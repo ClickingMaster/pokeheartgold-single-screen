@@ -15,9 +15,9 @@ typedef struct {
 
 extern Text *ov13_0224F540;
 extern u8 ov13_02245470[];
-extern void ov13_02240D80(Canvas *, int);
-extern void ov13_02240E2C(Canvas *);
-extern void ov13_02240CC0(Canvas *, int, int, int, int, int, u32, const u16 *);
+extern void WifiSetupText_Clear(Canvas *, int);
+extern void WifiSetupText_MarkDirty(Canvas *);
+extern void WifiSetupText_DrawInRect(Canvas *, int, int, int, int, int, u32, const u16 *);
 typedef char TextSize[(sizeof(Text) == 44) ? 1 : -1];
 typedef char TextStorageOffset[(offsetof(Text, text) == 8) ? 1 : -1];
 
@@ -34,7 +34,7 @@ void ov13_022316B4(void) {
     rect.y = 32;
     rect.width = 14;
     rect.height = 16;
-    ov13_02240D80(ov13_0224F540->a, 0);
+    WifiSetupText_Clear(ov13_0224F540->a, 0);
     tile[1] = 0;
     i = 0;
     j = 0;
@@ -51,7 +51,7 @@ void ov13_022316B4(void) {
             tile[0] = c;
         }
         rect.x = ov13_02245470[j];
-        ov13_02240CC0(ov13_0224F540->a, rect.x, rect.y, rect.width, rect.height, 2, 0x480, tile);
+        WifiSetupText_DrawInRect(ov13_0224F540->a, rect.x, rect.y, rect.width, rect.height, 2, 0x480, tile);
     }
-    ov13_02240E2C(ov13_0224F540->a);
+    WifiSetupText_MarkDirty(ov13_0224F540->a);
 }

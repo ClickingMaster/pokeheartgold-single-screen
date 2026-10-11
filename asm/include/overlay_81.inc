@@ -207,10 +207,10 @@
 .public ov80_0222A7CC
 .public ov80_02236DD4
 .public ov80_02237254
-.public ov81_0223DD60
-.public ov81_0223DEA8
-.public ov81_0223E234
-.public ov81_02241020
-.public ov81_022410C8
-.public ov81_0224113C
-.public ov81_02241238
+.public BattleFactoryApp_Init
+.public BattleFactoryApp_Main
+.public BattleFactoryApp_Exit
+.public BattleFactory_ReceivePing
+.public BattleFactory_ReceiveRentals
+.public BattleFactory_ReceiveUnused
+.public BattleFactory_ReceiveSwap

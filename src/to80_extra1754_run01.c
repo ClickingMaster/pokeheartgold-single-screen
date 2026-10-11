@@ -136,7 +136,7 @@ void getJntSRTAnmResult_(u8 *anim, u32 index, s32 frame, MdlJointResult *out) {
     }
 done: {
     int mode = (out->flags & 1) ? 4 : 0;
-    MdlRenderState *ctx = _021DA700;
+    MdlRenderState *ctx = gCurrentRenderState;
     ctx->scale(out, scales, ctx->command, mode);
 }
 }

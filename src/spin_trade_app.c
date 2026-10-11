@@ -447,9 +447,9 @@ BOOL sub_020698E8(SpinTradeRenderAnim *anim, fx32 step, BOOL loop);
 void sub_02069998(NNSG3dRenderObj *obj, UnkOv01_021FFECC_sub *model, SpinTradeRenderAnim *anim);
 void sub_020699D0(NNSG3dRenderObj *obj, const VecFx32 *position, const VecFx32 *scale, const u16 *angles);
 
-BOOL ov85_021E5900(OverlayManager *man, int *state);
-BOOL ov85_021E5A34(OverlayManager *man, int *state);
-BOOL ov85_021E5AAC(OverlayManager *man, int *state);
+BOOL SpinTradeApp_Init(OverlayManager *man, int *state);
+BOOL SpinTradeApp_Exit(OverlayManager *man, int *state);
+BOOL SpinTradeApp_Main(OverlayManager *man, int *state);
 void SpinTrade_ClearLinkFlags(SpinTradeApp *app);
 BOOL SpinTrade_State_Start(SpinTradeApp *app);
 BOOL SpinTrade_State_WaitFadeIn(SpinTradeApp *app);
@@ -611,20 +611,20 @@ void SpinTrade_AddAngle(fx32 *angle, fx32 delta);
 void SpinTrade_RotateAll(SpinTradeApp *app, fx32 delta);
 BOOL SpinTrade_TickSpinTimer(SpinTradeApp *app);
 void *SpinTrade_LoadNarcMember(SpinTradeApp *app, u32 member, int atStart);
-void ov85_021E85C4(SpinTradeApp *app, u8 jump);
-void ov85_021E85CC(SpinTradeApp *app, const u16 *data);
+void SpinTrade_ReceiveJump(SpinTradeApp *app, u8 jump);
+void SpinTrade_ReceiveSpinData(SpinTradeApp *app, const u16 *data);
 void *SpinTrade_ClearScratch(SpinTradeApp *app, u32 size);
 void *SpinTrade_GetScratch(SpinTradeApp *app);
 BOOL SpinTrade_HasReceivedStatus(SpinTradeApp *app, u32 status);
 BOOL SpinTrade_HaveAllMembersJoined(SpinTradeApp *app);
 int SpinTrade_CountMembers(SpinTradeApp *app);
-void ov85_021E8680(SpinTradeApp *app, SpinTradeMember *member);
-void ov85_021E86AC(SpinTradeApp *app, u32 count);
+void SpinTrade_ReceiveMemberSlot(SpinTradeApp *app, SpinTradeMember *member);
+void SpinTrade_ReceivePlayerCount(SpinTradeApp *app, u32 count);
 BOOL SpinTrade_IsMemberPresent(SpinTradeApp *app, u32 netId);
 void SpinTrade_ReceiveTradedMon(SpinTradeApp *app, int netId);
 int SpinTrade_CountReceivedParties(SpinTradeApp *app);
-void ov85_021E8740(SpinTradeApp *app, int netId, u32 slot);
-void ov85_021E8748(SpinTradeApp *app, const u16 *src);
+void SpinTrade_ReceiveTradeSlot(SpinTradeApp *app, int netId, u32 slot);
+void SpinTrade_ReceiveResult(SpinTradeApp *app, const u16 *src);
 BOOL SpinTrade_IsInBonusArea(SpinTradeApp *app, fx32 angle, int playerCount);
 BOOL SpinTrade_PartyHasBadEgg(Party *party);
 BOOL SpinTrade_AnyPartyHasBadEgg(SpinTradeApp *app);
@@ -632,7 +632,7 @@ int SpinTrade_CountConfirmed(SpinTradeApp *app);
 BOOL SpinTrade_IsCancelled(SpinTradeApp *app);
 
 #pragma force_active on
-BOOL ov85_021E5900(OverlayManager *man, int *state) {
+BOOL SpinTradeApp_Init(OverlayManager *man, int *state) {
     Work97024 *args = OverlayManager_GetArgs(man);
     SpinTradeApp *app;
     int i, slot, myNetId;
@@ -684,7 +684,7 @@ BOOL ov85_021E5900(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-BOOL ov85_021E5A34(OverlayManager *man, int *state) {
+BOOL SpinTradeApp_Exit(OverlayManager *man, int *state) {
     SpinTradeApp *app = OverlayManager_GetData(man);
 
     GF_ASSERT(sub_02021238() == 1);
@@ -706,7 +706,7 @@ BOOL ov85_021E5A34(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-BOOL ov85_021E5AAC(OverlayManager *man, int *state) {
+BOOL SpinTradeApp_Main(OverlayManager *man, int *state) {
     SpinTradeApp *app = OverlayManager_GetData(man);
     int ret;
 
@@ -2936,13 +2936,13 @@ void *SpinTrade_LoadNarcMember(SpinTradeApp *app, u32 member, int atStart) {
 }
 
 // Link receive callbacks (registered by frontier_menu_communication.c)
-void ov85_021E85C4(SpinTradeApp *app, u8 jump) {
+void SpinTrade_ReceiveJump(SpinTradeApp *app, u8 jump) {
     if (jump != 0) {
         app->remoteJump = jump;
     }
 }
 
-void ov85_021E85CC(SpinTradeApp *app, const u16 *data) {
+void SpinTrade_ReceiveSpinData(SpinTradeApp *app, const u16 *data) {
     app->spinReceived = TRUE;
     app->spinData.unk_0 = data[0];
     app->spinData.frame = data[1];
@@ -3000,7 +3000,7 @@ int SpinTrade_CountMembers(SpinTradeApp *app) {
 }
 
 #pragma force_active on
-void ov85_021E8680(SpinTradeApp *app, SpinTradeMember *member) {
+void SpinTrade_ReceiveMemberSlot(SpinTradeApp *app, SpinTradeMember *member) {
     volatile SpinTradeMember *received = member; // volatile: every field read is a separate load
     int index = received->slot;
     app->members[index].slot = received->slot;
@@ -3011,7 +3011,7 @@ void ov85_021E8680(SpinTradeApp *app, SpinTradeMember *member) {
 }
 #pragma force_active reset
 
-void ov85_021E86AC(SpinTradeApp *app, u32 count) {
+void SpinTrade_ReceivePlayerCount(SpinTradeApp *app, u32 count) {
     app->playerCount = count;
 }
 
@@ -3048,11 +3048,11 @@ int SpinTrade_CountReceivedParties(SpinTradeApp *app) {
     return count;
 }
 
-void ov85_021E8740(SpinTradeApp *app, int netId, u32 slot) {
+void SpinTrade_ReceiveTradeSlot(SpinTradeApp *app, int netId, u32 slot) {
     app->tradeSlots[netId] = slot;
 }
 
-void ov85_021E8748(SpinTradeApp *app, const u16 *src) {
+void SpinTrade_ReceiveResult(SpinTradeApp *app, const u16 *src) {
     u32 i;
     u16 *dst;
 

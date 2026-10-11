@@ -27,10 +27,10 @@ typedef struct {
     B *p;
 } C;
 
-extern void *ov13_0224128C(int, int);
-extern void *ov13_022408A0(int, int);
-extern void *ov13_02240184(int, int);
-extern void *ov13_02242528(int, void *, int, int);
+extern void *WifiSetupHeap_AllocZeroed(int, int);
+extern void *WifiSetupText_InitBgCanvas(int, int);
+extern void *WifiSetupOamTemplate_AllocOam(int, int);
+extern void *WifiSetupTask_Create(int, void *, int, int);
 extern char ov13_02234B48[];
 extern char ov13_022350A8[];
 extern s8 ov13_022455D4[];
@@ -50,15 +50,15 @@ extern u16 ov13_022464E4[];
 extern char ov13_02246440[];
 extern char ov13_02246458[];
 extern u8 *ov13_02239FF0(void);
-extern int ov13_02227228();
-extern int ov13_02227258();
-extern int ov13_0222726C();
+extern int WifiSetupButtonBar_Close();
+extern int WifiSetupButtonBar_GetSelected();
+extern int WifiSetupButtonBar_SelectIfNone();
 extern int ov13_022272A0();
-extern int ov13_022272CC();
-extern int ov13_022272E4();
-extern int ov13_022277B8();
-extern int ov13_0222788C();
-extern int ov13_02227924();
+extern int WifiSetupButtonBar_Unlock();
+extern int WifiSetupButtonBar_Lock();
+extern int WifiSetupMessage_Show();
+extern int WifiSetupMessage_Hide();
+extern int WifiSetup_LoadGraphics();
 extern int ov13_02227964();
 extern int ov13_022279B4();
 extern int ov13_02227E58();
@@ -96,21 +96,21 @@ extern int ov13_0223BE6C();
 extern int ov13_0223C198();
 extern int ov13_0223C1DC();
 extern int ov13_0223C1F0();
-extern int ov13_022400F0();
-extern int ov13_02240394();
-extern int ov13_022403B8();
-extern int ov13_022405B8();
-extern int ov13_02240B04();
-extern int ov13_02240C14();
-extern int ov13_02240CC0();
-extern int ov13_02240D80();
-extern int ov13_02240E2C();
-extern int ov13_02240EA8();
-extern int ov13_02240EFC();
-extern int ov13_022412B0();
-extern int ov13_02241694();
-extern int ov13_02241D98();
-extern int ov13_02242074();
+extern int WifiSetupOamTemplate_Copy();
+extern int WifiSetupFade_IsActive();
+extern int WifiSetupFade_Start();
+extern int WifiSetupFade_StartDelay();
+extern int WifiSetupText_FreeBgCanvas();
+extern int WifiSetupText_DrawMonospace();
+extern int WifiSetupText_DrawInRect();
+extern int WifiSetupText_Clear();
+extern int WifiSetupText_MarkDirty();
+extern int WifiSetupDisplay_ShowPlanes();
+extern int WifiSetupDisplay_HidePlanes();
+extern int WifiSetupHeap_FreeAndClear();
+extern int WifiSetupInput_IsKeyPressed();
+extern int WifiSetupOam_Release();
+extern int WifiSetup_StrNLen();
 void ov13_022322D8(void);
 void ov13_0223237C(void);
 void ov13_02232440(void);
@@ -164,18 +164,18 @@ void ov13_02233214(void) {
 }
 
 void ov13_02233250(void) {
-    ov13_022403B8(2, 1, 1, 8);
-    ov13_022403B8(2, 0, 29, 8);
-    ov13_02240EA8(1, 1);
-    ov13_02240EA8(0, 29);
+    WifiSetupFade_Start(2, 1, 1, 8);
+    WifiSetupFade_Start(2, 0, 29, 8);
+    WifiSetupDisplay_ShowPlanes(1, 1);
+    WifiSetupDisplay_ShowPlanes(0, 29);
     ov13_0222B8E8(ov13_022332A4);
 }
 
 void ov13_022332A4(void) {
-    if (ov13_02240394(1)) {
+    if (WifiSetupFade_IsActive(1)) {
         return;
     }
-    if (ov13_02240394(0)) {
+    if (WifiSetupFade_IsActive(0)) {
         return;
     }
     ov13_0222B8E8(ov13_022332D8);

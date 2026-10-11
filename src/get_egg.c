@@ -631,7 +631,7 @@ void GiveEggToPlayer(Daycare *dayCare, Party *party, PlayerProfile *profile) {
     SetBreedEggStats(mon, species, dayCare, otId, mom_form);
     InheritIVs(mon, dayCare);
     InheritMoves(mon, Daycare_GetBoxMonI(dayCare, gender_idx[1]), Daycare_GetBoxMonI(dayCare, gender_idx[0]));
-    MonSetTrainerMemo(mon, profile, 3, sub_02017FE4(MAPSECTYPE_GIFT, 0), HEAP_ID_FIELD1);
+    MonSetTrainerMemo(mon, profile, 3, Mapsec_FromTypeAndIndex(MAPSECTYPE_GIFT, 0), HEAP_ID_FIELD1);
     if (species == SPECIES_PICHU) {
         Daycare_LightBallCheck(mon, dayCare);
     }
@@ -933,7 +933,7 @@ static void sub_0206D038(Pokemon *mon, enum HeapID heapID) {
     otGender = GetMonData(mon, MON_DATA_OT_GENDER, NULL);
     otId = GetMonData(mon, MON_DATA_OT_ID, NULL);
     form = GetMonData(mon, MON_DATA_FORM, NULL);
-    if (species == SPECIES_MANAPHY && GetMonData(mon, MON_DATA_EGG_LOCATION, NULL) == sub_02017FE4(MAPSECTYPE_EXTERNAL, 1)) {
+    if (species == SPECIES_MANAPHY && GetMonData(mon, MON_DATA_EGG_LOCATION, NULL) == Mapsec_FromTypeAndIndex(MAPSECTYPE_EXTERNAL, 1)) {
         if (CalcShininessByOtIdAndPersonality(otId, pid)) {
             do {
                 pid = PRandom(pid);

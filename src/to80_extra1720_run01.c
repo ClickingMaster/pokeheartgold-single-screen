@@ -20,8 +20,8 @@ typedef struct {
 } Work;
 
 extern Work *ov13_0224F5A4;
-extern void *ov13_0224128C(u32, u32);
-extern void ov13_022412B0(void *);
+extern void *WifiSetupHeap_AllocZeroed(u32, u32);
+extern void WifiSetupHeap_FreeAndClear(void *);
 extern void DWCi_BACKUPlWritePage(void *, int *, void *);
 extern u16 MATH_CalcCRC16(const void *, const void *, u32);
 void ov13_0223A8F0(int);
@@ -59,7 +59,7 @@ void ov13_0223A8F0(int index) {
             ov13_0224F5A4->page[i].crc = MATH_CalcCRC16(ov13_0224F5A4->crcTable, (u8 *)ov13_0224F5A4 + offset, 254);
         }
     }
-    temp = ov13_0224128C(256, 32);
+    temp = WifiSetupHeap_AllocZeroed(256, 32);
     DWCi_BACKUPlWritePage(ov13_0224F5A4, changed, temp);
-    ov13_022412B0(&temp);
+    WifiSetupHeap_FreeAndClear(&temp);
 }

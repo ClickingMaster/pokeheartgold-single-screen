@@ -5,16 +5,16 @@
 
 	.rodata
 
-_020F6280:
+gMapsecTypeStarts:
 	.short MAPSEC_MYSTERY_ZONE
 	.short METLOC_DAY_CARE_COUPLE
 	.short METLOC_LOVELY_PLACE
 
 	.text
 
-	thumb_func_start sub_02017FAC
-sub_02017FAC: ; 0x02017FAC
-	ldr r3, _02017FC8 ; =_020F6280
+	thumb_func_start Mapsec_GetType
+Mapsec_GetType: ; 0x02017FAC
+	ldr r3, _02017FC8 ; =gMapsecTypeStarts
 	mov r2, #0
 _02017FB0:
 	ldrh r1, [r3, #2]
@@ -30,25 +30,25 @@ _02017FBA:
 	add r0, r2, #0
 	bx lr
 	nop
-_02017FC8: .word _020F6280
-	thumb_func_end sub_02017FAC
+_02017FC8: .word gMapsecTypeStarts
+	thumb_func_end Mapsec_GetType
 
-	thumb_func_start sub_02017FCC
-sub_02017FCC: ; 0x02017FCC
+	thumb_func_start Mapsec_GetIndexInType
+Mapsec_GetIndexInType: ; 0x02017FCC
 	push {r4, lr}
 	add r4, r0, #0
-	bl sub_02017FAC
+	bl Mapsec_GetType
 	lsl r1, r0, #1
-	ldr r0, _02017FE0 ; =_020F6280
+	ldr r0, _02017FE0 ; =gMapsecTypeStarts
 	ldrh r0, [r0, r1]
 	sub r0, r4, r0
 	pop {r4, pc}
 	nop
-_02017FE0: .word _020F6280
-	thumb_func_end sub_02017FCC
+_02017FE0: .word gMapsecTypeStarts
+	thumb_func_end Mapsec_GetIndexInType
 
-	thumb_func_start sub_02017FE4
-sub_02017FE4: ; 0x02017FE4
+	thumb_func_start Mapsec_FromTypeAndIndex
+Mapsec_FromTypeAndIndex: ; 0x02017FE4
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
@@ -56,14 +56,14 @@ sub_02017FE4: ; 0x02017FE4
 	blt _02017FF2
 	bl GF_AssertFail
 _02017FF2:
-	ldr r0, _02017FFC ; =_020F6280
+	ldr r0, _02017FFC ; =gMapsecTypeStarts
 	lsl r1, r5, #1
 	ldrh r0, [r0, r1]
 	add r0, r4, r0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-_02017FFC: .word _020F6280
-	thumb_func_end sub_02017FE4
+_02017FFC: .word gMapsecTypeStarts
+	thumb_func_end Mapsec_FromTypeAndIndex
 
 	thumb_func_start LocationIsDiamondPearlCompatible
 LocationIsDiamondPearlCompatible: ; 0x02018000

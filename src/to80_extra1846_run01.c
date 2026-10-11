@@ -6,10 +6,10 @@
 #define R32(a) (*(volatile u32 *)(a))
 #define R16(a) (*(volatile u16 *)(a))
 void GXx_SetMasterBrightness_(volatile u16 *, int);
-void ov13_02240648(void);
-void ov13_02241C68(void);
-void ov13_02241DFC(void);
-void ov13_0223FADC(void);
+void WifiSetupText_Init(void);
+void WifiSetupOam_Init(void);
+void WifiSetupCharVram_Init(void);
+void WifiSetupOamBlock_InitManager(void);
 void ov13_0222B620(void);
 
 static inline void subReset(volatile u32 *reg) {
@@ -65,10 +65,10 @@ void ov13_0222B620(void) {
     R32(0x4000000) &= ~0x38000000;
     R32(0x4000000) &= ~0x7000000;
     R16(0x4000304) &= ~0x8000;
-    ov13_02240648();
-    ov13_02241C68();
-    ov13_02241DFC();
-    ov13_0223FADC();
+    WifiSetupText_Init();
+    WifiSetupOam_Init();
+    WifiSetupCharVram_Init();
+    WifiSetupOamBlock_InitManager();
     GX_DispOn();
     R32(0x4001000) |= 0x10000;
     GX_VBlankIntr(1);

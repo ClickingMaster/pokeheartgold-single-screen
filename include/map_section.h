@@ -12,9 +12,9 @@ typedef enum MapsecType {
     MAPSECTYPE_MAX
 } MapsecType;
 
-int sub_02017FAC(int mapsec);
-int sub_02017FCC(int mapsec);
-int sub_02017FE4(MapsecType type, int offset);
+int Mapsec_GetType(int mapsec);
+int Mapsec_GetIndexInType(int mapsec);
+int Mapsec_FromTypeAndIndex(MapsecType type, int offset);
 BOOL LocationIsDiamondPearlCompatible(mapsec_t mapsec);
 
 #endif // POKEHEARTGOLD_MAP_SECTION_H

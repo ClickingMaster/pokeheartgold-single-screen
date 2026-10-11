@@ -89,9 +89,9 @@
 	.extern ov85_021E9BDC
 	.extern SpinTradeGroup_State_Proceed
 	.public _021EAA80
-	.public ov85_021E5900
-	.public ov85_021E5A34
-	.public ov85_021E5AAC
+	.public SpinTradeApp_Init
+	.public SpinTradeApp_Exit
+	.public SpinTradeApp_Main
 	.public SpinTrade_ClearLinkFlags
 	.public SpinTrade_State_Start
 	.public SpinTrade_State_WaitFadeIn
@@ -253,28 +253,28 @@
 	.public SpinTrade_RotateAll
 	.public SpinTrade_TickSpinTimer
 	.public SpinTrade_LoadNarcMember
-	.public ov85_021E85C4
-	.public ov85_021E85CC
+	.public SpinTrade_ReceiveJump
+	.public SpinTrade_ReceiveSpinData
 	.public SpinTrade_ClearScratch
 	.public SpinTrade_GetScratch
 	.public SpinTrade_HasReceivedStatus
 	.public SpinTrade_HaveAllMembersJoined
 	.public SpinTrade_CountMembers
-	.public ov85_021E8680
-	.public ov85_021E86AC
+	.public SpinTrade_ReceiveMemberSlot
+	.public SpinTrade_ReceivePlayerCount
 	.public SpinTrade_IsMemberPresent
 	.public SpinTrade_ReceiveTradedMon
 	.public SpinTrade_CountReceivedParties
-	.public ov85_021E8740
-	.public ov85_021E8748
+	.public SpinTrade_ReceiveTradeSlot
+	.public SpinTrade_ReceiveResult
 	.public SpinTrade_IsInBonusArea
 	.public SpinTrade_PartyHasBadEgg
 	.public SpinTrade_AnyPartyHasBadEgg
 	.public SpinTrade_CountConfirmed
 	.public SpinTrade_IsCancelled
-	.public ov85_021E88AC
-	.public ov85_021E8A08
-	.public ov85_021E8B08
+	.public SpinTradeGroupApp_Init
+	.public SpinTradeGroupApp_Main
+	.public SpinTradeGroupApp_Exit
 	.public SpinTradeGroup_VBlankTask
 	.public SpinTradeGroup_VBlankCallback
 	.public SpinTradeGroup_SetGraphicsBanks

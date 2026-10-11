@@ -14,8 +14,8 @@ DwcWork *ov13_0224F4F0;
 
 extern void ov13_0223EAD4(int);
 extern void ov13_0223EE58(u8 *, u8 *);
-extern void ov13_022425D0(int, int);
-extern void ov13_022412B0(void *);
+extern void WifiSetupTask_DestroyLater(int, int);
+extern void WifiSetupHeap_FreeAndClear(void *);
 extern u16 *ov13_0223EE9C(void);
 void ov13_0222BCC0(int n);
 
@@ -93,8 +93,8 @@ void ov13_0222BCC0(int n) {
     case 1: case 2: case 8: case 9:
         break;
     case 34:
-        ov13_022425D0(0, n);
-        ov13_022412B0(&ov13_0224F4F0);
+        WifiSetupTask_DestroyLater(0, n);
+        WifiSetupHeap_FreeAndClear(&ov13_0224F4F0);
         break;
     }
 }

@@ -29,12 +29,12 @@ extern void ov13_02233DCC(void);
 void ov13_022337D8(int);
 extern int ov13_02239564(void);
 extern int ov13_02239550(void);
-extern void ov13_02227D18(void);
+extern void WifiSetupCursor_Hide(void);
 extern void ov13_0223ABB8(int);
 extern void ov13_02234CA4(void);
 extern void ov13_022349DC(void);
 extern void ov13_02234AA4(void);
-extern void *ov13_02242528(int, void (*)(void), int, int);
+extern void *WifiSetupTask_Create(int, void (*)(void), int, int);
 void ov13_02233810(void);
 
 void ov13_022337D8(int v) {
@@ -65,7 +65,7 @@ void ov13_02233810(void) {
         if (ov13_0224F54C.s->timer) {
             return;
         }
-        ov13_02227D18();
+        WifiSetupCursor_Hide();
         ov13_0224F54C.val = (145 * ov13_02239550()) / 55;
         ov13_02233DCC();
         ov13_0224F54C.s->timer = 4;
@@ -81,9 +81,9 @@ void ov13_02233810(void) {
             return;
         }
         if (rem < 16) {
-            ov13_0224F54C.s->busy = ov13_02242528(0, ov13_022349DC, 0, 120);
+            ov13_0224F54C.s->busy = WifiSetupTask_Create(0, ov13_022349DC, 0, 120);
         } else {
-            ov13_0224F54C.s->busy = ov13_02242528(0, ov13_02234AA4, 0, 120);
+            ov13_0224F54C.s->busy = WifiSetupTask_Create(0, ov13_02234AA4, 0, 120);
             return;
         }
         return;
@@ -97,7 +97,7 @@ void ov13_02233810(void) {
             return;
         }
         ov13_0223ABB8(19);
-        ov13_0224F54C.s->busy = ov13_02242528(0, ov13_022349DC, 0, 120);
+        ov13_0224F54C.s->busy = WifiSetupTask_Create(0, ov13_022349DC, 0, 120);
         return;
     case 6:
         if (ov13_0224F54C.val == 145) {
@@ -109,7 +109,7 @@ void ov13_02233810(void) {
             return;
         }
         ov13_0223ABB8(19);
-        ov13_0224F54C.s->busy = ov13_02242528(0, ov13_02234AA4, 0, 120);
+        ov13_0224F54C.s->busy = WifiSetupTask_Create(0, ov13_02234AA4, 0, 120);
         return;
     case 5:
     case 7:

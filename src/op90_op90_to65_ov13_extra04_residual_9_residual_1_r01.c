@@ -13,20 +13,20 @@ static const Rect16 sRect1 = {0x8F, 0x34, 0x2C, 0x18};
 static const Rect16 sRect2 = {0xC0, 0x34, 0x2C, 0x18};
 extern Rect16 ov13_0224558A[];
 extern int FX_DivS32(int, int);
-extern BOOL ov13_022417DC(Rect16 *), ov13_02241974(Rect16 *);
+extern BOOL WifiSetupInput_IsTouchPressed(Rect16 *), WifiSetupInput_IsTouchPressedInBox(Rect16 *);
 int ov13_02234700(void);
 // @fn ov13_02234700
 int ov13_02234700(void) {
     Rect16 r;
     int row, i;
-    if (!ov13_022417DC(&ov13_02245958)) {
+    if (!WifiSetupInput_IsTouchPressed(&ov13_02245958)) {
         return 14;
     }
     row = FX_DivS32(ov13_0224F54C.scroll, 29);
     r = sRect0;
     for (i = 0; i < 4; i++) {
         if (row != 2 && row != 6) {
-            if (ov13_02241974(&r)) {
+            if (WifiSetupInput_IsTouchPressedInBox(&r)) {
                 return ov13_022455DC[row];
             }
         }
@@ -38,12 +38,12 @@ int ov13_02234700(void) {
         if (row == 2) {
             r = sRect2;
             r.y1 += i * 29;
-            if (ov13_02241974(&r)) {
+            if (WifiSetupInput_IsTouchPressedInBox(&r)) {
                 return ov13_022454FC.v[0];
             }
             r = sRect1;
             r.y1 += i * 29;
-            if (ov13_02241974(&r)) {
+            if (WifiSetupInput_IsTouchPressedInBox(&r)) {
                 return ov13_022454FC.v[1];
             }
             break;
@@ -55,12 +55,12 @@ int ov13_02234700(void) {
         if (row == 6) {
             r = sRect2;
             r.y1 += i * 29;
-            if (ov13_02241974(&r)) {
+            if (WifiSetupInput_IsTouchPressedInBox(&r)) {
                 return ov13_022454FC.v[2];
             }
             r = sRect1;
             r.y1 += i * 29;
-            if (ov13_02241974(&r)) {
+            if (WifiSetupInput_IsTouchPressedInBox(&r)) {
                 return ov13_022454FC.v[3];
             }
             break;
@@ -68,7 +68,7 @@ int ov13_02234700(void) {
         row++;
     }
     for (i = 0; i < 3; i++) {
-        if (ov13_022417DC(&ov13_0224558A[i])) {
+        if (WifiSetupInput_IsTouchPressed(&ov13_0224558A[i])) {
             return i + 11;
         }
     }

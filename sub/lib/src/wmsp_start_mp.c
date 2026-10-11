@@ -92,7 +92,7 @@ void WMSP_StartMP(WmspStartMPRequest *request) {
             if (settings->unk_62 > (s32)max) {
                 settings->unk_62 = max;
             }
-            settings->unk_7ca = (flags & 0x200) ? request->unk_3a : settings->unk_98;
+            settings->sendRetryCount = (flags & 0x200) ? request->unk_3a : settings->unk_98;
             settings->unk_7c6 = (flags & 0x400) ? request->unk_3c : settings->unk_92;
             settings->unk_7c8 = (flags & 0x800) ? request->unk_3d : settings->unk_94;
             settings->unk_7cc = (flags & 0x1000) ? request->unk_3e : settings->unk_9a;
@@ -109,7 +109,7 @@ void WMSP_StartMP(WmspStartMPRequest *request) {
         status->unk_88 = 0;
         status->unk_9e = 0;
         status->unk_a0 = 60;
-        status->unk_734 = 0;
+        status->sendInFlight = 0;
         status->unk_8a = 0;
         status->unk_8c = 0;
         status->unk_8e = 0;

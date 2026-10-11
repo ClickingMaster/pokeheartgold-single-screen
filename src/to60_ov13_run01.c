@@ -6,30 +6,30 @@
 
 typedef void (*StateFunc)(void);
 
-extern int ov13_02240394(int a);
-extern void ov13_022403B8(int a, int b, int c, int d);
-extern void ov13_02240EA8(int a, int b);
-extern void ov13_02240EFC(int a, int b);
-extern void ov13_02240B04(int a);
-extern void ov13_022405B8(int a);
-extern int ov13_02241694(int a);
-extern void ov13_02227F68(void);
-extern void ov13_02227028(void);
+extern int WifiSetupFade_IsActive(int a);
+extern void WifiSetupFade_Start(int a, int b, int c, int d);
+extern void WifiSetupDisplay_ShowPlanes(int a, int b);
+extern void WifiSetupDisplay_HidePlanes(int a, int b);
+extern void WifiSetupText_FreeBgCanvas(int a);
+extern void WifiSetupFade_StartDelay(int a);
+extern int WifiSetupInput_IsKeyPressed(int a);
+extern void WifiSetupSignalIcon_Destroy(void);
+extern void WifiSetupBusyIcon_Destroy(void);
 extern void ov13_0223A840(void);
 extern void ov13_0223AC20(void);
 extern void ov13_0223ABB8(int a);
-extern void ov13_022279EC(int a);
+extern void WifiSetup_PrintMessage(int a);
 extern void ov13_022279B4(int a);
-extern int ov13_02227258(void);
-extern void ov13_022272CC(void);
-extern void ov13_0222726C(int a);
-extern void ov13_022272E4(void);
-extern void ov13_02227228(void);
+extern int WifiSetupButtonBar_GetSelected(void);
+extern void WifiSetupButtonBar_Unlock(void);
+extern void WifiSetupButtonBar_SelectIfNone(int a);
+extern void WifiSetupButtonBar_Lock(void);
+extern void WifiSetupButtonBar_Close(void);
 extern int ov13_022272A0(void);
-extern void ov13_02227DE4(int a);
-extern int ov13_022277B8(int a, int b, int c);
-extern void ov13_02227924(void *a, void *b);
-extern void ov13_0222788C(void);
+extern void WifiSetupBackground_LoadHeader(int a);
+extern int WifiSetupMessage_Show(int a, int b, int c);
+extern void WifiSetup_LoadGraphics(void *a, void *b);
+extern void WifiSetupMessage_Hide(void);
 
 extern u8 ov13_0224F514;
 extern u8 ov13_0224F518;
@@ -90,18 +90,18 @@ extern u8 ov13_02246358[];
 extern u8 ov13_0224544C[];
 extern u8 ov13_02245450[];
 extern void ov13_02238440();
-extern void *ov13_0224128C(int size, int align);
+extern void *WifiSetupHeap_AllocZeroed(int size, int align);
 extern u8 ov13_02239D04(void *p);
 extern void ov13_02230C68();
 extern void ov13_022307AC(void);
 extern void ov13_02230CC4(void);
-extern void *ov13_022278C4(void *a);
-extern void *ov13_0223F95C(void *a, void *b, int c);
+extern void *WifiSetup_LocalizePath(void *a);
+extern void *WifiSetupFile_Load(void *a, void *b, int c);
 extern void ov13_02239228(void *a);
 extern void ov13_022392B4(void);
 extern void ov13_0223943C(int a, int b, int c, int d, int e);
-extern struct UnkOam *ov13_02240184(int a, int b);
-extern void ov13_022400F0(int a, int b, struct UnkOam *c);
+extern struct UnkOam *WifiSetupOamTemplate_AllocOam(int a, int b);
+extern void WifiSetupOamTemplate_Copy(int a, int b, struct UnkOam *c);
 extern void ov13_0222FF50(void);
 extern void ov13_022301A4(void);
 extern void ov13_02230414(void);
@@ -113,24 +113,24 @@ extern u8 ov13_02246344[];
 extern void ov13_02227E40(void);
 extern void ov13_02227964(int a);
 extern void ov13_0222B254(void);
-extern void *ov13_02242528(int a, void *b, int c, int d);
+extern void *WifiSetupTask_Create(int a, void *b, int c, int d);
 extern int ov13_0222B3B4(void);
-extern void ov13_022425F0(int a, void *b);
-extern void ov13_022425D0(int a, void *b);
+extern void WifiSetupTask_Destroy(int a, void *b);
+extern void WifiSetupTask_DestroyLater(int a, void *b);
 extern void ov13_0222B364(int a);
 extern void ov13_02237618();
-extern void ov13_022413E4(void);
-extern void ov13_02242478(int a);
+extern void WifiSetupInput_Update(void);
+extern void WifiSetupTask_RunQueue(int a);
 extern u8 ov13_022462D8[];
 extern u8 ov13_022462EC[];
-extern int ov13_022408A0(int a, int b);
-extern void ov13_02240CC0(int a, int b, int c, int d, int e, int f, int g, void *h);
-extern void ov13_02240E2C(int a);
+extern int WifiSetupText_InitBgCanvas(int a, int b);
+extern void WifiSetupText_DrawInRect(int a, int b, int c, int d, int e, int f, int g, void *h);
+extern void WifiSetupText_MarkDirty(int a);
 extern void ov13_0223BE6C(int a, int b, int c, int d, int e);
 extern int ov13_0223C1DC(void);
 extern void ov13_0223C198(void);
 extern int ov13_0223C1F0(void);
-extern void ov13_02226F58(int a);
+extern void WifiSetupBusyIcon_Create(int a);
 extern u8 ov13_0224629C[];
 extern u8 ov13_022462B0[];
 extern u8 ov13_022462C4[];
@@ -199,22 +199,22 @@ struct UnkE8 {
 
 extern void GX_DispOff(void);
 extern void ov13_0224230C(void);
-extern void ov13_022413AC(void);
-extern void ov13_02241B34(void);
+extern void WifiSetupInput_Free(void);
+extern void WifiSetup_RestoreVBlankIntr(void);
 extern void ov13_0223AB8C(void);
-extern void ov13_0223FBB0(void);
-extern void ov13_02241D4C(void);
-extern void ov13_0224074C(void);
-extern void ov13_02240380(void);
-extern void ov13_0223F814(void);
-extern void ov13_02242430(void);
-extern void ov13_0224121C(void);
-extern void ov13_02242154(void);
-extern void *ov13_0224022C(int a, void *b, int c);
-extern void ov13_022412B0(void *pp);
-extern void *ov13_022402E0(void *a);
-extern void ov13_0223FA50(void *a);
-extern void ov13_02240288(void *a, void *b);
+extern void WifiSetupOamBlock_FreeManager(void);
+extern void WifiSetupOam_Free(void);
+extern void WifiSetupText_Free(void);
+extern void WifiSetupFade_Free(void);
+extern void WifiSetupArchive_Unload(void);
+extern void WifiSetupTask_FreeScheduler(void);
+extern void WifiSetupHeap_Destroy(void);
+extern void WifiSetup_RestoreVramBanks(void);
+extern void *WifiSetupPool_NewWithItems(int a, void *b, int c);
+extern void WifiSetupHeap_FreeAndClear(void *pp);
+extern void *WifiSetupPool_Pop(void *a);
+extern void WifiSetupFile_Free(void *a);
+extern void WifiSetupPool_Push(void *a, void *b);
 extern void ov13_0223E80C(void *a, struct Unk1C *b);
 extern int ov13_0223EA58(void);
 extern void OS_Terminate(void);
@@ -224,17 +224,17 @@ extern int ov13_02226D74(int a, int b, void *c, void *d, void *e, int f);
 extern int ov13_02226E5C(void);
 extern int ov13_02226F28(struct UnkE8 *a);
 extern void ov13_0223A5D0(struct UnkE8 *a);
-extern void ov13_022412F4(void *a);
-extern void ov13_02242640(int a, int b);
-extern void ov13_022400C8(int a);
-extern void ov13_02227DD0(void);
-extern void ov13_02227B54(void);
+extern void WifiSetupHeap_Free(void *a);
+extern void WifiSetupTask_SetQueueEnabled(int a, int b);
+extern void WifiSetupOamTemplate_Free(int a);
+extern void WifiSetupBackground_Free(void);
+extern void WifiSetupCursor_Free(void);
 extern void ov13_02239FDC(void);
 extern void ov13_02239F98(void);
-extern void ov13_02227B34(void);
-extern void ov13_02227D58(void);
-extern void ov13_022277A4(void);
-extern void ov13_02240098(int a, void *b);
+extern void WifiSetupCursor_Init(void);
+extern void WifiSetupBackground_Init(void);
+extern void WifiSetupMessage_Reset(void);
+extern void WifiSetupOamTemplate_Load(int a, void *b);
 extern void *ov13_02246018[];
 extern u8 ov13_02246034[];
 extern u8 ov13_02246044[];
@@ -254,7 +254,7 @@ extern u8 ov13_02246164[];
 extern u8 ov13_0224617C[];
 extern void ov13_022368D8();
 extern void ov13_0223B6F4(int a);
-extern void ov13_02227C28(int a, int b, int c, int d);
+extern void WifiSetupCursor_ShowCorners(int a, int b, int c, int d);
 extern u16 ov13_0224533E[];
 extern u16 ov13_02245340[];
 extern u16 ov13_02245342[];
@@ -271,9 +271,9 @@ struct Unk8 {
     u8 data[8];
 };
 extern struct Unk8 ov13_0224532E[];
-extern int ov13_022417DC(struct Unk8 *a);
-extern int ov13_022416D4(int a);
-extern void ov13_02227D18(void);
+extern int WifiSetupInput_IsTouchPressed(struct Unk8 *a);
+extern int WifiSetupInput_IsKeyRepeated(int a);
+extern void WifiSetupCursor_Hide(void);
 
 struct Unk2 {
     u8 data[2];
@@ -314,10 +314,10 @@ struct WiFiInfo {
 };
 
 extern void DWCi_BM_GetWiFiInfo(struct WiFiInfo *info);
-extern void ov13_0222728C(int a);
-extern void ov13_02241D98(void *a);
+extern void WifiSetupButtonBar_SetSelected(int a);
+extern void WifiSetupOam_Release(void *a);
 extern s32 FX_ModS32(s32 a, s32 b);
-extern void ov13_02227EB0(int a);
+extern void WifiSetupSignalIcon_Create(int a);
 extern void ov13_0222E220();
 extern void ov13_0222DC24();
 extern u16 ov13_022461CC[];
@@ -442,17 +442,17 @@ void ov13_0222B898(void) {
     GX_DispOff();
     *(vu32 *)0x04001000 &= ~0x10000;
     ov13_0224230C();
-    ov13_022413AC();
-    ov13_02241B34();
+    WifiSetupInput_Free();
+    WifiSetup_RestoreVBlankIntr();
     ov13_0223AB8C();
-    ov13_0223FBB0();
-    ov13_02241D4C();
-    ov13_0224074C();
-    ov13_02240380();
-    ov13_0223F814();
-    ov13_02242430();
-    ov13_0224121C();
-    ov13_02242154();
+    WifiSetupOamBlock_FreeManager();
+    WifiSetupOam_Free();
+    WifiSetupText_Free();
+    WifiSetupFade_Free();
+    WifiSetupArchive_Unload();
+    WifiSetupTask_FreeScheduler();
+    WifiSetupHeap_Destroy();
+    WifiSetup_RestoreVramBanks();
 }
 
 void ov13_0222B8E8(void *func) {
@@ -515,18 +515,18 @@ u8 ov13_0222B9C8(void) {
 }
 
 void ov13_0222BA08(void) {
-    ov13_0224F4EC = ov13_0224128C(0x64, 4);
-    ov13_0224F4EC->unk60 = ov13_0224022C(8, ov13_0224F4EC, 0xc);
+    ov13_0224F4EC = WifiSetupHeap_AllocZeroed(0x64, 4);
+    ov13_0224F4EC->unk60 = WifiSetupPool_NewWithItems(8, ov13_0224F4EC, 0xc);
 }
 
 void ov13_0222BA44(void) {
-    ov13_022412B0(&ov13_0224F4EC);
+    WifiSetupHeap_FreeAndClear(&ov13_0224F4EC);
 }
 
 struct UnkRes *ov13_0222BA58(void *src) {
     u32 size;
-    struct UnkRes *res = ov13_022402E0(ov13_0224F4EC->unk60);
-    u8 *data = ov13_0223F95C(src, &size, 4);
+    struct UnkRes *res = WifiSetupPool_Pop(ov13_0224F4EC->unk60);
+    u8 *data = WifiSetupFile_Load(src, &size, 4);
     u8 *hdr;
     res->data = data;
     hdr = data + 0x20;
@@ -536,8 +536,8 @@ struct UnkRes *ov13_0222BA58(void *src) {
 }
 
 void ov13_0222BAB0(struct UnkRes *res) {
-    ov13_0223FA50(res->data);
-    ov13_02240288(ov13_0224F4EC->unk60, res);
+    WifiSetupFile_Free(res->data);
+    WifiSetupPool_Push(ov13_0224F4EC->unk60, res);
 }
 
 u8 *ov13_0222BADC(struct UnkRes *res, int idx) {

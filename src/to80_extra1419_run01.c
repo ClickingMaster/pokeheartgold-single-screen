@@ -18,9 +18,9 @@ extern struct {
 } ov13_0224F54C;
 
 extern int ov13_02233568(void);
-extern int ov13_02241694(int);
-extern int ov13_022416D4(int);
-extern int ov13_02241714(int);
+extern int WifiSetupInput_IsKeyPressed(int);
+extern int WifiSetupInput_IsKeyRepeated(int);
+extern int WifiSetupInput_IsKeyReleased(int);
 extern void ov13_022335EC(int);
 extern void ov13_0223ABB8(int);
 extern void ov13_0222B8E8(void *);
@@ -28,7 +28,7 @@ extern void ov13_02233A6C(void);
 extern void ov13_02234AA4(void);
 extern void ov13_022349DC(void);
 extern void ov13_02234D84(int);
-extern void *ov13_02242528(int, void *, int, int);
+extern void *WifiSetupTask_Create(int, void *, int, int);
 void ov13_022332E8(void);
 
 void ov13_022332E8(void) {
@@ -38,17 +38,17 @@ void ov13_022332E8(void) {
     if (ov13_02233568()) {
         return;
     }
-    if (ov13_02241694(1)) {
+    if (WifiSetupInput_IsKeyPressed(1)) {
         ov13_022335EC(ov13_0224F54C.selected);
         return;
     }
-    if (ov13_02241694(2)) {
+    if (WifiSetupInput_IsKeyPressed(2)) {
         ov13_0223ABB8(7);
         ov13_0224F54C.work->state = 13;
         ov13_0222B8E8(ov13_02233A6C);
         return;
     }
-    if (ov13_022416D4(512)) {
+    if (WifiSetupInput_IsKeyRepeated(512)) {
         if (ov13_0224F54C.position == 145) {
             if (ov13_0224F54C.work->repeat) {
                 return;
@@ -58,14 +58,14 @@ void ov13_022332E8(void) {
             return;
         }
         ov13_0223ABB8(19);
-        ov13_0224F54C.work->busy = ov13_02242528(0, ov13_02234AA4, 0, 120);
+        ov13_0224F54C.work->busy = WifiSetupTask_Create(0, ov13_02234AA4, 0, 120);
         return;
     }
-    if (ov13_02241714(512)) {
+    if (WifiSetupInput_IsKeyReleased(512)) {
         ov13_0224F54C.work->repeat = 0;
         return;
     }
-    if (ov13_022416D4(256)) {
+    if (WifiSetupInput_IsKeyRepeated(256)) {
         if (ov13_0224F54C.position == 0) {
             if (ov13_0224F54C.work->repeat) {
                 return;
@@ -75,34 +75,34 @@ void ov13_022332E8(void) {
             return;
         }
         ov13_0223ABB8(19);
-        ov13_0224F54C.work->busy = ov13_02242528(0, ov13_022349DC, 0, 120);
+        ov13_0224F54C.work->busy = WifiSetupTask_Create(0, ov13_022349DC, 0, 120);
         return;
     }
-    if (ov13_02241714(256)) {
+    if (WifiSetupInput_IsKeyReleased(256)) {
         ov13_0224F54C.work->repeat = 0;
         return;
     }
-    if (ov13_022416D4(64)) {
+    if (WifiSetupInput_IsKeyRepeated(64)) {
         ov13_02234D84(1);
         return;
     }
-    if (ov13_02241714(64)) {
+    if (WifiSetupInput_IsKeyReleased(64)) {
         ov13_0224F54C.work->repeat = 0;
         return;
     }
-    if (ov13_022416D4(128)) {
+    if (WifiSetupInput_IsKeyRepeated(128)) {
         ov13_02234D84(3);
         return;
     }
-    if (ov13_02241714(128)) {
+    if (WifiSetupInput_IsKeyReleased(128)) {
         ov13_0224F54C.work->repeat = 0;
         return;
     }
-    if (ov13_022416D4(32)) {
+    if (WifiSetupInput_IsKeyRepeated(32)) {
         ov13_02234D84(0);
         return;
     }
-    if (ov13_022416D4(16)) {
+    if (WifiSetupInput_IsKeyRepeated(16)) {
         ov13_02234D84(2);
     }
 }

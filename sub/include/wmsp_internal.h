@@ -43,11 +43,11 @@ typedef struct WmspSendEntry {
     u16 destBitmap;
     u16 restBitmap; // destinations still to send to
     u16 sentBitmap;
-    u16 unk_0a;
+    u16 inFlightBitmap; // destinations of the MP frame that carries the entry
     u16 unk_0c;
     u16 size;
-    u16 unk_10;
-    u16 seqNo;
+    u16 seqNo;      // port bit 3: sequence number << 1 (0xFFFF: none assigned yet)
+    u16 retryCount; // resends left after a failed MP frame (port bit 3: unlimited)
     u16 *data;
     void *callback;
     void *arg;
@@ -155,15 +155,15 @@ typedef struct WmspStatus {
     u16 unk_1ec; // 1: 1 Mbps, 2: 2 Mbps (from the parent's basic rate set)
     u16 unk_1ee; // preamble type last set with WMSP_WL_ParamSetPreambleType
     u8 unk_1f0[0x1f4 - 0x1f0];
-    u16 enableChannel;  // bit n: channel n usable (WMSP_SetParentParam)
-    u16 allowedChannel; // bit n-1: channel n allowed (WMSP_StartParent)
-    u8 unk_1f8[16][16];
+    u16 enableChannel;    // bit n: channel n usable (WMSP_SetParentParam)
+    u16 allowedChannel;   // bit n-1: channel n allowed (WMSP_StartParent)
+    u16 portSeqNo[16][8]; // per aid and port 0-7: next sequence number (bit 0 set: none yet)
     WmspSendEntry sendEntry[32];
     WmspSendQueue sendFreeQueue;
-    WmspSendQueue unk_6fc[4];
+    WmspSendQueue sentQueue[4]; // per priority: entries of the MP frame being sent
     WmspSendQueue sendQueue[4]; // per priority (WMSP_PutSendQueue)
     OSMutex sendQueueMutex;
-    u32 unk_734;
+    u32 sendInFlight;        // 1 from WMSP_SendMaMP / WMSP_SendMaKeyData until WMSP_FlushSendQueue
     OSTick lastRecvTick[16]; // per aid; 0: not tracked
     OSTick recvTimeout;
     u16 unk_7c0;
@@ -171,7 +171,7 @@ typedef struct WmspStatus {
     u16 unk_7c4;
     u16 unk_7c6;
     u16 unk_7c8;
-    u16 unk_7ca;
+    u16 sendRetryCount; // retryCount of new send queue entries
     u16 unk_7cc;
 } WmspStatus;
 
@@ -315,17 +315,36 @@ typedef struct WmspPortSendCallback {
     u16 api;
     u16 port;
     u16 destBitmap;
-    u16 failedBitmap; // the connected destinations when the send queue was full (result 10)
-    u16 unk_10;
+    u16 failedBitmap; // destinations not reached (result 10: the connected ones, queue full)
+    u16 sentBitmap;
     u16 unk_12;
     u16 *data;
     u16 size;
-    u16 unk_1a;
+    u16 seqNo;
     void *callback;
     void *arg;
     u16 sendSize; // own MP size: parentSize on the parent, childSize on a child
     u16 recvSize; // the other side's
 } WmspPortSendCallback;
+
+// Callback of a received port packet (indication 130, api 21) to the ARM9.
+typedef struct WmspPortRecvCallback {
+    u16 command;
+    u16 result;
+    u16 api;
+    u16 port;
+    void *context; // the MP receive buffer the packet is in
+    u16 *data;
+    u16 size;
+    u16 srcAid;
+    u8 unk_14[6];
+    u16 seqNo; // 0xFFFF: none
+    u8 unk_1c[4];
+    u16 destAid; // own aid
+    u8 unk_22[0x40 - 0x22];
+    u16 sendSize; // own MP size: parentSize on the parent, childSize on a child
+    u16 recvSize; // the other side's
+} WmspPortRecvCallback;
 
 extern WmspWork wmspW;
 extern OSThread wmspIndicateThread;
@@ -552,16 +571,22 @@ void WMSP_SetMPData(WmspSetMPDataRequest *request);
 void WMSP_ResumeMaMP(u32 bitmap);
 u32 WMSP_PutSendQueue(u32 childBitmap, u32 priority, u32 port, u32 destBitmap, u16 *data, u16 size, void *callback, void *arg);
 
+// wmsp_send_ma.c
+void WMSP_SendMaKeyData(void);
+void WMSP_SendMaMP(u16 bitmap);
+
+// wmsp_send_queue_flush.c
+int WMSP_FlushSendQueue(int retransmit, u16 failedBitmap);
+void WMSP_CleanSendQueue(u32 aidBitmap);
+void WMSP_ParsePortPacket(u16 srcAid, u16 header, void *data, s32 size, void *context);
+
+// wmsp_get_tmptt.c
+u16 WmspGetTmptt(u32 headerSize, u32 size, u32 bitmap, u32 line);
+
 // defined in the later WMSP files
 u32 WMSP_SetMPParameterCore(void *param, void *result);
-u16 WmspGetTmptt(u32 headerSize, u32 size, u32 bitmap, u32 line);
-void WMSP_SendMaMP(u16 bitmap);
-void WMSP_SendMaKeyData(void);
 u16 *WMSP_GetBuffer4Callback2Wm9(void);
 void WMSP_ReturnResult2Wm9(void *result);
-void WMSP_CleanSendQueue(u16 aidBitmap);
-int WMSP_FlushSendQueue(int timeout, u16 aidBitmap);
-void WMSP_ParsePortPacket(u16 aid, u16 port, void *data, u16 length, void *buf);
 void WMSPi_CommonInit(u32 arg);
 BOOL WMSPi_CommonWlIdle(u16 *result, u16 *wlResult);
 

@@ -23,12 +23,12 @@ typedef struct {
 extern Work *ov13_0224F544;
 extern const u16 ov13_02245480[];
 extern const u8 ov13_022454C0[];
-extern void ov13_02240D80(void *, int);
-extern void ov13_02240CC0(void *, int, int, int, int, int, int, void *);
-extern void ov13_02240E2C(void *);
+extern void WifiSetupText_Clear(void *, int);
+extern void WifiSetupText_DrawInRect(void *, int, int, int, int, int, int, void *);
+extern void WifiSetupText_MarkDirty(void *);
 
 static inline void draw(void *p, u16 x, volatile u16 *r, u16 *pair) {
-    ov13_02240CC0(p, x, r[1], r[2], r[3], 2, 0x480, pair);
+    WifiSetupText_DrawInRect(p, x, r[1], r[2], r[3], 2, 0x480, pair);
 }
 
 static inline int clamp(int i) {
@@ -50,7 +50,7 @@ void ov13_0223237C(void) {
     rect[1] = ov13_02245480[8];
     rect[2] = 11;
     rect[3] = 16;
-    ov13_02240D80(initial->window, 0);
+    WifiSetupText_Clear(initial->window, 0);
     pair[1] = 0;
     for (i = 0; i < 12; i++) {
         u16 x = ov13_022454C0[i];
@@ -58,5 +58,5 @@ void ov13_0223237C(void) {
         rect[0] = x;
         draw(ov13_0224F544->window, x, rect, pair);
     }
-    ov13_02240E2C(ov13_0224F544->window);
+    WifiSetupText_MarkDirty(ov13_0224F544->window);
 }

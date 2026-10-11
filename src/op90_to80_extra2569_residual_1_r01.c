@@ -45,7 +45,7 @@ static inline void DecodePivotRotation(fx32 *matrix, int axis, const s16 *rotati
 #pragma opt_common_subs off
 
 void getMdlRot_(MdlJointResult *out) {
-    MdlRenderState *ctx = _021DA700;
+    MdlRenderState *ctx = gCurrentRenderState;
     u32 index = ctx->command[1];
     NNSG3dResNodeInfo *info = ctx->nodes;
     const NNSG3dResDict *dict = (const NNSG3dResDict *)info;

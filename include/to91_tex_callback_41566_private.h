@@ -4,7 +4,7 @@
 #include <string.h>
 typedef void (*To91TexCalc41566)(void *,void *);
 typedef void (*To91TexSend41566)(void *);
-extern To91TexSend41566 _02110A8C[];
+extern To91TexSend41566 gSendTexSRTFuncs[];
 extern To91TexCalc41566 _02110C5C[];
 void texmtxCalc_flagR___xsi(void *,void *);
 void NNSi_G3dSendTexSRTXsi(void *);

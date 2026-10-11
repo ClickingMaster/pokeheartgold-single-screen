@@ -20,7 +20,7 @@ typedef struct {
 } Work;
 
 extern Work *ov13_0224F4C0;
-extern void ov13_0222AAFC(int, int), ov13_022425C8(void *, void (*)(void *));
+extern void ov13_0222AAFC(int, int), WifiSetupTask_SetFunc(void *, void (*)(void *));
 void ov13_0222A0DC(void *), ov13_0222A160(void *), ov13_0222A1E4(void *), ov13_0222A268(void *), ov13_0222A2EC(void *);
 
 static inline void GetPos(PackedSprite *s, volatile int *x, volatile int *y) {
@@ -52,5 +52,5 @@ void ov13_0222A268(void *p) {
     }
     ov13_0222AAFC(3, 145);
     ov13_0222AAFC(4, 192);
-    ov13_022425C8(p, ov13_0222A2EC);
+    WifiSetupTask_SetFunc(p, ov13_0222A2EC);
 }

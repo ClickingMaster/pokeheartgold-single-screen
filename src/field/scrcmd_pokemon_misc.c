@@ -1050,7 +1050,7 @@ BOOL ScrCmd_GiveTogepiEgg(ScriptContext *ctx) {
     mon = AllocMonZeroed(HEAP_ID_FIELD2);
     ZeroMonData(mon);
 
-    SetEggStats(mon, SPECIES_TOGEPI, 1, profile, 3, sub_02017FE4(MAPSECTYPE_GIFT, MAPLOC(METLOC_MR_POKEMON)));
+    SetEggStats(mon, SPECIES_TOGEPI, 1, profile, 3, Mapsec_FromTypeAndIndex(MAPSECTYPE_GIFT, MAPLOC(METLOC_MR_POKEMON)));
 
     for (i = 0; i < MAX_MON_MOVES; i++) {
         if (GetMonData(mon, MON_DATA_MOVE1 + i, 0) == MOVE_NONE) {
@@ -1132,7 +1132,7 @@ BOOL ScrCmd_GiveSpikyEarPichu(ScriptContext *ctx) {
     heldItem = ITEM_ZAP_PLATE;
     SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
 
-    u32 unkB = sub_02017FE4(MAPSECTYPE_NORMAL, MapHeader_GetMapSec(ctx->fieldSystem->location->mapId));
+    u32 unkB = Mapsec_FromTypeAndIndex(MAPSECTYPE_NORMAL, MapHeader_GetMapSec(ctx->fieldSystem->location->mapId));
 
     sub_020720FC(mon, profile, 4, unkB, 0x18, HEAP_ID_FIELD2);
 

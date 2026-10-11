@@ -19,9 +19,9 @@ typedef struct {
     void *data[4];
 } Work;
 extern Work *ov13_0224F4BC;
-extern void ov13_02240D94(void *, int, int, void *, int);
-extern void ov13_0223FDF4(void *, int, int, int);
-extern void ov13_0223FF18(void *, int, int, int);
+extern void WifiSetupText_ShowObjCanvas(void *, int, int, void *, int);
+extern void WifiSetupOamBlock_SetAffineMode(void *, int, int, int);
+extern void WifiSetupOamBlock_SetPosition(void *, int, int, int);
 extern s32 FX_ModS32(s32, s32);
 void ov13_022290F0(int mode, int idx, int y);
 static inline u32 OamPos(u32 attr, int x, int y) {
@@ -44,7 +44,7 @@ void ov13_022290F0(int mode, int idx, int y) {
         pos++;
     }
     if (idx < 4) {
-        ov13_02240D94(ov13_0224F4BC->res[mode][idx], ov13_02244FA4[start].x, y, ov13_0224F4BC->data[idx], 2);
+        WifiSetupText_ShowObjCanvas(ov13_0224F4BC->res[mode][idx], ov13_02244FA4[start].x, y, ov13_0224F4BC->data[idx], 2);
     }
     m = FX_ModS32(idx + 3, 4);
     for (i = 0; i < n2.v[idx]; i++) {
@@ -53,7 +53,7 @@ void ov13_022290F0(int mode, int idx, int y) {
         *ov13_0224F4BC->second[m] = OamPos(*ov13_0224F4BC->second[m], x, y);
     }
     for (i = 0; i < n3.v[idx]; i++) {
-        ov13_0223FDF4(ov13_0224F4BC->third[i], -1, 0, 0);
-        ov13_0223FF18(ov13_0224F4BC->third[i], -1, ov13_02244F7C[i].x, y);
+        WifiSetupOamBlock_SetAffineMode(ov13_0224F4BC->third[i], -1, 0, 0);
+        WifiSetupOamBlock_SetPosition(ov13_0224F4BC->third[i], -1, ov13_02244F7C[i].x, y);
     }
 }

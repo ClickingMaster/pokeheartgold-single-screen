@@ -12,15 +12,15 @@ typedef struct {
 
 extern Work *ov13_0224F540;
 extern void ov13_0222B948(int *, int *);
-extern void ov13_022277B8(int, int, int);
-extern int ov13_02242074(const void *, int);
+extern void WifiSetupMessage_Show(int, int, int);
+extern int WifiSetup_StrNLen(const void *, int);
 int ov13_0223191C(void);
 
 int ov13_0223191C(void) {
     int a, b, len;
     ov13_0222B948(&a, &b);
     if (b == 1) {
-        ov13_022277B8(0x35, -1, 0);
+        WifiSetupMessage_Show(0x35, -1, 0);
     }
     ov13_0222B948(&a, &b);
     if (a == 0) {
@@ -29,7 +29,7 @@ int ov13_0223191C(void) {
     if (b == 1 && ov13_0224F540->text[0] == 0) {
         return 0;
     }
-    len = ov13_02242074(ov13_0224F540->text, 32);
+    len = WifiSetup_StrNLen(ov13_0224F540->text, 32);
     switch (len) {
     case 0:
     case 5:

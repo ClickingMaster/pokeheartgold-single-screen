@@ -18,8 +18,8 @@ void WMSP_InitSendQueue(void) {
     for (i = 0; i < 4; i++) {
         status->sendQueue[i].head = 0xffff;
         status->sendQueue[i].tail = 0xffff;
-        status->unk_6fc[i].head = 0xffff;
-        status->unk_6fc[i].tail = 0xffff;
+        status->sentQueue[i].head = 0xffff;
+        status->sentQueue[i].tail = 0xffff;
     }
     __VENEER_OS_UnlockMutex(&status->sendQueueMutex);
 }

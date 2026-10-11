@@ -80,14 +80,14 @@ u32 WMSP_PutSendQueue(u32 childBitmap, u32 priority, u32 port, u32 destBitmap, u
     e->destBitmap = destBitmap;
     e->restBitmap = destBitmap & childBitmap;
     e->sentBitmap = 0;
-    e->unk_0a = 0;
+    e->inFlightBitmap = 0;
     e->data = data;
     e->size = size;
     e->callback = callback;
     e->arg = arg;
     e->next = 0xffff;
-    e->unk_10 = 0xffff;
-    e->seqNo = status->unk_7ca;
+    e->seqNo = 0xffff;
+    e->retryCount = status->sendRetryCount;
     if (queue->tail == 0xffff) {
         queue->head = index;
     } else {

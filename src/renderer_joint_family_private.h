@@ -36,8 +36,8 @@ typedef char MdlJointOffset[(offsetof(MdlRenderState,joint)==0x12c)?1:-1];
 typedef char MdlCacheSize[(sizeof(MdlScaleCache)==1536)?1:-1];
 typedef char MdlJointSize[(sizeof(MdlJointResult)==88)?1:-1];
 typedef char MdlRendererSize[(sizeof(MdlRenderState)==0x188)?1:-1];
-extern MdlRenderState *_021DA700;
-extern MdlScaleFunction _02110A80[3];
+extern MdlRenderState *gCurrentRenderState;
+extern MdlScaleFunction gGetJointScaleFuncs[3];
 typedef void (*MdlJointEvaluator)(MdlJointResult*,const NNSG3dAnmObj*,u32);
 void NNSi_G3dAnmCalcNsBca(MdlJointResult*,const NNSG3dAnmObj*,u32);
 int NNSi_G3dAnmBlendJnt(MdlJointResult*,const NNSG3dAnmObj*,u32);
@@ -62,5 +62,5 @@ extern fx32 _021DB514[380],_021DB518[379];
 #define MdlCache510Vol ((volatile fx32 *)_021DB510)
 #define MdlCache514Vol ((volatile fx32 *)_021DB514)
 #define MdlCache518Vol ((volatile fx32 *)_021DB518)
-extern void *_02110A74[3],*_02110A8C[4];
+extern void *gSendJointSRTFuncs[3],*gSendTexSRTFuncs[4];
 #endif

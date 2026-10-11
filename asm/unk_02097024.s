@@ -11,10 +11,10 @@
 
 	.public _02108EA0
 _02108EA0:
-	.word ov85_021E88AC, ov85_021E8A08, ov85_021E8B08, FS_OVERLAY_ID(OVY_85)
+	.word SpinTradeGroupApp_Init, SpinTradeGroupApp_Main, SpinTradeGroupApp_Exit, FS_OVERLAY_ID(OVY_85)
 	.public _02108EB0
 _02108EB0:
-	.word ov85_021E5900, ov85_021E5AAC, ov85_021E5A34, FS_OVERLAY_ID(OVY_85)
+	.word SpinTradeApp_Init, SpinTradeApp_Main, SpinTradeApp_Exit, FS_OVERLAY_ID(OVY_85)
 	.public _02108EC0
 _02108EC0:
 	.word sub_020970E4

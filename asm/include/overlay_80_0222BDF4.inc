@@ -455,9 +455,9 @@
 .public ov80_0223C738
 .public ov80_0223C990
 .public ov80_0223CD4A
-.public ov81_0223DD60
-.public ov81_0223DEA8
-.public ov81_0223E234
+.public BattleFactoryApp_Init
+.public BattleFactoryApp_Main
+.public BattleFactoryApp_Exit
 .public BattleHallApp_Init
 .public BattleHallApp_Main
 .public BattleHallApp_Exit

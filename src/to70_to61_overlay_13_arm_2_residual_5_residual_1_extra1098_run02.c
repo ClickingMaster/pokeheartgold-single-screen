@@ -28,8 +28,8 @@ typedef struct Global {
 } Global;
 
 extern Global ov13_0224F538;
-extern void ov13_0223ABB8(int), ov13_02230F54(void), ov13_0223959C(void), ov13_022272E4(void), ov13_0223BE6C(int, int, int, int, int), ov13_0222B8E8(void (*)(void)), ov13_02230F84(void), ov13_02230520(void);
-extern int ov13_02227258(void);
+extern void ov13_0223ABB8(int), ov13_02230F54(void), ov13_0223959C(void), WifiSetupButtonBar_Lock(void), ov13_0223BE6C(int, int, int, int, int), ov13_0222B8E8(void (*)(void)), ov13_02230F84(void), ov13_02230520(void);
+extern int WifiSetupButtonBar_GetSelected(void);
 extern int FX_DivS32(int, int);
 void ov13_02230414(void);
 
@@ -39,12 +39,12 @@ typedef struct Box {
 
 extern Box ov13_02245958;
 extern Box ov13_022453FC[];
-extern int ov13_022417DC(Box *);
-extern int ov13_022418EC(Box *);
-extern int ov13_02241694(int);
-extern int ov13_022416D4(int);
-extern int ov13_02241714(int);
-extern void ov13_0222726C(int);
+extern int WifiSetupInput_IsTouchPressed(Box *);
+extern int WifiSetupInput_IsTouchReleased(Box *);
+extern int WifiSetupInput_IsKeyPressed(int);
+extern int WifiSetupInput_IsKeyRepeated(int);
+extern int WifiSetupInput_IsKeyReleased(int);
+extern void WifiSetupButtonBar_SelectIfNone(int);
 extern void ov13_02230CC4(void);
 extern void ov13_02230ED0(void);
 extern void ov13_02230E5C(void);
@@ -57,7 +57,7 @@ void ov13_02230414(void) {
     if (ov13_0224F538.state->task || ov13_0224F538.state->blocked) {
         return;
     }
-    result = ov13_02227258();
+    result = WifiSetupButtonBar_GetSelected();
     switch (result) {
     case 0:
         ov13_0223ABB8(7);
@@ -73,7 +73,7 @@ void ov13_02230414(void) {
             if (s->items[index].kind == 2) {
                 ov13_0223ABB8(9);
                 ov13_0223959C();
-                ov13_022272E4();
+                WifiSetupButtonBar_Lock();
                 ov13_0223BE6C(14, 1, 1, -1, 0);
                 ov13_0222B8E8(ov13_02230F84);
                 return;

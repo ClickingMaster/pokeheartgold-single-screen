@@ -27,16 +27,16 @@ typedef struct Root {
 
 extern Root ov13_0224F538;
 extern int ov13_02239564(void);
-extern void ov13_022272E4(void);
-extern void ov13_02227D18(void);
+extern void WifiSetupButtonBar_Lock(void);
+extern void WifiSetupCursor_Hide(void);
 extern int ov13_02239550(void);
 extern void ov13_022307AC(void);
-extern void ov13_022272CC(void);
+extern void WifiSetupButtonBar_Unlock(void);
 extern void ov13_0223ABB8(int);
 extern void ov13_02230CC4(void);
 extern void ov13_02230B14(void *);
 extern void ov13_02230BD0(void *);
-extern void *ov13_02242528(int, void (*)(void *), int, int);
+extern void *WifiSetupTask_Create(int, void (*)(void *), int, int);
 extern int FX_DivS32(int, int);
 void ov13_022301A4(void);
 
@@ -52,13 +52,13 @@ void ov13_022301A4(void) {
         break;
     case 1:
         ov13_0224F538.state->active = 1;
-        ov13_022272E4();
+        WifiSetupButtonBar_Lock();
         break;
     case 2:
         if (ov13_0224F538.state->delay) {
             break;
         }
-        ov13_02227D18();
+        WifiSetupCursor_Hide();
         ov13_0224F538.value = FX_DivS32(ov13_0224F538.state->total * ov13_02239550(), ov13_0224F538.state->divisor);
         ov13_022307AC();
         ov13_0224F538.state->delay = 4;
@@ -66,7 +66,7 @@ void ov13_022301A4(void) {
     case 3: {
         int mod;
         ov13_0224F538.state->active = 0;
-        ov13_022272CC();
+        WifiSetupButtonBar_Unlock();
         ov13_0224F538.value = FX_DivS32(ov13_0224F538.state->total * ov13_02239550(), ov13_0224F538.state->divisor);
         ov13_0223ABB8(19);
         ov13_022307AC();
@@ -74,9 +74,9 @@ void ov13_022301A4(void) {
         if (mod == 0) {
             ov13_02230CC4();
         } else if (mod < 14) {
-            ov13_0224F538.state->task = ov13_02242528(0, ov13_02230B14, 0, 120);
+            ov13_0224F538.state->task = WifiSetupTask_Create(0, ov13_02230B14, 0, 120);
         } else {
-            ov13_0224F538.state->task = ov13_02242528(0, ov13_02230BD0, 0, 120);
+            ov13_0224F538.state->task = WifiSetupTask_Create(0, ov13_02230BD0, 0, 120);
         }
         break;
     }
@@ -88,7 +88,7 @@ void ov13_022301A4(void) {
             }
         } else {
             ov13_0223ABB8(19);
-            ov13_0224F538.state->task = ov13_02242528(0, ov13_02230B14, 0, 120);
+            ov13_0224F538.state->task = WifiSetupTask_Create(0, ov13_02230B14, 0, 120);
         }
         break;
     case 6:
@@ -99,7 +99,7 @@ void ov13_022301A4(void) {
             }
         } else {
             ov13_0223ABB8(19);
-            ov13_0224F538.state->task = ov13_02242528(0, ov13_02230BD0, 0, 120);
+            ov13_0224F538.state->task = WifiSetupTask_Create(0, ov13_02230BD0, 0, 120);
         }
         break;
     case 5:

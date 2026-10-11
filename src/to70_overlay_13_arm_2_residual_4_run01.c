@@ -35,8 +35,8 @@ typedef struct {
 extern Global ov13_0224F538;
 extern u8 ov13_0224544C[];
 extern u8 ov13_02245450[];
-extern Object *ov13_02240184(int, int);
-extern void ov13_022400F0(int, u8, Object *);
+extern Object *WifiSetupOamTemplate_AllocOam(int, int);
+extern void WifiSetupOamTemplate_Copy(int, u8, Object *);
 void ov13_0222FD10(void);
 
 void ov13_0222FD10(void) {
@@ -46,15 +46,15 @@ void ov13_0222FD10(void) {
     }
     int i = 0;
     for (; i < n; i++) {
-        ov13_0224F538.w->a[i] = ov13_02240184(0, 46);
-        ov13_0224F538.w->b[i] = ov13_02240184(0, 24);
+        ov13_0224F538.w->a[i] = WifiSetupOamTemplate_AllocOam(0, 46);
+        ov13_0224F538.w->b[i] = WifiSetupOamTemplate_AllocOam(0, 24);
     }
     for (i = 0; (u32)i < 3; i++) {
-        ov13_022400F0(0, ov13_0224544C[i], ov13_0224F538.w->a[0]);
+        WifiSetupOamTemplate_Copy(0, ov13_0224544C[i], ov13_0224F538.w->a[0]);
         ov13_0224F538.w->c[i] = ov13_0224F538.w->a[0]->attr.word & 1023;
     }
     for (i = 0; (u32)i < 4; i++) {
-        ov13_022400F0(0, ov13_02245450[i], ov13_0224F538.w->b[0]);
+        WifiSetupOamTemplate_Copy(0, ov13_02245450[i], ov13_0224F538.w->b[0]);
         ov13_0224F538.w->d[i] = ov13_0224F538.w->b[0]->attr.word & 1023;
     }
     for (i = 0; i < n; i++) {

@@ -211,7 +211,7 @@ void WMSP_IndicateThread(void *arg) {
             st->lastRecvTick[aid86] = __VENEER_OS_GetTick() | 1;
             __VENEER_MI_CpuCopy8((u8 *)message + 16, st->childMacAddress[aid86 - 1], 6);
             __VENEER_OS_RestoreInterrupts(irq);
-            __VENEER_MIi_CpuClear16(1, st->unk_1f8[aid86], 16);
+            __VENEER_MIi_CpuClear16(1, st->portSeqNo[aid86], 16);
             cb_3 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb_3[0] = 8;
             cb_3[1] = 0;

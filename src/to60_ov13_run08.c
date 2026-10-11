@@ -7,28 +7,28 @@
 typedef void (*Func)(void);
 typedef void (*TaskFunc)(void *, void *);
 
-extern void ov13_022403B8(int, int, int, int);
-extern void ov13_02240EA8(int, int);
-extern void ov13_02240EFC(int, int);
+extern void WifiSetupFade_Start(int, int, int, int);
+extern void WifiSetupDisplay_ShowPlanes(int, int);
+extern void WifiSetupDisplay_HidePlanes(int, int);
 extern void ov13_0222B8E8(Func);
 extern void ov13_0222B8F8(int, int);
-extern int ov13_02240394(int);
+extern int WifiSetupFade_IsActive(int);
 extern void ov13_022279B4(int);
-extern int ov13_02227258(void);
-extern void ov13_022272CC(void);
-extern void ov13_022272E4(void);
-extern void ov13_02227228(void);
+extern int WifiSetupButtonBar_GetSelected(void);
+extern void WifiSetupButtonBar_Unlock(void);
+extern void WifiSetupButtonBar_Lock(void);
+extern void WifiSetupButtonBar_Close(void);
 extern int ov13_022272A0(void);
-extern void ov13_02227028(void);
-extern void ov13_0222788C(void);
-extern int ov13_02241694(int);
-extern void ov13_0222726C(int);
+extern void WifiSetupBusyIcon_Destroy(void);
+extern void WifiSetupMessage_Hide(void);
+extern int WifiSetupInput_IsKeyPressed(int);
+extern void WifiSetupButtonBar_SelectIfNone(int);
 extern int ov13_02238C2C(void);
 extern void ov13_0223AC20(void);
 extern void ov13_0223ABB8(int);
-extern void ov13_022405B8(int);
+extern void WifiSetupFade_StartDelay(int);
 extern void ov13_0223B940(void);
-extern void ov13_02240B04(int);
+extern void WifiSetupText_FreeBgCanvas(int);
 extern void ov13_0223BE6C(int, int, int, int, int);
 extern void ov13_0223BA24(void *);
 extern int ov13_0223C1DC(void);
@@ -37,11 +37,11 @@ extern void ov13_0223C198(void);
 extern void ov13_022368D8(void);
 extern void ov13_022388A0(void);
 extern void ov13_02238694(void);
-extern void *ov13_0224128C(u32, u32);
-extern void ov13_022412B0(void *);
-extern void *ov13_02242528(int, TaskFunc, void *, int);
-extern void ov13_022425F0(int, void *);
-extern void ov13_022425D0(int, void *);
+extern void *WifiSetupHeap_AllocZeroed(u32, u32);
+extern void WifiSetupHeap_FreeAndClear(void *);
+extern void *WifiSetupTask_Create(int, TaskFunc, void *, int);
+extern void WifiSetupTask_Destroy(int, void *);
+extern void WifiSetupTask_DestroyLater(int, void *);
 
 extern u8 ov13_0224F58C;
 
@@ -109,17 +109,17 @@ extern Slider *ov13_0224F59C;
 extern u8 ov13_02245790[];
 extern u8 ov13_02245794[];
 extern u8 ov13_02245958[];
-extern void ov13_02240E50(int, int, Point *);
-extern void *ov13_022401B0(int, int, int);
-extern void ov13_0223FF18(void *, int, int, int);
-extern void ov13_02240008(void *, int, int);
-extern void ov13_0223FD60(void *);
-extern void ov13_022419DC(Point *);
+extern void WifiSetup_SetPoint(int, int, Point *);
+extern void *WifiSetupOamTemplate_AllocBlock(int, int, int);
+extern void WifiSetupOamBlock_SetPosition(void *, int, int, int);
+extern void WifiSetupOamBlock_SetPriority(void *, int, int);
+extern void WifiSetupOamBlock_Free(void *);
+extern void WifiSetupInput_GetTouchPos(Point *);
 extern void ov13_0223ABDC(int);
 extern void ov13_0223ABFC(int, int);
-extern int ov13_02241754(void *);
-extern int ov13_02241864(Rect *);
-extern int ov13_022417DC(Rect *);
+extern int WifiSetupInput_IsTouchHeld(void *);
+extern int WifiSetupInput_IsTouchRepeated(Rect *);
+extern int WifiSetupInput_IsTouchPressed(Rect *);
 extern s32 FX_DivS32(s32, s32);
 
 void ov13_022395B4(void *, void *);
@@ -311,7 +311,7 @@ extern void DWCi_AUTH_GetNewWiFiInfo(void *);
 extern void *DWCi_BACKUPlConvWifiInfo(void *);
 extern void DWCi_BACKUPlWritePage(BackupData *, int *, void *);
 extern u16 MATH_CalcCRC16(const MATHCRC16Table *, const void *, u32);
-extern int ov13_02242074(const char *, int);
+extern int WifiSetup_StrNLen(const char *, int);
 extern long atol(const char *);
 
 void ov13_0223A4F4(void);
@@ -347,15 +347,15 @@ extern u8 ov13_022467D8[];
 extern u8 ov13_022457EC[];
 extern u8 ov13_022457FB[];
 extern TitlePos ov13_0224580A[];
-extern void *ov13_0223F95C(void *, u32 *, int);
+extern void *WifiSetupFile_Load(void *, u32 *, int);
 extern void NNS_SndArcInitOnMemory(void *, void *);
 extern int NNS_SndArcPlayerStartSeqArc(void *, int, int);
 extern void NNS_SndPlayerSetVolume(void *, int);
 extern void NNS_SndPlayerSetTrackPitch(void *, u32, int);
 extern void NNS_SndPlayerStopSeq(void *, int);
-extern void ov13_0223FE98(void *, int, int, int);
-extern void ov13_02240068(void *, int, int *, int *);
-extern void ov13_022425C8(void *, TaskFunc);
+extern void WifiSetupOamBlock_SetModeAndPalette(void *, int, int, int);
+extern void WifiSetupOamBlock_GetPosition(void *, int, int *, int *);
+extern void WifiSetupTask_SetFunc(void *, TaskFunc);
 extern void ov13_0223B6F4(int);
 
 void ov13_0223AC40(void *, void *);
@@ -369,13 +369,13 @@ void ov13_02238D88(void);
 void ov13_02239228(void *src);
 
 void ov13_02238D88(void) {
-    ov13_022403B8(2, 0, 0x15, 8);
-    ov13_02240EA8(0, 0x15);
+    WifiSetupFade_Start(2, 0, 0x15, 8);
+    WifiSetupDisplay_ShowPlanes(0, 0x15);
     ov13_0222B8E8(ov13_02238DBC);
 }
 
 void ov13_02238DBC(void) {
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     ov13_022279B4(2);
@@ -383,10 +383,10 @@ void ov13_02238DBC(void) {
 }
 
 void ov13_02238DE8(void) {
-    if (ov13_02227258() == -2) {
+    if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
-    ov13_022272CC();
+    WifiSetupButtonBar_Unlock();
     ov13_0222B8E8(ov13_02238E10);
 }
 
@@ -397,12 +397,12 @@ void ov13_02238E10(void) {
 }
 
 void ov13_02238E24(void) {
-    if (ov13_02241694(2)) {
-        ov13_0222726C(0);
+    if (WifiSetupInput_IsKeyPressed(2)) {
+        WifiSetupButtonBar_SelectIfNone(0);
         return;
     }
     if (ov13_02238C2C()) {
-        ov13_0222726C(0);
+        WifiSetupButtonBar_SelectIfNone(0);
     }
 }
 
@@ -413,7 +413,7 @@ void ov13_02238E60(void) {
     if (ov13_0224F58C != 0) {
         return;
     }
-    if (ov13_02227258() != 0) {
+    if (WifiSetupButtonBar_GetSelected() != 0) {
         return;
     }
     ov13_0224F58C = 2;
@@ -423,29 +423,29 @@ void ov13_02238E60(void) {
 }
 
 void ov13_02238EAC(void) {
-    ov13_022272E4();
-    ov13_022405B8(8);
+    WifiSetupButtonBar_Lock();
+    WifiSetupFade_StartDelay(8);
     ov13_0222B8E8(ov13_02238ECC);
 }
 
 void ov13_02238ECC(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
-    ov13_02227228();
+    WifiSetupButtonBar_Close();
     if (ov13_0224F58C == 2 || ov13_0224F58C == 3) {
-        ov13_022403B8(3, 1, 1, 8);
+        WifiSetupFade_Start(3, 1, 1, 8);
     }
-    ov13_022403B8(3, 0, 0x15, 8);
+    WifiSetupFade_Start(3, 0, 0x15, 8);
     ov13_0222B8E8(ov13_02238F38);
 }
 
 void ov13_02238F38(void) {
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     if (ov13_0224F58C == 2) {
-        if (ov13_02240394(1) != 0) {
+        if (WifiSetupFade_IsActive(1) != 0) {
             return;
         }
     }
@@ -453,13 +453,13 @@ void ov13_02238F38(void) {
         return;
     }
     ov13_0223B940();
-    ov13_02227028();
-    ov13_02240B04(0);
+    WifiSetupBusyIcon_Destroy();
+    WifiSetupText_FreeBgCanvas(0);
     if (ov13_0224F58C == 2 || ov13_0224F58C == 3) {
-        ov13_0222788C();
-        ov13_02240EFC(1, 1);
+        WifiSetupMessage_Hide();
+        WifiSetupDisplay_HidePlanes(1, 1);
     }
-    ov13_02240EFC(0, 0x15);
+    WifiSetupDisplay_HidePlanes(0, 0x15);
     if (ov13_0224F58C == 2) {
         ov13_0222B8F8(2, 1);
         ov13_0222B8E8(ov13_022368D8);
@@ -482,7 +482,7 @@ void ov13_0223902C(int a) {
         ov13_0223AC20();
         ov13_0223ABB8(0x12);
         ov13_0223BE6C(0x10, 1, 1, -1, 0);
-        ov13_022272E4();
+        WifiSetupButtonBar_Lock();
         ov13_0222B8E8(ov13_02239118);
         break;
     case 1:
@@ -494,7 +494,7 @@ void ov13_0223902C(int a) {
         ov13_0223AC20();
         ov13_0223BA24(NULL);
         ov13_0223BE6C(0x11, 0, 1, -1, 0);
-        ov13_022272E4();
+        WifiSetupButtonBar_Lock();
         ov13_0222B8E8(ov13_02239164);
         break;
     case 3:
@@ -547,15 +547,15 @@ void ov13_022391C0(void) {
         return;
     }
     ov13_0223ABB8(0xb);
-    ov13_022272CC();
+    WifiSetupButtonBar_Unlock();
     ov13_0224F58C = 0;
     ov13_0223BA24(ov13_0223902C);
     ov13_0222B8E8(ov13_02238E10);
 }
 
 void ov13_02239228(void *src) {
-    BgBuf *p = ov13_0224128C(0x608, 4);
+    BgBuf *p = WifiSetupHeap_AllocZeroed(0x608, 4);
     ov13_0224F590.buf = p;
     MIi_CpuCopyFast(src, (u32 *)p->data, 0x600);
-    ov13_0224F590.buf->task = ov13_02242528(1, ov13_02239324, NULL, 0x78);
+    ov13_0224F590.buf->task = WifiSetupTask_Create(1, ov13_02239324, NULL, 0x78);
 }

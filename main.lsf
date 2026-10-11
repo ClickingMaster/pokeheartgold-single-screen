@@ -136,8 +136,8 @@ Static main
     Object src/pokepic_animation_commands_1.o
     Object src/pokepic_animation_7.o
     Object src/motion_state_update.o
-    Object asm/unk_02017FAC_data.o
-    Object src/map_matrix_1.o
+    Object asm/map_section_data.o
+    Object src/map_section.o
     Object src/model_animation.o
     Object src/unk_02018380.o
     Object src/menu_input_state.o
@@ -1262,25 +1262,11 @@ Static main
     Object lib/NitroSystem/src/g3d_mdl_bind.o
     Object lib/NitroSystem/src/g3d_glb.o
     Object lib/asm/to59_nnsys_anchor_own3.o
-    Object src/to65_nnsys_residual_38_run04.o
-    Object src/op90_to65_nnsys_residual_38_residual_4_r01.o
-    Object src/to65_nnsys_residual_38_run05.o
-    Object src/to80_extra1458_run01.o
-    Object src/to65_nnsys_residual_38_run06.o
-    Object src/to70_to65_nnsys_residual_38_residual_6_extra1158_run01.o
-    Object src/to65_nnsys_residual_38_run07.o
-    Object src/to70_to70_to65_nnsys_residual_38_residual_7_extra305_residual_1_extra1186_run01.o
-    Object src/to70_to65_nnsys_residual_38_residual_7_extra305_run01.o
-    Object src/op90_to70_to65_nnsys_residual_38_residual_7_extra305_residual_2_r01.o
-    Object src/to59_nnsys_run50.o
-    Object src/op90_to80_extra1752_residual_1_r01.o
-    Object src/to80_extra1752_run01.o
-    Object src/to80_extra1752_run02.o
-    Object src/op90_to80_extra1752_residual_2_r01.o
-    Object src/to70_to70_nnsys_residual_39_residual_1_extra1183_run01.o
-    Object src/to80_extra1753_run01.o
-    Object src/op90_to80_extra1864_residual_1_r01.o
-    Object src/to80_extra1864_run01.o
+    Object lib/NitroSystem/src/g3d_glb_state.o
+    Object lib/NitroSystem/src/g3d_anm_blend.o
+    Object lib/NitroSystem/src/g3d_draw.o
+    Object lib/NitroSystem/src/g3d_sbc.o
+    Object lib/NitroSystem/src/g3d_1mat1shp.o
     Object src/to70_nnsys_residual_39_run01.o
     Object src/to80_extra1478_run01.o
     Object src/op90_to80_extra1478_residual_1_r01.o
@@ -3716,18 +3702,9 @@ Overlay OVY_13
     Object src/wifi_setup_api.o
     Object asm/to53_overlay13_r24_data.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor.o
-    Object src/op90_to70_to61_overlay_13_arm_2_residual_1_residual_1_extra1096_residual_1_r01.o
-    Object src/op90_op90_to70_to61_overlay_13_arm_2_residual_1_residual_1_extra1096_residual_1_residual_1_r01.o
+    Object src/wifi_setup_busy_icon.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own1.o
-    Object src/to70_to61_overlay_13_arm_2_residual_1_residual_1_extra1096_run01.o
-    Object src/to61_overlay_13_arm_2_residual_1_run01.o
-    Object src/to80_extra1403_run01.o
-    Object src/to61_overlay_13_arm_2_residual_1_run02.o
-    Object src/to80_extra1404_run01.o
-    Object src/op90_to80_extra1404_residual_1_r01.o
-    Object src/to61_overlay_13_arm_2_residual_1_run03.o
-    Object src/to80_extra1722_run01.o
-    Object src/to61_overlay_13_arm_2_residual_1_run04.o
+    Object src/wifi_setup_ui_parts.o
     Object src/op90_to90_extra2319_residual_1_r01.o
     Object src/to90_extra2319_run01.o
     Object src/to61_overlay_13_arm_2_residual_1_run05.o
@@ -3879,17 +3856,7 @@ Overlay OVY_13
     Object src/to61_overlay_13_arm_2_residual_15_run14.o
     Object src/to80_extra1632_run01.o
     Object src/to61_overlay_13_arm_2_residual_15_run15.o
-    Object src/to60_ov13_run18.o
-    Object src/to80_extra1619_run01.o
-    Object src/to60_ov13_run19.o
-    Object src/op90_to60_overlay_13_arm_2_residual_17_r01.o
-    Object src/to60_ov13_run20.o
-    Object src/to80_extra1383_run01.o
-    Object src/to60_ov13_run21.o
-    Object src/to70_overlay_13_arm_2_residual_19_run01.o
-    Object src/to60_ov13_run22.o
-    Object lib/NitroDWC/src/to91_w41578_response_notify.o
-    Object src/to60_ov13_run23.o
+    Object src/wifi_setup_ui_system.o
 }
 Overlay OVY_14
 {

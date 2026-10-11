@@ -24,12 +24,12 @@
 .public MATH_CountPopulation
 .public memcpy
 .public memset
-.public ov85_021E85C4
-.public ov85_021E85CC
-.public ov85_021E8680
-.public ov85_021E86AC
-.public ov85_021E8740
-.public ov85_021E8748
+.public SpinTrade_ReceiveJump
+.public SpinTrade_ReceiveSpinData
+.public SpinTrade_ReceiveMemberSlot
+.public SpinTrade_ReceivePlayerCount
+.public SpinTrade_ReceiveTradeSlot
+.public SpinTrade_ReceiveResult
 .public ov85_021E9C84
 .public ov85_021E9D9C
 

@@ -20,7 +20,7 @@ typedef struct {
 
 extern State *ov13_0224F4BC;
 extern void ov13_022290F0(int, int, int);
-extern void ov13_022425C8(void *, void (*)(void *));
+extern void WifiSetupTask_SetFunc(void *, void (*)(void *));
 void ov13_02228444(void *), ov13_022284D8(void *), ov13_0222856C(void *), ov13_02228600(void *), ov13_02228694(void *);
 #pragma force_active on
 #pragma opt_propagation off
@@ -46,5 +46,5 @@ void ov13_02228600(void *w) {
     }
     ov13_022290F0(ov13_0224F4BC->mode, 3, 147);
     ov13_022290F0(ov13_0224F4BC->mode, 4, 192);
-    ov13_022425C8(w, ov13_02228694);
+    WifiSetupTask_SetFunc(w, ov13_02228694);
 }

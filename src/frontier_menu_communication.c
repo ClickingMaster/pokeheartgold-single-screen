@@ -32,12 +32,12 @@ void sub_02038C1C(int count);
 void sub_0205AD24(void *ptr);
 void ov85_021E9C84(void *ptr, int event, int value);
 void ov85_021E9D9C(void *ptr, int event, int value);
-void ov85_021E8680(void *ptr, void *data);
-void ov85_021E86AC(void *ptr, u32 data);
-void ov85_021E85C4(void *ptr, u8 data);
-void ov85_021E85CC(void *ptr, void *data);
-void ov85_021E8740(void *ptr, int sender, u32 data);
-void ov85_021E8748(void *ptr, void *data);
+void SpinTrade_ReceiveMemberSlot(void *ptr, void *data);
+void SpinTrade_ReceivePlayerCount(void *ptr, u32 data);
+void SpinTrade_ReceiveJump(void *ptr, u8 data);
+void SpinTrade_ReceiveSpinData(void *ptr, void *data);
+void SpinTrade_ReceiveTradeSlot(void *ptr, int sender, u32 data);
+void SpinTrade_ReceiveResult(void *ptr, void *data);
 extern const u32 _0210884C[];
 typedef void (*Callback)(int, int, void *, Menu *);
 extern const Callback _02108804[];
@@ -210,24 +210,24 @@ void sub_02096F3C(int sender, int unused, void *data, Menu *menu) {
     menu->flags42 |= 1 << sender;
 }
 void sub_02096F50(int sender, int unused, void *data, Menu *menu) {
-    ov85_021E8680(menu->parent->field34, data);
+    SpinTrade_ReceiveMemberSlot(menu->parent->field34, data);
 }
 void sub_02096F60(int sender, int unused, void *data, Menu *menu) {
-    ov85_021E86AC(menu->parent->field34, *(u32 *)data);
+    SpinTrade_ReceivePlayerCount(menu->parent->field34, *(u32 *)data);
 }
 void sub_02096F70(int sender, int unused, void *data, Menu *menu) {
-    ov85_021E85C4(menu->parent->field34, *(u8 *)data);
+    SpinTrade_ReceiveJump(menu->parent->field34, *(u8 *)data);
 }
 void sub_02096F80(int sender, int unused, void *data, Menu *menu) {
     if (Comm_GetLocalNetId() != 0) {
-        ov85_021E85CC(menu->parent->field34, data);
+        SpinTrade_ReceiveSpinData(menu->parent->field34, data);
     }
 }
 void sub_02096F9C(int sender, int unused, void *data, Menu *menu) {
-    ov85_021E8740(menu->parent->field34, sender, *(u32 *)data);
+    SpinTrade_ReceiveTradeSlot(menu->parent->field34, sender, *(u32 *)data);
 }
 void sub_02096FAC(int sender, int unused, void *data, Menu *menu) {
-    ov85_021E8748(menu->parent->field34, data);
+    SpinTrade_ReceiveResult(menu->parent->field34, data);
 }
 void sub_02096FBC(int sender, int unused, void *data, Menu *menu) {
     menu->flags48 |= 1 << sender;

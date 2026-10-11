@@ -18,7 +18,7 @@ typedef struct {
 
 extern Global ov13_0224F4C4;
 extern const u8 ov13_02245320[];
-extern void *ov13_0224128C(int, int);
+extern void *WifiSetupHeap_AllocZeroed(int, int);
 extern void ov13_0222B414(void);
 extern void ov13_0222B424(void);
 extern int ov13_02222C1C(void (*)(void), void (*)(void));
@@ -31,7 +31,7 @@ void ov13_0222B254(void) {
     const u16 *src;
     u16 a, b;
     u16 *base;
-    ov13_0224F4C4.buffer = ov13_0224128C(620, 4);
+    ov13_0224F4C4.buffer = WifiSetupHeap_AllocZeroed(620, 4);
     ov13_0224F4C4.flag = 0;
     MIi_CpuClear16(0, (u16 *)&msg, 260);
     msg.tag = 80;

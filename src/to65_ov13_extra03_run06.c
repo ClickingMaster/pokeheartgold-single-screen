@@ -24,20 +24,20 @@ extern u16 ov13_022452A2[];
 extern u16 ov13_022452A4[];
 extern s8 ov13_022452DA[];
 void ov13_022290F0(int, int, int);
-void *ov13_0223FDE0(void *, int);
-void ov13_0223FD60(void *);
-void ov13_0223FE98(void *, int, int, int);
-void ov13_0223FF18(void *, int, int, int);
-void ov13_02240008(void *, int, int);
-void ov13_022400F0(int, int, void *);
-void ov13_02240068(void *, int, int *, int *);
-void ov13_02240874(void *);
-void ov13_02241D98(void *);
-void *ov13_0224128C(u32, int);
-void ov13_022412F4(void *);
-void ov13_022412B0(void *);
-void ov13_022425C8(void *, void (*)(void *));
-void ov13_022425D0(int, void *);
+void *WifiSetupOamBlock_GetOam(void *, int);
+void WifiSetupOamBlock_Free(void *);
+void WifiSetupOamBlock_SetModeAndPalette(void *, int, int, int);
+void WifiSetupOamBlock_SetPosition(void *, int, int, int);
+void WifiSetupOamBlock_SetPriority(void *, int, int);
+void WifiSetupOamTemplate_Copy(int, int, void *);
+void WifiSetupOamBlock_GetPosition(void *, int, int *, int *);
+void WifiSetupText_FreeObjCanvas(void *);
+void WifiSetupOam_Release(void *);
+void *WifiSetupHeap_AllocZeroed(u32, int);
+void WifiSetupHeap_Free(void *);
+void WifiSetupHeap_FreeAndClear(void *);
+void WifiSetupTask_SetFunc(void *, void (*)(void *));
+void WifiSetupTask_DestroyLater(int, void *);
 void ov13_0222AAFC(int, int);
 void ov13_0222A378(void);
 void ov13_0222A554(void);
@@ -99,9 +99,9 @@ void ov13_0222B620(void);
 void ov13_0223AAFC(void);
 void ov13_0222B8E8(void (*)(void));
 void ov13_0222C1BC(void);
-void ov13_022413E4(void);
-void ov13_02242478(int);
-void ov13_02241A44(void);
+void WifiSetupInput_Update(void);
+void WifiSetupTask_RunQueue(int);
+void WifiSetupInput_UpdateLcdPower(void);
 void ov13_022422E0(void);
 void ov13_0222B898(void);
 
@@ -110,7 +110,7 @@ void ov13_0222B364(int a) {
     if (a && B(P(ov13_0224F4C4, 4), 0x116) == 0 && B(ov13_0224F4C4, 0) == 1) {
         ov13_0223A6E4((u8 *)P(ov13_0224F4C4, 4) + 0x117);
     }
-    ov13_022412B0(ov13_0224F4C8);
+    WifiSetupHeap_FreeAndClear(ov13_0224F4C8);
 }
 
 int ov13_0222B3B4(void) {
@@ -127,11 +127,11 @@ int ov13_0222B3B4(void) {
 }
 
 void *ov13_0222B414(u32 a) {
-    return ov13_0224128C(a, 32);
+    return WifiSetupHeap_AllocZeroed(a, 32);
 }
 
 void ov13_0222B424(void *a) {
-    ov13_022412F4(a);
+    WifiSetupHeap_Free(a);
 }
 
 int ov13_0222B430(void *a, int b, u32 c) {
@@ -145,10 +145,10 @@ int ov13_0222B430(void *a, int b, u32 c) {
     ov13_0223AAFC();
     ov13_0222B8E8(ov13_0222C1BC);
     do {
-        ov13_022413E4();
+        WifiSetupInput_Update();
         ((void (*)(void))P(ov13_0224F4CC, 12))();
-        ov13_02242478(0);
-        ov13_02241A44();
+        WifiSetupTask_RunQueue(0);
+        WifiSetupInput_UpdateLcdPower();
         ov13_022422E0();
         OS_WaitVBlankIntr();
     } while (B(ov13_0224F4CC, 1) == 0);

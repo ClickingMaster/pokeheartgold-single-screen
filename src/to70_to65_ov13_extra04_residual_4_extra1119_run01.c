@@ -29,12 +29,12 @@ typedef struct {
 extern Global ov13_0224F54C;
 extern s8 ov13_022455D4[];
 extern u8 *ov13_02239FF0(void);
-extern void *ov13_0224128C(int, int);
-extern void *ov13_022408A0(int, int);
-extern void *ov13_02240184(int, int);
-extern void *ov13_02242528(int, void *, int, int);
+extern void *WifiSetupHeap_AllocZeroed(int, int);
+extern void *WifiSetupText_InitBgCanvas(int, int);
+extern void *WifiSetupOamTemplate_AllocOam(int, int);
+extern void *WifiSetupTask_Create(int, void *, int, int);
 extern void ov13_02233214(void);
-extern void ov13_022277B8(int, int, int);
+extern void WifiSetupMessage_Show(int, int, int);
 extern void ov13_02227964(int);
 extern void ov13_02227E58(void);
 extern void ov13_0223943C(int, int, int, int, int);
@@ -67,11 +67,11 @@ extern u8 ov13_02246474[];
 extern u8 ov13_02246488[];
 extern u8 ov13_022464A0[];
 extern u8 ov13_022464B8[];
-extern void ov13_02227924(const void *, void *);
+extern void WifiSetup_LoadGraphics(const void *, void *);
 extern void ov13_02239228(void *);
 extern void ov13_022392B4(void);
-extern void *ov13_022278C4(void *);
-extern void *ov13_0223F95C(void *, int, int);
+extern void *WifiSetup_LocalizePath(void *);
+extern void *WifiSetupFile_Load(void *, int, int);
 
 static inline void setPriority(volatile u16 *r, int p) {
     *r = (*r & ~3) | p;
@@ -80,35 +80,35 @@ static inline void setPriority(volatile u16 *r, int p) {
 void ov13_02232E04(void) {
     u8 *user = ov13_02239FF0();
     int i;
-    ov13_0224F54C.ui = ov13_0224128C(72, 4);
+    ov13_0224F54C.ui = WifiSetupHeap_AllocZeroed(72, 4);
     ov13_0224F54C.ui->flag = user[246];
     ov13_0224F54C.ui->count = 12;
     ov13_02233214();
     ov13_02233000();
     if (!ov13_0224F54C.state) {
-        ov13_022277B8(48, ov13_022455D4[ov13_0222B970()], user[244] + 1);
+        WifiSetupMessage_Show(48, ov13_022455D4[ov13_0222B970()], user[244] + 1);
     } else {
-        ov13_022277B8(69, -1, 0);
+        WifiSetupMessage_Show(69, -1, 0);
     }
     ov13_02227964(1);
     ov13_02227E58();
     ov13_0223943C(2, 85, 241, 65, (ov13_0224F54C.position * 55) / 145);
-    ov13_0224F54C.ui->menu = ov13_022408A0(0, 1);
+    ov13_0224F54C.ui->menu = WifiSetupText_InitBgCanvas(0, 1);
     for (i = 0; i < 7; i++) {
-        ov13_0224F54C.ui->widgets[i] = ov13_02240184(0, 41);
+        ov13_0224F54C.ui->widgets[i] = WifiSetupOamTemplate_AllocOam(0, 41);
     }
     switch (user[231]) {
     case 1:
-        ov13_0224F54C.ui->extra = ov13_02240184(0, 80);
+        ov13_0224F54C.ui->extra = WifiSetupOamTemplate_AllocOam(0, 80);
         ov13_0224F54C.ui->extra->flags = (ov13_0224F54C.ui->extra->flags & ~0xc00) | 0xc00;
         break;
     case 2:
-        ov13_0224F54C.ui->extra = ov13_02240184(0, 81);
+        ov13_0224F54C.ui->extra = WifiSetupOamTemplate_AllocOam(0, 81);
         ov13_0224F54C.ui->extra->flags = (ov13_0224F54C.ui->extra->flags & ~0xc00) | 0xc00;
         break;
     }
-    ov13_0224F54C.ui->callback = ov13_02242528(1, ov13_02234B48, 0, 110);
-    ov13_0224F54C.ui->task = ov13_02242528(0, ov13_022350A8, 0, 120);
+    ov13_0224F54C.ui->callback = WifiSetupTask_Create(1, ov13_02234B48, 0, 110);
+    ov13_0224F54C.ui->task = WifiSetupTask_Create(0, ov13_022350A8, 0, 120);
     ov13_02233DCC();
     ov13_02234BCC();
     ov13_0222B8E8(ov13_02233250);

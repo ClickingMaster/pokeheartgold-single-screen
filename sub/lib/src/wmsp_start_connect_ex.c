@@ -165,7 +165,7 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
     }
     status->aid = result[4];
     status->unk_ba = parent->tgid;
-    __VENEER_MIi_CpuClear16(1, status->unk_1f8, 16);
+    __VENEER_MIi_CpuClear16(1, status->portSeqNo, 16);
     rssi = parent->bssDesc.rssi & 255;
     if (!(rssi & 2)) {
         rssi = (rssi >> 2) + 25;

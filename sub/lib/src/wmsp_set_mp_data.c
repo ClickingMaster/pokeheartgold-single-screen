@@ -46,12 +46,12 @@ void WMSP_SetMPData(WmspSetMPDataRequest *request) {
         cb->port = port;
         cb->destBitmap = destBitmap;
         cb->failedBitmap = result == 10 ? (destBitmap & connected) : 0;
-        cb->unk_10 = 0;
+        cb->sentBitmap = 0;
         cb->size = size;
         cb->data = data;
         cb->callback = callback;
         cb->arg = arg;
-        cb->unk_1a = 0xffff;
+        cb->seqNo = 0xffff;
         {
             u16 parentSize = status->parentSize, childSize = status->childSize;
             cb->sendSize = status->aid == 0 ? parentSize : childSize;

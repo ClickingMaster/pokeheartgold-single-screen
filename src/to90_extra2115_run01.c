@@ -15,8 +15,8 @@ extern u8 ov13_02245224[];
 extern u8 ov13_02245258[];
 extern u8 ov13_02245234[];
 extern u8 ov13_02245220[];
-int ov13_022418EC(const void *);
-void ov13_02240E74(const void *, const void *, void *);
+int WifiSetupInput_IsTouchReleased(const void *);
+void WifiSetup_RectFromPosSize(const void *, const void *, void *);
 void ov13_0222AE24(void);
 void ov13_0222A554(void);
 
@@ -25,13 +25,13 @@ void ov13_0222A554(void) {
     int i;
     u8 *entry;
     ov13_0224F4C0[0x60] = 0;
-    if (!ov13_022418EC(ov13_02245958)) {
+    if (!WifiSetupInput_IsTouchReleased(ov13_02245958)) {
         return;
     }
     entry = ov13_0224527A;
     for (i = 0; i < 10; i++, entry += 4) {
-        ov13_02240E74(entry, ov13_02245228, text);
-        if (ov13_022418EC(text)) {
+        WifiSetup_RectFromPosSize(entry, ov13_02245228, text);
+        if (WifiSetupInput_IsTouchReleased(text)) {
             if (*(s8 *)(ov13_0224F4C0 + 0x61) != i) {
                 return;
             }
@@ -43,8 +43,8 @@ void ov13_0222A554(void) {
     }
     entry = ov13_02245250;
     for (i = 0; i < 2; i++, entry += 4) {
-        ov13_02240E74(entry, ov13_02245230, text);
-        if (ov13_022418EC(text)) {
+        WifiSetup_RectFromPosSize(entry, ov13_02245230, text);
+        if (WifiSetupInput_IsTouchReleased(text)) {
             if (*(s8 *)(ov13_0224F4C0 + 0x61) != i + 10) {
                 return;
             }
@@ -56,8 +56,8 @@ void ov13_0222A554(void) {
     }
     entry = ov13_02245258;
     for (i = 0; i < 2; i++, entry += 4) {
-        ov13_02240E74(entry, ov13_02245234, text);
-        if (ov13_022418EC(text)) {
+        WifiSetup_RectFromPosSize(entry, ov13_02245234, text);
+        if (WifiSetupInput_IsTouchReleased(text)) {
             if (*(s8 *)(ov13_0224F4C0 + 0x61) != i + 12) {
                 return;
             }

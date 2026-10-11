@@ -58,7 +58,7 @@ BOOL GiveEgg(enum HeapID heapID, SaveData *saveData, int species, u8 metLocation
     party = SaveArray_Party_Get(saveData);
     mon = AllocMonZeroed(HEAP_ID_FIELD3);
     ZeroMonData(mon);
-    SetEggStats(mon, species, metLocation, profile, 4, sub_02017FE4(mapsecType, maploc));
+    SetEggStats(mon, species, metLocation, profile, 4, Mapsec_FromTypeAndIndex(mapsecType, maploc));
     result = Party_AddMon(party, mon);
     Heap_Free(mon);
     return result;

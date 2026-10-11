@@ -279,11 +279,11 @@ extern struct ArchiveHolder *ov13_0224F5CC;
 extern char ov13_02247404[];
 extern char ov13_0224593C[];
 extern char ov13_0224741C[];
-extern FSResult ov13_0223F8A0(FSFile *, FSCommandType);
-extern FSResult ov13_0223F904(FSArchive *, void *, u32, u32);
+extern FSResult WifiSetupArchive_Proc(FSFile *, FSCommandType);
+extern FSResult WifiSetupArchive_Read(FSArchive *, void *, u32, u32);
 extern FSResult ov13_0223F954(FSArchive *, const void *, u32, u32);
-extern void *ov13_0224128C(u32, int);
-extern void *ov13_0224022C(u32, void *, int);
+extern void *WifiSetupHeap_AllocZeroed(u32, int);
+extern void *WifiSetupPool_NewWithItems(u32, void *, int);
 void ov13_0223D448(int a);
 u16 ov13_0223D45C(void);
 u16 ov13_0223D470(int a);
@@ -364,7 +364,7 @@ void ov13_0223F664(void) {
     FSFile file;
     char path[128];
     u32 fnt[2], fat[2], base, size;
-    ov13_0224F5CC = ov13_0224128C(232, 4);
+    ov13_0224F5CC = WifiSetupHeap_AllocZeroed(232, 4);
     FS_InitFile(&file);
     if (!FS_OpenFile(&file, ov13_02247404)) {
         OS_Terminate();
@@ -378,14 +378,14 @@ void ov13_0223F664(void) {
     if (!FS_RegisterArchiveName(&ov13_0224F5CC->arc, ov13_0224593C, 3)) {
         OS_Terminate();
     }
-    FS_SetArchiveProc(&ov13_0224F5CC->arc, ov13_0223F8A0, 0x602);
-    if (!FS_LoadArchive(&ov13_0224F5CC->arc, base, fat[0], fat[1], fnt[0], fnt[1], ov13_0223F904, ov13_0223F954)) {
+    FS_SetArchiveProc(&ov13_0224F5CC->arc, WifiSetupArchive_Proc, 0x602);
+    if (!FS_LoadArchive(&ov13_0224F5CC->arc, base, fat[0], fat[1], fnt[0], fnt[1], WifiSetupArchive_Read, ov13_0223F954)) {
         OS_Terminate();
     }
     size = FS_LoadArchiveTables(&ov13_0224F5CC->arc, 0, 0);
-    ov13_0224F5CC->tables = ov13_0224128C(size, 4);
+    ov13_0224F5CC->tables = WifiSetupHeap_AllocZeroed(size, 4);
     FS_LoadArchiveTables(&ov13_0224F5CC->arc, ov13_0224F5CC->tables, size);
-    *(void **)((u8 *)ov13_0224F5CC + 132) = ov13_0224022C(32, ov13_0224F5CC->work, 4);
+    *(void **)((u8 *)ov13_0224F5CC + 132) = WifiSetupPool_NewWithItems(32, ov13_0224F5CC->work, 4);
     OS_SPrintf(path, ov13_0224741C, ov13_0224593C);
     FS_ChangeDir(path);
 }

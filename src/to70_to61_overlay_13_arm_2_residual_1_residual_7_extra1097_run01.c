@@ -3,8 +3,8 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-extern int ov13_02241754(void *);
-extern void ov13_02240E74(void *, void *, void *);
+extern int WifiSetupInput_IsTouchHeld(void *);
+extern void WifiSetup_RectFromPosSize(void *, void *, void *);
 extern void ov13_02228E6C(int);
 extern void ov13_0223ABB8(int);
 extern u32 ov13_02245958[];
@@ -30,13 +30,13 @@ void ov13_02228C68(void) {
     u32 result[2];
     int i;
     u32 *one, *two;
-    if (!ov13_02241754(ov13_02245958)) {
+    if (!WifiSetupInput_IsTouchHeld(ov13_02245958)) {
         goto none;
     }
     one = ov13_02244FA4;
     for (i = 0; i < 47; i++, one++) {
-        ov13_02240E74(one, ov13_02244F68, result);
-        if (ov13_02241754(result)) {
+        WifiSetup_RectFromPosSize(one, ov13_02244F68, result);
+        if (WifiSetupInput_IsTouchHeld(result)) {
             if (ov13_0224F4BC->selection != i) {
                 goto none;
             }
@@ -47,8 +47,8 @@ void ov13_02228C68(void) {
     two = ov13_02244F9C;
     one = ov13_02244F8C;
     for (i = 2; i < 4; i++, two++, one++) {
-        ov13_02240E74(one, two, result);
-        if (ov13_02241754(result)) {
+        WifiSetup_RectFromPosSize(one, two, result);
+        if (WifiSetupInput_IsTouchHeld(result)) {
             if (ov13_0224F4BC->selection != i + 47) {
                 goto none;
             }
@@ -72,8 +72,8 @@ void ov13_02228C68(void) {
     }
     one = ov13_02244F7C;
     for (i = 0; i < 2; i++, one++) {
-        ov13_02240E74(one, ov13_02244F64, result);
-        if (ov13_02241754(result)) {
+        WifiSetup_RectFromPosSize(one, ov13_02244F64, result);
+        if (WifiSetupInput_IsTouchHeld(result)) {
             if (ov13_0224F4BC->selection != i + 51) {
                 goto none;
             }

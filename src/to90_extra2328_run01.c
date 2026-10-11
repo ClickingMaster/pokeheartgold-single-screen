@@ -21,12 +21,12 @@ typedef struct {
 extern s32 FX_DivS32(s32, s32);
 extern Control ov13_0224F54C;
 extern u16 ov13_02245536[];
-extern void ov13_02240D80(void *, int);
+extern void WifiSetupText_Clear(void *, int);
 extern void ov13_02233E8C(int, int);
 extern void ov13_022392CC(void *, int, int, int);
 extern void ov13_02234028(int, int);
 extern void ov13_022392B4(void);
-extern void ov13_02240E2C(void *);
+extern void WifiSetupText_MarkDirty(void *);
 extern void ov13_022344F0(void);
 void ov13_02233DCC(void);
 #pragma force_active on
@@ -34,7 +34,7 @@ void ov13_02233DCC(void);
 void ov13_02233DCC(void) {
     int base = FX_DivS32(ov13_0224F54C.position, 29);
     int cursor, n;
-    ov13_02240D80(ov13_0224F54C.work->sprite, 0);
+    WifiSetupText_Clear(ov13_0224F54C.work->sprite, 0);
     cursor = base;
     n = 0;
     for (; n < 5; n++, cursor++) {
@@ -45,6 +45,6 @@ void ov13_02233DCC(void) {
         ov13_02234028(base, cursor);
     }
     ov13_022392B4();
-    ov13_02240E2C(ov13_0224F54C.work->sprite);
+    WifiSetupText_MarkDirty(ov13_0224F54C.work->sprite);
     ov13_022344F0();
 }

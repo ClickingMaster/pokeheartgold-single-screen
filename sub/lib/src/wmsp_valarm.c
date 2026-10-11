@@ -287,7 +287,7 @@ void WMSP_VAlarmSetMPData(void *request) {
     } else if (status->state == 10) {
         int send = 0;
         OSIntrMode irq = __VENEER_OS_DisableInterrupts();
-        if (status->unk_734 != 1) {
+        if (status->sendInFlight != 1) {
             status->unk_60 = 0;
             send = 1;
         }

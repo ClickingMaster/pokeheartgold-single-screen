@@ -172,37 +172,37 @@ extern void *ov13_02246854[];
 #define MBW_P144     (ov13_0224F5BC->p144)
 
 int ov13_0222BAF4(void *a, int b, int c, int d);
-void *ov13_022278C4(void *a);
-int ov13_02227B1C(void);
-void *ov13_0223F95C(void *a, int b, int c);
-void ov13_0223FA50(void *a);
-void *ov13_0223FC04(int a, int b, int c);
-void ov13_0223FD60(void *a);
-int ov13_0223FDE0(void *a, int b);
-int ov13_0223FDEC(void *a);
-void ov13_0223FDF4(void *a, int b, int c, int d);
-void ov13_0223FE98(void *a, int b, int c, int d);
-void ov13_0223FF18(void *a, int b, int c, int d);
-void ov13_02240008(void *a, int b, int c);
-void ov13_02240068(void *a, int b, int *x, int *y);
-void ov13_022400F0(int a, int b, int c);
-void *ov13_022401B0(int a, int b, int c);
-void *ov13_02240798(int a, int b, int c, int d, int *e, int f);
-void ov13_02240874(void *a);
-void ov13_02240CC0(void *a, int b, int c, int d, int e, int f, int g, int h);
-void ov13_02240D94(void *a, int b, int c, void *d, int e);
-void ov13_02240E5C(int a, int b, int c, int d, void *e);
-void ov13_02240E74(void *a, void *b, void *c);
-void ov13_02240F58(int a, int b, void *c);
-void ov13_02241070(int a, int b, int c, int d);
-void *ov13_0224128C(u32 size, int align);
-void ov13_022412B0(void *pp);
-int ov13_02241694(int a);
-int ov13_022417DC(void *a);
-void *ov13_02242528(int a, void *fn, int c, int d);
-void ov13_022425C8(void *task, void *fn);
-void ov13_022425D0(int a, void *task);
-void ov13_022425F0(int a, void *task);
+void *WifiSetup_LocalizePath(void *a);
+int WifiSetup_GetTextFlags(void);
+void *WifiSetupFile_Load(void *a, int b, int c);
+void WifiSetupFile_Free(void *a);
+void *WifiSetupOamBlock_Alloc(int a, int b, int c);
+void WifiSetupOamBlock_Free(void *a);
+int WifiSetupOamBlock_GetOam(void *a, int b);
+int WifiSetupOamBlock_GetCount(void *a);
+void WifiSetupOamBlock_SetAffineMode(void *a, int b, int c, int d);
+void WifiSetupOamBlock_SetModeAndPalette(void *a, int b, int c, int d);
+void WifiSetupOamBlock_SetPosition(void *a, int b, int c, int d);
+void WifiSetupOamBlock_SetPriority(void *a, int b, int c);
+void WifiSetupOamBlock_GetPosition(void *a, int b, int *x, int *y);
+void WifiSetupOamTemplate_Copy(int a, int b, int c);
+void *WifiSetupOamTemplate_AllocBlock(int a, int b, int c);
+void *WifiSetupText_AllocObjCanvas(int a, int b, int c, int d, int *e, int f);
+void WifiSetupText_FreeObjCanvas(void *a);
+void WifiSetupText_DrawInRect(void *a, int b, int c, int d, int e, int f, int g, int h);
+void WifiSetupText_ShowObjCanvas(void *a, int b, int c, void *d, int e);
+void WifiSetup_SetRect(int a, int b, int c, int d, void *e);
+void WifiSetup_RectFromPosSize(void *a, void *b, void *c);
+void WifiSetupDisplay_SetWindowRect(int a, int b, void *c);
+void WifiSetupDisplay_SetWindowPlanes(int a, int b, int c, int d);
+void *WifiSetupHeap_AllocZeroed(u32 size, int align);
+void WifiSetupHeap_FreeAndClear(void *pp);
+int WifiSetupInput_IsKeyPressed(int a);
+int WifiSetupInput_IsTouchPressed(void *a);
+void *WifiSetupTask_Create(int a, void *fn, int c, int d);
+void WifiSetupTask_SetFunc(void *task, void *fn);
+void WifiSetupTask_DestroyLater(int a, void *task);
+void WifiSetupTask_Destroy(int a, void *task);
 void ov13_0223D448(int a);
 int ov13_0223D45C(void);
 int ov13_0223D4C8(void);
@@ -281,22 +281,22 @@ void ov13_0223B1E0(int n);
 BOOL ov13_0223B2A8(void);
 
 void ov13_0223B178(void *task) {
-    ov13_022425D0(0, task);
+    WifiSetupTask_DestroyLater(0, task);
     ov13_0224F5AC.p->task = NULL;
 }
 
 void ov13_0223B1A0(void) {
     ov13_0224F5AC.p->unk18 = 1;
-    ov13_0224F5AC.p->task = ov13_02242528(0, ov13_0223B2C8, 0, 0x78);
+    ov13_0224F5AC.p->task = WifiSetupTask_Create(0, ov13_0223B2C8, 0, 0x78);
 }
 
 void ov13_0223B1E0(int n) {
     int i;
     for (i = 0; i < 5; i += 2) {
-        ov13_022400F0(1, ov13_022457EC[n][i], ov13_0223FDE0(ov13_0224F5AC.p->objs[i], 0));
-        ov13_02240008(ov13_0224F5AC.p->objs[i], -1, 0);
-        ov13_0223FF18(ov13_0224F5AC.p->objs[i], -1, ov13_0224580A[i].x, ov13_0224580A[i].y);
-        ov13_0223FE98(ov13_0224F5AC.p->objs[i], -1, 0, ov13_022457FB[n][i]);
+        WifiSetupOamTemplate_Copy(1, ov13_022457EC[n][i], WifiSetupOamBlock_GetOam(ov13_0224F5AC.p->objs[i], 0));
+        WifiSetupOamBlock_SetPriority(ov13_0224F5AC.p->objs[i], -1, 0);
+        WifiSetupOamBlock_SetPosition(ov13_0224F5AC.p->objs[i], -1, ov13_0224580A[i].x, ov13_0224580A[i].y);
+        WifiSetupOamBlock_SetModeAndPalette(ov13_0224F5AC.p->objs[i], -1, 0, ov13_022457FB[n][i]);
     }
     ov13_0223B6F4(n);
 }

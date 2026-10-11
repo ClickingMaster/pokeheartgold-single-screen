@@ -13,8 +13,8 @@ void NNSi_G3dGetJointScaleSi3d(MdlJointResult *out, const s32 *scale, const u8 *
     u32 current = cmd[1], parent = cmd[2];
     if (flag & 4) {
         out->flags |= 1;
-        if (_021DA700->scaleFlags[parent >> 5] & (1u << (parent & 31))) {
-            _021DA700->scaleFlags[current >> 5] |= 1u << (current & 31);
+        if (gCurrentRenderState->scaleFlags[parent >> 5] & (1u << (parent & 31))) {
+            gCurrentRenderState->scaleFlags[current >> 5] |= 1u << (current & 31);
             out->flags |= 0x18;
         } else {
             MIi_CpuCopy32((const u32 *)((u8 *)&_021DB504 + parent * 24), (u32 *)((u8 *)&_021DB504 + current * 24), 24);
@@ -24,12 +24,12 @@ void NNSi_G3dGetJointScaleSi3d(MdlJointResult *out, const s32 *scale, const u8 *
         out->scale[0] = scale[0];
         out->scale[1] = scale[1];
         out->scale[2] = scale[2];
-        if (_021DA700->scaleFlags[parent >> 5] & (1u << (parent & 31))) {
+        if (gCurrentRenderState->scaleFlags[parent >> 5] & (1u << (parent & 31))) {
             MIi_CpuCopy32((const u32 *)scale, (u32 *)((u8 *)&_021DB504 + current * 24), 24);
-            _021DA700->scaleFlags[current >> 5] &= ~(1u << (current & 31));
+            gCurrentRenderState->scaleFlags[current >> 5] &= ~(1u << (current & 31));
             out->flags |= 0x18;
         } else {
-            _021DA700->scaleFlags[current >> 5] &= ~(1u << (current & 31));
+            gCurrentRenderState->scaleFlags[current >> 5] &= ~(1u << (current & 31));
             MdlCache504Vol[current * 6] = (s64)scale[0] * MdlCache504Vol[parent * 6] >> 12;
             MdlCache508Vol[current * 6] = (s64)scale[1] * MdlCache508Vol[parent * 6] >> 12;
             MdlCache50CVol[current * 6] = (s64)scale[2] * MdlCache50CVol[parent * 6] >> 12;

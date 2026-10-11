@@ -10,13 +10,13 @@ extern const u16 ov13_0224646C[];
 extern const u16 ov13_022454DE[];
 extern const u16 ov13_022454DC[];
 extern void ov13_0222B948(int, void *);
-extern void ov13_02240C14(void *, int, int, int, int, const u16 *, int);
-extern void ov13_02240CC0(void *, int, int, int, int, int, void *, void *);
-extern void ov13_02240E2C(void *);
+extern void WifiSetupText_DrawMonospace(void *, int, int, int, int, const u16 *, int);
+extern void WifiSetupText_DrawInRect(void *, int, int, int, int, int, void *, void *);
+extern void WifiSetupText_MarkDirty(void *);
 extern int ov13_0222B970(void);
-extern void *ov13_022408A0(int, int);
+extern void *WifiSetupText_InitBgCanvas(int, int);
 extern void *ov13_0222BADC(void *, int);
-extern void *ov13_02227B1C(void);
+extern void *WifiSetup_GetTextFlags(void);
 extern int swprintf(u16 *, int, const u16 *, ...);
 void ov13_0223287C(void);
 
@@ -98,16 +98,16 @@ void ov13_0223287C(void) {
     } else {
         code = 0;
     }
-    display = ov13_022408A0(0, ov13_022454CC[ov13_0222B970()]);
+    display = WifiSetupText_InitBgCanvas(0, ov13_022454CC[ov13_0222B970()]);
     msg = ov13_0222BADC(ov13_0224F4F8, code);
     swprintf(text, 8, ov13_0224646C, -ov13_0224F548);
     {
         int y = ov13_022454DE[ov13_0222B970() * 2];
         {
             int x = ov13_022454DC[ov13_0222B970() * 2];
-            ov13_02240C14(display, x, y, 2, 10, text, 0);
+            WifiSetupText_DrawMonospace(display, x, y, 2, 10, text, 0);
         }
     }
-    ov13_02240CC0(display, 13, 60, 230, 94, 2, ov13_02227B1C(), msg);
-    ov13_02240E2C(display);
+    WifiSetupText_DrawInRect(display, 13, 60, 230, 94, 2, WifiSetup_GetTextFlags(), msg);
+    WifiSetupText_MarkDirty(display);
 }

@@ -622,9 +622,9 @@
 	.public _02243430
 	.public _02243442
 	.public _02243458
-	.public ov81_0223DD60
-	.public ov81_0223DEA8
-	.public ov81_0223E234
+	.public BattleFactoryApp_Init
+	.public BattleFactoryApp_Main
+	.public BattleFactoryApp_Exit
 	.public BattleFactoryApp_SlideIn
 	.public BattleFactoryApp_ShowScreen
 	.public BattleFactoryApp_SetupRentalScreen
@@ -686,11 +686,11 @@
 	.public BattleFactoryApp_CreatePokepic
 	.public BattleFactoryApp_SendLinkCommand
 	.public BattleFactoryApp_PrepareLinkPing
-	.public ov81_02241020
+	.public BattleFactory_ReceivePing
 	.public BattleFactoryApp_PrepareLinkRentals
-	.public ov81_022410C8
+	.public BattleFactory_ReceiveRentals
 	.public BattleFactoryApp_PrintPartnerRentals
-	.public ov81_02241238
+	.public BattleFactory_ReceiveSwap
 	.public BattleFactoryApp_CreateBall
 	.public BattleFactoryApp_CreateCenterSprite
 	.public BattleFactoryApp_DeleteCenterSprites
@@ -803,9 +803,9 @@
 	.public ov81_022437C8
 	.public ov81_02243808
 	.public _02243458
-	.public ov81_0223DD60
-	.public ov81_0223DEA8
-	.public ov81_0223E234
+	.public BattleFactoryApp_Init
+	.public BattleFactoryApp_Main
+	.public BattleFactoryApp_Exit
 	.public BattleFactoryApp_SlideIn
 	.public BattleFactoryApp_ShowScreen
 	.public BattleFactoryApp_SetupRentalScreen
@@ -875,13 +875,13 @@
 	.public BattleFactoryApp_CreatePokepic
 	.public BattleFactoryApp_SendLinkCommand
 	.public BattleFactoryApp_PrepareLinkPing
-	.public ov81_02241020
+	.public BattleFactory_ReceivePing
 	.public BattleFactoryApp_PrepareLinkRentals
-	.public ov81_022410C8
-	.public ov81_0224113C
+	.public BattleFactory_ReceiveRentals
+	.public BattleFactory_ReceiveUnused
 	.public BattleFactoryApp_PrintPartnerRentals
 	.public BattleFactoryApp_PrepareLinkSwap
-	.public ov81_02241238
+	.public BattleFactory_ReceiveSwap
 	.public BattleFactoryApp_CreateBall
 	.public BattleFactoryApp_CreateCenterSprite
 	.public BattleFactoryApp_DeleteCenterSprites
@@ -1012,7 +1012,7 @@
 	.public BattleFactoryApp_IsScreen
 	.public BattleFactory_GetRentalCount
 	.public BattleFactoryApp_SetCancelRequested
-	.public ov81_0224113C
+	.public BattleFactory_ReceiveUnused
 	.public BattleFactoryApp_PrepareLinkSwap
 	.public BattleFactoryApp_CloseWindow
 	.public BattleFactoryApp_ClearSwapOutMenu

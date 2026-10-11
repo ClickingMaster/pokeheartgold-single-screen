@@ -409,8 +409,8 @@ void BufferLocationName(MessageFormat *msgFmt, u32 fieldno, u32 mapsecId) {
         NARC_msg_msg_0281_bin,
         NARC_msg_msg_0280_bin,
     };
-    u32 locationBank = sub_02017FAC(mapsecId);
-    u32 locationId = sub_02017FCC(mapsecId);
+    u32 locationBank = Mapsec_GetType(mapsecId);
+    u32 locationId = Mapsec_GetIndexInType(mapsecId);
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, msgBanks[locationBank], msgFmt->heapID);
     int msgBank;
     if (msgData != NULL) {

@@ -17,7 +17,7 @@ typedef struct {
 extern Work ov13_0224F54C;
 extern u8 ov13_02245526[][3];
 extern int ov13_022349B8(int);
-extern void ov13_022400F0(int, int, Sprite *);
+extern void WifiSetupOamTemplate_Copy(int, int, Sprite *);
 void ov13_02234210(unsigned, int, int);
 
 void ov13_02234210(unsigned type, int option, int index) {
@@ -38,7 +38,7 @@ void ov13_02234210(unsigned type, int option, int index) {
         }
     }
     if (ov13_02245526[type][option]) {
-        ov13_022400F0(0, ov13_02245526[type][option], *s);
+        WifiSetupOamTemplate_Copy(0, ov13_02245526[type][option], *s);
         {
             u32 value = *(volatile u16 *)&values[type];
             Sprite *obj = *(Sprite *volatile *)s;

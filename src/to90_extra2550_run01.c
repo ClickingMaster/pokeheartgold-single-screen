@@ -32,7 +32,7 @@ typedef struct Work {
 extern Work *ov13_0224F4BC;
 extern const u8 ov13_02244F4C[4];
 extern const u8 ov13_02244F50[4];
-void ov13_0223FE98(OamBlk *, int, u32, u32);
+void WifiSetupOamBlock_SetModeAndPalette(OamBlk *, int, u32, u32);
 void ov13_022293F0(int, int);
 typedef char CheckOam[(sizeof(Oam) == 8) ? 1 : -1];
 typedef char CheckWork[(sizeof(Work) == 296) ? 1 : -1];
@@ -54,6 +54,6 @@ void ov13_022293F0(int index, int mode) {
         SetPalette(w->extras[index - 47], ov13_02244F4C[mode]);
     } else {
         Work *w = ov13_0224F4BC;
-        ov13_0223FE98(w->sprites[index - 51], -1, 0, ov13_02244F50[mode]);
+        WifiSetupOamBlock_SetModeAndPalette(w->sprites[index - 51], -1, 0, ov13_02244F50[mode]);
     }
 }

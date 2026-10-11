@@ -18,10 +18,10 @@ _02108594:
 	.word ov80_0222B3D4, sub_020342B8, 0
 	.word ov80_0222B420, sub_020342B8, 0
 	.word ov80_0222B52C, sub_020342B8, 0
-	.word ov81_02241020, sub_020342B8, 0
-	.word ov81_022410C8, sub_020342B8, 0
-	.word ov81_0224113C, sub_020342B8, 0
-	.word ov81_02241238, sub_020342B8, 0
+	.word BattleFactory_ReceivePing, sub_020342B8, 0
+	.word BattleFactory_ReceiveRentals, sub_020342B8, 0
+	.word BattleFactory_ReceiveUnused, sub_020342B8, 0
+	.word BattleFactory_ReceiveSwap, sub_020342B8, 0
 	.word ov80_0222AEF8, sub_020342B8, 0
 	.word ov80_0222AF3C, sub_020342B8, 0
 	.word ov80_0222AF84, sub_020342B8, 0

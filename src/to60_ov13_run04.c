@@ -8,35 +8,35 @@ typedef void (*StateFunc)(void);
 
 extern void ov13_0222B8E8(void *func);
 extern void ov13_0222B8F8(int a, int b);
-extern int ov13_02240394(int a);
-extern void ov13_022403B8(int a, int b, int c, int d);
-extern void ov13_02240EA8(int a, int b);
-extern void ov13_02240EFC(int a, int b);
-extern void ov13_02240B04(int a);
-extern void ov13_022405B8(int a);
-extern int ov13_02241694(int a);
+extern int WifiSetupFade_IsActive(int a);
+extern void WifiSetupFade_Start(int a, int b, int c, int d);
+extern void WifiSetupDisplay_ShowPlanes(int a, int b);
+extern void WifiSetupDisplay_HidePlanes(int a, int b);
+extern void WifiSetupText_FreeBgCanvas(int a);
+extern void WifiSetupFade_StartDelay(int a);
+extern int WifiSetupInput_IsKeyPressed(int a);
 extern void ov13_0222BC84(void *func);
 extern int ov13_0222BC68(void);
 extern void ov13_0222BC0C(void);
-extern void ov13_02227F68(void);
-extern void ov13_02227028(void);
+extern void WifiSetupSignalIcon_Destroy(void);
+extern void WifiSetupBusyIcon_Destroy(void);
 extern void ov13_0223A840(void);
 extern void ov13_0223AC20(void);
 extern void ov13_0223ABB8(int a);
-extern void ov13_022279EC(int a);
+extern void WifiSetup_PrintMessage(int a);
 extern void ov13_022279B4(int a);
-extern int ov13_02227258(void);
-extern void ov13_022272CC(void);
-extern void ov13_0222726C(int a);
-extern void ov13_022272E4(void);
-extern void ov13_02227228(void);
+extern int WifiSetupButtonBar_GetSelected(void);
+extern void WifiSetupButtonBar_Unlock(void);
+extern void WifiSetupButtonBar_SelectIfNone(int a);
+extern void WifiSetupButtonBar_Lock(void);
+extern void WifiSetupButtonBar_Close(void);
 extern int ov13_022272A0(void);
-extern void ov13_02227DE4(int a);
-extern int ov13_022277B8(int a, int b, int c);
-extern void ov13_02227924(void *a, void *b);
+extern void WifiSetupBackground_LoadHeader(int a);
+extern int WifiSetupMessage_Show(int a, int b, int c);
+extern void WifiSetup_LoadGraphics(void *a, void *b);
 extern void ov13_0222D454();
 extern void ov13_0222DB6C();
-extern void ov13_0222788C(void);
+extern void WifiSetupMessage_Hide(void);
 
 extern u8 ov13_0224F514;
 extern u8 ov13_0224F518;
@@ -98,19 +98,19 @@ extern u8 ov13_0224544C[];
 extern u8 ov13_02245450[];
 extern void ov13_0222B934(int a, int b);
 extern void ov13_02238440();
-extern void *ov13_0224128C(int size, int align);
+extern void *WifiSetupHeap_AllocZeroed(int size, int align);
 extern void ov13_0222B948(int *out, int a);
 extern u8 ov13_02239D04(void *p);
 extern void ov13_02230C68();
 extern void ov13_022307AC(void);
 extern void ov13_02230CC4(void);
-extern void *ov13_022278C4(void *a);
-extern void *ov13_0223F95C(void *a, int b, int c);
+extern void *WifiSetup_LocalizePath(void *a);
+extern void *WifiSetupFile_Load(void *a, int b, int c);
 extern void ov13_02239228(void *a);
 extern void ov13_022392B4(void);
 extern void ov13_0223943C(int a, int b, int c, int d, int e);
-extern struct UnkOam *ov13_02240184(int a, int b);
-extern void ov13_022400F0(int a, int b, struct UnkOam *c);
+extern struct UnkOam *WifiSetupOamTemplate_AllocOam(int a, int b);
+extern void WifiSetupOamTemplate_Copy(int a, int b, struct UnkOam *c);
 extern void ov13_0222FF50(void);
 extern void ov13_022301A4(void);
 extern void ov13_02230414(void);
@@ -122,27 +122,27 @@ extern u8 ov13_02246344[];
 extern void ov13_02227E40(void);
 extern void ov13_02227964(int a);
 extern void ov13_0222B254(void);
-extern void *ov13_02242528(int a, void *b, int c, int d);
+extern void *WifiSetupTask_Create(int a, void *b, int c, int d);
 extern int ov13_0222B3B4(void);
-extern void ov13_022425F0(int a, void *b);
-extern void ov13_022425D0(int a, void *b);
+extern void WifiSetupTask_Destroy(int a, void *b);
+extern void WifiSetupTask_DestroyLater(int a, void *b);
 extern void ov13_0222B364(int a);
 extern void ov13_02237618();
-extern void ov13_022413E4(void);
-extern void ov13_02242478(int a);
+extern void WifiSetupInput_Update(void);
+extern void WifiSetupTask_RunQueue(int a);
 extern u8 ov13_022462D8[];
 extern u8 ov13_022462EC[];
 extern void *ov13_0222BCA8(void);
-extern int ov13_022408A0(int a, int b);
-extern void ov13_02240CC0(int a, int b, int c, int d, int e, int f, int g, void *h);
-extern void ov13_02240E2C(int a);
+extern int WifiSetupText_InitBgCanvas(int a, int b);
+extern void WifiSetupText_DrawInRect(int a, int b, int c, int d, int e, int f, int g, void *h);
+extern void WifiSetupText_MarkDirty(int a);
 extern void ov13_0223BE6C(int a, int b, int c, int d, int e);
 extern int ov13_0223C1DC(void);
 extern void ov13_0223C198(void);
 extern int ov13_0223C1F0(void);
 extern void ov13_0222BC9C(void);
 extern void ov13_0222BB20(void *func);
-extern void ov13_02226F58(int a);
+extern void WifiSetupBusyIcon_Create(int a);
 extern u8 ov13_0224629C[];
 extern u8 ov13_022462B0[];
 extern u8 ov13_022462C4[];
@@ -279,13 +279,13 @@ void ov13_0222FF50();
 #define SET_PRI3(a) REG16(a) = (u16)((REG16(a) & ~3) | 3)
 
 void ov13_0222DC24(void) {
-    ov13_022403B8(2, 0, 0x15, 8);
-    ov13_02240EA8(0, 0x15);
+    WifiSetupFade_Start(2, 0, 0x15, 8);
+    WifiSetupDisplay_ShowPlanes(0, 0x15);
     ov13_0222B8E8(ov13_0222DC58);
 }
 
 void ov13_0222DC58(void) {
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     ov13_0222BC84(ov13_0222DD5C);
@@ -304,21 +304,21 @@ void ov13_0222DC9C(void) {
 }
 
 void ov13_0222DCA0(void) {
-    ov13_022403B8(3, 0, 0x15, 8);
+    WifiSetupFade_Start(3, 0, 0x15, 8);
     ov13_0222B8E8(ov13_0222DCC8);
 }
 
 void ov13_0222DCC8(void) {
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     if (ov13_0222BC68() == 0) {
         return;
     }
-    ov13_02227F68();
-    ov13_02227028();
-    ov13_02240B04(0);
-    ov13_02240EFC(0, 0x15);
+    WifiSetupSignalIcon_Destroy();
+    WifiSetupBusyIcon_Destroy();
+    WifiSetupText_FreeBgCanvas(0);
+    WifiSetupDisplay_HidePlanes(0, 0x15);
     ov13_0222B8F8(0, 1);
     if (ov13_0224F514 == 0) {
         ov13_0222B8E8(ov13_0222E754);
@@ -351,7 +351,7 @@ void ov13_0222DD5C(int a) {
 
 void ov13_0222DDE4(void) {
     ov13_0222DE04();
-    ov13_022279EC(0x1f);
+    WifiSetup_PrintMessage(0x1f);
     ov13_0222B8E8(ov13_0222DE6C);
 }
 
@@ -364,13 +364,13 @@ void ov13_0222DE04(void) {
 }
 
 void ov13_0222DE6C(void) {
-    ov13_022403B8(2, 0, 0x15, 8);
-    ov13_02240EA8(0, 0x15);
+    WifiSetupFade_Start(2, 0, 0x15, 8);
+    WifiSetupDisplay_ShowPlanes(0, 0x15);
     ov13_0222B8E8(ov13_0222DEA0);
 }
 
 void ov13_0222DEA0(void) {
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     ov13_022279B4(5);
@@ -378,10 +378,10 @@ void ov13_0222DEA0(void) {
 }
 
 void ov13_0222DECC(void) {
-    if (ov13_02227258() == -2) {
+    if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
-    ov13_022272CC();
+    WifiSetupButtonBar_Unlock();
     ov13_0222B8E8(ov13_0222DEF4);
 }
 
@@ -392,8 +392,8 @@ void ov13_0222DEF4(void) {
 }
 
 void ov13_0222DF08(void) {
-    if (ov13_02241694(1) != 0) {
-        ov13_0222726C(0);
+    if (WifiSetupInput_IsKeyPressed(1) != 0) {
+        WifiSetupButtonBar_SelectIfNone(0);
     }
 }
 
@@ -401,7 +401,7 @@ void ov13_0222DF28(void) {
 }
 
 void ov13_0222DF2C(void) {
-    if (ov13_02227258() != 0) {
+    if (WifiSetupButtonBar_GetSelected() != 0) {
         return;
     }
     ov13_0223ABB8(6);
@@ -409,25 +409,25 @@ void ov13_0222DF2C(void) {
 }
 
 void ov13_0222DF54(void) {
-    ov13_022272E4();
-    ov13_022405B8(8);
+    WifiSetupButtonBar_Lock();
+    WifiSetupFade_StartDelay(8);
     ov13_0222B8E8(ov13_0222DF74);
 }
 
 void ov13_0222DF74(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
-    ov13_022403B8(3, 1, 0x3f, 0x40);
-    ov13_022403B8(3, 0, 0x3f, 0x40);
+    WifiSetupFade_Start(3, 1, 0x3f, 0x40);
+    WifiSetupFade_Start(3, 0, 0x3f, 0x40);
     ov13_0222B8E8(ov13_0222DFC0);
 }
 
 void ov13_0222DFC0(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     OS_SpinWait(0x1000000);
@@ -436,7 +436,7 @@ void ov13_0222DFC0(void) {
 
 void ov13_0222DFF4(void) {
     ov13_0222E014();
-    ov13_022279EC(0x1a);
+    WifiSetup_PrintMessage(0x1a);
     ov13_0222B8E8(ov13_0222E07C);
 }
 
@@ -449,16 +449,16 @@ void ov13_0222E014(void) {
 }
 
 void ov13_0222E07C(void) {
-    ov13_022403B8(2, 0, 0x15, 8);
-    ov13_02240EA8(0, 0x15);
+    WifiSetupFade_Start(2, 0, 0x15, 8);
+    WifiSetupDisplay_ShowPlanes(0, 0x15);
     ov13_0222B8E8(ov13_0222E0B0);
 }
 
 void ov13_0222E0B0(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     ov13_022279B4(4);
@@ -466,10 +466,10 @@ void ov13_0222E0B0(void) {
 }
 
 void ov13_0222E0EC(void) {
-    if (ov13_02227258() == -2) {
+    if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
-    ov13_022272CC();
+    WifiSetupButtonBar_Unlock();
     ov13_0222B8E8(ov13_0222E114);
 }
 
@@ -480,8 +480,8 @@ void ov13_0222E114(void) {
 }
 
 void ov13_0222E128(void) {
-    if (ov13_02241694(1) != 0) {
-        ov13_0222726C(0);
+    if (WifiSetupInput_IsKeyPressed(1) != 0) {
+        WifiSetupButtonBar_SelectIfNone(0);
     }
 }
 
@@ -489,7 +489,7 @@ void ov13_0222E148(void) {
 }
 
 void ov13_0222E14C(void) {
-    if (ov13_02227258() != 0) {
+    if (WifiSetupButtonBar_GetSelected() != 0) {
         return;
     }
     ov13_0223ABB8(6);
@@ -497,29 +497,29 @@ void ov13_0222E14C(void) {
 }
 
 void ov13_0222E174(void) {
-    ov13_022272E4();
-    ov13_022405B8(8);
+    WifiSetupButtonBar_Lock();
+    WifiSetupFade_StartDelay(8);
     ov13_0222B8E8(ov13_0222E194);
 }
 
 void ov13_0222E194(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
-    ov13_02227228();
-    ov13_022403B8(3, 0, 0x15, 8);
+    WifiSetupButtonBar_Close();
+    WifiSetupFade_Start(3, 0, 0x15, 8);
     ov13_0222B8E8(ov13_0222E1D0);
 }
 
 void ov13_0222E1D0(void) {
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     if (ov13_022272A0() == 0) {
         return;
     }
-    ov13_02240B04(0);
-    ov13_02240EFC(0, 0x15);
+    WifiSetupText_FreeBgCanvas(0);
+    WifiSetupDisplay_HidePlanes(0, 0x15);
     ov13_0222B8F8(0, 1);
     ov13_0222B8E8(ov13_0222EEB4);
 }
@@ -527,14 +527,14 @@ void ov13_0222E1D0(void) {
 void ov13_0222E220(void) {
     ov13_0224F518 = 0;
     ov13_0222E268();
-    ov13_02227DE4(0x13);
-    ov13_022277B8(0x3c, -1, 0);
-    ov13_022279EC(0x1b);
+    WifiSetupBackground_LoadHeader(0x13);
+    WifiSetupMessage_Show(0x3c, -1, 0);
+    WifiSetup_PrintMessage(0x1b);
     ov13_0222B8E8(ov13_0222E2E8);
 }
 
 void ov13_0222E268(void) {
-    ov13_02227924(ov13_0224629C, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(ov13_0224629C, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
     SET_PRI3(0x04000008);
@@ -543,15 +543,15 @@ void ov13_0222E268(void) {
 }
 
 void ov13_0222E2E8(void) {
-    ov13_022403B8(2, 1, 1, 8);
-    ov13_022403B8(2, 0, 0x15, 8);
-    ov13_02240EA8(1, 1);
-    ov13_02240EA8(0, 0x15);
+    WifiSetupFade_Start(2, 1, 1, 8);
+    WifiSetupFade_Start(2, 0, 0x15, 8);
+    WifiSetupDisplay_ShowPlanes(1, 1);
+    WifiSetupDisplay_ShowPlanes(0, 0x15);
     ov13_0222B8E8(ov13_0222E33C);
 }
 
 void ov13_0222E33C(void) {
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     ov13_022279B4(3);
@@ -559,10 +559,10 @@ void ov13_0222E33C(void) {
 }
 
 void ov13_0222E368(void) {
-    if (ov13_02227258() == -2) {
+    if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
-    ov13_022272CC();
+    WifiSetupButtonBar_Unlock();
     ov13_0222B8E8(ov13_0222E390);
 }
 
@@ -573,11 +573,11 @@ void ov13_0222E390(void) {
 }
 
 void ov13_0222E3A4(void) {
-    if (ov13_02241694(1) != 0) {
-        ov13_0222726C(1);
+    if (WifiSetupInput_IsKeyPressed(1) != 0) {
+        WifiSetupButtonBar_SelectIfNone(1);
     }
-    if (ov13_02241694(2) != 0) {
-        ov13_0222726C(0);
+    if (WifiSetupInput_IsKeyPressed(2) != 0) {
+        WifiSetupButtonBar_SelectIfNone(0);
     }
 }
 
@@ -585,7 +585,7 @@ void ov13_0222E3DC(void) {
 }
 
 void ov13_0222E3E0(void) {
-    switch (ov13_02227258()) {
+    switch (WifiSetupButtonBar_GetSelected()) {
     case 0:
         ov13_0223ABB8(7);
         break;
@@ -600,41 +600,41 @@ void ov13_0222E3E0(void) {
 }
 
 void ov13_0222E430(void) {
-    ov13_022272E4();
-    ov13_022405B8(8);
+    WifiSetupButtonBar_Lock();
+    WifiSetupFade_StartDelay(8);
     ov13_0222B8E8(ov13_0222E450);
 }
 
 void ov13_0222E450(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
-    ov13_02227228();
+    WifiSetupButtonBar_Close();
     if (ov13_0224F518 == 0) {
-        ov13_022403B8(3, 1, 1, 8);
+        WifiSetupFade_Start(3, 1, 1, 8);
     }
-    ov13_022403B8(3, 0, 0x15, 8);
+    WifiSetupFade_Start(3, 0, 0x15, 8);
     ov13_0222B8E8(ov13_0222E4B4);
 }
 
 void ov13_0222E4B4(void) {
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     if (ov13_0224F518 == 0) {
-        if (ov13_02240394(1) != 0) {
+        if (WifiSetupFade_IsActive(1) != 0) {
             return;
         }
     }
     if (ov13_022272A0() == 0) {
         return;
     }
-    ov13_02240B04(0);
+    WifiSetupText_FreeBgCanvas(0);
     if (ov13_0224F518 == 0) {
-        ov13_0222788C();
-        ov13_02240EFC(1, 1);
+        WifiSetupMessage_Hide();
+        WifiSetupDisplay_HidePlanes(1, 1);
     }
-    ov13_02240EFC(0, 0x15);
+    WifiSetupDisplay_HidePlanes(0, 0x15);
     if (ov13_0224F518 == 0) {
         ov13_0222B8F8(0, 1);
         ov13_0222B8E8(ov13_0222D454);
@@ -647,12 +647,12 @@ void ov13_0222E4B4(void) {
 void ov13_0222E56C(void) {
     ov13_0224F51C = 0;
     ov13_0222E59C();
-    ov13_022279EC(0x21);
+    WifiSetup_PrintMessage(0x21);
     ov13_0222B8E8(ov13_0222E608);
 }
 
 void ov13_0222E59C(void) {
-    ov13_02227924(ov13_022462B0, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(ov13_022462B0, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
     SET_PRI3(0x0400000A);
@@ -660,13 +660,13 @@ void ov13_0222E59C(void) {
 }
 
 void ov13_0222E608(void) {
-    ov13_022403B8(2, 0, 0x15, 8);
-    ov13_02240EA8(0, 0x15);
+    WifiSetupFade_Start(2, 0, 0x15, 8);
+    WifiSetupDisplay_ShowPlanes(0, 0x15);
     ov13_0222B8E8(ov13_0222E63C);
 }
 
 void ov13_0222E63C(void) {
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     if (ov13_0222BC68() == 0) {
@@ -684,22 +684,22 @@ void ov13_0222E67C(void) {
 }
 
 void ov13_0222E680(void) {
-    ov13_022403B8(3, 1, 1, 8);
-    ov13_022403B8(3, 0, 0x15, 8);
+    WifiSetupFade_Start(3, 1, 1, 8);
+    WifiSetupFade_Start(3, 0, 0x15, 8);
     ov13_0222B8E8(ov13_0222E6BC);
 }
 
 void ov13_0222E6BC(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
-    ov13_02240B04(0);
-    ov13_0222788C();
-    ov13_02240EFC(1, 1);
-    ov13_02240EFC(0, 0x15);
+    WifiSetupText_FreeBgCanvas(0);
+    WifiSetupMessage_Hide();
+    WifiSetupDisplay_HidePlanes(1, 1);
+    WifiSetupDisplay_HidePlanes(0, 0x15);
     ov13_0222B8F8(0, 1);
     ov13_0222B8E8(ov13_0222D454);
 }
@@ -713,13 +713,13 @@ void ov13_0222E720(void) {
 
 void ov13_0222E754(void) {
     ov13_0222E790();
-    ov13_022279EC(0x20);
-    ov13_0224F520[0] = ov13_022277B8(0x3c, -1, 0);
+    WifiSetup_PrintMessage(0x20);
+    ov13_0224F520[0] = WifiSetupMessage_Show(0x3c, -1, 0);
     ov13_0222B8E8(ov13_0222E810);
 }
 
 void ov13_0222E790(void) {
-    ov13_02227924(ov13_022462C4, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(ov13_022462C4, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
     SET_PRI3(0x04000008);
@@ -728,20 +728,20 @@ void ov13_0222E790(void) {
 }
 
 void ov13_0222E810(void) {
-    ov13_022403B8(2, 0, 0x15, 8);
-    ov13_02240EA8(0, 0x15);
+    WifiSetupFade_Start(2, 0, 0x15, 8);
+    WifiSetupDisplay_ShowPlanes(0, 0x15);
     if (ov13_0224F520[0] != 0) {
-        ov13_022403B8(2, 1, 1, 8);
-        ov13_02240EA8(1, 1);
+        WifiSetupFade_Start(2, 1, 1, 8);
+        WifiSetupDisplay_ShowPlanes(1, 1);
     }
     ov13_0222B8E8(ov13_0222E878);
 }
 
 void ov13_0222E878(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     ov13_022279B4(3);
@@ -749,13 +749,13 @@ void ov13_0222E878(void) {
 }
 
 void ov13_0222E8B4(void) {
-    if (ov13_02227258() == -2) {
+    if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
     if (ov13_0222BC68() == 0) {
         return;
     }
-    ov13_022272CC();
+    WifiSetupButtonBar_Unlock();
     ov13_0222B8E8(ov13_0222E8E8);
 }
 
@@ -766,11 +766,11 @@ void ov13_0222E8E8(void) {
 }
 
 void ov13_0222E8FC(void) {
-    if (ov13_02241694(1) != 0) {
-        ov13_0222726C(1);
+    if (WifiSetupInput_IsKeyPressed(1) != 0) {
+        WifiSetupButtonBar_SelectIfNone(1);
     }
-    if (ov13_02241694(2) != 0) {
-        ov13_0222726C(0);
+    if (WifiSetupInput_IsKeyPressed(2) != 0) {
+        WifiSetupButtonBar_SelectIfNone(0);
     }
 }
 
@@ -778,7 +778,7 @@ void ov13_0222E934(void) {
 }
 
 void ov13_0222E938(void) {
-    int r = ov13_02227258();
+    int r = WifiSetupButtonBar_GetSelected();
     if (r != 0) {
         if (r != 1) {
             return;
@@ -793,39 +793,39 @@ void ov13_0222E938(void) {
 }
 
 void ov13_0222E990(void) {
-    ov13_022272E4();
-    ov13_022405B8(8);
+    WifiSetupButtonBar_Lock();
+    WifiSetupFade_StartDelay(8);
     ov13_0222B8E8(ov13_0222E9B0);
 }
 
 void ov13_0222E9B0(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
-    ov13_02227228();
+    WifiSetupButtonBar_Close();
     if (ov13_0224F520[1] == 0) {
-        ov13_022403B8(3, 1, 1, 8);
+        WifiSetupFade_Start(3, 1, 1, 8);
     }
-    ov13_022403B8(3, 0, 0x15, 8);
+    WifiSetupFade_Start(3, 0, 0x15, 8);
     ov13_0222B8E8(ov13_0222EA14);
 }
 
 void ov13_0222EA14(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     if (ov13_022272A0() == 0) {
         return;
     }
-    ov13_02240B04(0);
+    WifiSetupText_FreeBgCanvas(0);
     if (ov13_0224F520[1] == 0) {
-        ov13_0222788C();
-        ov13_02240EFC(1, 1);
+        WifiSetupMessage_Hide();
+        WifiSetupDisplay_HidePlanes(1, 1);
     }
-    ov13_02240EFC(0, 0x15);
+    WifiSetupDisplay_HidePlanes(0, 0x15);
     if (ov13_0224F520[1] == 0) {
         ov13_0222B8F8(0, 1);
         ov13_0222B8E8(ov13_0222D454);
@@ -838,21 +838,21 @@ void ov13_0222EA14(void) {
 void ov13_0222EABC(void) {
     u16 buf[11];
     u8 *src = ov13_0222BCA8();
-    int win = ov13_022408A0(0, 0);
+    int win = WifiSetupText_InitBgCanvas(0, 0);
     ov13_0224F524[1] = 0;
     ov13_0224F524[0] = 0;
     ov13_0222EB8C();
     MIi_CpuClear16(0, buf, sizeof(buf));
     MIi_CpuCopy16((u16 *)(src + 2), buf, src[1] * 2);
-    ov13_02240CC0(win, 8, 0x35, 0xf0, 0x1c, 2, 0x480, buf);
-    ov13_02240E2C(win);
+    WifiSetupText_DrawInRect(win, 8, 0x35, 0xf0, 0x1c, 2, 0x480, buf);
+    WifiSetupText_MarkDirty(win);
     ov13_0222BC84(ov13_0222EE80);
     ov13_0223BE6C(0x1d, 4, 0, -1, 0);
     ov13_0222B8E8(ov13_0222EC0C);
 }
 
 void ov13_0222EB8C(void) {
-    ov13_02227924(ov13_022462D8, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(ov13_022462D8, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
     SET_PRI3(0x04000008);
@@ -861,13 +861,13 @@ void ov13_0222EB8C(void) {
 }
 
 void ov13_0222EC0C(void) {
-    ov13_022403B8(2, 0, 0x15, 8);
-    ov13_02240EA8(0, 0x15);
+    WifiSetupFade_Start(2, 0, 0x15, 8);
+    WifiSetupDisplay_ShowPlanes(0, 0x15);
     ov13_0222B8E8(ov13_0222EC40);
 }
 
 void ov13_0222EC40(void) {
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     ov13_0222B8E8(ov13_0222EC64);
@@ -911,17 +911,17 @@ void ov13_0222ED00(void) {
         return;
     }
     if (ov13_0224F524[1] == 0) {
-        ov13_022403B8(3, 1, 1, 8);
+        WifiSetupFade_Start(3, 1, 1, 8);
     }
-    ov13_022403B8(3, 0, 0x15, 8);
+    WifiSetupFade_Start(3, 0, 0x15, 8);
     ov13_0222B8E8(ov13_0222ED5C);
 }
 
 void ov13_0222ED5C(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     if (ov13_0224F524[0] == 0 && ov13_0224F524[1] == 1) {
@@ -938,17 +938,17 @@ void ov13_0222EDB8(void) {
             return;
         }
     }
-    ov13_02240B04(0);
-    ov13_02240EFC(0, 0x15);
+    WifiSetupText_FreeBgCanvas(0);
+    WifiSetupDisplay_HidePlanes(0, 0x15);
     if (ov13_0224F524[1] == 0) {
-        ov13_0222788C();
-        ov13_02240EFC(1, 1);
+        WifiSetupMessage_Hide();
+        WifiSetupDisplay_HidePlanes(1, 1);
     }
     ov13_0222B8F8(0, 1);
     if (ov13_0224F524[0] != 0) {
         ov13_0222B8E8(ov13_0222E754);
     } else if (ov13_0224F524[1] == 0) {
-        ov13_02240EFC(1, 1);
+        WifiSetupDisplay_HidePlanes(1, 1);
         ov13_0222B8E8(ov13_0222D454);
     } else {
         ov13_0222B8E8(ov13_0222DB6C);
@@ -967,14 +967,14 @@ void ov13_0222EEB4(void) {
     ov13_0222BB20(ov13_0222F230);
     ov13_0224F528 = 0;
     ov13_0222EF00();
-    ov13_022279EC(0x1c);
-    ov13_02226F58(0);
+    WifiSetup_PrintMessage(0x1c);
+    WifiSetupBusyIcon_Create(0);
     ov13_0223ABB8(0xb);
     ov13_0222B8E8(ov13_0222EF80);
 }
 
 void ov13_0222EF00(void) {
-    ov13_02227924(ov13_022462EC, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(ov13_022462EC, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
     SET_PRI3(0x04000008);
@@ -983,13 +983,13 @@ void ov13_0222EF00(void) {
 }
 
 void ov13_0222EF80(void) {
-    ov13_022403B8(2, 0, 0x15, 8);
-    ov13_02240EA8(0, 0x15);
+    WifiSetupFade_Start(2, 0, 0x15, 8);
+    WifiSetupDisplay_ShowPlanes(0, 0x15);
     ov13_0222B8E8(ov13_0222EFB4);
 }
 
 void ov13_0222EFB4(void) {
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     ov13_022279B4(1);
@@ -997,7 +997,7 @@ void ov13_0222EFB4(void) {
 }
 
 void ov13_0222EFE0(void) {
-    if (ov13_02227258() == -2) {
+    if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
     ov13_0222B8E8(ov13_0222F004);
@@ -1010,12 +1010,12 @@ void ov13_0222F004(void) {
 }
 
 void ov13_0222F018(void) {
-    if (ov13_02241694(2) != 0) {
-        ov13_0222726C(0);
+    if (WifiSetupInput_IsKeyPressed(2) != 0) {
+        WifiSetupButtonBar_SelectIfNone(0);
         return;
     }
     if (ov13_0222EE94() != 0) {
-        ov13_0222726C(0);
+        WifiSetupButtonBar_SelectIfNone(0);
     }
 }
 
@@ -1023,7 +1023,7 @@ void ov13_0222F050(void) {
 }
 
 void ov13_0222F054(void) {
-    if (ov13_02227258() != 0) {
+    if (WifiSetupButtonBar_GetSelected() != 0) {
         return;
     }
     ov13_0223AC20();
@@ -1035,13 +1035,13 @@ void ov13_0222F080(void) {
     if (ov13_0224F528 == 0) {
         ov13_0222BC0C();
     }
-    ov13_022272E4();
-    ov13_022405B8(8);
+    WifiSetupButtonBar_Lock();
+    WifiSetupFade_StartDelay(8);
     ov13_0222B8E8(ov13_0222F0B8);
 }
 
 void ov13_0222F0B8(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
     if (ov13_0224F528 == 0) {
@@ -1049,20 +1049,20 @@ void ov13_0222F0B8(void) {
             return;
         }
     }
-    ov13_02227228();
+    WifiSetupButtonBar_Close();
     if (ov13_0224F528 == 0) {
-        ov13_022403B8(3, 1, 1, 8);
+        WifiSetupFade_Start(3, 1, 1, 8);
     }
-    ov13_022403B8(3, 0, 0x15, 8);
+    WifiSetupFade_Start(3, 0, 0x15, 8);
     ov13_0222B8E8(ov13_0222F138);
 }
 
 void ov13_0222F138(void) {
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     if (ov13_0224F528 == 0) {
-        if (ov13_02240394(1) != 0) {
+        if (WifiSetupFade_IsActive(1) != 0) {
             return;
         }
     }
@@ -1074,13 +1074,13 @@ void ov13_0222F138(void) {
             return;
         }
     }
-    ov13_02227028();
-    ov13_02240B04(0);
+    WifiSetupBusyIcon_Destroy();
+    WifiSetupText_FreeBgCanvas(0);
     if (ov13_0224F528 == 0) {
-        ov13_0222788C();
-        ov13_02240EFC(1, 1);
+        WifiSetupMessage_Hide();
+        WifiSetupDisplay_HidePlanes(1, 1);
     }
-    ov13_02240EFC(0, 0x15);
+    WifiSetupDisplay_HidePlanes(0, 0x15);
     if (ov13_0224F528 == 0) {
         ov13_0222B8F8(0, 1);
         ov13_0222B8E8(ov13_0222D454);
@@ -1114,19 +1114,19 @@ void ov13_0222F2AC(void) {
     ov13_0224F52C.counter = 0;
     ov13_0222F30C();
     ov13_02227E40();
-    ov13_022277B8(0x36, -1, 0);
+    WifiSetupMessage_Show(0x36, -1, 0);
     ov13_02227964(2);
-    ov13_022279EC(0x22);
-    ov13_02226F58(0);
+    WifiSetup_PrintMessage(0x22);
+    WifiSetupBusyIcon_Create(0);
     ov13_0222B254();
     ov13_0223ABB8(0xb);
     ov13_0222B8E8(ov13_0222F3B4);
 }
 
 void ov13_0222F30C(void) {
-    ov13_02227924(ov13_02246300, GX_LoadBG2Char);
-    ov13_02227924(ov13_02246318, GX_LoadBGPltt);
-    ov13_02227924(ov13_02246330, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(ov13_02246300, GX_LoadBG2Char);
+    WifiSetup_LoadGraphics(ov13_02246318, GX_LoadBGPltt);
+    WifiSetup_LoadGraphics(ov13_02246330, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
     SET_PRI3(0x04000008);
@@ -1135,18 +1135,18 @@ void ov13_0222F30C(void) {
 }
 
 void ov13_0222F3B4(void) {
-    ov13_022403B8(2, 1, 1, 8);
-    ov13_022403B8(2, 0, 0x15, 8);
-    ov13_02240EA8(1, 1);
-    ov13_02240EA8(0, 0x15);
+    WifiSetupFade_Start(2, 1, 1, 8);
+    WifiSetupFade_Start(2, 0, 0x15, 8);
+    WifiSetupDisplay_ShowPlanes(1, 1);
+    WifiSetupDisplay_ShowPlanes(0, 0x15);
     ov13_0222B8E8(ov13_0222F408);
 }
 
 void ov13_0222F408(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     ov13_022279B4(1);
@@ -1154,10 +1154,10 @@ void ov13_0222F408(void) {
 }
 
 void ov13_0222F444(void) {
-    if (ov13_02227258() == -2) {
+    if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
-    ov13_0224F52C.task = ov13_02242528(1, ov13_0222F764, 0, 0x78);
+    ov13_0224F52C.task = WifiSetupTask_Create(1, ov13_0222F764, 0, 0x78);
     ov13_0222B8E8(ov13_0222F48C);
 }
 
@@ -1173,7 +1173,7 @@ void ov13_0222F48C(void) {
             return;
         }
         ov13_0224F52C.flag = 1;
-        ov13_022425F0(1, ov13_0224F52C.task);
+        WifiSetupTask_Destroy(1, ov13_0224F52C.task);
         ov13_0224F52C.task = NULL;
         ov13_0222B8E8(ov13_0222F7CC);
         break;
@@ -1184,8 +1184,8 @@ void ov13_0222F48C(void) {
         ov13_0223AC20();
         ov13_0223BE6C(0xc, 1, 1, -1, 0);
         ov13_0223ABB8(9);
-        ov13_022272E4();
-        ov13_022425F0(1, ov13_0224F52C.task);
+        WifiSetupButtonBar_Lock();
+        WifiSetupTask_Destroy(1, ov13_0224F52C.task);
         ov13_0224F52C.task = NULL;
         ov13_0222B8E8(ov13_0222F780);
         break;
@@ -1193,12 +1193,12 @@ void ov13_0222F48C(void) {
 }
 
 void ov13_0222F560(void) {
-    if (ov13_02241694(2) != 0) {
-        ov13_0222726C(0);
+    if (WifiSetupInput_IsKeyPressed(2) != 0) {
+        WifiSetupButtonBar_SelectIfNone(0);
         return;
     }
     if (ov13_0222F28C() != 0) {
-        ov13_0222726C(0);
+        WifiSetupButtonBar_SelectIfNone(0);
     }
 }
 
@@ -1206,45 +1206,45 @@ void ov13_0222F598(void) {
 }
 
 void ov13_0222F59C(void) {
-    if (ov13_02227258() != 0) {
+    if (WifiSetupButtonBar_GetSelected() != 0) {
         return;
     }
     if (ov13_0224F52C.task == NULL) {
         return;
     }
-    ov13_022425D0(1, ov13_0224F52C.task);
+    WifiSetupTask_DestroyLater(1, ov13_0224F52C.task);
     ov13_0224F52C.task = NULL;
-    ov13_022272E4();
+    WifiSetupButtonBar_Lock();
     ov13_0222B8E8(ov13_0222F818);
 }
 
 void ov13_0222F5E8(void) {
-    ov13_022272E4();
+    WifiSetupButtonBar_Lock();
     if (ov13_0224F52C.task != NULL) {
-        ov13_022425F0(1, ov13_0224F52C.task);
+        WifiSetupTask_Destroy(1, ov13_0224F52C.task);
     }
-    ov13_022405B8(8);
+    WifiSetupFade_StartDelay(8);
     ov13_0222B8E8(ov13_0222F624);
 }
 
 void ov13_0222F624(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
-    ov13_02227228();
+    WifiSetupButtonBar_Close();
     if (ov13_0224F52C.flag == 0) {
-        ov13_022403B8(3, 1, 1, 8);
+        WifiSetupFade_Start(3, 1, 1, 8);
     }
-    ov13_022403B8(3, 0, 0x15, 8);
+    WifiSetupFade_Start(3, 0, 0x15, 8);
     ov13_0222B8E8(ov13_0222F688);
 }
 
 void ov13_0222F688(void) {
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     if (ov13_0224F52C.flag == 0) {
-        if (ov13_02240394(1) != 0) {
+        if (WifiSetupFade_IsActive(1) != 0) {
             return;
         }
     }
@@ -1252,13 +1252,13 @@ void ov13_0222F688(void) {
         return;
     }
     ov13_0222B364(ov13_0224F52C.flag != 0 ? 1 : 0);
-    ov13_02227028();
-    ov13_02240B04(0);
+    WifiSetupBusyIcon_Destroy();
+    WifiSetupText_FreeBgCanvas(0);
     if (ov13_0224F52C.flag == 0) {
-        ov13_0222788C();
-        ov13_02240EFC(1, 1);
+        WifiSetupMessage_Hide();
+        WifiSetupDisplay_HidePlanes(1, 1);
     }
-    ov13_02240EFC(0, 0x15);
+    WifiSetupDisplay_HidePlanes(0, 0x15);
     if (ov13_0224F52C.flag == 0) {
         ov13_0222B8F8(2, 1);
         ov13_0222B8E8(ov13_02237618);
@@ -1269,8 +1269,8 @@ void ov13_0222F688(void) {
 }
 
 void ov13_0222F764(void) {
-    ov13_022413E4();
-    ov13_02242478(0);
+    WifiSetupInput_Update();
+    WifiSetupTask_RunQueue(0);
     ov13_0222F560();
     ov13_0222F59C();
 }
@@ -1314,13 +1314,13 @@ void ov13_0222F848(void) {
     ov13_0224F534 = 0;
     ov13_0222F884();
     ov13_02227E40();
-    ov13_022279EC(0x23);
+    WifiSetup_PrintMessage(0x23);
     ov13_0223ABB8(0x10);
     ov13_0222B8E8(ov13_0222F8F0);
 }
 
 void ov13_0222F884(void) {
-    ov13_02227924(ov13_02246344, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(ov13_02246344, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
     SET_PRI3(0x0400000A);
@@ -1328,13 +1328,13 @@ void ov13_0222F884(void) {
 }
 
 void ov13_0222F8F0(void) {
-    ov13_022403B8(2, 0, 0x15, 8);
-    ov13_02240EA8(0, 0x15);
+    WifiSetupFade_Start(2, 0, 0x15, 8);
+    WifiSetupDisplay_ShowPlanes(0, 0x15);
     ov13_0222B8E8(ov13_0222F924);
 }
 
 void ov13_0222F924(void) {
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     ov13_0222B8E8(ov13_0222F948);
@@ -1349,22 +1349,22 @@ void ov13_0222F958(void) {
 }
 
 void ov13_0222F95C(void) {
-    ov13_022403B8(3, 1, 1, 8);
-    ov13_022403B8(3, 0, 0x15, 8);
+    WifiSetupFade_Start(3, 1, 1, 8);
+    WifiSetupFade_Start(3, 0, 0x15, 8);
     ov13_0222B8E8(ov13_0222F998);
 }
 
 void ov13_0222F998(void) {
-    if (ov13_02240394(1) != 0) {
+    if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
-    if (ov13_02240394(0) != 0) {
+    if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
-    ov13_02240B04(0);
-    ov13_0222788C();
-    ov13_02240EFC(1, 1);
-    ov13_02240EFC(0, 0x15);
+    WifiSetupText_FreeBgCanvas(0);
+    WifiSetupMessage_Hide();
+    WifiSetupDisplay_HidePlanes(1, 1);
+    WifiSetupDisplay_HidePlanes(0, 0x15);
     ov13_0222B8F8(0, 0);
     ov13_0222B934(0, 1);
     ov13_0222B8E8(ov13_02238440);
@@ -1379,7 +1379,7 @@ void ov13_0222FA08(void) {
 
 void ov13_0222FA3C(void) {
     int result;
-    ov13_0224F538.big = ov13_0224128C(0x5c, 4);
+    ov13_0224F538.big = WifiSetupHeap_AllocZeroed(0x5c, 4);
     ov13_0222B948(&result, 0);
     if (result == 0) {
         ov13_0224F538.unk0 = 0;
@@ -1388,12 +1388,12 @@ void ov13_0222FA3C(void) {
     ov13_0224F538.big->unk51 = ov13_02239D04(ov13_0224F538.big);
     ov13_0222FB14();
     ov13_02227E40();
-    ov13_022277B8(0x34, -1, 0);
+    WifiSetupMessage_Show(0x34, -1, 0);
     ov13_02227964(2);
     ov13_0222FC68();
     ov13_0222FD10();
-    ov13_0224F538.big->unkC = ov13_022408A0(0, 0);
-    ov13_0224F538.big->unk3C = ov13_02242528(1, ov13_02230C68, 0, 0x6e);
+    ov13_0224F538.big->unkC = WifiSetupText_InitBgCanvas(0, 0);
+    ov13_0224F538.big->unk3C = WifiSetupTask_Create(1, ov13_02230C68, 0, 0x6e);
     ov13_022307AC();
     ov13_02230CC4();
     ov13_0222B8E8(ov13_0222FE84);
@@ -1404,11 +1404,11 @@ void ov13_0222FB14(void) {
     struct Str22 b;
     a = ov13_022453E3;
     b = ov13_022453CD;
-    ov13_02227924(ov13_02246358, GX_LoadBG3Scr);
-    ov13_0224F538.big->unk4 = ov13_0223F95C(ov13_022278C4(&a), 0, 4);
+    WifiSetup_LoadGraphics(ov13_02246358, GX_LoadBG3Scr);
+    ov13_0224F538.big->unk4 = WifiSetupFile_Load(WifiSetup_LocalizePath(&a), 0, 4);
     ov13_02239228(ov13_0224F538.big->unk4);
     ov13_022392B4();
-    ov13_0224F538.big->unk8 = ov13_0223F95C(ov13_022278C4(&b), 0, 4);
+    ov13_0224F538.big->unk8 = WifiSetupFile_Load(WifiSetup_LocalizePath(&b), 0, 4);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
     SET_PRI3(0x04000008);

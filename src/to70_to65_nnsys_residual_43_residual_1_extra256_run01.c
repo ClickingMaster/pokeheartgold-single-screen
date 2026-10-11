@@ -31,7 +31,7 @@ static inline Node *GetNode(NNSG3dResNodeInfo *nodes, u8 index) {
 }
 
 void getMdlTrans_(MdlJointResult *out) {
-    MdlRenderState *state = _021DA700;
+    MdlRenderState *state = gCurrentRenderState;
     Node *node = GetNode(state->nodes, state->command[1]);
     if (node->flags & 1) {
         out->flags |= 4;

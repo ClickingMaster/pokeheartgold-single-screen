@@ -28,8 +28,8 @@ extern Pos16 ov13_02245250[];
 extern Pos16 ov13_02245230;
 extern Pos16 ov13_02245258[];
 extern Pos16 ov13_02245234;
-extern int ov13_022417DC(const void *);
-extern void ov13_02240E74(const void *, const void *, void *);
+extern int WifiSetupInput_IsTouchPressed(const void *);
+extern void WifiSetup_RectFromPosSize(const void *, const void *, void *);
 extern void ov13_0223ABB8(int);
 void ov13_0222A378(void);
 
@@ -37,14 +37,14 @@ void ov13_0222A378(void) {
     Rect16 record;
     int i;
     Pos16 *cursor;
-    if (!ov13_022417DC(&ov13_02245958)) {
+    if (!WifiSetupInput_IsTouchPressed(&ov13_02245958)) {
         return;
     }
     ov13_0224F4C0->selected = -1;
     cursor = ov13_0224527A;
     for (i = 0; i < 10; i++, cursor++) {
-        ov13_02240E74(cursor, &ov13_02245228, &record);
-        if (ov13_022417DC(&record)) {
+        WifiSetup_RectFromPosSize(cursor, &ov13_02245228, &record);
+        if (WifiSetupInput_IsTouchPressed(&record)) {
             if (!ov13_0224F4C0->b) {
                 ov13_0223ABB8(9);
                 return;
@@ -56,8 +56,8 @@ void ov13_0222A378(void) {
     }
     cursor = ov13_02245250;
     for (i = 0; i < 2; i++, cursor++) {
-        ov13_02240E74(cursor, &ov13_02245230, &record);
-        if (ov13_022417DC(&record)) {
+        WifiSetup_RectFromPosSize(cursor, &ov13_02245230, &record);
+        if (WifiSetupInput_IsTouchPressed(&record)) {
             if ((i == 0 && !ov13_0224F4C0->a) || (i == 1 && !ov13_0224F4C0->c)) {
                 ov13_0223ABB8(9);
                 return;
@@ -69,8 +69,8 @@ void ov13_0222A378(void) {
     }
     cursor = ov13_02245258;
     for (i = 0; i < 2; i++, cursor++) {
-        ov13_02240E74(cursor, &ov13_02245234, &record);
-        if (ov13_022417DC(&record)) {
+        WifiSetup_RectFromPosSize(cursor, &ov13_02245234, &record);
+        if (WifiSetupInput_IsTouchPressed(&record)) {
             ov13_0223ABB8(0);
             ov13_0224F4C0->selected = i + 12;
             return;

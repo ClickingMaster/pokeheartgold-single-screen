@@ -22,7 +22,7 @@ typedef struct {
 extern State ov13_0224F538;
 extern void ov13_0223ABB8(int);
 extern void ov13_02230B14(void);
-extern void *ov13_02242528(int, void (*)(void), int, int);
+extern void *WifiSetupTask_Create(int, void (*)(void), int, int);
 extern void ov13_02230ED0(void);
 extern void ov13_022307AC(void);
 extern void ov13_02239578(int);
@@ -39,7 +39,7 @@ void ov13_02230D10(int input) {
                 ov13_0224F538.state = 4;
             } else {
                 ov13_0223ABB8(19);
-                ov13_0224F538.work->task = ov13_02242528(0, ov13_02230B14, 0, 120);
+                ov13_0224F538.work->task = WifiSetupTask_Create(0, ov13_02230B14, 0, 120);
                 return;
             }
         } else {

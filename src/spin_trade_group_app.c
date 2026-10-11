@@ -179,9 +179,9 @@ BOOL sub_02039EB4(SaveData *saveData, int a1, s32 *state);
 void sub_02096CE0(SpinTradeGroupMenu *menu);
 BOOL sub_02096D4C(SpinTradeGroupMenu *menu, int command, void *data, int size);
 
-BOOL ov85_021E88AC(OverlayManager *manager, int *state);
-BOOL ov85_021E8A08(OverlayManager *man, int *state);
-BOOL ov85_021E8B08(OverlayManager *man, int *state);
+BOOL SpinTradeGroupApp_Init(OverlayManager *manager, int *state);
+BOOL SpinTradeGroupApp_Main(OverlayManager *man, int *state);
+BOOL SpinTradeGroupApp_Exit(OverlayManager *man, int *state);
 void SpinTradeGroup_VBlankTask(SysTask *task, void *data);
 void SpinTradeGroup_VBlankCallback(void *data);
 void SpinTradeGroup_SetGraphicsBanks(void);
@@ -252,7 +252,7 @@ void SpinTradeGroup_SetMaxConnections(SpinTradeGroupApp *app, int a1);
 int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int a1);
 void ov85_021EA4EC(void *a0, void *a1);
 
-BOOL ov85_021E88AC(OverlayManager *manager, int *state) {
+BOOL SpinTradeGroupApp_Init(OverlayManager *manager, int *state) {
     NARC *narc;
     Work97024 *args = OverlayManager_GetArgs(manager);
     SpinTradeGroupApp *app;
@@ -306,7 +306,7 @@ BOOL ov85_021E88AC(OverlayManager *manager, int *state) {
 }
 
 #pragma force_active on
-BOOL ov85_021E8A08(OverlayManager *man, int *state) {
+BOOL SpinTradeGroupApp_Main(OverlayManager *man, int *state) {
     SpinTradeGroupApp *app = OverlayManager_GetData(man);
     int mode;
 
@@ -358,7 +358,7 @@ BOOL ov85_021E8A08(OverlayManager *man, int *state) {
 }
 #pragma force_active reset
 
-BOOL ov85_021E8B08(OverlayManager *man, int *state) {
+BOOL SpinTradeGroupApp_Exit(OverlayManager *man, int *state) {
 #pragma unused(state)
     int i;
     SpinTradeGroupApp *app = OverlayManager_GetData(man);

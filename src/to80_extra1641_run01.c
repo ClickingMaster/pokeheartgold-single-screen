@@ -18,10 +18,10 @@ typedef struct {
 extern Root ov13_0224F54C;
 extern u32 ov13_0224F554[];
 extern u8 ov13_022464CC[];
-extern int ov13_02240394(int);
+extern int WifiSetupFade_IsActive(int);
 extern int DWCi_BACKUPlConvMaskCidr(void *);
 extern u8 *ov13_02239FF0(void);
-extern void ov13_022425F0(int, void *), ov13_02241D98(void *), ov13_02239514(void), ov13_02240B04(int), ov13_02227D18(void), ov13_0222788C(int), ov13_02239288(void), ov13_0223FA50(void *), ov13_02227924(void *, void (*)(const void *, u32, u32)), ov13_02240EFC(int, int), ov13_0222B934(int, int), ov13_0222B8F8(int, int), ov13_0222B8E8(void (*)(void)), ov13_0223A414(int), ov13_022412B0(void *);
+extern void WifiSetupTask_Destroy(int, void *), WifiSetupOam_Release(void *), ov13_02239514(void), WifiSetupText_FreeBgCanvas(int), WifiSetupCursor_Hide(void), WifiSetupMessage_Hide(int), ov13_02239288(void), WifiSetupFile_Free(void *), WifiSetup_LoadGraphics(void *, void (*)(const void *, u32, u32)), WifiSetupDisplay_HidePlanes(int, int), ov13_0222B934(int, int), ov13_0222B8F8(int, int), ov13_0222B8E8(void (*)(void)), ov13_0223A414(int), WifiSetupHeap_FreeAndClear(void *);
 extern void ov13_02230FD8(void);
 extern void ov13_02231B18(void);
 extern void ov13_02237DD0(void);
@@ -31,35 +31,35 @@ extern void ov13_02237618(void);
 void ov13_02233AD8(void);
 
 void ov13_02233AD8(void) {
-    if (ov13_02240394(1)) {
+    if (WifiSetupFade_IsActive(1)) {
         return;
     }
-    if (ov13_02240394(0)) {
+    if (WifiSetupFade_IsActive(0)) {
         return;
     }
-    ov13_022425F0(0, ov13_0224F54C.inner->first);
-    ov13_022425F0(1, ov13_0224F54C.inner->last);
+    WifiSetupTask_Destroy(0, ov13_0224F54C.inner->first);
+    WifiSetupTask_Destroy(1, ov13_0224F54C.inner->last);
     int i;
     for (i = 0; i < 7; i++) {
-        ov13_02241D98(ov13_0224F54C.inner->items[i]);
+        WifiSetupOam_Release(ov13_0224F54C.inner->items[i]);
     }
     if (ov13_0224F54C.inner->extra) {
-        ov13_02241D98(ov13_0224F54C.inner->extra);
+        WifiSetupOam_Release(ov13_0224F54C.inner->extra);
     }
     ov13_02239514();
-    ov13_02240B04(0);
-    ov13_02227D18();
+    WifiSetupText_FreeBgCanvas(0);
+    WifiSetupCursor_Hide();
     if (ov13_0224F54C.inner->mode != 12) {
-        ov13_0222788C(ov13_0224F54C.inner->mode);
+        WifiSetupMessage_Hide(ov13_0224F54C.inner->mode);
     }
     ov13_02239288();
-    ov13_0223FA50(ov13_0224F54C.inner->obj);
+    WifiSetupFile_Free(ov13_0224F54C.inner->obj);
     for (i = 0; i < 2; i++) {
-        ov13_0223FA50(ov13_0224F54C.inner->objs[i]);
+        WifiSetupFile_Free(ov13_0224F54C.inner->objs[i]);
     }
-    ov13_02227924(ov13_022464CC, GX_LoadOBJPltt);
-    ov13_02240EFC(1, 1);
-    ov13_02240EFC(0, 29);
+    WifiSetup_LoadGraphics(ov13_022464CC, GX_LoadOBJPltt);
+    WifiSetupDisplay_HidePlanes(1, 1);
+    WifiSetupDisplay_HidePlanes(0, 29);
     *(vu32 *)0x04000010 = 0;
     *(vu32 *)0x04000018 = 0;
     *(vu16 *)0x0400000c = (*(vu16 *)0x0400000c & 0x43) | 0xe10;
@@ -117,5 +117,5 @@ void ov13_02233AD8(void) {
         }
         break;
     }
-    ov13_022412B0(ov13_0224F554);
+    WifiSetupHeap_FreeAndClear(ov13_0224F554);
 }

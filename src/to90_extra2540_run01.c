@@ -32,10 +32,10 @@ extern Ov13Pos2 ov13_02245904[5][2];
 extern Ov13Pos2 ov13_022458A8[5];
 extern s8 ov13_02245894[][2];
 extern s8 ov13_02245895[][2];
-extern void ov13_02240E74(Pos16 *, Pos16 *, Rect16 *);
+extern void WifiSetup_RectFromPosSize(Pos16 *, Pos16 *, Rect16 *);
 extern void ov13_0223C73C(int);
-extern BOOL ov13_022417DC(Rect16 *);
-extern BOOL ov13_02241694(u16);
+extern BOOL WifiSetupInput_IsTouchPressed(Rect16 *);
+extern BOOL WifiSetupInput_IsKeyPressed(u16);
 void ov13_0223C340(void *);
 #pragma force_active on
 
@@ -46,16 +46,16 @@ void ov13_0223C340(void *task) {
     int j;
     u8 *counts;
     for (i = 0; i < ov13_02245934[ov13_0224F5B8->kind]; i++) {
-        ov13_02240E74((Pos16 *)&ov13_02245904[ov13_0224F5B8->kind][ov13_0224588A[ov13_0224F5B8->kind][i]], (Pos16 *)&ov13_022458A8[ov13_0224F5B8->kind], &temp);
-        if (ov13_022417DC(&temp)) {
+        WifiSetup_RectFromPosSize((Pos16 *)&ov13_02245904[ov13_0224F5B8->kind][ov13_0224588A[ov13_0224F5B8->kind][i]], (Pos16 *)&ov13_022458A8[ov13_0224F5B8->kind], &temp);
+        if (WifiSetupInput_IsTouchPressed(&temp)) {
             ov13_0224F5B8->unk1B = i;
             break;
         }
     }
-    if (ov13_02241694(1)) {
+    if (WifiSetupInput_IsKeyPressed(1)) {
         ov13_0224F5B8->unk1B = ov13_02245894[ov13_0224F5B8->kind][0];
     }
-    if (ov13_02241694(2)) {
+    if (WifiSetupInput_IsKeyPressed(2)) {
         ov13_0224F5B8->unk1B = ov13_02245895[ov13_0224F5B8->kind][0];
     }
     counts = ov13_02245934;

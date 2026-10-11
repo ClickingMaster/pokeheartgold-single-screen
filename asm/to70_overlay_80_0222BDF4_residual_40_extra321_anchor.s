@@ -743,15 +743,15 @@ ov80_0223BD80: ; 0x0223BD80
 	.byte 0x00, 0x00, 0x00, 0x00
 
 ov80_0223BDB4: ; 0x0223BDB4
-	.word ov81_0223DD60
-	.word ov81_0223DEA8
-	.word ov81_0223E234
+	.word BattleFactoryApp_Init
+	.word BattleFactoryApp_Main
+	.word BattleFactoryApp_Exit
 	.word FS_OVERLAY_ID(OVY_81)
 
 ov80_0223BDC4: ; 0x0223BDC4
-	.word ov81_0223DD60
-	.word ov81_0223DEA8
-	.word ov81_0223E234
+	.word BattleFactoryApp_Init
+	.word BattleFactoryApp_Main
+	.word BattleFactoryApp_Exit
 	.word FS_OVERLAY_ID(OVY_81)
 
 ov80_0223BDD4: ; 0x0223BDD4

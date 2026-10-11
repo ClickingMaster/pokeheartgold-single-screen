@@ -89,7 +89,7 @@ BOOL ScrCmd_GiveEgg(ScriptContext *ctx) {
     if (partyCount < PARTY_SIZE) {
         Pokemon *mon = AllocMonZeroed(HEAP_ID_FIELD2);
         ZeroMonData(mon);
-        int val = sub_02017FE4(MAPSECTYPE_GIFT, offset);
+        int val = Mapsec_FromTypeAndIndex(MAPSECTYPE_GIFT, offset);
         SetEggStats(mon, species, 1, profile, 3, val);
         Party_AddMon(party, mon);
         Heap_Free(mon);

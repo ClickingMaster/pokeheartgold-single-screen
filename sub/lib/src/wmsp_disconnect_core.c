@@ -224,7 +224,7 @@ deauthed:
                     WMSP_IndicateDisconnectionFromMyself(1, child, frame.childMac);
                 }
                 if (cleanup) {
-                    WMSP_CleanSendQueue(bit);
+                    WMSP_CleanSendQueue((u16)bit);
                 }
             } else {
                 __VENEER_OS_RestoreInterrupts((OSIntrMode)irq);

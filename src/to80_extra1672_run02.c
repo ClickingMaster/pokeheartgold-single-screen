@@ -13,7 +13,7 @@ void NNSi_G3dGetJointScaleMaya(MdlJointResult *result, const s32 *scale, const u
         result->flags |= 1;
         if (kind & 2) {
             u32 index = node[1];
-            u32 *bits = _021DA700->scaleFlags;
+            u32 *bits = gCurrentRenderState->scaleFlags;
             bits[index >> 5] |= 1u << (index & 31);
         }
     } else {
@@ -22,7 +22,7 @@ void NNSi_G3dGetJointScaleMaya(MdlJointResult *result, const s32 *scale, const u
         result->scale[2] = scale[2];
         if (kind & 2) {
             u32 index = node[1];
-            u32 *bits = _021DA700->scaleFlags;
+            u32 *bits = gCurrentRenderState->scaleFlags;
             int offset = (s16)index * (s16)24;
             bits[index >> 5] &= ~(1u << (index & 31));
             *(s32 *)((u8 *)_021DB510 + offset) = scale[3];
@@ -33,7 +33,7 @@ void NNSi_G3dGetJointScaleMaya(MdlJointResult *result, const s32 *scale, const u
     if (kind & 1) {
         u32 index = node[2];
         result->flags |= 32;
-        if ((_021DA700->scaleFlags)[index >> 5] & (1u << (index & 31))) {
+        if ((gCurrentRenderState->scaleFlags)[index >> 5] & (1u << (index & 31))) {
             result->flags |= 8;
         } else {
             result->inverseTriples[0] = _021DB510[index * 2];

@@ -48,10 +48,10 @@
 .public ov80_0222BD44
 .public ov80_0222BDD4
 .public ov80_022385D8
-.public ov81_02241020
-.public ov81_022410C8
-.public ov81_0224113C
-.public ov81_02241238
+.public BattleFactory_ReceivePing
+.public BattleFactory_ReceiveRentals
+.public BattleFactory_ReceiveUnused
+.public BattleFactory_ReceiveSwap
 .public BattleHall_ReceivePing
 .public BattleHall_ReceiveChoice
 .public BattleHall_ReceiveAnswer

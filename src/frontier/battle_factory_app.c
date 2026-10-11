@@ -251,9 +251,9 @@ u8 AddTextPrinterParameterizedWithColor(Window *window, int fontId, String *stri
 u8 TextPrinterCheckActive(u8 printerId);
 void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable);
 
-BOOL ov81_0223DD60(OverlayManager *man, int *state);
-BOOL ov81_0223DEA8(OverlayManager *man, int *state);
-BOOL ov81_0223E234(OverlayManager *man, int *state);
+BOOL BattleFactoryApp_Init(OverlayManager *man, int *state);
+BOOL BattleFactoryApp_Main(OverlayManager *man, int *state);
+BOOL BattleFactoryApp_Exit(OverlayManager *man, int *state);
 BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app);
 BOOL BattleFactoryApp_ShowScreen(BattleFactoryApp *app);
 void BattleFactoryApp_SetupRentalScreen(BattleFactoryApp *app);
@@ -323,13 +323,13 @@ void BattleFactoryApp_SetCancelRequested(BattleFactoryApp *app, u8 value);
 void BattleFactoryApp_CreatePokepic(BattleFactoryApp *app, int index, Pokemon *mon, int x, int y, int hFlip);
 BOOL BattleFactoryApp_SendLinkCommand(BattleFactoryApp *app, int command, int arg);
 void BattleFactoryApp_PrepareLinkPing(BattleFactoryApp *app, int command);
-void ov81_02241020(int netId);
+void BattleFactory_ReceivePing(int netId);
 void BattleFactoryApp_PrepareLinkRentals(BattleFactoryApp *app, int command, int arg);
-void ov81_022410C8(int netId, int size, const u16 *data, BattleFactoryApp *app);
-void ov81_0224113C(void);
+void BattleFactory_ReceiveRentals(int netId, int size, const u16 *data, BattleFactoryApp *app);
+void BattleFactory_ReceiveUnused(void);
 void BattleFactoryApp_PrintPartnerRentals(BattleFactoryApp *app);
 void BattleFactoryApp_PrepareLinkSwap(BattleFactoryApp *app, int command, int accepted);
-void ov81_02241238(int netId, int size, const BattleFactoryLinkMessage *msg, BattleFactoryApp *app);
+void BattleFactory_ReceiveSwap(int netId, int size, const BattleFactoryLinkMessage *msg, BattleFactoryApp *app);
 BattleFactoryBall *BattleFactoryApp_CreateBall(BattleFactoryApp *app, int index);
 BattleFactorySprite *BattleFactoryApp_CreateCenterSprite(BattleFactoryApp *app, int animSeq);
 void BattleFactoryApp_DeleteCenterSprites(BattleFactoryApp *app);
@@ -449,7 +449,7 @@ GridInputHandler *BattleFactoryApp_CreateSwapInGrid(BattleFactoryApp *app, GridI
 void BattleFactory_SetSwapInGridMenu(GridInputHandler *grid, int menuOpen, int frontierType);
 void BattleFactoryApp_OnSwapInCursorMove(BattleFactoryApp *app, int target);
 
-BOOL ov81_0223DD60(OverlayManager *man, int *state) {
+BOOL BattleFactoryApp_Init(OverlayManager *man, int *state) {
     BattleFactoryApp *app;
     BattleFactoryAppArgs *args;
 
@@ -501,7 +501,7 @@ BOOL ov81_0223DD60(OverlayManager *man, int *state) {
 }
 
 #pragma force_active on
-BOOL ov81_0223DEA8(OverlayManager *man, int *state) {
+BOOL BattleFactoryApp_Main(OverlayManager *man, int *state) {
     BattleFactoryApp *app = OverlayManager_GetData(man);
 
     if (app->partnerSwapState == 1) {
@@ -661,7 +661,7 @@ BOOL ov81_0223DEA8(OverlayManager *man, int *state) {
 }
 #pragma force_active reset
 
-BOOL ov81_0223E234(OverlayManager *man, int *state) {
+BOOL BattleFactoryApp_Exit(OverlayManager *man, int *state) {
 #pragma unused(state)
     BattleFactoryApp *app = OverlayManager_GetData(man);
     int i;
@@ -2399,7 +2399,7 @@ void BattleFactoryApp_PrepareLinkPing(BattleFactoryApp *app, int command) {
     app->sendBuf[0] = command;
 }
 
-void ov81_02241020(int netId) {
+void BattleFactory_ReceivePing(int netId) {
     if (netId != Comm_GetLocalNetId()) {
         return;
     }
@@ -2424,7 +2424,7 @@ void BattleFactoryApp_PrepareLinkRentals(BattleFactoryApp *app, int command, int
     }
 }
 
-void ov81_022410C8(int netId, int size, const u16 *data, BattleFactoryApp *app) {
+void BattleFactory_ReceiveRentals(int netId, int size, const u16 *data, BattleFactoryApp *app) {
     int i;
     int pos = 0;
 
@@ -2445,7 +2445,7 @@ void ov81_022410C8(int netId, int size, const u16 *data, BattleFactoryApp *app) 
 }
 #pragma force_active reset
 
-void ov81_0224113C(void) {
+void BattleFactory_ReceiveUnused(void) {
     GF_AssertFail();
 }
 
@@ -2484,7 +2484,7 @@ void BattleFactoryApp_PrepareLinkSwap(BattleFactoryApp *app, int command, int ac
     app->sendBuf[3] = app->picked[1];
 }
 
-void ov81_02241238(int netId, int size, const BattleFactoryLinkMessage *msg, BattleFactoryApp *app) {
+void BattleFactory_ReceiveSwap(int netId, int size, const BattleFactoryLinkMessage *msg, BattleFactoryApp *app) {
 #pragma unused(size)
     app->recvCount++;
     if (netId != Comm_GetLocalNetId()) {

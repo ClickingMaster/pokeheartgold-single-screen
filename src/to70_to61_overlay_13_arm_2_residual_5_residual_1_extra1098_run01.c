@@ -28,8 +28,8 @@ typedef struct Global {
 } Global;
 
 extern Global ov13_0224F538;
-extern void ov13_0223ABB8(int), ov13_02230F54(void), ov13_0223959C(void), ov13_022272E4(void), ov13_0223BE6C(int, int, int, int, int), ov13_0222B8E8(void (*)(void)), ov13_02230F84(void), ov13_02230520(void);
-extern int ov13_02227258(void);
+extern void ov13_0223ABB8(int), ov13_02230F54(void), ov13_0223959C(void), WifiSetupButtonBar_Lock(void), ov13_0223BE6C(int, int, int, int, int), ov13_0222B8E8(void (*)(void)), ov13_02230F84(void), ov13_02230520(void);
+extern int WifiSetupButtonBar_GetSelected(void);
 extern int FX_DivS32(int, int);
 void ov13_02230414(void);
 
@@ -39,12 +39,12 @@ typedef struct Box {
 
 extern Box ov13_02245958;
 extern Box ov13_022453FC[];
-extern int ov13_022417DC(Box *);
-extern int ov13_022418EC(Box *);
-extern int ov13_02241694(int);
-extern int ov13_022416D4(int);
-extern int ov13_02241714(int);
-extern void ov13_0222726C(int);
+extern int WifiSetupInput_IsTouchPressed(Box *);
+extern int WifiSetupInput_IsTouchReleased(Box *);
+extern int WifiSetupInput_IsKeyPressed(int);
+extern int WifiSetupInput_IsKeyRepeated(int);
+extern int WifiSetupInput_IsKeyReleased(int);
+extern void WifiSetupButtonBar_SelectIfNone(int);
 extern void ov13_02230CC4(void);
 extern void ov13_02230ED0(void);
 extern void ov13_02230E5C(void);
@@ -57,26 +57,26 @@ void ov13_0222FF50(void) {
     if (ov13_0224F538.state->task || ov13_0224F538.state->blocked) {
         return;
     }
-    if (ov13_022417DC(&ov13_02245958)) {
+    if (WifiSetupInput_IsTouchPressed(&ov13_02245958)) {
         ov13_0224F538.state->selected = -1;
         for (i = 0, box = ov13_022453FC; (u32)i < 5; i++, box++) {
-            if (ov13_022417DC(box)) {
+            if (WifiSetupInput_IsTouchPressed(box)) {
                 if (i < 4) {
                     ov13_0224F538.state->selected = i;
                     break;
                 }
-                ov13_0222726C(1);
+                WifiSetupButtonBar_SelectIfNone(1);
                 ov13_0224F538.selected = i;
                 ov13_02230CC4();
                 return;
             }
         }
     }
-    if (ov13_022418EC(&ov13_02245958)) {
+    if (WifiSetupInput_IsTouchReleased(&ov13_02245958)) {
         Box *pos;
         int j;
         for (j = 0, pos = ov13_022453FC; j < 4; j++, pos++) {
-            if (ov13_022418EC(pos)) {
+            if (WifiSetupInput_IsTouchReleased(pos)) {
                 if (ov13_0224F538.state->selected != j) {
                     break;
                 }
@@ -84,51 +84,51 @@ void ov13_0222FF50(void) {
                     ov13_0223ABB8(9);
                     break;
                 }
-                ov13_0222726C(1);
+                WifiSetupButtonBar_SelectIfNone(1);
                 ov13_0224F538.selected = j;
                 ov13_02230CC4();
                 return;
             }
         }
     }
-    if (ov13_02241694(1)) {
-        ov13_0222726C(1);
+    if (WifiSetupInput_IsKeyPressed(1)) {
+        WifiSetupButtonBar_SelectIfNone(1);
         ov13_0223959C();
         return;
     }
-    if (ov13_02241694(2)) {
-        ov13_0222726C(0);
+    if (WifiSetupInput_IsKeyPressed(2)) {
+        WifiSetupButtonBar_SelectIfNone(0);
         return;
     }
-    if (ov13_022416D4(0x200)) {
+    if (WifiSetupInput_IsKeyRepeated(0x200)) {
         ov13_02230ED0();
         return;
     }
-    if (ov13_02241714(0x200)) {
+    if (WifiSetupInput_IsKeyReleased(0x200)) {
         ov13_0224F538.state->repeat = 0;
         return;
     }
-    if (ov13_022416D4(0x100)) {
+    if (WifiSetupInput_IsKeyRepeated(0x100)) {
         ov13_02230E5C();
         return;
     }
-    if (ov13_02241714(0x100)) {
+    if (WifiSetupInput_IsKeyReleased(0x100)) {
         ov13_0224F538.state->repeat = 0;
         return;
     }
-    if (ov13_022416D4(0x40)) {
+    if (WifiSetupInput_IsKeyRepeated(0x40)) {
         ov13_02230D10(1);
         return;
     }
-    if (ov13_02241714(0x40)) {
+    if (WifiSetupInput_IsKeyReleased(0x40)) {
         ov13_0224F538.state->repeat = 0;
         return;
     }
-    if (ov13_022416D4(0x80)) {
+    if (WifiSetupInput_IsKeyRepeated(0x80)) {
         ov13_02230D10(3);
         return;
     }
-    if (ov13_02241714(0x80)) {
+    if (WifiSetupInput_IsKeyReleased(0x80)) {
         ov13_0224F538.state->repeat = 0;
     }
 }
