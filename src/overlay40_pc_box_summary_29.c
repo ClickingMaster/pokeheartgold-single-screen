@@ -173,7 +173,7 @@ int ov40_022365A0(void *p) {
     PTR(w, 0) = SaveArray_PCStorage_Get(PTR(p, 0x830));
     ov40_02236578(PTR(p, 0x830), PTR(w, 0), UWORD(w, 0x1A0), (u8 *)w + 4);
     ov40_0223655C(w);
-    ov40_0222D9E8((int *)((u8 *)w + 0x1A4), (int *)((u8 *)w + 0x1A8), 0);
+    VsRecorder_InitBgBlend((int *)((u8 *)w + 0x1A4), (int *)((u8 *)w + 0x1A8), 0);
     PTR(w, 0x330) = TouchHitboxController_Create(ov40_022452CC, 4, ov40_02236230, p, 0x6D);
     PTR(w, 0x334) = TouchHitboxController_Create(ov40_022452F4, 7, ov40_022362E4, p, 0x6D);
     PTR(w, 0x338) = TouchHitboxController_Create(ov40_022452F4, 7, ov40_02236320, p, 0x6D);

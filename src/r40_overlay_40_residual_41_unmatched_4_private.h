@@ -6,7 +6,7 @@
 #define PTR(p, off)  (*(void **)((u8 *)(p) + (off)))
 #define WORD(p, off) (*(u32 *)((u8 *)(p) + (off)))
 
-void *ov40_0222DAB0(u32 heapId);
+void *VsRecorder_NewMessageFormat(u32 heapId);
 void *String_New(u32 size, u32 heapId);
 void *FrontierCard_NewNameString(u32 value, u32 heapId);
 void ov40_02230DCC(void *work, void *string);

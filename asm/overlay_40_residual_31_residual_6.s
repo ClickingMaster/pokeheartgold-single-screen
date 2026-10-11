@@ -3359,32 +3359,32 @@
 	.public VsRecorder_DecorTask
 	.public VsRecorder_SetSpritePos
 	.public VsRecorder_GetSpritePos
-	.public ov40_0222D2A0
-	.public ov40_0222D3E8
-	.public ov40_0222D55C
-	.public ov40_0222D5AC
-	.public ov40_0222D66C
-	.public ov40_0222D6D0
+	.public VsRecorder_CreateMenuRowText
+	.public VsRecorder_SetMenuRowText
+	.public VsRecorder_FreeMenuRowText
+	.public VsRecorder_CreateTextSprite
+	.public VsRecorder_SetTextSpriteMsg
+	.public VsRecorder_FreeTextSprite
 	.public ov40_0222D6EC
 	.public ov40_0222D73C
 	.public ov40_0222D78C
 	.public ov40_0222D7DC
 	.public ov40_0222D800
-	.public ov40_0222D874
-	.public ov40_0222D88C
-	.public ov40_0222D8C8
-	.public ov40_0222D910
-	.public ov40_0222D980
-	.public ov40_0222D9E8
-	.public ov40_0222DA00
-	.public ov40_0222DA84
-	.public ov40_0222DAA8
-	.public ov40_0222DAB0
-	.public ov40_0222DAC0
+	.public VsRecorder_FreeMenuRows
+	.public VsRecorder_RebuildMenuRowsParent
+	.public VsRecorder_RebuildMenuRows
+	.public VsRecorder_InitBlend
+	.public VsRecorder_ApplyBlend
+	.public VsRecorder_InitBgBlend
+	.public VsRecorder_StepBlend
+	.public VsRecorder_StepFade
+	.public VsRecorder_ResetFade
+	.public VsRecorder_NewMessageFormat
+	.public VsRecorder_GetBlendColor
 	.public ov40_0222DAF0
-	.public ov40_0222DB30
-	.public ov40_0222DBEC
-	.public ov40_0222DD08
+	.public VsRecorder_GetSchemeFileId
+	.public VsRecorder_ReloadSchemePalettes
+	.public VsRecorder_ClearPaletteBlend
 	.public ov40_0222DD68
 	.public ov40_0222DD8C
 	.public ov40_0222DD94
@@ -4015,9 +4015,9 @@
 	.public VsRecorder_SetResumeScreen
 	.public VsRecorder_SetSpritePos
 	.public VsRecorder_GetSpritePos
-	.public ov40_0222D874
-	.public ov40_0222DAA8
-	.public ov40_0222DAB0
+	.public VsRecorder_FreeMenuRows
+	.public VsRecorder_ResetFade
+	.public VsRecorder_NewMessageFormat
 	.public ov40_0222DD8C
 	.public ov40_0222DD94
 	.public ov40_0222E4C4
@@ -4092,7 +4092,7 @@ _02238854:
 	add r0, r4, r1
 	add r1, r1, #4
 	add r1, r4, r1
-	bl ov40_0222D980
+	bl VsRecorder_ApplyBlend
 	add r0, r5, #0
 	bl ov40_02237564
 	add r0, r5, #0
@@ -4124,7 +4124,7 @@ _022388A6:
 	add r1, r4, r1
 	mov r2, #1
 	mov r3, #0
-	bl ov40_0222DA00
+	bl VsRecorder_StepBlend
 	cmp r0, #0
 	bne _022388BE
 	b _02238A30
@@ -4180,7 +4180,7 @@ _0223891E:
 	mov r2, #0
 	add r1, r4, r1
 	add r3, r2, #0
-	bl ov40_0222DA00
+	bl VsRecorder_StepBlend
 	cmp r0, #0
 	beq _02238A30
 	add r0, r5, #0
@@ -4362,7 +4362,7 @@ _02238A86:
 	add r0, r4, r1
 	add r1, r1, #4
 	add r1, r4, r1
-	bl ov40_0222D980
+	bl VsRecorder_ApplyBlend
 	mov r0, #4
 	mov r1, #0
 	bl GfGfx_EngineATogglePlanes
@@ -4377,7 +4377,7 @@ _02238AD6:
 	mov r2, #1
 	add r1, r4, r1
 	add r3, r2, #0
-	bl ov40_0222DA00
+	bl VsRecorder_StepBlend
 	cmp r0, #0
 	beq _02238B96
 	ldr r1, _02238BA8 ; =0x000004D4
@@ -4432,7 +4432,7 @@ _02238B52:
 	add r1, r4, r1
 	mov r2, #0
 	mov r3, #1
-	bl ov40_0222DA00
+	bl VsRecorder_StepBlend
 	cmp r0, #0
 	beq _02238B96
 	ldr r0, _02238BAC ; =0x00002ED8
@@ -4515,7 +4515,7 @@ _02238BFE:
 	mov r2, #1
 	add r1, r4, r1
 	add r3, r2, #0
-	bl ov40_0222DA00
+	bl VsRecorder_StepBlend
 	cmp r0, #0
 	bne _02238C16
 	b _02238D38
@@ -4560,7 +4560,7 @@ _02238C5E:
 	add r1, r4, r1
 	mov r2, #0
 	mov r3, #1
-	bl ov40_0222DA00
+	bl VsRecorder_StepBlend
 	cmp r0, #0
 	beq _02238D38
 	add r0, r5, #0

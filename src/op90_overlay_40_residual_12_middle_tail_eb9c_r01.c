@@ -1,6 +1,6 @@
 #pragma force_active on
 #include "global.h"
-extern void *ov40_0222DAB0(int),*NewString_ReadMsgData(void *,int),*String_New(int,int);
+extern void *VsRecorder_NewMessageFormat(int),*NewString_ReadMsgData(void *,int),*String_New(int,int);
 extern void String_Delete(void *),InitWindow(void *),FillWindowPixelBuffer(void *,int),ScheduleWindowCopyToVram(void *),MessageFormat_Delete(void *),MessageFormat_ResetBuffers(void *),StringExpandPlaceholders(void *,void *,void *),BufferString(void *,int,void *,int,int,int);
 extern void AddWindowParameterized(void *,void *,u8,u8,u8,u8,u8,u8,u16);
 extern void AddTextPrinterParameterizedWithColor(void *,int,void *,int,int,int,u32,void *);
@@ -26,7 +26,7 @@ void ov40_0222EB9C(State *w,Context *ctx,void *msg,Config *cfg,int unused,int ty
  {int count=w->count;if(count<w->rows){w->rows=count;w->top=count-1;w->bottom=w->rows-1;}}
  w->top=w->rows/2;w->bottom=w->rows/2;
  InitWindow(win);AddWindowParameterized(ctx->bg,win,(u8)cfg->layer,(u8)cfg->bg,(u8)cfg->x,(u8)cfg->y,(u8)cfg->width,14,(u16)cfg->base);FillWindowPixelBuffer(win,0);
- fmt=ov40_0222DAB0(109);limits=ov40_02244E10;previous=w->config->entries[0].time;groups[0]=0;
+ fmt=VsRecorder_NewMessageFormat(109);limits=ov40_02244E10;previous=w->config->entries[0].time;groups[0]=0;
  {for(i=1;i<limits.v[type];i++){
   u64 current=w->config->entries[i].time;
   if(current==previous)groups[i]=lastGroup;else{previous=current;groups[i]=i;lastGroup=i;}

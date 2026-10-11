@@ -46,7 +46,7 @@ void ov40_0222E09C(void *windowData, void *owner) {
     }
 
     save = OV40_PTR(windowData, 0);
-    fmt = ov40_0222DAB0(0x6D);
+    fmt = VsRecorder_NewMessageFormat(0x6D);
     window = (u8 *)windowData + 0x0C;
     nameStr = FrontierCard_NewNameString(save, 0x6D);
     ov40_02230DCC(owner, nameStr);

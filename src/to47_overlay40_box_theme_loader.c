@@ -59,7 +59,7 @@ int ov40_022376FC(void *work) {
         ++;
         break;
     case 1:
-        if (ov40_0222DA00((u8 *)inner + 0x1A4, (u8 *)inner + 0x1A8, 0, 0)) {
+        if (VsRecorder_StepBlend((u8 *)inner + 0x1A4, (u8 *)inner + 0x1A8, 0, 0)) {
             ov40_02237548(work, 0);
             ov40_022373E4(work, 1);
             GfGfx_EngineATogglePlanes(1, 1);
@@ -70,7 +70,7 @@ int ov40_022376FC(void *work) {
         }
         break;
     case 2:
-        if (ov40_0222DA84((u8 *)inner + 0x1AC, 0)) {
+        if (VsRecorder_StepFade((u8 *)inner + 0x1AC, 0)) {
             WORD_AT(inner, 0x344) = WORD_AT(inner, 0x330);
             VsRecorder_SetSubState(work, 3);
         }

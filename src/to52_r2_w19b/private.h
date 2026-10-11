@@ -7,7 +7,7 @@
 void ov40_0223064C(void *, void *);
 void ov40_0222E7B8(void *, void *);
 void GfGfx_EngineATogglePlanes(int, int);
-int ov40_0222DA00(void *, void *, int, int);
+int VsRecorder_StepBlend(void *, void *, int, int);
 void ov40_02230964(void *, int);
 void ov40_0222E79C(void *, void *);
 void ov40_0222E7DC(void *, int);

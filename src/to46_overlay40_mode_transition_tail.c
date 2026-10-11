@@ -24,7 +24,7 @@ int ov40_02235434(void *p) {
         ++;
         break;
     case 1:
-        if (ov40_0222DA00(w, (u8 *)w + 4, 1, 1)) {
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 1, 1)) {
             if (S32(w, 0xC) == 0) {
                 if (PTR(w, 0x228) != NULL) {
                     AccessoryPortrait_Destroy();
@@ -71,7 +71,7 @@ int ov40_02235434(void *p) {
         ++;
         break;
     case 4:
-        if (ov40_0222DA00(w, (u8 *)w + 4, 0, 1)) {
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 1)) {
             if (S32(w, 0xC) == 0) {
                 ov40_0222E7DC((u8 *)w + 0x250, 1);
                 GfGfx_EngineATogglePlanes(4, 1);
@@ -111,7 +111,7 @@ int ov40_02235644(void *p) {
         ++;
         break;
     case 1:
-        if (ov40_0222DA00(w, (u8 *)w + 4, 1, 1)) {
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 1, 1)) {
             if (S32(w, 0xC) == 0) {
                 if (PTR(w, 0x228) != NULL) {
                     AccessoryPortrait_Destroy();
@@ -159,7 +159,7 @@ int ov40_02235644(void *p) {
         ++;
         break;
     case 4:
-        if (ov40_0222DA00(w, (u8 *)w + 4, 0, 1)) {
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 1)) {
             if (S32(w, 0xC) == 0) {
                 ov40_02235C7C(p, S32(w, 0x234));
                 AccessoryPortrait_SetMonVisible(PTR(w, 0x228), 1);

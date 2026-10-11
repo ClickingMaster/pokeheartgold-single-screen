@@ -19,12 +19,12 @@ typedef struct Ov40Unk {
     Window window;
 } Ov40Unk;
 
-MessageFormat *ov40_0222DAB0(enum HeapID heapID);
+MessageFormat *VsRecorder_NewMessageFormat(enum HeapID heapID);
 void ov40_02242E4C(Ov40Src *src, Ov40Unk *data);
 
 // @fn ov40_02242E4C
 void ov40_02242E4C(Ov40Src *src, Ov40Unk *data) {
-    MessageFormat *msgFmt = ov40_0222DAB0(HEAP_ID_109);
+    MessageFormat *msgFmt = VsRecorder_NewMessageFormat(HEAP_ID_109);
     u64 value = src->value;
     u64 upper = value;
     String *low = String_New(255, HEAP_ID_109);

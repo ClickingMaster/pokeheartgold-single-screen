@@ -20,7 +20,7 @@ void ov40_0222C6C8(void *p, int a);
 void GfGfx_EngineATogglePlanes(int plane, BOOL enable);
 void InitWindow(void *window);
 void AddWindowParameterized(void *bgConfig, void *window, int bgId, int x, int y, int width, int height, int palette, int baseTile);
-void *ov40_0222DAB0(int heapId);
+void *VsRecorder_NewMessageFormat(int heapId);
 void *String_New(u32 maxLength, int heapId);
 void *FrontierCard_NewNameString(u32 p, int heapId);
 void ov40_02230DCC(void *p, u32 value);
@@ -35,7 +35,7 @@ void ScheduleWindowCopyToVram(void *window);
 void ov40_02230964(void *p, void *value);
 void ov40_0223064C(void *obj, void *p);
 void ov40_0222E7B8(void *obj, void *p);
-BOOL ov40_0222DA00(int *a, int *b, int c, int d);
+BOOL VsRecorder_StepBlend(int *a, int *b, int c, int d);
 void ov40_0222E79C(void *obj, void *p);
 void ov40_0222E7DC(void *obj, int value);
 void ov40_022307DC(void *p, int value, int bgId);
@@ -51,18 +51,18 @@ void TouchHitboxController_Destroy(void *controller);
 void ov40_0223A83C(void *p);
 void ov40_0223CCA0(void *p);
 void ov40_0223D504(void *p);
-void ov40_0222D8C8(void *p);
+void VsRecorder_RebuildMenuRows(void *p);
 void VsRecorder_SetResumeScreen(void *p, u32 value);
 void sub_02087A84(void *p, int a, int b);
 void Heap_Free(void *p);
 void ov40_02230738(void *p);
-void ov40_0222D9E8(int *a, int *b, int c);
+void VsRecorder_InitBgBlend(int *a, int *b, int c);
 void GfGfxLoader_LoadCharDataFromOpenNarc(void *narc, int memberNo, void *bgConfig, int layer, int tileStart, int size, int compressed, int heapId);
-void ov40_0222D66C(void *dst, void *src, int id);
+void VsRecorder_SetTextSpriteMsg(void *dst, void *src, int id);
 void ManagedSprite_SetAnim(void *sprite, int anim);
 void *TouchHitboxController_Create(const void *hitboxes, int count, HitboxCallback callback, void *arg, int heapId);
 void ov40_0223CFA8(void *p);
-int ov40_0222DA84(int *p, int direction);
+int VsRecorder_StepFade(int *p, int direction);
 void ov40_0223CD14(void *p);
 void PaletteData_BlendPalettes(void *palette, int buffer, int mask, int coeff, int color);
 void VsRecorder_ClearResumeState(void *p);
@@ -105,7 +105,7 @@ int ov40_0223C258(void *p) {
         ++;
         break;
     case 1:
-        if (ov40_0222DA00((int *)w, (int *)w + 1, 1, 1)) {
+        if (VsRecorder_StepBlend((int *)w, (int *)w + 1, 1, 1)) {
             WORD(p, 8)
             ++;
         }
@@ -126,7 +126,7 @@ int ov40_0223C258(void *p) {
         ++;
         break;
     case 3:
-        if (ov40_0222DA00((int *)w, (int *)w + 1, 0, 1)) {
+        if (VsRecorder_StepBlend((int *)w, (int *)w + 1, 0, 1)) {
             if (WORD(w, 0x10) == 0) {
                 ov40_0222E7DC((u8 *)w + 0x194, 1);
             } else {
@@ -176,7 +176,7 @@ int ov40_0223C3A4(void *p) {
         ov40_0223D504(p);
         ov40_02230964(p, NULL);
         ov40_02230964(p, (void *)1);
-        ov40_0222D8C8(p);
+        VsRecorder_RebuildMenuRows(p);
         ov40_02230964(p, NULL);
         VsRecorder_SetResumeScreen(p, WORD(PTR(p, 0x10), 0));
         sub_02087A84(PTR(p, 0x868), 1, 0);
@@ -196,7 +196,7 @@ int ov40_0223C498(Ov40Work *p) {
     case 0: {
         int i;
         ov40_02230738(p);
-        ov40_0222D9E8(w, (int *)w + 1, 0);
+        VsRecorder_InitBgBlend(w, (int *)w + 1, 0);
         for (i = 0; i < p->count; i++) {
             p->ptrs[i] = &p->entries[i];
         }
@@ -205,8 +205,8 @@ int ov40_0223C498(Ov40Work *p) {
         ov40_022307DC(p, 6, 7);
         GfGfx_EngineATogglePlanes(8, 1);
         GfGfx_EngineBTogglePlanes(8, 1);
-        ov40_0222D66C((u8 *)w + 0x114, (u8 *)p + 0x14, 3);
-        ov40_0222D66C((u8 *)w + 0x130, (u8 *)p + 0x14, 0x5E);
+        VsRecorder_SetTextSpriteMsg((u8 *)w + 0x114, (u8 *)p + 0x14, 3);
+        VsRecorder_SetTextSpriteMsg((u8 *)w + 0x130, (u8 *)p + 0x14, 0x5E);
         ManagedSprite_SetAnim(PTR(w, 0x118), 0);
         ManagedSprite_SetAnim(PTR(w, 0x134), 3);
         WORD(w, 0x2088) = 0x1F4;
@@ -237,8 +237,8 @@ int ov40_0223C498(Ov40Work *p) {
         ++;
         break;
     case 3:
-        ov40_0222DA84((int *)w + 2, 0);
-        if (ov40_0222DA00(w, (int *)w + 1, 0, 0)) {
+        VsRecorder_StepFade((int *)w + 2, 0);
+        if (VsRecorder_StepBlend(w, (int *)w + 1, 0, 0)) {
             ov40_022306A0((u8 *)w + 0x220, 1);
             ov40_0223CD14(p);
             GfGfx_EngineATogglePlanes(4, 1);
@@ -280,7 +280,7 @@ void ov40_0223C710(void *p, int msgId, int unused) {
     AddWindowParameterized(PTR(p, 0x24), win, 2, 1, 0x13, 0x1E, 4, 0xE, 0x12C);
     if (msgId == 0x64) {
         u32 v = WORD(w, 0x194);
-        void *fmt = ov40_0222DAB0(0x6D);
+        void *fmt = VsRecorder_NewMessageFormat(0x6D);
         void *name;
         void *s;
         str = String_New(0xFF, 0x6D);
@@ -323,8 +323,8 @@ int ov40_0223C80C(Ov40Work *p) {
             ++;
             break;
         case 1:
-            ov40_0222DA84((int *)w + 2, 1);
-            if (ov40_0222DA00(w, (int *)w + 1, 1, 0)) {
+            VsRecorder_StepFade((int *)w + 2, 1);
+            if (VsRecorder_StepBlend(w, (int *)w + 1, 1, 0)) {
                 ov40_02230964(p, (void *)1);
                 ov40_0223B374(p);
                 ov40_02230964(p, NULL);
@@ -352,8 +352,8 @@ int ov40_0223C80C(Ov40Work *p) {
             }
             break;
         case 4:
-            ov40_0222DA84((int *)w + 2, 1);
-            if (ov40_0222DA00(w, (int *)w + 1, 1, 0)) {
+            VsRecorder_StepFade((int *)w + 2, 1);
+            if (VsRecorder_StepBlend(w, (int *)w + 1, 1, 0)) {
                 ov40_02230964(p, (void *)1);
                 ov40_0223B44C(p);
                 ov40_02230964(p, NULL);
@@ -367,8 +367,8 @@ int ov40_0223C80C(Ov40Work *p) {
             ov40_0223A430(p);
             ov40_02230964(p, NULL);
             if (WORD(p, 0x86C) == 0xD2) {
-                ov40_0222D66C((u8 *)w + 0x114, (u8 *)p + 0x14, 3);
-                ov40_0222D66C((u8 *)w + 0x130, (u8 *)p + 0x14, 0x5E);
+                VsRecorder_SetTextSpriteMsg((u8 *)w + 0x114, (u8 *)p + 0x14, 3);
+                VsRecorder_SetTextSpriteMsg((u8 *)w + 0x130, (u8 *)p + 0x14, 0x5E);
                 ManagedSprite_SetAnim(PTR(w, 0x118), 0);
                 ManagedSprite_SetAnim(PTR(w, 0x134), 3);
             }
@@ -391,8 +391,8 @@ int ov40_0223C80C(Ov40Work *p) {
             ++;
             break;
         case 6:
-            ov40_0222DA84((int *)w + 2, 0);
-            if (ov40_0222DA00(w, (int *)w + 1, 0, 0)) {
+            VsRecorder_StepFade((int *)w + 2, 0);
+            if (VsRecorder_StepBlend(w, (int *)w + 1, 0, 0)) {
                 if (WORD(w, 0x10) == 0) {
                     ov40_022306A0((u8 *)w + 0x220, 1);
                 } else {
@@ -434,8 +434,8 @@ int ov40_0223C80C(Ov40Work *p) {
             ++;
             break;
         case 1:
-            ov40_0222DA84((int *)w + 2, 1);
-            if (ov40_0222DA00(w, (int *)w + 1, 1, 0)) {
+            VsRecorder_StepFade((int *)w + 2, 1);
+            if (VsRecorder_StepBlend(w, (int *)w + 1, 1, 0)) {
                 ov40_02230964(p, (void *)1);
                 ov40_0223B374(p);
                 ov40_02230964(p, NULL);
@@ -447,8 +447,8 @@ int ov40_0223C80C(Ov40Work *p) {
             PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, (u8)WORD(w, 8), (u16)WORD(p, 0x58));
             break;
         case 2:
-            ov40_0222DA84((int *)w + 2, 0);
-            if (ov40_0222DA00(w, (int *)w + 1, 0, 1)) {
+            VsRecorder_StepFade((int *)w + 2, 0);
+            if (VsRecorder_StepBlend(w, (int *)w + 1, 0, 1)) {
                 ov40_0223C710(p, 0x64, 0);
                 WORD(p, 8)
                 ++;

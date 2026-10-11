@@ -8,7 +8,7 @@ void Heap_Free(void *ptr);
 void *String_New(u32 size, u32 heapId);
 void String_Delete(void *str);
 void GF_AssertFail(void);
-void *ov40_0222DAB0(u32 heapId);
+void *VsRecorder_NewMessageFormat(u32 heapId);
 void *NewString_ReadMsgData(void *msgData, u32 messageId);
 void String16_FormatInteger(void *str, int value, u32 digits, int mode, BOOL charset);
 void BufferString(void *format, u32 index, void *str, u32 a3, u32 a4, u32 a5);

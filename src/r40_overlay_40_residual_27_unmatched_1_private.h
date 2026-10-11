@@ -56,7 +56,7 @@ void AccessoryPortrait_VBlank(void *p);
 void VsRecorder_SetSubState(void *p, int value);
 void VsRecorder_UpdateMenuTouch(void *p);
 void VsRecorder_GetSpritePos(void *p, s16 *x, s16 *y);
-void ov40_0222D6D0(void *p);
+void VsRecorder_FreeTextSprite(void *p);
 void ov40_0222D7DC(void *p);
 void ov40_0222DE40(void *p);
 void ov40_0222DED0(void *p, int value);

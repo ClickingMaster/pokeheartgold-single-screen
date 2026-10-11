@@ -7,7 +7,7 @@ void FrontierCard_Delete(void *p);
 void TouchHitboxController_IsTriggered(void *controller);
 void ClearWindowTilemapAndCopyToVram(void *window);
 void RemoveWindow(void *window);
-void ov40_0222D6D0(void *p);
+void VsRecorder_FreeTextSprite(void *p);
 void Sprite_DeleteAndFreeResources(void *sprite);
 void ov40_0222D7DC(void *p);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);

@@ -36,7 +36,7 @@ void FillWindowPixelBuffer(void *window, u8 fillValue);
 void AddTextPrinterParameterizedWithColor(void *window, int fontId, void *str, int x, int y, int speed, u32 color, void *callback);
 void ScheduleWindowCopyToVram(void *window);
 int ov40_022306C0(void *window, void *str);
-void *ov40_0222DAB0(u32 heapId);
+void *VsRecorder_NewMessageFormat(u32 heapId);
 void ov40_02230DCC(void *owner, void *value);
 void BufferString(void *fmt, u32 idx, void *str, u32 a3, u32 a4, u32 a5);
 void BufferMonthNameAbbr(void *fmt, u32 idx, u32 month);

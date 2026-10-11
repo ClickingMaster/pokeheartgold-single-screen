@@ -43,8 +43,8 @@ int ov40_02240B90(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((int *)w + 2, 1);
-        if (ov40_0222DA00((int *)w, (int *)w + 1, 1, 0)) {
+        VsRecorder_StepFade((int *)w + 2, 1);
+        if (VsRecorder_StepBlend((int *)w, (int *)w + 1, 1, 0)) {
             ov40_022421FC(p);
             WORD(p, 8)
             ++;
@@ -52,9 +52,9 @@ int ov40_02240B90(void *p) {
         BLEND(p, w, 3, 0xC);
         break;
     case 2:
-        ov40_0222DAA8((int *)w + 2);
+        VsRecorder_ResetFade((int *)w + 2);
         ov40_02230964(p, (void *)1);
-        ov40_0222D88C(p);
+        VsRecorder_RebuildMenuRowsParent(p);
         ov40_02230964(p, NULL);
         ov40_0222FB90(p, 1);
         WORD(p, 8)
@@ -62,9 +62,9 @@ int ov40_02240B90(void *p) {
         break;
     case 3:
         if (ov40_0222FBB4(p) != NULL) {
-            if (ov40_0222DA84((int *)w + 2, 0)) {
-                ov40_0222DD08(p);
-                ov40_0222DAA8((int *)w + 2);
+            if (VsRecorder_StepFade((int *)w + 2, 0)) {
+                VsRecorder_ClearPaletteBlend(p);
+                VsRecorder_ResetFade((int *)w + 2);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, (u16)WORD(p, 0x58));
                 VsRecorder_SetScreenIfDone(p, 1, TRUE, (u32 *)PTR(p, 0x10));
                 VsRecorder_SetSubState(p, 5);

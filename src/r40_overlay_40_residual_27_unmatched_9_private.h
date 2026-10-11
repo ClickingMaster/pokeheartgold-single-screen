@@ -3,8 +3,8 @@
 #include "global.h"
 void ov40_0222D6EC(void *, int);
 void *ov40_0222D800(void *, int);
-void ov40_0222D5AC(void *, void *, int);
-void ov40_0222D66C(void *, void *, int);
+void VsRecorder_CreateTextSprite(void *, void *, int);
+void VsRecorder_SetTextSpriteMsg(void *, void *, int);
 void ManagedSprite_SetAnim(void *, int);
 void ManagedSprite_SetPositionXY(void *, int, int);
 void TextOBJ_SetPosition(void *, int, int);

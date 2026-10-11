@@ -67,8 +67,8 @@ int ov40_0223BB74(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)w + 8, 0);
-        if (ov40_0222DA00(w, (u8 *)w + 4, 0, 0)) {
+        VsRecorder_StepFade((u8 *)w + 8, 0);
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 0)) {
             GfGfx_EngineATogglePlanes(4, 1);
             GfGfx_EngineBTogglePlanes(4, 1);
             ov40_0223D1AC(p, 1);
@@ -132,12 +132,12 @@ int ov40_0223BD98(void *p) {
         WORD(p, 8)
         ++;
     case 2:
-        ov40_0222DA84((u8 *)w + 8, 1);
-        if (ov40_0222DA00(w, (u8 *)w + 4, 1, 0)) {
+        VsRecorder_StepFade((u8 *)w + 8, 1);
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 1, 0)) {
             ov40_0223B4BC(p, 0);
             if (WORD(w, 0x2034) == 6) {
-                ov40_0222D66C((u8 *)w + 0x114, (u8 *)p + 0x14, 3);
-                ov40_0222D66C((u8 *)w + 0x130, (u8 *)p + 0x14, 0x5E);
+                VsRecorder_SetTextSpriteMsg((u8 *)w + 0x114, (u8 *)p + 0x14, 3);
+                VsRecorder_SetTextSpriteMsg((u8 *)w + 0x130, (u8 *)p + 0x14, 0x5E);
                 ManagedSprite_SetAnim(PTR(w, 0x118), 0);
                 ManagedSprite_SetAnim(PTR(w, 0x134), 3);
             }
@@ -165,8 +165,8 @@ int ov40_0223BF88(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)w + 8, 1);
-        if (ov40_0222DA00(w, (u8 *)w + 4, 1, 0)) {
+        VsRecorder_StepFade((u8 *)w + 8, 1);
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 1, 0)) {
             ov40_02230964(p, 1);
             ov40_0223B480(p);
             ov40_02230964(p, 0);
@@ -176,8 +176,8 @@ int ov40_0223BF88(void *p) {
         BLEND(p, w, 3, 0xC);
         break;
     case 2:
-        ov40_0222DAA8((u8 *)w + 8);
-        ov40_0222D88C(p);
+        VsRecorder_ResetFade((u8 *)w + 8);
+        VsRecorder_RebuildMenuRowsParent(p);
         sub_0203A948(1, 0x6D);
         ov40_0222FB90(p, 1);
         WORD(p, 8)
@@ -185,9 +185,9 @@ int ov40_0223BF88(void *p) {
         break;
     default:
         if (ov40_0222FBB4(p)) {
-            if (ov40_0222DA84((u8 *)w + 8, 0)) {
-                ov40_0222DD08(p);
-                ov40_0222DAA8((u8 *)w + 8);
+            if (VsRecorder_StepFade((u8 *)w + 8, 0)) {
+                VsRecorder_ClearPaletteBlend(p);
+                VsRecorder_ResetFade((u8 *)w + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, (u16)WORD(p, 0x58));
                 VsRecorder_SetScreenIfDone(p, 1, 1, PTR(p, 0x10));
                 VsRecorder_SetSubState(p, 5);
@@ -236,8 +236,8 @@ int ov40_0223C0D8(void *p) {
         ++;
         break;
     case 3:
-        ov40_0222DA84((u8 *)w + 8, 0);
-        if (ov40_0222DA00(w, (u8 *)w + 4, 0, 0)) {
+        VsRecorder_StepFade((u8 *)w + 8, 0);
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 0)) {
             ov40_022306A0((u8 *)w + 0x220, 1);
             ov40_0223CD14(p);
             GfGfx_EngineATogglePlanes(4, 1);

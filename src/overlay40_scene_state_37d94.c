@@ -14,14 +14,14 @@ int ov40_02237D94(void *p) {
         ov40_02237008(p);
         ov40_02236FE0(p);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
-        ov40_0222D980((u8 *)inner + 0x1A4, (u8 *)inner + 0x1A8, 8, 0x12, 8, 0x12, 1);
+        VsRecorder_ApplyBlend((u8 *)inner + 0x1A4, (u8 *)inner + 0x1A8, 8, 0x12, 8, 0x12, 1);
         GfGfx_EngineATogglePlanes(4, 0);
         WORD(p, 8)
         ++;
         /* fallthrough */
     case 1:
-        ov40_0222DA84((u8 *)inner + 0x1AC, 1);
-        if (ov40_0222DA00((u8 *)inner + 0x1A4, (u8 *)inner + 0x1A8, 1, 0)) {
+        VsRecorder_StepFade((u8 *)inner + 0x1AC, 1);
+        if (VsRecorder_StepBlend((u8 *)inner + 0x1A4, (u8 *)inner + 0x1A8, 1, 0)) {
             GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3E, PTR(p, 0x24), 3, 0, 0, 0, 0x6D);
             GfGfxLoader_LoadScrnDataFromOpenNarc(PTR(p, 0x14), 3, PTR(p, 0x24), 3, 0, 0, 0, 0x6D);
             GfGfxLoader_LoadScrnDataFromOpenNarc(PTR(p, 0x14), 0x4E, PTR(p, 0x24), 7, 0, 0, 0, 0x6D);
@@ -102,7 +102,7 @@ int ov40_02237D94(void *p) {
         }
         break;
     case 7:
-        if (!ov40_0222DA00((u8 *)inner + 0x1A4, (u8 *)inner + 0x1A8, 1, 0)) {
+        if (!VsRecorder_StepBlend((u8 *)inner + 0x1A4, (u8 *)inner + 0x1A8, 1, 0)) {
             break;
         }
         GfGfx_EngineATogglePlanes(4, 0);
@@ -112,8 +112,8 @@ int ov40_02237D94(void *p) {
         ++;
         break;
     case 8:
-        ov40_0222DA84((u8 *)inner + 0x1AC, 0);
-        if (ov40_0222DA00((u8 *)inner + 0x1A4, (u8 *)inner + 0x1A8, 0, 2)) {
+        VsRecorder_StepFade((u8 *)inner + 0x1AC, 0);
+        if (VsRecorder_StepBlend((u8 *)inner + 0x1A4, (u8 *)inner + 0x1A8, 0, 2)) {
             ov40_0222C710(p, 2);
             ov40_02237030(p, 0x113);
             ov40_02236F38(p);
@@ -124,8 +124,8 @@ int ov40_02237D94(void *p) {
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, (u8)WORD(inner, 0x1AC), (u16)WORD(p, 0x58));
         break;
     default:
-        ov40_0222DA84((u8 *)inner + 0x1AC, 0);
-        if (ov40_0222DA00((u8 *)inner + 0x1A4, (u8 *)inner + 0x1A8, 0, 0)) {
+        VsRecorder_StepFade((u8 *)inner + 0x1AC, 0);
+        if (VsRecorder_StepBlend((u8 *)inner + 0x1A4, (u8 *)inner + 0x1A8, 0, 0)) {
             ov40_02237C9C(p);
             ov40_02238290(p);
             ov40_02230964(p, 1);

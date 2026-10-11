@@ -44,7 +44,7 @@ void ov40_0223DDE8(void *p, u32 a1, u32 a2) {
     if (a1 == 0xFF && a2 == 0xFF) {
         str = NewString_ReadMsgData(PTR(p, 0x48), 0x7D);
     } else {
-        fmt = ov40_0222DAB0(0x6D);
+        fmt = VsRecorder_NewMessageFormat(0x6D);
         if (a2 != 0) {
             str = String_New(0xFF, 0x6D);
             tmp = NewString_ReadMsgData(PTR(p, 0x48), 0x17);
@@ -174,7 +174,7 @@ int ov40_0223E190(void *p) {
     switch (WORD(p, 8)) {
     case 0:
         ov40_02230738(p);
-        ov40_0222D9E8(inner, (u8 *)inner + 4, 0);
+        VsRecorder_InitBgBlend(inner, (u8 *)inner + 4, 0);
         GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3E, PTR(p, 0x24), 3, 0, 0, 0, 0x6D);
         GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3E, PTR(p, 0x24), 7, 0, 0, 0, 0x6D);
         ov40_022307DC(p, 0x38, 3);
@@ -191,8 +191,8 @@ int ov40_0223E190(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)inner + 8, 0);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 0, 0)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 0);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 0, 0)) {
             ov40_0222DED0(p, 0x7C);
             HALF(inner, 0x4C0) = 0xFFFF;
             BYTE(inner, 0x4C2) = 0xFF;
@@ -236,8 +236,8 @@ int ov40_0223E33C(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)inner + 8, 1);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 0)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 1);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 1, 0)) {
             WORD(p, 8)
             ++;
         }
@@ -246,7 +246,7 @@ int ov40_0223E33C(void *p) {
     case 2:
         ov40_02230964(p, (void *)1);
         ov40_022421FC(p);
-        ov40_0222D88C(p);
+        VsRecorder_RebuildMenuRowsParent(p);
         ov40_02230964(p, NULL);
         ov40_0222FB90(p, 1);
         WORD(p, 8)
@@ -254,9 +254,9 @@ int ov40_0223E33C(void *p) {
         break;
     default:
         if (ov40_0222FBB4(p)) {
-            if (ov40_0222DA84((u8 *)inner + 8, 0)) {
-                ov40_0222DD08(p);
-                ov40_0222DAA8((u8 *)inner + 8);
+            if (VsRecorder_StepFade((u8 *)inner + 8, 0)) {
+                VsRecorder_ClearPaletteBlend(p);
+                VsRecorder_ResetFade((u8 *)inner + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, (u16)WORD(p, 0x58));
                 VsRecorder_SetScreenIfDone(p, 1, TRUE, (u32 *)PTR(p, 0x10));
                 VsRecorder_SetSubState(p, 5);
@@ -284,8 +284,8 @@ int ov40_0223E494(void *p) {
         ++;
         /* fallthrough */
     case 1:
-        ov40_0222DA84((u8 *)inner + 8, 1);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 2)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 1);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 1, 2)) {
             WORD(p, 8)
             ++;
         }
@@ -321,8 +321,8 @@ int ov40_0223E520(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)inner + 8, 0);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 0, 2)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 0);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 0, 2)) {
             ov40_02230964(p, (void *)1);
             ov40_0222F9D4((u8 *)p + 0x47C, p);
             ov40_0222F734((u8 *)p + 0x49C);
@@ -367,8 +367,8 @@ int ov40_0223E520(void *p) {
         ++;
         /* fallthrough */
     case 4:
-        ov40_0222DA84((u8 *)inner + 8, 1);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 2)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 1);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 1, 2)) {
             ov40_022420B4(p, 0);
             WORD(p, 8)
             ++;
@@ -457,8 +457,8 @@ int ov40_0223E870(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)inner + 8, 0);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 0, 2)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 0);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 0, 2)) {
             ov40_0223E730(p);
             WORD(p, 8)
             ++;
@@ -480,13 +480,13 @@ int ov40_0223E870(void *p) {
         /* fallthrough */
     case 4:
         if (WORD(inner, 0x4D8) == 1) {
-            if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 2)) {
+            if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 1, 2)) {
                 WORD(p, 8)
                 ++;
             }
         } else {
-            ov40_0222DA84((u8 *)inner + 8, 1);
-            if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 2)) {
+            VsRecorder_StepFade((u8 *)inner + 8, 1);
+            if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 1, 2)) {
                 ov40_022420B4(p, 0);
                 WORD(p, 8)
                 ++;
@@ -516,7 +516,7 @@ int ov40_0223E9A4(void *p) {
         ++;
         break;
     case 1:
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 0, 2)) {
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 0, 2)) {
             ov40_02230964(p, (void *)1);
             ov40_0222F9D4((u8 *)p + 0x47C, p);
             *(Ov40Blk44 *)((u8 *)inner + 0x4E0) = ov40_022457DC;
@@ -562,15 +562,15 @@ int ov40_0223E9A4(void *p) {
         /* fallthrough */
     case 4:
         if (HALF(inner, 0x4C0) != 0xFFFF) {
-            ov40_0222DA84((u8 *)inner + 8, 1);
-            if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 2)) {
+            VsRecorder_StepFade((u8 *)inner + 8, 1);
+            if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 1, 2)) {
                 ov40_022420B4(p, 0);
                 WORD(p, 8)
                 ++;
             }
             PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, (u8)WORD(inner, 8), (u16)WORD(p, 0x58));
         } else {
-            if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 2)) {
+            if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 1, 2)) {
                 WORD(p, 8)
                 ++;
             }
@@ -684,8 +684,8 @@ int ov40_0223EDE0(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)inner + 8, 0);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 0, 2)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 0);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 0, 2)) {
             ov40_02230964(p, (void *)1);
             ov40_0222F9D4((u8 *)p + 0x47C, p);
             ov40_0222E8C4((u8 *)p + 0x49C, p, ov40_0224572C);
@@ -721,8 +721,8 @@ int ov40_0223EDE0(void *p) {
         ++;
         /* fallthrough */
     case 4:
-        ov40_0222DA84((u8 *)inner + 8, 1);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 2)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 1);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 1, 2)) {
             ov40_022420B4(p, 0);
             WORD(p, 8)
             ++;
@@ -746,8 +746,8 @@ int ov40_0223EFA4(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)inner + 8, 0);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 0, 2)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 0);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 0, 2)) {
             ov40_0222DF60(p, 0x7C);
             ov40_0223DF1C(p, 0);
             WORD(p, 8)
@@ -840,8 +840,8 @@ int ov40_0223F16C(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)inner + 8, 1);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 0)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 1);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 1, 0)) {
             ov40_022420B4(p, 1);
             WORD(p, 8)
             ++;
@@ -891,8 +891,8 @@ int ov40_0223F200(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)inner + 8, 0);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 0, 0)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 0);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 0, 0)) {
             GfGfx_EngineATogglePlanes(4, 1);
             GfGfx_EngineBTogglePlanes(4, 1);
             ov40_0223D830(p, 1);
@@ -954,12 +954,12 @@ int ov40_0223F3E4(void *p) {
         ++;
         /* fallthrough */
     case 2:
-        ov40_0222DA84((u8 *)inner + 8, 1);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 0)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 1);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 1, 0)) {
             ov40_022420B4(p, 0);
             if (WORD(inner, 0xC) == 0x11) {
-                ov40_0222D66C((u8 *)inner + 0x10, (u8 *)p + 0x14, 3);
-                ov40_0222D66C((u8 *)inner + 0x2C, (u8 *)p + 0x14, 0x5E);
+                VsRecorder_SetTextSpriteMsg((u8 *)inner + 0x10, (u8 *)p + 0x14, 3);
+                VsRecorder_SetTextSpriteMsg((u8 *)inner + 0x2C, (u8 *)p + 0x14, 0x5E);
                 ManagedSprite_SetAnim(PTR(inner, 0x14), 0);
                 ManagedSprite_SetAnim(PTR(inner, 0x30), 3);
             }
@@ -992,8 +992,8 @@ int ov40_0223F59C(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)inner + 8, 0);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 0, 0)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 0);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 0, 0)) {
             ov40_0222DED0(p, 0x7C);
             ov40_0223DBD4(p, 0);
             ov40_0223DD68(p, HALF(inner, 0x4C0));
@@ -1044,8 +1044,8 @@ int ov40_0223F6BC(void *p) {
         ++;
         break;
     case 3:
-        ov40_0222DA84((u8 *)inner + 8, 0);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 0, 0)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 0);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 0, 0)) {
             ov40_022306A0((u8 *)inner + 0x10C, 1);
             ov40_02241AB0(p);
             GfGfx_EngineATogglePlanes(4, 1);
@@ -1106,10 +1106,10 @@ int ov40_0223F880(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)inner + 8, 1);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 0)) {
-            ov40_0222D66C((u8 *)inner + 0x10, (u8 *)p + 0x14, 3);
-            ov40_0222D66C((u8 *)inner + 0x2C, (u8 *)p + 0x14, 0x6F);
+        VsRecorder_StepFade((u8 *)inner + 8, 1);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 1, 0)) {
+            VsRecorder_SetTextSpriteMsg((u8 *)inner + 0x10, (u8 *)p + 0x14, 3);
+            VsRecorder_SetTextSpriteMsg((u8 *)inner + 0x2C, (u8 *)p + 0x14, 0x6F);
             ManagedSprite_SetAnim(PTR(inner, 0x14), 0);
             ManagedSprite_SetAnim(PTR(inner, 0x30), 1);
             ov40_022420B4(p, 1);
@@ -1145,8 +1145,8 @@ int ov40_0223F984(Ov40Work *work) {
             ++;
             break;
         case 1:
-            ov40_0222DA84((u8 *)inner + 8, 1);
-            if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 0)) {
+            VsRecorder_StepFade((u8 *)inner + 8, 1);
+            if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 1, 0)) {
                 ov40_02230964(work, (void *)1);
                 ov40_022421FC(work);
                 ov40_02241054(work);
@@ -1179,8 +1179,8 @@ int ov40_0223F984(Ov40Work *work) {
             ov40_02230964(work, (void *)1);
             ov40_02242110(work);
             if (WORD(work, 0x86C) == 0xD2) {
-                ov40_0222D66C((u8 *)inner + 0x10, (u8 *)work + 0x14, 3);
-                ov40_0222D66C((u8 *)inner + 0x2C, (u8 *)work + 0x14, 0x5E);
+                VsRecorder_SetTextSpriteMsg((u8 *)inner + 0x10, (u8 *)work + 0x14, 3);
+                VsRecorder_SetTextSpriteMsg((u8 *)inner + 0x2C, (u8 *)work + 0x14, 0x5E);
                 ManagedSprite_SetAnim(PTR(inner, 0x14), 0);
                 ManagedSprite_SetAnim(PTR(inner, 0x30), 3);
             }
@@ -1205,8 +1205,8 @@ int ov40_0223F984(Ov40Work *work) {
             ++;
             break;
         case 5:
-            ov40_0222DA84((u8 *)inner + 8, 0);
-            if (ov40_0222DA00(inner, (u8 *)inner + 4, 0, 0)) {
+            VsRecorder_StepFade((u8 *)inner + 8, 0);
+            if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 0, 0)) {
                 if (WORD(inner, 0x1CC) == 0) {
                     ov40_022306A0((u8 *)inner + 0x10C, 1);
                 } else {

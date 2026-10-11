@@ -38,7 +38,7 @@ int ov40_02233F28(void *p) {
     case 3:
         VsRecorder_SetScreensFlipped(1);
         ov40_02230964(p, 1);
-        ov40_0222D88C(p);
+        VsRecorder_RebuildMenuRowsParent(p);
         ov40_02230964(p, 0);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
@@ -54,18 +54,18 @@ int ov40_02233F28(void *p) {
         }
         WORD(p, 8)
         ++;
-        ov40_0222DAA8(inner);
+        VsRecorder_ResetFade(inner);
         PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, (u8)*inner, (u16)WORD(p, 0x58));
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0x1C, (u8)*inner, (u16)WORD(p, 0x58));
         PaletteData_BlendPalettes(PTR(p, 0x28), 1, 2, (u8)*inner, (u16)WORD(p, 0x58));
         break;
     default:
-        if (ov40_0222DA84(inner, 0)) {
+        if (VsRecorder_StepFade(inner, 0)) {
             G2x_SetBlendAlpha_(0x04000050, 4, 0x12, 7, 8);
             G2x_SetBlendAlpha_(0x04001050, 4, 0x12, 7, 8);
             Heap_Free(inner);
-            ov40_0222DD08(p);
-            ov40_0222DAA8(inner);
+            VsRecorder_ClearPaletteBlend(p);
+            VsRecorder_ResetFade(inner);
             PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, (u16)WORD(p, 0x58));
             VsRecorder_SetScreenIfDone(p, 1, 1, WORD(p, 0x10));
             VsRecorder_SetSubState(p, 5);
@@ -93,7 +93,7 @@ int ov40_0223414C(void *p) {
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
-    ov40_0222D9E8(inner, (u8 *)inner + 4, 0);
+    VsRecorder_InitBgBlend(inner, (u8 *)inner + 4, 0);
     VsRecorder_SetSubState(p, 1);
     return 0;
 }
@@ -103,7 +103,7 @@ int ov40_022341E0(void *p) {
 
     switch (WORD(p, 8)) {
     case 0:
-        if (ov40_0222DA84((u8 *)inner + 8, 1)) {
+        if (VsRecorder_StepFade((u8 *)inner + 8, 1)) {
             WORD(p, 8)
             ++;
         }
@@ -134,7 +134,7 @@ int ov40_022341E0(void *p) {
         if (ov40_0222FBB4(p)) {
             ov40_02230964(p, 0);
             ov40_02230964(p, 1);
-            ov40_0222D874(p);
+            VsRecorder_FreeMenuRows(p);
             ov40_02235A30(p);
             ov40_02230964(p, 0);
             GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3E, PTR(p, 0x24), 3, 0, 0, 0, 0x6D);
@@ -175,8 +175,8 @@ int ov40_02234330(void *p) {
         ++;
         break;
     case 2:
-        ov40_0222DA84((u8 *)inner + 8, 0);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 0, 0)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 0);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 0, 0)) {
             GfGfx_EngineATogglePlanes(4, 1);
             GfGfx_EngineATogglePlanes(1, 1);
             ov40_02235B4C(p);

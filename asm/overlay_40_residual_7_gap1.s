@@ -3359,32 +3359,32 @@
 	.public VsRecorder_DecorTask
 	.public VsRecorder_SetSpritePos
 	.public VsRecorder_GetSpritePos
-	.public ov40_0222D2A0
-	.public ov40_0222D3E8
-	.public ov40_0222D55C
-	.public ov40_0222D5AC
-	.public ov40_0222D66C
-	.public ov40_0222D6D0
+	.public VsRecorder_CreateMenuRowText
+	.public VsRecorder_SetMenuRowText
+	.public VsRecorder_FreeMenuRowText
+	.public VsRecorder_CreateTextSprite
+	.public VsRecorder_SetTextSpriteMsg
+	.public VsRecorder_FreeTextSprite
 	.public ov40_0222D6EC
 	.public ov40_0222D73C
 	.public ov40_0222D78C
 	.public ov40_0222D7DC
 	.public ov40_0222D800
-	.public ov40_0222D874
-	.public ov40_0222D88C
-	.public ov40_0222D8C8
-	.public ov40_0222D910
-	.public ov40_0222D980
-	.public ov40_0222D9E8
-	.public ov40_0222DA00
-	.public ov40_0222DA84
-	.public ov40_0222DAA8
-	.public ov40_0222DAB0
-	.public ov40_0222DAC0
+	.public VsRecorder_FreeMenuRows
+	.public VsRecorder_RebuildMenuRowsParent
+	.public VsRecorder_RebuildMenuRows
+	.public VsRecorder_InitBlend
+	.public VsRecorder_ApplyBlend
+	.public VsRecorder_InitBgBlend
+	.public VsRecorder_StepBlend
+	.public VsRecorder_StepFade
+	.public VsRecorder_ResetFade
+	.public VsRecorder_NewMessageFormat
+	.public VsRecorder_GetBlendColor
 	.public ov40_0222DAF0
-	.public ov40_0222DB30
-	.public ov40_0222DBEC
-	.public ov40_0222DD08
+	.public VsRecorder_GetSchemeFileId
+	.public VsRecorder_ReloadSchemePalettes
+	.public VsRecorder_ClearPaletteBlend
 	.public ov40_0222DD68
 	.public ov40_0222DD8C
 	.public ov40_0222DD94
@@ -4015,9 +4015,9 @@
 	.public VsRecorder_SetResumeScreen
 	.public VsRecorder_SetSpritePos
 	.public VsRecorder_GetSpritePos
-	.public ov40_0222D874
-	.public ov40_0222DAA8
-	.public ov40_0222DAB0
+	.public VsRecorder_FreeMenuRows
+	.public VsRecorder_ResetFade
+	.public VsRecorder_NewMessageFormat
 	.public ov40_0222DD8C
 	.public ov40_0222DD94
 	.public ov40_0222E4C4
@@ -4063,8 +4063,8 @@
 	.public ov40_0224326C
 	.public ov40_022439B8
 
-	thumb_func_start ov40_0222DB30
-ov40_0222DB30: ; 0x0222DB30
+	thumb_func_start VsRecorder_GetSchemeFileId
+VsRecorder_GetSchemeFileId: ; 0x0222DB30
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x74
 	ldr r4, _0222DBDC ; =ov40_02244EB0
@@ -4160,11 +4160,11 @@ _0222DBDC: .word ov40_02244EB0
 _0222DBE0: .word ov40_02244E40
 _0222DBE4: .word ov40_02244ECC
 _0222DBE8: .word ov40_02244E78
-	thumb_func_end ov40_0222DB30
+	thumb_func_end VsRecorder_GetSchemeFileId
 
 
-	thumb_func_start ov40_0222DBEC
-ov40_0222DBEC: ; 0x0222DBEC
+	thumb_func_start VsRecorder_ReloadSchemePalettes
+VsRecorder_ReloadSchemePalettes: ; 0x0222DBEC
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x1c
 	add r5, r0, #0
@@ -4174,7 +4174,7 @@ ov40_0222DBEC: ; 0x0222DBEC
 	ldr r7, [r5, #0x1c]
 	ldr r6, [r5, #0x14]
 	mov r1, #3
-	bl ov40_0222DB30
+	bl VsRecorder_GetSchemeFileId
 	add r2, r0, #0
 	mov r1, #0
 	mov r0, #0x12
@@ -4188,7 +4188,7 @@ ov40_0222DBEC: ; 0x0222DBEC
 	bl PaletteData_LoadNarc
 	add r0, r5, #0
 	mov r1, #3
-	bl ov40_0222DB30
+	bl VsRecorder_GetSchemeFileId
 	add r2, r0, #0
 	mov r0, #1
 	str r0, [sp]
@@ -4203,7 +4203,7 @@ ov40_0222DBEC: ; 0x0222DBEC
 	bl PaletteData_LoadNarc
 	add r0, r5, #0
 	mov r1, #0
-	bl ov40_0222DB30
+	bl VsRecorder_GetSchemeFileId
 	add r2, r0, #0
 	mov r0, #0
 	str r0, [sp]
@@ -4217,7 +4217,7 @@ ov40_0222DBEC: ; 0x0222DBEC
 	bl PaletteData_LoadNarc
 	add r0, r5, #0
 	mov r1, #0
-	bl ov40_0222DB30
+	bl VsRecorder_GetSchemeFileId
 	add r2, r0, #0
 	mov r0, #1
 	str r0, [sp]
@@ -4251,7 +4251,7 @@ ov40_0222DBEC: ; 0x0222DBEC
 	bl SpriteManager_UnloadPlttObjById
 	add r0, r5, #0
 	mov r1, #2
-	bl ov40_0222DB30
+	bl VsRecorder_GetSchemeFileId
 	str r6, [sp]
 	str r0, [sp, #4]
 	mov r0, #0
@@ -4269,7 +4269,7 @@ ov40_0222DBEC: ; 0x0222DBEC
 	bl SpriteSystem_LoadPaletteBufferFromOpenNarc
 	add r0, r5, #0
 	mov r1, #2
-	bl ov40_0222DB30
+	bl VsRecorder_GetSchemeFileId
 	str r6, [sp]
 	str r0, [sp, #4]
 	mov r0, #0
@@ -4289,4 +4289,4 @@ ov40_0222DBEC: ; 0x0222DBEC
 	nop
 _0222DD00: .word 0x0000270F
 _0222DD04: .word 0x00002710
-	thumb_func_end ov40_0222DBEC
+	thumb_func_end VsRecorder_ReloadSchemePalettes

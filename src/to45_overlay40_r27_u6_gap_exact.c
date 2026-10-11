@@ -9,12 +9,12 @@ int ov40_02231EA4(void *p) {
         } else {
             BYTE(p, 0x5C) = 6;
         }
-        WORD(p, 0x58) = ov40_0222DAC0(p);
+        WORD(p, 0x58) = VsRecorder_GetBlendColor(p);
         WORD(p, 8)
         ++;
         break;
     case 1:
-        if (ov40_0222DA84((u8 *)p + 0x54, 1)) {
+        if (VsRecorder_StepFade((u8 *)p + 0x54, 1)) {
             WORD(p, 8)
             ++;
         }
@@ -26,7 +26,7 @@ int ov40_02231EA4(void *p) {
     case 2:
         GfGfx_EngineATogglePlanes(0x10, 0);
         GfGfx_EngineBTogglePlanes(0x10, 0);
-        ov40_0222DBEC(p, BYTE(p, 0x5C));
+        VsRecorder_ReloadSchemePalettes(p, BYTE(p, 0x5C));
         PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xFFFF, WORD(p, 0x54), WORD(p, 0x58));
         PaletteData_BlendPalettes(PTR(p, 0x28), 0, 0xFFFF, WORD(p, 0x54), WORD(p, 0x58));
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xFFFF, WORD(p, 0x54), WORD(p, 0x58));
@@ -41,7 +41,7 @@ int ov40_02231EA4(void *p) {
         ++;
         break;
     case 4:
-        if (ov40_0222DA84((u8 *)p + 0x54, 0)) {
+        if (VsRecorder_StepFade((u8 *)p + 0x54, 0)) {
             WORD(p, 8)
             ++;
         }

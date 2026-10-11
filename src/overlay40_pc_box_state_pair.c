@@ -4,7 +4,7 @@ int ov40_02236D60(void *p) {
     void *w = PTR(p, 0x860);
     switch (WORD(p, 8)) {
     case 0:
-        ov40_0222D980((u8 *)w + 0x1A4, (u8 *)w + 0x1A8, 8, 0x12, 8, 0x12, 1);
+        VsRecorder_ApplyBlend((u8 *)w + 0x1A4, (u8 *)w + 0x1A8, 8, 0x12, 8, 0x12, 1);
         ov40_02230964(p, 1);
         ov40_02237564(p);
         ov40_02237410(p);
@@ -14,8 +14,8 @@ int ov40_02236D60(void *p) {
         WORD(p, 8)
         ++;
     case 1:
-        ov40_0222DA84((u8 *)w + 0x1AC, 1);
-        if (ov40_0222DA00((u8 *)w + 0x1A4, (u8 *)w + 0x1A8, 1, 0)) {
+        VsRecorder_StepFade((u8 *)w + 0x1AC, 1);
+        if (VsRecorder_StepBlend((u8 *)w + 0x1A4, (u8 *)w + 0x1A8, 1, 0)) {
             WORD(p, 8)
             ++;
         }
@@ -32,13 +32,13 @@ int ov40_02236E18(void *p) {
     switch (WORD(p, 8)) {
     case 0:
         ov40_02236FE0(p);
-        ov40_0222D980((u8 *)w + 0x1A4, (u8 *)w + 0x1A8, 8, 0x12, 8, 0x12, 1);
+        VsRecorder_ApplyBlend((u8 *)w + 0x1A4, (u8 *)w + 0x1A8, 8, 0x12, 8, 0x12, 1);
         GfGfx_EngineATogglePlanes(4, 0);
         WORD(p, 8)
         ++;
     case 1:
-        ov40_0222DA84((u8 *)w + 0x1AC, 1);
-        if (ov40_0222DA00((u8 *)w + 0x1A4, (u8 *)w + 0x1A8, 1, 0)) {
+        VsRecorder_StepFade((u8 *)w + 0x1AC, 1);
+        if (VsRecorder_StepBlend((u8 *)w + 0x1A4, (u8 *)w + 0x1A8, 1, 0)) {
             WORD(p, 8)
             ++;
         }

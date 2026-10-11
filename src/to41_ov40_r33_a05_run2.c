@@ -15,7 +15,7 @@ int ov40_0223B5B0(void *p) {
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
-    ov40_0222D9E8(w, (u8 *)w + 4, 0);
+    VsRecorder_InitBgBlend(w, (u8 *)w + 4, 0);
     VsRecorder_SetSubState(p, 1);
     return 0;
 }
@@ -24,7 +24,7 @@ int ov40_0223B62C(void *p) {
     void *w = PTR(p, 0x860);
     switch (WORD(p, 8)) {
     case 0:
-        if (ov40_0222DA84((u8 *)w + 8, 1)) {
+        if (VsRecorder_StepFade((u8 *)w + 8, 1)) {
             WORD(p, 8)
             ++;
         }
@@ -49,7 +49,7 @@ int ov40_0223B62C(void *p) {
     case 2:
         if (ov40_0222FBB4(p)) {
             ov40_02230964(p, 1);
-            ov40_0222D874(p);
+            VsRecorder_FreeMenuRows(p);
             ov40_02230964(p, 0);
             ov40_02230964(p, 1);
             ov40_0223A430(p);

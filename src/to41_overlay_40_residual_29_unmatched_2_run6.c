@@ -7,7 +7,7 @@ void ov40_0223707C(void *p) {
     void *tmpl = NewString_ReadMsgData(PTR(p, 0x48), WORD(w, 0x380) + 0x1C);
     void *name = String_New(0xFF, 0x6D);
     void *expanded = String_New(0xFF, 0x6D);
-    void *fmt = ov40_0222DAB0(0x6D);
+    void *fmt = VsRecorder_NewMessageFormat(0x6D);
     void *win = (u8 *)w + 0x1D4;
     CopyU16ArrayToString(name, (u16 *)PTR((u8 *)w + WORD(p, 0x4D4) * 4, 0x38C));
     ov40_02230DCC(p, name);

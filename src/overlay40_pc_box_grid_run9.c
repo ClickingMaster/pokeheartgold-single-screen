@@ -2,7 +2,7 @@
 
 void ov40_022330B8(void *p) {
     void *w = PTR(p, 0x860);
-    ov40_0222D6D0((u8 *)w + 0x158);
+    VsRecorder_FreeTextSprite((u8 *)w + 0x158);
     Sprite_DeleteAndFreeResources(PTR(w, 0x15C));
     ov40_0222D7DC(p);
 }

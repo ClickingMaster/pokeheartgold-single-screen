@@ -7,7 +7,7 @@ void ov40_0223B44C(void *p) {
     u32 spriteOffset = 0x118;
     entry += 0x114;
     for (; i < 4; i++, entry += 0x1c, w += 0x1c) {
-        ov40_0222D6D0(entry);
+        VsRecorder_FreeTextSprite(entry);
         Sprite_DeleteAndFreeResources(PTR(w, spriteOffset));
     }
     ov40_0222D7DC(p);

@@ -4,7 +4,7 @@ int ov40_02244514(void *p) {
     void *w = PTR(p, 0x860);
     switch (WORD(p, 8)) {
     case 0:
-        if (ov40_0222DA84((u8 *)w + 8, 1)) {
+        if (VsRecorder_StepFade((u8 *)w + 8, 1)) {
             WORD(p, 8)
             ++;
         }
@@ -24,7 +24,7 @@ int ov40_02244514(void *p) {
         GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3E, PTR(p, 0x24), 3, 0, 0, 0, 0x6D);
         GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3E, PTR(p, 0x24), 7, 0, 0, 0, 0x6D);
         ov40_02230964(p, 1);
-        ov40_0222D874(p);
+        VsRecorder_FreeMenuRows(p);
         ov40_02230964(p, 0);
         WORD(p, 8)
         ++;

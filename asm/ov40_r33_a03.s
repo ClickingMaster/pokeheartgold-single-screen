@@ -17,12 +17,12 @@
 	.public GlobalTerminalNet_GetError
 	.public VsRecorder_SetScreenIfDone
 	.public VsRecorder_SetSubState
-	.public ov40_0222D66C
-	.public ov40_0222D88C
-	.public ov40_0222DA00
-	.public ov40_0222DA84
-	.public ov40_0222DAA8
-	.public ov40_0222DD08
+	.public VsRecorder_SetTextSpriteMsg
+	.public VsRecorder_RebuildMenuRowsParent
+	.public VsRecorder_StepBlend
+	.public VsRecorder_StepFade
+	.public VsRecorder_ResetFade
+	.public VsRecorder_ClearPaletteBlend
 	.public ov40_0222DEAC
 	.public ov40_0222E79C
 	.public ov40_0222E7B8
@@ -91,7 +91,7 @@ _0223A89E:
 	add r1, r4, #4
 	mov r2, #1
 	mov r3, #2
-	bl ov40_0222DA00
+	bl VsRecorder_StepBlend
 	cmp r0, #0
 	beq _0223A91E
 	add r0, r5, #0
@@ -110,12 +110,12 @@ _0223A8CC:
 	add r0, r4, #0
 	add r0, #8
 	mov r1, #0
-	bl ov40_0222DA84
+	bl VsRecorder_StepFade
 	add r0, r4, #0
 	add r1, r4, #4
 	mov r2, #0
 	mov r3, #2
-	bl ov40_0222DA00
+	bl VsRecorder_StepBlend
 	cmp r0, #0
 	beq _0223A8FE
 	add r0, r5, #0
@@ -191,12 +191,12 @@ _0223A964:
 	add r0, r5, #0
 	add r0, #8
 	mov r1, #1
-	bl ov40_0222DA84
+	bl VsRecorder_StepFade
 	add r0, r5, #0
 	add r1, r5, #4
 	mov r2, #1
 	mov r3, #2
-	bl ov40_0222DA00
+	bl VsRecorder_StepBlend
 	cmp r0, #0
 	beq _0223A99C
 	ldr r0, [r4, #0x24]
@@ -381,12 +381,12 @@ _0223AAF0:
 	bl ov40_0223A83C
 	add r5, #8
 	add r0, r5, #0
-	bl ov40_0222DAA8
+	bl VsRecorder_ResetFade
 	add r0, r4, #0
 	mov r1, #1
 	bl ov40_02230964
 	add r0, r4, #0
-	bl ov40_0222D88C
+	bl VsRecorder_RebuildMenuRowsParent
 	add r0, r4, #0
 	mov r1, #0
 	bl ov40_02230964
@@ -408,14 +408,14 @@ _0223AB4A:
 	add r0, r5, #0
 	add r0, #8
 	mov r1, #0
-	bl ov40_0222DA84
+	bl VsRecorder_StepFade
 	cmp r0, #0
 	beq _0223ABCC
 	add r0, r4, #0
-	bl ov40_0222DD08
+	bl VsRecorder_ClearPaletteBlend
 	add r0, r5, #0
 	add r0, #8
-	bl ov40_0222DAA8
+	bl VsRecorder_ResetFade
 	ldr r0, [r4, #0x58]
 	mov r1, #2
 	lsl r0, r0, #0x10
@@ -509,12 +509,12 @@ _0223AC3C:
 	add r0, r4, #0
 	add r0, #8
 	mov r1, #1
-	bl ov40_0222DA84
+	bl VsRecorder_StepFade
 	add r0, r4, #0
 	add r1, r4, #4
 	mov r2, #1
 	mov r3, #2
-	bl ov40_0222DA00
+	bl VsRecorder_StepBlend
 	cmp r0, #0
 	beq _0223AC80
 	mov r0, #0
@@ -554,7 +554,7 @@ _0223AC9A:
 	add r1, r4, #4
 	mov r2, #0
 	mov r3, #2
-	bl ov40_0222DA00
+	bl VsRecorder_StepBlend
 	cmp r0, #0
 	beq _0223ACC6
 	add r0, r5, #0
@@ -623,12 +623,12 @@ _0223AD20:
 	add r0, r5, #0
 	add r0, #8
 	mov r1, #1
-	bl ov40_0222DA84
+	bl VsRecorder_StepFade
 	add r0, r5, #0
 	add r1, r5, #4
 	mov r2, #1
 	mov r3, #0
-	bl ov40_0222DA00
+	bl VsRecorder_StepBlend
 	cmp r0, #0
 	beq _0223AD40
 	ldr r0, [r4, #8]
@@ -658,14 +658,14 @@ _0223AD5A:
 	add r0, r5, r0
 	add r1, #0x14
 	mov r2, #3
-	bl ov40_0222D66C
+	bl VsRecorder_SetTextSpriteMsg
 	mov r0, #0x13
 	lsl r0, r0, #4
 	add r1, r4, #0
 	add r0, r5, r0
 	add r1, #0x14
 	mov r2, #0x5e
-	bl ov40_0222D66C
+	bl VsRecorder_SetTextSpriteMsg
 	mov r0, #0x46
 	lsl r0, r0, #2
 	ldr r0, [r5, r0]
@@ -783,12 +783,12 @@ _0223AE82:
 	add r0, r5, #0
 	add r0, #8
 	mov r1, #0
-	bl ov40_0222DA84
+	bl VsRecorder_StepFade
 	mov r2, #0
 	add r0, r5, #0
 	add r1, r5, #4
 	add r3, r2, #0
-	bl ov40_0222DA00
+	bl VsRecorder_StepBlend
 	cmp r0, #0
 	beq _0223AED2
 	ldr r0, [r5, #0x10]

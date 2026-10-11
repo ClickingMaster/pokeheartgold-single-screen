@@ -12,8 +12,8 @@ int ov40_0223AF3C(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84(w + 8, 1);
-        if (ov40_0222DA00(w, w + 4, 1, 0)) {
+        VsRecorder_StepFade(w + 8, 1);
+        if (VsRecorder_StepBlend(w, w + 4, 1, 0)) {
             ov40_02230964(p, 1);
             ov40_0223B44C(p);
             ov40_02230964(p, 0);
@@ -25,8 +25,8 @@ int ov40_0223AF3C(void *p) {
     case 2:
         ov40_0223A430(p);
         if (WORD(p, 0x86c) == 0xd2) {
-            ov40_0222D66C(w + 0x114, (u8 *)p + 0x14, 3);
-            ov40_0222D66C(w + 0x130, (u8 *)p + 0x14, 0x5e);
+            VsRecorder_SetTextSpriteMsg(w + 0x114, (u8 *)p + 0x14, 3);
+            VsRecorder_SetTextSpriteMsg(w + 0x130, (u8 *)p + 0x14, 0x5e);
             ManagedSprite_SetAnim(PTR(w, 0x118), 0);
             ManagedSprite_SetAnim(PTR(w, 0x134), 3);
         }
@@ -49,8 +49,8 @@ int ov40_0223AF3C(void *p) {
         ++;
         break;
     case 3:
-        ov40_0222DA84(w + 8, 0);
-        if (ov40_0222DA00(w, w + 4, 0, 0)) {
+        VsRecorder_StepFade(w + 8, 0);
+        if (VsRecorder_StepBlend(w, w + 4, 0, 0)) {
             if (WORD(w, 0x10) == 0) {
                 ov40_022306A0(w + 0x220, 1);
             } else {
@@ -99,10 +99,10 @@ int ov40_0223B190(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84(w + 8, 1);
-        if (ov40_0222DA00(w, w + 4, 1, 0)) {
-            ov40_0222D66C(w + 0x114, (u8 *)p + 0x14, 3);
-            ov40_0222D66C(w + 0x130, (u8 *)p + 0x14, 0x6f);
+        VsRecorder_StepFade(w + 8, 1);
+        if (VsRecorder_StepBlend(w, w + 4, 1, 0)) {
+            VsRecorder_SetTextSpriteMsg(w + 0x114, (u8 *)p + 0x14, 3);
+            VsRecorder_SetTextSpriteMsg(w + 0x130, (u8 *)p + 0x14, 0x6f);
             ManagedSprite_SetAnim(PTR(w, 0x118), 0);
             ManagedSprite_SetAnim(PTR(w, 0x134), 1);
             ov40_0223B4BC(p, 1);

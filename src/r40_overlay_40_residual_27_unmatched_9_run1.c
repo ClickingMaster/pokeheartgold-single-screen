@@ -5,8 +5,8 @@ void ov40_02233044(void *work) {
     u8 *inner = *(u8 **)(raw + 0x860);
     ov40_0222D6EC(work, 2);
     *(void **)(inner + 0x15c) = ov40_0222D800(work, 2);
-    ov40_0222D5AC(inner + 0x158, raw + 0x14, 2);
-    ov40_0222D66C(inner + 0x158, raw + 0x14, 3);
+    VsRecorder_CreateTextSprite(inner + 0x158, raw + 0x14, 2);
+    VsRecorder_SetTextSpriteMsg(inner + 0x158, raw + 0x14, 3);
     ManagedSprite_SetAnim(*(void **)(inner + 0x15c), 0);
     ManagedSprite_SetPositionXY(*(void **)(inner + 0x15c), 0x50, 0xe8);
     TextOBJ_SetPosition(*(void **)(inner + 0x160), 0x24, -8);

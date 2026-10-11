@@ -8,11 +8,15 @@
 #include "font_sprite.h"
 #include "gf_3d_vramman.h"
 #include "gf_gfx_planes.h"
+#include "message_format.h"
 #include "msgdata.h"
+#include "obj_char_transfer.h"
 #include "palette.h"
+#include "pokemon_types_def.h"
 #include "pokepic.h"
 #include "save.h"
 #include "sprite_system.h"
+#include "string.h"
 #include "sys_task.h"
 #include "touch_hitbox_controller.h"
 #include "touchscreen.h"
@@ -21,6 +25,19 @@
 // The work is allocated by the main-ARM9 launcher (unk_02087E70.c), so only the fields known so far are named.
 
 typedef struct VsRecorderWork VsRecorderWork;
+
+// frontier_card.c (no public header)
+typedef struct FrontierCard FrontierCard;
+String *FrontierCard_NewNameString(const u16 *name, enum HeapID heapID); // the name is the card's first field
+u32 FrontierCard_GetGender(FrontierCard *card);
+u32 FrontierCard_GetSpecies(FrontierCard *card);
+u32 sub_020315F0(FrontierCard *card);
+u32 FrontierCard_IsEgg(FrontierCard *card);
+u32 FrontierCard_GetCountry(FrontierCard *card);
+u32 FrontierCard_GetRegion(FrontierCard *card);
+String *FrontierCard_GetGreeting(FrontierCard *card, MailMessage *message, enum HeapID heapID);
+u32 FrontierCard_GetBirthdayMonth(FrontierCard *card);
+u32 FrontierCard_GetAvatar(FrontierCard *card);
 
 // one step of a screen; TRUE when the screen is done
 typedef BOOL (*VsRecorderScreenFunc)(VsRecorderWork *work);
@@ -70,8 +87,34 @@ typedef struct VsRecorderMenuRow {
     int enabled;
     TouchscreenHitbox *hitbox;
     TextOBJ *text;
-    u8 unk_18[0x10];
+    TextOBJLayout *textLayout;
+    UnkStruct_02021AC8 charAlloc;
 } VsRecorderMenuRow; // size 0x28
+
+// a sprite with a one-line text label, used by several screens
+typedef struct VsRecorderTextSprite {
+    u32 unk_00;
+    ManagedSprite *sprite;
+    TextOBJ *text;
+    TextOBJLayout *textLayout;
+    UnkStruct_02021AC8 charAlloc;
+} VsRecorderTextSprite; // size 0x1C
+
+// the resource block of VsRecorderWork from narc to fontSystem (0x14-0x54); the text sprite helpers get &work->narc
+typedef struct VsRecorderGfx {
+    NARC *narc;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    u32 unk_0C;
+    BgConfig *bgConfig;
+    PaletteData *plttData;
+    TouchHitboxController *hitboxController;
+    TouchscreenHitbox menuHitboxes[5];
+    u32 unk_30;
+    MsgData *msgData;
+    MsgData *recordMsgData;
+    FontSystem *fontSystem;
+} VsRecorderGfx;
 
 // a sprite pair (main + sub screen) drifting in from the side, animated by a V-blank task
 typedef struct VsRecorderDecor {
@@ -136,9 +179,10 @@ struct VsRecorderWork {
     void *unk_0864;                          // 0x0864
     void *result;                            // 0x0868, Pair87 of the launcher
     u32 selection;                           // 0x086C
-    u8 unk_0870[0x87C - 0x870];              // 0x0870
+    u32 unk_0870;                            // 0x0870
+    u8 unk_0874[0x87C - 0x874];              // 0x0874
     void *savedVideos[4];                    // 0x087C
-    void *videoOwners[4];                    // 0x088C
+    FrontierCard *videoOwners[4];            // 0x088C
     u32 unk_089C;                            // 0x089C
     u8 unk_08A0[0x416C - 0x8A0];             // 0x08A0
     SysTask *task;                           // 0x416C
@@ -192,10 +236,41 @@ void VsRecorder_DecorTask(SysTask *task, void *data);
 void VsRecorder_SetSpritePos(ManagedSprite *sprite, s16 x, s16 y);
 void VsRecorder_GetSpritePos(ManagedSprite *sprite, s16 *x, s16 *y);
 
-// other OVY_40 modules (still address-named)
-void ov40_0222D3E8(VsRecorderWork *work, VsRecorderMenuRow *row, int msgId, const VsRecorderMenuEntry *entry);
-u32 ov40_0222DB30(VsRecorderWork *work, u32 kind);
+// vs_recorder_row_text.c
+void VsRecorder_CreateMenuRowText(VsRecorderWork *work);
+
+// vs_recorder_gfx.c
+void VsRecorder_SetMenuRowText(VsRecorderWork *work, VsRecorderMenuRow *row, int msgId, const VsRecorderMenuEntry *entry);
+void VsRecorder_FreeMenuRowText(VsRecorderWork *work);
+void VsRecorder_CreateTextSprite(VsRecorderTextSprite *textSprite, VsRecorderGfx *gfx, NNS_G2D_VRAM_TYPE vram);
+void VsRecorder_SetTextSpriteMsg(VsRecorderTextSprite *textSprite, VsRecorderGfx *gfx, int msgId);
+void VsRecorder_FreeTextSprite(VsRecorderTextSprite *textSprite);
+void ov40_0222D6EC(VsRecorderWork *work, int vram);
+void ov40_0222D73C(VsRecorderWork *work, int vram);
+void ov40_0222D78C(VsRecorderWork *work, int vram);
+void ov40_0222D7DC(VsRecorderWork *work);
+ManagedSprite *ov40_0222D800(VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram);
+void VsRecorder_FreeMenuRows(VsRecorderWork *work);
+void VsRecorder_RebuildMenuRowsParent(VsRecorderWork *work);
+void VsRecorder_RebuildMenuRows(VsRecorderWork *work);
+void VsRecorder_InitBlend(int *eva, int *evb, int mainPlane1, int mainPlane2, int subPlane1, int subPlane2, int mode);
+void VsRecorder_ApplyBlend(int *eva, int *evb, int mainPlane1, int mainPlane2, int subPlane1, int subPlane2, int mode);
+void VsRecorder_InitBgBlend(int *eva, int *evb, int mode);
+BOOL VsRecorder_StepBlend(int *eva, int *evb, BOOL reverse, int mode);
+BOOL VsRecorder_StepFade(int *fade, int direction);
+void VsRecorder_ResetFade(int *fade);
+MessageFormat *VsRecorder_NewMessageFormat(enum HeapID heapID);
+u32 VsRecorder_GetBlendColor(VsRecorderWork *work);
+u32 ov40_0222DAF0(VsRecorderWork *work);
+u32 VsRecorder_GetSchemeFileId(VsRecorderWork *work, u32 kind);
+void VsRecorder_ReloadSchemePalettes(VsRecorderWork *work);
+void VsRecorder_ClearPaletteBlend(VsRecorderWork *work);
+u16 *ov40_0222DD68(enum HeapID heapID, int unused, int *count);
+void ov40_0222DD8C(VsRecorderWork *work, u32 value);
 u32 ov40_0222DD94(VsRecorderWork *work);
+
+// other OVY_40 modules (still address-named)
+void ov40_02230DCC(VsRecorderWork *work, String *name);
 void ov40_0222DD9C(VsRecorderWork *work, int msgId);
 void ov40_0222DE40(VsRecorderWork *work);
 void ov40_0222DFE8(VsRecorderWork *work, int msgId);

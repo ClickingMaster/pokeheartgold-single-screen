@@ -23,7 +23,7 @@
 	.public String_GetLineN
 	.public String_New
 	.public WindowIsInUse
-	.public ov40_0222DAB0
+	.public VsRecorder_NewMessageFormat
 	.public ov40_0222DD68
 	.public ov40_02230DCC
 	.public ov40_02235B4C
@@ -74,7 +74,7 @@ _02235B66:
 	mov r1, #0
 	bl FillWindowPixelBuffer
 	mov r0, #0x6d
-	bl ov40_0222DAB0
+	bl VsRecorder_NewMessageFormat
 	str r0, [sp, #0x18]
 	mov r0, #0xff
 	mov r1, #0x6d
@@ -211,7 +211,7 @@ _02235C96:
 	mov r1, #0
 	bl FillWindowPixelBuffer
 	mov r0, #0x6d
-	bl ov40_0222DAB0
+	bl VsRecorder_NewMessageFormat
 	str r0, [sp, #0x18]
 	mov r0, #0xff
 	mov r1, #0x6d

@@ -1306,16 +1306,9 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/asm/to65_to65_nitro_unified_residual_36_extra22_anchor.o
     Object src/to65_to65_nitro_unified_residual_36_extra22_run01.o
     Object lib/asm/to65_to65_nitro_unified_residual_38_extra23_anchor.o
-    Object src/to65_to65_nitro_unified_residual_38_extra23_run01.o
-    Object lib/asm/to90_extra2137_anchor.o
-    Object src/to90_extra2137_run01.o
-    Object src/to90_extra2137_run02.o
-    Object src/to90_extra2137_run03.o
-    Object lib/asm/op90_to90_extra2137_residual_1_anchor.o
-    Object src/op90_to90_extra2137_residual_1_r01.o
-    Object src/to90_extra2137_run04.o
-    Object lib/asm/op90_to90_extra2137_residual_2_anchor.o
-    Object src/op90_to90_extra2137_residual_2_r01.o
+    Object lib/NitroSDK/src/card/card_spi_wait_cycles.o
+    Object lib/NitroSDK/src/card/card_spi_wait_init.o
+    Object lib/NitroSDK/src/card/card_spi_wait.o
     Object lib/NitroSDK/src/wm_core.o
     Object lib/NitroSDK/src/wm_requests.o
     Object lib/NitroSDK/src/wm_data_sharing.o
@@ -1689,29 +1682,9 @@ Overlay OVY_0
     Object lib/NitroDWC/src/persist_data.o
     Object lib/NitroDWC/src/gt_buffer.o
     Object lib/NitroDWC/src/gt_socket.o
-    Object src/to65_ov00_extra01_run01.o
-    Object src/to80_extra1410_run01.o
-    Object src/to65_ov00_extra01_run02.o
-    Object src/to70_to65_ov00_extra01_residual_2_extra1105_run01.o
-    Object src/to65_ov00_extra01_run03.o
-    Object src/op90_to65_ov00_extra01_residual_3_r01.o
-    Object src/to65_ov00_extra01_run04.o
-    Object src/to70_to65_ov00_extra01_residual_4_extra1106_run01.o
-    Object src/to80_extra1662_run01.o
-    Object src/to65_ov00_extra01_run05.o
-    Object src/to80_extra1911_run01.o
-    Object src/to65_ov00_extra01_run06.o
-    Object src/op90_to65_ov00_extra01_residual_6_r01.o
-    Object src/to65_ov00_extra01_run07.o
-    Object src/op90_to65_ov00_extra01_residual_7_r01.o
-    Object src/to65_ov00_extra01_run08.o
-    Object src/to90_extra2541_run01.o
-    Object src/to65_ov00_extra01_run09.o
-    Object src/op90_to65_ov00_extra01_residual_9_r01.o
-    Object src/to65_ov00_extra01_run10.o
-    Object src/op90_to90_extra2112_residual_1_r01.o
-    Object src/to90_extra2112_run01.o
-    Object src/to90_extra2112_run02.o
+    Object lib/NitroDWC/src/gt_connection.o
+    Object lib/NitroDWC/src/nat_negotiate.o
+    Object lib/NitroDWC/src/query_report_init.o
     Object src/to61_overlay_00_arm_residual_13_run01.o
     Object src/op90_to61_overlay_00_arm_residual_13_residual_2_r01.o
     Object src/to61_overlay_00_arm_residual_13_run02.o
@@ -3199,21 +3172,8 @@ Overlay OVY_40
     Object src/application/vs_recorder/vs_recorder.o
     Object src/application/vs_recorder/vs_recorder_ui.o
     Object asm/to91_w41503_battle_names_anchor_own1.o
-    Object src/op90_overlay_40_residual_5_gap_1_r01.o
-    Object src/r40_overlay_40_residual_5_gap_1_run1.o
-    Object src/overlay40_text_sprite_resources_r5.o
-    Object src/overlay_40_sol_partial_5.o
-    Object src/overlay40_blend_helpers_1.o
-    Object src/to46_overlay40_blend_controller.o
-    Object src/overlay40_blend_helpers_2.o
-    Object src/to70_overlay_40_residual_6_residual_2_extra785_run01.o
-    Object src/overlay40_blend_helpers_3.o
-    Object src/overlay_40_sol_partial_6.o
-    Object src/overlay40_palette_resources_r7_run1.o
-    Object src/r40_overlay_40_residual_7_gap1_run1.o
-    Object src/overlay40_palette_resources_r7_run2.o
-    Object src/to90_extra2211_run01.o
-    Object src/overlay_40_sol_partial_7.o
+    Object src/application/vs_recorder/vs_recorder_row_text.o
+    Object src/application/vs_recorder/vs_recorder_gfx.o
     Object src/overlay40_message_windows_r8_run1.o
     Object src/to47r5_overlay40_message_renderer.o
     Object src/overlay40_message_windows_r8_run2.o

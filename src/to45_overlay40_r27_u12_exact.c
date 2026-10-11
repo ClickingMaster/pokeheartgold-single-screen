@@ -48,7 +48,7 @@ BOOL ov40_022339CC(Ov40Work *work) {
         group->angle[i] += 20;
         group->angle[i] %= 360;
     }
-    ov40_0222DA00(&group->transitionA, &group->transitionB, 0, 0);
+    VsRecorder_StepBlend(&group->transitionA, &group->transitionB, 0, 0);
     for (i = 0; i < 5; i++) {
         if (group->angle[0] != 0) {
             group->scale[i] += 0.05f;
@@ -91,7 +91,7 @@ BOOL ov40_02233AEC(Ov40Work *work) {
             ManagedSprite_SetAffineOverwriteMode(group->group3[i], 2);
         }
     }
-    ov40_0222DA00(&group->transitionA, &group->transitionB, 1, 0);
+    VsRecorder_StepBlend(&group->transitionA, &group->transitionB, 1, 0);
     for (i = 0; i < 5; i++) {
         if (group->angle[0] != 0) {
             group->scale[i] -= 0.05f;

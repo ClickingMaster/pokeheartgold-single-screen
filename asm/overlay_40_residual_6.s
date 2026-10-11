@@ -3359,32 +3359,32 @@
 	.public VsRecorder_DecorTask
 	.public VsRecorder_SetSpritePos
 	.public VsRecorder_GetSpritePos
-	.public ov40_0222D2A0
-	.public ov40_0222D3E8
-	.public ov40_0222D55C
-	.public ov40_0222D5AC
-	.public ov40_0222D66C
-	.public ov40_0222D6D0
+	.public VsRecorder_CreateMenuRowText
+	.public VsRecorder_SetMenuRowText
+	.public VsRecorder_FreeMenuRowText
+	.public VsRecorder_CreateTextSprite
+	.public VsRecorder_SetTextSpriteMsg
+	.public VsRecorder_FreeTextSprite
 	.public ov40_0222D6EC
 	.public ov40_0222D73C
 	.public ov40_0222D78C
 	.public ov40_0222D7DC
 	.public ov40_0222D800
-	.public ov40_0222D874
-	.public ov40_0222D88C
-	.public ov40_0222D8C8
-	.public ov40_0222D910
-	.public ov40_0222D980
-	.public ov40_0222D9E8
-	.public ov40_0222DA00
-	.public ov40_0222DA84
-	.public ov40_0222DAA8
-	.public ov40_0222DAB0
-	.public ov40_0222DAC0
+	.public VsRecorder_FreeMenuRows
+	.public VsRecorder_RebuildMenuRowsParent
+	.public VsRecorder_RebuildMenuRows
+	.public VsRecorder_InitBlend
+	.public VsRecorder_ApplyBlend
+	.public VsRecorder_InitBgBlend
+	.public VsRecorder_StepBlend
+	.public VsRecorder_StepFade
+	.public VsRecorder_ResetFade
+	.public VsRecorder_NewMessageFormat
+	.public VsRecorder_GetBlendColor
 	.public ov40_0222DAF0
-	.public ov40_0222DB30
-	.public ov40_0222DBEC
-	.public ov40_0222DD08
+	.public VsRecorder_GetSchemeFileId
+	.public VsRecorder_ReloadSchemePalettes
+	.public VsRecorder_ClearPaletteBlend
 	.public ov40_0222DD68
 	.public ov40_0222DD8C
 	.public ov40_0222DD94
@@ -4015,9 +4015,9 @@
 	.public VsRecorder_SetResumeScreen
 	.public VsRecorder_SetSpritePos
 	.public VsRecorder_GetSpritePos
-	.public ov40_0222D874
-	.public ov40_0222DAA8
-	.public ov40_0222DAB0
+	.public VsRecorder_FreeMenuRows
+	.public VsRecorder_ResetFade
+	.public VsRecorder_NewMessageFormat
 	.public ov40_0222DD8C
 	.public ov40_0222DD94
 	.public ov40_0222E4C4
@@ -4062,14 +4062,14 @@
 	.public ov40_0224320C
 	.public ov40_0224326C
 	.public ov40_022439B8
-	.public ov40_0222D88C
-	.public ov40_0222D8C8
-	.public ov40_0222D9E8
-	.public ov40_0222DA84
+	.public VsRecorder_RebuildMenuRowsParent
+	.public VsRecorder_RebuildMenuRows
+	.public VsRecorder_InitBgBlend
+	.public VsRecorder_StepFade
 
 
-	thumb_func_start ov40_0222D910
-ov40_0222D910: ; 0x0222D910
+	thumb_func_start VsRecorder_InitBlend
+VsRecorder_InitBlend: ; 0x0222D910
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	mov r0, #0
@@ -4123,13 +4123,13 @@ _0222D974:
 	nop
 _0222D978: .word 0x04000050
 _0222D97C: .word 0x04001050
-	thumb_func_end ov40_0222D910
+	thumb_func_end VsRecorder_InitBlend
 
 
 
 
-	thumb_func_start ov40_0222D980
-ov40_0222D980: ; 0x0222D980
+	thumb_func_start VsRecorder_ApplyBlend
+VsRecorder_ApplyBlend: ; 0x0222D980
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	ldr r0, [sp, #0x20]
@@ -4179,4 +4179,4 @@ _0222D9DC:
 	nop
 _0222D9E0: .word 0x04000050
 _0222D9E4: .word 0x04001050
-	thumb_func_end ov40_0222D980
+	thumb_func_end VsRecorder_ApplyBlend

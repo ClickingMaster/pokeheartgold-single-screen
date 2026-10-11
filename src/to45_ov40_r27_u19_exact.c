@@ -20,7 +20,7 @@ void ov40_02235B4C(void *scene) {
     InitWindow(window);
     AddWindowParameterized(PTR_AT(scene, 0x24), window, 2, 0x10, 0x13, 0x10, 4, 0xE, 0x12C);
     FillWindowPixelBuffer(window, 0);
-    fmt = ov40_0222DAB0(0x6D);
+    fmt = VsRecorder_NewMessageFormat(0x6D);
     formatted = String_New(0xFF, 0x6D);
     source = NewString_ReadMsgData(PTR_AT(scene, 0x48), 0x38);
     line = String_New(0xFF, 0x6D);
@@ -65,7 +65,7 @@ void ov40_02235C7C(void *scene) {
     InitWindow(window);
     AddWindowParameterized(PTR_AT(scene, 0x24), window, 2, 0x10, 0x13, 0x10, 4, 0xE, 0x12C);
     FillWindowPixelBuffer(window, 0);
-    fmt = ov40_0222DAB0(0x6D);
+    fmt = VsRecorder_NewMessageFormat(0x6D);
     formatted = String_New(0xFF, 0x6D);
     source = NewString_ReadMsgData(PTR_AT(scene, 0x48), 0x38);
     line = String_New(0xFF, 0x6D);

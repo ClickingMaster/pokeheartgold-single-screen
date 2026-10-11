@@ -15,7 +15,7 @@ void GlobalTerminalNet_UnpackDressUpPhoto(void *, void *);
 void GlobalTerminalNet_CopyRequestHeader(void *, void *);
 void VsRecorder_ResetBg2(void *);
 void VsRecorder_SetSubState(void *, int);
-int ov40_0222DA00(void *, void *, int, int);
+int VsRecorder_StepBlend(void *, void *, int, int);
 void ov40_0222E79C(void *, void *);
 void ov40_0222E7B8(void *, void *);
 void ov40_0222E7DC(void *, int);

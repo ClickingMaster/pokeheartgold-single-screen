@@ -15,7 +15,7 @@ void ov40_0222F878(void *p);
 u32 FrontierCard_GetCountry(void *p);
 u32 FrontierCard_GetRegion(void *p);
 void *NewString_ReadMsgData(void *msgData, int msgId);
-void *ov40_0222DAB0(u32 heapId);
+void *VsRecorder_NewMessageFormat(u32 heapId);
 void *String_New(u32 size, u32 heapId);
 void BufferCityName(void *fmt, u32 idx, u32 country, u32 city);
 void BufferCountryName(void *fmt, u32 idx, u32 country);

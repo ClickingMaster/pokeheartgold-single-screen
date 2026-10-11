@@ -348,10 +348,10 @@ void VsRecorder_LoadFrameBg(VsRecorderWork *work) {
         GfGfxLoader_LoadCharDataFromOpenNarc(narc, 67, bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, HEAP_ID_109);
         GfGfxLoader_LoadCharDataFromOpenNarc(narc, 67, bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, HEAP_ID_109);
         GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 69, bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, HEAP_ID_109);
-        PaletteData_LoadNarc(plttData, NARC_a_1_9_1, ov40_0222DB30(work, 3), HEAP_ID_109, PLTTBUF_MAIN_BG, 0x120, 0);
-        PaletteData_LoadNarc(plttData, NARC_a_1_9_1, ov40_0222DB30(work, 3), HEAP_ID_109, PLTTBUF_SUB_BG, 0x120, 0);
-        PaletteData_LoadNarc(plttData, NARC_a_1_9_1, ov40_0222DB30(work, 0), HEAP_ID_109, PLTTBUF_MAIN_BG, 0x20, 0xE0);
-        PaletteData_LoadNarc(plttData, NARC_a_1_9_1, ov40_0222DB30(work, 0), HEAP_ID_109, PLTTBUF_SUB_BG, 0x20, 0xE0);
+        PaletteData_LoadNarc(plttData, NARC_a_1_9_1, VsRecorder_GetSchemeFileId(work, 3), HEAP_ID_109, PLTTBUF_MAIN_BG, 0x120, 0);
+        PaletteData_LoadNarc(plttData, NARC_a_1_9_1, VsRecorder_GetSchemeFileId(work, 3), HEAP_ID_109, PLTTBUF_SUB_BG, 0x120, 0);
+        PaletteData_LoadNarc(plttData, NARC_a_1_9_1, VsRecorder_GetSchemeFileId(work, 0), HEAP_ID_109, PLTTBUF_MAIN_BG, 0x20, 0xE0);
+        PaletteData_LoadNarc(plttData, NARC_a_1_9_1, VsRecorder_GetSchemeFileId(work, 0), HEAP_ID_109, PLTTBUF_SUB_BG, 0x20, 0xE0);
     } else {
         GfGfxLoader_LoadCharDataFromOpenNarc(narc, 54, bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, HEAP_ID_109);
         GfGfxLoader_LoadCharDataFromOpenNarc(narc, 54, bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, HEAP_ID_109);
@@ -401,8 +401,8 @@ void VsRecorder_LoadDecorGfx(VsRecorderWork *work) {
     plttData = work->plttData;
 
     if (work->mode == 0) {
-        SpriteSystem_LoadPaletteBufferFromOpenNarc(plttData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, narc, ov40_0222DB30(work, 2), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 9999);
-        SpriteSystem_LoadPaletteBufferFromOpenNarc(plttData, PLTTBUF_SUB_OBJ, spriteSystem, spriteManager, narc, ov40_0222DB30(work, 2), FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, 10000);
+        SpriteSystem_LoadPaletteBufferFromOpenNarc(plttData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, narc, VsRecorder_GetSchemeFileId(work, 2), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 9999);
+        SpriteSystem_LoadPaletteBufferFromOpenNarc(plttData, PLTTBUF_SUB_OBJ, spriteSystem, spriteManager, narc, VsRecorder_GetSchemeFileId(work, 2), FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, 10000);
     } else {
         SpriteSystem_LoadPaletteBufferFromOpenNarc(plttData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, narc, 51, FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 9999);
         SpriteSystem_LoadPaletteBufferFromOpenNarc(plttData, PLTTBUF_SUB_OBJ, spriteSystem, spriteManager, narc, 51, FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, 10000);
@@ -703,7 +703,7 @@ void VsRecorder_RefreshChoiceRows(VsRecorderWork *work) {
         ManagedSprite_SetDrawFlag(work->choiceRows[i].sprite, work->menu[i].enabled);
         if (work->menu[i].enabled != 0) {
             ManagedSprite_SetAnim(work->choiceRows[i].sprite, work->menu[i].anim);
-            ov40_0222D3E8(work, &work->choiceRows[i], work->menu[i].msgId, &work->menu[i]);
+            VsRecorder_SetMenuRowText(work, &work->choiceRows[i], work->menu[i].msgId, &work->menu[i]);
         }
     }
 }
@@ -729,7 +729,7 @@ void VsRecorder_RefreshPathRows(VsRecorderWork *work) {
     if (work->menuDepth != 0) {
         for (i = 0; i < work->menuDepth; i++) {
             ManagedSprite_SetAnim(work->pathRows[i].sprite, work->menuPath[i]->anim);
-            ov40_0222D3E8(work, &work->pathRows[i], work->menuPath[i]->msgId, work->menuPath[i]);
+            VsRecorder_SetMenuRowText(work, &work->pathRows[i], work->menuPath[i]->msgId, work->menuPath[i]);
             TextOBJ_SetPosition(work->pathRows[i].text, 36, -8);
             TextOBJ_SetSpritesDrawFlag(work->pathRows[i].text, TRUE);
             ManagedSprite_SetDrawFlag(work->pathRows[i].sprite, TRUE);

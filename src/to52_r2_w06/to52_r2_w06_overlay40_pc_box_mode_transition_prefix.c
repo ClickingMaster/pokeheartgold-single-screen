@@ -16,8 +16,8 @@ int ov40_02234A38(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)w + 8, 0);
-        if (ov40_0222DA00(w, (u8 *)w + 4, 0, 0)) {
+        VsRecorder_StepFade((u8 *)w + 8, 0);
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 0)) {
             ov40_0222DED0(p, 0x72);
             ov40_02235FFC(p);
             S32(p, 8)
@@ -42,13 +42,13 @@ int ov40_02234A38(void *p) {
         /* fallthrough */
     case 4:
         if (S32(w, 0x1e4) == 1) {
-            if (ov40_0222DA00(w, (u8 *)w + 4, 1, 2)) {
+            if (VsRecorder_StepBlend(w, (u8 *)w + 4, 1, 2)) {
                 S32(p, 8)
                 ++;
             }
         } else {
-            ov40_0222DA84((u8 *)w + 8, 1);
-            if (ov40_0222DA00(w, (u8 *)w + 4, 1, 2)) {
+            VsRecorder_StepFade((u8 *)w + 8, 1);
+            if (VsRecorder_StepBlend(w, (u8 *)w + 4, 1, 2)) {
                 S32(p, 8)
                 ++;
             }
@@ -76,7 +76,7 @@ int ov40_02234BBC(void *p) {
         ++;
         break;
     case 1:
-        if (ov40_0222DA00(w, (u8 *)w + 4, 0, 2)) {
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 2)) {
             ov40_0222DED0(p, 0x72);
             ov40_02230964(p, 1);
             ov40_0222F9D4((u8 *)p + 0x47c, p);
@@ -122,8 +122,8 @@ int ov40_02234BBC(void *p) {
         ++;
         /* fallthrough */
     case 4:
-        ov40_0222DA84((u8 *)w + 8, 1);
-        if (ov40_0222DA00(w, (u8 *)w + 4, 1, 0)) {
+        VsRecorder_StepFade((u8 *)w + 8, 1);
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 1, 0)) {
             S32(p, 8)
             ++;
         }

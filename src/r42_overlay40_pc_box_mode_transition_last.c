@@ -22,8 +22,8 @@ int ov40_02234D94(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)w + 8, 1);
-        if (ov40_0222DA00(w, (u8 *)w + 4, 1, 0)) {
+        VsRecorder_StepFade((u8 *)w + 8, 1);
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 1, 0)) {
             ov40_02230964(p, 1);
             ov40_02235B10(p);
             ov40_02230964(p, 0);
@@ -35,9 +35,9 @@ int ov40_02234D94(void *p) {
         BLEND(p, w, 3);
         break;
     case 2:
-        ov40_0222DAA8((u8 *)w + 8);
+        VsRecorder_ResetFade((u8 *)w + 8);
         ov40_02230964(p, 1);
-        ov40_0222D88C(p);
+        VsRecorder_RebuildMenuRowsParent(p);
         ov40_02230964(p, 0);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
@@ -49,7 +49,7 @@ int ov40_02234D94(void *p) {
         break;
     default:
         if (ov40_0222FBB4(p)) {
-            if (ov40_0222DA84((u8 *)w + 8, 0)) {
+            if (VsRecorder_StepFade((u8 *)w + 8, 0)) {
                 ov40_02230964(p, 1);
                 if (PTR(w, 0x228) != NULL) {
                     AccessoryPortrait_Destroy();
@@ -58,8 +58,8 @@ int ov40_02234D94(void *p) {
                     ov40_02235994();
                 }
                 ov40_02230964(p, 0);
-                ov40_0222DD08(p);
-                ov40_0222DAA8((u8 *)w + 8);
+                VsRecorder_ClearPaletteBlend(p);
+                VsRecorder_ResetFade((u8 *)w + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 12, 0x10, (u16)U32(p, 0x58));
                 VsRecorder_SetScreenIfDone(p, 1, 1, PTR(p, 0x10));
                 VsRecorder_SetSubState(p, 5);

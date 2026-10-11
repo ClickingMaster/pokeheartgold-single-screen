@@ -101,7 +101,7 @@ int ov40_02231100(void *work) {
         VsRecorder_CreateDecorSprites(work);
         VsRecorder_LoadMenuRowGfx(work);
         VsRecorder_CreateMenuRowSprites(work);
-        ov40_0222D2A0(work);
+        VsRecorder_CreateMenuRowText(work);
         VsRecorder_RefreshChoiceRows(work);
         VsRecorder_RefreshPathRows(work);
         ov40_02230964(work, 0);

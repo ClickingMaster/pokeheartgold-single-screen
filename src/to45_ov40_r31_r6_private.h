@@ -18,8 +18,8 @@ typedef struct Ov40R31R6Work {
     u32 flag;
 } Ov40R31R6Work;
 
-void ov40_0222D980(void *, void *, u32, u32, u32, u32, u32);
-u32 ov40_0222DA00(void *, void *, u32, u32);
+void VsRecorder_ApplyBlend(void *, void *, u32, u32, u32, u32, u32);
+u32 VsRecorder_StepBlend(void *, void *, u32, u32);
 void ov40_02230964(void *, u32);
 void ov40_02237564(void *);
 void ov40_02237410(void *);

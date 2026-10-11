@@ -22,8 +22,8 @@ int ov40_02238D5C(void *p) {
             for (i = 0; i < 5; i++) {
                 TouchHitboxController_Destroy(((SolCtx40 *)ctx)->hitbox[i]);
             }
-            ov40_0222DAA8((u8 *)ctx + 0x1AC);
-            ov40_0222D88C(p);
+            VsRecorder_ResetFade((u8 *)ctx + 0x1AC);
+            VsRecorder_RebuildMenuRowsParent(p);
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
@@ -33,9 +33,9 @@ int ov40_02238D5C(void *p) {
         }
         break;
     default:
-        if (ov40_0222DA84((u8 *)ctx + 0x1AC, 0) != 0) {
-            ov40_0222DD08(p);
-            ov40_0222DAA8((u8 *)ctx + 0x1AC);
+        if (VsRecorder_StepFade((u8 *)ctx + 0x1AC, 0) != 0) {
+            VsRecorder_ClearPaletteBlend(p);
+            VsRecorder_ResetFade((u8 *)ctx + 0x1AC);
             PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, (u16)U32(p, 0x58));
             VsRecorder_SetScreenIfDone(p, 1, 1, PTR(p, 0x10));
             VsRecorder_SetSubState(p, 5);

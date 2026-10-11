@@ -6,7 +6,7 @@
 #define PTR_AT(p, o) (*(void **)((u8 *)(p) + (o)))
 #define U32_AT(p, o) (*(u32 *)((u8 *)(p) + (o)))
 
-void *ov40_0222DAB0(u32 heapId);
+void *VsRecorder_NewMessageFormat(u32 heapId);
 void *ov40_0222DD68(u32 heapId, u32 unused, u32 *count);
 void ov40_02230DCC(void *scene, void *string);
 

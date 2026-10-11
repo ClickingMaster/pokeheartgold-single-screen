@@ -24,7 +24,7 @@ void VsRecorder_LoadDecorGfx(void *);
 void VsRecorder_CreateDecorSprites(void *);
 void VsRecorder_LoadMenuRowGfx(void *);
 void VsRecorder_CreateMenuRowSprites(void *);
-void ov40_0222D2A0(void *);
+void VsRecorder_CreateMenuRowText(void *);
 void VsRecorder_RefreshChoiceRows(void *);
 void VsRecorder_RefreshPathRows(void *);
 void VsRecorder_SetScreenIfDone(void *, void *, int, void *);

@@ -20,6 +20,6 @@
     }
 
 void ov40_022309CC(void *p) {
-    ov40_0222D6D0(p);
+    VsRecorder_FreeTextSprite(p);
     Sprite_DeleteAndFreeResources(PTR(p, 4));
 }

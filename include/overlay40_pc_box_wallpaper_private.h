@@ -39,7 +39,7 @@ void sub_0201A728(int a);
 void sub_0201A738(int a);
 void VsRecorder_SetSubState(void *p, int value);
 void ov40_0222C6C8(void *p, int a, int b);
-void ov40_0222D9E8(void *a, void *b, int c);
+void VsRecorder_InitBgBlend(void *a, void *b, int c);
 
 int ov40_022439CC(u8 *w, int id);
 int ov40_022439F4(u8 *w, int id);

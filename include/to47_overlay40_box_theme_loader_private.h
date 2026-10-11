@@ -19,8 +19,8 @@ void GfGfx_EngineBTogglePlanes(int plane, int enable);
 
 void VsRecorder_SetSubState(void *work, int state);
 void ov40_0222C710(void *work, int layer);
-BOOL ov40_0222DA00(void *a, void *b, int c, int d);
-BOOL ov40_0222DA84(void *transition, int direction);
+BOOL VsRecorder_StepBlend(void *a, void *b, int c, int d);
+BOOL VsRecorder_StepFade(void *transition, int direction);
 void ov40_02230964(void *work, int value);
 void ov40_02236EB4(void *work);
 void ov40_02237030(void *work, int messageId);

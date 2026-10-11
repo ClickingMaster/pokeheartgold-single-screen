@@ -10,7 +10,7 @@ int ov40_0224483C(void *p) {
         WORD(p, 8)
         ++;
     case 2:
-        ov40_0222D88C(p);
+        VsRecorder_RebuildMenuRowsParent(p);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
@@ -21,9 +21,9 @@ int ov40_0224483C(void *p) {
         break;
     default:
         if (ov40_0222FBB4(p) != NULL) {
-            if (ov40_0222DA84((u8 *)w + 8, 0)) {
-                ov40_0222DD08(p);
-                ov40_0222DAA8((u8 *)w + 8);
+            if (VsRecorder_StepFade((u8 *)w + 8, 0)) {
+                VsRecorder_ClearPaletteBlend(p);
+                VsRecorder_ResetFade((u8 *)w + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, (u16)WORD(p, 0x58));
                 VsRecorder_SetScreenIfDone(p, 1, TRUE, PTR(p, 0x10));
                 VsRecorder_SetSubState(p, 5);

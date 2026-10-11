@@ -6,10 +6,10 @@ void ov40_0223A430(void *p) {
     ov40_0222D6EC(p, 2);
     PTR(w, 0x118) = ov40_0222D800(p, 2);
     PTR(w, 0x134) = ov40_0222D800(p, 2);
-    ov40_0222D5AC((u8 *)w + 0x114, (u8 *)p + 0x14, 2);
-    ov40_0222D5AC((u8 *)w + 0x130, (u8 *)p + 0x14, 2);
-    ov40_0222D66C((u8 *)w + 0x114, (u8 *)p + 0x14, 3);
-    ov40_0222D66C((u8 *)w + 0x130, (u8 *)p + 0x14, 0x5E);
+    VsRecorder_CreateTextSprite((u8 *)w + 0x114, (u8 *)p + 0x14, 2);
+    VsRecorder_CreateTextSprite((u8 *)w + 0x130, (u8 *)p + 0x14, 2);
+    VsRecorder_SetTextSpriteMsg((u8 *)w + 0x114, (u8 *)p + 0x14, 3);
+    VsRecorder_SetTextSpriteMsg((u8 *)w + 0x130, (u8 *)p + 0x14, 0x5E);
     ManagedSprite_SetAnim(PTR(w, 0x118), 0);
     ManagedSprite_SetAnim(PTR(w, 0x134), 3);
     ManagedSprite_SetPositionXY(PTR(w, 0x118), 0x20, 0xE8);
@@ -28,7 +28,7 @@ void ov40_0223A510(void *p, int msgId, int index) {
 
     if (msgId == 0x64) {
         u32 value = WORD(w, 0x194);
-        void *fmt = ov40_0222DAB0(0x6D);
+        void *fmt = VsRecorder_NewMessageFormat(0x6D);
         void *out = String_New(0xFF, 0x6D);
         void *name = FrontierCard_NewNameString(value, 0x6D);
         void *message;
@@ -43,7 +43,7 @@ void ov40_0223A510(void *p, int msgId, int index) {
         str = out;
     } else if (msgId == 0x66) {
         u32 value = WORD((u8 *)p + index * 4, 0x88C);
-        void *fmt = ov40_0222DAB0(0x6D);
+        void *fmt = VsRecorder_NewMessageFormat(0x6D);
         void *out = String_New(0xFF, 0x6D);
         void *name = FrontierCard_NewNameString(value, 0x6D);
         void *message;
@@ -84,8 +84,8 @@ int ov40_0223A640(void *p) {
         ++;
         // fallthrough
     case 1:
-        ov40_0222DA84((int *)w + 2, 1);
-        if (ov40_0222DA00(w, (int *)w + 1, 1, 0)) {
+        VsRecorder_StepFade((int *)w + 2, 1);
+        if (VsRecorder_StepBlend(w, (int *)w + 1, 1, 0)) {
             WORD(p, 8)
             ++;
         }

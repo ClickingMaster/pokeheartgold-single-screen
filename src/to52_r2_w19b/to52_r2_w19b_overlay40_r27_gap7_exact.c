@@ -14,7 +14,7 @@ int ov40_022325B0(void *p) {
         ++;
         break;
     case 1:
-        if (ov40_0222DA00(w, (u8 *)w + 4, 1, 1)) {
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 1, 1)) {
             WORD(p, 8)
             ++;
         }
@@ -35,7 +35,7 @@ int ov40_022325B0(void *p) {
         ++;
         break;
     case 3:
-        if (ov40_0222DA00(w, (u8 *)w + 4, 0, 1)) {
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 1)) {
             if (WORD(w, 0xC) == 0) {
                 ov40_0222E7DC((u8 *)w + 0x10, 1);
             } else {

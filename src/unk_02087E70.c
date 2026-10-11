@@ -17,7 +17,7 @@ int sub_02087E70(OverlayManager *manager, int *state, BOOL special) {
         if (work->value5C >= 7) {
             work->value5C = 0;
         }
-        work->result58 = ov40_0222DAC0(work);
+        work->result58 = VsRecorder_GetBlendColor(work);
     } else {
         work->result58 = 0x7FDD;
     }
@@ -53,7 +53,7 @@ int sub_02087F2C(OverlayManager *manager, int *state) {
     case 1:
         VsRecorder_DeleteDecorSprites(work);
         VsRecorder_DeleteMenuRowSprites(work);
-        ov40_0222D55C(work);
+        VsRecorder_FreeMenuRowText(work);
         (*state)++;
         break;
     case 2:

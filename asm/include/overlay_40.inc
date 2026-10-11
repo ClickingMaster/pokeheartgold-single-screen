@@ -332,8 +332,8 @@
 .public VsRecorder_DeleteDecorSprites
 .public VsRecorder_DestroyDecorTasks
 .public VsRecorder_DeleteMenuRowSprites
-.public ov40_0222D55C
-.public ov40_0222DAC0
+.public VsRecorder_FreeMenuRowText
+.public VsRecorder_GetBlendColor
 .public ov40_02244920
 .public ov40_02244B3C
 .public ov40_02244B70

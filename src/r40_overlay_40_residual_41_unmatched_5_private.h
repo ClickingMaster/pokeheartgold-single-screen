@@ -4,13 +4,13 @@
 #pragma require_prototypes off
 #define PTR(p, off)  (*(void **)((u8 *)(p) + (off)))
 #define WORD(p, off) (*(u32 *)((u8 *)(p) + (off)))
-void ov40_0222D88C(void *);
+void VsRecorder_RebuildMenuRowsParent(void *);
 void BgClearTilemapBufferAndCommit(void *, int);
 void ov40_0222FB90(void *, int);
 void *ov40_0222FBB4(void *);
-int ov40_0222DA84(void *, int);
-void ov40_0222DD08(void *);
-void ov40_0222DAA8(void *);
+int VsRecorder_StepFade(void *, int);
+void VsRecorder_ClearPaletteBlend(void *);
+void VsRecorder_ResetFade(void *);
 void PaletteData_BlendPalettes(void *, int, int, int, u16);
 void VsRecorder_SetScreenIfDone(void *, int, int, void *);
 void VsRecorder_SetSubState(void *, int);
@@ -18,7 +18,7 @@ void Heap_Free(void *);
 void SetBgPriority(int, int);
 void GfGfxLoader_LoadCharDataFromOpenNarc(void *, int, void *, int, int, int, int, int);
 void ov40_02230964(void *, int);
-void ov40_0222D874(void *);
+void VsRecorder_FreeMenuRows(void *);
 void BattleRecord_GetBattlerAndPartyCount(int, int *, int *);
 void *String_New(int, int);
 void *Heap_Alloc(int, int);

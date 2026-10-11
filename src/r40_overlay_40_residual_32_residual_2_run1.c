@@ -32,8 +32,8 @@ int ov40_02239EFC(void *p) {
         }
         break;
     case 1:
-        ov40_0222DA84((u8 *)w + 8, 0);
-        if (ov40_0222DA00(w, (u8 *)w + 4, 0, 0)) {
+        VsRecorder_StepFade((u8 *)w + 8, 0);
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 0)) {
             GfGfx_EngineATogglePlanes(4, 1);
             GfGfx_EngineBTogglePlanes(4, 1);
             WORD(p, 8)

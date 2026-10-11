@@ -16,8 +16,8 @@ typedef struct Ov40Work {
 
 void GfGfx_EngineBTogglePlanes(int plane, BOOL enable);
 void GfGfx_EngineATogglePlanes(int plane, BOOL enable);
-BOOL ov40_0222DA00(int *a, int *b, int c, int d);
-int ov40_0222DA84(int *p, int direction);
+BOOL VsRecorder_StepBlend(int *a, int *b, int c, int d);
+int VsRecorder_StepFade(int *p, int direction);
 void ov40_0223CE38(void *p);
 void BgClearTilemapBufferAndCommit(void *bgConfig, int bgId);
 void ov40_0223A510(void *p, int msgId, int arg);
@@ -38,7 +38,7 @@ void ov40_0222E7B8(void *obj, void *p);
 void ov40_0222E79C(void *obj, void *p);
 void ov40_0222E7DC(void *obj, int value);
 void ManagedSprite_SetAnim(void *sprite, int anim);
-void ov40_0222D66C(void *dst, void *src, int id);
+void VsRecorder_SetTextSpriteMsg(void *dst, void *src, int id);
 int ov40_0222FC14(void *a0, void *a1, u8 value);
 void ov40_022306E0(void *p);
 void ov40_0223077C(void *a0, void *a1, int a2, int a3);
@@ -60,12 +60,12 @@ void ov40_0222FCCC(void *p);
 void ov40_0222F734(void *p);
 void TouchHitboxController_Destroy(void *controller);
 void ov40_0223A83C(void *p);
-void ov40_0222DAA8(void *p);
-void ov40_0222D88C(void *p);
+void VsRecorder_ResetFade(void *p);
+void VsRecorder_RebuildMenuRowsParent(void *p);
 void sub_0203A948(int a, int heapId);
 void ov40_0222FB90(void *p, int value);
 BOOL ov40_0222FBB4(void *p);
-void ov40_0222DD08(void *p);
+void VsRecorder_ClearPaletteBlend(void *p);
 void VsRecorder_SetScreenIfDone(void *p, int a1, int a2, void *a3);
 void Heap_Free(void *p);
 BOOL BattleRecord_Exists(void);
@@ -85,7 +85,7 @@ int ov40_0223A874(void *p) {
         ++;
         break;
     case 1:
-        if (ov40_0222DA00(w, (int *)w + 1, 1, 2)) {
+        if (VsRecorder_StepBlend(w, (int *)w + 1, 1, 2)) {
             ov40_0223CE38(p);
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
@@ -94,8 +94,8 @@ int ov40_0223A874(void *p) {
         }
         break;
     case 2:
-        ov40_0222DA84((int *)w + 2, 0);
-        if (ov40_0222DA00(w, (int *)w + 1, 0, 2)) {
+        VsRecorder_StepFade((int *)w + 2, 0);
+        if (VsRecorder_StepBlend(w, (int *)w + 1, 0, 2)) {
             ov40_0223A510(p, 0x64, 0);
             GfGfx_EngineBTogglePlanes(4, TRUE);
             WORD(p, 8)
@@ -120,8 +120,8 @@ int ov40_0223A924(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((int *)w + 2, 1);
-        if (ov40_0222DA00(w, (int *)w + 1, 1, 2)) {
+        VsRecorder_StepFade((int *)w + 2, 1);
+        if (VsRecorder_StepBlend(w, (int *)w + 1, 1, 2)) {
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
             ov40_0223A510(p, 0x116, 0);
             ov40_022306E0(p);
@@ -195,9 +195,9 @@ int ov40_0223A924(void *p) {
         TouchHitboxController_Destroy(PTR(w, 0x18C));
         TouchHitboxController_Destroy(PTR(w, 0x190));
         ov40_0223A83C(p);
-        ov40_0222DAA8((u8 *)w + 8);
+        VsRecorder_ResetFade((u8 *)w + 8);
         ov40_02230964(p, (void *)1);
-        ov40_0222D88C(p);
+        VsRecorder_RebuildMenuRowsParent(p);
         ov40_02230964(p, NULL);
         sub_0203A948(1, 0x6D);
         ov40_0222FB90(p, 1);
@@ -206,9 +206,9 @@ int ov40_0223A924(void *p) {
         break;
     default:
         if (ov40_0222FBB4(p)) {
-            if (ov40_0222DA84((int *)w + 2, 0)) {
-                ov40_0222DD08(p);
-                ov40_0222DAA8((u8 *)w + 8);
+            if (VsRecorder_StepFade((int *)w + 2, 0)) {
+                VsRecorder_ClearPaletteBlend(p);
+                VsRecorder_ResetFade((u8 *)w + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, (u16)WORD(p, 0x58));
                 VsRecorder_SetScreenIfDone(p, 1, 1, PTR(p, 0x10));
                 VsRecorder_SetSubState(p, 5);
@@ -235,8 +235,8 @@ int ov40_0223AC24(void *p) {
 
     switch (WORD(p, 8)) {
     case 0:
-        ov40_0222DA84((int *)w + 2, 1);
-        if (ov40_0222DA00(w, (int *)w + 1, 1, 2)) {
+        VsRecorder_StepFade((int *)w + 2, 1);
+        if (VsRecorder_StepBlend(w, (int *)w + 1, 1, 2)) {
             GfGfxLoader_LoadScrnDataFromOpenNarc(PTR(p, 0x14), 0x54, PTR(p, 0x24), 7, 0, 0, 0, 0x6D);
             ov40_0223A510(p, 0x66, WORD(w, 0x2028));
             WORD(p, 8)
@@ -245,7 +245,7 @@ int ov40_0223AC24(void *p) {
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, (u8)WORD(w, 8), (u16)WORD(p, 0x58));
         break;
     case 1:
-        if (ov40_0222DA00(w, (int *)w + 1, 0, 2)) {
+        if (VsRecorder_StepBlend(w, (int *)w + 1, 0, 2)) {
             ov40_0223CD58(p);
             GfGfx_EngineBTogglePlanes(4, TRUE);
             WORD(p, 8)
@@ -273,8 +273,8 @@ int ov40_0223ACD0(Ov40Work *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((int *)w + 2, 1);
-        if (ov40_0222DA00(w, (int *)w + 1, 1, 0)) {
+        VsRecorder_StepFade((int *)w + 2, 1);
+        if (VsRecorder_StepBlend(w, (int *)w + 1, 1, 0)) {
             WORD(p, 8)
             ++;
         }
@@ -282,8 +282,8 @@ int ov40_0223ACD0(Ov40Work *p) {
         break;
     case 2:
         if (WORD(p, 0x86C) == 0xD2) {
-            ov40_0222D66C((u8 *)w + 0x114, (u8 *)p + 0x14, 3);
-            ov40_0222D66C((u8 *)w + 0x130, (u8 *)p + 0x14, 0x5E);
+            VsRecorder_SetTextSpriteMsg((u8 *)w + 0x114, (u8 *)p + 0x14, 3);
+            VsRecorder_SetTextSpriteMsg((u8 *)w + 0x130, (u8 *)p + 0x14, 0x5E);
             ManagedSprite_SetAnim(PTR(w, 0x118), 0);
             ManagedSprite_SetAnim(PTR(w, 0x134), 3);
         }
@@ -309,8 +309,8 @@ int ov40_0223ACD0(Ov40Work *p) {
         ++;
         break;
     case 3:
-        ov40_0222DA84((int *)w + 2, 0);
-        if (ov40_0222DA00(w, (int *)w + 1, 0, 0)) {
+        VsRecorder_StepFade((int *)w + 2, 0);
+        if (VsRecorder_StepBlend(w, (int *)w + 1, 0, 0)) {
             if (WORD(w, 0x10) == 0) {
                 ov40_022306A0((u8 *)w + 0x220, 1);
             } else {

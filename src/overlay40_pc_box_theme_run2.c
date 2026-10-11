@@ -97,7 +97,7 @@ void ov40_02239574(void *p) {
     void *str1;
     int species;
     str1 = String_New(0xFF, 0x6D);
-    mf = ov40_0222DAB0(0x6D);
+    mf = VsRecorder_NewMessageFormat(0x6D);
     FillWindowPixelBuffer((u8 *)w + 0x24, 0);
     if (WORD(w, 0x1C) == 0) {
         s = NewString_ReadMsgData(PTR(p, 0x4C), *((u8 *)PTR(w, 0x718) + WORD(w, 0xC) * 0x48) - 1);
@@ -180,10 +180,10 @@ void ov40_02239838(void *p) {
     ov40_0222D73C(p, 2);
     PTR(w, 0xA8) = ov40_0222D800(p, 2);
     PTR(w, 0xC4) = ov40_0222D800(p, 2);
-    ov40_0222D5AC((u8 *)w + 0xA4, (u8 *)p + 0x14, 2);
-    ov40_0222D5AC((u8 *)w + 0xC0, (u8 *)p + 0x14, 2);
-    ov40_0222D66C((u8 *)w + 0xA4, (u8 *)p + 0x14, 0x35);
-    ov40_0222D66C((u8 *)w + 0xC0, (u8 *)p + 0x14, 3);
+    VsRecorder_CreateTextSprite((u8 *)w + 0xA4, (u8 *)p + 0x14, 2);
+    VsRecorder_CreateTextSprite((u8 *)w + 0xC0, (u8 *)p + 0x14, 2);
+    VsRecorder_SetTextSpriteMsg((u8 *)w + 0xA4, (u8 *)p + 0x14, 0x35);
+    VsRecorder_SetTextSpriteMsg((u8 *)w + 0xC0, (u8 *)p + 0x14, 3);
     ManagedSprite_SetPositionXY(PTR(w, 0xA8), 0x20, 0xE8);
     ManagedSprite_SetPositionXY(PTR(w, 0xC4), 0x80, 0xE8);
     TextOBJ_SetPosition(PTR(w, 0xAC), 0x24, -8);
@@ -195,8 +195,8 @@ void ov40_02239838(void *p) {
 
 void ov40_022398F8(void *p) {
     void *w = PTR(p, 0x860);
-    ov40_0222D6D0((u8 *)w + 0xA4);
-    ov40_0222D6D0((u8 *)w + 0xC0);
+    VsRecorder_FreeTextSprite((u8 *)w + 0xA4);
+    VsRecorder_FreeTextSprite((u8 *)w + 0xC0);
     Sprite_DeleteAndFreeResources(PTR(w, 0xA8));
     Sprite_DeleteAndFreeResources(PTR(w, 0xC4));
     ov40_0222D7DC(p);
@@ -248,7 +248,7 @@ int ov40_022399B8(void *p) {
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
-    ov40_0222D9E8(w, (u8 *)w + 4, 0);
+    VsRecorder_InitBgBlend(w, (u8 *)w + 4, 0);
     PTR(w, 0xDC) = TouchHitboxController_Create(ov40_022453AC, 3, ov40_02239954, p, 0x6D);
     VsRecorder_SetSubState(p, 1);
     return 0;
@@ -258,7 +258,7 @@ int ov40_02239A58(void *p) {
     void *w = PTR(p, 0x860);
     switch (WORD(p, 8)) {
     case 0:
-        if (ov40_0222DA84((u8 *)w + 8, 1)) {
+        if (VsRecorder_StepFade((u8 *)w + 8, 1)) {
             WORD(p, 8) = WORD(p, 8) + 1;
         }
         PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, WORD(w, 8), WORD(p, 0x58));
@@ -267,7 +267,7 @@ int ov40_02239A58(void *p) {
         break;
     case 1:
         ov40_02230964(p, 1);
-        ov40_0222D874(p);
+        VsRecorder_FreeMenuRows(p);
         ov40_02239838(p);
         ov40_02230964(p, 0);
         SetBgPriority(0, 1);

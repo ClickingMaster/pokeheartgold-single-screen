@@ -11,7 +11,7 @@ void ov40_0222E7F0(void *windowData, void *owner) {
     if (country == 0 && city == 0) {
         str = NewString_ReadMsgData(OV40_PTR(owner, 0x48), 0x7D);
     } else {
-        fmt = ov40_0222DAB0(0x6D);
+        fmt = VsRecorder_NewMessageFormat(0x6D);
         if (city != 0) {
             str = String_New(0xFF, 0x6D);
             template = NewString_ReadMsgData(OV40_PTR(owner, 0x48), 0x17);

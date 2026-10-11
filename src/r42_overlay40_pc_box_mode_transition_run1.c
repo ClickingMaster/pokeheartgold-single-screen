@@ -30,8 +30,8 @@ int ov40_0223512C(void *work) {
         ++;
         break;
     case 2:
-        ov40_0222DA84((u8 *)inner + 8, 0);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 0, 0)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 0);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 0, 0)) {
             AccessoryPortrait_SetMonVisible(PTR(inner, 0x228), 1);
             GfGfx_EngineATogglePlanes(4, 1);
             GfGfx_EngineATogglePlanes(1, 1);
@@ -109,8 +109,8 @@ int ov40_0223534C(void *work) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)inner + 8, 1);
-        if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 0)) {
+        VsRecorder_StepFade((u8 *)inner + 8, 1);
+        if (VsRecorder_StepBlend(inner, (u8 *)inner + 4, 1, 0)) {
             if (PTR(inner, 0x228) != NULL) {
                 AccessoryPortrait_Destroy();
                 VsRecorder_ResetBg2(work);

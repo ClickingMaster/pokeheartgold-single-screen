@@ -64,7 +64,7 @@ int ov40_02232AF8(void *p) {
             ov40_022330B8(p);
         }
         ov40_02230964(p, 1);
-        ov40_0222D8C8(p);
+        VsRecorder_RebuildMenuRows(p);
         ov40_02230964(p, 0);
         VsRecorder_SetResumeScreen(p, *(void **)PTR(p, 0x10));
         sub_02087A84(PTR(p, 0x868), 1, 0);
@@ -96,8 +96,8 @@ int ov40_02232BD8(void *p) {
         ++;
         break;
     case 1:
-        ov40_0222DA84((u8 *)w + 8, 1);
-        if (ov40_0222DA00(w, (u8 *)w + 4, 1, 0)) {
+        VsRecorder_StepFade((u8 *)w + 8, 1);
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 1, 0)) {
             ov40_022330B8(p);
             WORD(p, 8)
             ++;
@@ -107,7 +107,7 @@ int ov40_02232BD8(void *p) {
     case 2:
         ov40_0222FB90(p, 1);
         ov40_02230964(p, 1);
-        ov40_0222D88C(p);
+        VsRecorder_RebuildMenuRowsParent(p);
         ov40_02230964(p, 0);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
@@ -118,9 +118,9 @@ int ov40_02232BD8(void *p) {
         break;
     default:
         if (ov40_0222FBB4()) {
-            if (ov40_0222DA84((u8 *)w + 8, 0)) {
-                ov40_0222DD08(p);
-                ov40_0222DAA8((u8 *)w + 8);
+            if (VsRecorder_StepFade((u8 *)w + 8, 0)) {
+                VsRecorder_ClearPaletteBlend(p);
+                VsRecorder_ResetFade((u8 *)w + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, WORD(p, 0x58));
                 VsRecorder_SetScreenIfDone(p, 1, 1, PTR(p, 0x10));
                 VsRecorder_SetSubState(p, 5);
@@ -166,8 +166,8 @@ int ov40_02232D44(void *p) {
         ++;
         break;
     case 3:
-        ov40_0222DA84((u8 *)w + 8, 0);
-        if (ov40_0222DA00(w, (u8 *)w + 4, 0, 0)) {
+        VsRecorder_StepFade((u8 *)w + 8, 0);
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 0)) {
             ov40_022306A0((u8 *)w + 0x9C, 1);
             ov40_02232F88(p);
             GfGfx_EngineATogglePlanes(4, 1);

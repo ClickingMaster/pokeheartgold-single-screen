@@ -11,12 +11,12 @@ int ov40_02232094(void *p) {
         WORD(p, 0x54) = 0;
         BYTE(p, 0x5C) = BYTE(p, 0x5C) + 1;
         BYTE(p, 0x5C) = BYTE(p, 0x5C) % 7;
-        WORD(p, 0x58) = ov40_0222DAC0(p);
+        WORD(p, 0x58) = VsRecorder_GetBlendColor(p);
         WORD(p, 8)
         ++;
         break;
     case 1:
-        if (ov40_0222DA84((u8 *)p + 0x54, 1)) {
+        if (VsRecorder_StepFade((u8 *)p + 0x54, 1)) {
             WORD(p, 8)
             ++;
         }
@@ -28,7 +28,7 @@ int ov40_02232094(void *p) {
     case 2:
         GfGfx_EngineATogglePlanes(0x10, 0);
         GfGfx_EngineBTogglePlanes(0x10, 0);
-        ov40_0222DBEC(p, BYTE(p, 0x5C));
+        VsRecorder_ReloadSchemePalettes(p, BYTE(p, 0x5C));
         PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xFFFF, WORD(p, 0x54), WORD(p, 0x58));
         PaletteData_BlendPalettes(PTR(p, 0x28), 0, 0xFFFF, WORD(p, 0x54), WORD(p, 0x58));
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xFFFF, WORD(p, 0x54), WORD(p, 0x58));
@@ -43,7 +43,7 @@ int ov40_02232094(void *p) {
         ++;
         break;
     case 4:
-        if (ov40_0222DA84((u8 *)p + 0x54, 0)) {
+        if (VsRecorder_StepFade((u8 *)p + 0x54, 0)) {
             WORD(p, 8)
             ++;
         }
@@ -68,7 +68,7 @@ int ov40_02232288(void *p) {
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
-    ov40_0222D9E8(w, (u8 *)w + 4, 0);
+    VsRecorder_InitBgBlend(w, (u8 *)w + 4, 0);
     VsRecorder_SetSubState(p, 1);
     return 0;
 }
@@ -79,7 +79,7 @@ int ov40_022322E0(void *p) {
 
     switch (WORD(p, 8)) {
     case 0:
-        if (ov40_0222DA84((u8 *)w + 8, 1)) {
+        if (VsRecorder_StepFade((u8 *)w + 8, 1)) {
             WORD(p, 8)
             ++;
         }
@@ -89,7 +89,7 @@ int ov40_022322E0(void *p) {
         break;
     case 1:
         ov40_02230964(p, 1);
-        ov40_0222D874(p);
+        VsRecorder_FreeMenuRows(p);
         ov40_02230964(p, 0);
         SetBgPriority(0, 0);
         SetBgPriority(1, 3);
@@ -161,8 +161,8 @@ int ov40_02232470(void *p) {
         ++;
         break;
     case 3:
-        ov40_0222DA84((u8 *)w + 8, 0);
-        if (ov40_0222DA00(w, (u8 *)w + 4, 0, 0)) {
+        VsRecorder_StepFade((u8 *)w + 8, 0);
+        if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 0)) {
             ov40_022306A0((u8 *)w + 0x9C, 1);
             ov40_02232F88(p);
             GfGfx_EngineATogglePlanes(4, 1);

@@ -4,8 +4,8 @@
 	.public ManagedSprite_SetAnim
 	.public ManagedSprite_SetPositionXY
 	.public TextOBJ_SetSpritesDrawFlag
-	.public ov40_0222D5AC
-	.public ov40_0222D66C
+	.public VsRecorder_CreateTextSprite
+	.public VsRecorder_SetTextSpriteMsg
 	.public ov40_0222D6EC
 	.public ov40_0222D800
 	.public ov40_02233044
@@ -32,14 +32,14 @@ ov40_02233044: ; 0x02233044
 	add r0, r4, r0
 	add r1, #0x14
 	mov r2, #2
-	bl ov40_0222D5AC
+	bl VsRecorder_CreateTextSprite
 	mov r0, #0x56
 	lsl r0, r0, #2
 	add r5, #0x14
 	add r0, r4, r0
 	add r1, r5, #0
 	mov r2, #3
-	bl ov40_0222D66C
+	bl VsRecorder_SetTextSpriteMsg
 	mov r0, #0x57
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]

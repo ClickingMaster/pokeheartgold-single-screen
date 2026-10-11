@@ -4,7 +4,7 @@ u32 ov40_02238838(void *p) {
     Ov40R31R6Work *w = PTR_AT(p, 0x860);
     switch (U32_AT(p, 8)) {
     case 0:
-        ov40_0222D980(&w->fadeA, &w->fadeB, 8, 0x12, 8, 0x12, 1);
+        VsRecorder_ApplyBlend(&w->fadeA, &w->fadeB, 8, 0x12, 8, 0x12, 1);
         ov40_02237564(p);
         ov40_02237410(p);
         ov40_022371A0(p);
@@ -20,7 +20,7 @@ u32 ov40_02238838(void *p) {
         ++;
         /* fall through */
     case 2:
-        if (!ov40_0222DA00(&w->fadeA, &w->fadeB, 1, 0)) {
+        if (!VsRecorder_StepBlend(&w->fadeA, &w->fadeB, 1, 0)) {
             break;
         }
         GfGfxLoader_LoadCharDataFromOpenNarc(PTR_AT(p, 0x14), 0x3E, PTR_AT(p, 0x24), 3, 0, 0, 0, 0x6D);
@@ -32,7 +32,7 @@ u32 ov40_02238838(void *p) {
         ++;
         break;
     default:
-        if (!ov40_0222DA00(&w->fadeA, &w->fadeB, 0, 0)) {
+        if (!VsRecorder_StepBlend(&w->fadeA, &w->fadeB, 0, 0)) {
             break;
         }
         ov40_02230964(p, 1);
@@ -75,13 +75,13 @@ u32 ov40_02238A50(void *p) {
         ov40_0222F920((u8 *)p + 0x49C, p);
         w->flag = 1;
         BgClearTilemapBufferAndCommit(PTR_AT(p, 0x24), 2);
-        ov40_0222D980(&w->fadeA, &w->fadeB, 8, 0x12, 8, 0x12, 1);
+        VsRecorder_ApplyBlend(&w->fadeA, &w->fadeB, 8, 0x12, 8, 0x12, 1);
         GfGfx_EngineATogglePlanes(4, 0);
         U32_AT(p, 8)
         ++;
         /* fall through */
     case 1:
-        if (!ov40_0222DA00(&w->fadeA, &w->fadeB, 1, 1)) {
+        if (!VsRecorder_StepBlend(&w->fadeA, &w->fadeB, 1, 1)) {
             break;
         }
         ov40_02236184(p, PTR_AT(p, 0x4D4));
@@ -95,7 +95,7 @@ u32 ov40_02238A50(void *p) {
         ++;
         break;
     case 2:
-        if (!ov40_0222DA00(&w->fadeA, &w->fadeB, 0, 1)) {
+        if (!VsRecorder_StepBlend(&w->fadeA, &w->fadeB, 0, 1)) {
             break;
         }
         ov40_0222E7DC(w->panel, 1);
@@ -125,7 +125,7 @@ u32 ov40_02238BB0(void *p) {
         ++;
         /* fall through */
     case 2:
-        if (!ov40_0222DA00(&w->fadeA, &w->fadeB, 1, 1)) {
+        if (!VsRecorder_StepBlend(&w->fadeA, &w->fadeB, 1, 1)) {
             break;
         }
         BgClearTilemapBufferAndCommit(PTR_AT(p, 0x24), 2);
@@ -136,7 +136,7 @@ u32 ov40_02238BB0(void *p) {
         ++;
         break;
     default:
-        if (!ov40_0222DA00(&w->fadeA, &w->fadeB, 0, 1)) {
+        if (!VsRecorder_StepBlend(&w->fadeA, &w->fadeB, 0, 1)) {
             break;
         }
         ov40_02230964(p, 1);

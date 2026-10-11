@@ -35,7 +35,7 @@ void String16_FormatInteger(void *str, int value, u32 digits, int mode, BOOL cha
 void StringExpandPlaceholders(void *format, void *dst, void *src);
 void *NewString_ReadMsgData(void *msgData, int msgId);
 
-void *ov40_0222DAB0(u32 heapId);
+void *VsRecorder_NewMessageFormat(u32 heapId);
 void BufferString(void *format, u32 index, void *str, u32 a3, u32 a4, u32 a5);
 void MessageFormat_ResetBuffers(void *format);
 void MessageFormat_Delete(void *format);
@@ -95,7 +95,7 @@ void ov40_0222FF74(void *work, void *p) {
     }
 
     trainerId = WORD(work, 0);
-    fmt = ov40_0222DAB0(0x6D);
+    fmt = VsRecorder_NewMessageFormat(0x6D);
     window = (u8 *)work + 0x3C;
     nameStr = FrontierCard_NewNameString(trainerId, 0x6D);
     ov40_02230DCC(p, nameStr);

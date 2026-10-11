@@ -1,6 +1,6 @@
 #pragma force_active on
 #include "global.h"
-extern void *ov40_0222DAB0(int),*NewString_ReadMsgData(void *,int),*String_New(int,int);
+extern void *VsRecorder_NewMessageFormat(int),*NewString_ReadMsgData(void *,int),*String_New(int,int);
 extern void String_Delete(void *),InitWindow(void *),FillWindowPixelBuffer(void *,int),ScheduleWindowCopyToVram(void *),MessageFormat_Delete(void *),MessageFormat_ResetBuffers(void *),StringExpandPlaceholders(void *,void *,void *),BufferString(void *,int,void *,int,int,int);
 extern int ov40_022306C0(void *,void *);
 extern void AddWindowParameterized(void *,void *,u8,u8,u8,u8,u8,u8,u16);
@@ -43,7 +43,7 @@ int ov40_0222F09C(State *w, Context *ctx, void *unused, u32 type, void *extra) {
         return 0;
     }
     win = &w->window;
-    fmt = ov40_0222DAB0(109);
+    fmt = VsRecorder_NewMessageFormat(109);
     FillWindowPixelBuffer(win, 0);
     row = 0;
     lastGroup = 0;

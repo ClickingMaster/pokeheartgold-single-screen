@@ -45,7 +45,7 @@ void ManagedSprite_SetPositionXY(ManagedSprite *, s16, s16);
 void ManagedSprite_SetAffineScale(ManagedSprite *, float, float);
 fx32 GF_SinDeg(u16);
 fx32 GF_CosDeg(u16);
-BOOL ov40_0222DA00(s32 *, s32 *, int, int);
+BOOL VsRecorder_StepBlend(s32 *, s32 *, int, int);
 SaveVarsFlags *Save_VarsFlags_Get(void *saveData);
 u16 Save_VarsFlags_GetBattleTowerPrintProgress(SaveVarsFlags *);
 u16 Save_VarsFlags_GetBattleFactoryPrintProgress(SaveVarsFlags *);

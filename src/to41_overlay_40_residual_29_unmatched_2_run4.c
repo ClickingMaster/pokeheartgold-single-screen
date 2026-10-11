@@ -12,8 +12,8 @@ int ov40_02236C64(void *p) {
         WORD(p, 8)
         ++;
     case 1:
-        ov40_0222DA84((u8 *)w + 0x1AC, 1);
-        if (ov40_0222DA00((u8 *)w + 0x1A4, (u8 *)w + 0x1A8, 1, 2)) {
+        VsRecorder_StepFade((u8 *)w + 0x1AC, 1);
+        if (VsRecorder_StepBlend((u8 *)w + 0x1A4, (u8 *)w + 0x1A8, 1, 2)) {
             ov40_022368EC(p, 0);
             GfGfxLoader_LoadScrnDataFromOpenNarc(PTR(p, 0x14), 0x4D, PTR(p, 0x24), 7, 0, 0, 0, 0x6D);
             WORD(p, 8)
@@ -22,8 +22,8 @@ int ov40_02236C64(void *p) {
         BLEND(p, w);
         break;
     case 2:
-        ov40_0222DA84((u8 *)w + 0x1AC, 0);
-        if (ov40_0222DA00((u8 *)w + 0x1A4, (u8 *)w + 0x1A8, 0, 2)) {
+        VsRecorder_StepFade((u8 *)w + 0x1AC, 0);
+        if (VsRecorder_StepBlend((u8 *)w + 0x1A4, (u8 *)w + 0x1A8, 0, 2)) {
             ov40_02237030(p, 0x10E);
             VsRecorder_SetSubState(p, 3);
         }

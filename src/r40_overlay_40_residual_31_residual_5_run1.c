@@ -34,7 +34,7 @@ u32 ov40_022383C8(void *p) {
         ++;
         /* fall through */
     case 1:
-        if (!ov40_0222DA00((u8 *)w + 0x1a4, (u8 *)w + 0x1a8, 1, 0)) {
+        if (!VsRecorder_StepBlend((u8 *)w + 0x1a4, (u8 *)w + 0x1a8, 1, 0)) {
             break;
         }
         GfGfxLoader_LoadScrnDataFromOpenNarc(PTR_AT(p, 0x14), 0x4f, PTR_AT(p, 0x24), 7, 0, 0, 0, 0x6d);
@@ -42,7 +42,7 @@ u32 ov40_022383C8(void *p) {
         ++;
         break;
     case 2:
-        if (!ov40_0222DA00((u8 *)w + 0x1a4, (u8 *)w + 0x1a8, 0, 2)) {
+        if (!VsRecorder_StepBlend((u8 *)w + 0x1a4, (u8 *)w + 0x1a8, 0, 2)) {
             break;
         }
         ov40_0222C710(p, 2);

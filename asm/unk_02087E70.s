@@ -61,7 +61,7 @@ _02087EB0:
 	strb r1, [r0]
 _02087ED8:
 	add r0, r4, #0
-	bl ov40_0222DAC0
+	bl VsRecorder_GetBlendColor
 	str r0, [r4, #0x58]
 	b _02087EE6
 _02087EE2:
@@ -143,7 +143,7 @@ _02087F5C:
 	add r0, r5, #0
 	bl VsRecorder_DeleteMenuRowSprites
 	add r0, r5, #0
-	bl ov40_0222D55C
+	bl VsRecorder_FreeMenuRowText
 	ldr r0, [r4]
 	add r0, r0, #1
 	str r0, [r4]
