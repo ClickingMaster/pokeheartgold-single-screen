@@ -78,7 +78,7 @@ extern u32 ov01_021F467C(u32, u32);
 extern void ov01_021F46DC(void *);
 extern void BeginNormalPaletteFade(int, int, int, u16, int, int, int);
 extern int IsPaletteFadeFinished(void);
-extern void sub_0200FBF4(int, u16);
+extern void SetMasterBrightnessByColor(int, u16);
 
 void ov116_0225F020(Ov116FieldSystem *, const Ov116CameraKey *);
 void ov116_0225F054(void *, Ov116Task *);

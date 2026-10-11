@@ -83,7 +83,7 @@ void ov83_02247844(void *);
 int sub_02037474(void);
 void G2dRenderer_SetObjCharTransferReservedRegion(int, int);
 void G2dRenderer_SetPlttTransferReservedRegion(int);
-void sub_0203A880(void);
+void WirelessStatusIcon_Create(void);
 void G2x_SetBlendAlpha_(u32, int, int, int, int);
 void Main_SetVBlankIntrCB(void (*)(void *), void *);
 void ov83_0223F690(void *);

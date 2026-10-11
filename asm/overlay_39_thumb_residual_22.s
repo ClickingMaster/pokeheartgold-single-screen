@@ -165,7 +165,7 @@ ov39_02228F18: ; 0x02228F18
 	beq _02228F28
 	bl sub_0203946C
 _02228F28:
-	bl sub_0203A914
+	bl WirelessStatusIcon_Destroy
 	add r0, r4, #0
 	bl ov39_02228AA8
 	mov r0, #6

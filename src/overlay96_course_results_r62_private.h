@@ -55,7 +55,7 @@ extern void Heap_Free(void *);
 extern void PokeathlonCourse_FreePtr4HeapAlloc(void *);
 extern void GfGfx_SwapDisplay(void);
 extern void Heap_Destroy(int);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern void GfGfx_SetBanks(const void *);
 extern void SetBothScreensModesAndDisable(const void *);
 extern void InitBgFromTemplate(void *, int, const void *, int);

@@ -7,7 +7,7 @@ typedef struct {
 } Work;
 extern void ov83_02244DF4(Work *, u16 *, u16 *, u16 *, u16 *);
 extern BOOL ov80_02237D8C(u8);
-extern BOOL sub_0203769C(void);
+extern BOOL Comm_GetLocalNetId(void);
 extern void ov83_02244AD8(Work *, Window *, int, int, u8);
 extern void ov83_02244B40(Work *, Window *, int, int, int);
 void ov83_02245584(Work *w, Window *win);
@@ -17,7 +17,7 @@ void ov83_02245584(Work *w, Window *win) {
     ov83_02244DF4(w, &x1, &y1, &x2, &y2);
     if (!ov80_02237D8C(w->unk9)) {
         ov83_02244AD8(w, win, (u16)(x1 + 4), (u16)(y1 + 1), 0);
-    } else if (!sub_0203769C()) {
+    } else if (!Comm_GetLocalNetId()) {
         int y = y1; y = (u16)(y + 1);
         ov83_02244AD8(w, win, x1, y, 0);
         ov83_02244B40(w, win, x2, (u16)(y2 + 1), 0);

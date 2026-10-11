@@ -22,7 +22,7 @@ sub_0205AA9C: ; 0x0205AA9C
 	bl sub_02035798
 	b _0205AACE
 _0205AAC2:
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	mov r1, #1
 	eor r0, r1
 	bl sub_02034818

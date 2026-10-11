@@ -14,7 +14,7 @@ typedef struct Ov81Work {
 } Ov81Work;
 
 int ov80_02236DD4(u8 mode);
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 void ov81_022410C8(int netId, int size, u16 *data, Ov81Work *work);
 
 // @fn ov81_022410C8
@@ -23,7 +23,7 @@ void ov81_022410C8(int netId, int size, u16 *data, Ov81Work *work) {
     int pos = 0;
 
     ov80_02236DD4(work->mode);
-    if (netId == sub_0203769C()) {
+    if (netId == Comm_GetLocalNetId()) {
         return;
     }
     work->count = data[0];

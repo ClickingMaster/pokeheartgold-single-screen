@@ -7,7 +7,7 @@ typedef struct Overlay05State {
 extern void PlaySE(int);
 extern void ManagedSprite_SetDrawFlag(void *, int);
 extern void sub_020880CC(int, void *);
-extern void sub_0203769C(void *);
+extern void Comm_GetLocalNetId(void *);
 extern int sub_020378AC(void);
 extern void DoScheduledBgGpuUpdates(void *);
 extern void PaletteData_PushTransparentBuffers(void *);
@@ -76,7 +76,7 @@ int ov05_0221C8A0(Overlay05State *);
 void ov05_0221D054(Overlay05State *);
 
 int ov05_0221CCF4(void *arg) {
-    sub_0203769C(arg);
+    Comm_GetLocalNetId(arg);
     switch (sub_020378AC()) {
     case 0:
     case 2:

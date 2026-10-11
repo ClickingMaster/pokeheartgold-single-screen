@@ -57,7 +57,7 @@ BOOL ov39_02228370(OverlayManager *manager) {
     TextFlags_SetCanABSpeedUpPrint(FALSE);
     TextFlags_SetAutoScrollParam(0);
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     OverlayManager_FreeData(manager);
     Heap_Destroy(HEAP_ID_124);
     gSystem.screensFlipped = 0;

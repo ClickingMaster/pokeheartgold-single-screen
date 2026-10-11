@@ -47,7 +47,7 @@ BOOL sub_02058D04(const void *p) {
 
 BOOL sub_02058D24(void) {
     int i;
-    int count = sub_02037454();
+    int count = Comm_CountConnected();
     i = 0;
     for (i = 0; i < count; i++) {
         if (sub_02037B5C(i) == 0x5E) {

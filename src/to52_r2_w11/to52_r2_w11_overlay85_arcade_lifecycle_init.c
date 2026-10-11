@@ -40,10 +40,10 @@ BOOL ov85_021E88AC(void *manager, int *state) {
         sub_02096CE0(args->unk_30);
         sub_0203897C();
         sub_02038C1C(3);
-        if (!sub_0203769C()) {
+        if (!Comm_GetLocalNetId()) {
             sub_0205A904(13);
         }
-        sub_0203A880();
+        WirelessStatusIcon_Create();
         scene->unk_030 = SysTask_CreateOnVBlankQueue(ov85_021E8BB0, scene, 5);
         NARC_Delete(narc);
         (*state)++;

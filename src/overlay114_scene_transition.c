@@ -65,7 +65,7 @@ void ov114_0225F020(void *task, Ov114Task *ctx) {
         }
         break;
     case 7:
-        sub_0200FBF4(1, 0);
+        SetMasterBrightnessByColor(1, 0);
         HBlankSystem_Start(*(void **)((u8 *)*(void **)((u8 *)ctx->fieldSystem + 4) + 0x1c));
         if (ctx->completionFlag != NULL) {
             *ctx->completionFlag = 1;
@@ -151,7 +151,7 @@ void ov114_0225F280(void *task, Ov114Task *ctx) {
         }
         break;
     case 7:
-        sub_0200FBF4(1, 0);
+        SetMasterBrightnessByColor(1, 0);
         HBlankSystem_Start(*(void **)((u8 *)*(void **)((u8 *)ctx->fieldSystem + 4) + 0x1c));
         if (ctx->completionFlag != NULL) {
             *ctx->completionFlag = 1;

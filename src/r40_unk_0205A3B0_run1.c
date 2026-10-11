@@ -8,7 +8,7 @@ void sub_0205A3B0(struct UnkStruct_02059E1C *work, int mode, int value) {
     case 0:
         if (work->unk44 == 0) {
             work->unk34 = data[2];
-            sub_02037030(0x63, &data[2], 1);
+            Comm_SendCommand(0x63, &data[2], 1);
         }
         break;
     case 1:

@@ -198,7 +198,7 @@ ov90_02258B54: ; 0x02258B54
 	mov r4, #0
 	cmp r0, #0
 	beq _02258B94
-	bl sub_02037454
+	bl Comm_CountConnected
 	ldrb r1, [r5, #8]
 	cmp r1, r0
 	beq _02258B6C

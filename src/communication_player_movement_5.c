@@ -13,7 +13,7 @@ void sub_020572AC(void *fieldSystem) {
 void sub_020572DC(int unused, void *fieldSystem) {
     if (sub_02037474()) {
         sub_020572AC(fieldSystem);
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             sub_0205712C(fieldSystem);
             sub_020570C8(fieldSystem);
         } else {
@@ -27,7 +27,7 @@ void sub_02057314(void *unused) {
     int i;
     u8 slot;
     for (i = 0; i < 8; i++) {
-        if (sub_020373B4((u16)i)) {
+        if (Comm_IsNetIdConnected((u16)i)) {
             sub_02057818(i);
         } else if (_021D41C4->raw[0x24 + i] != 0) {
             slot = i;
@@ -82,12 +82,12 @@ void sub_020573F0(void *fieldSystem, int value) {
     _021D41C4->raw[0xF1] = value;
     avatar = *(void **)((u8 *)fieldSystem + 0x40);
     if (avatar != NULL) {
-        ((CommPlayerManagerLayout *)_021D41C4)->avatars[sub_0203769C()] = avatar;
+        ((CommPlayerManagerLayout *)_021D41C4)->avatars[Comm_GetLocalNetId()] = avatar;
     }
-    if (sub_02037474() && sub_0203769C() == 0) {
+    if (sub_02037474() && Comm_GetLocalNetId() == 0) {
         sub_02057550(0, _021D41C4);
     }
-    if (sub_02037474() && sub_0203769C() == 0) {
+    if (sub_02037474() && Comm_GetLocalNetId() == 0) {
         sub_02057D74();
     }
 }

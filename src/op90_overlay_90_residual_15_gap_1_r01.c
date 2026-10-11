@@ -61,7 +61,7 @@ int sub_02037B38(int);
 void WifiConnection_StopVoiceChat(void);
 void ov90_02259F44(Ov90Obj *, s16);
 u32 ov90_02259B38(void *, int);
-void sub_02037030(int, void *, int);
+void Comm_SendCommand(int, void *, int);
 void ov90_0225A108(void *);
 void ov90_02259170(void *);
 void ScheduleSetBgPosText(void *, int, int, int);
@@ -178,7 +178,7 @@ void ov90_02259794(SysTask *task, Ov90Work *work) {
                 msg = ov90_02259B38(ov90_0225C1E4, 3);
                 break;
             }
-            sub_02037030(0x1A, &msg, 4);
+            Comm_SendCommand(0x1A, &msg, 4);
         }
         work->state++;
         break;

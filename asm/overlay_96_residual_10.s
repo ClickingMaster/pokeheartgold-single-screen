@@ -259,7 +259,7 @@ _021E87CC:
 	add r0, r6, #0
 	add r1, r7, #0
 	add r2, r5, #0
-	bl sub_02037030
+	bl Comm_SendCommand
 	pop {r3, r4, r5, r6, r7, pc}
 _021E87DE:
 	ldr r0, [r4, #4]

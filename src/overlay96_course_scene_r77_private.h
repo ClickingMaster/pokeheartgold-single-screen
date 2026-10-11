@@ -28,7 +28,7 @@ void ov96_021E95F8(void *, void *, int, u16, int, int, int);
 void ov96_021E966C(void *, void *, int, u16, int, int, int, int, int, int, int);
 void ov96_021E93B4(void *, int);
 void ov96_0221A56C(void *, int);
-void sub_0203A914(void);
+void WirelessStatusIcon_Destroy(void);
 void Main_SetVBlankIntrCB(void *, void *);
 void Main_SetHBlankIntrCB(void *, void *);
 void FreeBgTilemapBuffer(void *, int);

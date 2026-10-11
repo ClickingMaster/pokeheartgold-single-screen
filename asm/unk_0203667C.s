@@ -15,7 +15,7 @@ sub_0203667C: ; 0x0203667C
 	cmp r0, #0
 	beq _02036738
 	mov r0, #0
-	bl sub_020373B4
+	bl Comm_IsNetIdConnected
 	cmp r0, #0
 	beq _02036796
 	ldr r0, _02036798 ; =_021D4140
@@ -76,7 +76,7 @@ _020366F4:
 _02036714:
 	lsl r0, r4, #0x10
 	lsr r0, r0, #0x10
-	bl sub_020373B4
+	bl Comm_IsNetIdConnected
 	cmp r0, #0
 	beq _0203672E
 	ldr r0, [r7, #8]

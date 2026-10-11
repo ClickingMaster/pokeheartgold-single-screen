@@ -10,5 +10,5 @@
     }
 
 int ov70_02245124(void) {
-    return sub_0203A880();
+    return WirelessStatusIcon_Create();
 }

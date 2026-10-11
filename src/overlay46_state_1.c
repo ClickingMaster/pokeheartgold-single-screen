@@ -212,7 +212,7 @@ int ov46_02258CB4(void *manager) {
     ov46_022592EC(work + 0xA0, *(void **)(work + 0xC), 0, 0x320, 4, 4, 0x17, 0x10, 0x94, *(void **)work, 0x77);
     ov46_022592EC(work + 0x10, *(void **)(work + 0xC), 1, 0x30A, 5, 1, 0x16, 2, 0x204, *(void **)work, 0x77);
     ov46_022594E0(work + 0x10, 0x15);
-    sub_0203A880();
+    WirelessStatusIcon_Create();
     Main_SetVBlankIntrCB(ov46_02258F70, work);
     HBlankInterruptDisable();
     gSystem[0x69] = 1;

@@ -6,7 +6,7 @@ extern void GridInputHandler_Free(void *);
 extern void ov81_02241DDC(void *, int);
 extern void ov81_0223F320(void *);
 extern void BufferBoxMonSpeciesName(void *, ...);
-extern int sub_0203769C(void);
+extern int Comm_GetLocalNetId(void);
 extern void ov80_02237254(int);
 extern void Pokepic_SetAttr(void *, int, int);
 extern void Sprite_SetDrawFlag(void *, int);

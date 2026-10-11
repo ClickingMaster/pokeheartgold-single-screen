@@ -16,7 +16,7 @@ void *Save_PlayerData_GetProfile(void *);
 u32 PlayerProfile_GetTrainerGender(void *);
 void *Heap_Alloc(u32, u32);
 void Heap_Free(void *);
-void sub_0200FBF4(int, int);
+void SetMasterBrightnessByColor(int, int);
 void ov80_0223B424(void *, u32);
 void ov80_0223B440(void *, int, int, int, int, int, int, int, int);
 void Sound_SetSceneAndPlayBGM(int, int, int);

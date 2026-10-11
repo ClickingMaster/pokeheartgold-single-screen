@@ -30,7 +30,7 @@ typedef struct FadeBlankPair {
 } FadeBlankPair;
 
 void SetMasterBrightness(PMLCDTarget screen, int brightness);
-void sub_0200FBF4(PMLCDTarget screen, u16 color);
+void SetMasterBrightnessByColor(PMLCDTarget screen, u16 color);
 void sub_0200FE78(u32 *dst, u32 a1, u32 a2, u32 a3);
 void sub_0200FE84(FadeParam *dst, u32 a1, u32 a2, u32 a3, u32 a4, u32 a5, u32 a6, u32 a7, u32 a8, u32 a9, u16 color);
 void sub_0200FEB0(FadeBlankPair *data);

@@ -1,8 +1,8 @@
 #include "overlay_98_helpers_internal.h"
 
 void ov98_0221F090(void) {
-    sub_0200FBF4(0, 0);
-    sub_0200FBF4(1, 0);
+    SetMasterBrightnessByColor(0, 0);
+    SetMasterBrightnessByColor(1, 0);
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();

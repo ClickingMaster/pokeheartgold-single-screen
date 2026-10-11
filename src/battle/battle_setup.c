@@ -74,10 +74,10 @@ BattleSetup *BattleSetup_New(enum HeapID heapID, u32 battleTypeFlags) {
     setup->unk_19C = RngSeedFromRTC();
 
     if (sub_02037474() == TRUE) {
-        for (i = 0; i < sub_02037454(); ++i) {
+        for (i = 0; i < Comm_CountConnected(); ++i) {
             setup->unk_1A0[i] = sub_020378AC(i);
         }
-        setup->unk1B0 = sub_0203769C();
+        setup->unk1B0 = Comm_GetLocalNetId();
     }
     MI_CpuClear8(&setup->unk138, sizeof(setup->unk138));
     return setup;

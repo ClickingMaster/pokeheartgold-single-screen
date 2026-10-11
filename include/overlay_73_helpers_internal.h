@@ -6,7 +6,7 @@
 #define U32(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 extern int ov73_021E746C(void *);
-extern int sub_0203A880(void *);
+extern int WirelessStatusIcon_Create(void *);
 extern void *Save_GetPlayerMixingRankingEntry(void *, u32);
 extern u32 ov00_021EC9D4(void *);
 extern void *Save_FriendGroup_Get(void *);
@@ -42,7 +42,7 @@ extern u32 Save_WriteFileAsync(void *);
 extern u32 TextPrinterCheckActive(u8);
 extern void FreeBgTilemapBuffer(void *, u32);
 extern void ov73_021E6508(void *);
-extern u32 sub_0203769C(void);
+extern u32 Comm_GetLocalNetId(void);
 extern void EraseFrameAndWindow1(void *, u32);
 extern u8 gSystem[];
 extern void ov73_021E9FF8(void *, void *, u32, u32, u32);

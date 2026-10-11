@@ -23,12 +23,12 @@ typedef struct FourBytes {
 #define PTR(p, o) (*(void **)&((u8 *)(p))[o])
 
 extern const u8 _021054B4[];
-void *sub_0203410C(const void *, int, void *);
-int sub_0203769C(void);
+void *Comm_RegisterCommandTable(const void *, int, void *);
+int Comm_GetLocalNetId(void);
 void sub_02037108(int, const void *, int);
 void CopyWindowToVram(void *);
 void ov37_021E6FC8(void *, int, int);
-int sub_02037454(void);
+int Comm_CountConnected(void);
 int sub_02033250(void);
 int ov37_021E75E0(void);
 int MATH_CountPopulation(u32);

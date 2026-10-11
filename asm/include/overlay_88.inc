@@ -78,7 +78,7 @@
 .public String_GetLength
 .public String_CountLines
 .public String_GetLineN
-.public sub_0203A880
+.public WirelessStatusIcon_Create
 .public NNS_G2dInitOamManagerModule
 .public GX_LoadBGPltt
 .public DC_FlushRange

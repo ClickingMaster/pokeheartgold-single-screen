@@ -33,13 +33,13 @@ void sub_02096C60(int sender, int unused, const u16 *src, u8 *data);
 int ov80_022385D8(int value);
 
 void sub_02096910(void *data) {
-    sub_0203410C(_02108594, 52, data);
+    Comm_RegisterCommandTable(_02108594, 52, data);
 }
 
 void sub_02096924(int sender, int unused, const u16 *src, u8 *data) {
     u16 result = 0;
     data[0x8D4]++;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         data[0x12] = src[0];
         *(u16 *)(data + 0x16) = src[1];
         *(u16 *)(data + 0x18) = src[2];
@@ -57,7 +57,7 @@ void sub_02096924(int sender, int unused, const u16 *src, u8 *data) {
 
 BOOL sub_02096998(u8 *data) {
     MI_CpuCopy8(data + 0x3E, data + 0x83E, 0x1C);
-    if (sub_02037030(0x3F, data + 0x83E, 0x1C) == 1) {
+    if (Comm_SendCommand(0x3F, data + 0x83E, 0x1C) == 1) {
         return TRUE;
     }
     return FALSE;
@@ -65,7 +65,7 @@ BOOL sub_02096998(u8 *data) {
 
 void sub_020969C4(int sender, int unused, const void *src, u8 *data) {
     data[0x8D4]++;
-    if (sender != sub_0203769C() && sub_0203769C() != 0) {
+    if (sender != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         MI_CpuCopy8(src, data + 0x3E, 0x1C);
     }
 }
@@ -73,7 +73,7 @@ void sub_020969C4(int sender, int unused, const void *src, u8 *data) {
 void sub_020969F8(int sender, int unused, const u16 *src, u8 *data) {
     *(u16 *)(data + 0x8D8) = 0;
     data[0x8D4]++;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         if (((CommDataBits *)data)->flag != 0 || src[0] != 0) {
             *(u16 *)(data + 0x8D8) = 1;
         }
@@ -87,7 +87,7 @@ BOOL sub_02096A34(u8 *data) {
     stat = ov80_022385D8(data[0xA0]);
     frontier = Save_Frontier_GetStatic(*(SaveData **)data);
     *(u16 *)(data + 0xA) = FrontierSave_GetStat(frontier, stat, sub_0205C268(stat));
-    if (sub_02037030(0x39, data + 8, 0x28) == 1) {
+    if (Comm_SendCommand(0x39, data + 8, 0x28) == 1) {
         return TRUE;
     }
     return FALSE;
@@ -95,7 +95,7 @@ BOOL sub_02096A34(u8 *data) {
 
 void sub_02096A7C(int sender, int unused, const u16 *src, u8 *data) {
     data[0x6F]++;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         data[0x6E] = src[0];
         *(u16 *)(data + 0x72) = src[1];
     }
@@ -103,7 +103,7 @@ void sub_02096A7C(int sender, int unused, const u16 *src, u8 *data) {
 
 BOOL sub_02096AAC(u8 *data, u16 value) {
     *(u16 *)(data + 8) = value;
-    if (sub_02037030(0x3A, data + 8, 0x28) == 1) {
+    if (Comm_SendCommand(0x3A, data + 8, 0x28) == 1) {
         return TRUE;
     }
     return FALSE;
@@ -111,7 +111,7 @@ BOOL sub_02096AAC(u8 *data, u16 value) {
 
 void sub_02096ACC(int sender, int unused, const u16 *src, u8 *data) {
     data[0x6F]++;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         data[0x59] = src[0];
     }
 }
@@ -138,7 +138,7 @@ BOOL sub_02096AF4(u8 *data, u8 first, u8 second) {
     *(u16 *)(data + 0xA) = *(u16 *)(data + 0x7E);
     *(u16 *)(data + 0xC) = *(u16 *)(data + 0x78);
     *(u16 *)(data + 0xE) = *(u16 *)(data + 0x80);
-    if (sub_02037030(0x3B, data + 8, 0x28) == 1) {
+    if (Comm_SendCommand(0x3B, data + 8, 0x28) == 1) {
         return TRUE;
     }
     return FALSE;
@@ -146,7 +146,7 @@ BOOL sub_02096AF4(u8 *data, u8 first, u8 second) {
 
 void sub_02096BB8(int sender, int unused, const u16 *src, u8 *data) {
     data[0x6F]++;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         *(u16 *)(data + 0x86) = src[0];
         *(u16 *)(data + 0x8E) = src[1];
         *(u16 *)(data + 0x88) = src[2];
@@ -156,7 +156,7 @@ void sub_02096BB8(int sender, int unused, const u16 *src, u8 *data) {
 
 BOOL sub_02096BF8(u8 *data, u16 value) {
     *(u16 *)(data + 8) = value;
-    if (sub_02037030(0x3C, data + 8, 0x28) == 1) {
+    if (Comm_SendCommand(0x3C, data + 8, 0x28) == 1) {
         return TRUE;
     }
     return FALSE;
@@ -164,14 +164,14 @@ BOOL sub_02096BF8(u8 *data, u16 value) {
 
 void sub_02096C18(int sender, int unused, const u16 *src, u8 *data) {
     data[0x6F]++;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         *(u16 *)(data + 0x74) = src[0];
     }
 }
 
 BOOL sub_02096C40(u8 *data, u16 value) {
     *(u16 *)(data + 8) = value;
-    if (sub_02037030(0x3D, data + 8, 0x28) == 1) {
+    if (Comm_SendCommand(0x3D, data + 8, 0x28) == 1) {
         return TRUE;
     }
     return FALSE;
@@ -179,7 +179,7 @@ BOOL sub_02096C40(u8 *data, u16 value) {
 
 void sub_02096C60(int sender, int unused, const u16 *src, u8 *data) {
     data[0x6F]++;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         data[0x71] = src[0];
     }
 }

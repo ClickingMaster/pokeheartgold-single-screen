@@ -102,7 +102,7 @@ void *ov73_021E83F4(void *, u32, s32);
 void ov73_021E841C(void *, void *);
 
 int ov73_021EA12C(void *p) {
-    return sub_0203A880(p);
+    return WirelessStatusIcon_Create(p);
 }
 
 void ov73_021EA134(void *p, u32 n, u32 v) {

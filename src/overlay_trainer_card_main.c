@@ -154,8 +154,8 @@ int TrainerCardMainApp_Init(OverlayManager *manager, int *state) {
     GfGfx_DisableEngineBPlanes();
     reg_GX_DISPCNT &= 0xffffe0ff;
     reg_GXS_DB_DISPCNT &= 0xffffe0ff;
-    sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
-    sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
     ResetVisibleHardwareWindows(PM_LCD_TOP);
     ResetVisibleHardwareWindows(PM_LCD_BOTTOM);
     SetKeyRepeatTimers(4, 8);

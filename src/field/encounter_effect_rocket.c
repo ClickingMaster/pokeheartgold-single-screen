@@ -141,7 +141,7 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
         }
         break;
     case 7:
-        sub_0200FBF4(1, RGB_BLACK);
+        SetMasterBrightnessByColor(1, RGB_BLACK);
         HBlankSystem_Start(effect->fieldSystem->unk4->hBlankSystem);
         if (effect->done != NULL) {
             *effect->done = TRUE;

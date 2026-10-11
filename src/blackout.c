@@ -88,8 +88,8 @@ static void Blackout_DrawMessage(FieldSystem *fieldSystem, TaskManager *taskMana
     env->state = 0;
     env->fieldSystem = fieldSystem;
     env->bgConfig = BgConfig_Alloc(HEAP_ID_FIELD2);
-    sub_0200FBF4(PM_LCD_TOP, RGB_WHITE);
-    sub_0200FBF4(PM_LCD_BOTTOM, RGB_WHITE);
+    SetMasterBrightnessByColor(PM_LCD_TOP, RGB_WHITE);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_WHITE);
     ResetVisibleHardwareWindows(PM_LCD_TOP);
     ResetVisibleHardwareWindows(PM_LCD_BOTTOM);
     Blackout_InitDisplays(env->bgConfig);

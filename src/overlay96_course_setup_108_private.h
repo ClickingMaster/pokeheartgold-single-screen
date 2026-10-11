@@ -28,7 +28,7 @@ extern void ov96_0221236C(void *);
 extern BOOL ov96_021E667C(void *);
 extern void PokeathlonCourse_SetStateField07(void *, int);
 extern void BeginNormalPaletteFade(int, int, int, int, int, int, void *);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern void ov96_021E6550(void *);
 extern void FreeBgTilemapBuffer(void *, int);
 extern void ov96_02214234(void *);

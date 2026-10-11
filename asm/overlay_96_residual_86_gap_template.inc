@@ -293,7 +293,7 @@ ov96_02204E58: ; 0x02204E58
 	add r5, r0, #0
 	bl PokeathlonCourse_GetHeapAllocPtr4
 	add r4, r0, #0
-	bl sub_0203A914
+	bl WirelessStatusIcon_Destroy
 	mov r0, #0
 	add r1, r0, #0
 	bl Main_SetVBlankIntrCB

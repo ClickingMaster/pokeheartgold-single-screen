@@ -24,7 +24,7 @@
 .public sub_02034084
 .public sub_02034098
 .public sub_020340C4
-.public sub_0203410C
+.public Comm_RegisterCommandTable
 .public sub_02034154
 .public sub_02034170
 .public sub_020341DC
@@ -38,11 +38,11 @@
 .public sub_0203453C
 .public sub_020345D0
 .public sub_02037108
-.public sub_020373B4
+.public Comm_IsNetIdConnected
 .public sub_02037618
 .public sub_02037640
 .public sub_02037668
-.public sub_0203769C
+.public Comm_GetLocalNetId
 .public sub_020376E0
 .public sub_0203776C
 .public sub_02037974

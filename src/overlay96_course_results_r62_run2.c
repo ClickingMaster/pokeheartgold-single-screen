@@ -31,7 +31,7 @@ int ov96_021F7C70(void *course) {
     U8(gSystem, 0x69) = 0;
     GfGfx_SwapDisplay();
     Heap_Destroy(0x89);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     return 1;
 }
 

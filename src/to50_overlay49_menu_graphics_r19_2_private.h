@@ -49,7 +49,7 @@ void ObjCharTransfer_ClearBuffers(void);
 void ObjPlttTransfer_Reset(void);
 void G2dRenderer_SetObjCharTransferReservedRegion(u32, u32);
 void G2dRenderer_SetPlttTransferReservedRegion(u32);
-void sub_0203A880(void);
+void WirelessStatusIcon_Create(void);
 void *G2dRenderer_Init(u32, void *, u32);
 void G2dRenderer_SetSubSurfaceCoords(void *, u32, u32);
 void *Create2DGfxResObjMan(u32, u32, u32);

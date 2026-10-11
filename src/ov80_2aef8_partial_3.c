@@ -63,13 +63,13 @@ BOOL ov80_0222B5C8(void *ctx) {
     stat = sub_0205C1F0(p[0x10]);
     substat = sub_0205C268(sub_0205C1F0(p[0x10]));
     *(u16 *)(p + 0x3D6) = FrontierSave_GetStat(frontier, stat, substat);
-    return sub_02037030(0x2A, p + 0x3C0, 0x28) == 1;
+    return Comm_SendCommand(0x2A, p + 0x3C0, 0x28) == 1;
 }
 
 void ov80_0222B628(u32 sender, u32 a1, const u16 *payload, void *ctx) {
     u8 *p = ctx;
     p[0xA1A]++;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         *(u16 *)(p + 0xA16) = payload[1];
         *(u16 *)(p + 0xA12) = payload[2];
         *(u16 *)(p + 0xA1C) = payload[11];
@@ -85,14 +85,14 @@ BOOL ov80_0222B65C(void *ctx) {
         p += 2;
         i++;
     }
-    return sub_02037030(0x2B, base + 0x3C0, 0x28) == 1;
+    return Comm_SendCommand(0x2B, base + 0x3C0, 0x28) == 1;
 }
 
 void ov80_0222B690(u32 sender, u32 a1, const u16 *payload, void *ctx) {
     u8 *p = ctx;
     int i;
     p[0xA1A]++;
-    if (sender != sub_0203769C() && sub_0203769C() != 0) {
+    if (sender != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         for (i = 0; i < 14; i++) {
             *(u16 *)(p + 0x30) = *payload++;
             p += 2;
@@ -103,7 +103,7 @@ void ov80_0222B690(u32 sender, u32 a1, const u16 *payload, void *ctx) {
 BOOL ov80_0222B6C8(void *ctx) {
     u8 *p = ctx;
     *(u16 *)(p + 0x3C0) = p[0xA18];
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         if (p[0xA1B] == 0) {
             p[0xA1B] = p[0xA18];
         } else if (p[0xA1B] - 6 == 4 && p[0xA18] != 4) {
@@ -113,5 +113,5 @@ BOOL ov80_0222B6C8(void *ctx) {
         p[0xA1B] = p[0xA18] + 6;
     }
     *(u16 *)(p + 0x3C2) = p[0xA1B];
-    return sub_02037030(0x2C, p + 0x3C0, 0x28) == 1;
+    return Comm_SendCommand(0x2C, p + 0x3C0, 0x28) == 1;
 }

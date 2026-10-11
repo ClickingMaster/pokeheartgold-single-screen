@@ -23,11 +23,11 @@ _02075290:
 	ldr r1, [r4]
 	tst r0, r1
 	beq _020752A2
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	lsl r0, r0, #3
 	b _020752A8
 _020752A2:
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	lsl r0, r0, #2
 _020752A8:
 	add r0, r4, r0

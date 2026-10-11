@@ -3,7 +3,7 @@
 int sub_02057A34(int player) {
  u8 *p;
  if (_021D41C4 == 0) return 0xFFFF;
- if (player == sub_0203769C()) return *(u16 *)(_021D41C4->raw + player*8 + 0x74);
+ if (player == Comm_GetLocalNetId()) return *(u16 *)(_021D41C4->raw + player*8 + 0x74);
  if (sub_02057A0C()) {
   p=(u8 *)_021D41C4;
   if (*(p + player + 0x24) != 0) goto success;
@@ -16,7 +16,7 @@ success:
 int sub_02057A88(int player) {
  u8 *p;
  if (_021D41C4 == 0) return 0xFFFF;
- if (player == sub_0203769C()) return *(u16 *)(_021D41C4->raw + player*8 + 0x76);
+ if (player == Comm_GetLocalNetId()) return *(u16 *)(_021D41C4->raw + player*8 + 0x76);
  if (sub_02057A0C()) {
   p=(u8 *)_021D41C4;
   if (*(p + player + 0x24) != 0) goto success;

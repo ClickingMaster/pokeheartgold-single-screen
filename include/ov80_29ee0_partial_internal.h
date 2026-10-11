@@ -31,7 +31,7 @@ void Sprite_SetMatrix(void *, const VecFx32 *);
 int CalculateHpBarColor(int, int, int);
 void CopyU16StringArray(const u16 *, u16 *);
 u16 LCRandom(void);
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 void *sub_02034818(int);
 void BufferPlayersName(void *, int, void *);
 int PlayerProfile_GetTrainerGender(void *);

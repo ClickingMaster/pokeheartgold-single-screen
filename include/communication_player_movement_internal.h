@@ -33,8 +33,8 @@ extern CommPlayerState *_021D41C4;
 
 extern void Heap_Free(void *);
 extern void SysTask_Destroy(void *);
-extern int sub_0203769C(void);
-extern int sub_020373B4(int);
+extern int Comm_GetLocalNetId(void);
+extern int Comm_IsNetIdConnected(int);
 extern int sub_02037474(void);
 extern void sub_02037498(int);
 extern int sub_020376E0(int, void *);

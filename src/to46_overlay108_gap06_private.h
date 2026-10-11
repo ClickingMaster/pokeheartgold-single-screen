@@ -50,7 +50,7 @@ extern void _s32_div_f(s32, s32, s32 *, s32 *);
 extern void Main_SetVBlankIntrCB(void *, void *);
 extern void HBlankInterruptDisable(void);
 extern void GfGfx_DisableEngineAPlanes(void);
-extern void sub_0200FBF4(int, u16);
+extern void SetMasterBrightnessByColor(int, u16);
 extern void ResetVisibleHardwareWindows(int);
 extern void Camera_Delete(void *);
 extern void NARC_Delete(void *);

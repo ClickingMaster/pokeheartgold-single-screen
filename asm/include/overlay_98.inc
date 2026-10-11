@@ -40,7 +40,7 @@
 .public ManagedSprite_SetAnimSpeed
 .public ManagedSprite_SetDrawFlag
 .public ManagedSprite_SetPaletteOverride
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public sub_02014510
 .public Main_SetVBlankIntrCB
 .public HBlankInterruptDisable

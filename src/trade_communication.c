@@ -1,7 +1,7 @@
 #include "trade_communication_internal.h"
 
 void sub_0208F658(TradeContext *context) {
-    sub_0203410C(_02105430, 11, context);
+    Comm_RegisterCommandTable(_02105430, 11, context);
 }
 
 u32 sub_0208F66C(u32 slot) {
@@ -16,17 +16,17 @@ u32 sub_0208F66C(u32 slot) {
 
 void sub_0208F680(int sender, int unused, void *data, TradeContext *context) {
     TradeWork *work = context->work;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         memcpy(work->receive, data, 0x590);
         work->count++;
         if (work->count * 0x590 >= 0x590) {
-            if (sub_0203769C() == 1) {
+            if (Comm_GetLocalNetId() == 1) {
                 ov65_0221DE24(work, 27, 0);
             } else {
-                ov65_0221DE64(sub_0203769C(), work->send, work->sequence);
+                ov65_0221DE64(Comm_GetLocalNetId(), work->send, work->sequence);
             }
         } else {
-            ov65_0221DE64(sub_0203769C(), work->send, work->sequence);
+            ov65_0221DE64(Comm_GetLocalNetId(), work->send, work->sequence);
         }
         work->sequence++;
     }
@@ -34,7 +34,7 @@ void sub_0208F680(int sender, int unused, void *data, TradeContext *context) {
 
 void sub_0208F6F4(int sender, int unused, u8 *data, TradeContext *context) {
     TradeWork *work = context->work;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         work->selection = sub_0208F66C(*data);
     }
 }
@@ -63,7 +63,7 @@ void sub_0208F73C(int sender, int unused, u8 *data, TradeContext *context) {
 void sub_0208F74C(int sender, int unused, u8 *data, TradeContext *context) {
     u8 *ribbons = Save_SpecialRibbons_Get(context->saveData)->ribbons;
     int i;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         for (i = 0; i < 14; i++) {
             if (data[i] && ribbons[i] != data[i]) {
                 ribbons[i] = data[i];
@@ -74,7 +74,7 @@ void sub_0208F74C(int sender, int unused, u8 *data, TradeContext *context) {
 
 void sub_0208F77C(int sender, int unused, SavePalPad *data, TradeContext *context) {
     TradeWork *work = context->work;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         SavePalPad_Merge(work->palPad, data, 1, (enum HeapID)26);
         work->state = 3;
     }
@@ -82,7 +82,7 @@ void sub_0208F77C(int sender, int unused, SavePalPad *data, TradeContext *contex
 
 void sub_0208F7A8(int sender, int unused, void *data, TradeContext *context) {
     TradeWork *work = context->work;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         MIi_CpuCopyFast(data, work->packets[sender].data, 0x3e8);
         work->state = 4;
         sub_020378E4(0);

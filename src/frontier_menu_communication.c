@@ -88,7 +88,7 @@ void sub_02096CC8(void *ptr) {
     Heap_Free(menu);
 }
 void sub_02096CE0(Menu *menu) {
-    sub_0203410C(_0210884C, 0x87, menu);
+    Comm_RegisterCommandTable(_0210884C, 0x87, menu);
 }
 void sub_02096CF4(void *ptr) {
     Menu *menu = ptr;
@@ -104,7 +104,7 @@ BOOL sub_02096D14(Menu *menu, u32 command, void *data, u32 size) {
     packet = &menu->packet;
     packet->command = command;
     memcpy(packet->data, data, size);
-    return sub_02037030(0x82, packet, 24);
+    return Comm_SendCommand(0x82, packet, 24);
 }
 BOOL sub_02096D4C(Menu *menu, u32 command, void *data, u32 size) {
     if (menu->blocked == 1) {
@@ -132,7 +132,7 @@ void sub_02096DB4(int sender, int unused, void *data, Menu *menu) {
     menu->count++;
 }
 void sub_02096DBC(int sender, int unused, void *data, Menu *menu) {
-    if (sub_0203769C() != 0) {
+    if (Comm_GetLocalNetId() != 0) {
         menu->count = 0;
         menu->state = 1;
         ov85_021E9C84(menu->parent->field38, 31, (u8)sender);
@@ -145,7 +145,7 @@ void sub_02096DF4(int sender, int unused, void *data, Menu *menu) {
     Handshake *src = data;
     if (sender != 0) {
         Handshake packet;
-        if (sub_0203769C() != 0) {
+        if (Comm_GetLocalNetId() != 0) {
             return;
         }
         packet = *src;
@@ -153,12 +153,12 @@ void sub_02096DF4(int sender, int unused, void *data, Menu *menu) {
         packet.count = menu->participantCount;
         switch (src->command) {
         case 0:
-            if (menu->participantCount != sub_02037454() || menu->participantCount != sub_02096FFC() || menu->participantCount != MATH_CountPopulation(sub_02033250())) {
+            if (menu->participantCount != Comm_CountConnected() || menu->participantCount != sub_02096FFC() || menu->participantCount != MATH_CountPopulation(sub_02033250())) {
                 packet.accepted = 0;
             } else {
                 menu->participantMask |= 1 << sender;
                 packet.accepted = 1;
-                sub_02038C1C(sub_02037454());
+                sub_02038C1C(Comm_CountConnected());
             }
             break;
         case 1:
@@ -170,7 +170,7 @@ void sub_02096DF4(int sender, int unused, void *data, Menu *menu) {
     switch (src->command) {
     case 0: {
         int id = src->sender;
-        if (id != sub_0203769C()) {
+        if (id != Comm_GetLocalNetId()) {
             return;
         }
         if (src->accepted == 0) {
@@ -188,17 +188,17 @@ void sub_02096DF4(int sender, int unused, void *data, Menu *menu) {
 }
 void sub_02096ED0(int sender, int unused, void *data, Menu *menu) {
     ov85_021E9D9C(menu->parent->field38, 1, *(u8 *)data);
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         menu->unk34 = 0;
     }
 }
 void sub_02096EF0(int sender, int unused, void *data, Menu *menu) {
-    if (sub_0203769C() != 0) {
+    if (Comm_GetLocalNetId() != 0) {
         ov85_021E9C84(menu->parent->field38, 13, 0);
     }
 }
 void sub_02096F0C(int sender, int unused, void *data, Menu *menu) {
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         u8 id = sender;
         sub_02096D4C(menu, 0, &id, 1);
     }
@@ -219,7 +219,7 @@ void sub_02096F70(int sender, int unused, void *data, Menu *menu) {
     ov85_021E85C4(menu->parent->field34, *(u8 *)data);
 }
 void sub_02096F80(int sender, int unused, void *data, Menu *menu) {
-    if (sub_0203769C() != 0) {
+    if (Comm_GetLocalNetId() != 0) {
         ov85_021E85CC(menu->parent->field34, data);
     }
 }

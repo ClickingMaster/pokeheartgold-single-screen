@@ -96,7 +96,7 @@ void ov85_021E8358(BattleArcadeWork *work);
 void ov85_021E83C0(void *task, BattleArcadeWork *work);
 
 BOOL ov85_021E5FD0(BattleArcadeWork *work) {
-    sub_0203769C();
+    Comm_GetLocalNetId();
     work->unk_000 = 27;
     return FALSE;
 }

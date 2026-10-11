@@ -20,8 +20,8 @@ u32 ov37_021E5900(void *manager, u32 *state) {
         SetKeyRepeatTimers(4, 8);
         ov37_021E5CF0();
         ov37_021E5D10(work->bgConfig);
-        sub_0200FBF4(0, 0);
-        sub_0200FBF4(1, 0);
+        SetMasterBrightnessByColor(0, 0);
+        SetMasterBrightnessByColor(1, 0);
         BeginNormalPaletteFade(0, 0x11, 0x11, 0, 0x10, 1, 0x27);
         work->args = OverlayManager_GetArgs(manager);
         narc = NARC_New(0x4e, 0x27);
@@ -38,11 +38,11 @@ u32 ov37_021E5900(void *manager, u32 *state) {
         *(volatile u16 *)0x04000304 &= 0xffff7fff;
         sub_0208F814(work);
         sub_020398D4(0, 1);
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             sub_02038C1C(3);
         }
-        sub_0203A880();
-        if (sub_0203769C() == 0) {
+        WirelessStatusIcon_Create();
+        if (Comm_GetLocalNetId() == 0) {
             sub_0205A904(1);
             sub_020356EC(1);
         }

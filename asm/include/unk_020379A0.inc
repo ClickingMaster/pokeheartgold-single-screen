@@ -3,8 +3,8 @@
 .public Heap_Alloc
 .public Heap_Free
 .public sub_02037184
-.public sub_020373B4
-.public sub_0203769C
+.public Comm_IsNetIdConnected
+.public Comm_GetLocalNetId
 .public sub_020376E0
 .public sub_020379A0
 .public sub_020379F8

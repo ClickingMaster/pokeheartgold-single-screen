@@ -36,7 +36,7 @@ void ov80_022333F0(void *data, const void *ctx) {
     } else {
         GF_ASSERT(*(void **)(p + 0xA8) != NULL);
         GF_ASSERT(*(void **)(p + 0xAC) != NULL);
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             first = *(void **)(p + 0xA8);
             second = *(void **)(p + 0xAC);
         } else {

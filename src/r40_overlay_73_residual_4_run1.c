@@ -2,8 +2,8 @@
 
 int ov73_021E6444(void *p, int result) {
     sub_020398D4(0, 1);
-    if (sub_0203769C() == 0) {
-        if (sub_02037454() >= 2) {
+    if (Comm_GetLocalNetId() == 0) {
+        if (Comm_CountConnected() >= 2) {
             ov73_021E756C(p, 2, 0);
         }
     } else {
@@ -15,7 +15,7 @@ int ov73_021E6444(void *p, int result) {
 
 int ov73_021E6484(void *p, int result) {
     ov73_021E6508(p);
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         if (ov73_021E7340() != 1) {
             ov73_021E7468(p);
         }

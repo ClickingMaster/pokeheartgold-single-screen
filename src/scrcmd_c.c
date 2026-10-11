@@ -1853,7 +1853,7 @@ BOOL ScrCmd_153(ScriptContext *ctx) {
 
 BOOL ScrCmd_451(ScriptContext *ctx) {
     u16 *p_dest = ScriptGetVarPointer(ctx);
-    *p_dest = sub_0203769C();
+    *p_dest = Comm_GetLocalNetId();
     return TRUE;
 }
 
@@ -2657,7 +2657,7 @@ BOOL ScrCmd_257(ScriptContext *ctx) {
 }
 
 BOOL sub_02044054(ScriptContext *ctx) {
-    if (sub_02037454() < 2) {
+    if (Comm_CountConnected() < 2) {
         return TRUE;
     } else {
         return sub_02037B38(ctx->data[0]);
@@ -2692,7 +2692,7 @@ BOOL ScrCmd_261(ScriptContext *ctx) {
     } else if (command == 11) {
         sub_02038104();
     }
-    if (!sub_0203769C()) {
+    if (!Comm_GetLocalNetId()) {
         sub_0205A904(command);
     }
     return FALSE;
@@ -2730,7 +2730,7 @@ BOOL ScrCmd_266(ScriptContext *ctx) {
 }
 
 BOOL sub_020441C4(ScriptContext *ctx) {
-    return sub_02037454() < 2;
+    return Comm_CountConnected() < 2;
 }
 
 BOOL ScrCmd_267(ScriptContext *ctx) {
@@ -4080,12 +4080,12 @@ BOOL ScrCmd_576(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_577(ScriptContext *ctx) {
-    sub_0203A880();
+    WirelessStatusIcon_Create();
     return FALSE;
 }
 
 BOOL ScrCmd_578(ScriptContext *ctx) {
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     return FALSE;
 }
 

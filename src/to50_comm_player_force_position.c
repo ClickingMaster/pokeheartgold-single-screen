@@ -12,7 +12,7 @@ void CommPlayerManager_ForcePosition(void) {
         int z;
         int facing;
 
-        if (((CommPlayerManagerLayout *)_021D41C4)->avatars[i] != NULL && i != sub_0203769C()) {
+        if (((CommPlayerManagerLayout *)_021D41C4)->avatars[i] != NULL && i != Comm_GetLocalNetId()) {
             object = PlayerAvatar_GetMapObject(((CommPlayerManagerLayout *)_021D41C4)->avatars[i]);
             x = ((CommPlayerPositionLayout *)_021D41C4)->remote[i].x;
             z = ((CommPlayerPositionLayout *)_021D41C4)->remote[i].z;

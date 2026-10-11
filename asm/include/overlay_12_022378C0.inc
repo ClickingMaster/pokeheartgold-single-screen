@@ -66,7 +66,7 @@
 .public WaitingIcon_New
 .public WaitingIcon_Delete
 .public SetMasterBrightnessNeutral
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public sub_02014DA0
 .public sub_02014F84
 .public sub_020163E0
@@ -128,8 +128,8 @@
 .public GameStats_Inc
 .public sub_020302A4
 .public sub_02035650
-.public sub_02037454
-.public sub_0203769C
+.public Comm_CountConnected
+.public Comm_GetLocalNetId
 .public sub_020378AC
 .public sub_02037930
 .public sub_02037AC0
@@ -138,8 +138,8 @@
 .public sub_020399FC
 .public sub_02039AD8
 .public sub_02039F68
-.public sub_0203A880
-.public sub_0203A914
+.public WirelessStatusIcon_Create
+.public WirelessStatusIcon_Destroy
 .public sub_0203A930
 .public GetMonData
 .public SetMonData

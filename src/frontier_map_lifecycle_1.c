@@ -23,7 +23,7 @@ extern void Heap_Destroy(int);
 extern void TextFlags_SetCanABSpeedUpPrint(int);
 extern void TextFlags_SetAutoScrollParam(int);
 extern void TextFlags_SetCanTouchSpeedUpPrint(int);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 void FrontierMap_Free(FrontierMap *);
 
 extern void *Save_PlayerData_GetProfile(void *);
@@ -59,7 +59,7 @@ extern u32 ov80_0222ACA0(u32, u32);
 extern void Sound_SetFieldBGM(u16);
 extern void sub_02055198(int, u16);
 extern void ov80_0222AD9C(FrontierMap *, void *, u8);
-extern void sub_0203A880(void);
+extern void WirelessStatusIcon_Create(void);
 void *FrontierMap_Init(void *);
 
 void *FrontierMap_Init(void *frontier) {
@@ -126,7 +126,7 @@ void *FrontierMap_Init(void *frontier) {
     Main_SetVBlankIntrCB(FrontierMap_VBlank, m);
     *(void **)((u8 *)m + 0xa0) = SysTask_CreateOnVBlankQueue(ov80_02238AAC, m, 10);
     ov80_0222AD9C(m, (u8 *)m + 0x90, *(u8 *)((u8 *)m + 0xc1));
-    sub_0203A880();
+    WirelessStatusIcon_Create();
     return m;
 }
 
@@ -165,7 +165,7 @@ void FrontierMap_Free(FrontierMap *m) {
     TextFlags_SetCanABSpeedUpPrint(0);
     TextFlags_SetAutoScrollParam(0);
     TextFlags_SetCanTouchSpeedUpPrint(0);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     MIi_CpuClear16(0x7fff, (u16 *)0x05000000, 0x200);
     MIi_CpuClear16(0x7fff, (u16 *)0x05000200, 0x200);
     MIi_CpuClear16(0x7fff, (u16 *)0x05000400, 0x200);

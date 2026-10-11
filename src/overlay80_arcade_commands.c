@@ -141,7 +141,7 @@ BOOL FrtCmd_179(FrontierScriptContextPrivate *ctx) {
     selection = backup.fields.selection;
     data->selection = selection;
     data->flags = (data->flags & ~0xE0) | (((u8)(selection + 5) & 7) << 5);
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         FrontierFieldSystem_SetRandomFrontierTrainers(data, args->saveData);
     }
     HealParty(SaveArray_Party_Get(args->saveData));

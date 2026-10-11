@@ -12,7 +12,7 @@ int ov70_022408FC(Ov70Work *work) {
 
 int ov70_02240948(Ov70Work *work) {
     ov70_02238F80(work);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     if (work->unk11FC == 1) {
         BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, 0x3d);
     } else {

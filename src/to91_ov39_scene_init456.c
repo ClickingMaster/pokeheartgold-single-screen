@@ -32,6 +32,6 @@ int ov39_02228140(OverlayManager*manager,int*state){Scene*w;
  {MessageFormat *format=MessageFormat_New_Custom(11,64,(enum HeapID)124);w->format=format;}w->messages.one=NewMsgDataFromNarc((MsgDataLoadType)0,(NarcId)27,0x307,(enum HeapID)124);w->messages.two=NewMsgDataFromNarc((MsgDataLoadType)0,(NarcId)27,0x30a,(enum HeapID)124);w->messages.three=NewMsgDataFromNarc((MsgDataLoadType)0,(NarcId)27,0x320,(enum HeapID)124);
  w->string1=String_New(180,(enum HeapID)124);w->string3=String_New(256,(enum HeapID)124);w->string2=NewString_ReadMsgData(w->messages.one,31);ov39_022285CC(w);ov39_022288A0(w);BeginNormalPaletteFade(FADE_BOTH_SCREENS,FADE_TYPE_BRIGHTNESS_IN,FADE_TYPE_BRIGHTNESS_IN,0,6,1,(enum HeapID)124);
  GfGfx_EngineATogglePlanes(16,1);GfGfx_EngineATogglePlanes(1,1);GfGfx_EngineATogglePlanes(2,1);GfGfx_EngineBTogglePlanes(1,1);GfGfx_EngineBTogglePlanes(2,1);B((u8*)&gSystem+0x60,9)=1;GfGfx_SwapDisplay();TextFlags_SetCanABSpeedUpPrint(1);TextFlags_SetAutoScrollParam(0);TextFlags_SetCanTouchSpeedUpPrint(1);Main_SetVBlankIntrCB(ov39_02228418,w);
- if(P(w->args,4)){sub_0203A880();ov39_02228B6C(w,13,8);}else {if(P(P(w->args,0),8)!=NULL)w->mode=1;else w->mode=0;}
+ if(P(w->args,4)){WirelessStatusIcon_Create();ov39_02228B6C(w,13,8);}else {if(P(P(w->args,0),8)!=NULL)w->mode=1;else w->mode=0;}
  w->textSpeed=Options_GetTextFrameDelay(Save_PlayerData_GetOptionsAddr(P(P(w->args,0),4)));U(w->args,0x7c)=0;return 1;
 }

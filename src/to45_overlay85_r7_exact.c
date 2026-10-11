@@ -43,7 +43,7 @@ int ov85_021E60F0(Ov85R7Work *work) {
 int ov85_021E61C8(Ov85R7Work *work) {
     ov85_021E84EC(work, 0);
     PTR_AT(work, 0x28) = ov85_021E7958(work);
-    if (S32_AT(PTR_AT(work, 0x28), 0xc) == sub_0203769C()) {
+    if (S32_AT(PTR_AT(work, 0x28), 0xc) == Comm_GetLocalNetId()) {
         U32_AT(work, 0) = 30;
     } else {
         U32_AT(work, 0) = 31;
@@ -55,7 +55,7 @@ int ov85_021E61C8(Ov85R7Work *work) {
 int ov85_021E61FC(Ov85R7Work *work) {
     ov85_021E8558(work, 0x4000);
     PTR_AT(work, 0x28) = ov85_021E7958(work);
-    if (S32_AT(PTR_AT(work, 0x28), 0xc) != sub_0203769C()) {
+    if (S32_AT(PTR_AT(work, 0x28), 0xc) != Comm_GetLocalNetId()) {
         U32_AT(work, 0) = 31;
     }
     return FALSE;

@@ -34,5 +34,5 @@ void ov65_0221BFBC(void *, u32, u32, u32, u32, void *);
 
 int ov65_0221DE10(u32 unused, u32 n, u8 v) {
     u8 x = v;
-    return sub_02037030(n, &x, 1);
+    return Comm_SendCommand(n, &x, 1);
 }

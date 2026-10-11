@@ -142,7 +142,7 @@ void sub_02091570() {
 }
 
 void sub_02091574(void *arg0) {
-    sub_0203410C(&sUnkTable_02106078, NELEMS(sUnkTable_02106078), arg0);
+    Comm_RegisterCommandTable(&sUnkTable_02106078, NELEMS(sUnkTable_02106078), arg0);
 }
 
 u32 sub_02091588() {

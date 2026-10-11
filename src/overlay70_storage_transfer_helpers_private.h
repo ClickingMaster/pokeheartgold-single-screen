@@ -197,7 +197,7 @@ int Save_WriteFileAsync(void *);
 void ov70_02238E50(Ov70Work *, int, int);
 void ov70_02238F80(Ov70Work *);
 void ov70_02244FA4(Ov70Work *, void *, int, int, int);
-void sub_0203A914(void);
+void WirelessStatusIcon_Destroy(void);
 int TextPrinterCheckActive(u8);
 void BeginNormalPaletteFade(int, int, int, int, int, int, int);
 void ov00_021ECB94(void *, void *);

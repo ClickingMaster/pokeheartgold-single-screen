@@ -182,7 +182,7 @@ void ov70_0223CDD8(Ov70Work *work) {
 }
 
 int ov70_0223CDF8(Ov70Work *work) {
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     if (GXx_GetMasterBrightness_((volatile u16 *)0x0400106C)) {
         ov70_02241380(work);
     }

@@ -41,7 +41,7 @@
 .public ClearFrameAndWindow2
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public YesNoPrompt_Create
 .public YesNoPrompt_Destroy
 .public YesNoPrompt_InitFromTemplate
@@ -107,10 +107,10 @@
 .public sub_02033250
 .public sub_02034818
 .public sub_020356EC
-.public sub_02037030
+.public Comm_SendCommand
 .public sub_02037108
-.public sub_02037454
-.public sub_0203769C
+.public Comm_CountConnected
+.public Comm_GetLocalNetId
 .public sub_0203783C
 .public sub_02037854
 .public sub_02037AC0
@@ -118,7 +118,7 @@
 .public sub_02037FF0
 .public sub_02038C1C
 .public sub_020398D4
-.public sub_0203A880
+.public WirelessStatusIcon_Create
 .public sub_0205A904
 .public sub_0205AD24
 .public sub_0208F814

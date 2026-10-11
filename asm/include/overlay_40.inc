@@ -238,8 +238,8 @@
 .public sub_02031700
 .public sub_0203A4AC
 .public sub_0203A86C
-.public sub_0203A880
-.public sub_0203A914
+.public WirelessStatusIcon_Create
+.public WirelessStatusIcon_Destroy
 .public sub_0203A948
 .public Save_VarsFlags_Get
 .public Save_VarsFlags_GetBattleFactoryPrintProgress

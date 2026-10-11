@@ -108,8 +108,8 @@ static void TitleScreenAnim_FadeInGameTitleLayer(TitleScreenAnimData *animData);
 const OverlayManagerTemplate gApplication_TitleScreen = { TitleScreen_Init, TitleScreen_Main, TitleScreen_Exit, FS_OVERLAY_ID_NONE };
 
 static BOOL TitleScreen_Init(OverlayManager *man, int *state) {
-    sub_0200FBF4(PM_LCD_TOP, RGB_WHITE);
-    sub_0200FBF4(PM_LCD_BOTTOM, RGB_WHITE);
+    SetMasterBrightnessByColor(PM_LCD_TOP, RGB_WHITE);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_WHITE);
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
     GfGfx_DisableEngineAPlanes();

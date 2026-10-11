@@ -208,7 +208,7 @@ static void IntroMovie_Scene3_Show2DGfx(IntroMovieScene3Data *sceneData, BgConfi
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     BG_SetMaskColor(GF_BG_LYR_MAIN_0, RGB_BLACK);
     BG_SetMaskColor(GF_BG_LYR_SUB_0, RGB_BLACK);
-    sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
 }
 
 static BOOL IntroMovie_Scene3_Main(IntroMovieOverlayData *data, IntroMovieScene3Data *sceneData, int totalFrames) {

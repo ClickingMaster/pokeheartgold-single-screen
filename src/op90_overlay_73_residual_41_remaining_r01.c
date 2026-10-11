@@ -15,7 +15,7 @@ typedef struct Entry73 {
     void (*func)(Args73 *args);
 } Entry73;
 extern const Entry73 ov73_021EA744[];
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 BOOL sub_02034818(int idx);
 void *sub_020270C4(SaveData *saveData);
 void sub_0202E43C(void *p);
@@ -39,7 +39,7 @@ void ov73_021EA3D0(SaveData *saveData, u8 (*buffer)[0xBC0]) {
     args.unk00 = 50;
     offset = 0;
     args.saveData = saveData;
-    args.unk0C = sub_0203769C();
+    args.unk0C = Comm_GetLocalNetId();
     args.unk08 = 5;
     args.records = records;
     args.records2 = records2;

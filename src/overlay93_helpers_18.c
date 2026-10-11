@@ -32,9 +32,9 @@ extern void *OverlayManager_GetData(void *);
 extern void *OverlayManager_GetArgs(void *);
 extern void OverlayManager_FreeData(void *);
 extern void BgClearTilemapBufferAndCommit(void *, u32);
-extern u32 sub_02037030(u32, void *, u32);
-extern void sub_0203410C(const u32 *, u32, void *);
-extern u32 sub_0203769C(void);
+extern u32 Comm_SendCommand(u32, void *, u32);
+extern void Comm_RegisterCommandTable(const u32 *, u32, void *);
+extern u32 Comm_GetLocalNetId(void);
 
 /* ------------------------------------------------------------------ */
 /* Forward declarations for everything defined in this file.           */

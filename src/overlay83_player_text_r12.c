@@ -17,7 +17,7 @@ void ov83_02240C8C(void *work, void *window, u32 x, u32 y, u8 fontId) {
 }
 
 void ov83_02240CFC(void *work, void *window, u32 x, u32 y) {
-    void *profile = sub_02034818(sub_0203769C(work) ^ 1);
+    void *profile = sub_02034818(Comm_GetLocalNetId(work) ^ 1);
     u32 color;
 
     if (PlayerProfile_GetTrainerGender(profile) == 0) {

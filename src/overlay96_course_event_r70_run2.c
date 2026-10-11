@@ -32,7 +32,7 @@ BOOL ov96_021F9CC4(void *course) {
 BOOL ov96_021F9D58(void *course) {
     u8 *work = PokeathlonCourse_GetHeapAllocPtr4(course);
 
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     ov96_021E87B0(PokeathlonCourse_GetSystem(course), 0);
     ov96_021FC1A8(*(void **)(work + 0x228));
     PokeathlonCourse_ResetField3A4(course);

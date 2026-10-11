@@ -4,12 +4,12 @@
 .public Heap_Free
 .public GF_AssertFail
 .public sub_02033250
-.public sub_0203410C
+.public Comm_RegisterCommandTable
 .public sub_020342C0
 .public sub_02034818
-.public sub_02037030
-.public sub_02037454
-.public sub_0203769C
+.public Comm_SendCommand
+.public Comm_CountConnected
+.public Comm_GetLocalNetId
 .public sub_02037FF0
 .public sub_02038C1C
 .public sub_0205A904

@@ -101,8 +101,8 @@ int TrainerCardSignature_Init(OverlayManager *manager, int *state) {
 
     switch (*state) {
     case 0:
-        sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
-        sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+        SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
+        SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
         Main_SetVBlankIntrCB(NULL, NULL);
         HBlankInterruptDisable();
         GfGfx_DisableEngineAPlanes();

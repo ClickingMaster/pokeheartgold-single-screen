@@ -21,7 +21,7 @@ void ov80_0223AF60(void *);
 void ClearWindowTilemapAndCopyToVram(Window *);
 void RemoveWindow(Window *);
 void WindowArray_Delete(Window *, u32);
-void sub_0200FBF4(u32, u32);
+void SetMasterBrightnessByColor(u32, u32);
 void BG_ClearCharDataRange(u32, u32, u32, u32);
 void BgClearTilemapBufferAndCommit(void *, u32);
 BOOL ov80_0222D390(void *);

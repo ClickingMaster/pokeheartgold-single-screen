@@ -21,7 +21,7 @@ void ov81_022408C4(void *save, void *window, int x, int y, u8 font) {
 }
 
 void ov81_0224093C(void *unused, void *window, int x, int y, u8 font) {
-    void *profile = sub_02034818(1 - sub_0203769C());
+    void *profile = sub_02034818(1 - Comm_GetLocalNetId());
     void *string = String_New(8, 0x64);
     u32 color;
     FillWindowPixelBuffer(window, 0);

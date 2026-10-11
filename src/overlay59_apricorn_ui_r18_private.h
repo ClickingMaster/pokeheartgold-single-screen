@@ -49,7 +49,7 @@ void Main_SetVBlankIntrCB(void *, void *);
 void HBlankInterruptDisable(void);
 void GfGfx_DisableEngineAPlanes(void);
 void GfGfx_DisableEngineBPlanes(void);
-void sub_0200FBF4(int, int);
+void SetMasterBrightnessByColor(int, int);
 void ResetVisibleHardwareWindows(int);
 int sub_02031C08(void *);
 int sub_02031CE8(void *);

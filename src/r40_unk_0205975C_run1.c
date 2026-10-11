@@ -9,7 +9,7 @@ BOOL sub_0205975C(void *p) {
     if (U16(p, 0x86) == 0) {
         ok = sub_02037108(0x6B, (u8 *)p + 0x84, 1);
     } else {
-        ok = sub_02037030(0x6B, (u8 *)p + 0x84, 1);
+        ok = Comm_SendCommand(0x6B, (u8 *)p + 0x84, 1);
     }
     if (ok) {
         U8(p, 0x89) = 1 | U8(p, 0x89);

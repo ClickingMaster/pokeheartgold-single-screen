@@ -58,7 +58,7 @@ extern void MessageFormat_Delete(void *);
 extern void DestroyMsgData(void *);
 extern int TextPrinterCheckActive(u8);
 extern void ov74_02229DF8(void);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern void *Sprite_CreateAffine(const RawSpriteTemplate *);
 extern void Sprite_SetAnimActiveFlag(void *, int);
 extern void Sprite_SetPriority(void *, int);
@@ -72,7 +72,7 @@ extern void *BgConfig_Alloc(int);
 extern void GfGfx_DisableEngineAPlanes(void);
 extern void GfGfx_DisableEngineBPlanes(void);
 extern void ov74_0222FCA4(void);
-extern void sub_0200FBF4(int, int);
+extern void SetMasterBrightnessByColor(int, int);
 extern void Sound_SetSceneAndPlayBGM(int, int, int);
 extern void ov74_0223512C(int);
 extern int ov74_02235230(void);
@@ -135,7 +135,7 @@ void ov74_0222AE3C(void *data) {
     switch (U32(data, 0x15d4)) {
     case 1:
         ov74_02229DF8();
-        sub_0203A914();
+        WirelessStatusIcon_Destroy();
         break;
     case 0:
     case 2:
@@ -156,8 +156,8 @@ int ov74_0222AE6C(void *manager) {
     GfGfx_DisableEngineBPlanes();
     ov74_0222FCA4();
     ov74_0222A744(*(void **)data);
-    sub_0200FBF4(0, 0);
-    sub_0200FBF4(1, 0);
+    SetMasterBrightnessByColor(0, 0);
+    SetMasterBrightnessByColor(1, 0);
     Sound_SetSceneAndPlayBGM(10, 0x47e, 1);
     ov74_0223512C(0x54);
     if (ov74_02235230()) {

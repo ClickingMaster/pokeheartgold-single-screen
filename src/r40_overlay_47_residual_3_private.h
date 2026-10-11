@@ -11,7 +11,7 @@ void G2dRenderer_SetObjCharTransferReservedRegion(int, int);
 void G2dRenderer_SetPlttTransferReservedRegion(int);
 void *G2dRenderer_Init(int, void *, int);
 void *Create2DGfxResObjMan(int, int, int);
-void sub_0203A880(void);
+void WirelessStatusIcon_Create(void);
 void GfGfx_EngineATogglePlanes(int, int);
 void GfGfx_EngineBTogglePlanes(int, int);
 extern const u8 ov47_02259E58[];

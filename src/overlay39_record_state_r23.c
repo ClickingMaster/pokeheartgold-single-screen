@@ -15,7 +15,7 @@ BOOL ov39_022290A4(Ov39AppR23 *app) {
         app->substate94++;
         break;
     case 2:
-        sub_0203A914();
+        WirelessStatusIcon_Destroy();
         ov39_02228B04(app, app->unk2C, 0x1B, app->unk90, 0xF0F);
         app->substate94++;
         break;

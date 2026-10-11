@@ -17,8 +17,8 @@ void ov108_021E8AD4(void) {
     GfGfx_DisableEngineBPlanes();
     *(volatile u32 *)0x04000000 &= 0xffffe0ff;
     *(volatile u32 *)0x04001000 &= 0xffffe0ff;
-    sub_0200FBF4(0, 0);
-    sub_0200FBF4(1, 0);
+    SetMasterBrightnessByColor(0, 0);
+    SetMasterBrightnessByColor(1, 0);
     ResetVisibleHardwareWindows(0);
     ResetVisibleHardwareWindows(1);
 }

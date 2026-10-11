@@ -8,8 +8,8 @@
 #include "unk_020379A0.h"
 #include "unk_02069660.h"
 extern void GF_AssertFail(void);
-extern int sub_02037454(void);
-extern BOOL sub_0203769C(void);
+extern int Comm_CountConnected(void);
+extern BOOL Comm_GetLocalNetId(void);
 extern BOOL sub_02036FD8(int, void *, u32);
 extern BOOL IsPaletteFadeFinished(void);
 

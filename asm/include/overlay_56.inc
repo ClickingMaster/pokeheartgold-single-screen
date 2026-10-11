@@ -50,7 +50,7 @@
 .public ClearFrameAndWindow2
 .public ResetVisibleHardwareWindows
 .public SetMasterBrightnessNeutral
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public MailMsg_GetExpandedString
 .public MailMsg_IsInit
 .public YesNoPrompt_Create

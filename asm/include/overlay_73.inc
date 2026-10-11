@@ -171,9 +171,9 @@
 .public sub_02034D8C
 .public sub_02034DB8
 .public sub_02034DE0
-.public sub_02037030
-.public sub_02037454
-.public sub_0203769C
+.public Comm_SendCommand
+.public Comm_CountConnected
+.public Comm_GetLocalNetId
 .public sub_02037AC0
 .public sub_02037B38
 .public sub_02037FF0
@@ -185,8 +185,8 @@
 .public sub_020399EC
 .public sub_02039EAC
 .public sub_02039EB4
-.public sub_0203A880
-.public sub_0203A914
+.public WirelessStatusIcon_Create
+.public WirelessStatusIcon_Destroy
 .public sub_0203A930
 .public sub_0205A904
 .public sub_0205AD24

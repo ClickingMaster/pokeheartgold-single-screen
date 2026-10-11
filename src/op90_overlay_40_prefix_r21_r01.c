@@ -102,7 +102,7 @@ void ov40_0222B6E0(Ov40Work *work) {
         G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
         G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DSUB, GX_OBJVRAMMODE_CHAR_1D_128K);
         G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DSUB);
-        sub_0203A880();
+        WirelessStatusIcon_Create();
         sub_0203A948(1, HEAP_ID_109);
         file = sub_0203A4AC(HEAP_ID_109);
         NNS_G2dGetUnpackedPaletteData(file, &pltt);

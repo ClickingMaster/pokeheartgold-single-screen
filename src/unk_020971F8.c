@@ -4,11 +4,11 @@
 #include "unk_0203AC88.h"
 
 void sub_020971F8(void *arg0) {
-    sub_0203410C(sub_0203AC88(), sub_0203AC90(), arg0);
+    Comm_RegisterCommandTable(sub_0203AC88(), sub_0203AC90(), arg0);
 }
 
 void sub_02097214(void) {
-    sub_0203410C(sub_0203AC88(), sub_0203AC90(), NULL);
+    Comm_RegisterCommandTable(sub_0203AC88(), sub_0203AC90(), NULL);
 }
 
 s32 sub_0209722C(void) {

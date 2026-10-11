@@ -18,7 +18,7 @@ int ov96_02204DF8(void *course) {
 
 int ov96_02204E58(void *course) {
     u8 *p = PokeathlonCourse_GetHeapAllocPtr4(course);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
     PokeathlonCourse_ResetField3A4(course);

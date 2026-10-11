@@ -3,7 +3,7 @@
 void sub_02035E9C(void) {
     int i;
     for (i = 1; i < 8; i++) {
-        if (!sub_020373B4((u16)i) && _021D4140.work[0x69E + i] == 0) {
+        if (!Comm_IsNetIdConnected((u16)i) && _021D4140.work[0x69E + i] == 0) {
             sub_02035DE0(i);
         }
     }
@@ -35,7 +35,7 @@ int sub_02035F14(int a, int b, int c) {
 
 void sub_02035F4C(void) {
     int changed = 0;
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         if (_0210F900[0] != 4) {
             return;
         }
@@ -128,7 +128,7 @@ int sub_020360E4(int value) {
 void sub_020360EC(void) {
     if (_021D4140.updateLock != 0) {
         sub_02036AD8();
-        if (sub_0203769C() == 0 && sub_020373B4(0)) {
+        if (Comm_GetLocalNetId() == 0 && Comm_IsNetIdConnected(0)) {
             sub_02036508();
         }
         _021D4140.updateLock = 0;
@@ -137,7 +137,7 @@ void sub_020360EC(void) {
 
 void sub_0203611C(void) {
     if (sub_020357FC()) {
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             if (sub_0203567C() == 0) {
                 sub_02036024();
             }

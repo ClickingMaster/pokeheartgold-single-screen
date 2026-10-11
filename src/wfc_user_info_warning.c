@@ -67,8 +67,8 @@ void ShowWFCUserInfoWarning(enum HeapID heapID, int a1) {
 #pragma unused(a1)
     Window window;
 
-    sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
-    sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
 
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);

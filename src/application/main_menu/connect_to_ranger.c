@@ -527,7 +527,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         if (sub_02034DB8()) {
             ov74_02230A84(ov74_0223BD5C, app->linkWork);
             app->linkInitialised = TRUE;
-            sub_0203A880();
+            WirelessStatusIcon_Create();
             CONNECT_STATE = RANGER_CONNECT_SEARCH;
         }
         break;
@@ -692,7 +692,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         if (ov74_02231048()) {
             if (app->linkStarted == TRUE) {
                 sub_02034DE0();
-                sub_0203A914();
+                WirelessStatusIcon_Destroy();
                 app->linkStarted = FALSE;
             }
             if (gSystem.newKeys & PAD_BUTTON_A) {
@@ -717,7 +717,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         if (ov74_02231048()) {
             if (app->linkStarted == TRUE) {
                 sub_02034DE0();
-                sub_0203A914();
+                WirelessStatusIcon_Destroy();
                 app->linkStarted = FALSE;
             }
             if (gSystem.newKeys & PAD_BUTTON_A) {
@@ -728,7 +728,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
     case RANGER_CONNECT_CANCEL:
         if (ov74_02231048() && app->linkStarted == TRUE) {
             sub_02034DE0();
-            sub_0203A914();
+            WirelessStatusIcon_Destroy();
             app->linkStarted = FALSE;
             if (app->waitingIcon) {
                 WaitingIcon_Delete(app->waitingIcon);

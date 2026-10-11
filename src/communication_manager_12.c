@@ -1,27 +1,27 @@
 #include "communication_manager_internal.h"
 
 void sub_02037618(void *a, void *b, const u8 *data) {
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         _021D4140.work[0x6AB] = 1;
         _021D4140.work[0x6AC] = *data;
     }
 }
 
 void sub_02037640(void *a, void *b, const u8 *data) {
-    if (sub_0203769C() != 0) {
+    if (Comm_GetLocalNetId() != 0) {
         _021D4140.work[0x6AC] = *data;
         _021D4140.work[0x6AB] = 3;
     }
 }
 
 void sub_02037668(void *a, void *b, const u8 *data) {
-    if (sub_0203769C() == 0 && _021D4140.work[0x6AB] == 2) {
+    if (Comm_GetLocalNetId() == 0 && _021D4140.work[0x6AB] == 2) {
         sub_02035FA8(*data);
         _021D4140.work[0x6AB] = 0;
     }
 }
 
-int sub_0203769C(void) {
+int Comm_GetLocalNetId(void) {
     if (_021D4140.work != NULL) {
         if (sub_02034044(sub_0203993C())) {
             int id = WifiConnection_GetAid();
@@ -40,11 +40,11 @@ int sub_020376D4(void *a, void *b) {
 }
 
 int sub_020376E0(void *a, void *b) {
-    return sub_02037030((int)a, b, 0);
+    return Comm_SendCommand((int)a, b, 0);
 }
 
 int sub_020376EC(void *a) {
-    return sub_02037030((int)a, NULL, 0);
+    return Comm_SendCommand((int)a, NULL, 0);
 }
 
 int sub_020376F8(void) {
@@ -79,7 +79,7 @@ int sub_0203775C(int value) {
 
 void sub_0203776C(void) {
     u8 value;
-    if (!sub_020357FC() && !sub_0203769C()) {
+    if (!sub_020357FC() && !Comm_GetLocalNetId()) {
         sub_02037184((void *)2, &value);
     }
     sub_0203581C();

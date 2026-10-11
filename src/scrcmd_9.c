@@ -240,14 +240,14 @@ BOOL ScrCmd_416(ScriptContext *ctx) {
         break;
     }
     if (sub_0205C298(ctx->fieldSystem->saveData) == 1) {
-        if (sub_02037C0C(sub_0203769C(), frontierFsys->unk83e) == 1) {
+        if (sub_02037C0C(Comm_GetLocalNetId(), frontierFsys->unk83e) == 1) {
             *unkPtr = TRUE;
         } else {
             return TRUE;
         }
     } else {
         sub_02096910((void *)frontierFsys);
-        if (sub_02037030(unk0, frontierFsys->unk83e, sizeof(frontierFsys->unk83e)) == 1) {
+        if (Comm_SendCommand(unk0, frontierFsys->unk83e, sizeof(frontierFsys->unk83e)) == 1) {
             *unkPtr = TRUE;
         }
     }

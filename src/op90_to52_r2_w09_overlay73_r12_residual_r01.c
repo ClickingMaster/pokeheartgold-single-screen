@@ -16,7 +16,7 @@ typedef struct Ov73Work {
     ProfileSlot profiles[5];
     int states[5];
 } Ov73Work;
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 void ov73_021E77A4(void *a0, void *a1, int index, int avatar, int gender);
 void Sprite_SetAnimCtrlSeq(Sprite *sprite, int seq);
 void Sprite_SetDrawFlag(Sprite *sprite, int flag);
@@ -36,7 +36,7 @@ void ov73_021E762C(Ov73Work *work) {
             GF_ASSERT(work->profiles[i].cur != NULL);
             gender = PlayerProfile_GetTrainerGender(work->profiles[i].cur);
             avatar = PlayerProfile_GetAvatar(work->profiles[i].cur);
-            if (i == sub_0203769C()) {
+            if (i == Comm_GetLocalNetId()) {
                 Sprite_SetAnimCtrlSeq(work->sprites[i], gender * 2 + 38);
             } else {
                 ov73_021E77A4(work->unk2F4, work->unk304, i, avatar, gender);
@@ -49,7 +49,7 @@ void ov73_021E762C(Ov73Work *work) {
         case 2:
             break;
         case 3:
-            if (i == sub_0203769C()) {
+            if (i == Comm_GetLocalNetId()) {
                 Sprite_SetAnimCtrlSeq(work->sprites[i], PlayerProfile_GetTrainerGender(work->profiles[i].cur) * 2 + 39);
             } else {
                 Sprite_SetAnimCtrlSeq(work->sprites[i], i * 2 + 28);

@@ -40,7 +40,7 @@ BOOL sub_02057C94(void) {
             if (coords[0] == sub_02057A34(j) && coords[1] == sub_02057A88(j)) {
                 count++;
                 mapping[j] = i;
-                if (j == sub_0203769C()) {
+                if (j == Comm_GetLocalNetId()) {
                     result = TRUE;
                 }
                 break;

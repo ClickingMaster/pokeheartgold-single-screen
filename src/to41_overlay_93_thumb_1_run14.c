@@ -34,7 +34,7 @@ extern void sub_020181EC(void *);
 extern void sub_02018068(void *);
 extern void sub_020180F8(void *, void *);
 extern u32 sub_0201815C(void *, u32);
-extern u32 sub_0203769C(void);
+extern u32 Comm_GetLocalNetId(void);
 extern u32 sub_02034818(u32);
 extern u32 sub_02037B38(u32);
 extern void sub_02037AC0(u8);
@@ -209,7 +209,7 @@ void ov93_0225E0A4(void *p) {
 }
 
 u32 ov93_0225E0F4(void *p) {
-    if (U32AT(p, 4) == sub_0203769C()) {
+    if (U32AT(p, 4) == Comm_GetLocalNetId()) {
         return 1;
     }
     return 0;

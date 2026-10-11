@@ -462,7 +462,7 @@ static void ov03_02254660(void *arg0, CommClubManager *commClubManager) {
         ov03_02255ADC(commClubManager);
         sCommClubManager->unkA1 = 1;
     } else {
-        if (sub_02034818(sub_0203769C())) {
+        if (sub_02034818(Comm_GetLocalNetId())) {
             sub_02037BC8();
             ov03_022546B0(arg0, commClubManager);
         }
@@ -506,7 +506,7 @@ static BOOL ov03_022547D8(void *arg0, CommClubManager *commClubManager) {
         ov03_0225574C(arg0, commClubManager);
         ov03_02253E20(0, FALSE);
         ov03_02255ADC(commClubManager);
-    } else if (sub_02037BA0(0, 3) == sub_0203769C()) {
+    } else if (sub_02037BA0(0, 3) == Comm_GetLocalNetId()) {
         sub_02037BC8();
         ov03_0225574C(arg0, commClubManager);
         ov03_02255A70(commClubManager);
@@ -514,10 +514,10 @@ static BOOL ov03_022547D8(void *arg0, CommClubManager *commClubManager) {
         sub_02037BC8();
         ov03_0225574C(arg0, commClubManager);
         ov03_02255A70(commClubManager);
-    } else if (sub_02037BA0(0, 4) == sub_0203769C()) {
+    } else if (sub_02037BA0(0, 4) == Comm_GetLocalNetId()) {
         ov03_02253E20(116, FALSE);
         ov03_02254B4C(&ov03_02255280);
-    } else if (sub_02037BA0(0, 2) == sub_0203769C()) {
+    } else if (sub_02037BA0(0, 2) == Comm_GetLocalNetId()) {
         sub_02037BC8();
         commClubManager->connectedCount = sub_020347A0();
         if (DialogBox_IsPrintFinished(sCommClubManager->printerID) == FALSE) {
@@ -936,11 +936,11 @@ static void ov03_02255078(void *arg0, CommClubManager *commClubManager) {
         return;
     }
     int i;
-    if (sub_020373B4(commClubManager->unk95) == FALSE) {
+    if (Comm_IsNetIdConnected(commClubManager->unk95) == FALSE) {
         ov03_02255CE4(commClubManager);
         if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_POKEATHLON) {
             for (i = 1; i < ov03_02255B84(); i++) {
-                if (sub_020373B4(i)) {
+                if (Comm_IsNetIdConnected(i)) {
                     sub_020346E8(i);
                     sub_02037B8C(5, i);
                 }
@@ -982,7 +982,7 @@ static void ov03_02255078(void *arg0, CommClubManager *commClubManager) {
         } else if (commClubManager->unkA4 == 1) {
             if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_POKEATHLON) {
                 for (i = 1; i < ov03_02255B84(); i++) {
-                    if (sub_020373B4(i)) {
+                    if (Comm_IsNetIdConnected(i)) {
                         sub_020346E8(i);
                         sub_02037B8C(5, i);
                     }
@@ -1102,15 +1102,15 @@ static void ov03_02255404(void *arg0, CommClubManager *commClubManager) {
     }
 
     if (ov03_02255CD0(commClubManager)) {
-        if (sub_02037700() || commClubManager->connectedCount != sub_02037454()) {
+        if (sub_02037700() || commClubManager->connectedCount != Comm_CountConnected()) {
             ov03_02255CE4(commClubManager);
             ov03_02254B4C(&ov03_022554E0);
         } else {
             if (ov01_021F6AEC(commClubManager->fieldSystem) == 6) {
                 if (commClubManager->unkA4 == 0) {
                     if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_POKEATHLON) {
-                        for (int i = 1; i < sub_02037454(); i++) {
-                            if (sub_020373B4(i) == 0) {
+                        for (int i = 1; i < Comm_CountConnected(); i++) {
+                            if (Comm_IsNetIdConnected(i) == 0) {
                                 ov03_02254B4C(&ov03_022554E0);
                                 return;
                             }
@@ -1284,7 +1284,7 @@ static void ov03_0225562C(void *arg0, CommClubManager *commClubManager) {
 }
 
 static void ov03_022556BC(void *arg0, CommClubManager *commClubManager) {
-    if (sub_02037700() || commClubManager->connectedCount != sub_02037454()) {
+    if (sub_02037700() || commClubManager->connectedCount != Comm_CountConnected()) {
         ov03_02254B4C(&ov03_022554E0);
     } else {
         ov03_02254C9C(commClubManager);
@@ -1335,14 +1335,14 @@ static void ov03_02255804(CommClubManager *commClubManager) {
     sub_020351DC(commClubManager->connectionIndex, sCommClubManager->playerProfile[1]);
     BufferPlayersName(commClubManager->messageFormat[2], 1, sCommClubManager->playerProfile[1]);
     ov03_02253E20(4, TRUE);
-    commClubManager->connectedCount = sub_02037454();
+    commClubManager->connectedCount = Comm_CountConnected();
     SysTask_CreateOnMainQueue(&ov03_02254D64, commClubManager, 0);
     ov03_02254B4C(&ov03_02255860);
     sCommClubManager->messageDelay = 90;
 }
 
 static void ov03_02255860(u32 arg0_unused, CommClubManager *commClubManager) {
-    if (sub_0203769C() == FALSE && commClubManager->connectedCount != sub_02037454()) {
+    if (Comm_GetLocalNetId() == FALSE && commClubManager->connectedCount != Comm_CountConnected()) {
         ov03_02254B4C(&ov03_02255A00);
     } else if (ov03_02255C80() || sub_02037700()) {
         ov03_02254B4C(&ov03_02255A00);
@@ -1353,12 +1353,12 @@ static void ov03_02255860(u32 arg0_unused, CommClubManager *commClubManager) {
 }
 
 static void ov03_022558C4(void *task, CommClubManager *commClubManager) {
-    if (sub_0203769C() == 0 && commClubManager->connectedCount != sub_02037454()) {
+    if (Comm_GetLocalNetId() == 0 && commClubManager->connectedCount != Comm_CountConnected()) {
         ov03_02254B4C(&ov03_02255A00);
     } else if (ov03_02255C80() || sub_02037700()) {
         ov03_02254B4C(&ov03_02255A00);
         return;
-    } else if (sub_020373B4(0) == 0) {
+    } else if (Comm_IsNetIdConnected(0) == 0) {
         ov03_02254B4C(&ov03_02255A00);
         return;
     } else if (sub_02037BA0(0, 5) != -1) {
@@ -1368,7 +1368,7 @@ static void ov03_022558C4(void *task, CommClubManager *commClubManager) {
         if (DialogBox_IsPrintFinished(sCommClubManager->printerID) == FALSE) {
             RemoveTextPrinter(sCommClubManager->printerID);
         }
-        commClubManager->connectedCount = sub_02037454();
+        commClubManager->connectedCount = Comm_CountConnected();
         ov03_02255B44(commClubManager);
         SysTask_Destroy(task);
         return;

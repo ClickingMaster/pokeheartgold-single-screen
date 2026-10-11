@@ -71,14 +71,14 @@ int ov91_0225C58C(OverlayManager *manager, int *state) {
         if (work->unk74 <= 1) {
             GF_AssertFail();
         }
-        work->unk44 = sub_0203769C();
+        work->unk44 = Comm_GetLocalNetId();
         work->unk46 = ov90_0225886C(work->unk08, work->unk44);
         if (work->unk44 == 0) {
             work->unk30 = ov91_0225CCC4(0x6A, 0x4B0, work->unk74, work->unk48);
             work->unk7C = 1;
         }
         work->unk34 = ov91_0225CDF4(0x6A, 0x4B0, work->unk74, work->unk46, work->unk48);
-        sub_0203A880();
+        WirelessStatusIcon_Create();
         if (args[0x38] != 0) {
             WifiConnection_StartVoiceChat(0x6A);
         }
@@ -113,7 +113,7 @@ int ov91_0225C58C(OverlayManager *manager, int *state) {
         ov91_0225CEB4(work->unk34, 0);
         if (IsPaletteFadeFinished() != 0) {
             if (work->unk44 == 0) {
-                if (sub_02037030(0x16, NULL, 0) != 0) {
+                if (Comm_SendCommand(0x16, NULL, 0) != 0) {
                     (*state)++;
                 }
             } else {
@@ -135,7 +135,7 @@ int ov91_0225C58C(OverlayManager *manager, int *state) {
     case 7:
         if (work->unk3C != 0) {
             stack.tmp = ov91_0225D37C(work->unk34);
-            if (sub_02037030(0x19, &stack.tmp, 4) != 0) {
+            if (Comm_SendCommand(0x19, &stack.tmp, 4) != 0) {
                 (*state)++;
             }
         } else {
@@ -161,7 +161,7 @@ int ov91_0225C58C(OverlayManager *manager, int *state) {
         if (work->unk44 == 0) {
             if (ov91_0225CDAC(work->unk30) == 1) {
                 ov91_0225CDC4(work->unk30, &stack.block);
-                if (sub_02037030(0x1A, &stack.block, 0x10) != 0) {
+                if (Comm_SendCommand(0x1A, &stack.block, 0x10) != 0) {
                     (*state)++;
                 }
             }

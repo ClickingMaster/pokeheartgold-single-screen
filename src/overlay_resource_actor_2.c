@@ -20,8 +20,8 @@ BOOL sub_02075D3C(Work *work) {
 }
 
 void sub_02075D4C(Work *work) {
-    sub_0200FBF4(0, 0);
-    sub_0200FBF4(1, 0);
+    SetMasterBrightnessByColor(0, 0);
+    SetMasterBrightnessByColor(1, 0);
     Main_SetVBlankIntrCB(0, 0);
     FontID_Release(4);
     sub_02075770(work);

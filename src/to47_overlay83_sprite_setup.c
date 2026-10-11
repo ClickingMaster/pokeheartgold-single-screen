@@ -47,7 +47,7 @@ void ov83_0223F200(void *p){
  PTR(p,0x838)=ov83_02247A24(p,1,U8(p,0x14));
  PTR(p,0x83c)=ov83_02247CB8(PTR(p,0x518),PTR(p,0x500));
  ov83_02247844((u8*)p+0x84c);
- if(sub_02037474()){G2dRenderer_SetObjCharTransferReservedRegion(1,0x10);G2dRenderer_SetPlttTransferReservedRegion(1);sub_0203A880();}
+ if(sub_02037474()){G2dRenderer_SetObjCharTransferReservedRegion(1,0x10);G2dRenderer_SetPlttTransferReservedRegion(1);WirelessStatusIcon_Create();}
  G2x_SetBlendAlpha_(0x04000050,0,0xe,6,0xa);
  Main_SetVBlankIntrCB(ov83_0223F7A0,p);
 }

@@ -225,7 +225,7 @@ int ov70_02244CCC(Ov70Work *work) {
 }
 
 int ov70_02244D08(Ov70Work *work) {
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     ov70_02238F80(work);
     BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, 0x3d);
     U32(work, 0x2c) = 0;

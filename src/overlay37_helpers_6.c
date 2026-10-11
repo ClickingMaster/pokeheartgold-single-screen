@@ -34,7 +34,7 @@ u32 ov37_021E6E04(Ov37Work *work, u32 arg1) {
 }
 
 u32 ov37_021E6E2C(Ov37Work *work, u32 arg1) {
-    if (sub_02037B38(0xC8) || sub_02037454() == 1) {
+    if (sub_02037B38(0xC8) || Comm_CountConnected() == 1) {
         BeginNormalPaletteFade(0, 0x10, 0x10, 0, 0x10, 1, 0x27);
         arg1 = 3;
     }
@@ -69,17 +69,17 @@ u32 ov37_021E6EB4(Ov37Work *work, u32 arg1) {
     ov37_021E762C(work, 2, 1);
     ov37_021E7844(work, 0x16);
     PlaySE(0x5E4);
-    if (!sub_0203769C()) {
+    if (!Comm_GetLocalNetId()) {
         ov37_021E76D0(work, 0);
     }
-    work->unk_93B0 = sub_02037454();
+    work->unk_93B0 = Comm_CountConnected();
     ov37_021E68AC(work);
     return arg1;
 }
 
 u32 ov37_021E6F14(Ov37Work *work, u32 arg1) {
     if (work->unk_93B0 != 0) {
-        if (work->unk_93B0 != sub_02037454()) {
+        if (work->unk_93B0 != Comm_CountConnected()) {
             work->unk_93B0 = 0;
         }
     }

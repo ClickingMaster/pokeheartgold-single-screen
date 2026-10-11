@@ -18,7 +18,7 @@ void ov81_02240BB0(Work *w) {
     ov81_02241364(w);
     ov81_02241FC0(w);
     ov81_02242170(w);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     PaletteData_FreeBuffers(PTR(w, 0x1A0), 2);
     PaletteData_FreeBuffers(PTR(w, 0x1A0), 0);
     PaletteData_Free(PTR(w, 0x1A0));

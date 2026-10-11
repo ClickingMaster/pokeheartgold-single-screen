@@ -22,8 +22,8 @@ typedef struct Ov80CastleWork {
     u16 *unkA20;
 } Ov80CastleWork;
 
-extern u32 sub_0203769C(void);
-extern BOOL sub_02037030(u32, void *, u32);
+extern u32 Comm_GetLocalNetId(void);
+extern BOOL Comm_SendCommand(u32, void *, u32);
 
 void ov80_0222B740(int, int, void *, void *);
 BOOL ov80_0222B7E4(Ov80CastleWork *);
@@ -35,13 +35,13 @@ void ov80_0222B740(int netID, int unused, void *param2, void *work) {
 
     battleCastle_dupe->msgsReceived++;
 
-    if (sub_0203769C() == netID) {
+    if (Comm_GetLocalNetId() == netID) {
         return;
     }
 
     battleCastle_dupe->unkA19 = param2_dupe[0];
 
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         if (battleCastle_dupe->unkA1B != 0) {
             if (battleCastle_dupe->unkA1B == 4) {
                 if (battleCastle_dupe->unkA19 != 4) {
@@ -98,7 +98,7 @@ BOOL ov80_0222B7E4(Ov80CastleWork *battleCastle) {
 
     offset += (4 * 2);
 
-    if (sub_02037030(0x2D, battleCastle->commBuffer, dataSize) == 1) {
+    if (Comm_SendCommand(0x2D, battleCastle->commBuffer, dataSize) == 1) {
         result = TRUE;
     } else {
         result = FALSE;
@@ -115,7 +115,7 @@ void ov80_0222B860(int netID, int unused, void *monData, void *work) {
     offset = 0;
     battleCastle_dupe->msgsReceived++;
 
-    if (sub_0203769C() == netID || sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == netID || Comm_GetLocalNetId() == 0) {
         return;
     }
 

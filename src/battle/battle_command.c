@@ -6934,8 +6934,8 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
         break;
     case STATE_GET_POKEMON_PREPARE_NAMING_SCREEN:
         if (!PaletteData_GetSelectedBuffersBitmask(paletteData)) {
-            sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
-            sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+            SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
+            SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
             Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
             NamingScreenArgs *namingScreenArgs = NamingScreen_CreateArgs(HEAP_ID_BATTLE, NAME_SCREEN_POKEMON, GetMonData(mon, MON_DATA_SPECIES, 0), 10, BattleSystem_GetOptions(data->battleSystem), 0);
             data->tempPointers[POINTER_GET_POKEMON_NAMING_SCREEN_ARGS] = namingScreenArgs;

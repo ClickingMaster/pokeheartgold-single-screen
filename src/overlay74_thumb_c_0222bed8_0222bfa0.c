@@ -13,7 +13,7 @@ extern void ov74_0222B288(void *);
 extern void ov74_0222B3A4(void *);
 extern void ov74_0222B144(void *);
 extern void sub_02034DE0(void);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern void sub_02038D28(void *);
 extern u32 sub_02038D80(void);
 extern void sub_02038D64(void);

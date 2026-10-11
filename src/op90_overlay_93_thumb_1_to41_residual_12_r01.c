@@ -77,7 +77,7 @@ typedef struct {
     int file[5];
 } FileRow;
 extern const FileRow ov93_02262AF0[], ov93_02262AF4[], ov93_02262AF8[], ov93_02262AFC[], ov93_02262B00[];
-extern int sub_0203769C(void);
+extern int Comm_GetLocalNetId(void);
 extern int ov93_0225E45C(Ov93Work *, int);
 void ov93_0225DD2C(Ov93Work *work, NARC *narc);
 // @fn ov93_0225DD2C
@@ -92,7 +92,7 @@ void ov93_0225DD2C(Ov93Work *work, NARC *narc) {
     bank = &work->bank;
     footer = &work->footer;
     shared = NULL;
-    idx = ov93_0225E45C(work, sub_0203769C());
+    idx = ov93_0225E45C(work, Comm_GetLocalNetId());
 
     sub_02018030(&bank->resource, narc, ov93_02262AF0[idx].file[0], HEAP_ID_117);
     sub_020181B0(&bank->instance, &bank->resource);

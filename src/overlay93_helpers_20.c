@@ -32,9 +32,9 @@ extern void *OverlayManager_GetData(void *);
 extern void *OverlayManager_GetArgs(void *);
 extern void OverlayManager_FreeData(void *);
 extern void BgClearTilemapBufferAndCommit(void *, u32);
-extern u32 sub_02037030(u32, void *, u32);
-extern void sub_0203410C(const u32 *, u32, void *);
-extern u32 sub_0203769C(void);
+extern u32 Comm_SendCommand(u32, void *, u32);
+extern void Comm_RegisterCommandTable(const u32 *, u32, void *);
+extern u32 Comm_GetLocalNetId(void);
 
 /* ------------------------------------------------------------------ */
 /* Forward declarations for everything defined in this file.           */
@@ -154,7 +154,7 @@ u32 ov93_022626E8(void *man) {
 }
 
 void ov93_022626FC(void *a) {
-    sub_0203410C(ov93_022630E4, 4, a);
+    Comm_RegisterCommandTable(ov93_022630E4, 4, a);
 }
 
 u32 ov93_02262710(void) {
@@ -173,7 +173,7 @@ void ov93_02262718(void *a, void *b, void *c, void *d) {
 
 u32 ov93_02262724(void *a, void *b) {
     (void)a;
-    if (sub_02037030(0x18, b, 0x14) == 1) {
+    if (Comm_SendCommand(0x18, b, 0x14) == 1) {
         return 1;
     }
     return 0;
@@ -187,7 +187,7 @@ void ov93_0226273C(void *a, void *b, void *c, void *d) {
 }
 
 u32 ov93_02262748(void) {
-    if (sub_02037030(0x19, NULL, 0) == 1) {
+    if (Comm_SendCommand(0x19, NULL, 0) == 1) {
         return 1;
     }
     return 0;

@@ -22,7 +22,7 @@ u32 IsBattleResultWin(u32 result);
 void BattleSetup_Delete(void *setup);
 void ov80_02236ABC(void *data, u32 value);
 void GF_AssertFail(void);
-u32 sub_0203769C(void);
+u32 Comm_GetLocalNetId(void);
 u32 sub_02037C0C(u32 value, void *data);
 void *sub_02037C44(u32 side);
 u16 *ov80_0222BE24(void *ctx, u32 value);

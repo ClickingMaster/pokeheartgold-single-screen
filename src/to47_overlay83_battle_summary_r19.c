@@ -26,7 +26,7 @@ void ov83_02241770(u8 *work, void *window) {
 
         FillWindowPixelRect(window, 0, 0x40, 0, 0x30, 0x10);
         FillWindowPixelRect(window, 0, 0xC0, 0, 0x30, 0x10);
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             stat = sub_0205C1F0(work[9]);
             left = FrontierSave_GetStat(PTR_AT(work, 4), stat, sub_0205C268(sub_0205C1F0(work[9])));
             right = U16_AT(work, 0x802);
@@ -69,7 +69,7 @@ void ov83_022418E8(u8 *work, u32 value, u8 type) {
         break;
     }
 
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         if (value < old) {
             ov83_02240C6C(work, 5);
             ov80_02237FA4(PTR_AT(work, 4), work[9], cost);

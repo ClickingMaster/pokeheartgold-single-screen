@@ -21,7 +21,7 @@ BOOL sub_02075074(LinkWork *work, u32 value, ...) {
     if (sub_02037B38(51) == 0) {
         return FALSE;
     }
-    return sub_02037030(24, &value, 4);
+    return Comm_SendCommand(24, &value, 4);
 }
 void sub_020750B4(int sender, int unused, u32 *data, LinkWork *work) {
     work->setup->aiFlags[sender] = *data;

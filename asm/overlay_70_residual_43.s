@@ -2852,7 +2852,7 @@ ov70_02244854: ; 0x02244854
 	push {r3, r4, lr}
 	sub sp, #4
 	add r4, r0, #0
-	bl sub_0203A914
+	bl WirelessStatusIcon_Destroy
 	ldr r0, _02244880 ; =0x00000F0F
 	ldr r1, _02244884 ; =0x00000BAC
 	str r0, [sp]

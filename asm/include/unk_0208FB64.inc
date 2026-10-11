@@ -3,11 +3,11 @@
 .public PlaySE
 .public LCRandom
 .public sub_02033250
-.public sub_0203410C
+.public Comm_RegisterCommandTable
 .public sub_02036FD8
-.public sub_02037030
-.public sub_02037454
-.public sub_0203769C
+.public Comm_SendCommand
+.public Comm_CountConnected
+.public Comm_GetLocalNetId
 .public sub_02038C1C
 .public sub_020398D4
 .public sub_0208FB64

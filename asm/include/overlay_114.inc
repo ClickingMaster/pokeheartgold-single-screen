@@ -2,7 +2,7 @@
 #pragma once
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public Heap_Alloc
 .public GfGfx_EngineATogglePlanes
 .public SpriteList_RenderAndAnimateSprites

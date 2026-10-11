@@ -30,7 +30,7 @@ int PokeathlonCourse_GetMode(void *);
 void *PokeathlonCourse_GetSaveData(void *);
 void ov96_021EE75C(void *, void *, int, int, void *);
 void GfGfx_SwapDisplay(void);
-void sub_0203A914(void);
+void WirelessStatusIcon_Destroy(void);
 void ov96_021EE808(void *);
 void ov96_021EEF98(void *);
 void ov96_021EE9BC(void *);

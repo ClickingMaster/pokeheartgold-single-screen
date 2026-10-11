@@ -96,7 +96,7 @@ void ov85_021E8358(BattleArcadeWork *work);
 void ov85_021E83C0(void *task, BattleArcadeWork *work);
 
 BOOL ov85_021E66F4(BattleArcadeWork *work) {
-    if (sub_02037454() <= 1) {
+    if (Comm_CountConnected() <= 1) {
         work->unk_000 = 51;
         return TRUE;
     }

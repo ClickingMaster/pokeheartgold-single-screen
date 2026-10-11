@@ -14,7 +14,7 @@ extern u32 ov74_022365FC(void);
 extern void ov74_0222CE10(void *);
 extern void ov74_02235390(u32);
 extern void ov74_0223539C(u32, u32, u32, u32);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern void Sprite_Delete(void *);
 extern void *ov74_0222B0C8(void *, u32);
 extern void Sprite_TryChangeAnimSeq(void *, u32);
@@ -56,6 +56,6 @@ void ov74_0222A2A4(void *manager) {
     if (U32AT(data, 0x15d4) == 1) {
         ov74_02229E28(data, 0);
     }
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     ov74_0222A5CC(manager);
 }

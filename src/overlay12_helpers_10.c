@@ -51,12 +51,12 @@ extern void TextFlags_SetCanABSpeedUpPrint(BOOL value);
 extern void TextFlags_SetCanTouchSpeedUpPrint(BOOL value);
 extern char SDK_OVERLAY_OVY_18_ID[];
 extern void Main_SetVBlankIntrCB(void (*callback)(void *), void *arg);
-extern void sub_0200FBF4(void *callback, void *arg);
+extern void SetMasterBrightnessByColor(void *callback, void *arg);
 extern void PaletteData_FreeBuffers(void *paletteData, int selector);
 extern void PaletteData_Free(void *paletteData);
 extern void WindowArray_Delete(void *windows, int count);
 extern void Heap_Free(void *ptr);
-extern void sub_0203A880(void);
+extern void WirelessStatusIcon_Create(void);
 extern int ov00_021EC9D4(void);
 extern BOOL sub_02035650(void);
 extern int WM_GetLinkLevel(void);
@@ -90,7 +90,7 @@ BOOL ov12_022395BC(int value);
 void ov12_022396F0(void);
 
 void ov12_0223A7A0(void) {
-    sub_0203A880();
+    WirelessStatusIcon_Create();
     if (sub_02039998()) {
         sub_0203A930(3 - ov00_021EC9D4());
     } else if (sub_02035650()) {

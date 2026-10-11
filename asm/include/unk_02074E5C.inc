@@ -15,12 +15,12 @@
 .public SavePalPad_Merge
 .public Chatot_Copy
 .public sub_0203049C
-.public sub_0203410C
+.public Comm_RegisterCommandTable
 .public sub_020342B8
 .public sub_02036FD8
-.public sub_02037030
+.public Comm_SendCommand
 .public sub_02037190
-.public sub_0203769C
+.public Comm_GetLocalNetId
 .public sub_02037B38
 .public PartyCore_sizeof
 .public Party_Copy

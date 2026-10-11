@@ -63,7 +63,7 @@ extern void Main_SetVBlankIntrCB(void *, void *);
 extern void HBlankInterruptDisable(void);
 extern void GfGfx_DisableEngineAPlanes(void);
 extern void GfGfx_DisableEngineBPlanes(void);
-extern void sub_0200FBF4(int, int);
+extern void SetMasterBrightnessByColor(int, int);
 extern void ResetVisibleHardwareWindows(int);
 extern void GfGfx_EngineATogglePlanes(int, int);
 extern void SetMasterBrightnessNeutral(int);

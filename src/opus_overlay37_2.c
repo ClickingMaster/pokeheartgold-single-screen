@@ -121,7 +121,7 @@ void ov37_021E5E30(Ov37Work *work) {
     work->prevState = 0;
     work->unk_9404 = 0;
     work->unk_9408 = 0;
-    sub_0203769C();
+    Comm_GetLocalNetId();
     ov37_021E7844(work, 4);
     ReadMsgDataIntoString(work->msgData, 7, work->unk_0028);
     work->unk_43C8 = Heap_Alloc(0x27, 0xf << 0xa);

@@ -789,7 +789,7 @@ ov46_02258CB4: ; 0x02258CB4
 	add r0, #0x10
 	mov r1, #0x15
 	bl ov46_022594E0
-	bl sub_0203A880
+	bl WirelessStatusIcon_Create
 	ldr r0, _02258DA0 ; =ov46_02258F70
 	add r1, r4, #0
 	bl Main_SetVBlankIntrCB

@@ -2,7 +2,7 @@
 #pragma once
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public sub_0200FC20
 .public Heap_Alloc
 .public BG_ClearCharDataRange

@@ -47,11 +47,11 @@
 .public sub_02034AEC
 .public sub_02034B00
 .public sub_020357C4
-.public sub_02037030
-.public sub_020373B4
-.public sub_02037454
+.public Comm_SendCommand
+.public Comm_IsNetIdConnected
+.public Comm_CountConnected
 .public sub_0203753C
-.public sub_0203769C
+.public Comm_GetLocalNetId
 .public sub_02037824
 .public sub_020378AC
 .public sub_0203A084

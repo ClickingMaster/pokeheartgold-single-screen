@@ -329,7 +329,7 @@ _0222B218:
 	blt _0222B218
 	mov r0, #0x18
 	mov r2, #0x3c
-	bl sub_02037030
+	bl Comm_SendCommand
 	cmp r0, #1
 	bne _0222B23C
 	mov r0, #1
@@ -354,10 +354,10 @@ ov80_0222B24C: ; 0x0222B24C
 	add r5, r2, #0
 	add r1, r1, #1
 	strb r1, [r4, r0]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r6, r0
 	beq _0222B2BE
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r0, #0
 	beq _0222B2BE
 	mov r0, #0x95
@@ -458,7 +458,7 @@ _0222B300:
 	blt _0222B300
 	mov r0, #0x19
 	mov r2, #0x3c
-	bl sub_02037030
+	bl Comm_SendCommand
 	cmp r0, #1
 	bne _0222B324
 	mov r0, #1
@@ -483,10 +483,10 @@ ov80_0222B334: ; 0x0222B334
 	add r5, r2, #0
 	add r1, r1, #1
 	strb r1, [r4, r0]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r6, r0
 	beq _0222B3A2
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r0, #0
 	beq _0222B3A2
 	ldr r0, _0222B3A8 ; =0x000003D2

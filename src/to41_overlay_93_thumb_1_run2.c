@@ -34,7 +34,7 @@ extern void sub_020181EC(void *);
 extern void sub_02018068(void *);
 extern void sub_020180F8(void *, void *);
 extern u32 sub_0201815C(void *, u32);
-extern u32 sub_0203769C(void);
+extern u32 Comm_GetLocalNetId(void);
 extern u32 sub_02034818(u32);
 extern u32 sub_02037B38(u32);
 extern void sub_02037AC0(u8);
@@ -159,7 +159,7 @@ void ov93_0225C6D8(void *p, void *args) {
     s32 i;
     s32 count;
 
-    sub_0203769C();
+    Comm_GetLocalNetId();
     count = 0;
     for (i = 0; i < 4; i++) {
         if (sub_02034818(i) != 0) {

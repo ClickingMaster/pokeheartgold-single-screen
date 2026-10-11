@@ -9,7 +9,7 @@ extern int YesNoPrompt_HandleInput(void *prompt);
 extern void YesNoPrompt_Destroy(void *prompt);
 extern void sub_02039418(void *saveData);
 extern void Sys_SetSleepDisableFlag(u32 flag);
-extern void sub_0203A880(void);
+extern void WirelessStatusIcon_Create(void);
 extern void ov00_021EC3F0(void *p, u32 a1, u32 a2, u32 a3);
 extern void ov00_021EC454(u32 value);
 extern void ov00_021EC4A4(void);
@@ -62,7 +62,7 @@ BOOL ov39_02228C78(Ov39Residual20App *app) {
     case 0:
         sub_02039418(((void **)*(void **)app->unk00)[1]);
         Sys_SetSleepDisableFlag(4);
-        sub_0203A880();
+        WirelessStatusIcon_Create();
         ov39_02228B04(app, app->unk28, 1, app->unk90, 0xF0F);
         ov39_02228A8C(app);
         app->unk94++;

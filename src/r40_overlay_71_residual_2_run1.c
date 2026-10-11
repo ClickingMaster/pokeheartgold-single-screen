@@ -4,7 +4,7 @@ BOOL TradeSequence_Exit(OverlayManager *manager, int *state) {
     OSIntrMode enabled = OS_DisableInterrupts();
     u8 *data = OverlayManager_GetData(manager);
     SysTask_Destroy(*(SysTask **)(data + 0x144));
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     MessageFormat_Delete(*(MessageFormat **)(data + 0xc));
     DestroyMsgData(*(MsgData **)(data + 0x10));
     String_Delete(*(String **)(data + 0x14));

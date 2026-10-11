@@ -1,30 +1,35 @@
 #pragma force_active on
-#include <OS_terminate_proc.h>
 #include <nitro/types.h>
-
+// The SDK headers below expect <nitro/types.h> to be included first.
+#include <OS_terminate_proc.h>
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-typedef struct {
-    u32 destination, loadSize, bssSize;
-} Auto09;
+typedef struct AutoloadEntry {
+    u32 destination;
+    u32 loadSize;
+    u32 bssSize;
+} AutoloadEntry;
 
-typedef struct {
-    u8 status, reserved[3];
+typedef struct WvrWork {
+    u8 status;
+    u8 reserved[3];
     u32 *image;
     void *heap;
     u32 imageSize;
-    u8 rest[0x1374 - 16];
-} Wvr09;
+    u8 unk_10[0x1374 - 0x10];
+} WvrWork;
 
-extern const Auto09 SDK_AUTOLOAD_LIST[];
-extern const Auto09 SDK_AUTOLOAD_LIST_END[];
+extern const AutoloadEntry SDK_AUTOLOAD_LIST[];
+extern const AutoloadEntry SDK_AUTOLOAD_LIST_END[];
 extern const u32 SDK_AUTOLOAD_START[];
 extern u8 SDK_AUTOLOAD_MAIN_BSS_END[];
 extern u8 SDK_SUBPRIV_ARENA_LO[];
-extern Wvr09 WVR_BSS_START;
+extern WvrWork WVR_BSS_START;
 
-static inline void ShelterImage09(u32 load, u32 bss, const u8 *source) {
+// Copies the autoload image (data + cleared bss) right behind the main-memory autoload bss, which
+// must be exactly where the ARM7 private arena starts.
+static inline void ShelterImage(u32 load, u32 bss, const u8 *source) {
     u32 *dst;
     u32 i;
     u32 total = load + bss;
@@ -44,14 +49,17 @@ static inline void ShelterImage09(u32 load, u32 bss, const u8 *source) {
 
 void WVR_ShelterExtWram(void);
 
+// Saves the autoload block that targets 0x06000000 (the wireless driver's extended WRAM).
 void WVR_ShelterExtWram(void) {
     const u8 *source = (const u8 *)SDK_AUTOLOAD_START;
-    const Auto09 *entry = SDK_AUTOLOAD_LIST;
+    const AutoloadEntry *entry = SDK_AUTOLOAD_LIST;
     while (entry != SDK_AUTOLOAD_LIST_END) {
-        u32 destination = entry->destination, load = entry->loadSize, bss = entry->bssSize;
+        u32 destination = entry->destination;
+        u32 load = entry->loadSize;
+        u32 bss = entry->bssSize;
         entry++;
         if (destination == 0x06000000) {
-            ShelterImage09(load, bss, source);
+            ShelterImage(load, bss, source);
             break;
         }
         source += load;

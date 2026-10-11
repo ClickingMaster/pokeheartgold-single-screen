@@ -22,7 +22,7 @@ int ov85_021E5EB4(u8 *ctx) {
 int ov85_021E5EE8(u8 *ctx) {
     if (++*(int *)(ctx + 0xc) > 30) {
         *(int *)(ctx + 0xc) = 0;
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             *(int *)ctx = 0x14;
         } else {
             *(int *)ctx = 0x15;

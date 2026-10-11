@@ -11,7 +11,7 @@ void ov83_02245248(void *state, int value);
 void *Save_PlayerData_GetProfile(void *saveData);
 int PlayerProfile_GetTrainerGender(void *profile);
 u16 ov83_0224777C(void *saveData, u8 slot, u8 index);
-int sub_0203769C(void);
-int sub_02037030(int value, void *dest, int size);
+int Comm_GetLocalNetId(void);
+int Comm_SendCommand(int value, void *dest, int size);
 
 #endif

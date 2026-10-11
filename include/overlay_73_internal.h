@@ -133,10 +133,10 @@ extern void sub_02021238(void);
 extern void sub_0208FB64(void *);
 extern void sub_0203893C(void);
 extern void sub_02038C1C(int);
-extern int sub_0203769C(void);
-extern void sub_0203A880(void);
+extern int Comm_GetLocalNetId(void);
+extern void WirelessStatusIcon_Create(void);
 extern void sub_02037FF0(void);
-extern void sub_02037030(int, int, int);
+extern void Comm_SendCommand(int, int, int);
 extern u32 sub_02033250(void);
 
 extern void ov73_021E5F38(Ov73Work *, void *);

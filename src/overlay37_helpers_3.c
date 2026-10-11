@@ -37,7 +37,7 @@ void ov37_021E6848(Ov37SpriteHolder *holder, u32 arg1) {
 
 u32 ov37_021E6860(Ov37Work *work, u32 arg1) {
     ov37_021E65EC(work);
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         if (ov37_021E745C() != 1) {
             ov37_021E755C(work);
         }
@@ -55,7 +55,7 @@ void ov37_021E68AC(Ov37Work *work) {
 }
 
 u32 ov37_021E68D0(Ov37Work *work, u32 arg1) {
-    if (work->unk_0320 == sub_0203769C()) {
+    if (work->unk_0320 == Comm_GetLocalNetId()) {
         ov37_021E762C(work, 0xD, 0);
     } else {
         ov37_021E762C(work, 0, 0);

@@ -109,7 +109,7 @@
 .public sub_020318E8
 .public sub_020318F4
 .public sub_020318F8
-.public sub_0203A880
+.public WirelessStatusIcon_Create
 .public NNS_G2dInitOamManagerModule
 .public memset
 .public _ll_udiv

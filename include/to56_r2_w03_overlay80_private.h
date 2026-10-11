@@ -95,7 +95,7 @@ u8 CalcShininessByOtIdAndPersonality(u32 otId, u32 personality);
 fx32 FX_Sqrt(fx32 x);
 u32 sub_02030BD0(u32 a, void *b);
 void *sub_02034818(int a);
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 void sub_02051D18(Ov80Setup *setup, int a, u32 b, u32 c, u32 d, u32 e);
 void *ov80_02229F04(TrHouseWork *dst, u32 species, u32 heapId, u32 d);
 void ov80_0222A140(Ov80Mon *a, void *b, u8 c);

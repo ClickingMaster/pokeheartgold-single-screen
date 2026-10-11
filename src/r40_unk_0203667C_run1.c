@@ -5,7 +5,7 @@ void sub_0203667C(void) {
     int i;
 
     if (sub_02034044(sub_0203993C())) {
-        if (!sub_020373B4(0)) {
+        if (!Comm_IsNetIdConnected(0)) {
             return;
         }
         if (*(int *)(_021D4140.work + 0x664) != 0) {
@@ -33,7 +33,7 @@ void sub_0203667C(void) {
         }
         _0210F900[0] = 4;
         for (i = 0; i < count; i++) {
-            if (sub_020373B4((u16)i)) {
+            if (Comm_IsNetIdConnected((u16)i)) {
                 (*(int *)(_021D4140.work + i * 4 + 0x66C))++;
             }
         }

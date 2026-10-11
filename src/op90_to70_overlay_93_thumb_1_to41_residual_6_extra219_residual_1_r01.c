@@ -2,7 +2,7 @@
 #include "global.h"
 typedef struct Data{u8 pad[0x2c];u8 ids[4];u8 count;}Data;typedef struct W{Data*data;u8 pad[0x28];void*bg;u8 windows[4][16];}W;
 extern void FillBgTilemapRect(void*,int,int,int,int,int,int,int),ScheduleBgTilemapBufferTransfer(void*,int);void ov93_0225D5AC(W*,int);
-extern int sub_0203769C(void),ov93_0225E3C4(W*,int),ov90_022588A4(Data*,int),FontID_String_GetWidth(int,void*,int);extern void*ov90_022588CC(Data*,int),*PlayerProfile_GetPlayerName_NewString(void*,int);extern const u8 ov93_02262A68[];extern void Heap_Free(void*),AddTextPrinterParameterizedWithColor(void*,int,void*,int,int,int,int,void*);
+extern int Comm_GetLocalNetId(void),ov93_0225E3C4(W*,int),ov90_022588A4(Data*,int),FontID_String_GetWidth(int,void*,int);extern void*ov90_022588CC(Data*,int),*PlayerProfile_GetPlayerName_NewString(void*,int);extern const u8 ov93_02262A68[];extern void Heap_Free(void*),AddTextPrinterParameterizedWithColor(void*,int,void*,int,int,int,int,void*);
 void ov93_0225D4EC(W*);
 #pragma opt_common_subs off
 #pragma opt_rotateloops off
@@ -16,7 +16,7 @@ void ov93_0225D4EC(W *w) {
     int i;
     int color;
     int x;
-    self = sub_0203769C();
+    self = Comm_GetLocalNetId();
     windows = (u8 *)w;
     windows += 0x30;
     for (i = 0; i < w->data->count; i++) {

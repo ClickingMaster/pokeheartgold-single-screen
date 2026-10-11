@@ -31,7 +31,7 @@ extern void sub_0208F658(void *);
 extern void ToggleBgLayer(u32, u32);
 extern void GfGfx_EngineATogglePlanes(u32, u32);
 extern void sub_020399FC(u32, void *);
-extern void sub_0203A880(void);
+extern void WirelessStatusIcon_Create(void);
 extern u32 IsNighttime(void);
 extern void sub_02055198(u32, u32);
 extern void sub_02005448(u32);

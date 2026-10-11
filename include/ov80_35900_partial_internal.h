@@ -18,7 +18,7 @@ void *ov80_02235FC8(void *arg);
 void ov80_02235FEC(void *data);
 u16 ov80_02235FF8(void *data, u32 a, u32 b, u32 c);
 void ov80_02236040(void *ctx, void *data, u32 value);
-u32 sub_0203769C(void);
+u32 Comm_GetLocalNetId(void);
 u32 sub_02037B5C(u32 value);
 void Heap_Free(void *ptr);
 u32 sub_02096998(void *data);

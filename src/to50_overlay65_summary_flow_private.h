@@ -14,7 +14,7 @@ extern const u8 _0221FD34[];
 extern const u8 gOverlayTemplate_PokemonSummary[];
 
 extern u32 Party_GetCount(void *party);
-extern u32 sub_0203769C(void);
+extern u32 Comm_GetLocalNetId(void);
 extern void *sub_02034818(u32 value);
 extern void sub_0208AD34(void *args, void *profile);
 extern void *sub_02088288(void *saveData);

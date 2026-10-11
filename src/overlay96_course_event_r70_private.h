@@ -17,7 +17,7 @@ extern void ov96_021E966C(void *, void *, u32, u32, u32, u32, u8, u8, u8, u8, u3
 extern s32 ov96_021FBDEC(s32);
 extern void ov96_021FC314(void **);
 extern void ov96_021EB5BC(u8 *);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern void *PokeathlonCourse_GetSystem(void *);
 extern void PokeathlonCourse_ResetField3A4(void *);
 extern void ov96_021FC1A8(void *);

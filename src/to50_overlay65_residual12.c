@@ -46,11 +46,11 @@ void ov65_0221F5A0(void *partyA, void *partyB, u32 indexA, u32 indexB, void *ctx
         SetMonData(copyB, 9, &data[1]);
         SetMonData(copyB, 0xbb, &data[0]);
     }
-    MonSetTrainerMemo(copyB, sub_02034818(sub_0203769C()), 5, 0, 0xb);
+    MonSetTrainerMemo(copyB, sub_02034818(Comm_GetLocalNetId()), 5, 0, 0xb);
     Pokemon_RemoveCapsule(copyB);
     CopyPokemonToPokemon(copyA, PTR(ctx, 0x38));
     CopyPokemonToPokemon(copyB, PTR(ctx, 0x3c));
-    PlayerProfile_Copy(sub_02034818(sub_0203769C() ^ 1), PTR(ctx, 0x34));
+    PlayerProfile_Copy(sub_02034818(Comm_GetLocalNetId() ^ 1), PTR(ctx, 0x34));
     U32(ctx, 0x28) = indexA;
     if (Party_HasMon(partyA, 0x1b9) == 0) {
         Chatot_Invalidate(Save_Chatot_Get(PTR(ctx, 0x10)));

@@ -105,7 +105,7 @@ extern void RequestSwap3DBuffers(int, int);
 extern void SysTask_Destroy(void *);
 extern void sub_02075E14(Work *);
 void sub_02075D08(void *, Work *);
-extern void sub_0200FBF4(int, int);
+extern void SetMasterBrightnessByColor(int, int);
 extern void Main_SetVBlankIntrCB(void *, int);
 extern void FontID_Release(int);
 extern void WindowArray_Delete(void *, int);

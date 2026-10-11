@@ -16,8 +16,8 @@ typedef struct Unk0205857CRoot {
     Unk0205857CField *field;
 } Unk0205857CRoot;
 extern Unk0205857CRoot *_021D41C8;
-int sub_02037454(void);
-int sub_0203769C(void);
+int Comm_CountConnected(void);
+int Comm_GetLocalNetId(void);
 int sub_02037B5C(int);
 void Heap_Free(void *);
 void StartMapSceneScript(Unk0205857CField *, int, int);

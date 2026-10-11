@@ -11,7 +11,7 @@ int ov00_021EC9D4(void);
 void ov00_021ECD04(void);
 void ov72_02237CB0(void *);
 void ov00_021EC8D8(void);
-void sub_0203A880(void);
+void WirelessStatusIcon_Create(void);
 void *WaitingIcon_Delete(void *);
 int IsPaletteFadeFinished(void);
 int ov72_0223A8A0(void *);

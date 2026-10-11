@@ -18,14 +18,14 @@ BOOL sub_0205A478(struct UnkStruct_02059E1C *p) {
 
 int sub_0205A47C(struct UnkStruct_02059E1C *p, int a1) {
     if (p->unk30 == 0) {
-        sub_02037030(0x68, NULL, 0);
+        Comm_SendCommand(0x68, NULL, 0);
         return a1;
     }
     return 0;
 }
 
 void sub_0205A498(int a0, int a1, void *a2) {
-    sub_02034818(sub_0203769C() ^ 1);
+    sub_02034818(Comm_GetLocalNetId() ^ 1);
     *(u16 *)((u8 *)a2 + 0x66A) = 1;
 }
 
@@ -38,7 +38,7 @@ void sub_0205A4C4(int a0, int a1, u8 *a2, struct FieldSysPriv *fsys) {
 }
 
 BOOL sub_0205A4D8(struct UnkStruct_02059E1C *p) {
-    int netId = sub_0203769C();
+    int netId = Comm_GetLocalNetId();
     if (p->unk176[netId] == 2) {
         return 1;
     }
@@ -51,7 +51,7 @@ BOOL sub_0205A4D8(struct UnkStruct_02059E1C *p) {
 void sub_0205A508(int a0) {
     u8 sp0;
     sp0 = a0;
-    sub_02037030(0x65, &sp0, 1);
+    Comm_SendCommand(0x65, &sp0, 1);
 }
 
 int sub_0205A51C(int a0) {

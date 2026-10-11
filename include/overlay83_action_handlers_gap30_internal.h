@@ -8,7 +8,7 @@ void *ov83_02247454(void *, int, int, int, int, int, int, int, int);
 int ov83_02247624(void *);
 void ov83_0224753C(void *);
 void ov83_02246114(u8 *, int);
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 int ov83_02244E24(u8 *, int, u32);
 int ov83_02244F60(u8 *, int, int);
 #endif

@@ -1331,7 +1331,7 @@ _0222C706:
 	mov r1, #0
 	bl ov74_02229E28
 	bl ov74_02229DF8
-	bl sub_0203A914
+	bl WirelessStatusIcon_Destroy
 	mov r0, #0x11
 	str r0, [r5]
 	b _0222CD3A
@@ -1342,12 +1342,12 @@ _0222C71C:
 	bl ov74_0222AB0C
 	b _0222CD3A
 _0222C728:
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	add r7, r0, #0
 	beq _0222C780
 	lsl r0, r7, #0x10
 	lsr r0, r0, #0x10
-	bl sub_020373B4
+	bl Comm_IsNetIdConnected
 	cmp r0, #0
 	beq _0222C780
 	mov r0, #0xab
@@ -1383,11 +1383,11 @@ _0222C780:
 	beq _0222C7B0
 	lsl r0, r7, #0x10
 	lsr r0, r0, #0x10
-	bl sub_020373B4
+	bl Comm_IsNetIdConnected
 	cmp r0, #0
 	bne _0222C7B0
 	bl ov74_02229DF8
-	bl sub_0203A914
+	bl WirelessStatusIcon_Destroy
 	mov r1, #0
 	add r0, r4, #0
 	mvn r1, r1
@@ -1413,7 +1413,7 @@ _0222C7B0:
 	bne _0222C8B8
 _0222C7C8:
 	bl ov74_02229DF8
-	bl sub_0203A914
+	bl WirelessStatusIcon_Destroy
 	mov r1, #0
 	add r0, r4, #0
 	mvn r1, r1
@@ -1431,7 +1431,7 @@ _0222C7E8:
 	mov r0, #0xb
 	str r0, [r5]
 _0222C7F4:
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	ldr r1, _0222CA14 ; =gSystem
 	ldr r2, [r1, #0x48]
 	mov r1, #2
@@ -1448,7 +1448,7 @@ _0222C7F4:
 	beq _0222C8B8
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
-	bl sub_020373B4
+	bl Comm_IsNetIdConnected
 	cmp r0, #0
 	bne _0222C8B8
 _0222C820:
@@ -1456,7 +1456,7 @@ _0222C820:
 	mov r1, #0
 	bl ov74_02229E28
 	bl ov74_02229DF8
-	bl sub_0203A914
+	bl WirelessStatusIcon_Destroy
 	mov r0, #0x11
 	str r0, [r5]
 	b _0222CD3A
@@ -1475,12 +1475,12 @@ _0222C836:
 	str r0, [r5]
 	b _0222CD3A
 _0222C858:
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r0, #0
 	beq _0222C896
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
-	bl sub_020373B4
+	bl Comm_IsNetIdConnected
 	cmp r0, #0
 	bne _0222C896
 	bl ov74_02229DF8
@@ -1491,7 +1491,7 @@ _0222C858:
 	add r0, r4, #0
 	mov r1, #0
 	bl ov74_02229E28
-	bl sub_0203A914
+	bl WirelessStatusIcon_Destroy
 	mov r1, #0
 	add r0, r4, #0
 	mvn r1, r1
@@ -1611,7 +1611,7 @@ _0222C96A:
 	mov r1, #0
 	bl ov74_02229E28
 	bl ov74_02229DF8
-	bl sub_0203A914
+	bl WirelessStatusIcon_Destroy
 	ldr r0, _0222CA28 ; =SEQ_SE_DP_UG_020
 	bl PlaySE
 	mov r1, #0

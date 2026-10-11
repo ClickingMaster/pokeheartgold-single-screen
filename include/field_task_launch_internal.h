@@ -10,10 +10,10 @@ typedef struct TrainerCardTaskEnv {
     u32 state;
     u8 pad2C[0x67C];
 } TrainerCardTaskEnv;
-u32 sub_0203769C(void);
+u32 Comm_GetLocalNetId(void);
 int sub_02057ADC(void);
 int sub_02057B14(int player);
-int sub_02037454(void);
+int Comm_CountConnected(void);
 int sub_02057A34(int player);
 int sub_02057A88(int player);
 void sub_0203E2F4(void);

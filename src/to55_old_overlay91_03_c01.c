@@ -50,7 +50,7 @@ void ov91_0225F008(void);
 void ov91_0225F388(Ov91F3D4 *p);
 BOOL ov91_0225CCA8(Ov91Work *w, void *a, void *b, void *c);
 extern BOOL ov90_02258CE0(void *p);
-extern BOOL sub_02037030(void *a, void *b, void *c);
+extern BOOL Comm_SendCommand(void *a, void *b, void *c);
 void ov91_0225E6B0(void *p);
 BOOL ov91_0225EE48(Ov91Ring *r, Ov91Ev *out);
 BOOL ov91_0225EE64(Ov91Ring *r, Ov91Ev *out);

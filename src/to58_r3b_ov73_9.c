@@ -1,7 +1,7 @@
 #include "global.h"
 
-extern int sub_0203769C(void);
-extern int sub_02037454(void);
+extern int Comm_GetLocalNetId(void);
+extern int Comm_CountConnected(void);
 extern int sub_02039EB4(void *, u32, void *);
 extern void StopSE(u32, u32);
 extern void ov73_021E756C(void *, u32, u32);
@@ -11,8 +11,8 @@ extern u8 gSystem[];
 void *ov73_021E6C50(void *, void *);
 
 void *ov73_021E6C50(void *work, void *result) {
-    if (sub_0203769C() == 0) {
-        sub_02037454();
+    if (Comm_GetLocalNetId() == 0) {
+        Comm_CountConnected();
     }
     if (sub_02039EB4(**(void ***)((u8 *)work + 8), 2, (u8 *)work + 0x374)) {
         StopSE(0x657, 8);

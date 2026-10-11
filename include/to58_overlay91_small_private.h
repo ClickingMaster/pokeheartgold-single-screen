@@ -27,7 +27,7 @@ void ov91_0225E294(void *record, void *out);
 void ov91_0225E2E4(void *base, void *data, int mode);
 void ov91_0225D2EC(u8 *base, u8 *record);
 void ov91_0225D3B4(void *object, int arg, int index);
-void sub_02037030(int id, int a, int b);
+void Comm_SendCommand(int id, int a, int b);
 void ov91_0225CAEC(u8 *base, int arg, int index);
 int ov91_0225CCF4(u8 *base);
 void ov91_0225CB64(u8 *base);

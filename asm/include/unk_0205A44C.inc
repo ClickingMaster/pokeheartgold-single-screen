@@ -31,8 +31,8 @@
 .public sub_02035854
 .public sub_0203588C
 .public sub_02036FD8
-.public sub_02037030
-.public sub_0203769C
+.public Comm_SendCommand
+.public Comm_GetLocalNetId
 .public sub_020388E0
 .public sub_020398D4
 .public sub_02039AD8

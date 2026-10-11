@@ -22,7 +22,7 @@ BOOL ov83_02241368(void *p, int kind, int param) {
         ov83_02241504(p, kind);
         break;
     }
-    if (sub_02037030(value, (u8 *)p + 0x7AC, 0x28) == 1) {
+    if (Comm_SendCommand(value, (u8 *)p + 0x7AC, 0x28) == 1) {
         return TRUE;
     }
     return FALSE;
@@ -44,7 +44,7 @@ void ov83_0224140C(int id, void *unused, void *record, void *state) {
     int i;
     u8 *src;
     (*((u8 *)state + 0xF))++;
-    if (id != sub_0203769C()) {
+    if (id != Comm_GetLocalNetId()) {
         for (i = 0, src = (u8 *)record + 4; i < 3; i++, src += 2) {
             ((u8 *)state + (u32)i)[0x7FF] = *(u16 *)src;
         }

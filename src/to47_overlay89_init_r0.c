@@ -53,7 +53,7 @@ extern void GF_CreateVramTransferManager(u32, u32);
 extern void SetKeyRepeatTimers(int, int);
 extern void sub_020210BC(void);
 extern void sub_02021148(int);
-extern void sub_0203A880(void);
+extern void WirelessStatusIcon_Create(void);
 extern void sub_0200FB70(void);
 extern void *FontID_Alloc(int, u32);
 extern void *MessageFormat_New(u32);
@@ -156,7 +156,7 @@ BOOL ov89_02258800(void *man) {
     SpriteSystem_InitSprites(*(void **)(work + 0x1C), *(void **)(work + 0x20), 0x80);
     SpriteSystem_InitManagerWithCapacities(*(void **)(work + 0x1C), *(void **)(work + 0x20), &ov89_0225CA00);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(*(void **)(work + 0x1C)), 0, 0x110000);
-    sub_0203A880();
+    WirelessStatusIcon_Create();
     ov89_0225A46C(work + 0x194, *(void **)(work + 0x19E0));
     ov89_02259408(work, *(void **)(work + 0x160));
     ov89_02259734(work, *(void **)(work + 0x160));

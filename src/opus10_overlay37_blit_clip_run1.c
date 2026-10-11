@@ -2,7 +2,7 @@
 
 u32 ov37_021E6F5C(Ov37Work *work, u32 arg1) {
     if (work->unk_93B0 != 0) {
-        if (work->unk_93B0 != sub_02037454()) {
+        if (work->unk_93B0 != Comm_CountConnected()) {
             work->unk_93B0 = 0;
         }
     }
@@ -10,7 +10,7 @@ u32 ov37_021E6F5C(Ov37Work *work, u32 arg1) {
     if ((s32)work->counter > 60 && work->unk_93B0 == 0) {
         ov37_021E76C0(work);
         ov37_021E7844(work, 4);
-        if (!sub_0203769C()) {
+        if (!Comm_GetLocalNetId()) {
             work->unk_93F4 = 1;
             ov37_021E76D0(work, 1);
         }
@@ -42,10 +42,10 @@ void ov37_021E6FC8(Ov37Work *work, int arg1, u32 arg2) {
             return;
         }
         BufferPlayersName(work->msgFormat, 0, sub_02034818(arg2));
-        if (arg2 == sub_0203769C()) {
+        if (arg2 == Comm_GetLocalNetId()) {
             return;
         }
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             work->unk_93B4 &= 0xFFFF ^ arg2;
         }
         if (work->prevState == 6 || work->prevState == 0xE) {
@@ -220,7 +220,7 @@ void ov37_021E73B4(Ov37Work *work) {
     Ov37Entry *e;
 
     for (i = 0, e = work->entries; i < 5; i++) {
-        if (i != sub_0203769C()) {
+        if (i != Comm_GetLocalNetId()) {
             if (e->count != 0 && sub_02034818(i)) {
                 Sprite_SetDrawFlag(work->sprites[i], 1);
                 ov37_021E657C(work->sprites[i], e->xs[e->count - 1], e->ys[e->count - 1]);

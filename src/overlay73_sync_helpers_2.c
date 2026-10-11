@@ -1,7 +1,7 @@
 #include "overlay73_sync_helpers_private.h"
 
 int ov73_021E6DF8(void *work, int state) {
-    if (sub_0203769C()==0) {
+    if (Comm_GetLocalNetId()==0) {
         ov73_021E756C(work,5,0);
     } else {
         void *player = sub_02034818(0);

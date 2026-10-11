@@ -32,8 +32,8 @@ u32 ov37_021E6D14(Ov37Work *work, u32 state) {
         ov37_021E6848((void *)((u8 *)work + 0x248), 0);
         ClearFrameAndWindow2((void *)((u8 *)work + 0x2D8), 1);
         ov37_021E78A4(work);
-        if (sub_0203769C() == 0) {
-            sub_02038C1C(sub_02037454() + 1);
+        if (Comm_GetLocalNetId() == 0) {
+            sub_02038C1C(Comm_CountConnected() + 1);
             U32_AT(work, 0x93F4) = 1;
         }
         break;

@@ -384,7 +384,7 @@ void PlazaNewsGraphics_InitSprites(PlazaNewsGraphics *graphics, enum HeapID heap
     for (i = 0; i < 4; i++) {
         graphics->resourceManagers[i] = Create2DGfxResObjMan(0x20, (GfGfxResType)i, heapID);
     }
-    sub_0203A880();
+    WirelessStatusIcon_Create();
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, TRUE);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, TRUE);
 }

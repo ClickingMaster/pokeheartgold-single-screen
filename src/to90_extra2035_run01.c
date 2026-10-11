@@ -10,7 +10,7 @@ extern const u8 ov71_0224BEC0[],ov71_0224BE84[],ov71_0224BEA4[];
 extern void GfGfx_SetBanks(const void*),SetBothScreensModesAndDisable(const void*),InitBgFromTemplate(void*,int,const void*,int);
 extern int ov71_022473A0(void*);
 extern void GfGfxLoader_LoadCharData(int,int,void*,int,int,int,int,int),GfGfxLoader_LoadScrnData(int,int,void*,int,int,int,int,int);
-extern void GfGfxLoader_GXLoadPalWithSrcOffset(int,int,int,int,int,int,int),BgSetPosTextAndCommit(void*,int,int,int),GfGfx_EngineATogglePlanes(int,int),GfGfx_EngineBTogglePlanes(int,int),sub_0203A880(void),sub_0203A948(int,int);
+extern void GfGfxLoader_GXLoadPalWithSrcOffset(int,int,int,int,int,int,int),BgSetPosTextAndCommit(void*,int,int,int),GfGfx_EngineATogglePlanes(int,int),GfGfx_EngineBTogglePlanes(int,int),WirelessStatusIcon_Create(void),sub_0203A948(int,int);
 void ov71_0224A278(void*);
 #pragma force_active on
 void ov71_0224A278(void*w){int screen,ch,pal,offset;
@@ -21,5 +21,5 @@ void ov71_0224A278(void*w){int screen,ch,pal,offset;
  GfGfxLoader_LoadScrnData(89,screen,P(w,0x24),3,0,0,1,57);GfGfxLoader_LoadScrnData(89,screen,P(w,0x24),7,0,0,1,57);
  GfGfxLoader_GXLoadPalWithSrcOffset(89,pal,0,offset,0,32,57);GfGfxLoader_GXLoadPalWithSrcOffset(89,pal,4,offset,0,32,57);
  BgSetPosTextAndCommit(P(w,0x24),3,3,0);BgSetPosTextAndCommit(P(w,0x24),7,3,256);
- GfGfx_EngineATogglePlanes(16,1);GfGfx_EngineBTogglePlanes(16,1);sub_0203A880();sub_0203A948(1,56);
+ GfGfx_EngineATogglePlanes(16,1);GfGfx_EngineBTogglePlanes(16,1);WirelessStatusIcon_Create();sub_0203A948(1,56);
 }

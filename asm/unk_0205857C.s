@@ -7,12 +7,12 @@ sub_0205857C: ; 0x0205857C
 	push {r3, r4, r5, r6, r7, lr}
 	mov r0, #0
 	str r0, [sp]
-	bl sub_02037454
+	bl Comm_CountConnected
 	cmp r0, #0
 	ble _020585F0
 	mov r7, #0
 _0205858C:
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	ldr r1, [sp]
 	cmp r1, r0
 	beq _020585E0
@@ -56,7 +56,7 @@ _020585E0:
 	ldr r0, [sp]
 	add r0, r0, #1
 	str r0, [sp]
-	bl sub_02037454
+	bl Comm_CountConnected
 	ldr r1, [sp]
 	cmp r1, r0
 	blt _0205858C

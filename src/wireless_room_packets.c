@@ -1,11 +1,11 @@
 #include "wireless_room_packets_internal.h"
 
 void *sub_0208F814(void *arg) {
-    return sub_0203410C(_021054B4, 0x6e, arg);
+    return Comm_RegisterCommandTable(_021054B4, 0x6e, arg);
 }
 
 void sub_0208F828(void *a, void *b, void *data, Work *work) {
-    if (sub_0203769C() != 0) {
+    if (Comm_GetLocalNetId() != 0) {
         int offset = U8(data, 0x3ec) * 0x3e8;
         if (offset > 0x3840) {
             MIi_CpuCopyFast((const u32 *)data, (u32 *)(&work->raw[0x43d0] + offset), 0x190);
@@ -47,8 +47,8 @@ void sub_0208F8E4(int index, void *unused, const u8 *src, Work *work) {
 void sub_0208F918(void *a, void *b, void *c, Work *work) {
     ov37_021E6FC8(work, 3, 0);
     MIi_CpuClearFast(0, (u32 *)&work->raw[0x43d0], 0x3840);
-    if (sub_0203769C() == 0) {
-        U32(work, 0x318) = sub_02037454();
+    if (Comm_GetLocalNetId() == 0) {
+        U32(work, 0x318) = Comm_CountConnected();
         U32(work, 0x31c) = sub_02033250();
         U32(work, 0x93f4) = 1;
     }
@@ -57,7 +57,7 @@ void sub_0208F918(void *a, void *b, void *c, Work *work) {
 void sub_0208F960(int id, void *unused, const FourBytes *packet, Work *work) {
     FourBytes local;
     if (id != 0) {
-        if (sub_0203769C() != 0) {
+        if (Comm_GetLocalNetId() != 0) {
             return;
         }
         local = *packet;
@@ -65,12 +65,12 @@ void sub_0208F960(int id, void *unused, const FourBytes *packet, Work *work) {
         local.data[1] = U32(work, 0x318);
         switch (packet->data[2]) {
         case 0:
-            if (sub_02037454() != U32(work, 0x318) || ov37_021E75E0() != U32(work, 0x318) || MATH_CountPopulation(sub_02033250()) != U32(work, 0x318)) {
+            if (Comm_CountConnected() != U32(work, 0x318) || ov37_021E75E0() != U32(work, 0x318) || MATH_CountPopulation(sub_02033250()) != U32(work, 0x318)) {
                 local.data[3] = 0;
             } else {
                 U32(work, 0x93b4) |= 1 << id;
                 local.data[3] = 1;
-                sub_02038C1C(sub_02037454());
+                sub_02038C1C(Comm_CountConnected());
             }
             break;
         case 1:
@@ -82,7 +82,7 @@ void sub_0208F960(int id, void *unused, const FourBytes *packet, Work *work) {
         switch (packet->data[2]) {
         case 0:
             sender = packet->data[0];
-            if (sender != sub_0203769C()) {
+            if (sender != Comm_GetLocalNetId()) {
                 return;
             }
             if (packet->data[3] == 0) {
@@ -106,7 +106,7 @@ void sub_0208FA50(void) {
 
 void sub_0208FA54(void *a, void *b, const u8 *data, Work *work) {
     ov37_021E6FC8(work, 1, data[0]);
-    if (sub_0203769C() == 0 && U32(work, 0x300) == 1) {
+    if (Comm_GetLocalNetId() == 0 && U32(work, 0x300) == 1) {
         U32(work, 0x43cc) = 0;
         sub_0208FAF8(work, U32(work, 0x43cc));
     }
@@ -118,17 +118,17 @@ void sub_0208FA8C(void) {
 }
 
 void sub_0208FA90(void *a, void *b, void *c, Work *work) {
-    if (sub_0203769C() != 0) {
+    if (Comm_GetLocalNetId() != 0) {
         ov37_021E6FC8(work, 15, 0);
     }
 }
 
 void sub_0208FAA8(int value, void *b, void *c, Work *work) {
     u8 packet;
-    if (sub_0203769C() != 0) {
+    if (Comm_GetLocalNetId() != 0) {
         GF_AssertFail();
     }
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         if (U32(work, 0x93fc) != 0) {
             packet = value;
             sub_02037108(0x7b, &packet, 1);

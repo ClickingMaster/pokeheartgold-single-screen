@@ -40,7 +40,7 @@
 .public GetUserFrameGfx1PaletteMember
 .public DrawFrameAndWindow1
 .public EraseFrameAndWindow1
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public FontSystem_NewInit
 .public sub_020135AC
 .public sub_020135D8

@@ -32,7 +32,7 @@ void sub_02058690(void) {
 }
 
 void sub_020586A0(void) {
-    if (sub_02037958() == 0 && sub_02057F18(sub_0203769C()) == 0) {
+    if (sub_02037958() == 0 && sub_02057F18(Comm_GetLocalNetId()) == 0) {
         if (_021D41C8->timer) {
             _021D41C8->timer--;
             return;
@@ -54,7 +54,7 @@ void sub_020586EC(void) {
 }
 
 void sub_02058720(int sender, int unused, u8 *data) {
-    if (*data == sub_0203769C()) {
+    if (*data == Comm_GetLocalNetId()) {
         _021D41C8->ready = 1;
     }
 }
@@ -155,7 +155,7 @@ void *sub_020588DC(int index) {
 }
 
 void sub_020588F8(void) {
-    int id = sub_0203769C();
+    int id = Comm_GetLocalNetId();
     if (sub_02037B38(95)) {
         sub_02036FD8(88, _021D41C8->packets[id], 0x66c);
         sub_020582F4(sub_02058930, 0);
@@ -164,7 +164,7 @@ void sub_020588F8(void) {
 
 void sub_02058930(void) {
     int i;
-    for (i = 0; i < sub_02037454(); i++) {
+    for (i = 0; i < Comm_CountConnected(); i++) {
         if (_021D41C8->received[i] == 0) {
             return;
         }

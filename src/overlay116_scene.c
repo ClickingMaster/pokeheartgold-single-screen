@@ -80,14 +80,14 @@ void ov116_0225F054(void *arg0, Ov116Task *task) {
         }
         break;
     case 7:
-        sub_0200FBF4(1, 0x7FFF);
+        SetMasterBrightnessByColor(1, 0x7FFF);
         ov01_021F46DC(work);
         *(vu16 *)0x04000050 = 0;
         if (task->completionFlag != NULL) {
             *task->completionFlag = 1;
         }
         ov01_021EFCDC(task, arg0);
-        sub_0200FBF4(1, 0x7FFF);
+        SetMasterBrightnessByColor(1, 0x7FFF);
         break;
     }
 }
@@ -156,14 +156,14 @@ void ov116_0225F1BC(void *arg0, Ov116Task *task, const Ov116Sequence *seq) {
         }
         break;
     case 9:
-        sub_0200FBF4(1, 0x7FFF);
+        SetMasterBrightnessByColor(1, 0x7FFF);
         ov01_021F46DC(work);
         *(vu16 *)0x04000050 = 0;
         if (task->completionFlag != NULL) {
             *task->completionFlag = 1;
         }
         ov01_021EFCDC(task, arg0);
-        sub_0200FBF4(1, 0x7FFF);
+        SetMasterBrightnessByColor(1, 0x7FFF);
         break;
     }
 }

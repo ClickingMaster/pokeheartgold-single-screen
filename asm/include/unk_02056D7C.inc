@@ -10,13 +10,13 @@
 .public sub_02034818
 .public sub_02037108
 .public sub_02037184
-.public sub_020373B4
+.public Comm_IsNetIdConnected
 .public sub_02037474
 .public sub_02037498
 .public sub_020374AC
 .public sub_020374C0
 .public sub_020374E4
-.public sub_0203769C
+.public Comm_GetLocalNetId
 .public sub_020376E0
 .public sub_0203774C
 .public sub_02037894

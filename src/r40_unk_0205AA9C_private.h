@@ -10,6 +10,6 @@
 extern const s32 _020FC898[7];
 PlayerProfile *sub_02035798(int objId);
 PlayerProfile *sub_02034818(int netId);
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 void sub_0205AA9C(MessageFormat *msgFmt, u16 mode, u16 objId, PlayerProfile *profile, SaveEasyChat *easyChat);
 #endif

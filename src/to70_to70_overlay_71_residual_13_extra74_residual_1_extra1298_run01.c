@@ -16,7 +16,7 @@ extern void *ov71_0224744C(int,int,int,int);
 extern void *ov71_02247F9C(void *);
 extern void *ov71_02247610(void *,int,int,int,int,int,int,int);
 extern void ov71_022476EC(void *,Triple *);
-extern void sub_0203A880(void),sub_0203A948(int,int);
+extern void WirelessStatusIcon_Create(void),sub_0203A948(int,int);
 int ov71_02247A10(u8 *);
 #define P(x) (*(void **)(p+(x)))
 int ov71_02247A10(u8 *p){
@@ -48,6 +48,6 @@ int ov71_02247A10(u8 *p){
  vec=ov71_0224BC5C;ov71_022476EC(P(0x74),&vec);
  GfGfx_EngineATogglePlanes(16,1);GfGfx_EngineBTogglePlanes(16,1);
  ov71_02247FF8(p);*(volatile u16 *)0x04000050=0;
- sub_0203A880();sub_0203A948(1,0x38);
+ WirelessStatusIcon_Create();sub_0203A948(1,0x38);
  BeginNormalPaletteFade(0,1,1,0,16,1,(enum HeapID)0x39);return 1;
 }

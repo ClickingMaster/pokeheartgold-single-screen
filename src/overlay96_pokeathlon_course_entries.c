@@ -123,7 +123,7 @@ extern void BeginNormalPaletteFade(u32, u32, u32, u32, u32, u32, u32);
 extern u32 IsPaletteFadeFinished(void);
 extern s32 GF_SinDeg(u16);
 extern void sub_0203A994(u32);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 
 u32 ov96_0220E22C(void *course, u8 *state);
 void ov96_0220E2A8(void *course);
@@ -322,7 +322,7 @@ u32 ov96_0220E670(void *course) {
     ov96_022101D0((u8 *)w + 0x510);
     ov96_0220EAA4(w);
     ov96_0220EE4C(w);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
     PokeathlonCourse_FreePtr4HeapAlloc(course);

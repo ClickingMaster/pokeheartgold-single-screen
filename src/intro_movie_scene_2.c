@@ -85,8 +85,8 @@ static void IntroMovie_Scene2_VBlankCB(void *pVoid) {
 }
 
 static void IntroMovie_Scene2_Init(IntroMovieOverlayData *data, IntroMovieScene2Data *sceneData) {
-    sub_0200FBF4(PM_LCD_TOP, RGB_WHITE);
-    sub_0200FBF4(PM_LCD_BOTTOM, RGB_WHITE);
+    SetMasterBrightnessByColor(PM_LCD_TOP, RGB_WHITE);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_WHITE);
     BgConfig *bgConfig = IntroMovie_GetBgConfig(data);
     ObjCharTransfer_ClearBuffers();
     ObjPlttTransfer_Reset();

@@ -1285,112 +1285,112 @@
   {
    "function": "__VENEER_OS_CreateThread",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_CreateThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_InitMessageQueue",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_InitMessageQueue: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_InitMutex",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_InitMutex: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_InitVAlarm",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_InitVAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_IsVAlarmAvailable",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_IsVAlarmAvailable: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_WakeupThreadDirect",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_WakeupThreadDirect: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_PXI_Init",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to PXI_Init: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_PXI_SetFifoRecvCallback",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to PXI_SetFifoRecvCallback: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_ReceiveMessage",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_ReceiveMessage: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_SendMessage",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_SendMessage: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_Terminate",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_Terminate: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_SND_BeginSleep",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to SND_BeginSleep: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_WMSP_GetBuffer4Callback2Wm9",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to WMSP_GetBuffer4Callback2Wm9: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_WMSP_ReturnResult2Wm9",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to WMSP_ReturnResult2Wm9: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_MI_CpuCopy8",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_3_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to MI_CpuCopy8: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_MIi_CpuClear16",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_4_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to MIi_CpuClear16: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
@@ -1404,35 +1404,35 @@
   {
    "function": "__VENEER_OS_DisableInterrupts",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_DisableInterrupts: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_DisableScheduler",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_DisableScheduler: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_EnableScheduler",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_EnableScheduler: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_RestoreInterrupts",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_RestoreInterrupts: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_SetThreadPriority",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_system.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_SetThreadPriority: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },

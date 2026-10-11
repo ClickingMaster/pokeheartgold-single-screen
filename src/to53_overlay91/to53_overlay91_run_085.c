@@ -13,7 +13,7 @@ int ov91_02261B28(void) {
 }
 
 void ov91_02261B2C(int value) {
-    sub_0203410C(ov91_02261B20(), ov91_02261B28(), value);
+    Comm_RegisterCommandTable(ov91_02261B20(), ov91_02261B28(), value);
 }
 
 int ov91_02261B48(void) {
@@ -30,7 +30,7 @@ u32 ov91_02261B58(u32 a0, u32 a1, u32 a2, u32 a3) {
 
 void ov91_02261B64(u32 a0, u32 a1, u32 a2, u32 a3) {
     ov91_0225CA90(a3, a2, a0);
-    if (!sub_0203769C()) {
+    if (!Comm_GetLocalNetId()) {
         ov91_0225CA74(a3, a2, a0);
     }
 }

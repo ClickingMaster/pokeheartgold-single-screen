@@ -8,7 +8,7 @@
 .public sub_0200FB70
 .public ResetVisibleHardwareWindows
 .public SetMasterBrightnessNeutral
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public sub_0200FC20
 .public sub_0200FC60
 .public sub_0200FCDC

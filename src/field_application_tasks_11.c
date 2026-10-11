@@ -8,10 +8,10 @@ int sub_0205A35C(const void *p) {
     if (*(const u32 *)((const u8 *)p + 0x44) != 0) {
         return 7;
     }
-    if (sub_02037454() < 2) {
+    if (Comm_CountConnected() < 2) {
         return 7;
     }
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         if (sub_02037FCC() == TRUE) {
             return *(const int *)((const u8 *)p + 0x40);
         }

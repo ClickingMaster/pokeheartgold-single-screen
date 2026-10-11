@@ -31,7 +31,7 @@ BOOL ov90_02258B98(Ov90Status *status);
 Ov90Resource *ov90_02258BD4(void *owner, u32 heapId);
 void ov90_02258C38(Ov90Resource *resource);
 
-extern u8 sub_02037454(Ov90StatusData *data);
+extern u8 Comm_CountConnected(Ov90StatusData *data);
 extern int sub_02039264(void);
 extern int sub_020390C4(void);
 extern void GF_AssertFail(void);

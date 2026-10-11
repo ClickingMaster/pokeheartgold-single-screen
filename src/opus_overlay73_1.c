@@ -43,10 +43,10 @@ int ov73_021E5900(OverlayManager *mgr, u32 *state) {
         sub_0208FB64(work);
         sub_0203893C();
         sub_02038C1C(3);
-        if (!sub_0203769C()) {
+        if (!Comm_GetLocalNetId()) {
             sub_0205A904(2);
         }
-        sub_0203A880();
+        WirelessStatusIcon_Create();
         ov73_021EA374(work->unk_4A0C, work->unk_388);
         work->task = SysTask_CreateOnVBlankQueue(ov73_021E5C74, work, 5);
         NARC_Delete(narc);

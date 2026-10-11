@@ -26,7 +26,7 @@ void sub_02057F28(int facing) {
     int slot;
     u8 *position;
     PlayerAvatar_SetFacingDirection(*(void **)((u8 *)*(void **)&_021D41C4->raw[0x30] + 0x40), facing);
-    slot = sub_0203769C();
+    slot = Comm_GetLocalNetId();
     position = _021D41C4->raw + slot * 8;
     position[0x78] = facing;
     sub_0205701C(0);

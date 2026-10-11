@@ -54,7 +54,7 @@ int ov05_0221BE04(Ov05Work *work) {
         ov05_0221E5E4(work);
         ov05_0221E944(work);
         ov05_0221DE38(work);
-        sub_0203A880();
+        WirelessStatusIcon_Create();
         sub_020880CC(0, OV05_U32(OV05_PTR(work, 0), 0x24));
         Main_SetVBlankIntrCB((void (*)(void *))ov05_0221CE88, work);
         return 1;
@@ -74,7 +74,7 @@ int ov05_0221BE80(Ov05Work *work) {
     case 1:
         ov05_0221D6C4(work, 0, 0);
         ov05_0221D240(work);
-        sub_0203A880();
+        WirelessStatusIcon_Create();
         ov05_0221D9F0(work);
         break;
     case 2:
@@ -115,7 +115,7 @@ int ov05_0221BF08(Ov05Work *work) {
     case 1:
         ov05_0221D6C4(work, -32, -16);
         ov05_0221D7AC(work);
-        sub_0203A880();
+        WirelessStatusIcon_Create();
         break;
     case 2:
         sub_020880CC(0, OV05_U32(OV05_PTR(work, 0), 0x24));

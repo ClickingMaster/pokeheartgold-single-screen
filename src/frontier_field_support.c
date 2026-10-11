@@ -99,7 +99,7 @@ void sub_02067200(TaskManager *taskManager, u16 arg1, u16 outputVar, u16 arg2) {
 BOOL sub_02067238(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     SmallTaskEnv *env = TaskManager_GetEnvironment(taskManager);
-    u16 *linkData = sub_02037C44(1 - sub_0203769C());
+    u16 *linkData = sub_02037C44(1 - Comm_GetLocalNetId());
     u16 *output;
     if (linkData == NULL) {
         return FALSE;

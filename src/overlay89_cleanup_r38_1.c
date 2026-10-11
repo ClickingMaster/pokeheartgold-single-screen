@@ -41,7 +41,7 @@ extern void ov89_0225A5EC(void *);
 extern void ov89_0225A760(void *, void *);
 extern void sub_020135AC(void *);
 extern void sub_02021238(void);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern const GraphicsBanks ov89_0225CA78;
 extern const GraphicsModes ov89_0225C9DC;
 extern const Ov89BgTemplates ov89_0225CC18;
@@ -87,7 +87,7 @@ BOOL ov89_02258F00(void *manager) {
     TextFlags_SetCanABSpeedUpPrint(0);
     TextFlags_SetAutoScrollParam(0);
     TextFlags_SetCanTouchSpeedUpPrint(0);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     OverlayManager_FreeData(manager);
     Heap_Destroy(HEAP_ID_125);
     return TRUE;

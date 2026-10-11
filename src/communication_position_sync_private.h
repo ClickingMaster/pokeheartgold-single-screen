@@ -11,7 +11,7 @@ extern const u16 _0210FABC[];
 
 int sub_0203993C(void);
 int sub_0203774C(void);
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 int sub_02057A34(void);
 void sub_02057F28(int);
 int sub_0206234C(int, int);

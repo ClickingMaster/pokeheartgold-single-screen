@@ -57,7 +57,7 @@ extern BOOL sub_0202C2DC(UnkStruct_021D2230 *data, int index);
 extern void sub_0202C338(UnkStruct_021D2230 *data, int index);
 extern void sub_020311AC(void *frontier, int row);
 extern void *Save_Frontier_GetStatic(SaveData *saveData);
-extern int sub_02037454(void);
+extern int Comm_CountConnected(void);
 extern int sub_02034818(int);
 extern void *Save_Bag_Get(SaveData *saveData);
 extern BOOL Bag_HasItem(void *bag, u16 itemId, u16 quantity, int heapId);

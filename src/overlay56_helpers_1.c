@@ -374,8 +374,8 @@ int ov56_021E6228(void *data) {
         GfGfx_DisableEngineBPlanes();
         *(volatile u32 *)0x04000000 &= 0xffffe0ff;
         *(volatile u32 *)0x04001000 &= 0xffffe0ff;
-        sub_0200FBF4(0, 0);
-        sub_0200FBF4(1, 0);
+        SetMasterBrightnessByColor(0, 0);
+        SetMasterBrightnessByColor(1, 0);
         ResetVisibleHardwareWindows(0);
         ResetVisibleHardwareWindows(1);
         break;
@@ -413,8 +413,8 @@ int ov56_021E6228(void *data) {
             }
             return 0;
         }
-        sub_0200FBF4(0, 0);
-        sub_0200FBF4(1, 0);
+        SetMasterBrightnessByColor(0, 0);
+        SetMasterBrightnessByColor(1, 0);
         Main_SetVBlankIntrCB(0, 0);
         GfGfx_DisableEngineAPlanes();
         GfGfx_DisableEngineBPlanes();

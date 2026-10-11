@@ -1,16 +1,16 @@
 #include "global.h"
 
-extern int sub_0203769C(void);
-extern int sub_02037454(void);
+extern int Comm_GetLocalNetId(void);
+extern int Comm_CountConnected(void);
 extern void sub_02038C1C(int);
 void ov73_021E781C(void *, int);
 
 void ov73_021E781C(void *work, int index) {
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         if (index == -1) {
             sub_02038C1C(1);
         } else {
-            int count = sub_02037454() + index;
+            int count = Comm_CountConnected() + index;
             if (count > 5) {
                 count = 5;
             }

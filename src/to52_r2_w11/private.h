@@ -42,7 +42,7 @@ extern int (*ov85_021EA9E0[])(ArcScene *);
 extern u32 sub_02033250(void);
 extern void sub_0203897C(void);
 extern void sub_02038C1C(int);
-extern void sub_0203A880(void);
+extern void WirelessStatusIcon_Create(void);
 extern void sub_02096CE0(void *);
 extern BOOL sub_02096D4C(void *, int, void *, int);
 extern BOOL ov85_021E88AC(void *, int *);

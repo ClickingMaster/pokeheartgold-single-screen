@@ -12,7 +12,7 @@ extern volatile u8 _0210F900[2];
 int sub_0203993C(void);
 int sub_02033FC4(u16 value);
 int sub_02034044(int value);
-int sub_020373B4(u16 slot);
+int Comm_IsNetIdConnected(u16 slot);
 int sub_02035FF0(void);
 BOOL sub_02036438(int slot);
 int sub_02033298(void);
@@ -50,7 +50,7 @@ void sub_02036508(void) {
     if (_0210F900[0] == 1 || _0210F900[0] == 3) {
         _021D4140.initialized = 0;
         for (i = 0; i < count; i++) {
-            if (sub_020373B4(i)) {
+            if (Comm_IsNetIdConnected(i)) {
                 (*(int *)(_021D4140.work + i * 4 + 0x66C))++;
             }
         }

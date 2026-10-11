@@ -54,7 +54,7 @@ void ov80_0222BD44(u32 sender, u32 a1, const void *payload, void *ctx);
 void ov80_0222AEF8(u32 sender, u32 a1, void *payload, void *ctx) {
     u8 *p = ctx;
     p[0xD90]++;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         return;
     }
 }
@@ -62,13 +62,13 @@ void ov80_0222AEF8(u32 sender, u32 a1, void *payload, void *ctx) {
 BOOL ov80_0222AF10(void *ctx) {
     u8 *p = ctx;
     Save_PlayerData_GetProfile(*(void **)(p + 0x6FC));
-    return sub_02037030(0x22, p + 0x72C, 0x2C) == 1;
+    return Comm_SendCommand(0x22, p + 0x72C, 0x2C) == 1;
 }
 
 void ov80_0222AF3C(u32 sender, u32 a1, void *payload, void *ctx) {
     u8 *p = ctx;
     p[0xD90]++;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         return;
     }
 }
@@ -82,14 +82,14 @@ BOOL ov80_0222AF54(void *ctx) {
         *dst++ = *(u16 *)(p + 0x18);
         p += 2;
     }
-    return sub_02037030(0x23, packet, 0x2C) == 1;
+    return Comm_SendCommand(0x23, packet, 0x2C) == 1;
 }
 
 void ov80_0222AF84(u32 sender, u32 a1, const u16 *payload, void *ctx) {
     u8 *p = ctx;
     int i;
     p[0xD90]++;
-    if (sender != sub_0203769C() && sub_0203769C() != 0) {
+    if (sender != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         for (i = 0; i < 20; i++) {
             *(u16 *)(p + 0x18) = *payload++;
             p += 2;
@@ -107,14 +107,14 @@ BOOL ov80_0222AFB8(void *ctx) {
         p += 2;
         i++;
     }
-    return sub_02037030(0x24, packet, 0x2C) == 1;
+    return Comm_SendCommand(0x24, packet, 0x2C) == 1;
 }
 
 void ov80_0222AFEC(u32 sender, u32 a1, const u16 *payload, void *ctx) {
     u8 *p = ctx;
     int i;
     p[0xD90]++;
-    if (sender != sub_0203769C() && sub_0203769C() != 0) {
+    if (sender != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         for (i = 0; i < 20; i++) {
             *(u16 *)(p + 0x268) = *payload++;
             p += 2;
@@ -125,13 +125,13 @@ void ov80_0222AFEC(u32 sender, u32 a1, const u16 *payload, void *ctx) {
 BOOL ov80_0222B024(void *ctx, u16 value) {
     u8 *p = ctx;
     *(u16 *)(p + 0x72C) = value;
-    return sub_02037030(0x25, p + 0x72C, 0x2C) == 1;
+    return Comm_SendCommand(0x25, p + 0x72C, 0x2C) == 1;
 }
 
 void ov80_0222B048(u32 sender, u32 a1, const u16 *payload, void *ctx) {
     u8 *p = ctx;
     p[0xD90]++;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         p[0xD88] = *payload;
     }
 }
@@ -147,7 +147,7 @@ BOOL ov80_0222B070(void *ctx) {
 void ov80_0222B0B8(u32 sender, u32 a1, const void *payload, void *ctx) {
     u8 *p = ctx;
     p[0xD90]++;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         MI_CpuCopy8(payload, *(void **)(p + 0xD8C), SizeOfStructPokemon());
     }
 }
@@ -165,13 +165,13 @@ BOOL ov80_0222B108(void *ctx) {
     *(u16 *)(packet + 2) = *(u16 *)(p + 8);
     *(u16 *)(packet + 4) = *(u16 *)(p + 0xC);
     *(u16 *)(packet + 6) = *(u16 *)(p + 0xE);
-    return sub_02037030(0x16, packet, 0x3C) == 1;
+    return Comm_SendCommand(0x16, packet, 0x3C) == 1;
 }
 
 void ov80_0222B140(u32 sender, u32 a1, const u16 *payload, void *ctx) {
     u8 *p = ctx;
     p[0x702]++;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         *(u16 *)(p + 0x580) = payload[1];
         *(u16 *)(p + 0x582) = payload[2];
         *(u16 *)(p + 0x57E) = payload[3];
@@ -187,14 +187,14 @@ BOOL ov80_0222B174(void *ctx) {
         *dst++ = *(u16 *)(p + 0x18);
         p += 2;
     }
-    return sub_02037030(0x17, packet, 0x3C) == 1;
+    return Comm_SendCommand(0x17, packet, 0x3C) == 1;
 }
 
 void ov80_0222B1A4(u32 sender, u32 a1, const u16 *payload, void *ctx) {
     u8 *p = ctx;
     int i;
     p[0x702]++;
-    if (sender != sub_0203769C() && sub_0203769C() != 0) {
+    if (sender != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         for (i = 0; i < 14; i++) {
             *(u16 *)(p + 0x18) = *payload++;
             p += 2;

@@ -268,7 +268,7 @@ ov73_021E671C: ; 0x021E671C
 	ldr r0, [r5, r1]
 	cmp r0, #3
 	bne _021E6768
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r0, #0
 	bne _021E674E
 	mov r1, #0
@@ -302,7 +302,7 @@ ov73_021E6778: ; 0x021E6778
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r0, #0
 	bne _021E6794
 	mov r0, #0
@@ -310,7 +310,7 @@ ov73_021E6778: ; 0x021E6778
 	mov r0, #0x75
 	add r1, sp, #0
 	mov r2, #1
-	bl sub_02037030
+	bl Comm_SendCommand
 _021E6794:
 	mov r0, #0xc6
 	mov r1, #3
@@ -369,7 +369,7 @@ ov73_021E67A8: ; 0x021E67A8
 	ldr r0, _021E682C ; =0x00004A15
 	mov r1, #1
 	strb r1, [r4, r0]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r0, #0
 	bne _021E6814
 	add r0, r4, #0
@@ -412,7 +412,7 @@ ov73_021E6830: ; 0x021E6830
 	ldr r0, _021E6888 ; =0x00004A15
 	mov r1, #0
 	strb r1, [r4, r0]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r0, #0
 	bne _021E686C
 	mov r1, #0
@@ -462,7 +462,7 @@ ov73_021E68AC: ; 0x021E68AC
 	sub sp, #8
 	add r5, r0, #0
 	add r6, r1, #0
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r0, #0
 	beq _021E68E0
 	ldr r0, _021E69BC ; =0x00004A10
@@ -503,7 +503,7 @@ _021E68F8:
 _021E6904:
 	bl ov73_021E746C
 	add r4, r0, #0
-	bl sub_02037454
+	bl Comm_CountConnected
 	cmp r4, r0
 	beq _021E691E
 	add r0, r5, #0
@@ -520,7 +520,7 @@ _021E691E:
 	beq _021E69B0
 	cmp r0, #2
 	bne _021E6958
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r0, #0
 	bne _021E694E
 	mov r0, #0
@@ -528,7 +528,7 @@ _021E691E:
 	mov r0, #0x75
 	add r1, sp, #4
 	mov r2, #1
-	bl sub_02037030
+	bl Comm_SendCommand
 	add r0, r5, #0
 	mov r1, #1
 	bl ov73_021E781C
@@ -538,7 +538,7 @@ _021E694E:
 	bl ov73_021E670C
 	b _021E69AA
 _021E6958:
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r0, #0
 	bne _021E6974
 	add r0, r5, #0
@@ -557,7 +557,7 @@ _021E6974:
 	mov r1, #0
 	add r0, sp, #0
 	strb r1, [r0, #2]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	add r1, sp, #0
 	strb r0, [r1]
 	ldr r0, _021E69CC ; =0x00004A28
@@ -573,7 +573,7 @@ _021E6974:
 	mov r0, #0x70
 	add r1, sp, #0
 	mov r2, #4
-	bl sub_02037030
+	bl Comm_SendCommand
 _021E69AA:
 	add r0, r5, #0
 	bl ov73_021E6830

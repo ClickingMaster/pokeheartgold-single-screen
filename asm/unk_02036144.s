@@ -47,11 +47,11 @@ sub_02036144: ; 0x02036144
 	bne _020361A4
 	bl sub_020372E4
 _020361A4:
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r0, #0
 	bne _020361C6
 	mov r0, #0
-	bl sub_020373B4
+	bl Comm_IsNetIdConnected
 	cmp r0, #0
 	beq _020361C6
 	bl sub_0203993C
@@ -60,7 +60,7 @@ _020361A4:
 	bne _020361C6
 	bl sub_0203667C
 _020361C6:
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r0, #0
 	beq _020361D6
 	bl sub_02035FF0
@@ -78,7 +78,7 @@ _020361E0:
 	ldr r0, _02036228 ; =0x00000694
 	ldrh r0, [r1, r0]
 	bl sub_020355C8
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r0, #0
 	bne _020361F8
 	bl sub_02035E9C

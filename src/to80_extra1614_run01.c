@@ -45,7 +45,7 @@ extern u32 MonTryLearnMoveOnLevelUp(void *,u32 *,u16 *);
 extern void BufferMoveName(void *,int,u32);
 extern void sub_0207584C(Work *,int);
 extern int sub_02075A04(Work *);
-extern void sub_0200FBF4(int,int);
+extern void SetMasterBrightnessByColor(int,int);
 extern void sub_020771A0(void *);
 extern void sub_02075770(Work *);
 extern const u8 _020FFEC0[];
@@ -57,7 +57,7 @@ extern void sub_02076E64(void *,void *);
 extern void sub_02075630(Work *);
 extern void DrawFrameAndWindow2(void *,int,int,int);
 extern void Pokepic_ScheduleReloadFromNarc(void *);
-extern void sub_0203A880(void);
+extern void WirelessStatusIcon_Create(void);
 extern void MonSetMoveInSlot(void *,u16,u8);
 extern int IsFanfarePlaying(void);
 extern void sub_02076C90(Work *);
@@ -92,8 +92,8 @@ void sub_02075E14(Work *w){
  case 15:case 17:case 19:case 26:case 28:case 30:case 33:if(!TextPrinterCheckActive(w->printer)&&--w->timer==0)w->state++;break;
  case 20:sub_0207584C(w,1);w->state++;break;
  case 21:{int result=sub_02075A04(w);switch(result){case 1:w->state=22;PaletteData_BeginPaletteFade(w->palette,15,0xffff,1,0,16,0);Pokepic_StartPaletteFadeAll(w->picman,0,16,0,0);break;case 2:w->state=32;break;default:break;}break;}
- case 22:if(PaletteData_GetSelectedBuffersBitmask(w->palette)==0){sub_0200FBF4(0,0);sub_0200FBF4(1,0);sub_020771A0(w->bg);sub_02075770(w);Pokepic_SetAttr(w->pic0,6,1);Pokepic_SetAttr(w->pic1,6,1);w->summary->mon=w->mon;w->summary->options=w->options;w->summary->f11=0;w->summary->f14=0;w->summary->f13=1;w->summary->move=w->newMove;w->summary->f12=2;w->summary->field28=0;w->summary->field30=0;sub_02089D40(w->summary,_020FFEC0);sub_02077394(w);w->state++;}break;
- case 23:if(OverlayManager_Run(w->manager)){OverlayManager_Delete(w->manager);w->manager=NULL;sub_02076E64(w,w->bg);sub_02075630(w);DrawFrameAndWindow2(w->window,0,1,10);Pokepic_SetAttr(w->pic0,6,0);Pokepic_SetAttr(w->pic1,6,0);Pokepic_ScheduleReloadFromNarc(w->pic0);Pokepic_ScheduleReloadFromNarc(w->pic1);PaletteData_BeginPaletteFade(w->palette,15,0xffff,1,16,0,0);Pokepic_StartPaletteFadeAll(w->picman,16,0,0,0);sub_0203A880();w->state++;}break;
+ case 22:if(PaletteData_GetSelectedBuffersBitmask(w->palette)==0){SetMasterBrightnessByColor(0,0);SetMasterBrightnessByColor(1,0);sub_020771A0(w->bg);sub_02075770(w);Pokepic_SetAttr(w->pic0,6,1);Pokepic_SetAttr(w->pic1,6,1);w->summary->mon=w->mon;w->summary->options=w->options;w->summary->f11=0;w->summary->f14=0;w->summary->f13=1;w->summary->move=w->newMove;w->summary->f12=2;w->summary->field28=0;w->summary->field30=0;sub_02089D40(w->summary,_020FFEC0);sub_02077394(w);w->state++;}break;
+ case 23:if(OverlayManager_Run(w->manager)){OverlayManager_Delete(w->manager);w->manager=NULL;sub_02076E64(w,w->bg);sub_02075630(w);DrawFrameAndWindow2(w->window,0,1,10);Pokepic_SetAttr(w->pic0,6,0);Pokepic_SetAttr(w->pic1,6,0);Pokepic_ScheduleReloadFromNarc(w->pic0);Pokepic_ScheduleReloadFromNarc(w->pic1);PaletteData_BeginPaletteFade(w->palette,15,0xffff,1,16,0,0);Pokepic_StartPaletteFadeAll(w->picman,16,0,0,0);WirelessStatusIcon_Create();w->state++;}break;
  case 24:SetMasterBrightnessNeutral(0);SetMasterBrightnessNeutral(1);if(PaletteData_GetSelectedBuffersBitmask(w->palette)==0){if(w->summary->selection==4)w->state=32;else{w->selection=w->summary->selection;w->state=25;}}break;
  case 32:BufferMoveName(w->format,0,w->newMove);w->printer=sub_020772F8(w,0x4ad);w->timer=1;w->state++;break;
  case 34:sub_0207584C(w,0);w->state++;break;

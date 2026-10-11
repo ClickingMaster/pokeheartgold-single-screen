@@ -4,7 +4,7 @@ int ov73_021E671C(void *p, int result) {
     if (ov73_021E75FC(U32(p, 0x4C))) {
         U32(p, 0x318) = U32(p, 0x31C);
         if (U32(p, 0x31C) == 3) {
-            if (sub_0203769C() == 0) {
+            if (Comm_GetLocalNetId() == 0) {
                 ov73_021E71E4(p, 0, 0);
             }
             U32(p, 0x4A38) = -1;
@@ -18,9 +18,9 @@ int ov73_021E671C(void *p, int result) {
 
 int ov73_021E6778(void *p, int result) {
     u32 data;
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         data = 0;
-        sub_02037030(0x75, &data, 1);
+        Comm_SendCommand(0x75, &data, 1);
     }
     U32(p, 0x318) = 3;
     ov73_021E66F0(p);
@@ -40,7 +40,7 @@ void ov73_021E67A8(void *p) {
     t.d = 0;
     YesNoPrompt_InitFromTemplate(PTR(p, 0x2E8), &t);
     U8(p, 0x4A15) = 1;
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         ov73_021E71E4(p, 0, 2);
     }
     ov73_021E71E4(p, 1, 2);
@@ -52,7 +52,7 @@ void ov73_021E6830(void *p) {
         U32(p, 0x314) = YesNoPrompt_IsInTouchMode(PTR(p, 0x2E8));
         YesNoPrompt_Reset(PTR(p, 0x2E8));
         U8(p, 0x4A15) = 0;
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             ov73_021E71E4(p, 0, 0);
         }
         U32(p, 0x4A38) = -1;
@@ -73,7 +73,7 @@ int ov73_021E68AC(void *p, int result) {
     u8 data[4];
     int input;
 
-    if (sub_0203769C() != 0) {
+    if (Comm_GetLocalNetId() != 0) {
         if (U32(p, 0x4A10) != 0) {
             if (U32(gSystem, 0x48) & 0xC3) {
                 PlaySE(0x5F2);
@@ -90,30 +90,30 @@ int ov73_021E68AC(void *p, int result) {
             return result;
         }
     }
-    if (ov73_021E746C() != sub_02037454()) {
+    if (ov73_021E746C() != Comm_CountConnected()) {
         ov73_021E66F0(p);
         return result;
     }
     input = YesNoPrompt_HandleInput(PTR(p, 0x2E8));
     if (input != 0) {
         if (input == 2) {
-            if (sub_0203769C() == 0) {
+            if (Comm_GetLocalNetId() == 0) {
                 noData = 0;
-                sub_02037030(0x75, &noData, 1);
+                Comm_SendCommand(0x75, &noData, 1);
                 ov73_021E781C(p, 1);
             }
             ov73_021E670C(p, 0);
-        } else if (sub_0203769C() == 0) {
+        } else if (Comm_GetLocalNetId() == 0) {
             ov73_021E670C(p, 0xB);
             ov73_021E756C(p, 0xE, 0);
         } else {
             MI_CpuFill8(data, 0, 4);
             data[2] = 0;
-            data[0] = sub_0203769C();
+            data[0] = Comm_GetLocalNetId();
             U8(p, 0x4A28) = 1;
             U16(p, 0x4A32) = 0;
             U32(p, 0x318) = 6;
-            sub_02037030(0x70, data, 4);
+            Comm_SendCommand(0x70, data, 4);
         }
         ov73_021E6830(p);
     }

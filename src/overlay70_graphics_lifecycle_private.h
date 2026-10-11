@@ -50,7 +50,7 @@ int GXx_GetMasterBrightness_(volatile u16 *);
 void ov70_02241358(Ov70R8 *);
 void ov70_02238E44(Ov70R8 *);
 void sub_0203A930(void);
-void sub_0203A914(void);
+void WirelessStatusIcon_Destroy(void);
 void ov70_022394A8(Ov70R8 *);
 void ov70_0223963C(Ov70R8 *);
 void ov70_022395C4(Ov70R8 *);

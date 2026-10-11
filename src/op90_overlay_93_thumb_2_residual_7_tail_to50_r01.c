@@ -12,7 +12,7 @@ typedef struct {
 } Work;
 extern u16 ov93_02262C72[];
 extern u16 ov93_02262DA4[][4];
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 int ov93_0225E3C4(Work *work, int id);
 
 static inline int FindPlayerIndex(Work *work, int id) {
@@ -44,7 +44,7 @@ void ov93_02260BF0(Work *work) {
             colors[i][j] = PaletteData_GetBufferColorAtIndex(work->plttData, PLTTBUF_SUB_BG, PLTTSEL_OPAQUE, base + j);
         }
     }
-    FindPlayerIndex(work, sub_0203769C());
+    FindPlayerIndex(work, Comm_GetLocalNetId());
     unfaded = PaletteData_GetUnfadedBuf(work->plttData, PLTTBUF_SUB_BG);
     faded = PaletteData_GetFadedBuf(work->plttData, PLTTBUF_SUB_BG);
     for (i = 0; i < work->config->count; i++) {

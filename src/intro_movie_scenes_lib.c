@@ -451,9 +451,9 @@ void Task_IntroMovie_CircleWipeEffect(SysTask *task, void *pVoid) {
 
         u8 screen = effectData->whichScreen == 0 ? PM_LCD_BOTTOM : PM_LCD_TOP;
         if (effectData->kind == 1) {
-            sub_0200FBF4((PMLCDTarget)screen, RGB_WHITE);
+            SetMasterBrightnessByColor((PMLCDTarget)screen, RGB_WHITE);
         } else if (effectData->kind == 3) {
-            sub_0200FBF4((PMLCDTarget)screen, RGB_BLACK);
+            SetMasterBrightnessByColor((PMLCDTarget)screen, RGB_BLACK);
         } else {
             if (effectData->whichScreen) {
                 GX_SetVisibleWnd(GX_WNDMASK_NONE);

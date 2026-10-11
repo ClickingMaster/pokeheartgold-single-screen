@@ -148,7 +148,7 @@ _02039CC8:
 	ldrb r0, [r0]
 	cmp r0, #0
 	beq _02039CEE
-	bl sub_02037454
+	bl Comm_CountConnected
 	ldr r1, _02039D00 ; =_021D4150
 	ldr r1, [r1]
 	add r1, #0x4b

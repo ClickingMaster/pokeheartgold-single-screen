@@ -1,10 +1,10 @@
 #include "field_link_messages_internal.h"
 
 int sub_0205A6AC(struct MessageFormat *msgFmt) {
-    u8 myCountry = sub_020348A8(sub_0203769C());
-    u8 theirCountry = sub_020348A8(sub_0203769C() ^ 1);
-    u8 myCity = sub_020348CC(sub_0203769C());
-    u8 theirCity = sub_020348CC(sub_0203769C() ^ 1);
+    u8 myCountry = sub_020348A8(Comm_GetLocalNetId());
+    u8 theirCountry = sub_020348A8(Comm_GetLocalNetId() ^ 1);
+    u8 myCity = sub_020348CC(Comm_GetLocalNetId());
+    u8 theirCity = sub_020348CC(Comm_GetLocalNetId() ^ 1);
 
     if (theirCountry == 0) {
         return 15;
@@ -104,7 +104,7 @@ int sub_0205A750(struct UnkStruct_02059E1C *p, int objId, int a2, struct Message
 }
 
 u8 sub_0205A894(void) {
-    PlayerProfile *profile = sub_02034818(sub_0203769C() ^ 1);
+    PlayerProfile *profile = sub_02034818(Comm_GetLocalNetId() ^ 1);
     GF_ASSERT(profile);
     return PlayerProfile_GetVersion(profile);
 }
@@ -117,7 +117,7 @@ void sub_0205A8B4(struct UnkSub_0205AA4C *p) {
         i = netId - 1;
         profile = sub_02034818(netId);
         if (profile != NULL) {
-            if (sub_0203769C() == 0) {
+            if (Comm_GetLocalNetId() == 0) {
                 p->unk00[i] = PlayerProfile_GetTrainerID(profile);
                 p->unk18[i] = PlayerProfile_GetAvatar(profile) | (PlayerProfile_GetTrainerGender(profile) << 7);
             }

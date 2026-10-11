@@ -75,6 +75,6 @@ void HBlankSystem_Stop(void *);
 void HBlankSystem_Start(void *);
 void BeginNormalPaletteFade(s32, s32, s32, u16, s32, s32, s32);
 BOOL IsPaletteFadeFinished(void);
-void sub_0200FBF4(s32, u16);
+void SetMasterBrightnessByColor(s32, u16);
 void ov114_0225F020(void *, Ov114Task *);
 void ov114_0225F280(void *, Ov114Task *);

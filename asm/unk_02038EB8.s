@@ -73,7 +73,7 @@ _02038F3A:
 	ldrb r0, [r0]
 	cmp r0, #0
 	beq _02038F5E
-	bl sub_02037454
+	bl Comm_CountConnected
 	ldr r1, _02038F6C ; =_021D4150
 	ldr r1, [r1]
 	add r1, #0x4b

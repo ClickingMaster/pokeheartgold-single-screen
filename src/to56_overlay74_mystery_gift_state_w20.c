@@ -144,13 +144,13 @@ int ov74_0222E1F4(OverlayManager *arg0, int *arg1) {
         break;
     case 18:
         ov74_0222E7EC();
-        sub_0203A880();
+        WirelessStatusIcon_Create();
         ov74_0222D7F0(temp_r4, 1, 0x13, arg1);
         break;
     case 19: {
         s32 var_r6;
         var_r6 = 0;
-        if (sub_020373B4(0) != 0) {
+        if (Comm_IsNetIdConnected(0) != 0) {
             sub_020358B8((u8 *)temp_r4 + 0x90);
             var_r6 = ov74_0222E8B4(temp_r4, temp_r4->window2B08);
             if ((var_r6 == 0) && (temp_r4->shown != 0)) {

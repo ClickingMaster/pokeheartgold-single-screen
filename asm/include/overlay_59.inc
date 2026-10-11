@@ -60,7 +60,7 @@
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
 .public ResetVisibleHardwareWindows
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public ListMenuItems_New
 .public ListMenuItems_Delete
 .public ListMenuItems_AppendFromMsgData

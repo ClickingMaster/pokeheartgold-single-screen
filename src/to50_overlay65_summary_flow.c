@@ -5,12 +5,12 @@ void ov65_0221E06C(void *work, u32 mode) {
         PTR(work, 0xC) = PTR(work, 0x2224);
         U8(work, 0x1F) = Party_GetCount(PTR(PTR(work, 8), 8));
         PTR(work, 0x34) = NULL;
-        sub_0208AD34((u8 *)work + 0xC, sub_02034818(sub_0203769C()));
+        sub_0208AD34((u8 *)work + 0xC, sub_02034818(Comm_GetLocalNetId()));
     } else {
         PTR(work, 0xC) = PTR(work, 0x2228);
         U8(work, 0x1F) = Party_GetCount(PTR(work, 0x2228));
-        PTR(work, 0x34) = (u8 *)work + 0x2E20 + (sub_0203769C() ^ 1) * 0x3EC;
-        sub_0208AD34((u8 *)work + 0xC, sub_02034818(sub_0203769C() ^ 1));
+        PTR(work, 0x34) = (u8 *)work + 0x2E20 + (Comm_GetLocalNetId() ^ 1) * 0x3EC;
+        sub_0208AD34((u8 *)work + 0xC, sub_02034818(Comm_GetLocalNetId() ^ 1));
     }
 
     U8(work, 0x1D) = 1;

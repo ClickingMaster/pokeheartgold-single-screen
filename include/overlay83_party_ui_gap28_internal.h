@@ -8,7 +8,7 @@ void *String_New(int, int);
 void CopyU16ArrayToString(void *, void *);
 void String_Delete(void *);
 void AddTextPrinterParameterizedWithColor(void *, int, void *, int, int, int, u32, void *);
-int sub_0203769C(void *);
+int Comm_GetLocalNetId(void *);
 void *sub_02034818(int);
 void BufferPlayersName(void *, int, void *);
 void ov83_0224484C(void *, void *, int, int, int, int, int, int, int, int);

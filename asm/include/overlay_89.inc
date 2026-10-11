@@ -183,8 +183,8 @@
 .public PlayerProfile_GetTrainerGender
 .public Options_GetTextFrameDelay
 .public Options_GetFrame
-.public sub_0203A880
-.public sub_0203A914
+.public WirelessStatusIcon_Create
+.public WirelessStatusIcon_Destroy
 .public GetMonData
 .public GetNatureFromPersonality
 .public Party_GetCount

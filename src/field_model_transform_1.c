@@ -19,7 +19,7 @@ BOOL sub_02036438(int slot) {
         do {
             u8 *ctx = *(u8 **)(_021D4140 + 8);
             sub_02033C28(ctx + 0x4B0 + entryOffset);
-            if (sub_020373B4((u16)i)) {
+            if (Comm_IsNetIdConnected((u16)i)) {
                 ctx = *(u8 **)(_021D4140 + 8);
                 ctx[0x80 + slotOffset + rowOffset] = 14;
             } else {

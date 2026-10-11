@@ -20,7 +20,7 @@ extern void SetMonData(void *, u32, void *);
 extern void *Save_VarsFlags_Get(void *);
 extern u32 Save_VarsFlags_GetVar404C(void *);
 extern void Save_VarsFlags_SetVar404C(void *, u32);
-extern u32 sub_0203769C(void);
+extern u32 Comm_GetLocalNetId(void);
 extern void *sub_02034818(u32);
 extern void MonSetTrainerMemo(void *, void *, u32, u32, u32);
 extern void Pokemon_RemoveCapsule(void *);

@@ -17,7 +17,7 @@ extern void ov85_021E7644(void *a0, int a1);
 extern void ov85_021E8558(Ov85R7Work *work, int a1);
 extern void ov85_021E84EC(Ov85R7Work *work, int a1);
 extern void *ov85_021E7958(Ov85R7Work *work);
-extern BOOL sub_0203769C(void);
+extern BOOL Comm_GetLocalNetId(void);
 extern BOOL PlaySE(u16 seqNo);
 extern void ov85_021E78A4(Ov85R7Work *work, int a1);
 extern void ov85_021E8530(void *a0, int a1);

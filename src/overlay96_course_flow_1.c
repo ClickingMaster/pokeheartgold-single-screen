@@ -51,7 +51,7 @@ extern u32 ov96_021E5F24(Work *);
 extern BOOL ov96_021E75E4(Work *);
 extern void PokeathlonCourse_SetField1F4(Work *, u32);
 extern u32 sub_02031B10(void);
-extern u32 sub_0203769C(void);
+extern u32 Comm_GetLocalNetId(void);
 extern void *Save_ApricornBox_Get(void *);
 extern void *Save_PlayerData_GetProfile(void *);
 extern void *Save_Pokeathlon_Get(void *);
@@ -309,7 +309,7 @@ u32 ov96_021E7514(Work *w) {
 u32 ov96_021E7544(Work *w) {
     void *box = Save_ApricornBox_Get(*(void **)U32(w, 0x1f8));
     u32 count = PokeathlonCourse_GetParticipantCount(w);
-    u32 value = sub_0203769C();
+    u32 value = Comm_GetLocalNetId();
     sub_020321A0(box, (void *)U32(w, 0xd68), count, value);
     if (!GF_heap_c_dummy_return_true(0x5c)) {
         GF_AssertFail();

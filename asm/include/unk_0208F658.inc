@@ -2,10 +2,10 @@
 #pragma once
 .public SavePalPad_Merge
 .public Save_SpecialRibbons_Get
-.public sub_0203410C
+.public Comm_RegisterCommandTable
 .public sub_020342C0
 .public sub_020342C4
-.public sub_0203769C
+.public Comm_GetLocalNetId
 .public sub_020378E4
 .public sub_0208F658
 .public sub_0208F7E0

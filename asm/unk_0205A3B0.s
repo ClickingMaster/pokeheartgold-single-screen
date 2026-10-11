@@ -24,7 +24,7 @@ _0205A3C4:
 	str r0, [r5, #0x34]
 	mov r0, #0x63
 	mov r2, #1
-	bl sub_02037030
+	bl Comm_SendCommand
 	pop {r3, r4, r5, pc}
 _0205A3DC:
 	cmp r4, #0

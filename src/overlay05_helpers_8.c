@@ -7,7 +7,7 @@ typedef struct Overlay05State {
 extern void PlaySE(int);
 extern void ManagedSprite_SetDrawFlag(void *, int);
 extern void sub_020880CC(int, void *);
-extern void sub_0203769C(void *);
+extern void Comm_GetLocalNetId(void *);
 extern int sub_020378AC(void);
 extern void DoScheduledBgGpuUpdates(void *);
 extern void PaletteData_PushTransparentBuffers(void *);

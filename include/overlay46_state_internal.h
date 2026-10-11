@@ -20,7 +20,7 @@ extern void *memset(void *, int, u32);
 extern void ov46_02258F78(void *, int);
 extern void ov46_022592EC(void *, void *, int, int, int, int, int, int, int, void *, int);
 extern void ov46_022594E0(void *, int);
-extern void sub_0203A880(void);
+extern void WirelessStatusIcon_Create(void);
 extern void ov46_02258F70(void *);
 int ov46_02258CB4(void *);
 extern void Sound_SetSceneAndPlayBGM(int, int, int);

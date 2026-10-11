@@ -30,13 +30,13 @@ int ov73_021E6AAC(void *p, int result) {
         ov73_021E6830(p);
         if (input == 2) {
             data = 0;
-            sub_02037030(0x75, &data, 1);
+            Comm_SendCommand(0x75, &data, 1);
             ov73_021E781C(p, 1);
             ov73_021E670C(p, 0);
         } else {
             ov73_021E71E4(p, 1, 2);
             ov73_021E71E4(p, 0, 2);
-            if (sub_0203769C() == 0) {
+            if (Comm_GetLocalNetId() == 0) {
                 U32(p, 0x318) = 0x18;
                 U8(p, 0x4A2A) = ov73_021E746C();
             } else {
@@ -49,7 +49,7 @@ int ov73_021E6AAC(void *p, int result) {
 }
 
 int ov73_021E6B6C(void *p, int result) {
-    if (((SolOv73Large *)p)->field_4A2B == 0 && sub_02037030(0x73, NULL, 0) == 1) {
+    if (((SolOv73Large *)p)->field_4A2B == 0 && Comm_SendCommand(0x73, NULL, 0) == 1) {
         U8(p, 0x4A2B) = 1;
     }
     return result;

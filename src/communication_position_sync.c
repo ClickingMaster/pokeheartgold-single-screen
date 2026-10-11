@@ -31,7 +31,7 @@ void sub_02057D74(void) {
 }
 
 void sub_02057E08(void) {
-    int slot = sub_0203769C();
+    int slot = Comm_GetLocalNetId();
     int value;
 
     if (sub_02057A34() > 8) {

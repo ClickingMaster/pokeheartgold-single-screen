@@ -20,7 +20,7 @@ u16 ov83_0224777C(void *save, u8 a, u8 b);
 
 void *Save_PlayerData_GetProfile(void *save);
 int PlayerProfile_GetTrainerGender(void *profile);
-int sub_0203769C(void);
-int sub_02037030(int a, void *b, int c);
+int Comm_GetLocalNetId(void);
+int Comm_SendCommand(int a, void *b, int c);
 
 #endif

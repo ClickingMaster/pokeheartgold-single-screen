@@ -146,7 +146,7 @@ static BOOL sub_0204FB60(TaskManager *taskManager) {
     UnkStruct_0204FB20 *unk = TaskManager_GetEnvironment(taskManager);
     switch (unk->state) {
     case 0:
-        if (sub_02037030(133, unk, 16) == TRUE) {
+        if (Comm_SendCommand(133, unk, 16) == TRUE) {
             unk->state++;
         }
         break;
@@ -281,7 +281,7 @@ static u32 sub_0204FE30(UnkStruct_0204FBDC *a0, FieldSystem *fieldSystem) {
 
 void sub_0204FE58(u32 a0, u32 unused, UnkStruct_0204FB20 *a2, UnkStruct_0204FB20 *a3) {
     a3->unk01++;
-    if (sub_0203769C() != a0) {
+    if (Comm_GetLocalNetId() != a0) {
         a3->partnerTeam[0] = a2->playerTeam[0];
         a3->partnerTeam[1] = a2->playerTeam[1];
     }

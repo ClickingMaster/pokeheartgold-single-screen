@@ -189,7 +189,7 @@ u32 ov96_02215D4C(void *course) {
     ov96_02217DBC(work);
     ov96_02216390(work);
     ov96_022165FC(work);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
     PokeathlonCourse_FreePtr4HeapAlloc(course);

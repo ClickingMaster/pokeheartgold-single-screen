@@ -166,8 +166,8 @@ BOOL ov80_0222DCF0(void *context) {
     data = Frontier_GetData(PTR(PTR(context, 0), 0));
     result = ov80_0223B9EC[U32_AT(data, 8)](data);
     if (result == FALSE) {
-        sub_0200FBF4(0, 0);
-        sub_0200FBF4(1, 0);
+        SetMasterBrightnessByColor(0, 0);
+        SetMasterBrightnessByColor(1, 0);
         Frontier_SetData(PTR(PTR(context, 0), 0), PTR(data, 0x14));
         Heap_Free(data);
     }

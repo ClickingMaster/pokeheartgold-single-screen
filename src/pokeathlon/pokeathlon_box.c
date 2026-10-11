@@ -16,6 +16,7 @@
 #include "system.h"
 #include "text.h"
 #include "unk_0200B150.h"
+#include "unk_02013FDC.h"
 #include "unk_0203A3B0.h"
 
 // functions in asm:
@@ -43,6 +44,7 @@ extern const BgTemplate pokeathlonBoxBgTemplate3;
 extern const BgTemplate pokeathlonBoxBgTemplate1;
 extern const BgTemplate pokeathlonBoxBgTemplate2;
 extern const BgTemplate pokeathlonBoxBgTemplate4;
+extern const u8 ov97_0221FCF4[5];
 extern const u8 ov97_0221FCFC[5];
 
 BOOL PokeathlonBox_Init(OverlayManager *manager) {
@@ -399,11 +401,11 @@ void ov97_0221EC14(int boxno, u8 slot, PokeathlonBox *data) {
 }
 
 void ov97_0221EDE4(PokeathlonBox_MonStats *stats1, PokeathlonBox_MonStats *stats2, PartyAprijuiceModifier *aprijuiceModifier, PokeathlonBox_UnkStruct0221EC14 *mon) {
-    mon->unk28 = sub_0208B85C(&mon->unk29, stats1->power, stats2->power, (u32)(stats2->stars << 0x1D) >> 0x1D, aprijuiceModifier->unk_00[0]);
-    mon->unk30 = sub_0208B85C(&mon->unk31, stats1->skill, stats2->skill, (u32)(stats2->stars << 0x14) >> 0x1D, aprijuiceModifier->unk_00[1]);
-    mon->unk38 = sub_0208B85C(&mon->unk39, stats1->speed, stats2->speed, (u32)(stats2->stars << 0x11) >> 0x1D, aprijuiceModifier->unk_00[2]);
-    mon->unk40 = sub_0208B85C(&mon->unk41, stats1->jump, stats2->jump, (u32)(stats2->stars << 0x17) >> 0x1D, aprijuiceModifier->unk_00[3]);
-    mon->unk48 = sub_0208B85C(&mon->unk49, stats1->stamina, stats2->stamina, (u32)(stats2->stars << 0x1A) >> 0x1D, aprijuiceModifier->unk_00[4]);
+    mon->statChanges[0].direction = sub_0208B85C(mon->statChanges[0].stars, stats1->power, stats2->power, (u32)(stats2->stars << 0x1D) >> 0x1D, aprijuiceModifier->unk_00[0]);
+    mon->statChanges[1].direction = sub_0208B85C(mon->statChanges[1].stars, stats1->skill, stats2->skill, (u32)(stats2->stars << 0x14) >> 0x1D, aprijuiceModifier->unk_00[1]);
+    mon->statChanges[2].direction = sub_0208B85C(mon->statChanges[2].stars, stats1->speed, stats2->speed, (u32)(stats2->stars << 0x11) >> 0x1D, aprijuiceModifier->unk_00[2]);
+    mon->statChanges[3].direction = sub_0208B85C(mon->statChanges[3].stars, stats1->jump, stats2->jump, (u32)(stats2->stars << 0x17) >> 0x1D, aprijuiceModifier->unk_00[3]);
+    mon->statChanges[4].direction = sub_0208B85C(mon->statChanges[4].stars, stats1->stamina, stats2->stamina, (u32)(stats2->stars << 0x1A) >> 0x1D, aprijuiceModifier->unk_00[4]);
 }
 
 PokeathlonBox_Graphics *PokeathlonBox_InitGraphics(enum HeapID heapID) {
@@ -443,7 +445,7 @@ void ov97_0221EFD0(PokeathlonBox_Graphics *graphics, PokeathlonBox_UnkStruct0221
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         return;
     }
-    ov97_0221F74C();
+    ov97_0221F74C(); // the argument is passed on in r0 from the caller (graphics)
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
 }
@@ -498,7 +500,7 @@ void ov97_0221F0E0(PokeathlonBox_SubGraphics *subGraphics) {
     }
 
     Sprite_Delete(subGraphics->unk254);
-    Heap_Free(subGraphics->unk258);
+    Heap_Free(subGraphics->monPicChars);
 }
 
 void ov97_0221F14C(BgConfig *bgConfig, enum HeapID heapID) {
@@ -601,7 +603,7 @@ void ov97_0221F56C(PokeathlonBox_Graphics *graphics, PokeathlonBox_UnkStruct0221
     PokeathlonBox_SubGraphics *sub = &graphics->sub;
     u8 subroutine_arg0[5];
 
-    ov97_0221FBDC(&graphics->sub);
+    ov97_0221FBDC(&graphics->sub); // mon is still in r1
     ov97_0221FC54(&graphics->sub);
     Sprite_SetDrawFlag(graphics->sub.unk254, 1);
     ov97_0221F5F8(&graphics->sub, mon);
@@ -613,4 +615,193 @@ void ov97_0221F56C(PokeathlonBox_Graphics *graphics, PokeathlonBox_UnkStruct0221
             Sprite_SetDrawFlag(sub->sprites[subroutine_arg0[i]], 0);
         }
     }
+}
+
+// The direction sprite of stat row i, addressed the way the original code did (base + i * row size).
+#define STAT_ROW_SPRITE(subGraphics, i) (((PokeathlonBox_SubGraphics *)((u8 *)(subGraphics) + (i) * sizeof(PokeathlonBox_UnkStruct0221F0E0)))->unk1DC[0].sprite)
+
+void ov97_0221F5F8(PokeathlonBox_SubGraphics *subGraphics, PokeathlonBox_UnkStruct0221EC14 *mon) {
+    u8 i;
+    u8 j;
+
+    for (i = 0; i < 5; i++) {
+        // mon shifted by i stat blocks, so that statChanges[0] is stat i
+        const PokeathlonBox_UnkStruct0221EC14 *shifted = (const PokeathlonBox_UnkStruct0221EC14 *)((const u8 *)mon + i * sizeof(PokeathlonBox_StatChange));
+        s8 direction = shifted->statChanges[0].direction;
+        if (direction > 0) {
+            Sprite_SetDrawFlag(STAT_ROW_SPRITE(subGraphics, i), 1);
+            Sprite_SetAnimCtrlSeq(STAT_ROW_SPRITE(subGraphics, i), 4);
+        } else if (direction < 0) {
+            Sprite_SetDrawFlag(STAT_ROW_SPRITE(subGraphics, i), 1);
+            Sprite_SetAnimCtrlSeq(STAT_ROW_SPRITE(subGraphics, i), 5);
+        } else {
+            Sprite_SetDrawFlag(STAT_ROW_SPRITE(subGraphics, i), 0);
+        }
+        for (j = 0; j < 5; j++) {
+            switch (shifted->statChanges[0].stars[j]) {
+            case 0:
+                Sprite_SetDrawFlag(subGraphics->unk1DC[i].sprites[j], 0);
+                break;
+            case 1:
+                Sprite_SetDrawFlag(subGraphics->unk1DC[i].sprites[j], 1);
+                Sprite_SetAnimCtrlSeq(subGraphics->unk1DC[i].sprites[j], 3);
+                break;
+            case 2:
+                Sprite_SetDrawFlag(subGraphics->unk1DC[i].sprites[j], 1);
+                Sprite_SetAnimCtrlSeq(subGraphics->unk1DC[i].sprites[j], 0);
+                break;
+            case 3:
+                Sprite_SetDrawFlag(subGraphics->unk1DC[i].sprites[j], 1);
+                Sprite_SetAnimCtrlSeq(subGraphics->unk1DC[i].sprites[j], 1);
+                break;
+            case 4:
+                Sprite_SetDrawFlag(subGraphics->unk1DC[i].sprites[j], 1);
+                Sprite_SetAnimCtrlSeq(subGraphics->unk1DC[i].sprites[j], 2);
+                break;
+            default:
+                GF_AssertFail();
+                break;
+            }
+        }
+    }
+}
+
+#pragma force_active on
+
+void ov97_0221F74C(PokeathlonBox_Graphics *graphics) {
+    PokeathlonBox_SubGraphics *sub = &graphics->sub;
+    u8 i;
+    u8 j;
+
+    for (i = 0; i < 5; i++) {
+        Sprite_SetDrawFlag(sub->sprites[i], FALSE);
+        Sprite_SetDrawFlag(sub->unk1C8[i], FALSE);
+    }
+    for (i = 0; i < 5; i++) {
+        Sprite_SetDrawFlag(sub->unk1DC[i].sprite, FALSE);
+        for (j = 0; j < 5; j++) {
+            Sprite_SetDrawFlag(sub->unk1DC[i].sprites[j], FALSE);
+        }
+    }
+    Sprite_SetDrawFlag(sub->unk254, FALSE);
+}
+
+void ov97_0221F7DC(PokeathlonBox_SubGraphics *sub) {
+    int i;
+
+    sub->spriteList = G2dRenderer_Init(66, &sub->renderer, sub->heapID);
+    G2dRenderer_SetSubSurfaceCoords(&sub->renderer, 0, FX32_CONST(256));
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
+    for (i = 0; i < 6; i++) {
+        sub->mgrs[i] = Create2DGfxResObjMan(3, (GfGfxResType)i, sub->heapID);
+    }
+    sub->unk1C0[0].charResObj = AddCharResObjFromNarc(sub->mgrs[0], NARC_a_2_4_1, 7, TRUE, 1, NNS_G2D_VRAM_TYPE_2DSUB, sub->heapID);
+    sub->unk1C0[0].plttResObj = AddPlttResObjFromNarc(sub->mgrs[1], NARC_a_2_4_1, 4, FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 4, sub->heapID);
+    sub->unk1C0[0].cellResObj = AddCellOrAnimResObjFromNarc(sub->mgrs[2], NARC_a_2_4_1, 6, TRUE, 1, GF_GFX_RES_TYPE_CELL, sub->heapID);
+    sub->unk1C0[0].animResObj = AddCellOrAnimResObjFromNarc(sub->mgrs[3], NARC_a_2_4_1, 5, TRUE, 1, GF_GFX_RES_TYPE_ANIM, sub->heapID);
+    SpriteTransfer_CreateCharTransferTask_AllocAtEnd(sub->unk1C0[0].charResObj);
+    SpriteTransfer_CreateExtPlttTransferTask(sub->unk1C0[0].plttResObj);
+    sub->unk1C0[1].charResObj = AddCharResObjFromNarc(sub->mgrs[0], NARC_a_1_6_2, 66, FALSE, 2, NNS_G2D_VRAM_TYPE_2DSUB, sub->heapID);
+    sub->unk1C0[1].plttResObj = AddPlttResObjFromNarc(sub->mgrs[1], NARC_a_1_6_2, 65, FALSE, 2, NNS_G2D_VRAM_TYPE_2DSUB, 4, sub->heapID);
+    sub->unk1C0[1].cellResObj = AddCellOrAnimResObjFromNarc(sub->mgrs[2], NARC_a_1_6_2, 67, FALSE, 2, GF_GFX_RES_TYPE_CELL, sub->heapID);
+    sub->unk1C0[1].animResObj = AddCellOrAnimResObjFromNarc(sub->mgrs[3], NARC_a_1_6_2, 68, FALSE, 2, GF_GFX_RES_TYPE_ANIM, sub->heapID);
+    SpriteTransfer_CreateCharTransferTask_AllocAtEnd(sub->unk1C0[1].charResObj);
+    SpriteTransfer_CreateExtPlttTransferTask(sub->unk1C0[1].plttResObj);
+    sub->unk1C0[2].charResObj = AddCharResObjFromNarc(sub->mgrs[0], NARC_application_choose_starter_choose_starter_sub_res, 9, FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, sub->heapID);
+    sub->unk1C0[2].plttResObj = AddPlttResObjFromNarc(sub->mgrs[1], NARC_application_choose_starter_choose_starter_sub_res, 6, FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, 4, sub->heapID);
+    sub->unk1C0[2].cellResObj = AddCellOrAnimResObjFromNarc(sub->mgrs[2], NARC_application_choose_starter_choose_starter_sub_res, 10, FALSE, 3, GF_GFX_RES_TYPE_CELL, sub->heapID);
+    sub->unk1C0[2].animResObj = AddCellOrAnimResObjFromNarc(sub->mgrs[3], NARC_application_choose_starter_choose_starter_sub_res, 10, FALSE, 3, GF_GFX_RES_TYPE_ANIM, sub->heapID);
+    SpriteTransfer_CreateCharTransferTask_AllocAtEnd(sub->unk1C0[2].charResObj);
+    SpriteTransfer_CreateExtPlttTransferTask(sub->unk1C0[2].plttResObj);
+}
+
+#pragma force_active reset
+
+void ov97_0221F9E0(PokeathlonBox_SubGraphics *sub) {
+    u8 i;
+    u8 j;
+    int x;
+    int y;
+
+    for (i = 0; i < 5; i++) {
+        x = i * 32 + 104;
+        sub->sprites[i] = ov97_0221FAEC(sub, 1, 2, 0, x, 168, i, FALSE);
+        sub->unk1C8[i] = ov97_0221FAEC(sub, 1, 1, 0, x, 168, 5, FALSE);
+    }
+    for (i = 0; i < 5; i++) {
+        y = ov97_0221FCF4[i] * 16 + 48;
+        sub->unk1DC[i].sprite = ov97_0221FAEC(sub, 2, 1, 0, 96, y, 4, FALSE);
+        for (j = 0; j < 5; j++) {
+            sub->unk1DC[i].sprites[j] = ov97_0221FAEC(sub, 2, 2, 0, j * 16 + 168, y, 3, FALSE);
+        }
+    }
+    sub->unk254 = ov97_0221FAEC(sub, 3, 0, 0, 48, 72, 0, FALSE);
+    sub->monPicChars = Heap_Alloc(sub->heapID, 0xC80);
+    ov97_0221FBA0(sub);
+}
+
+Sprite *ov97_0221FAEC(PokeathlonBox_SubGraphics *sub, int resourceId, int drawPriority, int priority, int x, int y, int anim, BOOL draw) {
+    SpriteTemplate template;
+    SpriteResourcesHeader header;
+    Sprite *sprite;
+
+    CreateSpriteResourcesHeader(&header, resourceId, resourceId, resourceId, resourceId, -1, -1, FALSE, priority, sub->mgrs[0], sub->mgrs[1], sub->mgrs[2], sub->mgrs[3], NULL, NULL);
+    ov97_0221FB80(&template, sub->spriteList, &header, NNS_G2D_VRAM_TYPE_2DSUB, sub->heapID);
+    template.position.x = x << FX32_SHIFT;
+    template.position.y = (y << FX32_SHIFT) + FX32_CONST(256);
+    template.drawPriority = drawPriority;
+    sprite = Sprite_CreateAffine(&template);
+    Sprite_SetAnimActiveFlag(sprite, TRUE);
+    Sprite_SetAnimCtrlSeq(sprite, anim);
+    Sprite_SetPriority(sprite, 1);
+    Sprite_SetDrawFlag(sprite, draw);
+    return sprite;
+}
+
+void ov97_0221FB80(SpriteTemplate *template, SpriteList *spriteList, SpriteResourcesHeader *header, NNS_G2D_VRAM_TYPE whichScreen, enum HeapID heapID) {
+    template->spriteList = spriteList;
+    template->header = header;
+    template->position.z = 0;
+    template->scale.x = FX32_ONE;
+    template->scale.y = FX32_ONE;
+    template->scale.z = FX32_ONE;
+    template->rotation = 0;
+    template->drawPriority = 0;
+    template->whichScreen = whichScreen;
+    template->heapID = heapID;
+}
+
+void ov97_0221FBA0(PokeathlonBox_SubGraphics *sub) {
+    SpriteResource *plttResObj = sub->unk1C0[2].plttResObj;
+    NNSG2dImageProxy *charProxy = SpriteTransfer_GetCharProxy(sub->unk1C0[2].charResObj);
+    NNSG2dImagePaletteProxy *plttProxy = SpriteTransfer_GetPaletteProxy(plttResObj, charProxy);
+    sub->monPicCharOffset = NNS_G2dGetImageLocation(charProxy, NNS_G2D_VRAM_TYPE_2DSUB);
+    sub->monPicPlttOffset = NNS_G2dGetImagePaletteLocation(plttProxy, NNS_G2D_VRAM_TYPE_2DSUB);
+}
+
+// Loads the front sprite chars and palette of `mon` into the buffers drawn by ov97_0221FC54.
+#pragma force_active on
+
+void ov97_0221FBDC(PokeathlonBox_SubGraphics *sub, PokeathlonBox_UnkStruct0221EC14 *mon) {
+    PokepicTemplate pokepic;
+    NNSG2dPaletteData *plttData;
+    void *file;
+
+    GetMonSpriteCharAndPlttNarcIdsEx(&pokepic, mon->species, mon->gender, MON_PIC_FACING_FRONT, mon->isShiny, mon->form, mon->personality);
+    sub_02014540((NarcId)pokepic.narcID, pokepic.charDataID, sub->heapID, sub->monPicChars, mon->personality, FALSE, MON_PIC_FACING_FRONT, mon->species);
+    file = AllocAndReadWholeNarcMemberByIdPair((NarcId)pokepic.narcID, pokepic.palDataID, sub->heapID);
+    if (NNS_G2dGetUnpackedPaletteData(file, &plttData) != TRUE) {
+        GF_AssertFail();
+    }
+    MIi_CpuCopy16(plttData->pRawData, (u16 *)sub->monPicPalette, 32);
+    Heap_Free(file);
+}
+
+#pragma force_active reset
+
+void ov97_0221FC54(PokeathlonBox_SubGraphics *sub) {
+    DC_FlushRange(sub->monPicChars, 0xc80);
+    GXS_LoadOBJ(sub->monPicChars, sub->monPicCharOffset, 0xc80);
+    DC_FlushRange(sub->monPicPalette, 0x20);
+    GXS_LoadOBJPltt(sub->monPicPalette, sub->monPicPlttOffset, 0x20);
 }

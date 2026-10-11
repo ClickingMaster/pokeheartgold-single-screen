@@ -22,11 +22,11 @@ void ov73_021E705C(void *p, int state, int player) {
             return;
         }
         BufferPlayersName(PTR(p, 0x24), 0, sub_02034818(player));
-        if (player == sub_0203769C()) {
+        if (player == Comm_GetLocalNetId()) {
             return;
         }
         ov73_021E6830(p);
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             U32(p, 0x4A24) &= player ^ 0xFFFF;
         }
         break;
@@ -47,20 +47,20 @@ void ov73_021E7120(void *p, int state, int player) {
             BufferPlayersName(PTR(p, 0x24), 0, sub_02034818(player));
             ov73_021E781C(p, 1);
             U32(p, 0x318) = state;
-            U32(p, 0x4A1C) = sub_02037454();
+            U32(p, 0x4A1C) = Comm_CountConnected();
             U32(p, 0x4A24) = 0;
-            if (sub_0203769C() == 0) {
+            if (Comm_GetLocalNetId() == 0) {
                 one = 1;
-                sub_02037030(0x75, &one, one);
+                Comm_SendCommand(0x75, &one, one);
             }
             return;
         }
         case 19:
             BufferPlayersName(PTR(p, 0x24), 0, sub_02034818(player));
-            if (player == sub_0203769C()) {
+            if (player == Comm_GetLocalNetId()) {
                 return;
             }
-            if (sub_0203769C() == 0) {
+            if (Comm_GetLocalNetId() == 0) {
                 U32(p, 0x4A24) &= player ^ 0xFFFF;
             }
             U32(p, 0x318) = state;
@@ -72,7 +72,7 @@ void ov73_021E7120(void *p, int state, int player) {
     }
     if (state == 1) {
         U32(p, 0x4A24) = 0;
-        U32(p, 0x4A1C) = sub_02037454();
+        U32(p, 0x4A1C) = Comm_CountConnected();
     }
 }
 

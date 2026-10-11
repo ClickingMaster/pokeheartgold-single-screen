@@ -7,7 +7,7 @@
 #define U32(base, offset) (*(u32 *)((u8 *)(base) + (offset)))
 
 extern void GF_AssertFail(void);
-extern u32 sub_0203769C(void);
+extern u32 Comm_GetLocalNetId(void);
 extern void Sprite_SetAnimCtrlSeq(void *sprite, u32 sequence);
 extern void Sprite_SetDrawFlag(void *sprite, u32 draw);
 extern void PlaySE(u32 seqNo);

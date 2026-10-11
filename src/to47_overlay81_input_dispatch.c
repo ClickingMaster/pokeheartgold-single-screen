@@ -13,9 +13,9 @@ void ov81_02241238(int value, int unused, Ov81InputRecord *input, void *work) {
 #pragma unused(unused)
     U8_AT(work, 0x462)
     ++;
-    if (value != sub_0203769C()) {
+    if (value != Comm_GetLocalNetId()) {
         U16_AT(work, 0x458) = (u8)input->unk2;
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             if (((u32)U8_AT(work, 0x13) << 28) >> 31 == 1) {
                 U16_AT(work, 0x458) = 0;
                 return;

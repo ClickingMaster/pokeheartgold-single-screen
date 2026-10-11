@@ -4,7 +4,7 @@
 #define S32(p, o) (*(s32 *)((u8 *)(p) + (o)))
 
 int ov72_0223A014(void *p) {
-    sub_0203A914(p);
+    WirelessStatusIcon_Destroy(p);
     sub_0203946C();
     BeginNormalPaletteFade(0, 0, 0, 0, 8, 1, 0x43);
     U32(p, 0x1C) = 0;

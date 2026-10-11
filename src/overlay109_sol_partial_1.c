@@ -175,8 +175,8 @@ void ov109_021E5A20(void) {
     GfGfx_DisableEngineBPlanes();
     reg_GX_DISPCNT &= 0xFFFFE0FF;
     reg_GXS_DB_DISPCNT &= 0xFFFFE0FF;
-    sub_0200FBF4(PM_LCD_TOP, 0);
-    sub_0200FBF4(PM_LCD_BOTTOM, 0);
+    SetMasterBrightnessByColor(PM_LCD_TOP, 0);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, 0);
     ResetVisibleHardwareWindows(PM_LCD_TOP);
     ResetVisibleHardwareWindows(PM_LCD_BOTTOM);
 }

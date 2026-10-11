@@ -25,7 +25,7 @@ extern void sub_02021238(void);
 extern void TextFlags_SetCanABSpeedUpPrint(u32);
 extern void TextFlags_SetAutoScrollParam(u32);
 extern void TextFlags_SetCanTouchSpeedUpPrint(u32);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern void ov90_02258C38(void *);
 extern void ov93_022602E4(void *);
 extern void ov93_02260608(void *);
@@ -103,7 +103,7 @@ extern void ov93_0225DD2C(void *, void *);
 extern void PaletteData_LoadNarc(void *, int, int, int, int, int, int);
 extern void ov93_0225D4EC(void *);
 extern void ov93_0225D468(void *);
-extern void sub_0203A880(void);
+extern void WirelessStatusIcon_Create(void);
 extern void *ov93_0225E7B0(void *);
 extern void *SysTask_CreateOnMainQueue(void *, void *, u32);
 extern void GfGfx_SwapDisplay(void);
@@ -182,7 +182,7 @@ u32 ov93_0225C768(void *man) {
     ov93_0225D4EC(p);
     ov93_0225D5AC(p, 0);
     ov93_0225D468(p);
-    sub_0203A880();
+    WirelessStatusIcon_Create();
     PAT(p, 0xd4) = ov93_0225E7B0(p);
     BeginNormalPaletteFade(0, 0x1b, 0x1b, 0, 6, 1, 0x75);
     PAT(p, 0x94) = SysTask_CreateOnMainQueue(ov93_0225D07C, p, 0xea60);
@@ -391,6 +391,6 @@ u32 ov93_0225CD10(void *man) {
     TextFlags_SetCanABSpeedUpPrint(0);
     TextFlags_SetAutoScrollParam(0);
     TextFlags_SetCanTouchSpeedUpPrint(0);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     return 1;
 }

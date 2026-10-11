@@ -1,7 +1,7 @@
 #include "private.h"
 
 int ov70_02244854(void *work) {
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     ov70_02244FA4(work, PTR_AT(work, 0xBAC), 0x1B, 1, 0xF0F);
     ov70_02238D84(work, 0x14, 0xB);
     return 3;

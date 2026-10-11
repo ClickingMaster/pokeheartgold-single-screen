@@ -11,7 +11,7 @@ int ov74_02229F90(void *manager) {
     if (work->field15D4 != 2) {
         ov74_02229D1C(work, 15);
         work->field434 = 0x1c20;
-        sub_0203A880();
+        WirelessStatusIcon_Create();
         ov74_02229E28(work, 1);
         return 7;
     }

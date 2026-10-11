@@ -1,6 +1,6 @@
 #include "communication_manager_internal.h"
 
-int sub_020373B4(int slot) {
+int Comm_IsNetIdConnected(int slot) {
     if (_021D4140.work == NULL) {
         return 0;
     }
@@ -19,10 +19,10 @@ int sub_020373B4(int slot) {
     if (sub_02033298() != 4) {
         return 0;
     }
-    if (slot == sub_0203769C()) {
+    if (slot == Comm_GetLocalNetId()) {
         return 1;
     }
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         if ((sub_02033250() & (1 << slot)) != 0) {
             return 1;
         }
@@ -32,11 +32,11 @@ int sub_020373B4(int slot) {
     return 0;
 }
 
-int sub_02037454(void) {
+int Comm_CountConnected(void) {
     int count = 0;
     int i;
     for (i = 0; i < 8; i++) {
-        if (sub_020373B4((u16)i)) {
+        if (Comm_IsNetIdConnected((u16)i)) {
             count++;
         }
     }

@@ -7,8 +7,8 @@ int ov74_0222F598(void *manager) {
     memset(data, 0, 0x3d0c);
     U32AT(data, 0x29fc) = (u32)BgConfig_Alloc(0x55);
     U32AT(data, 0) = 0x55;
-    sub_0200FBF4(0, 0);
-    sub_0200FBF4(1, 0);
+    SetMasterBrightnessByColor(0, 0);
+    SetMasterBrightnessByColor(1, 0);
     U32AT(data, 0x2bf4) = 1;
     ov74_022352A0(0x55);
     Heap_Create(0, 0x59, 0x570);

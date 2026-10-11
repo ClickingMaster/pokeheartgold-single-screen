@@ -72,7 +72,7 @@ BOOL sub_020340C4(int v) {
     }
 }
 
-void sub_0203410C(const void *table, int count, void *context) {
+void Comm_RegisterCommandTable(const void *table, int count, void *context) {
     int i;
     if (_021D412C == NULL) {
         _021D412C = Heap_Alloc(HEAP_ID_15, sizeof(CommManager));

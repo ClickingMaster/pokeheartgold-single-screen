@@ -45,7 +45,7 @@ extern u16 ov96_0221AAE8[];
 extern void *ov96_021E86FC(void *ptr, u8 index);
 extern void GF_AssertFail(void);
 extern void PokeathlonCourse_ResetDataCopyArea(void *course);
-extern int sub_0203769C(void);
+extern int Comm_GetLocalNetId(void);
 extern void *Heap_Alloc(u32 heapId, u32 size);
 extern void ov96_021E9394(void *ptr);
 extern void *PokeathlonCourse_GetFieldBA4(void *course);

@@ -44,7 +44,7 @@ extern void PlaySE(u32 seqNo);
 extern void Save_ClearStatusFlags(void *saveData);
 extern void ov75_02247878(Ov75Task *task);
 extern void ov00_021EC8D8(void);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern void sub_0203957C(void);
 extern void Sys_ClearSleepDisableFlag(u32 flag);
 extern void ov70_02237F2C(void);

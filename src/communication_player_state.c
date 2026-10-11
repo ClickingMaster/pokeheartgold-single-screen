@@ -49,7 +49,7 @@ void sub_02034434(void) {
     void *wifi;
     void *profile;
 
-    netId = sub_0203769C();
+    netId = Comm_GetLocalNetId();
     friends = Save_FriendGroup_Get(_021D4130->save);
     r7 = sub_0202C6F4(_021D4130->save);
     wifi = Save_WiFiHistory_Get(_021D4130->save);
@@ -68,7 +68,7 @@ void sub_02034434(void) {
     if (_021D4130->rules != NULL) {
         LinkBattleRuleset_Copy(_021D4130->rules, &_021D4130->entries[netId]);
     }
-    sub_02037030(3, &_021D4130->entries[netId], sizeof(Unk02034354_Entry));
+    Comm_SendCommand(3, &_021D4130->entries[netId], sizeof(Unk02034354_Entry));
 }
 
 int sub_02034520(void) {
@@ -88,7 +88,7 @@ void sub_0203453C(int netId, int unused, void *packet) {
     if (_021D4130 == NULL) {
         return;
     }
-    if (!sub_020373B4((u16)netId)) {
+    if (!Comm_IsNetIdConnected((u16)netId)) {
         return;
     }
     MI_CpuCopy8(pkt, &_021D4130->entries[pkt->index], sizeof(Unk02034354_Entry));
@@ -100,7 +100,7 @@ void sub_0203453C(int netId, int unused, void *packet) {
         return;
     }
     _021D4130->status[_021D4130->curIdx] = 1;
-    if (_021D4130->curIdx != sub_0203769C()) {
+    if (_021D4130->curIdx != Comm_GetLocalNetId()) {
         return;
     }
     _021D4130->status[_021D4130->curIdx] = 3;
@@ -114,7 +114,7 @@ void sub_020345D0(int netId, int unused, void *src) {
     MI_CpuCopy8(src, &_021D4130->entries[netId], sizeof(Unk02034354_Entry));
     sub_020357C4(_021D4130->entries[netId].mac, netId);
     _021D4130->status[netId] = 1;
-    if (netId == sub_0203769C()) {
+    if (netId == Comm_GetLocalNetId()) {
         _021D4130->status[netId] = 3;
         return;
     }
@@ -127,7 +127,7 @@ BOOL sub_02034638(void) {
     if (_021D4130->unk3A5 == 0) {
         return FALSE;
     }
-    if (sub_0203769C() != 0) {
+    if (Comm_GetLocalNetId() != 0) {
         return FALSE;
     }
     if (sub_02037824(5) == 0) {
@@ -208,11 +208,11 @@ BOOL sub_020347CC(void) {
 
     ret = FALSE;
     if (_021D4130 != NULL) {
-        if (sub_02037454() == 0) {
+        if (Comm_CountConnected() == 0) {
             return ret;
         }
         for (i = 0; i < 8; i++) {
-            if (!sub_020373B4((u16)i) && _021D4130->status[i] != 0) {
+            if (!Comm_IsNetIdConnected((u16)i) && _021D4130->status[i] != 0) {
                 sub_020346E8(i);
                 ret = TRUE;
             }
@@ -271,13 +271,13 @@ BOOL sub_020348F0(void) {
     int j;
 
     for (i = 0; i < 7; i++) {
-        if (!sub_020373B4((u16)i)) {
+        if (!Comm_IsNetIdConnected((u16)i)) {
             continue;
         }
         if (_021D4130->status[i] == 0) {
             continue;
         }
-        if (!sub_020373B4((u16)(i + 1))) {
+        if (!Comm_IsNetIdConnected((u16)(i + 1))) {
             continue;
         }
         if (_021D4130->status[i + 1] == 0) {
@@ -300,10 +300,10 @@ void sub_02034960(int mode, int delta) {
         return;
     }
     if (mode != 2) {
-        parity = sub_020378AC(sub_0203769C()) & 1;
+        parity = sub_020378AC(Comm_GetLocalNetId()) & 1;
     }
-    for (i = 0; i < sub_02037454(); i++) {
-        if (!sub_020373B4((u16)i)) {
+    for (i = 0; i < Comm_CountConnected(); i++) {
+        if (!Comm_IsNetIdConnected((u16)i)) {
             continue;
         }
         if (_021D4130->status[i] == 0) {
@@ -332,7 +332,7 @@ void sub_02034A20(void *save) {
     void *tok;
 
     r = sub_0202C6F4(save);
-    for (i = 0; i < sub_02037454(); i++) {
+    for (i = 0; i < Comm_CountConnected(); i++) {
         tok = sub_0203484C(i);
         if (tok != NULL) {
             int res = sub_0203A084(save, tok, &val);

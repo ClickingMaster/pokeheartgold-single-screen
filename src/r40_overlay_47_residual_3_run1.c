@@ -18,7 +18,7 @@ void ov47_02258BB4(void *arg, int heapId) {
         *(void **)(work + offset) = Create2DGfxResObjMan(0x20, i, heapId);
         work += 4;
     }
-    sub_0203A880();
+    WirelessStatusIcon_Create();
     GfGfx_EngineATogglePlanes(0x10, 1);
     GfGfx_EngineBTogglePlanes(0x10, 1);
 }

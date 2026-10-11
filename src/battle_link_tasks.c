@@ -76,7 +76,7 @@ void sub_02075434(SysTask *task, void *ptr) {
             *end = 0;
         }
         size = (buffer[*read + 2] | (buffer[*read + 3] << 8)) + 4;
-        if (sub_02037030(23, &buffer[*read], size) == TRUE) {
+        if (Comm_SendCommand(23, &buffer[*read], size) == TRUE) {
             *read += size;
         }
         break;
@@ -134,7 +134,7 @@ void sub_02075554(PlayerProfile *profile, SavePalPad *friends, SavePalPad *out) 
     }
 }
 void sub_020755B4(int sender, int unused, SavePalPad *data, LinkWork *work) {
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         SavePalPad_Merge(work->setup->palPad, data, 1, (enum HeapID)5);
     }
     work->received++;

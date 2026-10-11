@@ -62,13 +62,13 @@ BOOL ov80_0222BA7C(void *ctx) {
     sub_02030FA0(*(void **)(p + 4));
     *(u16 *)(p + 0x426) = *(u16 *)(p + 0x18);
     *(u16 *)(p + 0x428) = *(u16 *)(p + 0x1A);
-    return sub_02037030(0x41, p + 0x424, 0x28) == 1;
+    return Comm_SendCommand(0x41, p + 0x424, 0x28) == 1;
 }
 
 void ov80_0222BAB0(u32 sender, u32 a1, const u16 *payload, void *ctx) {
     u8 *p = ctx;
     p[0xA7C]++;
-    if (sender != sub_0203769C()) {
+    if (sender != Comm_GetLocalNetId()) {
         *(u16 *)(p + 0xA78) = payload[1];
         *(u16 *)(p + 0xA76) = payload[2];
     }
@@ -83,14 +83,14 @@ BOOL ov80_0222BAE0(void *ctx) {
         p += 2;
         i++;
     }
-    return sub_02037030(0x42, base + 0x424, 0x28) == 1;
+    return Comm_SendCommand(0x42, base + 0x424, 0x28) == 1;
 }
 
 void ov80_0222BB18(u32 sender, u32 a1, const u16 *payload, void *ctx) {
     u8 *p = ctx;
     int i;
     p[0xA7C]++;
-    if (sender != sub_0203769C() && sub_0203769C() != 0) {
+    if (sender != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         for (i = 0; i < 14; i++) {
             u16 value = *payload;
             *(u16 *)(p + 0x78) = value;

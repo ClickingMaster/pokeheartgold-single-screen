@@ -28,7 +28,7 @@ void sub_02037A24(int sender, int unused, u8 *data) {
     u8 state = data[0];
     u8 packet[2];
     int i;
-    if (sub_0203769C() != 0) {
+    if (Comm_GetLocalNetId() != 0) {
         return;
     }
     packet[0] = sender;
@@ -36,7 +36,7 @@ void sub_02037A24(int sender, int unused, u8 *data) {
     sub_02037184(18, packet);
     _021D414C->states[sender] = state;
     for (i = 0; i < 8; i++) {
-        if (sub_020373B4((u16)i) && state != _021D414C->states[i]) {
+        if (Comm_IsNetIdConnected((u16)i) && state != _021D414C->states[i]) {
             return;
         }
     }

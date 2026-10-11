@@ -5,7 +5,7 @@ void ov96_021E87B4(void *a0, void *a1, s32 value, Ov96R10Dispatch *dispatch) {
         GF_AssertFail();
     }
     if (dispatch->mode == 1) {
-        sub_02037030(a0, a1, value);
+        Comm_SendCommand(a0, a1, value);
     } else {
         ov96_021E8914(dispatch->data, a0, a1, value);
     }

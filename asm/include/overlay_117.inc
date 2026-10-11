@@ -13,7 +13,7 @@
 .public StringExpandPlaceholders
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public Heap_Alloc
 .public Heap_Free
 .public SetBgPriority

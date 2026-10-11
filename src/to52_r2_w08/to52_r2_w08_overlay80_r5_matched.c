@@ -19,7 +19,7 @@ void ov80_02232F08(void *work) {
 
 void ov80_02232F60(void *ctx) {
     u8 *p = ctx;
-    s32 start = sub_0203769C() == 0 ? 0 : 2;
+    s32 start = Comm_GetLocalNetId() == 0 ? 0 : 2;
     s32 count = ov80_02237B24(p[0x10], 0);
     s32 end;
     s32 i;

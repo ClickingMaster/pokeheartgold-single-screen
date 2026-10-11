@@ -7,7 +7,7 @@ int ov70_0223E884(Ov70Work24 *work) {
 }
 
 int ov70_0223E8A4(Ov70Work24 *work) {
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     ov70_0223ECA4(work);
     ov70_0224212C(work->manager11A8);
     ov70_0223ED24(work);

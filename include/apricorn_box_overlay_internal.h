@@ -53,6 +53,6 @@ typedef struct ApricornJuiceData {
     /* 0x0B */ u8 unk_0B;
 } ApricornJuiceData;
 
-void sub_0200FBF4(PMLCDTarget screen, u16 color);
+void SetMasterBrightnessByColor(PMLCDTarget screen, u16 color);
 
 #endif // OV58_PRIVATE_H

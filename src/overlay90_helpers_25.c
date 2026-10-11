@@ -33,7 +33,7 @@ extern void sub_02014A8C(void *);
 extern void sub_02014A78(void *, int);
 extern void ov90_0225B330(u8 *);
 extern void PlayFanfare(u16);
-extern void sub_0203410C(const void *, int, void *);
+extern void Comm_RegisterCommandTable(const void *, int, void *);
 extern void BufferIntegerAsString(void *, int, int, int, int, int);
 extern void ReadMsgDataIntoString(void *, int, void *);
 extern void StringExpandPlaceholders(void *, void *, void *);
@@ -114,11 +114,11 @@ int ov90_0225C158(void) {
 }
 
 void ov90_0225C15C(void *data) {
-    sub_0203410C(ov90_0225C150(), ov90_0225C158(), data);
+    Comm_RegisterCommandTable(ov90_0225C150(), ov90_0225C158(), data);
 }
 
 void ov90_0225C178(void *data) {
-    sub_0203410C(ov90_0225C150(), ov90_0225C158(), data);
+    Comm_RegisterCommandTable(ov90_0225C150(), ov90_0225C158(), data);
 }
 
 int ov90_0225C194(void) {

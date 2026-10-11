@@ -1,7 +1,7 @@
 #include "global.h"
 
-extern int sub_0203769C(void);
-extern int sub_02037454(void);
+extern int Comm_GetLocalNetId(void);
+extern int Comm_CountConnected(void);
 extern void ov73_021E71E4(void *, u32, u32);
 extern void ScheduleBgTilemapBufferTransfer(void *, u32);
 extern int ov73_021E75FC(u32);
@@ -12,7 +12,7 @@ extern void ov73_021E66F0(void *);
 void *ov73_021E6F1C(void *, void *);
 
 void *ov73_021E6F1C(void *work, void *result) {
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         ov73_021E71E4(work, 0, 2);
     }
     *(s32 *)((u8 *)work + 0x4A38) = -1;
@@ -23,10 +23,10 @@ void *ov73_021E6F1C(void *work, void *result) {
     }
     ov73_021E756C(work, 15, 1);
     *(u32 *)((u8 *)work + 0x318) = 20;
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         ov73_021E781C(work, 0);
     }
-    *(u32 *)((u8 *)work + 0x4A2C) = sub_02037454();
+    *(u32 *)((u8 *)work + 0x4A2C) = Comm_CountConnected();
     *(u32 *)((u8 *)work + 0x4A34) = 0x12c;
     ov73_021E66F0(work);
     return result;

@@ -11,7 +11,7 @@ typedef struct LinkWork7527C {
 } LinkWork7527C;
 
 int sub_02037190(void);
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 void sub_02075554(void *profile, void *friends, void *out);
 void *Heap_Alloc(u32 heapId, u32 size);
 BOOL sub_0207527C(LinkWork7527C *work);

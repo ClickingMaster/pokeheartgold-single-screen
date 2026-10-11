@@ -5013,32 +5013,9 @@ Overlay OVY_38
     Object src/game_stats_request_state.o
     Object asm/overlay_38_thumb_data.o
     Object lib/NitroDWC/asm/to60_overlay_38_arm_anchor.o
-    Object src/to60_ov38_run01.o
-    Object src/to70_overlay_38_arm_residual_1_run01.o
-    Object src/to60_ov38_run02.o
-    Object src/to65_ov38_extra15_run01.o
-    Object src/to91_w41416_ghiPostStateDoPosting_run01.o
-    Object src/to80_extra1642_run01.o
-    Object src/to90_extra2120_run01.o
-    Object src/op90_to90_extra2120_residual_1_r01.o
-    Object src/to90_extra2120_run02.o
-    Object src/to65_ov38_extra15_run02.o
-    Object src/to80_extra1421_run01.o
-    Object src/to65_ov38_extra15_run03.o
-    Object src/to70_to65_ov38_extra15_residual_3_extra1120_run01.o
-    Object src/to65_ov38_extra15_run04.o
-    Object src/to70_to65_ov38_extra15_residual_4_extra1121_run01.o
-    Object src/to80_extra1734_run01.o
-    Object src/to70_to65_ov38_extra15_residual_4_extra1121_run02.o
-    Object src/to65_ov38_extra15_run05.o
-    Object src/to90_extra2320_run01.o
-    Object src/to65_ov38_extra15_run06.o
-    Object src/op90_to90_extra2549_residual_1_r01.o
-    Object src/to90_extra2549_run01.o
-    Object src/to65_ov38_extra15_run07.o
-    Object src/to70_to65_ov38_extra15_residual_7_extra1122_run01.o
-    Object src/to65_ov38_extra15_run08.o
-    Object src/op90_to70_to65_ov38_extra15_residual_8_extra1123_residual_1_r01.o
+    Object lib/NitroDWC/src/http_connection.o
+    Object lib/NitroDWC/src/http_request.o
+    Object lib/NitroDWC/src/http_engine_init.o
     Object lib/NitroDWC/asm/to60_overlay_38_arm_anchor_own1.o
     Object src/to70_to65_ov38_extra15_residual_8_extra1123_run01.o
     Object src/to61_overlay_38_arm_residual_2_run01.o
@@ -10094,13 +10071,6 @@ Overlay OVY_97
 {
     After OVY_96
     Object src/pokeathlon/pokeathlon_box.o
-    Object src/overlay97_tail_r7.o
-    Object src/to90_extra2298_run01.o
-    Object src/to90_extra2064_run01.o
-    Object src/overlay97_sprite_setup_tail.o
-    Object src/overlay97_helpers_8.o
-    Object src/to70_overlay_97_residual_8_extra885_run01.o
-    Object src/overlay97_helpers_9.o
     Object asm/overlay_97_residual_9.o
 }
 Overlay OVY_98

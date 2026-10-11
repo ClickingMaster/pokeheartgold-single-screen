@@ -13,7 +13,7 @@ extern u8 _0210F900[2];
 int sub_0203993C(void);
 int sub_02033FC4(u16 value);
 int sub_02034044(int value);
-int sub_020373B4(u16 slot);
+int Comm_IsNetIdConnected(u16 slot);
 BOOL sub_02036630(void);
 int sub_02035FF0(void);
 BOOL sub_02036438(int slot);

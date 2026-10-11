@@ -23,8 +23,8 @@ extern BOOL sub_020753A8(void *, int);
 extern BOOL sub_020753D4(void *, int, int);
 extern void sub_020399FC(int, BgConfig *);
 extern void sub_02037930(int);
-extern int sub_02037454(void);
-extern int sub_0203769C(void);
+extern int Comm_CountConnected(void);
+extern int Comm_GetLocalNetId(void);
 
 BOOL ov12_02239C28(OverlayManager *man) {
     LinkInitWork *work = OverlayManager_GetData(man);
@@ -135,7 +135,7 @@ BOOL ov12_02239C28(OverlayManager *man) {
     case 21:
         if (!(work->setup->battleType & 0x80)) {
             work->state1 = 33;
-        } else if (sub_0203769C() != 0) {
+        } else if (Comm_GetLocalNetId() != 0) {
             sub_02037AC0(0x39);
             work->state1++;
         } else if (sub_0207531C(work, 1) == TRUE) {
@@ -145,7 +145,7 @@ BOOL ov12_02239C28(OverlayManager *man) {
         break;
     case 22:
         work->state0 = 1;
-        if (sub_0203769C() != 0) {
+        if (Comm_GetLocalNetId() != 0) {
             if (sub_02037B38(0x39) == TRUE) {
                 work->state1++;
             }
@@ -156,7 +156,7 @@ BOOL ov12_02239C28(OverlayManager *man) {
     case 23:
         goto common;
     case 24:
-        if (sub_0203769C() != 0) {
+        if (Comm_GetLocalNetId() != 0) {
             sub_02037AC0(0x3A);
             work->state1++;
         } else if (sub_0207531C(work, 3) == TRUE) {
@@ -166,7 +166,7 @@ BOOL ov12_02239C28(OverlayManager *man) {
         break;
     case 25:
         work->state0 = 1;
-        if (sub_0203769C() != 0) {
+        if (Comm_GetLocalNetId() != 0) {
             if (sub_02037B38(0x3A) == TRUE) {
                 work->state1++;
             }
@@ -177,7 +177,7 @@ BOOL ov12_02239C28(OverlayManager *man) {
     case 26:
         goto common;
     case 27:
-        if (sub_0203769C() != 0) {
+        if (Comm_GetLocalNetId() != 0) {
             sub_02037AC0(0x3B);
             work->state1++;
         } else if (sub_020753A8(work, 1) == TRUE) {
@@ -187,7 +187,7 @@ BOOL ov12_02239C28(OverlayManager *man) {
         break;
     case 28:
         work->state0 = 1;
-        if (sub_0203769C() != 0) {
+        if (Comm_GetLocalNetId() != 0) {
             if (sub_02037B38(0x3B) == TRUE) {
                 work->state1++;
             }
@@ -198,7 +198,7 @@ BOOL ov12_02239C28(OverlayManager *man) {
     case 29:
         goto common;
     case 30:
-        if (sub_0203769C() != 0) {
+        if (Comm_GetLocalNetId() != 0) {
             sub_02037AC0(0x3C);
             work->state1++;
         } else if (sub_020753A8(work, 3) == TRUE) {
@@ -208,7 +208,7 @@ BOOL ov12_02239C28(OverlayManager *man) {
         break;
     case 31:
         work->state0 = 1;
-        if (sub_0203769C() != 0) {
+        if (Comm_GetLocalNetId() != 0) {
             if (sub_02037B38(0x3C) == TRUE) {
                 work->state1++;
             }
@@ -218,7 +218,7 @@ BOOL ov12_02239C28(OverlayManager *man) {
         break;
     case 32:
 common:
-        if (work->state0 == sub_02037454()) {
+        if (work->state0 == Comm_CountConnected()) {
             if (work->state1 == 20) {
                 for (i = 0; i < 4; i++) {
                     Heap_Free(((void **)work)[i + 4]);

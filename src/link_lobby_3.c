@@ -47,7 +47,7 @@ void sub_0205838C(void) {
 }
 
 void sub_020583EC(void) {
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         sub_02034638();
     }
     if (sub_02037B38(92)) {
@@ -76,7 +76,7 @@ void sub_02058478(void) {
         _021D41C8->timer--;
         return;
     }
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         if (sub_02057E50() == 0) {
             return;
         }
@@ -105,7 +105,7 @@ void sub_020584BC(void) {
 }
 
 void sub_02058518(void) {
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         sub_02034638();
     }
     if (sub_02037B38(92)) {

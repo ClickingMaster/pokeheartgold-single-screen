@@ -268,8 +268,8 @@ void ov58_02237CCC(void) {
     GfGfx_DisableEngineBPlanes();
     reg_GX_DISPCNT &= 0xFFFFE0FF;
     reg_GXS_DB_DISPCNT &= 0xFFFFE0FF;
-    sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
-    sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
     ResetVisibleHardwareWindows(PM_LCD_TOP);
     ResetVisibleHardwareWindows(PM_LCD_BOTTOM);
 }

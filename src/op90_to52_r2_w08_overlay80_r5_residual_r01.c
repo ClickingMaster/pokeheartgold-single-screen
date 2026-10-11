@@ -15,7 +15,7 @@ typedef struct {
 } Ov80Work;
 extern int ov80_02237B24(u8, int);
 extern int ov80_02237B58(u8, int);
-extern BOOL sub_0203769C(void);
+extern BOOL Comm_GetLocalNetId(void);
 int ov80_02233020(Ov80Work *w);
 // @fn ov80_02233020
 int ov80_02233020(Ov80Work *w) {
@@ -38,7 +38,7 @@ int ov80_02233020(Ov80Work *w) {
     }
     ppSum = 0;
     w->fainted = 0;
-    if (sub_0203769C() == FALSE) {
+    if (Comm_GetLocalNetId() == FALSE) {
         start = 0;
     } else {
         start = 2;

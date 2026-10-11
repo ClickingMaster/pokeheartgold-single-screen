@@ -1,8 +1,8 @@
 #ifndef POKEHEARTGOLD_UNK_0203A3B0_H
 #define POKEHEARTGOLD_UNK_0203A3B0_H
 
-void sub_0203A880(void);
-void sub_0203A914(void);
+void WirelessStatusIcon_Create(void);
+void WirelessStatusIcon_Destroy(void);
 void sub_0203A964(void);
 void sub_0203A994(int a0);
 

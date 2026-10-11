@@ -1,7 +1,7 @@
 #include "overlay_27_helpers_internal.h"
 
 extern int PlayerAvatar_GetPlayerMoveState(PlayerAvatar *avatar);
-extern u32 sub_0203769C(void);
+extern u32 Comm_GetLocalNetId(void);
 extern BOOL sub_02037958(void);
 extern BOOL sub_02058740(void);
 extern BOOL sub_02058258(void);
@@ -47,7 +47,7 @@ BOOL ov27_0225B4D8(Ov27Work *work) {
     }
 
     if (((work->unk51C.raw << 27) >> 28) == 5) {
-        u32 player = sub_0203769C();
+        u32 player = Comm_GetLocalNetId();
         if (!sub_02058740() || !sub_02058258() || !sub_02056EE0() || !sub_02057A0C() || sub_02057F18(player) || sub_02037958()) {
             return TRUE;
         }

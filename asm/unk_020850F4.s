@@ -127,7 +127,7 @@ _0208512C:
 	ldr r0, [r4, r0]
 	cmp r0, #0
 	beq _0208520A
-	bl sub_0203A880
+	bl WirelessStatusIcon_Create
 	mov r0, #1
 	mov r1, #0x6c
 	bl sub_0203A948
@@ -196,7 +196,7 @@ sub_0208527C: ; 0x0208527C
 	ldr r0, [r4, r0]
 	cmp r0, #0
 	beq _02085294
-	bl sub_0203A914
+	bl WirelessStatusIcon_Destroy
 _02085294:
 	add r0, r4, #0
 	bl sub_020866CC

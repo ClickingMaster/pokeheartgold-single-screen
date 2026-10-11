@@ -1,7 +1,7 @@
 #include "ov80_29ee0_partial_internal.h"
 
 void ov80_0222A7CC(void *message, int field) {
-    int player = sub_0203769C() ^ 1;
+    int player = Comm_GetLocalNetId() ^ 1;
     BufferPlayersName(message, field, sub_02034818(player));
 }
 

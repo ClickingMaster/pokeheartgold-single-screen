@@ -596,13 +596,13 @@ BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
             app->recvCount = 0;
             // The parent's choice wins unless the child chose first
             if (app->linkChoice < 20) {
-                if (sub_0203769C() == 0) {
+                if (Comm_GetLocalNetId() == 0) {
                     app->subState = 2;
                 } else {
                     app->subState = 3;
                 }
             } else {
-                if (sub_0203769C() == 0) {
+                if (Comm_GetLocalNetId() == 0) {
                     app->subState = 3;
                 } else {
                     app->subState = 2;
@@ -758,7 +758,7 @@ void BattleHallApp_FreeGraphics(BattleHallApp *app) {
         BattleHallSprite_Delete(app->monIcon);
     }
     BattleHallApp_DestroyYesNo(app->yesNoPrompt);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     PaletteData_FreeBuffers(app->paletteData, PLTTBUF_MAIN_OBJ);
     PaletteData_FreeBuffers(app->paletteData, PLTTBUF_MAIN_BG);
     PaletteData_Free(app->paletteData);
@@ -829,7 +829,7 @@ void BattleHallApp_InitGraphics(BattleHallApp *app) {
     if (sub_02037474()) {
         G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN, GX_OBJVRAMMODE_CHAR_1D_32K);
         G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
-        sub_0203A880();
+        WirelessStatusIcon_Create();
     }
     app->yesNoPrompt = BattleHallApp_CreateYesNo(HEAP_ID_105);
     Main_SetVBlankIntrCB((GFIntrCB)BattleHallApp_VBlankCallback, app);
@@ -1338,7 +1338,7 @@ BOOL BattleHallApp_SendLinkCommand(BattleHallApp *app, u16 command, u16 arg) {
         BattleHallApp_PrepareLinkAnswer(app, command, arg);
         break;
     }
-    if (sub_02037030(id, &app->linkCommand, 0x2C) == TRUE) {
+    if (Comm_SendCommand(id, &app->linkCommand, 0x2C) == TRUE) {
         return TRUE;
     }
     return FALSE;
@@ -1350,7 +1350,7 @@ void BattleHallApp_PrepareLinkPing(BattleHallApp *app, u16 command) {
 }
 
 void ov82_0223F764(u32 netId) {
-    if (netId == sub_0203769C()) {
+    if (netId == Comm_GetLocalNetId()) {
         return;
     }
 }
@@ -1360,7 +1360,7 @@ void BattleHallApp_PrepareLinkChoice(BattleHallApp *app, u16 command, u16 choice
 
     app->linkCommand = command;
     app->linkArg = choice;
-    if (sub_0203769C() == 0 && app->linkChoice == NO_LINK_CHOICE) {
+    if (Comm_GetLocalNetId() == 0 && app->linkChoice == NO_LINK_CHOICE) {
         app->linkChoice = (u8)choice;
     }
     app->linkChoiceSent = app->linkChoice;
@@ -1370,11 +1370,11 @@ void BattleHallApp_PrepareLinkChoice(BattleHallApp *app, u16 command, u16 choice
 
 void ov82_0223F7B4(u32 netId, u32 unused, const u16 *msg, BattleHallApp *app) {
     app->recvCount++;
-    if (netId == sub_0203769C()) {
+    if (netId == Comm_GetLocalNetId()) {
         return;
     }
     app->partnerCursor = (u8)msg[1];
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         if (app->linkChoice != NO_LINK_CHOICE) {
             app->partnerCursor = 0;
         } else {
@@ -1394,7 +1394,7 @@ void BattleHallApp_PrepareLinkAnswer(BattleHallApp *app, u16 command, u16 answer
 void ov82_0223F814(u32 netId, u32 unused, const u16 *msg, BattleHallApp *app) {
     u16 answer;
 
-    if (netId == sub_0203769C()) {
+    if (netId == Comm_GetLocalNetId()) {
         return;
     }
     answer = msg[1];

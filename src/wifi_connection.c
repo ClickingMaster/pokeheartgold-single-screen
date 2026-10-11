@@ -26,7 +26,7 @@ extern void sub_02031214(void *, int, int);
 extern void *Save_Frontier_GetStatic(void *);
 extern int sub_02034084(void);
 extern int sub_02034098(void);
-extern int sub_02037454(void);
+extern int Comm_CountConnected(void);
 extern void sub_02038F74(int, u32, int);
 extern int sub_0203993C(void);
 extern void sub_02039AD8(int);
@@ -786,7 +786,7 @@ void WifiConnection_StartVoiceChat(int heapId) {
     sub_0203993C();
     online = sub_02034084();
     if (online) {
-        count = sub_02037454() - 1;
+        count = Comm_CountConnected() - 1;
         if (count < 1) {
             count = 1;
         }

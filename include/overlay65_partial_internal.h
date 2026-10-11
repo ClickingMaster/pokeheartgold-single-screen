@@ -6,7 +6,7 @@
 #define U32(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 extern int sub_02036FD8(u32, void *, u32);
-extern int sub_02037030(u32, void *, u32);
+extern int Comm_SendCommand(u32, void *, u32);
 extern void *Save_SpecialRibbons_Get(void *);
 extern int sub_02037B38(u32);
 extern void ov65_0221DE24(void *, u32, u32);
@@ -22,11 +22,11 @@ extern void BgCopyOrUncompressTilemapBufferRangeToVram(void *, u32, void *, u32,
 extern void ov65_0221FB90(void *, u32, u32, u32, void *);
 extern void TouchscreenListMenu_Destroy(void *);
 extern void TouchscreenListMenuSpawner_Destroy(void *);
-extern u32 sub_020373B4(u16);
+extern u32 Comm_IsNetIdConnected(u16);
 extern void *Party_GetMonByIndex(void *, u32);
 extern u32 GetMonData(void *, u32, void *);
 extern void sub_02039AD8(u32);
-extern u32 sub_0203769C(void);
+extern u32 Comm_GetLocalNetId(void);
 extern void BgSetPosTextAndCommit(void *, u32, u32, u32);
 extern u32 Party_GetCount(void *);
 extern void *Mon_GetBoxMon(void *);

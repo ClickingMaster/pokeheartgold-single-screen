@@ -8,7 +8,7 @@ typedef struct {u8 pad[4];void *data;u8 pad2;u8 mode,result;u8 pad3[4];union {u8
 typedef char WorkPrefixExtent[(sizeof(Work)==0x5bc)?1:-1];
 typedef char CountsOffset[(offsetof(Work,counts)==0x5b7)?1:-1];
 typedef char PointsOffset[(offsetof(Work,points)==0x5ba)?1:-1];
-extern int ov80_02237B24(int,int),ov80_02237D8C(int),sub_0203769C(void),ov83_022448AC(Work *,int,int);
+extern int ov80_02237B24(int,int),ov80_02237D8C(int),Comm_GetLocalNetId(void),ov83_022448AC(Work *,int,int);
 extern u8 ov83_0224776C(u8,u8),ov83_0224777C(void *,int,int);
 extern void ov83_02244ABC(Work *,int),ov80_02237FA4(void *,int,int),ov83_022477C4(u32,int),ov83_02245390(Work *),ov83_022453DC(Work *,void *);
 extern void ov83_02247944(Window *,int);
@@ -17,7 +17,7 @@ extern const u16 ov83_02248054[][3];
 void ov83_02245ACC(void *,u8,int);
 void ov83_02245ACC(void *owner,u8 index,int kind){Work *w=owner;
 int category;u32 threshold;ov80_02237B24(w->mode,0);if(kind==5)category=2;else {GF_AssertFail();}threshold=w->threshold;ov83_0224776C(threshold,index);
-if(sub_0203769C()==0){if(index<threshold){FrontierSave *save;int stat;ov83_02244ABC(w,5);ov83_0224777C(w->save,w->mode,category);ov80_02237FA4(w->data,w->mode,50);index=ov83_0224777C(w->save,w->mode,category);save=Save_Frontier_GetStatic(w->save);stat=sub_0205C174(w->mode,category);sub_02031108(save,stat,sub_0205C268(sub_0205C174(w->mode,category)),(u16)(index+1));if(ov80_02237D8C(w->mode)==1)w->updates=2;
+if(Comm_GetLocalNetId()==0){if(index<threshold){FrontierSave *save;int stat;ov83_02244ABC(w,5);ov83_0224777C(w->save,w->mode,category);ov80_02237FA4(w->data,w->mode,50);index=ov83_0224777C(w->save,w->mode,category);save=Save_Frontier_GetStatic(w->save);stat=sub_0205C174(w->mode,category);sub_02031108(save,stat,sub_0205C268(sub_0205C174(w->mode,category)),(u16)(index+1));if(ov80_02237D8C(w->mode)==1)w->updates=2;
 }else{ov83_022477C4((u32)w->format,5);index=w->counts[category];w->points-=50;w->counts[category]++;}}
 else{if(index<threshold){ov83_022477C4((u32)w->format,5);index=w->counts[category];w->points-=50;w->counts[category]++;}
 else{FrontierSave *save;int stat;ov83_02244ABC(w,5);ov83_0224777C(w->save,w->mode,category);ov80_02237FA4(w->data,w->mode,50);index=ov83_0224777C(w->save,w->mode,category);save=Save_Frontier_GetStatic(w->save);stat=sub_0205C174(w->mode,category);sub_02031108(save,stat,sub_0205C268(sub_0205C174(w->mode,category)),(u16)(index+1));if(ov80_02237D8C(w->mode)==1)w->updates=2;}}

@@ -7,7 +7,7 @@ void sub_02074E5C(BattleSystem *battle) {
     }
     send = Heap_Alloc((enum HeapID)5, sizeof(LinkTask));
     recv = Heap_Alloc((enum HeapID)5, sizeof(LinkTask));
-    sub_0203410C(_020FFE30, 12, battle);
+    Comm_RegisterCommandTable(_020FFE30, 12, battle);
     send->battle = battle;
     send->state = 0;
     recv->battle = battle;
@@ -18,7 +18,7 @@ void sub_02074E5C(BattleSystem *battle) {
     SysTask_CreateOnMainQueue(sub_020754C0, recv, 0);
 }
 void sub_02074EC4(LinkWork *work) {
-    sub_0203410C(_020FFE30, 12, work);
+    Comm_RegisterCommandTable(_020FFE30, 12, work);
 }
 u32 sub_02074ED8(void) {
     return 4;

@@ -81,8 +81,8 @@ M2C_UNK sub_0203476C();                             /* extern */
 s32 sub_02034780();                                 /* extern */
 u32 sub_020347A0();                                 /* extern */
 M2C_UNK sub_02034B00();                             /* extern */
-s32 sub_02037454();                                 /* extern */
-s32 sub_0203769C();                                 /* extern */
+s32 Comm_CountConnected();                                 /* extern */
+s32 Comm_GetLocalNetId();                                 /* extern */
 M2C_UNK sub_020378E4(s32);                          /* extern */
 M2C_UNK sub_02037AC0(u8);                           /* extern */
 s32 sub_02037B38(u8);                               /* extern */
@@ -151,7 +151,7 @@ s32 ov49_02262028(s32 arg0, s32 arg1, s32 arg2) {
         if ((u32) M2C_FIELD(temp_r4, u16 *, 8) > ov45_0222F314(M2C_FIELD(temp_r6, u8 *, 1))) {
             M2C_FIELD(temp_r6, s8 *, 0) = 4;
             ov49_0225EF8C(sp10, 0x17U);
-        } else if ((s32) M2C_FIELD(temp_r4, u16 *, 8) > sub_02037454()) {
+        } else if ((s32) M2C_FIELD(temp_r4, u16 *, 8) > Comm_CountConnected()) {
             M2C_FIELD(temp_r6, s8 *, 0) = 4;
             ov49_0225EF8C(sp10, 0x17U);
         } else if (sub_0203988C() == 0) {
@@ -404,7 +404,7 @@ block_75:
         ov49_02262DD4(temp_r4 + 0x3C, 0);
         ov49_02262DF8(temp_r4 + 0x3C, arg1, 0);
         sub_02034434();
-        sub_0203769C();
+        Comm_GetLocalNetId();
         sub_0203476C();
         ov49_0225EF8C(sp10, 0xBU);
         /* Duplicate return node #164. Try simplifying control flow for better match */
@@ -444,7 +444,7 @@ block_75:
         ov49_02262DD4(temp_r4 + 0x3C, 0);
         ov49_02262DF8(temp_r4 + 0x3C, arg1, 0);
         M2C_FIELD(temp_r4, s32 *, 0xC) = ov45_0222A548(sp30);
-        if (sub_02037C0C(sub_0203769C(), temp_r4 + 0xC) != 1) {
+        if (sub_02037C0C(Comm_GetLocalNetId(), temp_r4 + 0xC) != 1) {
 
         } else {
             ov49_0225EF8C(sp10, 0xEU);
@@ -457,7 +457,7 @@ block_75:
         sp18 = 0;
         temp_r0_7 = sub_020347A0();
         sp28 = temp_r0_7;
-        sp24 = sub_0203769C();
+        sp24 = Comm_GetLocalNetId();
         var_r7_2 = 0;
         sp20 = var_r7_2;
         sp1C = ov45_0222F430();

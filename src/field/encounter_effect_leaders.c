@@ -356,7 +356,7 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
         }
         break;
     case 15:
-        sub_0200FBF4(1, RGB_WHITE);
+        SetMasterBrightnessByColor(1, RGB_WHITE);
         if (effect->done) {
             *effect->done = TRUE;
         }
@@ -729,7 +729,7 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
         }
         break;
     case 14:
-        sub_0200FBF4(1, RGB_WHITE);
+        SetMasterBrightnessByColor(1, RGB_WHITE);
         if (effect->done) {
             *effect->done = TRUE;
         }

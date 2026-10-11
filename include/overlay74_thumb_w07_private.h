@@ -8,7 +8,7 @@
 
 void *sub_02034818(int);
 void ov74_02229DF8(void);
-void sub_0203A914(void);
+void WirelessStatusIcon_Destroy(void);
 BOOL WindowIsInUse(void *);
 void EraseFrameAndWindow1(void *, int);
 void ClearFrameAndWindow2(void *, int);
@@ -34,7 +34,7 @@ void BG_LoadScreenTilemapData(void *, u8, const void *, u32);
 void Heap_Create(int, int, u32);
 void *OverlayManager_CreateAndGetData(void *, u32, int);
 void *BgConfig_Alloc(int);
-void sub_0200FBF4(int, int);
+void SetMasterBrightnessByColor(int, int);
 void ov74_022352A0(int);
 
 int ov74_0222E85C(s32 *);

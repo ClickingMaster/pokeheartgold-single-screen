@@ -10,7 +10,7 @@ void ov83_02244AD8(u8 *work, void *window, int x, int y, u8 font) {
     String_Delete(string);
 }
 void ov83_02244B40(u8 *work, void *window, int x, int y) {
-    void *profile = sub_02034818(sub_0203769C(work) ^ 1);
+    void *profile = sub_02034818(Comm_GetLocalNetId(work) ^ 1);
     u32 color = PlayerProfile_GetTrainerGender(profile) == 0 ? 0x70800 : 0x30400;
     BufferPlayersName(PTR(work, 0x24), 0, profile);
     ov83_0224484C(work, window, 1, x, y, 0xff, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, 0);

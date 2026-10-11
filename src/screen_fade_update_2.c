@@ -76,7 +76,7 @@ void sub_02010064(FadeParam *param) {
 
 void sub_02010094(FadeParam *param) {
     if (param->state == 1 && (param->color == 0x7FFF || param->color == 0) && param->task == NULL) {
-        sub_0200FBF4((PMLCDTarget)param->screen, param->color);
+        SetMasterBrightnessByColor((PMLCDTarget)param->screen, param->color);
         ResetVisibleHardwareWindows((PMLCDTarget)param->screen);
     }
 }

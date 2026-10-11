@@ -538,7 +538,7 @@ FrtCmd_124: ; 0x0222D034
 	add r0, r1, #1
 	str r0, [r5, #0x1c]
 	ldrb r4, [r1]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	mov r1, #1
 	eor r0, r1
 	bl sub_02034818

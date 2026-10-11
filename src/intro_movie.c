@@ -52,8 +52,8 @@ enum HeapID _deadstrip_00(int idx) {
 
 static BOOL IntroMovie_Init(OverlayManager *man, int *state) {
     ScreenBrightnessData_InitAll();
-    sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
-    sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
     GfGfx_DisableEngineAPlanes();
@@ -81,8 +81,8 @@ static BOOL IntroMovie_Main(OverlayManager *man, int *state) {
     if (data->skipAllowed && ((gSystem.newKeys & PAD_BUTTON_A) || (gSystem.newKeys & PAD_BUTTON_START) || gSystem.touchNew)) {
         data->introSkipped = TRUE;
         gSystem.unk70 = FALSE;
-        sub_0200FBF4(PM_LCD_TOP, RGB_WHITE);
-        sub_0200FBF4(PM_LCD_BOTTOM, RGB_WHITE);
+        SetMasterBrightnessByColor(PM_LCD_TOP, RGB_WHITE);
+        SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_WHITE);
     }
 
     switch (*state) {
@@ -122,8 +122,8 @@ static BOOL IntroMovie_Exit(OverlayManager *man, int *state) {
     int i;
 
     IntroMovieOverlayData *data = OverlayManager_GetData(man);
-    sub_0200FBF4(PM_LCD_TOP, RGB_WHITE);
-    sub_0200FBF4(PM_LCD_BOTTOM, RGB_WHITE);
+    SetMasterBrightnessByColor(PM_LCD_TOP, RGB_WHITE);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_WHITE);
     IntroMovie_TeardownSpritesManager(data);
     Heap_Free(data->bgConfig);
     if (data->bgAnimCnt.blend[0].task != NULL) {

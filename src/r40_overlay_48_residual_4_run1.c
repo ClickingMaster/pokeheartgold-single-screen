@@ -30,7 +30,7 @@ void ov48_02259688(void *p, u32 heapId) {
         PTRAT(p, offset) = Create2DGfxResObjMan(0x20, i, heapId);
         p = ADD(p, 4);
     }
-    sub_0203A880();
+    WirelessStatusIcon_Create();
     GfGfx_EngineATogglePlanes(0x10, 1);
     GfGfx_EngineBTogglePlanes(0x10, 1);
 }

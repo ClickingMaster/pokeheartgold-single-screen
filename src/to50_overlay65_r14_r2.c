@@ -1,8 +1,8 @@
 #include "to50_overlay65_r14_r2_private.h"
 
 void ov65_0221BFEC(void *work) {
-    void *p0 = sub_02034818(sub_0203769C());
-    void *p1 = sub_02034818(sub_0203769C() ^ 1);
+    void *p0 = sub_02034818(Comm_GetLocalNetId());
+    void *p1 = sub_02034818(Comm_GetLocalNetId() ^ 1);
     void *s0 = PlayerProfile_GetPlayerName_NewString(p0, 0x1a);
     void *s1 = PlayerProfile_GetPlayerName_NewString(p1, 0x1a);
     void *s2 = NewString_ReadMsgData(PTR_AT(work, 0x190), 0x32);
@@ -100,7 +100,7 @@ BOOL WirelessTradeSelectMon_Main(OverlayManager *man, int *state) {
                 U32_AT(work, 0x94) = U8_AT(work, 0x20) + 6 * U32_AT(work, 0x48);
                 ov65_0221CB5C(work);
                 ov65_0221DD34(U32_AT(work, 0x94), PTR_AT(work, 0x344), 0);
-                sub_0203A880();
+                WirelessStatusIcon_Create();
                 U32_AT(work, 0x54) = 6;
             }
             break;

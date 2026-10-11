@@ -100,8 +100,8 @@
 .public sub_0203946C
 .public sub_020399EC
 .public sub_0203A040
-.public sub_0203A880
-.public sub_0203A914
+.public WirelessStatusIcon_Create
+.public WirelessStatusIcon_Destroy
 .public PCStorage_GetBoxWallpaper
 .public PCStorage_GetBoxName
 .public PCStorage_GetMonDataByIndexPair

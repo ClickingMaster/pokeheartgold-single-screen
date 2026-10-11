@@ -13,11 +13,11 @@ typedef struct SolOv73Large {
     u16 field_4A30;
 } SolOv73Large;
 
-u32 sub_02037454(void);
+u32 Comm_CountConnected(void);
 u32 ov73_021E746C(void);
 void ov73_021E66F0(void *);
-int sub_0203769C(void);
-int sub_02037030(int, void *, int);
+int Comm_GetLocalNetId(void);
+int Comm_SendCommand(int, void *, int);
 void ov73_021E670C(void *, int);
 void ov73_021E67A8(void *);
 extern u8 gSystem[];

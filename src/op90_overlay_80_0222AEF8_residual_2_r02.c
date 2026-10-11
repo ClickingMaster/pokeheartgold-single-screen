@@ -19,8 +19,8 @@ typedef struct Ov80Work {
 } Ov80Work;
 
 int ov80_02236DD4(u8 mode);
-BOOL sub_02037030(int cmd, void *data, int size);
-int sub_0203769C(void);
+BOOL Comm_SendCommand(int cmd, void *data, int size);
+int Comm_GetLocalNetId(void);
 BOOL ov80_0222B448(Ov80Work *work);
 void ov80_0222B52C(int netId, int size, u16 *data, Ov80Work *work);
 
@@ -31,7 +31,7 @@ void ov80_0222B52C(int netId, int size, u16 *data, Ov80Work *work) {
     int pos = 0;
 
     work->recvCount++;
-    if (netId == sub_0203769C()) {
+    if (netId == Comm_GetLocalNetId()) {
         return;
     }
     count = ov80_02236DD4(work->mode);

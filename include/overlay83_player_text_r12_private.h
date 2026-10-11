@@ -10,7 +10,7 @@ u32 PlayerProfile_GetTrainerGender(void *);
 u8 AddTextPrinterParameterizedWithColor(void *, u32, void *, u32, u32, u32, u32, void *);
 void ScheduleWindowCopyToVram(void *);
 void String_Delete(void *);
-u32 sub_0203769C(void *);
+u32 Comm_GetLocalNetId(void *);
 void *sub_02034818(u32);
 void BufferPlayersName(void *, u32, void *);
 void ov83_0223FCB4(void *, void *, u32, u32, u32, u32, u32, u32, u32, u32);

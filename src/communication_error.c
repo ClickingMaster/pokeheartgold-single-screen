@@ -126,8 +126,8 @@ void ShowCommunicationError(enum HeapID heapID, u32 error, u32 errorCode) {
         break;
     }
 
-    sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
-    sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
 
     OS_DisableIrqMask(OS_IE_VBLANK);
     OS_SetIrqFunction(OS_IE_VBLANK, VBlankIntr);

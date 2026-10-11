@@ -48,7 +48,7 @@ void sub_02021238(void);
 void TextFlags_SetCanABSpeedUpPrint(BOOL enable);
 void TextFlags_SetAutoScrollParam(int param);
 void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable);
-void sub_0203A914(void);
+void WirelessStatusIcon_Destroy(void);
 void OverlayManager_FreeData(OverlayManager *manager);
 void GfGfx_SwapDisplay(void);
 void GF_RunVramTransferTasks(void);

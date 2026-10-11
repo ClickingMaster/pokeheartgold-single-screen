@@ -9,6 +9,6 @@ BOOL sub_02057A0C(void) {
     if (_021D41C4 == NULL) {
         return FALSE;
     }
-    slot = sub_0203769C();
-    return sub_020373B4(slot) != 0;
+    slot = Comm_GetLocalNetId();
+    return Comm_IsNetIdConnected(slot) != 0;
 }

@@ -77,7 +77,7 @@ void ov12_022645F8(BattleSystem *bsys, BattleContext *ctx, void *buf, int cmd, i
 void ov12_022643C8(BattleSystem *bsys, BattleContext *ctx, void *buf, int a3, int a4, int a5, int a6, int a7);
 BattleContext *BattleSystem_GetBattleContext(BattleSystem *bsys);
 void BattleBuffer_Clear(BattleContext *ctx, int battlerId);
-u8 sub_0203769C(void);
+u8 Comm_GetLocalNetId(void);
 
 void BattleController_EmitInitStartBallGauge(BattleSystem *bsys, int battlerId);
 void BattleController_EmitDeleteStartBallGauge(BattleSystem *bsys, int battlerId);

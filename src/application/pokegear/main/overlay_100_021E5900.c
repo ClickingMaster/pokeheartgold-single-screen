@@ -232,8 +232,8 @@ BOOL PokegearApp_LoadGFX(PokegearAppData *pokegearApp) {
         GfGfx_DisableEngineBPlanes();
         GX_SetVisiblePlane(0);
         GXS_SetVisiblePlane(0);
-        sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
-        sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+        SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
+        SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
         ResetVisibleHardwareWindows(PM_LCD_TOP);
         ResetVisibleHardwareWindows(PM_LCD_BOTTOM);
         sub_020210BC();

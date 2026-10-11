@@ -34,7 +34,7 @@ extern u8 BattleArcade_GetOpponentMonCount(u8, int);
 extern int ov80_02238344(u8);
 extern BattleSetupX *BattleSetup_New(enum HeapID, u32);
 extern void sub_02051D18(BattleSetupX *, int, void *, void *, void *, void *);
-extern BOOL sub_0203769C(void);
+extern BOOL Comm_GetLocalNetId(void);
 extern void BattleSetup_AddMonToParty(BattleSetupX *, Pokemon *, int);
 extern void BattleSetup_SetAllySideBattlersToPlayer(BattleSetupX *);
 extern void *ov80_02229F04(void *, u16, enum HeapID, int);
@@ -68,7 +68,7 @@ BattleSetupX *BattleArcade_NewBattleSetup(ArcadeData *data, FieldSysX *fs) {
         enemyParty = data->party1;
     }
     Party_InitWithMaxSize(setup->parties[0], playerCount);
-    if (sub_0203769C() == FALSE) {
+    if (Comm_GetLocalNetId() == FALSE) {
         start = 0;
     } else {
         start = 2;
@@ -97,7 +97,7 @@ BattleSetupX *BattleArcade_NewBattleSetup(ArcadeData *data, FieldSysX *fs) {
     case 2:
     case 3:
         BattleSetup_SetAllySideBattlersToPlayer(setup);
-        PlayerProfile_Copy(sub_02034818(1 - sub_0203769C()), *(void **)((u8 *)setup + 0x100));
+        PlayerProfile_Copy(sub_02034818(1 - Comm_GetLocalNetId()), *(void **)((u8 *)setup + 0x100));
         Heap_Free(ov80_02229F04(trainer, data->trainerIds[data->trainerIdx + 7], HEAP_ID_FIELD2, 204));
         ov80_0222A480(setup, trainer, enemyCount, 3, HEAP_ID_FIELD2);
         Party_InitWithMaxSize(setup->parties[3], BattleArcade_GetOpponentMonCount(data->type, 0));

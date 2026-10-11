@@ -49,12 +49,12 @@ _020581D6:
 	ldr r0, [r0]
 	add r0, #0x3f
 	strb r1, [r0]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	str r0, [sp, #8]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	bl sub_02034818
 	mov r4, #0
-	bl sub_02037454
+	bl Comm_CountConnected
 	cmp r0, #0
 	ble _0205821E
 	ldr r6, _0205824C ; =_021D41C8
@@ -73,7 +73,7 @@ _020581FE:
 _02058212:
 	add r5, r5, #4
 	add r4, r4, #1
-	bl sub_02037454
+	bl Comm_CountConnected
 	cmp r4, r0
 	blt _020581FE
 _0205821E:

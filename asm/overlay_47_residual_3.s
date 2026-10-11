@@ -92,7 +92,7 @@ _02258C12:
 	add r5, r5, #4
 	cmp r4, #4
 	blt _02258C12
-	bl sub_0203A880
+	bl WirelessStatusIcon_Create
 	mov r0, #0x10
 	mov r1, #1
 	bl GfGfx_EngineATogglePlanes

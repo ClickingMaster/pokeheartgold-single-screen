@@ -28,7 +28,7 @@ void *ov80_02237B58(u8, int);
 int ov80_02237D8C(u8);
 void ov80_0222A6B8(void *, u16, u16, void *, void *, void *, void *, u8);
 void ov80_02237E30(void *);
-BOOL sub_0203769C(void);
+BOOL Comm_GetLocalNetId(void);
 int ov80_02237B24(u8, int);
 int Party_GetCount(void *);
 void *Party_GetMonByIndex(void *, int);

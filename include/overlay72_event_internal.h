@@ -3,7 +3,7 @@
 #include "global.h"
 
 #include "system.h"
-extern void sub_0203A914(void *);
+extern void WirelessStatusIcon_Destroy(void *);
 extern void sub_0203946C(void);
 extern void BeginNormalPaletteFade(int, int, int, int, int, int, int);
 extern int ov72_02238668(void *);

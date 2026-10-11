@@ -36,9 +36,9 @@ BOOL ov65_0221C5E0(void *work) {
             } else {
                 S32_AT(work, 0x58) = 2;
             }
-            if (sub_0203769C() == 0) {
+            if (Comm_GetLocalNetId() == 0) {
                 u16 value = (s32)LCRandom() % 60;
-                ov65_0221DE10(sub_0203769C(), 0x1f, value + 3);
+                ov65_0221DE10(Comm_GetLocalNetId(), 0x1f, value + 3);
             }
             ov65_0221DE8C(PTR_AT(work, 4));
             ov65_0221F850(work);
@@ -84,8 +84,8 @@ BOOL ov65_0221C5E0(void *work) {
         S32_AT(work, 0x5c) = 0;
         S32_AT(work, 0x60) = 0;
         S32_AT(work, 0x64) = 0;
-        if (sub_0203769C() == 1) {
-            ov65_0221DE64(sub_0203769C(), PTR_AT(work, 0x2224), S32_AT(work, 0x5c));
+        if (Comm_GetLocalNetId() == 1) {
+            ov65_0221DE64(Comm_GetLocalNetId(), PTR_AT(work, 0x2224), S32_AT(work, 0x5c));
             S32_AT(work, 0x5c)
             ++;
         }
@@ -136,7 +136,7 @@ BOOL ov65_0221C5E0(void *work) {
         ++;
         break;
     case 12:
-        ov65_0221DEA0(sub_02034818(sub_0203769C()), PTR_AT(work, 0x2230), (u8 *)work + 0x2234);
+        ov65_0221DEA0(sub_02034818(Comm_GetLocalNetId()), PTR_AT(work, 0x2230), (u8 *)work + 0x2234);
         S32_AT(work, 0x58)
         ++;
         break;

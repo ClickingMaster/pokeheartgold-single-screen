@@ -1,8 +1,8 @@
 #ifndef PRIVATE_OV80_0222AEF8_H
 #define PRIVATE_OV80_0222AEF8_H
 #include "global.h"
-u32 sub_0203769C(void);
-BOOL sub_02037030(u32 command, void *data, u32 size);
+u32 Comm_GetLocalNetId(void);
+BOOL Comm_SendCommand(u32 command, void *data, u32 size);
 void *Save_PlayerData_GetProfile(void *save);
 void sub_02030FA0(void *save);
 void *SaveArray_Party_Get(void *save);

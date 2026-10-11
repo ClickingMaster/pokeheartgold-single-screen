@@ -263,7 +263,7 @@ static BOOL sub_0204F228(TaskManager *taskManager) {
     UnkStruct_0204F1E4 *r4 = TaskManager_GetEnvironment(taskManager);
     switch (r4->state) {
     case 0:
-        if (sub_02037030(0x84, r4, sizeof(UnkStruct_0204F1E4)) == 1) {
+        if (Comm_SendCommand(0x84, r4, sizeof(UnkStruct_0204F1E4)) == 1) {
             r4->state++;
         }
         break;
@@ -530,7 +530,7 @@ BOOL ScrCmd_697(ScriptContext *ctx) {
 
 void sub_0204F85C(u32 a0, u32 unused, UnkStruct_0204F1E4 *a2, UnkStruct_0204F1E4 *a3) {
     a3->unk01++;
-    if (sub_0203769C() != a0) {
+    if (Comm_GetLocalNetId() != a0) {
         a3->partnerTeam = a2->playerTeam;
     }
 }

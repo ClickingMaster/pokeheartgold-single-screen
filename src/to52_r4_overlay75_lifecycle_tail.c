@@ -5,7 +5,7 @@ extern Ov75StateFn ov75_02249B30[];
 void ov75_02247838(void *p);
 void ov75_0224741C(void *p);
 void sub_02021238(void);
-void sub_0203A914(void);
+void WirelessStatusIcon_Destroy(void);
 void *OverlayManager_GetData(void *manager);
 void OverlayManager_FreeData(void *manager);
 BOOL IsPaletteFadeFinished(void);
@@ -86,7 +86,7 @@ BOOL ov75_02247180(void *manager) {
     TextFlags_SetCanABSpeedUpPrint(FALSE);
     TextFlags_SetAutoScrollParam(0);
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     OverlayManager_FreeData(manager);
     Heap_Destroy(0x74);
     (gSystem + 0x60)[9] = FALSE;

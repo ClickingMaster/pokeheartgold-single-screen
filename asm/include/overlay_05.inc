@@ -135,11 +135,11 @@
 .public sub_0202FE14
 .public sub_020304B4
 .public sub_02034818
-.public sub_0203769C
+.public Comm_GetLocalNetId
 .public sub_020378AC
 .public sub_02037AC0
 .public sub_02037B38
-.public sub_0203A880
+.public WirelessStatusIcon_Create
 .public GetMonData
 .public GetMonGender
 .public Mon_GetBoxMon

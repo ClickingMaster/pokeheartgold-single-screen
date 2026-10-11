@@ -39,7 +39,7 @@ typedef struct Ov93System {
 } Ov93System;
 
 extern void GF_AssertFail(void);
-extern u32 sub_0203769C(void);
+extern u32 Comm_GetLocalNetId(void);
 extern u32 ov93_0225E3C4(void *sys, u32 id);
 extern int ov93_0225DF38(void *sys, u32 payload);
 extern void ov93_02261C58(void *sys, void *arg1, u32 arg2, u32 arg3, u32 arg4);
@@ -91,7 +91,7 @@ u32 ov93_0225FF1C(void *sys, const Ov93Request *request, Ov93Entry *entry) {
     entry->config = config;
     entry->kind = request->side;
     entry->sprite = ov93_0226027C(work, (const Ov93Position *)config);
-    if (request->id == sub_0203769C()) {
+    if (request->id == Comm_GetLocalNetId()) {
         ov93_0225DF38(work, request->payload4);
         entry->delay = 25;
         ManagedSprite_SetDrawFlag(entry->sprite, FALSE);

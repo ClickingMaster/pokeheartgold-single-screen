@@ -60,13 +60,13 @@
 .public sub_02036904
 .public sub_020369CC
 .public sub_02036FD8
-.public sub_02037030
+.public Comm_SendCommand
 .public sub_02037088
 .public sub_02037108
 .public sub_02037184
 .public sub_02037190
-.public sub_020373B4
-.public sub_02037454
+.public Comm_IsNetIdConnected
+.public Comm_CountConnected
 .public sub_02037474
 .public sub_02037498
 .public sub_020374AC
@@ -77,7 +77,7 @@
 .public sub_02037618
 .public sub_02037640
 .public sub_02037668
-.public sub_0203769C
+.public Comm_GetLocalNetId
 .public sub_020376D4
 .public sub_020376E0
 .public sub_020376EC

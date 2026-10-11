@@ -3,7 +3,7 @@
 
 int ov96_021E8828(u16 *p) {
     if (*p == 1) {
-        return sub_0203769C();
+        return Comm_GetLocalNetId();
     }
     return 0;
 }

@@ -2,7 +2,7 @@
 #include "global.h"
 typedef struct {u8 pad0[0x2c];u8 ids[4];u8 count;} Config;
 typedef struct {Config *config;} Work;
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 extern u8 ov93_02262A54[][4];
 int ov93_0225E3C4(Work *work, int id);
 // @fn ov93_0225E3C4
@@ -18,7 +18,7 @@ int ov93_0225E3C4(Work *work, int id) {
     int mePos;
     int diff;
 
-    myId = sub_0203769C();
+    myId = Comm_GetLocalNetId();
     them = 0xFF;
     me = them;
     for (i = 0; i < work->config->count; i++) {

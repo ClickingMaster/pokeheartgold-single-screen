@@ -8,7 +8,7 @@
 .public OverlayManager_GetArgs
 .public OverlayManager_Run
 .public ResetVisibleHardwareWindows
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public Main_SetVBlankIntrCB
 .public HBlankInterruptDisable
 .public Heap_Create

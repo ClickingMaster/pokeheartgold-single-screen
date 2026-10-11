@@ -9,5 +9,5 @@ void ov83_02245248(void *, int);
 void *Save_PlayerData_GetProfile(void *);
 int PlayerProfile_GetTrainerGender(void *);
 u16 ov83_0224777C(void *, u8, u8);
-int sub_0203769C(void);
-int sub_02037030(int, void *, int);
+int Comm_GetLocalNetId(void);
+int Comm_SendCommand(int, void *, int);

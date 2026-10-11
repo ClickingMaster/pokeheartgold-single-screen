@@ -6,8 +6,8 @@
 extern const u8 ov91_02262754[];
 
 void GF_SndHandleSetTempoRatio(int, int);
-void sub_0203410C(const void *, int, int);
-BOOL sub_0203769C(void);
+void Comm_RegisterCommandTable(const void *, int, int);
+BOOL Comm_GetLocalNetId(void);
 u32 ov91_0225CA64(u32, u32, u32);
 u32 ov91_0225CA6C(u32, u32, u32);
 void ov91_0225CA74(u32, u32, u32);

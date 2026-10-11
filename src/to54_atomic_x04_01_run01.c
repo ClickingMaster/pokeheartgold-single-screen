@@ -17,7 +17,7 @@ extern void ov91_0225CC38(void *);
 extern void sub_020398D4(int, int);
 extern void sub_02037AC0(int);
 extern int sub_02037B38(int);
-extern int sub_02037454(void);
+extern int Comm_CountConnected(void);
 extern int sub_020347A0(void);
 
 int ov91_0225C540(OverlayManager *manager, int *state);

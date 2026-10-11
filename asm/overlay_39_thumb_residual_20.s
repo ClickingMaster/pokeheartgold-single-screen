@@ -242,7 +242,7 @@ _02228C90:
 	bl sub_02039418
 	mov r0, #4
 	bl Sys_SetSleepDisableFlag
-	bl sub_0203A880
+	bl WirelessStatusIcon_Create
 	ldr r0, _02228D08 ; =0x00000F0F
 	add r3, r4, #0
 	str r0, [sp]

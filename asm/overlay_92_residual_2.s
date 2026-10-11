@@ -1152,7 +1152,7 @@ ov92_0225C5C4: ; 0x0225C5C4
 	bl G2dRenderer_SetObjCharTransferReservedRegion
 	mov r0, #1
 	bl G2dRenderer_SetPlttTransferReservedRegion
-	bl sub_0203A880
+	bl WirelessStatusIcon_Create
 	mov r0, #0x71
 	bl sub_0203A4AC
 	add r1, sp, #0x24
@@ -1170,7 +1170,7 @@ ov92_0225C5C4: ; 0x0225C5C4
 	bl Heap_Free
 	bl sub_020347A0
 	add r4, r0, #0
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	str r0, [r5, #0x44]
 	add r0, r5, #0
 	bl ov92_0225C5A8
@@ -2245,7 +2245,7 @@ _0225CF0E:
 	mov r0, #0x16
 	add r1, #0x14
 	mov r2, #8
-	bl sub_02037030
+	bl Comm_SendCommand
 _0225CF36:
 	add r0, r4, #0
 	add r1, r5, #0
@@ -2318,7 +2318,7 @@ _0225CFA8:
 	mov r1, #0
 	mov r0, #0x17
 	add r2, r1, #0
-	bl sub_02037030
+	bl Comm_SendCommand
 _0225CFD2:
 	ldr r0, [r4, #4]
 	bl ov92_0225FC2C
@@ -2383,7 +2383,7 @@ _0225D04E:
 	mov r0, #0x19
 	add r1, #0x1c
 	mov r2, #8
-	bl sub_02037030
+	bl Comm_SendCommand
 	add r0, r4, #0
 	mov r1, #1
 	mov r2, #0xe

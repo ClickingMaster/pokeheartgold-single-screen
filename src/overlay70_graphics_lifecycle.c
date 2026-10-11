@@ -38,7 +38,7 @@ int ov70_022390DC(Ov70R8 *work) {
 }
 
 int ov70_022390FC(Ov70R8 *work) {
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     ov70_022394A8(work);
     ov70_0223963C(work);
     ov70_022395C4(work);

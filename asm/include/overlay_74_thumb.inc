@@ -74,7 +74,7 @@
 .public WaitingIcon_DeleteWithoutRestore
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public sub_02014494
 .public GF_RTC_CopyDate
 .public ListMenuItems_New
@@ -231,7 +231,7 @@
 .public MigratedPokemon_CopyBoxPokemonToSlot
 .public MigratedPokemon_RecordMigration
 .public MigratedPokemon_CountPokemon
-.public sub_0203410C
+.public Comm_RegisterCommandTable
 .public sub_020342C0
 .public sub_02034434
 .public sub_02034818
@@ -242,9 +242,9 @@
 .public sub_020358B8
 .public sub_020358D0
 .public sub_02037088
-.public sub_020373B4
+.public Comm_IsNetIdConnected
 .public sub_02037474
-.public sub_0203769C
+.public Comm_GetLocalNetId
 .public sub_0203778C
 .public sub_02037AC0
 .public sub_02037B38
@@ -261,8 +261,8 @@
 .public sub_020394F4
 .public sub_020398D4
 .public sub_02039FD8
-.public sub_0203A880
-.public sub_0203A914
+.public WirelessStatusIcon_Create
+.public WirelessStatusIcon_Destroy
 .public sub_0203A930
 .public ZeroBoxMonData
 .public AcquireBoxMonLock

@@ -5,7 +5,7 @@
 void ov83_0224517C(void *p, u16 value, u16 other) {
     *(u16 *)((u8 *)p + 0x564) = value;
     *(u16 *)((u8 *)p + 0x566) = other;
-    if (sub_0203769C() == 0 && *((u8 *)p + 0x11) == 0xFF) {
+    if (Comm_GetLocalNetId() == 0 && *((u8 *)p + 0x11) == 0xFF) {
         *((u8 *)p + 0x11) = other;
     }
     *(u16 *)((u8 *)p + 0x568) = *((u8 *)p + 0x11);

@@ -3,7 +3,7 @@ void ov96_021EF05C(void *course) {
     Ov96R47Work *w = PokeathlonCourse_GetHeapAllocPtr4(course);
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     ov96_021EE808(w->sub);
     ov96_021EEF98(w);
     PokeathlonCourse_FreePtr4HeapAlloc(course);

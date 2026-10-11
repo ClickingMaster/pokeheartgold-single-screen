@@ -33,7 +33,7 @@ u64 DWC_CreateFriendKey(u32);
 void ov70_022378C0(u32, u32, u32);
 void ov70_022451A8(Ov70Work *, int, int);
 void EraseFrameAndWindow1(void *, int);
-void sub_0203A914(void);
+void WirelessStatusIcon_Destroy(void);
 void ov70_02238F80(Ov70Work *);
 void BeginNormalPaletteFade(int, int, int, int, int, int, int);
 int ov70_02238C8C(Ov70Work *);

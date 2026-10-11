@@ -80,7 +80,7 @@
 .public sub_020397C8
 .public sub_020397E4
 .public sub_020397FC
-.public sub_0203A880
+.public WirelessStatusIcon_Create
 .public GX_LoadBGPltt
 .public GXS_LoadBGPltt
 .public DC_FlushRange

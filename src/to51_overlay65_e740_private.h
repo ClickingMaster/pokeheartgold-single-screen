@@ -21,7 +21,7 @@ extern const TouchscreenListMenuTemplate ov65_0221FD3C;
 extern s32 ov65_0221FF4C[];
 extern s32 ov65_0221FF50[];
 
-extern int sub_02037454(void);
+extern int Comm_CountConnected(void);
 extern void sub_02037AC0(u32);
 extern void *Save_Bag_Get(void *);
 extern BOOL Bag_HasItem(void *, u16, u16, int);

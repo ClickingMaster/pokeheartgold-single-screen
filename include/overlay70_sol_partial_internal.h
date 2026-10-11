@@ -62,7 +62,7 @@ extern void Sprite_SetMatrix(void *sprite, void *matrix);
 extern void ov00_021ECD04(void *arg);
 extern int ov00_021EC9D4(void);
 extern int CalcBoxMonLevel(void *boxmon);
-extern int sub_0203A880(void);
+extern int WirelessStatusIcon_Create(void);
 extern int _s32_div_f(int lhs, int rhs);
 extern BOOL TextPrinterCheckActive(u8 printerId);
 extern void String_Delete(void *string);

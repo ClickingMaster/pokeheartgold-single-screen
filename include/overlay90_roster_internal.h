@@ -12,7 +12,7 @@ typedef struct Ov90LinkRoster {
 } Ov90LinkRoster;
 
 int sub_020347A0(void);
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 void *sub_02034818(int slot);
 void GF_AssertFail(void);
 

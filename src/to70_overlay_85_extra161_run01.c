@@ -19,7 +19,7 @@ u8 *OverlayManager_CreateAndGetData(void *,u32,int);
 void *SaveArray_Party_Get(void *),*NARC_New(int,int);
 void GF_CreateVramTransferManager(int,int),sub_020210BC(void),sub_02021148(int);
 void ov85_021E678C(void *),ov85_021E6764(void *),ov85_021E752C(void *),ov85_021E7650(void *);
-int sub_0203769C(void),GF_GetCurrentPlayingBGM(void);
+int Comm_GetLocalNetId(void),GF_GetCurrentPlayingBGM(void);
 void ov85_021E7D08(void *),ov85_021E7E3C(void *),ov85_021E7F74(void *),ov85_021E80E0(void *),ov85_021E82F8(void *),ov85_021E83E0(void *);
 void BeginNormalPaletteFade(int,int,int,int,int,int,int);
 extern const u16 ov85_021EA788[][5];
@@ -38,7 +38,7 @@ int ov85_021E5900(void *man){
  P(w,0x24)=SaveArray_Party_Get(P((u8 *)P(w,0xcc),0x1c));
  P(w,0xd80)=NARC_New(187,102);GF_CreateVramTransferManager(8,102);sub_020210BC();sub_02021148(4);
  ov85_021E678C(w);Main_SetVBlankIntrCB(ov85_021E6764,w);ov85_021E752C(w);ov85_021E7650(w);
- i=0;count=0;me=sub_0203769C();
+ i=0;count=0;me=Comm_GetLocalNetId();
  pos=w+0xd4;
  args=P(w,0xcc);
  for(;i<5;i++)if(W(args,12)&(1<<i)){if(i==me)break;count++;}

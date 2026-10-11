@@ -9,7 +9,7 @@
 .public Save_Frontier_GetStatic
 .public FrontierSave_GetStat
 .public sub_02031108
-.public sub_0203769C
+.public Comm_GetLocalNetId
 .public BattleSetup_Delete
 .public IsBattleResultWin
 .public sub_0205C1F0

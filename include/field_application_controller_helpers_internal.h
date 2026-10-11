@@ -17,7 +17,7 @@ void *NewMsgDataFromNarc(int, int, int, int);
 void *String_New(u32, int);
 void *ListMenuCursorNew(int);
 u8 sub_0203993C(void);
-u16 sub_0203769C(void);
+u16 Comm_GetLocalNetId(void);
 void *sub_02034818(int);
 u32 sub_02059B08(void);
 void *SaveArray_Party_Alloc(int);

@@ -36,7 +36,7 @@ void ov49_0225A5EC(Ov49Graphics *work, void *saveData, u32 heapId) {
     ObjPlttTransfer_Reset();
     G2dRenderer_SetObjCharTransferReservedRegion(1, 0x10);
     G2dRenderer_SetPlttTransferReservedRegion(1);
-    sub_0203A880();
+    WirelessStatusIcon_Create();
     work->spriteList = G2dRenderer_Init(0x18, &work->padding08, heapId);
     G2dRenderer_SetSubSurfaceCoords(&work->padding08, 0, 1 << 20);
     for (j = 0; j < 4; j++) {

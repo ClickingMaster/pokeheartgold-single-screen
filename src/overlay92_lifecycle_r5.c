@@ -6,7 +6,7 @@ extern void Heap_Destroy(int heapId);
 extern void sub_020398D4(int, int);
 extern void sub_02037AC0(int);
 extern int sub_02037B38(int);
-extern int sub_02037454(void);
+extern int Comm_CountConnected(void);
 extern int sub_020347A0(void);
 extern int ov92_0225D8E4(void *work);
 
@@ -60,7 +60,7 @@ int ov92_0225D36C(void *manager, int *state) {
         if (sub_02037B38(0xe7) == 1) {
             goto return_true;
         }
-        result = sub_02037454();
+        result = Comm_CountConnected();
         if (result >= sub_020347A0()) {
             goto return_false;
         }

@@ -21,7 +21,7 @@ int ov96_022116C8(void *course) {
     u8 *window;
     int i;
 
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     ov96_021E6550(course);
     FreeBgTilemapBuffer(*(void **)(alloc + 4), 0);
     FreeBgTilemapBuffer(*(void **)(alloc + 4), 1);

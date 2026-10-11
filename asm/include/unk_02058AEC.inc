@@ -48,12 +48,12 @@
 .public sub_02035798
 .public sub_02035878
 .public sub_02036FD8
-.public sub_02037030
+.public Comm_SendCommand
 .public sub_02037088
 .public sub_02037108
-.public sub_02037454
+.public Comm_CountConnected
 .public sub_02037474
-.public sub_0203769C
+.public Comm_GetLocalNetId
 .public sub_020376F8
 .public sub_0203778C
 .public sub_02037AC0

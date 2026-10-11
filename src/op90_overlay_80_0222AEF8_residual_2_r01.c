@@ -19,7 +19,7 @@ typedef struct Ov80Work {
 } Ov80Work;
 
 int ov80_02236DD4(u8 mode);
-BOOL sub_02037030(int cmd, void *data, int size);
+BOOL Comm_SendCommand(int cmd, void *data, int size);
 BOOL ov80_0222B448(Ov80Work *work);
 
 // @fn ov80_0222B448
@@ -53,7 +53,7 @@ BOOL ov80_0222B448(Ov80Work *work) {
         buf[pos + i] = pids[i];
         buf[count + pos + i] = pids[i] >> 16;
     }
-    if (sub_02037030(0x1C, buf, 0x3C) == TRUE) {
+    if (Comm_SendCommand(0x1C, buf, 0x3C) == TRUE) {
         return TRUE;
     }
     return FALSE;

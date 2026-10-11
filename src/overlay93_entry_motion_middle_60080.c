@@ -14,7 +14,7 @@ typedef struct Ov93Entry {
     const u8 *config;
 } Ov93Entry;
 
-extern u32 sub_0203769C(void);
+extern u32 Comm_GetLocalNetId(void);
 extern const s32 ov93_02262CA4[];
 extern u32 ov93_022614F4(void *sys, void **out);
 extern void ov93_02260FB8(void *sys, u32 kind);
@@ -95,7 +95,7 @@ BOOL ov93_02260080(void *sys, Ov93Entry *entry) {
         ManagedSprite_SetAffineScale(entry->sprite, scale, scale);
     }
 
-    if (entry->value4 == sub_0203769C() && previous >= 0 && remaining <= 0) {
+    if (entry->value4 == Comm_GetLocalNetId() && previous >= 0 && remaining <= 0) {
         entry->kind = ov93_022614F4(sys, &target);
         switch (entry->kind) {
         case 1:

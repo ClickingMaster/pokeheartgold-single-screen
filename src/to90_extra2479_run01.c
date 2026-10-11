@@ -5,8 +5,8 @@
 typedef struct { u32 zero; u32 ids[4]; void *names[4]; u32 heap; u8 flag, multi; u8 unused[6]; } Request;
 typedef struct { u8 beforeFlags[44]; u32 flags; u8 beforeProfiles[24]; void *profiles[4]; u8 beforeIDs[16]; u32 ids[4]; u8 beforeRequest[0x14c]; Request *request; u8 beforeState[0x2244]; u32 state; } Work;
 void *OverlayManager_GetData(void *), *OverlayManager_GetArgs(void *), *PlayerProfile_GetPlayerName_NewString(void *, int);
-void sub_0203A914(void), ov05_0221BA00(Request *);
-int sub_0203769C(void);
+void WirelessStatusIcon_Destroy(void), ov05_0221BA00(Request *);
+int Comm_GetLocalNetId(void);
 int sub_020378AC(int);
 int ov12_0223A260(void *);
 int ov12_0223A260(void *manager)
@@ -16,9 +16,9 @@ int ov12_0223A260(void *manager)
  int i, destination;
  OverlayManager_GetArgs(manager);
  if (!(work->flags & 4) || (work->state & 16) || (work->flags & 128)) {
-  sub_0203A914(); return 0;
+  WirelessStatusIcon_Destroy(); return 0;
  }
- player = sub_0203769C();
+ player = Comm_GetLocalNetId();
  work->request = Heap_Alloc(HEAP_ID_BATTLE, sizeof(Request));
  MI_CpuClearFast(work->request, sizeof(Request));
  if (work->flags & 8) {

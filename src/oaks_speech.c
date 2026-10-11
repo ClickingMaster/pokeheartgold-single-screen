@@ -568,8 +568,8 @@ BOOL OakSpeech_Main(OverlayManager *ovyMan, int *pState) {
     BOOL ret = FALSE;
     switch (*pState) {
     case 0:
-        sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
-        sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+        SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
+        SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
         Main_SetVBlankIntrCB(NULL, NULL);
         Main_SetHBlankIntrCB(NULL, NULL);
         GfGfx_DisableEngineAPlanes();

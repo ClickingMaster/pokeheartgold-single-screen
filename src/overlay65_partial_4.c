@@ -37,11 +37,11 @@ void *ov65_0221DE58(void *p, u32 n) {
 }
 
 void ov65_0221DE64(u32 n, void *p, u32 i) {
-    if (sub_020373B4((u16)n)) {
+    if (Comm_IsNetIdConnected((u16)n)) {
         sub_02036FD8(0x16, ov65_0221DE58(p, i), 0x590);
     }
 }
 
 int ov65_0221DE8C(void *p) {
-    return sub_02037030(0x20, Save_SpecialRibbons_Get(p), 0xe);
+    return Comm_SendCommand(0x20, Save_SpecialRibbons_Get(p), 0xe);
 }

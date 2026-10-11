@@ -66,7 +66,7 @@ int ov83_02244F60(u8 *work, int unused, int state) {
         return 1;
     case 3:
         if (ov80_02237D8C(work[9]) == 1) {
-            if (sub_0203769C() == 0) {
+            if (Comm_GetLocalNetId() == 0) {
                 if (work[0x11] >= limit) {
                     work[0xf] &= ~1;
                     return 1;
@@ -84,7 +84,7 @@ int ov83_02244F60(u8 *work, int unused, int state) {
         break;
     case 4:
         if (ov80_02237D8C(work[9]) == 1) {
-            if (sub_0203769C() == 0) {
+            if (Comm_GetLocalNetId() == 0) {
                 if (work[0x11] >= limit) {
                     work[0xf] &= ~1;
                     return 1;

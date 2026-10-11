@@ -19,7 +19,7 @@ int sub_0205C268(int value);
 int FrontierSave_GetStat(void *save, int stat, int substat);
 void ov83_02240C48(u8 *work, int field, int value, int digits, int mode);
 int ov83_0223FCB4(void *work, void *window, int msg, int x, int y, int speed, u8 a, u8 b, u8 c, u8 d);
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 void ov83_02241DD8(u8 *work, void *window, void *msgData, int msgNo, int x, int y, int color, int a, int b);
 void ScheduleWindowCopyToVram(void *window);
 void ov83_02241770(u8 *work, void *window);

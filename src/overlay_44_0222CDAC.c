@@ -887,7 +887,7 @@ s32 ov44_0222A4B4(OverlayManager *overlayMananger, s32 *arg1) {
         ov44_0222A1FC(data);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_53);
         if (sub_02039998() != 0) {
-            sub_0203A880();
+            WirelessStatusIcon_Create();
         } else {
             LoadDwcOverlay();
             sub_02039FD8(HEAP_ID_53);
@@ -1790,8 +1790,8 @@ s32 ov44_0222BC78(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 
     } else {
         if (ov44_02231BB0(&arg0->unk38C) == 1) {
-            sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
-            sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+            SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
+            SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
             ov44_02231B4C(&arg0->unk38C);
             for (s32 i = 0; i < 33; i++) {
                 arg0->unkA88[i] = 0;
@@ -1920,7 +1920,7 @@ s32 ov44_0222BFF0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         arg0->unk348 = ov44_0222ADD0();
     } else if ((sub_020393C8() != 0) || (sub_020390C4() == 3)) {
         ov44_0222B9A0(arg0);
-    } else if ((sub_020390C4() >= 4) || (sub_02039264() != 0) || (sub_020373B4(0) == 0)) {
+    } else if ((sub_020390C4() >= 4) || (sub_02039264() != 0) || (Comm_IsNetIdConnected(0) == 0)) {
         sub_02039358();
         arg0->unk348 = ov44_0222ADD0();
     }
@@ -2423,7 +2423,7 @@ s32 ov44_0222CE40(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
         s32 temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk184, HEAP_ID_53);
         if (temp_r0 == -1) {
-            if ((sub_020390C4() >= 4) || (sub_02039264() != 0) || (sub_020373B4(0) == 0)) {
+            if ((sub_020390C4() >= 4) || (sub_02039264() != 0) || (Comm_IsNetIdConnected(0) == 0)) {
                 ov44_0222F7BC(arg0);
                 ov44_0222F818(arg0, 16);
                 Clear2dMenuWindowAndDelete(arg0->unk184, HEAP_ID_53);
@@ -2465,7 +2465,7 @@ s32 ov44_0222CE40(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             YesNoPrompt_Destroy(arg0->unk188);
             arg0->unk348 = 24;
         } else {
-            if ((sub_020390C4() >= 4) || (sub_02039264() != 0) || (sub_020373B4(0) == 0)) {
+            if ((sub_020390C4() >= 4) || (sub_02039264() != 0) || (Comm_IsNetIdConnected(0) == 0)) {
                 ov44_0222F7BC(arg0);
                 ov44_0222F818(arg0, 16);
                 YesNoPrompt_Destroy(arg0->unk188);
@@ -2808,7 +2808,7 @@ s32 ov44_0222D824(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         arg0->unk384 = 0;
         sub_02034354(arg0->saveData, 0);
         sub_02034434();
-        sub_0203476C(sub_0203769C());
+        sub_0203476C(Comm_GetLocalNetId());
         arg1 = 2;
     }
     return arg1;
@@ -3271,7 +3271,7 @@ s32 ov44_0222E45C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             ov44_0222F7BC(arg0);
             sub_02034354(arg0->saveData, 0);
             arg0->unk35C = 30;
-        } else if (sub_020373B4(0) == 1) {
+        } else if (Comm_IsNetIdConnected(0) == 1) {
             ov44_0222F7BC(arg0);
             sub_02034354(arg0->saveData, 0);
             sub_020398D4(0, 1);
@@ -3399,7 +3399,7 @@ s32 ov44_0222E7C4(UnkStruct_ov44_022319EC *arg0) {
 }
 
 s32 ov44_0222E860(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
-    if ((sub_020390C4() >= 4) || (sub_02039264() != 0) || (sub_020373B4(0) == 0)) {
+    if ((sub_020390C4() >= 4) || (sub_02039264() != 0) || (Comm_IsNetIdConnected(0) == 0)) {
         if (arg0->unk384 != 0) {
             ov44_0222F510(arg0, 101, 0);
         } else {
@@ -3430,7 +3430,7 @@ s32 ov44_0222E860(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 s32 ov44_0222E908(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if ((ov44_0222E7C4(arg0) == 0) && (sub_02037B38(14) != 0)) {
         s16 r1 = ov44_02229F00(arg0, &arg0->unk4->unk0);
-        if (sub_02037C0C(sub_0203769C(), &r1) != 0) {
+        if (sub_02037C0C(Comm_GetLocalNetId(), &r1) != 0) {
             arg0->unk348 = 51;
         }
     }
@@ -3439,7 +3439,7 @@ s32 ov44_0222E908(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 
 s32 ov44_0222E948(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     s32 var_r0;
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         var_r0 = 1;
     } else {
         var_r0 = 0;

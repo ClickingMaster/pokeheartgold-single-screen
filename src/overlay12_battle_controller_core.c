@@ -33,7 +33,7 @@ void ov12_02262240(BattleSystem *bsys, int direction, int battlerId, const void 
 
     if ((bsys->battleType & 4) && !(*(u32 *)((u8 *)bsys + 0x240C) & 0x10)) {
         if (direction == 1) {
-            for (i = 0; i < sub_02037454(); i++) {
+            for (i = 0; i < Comm_CountConnected(); i++) {
                 ov12_0224ECC4(bsys->ctx, i, battlerId, *(const u8 *)data);
             }
         }

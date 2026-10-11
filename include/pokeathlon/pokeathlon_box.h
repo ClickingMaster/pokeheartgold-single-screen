@@ -12,6 +12,7 @@
 #include "pokemon_storage_system.h"
 #include "pokemon_types_def.h"
 #include "sprite.h"
+#include "unk_02009D48.h"
 #include "unk_0200A090.h"
 
 typedef PartyExtraSub PartyAprijuiceModifier;
@@ -84,6 +85,13 @@ typedef struct PokeathlonBox_SelectedMon {
     u32 slot;
 } PokeathlonBox_SelectedMon;
 
+// How a performance stat changes for the selected course, and its star display.
+typedef struct PokeathlonBox_StatChange {
+    s8 direction; // > 0 up, < 0 down, 0 unchanged
+    u8 stars[5];  // per star: 0 hidden, 1-4 animation
+    u8 unk6[2];
+} PokeathlonBox_StatChange; // size: 0x8
+
 typedef struct PokeathlonBox_UnkStruct0221EC14 {
     u32 personality;  // 0x00
     u16 species;      // 0x04
@@ -95,27 +103,15 @@ typedef struct PokeathlonBox_UnkStruct0221EC14 {
     u8 unk20[5];
     u8 unk25;
     u16 unk26;
-    u8 unk28;
-    u8 unk29;
-    u8 filler2A[6];
-    u8 unk30;
-    u8 unk31;
-    u8 filler32[6];
-    u8 unk38;
-    u8 unk39;
-    u8 filler3A[6];
-    u8 unk40;
-    u8 unk41;
-    u8 filler42[6];
-    u8 unk48;
-    u8 unk49;
-    u8 filler[3];
+    PokeathlonBox_StatChange statChanges[5]; // 0x28, power/skill/speed/jump/stamina
 } PokeathlonBox_UnkStruct0221EC14;
 
 typedef struct PokeathlonBox_UnkStruct0221F020 {
     SpriteResource *charResObj;
     SpriteResource *plttResObj;
-    u8 padding[0x10];
+    SpriteResource *cellResObj;
+    SpriteResource *animResObj;
+    u8 padding[0x8];
 } PokeathlonBox_UnkStruct0221F020; // size: 0x18
 
 typedef struct PokeathlonBox_UnkStruct0221F0E0 {
@@ -126,16 +122,18 @@ typedef struct PokeathlonBox_UnkStruct0221F0E0 {
 typedef struct PokeathlonBox_SubGraphics {
     enum HeapID heapID;                        // 0x000 / 0x078
     SpriteList *spriteList;                    // 0x004 / 0x07C
-    u8 filler8[0x128];                         // 0x008 / 0x080
+    G2dRenderer renderer;                      // 0x008 / 0x080
     GF_2DGfxResMan *mgrs[6];                   // 0x130 / 0x1A8
     PokeathlonBox_UnkStruct0221F020 unk1C0[3]; // 0x148 / 0x1C0
     u8 filler190[0x24];                        // 0x190 / 0x208
     Sprite *sprites[5];                        // 0x1B4 / 0x22C
-    u8 filler1C8[0x14];                        // 0x1C8 / 0x23C
+    Sprite *unk1C8[5];                         // 0x1C8 / 0x23C
     PokeathlonBox_UnkStruct0221F0E0 unk1DC[5]; // 0x1DC / 0x250
     Sprite *unk254;                            // 0x254 / 0x2C8
-    void *unk258;                              // 0x258 / 0x2CC
-    u8 filler25C[0x28];                        // 0x25C / 0x2D0
+    void *monPicChars;                         // 0x258 / 0x2CC
+    u8 monPicPalette[0x20];                    // 0x25C / 0x2D0
+    u32 monPicCharOffset;                      // 0x27C / 0x2F0
+    u32 monPicPlttOffset;                      // 0x280 / 0x2F4
 } PokeathlonBox_SubGraphics;
 
 typedef struct PokeathlonBox_Graphics {
@@ -201,7 +199,10 @@ void ov97_0221F5F8(PokeathlonBox_SubGraphics *subGraphics, PokeathlonBox_UnkStru
 void ov97_0221F74C();
 void ov97_0221F7DC(PokeathlonBox_SubGraphics *subGraphics);
 void ov97_0221F9E0(PokeathlonBox_SubGraphics *subGraphics);
-void ov97_0221FBDC(PokeathlonBox_SubGraphics *subGraphics);
+Sprite *ov97_0221FAEC(PokeathlonBox_SubGraphics *sub, int resourceId, int drawPriority, int priority, int x, int y, int anim, BOOL draw);
+void ov97_0221FB80(SpriteTemplate *template, SpriteList *spriteList, SpriteResourcesHeader *header, NNS_G2D_VRAM_TYPE whichScreen, enum HeapID heapID);
+void ov97_0221FBA0(PokeathlonBox_SubGraphics *sub);
+void ov97_0221FBDC(); // (PokeathlonBox_SubGraphics *, PokeathlonBox_UnkStruct0221EC14 *), called with the second argument left in r1
 void ov97_0221FC54(PokeathlonBox_SubGraphics *subGraphics);
 
 #endif // POKEHEARTGOLD_POKEATHLON_BOX_H

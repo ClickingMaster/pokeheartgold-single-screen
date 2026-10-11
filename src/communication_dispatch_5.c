@@ -18,10 +18,10 @@ u32 sub_020342C8(void) {
 
 void sub_020342CC(int aid) {
     int i;
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         _021D412C->ready[aid] = 1;
         for (i = 0; i < 8; i++) {
-            if (sub_020373B4((u16)i) != 0 && _021D412C->ready[i] == 0) {
+            if (Comm_IsNetIdConnected((u16)i) != 0 && _021D412C->ready[i] == 0) {
                 return;
             }
         }
@@ -38,7 +38,7 @@ void sub_02034310(int a, int b, void *arg) {
 }
 
 void sub_02034338(int aid) {
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         _021D412C->ready[aid] = 0;
     }
 }

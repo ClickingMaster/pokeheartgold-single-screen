@@ -19,19 +19,19 @@ BOOL sub_02036144(void) {
             if (sub_02035FF0() == 0) {
                 sub_020372E4();
             }
-            if (sub_0203769C() == 0 && sub_020373B4(0) != 0) {
+            if (Comm_GetLocalNetId() == 0 && Comm_IsNetIdConnected(0) != 0) {
                 sub_0203993C();
                 if (sub_02034084() == 0) {
                     sub_0203667C();
                 }
             }
-            if (sub_0203769C() == 0 || sub_02035FF0() == 1) {
+            if (Comm_GetLocalNetId() == 0 || sub_02035FF0() == 1) {
                 sub_02037334();
             }
             _021D4140.updateLock = 1;
         }
         sub_020355C8(*(u16 *)(_021D4140.work + 0x694));
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             sub_02035E9C();
         }
         sub_0203611C();

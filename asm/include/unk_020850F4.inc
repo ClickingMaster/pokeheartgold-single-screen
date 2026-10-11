@@ -40,8 +40,8 @@
 .public String_New
 .public String_Delete
 .public TouchHitboxController_Destroy
-.public sub_0203A880
-.public sub_0203A914
+.public WirelessStatusIcon_Create
+.public WirelessStatusIcon_Destroy
 .public sub_0203A930
 .public sub_0203A948
 .public sub_02085400

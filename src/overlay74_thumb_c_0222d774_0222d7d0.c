@@ -51,7 +51,7 @@ extern void Heap_Create(int, int, int);
 extern void *OverlayManager_CreateAndGetData(void *, int, int);
 extern void *memset(void *, int, u32);
 extern void *BgConfig_Alloc(int);
-extern void sub_0200FBF4(int, int);
+extern void SetMasterBrightnessByColor(int, int);
 extern void ov74_022352A0(int);
 extern void GF_AssertFail(void);
 extern void SaveSubstruct_AssertCRC(int);

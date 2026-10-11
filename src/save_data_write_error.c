@@ -76,8 +76,8 @@ void ShowSaveDataWriteError(enum HeapID heapID, int code) {
         msg_no = msg_0009_00000;
     }
 
-    sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
-    sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
 
     sub_0201A0E0();
 

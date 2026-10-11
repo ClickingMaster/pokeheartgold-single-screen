@@ -6,13 +6,13 @@
 #include "safari_zone.h"
 
 BOOL sub_02036144(void);
-BOOL sub_020373B4(u16 arg0);
-BOOL sub_02037030(int arg0, void *arg1, int arg2);
-int sub_02037454(void);
+BOOL Comm_IsNetIdConnected(u16 arg0);
+BOOL Comm_SendCommand(int arg0, void *arg1, int arg2);
+int Comm_CountConnected(void);
 BOOL sub_02037474(void);
 void sub_020374E4(void);
 void sub_02037504(void);
-BOOL sub_0203769C(void);
+BOOL Comm_GetLocalNetId(void);
 void sub_020376D4(s32 arg0, SafariZoneAreaSet *areaSet);
 void sub_020376EC(int arg0);
 BOOL sub_02037700();

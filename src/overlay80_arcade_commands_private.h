@@ -54,7 +54,7 @@ void Frontier_SetData(void *ctx, ArcadeDataPrivate *data);
 void ov80_02235FEC(void *data);
 ArcadeDataPrivate *FrontierFieldSystem_New(void *saveData, u32 mode, u32 facility);
 void ov80_0222A840(void *saveData);
-u32 sub_0203769C(void);
+u32 Comm_GetLocalNetId(void);
 u16 *FrontierScript_ReadVarPtr(FrontierScriptContextPrivate *ctx);
 void *Save_Frontier_GetStatic(void *saveData);
 u32 sub_0205C268(u32 value);

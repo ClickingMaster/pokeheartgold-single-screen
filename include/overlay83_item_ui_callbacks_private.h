@@ -24,7 +24,7 @@ void BufferItemName(void *, int, int);
 void ov83_022416A0(u8 *, int, u16);
 void ov83_02240F7C(void *, u16 *, u16 *, u16 *, u16 *);
 int ov80_02237D8C(int);
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 void ov83_02240C8C(void *, void *, u16, u16, int);
 void ov83_02240CFC(void *, void *, u16, u16, int);
 void ScheduleWindowCopyToVram(void *);

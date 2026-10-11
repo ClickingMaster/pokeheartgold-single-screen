@@ -48,7 +48,7 @@ void ov81_02242D74(void *);
 void ov81_02241364(void *);
 void ov81_02241FC0(void *);
 void ov81_02242170(void *);
-void sub_0203A914(void);
+void WirelessStatusIcon_Destroy(void);
 void PaletteData_FreeBuffers(void *,u32);
 void PaletteData_Free(void *);
 void ov81_02242B38(void *);

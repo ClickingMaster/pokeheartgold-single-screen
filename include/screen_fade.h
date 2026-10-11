@@ -33,6 +33,6 @@ BOOL IsPaletteFadeFinished(void);
 void sub_0200FB70(void);
 void ResetVisibleHardwareWindows(PMLCDTarget screen);
 void SetMasterBrightnessNeutral(PMLCDTarget screen);
-void sub_0200FBF4(PMLCDTarget screen, u16 color);
+void SetMasterBrightnessByColor(PMLCDTarget screen, u16 color);
 
 #endif // POKEHEARTGOLD_SCREEN_FADE_H

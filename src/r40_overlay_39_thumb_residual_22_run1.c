@@ -5,7 +5,7 @@ extern BOOL System_GetTouchNew(void);
 extern void EraseFrameAndWindow1(void *window, BOOL copyToVram);
 extern BOOL ov39_02228B74(int a0, int a1);
 extern void sub_0203946C(void);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern void ov39_02228AA8(void *app);
 extern void BeginNormalPaletteFade(int a0, int a1, int a2, int a3, int a4, int a5, int a6);
 extern void ov39_02228B04(void *app, void *window, int message, u32 a3, u32 color);
@@ -30,7 +30,7 @@ BOOL ov39_02228F18(Ov39Residual22App *app) {
     if (app->unk08 != 9) {
         sub_0203946C();
     }
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     ov39_02228AA8(app);
     BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, 0x7C);
     app->unk08 = 0;

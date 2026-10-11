@@ -20,7 +20,7 @@ BOOL ov12_0223A3F0(OverlayManager *manager){
  BattleSetup *args=OverlayManager_GetArgs(manager);
  int local,i,offset,other,slot;Result *out;
  if(!(args->battleType&4)||(args->battleSpecial&16)||(args->battleType&0x80))return FALSE;
- local=(u8)sub_0203769C();HandleLoadOverlay(FS_OVERLAY_ID(OVY_5),OVY_LOAD_ASYNC);
+ local=(u8)Comm_GetLocalNetId();HandleLoadOverlay(FS_OVERLAY_ID(OVY_5),OVY_LOAD_ASYNC);
  out=Heap_Alloc(HEAP_ID_BATTLE,sizeof(Result));args->evolutionTaskData=(EvolutionTaskData*)out;
  MIi_CpuClearFast(0,(u32*)out,sizeof(Result));out->setup=args;
  switch(args->winFlag){

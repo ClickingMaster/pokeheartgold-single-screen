@@ -40,7 +40,7 @@ BOOL WirelessTradeSelectMon_Init(OverlayManager *man, int *state) {
     ToggleBgLayer(0, 1);
     GfGfx_EngineATogglePlanes(0x10, 1);
     sub_020399FC(0x1A, PTR(work, 0x180));
-    sub_0203A880();
+    WirelessStatusIcon_Create();
     IsNighttime();
     sub_02055198(0, 0x427);
     sub_02005448(0x427);

@@ -8,7 +8,7 @@ void SetMasterBrightnessNeutral(int screen) {
     SetMasterBrightness(screen, 0);
 }
 
-void sub_0200FBF4(int screen, u16 color) {
+void SetMasterBrightnessByColor(int screen, u16 color) {
     if (color == 0xffff) {
         color = _021D1034.color;
     }

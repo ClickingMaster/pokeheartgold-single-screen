@@ -249,7 +249,7 @@ _022386D4:
 	add r0, r4, #0
 	add r1, #0x90
 	bl ov80_0222AD9C
-	bl sub_0203A880
+	bl WirelessStatusIcon_Create
 	add r0, r4, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
@@ -369,7 +369,7 @@ FrontierMap_Free: ; 0x0223885C
 	bl TextFlags_SetAutoScrollParam
 	mov r0, #0
 	bl TextFlags_SetCanTouchSpeedUpPrint
-	bl sub_0203A914
+	bl WirelessStatusIcon_Destroy
 	mov r1, #5
 	mov r2, #2
 	ldr r0, _022389AC ; =0x00007FFF

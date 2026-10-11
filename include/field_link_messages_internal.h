@@ -44,9 +44,9 @@ struct FieldSysPriv {
     struct UnkStruct_02059E1C *unk80;
 };
 
-BOOL sub_0203769C(void);
+BOOL Comm_GetLocalNetId(void);
 PlayerProfile *sub_02034818(u32 netId);
-BOOL sub_02037030(int a0, void *a1, int a2);
+BOOL Comm_SendCommand(int a0, void *a1, int a2);
 void *sub_02036FD8(int a0, void *a1, int a2);
 void sub_020388E0(void);
 void MailMsg_Copy(MailMessage *dst, const MailMessage *src);

@@ -17,9 +17,9 @@ void sub_02058190(FieldSystem *fieldSystem) {
             _021D41C8->host = 0;
         }
         _021D41C8->ready = 0;
-        netId = sub_0203769C();
-        sub_02034818(sub_0203769C());
-        for (i = 0; i < sub_02037454(); i++) {
+        netId = Comm_GetLocalNetId();
+        sub_02034818(Comm_GetLocalNetId());
+        for (i = 0; i < Comm_CountConnected(); i++) {
             if (_021D41C8->packets[i] == NULL) {
                 _021D41C8->packets[i] = Heap_Alloc((enum HeapID)0, 0x66C);
             }

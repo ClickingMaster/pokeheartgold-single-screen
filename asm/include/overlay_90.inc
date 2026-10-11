@@ -142,7 +142,7 @@
 .public sub_0202C6F4
 .public Save_GameStats_Get
 .public GameStats_AddScore
-.public sub_0203410C
+.public Comm_RegisterCommandTable
 .public sub_020343E4
 .public sub_02034420
 .public sub_020347A0
@@ -150,9 +150,9 @@
 .public sub_0203484C
 .public sub_020348A8
 .public sub_020348CC
-.public sub_02037030
-.public sub_02037454
-.public sub_0203769C
+.public Comm_SendCommand
+.public Comm_CountConnected
+.public Comm_GetLocalNetId
 .public sub_02037AC0
 .public sub_02037B38
 .public sub_020390C4
@@ -160,8 +160,8 @@
 .public sub_020392A0
 .public sub_0203986C
 .public sub_0203A084
-.public sub_0203A880
-.public sub_0203A914
+.public WirelessStatusIcon_Create
+.public WirelessStatusIcon_Destroy
 .public sub_0203A948
 .public NNS_G2dInitOamManagerModule
 .public FX_Div

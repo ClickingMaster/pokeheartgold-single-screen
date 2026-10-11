@@ -76,7 +76,7 @@ void ov70_0223F508(void *, void *, void *, void *, void *);
 void *ov70_02242014(void *, int);
 void ov70_02238E44(void);
 void sub_0203A930(void);
-void sub_0203A914(void);
+void WirelessStatusIcon_Destroy(void);
 void ov70_0223ECA4(Ov70Work24 *);
 void ov70_0224212C(void *);
 void ov70_0223ED24(Ov70Work24 *);

@@ -43,7 +43,7 @@ void *PlayerProfile_GetNamePtr(void *);
 void CopyU16ArrayToString(void *, const u16 *);
 int PlayerProfile_GetTrainerGender(void *);
 void String_Delete(void *);
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 void *sub_02034818(int);
 void PlayerName_FlatToString(void *, void *);
 void Main_SetVBlankIntrCB(void *, void *);

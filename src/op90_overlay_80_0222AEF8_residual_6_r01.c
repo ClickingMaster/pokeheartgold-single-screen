@@ -13,7 +13,7 @@ typedef struct Ov80Work {
     u8 recvCount;
 } Ov80Work;
 
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 int BattleArcade_GetMonCount(u8 mode, int unk);
 void ov80_0222BD44(int netId, int size, void *data, Ov80Work *work);
 
@@ -25,7 +25,7 @@ void ov80_0222BD44(int netId, int size, void *data, Ov80Work *work) {
     Pokemon *mon;
 
     work->recvCount++;
-    if (netId == sub_0203769C()) {
+    if (netId == Comm_GetLocalNetId()) {
         return;
     }
     count = BattleArcade_GetMonCount(work->mode, 0);
@@ -36,7 +36,7 @@ void ov80_0222BD44(int netId, int size, void *data, Ov80Work *work) {
         Party_AddMon(work->party, mon);
     }
     Heap_Free(mon);
-    if (sub_0203769C() != 0) {
+    if (Comm_GetLocalNetId() != 0) {
         Party_SwapSlots(work->party, 0, 2);
         Party_SwapSlots(work->party, 1, 3);
     }

@@ -218,8 +218,8 @@
 .public sub_02039AD8
 .public sub_02039FB8
 .public sub_02039FD8
-.public sub_0203A880
-.public sub_0203A914
+.public WirelessStatusIcon_Create
+.public WirelessStatusIcon_Destroy
 .public sub_0203A930
 .public ShowCommunicationError
 .public Save_VarsFlags_Get

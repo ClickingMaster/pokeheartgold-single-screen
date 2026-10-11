@@ -3,20 +3,24 @@
 #include <nitro/os/common/interrupt_shared.h>
 #include <nitro/os/common/system_shared.h>
 #include <nitro/types.h>
-
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+// Firmware user-settings page as stored in NVRAM (two copies; the newer valid one is used).
 typedef struct {
     u8 prefix[6];
     u16 firstText[10];
-    u8 firstLength, reserved1b;
+    u8 firstLength;
+    u8 reserved1b;
     u16 secondText[26];
-    u8 secondLength, reserved51[0x64 - 0x51];
+    u8 secondLength;
+    u8 reserved51[0x64 - 0x51];
     u16 languageBits;
     u8 reserved66[0x70 - 0x66];
-    u16 revision, baseCrc;
-    u8 extensionTag, preferredLanguage;
+    u16 revision;
+    u16 baseCrc;
+    u8 extensionTag;
+    u8 preferredLanguage;
     u16 allowedLanguages;
     u8 reserved78[0xfe - 0x78];
     u16 extensionCrc;
@@ -29,43 +33,52 @@ typedef union {
     FirmwareFields fields;
 } FirmwarePage;
 
-typedef char FirmwareFieldsMustBe256[(sizeof(FirmwareFields) == 256) ? 1 : -1];
-
 typedef struct {
-    u32 index, count, finalDelay, on[6], off[6], active, limit, repeats;
+    u32 index;
+    u32 count;
+    u32 finalDelay;
+    u32 on[6];
+    u32 off[6];
+    u32 active;
+    u32 limit;
+    u32 repeats;
 } Pulse;
 
-extern void WVR_ShelterExtWram(void);
-extern void OS_Init(void);
-extern void OS_InitThread(void);
-extern void NVRAM_ReadDataBytes(u32, u32, u8 *);
-extern u16 GetRomValidLanguage(void);
-extern u16 __Veneer_SVC_GetCRC16(u16, const void *, u32);
-extern u16 WMSP_GetAllowedChannel(u32);
-extern void MIi_CpuClear32(u32, u32 *, u32);
-extern void MIi_CpuCopy32(const u32 *, u32 *, u32);
-extern void MI_CpuCopy8(const void *, void *, u32);
-extern void MI_CpuFill8(void *, u8, u32);
-extern void PXI_Init(void);
-extern void OS_Terminate(void);
-extern void SND_Init(int);
-extern void PAD_InitXYButton(void);
-extern void VBlankIntr(void);
-extern void OS_SetIrqFunction(OSIrqMask, OSIrqFunction);
-extern OSIrqMask OS_EnableIrqMask(OSIrqMask);
-extern OSIntrMode OS_EnableInterrupts(void);
-extern void FS_Init(u32);
-extern void RTC_Init(u32);
-extern void WVR_Init(s32);
-extern void SPI_Init(u32);
-extern void __Veneer_SVC_Halt(void);
-extern int CARD_SetThreadPriority(int);
-extern BOOL OS_IsResetOccurred(void);
-extern void CTRDG_VibPulseEdgeUpdate(Pulse *);
-extern void OS_ResetSystem(void);
-extern void CTRDG_CheckPullOut_Polling(void);
-extern void CARD_CheckPullOut_Polling(void);
+extern u32 PMi_Initialized;
+
+void WVR_ShelterExtWram(void);
+void OS_Init(void);
+void OS_InitThread(void);
+void NVRAM_ReadDataBytes(u32 address, u32 length, u8 *out);
+u16 WMSP_GetAllowedChannel(u32 channels);
+void MIi_CpuClear32(u32 data, u32 *dest, u32 size);
+void MIi_CpuCopy32(const u32 *src, u32 *dest, u32 size);
+void MI_CpuCopy8(const void *src, void *dest, u32 size);
+void MI_CpuFill8(void *dest, u8 data, u32 size);
+void PXI_Init(void);
+void OS_Terminate(void);
+void SND_Init(int priority);
+void PAD_InitXYButton(void);
+void OS_SetIrqFunction(OSIrqMask mask, OSIrqFunction function);
+OSIrqMask OS_EnableIrqMask(OSIrqMask mask);
+OSIntrMode OS_EnableInterrupts(void);
+void FS_Init(u32 dmaNo);
+void RTC_Init(u32 priority);
+void WVR_Init(s32 heap);
+void SPI_Init(u32 priority);
+int CARD_SetThreadPriority(int priority);
+BOOL OS_IsResetOccurred(void);
+void CTRDG_VibPulseEdgeUpdate(Pulse *pulse);
+void OS_ResetSystem(void);
+void CTRDG_CheckPullOut_Polling(void);
+void CARD_CheckPullOut_Polling(void);
+void PM_SelfBlinkProc(void);
+
 void NitroSpMain(void);
+u16 __Veneer_SVC_GetCRC16(u16 start, const void *data, u32 size);
+void __Veneer_SVC_Halt(void);
+u16 GetRomValidLanguage(void);
+void VBlankIntr(void);
 
 void NitroSpMain(void) {
     u8 feature;
@@ -73,9 +86,10 @@ void NitroSpMain(void) {
     u8 mac[6];
     u32 offset;
     FirmwarePage pages[2];
-    void *lo, *hi;
+    void *lo;
+    void *hi;
     OSHeapHandle heap;
-    FirmwarePage *shared = (FirmwarePage *)0x027ffc80;
+    FirmwarePage *shared = (FirmwarePage *)0x027ffc80; // user settings shared with the ARM9
     WVR_ShelterExtWram();
     OS_Init();
     OS_InitThread();
@@ -189,6 +203,7 @@ selected:
     PAD_InitXYButton();
     OS_SetIrqFunction(1, VBlankIntr);
     OS_EnableIrqMask(1);
+    // Enable the VBlank IRQ in DISPSTAT, then set IME.
     {
         volatile u16 *disp = (volatile u16 *)0x04000004;
         volatile u16 *ime = (volatile u16 *)0x04000208;
@@ -214,3 +229,43 @@ selected:
         CARD_CheckPullOut_Polling();
     }
 }
+
+// -ipa file would otherwise inline the functions below into NitroSpMain.
+#pragma dont_inline on
+
+// The ARM code calls these Thumb system calls through ARM veneers of its own.
+u16 SVC_GetCRC16(u16 start, const void *data, u32 size);
+void SVC_Halt(void);
+
+u16 __Veneer_SVC_GetCRC16(u16 start, const void *data, u32 size) {
+    return SVC_GetCRC16(start, data, size);
+}
+
+void __Veneer_SVC_Halt(void) {
+    SVC_Halt();
+}
+
+#pragma opt_propagation off
+
+u16 GetRomValidLanguage(void) {
+    u16 result = 0;
+    u8 code = *(volatile u8 *)0x027ffe1d; // ROM header byte 0x1d (region)
+    if (code == 0x80) {
+        result |= 0x40;
+        return result;
+    }
+    if (code == 0x40) {
+        result |= 0x80;
+    }
+    return result;
+}
+
+#pragma opt_propagation on
+
+void VBlankIntr(void) {
+    if (PMi_Initialized) {
+        PM_SelfBlinkProc();
+    }
+}
+
+#pragma dont_inline reset

@@ -18,7 +18,7 @@ extern void Main_SetVBlankIntrCB(void (*)(void *), void *);
 extern void HBlankInterruptDisable(void);
 extern void GfGfx_DisableEngineAPlanes(void);
 extern void GfGfx_DisableEngineBPlanes(void);
-extern void sub_0200FBF4(int, int);
+extern void SetMasterBrightnessByColor(int, int);
 extern void ResetVisibleHardwareWindows(int);
 extern int Pokedex_GetSeenFormByIdx_Unown(void *, int, int);
 extern void MenuInputStateMgr_SetState(void *, u32);
@@ -115,8 +115,8 @@ void ov113_021E59F8(void) {
     GfGfx_DisableEngineBPlanes();
     *(volatile u32 *)0x04000000 &= 0xFFFFE0FF;
     *(volatile u32 *)0x04001000 &= 0xFFFFE0FF;
-    sub_0200FBF4(0, 0);
-    sub_0200FBF4(1, 0);
+    SetMasterBrightnessByColor(0, 0);
+    SetMasterBrightnessByColor(1, 0);
     ResetVisibleHardwareWindows(0);
     ResetVisibleHardwareWindows(1);
 }

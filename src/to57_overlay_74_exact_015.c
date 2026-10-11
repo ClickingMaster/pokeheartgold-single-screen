@@ -10,7 +10,7 @@ extern void Heap_FreeExplicit(u32, void *);
 extern void Heap_Free(void *);
 extern void sub_02037E9C(void);
 extern void sub_02034DE0(void);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern void GF_AssertFail(void);
 extern void Save_Cancel(void *);
 extern void sub_0201A738(u32);
@@ -65,7 +65,7 @@ extern BOOL ov74_0223514C(void);
 
 extern void Heap_Create(u32, u32, u32);
 extern void *OverlayManager_CreateAndGetData(void *, u32, u32);
-extern void sub_0200FBF4(u32, u32);
+extern void SetMasterBrightnessByColor(u32, u32);
 extern u32 ov74_0223D454[];
 extern BOOL IsPaletteFadeFinished(void);
 extern void ov74_02233DBC(int);

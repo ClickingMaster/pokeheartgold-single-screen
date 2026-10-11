@@ -24,7 +24,7 @@ extern void *WaitingIcon_New(void *, int);
 extern void WaitingIcon_Delete(void *);
 extern void sub_0203957C(void);
 extern void ov00_021EC8D8(void);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern void Sys_ClearSleepDisableFlag(int);
 extern void ov70_02237F2C(void);
 extern void BeginNormalPaletteFade(int, int, int, int, int, int, int);

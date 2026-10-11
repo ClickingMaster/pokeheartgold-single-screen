@@ -17,7 +17,7 @@ extern void *BgConfig_Alloc(u32 heapId);
 extern void *PaletteData_Init(u32 heapId);
 extern void PaletteData_AllocBuffers(void *data, u32 bufferId, u32 size, u32 heapId);
 extern void BG_SetMaskColor(u32 bgId, u32 color);
-extern void sub_0203A880(void);
+extern void WirelessStatusIcon_Create(void);
 extern void sub_020880CC(u32, u32);
 extern BOOL sub_02034818(u32);
 extern u32 PlayerProfile_GetVersion(void *);

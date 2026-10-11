@@ -6,7 +6,7 @@ BOOL ov90_02258B54(Ov90Status *status) {
     BOOL result = FALSE;
 
     if (status->data != NULL) {
-        if (status->value != sub_02037454(status->data)) {
+        if (status->value != Comm_CountConnected(status->data)) {
             result = TRUE;
         }
         if (sub_02039264() == 1) {

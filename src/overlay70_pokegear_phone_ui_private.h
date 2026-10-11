@@ -148,7 +148,7 @@ void Sprite_SetPriority(void *, int);
 void Sprite_SetDrawFlag(void *, int);
 int TouchscreenHitbox_FindRectAtTouchNew(const void *);
 void sub_0203A930(void);
-void sub_0203A914(void);
+void WirelessStatusIcon_Destroy(void);
 
 /* overlay 70 */
 void ov70_02238B54(void *, Ov70Work *, void *, int);

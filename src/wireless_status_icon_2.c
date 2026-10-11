@@ -6,13 +6,13 @@ void sub_0203A86C(void) {
     }
 }
 
-void sub_0203A880(void) {
+void WirelessStatusIcon_Create(void) {
     int a = 0;
 
     if (sub_02039998() != 0) {
         a = 1;
     }
-    sub_0203A8CC(0xF0, 0, a, 1, 0x1C0);
+    WirelessStatusIcon_CreateAt(0xF0, 0, a, 1, 0x1C0);
 }
 
 void sub_0203A8A8(int a0) {
@@ -21,19 +21,19 @@ void sub_0203A8A8(int a0) {
     if (sub_02039998() != 0) {
         a = 1;
     }
-    sub_0203A8CC(0xF0, 0, a, a0, 0x1E0);
+    WirelessStatusIcon_CreateAt(0xF0, 0, a, a0, 0x1E0);
 }
 
-void sub_0203A8CC(int a0, int a1, int a2, int a3, u32 a4) {
+void WirelessStatusIcon_CreateAt(int a0, int a1, int a2, int a3, u32 a4) {
     if (sub_02034DCC() != 0) {
         if (_021D4154 != NULL) {
-            sub_0203A914();
+            WirelessStatusIcon_Destroy();
         }
         _021D4154 = sub_0203A3B0(0, (enum HeapID)0x59, a0, a1, a2, _0210F91C, a3, a4);
     }
 }
 
-void sub_0203A914(void) {
+void WirelessStatusIcon_Destroy(void) {
     if (_021D4154 != NULL) {
         sub_0203A444(_021D4154);
         _021D4154 = NULL;
@@ -54,17 +54,17 @@ void sub_0203A948(int a0, enum HeapID a1) {
 
 void sub_0203A964(void) {
     if (sub_02037474()) {
-        if (sub_02037454() > 1 || sub_02039998() != 0) {
-            sub_0203A880();
+        if (Comm_CountConnected() > 1 || sub_02039998() != 0) {
+            WirelessStatusIcon_Create();
         }
     } else if (sub_02039998() != 0) {
-        sub_0203A880();
+        WirelessStatusIcon_Create();
     }
 }
 
 void sub_0203A994(int a0) {
     if (sub_02037474()) {
-        if (sub_02037454() > 1 || sub_02039998() != 0) {
+        if (Comm_CountConnected() > 1 || sub_02039998() != 0) {
             sub_0203A8A8(a0);
         }
     } else if (sub_02039998() != 0) {

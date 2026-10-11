@@ -33,8 +33,8 @@ void ov37_021E76C0(Ov37Work *work) {
 void ov37_021E76D0(Ov37Work *work, u32 arg1) {
 #pragma unused(work)
     s32 v;
-    if (!sub_0203769C()) {
-        v = sub_02037454() + arg1;
+    if (!Comm_GetLocalNetId()) {
+        v = Comm_CountConnected() + arg1;
         if (v > 5) {
             v = 5;
         }

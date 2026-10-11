@@ -21,7 +21,7 @@ extern void sub_02037AC0(int);
 extern void sub_0201A728(int);
 extern void ov65_0221F760(void *work);
 extern BOOL sub_02037B38(int);
-extern int sub_0203769C(void);
+extern int Comm_GetLocalNetId(void);
 extern u32 LCRandom(void);
 extern void ov65_0221DE10(int, int, int);
 extern void ov65_0221DE8C(void *);

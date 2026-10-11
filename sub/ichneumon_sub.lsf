@@ -10,15 +10,13 @@ Static ichneumon_sub
 Autoload MAIN
 {
 	Address 0x027E0000
-	Object lib/src/to91_w41502_shelter.o
+	Object lib/src/wvr_shelter.o
 }
 
 Autoload WRAM
 {
 	Address 0x037F8000
-	Object lib/src/op90_sp_main_r01.o
-	Object lib/src/op90_op90_sp_main_residual_1_r01.o
-	Object lib/src/to90_a7_next1668_o01_run01.o
+	Object lib/src/sp_main.o
 	Object lib/src/OS_irqHandler.o
 	Object lib/src/OS_irqTable.o
 	Object lib/src/OS_interrupt.o
@@ -118,31 +116,7 @@ Autoload EXT_WRAM
 {
 	Address 0x06000000
 	Object lib/asm/to90_arm7_WM_sp_anchor.o
-	Object lib/src/to90_arm7_WM_sp_run01.o
-	Object lib/src/op90_to90_arm7_WM_sp_residual_1_r01.o
-	Object lib/src/to90_arm7_WM_sp_run02.o
-	Object lib/src/op90_to90_arm7_WM_sp_residual_2_r01.o
-	Object lib/src/to90_arm7_WM_sp_run03.o
-	Object lib/src/to90_arm7_WM_sp_run04.o
-	Object lib/src/to90_arm7_WM_sp_run05.o
-	Object lib/src/op90_to90_arm7_WM_sp_residual_3_r01.o
-	Object lib/src/to90_arm7_WM_sp_run18.o
-	Object lib/src/op90_to90_arm7_WM_sp_residual_4_r01.o
-	Object lib/src/to90_arm7_WM_sp_run06.o
-	Object lib/src/to90_arm7_WM_sp_run07.o
-	Object lib/src/to90_arm7_WM_sp_run08.o
-	Object lib/src/to90_arm7_WM_sp_run09.o
-	Object lib/src/to90_arm7_WM_sp_run10.o
-	Object lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.o
-	Object lib/src/to90_arm7_current1_wm_helpers_run01.o
-	Object lib/src/to90_arm7_current1_wm_helpers_run02.o
-	Object lib/src/to90_arm7_WM_sp_run11.o
-	Object lib/src/to90_arm7_WM_sp_run12.o
-	Object lib/src/to90_arm7_WM_sp_run13.o
-	Object lib/src/to90_arm7_WM_sp_run14.o
-	Object lib/src/to90_arm7_WM_sp_run15.o
-	Object lib/src/to90_arm7_WM_sp_run16.o
-	Object lib/src/to90_arm7_WM_sp_run17.o
+	Object lib/src/wmsp_system.o
 	Object asm/to90_arm7_sub_ext_wram_anchor.o
 	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_1_r01.o
 	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.o

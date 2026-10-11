@@ -18,7 +18,7 @@ BOOL ov85_021E5B48(BattleArcadeWork *work) {
 
 BOOL ov85_021E5B78(BattleArcadeWork *work) {
     int expected = ov85_021E8660(work) + 1;
-    if (expected != sub_02037454()) {
+    if (expected != Comm_CountConnected()) {
         return FALSE;
     }
     work->unk_000 = 5;

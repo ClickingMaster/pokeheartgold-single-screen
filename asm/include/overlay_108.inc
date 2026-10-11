@@ -77,7 +77,7 @@
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
 .public ResetVisibleHardwareWindows
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public FontSystem_NewInit
 .public sub_020135AC
 .public TextOBJ_SetSpritesDrawFlag

@@ -12,7 +12,7 @@ BOOL sub_02036FA8(void) {
 }
 
 int sub_02036FD8(void *data, void *size, int arg) {
-    if (!sub_020373B4(sub_0203769C())) {
+    if (!Comm_IsNetIdConnected(Comm_GetLocalNetId())) {
         return 0;
     }
     if (sub_02033DF0(_021D4140.work + 0x580, data, (int)size, arg, 1, 0)) {
@@ -24,8 +24,8 @@ int sub_02036FD8(void *data, void *size, int arg) {
     return 0;
 }
 
-int sub_02037030(int command, void *payload, int size) {
-    if (!sub_020373B4(sub_0203769C())) {
+int Comm_SendCommand(int command, void *payload, int size) {
+    if (!Comm_IsNetIdConnected(Comm_GetLocalNetId())) {
         return 0;
     }
     if (sub_02033DF0(_021D4140.work + 0x580, (void *)command, (int)payload, size, 1, 1)) {
@@ -38,11 +38,11 @@ int sub_02037030(int command, void *payload, int size) {
 }
 
 int sub_02037088(void *data, void *size, int arg) {
-    if (sub_0203769C() != 0) {
+    if (Comm_GetLocalNetId() != 0) {
         GF_AssertFail();
         return 0;
     }
-    if (!sub_020373B4(0)) {
+    if (!Comm_IsNetIdConnected(0)) {
         return 0;
     }
     if (sub_02035FF0() == 1) {
@@ -58,15 +58,15 @@ int sub_02037088(void *data, void *size, int arg) {
 }
 
 int sub_02037108(void *data, void *size, int arg) {
-    if (sub_0203769C() != 0) {
+    if (Comm_GetLocalNetId() != 0) {
         sub_02037974();
         return 0;
     }
-    if (!sub_020373B4(0)) {
+    if (!Comm_IsNetIdConnected(0)) {
         return 0;
     }
     if (sub_02035FF0() == 1) {
-        return sub_02037030((int)data, size, arg);
+        return Comm_SendCommand((int)data, size, arg);
     }
     if (sub_02033DF0(_021D4140.work + 0x5A0, data, (int)size, arg, 1, 1)) {
         return 1;

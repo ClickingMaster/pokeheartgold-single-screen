@@ -17,7 +17,7 @@ extern void Main_SetVBlankIntrCB(void *, void *);
 extern void HBlankInterruptDisable(void);
 extern void GfGfx_DisableEngineAPlanes(void);
 extern void GfGfx_DisableEngineBPlanes(void);
-extern void sub_0200FBF4(int, int);
+extern void SetMasterBrightnessByColor(int, int);
 extern void ResetVisibleHardwareWindows(int);
 extern void ov59_0223B434(Ov59Work *);
 extern void ov59_0223B590(Ov59Work *);

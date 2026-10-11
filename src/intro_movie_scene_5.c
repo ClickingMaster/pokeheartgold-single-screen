@@ -63,8 +63,8 @@ static void IntroMovie_Scene5_Init(IntroMovieOverlayData *data, IntroMovieScene5
     BgConfig *bgConfig = IntroMovie_GetBgConfig(data);
     gSystem.screensFlipped = TRUE;
     GfGfx_SwapDisplay();
-    sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
-    sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
     IntroMovie_Scene5_InitBgs(data);
     IntroMovie_InitBgAnimGxState(data);
     Main_SetVBlankIntrCB(IntroMovie_Scene5_VBlankCB, data);

@@ -355,8 +355,8 @@ void ov85_021E9288(ArcScene *work) {
 
 int ov85_021E92B8(ArcScene *work, int state) {
     sub_020398D4(0, 1);
-    if (!sub_0203769C()) {
-        if ((int)sub_02037454() >= 2) {
+    if (!Comm_GetLocalNetId()) {
+        if ((int)Comm_CountConnected() >= 2) {
             ov85_021EA0EC(work, 2, 0);
         }
     } else {
@@ -368,7 +368,7 @@ int ov85_021E92B8(ArcScene *work, int state) {
 
 int ov85_021E92F8(ArcScene *work, int state) {
     ov85_021E9324(work);
-    if (!sub_0203769C()) {
+    if (!Comm_GetLocalNetId()) {
         if (ov85_021E9EA4() != 1) {
             ov85_021E9FCC(work);
         }
@@ -384,7 +384,7 @@ void ov85_021E9324(ArcScene *work) {
     u8 c;
 
     if (gSystem.newKeys & 1) {
-        if (!sub_0203769C()) {
+        if (!Comm_GetLocalNetId()) {
             if (((ArcSub10 *)work->unk_010)->unk_2C == (u32)ov85_021E9FD0() && ((ArcSub10 *)work->unk_010)->unk_30 == 0) {
                 a = 1;
                 ov85_021EA0EC(work, 3, 0);
@@ -396,7 +396,7 @@ void ov85_021E9324(ArcScene *work) {
             }
         }
     } else if (gSystem.newKeys & 2) {
-        if (sub_0203769C()) {
+        if (Comm_GetLocalNetId()) {
             if (((ArcSub10 *)work->unk_010)->unk_28 == 0) {
                 ov85_021EA0EC(work, 4, 0);
                 ov85_021E9458(work, 4);
@@ -404,7 +404,7 @@ void ov85_021E9324(ArcScene *work) {
                 PlaySE(0x5F2);
             }
         } else {
-            if (((ArcSub10 *)work->unk_010)->unk_2C == sub_02037454() && ((ArcSub10 *)work->unk_010)->unk_30 == 0) {
+            if (((ArcSub10 *)work->unk_010)->unk_2C == Comm_CountConnected() && ((ArcSub10 *)work->unk_010)->unk_30 == 0) {
                 b = 1;
                 ov85_021EA0EC(work, 4, 0);
                 ov85_021E9458(work, 4);
@@ -415,7 +415,7 @@ void ov85_021E9324(ArcScene *work) {
             }
         }
     } else {
-        if (work->unk_4A48 == 0 && !sub_0203769C() && ((ArcSub10 *)work->unk_010)->unk_2C == sub_02037454()) {
+        if (work->unk_4A48 == 0 && !Comm_GetLocalNetId() && ((ArcSub10 *)work->unk_010)->unk_2C == Comm_CountConnected()) {
             c = 0;
             sub_02096D4C(work->unk_010, 7, &c, 1);
         }
@@ -447,7 +447,7 @@ int ov85_021E9468(ArcScene *work, int state) {
 
 int ov85_021E948C(ArcScene *work, int state) {
     u32 v;
-    if (!sub_0203769C()) {
+    if (!Comm_GetLocalNetId()) {
         v = 0;
         sub_02096D4C(work->unk_010, 7, &v, 1);
     }
@@ -468,7 +468,7 @@ int ov85_021E94EC(ArcScene *work, int state) {
     u8 buf[4];
     int input;
 
-    if (sub_0203769C()) {
+    if (Comm_GetLocalNetId()) {
         if (((ArcSub10 *)work->unk_010)->unk_28) {
             if (gSystem.newKeys & 0xC3) {
                 PlaySE(0x5F2);
@@ -485,26 +485,26 @@ int ov85_021E94EC(ArcScene *work, int state) {
             return state;
         }
     }
-    if ((u32)ov85_021E9FD0() != sub_02037454()) {
+    if ((u32)ov85_021E9FD0() != Comm_CountConnected()) {
         ov85_021E943C(work);
         return state;
     }
     input = Handle2dMenuInput_DeleteOnFinish((struct ListMenu2D *)work->unk_330, (enum HeapID)0x66);
     if (input != -1) {
         if (input == -2) {
-            if (!sub_0203769C()) {
+            if (!Comm_GetLocalNetId()) {
                 v = 0;
                 sub_02096D4C(work->unk_010, 7, &v, 1);
                 ov85_021EA39C(work, 1);
             }
             ov85_021E9458(work, 0);
-        } else if (!sub_0203769C()) {
+        } else if (!Comm_GetLocalNetId()) {
             ov85_021E9458(work, 0xB);
             ov85_021EA0EC(work, 0xE, 0);
         } else {
             MI_CpuFill8(buf, 0, 4);
             buf[2] = 0;
-            buf[0] = (u8)sub_0203769C();
+            buf[0] = (u8)Comm_GetLocalNetId();
             work->unk_4A50 = 1;
             work->unk_4A5C = 0;
             work->unk_354 = 6;
@@ -523,7 +523,7 @@ int ov85_021E9614(ArcScene *work, int state) {
 }
 
 int ov85_021E962C(ArcScene *scene, int a1) {
-    if (((ArcSub10 *)scene->unk_010)->unk_38 != sub_02037454() || ((ArcSub10 *)scene->unk_010)->unk_38 != ov85_021E9FD0()) {
+    if (((ArcSub10 *)scene->unk_010)->unk_38 != Comm_CountConnected() || ((ArcSub10 *)scene->unk_010)->unk_38 != ov85_021E9FD0()) {
         scene->unk_4A5C = 0;
         scene->unk_354 = 8;
         ov85_021E943C(scene);
@@ -534,7 +534,7 @@ int ov85_021E962C(ArcScene *scene, int a1) {
         u8 buf[4];
         MI_CpuFill8(buf, 0, 4);
         buf[2] = 1;
-        buf[0] = (u8)sub_0203769C();
+        buf[0] = (u8)Comm_GetLocalNetId();
         sub_02096D4C(scene->unk_010, 2, buf, 4);
         scene->unk_4A5C = 0;
         scene->unk_354 = 9;
@@ -574,7 +574,7 @@ int ov85_021E9700(ArcScene *scene, int a1) {
                 sub_02096D4C(scene->unk_010, 7, &v, 1);
                 ov85_021EA39C(scene, 1);
                 ov85_021E9458(scene, 0);
-            } else if (sub_0203769C() == 0) {
+            } else if (Comm_GetLocalNetId() == 0) {
                 scene->unk_354 = 0x18;
                 scene->unk_4A52 = (u8)ov85_021E9FD0();
                 sub_0205A904(0xC);
@@ -598,10 +598,10 @@ int ov85_021E97B8(ArcScene *work, int state) {
 }
 
 int ov85_021E97E8(ArcScene *work, int state) {
-    if (!sub_0203769C()) {
-        sub_02037454();
+    if (!Comm_GetLocalNetId()) {
+        Comm_CountConnected();
     }
-    if (((ArcSub10 *)work->unk_010)->unk_20 == sub_02037454()) {
+    if (((ArcSub10 *)work->unk_010)->unk_20 == Comm_CountConnected()) {
         work->unk_354 = 0x1F;
     }
     return state;
@@ -622,8 +622,8 @@ int ov85_021E9834(ArcScene *work, int state) {
 }
 
 int ov85_021E9864(ArcScene *scene, int a1) {
-    if (sub_0203769C() == 0) {
-        sub_02037454();
+    if (Comm_GetLocalNetId() == 0) {
+        Comm_CountConnected();
     }
     if (sub_02039EB4(((ArcSubC *)scene->unk_00C)->unk_1C, 2, scene->unk_3B0) != 0) {
         StopSE(0x657, 8);
@@ -698,7 +698,7 @@ int ov85_021E996C(ArcScene *scene, int a1) {
 }
 
 int ov85_021E9A1C(ArcScene *scene, int a1) {
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         ov85_021EA0EC(scene, 5, 0);
     } else {
         BufferPlayersName(scene->unk_034, 0, (PlayerProfile *)sub_02034818(0));
@@ -759,10 +759,10 @@ int ov85_021E9B40(ArcScene *scene, int a1) {
     }
     ov85_021EA0EC(scene, 0xF, 1);
     scene->unk_354 = 0x14;
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         ov85_021EA39C(scene, 0);
     }
-    scene->unk_4A58 = sub_02037454();
+    scene->unk_4A58 = Comm_CountConnected();
     scene->unk_4A54 = 0x12C;
     ov85_021E943C(scene);
     return a1;
@@ -770,7 +770,7 @@ int ov85_021E9B40(ArcScene *scene, int a1) {
 
 int ov85_021E9BA0(ArcScene *work, int state) {
     if (work->unk_4A58 != 0) {
-        if (work->unk_4A58 != sub_02037454()) {
+        if (work->unk_4A58 != Comm_CountConnected()) {
             work->unk_4A58 = 0;
         }
     }
@@ -782,7 +782,7 @@ int ov85_021E9BA0(ArcScene *work, int state) {
 
 int ov85_021E9BDC(ArcScene *scene, int a1) {
     if (scene->unk_4A58 != 0) {
-        if (scene->unk_4A58 != sub_02037454()) {
+        if (scene->unk_4A58 != Comm_CountConnected()) {
             scene->unk_4A58 = 0;
         }
     }
@@ -793,7 +793,7 @@ int ov85_021E9BDC(ArcScene *scene, int a1) {
     scene->unk_360++;
     if (scene->unk_360 > 0x3C && scene->unk_4A58 == 0) {
         scene->unk_354 = 0;
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             ov85_021EA39C(scene, 1);
         }
     }
@@ -839,14 +839,14 @@ void ov85_021E9C84(ArcScene *scene, int msg, int a2) {
             return;
         }
         BufferPlayersName(scene->unk_034, 0, (PlayerProfile *)sub_02034818(a2));
-        if (a2 == sub_0203769C()) {
+        if (a2 == Comm_GetLocalNetId()) {
             return;
         }
         if (scene->unk_330 != NULL) {
             Clear2dMenuWindowAndDelete(scene->unk_330, (enum HeapID)0x66);
             scene->unk_330 = NULL;
         }
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             ((ArcSub10 *)scene->unk_010)->unk_30 &= 0xFFFF ^ a2;
         }
         break;
@@ -873,10 +873,10 @@ void ov85_021E9D9C(ArcScene *scene, int a1, int a2) {
             BufferPlayersName(scene->unk_034, 0, (PlayerProfile *)sub_02034818(a2));
             ov85_021EA39C(scene, 1);
             scene->unk_354 = a1;
-            ((ArcSub10 *)scene->unk_010)->unk_2C = sub_02037454();
+            ((ArcSub10 *)scene->unk_010)->unk_2C = Comm_CountConnected();
             p = scene->unk_010;
             p->unk_30 = 0;
-            if (sub_0203769C() == 0) {
+            if (Comm_GetLocalNetId() == 0) {
                 u32 v = 1;
                 sub_02096D4C(scene->unk_010, 7, &v, 1);
             }
@@ -884,8 +884,8 @@ void ov85_021E9D9C(ArcScene *scene, int a1, int a2) {
         }
         case 0x13:
             BufferPlayersName(scene->unk_034, 0, (PlayerProfile *)sub_02034818(a2));
-            if (a2 != sub_0203769C()) {
-                if (sub_0203769C() == 0) {
+            if (a2 != Comm_GetLocalNetId()) {
+                if (Comm_GetLocalNetId() == 0) {
                     ArcSub10 *p = scene->unk_010;
                     p->unk_30 = (0xFFFF ^ a2) & p->unk_30;
                 }
@@ -898,7 +898,7 @@ void ov85_021E9D9C(ArcScene *scene, int a1, int a2) {
         }
     } else if (a1 == 1) {
         ((ArcSub10 *)scene->unk_010)->unk_30 = 0;
-        ((ArcSub10 *)scene->unk_010)->unk_2C = sub_02037454();
+        ((ArcSub10 *)scene->unk_010)->unk_2C = Comm_CountConnected();
     }
 }
 
@@ -932,7 +932,7 @@ BOOL ov85_021E9EC0(Window *window, u32 a1, u32 color, ArcScene *scene) {
     String *str;
     u32 tid;
 
-    sel = sub_0203769C();
+    sel = Comm_GetLocalNetId();
     if (!ov85_021EA010(scene)) {
         return FALSE;
     }
@@ -1066,7 +1066,7 @@ void ov85_021EA1AC(ArcScene *scene) {
             }
             gender = PlayerProfile_GetTrainerGender((PlayerProfile *)scene->unk_374[i].unk_00);
             avatar = PlayerProfile_GetAvatar((PlayerProfile *)scene->unk_374[i].unk_00);
-            if (i == sub_0203769C()) {
+            if (i == Comm_GetLocalNetId()) {
                 Sprite_SetAnimCtrlSeq(scene->unk_23C[i], gender * 2 + 0x26);
             } else {
                 ov85_021EA324((ArcGfxHolder *)&scene->unk_33C, (ArcGfxHolder *)&scene->unk_34C, i, avatar, gender);
@@ -1080,7 +1080,7 @@ void ov85_021EA1AC(ArcScene *scene) {
         case 2:
             break;
         case 3:
-            if (i == sub_0203769C()) {
+            if (i == Comm_GetLocalNetId()) {
                 Sprite_SetAnimCtrlSeq(scene->unk_23C[i], PlayerProfile_GetTrainerGender((PlayerProfile *)scene->unk_374[i].unk_00) * 2 + 0x27);
             } else {
                 Sprite_SetAnimCtrlSeq(scene->unk_23C[i], i * 2 + 0x1C);
@@ -1121,11 +1121,11 @@ int ov85_021EA398(ArcScene *work) {
 }
 
 void ov85_021EA39C(ArcScene *scene, int a1) {
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         if (a1 == -1) {
             sub_02038C1C(1);
         } else {
-            int v = a1 + sub_02037454();
+            int v = a1 + Comm_CountConnected();
             if (v > 5) {
                 v = 5;
             }
@@ -1155,7 +1155,7 @@ int ov85_021EA3F0(ArcScene *scene, int a1) {
     }
     switch (v) {
     case 1:
-        if ((int)sub_02037454() > 1 || sub_02033250() > 1) {
+        if ((int)Comm_CountConnected() > 1 || sub_02033250() > 1) {
             return 1;
         }
         scene->unk_354 = 0x11;
@@ -1178,7 +1178,7 @@ int ov85_021EA3F0(ArcScene *scene, int a1) {
                 ov85_021EA39C(scene, 0);
                 break;
             }
-            ((ArcSub10 *)scene->unk_010)->unk_2C = sub_02037454();
+            ((ArcSub10 *)scene->unk_010)->unk_2C = Comm_CountConnected();
         }
         break;
     case 5:

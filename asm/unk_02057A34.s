@@ -13,7 +13,7 @@ sub_02057A34: ; 0x02057A34
 	ldr r0, _02057A84 ; =0x0000FFFF
 	pop {r4, pc}
 _02057A44:
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r4, r0
 	bne _02057A5A
 	ldr r0, _02057A80 ; =_021D41C4
@@ -58,7 +58,7 @@ sub_02057A88: ; 0x02057A88
 	ldr r0, _02057AD8 ; =0x0000FFFF
 	pop {r4, pc}
 _02057A98:
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	cmp r4, r0
 	bne _02057AAE
 	ldr r0, _02057AD4 ; =_021D41C4

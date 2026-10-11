@@ -88,8 +88,8 @@
 .public GF_3DVramMan_Delete
 .public Save_PlayerData_GetProfile
 .public Options_GetFrame
-.public sub_0203A880
-.public sub_0203A914
+.public WirelessStatusIcon_Create
+.public WirelessStatusIcon_Destroy
 .public sub_02055198
 .public Frontier_GetLaunchArgs
 .public sub_02096864

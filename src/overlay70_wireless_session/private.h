@@ -6,7 +6,7 @@
 #define U32_AT(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define PTR_AT(p, o) (*(void **)((u8 *)(p) + (o)))
 
-void sub_0203A914(void);
+void WirelessStatusIcon_Destroy(void);
 void sub_02039418(void *);
 void Sys_SetSleepDisableFlag(int);
 void ov70_02244FA4(void *, void *, int, int, int);

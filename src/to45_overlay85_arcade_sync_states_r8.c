@@ -47,7 +47,7 @@ typedef struct Ov85Work {
 } Ov85Work;
 
 void GF_AssertFail(void);
-BOOL sub_0203769C(void);
+BOOL Comm_GetLocalNetId(void);
 BOOL sub_02096D4C(void *menu, int command, void *data, int size);
 BOOL ov85_021E8764(Ov85Work *work, fx32 value, s32 count);
 void ov85_021E75C8(Ov85Work *work);
@@ -64,7 +64,7 @@ BOOL ov85_021E6420(Ov85Work *work);
 
 BOOL ov85_021E62B4(Ov85Work *work) {
     if (sub_02037B38(0xCA)) {
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             work->state = 0x22;
         } else {
             work->state = 0x23;

@@ -15,12 +15,12 @@ void sub_02036AD8(void) {
     if (sub_02033298() != 4) {
         return;
     }
-    if (!sub_020373B4(sub_0203769C())) {
-        sub_0203769C();
+    if (!Comm_IsNetIdConnected(Comm_GetLocalNetId())) {
+        Comm_GetLocalNetId();
         return;
     }
     if (_0210F900[1] == 2 || _0210F900[1] == 0) {
-        if (sub_0203769C()) {
+        if (Comm_GetLocalNetId()) {
             _0210F900[1]++;
             work = _021D4140.work;
             if (!sub_02033800(work + work[0x6AF] * 64, (u16)trainerId, 14, sub_02036AA0)) {

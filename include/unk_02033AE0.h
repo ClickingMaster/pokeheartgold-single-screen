@@ -4,7 +4,7 @@
 #include "global.h"
 
 BOOL sub_0203401C(int);
-void sub_0203410C(const void *, int, void *arg2);
+void Comm_RegisterCommandTable(const void *, int, void *arg2);
 u32 sub_020342C4(void);
 u32 sub_020342C0(void);
 u32 sub_020342B8(void);

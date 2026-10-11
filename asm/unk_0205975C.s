@@ -21,7 +21,7 @@ _02059776:
 	mov r0, #0x6b
 	add r1, #0x84
 	mov r2, #1
-	bl sub_02037030
+	bl Comm_SendCommand
 _02059782:
 	cmp r0, #0
 	beq _02059794

@@ -75,7 +75,7 @@ extern void BgCommitTilemapBufferToVram(void *bgConfig, int bgId);
 extern void ClearFrameAndWindow2(void *window, int copy);
 extern void ClearWindowTilemapAndScheduleTransfer(void *window);
 extern void PlaySE(int seq);
-extern int sub_0203769C(int value);
+extern int Comm_GetLocalNetId(int value);
 extern void *sub_02034818(int value);
 extern void *Save_PlayerData_GetProfile(void *save);
 extern int Options_GetFrame(void *options);
@@ -215,7 +215,7 @@ void ov83_022477B0(int value, int seq) {
 }
 
 void ov83_022477C4(u32 value, int field) {
-    void *profile = sub_02034818(sub_0203769C(value) ^ 1);
+    void *profile = sub_02034818(Comm_GetLocalNetId(value) ^ 1);
     BufferPlayersName((void *)value, field, profile);
 }
 

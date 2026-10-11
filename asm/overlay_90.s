@@ -208,7 +208,7 @@ _02258812:
 	bne _02258812
 	bl sub_020347A0
 	strb r0, [r6, #8]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	mov r5, #0
 	add r7, r0, #0
 	add r4, r5, #0

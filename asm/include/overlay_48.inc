@@ -138,7 +138,7 @@
 .public Save_WiFiHistory_Get
 .public WifiHistory_GetPlayerCountry
 .public WiFiHistory_GetPlayerRegion
-.public sub_0203A880
+.public WirelessStatusIcon_Create
 .public LocationGmmDatCountGet
 .public LocationGmmDatGetCountryMsgNo
 .public LocationGmmDatGetEarthPlaceDatId

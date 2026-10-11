@@ -5,7 +5,7 @@ BOOL ov96_021EF19C(void *course) {
     int i;
 
     NARC_Delete(work->narc);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     ov96_021EE5E0(work->unk34);
     ov98_0221EB84(work->message, 12);
     for (i = 0; i < 7; i++) {

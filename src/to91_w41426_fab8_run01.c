@@ -17,14 +17,14 @@ void ov92_0225FAB8(void *data){
  case 0:
   if(ov92_0225ED68(data, 0)){
    w->timer=0;ov92_0225EEBC(data);ov92_0225FEB4(data);w->states[w->id]=1;
-   sub_02037030(24,&w->states[w->id],4);w->value=0;w->count=0;w->objectTimer=0;
+   Comm_SendCommand(24,&w->states[w->id],4);w->value=0;w->count=0;w->objectTimer=0;
   }else{
    ov92_0225ED80(data);ov92_0225FC9C(data);ov92_0225FF1C(data);ov92_0225F878(data);w->counters[w->id]++;
   }break;
  case 1:
   w->timer++;if(w->timer>=90)w->states[w->id]=2;w->value=0;w->count=0;w->counters[w->id]=0;break;
  case 2:
-  if(w->timer){w->value=0;w->count=0;w->timer=0;w->counters[w->id]=0;if(w->phase!=w->previousPhase)w->previousPhase=w->phase;ov92_0225EBE0(data);sub_02037030(24,&w->states[w->id],4);}else w->states[w->id]=0;break;
+  if(w->timer){w->value=0;w->count=0;w->timer=0;w->counters[w->id]=0;if(w->phase!=w->previousPhase)w->previousPhase=w->phase;ov92_0225EBE0(data);Comm_SendCommand(24,&w->states[w->id],4);}else w->states[w->id]=0;break;
  case 3:
   w->timer++;if((u32)w->timer>=29){w->timer=0;ov92_0225EBE0(data);w->states[w->id]=0;}break;
  }

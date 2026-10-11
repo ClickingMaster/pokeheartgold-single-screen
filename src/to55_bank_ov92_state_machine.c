@@ -38,7 +38,7 @@ M2C_UNK ov92_0225FC2C(void *);                  /* extern */
 s32 ov92_0226077C(void *, s32);                 /* extern */
 M2C_UNK ov92_0226156C(void *);                  /* extern */
 M2C_UNK ov92_02261B18(void *);                  /* extern */
-M2C_UNK sub_02037030(s32, void *, s32);         /* extern */
+M2C_UNK Comm_SendCommand(s32, void *, s32);         /* extern */
 M2C_UNK sub_02037AC0(s32);                      /* extern */
 s32 sub_02037B38(s32);                          /* extern */
 
@@ -104,7 +104,7 @@ s32 ov92_0225CDF4(void *arg0, u32 *arg1) {
             temp_r0_4 = ov92_0225CC6C(M2C_FIELD(temp_r4, void **, 4));
             if ((temp_r0_4 != 0) && (ov92_0225D8C4(temp_r4) == 1)) {
                 M2C_FIELD(temp_r4, s32 *, 0x18) = (s32)M2C_FIELD(temp_r4, s32 *, 0x80);
-                sub_02037030(0x16, temp_r4 + 0x14, 8);
+                Comm_SendCommand(0x16, temp_r4 + 0x14, 8);
             }
             ov92_0225D88C(temp_r4, temp_r0_4, 7, arg1);
             break;
@@ -131,7 +131,7 @@ s32 ov92_0225CDF4(void *arg0, u32 *arg1) {
             if (var_r5 == 0) {
                 if ((ov92_0225D8C4(temp_r4) == 1) && (ov92_0225EB70(M2C_FIELD(temp_r4, s32 *, 0)) == 0)) {
                     StopSE(0x589, 0);
-                    sub_02037030(0x17, NULL, 0);
+                    Comm_SendCommand(0x17, NULL, 0);
                 }
                 ov92_0225FC2C(M2C_FIELD(temp_r4, void **, 4));
             }
@@ -155,7 +155,7 @@ s32 ov92_0225CDF4(void *arg0, u32 *arg1) {
             if (M2C_FIELD(M2C_FIELD(temp_r4, void **, 4), s32 *, 0x2B94) == 0) {
                 M2C_FIELD(temp_r4, u32 *, 0x1C) = 1U;
             }
-            sub_02037030(0x19, temp_r4 + 0x1C, 8);
+            Comm_SendCommand(0x19, temp_r4 + 0x1C, 8);
             ov92_0225D88C(temp_r4, 1, 0xE, arg1);
             break;
         case 14: {

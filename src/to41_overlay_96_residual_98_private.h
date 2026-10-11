@@ -140,7 +140,7 @@ extern void BeginNormalPaletteFade(u32, u32, u32, u32, u32, u32, u32);
 extern u32 IsPaletteFadeFinished(void);
 extern s32 GF_SinDeg(u16);
 extern void sub_0203A994(u32);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 
 extern void MATH_QSort(void *ptr, u32 nmemb, u32 size, Ov96CmpFunc func, void *work);
 extern void PlaySE(u32);

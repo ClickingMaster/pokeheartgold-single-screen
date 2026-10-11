@@ -184,7 +184,7 @@ _0225F162:
 _0225F178:
 	ldr r1, _0225F1B4 ; =0x00007FFF
 	mov r0, #1
-	bl sub_0200FBF4
+	bl SetMasterBrightnessByColor
 	add r0, r5, #0
 	bl ov01_021F46DC
 	ldr r0, _0225F1B8 ; =0x04000050
@@ -201,7 +201,7 @@ _0225F196:
 	bl ov01_021EFCDC
 	ldr r1, _0225F1B4 ; =0x00007FFF
 	mov r0, #1
-	bl sub_0200FBF4
+	bl SetMasterBrightnessByColor
 _0225F1A6:
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
@@ -394,7 +394,7 @@ _0225F312:
 _0225F328:
 	ldr r1, _0225F35C ; =0x00007FFF
 	mov r0, #1
-	bl sub_0200FBF4
+	bl SetMasterBrightnessByColor
 	add r0, r5, #0
 	bl ov01_021F46DC
 	ldr r0, _0225F360 ; =0x04000050
@@ -411,7 +411,7 @@ _0225F346:
 	bl ov01_021EFCDC
 	ldr r1, _0225F35C ; =0x00007FFF
 	mov r0, #1
-	bl sub_0200FBF4
+	bl SetMasterBrightnessByColor
 _0225F356:
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}

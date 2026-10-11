@@ -111,7 +111,7 @@ int FrtCmd_053(void *c) {
 }
 
 BOOL ov80_0222D200(void *c) {
-    if (sub_02037454(c) < 2) {
+    if (Comm_CountConnected(c) < 2) {
         return TRUE;
     }
     return sub_02037B38((u8)U16(c, 0x78));

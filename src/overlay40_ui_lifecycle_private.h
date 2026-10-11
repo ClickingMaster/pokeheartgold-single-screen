@@ -31,7 +31,7 @@ extern void NARC_Delete(void *);
 extern void SysTask_Destroy(void *);
 extern void SpriteSystem_FreeResourcesAndManager(void *, void *);
 extern void SpriteSystem_Free(void *);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern void sub_02021238(void);
 extern void TouchHitboxController_Destroy(void *);
 extern void TextFlags_SetCanTouchSpeedUpPrint(BOOL);

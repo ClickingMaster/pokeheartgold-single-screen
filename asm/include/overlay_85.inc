@@ -180,8 +180,8 @@
 .public sub_02033250
 .public sub_02034818
 .public sub_02036FD8
-.public sub_02037454
-.public sub_0203769C
+.public Comm_CountConnected
+.public Comm_GetLocalNetId
 .public sub_02037AC0
 .public sub_02037B38
 .public sub_02037FF0
@@ -191,7 +191,7 @@
 .public sub_02039EAC
 .public sub_02039EB4
 .public sub_0203A4AC
-.public sub_0203A880
+.public WirelessStatusIcon_Create
 .public sub_02055198
 .public sub_0205A904
 .public SpriteToUnionRoomAvatarIdx

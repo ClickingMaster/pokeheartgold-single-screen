@@ -64,8 +64,8 @@ BOOL ov80_0222D404(void *work) {
             ClearWindowTilemapAndCopyToVram(PTR_AT(work, 0x28));
             RemoveWindow(PTR_AT(work, 0x28));
             WindowArray_Delete(PTR_AT(work, 0x28), 1);
-            sub_0200FBF4(0, 0);
-            sub_0200FBF4(1, 0);
+            SetMasterBrightnessByColor(0, 0);
+            SetMasterBrightnessByColor(1, 0);
             BG_ClearCharDataRange(1, 0x20, 0, 0xb);
             BgClearTilemapBufferAndCommit(PTR_AT(PTR_AT(work, 0), 0), 1);
             return FALSE;
@@ -114,8 +114,8 @@ BOOL ov80_0222D520(void *work) {
             ClearWindowTilemapAndCopyToVram(PTR_AT(work, 0x28));
             RemoveWindow(PTR_AT(work, 0x28));
             WindowArray_Delete(PTR_AT(work, 0x28), 1);
-            sub_0200FBF4(0, 0);
-            sub_0200FBF4(1, 0);
+            SetMasterBrightnessByColor(0, 0);
+            SetMasterBrightnessByColor(1, 0);
             BG_ClearCharDataRange(1, 0x20, 0, 0xb);
             BgClearTilemapBufferAndCommit(PTR_AT(PTR_AT(work, 0), 0), 1);
             return FALSE;

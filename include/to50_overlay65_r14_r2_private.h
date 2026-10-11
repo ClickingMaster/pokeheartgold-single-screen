@@ -6,7 +6,7 @@
 #define PTR_AT(p, o) (*(void **)((u8 *)(p) + (o)))
 #define U8_AT(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 #define U32_AT(p, o) (*(u32 *)((u8 *)(p) + (o)))
-extern int sub_0203769C(void);
+extern int Comm_GetLocalNetId(void);
 extern void *sub_02034818(int);
 extern void *PlayerProfile_GetPlayerName_NewString(void *, int);
 extern void *NewString_ReadMsgData(void *, int);
@@ -45,7 +45,7 @@ extern void ov65_0221D1C8(void *);
 extern void ov65_0221E06C(void *, int);
 extern void ov65_0221CB5C(void *);
 extern void ov65_0221DD34(int, void *, int);
-extern void sub_0203A880(void);
+extern void WirelessStatusIcon_Create(void);
 extern void ov65_0221F714(void *);
 extern void SpriteList_RenderAndAnimateSprites(void *);
 extern void sub_020399FC(int, void *);

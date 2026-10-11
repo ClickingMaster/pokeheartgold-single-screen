@@ -247,7 +247,7 @@ ov96_021EF19C: ; 0x021EF19C
 	add r6, r0, #0
 	ldr r0, [r6, #8]
 	bl NARC_Delete
-	bl sub_0203A914
+	bl WirelessStatusIcon_Destroy
 	ldr r0, [r6, #0x34]
 	bl ov96_021EE5E0
 	ldr r0, [r6, #0x30]

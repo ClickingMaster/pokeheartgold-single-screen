@@ -167,10 +167,10 @@
 .public sub_02034818
 .public sub_02034AEC
 .public sub_02036FD8
-.public sub_02037030
-.public sub_020373B4
-.public sub_02037454
-.public sub_0203769C
+.public Comm_SendCommand
+.public Comm_IsNetIdConnected
+.public Comm_CountConnected
+.public Comm_GetLocalNetId
 .public sub_020378E4
 .public sub_02037AC0
 .public sub_02037B38
@@ -181,7 +181,7 @@
 .public sub_02039F68
 .public sub_0203A1C4
 .public sub_0203A280
-.public sub_0203A880
+.public WirelessStatusIcon_Create
 .public Save_VarsFlags_Get
 .public sub_02055198
 .public Save_VarsFlags_GetVar404C

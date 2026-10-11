@@ -5,7 +5,7 @@
 	thumb_func_start sub_02056EF4
 sub_02056EF4: ; 0x02056EF4
 	push {r4, lr}
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	ldr r1, _02056FCC ; =_021D41C4
 	lsl r0, r0, #2
 	ldr r2, [r1]
@@ -13,14 +13,14 @@ sub_02056EF4: ; 0x02056EF4
 	add r0, r2, r0
 	ldr r1, [r1, #0x40]
 	str r1, [r0, #4]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	ldr r1, _02056FCC ; =_021D41C4
 	mov r2, #1
 	ldr r1, [r1]
 	add r0, r1, r0
 	add r0, #0x24
 	strb r2, [r0]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	add r4, r0, #0
 	ldr r0, _02056FCC ; =_021D41C4
 	ldr r0, [r0]
@@ -33,7 +33,7 @@ sub_02056EF4: ; 0x02056EF4
 	add r1, r2, r1
 	add r1, #0x74
 	strh r0, [r1]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	add r4, r0, #0
 	ldr r0, _02056FCC ; =_021D41C4
 	ldr r0, [r0]
@@ -46,7 +46,7 @@ sub_02056EF4: ; 0x02056EF4
 	add r1, r2, r1
 	add r1, #0x76
 	strh r0, [r1]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	add r4, r0, #0
 	ldr r0, _02056FCC ; =_021D41C4
 	ldr r0, [r0]
@@ -59,7 +59,7 @@ sub_02056EF4: ; 0x02056EF4
 	add r1, r2, r1
 	add r1, #0x78
 	strb r0, [r1]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	add r4, r0, #0
 	ldr r0, _02056FCC ; =_021D41C4
 	ldr r0, [r0]
@@ -71,7 +71,7 @@ sub_02056EF4: ; 0x02056EF4
 	lsl r1, r4, #3
 	add r1, r2, r1
 	strh r0, [r1, #0x34]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	add r4, r0, #0
 	ldr r0, _02056FCC ; =_021D41C4
 	ldr r0, [r0]
@@ -83,7 +83,7 @@ sub_02056EF4: ; 0x02056EF4
 	lsl r1, r4, #3
 	add r1, r2, r1
 	strh r0, [r1, #0x36]
-	bl sub_0203769C
+	bl Comm_GetLocalNetId
 	add r4, r0, #0
 	ldr r0, _02056FCC ; =_021D41C4
 	ldr r0, [r0]

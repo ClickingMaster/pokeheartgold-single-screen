@@ -7,7 +7,7 @@ typedef struct Ov96R10Dispatch {
     void *data;
 } Ov96R10Dispatch;
 void GF_AssertFail(void);
-void sub_02037030(void *, void *, s32);
+void Comm_SendCommand(void *, void *, s32);
 void ov96_021E8914(void *, void *, void *, s32);
 void sub_02036FD8(void *, void *, void *);
 void ov96_021E8988(void *, void *, void *, void *);

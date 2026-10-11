@@ -58,10 +58,10 @@
 .public sub_02021B5C
 .public GF_AssertFail
 .public String_Delete
-.public sub_0203410C
+.public Comm_RegisterCommandTable
 .public sub_020342C0
-.public sub_02037030
-.public sub_0203769C
+.public Comm_SendCommand
+.public Comm_GetLocalNetId
 .public FX_Inv
 .public FX_ModS32
 .public MI_CpuFill8

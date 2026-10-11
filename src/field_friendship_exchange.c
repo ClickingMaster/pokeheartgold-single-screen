@@ -36,7 +36,7 @@ BOOL ov01_021F6D78(FieldFriendCtx *ctx) {
 
     ctx->unk88 = (u32)-1;
     i = 0;
-    if (sub_02037454() > 0) {
+    if (Comm_CountConnected() > 0) {
         do {
             if (ctx->unk48[i] == 2) {
                 ctx->unk88 = i;
@@ -44,7 +44,7 @@ BOOL ov01_021F6D78(FieldFriendCtx *ctx) {
                 break;
             }
             i++;
-        } while (i < sub_02037454());
+        } while (i < Comm_CountConnected());
     }
     if (ctx->unk88 == (u32)-1) {
         return TRUE;

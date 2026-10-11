@@ -52,7 +52,7 @@
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
 .public ResetVisibleHardwareWindows
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public YesNoPrompt_Create
 .public YesNoPrompt_Destroy
 .public MenuInputStateMgr_GetState

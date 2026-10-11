@@ -382,7 +382,7 @@ static BOOL BattleArcadeGameBoard_MoveCursor(GAME_BOARD_WORK *work) {
         break;
     case 6:
         ov84_0223EBE8(work, gSystem.newKeys);
-        if (sub_0203769C() == 0) {
+        if (Comm_GetLocalNetId() == 0) {
             if (work->unk18 > 0) {
                 work->unk18--;
             }
@@ -520,7 +520,7 @@ static void BattleArcadeGameBoard_Delete(GAME_BOARD_WORK *work) {
         }
     }
 
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
 
     PaletteData_FreeBuffers(work->unk3D4, PLTTBUF_MAIN_OBJ);
     PaletteData_FreeBuffers(work->unk3D4, PLTTBUF_MAIN_BG);
@@ -610,7 +610,7 @@ static void BattleArcadeGameBoard_InitObjects(GAME_BOARD_WORK *work) {
     if (sub_02037474()) {
         G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN, GX_OBJVRAMMODE_CHAR_1D_32K);
         G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
-        sub_0203A880();
+        WirelessStatusIcon_Create();
     }
 
     Main_SetVBlankIntrCB(BattleArcade_VBlank, work);
@@ -806,7 +806,7 @@ static BOOL ov84_0223ECBC(GAME_BOARD_WORK *work, u16 type, u16 a2) {
         break;
     }
 
-    return sub_02037030(unkA, work->sendBuffer, 40) == TRUE;
+    return Comm_SendCommand(unkA, work->sendBuffer, 40) == TRUE;
 }
 
 static void ov84_0223ED00(GAME_BOARD_WORK *work, u16 type) {
@@ -834,11 +834,11 @@ void ov84_0223ED34(int a0, int size, void *data, void *_work) {
 
     work->unkF++;
 
-    if (sub_0203769C() == a0) {
+    if (Comm_GetLocalNetId() == a0) {
         return;
     }
 
-    if (sub_0203769C() != 0) {
+    if (Comm_GetLocalNetId() != 0) {
         offset = 2;
 
         for (i = 0; i < 16; i++) {
@@ -860,7 +860,7 @@ static void ov84_0223ED6C(GAME_BOARD_WORK *work, u16 type, u16 a2) {
     work->sendBuffer[offset] = a2;
     offset++;
 
-    if (sub_0203769C() == 0 && work->unkE == 255) {
+    if (Comm_GetLocalNetId() == 0 && work->unkE == 255) {
         work->unkE = a2;
     }
 
@@ -881,13 +881,13 @@ void ov84_0223EDA8(int a0, int size, void *data, void *_work) {
 
     work->unkF++;
 
-    if (sub_0203769C() == a0) {
+    if (Comm_GetLocalNetId() == a0) {
         return;
     }
 
     work->multiSelectPos = recv[1];
 
-    if (sub_0203769C() == 0) {
+    if (Comm_GetLocalNetId() == 0) {
         if (work->unkE != 255) {
             work->multiSelectPos = 0;
         } else {
@@ -908,7 +908,7 @@ void ov84_0223EE08(int a0, int size, void *data, void *_work) {
     GAME_BOARD_WORK *work = _work;
     const u16 *recv = data;
 
-    if (sub_0203769C() == a0) {
+    if (Comm_GetLocalNetId() == a0) {
         return;
     }
 

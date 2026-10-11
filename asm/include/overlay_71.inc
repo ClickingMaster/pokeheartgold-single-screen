@@ -131,8 +131,8 @@
 .public GF_3DVramMan_InitFrameTexVramManager
 .public GF_3DVramMan_InitFramePlttVramManager
 .public Options_GetFrame
-.public sub_0203A880
-.public sub_0203A914
+.public WirelessStatusIcon_Create
+.public WirelessStatusIcon_Destroy
 .public sub_0203A948
 .public AcquireBoxMonLock
 .public ReleaseBoxMonLock

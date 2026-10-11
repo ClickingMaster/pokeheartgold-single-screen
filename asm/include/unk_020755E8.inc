@@ -83,7 +83,7 @@
 .public DrawFrameAndWindow2
 .public LoadUserFrameGfx2WithFill
 .public SetMasterBrightnessNeutral
-.public sub_0200FBF4
+.public SetMasterBrightnessByColor
 .public sub_020163E0
 .public sub_0201649C
 .public sub_020164C4
@@ -133,7 +133,7 @@
 .public Mail_New
 .public GameStats_Inc
 .public GameStats_AddScore
-.public sub_0203A880
+.public WirelessStatusIcon_Create
 .public AllocMonZeroed
 .public CalcMonLevelAndStats
 .public GetMonData

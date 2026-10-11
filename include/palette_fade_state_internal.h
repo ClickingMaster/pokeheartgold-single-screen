@@ -87,7 +87,7 @@ BOOL IsPaletteFadeFinished(void);
 void sub_0200FB70(void);
 void ResetVisibleHardwareWindows(int);
 void SetMasterBrightnessNeutral(int);
-void sub_0200FBF4(int, u16);
+void SetMasterBrightnessByColor(int, u16);
 void sub_0200FC20(u16);
 void sub_0200FCDC(u16);
 void sub_0200FC60(int, u16);

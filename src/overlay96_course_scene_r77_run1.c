@@ -2,7 +2,7 @@
 
 int ov96_021FCE10(void *course) {
     u8 *p = PokeathlonCourse_GetHeapAllocPtr4(course);
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     PokeathlonCourse_ResetField3A4(course);
     FreeBgTilemapBuffer(PTR(p, 0), 0);
     FreeBgTilemapBuffer(PTR(p, 0), 1);

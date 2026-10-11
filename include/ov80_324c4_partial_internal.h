@@ -32,7 +32,7 @@ BOOL ov80_0222B7E4(void *);
 BOOL ov80_0222B8D8(void *, u16);
 BOOL ov80_0222B920(void *, u16);
 BOOL ov80_0222B968(void *);
-u32 sub_0203769C(void);
+u32 Comm_GetLocalNetId(void);
 s32 ov80_02237B24(u32 mode, u32 arg);
 s32 Party_GetCount(void *party);
 void *Party_GetMonByIndex(void *party, s32 slot);

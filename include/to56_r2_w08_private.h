@@ -24,7 +24,7 @@ extern void *OverlayManager_GetArgs(void *);
 extern void ov74_0222AA18(void *, void *, int);
 extern void ov74_02229F60(void *, int);
 extern void ov74_02229D1C(void *, int);
-extern void sub_0203A880(void);
+extern void WirelessStatusIcon_Create(void);
 extern void ov74_02229E28(void *, int);
 extern void ov74_02229D50(int);
 extern void ov74_02229F28(void *, int);

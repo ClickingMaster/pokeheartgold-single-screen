@@ -135,8 +135,8 @@
 .public sub_02039FD8
 .public sub_0203A040
 .public sub_0203A05C
-.public sub_0203A880
-.public sub_0203A914
+.public WirelessStatusIcon_Create
+.public WirelessStatusIcon_Destroy
 .public sub_0203A930
 .public Save_VarsFlags_Get
 .public SetFlag970

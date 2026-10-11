@@ -344,7 +344,7 @@ void ov85_021E86CC(ArcWork *work, int a1) {
     int idx = (&work->unk_044)[a1];
     Pokemon *dest = Party_GetMonByIndex(owner, ((ArcSubCC *)work->unk_0CC)->unk_04);
     Pokemon *mon = Party_GetMonByIndex(party, idx);
-    MonSetTrainerMemo(mon, (PlayerProfile *)sub_02034818(sub_0203769C()), 5, 0, (enum HeapID)0xB);
+    MonSetTrainerMemo(mon, (PlayerProfile *)sub_02034818(Comm_GetLocalNetId()), 5, 0, (enum HeapID)0xB);
     CopyPokemonToPokemon(mon, dest);
 }
 

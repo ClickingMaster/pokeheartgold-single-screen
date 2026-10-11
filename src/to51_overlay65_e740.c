@@ -17,7 +17,7 @@ int ov65_0221E740(void *p) {
     void *state;
 
     w->selected = -1;
-    for (i = 0; i < sub_02037454(); i++) {
+    for (i = 0; i < Comm_CountConnected(); i++) {
         if (w->states[i] == 2) {
             w->selected = i;
             w->states[i] = 0;

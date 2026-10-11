@@ -8,8 +8,8 @@
 .public Save_Frontier_GetStatic
 .public FrontierSave_GetStat
 .public sub_02036FD8
-.public sub_02037030
-.public sub_0203769C
+.public Comm_SendCommand
+.public Comm_GetLocalNetId
 .public sub_0205C1F0
 .public sub_0205C268
 .public SizeOfStructPokemon

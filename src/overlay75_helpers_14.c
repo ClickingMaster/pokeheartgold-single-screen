@@ -24,7 +24,7 @@ extern void *WaitingIcon_New(void *, int);
 extern void WaitingIcon_Delete(void *);
 extern void sub_0203957C(void);
 extern void ov00_021EC8D8(void);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern void Sys_ClearSleepDisableFlag(int);
 extern void ov70_02237F2C(void);
 extern void BeginNormalPaletteFade(int, int, int, int, int, int, int);
@@ -91,7 +91,7 @@ int ov75_0224921C(Task *t) {
     if (t->next != 0x1e) {
         sub_0203957C();
     }
-    sub_0203A914();
+    WirelessStatusIcon_Destroy();
     ov75_02247878((State *)t);
     BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, 0x74);
     t->next = 0;

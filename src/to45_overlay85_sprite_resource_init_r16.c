@@ -16,7 +16,7 @@ extern const OamManagerParam ov85_021EA6B8;
 extern const OamCharTransferParam ov85_021EA56C;
 extern const SpriteResourceCountsListUnion ov85_021EA594;
 
-void sub_0203A880(void);
+void WirelessStatusIcon_Create(void);
 void *sub_0203A4AC(enum HeapID heapId);
 void ov85_021E6ECC(Ov85R16Work *work);
 void ov85_021E6F6C(Ov85R16Work *work);
@@ -53,7 +53,7 @@ void ov85_021E6F6C(Ov85R16Work *work) {
     SpriteSystem_LoadCellResObjFromOpenNarc(spriteSystem, spriteManager, narc, 0x11, FALSE, 6);
     SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, narc, 0x12, FALSE, 7);
     NARC_Delete(narc);
-    sub_0203A880();
+    WirelessStatusIcon_Create();
     raw = sub_0203A4AC((enum HeapID)0x66);
     NNS_G2dGetUnpackedPaletteData(raw, &unpacked);
     PaletteData_LoadPalette(paletteData, unpacked->pRawData, (PaletteBufferId)2, 0xe0, 0x20);

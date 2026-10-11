@@ -28,7 +28,7 @@ int sub_020850F4(void *overlayManager) {
     sub_02021148(4);
     sub_020860B8(data);
     if (data->args.words[12] != 0) {
-        sub_0203A880((void *)data->args.words[12]);
+        WirelessStatusIcon_Create((void *)data->args.words[12]);
         sub_0203A948(1, HEAP_ID_108);
     }
     G2x_SetBlendAlpha_(0x04000050, 0, 6, 0xF, 7);
@@ -54,7 +54,7 @@ int sub_0208527C(void *overlayManager) {
     SummaryAppData *data = OverlayManager_GetData(overlayManager);
 
     if (data->args.words[12] != 0) {
-        sub_0203A914((void *)data->args.words[12]);
+        WirelessStatusIcon_Destroy((void *)data->args.words[12]);
     }
     sub_020866CC(data);
     GfGfx_EngineATogglePlanes(1, FALSE);

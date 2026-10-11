@@ -1361,8 +1361,8 @@ BOOL MainMenuApp_Init(OverlayManager *manager, int *state) {
 
     data->bgConfig = BgConfig_Alloc(HEAP_ID_MAIN_MENU);
 
-    sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
-    sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
 
     UnkStruct_02111868_sub *args = OverlayManager_GetArgs(manager);
     data->saveData = args->saveData;

@@ -27,7 +27,7 @@ extern void G2dRenderer_SetPlttTransferReservedRegion(u32);
 extern void *G2dRenderer_Init(u32, void *, u32);
 extern void G2dRenderer_SetSubSurfaceCoords(void *, u32, u32);
 extern void *Create2DGfxResObjMan(u32, u32, u32);
-extern void sub_0203A880(void);
+extern void WirelessStatusIcon_Create(void);
 extern void GfGfx_EngineATogglePlanes(u32, u32);
 extern void GfGfx_EngineBTogglePlanes(u32, u32);
 

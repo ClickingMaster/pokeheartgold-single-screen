@@ -44,7 +44,7 @@ extern void PlaySE(u32 seqNo);
 extern void Save_ClearStatusFlags(void *saveData);
 extern void ov75_02247878(Ov75Task *task);
 extern void ov00_021EC8D8(void);
-extern void sub_0203A914(void);
+extern void WirelessStatusIcon_Destroy(void);
 extern void sub_0203957C(void);
 extern void Sys_ClearSleepDisableFlag(u32 flag);
 extern void ov70_02237F2C(void);
@@ -144,7 +144,7 @@ int ov75_022490D8(Ov75Task *task) {
         break;
     case 1:
         ov00_021EC8D8();
-        sub_0203A914();
+        WirelessStatusIcon_Destroy();
         sub_0203957C();
         Sys_ClearSleepDisableFlag(4);
         if (*(u32 *)((u8 *)task->work + 0x118) == 1) {

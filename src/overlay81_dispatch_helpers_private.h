@@ -9,7 +9,7 @@ extern void ov81_02242CB0(void*,int);
 extern void *Save_PlayerData_GetProfile(void*);
 extern int ov80_02237254(int);
 extern void ov81_02241218(void*,int,void*);
-extern int sub_02037030(int,void*,int);
+extern int Comm_SendCommand(int,void*,int);
 void ov81_0224102C(void*,int,void*);
 void ov81_02240F48(void*,int,void*,int,int,int);
 void ov81_02241008(void*,int);

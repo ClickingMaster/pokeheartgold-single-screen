@@ -85,7 +85,7 @@ void ov98_0221ECD0(Ov98TextContext *, u32, u32, s32, u32, u32);
 void ov98_0221F090(void);
 void ov98_0221F0EC(void);
 
-extern void sub_0200FBF4(int, int);
+extern void SetMasterBrightnessByColor(int, int);
 
 extern u32 MATH_CountPopulation(u32);
 

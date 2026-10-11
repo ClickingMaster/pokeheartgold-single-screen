@@ -94,7 +94,7 @@ u8 CalcShininessByOtIdAndPersonality(u32 otId, u32 personality);
 fx32 FX_Sqrt(fx32 x);
 u32 sub_02030BD0(u32 a, void *b);
 void *sub_02034818(int a);
-int sub_0203769C(void);
+int Comm_GetLocalNetId(void);
 void sub_02051D18(Ov80Setup *setup, int a, u32 b, u32 c, u32 d, u32 e);
 void *ov80_02229F04(TrHouseWork *dst, u32 species, u32 heapId, u32 d);
 void ov80_0222A140(Ov80Mon *a, void *b, u8 c);
@@ -177,7 +177,7 @@ Ov80Setup *ov80_022375D0(Ov80Battle *p, Ov80Arg *q) {
     case 2:
     case 3:
         BattleSetup_SetAllySideBattlersToPlayer(setup);
-        PlayerProfile_Copy(sub_02034818(1 - sub_0203769C()), setup->battlers[3].profile);
+        PlayerProfile_Copy(sub_02034818(1 - Comm_GetLocalNetId()), setup->battlers[3].profile);
         Heap_Free(ov80_02229F04(&trainer, p->species[slot2 + 1], 11, 0xCC));
         ov80_0222A480(setup, &trainer, n2, 3, 11);
         Party_InitWithMaxSize(setup->party2, n2);
