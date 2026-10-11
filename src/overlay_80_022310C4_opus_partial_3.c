@@ -16,7 +16,7 @@ void ov80_022317D0(TrHouse *s, u32 a) {
 }
 
 void ov80_02231804(TrHouse *s) {
-    sub_02030C34(s->unk704[s->kind]);
+    HallTypeRanks_Clear(s->unk704[s->kind]);
     ov80_0223157C(s, 1);
 }
 

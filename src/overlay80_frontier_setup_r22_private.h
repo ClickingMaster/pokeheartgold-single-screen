@@ -93,7 +93,7 @@ void BattleSetup_SetAllySideBattlersToPlayer(Ov80Setup *setup);
 void PlayerProfile_Copy(void *dst, void *src);
 u8 CalcShininessByOtIdAndPersonality(u32 otId, u32 personality);
 fx32 FX_Sqrt(fx32 x);
-u32 sub_02030BD0(u32 a, void *b);
+u32 HallTypeRanks_Get(u32 a, void *b);
 void *CommPlayerInfo_GetProfile(int a);
 int Comm_GetLocalNetId(void);
 void sub_02051D18(Ov80Setup *setup, int a, u32 b, u32 c, u32 d, u32 e);

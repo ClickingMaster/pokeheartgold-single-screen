@@ -9,15 +9,15 @@
     "lib/include/nitro/code32.h": "1b920b5d4420f07164ab0b6d378e8f7f64c1d76341f578baf71cd9584f7987c4"
   },
   "modules": {
-    "build.py": "01b267a232e5e0742a1d4a2f540309b2eee3db7651a1baf55918bde23a846095",
-    "shape.py": "a8c468b11b03fd780e908e8039b63b68958fc8d0047d0d6539fdd4465da85064",
+    "build.py": "21aab19b4560f57fe8c5b5b2d858b2e2ff78c44161f88509d1ac40fa5bd22e21",
+    "shape.py": "cc26491c69384097da9a1d50c50bc393ed4ae45459d1ea86268a0e45c7a924b2",
     "select-d1.py": "7b655f5f2baffb9e75f805b3c0a8018caa4ec899ba2ff1ac4789771eb118f212",
-    "producer-shape.json": "5dd10292b40dca9aee08c1b1b408ce2126e42151d356fd46a14e71116184a61b"
+    "producer-shape.json": "72dd44096f210c6866945c401d96efeb80dc230e273fb8473c60bf447582e8ce"
   },
   "GNU_CPP_tokens": {
     "heartgold": [
       "wine",
-      "/home/art/projects/pokeheartgold//tools/mwccarm/2.0/sp2p3/mwccarm.exe",
+      "tools/mwccarm/2.0/sp2p3/mwccarm.exe",
       "-DHEARTGOLD",
       "-DGAME_REMASTER=0",
       "-DENGLISH",
@@ -79,7 +79,7 @@
     ],
     "soulsilver": [
       "wine",
-      "/home/art/projects/pokeheartgold//tools/mwccarm/2.0/sp2p3/mwccarm.exe",
+      "tools/mwccarm/2.0/sp2p3/mwccarm.exe",
       "-DSOULSILVER",
       "-DGAME_REMASTER=0",
       "-DENGLISH",

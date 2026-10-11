@@ -161,9 +161,9 @@ int FrtCmd_145(void *c) {
         break;
     }
     case 28: {
-        u32 n = sub_02030BD0(U8(data, 0x6f5), (u8 *)data + 0x704 + U8(data, 4) * 9);
+        u32 n = HallTypeRanks_Get(U8(data, 0x6f5), (u8 *)data + 0x704 + U8(data, 4) * 9);
         if (n < 10) {
-            sub_02030BF4(U8(data, 0x6f5), (u8 *)data + 0x704 + U8(data, 4) * 9, (u8)(n + 1));
+            HallTypeRanks_Set(U8(data, 0x6f5), (u8 *)data + 0x704 + U8(data, 4) * 9, (u8)(n + 1));
         }
         break;
     }
@@ -191,7 +191,7 @@ int FrtCmd_145(void *c) {
         break;
     }
     case 33:
-        *out = sub_02030BD0(U8(data, 0x6f5), (u8 *)data + 0x704 + U8(data, 4) * 9);
+        *out = HallTypeRanks_Get(U8(data, 0x6f5), (u8 *)data + 0x704 + U8(data, 4) * 9);
         break;
     case 34:
         *out = ov80_02231888(data);

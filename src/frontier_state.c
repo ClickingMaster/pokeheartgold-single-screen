@@ -17,9 +17,9 @@ u32 HallChallenge_GetSaved(FrontierState *state);
 void HallChallenge_SetSaved(FrontierState *state, int value);
 void HallChallenge_SetField(FrontierState *state, int field, int index, int unused, void *value);
 u32 HallChallenge_GetField(FrontierState *state, int field, int index, int unused, int unused2);
-u8 sub_02030BD0(int index, u8 *values);
-void sub_02030BF4(int index, u8 *values, int value);
-void sub_02030C34(u8 *values);
+u8 HallTypeRanks_Get(int index, u8 *values);
+void HallTypeRanks_Set(int index, u8 *values, int value);
+void HallTypeRanks_Clear(u8 *values);
 void HallFlags_Init(void *state);
 
 void FactoryFlags_Init(void *state) {
@@ -105,13 +105,13 @@ u32 HallChallenge_GetField(FrontierState *state, int field, int index, int unuse
     return 0;
 }
 
-u8 sub_02030BD0(int index, u8 *values) {
+u8 HallTypeRanks_Get(int index, u8 *values) {
     u8 byte = (index >> 1);
     u8 nibble = index % 2;
     return (values[byte] >> (nibble * 4)) & 15;
 }
 
-void sub_02030BF4(int index, u8 *values, int value) {
+void HallTypeRanks_Set(int index, u8 *values, int value) {
     u8 byte = (index >> 1);
     u8 nibble = index % 2;
     if (nibble == 0) {
@@ -122,9 +122,9 @@ void sub_02030BF4(int index, u8 *values, int value) {
     values[byte] |= (u8)(value << (nibble * 4));
 }
 
-void sub_02030C34(u8 *values) {
+void HallTypeRanks_Clear(u8 *values) {
     for (int i = 0; i < 18; i++) {
-        sub_02030BF4((u8)i, values, 0);
+        HallTypeRanks_Set((u8)i, values, 0);
     }
 }
 

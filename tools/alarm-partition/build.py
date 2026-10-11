@@ -7,6 +7,9 @@ ROOT=next(p for p in HOME.parents if (p/'common.mk').is_file())
 cc.ROOT=ROOT;assemble.R=ROOT
 def digest(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def config():
+ # The closure pins every input the compiler reads (sources, headers, compiler executables).
+ # Makefiles are not pinned as files: their effect is the command line, which build() checks
+ # token by token against GNU_*_tokens, so any flag change in common.mk etc. is still rejected.
  c=json.loads((HOME/'profile.json').read_text())
  for rel,pin in c['closure'].items():assert digest(ROOT/rel)==pin,('production closure drift',rel)
  for rel,pin in c['modules'].items():assert digest(HOME/rel)==pin,('build module drift',rel)

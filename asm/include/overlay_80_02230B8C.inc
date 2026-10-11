@@ -5,8 +5,8 @@
 .public Heap_Free
 .public GfGfx_EngineATogglePlanes
 .public HallChallenge_GetSaved
-.public sub_02030BD0
-.public sub_02030BF4
+.public HallTypeRanks_Get
+.public HallTypeRanks_Set
 .public BattleSetup_Delete
 .public IsBattleResultWin
 .public GetMonData

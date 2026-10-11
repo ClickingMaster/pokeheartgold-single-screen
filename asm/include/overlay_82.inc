@@ -127,7 +127,7 @@
 .public Options_GetTextFrameDelay
 .public Options_GetFrame
 .public Save_SpecialRibbons_Get
-.public sub_02030BD0
+.public HallTypeRanks_Get
 .public Comm_SendCommand
 .public sub_02037474
 .public Comm_GetLocalNetId

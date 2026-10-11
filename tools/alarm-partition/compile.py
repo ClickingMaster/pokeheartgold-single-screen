@@ -7,7 +7,7 @@ Library ARM sources must start with:
     #include "global.h"          (or nitro/types.h etc.)
     #include <nitro/code32.h>    (AFTER global.h; global.h forces Thumb)
 """
-import argparse, os, subprocess, sys, tempfile, fcntl, time
+import argparse, contextlib, os, subprocess, sys, tempfile, fcntl, time
 from pathlib import Path
 
 ROOT = next(p for p in Path(__file__).resolve().parents if (p/'common.mk').is_file())
@@ -39,14 +39,24 @@ def compile_c(src, out, game="hg", ver="2.0/sp2p2", ipa=None, extra=()):
 
 _compile_c_unlimited = compile_c
 
-def compile_c(src, out, game="hg", ver="2.0/sp2p2", ipa=None, extra=()):
-    # Bound Wine startup contention without changing compilation flags or checks.
-    slots = ROOT / ".local-tools/to80/compiler-slots"
+
+@contextlib.contextmanager
+def compiler_slot():
+    """Optionally bound concurrent Wine compiler starts across processes.
+
+    Off unless COMPILER_SLOTS_DIR names a directory of flock slot files (12 slots, or 4 while a
+    `full-build-active` file exists next to that directory). Under make, -j already bounds the jobs.
+    """
+    slots = os.environ.get("COMPILER_SLOTS_DIR")
+    if not slots:
+        yield
+        return
+    slots = Path(slots)
     slots.mkdir(parents=True, exist_ok=True)
     deadline = time.monotonic() + 900
     held = None
     while held is None:
-        limit = 4 if (ROOT / ".local-tools/to80/full-build-active").exists() else 12
+        limit = 4 if (slots.parent / "full-build-active").exists() else 12
         for index in range(limit):
             handle = (slots / str(index)).open("a")
             try:
@@ -61,9 +71,15 @@ def compile_c(src, out, game="hg", ver="2.0/sp2p2", ipa=None, extra=()):
                 raise TimeoutError("scratch compiler slot wait exceeded 900 seconds")
             time.sleep(0.2)
     try:
-        return _compile_c_unlimited(src, out, game, ver, ipa, extra)
+        yield
     finally:
         held.close()
+
+
+def compile_c(src, out, game="hg", ver="2.0/sp2p2", ipa=None, extra=()):
+    # Throttling changes no compilation flags or checks.
+    with compiler_slot():
+        return _compile_c_unlimited(src, out, game, ver, ipa, extra)
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()

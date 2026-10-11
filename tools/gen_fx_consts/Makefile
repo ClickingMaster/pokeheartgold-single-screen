@@ -1,5 +1,6 @@
 CC = gcc
 CFLAGS := -O3 -g -DNDEBUG -DSOURCE_DIR="\"$(CURDIR)\""
+LDLIBS := -lm
 
 SRCS := main.c fx_encode.c fx_data.c
 OBJS := $(SRCS:%.c=%.o)
@@ -17,7 +18,7 @@ all: $(prog)
 clean: ; $(RM) -r $(DEPDIR) $(OBJS) $(prog) $(prog).exe
 
 $(prog): $(OBJS)
-	$(CC) $(LDFLAGS) -lm -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 $(OBJS): %.o: %.c
 $(OBJS): %.o: %.c $(DEPDIR)/%.d | $(DEPDIR)

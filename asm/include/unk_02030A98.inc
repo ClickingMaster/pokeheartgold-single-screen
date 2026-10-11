@@ -39,9 +39,9 @@
 .public HallChallenge_SetSaved
 .public HallChallenge_SetField
 .public HallChallenge_GetField
-.public sub_02030BD0
-.public sub_02030BF4
-.public sub_02030C34
+.public HallTypeRanks_Get
+.public HallTypeRanks_Set
+.public HallTypeRanks_Clear
 .public Save_Frontier_GetHallFlags
 .public HallFlags_SetField
 .public HallFlags_GetField

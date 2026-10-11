@@ -195,13 +195,13 @@
         0,
         0,
         0,
-        259,
+        226,
         0,
         0,
         0,
         0
       ],
-      "payload_sha256": "451582de3e4ad12c8fdcaa5d85d42337a95233fab81306df7f946c961fa951c3"
+      "payload_sha256": "491836a8a0857d3be7179ec724f7c3474dff690844ea71ebb13a4eaa248edb30"
     },
     {
       "index": 11,
@@ -218,7 +218,7 @@
         0,
         12
       ],
-      "payload_sha256": "295dd92f0caf2546d1c04fe0a6adeaba110c5def233568a8533e40eb60ff4479"
+      "payload_sha256": "6331a6c6621f36a6dc94159ddf617960554bbf7899c2f66c91aeecbde582a3e9"
     },
     {
       "index": 12,
@@ -732,7 +732,7 @@
       "name": ".dwarf_line._Znwm",
       "record": [
         458,
-        181,
+        148,
         42,
         1,
         0,
@@ -744,7 +744,7 @@
       "name": ".dwarf_line._ZnwmRKSt9nothrow_t",
       "record": [
         489,
-        223,
+        190,
         36,
         1,
         0,
@@ -944,6 +944,6 @@
       ]
     }
   ],
-  "normalization": "Only the declared source directory in nonallocated DWARF-v2 line-header and actual compile-unit DW_AT_comp_dir: exact directory strings, header/CU/pubnames lengths and affected local symbol/relocation offsets plus parser-identified sibling references to later DIEs in the same CU. All other bytes and all runtime payloads/names/bindings remain fixed.",
+  "normalization": "Only the declared source and checkout Nitro header directories in nonallocated DWARF-v2 line-header and actual compile-unit DW_AT_comp_dir: exact directory strings, header/CU/pubnames lengths and affected local symbol/relocation offsets plus parser-identified sibling references to later DIEs in the same CU. All other bytes and all runtime payloads/names/bindings remain fixed.",
   "source_basename": "to91_msl_scalar_new.cpp"
 }

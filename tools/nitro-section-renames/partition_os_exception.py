@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Finite scratch-only exception SDK producer route; no tracked writes or installation."""
 import argparse,collections,hashlib,json,os,pathlib,struct,subprocess
-R=pathlib.Path('/home/art/projects/pokeheartgold');P=pathlib.Path(__file__).resolve().parent
+P=pathlib.Path(__file__).resolve().parent;R=next(p for p in P.parents if (p/'common.mk').is_file())
 SOURCE=R/'lib/NitroSDK/src/os/os_exception.c'
 ALIAS={17:'to91_OSi_ExceptionWork',18:'to91_OSi_ExContext'}
 FUNC=['OS_InitException','OSi_ExceptionHandler','OSi_GetAndDisplayContext','OSi_SetExContext','OSi_DisplayExContext']

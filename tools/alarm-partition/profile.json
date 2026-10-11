@@ -132,18 +132,14 @@
     "lib/include/nitro/std/string.h": "10050c5bc177b65a9dbe7c2dd5fcbbc2be77ba94b711a4ad290cba7a72a63c40",
     "lib/include/nitro/types.h": "bc6a942130f6d5643c27a69b6aacf6f9b674fe81b0cc8a5210183df2e2debde4",
     "lib/include/stdarg.h": "6a15b893f036568a900652958aea8662ab13372407f94e17ac128fe1eeb8a9cc",
-    "common.mk": "9b68df320e8cc86b628e8e476dc5a0d3c1bf59b5897f48c6c27e7a476c6ac14c",
-    "config.mk": "b6e8df9ee6220c7fdc1231554bcead4c5cf547f75fc0f80eb53f1f8a9557b30d",
-    "platform.mk": "85f3f66375063a22f80ec8614c300eb0dc7d6719efdb4173d4ff13c3abe1c286",
-    "binutils.mk": "5610221f5b48df57c29c07a1f72be095bb815159a0c16da9248cb56b4754921c",
     "tools/mwccarm/2.0/sp2p3/mwccarm.exe": "900e6b2ce072b5c178e98d47468f83caa8156eda7fb2e1efa786535b73cf86f2",
     "tools/mwccarm/2.0/sp2p3/mwasmarm.exe": "4ff886599e66056e11dc42b1b2a9d9134a4178d7fed924bd8ec2a4dc3d68114b"
   },
   "modules": {
-    "compile.py": "4693e29b2f82e5ad51047918626d4214ebdb354315e2b39a3516c06d04ad0d29",
-    "assemble.py": "d8da5b1e5ef75a2e1278476aea59decb484e19e44a0aef696894380f4f2468a2",
+    "compile.py": "f6b8bd01fe3309e21668733c58796674a24e405c836067f95d16fdf1b69fe75b",
+    "assemble.py": "1c5dd70dd322a34ac3581fbc5ed417d328cb011701ff10cc89fafd865e0fe58a",
     "partition.py": "107ccae648d13e8f46b9c89de44113267ee96cdc90c4dd884996fd5b1564527a",
-    "build.py": "a9aee3a92287ac4fa638c407a1a864365ce3d28cd92bafe279b54812ad68bf3f"
+    "build.py": "5b6cbb20183f4a45d03e1d7205423dd4a29de7515ec2ad8a4793d69ac29ec301"
   },
   "roles": {
     "prefix": {

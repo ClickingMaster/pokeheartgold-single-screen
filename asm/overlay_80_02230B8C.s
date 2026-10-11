@@ -485,7 +485,7 @@ _02230EBA:
 	lsl r1, r2, #3
 	add r1, r2, r1
 	add r1, r3, r1
-	bl sub_02030BD0
+	bl HallTypeRanks_Get
 	add r2, r0, #0
 	cmp r2, #0xa
 	bhs _02230FB6
@@ -500,7 +500,7 @@ _02230EBA:
 	lsl r2, r2, #0x18
 	add r1, r5, r1
 	lsr r2, r2, #0x18
-	bl sub_02030BF4
+	bl HallTypeRanks_Set
 	b _02230FB6
 _02230EF0:
 	bl sub_02096910
@@ -557,7 +557,7 @@ _02230F4C:
 	lsl r1, r2, #3
 	add r1, r2, r1
 	add r1, r3, r1
-	bl sub_02030BD0
+	bl HallTypeRanks_Get
 	strh r0, [r5]
 	b _02230FB6
 _02230F64:

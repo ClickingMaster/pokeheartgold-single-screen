@@ -7,13 +7,13 @@ void ov80_022319B0(TrHouse *s) {
         return;
     }
     for (i = 0; i < 0x11; i++) {
-        if (sub_02030BD0(i, s->unk704[s->kind]) < 0xA) {
+        if (HallTypeRanks_Get(i, s->unk704[s->kind]) < 0xA) {
             break;
         }
     }
     if (i == 0x11) {
         for (i = 0; i < 0x11; i++) {
-            sub_02030BF4(i, s->unk704[s->kind], 9);
+            HallTypeRanks_Set(i, s->unk704[s->kind], 9);
         }
     }
 }

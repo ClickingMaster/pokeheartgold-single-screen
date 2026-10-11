@@ -1,5 +1,5 @@
 #pragma force_active on
-#include "Z:/home/art/projects/pokeheartgold/.local-tools/to90/opus/r12/10c4/hdr.h"
+#include "overlay_80_022310C4_internal.h"
 #include "party.h"
 #include "pokemon.h"
 #include "save_vars_flags.h"
@@ -99,12 +99,12 @@ TrHouse *ov80_022310C4(void *save, u32 resume, u8 kind, u8 a3, u8 a4) {
     s->unkA = s->unk8 / 10;
     if (s->kind == 2) {
         for (i = 0; i < 18; i++) {
-            sub_02030BF4(i, (u8 *)ov80_0223DD44 + 0x716, 9);
+            HallTypeRanks_Set(i, (u8 *)ov80_0223DD44 + 0x716, 9);
         }
     } else {
         for (i = 0; i < 18; i++) {
             u16 v = ov80_022318D0(save, ov80_0223DD44->kind, i, &out1, &out2);
-            sub_02030BF4(i, ov80_0223DD44->unk704[ov80_0223DD44->kind], v);
+            HallTypeRanks_Set(i, ov80_0223DD44->unk704[ov80_0223DD44->kind], v);
         }
     }
     if (ov80_0223792C(ov80_0223DD44->kind) == TRUE) {

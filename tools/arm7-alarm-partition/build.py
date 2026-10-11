@@ -3,7 +3,7 @@ from pathlib import Path
 import argparse,hashlib,json,os,shlex,subprocess,sys,tempfile
 sys.dont_write_bytecode=True
 HOME=Path(__file__).resolve().parent
-ROOT=Path('/home/art/projects/pokeheartgold');SUB=ROOT/'sub'
+ROOT=next(p for p in HOME.parents if (p/'common.mk').is_file());SUB=ROOT/'sub'
 sys.path.insert(0,str(HOME));import partition
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
@@ -11,7 +11,7 @@ def need(x,m):
  if not x:raise ValueError(m)
 def read(p):return json.loads(Path(p).read_text())
 def pins(mapping):
- for p,h in mapping.items():need(Path(p).is_file() and not Path(p).is_symlink() and sha(p)==h,'physical input drift '+p)
+ for p,h in mapping.items():q=ROOT/p;need(q.is_file() and not q.is_symlink() and sha(q)==h,'physical input drift '+p)
 def config():
  c=read(HOME/'profile.json');pins(c['tool_sha256']);pins(c['C_header_pins'])
  for n,h in c['modules'].items():need(sha(HOME/n)==h,'production module drift '+n)
@@ -27,7 +27,7 @@ def dep_paths(md,cwd=SUB):
 
 def profile(tokens,kind,c):
  t=shlex.split(tokens) if isinstance(tokens,str)else list(tokens);expected=c[kind+'_base']
- need(t==expected,'actual ordered GNU compiler profile mismatch');need(t[0]=='wine','native Wine launcher');exe=Path(t[1]).resolve()
+ need(len(t)>1 and t[:1]+t[2:]==expected[:1]+expected[2:] and Path(t[1]).resolve()==(ROOT/expected[1]).resolve(),'actual ordered GNU compiler profile mismatch');need(t[0]=='wine','native Wine launcher');exe=Path(t[1]).resolve()
  need(exe.is_relative_to(ROOT/'tools/mwccarm/2.0/sp2p3'),'truthful SDK2p3 tool path');pins(c['tool_sha256']);return t
 
 def handler_proof(blob):
@@ -50,10 +50,10 @@ def produce(source,obj,role,game,gnu_profile):
  obj=Path(obj).resolve();need(obj.suffix=='.o' and obj!=source,'object alias');kind='ASM'if role=='handler'else'C';base=profile(gnu_profile,kind,c)
  obj.parent.mkdir(parents=True,exist_ok=True);parent=obj.with_suffix('.producer');parent.mkdir(exist_ok=True);work=Path(tempfile.mkdtemp(prefix='full-',dir=parent));os.chmod(work,0o700);full=work/'full.o'
  argv=base+(['-c']if kind=='C'else[])+['-o',os.path.relpath(full,SUB),os.path.relpath(source,SUB)]
- env=dict(os.environ,WINEPREFIX=str(Path.home()/'.wine'),WINEDEBUG='-all',LM_LICENSE_FILE=str(ROOT/'tools/mwccarm/license.dat'))
+ env=dict(os.environ,WINEPREFIX=os.environ.get('WINEPREFIX',str(Path.home()/'.wine')),WINEDEBUG='-all',LM_LICENSE_FILE=str(ROOT/'tools/mwccarm/license.dat'))
  with (work/'compiler.log').open('wb')as log:r=subprocess.run(argv,cwd=SUB,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=240)
  need(r.returncode==0 and full.is_file() and full.with_suffix('.d').is_file(),'actual private full producer failed')
- deps=dep_paths(full.with_suffix('.d'));expected=set(c['C_headers'])|{str(source)}if kind=='C'else{str(source)};need(set(deps['unique'])==expected,'complete genuine MD source/include closure changed')
+ deps=dep_paths(full.with_suffix('.d'));expected={str((ROOT/h).resolve())for h in c['C_headers']}|{str(source)}if kind=='C'else{str(source)};need(set(deps['unique'])==expected,'complete genuine MD source/include closure changed')
  closure={p:sha(p)for p in deps['unique']};pins(closure);config();need(sha(source)==row['sha256'],'source changed while compiling')
  if kind=='C':
   children,reports=partition.split(full.read_bytes());proof=partition.prove(full.read_bytes(),children,reports);index=0 if role=='prefix'else 1;child=children[index];proof['selected_partition']=reports[index]

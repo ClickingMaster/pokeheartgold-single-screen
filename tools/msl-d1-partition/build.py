@@ -72,9 +72,10 @@ def build(source,obj,game,nodep,command):
   c=config();assert source==(ROOT/c['source']).resolve() and digest(source)==c['source_sha256'],'unregistered source'
   assert obj==(ROOT/'build'/f'{game}.us'/'src'/(source.stem+'.o')).resolve(),'unregistered object or dishonest basename'
   tokens=shlex.split(command);expected=c['GNU_CPP_tokens'][game]
-  assert tokens==expected+([]if nodep else['-gccdep','-MD'])+['-c','-o'],'production command profile drift'
+  assert len(tokens)>1 and Path(tokens[1]).resolve()==(ROOT/expected[1]).resolve(),'production compiler path drift'
+  assert tokens[:1]+tokens[2:]==expected[:1]+expected[2:]+([]if nodep else['-gccdep','-MD'])+['-c','-o'],'production command profile drift'
   args=tokens+[os.path.relpath(full,ROOT),os.path.relpath(source,ROOT)]
-  env=dict(os.environ,WINEPREFIX=str(Path.home()/'.wine'),WINEDEBUG='-all')
+  env=dict(os.environ,WINEPREFIX=os.environ.get('WINEPREFIX',str(Path.home()/'.wine')),WINEDEBUG='-all')
   with full.with_suffix('.log').open('w')as log:
    process=subprocess.Popen(args,cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
    try:status=process.wait(timeout=265)

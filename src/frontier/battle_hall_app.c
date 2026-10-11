@@ -165,7 +165,7 @@ u32 ov80_0223792C(u8 mode);
 void Frontier_BufferPartnerName(void *a0, u32 a1);
 
 // Not declared by the owners' headers yet
-u32 sub_02030BD0(u8 type, void *hallRecords);
+u32 HallTypeRanks_Get(u8 type, void *hallRecords);
 void GX_LoadBGPltt(const void *src, u32 offset, u32 size);
 
 // text.h (and render_text.h, which includes it) are not included: text.h declares fontId as u8
@@ -473,7 +473,7 @@ BOOL BattleHallApp_SelectType(BattleHallApp *app) {
                 return FALSE;
             }
         } else {
-            if (sub_02030BD0(BattleHallApp_GetRecordIndex(app->cursor), app->hallRecords) >= MAX_TYPE_RANK) {
+            if (HallTypeRanks_Get(BattleHallApp_GetRecordIndex(app->cursor), app->hallRecords) >= MAX_TYPE_RANK) {
                 PlaySE(SEQ_SE_DP_BOX03);
                 return FALSE;
             }
@@ -1033,7 +1033,7 @@ void BattleHallApp_PrintTypeRanks(BattleHallApp *app, Window *window) {
             int index = column + base;
             u32 type = ov80_02237920((u8)index);
             if (type != TYPE_CELL_EMPTY && type != TYPE_MYSTERY) {
-                u8 rank = (u8)(sub_02030BD0(BattleHallApp_GetRecordIndex((u8)index), app->hallRecords) + 1);
+                u8 rank = (u8)(HallTypeRanks_Get(BattleHallApp_GetRecordIndex((u8)index), app->hallRecords) + 1);
                 if (rank > MAX_TYPE_RANK) {
                     rank = MAX_TYPE_RANK;
                 }
@@ -1222,7 +1222,7 @@ void BattleHallApp_GrayOutTypes(BattleHallApp *app, BgConfig *bgConfig) {
         }
     } else {
         for (i = 0; i < 17; i++) {
-            if (sub_02030BD0((u8)i, app->hallRecords) >= MAX_TYPE_RANK) {
+            if (HallTypeRanks_Get((u8)i, app->hallRecords) >= MAX_TYPE_RANK) {
                 BattleHallApp_SetCellPalette(bgConfig, (u8)i, 3);
             }
         }
@@ -1418,7 +1418,7 @@ void BattleHallApp_ShowConfirmPrompt(BattleHallApp *app) {
     BattleHallSprite_SetVisible(app->monIcon, FALSE);
     BattleHallApp_DrawMessageFrame(&app->windows[0], Options_GetFrame(app->options));
     BufferTypeName(app->msgFormat, 0, ov80_02237920(app->cursor));
-    rank = sub_02030BD0(BattleHallApp_GetRecordIndex(app->cursor), app->hallRecords) + 1;
+    rank = HallTypeRanks_Get(BattleHallApp_GetRecordIndex(app->cursor), app->hallRecords) + 1;
     if (rank > MAX_TYPE_RANK) {
         rank = MAX_TYPE_RANK;
     }

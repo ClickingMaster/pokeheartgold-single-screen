@@ -17,7 +17,7 @@ extern u16 FrontierSave_GetStat(void *,int,int);
 extern void FrontierSave_SetStat(void *,int,int,u16);
 extern void FrontierSave_RaiseStat(void *,int,int,u16);
 extern void HallFlags_SetField(void *,int,u8,int,void *);
-extern u8 sub_02030BD0(u8,void *);
+extern u8 HallTypeRanks_Get(u8,void *);
 extern void ov80_02231930(void *,u8,u8,u8);
 void ov80_0223157C(W *,int);
 void ov80_0223157C(W *w,int mode) {
@@ -45,7 +45,7 @@ void ov80_0223157C(W *w,int mode) {
  }
  for(i=0;i<20;i++){temp.value=w->values[i];HallChallenge_SetField(w->aux,2,(u8)i,0,&temp.value);}
  for(i=0;i<2;i++){temp.byte=w->indices[i];HallChallenge_SetField(w->aux,3,(u8)i,0,&temp.byte);}
- for(i=0;i<18;i++){temp.byte=sub_02030BD0((u8)i,w->matrix+w->type*9);ov80_02231930(w->save,w->type,(u8)i,temp.byte);}
+ for(i=0;i<18;i++){temp.byte=HallTypeRanks_Get((u8)i,w->matrix+w->type*9);ov80_02231930(w->save,w->type,(u8)i,temp.byte);}
  for(i=0;i<20;i++){temp.value=w->values2[i];HallChallenge_SetField(w->aux,4,(u8)i,0,&temp.value);}
  index=sub_0205C11C(w->type);{int group=sub_0205C268(sub_0205C11C(w->type));FrontierSave_SetStat(frontier,index,group,(u16)GetMonData(mon,5,0));}
 }

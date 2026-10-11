@@ -92,7 +92,7 @@ void BattleSetup_SetAllySideBattlersToPlayer(Ov80Setup *setup);
 void PlayerProfile_Copy(void *dst, void *src);
 u8 CalcShininessByOtIdAndPersonality(u32 otId, u32 personality);
 fx32 FX_Sqrt(fx32 x);
-u32 sub_02030BD0(u32 a, void *b);
+u32 HallTypeRanks_Get(u32 a, void *b);
 void *CommPlayerInfo_GetProfile(int a);
 int Comm_GetLocalNetId(void);
 void sub_02051D18(Ov80Setup *setup, int a, u32 b, u32 c, u32 d, u32 e);
@@ -155,7 +155,7 @@ Ov80Setup *ov80_022375D0(Ov80Battle *p, Ov80Arg *q) {
     Heap_Free(FrontierTrainer_Load(&trainer, p->species[slot2], 11, 0xCC));
     FrontierTrainer_SetBattleTrainer(setup, &trainer, n2, 1, 11);
     Party_InitWithMaxSize(setup->party1, n2);
-    val = sub_02030BD0(p->f6F5, p->f704[p->mode]);
+    val = HallTypeRanks_Get(p->f6F5, p->f704[p->mode]);
     if (p->mode == 2) {
         val = 9;
     }

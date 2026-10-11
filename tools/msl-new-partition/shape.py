@@ -97,9 +97,14 @@ def inventory(b,source):
  line=next(i for i,n in enumerate(ns)if n=='.debug_line'and ss[i][5]);raw=payload[line]
  directory=('Z:'+str(source.resolve().parent).replace('/','\\')+'\\').encode()+b'\0';assert raw.count(directory)==1
  at=raw.index(directory);end=at+len(directory);replacement=b'@D1_SOURCE_DIRECTORY@\0';delta=len(directory)-len(replacement)
+ # The checkout's lib/include/nitro directory precedes it in include_directories and is just as checkout-dependent.
+ nitro=('Z:'+str((source.resolve().parents[1]/'lib/include/nitro').resolve()).replace('/','\\')+'\\').encode()+b'\0'
+ assert raw.count(nitro)==1;nitro_at=raw.index(nitro);nitro_end=nitro_at+len(nitro);nitro_replacement=b'@D1_NITRO_DIRECTORY@\0'
+ assert 10<nitro_at<nitro_end<=at and raw[10:nitro_at]==bytes.fromhex('0201ff040c0001010101000000010000')
+ line_delta=delta+len(nitro)-len(nitro_replacement)
  # Source-directory bytes reside entirely in the DWARF v2 header, never in the line program.
  total,version,header=struct.unpack_from('<IHI',raw);assert version==2 and total==len(raw)-4 and 10<=at<end<=10+header
- canonical=bytearray(raw[:at]+replacement+raw[end:]);struct.pack_into('<I',canonical,0,total-delta);struct.pack_into('<I',canonical,6,header-delta);payload[line]=bytes(canonical)
+ canonical=bytearray(raw[:nitro_at]+nitro_replacement+raw[nitro_end:at]+replacement+raw[end:]);struct.pack_into('<I',canonical,0,total-line_delta);struct.pack_into('<I',canonical,6,header-line_delta);payload[line]=bytes(canonical)
  info=next(i for i,n in enumerate(ns)if n=='.debug_info');abbrev=next(i for i,n in enumerate(ns)if n=='.debug_abbrev')
  assert not ss[line][2]&2 and not ss[info][2]&2 and not ss[abbrev][2]&2
  info_raw=payload[info];info_at,info_end=comp_directory(info_raw,payload[abbrev],directory,source.name)
@@ -120,7 +125,7 @@ def inventory(b,source):
  pub=next(i for i,n in enumerate(ns)if n=='.debug_pubnames');assert not ss[pub][2]&2
  pub_raw=payload[pub];assert len(pub_raw)==18 and struct.unpack('<IHIII',pub_raw)==(14,2,0,cu_length,0)
  pub_canonical=bytearray(pub_raw);struct.pack_into('<I',pub_canonical,10,cu_length-info_delta);payload[pub]=bytes(pub_canonical)
- normalizations={line:(end,delta),info:(info_end,info_delta)}
+ normalizations={line:(end,line_delta),info:(info_end,info_delta)}
 
  sections=[]
  for i,s in enumerate(ss):
@@ -132,6 +137,7 @@ def inventory(b,source):
    for p in range(0,len(v),entry):
     off=struct.unpack_from('<I',v,p)[0]
     assert not (s[7]==info and info_at<=off<info_end), 'relocation inside comp_dir'
+    assert not (s[7]==line and nitro_at<=off<end), 'relocation inside line-header directories'
     if off>=limit:struct.pack_into('<I',v,p,off-shrink)
     if s[7]==info and off in sibling_adjustments:
      assert entry==12
@@ -145,7 +151,8 @@ def inventory(b,source):
   if y[5]in normalizations:
    limit,shrink=normalizations[y[5]]
    assert not (y[5]==info and info_at<=y[1]<info_end), 'symbol inside comp_dir'
+   assert not (y[5]==line and nitro_at<=y[1]<end), 'symbol inside line-header directories'
    if y[1]>=limit:row[1]-=shrink
   symbols.append({'index':i,'name':n,'record':row})
  header=h.copy();header[0]=header[0].hex();header[6]=0 # Rebuilt object offsets are structural, not source payload.
- return {'header':header,'sections':sections,'symbols':symbols,'normalization':'Only the declared source directory in nonallocated DWARF-v2 line-header and actual compile-unit DW_AT_comp_dir: exact directory strings, header/CU/pubnames lengths and affected local symbol/relocation offsets plus parser-identified sibling references to later DIEs in the same CU. All other bytes and all runtime payloads/names/bindings remain fixed.','source_basename':source.name}
+ return {'header':header,'sections':sections,'symbols':symbols,'normalization':'Only the declared source and checkout Nitro header directories in nonallocated DWARF-v2 line-header and actual compile-unit DW_AT_comp_dir: exact directory strings, header/CU/pubnames lengths and affected local symbol/relocation offsets plus parser-identified sibling references to later DIEs in the same CU. All other bytes and all runtime payloads/names/bindings remain fixed.','source_basename':source.name}
