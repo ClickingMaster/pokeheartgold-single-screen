@@ -188,21 +188,21 @@
 	.extern MainMenuUtil_CreateSprite
 	.extern MainMenuUtil_FreeSprites
 	.extern ov74_02235A68
-	.extern ov74_02235DC4
-	.extern ov74_02235ED0
-	.extern ov74_02235F58
-	.extern ov74_02236034
-	.extern ov74_022360A0
-	.extern ov74_022360B0
-	.extern ov74_02236128
-	.extern ov74_02236140
-	.extern ov74_0223615C
-	.extern ov74_022365FC
-	.extern ov74_02236680
-	.extern ov74_022368D4
-	.extern ov74_02236980
-	.extern ov74_02236988
-	.extern ov74_02236AE0
+	.extern MainMenuUtil_ShowCardSubScreen
+	.extern MainMenuUtil_EncryptWonderCard
+	.extern MainMenuUtil_DecryptWonderCard
+	.extern MainMenuUtil_EnableCartridgePullOutCheck
+	.extern MainMenuUtil_StartSave
+	.extern MainMenuUtil_RunSave
+	.extern MainMenuUtil_ResumeSave
+	.extern MainMenuUtil_CancelSave
+	.extern MainMenuUtil_GetSaveState
+	.extern MysteryGiftBeacon_Stop
+	.extern MysteryGiftBeacon_Init
+	.extern MysteryGiftBeacon_DecryptGift
+	.extern MysteryGiftBeacon_GetWorkSize
+	.extern MysteryGiftBeacon_GetTitle
+	.extern MysteryGiftWfc_Run
 	.extern ov74_0223BD5C
 	.extern sRangerCharTable
 	.extern ov74_0223C1F4
@@ -1040,7 +1040,7 @@ _0222C44C:
 	mov r3, #3
 	bl AddWindowParameterized
 _0222C47A:
-	bl ov74_02236988
+	bl MysteryGiftBeacon_GetTitle
 	add r1, r4, #0
 	add r2, r0, #0
 	add r0, r6, #0
@@ -1122,7 +1122,7 @@ _0222C4CE:
 _0222C53A:
 	ldr r0, [r4]
 	add r1, r7, #0
-	bl ov74_02235DC4
+	bl MainMenuUtil_ShowCardSubScreen
 	add r0, r6, #0
 	bl MysteryGiftApp_SaveReceivedGift
 _0222C548:
@@ -1146,11 +1146,11 @@ _0222C54E:
 	bl GfGfx_EngineATogglePlanes
 	b _0222CD3A
 _0222C570:
-	bl ov74_0223615C
+	bl MainMenuUtil_GetSaveState
 	add r7, r0, #0
 	cmp r7, #4
 	bne _0222C57E
-	bl ov74_02236128
+	bl MainMenuUtil_ResumeSave
 _0222C57E:
 	cmp r7, #2
 	bne _0222C5D8
@@ -1179,7 +1179,7 @@ _0222C57E:
 	bne _0222C5CC
 	ldr r0, [r4]
 	add r1, r6, #0
-	bl ov74_02235DC4
+	bl MainMenuUtil_ShowCardSubScreen
 	ldr r0, _0222C65C ; =0x000029F4
 	mov r1, #2
 	str r1, [r4, r0]
@@ -1465,7 +1465,7 @@ _0222C836:
 	bl MysteryGiftApp_GetReceivedCard
 	add r1, r0, #0
 	ldr r0, [r4]
-	bl ov74_02235DC4
+	bl MainMenuUtil_ShowCardSubScreen
 	mov r0, #0
 	add r1, r0, #0
 	bl sub_020398D4
@@ -1487,7 +1487,7 @@ _0222C858:
 	ldr r0, _0222CA20 ; =0x000029EC
 	mov r1, #1
 	str r1, [r4, r0]
-	bl ov74_02236140
+	bl MainMenuUtil_CancelSave
 	add r0, r4, #0
 	mov r1, #0
 	bl MysteryGiftApp_SetWaitingIconVisible
@@ -1500,7 +1500,7 @@ _0222C858:
 	str r0, [r5]
 	b _0222CD3A
 _0222C896:
-	bl ov74_0223615C
+	bl MainMenuUtil_GetSaveState
 	cmp r0, #4
 	bne _0222C8B0
 	mov r0, #0x93
@@ -1512,13 +1512,13 @@ _0222C896:
 	str r1, [r4, r0]
 	b _0222CD3A
 _0222C8B0:
-	bl ov74_0223615C
+	bl MainMenuUtil_GetSaveState
 	cmp r0, #3
 	beq _0222C8BA
 _0222C8B8:
 	b _0222CD3A
 _0222C8BA:
-	bl ov74_02236140
+	bl MainMenuUtil_CancelSave
 	add r0, r4, #0
 	add r0, #0xda
 	ldrb r1, [r0]
@@ -1543,7 +1543,7 @@ _0222C8E8:
 	bl LinkSync_IsSynced
 	cmp r0, #1
 	bne _0222C902
-	bl ov74_02236128
+	bl MainMenuUtil_ResumeSave
 	ldr r0, _0222CA24 ; =0x0000043C
 	mov r1, #0xa
 	str r1, [r4, r0]
@@ -1558,7 +1558,7 @@ _0222C902:
 	ldr r0, [r4, r0]
 	cmp r0, #0
 	bne _0222CA0C
-	bl ov74_02236140
+	bl MainMenuUtil_CancelSave
 	add r0, r4, #0
 	add r0, #0xda
 	ldrb r1, [r0]
@@ -1788,7 +1788,7 @@ _0222CAFC:
 	bl MysteryGiftApp_GetReceivedCard
 	add r1, r0, #0
 	ldr r0, [r4]
-	bl ov74_02235DC4
+	bl MainMenuUtil_ShowCardSubScreen
 	add r1, r4, #0
 	add r0, r6, #0
 	add r1, #0x18
@@ -1820,12 +1820,12 @@ _0222CB32:
 	str r0, [r5]
 	b _0222CD3A
 _0222CB4C:
-	bl ov74_0223615C
+	bl MainMenuUtil_GetSaveState
 	cmp r0, #4
 	bne _0222CB58
-	bl ov74_02236128
+	bl MainMenuUtil_ResumeSave
 _0222CB58:
-	bl ov74_0223615C
+	bl MainMenuUtil_GetSaveState
 	cmp r0, #2
 	bne _0222CB90
 	ldr r0, _0222CD5C ; =0x0000043C
@@ -1849,7 +1849,7 @@ _0222CB58:
 	str r0, [r5]
 	b _0222CD3A
 _0222CB90:
-	bl ov74_0223615C
+	bl MainMenuUtil_GetSaveState
 	cmp r0, #3
 	bne _0222CC18
 	mov r1, #0

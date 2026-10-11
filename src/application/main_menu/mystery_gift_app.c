@@ -7,9 +7,16 @@
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
 
+#include "application/main_menu/lock_capsule_card.h"
 #include "application/main_menu/main_menu.h"
 #include "application/main_menu/main_menu_internal.h"
+#include "application/main_menu/main_menu_shared.h"
+#include "application/main_menu/main_menu_util.h"
+#include "application/main_menu/mystery_gift_app_internal.h"
+#include "application/main_menu/mystery_gift_beacon.h"
+#include "application/main_menu/mystery_gift_wfc.h"
 #include "application/main_menu/mystery_gift_wireless.h"
+#include "application/main_menu/wonder_card_album.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0247.h"
 
@@ -20,6 +27,7 @@
 #include "gf_gfx_planes.h"
 #include "gf_rtc.h"
 #include "heap.h"
+#include "link_synchronization.h"
 #include "list_menu.h"
 #include "list_menu_items.h"
 #include "main.h"
@@ -47,61 +55,10 @@
 #include "unk_0200A090.h"
 #include "unk_02034B0C.h"
 #include "unk_02035900.h"
-#include "link_synchronization.h"
 #include "unk_0203A3B0.h"
 
 // Main menu option "Mystery Gift": receives a gift (from a friend or a distribution over DS wireless, or
 // over Nintendo Wi-Fi Connection), stores it in the save, and opens the Wonder Card viewers.
-
-struct MysteryGiftAppData {
-    BgConfig *bgConfig;                                // 0x0000
-    SaveData *saveData;                                // 0x0004
-    Options *options;                                  // 0x0008
-    MessageFormat *msgFormat;                          // 0x000C
-    MsgData *msgData;                                  // 0x0010
-    String *string;                                    // 0x0014, printed instead of a message id when set
-    Window messageWindow;                              // 0x0018
-    Window windows[3];                                 // 0x0028, main menu, receive menu, yes/no menu
-    Window titleWindow;                                // 0x0058, title of the gift found
-    u32 textSpeed;                                     // 0x0068
-    u32 textPrinterId;                                 // 0x006C
-    u32 unk_0070;                                      // 0x0070
-    int stateAfterMessage;                             // 0x0074
-    struct ListMenu *listMenu;                         // 0x0078
-    ListMenuItem *listMenuItems;                       // 0x007C
-    int giftCheckResult;                               // 0x0080, MysteryGift_CheckCanReceive: 0 ok, 1..5 why the gift cannot be received
-    int unk_0084;                                      // 0x0084
-    u32 unk_0088;                                      // 0x0088
-    UnkWonderCardSubstruct_104 receivedHeader;         // 0x008C
-    WonderCard receivedCard;                           // 0x00DC
-    int timeout;                                       // 0x0434
-    int channel;                                       // 0x0438, partner found by the wireless search
-    int timer;                                         // 0x043C
-    int exitTarget;                                    // 0x0440, 0: title screen, 1: Wonder Card viewer, 2: Lock Capsule card
-    u8 unk_0444[0x180];                                // 0x0444
-    Sprite *sprite;                                    // 0x05C4
-    int unk_05C8;                                      // 0x05C8
-    int unk_05CC;                                      // 0x05CC
-    int unk_05D0;                                      // 0x05D0
-    u8 recvBuffer[0x1000];                             // 0x05D4, receivedHeader + receivedCard (receive mode 3)
-    int receiveMode;                                   // 0x15D4, 1/2: from a friend, 3: DS wireless, 4: Nintendo WFC
-    int *mainState;                                    // 0x15D8
-    int unk_15DC;                                      // 0x15DC
-    int wfcState;                                      // 0x15E0, Nintendo WFC download (ov74_02236AE0)
-    u8 unk_15E4[0x74];                                 // 0x15E4
-    u8 wfcRecvBuffer[0x1000];                          // 0x1658, receivedHeader + receivedCard (receive mode 4)
-    u8 unk_2658[0x14];                                 // 0x2658
-    int wfcErrorMsgId;                                 // 0x266C
-    int wfcErrorCode;                                  // 0x2670
-    u8 unk_2674[0x8];                                  // 0x2674
-    u32 unk_267C;                                      // 0x267C
-    Window wfcErrorWindow;                             // 0x2680
-    u8 unk_2690[0x358];                                // 0x2690
-    void (*callback)(struct MysteryGiftAppData *data); // 0x29E8, run every frame while set
-    int unk_29EC;                                      // 0x29EC
-    WaitingIcon *waitingIcon;                          // 0x29F0
-    int animStatus;                                    // 0x29F4, gift animation task: 1 running, 2 may finish, 0 done
-}; // size: 0x29F8
 
 // The menu tables of the module (still in asm data); the main menu's first entries are addressed from the
 // start of the block.
@@ -123,31 +80,6 @@ typedef struct MysteryGiftLinkState {
     u32 count;                        // 0x0C
     u32 state;                        // 0x10
 } MysteryGiftLinkState;
-
-// Overlay helpers (not in a header yet).
-void ov74_02235F58(UnkWonderCardSubstruct_104 *header, WonderCard *card, enum HeapID heapID);
-void ov74_022360A0(SaveData *saveData);
-int ov74_022360B0(void);
-u32 MainMenuUtil_GetCartridgeGiftSize(void);
-void ov74_02236034(BOOL a0);
-void MainMenuUtil_SetCryptoHeap(enum HeapID heapID);
-void WonderCard_SetGraphicsBanks(void);
-int ov74_022365FC(void);
-int ov74_02236AE0(OverlayManager *manager, int *state);
-void MainMenuUtil_UpdateGiftSprite(int animStatus);
-int MysteryGift_CheckCanReceive(SaveData *saveData, UnkWonderCardSubstruct_104 *header);
-BOOL MainMenuUtil_ReadCartridgeGift(void *data, int size);
-void *MainMenuUtil_GetSpriteList(void);
-u32 ov74_0223615C(void);
-void ov74_02236128(void);
-void ov74_02236140(void);
-void ov74_02235DC4(BgConfig *bgConfig, WonderCard *card);
-const u16 *ov74_02236988(void);
-BOOL ov74_022368D4(void);
-u32 ov74_02236980(void);
-void ov74_02236680(void *buffer, void (*callback)(int), void *work);
-void LockCapsuleCard_DrawCardOnBg(BgConfig *bgConfig, WonderCard *card, enum HeapID heapID);
-void WonderCardAlbum_DrawCardOnBg(BgConfig *bgConfig, WonderCard *card, enum HeapID heapID);
 
 // Other modules (not in a header yet).
 extern BOOL CTRDG_IsExisting();
@@ -174,13 +106,6 @@ extern const OverlayManagerTemplate _0223B410;
 extern const OverlayManagerTemplate _0223B420;
 extern const MysteryGiftMenuItem ov74_0223C2A0[];
 extern const MysteryGiftMenuItem ov74_0223C2B0[];
-
-// Sprite system of the overlay's shared helpers (MainMenuUtil_GetSpriteList).
-typedef struct MainMenuSpriteSystem {
-    SpriteList *spriteList;    // 0x000
-    u8 unk_004[0x128];         // 0x004
-    GF_2DGfxResMan *resMan[4]; // 0x12C, char, pltt, cell, anim
-} MainMenuSpriteSystem;
 
 #define MYSTERY_GIFT_PARTICLE_COUNT 80
 
@@ -212,7 +137,7 @@ struct MysteryGiftAnimData {
     int state;                                                 // 0x0000
     u32 unk_0004;                                              // 0x0004
     s8 brightness;                                             // 0x0008
-    MainMenuSpriteSystem *spriteSystem;                        // 0x000C
+    MainMenuUtilSprites *spriteSystem;                         // 0x000C
     SpriteResourcesHeader resHeaders[2];                       // 0x0010, main and sub screen
     SpriteResource *mainResources[4];                          // 0x0058
     u8 unk_0068[0x8];                                          // 0x0068
@@ -378,7 +303,7 @@ WonderCard *MysteryGiftApp_GetReceivedCard(OverlayManager *manager) {
     switch (data->receiveMode) {
     case 1:
         memcpy(card, MysteryGiftComm_GetRecvBuffer(0, NULL, 0), sizeof(WonderCard));
-        ov74_02235F58(&data->receivedHeader, &data->receivedCard, HEAP_ID_84);
+        MainMenuUtil_DecryptWonderCard(&data->receivedHeader, &data->receivedCard, HEAP_ID_84);
         break;
     case 3: {
         u8 *src = data->recvBuffer;
@@ -419,7 +344,7 @@ void MysteryGiftApp_WaitForSave(MysteryGiftAppData *data) {
     if (data->unk_29EC == 1) {
         data->callback = NULL;
     }
-    if ((u32)(ov74_022360B0() - 2) <= 1) {
+    if ((u32)(MainMenuUtil_RunSave() - 2) <= 1) {
         if (ov74_0222A0E4(&data->receivedCard) != TRUE) {
             PlaySE(SEQ_SE_DP_SAVE);
         }
@@ -458,7 +383,7 @@ void MysteryGiftApp_SaveReceivedGift(OverlayManager *manager) {
     } else {
         SaveMysteryGift_TryInsertCard(mysteryGift, card);
     }
-    ov74_022360A0(saveData);
+    MainMenuUtil_StartSave(saveData);
     data->unk_29EC = 0;
     data->callback = MysteryGiftApp_WaitForSave;
 }
@@ -597,7 +522,7 @@ int ov74_0222A538(OverlayManager *manager) {
     case 40:
     case 41:
     case 48:
-        if (ov74_022365FC()) {
+        if (MysteryGiftBeacon_Stop()) {
             ov74_0223D0A8.state = 43;
         }
         break;
@@ -615,7 +540,7 @@ int ov74_0222A560(OverlayManager *manager) {
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[2], FALSE);
     MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
     data->wfcState = 0x1000;
-    data->unk_267C = 0;
+    data->wfcCallback = NULL;
     return 27;
 }
 
@@ -861,7 +786,7 @@ BOOL MysteryGiftApp_SetupScreen(OverlayManager *manager, MysteryGiftAppData *dat
 void MysteryGiftApp_RunWfcDownload(OverlayManager *manager, int *state) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
-    switch (ov74_02236AE0(manager, &data->wfcState)) {
+    switch (MysteryGiftWfc_Run(manager, &data->wfcState)) {
     case 1:
         memcpy(&data->receivedHeader, data->wfcRecvBuffer, sizeof(UnkWonderCardSubstruct_104) + sizeof(WonderCard));
         MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
@@ -983,7 +908,7 @@ BOOL MysteryGiftApp_Init(OverlayManager *manager, int *state) {
     if (MainMenuUtil_GetCartridgeGiftSize()) {
         data->receiveMode = 2;
         sub_0201A4B0(gGameVersion);
-        ov74_02236034(TRUE);
+        MainMenuUtil_EnableCartridgePullOutCheck(TRUE);
     }
     data->unk_05C8 = 29;
     args = OverlayManager_GetArgs(manager);
@@ -1852,7 +1777,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
                 if (!WindowIsInUse(&data->titleWindow)) {
                     AddWindowParameterized(data->bgConfig, &data->titleWindow, GF_BG_LYR_MAIN_0, 3, 2, 26, 4, 0, 452);
                 }
-                MysteryGiftApp_PrintGiftTitle(manager, &data->titleWindow, ov74_02236988());
+                MysteryGiftApp_PrintGiftTitle(manager, &data->titleWindow, MysteryGiftBeacon_GetTitle());
                 MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00004);
                 ov74_0222A43C(manager);
                 *state = 31;
@@ -1884,7 +1809,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             anim->spriteSystem = MainMenuUtil_GetSpriteList();
             SysTask_CreateOnMainQueue((SysTaskFunc)MysteryGiftAnim_Task, anim, 5);
         } else {
-            ov74_02235DC4(data->bgConfig, card);
+            MainMenuUtil_ShowCardSubScreen(data->bgConfig, card);
             MysteryGiftApp_SaveReceivedGift(manager);
         }
         *state = 34;
@@ -1896,9 +1821,9 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         }
         break;
     case 34:
-        result = ov74_0223615C();
+        result = MainMenuUtil_GetSaveState();
         if (result == 4) {
-            ov74_02236128();
+            MainMenuUtil_ResumeSave();
         }
         if (result == 2) {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
@@ -1908,7 +1833,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
             card = &data->receivedCard;
             if (ov74_0222A0E4(card) == TRUE) {
-                ov74_02235DC4(data->bgConfig, card);
+                MainMenuUtil_ShowCardSubScreen(data->bgConfig, card);
                 data->animStatus = 2;
             } else {
                 PlaySE(SEQ_SE_DP_UG_020);
@@ -1996,7 +1921,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         break;
     case 11:
         card = MysteryGiftApp_GetReceivedCard(manager);
-        ov74_02235DC4(data->bgConfig, card);
+        MainMenuUtil_ShowCardSubScreen(data->bgConfig, card);
         sub_020398D4(0, 0);
         MysteryGiftApp_SaveReceivedGift(manager);
         *state = 12;
@@ -2006,17 +1931,17 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         if (result && !Comm_IsNetIdConnected((u16)result)) {
             MysteryGiftComm_Free();
             data->unk_29EC = 1;
-            ov74_02236140();
+            MainMenuUtil_CancelSave();
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             WirelessStatusIcon_Destroy();
             MysteryGiftApp_SetSpriteAnim(data, -1);
             *state = 14;
-        } else if (ov74_0223615C() == 4) {
+        } else if (MainMenuUtil_GetSaveState() == 4) {
             LinkSync_StartSync(147);
             *state = 13;
             data->timer = 120;
-        } else if (ov74_0223615C() == 3) {
-            ov74_02236140();
+        } else if (MainMenuUtil_GetSaveState() == 3) {
+            MainMenuUtil_CancelSave();
             data->receivedHeader.unk8E_2 = 0;
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, 56);
@@ -2024,11 +1949,11 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         break;
     case 13:
         if (LinkSync_IsSynced(147) == TRUE) {
-            ov74_02236128();
+            MainMenuUtil_ResumeSave();
             data->timer = 10;
             *state = 15;
         } else if (--data->timer == 0) {
-            ov74_02236140();
+            MainMenuUtil_CancelSave();
             data->receivedHeader.unk8E_2 = 0;
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, 56);
@@ -2103,7 +2028,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         break;
     case 22:
         card = MysteryGiftApp_GetReceivedCard(manager);
-        ov74_02235DC4(data->bgConfig, card);
+        MainMenuUtil_ShowCardSubScreen(data->bgConfig, card);
         MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00007);
         MysteryGiftApp_SetSpriteAnim(data, 1);
         MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
@@ -2117,16 +2042,16 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         }
         break;
     case 24:
-        if (ov74_0223615C() == 4) {
-            ov74_02236128();
+        if (MainMenuUtil_GetSaveState() == 4) {
+            MainMenuUtil_ResumeSave();
         }
-        if (ov74_0223615C() == 2) {
+        if (MainMenuUtil_GetSaveState() == 2) {
             data->timer = 1;
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             MysteryGiftApp_SetSpriteAnim(data, -1);
             PlaySE(SEQ_SE_DP_UG_020);
             *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00008, 25);
-        } else if (ov74_0223615C() == 3) {
+        } else if (MainMenuUtil_GetSaveState() == 3) {
             MysteryGiftApp_SetSpriteAnim(data, -1);
             data->receivedHeader.unk8E_2 = 0;
             *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, 56);
@@ -2236,7 +2161,7 @@ BOOL MysteryGiftApp_Exit(OverlayManager *manager, int *state) {
     if (data->receiveMode == 2) {
         sub_0201A4B0(0);
     }
-    ov74_02236034(FALSE);
+    MainMenuUtil_EnableCartridgePullOutCheck(FALSE);
     return TRUE;
 }
 
@@ -2302,7 +2227,7 @@ void ov74_0222CEE0(MysteryGiftAppData *data) {
 
     if (ov74_0223D0A8.state == 44) {
         ov74_0222CEC0();
-        if (ov74_022368D4()) {
+        if (MysteryGiftBeacon_DecryptGift()) {
             ov74_0223D0A8.state = 45;
         } else {
             ov74_0223D0A8.state = 46;
@@ -2322,9 +2247,9 @@ void ov74_0222CEE0(MysteryGiftAppData *data) {
             void *linkWork;
 
             ov74_0223D0A8.count = 0;
-            linkWork = Heap_Alloc(HEAP_ID_84, ov74_02236980());
+            linkWork = Heap_Alloc(HEAP_ID_84, MysteryGiftBeacon_GetWorkSize());
             ov74_0223D0A8.linkWork = linkWork;
-            ov74_02236680(data->recvBuffer, ov74_0222CE6C, linkWork);
+            MysteryGiftBeacon_Init(data->recvBuffer, ov74_0222CE6C, linkWork);
             ov74_0223D0A8.state = 39;
             WirelessStatusIcon_Create();
         }
@@ -2349,7 +2274,7 @@ void ov74_0222CEE0(MysteryGiftAppData *data) {
         case 40:
         case 41:
         case 48:
-            if (ov74_022365FC()) {
+            if (MysteryGiftBeacon_Stop()) {
                 ov74_0223D0A8.state = 43;
             }
             break;

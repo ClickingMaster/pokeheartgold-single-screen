@@ -188,21 +188,21 @@
 	.extern MainMenuUtil_CreateSprite
 	.extern MainMenuUtil_FreeSprites
 	.extern ov74_02235A68
-	.extern ov74_02235DC4
-	.extern ov74_02235ED0
-	.extern ov74_02235F58
-	.extern ov74_02236034
-	.extern ov74_022360A0
-	.extern ov74_022360B0
-	.extern ov74_02236128
-	.extern ov74_02236140
-	.extern ov74_0223615C
-	.extern ov74_022365FC
-	.extern ov74_02236680
-	.extern ov74_022368D4
-	.extern ov74_02236980
-	.extern ov74_02236988
-	.extern ov74_02236AE0
+	.extern MainMenuUtil_ShowCardSubScreen
+	.extern MainMenuUtil_EncryptWonderCard
+	.extern MainMenuUtil_DecryptWonderCard
+	.extern MainMenuUtil_EnableCartridgePullOutCheck
+	.extern MainMenuUtil_StartSave
+	.extern MainMenuUtil_RunSave
+	.extern MainMenuUtil_ResumeSave
+	.extern MainMenuUtil_CancelSave
+	.extern MainMenuUtil_GetSaveState
+	.extern MysteryGiftBeacon_Stop
+	.extern MysteryGiftBeacon_Init
+	.extern MysteryGiftBeacon_DecryptGift
+	.extern MysteryGiftBeacon_GetWorkSize
+	.extern MysteryGiftBeacon_GetTitle
+	.extern MysteryGiftWfc_Run
 	.extern ov74_0223BD5C
 	.extern sRangerCharTable
 	.extern ov74_0223C1F4

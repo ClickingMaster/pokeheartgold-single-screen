@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 5897fb3fa · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · cb0889a23 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -11298,118 +11298,55 @@ src/application/main_menu/connect_to_ranger.c</title></rect>
 <rect x="773.480" y="373.852" width="26.782" height="19.214" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / main_menu_util.o
 3,216 bytes · C-only source
 src/application/main_menu/main_menu_util.c</title></rect>
-<rect x="755.987" y="393.066" width="12.502" height="19.197" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_sign.o
+<rect x="755.987" y="393.066" width="24.190" height="13.944" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / mystery_gift_beacon.o
+2,108 bytes · C-only source
+src/application/main_menu/mystery_gift_beacon.c</title></rect>
+<rect x="755.987" y="407.010" width="12.452" height="19.275" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_sign.o
 1,500 bytes · C-only source
 lib/src/nitrocrypto_sign.c</title></rect>
-<rect x="768.489" y="393.066" width="9.202" height="19.197" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to70_to57_overlay_74_residual_054_extra1237_run01.o
-1,104 bytes · C-only source
-src/to70_to57_overlay_74_residual_054_extra1237_run01.c</title></rect>
-<rect x="755.987" y="412.263" width="8.330" height="14.022" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to58_w09_ov74_048_b.o
-730 bytes · C-only source
-src/to58_w09_ov74_048_b.c</title></rect>
-<rect x="764.317" y="412.263" width="13.374" height="8.327" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / mystery_gift_wireless.o
+<rect x="768.438" y="407.010" width="11.738" height="19.275" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / mystery_gift_wfc.o
+1,414 bytes · C-only source
+src/application/main_menu/mystery_gift_wfc.c</title></rect>
+<rect x="780.176" y="393.066" width="8.887" height="16.745" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / main_menu_shared.o
+930 bytes · C-only source
+src/application/main_menu/main_menu_shared.c</title></rect>
+<rect x="789.063" y="393.066" width="11.199" height="9.944" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / mystery_gift_wireless.o
 696 bytes · C-only source
 src/application/main_menu/mystery_gift_wireless.c</title></rect>
-<rect x="764.317" y="420.590" width="13.374" height="5.695" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_bits.o
+<rect x="789.063" y="403.010" width="11.199" height="6.801" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_bits.o
 476 bytes · C-only source
 lib/src/nitrocrypto_bn_bits.c</title></rect>
-<rect x="777.691" y="393.066" width="6.059" height="8.346" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to57_overlay_74_exact_055.o
+<rect x="780.176" y="409.811" width="5.829" height="8.674" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / agb_string.o
 316 bytes · C-only source
-src/to57_overlay_74_exact_055.c</title></rect>
-<rect x="783.749" y="393.066" width="6.059" height="8.346" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to90_extra2522_run01.o
-316 bytes · C-only source
-src/to90_extra2522_run01.c</title></rect>
-<rect x="777.691" y="401.412" width="6.386" height="7.817" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to90_extra2419_run01.o
-312 bytes · C-only source
-src/to90_extra2419_run01.c</title></rect>
-<rect x="784.077" y="401.412" width="5.731" height="7.817" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_expand.o
+src/application/main_menu/agb_string.c</title></rect>
+<rect x="786.006" y="409.811" width="5.165" height="8.674" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_expand.o
 280 bytes · C-only source
 lib/src/nitrocrypto_bn_expand.c</title></rect>
-<rect x="789.808" y="393.066" width="5.304" height="8.326" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_bin2bn.o
+<rect x="780.176" y="418.485" width="5.661" height="7.800" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_bin2bn.o
 276 bytes · C-only source
 lib/src/nitrocrypto_bn_bin2bn.c</title></rect>
-<rect x="795.112" y="393.066" width="5.150" height="8.326" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / op90_to70_to58_w12_ov74_040_residual_04_extra107_residual_1_r01.o
-268 bytes · C-only source
-src/op90_to70_to58_w12_ov74_040_residual_04_extra107_residual_1_r01.c</title></rect>
-<rect x="789.808" y="401.392" width="5.309" height="7.837" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_ctx.o
+<rect x="785.838" y="418.485" width="5.333" height="7.800" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_ctx.o
 260 bytes · C-only source
 lib/src/nitrocrypto_bn_ctx.c</title></rect>
-<rect x="795.117" y="401.392" width="5.145" height="7.837" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / op90_to58_w09_ov74_048_mid_a_r01.o
-252 bytes · C-only source
-src/op90_to58_w09_ov74_048_mid_a_r01.c</title></rect>
-<rect x="777.691" y="409.229" width="3.952" height="9.717" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to58_w09_ov74_048_a.o
-240 bytes · C-only source
-src/to58_w09_ov74_048_a.c</title></rect>
-<rect x="781.643" y="409.229" width="6.949" height="5.020" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to70_to58_w09_ov74_048_tail_extra141_run01.o
-218 bytes · C-only source
-src/to70_to58_w09_ov74_048_tail_extra141_run01.c</title></rect>
-<rect x="781.643" y="414.249" width="6.949" height="4.697" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_fix_top.o
+<rect x="791.171" y="409.811" width="9.091" height="3.590" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_fix_top.o
 204 bytes · C-only source
 lib/src/nitrocrypto_bn_fix_top.c</title></rect>
-<rect x="777.691" y="418.946" width="3.750" height="7.339" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_alloc.o
+<rect x="791.171" y="413.402" width="4.599" height="5.984" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_alloc.o
 172 bytes · C-only source
 lib/src/nitrocrypto_alloc.c</title></rect>
-<rect x="781.441" y="418.946" width="7.151" height="3.759" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_word.o
+<rect x="795.770" y="413.402" width="4.492" height="5.984" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_word.o
 168 bytes · C-only source
 lib/src/nitrocrypto_bn_word.c</title></rect>
-<rect x="781.441" y="422.705" width="7.151" height="3.580" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / op90_to70_to58_w12_ov74_040_residual_04_extra107_residual_2_r01.o
-160 bytes · C-only source
-src/op90_to70_to58_w12_ov74_040_residual_04_extra107_residual_2_r01.c</title></rect>
-<rect x="788.592" y="409.229" width="5.026" height="4.712" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_num_bits.o
+<rect x="791.171" y="419.386" width="3.432" height="6.899" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_num_bits.o
 148 bytes · C-only source
 lib/src/nitrocrypto_bn_num_bits.c</title></rect>
-<rect x="788.592" y="413.941" width="5.026" height="4.584" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / op90_to57_overlay_74_residual_046_r01.o
-144 bytes · C-only source
-src/op90_to57_overlay_74_residual_046_r01.c</title></rect>
-<rect x="793.618" y="409.229" width="6.644" height="3.275" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to70_to58_w12_ov74_040_residual_04_extra107_run01.o
-136 bytes · C-only source
-src/to70_to58_w12_ov74_040_residual_04_extra107_run01.c</title></rect>
-<rect x="793.618" y="412.504" width="3.349" height="6.021" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to70_to57_overlay_74_residual_052_extra426_run01.o
-126 bytes · C-only source
-src/to70_to57_overlay_74_residual_052_extra426_run01.c</title></rect>
-<rect x="796.966" y="412.504" width="3.295" height="6.021" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_free.o
+<rect x="794.603" y="419.386" width="5.659" height="3.506" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_bn_free.o
 124 bytes · C-only source
 lib/src/nitrocrypto_bn_free.c</title></rect>
-<rect x="788.592" y="418.525" width="6.186" height="3.104" fill="#6f8fd8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_rc4.o
+<rect x="794.603" y="422.892" width="5.659" height="3.393" fill="#6f8fd8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / nitrocrypto_rc4.o
 120 bytes · Original hand-written assembly
 lib/src/nitrocrypto_rc4.c
 CRYPTO_RC4Encrypt</title></rect>
-<rect x="788.592" y="421.629" width="3.299" height="4.656" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to70_to57_overlay_74_residual_042_extra905_run01.o
-96 bytes · C-only source
-src/to70_to57_overlay_74_residual_042_extra905_run01.c</title></rect>
-<rect x="791.891" y="421.629" width="2.887" height="4.656" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to90_extra2556_run01.o
-84 bytes · C-only source
-src/to90_extra2556_run01.c</title></rect>
-<rect x="794.777" y="418.525" width="2.097" height="3.968" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to57_overlay_74_exact_053.o
-52 bytes · C-only source
-src/to57_overlay_74_exact_053.c</title></rect>
-<rect x="796.874" y="418.525" width="3.388" height="2.078" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to80_extra1603_run01.o
-44 bytes · C-only source
-src/to80_extra1603_run01.c</title></rect>
-<rect x="796.874" y="420.603" width="3.388" height="1.889" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to57_overlay_74_exact_047.o
-40 bytes · C-only source
-src/to57_overlay_74_exact_047.c</title></rect>
-<rect x="794.777" y="422.492" width="2.700" height="1.896" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to70_to57_overlay_74_residual_050_extra1061_run01.o
-32 bytes · C-only source
-src/to70_to57_overlay_74_residual_050_extra1061_run01.c</title></rect>
-<rect x="794.777" y="424.389" width="2.700" height="1.896" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to90_extra2290_run01.o
-32 bytes · C-only source
-src/to90_extra2290_run01.c</title></rect>
-<rect x="797.477" y="422.492" width="1.671" height="2.299" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to57_overlay_74_exact_041.o
-24 bytes · C-only source
-src/to57_overlay_74_exact_041.c</title></rect>
-<rect x="799.148" y="422.492" width="1.114" height="2.299" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to57_overlay_74_exact_045.o
-16 bytes · C-only source
-src/to57_overlay_74_exact_045.c</title></rect>
-<rect x="797.477" y="424.791" width="1.714" height="1.494" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to57_overlay_74_exact_051.o
-16 bytes · C-only source
-src/to57_overlay_74_exact_051.c</title></rect>
-<rect x="799.191" y="424.791" width="1.071" height="1.195" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to57_overlay_74_exact_049.o
-8 bytes · C-only source
-src/to57_overlay_74_exact_049.c</title></rect>
-<rect x="799.191" y="425.986" width="1.071" height="0.299" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_74 / to57_overlay_74_exact_043.o
-2 bytes · C-only source
-src/to57_overlay_74_exact_043.c</title></rect>
 <rect x="716.236" y="269.471" width="84.026" height="156.814" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="800.262" y="269.471" width="46.063" height="77.691" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / ov18_021E8BF4.o
 22,366 bytes · C-only source

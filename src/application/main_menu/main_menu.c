@@ -2,6 +2,10 @@
 
 #include "global.h"
 
+#include "application/main_menu/agb_cartridge.h"
+#include "application/main_menu/main_menu_internal.h"
+#include "application/main_menu/main_menu_shared.h"
+#include "application/main_menu/main_menu_util.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0017.h"
 #include "msgdata/msg/msg_0442.h"
@@ -99,25 +103,7 @@ typedef struct MainMenuAppData {
     u32 unk1B4;
 } MainMenuAppData;
 
-typedef struct UnkStruct_ov74_02235414 {
-    u32 unk0;
-    BOOL unk4;
-    u8 unk8[0x8];
-    Window *window;
-    u8 unk14[0x20 - 0x14];
-    u32 textX;
-    u32 textY;
-    u8 unk28[4];
-    u32 layer;
-    u32 paletteNum1;
-    u32 gmmId;
-    u32 baseTile;
-    u32 paletteNum2;
-    u32 fontId;
-    u8 unk44[0x10];
-} UnkStruct_ov74_02235414;
-
-typedef BOOL (*MainMenuPrintFunction)(MainMenuAppData *, u32, UnkStruct_ov74_02235414 *, u32);
+typedef BOOL (*MainMenuPrintFunction)(MainMenuAppData *, u32, MainMenuTextPrinter *, u32);
 
 typedef struct MainMenuButton {
     MainMenu_AppOption id;
@@ -132,28 +118,6 @@ extern void sub_02038D28(SaveData *saveData);
 extern void sub_02038D64(void);
 extern u32 sub_02038D80(void);
 
-extern u32 PmAgbCartridgeGetOffsets(u32 a0);
-extern u32 PmAgbCartridge_GetVersionInternal(void);
-extern u32 PmAgbCartridge_GetLanguage(void);
-extern void MainMenuUtil_SetCryptoHeap(enum HeapID heapID);
-extern u32 MainMenuUtil_GetCartridgeGiftSize(void);
-extern void MainMenuUtil_InitWork(enum HeapID heapID);
-extern void MainMenuUtil_InitBg(BgConfig *bgConfig, u8 bgId, u32 screenSize, u32 screenBase, u32 charBase);
-extern void MainMenuUtil_SetFadeWhite(u32 a0);
-extern void MainMenuUtil_StartFade(u32 a0, u32 newState, int *state, u32 waitingState);
-extern void MainMenuUtil_WaitFade(int *state);
-extern void MainMenuTextPrinter_Init(UnkStruct_ov74_02235414 *a0, Window *window, u32 palette1, u32 gmmId, u32 baseTile, u32 palette2);
-extern void MainMenuTextPrinter_SetSize(UnkStruct_ov74_02235414 *a0, u32 width, u32 height, u32 baseTile);
-extern void MainMenuTextPrinter_AddWindowAndPrint(BgConfig *bgConfig, UnkStruct_ov74_02235414 *a1, u32 x, u32 y, u32 msgId);
-extern void MainMenuUtil_InitObjTransfer(void);
-extern void MainMenuUtil_InitSprites(void);
-extern void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFileId, u32 cellFileId, u32 animFileId, u32 a5);
-extern void MainMenuUtil_UpdateSprites(void);
-extern Sprite *MainMenuUtil_CreateSprite(u32 a0, Sprite *sprite, u32 x, u32 y, u32 ctrlSeq);
-extern void MainMenuUtil_FreeSprites(void);
-extern void ov74_02236034(BOOL enable);
-extern void ov74_02236074(void);
-
 extern BOOL CTRDG_IsExisting();
 
 static void ov74_0222841C(MainMenuAppData *data, int currentOption);
@@ -163,14 +127,14 @@ static void ov74_022286F8(MainMenuAppData *data, int a1);
 static void MainMenu_UpdateArrowSprites(MainMenuAppData *data);
 static void AdvanceButtonBorderAnimation(MainMenuAppData *data);
 
-static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3);
-static BOOL MainMenu_PrintMigrateFromAgbButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3);
-static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3);
-static BOOL MainMenu_PrintConnectToRangerButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3);
-static BOOL MainMenu_PrintConnectToWiiButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3);
-static BOOL MainMenu_PrintNintendoWFCSetupButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3);
-static BOOL MainMenu_PrintConnectToPokewalkerButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3);
-static BOOL MainMenu_PrintWiiMessageSettingsButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3);
+static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
+static BOOL MainMenu_PrintMigrateFromAgbButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
+static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
+static BOOL MainMenu_PrintConnectToRangerButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
+static BOOL MainMenu_PrintConnectToWiiButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
+static BOOL MainMenu_PrintNintendoWFCSetupButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
+static BOOL MainMenu_PrintConnectToPokewalkerButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
+static BOOL MainMenu_PrintWiiMessageSettingsButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
 
 static MainMenuButton sMainMenuButtons[] = {
     { .id = APPOPTION_CONTINUE,       .height = 10, .msgId = msg_0442_00000, .printFunction = MainMenu_PrintContinueButton            },
@@ -505,7 +469,7 @@ static BOOL ov74_02227584(MainMenuAppData *data) {
         for (int i = 0; i < (int)NELEMS(data->unk18C); i++) {
             if (data->unk18C[i] == 1) {
                 data->unk18C[i] = 0;
-                UnkStruct_ov74_02235414 unk;
+                MainMenuTextPrinter unk;
                 const UnkStruct_ov74_0223BBD4 *unk2 = &ov74_0223BBD4[i];
                 MainMenuTextPrinter_Init(&unk, &data->unk190, 0, unk2->gmmId, 0x3F7, 2);
                 MainMenuTextPrinter_SetSize(&unk, unk2->width, unk2->height, 1);
@@ -555,7 +519,7 @@ static void DetectInsertedGBACart(MainMenuAppData *data) {
 
     if (Pokedex_GetNatDexFlag(data->pokedex) && gGameLanguage == PmAgbCartridge_GetLanguage()) {
         data->connectedAgbGame = PmAgbCartridge_GetVersionInternal() + 1;
-        ov74_02236074();
+        MainMenuUtil_IgnoreCartridgeIrq();
     }
 }
 
@@ -659,7 +623,7 @@ static BOOL ov74_0222779C(MainMenuAppData *data) {
         data->unk144 = 17;
         break;
     case 17: {
-        UnkStruct_ov74_02235414 unk;
+        MainMenuTextPrinter unk;
         MainMenuTextPrinter_Init(&unk, &data->unk154, 0, NARC_msg_msg_0017_bin, 0x3F7, 2);
         UnkStruct_ov74_0223BC30 *unk2;
         u32 unk3 = data->unk40 & ~data->unk44;
@@ -668,9 +632,9 @@ static BOOL ov74_0222779C(MainMenuAppData *data) {
         } else if (unk3 & (1 << 1)) {
             unk2 = (data->unk38 & (1 << 1)) ? &ov74_0223BC30[2] : &ov74_0223BC30[3];
         } else if (unk3 & (1 << 7)) {
-            unk.unk0 = 2;
+            unk.frameType = 2;
             unk2 = &ov74_0223BC30[4];
-            MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, unk.gmmId, HEAP_ID_MAIN_MENU);
+            MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, unk.msgFileId, HEAP_ID_MAIN_MENU);
             String *string = NewString_ReadMsgData(msgData, unk2->msgId);
             u32 width = FontID_String_GetWidthMultiline(unk.fontId, string, 0);
             unk.textX = (unk2->width * 8 - width) / 2;
@@ -679,7 +643,7 @@ static BOOL ov74_0222779C(MainMenuAppData *data) {
             unk.textY = 4;
         }
         MainMenuTextPrinter_SetSize(&unk, unk2->width, unk2->height, 0x91);
-        unk.layer = GF_BG_LYR_MAIN_1;
+        unk.bgId = GF_BG_LYR_MAIN_1;
         MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &unk, unk2->x, unk2->y, unk2->msgId);
 
         BgTilemapRectChangePalette(data->bgConfig, GF_BG_LYR_MAIN_1, GetWindowX(unk.window), GetWindowY(unk.window), GetWindowWidth(unk.window), GetWindowHeight(unk.window), 0);
@@ -691,7 +655,7 @@ static BOOL ov74_0222779C(MainMenuAppData *data) {
                 UnkStruct_ov74_0223BC30 *unk3 = &ov74_0223BC30[i + 5];
                 unk.textY = 4;
                 MainMenuTextPrinter_SetSize(&unk, unk3->width, unk3->height, (i * 72) + 1);
-                unk.layer = GF_BG_LYR_MAIN_1;
+                unk.bgId = GF_BG_LYR_MAIN_1;
                 MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &unk, unk3->x, unk3->y, unk3->msgId);
             }
             data->currentNewGameOption = 0;
@@ -914,7 +878,7 @@ static void ov74_02227E64(MessageFormat *messageFormat, int number) {
     BufferIntegerAsString(messageFormat, 0, number, digits, printingMode, 1);
 }
 
-static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3) {
+static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3) {
     MessageFormat *messageFormat;
     MsgData *msgData;
 
@@ -956,7 +920,7 @@ static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 a1, UnkStruc
         PrintPlayerInfoField(a2->window, msgData, messageFormat, textColor, msg_0442_00019, 64);
     }
 
-    DrawFrameAndWindow1(a2->window, FALSE, a2->baseTile, a2->paletteNum2);
+    DrawFrameAndWindow1(a2->window, FALSE, a2->frameBaseTile, a2->framePalette);
 
     data->unkEC[a1] = sMainMenuButtons[a1].id;
     MessageFormat_Delete(messageFormat);
@@ -965,7 +929,7 @@ static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 a1, UnkStruc
     return TRUE;
 }
 
-static BOOL MainMenu_PrintMigrateFromAgbButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3) {
+static BOOL MainMenu_PrintMigrateFromAgbButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3) {
     if (data->connectedAgbGame == 0) {
         return FALSE;
     }
@@ -996,7 +960,7 @@ static BOOL MainMenu_PrintMigrateFromAgbButton(MainMenuAppData *data, u32 a1, Un
     return TRUE;
 }
 
-static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 y) {
+static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 y) {
     if (!data->drawMysteryGiftButton) {
         if (SaveMysteryGift_TestFlagx7FF(data->mysteryGift) == TRUE) {
             data->drawMysteryGiftButton = TRUE;
@@ -1010,7 +974,7 @@ static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 a1, UnkSt
 
         if (MainMenuUtil_GetCartridgeGiftSize() != 0) {
             data->drawMysteryGiftButton = TRUE;
-            ov74_02236034(TRUE);
+            MainMenuUtil_EnableCartridgePullOutCheck(TRUE);
         }
     }
 
@@ -1031,7 +995,7 @@ static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 a1, UnkSt
     return FALSE;
 }
 
-static BOOL MainMenu_PrintConnectToRangerButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3) {
+static BOOL MainMenu_PrintConnectToRangerButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3) {
     if (data->drawConnectToRangerButton == TRUE && data->hasPokedex == TRUE) {
         MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
         DrawWirelessIcon(data, 23, a3, 1);
@@ -1045,7 +1009,7 @@ static BOOL MainMenu_PrintConnectToRangerButton(MainMenuAppData *data, u32 a1, U
     return FALSE;
 }
 
-static BOOL MainMenu_PrintConnectToWiiButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3) {
+static BOOL MainMenu_PrintConnectToWiiButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3) {
     if (data->drawConnectToWiiButton == TRUE) {
         MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
         data->unk110[a1] = 1;
@@ -1058,7 +1022,7 @@ static BOOL MainMenu_PrintConnectToWiiButton(MainMenuAppData *data, u32 a1, UnkS
     return FALSE;
 }
 
-static BOOL MainMenu_PrintNintendoWFCSetupButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3) {
+static BOOL MainMenu_PrintNintendoWFCSetupButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3) {
     MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
     data->unk110[a1] = 2;
     DrawWirelessIcon(data, 23, a3, 2);
@@ -1067,7 +1031,7 @@ static BOOL MainMenu_PrintNintendoWFCSetupButton(MainMenuAppData *data, u32 a1, 
     return TRUE;
 }
 
-static BOOL MainMenu_PrintConnectToPokewalkerButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3) {
+static BOOL MainMenu_PrintConnectToPokewalkerButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3) {
     MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
     ClearWirelessIcon(data, 23, a3);
     data->unkEC[a1] = sMainMenuButtons[a1].id;
@@ -1075,7 +1039,7 @@ static BOOL MainMenu_PrintConnectToPokewalkerButton(MainMenuAppData *data, u32 a
     return TRUE;
 }
 
-static BOOL MainMenu_PrintWiiMessageSettingsButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3) {
+static BOOL MainMenu_PrintWiiMessageSettingsButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3) {
     MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
     ClearWirelessIcon(data, 23, a3);
     data->unkEC[a1] = sMainMenuButtons[a1].id;
@@ -1094,14 +1058,14 @@ static BOOL ov74_022282CC(MainMenuAppData *data) {
 
     for (i = 0, y = 1; i < APPOPTION_COUNT; i++) {
         const MainMenuButton *button = &sMainMenuButtons[i];
-        UnkStruct_ov74_02235414 unk;
+        MainMenuTextPrinter unk;
         MainMenuTextPrinter_Init(&unk, &data->unk5C[i], 1, NARC_msg_msg_0442_bin, 0x3F7, 2);
         MainMenuTextPrinter_SetSize(&unk, 23, button->height, data->unk20);
         if (button->printFunction != NULL) {
             if (data->unkEC[i] != 0) {
                 SetWindowX(unk.window, 3);
                 SetWindowY(unk.window, y);
-                DrawFrameAndWindow1(unk.window, FALSE, unk.baseTile, unk.paletteNum2);
+                DrawFrameAndWindow1(unk.window, FALSE, unk.frameBaseTile, unk.framePalette);
 
                 if (data->unk110[i] != 0) {
                     DrawWirelessIcon(data, 23, y, data->unk110[i]);
@@ -1528,7 +1492,7 @@ BOOL MainMenuApp_Exit(OverlayManager *manager, int *state) {
     OverlayManager_FreeData(manager);
     Heap_Destroy(HEAP_ID_MAIN_MENU);
 
-    ov74_02236034(FALSE);
+    MainMenuUtil_EnableCartridgePullOutCheck(FALSE);
 
     return TRUE;
 }

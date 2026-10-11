@@ -7,6 +7,7 @@
 
 #include "application/main_menu/main_menu.h"
 #include "application/main_menu/main_menu_internal.h"
+#include "application/main_menu/main_menu_util.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0247.h"
 
@@ -74,9 +75,6 @@ struct LockCapsuleCardView {
     int selection;                               // 0x3D04
     WaitingIcon *waitingIcon;                    // 0x3D08
 }; // size: 0x3D0C
-
-// Overlay helpers (not in a header yet).
-u32 MainMenuUtil_SpritesActive(void);
 
 // Declared here rather than through font.h / text.h: the card screens pass the u32 font ids of their text box
 // tables unconverted (those headers type them as the u8 FontID; matching).

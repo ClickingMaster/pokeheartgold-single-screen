@@ -5,6 +5,7 @@
 #include "constants/sndseq.h"
 
 #include "application/main_menu/agb_cartridge.h"
+#include "application/main_menu/main_menu_shared.h"
 #include "msgdata/msg.naix"
 
 #include "bg_window.h"
@@ -30,6 +31,7 @@
 #include "render_window.h"
 #include "save.h"
 #include "save_arrays.h"
+#include "save_data_read_error.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
 #include "sound_system.h"
@@ -51,9 +53,6 @@ extern u8 TextPrinterCheckActive(u8 printerId);
 extern void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable);
 
 // Overlay helpers (not in a header yet)
-void ov74_02236034(int a0);
-void ov74_02236074(void);
-void ShowGBACartRemovedError(enum HeapID heapID);
 BOOL CTRDG_IsExisting(void);
 BOOL CTRDG_IsPulledOut(void);
 void CTRDG_ReadAgbFlash(u16 sector, u32 offset, void *dest, u32 size);
@@ -1323,7 +1322,7 @@ BOOL MigrateFromAgb_Init(OverlayManager *man, int *state) {
     if (OS_IsTickAvailable() == FALSE) {
         OS_InitTick();
     }
-    ov74_02236074();
+    MainMenuUtil_IgnoreCartridgeIrq();
     sMigrateFromAgbIcons = app->icons;
     return TRUE;
 }
@@ -1636,6 +1635,6 @@ BOOL MigrateFromAgb_Exit(OverlayManager *man, int *state) {
     RegisterMainOverlay(FS_OVERLAY_ID(intro_title), &gApplication_TitleScreen);
     OverlayManager_FreeData(man);
     Heap_Destroy(HEAP_ID_76);
-    ov74_02236034(0);
+    MainMenuUtil_EnableCartridgePullOutCheck(0);
     return TRUE;
 }

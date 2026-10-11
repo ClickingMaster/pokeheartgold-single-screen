@@ -2,15 +2,17 @@
 
 #include "global.h"
 
+#include "application/main_menu/mystery_gift_app.h"
+
+#include "communication_player_state.h"
 #include "heap.h"
+#include "link_synchronization.h"
 #include "mystery_gift.h"
 #include "overlay_manager.h"
 #include "player_data.h"
 #include "sys_task_api.h"
 #include "unk_02033AE0.h"
-#include "communication_player_state.h"
 #include "unk_02034B0C.h"
-#include "link_synchronization.h"
 
 // DS-wireless link used by Mystery Gift to receive a Wonder Card from a distribution system. The link
 // is driven by a small state callback run from a task every frame.
@@ -43,7 +45,6 @@ extern int sub_02037088(int a0, void *a1, void *a2);
 extern void sub_02038114(void *a0, void *a1);
 extern void sub_02038148(void *a0, int a1);
 extern void *sub_020358D0(int a0);
-extern OverlayManager *MysteryGiftApp_GetOverlayManager(void);
 
 // The pieces of this module that poll the work pointer read it as volatile.
 #define VOLATILE_WORK (*(MysteryGiftCommWork *volatile *)&sMysteryGiftCommWork)

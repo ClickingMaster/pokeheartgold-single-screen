@@ -4824,31 +4824,10 @@ Object src/application/main_menu/mystery_gift_wireless.o
     Object src/application/main_menu/agb_cartridge.o
     Object src/application/main_menu/main_menu_util.o
     Object asm/to57_overlay_74_data_own1.o
-    Object src/op90_to70_to58_w12_ov74_040_residual_04_extra107_residual_1_r01.o
-    Object src/to70_to58_w12_ov74_040_residual_04_extra107_run01.o
-    Object src/op90_to70_to58_w12_ov74_040_residual_04_extra107_residual_2_r01.o
-    Object src/to57_overlay_74_exact_041.o
-    Object src/to70_to57_overlay_74_residual_042_extra905_run01.o
-    Object src/to57_overlay_74_exact_043.o
-    Object src/to80_extra1603_run01.o
-    Object src/to57_overlay_74_exact_045.o
-    Object src/op90_to57_overlay_74_residual_046_r01.o
-    Object src/to57_overlay_74_exact_047.o
-    Object src/to58_w09_ov74_048_a.o
-    Object src/op90_to58_w09_ov74_048_mid_a_r01.o
-    Object src/to90_extra2419_run01.o
-    Object src/to58_w09_ov74_048_b.o
-    Object src/to90_extra2522_run01.o
-    Object src/to70_to58_w09_ov74_048_tail_extra141_run01.o
-    Object src/to57_overlay_74_exact_049.o
-    Object src/to70_to57_overlay_74_residual_050_extra1061_run01.o
-    Object src/to90_extra2290_run01.o
-    Object src/to57_overlay_74_exact_051.o
-    Object src/to90_extra2556_run01.o
-    Object src/to70_to57_overlay_74_residual_052_extra426_run01.o
-    Object src/to57_overlay_74_exact_053.o
-    Object src/to70_to57_overlay_74_residual_054_extra1237_run01.o
-    Object src/to57_overlay_74_exact_055.o
+    Object src/application/main_menu/main_menu_shared.o
+    Object src/application/main_menu/mystery_gift_beacon.o
+    Object src/application/main_menu/mystery_gift_wfc.o
+    Object src/application/main_menu/agb_string.o
     Object asm/to57_overlay_74_data.o
     Object asm/op90_nitrocrypto_residual00_anchor.o
     Object lib/src/nitrocrypto_rc4.o

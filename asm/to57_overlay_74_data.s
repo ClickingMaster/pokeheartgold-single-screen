@@ -83,21 +83,21 @@
 	.public MainMenuUtil_CreateSprite
 	.public MainMenuUtil_FreeSprites
 	.public ov74_02235A68
-	.public ov74_02235DC4
-	.public ov74_02235ED0
-	.public ov74_02235F58
-	.public ov74_02236034
-	.public ov74_022360A0
-	.public ov74_022360B0
-	.public ov74_02236128
-	.public ov74_02236140
-	.public ov74_0223615C
-	.public ov74_022365FC
-	.public ov74_02236680
-	.public ov74_022368D4
-	.public ov74_02236980
-	.public ov74_02236988
-	.public ov74_02236AE0
+	.public MainMenuUtil_ShowCardSubScreen
+	.public MainMenuUtil_EncryptWonderCard
+	.public MainMenuUtil_DecryptWonderCard
+	.public MainMenuUtil_EnableCartridgePullOutCheck
+	.public MainMenuUtil_StartSave
+	.public MainMenuUtil_RunSave
+	.public MainMenuUtil_ResumeSave
+	.public MainMenuUtil_CancelSave
+	.public MainMenuUtil_GetSaveState
+	.public MysteryGiftBeacon_Stop
+	.public MysteryGiftBeacon_Init
+	.public MysteryGiftBeacon_DecryptGift
+	.public MysteryGiftBeacon_GetWorkSize
+	.public MysteryGiftBeacon_GetTitle
+	.public MysteryGiftWfc_Run
 	.public ov74_0223BD5C
 	.public sRangerCharTable
 	.public ov74_0223C1F4
@@ -244,7 +244,7 @@
 	.public _0223B710
 	.public _0223B720
 	.public _0223B73C
-	.public _0223B760
+	.public sAgbToDpCharMap
 	.public gApp_MainMenu
 	.public gApp_MainMenu_SelectOption_ConnectToRanger
 	.public gApp_MainMenu_SelectOption_MigrateFromAgb
@@ -388,55 +388,55 @@
 	.public MainMenuUtil_ShowGiftPokemon
 	.public MainMenuUtil_ShowGiftItem
 	.public MainMenuUtil_LoadCardSubScreenPalette
-	.public ov74_02235DC4
-	.public ov74_02235ED0
-	.public ov74_02235F58
-	.public ov74_02235FF8
-	.public ov74_02236010
-	.public ov74_02236034
-	.public ov74_02236070
-	.public ov74_02236074
-	.public ov74_022360A0
-	.public ov74_022360B0
-	.public ov74_02236128
-	.public ov74_02236140
-	.public ov74_0223615C
-	.public ov74_02236168
-	.public ov74_022361B8
-	.public ov74_022361D4
-	.public ov74_02236258
-	.public ov74_02236354
-	.public ov74_0223648C
-	.public ov74_022364A8
-	.public ov74_022364C0
-	.public ov74_022364F0
-	.public ov74_02236514
-	.public ov74_0223653C
-	.public ov74_02236570
-	.public ov74_022365AC
-	.public ov74_022365FC
-	.public ov74_02236620
-	.public ov74_02236644
-	.public ov74_02236680
-	.public ov74_022366E8
-	.public ov74_02236768
-	.public ov74_022368A4
-	.public ov74_022368D4
-	.public ov74_02236980
-	.public ov74_02236988
-	.public ov74_022369A8
-	.public ov74_022369C8
-	.public ov74_022369D8
+	.public MainMenuUtil_ShowCardSubScreen
+	.public MainMenuUtil_EncryptWonderCard
+	.public MainMenuUtil_DecryptWonderCard
+	.public MainMenuUtil_ListMenuCursorCallback
+	.public MainMenuUtil_CartridgeIrqHandler
+	.public MainMenuUtil_EnableCartridgePullOutCheck
+	.public MainMenuUtil_IgnoreCartridgeIrqHandler
+	.public MainMenuUtil_IgnoreCartridgeIrq
+	.public MainMenuUtil_StartSave
+	.public MainMenuUtil_RunSave
+	.public MainMenuUtil_ResumeSave
+	.public MainMenuUtil_CancelSave
+	.public MainMenuUtil_GetSaveState
+	.public MysteryGiftBeacon_SetState
+	.public MysteryGiftBeacon_SetError
+	.public MysteryGiftBeacon_StartScan
+	.public MysteryGiftBeacon_ScanChannel
+	.public MysteryGiftBeacon_ScanCallback
+	.public MysteryGiftBeacon_EndScan
+	.public MysteryGiftBeacon_EndScanCallback
+	.public MysteryGiftBeacon_EndCallback
+	.public MysteryGiftBeacon_Start
+	.public MysteryGiftBeacon_IndicationCallback
+	.public MysteryGiftBeacon_Initialize
+	.public MysteryGiftBeacon_InitializeCallback
+	.public MysteryGiftBeacon_End
+	.public MysteryGiftBeacon_Stop
+	.public MysteryGiftBeacon_Reset
+	.public MysteryGiftBeacon_ResetCallback
+	.public MysteryGiftBeacon_Init
+	.public MysteryGiftBeacon_StartReceive
+	.public MysteryGiftBeacon_ReceivePacket
+	.public MysteryGiftBeacon_Checksum
+	.public MysteryGiftBeacon_DecryptGift
+	.public MysteryGiftBeacon_GetWorkSize
+	.public MysteryGiftBeacon_GetTitle
+	.public MysteryGiftWfc_Alloc
+	.public MysteryGiftWfc_Free
+	.public MysteryGiftWfc_HandleError
 	.public ov74_02236A2C
-	.public ov74_02236A54
-	.public ov74_02236A78
-	.public ov74_02236AAC
-	.public ov74_02236ABC
-	.public ov74_02236AC8
-	.public ov74_02236AE0
-	.public ov74_02236F30
-	.public ov74_02236F44
-	.public ov74_02236F80
+	.public MysteryGiftWfc_WaitForRequest
+	.public MysteryGiftWfc_StartCleanup
+	.public MysteryGiftWfc_OnRequestDone
+	.public MysteryGiftWfc_OnCleanupDone
+	.public MysteryGiftWfc_Shutdown
+	.public MysteryGiftWfc_Run
+	.public AgbString_GetSpaceChar
+	.public AgbString_GetOpenQuoteChar
+	.public AgbString_GetCloseQuoteChar
 	.public ov74_0223BD5C
 	.public sRangerCharTable
 	.public ov74_0223C1F4
@@ -478,7 +478,7 @@
 	.public ov74_0223CF8C
 	.public ov74_0223CFA8
 	.public ov74_0223CFC4
-	.public ov74_0223CFE4
+	.public sMysteryGiftBeaconStateNames
 	.public ov74_0223D00C
 	.public ov74_0223D014
 	.public ov74_0223D018
@@ -501,9 +501,9 @@
 	.public ov74_0223D48C
 	.public ov74_0223D654
 	.public ov74_0223E2D4
-	.public ov74_0223E2FC
-	.public ov74_0223E304
-	.public ov74_0223E318
+	.public sMysteryGiftBeacon
+	.public sMysteryGiftWfcStatus
+	.public sMysteryGiftWfcFileList
 	.public sAgbCartNintendoLogo
 	.public sPmAgbCartridgeSpec
 	.public sPmAgbRomCodeMappings
@@ -742,7 +742,7 @@ _0223B73C:
 	.byte 0x00, 0x00, 0x01, 0x01
 	.byte 0x02, 0x01, 0x03, 0x02, 0x04, 0x03, 0x05, 0x02, 0x06, 0x02, 0x07, 0x00, 0x08, 0x05, 0x09, 0x05
 	.byte 0x0A, 0x05, 0x0B, 0x04, 0x0C, 0x05, 0x0D, 0x05, 0x0E, 0x02, 0x0F, 0x02, 0xFF, 0x00, 0x00, 0x00
-_0223B760:
+sAgbToDpCharMap:
 	.byte 0x01, 0x00, 0x01, 0x00, 0x03, 0x00, 0x03, 0x00, 0x05, 0x00, 0x05, 0x00, 0x07, 0x00, 0x07, 0x00
 	.byte 0x09, 0x00, 0x09, 0x00, 0x0B, 0x00, 0x0B, 0x00, 0x0C, 0x00, 0x0C, 0x00, 0x0E, 0x00, 0x0E, 0x00
 	.byte 0x10, 0x00, 0x10, 0x00, 0x12, 0x00, 0x12, 0x00, 0x14, 0x00, 0x14, 0x00, 0x16, 0x00, 0x16, 0x00
@@ -916,7 +916,7 @@ ov74_0223C260: ; 0x0223C260
 
 ov74_0223C270: ; 0x0223C270
 	.word 0
-	.word ov74_02235FF8
+	.word MainMenuUtil_ListMenuCursorCallback
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x03, 0x00, 0x00, 0x0C, 0x00, 0x10, 0x2F, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00
 	.word msg_0247_00012, MysteryGiftApp_SelectReceiveGift
@@ -950,7 +950,7 @@ ov74_0223C2F0: ; 0x0223C2F0
 
 ov74_0223C320: ; 0x0223C320
 	.word 0
-	.word ov74_02235FF8
+	.word MainMenuUtil_ListMenuCursorCallback
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x04, 0x00, 0x00, 0x0C, 0x00, 0x10, 0x2F, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00
 
@@ -1056,7 +1056,7 @@ ov74_0223C6D0: ; 0x0223C6D0
 
 ov74_0223C6E0: ; 0x0223C6E0
 	.word 0
-	.word ov74_02235FF8
+	.word MainMenuUtil_ListMenuCursorCallback
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x04, 0x00, 0x00, 0x0C, 0x00, 0x10, 0x2F, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00
 
@@ -1297,7 +1297,7 @@ ov74_0223CFC4:
 	.asciz "mywh_SYSSTATE_MEASURECHANNEL"
 	.balign 4, 0
 
-ov74_0223CFE4: ; 0x0223CFE4
+sMysteryGiftBeaconStateNames: ; 0x0223CFE4
 	.word ov74_0223CF18
 	.word ov74_0223CEF0
 	.word ov74_0223CF40
@@ -1347,11 +1347,11 @@ ov74_0223D654: ; 0x0223D654
 ov74_0223E2D4: ; 0x0223E2D4
 	.space 0x28
 
-ov74_0223E2FC: ; 0x0223E2FC
+sMysteryGiftBeacon: ; 0x0223E2FC
 	.space 0x8
 
-ov74_0223E304: ; 0x0223E304
+sMysteryGiftWfcStatus: ; 0x0223E304
 	.space 0x14
 
-ov74_0223E318: ; 0x0223E318
+sMysteryGiftWfcFileList: ; 0x0223E318
 	.space 0x6e0

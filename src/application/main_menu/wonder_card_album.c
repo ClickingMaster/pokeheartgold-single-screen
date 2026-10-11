@@ -6,8 +6,11 @@
 #include "constants/sndseq.h"
 #include "constants/species.h"
 
+#include "application/main_menu/lock_capsule_card.h"
 #include "application/main_menu/main_menu.h"
 #include "application/main_menu/main_menu_internal.h"
+#include "application/main_menu/main_menu_shared.h"
+#include "application/main_menu/main_menu_util.h"
 #include "application/main_menu/mystery_gift_wireless.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0247.h"
@@ -87,16 +90,6 @@ struct WonderCardAlbum {
     int selection;                             // 0x3D4C, 0: share, 1: cancel
     WaitingIcon *waitingIcon;                  // 0x3D50
 }; // size: 0x3D54
-
-// Overlay helpers (not in a header yet).
-u32 MainMenuUtil_SpritesActive(void);
-int ov74_022360B0(void);
-void ov74_022360A0(SaveData *saveData);
-void ov74_02235ED0(UnkWonderCardSubstruct_104 *header, void *buffer, enum HeapID heapID);
-u32 ov74_0223615C(void);
-void ov74_02236128(void);
-void WonderCard_SetGraphicsBanks(void);
-void WonderCard_InitBgLayers(BgConfig *bgConfig);
 
 // Declared here rather than through font.h / text.h: the card screens pass the u32 font ids of their text box
 // tables unconverted (those headers type them as the u8 FontID; matching).
@@ -742,7 +735,7 @@ BOOL WonderCardAlbum_UpdateFlipEffect(WonderCardAlbum *album) {
 #pragma force_active reset
 
 void WonderCardAlbum_WaitForSave(WonderCardAlbum *album) {
-    int status = ov74_022360B0();
+    int status = MainMenuUtil_RunSave();
 
     if (status == 2 || status == 3) {
         PlaySE(SEQ_SE_DP_SAVE);
@@ -760,7 +753,7 @@ void WonderCardAlbum_CountShare(WonderCardAlbum *album) {
         album->cards[album->cardIndex]->shareMax--;
     }
     SaveSubstruct_UpdateCRC(SAVE_MYSTERY_GIFT);
-    ov74_022360A0(album->saveData);
+    MainMenuUtil_StartSave(album->saveData);
     album->callback = WonderCardAlbum_WaitForSave;
 }
 
@@ -978,14 +971,14 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
     case 22:
         album->timer--;
         if (album->timer == 0) {
-            ov74_02235ED0(&album->shareHeader, album->unk_2DD8, album->heapId);
+            MainMenuUtil_EncryptWonderCard(&album->shareHeader, album->unk_2DD8, album->heapId);
             ov74_02229D0C(album->unk_2DD8, (void *)sizeof(WonderCard));
             WonderCardAlbum_CountShare(album);
             *state = 24;
         }
         break;
     case 24:
-        if (ov74_0223615C() == 4) {
+        if (MainMenuUtil_GetSaveState() == 4) {
             LinkSync_StartSync(147);
             sub_020398D4(1, 1);
             *state = 25;
@@ -994,7 +987,7 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
     case 25:
         if (WonderCardAlbum_CountReceivers() == 0 || LinkSync_IsSynced(147) == TRUE) {
             sub_020398D4(0, 0);
-            ov74_02236128();
+            MainMenuUtil_ResumeSave();
             WonderCardAlbum_PrintTextBox(album, &album->messageWindow, 18, 640);
             WaitingIcon_Delete(album->waitingIcon);
             WonderCardAlbum_StopSharing(album, state, 26);

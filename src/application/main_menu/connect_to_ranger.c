@@ -6,7 +6,9 @@
 #include "constants/species.h"
 
 #include "application/main_menu/main_menu_internal.h"
+#include "application/main_menu/main_menu_shared.h"
 #include "application/main_menu/ranger_link.h"
+#include "application/main_menu/wonder_card_album.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0017.h"
 #include "msgdata/msg/msg_0247.h"
@@ -28,12 +30,12 @@
 #include "pokedex.h"
 #include "render_window.h"
 #include "save_arrays.h"
+#include "sound_playback.h"
 #include "sound_system.h"
 #include "sprite.h"
 #include "system.h"
 #include "text.h"
 #include "title_screen.h"
-#include "sound_playback.h"
 #include "unk_02034B0C.h"
 #include "unk_0203A3B0.h"
 
@@ -115,12 +117,6 @@ extern void sub_02034DE0(void);
 extern void sub_0203A930(int a0);
 
 // Wireless link with Pokemon Ranger (link_status part of this overlay)
-void ov74_022360A0(SaveData *saveData);
-int ov74_022360B0(void);
-void ov74_02236128(void);
-int ov74_0223615C(void);
-void WonderCardAlbum_DrawCardOnBg(BgConfig *bgConfig, WonderCard *wonderCard, enum HeapID heapID);
-void ov74_02235DC4(BgConfig *bgConfig, WonderCard *wonderCard);
 
 u16 ConnectToRanger_ConvertCharToRanger(u16 c) {
     u32 i;
@@ -450,7 +446,7 @@ void ConnectToRanger_StoreManaphyEggCard(ConnectToRangerApp *app) {
     // The card's header has the layout of a MysteryGift.
     SaveMysteryGift_TryInsertGift(app->mysteryGift, (MysteryGift *)wonderCard, 3);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
-    ov74_02235DC4(app->bgConfig, wonderCard);
+    MainMenuUtil_ShowCardSubScreen(app->bgConfig, wonderCard);
 }
 
 #pragma force_active reset
@@ -603,12 +599,12 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
             MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->statusText, 2, 19, msg_0247_00074);
             app->waitingIcon = WaitingIcon_New(&app->statusWindow, 10);
             ConnectToRanger_StoreManaphyEggCard(app);
-            ov74_022360A0(app->saveData);
+            MainMenuUtil_StartSave(app->saveData);
             CONNECT_STATE = RANGER_CONNECT_SAVING;
         }
         break;
     case RANGER_CONNECT_SAVING:
-        if (ov74_022360B0() == 1) {
+        if (MainMenuUtil_RunSave() == 1) {
             CONNECT_STATE = RANGER_CONNECT_RANDOM_DELAY;
             app->timer = (s32)OS_GetTickLo() % 54 + 6;
         }
@@ -625,7 +621,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         break;
     case RANGER_CONNECT_WAIT_ACK:
         if (RangerLink_IsCommandAcknowledged()) {
-            ov74_02236128();
+            MainMenuUtil_ResumeSave();
             CONNECT_STATE = RANGER_CONNECT_FINISH_SAVE;
             app->timer = 800;
         } else {
@@ -642,12 +638,12 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         }
         break;
     case RANGER_CONNECT_FINISH_SAVE:
-        if (ov74_0223615C() == 3) {
+        if (MainMenuUtil_GetSaveState() == 3) {
             RangerLink_RequestEnd();
             CONNECT_STATE = RANGER_CONNECT_LINK_LOST;
             app->timer = 120;
-        } else if (ov74_0223615C() != 2) {
-            ov74_022360B0();
+        } else if (MainMenuUtil_GetSaveState() != 2) {
+            MainMenuUtil_RunSave();
         } else if (RangerLink_IsCommandDone() || !RangerLink_IsConnected()) {
             CONNECT_STATE = RANGER_CONNECT_DONE_DELAY;
             app->timer = 1;

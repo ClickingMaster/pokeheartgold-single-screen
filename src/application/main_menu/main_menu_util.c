@@ -241,21 +241,21 @@ void MainMenuUtil_WaitFade(int *state) {
 #pragma force_active reset
 
 // The message box printer (MainMenuTextPrinter)
-void MainMenuTextPrinter_Init(MainMenuTextPrinter *printer, Window *window, u32 unk30, u32 msgFileId, u32 unk38, u32 unk3C) {
+void MainMenuTextPrinter_Init(MainMenuTextPrinter *printer, Window *window, u32 palette, u32 msgFileId, u32 frameBaseTile, u32 framePalette) {
     memset(printer, 0, sizeof(MainMenuTextPrinter));
-    printer->unk_04 = 1;
+    printer->drawFrame = 1;
     printer->clearWindow = TRUE;
     printer->msgId = -1;
     printer->window = window;
-    printer->unk_30 = unk30;
+    printer->palette = palette;
     printer->msgFileId = msgFileId;
-    printer->unk_38 = unk38;
-    printer->unk_3C = unk3C;
-    printer->unk_2C = 0;
+    printer->frameBaseTile = frameBaseTile;
+    printer->framePalette = framePalette;
+    printer->bgId = 0;
     printer->fontId = 0;
     printer->color = 0x01020F; // text 1, shadow 2, background 15
     printer->fillColor = 15;
-    printer->unk_00 = 0;
+    printer->frameType = 0;
     printer->textY = 0;
     printer->textX = 0;
     printer->msgFormat = NULL;
@@ -268,8 +268,8 @@ void MainMenuTextPrinter_SetSize(MainMenuTextPrinter *printer, u32 width, u32 he
     printer->baseTile = baseTile;
 }
 
-void MainMenuTextPrinter_SetFrameAndFont(MainMenuTextPrinter *printer, u32 unk00, u32 fontId) {
-    printer->unk_00 = unk00;
+void MainMenuTextPrinter_SetFrameAndFont(MainMenuTextPrinter *printer, u32 frameType, u32 fontId) {
+    printer->frameType = frameType;
     printer->fontId = fontId;
 }
 
@@ -320,7 +320,7 @@ int MainMenuTextPrinter_Print(MainMenuTextPrinter *printer, int msgId) {
 int MainMenuTextPrinter_AddWindowAndPrint(BgConfig *bgConfig, MainMenuTextPrinter *printer, int x, int y, int msgId) {
     u32 result;
     if (printer->window->bgConfig == NULL) {
-        AddWindowParameterized(bgConfig, printer->window, (u8)printer->unk_2C, (u8)x, (u8)y, (u8)printer->width, (u8)printer->height, (u8)printer->unk_30, (u16)printer->baseTile);
+        AddWindowParameterized(bgConfig, printer->window, (u8)printer->bgId, (u8)x, (u8)y, (u8)printer->width, (u8)printer->height, (u8)printer->palette, (u16)printer->baseTile);
         result = MainMenuTextPrinter_Print(printer, msgId);
     } else {
         if (x != -1) {
@@ -331,13 +331,13 @@ int MainMenuTextPrinter_AddWindowAndPrint(BgConfig *bgConfig, MainMenuTextPrinte
         }
         result = MainMenuTextPrinter_Print(printer, msgId);
     }
-    if (printer->unk_04 == 1) {
-        switch (printer->unk_00) {
+    if (printer->drawFrame == 1) {
+        switch (printer->frameType) {
         case 0:
-            DrawFrameAndWindow1(printer->window, FALSE, (u16)printer->unk_38, (u8)printer->unk_3C);
+            DrawFrameAndWindow1(printer->window, FALSE, (u16)printer->frameBaseTile, (u8)printer->framePalette);
             break;
         case 1:
-            DrawFrameAndWindow2(printer->window, FALSE, (u16)printer->unk_38, (u8)printer->unk_3C);
+            DrawFrameAndWindow2(printer->window, FALSE, (u16)printer->frameBaseTile, (u8)printer->framePalette);
             break;
         case 2:
         default:
@@ -386,10 +386,10 @@ void MainMenuUtil_InitSprites(void) {
     }
 }
 
-SpriteList **MainMenuUtil_GetSpriteList(void) {
+MainMenuUtilSprites *MainMenuUtil_GetSpriteList(void) {
     MainMenuUtilWork *work = (MainMenuUtilWork *)(&sMainMenuUtilCryptoHeapId + 1);
     GF_ASSERT(gMainMenuUtilWork.sprites.spriteList != NULL);
-    return &work->sprites.spriteList;
+    return &work->sprites;
 }
 
 #pragma force_active reset
@@ -598,7 +598,7 @@ void MainMenuUtil_LoadGiftMonSprite(Sprite *sprite, Pokemon *mon, int species, i
 }
 
 // Gift graphics of the card screens: the gift box
-void MainMenuUtil_ShowGiftBox(MainMenuUtilWork *work) {
+void MainMenuUtil_ShowGiftBox(MainMenuUtilWork *work, int giftType, void *gift) {
     MainMenuUtil_LoadSpriteResources(NARC_a_1_1_3, 39, 36, 38, 37, 1);
     MainMenuUtil_SetSubScreenOffset(0, FX32_CONST(256));
     work->giftSprite = MainMenuUtil_CreateSprite(1, work->giftSprite, 128, 0, 0);
