@@ -598,9 +598,9 @@ gFrontierCommandTable: ; 0x0223BA04
 	.word FrtCmd_077
 	.word FrtCmd_078
 	.word FrtCmd_079
-	.word FrtCmd_080
-	.word FrtCmd_081
-	.word FrtCmd_082
+	.word FrtCmd_CastleShowPoints
+	.word FrtCmd_CastleHidePoints
+	.word FrtCmd_CastlePrintPoints
 	.word FrtCmd_083
 	.word FrtCmd_084
 	.word FrtCmd_085
@@ -669,25 +669,25 @@ gFrontierCommandTable: ; 0x0223BA04
 	.word FrtCmd_148
 	.word FrtCmd_149
 	.word FrtCmd_150
-	.word FrtCmd_151
-	.word FrtCmd_152
-	.word FrtCmd_153
-	.word FrtCmd_154
-	.word FrtCmd_155
-	.word FrtCmd_156
-	.word FrtCmd_157
+	.word FrtCmd_CastleAlloc
+	.word FrtCmd_CastleInit
+	.word FrtCmd_CastleFree
+	.word FrtCmd_CastleLaunchPartyApp
+	.word FrtCmd_CastleEndBattle
+	.word FrtCmd_CastleStartBattle
+	.word FrtCmd_CastleLaunchOpponentApp
 	.word FrtCmd_158
-	.word FrtCmd_159
-	.word FrtCmd_160
-	.word FrtCmd_161
-	.word FrtCmd_162
-	.word FrtCmd_163
+	.word FrtCmd_CastleGenerateOpponents
+	.word FrtCmd_CastleAction
+	.word FrtCmd_CastleGetBattleResult
+	.word FrtCmd_CastleSendLinkMessage
+	.word FrtCmd_CastleWaitLink
 	.word FrtCmd_164
-	.word FrtCmd_165
-	.word FrtCmd_166
-	.word FrtCmd_167
-	.word FrtCmd_168
-	.word FrtCmd_169
+	.word FrtCmd_CastleWaitLinkChoice
+	.word FrtCmd_CastleGetPoints
+	.word FrtCmd_CastleSpendPoints
+	.word FrtCmd_CastleAddPoints
+	.word FrtCmd_CastlePrintTrainerMessage
 	.word FrtCmd_LinkLobbyAlloc
 	.word FrtCmd_LinkLobbyFree
 	.word FrtCmd_LinkLobbySend

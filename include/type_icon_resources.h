@@ -9,6 +9,7 @@ u32 TypeIcon_GetPalette(u32 type);
 void TypeIcon_LoadPaletteBuffer(PaletteData *paletteData, int a1, SpriteSystem *spriteSystem, SpriteManager *spriteManager, int a4, int a5);
 void TypeIcon_LoadCellAnim(SpriteSystem *spriteSystem, SpriteManager *spriteManager, int a2, int a3);
 void TypeIcon_LoadChar(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NNS_G2D_VRAM_TYPE vramType, int type, int a4); // load type icon graphics?
+void TypeIcon_LoadPltt(SpriteSystem *spriteSystem, SpriteManager *spriteManager, int vram, int resId);
 void TypeIcon_UnloadChar(SpriteManager *spriteManager, int a1);
 void TypeIcon_UnloadPltt(SpriteManager *spriteManager, int a1);
 void TypeIcon_UnloadCellAnim(SpriteManager *spriteManager, int a1, int a2);

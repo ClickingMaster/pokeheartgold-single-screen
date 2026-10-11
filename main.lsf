@@ -923,25 +923,12 @@ Static main
     Object lib/libCPS/src/cps_udp.o
     Object lib/libCPS/src/cps_ip_frag.o
     Object lib/libCPS/src/cps_ip.o
-    Object src/to90_extra2464_run01.o
-    Object src/to65_wifi_residual_11_run16.o
-    Object src/to80_extra1460_run01.o
-    Object src/to65_wifi_residual_11_run17.o
-    Object src/op90_to65_wifi_residual_11_residual_17_r01.o
-    Object src/to65_wifi_residual_11_run18.o
-    Object src/to70_to65_wifi_residual_11_residual_18_extra1164_run01.o
-    Object src/to65_wifi_residual_11_run19.o
-    Object src/to80_extra1461_run01.o
-    Object src/to65_wifi_residual_11_run20.o
-    Object src/to65_wifi_residual_11_run21.o
-    Object src/to80_extra1462_run01.o
-    Object src/to65_wifi_residual_11_run22.o
-    Object src/to70_to65_wifi_residual_11_residual_21_extra1165_run01.o
-    Object src/op90_to70_to65_wifi_residual_11_residual_21_extra1165_residual_1_r01.o
-    Object src/to65_wifi_residual_11_run23.o
-    Object src/op90_to65_wifi_residual_11_residual_22_r01.o
-    Object src/to65_wifi_residual_11_run24.o
-    Object src/to80_extra1856_run01.o
+    Object lib/libCPS/src/cps_socket.o
+    Object lib/libCPS/src/cps_tcp_write.o
+    Object lib/libCPS/src/cps_scavenger.o
+    Object lib/libCPS/src/cps_dhcp.o
+    Object lib/libCPS/src/cps_dns.o
+    Object lib/libCPS/src/cps_resolve.o
     Object src/to90_extra2350_run01.o
     Object src/to65_wifi_residual_11_run25.o
     Object src/to90_extra2465_run01.o
@@ -2507,135 +2494,9 @@ Overlay OVY_14
 Overlay OVY_15
 {
     After OVY_14
-    Object src/to47r5_overlay15_bag_entry.o
-    Object src/overlay15_bag_exit.o
-    Object src/to41_overlay_15_prefix_run1.o
-    Object src/to50_overlay15_vblank_tasks.o
-    Object src/to41_overlay_15_prefix_run2.o
-    Object src/to45_overlay15_prefix_r3.o
-    Object src/op90_overlay_15_prefix_to45_residual_3_tail_r01.o
-    Object src/to41_overlay_15_prefix_run3.o
-    Object src/to52_r4_overlay15_prefix4_exact.o
-    Object src/to90_extra2255_run01.o
-    Object src/to41_overlay_15_prefix_run4.o
-    Object src/to50_overlay15_bag_scroll_clamp.o
-    Object src/to41_overlay_15_prefix_run5.o
-    Object src/to70_overlay_15_prefix_to41_residual_6_extra949_run01.o
-    Object src/to41_overlay_15_prefix_run6.o
-    Object src/overlay15_bag_navigation_r42_run1.o
-    Object src/to80_extra1515_run01.o
-    Object src/to80_extra1906_run01.o
-    Object src/overlay15_bag_navigation_r42_run2.o
-    Object src/op90_overlay_15_prefix_to41_residual_7_asm2_r01.o
-    Object src/overlay15_bag_navigation_r42_run3.o
-    Object src/to90_extra2481_run01.o
-    Object src/to46_overlay15_touch_nav.o
-    Object src/to70_overlay_15_prefix_to46_residual_7_asm3_tail_extra383_run01.o
-    Object src/to41_overlay_15_prefix_run7.o
-    Object src/to70_to42_overlay15_bag_residual8_asm01_extra526_run01.o
-    Object src/to42_overlay15_bag_residual8_run01.o
-    Object src/op90_to42_overlay15_bag_residual8_asm02_r01.o
-    Object src/to42_overlay15_bag_residual8_run02.o
-    Object src/to90_extra2506_run01.o
-    Object src/to42_overlay15_bag_residual8_run03.o
-    Object src/to70_to42_overlay15_bag_residual8_asm04_extra527_run01.o
-    Object src/to42_overlay15_bag_residual8_run04.o
-    Object src/to91_bag_choices41560_run01.o
-    Object src/to42_overlay15_bag_residual8_run05.o
-    Object src/to90_extra2406_run01.o
-    Object src/to42_overlay15_bag_residual8_run06.o
-    Object src/to70_to42_overlay15_bag_residual8_asm07_extra1050_run01.o
-    Object src/to42_overlay15_bag_residual8_run07.o
-    Object src/to41_overlay_15_prefix_run8.o
-    Object src/to90_extra2068_run01.o
-    Object src/to52_r4_overlay15_bag_item_use.o
-    Object src/to41_overlay_15_prefix_run9.o
-    Object src/to70_overlay_15_prefix_to41_residual_10_retained_extra771_run01.o
-    Object src/to50_overlay15_bag_discard_state.o
-    Object src/to41_overlay_15_prefix_run10.o
-    Object src/to50_overlay15_bag_quantity_branch.o
-    Object src/to41_overlay_15_prefix_run11.o
-    Object src/to80_extra1693_run01.o
-    Object src/to41_overlay_15_prefix_run12.o
-    Object src/to50_overlay15_bag_ui_refresh.o
-    Object src/to41_overlay_15_prefix_run13.o
-    Object src/to50_overlay15_bag_toss_confirm.o
-    Object src/to41_overlay_15_prefix_run14.o
-    Object src/to52_overlay15_bag_register_flow.o
-    Object src/to41_overlay_15_prefix_run15.o
-    Object src/to70_overlay_15_prefix_to42_r16_gap01_extra1196_run01.o
-    Object src/to42_overlay15_r16_run01.o
-    Object src/to80_extra1516_run01.o
-    Object src/overlay15_bag_quantity_branch.o
-    Object src/to42_overlay15_r16_run02.o
-    Object src/to90_extra2002_run01.o
-    Object src/to42_overlay15_r16_run03.o
-    Object src/to41_overlay_15_prefix_run16.o
-    Object src/to50_overlay15_bag_sale_flow_run1.o
-    Object src/to91_w41557_sale_run01.o
-    Object src/to50_overlay15_bag_sale_flow_run2.o
-    Object src/to41_overlay_15_prefix_run17.o
-    Object src/to50_overlay15_bag_bg_layout.o
-    Object src/to41_overlay_15_prefix_run18.o
-    Object src/to50_overlay15_r19_exact.o
-    Object src/to59_overlay15_bag_render_init.o
-    Object src/to41_overlay_15_prefix_run19.o
-    Object src/to50_overlay15_bag_interpolation.o
-    Object src/to41_overlay_15_prefix_run20.o
-    Object src/to50_overlay15_bag_model_render.o
-    Object src/to41_overlay_15_prefix_run21.o
-    Object src/to45_overlay15_model_windows_r22.o
-    Object src/to41_overlay_15_prefix_run22.o
-    Object src/to47_overlay15_windows_r23.o
-    Object src/to41_overlay_15_prefix_run23.o
-    Object src/to50_overlay15_bag_bg_palette_rows.o
-    Object src/to41_overlay_15_prefix_run24.o
-    Object src/to50_overlay15_bag_item_move_text.o
-    Object src/to41_overlay_15_prefix_run25.o
-    Object src/overlay15_tm_label_format.o
-    Object src/to90_extra2369_run01.o
-    Object src/overlay15_hm_marker.o
+    Object src/application/bag/bag_app.o
     Object asm/overlay_15_suffix_to42_data.o
-    Object src/to70_overlay_15_suffix_to42_residual_01_extra772_run01.o
-    Object src/to42_overlay_15_suffix_run01.o
-    Object src/to90_extra2003_run01.o
-    Object src/to42_overlay_15_suffix_run02.o
-    Object src/to90_extra2431_run01.o
-    Object src/to90_extra2186_run01.o
-    Object src/to42_overlay_15_suffix_run03.o
-    Object src/to70_overlay_15_suffix_to42_residual_04_extra950_run01.o
-    Object src/to42_overlay_15_suffix_run04.o
-    Object src/to70_overlay_15_suffix_to42_residual_05_extra576_run01.o
-    Object src/to42_overlay_15_suffix_run05.o
-    Object src/op90_to52_r4_overlay15_suffix06_residual_r01.o
-    Object src/op90_op90_to52_r4_overlay15_suffix06_residual_residual_1_r01.o
-    Object src/to52_r4_overlay15_suffix06_tail.o
-    Object src/to42_overlay_15_suffix_run06.o
-    Object src/to70_overlay_15_suffix_to42_residual_07_extra266_run01.o
-    Object src/to42_overlay_15_suffix_run07.o
-    Object src/to80_extra1873_run01.o
-    Object src/to42_overlay_15_suffix_run08.o
-    Object src/to70_overlay_15_suffix_to42_residual_09_extra951_run01.o
-    Object src/to42_overlay_15_suffix_run09.o
-    Object src/to70_overlay_15_suffix_to42_residual_10_extra952_run01.o
-    Object src/to42_overlay_15_suffix_run10.o
-    Object src/to46_overlay15_gap11_head.o
-    Object src/to70_overlay_15_suffix_to46_residual_11_extra1197_run01.o
-    Object src/to46_overlay15_gap11_tail.o
-    Object src/to42_overlay_15_suffix_run11.o
-    Object src/to70_overlay_15_suffix_to42_residual_12_extra577_run01.o
-    Object src/to42_overlay_15_suffix_run12.o
-    Object src/op90_to70_overlay_15_suffix_to42_residual_13_extra578_residual_1_r01.o
-    Object src/to70_overlay_15_suffix_to42_residual_13_extra578_run01.o
-    Object src/to42_overlay_15_suffix_run13.o
-    Object src/to70_overlay_15_suffix_to42_residual_14_extra384_run01.o
-    Object src/to42_overlay_15_suffix_run14.o
-    Object src/to80_extra1517_run01.o
-    Object src/to42_overlay_15_suffix_run15.o
-    Object src/op90_overlay_15_suffix_to42_residual_16_r01.o
-    Object src/to42_overlay_15_suffix_run16.o
-    Object src/to90_extra2187_run01.o
-    Object src/to42_overlay_15_suffix_run17.o
+    Object src/application/bag/bag_app_display.o
 }
 Overlay OVY_16
 {
@@ -3948,29 +3809,8 @@ Overlay OVY_80
     Object src/overlay_80_02231930.o
     Object src/overlay_80_022310C4_opus_partial_4.o
     Object src/to90_extra2043_run01.o
-    Object src/ov80_31bf8_partial_1.o
-    Object src/overlay_80_02231BF8.o
-    Object src/ov80_31bf8_partial_2.o
-    Object src/to80_extra1551_run01.o
-    Object src/ov80_31bf8_partial_3.o
-    Object src/op90_overlay_80_022324C4_r01.o
-    Object src/ov80_324c4_partial_1.o
-    Object src/to90_extra2526_run01.o
-    Object src/to90_extra2254_run01.o
-    Object src/to52_r2_w16_ov80_party_restore_r2.o
-    Object src/ov80_324c4_partial_2.o
-    Object src/to70_overlay_80_022324C4_residual_3_extra989_run01.o
-    Object src/ov80_324c4_partial_3.o
-    Object src/to70_overlay_80_022324C4_residual_4_extra1224_run01.o
-    Object src/ov80_324c4_partial_4.o
-    Object src/to52_r2_w08/to52_r2_w08_overlay80_r5_matched.o
-    Object src/op90_to52_r2_w08_overlay80_r5_residual_r01.o
-    Object src/ov80_324c4_partial_5.o
-    Object src/to70_overlay_80_022324C4_residual_6_extra348_run01.o
-    Object src/ov80_324c4_partial_6.o
-    Object src/to90_extra2044_run01.o
-    Object src/op90_to90_extra2044_residual_1_r01.o
-    Object src/ov80_324c4_partial_7.o
+    Object src/frontier/frontier_cmd_castle.o
+    Object src/frontier/battle_castle_challenge.o
     Object src/frontier/frontier_cmd_arcade.o
     Object src/frontier/battle_arcade_data.o
     Object asm/battle_arcade_data_tables.o

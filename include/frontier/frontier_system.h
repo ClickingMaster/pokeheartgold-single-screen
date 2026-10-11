@@ -37,7 +37,8 @@ typedef struct FrontierSystem {
     struct ListMenu2D *yesNoMenu;           // 0x74
     u8 filler_78[4];
     struct WaitingIcon *waitingIcon;        // 0x7C
-    u8 filler_80[0x30];
+    u8 filler_80[0x28];
+    Window *castlePointsWindows[2];         // 0xA8, Battle Castle points (BattleCastle_ShowPointsWindows)
     u16 recordSaveState;                    // 0xB0, battle record save (FrtCmd_109)
     u16 recordWriteState;                   // 0xB2
     u16 recordType;                         // 0xB4
