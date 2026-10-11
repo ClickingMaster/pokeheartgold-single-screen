@@ -6,7 +6,7 @@ typedef struct Ov59R8Work {
     void *sprites[15];
 } Ov59R8Work;
 void ov59_02239D08(Ov59R8Work *, int);
-int sub_02031C08(void *);
+int ApricornBox_CountQueuedApricorns(void *);
 int sub_02032004(void *);
 void BufferIntegerAsString(void *, int, int, int, int, int);
 void BufferItemNamePlural(void *, int, int);

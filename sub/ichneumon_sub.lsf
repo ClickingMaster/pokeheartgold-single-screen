@@ -123,18 +123,18 @@ Autoload EXT_WRAM
 	Object lib/src/wmsp_request.o
 	Object lib/src/wmsp_wl_command.o
 	Object lib/src/wmsp_initialize.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_12_r01.o
+	Object lib/src/wmsp_reset.o
 	Object lib/src/wmsp_end.o
-	Object lib/src/op90_to91_w41430_WMSP_SetParentParam_suffix_r01.o
+	Object lib/src/wmsp_start_parent.o
 	Object lib/src/wmsp_scan.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_14_r01.o
+	Object lib/src/wmsp_start_scan_ex.o
 	Object lib/src/wmsp_end_scan.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_15_r01.o
+	Object lib/src/wmsp_start_connect_ex.o
 	Object lib/src/wmsp_disconnect.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_16_r01.o
+	Object lib/src/wmsp_disconnect_core.o
 	Object lib/src/wmsp_disconnect_ind.o
-	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_17_residual_1_r01.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_17_r01.o
+	Object lib/src/wmsp_start_mp.o
+	Object lib/src/wmsp_set_mp_data.o
 	Object lib/src/to90_arm7_sub_ext_wram_run54.o
 	Object lib/src/to90_arm7_sub_ext_wram_run55.o
 	Object lib/src/to90_arm7_sub_ext_wram_run56.o

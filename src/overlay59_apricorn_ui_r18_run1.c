@@ -97,14 +97,14 @@ void ov59_022386D0(u8 *work) {
 void ov59_02238768(u8 *work) {
     int i;
 
-    R18_U8(work, 0x18) = sub_02031C08(R18_PTR(work, 0x10));
-    R18_U8(work, 0x14) = sub_02031CE8(R18_PTR(work, 0x10));
-    sub_02031CEC(R18_PTR(work, 0x10), 8, work + 0x22);
+    R18_U8(work, 0x18) = ApricornBox_CountQueuedApricorns(R18_PTR(work, 0x10));
+    R18_U8(work, 0x14) = ApricornBox_GetJuiceServings(R18_PTR(work, 0x10));
+    ApricornBox_GetJuice(R18_PTR(work, 0x10), 8, work + 0x22);
     R18_U8(work, 0x16) = R18_U8(work, 0x24);
     R18_U8(work, 0x17) = sub_02031FE8(work + 0x22);
-    R18_U8(work, 0x15) = sub_02031D80(work + 0x22);
-    sub_02031DA0(work + 0x22, work + 0x2A);
-    R18_U8(work, 0x19) = sub_02031CA0(R18_PTR(work, 0x10));
+    R18_U8(work, 0x15) = ApricornJuice_GetFlavorTotal(work + 0x22);
+    ApricornJuice_RankFlavors(work + 0x22, work + 0x2A);
+    R18_U8(work, 0x19) = ApricornBox_GetMixProgressLevel(R18_PTR(work, 0x10));
     for (i = 0; i < 7; i++) {
         R18_U8(work + i, 0x1A) = ApricornBox_CountApricorn(R18_PTR(work, 0x10), i);
     }

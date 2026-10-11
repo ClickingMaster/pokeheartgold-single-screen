@@ -121,7 +121,7 @@ void ov58_022379C0(UnkStruct_02031CEC *record, Party *party, int slot) {
     int i;
 
     MI_CpuFill8(newMods, 0, 5);
-    sub_02031DA0(record, &juice);
+    ApricornJuice_RankFlavors(record, &juice);
     level = record->unk2;
     if (juice.entries[0].stat >= 5) {
         statA = juice.statOverride[0];

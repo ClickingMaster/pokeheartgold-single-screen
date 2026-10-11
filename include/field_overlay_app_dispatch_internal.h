@@ -87,14 +87,14 @@ typedef struct AppEntry {
 // ---------------------------------------------------------------------------
 
 extern void ov35_02259D80(void *, int, int);
-extern void ov27_0225C41C(void *, void *, void *);
-extern void ov27_0225A2CC(void *);
-extern void ov27_0225A2EC(void *, int);
+extern void TouchscreenChoiceMenu_SetCallback(void *, void *, void *);
+extern void TouchscreenMenu_RequestSelectedIconAnim(void *);
+extern void TouchscreenMenu_RequestRegisteredItemAnim(void *, int);
 extern void *UnionChatLog_Init(FieldSys *);
 extern void UnionChatLog_Exit(void *);
 
-extern void *ov27_02259F80(void *, void *, FieldSys *, void *);
-extern void ov27_0225A19C(void *, void *);
+extern void *TouchscreenMenu_Create(void *, void *, FieldSys *, void *);
+extern void TouchscreenMenu_Destroy(void *, void *);
 extern BOOL ov27_0225A2C8(void *);
 extern void *ov30_0225D520(void *, void *, FieldSys *, void *);
 extern void ov30_0225D64C(void *, void *);
@@ -102,8 +102,8 @@ extern BOOL ov30_0225D6FC(void *);
 extern void *TouchMartApp_Init(void *, void *, FieldSys *, void *);
 extern void TouchMartApp_Exit(void *, void *);
 extern BOOL TouchMartApp_IsExitDone(void *);
-extern void *ov27_0225C250(void *, void *, FieldSys *, void *);
-extern void ov27_0225C398(void *, void *);
+extern void *TouchscreenChoiceMenu_Create(void *, void *, FieldSys *, void *);
+extern void TouchscreenChoiceMenu_Destroy(void *, void *);
 extern BOOL ov27_0225C418(void *);
 extern void *DowsingMchn_Init(void *, void *, FieldSys *, void *);
 extern void DowsingMchn_Exit(void *, void *);

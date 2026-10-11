@@ -1,50 +1,50 @@
 	.include "asm/macros.inc"
-	.public ov56_021E5C20
-	.public ov56_021E5C9C
-	.public ov56_021E5CB4
-	.public ov56_021E5CE0
-	.public ov56_021E5D08
-	.public ov56_021E5D34
-	.public ov56_021E5D40
-	.public ov56_021E5D44
-	.public ov56_021E5DA4
-	.public ov56_021E5DDC
-	.public ov56_021E5EFC
-	.public ov56_021E5FB4
-	.public ov56_021E5FDC
-	.public ov56_021E609C
-	.public ov56_021E60F4
-	.public ov56_021E614C
-	.public ov56_021E6228
-	.public ov56_021E63C0
-	.public ov56_021E63FC
-	.public ov56_021E647C
-	.public ov56_021E64C8
-	.public ov56_021E64F4
-	.public ov56_021E6514
-	.public ov56_021E660C
-	.public ov56_021E6650
-	.public ov56_021E692C
-	.public ov56_021E696C
-	.public ov56_021E6A7C
-	.public ov56_021E6AA4
-	.public ov56_021E6BB4
-	.public ov56_021E6D90
+	.public MailView_Init
+	.public MailView_Main
+	.public MailView_Exit
+	.public MailView_AreAllMessagesEmpty
+	.public MailView_ResetCursorHighlight
+	.public MailView_OnSwitchToTouch
+	.public MailView_OnSwitchToKeys
+	.public MailView_CheckInputModeSwitch
+	.public MailView_HandleReadInput
+	.public MailView_HandleWriteKeys
+	.public MailView_HandleWriteTouch
+	.public MailView_HandleWriteInput
+	.public MailView_ShowEmptyMailWarning
+	.public MailView_InitYesNoPrompt
+	.public MailView_HandleYesNoPrompt
+	.public MailView_ConfirmQuit
+	.public MailView_Run
+	.public MailView_VBlankCB
+	.public MailView_CursorBlinkTask
+	.public MailView_SetupGraphics
+	.public MailView_FreeGraphics
+	.public MailView_SetGfxBanks
+	.public MailView_InitBgs
+	.public MailView_FreeBgs
+	.public MailView_LoadBgGraphics
+	.public MailView_FreeBgGraphics
+	.public MailView_CreateWindows
+	.public MailView_DeleteWindows
+	.public MailView_PrintTexts
+	.public MailView_CreateMonIcons
+	.public MailView_DeleteMonIcons
 	.public _021E6DD4
-	.public ov56_021E6DE4
-	.public ov56_021E6DF4
-	.public ov56_021E6E08
-	.public ov56_021E6E20
-	.public ov56_021E6E38
-	.public ov56_021E6E58
-	.public ov56_021E6E80
+	.public sMailViewScreenFuncs
+	.public sMailViewOamCharTransferParam
+	.public sMailViewSpriteResourceCounts
+	.public sMailViewHitboxes
+	.public sMailViewOamManagerParam
+	.public sMailViewGraphicsBanks
+	.public sMailViewBgTemplates
 	.include "overlay_56.inc"
 	.include "global.inc"
 
 	.text
 
-	thumb_func_start ov56_021E6BB4
-ov56_021E6BB4: ; 0x021E6BB4
+	thumb_func_start MailView_CreateMonIcons
+MailView_CreateMonIcons: ; 0x021E6BB4
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x94
 	add r5, r0, #0
@@ -69,7 +69,7 @@ _021E6BC6:
 	add r1, r5, #0
 	add r1, #0xb4
 	add r2, sp, #0x40
-	ldr r4, _021E6D80 ; =ov56_021E6E38
+	ldr r4, _021E6D80 ; =sMailViewOamManagerParam
 	str r0, [r1]
 	ldmia r4!, {r0, r1}
 	add r3, r2, #0
@@ -79,7 +79,7 @@ _021E6BC6:
 	ldmia r4!, {r0, r1}
 	stmia r2!, {r0, r1}
 	ldmia r4!, {r0, r1}
-	ldr r6, _021E6D84 ; =ov56_021E6DF4
+	ldr r6, _021E6D84 ; =sMailViewOamCharTransferParam
 	stmia r2!, {r0, r1}
 	add r4, sp, #0x2c
 	ldmia r6!, {r0, r1}
@@ -88,7 +88,7 @@ _021E6BC6:
 	ldmia r6!, {r0, r1}
 	stmia r4!, {r0, r1}
 	ldr r0, [r6]
-	ldr r6, _021E6D88 ; =ov56_021E6E08
+	ldr r6, _021E6D88 ; =sMailViewSpriteResourceCounts
 	str r0, [r4]
 	add r4, sp, #0x14
 	ldmia r6!, {r0, r1}
@@ -262,8 +262,8 @@ _021E6D7C:
 	add sp, #0x94
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-_021E6D80: .word ov56_021E6E38
-_021E6D84: .word ov56_021E6DF4
-_021E6D88: .word ov56_021E6E08
+_021E6D80: .word sMailViewOamManagerParam
+_021E6D84: .word sMailViewOamCharTransferParam
+_021E6D88: .word sMailViewSpriteResourceCounts
 _021E6D8C: .word 0x0000FFFF
-	thumb_func_end ov56_021E6BB4
+	thumb_func_end MailView_CreateMonIcons

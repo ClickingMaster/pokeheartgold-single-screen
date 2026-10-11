@@ -48,6 +48,6 @@ typedef struct Ov59R12Work {
 
 extern const u32 ov59_0223C99C[];
 void ov58_022379C0(UnkStruct_02031CEC *record, Party *party, int slot);
-int sub_02032024(SaveApricornBox *box);
+int ApricornBox_UseJuiceServing(SaveApricornBox *box);
 void ov59_0223BAE8(Ov59R12Work *work);
 #endif

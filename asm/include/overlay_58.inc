@@ -19,7 +19,7 @@
 .public GfGfx_DisableEngineBPlanes
 .public Save_PlayerData_GetOptionsAddr
 .public Save_Mailbox_Get
-.public sub_02031DA0
+.public ApricornJuice_RankFlavors
 .public Party_GetMonByIndex
 .public Party_GetMonAprijuiceModifiers
 .public Party_SetMonAprijuiceModifiers

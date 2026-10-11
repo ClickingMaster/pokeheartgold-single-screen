@@ -6,7 +6,7 @@ void ov59_0223BAE8(Ov59R12Work *work) {
 
     ov58_022379C0(&work->record, work->party, entry->slot);
     if (work->mode->mode == 8) {
-        sub_02032024(work->box);
+        ApricornBox_UseJuiceServing(work->box);
     }
     Party_GetMonAprijuiceModifiers(work->party, &entry->aprijuice, entry->slot);
     work->oldStars[0] = entry->stars.stars;

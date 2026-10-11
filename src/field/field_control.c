@@ -849,7 +849,7 @@ static BOOL FieldSystem_UpdateBugContest(FieldSystem *fieldSystem) {
 
 static void ov01_021E7A98(FieldSystem *fieldSystem) {
     u32 steps = GameStats_GetCapped(Save_GameStats_Get(fieldSystem->saveData), GAME_STAT_STEPS_WALKED);
-    sub_02032058(Save_ApricornBox_Get(fieldSystem->saveData), steps);
+    ApricornBox_UpdateSteps(Save_ApricornBox_Get(fieldSystem->saveData), steps);
 }
 
 static void PlayerAvatar_GetStandingTileCoords(FieldSystem *fieldSystem, int *x, int *z) {

@@ -18,7 +18,7 @@
 .public PlayerProfile_GetVersion
 .public PlayerProfile_GetLanguage
 .public Save_ApricornBox_sizeof
-.public sub_02031B10
+.public ApricornJuiceRecord_sizeof
 .public Save_ApricornBox_Get
 .public Save_ApricornBox_Init
 .public ApricornBox_GiveApricorn
@@ -26,45 +26,45 @@
 .public ApricornBox_SetKurtApricorn
 .public ApricornBox_GetKurtQuantity
 .public ApricornBox_GetKurtBall
-.public sub_02031BEC
-.public sub_02031C00
-.public sub_02031C08
-.public sub_02031C30
-.public sub_02031CA0
+.public ApricornBox_SetMixState
+.public ApricornBox_GetMixState
+.public ApricornBox_CountQueuedApricorns
+.public ApricornBox_QueueApricorn
+.public ApricornBox_GetMixProgressLevel
 .public sub_02031CCC
-.public sub_02031CE8
-.public sub_02031CEC
-.public sub_02031D80
-.public sub_02031DA0
+.public ApricornBox_GetJuiceServings
+.public ApricornBox_GetJuice
+.public ApricornJuice_GetFlavorTotal
+.public ApricornJuice_RankFlavors
 .public sub_02031FE8
 .public sub_02032004
-.public sub_02032024
-.public sub_02032058
-.public sub_020320E0
-.public sub_020321A0
-.public sub_020322AC
-.public sub_02032308
+.public ApricornBox_UseJuiceServing
+.public ApricornBox_UpdateSteps
+.public ApricornRecord_New
+.public ApricornBox_StoreJuiceRecords
+.public ApricornBox_GetJuiceName
+.public ApricornBox_GetJuiceFlavorName
 .public MI_CpuFill8
 .public _u32_div_f
 .public InitApricornBox
-.public sub_02031B3C
-.public sub_02031B5C
+.public ApricornBox_ClearJuiceRecords
+.public ClearApricornJuice
 .public ApricornBox_TakeApricorn
 
-.public sub_02031D6C
+.public ApricornJuice_IsValid
 
-.public sub_02032158
+.public ApricornRecord_IsSameTrainer
 
 .public sub_02032340
 
-.public sub_02032354
+.public ApricornBox_MixQueuedApricorns
 
-.public sub_020324F4
+.public ApricornJuice_GetFlavors
 
-.public sub_02032504
+.public GetJuiceFlavorLevel
 
-.public sub_02032588
+.public PackJuiceFlavor
 
-.public sub_020325CC
-.public _020F68DE
-.public _020F6902
+.public ClearApricornJuiceRecord
+.public gApricornFlavorDeltas
+.public gApricornJuicePresets

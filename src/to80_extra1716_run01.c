@@ -1,8 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-typedef struct {u32 a[4];} Window;
-typedef struct {u8 pad[0x1c];void*msg;void*formatter;} Work;
-extern void FillWindowPixelBuffer(Window*,int);extern void*Party_GetMonByIndex(void*,int);extern void*String_New(int,int);extern void*NewString_ReadMsgData(void*,int);extern void*Mon_GetBoxMon(void*);extern void BufferBoxMonSpeciesName(void*,int,void*),StringExpandPlaceholders(void*,void*,void*);extern void AddTextPrinterParameterizedWithColor(Window*,int,void*,int,int,int,int,int);extern void String_Delete(void*);extern u32 GetMonData(void*,int,void*);extern int GetMonGender(void*),GetWindowWidth(Window*);extern void ScheduleWindowCopyToVram(Window*);
-void ov81_022409B0(Work*,Window*,int,int,int,u8,u8,volatile u8,u8,void*);
-void ov81_022409B0(Work*w,Window*win,int monidx,int x,int y,u8 fg,u8 shadow,volatile u8 bg,u8 font,void*party){void*mon;void*name;void*format;int gender;u16 right;FillWindowPixelBuffer(win,bg);mon=Party_GetMonByIndex(party,monidx);name=String_New(11,100);format=NewString_ReadMsgData(w->msg,28);BufferBoxMonSpeciesName(w->formatter,0,Mon_GetBoxMon(mon));StringExpandPlaceholders(w->formatter,name,format);AddTextPrinterParameterizedWithColor(win,font,name,x,y,255,(((u32)fg<<24)>>8)|(((u32)shadow<<24)>>16)|bg,0);String_Delete(format);String_Delete(name);if(GetMonData(mon,176,0)==1){gender=GetMonGender(mon);right=((GetWindowWidth(win)-1)<<3)-4;if(gender==0){name=NewString_ReadMsgData(w->msg,26);AddTextPrinterParameterizedWithColor(win,font,name,right,y,255,0x70800,0);String_Delete(name);}else if(gender==1){name=NewString_ReadMsgData(w->msg,27);AddTextPrinterParameterizedWithColor(win,font,name,right,y,255,0x30400,0);String_Delete(name);}}ScheduleWindowCopyToVram(win);}

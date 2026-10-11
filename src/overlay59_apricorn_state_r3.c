@@ -209,7 +209,7 @@ u32 ov59_022383B4(Ov59Work *work) {
         }
         PlaySE(0x8E6);
         Sprite_SetAnimCtrlSeq(PTR_(work, 0x27C), 0x14);
-        sub_02031C30(PTR_(work, 0x10), U8_(work, 0x4D), PTR_(work, 0x38));
+        ApricornBox_QueueApricorn(PTR_(work, 0x10), U8_(work, 0x4D), PTR_(work, 0x38));
         ov59_02238768(work);
         ov59_0223919C(work, 1, 0);
         U16_(work, 0x3C)

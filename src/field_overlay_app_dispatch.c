@@ -79,10 +79,10 @@ static const u16 ov01_02206C08[] = {
 };
 
 static const AppEntry ov01_02206C60[] = {
-    { ov27_02259F80, ov27_0225A19C, ov27_0225A2C8, (u32)-1                       },
+    { TouchscreenMenu_Create, TouchscreenMenu_Destroy, ov27_0225A2C8, (u32)-1                       },
     { ov30_0225D520, ov30_0225D64C, ov30_0225D6FC, FS_OVERLAY_ID(touch_save_app) },
     { TouchMartApp_Init, TouchMartApp_Exit, TouchMartApp_IsExitDone, FS_OVERLAY_ID(OVY_31)         },
-    { ov27_0225C250, ov27_0225C398, ov27_0225C418, (u32)-1                       },
+    { TouchscreenChoiceMenu_Create, TouchscreenChoiceMenu_Destroy, ov27_0225C418, (u32)-1                       },
     { DowsingMchn_Init, DowsingMchn_Exit, DowsingMchn_IsExitDone, FS_OVERLAY_ID(OVY_28)         },
     { NumberEntry_Init, NumberEntry_Exit, NumberEntry_IsExitDone, FS_OVERLAY_ID(OVY_29)         },
     { FriendRosterApp_Init, FriendRosterApp_Exit, FriendRosterApp_IsExitDone, FS_OVERLAY_ID(OVY_32)         },
@@ -257,12 +257,12 @@ void **ov01_021F6B20(FieldSys *fieldSystem) {
 
 void ov01_021F6B34(FieldSys *fieldSystem, void *a1, void *a2) {
     AppTaskData *data = SysTask_GetData(fieldSystem->unkD8);
-    ov27_0225C41C(data->unk04, a1, a2);
+    TouchscreenChoiceMenu_SetCallback(data->unk04, a1, a2);
 }
 
 void ov01_021F6B50(FieldSys *fieldSystem) {
     AppTaskData *data = SysTask_GetData(fieldSystem->unkD8);
-    ov27_0225A2CC(data->unk04);
+    TouchscreenMenu_RequestSelectedIconAnim(data->unk04);
 }
 
 void ov01_021F6B64(FieldSys *fieldSystem, int a1) {
@@ -270,7 +270,7 @@ void ov01_021F6B64(FieldSys *fieldSystem, int a1) {
     if (a1 <= 0 || a1 >= 3) {
         GF_AssertFail();
     }
-    ov27_0225A2EC(data->unk04, a1);
+    TouchscreenMenu_RequestRegisteredItemAnim(data->unk04, a1);
 }
 
 void *ov01_021F6B88(void *a0, void *a1, FieldSys *fieldSystem, void *a3) {

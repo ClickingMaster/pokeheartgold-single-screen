@@ -12,8 +12,8 @@ void ov59_0223A9E4(Ov59Gap8Work *work) {
     U8(work, 0x4B) = Options_GetTextFrameDelay(options);
     U8(work, 0x4C) = Options_GetFrame(options);
     PTR(work, 0x14) = Save_ApricornBox_Get(PTR(work, 8));
-    sub_02031CEC(PTR(work, 0x14), PTR(PTR(work, 4), 0x14), (u8 *)work + 0x18);
-    sub_02031DA0((u8 *)work + 0x18, (u8 *)work + 0x20);
+    ApricornBox_GetJuice(PTR(work, 0x14), PTR(PTR(work, 4), 0x14), (u8 *)work + 0x18);
+    ApricornJuice_RankFlavors((u8 *)work + 0x18, (u8 *)work + 0x20);
     ov59_0223AE20(work);
     i = 0;
     if (i < U8(work, 0x49)) {

@@ -34,7 +34,7 @@ int ov96_021E9A1C(void) {
 }
 
 void *ov96_021E9A24(void) {
-    return sub_02031B10();
+    return ApricornJuiceRecord_sizeof();
 }
 
 void *ov96_021E9A2C(int unused, void *course) {

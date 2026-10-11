@@ -15,11 +15,11 @@ typedef struct SaveApricornBox SaveApricornBox;
 
 SaveApricornBox *Save_ApricornBox_Get(SaveData *saveData);
 void sub_02031CCC(SaveApricornBox *, int);
-BOOL sub_02031CEC(SaveApricornBox *apricornBox, int a1, UnkStruct_02031CEC *a2);
-int sub_02031D80(UnkStruct_02031CEC *a0);
-void sub_02032058(SaveApricornBox *saveApricornBox, u32 steps);
-String *sub_020322AC(SaveApricornBox *apricornBox, int a1, u32 a2);
-String *sub_02032308(SaveApricornBox *apricornBox, u16 a1, u32 a2);
+BOOL ApricornBox_GetJuice(SaveApricornBox *apricornBox, int a1, UnkStruct_02031CEC *a2);
+int ApricornJuice_GetFlavorTotal(UnkStruct_02031CEC *a0);
+void ApricornBox_UpdateSteps(SaveApricornBox *saveApricornBox, u32 steps);
+String *ApricornBox_GetJuiceName(SaveApricornBox *apricornBox, int a1, u32 a2);
+String *ApricornBox_GetJuiceFlavorName(SaveApricornBox *apricornBox, u16 a1, u32 a2);
 int ApricornBox_CountApricorn(SaveApricornBox *apricornBox, int a1);
 int ApricornBox_GiveApricorn(SaveApricornBox *apricornBox, int a1, u8 a2);
 int ApricornBox_GetKurtQuantity(SaveApricornBox *apricornBox);

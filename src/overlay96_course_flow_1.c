@@ -50,15 +50,15 @@ extern void *ov96_021E9A1C(void);
 extern u32 ov96_021E5F24(Work *);
 extern BOOL ov96_021E75E4(Work *);
 extern void PokeathlonCourse_SetField1F4(Work *, u32);
-extern u32 sub_02031B10(void);
+extern u32 ApricornJuiceRecord_sizeof(void);
 extern u32 Comm_GetLocalNetId(void);
 extern void *Save_ApricornBox_Get(void *);
 extern void *Save_PlayerData_GetProfile(void *);
 extern void *Save_Pokeathlon_Get(void *);
 extern void *PokeathlonSave_GetUnkB00(void *);
 extern void *Heap_AllocAtEnd(u32, u32);
-extern u32 sub_020320E0(void *, void *, u32, u32);
-extern void sub_020321A0(void *, void *, u32, u32);
+extern u32 ApricornRecord_New(void *, void *, u32, u32);
+extern void ApricornBox_StoreJuiceRecords(void *, void *, u32, u32);
 extern const u8 ov96_0221A86C[];
 extern const u8 ov96_0221DC24[];
 extern const u8 ov96_0221A844[];
@@ -267,10 +267,10 @@ u32 ov96_021E73F8(Work *w) {
     box = Save_ApricornBox_Get(*(void **)U32(w, 0x1f8));
     profile = Save_PlayerData_GetProfile(*(void **)U32(w, 0x1f8));
     pokeathlon = PokeathlonSave_GetUnkB00(Save_Pokeathlon_Get(*(void **)U32(w, 0x1f8)));
-    size = sub_02031B10() * 4;
+    size = ApricornJuiceRecord_sizeof() * 4;
     U32(w, 0xd68) = (u32)Heap_AllocAtEnd(U32(w, 0x284), size);
     memset((void *)U32(w, 0xd68), 0, size);
-    U32(w, 0xd64) = sub_020320E0(box, profile, U32((Work *)pokeathlon, 0x70), U32(w, 0x284));
+    U32(w, 0xd64) = ApricornRecord_New(box, profile, U32((Work *)pokeathlon, 0x70), U32(w, 0x284));
     if (*(u32 *)((u8 *)U32(w, 0x1f8) + 4) == 1) {
         PokeathlonCourse_SetStateTransitionType(w, 0xe);
         PokeathlonCourse_SetStateField07(w, 0x23);
@@ -299,7 +299,7 @@ u32 ov96_021E74E0(Work *w) {
 }
 
 u32 ov96_021E7514(Work *w) {
-    u32 size = sub_02031B10();
+    u32 size = ApricornJuiceRecord_sizeof();
     if (ov96_021E87EC(0x21, (void *)U32(w, 0xd64), (void *)size, (void *)U32(w, 0x288))) {
         PokeathlonCourse_SetStateField07(w, 0x26);
     }
@@ -310,7 +310,7 @@ u32 ov96_021E7544(Work *w) {
     void *box = Save_ApricornBox_Get(*(void **)U32(w, 0x1f8));
     u32 count = PokeathlonCourse_GetParticipantCount(w);
     u32 value = Comm_GetLocalNetId();
-    sub_020321A0(box, (void *)U32(w, 0xd68), count, value);
+    ApricornBox_StoreJuiceRecords(box, (void *)U32(w, 0xd68), count, value);
     if (!GF_heap_c_dummy_return_true(0x5c)) {
         GF_AssertFail();
     }

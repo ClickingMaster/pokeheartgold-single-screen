@@ -1,43 +1,43 @@
 	.include "asm/macros.inc"
-	.public ov56_021E5C20
-	.public ov56_021E5C9C
-	.public ov56_021E5CB4
-	.public ov56_021E5CE0
-	.public ov56_021E5D08
-	.public ov56_021E5D34
-	.public ov56_021E5D40
-	.public ov56_021E5D44
-	.public ov56_021E5DA4
-	.public ov56_021E5DDC
-	.public ov56_021E5EFC
-	.public ov56_021E5FB4
-	.public ov56_021E5FDC
-	.public ov56_021E609C
-	.public ov56_021E60F4
-	.public ov56_021E614C
-	.public ov56_021E6228
-	.public ov56_021E63C0
-	.public ov56_021E63FC
-	.public ov56_021E647C
-	.public ov56_021E64C8
-	.public ov56_021E64F4
-	.public ov56_021E6514
-	.public ov56_021E660C
-	.public ov56_021E6650
-	.public ov56_021E692C
-	.public ov56_021E696C
-	.public ov56_021E6A7C
-	.public ov56_021E6AA4
-	.public ov56_021E6BB4
-	.public ov56_021E6D90
+	.public MailView_Init
+	.public MailView_Main
+	.public MailView_Exit
+	.public MailView_AreAllMessagesEmpty
+	.public MailView_ResetCursorHighlight
+	.public MailView_OnSwitchToTouch
+	.public MailView_OnSwitchToKeys
+	.public MailView_CheckInputModeSwitch
+	.public MailView_HandleReadInput
+	.public MailView_HandleWriteKeys
+	.public MailView_HandleWriteTouch
+	.public MailView_HandleWriteInput
+	.public MailView_ShowEmptyMailWarning
+	.public MailView_InitYesNoPrompt
+	.public MailView_HandleYesNoPrompt
+	.public MailView_ConfirmQuit
+	.public MailView_Run
+	.public MailView_VBlankCB
+	.public MailView_CursorBlinkTask
+	.public MailView_SetupGraphics
+	.public MailView_FreeGraphics
+	.public MailView_SetGfxBanks
+	.public MailView_InitBgs
+	.public MailView_FreeBgs
+	.public MailView_LoadBgGraphics
+	.public MailView_FreeBgGraphics
+	.public MailView_CreateWindows
+	.public MailView_DeleteWindows
+	.public MailView_PrintTexts
+	.public MailView_CreateMonIcons
+	.public MailView_DeleteMonIcons
 	.public _021E6DD4
-	.public ov56_021E6DE4
-	.public ov56_021E6DF4
-	.public ov56_021E6E08
-	.public ov56_021E6E20
-	.public ov56_021E6E38
-	.public ov56_021E6E58
-	.public ov56_021E6E80
+	.public sMailViewScreenFuncs
+	.public sMailViewOamCharTransferParam
+	.public sMailViewSpriteResourceCounts
+	.public sMailViewHitboxes
+	.public sMailViewOamManagerParam
+	.public sMailViewGraphicsBanks
+	.public sMailViewBgTemplates
 	.include "overlay_56.inc"
 	.include "global.inc"
 
@@ -48,35 +48,35 @@ _021E6DD4:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov56_021E6DE4: ; 0x021E6DE4
-	.word ov56_021E5DA4
-	.word ov56_021E5FB4
-	.word ov56_021E5FDC
-	.word ov56_021E614C
+sMailViewScreenFuncs: ; 0x021E6DE4
+	.word MailView_HandleReadInput
+	.word MailView_HandleWriteInput
+	.word MailView_ShowEmptyMailWarning
+	.word MailView_ConfirmQuit
 
-ov56_021E6DF4: ; 0x021E6DF4
+sMailViewOamCharTransferParam: ; 0x021E6DF4
 	.byte 0x03, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 
-ov56_021E6E08: ; 0x021E6E08
+sMailViewSpriteResourceCounts: ; 0x021E6E08
 	.byte 0x03, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov56_021E6E20: ; 0x021E6E20
+sMailViewHitboxes: ; 0x021E6E20
 	.byte 0x18, 0x38, 0x18, 0xE8, 0x40, 0x60, 0x18, 0xE8, 0x68, 0x88, 0x18, 0xE8, 0x94, 0xAC, 0xA0, 0xE0
 	.byte 0x94, 0xAC, 0x18, 0x58, 0xFF, 0x00, 0x00, 0x00
 
-ov56_021E6E38: ; 0x021E6E38
+sMailViewOamManagerParam: ; 0x021E6E38
 	.byte 0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-ov56_021E6E58: ; 0x021E6E58
+sMailViewGraphicsBanks: ; 0x021E6E58
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov56_021E6E80: ; 0x021E6E80
+sMailViewBgTemplates: ; 0x021E6E80
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1F, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x00

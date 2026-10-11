@@ -98,7 +98,7 @@ void *Save_PlayerData_GetOptionsAddr(void *save);
 int Options_GetTextFrameDelay(void *options);
 int Options_GetFrame(void *options);
 void *Save_ApricornBox_Get(void *save);
-void sub_02031CEC(void *src, void *dst);
-void sub_02031DA0(void *src, void *dst);
+void ApricornBox_GetJuice(void *src, void *dst);
+void ApricornJuice_RankFlavors(void *src, void *dst);
 
 #endif

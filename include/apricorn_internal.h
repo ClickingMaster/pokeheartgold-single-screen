@@ -43,17 +43,17 @@ typedef struct ApricornMix {
     u8 values[5];
 } ApricornMix;
 
-int sub_02031C08(SaveApricornBox *);
+int ApricornBox_CountQueuedApricorns(SaveApricornBox *);
 int ApricornBox_TakeApricorn(SaveApricornBox *, int, u32);
-void sub_02031B5C(void *);
-BOOL sub_02031CEC(SaveApricornBox *, int, UnkStruct_02031CEC *);
-BOOL sub_02031D6C(UnkStruct_02031CEC *);
-int sub_02031D80(UnkStruct_02031CEC *);
-void sub_02031DA0(void *, void *);
-void sub_02031BEC(SaveApricornBox *, u32);
+void ClearApricornJuice(void *);
+BOOL ApricornBox_GetJuice(SaveApricornBox *, int, UnkStruct_02031CEC *);
+BOOL ApricornJuice_IsValid(UnkStruct_02031CEC *);
+int ApricornJuice_GetFlavorTotal(UnkStruct_02031CEC *);
+void ApricornJuice_RankFlavors(void *, void *);
+void ApricornBox_SetMixState(SaveApricornBox *, u32);
 void sub_02032340(SaveApricornBox *, u8);
-void sub_02032354(SaveApricornBox *);
+void ApricornBox_MixQueuedApricorns(SaveApricornBox *);
 int sub_02032004(void *);
-u8 sub_02032504(int, u8);
+u8 GetJuiceFlavorLevel(int, u8);
 
 #endif

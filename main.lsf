@@ -251,19 +251,8 @@ Static main
     Object src/unk_0203170C.o
     Object src/save_block_32.o
     Object src/pokeathlon/pokeathlon_save.o
-    Object src/apricorn_save.o
-    Object asm/slop_r1_apricorn_tables_residual.o
-    Object src/slop_r1_apricorn_slot_count.o
-    Object src/apricorn_queue.o
-    Object src/apricorn_preset_lookup.o
-    Object src/apricorn_validity.o
-    Object src/apricorn_mix.o
-    Object src/to90_extra2101_run01.o
-    Object src/apricorn_juice.o
-    Object src/slop_r1_apricorn_record_merge.o
-    Object src/apricorn_names.o
-    Object src/op90_unk_02032354_r01.o
-    Object src/apricorn_flavors.o
+    Object asm/apricorn_box_data.o
+    Object src/apricorn_box.o
     Object src/pokewalker.o
     Object src/save_trainer_house.o
     Object src/wireless_parent_start.o
@@ -4680,64 +4669,9 @@ Overlay OVY_26
 Overlay OVY_27
 {
     After bug_contest
-    Object src/to53_overlay27_app_lifecycle.o
-    Object src/overlay27_helpers_1.o
-    Object src/to90_extra2011_run01.o
-    Object src/overlay27_helpers_2.o
-    Object src/r40_overlay_27_residual_3_run1.o
-    Object src/overlay27_helpers_3.o
-    Object src/to90_extra2432_run01.o
-    Object src/to90_extra2208_run01.o
-    Object src/overlay27_helpers_4.o
-    Object src/to70_overlay_27_residual_5_extra777_run01.o
-    Object src/overlay27_helpers_5.o
-    Object src/to52_r2_card_overlay27_field_ui_state_r6.o
-    Object src/overlay27_helpers_6.o
-    Object src/overlay27_menu_setup_r7.o
-    Object src/overlay27_helpers_7.o
-    Object src/to47r5_ov27_resource_pair_r8.o
-    Object src/to90_extra1937_run01.o
-    Object src/to45_overlay27_r8_exact.o
-    Object src/to70_overlay_27_residual_8_suffix_extra579_run01.o
-    Object src/overlay27_helpers_8.o
-    Object src/overlay27_input_dispatch.o
-    Object src/overlay27_helpers_9.o
-    Object src/to90_extra2509_run01.o
-    Object src/to52_r6_overlay27_menu_text_cleanup_r10.o
-    Object src/to70_to52_r6_overlay27_r10_suffix_extra893_run01.o
-    Object src/overlay27_r10_centered_text.o
-    Object src/overlay27_helpers_10.o
-    Object src/to70_overlay_27_residual_11_extra773_run01.o
-    Object src/overlay27_helpers_11.o
-    Object src/to70_overlay_27_residual_12_extra483_run01.o
-    Object src/overlay27_helpers_12.o
-    Object src/op90_overlay27_r13_residual_r01.o
-    Object src/overlay27_r13_value_windows.o
-    Object src/overlay27_helpers_13.o
-    Object src/to70_overlay_27_residual_14_extra953_run01.o
-    Object src/overlay27_helpers_14.o
-    Object src/to70_overlay_27_residual_15_extra774_run01.o
-    Object src/r40_overlay_27_residual_15_run1.o
-    Object src/to80_extra1874_run01.o
-    Object src/to80_extra1874_run02.o
-    Object src/overlay27_helpers_15.o
-    Object src/to52_r2_w17b_overlay27_subapp_lifecycle.o
-    Object src/overlay27_helpers_16.o
-    Object src/to46_overlay27_r17.o
-    Object src/overlay27_helpers_17.o
-    Object src/to70_overlay_27_residual_18_extra484_run01.o
-    Object src/overlay27_helpers_18.o
-    Object src/to70_overlay_27_residual_19_extra195_run01.o
-    Object src/op90_to70_overlay_27_residual_19_extra195_residual_1_r01.o
-    Object src/overlay27_helpers_19.o
-    Object src/to70_overlay_27_residual_20_extra775_run01.o
-    Object src/overlay27_helpers_20.o
-    Object src/to90_extra2012_run01.o
-    Object src/overlay27_helpers_21.o
-    Object src/to70_overlay_27_residual_22_extra776_run01.o
-    Object src/overlay27_helpers_22.o
-    Object src/to50_overlay27_input_handlers.o
-    Object asm/overlay_27_residual_23_data.o
+    Object src/touchscreen_menu.o
+    Object src/touchscreen_choice_menu.o
+    Object asm/touchscreen_menu_data.o
 }
 Overlay OVY_28
 {
@@ -6430,11 +6364,7 @@ Overlay OVY_55
 Overlay OVY_56
 {
     After OVY_55
-    Object src/overlay56_helpers_1.o
-    Object src/to80_extra1536_run01.o
-    Object src/overlay56_helpers_2.o
-    Object src/overlay56_sprite_setup_1.o
-    Object src/overlay56_helpers_3.o
+    Object src/mail_view.o
     Object asm/overlay_56_residual_3.o
 }
 Overlay OVY_57
@@ -8024,113 +7954,8 @@ Object src/to91_w41541_frontier568_run01.o
 Overlay OVY_81
 {
     After OVY_80
-    Object src/opus10_overlay81_box_lifecycle_run1.o
-    Object src/to70_overlay_81_r46_prefix_extra1225_run01.o
-    Object src/r46_overlay81_exit.o
-    Object src/to80_extra2576_run01.o
-    Object src/opus10_overlay81_box_lifecycle_run2.o
-    Object src/to80_extra1554_run01.o
-    Object src/opus10_overlay81_box_lifecycle_run3.o
-    Object src/overlay81_partial_1.o
-    Object src/to47r5_ov81_box_setup_head.o
-    Object src/to70_to47r5_ov81_box_setup_head_residual_extra890_run01.o
-    Object src/overlay81_box_runtime_r2_run1.o
-    Object src/to70_overlay_81_residual_2_gap_extra1226_run01.o
-    Object src/overlay81_box_runtime_r2_run2.o
-    Object src/to90_extra2047_run01.o
-    Object src/overlay81_partial_2.o
-    Object src/overlay81_selection_state_r3_run1.o
-    Object src/to70_overlay_81_residual_3_gap1_extra1227_run01.o
-    Object src/overlay81_selection_state_r3_run2.o
-    Object src/to70_overlay_81_residual_3_gap2_extra848_run01.o
-    Object src/overlay81_selection_state_r3_run3.o
-    Object src/to70_to50_overlay81_selection_state_residual_extra1230_run01.o
-    Object src/to50_overlay81_selection_cleanup.o
-    Object src/overlay81_selection_state_r3_run4.o
-    Object src/to70_overlay_81_residual_3_gap4_extra509_run01.o
-    Object src/overlay81_partial_3.o
-    Object src/to54_atomic_h05_01_landing.o
-    Object src/overlay81_results_screen_flow_r4.o
-    Object src/r40_overlay_81_residual_4_middle_run1.o
-    Object src/overlay81_results_screen_setup_r4.o
-    Object src/overlay81_partial_4.o
-    Object src/to70_overlay_81_residual_5_extra998_run01.o
-    Object src/overlay81_partial_5.o
-    Object src/to90_extra2438_run01.o
-    Object src/to90_extra2223_run01.o
-    Object src/overlay81_screen_setup_r6_run1.o
-    Object src/to70_overlay_81_residual_6_part2_extra849_run01.o
-    Object src/overlay81_screen_setup_r6_run2.o
-    Object src/to80_extra1716_run01.o
-    Object src/to80_extra1595_run01.o
-    Object src/to52_r4_overlay81_cleanup.o
-    Object src/overlay81_screen_setup_r6_run3.o
-    Object src/to70_overlay_81_residual_6_part4_extra323_run01.o
-    Object src/overlay81_screen_setup_r6_run4.o
-    Object src/overlay81_partial_6.o
-    Object src/to80_extra1797_run01.o
-    Object src/overlay81_partial_7.o
-    Object src/to70_overlay_81_residual_8_extra850_run01.o
-    Object src/overlay81_dispatch_helpers_1.o
-    Object src/to52_r6_w13_overlay81_r8_2_head.o
-    Object src/to91_w41515_packet_run01.o
-    Object src/op90_to91_w41515_packet_residual_1_r01.o
-    Object src/overlay81_partial_8.o
-    Object src/to90_extra2224_run01.o
-    Object src/overlay81_partial_9.o
-    Object src/to47_overlay81_input_dispatch.o
-    Object src/overlay81_partial_10.o
-    Object src/overlay81_grid_windows_1.o
-    Object src/to70_overlay_81_residual_11_gap_1_extra292_run01.o
-    Object src/overlay81_grid_windows_2.o
-    Object src/overlay81_partial_11.o
-    Object src/overlay81_grid_windows_3.o
-    Object src/r40_overlay_81_residual_12_run1.o
-    Object src/overlay81_partial_12.o
-    Object src/to90_extra2390_run01.o
-    Object src/overlay81_partial_13.o
-    Object src/overlay81_ui_helpers_1.o
-    Object src/to70_overlay_81_residual_14_extra847_run01.o
-    Object src/overlay81_ui_helpers_2.o
-    Object src/to70_overlay_81_residual_14_residual_2_extra994_run01.o
-    Object src/overlay81_ui_helpers_3.o
-    Object src/to52_overlay81_party_pictures.o
-    Object src/overlay81_ui_helpers_4.o
-    Object src/to52_r5_overlay81_box_icon_setup.o
-    Object src/overlay81_ui_helpers_5.o
-    Object src/overlay81_box_icons_r14r5.o
-    Object src/overlay81_ui_helpers_6.o
-    Object src/to70_overlay_81_residual_14_residual_6_extra507_run01.o
-    Object src/overlay81_ui_helpers_7.o
-    Object src/to70_overlay_81_residual_14_residual_7_extra322_run01.o
-    Object src/overlay81_partial_14.o
-    Object src/to70_overlay_81_residual_15_extra995_run01.o
-    Object src/overlay81_partial_15.o
-    Object src/overlay81_sprite_graphics_r16.o
-    Object src/overlay81_partial_16.o
-    Object src/to70_overlay_81_residual_17_extra468_run01.o
-    Object src/overlay81_partial_17.o
-    Object src/to70_overlay_81_residual_18_extra635_run01.o
-    Object src/overlay81_partial_18.o
-    Object src/to70_overlay_81_residual_19_extra996_run01.o
-    Object src/overlay81_partial_19.o
-    Object src/to80_extra1555_run01.o
-    Object src/overlay81_partial_20.o
-    Object src/to80_extra1556_run01.o
-    Object src/overlay81_partial_21.o
-    Object src/to70_overlay_81_residual_22_extra636_run01.o
-    Object src/overlay81_partial_22.o
-    Object src/to52_r6_w11_overlay81_r23_head.o
-    Object src/op90_to52_r6_w11_overlay81_r23_residual_r01.o
-    Object src/to52_r6_w11_overlay81_r23_tail.o
-    Object src/overlay81_partial_23.o
-    Object src/to70_overlay_81_residual_24_extra997_run01.o
-    Object src/overlay81_partial_24.o
-    Object src/to70_overlay_81_residual_25_extra508_run01.o
-    Object src/overlay81_partial_25.o
-    Object src/to52_r6_w16_overlay81_r26.o
-    Object src/overlay81_partial_26.o
-    Object asm/overlay_81_residual_27.o
+    Object src/frontier/battle_factory_app.o
+    Object asm/battle_factory_app_data.o
 }
 Overlay OVY_82
 {

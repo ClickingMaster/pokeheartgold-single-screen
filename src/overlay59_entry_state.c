@@ -44,8 +44,8 @@ extern void ov59_02238FF4(void *, int);
 extern void sub_020210BC(void);
 extern void sub_02021148(int);
 extern void sub_02021238(void);
-extern void sub_02031BEC(void *, int);
-extern u32 sub_02031C00(void *);
+extern void ApricornBox_SetMixState(void *, int);
+extern u32 ApricornBox_GetMixState(void *);
 
 BOOL ov59_02237D40(void *, u32 *);
 BOOL ov59_02237DA8(void *, u32 *);
@@ -218,7 +218,7 @@ u32 ov59_02237FA4(u8 *p) {
             case 0:
                 break;
             case 1:
-                if (sub_02031C00(*(void **)(p + 0x10)) != 1) {
+                if (ApricornBox_GetMixState(*(void **)(p + 0x10)) != 1) {
                     return 2;
                 }
                 return 4;
@@ -254,7 +254,7 @@ u32 ov59_02238068(u8 *p) {
     if (*(u16 *)(p + 0x3c) == 0) {
         u32 kind;
         ov59_02238FF4(p, 1);
-        kind = sub_02031C00(*(void **)(p + 0x10));
+        kind = ApricornBox_GetMixState(*(void **)(p + 0x10));
         switch (kind) {
         case 0:
             ov59_02238CFC(p, 0x16, p[0x45]);
@@ -266,7 +266,7 @@ u32 ov59_02238068(u8 *p) {
             ov59_02238CFC(p, 0x18, 0xff);
             break;
         }
-        sub_02031BEC(*(void **)(p + 0x10), 1);
+        ApricornBox_SetMixState(*(void **)(p + 0x10), 1);
         (*(u16 *)(p + 0x3c))++;
     } else if (ov59_022385AC(p)) {
         ov59_02238FF4(p, 0);

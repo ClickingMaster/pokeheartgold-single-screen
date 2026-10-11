@@ -904,18 +904,18 @@ BOOL ScrCmd_741(ScriptContext *ctx) {
     unkPtrC = ScriptGetVarPointer(ctx);
     GF_RTC_CopyDate(&date);
     *unkPtrA = unkVar + 5;
-    if (!sub_02031CEC(apricornBox, *unkPtrA, &unkOut)) {
+    if (!ApricornBox_GetJuice(apricornBox, *unkPtrA, &unkOut)) {
         *unkPtrA = (date.week + 2 * unkVar) % 5;
-        sub_02031CEC(apricornBox, *unkPtrA, &unkOut);
+        ApricornBox_GetJuice(apricornBox, *unkPtrA, &unkOut);
     }
-    str = sub_020322AC(apricornBox, *unkPtrA, 0x20);
+    str = ApricornBox_GetJuiceName(apricornBox, *unkPtrA, 0x20);
     BufferString(*msgfmt, 0, str, 2, 1, gGameVersion); // buffer owner..?
     Heap_Free(str);
-    str = sub_02032308(apricornBox, *unkPtrA, 0x20);
+    str = ApricornBox_GetJuiceFlavorName(apricornBox, *unkPtrA, 0x20);
     BufferString(*msgfmt, 1, str, 2, 1, gGameVersion); // buffer juice type..?
     Heap_Free(str);
 
-    unkVar = sub_02031D80(&unkOut);
+    unkVar = ApricornJuice_GetFlavorTotal(&unkOut);
     *price = (unkOut.unk0 / 10) + 2 * unkVar;
 
     if (*price < 100) {

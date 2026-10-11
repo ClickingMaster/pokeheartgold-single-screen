@@ -39,7 +39,7 @@ extern void ObjPlttTransfer_Destroy(void);
 extern void SpriteSystem_DrawSprites(void *system);
 extern u32 MTRandom(void);
 extern void ov96_021EEB84(void *ptr);
-extern void *sub_02031B10(void);
+extern void *ApricornJuiceRecord_sizeof(void);
 extern u8 ov96_0221AEC4[];
 extern u16 ov96_0221AAE8[];
 extern void *ov96_021E86FC(void *ptr, u8 index);

@@ -37,7 +37,7 @@ typedef struct ApricornBoxApp {
     /* 0x1C */ u8 unk_1C;
 } ApricornBoxApp;
 
-// No tracked definition: output block of sub_02031DA0.
+// No tracked definition: output block of ApricornJuice_RankFlavors.
 typedef struct ApricornJuiceEntry {
     u16 stat : 4;
     u16 unk_04 : 4;

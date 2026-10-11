@@ -114,6 +114,6 @@
 .public MI_CpuFill8
 .public memset
 .public gSystem
-.public ov56_021E5C20
-.public ov56_021E5C9C
-.public ov56_021E5CB4
+.public MailView_Init
+.public MailView_Main
+.public MailView_Exit

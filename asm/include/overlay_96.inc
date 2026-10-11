@@ -307,10 +307,10 @@
 .public PokeathlonSave_SetUnkDC_AtIndex
 .public PokeathlonSave_AddAthletePoints
 .public Save_Pokeathlon_FriendshipRecords_Get
-.public sub_02031B10
+.public ApricornJuiceRecord_sizeof
 .public Save_ApricornBox_Get
-.public sub_020320E0
-.public sub_020321A0
+.public ApricornRecord_New
+.public ApricornBox_StoreJuiceRecords
 .public Comm_RegisterCommandTable
 .public sub_020342B8
 .public sub_02034818

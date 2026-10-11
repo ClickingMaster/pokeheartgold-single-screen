@@ -29,7 +29,7 @@ extern void ov59_02238D74(Ov59Work *);
 extern void Sprite_SetDrawFlag(void *, u32);
 extern void Sprite_ResetAnimCtrlState(void *);
 extern BOOL Sprite_IsAnimated(void *);
-extern void sub_02031C30(void *, u32, void *);
+extern void ApricornBox_QueueApricorn(void *, u32, void *);
 extern void ov59_02238768(Ov59Work *);
 extern void ov59_0223892C(Ov59Work *, u32);
 extern void ov59_02238E98(Ov59Work *);

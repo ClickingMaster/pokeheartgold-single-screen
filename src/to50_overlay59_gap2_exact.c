@@ -5,7 +5,7 @@
 void ov59_02239D08(Ov59R8Work *work, int msgNo) {
     switch (msgNo) {
     case 6: {
-        int count = sub_02031C08(PTR(work, 0x10));
+        int count = ApricornBox_CountQueuedApricorns(PTR(work, 0x10));
         BufferIntegerAsString(PTR(work, 0x60), 0, 5 - count, 1, 0, 1);
         break;
     }

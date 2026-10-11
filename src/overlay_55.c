@@ -13,18 +13,18 @@
 FS_EXTERN_OVERLAY(OVY_56);
 FS_EXTERN_OVERLAY(OVY_102);
 
-extern BOOL ov56_021E5C20(OverlayManager *, int *);
-extern BOOL ov56_021E5C9C(OverlayManager *, int *);
-extern BOOL ov56_021E5CB4(OverlayManager *, int *);
+extern BOOL MailView_Init(OverlayManager *, int *);
+extern BOOL MailView_Main(OverlayManager *, int *);
+extern BOOL MailView_Exit(OverlayManager *, int *);
 
 extern BOOL EasyChat_Init(OverlayManager *, int *);
 extern BOOL EasyChat_Main(OverlayManager *, int *);
 extern BOOL EasyChat_Exit(OverlayManager *, int *);
 
 static const OverlayManagerTemplate ov55_021E5BF4 = {
-    .init = ov56_021E5C20,
-    .exec = ov56_021E5C9C,
-    .exit = ov56_021E5CB4,
+    .init = MailView_Init,
+    .exec = MailView_Main,
+    .exit = MailView_Exit,
     .ovy_id = FS_OVERLAY_ID(OVY_56),
 };
 
