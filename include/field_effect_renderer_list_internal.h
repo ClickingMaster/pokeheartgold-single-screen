@@ -8,17 +8,17 @@
 
 #include "map_object.h"
 #include "field/field_effect_manager.h"
-#include "unk_020689C8.h"
+#include "field_effects.h"
 #include "render_model.h"
 #include "render_animation.h"
 
 // Not declared in any tracked header.
-void sub_02068DA8(void *a0, VecFx32 *a1);
+void FieldEffect_SetPosition(void *a0, VecFx32 *a1);
 void GF_AssertFail(void);
 
 #define FIELD_EFFECT_RENDERER_SLOT_EMPTY 0xFFFF
 
-// The user-data block handed to FieldEffectManager_CreateEffect as a4 and recovered via sub_02068D98.
+// The user-data block handed to FieldEffectManager_CreateEffect as a4 and recovered via FieldEffect_GetUserData.
 typedef struct FieldEffectRendererArgs {
     u32 unk0;
     FieldSystem *unk4;

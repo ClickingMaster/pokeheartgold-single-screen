@@ -6,11 +6,11 @@
 #include "map_object.h"
 
 // Not declared in any header yet.
-void *sub_020689C8(enum HeapID heapID, u32 count);
-void sub_020689F8(void *manager);
-void sub_02068BAC(void *manager);
-void *sub_02068B0C(void *manager, const void *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
-void sub_02068B48(int effect);
+void *FieldEffectPool_New(enum HeapID heapID, u32 count);
+void FieldEffectPool_Delete(void *manager);
+void FieldEffectPool_DrawAll(void *manager);
+void *FieldEffectPool_AddBasicEffect(void *manager, const void *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
+void FieldEffect_Destroy(int effect);
 void *Billboard_Create(const FieldEffectBillboardListTemplate *template);
 void Billboard_Delete(void *billboards);
 void *BillboardObject_Create(const FieldEffectBillboardTemplate *template);
@@ -229,30 +229,30 @@ const FieldEffectRendererTemplate *FieldEffect_GetRendererTemplate(u32 id) {
 }
 
 void FieldEffectManager_InitEffects(FieldEffectManager *manager) {
-    manager->effects = sub_020689C8(manager->heapID, manager->animManagerCount);
+    manager->effects = FieldEffectPool_New(manager->heapID, manager->animManagerCount);
 }
 
 void FieldEffectManager_FreeEffects(FieldEffectManager *manager) {
     if (manager->effects != NULL) {
-        sub_020689F8(manager->effects);
+        FieldEffectPool_Delete(manager->effects);
         manager->effects = NULL;
     }
 }
 
 void FieldEffectManager_DrawEffects(FieldEffectManager *manager) {
     if (manager->effects != NULL) {
-        sub_02068BAC(manager->effects);
+        FieldEffectPool_DrawAll(manager->effects);
     }
 }
 
 void *FieldEffectManager_CreateEffect(FieldEffectManager *manager, const void *template, const VecFx32 *position, int parameter, void *userData, u32 priority) {
-    void *effect = sub_02068B0C(manager->effects, template, position, parameter, userData, priority);
+    void *effect = FieldEffectPool_AddBasicEffect(manager->effects, template, position, parameter, userData, priority);
     GF_ASSERT(effect != NULL);
     return effect;
 }
 
 void FieldEffectManager_DestroyEffect(int effect) {
-    sub_02068B48(effect);
+    FieldEffect_Destroy(effect);
 }
 
 void FieldEffectManager_CreateGfx(FieldEffectManager *manager, enum HeapID heapID, u32 recordCount, u32 a3, u32 a4, u32 resCount, int a6, int a7, int a8) {

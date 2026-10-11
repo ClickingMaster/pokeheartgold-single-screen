@@ -2085,7 +2085,7 @@ ov02_0224AA44: ; 0x0224AA44
 	ldr r0, [r5, r0]
 	ldr r3, [sp, #0x30]
 	add r2, r4, #0
-	bl sub_02068B0C
+	bl FieldEffectPool_AddBasicEffect
 	add sp, #0x20
 	pop {r3, r4, r5, pc}
 	nop
@@ -2099,7 +2099,7 @@ ov02_0224AA80: ; 0x0224AA80
 	sub sp, #0xc
 	add r4, r1, #0
 	add r5, r0, #0
-	bl sub_02068D98
+	bl FieldEffect_GetUserData
 	add r2, r4, #0
 	add r3, r0, #0
 	add r2, #0xc
@@ -2110,11 +2110,11 @@ ov02_0224AA80: ; 0x0224AA80
 	ldmia r3!, {r0, r1}
 	stmia r2!, {r0, r1}
 	add r0, r5, #0
-	bl sub_02068D90
+	bl FieldEffect_GetParam
 	str r0, [r4, #4]
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02068DB8
+	bl FieldEffect_GetPosition
 	ldr r0, [r4, #0x14]
 	ldr r2, [r4, #0xc]
 	ldr r3, [r4, #4]

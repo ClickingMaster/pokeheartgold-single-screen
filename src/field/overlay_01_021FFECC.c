@@ -5,7 +5,7 @@
 #include "player_avatar.h"
 #include "unk_0205FD20.h"
 #include "unk_020658D4.h"
-#include "unk_020689C8.h"
+#include "field_effects.h"
 #include "render_model.h"
 #include "render_animation.h"
 
@@ -76,7 +76,7 @@ void ov01_021FFF5C(LocalMapObject *mapObject, int a1) {
 }
 
 static BOOL ov01_021FFFCC(void *a0, UnkOv01_021FFFCD *a1) {
-    UnkOv01_021FFFCC *ptr = sub_02068D98(a0);
+    UnkOv01_021FFFCC *ptr = FieldEffect_GetUserData(a0);
     LocalMapObject *mapObject = ptr->unk0.unkC;
 
     a1->unk10 = ptr->unk0;
@@ -102,7 +102,7 @@ static void ov01_02200020(void *a0, UnkOv01_021FFFCD *a1) {
     VecFx32 translation;
 
     if (a1->unk4 != TRUE) {
-        sub_02068DB8(a0, &translation);
+        FieldEffect_GetPosition(a0, &translation);
         RenderObj_DrawAt(a1->unk10.unk10, &translation);
     }
 }

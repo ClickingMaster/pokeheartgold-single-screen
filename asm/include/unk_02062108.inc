@@ -165,7 +165,7 @@
 .public MapObjectMovementCmd102_Step1
 .public sub_0206642C
 .public sub_02066438
-.public sub_02068B48
+.public FieldEffect_Destroy
 .public _020FD198
 .public gMovementCmdTable
 .public ov01_022000DC

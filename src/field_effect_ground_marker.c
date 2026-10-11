@@ -126,11 +126,11 @@ void *ov01_02203B98(FieldSystem *fieldSystem, const VecFx32 *position) {
 BOOL ov01_02203BB4(void *a0, Ov01_02203A18_Inst *inst) {
     VecFx32 position;
 
-    inst->unk30 = *(Ov01_02203A18_Args *)sub_02068D98(a0);
+    inst->unk30 = *(Ov01_02203A18_Args *)FieldEffect_GetUserData(a0);
     inst->unk8 = MapObject_GetID(inst->unk30.unk8);
     inst->unkC = MapObject_GetMapID(inst->unk30.unk8);
     inst->unk28 = FX32_CONST(6);
-    u32 idx = (u32)sub_02068D90(a0);
+    u32 idx = (u32)FieldEffect_GetParam(a0);
     inst->unk40.unk18 = FieldEffectManager_LoadNarcMember(inst->unk30.unk0, ov01_02209544[idx].unk0, 1);
     inst->unk40.unk14 = FieldEffectManager_LoadNarcMember(inst->unk30.unk0, ov01_02209544[idx].unk4, 1);
     BillboardGfxSequence_Init(inst->unk40.unk14, &inst->unk40);
@@ -143,7 +143,7 @@ BOOL ov01_02203BB4(void *a0, Ov01_02203A18_Inst *inst) {
     GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)0, inst->unk40.unk1C, Texture_GetImageData(inst->unk40.unk10, 0), inst->unk40.unk20);
     u32 plttAddr = NNS_GfdGetTexKeyAddr(tex->plttInfo.vramKey);
     GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)1, plttAddr, Texture_GetPaletteData(inst->unk40.unk10, 0), 0x20);
-    sub_02068DB8(a0, &position);
+    FieldEffect_GetPosition(a0, &position);
     inst->unk3C = ov01_02203B98(inst->unk30.unk0, &position);
     BillboardObject_SetVisible(inst->unk3C, 0);
     PlaySE(SEQ_SE_DP_DECIDE);
@@ -205,14 +205,14 @@ void ov01_02203CB8(void *a0, Ov01_02203A18_Inst *inst) {
         FieldEffectManager_DestroyEffect((int)a0);
         return;
     }
-    sub_02068DA8(a0, &result);
+    FieldEffect_SetPosition(a0, &result);
 }
 
 void ov01_02203DC0(void *a0, Ov01_02203A18_Inst *inst) {
     VecFx32 position;
 
     if (inst->unk10 != 1) {
-        sub_02068DB8(a0, &position);
+        FieldEffect_GetPosition(a0, &position);
         position.x += inst->unk18.x;
         position.y += inst->unk18.y;
         position.z += inst->unk18.z;

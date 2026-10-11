@@ -79,11 +79,11 @@
 .public PlazaGameResults_IsDone
 .public PlazaGameResults_GetContinue
 .public PlazaGameRoster_ProcessConnectionLost
-.public ov93_0225DF38
-.public ov93_0225E144
-.public ov93_0225E230
-.public ov93_0225E3C4
-.public ov93_0225E48C
+.public WobbuffetPop_AddModelSlot
+.public WobbuffetPop_QueuePlayerEvent
+.public WobbuffetPop_QueueEvent
+.public WobbuffetPop_GetPlayerSeat
+.public WobbuffetPop_RequestSync
 .public ov93_0225FDF4
 .public ov93_0225FE80
 .public ov93_0225FEC4

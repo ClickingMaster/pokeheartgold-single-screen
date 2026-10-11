@@ -31,7 +31,7 @@ void ov01_021FFC80(LocalCtx *ctx) {
 
 BOOL ov01_021FFCA8(void *task, LocalState *s) {
     VecFx32 pos;
-    *(LocalNineWords *)&s->x = *(LocalNineWords *)sub_02068D98(task);
+    *(LocalNineWords *)&s->x = *(LocalNineWords *)FieldEffect_GetUserData(task);
     s->sprite = MapObject_GetSpriteID(s->mapObject);
     s->id = MapObject_GetID(s->mapObject);
     s->mapId = MapObject_GetMapID(s->mapObject);
@@ -42,12 +42,12 @@ BOOL ov01_021FFCA8(void *task, LocalState *s) {
     pos.x += 0x1e << 10;
     pos.y -= 2 << 14;
     pos.z += 0xd << 12;
-    sub_02068DA8(task, &pos);
+    FieldEffect_SetPosition(task, &pos);
     s->effect = FieldEffectManager_CreateBillboardFromRecord(s->resource, 0xa, &pos);
     if (MapObject_TestFlagsBits(s->mapObject, 2 << 8) == TRUE) {
         BillboardObject_SetVisible(s->effect, FALSE);
     }
-    if (sub_02068D90(task) == 0) {
+    if (FieldEffect_GetParam(task) == 0) {
         BillboardObject_SetFrame(s->effect, 2 << 12);
         s->stage = 2;
     }
@@ -74,14 +74,14 @@ void ov01_021FFD70(void *task, LocalState *s) {
         BillboardObject_SetVisible(s->effect, TRUE);
     }
     if (s->onFloor == 0) {
-        sub_02068DB8(task, &local.current);
+        FieldEffect_GetPosition(task, &local.current);
         local.target.x = s->x << 16;
         local.target.z = s->z << 16;
         local.target.y = local.current.y;
         s->onFloor = sub_0206121C(s->fieldSystem, &local.target);
         if (s->onFloor == 1) {
             local.current.y = local.target.y;
-            sub_02068DA8(task, &local.current);
+            FieldEffect_SetPosition(task, &local.current);
         }
     }
     switch (s->stage) {
@@ -119,6 +119,6 @@ void ov01_021FFE98(void *task, LocalState *s) {
         FieldEffectManager_DestroyEffect(task);
         return;
     }
-    sub_02068DB8(task, &pos);
+    FieldEffect_GetPosition(task, &pos);
     BillboardObject_SetPosition(s->effect, &pos);
 }

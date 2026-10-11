@@ -2,14 +2,14 @@
 
 void sub_0205B0DC(Slot *slot, BOOL both) {
     if (slot->effect1 != NULL) {
-        if (sub_02068CCC(slot->effect1)) {
-            sub_02068B48((int)slot->effect1);
+        if (FieldEffect_IsActive(slot->effect1)) {
+            FieldEffect_Destroy((int)slot->effect1);
         }
         slot->effect1 = NULL;
     }
     if (both && slot->effect2 != NULL) {
-        if (sub_02068CCC(slot->effect2)) {
-            sub_02068B48((int)slot->effect2);
+        if (FieldEffect_IsActive(slot->effect2)) {
+            FieldEffect_Destroy((int)slot->effect2);
         }
         slot->effect2 = NULL;
     }

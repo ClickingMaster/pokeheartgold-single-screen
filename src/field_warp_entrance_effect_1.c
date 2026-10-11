@@ -47,7 +47,7 @@ void ov01_022008B4(PlayerAvatar *a0) {
 }
 
 BOOL ov01_02200900(void *a0, Ov01_02200858_Inst *inst) {
-    Ov01_02200858_Args *args = (Ov01_02200858_Args *)sub_02068D98(a0);
+    Ov01_02200858_Args *args = (Ov01_02200858_Args *)FieldEffect_GetUserData(a0);
     inst->unk24 = *args;
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(args->unk8);
     inst->unk4 = -1;
@@ -90,7 +90,7 @@ void ov01_0220093C(void *a0, Ov01_02200858_Inst *inst) {
     sub_020611C8(x + dx, z + dy, &position);
     MapObject_CopyPositionVector(mapObject, &objPos);
     position.y = objPos.y;
-    sub_02068DA8(a0, &position);
+    FieldEffect_SetPosition(a0, &position);
     inst->unk1C++;
     if (inst->unk1C > 15) {
         inst->unk1C = 0;

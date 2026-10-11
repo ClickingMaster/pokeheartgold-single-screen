@@ -14,9 +14,9 @@ extern const u32 ov93_022630E4[];
 /* Symbols from sibling objects (overlay_93_thumb_1.o / overlay_93_arm.o)
    and from the rest of the game. Prototype only, never defined here.   */
 /* ------------------------------------------------------------------ */
-extern void ov93_0225E144(void *, void *);
-extern void ov93_0225E230(void *, const void *);
-extern void ov93_0225E48C(void *, u32, u32);
+extern void WobbuffetPop_QueuePlayerEvent(void *, void *);
+extern void WobbuffetPop_QueueEvent(void *, const void *);
+extern void WobbuffetPop_RequestSync(void *, u32, u32);
 
 extern void *SpriteSystem_NewSprite(void *, void *, const struct SpriteTemplate *);
 extern void Sprite_DeleteAndFreeResources(void *);
@@ -168,7 +168,7 @@ u32 ov93_02262714(void) {
 void ov93_02262718(void *a, void *b, void *c, void *d) {
     (void)b;
     (void)c;
-    ov93_0225E144(d, a);
+    WobbuffetPop_QueuePlayerEvent(d, a);
 }
 
 u32 ov93_02262724(void *a, void *b) {

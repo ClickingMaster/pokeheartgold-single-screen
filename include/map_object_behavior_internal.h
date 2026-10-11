@@ -8,7 +8,7 @@
 #include "player_avatar.h"
 #include "sys_task.h"
 #include "sys_task_api.h"
-#include "unk_020689C8.h"
+#include "field_effects.h"
 
 typedef struct TrainerApproachWork {
     int state;

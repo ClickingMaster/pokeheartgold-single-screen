@@ -6,7 +6,7 @@
 
 #include "map_object.h"
 #include "field/field_effect_manager.h"
-#include "unk_020689C8.h"
+#include "field_effects.h"
 #include "render_model.h"
 #include "render_animation.h"
 
@@ -53,7 +53,7 @@ typedef struct UnkOv01_021FE200_Args {
     NNSG3dRenderObj *unk8;
 } UnkOv01_021FE200_Args;
 
-// Field view of sub_02068D98's return. The tracked UnkOv01_021FFFCC wraps a
+// Field view of FieldEffect_GetUserData's return. The tracked UnkOv01_021FFFCC wraps a
 // UnkOv01_021FFFCC_common whose 0x4 is a u8[8]; this module reads 0x4/0x8 as
 // words. See report.md.
 typedef struct UnkOv01_021FE200_Mdl {
@@ -63,7 +63,7 @@ typedef struct UnkOv01_021FE200_Mdl {
 } UnkOv01_021FE200_Mdl;
 
 void sub_020611C8(int x, int z, VecFx32 *position);
-void *sub_02068D90(void *a0);
+void *FieldEffect_GetParam(void *a0);
 void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *pMdl, u32 alpha);
 
 #endif // POKEHEARTGOLD_OV01_021FE200_POKEHEARTGOLD_FIELD_EFFECT_MODEL_BANK_H

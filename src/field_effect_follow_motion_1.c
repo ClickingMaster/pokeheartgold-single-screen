@@ -62,15 +62,15 @@ void ov01_021FEAB0(void *mapObj, s32 x, s32 z, u32 kind, u32 usePosition) {
     FieldEffectManager_CreateEffect(ctx, ov01_022090FC, &pos, usePosition, &a, priority);
 }
 void ov01_021FEB30(void *task, void *v) {
-    void *p = sub_02068D74(task);
+    void *p = FieldEffect_GetState(task);
     *(void **)((u8 *)p + 0xc) = v;
 }
 BOOL ov01_021FEB3C(void *task, void *v) {
     u8 *p = v;
-    Copy20 *src = sub_02068D98(task);
+    Copy20 *src = FieldEffect_GetUserData(task);
     *(Copy20 *)(p + 0x10) = *src;
     *(u32 *)(p + 4) = src->v[0];
-    *(void **)(p + 0xc) = sub_02068D90(task);
+    *(void **)(p + 0xc) = FieldEffect_GetParam(task);
     ov01_021FEA90(*(void **)(p + 0x1c));
     ov01_021FEA30(*(void **)(p + 0x1c));
     return TRUE;
@@ -88,7 +88,7 @@ void ov01_021FEB8C(void *task, void *v) {
         memset(&zero, 0, sizeof(zero));
         sub_0205F9A0(mapObj, &zero);
         MapObject_CopyPositionVector(mapObj, &pos);
-        sub_02068DA8(task, &pos);
+        FieldEffect_SetPosition(task, &pos);
     }
 }
 void ov01_021FEBC0(void *task, EffectWork *work) {
@@ -118,6 +118,6 @@ void ov01_021FEBC0(void *task, EffectWork *work) {
         break;
     }
     Math_CalcRotationMatrixXYZDeg(&rot, 0, angle, 0);
-    sub_02068DB8(task, &pos);
+    FieldEffect_GetPosition(task, &pos);
     RenderObj_Draw(obj, &pos, &scale, &rot);
 }

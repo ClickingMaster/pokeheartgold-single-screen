@@ -34,19 +34,19 @@ void ov01_022052C4(void *ctx, void *arg) {
     FieldEffectManager_CreateEffect(ctx, ov01_022096CC, arg, 0, &a, 0xFF);
 }
 void *ov01_022052F4(void *task) {
-    return *(void **)sub_02068D74(task);
+    return *(void **)FieldEffect_GetState(task);
 }
 BOOL ov01_02205300(void *task, void *v) {
     u8 *p = v;
     u8 *ctx;
     Vec3 pos;
-    void *args = sub_02068D98(task);
+    void *args = FieldEffect_GetUserData(task);
     *(void **)(p + 4) = *(void **)((u8 *)args + 4);
     *(u32 *)p = 0;
     ctx = *(u8 **)((u8 *)args + 4);
     ov01_022053C4(ctx + 0x24, 2, 0);
     Field3dObject_SetActiveFlag(ctx + 0x4c, TRUE);
-    sub_02068DB8(task, &pos);
+    FieldEffect_GetPosition(task, &pos);
     Field3dObject_SetPosEx(ctx + 0x4c, pos.x, pos.y, pos.z);
     PlaySE(0x910);
     return TRUE;

@@ -63,7 +63,7 @@ _02203678:
 	bne _022036B0
 	add r0, r4, #0
 	add r1, sp, #0x1c
-	bl sub_02068DB8
+	bl FieldEffect_GetPosition
 	add r6, r5, #0
 	add r6, #0x18
 	add r3, sp, #0x10
@@ -82,7 +82,7 @@ _02203678:
 	add r1, sp, #0x1c
 	str r0, [sp, #0x20]
 	add r0, r4, #0
-	bl sub_02068DA8
+	bl FieldEffect_SetPosition
 _022036B0:
 	ldr r0, [r5]
 	cmp r0, #0

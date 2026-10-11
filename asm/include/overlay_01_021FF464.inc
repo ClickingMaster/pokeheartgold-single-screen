@@ -16,9 +16,9 @@
 .public MapObject_CheckFlag26
 .public MapObject_CopyPositionVector
 .public MapObject_CopyFacingVector
-.public sub_02068D90
-.public sub_02068D98
-.public sub_02068DA8
+.public FieldEffect_GetParam
+.public FieldEffect_GetUserData
+.public FieldEffect_SetPosition
 .public FieldEffectManager_HeapAllocAndFill
 .public FieldEffectManager_HeapFree
 .public FieldEffectManager_GetRendererData

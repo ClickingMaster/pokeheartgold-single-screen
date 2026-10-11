@@ -6,7 +6,7 @@ WIP_LOCAL void ov02_02249984(SysTask *task, void *sm) {
     }
     if (*(int *)((u8 *)sm + 0x10) == 1) {
         if (*(void **)((u8 *)sm + 0x1e0) != NULL) {
-            sub_02068BAC(*(void **)((u8 *)sm + 0x1e0));
+            FieldEffectPool_DrawAll(*(void **)((u8 *)sm + 0x1e0));
         }
         ov02_0224A32C(sm);
     }
@@ -18,7 +18,7 @@ WIP_LOCAL void ov02_022499B8(SysTask *task, void *sm) {
     }
     if (*(int *)((u8 *)sm + 0x10) == 1) {
         if (*(void **)((u8 *)sm + 0x1e0) != NULL) {
-            sub_02068BAC(*(void **)((u8 *)sm + 0x1e0));
+            FieldEffectPool_DrawAll(*(void **)((u8 *)sm + 0x1e0));
         }
         ov02_0224A32C(sm);
     }

@@ -1,7 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-struct S{u8 p[12];int state;u8 p10[8];u8 index;};void ov93_0226297C(void*,int,u8);int ov93_0225E548(void*,u8);void ov93_022629B8(void*,u8);void ov93_022628F4(void*,u8);int ov93_0225E584(void*,struct S*);
-struct World{u8 pad[0x1430];int progress,target;u8 p1438[0x2edc-0x1438];u32 a;u8 p2EE0[16];u32 b;u8 p2EF4[0x2fb4-0x2ef4];u32 time;u8 p2FB8[16];int index;u8 p2FCC[8];u32 c;};int ov93_0225FDF4(int);void ov93_02262884(struct World*,int,int,u8);int ov93_0225E3B8(struct World*);void ov93_02262830(struct World*,int,u8);int ov93_0225E61C(struct World*,struct S*);
-int ov93_0225E584(void*c,struct S*s){switch(s->state){case 0:ov93_0226297C(c,1,s->index);s->state++;break;case 1:if(ov93_0225E548(c,s->index)==1){s->index++;s->state++;}break;case 2:ov93_022629B8(c,s->index);s->state++;break;case 3:if(ov93_0225E548(c,s->index)==1){s->index++;s->state++;}break;case 4:ov93_022628F4(c,s->index);s->state++;break;case 5:if(ov93_0225E548(c,s->index)==1){s->index++;return 1;}break;}return 0;}
-int ov93_0225E61C(struct World*w,struct S*s){if(w->time>1302 && !w->c && !w->a && !w->b)return 1;switch(s->state){case 0:{int value=ov93_0225FDF4(w->index);ov93_02262884(w,w->index,value,s->index);s->state++;break;}case 1:if(ov93_0225E548(w,s->index)==1){s->index++;s->state++;}break;case 2:if(w->target!=0 && w->progress>=w->target){w->index++;ov93_02262830(w,ov93_0225E3B8(w),s->index);s->state++;}break;case 3:if(ov93_0225E548(w,s->index)==1){s->index++;s->state=0;}break;}return 0;}

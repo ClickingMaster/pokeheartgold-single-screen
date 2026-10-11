@@ -1862,16 +1862,16 @@ ov02_02253430: ; 0x02253430
 ov02_02253440: ; 0x02253440
 	.byte 0x08, 0x00, 0x00, 0x00
 	.word ov02_0224B6D0
-	.word sub_02068DD4
+	.word FieldEffect_DefaultDestroy
 	.word ov02_0224B6E4
-	.word sub_02068DD0
+	.word FieldEffect_DefaultDraw
 
 ov02_02253454: ; 0x02253454
 	.byte 0x74, 0x00, 0x00, 0x00
 	.word ov02_02248D98
 	.word ov02_02248DE4
 	.word ov02_02248DF0
-	.word sub_02068DD0
+	.word FieldEffect_DefaultDraw
 
 ov02_02253468: ; 0x02253468
 	.byte 0x24, 0x00, 0x00, 0x00
@@ -1897,9 +1897,9 @@ ov02_02253490: ; 0x02253490
 ov02_022534A4: ; 0x022534A4
 	.byte 0x24, 0x00, 0x00, 0x00
 	.word ov02_0224B350
-	.word sub_02068DD4
+	.word FieldEffect_DefaultDestroy
 	.word ov02_0224B3FC
-	.word sub_02068DD0
+	.word FieldEffect_DefaultDraw
 
 ov02_022534B8: ; 0x022534B8
 	.word ov02_0224B494

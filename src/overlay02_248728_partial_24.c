@@ -134,5 +134,5 @@ void ov02_0224AB9C(void *);
 int ov02_0224B638(void *);
 
 void ov02_0224B2C0(void *p) {
-    U32(sub_02068D74(p), 0) = 0;
+    U32(FieldEffect_GetState(p), 0) = 0;
 }

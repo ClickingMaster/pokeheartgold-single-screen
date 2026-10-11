@@ -219,8 +219,8 @@ BOOL ov01_021FE3F8(LocalMapObject *a0, u32 a1) {
 BOOL ov01_021FE4FC(void *a0, UnkOv01_021FE200_Work *a1) {
     UnkOv01_021FE200_Mdl *mdl;
 
-    a1->unk10 = sub_02068D90(a0);
-    mdl = (UnkOv01_021FE200_Mdl *)sub_02068D98(a0);
+    a1->unk10 = FieldEffect_GetParam(a0);
+    mdl = (UnkOv01_021FE200_Mdl *)FieldEffect_GetUserData(a0);
     a1->unk18 = mdl->unk8;
     a1->unk14 = mdl->unk4;
     a1->unkC = 0x1F;
@@ -252,7 +252,7 @@ void ov01_021FE558(void *a0, UnkOv01_021FE200_Work *a1) {
     VecFx32 position;
 
     if (a1->unk8 == 0) {
-        sub_02068DB8(a0, &position);
+        FieldEffect_GetPosition(a0, &position);
         NNSi_G3dModifyPolygonAttrMask(a1->unk14->unkC, TRUE, 0x1F << 16);
         NNS_G3dMdlSetMdlAlphaAll(a1->unk14->unkC, a1->unkC);
         RenderObj_DrawAt(a1->unk18, &position);

@@ -16,7 +16,7 @@ extern void *sub_0205F3C0(void *, u32);
 extern void *sub_0205F3E4(void *);
 extern void *ov01_02200540(void *, u32, u32);
 extern BOOL ov01_022003F4(void *);
-extern void sub_02068B48(void *);
+extern void FieldEffect_Destroy(void *);
 extern void MapObject_IncrementMovementStep(void *);
 extern void sub_02060F24(void *, u32);
 extern void MapObject_SetOrQueueFacing(void *, u32);

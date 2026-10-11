@@ -88,7 +88,7 @@ void ov02_02249EC0(void *work) {
 #endif
     ov02_0224A080(work, narc);
     NARC_Delete(narc);
-    *(void **)((u8 *)work + 0x1e0) = sub_020689C8(HEAP_ID_FIELD1, 0x20);
+    *(void **)((u8 *)work + 0x1e0) = FieldEffectPool_New(HEAP_ID_FIELD1, 0x20);
     GfGfx_EngineATogglePlanes(8, 1);
 }
 
@@ -101,13 +101,13 @@ void ov02_02249F6C(void *work) {
     GfGfx_EngineATogglePlanes(8, 0);
     ov02_0224A080(work, narc);
     NARC_Delete(narc);
-    *(void **)((u8 *)work + 0x1e0) = sub_020689C8(HEAP_ID_FIELD1, 0x20);
+    *(void **)((u8 *)work + 0x1e0) = FieldEffectPool_New(HEAP_ID_FIELD1, 0x20);
     GfGfx_EngineATogglePlanes(8, 1);
 }
 
 void ov02_02249FD4(void *work) {
     GfGfx_EngineATogglePlanes(8, 0);
-    sub_020689F8(*(void **)((u8 *)work + 0x1e0));
+    FieldEffectPool_Delete(*(void **)((u8 *)work + 0x1e0));
     ov02_0224A63C(*(BgConfig **)((u8 *)*(void **)((u8 *)work + 0x60) + 8));
     ov02_0224A288(work);
     reg_G2_BG0CNT = (reg_G2_BG0CNT & ~3) | *(u16 *)((u8 *)work + 0x24);
@@ -118,7 +118,7 @@ void ov02_02249FD4(void *work) {
 
 void ov02_0224A028(void *work) {
     GfGfx_EngineATogglePlanes(8, 0);
-    sub_020689F8(*(void **)((u8 *)work + 0x1e0));
+    FieldEffectPool_Delete(*(void **)((u8 *)work + 0x1e0));
     ov02_0224A288(work);
     reg_G2_BG0CNT = (reg_G2_BG0CNT & ~3) | *(u16 *)((u8 *)work + 0x24);
     reg_G2_BG3CNT = (reg_G2_BG3CNT & ~3) | *(u16 *)((u8 *)work + 0x26);

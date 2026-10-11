@@ -144,10 +144,10 @@ void *ov01_022003C4(void *manager, int which, Vec3 *pos) {
     return obj;
 }
 void *ov01_022003F4(void) {
-    return *(void **)(sub_02068D74() + 0x14);
+    return *(void **)(FieldEffect_GetState() + 0x14);
 }
 void ov01_02200400(void) {
-    u8 *p = sub_02068D74();
+    u8 *p = FieldEffect_GetState();
     *(int *)(p + 0x10) = 1;
     if (*(void **)(p + 0x40) != NULL) {
         BillboardObject_SetVisible(*(void **)(p + 0x40), 0);
@@ -156,21 +156,21 @@ void ov01_02200400(void) {
 
 int ov01_02200418(void *task, AnimWork *w) {
     Vec3 pos;
-    *(Vec4 *)((u8 *)w + 0x30) = *sub_02068D98(task);
+    *(Vec4 *)((u8 *)w + 0x30) = *FieldEffect_GetUserData(task);
     w->velocity = 0x6000;
     ov01_0220039C(w->effects, w->which);
-    sub_02068DB8(task, &pos);
+    FieldEffect_GetPosition(task, &pos);
     w->renderObj = ov01_022003C4((void *)w->model, w->which, &pos);
     ov01_02200238(w->effects, w->which);
     BillboardObject_SetVisible(w->renderObj, 0);
-    if (sub_02068D90(task) == 1) {
+    if (FieldEffect_GetParam(task) == 1) {
         PlaySE(SEQ_SE_DP_DECIDE);
     }
     return 1;
 }
 void ov01_02200480(void *task, AnimWork *w) {
     Vec3 pos;
-    sub_02068DB8(task, &pos);
+    FieldEffect_GetPosition(task, &pos);
     switch (w->state) {
     case 0:
         BillboardObject_SetVisible(w->renderObj, 1);
@@ -193,7 +193,7 @@ void ov01_02200480(void *task, AnimWork *w) {
     case 2:
         break;
     }
-    sub_02068DA8(task, &pos);
+    FieldEffect_SetPosition(task, &pos);
 }
 void ov01_022004EC(void *task, AnimWork *w) {
     BillboardObject_Delete(w->renderObj);
@@ -203,7 +203,7 @@ void ov01_022004EC(void *task, AnimWork *w) {
 void ov01_02200508(void *task, AnimWork *w) {
     Vec3 pos;
     if (w->unk10 != 1) {
-        sub_02068DB8(task, &pos);
+        FieldEffect_GetPosition(task, &pos);
         pos.x += w->offX;
         pos.y += w->offY;
         pos.z += w->offZ;
@@ -228,16 +228,16 @@ int ov01_02200540(void *obj, int a1, int a2) {
 }
 int ov01_0220059C(void *task, AnimWork *w) {
     Vec3 pos;
-    *(Vec4 *)((u8 *)w + 0x30) = *sub_02068D98(task);
+    *(Vec4 *)((u8 *)w + 0x30) = *FieldEffect_GetUserData(task);
     w->objectId = MapObject_GetID(w->mapObject);
     w->mapId = MapObject_GetMapID(w->mapObject);
     w->velocity = 0x6000;
     ov01_0220039C(w->effects, w->which);
-    sub_02068DB8(task, &pos);
+    FieldEffect_GetPosition(task, &pos);
     w->renderObj = ov01_022003C4((void *)w->model, w->which, &pos);
     ov01_02200238(w->effects, w->which);
     BillboardObject_SetVisible(w->renderObj, 0);
-    if (sub_02068D90(task) == 1) {
+    if (FieldEffect_GetParam(task) == 1) {
         PlaySE(SEQ_SE_DP_DECIDE);
     }
     return 1;
@@ -273,5 +273,5 @@ void ov01_02200614(void *task, AnimWork *w) {
     case 2:
         break;
     }
-    sub_02068DA8(task, &pos);
+    FieldEffect_SetPosition(task, &pos);
 }

@@ -45,10 +45,10 @@ void DC_FlushRange(const void *, u32);
 void GX_LoadOBJ(const void *, u32, u32);
 void GX_LoadOBJPltt(const void *, u32, u32);
 void *ov02_0224A33C(void *, void *, u32, u32, u32, s32, u32, u32);
-void *sub_02068B0C(void *, const void *, const VecFx32 *, int, void *, u32);
-void *sub_02068D98(void *);
-u32 sub_02068D90(void *);
-void sub_02068DB8(void *, VecFx32 *);
+void *FieldEffectPool_AddBasicEffect(void *, const void *, const VecFx32 *, int, void *, u32);
+void *FieldEffect_GetUserData(void *);
+u32 FieldEffect_GetParam(void *);
+void FieldEffect_GetPosition(void *, VecFx32 *);
 void *ov02_0224A3F0(u32, const VecFx32 *, u32, u32);
 void Sprite_SetDrawFlag(void *, BOOL);
 

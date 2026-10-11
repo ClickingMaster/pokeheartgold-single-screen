@@ -25,10 +25,10 @@
 .public MapObject_CopyFacingVector
 .public sub_0205F990
 .public sub_0205F9B0
-.public sub_02068D90
-.public sub_02068D98
-.public sub_02068DA8
-.public sub_02068DB8
+.public FieldEffect_GetParam
+.public FieldEffect_GetUserData
+.public FieldEffect_SetPosition
+.public FieldEffect_GetPosition
 .public NNS_G3dMdlSetMdlFogEnableFlagAll
 .public NNS_G3dGetTex
 .public VEC_Add

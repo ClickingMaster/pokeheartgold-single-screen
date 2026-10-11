@@ -6,16 +6,16 @@
 
 #include "map_object.h"
 #include "field/field_effect_manager.h"
-#include "unk_020689C8.h"
+#include "field_effects.h"
 #include "render_model.h"
 #include "render_animation.h"
 
 // ---- not declared in any tracked header (private proposals; see report.md) ----
 void RenderObj_Draw(void *a0, VecFx32 *pos, VecFx32 *scale, MtxFx33 *mtx);
 void Math_CalcRotationMatrixXYZDeg(MtxFx33 *mtx, u16 x, u16 y, u16 z);
-void *sub_02068D74(void *a0);
-void *sub_02068D90(void *a0);
-void sub_02068DA8(void *a0, VecFx32 *a1);
+void *FieldEffect_GetState(void *a0);
+void *FieldEffect_GetParam(void *a0);
+void FieldEffect_SetPosition(void *a0, VecFx32 *a1);
 BOOL sub_0206121C(void *fieldSystem, VecFx32 *position);
 
 // The 0x6c renderer context allocated by ov01_021FE780 and recovered through
@@ -27,7 +27,7 @@ typedef struct Ov01FE780Ctx {
 } Ov01FE780Ctx;                /* 0x6c */
 
 // The 0x10-byte user-data block handed to FieldEffectManager_CreateEffect as a4 and recovered
-// via sub_02068D98 in ov01_021FE868.
+// via FieldEffect_GetUserData in ov01_021FE868.
 typedef struct Ov01FE780Args {
     u32 dir;                /* 0x00 */
     FieldSystem *fieldSys;  /* 0x04 */

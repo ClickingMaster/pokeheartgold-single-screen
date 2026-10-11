@@ -110,7 +110,7 @@ ov01_021FFCA8: ; 0x021FFCA8
 	sub sp, #0xc
 	add r5, r0, #0
 	add r4, r1, #0
-	bl sub_02068D98
+	bl FieldEffect_GetUserData
 	add r3, r4, #0
 	add r6, r0, #0
 	add r3, #0x18
@@ -161,7 +161,7 @@ _021FFCBC:
 	str r0, [sp, #8]
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02068DA8
+	bl FieldEffect_SetPosition
 	ldr r0, [r4, #0x28]
 	mov r1, #0xa
 	add r2, sp, #0
@@ -178,7 +178,7 @@ _021FFCBC:
 	bl BillboardObject_SetVisible
 _021FFD46:
 	add r0, r5, #0
-	bl sub_02068D90
+	bl FieldEffect_GetParam
 	cmp r0, #0
 	bne _021FFD5E
 	mov r1, #2
@@ -240,7 +240,7 @@ _021FFDB2:
 	bne _021FFDEA
 	add r0, r6, #0
 	add r1, sp, #0xc
-	bl sub_02068DB8
+	bl FieldEffect_GetPosition
 	ldr r0, [r5, #0x18]
 	add r1, sp, #0
 	lsl r0, r0, #0x10
@@ -259,7 +259,7 @@ _021FFDB2:
 	add r1, sp, #0xc
 	str r0, [sp, #0x10]
 	add r0, r6, #0
-	bl sub_02068DA8
+	bl FieldEffect_SetPosition
 _021FFDEA:
 	ldr r0, [r5]
 	cmp r0, #0
@@ -365,7 +365,7 @@ ov01_021FFE98: ; 0x021FFE98
 _021FFEB8:
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02068DB8
+	bl FieldEffect_GetPosition
 	ldr r0, [r4, #0x3c]
 	add r1, sp, #0
 	bl BillboardObject_SetPosition

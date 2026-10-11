@@ -207,7 +207,7 @@ _021FEB2C: .word ov01_022090FC
 ov01_021FEB30: ; 0x021FEB30
 	push {r4, lr}
 	add r4, r1, #0
-	bl sub_02068D74
+	bl FieldEffect_GetState
 	str r4, [r0, #0xc]
 	pop {r4, pc}
 	thumb_func_end ov01_021FEB30
@@ -217,7 +217,7 @@ ov01_021FEB3C: ; 0x021FEB3C
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	add r4, r1, #0
-	bl sub_02068D98
+	bl FieldEffect_GetUserData
 	add r2, r0, #0
 	add r6, r2, #0
 	add r3, r4, #0
@@ -231,7 +231,7 @@ ov01_021FEB3C: ; 0x021FEB3C
 	ldr r0, [r2]
 	str r0, [r4, #4]
 	add r0, r5, #0
-	bl sub_02068D90
+	bl FieldEffect_GetParam
 	str r0, [r4, #0xc]
 	ldr r0, [r4, #0x1c]
 	bl ov01_021FEA90
@@ -275,7 +275,7 @@ ov01_021FEB8C: ; 0x021FEB8C
 	bl MapObject_CopyPositionVector
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02068DA8
+	bl FieldEffect_SetPosition
 _021FEBBA:
 	add sp, #0x18
 	pop {r3, r4, r5, pc}
@@ -334,7 +334,7 @@ _021FEC0A:
 	bl Math_CalcRotationMatrixXYZDeg
 	add r0, r6, #0
 	add r1, sp, #0xc
-	bl sub_02068DB8
+	bl FieldEffect_GetPosition
 	add r0, r4, #0
 	add r1, sp, #0xc
 	add r2, sp, #0

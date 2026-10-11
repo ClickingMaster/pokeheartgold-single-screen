@@ -14,7 +14,7 @@
 #include "sound_playback.h"
 #include "unk_02062108.h"
 #include "unk_0206793C.h"
-#include "unk_020689C8.h"
+#include "field_effects.h"
 
 typedef struct {
     u8 unk0;

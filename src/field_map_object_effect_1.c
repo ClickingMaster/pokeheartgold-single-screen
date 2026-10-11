@@ -41,11 +41,11 @@ void ov01_021FF4FC(void *obj, void *arg) {
 }
 BOOL ov01_021FF54C(void *task, LocalState *s) {
     VecFx32 pos = { 0, 0, 0 };
-    *(LocalFourWords *)&s->data14 = *(LocalFourWords *)sub_02068D98(task);
+    *(LocalFourWords *)&s->data14 = *(LocalFourWords *)FieldEffect_GetUserData(task);
     s->sprite = MapObject_GetSpriteID(s->mapObject);
     s->id = MapObject_GetID(s->mapObject);
     s->mapId = MapObject_GetMapID(s->mapObject);
-    sub_02068DA8(task, &pos);
+    FieldEffect_SetPosition(task, &pos);
     s->effect = FieldEffectManager_CreateBillboardFromRecord(s->resource, 3, &pos);
     if (MapObject_TestFlagsBits(s->mapObject, 2 << 8) == TRUE) {
         BillboardObject_SetVisible(s->effect, FALSE);
@@ -62,7 +62,7 @@ void ov01_021FF5C4(void *task, LocalState *s) {
         FieldEffectManager_DestroyEffect(task);
         return;
     }
-    mode = sub_02068D90(task);
+    mode = FieldEffect_GetParam(task);
     if (mode == 1 && !MapObject_CheckFlag26(obj)) {
         FieldEffectManager_DestroyEffect(task);
         return;

@@ -43,13 +43,13 @@ extern void sub_020611C8(void *, u32, Ov01Vec3 *);
 extern s32 MapObject_GetPreviousYCoord(void *);
 extern s32 MapObject_GetPriorityPlusValue(void *, s32);
 extern void FieldEffectManager_CreateEffect(void *, const void *, const Ov01Vec3 *, u32, Ov01SpawnArgs *, s32);
-extern Ov01TaskArgs *sub_02068D98(void *);
+extern Ov01TaskArgs *FieldEffect_GetUserData(void *);
 extern void ov01_021F1A34(void *, void *, void *, void *, u32);
 extern void RenderObj_InitWithAnimation(void *, void *, void *);
 extern BOOL RenderAnimation_IsDone(void *);
 extern void FieldEffectManager_DestroyEffect(void *);
 extern void RenderAnimation_Advance(void *, s32, u32);
-extern void sub_02068DB8(void *, Ov01Vec3 *);
+extern void FieldEffect_GetPosition(void *, Ov01Vec3 *);
 extern void RenderObj_DrawAt(void *, const Ov01Vec3 *);
 extern const u8 ov01_02209110[];
 

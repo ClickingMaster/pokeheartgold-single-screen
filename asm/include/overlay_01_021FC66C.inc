@@ -39,7 +39,7 @@
 .public MapObject_UnpauseMovement
 .public MapObject_AreBitsSetForMovementScriptInit
 .public MapObject_ClearHeldMovementIfActive
-.public sub_02068B48
+.public FieldEffect_Destroy
 .public FollowMon_GetMapObject
 .public FollowMon_IsActive
 .public FieldSystem_UnkSub108_GetMonMood

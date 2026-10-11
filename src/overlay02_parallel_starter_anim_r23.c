@@ -5,7 +5,7 @@ void ov02_0224ADF0(void *arg0) {
     VecFx32 scale = ov02_0225336C;
     VecFx32 matrix;
     VecFx32 secondScale;
-    void *work = sub_02068D74(PTR_AT(arg0, 0x1ec));
+    void *work = FieldEffect_GetState(PTR_AT(arg0, 0x1ec));
     Sprite *sprite;
 
     U8_AT(work, 0) = 2;

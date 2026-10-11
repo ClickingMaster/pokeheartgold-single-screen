@@ -35,15 +35,15 @@ void ov02_0224AA44(void *p, const VecFx32 *position, const VecFx32 *offset, u32 
     args.owner = owner;
     args.context = p;
     args.offset = *offset;
-    sub_02068B0C(PTR(p, 0x1e0), &ov02_02253468, position, parameter, &args, 0x85);
+    FieldEffectPool_AddBasicEffect(PTR(p, 0x1e0), &ov02_02253468, position, parameter, &args, 0x85);
 }
 
 int ov02_0224AA80(void *task, Ov02R17TaskWork *work) {
     VecFx32 position;
-    Ov02R17TaskArgs *args = sub_02068D98(task);
+    Ov02R17TaskArgs *args = FieldEffect_GetUserData(task);
     work->args = *args;
-    work->effectParam = sub_02068D90(task);
-    sub_02068DB8(task, &position);
+    work->effectParam = FieldEffect_GetParam(task);
+    FieldEffect_GetPosition(task, &position);
     work->sprite = ov02_0224A3F0(work->args.position.z, &position, work->args.position.x, work->effectParam);
     Sprite_SetDrawFlag(work->sprite, FALSE);
     return TRUE;

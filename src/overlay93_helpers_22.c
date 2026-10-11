@@ -14,9 +14,9 @@ extern const u32 ov93_022630E4[];
 /* Symbols from sibling objects (overlay_93_thumb_1.o / overlay_93_arm.o)
    and from the rest of the game. Prototype only, never defined here.   */
 /* ------------------------------------------------------------------ */
-extern void ov93_0225E144(void *, void *);
-extern void ov93_0225E230(void *, const void *);
-extern void ov93_0225E48C(void *, u32, u32);
+extern void WobbuffetPop_QueuePlayerEvent(void *, void *);
+extern void WobbuffetPop_QueueEvent(void *, const void *);
+extern void WobbuffetPop_RequestSync(void *, u32, u32);
 
 extern void *SpriteSystem_NewSprite(void *, void *, const struct SpriteTemplate *);
 extern void Sprite_DeleteAndFreeResources(void *);
@@ -152,7 +152,7 @@ void ov93_022627E8(void *sys, const void *body) {
     MI_CpuFill8(&evt, 0, sizeof(evt));
     evt.kind = 1;
     evt.u.blob = *(const Ov93EvtBody *)body;
-    ov93_0225E230(sys, &evt);
+    WobbuffetPop_QueueEvent(sys, &evt);
 }
 
 void ov93_02262814(void *sys, void *e) {
@@ -168,14 +168,14 @@ void ov93_02262830(void *sys, u16 h, u8 c) {
     evt.u.h.h4 = h;
     evt.u.h.b6 = 5;
     evt.u.h.b7 = c;
-    ov93_0225E230(sys, &evt);
+    WobbuffetPop_QueueEvent(sys, &evt);
 }
 
 void ov93_02262860(void *sys, void *e) {
     U32AT(sys, 0x2fd0)
     ++;
     ov93_02260908(sys);
-    ov93_0225E48C(sys, U8AT(e, 6), U8AT(e, 7));
+    WobbuffetPop_RequestSync(sys, U8AT(e, 6), U8AT(e, 7));
 }
 
 void ov93_02262884(void *sys, u16 b, u8 c, u8 d) {
@@ -186,14 +186,14 @@ void ov93_02262884(void *sys, u16 b, u8 c, u8 d) {
     evt.u.h.b6 = c;
     evt.u.h.b7 = 4;
     evt.u.h.b8 = d;
-    ov93_0225E230(sys, &evt);
+    WobbuffetPop_QueueEvent(sys, &evt);
 }
 
 void ov93_022628B8(void *sys, void *e) {
     U32AT(sys, 0x2fc8) = U16AT(e, 4);
     ov93_0225FBF0(PAT(sys, 0x2c), U8AT(PAT(sys, 0), 0x30), U8AT(e, 6), (u8 *)sys + 0x1428);
     U32AT(sys, 0x2fcc) = 1;
-    ov93_0225E48C(sys, U8AT(e, 7), U8AT(e, 8));
+    WobbuffetPop_RequestSync(sys, U8AT(e, 7), U8AT(e, 8));
 }
 
 void ov93_022628F4(void *sys, u8 v) {
@@ -202,12 +202,12 @@ void ov93_022628F4(void *sys, u8 v) {
     evt.kind = 4;
     evt.u.b.b4 = 2;
     evt.u.b.b5 = v;
-    ov93_0225E230(sys, &evt);
+    WobbuffetPop_QueueEvent(sys, &evt);
 }
 
 void ov93_02262920(void *sys, void *e) {
     U32AT(sys, 0x20) = 3;
-    ov93_0225E48C(sys, U8AT(e, 4), U8AT(e, 5));
+    WobbuffetPop_RequestSync(sys, U8AT(e, 4), U8AT(e, 5));
 }
 
 void ov93_02262934(void *sys, u8 v) {
@@ -216,13 +216,13 @@ void ov93_02262934(void *sys, u8 v) {
     evt.kind = 5;
     evt.u.b.b4 = 3;
     evt.u.b.b5 = v;
-    ov93_0225E230(sys, &evt);
+    WobbuffetPop_QueueEvent(sys, &evt);
 }
 
 void ov93_02262960(void *sys, void *e) {
     U32AT(sys, 0x2fbc) = 1;
     U32AT(sys, 0x20) = 6;
-    ov93_0225E48C(sys, U8AT(e, 4), U8AT(e, 5));
+    WobbuffetPop_RequestSync(sys, U8AT(e, 4), U8AT(e, 5));
 }
 
 void ov93_0226297C(void *sys, u8 a, u8 b) {
@@ -231,11 +231,11 @@ void ov93_0226297C(void *sys, u8 a, u8 b) {
     evt.kind = 6;
     evt.u.b.b4 = a;
     evt.u.b.b5 = b;
-    ov93_0225E230(sys, &evt);
+    WobbuffetPop_QueueEvent(sys, &evt);
 }
 
 void ov93_022629A8(void *sys, void *e) {
-    ov93_0225E48C(sys, U8AT(e, 4), U8AT(e, 5));
+    WobbuffetPop_RequestSync(sys, U8AT(e, 4), U8AT(e, 5));
 }
 
 void ov93_022629B8(void *sys, u8 v) {
@@ -244,10 +244,10 @@ void ov93_022629B8(void *sys, u8 v) {
     evt.kind = 7;
     evt.u.b.b4 = 6;
     evt.u.b.b5 = v;
-    ov93_0225E230(sys, &evt);
+    WobbuffetPop_QueueEvent(sys, &evt);
 }
 
 void ov93_022629E4(void *sys, void *e) {
     U32AT(sys, 0x20) = 1;
-    ov93_0225E48C(sys, U8AT(e, 4), U8AT(e, 5));
+    WobbuffetPop_RequestSync(sys, U8AT(e, 4), U8AT(e, 5));
 }

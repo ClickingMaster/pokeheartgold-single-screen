@@ -40,10 +40,10 @@ void ov01_02200730(void *mapObject) {
 
 BOOL ov01_02200780(void *task, Ov01ObjectState *state) {
     Ov01Vec3 position = { 0, 0, 0 };
-    state->setup = *(Ov01Setup *)sub_02068D98(task);
+    state->setup = *(Ov01Setup *)FieldEffect_GetUserData(task);
     state->objectId = MapObject_GetID((void *)state->setup.words[3]);
     state->mapId = MapObject_GetMapID((void *)state->setup.words[3]);
-    sub_02068DA8(task, &position);
+    FieldEffect_SetPosition(task, &position);
     state->effect = FieldEffectManager_CreateBillboardFromRecord((void *)state->setup.words[1], 4, &position);
     return TRUE;
 }

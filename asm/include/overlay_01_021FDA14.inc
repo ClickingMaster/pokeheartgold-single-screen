@@ -26,11 +26,11 @@
 .public MapObject_CopyPositionVector
 .public MapObject_CopyFacingVector
 .public sub_0206121C
-.public sub_02068D18
-.public sub_02068D90
-.public sub_02068D98
-.public sub_02068DA8
-.public sub_02068DB8
+.public FieldEffect_RunUpdate
+.public FieldEffect_GetParam
+.public FieldEffect_GetUserData
+.public FieldEffect_SetPosition
+.public FieldEffect_GetPosition
 .public _s32_div_f
 .public FieldEffectManager_HeapAllocAndFill
 .public FieldEffectManager_HeapFree

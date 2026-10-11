@@ -44,8 +44,8 @@
 .public MapObject_AreBitsSetForMovementScriptInit
 .public MapObject_SetHeldMovement
 .public MapObject_ClearHeldMovementIfActive
-.public sub_02068B48
-.public sub_02068CCC
+.public FieldEffect_Destroy
+.public FieldEffect_IsActive
 .public MIi_CpuClearFast
 .public _020FC824
 .public ov01_021FD8E8

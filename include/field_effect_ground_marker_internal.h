@@ -14,7 +14,7 @@
 #include "field/field_effect_manager.h"
 #include "task.h"
 #include "billboard_lists.h"
-#include "unk_020689C8.h"
+#include "field_effects.h"
 #include "vram_transfer_manager.h"
 
 // Not declared in any tracked header (field_effect_manager_4.c declares these
@@ -35,8 +35,8 @@ NNSG3dResTex *FieldEffectManager_GetTexture(FieldSystem *fieldSystem, int id);
 void *BillboardObject_Delete(void *a0);
 void BillboardObject_SetPosition(void *a0, const VecFx32 *a1);
 void BillboardGfxSequence_Init(void *a0, void *a1);
-void *sub_02068D90(void *a0);
-void sub_02068DA8(void *a0, VecFx32 *a1);
+void *FieldEffect_GetParam(void *a0);
+void FieldEffect_SetPosition(void *a0, VecFx32 *a1);
 void *Texture_GetImageData(NNSG3dResTex *tex, int a1);
 void *Texture_GetPaletteData(NNSG3dResTex *tex, int a1);
 u32 Texture_GetImageVramOffsetByIndex(NNSG3dResTex *tex, int a1);
@@ -51,7 +51,7 @@ typedef struct Ov01_02203A18_Work {
     BOOL unk4;
 } Ov01_02203A18_Work;
 
-// The user-data block handed to FieldEffectManager_CreateEffect as a4 and recovered via sub_02068D98.
+// The user-data block handed to FieldEffectManager_CreateEffect as a4 and recovered via FieldEffect_GetUserData.
 typedef struct Ov01_02203A18_Args {
     FieldSystem *unk0;
     Ov01_02203A18_Work *unk4;

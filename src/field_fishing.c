@@ -241,7 +241,7 @@ int ov01_021FC914(FishingRodEnv *env, PlayerAvatar *avatar, LocalMapObject *obj)
 int ov01_021FC934(FishingRodEnv *env, PlayerAvatar *avatar, LocalMapObject *obj) {
     env->timer++;
     if (env->effect != 0) {
-        sub_02068B48(env->effect);
+        FieldEffect_Destroy(env->effect);
         env->effect = 0;
     }
     if (env->timer > 15) {
@@ -340,7 +340,7 @@ int ov01_021FCA94(FishingRodEnv *env, PlayerAvatar *avatar, LocalMapObject *obj)
 
 int ov01_021FCAA8(FishingRodEnv *env, PlayerAvatar *avatar, LocalMapObject *obj) {
     if (env->effect != 0) {
-        sub_02068B48(env->effect);
+        FieldEffect_Destroy(env->effect);
         env->effect = 0;
     }
     env->finished = TRUE;

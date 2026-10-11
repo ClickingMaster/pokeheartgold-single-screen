@@ -45,7 +45,7 @@ MapObjectMovementCmd101_Step0: ; 0x0206319C
 	bl sub_0206642C
 	cmp r0, #0
 	beq _020631B6
-	bl sub_02068B48
+	bl FieldEffect_Destroy
 _020631B6:
 	add r1, sp, #0
 	mov r0, #0

@@ -134,12 +134,12 @@ void ov01_021FD2EC(LocalMapObject *mapObject, VecFx32 *a1) {
 }
 
 BOOL ov01_021FD328(void *a0, FieldEffectRendererWork *work) {
-    FieldEffectRendererArgs *args = (FieldEffectRendererArgs *)sub_02068D98(a0);
+    FieldEffectRendererArgs *args = (FieldEffectRendererArgs *)FieldEffect_GetUserData(a0);
     work->unk1C = *args;
     work->unk4 = MapObject_GetID(work->unk1C.unk8);
     work->unk18 = ov01_021FD2CC(work->unk1C.unk4, work->unk1C.unk0);
     work->unk8 = MapObject_CheckFlag25(work->unk1C.unk8) == TRUE ? sub_0205F544(work->unk1C.unk8) : MapObject_GetMapID(work->unk1C.unk8);
-    sub_02068DB8(a0, &work->unkC);
+    FieldEffect_GetPosition(a0, &work->unkC);
     return TRUE;
 }
 
@@ -160,13 +160,13 @@ void ov01_021FD37C(void *a0, FieldEffectRendererWork *work) {
     position.x += facing.x + work->unkC.x;
     position.y += facing.y + work->unkC.y;
     position.z += facing.z + work->unkC.z;
-    sub_02068DA8(a0, &position);
+    FieldEffect_SetPosition(a0, &position);
 }
 
 void ov01_021FD3E0(void *a0, FieldEffectRendererWork *work) {
     VecFx32 position;
 
-    sub_02068DB8(a0, &position);
+    FieldEffect_GetPosition(a0, &position);
     RenderObj_DrawAt((int)work->unk18, &position);
 }
 

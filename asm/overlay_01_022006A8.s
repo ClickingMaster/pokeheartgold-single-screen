@@ -147,7 +147,7 @@ ov01_02200780: ; 0x02200780
 	str r1, [r2, #4]
 	add r5, r0, #0
 	str r1, [r2, #8]
-	bl sub_02068D98
+	bl FieldEffect_GetUserData
 	add r2, r4, #0
 	add r3, r0, #0
 	add r2, #0x10
@@ -163,7 +163,7 @@ ov01_02200780: ; 0x02200780
 	str r0, [r4, #8]
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02068DA8
+	bl FieldEffect_SetPosition
 	ldr r0, [r4, #0x14]
 	mov r1, #4
 	add r2, sp, #0

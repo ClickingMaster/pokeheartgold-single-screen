@@ -10,7 +10,7 @@
 /* ---- Not declared in any tracked header (private proposals) ---- */
 
 /* 0x24-byte user-data block handed to FieldEffectManager_CreateEffect as a4 for bank ov01_02209138
- * and recovered via sub_02068D98 in ov01_021FF174. */
+ * and recovered via FieldEffect_GetUserData in ov01_021FF174. */
 typedef struct FieldEffectFollowArgs {
     int x;                   /* 0x00 */
     int y;                   /* 0x04 */
@@ -76,9 +76,9 @@ void FieldEffectManager_FreeTexResource(FieldEffectManager *manager, int a1);
 void FieldEffectManager_AddRecord(FieldEffectManager *manager, int a1, int a2, int a3, int a4, int a5, const FieldEffectAnimSpec *a6);
 void *FieldEffectManager_CreateBillboardFromRecord(void *a0, int a1, const VecFx32 *pos);
 
-int sub_02068D90(void *a0);
-void sub_02068DA8(void *a0, VecFx32 *a1);
-void sub_02068DB8(void *a0, VecFx32 *a1);
+int FieldEffect_GetParam(void *a0);
+void FieldEffect_SetPosition(void *a0, VecFx32 *a1);
+void FieldEffect_GetPosition(void *a0, VecFx32 *a1);
 int sub_0206121C(TaskManager *taskman, VecFx32 *pos);
 BOOL sub_0205F0F8(LocalMapObject *object, u32 spriteId, u32 objId, u32 mapId);
 BOOL BillboardObject_Delete(void *sprite);

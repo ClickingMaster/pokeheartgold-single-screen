@@ -21,16 +21,16 @@
 	.public ov93_02262B00
 	.public ov93_02262B40
 	.public ov93_02262B94
-	.extern ov93_0225C768
-	.extern ov93_0225CA8C
-	.extern ov93_0225CD10
-	.extern ov93_0225E584
-	.extern ov93_0225E61C
-	.extern ov93_0225E6F8
+	.extern WobbuffetPop_Init
+	.extern WobbuffetPop_Main
+	.extern WobbuffetPop_Exit
+	.extern WobbuffetPop_HostStartGame
+	.extern WobbuffetPop_HostPlayGame
+	.extern WobbuffetPop_HostFinishGame
 	.rodata
 
 _022629F8:
-	.word ov93_0225C768, ov93_0225CA8C, ov93_0225CD10, 0xFFFFFFFF
+	.word WobbuffetPop_Init, WobbuffetPop_Main, WobbuffetPop_Exit, 0xFFFFFFFF
 
 ov93_02262A08: ; 0x02262A08
 	.word ov93_02262598, ov93_022625BC, ov93_022626E8, 0xFFFFFFFF
@@ -40,7 +40,7 @@ ov93_02262A18: ; 0x02262A18
 
 	.public ov93_02262A20
 ov93_02262A20: ; 0x02262A20
-	.word ov93_0225E584, ov93_0225E61C, ov93_0225E6F8
+	.word WobbuffetPop_HostStartGame, WobbuffetPop_HostPlayGame, WobbuffetPop_HostFinishGame
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x1E, 0x88, 0x01, 0x00, 0x00, 0x50, 0x00, 0x00
 

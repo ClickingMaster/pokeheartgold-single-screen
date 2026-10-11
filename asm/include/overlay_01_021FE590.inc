@@ -5,8 +5,8 @@
 .public BillboardObject_AdvanceFrame
 .public BillboardObject_SetFrame
 .public GF_AssertFail
-.public sub_02068D98
-.public sub_02068DB8
+.public FieldEffect_GetUserData
+.public FieldEffect_GetPosition
 .public FieldEffectManager_HeapAllocAndFill
 .public FieldEffectManager_HeapFree
 .public FieldEffectManager_GetRendererData

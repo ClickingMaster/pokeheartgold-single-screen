@@ -53,10 +53,10 @@ void ov01_022000DC(void *mapObject) {
 
 BOOL ov01_02200140(void *task, LocalState *state) {
     VecFx32 position;
-    *(LocalFourWords *)&state->args0 = *(LocalFourWords *)sub_02068D98(task);
+    *(LocalFourWords *)&state->args0 = *(LocalFourWords *)FieldEffect_GetUserData(task);
     state->objectId = MapObject_GetID(state->mapObject);
     state->mapId = MapObject_GetMapID(state->mapObject);
-    sub_02068DB8(task, &position);
+    FieldEffect_GetPosition(task, &position);
     state->effect = FieldEffectManager_CreateBillboardFromRecord(state->resource, 11, &position);
     return TRUE;
 }
@@ -76,7 +76,7 @@ void ov01_02200190(void *task, LocalState *state) {
 
 void ov01_022001C0(void *task, LocalState *state) {
     VecFx32 position;
-    sub_02068DB8(task, &position);
+    FieldEffect_GetPosition(task, &position);
     position.z += 8 * FX32_ONE;
     BillboardObject_SetPosition(state->effect, &position);
 }

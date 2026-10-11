@@ -3,7 +3,7 @@
 BOOL ov01_021FF174(void *a0, FieldEffectFollowWork *work) {
     VecFx32 pos;
 
-    work->args = *(FieldEffectFollowArgs *)sub_02068D98(a0);
+    work->args = *(FieldEffectFollowArgs *)FieldEffect_GetUserData(a0);
     work->spriteId = MapObject_GetSpriteID(work->args.object);
     work->objId = MapObject_GetID(work->args.object);
     work->mapId = MapObject_GetMapID(work->args.object);
@@ -13,12 +13,12 @@ BOOL ov01_021FF174(void *a0, FieldEffectFollowWork *work) {
     work->unk14 = sub_0206121C(work->args.taskman, &pos);
     pos.x = pos.x + (2 << 14);
     pos.z = pos.z + (0x12 << 12);
-    sub_02068DA8(a0, &pos);
+    FieldEffect_SetPosition(a0, &pos);
     work->sprite = FieldEffectManager_CreateBillboardFromRecord(work->args.fieldSys, 0, &pos);
     if (MapObject_TestFlagsBits(work->args.object, MAPOBJECTFLAG_VISIBLE) == 1) {
         BillboardObject_SetVisible(work->sprite, 0);
     }
-    if (sub_02068D90(a0) == 0) {
+    if (FieldEffect_GetParam(a0) == 0) {
         BillboardObject_SetFrame(work->sprite, 3 << 14);
         work->state = 2;
     }
@@ -46,14 +46,14 @@ void ov01_021FF234(void *a0, FieldEffectFollowWork *work) {
         BillboardObject_SetVisible(work->sprite, 1);
     }
     if (work->unk14 == 0) {
-        sub_02068DB8(a0, &cur);
+        FieldEffect_GetPosition(a0, &cur);
         pos.x = work->args.x << 16;
         pos.z = work->args.z << 16;
         pos.y = cur.y;
         work->unk14 = sub_0206121C(work->args.taskman, &pos);
         if (work->unk14 == 1) {
             cur.y = pos.y;
-            sub_02068DA8(a0, &cur);
+            FieldEffect_SetPosition(a0, &cur);
         }
     }
     switch (work->state) {
@@ -96,6 +96,6 @@ void ov01_021FF35C(void *a0, FieldEffectFollowWork *work) {
         FieldEffectManager_DestroyEffect((int)a0);
         return;
     }
-    sub_02068DB8(a0, &pos);
+    FieldEffect_GetPosition(a0, &pos);
     BillboardObject_SetPosition(work->sprite, &pos);
 }

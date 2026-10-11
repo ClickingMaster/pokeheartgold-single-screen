@@ -20,6 +20,6 @@ void ov01_021FF424(void *a0, FieldEffectSimpleWork *work) {
 void ov01_021FF44C(void *a0, FieldEffectSimpleWork *work) {
     VecFx32 pos;
 
-    sub_02068DB8(a0, &pos);
+    FieldEffect_GetPosition(a0, &pos);
     BillboardObject_SetPosition(work->sprite, &pos);
 }

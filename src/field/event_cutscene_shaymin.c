@@ -12,7 +12,7 @@
 #include "script_pokemon_util.h"
 #include "task.h"
 #include "unk_02062108.h"
-#include "unk_020689C8.h"
+#include "field_effects.h"
 
 typedef struct UnkStruct_022523D0 {
     int unk0;
@@ -99,7 +99,7 @@ static BOOL ov02_022523D0(TaskManager *taskMan) {
         if (env->unk4 == 0) {
             var = 1;
         } else if (ov01_022052F4()) {
-            sub_02068B48(env->unk4);
+            FieldEffect_Destroy(env->unk4);
             var = 1;
         }
         if (var != 0) {

@@ -47,7 +47,7 @@ extern s32 ov93_0225F548(Ov93WorkScratch *work, s32 mode, s32 amount);
 extern s32 ov93_0225F8AC(Ov93WorkScratch *work, s32 mode);
 extern BOOL ov93_0225F8E4(Ov93WorkScratch *work, s32 amount, s32 a, s32 b, s32 *hi, s32 *lo);
 extern u16 FX_Atan2Idx(fx32 y, fx32 x);
-extern void ov93_0225EB38(Ov93WorkScratch *work);
+extern void WobbuffetPopBalloon_ReleaseTouch(Ov93WorkScratch *work);
 int ov93_0225F44C(Ov93WorkScratch *work);
 
 int ov93_0225F370(Ov93WorkScratch *work) {
@@ -105,7 +105,7 @@ int ov93_0225F44C(Ov93WorkScratch *work) {
         if (result != 1 && result != 2) {
             result = result;
         } else {
-            ov93_0225EB38(work);
+            WobbuffetPopBalloon_ReleaseTouch(work);
         }
     }
     work->f230 = -(work->nodes[0].f14 + (work->nodes[0].f04 - work->nodes[0].f14) / 2);

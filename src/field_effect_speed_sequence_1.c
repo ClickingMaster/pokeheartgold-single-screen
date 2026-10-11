@@ -68,9 +68,9 @@ void ov01_021FE66C(void *obj) {
 }
 BOOL ov01_021FE6B4(void *task, LocalState *s) {
     VecFx32 pos;
-    *(LocalThreeWords *)&s->resource = *(LocalThreeWords *)sub_02068D98(task);
+    *(LocalThreeWords *)&s->resource = *(LocalThreeWords *)FieldEffect_GetUserData(task);
     ov01_021FE64C(s->manager);
-    sub_02068DB8(task, &pos);
+    FieldEffect_GetPosition(task, &pos);
     s->effect = FieldEffectManager_CreateBillboardFromRecord(s->resource, 13, &pos);
     ov01_021FE5B4(s->manager);
     return TRUE;
@@ -100,6 +100,6 @@ void ov01_021FE70C(void *task, LocalState *s) {
 }
 void ov01_021FE768(void *task, LocalState *s) {
     VecFx32 pos;
-    sub_02068DB8(task, &pos);
+    FieldEffect_GetPosition(task, &pos);
     BillboardObject_SetPosition(s->effect, &pos);
 }

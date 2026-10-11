@@ -13,7 +13,7 @@ typedef struct {
 extern u16 ov93_02262C72[];
 extern u16 ov93_02262DA4[][4];
 int Comm_GetLocalNetId(void);
-int ov93_0225E3C4(Work *work, int id);
+int WobbuffetPop_GetPlayerSeat(Work *work, int id);
 
 static inline int FindPlayerIndex(Work *work, int id) {
     int i;
@@ -27,7 +27,7 @@ static inline int FindPlayerIndex(Work *work, int id) {
 
 static inline int GetPaletteIndex(Work *work, int i) {
     u8 count = work->config->count;
-    int pos = ov93_0225E3C4(work, work->config->ids[i]);
+    int pos = WobbuffetPop_GetPlayerSeat(work, work->config->ids[i]);
     return ov93_02262DA4[count][pos];
 }
 void ov93_02260BF0(Work *work);

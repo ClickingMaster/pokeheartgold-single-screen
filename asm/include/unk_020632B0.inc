@@ -121,7 +121,7 @@
 .public sub_0206457C
 .public sub_02064598
 .public sub_020645AC
-.public sub_02068B48
+.public FieldEffect_Destroy
 .public FX_Div
 .public MI_CpuFill8
 .public memset

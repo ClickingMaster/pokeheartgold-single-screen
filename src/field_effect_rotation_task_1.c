@@ -38,7 +38,7 @@ void ov01_021FECA0(void *mapObject, void *arg, u32 variant, u32 direction) {
 }
 
 BOOL ov01_021FED14(void *task, Ov01EffectState *state) {
-    Ov01TaskArgs *args = sub_02068D98(task);
+    Ov01TaskArgs *args = FieldEffect_GetUserData(task);
     state->args = *args;
     ov01_021F1A34(state->args.context, state, (u8 *)state->args.resource + 4, (u8 *)state->args.resource + 0x18, 0);
     RenderObj_InitWithAnimation((u8 *)state + 0x24, (u8 *)state->args.resource + 4, state);
@@ -59,6 +59,6 @@ void ov01_021FED58(void *task, void *state) {
 
 void ov01_021FED80(void *task, void *state) {
     Ov01Vec3 position;
-    sub_02068DB8(task, &position);
+    FieldEffect_GetPosition(task, &position);
     RenderObj_DrawAt((u8 *)state + 0x24, &position);
 }

@@ -155,7 +155,7 @@ ov01_021FF54C: ; 0x021FF54C
 	str r1, [r2, #4]
 	add r5, r0, #0
 	str r1, [r2, #8]
-	bl sub_02068D98
+	bl FieldEffect_GetUserData
 	add r2, r4, #0
 	add r3, r0, #0
 	add r2, #0x14
@@ -174,7 +174,7 @@ ov01_021FF54C: ; 0x021FF54C
 	str r0, [r4, #0xc]
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02068DA8
+	bl FieldEffect_SetPosition
 	ldr r0, [r4, #0x18]
 	mov r1, #3
 	add r2, sp, #0
@@ -222,7 +222,7 @@ ov01_021FF5C4: ; 0x021FF5C4
 	pop {r3, r4, r5, r6, r7, pc}
 _021FF5E4:
 	add r0, r5, #0
-	bl sub_02068D90
+	bl FieldEffect_GetParam
 	add r7, r0, #0
 	cmp r7, #1
 	bne _021FF602

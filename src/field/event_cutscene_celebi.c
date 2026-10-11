@@ -12,7 +12,7 @@
 #include "script_pokemon_util.h"
 #include "task.h"
 #include "unk_02062108.h"
-#include "unk_020689C8.h"
+#include "field_effects.h"
 
 typedef struct CelebiTimeTravelCutsceneTaskData {
     u16 unk0;

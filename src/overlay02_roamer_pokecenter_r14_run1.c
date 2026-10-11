@@ -27,8 +27,8 @@ BOOL ov02_0224B938(void *p) {
     return TRUE;
 }
 BOOL ov02_0224B964(void *p) {
-    if (U32(sub_02068D74(PTR(p, 0x1f0)), 8) == 1) {
-        sub_02068B48(PTR(p, 0x1f0));
+    if (U32(FieldEffect_GetState(PTR(p, 0x1f0)), 8) == 1) {
+        FieldEffect_Destroy(PTR(p, 0x1f0));
         ov02_0224B90C(p);
         U32(p, 0)
         ++;

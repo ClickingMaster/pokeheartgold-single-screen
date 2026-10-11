@@ -17,7 +17,7 @@ void ov01_021FAB9C(void *, W13Work *);
 extern BOOL MapObject_CheckActive(void *);
 extern BOOL ov01_021FA2D4(void *);
 extern u32 MapObject_GetSpriteID(void *);
-extern void sub_02068B48(void);
+extern void FieldEffect_Destroy(void);
 extern void BillboardObject_Delete(void *);
 extern void Heap_Free(void *);
 extern void SysTask_Destroy(void *);

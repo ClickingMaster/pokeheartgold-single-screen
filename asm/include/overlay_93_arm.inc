@@ -23,7 +23,7 @@
 .public FX_Atan2Idx
 .public _ll_sdiv
 .public FX_SinCosTable_
-.public ov93_0225EB38
+.public WobbuffetPopBalloon_ReleaseTouch
 .public ov93_0225EE98
 .public ov93_0225EF0C
 .public ov93_0225EF5C

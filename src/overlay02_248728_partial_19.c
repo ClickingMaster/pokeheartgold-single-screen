@@ -134,16 +134,16 @@ void ov02_0224AB9C(void *);
 int ov02_0224B638(void *);
 
 u8 ov02_0224AB8C(void *p) {
-    return U8(sub_02068D74(PTR(p, 0x1ec)), 2);
+    return U8(FieldEffect_GetState(PTR(p, 0x1ec)), 2);
 }
 
 void ov02_0224AB9C(void *p) {
-    void *q = sub_02068D74(PTR(p, 0x1ec));
+    void *q = FieldEffect_GetState(PTR(p, 0x1ec));
     if (PTR(q, 0x60)) {
-        sub_02068B48(PTR(q, 0x60));
+        FieldEffect_Destroy(PTR(q, 0x60));
     }
     if (PTR(q, 0x64)) {
         ov01_021FCD78(PTR(q, 0x64));
     }
-    sub_02068B48(PTR(p, 0x1ec));
+    FieldEffect_Destroy(PTR(p, 0x1ec));
 }

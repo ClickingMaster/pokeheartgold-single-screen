@@ -37,7 +37,7 @@ void ov01_021FEE04(void *mapObject, s32 x, s32 offset, s32 z) {
 
 BOOL ov01_021FEE64(void *object, void *data) {
     EffectWorkPrivate *p = data;
-    TwoWordsPrivate *source = sub_02068D98(object);
+    TwoWordsPrivate *source = FieldEffect_GetUserData(object);
     p->source = *source;
     ov01_021F1A34(p->source.word0, p, p->source.word4 + 4, p->source.word4 + 0x18, 0);
     RenderObj_InitWithAnimation(p->fields + 0x24, p->source.word4 + 4, p);
@@ -58,6 +58,6 @@ void ov01_021FEEA8(void *task, void *data) {
 
 void ov01_021FEED0(void *object, void *data) {
     VecFx32Private position;
-    sub_02068DB8(object, &position);
+    FieldEffect_GetPosition(object, &position);
     RenderObj_DrawAt((u8 *)data + 0x24, &position);
 }

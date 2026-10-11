@@ -137,7 +137,7 @@ ov01_021FEE64: ; 0x021FEE64
 	push {r3, r4, lr}
 	sub sp, #4
 	add r4, r1, #0
-	bl sub_02068D98
+	bl FieldEffect_GetUserData
 	ldr r3, [r0, #4]
 	ldr r1, [r0]
 	mov r0, #0
@@ -198,7 +198,7 @@ ov01_021FEED0: ; 0x021FEED0
 	sub sp, #0xc
 	add r4, r1, #0
 	add r1, sp, #0
-	bl sub_02068DB8
+	bl FieldEffect_GetPosition
 	add r4, #0x24
 	add r0, r4, #0
 	add r1, sp, #0

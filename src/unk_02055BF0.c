@@ -159,7 +159,7 @@ BOOL sub_02055DBC(TaskManager *man) {
         env->state++;
         break;
     case 2:
-        if (env->unk24 && sub_02068CCC(env->unk24)) {
+        if (env->unk24 && FieldEffect_IsActive(env->unk24)) {
             break;
         }
         FieldBGM_TryFadeIn(fieldSystem, env->location.mapId);

@@ -29,11 +29,11 @@
 .public GF3dGfxRawResObj_GetPlttKey
 .public BillboardGfxSequence_Init
 .public MapObject_GetFieldSystem
-.public sub_020689C8
-.public sub_020689F8
-.public sub_02068B0C
-.public sub_02068B48
-.public sub_02068BAC
+.public FieldEffectPool_New
+.public FieldEffectPool_Delete
+.public FieldEffectPool_AddBasicEffect
+.public FieldEffect_Destroy
+.public FieldEffectPool_DrawAll
 .public RenderModel_LoadFromNarc
 .public RenderModel_BindTexturesOnVBlank
 .public RenderAnimation_LoadFromNarc

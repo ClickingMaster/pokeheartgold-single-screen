@@ -127,7 +127,7 @@ BOOL FollowMon_IsActive(FieldSystem *fieldSystem);
 s8 FieldSystem_UnkSub108_GetMonMood(FieldSystemUnkSub108 *unk);
 int ov01_02200540(LocalMapObject *obj, int a0, int a1);
 void ov01_02200400(int effect);
-void sub_02068B48(int effect);
+void FieldEffect_Destroy(int effect);
 
 MsgData *NewMsgDataFromNarc(u32 type, u32 narcId, u32 fileId, u32 heapId);
 void DestroyMsgData(MsgData *msgData);

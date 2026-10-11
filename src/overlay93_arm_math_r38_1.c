@@ -38,7 +38,7 @@ int ov93_0225F370(Ov93WorkScratch *work);
 extern BOOL IsSEPlaying(u16 seqNo);
 extern void PlaySE(u16 seqNo);
 extern s32 ov93_0225F548(Ov93WorkScratch *work, s32 mode, s32 amount);
-extern void ov93_0225EB38(Ov93WorkScratch *work);
+extern void WobbuffetPopBalloon_ReleaseTouch(Ov93WorkScratch *work);
 int ov93_0225F44C(Ov93WorkScratch *work);
 
 void ov93_0225F268(s32 x, s32 y, s16 *outX, s16 *outY) {

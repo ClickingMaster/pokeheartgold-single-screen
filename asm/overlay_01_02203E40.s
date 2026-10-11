@@ -139,7 +139,7 @@ _02203F28: .word ov01_022095B4
 ov01_02203F2C: ; 0x02203F2C
 	push {r4, lr}
 	add r4, r1, #0
-	bl sub_02068D74
+	bl FieldEffect_GetState
 	ldr r0, [r0, #8]
 	str r4, [r0, #0x64]
 	pop {r4, pc}
@@ -151,7 +151,7 @@ ov01_02203F3C: ; 0x02203F3C
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
-	bl sub_02068D98
+	bl FieldEffect_GetUserData
 	add r3, r0, #0
 	ldmia r3!, {r0, r1}
 	add r2, r4, #4
@@ -163,7 +163,7 @@ ov01_02203F3C: ; 0x02203F3C
 	ldr r0, [r3]
 	str r0, [r2]
 	add r0, r5, #0
-	bl sub_02068D90
+	bl FieldEffect_GetParam
 	str r0, [r4]
 	mov r0, #1
 	pop {r3, r4, r5, pc}
@@ -193,7 +193,7 @@ ov01_02203F6C: ; 0x02203F6C
 	bl VEC_MultAdd
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02068DA8
+	bl FieldEffect_SetPosition
 	add sp, #0x18
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
@@ -235,7 +235,7 @@ _02203FA6:
 	str r0, [sp, #0x2c]
 	add r0, r5, #0
 	add r1, sp, #0x30
-	bl sub_02068DB8
+	bl FieldEffect_GetPosition
 	ldr r0, [r4, #8]
 	add r1, sp, #0x30
 	add r0, r0, #4

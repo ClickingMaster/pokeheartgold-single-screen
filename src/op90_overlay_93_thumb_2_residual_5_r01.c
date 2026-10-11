@@ -41,7 +41,7 @@ typedef struct {
 extern const ManagedSpriteTemplate ov93_02262E00;
 extern const u16 ov93_02262D7C[][4];
 extern const u16 _02262C6C[];
-s32 ov93_0225E3C4(Sys *, s32);
+s32 WobbuffetPop_GetPlayerSeat(Sys *, s32);
 void ov93_02260314(Sys *w, Out *out, Data *data);
 
 #pragma optimization_level 2
@@ -67,7 +67,7 @@ void ov93_02260314(Sys *w, Out *out, Data *data) {
     n1 = data->n1;
     n2 = data->n2;
     for (i = 0; i < w->info->count; i++) {
-        id = ov93_0225E3C4(w, w->info->ids[i]);
+        id = WobbuffetPop_GetPlayerSeat(w, w->info->ids[i]);
         totals[i] = 36 * data->weights[id] / (n1 + n2);
         anim = ov93_02262D7C[w->info->count][id];
         for (j = 0; j < totals[i]; j++) {

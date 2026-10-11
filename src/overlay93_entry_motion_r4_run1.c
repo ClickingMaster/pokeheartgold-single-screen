@@ -40,8 +40,8 @@ typedef struct Ov93System {
 
 extern void GF_AssertFail(void);
 extern u32 Comm_GetLocalNetId(void);
-extern u32 ov93_0225E3C4(void *sys, u32 id);
-extern int ov93_0225DF38(void *sys, u32 payload);
+extern u32 WobbuffetPop_GetPlayerSeat(void *sys, u32 id);
+extern int WobbuffetPop_AddModelSlot(void *sys, u32 payload);
 extern void ov93_02261C58(void *sys, void *arg1, u32 arg2, u32 arg3, u32 arg4);
 extern BOOL ov93_02260080(void *sys, Ov93Entry *entry);
 extern void ov93_0225FE08(void *sys, void *arg1, u32 arg2, s16 arg3, u32 arg4);
@@ -84,7 +84,7 @@ u32 ov93_0225FF1C(void *sys, const Ov93Request *request, Ov93Entry *entry) {
         GF_AssertFail();
     }
     MI_CpuFill8(entry, 0, sizeof(*entry));
-    config = ov93_02263010 + (*(u8 *)((u8 *)*(void **)work + 0x30) * 40) + ov93_0225E3C4(work, request->id) * 10;
+    config = ov93_02263010 + (*(u8 *)((u8 *)*(void **)work + 0x30) * 40) + WobbuffetPop_GetPlayerSeat(work, request->id) * 10;
     entry->value4 = request->id;
     entry->value6 = request->value;
     entry->value8 = request->payload8;
@@ -92,7 +92,7 @@ u32 ov93_0225FF1C(void *sys, const Ov93Request *request, Ov93Entry *entry) {
     entry->kind = request->side;
     entry->sprite = ov93_0226027C(work, (const Ov93Position *)config);
     if (request->id == Comm_GetLocalNetId()) {
-        ov93_0225DF38(work, request->payload4);
+        WobbuffetPop_AddModelSlot(work, request->payload4);
         entry->delay = 25;
         ManagedSprite_SetDrawFlag(entry->sprite, FALSE);
     }

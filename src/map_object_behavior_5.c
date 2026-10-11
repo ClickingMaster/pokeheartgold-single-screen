@@ -66,7 +66,7 @@ BOOL sub_02064730(TrainerApproachWork *work) {
 
 BOOL sub_02064748(TrainerApproachWork *work) {
     if (ov01_022003F4(work->effect) == TRUE) {
-        sub_02068B48(work->effect);
+        FieldEffect_Destroy(work->effect);
         work->state = 9;
     }
     return FALSE;

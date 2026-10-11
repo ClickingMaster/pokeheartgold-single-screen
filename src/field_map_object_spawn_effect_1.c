@@ -59,8 +59,8 @@ void ov01_021FDA74(void *obj, void *arg) {
 }
 BOOL ov01_021FDAC0(void *task, LocalEffectState *state) {
     VecFx32 pos;
-    *(LocalFourWords *)&state->data14 = *(LocalFourWords *)sub_02068D98(task);
-    state->mode = sub_02068D90(task);
+    *(LocalFourWords *)&state->data14 = *(LocalFourWords *)FieldEffect_GetUserData(task);
+    state->mode = FieldEffect_GetParam(task);
     state->objectId = MapObject_GetID(state->mapObject);
     state->mapId = MapObject_GetMapID(state->mapObject);
     state->spriteId = MapObject_GetSpriteID(state->mapObject);
@@ -72,7 +72,7 @@ BOOL ov01_021FDAC0(void *task, LocalEffectState *state) {
         state->delta = 0;
     }
     ov01_021FDC7C(state, state->mapObject, &pos);
-    sub_02068DA8(task, &pos);
+    FieldEffect_SetPosition(task, &pos);
     ov01_021FDD48(task, state);
     return TRUE;
 }
@@ -97,7 +97,7 @@ void ov01_021FDB44(void *task, LocalEffectState *state) {
         state->delta = -state->delta;
     }
     ov01_021FDC7C(state, obj, &pos);
-    sub_02068DA8(task, &pos);
+    FieldEffect_SetPosition(task, &pos);
     if (state->active == 0) {
         ov01_021FDD48(task, state);
     }
@@ -129,7 +129,7 @@ void ov01_021FDBCC(void *task, LocalEffectState *state) {
     } else {
         BillboardObject_SetVisible(state->effect, TRUE);
     }
-    sub_02068DB8(task, &local.pos);
+    FieldEffect_GetPosition(task, &local.pos);
     BillboardObject_SetPosition(state->effect, &local.pos);
     BillboardObject_SetScale(state->effect, &state->scaleX);
     source = ov01_021F72DC(state->mapObject);
@@ -187,7 +187,7 @@ void ov01_021FDD48(void *task, LocalEffectState *state) {
     } local;
     if (ov01_021F9744(MapObject_GetManager(state->mapObject), state->spriteId, local.args) && ov01_021FA2D4(state->mapObject) != 1) {
         *(void **)local.args = ov01_021F18F0((void *)state->data14[1], 2);
-        sub_02068DB8(task, &local.pos);
+        FieldEffect_GetPosition(task, &local.pos);
         state->effect = FieldEffectManager_CreateBillboard((void *)state->data14[1], local.args, &local.pos);
         state->active = 1;
     }
@@ -200,7 +200,7 @@ void ov01_021FDD94(void *task, LocalExtendedEffectState *state) {
     void *oldEffect;
     *(LocalTenWords *)local.args = *(LocalTenWords *)((u8 *)state + 0x10);
     *(void **)local.args = ov01_021F18F0((void *)state->data04[1], 2);
-    sub_02068DB8(task, &local.pos);
+    FieldEffect_GetPosition(task, &local.pos);
     state->effect = FieldEffectManager_CreateBillboard((void *)state->data04[1], local.args, &local.pos);
     oldEffect = *(void **)((u8 *)state + 0x38);
     BillboardObject_SetSequence(state->effect, BillboardObject_GetSequence(oldEffect));
@@ -238,8 +238,8 @@ void ov01_021FDE64(void *owner, const void *input, void *value, void *callbackAr
 }
 BOOL ov01_021FDEAC(void *task, LocalExtendedEffectState *state) {
     VecFx32 pos;
-    *(LocalFourteenWords *)state->data04 = *(LocalFourteenWords *)sub_02068D98(task);
-    state->mode = sub_02068D90(task);
+    *(LocalFourteenWords *)state->data04 = *(LocalFourteenWords *)FieldEffect_GetUserData(task);
+    state->mode = FieldEffect_GetParam(task);
     state->scaleX = FX32_ONE;
     state->scaleY = FX32_ONE;
     state->scaleZ = FX32_ONE;
@@ -247,11 +247,11 @@ BOOL ov01_021FDEAC(void *task, LocalExtendedEffectState *state) {
     if (state->mode == 2) {
         state->delta = 0;
     }
-    sub_02068DB8(task, &state->position);
+    FieldEffect_GetPosition(task, &state->position);
     ov01_021FDE08(state, &pos);
-    sub_02068DA8(task, &pos);
+    FieldEffect_SetPosition(task, &pos);
     ov01_021FDD94(task, state);
-    sub_02068D18(task);
+    FieldEffect_RunUpdate(task);
     return TRUE;
 }
 void ov01_021FDF14(void *task, LocalExtendedEffectState *state) {
@@ -268,11 +268,11 @@ void ov01_021FDF20(void *task, LocalExtendedEffectState *state) {
         state->delta = -state->delta;
     }
     ov01_021FDE08(state, &pos);
-    sub_02068DA8(task, &pos);
+    FieldEffect_SetPosition(task, &pos);
 }
 void ov01_021FDF64(void *task, LocalExtendedEffectState *state) {
     VecFx32 pos;
-    sub_02068DB8(task, &pos);
+    FieldEffect_GetPosition(task, &pos);
     BillboardObject_SetPosition(state->effect, &pos);
     BillboardObject_SetScale(state->effect, &state->scaleX);
 }
@@ -281,8 +281,8 @@ void ov01_021FDF88(void *obj, void *arg) {
 }
 BOOL ov01_021FDFD4(void *task, LocalEffectState *state) {
     VecFx32 pos;
-    *(LocalFourWords *)&state->data14 = *(LocalFourWords *)sub_02068D98(task);
-    state->mode = sub_02068D90(task);
+    *(LocalFourWords *)&state->data14 = *(LocalFourWords *)FieldEffect_GetUserData(task);
+    state->mode = FieldEffect_GetParam(task);
     state->objectId = MapObject_GetID(state->mapObject);
     state->mapId = MapObject_GetMapID(state->mapObject);
     state->spriteId = MapObject_GetSpriteID(state->mapObject);
@@ -295,7 +295,7 @@ BOOL ov01_021FDFD4(void *task, LocalEffectState *state) {
     }
     ov01_021FDC7C(state, state->mapObject, &pos);
     pos.y -= 0x514;
-    sub_02068DA8(task, &pos);
+    FieldEffect_SetPosition(task, &pos);
     ov01_021FE190(task, state);
     return TRUE;
 }
@@ -316,7 +316,7 @@ void ov01_021FE058(void *task, LocalEffectState *state) {
     }
     ov01_021FDC7C(state, obj, &pos);
     pos.y -= 0x514;
-    sub_02068DA8(task, &pos);
+    FieldEffect_SetPosition(task, &pos);
     if (state->active == 0) {
         ov01_021FE190(task, state);
     }
@@ -337,7 +337,7 @@ void ov01_021FE0EC(void *task, LocalEffectState *state) {
     } else {
         BillboardObject_SetVisible(state->effect, TRUE);
     }
-    sub_02068DB8(task, &pos);
+    FieldEffect_GetPosition(task, &pos);
     pos.z -= FX32_ONE;
     BillboardObject_SetPosition(state->effect, &pos);
     BillboardObject_SetScale(state->effect, &state->scaleX);
@@ -361,7 +361,7 @@ void ov01_021FE190(void *task, LocalEffectState *state) {
         if (ov01_0220553C(state->mapObject)) {
             ov01_02205870(1, state->mapObject, state->effect, local.args);
         }
-        sub_02068DB8(task, &local.pos);
+        FieldEffect_GetPosition(task, &local.pos);
         state->effect = FieldEffectManager_CreateBillboard((void *)state->data14[1], local.args, &local.pos);
         state->active = 1;
     }

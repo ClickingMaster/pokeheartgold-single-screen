@@ -14,7 +14,7 @@ extern const VecFx32 ov02_02253354;
 extern const VecFx32 ov02_0225336C;
 extern const VecFx32 ov02_02253378;
 
-void *sub_02068D74(void *);
+void *FieldEffect_GetState(void *);
 void *ov02_0224B298(void *, void *);
 void *ov01_021FCD2C(void *, int);
 void ov01_021FCD8C(void *, int, fx32, int);

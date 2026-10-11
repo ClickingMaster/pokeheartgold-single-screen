@@ -66,14 +66,14 @@ u32 ov01_021FE7DC(LocalMapObject *obj, u32 x, u32 y, u32 dir, u32 a4) {
 }
 
 BOOL ov01_021FE868(void *a0, Ov01FE780Work *work) {
-    Ov01FE780Args *args = (Ov01FE780Args *)sub_02068D98(a0);
+    Ov01FE780Args *args = (Ov01FE780Args *)FieldEffect_GetUserData(a0);
     LocalMapObject *object = args->object;
 
     work->args = *args;
     work->objId = MapObject_GetID(object);
     work->mapId = MapObject_GetMapID(object);
     work->unk08 = args->dir;
-    work->unk18 = sub_02068D90(a0);
+    work->unk18 = FieldEffect_GetParam(a0);
     work->unk1C = FX32_ONE;
     work->unk20 = FX32_ONE >> 2;
     return TRUE;
@@ -121,7 +121,7 @@ void ov01_021FE8C8(void *a0, Ov01FE780Work *work) {
         sub_0205F9A0(object, &vec);
         MapObject_CopyPositionVector(object, &pos);
         pos.y += work->unk1C - FX32_ONE;
-        sub_02068DA8(a0, &pos);
+        FieldEffect_SetPosition(a0, &pos);
     }
 }
 
@@ -156,12 +156,12 @@ void ov01_021FE970(void *a0, Ov01FE780Work *work) {
         break;
     }
     Math_CalcRotationMatrixXYZDeg(&mtx, 0, angle, 0);
-    sub_02068DB8(a0, &pos);
+    FieldEffect_GetPosition(a0, &pos);
     RenderObj_Draw(renderObj, &pos, &scale, &mtx);
 }
 
 void ov01_021FE9F4(void *a0, void *a1) {
-    Ov01FE780Work *work = (Ov01FE780Work *)sub_02068D74(a0);
+    Ov01FE780Work *work = (Ov01FE780Work *)FieldEffect_GetState(a0);
 
     work->unk18 = a1;
     work->unk1C = FX32_ONE;

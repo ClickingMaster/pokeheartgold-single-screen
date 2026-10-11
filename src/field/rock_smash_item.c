@@ -14,7 +14,7 @@
 #include "overlay_01_022001E4.h"
 #include "script.h"
 #include "task.h"
-#include "unk_020689C8.h"
+#include "field_effects.h"
 
 typedef struct {
     u16 odds;
@@ -194,7 +194,7 @@ static BOOL Task_GetRockSmashItem(TaskManager *taskman) {
         break;
     case 1:
         if (ov01_022003F4(env->unk14)) {
-            sub_02068B48(env->unk14);
+            FieldEffect_Destroy(env->unk14);
             ++(*state_p);
         }
         break;

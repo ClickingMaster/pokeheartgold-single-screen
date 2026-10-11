@@ -8,12 +8,12 @@
 #include "map_object.h"
 #include "render_animation.h"
 #include "render_model.h"
-#include "unk_020689C8.h"
+#include "field_effects.h"
 
 // Map object ground shadows: four shadow models whose alpha and scale follow the time of day.
 
 // Not declared in any header yet.
-void *sub_02068D90(void *effect);
+void *FieldEffect_GetParam(void *effect);
 void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *mdl, u32 alpha);
 void RenderObj_Draw(void *renderObj, VecFx32 *pos, VecFx32 *scale, MtxFx33 *mtx);
 BOOL ov01_021F8F88(LocalMapObject *object);
@@ -217,8 +217,8 @@ void ov01_021FD684(LocalMapObject *object) {
 }
 
 BOOL FieldShadowEffect_Init(void *effect, FieldShadowEffect *work) {
-    *(FieldEffectRendererArgs *)&work->unk_14 = *(FieldEffectRendererArgs *)sub_02068D98(effect);
-    work->parameter = sub_02068D90(effect);
+    *(FieldEffectRendererArgs *)&work->unk_14 = *(FieldEffectRendererArgs *)FieldEffect_GetUserData(effect);
+    work->parameter = FieldEffect_GetParam(effect);
     work->spriteId = MapObject_GetSpriteID(work->mapObject);
     work->objectId = MapObject_GetID(work->mapObject);
     if (MapObject_CheckFlag25(work->mapObject) == TRUE) {
@@ -249,12 +249,12 @@ void FieldShadowEffect_Update(void *effect, FieldShadowEffect *work) {
         return;
     }
     MapObject_CopyPositionVector(object, &pos);
-    sub_02068DA8(effect, &pos);
+    FieldEffect_SetPosition(effect, &pos);
 }
 
 BOOL ov01_021FD784(void *effect, FieldShadowEffect *work) {
-    *(FieldEffectRendererArgs *)&work->unk_14 = *(FieldEffectRendererArgs *)sub_02068D98(effect);
-    work->parameter = sub_02068D90(effect);
+    *(FieldEffectRendererArgs *)&work->unk_14 = *(FieldEffectRendererArgs *)FieldEffect_GetUserData(effect);
+    work->parameter = FieldEffect_GetParam(effect);
     work->spriteId = MapObject_GetSpriteID(work->mapObject);
     work->objectId = MapObject_GetID(work->mapObject);
     if (MapObject_CheckFlag25(work->mapObject) == TRUE) {
@@ -277,7 +277,7 @@ void FieldShadowEffect_Draw(void *effect, FieldShadowEffect *work) {
     mtx = ov01_02208F14;
     shadow = work->shadow;
     FieldShadow_GetScale(shadow, &scale);
-    sub_02068DB8(effect, &pos);
+    FieldEffect_GetPosition(effect, &pos);
     pos.x -= 0x800;
     pos.y -= 0x4000;
     pos.z += 0x1000;
@@ -302,7 +302,7 @@ void ov01_021FD838(void *effect, FieldShadowEffect *work) {
     renderObj = &shadow->renderObjs[0];
     FieldShadow_GetScale(shadow, &scale);
     if (ov01_021F8F88(object) != 0) {
-        sub_02068DB8(effect, &pos);
+        FieldEffect_GetPosition(effect, &pos);
         pos.x -= 0x800;
         pos.y -= 0x4000;
         pos.z += 0x1000;
@@ -343,7 +343,7 @@ void ov01_021FD92C(void *effect, FieldShadowEffect *work) {
         return;
     }
     MapObject_CopyPositionVector(object, &pos);
-    sub_02068DA8(effect, &pos);
+    FieldEffect_SetPosition(effect, &pos);
 }
 
 void ov01_021FD980(void *effect, FieldShadowEffect *work) {
@@ -353,10 +353,10 @@ void ov01_021FD980(void *effect, FieldShadowEffect *work) {
         return;
     }
     {
-        u32 index = (u32)sub_02068D90(effect);
+        u32 index = (u32)FieldEffect_GetParam(effect);
         FieldShadow *shadow = work->shadow;
         NNSG3dRenderObj *renderObj = &shadow->renderObjs[index];
-        sub_02068DB8(effect, &pos);
+        FieldEffect_GetPosition(effect, &pos);
         pos.x -= 0x800;
         pos.y -= 0x4000;
         pos.z += 0x1000;

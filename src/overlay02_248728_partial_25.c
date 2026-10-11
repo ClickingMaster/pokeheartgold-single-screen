@@ -134,7 +134,7 @@ void ov02_0224AB9C(void *);
 int ov02_0224B638(void *);
 
 int ov02_0224B350(void *a, void *p) {
-    void *q = sub_02068D98(a);
+    void *q = FieldEffect_GetUserData(a);
     U32(p, 0x1c) = U32(q, 0);
     U32(p, 0x20) = U32(q, 4);
     return 1;

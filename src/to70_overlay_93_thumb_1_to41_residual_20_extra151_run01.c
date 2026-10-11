@@ -1,5 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-struct Texture{u8 p[20];u32 data;u8 p18[20];u32 size;u16 count,p32;u32 p34,offset;};struct S{void*raw;struct Texture*tex;u8 pad[0x24c-8];void*copy,*copy2;u32 bytes,texbytes;};void*AllocAndReadWholeNarcMemberByIdPair(int,int,int);void GF3dRender_AllocAndLoadTexResources(struct Texture*);void*Heap_Alloc(int,u32);void Heap_Realloc(void*,u32);void ov93_0225EC98(struct S*);
-void ov93_0225EC98(struct S*s){struct Texture*t;u32 bytes,off,size;s->raw=AllocAndReadWholeNarcMemberByIdPair(201,29,117);s->tex=(struct Texture*)NNS_G3dGetTex((NNSG3dResFileHeader*)s->raw);GF3dRender_AllocAndLoadTexResources(s->tex);t=s->tex;bytes=t->count<<3;off=t->offset;size=(t->size&0xffff)<<3;if(s->copy)GF_AssertFail();s->copy=Heap_Alloc(117,bytes);s->copy2=Heap_Alloc(117,bytes);MI_CpuCopy8((u8*)t+off,s->copy,bytes);MI_CpuCopy8((u8*)t+off,s->copy2,bytes);DC_FlushRange(s->copy2,bytes);s->texbytes=size;s->bytes=bytes;if(s->tex->data==0)GF_AssertFail();Heap_Realloc(s->raw,(u8*)s->tex+s->tex->data-(u8*)s->raw);}

@@ -6,7 +6,7 @@ void ov01_021FAB9C(void *task, W13Work *work) {
     case 0:
         if (!MapObject_CheckActive(obj) || !ov01_021FA2D4(obj)) {
             if (work->reflection != NULL) {
-                sub_02068B48();
+                FieldEffect_Destroy();
             }
             BillboardObject_Delete(work->unk24);
             Heap_Free(work->mdl1);
@@ -23,7 +23,7 @@ void ov01_021FAB9C(void *task, W13Work *work) {
     case 1:
         if (!ov01_021FA2D4(obj)) {
             if (work->reflection != NULL) {
-                sub_02068B48();
+                FieldEffect_Destroy();
             }
             BillboardObject_Delete(work->unk24);
             Heap_Free(work->mdl1);

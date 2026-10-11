@@ -4,11 +4,11 @@
 .public Camera_GetLookAtCamPos
 .public MapObject_GetPriorityPlusValue
 .public MapObject_CopyPositionVector
-.public sub_02068D74
-.public sub_02068D90
-.public sub_02068D98
-.public sub_02068DA8
-.public sub_02068DB8
+.public FieldEffect_GetState
+.public FieldEffect_GetParam
+.public FieldEffect_GetUserData
+.public FieldEffect_SetPosition
+.public FieldEffect_GetPosition
 .public VEC_Subtract
 .public VEC_Normalize
 .public VEC_MultAdd

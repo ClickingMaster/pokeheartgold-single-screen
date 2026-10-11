@@ -41,7 +41,7 @@ MapObjectMovementCmd075_Step1: ; 0x02062F6C
 	cmp r0, #1
 	bne _02062F90
 	ldr r0, [r4, #4]
-	bl sub_02068B48
+	bl FieldEffect_Destroy
 	add r0, r5, #0
 	bl MapObject_IncrementMovementStep
 	mov r0, #1

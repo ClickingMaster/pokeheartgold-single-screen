@@ -11,12 +11,12 @@ void ov01_02203654(void *task, void *v) {
         return;
     }
     if (*(u32 *)(p + 0x14) == 0) {
-        sub_02068DB8(task, &pos);
+        FieldEffect_GetPosition(task, &pos);
         temp = *(Vec3 *)(p + 0x18);
         *(u32 *)(p + 0x14) = sub_0206121C(*(void **)(p + 0x24), &temp);
         if (*(u32 *)(p + 0x14) == 1) {
             pos.y = temp.y;
-            sub_02068DA8(task, &pos);
+            FieldEffect_SetPosition(task, &pos);
         }
     }
     switch (*(u32 *)p) {

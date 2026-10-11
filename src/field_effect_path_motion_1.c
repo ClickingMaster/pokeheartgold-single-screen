@@ -46,10 +46,10 @@ void ov01_021FF74C(void *mapObject) {
 BOOL ov01_021FF7B0(void *object, void *data) {
     u8 *p = data;
     VecFx32Private position;
-    *(FourWordsPrivate *)(p + 0x10) = *(FourWordsPrivate *)sub_02068D98(object);
+    *(FourWordsPrivate *)(p + 0x10) = *(FourWordsPrivate *)FieldEffect_GetUserData(object);
     *(u32 *)(p + 4) = MapObject_GetID(*(void **)(p + 0x1c));
     *(u32 *)(p + 8) = MapObject_GetMapID(*(void **)(p + 0x1c));
-    sub_02068DB8(object, &position);
+    FieldEffect_GetPosition(object, &position);
     *(void **)(p + 0x20) = FieldEffectManager_CreateBillboardFromRecord(*(void **)(p + 0x14), 8, &position);
     return TRUE;
 }
@@ -72,7 +72,7 @@ void ov01_021FF800(void *task, void *data) {
 
 void ov01_021FF830(void *object, void *data) {
     VecFx32Private position;
-    sub_02068DB8(object, &position);
+    FieldEffect_GetPosition(object, &position);
     position.z += 0x8000;
     BillboardObject_SetPosition(*(void **)((u8 *)data + 0x20), &position);
 }

@@ -90,7 +90,7 @@ void ov01_021FF964(LocalMapObject *mapObject, int a1, int a2, int a3, int a4) {
 BOOL ov01_021FF9F4(void *a0, UnkOv01_02209218_Work *work) {
     VecFx32 position;
 
-    work->unk18 = *(UnkOv01_02209218_Args *)sub_02068D98(a0);
+    work->unk18 = *(UnkOv01_02209218_Args *)FieldEffect_GetUserData(a0);
     work->unk04 = MapObject_GetSpriteID(work->unk18.unk18);
     work->unk08 = MapObject_GetID(work->unk18.unk18);
     work->unk0C = MapObject_GetMapID(work->unk18.unk18);
@@ -100,12 +100,12 @@ BOOL ov01_021FF9F4(void *a0, UnkOv01_02209218_Work *work) {
     work->unk14 = sub_0206121C(work->unk18.unk0C, &position);
     position.x += 2 << 14;
     position.z += 0x12 << 12;
-    sub_02068DA8(a0, &position);
+    FieldEffect_SetPosition(a0, &position);
     work->unk3C = FieldEffectManager_CreateBillboardFromRecord(work->unk18.unk10, 9, &position);
     if (MapObject_TestFlagsBits(work->unk18.unk18, MAPOBJECTFLAG_VISIBLE) == TRUE) {
         BillboardObject_SetVisible(work->unk3C, 0);
     }
-    if (sub_02068D90(a0) == NULL) {
+    if (FieldEffect_GetParam(a0) == NULL) {
         BillboardObject_SetFrame(work->unk3C, 3 << 14);
         BillboardObject_AdvanceFrame(work->unk3C, 0);
         work->unk00 = 2;
@@ -132,14 +132,14 @@ void ov01_021FFABC(void *a0, UnkOv01_02209218_Work *work) {
         BillboardObject_SetVisible(work->unk3C, 1);
     }
     if (work->unk14 == 0) {
-        sub_02068DB8(a0, &sp0C);
+        FieldEffect_GetPosition(a0, &sp0C);
         position.x = work->unk18.unk00 << 16;
         position.z = work->unk18.unk08 << 16;
         position.y = sp0C.y;
         work->unk14 = sub_0206121C(work->unk18.unk0C, &position);
         if (work->unk14 == TRUE) {
             sp0C.y = position.y;
-            sub_02068DA8(a0, &sp0C);
+            FieldEffect_SetPosition(a0, &sp0C);
         }
     }
     switch (work->unk00) {
@@ -177,6 +177,6 @@ void ov01_021FFBD4(void *a0, UnkOv01_02209218_Work *work) {
         FieldEffectManager_DestroyEffect((int)a0);
         return;
     }
-    sub_02068DB8(a0, &position);
+    FieldEffect_GetPosition(a0, &position);
     BillboardObject_SetPosition(work->unk3C, &position);
 }

@@ -12,7 +12,7 @@ BOOL MapObjectMovementCmd075_Step1(void *mapObject, void *unused) {
     (void)unused;
     work = sub_0205F3E4(mapObject);
     if (ov01_022003F4(work->effect) == TRUE) {
-        sub_02068B48(work->effect);
+        FieldEffect_Destroy(work->effect);
         MapObject_IncrementMovementStep(mapObject);
         return TRUE;
     }

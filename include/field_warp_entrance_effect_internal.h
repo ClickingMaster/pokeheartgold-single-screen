@@ -10,14 +10,14 @@
 #include "field/field_effect_manager.h"
 #include "player_avatar.h"
 #include "unk_0205FD20.h"
-#include "unk_020689C8.h"
+#include "field_effects.h"
 #include "render_model.h"
 #include "render_animation.h"
 
 // ---- not declared in any tracked header (see report.md) ----
 void RenderObj_Draw(void *a0, VecFx32 *pos, VecFx32 *scale, MtxFx33 *mtx);
 void Math_CalcRotationMatrixXYZDeg(MtxFx33 *mtx, u16 x, u16 y, u16 z);
-void sub_02068DA8(void *a0, VecFx32 *a1);
+void FieldEffect_SetPosition(void *a0, VecFx32 *a1);
 
 // The 0x6c module object allocated by ov01_02200858 and recovered from the
 // field-effect manager slot 3 by FieldEffectManager_GetRendererData.
@@ -27,7 +27,7 @@ typedef struct Ov01_02200858_Work {
     NNSG3dRenderObj unk18;
 } Ov01_02200858_Work; // 0x6c
 
-// The user-data block handed to FieldEffectManager_CreateEffect as a4 and recovered via sub_02068D98.
+// The user-data block handed to FieldEffectManager_CreateEffect as a4 and recovered via FieldEffect_GetUserData.
 typedef struct Ov01_02200858_Args {
     FieldSystem *unk0;
     Ov01_02200858_Work *unk4;

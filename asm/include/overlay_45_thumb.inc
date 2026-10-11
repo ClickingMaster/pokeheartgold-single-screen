@@ -428,6 +428,6 @@
 .public MimeJrTop_Init
 .public MimeJrTop_Main
 .public MimeJrTop_Exit
-.public ov93_0225C540
-.public ov93_0225C574
-.public ov93_0225C6C0
+.public WobbuffetPopApp_Init
+.public WobbuffetPopApp_Main
+.public WobbuffetPopApp_Exit

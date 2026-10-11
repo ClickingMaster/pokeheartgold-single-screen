@@ -135,7 +135,7 @@ int ov02_0224B638(void *);
 
 void ov02_0224B768(void *p) {
     if (PTR(p, 0x1f4)) {
-        sub_02068B48(PTR(p, 0x1f4));
+        FieldEffect_Destroy(PTR(p, 0x1f4));
         PTR(p, 0x1f4) = 0;
     }
 }

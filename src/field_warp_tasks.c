@@ -892,7 +892,7 @@ static BOOL sub_02053CCC(TaskManager *taskManager) {
         env->unk0++;
         break;
     case 1:
-        if (env->unk1C == 0 || !sub_02068CCC(env->unk1C)) {
+        if (env->unk1C == 0 || !FieldEffect_IsActive(env->unk1C)) {
             ov01_021F35C4(fieldSystem, 1, &env->unk4);
             env->unk0++;
         }

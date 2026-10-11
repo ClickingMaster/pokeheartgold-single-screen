@@ -42,5 +42,5 @@ WIP_LOCAL void *ov02_02248D58(void *arg0, void *arg1, void *arg2, void *arg3) {
     a4.unk4 = arg0;
     a4.unkC = arg2;
     a4.unk8 = arg3;
-    return sub_02068B0C(arg1, &ov02_02253454, &pos, 0, &a4, 0x82);
+    return FieldEffectPool_AddBasicEffect(arg1, &ov02_02253454, &pos, 0, &a4, 0x82);
 }

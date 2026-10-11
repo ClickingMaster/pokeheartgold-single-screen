@@ -134,5 +134,5 @@ void ov02_0224AB9C(void *);
 int ov02_0224B638(void *);
 
 u8 ov02_02248D8C(void *p) {
-    return U8(sub_02068D74(p), 2);
+    return U8(FieldEffect_GetState(p), 2);
 }

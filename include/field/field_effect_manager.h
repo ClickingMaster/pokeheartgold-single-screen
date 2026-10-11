@@ -4,7 +4,7 @@
 #include "map_object.h"
 #include "script.h"
 #include "task.h"
-#include "unk_020689C8.h"
+#include "field_effects.h"
 
 typedef struct FieldEffectManager {
     u8 unk0[0x24];

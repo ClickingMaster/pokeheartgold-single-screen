@@ -54,12 +54,12 @@ void *ov01_02203EA0(void *obj) {
     return local.ctx.resource->task;
 }
 void ov01_02203F2C(void *task, u32 value) {
-    LocalManager *m = *(LocalManager **)((u8 *)sub_02068D74(task) + 8);
+    LocalManager *m = *(LocalManager **)((u8 *)FieldEffect_GetState(task) + 8);
     m->scale = value;
 }
 BOOL ov01_02203F3C(void *task, LocalState *s) {
-    *(LocalSevenWords *)&s->data04 = *(LocalSevenWords *)sub_02068D98(task);
-    s->mode = sub_02068D90(task);
+    *(LocalSevenWords *)&s->data04 = *(LocalSevenWords *)FieldEffect_GetUserData(task);
+    s->mode = FieldEffect_GetParam(task);
     return TRUE;
 }
 void ov01_02203F68(void) {
@@ -68,7 +68,7 @@ void ov01_02203F6C(void *task, LocalState *s) {
     VecFx32 input, out;
     MapObject_CopyPositionVector(s->mapObject, &input);
     VEC_MultAdd(s->multiplier, &s->direction, &input, &out);
-    sub_02068DA8(task, &out);
+    FieldEffect_SetPosition(task, &out);
 }
 void ov01_02203F98(void *task, LocalState *s) {
     static const LocalNineWords identity = {
@@ -82,6 +82,6 @@ void ov01_02203F98(void *task, LocalState *s) {
     local.scale.x = (fx32)(4096.0f * (*(float *)&s->resource->scale));
     local.scale.y = (fx32)(4096.0f * (*(float *)&s->resource->scale));
     local.scale.z = (fx32)(4096.0f * (*(float *)&s->resource->scale));
-    sub_02068DB8(task, &local.pos);
+    FieldEffect_GetPosition(task, &local.pos);
     GF3dRender_DrawModel((u8 *)s->resource + 4, &local.pos, &local.matrix, &local.scale);
 }

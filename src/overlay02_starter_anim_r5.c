@@ -7,7 +7,7 @@ extern void ov01_021FCD8C(void *, int, fx32, int);
 extern BOOL ov01_021FCD6C(void *);
 extern void ov02_0224B314(void *);
 extern void ov02_02249444(void *, BOOL);
-extern void *sub_02068D74(void *);
+extern void *FieldEffect_GetState(void *);
 extern void *ov02_0224B298(void *, void *);
 extern void *ov01_021FCD2C(void *, int);
 extern void ov02_022493FC(void);
@@ -32,7 +32,7 @@ void ov02_02248E20(void *arg0) {
     VecFx32 scale = ov02_022533CC;
     VecFx32 matrix;
     VecFx32 secondScale;
-    void *work = sub_02068D74(arg0);
+    void *work = FieldEffect_GetState(arg0);
     Sprite *sprite;
 
     ((u8 *)work)[0] = 1;

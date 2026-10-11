@@ -115,13 +115,13 @@
 // for objdiff. See VISIBILITY NOTE above. Finalize to `static` at flip-to-src.
 #define WIP_LOCAL /* static */
 
-// 8-byte pair used for the sub_02068D98 struct-copy getters (name TBD).
+// 8-byte pair used for the FieldEffect_GetUserData struct-copy getters (name TBD).
 typedef struct UnkPair8 {
     s32 unk0;
     s32 unk4;
 } UnkPair8;
 
-// 16-byte blob copied via two ldm/stm word-pairs (sub_02068D98 -> obj+0x58).
+// 16-byte blob copied via two ldm/stm word-pairs (FieldEffect_GetUserData -> obj+0x58).
 typedef struct UnkBlob16 {
     s32 unk0;
     s32 unk4;
@@ -129,7 +129,7 @@ typedef struct UnkBlob16 {
     s32 unkC;
 } UnkBlob16;
 
-// 24-byte blob copied via three ldm/stm word-pairs (sub_02068D98 -> work+0xc).
+// 24-byte blob copied via three ldm/stm word-pairs (FieldEffect_GetUserData -> work+0xc).
 typedef struct UnkBlob24 {
     s32 unk0;
     s32 unk4;
@@ -171,12 +171,12 @@ typedef struct ov02_A9D8Entry {
 
 // follow-mon task-data accessor (defined in unk_020689C8.c); local extern matches
 // the convention used by other overlays that don't pull in the full header.
-extern void *sub_02068D74(void *work);
-extern void sub_02068B48(int a0);                                                // unk_020689C8.h
+extern void *FieldEffect_GetState(void *work);
+extern void FieldEffect_Destroy(int a0);                                                // unk_020689C8.h
 extern void MapPropOneShotAnimationManager_PlayAnimation(void *a, int b, int c); // no header yet
 extern BOOL ov01_022060B8(FieldSystem *fieldSystem, u8 a1, u8 a2);
 extern BOOL ov01_02205D68(FieldSystem *fieldSystem); // no header included here
-extern void sub_020689F8(void *a0);                  // unk_020689C8.h
+extern void FieldEffectPool_Delete(void *a0);                  // unk_020689C8.h
 
 // Nested state-machine dispatch: outer table indexed by sm[0] -> inner func table
 // indexed by sm[1]; each func(sm) returns 1 to keep running. Tables are file-local
@@ -186,7 +186,7 @@ typedef BOOL (*ov02_StateMachineFunc)(void *sm);
 // Field-move task state tables: func(taskManager, fieldSystem, env) -> 1=loop, 2=free.
 typedef int (*ov02_FieldTaskFunc)(TaskManager *taskManager, FieldSystem *fieldSystem, void *env);
 extern BOOL ov01_02205A60(TaskManager *taskMan);                                                             // overlay_01_022053EC.h, not included
-extern void sub_02068BAC(void *a0);                                                                          // unk_020689C8.h
+extern void FieldEffectPool_DrawAll(void *a0);                                                                          // unk_020689C8.h
 extern void ov01_021FCD78(SysTask *task);                                                                    // no header included here
 extern BOOL ov01_021FCD6C(SysTask *task);                                                                    // no header included here
 extern void ov01_021F8F68(LocalMapObject *object, int a1);                                                   // no header included here
@@ -286,7 +286,7 @@ extern void PlayCryEx(int, int, int, int, int, int);                            
 extern void GfGfx_EngineATogglePlanes(u8 planeMask, u8 enable);                                                      // gf_gfx_planes.h, not included
 extern void *GfGfxLoader_LoadFromNarc(NarcId narcId, s32 fileId, BOOL isCompressed, enum HeapID heapID, BOOL atEnd); // gf_gfx_loader.h, not included
 extern void FieldMessage_LoadTextPalettes(int a0, int a1);                                                           // text_0205B4EC.h, not included
-extern void *sub_020689C8(int a0, int a1);                                                                           // unk_020689C8.h, not included
+extern void *FieldEffectPool_New(int a0, int a1);                                                                           // unk_020689C8.h, not included
 extern u16 GF_DegreeToSinCosIdx(u16 deg);                                                                            // math_util.h, not included
 extern u16 LCRandom(void);                                                                                           // math_util.h, not included
 extern fx32 GF_SinDeg(u16 deg);                                                                                      // math_util.h, not included
@@ -329,13 +329,13 @@ extern WallpaperPasswordBank *WallpaperPasswordBank_Create(enum HeapID heapID);
 extern void WallpaperPasswordBank_Delete(WallpaperPasswordBank *bank);
 extern u32 WallpaperPasswordBank_GetCount(WallpaperPasswordBank *bank);
 extern s16 WallpaperPasswordBank_GetIndexOfWord(WallpaperPasswordBank *bank, s32 word);
-extern u32 sub_02068D90(void *a0);                                           // unk_020689C8.c, no C proto
-extern void sub_02068DA8(void *a0, VecFx32 *src);                            // unk_020689C8.c, no C proto
+extern u32 FieldEffect_GetParam(void *a0);                                           // unk_020689C8.c, no C proto
+extern void FieldEffect_SetPosition(void *a0, VecFx32 *src);                            // unk_020689C8.c, no C proto
 extern void Field3dObject_SetPos(Field3dObject *object, const VecFx32 *pos); // .public, no C proto yet
 extern void GetFlyWarpData(u16 spawnId, Location *dest);                     // unk_0203BA5C.h, not included
 extern void GetSpecialSpawnWarpData(u16 spawnId, Location *dest);            // unk_0203BA5C.h, not included
 
-// unk_020689C8.c task launcher: sub_02068B0C(mgr, src, pos, a3, a4, priority).
+// unk_020689C8.c task launcher: FieldEffectPool_AddBasicEffect(mgr, src, pos, a3, a4, priority).
 // The UnkTemplateBase/UnkTaskWork types are local to that TU; mirror minimally.
 // src points to a 0x14-byte template (file-local rodata, still in asm for now).
 typedef struct ov02_LaunchTemplate {
@@ -346,7 +346,7 @@ typedef struct ov02_LaunchTemplate {
     void *unk10;
 } ov02_LaunchTemplate;
 
-extern void *sub_02068B0C(void *mgr, const ov02_LaunchTemplate *src, VecFx32 *pos, u32 a3, void *a4, u32 priority);
+extern void *FieldEffectPool_AddBasicEffect(void *mgr, const ov02_LaunchTemplate *src, VecFx32 *pos, u32 a3, void *a4, u32 priority);
 
 // STRUCT-CLEANUP TODO: the getters/setters/deleters below use byte-offset casts
 // because their owning struct isn't named yet. They byte-match; replace the casts
@@ -527,8 +527,8 @@ WIP_LOCAL void ov02_02248AFC(void *mgr, int a1);
 WIP_LOCAL int ov02_0224B4AC(void *work);
 
 // forward decls for functions referenced only from the consolidated rodata tables
-extern void sub_02068DD0(void);
-extern void sub_02068DD4(void);
+extern void FieldEffect_DefaultDraw(void);
+extern void FieldEffect_DefaultDestroy(void);
 WIP_LOCAL void ov02_02248DF0(void *a0, u8 *sm);
 WIP_LOCAL int ov02_02248E10(void *work);
 WIP_LOCAL int ov02_022491A8(void *work);

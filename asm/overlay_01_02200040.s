@@ -146,7 +146,7 @@ ov01_02200140: ; 0x02200140
 	sub sp, #0xc
 	add r4, r1, #0
 	add r5, r0, #0
-	bl sub_02068D98
+	bl FieldEffect_GetUserData
 	add r2, r4, #0
 	add r3, r0, #0
 	add r2, #0x10
@@ -162,7 +162,7 @@ ov01_02200140: ; 0x02200140
 	str r0, [r4, #8]
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02068DB8
+	bl FieldEffect_GetPosition
 	ldr r0, [r4, #0x14]
 	mov r1, #0xb
 	add r2, sp, #0
@@ -214,7 +214,7 @@ ov01_022001C0: ; 0x022001C0
 	sub sp, #0xc
 	add r4, r1, #0
 	add r1, sp, #0
-	bl sub_02068DB8
+	bl FieldEffect_GetPosition
 	mov r0, #2
 	ldr r1, [sp, #8]
 	lsl r0, r0, #0xe

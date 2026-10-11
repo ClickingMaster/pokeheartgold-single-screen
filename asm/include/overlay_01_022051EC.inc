@@ -2,9 +2,9 @@
 #pragma once
 .public PlaySE
 .public HeapExp_FndInitAllocator
-.public sub_02068D74
-.public sub_02068D98
-.public sub_02068DB8
+.public FieldEffect_GetState
+.public FieldEffect_GetUserData
+.public FieldEffect_GetPosition
 .public FieldEffectManager_HeapAllocAndFill
 .public FieldEffectManager_HeapFree
 .public FieldEffectManager_GetRendererData

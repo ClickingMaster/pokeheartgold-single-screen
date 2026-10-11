@@ -33,13 +33,13 @@ extern void sub_020611C8(s32, s32, VecFx32Private *);
 extern s32 MapObject_GetPreviousYCoord(void *);
 extern u32 MapObject_GetPriorityPlusValue(void *, u32);
 extern void FieldEffectManager_CreateEffect(void *, const void *, const VecFx32Private *, u32, const EffectContextPrivate *, u32);
-extern void *sub_02068D98(void *);
+extern void *FieldEffect_GetUserData(void *);
 extern void ov01_021F1A34(u32, void *, u32, u32, u32);
 extern void RenderObj_InitWithAnimation(void *, u32, void *);
 extern s32 RenderAnimation_IsDone(void *);
 extern void FieldEffectManager_DestroyEffect(void *);
 extern void RenderAnimation_Advance(void *, s32, u32);
-extern void sub_02068DB8(void *, VecFx32Private *);
+extern void FieldEffect_GetPosition(void *, VecFx32Private *);
 extern void RenderObj_DrawAt(void *, const VecFx32Private *);
 extern const u32 ov01_02209124[];
 

@@ -737,9 +737,9 @@ ov45_02254B24: ; 0x02254B24
 	.word FS_OVERLAY_ID(OVY_89)
 
 ov45_02254B34: ; 0x02254B34
-	.word ov93_0225C540
-	.word ov93_0225C574
-	.word ov93_0225C6C0
+	.word WobbuffetPopApp_Init
+	.word WobbuffetPopApp_Main
+	.word WobbuffetPopApp_Exit
 	.word FS_OVERLAY_ID(OVY_93)
 
 ov45_02254B44: ; 0x02254B44

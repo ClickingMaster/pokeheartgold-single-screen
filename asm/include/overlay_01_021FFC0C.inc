@@ -17,10 +17,10 @@
 .public MapObject_GetZCoord
 .public MapObject_GetPositionVectorYCoord
 .public sub_0206121C
-.public sub_02068D90
-.public sub_02068D98
-.public sub_02068DA8
-.public sub_02068DB8
+.public FieldEffect_GetParam
+.public FieldEffect_GetUserData
+.public FieldEffect_SetPosition
+.public FieldEffect_GetPosition
 .public FieldEffectManager_HeapAllocAndFill
 .public FieldEffectManager_HeapFree
 .public FieldEffectManager_DestroyEffect

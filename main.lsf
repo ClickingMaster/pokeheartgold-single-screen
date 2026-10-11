@@ -1213,32 +1213,32 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     ### NitroSDK ###
     Object lib/NitroSDK/asm/fx_sincos.o
     Object lib/NitroSDK/src/fx/fx_mtx22.o
-    Object lib/NitroSDK/src/fx/to91_fx_scale22.o
-    Object src/op90_fx_mtx33_identity_residual_r01.o
+    Object lib/NitroSDK/src/fx/fx_mtx22_rot_scale.o
+    Object lib/NitroSDK/src/fx/fx_mtx33_identity.o
     Object lib/NitroSDK/src/fx/fx_mtx33_scale.o
-    Object src/to90_extra2338_run01.o
-    Object src/op90_to90_extra2338_residual_1_r01.o
-    Object src/to90_extra1969_run01.o
-    Object lib/NitroSDK/src/fx/fx_mtx33_tail.o
-    Object src/op90_to90_extra2544_residual_1_r01.o
-    Object src/to90_extra2544_run01.o
-    Object src/op90_to90_extra2544_residual_2_r01.o
+    Object lib/NitroSDK/src/fx/fx_mtx33_rot_x.o
+    Object lib/NitroSDK/src/fx/fx_mtx33_rot_yz.o
+    Object lib/NitroSDK/src/fx/fx_mtx33_inverse.o
+    Object lib/NitroSDK/src/fx/fx_mtx33_concat.o
+    Object lib/NitroSDK/src/fx/fx_mtx43_identity.o
+    Object lib/NitroSDK/src/fx/fx_mtx43_trans_apply.o
+    Object lib/NitroSDK/src/fx/fx_mtx43_scale.o
     Object lib/NitroSDK/src/fx/fx_mtx43_scale_apply.o
-    Object src/op90_fx_mtx43_residual_1_r01.o
-    Object lib/NitroSDK/src/fx/fx_mtx43_tail.o
-    Object src/to80_extra1441_run01.o
-    Object src/op90_fx_mtx44_residual_head_r01.o
+    Object lib/NitroSDK/src/fx/fx_mtx43_rot.o
+    Object lib/NitroSDK/src/fx/fx_mtx43_inverse_concat.o
+    Object lib/NitroSDK/src/fx/fx_mtx43_look_at.o
+    Object lib/NitroSDK/src/fx/fx_mtx44_identity.o
     Object lib/NitroSDK/src/fx/fx_mtx44_trans_apply.o
-    Object src/op90_fx_mtx44_residual_rot_r01.o
+    Object lib/NitroSDK/src/fx/fx_mtx44_rot.o
     Object lib/NitroSDK/src/fx/fx_mtx44_concat.o
-    Object src/op90_to80_extra1442_residual_1_r01.o
-    Object src/to80_extra1442_run01.o
+    Object lib/NitroSDK/src/fx/fx_mtx44_perspective.o
+    Object lib/NitroSDK/src/fx/fx_mtx44_ortho.o
     Object lib/NitroSDK/src/fx/fx_cp.o
-    Object lib/NitroSDK/src/fx/fx_vec_exact_prefix.o
-    Object src/op90_fx_vec_normalize_residual_r01.o
-    Object lib/NitroSDK/src/fx/fx_vec_exact_suffix.o
-    Object src/op90_to70_fx_trig_extra207_residual_1_r01.o
-    Object src/to70_fx_trig_extra207_run01.o
+    Object lib/NitroSDK/src/fx/fx_vec.o
+    Object lib/NitroSDK/src/fx/fx_vec_normalize.o
+    Object lib/NitroSDK/src/fx/fx_vec_mult_add.o
+    Object lib/NitroSDK/src/fx/fx_trig_internal.o
+    Object lib/NitroSDK/src/fx/fx_trig.o
     Object lib/NitroSDK/src/fx/fx_atanidx.o
     Object lib/NitroSDK/src/fx/fx.o
     Object lib/NitroSDK/src/gx/gx.o
@@ -1249,13 +1249,13 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/NitroSDK/src/gx/g3b.o
     Object lib/NitroSDK/src/gx/g3imm.o
     Object lib/NitroSDK/src/gx/g3x.o
-    Object src/op90_g3x_nop_fifo_residual_r01.o
+    Object lib/NitroSDK/src/gx/g3x_nop_clear_fifo.o
     Object lib/NitroSDK/src/gx/g3_util.o
     Object lib/NitroSDK/src/gx/gx_load2d.o
     Object lib/NitroSDK/src/gx/gx_load3d.o
     Object lib/NitroSDK/src/gx/g3.o
-    Object src/op90_gxasm_r01.o
-    Object lib/NitroSDK/src/os/to90_waitirq_pure.o
+    Object lib/NitroSDK/src/gx/gxasm.o
+    Object lib/NitroSDK/src/os/os_wait_irq.o
     Object lib/NitroSDK/src/os/os_irqHandler.o
     Object lib/NitroSDK/src/os/os_irqTable.o
     Object lib/NitroSDK/src/os/os_interrupt.o
@@ -1273,7 +1273,7 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/NitroSDK/src/os/os_mutex.o
     Object lib/NitroSDK/src/os/os_cache.o
     Object lib/NitroSDK/src/os/os_init.o
-    Object lib/NitroSDK/src/os/to91_os_init_pure.o
+    Object lib/NitroSDK/src/os/os_init_system.o
     Object lib/NitroSDK/src/os/os_arena.o
     Object lib/NitroSDK/src/os/os_alloc.o
     Object lib/NitroSDK/src/os/os_tcm.o
@@ -1294,21 +1294,21 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/NitroSDK/asm/op90_to90_reset_reset_system_anchor.o
     Object src/op90_to90_reset_reset_system_r01.o
     Object lib/NitroSDK/src/os/os_ownerInfo.o
-    Object src/op90_to90_os_vramExclusive_clz_r01.o
+    Object lib/NitroSDK/src/os/os_vram_exclusive_clz.o
     Object lib/NitroSDK/src/os/os_vramExclusive.o
     Object lib/NitroSDK/src/os/os_entropy.o
-    Object lib/NitroSDK/src/os/to91_os_terminate_pure.o
+    Object lib/NitroSDK/src/os/os_terminate_arm9.o
     Object lib/NitroSDK/src/os/os_terminate_proc.o
     Object lib/NitroSDK/src/mi/mi_wram.o
     Object lib/NitroSDK/src/mi/mi_dma.o
     Object lib/NitroSDK/src/mi/mi_dma_hblank.o
     Object lib/NitroSDK/src/mi/mi_dma_gxcommand.o
-    Object src/op90_mi_memory_r01.o
-    Object src/op90_mi_swap_r01.o
-    Object src/op90_mi_uncompress_r01.o
+    Object lib/NitroSDK/src/mi/mi_memory.o
+    Object lib/NitroSDK/src/mi/mi_swap.o
+    Object lib/NitroSDK/src/mi/mi_uncompress.o
     Object lib/NitroSDK/src/mi/mi_dma_card.o
-    Object src/to80_extra1853_run01.o
-    Object src/op90_to80_extra1853_residual_1_r01.o
+    Object lib/NitroSDK/src/mi/mi_compress.o
+    Object lib/NitroSDK/src/mi/mi_compress_search.o
     Object lib/NitroSDK/src/mi/mi_init.o
     Object lib/NitroSDK/src/snd/snd_interface.o
     Object lib/asm/to65_nitro_unified_anchor.o
@@ -5335,50 +5335,7 @@ Overlay OVY_92
 Overlay OVY_93
 {
     After OVY_90
-    Object src/to41_overlay_93_thumb_1_run1.o
-    Object src/to90_extra2053_run01.o
-    Object src/to41_overlay_93_thumb_1_run2.o
-    Object src/overlay_93_lifecycle_to46.o
-    Object src/to41_overlay_93_thumb_1_run3.o
-    Object src/to70_overlay_93_thumb_1_to41_residual_3_extra867_run01.o
-    Object src/to41_overlay_93_thumb_1_run4.o
-    Object src/to70_overlay_93_thumb_1_to41_residual_4_extra652_run01.o
-    Object src/to41_overlay_93_thumb_1_run5.o
-    Object src/to47r5_ov93_scene_setup.o
-    Object src/to41_overlay_93_thumb_1_run6.o
-    Object src/op90_to70_overlay_93_thumb_1_to41_residual_6_extra219_residual_1_r01.o
-    Object src/to70_overlay_93_thumb_1_to41_residual_6_extra219_run01.o
-    Object src/to41_overlay_93_thumb_1_run7.o
-    Object src/to70_overlay_93_thumb_1_to41_residual_7_extra1026_run01.o
-    Object src/to41_overlay_93_thumb_1_run8.o
-    Object src/to80_extra1574_run01.o
-    Object src/to41_overlay_93_thumb_1_run9.o
-    Object src/to70_overlay_93_thumb_1_to41_residual_9_extra469_run01.o
-    Object src/to41_overlay_93_thumb_1_run10.o
-    Object src/to70_overlay_93_thumb_1_to41_residual_10_extra516_run01.o
-    Object src/to41_overlay_93_thumb_1_run11.o
-    Object src/to70_overlay_93_thumb_1_to41_residual_11_extra243_run01.o
-    Object src/to41_overlay_93_thumb_1_run12.o
-    Object src/op90_overlay_93_thumb_1_to41_residual_12_r01.o
-    Object src/to41_overlay_93_thumb_1_run13.o
-    Object src/to91_w41485_model_run01.o
-    Object src/to41_overlay_93_thumb_1_run14.o
-    Object src/op90_overlay_93_thumb_1_to41_residual_14_r01.o
-    Object src/to41_overlay_93_thumb_1_run15.o
-    Object src/op90_op90_overlay_93_thumb_1_to41_residual_15_residual_1_r01.o
-    Object src/op90_overlay_93_thumb_1_to41_residual_15_r01.o
-    Object src/to41_overlay_93_thumb_1_run16.o
-    Object src/to58_r3_ov93_overlay_93_thumb_1_to41_residual_16.o
-    Object src/to41_overlay_93_thumb_1_run17.o
-    Object src/to70_overlay_93_thumb_1_to41_residual_17_extra218_run01.o
-    Object src/to41_overlay_93_thumb_1_run18.o
-    Object src/to58_r3_ov93_overlay_93_thumb_1_to41_residual_18.o
-    Object src/to41_overlay_93_thumb_1_run19.o
-    Object src/to91_w14_ov93_e898440.o
-    Object src/to41_overlay_93_thumb_1_run20.o
-    Object src/to70_to70_overlay_93_thumb_1_to41_residual_20_extra151_residual_1_extra1322_run01.o
-    Object src/to70_overlay_93_thumb_1_to41_residual_20_extra151_run01.o
-    Object src/to41_overlay_93_thumb_1_run21.o
+    Object src/application/wobbuffet_pop.o
     Object asm/overlay_93_thumb_1_to41_residual_21.o
     Object src/overlay_93_arm_opus_partial_1.o
     Object src/overlay93_draw_quads_slop_r1.o

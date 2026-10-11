@@ -188,7 +188,7 @@ ov01_021FE6B4: ; 0x021FE6B4
 	sub sp, #0xc
 	add r5, r0, #0
 	add r4, r1, #0
-	bl sub_02068D98
+	bl FieldEffect_GetUserData
 	add r3, r0, #0
 	add r2, r4, #0
 	ldmia r3!, {r0, r1}
@@ -200,7 +200,7 @@ ov01_021FE6B4: ; 0x021FE6B4
 	bl ov01_021FE64C
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02068DB8
+	bl FieldEffect_GetPosition
 	ldr r0, [r4, #0xc]
 	mov r1, #0xd
 	add r2, sp, #0
@@ -281,7 +281,7 @@ ov01_021FE768: ; 0x021FE768
 	sub sp, #0xc
 	add r4, r1, #0
 	add r1, sp, #0
-	bl sub_02068DB8
+	bl FieldEffect_GetPosition
 	ldr r0, [r4, #0x18]
 	add r1, sp, #0
 	bl BillboardObject_SetPosition

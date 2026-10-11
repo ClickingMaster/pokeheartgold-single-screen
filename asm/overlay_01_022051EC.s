@@ -163,7 +163,7 @@ _022052F0: .word ov01_022096CC
 	thumb_func_start ov01_022052F4
 ov01_022052F4: ; 0x022052F4
 	push {r3, lr}
-	bl sub_02068D74
+	bl FieldEffect_GetState
 	ldr r0, [r0]
 	pop {r3, pc}
 	.balign 4, 0
@@ -175,7 +175,7 @@ ov01_02205300: ; 0x02205300
 	sub sp, #0xc
 	add r5, r0, #0
 	add r4, r1, #0
-	bl sub_02068D98
+	bl FieldEffect_GetUserData
 	ldr r1, [r0, #4]
 	mov r2, #0
 	str r1, [r4, #4]
@@ -191,7 +191,7 @@ ov01_02205300: ; 0x02205300
 	bl Field3dObject_SetActiveFlag
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02068DB8
+	bl FieldEffect_GetPosition
 	add r4, #0x4c
 	ldr r1, [sp]
 	ldr r2, [sp, #4]
