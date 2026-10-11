@@ -719,9 +719,9 @@ ov45_02254AC4: ; 0x02254AC4
 	.byte 0x04, 0x00, 0x00, 0x00
 
 ov45_02254B04: ; 0x02254B04
-	.word ov46_02258CB4
-	.word ov46_02258DA8
-	.word ov46_02258EFC
+	.word WiFiPlazaConnect_DisconnectInit
+	.word WiFiPlazaConnect_DisconnectMain
+	.word WiFiPlazaConnect_DisconnectExit
 	.word FS_OVERLAY_ID(OVY_46)
 
 ov45_02254B14: ; 0x02254B14
@@ -743,9 +743,9 @@ ov45_02254B34: ; 0x02254B34
 	.word FS_OVERLAY_ID(OVY_93)
 
 ov45_02254B44: ; 0x02254B44
-	.word ov47_02258800
-	.word ov47_02258898
-	.word ov47_022589A8
+	.word WiFiPlazaSurvey_Init
+	.word WiFiPlazaSurvey_Main
+	.word WiFiPlazaSurvey_Exit
 	.word FS_OVERLAY_ID(OVY_47)
 
 ov45_02254B54: ; 0x02254B54
@@ -755,9 +755,9 @@ ov45_02254B54: ; 0x02254B54
 	.word FS_OVERLAY_ID(OVY_91)
 
 ov45_02254B64: ; 0x02254B64
-	.word ov46_02258800
-	.word ov46_0225892C
-	.word ov46_02258C38
+	.word WiFiPlazaConnect_Init
+	.word WiFiPlazaConnect_Main
+	.word WiFiPlazaConnect_Exit
 	.word FS_OVERLAY_ID(OVY_46)
 
 ov45_02254B74: ; 0x02254B74

@@ -18,6 +18,6 @@ typedef struct OpponentDataR4W18 {
 } OpponentDataR4W18;
 void ov12_022597EC(BattleSystem *, OpponentDataR4W18 *);
 void ov12_0223BF14(BattleSystem *, u16, u8 *);
-void ov12_0226430C(BattleSystem *, int, int);
+void BattleController_EmitCommandComplete(BattleSystem *, int, int);
 void ov12_02259928(OpponentDataR4W18 *);
 #endif

@@ -27,5 +27,5 @@ void ov12_0225B16C(void *, u8 *, u8 *);
 SysTask *SysTask_CreateOnMainQueue(SysTaskFunc, void *, u32);
 void ov12_0225B1A8(BattleSystem *, OpponentData *);
 void ov12_0223BB80(BattleSystem *, void *);
-void ov12_0226430C(BattleSystem *, int, int);
+void BattleController_EmitCommandComplete(BattleSystem *, int, int);
 #endif

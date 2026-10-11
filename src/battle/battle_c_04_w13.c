@@ -21,6 +21,6 @@
 void ov12_022594F4(BattleSystem *battleSystem, OpponentData *opponentData) {
     int offset = 0x65;
     BattleSystem_SetBackground(battleSystem);
-    ov12_0226430C(battleSystem, ((u8 *)opponentData)[offset * 4], 0x2E);
+    BattleController_EmitCommandComplete(battleSystem, ((u8 *)opponentData)[offset * 4], 0x2E);
     ov12_02259928(opponentData);
 }

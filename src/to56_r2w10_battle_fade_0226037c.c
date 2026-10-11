@@ -32,10 +32,10 @@ typedef struct BattleTransitionTask {
     u32 flag;
 } BattleTransitionTask;
 
-void ov12_0226430C(BattleSystem *, int, int);
+void BattleController_EmitCommandComplete(BattleSystem *, int, int);
 void ov12_022600F0(SysTask *, void *);
 void ov12_0226037C(SysTask *, void *);
-void ov12_022643C8(BattleSystem *, void *, void *, int, int, int, int, int);
+void BattleController_InitMoveAnimData(BattleSystem *, void *, void *, int, int, int, int, int);
 void ov12_02261B80(BattleSystem *, void *, void *, void *);
 void ov12_02261CA8(BattleSystem *, void *, void *, int);
 void ov07_02234A20(void *, int);
@@ -65,7 +65,7 @@ void ov12_0226037C(SysTask *task, void *arg) {
         work->state++;
         return;
     case 2:
-        ov12_0226430C(work->battleSystem, work->side, work->battler);
+        BattleController_EmitCommandComplete(work->battleSystem, work->side, work->battler);
         Heap_Free(work);
         SysTask_Destroy(task);
         return;

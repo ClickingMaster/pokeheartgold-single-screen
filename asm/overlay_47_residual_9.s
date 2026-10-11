@@ -4,46 +4,46 @@
 	.include "overlay47_exact_bank.inc"
 
 	.text
-	.public ov47_02258A14
-	.public ov47_02258A1C
-	.public ov47_02258A60
-	.public ov47_02258A80
-	.public ov47_02258A8C
-	.public ov47_02258B8C
-	.public ov47_02258C44
-	.public ov47_02258CC0
-	.public ov47_02258CEC
-	.public ov47_02258D18
-	.public ov47_02258D44
-	.public ov47_02258D78
-	.public ov47_02258DA8
-	.public ov47_02258DB4
-	.public ov47_022591F8
-	.public ov47_0225921C
-	.public ov47_02259228
-	.public ov47_02259278
-	.public ov47_022592B4
-	.public ov47_02259318
-	.public ov47_02259384
-	.public ov47_022593A0
-	.public ov47_022593B4
-	.public ov47_022593CC
-	.public ov47_02259404
-	.public ov47_02259430
-	.public ov47_02259448
-	.public ov47_0225945C
-	.public ov47_0225946C
-	.public ov47_02259968
-	.public ov47_0225999C
-	.public ov47_02259B30
-	.public ov47_02259D24
-	.public ov47_02259D40
-	.public ov47_02259D58
-	.public ov47_02259DA4
-	.public ov47_02259DCC
+	.public WiFiPlazaSurvey_VBlankCB
+	.public WiFiPlazaSurvey_InitGraphics
+	.public WiFiPlazaSurvey_FreeGraphics
+	.public WiFiPlazaSurvey_RenderSprites
+	.public WiFiPlazaSurvey_DoVBlankUpdates
+	.public WiFiPlazaSurvey_FreeBgs
+	.public WiFiPlazaSurvey_FreeSpriteSystem
+	.public WiFiPlazaSurvey_FreeMessages
+	.public WiFiPlazaSurvey_GetMessage
+	.public WiFiPlazaSurvey_GetQuestionTextFromMsg
+	.public WiFiPlazaSurvey_GetAnswerTextFromMsg
+	.public WiFiPlazaSurvey_BufferPlayerName
+	.public WiFiPlazaSurveyAnswer_Init
+	.public WiFiPlazaSurveyAnswer_Main
+	.public WiFiPlazaSurveyAnswer_UpdateCursor
+	.public WiFiPlazaSurveyAnswer_StartCursorAnim
+	.public WiFiPlazaSurvey_InitMessageBox
+	.public WiFiPlazaSurvey_FreeMessageBox
+	.public WiFiPlazaSurvey_PrintMessage
+	.public WiFiPlazaSurvey_PrintMessageInstant
+	.public WiFiPlazaSurvey_StartWaitingIcon
+	.public WiFiPlazaSurvey_StopWaitingIcon
+	.public WiFiPlazaSurvey_IsMessageFinished
+	.public WiFiPlazaSurvey_ClearMessageBox
+	.public WiFiPlazaSurvey_CreateYesNoMenu
+	.public WiFiPlazaSurvey_HandleYesNoMenu
+	.public WiFiPlazaSurvey_DestroyYesNoMenu
+	.public WiFiPlazaSurveyResults_Init
+	.public WiFiPlazaSurveyResults_Main
+	.public WiFiPlazaSurveyResults_Teardown
+	.public WiFiPlazaSurveyResults_PrintTitle
+	.public WiFiPlazaSurveyResults_StartBars
+	.public WiFiPlazaSurvey_FreeQuestion
+	.public WiFiPlazaSurvey_GetQuestionText
+	.public WiFiPlazaSurvey_GetAnswerText
+	.public WiFiPlazaSurvey_GetBarLength
+	.public WiFiPlazaSurvey_CountPlazaAnswers
 
-	thumb_func_start ov47_02259D74
-ov47_02259D74: ; 0x02259D74
+	thumb_func_start WiFiPlazaSurvey_LoadLastWeekTotals
+WiFiPlazaSurvey_LoadLastWeekTotals: ; 0x02259D74
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	mov r6, #0
@@ -68,4 +68,4 @@ _02259D84:
 	cmp r6, #3
 	blt _02259D84
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov47_02259D74
+	thumb_func_end WiFiPlazaSurvey_LoadLastWeekTotals

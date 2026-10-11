@@ -103,7 +103,7 @@ void sub_020754C0(SysTask *task, void *ptr) {
             *read = 0;
             *end = 0;
         }
-        if (ov12_02264334(work->battle, &buffer[*read]) == TRUE) {
+        if (BattleController_RecvLinkData(work->battle, &buffer[*read]) == TRUE) {
             *read += (buffer[*read + 2] | (buffer[*read + 3] << 8)) + 4;
         }
         break;

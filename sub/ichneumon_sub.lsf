@@ -135,38 +135,9 @@ Autoload EXT_WRAM
 	Object lib/src/wmsp_disconnect_ind.o
 	Object lib/src/wmsp_start_mp.o
 	Object lib/src/wmsp_set_mp_data.o
-	Object lib/src/to90_arm7_sub_ext_wram_run54.o
-	Object lib/src/to90_arm7_sub_ext_wram_run55.o
-	Object lib/src/to90_arm7_sub_ext_wram_run56.o
-	Object lib/src/to90_arm7_sub_ext_wram_run57.o
-	Object lib/src/to90_arm7_sub_ext_wram_run58.o
-	Object lib/src/to90_arm7_sub_ext_wram_run59.o
-	Object lib/src/to90_arm7_sub_ext_wram_run60.o
-	Object lib/src/to90_arm7_sub_ext_wram_run61.o
-	Object lib/src/to90_arm7_sub_ext_wram_run62.o
-	Object lib/src/to90_arm7_sub_ext_wram_run63.o
-	Object lib/src/to90_arm7_sub_ext_wram_run64.o
-	Object lib/src/to90_arm7_sub_ext_wram_run65.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_18_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run66.o
-	Object lib/src/to90_arm7_sub_ext_wram_run67.o
-	Object lib/src/to90_arm7_sub_ext_wram_run68.o
-	Object lib/src/to90_arm7_sub_ext_wram_run69.o
-	Object lib/src/to90_arm7_sub_ext_wram_run70.o
-	Object lib/src/to90_arm7_sub_ext_wram_run71.o
-	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_19_residual_1_r01.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_19_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run72.o
-	Object lib/src/to90_arm7_sub_ext_wram_run73.o
-	Object lib/src/to90_arm7_sub_ext_wram_run74.o
-	Object lib/src/to90_arm7_sub_ext_wram_run75.o
-	Object lib/src/to90_arm7_sub_ext_wram_run76.o
-	Object lib/src/to90_arm7_sub_ext_wram_run77.o
-	Object lib/src/to90_arm7_sub_ext_wram_run78.o
-	Object lib/src/to90_arm7_sub_ext_wram_run79.o
-	Object lib/src/to90_arm7_sub_ext_wram_run80.o
-	Object lib/src/to90_arm7_sub_ext_wram_run81.o
-	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_1_r01.o
+	Object lib/src/wmsp_param.o
+	Object lib/src/wmsp_valarm.o
+	Object lib/src/wmsp_send_queue_init.o
 	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_20_r01.o
 	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_r01.o
 	Object lib/src/op90_op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_residual_1_r01.o

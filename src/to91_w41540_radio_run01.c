@@ -1,7 +1,7 @@
 #include "global.h"
 #include <string.h>
 #pragma force_active on
-#include "communication_manager_internal.h"
+#include "communication_core_internal.h"
 #include "overlay_37_work.h"
 typedef Ov37Work W;
 void ov37_021E755C(W*);

@@ -59,5 +59,5 @@ void ov12_0225B1A8(BattleSystem *battleSystem, OpponentData *opponentData) {
         waitingIcon = WaitingIcon_New(BattleSystem_GetWindow(battleSystem, 0), 1);
         ov12_0223BB80(battleSystem, waitingIcon);
     }
-    ov12_0226430C(battleSystem, opponentData->unk194, 0x37);
+    BattleController_EmitCommandComplete(battleSystem, opponentData->unk194, 0x37);
 }

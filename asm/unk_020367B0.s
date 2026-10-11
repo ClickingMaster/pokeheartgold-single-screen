@@ -2,11 +2,11 @@
 	.include "unk_02035900.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_020367B0
-sub_020367B0: ; 0x020367B0
+	thumb_func_start Comm_OnParentFrameReceived
+Comm_OnParentFrameReceived: ; 0x020367B0
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
-	ldr r0, _020368E4 ; =_021D4140
+	ldr r0, _020368E4 ; =gCommCore
 	add r5, r1, #0
 	ldr r2, [r0, #8]
 	ldr r0, _020368E8 ; =0x00000668
@@ -18,7 +18,7 @@ sub_020367B0: ; 0x020367B0
 	ldrb r0, [r5]
 	cmp r0, #0xb
 	bne _020367DA
-	bl sub_02035FF0
+	bl Comm_GetTransferMode
 	cmp r0, #1
 	bne _020367D6
 _020367D4:
@@ -27,11 +27,11 @@ _020367D6:
 	add r5, r5, #1
 	b _020367E2
 _020367DA:
-	bl sub_02035FF0
+	bl Comm_GetTransferMode
 	cmp r0, #0
 	beq _020368E0
 _020367E2:
-	ldr r0, _020368E4 ; =_021D4140
+	ldr r0, _020368E4 ; =gCommCore
 	ldr r1, _020368EC ; =0x000006B2
 	ldr r0, [r0, #8]
 	ldrb r1, [r0, r1]
@@ -45,7 +45,7 @@ _020367F6:
 	ldr r1, _020368EC ; =0x000006B2
 	mov r2, #0
 	strb r2, [r0, r1]
-	bl sub_02035FF0
+	bl Comm_GetTransferMode
 	cmp r0, #1
 	bne _020368B4
 	bl sub_0203993C
@@ -69,7 +69,7 @@ _0203682E:
 	ldrb r0, [r5]
 	cmp r0, #0xff
 	bne _02036846
-	ldr r0, _020368E4 ; =_021D4140
+	ldr r0, _020368E4 ; =gCommCore
 	mov r2, #1
 	ldr r1, [r0, #8]
 	ldr r0, _020368F0 ; =0x00000694
@@ -79,7 +79,7 @@ _0203682E:
 	and r2, r0
 	b _02036854
 _02036846:
-	ldr r0, _020368E4 ; =_021D4140
+	ldr r0, _020368E4 ; =gCommCore
 	mov r2, #1
 	ldr r1, [r0, #8]
 	ldr r0, _020368F0 ; =0x00000694
@@ -100,7 +100,7 @@ _02036862:
 	add r5, r5, r6
 	b _020368A6
 _0203686A:
-	ldr r0, _020368E4 ; =_021D4140
+	ldr r0, _020368E4 ; =gCommCore
 	ldr r3, [r0, #8]
 	ldr r0, _020368F4 ; =0x0000069E
 	add r1, r3, r4
@@ -125,7 +125,7 @@ _02036882:
 	ldr r0, [sp]
 	mov r1, #0
 	add r5, r5, r0
-	ldr r0, _020368E4 ; =_021D4140
+	ldr r0, _020368E4 ; =gCommCore
 	ldr r0, [r0, #8]
 	add r2, r0, r4
 	ldr r0, _020368F4 ; =0x0000069E
@@ -139,7 +139,7 @@ _020368A6:
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}
 _020368B4:
-	ldr r1, _020368E4 ; =_021D4140
+	ldr r1, _020368E4 ; =gCommCore
 	ldrb r3, [r5, #1]
 	ldr r2, [r1, #8]
 	ldr r0, _020368F0 ; =0x00000694
@@ -164,7 +164,7 @@ _020368E0:
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-_020368E4: .word _021D4140
+_020368E4: .word gCommCore
 _020368E8: .word 0x00000668
 _020368EC: .word 0x000006B2
 _020368F0: .word 0x00000694
@@ -172,4 +172,4 @@ _020368F4: .word 0x0000069E
 _020368F8: .word 0x0000051C
 _020368FC: .word 0x0000054C
 _02036900: .word 0x000004A4
-	thumb_func_end sub_020367B0
+	thumb_func_end Comm_OnParentFrameReceived

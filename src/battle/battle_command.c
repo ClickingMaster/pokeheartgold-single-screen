@@ -919,7 +919,7 @@ BOOL BtlCmd_PlayMoveAnimationOnMons(BattleSystem *battleSystem, BattleContext *c
 
     if ((!(ctx->battleStatus & BATTLE_STATUS_MOVE_ANIMATIONS_OFF) && BattleSystem_AreBattleAnimationsOn(battleSystem) == TRUE) || move == MOVE_TRANSFORM) {
         ctx->battleStatus |= BATTLE_STATUS_MOVE_ANIMATIONS_OFF;
-        ov12_0226343C(battleSystem, ctx, move, attacker, defender);
+        BattleController_SetMoveAnimationForBattlers(battleSystem, ctx, move, attacker, defender);
     }
 
     if (!BattleSystem_AreBattleAnimationsOn(battleSystem)) {
@@ -5285,7 +5285,7 @@ BOOL BtlCmd_RestoreSprite(BattleSystem *battleSystem, BattleContext *ctx) {
 
     int side = BattleScriptReadWord(ctx);
     int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
-    ov12_02263F8C(battleSystem, ctx, battlerId);
+    BattleController_EmitRestoreSprite(battleSystem, ctx, battlerId);
 
     return FALSE;
 }
@@ -5315,7 +5315,7 @@ BOOL BtlCmd_SpriteToOAM(BattleSystem *battleSystem, BattleContext *ctx) {
         for (battlerId = 0; battlerId < maxBattlers; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
             if (!(opponentData->battlerType & BATTLER_TYPE_IS_ENEMY)) {
-                ov12_02264038(battleSystem, battlerId);
+                BattleController_EmitSpriteToOAM(battleSystem, battlerId);
             }
         }
         break;
@@ -5323,13 +5323,13 @@ BOOL BtlCmd_SpriteToOAM(BattleSystem *battleSystem, BattleContext *ctx) {
         for (battlerId = 0; battlerId < maxBattlers; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
             if (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) {
-                ov12_02264038(battleSystem, battlerId);
+                BattleController_EmitSpriteToOAM(battleSystem, battlerId);
             }
         }
         break;
     default:
         battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
-        ov12_02264038(battleSystem, battlerId);
+        BattleController_EmitSpriteToOAM(battleSystem, battlerId);
         break;
     }
 
@@ -5350,7 +5350,7 @@ BOOL BtlCmd_OAMToSprite(BattleSystem *battleSystem, BattleContext *ctx) {
         for (battlerId = 0; battlerId < maxBattlers; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
             if (!(opponentData->battlerType & BATTLER_TYPE_IS_ENEMY)) {
-                ov12_02264054(battleSystem, battlerId);
+                BattleController_EmitOAMToSprite(battleSystem, battlerId);
             }
         }
         break;
@@ -5358,13 +5358,13 @@ BOOL BtlCmd_OAMToSprite(BattleSystem *battleSystem, BattleContext *ctx) {
         for (battlerId = 0; battlerId < maxBattlers; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
             if (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) {
-                ov12_02264054(battleSystem, battlerId);
+                BattleController_EmitOAMToSprite(battleSystem, battlerId);
             }
         }
         break;
     default:
         battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
-        ov12_02264054(battleSystem, battlerId);
+        BattleController_EmitOAMToSprite(battleSystem, battlerId);
         break;
     }
 
@@ -6118,7 +6118,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
     case STATE_GET_EXP_GAUGE:
         // Only animate the gauge for an active battler.
         if (slot == data->ctx->selectedMonIndex[expBattler]) {
-            ov12_02263564(data->battleSystem, data->ctx, expBattler, data->tempData[DATA_GET_EXP_PREV_PROGRESS_TO_NEXT_LEVEL]);
+            BattleController_EmitExpBarUpdate(data->battleSystem, data->ctx, expBattler, data->tempData[DATA_GET_EXP_PREV_PROGRESS_TO_NEXT_LEVEL]);
             data->tempData[DATA_GET_EXP_PREV_PROGRESS_TO_NEXT_LEVEL] = 0;
             data->state++;
         } else {
@@ -6137,7 +6137,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
             // Only play the special level-up animation for an active battler.
             if (data->ctx->selectedMonIndex[expBattler] == slot) {
                 BattleController_EmitSetStatus2Effect(data->battleSystem, data->ctx, expBattler, 8);
-                ov12_0226399C(data->battleSystem, expBattler);
+                BattleController_EmitExpBarFullFlash(data->battleSystem, expBattler);
             }
 
             data->state = STATE_GET_EXP_WAIT_LEVEL_UP_EFFECT;
@@ -6166,7 +6166,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
             }
 
             data->ctx->levelUpMons |= MaskOfFlagNo(slot);
-            ov12_02263A1C(data->battleSystem, data->ctx, expBattler);
+            BattleController_EmitRefreshHealthbar(data->battleSystem, data->ctx, expBattler);
             // "{0} grew to Lv. {1}!"
             msg.id = msg_0197_00003;
             msg.tag = TAG_NICKNAME_NUM;
@@ -6368,7 +6368,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
 
     case STATE_GET_EXP_MAKE_IT_FORGET_WAIT:
         if (!TextPrinterCheckActive(data->tempData[DATA_GET_EXP_PRINTER_ID])) {
-            ov12_02263D14(data->battleSystem, expBattler, data->tempData[DATA_GET_EXP_MOVE_TO_LEARN], slot);
+            BattleController_EmitSelectMoveToForget(data->battleSystem, expBattler, data->tempData[DATA_GET_EXP_MOVE_TO_LEARN], slot);
             data->state++;
         }
         break;
@@ -6712,7 +6712,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
     case STATE_GET_POKEMON_CALCULATE_SHAKES:
         data->tempData[DATA_GET_POKEMON_FRAME_COUNTER]--;
         if (data->tempData[DATA_GET_POKEMON_FRAME_COUNTER] == 0) { // After 23 frames have passed...
-            ov12_022628A0(data->battleSystem, battlerId, data->ballID);
+            BattleController_EmitPokemonEnterBall(data->battleSystem, battlerId, data->ballID);
             data->tempData[DATA_GET_POKEMON_BALL_SHAKES_TOTAL] = BattleSystem_CalculateBallShakes(data->battleSystem, data->ctx);
 
             if (data->tempData[DATA_GET_POKEMON_BALL_SHAKES_TOTAL] < BALL_SHAKE_MAX) {

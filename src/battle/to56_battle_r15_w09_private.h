@@ -50,7 +50,7 @@ typedef struct ActionSelectData {
 } ActionSelectData;
 
 void ov12_0225DAD4(SysTask *, CommandSetData *);
-void ov12_0226430C(BattleSystem *, int, int);
-void ov12_02262F24(BattleSystem *, int, u32);
+void BattleController_EmitCommandComplete(BattleSystem *, int, int);
+void BattleController_ReplyCommandSelection(BattleSystem *, int, u32);
 void PlaySE(u16);
 #endif

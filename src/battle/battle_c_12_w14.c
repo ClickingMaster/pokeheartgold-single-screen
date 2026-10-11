@@ -8,7 +8,7 @@
 #define U16(p, n) (*(u16 *)((u8 *)(p) + (n)))
 #define U32(p, n) (*(u32 *)((u8 *)(p) + (n)))
 typedef struct BattleSystem BattleSystem;
-void ov12_0226430C(BattleSystem *, int, int);
+void BattleController_EmitCommandComplete(BattleSystem *, int, int);
 void ov12_0225FF80(SysTask *, void *); void ov12_0226037C(SysTask *, void *);
 void ov12_02260584(SysTask *, void *); void ov12_022609F8(SysTask *, void *);
 void ov12_02260B30(SysTask *, void *); void ov12_02260D84(SysTask *, void *);
@@ -20,4 +20,4 @@ void ov12_0225B060(BattleSystem *, void *, void *); void ov12_0225B200(BattleSys
 void ov12_0225B3A0(BattleSystem *, void *, void *); void ov12_0225B434(BattleSystem *, void *, void *);
 void ov12_0225B454(BattleSystem *, void *, void *);
 
-void ov12_0225B3A0(BattleSystem *b, void *c, void *m) { u8 w[80]; ov12_02261CA8(b,m,w,U8(c,0x194)); ov07_02234A20(w,5); ov12_0226430C(b,U8(c,0x194),U8(m,0)); }
+void ov12_0225B3A0(BattleSystem *b, void *c, void *m) { u8 w[80]; ov12_02261CA8(b,m,w,U8(c,0x194)); ov07_02234A20(w,5); BattleController_EmitCommandComplete(b,U8(c,0x194),U8(m,0)); }

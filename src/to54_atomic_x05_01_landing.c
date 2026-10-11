@@ -36,7 +36,7 @@ extern int PartyGauge_IsArrowTaskFinished(void *);
 extern void PartyGauge_StartHideTask(void *, int, int);
 extern int PartyGauge_IsHideTaskFinished(void *);
 extern void PartyGauge_DeleteAndFreeResources(void *);
-extern void ov12_0226430C(void *, int, int);
+extern void BattleController_EmitCommandComplete(void *, int, int);
 extern void Heap_Free(void *);
 extern void SysTask_Destroy(void *);
 extern void GF_AssertFail(void);
@@ -92,7 +92,7 @@ void ov12_02260BA0(void *task, PartyGaugeWork *work) {
         }
         break;
     default:
-        ov12_0226430C(work->battleSystem, work->battler, work->result);
+        BattleController_EmitCommandComplete(work->battleSystem, work->battler, work->result);
         Heap_Free(work);
         SysTask_Destroy(task);
         break;
@@ -134,7 +134,7 @@ void ov12_02260C58(void *task, PartyGaugeWork *work) {
         }
         break;
     default:
-        ov12_0226430C(work->battleSystem, work->battler, work->result);
+        BattleController_EmitCommandComplete(work->battleSystem, work->battler, work->result);
         Heap_Free(work);
         SysTask_Destroy(task);
         break;
@@ -149,7 +149,7 @@ void ov12_02260CDC(void *task, BattleObjectWork *work) {
         work->holder->object = ov07_0221FB90(work->battleSystem, 5, work->battler);
         work->state++;
     } else {
-        ov12_0226430C(work->battleSystem, work->battler, work->result);
+        BattleController_EmitCommandComplete(work->battleSystem, work->battler, work->result);
         Heap_Free(work);
         SysTask_Destroy(task);
     }
@@ -165,7 +165,7 @@ void ov12_02260D28(void *task, BattleObjectWork *work) {
     }
     ov07_0221FE3C(work->holder->object, work->battler);
     work->holder->object = NULL;
-    ov12_0226430C(work->battleSystem, work->battler, work->result);
+    BattleController_EmitCommandComplete(work->battleSystem, work->battler, work->result);
     Heap_Free(work);
     SysTask_Destroy(task);
 }
@@ -219,7 +219,7 @@ void ov12_02260D84(void *task, PaletteTaskWork *work) {
         }
         break;
     case 2:
-        ov12_0226430C(work->battleSystem, work->battler, work->result);
+        BattleController_EmitCommandComplete(work->battleSystem, work->battler, work->result);
         Heap_Free(work);
         SysTask_Destroy(task);
         break;

@@ -48,7 +48,7 @@ void ov12_02258E54(BattleSystem *battleSystem, OpponentData *opponentData);
 void ov12_02258E7C(BattleSystem *battleSystem, OpponentData *opponentData, int a2);
 OpponentData *ov12_02258D74(BattleSystem *battleSystem, const u8 *data);
 void ov12_02260EA4(BattleSystem *battleSystem, OpponentData *opponentData);
-void ov12_022621C4(BattleSystem *battleSystem, int a1);
+void BattleController_ProcessQueue(BattleSystem *battleSystem, int a1);
 void ov12_02265FD4(UnkBattleSystemSub17C *dest, BattleSystem *battleSystem, s32 idx, s32 terrain);
 void BgConfig_InitBattleMenuBackgrounds(BgConfig *bgConfig);
 void LoadUserFrameGfx2WithFill(BgConfig *bgConfig, u8 bgId, u16 baseTile, u8 color, u8 type, enum HeapID heapId);

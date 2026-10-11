@@ -34,6 +34,6 @@ void ov12_022597EC(BattleSystem *battleSystem, OpponentDataR4W18 *opponentData) 
             BattleSystem_SetBattleOutcomeFlags(battleSystem, 1);
         }
     }
-    ov12_0226430C(battleSystem, RAW(opponentData)[0x194], command->command);
+    BattleController_EmitCommandComplete(battleSystem, RAW(opponentData)[0x194], command->command);
     ov12_02259928(opponentData);
 }

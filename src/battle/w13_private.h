@@ -14,7 +14,7 @@
 #include "pokepic.h"
 #include "sound.h"
 
-void ov12_0226430C(BattleSystem *battleSystem, int battlerId, int value);
+void BattleController_EmitCommandComplete(BattleSystem *battleSystem, int battlerId, int value);
 
 void ov12_02258EB0(BattleSystem *battleSystem, OpponentData *opponentData);
 u8 ov12_02258BA0(BattleSystem *battleSystem, int battlerId);
@@ -31,7 +31,7 @@ void ov12_0225F960(SysTask *task, void *data);
 void ov12_0225FC80(SysTask *task, void *data);
 void ov12_0225FCA0(SysTask *task, void *data);
 void ov12_0225B434(BattleSystem *battleSystem, OpponentData *opponentData, u8 *buffer);
-void ov12_02262F24(BattleSystem *battleSystem, int battlerId, u32 value);
+void BattleController_ReplyCommandSelection(BattleSystem *battleSystem, int battlerId, u32 value);
 u8 ov12_02261258(OpponentData *opponentData);
 u32 ov12_02261264(OpponentData *opponentData);
 void *ov12_02261270(OpponentData *opponentData);

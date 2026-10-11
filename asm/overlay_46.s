@@ -87,58 +87,58 @@
 	.public _022592AE
 	.public _022592B0
 	.public _022592B4
-	.public _02259598
-	.public ov46_02258800
-	.public ov46_0225892C
-	.public ov46_02258C38
-	.public ov46_02258CB4
-	.public ov46_02258DA8
-	.public ov46_02258EFC
-	.public ov46_02258F78
-	.public ov46_02259210
-	.public ov46_022595A4
-	.public ov46_022595B4
-	.public ov46_022595DC
-	.public _02259598
-	.public ov46_02258800
-	.public ov46_0225892C
-	.public ov46_02258C38
-	.public ov46_02258CB4
-	.public ov46_02258DA8
-	.public ov46_02258EFC
-	.public ov46_02258F70
-	.public ov46_02258F78
-	.public ov46_02259210
-	.public ov46_022592B8
-	.public ov46_022592E0
-	.public ov46_022592EC
-	.public ov46_02259374
-	.public ov46_022593F8
-	.public ov46_02259450
-	.public ov46_02259474
-	.public ov46_02259494
-	.public ov46_022594E0
-	.public ov46_02259534
-	.public ov46_02259550
+	.public sWiFiPlazaConnectBgLayers
+	.public WiFiPlazaConnect_Init
+	.public WiFiPlazaConnect_Main
+	.public WiFiPlazaConnect_Exit
+	.public WiFiPlazaConnect_DisconnectInit
+	.public WiFiPlazaConnect_DisconnectMain
+	.public WiFiPlazaConnect_DisconnectExit
+	.public WiFiPlazaConnect_InitGraphics
+	.public WiFiPlazaConnect_PaletteCycleTask
+	.public sWiFiPlazaConnectGraphicsModes
+	.public sWiFiPlazaConnectGraphicsBanks
+	.public sWiFiPlazaConnectBgTemplates
+	.public sWiFiPlazaConnectBgLayers
+	.public WiFiPlazaConnect_Init
+	.public WiFiPlazaConnect_Main
+	.public WiFiPlazaConnect_Exit
+	.public WiFiPlazaConnect_DisconnectInit
+	.public WiFiPlazaConnect_DisconnectMain
+	.public WiFiPlazaConnect_DisconnectExit
+	.public WiFiPlazaConnect_VBlankCB
+	.public WiFiPlazaConnect_InitGraphics
+	.public WiFiPlazaConnect_PaletteCycleTask
+	.public WiFiPlazaConnect_FreeBgs
+	.public WiFiPlazaConnect_DoBgUpdates
+	.public WiFiPlazaConnect_InitMessageBox
+	.public WiFiPlazaConnect_PrintMessage
+	.public WiFiPlazaConnect_ClearMessageBox
+	.public WiFiPlazaConnect_StartWaitingIcon
+	.public WiFiPlazaConnect_StopWaitingIcon
+	.public WiFiPlazaConnect_FreeMessageBox
+	.public WiFiPlazaConnect_PrintCenteredTitle
+	.public WiFiPlazaConnect_BufferErrorCode
+	.public WiFiPlazaConnect_CreateYesNoPrompt
 	.include "overlay_46.inc"
 	.include "global.inc"
 
 	.text
-	.public ov46_02258F70
-	.public ov46_022592B8
-	.public ov46_022592E0
-	.public ov46_022592EC
-	.public ov46_02259374
-	.public ov46_022593F8
-	.public ov46_02259450
-	.public ov46_02259474
-	.public ov46_02259494
-	.public ov46_022594E0
-	.public ov46_02259534
-	.public ov46_02259550
+	.public WiFiPlazaConnect_VBlankCB
+	.public WiFiPlazaConnect_FreeBgs
+	.public WiFiPlazaConnect_DoBgUpdates
+	.public WiFiPlazaConnect_InitMessageBox
+	.public WiFiPlazaConnect_PrintMessage
+	.public WiFiPlazaConnect_ClearMessageBox
+	.public WiFiPlazaConnect_StartWaitingIcon
+	.public WiFiPlazaConnect_StopWaitingIcon
+	.public WiFiPlazaConnect_FreeMessageBox
+	.public WiFiPlazaConnect_PrintCenteredTitle
+	.public WiFiPlazaConnect_BufferErrorCode
+	.public WiFiPlazaConnect_CreateYesNoPrompt
 
-	thumb_func_start ov46_02258800
-ov46_02258800: ; 0x02258800
+	thumb_func_start WiFiPlazaConnect_Init
+WiFiPlazaConnect_Init: ; 0x02258800
 	push {r4, r5, lr}
 	sub sp, #0x1c
 	mov r2, #2
@@ -168,7 +168,7 @@ ov46_02258800: ; 0x02258800
 	str r0, [r4, #0x10]
 	add r0, r5, #0
 	mov r1, #0x77
-	bl ov46_02258F78
+	bl WiFiPlazaConnect_InitGraphics
 	mov r0, #2
 	str r0, [sp]
 	mov r0, #0x13
@@ -188,7 +188,7 @@ ov46_02258800: ; 0x02258800
 	ldr r1, [r5, #0xc]
 	add r0, #0x40
 	mov r2, #1
-	bl ov46_022592EC
+	bl WiFiPlazaConnect_InitMessageBox
 	mov r0, #2
 	str r0, [sp]
 	mov r0, #0x13
@@ -209,7 +209,7 @@ ov46_02258800: ; 0x02258800
 	add r0, #0x70
 	mov r2, #1
 	lsl r3, r3, #4
-	bl ov46_022592EC
+	bl WiFiPlazaConnect_InitMessageBox
 	mov r0, #4
 	str r0, [sp]
 	str r0, [sp, #4]
@@ -229,7 +229,7 @@ ov46_02258800: ; 0x02258800
 	add r0, #0xa0
 	mov r2, #0
 	lsl r3, r3, #4
-	bl ov46_022592EC
+	bl WiFiPlazaConnect_InitMessageBox
 	mov r0, #5
 	str r0, [sp]
 	mov r2, #1
@@ -249,12 +249,12 @@ ov46_02258800: ; 0x02258800
 	add r0, r5, #0
 	ldr r1, [r5, #0xc]
 	add r0, #0x10
-	bl ov46_022592EC
+	bl WiFiPlazaConnect_InitMessageBox
 	add r0, r5, #0
 	add r0, #0x10
 	mov r1, #0x15
-	bl ov46_022594E0
-	ldr r0, _02258924 ; =ov46_02258F70
+	bl WiFiPlazaConnect_PrintCenteredTitle
+	ldr r0, _02258924 ; =WiFiPlazaConnect_VBlankCB
 	add r1, r5, #0
 	bl Main_SetVBlankIntrCB
 	bl HBlankInterruptDisable
@@ -269,13 +269,13 @@ ov46_02258800: ; 0x02258800
 _02258918: .word 0x00000404
 _0225891C: .word 0x0000047D
 _02258920: .word 0x0000030A
-_02258924: .word ov46_02258F70
+_02258924: .word WiFiPlazaConnect_VBlankCB
 _02258928: .word gSystem + 0x60
-	thumb_func_end ov46_02258800
+	thumb_func_end WiFiPlazaConnect_Init
 
 
-	thumb_func_start ov46_0225892C
-ov46_0225892C: ; 0x0225892C
+	thumb_func_start WiFiPlazaConnect_Main
+WiFiPlazaConnect_Main: ; 0x0225892C
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	add r6, r0, #0
@@ -343,11 +343,11 @@ _022589A4:
 	add r0, r5, #0
 	add r0, #0x70
 	mov r1, #0x11
-	bl ov46_02259374
+	bl WiFiPlazaConnect_PrintMessage
 	mov r1, #0x23
 	ldr r0, [r5, #0xc]
 	lsl r1, r1, #4
-	bl ov46_02259550
+	bl WiFiPlazaConnect_CreateYesNoPrompt
 	add r5, #0xd0
 	str r0, [r5]
 	ldr r0, [r4]
@@ -383,7 +383,7 @@ _022589F2:
 	bl YesNoPrompt_Destroy
 	add r5, #0x40
 	add r0, r5, #0
-	bl ov46_022593F8
+	bl WiFiPlazaConnect_ClearMessageBox
 	mov r0, #7
 	str r0, [r4]
 	b _02258C28
@@ -396,10 +396,10 @@ _02258A0A:
 	add r0, r5, #0
 	add r0, #0x70
 	mov r1, #0x17
-	bl ov46_02259374
+	bl WiFiPlazaConnect_PrintMessage
 	add r5, #0x70
 	add r0, r5, #0
-	bl ov46_02259450
+	bl WiFiPlazaConnect_StartWaitingIcon
 	ldr r0, [r4]
 	add r0, r0, #1
 	str r0, [r4]
@@ -414,7 +414,7 @@ _02258A32:
 _02258A42:
 	add r5, #0x70
 	add r0, r5, #0
-	bl ov46_02259474
+	bl WiFiPlazaConnect_StopWaitingIcon
 	mov r0, #9
 	str r0, [r4]
 _02258A4E:
@@ -437,7 +437,7 @@ _02258A64:
 _02258A74:
 	add r0, r5, #0
 	add r0, #0x70
-	bl ov46_02259474
+	bl WiFiPlazaConnect_StopWaitingIcon
 	mov r0, #9
 	str r0, [r4]
 _02258A80:
@@ -446,7 +446,7 @@ _02258A80:
 	beq _02258B20
 	add r0, r5, #0
 	add r0, #0x70
-	bl ov46_02259474
+	bl WiFiPlazaConnect_StopWaitingIcon
 	ldr r0, [r5]
 	bl Save_GameStats_Get
 	mov r1, #0x21 ; SCORE_EVENT_WIFI_PLAZA_ACCESSED
@@ -484,18 +484,18 @@ _02258ADC:
 	bl ov45_0222B270
 	add r0, r5, #0
 	add r0, #0x40
-	bl ov46_022593F8
+	bl WiFiPlazaConnect_ClearMessageBox
 	add r0, r5, #0
 	add r0, #0x70
-	bl ov46_022593F8
+	bl WiFiPlazaConnect_ClearMessageBox
 	add r0, r5, #0
 	add r0, #0xa0
 	add r1, r7, #0
-	bl ov46_02259534
+	bl WiFiPlazaConnect_BufferErrorCode
 	add r5, #0xa0
 	ldr r1, [sp, #0xc]
 	add r0, r5, #0
-	bl ov46_02259374
+	bl WiFiPlazaConnect_PrintMessage
 	ldr r0, [r4]
 	add r0, r0, #1
 	str r0, [r4]
@@ -535,15 +535,15 @@ _02258B46:
 _02258B4C:
 	add r0, r5, #0
 	add r0, #0xa0
-	bl ov46_022593F8
+	bl WiFiPlazaConnect_ClearMessageBox
 	add r0, r5, #0
 	add r0, #0x40
 	mov r1, #0x58
-	bl ov46_02259374
+	bl WiFiPlazaConnect_PrintMessage
 	mov r1, #0x23
 	ldr r0, [r5, #0xc]
 	lsl r1, r1, #4
-	bl ov46_02259550
+	bl WiFiPlazaConnect_CreateYesNoPrompt
 	add r5, #0xd0
 	str r0, [r5]
 	ldr r0, [r4]
@@ -583,13 +583,13 @@ _02258BA6:
 _02258BB4:
 	add r0, r5, #0
 	add r0, #0x40
-	bl ov46_022593F8
+	bl WiFiPlazaConnect_ClearMessageBox
 	add r0, r5, #0
 	add r0, #0x70
-	bl ov46_022593F8
+	bl WiFiPlazaConnect_ClearMessageBox
 	add r5, #0xa0
 	add r0, r5, #0
-	bl ov46_022593F8
+	bl WiFiPlazaConnect_ClearMessageBox
 	bl sub_020397C8
 	ldr r0, [r4]
 	add r0, r0, #1
@@ -601,10 +601,10 @@ _02258BD8:
 	bne _02258C28
 	add r0, r5, #0
 	add r0, #0x40
-	bl ov46_022593F8
+	bl WiFiPlazaConnect_ClearMessageBox
 	add r5, #0x70
 	add r0, r5, #0
-	bl ov46_022593F8
+	bl WiFiPlazaConnect_ClearMessageBox
 	mov r0, #7
 	str r0, [r4]
 	b _02258C28
@@ -640,11 +640,11 @@ _02258C28:
 	nop
 _02258C30: .word 0x0000FFFF
 _02258C34: .word gSystem
-	thumb_func_end ov46_0225892C
+	thumb_func_end WiFiPlazaConnect_Main
 
 
-	thumb_func_start ov46_02258C38
-ov46_02258C38: ; 0x02258C38
+	thumb_func_start WiFiPlazaConnect_Exit
+WiFiPlazaConnect_Exit: ; 0x02258C38
 	push {r4, lr}
 	bl OverlayManager_GetData
 	add r4, r0, #0
@@ -668,18 +668,18 @@ ov46_02258C38: ; 0x02258C38
 _02258C68:
 	add r0, r4, #0
 	add r0, #0x40
-	bl ov46_02259494
+	bl WiFiPlazaConnect_FreeMessageBox
 	add r0, r4, #0
 	add r0, #0x70
-	bl ov46_02259494
+	bl WiFiPlazaConnect_FreeMessageBox
 	add r0, r4, #0
 	add r0, #0xa0
-	bl ov46_02259494
+	bl WiFiPlazaConnect_FreeMessageBox
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov46_02259494
+	bl WiFiPlazaConnect_FreeMessageBox
 	add r0, r4, #0
-	bl ov46_022592B8
+	bl WiFiPlazaConnect_FreeBgs
 	add r0, r4, #0
 	mov r1, #0
 	add r0, #0xd8
@@ -696,11 +696,11 @@ _02258C68:
 	pop {r4, pc}
 	.balign 4, 0
 _02258CB0: .word gSystem + 0x60
-	thumb_func_end ov46_02258C38
+	thumb_func_end WiFiPlazaConnect_Exit
 
 
-	thumb_func_start ov46_02258CB4
-ov46_02258CB4: ; 0x02258CB4
+	thumb_func_start WiFiPlazaConnect_DisconnectInit
+WiFiPlazaConnect_DisconnectInit: ; 0x02258CB4
 	push {r4, r5, lr}
 	sub sp, #0x1c
 	mov r2, #2
@@ -723,7 +723,7 @@ ov46_02258CB4: ; 0x02258CB4
 	mov r1, #0x77
 	str r0, [r4]
 	add r0, r4, #0
-	bl ov46_02258F78
+	bl WiFiPlazaConnect_InitGraphics
 	mov r0, #2
 	str r0, [sp]
 	mov r0, #0x13
@@ -744,7 +744,7 @@ ov46_02258CB4: ; 0x02258CB4
 	add r0, #0x40
 	mov r2, #1
 	lsl r3, r3, #4
-	bl ov46_022592EC
+	bl WiFiPlazaConnect_InitMessageBox
 	mov r0, #4
 	str r0, [sp]
 	str r0, [sp, #4]
@@ -764,7 +764,7 @@ ov46_02258CB4: ; 0x02258CB4
 	add r0, #0xa0
 	mov r2, #0
 	lsl r3, r3, #4
-	bl ov46_022592EC
+	bl WiFiPlazaConnect_InitMessageBox
 	mov r0, #5
 	str r0, [sp]
 	mov r2, #1
@@ -784,13 +784,13 @@ ov46_02258CB4: ; 0x02258CB4
 	add r0, r4, #0
 	ldr r1, [r4, #0xc]
 	add r0, #0x10
-	bl ov46_022592EC
+	bl WiFiPlazaConnect_InitMessageBox
 	add r0, r4, #0
 	add r0, #0x10
 	mov r1, #0x15
-	bl ov46_022594E0
+	bl WiFiPlazaConnect_PrintCenteredTitle
 	bl WirelessStatusIcon_Create
-	ldr r0, _02258DA0 ; =ov46_02258F70
+	ldr r0, _02258DA0 ; =WiFiPlazaConnect_VBlankCB
 	add r1, r4, #0
 	bl Main_SetVBlankIntrCB
 	bl HBlankInterruptDisable
@@ -804,13 +804,13 @@ ov46_02258CB4: ; 0x02258CB4
 	nop
 _02258D98: .word 0x00000404
 _02258D9C: .word 0x0000030A
-_02258DA0: .word ov46_02258F70
+_02258DA0: .word WiFiPlazaConnect_VBlankCB
 _02258DA4: .word gSystem + 0x60
-	thumb_func_end ov46_02258CB4
+	thumb_func_end WiFiPlazaConnect_DisconnectInit
 
 
-	thumb_func_start ov46_02258DA8
-ov46_02258DA8: ; 0x02258DA8
+	thumb_func_start WiFiPlazaConnect_DisconnectMain
+WiFiPlazaConnect_DisconnectMain: ; 0x02258DA8
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r6, r0, #0
@@ -869,7 +869,7 @@ _02258E14:
 	add r0, r5, #0
 	add r0, #0x40
 	mov r1, #0x1a
-	bl ov46_02259374
+	bl WiFiPlazaConnect_PrintMessage
 	bl sub_020393C8
 	cmp r0, #0
 	bne _02258E2E
@@ -881,14 +881,14 @@ _02258E2E:
 	add r5, #0x40
 	str r0, [r4]
 	add r0, r5, #0
-	bl ov46_02259450
+	bl WiFiPlazaConnect_StartWaitingIcon
 	b _02258EF2
 _02258E3C:
 	mov r0, #3
 	add r5, #0x40
 	str r0, [r4]
 	add r0, r5, #0
-	bl ov46_02259450
+	bl WiFiPlazaConnect_StartWaitingIcon
 	b _02258EF2
 _02258E4A:
 	bl ov45_0222ED7C
@@ -923,7 +923,7 @@ _02258E7E:
 	bne _02258EF2
 	add r5, #0x70
 	add r0, r5, #0
-	bl ov46_02259474
+	bl WiFiPlazaConnect_StopWaitingIcon
 	ldr r0, [r6, #4]
 	bl ov45_0222B270
 	mov r0, #7
@@ -933,7 +933,7 @@ _02258E9A:
 	add r0, r5, #0
 	add r0, #0x40
 	mov r1, #0x1b
-	bl ov46_02259374
+	bl WiFiPlazaConnect_PrintMessage
 	mov r0, #0x5a
 	str r0, [r5, #8]
 	mov r0, #8
@@ -969,7 +969,7 @@ _02258EDC:
 	beq _02258EF2
 	add r5, #0x40
 	add r0, r5, #0
-	bl ov46_02259474
+	bl WiFiPlazaConnect_StopWaitingIcon
 	add sp, #0xc
 	mov r0, #1
 	pop {r3, r4, r5, r6, pc}
@@ -979,11 +979,11 @@ _02258EF2:
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
 _02258EF8: .word 0x0000FFFF
-	thumb_func_end ov46_02258DA8
+	thumb_func_end WiFiPlazaConnect_DisconnectMain
 
 
-	thumb_func_start ov46_02258EFC
-ov46_02258EFC: ; 0x02258EFC
+	thumb_func_start WiFiPlazaConnect_DisconnectExit
+WiFiPlazaConnect_DisconnectExit: ; 0x02258EFC
 	push {r4, lr}
 	bl OverlayManager_GetData
 	add r4, r0, #0
@@ -1007,15 +1007,15 @@ ov46_02258EFC: ; 0x02258EFC
 _02258F2C:
 	add r0, r4, #0
 	add r0, #0x40
-	bl ov46_02259494
+	bl WiFiPlazaConnect_FreeMessageBox
 	add r0, r4, #0
 	add r0, #0xa0
-	bl ov46_02259494
+	bl WiFiPlazaConnect_FreeMessageBox
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov46_02259494
+	bl WiFiPlazaConnect_FreeMessageBox
 	add r0, r4, #0
-	bl ov46_022592B8
+	bl WiFiPlazaConnect_FreeBgs
 	add r0, r4, #0
 	mov r1, #0
 	add r0, #0xd8
@@ -1032,4 +1032,4 @@ _02258F2C:
 	pop {r4, pc}
 	.balign 4, 0
 _02258F6C: .word gSystem + 0x60
-	thumb_func_end ov46_02258EFC
+	thumb_func_end WiFiPlazaConnect_DisconnectExit

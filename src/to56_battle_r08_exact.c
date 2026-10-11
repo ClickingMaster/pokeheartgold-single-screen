@@ -28,7 +28,7 @@ void ov12_0225ACB0(BattleSystem *battleSystem, OpponentData *opponentData, const
     }
     *((u8 *)opponentData + 0x72) = command[1];
     ov12_0226498C(&opponentData->hpBar, *(u32 *)((u8 *)opponentData + 0x50), 0x100);
-    ov12_0226430C(battleSystem, opponentData->unk194, command[0]);
+    BattleController_EmitCommandComplete(battleSystem, opponentData->unk194, command[0]);
 }
 
 void ov12_0225ACE8(BattleSystem *battleSystem, OpponentData *opponentData, const u8 *command) {

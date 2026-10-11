@@ -2,11 +2,11 @@
 	.include "unk_02035900.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02036144
-sub_02036144: ; 0x02036144
+	thumb_func_start Comm_Update
+Comm_Update: ; 0x02036144
 	push {r4, lr}
 	bl sub_0203817C
-	ldr r3, _02036214 ; =_021D4140
+	ldr r3, _02036214 ; =gCommCore
 	ldr r0, [r3, #8]
 	cmp r0, #0
 	beq _020361FE
@@ -22,7 +22,7 @@ sub_02036144: ; 0x02036144
 	mov r0, #0
 	strb r0, [r3, #1]
 	bl sub_02035F4C
-	ldr r0, _02036214 ; =_021D4140
+	ldr r0, _02036214 ; =gCommCore
 	ldr r1, _0203621C ; =gSystem
 	ldr r0, [r0, #8]
 	ldr r2, _02036220 ; =0x0000065C
@@ -34,7 +34,7 @@ sub_02036144: ; 0x02036144
 	strh r1, [r0, r2]
 	bl sub_02036BE4
 	bl sub_02036298
-	ldr r0, _02036214 ; =_021D4140
+	ldr r0, _02036214 ; =gCommCore
 	ldr r1, _02036220 ; =0x0000065C
 	ldr r3, [r0, #8]
 	mov r0, #2
@@ -42,10 +42,10 @@ sub_02036144: ; 0x02036144
 	lsl r0, r0, #0xe
 	and r0, r2
 	strh r0, [r3, r1]
-	bl sub_02035FF0
+	bl Comm_GetTransferMode
 	cmp r0, #0
 	bne _020361A4
-	bl sub_020372E4
+	bl Comm_ReceiveFromParent
 _020361A4:
 	bl Comm_GetLocalNetId
 	cmp r0, #0
@@ -63,17 +63,17 @@ _020361C6:
 	bl Comm_GetLocalNetId
 	cmp r0, #0
 	beq _020361D6
-	bl sub_02035FF0
+	bl Comm_GetTransferMode
 	cmp r0, #1
 	bne _020361DA
 _020361D6:
-	bl sub_02037334
+	bl Comm_ReceiveFromChildren
 _020361DA:
-	ldr r0, _02036214 ; =_021D4140
+	ldr r0, _02036214 ; =gCommCore
 	mov r1, #1
 	strb r1, [r0, #1]
 _020361E0:
-	ldr r0, _02036214 ; =_021D4140
+	ldr r0, _02036214 ; =gCommCore
 	ldr r1, [r0, #8]
 	ldr r0, _02036228 ; =0x00000694
 	ldrh r0, [r1, r0]
@@ -81,7 +81,7 @@ _020361E0:
 	bl Comm_GetLocalNetId
 	cmp r0, #0
 	bne _020361F8
-	bl sub_02035E9C
+	bl Comm_ResetDisconnectedNetIds
 _020361F8:
 	bl sub_0203611C
 	b _02036204
@@ -95,10 +95,10 @@ _02036204:
 	mov r0, #1
 	pop {r4, pc}
 	nop
-_02036214: .word _021D4140
+_02036214: .word gCommCore
 _02036218: .word 0x000006B9
 _0203621C: .word gSystem
 _02036220: .word 0x0000065C
 _02036224: .word 0x00007FFF
 _02036228: .word 0x00000694
-	thumb_func_end sub_02036144
+	thumb_func_end Comm_Update

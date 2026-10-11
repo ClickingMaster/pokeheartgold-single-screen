@@ -52,7 +52,7 @@ void ov12_0225CE28(SysTask *, TrainerEncounterData *);
 void ov12_0225D138(SysTask *, TrainerThrowBallData *);
 void ov12_0225D644(SysTask *, TrainerThrowBallData *);
 void PlaySE(u16);
-void ov12_0226430C(BattleSystem *, int, int);
+void BattleController_EmitCommandComplete(BattleSystem *, int, int);
 BOOL ov12_02261DC8(TrainerEncounterData *, ManagedSprite *);
 void ov07_0223449C(UnkBallData *, int);
 void ov07_022344A8(UnkBallData *, s16, s16);

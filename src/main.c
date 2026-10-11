@@ -101,7 +101,7 @@ void NitroMain(void) {
                 DoSoftReset(0); // no return
             }
         }
-        if (sub_02036144()) {
+        if (Comm_Update()) {
             sub_02000F60();
             OS_GetTick();
             Main_RunOverlayManager();
@@ -166,7 +166,7 @@ void RegisterMainOverlay(FSOverlayID overlayId, const OverlayManagerTemplate *te
 }
 
 static void sub_02000F14(void) {
-    sub_02036144();
+    Comm_Update();
     OS_WaitIrq(TRUE, OS_IE_VBLANK);
     gSystem.vblankCounter++;
     gSystem.frameCounter = 0;

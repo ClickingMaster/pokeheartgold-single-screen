@@ -17,5 +17,5 @@ void ov12_0225B3D4(void *arg0, const u8 *battle, const u8 *data) {
         PlaySE_SetPan(0x6FD, pan);
         break;
     }
-    ov12_0226430C(arg0, battle[0x194], data[0]);
+    BattleController_EmitCommandComplete(arg0, battle[0x194], data[0]);
 }

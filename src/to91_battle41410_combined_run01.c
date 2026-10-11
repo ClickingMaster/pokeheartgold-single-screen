@@ -19,9 +19,9 @@ extern int ov07_0221C394(u8*);
 extern BOOL ov07_0221C3B0(void*);
 extern BOOL ov07_0221C3C0(void*);
 extern void ov12_02261F38(void*,int,int,void*,void*,int,int,int,int);
-extern void ov12_022643C8(BattleSystem*,BattleContext*,void*,int,int,int,int,int);
+extern void BattleController_InitMoveAnimData(BattleSystem*,BattleContext*,void*,int,int,int,int,int);
 extern void ov07_02234A20(W*,int);
-extern void ov12_0226430C(BattleSystem*,int,int);
+extern void BattleController_EmitCommandComplete(BattleSystem*,int,int);
 extern const u8 ov12_0226D120[];
 extern const u16 ov12_0226D15A[];
 extern Ov07Work *ov07_02232694(enum HeapID,const Ov07Input *);
@@ -75,13 +75,13 @@ void ov12_0225C18C(SysTask *task,void *data) {
  case 6:
  if(sub_02017068(ov12_0223B750(work->system),work->battler)==1 &&Pokepic_IsAnimFinished(work->context->pic)==0) {
  ov07_02233ECC(work->objectC);ov07_02232AB8(work->object8);
- if(work->shiny){ov12_022643C8(work->system,0,&message1,1,11,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message1.source);work->state=7;}else work->state=8;
+ if(work->shiny){BattleController_InitMoveAnimData(work->system,0,&message1,1,11,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message1.source);work->state=7;}else work->state=8;
  }break;
  case 7:case 9:case 11:ov07_0221C394((u8*)engine);if(ov07_0221C3B0(engine)==0){ov07_0221C3C0(engine);work->state++;}break;
- case 8:if(work->value98){ov12_022643C8(work->system,0,&message2,1,15,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message2.source);work->state++;}else work->state=255;break;
+ case 8:if(work->value98){BattleController_InitMoveAnimData(work->system,0,&message2,1,15,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message2.source);work->state++;}else work->state=255;break;
  case 10:ov12_02261CA8(work->system,&work->source,&source.params,work->battler);ov07_02234A20(&source.display,5);
- ov12_022643C8(work->system,0,&message3,1,16,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message3.source);work->context->flag=1;work->state++;break;
- default:ov12_0226430C(work->system,work->battler,work->command);Heap_Free(work);SysTask_Destroy(task);break;
+ BattleController_InitMoveAnimData(work->system,0,&message3,1,16,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message3.source);work->context->flag=1;work->state++;break;
+ default:BattleController_EmitCommandComplete(work->system,work->battler,work->command);Heap_Free(work);SysTask_Destroy(task);break;
  }
 }
 
@@ -96,24 +96,24 @@ void ov12_0225C6C8(SysTask *task,void *data) {
  work->context->pic=ov12_022612A4(work->system,manager,&work->template,(ov07_022377F4+6)[work->type][0],(ov07_022377F4+6)[work->type][1],ov07_022377F4[work->type][2],work->height,work->value90,work->value91,work->value93,work->battler,script,0);
  Pokepic_SetAttr(work->context->pic,12,256);Pokepic_SetAttr(work->context->pic,13,256);
  Pokepic_SetAttr(work->context->pic,44,0);Pokepic_SetAttr(work->context->pic,6,0);work->state++;}break;
- case 1:ov12_022643C8(work->system,0,&message1,1,41,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message1.source);work->state++;break;
+ case 1:BattleController_InitMoveAnimData(work->system,0,&message1,1,41,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message1.source);work->state++;break;
  case 3:
  if(work->facing==2)Pokepic_SetAttr(work->context->pic,45,0);
  ov12_02261F38(work->system,work->battler,work->type,work->context->pic,work->context->narc,work->species,work->form,work->facing,work->personality);work->state=4;break;
  case 4:
  if(sub_02017068(ov12_0223B750(work->system),work->battler)==1 && Pokepic_IsAnimFinished(work->context->pic)==0) {
- if(work->shiny) {ov12_022643C8(work->system,0,&message2,1,11,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message2.source);work->state=5;}
+ if(work->shiny) {BattleController_InitMoveAnimData(work->system,0,&message2,1,11,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message2.source);work->state=5;}
  else work->state=6;
  }break;
  case 2:case 5:case 7:case 9:
  ov07_0221C394((u8 *)engine);if(ov07_0221C3B0(engine)==0){ov07_0221C3C0(engine);work->state++;}break;
  case 6:
- if(work->value98) {ov12_022643C8(work->system,0,&message3,1,15,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message3.source);work->state++;}
+ if(work->value98) {BattleController_InitMoveAnimData(work->system,0,&message3,1,15,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message3.source);work->state++;}
  else work->state=255;break;
  case 8:
  ov12_02261CA8(work->system,&work->source,&source.params,work->battler);ov07_02234A20(&source.display,5);
- ov12_022643C8(work->system,0,&message4,1,16,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message4.source);
+ BattleController_InitMoveAnimData(work->system,0,&message4,1,16,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message4.source);
  work->context->flag=1;work->state++;break;
- default:ov12_0226430C(work->system,work->battler,work->command);Heap_Free(work);SysTask_Destroy(task);break;
+ default:BattleController_EmitCommandComplete(work->system,work->battler,work->command);Heap_Free(work);SysTask_Destroy(task);break;
  }
 }

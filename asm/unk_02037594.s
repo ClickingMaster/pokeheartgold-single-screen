@@ -5,7 +5,7 @@
 	thumb_func_start sub_02037594
 sub_02037594: ; 0x02037594
 	push {r3, lr}
-	ldr r0, _0203760C ; =_021D4140
+	ldr r0, _0203760C ; =gCommCore
 	ldr r2, [r0, #8]
 	cmp r2, #0
 	beq _02037608
@@ -17,10 +17,10 @@ sub_02037594: ; 0x02037594
 	beq _020375E4
 	pop {r3, pc}
 _020375AC:
-	bl sub_02035FF0
+	bl Comm_GetTransferMode
 	cmp r0, #1
 	bne _020375C4
-	ldr r1, _0203760C ; =_021D4140
+	ldr r1, _0203760C ; =gCommCore
 	mov r0, #0xb
 	ldr r2, [r1, #8]
 	ldr r1, _02037614 ; =0x000006AC
@@ -28,7 +28,7 @@ _020375AC:
 	bl sub_020376E0
 	b _020375D4
 _020375C4:
-	ldr r1, _0203760C ; =_021D4140
+	ldr r1, _0203760C ; =gCommCore
 	mov r0, #0xb
 	ldr r2, [r1, #8]
 	ldr r1, _02037614 ; =0x000006AC
@@ -38,7 +38,7 @@ _020375C4:
 _020375D4:
 	cmp r0, #0
 	beq _02037608
-	ldr r0, _0203760C ; =_021D4140
+	ldr r0, _0203760C ; =gCommCore
 	mov r2, #2
 	ldr r1, [r0, #8]
 	ldr r0, _02037610 ; =0x000006AB
@@ -51,12 +51,12 @@ _020375E4:
 	bl sub_020376E0
 	cmp r0, #0
 	beq _02037608
-	ldr r0, _0203760C ; =_021D4140
+	ldr r0, _0203760C ; =gCommCore
 	ldr r1, [r0, #8]
 	ldr r0, _02037614 ; =0x000006AC
 	ldrb r0, [r1, r0]
-	bl sub_02035FA8
-	ldr r0, _0203760C ; =_021D4140
+	bl Comm_RequestTransferMode
+	ldr r0, _0203760C ; =gCommCore
 	mov r2, #0
 	ldr r1, [r0, #8]
 	ldr r0, _02037610 ; =0x000006AB
@@ -64,7 +64,7 @@ _020375E4:
 _02037608:
 	pop {r3, pc}
 	nop
-_0203760C: .word _021D4140
+_0203760C: .word gCommCore
 _02037610: .word 0x000006AB
 _02037614: .word 0x000006AC
 	thumb_func_end sub_02037594

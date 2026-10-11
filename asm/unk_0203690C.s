@@ -3,10 +3,10 @@
 	.include "global.inc"
 	.include "communication_payload_send.inc"
 	.text
-	thumb_func_start sub_0203690C
-sub_0203690C: ; 0x0203690C
+	thumb_func_start Comm_OnChildFrameReceived
+Comm_OnChildFrameReceived: ; 0x0203690C
 	push {r4, r5, r6, lr}
-	ldr r3, _020369BC ; =_021D4140
+	ldr r3, _020369BC ; =gCommCore
 	add r5, r0, #0
 	ldr r0, [r3, #8]
 	ldr r2, _020369C0 ; =0x0000066C
@@ -31,7 +31,7 @@ sub_0203690C: ; 0x0203690C
 _0203693A:
 	mov r1, #0
 	strb r1, [r0, r5]
-	bl sub_02035FF0
+	bl Comm_GetTransferMode
 	cmp r0, #1
 	bne _02036992
 	bl sub_0203993C
@@ -47,7 +47,7 @@ _0203693A:
 	mov r0, #2
 	tst r0, r1
 	bne _02036982
-	ldr r0, _020369BC ; =_021D4140
+	ldr r0, _020369BC ; =gCommCore
 	mov r3, #0x4b
 	ldr r0, [r0, #8]
 	lsl r3, r3, #4
@@ -60,7 +60,7 @@ _0203693A:
 	add r3, #0xf5
 	bl sub_02033AF0
 _02036982:
-	ldr r0, _020369BC ; =_021D4140
+	ldr r0, _020369BC ; =gCommCore
 	ldr r1, [r0, #8]
 	ldr r0, _020369C4 ; =0x00000696
 	add r1, r1, r0
@@ -76,7 +76,7 @@ _02036992:
 	mov r0, #2
 	tst r0, r1
 	bne _020369BA
-	ldr r0, _020369BC ; =_021D4140
+	ldr r0, _020369BC ; =gCommCore
 	ldr r3, _020369C8 ; =0x0000051C
 	ldr r0, [r0, #8]
 	mov r2, #0xb
@@ -90,15 +90,15 @@ _02036992:
 _020369BA:
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-_020369BC: .word _021D4140
+_020369BC: .word gCommCore
 _020369C0: .word 0x0000066C
 _020369C4: .word 0x00000696
 _020369C8: .word 0x0000051C
-	thumb_func_end sub_0203690C
+	thumb_func_end Comm_OnChildFrameReceived
 	thumb_func_start sub_020369CC
 sub_020369CC: ; 0x020369CC
 	push {r4, r5, r6, lr}
-	ldr r3, _02036A8C ; =_021D4140
+	ldr r3, _02036A8C ; =gCommCore
 	add r5, r0, #0
 	ldr r0, [r3, #8]
 	ldr r2, _02036A90 ; =0x0000066C
@@ -123,7 +123,7 @@ sub_020369CC: ; 0x020369CC
 _020369FA:
 	mov r1, #0
 	strb r1, [r0, r5]
-	bl sub_02035FF0
+	bl Comm_GetTransferMode
 	cmp r0, #1
 	bne _02036A88
 	bl sub_0203993C
@@ -139,7 +139,7 @@ _020369FA:
 	ldr r2, _02036A94 ; =0x00000694
 	cmp r0, #0xff
 	bne _02036A38
-	ldr r0, _02036A8C ; =_021D4140
+	ldr r0, _02036A8C ; =gCommCore
 	mov r3, #1
 	ldr r1, [r0, #8]
 	lsl r3, r5
@@ -148,7 +148,7 @@ _020369FA:
 	and r0, r3
 	b _02036A44
 _02036A38:
-	ldr r0, _02036A8C ; =_021D4140
+	ldr r0, _02036A8C ; =gCommCore
 	mov r3, #1
 	ldr r1, [r0, #8]
 	lsl r3, r5
@@ -163,7 +163,7 @@ _02036A44:
 	beq _02036A88
 	cmp r0, #0xe
 	beq _02036A88
-	ldr r1, _02036A8C ; =_021D4140
+	ldr r1, _02036A8C ; =gCommCore
 	ldr r2, _02036A98 ; =0x0000069E
 	ldr r1, [r1, #8]
 	add r3, r1, r5
@@ -183,7 +183,7 @@ _02036A68:
 	sub r2, r6, #1
 	add r3, #0xcb
 	bl sub_02033AF0
-	ldr r0, _02036A8C ; =_021D4140
+	ldr r0, _02036A8C ; =gCommCore
 	mov r2, #0
 	ldr r0, [r0, #8]
 	add r1, r0, r5
@@ -192,7 +192,7 @@ _02036A68:
 _02036A88:
 	pop {r4, r5, r6, pc}
 	nop
-_02036A8C: .word _021D4140
+_02036A8C: .word gCommCore
 _02036A90: .word 0x0000066C
 _02036A94: .word 0x00000694
 _02036A98: .word 0x0000069E

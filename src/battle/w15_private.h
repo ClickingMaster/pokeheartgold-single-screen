@@ -14,7 +14,7 @@ struct PokepicMoveTask;
 struct ManagedSpriteDeleteTask;
 struct ManagedSpriteMoveTask;
 
-void ov12_0226430C(BattleSystem *battleSystem, int battlerId, int command);
+void BattleController_EmitCommandComplete(BattleSystem *battleSystem, int battlerId, int command);
 void ov12_0225CDB8(SysTask *task, struct PokepicMoveTask *work);
 void ov12_0225D890(SysTask *task, struct ManagedSpriteDeleteTask *work);
 void ov12_0225D990(SysTask *task, struct ManagedSpriteMoveTask *work);

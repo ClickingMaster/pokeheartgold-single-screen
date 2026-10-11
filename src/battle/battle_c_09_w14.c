@@ -8,7 +8,7 @@
 #define U16(p, n) (*(u16 *)((u8 *)(p) + (n)))
 #define U32(p, n) (*(u32 *)((u8 *)(p) + (n)))
 typedef struct BattleSystem BattleSystem;
-void ov12_0226430C(BattleSystem *, int, int);
+void BattleController_EmitCommandComplete(BattleSystem *, int, int);
 void ov12_0225FF80(SysTask *, void *); void ov12_0226037C(SysTask *, void *);
 void ov12_02260584(SysTask *, void *); void ov12_022609F8(SysTask *, void *);
 void ov12_02260B30(SysTask *, void *); void ov12_02260D84(SysTask *, void *);

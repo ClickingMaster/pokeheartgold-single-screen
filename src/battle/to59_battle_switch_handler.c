@@ -5,8 +5,8 @@
 
 void ov12_02261EB8(BattleSystem *);
 void ov12_02261ED4(BattleSystem *);
-void ov12_0226311C(BattleSystem *, int, u32);
-void ov12_0226430C(BattleSystem *, int, int);
+void BattleController_ReplyTargetSelection(BattleSystem *, int, u32);
+void BattleController_EmitCommandComplete(BattleSystem *, int, int);
 void ov12_0225E760(SysTask *, void *);
 
 void ov12_0225E760(SysTask *task, void *data)
@@ -36,8 +36,8 @@ void ov12_0225E760(SysTask *task, void *data)
             break;
         }
     }
-    ov12_0226311C(*(BattleSystem **)work, work[0xD], value);
-    ov12_0226430C(*(BattleSystem **)work, work[0xD], work[0xC]);
+    BattleController_ReplyTargetSelection(*(BattleSystem **)work, work[0xD], value);
+    BattleController_EmitCommandComplete(*(BattleSystem **)work, work[0xD], work[0xC]);
     Heap_Free(work);
     SysTask_Destroy(task);
 }

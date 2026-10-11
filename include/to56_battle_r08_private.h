@@ -50,7 +50,7 @@ typedef struct R4Command {
 
 void ov12_02260418(SysTask *, R4Work *);
 void ov12_022605D0(SysTask *, R4TextWork *);
-void ov12_0226430C(BattleSystem *, int, int);
+void BattleController_EmitCommandComplete(BattleSystem *, int, int);
 void ov12_02261390(BattleSystem *, OpponentData *, const u8 *, BattleMessage *);
 void ov12_02261464(BattleSystem *, OpponentData *, const u8 *, BattleMessage *);
 void ov12_02261544(BattleSystem *, OpponentData *, BattleMessage *);

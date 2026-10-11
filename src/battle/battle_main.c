@@ -242,20 +242,20 @@ BOOL Battle_BattleMain(OverlayManager *man) {
     } else {
         if (battleSystem->unk23FC) {
             battleSystem->unk23FE = BattleContext_Main(battleSystem, battleSystem->ctx);
-            ov12_022621C4(battleSystem, 1);
+            BattleController_ProcessQueue(battleSystem, 1);
         }
         for (i = 0; i < battleSystem->maxBattlers; i++) {
             ov12_02258E54(battleSystem, battleSystem->opponentData[i]);
-            ov12_022621C4(battleSystem, 0);
+            BattleController_ProcessQueue(battleSystem, 0);
         }
         if (!battleSystem->unk23FE) {
             if (battleSystem->unk23FC) {
                 battleSystem->unk23FE = BattleContext_Main(battleSystem, battleSystem->ctx);
-                ov12_022621C4(battleSystem, 1);
+                BattleController_ProcessQueue(battleSystem, 1);
             }
             for (i = 0; i < battleSystem->maxBattlers; i++) {
                 ov12_02258E54(battleSystem, battleSystem->opponentData[i]);
-                ov12_022621C4(battleSystem, 0);
+                BattleController_ProcessQueue(battleSystem, 0);
             }
         }
     }

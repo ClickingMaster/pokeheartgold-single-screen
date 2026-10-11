@@ -62,7 +62,7 @@ extern int PlayerProfile_GetTrainerID_VisibleHalf(void *);
 extern void *Heap_Alloc(int, u32);
 extern void MI_CpuFill8(void *, u8, u32);
 extern void *SysTask_CreateOnMainQueue(void (*)(), int);
-extern void sub_0203778C(void *);
+extern void CommRandom_Init(void *);
 extern void Comm_GetLocalNetId(void);
 extern int Comm_IsNetIdConnected(int);
 extern void *sub_02034818(int);

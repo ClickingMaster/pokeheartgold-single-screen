@@ -104,7 +104,7 @@ void ov12_0225CE28(SysTask *task, TrainerEncounterData *work) {
         }
         work->state = 4;
     case 4:
-        ov12_0226430C(work->battleSystem, work->battlerId, work->command);
+        BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
         break;
@@ -259,7 +259,7 @@ void ov12_0225D138(SysTask *task, TrainerThrowBallData *work) {
         }
         break;
     case 6:
-        ov12_0226430C(work->battleSystem, work->battlerId, work->command);
+        BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
         break;
@@ -320,7 +320,7 @@ void ov12_0225D644(SysTask *task, TrainerThrowBallData *work) {
         }
         break;
     case 2:
-        ov12_0226430C(work->battleSystem, work->battlerId, work->command);
+        BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
         break;

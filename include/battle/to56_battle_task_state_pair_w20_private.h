@@ -58,9 +58,9 @@ typedef struct W20TaskLarge {
 
 void ov12_02261ED4(BattleSystem *);
 void ov12_02261EB8(BattleSystem *);
-void ov12_02262F24(BattleSystem *, u8, u8);
-void ov12_0226430C(BattleSystem *, u8, u8);
-void ov12_022643C8(BattleSystem *, void *, void *, int, int, int, int, int);
+void BattleController_ReplyCommandSelection(BattleSystem *, u8, u8);
+void BattleController_EmitCommandComplete(BattleSystem *, u8, u8);
+void BattleController_InitMoveAnimData(BattleSystem *, void *, void *, int, int, int, int, int);
 void ov12_02261B80(BattleSystem *, void *, void *, void *);
 void ov12_02261CA8(BattleSystem *, W20BattleSource *, W20BattleParams *, u8);
 void ov07_0223494C(void *, int);

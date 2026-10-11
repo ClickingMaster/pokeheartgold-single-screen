@@ -63,7 +63,7 @@ void ov12_0225E250(SysTask *task, BattleWork16 *work) {
             }
             BattleInput_DisableBallGauge(battleInput);
         }
-        ov12_02262FE0(work->battleSystem, work->battlerId, work->input);
+        BattleController_ReplyMoveSelection(work->battleSystem, work->battlerId, work->input);
         work->state++;
         return;
     case 3:
@@ -72,7 +72,7 @@ void ov12_0225E250(SysTask *task, BattleWork16 *work) {
     default:
         if (ov12_022698B0(battleInput) == 1) {
             ov12_0223BB10(work->battleSystem, 1);
-            ov12_0226430C(work->battleSystem, work->battlerId, work->command);
+            BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
             Heap_Free(work);
             SysTask_Destroy(task);
         }
@@ -110,8 +110,8 @@ void ov12_0225E404(SysTask *task, BattleWork16 *work) {
         data = ov12_022506D4(work->battleSystem, ctx, work->battlerId, work->moves[selected - 1], 1, 0);
         ov12_022582B8(work->battleSystem, ctx, 11, work->battlerId, data);
     }
-    ov12_02262FE0(work->battleSystem, work->battlerId, selected);
-    ov12_0226430C(work->battleSystem, work->battlerId, work->command);
+    BattleController_ReplyMoveSelection(work->battleSystem, work->battlerId, selected);
+    BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
     Heap_Free(work);
     SysTask_Destroy(task);
 }

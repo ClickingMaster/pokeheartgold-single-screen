@@ -7,7 +7,7 @@ extern void *BattleSystem_GetPartyMon(void *,int,int);
 extern u32 MaskOfFlagNo(int);
 extern void SetMonData(void *,int,const void *);
 extern void CalcMonLevelAndStats(void *);
-extern void ov12_0226430C(void *,int,int);
+extern void BattleController_EmitCommandComplete(void *,int,int);
 extern void ov12_02259928(Context *);
 void ov12_022591F4(void *,Context *);
 void ov12_022591F4(void *bs,Context *ctx){
@@ -17,5 +17,5 @@ void ov12_022591F4(void *bs,Context *ctx){
  SetMonData(mon,0xa3,&b->hp);SetMonData(mon,0xa0,&b->maxhp);
  if(b->experienceFlag)SetMonData(mon,0x70,&b->experience);
  if(b->levelFlag){SetMonData(mon,0xa,&b->personality);CalcMonLevelAndStats(mon);}
- ov12_0226430C(bs,ctx->battler,b->species);ov12_02259928(ctx);
+ BattleController_EmitCommandComplete(bs,ctx->battler,b->species);ov12_02259928(ctx);
 }

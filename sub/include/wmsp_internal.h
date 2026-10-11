@@ -14,10 +14,11 @@
 #include <nitro/os/system.h>
 #include <nitro/os/thread.h>
 #include <nitro/os/tick.h>
+#include <nitro/os/valarm.h>
 
 // Parent parameters given by the ARM9 (WMSP_SetParentParam).
 typedef struct WmspParentParam {
-    u8 unk_00[4];
+    void *userGameInfo; // ARM9 buffer (WMSP_SetGameInfo)
     u16 userGameInfoLength;
     u16 unk_06;
     u32 ggid;
@@ -35,6 +36,29 @@ typedef struct WmspParentParam {
     u8 unk_38[0x40 - 0x38];
 } WmspParentParam;
 
+// Send queue entry (WMSP_PutSendQueue); the entries are linked through `next` (0xFFFF: end).
+typedef struct WmspSendEntry {
+    u16 next;
+    u16 port;
+    u16 destBitmap;
+    u16 restBitmap; // destinations still to send to
+    u16 sentBitmap;
+    u16 unk_0a;
+    u16 unk_0c;
+    u16 size;
+    u16 unk_10;
+    u16 seqNo;
+    u16 *data;
+    void *callback;
+    void *arg;
+} WmspSendEntry;
+
+// Head and tail entry index of a send queue (0xFFFF: empty).
+typedef struct WmspSendQueue {
+    u16 head;
+    u16 tail;
+} WmspSendQueue;
+
 // Wireless-manager state shared with the ARM9 (wmspW.status).
 typedef struct WmspStatus {
     u16 state;
@@ -42,10 +66,10 @@ typedef struct WmspStatus {
     u32 requestBusy;    // 1 while WMSP_RequestThread runs a request
     u32 unk_08;
     u32 mpActive;
-    u32 unk_10;
+    u32 dcfActive; // 1 from WMSP_StartDCF until WMSP_EndDCF
     u32 unk_14;
-    u32 unk_18;
-    u32 unk_1c;
+    u32 unk_18; // cleared by WMSP_StartDCF, set by WMSP_SetDCFData
+    u32 unk_1c; // child: 1 once the VSync adjustment is done (WmspChildAdjustVSync1/2)
     u8 unk_20[0x30 - 0x20];
     u16 parentSize;
     u16 childSize;
@@ -55,7 +79,8 @@ typedef struct WmspStatus {
     u16 recvSize;
     u16 sendMaxSize;
     u16 recvMaxSize;
-    u8 unk_40[0x44 - 0x40];
+    s16 parentVAlarmLine; // VCOUNT line of the parent's MP VAlarm (WmspParentVAlarmMP)
+    s16 childVAlarmLine;  // VCOUNT line of the child's MP VAlarm (WmspChildVAlarmMP)
     u16 parentInterval;
     u16 childInterval;
     OSTick parentIntervalTick;
@@ -80,19 +105,30 @@ typedef struct WmspStatus {
     u16 unk_8c;
     u16 unk_8e;
     u16 unk_90;
-    u8 unk_92[0xae - 0x92];
+    u8 unk_92[0x9e - 0x92];
+    u16 unk_9e;
+    u16 unk_a0;
+    u8 dcfDestAddress[6]; // WMSP_SetDCFData: destination of the DCF frame
+    u16 *dcfData;
+    u16 dcfDataSize;
     u16 rxBufIndex;
     u8 *rxBuf[2];
-    u16 unk_b8;
+    u16 rxBufSize; // size of each rxBuf (WMSP_StartDCF)
     u16 unk_ba;
     u16 linkLevel;
     u16 minRssi;
-    u16 unk_c0;
+    u16 linkLevelCountdown; // MP frames until linkLevel is updated from minRssi
     u16 unk_c2;
     u16 wepKeyId;
     u16 pwrMgtMode; // WMSP_StartParent: argument of WMSP_WL_MlmePowerManagement
     u32 unk_c8;
-    u8 unk_cc[0xe0 - 0xcc];
+    u16 unk_cc;
+    u16 vAlarmRequestQueued; // 1 while the VAlarm's request 28 (WMSP_VAlarmSetMPData) is queued
+    u32 vsyncTime;           // child: VSync time stamp of the parent, then the next VSync after now
+    u32 lastVSyncWord;       // child: last WMSP_VSYNC_TIME value used
+    u32 vsyncAdjust;         // child: time to the parent's next VSync (0: none)
+    u16 vcountResyncCount;   // parent: VAlarms since VCOUNT was last rewritten
+    u16 unk_de;
     u8 macAddress[6];
     u16 unk_e6;
     WmspParentParam parentParam; // copied from the ARM9 by WMSP_SetParentParam
@@ -112,10 +148,19 @@ typedef struct WmspStatus {
     u16 enableChannel;  // bit n: channel n usable (WMSP_SetParentParam)
     u16 allowedChannel; // bit n-1: channel n allowed (WMSP_StartParent)
     u8 unk_1f8[16][16];
-    u8 unk_2f8[0x738 - 0x2f8];
+    WmspSendEntry sendEntry[32];
+    WmspSendQueue sendFreeQueue;
+    WmspSendQueue unk_6fc[4];
+    WmspSendQueue sendQueue[4]; // per priority (WMSP_PutSendQueue)
+    OSMutex sendQueueMutex;
+    u32 unk_734;
     OSTick lastRecvTick[16]; // per aid; 0: not tracked
     OSTick recvTimeout;
-    u8 unk_7c0[0x7cc - 0x7c0];
+    u8 unk_7c0[2];
+    s16 unk_7c2;
+    u16 unk_7c4;
+    u16 unk_7c6;
+    u8 unk_7c8[0x7cc - 0x7c8];
     u16 unk_7cc;
 } WmspStatus;
 
@@ -170,6 +215,7 @@ extern OSThread wmspIndicateThread;
 extern OSThread wmspRequestThread;
 extern OSAlarm wmspMPIntervalAlarm;
 extern OSAlarm wmspMPAckAlarm;
+extern OSVAlarm wmspVAlarm; // MP timing alarm (WMSP_SetVAlarm)
 
 // ARM veneers (ldr pc) to the functions they are named after.
 void __VENEER_OS_InitMessageQueue(OSMessageQueue *mq, OSMessage *msgArray, s32 msgCount);
@@ -202,6 +248,10 @@ OSIntrMode __VENEER_OS_RestoreInterrupts(OSIntrMode state);
 u32 __VENEER_OS_DisableScheduler(void);
 u32 __VENEER_OS_EnableScheduler(void);
 BOOL __VENEER_OS_SetThreadPriority(OSThread *thread, u32 prio);
+void __VENEER_OS_CancelVAlarm(OSVAlarm *alarm);
+void __VENEER_OS_SetVAlarm(OSVAlarm *alarm, s16 count, s16 delay, OSVAlarmHandler handler, void *arg);
+void __VENEER_OS_LockMutex(OSMutex *mutex);
+void __VENEER_OS_UnlockMutex(OSMutex *mutex);
 
 // wmsp_system.c
 void WMSP_Init(u8 *driver, u32 *config);
@@ -321,12 +371,50 @@ void WMSP_IndicateDisconnectionFromMyself(BOOL parent, u16 aid, void *mac);
 void WmspError_06004CB4(u16 command, u16 result, u16 aidBitmap, u16 disconnected);
 void WmspIndError(u16 a, u16 b, u16 c, u16 d);
 
+// wmsp_param.c
+void WMSP_EndMP(void *request);
+void WmspError_06005328(u16 command, u16 result);
+void WMSP_StartDCF(u32 *request);
+void WMSP_SetDCFData(u32 *request);
+void WMSP_EndDCF(void *request);
+void WMSP_SetWEPKey(u32 *request);
+void WMSP_SetWEPKeyEx(u32 *request);
+void WMSP_SetGameInfo(u32 *request);
+void WMSP_SetBeaconTxRxInd(u32 *request);
+void WMSP_StartTestMode(void *request);
+void WMSP_StopTestMode(void *request);
+void WMSP_SetLifeTime(u32 *request);
+void WMSP_MeasureChannel(u16 *request);
+void WmspError_06005BB8(u16 command, u16 result);
+void WMSP_InitWirelessCounter(void *request);
+void WMSP_GetWirelessCounter(void *request);
+
+// wmsp_valarm.c
+void WMSP_InitVAlarm(void);
+void WMSP_CancelVAlarm(void);
+void WMSP_SetVAlarm(void);
+void WmspChildAdjustVSync1(void *arg);
+void WmspChildAdjustVSync2(void *arg);
+void WmspChildVAlarmMP(void *arg);
+void WmspParentAdjustVSync(void *arg);
+void WmspParentVAlarmMP(void *arg);
+void WmspFromVAlarmToWmspThread(void);
+void WMSP_VAlarmSetMPData(void *request);
+void WMSP_KickNextMP_Parent(u32 *request);
+void WMSP_KickNextMP_Child(void *request);
+void WMSP_KickNextMP_Resume(u32 *request);
+
+// wmsp_send_queue_init.c
+void WMSP_InitSendQueue(void);
+
 // defined in the later WMSP files
+void WMSP_SendMaMP(u16 bitmap);
+void WMSP_ResumeMaMP(u16 bitmap);
+void WMSP_SendMaKeyData(void);
 BOOL WMSP_DisconnectCore(u32 *request, BOOL unk, u16 *result);
 u16 *WMSP_GetBuffer4Callback2Wm9(void);
 void WMSP_ReturnResult2Wm9(void *result);
 void WMSP_CleanSendQueue(u16 aidBitmap);
-void WMSP_CancelVAlarm(void);
 int WMSP_FlushSendQueue(int timeout, u16 aidBitmap);
 void WMSP_ParsePortPacket(u16 aid, u16 port, void *data, u16 length, void *buf);
 void WMSPi_CommonInit(u32 arg);

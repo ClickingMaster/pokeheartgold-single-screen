@@ -25,8 +25,8 @@ typedef struct TargetSelectData {
     u8 unk32;
 } TargetSelectData;
 
-void ov12_0226311C(BattleSystem *bsys, int battlerId, u32 msg);
-void ov12_0226430C(BattleSystem *bsys, int battlerId, int command);
+void BattleController_ReplyTargetSelection(BattleSystem *bsys, int battlerId, u32 msg);
+void BattleController_EmitCommandComplete(BattleSystem *bsys, int battlerId, int command);
 void ov12_0225E568(SysTask *task, TargetSelectData *data);
 // @fn ov12_0225E568
 void ov12_0225E568(SysTask *task, TargetSelectData *data) {
@@ -94,8 +94,8 @@ void ov12_0225E568(SysTask *task, TargetSelectData *data) {
                     input = order[data->input - 1] + 1;
                 }
             }
-            ov12_0226311C(data->battleSystem, data->battlerId, input);
-            ov12_0226430C(data->battleSystem, data->battlerId, data->command);
+            BattleController_ReplyTargetSelection(data->battleSystem, data->battlerId, input);
+            BattleController_EmitCommandComplete(data->battleSystem, data->battlerId, data->command);
             Heap_Free(data);
             SysTask_Destroy(task);
         }

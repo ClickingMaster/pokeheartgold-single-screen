@@ -22,7 +22,7 @@ void ov12_022598F8(BattleSystem *battleSystem, OpponentData *opponentData) {
     Window *window = BattleSystem_GetWindow(battleSystem, 0);
     FillWindowPixelBuffer(window, 0xFF);
     CopyWindowPixelsToVram_TextMode(window);
-    ov12_0226430C(battleSystem, BATTLER_ID(opponentData), 0x42);
+    BattleController_EmitCommandComplete(battleSystem, BATTLER_ID(opponentData), 0x42);
     ov12_02259928(opponentData);
 }
 

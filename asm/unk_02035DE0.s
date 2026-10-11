@@ -2,10 +2,10 @@
 	.include "unk_02035900.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02035DE0
-sub_02035DE0: ; 0x02035DE0
+	thumb_func_start Comm_ResetNetIdBuffers
+Comm_ResetNetIdBuffers: ; 0x02035DE0
 	push {r3, r4, r5, r6, r7, lr}
-	ldr r4, _02035E84 ; =_021D4140
+	ldr r4, _02035E84 ; =gCommCore
 	add r5, r0, #0
 	ldr r0, [r4, #8]
 	ldr r3, _02035E88 ; =0x00000696
@@ -49,7 +49,7 @@ sub_02035DE0: ; 0x02035DE0
 	add r0, r0, r4
 	add r1, r1, r7
 	bl sub_02033AE0
-	ldr r0, _02035E84 ; =_021D4140
+	ldr r0, _02035E84 ; =gCommCore
 	ldr r1, _02035E90 ; =0x0000051C
 	ldr r2, [r0, #8]
 	add r0, r2, r1
@@ -59,7 +59,7 @@ sub_02035DE0: ; 0x02035DE0
 	add r0, r0, r4
 	add r1, r1, r7
 	bl sub_02033AE0
-	ldr r3, _02035E84 ; =_021D4140
+	ldr r3, _02035E84 ; =gCommCore
 	ldr r2, _02035E94 ; =0x000005CA
 	ldr r0, [r3, #8]
 	mov r1, #0xee
@@ -81,10 +81,10 @@ sub_02035DE0: ; 0x02035DE0
 	str r0, [r1, r2]
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_02035E84: .word _021D4140
+_02035E84: .word gCommCore
 _02035E88: .word 0x00000696
 _02035E8C: .word 0x0000068C
 _02035E90: .word 0x0000051C
 _02035E94: .word 0x000005CA
 _02035E98: .word 0x0000FFFF
-	thumb_func_end sub_02035DE0
+	thumb_func_end Comm_ResetNetIdBuffers

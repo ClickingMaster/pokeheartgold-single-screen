@@ -67,7 +67,7 @@ typedef struct CommandSetWorkR4W06 {
 void ov12_0225FFDC(SysTask *, void *);
 void ov12_02260030(SysTask *, void *);
 void ov12_022600F0(SysTask *, void *);
-void ov12_0226430C(BattleSystem *, int, int);
+void BattleController_EmitCommandComplete(BattleSystem *, int, int);
 void ov12_0225A9E0(BattleSystem *, OpponentData *, HealthbarUpdateMessageR4W06 *);
 void ov12_0225AA6C(BattleSystem *, OpponentData *, ExpUpdateMessageR4W06 *);
 void ov12_0225AAE0(BattleSystem *, OpponentData *, CommandSetMessageR4W06 *);
@@ -109,7 +109,7 @@ void ov12_0225AA6C(BattleSystem *battleSystem, OpponentData *opponentData, ExpUp
     if (opponentData->battlerType == 0) {
         hpBar->unk10 = SysTask_CreateOnMainQueue(ov12_02260030, hpBar, 1000);
     } else {
-        ov12_0226430C(hpBar->battleSystem, hpBar->battlerId, hpBar->unk4C);
+        BattleController_EmitCommandComplete(hpBar->battleSystem, hpBar->battlerId, hpBar->unk4C);
     }
 }
 
@@ -148,6 +148,6 @@ void ov12_0225ABB8(BattleSystem *battleSystem, OpponentData *opponentData, u8 *m
     } else {
         pan = 1 - 0x76;
     }
-    ov12_0226430C(battleSystem, opponentData->unk194, message[0]);
+    BattleController_EmitCommandComplete(battleSystem, opponentData->unk194, message[0]);
     PlaySE_SetPan(*(u16 *)&message[2], pan);
 }

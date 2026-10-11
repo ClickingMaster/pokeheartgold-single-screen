@@ -55,7 +55,7 @@
 .public sub_02037474
 .public Comm_GetLocalNetId
 .public sub_020376F8
-.public sub_0203778C
+.public CommRandom_Init
 .public sub_02037AC0
 .public sub_02037B38
 .public sub_02037B5C

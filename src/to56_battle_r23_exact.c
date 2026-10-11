@@ -37,11 +37,11 @@ void ov12_022609F8(SysTask *task, R2Work *work) {
     case 3:
         if (PaletteData_GetSelectedBuffersBitmask(palette) == 0) {
             if (work->child->result == 4) {
-                ov12_02263360(work->battleSystem, work->battler, 0xFF);
+                BattleController_ReplyPartySelection(work->battleSystem, work->battler, 0xFF);
             } else {
-                ov12_02263360(work->battleSystem, work->battler, work->child->result + 1);
+                BattleController_ReplyPartySelection(work->battleSystem, work->battler, work->child->result + 1);
             }
-            ov12_0226430C(work->battleSystem, work->battler, work->command);
+            BattleController_EmitCommandComplete(work->battleSystem, work->battler, work->command);
             Heap_Free(work->child);
             Heap_Free(work);
             SysTask_Destroy(task);

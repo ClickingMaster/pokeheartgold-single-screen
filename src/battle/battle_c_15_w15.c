@@ -58,7 +58,7 @@ void ov12_0225D890(SysTask *task, ManagedSpriteDeleteTask *work)
         SpriteManager_UnloadPlttObjById(spriteManager, work->opponentData->battlerType + 0x4E2A);
         SpriteManager_UnloadCellObjById(spriteManager, work->opponentData->battlerType + 0x4E27);
         SpriteManager_UnloadAnimObjById(spriteManager, work->opponentData->battlerType + 0x4E27);
-        ov12_0226430C(work->battleSystem, work->battlerId, work->command);
+        BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
         break;
@@ -88,7 +88,7 @@ void ov12_0225D990(SysTask *task, ManagedSpriteMoveTask *work)
         ManagedSprite_SetPositionXY(work->sprite, pos[1], pos[0]);
         break;
     case 1:
-        ov12_0226430C(work->battleSystem, work->battlerId, work->command);
+        BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
         break;
@@ -113,7 +113,7 @@ void ov12_0225DA18(SysTask *task, BattleHpBar *hpBar)
         }
         break;
     default:
-        ov12_0226430C(hpBar->battleSystem, hpBar->battlerId, hpBar->unk4C);
+        BattleController_EmitCommandComplete(hpBar->battleSystem, hpBar->battlerId, hpBar->unk4C);
         hpBar->unk10 = NULL;
         SysTask_Destroy(task);
         break;
@@ -127,7 +127,7 @@ void ov12_0225DA8C(SysTask *task, BattleHpBar *hpBar)
             hpBar->script++;
         }
     } else {
-        ov12_0226430C(hpBar->battleSystem, hpBar->battlerId, hpBar->unk4C);
+        BattleController_EmitCommandComplete(hpBar->battleSystem, hpBar->battlerId, hpBar->unk4C);
         hpBar->unk10 = NULL;
         SysTask_Destroy(task);
         BattleHpBar_SetEnabled(hpBar, FALSE);

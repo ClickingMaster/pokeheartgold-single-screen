@@ -211,8 +211,8 @@ void ov12_0225DAD4(SysTask *task, CommandSetData *work) {
         break;
     case 8:
         if (ov12_022698B0(battleInput) == 1) {
-            ov12_02262F24(work->battleSystem, work->battlerId, work->input);
-            ov12_0226430C(work->battleSystem, work->battlerId, work->command);
+            BattleController_ReplyCommandSelection(work->battleSystem, work->battlerId, work->input);
+            BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
             Heap_Free(work);
             SysTask_Destroy(task);
         }

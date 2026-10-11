@@ -78,7 +78,7 @@ typedef struct {
     u64 add;
 } MATHRandContext32;
 
-void sub_0203778C(MATHRandContext32 *arg0);
+void CommRandom_Init(MATHRandContext32 *arg0);
 void sub_02034154(void);
 void sub_02034DE0(void);
 void sub_02036274(void);

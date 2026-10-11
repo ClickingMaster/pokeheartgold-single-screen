@@ -43,7 +43,7 @@ void ov12_02258EB0(BattleSystem *battleSystem, OpponentData *opponentData) {
 void ov12_02258EB4(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleSystem_SetRandTemp(battleSystem, *(u32 *)(COMMAND(opponentData) + 4));
     ov12_02259944(battleSystem, opponentData);
-    ov12_0226430C(battleSystem, BATTLER_ID(opponentData), 1);
+    BattleController_EmitCommandComplete(battleSystem, BATTLER_ID(opponentData), 1);
     ov12_02259928(opponentData);
 }
 
@@ -62,7 +62,7 @@ DEFINE_HANDLER3(ov12_02258F30, ov12_0225A018)
 void ov12_02258F44(BattleSystem *battleSystem, OpponentData *opponentData) {
     int offset = 0x65;
     Pokepic_Delete(opponentData->pokepic);
-    ov12_0226430C(battleSystem, ((u8 *)opponentData)[offset * 4], 7);
+    BattleController_EmitCommandComplete(battleSystem, ((u8 *)opponentData)[offset * 4], 7);
     ov12_02259928(opponentData);
 }
 
@@ -107,7 +107,7 @@ DEFINE_HANDLER3(ov12_0225908C, ov12_0225A914)
 
 void ov12_022590A0(BattleSystem *battleSystem, OpponentData *opponentData) {
     if (Pokepic_GetAttr(opponentData->pokepic, 6) == 1) {
-        ov12_0226430C(battleSystem, BATTLER_ID(opponentData), 0x17);
+        BattleController_EmitCommandComplete(battleSystem, BATTLER_ID(opponentData), 0x17);
     } else {
         ov12_0225A9B0(battleSystem, opponentData);
     }

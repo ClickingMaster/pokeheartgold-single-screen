@@ -135,6 +135,6 @@
 .public ov45_0222F544
 .public ov45_0222F628
 .public ov45_0222F6B0
-.public ov47_02258800
-.public ov47_02258898
-.public ov47_022589A8
+.public WiFiPlazaSurvey_Init
+.public WiFiPlazaSurvey_Main
+.public WiFiPlazaSurvey_Exit

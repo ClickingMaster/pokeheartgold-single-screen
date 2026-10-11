@@ -47,7 +47,7 @@ u32 PaletteData_GetSelectedBuffersBitmask(PaletteData *);
 void ov12_02237B0C(BattleSystem *);
 void ov12_02237BB8(BattleSystem *);
 void ov10_0221BE20(R2Child *);
-void ov12_02263360(BattleSystem *, u32, u32);
-void ov12_0226430C(BattleSystem *, u32, u32);
+void BattleController_ReplyPartySelection(BattleSystem *, u32, u32);
+void BattleController_EmitCommandComplete(BattleSystem *, u32, u32);
 void ov12_022609F8(SysTask *, R2Work *);
 #endif

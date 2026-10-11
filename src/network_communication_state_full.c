@@ -82,7 +82,7 @@ void sub_02037C98(SaveData *saveData, s8 arg1) {
         _021D4150->unk4C = 0;
         _021D4150->unk57 = 0;
         _021D4150->unk4E = arg1;
-        sub_0203778C(&_021D4150->mathRandContext);
+        CommRandom_Init(&_021D4150->mathRandContext);
         Comm_RegisterCommandTable(0, 0, 0);
         if ((arg1 != 9) && (arg1 != 17) && (arg1 != 15)) {
             WirelessStatusIcon_Create();

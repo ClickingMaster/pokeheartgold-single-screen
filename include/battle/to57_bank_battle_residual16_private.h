@@ -39,8 +39,8 @@ typedef struct BattleMoveMenuData16 {
     u8 partySlot;
 } BattleMoveMenuData16;
 
-void ov12_02262FE0(BattleSystem *, int, u32);
-void ov12_0226430C(BattleSystem *, int, int);
+void BattleController_ReplyMoveSelection(BattleSystem *, int, u32);
+void BattleController_EmitCommandComplete(BattleSystem *, int, int);
 void PlaySE(u16);
 void ov12_0225E250(SysTask *, BattleWork16 *);
 void ov12_0225E404(SysTask *, BattleWork16 *);

@@ -45,7 +45,7 @@ void ov12_0225CDB8(SysTask *task, PokepicMoveTask *work)
         }
         break;
     case 1:
-        ov12_0226430C(work->battleSystem, work->battlerId, work->command);
+        BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
         break;

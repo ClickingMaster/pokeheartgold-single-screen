@@ -1,12 +1,12 @@
 #include "w16_private.h"
 
-void ov12_0226311C(BattleSystem *, int, u32);
+void BattleController_ReplyTargetSelection(BattleSystem *, int, u32);
 typedef struct W16Pair {
     u16 first;
     u16 second;
 } W16Pair;
-void ov12_022632C0(BattleSystem *, int, W16Pair);
-void ov12_02262FE0(BattleSystem *, int, u32);
+void BattleController_ReplyItemSelection(BattleSystem *, int, W16Pair);
+void BattleController_ReplyMoveSelection(BattleSystem *, int, u32);
 void ov12_0225E1FC(SysTask *, void *);
 void ov12_0225E154(SysTask *, void *);
 void ov12_0225E4EC(SysTask *, void *);
@@ -19,7 +19,7 @@ extern u8 ov12_0226D141[][2];
 #define DEFINE_TASK_CLEANUP(name, commandOffset, battlerOffset)                          \
     void name(SysTask *task, void *data) {                                               \
         u8 *work = data;                                                                 \
-        ov12_0226430C(*(BattleSystem **)work, work[battlerOffset], work[commandOffset]); \
+        BattleController_EmitCommandComplete(*(BattleSystem **)work, work[battlerOffset], work[commandOffset]); \
         Heap_Free(work);                                                                 \
         SysTask_Destroy(task);                                                           \
     }
@@ -27,8 +27,8 @@ extern u8 ov12_0226D141[][2];
 void ov12_0225E104(SysTask *task, void *data) {
     u8 *work = data;
     u32 value = ov10_022205BC(*(BattleSystem **)work, work[9]);
-    ov12_02262F24(*(BattleSystem **)work, work[9], value);
-    ov12_0226430C(*(BattleSystem **)work, work[9], work[8]);
+    BattleController_ReplyCommandSelection(*(BattleSystem **)work, work[9], value);
+    BattleController_EmitCommandComplete(*(BattleSystem **)work, work[9], work[8]);
     Heap_Free(work);
     SysTask_Destroy(task);
 }
@@ -45,19 +45,19 @@ void ov12_0225E154(SysTask *task, void *data) {
     int numerator = ov12_0226D140[index][0] * stat;
     int chance = numerator / ov12_0226D141[index][0];
     if (BattleSystem_Random(*(BattleSystem **)work) % 0xFF <= chance) {
-        ov12_02262F24(*(BattleSystem **)work, work[9], 4);
+        BattleController_ReplyCommandSelection(*(BattleSystem **)work, work[9], 4);
     } else {
-        ov12_02262F24(*(BattleSystem **)work, work[9], 5);
+        BattleController_ReplyCommandSelection(*(BattleSystem **)work, work[9], 5);
     }
-    ov12_0226430C(*(BattleSystem **)work, work[9], work[8]);
+    BattleController_EmitCommandComplete(*(BattleSystem **)work, work[9], work[8]);
     Heap_Free(work);
     SysTask_Destroy(task);
 }
 
 void ov12_0225E1D4(SysTask *task, void *data) {
     u8 *work = data;
-    ov12_02262F24(*(BattleSystem **)work, work[9], 4);
-    ov12_0226430C(*(BattleSystem **)work, work[9], work[8]);
+    BattleController_ReplyCommandSelection(*(BattleSystem **)work, work[9], 4);
+    BattleController_EmitCommandComplete(*(BattleSystem **)work, work[9], work[8]);
     Heap_Free(work);
     SysTask_Destroy(task);
 }
@@ -71,8 +71,8 @@ void ov12_0225E1FC(SysTask *task, void *data) {
     if (value == 0 || value > 4 || value == 2) {
         ov12_02261EB8(*(BattleSystem **)work);
     }
-    ov12_02262F24(*(BattleSystem **)work, work[9], value);
-    ov12_0226430C(*(BattleSystem **)work, work[9], work[8]);
+    BattleController_ReplyCommandSelection(*(BattleSystem **)work, work[9], value);
+    BattleController_EmitCommandComplete(*(BattleSystem **)work, work[9], work[8]);
     Heap_Free(work);
     SysTask_Destroy(task);
 }

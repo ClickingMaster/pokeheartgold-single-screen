@@ -86,7 +86,7 @@
 .public sub_020376E0
 .public sub_020376F8
 .public sub_02037700
-.public sub_0203778C
+.public CommRandom_Init
 .public sub_0203786C
 .public sub_020378E4
 .public sub_02037988

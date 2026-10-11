@@ -13,7 +13,7 @@ void sub_02058038(FieldSystem *fieldSystem) {
         _021D41C8->fieldSystem = fieldSystem;
         _021D41C8->party = NULL;
         sub_02058034();
-        sub_0203778C(_021D41C8->pad18);
+        CommRandom_Init(_021D41C8->pad18);
     }
 }
 

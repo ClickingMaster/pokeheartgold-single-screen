@@ -5,7 +5,7 @@
 
 #include "safari_zone.h"
 
-BOOL sub_02036144(void);
+BOOL Comm_Update(void);
 BOOL Comm_IsNetIdConnected(u16 arg0);
 BOOL Comm_SendCommand(int arg0, void *arg1, int arg2);
 int Comm_CountConnected(void);

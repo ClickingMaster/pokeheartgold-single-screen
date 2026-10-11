@@ -8,8 +8,8 @@ void ov12_0225FCC0(SysTask *task, W20TaskSmall *work) {
     if (value == 0 || (value != 0xFF && value != 1)) {
         ov12_02261EB8(work->battleSystem);
     }
-    ov12_02262F24(work->battleSystem, work->battlerId, value);
-    ov12_0226430C(work->battleSystem, work->battlerId, work->command);
+    BattleController_ReplyCommandSelection(work->battleSystem, work->battlerId, value);
+    BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
     Heap_Free(work);
     SysTask_Destroy(task);
 }
@@ -27,7 +27,7 @@ void ov12_0225FD14(SysTask *task, W20TaskLarge *work) {
     case 0:
         if (work->source.active && work->source.mode4C == 0 && Pokepic_GetAttr(work->pokepic, 6) == 0) {
             battlerId = work->battlerId;
-            ov12_022643C8(work->battleSystem, NULL, &source0, 1, 15, battlerId, battlerId, 0);
+            BattleController_InitMoveAnimData(work->battleSystem, NULL, &source0, 1, 15, battlerId, battlerId, 0);
             ov12_02261B80(work->battleSystem, work->context, work->object, &source0);
             work->state = 1;
         } else {
@@ -38,7 +38,7 @@ void ov12_0225FD14(SysTask *task, W20TaskLarge *work) {
         ov12_02261CA8(work->battleSystem, &work->source, &params2, work->battlerId);
         ov07_0223494C(&params2, 5);
         battlerId = work->battlerId;
-        ov12_022643C8(work->battleSystem, NULL, &source2, 1, 16, battlerId, battlerId, 0);
+        BattleController_InitMoveAnimData(work->battleSystem, NULL, &source2, 1, 16, battlerId, battlerId, 0);
         ov12_02261B80(work->battleSystem, work->context, work->object, &source2);
         *(int *)((u8 *)work->context + 0x1A0) = 0;
         work->state++;
@@ -64,7 +64,7 @@ void ov12_0225FD14(SysTask *task, W20TaskLarge *work) {
         }
         if (work->source.active && work->source.mode4C == 0 && Pokepic_GetAttr(work->pokepic, 6) == 0) {
             battlerId = work->battlerId;
-            ov12_022643C8(work->battleSystem, NULL, &source6, 1, 15, battlerId, battlerId, 0);
+            BattleController_InitMoveAnimData(work->battleSystem, NULL, &source6, 1, 15, battlerId, battlerId, 0);
             ov12_02261B80(work->battleSystem, work->context, work->object, &source6);
             work->state = 7;
         } else {
@@ -75,13 +75,13 @@ void ov12_0225FD14(SysTask *task, W20TaskLarge *work) {
         ov12_02261CA8(work->battleSystem, &work->source, &params8, work->battlerId);
         ov07_02234A20(&params8, 5);
         battlerId = work->battlerId;
-        ov12_022643C8(work->battleSystem, NULL, &source8, 1, 16, battlerId, battlerId, 0);
+        BattleController_InitMoveAnimData(work->battleSystem, NULL, &source8, 1, 16, battlerId, battlerId, 0);
         ov12_02261B80(work->battleSystem, work->context, work->object, &source8);
         *(int *)((u8 *)work->context + 0x1A0) = 1;
         work->state++;
         return;
     case 10:
-        ov12_0226430C(work->battleSystem, work->battlerId, work->value68);
+        BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->value68);
         Heap_Free(work);
         SysTask_Destroy(task);
         return;

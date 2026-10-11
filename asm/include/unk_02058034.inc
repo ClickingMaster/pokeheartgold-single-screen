@@ -24,7 +24,7 @@
 .public sub_02037504
 .public Comm_GetLocalNetId
 .public sub_020376E0
-.public sub_0203778C
+.public CommRandom_Init
 .public sub_02037958
 .public sub_02037AC0
 .public sub_02037B38

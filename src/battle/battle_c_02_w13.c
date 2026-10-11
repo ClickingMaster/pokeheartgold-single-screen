@@ -35,13 +35,13 @@ void ov12_022592D0(BattleSystem *battleSystem, OpponentData *opponentData) {
         BattleInput_StartMenuScrollHorizontalTask(input, -0xD00, 0);
     }
 done:
-    ov12_0226430C(battleSystem, BATTLER_ID(opponentData), COMMAND(opponentData)[0]);
+    BattleController_EmitCommandComplete(battleSystem, BATTLER_ID(opponentData), COMMAND(opponentData)[0]);
     ov12_02259928(opponentData);
 }
 
 void ov12_02259328(BattleSystem *battleSystem, OpponentData *opponentData) {
     ov12_02264EB4(RAW_OPP(opponentData) + 0x28);
     ov12_02262014(opponentData);
-    ov12_0226430C(battleSystem, BATTLER_ID(opponentData), COMMAND(opponentData)[0]);
+    BattleController_EmitCommandComplete(battleSystem, BATTLER_ID(opponentData), COMMAND(opponentData)[0]);
     ov12_02259928(opponentData);
 }

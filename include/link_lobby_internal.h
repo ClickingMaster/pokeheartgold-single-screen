@@ -56,7 +56,7 @@ void sub_0205876C(void);
 #include "encounter.h"
 #include "screen_fade.h"
 #include "unk_02091564.h"
-void sub_0203778C(void *);
+void CommRandom_Init(void *);
 void sub_02037D8C(SaveData *, s32, s32, LinkBattleRuleset *, int);
 void sub_02037DD4(SaveData *, u8, u32, LinkBattleRuleset *, int);
 void sub_02039980(void *);

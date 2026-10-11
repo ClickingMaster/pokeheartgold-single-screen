@@ -35,7 +35,7 @@ extern const u32 _020FFE30[];
 int sub_02037190(void);
 BOOL sub_02036FD8(int command, void *data, int size);
 void sub_0203049C(int sender, u32 flags);
-BOOL ov12_02264334(BattleSystem *battle, u8 *data);
+BOOL BattleController_RecvLinkData(BattleSystem *battle, u8 *data);
 void sub_02074E5C(BattleSystem *battle);
 void sub_02074EC4(LinkWork *work);
 u32 sub_02074ED8(void);

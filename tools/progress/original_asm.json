@@ -1173,14 +1173,14 @@
   {
    "function": "__VENEER_OS_CancelVAlarm",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_19_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_valarm.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_CancelVAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_SetVAlarm",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_19_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_valarm.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_SetVAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
@@ -1229,14 +1229,14 @@
   {
    "function": "__VENEER_OS_LockMutex",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_send_queue_init.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_LockMutex: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_UnlockMutex",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_send_queue_init.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_UnlockMutex: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },

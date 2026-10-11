@@ -43,7 +43,7 @@ void *sub_02059E1C(void *fieldSystem) {
     *(void **)(data + 4) = saveData;
     *(void **)(data + 8) = Save_PlayerData_GetProfile(saveData);
     sub_0205ABBC(data);
-    sub_0203778C(data + 0x150);
+    CommRandom_Init(data + 0x150);
     return data;
 }
 

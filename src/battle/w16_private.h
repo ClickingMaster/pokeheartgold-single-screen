@@ -6,8 +6,8 @@
 #include "battle/overlay_12_0224E4FC.h"
 #include "pokemon.h"
 
-void ov12_0226430C(BattleSystem *, int, int);
-void ov12_02262F24(BattleSystem *, int, u32);
+void BattleController_EmitCommandComplete(BattleSystem *, int, int);
+void BattleController_ReplyCommandSelection(BattleSystem *, int, u32);
 void ov12_02261EB8(BattleSystem *);
 void ov12_02261ED4(BattleSystem *);
 u32 ov10_022205BC(BattleSystem *, int);

@@ -19,7 +19,7 @@ typedef struct Ov12B593FCCommand {
 } Ov12B593FCCommand;
 
 s16 ov07_02234B5C(u32 flags, u32 value);
-void ov12_0226430C(BattleSystem *battleSystem, int battlerId, int command);
+void BattleController_EmitCommandComplete(BattleSystem *battleSystem, int battlerId, int command);
 void ov12_02259928(OpponentData *opponentData);
 void ov12_022593FC(BattleSystem *battleSystem, OpponentData *opponentData);
 
@@ -49,6 +49,6 @@ void ov12_022593FC(BattleSystem *battleSystem, OpponentData *opponentData) {
     height = GetMonPicHeightBySpeciesGenderForm(command->species, command->gender, facing, command->form, command->personality);
     ov12_0223BBD8(ov12_0223A99C(battleSystem), opponentData->unk194, height);
     Pokepic_SetAttr(opponentData->pokepic, 1, height + ov07_02234B5C(opponentData->battlerType, 1));
-    ov12_0226430C(battleSystem, opponentData->unk194, command->command);
+    BattleController_EmitCommandComplete(battleSystem, opponentData->unk194, command->command);
     ov12_02259928(opponentData);
 }

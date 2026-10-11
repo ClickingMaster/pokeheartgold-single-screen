@@ -9,7 +9,7 @@ void *Heap_Alloc(int, u32);
 void MI_CpuFill8(void *, u8, u32);
 void *SysTask_CreateOnMainQueue(TaskFn, void *, u32);
 void ov74_02229CB8(void *);
-void sub_0203778C(void *);
+void CommRandom_Init(void *);
 void ov74_02229B68(void *arg);
 
 const u16 *PlayerProfile_GetNamePtr(void *);
@@ -75,6 +75,6 @@ void ov74_02229B68(void *arg) {
         *(u16 *)(ov74_0223D0A4 + 0x24) = 50;
         *(void **)(ov74_0223D0A4 + 0x1c) = SysTask_CreateOnMainQueue(ov74_02229CB8, NULL, 10);
         *(void **)ov74_0223D0A4 = arg;
-        sub_0203778C(ov74_0223D0A4 + 4);
+        CommRandom_Init(ov74_0223D0A4 + 4);
     }
 }

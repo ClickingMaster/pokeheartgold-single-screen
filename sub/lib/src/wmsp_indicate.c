@@ -157,7 +157,7 @@ void WMSP_IndicateThread(void *arg) {
                 st->childBitmap = 0;
                 st->unk_86 = 0;
                 st->unk_14 = 0;
-                st->unk_10 = 0;
+                st->dcfActive = 0;
                 st->unk_1c = 0;
                 st->wepEnabled = 0;
                 st->wepMode = 0;
@@ -301,7 +301,7 @@ void WMSP_IndicateThread(void *arg) {
             break;
         }
         case 0x180: {
-            if (!st->unk_10) {
+            if (!st->dcfActive) {
                 break;
             }
             WMSP_AddRssiToList(WMSP_GetRssi8_06001B5C(B(message, 31)));

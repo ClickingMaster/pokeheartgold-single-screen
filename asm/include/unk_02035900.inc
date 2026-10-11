@@ -52,7 +52,7 @@
 .public sub_02036010
 .public sub_02036024
 .public sub_020360E4
-.public sub_02036144
+.public Comm_Update
 .public sub_0203622C
 .public sub_0203624C
 .public sub_02036274
@@ -86,7 +86,7 @@
 .public sub_0203774C
 .public sub_0203775C
 .public sub_0203776C
-.public sub_0203778C
+.public CommRandom_Init
 .public sub_02037824
 .public sub_0203783C
 .public sub_02037854
@@ -121,40 +121,40 @@
 .public ov00_021E70CC
 .public ov00_021EE4FC
 
-	.public sub_02035900
-	.public sub_02035AE0
-	.public sub_02035DA4
+	.public Comm_InitWork
+	.public Comm_ResetBuffers
+	.public Comm_Reset
 	.public sub_02035DD8
-	.public sub_02035DE0
-	.public sub_02035E9C
+	.public Comm_ResetNetIdBuffers
+	.public Comm_ResetDisconnectedNetIds
 	.public sub_02035ED0
 	.public sub_02035F4C
-	.public sub_02035FA8
-	.public sub_02035FF0
-	.public sub_020360EC
+	.public Comm_RequestTransferMode
+	.public Comm_GetTransferMode
+	.public Comm_VBlankSendTask
 	.public sub_0203611C
 	.public sub_02036298
-	.public sub_02036438
-	.public sub_02036508
+	.public Comm_FillParentFrameFromChildren
+	.public Comm_SendParentFrame
 	.public sub_02036630
 	.public sub_0203667C
-	.public sub_020367B0
-	.public sub_0203690C
-	.public sub_02036AA0
-	.public sub_02036ABC
-	.public sub_02036AD8
+	.public Comm_OnParentFrameReceived
+	.public Comm_OnChildFrameReceived
+	.public Comm_OnChildFrameSent
+	.public Comm_OnParentFrameSent
+	.public Comm_SendChildFrame
 	.public sub_02036BE4
 	.public sub_02036D14
 	.public sub_02036DA0
-	.public sub_02036E60
-	.public sub_02036F30
+	.public Comm_BuildChildFrame
+	.public Comm_BuildParentFrame
 	.public sub_02036FA8
-	.public sub_020371A8
-	.public sub_020371C4
-	.public sub_020372E4
-	.public sub_02037334
+	.public Comm_FinishCommand
+	.public Comm_ReceiveCommands
+	.public Comm_ReceiveFromParent
+	.public Comm_ReceiveFromChildren
 	.public sub_0203751C
 	.public sub_02037594
 	.public sub_0203772C
-	.public _0210F900
-	.public _021D4140
+	.public gCommSendStages
+	.public gCommCore

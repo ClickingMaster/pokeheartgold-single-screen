@@ -33,8 +33,8 @@ void ov12_0225F8AC(SysTask *task, void *data) {
             selected = i;
         }
     }
-    ov12_02263360(PTR8(work, 0), work[9], selected + 1);
-    ov12_0226430C(PTR8(work, 0), work[9], work[8]);
+    BattleController_ReplyPartySelection(PTR8(work, 0), work[9], selected + 1);
+    BattleController_EmitCommandComplete(PTR8(work, 0), work[9], work[8]);
     Heap_Free(work);
     SysTask_Destroy(task);
 }

@@ -17,111 +17,111 @@
 	.public _021EA5CC
 	.public _021EA5D8
 	.public _021EA5E4
-	.public ov99_021E5B90
-	.public ov99_021E5BB4
-	.public ov99_021E5BD8
-	.public ov99_021E5C20
-	.public ov99_021E5C4C
-	.public ov99_021E5C88
-	.public ov99_021E5D2C
-	.public ov99_021E5D58
-	.public ov99_021E5EB4
-	.public ov99_021E5F74
-	.public ov99_021E5FE8
-	.public ov99_021E6018
-	.public ov99_021E6050
-	.public ov99_021E607C
-	.public ov99_021E6144
-	.public ov99_021E6188
-	.public ov99_021E6218
-	.public ov99_021E6250
-	.public ov99_021E6274
-	.public ov99_021E6400
-	.public ov99_021E6438
-	.public ov99_021E64E0
-	.public ov99_021E6530
-	.public ov99_021E6638
+	.public PokeathlonCourseRecord_GetTotalScore
+	.public PokeathlonCourseRecord_HasRecord
+	.public PokeathlonCourseRecord_GetScore
+	.public PokeathlonCourseRecord_GetEventId
+	.public PokeathlonCourseRecord_GetMonSpecies
+	.public PokeathlonCourseRecord_InitBgs
+	.public PokeathlonCourseRecord_FreeBgs
+	.public PokeathlonCourseRecord_LoadBgGraphics
+	.public PokeathlonCourseRecord_StartPageScroll
+	.public PokeathlonCourseRecord_UpdatePageScroll
+	.public PokeathlonCourseRecord_ShowCoursePanel
+	.public PokeathlonCourseRecord_PrintStaticText
+	.public PokeathlonCourseRecord_PrintPage
+	.public PokeathlonCourseRecord_PrintEventScores
+	.public PokeathlonCourseRecord_PrintMonNames
+	.public PokeathlonCourseRecord_PrintCourseName
+	.public PokeathlonCourseRecord_PrintTotalLabel
+	.public PokeathlonCourseRecord_VBlankCallback
+	.public PokeathlonCourseRecord_LoadSpriteResources
+	.public PokeathlonCourseRecord_LoadMonPicResources
+	.public PokeathlonCourseRecord_CreateSprites
+	.public PokeathlonCourseRecord_SetMonSpritesVisible
+	.public PokeathlonCourseRecord_UpdatePageSprites
+	.public PokeathlonCourseRecord_HandleInput
 	.public ov99_021E677C
 	.public ov99_021E6840
 	.public ov99_021E6888
-	.public ov99_021E6938
-	.public ov99_021E695C
-	.public ov99_021E69D8
-	.public ov99_021E6A70
-	.public ov99_021E6A9C
-	.public ov99_021E6C30
-	.public ov99_021E6CF4
-	.public ov99_021E6D14
-	.public ov99_021E6D34
-	.public ov99_021E6F70
-	.public ov99_021E6FA0
-	.public ov99_021E6FD0
-	.public ov99_021E7100
-	.public ov99_021E7124
-	.public ov99_021E7158
-	.public ov99_021E71B0
-	.public ov99_021E71E4
-	.public ov99_021E7208
-	.public ov99_021E7258
-	.public ov99_021E728C
-	.public ov99_021E72C0
-	.public ov99_021E738C
-	.public ov99_021E73E0
-	.public ov99_021E7428
-	.public ov99_021E7450
-	.public ov99_021E7508
-	.public ov99_021E7598
-	.public ov99_021E76D8
-	.public ov99_021E7758
-	.public ov99_021E7794
-	.public ov99_021E77D8
-	.public ov99_021E7A54
-	.public ov99_021E7A78
-	.public ov99_021E7AB8
-	.public ov99_021E7AD4
-	.public ov99_021E7BC8
-	.public ov99_021E7C58
-	.public ov99_021E7CE4
-	.public ov99_021E7D30
-	.public ov99_021E7DA4
-	.public ov99_021E7EBC
-	.public ov99_021E7EF0
-	.public ov99_021E7F64
-	.public ov99_021E7F90
-	.public ov99_021E80D0
-	.public ov99_021E810C
-	.public ov99_021E8198
-	.public ov99_021E8224
-	.public ov99_021E82E4
+	.public PokeathlonTrophies_VBlankCallback
+	.public PokeathlonTrophies_InitBgs
+	.public PokeathlonTrophies_LoadBgGraphics
+	.public PokeathlonTrophies_FreeBgs
+	.public PokeathlonTrophies_LoadSpriteResources
+	.public PokeathlonTrophies_CreateNumberSprites
+	.public PokeathlonTrophies_PrintTitle
+	.public PokeathlonTrophies_PrintNextFriendshipTrophy
+	.public PokeathlonTrophies_DrawScreen
+	.public PokeathlonTrophies_CalcEventRecordTotal
+	.public PokeathlonTrophies_CountMedals
+	.public PokeathlonTrophies_CreateSummary
+	.public PokeathlonTrophies_CountFriendshipTrophies
+	.public PokeathlonTrophies_CountCollectiveTrophies
+	.public PokeathlonMedals_GetPageSpeciesCount
+	.public PokeathlonMedals_GetSelectedSpecies
+	.public PokeathlonMedals_GetSeenForm
+	.public PokeathlonMedals_GetSeenGender
+	.public PokeathlonMedals_ShowSpeciesMedals
+	.public PokeathlonMedals_LoadSpeciesOrder
+	.public PokeathlonMedals_BuildSpeciesList
+	.public PokeathlonMedals_DrawMedalistTiles
+	.public PokeathlonMedals_DrawMedalistMark
+	.public PokeathlonMedals_SetIconsVisible
+	.public PokeathlonMedals_ShowPage
+	.public PokeathlonMedals_UpdatePageIndicator
+	.public PokeathlonMedals_UpdatePageScroll
+	.public PokeathlonMedals_LoadMonPic
+	.public PokeathlonMedals_PrintSpeciesName
+	.public PokeathlonMedals_ShowSelectedSpecies
+	.public PokeathlonMedals_HideSelectedSpecies
+	.public PokeathlonMedals_VBlankCallback
+	.public PokeathlonMedals_CreateGridInput
+	.public PokeathlonMedals_FreeGridInput
+	.public PokeathlonMedals_ChangePage
+	.public PokeathlonMedals_HandleInput
+	.public PokeathlonMedals_MoveCursor
+	.public PokeathlonMedals_OnCursorMoved
+	.public PokeathlonMedals_InitBgs
+	.public PokeathlonMedals_LoadBgGraphics
+	.public PokeathlonMedals_FreeBgs
+	.public PokeathlonMedals_CreateSprites
+	.public PokeathlonMedals_LoadMonPicResources
+	.public PokeathlonMedals_LoadSpriteResources
+	.public PokeathlonMedals_CreateUiSprites
+	.public PokeathlonMedals_CreateMedalSprites
+	.public PokeathlonMedals_CreateIconSprites
+	.public PokeathlonMedals_PrintStaticText
+	.public PokeathlonEventRecord_GetEventTotal
 	.public ov99_021E84EC
 	.public ov99_021E8518
-	.public ov99_021E8544
-	.public ov99_021E856C
-	.public ov99_021E8590
-	.public ov99_021E860C
-	.public ov99_021E86D4
-	.public ov99_021E875C
-	.public ov99_021E8788
-	.public ov99_021E87D0
-	.public ov99_021E8828
-	.public ov99_021E88EC
-	.public ov99_021E89A4
-	.public ov99_021E89EC
-	.public ov99_021E8C04
-	.public ov99_021E8C50
-	.public ov99_021E8C88
-	.public ov99_021E8D5C
-	.public ov99_021E8D88
-	.public ov99_021E8EBC
-	.public ov99_021E8F50
-	.public ov99_021E8FEC
-	.public ov99_021E9038
-	.public ov99_021E90F4
-	.public ov99_021E92EC
-	.public ov99_021E93DC
-	.public ov99_021E9430
-	.public ov99_021E9464
-	.public ov99_021E94CC
+	.public PokeathlonEventRecord_IsRankEmpty
+	.public PokeathlonEventRecord_VBlankCallback
+	.public PokeathlonEventRecord_InitBgs
+	.public PokeathlonEventRecord_LoadBgGraphics
+	.public PokeathlonEventRecord_DrawEventIcon
+	.public PokeathlonEventRecord_FreeBgs
+	.public PokeathlonEventRecord_ShowEvent
+	.public PokeathlonEventRecord_LoadModePalette
+	.public PokeathlonEventRecord_SwitchMode
+	.public PokeathlonEventRecord_PrintRecordValue
+	.public PokeathlonEventRecord_PrintModeTitle
+	.public PokeathlonEventRecord_PrintEventRecord
+	.public PokeathlonEventRecord_CreateSprites
+	.public PokeathlonEventRecord_ShowEventRecordMons
+	.public PokeathlonEventRecord_LoadSpriteResources
+	.public PokeathlonEventRecord_CreateUiSprites
+	.public PokeathlonEventRecord_CreateEventSprites
+	.public PokeathlonEventRecord_CreateMonIconSprites
+	.public PokeathlonEventRecord_ShowRecordMonIcons
+	.public PokeathlonEventRecord_SetMonIconsVisible
+	.public PokeathlonEventRecord_UpdateEventGrid
+	.public PokeathlonEventRecord_HandleInput
+	.public PokeathlonEventRecord_CopyRecords
+	.public PokeathlonEventRecord_CreateRecordData
+	.public PokeathlonEventRecord_GetRecords
+	.public PokeathlonEventRecord_GetRecordMon
+	.public PokeathlonEventRecord_GetRecordScore
 	.public ov99_021E9554
 	.public ov99_021E9564
 	.public ov99_021E9574
@@ -178,40 +178,40 @@
 	.public ov99_021EA4F4
 	.public ov99_021EA59C
 
-	.public ov99_021E5B54
+	.public PokeathlonCourseRecord_CopyArgs
 	.public ov99_021E5B70
-	.public ov99_021E5B74
-	.public ov99_021E5B7C
-	.public ov99_021E6C14
-	.public ov99_021E7060
-	.public ov99_021E7068
-	.public ov99_021E7078
-	.public ov99_021E7088
-	.public ov99_021E7098
-	.public ov99_021E70A8
-	.public ov99_021E70B8
-	.public ov99_021E70C8
-	.public ov99_021E70D8
-	.public ov99_021E70E8
+	.public PokeathlonCourseRecord_FreeArgs
+	.public PokeathlonCourseRecord_GetMon
+	.public PokeathlonTrophies_CreatePlayerSprite
+	.public PokeathlonTrophies_FreeSummary
+	.public PokeathlonTrophies_GetPotentialTrophyCount
+	.public PokeathlonTrophies_GetMedalistCount
+	.public PokeathlonTrophies_GetGender
+	.public PokeathlonTrophies_GetProfile
+	.public PokeathlonTrophies_GetMedalTotal
+	.public PokeathlonTrophies_GetEventRecordTotal
+	.public PokeathlonTrophies_GetCourseRecordTotal
+	.public PokeathlonTrophies_GetTotalPoints
+	.public PokeathlonTrophies_GetCourseScore
 	.public ov99_021E714C
 	.public ov99_021E7150
-	.public ov99_021E7180
-	.public ov99_021E718C
-	.public ov99_021E7198
-	.public ov99_021E71DC
-	.public ov99_021E723C
-	.public ov99_021E724C
-	.public ov99_021E7CA8
-	.public ov99_021E7CC8
-	.public ov99_021E7CCC
-	.public ov99_021E7CD8
-	.public ov99_021E8818
-	.public ov99_021E88D4
-	.public ov99_021E9020
-	.public ov99_021E9418
+	.public PokeathlonMedals_GetSpeciesMedals
+	.public PokeathlonMedals_CountMedalists
+	.public PokeathlonMedals_HasAllMedals
+	.public PokeathlonMedals_GetPokedex
+	.public PokeathlonMedals_GetSpindaPersonality
+	.public PokeathlonMedals_CountTrustTrophies
+	.public PokeathlonMedals_OnButton
+	.public PokeathlonMedals_OnSwitchToTouchMode
+	.public PokeathlonMedals_OnKeyMove
+	.public PokeathlonMedals_OnTouch
+	.public PokeathlonEventRecord_DrawModeScreen
+	.public PokeathlonEventRecord_PrintReturnButton
+	.public PokeathlonEventRecord_ClearNameWindows
+	.public PokeathlonEventRecord_FreeRecordData
 	.public ov99_021E945C
-	.public ov99_021E94FC
-	.public ov99_021E9508
+	.public PokeathlonEventRecord_GetTimesJoined
+	.public PokeathlonEventRecord_GetProfile
 
 
 	.rodata
@@ -473,7 +473,7 @@ ov99_021E9F90: ; 0x021E9F90
 	.byte 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
 ov99_021E9FA0: ; 0x021E9FA0
-	.word ov99_021E7CA8, ov99_021E7CC8, ov99_021E7CCC, ov99_021E7CD8
+	.word PokeathlonMedals_OnButton, PokeathlonMedals_OnSwitchToTouchMode, PokeathlonMedals_OnKeyMove, PokeathlonMedals_OnTouch
 
 ov99_021E9FB0: ; 0x021E9FB0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00

@@ -77,14 +77,14 @@ typedef struct MenuTaskData {
 
 extern void MI_CpuFill8(void *dest, u8 value, u32 size);
 extern void ManagedSprite_SetDrawFlag(void *sprite, int flag);
-extern void ov12_0226430C(void *battleSystem, u8 battler, u8 result);
+extern void BattleController_EmitCommandComplete(void *battleSystem, u8 battler, u8 result);
 extern void Heap_Free(void *ptr);
 extern void SysTask_Destroy(void *task);
 extern void *ov12_0223BB78(void *battleSystem);
 extern void WaitingIcon_Delete(void *object);
 extern void ov12_0223BB80(void *battleSystem, int value);
 extern int TextPrinterCheckActive(u8 printerId);
-extern void ov12_02263A00(void *battleSystem, u8 battler);
+extern void BattleController_ReplySelectionMessageDone(void *battleSystem, u8 battler);
 extern void BattleHpBar_BeginExpBarFullFlashEffect(void *hpBar, u8 *done);
 extern void PlaySE(u32 seqNo);
 extern void GF_AssertFail(void);
@@ -161,7 +161,7 @@ void ov12_02261294(OpponentDataScratch *data, int flag)
 #if W17_GROUP == 1
 void ov12_0225F960(void *task, CleanupTaskData *data)
 {
-    ov12_0226430C(data->battleSystem, data->battler, data->result);
+    BattleController_EmitCommandComplete(data->battleSystem, data->battler, data->result);
     Heap_Free(data);
     SysTask_Destroy(task);
 }
@@ -170,14 +170,14 @@ void ov12_0225F960(void *task, CleanupTaskData *data)
 #if W17_GROUP == 2
 void ov12_0225FC80(void *task, CleanupTaskData *data)
 {
-    ov12_0226430C(data->battleSystem, data->battler2, data->result2);
+    BattleController_EmitCommandComplete(data->battleSystem, data->battler2, data->result2);
     Heap_Free(data);
     SysTask_Destroy(task);
 }
 
 void ov12_0225FCA0(void *task, CleanupTaskData *data)
 {
-    ov12_0226430C(data->battleSystem, data->battler2, data->result2);
+    BattleController_EmitCommandComplete(data->battleSystem, data->battler2, data->result2);
     Heap_Free(data);
     SysTask_Destroy(task);
 }
@@ -194,7 +194,7 @@ void ov12_02260584(void *task, SmallTaskData *data)
         break;
     case 1:
         if (data->done == 1) {
-            ov12_0226430C(data->battleSystem, data->battler, data->result);
+            BattleController_EmitCommandComplete(data->battleSystem, data->battler, data->result);
             Heap_Free(data);
             SysTask_Destroy(task);
         }
@@ -209,7 +209,7 @@ void ov12_022605D0(void *task, TextTaskData *data)
         ov12_0223BB80(data->battleSystem, 0);
     }
     if (!TextPrinterCheckActive(data->printer)) {
-        ov12_0226430C(data->battleSystem, data->battler, data->result);
+        BattleController_EmitCommandComplete(data->battleSystem, data->battler, data->result);
         Heap_Free(data);
         SysTask_Destroy(task);
     }
@@ -227,8 +227,8 @@ void ov12_02260614(void *task, TextTaskData *data)
     case 1:
         data->timer++;
         if (data->timer == 40) {
-            ov12_02263A00(data->battleSystem, data->battler);
-            ov12_0226430C(data->battleSystem, data->battler, data->result);
+            BattleController_ReplySelectionMessageDone(data->battleSystem, data->battler);
+            BattleController_EmitCommandComplete(data->battleSystem, data->battler, data->result);
             Heap_Free(data);
             SysTask_Destroy(task);
         }
@@ -261,7 +261,7 @@ void ov12_02260B30(void *task, PokepicMoveTaskData *data)
         }
         break;
     case 1:
-        ov12_0226430C(data->battleSystem, data->battler, data->result);
+        BattleController_EmitCommandComplete(data->battleSystem, data->battler, data->result);
         Heap_Free(data);
         SysTask_Destroy(task);
         break;
@@ -282,7 +282,7 @@ void ov12_0225FF80(void *task, PokepicMoveTaskData *data)
         }
     } else {
         Pokepic_SetAttr(data->pokepic, 6, 0);
-        ov12_0226430C(data->battleSystem, data->result, 0x17);
+        BattleController_EmitCommandComplete(data->battleSystem, data->result, 0x17);
         Heap_Free(data);
         SysTask_Destroy(task);
     }
@@ -300,7 +300,7 @@ void ov12_0225FFDC(void *task, MenuTaskData *data)
         }
         break;
     default:
-        ov12_0226430C(data->battleSystem, data->battler, data->result);
+        BattleController_EmitCommandComplete(data->battleSystem, data->battler, data->result);
         data->taskHandle = NULL;
         SysTask_Destroy(task);
         break;
@@ -336,7 +336,7 @@ void ov12_02260030(void *task, MenuTaskData *data)
         }
         break;
     default:
-        ov12_0226430C(data->battleSystem, data->battler, data->result);
+        BattleController_EmitCommandComplete(data->battleSystem, data->battler, data->result);
         data->taskHandle = NULL;
         SysTask_Destroy(task);
         break;

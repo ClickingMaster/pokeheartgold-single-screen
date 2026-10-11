@@ -97,9 +97,9 @@
 .public ov45_0222E7FC
 .public ov45_0222ED7C
 .public ov45_0222EDA8
-.public ov46_02258800
-.public ov46_0225892C
-.public ov46_02258C38
-.public ov46_02258CB4
-.public ov46_02258DA8
-.public ov46_02258EFC
+.public WiFiPlazaConnect_Init
+.public WiFiPlazaConnect_Main
+.public WiFiPlazaConnect_Exit
+.public WiFiPlazaConnect_DisconnectInit
+.public WiFiPlazaConnect_DisconnectMain
+.public WiFiPlazaConnect_DisconnectExit

@@ -152,7 +152,7 @@ void PrintErrorMessageAndReset(void) {
 
     while (TRUE) {
         HandleDSLidAction();
-        sub_02036144();
+        Comm_Update();
 
         if (sub_02039AA4()) {
             break;

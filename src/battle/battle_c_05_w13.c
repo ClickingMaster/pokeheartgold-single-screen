@@ -29,7 +29,7 @@ void ov12_022595E0(BattleSystem *battleSystem, OpponentData *opponentData) {
     if (BattleSystem_GetFieldSide(battleSystem, BATTLER_ID(opponentData)) != 0) {
         ov12_0225B120(battleSystem, opponentData, command);
     } else {
-        ov12_0226430C(battleSystem, BATTLER_ID(opponentData), 0x32);
+        BattleController_EmitCommandComplete(battleSystem, BATTLER_ID(opponentData), 0x32);
     }
     ov12_02259928(opponentData);
 }
@@ -39,7 +39,7 @@ void ov12_0225961C(BattleSystem *battleSystem, OpponentData *opponentData) {
     if (BattleSystem_GetFieldSide(battleSystem, BATTLER_ID(opponentData)) != 0) {
         ov12_0225B16C(battleSystem, opponentData, command);
     } else {
-        ov12_0226430C(battleSystem, BATTLER_ID(opponentData), 0x33);
+        BattleController_EmitCommandComplete(battleSystem, BATTLER_ID(opponentData), 0x33);
     }
     ov12_02259928(opponentData);
 }
@@ -49,14 +49,14 @@ void ov12_02259658(BattleSystem *battleSystem, OpponentData *opponentData) {
     SpriteManager *spriteManager = BattleSystem_GetSpriteManager(battleSystem);
     PaletteData *paletteData = BattleSystem_GetPaletteData(battleSystem);
     PartyGauge_LoadGraphics(spriteSystem, spriteManager, paletteData);
-    ov12_0226430C(battleSystem, BATTLER_ID(opponentData), 0x34);
+    BattleController_EmitCommandComplete(battleSystem, BATTLER_ID(opponentData), 0x34);
     ov12_02259928(opponentData);
 }
 
 void ov12_02259694(BattleSystem *battleSystem, OpponentData *opponentData) {
     int offset = 0x65;
     PartyGauge_FreeGraphics(BattleSystem_GetSpriteManager(battleSystem));
-    ov12_0226430C(battleSystem, ((u8 *)opponentData)[offset * 4], 0x35);
+    BattleController_EmitCommandComplete(battleSystem, ((u8 *)opponentData)[offset * 4], 0x35);
     ov12_02259928(opponentData);
 }
 
@@ -69,7 +69,7 @@ void ov12_022596B8(BattleSystem *battleSystem, OpponentData *opponentData) {
     } else if (RAW_OPP(opponentData)[0x196] != 0) {
         BattleSystem_GameStatIncrement(battleSystem, *(u16 *)(command + 2));
     }
-    ov12_0226430C(battleSystem, BATTLER_ID(opponentData), command[0]);
+    BattleController_EmitCommandComplete(battleSystem, BATTLER_ID(opponentData), command[0]);
     ov12_02259928(opponentData);
 }
 

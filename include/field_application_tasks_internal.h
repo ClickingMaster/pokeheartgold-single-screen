@@ -57,7 +57,7 @@ extern void sub_02037F18(void);
 extern void *Heap_Alloc(int heapId, u32 size);
 extern void *SysTask_CreateOnMainQueue(void (*callback)(void *, void *), void *arg, int priority);
 extern void *Save_PlayerData_GetProfile(void *saveData);
-extern void sub_0203778C(void *);
+extern void CommRandom_Init(void *);
 extern void GF_AssertFail(void);
 extern void Heap_CreateAtEnd(int parent, int child, u32 size);
 extern void sub_02038C1C(int);
