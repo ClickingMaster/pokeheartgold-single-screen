@@ -20,8 +20,8 @@ typedef struct Key {
     u8 *c;
 } Key;
 
-extern void *(*_021D4634)(int);
-extern void (*_021D4660)(void *);
+extern void *(*gCpsAlloc)(int);
+extern void (*gCpsFree)(void *);
 extern void CPSi_big_from_char(u16 *, const u8 *, int, int);
 extern void CPSi_big_montpower(u16 *, u16 *, u16 *, int, u16 *);
 extern void CPSi_big_sub(u16 *, u16 *, u16 *, int);
@@ -42,7 +42,7 @@ void decrypt_premaster_secret(u8 *out, const u8 *input, Key *k) {
         return;
     }
     len = ((k->size << 1) / 2) + 1;
-    a = _021D4634(len * 20);
+    a = gCpsAlloc(len * 20);
     if (!a) {
         return;
     }
@@ -77,5 +77,5 @@ void decrypt_premaster_secret(u8 *out, const u8 *input, Key *k) {
         CPSi_big_div(0, c, b, g, len, h);
     }
     CPSi_char_from_big(out, g, 48, len);
-    _021D4660(a);
+    gCpsFree(a);
 }

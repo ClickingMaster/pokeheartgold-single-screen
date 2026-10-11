@@ -14,8 +14,8 @@ typedef struct {
     void *exponent;
 } Key;
 
-extern void *(*_021D4634)(int);
-extern void (*_021D4660)(void *);
+extern void *(*gCpsAlloc)(int);
+extern void (*gCpsFree)(void *);
 extern void CPSi_big_from_char(u16 *, void *, int, int);
 extern void CPSi_big_power(u16 *, u16 *, u16 *, int, u16 *);
 extern void exit_computebound(int);
@@ -30,7 +30,7 @@ int validate_signature(u8 *w, Key *k) {
         return 2;
     }
     words = (k->length * 2) / 2;
-    buf = _021D4634(words * 8);
+    buf = gCpsAlloc(words * 8);
     if (!buf) {
         return 2;
     }
@@ -59,6 +59,6 @@ int validate_signature(u8 *w, Key *k) {
             result = 2;
         }
     }
-    _021D4660(buf);
+    gCpsFree(buf);
     return result;
 }

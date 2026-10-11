@@ -1,129 +1,100 @@
 #pragma force_active on
-#include <nitro/types.h>
-
+#include "wl_internal.h"
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#define ROOT    (*(u8 **)0x0380fff4)
-#define H(p, o) (*(u16 *)((u8 *)(p) + (o)))
-#define W(p, o) (*(u32 *)((u8 *)(p) + (o)))
-#define P(p, o) (*(u8 **)((u8 *)(p) + (o)))
 
-typedef struct {
-    u16 frag : 4;
-    u16 seq : 12;
-} SeqCtrl;
+// Frame control bits (WlFrameCtrlBits) tested as masks.
+#define FC_TO_DS     0x100
+#define FC_FROM_DS   0x200
+#define FC_MORE_FRAG 0x400
 
-#define SC(p, o) (*(SeqCtrl *)((u8 *)(p) + (o)))
+// Fragments in a received frame (RX header status bits 4..7).
+#define FRAG_COUNT(status) ((int)((status) & 0xF0) / 16)
 
-typedef struct {
-    u8 a1[6];
-    u8 a2[6];
-    SeqCtrl sc;
-    u16 pad;
-} DefragKey;
-
-typedef struct {
-    u16 state;
-    u16 fragLen;
-    u8 a1[6];
-    u8 a2[6];
-    SeqCtrl sc;
-    u16 x12;
-    u8 *buf;
-} Entry;
-
-extern int MatchMacAdrs(const void *, const void *);
-extern void WSetMacAdrs1(void *, const void *);
-extern void __VENEER_MIi_CpuCopy16(const void *, void *, u32);
-extern void *AllocateHeapBuf(void *, u32);
-extern void SetFatalErr(u32);
-extern void __VENEER_MI_WaitDma(u32);
-extern void ReleaseHeapBuf(void *, void *);
-extern void MoveHeapBuf(void *, void *, void *);
-extern void AddTask(u32, u32);
-extern u32 __VENEER__u32_div_f(u32, u32);
-void DefragTask(void);
-
+// Task 9: the next received fragment (WlHeap.bufMan[8]). The first one takes a free reassembly slot and a heap buffer
+// for the whole frame; the following ones are copied to their place in it. The last fragment completes the frame,
+// which goes on to the management (bufMan[7], task 7) or data (bufMan[5], task 6) frames.
 void DefragTask(void) {
-
-    Entry *e;
-    u8 *p;
-    u8 *rx;
-    u32 n2;
+    WlDefrag *slot;
+    WlRxFrame *frame;
+    WlHeap *heap;
+    u32 fragCount2;
     int free;
-    int d;
-    Entry *e2;
-    u8 *wl;
+    int fragDiff;
+    WlDefrag *slot2;
+    WlWork *w;
     u32 total;
-    u8 *frm;
+    WlRxBuf *frm;
     u32 i;
-    u8 *buf;
-    u16 fc;
-    int len2;
-    Entry *tbl;
-    int k;
-    int len;
-    u32 n;
-    u32 off;
+    WlRxBuf *buf;
+    u16 frameCtrl;
+    int length2;
+    WlDefrag *defrag;
+    int fragNo;
+    int length;
+    u32 fragCount;
+    u32 offset;
     u32 i2;
-    Entry *tbl2;
+    WlDefrag *defrag2;
 
-    DefragKey key;
+    WlDefragKey key;
 
-    rx = ROOT + 0x17c;
-    frm = P(rx, 0x6c);
+    heap = &wlWorkPlain->heap;
+    frm = (WlRxBuf *)heap->bufMan[8].first;
 
-    if (frm == (u8 *)0xffffffff) {
+    if (frm == (WlRxBuf *)0xFFFFFFFF) {
         return;
     }
-    if (H(ROOT, 0x34c) != 0x40 || H(frm, 0x20) > 0x5fc) {
+    if (wlWorkPlain->bss.state != 0x40 || frm->frame.frameLength > 0x5FC) {
         goto done;
     }
-    fc = H(frm, 0x24);
-    if (fc & 0x100) {
-        WSetMacAdrs1(key.a1, frm + 0x34);
-        if (fc & 0x200) {
+    frameCtrl = frm->frame.frameCtrl;
+    if (frameCtrl & FC_TO_DS) {
+        WSetMacAdrs1(key.addr1, frm->frame.addr3);
+        if (frameCtrl & FC_FROM_DS) {
             goto done;
         }
-        WSetMacAdrs1(key.a2, frm + 0x2e);
+        WSetMacAdrs1(key.addr2, frm->frame.addr2);
     } else {
-        WSetMacAdrs1(key.a1, frm + 0x28);
-        if (fc & 0x200) {
-            WSetMacAdrs1(key.a2, frm + 0x34);
+        WSetMacAdrs1(key.addr1, frm->frame.addr1);
+        if (frameCtrl & FC_FROM_DS) {
+            WSetMacAdrs1(key.addr2, frm->frame.addr3);
         } else {
-            WSetMacAdrs1(key.a2, frm + 0x2e);
+            WSetMacAdrs1(key.addr2, frm->frame.addr2);
         }
     }
-    *(u16 *)&key.sc = H(frm, 0x3a);
-    if ((fc & 0x400) && SC(frm, 0x3a).frag == 0) {
+    *(u16 *)&key.seqCtrl = frm->frame.seqCtrl;
+    if ((frameCtrl & FC_MORE_FRAG) && ((WlSeqCtrlBits *)&frm->frame.seqCtrl)->fragNo == 0) {
+        // the first fragment: a slot already holding the frame takes the fragments it lacks, else a free slot
+        // starts the frame
         free = -1;
-        tbl = (Entry *)(ROOT + 0x4e4);
+        defrag = wlWorkPlain->rxCtrl.defrag;
         for (i = 0; i < 3; i++) {
-            e = &tbl[i];
-            if (tbl[i].state != 0) {
-                if (!MatchMacAdrs(e->a1, key.a1)) {
+            slot = &defrag[i];
+            if (defrag[i].timer != 0) {
+                if (!MatchMacAdrs(slot->key.addr1, key.addr1)) {
                     continue;
                 }
-                if (!MatchMacAdrs(e->a2, key.a2)) {
+                if (!MatchMacAdrs(slot->key.addr2, key.addr2)) {
                     continue;
                 }
-                if (key.sc.seq != e->sc.seq) {
+                if (key.seqCtrl.seqNo != slot->key.seqCtrl.seqNo) {
                     continue;
                 }
-                n = (int)(H(frm, 0x18) & 0xf0) / 16;
-                d = n - e->sc.frag;
-                if (d == 0 || (d & 0x80000000)) {
+                fragCount = FRAG_COUNT(frm->frame.status);
+                fragDiff = fragCount - slot->key.seqCtrl.fragNo;
+                if (fragDiff == 0 || (fragDiff & 0x80000000)) {
                     goto done;
                 }
-                buf = tbl[i].buf;
-                len = H(frm, 0x20) - H(buf, 0x20) - 0x18;
-                if (len == 0 || (len & 0x80000000)) {
+                buf = (WlRxBuf *)defrag[i].buf;
+                length = frm->frame.frameLength - buf->frame.frameLength - 24;
+                if (length == 0 || (length & 0x80000000)) {
                     goto done;
                 }
-                __VENEER_MIi_CpuCopy16(frm + 0x3c + H(buf, 0x20), buf + 0x3c + H(buf, 0x20), len);
-                H(buf, 0x20) += len;
-                e->sc.frag = n;
-                W(ROOT, 0x560) += n;
+                __VENEER_MIi_CpuCopy16((u8 *)&frm->frame + sizeof(WlRxFrame) + buf->frame.frameLength, (u8 *)&buf->frame + sizeof(WlRxFrame) + buf->frame.frameLength, length);
+                buf->frame.frameLength += length;
+                slot->key.seqCtrl.fragNo = fragCount;
+                wlWorkPlain->counter[9] += fragCount;
                 goto done;
             } else {
                 free = i;
@@ -132,50 +103,53 @@ void DefragTask(void) {
         if (free == -1) {
             goto done;
         }
-        buf = AllocateHeapBuf(ROOT + 0x188, 0x622);
+        buf = AllocateHeapBuf(&wlWorkPlain->heap.bufMan[0], 0x622);
         if (buf) {
-            e = &tbl[free];
-            __VENEER_MIi_CpuCopy16(&key, e->a1, 0x10);
-            tbl[free].state = 5;
-            tbl[free].buf = buf;
-            __VENEER_MIi_CpuCopy16(frm + 0x18, buf + 0x18, H(frm, 0x20) + 0xc);
-            __VENEER_MI_WaitDma(W(ROOT, 0x30c));
-            n = (int)(H(buf, 0x18) & 0xf0) / 16;
-            e->sc.frag = n;
-            W(ROOT, 0x560) += n;
-            H(buf, 0x20) = H(frm, 0x20) - 0x18;
-            tbl[free].fragLen = __VENEER__u32_div_f(H(buf, 0x20), n);
+            slot = &defrag[free];
+            __VENEER_MIi_CpuCopy16(&key, &slot->key, sizeof(WlDefragKey));
+            defrag[free].timer = 5;
+            defrag[free].buf = &buf->header;
+            __VENEER_MIi_CpuCopy16(&frm->frame.status, &buf->frame.status, frm->frame.frameLength + 12);
+            __VENEER_MI_WaitDma(wlWorkPlain->dmaNo);
+            fragCount = FRAG_COUNT(buf->frame.status);
+            slot->key.seqCtrl.fragNo = fragCount;
+            wlWorkPlain->counter[9] += fragCount;
+            buf->frame.frameLength = frm->frame.frameLength - 24;
+            defrag[free].fragLength = __VENEER__u32_div_f(buf->frame.frameLength, fragCount);
         } else {
             SetFatalErr(4);
         }
     } else {
-        wl = ROOT;
-        H(frm, 0x20) -= 0x18;
-        tbl2 = (Entry *)(wl + 0x4e4);
+        // a following fragment: copy it to the frame of its slot
+        w = wlWorkPlain;
+        frm->frame.frameLength -= 24;
+        defrag2 = w->rxCtrl.defrag;
         for (i2 = 0; i2 < 3; i2++) {
-            e2 = &tbl2[i2];
-            if (tbl2[i2].state == 0) {
+            slot2 = &defrag2[i2];
+            if (defrag2[i2].timer == 0) {
                 continue;
             }
-            if (!MatchMacAdrs(e2->a1, key.a1)) {
+            if (!MatchMacAdrs(slot2->key.addr1, key.addr1)) {
                 continue;
             }
-            if (!MatchMacAdrs(e2->a2, key.a2)) {
+            if (!MatchMacAdrs(slot2->key.addr2, key.addr2)) {
                 continue;
             }
-            if (key.sc.seq != e2->sc.seq) {
+            if (key.seqCtrl.seqNo != slot2->key.seqCtrl.seqNo) {
                 continue;
             }
-            k = *(u16 *)((u8 *)tbl2 + i2 * 0x18 + 0x10) - *(u16 *)&key.sc;
-            if (k & 0x80000000) {
+            // same sequence number: the difference of the raw sequence controls is the fragment number difference
+            // (the slot's key.seqCtrl is addressed by hand: the compiler must load it again here)
+            fragNo = *(u16 *)((u8 *)defrag2 + i2 * sizeof(WlDefrag) + 0x10) - *(u16 *)&key.seqCtrl;
+            if (fragNo & 0x80000000) {
                 goto done;
             }
-            off = k * tbl2[i2].fragLen;
-            len2 = H(frm, 0x20) - off;
-            if (len2 == 0) {
+            offset = fragNo * defrag2[i2].fragLength;
+            length2 = frm->frame.frameLength - offset;
+            if (length2 == 0) {
                 goto done;
             }
-            if (!(len2 & 0x80000000)) {
+            if (!(length2 & 0x80000000)) {
                 break;
             }
             goto done;
@@ -183,41 +157,42 @@ void DefragTask(void) {
         if (i2 == 3) {
             goto done;
         }
-        p = tbl2[i2].buf + 0x10;
-        total = H(p, 0x10) + len2;
-        if (total > 0x5e4) {
-            ReleaseHeapBuf(wl + 0x188, p - 0x10);
-            tbl2[i2].state = 0;
+        frame = &((WlRxBuf *)defrag2[i2].buf)->frame;
+        total = frame->frameLength + length2;
+        if (total > 0x5E4) {
+            ReleaseHeapBuf(&w->heap.bufMan[0], (WlHeapBuf *)((u8 *)frame - 16));
+            defrag2[i2].timer = 0;
             goto done;
         }
-        __VENEER_MIi_CpuCopy16(frm + 0x3c + off, p + 0x2c + H(p, 0x10), len2 + 1);
-        H(p, 0x10) = total;
-        n2 = (int)(H(frm, 0x18) & 0xf0) / 16;
-        tbl2[i2].sc.frag += n2 - k;
-        W(ROOT, 0x560) += n2;
-        if (H(frm, 0x18) & 0x100) {
+        __VENEER_MIi_CpuCopy16((u8 *)&frm->frame + sizeof(WlRxFrame) + offset, (u8 *)frame + sizeof(WlRxFrame) + frame->frameLength, length2 + 1);
+        frame->frameLength = total;
+        fragCount2 = FRAG_COUNT(frm->frame.status);
+        defrag2[i2].key.seqCtrl.fragNo += fragCount2 - fragNo;
+        wlWorkPlain->counter[9] += fragCount2;
+        if (frm->frame.status & 0x100) {
             goto done;
         }
-        tbl2[i2].state = 0;
-        H(p, 8) = (H(p, 8) & ~0xf0) + 0x10;
-        H(p, 0x10) += 0x18;
-        switch (H(p, 8) & 0xf) {
+        // the frame is complete
+        defrag2[i2].timer = 0;
+        frame->status = (frame->status & ~0xF0) + 0x10;
+        frame->frameLength += 24;
+        switch (frame->status & 0xF) {
         case 8:
-            MoveHeapBuf(wl + 0x188, wl + 0x1c4, p - 0x10);
+            MoveHeapBuf(&w->heap.bufMan[0], &w->heap.bufMan[5], (WlHeapBuf *)((u8 *)frame - 16));
             AddTask(2, 6);
             break;
         case 0:
-            MoveHeapBuf(wl + 0x188, wl + 0x1dc, p - 0x10);
+            MoveHeapBuf(&w->heap.bufMan[0], &w->heap.bufMan[7], (WlHeapBuf *)((u8 *)frame - 16));
             AddTask(1, 7);
             break;
         default:
-            ReleaseHeapBuf(wl + 0x188, p - 0x10);
+            ReleaseHeapBuf(&w->heap.bufMan[0], (WlHeapBuf *)((u8 *)frame - 16));
             break;
         }
     }
 done:
-    ReleaseHeapBuf(rx + 0x6c, frm);
-    if (H(rx, 0x74)) {
+    ReleaseHeapBuf(&heap->bufMan[8], &frm->header);
+    if (heap->bufMan[8].count) {
         AddTask(2, 9);
     }
 }

@@ -11,7 +11,7 @@
 
 // Task 12 (WlIntrPreTbtt: too many beacons lost).
 void MLME_BeaconLostTask(void) {
-    MLME_IssueBeaconLostIndication(wlWorkPlain->bss.unk_82);
+    MLME_IssueBeaconLostIndication(wlWorkPlain->bss.parentMacAdrs);
 }
 
 // Sends the confirm of the MLME request in progress and lets RequestCmdTask take the next request.

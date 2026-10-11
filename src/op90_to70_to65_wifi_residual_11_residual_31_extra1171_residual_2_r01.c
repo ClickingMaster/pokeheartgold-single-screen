@@ -17,8 +17,8 @@ typedef struct {
     u32 reserved[3];
 } ReleaseSlot;
 
-extern AllocatorSlot _021D4634;
-extern ReleaseSlot _021D4660;
+extern AllocatorSlot gCpsAlloc;
+extern ReleaseSlot gCpsFree;
 extern void CPSi_TcpWrite2Raw(void *, int, int, int, void *);
 extern void set_random(void *, int);
 extern void CPSi_big_from_char(u16 *, void *, int, int);
@@ -74,7 +74,7 @@ void send_client_key_exchange(void *ctx) {
     set_random(s->secret.random, 46);
     bytes = s->bytes;
     limbs = (s32)((u32)bytes * 2) / 2;
-    encoded = _021D4634.allocate(bytes);
+    encoded = gCpsAlloc.allocate(bytes);
     if (!encoded) {
         s->error = 9;
         return;
@@ -84,9 +84,9 @@ void send_client_key_exchange(void *ctx) {
     set_random(encoded + 2, (s32)((u32)bytes - 51));
     encoded[(s32)((u32)bytes - 49)] = 0;
     MI_CpuCopy8(&s->secret, encoded + bytes - 48, 48);
-    work = _021D4634.allocate((s32)((u32)limbs << 3));
+    work = gCpsAlloc.allocate((s32)((u32)limbs << 3));
     if (!work) {
-        _021D4660.release(encoded);
+        gCpsFree.release(encoded);
         s->error = 9;
         return;
     }
@@ -99,10 +99,10 @@ void send_client_key_exchange(void *ctx) {
     old = enter_computebound();
     CPSi_big_power(work, plain, exponent, limbs, modulus);
     exit_computebound(old);
-    out = _021D4634.allocate((s32)((u32)bytes + 73));
+    out = gCpsAlloc.allocate((s32)((u32)bytes + 73));
     if (!out) {
-        _021D4660.release(encoded);
-        _021D4660.release(work);
+        gCpsFree.release(encoded);
+        gCpsFree.release(work);
         s->error = 9;
         return;
     }
@@ -128,7 +128,7 @@ void send_client_key_exchange(void *ctx) {
     }
     CPSi_TcpWrite2Raw(out, (s32)((u32)bytes + 9), 0, 0, ctx);
     update_digest(s, out + 5, (s32)((u32)bytes + 4));
-    _021D4660.release(out);
-    _021D4660.release(work);
-    _021D4660.release(encoded);
+    gCpsFree.release(out);
+    gCpsFree.release(work);
+    gCpsFree.release(encoded);
 }

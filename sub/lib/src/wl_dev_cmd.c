@@ -73,13 +73,13 @@ int DEV_ClearWlInfoReqCmd(WlParamReq *req, WlParamCfm *cfm) {
 }
 
 // Confirm: driver version (8 bytes), MAC version (register 0x000), BBP version and register CRC
-// (unk_690 bit 15; fixed values without it), RF type (unk_690 bit 14; 2 without it).
+// (hwWorkarounds bit 15; fixed values without it), RF type (hwWorkarounds bit 14; 2 without it).
 int DEV_GetVerInfoReqCmd(WlParamReq *req, WlParamCfm *cfm) {
     WlWork *w;
     cfm->header.length = 9;
     __VENEER_MIi_CpuCopy16(wlVersion$4017, cfm->param, 8);
     cfm->param[4] = WL_REG(0x000);
-    if (!(wlWork->unk_690 & 0x8000)) {
+    if (!(wlWork->hwWorkarounds & 0x8000)) {
         cfm->param[5] = 0x6D;
         cfm->param[6] = 0x933D;
     } else {
@@ -87,7 +87,7 @@ int DEV_GetVerInfoReqCmd(WlParamReq *req, WlParamCfm *cfm) {
         cfm->param[6] = CalcBbpCRC();
     }
     w = wlWork;
-    if (w->unk_690 & 0x4000) {
+    if (w->hwWorkarounds & 0x4000) {
         cfm->param[7] = w->rf.type;
     } else {
         cfm->param[7] = 2;

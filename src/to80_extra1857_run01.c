@@ -10,8 +10,8 @@ typedef struct {
     void *cipher;
 } S;
 
-extern void *(*_021D4634)(int);
-extern void (*_021D4660)(void *);
+extern void *(*gCpsAlloc)(int);
+extern void (*gCpsFree)(void *);
 extern int make_ciphertext(void *, u8 *);
 extern u32 CPSi_TcpWrite2Raw(void *, int, int, int, S *);
 int CPSi_SslWrite2(u8 *, u32, u8 *, int, S *);
@@ -24,7 +24,7 @@ int CPSi_SslWrite2(u8 *a, u32 na, u8 *b, int nb, S *s) {
     int first;
     do {
         int n = left > 2895 ? 2895 : left;
-        p = _021D4634(n + 25);
+        p = gCpsAlloc(n + 25);
         int second;
         if (!p) {
             break;
@@ -45,7 +45,7 @@ int CPSi_SslWrite2(u8 *a, u32 na, u8 *b, int nb, S *s) {
         if (CPSi_TcpWrite2Raw(p, first, 0, 0, s) < (u32)first) {
             n = 0;
         }
-        _021D4660(p);
+        gCpsFree(p);
         left -= n;
         total += n;
         if (!left || !n) {

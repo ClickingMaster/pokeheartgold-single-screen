@@ -7,7 +7,7 @@
 #define B(p, o) (*(u8 *)((u8 *)(p) + (o)))
 #define W(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
-extern void (*_021D4660)(void *);
+extern void (*gCpsFree)(void *);
 extern int make_plaintext(u8 *, u8 *);
 extern void client_hello(u8 *, u8 *);
 extern void rcv_client_key_exchange(u8 *, u8 *);
@@ -22,7 +22,7 @@ void parse_record_in_buf(u8 *w, u8 *buf) {
     u8 *p;
     int length;
     if (state == 9) {
-        _021D4660(buf);
+        gCpsFree(buf);
         return;
     }
     length = (buf[3] << 8) + buf[4] + 5;
@@ -31,7 +31,7 @@ void parse_record_in_buf(u8 *w, u8 *buf) {
         length = make_plaintext(w, buf);
         state = B(w, 0x455);
         if (state == 9) {
-            _021D4660(buf);
+            gCpsFree(buf);
             return;
         }
     }
@@ -104,5 +104,5 @@ void parse_record_in_buf(u8 *w, u8 *buf) {
         B(w, 0x455) = 9;
         break;
     }
-    _021D4660(buf);
+    gCpsFree(buf);
 }

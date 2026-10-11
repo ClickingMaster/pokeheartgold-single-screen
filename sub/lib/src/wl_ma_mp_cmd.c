@@ -17,7 +17,7 @@ int MA_MpReqCmd(WlMaMpReq *req, WlCmdCfm *cfm) {
     u8 *entry;
     u32 count;
     int send = 1;
-    u32 flags = w->unk_690;
+    u32 flags = w->hwWorkarounds;
     u32 entrySize;
     u32 bytes;
     u32 irq;

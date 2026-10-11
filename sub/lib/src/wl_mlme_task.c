@@ -21,8 +21,8 @@ void MLME_ScanTask(void) {
     case 16:
         WSetStaState(32);
         bss->mode = 2;
-        p->cfm.scan->unk_08 = 0;
-        p->cfm.scan->unk_06 = 0;
+        p->cfm.scan->bssCount = 0;
+        p->cfm.scan->knownBssidFound = 0;
         p->work.scan.channelIndex = 0;
         p->work.scan.unk_08 = 0;
         if (p->req.scan->scanType == 0) {

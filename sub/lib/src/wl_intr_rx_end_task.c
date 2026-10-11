@@ -47,7 +47,7 @@ void WlIntrRxEndTask(void) {
             }
             continue;
         }
-        if ((wlWorkPlain->unk_690 & 8) && (frame->frameCtrl & 0x4000)) {
+        if ((wlWorkPlain->hwWorkarounds & 8) && (frame->frameCtrl & 0x4000)) {
             rx->unk_02 = 0;
         }
         release = 1;
@@ -108,7 +108,7 @@ void WlIntrRxEndTask(void) {
         if (release) {
             ReleaseHeapBuf(&w->heap.bufMan[0], (WlHeapBuf *)((u8 *)frame - 16));
         }
-        if (wlWorkPlain->unk_690 & 1) {
+        if (wlWorkPlain->hwWorkarounds & 1) {
             u32 i;
             for (i = 0; i < 7; i++) {
                 if ((u32)raw >= 0x04805F60) {

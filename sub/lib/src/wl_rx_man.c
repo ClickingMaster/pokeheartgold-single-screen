@@ -32,7 +32,7 @@ void RxDisAssFrame(WlRxFrame *frame) {
     } break;
     case 2:
     case 3: {
-        if (bss->state == 64 && MatchMacAdrs(frame->addr2, bss->unk_82)) {
+        if (bss->state == 64 && MatchMacAdrs(frame->addr2, bss->parentMacAdrs)) {
             WSetStaState(48);
             WClearAids();
             MLME_IssueDisAssIndication(frame->addr2, *(u16 *)((u8 *)frame + 0x2C));

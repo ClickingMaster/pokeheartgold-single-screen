@@ -8,9 +8,6 @@
 
 #define WL_IRQ_MASK 0x01000000 // interrupt bit 24: wireless
 
-// Some accesses to the station table state were volatile in the original code.
-#define VOLATILE_U16(lvalue) (*(vu16 *)&(lvalue))
-
 u32 CAM_Search(const u16 *addr) {
     WlWork *w;
     WlStation *sta;
@@ -170,12 +167,12 @@ void CAM_SetStaState(u16 aid, u16 state) {
 
 #pragma opt_common_subs reset
 
-void CAM_SetRSSI(u32 index, u32 rssi) {
+void CAM_SetRSSI(u16 index, u16 rssi) {
     WlStation *sta = wlWorkPlain->param.camTable + index;
-    sta->rssi = (u16)rssi;
+    sta->rssi = rssi;
 }
 
-void CAM_SetPowerMgtMode(u32 index, u16 mode) {
+void CAM_SetPowerMgtMode(u16 index, u16 mode) {
     WlWork *w = wlWorkPlain;
     volatile WlCam *cam = &w->cam;
     u32 awake;
@@ -368,7 +365,7 @@ void CAM_TimerTask(void) {
                             {
                                 WlTxHeapFrame *frame;
                                 wlWorkPlain->cam.unk_08 |= 1 << aid;
-                                CAM_SetPowerMgtMode((u16)aid, 0);
+                                CAM_SetPowerMgtMode(aid, 0);
                                 wlWorkPlain->cam.activeMap |= 1 << aid;
                                 frame = MakeDeAuthFrame(sta->macAdrs, 1, 0);
                                 if (frame) {
@@ -379,7 +376,7 @@ void CAM_TimerTask(void) {
                                 }
                                 MLME_IssueDeAuthIndication(sta->macAdrs, 1);
                             }
-                        } else if (aid == w->bss.unk_88) {
+                        } else if (aid == w->bss.parentStation) {
                             WlTxHeapFrame *frame = MakeDeAuthFrame(sta->macAdrs, 1, 0);
                             if (frame) {
                                 frame->unk_00 = 1;
@@ -450,7 +447,7 @@ void CAM_InitElement(u32 index, const u8 *addr) {
     __VENEER_MIi_CpuClear16(0, sta, 26);
     w = wlWorkPlain;
     w->cam.unk_08 &= ~(1U << index);
-    CAM_SetPowerMgtMode((u16)index, 0);
+    CAM_SetPowerMgtMode(index, 0);
     w = wlWorkPlain;
     w->cam.activeMap |= (1U << index);
     WSetMacAdrs1(sta->macAdrs, (const u16 *)addr);

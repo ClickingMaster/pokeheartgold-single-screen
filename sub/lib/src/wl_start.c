@@ -65,7 +65,7 @@ void WStart(void) {
     WL_REG(0x030) = 0x8000;
     WL_REG(0x010) = 0xFFFF;
     WL_REG(0x1AE) = 0x1FFF;
-    if (wlWorkPlain->unk_690 & 8) {
+    if (wlWorkPlain->hwWorkarounds & 8) {
         WL_REG(0x1AA) = 0x400;
     } else {
         WL_REG(0x1AA) = 0;
@@ -100,7 +100,7 @@ void WStart(void) {
     }
     case 2:
         WL_REG(0x012) = 0xE0BF;
-        if (wlWorkPlain->unk_690 & 0x20) {
+        if (wlWorkPlain->hwWorkarounds & 0x20) {
             WL_REG(0x012) |= 0x40;
             WL_REG(0x1AA) |= 0x68;
         }

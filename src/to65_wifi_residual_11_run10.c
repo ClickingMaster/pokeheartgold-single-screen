@@ -28,10 +28,10 @@ static inline u32 Swap32(u32 v) {
     return ((v >> 24) & 255) | ((v >> 8) & 0xff00) | ((v << 8) & 0xff0000) | ((v << 24) & 0xff000000);
 }
 
-extern u8 _021D4490[];
-extern u8 _02110648[];
-extern u8 _02110630[];
-extern u8 _021D4494[];
+extern u8 gSoclTrash[];
+extern u8 gSoclTcpSocketParam[];
+extern u8 gSoclUdpSocketParam[];
+extern u8 gSocState[];
 extern u8 _021D4620[];
 extern u8 _021D4B08[];
 extern u8 _02110690[];
@@ -104,10 +104,10 @@ void send_packet(u8 *a, int b, void *c, int d);
 void CPSi_RecvCallbackFunc(void *a, void *b, void *c, u32 d);
 void *arprequest(u32 a);
 
-extern u8 _021D451C[];
-extern u8 _021D44AC[];
+extern u8 gSocHostName[];
+extern u8 gSocHostEntWork[];
 extern u8 _021D44B4[];
-extern u8 _021D44D4[];
+extern u8 gSocSoclConfig[];
 extern char _02110678[];
 int SOCL_Startup(void *);
 u32 SOCL_Resolve(char *);
@@ -128,7 +128,7 @@ int SOCL_GetStatus(void *);
 void throw_packet(void);
 void reset_network_vars(u32 a);
 int SOC_Poll(u8 *a, u32 b, s64 time);
-extern u8 _021D450C[];
+extern u8 gSocInetNtoABuffer[];
 void *SOC_InetNtoA(u32, ...);
 void reg_arpcache(u8 *, u32, int);
 void *SOC_InetNtoA(u32 a, ...);

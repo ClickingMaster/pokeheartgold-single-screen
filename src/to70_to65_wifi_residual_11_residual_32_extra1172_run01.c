@@ -20,7 +20,7 @@ typedef struct {
     u32 available;
 } Socket;
 
-extern void *(*_021D4634)(u32);
+extern void *(*gCpsAlloc)(u32);
 extern u8 *CPSi_TcpReadRaw(u32 *, Socket *);
 extern void CPSi_SocConsumeRaw(u32, Socket *);
 extern void parse_record_in_buf(Record *, u8 *);
@@ -41,7 +41,7 @@ void try_fill_record(Socket *s) {
             r->status = 9;
             return;
         }
-        r->record = _021D4634(size);
+        r->record = gCpsAlloc(size);
         if (r->record == 0) {
             r->status = 9;
             return;

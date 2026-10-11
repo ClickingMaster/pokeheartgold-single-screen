@@ -15,7 +15,7 @@ void WlIntrRxEnd(void) {
     u32 current, end;
     bss = &w->bss;
     rx = &w->rxCtrl;
-    checkRing = w->unk_690;
+    checkRing = w->hwWorkarounds;
     WL_REG(0x010) = 1;
     if (!bss->mode) {
         WL_REG(0x05A) = WL_REG(0x054);

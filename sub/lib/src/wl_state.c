@@ -170,10 +170,10 @@ void WClearAids(void) {
     bss->aid = 0;
     WaitLoop_ClrAid();
     WL_REG(0x02A) = 0;
-    if (bss->unk_88) {
-        DeleteTxFrames(bss->unk_88);
-        CAM_SetStaState(bss->unk_88, 32);
-        bss->unk_88 = 0;
+    if (bss->parentStation) {
+        DeleteTxFrames(bss->parentStation);
+        CAM_SetStaState(bss->parentStation, 32);
+        bss->parentStation = 0;
     }
 }
 

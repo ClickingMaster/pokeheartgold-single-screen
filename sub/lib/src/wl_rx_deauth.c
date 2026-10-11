@@ -20,7 +20,7 @@ void RxDeAuthFrame(WlRxFrame *frame) {
     } break;
     case 2:
     case 3: {
-        if (bss->state > 32 && MatchMacAdrs(frame->addr2, bss->unk_82)) {
+        if (bss->state > 32 && MatchMacAdrs(frame->addr2, bss->parentMacAdrs)) {
             WSetStaState(32);
             WClearAids();
             MLME_IssueDeAuthIndication(frame->addr2, *(u16 *)((u8 *)frame + 0x2C));

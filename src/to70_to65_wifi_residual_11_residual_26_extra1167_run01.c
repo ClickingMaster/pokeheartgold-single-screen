@@ -14,8 +14,8 @@ typedef struct {
     void *exponent;
 } Key;
 
-extern void *(*_021D4634)(int);
-extern void (*_021D4660)(void *);
+extern void *(*gCpsAlloc)(int);
+extern void (*gCpsFree)(void *);
 extern void CPSi_big_from_char(u16 *, void *, int, int);
 extern void CPSi_big_power(u16 *, u16 *, u16 *, int, u16 *);
 extern void exit_computebound(int);

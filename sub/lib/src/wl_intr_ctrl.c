@@ -9,7 +9,7 @@
 // -ipa file would otherwise inline the small functions of this file into their callers here.
 #pragma dont_inline on
 
-// RX start (unk_690 bit 5): when an MP frame for this station starts arriving while the TX is busy,
+// RX start (hwWorkarounds bit 5): when an MP frame for this station starts arriving while the TX is busy,
 // stops the TX of the key data frame (its pointer is saved in WlTxCtrl.unk_a4 and restored at the end).
 void WlIntrStartRx(void) {
     u16 *cursor = 0;
@@ -19,7 +19,7 @@ void WlIntrStartRx(void) {
     WlBss *bss = &w->bss;
     WlTxCtrl *txCtrl = &w->txCtrl;
     WL_REG(0x010) = 0x40;
-    if (!(wlWork->unk_690 & 0x20)) {
+    if (!(wlWork->hwWorkarounds & 0x20)) {
         goto done;
     }
     if (txCtrl->unk_a4 != 0xFFFF || (WL_REG(0x19C) & 3) != 3) {
@@ -207,7 +207,7 @@ void WlIntrTxBeaconTask(void) {
 
 // Completes the frames the MAC has sent from the three priority queues (highest first): updates the heap
 // frame's status and retry count and calls the queue's callback. A WEP frame with an empty ICV resets the
-// TX side (unk_690 bit 3) and is sent again unless it timed out.
+// TX side (hwWorkarounds bit 3) and is sent again unless it timed out.
 void WlIntrTxEndTask(void) {
     WlWork *w = wlWorkPlain;
     WlTxCtrl *txCtrl = &w->txCtrl;
@@ -227,7 +227,7 @@ void WlIntrTxEndTask(void) {
             desc->heapFrame->frame.frameCtrl = ((WlTxFrame *)desc->frame)->frameCtrl;
             if (((WlTxFrame *)desc->frame)->frameCtrl & 0x4000) {
                 WlTxFrame *frame = (WlTxFrame *)desc->frame;
-                if (wlWorkPlain->unk_690 & 8) {
+                if (wlWorkPlain->hwWorkarounds & 8) {
                     u16 *icv = (u16 *)((u32)((u32)&frame->frameCtrl + frame->length - 7) & ~1u);
                     if (icv[0] == 0 && icv[1] == 0) {
                         WL_REG(0x032) = 0;

@@ -3,12 +3,12 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// TX start: (unk_690 bit 5) restarts the TX when its pointer lies between the queue 2 and queue 4 frames,
+// TX start: (hwWorkarounds bit 5) restarts the TX when its pointer lies between the queue 2 and queue 4 frames,
 // then waits for register 0x2B8 to move; it sets fatal error 0x40 when it does not.
 void WlIntrStartTx(void) {
     WlTxCtrl *txCtrl = &wlWorkPlain->txCtrl;
     WL_REG(0x010) = 0x80;
-    if (wlWorkPlain->unk_690 & 0x20) {
+    if (wlWorkPlain->hwWorkarounds & 0x20) {
         u32 state = WL_REG(0x214) & 0xFF;
         u16 pointer = WL_REG(0x268);
         if (state >= 3 && state <= 5 && pointer >= (((u32)txCtrl->txq[4].frame >> 1) & 0xFFF) && pointer <= (((u32)txCtrl->txq[2].frame >> 1) & 0xFFF)) {

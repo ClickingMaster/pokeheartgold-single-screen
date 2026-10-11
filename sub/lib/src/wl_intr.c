@@ -82,7 +82,7 @@ void WlIntrTbtt(void) {
     WL_REG(0x010) = 0x4000;
     switch (bss->mode) {
     case 1: {
-        u32 timestamp = *(vu16 *)0x0380FFF0;
+        u32 timestamp = VOLATILE_U16(WL_VSYNC_TIME);
         frame = txCtrl->beacon.frame + 0x24 + bss->gameInfoOffset;
         WL_WriteByte(frame + 8, timestamp & 255);
         WL_WriteByte(frame + 9, (timestamp >> 8) & 255);
@@ -192,7 +192,7 @@ void WlIntrCntOvf(void) {
 }
 
 // TX error: switches the antenna (diversity), and resets the TX side when a queued WEP frame has an
-// empty ICV (unk_690 bit 3).
+// empty ICV (hwWorkarounds bit 3).
 void WlIntrTxErr(void) {
     WlWork *w;
     WL_REG(0x010) = 8;
@@ -202,7 +202,7 @@ void WlIntrTxErr(void) {
         }
     }
     w = wlWorkPlain;
-    if (w->unk_690 & 8) {
+    if (w->hwWorkarounds & 8) {
         u32 i = 0;
         WlBss *bss = &w->bss;
         WlTxDesc *txq = w->txCtrl.txq;
@@ -224,8 +224,8 @@ void WlIntrTxErr(void) {
     }
 }
 
-// RX counter interrupt: resets the TX side when it stays busy (unk_690 bit 3), and repairs the RX ring
-// read pointer (unk_690 bit 0).
+// RX counter interrupt: resets the TX side when it stays busy (hwWorkarounds bit 3), and repairs the RX ring
+// read pointer (hwWorkarounds bit 0).
 void WlIntrRxCntup(void) {
     WlWork *w = wlWorkPlain;
     WlRxCtrl *rx = &w->rxCtrl;
@@ -233,7 +233,7 @@ void WlIntrRxCntup(void) {
     u16 status;
     WL_REG(0x010) = 4;
     status = WL_REG(0x1A8);
-    if ((wlWorkPlain->unk_690 & 8) && (status & 0x400)) {
+    if ((wlWorkPlain->hwWorkarounds & 8) && (status & 0x400)) {
         u16 busy = WL_REG(0x0B0);
         if (!((busy & 1) && txq[0].active) && !((busy & 4) && txq[1].active) && !((busy & 8) && txq[2].active) && !(WL_REG(0x19C) & 1)) {
             WL_REG(0x032) = 0;
@@ -250,7 +250,7 @@ void WlIntrRxCntup(void) {
             }
         }
     }
-    if ((wlWorkPlain->unk_690 & 1) && (status & 0x60)) {
+    if ((wlWorkPlain->hwWorkarounds & 1) && (status & 0x60)) {
         s32 position = WL_REG(0x054);
         if (position >= (s32)(WL_REG(0x052) - 0x4000) / 2 || position < (s32)(WL_REG(0x050) - 0x4000) / 2) {
             WL_REG(0x056) = WL_REG(0x05A);
@@ -316,7 +316,7 @@ void WlIntrTxEnd(void) {
                 WL_REG(0x290) ^= 1;
             }
         }
-        if (wlWorkPlain->unk_690 & 64) {
+        if (wlWorkPlain->hwWorkarounds & 64) {
             while (bits > 1) {
                 bits = (u16)(bits >> 1);
                 if (bits & 1) {

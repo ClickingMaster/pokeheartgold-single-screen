@@ -76,7 +76,7 @@ int MLME_ScanReqCmd(WlMlmeScanReq *req, WlMlmeScanCfm *cfm) {
     if (req->maxChannelTime < 10) {
         return 5;
     }
-    if (req->unk_4c > 16) {
+    if (req->knownBssidCount > 16) {
         return 5;
     }
     for (i = 0; i < 16; i++) {

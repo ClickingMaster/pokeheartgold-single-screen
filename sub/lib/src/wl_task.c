@@ -8,9 +8,6 @@
 // IRQs masked while the task queues change (wireless and timer 0).
 #define TASK_IRQ_MASK 0x1000010
 
-// The task state words are shared with the interrupt handlers that queue tasks.
-#define VOLATILE_U16(field) (*(vu16 *)&(field))
-
 extern void (*const pTaskFunc[24])(void);
 
 // -ipa file would otherwise inline the small functions of this file into their callers here.
@@ -54,7 +51,7 @@ u16 WL_InitDriver(WlInitParam *param) {
     *(vu16 *)0x04000206 = 48; // WIFIWAITCNT
     wlWork->unk_68c = 3;
     FLASH_Read(0x3C, 2, &wlWork->unk_692);
-    FLASH_Read(0x3E, 2, &wlWork->unk_690);
+    FLASH_Read(0x3E, 2, &wlWork->hwWorkarounds);
     wlWork->requestQueue = param->requestQueue;
     wlWork->indicateQueue = param->indicateQueue;
     {

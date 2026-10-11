@@ -24,7 +24,7 @@ static inline u32 SetGameInfoElement(u8 *element) {
     WL_WriteByte(element + 5, 0);
     WL_WriteByte(element + 6, (u8)param->activeZoneTime);
     WL_WriteByte(element + 7, (u8)(param->activeZoneTime >> 8));
-    value = *(u16 *)0x0380FFF0;
+    value = WL_VSYNC_TIME;
     WL_WriteByte(element + 8, (u8)value);
     WL_WriteByte(element + 9, (u8)(value >> 8));
     i += 10;

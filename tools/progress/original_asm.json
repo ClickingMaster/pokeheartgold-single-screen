@@ -760,21 +760,21 @@
   {
    "function": "get48bits_2",
    "cpu": "ARM9",
-   "source": "src/op90_to90_extra2156_residual_1_r01.c",
+   "source": "lib/libCPS/src/cps_bignum.c",
    "kind": "asm",
    "reason": "u64 composed from halfword loads without the orr rX,rY,#0 that MWCC emits for every u64 composition form"
   },
   {
    "function": "get48bits_3",
    "cpu": "ARM9",
-   "source": "src/op90_to90_extra2156_residual_1_r01.c",
+   "source": "lib/libCPS/src/cps_bignum.c",
    "kind": "asm",
    "reason": "u64 composed from halfword loads without the orr rX,rY,#0 that MWCC emits for every u64 composition form"
   },
   {
    "function": "get64bits",
    "cpu": "ARM9",
-   "source": "src/op90_to90_extra2156_residual_1_r01.c",
+   "source": "lib/libCPS/src/cps_bignum.c",
    "kind": "asm",
    "reason": "u64 composed from halfword loads without the orr rX,rY,#0 that MWCC emits for every u64 composition form"
   },

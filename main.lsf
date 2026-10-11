@@ -918,48 +918,20 @@ Static main
     Object lib/src/nitrocrypto_rc4_init.o
     Object lib/src/nitrocrypto_rc4_fast.o
     Object lib/asm/to59_wifi_anchor.o
-    Object src/to70_wifi_residual_1_run01.o
-    Object src/op90_to70_wifi_residual_1_residual_1_r01.o
-    Object src/to70_wifi_residual_1_run02.o
-    Object src/to59_wifi_run01.o
-    Object src/to59_wifi_run02.o
-    Object src/to59_wifi_run03.o
-    Object src/to70_wifi_residual_2_run01.o
-    Object src/to59_wifi_run04.o
-    Object src/to91_w41427_copycps264.o
-    Object src/to59_wifi_run05.o
-    Object src/to70_wifi_residual_4_run01.o
-    Object src/to59_wifi_run06.o
-    Object src/to70_to70_wifi_residual_5_residual_1_extra1188_run01.o
-    Object src/to70_wifi_residual_5_run01.o
-    Object src/to80_extra1482_run01.o
-    Object src/to90_extra2553_run01.o
-    Object src/to70_wifi_residual_5_run02.o
-    Object src/op90_to90_extra2467_residual_1_r01.o
-    Object src/to90_extra2467_run01.o
-    Object src/to70_to70_wifi_residual_5_residual_3_extra1189_run01.o
-    Object src/to59_wifi_run07.o
-    Object src/to90_extra2463_run01.o
-    Object src/to59_wifi_run08.o
-    Object src/to70_wifi_residual_7_run01.o
-    Object src/to80_extra1483_run01.o
-    Object src/to70_wifi_residual_7_run02.o
-    Object src/to59_wifi_run09.o
-    Object src/to70_wifi_residual_8_run01.o
-    Object src/to59_wifi_run10.o
-    Object src/to70_wifi_residual_9_run01.o
-    Object src/to59_wifi_run11.o
-    Object src/to90_extra2462_run01.o
-    Object src/to59_wifi_run12.o
-    Object src/to65_wifi_residual_11_run01.o
-    Object src/to80_extra1675_run01.o
-    Object src/to65_wifi_residual_11_run02.o
-    Object src/op90_to65_wifi_residual_11_residual_2_r01.o
+    Object lib/NitroWiFi/src/socl_startup.o
+    Object lib/NitroWiFi/src/socl_command.o
+    Object lib/NitroWiFi/src/socl_socket.o
+    Object lib/NitroWiFi/src/socl_read.o
+    Object lib/NitroWiFi/src/socl_write.o
+    Object lib/NitroWiFi/src/socl_close.o
+    Object lib/NitroWiFi/src/socl_resolver.o
+    Object lib/NitroWiFi/src/socl_status.o
+    Object lib/NitroWiFi/src/socl_list.o
+    Object lib/NitroWiFi/src/soc.o
+    Object lib/NitroWiFi/src/soc_gethostbyname.o
     Object lib/asm/to59_wifi_anchor_own1.o
-    Object src/to65_wifi_residual_11_run03.o
-    Object src/to80_extra1756_run01.o
-    Object src/to80_extra1463_run01.o
-    Object src/to65_wifi_residual_11_run04.o
+    Object lib/NitroWiFi/src/soc_inet.o
+    Object lib/NitroWiFi/src/socl_ssl.o
     Object src/op90_to65_wifi_residual_11_residual_4_r01.o
     Object src/to65_wifi_residual_11_run05.o
     Object src/op90_to65_wifi_residual_11_residual_5_r01.o
@@ -1041,28 +1013,10 @@ Static main
     Object src/to65_wifi_residual_11_run35.o
     Object src/to80_extra1857_run01.o
     Object src/to65_wifi_residual_11_run36.o
-    Object src/to80_extra1464_run01.o
-    Object src/to65_wifi_residual_11_run37.o
-    Object src/op90_to65_wifi_residual_11_residual_35_r01.o
-    Object src/to65_wifi_residual_11_run38.o
-    Object src/to80_extra1921_run01.o
-    Object src/to80_extra1749_run01.o
-    Object src/to65_wifi_residual_11_run39.o
-    Object src/op90_to65_wifi_residual_11_residual_37_r01.o
-    Object src/to65_wifi_residual_11_run40.o
-    Object src/op90_to80_extra1465_residual_1_r01.o
-    Object src/to80_extra1465_run01.o
-    Object src/to65_wifi_residual_11_run41.o
-    Object src/to80_extra1466_run01.o
-    Object src/to65_wifi_residual_11_run42.o
-    Object src/to80_extra1858_run01.o
-    Object src/to65_wifi_residual_11_run43.o
-    Object src/op90_to90_extra2156_residual_1_r01.o
-    Object src/to90_extra2156_run01.o
-    Object src/to90_extra2156_run02.o
-    Object src/to90_extra2156_run03.o
-    Object src/to65_wifi_residual_11_run44.o
-    Object src/to70_to65_wifi_residual_11_residual_42_extra1173_run01.o
+    Object lib/libCPS/src/cps_md5.o
+    Object lib/libCPS/src/cps_sha1.o
+    Object lib/libCPS/src/cps_rc4.o
+    Object lib/libCPS/src/cps_bignum.o
     Object src/to65_wifi_residual_11_run45.o
     Object src/to70_to65_wifi_residual_11_residual_43_extra1174_run01.o
     Object src/to65_wifi_residual_11_run46.o

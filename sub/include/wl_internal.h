@@ -182,11 +182,11 @@ typedef struct WlBss {
     u16 capability; // capability information of the own beacon
     u16 beaconLostThreshold;
     u16 beaconLostCount;
-    u16 unk_82[3]; // MLME_BeaconLostTask: address of the BSS whose beacons were lost
-    u16 unk_88;    // station whose frames and CAM state WClearAids drops
-    u16 unk_8a;    // bit 14 set while WEP is on
-    u16 unk_8c;    // WSetFrameLifeTime: life time * beaconPeriod / 100 (0xFFFF: none)
-    u16 unk_8e;    // TxqEndData: no own power save while set
+    u16 parentMacAdrs[3]; // child: the parent associated with (RxAssResFrame); MLME_BeaconLostTask reports it
+    u16 parentStation;    // child: CAM index of the parent; WClearAids drops its frames and CAM state
+    u16 unk_8a;           // bit 14 set while WEP is on
+    u16 unk_8c;           // WSetFrameLifeTime: life time * beaconPeriod / 100 (0xFFFF: none)
+    u16 parentBuffered;   // child in power save: the parent's TIM (RxBeaconFrame), bit 0: broadcast frames, 1: frames for the own AID; no doze while set
     u16 unk_90;
     u16 ssidOffset;     // offset of the SSID in the beacon frame
     u16 unk_94;         // offset of the beacon's TIM element (MakeBeaconFrame; MAC memory 0x0480425C + unk_94)
@@ -315,6 +315,38 @@ typedef struct WlRxBuf {
     WlRxFrame frame;
 } WlRxBuf;
 
+// Body of a received frame: it follows the WlRxFrame header.
+#define WL_RX_BODY(frame, type) ((type *)((WlRxFrame *)(frame) + 1))
+
+// Bodies of received management frames.
+typedef struct WlBeaconBody { // beacon, probe response
+    u16 timeStamp[4];
+    u16 beaconPeriod;
+    u16 capaInfo;
+    u8 elements[0];
+} WlBeaconBody;
+
+typedef struct WlAuthBody {
+    u16 algorithm; // 0: open system, 1: shared key
+    u16 seqNo;
+    u16 statusCode;
+    u8 challenge[0]; // challenge text element (id, length, text)
+} WlAuthBody;
+
+typedef struct WlAssResBody { // association / reassociation response
+    u16 capaInfo;
+    u16 statusCode;
+    u16 aid;
+    u8 elements[0];
+} WlAssResBody;
+
+typedef struct WlReAssReqBody {
+    u16 capaInfo;
+    u16 listenInterval;
+    u16 currentAp[3];
+    u8 elements[0];
+} WlReAssReqBody;
+
 // A frame waiting in the MAC memory (WlTxCtrl.txq / beacon).
 typedef struct WlTxDesc {
     u16 active; // txq[4], txq[5]: 2 while the key data frame is sent, then 1 (CheckKeyTxEndMain)
@@ -348,11 +380,20 @@ typedef struct WlTxCtrl {
     u16 unk_ae; // WlIntrTbtt: queued frames timed out
 } WlTxCtrl;
 
-// Fragment reassembly slot.
+// Frame a fragment belongs to: destination, source and sequence control (fragment number: last one received).
+typedef struct WlDefragKey {
+    u16 addr1[3];
+    u16 addr2[3];
+    WlSeqCtrlBits seqCtrl;
+    u16 unk_0e;
+} WlDefragKey;
+
+// Fragment reassembly slot (DefragTask).
 typedef struct WlDefrag {
-    u16 timer; // DefragTimerTask counts it down and drops the frame at 0
-    u8 unk_02[18];
-    WlHeapBuf *buf;
+    u16 timer;      // 0: free; DefragTimerTask counts it down and drops the frame at 0
+    u16 fragLength; // body bytes per fragment (from the first fragment)
+    WlDefragKey key;
+    WlHeapBuf *buf; // WlRxBuf of the frame being reassembled
 } WlDefrag;
 
 // RX side of the MAC (WlWork+0x4DC).
@@ -438,7 +479,8 @@ typedef struct WlMlmeScanReq {
     u16 scanType; // 0: active (probe requests)
     u8 channelList[16];
     u16 maxChannelTime;
-    u16 unk_4c;
+    u16 knownBssidCount;   // up to 16
+    u16 knownBssid[16][3]; // BSSs flagged in WlMlmeScanCfm.knownBssidFound instead of being described
 } WlMlmeScanReq;
 
 typedef struct WlMlmeJoinReq {
@@ -486,7 +528,7 @@ typedef struct WlMlmeMeasChanReq {
 
 typedef struct WlMlmeAuthCfm {
     WlCmdCfm header;
-    u16 unk_06;
+    u16 statusCode; // of the peer's authentication frame
     u16 peerMacAdrs[3];
     u16 algorithm;
 } WlMlmeAuthCfm;
@@ -496,16 +538,43 @@ typedef struct WlMlmeDeAuthCfm {
     u16 peerMacAdrs[3];
 } WlMlmeDeAuthCfm;
 
+// BSS found by a scan (in the scan confirm, from a beacon or probe response).
+typedef struct WlBssDesc {
+    u16 length; // in halfwords, the data included
+    u16 rssi;
+    u16 bssid[3];
+    u16 ssidLength;
+    u8 ssid[32];
+    u16 capaInfo;
+    WlRateSet rateSet;
+    u16 beaconPeriod;
+    u16 dtimPeriod;
+    u16 channel;
+    u16 cfpPeriod;
+    u16 unk_3a;
+    u16 gameInfoLength;
+    u16 otherElementCount; // without game information: the unknown elements copied to data
+    u8 data[0];            // the game information or the unknown elements
+} WlBssDesc;
+
 typedef struct WlMlmeScanCfm {
     WlCmdCfm header;
-    u16 unk_06;
-    u16 unk_08;
+    u16 knownBssidFound; // bit per WlMlmeScanReq.knownBssid entry heard
+    u16 bssCount;
+    u16 bssDesc[0]; // WlBssDesc entries, each WlBssDesc.length halfwords
 } WlMlmeScanCfm;
 
 typedef struct WlMlmeJoinCfm {
     WlCmdCfm header;
     u16 reason;
+    u16 peerMacAdrs[3];
 } WlMlmeJoinCfm;
+
+typedef struct WlMlmeAssCfm {
+    WlCmdCfm header;
+    u16 statusCode; // of the association response
+    u16 aid;
+} WlMlmeAssCfm;
 
 typedef struct WlMlmeMeasChanCfm {
     WlCmdCfm header;
@@ -560,6 +629,7 @@ typedef struct WlMlme {
         WlMlmeDeAuthCfm *deauth;
         WlMlmeScanCfm *scan;
         WlMlmeJoinCfm *join;
+        WlMlmeAssCfm *ass;
         WlMlmeMeasChanCfm *meas;
     } cfm;
 } WlMlme;
@@ -744,14 +814,20 @@ typedef struct WlWork {
     OSAlarm timeOutAlarm;         // SetupTimeOut
     OSAlarm ksidAlarm;            // runs WClearKSID
     u32 unk_68c;
-    u16 unk_690; // flash 0x3e: hardware workarounds (bit 0: RX ring check, 3: TX reset, 4: MP timeout, 5: key search, 6: MP answer count)
-    u16 unk_692; // flash 0x3c
+    u16 hwWorkarounds; // flash 0x3e: hardware workarounds (bit 0: RX ring check, 3: TX reset, 4: MP timeout, 5: key search, 6: MP answer count)
+    u16 unk_692;       // flash 0x3c
 } WlWork;
 
 #define WL_WORK_ADDR 0x0380FFF4
 #define wlWork       (*(WlWork *volatile *)WL_WORK_ADDR)
 // The same pointer as a plain variable: the compiler may keep a loaded value until the next store.
 #define wlWorkPlain (*(WlWork **)WL_WORK_ADDR)
+
+// A halfword field accessed as volatile (the work area is shared with the interrupt handlers).
+#define VOLATILE_U16(lvalue) (*(vu16 *)&(lvalue))
+
+// The parent's V-sync time (from its game information element), shared with the WMSP (WMSP_VSYNC_TIME).
+#define WL_VSYNC_TIME (*(u16 *)0x0380FFF0)
 
 // wl_task.c
 void WlessLibReboot(void);
@@ -1183,6 +1259,21 @@ void RxProbeReqFrame(WlRxFrame *frame);
 void RxDeAuthFrame(WlRxFrame *frame);
 void ElementChecker(WlElements *info);
 
+// wl_rx_beacon.c
+void RxBeaconFrame(WlRxFrame *frame);
+
+// wl_rx_probe_res.c
+void RxProbeResFrame(WlRxFrame *frame, WlElements *info);
+
+// wl_rx_auth.c
+void RxAuthFrame(WlRxFrame *frame);
+
+// wl_rx_man_task.c
+void RxManCtrlTask(void);
+
+// wl_defrag.c
+void DefragTask(void);
+
 // wl_cam.c
 u32 CAM_Search(const u16 *addr);
 u32 CAM_SearchAdd(const u16 *addr);
@@ -1190,8 +1281,8 @@ void CAM_AddBcFrame(WlHeapBufMan *from, WlHeapBuf *frame);
 void CAM_IncFrameCount(void *frame);
 void CAM_DecFrameCount(void *frame);
 void CAM_SetStaState(u16 aid, u16 state);
-void CAM_SetRSSI(u32 index, u32 rssi);
-void CAM_SetPowerMgtMode(u32 index, u16 mode);
+void CAM_SetRSSI(u16 index, u16 rssi);
+void CAM_SetPowerMgtMode(u16 index, u16 mode);
 void CAM_SetDoze(u32 index);
 void CAM_SetAwake(u32 index);
 void CAM_SetCapaInfo(u32 index, u16 capaInfo);
@@ -1251,9 +1342,9 @@ void __VENEER_OS_ExitThread(void);
 // defined in the later WL files
 OSIntrMode __VENEER_OS_DisableInterrupts(void);
 OSIntrMode __VENEER_OS_RestoreInterrupts(OSIntrMode state);
-void RxBeaconFrame(WlRxFrame *frame);
 
 extern const u8 BC_ADRS[];
+extern const u8 NULL_ADRS[];
 extern const u8 MP_ADRS[];
 extern const u8 MPKEY_ADRS[];
 

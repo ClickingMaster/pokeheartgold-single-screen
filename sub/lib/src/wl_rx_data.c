@@ -73,7 +73,7 @@ void RxDataFrameTask(void) {
             }
             break;
         }
-        CAM_SetPowerMgtMode((u16)index, ((WlFrameCtrlBits *)&buf->frame.frameCtrl)->pwrMgt);
+        CAM_SetPowerMgtMode(index, ((WlFrameCtrlBits *)&buf->frame.frameCtrl)->pwrMgt);
         if (buf->frame.seqCtrl == CAM_GetLastSeqCtrl(index)) {
             base->counter[15]++;
             break;
@@ -89,15 +89,15 @@ void RxDataFrameTask(void) {
         }
         if (bss->powerMgtMode && !(frameCtrl & 0x2000)) {
             if (buf->frame.addr1[0] & 1) {
-                bss->unk_8e &= ~1;
+                bss->parentBuffered &= ~1;
             } else if (mode != 3) {
-                bss->unk_8e &= ~2;
+                bss->parentBuffered &= ~2;
             }
-            if (!bss->unk_8e && !heap->bufMan[1].count && !heap->bufMan[2].count) {
+            if (!bss->parentBuffered && !heap->bufMan[1].count && !heap->bufMan[2].count) {
                 WSetPowerState(1);
             }
         }
-        index = bss->unk_88;
+        index = bss->parentStation;
         if (buf->frame.seqCtrl == CAM_GetLastSeqCtrl(index)) {
             base->counter[15]++;
             break;
@@ -139,7 +139,7 @@ int RxMpFrame(WlRxFrame *frame) {
     if (bss->state != 0x40) {
         return 1;
     }
-    if (!MatchMacAdrs(frame->addr2, bss->bssid) || !MatchMacAdrs(frame->addr3, bss->unk_82)) {
+    if (!MatchMacAdrs(frame->addr2, bss->bssid) || !MatchMacAdrs(frame->addr3, bss->parentMacAdrs)) {
         return 1;
     }
     // body: interval (+0x2C), bitmap of the stations asked (+0x2E)
@@ -154,7 +154,7 @@ int RxMpFrame(WlRxFrame *frame) {
             rx->unk_06 |= 0x4000;
         }
     }
-    CAM_UpdateLifeTime(bss->unk_88);
+    CAM_UpdateLifeTime(bss->parentStation);
     frame->length = frame->frameLength - 0x1C;
     msg = (WlRxBuf *)((u8 *)frame - 0x10);
     msg->command = 0x182;
@@ -208,7 +208,7 @@ void RxKeyDataFrame(WlRxFrame *frame) {
     if (aid == 0) {
         return;
     }
-    CAM_SetPowerMgtMode((u16)aid, ((WlFrameCtrlBits *)&frame->frameCtrl)->pwrMgt);
+    CAM_SetPowerMgtMode(aid, ((WlFrameCtrlBits *)&frame->frameCtrl)->pwrMgt);
     CAM_UpdateLifeTime(aid);
     bit = (u16)(1 << CAM_GetAID(aid));
     if (bit & txCtrl->unk_9a) {
@@ -241,7 +241,7 @@ int RxMpAckFrame(WlRxFrame *frame) {
     if (w->bss.state != 0x40) {
         return 1;
     }
-    if (!MatchMacAdrs(frame->addr2, bss->bssid) || !MatchMacAdrs(frame->addr3, bss->unk_82)) {
+    if (!MatchMacAdrs(frame->addr2, bss->bssid) || !MatchMacAdrs(frame->addr3, bss->parentMacAdrs)) {
         return 1;
     }
     frame->length = frame->frameLength - 0x1C;

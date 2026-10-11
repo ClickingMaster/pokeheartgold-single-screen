@@ -27,8 +27,8 @@ extern RandomState _021D5E60;
 extern Generator _021D4688;
 extern u8 _021D5FD8[20];
 extern u8 _021D5FEB[];
-extern u8 *(*_021D4634)(u32);
-extern void (*_021D4660)(void *);
+extern u8 *(*gCpsAlloc)(u32);
+extern void (*gCpsFree)(void *);
 extern u8 *CPSi_TcpReadRaw(u32 *, Socket *);
 extern void CPSi_SocConsumeRaw(u32, Socket *);
 extern void client_hello_v2(State *, void *);
@@ -60,7 +60,7 @@ int parse_record(Socket *sock) {
         if (s->bytes[0x454] && !s->bytes[0x455]) {
             size = raw[1];
             CPSi_SocConsumeRaw(2, sock);
-            buf = _021D4634(size);
+            buf = gCpsAlloc(size);
             if (!buf) {
                 s->bytes[0x455] = 9;
                 return 9;
@@ -71,7 +71,7 @@ int parse_record(Socket *sock) {
                 s->bytes[0x455] = 9;
             }
             update_digest(s, buf, size);
-            _021D4660(buf);
+            gCpsFree(buf);
         } else {
             s->bytes[0x455] = 9;
         }
@@ -81,13 +81,13 @@ int parse_record(Socket *sock) {
             s->bytes[0x455] = 9;
             return 9;
         }
-        buf = _021D4634(size);
+        buf = gCpsAlloc(size);
         if (!buf) {
             s->bytes[0x455] = 9;
             return 9;
         }
         if (tcp_read_raw_nbytes(buf, size, sock)) {
-            _021D4660(buf);
+            gCpsFree(buf);
             s->bytes[0x455] = 9;
             return 9;
         }

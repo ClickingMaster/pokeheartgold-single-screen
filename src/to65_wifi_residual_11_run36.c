@@ -7,13 +7,13 @@
 #define VW(p, n) (*(volatile u32 *)((u8 *)(p) + (n)))
 #define W(p, n)  (*(u32 *)((u8 *)(p) + (n)))
 #define P(p, n)  (*(void **)((u8 *)(p) + (n)))
-extern void (*_021D4660)(void *);
+extern void (*gCpsFree)(void *);
 extern u8 _021D5E68[];
 extern u8 _version_UBIQUITOUS_SSL[];
 extern u8 _021D5FD8[];
 extern u8 _021D5E60[];
-extern u8 _02110758[];
-extern u8 _02110898[];
+extern u8 gCpsMd5Padding[];
+extern u8 gCpsSha1Padding[];
 extern u8 _02110899[];
 void OSi_ReferSymbol(void *);
 void *CPSi_TcpReadRaw(u32 *, void *);
@@ -120,7 +120,7 @@ void CPSi_SslClose(void *a) {
     void *p = P(a, 12);
     B(p, 0x455) = 0;
     if (P(p, 0x824)) {
-        _021D4660(P(p, 0x824));
+        gCpsFree(P(p, 0x824));
     }
     P(p, 0x824) = 0;
 }

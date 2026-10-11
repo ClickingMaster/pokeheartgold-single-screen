@@ -3,8 +3,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-#define VOLATILE_U16(lvalue) (*(vu16 *)&(lvalue))
-
 // TX bits of the queues in register 0x0B4 (stop) by priority.
 extern const u16 Pri2QBit[];
 
@@ -12,7 +10,7 @@ extern const u16 Pri2QBit[];
 #pragma dont_inline on
 
 // Copies a queued TX frame (header and body; the body is inline or behind a pointer) into the MAC memory.
-// WEP frames get their IV, a zero ICV (unk_690 bit 3); unk_690 bit 2 appends a fixed tail.
+// WEP frames get their IV, a zero ICV (hwWorkarounds bit 3); hwWorkarounds bit 2 appends a fixed tail.
 void CopyTxFrmToMacBuf(void *dest, void *source) {
     WlMaDataReq *src = source;
     u8 *d = dest, *tail;
@@ -34,7 +32,7 @@ void CopyTxFrmToMacBuf(void *dest, void *source) {
         w = *root;
         x = WL_REG(0x044) & 255;
         ((WlTxFrame *)d)->unk_26 = (w->param.wepKeyId << 14) | x;
-        if (wlWorkPlain->unk_690 & 8) {
+        if (wlWorkPlain->hwWorkarounds & 8) {
             tail = (u8 *)(((u32)(d + 12 + src->frame.frame.length) - 7) & ~1u);
             ((u16 *)tail)[0] = 0;
             ((u16 *)tail)[1] = 0;
@@ -46,7 +44,7 @@ void CopyTxFrmToMacBuf(void *dest, void *source) {
             DMA_WriteHeaderData(d, &src->frame.frame, *(u8 **)&src->frame.frame.unk_24, src->frame.bodyLength);
         }
     }
-    if (wlWorkPlain->unk_690 & 4) {
+    if (wlWorkPlain->hwWorkarounds & 4) {
         tail = (u8 *)(((u32)(d + 12 + src->frame.frame.length) - 1) & ~3u);
         ((u16 *)tail)[0] = 0xB6B8;
         ((u16 *)tail)[1] = 0x1D46;
@@ -108,7 +106,7 @@ void TxqEndData(void *arg, u32 next) {
     if (next) {
         if (queue->count) {
             TxqPri(0);
-        } else if ((u16)(VOLATILE_U16(bss->mode) + 0xFFFE) <= 1 && VOLATILE_U16(bss->state) == 0x40 && VOLATILE_U16(bss->powerMgtMode) && CAM_GetFrameCount(VOLATILE_U16(bss->unk_88)) == 0 && VOLATILE_U16(bss->unk_8e) == 0) {
+        } else if ((u16)(VOLATILE_U16(bss->mode) + 0xFFFE) <= 1 && VOLATILE_U16(bss->state) == 0x40 && VOLATILE_U16(bss->powerMgtMode) && CAM_GetFrameCount(VOLATILE_U16(bss->parentStation)) == 0 && VOLATILE_U16(bss->parentBuffered) == 0) {
             WSetPowerState(1);
         }
     }

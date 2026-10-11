@@ -27,8 +27,8 @@ typedef struct Conn {
     SSL *ssl;
 } Conn;
 
-extern void *(*_021D4634)(int);
-extern void (*_021D4660)(void *);
+extern void *(*gCpsAlloc)(int);
+extern void (*gCpsFree)(void *);
 
 extern struct {
     u32 first, count;
@@ -51,7 +51,7 @@ int send_server_hello(Conn *connection) {
     ssl->random[2] = time >> 8;
     ssl->random[3] = time;
     set_random(ssl->random + 4, 28);
-    buffer = _021D4634(length + 157);
+    buffer = gCpsAlloc(length + 157);
     if (!buffer) {
         ssl->error = 9;
         return 1;
@@ -118,6 +118,6 @@ int send_server_hello(Conn *connection) {
     buffer[4] = length;
     update_digest(ssl, buffer + 5, length);
     CPSi_TcpWrite2Raw(buffer, length + 5, 0, 0, connection);
-    _021D4660(buffer);
+    gCpsFree(buffer);
     return ssl->resumed;
 }

@@ -3,8 +3,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-#define VOLATILE_U16(lvalue) (*(vu16 *)&(lvalue))
-
 // Management frames (MakeDisAssFrame .. MakeProbeReqFrame) are built in a driver heap buffer shaped like an MA data
 // request: command 0xFFFF (no confirm), the TX frame and its body (from WlTxFrame.unk_24).
 
@@ -152,7 +150,7 @@ void MakeBeaconFrame(void) {
         }
     }
     {
-        u32 value = *(u16 *)0x0380FFF0;
+        u32 value = WL_VSYNC_TIME;
         WL_WriteByte(pos, value & 255);
         {
             u8 *next = pos + 1;
@@ -178,7 +176,7 @@ void MakeBeaconFrame(void) {
             }
         }
     }
-    if (wlWorkPlain->unk_690 & 4) {
+    if (wlWorkPlain->hwWorkarounds & 4) {
         u32 aligned = ((u32)pos + 3) & ~3U;
         ((u16 *)aligned)[0] = 0xB6B8;
         ((u16 *)aligned)[1] = 0x1D46;
@@ -199,14 +197,14 @@ void UpdateGameInfoElement(void) {
         u8 *source = *(u8 *volatile *)&bss->gameInfo, *destination = out + 10;
         if (odd & 1) {
             DMA_Write(destination - 1, source, length + 2);
-            WL_WriteByte(out + 9, (*(u16 *)0x0380FFF0 >> 8) & 255);
+            WL_WriteByte(out + 9, (WL_VSYNC_TIME >> 8) & 255);
         } else {
             DMA_Write(destination, source, length + 1);
         }
     }
     ((WlTxFrame *)*(u8 *volatile *)&wlWork->txCtrl.beacon.frame)->length = (u16)(bss->gameInfoOffset + 0x26 + bss->gameInfoLength);
     WL_WriteByte(out + 1, (bss->gameInfoLength + 8) & 255);
-    if (wlWork->unk_690 & 4) {
+    if (wlWork->hwWorkarounds & 4) {
         u8 *end = (u8 *)((u32)(out + 13 + bss->gameInfoLength) & ~3u);
         ((u16 *)end)[0] = 0xB6B8;
         ((u16 *)end)[1] = 0x1D46;
@@ -272,7 +270,7 @@ WlTxHeapFrame *MakeReAssReqFrame(const u16 *macAdrs) {
     InitManHeader(&buf->frame, macAdrs);
     VOLATILE_U16(buf->frame.frame.unk_24) = VOLATILE_U16(bss->capability);
     VOLATILE_U16(buf->frame.frame.unk_26) = VOLATILE_U16(bss->listenInterval);
-    WSetMacAdrs1(&buf->frame.frame.unk_28, bss->unk_82);
+    WSetMacAdrs1(&buf->frame.frame.unk_28, bss->parentMacAdrs);
     length = SetSSIDElement((u8 *)&buf->frame.frame.unk_28 + 6);
     length += SetSupRateSet((u8 *)&buf->frame.frame.unk_28 + 6 + length);
     VOLATILE_U16(buf->frame.bodyLength) = (u16)(length + 10);

@@ -24,7 +24,7 @@ int MA_DataReqCmd(WlMaDataReq *req, WlCmdCfm *cfm) {
             return 10;
         }
     } else {
-        id = bss->unk_88;
+        id = bss->parentStation;
     }
     req->frame.station = id;
     req->frame.time = wlWork->bss.intervalCount;
@@ -87,7 +87,7 @@ int MA_KeyDataReqCmd(WlMaKeyDataReq *req, WlCmdCfm *cfm) {
     u32 irq;
     WlWork *w = wlWork;
     u8 *tail;
-    flags = w->unk_690;
+    flags = w->hwWorkarounds;
     param = (WlParam *)&w->param;
     cfm->length = i;
     q = (u8 *)&w->txCtrl;

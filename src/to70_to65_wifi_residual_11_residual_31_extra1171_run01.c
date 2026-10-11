@@ -19,8 +19,8 @@ typedef struct {
 
 #define B(s, o) ((s)->bytes[o])
 #define P(s, o) ((s)->bytes + (o))
-extern u8 *(*_021D4634)(int);
-extern void (*_021D4660)(void *);
+extern u8 *(*gCpsAlloc)(int);
+extern void (*gCpsFree)(void *);
 extern volatile u16 _021106B0[];
 extern u32 date2sec(void);
 extern void set_random(void *, int);
@@ -35,7 +35,7 @@ void send_client_hello(Socket *);
 
 void send_change_cipher_spec_and_finished(Socket *sock) {
     State *s = sock->state;
-    u8 *packet = _021D4634(131);
+    u8 *packet = gCpsAlloc(131);
     if (!packet) {
         B(s, 0x455) = 9;
         return;
@@ -64,7 +64,7 @@ void send_change_cipher_spec_and_finished(Socket *sock) {
     MI_CpuCopy8(P(s, 0x348), P(s, 0x2ec), 0x5c);
     update_digest(s, packet + 11, 40);
     CPSi_TcpWrite2Raw(packet, make_ciphertext(s, packet + 6) + 6, 0, 0, sock);
-    _021D4660(packet);
+    gCpsFree(packet);
 }
 
 void send_client_hello(Socket *sock) {
@@ -72,7 +72,7 @@ void send_client_hello(Socket *sock) {
     u8 *packet, *p;
     u32 now, i;
     int n;
-    packet = _021D4634(152);
+    packet = gCpsAlloc(152);
     if (!packet) {
         B(s, 0x455) = 9;
         return;
@@ -117,5 +117,5 @@ void send_client_hello(Socket *sock) {
     packet[8] = n - 4;
     CPSi_TcpWrite2Raw(packet, n + 5, 0, 0, sock);
     update_digest(s, packet + 5, n);
-    _021D4660(packet);
+    gCpsFree(packet);
 }
