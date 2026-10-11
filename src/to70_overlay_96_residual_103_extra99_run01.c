@@ -12,6 +12,6 @@ extern void*ov96_0220ED34(void*,void*,int,int,int,int),*ov96_0220ECA4(void*,void
 void ov96_0221007C(Big*,void*,void*,void*);
 typedef struct Data {u8 pad0[0x1c];u32 unused:24,count:6,index:2;u32 value:7,unused2:25;} Data;
 typedef struct Status {void*owner;u8 pad4[0x188];u16 previous[2];} Status;
-extern void*PokeathlonCourse_GetDataCopyArea(void*),*PokeathlonCourse_GetHeapAllocPtr4(void*);extern void ov96_0220DC7C(Status*,Data*,void*),ov96_0220DEAC(Status*,Data*,void*),ov96_02210390(void*,u8,u16),ov96_0221040C(void*,int),ov96_021E6454(void*,int);
+extern void*PokeathlonCourse_GetDataCopyArea(void*),*PokeathlonCourse_GetHeapAllocPtr4(void*);extern void ov96_0220DC7C(Status*,Data*,void*),ov96_0220DEAC(Status*,Data*,void*),ov96_02210390(void*,u8,u16),ov96_0221040C(void*,int),PokeathlonCourse_UpdateTimeUpCountdown(void*,int);
 void ov96_0221013C(Status*,void*);
 void ov96_0220FF88(Work*w,void*a){int count=1;w->kind=ov96_0220FF68(a);switch(w->kind){case 0:case 2:w->delay=30;break;case 1:case 3:w->delay=0;break;}u8 mode;if(w->kind<3)mode=4;else mode=((MTRandom()&1)+1)*4;if(w->kind!=0)count=2;for(int i=0;i<count;i++){if(!w->nodes[i].busy){ov96_0220FB98(&w->nodes[i],mode,(u8)i);return;}}}

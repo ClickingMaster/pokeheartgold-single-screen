@@ -10,7 +10,7 @@ void ov49_02267A84(void *ctx, void *state, u32 count) {
     for (i = 0; i < count; i++) {
         VecFx32 v;
         ov49_02265980(ctx, state, i, &ov49_0226A70C[i]);
-        ov49_02259154((void *)U32_AT(state, 8), &v);
+        WiFiPlazaObj_GetPosition((void *)U32_AT(state, 8), &v);
         v.y += 0x8000;
         v.z += 0x6000;
         ModelInstance_SetPosition(&OV49_ENTRIES(state)[i], v.x, v.y, v.z);

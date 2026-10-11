@@ -65,7 +65,7 @@ typedef struct Ov96FreeWork {
 
 void ov96_021FEE60(void *w, int unused, int i, void *p, BOOL flag, int x) {
     VecFx32 v;
-    ov96_021EAB38(PTR(w, i * 4), 1);
+    PokeathlonCourseMonObject_SetDrawFlag(PTR(w, i * 4), 1);
     WORD(w, 0xc8) = 0;
     ov96_021EB52C(PTR(w, 0x70), 1, 1);
     ov96_021EB564(PTR(w, 0x70), 8);

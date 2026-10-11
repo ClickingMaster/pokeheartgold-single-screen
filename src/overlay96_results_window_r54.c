@@ -19,8 +19,8 @@ typedef struct Ov96R54Participant {
 } Ov96R54Participant;
 
 extern const WindowTemplate ov96_0221BC5C;
-extern const u8 *ov96_021E60D8(void *, s32, s32);
-extern void ov96_021EAED4(void *, s32, s32, s32, s32);
+extern const u8 *PokeathlonCourse_GetMonStats(void *, s32, s32);
+extern void PokeathlonCourseMonObject_Move(void *, s32, s32, s32, s32);
 extern void ov96_021EB06C(void *, s32, s32, s32 *, s32 *);
 void ov96_021F2E80(void *, Ov96R54Participant *, void *, s32, s32);
 void ov96_021F2EC8(Ov96R54WindowWork *);
@@ -32,8 +32,8 @@ void ov96_021F2E80(void *a0, Ov96R54Participant *participant, void *a2, s32 valu
         s32 quotient = value / 3;
         s32 remainder = value % 3;
 
-        if (ov96_021E60D8(a0, quotient, remainder)[2] != 0) {
-            ov96_021EAED4(a2, 0, participant->field2C, a4, 0);
+        if (PokeathlonCourse_GetMonStats(a0, quotient, remainder)[2] != 0) {
+            PokeathlonCourseMonObject_Move(a2, 0, participant->field2C, a4, 0);
         }
     }
 }

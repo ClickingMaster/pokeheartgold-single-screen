@@ -10,8 +10,8 @@ typedef struct Ov49R59Small {
     void *object;
 } Ov49R59Small;
 
-void ov49_02259154(void *object, VecFx32 *position);
-void ov49_02259148(void *object, const VecFx32 *position);
+void WiFiPlazaObj_GetPosition(void *object, VecFx32 *position);
+void WiFiPlazaObj_SetPosition(void *object, const VecFx32 *position);
 BOOL ov49_022613AC(Ov49R59Small *work);
 
 #endif

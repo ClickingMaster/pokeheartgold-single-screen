@@ -38,7 +38,7 @@ u32 ov96_02215984(void *course, u8 *state) {
         }
         break;
     case 2:
-        if (ov96_021E637C(course)) {
+        if (PokeathlonCourse_RunStartCountdown(course)) {
             PokeathlonCourse_SetStateField07(course, 1);
         }
         break;
@@ -60,7 +60,7 @@ u32 ov96_022159F0(void *course, u8 *state) {
         break;
     case 1:
         ov96_02215FC8(course);
-        if (ov96_021E667C(course) && ov96_02215864((u8 *)work + 0x7f8)) {
+        if (PokeathlonCourse_RunFinish(course) && ov96_02215864((u8 *)work + 0x7f8)) {
             BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, U32_AT(work, 0));
             PokeathlonCourse_SetStateField07(course, 2);
         }
@@ -113,7 +113,7 @@ u32 ov96_02215AC4(void *course) {
         break;
     case 1:
         PTR_AT(work, 4) = BgConfig_Alloc(U32_AT(work, 0));
-        ov96_021E6670(course, 8);
+        PokeathlonCourse_SetHudPlanes(course, 8);
         ov96_0221654C(work);
         ov96_0221663C(work);
         ov96_022193E4(work);
@@ -122,9 +122,9 @@ u32 ov96_02215AC4(void *course) {
         PokeathlonCourse_IncrementField1ED(course);
         break;
     case 2:
-        if (ov96_021EAA00(PTR_AT(work, 0x1c))) {
+        if (PokeathlonCourseMonObjects_IsLoaded(PTR_AT(work, 0x1c))) {
             ov96_022163AC(work);
-            Sprite_SetDrawPriority(*ov96_021E61D8(course, 0, PTR_AT(work, 0x18), SpriteManager_GetSpriteList(PTR_AT(work, 0xc))), 0);
+            Sprite_SetDrawPriority(*PokeathlonCourse_CreateHudSprites(course, 0, PTR_AT(work, 0x18), SpriteManager_GetSpriteList(PTR_AT(work, 0xc))), 0);
             PokeathlonCourse_IncrementField1ED(course);
         }
         break;
@@ -170,14 +170,14 @@ u32 ov96_02215CD0(void *course) {
 u32 ov96_02215CE8(void *course) {
     void *gfx = PokeathlonCourse_GetGraphicsSystem(course);
     int i;
-    ov96_021E9510(gfx);
+    PokeathlonCourseScoreList_Init(gfx);
     for (i = 0; i < 4; i++) {
-        ov96_021E95F8(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, 0x12a);
+        PokeathlonCourse_AddScoreEntry(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, 0x12a);
     }
-    ov96_021E93B4(gfx, 1);
+    PokeathlonCourseScoreList_Rank(gfx, 1);
     ov96_0221A56C(gfx, 7);
-    ov96_021E952C(gfx);
-    ov96_021E9570(gfx, 7);
+    PokeathlonCourseScoreList_AddPointsToTotals(gfx);
+    PokeathlonCourseScoreList_SaveEventPoints(gfx, 7);
     return 1;
 }
 

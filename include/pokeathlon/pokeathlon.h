@@ -183,17 +183,17 @@ void *PokeathlonCourse_GetGraphicsSystem(PokeathlonCourseData *data);
 
 // Internal overlay 96 functions (stubs for now, in assembly)
 void ov96_021E67AC(PokeathlonCourseData *data);
-void ov96_021E75BC(void *);
-void ov96_021E7F98(s32 frameCount, u32 maxValue, Pokeathlon_UnkSubStruct_B00 *result);
-void *ov96_021E8770(int a0, int a1, PokeathlonCourseData *data, int a3, enum HeapID heapId);
-void ov96_021E87B4(int a0, void *a1, void *a2, int a3);
-void ov96_021E8810(void *ptr);
-BOOL ov96_021E8828(void *);
+void PokeathlonCourse_VBlankCallback(void *);
+void PokeathlonCourse_AddCapped(s32 frameCount, u32 maxValue, Pokeathlon_UnkSubStruct_B00 *result);
+void *PokeathlonCourseLink_New(int a0, int a1, PokeathlonCourseData *data, int a3, enum HeapID heapId);
+void PokeathlonCourseLink_SendCommand(int a0, void *a1, void *a2, int a3);
+void PokeathlonCourseLink_Free(void *ptr);
+BOOL PokeathlonCourseLink_GetNetId(void *);
 u8 *ov96_021E8A20(void *ptr);
-int ov96_021E8A24(void);
-int ov96_021E8A2C(void);
-void *ov96_021E92E0(enum HeapID heapId);
-void ov96_021E9320(void *ptr);
-void *ov96_021E9A14(void);
+int PokeathlonCourseCmd_GetTable(void);
+int PokeathlonCourseCmd_GetCount(void);
+void *PokeathlonCourseScoreList_New(enum HeapID heapId);
+void PokeathlonCourseScoreList_Free(void *ptr);
+void *PokeathlonCourseCmd_PacketSize(void);
 
 #endif // POKEHEARTGOLD_POKEATHLON_H

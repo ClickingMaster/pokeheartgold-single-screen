@@ -6,8 +6,8 @@
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 
 void *PokeathlonCourse_GetHeapAllocPtr4(void *);
-void ov96_021EA894(void *);
-void ov96_021E9C0C(void *);
+void PokeathlonCourseMonObjects_Free(void *);
+void PokeathlonCourseSprites_FreeResources(void *);
 void SpriteSystem_FreeResourcesAndManager(void *, void *);
 void SpriteSystem_Free(void *);
 void RemoveWindow(void *);

@@ -6,7 +6,7 @@ void ov49_0226747C(void *state) {
     u32 x;
     u32 y;
 
-    ov49_02259154(*(void **)((u8 *)state + 8), &pos);
+    WiFiPlazaObj_GetPosition(*(void **)((u8 *)state + 8), &pos);
     type = *(s8 *)((u8 *)state + 0x955);
     switch (type) {
     case 1:
@@ -43,7 +43,7 @@ void ov49_02267674(void *state) {
     u32 x;
     u32 y;
 
-    ov49_02259154(*(void **)((u8 *)state + 8), &pos);
+    WiFiPlazaObj_GetPosition(*(void **)((u8 *)state + 8), &pos);
     type = *(s8 *)((u8 *)state + 0x955);
     switch (type) {
     case 1:

@@ -20,7 +20,7 @@ typedef struct Ov49F518Work {
 #pragma require_prototypes off
 void *WiFiPlazaRoom_GetLobby(void *);
 void *WiFiPlazaRoom_GetObjManager(void *);
-void *ov49_02258DAC(void *);
+void *WiFiPlazaObj_GetOwnPlayer(void *);
 void *ov49_0225EF84(void *);
 u8 *ov49_0225EF40(void *, u32);
 u32 ov49_0225EF88(void *);
@@ -31,7 +31,7 @@ u32 ov49_0225A02C(void *);
 u32 ov49_0225A1D4(void *);
 u32 WiFiPlazaRoom_GetYesNoResult(void *);
 u32 WiFiPlazaRoom_IsMessageFinished(void *);
-u32 ov49_02258F38(void *);
+u32 WiFiPlazaObj_IsFinished(void *);
 extern const u8 ov49_02269B38[];
 BOOL ov49_0225F518(void *, void *, u32);
 

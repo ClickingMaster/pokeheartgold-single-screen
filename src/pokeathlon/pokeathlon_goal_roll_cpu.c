@@ -10,7 +10,7 @@
 #include "unk_02009D48.h"
 
 // Course helpers and the sprite pool (OVY_96, not yet tidied).
-void ov96_021E8228(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
+void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
 s32 ov96_021EAF8C(void *object);
 void ov96_021EB52C(PokeathlonGoalRollSprite *sprite, BOOL a1, BOOL show);
 
@@ -233,7 +233,7 @@ int ov96_02214C3C(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
         result = ov96_02214DBC(mon, balls, decisions.values[1], quadrant);
     }
     if (mon->mode == GOAL_ROLL_MODE_DASH) {
-        ov96_021E8228(course, participant, member, 6, 1);
+        PokeathlonCourse_AddMonCounter(course, participant, member, 6, 1);
     }
     return result;
 }
@@ -348,7 +348,7 @@ int ov96_02214EB4(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
         }
     }
     if (mon->mode == GOAL_ROLL_MODE_DASH) {
-        ov96_021E8228(course, participant, member, 6, 1);
+        PokeathlonCourse_AddMonCounter(course, participant, member, 6, 1);
     }
     return result;
 }
@@ -502,7 +502,7 @@ int ov96_02215184(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
         result = ov96_02215460(mon, balls, decision1, participant, teams);
     }
     if (mon->mode == GOAL_ROLL_MODE_DASH) {
-        ov96_021E8228(course, participant, member, 6, 1);
+        PokeathlonCourse_AddMonCounter(course, participant, member, 6, 1);
     }
     return result;
 }

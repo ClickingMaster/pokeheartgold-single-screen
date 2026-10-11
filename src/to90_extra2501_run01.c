@@ -10,7 +10,7 @@ typedef struct {u32 down;u8 x,y,gap[2],phase,tail[27];} Frame;
 typedef struct {VecFx32 limitZero,zero,delta,combined;} Workspace;
 extern void *PokeathlonCourse_GetDataCopyArea(void*);extern Game *PokeathlonCourse_GetHeapAllocPtr4(void*);extern Frame *ov96_021E8A20(void*);
 extern int ov96_021E5F24(void*),ov96_021FDE6C(Game*,u8,u8),ov96_021FDE08(Game*,u8,u8,u8);
-extern void ov96_021FDA30(Game*,Frame*),ov96_021FFE5C(Game*,u8,int),ov96_021E8228(void*,u8,u8,int,int),ov96_02200EF4(void*,u32,u16),ov96_021FDE7C(void*),ov96_021FF72C(const VecFx32*,const VecFx32*,VecFx32*);
+extern void ov96_021FDA30(Game*,Frame*),ov96_021FFE5C(Game*,u8,int),PokeathlonCourse_AddMonCounter(void*,u8,u8,int,int),ov96_02200EF4(void*,u32,u16),ov96_021FDE7C(void*),ov96_021FF72C(const VecFx32*,const VecFx32*,VecFx32*);
 extern float ov96_021FF6DC(Player*,int),_fflt(int);
 static inline void clearDrag(PlayerWindow *window,Game *enabled){enabled->moving[0]=0;window->player.heldFrames=0;window->player.initial.x=0;window->player.initial.y=0;window->player.initial.z=0;window->player.current=window->player.initial;}
 void ov96_021FD4D0(void*);
@@ -29,15 +29,15 @@ void ov96_021FD4D0(void *course){
   if(window->player.swapping){if(window->player.swapPhase==1&&frame->phase==1){window->player.selected=(window->player.selected+1)%3;window->player.swapPhase=2;}else if(window->player.swapPhase==2&&frame->phase==2){window->player.swapPhase=0;window->player.swapping=0;window->player.gap3[2]=0;}clearDrag(window,enabled);continue;}
   if(window->player.athletes[window->player.selected].type==2){clearDrag(window,enabled);continue;}
   if(window->player.locked){clearDrag(window,enabled);continue;}
-  clear=0;if(latches->latches[0].down){if(ov96_021FDE6C(game,frame->x,frame->y)){window->player.swapping=1;window->player.swapPhase=1;ov96_021E8228(course,window->player.id,window->player.selected,7,1);}else if(ov96_021FDE08(game,(u8)i,frame->x,frame->y)){enabled->moving[0]=1;window->player.initial.x=frame->x<<12;window->player.initial.y=frame->y<<12;window->player.initial.z=0;window->player.current=window->player.initial;}}
+  clear=0;if(latches->latches[0].down){if(ov96_021FDE6C(game,frame->x,frame->y)){window->player.swapping=1;window->player.swapPhase=1;PokeathlonCourse_AddMonCounter(course,window->player.id,window->player.selected,7,1);}else if(ov96_021FDE08(game,(u8)i,frame->x,frame->y)){enabled->moving[0]=1;window->player.initial.x=frame->x<<12;window->player.initial.y=frame->y<<12;window->player.initial.z=0;window->player.current=window->player.initial;}}
   else if(latches->latches[0].previous){if(window->player.heldFrames<255)window->player.heldFrames++;else game->timeout=1;if(!enabled->moving[0])continue;window->player.current.x=frame->x<<12;window->player.current.y=frame->y<<12;}
   else{if(enabled->moving[0]){if(window->player.heldFrames<=30)window->player.release=1;enabled->moving[0]=0;game->timeout=0;}clear=1;}
   if(window->player.release){float weight,speed;fx32 scale;{fx32 *zero=(fx32*)&workspace.zero;*zero++=0;*zero++=0;*zero=0;}
    acceleration=window->player.athletes[window->player.selected].acceleration;weight=window->player.athletes[window->player.selected].weight;maximum=ov96_021FF6DC(player,window->player.selected);scale=(fx32)(4096.0*((double)(acceleration*weight)/8.0));
-   VEC_Subtract(current,initial,&workspace.delta);if(workspace.delta.x<0){if(workspace.delta.x<-65536){window->player.swapping=1;window->player.swapPhase=1;ov96_021E8228(course,window->player.id,window->player.selected,7,1);}workspace.delta.x=0;workspace.delta.y=0;workspace.delta.z=0;}
+   VEC_Subtract(current,initial,&workspace.delta);if(workspace.delta.x<0){if(workspace.delta.x<-65536){window->player.swapping=1;window->player.swapPhase=1;PokeathlonCourse_AddMonCounter(course,window->player.id,window->player.selected,7,1);}workspace.delta.x=0;workspace.delta.y=0;workspace.delta.z=0;}
    VEC_MultAdd(scale,&workspace.delta,&workspace.zero,&workspace.delta);(void)_fflt(VEC_Mag(&workspace.delta)/4096);workspace.combined=window->player.velocity;ov96_021FF72C(&workspace.combined,&workspace.delta,&workspace.combined);speed=_fflt(VEC_Mag(&workspace.combined));
    if(speed>4096.0f*maximum){{fx32 *zero=(fx32*)&workspace.limitZero;*zero++=0;*zero++=0;*zero=0;}VEC_Normalize(&workspace.combined,&workspace.combined);VEC_MultAdd((fx32)(4096.0f*maximum),&workspace.combined,&workspace.limitZero,velocity);}else ov96_021FF72C(velocityAgain,&workspace.delta,velocity);
-   {fx32 magnitude=VEC_Mag(&player->velocity);if(magnitude>=((int)player->athletes[player->selected].range-3)*4096)ov96_021E8228(course,player->id,player->selected,6,1);}
+   {fx32 magnitude=VEC_Mag(&player->velocity);if(magnitude>=((int)player->athletes[player->selected].range-3)*4096)PokeathlonCourse_AddMonCounter(course,player->id,player->selected,6,1);}
    window->player.release=0;
   }
   if(clear){window->player.heldFrames=0;window->player.initial.x=0;window->player.initial.y=0;window->player.initial.z=0;window->player.current=window->player.initial;}

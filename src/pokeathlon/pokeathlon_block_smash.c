@@ -31,30 +31,30 @@
 
 // Course helpers (OVY_96, not yet tidied).
 u8 *ov96_021E8A20(void *block);
-void ov96_021E6168(PokeathlonCourseData *course, int participant, int member, void *out);
-void *ov96_021E60C0(PokeathlonCourseData *course, int participant, int member);
+void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, void *out);
+void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 u32 ov96_021E6108(void *mon);
-void ov96_021E62AC(PokeathlonCourseData *course, int a1, void *resources, void *spriteList, int a4, int a5, const void *position);
-BOOL ov96_021E637C(PokeathlonCourseData *course);
-void ov96_021E6454(PokeathlonCourseData *course, int timer);
-BOOL ov96_021E667C(PokeathlonCourseData *course);
-void ov96_021E6670(PokeathlonCourseData *course, int a1);
-void **ov96_021E61D8(PokeathlonCourseData *course, int a1, void *resources, void *spriteList);
-void ov96_021E8228(PokeathlonCourseData *course, u8 participant, int a2, int a3, int a4);
-void ov96_021E8318(PokeathlonCourseData *course, u16 score);
-void ov96_021E9510(void *graphics);
-void ov96_021E95F8(PokeathlonCourseData *course, void *graphics, int participant, int a3, int a4, int a5, int a6);
-void ov96_021E93B4(void *graphics, int a1);
-void ov96_021E952C(void *graphics);
-void ov96_021E9570(void *graphics, int a1);
-void *ov96_021E9A78(enum HeapID heapId, int a1, int a2);
-void ov96_021E9C0C(void *resources);
+void PokeathlonCourse_CreateStartSprites(PokeathlonCourseData *course, int a1, void *resources, void *spriteList, int a4, int a5, const void *position);
+BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
+void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, int timer);
+BOOL PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
+void PokeathlonCourse_SetHudPlanes(PokeathlonCourseData *course, int a1);
+void **PokeathlonCourse_CreateHudSprites(PokeathlonCourseData *course, int a1, void *resources, void *spriteList);
+void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, int a2, int a3, int a4);
+void PokeathlonCourse_SetRecordScore(PokeathlonCourseData *course, u16 score);
+void PokeathlonCourseScoreList_Init(void *graphics);
+void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, void *graphics, int participant, int a3, int a4, int a5, int a6);
+void PokeathlonCourseScoreList_Rank(void *graphics, int a1);
+void PokeathlonCourseScoreList_AddPointsToTotals(void *graphics);
+void PokeathlonCourseScoreList_SaveEventPoints(void *graphics, int a1);
+void *PokeathlonCourseSprites_CreateResources(enum HeapID heapId, int a1, int a2);
+void PokeathlonCourseSprites_FreeResources(void *resources);
 void *ov96_021EA374(void *resources, void *spriteList, int a2, enum HeapID heapId);
-void *ov96_021EA584(void *resources, void *spriteList, int a2, enum HeapID heapId);
-void *ov96_021EA854(enum HeapID heapId, int count, int a2, void *resources, void *spriteList);
-void ov96_021EA894(void *monPics);
-void ov96_021EA8A8(void *monPics, int count, void *mons, void *params, int a4, int a5);
-BOOL ov96_021EAA00(void *monPics);
+void *PokeathlonCourseSprites_CreateTimeUpCountdown(void *resources, void *spriteList, int a2, enum HeapID heapId);
+void *PokeathlonCourseMonObjects_Create(enum HeapID heapId, int count, int a2, void *resources, void *spriteList);
+void PokeathlonCourseMonObjects_Free(void *monPics);
+void PokeathlonCourseMonObjects_Load(void *monPics, int count, void *mons, void *params, int a4, int a5);
+BOOL PokeathlonCourseMonObjects_IsLoaded(void *monPics);
 void ov96_021EB144(void *monPics, int a1);
 void ov96_021EECB8(ManagedSprite *sprite, void *mon, u16 plttId, NARC *narc, u32 offset, enum HeapID heapId);
 void ov96_0221A56C(void *graphics, int a1);
@@ -175,12 +175,12 @@ BOOL PokeathlonBlockSmash_Intro(PokeathlonCourseData *course, u8 *state) {
             void *spriteList;
             position = ov96_0221CC00;
             spriteList = SpriteManager_GetSpriteList(work->spriteManager);
-            ov96_021E62AC(course, 0, work->iconResources, spriteList, 1, 1, &position);
+            PokeathlonCourse_CreateStartSprites(course, 0, work->iconResources, spriteList, 1, 1, &position);
             (*state)++;
         }
         break;
     case 1:
-        if (ov96_021E637C(course)) {
+        if (PokeathlonCourse_RunStartCountdown(course)) {
             ov96_021EB144(work->monPics, 0);
             PokeathlonCourse_SetStateField07(course, 1);
         }
@@ -213,7 +213,7 @@ BOOL PokeathlonBlockSmash_UpdateGame(PokeathlonCourseData *course) {
         return TRUE;
     }
     if (System_GetTouchNew()) {
-        ov96_021E8228(course, (u8)ov96_021E5F24(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, (u8)ov96_021E5F24(course), 3, 0, 1);
     }
     PokeathlonBlockSmash_UpdateTimer(work);
     PokeathlonBlockSmashBlocks_Update(work->blocks);
@@ -245,7 +245,7 @@ BOOL PokeathlonBlockSmash_UpdateGame(PokeathlonCourseData *course) {
     if (work->timer > 0) {
         work->timer--;
     }
-    ov96_021E6454(course, work->timer);
+    PokeathlonCourse_UpdateTimeUpCountdown(course, work->timer);
     if (work->timer == 0 && ov96_021E5F24(course) == 0) {
         PokeathlonBlockSmashFrame *frame = (PokeathlonBlockSmashFrame *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
         frame->finished = TRUE;
@@ -267,7 +267,7 @@ BOOL PokeathlonBlockSmash_Play(PokeathlonCourseData *course, u8 *state) {
         }
         break;
     case 1:
-        if (ov96_021E667C(course) && work->shakeTask == NULL) {
+        if (PokeathlonCourse_RunFinish(course) && work->shakeTask == NULL) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, work->heapId);
             PokeathlonCourse_SetStateField07(course, 2);
         }
@@ -320,7 +320,7 @@ typedef struct PokeathlonBlockSmashTeamMon {
     u16 nickname[11];
 } PokeathlonBlockSmashTeamMon;
 
-// What ov96_021E6168 reports about one Pokemon of a team.
+// What PokeathlonCourse_GetMonInfo reports about one Pokemon of a team.
 typedef struct PokeathlonBlockSmashMonInfo {
     u32 unk0;
     u32 unk4;
@@ -354,12 +354,12 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
         break;
     case 1:
         work->bgConfig = BgConfig_Alloc(work->heapId);
-        ov96_021E6670(course, 4);
+        PokeathlonCourse_SetHudPlanes(course, 4);
         PokeathlonBlockSmash_InitBgs(work->bgConfig, work->heapId);
         PokeathlonBlockSmash_InitText(course);
         PokeathlonBlockSmash_LoadBgGraphics(work);
         PokeathlonBlockSmash_InitSpriteSystem(work);
-        work->monPics = ov96_021EA854(work->heapId, 9, 32, work->iconResources, SpriteManager_GetSpriteList(work->spriteManager));
+        work->monPics = PokeathlonCourseMonObjects_Create(work->heapId, 9, 32, work->iconResources, SpriteManager_GetSpriteList(work->spriteManager));
         PokeathlonCourse_IncrementField1ED(course);
         break;
     case 2: {
@@ -370,8 +370,8 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
             if (i != ov96_021E5F24(course)) {
                 for (j = 0; j < 3; j++) {
                     GF_ASSERT(n < 9);
-                    ov96_021E6168(course, i, j, &mons[n]);
-                    params.ids[n] = ov96_021E6108(ov96_021E60C0(course, i, j));
+                    PokeathlonCourse_GetMonInfo(course, i, j, &mons[n]);
+                    params.ids[n] = ov96_021E6108(PokeathlonCourse_GetPerformance(course, i, j));
                     n++;
                 }
             }
@@ -379,15 +379,15 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
         params.unk4 = 1;
         params.unkC = 1;
         params.unk10 = 1;
-        ov96_021EA8A8(work->monPics, 9, mons, &params, 0, 0);
+        PokeathlonCourseMonObjects_Load(work->monPics, 9, mons, &params, 0, 0);
         PokeathlonCourse_IncrementField1ED(course);
         break;
     }
     case 3:
-        if (ov96_021EAA00(work->monPics)) {
+        if (PokeathlonCourseMonObjects_IsLoaded(work->monPics)) {
             PokeathlonBlockSmash_LoadSpriteResources(work);
             ov96_02209B04(work->spriteSystem, work->spriteManager);
-            Sprite_SetDrawPriority(*ov96_021E61D8(course, 0, work->iconResources, SpriteManager_GetSpriteList(work->spriteManager)), 0);
+            Sprite_SetDrawPriority(*PokeathlonCourse_CreateHudSprites(course, 0, work->iconResources, SpriteManager_GetSpriteList(work->spriteManager)), 0);
             PokeathlonCourse_IncrementField1ED(course);
         }
         break;
@@ -450,15 +450,15 @@ BOOL PokeathlonBlockSmash_Draw(PokeathlonCourseData *course) {
 BOOL ov96_02209748(PokeathlonCourseData *course) {
     void *graphics = PokeathlonCourse_GetGraphicsSystem(course);
     int i;
-    ov96_021E9510(graphics);
+    PokeathlonCourseScoreList_Init(graphics);
     for (i = 0; i < 4; i++) {
         u16 value = PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i);
-        ov96_021E95F8(course, graphics, i, value, 0, 3, 294);
+        PokeathlonCourse_AddScoreEntry(course, graphics, i, value, 0, 3, 294);
     }
-    ov96_021E93B4(graphics, 1);
+    PokeathlonCourseScoreList_Rank(graphics, 1);
     ov96_0221A56C(graphics, 3);
-    ov96_021E952C(graphics);
-    ov96_021E9570(graphics, 3);
+    PokeathlonCourseScoreList_AddPointsToTotals(graphics);
+    PokeathlonCourseScoreList_SaveEventPoints(graphics, 3);
     return TRUE;
 }
 
@@ -501,7 +501,7 @@ void PokeathlonBlockSmash_InitSpriteSystem(PokeathlonBlockSmash *work) {
     SpriteSystem_InitSprites(work->spriteSystem, work->spriteManager, 256);
     SpriteSystem_InitManagerWithCapacities(work->spriteSystem, work->spriteManager, &counts);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(work->spriteSystem), 0, FX32_CONST(256));
-    work->iconResources = ov96_021E9A78(work->heapId, 743, 1);
+    work->iconResources = PokeathlonCourseSprites_CreateResources(work->heapId, 743, 1);
     work->icons.narc = NARC_New(NARC_poketool_icongra_poke_icon, work->heapId);
 }
 
@@ -509,8 +509,8 @@ void PokeathlonBlockSmash_InitSpriteSystem(PokeathlonBlockSmash *work) {
 
 void PokeathlonBlockSmash_FreeSpriteSystem(PokeathlonBlockSmash *work) {
     NARC_Delete(work->icons.narc);
-    ov96_021EA894(work->monPics);
-    ov96_021E9C0C(work->iconResources);
+    PokeathlonCourseMonObjects_Free(work->monPics);
+    PokeathlonCourseSprites_FreeResources(work->iconResources);
     SpriteSystem_FreeResourcesAndManager(work->spriteSystem, work->spriteManager);
     SpriteSystem_Free(work->spriteSystem);
 }
@@ -525,7 +525,7 @@ void PokeathlonBlockSmash_CreateHudSprites(PokeathlonBlockSmash *work) {
     for (i = 0; i < 3; i++) {
         position.x = x;
         position.y = FX32_CONST(176);
-        work->scoreDigits[i] = ov96_021EA584(work->iconResources, SpriteManager_GetSpriteList(work->spriteManager), 0, work->heapId);
+        work->scoreDigits[i] = PokeathlonCourseSprites_CreateTimeUpCountdown(work->iconResources, SpriteManager_GetSpriteList(work->spriteManager), 0, work->heapId);
         Sprite_SetMatrix(work->scoreDigits[i], &position);
         Sprite_SetDrawPriority(work->scoreDigits[i], 2);
         Sprite_SetAnimCtrlSeq(work->scoreDigits[i], 1);
@@ -852,7 +852,7 @@ void PokeathlonBlockSmash_SetTeamRowIcon(PokeathlonCourseData *course, u32 parti
     PokeathlonBlockSmashMonInfo info;
     PokeathlonBlockSmash *work = PokeathlonCourse_GetHeapAllocPtr4(course);
     PokeathlonBlockSmashTeamIcons *icons = &work->icons;
-    ov96_021E6168(course, participant, member, &info);
+    PokeathlonCourse_GetMonInfo(course, participant, member, &info);
     ov96_021EECB8(icons->rows[participant].icon, &info, icons->plttId, work->icons.narc, participant << 9, work->heapId);
 }
 
@@ -972,7 +972,7 @@ void PokeathlonBlockSmash_PrintScore(PokeathlonCourseData *course, u32 score) {
     work = PokeathlonCourse_GetHeapAllocPtr4(course);
     msgFormat = work->msgFormat;
     msgData = work->msgData;
-    ov96_021E8318(course, (u16)score);
+    PokeathlonCourse_SetRecordScore(course, (u16)score);
     FillWindowPixelBuffer(&work->windows[2], 0);
     BufferIntegerAsString(msgFormat, 0, score, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
     string = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msg_0309_00159, work->heapId);
@@ -1208,7 +1208,7 @@ u16 PokeathlonBlockSmashBlocks_Hit(PokeathlonBlockSmashBlocks *blocks, int membe
             power = -block->health;
             broken++;
             PokeathlonBlockSmashFragments_Spawn(blocks->fragments, 4, position.x, position.y);
-            ov96_021E8228(blocks->course, (u8)ov96_021E5F24(blocks->course), member, 3, 1);
+            PokeathlonCourse_AddMonCounter(blocks->course, (u8)ov96_021E5F24(blocks->course), member, 3, 1);
         }
     }
     if (broken) {

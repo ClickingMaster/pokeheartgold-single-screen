@@ -20,13 +20,13 @@ BOOL ov96_021FDB64(void *course) {
             Sprite_SetDrawFlag(PTR8(work, 0x24), FALSE);
             ov96_021EB63C(PTR8(work, 0x18), 1);
             ov96_021EB144(PTR8(work, 0x3c8), 1);
-            ov96_021E8324(course, ov96_021FFEE8);
+            PokeathlonCourse_SetFinishCallback(course, ov96_021FFEE8);
             if (!ov96_021E5F24(course)) {
                 for (i = 0; i < 4; i++) {
                     u8 *entry = work + i * 0xd4;
                     for (j = 0; j < 3; j++) {
                         s32 value = *(s32 *)(entry + 0x3c + j * 4) / 1024;
-                        ov96_021E8228(course, i, j, 3, (u8)(value / 4096));
+                        PokeathlonCourse_AddMonCounter(course, i, j, 3, (u8)(value / 4096));
                     }
                 }
             }
@@ -34,7 +34,7 @@ BOOL ov96_021FDB64(void *course) {
         }
     }
     if (System_GetTouchNew()) {
-        ov96_021E8228(course, (u8)ov96_021E5F24(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, (u8)ov96_021E5F24(course), 3, 0, 1);
     }
     if (System_GetTouchHeld()) {
         touch[4] = *(u16 *)(gSystem + 0x60);

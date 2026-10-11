@@ -72,7 +72,7 @@ void ov96_021EB0A4(void *sprite, int x, int y, int *outX, int *outY);
 void ov96_021EB03C(void *sprite, fx32 x, fx32 y, fx32 *outX, fx32 *outY);
 void ov96_0220144C(int *value, int delta);
 Goal *ov96_0220146C(CycleWork *work);
-void ov96_021E8228(void *course, u8 participant, u8 current, int a, int b);
+void PokeathlonCourse_AddMonCounter(void *course, u8 participant, u8 current, int a, int b);
 void ov96_02200F84(void *course, CycleWork *work, u8 selected, s32 time);
 
 // @fn ov96_02200F84
@@ -221,6 +221,6 @@ void ov96_02200F84(void *course, CycleWork *work, u8 selected, s32 time) {
         }
         entry->actor->blocked = TRUE;
         entry->actor->unk9E = TRUE;
-        ov96_021E8228(course, entry->actor->participant, entry->actor->current, 7, 1);
+        PokeathlonCourse_AddMonCounter(course, entry->actor->participant, entry->actor->current, 7, 1);
     }
 }

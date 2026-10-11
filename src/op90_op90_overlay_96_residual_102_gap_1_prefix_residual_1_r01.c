@@ -61,16 +61,16 @@ typedef struct Info {
 extern Coord ov96_0221CFBC[4][3];
 
 void ov96_0220F280(void *course);
-void *ov96_021EAA04(void *objs, u8 index);
-void ov96_021EAB38(void *obj, int v);
-void *ov96_021E60C0(void *course, int group, int slot);
+void *PokeathlonCourseMonObjects_Get(void *objs, u8 index);
+void PokeathlonCourseMonObject_SetDrawFlag(void *obj, int v);
+void *PokeathlonCourse_GetPerformance(void *course, int group, int slot);
 int ov96_021E6138(void *p);
 void ov96_021EAF70(void *obj, int a, int b);
-void *ov96_021EAA20(void *obj);
-Info *ov96_021E8BB0(void *p);
+void *PokeathlonCourseMonObject_GetGfx(void *obj);
+Info *PokeathlonCourseMonGfx_GetInfo(void *p);
 void ov96_0220D554(void *obj, int v);
 void ov96_021EB10C(void *obj, f32 a, f32 b);
-void ov96_021EAC0C(void *obj);
+void PokeathlonCourseMonObject_SetAnimState(void *obj);
 void ov96_021EAF94(void *obj, int x, int y);
 int ov96_021E6104(void);
 void ov96_021EAF6C(void *obj, int v);
@@ -78,16 +78,16 @@ void ov96_021EB0A4(void *obj, int x, int y, int *outX, int *outY);
 void *ov96_0220F378(void *course, u8 group, u8 slot);
 int ov96_021E5F24(void *course);
 void *SpriteManager_GetSpriteList(void *manager);
-void *ov96_021E64F8(void *course, void *obj, void *res, void *list, int v);
+void *PokeathlonCourse_AddMarker(void *course, void *obj, void *res, void *list, int v);
 void Sprite_SetDrawPriority(void *sprite, u32 priority);
-void ov96_021EABA8(void *obj, int v);
+void PokeathlonCourseMonObject_SetDrawPriority(void *obj, int v);
 u8 *PokeathlonCourse_GetDataCopyArea(void *course);
 u8 *ov96_021E8A20(void *ptr);
-void ov96_021E62AC(void *course, int a, void *res, void *list, int b, int c, Coord *coords);
+void PokeathlonCourse_CreateStartSprites(void *course, int a, void *res, void *list, int b, int c, Coord *coords);
 void ov96_0220F4A0(Work *w);
 
 static inline int GetCourseType(void *course, int idx) {
-    return ov96_021E6138(ov96_021E60C0(course, idx / 3, idx % 3));
+    return ov96_021E6138(PokeathlonCourse_GetPerformance(course, idx / 3, idx % 3));
 }
 
 // @fn ov96_0220F4A0
@@ -117,19 +117,19 @@ void ov96_0220F4A0(Work *w) {
         slot = i % 3;
         group = i / 3;
         racer = &w->groups[group].racers[slot];
-        obj = ov96_021EAA04(w->objs, i);
-        ov96_021EAB38(obj, 1);
+        obj = PokeathlonCourseMonObjects_Get(w->objs, i);
+        PokeathlonCourseMonObject_SetDrawFlag(obj, 1);
         {
             int k = GetCourseType(course, i);
             ov96_021EAF70(obj, pairs[k - 1][0], pairs[k - 1][1]);
         }
-        obj2 = ov96_021EAA04(w->objs, i);
-        info = ov96_021E8BB0(ov96_021EAA20(obj2));
+        obj2 = PokeathlonCourseMonObjects_Get(w->objs, i);
+        info = PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonObject_GetGfx(obj2));
         ov96_0220D554(obj2, 0);
         ov96_021EB10C(obj2, 1.0f, 1.0f);
         x = ov96_0221CFBC[group][slot].x;
         y = ov96_0221CFBC[group][slot].y;
-        ov96_021EAC0C(obj2);
+        PokeathlonCourseMonObject_SetAnimState(obj2);
         ov96_021EAF94(obj2, x, y);
         ov96_021EAF6C(obj2, ov96_021E6104());
         ov96_021EB0A4(obj2, x, y, &outX, &outY);
@@ -149,10 +149,10 @@ void ov96_0220F4A0(Work *w) {
         if (group == ov96_021E5F24(course)) {
             coords[slot].x = x;
             coords[slot].y = y;
-            Sprite_SetDrawPriority(ov96_021E64F8(course, obj2, w->res, SpriteManager_GetSpriteList(w->spriteManager), 1), 4);
-            ov96_021EABA8(obj2, 6);
+            Sprite_SetDrawPriority(PokeathlonCourse_AddMarker(course, obj2, w->res, SpriteManager_GetSpriteList(w->spriteManager), 1), 4);
+            PokeathlonCourseMonObject_SetDrawPriority(obj2, 6);
         } else {
-            ov96_021EABA8(obj2, 7);
+            PokeathlonCourseMonObject_SetDrawPriority(obj2, 7);
         }
         if (ov96_021E5F24(course) == 0) {
             data = ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
@@ -160,5 +160,5 @@ void ov96_0220F4A0(Work *w) {
             data[0x10 + i] = outY;
         }
     }
-    ov96_021E62AC(course, 0, w->res, SpriteManager_GetSpriteList(w->spriteManager), 1, 3, coords);
+    PokeathlonCourse_CreateStartSprites(course, 0, w->res, SpriteManager_GetSpriteList(w->spriteManager), 1, 3, coords);
 }

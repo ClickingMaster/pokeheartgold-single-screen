@@ -141,7 +141,7 @@ void ov96_021FFEE8(void *p) {
     if (v > 0x3c) {
         v = 0x3c;
     }
-    ov96_021E8318(p, (u16)(t + (v << 10)));
+    PokeathlonCourse_SetRecordScore(p, (u16)(t + (v << 10)));
     ov96_021FFD80(heap, v, t);
 }
 

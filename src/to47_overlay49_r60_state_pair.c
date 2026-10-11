@@ -23,28 +23,28 @@ extern u32 ov49_0225EF88(void *);
 extern void ov49_0225EF90(void *);
 extern void *WiFiPlazaRoom_GetLobby(void *);
 extern void *WiFiPlazaRoom_GetObjManager(void *);
-extern void *ov49_02258D70(void *, u32);
-extern void *ov49_02258DAC(void *);
+extern void *WiFiPlazaObj_FindById(void *, u32);
+extern void *WiFiPlazaObj_GetOwnPlayer(void *);
 extern u32 ov49_02258E34(void *);
 extern void ov49_0225913C(void *, Ov49R60Coord *);
 extern u32 ov49_022591CC(void *);
 extern void ov49_022591C0(void *, u32);
-extern u32 ov49_02258F38(void *);
-extern void ov49_02258EEC(void *, void *, int);
+extern u32 WiFiPlazaObj_IsFinished(void *);
+extern void WiFiPlazaObj_SetHandler(void *, void *, int);
 extern void ov49_0225A04C(void *, u8, u32);
 extern void ov49_0225A06C(void *, u8, u32);
 extern u32 ov45_0222B0B0(void *);
 extern void *WiFiPlazaWork_GetMyPlayer(void *);
 extern u8 ov45_0222A920(void *);
 extern void ov45_0222B0A4(void *);
-extern void ov49_02258E60(void *, u32);
+extern void WiFiPlazaObj_GetParam(void *, u32);
 extern u32 ov42_022282A4(void);
 extern void ov49_02258EAC(void *, void *, u32, u32);
 extern void *WiFiPlazaWork_GetPlayer(void *, u32);
 extern u32 ov45_0222AFF8(void *);
 extern u32 ov45_0222A2A0(void *, u32);
-extern u32 ov49_02258FDC(void *, u8, u8);
-extern void ov49_02258DB4(void *, Ov49R60Coord);
+extern u32 WiFiPlazaObj_IsOnCell(void *, u8, u8);
+extern void WiFiPlazaObj_SetGridPos(void *, Ov49R60Coord);
 
 extern void *ov49_0225EF84(void *);
 extern void *ov49_0225EF40(void *, u32);
@@ -54,12 +54,12 @@ extern void *WiFiPlazaRoom_GetModels(void *);
 extern int ov45_0222ADA8(void *, int);
 extern void ov45_0222AE08(int, int *, int *);
 extern void ov49_0225E420(void *, int, int, VecFx32 *);
-extern void ov49_02259154(void *, VecFx32 *);
-extern void ov49_02259148(void *, VecFx32 *);
+extern void WiFiPlazaObj_GetPosition(void *, VecFx32 *);
+extern void WiFiPlazaObj_SetPosition(void *, VecFx32 *);
 extern void ov49_02259184(void *, u32);
 extern void ov49_022591B4(void *, u32);
-extern void ov49_02259160(void *, u32);
-extern void ov49_02258D54(void *);
+extern void WiFiPlazaObj_SetDirection(void *, u32);
+extern void WiFiPlazaObj_Delete(void *);
 extern u32 ov49_0225A520(void *, int);
 extern BOOL ov49_0225F438(void *);
 extern void ov49_0225F374(void *);
@@ -101,23 +101,23 @@ BOOL ov49_02261930(void *state, void *ctx, u32 index) {
     switch (ov49_0225EF88(state)) {
     case 0:
         work = (Ov49R60Work *)ov49_0225EF40(state, 0x20);
-        work->unk00 = ov49_02258D70(map, index);
+        work->unk00 = WiFiPlazaObj_FindById(map, index);
         work->unk04 = ov45_0222ADA8(field, index);
         GF_ASSERT(work->unk04 != -1);
         ov45_0222AE08(work->unk04, &work->unk04, &work->unk08);
-        ov49_02258EEC(map, (void*)(work->unk00), 3);
+        WiFiPlazaObj_SetHandler(map, (void*)(work->unk00), 3);
         ov49_0225EF8C(state, 1);
         break;
     case 1:
-        if (ov49_02258F38(work->unk00) != 0) {
+        if (WiFiPlazaObj_IsFinished(work->unk00) != 0) {
             ov49_0225E420(third, work->unk04, work->unk08, &vecD);
             work->unk10 = vecD.x - 0x10000;
-            ov49_02259154(work->unk00, &vecD);
+            WiFiPlazaObj_GetPosition(work->unk00, &vecD);
             work->unk0C = vecD.y;
             work->unk14 = 0;
             {
                 Ov49R60Coord coord = { 0 };
-                ov49_02258DB4(work->unk00, coord);
+                WiFiPlazaObj_SetGridPos(work->unk00, coord);
             }
             PlaySE(0x64E);
             ov49_02259184(work->unk00, 1);
@@ -137,11 +137,11 @@ BOOL ov49_02261930(void *state, void *ctx, u32 index) {
         delta = vecC.y - work->unk0C;
         vecB.y = FX_Div(FX_Mul(FX_F32_TO_FX32(work->unk14), delta), 0x18000);
         vecB.y += work->unk0C;
-        ov49_02259148(work->unk00, &vecB);
+        WiFiPlazaObj_SetPosition(work->unk00, &vecB);
         if (done == TRUE) {
             ov49_02259184(work->unk00, 0);
             ov49_022591B4(work->unk00, 8);
-            ov49_02259160(work->unk00, 2);
+            WiFiPlazaObj_SetDirection(work->unk00, 2);
             ov49_0225EF8C(state, 3);
         }
         break;
@@ -156,13 +156,13 @@ BOOL ov49_02261930(void *state, void *ctx, u32 index) {
         offset = ov49_0225F394(work->unk18);
         ov49_0225E420(third, work->unk04, work->unk08, &vecA);
         vecA.y += offset;
-        ov49_02259148(work->unk00, &vecA);
+        WiFiPlazaObj_SetPosition(work->unk00, &vecA);
         if (ov45_0222AD80(field, work->unk04) == 2) {
             ov49_0225EF8C(state, 4);
         }
         break;
     case 4:
-        ov49_02258D54(work->unk00);
+        WiFiPlazaObj_Delete(work->unk00);
         ov49_0225EF68(state);
         ov49_0225EF98(ov49_0225A010(ctx), index, ov49_02269B78, 0);
         break;
@@ -184,8 +184,8 @@ BOOL ov49_02261B74(void *state, void *ctx, u32 index) {
     work = ov49_0225EF3C(state);
     field = WiFiPlazaRoom_GetLobby(ctx);
     map = WiFiPlazaRoom_GetObjManager(ctx);
-    object = ov49_02258D70(map, index);
-    manager = ov49_02258DAC(map);
+    object = WiFiPlazaObj_FindById(map, index);
+    manager = WiFiPlazaObj_GetOwnPlayer(map);
 
     switch (ov49_0225EF88(state)) {
     case 0:
@@ -196,13 +196,13 @@ BOOL ov49_02261B74(void *state, void *ctx, u32 index) {
         }
         break;
     case 1:
-        ov49_02258EEC(map, (void*)(object), 3);
+        WiFiPlazaObj_SetHandler(map, (void*)(object), 3);
         ov49_0225EF90(state);
         break;
     case 2:
     case 7:
     case 9:
-        if (ov49_02258F38(object) == TRUE) {
+        if (WiFiPlazaObj_IsFinished(object) == TRUE) {
             ov49_0225EF90(state);
         }
         break;
@@ -215,14 +215,14 @@ BOOL ov49_02261B74(void *state, void *ctx, u32 index) {
         if (ov49_022591CC(object) == 0) {
             ov49_022591C0(object, 1);
         }
-        ov49_02258EEC(map, (void*)(object), 4);
+        WiFiPlazaObj_SetHandler(map, (void*)(object), 4);
         ov49_0225EF90(state);
         break;
     }
     case 4:
-        if (ov49_02258F38(object) == TRUE) {
+        if (WiFiPlazaObj_IsFinished(object) == TRUE) {
             ov49_0225EF90(state);
-            ov49_02258EEC(map, (void*)(object), 0);
+            WiFiPlazaObj_SetHandler(map, (void*)(object), 0);
             ov49_0225A04C(ctx, index, 0);
             ov49_0225A06C(ctx, index, 0);
         }
@@ -231,7 +231,7 @@ BOOL ov49_02261B74(void *state, void *ctx, u32 index) {
         shouldAdvance = FALSE;
         if (((Ov49R60Input *)work)->mode == 1 && ov45_0222B0B0(field) == 0 && ov45_0222A920(WiFiPlazaWork_GetMyPlayer(field)) == 9) {
             ov45_0222B0A4(field);
-            ov49_02258E60(object, 6);
+            WiFiPlazaObj_GetParam(object, 6);
             ov49_02258EAC(map, manager, 0, ov42_022282A4());
         }
         object = WiFiPlazaWork_GetPlayer(field, index);
@@ -252,21 +252,21 @@ BOOL ov49_02261B74(void *state, void *ctx, u32 index) {
         }
         break;
     case 6:
-        ov49_02258EEC(map, (void*)(object), 3);
+        WiFiPlazaObj_SetHandler(map, (void*)(object), 3);
         ov49_0225EF90(state);
         break;
     case 8:
-        if (ov49_02258FDC(ov49_02258DAC(map), ((Ov49R60Input *)work)->x, ((Ov49R60Input *)work)->y) == 0) {
+        if (WiFiPlazaObj_IsOnCell(WiFiPlazaObj_GetOwnPlayer(map), ((Ov49R60Input *)work)->x, ((Ov49R60Input *)work)->y) == 0) {
             coord.x = ((Ov49R60Input *)work)->x << 4;
             coord.y = ((Ov49R60Input *)work)->y << 4;
-            ov49_02258DB4(object, coord);
+            WiFiPlazaObj_SetGridPos(object, coord);
             ov49_0225913C(object, &coord);
-            ov49_02258EEC(map, (void*)(object), 4);
+            WiFiPlazaObj_SetHandler(map, (void*)(object), 4);
             ov49_0225EF90(state);
         }
         break;
     case 10:
-        ov49_02258EEC(map, (void*)(object), 2);
+        WiFiPlazaObj_SetHandler(map, (void*)(object), 2);
         ov49_0225A04C(ctx, index, 0);
         ov49_0225A06C(ctx, index, 0);
         return TRUE;

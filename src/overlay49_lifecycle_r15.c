@@ -51,7 +51,7 @@ extern void ov49_0225B200(void *);
 extern void ov49_0225B0D8(void *);
 extern void WiFiPlazaCamera_Delete(void *);
 extern void ov49_0225E2B4(void *);
-extern void ov49_02258B20(void *);
+extern void WiFiPlazaObj_DeleteManager(void *);
 extern void WiFiPlazaMap_Delete(void *);
 extern void ov49_0225A7D0(void *);
 extern void StopAllSE(u32);
@@ -65,7 +65,7 @@ extern void *Save_PlayerData_GetProfile(void *);
 extern u32 PlayerProfile_GetTrainerGender(void *);
 extern void ov49_0225A5EC(void *, void *, u32);
 extern void *WiFiPlazaMap_Create(u32);
-extern void *ov49_02258AB4(u32, u32, void *, u32, u32);
+extern void *WiFiPlazaObj_CreateManager(u32, u32, void *, u32, u32);
 extern void *ov49_0225DF18(void *, void *, void *, u32, u32);
 extern void *WiFiPlazaCamera_Create(u32);
 extern void ov49_0225AAC8(void *, void *, void *, u32);
@@ -106,7 +106,7 @@ extern u32 ov49_0225B898(void *);
 extern void ov49_0225A98C(void *);
 extern void ov49_0225AA2C(void *);
 
-BOOL ov49_02259A54(Ov49Interpolation15 *state, void *target) {
+BOOL WiFiPlazaObj_UpdateLight(Ov49Interpolation15 *state, void *target) {
     if (state->active == 0) {
         return TRUE;
     }
@@ -140,7 +140,7 @@ BOOL ov49_02259AA4(OverlayManager *manager, int *unused) {
     *(void **)((u8 *)work + 0x3F4) = Save_PlayerData_GetProfile(*(void **)args);
     ov49_0225A5EC((u8 *)work + 0x3C, *(void **)args, 0x77);
     *(void **)((u8 *)work + 0x3E8) = WiFiPlazaMap_Create(0x77);
-    *(void **)((u8 *)work + 0x3E0) = ov49_02258AB4(0x18, PlayerProfile_GetTrainerGender(*(void **)((u8 *)work + 0x3F4)), *(void **)((u8 *)work + 0x3E8), 0x77, 0x78);
+    *(void **)((u8 *)work + 0x3E0) = WiFiPlazaObj_CreateManager(0x18, PlayerProfile_GetTrainerGender(*(void **)((u8 *)work + 0x3F4)), *(void **)((u8 *)work + 0x3E8), 0x77, 0x78);
     *(void **)((u8 *)work + 0x3E4) = ov49_0225DF18(*(void **)((u8 *)args + 4), *(void **)((u8 *)args + 8), *(void **)((u8 *)work + 0x3E8), 0x77, 0x78);
     *(void **)((u8 *)work + 0x3EC) = WiFiPlazaCamera_Create(0x77);
     ov49_0225AAC8((u8 *)work + 0x2F8, (u8 *)work + 0x3C, *(void **)args, 0x77);
@@ -282,7 +282,7 @@ BOOL ov49_02259EF8(OverlayManager *manager) {
     ov49_0225B0D8((u8 *)work + 0x3C4);
     WiFiPlazaCamera_Delete(*(void **)((u8 *)work + 0x3EC));
     ov49_0225E2B4(*(void **)((u8 *)work + 0x3E4));
-    ov49_02258B20(*(void **)((u8 *)work + 0x3E0));
+    WiFiPlazaObj_DeleteManager(*(void **)((u8 *)work + 0x3E0));
     WiFiPlazaMap_Delete(*(void **)((u8 *)work + 0x3E8));
     ov49_0225A7D0((u8 *)work + 0x3C);
     Heap_Free(work);

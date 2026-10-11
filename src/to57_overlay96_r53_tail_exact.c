@@ -12,7 +12,7 @@
 #define VEC_AT(p, o) (*(VecFx32 *)((u8 *)(p) + (o)))
 
 extern void *PokeathlonCourse_GetHeapAllocPtr4(void *);
-extern BOOL ov96_021E8228(void *, u8, u8, u32, u32);
+extern BOOL PokeathlonCourse_AddMonCounter(void *, u8, u8, u32, u32);
 extern BOOL ov96_021F218C(void *, void *);
 extern BOOL ov96_021F22FC(void *, void *, u8, const VecFx32 *);
 extern void ov96_021F234C(void *);
@@ -55,10 +55,10 @@ void ov96_021F1CC0(void *course) {
             U32_AT(cell, 0x18) = 0;
             U8_AT(cell, 0x45) = 0;
             U8_AT(cell, 0x44) = 0;
-            ov96_021E8228(course, row, column, 5, 1);
-            ov96_021E8228(course, row, column, 1, 1);
+            PokeathlonCourse_AddMonCounter(course, row, column, 5, 1);
+            PokeathlonCourse_AddMonCounter(course, row, column, 1, 1);
             if (work->flags[i] != 0) {
-                ov96_021E8228(course, row, column, 8, 1);
+                PokeathlonCourse_AddMonCounter(course, row, column, 8, 1);
             }
             work->flags[i] = 0;
         }

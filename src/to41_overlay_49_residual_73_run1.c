@@ -13,9 +13,9 @@ u32 ov49_02266E78(void *ctx, void *state) {
     ov49_02265628((u8 *)state + 0xA2C);
     S16_AT(state, 0x956)
     ++;
-    ov49_02259154((void *)U32_AT(state, 8), &v);
+    WiFiPlazaObj_GetPosition((void *)U32_AT(state, 8), &v);
     ov49_022655E0((u8 *)state + 0xA04, &v.x, &v.y, &v.z);
-    ov49_02259148((void *)U32_AT(state, 8), &v);
+    WiFiPlazaObj_SetPosition((void *)U32_AT(state, 8), &v);
     ov49_02267674(state);
     for (i = 0; i < S8_AT(state, 0x955); i++) {
         ov49_0226789C(ctx, state, i);

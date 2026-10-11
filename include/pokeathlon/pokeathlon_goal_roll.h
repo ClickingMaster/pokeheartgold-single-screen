@@ -54,7 +54,7 @@ typedef struct PokeathlonGoalRollSpritePool {
     PokeathlonGoalRollSprite *records;
 } PokeathlonGoalRollSpritePool;
 
-// A Pokemon's object in the course's 3D object list (ov96_021EAA04).
+// A Pokemon's object in the course's 3D object list (PokeathlonCourseMonObjects_Get).
 typedef struct PokeathlonGoalRollMonObject {
     void *object;              // 0x00
     void *sprite1;             // 0x04

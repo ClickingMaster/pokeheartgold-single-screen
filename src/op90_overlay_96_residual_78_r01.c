@@ -57,7 +57,7 @@ void ov96_021FE538(void *course, Work *work, Actor *actor);
 int ov96_021EAF8C(void *sprite);
 int ov96_021FF5A8(Work *work, int state, int a2, VecFx32 *prev, VecFx32 *pos, VecFx32 *out);
 BOOL ov96_021FF764(void *course, Actor *actors, VecFx32 *hit);
-void ov96_021E8228(void *course, u8 owner, u8 current, u32 event, u32 value);
+void PokeathlonCourse_AddMonCounter(void *course, u8 owner, u8 current, u32 event, u32 value);
 void ov96_021FDE7C(void *course);
 
 // @fn ov96_021FDE7C
@@ -279,7 +279,7 @@ void ov96_021FDE7C(void *course) {
                     actor->members[j].mode = 2;
                     actor->tired = TRUE;
                     actor->cooldown = actor->members[j].cooldown;
-                    ov96_021E8228(course, actor->owner, actor->current, 1, 1);
+                    PokeathlonCourse_AddMonCounter(course, actor->owner, actor->current, 1, 1);
                 }
             } else if (energy <= 40.0) {
                 actor->members[j].energy = energy;

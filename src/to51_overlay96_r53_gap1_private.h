@@ -11,8 +11,8 @@
 void *PokeathlonCourse_GetHeapAllocPtr4(void *course);
 void PokeathlonCourse_SetField5E0_AtIndex(void *course, u8 index, u16 value);
 void PokeathlonCourse_SetStateField07(void *course, u32 state);
-u32 ov96_021E637C(void *course);
-u32 ov96_021E667C(void *course);
+u32 PokeathlonCourse_RunStartCountdown(void *course);
+u32 PokeathlonCourse_RunFinish(void *course);
 u32 ov96_021E5F24(void *course);
 u32 IsPaletteFadeFinished(void);
 void BeginNormalPaletteFade(u32, u32, u32, u32, u32, u32, u32);

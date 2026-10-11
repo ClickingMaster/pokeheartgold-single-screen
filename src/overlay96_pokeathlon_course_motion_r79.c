@@ -43,7 +43,7 @@ void ov96_021FEBF0(void *course, u8 *work, VecFx32 *position, int mode, u8 parti
         ov96_021EB52C(*(void **)(work + 0x70), 1, 1);
         ov96_021EB564(*(void **)(work + 0x70), 8);
         ov96_021EB52C(*(void **)(work + 0x74), 1, 1);
-        ov96_021EAB38(*(void **)(work + participant * 4), 0);
+        PokeathlonCourseMonObject_SetDrawFlag(*(void **)(work + participant * 4), 0);
         *(u32 *)(work + 0xC8) = 1;
         work[0xA1] = 0;
         ov96_021FFE38(position->x / 0x1000, 0x8B4, checkB);
@@ -88,7 +88,7 @@ void ov96_021FED3C(u8 *work, VecFx32 *position, int unused, u8 participant, u8 *
         vec.y -= 0x190000;
         ov96_021EB588(*(void **)(work + 0x74), &vec);
         ov96_021EB52C(*(void **)(work + 0x74), 1, 1);
-        ov96_021EAB38(*(void **)(work + participant * 4), 0);
+        PokeathlonCourseMonObject_SetDrawFlag(*(void **)(work + participant * 4), 0);
         work[0xA1] = 0;
         ov96_021FFE38(position->x / 0x1000, 0x8B5, sound);
         work[0xA0]++;

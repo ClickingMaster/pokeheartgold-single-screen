@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-void ov49_02259154(void *object, VecFx32 *position);
+void WiFiPlazaObj_GetPosition(void *object, VecFx32 *position);
 void ModelInstance_SetPosition(void *object, fx32 x, fx32 y, fx32 z);
 void ov49_0226747C(void *state);
 void ov49_02267674(void *state);

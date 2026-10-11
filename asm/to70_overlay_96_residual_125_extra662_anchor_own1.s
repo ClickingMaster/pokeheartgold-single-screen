@@ -49,20 +49,20 @@
 	.extern ov96_021E5F24
 	.extern ov96_021E6F18
 	.extern ov96_021E75B8
-	.extern ov96_021E99F4
-	.extern ov96_021E99F8
-	.extern ov96_021E99FC
-	.extern ov96_021E9A04
-	.extern ov96_021E9A10
-	.extern ov96_021E9A14
-	.extern ov96_021E9A18
-	.extern ov96_021E9A1C
-	.extern ov96_021E9A24
-	.extern ov96_021E9A2C
-	.extern ov96_021E9A38
-	.extern ov96_021E9A48
+	.extern PokeathlonCourseCmd_EventsSize
+	.extern PokeathlonCourseCmd_ParticipantSize
+	.extern PokeathlonCourseCmd_AllParticipantsSize
+	.extern PokeathlonCourseCmd_ProfilesSize
+	.extern PokeathlonCourseCmd_RecordSize
+	.extern PokeathlonCourseCmd_PacketSize
+	.extern PokeathlonCourseCmd_MonCountersSize
+	.extern PokeathlonCourseCmd_ResultsSize
+	.extern PokeathlonCourseCmd_JuiceRecordSize
+	.extern PokeathlonCourseCmd_GetEventDataBuffer
+	.extern PokeathlonCourseCmd_GetRecordBuffer
+	.extern PokeathlonCourseCmd_GetResultsBuffer
 	.extern ov96_021E9A54
-	.extern ov96_021E9A68
+	.extern PokeathlonCourseCmd_GetJuiceRecordBuffer
 	.extern ov96_021EB678
 	.extern ov96_021EB680
 	.extern ov96_021EB688
@@ -74,7 +74,7 @@
 	.extern ov96_021EF18C
 	.extern ov96_021F08E4
 	.extern PokeathlonLampJump_Draw
-	.extern ov96_021F9234
+	.extern PokeathlonHurdleDash_Start
 	.extern ov96_021FCD74
 	.extern ov96_02204DE8
 	.extern PokeathlonBlockSmash_Draw
@@ -241,10 +241,10 @@ ov96_0221A858:
 	.word 0
 
 ov96_0221A86C: ; 0x0221A86C
-	.word ov96_021F7934
-	.word ov96_021F7C4C
+	.word PokeathlonResultsAnnouncement_Init
+	.word PokeathlonResultsAnnouncement_Draw
 	.word 0
-	.word ov96_021F7C70
+	.word PokeathlonResultsAnnouncement_Exit
 	.word 0
 
 ov96_0221A880:
@@ -294,10 +294,10 @@ ov96_0221A8F8:
 	.word 0
 
 ov96_0221A90C:
-	.word ov96_021F94A8
-	.word ov96_021F9CA4
-	.word ov96_021F9CC4
-	.word ov96_021F9D58
+	.word PokeathlonHurdleDash_Init
+	.word PokeathlonHurdleDash_Draw
+	.word PokeathlonHurdleDash_ShowResults
+	.word PokeathlonHurdleDash_Exit
 	.word 1
 
 ov96_0221A920:
@@ -321,13 +321,13 @@ ov96_0221A95C: ; 0x0221A95C
 
 	.global sPokeathlonStateInfoFuncTable
 sPokeathlonStateInfoFuncTable: ; 0x0221A984
-	.word ov96_021E67C4
-	.word ov96_021E6814
+	.word PokeathlonCourse_State_SendEvents
+	.word PokeathlonCourse_State_RunEventOverlay
 	.word ov96_021E6870
-	.word ov96_021E695C
-	.word ov96_021E6990
-	.word ov96_021E69C4
-	.word ov96_021E6A00
+	.word PokeathlonCourse_State_SendParticipant
+	.word PokeathlonCourse_State_SendParticipants
+	.word PokeathlonCourse_State_SendProfiles
+	.word PokeathlonCourse_State_SendRecord
 	.word ov96_021E6A54
 	.word ov96_021E6A94
 	.word ov96_021E6AE8
@@ -336,29 +336,29 @@ sPokeathlonStateInfoFuncTable: ; 0x0221A984
 	.word ov96_021E6C20
 	.word ov96_021E6C40
 	.word ov96_021E6CB8
-	.word ov96_021E6CE4
-	.word ov96_021E6D54
+	.word PokeathlonCourse_State_StartRound
+	.word PokeathlonCourse_State_WaitRoundStart
 	.word ov96_021E6DE8
-	.word ov96_021E6E38
+	.word PokeathlonCourse_State_RunEvent
 	.word ov96_021E6F18
 	.word ov96_021E6F2C
 	.word ov96_021E6FFC
-	.word ov96_021E7030
+	.word PokeathlonCourse_State_EndRound
 	.word ov96_021E7080
-	.word ov96_021E70F0
+	.word PokeathlonCourse_State_NextRound
 	.word ov96_021E711C
 	.word ov96_021E7150
 	.word ov96_021E7190
 	.word ov96_021E7268
-	.word ov96_021E74AC
-	.word ov96_021E74E0
+	.word PokeathlonCourse_State_SendMonCounters
+	.word PokeathlonCourse_State_SendResults
 	.word ov96_021E7294
 	.word ov96_021E72CC
 	.word ov96_021E7320
-	.word ov96_021E73F8
-	.word ov96_021E7514
-	.word ov96_021E7544
-	.word ov96_021E7590
+	.word PokeathlonCourse_State_CreateJuiceRecords
+	.word PokeathlonCourse_State_SendJuiceRecord
+	.word PokeathlonCourse_State_StoreJuiceRecords
+	.word PokeathlonCourse_State_Exit
 	.word ov96_021E75B8
 
 ov96_0221AA20: ; 0x0221AA20
@@ -442,42 +442,42 @@ ov96_0221AAE8: ; 0x0221AAE8
 	.byte 0x16, 0x02, 0x18, 0x02
 
 ov96_0221AEC4: ; 0x0221AEC4
-	.word ov96_021E96F8
-	.word ov96_021E99F4
+	.word PokeathlonCourseCmd_RecvEvents
+	.word PokeathlonCourseCmd_EventsSize
 	.word 0
-	.word ov96_021E9718
-	.word ov96_021E99F8
+	.word PokeathlonCourseCmd_RecvParticipant
+	.word PokeathlonCourseCmd_ParticipantSize
 	.word 0
-	.word ov96_021E9784
-	.word ov96_021E99FC
+	.word PokeathlonCourseCmd_RecvAllParticipants
+	.word PokeathlonCourseCmd_AllParticipantsSize
 	.word 0
-	.word ov96_021E97B8
-	.word ov96_021E9A04
+	.word PokeathlonCourseCmd_RecvProfiles
+	.word PokeathlonCourseCmd_ProfilesSize
 	.word 0
-	.word ov96_021E97EC
-	.word ov96_021E9A10
-	.word ov96_021E9A38
-	.word ov96_021E9820
-	.word ov96_021E9A14
+	.word PokeathlonCourseCmd_RecvRecord
+	.word PokeathlonCourseCmd_RecordSize
+	.word PokeathlonCourseCmd_GetRecordBuffer
+	.word PokeathlonCourseCmd_RecvPacket
+	.word PokeathlonCourseCmd_PacketSize
 	.word 0
-	.word ov96_021E9858
+	.word PokeathlonCourseCmd_RecvEventData
 	.word sub_020342B8
-	.word ov96_021E9A2C
-	.word ov96_021E9870
-	.word ov96_021E9A14
+	.word PokeathlonCourseCmd_GetEventDataBuffer
+	.word PokeathlonCourseCmd_RecvEventResult
+	.word PokeathlonCourseCmd_PacketSize
 	.word 0
-	.word ov96_021E98D0
-	.word ov96_021E9A14
+	.word PokeathlonCourseCmd_RecvEventResults
+	.word PokeathlonCourseCmd_PacketSize
 	.word 0
-	.word ov96_021E98F4
-	.word ov96_021E9A18
+	.word PokeathlonCourseCmd_RecvMonCounters
+	.word PokeathlonCourseCmd_MonCountersSize
 	.word ov96_021E9A54
-	.word ov96_021E9994
-	.word ov96_021E9A1C
-	.word ov96_021E9A48
-	.word ov96_021E99B8
-	.word ov96_021E9A24
-	.word ov96_021E9A68
+	.word PokeathlonCourseCmd_RecvResults
+	.word PokeathlonCourseCmd_ResultsSize
+	.word PokeathlonCourseCmd_GetResultsBuffer
+	.word PokeathlonCourseCmd_RecvJuiceRecord
+	.word PokeathlonCourseCmd_JuiceRecordSize
+	.word PokeathlonCourseCmd_GetJuiceRecordBuffer
 
 ov96_0221AF54: ; 0x0221AF54
 	.byte 0x0B, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00

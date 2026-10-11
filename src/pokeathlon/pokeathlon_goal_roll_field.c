@@ -16,10 +16,10 @@
 #include "text.h"
 
 // Course helpers, sprite scene and object helpers (OVY_96, not yet tidied).
-u8 *ov96_021E60D8(PokeathlonCourseData *course, int participant, int member);
+u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
 int ov96_021E6104(void);
-void ov96_021E8228(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
-BOOL ov96_021E872C(int x, int y, int touchX, int touchY, int radius, int *distance);
+void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
+BOOL PokeathlonCourse_IsInRange(int x, int y, int touchX, int touchY, int radius, int *distance);
 void ov96_021EAF78(void *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, int *outRadius);
 void ov96_021EB52C(PokeathlonGoalRollSprite *sprite, BOOL a1, BOOL show);
 void ov96_021EB564(PokeathlonGoalRollSprite *sprite, int anim);
@@ -274,7 +274,7 @@ void PokeathlonGoalRoll_CollideBalls(PokeathlonCourseData *course) {
                         mon->motionStep.x *= -1;
                         mon->motionStep.y *= -1;
                         mon->motionFrames = 7;
-                        ov96_021E8228(course, participant, member, 1, 1);
+                        PokeathlonCourse_AddMonCounter(course, participant, member, 1, 1);
                     } else {
                         mon->power = power;
                         mon->motion = GOAL_ROLL_MOTION_KNOCKBACK;
@@ -302,7 +302,7 @@ void PokeathlonGoalRoll_CollideBalls(PokeathlonCourseData *course) {
                             mon->mode = GOAL_ROLL_MODE_WALK;
                             ball->step = 1;
                             ball->steps = 30;
-                            ov96_021E8228(course, participant, member, 4, 1);
+                            PokeathlonCourse_AddMonCounter(course, participant, member, 4, 1);
                         } else {
                             ball->speedTable = 1;
                             ball->speedRow = mon->kickRow;
@@ -604,9 +604,9 @@ void PokeathlonGoalRoll_CheckGoals(PokeathlonCourseData *course) {
                     goalRoll->scores[ball->lastKicker / 3]--;
                 }
                 index = ball->lastKicker;
-                ov96_021E8228(course, (u8)(index / 3), (u8)(index % 3), 8, 1);
+                PokeathlonCourse_AddMonCounter(course, (u8)(index / 3), (u8)(index % 3), 8, 1);
                 index = ball->lastKicker;
-                ov96_021E8228(course, (u8)(index / 3), (u8)(index % 3), 1, 1);
+                PokeathlonCourse_AddMonCounter(course, (u8)(index / 3), (u8)(index % 3), 1, 1);
             } else {
                 points = 0;
                 if (ball->kind == GOAL_ROLL_BALL_SMALL) {
@@ -626,7 +626,7 @@ void PokeathlonGoalRoll_CheckGoals(PokeathlonCourseData *course) {
                     goalRoll->scores[goal]--;
                 }
                 index = ball->lastKicker;
-                ov96_021E8228(course, (u8)(index / 3), (u8)(index % 3), 3, 1);
+                PokeathlonCourse_AddMonCounter(course, (u8)(index / 3), (u8)(index % 3), 3, 1);
             }
         }
     }
@@ -679,7 +679,7 @@ int PokeathlonGoalRoll_GetTouchedMon(PokeathlonGoalRoll *goalRoll, u8 participan
     nearest = reach << 12;
     for (i = 0; i < 3; i++) {
         PokeathlonGoalRollMon *mon = &goalRoll->mons[participant][i];
-        if (ov96_021E872C(mon->position.x / FX32_ONE, mon->position.y / FX32_ONE, touchX, touchY, reach, &distance)) {
+        if (PokeathlonCourse_IsInRange(mon->position.x / FX32_ONE, mon->position.y / FX32_ONE, touchX, touchY, reach, &distance)) {
             distances[i] = distance;
             inReach[i] = TRUE;
             count++;
@@ -771,7 +771,7 @@ void PokeathlonGoalRoll_RecoverPower(PokeathlonGoalRollMon *mon) {
 }
 
 void PokeathlonGoalRoll_InitMonStats(PokeathlonCourseData *course, PokeathlonGoalRollMonParams *params, u8 participant, u8 member, PokeathlonGoalRollMon *mon) {
-    u8 *levels = ov96_021E60D8(course, participant, member);
+    u8 *levels = PokeathlonCourse_GetMonStats(course, participant, member);
     mon->kickAngle = params->kickAngle[levels[4]];
     mon->unk6E = params->unk6E[levels[4]];
     mon->maxPower = params->power[levels[3]];

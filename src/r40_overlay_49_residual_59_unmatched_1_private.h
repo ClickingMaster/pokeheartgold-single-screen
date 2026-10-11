@@ -4,7 +4,7 @@
 #include "global.h"
 
 void *WiFiPlazaRoom_GetObjManager(void *p);
-void *ov49_02258D70(void *p, u32 index);
+void *WiFiPlazaObj_FindById(void *p, u32 index);
 void *WiFiPlazaRoom_GetLobby(void *p);
 u32 ov49_0225EF88(void *p);
 void ov49_0225A56C(void *p, u32 index);
@@ -12,14 +12,14 @@ void ov49_0225EF8C(void *p, u32 state);
 int ov45_0222A53C(void *p);
 void ov49_0225A53C(void *p, u32 value);
 u32 ov49_0225A5AC(void *p, u32 index);
-void ov49_02258EEC(void *, void *, int);
+void WiFiPlazaObj_SetHandler(void *, void *, int);
 u32 ov49_0225A4F0(void *p);
 u32 ov49_0225A4E0(void *p);
 void ov49_0225A04C(void *p, u32 index, u8 value);
 void ov49_0225A54C(void *p);
 void *ov49_02259FEC(void *p);
-void *ov49_02258DAC(void *p);
-u32 ov49_02258E60(void *p, u32 index);
+void *WiFiPlazaObj_GetOwnPlayer(void *p);
+u32 WiFiPlazaObj_GetParam(void *p, u32 index);
 void ov49_0225F334(void *p, u32 a, u16 b, u16 c, u32 d);
 void ov45_0222A520(void *p, u32 value);
 void ov49_0225EF90(void *p);

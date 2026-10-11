@@ -41,10 +41,10 @@ typedef struct Ov96CourseEntityR118 {
     Ov96CourseEntityR118Flags flags;
 } Ov96CourseEntityR118;
 
-void *ov96_021EAA20(void *);
-u8 ov96_021E90FC(void *);
-u16 *ov96_021E8BB0(void *);
-void ov96_021EABF4(void *, const VecFx32 *);
+void *PokeathlonCourseMonObject_GetGfx(void *);
+u8 PokeathlonCourseMonGfx_GetTopRow(void *);
+u16 *PokeathlonCourseMonGfx_GetInfo(void *);
+void PokeathlonCourseMonObject_SetAffineMatrix(void *, const VecFx32 *);
 
 void ov96_02218510(void *, int);
 void ov96_02218578(Ov96CourseEntityR118 *, int);

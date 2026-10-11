@@ -50,15 +50,15 @@ u32 ov45_0222B1EC(WiFiPlazaWork *lobby);
 
 // Other OVY_49 modules, until their own headers exist.
 // object manager (avatars)
-void ov49_02258BEC(void *objManager, int lightSet);
-void ov49_02258C08(void *objManager, int lightSet);
-void *ov49_02258DAC(void *objManager);
-void *ov49_02258DB0(void *objManager);
-u32 ov49_02258E60(void *obj, int param);
+void WiFiPlazaObj_SetLightSet(void *objManager, int lightSet);
+void WiFiPlazaObj_FadeToLightSet(void *objManager, int lightSet);
+void *WiFiPlazaObj_GetOwnPlayer(void *objManager);
+void *WiFiPlazaObj_GetSpecial(void *objManager);
+u32 WiFiPlazaObj_GetParam(void *obj, int param);
 void ov49_02258EAC(void *objManager, void *obj, u16 value, u8 kind);
-void ov49_02258EEC(void *objManager, void *obj, int enable);
+void WiFiPlazaObj_SetHandler(void *objManager, void *obj, int enable);
 void ov49_02259130(void *obj, int enable);
-void ov49_02259160(void *obj, u32 direction);
+void WiFiPlazaObj_SetDirection(void *obj, u32 direction);
 // scenery models
 void ov49_0225E3B8(void *models, int index, fx32 x);
 void ov49_0225E3F4(void *models, int index, const VecFx32 *offset);

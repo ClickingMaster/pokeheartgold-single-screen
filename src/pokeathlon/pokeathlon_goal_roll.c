@@ -21,44 +21,44 @@
 #include "wireless_status_icon.h"
 
 // Course helpers, sprite scene and object helpers (OVY_96, not yet tidied).
-void *ov96_021E60C0(PokeathlonCourseData *course, int participant, int member);
+void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 int ov96_021E6104(void);
 int ov96_021E6108(const void *mon);
 int ov96_021E6138(const void *mon);
-void ov96_021E6168(PokeathlonCourseData *course, int participant, int member, void *view);
+void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, void *view);
 Sprite **ov96_021E6290(PokeathlonCourseData *course, int a1, void *resources, void *pool);
 void ov96_021E634C(PokeathlonCourseData *course, int a1, void *resources, void *pool, u32 a4, u8 a5, const u16 (*coords)[2]);
-BOOL ov96_021E637C(PokeathlonCourseData *course);
-void ov96_021E64B8(PokeathlonCourseData *course);
-Sprite *ov96_021E64F8(PokeathlonCourseData *course, void *object, void *resources, SpriteList *spriteList, int a4);
-void ov96_021E6550(PokeathlonCourseData *course);
-void ov96_021E65A4(PokeathlonCourseData *course);
-void ov96_021E6670(PokeathlonCourseData *course, u32 a1);
-BOOL ov96_021E667C(PokeathlonCourseData *course);
-void ov96_021E8228(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
-void ov96_021E8324(PokeathlonCourseData *course, void (*callback)(PokeathlonCourseData *));
+BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
+void PokeathlonCourse_InitMarkers(PokeathlonCourseData *course);
+Sprite *PokeathlonCourse_AddMarker(PokeathlonCourseData *course, void *object, void *resources, SpriteList *spriteList, int a4);
+void PokeathlonCourse_FreeMarkers(PokeathlonCourseData *course);
+void PokeathlonCourse_StopMarkerAnims(PokeathlonCourseData *course);
+void PokeathlonCourse_SetHudPlanes(PokeathlonCourseData *course, u32 a1);
+BOOL PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
+void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
+void PokeathlonCourse_SetFinishCallback(PokeathlonCourseData *course, void (*callback)(PokeathlonCourseData *));
 u8 *ov96_021E8A20(void *ptr);
-void ov96_021E8BAC(void *object);
-u8 ov96_021E90FC(u8 *image);
-void ov96_021E92B0(ObjCharTransferTemplate *config, int a1, enum HeapID heapId, GXOBJVRamModeChar a3, GXOBJVRamModeChar a4);
-void ov96_021E93B4(void *gfx, int a1);
-void ov96_021E9510(void *gfx);
-void ov96_021E952C(void *gfx);
-void ov96_021E9570(void *gfx, int a1);
-void ov96_021E95F8(PokeathlonCourseData *course, void *gfx, int participant, u16 score, int a4, int a5, int a6);
-PokeathlonGoalRollResources *ov96_021E9A78(int heapId, int a1, int a2);
-void ov96_021E9C0C(PokeathlonGoalRollResources *resources);
-PokeathlonGoalRollMonObjects *ov96_021EA854(enum HeapID heapId, int count, int a2, PokeathlonGoalRollResources *resources, SpriteList *spriteList);
-void ov96_021EA894(PokeathlonGoalRollMonObjects *monObjects);
-void ov96_021EA8A8(PokeathlonGoalRollMonObjects *monObjects, int count, void *views, void *info, int a4, int a5);
-BOOL ov96_021EAA00(PokeathlonGoalRollMonObjects *monObjects);
-PokeathlonGoalRollMonObject *ov96_021EAA04(void *monObjects, u8 index);
-u8 *ov96_021EAA20(void *object);
-void ov96_021EAB38(u8 *object, int a1);
-void ov96_021EABA8(void *object, int priority);
-void ov96_021EABDC(u8 *object, u32 a1);
-void ov96_021EAC0C(void *object, u8 anim);
-void ov96_021EAC5C(void *object, int anim);
+void PokeathlonCourseMonGfx_GetSprite(void *object);
+u8 PokeathlonCourseMonGfx_GetTopRow(u8 *image);
+void PokeathlonCourse_InitObjTransfer(ObjCharTransferTemplate *config, int a1, enum HeapID heapId, GXOBJVRamModeChar a3, GXOBJVRamModeChar a4);
+void PokeathlonCourseScoreList_Rank(void *gfx, int a1);
+void PokeathlonCourseScoreList_Init(void *gfx);
+void PokeathlonCourseScoreList_AddPointsToTotals(void *gfx);
+void PokeathlonCourseScoreList_SaveEventPoints(void *gfx, int a1);
+void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, void *gfx, int participant, u16 score, int a4, int a5, int a6);
+PokeathlonGoalRollResources *PokeathlonCourseSprites_CreateResources(int heapId, int a1, int a2);
+void PokeathlonCourseSprites_FreeResources(PokeathlonGoalRollResources *resources);
+PokeathlonGoalRollMonObjects *PokeathlonCourseMonObjects_Create(enum HeapID heapId, int count, int a2, PokeathlonGoalRollResources *resources, SpriteList *spriteList);
+void PokeathlonCourseMonObjects_Free(PokeathlonGoalRollMonObjects *monObjects);
+void PokeathlonCourseMonObjects_Load(PokeathlonGoalRollMonObjects *monObjects, int count, void *views, void *info, int a4, int a5);
+BOOL PokeathlonCourseMonObjects_IsLoaded(PokeathlonGoalRollMonObjects *monObjects);
+PokeathlonGoalRollMonObject *PokeathlonCourseMonObjects_Get(void *monObjects, u8 index);
+u8 *PokeathlonCourseMonObject_GetGfx(void *object);
+void PokeathlonCourseMonObject_SetDrawFlag(u8 *object, int a1);
+void PokeathlonCourseMonObject_SetDrawPriority(void *object, int priority);
+void PokeathlonCourseMonObject_SetDrawPriorityStep(u8 *object, u32 a1);
+void PokeathlonCourseMonObject_SetAnimState(void *object, u8 anim);
+void PokeathlonCourseMonObject_SetAnim(void *object, int anim);
 void ov96_021EAF6C(u8 *object, u32 a1);
 void ov96_021EAF70(u8 *object, u32 width, u32 height);
 s32 ov96_021EAF8C(void *object);
@@ -109,7 +109,7 @@ extern const VecFx32 ov96_0221D4B4[4][2];
 
 extern const PokeathlonGoalRollPaletteData ov96_0221D1F4;
 
-// A Pokemon as ov96_021E6168 describes it to the 3D object list.
+// A Pokemon as PokeathlonCourse_GetMonInfo describes it to the 3D object list.
 typedef struct PokeathlonGoalRollMonView {
     u16 species;
     u16 unk02;
@@ -155,11 +155,11 @@ static inline void PokeathlonGoalRoll_SetModelSize(PokeathlonCourseData *course,
     int participant;
     int member;
     int size;
-    object = ov96_021EAA04((u8 *)monObjects, (u8)index);
-    ov96_021EAB38((u8 *)object, 1);
+    object = PokeathlonCourseMonObjects_Get((u8 *)monObjects, (u8)index);
+    PokeathlonCourseMonObject_SetDrawFlag((u8 *)object, 1);
     participant = index / 3;
     member = index % 3;
-    size = ov96_021E6138(ov96_021E60C0(course, participant, member));
+    size = ov96_021E6138(PokeathlonCourse_GetPerformance(course, participant, member));
     ov96_021EAF70((u8 *)object, sizes[size - 1].width, sizes[size - 1].height);
 }
 
@@ -222,12 +222,12 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
         goalRoll->sortWork = Heap_Alloc(HEAP_ID_147, 40);
         MI_CpuFill8(goalRoll->sortWork, 0, 40);
         goalRoll->bgConfig = BgConfig_Alloc(HEAP_ID_147);
-        ov96_021E6670(course, 8);
+        PokeathlonCourse_SetHudPlanes(course, 8);
         work.charTransfer.maxTasks = 133;
         work.charTransfer.sizeMain = 0x40000;
         work.charTransfer.sizeSub = 0x4000;
         work.charTransfer.heapID = HEAP_ID_147;
-        ov96_021E92B0(&work.charTransfer, 16, HEAP_ID_147, (GXOBJVRamModeChar)0x300010, (GXOBJVRamModeChar)16);
+        PokeathlonCourse_InitObjTransfer(&work.charTransfer, 16, HEAP_ID_147, (GXOBJVRamModeChar)0x300010, (GXOBJVRamModeChar)16);
         NNS_G2dInitOamManagerModule();
         OamManager_Create(0, 126, 0, 32, 1, 126, 0, 32, HEAP_ID_147);
         goalRoll->heapId = HEAP_ID_147;
@@ -250,8 +250,8 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
         count = PokeathlonCourse_GetParticipantCount(course);
         mode = PokeathlonCourse_GetMode(course);
         goalRoll->cpu = ((PokeathlonGoalRollCpuNewFunc)PokeathlonGoalRollCpu_New)((u32)goalRoll->heapId, 4 - count, mode);
-        goalRoll->resources = ov96_021E9A78(goalRoll->heapId, 2735, 1);
-        ov96_021E64B8(course);
+        goalRoll->resources = PokeathlonCourseSprites_CreateResources(goalRoll->heapId, 2735, 1);
+        PokeathlonCourse_InitMarkers(course);
         PokeathlonCourse_IncrementField1ED(course);
         break;
     }
@@ -259,7 +259,7 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
         work.poolConfig = ov96_0221D238;
         goalRoll->spritePool = ov96_021EB180(goalRoll->heapId, &work.poolConfig);
         ov96_021EB5C8(goalRoll->spritePool, 0, 0, 0, 0x200000);
-        goalRoll->monObjects = ov96_021EA854(goalRoll->heapId, 12, 8, goalRoll->resources, ov96_021EB5E8((u8 *)goalRoll->spritePool));
+        goalRoll->monObjects = PokeathlonCourseMonObjects_Create(goalRoll->heapId, 12, 8, goalRoll->resources, ov96_021EB5E8((u8 *)goalRoll->spritePool));
         ov96_021EB29C(goalRoll->spritePool, 0, 101);
         ov96_021EB29C(goalRoll->spritePool, 1, 102);
         ov96_021EB2BC(goalRoll->spritePool, NARC_a_2_3_4, 18, 101, 1);
@@ -343,22 +343,22 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
         for (i = 0; i < 12; i++) {
             col = i % 3;
             participantIndex = i / 3;
-            ov96_021E6168(course, participantIndex, col, &work.views[i]);
-            info->sizes[i] = ov96_021E6108(ov96_021E60C0(course, participantIndex, col));
+            PokeathlonCourse_GetMonInfo(course, participantIndex, col, &work.views[i]);
+            info->sizes[i] = ov96_021E6108(PokeathlonCourse_GetPerformance(course, participantIndex, col));
         }
         work.objectsInfo.unk00[0] = 0;
         work.objectsInfo.unk00[1] = 1;
         work.objectsInfo.unk00[2] = 0;
         work.objectsInfo.unk00[3] = 1;
         work.objectsInfo.unk00[4] = 1;
-        ov96_021EA8A8(goalRoll->monObjects, 12, work.views, &work.objectsInfo, 0, 0);
+        PokeathlonCourseMonObjects_Load(goalRoll->monObjects, 12, work.views, &work.objectsInfo, 0, 0);
         PokeathlonCourse_IncrementField1ED(course);
         break;
     }
     case 4: {
         PokeathlonGoalRollMonObject *object;
         PokeathlonGoalRollMon *mon;
-        if (!ov96_021EAA00(goalRoll->monObjects)) {
+        if (!PokeathlonCourseMonObjects_IsLoaded(goalRoll->monObjects)) {
             break;
         }
         own = ov96_021E5F24(course);
@@ -367,19 +367,19 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
         ReadWholeNarcMemberByIdPair(modelSizes, NARC_a_1_7_0, 11);
         for (i = 0; i < 12; i++) {
             PokeathlonGoalRoll_SetModelSize(course, goalRoll->monObjects, i, modelSizes);
-            object = ov96_021EAA04((u8 *)goalRoll->monObjects, (u8)i);
-            image = ov96_021EAA20(&object->object);
+            object = PokeathlonCourseMonObjects_Get((u8 *)goalRoll->monObjects, (u8)i);
+            image = PokeathlonCourseMonObject_GetGfx(&object->object);
             member = i % 3;
             row = i / 3;
             mon = &goalRoll->mons[row][member];
             mon->object = object;
             mon->radius = ov96_021EAF8C(object);
             mon->mode = GOAL_ROLL_MODE_WALK;
-            ov96_021E90FC(image);
+            PokeathlonCourseMonGfx_GetTopRow(image);
             x = ov96_0221D408[row][member][0];
             y = ov96_0221D408[row][member][1];
             mon->facing = 2;
-            ov96_021EAC0C(object, 2);
+            PokeathlonCourseMonObject_SetAnimState(object, 2);
             ov96_021EAF94(object, x, y);
             ov96_021EAF6C((u8 *)object, ov96_021E6104());
             ov96_021EB0A4(object, x, y, &screen.x, &screen.y);
@@ -390,15 +390,15 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
             mon->target.x = (s32)((u32)screen.x << 12);
             mon->target.y = (s32)((u32)screen.y << 12);
             if (row == ov96_021E5F24(course)) {
-                ov96_021EABA8(object, 8);
+                PokeathlonCourseMonObject_SetDrawPriority(object, 8);
             } else {
-                ov96_021EABA8(object, 16);
+                PokeathlonCourseMonObject_SetDrawPriority(object, 16);
             }
-            ov96_021EABDC((u8 *)object, 20);
+            PokeathlonCourseMonObject_SetDrawPriorityStep((u8 *)object, 20);
             if (row == own) {
                 work.ownCoords[member][0] = screen.x;
                 work.ownCoords[member][1] = screen.y;
-                ov96_021E64F8(course, object, goalRoll->resources, ov96_021EB5E8((u8 *)goalRoll->spritePool), 1);
+                PokeathlonCourse_AddMarker(course, object, goalRoll->resources, ov96_021EB5E8((u8 *)goalRoll->spritePool), 1);
             }
         }
         ov96_021E634C(course, 0, goalRoll->resources, goalRoll->spritePool, 1, 3, work.ownCoords);
@@ -471,14 +471,14 @@ BOOL ov96_02211660(PokeathlonCourseData *course) {
 
     PokeathlonCourse_GetHeapAllocPtr4(course);
     gfx = PokeathlonCourse_GetGraphicsSystem(course);
-    ov96_021E9510(gfx);
+    PokeathlonCourseScoreList_Init(gfx);
     for (i = 0; i < 4; i++) {
-        ov96_021E95F8(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, 300);
+        PokeathlonCourse_AddScoreEntry(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, 300);
     }
-    ov96_021E93B4(gfx, 1);
+    PokeathlonCourseScoreList_Rank(gfx, 1);
     ov96_0221A56C(gfx, 9);
-    ov96_021E952C(gfx);
-    ov96_021E9570(gfx, 9);
+    PokeathlonCourseScoreList_AddPointsToTotals(gfx);
+    PokeathlonCourseScoreList_SaveEventPoints(gfx, 9);
     return TRUE;
 }
 
@@ -488,7 +488,7 @@ BOOL PokeathlonGoalRoll_Exit(PokeathlonCourseData *course) {
     int i;
 
     WirelessStatusIcon_Destroy();
-    ov96_021E6550(course);
+    PokeathlonCourse_FreeMarkers(course);
     FreeBgTilemapBuffer(goalRoll->bgConfig, GF_BG_LYR_MAIN_0);
     FreeBgTilemapBuffer(goalRoll->bgConfig, GF_BG_LYR_MAIN_1);
     FreeBgTilemapBuffer(goalRoll->bgConfig, GF_BG_LYR_MAIN_2);
@@ -510,8 +510,8 @@ BOOL PokeathlonGoalRoll_Exit(PokeathlonCourseData *course) {
     }
     Heap_Free(goalRoll->bgConfig);
     ov96_021EB21C(goalRoll->spritePool);
-    ov96_021EA894(goalRoll->monObjects);
-    ov96_021E9C0C(goalRoll->resources);
+    PokeathlonCourseMonObjects_Free(goalRoll->monObjects);
+    PokeathlonCourseSprites_FreeResources(goalRoll->resources);
     OamManager_Free();
     ObjCharTransfer_Destroy();
     ObjPlttTransfer_Destroy();
@@ -539,7 +539,7 @@ BOOL PokeathlonGoalRoll_State_Play(PokeathlonCourseData *course, u8 *state) {
 
     switch (*state) {
     case 0:
-        if (ov96_021E637C(course)) {
+        if (PokeathlonCourse_RunStartCountdown(course)) {
             (*state)++;
         }
         break;
@@ -552,7 +552,7 @@ BOOL PokeathlonGoalRoll_State_Play(PokeathlonCourseData *course, u8 *state) {
     case 2:
         PokeathlonGoalRoll_HostUpdate(course);
         PokeathlonGoalRoll_ApplyFrameScore(course);
-        if (ov96_021E667C(course)) {
+        if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, goalRoll->heapId);
             PokeathlonCourse_SetStateField07(course, 1);
         }
@@ -645,12 +645,12 @@ BOOL PokeathlonGoalRoll_HandleInput(PokeathlonCourseData *course) {
     if (timeUp) {
         ov96_021EB63C(goalRoll->spritePool);
         ov96_021EB144(goalRoll->monObjects, 1);
-        ov96_021E65A4(course);
-        ov96_021E8324(course, PokeathlonGoalRoll_OnTimeUp);
+        PokeathlonCourse_StopMarkerAnims(course);
+        PokeathlonCourse_SetFinishCallback(course, PokeathlonGoalRoll_OnTimeUp);
         return TRUE;
     }
     if (System_GetTouchNew()) {
-        ov96_021E8228(course, (u8)ov96_021E5F24(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, (u8)ov96_021E5F24(course), 3, 0, 1);
     }
     if (System_GetTouchHeld()) {
         input->x = (u8)gSystem.touchX;
@@ -738,7 +738,7 @@ void PokeathlonGoalRoll_HostUpdate(PokeathlonCourseData *course) {
                     if (goalRoll->holdFrames <= 8) {
                         if (mon->target.x != mon->position.x || mon->target.y != mon->position.y) {
                             mon->mode = GOAL_ROLL_MODE_DASH;
-                            ov96_021E8228(frame.course, (u8)i, (u8)(goalRoll->heldMon[i] % 3), 6, 1);
+                            PokeathlonCourse_AddMonCounter(frame.course, (u8)i, (u8)(goalRoll->heldMon[i] % 3), 6, 1);
                         }
                     } else {
                         mon->mode = GOAL_ROLL_MODE_WALK;
@@ -821,14 +821,14 @@ void PokeathlonGoalRoll_PackFrame(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRo
     out->flags += score << 25;
 }
 
-// The course's record of a participant's Pokemon (ov96_021E60C0).
+// The course's record of a participant's Pokemon (PokeathlonCourse_GetPerformance).
 typedef struct PokeathlonGoalRollCourseMon {
     u8 unk00[7];
     u8 size; // 1..3
 } PokeathlonGoalRollCourseMon;
 
 static inline u8 PokeathlonGoalRoll_GetMonSize(PokeathlonCourseData *course, int index) {
-    return ((PokeathlonGoalRollCourseMon *)ov96_021E60C0(course, index / 3, index % 3))->size;
+    return ((PokeathlonGoalRollCourseMon *)PokeathlonCourse_GetPerformance(course, index / 3, index % 3))->size;
 }
 
 static inline void PokeathlonGoalRoll_ClearVec(VecFx32 *vec) {
@@ -867,7 +867,7 @@ void PokeathlonGoalRoll_ApplyFrame(PokeathlonCourseData *course) {
     for (i = 0; i < 12; i++) {
         participant = i / 3;
         mon = &goalRoll->mons[participant][i % 3];
-        ov96_021E8BAC(ov96_021EAA20(mon->object));
+        PokeathlonCourseMonGfx_GetSprite(PokeathlonCourseMonObject_GetGfx(mon->object));
         mode = (frame->flags >> (i * 2)) & 3;
         if (mode == GOAL_ROLL_MODE_TIRED) {
             ov96_021EB52C(mon->dashSprite, TRUE, TRUE);
@@ -909,7 +909,7 @@ void PokeathlonGoalRoll_ApplyFrame(PokeathlonCourseData *course) {
                 VecFx32 trailPosition = { 0, 0, 0 };
                 s32 screenX, screenY;
 
-                object = ov96_021EAA04(goalRoll->monObjects, i);
+                object = PokeathlonCourseMonObjects_Get(goalRoll->monObjects, i);
                 trail = mon->trailIndex;
                 ov96_021EB06C(object, frame->monX[i], frame->monY[i], &screenX, &screenY);
                 trailPosition.x = screenX << 12;
@@ -926,11 +926,11 @@ void PokeathlonGoalRoll_ApplyFrame(PokeathlonCourseData *course) {
                 mon->trailCooldown--;
             }
         }
-        object = ov96_021EAA04(goalRoll->monObjects, i);
+        object = PokeathlonCourseMonObjects_Get(goalRoll->monObjects, i);
         if (mode == GOAL_ROLL_MODE_STUNNED) {
-            ov96_021EAC5C(object, 20);
+            PokeathlonCourseMonObject_SetAnim(object, 20);
         } else {
-            ov96_021EAC0C(object, state + 1);
+            PokeathlonCourseMonObject_SetAnimState(object, state + 1);
         }
         ov96_021EB01C(object, x, y, 1);
     }

@@ -26,11 +26,11 @@ void ov96_021EB0A4(void *object, int x, int y, int *outX, int *outY);
 BOOL ov96_021EB0CC(void *object, fx32 x, fx32 y, int touchX, int touchY);
 void ov96_021EB144(void *object, int a1);
 void ov96_021EB63C(void *object);
-u32 ov96_021E637C(PokeathlonCourseData *course);
-u32 ov96_021E667C(PokeathlonCourseData *course);
-void ov96_021E6454(PokeathlonCourseData *course, u16 timeLeft);
-void ov96_021E8228(PokeathlonCourseData *course, u8 participant, int type, int index, int value);
-void ov96_021E8324(PokeathlonCourseData *course, void (*callback)(PokeathlonCourseData *course));
+u32 PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
+u32 PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
+void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, u16 timeLeft);
+void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, int type, int index, int value);
+void PokeathlonCourse_SetFinishCallback(PokeathlonCourseData *course, void (*callback)(PokeathlonCourseData *course));
 
 // Screen templates (asm data).
 extern const GraphicsModes ov96_0221CAF0;
@@ -238,7 +238,7 @@ BOOL PokeathlonPennantCapture_State_Play(PokeathlonCourseData *course, u8 *state
     switch (*state) {
     case 0:
         PokeathlonPennantCapture_ShowFrame(course);
-        if (ov96_021E637C(course)) {
+        if (PokeathlonCourse_RunStartCountdown(course)) {
             (*state)++;
         }
         break;
@@ -250,7 +250,7 @@ BOOL PokeathlonPennantCapture_State_Play(PokeathlonCourseData *course, u8 *state
         break;
     case 2:
         PokeathlonPennantCapture_HostStep(course);
-        if (ov96_021E667C(course)) {
+        if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, work->heapId);
             PokeathlonCourse_SetStateField07(course, 2);
         }
@@ -515,12 +515,12 @@ BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course) {
         if (finished) {
             ov96_021EB63C(work->unk020);
             ov96_021EB144(work->unk348, 1);
-            ov96_021E8324(course, PokeathlonPennantCapture_UpdateOwnScore);
+            PokeathlonCourse_SetFinishCallback(course, PokeathlonPennantCapture_UpdateOwnScore);
             return TRUE;
         }
     }
     if (System_GetTouchNew()) {
-        ov96_021E8228(course, (u8)ov96_021E5F24(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, (u8)ov96_021E5F24(course), 3, 0, 1);
     }
     if (System_GetTouchHeld()) {
         input->x = gSystem.touchX;
@@ -549,7 +549,7 @@ void PokeathlonPennantCapture_ShowFrame(PokeathlonCourseData *course) {
     PokeathlonPennantCapture_UpdatePennantSprites(work, frame, x, y);
     PokeathlonPennantCapture_AnimateBg(work);
     PokeathlonPennantCaptureDisplay_SetTimer(work->display, frame->timeLeft);
-    ov96_021E6454(course, frame->timeLeft);
+    PokeathlonCourse_UpdateTimeUpCountdown(course, frame->timeLeft);
 }
 
 BOOL PokeathlonPennantCapture_IsTouchOnOwnMon(PokeathlonPennantCapture *work, int participant, int x, int y) {

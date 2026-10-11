@@ -30,7 +30,7 @@ extern void ov96_021FB6C8(void *, void *);
 extern void ov96_021FBEFC(void *, s32);
 extern void ov96_021FC6EC(void *, u32, s32);
 extern void ov96_021FA83C(u32, void *, void *);
-extern void ov96_021EAC0C(void *, u32);
+extern void PokeathlonCourseMonObject_SetAnimState(void *, u32);
 extern void ov96_021FAB24(void *, void *);
 extern void PlaySEOnPlayer(u32, u32);
 extern void SetPlayerPan(u32, s32);
@@ -119,7 +119,7 @@ void ov96_021FA34C(void *sys, void *work, void *node, void *sel) {
             } else if (U16AT(node, 0) >= 0x1000) {
                 U32AT(node, 0xC) = 0x3F800000;
                 S32AT(node, 0x10) = 0;
-                ov96_021EAC0C(PAT(node, 0x24), 1);
+                PokeathlonCourseMonObject_SetAnimState(PAT(node, 0x24), 1);
                 Sprite_SetAnimCtrlSeq(ov96_021EB5B8(PAT(node, 0x4C)), 0);
             }
         }
@@ -144,7 +144,7 @@ void ov96_021FA34C(void *sys, void *work, void *node, void *sel) {
                         PlaySEOnPlayer(0x8A5, ov96_0221DC2C[U8AT(node, 0x18)]);
                         SetPlayerPan(ov96_0221DC2C[U8AT(node, 0x18)], ov96_0221DC28[U8AT(node, 0x18)]);
                         if (U16AT(node, 0x60) == 1 && U16AT(node, 0x62) == 1) {
-                            ov96_021E8228(sys, (u8)ov96_021E5F24(sys), U8AT(node, 0x18), 2, 1);
+                            PokeathlonCourse_AddMonCounter(sys, (u8)ov96_021E5F24(sys), U8AT(node, 0x18), 2, 1);
                             U8AT(node, 0x30) = 3;
                             S32AT(node, 0x2C) = 1;
                             ov96_021FBCB8(sys, node);
@@ -156,7 +156,7 @@ void ov96_021FA34C(void *sys, void *work, void *node, void *sel) {
                             U8AT(node, 0x32) = 1;
                             S32AT(node, 0x2C) = 4;
                             Sprite_SetAnimCtrlSeq(ov96_021EB5B8(PAT(node, 0x4C)), 0);
-                            ov96_021E8228(sys, (u8)ov96_021E5F24(sys), U8AT(node, 0x18), 1, 1);
+                            PokeathlonCourse_AddMonCounter(sys, (u8)ov96_021E5F24(sys), U8AT(node, 0x18), 1, 1);
                         }
                         U16AT(node, 0x60) = 0;
                         U16AT(node, 0x62) = 0;
@@ -186,7 +186,7 @@ BOOL ov96_021FA6D0(void *course, void *work) {
     sel.flag = ret;
 
     if (System_GetTouchNew()) {
-        ov96_021E8228(course, (u8)ov96_021E5F24(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, (u8)ov96_021E5F24(course), 3, 0, 1);
         hit = ov96_021FB784(work, gSystem.touchX, gSystem.touchY);
         if (hit < 3) {
             sel.idx = hit;

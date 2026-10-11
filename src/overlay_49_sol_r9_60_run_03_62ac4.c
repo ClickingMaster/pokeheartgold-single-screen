@@ -57,7 +57,7 @@ BOOL ov49_02262B14(void *state, void *ctx) {
             ov49_02262DB8(object, ctx);
             WiFiPlazaRoom_CloseMessage(ctx);
             object = WiFiPlazaRoom_GetObjManager(ctx);
-            ov49_02258EEC(object, (void*)(ov49_02258DAC(object)), 1);
+            WiFiPlazaObj_SetHandler(object, (void*)(WiFiPlazaObj_GetOwnPlayer(object)), 1);
             ov49_0225EF68(state);
             return TRUE;
         }

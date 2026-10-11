@@ -18,9 +18,9 @@ extern void *PokeathlonCourse_GetDataCopyArea(void *course);
 extern void *PokeathlonCourse_GetHeapAllocPtr4(void *course);
 extern u8 *ov96_021E8A20(void *ptr);
 extern u16 ov96_0221978C(void *p);
-extern void ov96_021E8318(void *course, u16 value);
+extern void PokeathlonCourse_SetRecordScore(void *course, u16 value);
 extern void ov96_022193F8(void *course, u8 value);
-extern void ov96_021E9C0C(void *p);
+extern void PokeathlonCourseSprites_FreeResources(void *p);
 extern void SpriteSystem_FreeResourcesAndManager(void *system, void *manager);
 extern void SpriteSystem_Free(void *system);
 extern void RemoveWindow(void *window);
@@ -43,7 +43,7 @@ void ov96_02217820(u8 *p);
 void ov96_02217868(u8 *p, int value);
 
 void ov96_02216390(SolR9Ui *p) {
-    ov96_021E9C0C(p->unk18);
+    PokeathlonCourseSprites_FreeResources(p->unk18);
     SpriteSystem_FreeResourcesAndManager(p->spriteSystem, p->spriteManager);
     SpriteSystem_Free(p->spriteSystem);
 }

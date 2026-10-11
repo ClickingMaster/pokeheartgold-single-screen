@@ -18,9 +18,9 @@ void MATH_QSort(void *base, u32 count, u32 width, int (*compare)(const void *, c
 
 // Course helpers and the sprite pool (OVY_96, not yet tidied).
 u8 *ov96_021E8A20(void *ptr);
-void ov96_021E8318(PokeathlonCourseData *course, u32 score);
+void PokeathlonCourse_SetRecordScore(PokeathlonCourseData *course, u32 score);
 Sprite *ov96_021EA2C4(PokeathlonGoalRollResources *resources, SpriteList *spriteList, int a2, enum HeapID heapId);
-void ov96_021EABA8(void *object, u32 priority);
+void PokeathlonCourseMonObject_SetDrawPriority(void *object, u32 priority);
 PokeathlonGoalRollSprite *ov96_021EB3E4(PokeathlonGoalRollSpritePool *pool, int a1, int a2, int a3, u8 a4);
 void ov96_021EB52C(PokeathlonGoalRollSprite *sprite, BOOL a1, BOOL show);
 void ov96_021EB564(PokeathlonGoalRollSprite *sprite, int anim);
@@ -236,7 +236,7 @@ void PokeathlonGoalRoll_SortOwnTeamOrder(PokeathlonGoalRollMon *team, u8 *monY) 
         order[2] = low;
     }
     for (i = 0; i < 3; i++) {
-        ov96_021EABA8(order[i]->mon->object, i + 8);
+        PokeathlonCourseMonObject_SetDrawPriority(order[i]->mon->object, i + 8);
     }
 }
 
@@ -286,7 +286,7 @@ void PokeathlonGoalRoll_SortOtherMonsOrder(PokeathlonGoalRoll *goalRoll, Pokeath
             u8 index = mons[j].index;
             int participant = index / 3;
             int member = index % 3;
-            ov96_021EABA8(goalRoll->mons[participant][member].object, j + 16);
+            PokeathlonCourseMonObject_SetDrawPriority(goalRoll->mons[participant][member].object, j + 16);
         }
     }
 }
@@ -299,7 +299,7 @@ void PokeathlonGoalRoll_OnTimeUp(PokeathlonCourseData *course) {
     ov96_021E8A20((u8 *)area + 0xF0);
     PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetHeapAllocPtr4(course);
     u32 score = PokeathlonGoalRollDisplay_GetScore(goalRoll->display);
-    ov96_021E8318(course, score);
+    PokeathlonCourse_SetRecordScore(course, score);
     PokeathlonGoalRoll_PrintTotalPoints(goalRoll, score);
 }
 

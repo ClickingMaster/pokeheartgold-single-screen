@@ -31,7 +31,7 @@ typedef struct Ov49Unk {
 
 extern const u8 ov49_0226A450[];
 
-void ov49_02259154(void *a0, VecFx32 *pos);
+void WiFiPlazaObj_GetPosition(void *a0, VecFx32 *pos);
 void ov49_0226540C(Ov49Obj2 *obj, fx32 x0, fx32 x1, fx32 y0, fx32 y1, fx32 z0, fx32 z1, int a7);
 void ModelInstance_GetPosition(Ov49Obj *obj, fx32 *x, fx32 *y, fx32 *z);
 void ov49_022655F4(Ov49Anim *anim, int rot, int a2, int a3);
@@ -44,7 +44,7 @@ void ov49_02266F14(void *a0, Ov49Unk *data) {
     fx32 x, y, z;
     int i;
 
-    ov49_02259154(data->unk8, &pos);
+    WiFiPlazaObj_GetPosition(data->unk8, &pos);
     ov49_0226540C(&data->objs2[3], pos.x, pos.x, pos.y, pos.y - FX32_CONST(ov49_0226A450[data->count - 1]), pos.z, pos.z, 10);
     data->unk956 = 0;
     data->unk954 = 0;

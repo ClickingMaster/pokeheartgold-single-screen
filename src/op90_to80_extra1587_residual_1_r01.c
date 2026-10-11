@@ -12,11 +12,11 @@ typedef struct {
     u8 pad[0x18];
     Entry entries[4];
 } Out;
-u8 *ov96_021E60D8(void *course, int a, int b);
+u8 *PokeathlonCourse_GetMonStats(void *course, int a, int b);
 void ov96_021FEFE8(void *course, Params *params, int a2, u8 idx, Out *out);
 // @fn ov96_021FEFE8
 void ov96_021FEFE8(void *course, Params *params, int a2, u8 idx, Out *out) {
-    u8 *info = ov96_021E60D8(course, a2, idx);
+    u8 *info = PokeathlonCourse_GetMonStats(course, a2, idx);
     out->entries[idx].x8 = (f32)params->a[0][info[0]] / 10.0;
     out->entries[idx].x10 = params->a[1][info[3]];
     out->entries[idx].xc = params->a[1][info[3]];

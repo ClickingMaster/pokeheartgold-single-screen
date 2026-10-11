@@ -6,7 +6,7 @@ typedef struct Info { void *pad; Desc *desc; } Info;
 typedef struct E E;
 struct E { void *root; Info *info; u8 p8[8]; E *link; int kind, prior; u8 p1c[0x28]; VecFx32 vec; u8 p50[13]; u8 action; u8 p5e[2]; struct { u32 count:12; u32 level:2; u32 style:2; u32 pad:4; u32 color:2; u32 channel:2; u32 pad2:3; u32 hit:1; u32 pad3:3; u32 final:1; } flags; int timer; };
 extern int ov96_0221785C(int,int);
-extern void ov96_021E8228(void *,u8,u8,int,int);
+extern void PokeathlonCourse_AddMonCounter(void *,u8,u8,int,int);
 extern void ov96_02215958(VecFx32 *, int);
 extern void ov96_02217868(E *, VecFx32 *);
 extern int ov96_02217890(int);
@@ -20,14 +20,14 @@ int ov96_022178A0(E *target, E *source, VecFx32 *direction) {
  int n;
  power=(int)(3.0f*(float)power); other=(int)(2.0f*(float)other);
  n=(int)source->flags.count+1; if(n>200)n=200; source->flags.count=n;
- ov96_021E8228(source->root,(u8)source->flags.color,(u8)source->flags.channel,3,1);
- ov96_021E8228(source->root,(u8)source->flags.color,(u8)source->flags.channel,4,1);
+ PokeathlonCourse_AddMonCounter(source->root,(u8)source->flags.color,(u8)source->flags.channel,3,1);
+ PokeathlonCourse_AddMonCounter(source->root,(u8)source->flags.color,(u8)source->flags.channel,4,1);
  } else if(source->kind==11) {
  int n;
  power=source->info->desc->altPower;other=source->info->desc->altOther;
  n=(int)source->flags.count+2;if(n>200)n=200;source->flags.count=n;
- ov96_021E8228(source->root,(u8)source->flags.color,(u8)source->flags.channel,3,1);
- ov96_021E8228(source->root,(u8)source->flags.color,(u8)source->flags.channel,4,1);
+ PokeathlonCourse_AddMonCounter(source->root,(u8)source->flags.color,(u8)source->flags.channel,3,1);
+ PokeathlonCourse_AddMonCounter(source->root,(u8)source->flags.color,(u8)source->flags.channel,4,1);
  } else power=3<<12;
  VEC_MultAdd(power,direction,&target->vec,&target->vec);
  ov96_02215958(&target->vec,3<<14);

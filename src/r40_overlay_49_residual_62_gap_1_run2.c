@@ -78,8 +78,8 @@ BOOL ov49_022649F4(void *state, void *ctx) {
     case 2:
         WiFiPlazaRoom_CloseMessage(ctx);
         message = WiFiPlazaRoom_GetObjManager(ctx);
-        object = ov49_02258DAC(message);
-        ov49_02258EEC(message, object, 1);
+        object = WiFiPlazaObj_GetOwnPlayer(message);
+        WiFiPlazaObj_SetHandler(message, object, 1);
         return TRUE;
     }
 done:

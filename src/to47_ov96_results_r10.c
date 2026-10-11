@@ -47,11 +47,11 @@ void ov96_02217544(void *dst, void *a1, void *a2, void *a3, void *a4, void *a5) 
     control[0] = (u32)a5;
     do {
         index = (u8)control[1];
-        PTR_AT(group, 0) = ov96_021EAA04(a4, index);
+        PTR_AT(group, 0) = PokeathlonCourseMonObjects_Get(a4, index);
         palette = (u16 *)(group + 0x1c);
         gray = (u16 *)(group + 0x3c);
         for (j = 0; j < 3; index++, j++, palette += 0x20, gray += 0x20) {
-            ov96_021E8BB4(ov96_021E8BB0(ov96_021EAA20(ov96_021EAA04(a4, (u8)index))), (void *)control[0], palette);
+            PokeathlonCourseMonGfx_LoadPalette(PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonObject_GetGfx(PokeathlonCourseMonObjects_Get(a4, (u8)index))), (void *)control[0], palette);
             MI_CpuCopy8(palette, gray, 0x20);
             TintPalette_GrayScale(gray, 0x10);
         }
@@ -83,7 +83,7 @@ void ov96_0221768C(R10Work *work, R10Course *course) {
     data = (R10Data *)(void *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0xf0);
     heap = PokeathlonCourse_GetHeapAllocPtr4(course);
     ov96_02216C38(work, data, course);
-    ov96_021E6454(course, (data->unk020 << 13) >> 16);
+    PokeathlonCourse_UpdateTimeUpCountdown(course, (data->unk020 << 13) >> 16);
     if (((data->unk020 << 13) >> 16) == 0x1c2) {
         PlaySE(0x6d7);
     }

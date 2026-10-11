@@ -19,7 +19,7 @@ typedef struct Ov49Unk {
     void *models[4];
 } Ov49Unk;
 
-void ov49_02259154(void *a0, VecFx32 *pos);
+void WiFiPlazaObj_GetPosition(void *a0, VecFx32 *pos);
 void ov49_0226540C(Ov49Obj *obj, fx32 x0, fx32 x1, fx32 y0, fx32 y1, fx32 z0, fx32 z1, int a7);
 void ov49_022655F4(Ov49Anim *anim, int rot, int a2, int a3);
 void ModelInstance_SetPosition(void *model, fx32 x, fx32 y, fx32 z);
@@ -32,7 +32,7 @@ void ov49_02267F94(Ov49Unk *data, void *a1) {
     int i;
     fx32 x, y, z;
 
-    ov49_02259154(a1, &pos);
+    WiFiPlazaObj_GetPosition(a1, &pos);
     pos.x += FX32_CONST(8);
     pos.y += FX32_CONST(16);
     pos.z -= FX32_CONST(8);

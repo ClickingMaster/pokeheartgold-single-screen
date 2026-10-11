@@ -88,26 +88,26 @@ BOOL PlaySE(u16 seq);
 BOOL IsSEPlaying(u16 seq);
 void ov96_021F295C(int time, BgConfig *bg);
 void PokeathlonCirclePushDisplay_SetRound(void *ui, int level);
-void *ov96_021EAA20(void *obj);
-Sprite *ov96_021E8BAC(void *obj);
+void *PokeathlonCourseMonObject_GetGfx(void *obj);
+Sprite *PokeathlonCourseMonGfx_GetSprite(void *obj);
 void ov96_021EB06C(void *obj, int x, int y, int *outX, int *outY);
-void ov96_021EABE0(void *obj, int flag);
-void ov96_021EAB38(void *obj, int flag);
+void PokeathlonCourseMonObject_SetAffineOverwriteMode(void *obj, int flag);
+void PokeathlonCourseMonObject_SetDrawFlag(void *obj, int flag);
 void ov96_021EB52C(void *obj, int a, int b);
-void ov96_021EAB74(void *obj, int flag);
+void PokeathlonCourseMonObject_SetShadowDrawFlag(void *obj, int flag);
 void ov96_021EB01C(void *obj, int x, int y, int flag);
 void ov96_021EAF60(void *manager, u8 index, int flag, void *style);
 Sprite *ov96_021EB5B8(void *obj);
-u8 *ov96_021E60C0(void *course, int row, int col);
-void *ov96_021EAA04(void *manager, u8 index);
-void ov96_021EAC0C(void *obj, int anim);
-u8 *ov96_021E60D8(void *course, int row, int col);
-void ov96_021EAED4(void *obj, int a, int pitch, int anim, int b);
+u8 *PokeathlonCourse_GetPerformance(void *course, int row, int col);
+void *PokeathlonCourseMonObjects_Get(void *manager, u8 index);
+void PokeathlonCourseMonObject_SetAnimState(void *obj, int anim);
+u8 *PokeathlonCourse_GetMonStats(void *course, int row, int col);
+void PokeathlonCourseMonObject_Move(void *obj, int a, int pitch, int anim, int b);
 void ov96_021F2E80(void *course, Batch *batch, void *obj, u8 index, int anim);
 void PokeathlonCirclePushDisplay_ShowPlayerEvent(void *ui, u8 row, int effect);
 void ov96_021F2E2C(Batch *batch, u8 index);
 BOOL ov96_021F3180(u8 group, u16 x, u16 y, u8 *result);
-void ov96_021E658C(void *course, u8 col, int flag);
+void PokeathlonCourse_SetMarkerAnim(void *course, u8 col, int flag);
 void ov96_021F2FEC(CourseWork *work, Packet *packet);
 void ov96_021F2D98(Batch *batch);
 void PokeathlonCirclePushDisplay_SetScore(void *ui, int arg, int mode);
@@ -117,7 +117,7 @@ void PokeathlonCirclePushDisplay_Update(void *ui, int active, u8 *flags);
 static inline void UpdateActorAnim(void *course, CourseWork *work, Actor *actor, int index, int row, u8 player, int anim, int x, int y, VecFx32 *pos, u8 active, Sprite *sprite) {
     void *obj;
 
-    switch (ov96_021E60C0(course, index / 3, index % 3)[7]) {
+    switch (PokeathlonCourse_GetPerformance(course, index / 3, index % 3)[7]) {
     case 1:
         pos->y -= 0x8000;
         break;
@@ -132,14 +132,14 @@ static inline void UpdateActorAnim(void *course, CourseWork *work, Actor *actor,
         break;
     }
     Sprite_SetMatrix(ov96_021EB5B8(actor->marker), pos);
-    obj = ov96_021EAA04(work->manager, index);
-    ov96_021EAC0C(obj, anim);
+    obj = PokeathlonCourseMonObjects_Get(work->manager, index);
+    PokeathlonCourseMonObject_SetAnimState(obj, anim);
     ov96_021EB01C(obj, x, y, 1);
-    if (row == player && ov96_021E60D8(course, player, index % 3)[2]) {
-        ov96_021EAED4(obj, 0, work->batch.pitch, anim, 0);
+    if (row == player && PokeathlonCourse_GetMonStats(course, player, index % 3)[2]) {
+        PokeathlonCourseMonObject_Move(obj, 0, work->batch.pitch, anim, 0);
     }
     if (active) {
-        void *obj2 = ov96_021EAA04(work->manager, index);
+        void *obj2 = PokeathlonCourseMonObjects_Get(work->manager, index);
         Sprite_SetAnimActiveFlag(sprite, FALSE);
         work->batch.active = TRUE;
         ov96_021F2E80(course, &work->batch, obj2, index, anim);
@@ -233,7 +233,7 @@ void ov96_021F1614(void *course) {
         Actor *actor;
         col = i % 3;
         actor = &work->actors[(i / 3)][col];
-        sprite = ov96_021E8BAC(ov96_021EAA20(actor->primary));
+        sprite = PokeathlonCourseMonGfx_GetSprite(PokeathlonCourseMonObject_GetGfx(actor->primary));
         status = (packet->statusBits >> (i * 2)) & 3;
         bit = (packet->flagBits >> i) & 1;
         if (status == 0) {
@@ -253,16 +253,16 @@ void ov96_021F1614(void *course) {
                     offset = offsets.v[work->counters[i].tick / 2];
                 }
                 work->counters[i].tick++;
-                ov96_021EABE0(actor->primary, 1);
+                PokeathlonCourseMonObject_SetAffineOverwriteMode(actor->primary, 1);
                 Sprite_SetAffineScale(sprite, &scale);
                 if (work->counters[i].tick >= 12) {
                     work->counters[i].state = 2;
                 }
             } else {
-                ov96_021EAB38(actor->primary, 0);
+                PokeathlonCourseMonObject_SetDrawFlag(actor->primary, 0);
             }
             ov96_021EB52C(actor->marker, 1, 0);
-            ov96_021EAB74(actor->primary, 0);
+            PokeathlonCourseMonObject_SetShadowDrawFlag(actor->primary, 0);
             ov96_021EB01C(actor->primary, packet->x[i], packet->y[i] + offset, 1);
             flags[i] = 1;
         } else {
@@ -272,7 +272,7 @@ void ov96_021F1614(void *course) {
             scale.x = FX32_ONE;
             scale.y = FX32_ONE;
             scale.z = FX32_ONE;
-            ov96_021EABE0(actor->primary, 0);
+            PokeathlonCourseMonObject_SetAffineOverwriteMode(actor->primary, 0);
             if (bit) {
                 ov96_021EB52C(actor->marker, 1, 1);
                 if ((i / 3) == player && !IsSEPlaying(0x890)) {
@@ -282,7 +282,7 @@ void ov96_021F1614(void *course) {
                 ov96_021EB52C(actor->marker, 1, 0);
             }
             Sprite_SetAffineScale(sprite, &scale);
-            ov96_021EAB38(actor->primary, 1);
+            PokeathlonCourseMonObject_SetDrawFlag(actor->primary, 1);
             if (status == 2 && work->flags[i] == 0) {
                 work->flags[i] = 1;
                 ov96_021EAF60(work->manager, i, 1, actor->styleB);
@@ -327,9 +327,9 @@ void ov96_021F1614(void *course) {
                 u8 result;
                 ov96_021EB06C(actor->primary, x, y, &outX, &outY);
                 if (status == 1 && ov96_021F3180(work->group, outX, outY, &result)) {
-                    ov96_021E658C(course, col, 1);
+                    PokeathlonCourse_SetMarkerAnim(course, col, 1);
                 } else {
-                    ov96_021E658C(course, col, 0);
+                    PokeathlonCourse_SetMarkerAnim(course, col, 0);
                 }
             }
         }

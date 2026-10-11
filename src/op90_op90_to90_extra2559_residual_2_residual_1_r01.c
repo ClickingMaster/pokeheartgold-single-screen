@@ -62,10 +62,10 @@ void ov96_02203BC0(void *screen, u8 index, int value);
 void ov96_02203CA4(void *screen, u8 index, int value);
 BOOL ov96_02203CC4(void *screen, u8 index);
 void ov96_02203CD4(void *screen);
-void ov96_021EAC5C(void *sprite, int value);
-BOOL ov96_021EAD78(void *sprite);
+void PokeathlonCourseMonObject_SetAnim(void *sprite, int value);
+BOOL PokeathlonCourseMonObject_IsAnimated(void *sprite);
 void ov96_02203970(Scene *scene, u8 current);
-void ov96_021E6454(void *course, int value);
+void PokeathlonCourse_UpdateTimeUpCountdown(void *course, int value);
 void ov96_02202958(void *course);
 
 // @fn ov96_02202958
@@ -220,29 +220,29 @@ void ov96_02202958(void *course) {
         cellX = input->entries[slot] & 0x3F;
         cellZ = (input->entries[slot] >> 6) & 0x3F;
         if (state == 1) {
-            ov96_021EAC5C(scene->actors[k], 20);
+            PokeathlonCourseMonObject_SetAnim(scene->actors[k], 20);
             scene->slots[slot].timer = 20;
             if (!IsSEPlaying(0x890)) {
                 PlaySE(0x890);
             }
         } else if (flash) {
-            ov96_021EAC5C(scene->actors[k], 22);
+            PokeathlonCourseMonObject_SetAnim(scene->actors[k], 22);
             scene->slots[slot].timer = 22;
         } else if (phase == 1 && cellX + 1 == ov96_0221C98C[slot].x / FX32_ONE && cellZ + 1 == ov96_0221C98C[slot].z / FX32_ONE) {
             if (state == 1) {
                 GF_AssertFail();
             }
-            ov96_021EAC5C(scene->actors[k], 16);
+            PokeathlonCourseMonObject_SetAnim(scene->actors[k], 16);
             scene->slots[slot].timer = 16;
         } else {
             ready = FALSE;
             if (scene->slots[slot].timer == 20) {
                 ready = TRUE;
-            } else if (!ov96_021EAD78(scene->actors[k])) {
+            } else if (!PokeathlonCourseMonObject_IsAnimated(scene->actors[k])) {
                 ready = TRUE;
             }
             if (ready) {
-                ov96_021EAC5C(scene->actors[k], 0);
+                PokeathlonCourseMonObject_SetAnim(scene->actors[k], 0);
                 scene->slots[slot].timer = 0;
             }
         }
@@ -313,5 +313,5 @@ void ov96_02202958(void *course) {
         }
     }
     ov96_02203970(scene, current);
-    ov96_021E6454(course, time * 30);
+    PokeathlonCourse_UpdateTimeUpCountdown(course, time * 30);
 }

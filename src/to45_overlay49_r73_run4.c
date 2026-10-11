@@ -7,7 +7,7 @@ void ov49_02266C6C(void *ctx, void *state) {
     u8 value;
     float delta;
 
-    ov49_02259154(*(void **)((u8 *)state + 8), &v);
+    WiFiPlazaObj_GetPosition(*(void **)((u8 *)state + 8), &v);
     value = ov49_0226A450[S8_AT(state, 0x955) - 1];
     if (value != 0) {
         delta = (float)(value << 12) + 0.5f;
@@ -22,7 +22,7 @@ void ov49_02266C6C(void *ctx, void *state) {
 
 void ov49_02266D04(void *ctx, void *state) {
     VecFx32 v;
-    ov49_02259154(*(void **)((u8 *)state + 8), &v);
+    WiFiPlazaObj_GetPosition(*(void **)((u8 *)state + 8), &v);
     ov49_0226540C((u8 *)state + 0xA04, v.x, v.x, v.y, v.y + 0x2000, v.z, v.z, 2);
     ov49_022655F4((u8 *)state + 0xA2C, 0, 0x71C, 0);
     ov49_02267674(state);
@@ -46,18 +46,18 @@ u32 ov49_02266D7C(void *ctx, void *state) {
     ov49_02265628((u8 *)state + 0xA2C);
     S16_AT(state, 0x956)
     ++;
-    ov49_02259154(*(void **)((u8 *)state + 8), &v);
+    WiFiPlazaObj_GetPosition(*(void **)((u8 *)state + 8), &v);
     ov49_022655E0((u8 *)state + 0xA04, &v.x, &v.y, &v.z);
     ov49_02265660((u8 *)state + 0xA2C, &delta);
     if (result == 0) {
         v.x += delta;
     }
-    ov49_02259148(*(void **)((u8 *)state + 8), &v);
+    WiFiPlazaObj_SetPosition(*(void **)((u8 *)state + 8), &v);
     ov49_0226747C(state);
     for (i = 0; i < S8_AT(state, 0x955); i++) {
         ov49_0226789C(ctx, state, i);
     }
-    if (*(void **)((u8 *)state + 8) == ov49_02258DAC(*(void **)((u8 *)ctx + 4))) {
+    if (*(void **)((u8 *)state + 8) == WiFiPlazaObj_GetOwnPlayer(*(void **)((u8 *)ctx + 4))) {
         u32 keys = gSystem.newKeys;
         u32 direction = 4;
         UnkStruct_ov44_02232914 position;
@@ -76,11 +76,11 @@ u32 ov49_02266D7C(void *ctx, void *state) {
             direction = 2;
         }
         if (direction != 4) {
-            ov49_02259160(*(void **)((u8 *)state + 8), direction);
+            WiFiPlazaObj_SetDirection(*(void **)((u8 *)state + 8), direction);
             packed = ov49_02258E34(*(void **)((u8 *)state + 8));
             position.unk0 = (s16)packed;
             position.unk2 = (s16)(packed >> 16);
-            ov49_02258E04(*(void **)((u8 *)state + 8), position, direction);
+            WiFiPlazaObj_SetGridPosAndDir(*(void **)((u8 *)state + 8), position, direction);
         }
     }
     return result;

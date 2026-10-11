@@ -114,7 +114,7 @@ u32 WiFiPlazaMap_GetTileAttr(WiFiPlazaMap *map, u16 x, u16 y) {
 }
 
 // Finds the cell holding the ordinal-th occurrence of tag, scanning row by row.
-BOOL WiFiPlazaMap_FindTileTag(WiFiPlazaMap *map, u16 tag, u16 *outX, u16 *outY, u32 ordinal) {
+BOOL WiFiPlazaMap_FindTileTag(WiFiPlazaMap *map, int tag, u16 *outX, u16 *outY, u32 ordinal) {
     int x;
     int y;
     u32 count = 0;

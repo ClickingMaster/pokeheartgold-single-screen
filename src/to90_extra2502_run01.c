@@ -14,7 +14,7 @@ typedef struct { u32 touched;u8 x,y,pad06[2],ready,pad09[27]; } Input;
 
 extern int ov96_021F32C4(int),ov96_021F20C4(void *,u8,int,int),ov96_021F2F7C(void *,int,int),ov96_021F342C(void *,void*);
 
-extern void ov96_021E8228(void *,u32,u32,int,int),ov96_021F208C(int,int,const VecFx32 *,fx32,VecFx32 *),GF_AssertFail(void),ov96_021F1CC0(void *),ov96_021F21EC(void *),ov96_021F2834(void *),ov96_021F0F04(void *,void *);
+extern void PokeathlonCourse_AddMonCounter(void *,u32,u32,int,int),ov96_021F208C(int,int,const VecFx32 *,fx32,VecFx32 *),GF_AssertFail(void),ov96_021F1CC0(void *),ov96_021F21EC(void *),ov96_021F2834(void *),ov96_021F0F04(void *,void *);
 typedef struct { int count;u8 *area;union{Input *ready;u8 *drag;} phase; } Frame;
 void ov96_021F1170(void *);
 #pragma force_active on
@@ -23,7 +23,7 @@ void ov96_021F1170(void *ctx) {
  void *info=ov96_021E8A20(frame.area+40);
  if(W(w,0x7ec)==1){u8 ready=0;int i;frame.count=PokeathlonCourse_GetParticipantCount((PokeathlonCourseData*)ctx);i=ready;if(frame.count>0){u8*entry=frame.area+80;do{frame.phase.ready=(Input*)ov96_021E8A20(entry);if(frame.phase.ready->ready)ready++;entry+=40;i++;}while(i<frame.count);}if(ready==frame.count){B(w,0x726)=0;B(w,0x74a)=0;W(w,0x7ec)=0;}}
  else if(B(w,0x728)){B(w,0x728)--;if(B(w,0x728)==0)W(w,0x7ec)=1;else if(B(w,0x728)==60){B(w,0x72a)=1;B(w,0x727)++;}}
- else if(B(w,0x74a)){B(w,0x726)=44;if(B(w,0x749)==0){if(B(w,0x74d)==0){if(B(w,0x74f)>=B(w,0x74e)){ov96_021F2A00((Ov96R54Course*)w);B(w,0x728)=90;}else{B(w,0x74b)=B(w+B(w,0x74f),0x750);B(w,0x74c)=ov96_021F32C4(B(w+B(w,0x74f),0x75c));u8 player=B(w,0x74b)/3;int *scores=(int*)(w+0x6e0);scores[player]+=B(w+B(w,0x74f),0x75c);B(w,0x74f)++;B(w,0x74d)=6;ov96_021E8228(ctx,player,(u8)(B(w,0x74b)%3),3,1);}}else B(w,0x74d)--;}else B(w,0x749)--;}
+ else if(B(w,0x74a)){B(w,0x726)=44;if(B(w,0x749)==0){if(B(w,0x74d)==0){if(B(w,0x74f)>=B(w,0x74e)){ov96_021F2A00((Ov96R54Course*)w);B(w,0x728)=90;}else{B(w,0x74b)=B(w+B(w,0x74f),0x750);B(w,0x74c)=ov96_021F32C4(B(w+B(w,0x74f),0x75c));u8 player=B(w,0x74b)/3;int *scores=(int*)(w+0x6e0);scores[player]+=B(w+B(w,0x74f),0x75c);B(w,0x74f)++;B(w,0x74d)=6;PokeathlonCourse_AddMonCounter(ctx,player,(u8)(B(w,0x74b)%3),3,1);}}else B(w,0x74d)--;}else B(w,0x749)--;}
  else {int limit;if(B(w,0x727)<1)limit=8;else if(B(w,0x727)<3)limit=6;else limit=4;B(w,0x725)++;if(B(w,0x725)>=limit){B(w,0x725)=0;B(w,0x726)++;if(B(w,0x726)>=43){B(w,0x72b)=1;B(w,0x748)=1;B(w,0x74a)=1;B(w,0x749)=20;int i;for(i=0;i<4;i++)B(w+i,0x720)=12;for(i=0;i<12;i++){u8 *entry=w+32+(i/3)*432+(i%3)*144;*(Vector*)(entry+0x1c)=*(Vector*)(entry+0x28);W(entry,0x34)=0;W(entry,0x38)=0;H(entry,0x8e)=H(entry,0x8c);B(entry,0x44)=0;B(entry,0x45)=0;B(entry,0x46)=0;B(entry,0x47)=0;}}}}
  if(B(w,0x727)>=6)B(w,0x729)=1;else B(w,0x729)=0;
  Sync *dst=(Sync*)ov96_021E8A20(frame.area+80);Sync *src=(Sync*)ov96_021E8A20(frame.area);*dst=*src;

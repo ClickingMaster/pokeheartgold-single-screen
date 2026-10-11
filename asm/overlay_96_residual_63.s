@@ -50,55 +50,55 @@
 	.extern PokeathlonCourse_SetStateTransitionType
 	.extern PokeathlonCourse_SetVBlankIntrCB
 	.extern PokeathlonCourse_GetGraphicsSystem
-	.public ov96_021E60C0
+	.public PokeathlonCourse_GetPerformance
 	.public ov96_021E6104
-	.public ov96_021E6670
-	.public ov96_021E679C
+	.public PokeathlonCourse_SetHudPlanes
+	.public PokeathlonCourse_GetPerformanceFileId
 	.public ov96_021E6F18
 	.public ov96_021E75B8
-	.public ov96_021E7F98
-	.public ov96_021E8318
-	.public ov96_021E87B0
-	.public ov96_021E8828
+	.public PokeathlonCourse_AddCapped
+	.public PokeathlonCourse_SetRecordScore
+	.public PokeathlonCourseLink_SetCheckSize
+	.public PokeathlonCourseLink_GetNetId
 	.public ov96_021E8A20
-	.public ov96_021E8A24
-	.public ov96_021E8A2C
-	.public ov96_021E8A30
-	.public ov96_021E8B88
-	.public ov96_021E8BAC
-	.public ov96_021E8BB0
-	.public ov96_021E90FC
-	.public ov96_021E92AC
-	.public ov96_021E92D0
-	.public ov96_021E9510
-	.public ov96_021E9524
+	.public PokeathlonCourseCmd_GetTable
+	.public PokeathlonCourseCmd_GetCount
+	.public PokeathlonCourseMonGfx_AllocManager
+	.public PokeathlonCourseMonGfx_IsLoaded
+	.public PokeathlonCourseMonGfx_GetSprite
+	.public PokeathlonCourseMonGfx_GetInfo
+	.public PokeathlonCourseMonGfx_GetTopRow
+	.public PokeathlonCourseMonGfx_IsShiftedUp
+	.public PokeathlonCourse_FreeObjTransfer
+	.public PokeathlonCourseScoreList_Init
+	.public PokeathlonCourseScoreList_GetCount
 	.public ov96_021E9528
-	.public ov96_021E99F4
-	.public ov96_021E99F8
-	.public ov96_021E99FC
-	.public ov96_021E9A04
-	.public ov96_021E9A10
-	.public ov96_021E9A14
-	.public ov96_021E9A18
-	.public ov96_021E9A1C
-	.public ov96_021E9A24
-	.public ov96_021E9A2C
-	.public ov96_021E9A38
-	.public ov96_021E9A48
+	.public PokeathlonCourseCmd_EventsSize
+	.public PokeathlonCourseCmd_ParticipantSize
+	.public PokeathlonCourseCmd_AllParticipantsSize
+	.public PokeathlonCourseCmd_ProfilesSize
+	.public PokeathlonCourseCmd_RecordSize
+	.public PokeathlonCourseCmd_PacketSize
+	.public PokeathlonCourseCmd_MonCountersSize
+	.public PokeathlonCourseCmd_ResultsSize
+	.public PokeathlonCourseCmd_JuiceRecordSize
+	.public PokeathlonCourseCmd_GetEventDataBuffer
+	.public PokeathlonCourseCmd_GetRecordBuffer
+	.public PokeathlonCourseCmd_GetResultsBuffer
 	.public ov96_021E9A54
-	.public ov96_021E9A68
-	.public ov96_021E9CF4
-	.public ov96_021E9D08
-	.public ov96_021EA894
-	.public ov96_021EAA00
-	.public ov96_021EAA20
-	.public ov96_021EAB94
-	.public ov96_021EABDC
-	.public ov96_021EABE0
-	.public ov96_021EABF4
-	.public ov96_021EAC08
-	.public ov96_021EAD78
-	.public ov96_021EAEC8
+	.public PokeathlonCourseCmd_GetJuiceRecordBuffer
+	.public PokeathlonCourseSprites_HasGroup
+	.public PokeathlonCourseSprites_GetResMan
+	.public PokeathlonCourseMonObjects_Free
+	.public PokeathlonCourseMonObjects_IsLoaded
+	.public PokeathlonCourseMonObject_GetGfx
+	.public PokeathlonCourseMonObject_SetMonDrawFlag
+	.public PokeathlonCourseMonObject_SetDrawPriorityStep
+	.public PokeathlonCourseMonObject_SetAffineOverwriteMode
+	.public PokeathlonCourseMonObject_SetAffineMatrix
+	.public PokeathlonCourseMonObject_SetAnimStateRaw
+	.public PokeathlonCourseMonObject_IsAnimated
+	.public PokeathlonCourseMonObject_GetPosition
 	.public ov96_021EAF6C
 	.public ov96_021EAF70
 	.public ov96_021EAF8C
@@ -152,20 +152,20 @@
 	.public ov96_021F3E58
 	.public PokeathlonCirclePushDisplay_GetScore
 	.public PokeathlonLampJump_Draw
-	.public ov96_021F74C8
-	.public ov96_021F75D4
-	.public ov96_021F75E0
-	.public ov96_021F7738
-	.public ov96_021F8094
-	.public ov96_021F81C0
-	.public ov96_021F8354
-	.public ov96_021F83BC
-	.public ov96_021F83D0
-	.public ov96_021F87D0
-	.public ov96_021F893C
-	.public ov96_021F8948
-	.public ov96_021F8978
-	.public ov96_021F9234
+	.public PokeathlonLampJump_FreeLamps
+	.public PokeathlonLampJump_GetLampPos
+	.public PokeathlonLampJump_IsLampLit
+	.public PokeathlonLampJump_FreeCpuPlayers
+	.public PokeathlonResultsAnnouncement_CreatePlates
+	.public PokeathlonResultsAnnouncement_Wait
+	.public PokeathlonResultsAnnouncement_ClearSlide
+	.public PokeathlonResultsAnnouncement_RemoveSlide
+	.public PokeathlonResultsAnnouncement_GetLeavingSlide
+	.public PokeathlonResultsAnnouncement_DrawPlates
+	.public PokeathlonResultsAnnouncement_GetPlatePos
+	.public PokeathlonResultsAnnouncement_SetPlatePos
+	.public PokeathlonResultsAnnouncement_GetPlateRank
+	.public PokeathlonHurdleDash_Start
 	.public ov96_021FA340
 	.public ov96_021FBE3C
 	.public ov96_021FBE44
@@ -239,8 +239,8 @@
 	.public ov96_0221A69C
 	.public ov96_0221A720
 
-	thumb_func_start ov96_021F80A8
-ov96_021F80A8: ; 0x021F80A8
+	thumb_func_start PokeathlonResultsAnnouncement_StartRanking
+PokeathlonResultsAnnouncement_StartRanking: ; 0x021F80A8
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	add r7, r0, #0
@@ -252,7 +252,7 @@ ov96_021F80A8: ; 0x021F80A8
 	strb r0, [r1]
 	ldr r0, [r7]
 	add r1, r3, #0
-	bl ov96_021F87E0
+	bl PokeathlonResultsAnnouncement_InitPlates
 	mov r5, #0
 	str r5, [sp, #0xc]
 	add r6, r5, #0
@@ -265,9 +265,9 @@ _021F80C8:
 	lsl r2, r2, #8
 	sub r3, r3, r6
 	add r4, #0xa
-	bl ov96_021F8378
+	bl PokeathlonResultsAnnouncement_AddPlate
 	str r0, [sp, #8]
-	bl ov96_021F8978
+	bl PokeathlonResultsAnnouncement_GetPlateRank
 	cmp r0, #0
 	bne _021F80E8
 	add r4, #0xa
@@ -275,7 +275,7 @@ _021F80E8:
 	ldr r1, [sp, #8]
 	add r0, r7, #0
 	add r2, r4, #0
-	bl ov96_021F82E4
+	bl PokeathlonResultsAnnouncement_QueueSlide
 	ldr r0, [sp, #0xc]
 	add r5, #0xa
 	add r0, r0, #1
@@ -291,22 +291,22 @@ _021F80E8:
 	add r0, r7, #0
 	lsl r2, r2, #8
 	mov r3, #0x28
-	bl ov96_021F8378
+	bl PokeathlonResultsAnnouncement_AddPlate
 	add r1, r0, #0
 	add r0, r7, #0
 	mov r2, #0
-	bl ov96_021F8334
+	bl PokeathlonResultsAnnouncement_SetIncomingSlide
 _021F811E:
 	mov r0, #1
 	add r7, #0x58
 	strb r0, [r7]
 	add sp, #0x10
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov96_021F80A8
+	thumb_func_end PokeathlonResultsAnnouncement_StartRanking
 
 
-	thumb_func_start ov96_021F8128
-ov96_021F8128: ; 0x021F8128
+	thumb_func_start PokeathlonResultsAnnouncement_MoveSlide
+PokeathlonResultsAnnouncement_MoveSlide: ; 0x021F8128
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4]
@@ -316,12 +316,12 @@ ov96_021F8128: ; 0x021F8128
 	cmp r0, #0
 	bne _021F8156
 	ldr r0, [r4, #4]
-	bl ov96_021F895C
+	bl PokeathlonResultsAnnouncement_MovePlate
 	ldr r0, [r4, #0xc]
 	cmp r0, #0
 	bne _021F815A
 	ldr r0, [r4, #4]
-	bl ov96_021F8978
+	bl PokeathlonResultsAnnouncement_GetPlateRank
 	ldr r0, _021F815C ; =0x000008D7
 	bl PlaySE
 	mov r0, #1
@@ -334,11 +334,11 @@ _021F815A:
 	pop {r4, pc}
 	.balign 4, 0
 _021F815C: .word 0x000008D7
-	thumb_func_end ov96_021F8128
+	thumb_func_end PokeathlonResultsAnnouncement_MoveSlide
 
 
-	thumb_func_start ov96_021F8160
-ov96_021F8160: ; 0x021F8160
+	thumb_func_start PokeathlonResultsAnnouncement_MoveSlides
+PokeathlonResultsAnnouncement_MoveSlides: ; 0x021F8160
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r1, #0
 	add r7, r2, #0
@@ -348,18 +348,18 @@ _021F816A:
 	add r0, r5, #0
 	add r1, r6, #0
 	add r2, r7, #0
-	bl ov96_021F8128
+	bl PokeathlonResultsAnnouncement_MoveSlide
 	add r4, r4, #1
 	add r5, #0x10
 	cmp r4, #4
 	blt _021F816A
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov96_021F8160
+	thumb_func_end PokeathlonResultsAnnouncement_MoveSlides
 
 
-	thumb_func_start ov96_021F8180
-ov96_021F8180: ; 0x021F8180
+	thumb_func_start PokeathlonResultsAnnouncement_IsSlideDone
+PokeathlonResultsAnnouncement_IsSlideDone: ; 0x021F8180
 	push {r4, r5, r6, lr}
 	sub sp, #8
 	add r5, r0, #0
@@ -368,7 +368,7 @@ ov96_021F8180: ; 0x021F8180
 	add r1, sp, #4
 	add r2, sp, #0
 	mov r6, #0
-	bl ov96_021F893C
+	bl PokeathlonResultsAnnouncement_GetPlatePos
 	cmp r4, #0
 	bne _021F81AC
 	ldr r0, [sp, #4]
@@ -377,7 +377,7 @@ ov96_021F8180: ; 0x021F8180
 	ldr r0, [r5, #4]
 	ldr r2, [sp]
 	add r1, r6, #0
-	bl ov96_021F8948
+	bl PokeathlonResultsAnnouncement_SetPlatePos
 	mov r6, #1
 	b _021F81B8
 _021F81AC:
@@ -392,4 +392,4 @@ _021F81B8:
 	add sp, #8
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov96_021F8180
+	thumb_func_end PokeathlonResultsAnnouncement_IsSlideDone

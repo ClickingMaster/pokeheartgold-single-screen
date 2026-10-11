@@ -7,10 +7,10 @@ extern void *WiFiPlazaRoom_GetLobby(void*),*WiFiPlazaRoom_GetObjManager(void*);
 extern State *ov49_0225EF84(void*),*ov49_0225EF40(void*,int);
 extern u32 ov45_0222B034(void*),ov45_0222B040(void*),ov45_0222B06C(void*),ov45_0222B020(void*),ov45_0222B028(void*),ov45_0222B0B0(void*);
 extern void *WiFiPlazaWork_GetMyPlayer(void*),*WiFiPlazaWork_GetPlayer(void*,int),*ov45_0222AAC8(void*);
-extern u32 ov49_0225EF88(void*),ov49_0225A0DC(void*),ov49_0225A1D4(void*),ov49_0225CB70(void*),ov49_02258DAC(void*);
+extern u32 ov49_0225EF88(void*),ov49_0225A0DC(void*),ov49_0225A1D4(void*),ov49_0225CB70(void*),WiFiPlazaObj_GetOwnPlayer(void*);
 extern void ov49_0225EF8C(void*,int),ov49_0225A0CC(void*),ov49_0225A0BC(void*),WiFiPlazaRoom_CloseMessage(void*),ov49_0225A4D0(void*),ov49_0225EF68(void*);
 extern void ov45_0222A5E8(void*,int),ov45_0222B0E8(void*,u32),ov45_0222B118(void*,int),ov45_0222AED8(void*,u16),ov45_0222B0BC(void*),ov45_0222AFC4(void*),ov45_0222AE64(void*),ov45_0222B0D8(void*,int),ov45_0222A704(void*,u16,void*);
-extern void ov49_0225A428(void*,u32,int),ov49_0225A334(void*,u16,int),WiFiPlazaRoom_PrintMessage(void*,void*),ov49_0225A478(void*,void*),ov49_0225A174(void*,void*,int,int),ov49_0225A1E4(void*,int,int),ov49_02258EEC(void *, void *, int);
+extern void ov49_0225A428(void*,u32,int),ov49_0225A334(void*,u16,int),WiFiPlazaRoom_PrintMessage(void*,void*),ov49_0225A478(void*,void*),ov49_0225A174(void*,void*,int,int),ov49_0225A1E4(void*,int,int),WiFiPlazaObj_SetHandler(void *, void *, int);
 extern void *ov49_02264C04(void*,u16,int),*ov49_02264C50(void*,u16,u16);
 extern int ov49_02264CA8(State*,void*,u32),ov49_02264E20(State*,void*,void*);
 extern void ov49_02264CFC(State*,u8,int,void*,int),ov49_02264D4C(State*,void*,void*,int,void*,void*),ov49_02264EC8(State*,void*),ov49_02264E90(State*,void*,void*,int,int);
@@ -56,7 +56,7 @@ int ov49_02263B74(void *task,void *ctx){
  case 28:ov49_0225A334(ctx,s->active,0);WiFiPlazaRoom_PrintMessage(ctx,ov49_02264C04(ctx,s->active,49));ov49_02264CFC(s,128,27,task,30);break;
  case 29:ov49_02264D14(s,task);break;
  case 30:ov49_02264D30(s,task,ctx);break;
- case 31:if(s->special==1)ov45_0222A704(game,s->specialValue,s->specialData);if(!s->flag)ov45_0222B0D8(game,s->active);ov45_0222AE64(game);WiFiPlazaRoom_CloseMessage(ctx);ov49_02264CF8(s);ov49_0225EF68(task);ov45_0222A5E8(game,1);{void *x=WiFiPlazaRoom_GetObjManager(ctx);ov49_02258EEC(x, (void*)(ov49_02258DAC(x)),1);}ov49_0225A4D0(ctx);return 1;
+ case 31:if(s->special==1)ov45_0222A704(game,s->specialValue,s->specialData);if(!s->flag)ov45_0222B0D8(game,s->active);ov45_0222AE64(game);WiFiPlazaRoom_CloseMessage(ctx);ov49_02264CF8(s);ov49_0225EF68(task);ov45_0222A5E8(game,1);{void *x=WiFiPlazaRoom_GetObjManager(ctx);WiFiPlazaObj_SetHandler(x, (void*)(WiFiPlazaObj_GetOwnPlayer(x)),1);}ov49_0225A4D0(ctx);return 1;
  }
  ov49_02264F60(s);return 0;
 }

@@ -4,7 +4,7 @@ extern void GF_AssertFail(void);
 extern void ManagedSprite_SetDrawFlag(void *, u32);
 extern void ManagedSprite_SetPositionXYWithSubscreenOffset(void *, s32, s32, s32);
 void ov96_02219BDC(void *, void *, void *, u32, u32, s16, s16);
-extern void ov96_021E6168(void *, u32, u32, void *);
+extern void PokeathlonCourse_GetMonInfo(void *, u32, u32, void *);
 extern void ov96_021EECB8(void *, void *, u32, u32, u32, u32);
 extern void ov96_021EEBE4(void *, void *, u32, u32, u32);
 extern void BufferString(void *, u32, void *, u32, u32, u32);

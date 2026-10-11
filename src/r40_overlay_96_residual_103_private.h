@@ -27,7 +27,7 @@ void ov96_0220DC7C(void *, void *, void *);
 void ov96_0220DEAC(void *, void *, void *);
 void ov96_02210390(u32, u32, u16);
 void ov96_0221040C(void *, s32);
-void ov96_021E6454(void *, u32);
+void PokeathlonCourse_UpdateTimeUpCountdown(void *, u32);
 void GF_AssertFail(void);
 void Sprite_DeleteAndFreeResources(void *);
 void SysTask_Destroy(void *);

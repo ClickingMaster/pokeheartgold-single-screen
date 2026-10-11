@@ -42,7 +42,7 @@ void ov49_02265398(void *work) {
     u8 *entry;
     u32 stride;
 
-    ov49_02258DAC(PTR_AT(work, 4));
+    WiFiPlazaObj_GetOwnPlayer(PTR_AT(work, 4));
     entry = (u8 *)work;
     stride = 0xD1;
     i = 0;
@@ -59,7 +59,7 @@ void ov49_022653C0(void *work, u32 index, u32 value) {
     if (index >= 20) {
         GF_AssertFail();
     }
-    result = ov49_02258D70(PTR_AT(work, 4), index);
+    result = WiFiPlazaObj_FindById(PTR_AT(work, 4), index);
     if (result != NULL) {
         ov49_02265890(work, (u8 *)work + 0x10 + index * 0xD10, result, value);
     }

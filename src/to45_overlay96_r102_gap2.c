@@ -86,5 +86,5 @@ void ov96_0220FD28(void *object, void *groups, const u8 *input) {
     }
     group->score = value;
     *(u32 *)((u8 *)object + 4) = (*(u32 *)((u8 *)object + 4) & ~3) | (input[4] & 3);
-    ov96_021E8228(sprite, input[4], input[5], 3, 1);
+    PokeathlonCourse_AddMonCounter(sprite, input[4], input[5], 3, 1);
 }

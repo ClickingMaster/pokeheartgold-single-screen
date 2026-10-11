@@ -24,7 +24,7 @@ u32 WiFiPlazaMap_GetWidth(void);
 s32 WiFiPlazaMap_GetCollision(WiFiPlazaMap *map, u16 x, u16 y);
 u32 WiFiPlazaMap_GetTileTag(WiFiPlazaMap *map, u16 x, u16 y);
 u32 WiFiPlazaMap_GetTileAttr(WiFiPlazaMap *map, u16 x, u16 y);
-BOOL WiFiPlazaMap_FindTileTag(WiFiPlazaMap *map, u16 tag, u16 *outX, u16 *outY, u32 ordinal);
+BOOL WiFiPlazaMap_FindTileTag(WiFiPlazaMap *map, int tag, u16 *outX, u16 *outY, u32 ordinal);
 BOOL ov49_02258A30(u8 attr);
 BOOL ov49_02258A50(u8 attr);
 BOOL ov49_02258A70(u8 attr);

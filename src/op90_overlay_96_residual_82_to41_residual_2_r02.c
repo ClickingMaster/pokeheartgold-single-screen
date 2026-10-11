@@ -38,7 +38,7 @@ extern VecFx32 ov96_0221C98C[];
 
 void VEC_Subtract(const VecFx32 *a, const VecFx32 *b, VecFx32 *dest);
 fx32 VEC_Mag(VecFx32 *v);
-void ov96_021E8228(void *course, u8 a, u8 b, int c, int d);
+void PokeathlonCourse_AddMonCounter(void *course, u8 a, u8 b, int c, int d);
 void ov96_02203544(void *course, Work *w);
 
 // @fn ov96_02203544
@@ -66,7 +66,7 @@ void ov96_02203544(void *course, Work *w) {
                 continue;
             }
             w->particles[i].state = 3;
-            ov96_021E8228(course, group, i % 3, 3, 1);
+            PokeathlonCourse_AddMonCounter(course, group, i % 3, 3, 1);
             w->players[i].hits++;
             if (w->players[i].hits > 999) {
                 w->players[i].hits = 999;
@@ -104,11 +104,11 @@ void ov96_02203544(void *course, Work *w) {
             if (w->players[j].meter == 0) {
                 if (gain > 40) {
                     w->players[j].meter = gain;
-                    ov96_021E8228(course, j / 3, j % 3, 1, 1);
+                    PokeathlonCourse_AddMonCounter(course, j / 3, j % 3, 1, 1);
                 }
             } else {
                 w->players[j].meter += gain;
-                ov96_021E8228(course, j / 3, j % 3, 1, 1);
+                PokeathlonCourse_AddMonCounter(course, j / 3, j % 3, 1, 1);
             }
         }
     }

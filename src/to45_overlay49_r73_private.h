@@ -25,7 +25,7 @@ extern u32 ov49_022670B8(void *, void *);
 extern u32 ov49_02267E18(void *, int);
 extern void ov49_02267D00(void *, void *);
 extern void ov49_02267D34(void *, void *);
-extern void ov49_02259154(void *, VecFx32 *);
+extern void WiFiPlazaObj_GetPosition(void *, VecFx32 *);
 extern void ov49_0226540C(void *, fx32, fx32, fx32, fx32, fx32, fx32, u32);
 extern void ov49_022655F4(void *, u32, u32, u32);
 extern u32 ov49_02267674(void *);
@@ -35,12 +35,12 @@ extern u32 ov49_02265434(void *, s32);
 extern void ov49_02265628(void *);
 extern void ov49_022655E0(void *, fx32 *, fx32 *, fx32 *);
 extern void ov49_02265660(void *, fx32 *);
-extern void ov49_02259148(void *, VecFx32 *);
+extern void WiFiPlazaObj_SetPosition(void *, VecFx32 *);
 extern void ov49_0226789C(void *, void *, u32);
-extern void *ov49_02258DAC(void *);
-extern void ov49_02259160(void *, u32);
+extern void *WiFiPlazaObj_GetOwnPlayer(void *);
+extern void WiFiPlazaObj_SetDirection(void *, u32);
 extern u32 ov49_02258E34(void *);
-extern void ov49_02258E04(void *, UnkStruct_ov44_02232914, s32);
+extern void WiFiPlazaObj_SetGridPosAndDir(void *, UnkStruct_ov44_02232914, s32);
 
 typedef struct Ov49R73Entry {
     u8 raw[0x78];

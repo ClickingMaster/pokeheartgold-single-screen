@@ -27,7 +27,7 @@ typedef struct Ov96R54TaskWork {
     void *course30;
 } Ov96R54TaskWork;
 
-u8 *ov96_021E60D8(void *, u32, u32);
+u8 *PokeathlonCourse_GetMonStats(void *, u32, u32);
 void *SysTask_CreateOnMainQueue(void (*)(void *, void *), void *, u32);
 void SysTask_Destroy(void *);
 void *PokeathlonCourse_GetDataCopyArea(void *);

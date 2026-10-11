@@ -11,7 +11,7 @@ BOOL ov49_0225F518(void *controller, void *ctx, u32 arg) {
 
     selection = WiFiPlazaRoom_GetLobby(ctx);
     object = WiFiPlazaRoom_GetObjManager(ctx);
-    entry = ov49_02258DAC(object);
+    entry = WiFiPlazaObj_GetOwnPlayer(object);
     work = ov49_0225EF84(controller);
 
     switch (ov49_0225EF88(controller)) {
@@ -21,12 +21,12 @@ BOOL ov49_0225F518(void *controller, void *ctx, u32 arg) {
         ov45_0222A4D0(selection);
         U16_AT(work, 2) = ov45_0222B1B4(selection);
         ov45_0222A72C(selection, U16_AT(work, 2));
-        ov49_02258EEC(object, ov49_0225F2FC(ctx, arg), 4);
+        WiFiPlazaObj_SetHandler(object, ov49_0225F2FC(ctx, arg), 4);
         ov49_0225EF90(controller);
         break;
     case 1:
-        if (ov49_0225A030(ctx) == 0 && ov49_02258F38(entry) == 1) {
-            ov49_02258EEC(object, entry, 0);
+        if (ov49_0225A030(ctx) == 0 && WiFiPlazaObj_IsFinished(entry) == 1) {
+            WiFiPlazaObj_SetHandler(object, entry, 0);
             WiFiPlazaCamera_SetFollowObject(ov49_0225A008(ctx), entry);
             U32_AT(work, 4) = 0x10;
             ov49_0225EF90(controller);
@@ -39,27 +39,27 @@ BOOL ov49_0225F518(void *controller, void *ctx, u32 arg) {
         }
         break;
     case 3:
-        ov49_02258E7C(object, entry, 2, 0);
+        WiFiPlazaObj_QueueCommand(object, entry, 2, 0);
         U16_AT(work, 0) = 4;
         ov49_0225EF8C(controller, 7);
         break;
     case 4:
-        ov49_02258E7C(object, entry, 2, 0);
+        WiFiPlazaObj_QueueCommand(object, entry, 2, 0);
         U16_AT(work, 0) = 5;
         ov49_0225EF8C(controller, 7);
         break;
     case 5:
-        ov49_02258E7C(object, entry, 1, 3);
+        WiFiPlazaObj_QueueCommand(object, entry, 1, 3);
         U16_AT(work, 0) = 6;
         ov49_0225EF8C(controller, 7);
         break;
     case 6:
-        ov49_02258E7C(object, entry, 2, 3);
+        WiFiPlazaObj_QueueCommand(object, entry, 2, 3);
         U16_AT(work, 0) = 8;
         ov49_0225EF8C(controller, 7);
         break;
     case 7:
-        if (ov49_02258E60(entry, 5) == 0) {
+        if (WiFiPlazaObj_GetParam(entry, 5) == 0) {
             ov49_0225EF8C(controller, U16_AT(work, 0));
         }
         break;
@@ -216,7 +216,7 @@ BOOL ov49_0225F518(void *controller, void *ctx, u32 arg) {
         }
         break;
     case 22:
-        ov49_02258EEC(object, entry, 1);
+        WiFiPlazaObj_SetHandler(object, entry, 1);
         WiFiPlazaRoom_CloseMessage(ctx);
         ov49_02261540(work, ctx);
         ov49_0225EF68(controller);

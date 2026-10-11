@@ -5,8 +5,8 @@
 
 u32 ov49_0225EF88(void *);
 void *WiFiPlazaRoom_GetObjManager(void *);
-void *ov49_02258DAC(void *);
-void ov49_02258EEC(void *, void *, int);
+void *WiFiPlazaObj_GetOwnPlayer(void *);
+void WiFiPlazaObj_SetHandler(void *, void *, int);
 void *WiFiPlazaRoom_GetLobby(void *);
 void ov45_0222A5E8(void *, u32);
 void PlaySE(u32);
@@ -22,12 +22,12 @@ void WiFiPlazaRoom_CloseMessage(void *);
 void ov49_0225A018(void *, u32);
 void *ov49_0225A008(void *);
 void WiFiPlazaCamera_ClearFollowObject(void *);
-u32 ov49_02258F38(void *);
+u32 WiFiPlazaObj_IsFinished(void *);
 void ov49_0225A034(void *, u32);
 void ov49_0225A038(void *, u32);
 void ov49_02258EAC(void *, void *, u32, u32);
 void *ov49_0225A010(void *);
-u32 ov49_02258E60(void *, u32);
+u32 WiFiPlazaObj_GetParam(void *, u32);
 void ov49_0225EF98(void *, u32, const void *, u32);
 extern const u8 ov49_02269B38[];
 BOOL ov49_02260254(void *, void *, u32);

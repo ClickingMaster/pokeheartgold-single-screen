@@ -30,23 +30,23 @@ u32 ov49_02267328(void *ctx, void *state) {
             ov49_0225919C((void *)U32_AT(state, 8), 0);
             U8_AT(state, 0x954) = 3;
             S16_AT(state, 0x956) = 0;
-            result = ov49_02258E60((void *)U32_AT(state, 8), 6);
-            ov49_02259160((void *)U32_AT(state, 8), result);
+            result = WiFiPlazaObj_GetParam((void *)U32_AT(state, 8), 6);
+            WiFiPlazaObj_SetDirection((void *)U32_AT(state, 8), result);
         }
         break;
     case 3:
         result = ov49_02265434((u8 *)state + 0xA04, S16_AT(state, 0x956));
         S16_AT(state, 0x956)
         ++;
-        ov49_02259154((void *)U32_AT(state, 8), &v);
+        WiFiPlazaObj_GetPosition((void *)U32_AT(state, 8), &v);
         ov49_022655E0((u8 *)state + 0xA04, &v.x, &v.y, &v.z);
-        ov49_02259148((void *)U32_AT(state, 8), &v);
+        WiFiPlazaObj_SetPosition((void *)U32_AT(state, 8), &v);
         if (result == 1) {
             S16_AT(state, 0x956) = 0;
             U32_AT(state, 0x958) = v.y;
             ov49_02265668(ctx, state, 0x5C2);
             ov49_02259130((void *)U32_AT(state, 8), 1);
-            if ((void *)U32_AT(state, 8) == ov49_02258DAC((void *)U32_AT(ctx, 4))) {
+            if ((void *)U32_AT(state, 8) == WiFiPlazaObj_GetOwnPlayer((void *)U32_AT(ctx, 4))) {
                 WiFiPlazaCamera_SetFollowObject((void *)U32_AT(ctx, 8), (void *)U32_AT(state, 8));
             }
             return 1;

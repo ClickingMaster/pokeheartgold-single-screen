@@ -5,7 +5,7 @@
 void ov49_022682D4(Ov49Ctl *ctl, void *object) {
     VecFx32 v;
     int i;
-    ov49_02259154(object, &v);
+    WiFiPlazaObj_GetPosition(object, &v);
     v.x += 0x8000;
     v.y += 0x14000;
     v.z -= 0x8000;

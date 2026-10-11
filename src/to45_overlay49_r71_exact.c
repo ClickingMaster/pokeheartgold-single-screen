@@ -9,7 +9,7 @@ void ov49_02265CB0(void *ctx, void *state) {
     entry += 0xC;
     for (; i < 3; i++, entry += 0x78) {
         ov49_02265980(ctx, state, i, &ov49_0226A70C[i + 3]);
-        ov49_02259154(PTR(state, 8), &pos);
+        WiFiPlazaObj_GetPosition(PTR(state, 8), &pos);
         pos.y += 0x8000;
         ModelInstance_SetPosition(entry, pos.x, pos.y, pos.z);
         ModelInstance_SetVisible(entry, 0);
@@ -24,14 +24,14 @@ void ov49_02265D10(void *ctx, void *state) {
     ov49_02265980(ctx, state, 1, ov49_0226A730);
     ov49_02265980(ctx, state, 0, ov49_0226A73C);
     ModelInstance_SetVisible((u8 *)state + 0x84, 0);
-    ov49_02259154(PTR(state, 8), &a);
+    WiFiPlazaObj_GetPosition(PTR(state, 8), &a);
     a.y += 0x10000;
     a.x += 0x8000;
     b = a;
     b.y += 0x10000;
     WORD(state, 0x958) = 8;
 
-    switch (ov49_02258E60(PTR(state, 8), 6)) {
+    switch (WiFiPlazaObj_GetParam(PTR(state, 8), 6)) {
     case 0:
         a.z -= 0x1C000;
         b.z -= 0xE000;
@@ -67,7 +67,7 @@ void ov49_02265E54(void *ctx, void *state) {
     ov49_02265980(ctx, state, 0, ov49_0226A73C);
     ov49_02265980(ctx, state, 2, ov49_0226A734);
     ModelInstance_SetVisible((u8 *)state + 0x84, 0);
-    ov49_02259154(PTR(state, 8), &a);
+    WiFiPlazaObj_GetPosition(PTR(state, 8), &a);
     a.y += 0x10000;
     a.x += 0x8000;
     b = a;
@@ -75,7 +75,7 @@ void ov49_02265E54(void *ctx, void *state) {
     WORD(state, 0x958) = 8;
     WORD(state, 0x95C) = 8;
 
-    switch (ov49_02258E60(PTR(state, 8), 6)) {
+    switch (WiFiPlazaObj_GetParam(PTR(state, 8), 6)) {
     case 0:
         a.z -= 0x1C000;
         b.z -= 0xE000;
@@ -126,13 +126,13 @@ void ov49_02266088(void *ctx, void *state) {
     WORD(state, 0x958) = 8;
     WORD(state, 0x95C) = 8;
     WORD(state, 0x960) = 8;
-    ov49_02259154(PTR(state, 8), &a);
+    WiFiPlazaObj_GetPosition(PTR(state, 8), &a);
     a.y += 0x10000;
     a.x += 0x8000;
     b = a;
     b.y += 0x10000;
 
-    switch (ov49_02258E60(PTR(state, 8), 6)) {
+    switch (WiFiPlazaObj_GetParam(PTR(state, 8), 6)) {
     case 0:
         a.z -= 0x1C000;
         b.z -= 0xE000;

@@ -56,7 +56,7 @@ typedef struct R57ParticipantView {
     u32 fieldC;
 } R57ParticipantView;
 
-extern void ov96_021E6168(void *, u32, u32, R57ParticipantView *);
+extern void PokeathlonCourse_GetMonInfo(void *, u32, u32, R57ParticipantView *);
 
 void PokeathlonCirclePushDisplay_SetRound(void *, u32);
 void ov96_021F3E60(void *);

@@ -24,7 +24,7 @@ typedef struct Ov96Object {
 void ov96_021EB0A4(void *, s32, s32, s32 *, s32 *);
 void ov96_0220D744(Ov96Object *);
 BOOL ov96_0220D8C4(Ov96Object *, fx32, fx32);
-void ov96_021E8228(void *, u8, u8, u8, u32);
+void PokeathlonCourse_AddMonCounter(void *, u8, u8, u8, u32);
 BOOL ov96_021EB0CC(void *, fx32, fx32, s32, s32);
 
 extern const s16 ov96_0221CFBC[][3][2];

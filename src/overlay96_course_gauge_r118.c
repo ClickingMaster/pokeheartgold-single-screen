@@ -25,7 +25,7 @@ void ov96_02217FD0(Ov96R118Unit *units) {
                     object->flags.bits.bit28 = 1;
                     object->flags.bits.bit29 = 0;
                     object->flags.bits.bit30 = 0;
-                    ov96_021E8228(object->unk00, object->flags.bits.field20, object->flags.bits.field22, 1, 1);
+                    PokeathlonCourse_AddMonCounter(object->unk00, object->flags.bits.field20, object->flags.bits.field22, 1, 1);
                 }
             } else {
                 increment = 819.0f;

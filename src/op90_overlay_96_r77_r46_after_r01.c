@@ -32,7 +32,7 @@ void ov96_02200A64(void *w, u16 v);
 void ov96_021EB570(void *obj, int anim);
 void PlaySE(u16 se);
 void ov96_021FFBD8(BgConfig *bg, u16 v);
-void ov96_021E6454(void *course, u16 v);
+void PokeathlonCourse_UpdateTimeUpCountdown(void *course, u16 v);
 void ov96_021FDC7C(void *course);
 // @fn ov96_021FDC7C
 void ov96_021FDC7C(void *course) {
@@ -85,5 +85,5 @@ void ov96_021FDC7C(void *course) {
         break;
     }
     ov96_021FFBD8(work->bg, data->pos[me]);
-    ov96_021E6454(course, data->x18);
+    PokeathlonCourse_UpdateTimeUpCountdown(course, data->x18);
 }

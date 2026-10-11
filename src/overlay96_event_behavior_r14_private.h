@@ -29,7 +29,7 @@ extern void ov96_0221A400(R123Rec *);
 extern int ov96_02215FA0(const VecFx32 *);
 extern void (*ov96_0221D9A0[])(void *);
 extern R123Unary ov96_0221D9C8[];
-extern void *ov96_021E94EC(void *, u8);
+extern void *PokeathlonCourseScoreList_GetRanked(void *, u8);
 extern void ov96_0221A730(void *);
 extern u32 MTRandom(void);
 extern u32 ov96_02215E68(void *, u8);

@@ -73,7 +73,7 @@ typedef struct Ov96PaletteDataR36 {
 
 void *PokeathlonCourse_GetParticipantUnk04(void *, u32);
 void *PokeathlonCourse_GetParticipantData(void *, u32);
-void ov96_021E6168(void *, u32, u32, Ov96ParticipantViewR36 *);
+void PokeathlonCourse_GetMonInfo(void *, u32, u32, Ov96ParticipantViewR36 *);
 void ov96_021EEBF8(void *, Ov96ParticipantViewR36 *, u32, u32, u32, u32);
 void GetMonSpriteCharAndPlttNarcIdsEx(Ov96PokepicTemplateR36 *, u16, u8, u32, u8, u8, u32);
 void *GfGfxLoader_GetPlttData(u32, s32, Ov96PaletteDataR36 **, u32);

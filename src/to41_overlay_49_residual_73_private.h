@@ -26,7 +26,7 @@ extern u32 (*const ov49_0226A484[])(void *);
 extern void ModelInstance_SetVisible(void *, int);
 
 extern u32 ov49_02258F70(void *);
-extern void ov49_02259154(void *, VecFx32 *);
+extern void WiFiPlazaObj_GetPosition(void *, VecFx32 *);
 extern void ov49_0226540C(void *, fx32, fx32, fx32, fx32, fx32, fx32, u32);
 extern void ov49_022655F4(void *, u32, u32, u32);
 extern void ov49_02265628(void *);
@@ -40,6 +40,6 @@ extern void ov49_02265980(void *, void *, u32, const void *);
 extern void WiFiPlazaLight_UnpackColorSet(void *, const u8 *);
 extern void WiFiPlazaLight_UnpackLight1(void *, const u16 *);
 extern void WiFiPlazaLight_Apply(void *);
-extern void ov49_02259148(void *, VecFx32 *);
+extern void WiFiPlazaObj_SetPosition(void *, VecFx32 *);
 
 #endif

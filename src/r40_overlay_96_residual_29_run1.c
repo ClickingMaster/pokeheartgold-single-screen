@@ -3,7 +3,7 @@
 void ov96_021EAF94(Ov96PositionObject *obj, s32 x, s32 y) {
     VecFx32 matrix;
     VecFx32 position = { 0 };
-    void *sprite = ov96_021E8BAC(obj->object);
+    void *sprite = PokeathlonCourseMonGfx_GetSprite(obj->object);
     s32 tempY;
     matrix = position;
     matrix.x = x << FX32_SHIFT;
@@ -22,7 +22,7 @@ void ov96_021EAF94(Ov96PositionObject *obj, s32 x, s32 y) {
         position.x = tempX << FX32_SHIFT;
     }
     position.y = tempY << FX32_SHIFT;
-    if (ov96_021E92AC(obj->object)) {
+    if (PokeathlonCourseMonGfx_IsShiftedUp(obj->object)) {
         position.y += 0x8000;
     }
     Sprite_SetMatrix(sprite, &position);
@@ -34,7 +34,7 @@ void ov96_021EB01C(Ov96PositionObject *obj, s32 x, s32 y, u32 arg) {
     s32 delta = 2 * obj->halfHeight - center;
     x -= offsetX;
     y -= center + delta / 2;
-    ov96_021EAD88(obj, x, y, arg);
+    PokeathlonCourseMonObject_SetPosition(obj, x, y, arg);
 }
 
 void ov96_021EB03C(Ov96PositionObject *obj, s32 x, s32 y, s32 *outX, s32 *outY) {

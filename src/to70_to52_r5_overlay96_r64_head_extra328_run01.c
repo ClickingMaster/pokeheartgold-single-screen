@@ -1,6 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-typedef struct E{int x;void*sprite;int a,b;}E;typedef struct W{u8 pad[4];E entries[4];E main;int timer;u8 state;u8 gap[7];int sound;}W;
-extern void ov96_021F8128(E*,int,int),ov96_021F82E4(W*,void*,int),ov96_021F8354(E*),ov96_021F8334(W*,void*,int),ov96_021F81C0(W*,int),ov96_021F8160(W*,int,int),ov96_021F83BC(W*,E*),PlayFanfare(int);extern int ov96_021F8180(E*,int),ov96_021F8360(W*),ov96_021F8978(void*);extern E*ov96_021F83D0(W*);extern void*ov96_021F8378(W*,int,int,int);int ov96_021F81CC(W*,int);
-int ov96_021F81CC(W*w,int heap){u8*state=&w->state;switch(*state){case 0:ov96_021F8128(&w->main,-80,0);if(ov96_021F8180(&w->main,0)){ov96_021F82E4(w,w->main.sprite,0);ov96_021F8354(&w->main);if(ov96_021F8360(w))ov96_021F8334(w,ov96_021F8378(w,heap,256,40),0);ov96_021F81C0(w,10);}break;case 1:{int i;E*e;ov96_021F8160(w,-80,0);for(i=0,e=w->entries;i<4;i++,e++){if(!ov96_021F8180(e,0))break;if(w->sound==0&&ov96_021F8978(e->sprite)==0){PlayFanfare(1209);w->sound=1;}}if(i==4)ov96_021F81C0(w,10);break;}case 2:{E*e;ov96_021F8160(w,0,8);e=ov96_021F83D0(w);if(ov96_021F8180(e,1)){ov96_021F83BC(w,e);*state=0;}break;}case 3:if(w->timer--<=0){if(ov96_021F8360(w))*state=2;else return 1;}break;}return 0;}

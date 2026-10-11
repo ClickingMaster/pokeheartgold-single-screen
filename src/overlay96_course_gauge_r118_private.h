@@ -61,6 +61,6 @@ typedef struct Ov96R118Unit {
 } Ov96R118Unit;
 
 void ov96_02217FD0(Ov96R118Unit *);
-void ov96_021E8228(void *, u8, u8, int, int);
+void PokeathlonCourse_AddMonCounter(void *, u8, u8, int, int);
 
 #endif

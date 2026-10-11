@@ -21,7 +21,7 @@
 #include "unk_02013FDC.h"
 
 // Sprite scene of the event and the course helpers (OVY_96, not yet tidied).
-void ov96_021E6168(PokeathlonCourseData *course, int participant, int member, PokeathlonCirclePushMonView *view);
+void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonCirclePushMonView *view);
 void ov96_021EB408(void *scene, int a1, int a2, int a3, int a4);
 void *ov96_021EB4F4(void *scene, int a1, int a2);
 void ov96_021EB52C(void *sprite, int a1, int a2);
@@ -232,7 +232,7 @@ void PokeathlonCirclePushDisplay_LoadMonPics(PokeathlonCirclePushDisplay *displa
     PokeathlonCirclePushMonView view;
 
     for (i = 0; i < 12; i++) {
-        ov96_021E6168(display->course, i / 3, i % 3, &view);
+        PokeathlonCourse_GetMonInfo(display->course, i / 3, i % 3, &view);
         GetMonSpriteCharAndPlttNarcIdsEx(&pokepic, view.species, view.gender, 2, view.shiny, (u8)view.form, view.personality);
         display->anim.monPics[i].charData = sub_0201457C((NarcId)pokepic.narcID, pokepic.charDataID, display->heapId, view.personality, FALSE, 2, view.species);
         display->anim.monPics[i].paletteData = sub_02014450((NarcId)pokepic.narcID, pokepic.palDataID, display->heapId);

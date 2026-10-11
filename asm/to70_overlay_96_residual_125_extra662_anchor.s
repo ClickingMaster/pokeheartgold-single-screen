@@ -128,20 +128,20 @@
 	.extern ov96_021E5F24
 	.extern ov96_021E6F18
 	.extern ov96_021E75B8
-	.extern ov96_021E99F4
-	.extern ov96_021E99F8
-	.extern ov96_021E99FC
-	.extern ov96_021E9A04
-	.extern ov96_021E9A10
-	.extern ov96_021E9A14
-	.extern ov96_021E9A18
-	.extern ov96_021E9A1C
-	.extern ov96_021E9A24
-	.extern ov96_021E9A2C
-	.extern ov96_021E9A38
-	.extern ov96_021E9A48
+	.extern PokeathlonCourseCmd_EventsSize
+	.extern PokeathlonCourseCmd_ParticipantSize
+	.extern PokeathlonCourseCmd_AllParticipantsSize
+	.extern PokeathlonCourseCmd_ProfilesSize
+	.extern PokeathlonCourseCmd_RecordSize
+	.extern PokeathlonCourseCmd_PacketSize
+	.extern PokeathlonCourseCmd_MonCountersSize
+	.extern PokeathlonCourseCmd_ResultsSize
+	.extern PokeathlonCourseCmd_JuiceRecordSize
+	.extern PokeathlonCourseCmd_GetEventDataBuffer
+	.extern PokeathlonCourseCmd_GetRecordBuffer
+	.extern PokeathlonCourseCmd_GetResultsBuffer
 	.extern ov96_021E9A54
-	.extern ov96_021E9A68
+	.extern PokeathlonCourseCmd_GetJuiceRecordBuffer
 	.extern ov96_021EB678
 	.extern ov96_021EB680
 	.extern ov96_021EB688
@@ -153,7 +153,7 @@
 	.extern ov96_021EF18C
 	.extern ov96_021F08E4
 	.extern PokeathlonLampJump_Draw
-	.extern ov96_021F9234
+	.extern PokeathlonHurdleDash_Start
 	.extern ov96_021FCD74
 	.extern ov96_02204DE8
 	.extern PokeathlonBlockSmash_Draw
@@ -259,55 +259,55 @@
 	.extern PokeathlonCourse_SetStateTransitionType
 	.extern PokeathlonCourse_SetVBlankIntrCB
 	.extern PokeathlonCourse_GetGraphicsSystem
-	.public ov96_021E60C0
+	.public PokeathlonCourse_GetPerformance
 	.public ov96_021E6104
-	.public ov96_021E6670
-	.public ov96_021E679C
+	.public PokeathlonCourse_SetHudPlanes
+	.public PokeathlonCourse_GetPerformanceFileId
 	.public ov96_021E6F18
 	.public ov96_021E75B8
-	.public ov96_021E7F98
-	.public ov96_021E8318
-	.public ov96_021E87B0
-	.public ov96_021E8828
+	.public PokeathlonCourse_AddCapped
+	.public PokeathlonCourse_SetRecordScore
+	.public PokeathlonCourseLink_SetCheckSize
+	.public PokeathlonCourseLink_GetNetId
 	.public ov96_021E8A20
-	.public ov96_021E8A24
-	.public ov96_021E8A2C
-	.public ov96_021E8A30
-	.public ov96_021E8B88
-	.public ov96_021E8BAC
-	.public ov96_021E8BB0
-	.public ov96_021E90FC
-	.public ov96_021E92AC
-	.public ov96_021E92D0
-	.public ov96_021E9510
-	.public ov96_021E9524
+	.public PokeathlonCourseCmd_GetTable
+	.public PokeathlonCourseCmd_GetCount
+	.public PokeathlonCourseMonGfx_AllocManager
+	.public PokeathlonCourseMonGfx_IsLoaded
+	.public PokeathlonCourseMonGfx_GetSprite
+	.public PokeathlonCourseMonGfx_GetInfo
+	.public PokeathlonCourseMonGfx_GetTopRow
+	.public PokeathlonCourseMonGfx_IsShiftedUp
+	.public PokeathlonCourse_FreeObjTransfer
+	.public PokeathlonCourseScoreList_Init
+	.public PokeathlonCourseScoreList_GetCount
 	.public ov96_021E9528
-	.public ov96_021E99F4
-	.public ov96_021E99F8
-	.public ov96_021E99FC
-	.public ov96_021E9A04
-	.public ov96_021E9A10
-	.public ov96_021E9A14
-	.public ov96_021E9A18
-	.public ov96_021E9A1C
-	.public ov96_021E9A24
-	.public ov96_021E9A2C
-	.public ov96_021E9A38
-	.public ov96_021E9A48
+	.public PokeathlonCourseCmd_EventsSize
+	.public PokeathlonCourseCmd_ParticipantSize
+	.public PokeathlonCourseCmd_AllParticipantsSize
+	.public PokeathlonCourseCmd_ProfilesSize
+	.public PokeathlonCourseCmd_RecordSize
+	.public PokeathlonCourseCmd_PacketSize
+	.public PokeathlonCourseCmd_MonCountersSize
+	.public PokeathlonCourseCmd_ResultsSize
+	.public PokeathlonCourseCmd_JuiceRecordSize
+	.public PokeathlonCourseCmd_GetEventDataBuffer
+	.public PokeathlonCourseCmd_GetRecordBuffer
+	.public PokeathlonCourseCmd_GetResultsBuffer
 	.public ov96_021E9A54
-	.public ov96_021E9A68
-	.public ov96_021E9CF4
-	.public ov96_021E9D08
-	.public ov96_021EA894
-	.public ov96_021EAA00
-	.public ov96_021EAA20
-	.public ov96_021EAB94
-	.public ov96_021EABDC
-	.public ov96_021EABE0
-	.public ov96_021EABF4
-	.public ov96_021EAC08
-	.public ov96_021EAD78
-	.public ov96_021EAEC8
+	.public PokeathlonCourseCmd_GetJuiceRecordBuffer
+	.public PokeathlonCourseSprites_HasGroup
+	.public PokeathlonCourseSprites_GetResMan
+	.public PokeathlonCourseMonObjects_Free
+	.public PokeathlonCourseMonObjects_IsLoaded
+	.public PokeathlonCourseMonObject_GetGfx
+	.public PokeathlonCourseMonObject_SetMonDrawFlag
+	.public PokeathlonCourseMonObject_SetDrawPriorityStep
+	.public PokeathlonCourseMonObject_SetAffineOverwriteMode
+	.public PokeathlonCourseMonObject_SetAffineMatrix
+	.public PokeathlonCourseMonObject_SetAnimStateRaw
+	.public PokeathlonCourseMonObject_IsAnimated
+	.public PokeathlonCourseMonObject_GetPosition
 	.public ov96_021EAF6C
 	.public ov96_021EAF70
 	.public ov96_021EAF8C
@@ -361,20 +361,20 @@
 	.public ov96_021F3E58
 	.public PokeathlonCirclePushDisplay_GetScore
 	.public PokeathlonLampJump_Draw
-	.public ov96_021F74C8
-	.public ov96_021F75D4
-	.public ov96_021F75E0
-	.public ov96_021F7738
-	.public ov96_021F8094
-	.public ov96_021F81C0
-	.public ov96_021F8354
-	.public ov96_021F83BC
-	.public ov96_021F83D0
-	.public ov96_021F87D0
-	.public ov96_021F893C
-	.public ov96_021F8948
-	.public ov96_021F8978
-	.public ov96_021F9234
+	.public PokeathlonLampJump_FreeLamps
+	.public PokeathlonLampJump_GetLampPos
+	.public PokeathlonLampJump_IsLampLit
+	.public PokeathlonLampJump_FreeCpuPlayers
+	.public PokeathlonResultsAnnouncement_CreatePlates
+	.public PokeathlonResultsAnnouncement_Wait
+	.public PokeathlonResultsAnnouncement_ClearSlide
+	.public PokeathlonResultsAnnouncement_RemoveSlide
+	.public PokeathlonResultsAnnouncement_GetLeavingSlide
+	.public PokeathlonResultsAnnouncement_DrawPlates
+	.public PokeathlonResultsAnnouncement_GetPlatePos
+	.public PokeathlonResultsAnnouncement_SetPlatePos
+	.public PokeathlonResultsAnnouncement_GetPlateRank
+	.public PokeathlonHurdleDash_Start
 	.public ov96_021FA340
 	.public ov96_021FBE3C
 	.public ov96_021FBE44
@@ -1060,7 +1060,7 @@ ov96_0221DC1C:
 	.word PokeathlonLampJump_CalcScores
 
 ov96_0221DC24: ; 0x0221DC24
-	.word ov96_021F7E74
+	.word PokeathlonResultsAnnouncement_Run
 
 ov96_0221DC28: ; 0x0221DC28
 	.byte 0x94, 0x00, 0x6B, 0x00
@@ -1069,9 +1069,9 @@ ov96_0221DC2C: ; 0x0221DC2C
 	.byte 0x03, 0x04, 0x05, 0x00
 
 ov96_0221DC30:
-	.word ov96_021F9234
-	.word ov96_021F9240
-	.word ov96_021F9380
+	.word PokeathlonHurdleDash_Start
+	.word PokeathlonHurdleDash_Play
+	.word PokeathlonHurdleDash_CalcScores
 
 ov96_0221DC3C:
 	.word ov96_021FD2E0

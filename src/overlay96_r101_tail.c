@@ -16,12 +16,12 @@ u32 ov96_0220F1CC(void *course) {
     u32 *local = (void *)ov96_021E8A20(copy);
     if (remote[8] >> 31 == 1) {
         ov96_0220EAC4(work);
-        ov96_021E65A4(course);
+        PokeathlonCourse_StopMarkerAnims(course);
         ov96_0220E2A8(course);
         return 1;
     }
     if (System_GetTouchNew()) {
-        ov96_021E8228(course, (u8)ov96_021E5F24(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, (u8)ov96_021E5F24(course), 3, 0, 1);
     }
     if (System_GetTouchHeld()) {
         u32 value = local[0] & ~0xff;
@@ -45,7 +45,7 @@ void ov96_0220F280(void *course) {
     for (row = 0; row < 4; row++) {
         row8 = (u8)row;
         for (col = 0; col < 3; col++) {
-            u8 *in = ov96_021E60D8(course, row, col);
+            u8 *in = PokeathlonCourse_GetMonStats(course, row, col);
             Ov96FData *out = ov96_0220F378(course, row8, (u8)col);
             s32 v;
             float f;

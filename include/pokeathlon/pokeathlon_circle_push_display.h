@@ -15,7 +15,7 @@
 // match interrupt it: the scoreboard with the own team's points, and the picture of a Pokemon
 // that scored.
 
-// What ov96_021E6168 reports about one Pokemon of a team.
+// What PokeathlonCourse_GetMonInfo reports about one Pokemon of a team.
 typedef struct PokeathlonCirclePushMonView {
     u16 species;     // 0x00
     u16 form;        // 0x02

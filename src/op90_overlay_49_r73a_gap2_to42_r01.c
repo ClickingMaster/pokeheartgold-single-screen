@@ -34,15 +34,15 @@ typedef struct RootMotion {
 } RootMotion;
 
 void ov49_0225919C(void *main, int a1);
-void ov49_02259160(void *main, void *a1);
-void ov49_02259154(void *main, VecFx32 *pos);
-void ov49_02259148(void *main, VecFx32 *pos);
+void WiFiPlazaObj_SetDirection(void *main, void *a1);
+void WiFiPlazaObj_GetPosition(void *main, VecFx32 *pos);
+void WiFiPlazaObj_SetPosition(void *main, VecFx32 *pos);
 void ov49_02259130(void *main, int a1);
-void *ov49_02258E60(void *main, int a1);
+void *WiFiPlazaObj_GetParam(void *main, int a1);
 int ov49_02265434(Curve *curve, int frame);
 void ov49_022655E0(Curve *curve, fx32 *x, fx32 *y, fx32 *z);
 void ov49_02265668(RootMotion *root, Motion *s, int se);
-void *ov49_02258DAC(void *context);
+void *WiFiPlazaObj_GetOwnPlayer(void *context);
 void WiFiPlazaCamera_SetFollowObject(void *ui, void *main);
 void ov49_02265628(VecFx32 *pos);
 void ModelInstance_GetPosition(Obj120 *obj, fx32 *x, fx32 *y, fx32 *z);
@@ -82,15 +82,15 @@ int ov49_022670D4(RootMotion *root, Motion *s) {
             ov49_0225919C(s->main, 0);
             s->stage = 3;
             s->timer = 0;
-            ov49_02259160(s->main, ov49_02258E60(s->main, 6));
+            WiFiPlazaObj_SetDirection(s->main, WiFiPlazaObj_GetParam(s->main, 6));
         }
         break;
     case 3:
         done = ov49_02265434(&s->curves[3], s->timer);
         s->timer++;
-        ov49_02259154(s->main, &mainPos);
+        WiFiPlazaObj_GetPosition(s->main, &mainPos);
         ov49_022655E0(&s->curves[3], &mainPos.x, &mainPos.y, &mainPos.z);
-        ov49_02259148(s->main, &mainPos);
+        WiFiPlazaObj_SetPosition(s->main, &mainPos);
         if (done == 1) {
             s->stage = 4;
             s->timer = 0;
@@ -102,15 +102,15 @@ int ov49_022670D4(RootMotion *root, Motion *s) {
         u16 angle = 0x7FFF * s->timer / 10;
         fx32 value = FX_Mul(FX_SinIdx(angle), 0x8000);
         int next;
-        ov49_02259154(s->main, &movement);
+        WiFiPlazaObj_GetPosition(s->main, &movement);
         movement.y = s->base + value;
-        ov49_02259148(s->main, &movement);
+        WiFiPlazaObj_SetPosition(s->main, &movement);
         next = s->timer + 1;
         if (next > 10) {
             void *main;
             ov49_02259130(s->main, 1);
             main = s->main;
-            if (main == ov49_02258DAC(root->context)) {
+            if (main == WiFiPlazaObj_GetOwnPlayer(root->context)) {
                 WiFiPlazaCamera_SetFollowObject(root->ui, main);
             }
             return 1;

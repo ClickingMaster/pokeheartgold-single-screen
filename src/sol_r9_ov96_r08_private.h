@@ -19,7 +19,7 @@ u32 GfGfxLoader_LoadCharData(u32 narcId, s32 memberNo, void *bgConfig, u32 layer
 void GfGfxLoader_LoadScrnData(u32 narcId, s32 memberNo, void *bgConfig, u32 layer, u32 tileStart, u32 size, BOOL compressed, u32 heapId);
 void GfGfxLoader_GXLoadPal(u32 narcId, s32 memberNo, u32 location, u32 offset, u32 size, u32 heapId);
 void LoadFontPal0(u32 location, u32 offset, u32 heapId);
-void ov96_021EAB38(void *owner, int value);
+void PokeathlonCourseMonObject_SetDrawFlag(void *owner, int value);
 void ManagedSprite_SetPositionXYWithSubscreenOffset(void *sprite, s16 x, s16 y, fx32 offset);
 void ManagedSprite_ResetSpriteAnimCtrlState(void *sprite);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);

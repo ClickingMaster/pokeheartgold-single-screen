@@ -16,7 +16,7 @@ typedef struct {
 } Params;
 void *PokeathlonCourse_GetHeapAllocPtr4(void *course);
 u8 PokeathlonCourse_GetParticipantCount(void *course);
-u8 *ov96_021E60D8(void *course, int a, int b);
+u8 *PokeathlonCourse_GetMonStats(void *course, int a, int b);
 u16 LCRandom(void);
 void GF_AssertFail(void);
 typedef struct {
@@ -36,7 +36,7 @@ typedef struct {
 } Heap2;
 extern f32 ov96_0221C444[];
 int ov96_021FC164(void *a, int b, int c);
-void ov96_021E8228(void *course, int a, int b, int c, int d);
+void PokeathlonCourse_AddMonCounter(void *course, int a, int b, int c, int d);
 void PlaySE(u32 seq);
 void ov96_021FBA3C(void *course, Heap2 *heap, Payload *out, u8 a3, int idx, u8 itemIdx);
 void ov96_021FBBB4(void *course, Params *params);
@@ -68,16 +68,16 @@ void ov96_021FBA3C(void *course, Heap2 *heap, Payload *out, u8 a3, int idx, u8 i
                     item->stacks++;
                     item->speed = item->max + ov96_0221C444[item->stacks - 1];
                 }
-                ov96_021E8228(course, a3, idx, 6, 1);
-                ov96_021E8228(course, a3, idx, 2, 1);
+                PokeathlonCourse_AddMonCounter(course, a3, idx, 6, 1);
+                PokeathlonCourse_AddMonCounter(course, a3, idx, 2, 1);
             } else if (rnd < item->other) {
                 item->state = 2;
                 item->timer = 30;
                 item->stacks = 0;
                 item->speed = 0.5f;
-                ov96_021E8228(course, a3, idx, 1, 1);
+                PokeathlonCourse_AddMonCounter(course, a3, idx, 1, 1);
             } else {
-                ov96_021E8228(course, a3, idx, 2, 1);
+                PokeathlonCourse_AddMonCounter(course, a3, idx, 2, 1);
             }
             item->event = event;
         }
@@ -106,7 +106,7 @@ void ov96_021FBBB4(void *course, Params *params) {
         int base = i - count;
         for (j = 0; j < 3; j++) {
             Item *item = &heap->items[(u8)(j + base * 3)];
-            u8 *stats = ov96_021E60D8(course, i, j);
+            u8 *stats = PokeathlonCourse_GetMonStats(course, i, j);
             item->max = params->max[stats[1]] / 10.0f;
             item->accel = params->accel[stats[4]] / 100.0f;
             switch (LCRandom() % 6) {

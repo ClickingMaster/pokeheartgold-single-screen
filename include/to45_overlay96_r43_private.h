@@ -42,7 +42,7 @@ extern Ov96R43Record *PokeathlonCourse_GetField974_AtIndex(void *, int);
 extern int ov96_021EDF7C(int);
 extern int ov96_021EDF5C(u32);
 extern void *PokeathlonCourse_GetParticipantData(void *, int);
-extern const u8 *ov96_021E60D8(void *, int, int);
+extern const u8 *PokeathlonCourse_GetMonStats(void *, int, int);
 extern int ov96_021E8448(void *, u8);
 
 void ov96_021EDF84(Ov96R43Record *, const Ov96R43Record *);

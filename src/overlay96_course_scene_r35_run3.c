@@ -28,8 +28,8 @@ void ov96_021EC218(SysTask *task, void *data) {
 
     switch (work->state) {
     case 0:
-        ov96_021EAC0C(sprite, 2);
-        ov96_021EAC5C(sprite, 0x10);
+        PokeathlonCourseMonObject_SetAnimState(sprite, 2);
+        PokeathlonCourseMonObject_SetAnim(sprite, 0x10);
         work->state++;
         break;
     case 1:
@@ -38,9 +38,9 @@ void ov96_021EC218(SysTask *task, void *data) {
         }
         break;
     case 2:
-        if (!ov96_021EAD78(sprite) && !IsCryFinished()) {
-            ov96_021EAC0C(sprite, 1);
-            ov96_021EAC5C(sprite, 0);
+        if (!PokeathlonCourseMonObject_IsAnimated(sprite) && !IsCryFinished()) {
+            PokeathlonCourseMonObject_SetAnimState(sprite, 1);
+            PokeathlonCourseMonObject_SetAnim(sprite, 0);
             *work->active = 0;
             Heap_Free(work);
             SysTask_Destroy(task);
@@ -57,7 +57,7 @@ void ov96_021EC298(void *work, u8 index) {
 
     MI_CpuFill8(taskWork, 0, sizeof(Ov96CourseSceneCryTask));
     PTR_AT(work, 0x88) = taskWork;
-    taskWork->sprite = ov96_021EAA04(PTR_AT(work, 0x14), index);
+    taskWork->sprite = PokeathlonCourseMonObjects_Get(PTR_AT(work, 0x14), index);
     U32_AT(work, 0x98) = 1;
     taskWork->active = (u32 *)((u8 *)work + 0x98);
     PTR_AT(work, 8) = SysTask_CreateOnMainQueue(ov96_021EC218, taskWork, 1);

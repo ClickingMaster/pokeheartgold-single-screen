@@ -235,7 +235,7 @@ cancel_menu3:
         ov49_0225EF68(state);
         WiFiPlazaRoom_CloseMessage(ctx);
         ctx = WiFiPlazaRoom_GetObjManager(ctx);
-        ov49_02258EEC(ctx, ov49_02258DAC(ctx), 1);
+        WiFiPlazaObj_SetHandler(ctx, WiFiPlazaObj_GetOwnPlayer(ctx), 1);
         return TRUE;
     }
     return FALSE;

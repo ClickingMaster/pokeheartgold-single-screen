@@ -114,7 +114,7 @@ void ov96_021FFB7C(u8 *w, int a, int b) {
     {
         int i;
         for (i = 0; i < 3; i++) {
-            ov96_021EABA8(PTR(w, 0), n + 2);
+            PokeathlonCourseMonObject_SetDrawPriority(PTR(w, 0), n + 2);
             w += 4;
         }
     }

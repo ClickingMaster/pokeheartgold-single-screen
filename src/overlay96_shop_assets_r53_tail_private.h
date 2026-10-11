@@ -25,15 +25,15 @@ void *PokeathlonCourse_GetDataCopyArea(void *course);
 u8 *ov96_021E8A20(void *ptr);
 void ov96_021EB63C(void *ptr, int value);
 void ov96_021EB144(void *ptr, int value);
-void ov96_021E65A4(void *course);
+void PokeathlonCourse_StopMarkerAnims(void *course);
 void *PokeathlonCirclePushDisplay_GetScore(void *ptr);
-void ov96_021E8318(void *course, void *ptr);
+void PokeathlonCourse_SetRecordScore(void *course, void *ptr);
 void ov96_021F2EFC(void *work, void *ptr);
 u8 ov96_021F30F8(u8 value, int kind);
 BOOL System_GetTouchNew(void);
 BOOL System_GetTouchHeld(void);
 u32 ov96_021E5F24(void *course);
-void ov96_021E8228(void *course, u8 player, u8 type, u8 index, u32 value);
+void PokeathlonCourse_AddMonCounter(void *course, u8 player, u8 type, u8 index, u32 value);
 void ov96_021F1614(void *course);
 BOOL ov96_021F107C(void *course);
 

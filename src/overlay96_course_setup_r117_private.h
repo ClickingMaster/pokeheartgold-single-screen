@@ -23,11 +23,11 @@ typedef struct Ov96R117Work {
 } Ov96R117Work;
 
 void *SpriteManager_GetSpriteList(void *);
-void *ov96_021EA854(void *, u32, u32, void *, void *);
-void ov96_021E6168(void *, int, int, Ov96R117ParticipantView *);
-void *ov96_021E60C0(void *, int, int);
+void *PokeathlonCourseMonObjects_Create(void *, u32, u32, void *, void *);
+void PokeathlonCourse_GetMonInfo(void *, int, int, Ov96R117ParticipantView *);
+void *PokeathlonCourse_GetPerformance(void *, int, int);
 int ov96_021E6108(const void *);
-void ov96_021EA8A8(void *, int, Ov96R117ParticipantView *, u32 *, u32, u32);
+void PokeathlonCourseMonObjects_Load(void *, int, Ov96R117ParticipantView *, u32 *, u32, u32);
 
 void ov96_02217AE4(Ov96R117Work *, void *);
 

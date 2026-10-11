@@ -8,7 +8,7 @@ void ov49_0226813C(Ov49Ctl *ctl, void *object) {
     fx32 y;
     fx32 z;
     int i;
-    ov49_02259154(object, &v);
+    WiFiPlazaObj_GetPosition(object, &v);
     v.x += 0x8000;
     v.y += 0x8000;
     v.z -= 0x8000;

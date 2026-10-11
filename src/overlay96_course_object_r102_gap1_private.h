@@ -24,12 +24,12 @@ typedef struct Ov96R102Gap1Work {
 } Ov96R102Gap1Work;
 
 void *SpriteManager_GetSpriteList(void *);
-void *ov96_021EA854(u32, u32, u32, void *, void *);
+void *PokeathlonCourseMonObjects_Create(u32, u32, u32, void *, void *);
 void ov96_021EB138(void *);
-void ov96_021E6168(void *, int, int, Ov96R102Gap1ParticipantView *);
-void *ov96_021E60C0(void *, int, int);
+void PokeathlonCourse_GetMonInfo(void *, int, int, Ov96R102Gap1ParticipantView *);
+void *PokeathlonCourse_GetPerformance(void *, int, int);
 int ov96_021E6108(const void *);
-void ov96_021EA8A8(void *, int, Ov96R102Gap1ParticipantView *, u32 *, u32, u32);
+void PokeathlonCourseMonObjects_Load(void *, int, Ov96R102Gap1ParticipantView *, u32 *, u32, u32);
 
 void ov96_0220F3FC(Ov96R102Gap1Work *);
 

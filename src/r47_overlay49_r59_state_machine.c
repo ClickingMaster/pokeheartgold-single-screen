@@ -4,7 +4,7 @@ BOOL ov49_022607C4(void *controller, void *work, u32 arg) {
     void *state = ov49_0225EF84(controller);
     void *owner = ov49_0225A010(work);
     void *object = WiFiPlazaRoom_GetObjManager(work);
-    void *entry = ov49_02258DAC(object);
+    void *entry = WiFiPlazaObj_GetOwnPlayer(object);
     void *anim = WiFiPlazaRoom_GetLobby(work);
     int value;
     int choice;
@@ -12,7 +12,7 @@ BOOL ov49_022607C4(void *controller, void *work, u32 arg) {
     switch (ov49_0225EF88(controller)) {
     case 0: {
         u8 *selection = ov49_0225EF40(controller, 4);
-        ov49_02258EEC(object, (void*)(entry), 0);
+        WiFiPlazaObj_SetHandler(object, (void*)(entry), 0);
         ov49_0225EF90(controller);
         selection[0] = 0;
         switch (ov49_0225A040(work)) {
@@ -70,7 +70,7 @@ BOOL ov49_022607C4(void *controller, void *work, u32 arg) {
         ov49_0225A038(work, (u8)value);
         IncrementGameStat119(anim);
         ov45_0222B118(anim, choice);
-        converted = ov42_022282A4(ov49_02258E60(entry, 6));
+        converted = ov42_022282A4(WiFiPlazaObj_GetParam(entry, 6));
         result = ov49_02259FEC(work);
         packed = ov49_02258E34(entry);
         current.x = packed;
@@ -86,11 +86,11 @@ BOOL ov49_022607C4(void *controller, void *work, u32 arg) {
         return TRUE;
     }
     case 3:
-        ov49_02258EAC(object, entry, 2, ov42_022282A4(ov49_02258E60(entry, 6)));
+        ov49_02258EAC(object, entry, 2, ov42_022282A4(WiFiPlazaObj_GetParam(entry, 6)));
         ov49_0225EF90(controller);
         break;
     case 4:
-        if (ov49_02258E60(entry, 5) == 0) {
+        if (WiFiPlazaObj_GetParam(entry, 5) == 0) {
             ov49_0225EF90(controller);
         }
         break;
@@ -141,7 +141,7 @@ BOOL ov49_022607C4(void *controller, void *work, u32 arg) {
     case 7:
         ov49_0225EF68(controller);
         ov45_0222A5E8(WiFiPlazaRoom_GetLobby(work), 1);
-        ov49_02258EEC(object, (void*)(entry), 1);
+        WiFiPlazaObj_SetHandler(object, (void*)(entry), 1);
         ov49_0225EF98(ov49_0225A010(work), arg, ov49_02269B38, 0);
         break;
     }

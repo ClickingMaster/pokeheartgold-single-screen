@@ -2,20 +2,20 @@
 
 BOOL ov49_022618C0(void *state, void *ctx, u32 index) {
     void *object = WiFiPlazaRoom_GetObjManager(ctx);
-    void *target = ov49_02258D70(object, index);
+    void *target = WiFiPlazaObj_FindById(object, index);
 
     switch (ov49_0225EF88(state)) {
     case 0:
-        ov49_02258EEC(object, (void*)((u32)target), 3);
+        WiFiPlazaObj_SetHandler(object, (void*)((u32)target), 3);
         ov49_0225EF90(state);
         break;
     case 1:
-        if (ov49_02258F38(target) != 0) {
+        if (WiFiPlazaObj_IsFinished(target) != 0) {
             ov49_0225EF90(state);
         }
         break;
     case 2:
-        ov49_02258D54(target);
+        WiFiPlazaObj_Delete(target);
         ov49_0225EF98(ov49_0225A010(ctx), index, ov49_02269B78, 0);
         break;
     }

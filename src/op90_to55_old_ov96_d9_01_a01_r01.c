@@ -23,7 +23,7 @@ typedef struct Ov96Object {
 
 void ov96_0220D744(Ov96Object *, void *);
 BOOL ov96_0220D8C4(Ov96Object *, fx32, fx32);
-void ov96_021E8228(void *, u8, u8, u8, u32);
+void PokeathlonCourse_AddMonCounter(void *, u8, u8, u8, u32);
 void ov96_0220D910(Ov96Object *);
 void ov96_0220D9A4(Ov96Object *obj, void *arg);
 
@@ -43,10 +43,10 @@ void ov96_0220D9A4(Ov96Object *obj, void *arg) {
     case 2:
         ov96_0220D744(obj, arg);
         if (ov96_0220D8C4(obj, obj->position.x, obj->position.y)) {
-            ov96_021E8228(obj->course, obj->row, obj->column, 1, 1);
-            ov96_021E8228(obj->course, obj->row, obj->column, 5, 1);
+            PokeathlonCourse_AddMonCounter(obj->course, obj->row, obj->column, 1, 1);
+            PokeathlonCourse_AddMonCounter(obj->course, obj->row, obj->column, 5, 1);
             if (obj->flag29) {
-                ov96_021E8228(obj->course, obj->row, obj->column, 8, 1);
+                PokeathlonCourse_AddMonCounter(obj->course, obj->row, obj->column, 8, 1);
             }
             obj->flag29 = 0;
             obj->wait = 90;

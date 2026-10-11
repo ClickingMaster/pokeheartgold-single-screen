@@ -88,8 +88,8 @@ void GfGfx_DisableEngineAPlanes(void);
 void GfGfx_DisableEngineBPlanes(void);
 void GfGfx_SwapDisplay(void);
 void ov96_02201C90(void);
-void ov96_021E6670(void *course, int value);
-void ov96_021E92B0(Setup *setup, int a, int heapID, int b, int c);
+void PokeathlonCourse_SetHudPlanes(void *course, int value);
+void PokeathlonCourse_InitObjTransfer(Setup *setup, int a, int heapID, int b, int c);
 void NNS_G2dInitOamManagerModule(void);
 void OamManager_Create(int a, int b, int c, int d, int e, int f, int g, int h, int heapID);
 void FontID_Alloc(int id, int heapID);
@@ -104,27 +104,27 @@ void ov96_021EB29C(void *renderer, int index, int value);
 void ov96_02201E70(void *renderer);
 void ov96_02203B44(void *screen, void *renderer);
 void ov96_021EB3A4(void *renderer);
-void *ov96_021E9A78(u32 heap, int id, int count);
+void *PokeathlonCourseSprites_CreateResources(u32 heap, int id, int count);
 void *ov96_021EB5E8(void *renderer);
-void *ov96_021EA854(u32 heap, int count, int max, void *resource, void *list);
+void *PokeathlonCourseMonObjects_Create(u32 heap, int count, int max, void *resource, void *list);
 void **ov96_021E6290(void *course, int index, void *resource, void *renderer);
 void Sprite_SetDrawPriority(void *sprite, int priority);
 void ov96_02201EF0(State *s, void *renderer, u8 selected);
-void ov96_021E6168(void *course, int participant, int member, Mon *mon);
-void *ov96_021E60C0(void *course, int participant, int member);
+void PokeathlonCourse_GetMonInfo(void *course, int participant, int member, Mon *mon);
+void *PokeathlonCourse_GetPerformance(void *course, int participant, int member);
 u32 ov96_021E6108(void *mon);
 void ov96_02203B8C(void *screen, void *renderer, Mon *mons);
 u8 GetMonPicHeightBySpeciesGenderForm(u16 species, u8 gender, u8 isEgg, u8 form, u32 personality);
 void ov96_021EB588(void *sprite, VecFx32 *pos);
-void ov96_021EA8A8(void *icons, int count, Mon *mons, RenderOptions *options, int a, int b);
-BOOL ov96_021EAA00(void *icons);
-void *ov96_021EAA04(void *icons, u8 index);
-void ov96_021EAB38(void *sprite, int value);
-void ov96_021EAC0C(void *sprite, u32 anim);
+void PokeathlonCourseMonObjects_Load(void *icons, int count, Mon *mons, RenderOptions *options, int a, int b);
+BOOL PokeathlonCourseMonObjects_IsLoaded(void *icons);
+void *PokeathlonCourseMonObjects_Get(void *icons, u8 index);
+void PokeathlonCourseMonObject_SetDrawFlag(void *sprite, int value);
+void PokeathlonCourseMonObject_SetAnimState(void *sprite, u32 anim);
 void ov96_021EAF94(void *sprite, int x, int y);
-void *ov96_021EAA20(void *sprite);
-SpriteInfo *ov96_021E8BB0(void *sprite);
-void ov96_021EABA8(void *sprite, int value);
+void *PokeathlonCourseMonObject_GetGfx(void *sprite);
+SpriteInfo *PokeathlonCourseMonGfx_GetInfo(void *sprite);
+void PokeathlonCourseMonObject_SetDrawPriority(void *sprite, int value);
 void ov96_0220329C(void *course, u8 *raw, u8 team, u8 member, Slot *slot);
 void ov96_022043AC(void *secondary, u8 index, Slot *slot, Competitor *competitor);
 void ov96_02202738(State *s, u8 *data);
@@ -175,12 +175,12 @@ int ov96_02201558(void *course) {
         newState->auxList = Heap_Alloc((enum HeapID)146, 40);
         MI_CpuFill8(newState->auxList, 0, 40);
         newState->bg = BgConfig_Alloc((enum HeapID)146);
-        ov96_021E6670(course, 8);
+        PokeathlonCourse_SetHudPlanes(course, 8);
         setup.maxTasks = 115;
         setup.sizeMain = 0x40000;
         setup.sizeSub = 0x4000;
         setup.heapID = PokeathlonCourse_GetHeapID(course);
-        ov96_021E92B0(&setup, 22, 146, 0x300010, 0x300010);
+        PokeathlonCourse_InitObjTransfer(&setup, 22, 146, 0x300010, 0x300010);
         NNS_G2dInitOamManagerModule();
         OamManager_Create(0, 126, 0, 32, 0, 126, 0, 32, 146);
         newState->heap = 146;
@@ -210,8 +210,8 @@ int ov96_02201558(void *course) {
         ov96_02201E70(s->renderer);
         ov96_02203B44(s->screen, s->renderer);
         ov96_021EB3A4(s->renderer);
-        s->resource = ov96_021E9A78(s->heap, 1255, 1);
-        s->icons = ov96_021EA854(s->heap, 9, 32, s->resource, ov96_021EB5E8(s->renderer));
+        s->resource = PokeathlonCourseSprites_CreateResources(s->heap, 1255, 1);
+        s->icons = PokeathlonCourseMonObjects_Create(s->heap, 9, 32, s->resource, ov96_021EB5E8(s->renderer));
         Sprite_SetDrawPriority(*ov96_021E6290(course, 0, s->resource, s->renderer), 1);
         selected = ov96_021E5F24(course);
         ov96_02201EF0(s, s->renderer, selected);
@@ -224,8 +224,8 @@ int ov96_02201558(void *course) {
             n = (u8)(((u8)(((selected + 1) * 3) % 12) + monIndex) % 12);
             member = n % 3;
             participant = n / 3;
-            ov96_021E6168(course, participant, member, &mons[monIndex]);
-            options.types[monIndex] = ov96_021E6108(ov96_021E60C0(course, participant, member));
+            PokeathlonCourse_GetMonInfo(course, participant, member, &mons[monIndex]);
+            options.types[monIndex] = ov96_021E6108(PokeathlonCourse_GetPerformance(course, participant, member));
         }
         ov96_02203B8C(s->screen, s->renderer, &mons[9]);
         for (monIndex = 0; monIndex < 3; monIndex++) {
@@ -242,11 +242,11 @@ int ov96_02201558(void *course) {
         options.v[2] = 0;
         options.v[3] = 1;
         options.v[4] = 1;
-        ov96_021EA8A8(s->icons, 9, mons, &options, 0, 0);
+        PokeathlonCourseMonObjects_Load(s->icons, 9, mons, &options, 0, 0);
         PokeathlonCourse_IncrementField1ED(course);
         break;
     case 4:
-        if (!ov96_021EAA00(s->icons)) {
+        if (!PokeathlonCourseMonObjects_IsLoaded(s->icons)) {
             break;
         } else {
         Triple anims = ov96_0221C7D0;
@@ -255,17 +255,17 @@ int ov96_02201558(void *course) {
         PokeathlonCourse_SetField1F4(course, 1);
         selected = ov96_021E5F24(course);
         for (spriteIndex = 0; spriteIndex < 9; spriteIndex++) {
-            s->sprites[spriteIndex] = ov96_021EAA04(s->icons, spriteIndex);
+            s->sprites[spriteIndex] = PokeathlonCourseMonObjects_Get(s->icons, spriteIndex);
             sprite = s->sprites[spriteIndex];
-            ov96_021EAB38(sprite, 1);
+            PokeathlonCourseMonObject_SetDrawFlag(sprite, 1);
             slot = ((u8)(((selected + 1) * 3) % 12) + spriteIndex) % 12;
             x = ov96_0221C8C8[spriteIndex];
             y = ov96_0221C8EC[spriteIndex];
-            ov96_021EAC0C(sprite, anims.v[spriteIndex / 3]);
+            PokeathlonCourseMonObject_SetAnimState(sprite, anims.v[spriteIndex / 3]);
             ov96_021EAF94(sprite, x, y);
             {
                 VecFx32 iconPos = { 0, 0, 0 };
-                if (ov96_021E8BB0(ov96_021EAA20(sprite))->flipped) {
+                if (PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonObject_GetGfx(sprite))->flipped) {
                     iconPos.x = x << 12;
                     iconPos.y = (y - 40) << 12;
                 } else {
@@ -275,7 +275,7 @@ int ov96_02201558(void *course) {
                 ov96_021EB588(s->slots[slot].sprite, &iconPos);
                 ov96_021EB588(s->aux[spriteIndex], &iconPos);
             }
-            ov96_021EABA8(sprite, ov96_0221CA1C[spriteIndex] + 32);
+            PokeathlonCourseMonObject_SetDrawPriority(sprite, ov96_0221CA1C[spriteIndex] + 32);
         }
         ReadWholeNarcMemberByIdPair(raw, 170, 3);
         s->duration = 1800;

@@ -22,11 +22,11 @@ extern u16 PokeathlonCourse_GetField5F0_AtIndex(void *, u8);
 extern void PokeathlonCourse_SetStateTransitionType(void *, u32);
 extern void PokeathlonCourse_SetStateField07(void *, u32);
 
-extern void ov96_021E9510(void *);
-extern void ov96_021E95F8(void *, void *, u32, u32, u8, u8, u32);
-extern void ov96_021E93B4(void *, u32);
-extern void ov96_021E952C(void *);
-extern void ov96_021E9570(void *, u32);
+extern void PokeathlonCourseScoreList_Init(void *);
+extern void PokeathlonCourse_AddScoreEntry(void *, void *, u32, u32, u8, u8, u32);
+extern void PokeathlonCourseScoreList_Rank(void *, u32);
+extern void PokeathlonCourseScoreList_AddPointsToTotals(void *);
+extern void PokeathlonCourseScoreList_SaveEventPoints(void *, u32);
 extern void ov96_0221A56C(void *, u32);
 extern void ov96_021EAF78(void *, u32, u32, fx32 *, fx32 *, s32 *);
 

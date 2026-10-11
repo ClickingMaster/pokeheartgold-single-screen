@@ -1,7 +1,7 @@
 #include "r40_overlay_96_residual_54_residual_3_private.h"
 
 void ov96_021F2B24(void *course, u32 *table, u32 a2, u32 a3, void *dest) {
-    u8 *entry = ov96_021E60D8(course, a2, a3);
+    u8 *entry = PokeathlonCourse_GetMonStats(course, a2, a3);
 
     U16_AT(dest, 0x8a) = table[entry[0]];
     U16_AT(dest, 0x8c) = *(u32 *)((u8 *)table + entry[3] * 4 + 0x14);

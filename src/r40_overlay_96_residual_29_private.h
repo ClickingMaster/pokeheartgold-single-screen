@@ -15,9 +15,9 @@ typedef struct Ov96PositionObject {
     s32 center;
     s32 bottom;
 } Ov96PositionObject;
-void *ov96_021E8BAC(void *);
-BOOL ov96_021E92AC(void *);
-void ov96_021EAD88(Ov96PositionObject *, s32, s32, u32);
+void *PokeathlonCourseMonGfx_GetSprite(void *);
+BOOL PokeathlonCourseMonGfx_IsShiftedUp(void *);
+void PokeathlonCourseMonObject_SetPosition(Ov96PositionObject *, s32, s32, u32);
 void Sprite_SetMatrix(void *, VecFx32 *);
 void ov96_021EAF94(Ov96PositionObject *, s32, s32);
 void ov96_021EB01C(Ov96PositionObject *, s32, s32, u32);

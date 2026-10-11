@@ -20,9 +20,9 @@ BOOL ov96_021F107C(void *course) {
         if (flag) {
             ov96_021EB63C(PTR_AT(work, 0x18), 1);
             ov96_021EB144(PTR_AT(work, 0x76C), 1);
-            ov96_021E65A4(course);
+            PokeathlonCourse_StopMarkerAnims(course);
             touch = PokeathlonCirclePushDisplay_GetScore(PTR_AT(work, 0x774));
-            ov96_021E8318(course, touch);
+            PokeathlonCourse_SetRecordScore(course, touch);
             ov96_021F2EFC(work, touch);
             return TRUE;
         }
@@ -43,7 +43,7 @@ BOOL ov96_021F107C(void *course) {
         U8_AT(work, 0x72A) = 0;
     }
     if (System_GetTouchNew()) {
-        ov96_021E8228(course, (u8)ov96_021E5F24(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, (u8)ov96_021E5F24(course), 3, 0, 1);
     }
     if (System_GetTouchHeld()) {
         touch[4] = gSystem.touchX;

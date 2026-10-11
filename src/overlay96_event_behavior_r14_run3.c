@@ -7,7 +7,7 @@ void ov96_0221A57C(void *p, int which) {
     u8 i;
     if (fn != NULL) {
         for (i = 0; i < 4; i++) {
-            u8 *r = ov96_021E94EC(p, i);
+            u8 *r = PokeathlonCourseScoreList_GetRanked(p, i);
             U16(r, 0xa) = (u16)fn((u16)U32(r, 0xc));
         }
     } else {

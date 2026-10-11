@@ -11,7 +11,7 @@
 
 void *Heap_Alloc(u32, u32);
 void *NARC_New(u32, u32);
-void *ov49_02258D70(void *, u32);
+void *WiFiPlazaObj_FindById(void *, u32);
 s64 _ll_mul(s64, s64);
 
 typedef struct Ov49Interpolation {

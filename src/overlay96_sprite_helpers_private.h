@@ -12,9 +12,9 @@ typedef struct Ov96R31Rec { u16 active; u16 shown; Sprite *sprite; u16 kind; u16
 typedef struct Ov96R31Config { s32 capacity; s32 resourceCount; u8 managerCounts[4]; } Ov96R31Config;
 typedef struct Ov96R31Work { u32 heap; s32 used; Ov96R31Config config; void *spriteList; u8 pad18[0x128]; void *resources[4]; u8 *resourceRecords; Ov96R31Rec *records; } Ov96R31Work;
 extern void GF_AssertFail(void);
-extern void *ov96_021EAA04(void *, int);
-extern void *ov96_021EAA20(void *);
-extern void *ov96_021E8BAC(void *);
+extern void *PokeathlonCourseMonObjects_Get(void *, int);
+extern void *PokeathlonCourseMonObject_GetGfx(void *);
+extern void *PokeathlonCourseMonGfx_GetSprite(void *);
 extern void **ov96_021EB5EC(Ov96R31Work *, int, int);
 extern Sprite *ov96_021EB408(Ov96R31Work *, int, int, int, u8);
 extern Ov96R31Rec *ov96_021EB4F4(Ov96R31Work *, int, int);

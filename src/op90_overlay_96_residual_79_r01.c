@@ -57,12 +57,12 @@ void PlaySEOnPlayer(u32 seqNo, u32 playerNo);
 u32 sub_02006190(u32 a);
 void ov96_021FEECC(void *screen, Actor *actor, VecFx32 *pos, Packet *packet, u8 index, u8 target, Packet *info, int a7, int a8, int a9);
 void ov96_02200950(void *screen, u8 index, u8 target, u8 hide, int status);
-void ov96_021EAB38(void *sprite, int value);
+void PokeathlonCourseMonObject_SetDrawFlag(void *sprite, int value);
 void ov96_021EAF94(void *sprite, int x, int y);
 void ov96_021FFB7C(Actor *actor, int y, int flag);
-void *ov96_021E60C0(void *course, int participant, int member);
+void *PokeathlonCourse_GetPerformance(void *course, int participant, int member);
 void ov96_021FFAEC(void *mon, VecFx32 *pos, void *sprite);
-void ov96_021EAC5C(void *sprite, int value);
+void PokeathlonCourseMonObject_SetAnim(void *sprite, int value);
 void ov96_021FFE38(int x, int seqNo, int flag);
 u8 ov96_02200BC8(void *screen, int index);
 void ov96_02200A18(void *screen, u8 a, u8 b);
@@ -157,15 +157,15 @@ void ov96_021FE550(void *course, int selected, Actor *actor, Shared *shared) {
         }
         ov96_02200950(s->screen, i, (u8)target, hide, status);
         if (actor->inactive == 0 && sx >= -32 && sx <= 288) {
-            ov96_021EAB38(sprite, 1);
+            PokeathlonCourseMonObject_SetDrawFlag(sprite, 1);
         } else {
-            ov96_021EAB38(sprite, 0);
+            PokeathlonCourseMonObject_SetDrawFlag(sprite, 0);
         }
         for (j = 0; j < 3; j++) {
             ov96_021EAF94(actor->sprites[j], sx, packet->y[i]);
         }
         ov96_021FFB7C(actor, packet->y[i], i == ov96_021E5F24(course));
-        ov96_021FFAEC(ov96_021E60C0(course, i, target), &world, actor->sprite6C);
+        ov96_021FFAEC(PokeathlonCourse_GetPerformance(course, i, target), &world, actor->sprite6C);
         displaced = world;
         displaced.y -= FX32_CONST(24);
         ov96_021EB588(actor->sprite78, &displaced);
@@ -178,7 +178,7 @@ void ov96_021FE550(void *course, int selected, Actor *actor, Shared *shared) {
                     ov96_021EB52C(actor->sprite78, 1, 1);
                     ov96_021EB564(actor->sprite78, 4);
                 }
-                ov96_021EAC5C(sprite, 8);
+                PokeathlonCourseMonObject_SetAnim(sprite, 8);
                 animated = TRUE;
                 if (actor->pace <= 1 && actor->latch == 0) {
                     ov96_021FFE38(sx, 0x8A7, own);
@@ -191,7 +191,7 @@ void ov96_021FE550(void *course, int selected, Actor *actor, Shared *shared) {
                     ov96_021EB52C(actor->sprite78, 1, 1);
                     ov96_021EB564(actor->sprite78, 5);
                 }
-                ov96_021EAC5C(sprite, 8);
+                PokeathlonCourseMonObject_SetAnim(sprite, 8);
                 animated = TRUE;
                 if (actor->pace <= 1 && actor->latch == 0) {
                     ov96_021FFE38(sx, 0x8A7, own);
@@ -215,7 +215,7 @@ void ov96_021FE550(void *course, int selected, Actor *actor, Shared *shared) {
                     ov96_021EB52C(actor->sprite6C, 1, 1);
                     ov96_021EB564(actor->sprite6C, 7);
                 }
-                ov96_021EAC5C(sprite, 21);
+                PokeathlonCourseMonObject_SetAnim(sprite, 21);
                 hurt = TRUE;
                 if (own) {
                     if (!sub_02006190(3)) {
@@ -232,7 +232,7 @@ void ov96_021FE550(void *course, int selected, Actor *actor, Shared *shared) {
                 break;
             }
             if (!animated && !hurt) {
-                ov96_021EAC5C(sprite, 0);
+                PokeathlonCourseMonObject_SetAnim(sprite, 0);
             }
         } else {
             ov96_021EB52C(actor->sprite78, 1, 0);

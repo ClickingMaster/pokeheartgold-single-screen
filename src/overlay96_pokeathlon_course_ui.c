@@ -79,7 +79,7 @@ void ov96_022038D4(PokeathlonCourseData *course) {
     if (v > 999) {
         v = 999;
     }
-    ov96_021E8318(course, v);
+    PokeathlonCourse_SetRecordScore(course, v);
     ov96_0220337C(heapPtr, v);
 }
 

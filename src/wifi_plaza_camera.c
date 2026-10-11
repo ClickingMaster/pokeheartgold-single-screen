@@ -8,7 +8,7 @@
 extern const CameraAngle sWiFiPlazaCameraAngle;
 
 // Object manager (wifi_plaza_obj): writes the object's position
-void ov49_02259154(void *object, VecFx32 *position);
+void WiFiPlazaObj_GetPosition(void *object, VecFx32 *position);
 
 WiFiPlazaCamera *WiFiPlazaCamera_Create(enum HeapID heapID) {
     WiFiPlazaCamera *camera = Heap_Alloc(heapID, sizeof(WiFiPlazaCamera));
@@ -37,7 +37,7 @@ void WiFiPlazaCamera_Delete(WiFiPlazaCamera *camera) {
 
 void WiFiPlazaCamera_Update(WiFiPlazaCamera *camera) {
     if (camera->followObject != NULL) {
-        ov49_02259154(camera->followObject, &camera->target);
+        WiFiPlazaObj_GetPosition(camera->followObject, &camera->target);
         camera->target.x += 0x8000;
         camera->target.z -= 0x20000;
     }

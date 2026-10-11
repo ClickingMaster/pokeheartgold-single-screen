@@ -52,23 +52,23 @@ typedef struct Pos { s32 x, y; } Pos;
 typedef struct Anchor { s16 x, y; } Anchor;
 extern const s16 ov96_0221D6E4[4][2];
 void ov96_0221918C(void *course);
-void *ov96_021EAA04(void *objects, u8 idx);
-void ov96_021EAB38(void *obj, u8 flag);
-void *ov96_021E60C0(void *course, u8 row, u8 col);
+void *PokeathlonCourseMonObjects_Get(void *objects, u8 idx);
+void PokeathlonCourseMonObject_SetDrawFlag(void *obj, u8 flag);
+void *PokeathlonCourse_GetPerformance(void *course, u8 row, u8 col);
 int ov96_021E6138(void *);
 void ov96_021EAF70(void *obj, s32 x, s32 y);
-void ov96_021EAA20(void *obj);
-void ov96_021EABE0(void *obj, int);
+void PokeathlonCourseMonObject_GetGfx(void *obj);
+void PokeathlonCourseMonObject_SetAffineOverwriteMode(void *obj, int);
 void ov96_02218510(void *obj, int);
 u32 ov96_021E5F24(void *course);
-void ov96_021EAC0C(void *obj, int);
-void ov96_021EABA8(void *obj, int);
+void PokeathlonCourseMonObject_SetAnimState(void *obj, int);
+void PokeathlonCourseMonObject_SetDrawPriority(void *obj, int);
 void ov96_021EAF94(void *obj, s32 x, s32 y);
 int ov96_021E6104(void);
 void ov96_021EAF6C(void *obj, int);
 void ov96_021EB0A4(void *obj, s32 x, s32 y, s32 *outX, s32 *outY);
 Info *ov96_0221935C(void *course, u8 row, u8 col);
-void ov96_021E62AC(void *course, int, void *res, void *list, int, int, Anchor *anchor);
+void PokeathlonCourse_CreateStartSprites(void *course, int, void *res, void *list, int, int, Anchor *anchor);
 void ov96_02218578(Entity *e, int);
 void ov96_02217B84(Work *w, void *course);
 // @fn ov96_02217B84
@@ -93,13 +93,13 @@ void ov96_02217B84(Work *w, void *course) {
         row = i / 3;
         col = i % 3;
         item = &w->regions[row].entity.items_[col];
-        obj = ov96_021EAA04(w->objects, i);
-        ov96_021EAB38(obj, col == 0);
-        n = ov96_021E6138(ov96_021E60C0(course, row, col));
+        obj = PokeathlonCourseMonObjects_Get(w->objects, i);
+        PokeathlonCourseMonObject_SetDrawFlag(obj, col == 0);
+        n = ov96_021E6138(PokeathlonCourse_GetPerformance(course, row, col));
         ov96_021EAF70(obj, coords[n - 1].x, coords[n - 1].y);
-        obj = ov96_021EAA04(w->objects, i);
-        ov96_021EAA20(obj);
-        ov96_021EABE0(obj, 2);
+        obj = PokeathlonCourseMonObjects_Get(w->objects, i);
+        PokeathlonCourseMonObject_GetGfx(obj);
+        PokeathlonCourseMonObject_SetAffineOverwriteMode(obj, 2);
         ov96_02218510(obj, 1);
         x = ov96_0221D6E4[row][0];
         y = ov96_0221D6E4[row][1];
@@ -107,8 +107,8 @@ void ov96_02217B84(Work *w, void *course) {
             t.anchor.x = x;
             t.anchor.y = y;
         }
-        ov96_021EAC0C(obj, 2);
-        ov96_021EABA8(obj, 7);
+        PokeathlonCourseMonObject_SetAnimState(obj, 2);
+        PokeathlonCourseMonObject_SetDrawPriority(obj, 7);
         ov96_021EAF94(obj, x, y);
         ov96_021EAF6C(obj, ov96_021E6104());
         ov96_021EB0A4(obj, x, y, &t.px, &t.py);
@@ -117,7 +117,7 @@ void ov96_02217B84(Work *w, void *course) {
         item->info = ov96_0221935C(course, row, col);
         item->value = item->info->value;
     }
-    ov96_021E62AC(course, 0, w->resource, SpriteManager_GetSpriteList(w->spriteManager), 1, 1, &t.anchor);
+    PokeathlonCourse_CreateStartSprites(course, 0, w->resource, SpriteManager_GetSpriteList(w->spriteManager), 1, 1, &t.anchor);
     for (i = 0; i < 4; i++) {
         e = &w->regions[i].entity;
         e->region = &w->regions[i];

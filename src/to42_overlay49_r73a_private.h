@@ -27,12 +27,12 @@ typedef struct Ov49CounterState {
 #define OV49_ENTRIES(s) ((Ov49Entry *)((u8 *)(s) + 0xC))
 
 extern u32 ov49_02258F70(void *);
-extern void *ov49_02258DAC(void *);
-extern u32 ov49_02258E60(void *, int);
+extern void *WiFiPlazaObj_GetOwnPlayer(void *);
+extern u32 WiFiPlazaObj_GetParam(void *, int);
 extern void ov49_02259130(void *, int);
-extern void ov49_02259154(void *, VecFx32 *);
-extern void ov49_02259148(void *, VecFx32 *);
-extern void ov49_02259160(void *, u32);
+extern void WiFiPlazaObj_GetPosition(void *, VecFx32 *);
+extern void WiFiPlazaObj_SetPosition(void *, VecFx32 *);
+extern void WiFiPlazaObj_SetDirection(void *, u32);
 extern void ov49_0225919C(void *, int);
 extern void ov49_0226540C(void *, fx32, fx32, fx32, fx32, fx32, fx32, u32);
 extern u32 ov49_02265434(void *, s32);

@@ -5,14 +5,14 @@
 int ov96_02204DF8(void *course) {
     void *gfx = PokeathlonCourse_GetGraphicsSystem(course);
     int i;
-    ov96_021E9510(gfx);
+    PokeathlonCourseScoreList_Init(gfx);
     for (i = 0; i < 4; i++) {
-        ov96_021E95F8(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, 0x124);
+        PokeathlonCourse_AddScoreEntry(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, 0x124);
     }
-    ov96_021E93B4(gfx, 1);
+    PokeathlonCourseScoreList_Rank(gfx, 1);
     ov96_0221A56C(gfx, 1);
-    ov96_021E952C(gfx);
-    ov96_021E9570(gfx, 1);
+    PokeathlonCourseScoreList_AddPointsToTotals(gfx);
+    PokeathlonCourseScoreList_SaveEventPoints(gfx, 1);
     return 1;
 }
 
@@ -31,8 +31,8 @@ int ov96_02204E58(void *course) {
     RemoveWindow(p + 4);
     Heap_Free(PTR(p, 0));
     ov96_021EB21C(PTR(p, 0x20));
-    ov96_021EA894(PTR(p, 0x348));
-    ov96_021E9C0C(PTR(p, 0x344));
+    PokeathlonCourseMonObjects_Free(PTR(p, 0x348));
+    PokeathlonCourseSprites_FreeResources(PTR(p, 0x344));
     OamManager_Free();
     ObjCharTransfer_Destroy();
     ObjPlttTransfer_Destroy();

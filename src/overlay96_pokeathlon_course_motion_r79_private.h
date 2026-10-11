@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-extern void ov96_021EAB38(void *sprite, int value);
+extern void PokeathlonCourseMonObject_SetDrawFlag(void *sprite, int value);
 extern void ov96_021EB52C(void *sprite, int a, int b);
 extern void ov96_021EB564(void *sprite, int value);
 extern void ov96_021EB588(void *sprite, const void *position);

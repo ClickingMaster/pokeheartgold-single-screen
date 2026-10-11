@@ -39,7 +39,7 @@ void ov49_02267908(void *ctx, void *state, u32 count) {
     u32 i;
     int j;
 
-    ov49_02259154((void *)U32_AT(state, 8), &base);
+    WiFiPlazaObj_GetPosition((void *)U32_AT(state, 8), &base);
     for (i = 0; i < count; i++) {
         u32 baseIdx = i * 4;
         u32 tableIdx = i + 13;

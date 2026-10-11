@@ -20,7 +20,7 @@ extern u32 ov45_02230920(void *);
 extern u32 ov45_022308B0(void *);
 extern u32 ov45_02230978(void *);
 extern u32 ov45_02230994(void *);
-extern void ov49_02259764(void *, u32, u32);
+extern void WiFiPlazaObj_SlideOneCell(void *, u32, u32);
 extern void ov49_0225AB14(void *, u32, u32);
 extern void ov49_0225B124(void *);
 extern void ov49_0225CD58(void *);

@@ -193,7 +193,7 @@ WiFiPlazaEvent *WiFiPlazaEvent_Create(enum HeapID heapID, WiFiPlazaRoomWork *roo
     event->light = WiFiPlazaLight_Create(heapID, colorSet, light1Set, thirdSet);
     event->unk14 = ov49_02268FAC(room, heapID);
     event->unk18 = ov49_02268A0C(event->lobby, event->models, heapID);
-    ov49_02258BEC(event->objManager, colorSet);
+    WiFiPlazaObj_SetLightSet(event->objManager, colorSet);
     mode = ov45_0222A35C(event->lobby);
     ov45_0222A324(event->lobby);
     flagB = ov45_0222A374(event->lobby);
@@ -229,7 +229,7 @@ void WiFiPlazaEvent_Update(WiFiPlazaEvent *event) {
     if (ov45_0222A288(event->lobby, 1)) {
         set = WiFiPlazaEvent_GetColorSet(ov45_0222A3BC(event->lobby));
         WiFiPlazaLight_FadeToColorSet(event->light, set);
-        ov49_02258C08(event->objManager, set);
+        WiFiPlazaObj_FadeToLightSet(event->objManager, set);
     }
     if (ov45_0222A288(event->lobby, 2)) {
         set = WiFiPlazaEvent_GetLight1Set(ov45_0222A3D4(event->lobby));
@@ -540,13 +540,14 @@ void WiFiPlazaEvent_StopLoopSE(UnkStruct_ov49_02268A0C *effect) {
     }
 }
 
-// Player state handler: talk prompt (message bank 1) with a yes/no menu.
+// Player state handler: talking to the special object (map tag 97), which turns to the player; message bank 1
+// with a yes/no menu.
 BOOL ov49_02268DCC(void *state, WiFiPlazaRoomWork *room) {
     u32 *nextStep = ov49_0225EF84(state);
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
     void *objManager = WiFiPlazaRoom_GetObjManager(room);
-    void *ownObj = ov49_02258DB0(objManager);
-    void *obj = ov49_02258DAC(objManager);
+    void *special = WiFiPlazaObj_GetSpecial(objManager);
+    void *player = WiFiPlazaObj_GetOwnPlayer(objManager);
 
     switch (ov49_0225EF88(state)) {
     case 0: {
@@ -555,10 +556,10 @@ BOOL ov49_02268DCC(void *state, WiFiPlazaRoomWork *room) {
 
         nextStep = ov49_0225EF40(state, 4);
         PlaySE(0x5DC);
-        direction = ov42_022282A4(ov49_02258E60(obj, 6));
-        ov49_02258EEC(objManager, ownObj, 0);
-        ov49_02259130(ownObj, 0);
-        ov49_02259160(ownObj, direction);
+        direction = ov42_022282A4(WiFiPlazaObj_GetParam(player, 6));
+        WiFiPlazaObj_SetHandler(objManager, special, 0);
+        ov49_02259130(special, 0);
+        WiFiPlazaObj_SetDirection(special, direction);
         if (ov45_0222A330(lobby) != 0) {
             message = WiFiPlazaRoom_GetMsgString(room, 1, 3);
             *nextStep = 4;
@@ -611,10 +612,10 @@ BOOL ov49_02268DCC(void *state, WiFiPlazaRoomWork *room) {
     case 4:
         WiFiPlazaRoom_CloseMessage(room);
         WiFiPlazaRoom_CloseYesNoMenu(room);
-        ov49_02258EEC(objManager, obj, 1);
+        WiFiPlazaObj_SetHandler(objManager, player, 1);
         ov49_0225EF68(state);
-        ov49_02259130(ownObj, 1);
-        ov49_02258EAC(objManager, ownObj, 0, 1);
+        ov49_02259130(special, 1);
+        ov49_02258EAC(objManager, special, 0, 1);
         return TRUE;
     case 5:
         if (WiFiPlazaRoom_IsMessageFinished(room) == TRUE) {

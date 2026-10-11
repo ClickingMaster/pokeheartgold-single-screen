@@ -1,14 +1,14 @@
-	.extern ov49_0225940C
-	.extern ov49_02259410
-	.extern ov49_022594D8
-	.extern ov49_022595CC
-	.extern ov49_0225967C
-	.extern ov49_02259734
-	.extern ov49_02259740
-	.extern ov49_0225974C
-	.extern ov49_02259758
-	.extern ov49_0225991C
-	.extern ov49_022599F8
+	.extern WiFiPlazaObj_HandlerIdle
+	.extern WiFiPlazaObj_HandlerPlayerInput
+	.extern WiFiPlazaObj_HandlerWander
+	.extern WiFiPlazaObj_HandlerRiseOut
+	.extern WiFiPlazaObj_HandlerDropIn
+	.extern WiFiPlazaObj_HandlerSlideLeft
+	.extern WiFiPlazaObj_HandlerSlideRight
+	.extern WiFiPlazaObj_HandlerSlideUp
+	.extern WiFiPlazaObj_HandlerSlideDown
+	.extern WiFiPlazaObj_HandlerHop
+	.extern WiFiPlazaObj_HandlerResetHeight
 	.extern ov49_0225E420
 	.extern ov49_0225F448
 	.extern ov49_0225F518
@@ -2576,71 +2576,71 @@
 	.public ov49_02258A70
 	.public ov49_02258A90
 	.public WiFiPlazaMap_GetGrid
-	.public ov49_02258AB4
-	.public ov49_02258B20
+	.public WiFiPlazaObj_CreateManager
+	.public WiFiPlazaObj_DeleteManager
 	.public ov49_02258B44
-	.public ov49_02258B5C
+	.public WiFiPlazaObj_UpdateManager
 	.public ov49_02258BD4
 	.public ov49_02258BE0
-	.public ov49_02258BEC
-	.public ov49_02258C08
-	.public ov49_02258C1C
-	.public ov49_02258C28
-	.public ov49_02258C5C
-	.public ov49_02258CB8
-	.public ov49_02258D54
-	.public ov49_02258D70
-	.public ov49_02258DAC
-	.public ov49_02258DB0
-	.public ov49_02258DB4
-	.public ov49_02258E04
+	.public WiFiPlazaObj_SetLightSet
+	.public WiFiPlazaObj_FadeToLightSet
+	.public WiFiPlazaObj_PushCommand
+	.public WiFiPlazaObj_CreateOwnPlayer
+	.public WiFiPlazaObj_CreateOwnPlayerAt
+	.public WiFiPlazaObj_CreatePlayer
+	.public WiFiPlazaObj_Delete
+	.public WiFiPlazaObj_FindById
+	.public WiFiPlazaObj_GetOwnPlayer
+	.public WiFiPlazaObj_GetSpecial
+	.public WiFiPlazaObj_SetGridPos
+	.public WiFiPlazaObj_SetGridPosAndDir
 	.public ov49_02258E34
-	.public ov49_02258E60
-	.public ov49_02258E7C
+	.public WiFiPlazaObj_GetParam
+	.public WiFiPlazaObj_QueueCommand
 	.public ov49_02258EAC
-	.public ov49_02258EEC
-	.public ov49_02258F38
-	.public ov49_02258F3C
-	.public ov49_02258F40
+	.public WiFiPlazaObj_SetHandler
+	.public WiFiPlazaObj_IsFinished
+	.public WiFiPlazaObj_GetHandler
+	.public WiFiPlazaObj_FindFacing
 	.public ov49_02258F70
-	.public ov49_02258F7C
-	.public ov49_02258FDC
-	.public ov49_0225904C
+	.public WiFiPlazaObj_FindAt
+	.public WiFiPlazaObj_IsOnCell
+	.public WiFiPlazaObj_FindFreeNeighbor
 	.public ov49_02259130
 	.public ov49_0225913C
-	.public ov49_02259148
-	.public ov49_02259154
-	.public ov49_02259160
+	.public WiFiPlazaObj_SetPosition
+	.public WiFiPlazaObj_GetPosition
+	.public WiFiPlazaObj_SetDirection
 	.public ov49_0225916C
 	.public ov49_02259184
 	.public ov49_0225919C
 	.public ov49_022591B4
 	.public ov49_022591C0
 	.public ov49_022591CC
-	.public ov49_022591D8
-	.public ov49_0225927C
-	.public ov49_02259294
-	.public ov49_022592A8
-	.public ov49_02259320
-	.public ov49_0225932C
-	.public ov49_022593BC
-	.public ov49_022593C0
-	.public ov49_022593FC
-	.public ov49_0225940C
-	.public ov49_02259410
-	.public ov49_022594D8
-	.public ov49_022595CC
-	.public ov49_0225967C
-	.public ov49_02259734
-	.public ov49_02259740
-	.public ov49_0225974C
-	.public ov49_02259758
-	.public ov49_02259764
-	.public ov49_0225991C
-	.public ov49_022599F8
-	.public ov49_02259A20
-	.public ov49_02259A3C
-	.public ov49_02259A54
+	.public WiFiPlazaObj_SpawnMapObjects
+	.public WiFiPlazaObj_QueueMove
+	.public WiFiPlazaObj_RandomPick
+	.public WiFiPlazaObj_IsTagInDirection
+	.public WiFiPlazaObj_InitTween
+	.public WiFiPlazaObj_UpdateTween
+	.public WiFiPlazaObj_GetTweenValue
+	.public WiFiPlazaObj_AllocObj
+	.public WiFiPlazaObj_IsFree
+	.public WiFiPlazaObj_HandlerIdle
+	.public WiFiPlazaObj_HandlerPlayerInput
+	.public WiFiPlazaObj_HandlerWander
+	.public WiFiPlazaObj_HandlerRiseOut
+	.public WiFiPlazaObj_HandlerDropIn
+	.public WiFiPlazaObj_HandlerSlideLeft
+	.public WiFiPlazaObj_HandlerSlideRight
+	.public WiFiPlazaObj_HandlerSlideUp
+	.public WiFiPlazaObj_HandlerSlideDown
+	.public WiFiPlazaObj_SlideOneCell
+	.public WiFiPlazaObj_HandlerHop
+	.public WiFiPlazaObj_HandlerResetHeight
+	.public WiFiPlazaObj_InitLight
+	.public WiFiPlazaObj_StartLightFade
+	.public WiFiPlazaObj_UpdateLight
 	.public ov49_02259AA4
 	.public ov49_02259C90
 	.public ov49_02259EF8
@@ -3232,9 +3232,9 @@
 	.public ov49_02269658
 	.public ov49_0226965C
 	.public ov49_02269660
-	.public ov49_02269678
-	.public ov49_02269698
-	.public ov49_022696C0
+	.public sWiFiPlazaObjMapSpawns
+	.public sWiFiPlazaObjExitHandlers
+	.public sWiFiPlazaObjHandlers
 	.public ov49_022696E8
 	.public ov49_022696EC
 	.public ov49_022696F0
@@ -3354,32 +3354,32 @@
 	.public WiFiPlazaMap_GetGrid
 	.public ov49_02258BD4
 	.public ov49_02258BE0
-	.public ov49_02258C1C
-	.public ov49_02258DAC
-	.public ov49_02258DB0
-	.public ov49_02258F38
-	.public ov49_02258F3C
+	.public WiFiPlazaObj_PushCommand
+	.public WiFiPlazaObj_GetOwnPlayer
+	.public WiFiPlazaObj_GetSpecial
+	.public WiFiPlazaObj_IsFinished
+	.public WiFiPlazaObj_GetHandler
 	.public ov49_02258F70
 	.public ov49_02259130
 	.public ov49_0225913C
-	.public ov49_02259148
-	.public ov49_02259154
-	.public ov49_02259160
+	.public WiFiPlazaObj_SetPosition
+	.public WiFiPlazaObj_GetPosition
+	.public WiFiPlazaObj_SetDirection
 	.public ov49_0225916C
 	.public ov49_02259184
 	.public ov49_0225919C
 	.public ov49_022591B4
 	.public ov49_022591C0
 	.public ov49_022591CC
-	.public ov49_02259320
-	.public ov49_022593BC
-	.public ov49_022593FC
-	.public ov49_0225940C
-	.public ov49_02259734
-	.public ov49_02259740
-	.public ov49_0225974C
-	.public ov49_02259758
-	.public ov49_02259A3C
+	.public WiFiPlazaObj_InitTween
+	.public WiFiPlazaObj_GetTweenValue
+	.public WiFiPlazaObj_IsFree
+	.public WiFiPlazaObj_HandlerIdle
+	.public WiFiPlazaObj_HandlerSlideLeft
+	.public WiFiPlazaObj_HandlerSlideRight
+	.public WiFiPlazaObj_HandlerSlideUp
+	.public WiFiPlazaObj_HandlerSlideDown
+	.public WiFiPlazaObj_StartLightFade
 	.public WiFiPlazaRoom_GetLobby
 	.public ov49_02259FEC
 	.public WiFiPlazaRoom_GetObjManager
@@ -3547,28 +3547,28 @@ ov49_02269660: ; 0x02269660
 	.byte 0x10, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov49_02269678: ; 0x02269678
+sWiFiPlazaObjMapSpawns: ; 0x02269678
 	.byte 0x40, 0x02, 0x1E, 0x01, 0xFF, 0x00, 0x00, 0x00
 	.byte 0x41, 0x01, 0x1E, 0x01, 0xFF, 0x00, 0x00, 0x00, 0x42, 0x01, 0x1D, 0x01, 0xFF, 0x00, 0x00, 0x00
 	.byte 0x61, 0x01, 0x1D, 0x01, 0xFE, 0x00, 0x00, 0x00
 
-ov49_02269698: ; 0x02269698
+sWiFiPlazaObjExitHandlers: ; 0x02269698
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.word ov49_022599F8
+	.word WiFiPlazaObj_HandlerResetHeight
 
-ov49_022696C0: ; 0x022696C0
-	.word ov49_0225940C
-	.word ov49_02259410
-	.word ov49_022594D8
-	.word ov49_022595CC
-	.word ov49_0225967C
-	.word ov49_0225974C
-	.word ov49_02259758
-	.word ov49_02259734
-	.word ov49_02259740
-	.word ov49_0225991C
+sWiFiPlazaObjHandlers: ; 0x022696C0
+	.word WiFiPlazaObj_HandlerIdle
+	.word WiFiPlazaObj_HandlerPlayerInput
+	.word WiFiPlazaObj_HandlerWander
+	.word WiFiPlazaObj_HandlerRiseOut
+	.word WiFiPlazaObj_HandlerDropIn
+	.word WiFiPlazaObj_HandlerSlideUp
+	.word WiFiPlazaObj_HandlerSlideDown
+	.word WiFiPlazaObj_HandlerSlideLeft
+	.word WiFiPlazaObj_HandlerSlideRight
+	.word WiFiPlazaObj_HandlerHop
 
 ov49_022696E8: ; 0x022696E8
 	.byte 0x14, 0x88, 0x00, 0x00

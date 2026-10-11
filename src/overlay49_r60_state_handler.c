@@ -21,16 +21,16 @@ extern void *ov49_02269C20[];
 extern void *ov49_02269C40[];
 
 extern void *WiFiPlazaRoom_GetObjManager(void *);
-extern s32 ov49_02258DAC(void *);
+extern s32 WiFiPlazaObj_GetOwnPlayer(void *);
 extern void *WiFiPlazaRoom_GetMap(void *);
-extern s32 ov49_02258E60(void *, s32);
+extern s32 WiFiPlazaObj_GetParam(void *, s32);
 extern BOOL ov49_02261FC0(void *, void *, void **, u32, u16 *);
 extern BOOL ov45_0222AFF8(void *);
 extern BOOL ov45_0222B00C(void *);
 extern u16 ov45_0222B020(void *);
-extern BOOL ov49_0225904C(void *, s32, s32 *, u16 *);
+extern BOOL WiFiPlazaObj_FindFreeNeighbor(void *, s32, s32 *, u16 *);
 extern u32 ov49_02258E34(void *);
-extern void ov49_02258E04(void *, UnkStruct_ov44_02232914, s32);
+extern void WiFiPlazaObj_SetGridPosAndDir(void *, UnkStruct_ov44_02232914, s32);
 
 BOOL ov49_02261DBC(Ov49R60Result *result, void *state, void *ctx, void *object, u8 kind, u32 value) {
     s32 movement;
@@ -45,9 +45,9 @@ BOOL ov49_02261DBC(Ov49R60Result *result, void *state, void *ctx, void *object, 
     s32 valid = FALSE;
 
     map = WiFiPlazaRoom_GetObjManager(ctx);
-    direction = ov49_02258DAC(map);
+    direction = WiFiPlazaObj_GetOwnPlayer(map);
     sub = WiFiPlazaRoom_GetMap(ctx);
-    expected = ov49_02258E60(object, 4);
+    expected = WiFiPlazaObj_GetParam(object, 4);
     movement = 1;
 
     switch (kind) {
@@ -102,7 +102,7 @@ BOOL ov49_02261DBC(Ov49R60Result *result, void *state, void *ctx, void *object, 
         if (expected != ov45_0222B020(state)) {
             return valid;
         }
-        if (ov49_0225904C(map, direction, &movement, output) != TRUE) {
+        if (WiFiPlazaObj_FindFreeNeighbor(map, direction, &movement, output) != TRUE) {
             GF_AssertFail();
         }
         movement = ov42_022282A4(movement);
@@ -124,7 +124,7 @@ success:
     current.unk0 = packed;
     current.unk2 = packed >> 16;
     position = current;
-    ov49_02258E04(object, *(UnkStruct_ov44_02232914 *)output, movement);
+    WiFiPlazaObj_SetGridPosAndDir(object, *(UnkStruct_ov44_02232914 *)output, movement);
     result->x = position.unk0 / 16;
     result->y = position.unk2 / 16;
     result->kind = kind;

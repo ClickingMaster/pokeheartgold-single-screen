@@ -4,7 +4,7 @@ u32 ov96_02202154(void *course, u8 *state) {
     void *work = PokeathlonCourse_GetHeapAllocPtr4(course);
     switch (*state) {
     case 0:
-        if (ov96_021E637C(course)) {
+        if (PokeathlonCourse_RunStartCountdown(course)) {
             (*state)++;
         }
         break;
@@ -16,7 +16,7 @@ u32 ov96_02202154(void *course, u8 *state) {
         break;
     case 2:
         ov96_0220223C(course);
-        if (ov96_021E667C(course)) {
+        if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, U32_AT(work, 0x44));
             PokeathlonCourse_SetStateField07(course, 1);
         }

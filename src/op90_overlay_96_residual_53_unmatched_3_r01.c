@@ -14,7 +14,7 @@ typedef struct {
     Team teams[4];
 } Course;
 int ov96_021E6104(Course *course);
-BOOL ov96_021E872C(int x, int y, int a2, int a3, int r, int *out);
+BOOL PokeathlonCourse_IsInRange(int x, int y, int a2, int a3, int r, int *out);
 u8 ov96_021F20C4(Course *course, u8 team, u16 a2, u16 a3);
 // @fn ov96_021F20C4
 u8 ov96_021F20C4(Course *course, u8 team, u16 a2, u16 a3) {
@@ -28,7 +28,7 @@ u8 ov96_021F20C4(Course *course, u8 team, u16 a2, u16 a3) {
     int out;
     for (i = 0; i < 3; i++) {
         Ent *ent = &course->teams[team].ents[i];
-        if (ov96_021E872C(ent->x / FX32_ONE, ent->y / FX32_ONE, a2, a3, r, &out)) {
+        if (PokeathlonCourse_IsInRange(ent->x / FX32_ONE, ent->y / FX32_ONE, a2, a3, r, &out)) {
             dist[i] = out;
             valid[i] = TRUE;
             count++;

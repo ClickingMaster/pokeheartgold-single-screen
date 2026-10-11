@@ -14,8 +14,8 @@ int ov96_021FCE10(void *course) {
     RemoveWindow(p + 4);
     Heap_Free(PTR(p, 0));
     ov96_021EB21C(PTR(p, 0x18));
-    ov96_021EA894(PTR(p, 0x3c8));
-    ov96_021E9C0C(PTR(p, 0x3c4));
+    PokeathlonCourseMonObjects_Free(PTR(p, 0x3c8));
+    PokeathlonCourseSprites_FreeResources(PTR(p, 0x3c4));
     OamManager_Free();
     ObjCharTransfer_Destroy();
     ObjPlttTransfer_Destroy();

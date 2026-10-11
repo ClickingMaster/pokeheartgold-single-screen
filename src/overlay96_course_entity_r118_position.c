@@ -1,10 +1,10 @@
 #include "overlay96_course_entity_r118_private.h"
 
 void ov96_02218510(void *arg, int mode) {
-    void *value = ov96_021EAA20(arg);
-    int offset = ov96_021E90FC(value);
+    void *value = PokeathlonCourseMonObject_GetGfx(arg);
+    int offset = PokeathlonCourseMonGfx_GetTopRow(value);
     VecFx32 vec = { 0 };
-    int width = ov96_021E8BB0(value)[2] != 0 ? 0x40 : 0x20;
+    int width = PokeathlonCourseMonGfx_GetInfo(value)[2] != 0 ? 0x40 : 0x20;
 
     if (mode != 0) {
         vec.x = (width / 2) << FX32_SHIFT;
@@ -13,7 +13,7 @@ void ov96_02218510(void *arg, int mode) {
         vec.x = (width / 2) << FX32_SHIFT;
         vec.y = width << FX32_SHIFT;
     }
-    ov96_021EABF4(arg, &vec);
+    PokeathlonCourseMonObject_SetAffineMatrix(arg, &vec);
 }
 
 void ov96_02218578(Ov96CourseEntityR118 *object, int state) {

@@ -13,7 +13,7 @@ typedef struct Ov96Gap2Group {
     u32 rest : 14;
 } Ov96Gap2Group;
 u32 ov96_0220F3BC(const void *object);
-void ov96_021E8228(void *sprite, u8 row, u8 column, u32 kind, u32 value);
+void PokeathlonCourse_AddMonCounter(void *sprite, u8 row, u8 column, u32 kind, u32 value);
 void ov96_0220FD28(void *object, void *groups, const u8 *input);
 
 #endif

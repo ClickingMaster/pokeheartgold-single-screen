@@ -49,20 +49,20 @@
 	.extern ov96_021E5F24
 	.extern ov96_021E6F18
 	.extern ov96_021E75B8
-	.extern ov96_021E99F4
-	.extern ov96_021E99F8
-	.extern ov96_021E99FC
-	.extern ov96_021E9A04
-	.extern ov96_021E9A10
-	.extern ov96_021E9A14
-	.extern ov96_021E9A18
-	.extern ov96_021E9A1C
-	.extern ov96_021E9A24
-	.extern ov96_021E9A2C
-	.extern ov96_021E9A38
-	.extern ov96_021E9A48
+	.extern PokeathlonCourseCmd_EventsSize
+	.extern PokeathlonCourseCmd_ParticipantSize
+	.extern PokeathlonCourseCmd_AllParticipantsSize
+	.extern PokeathlonCourseCmd_ProfilesSize
+	.extern PokeathlonCourseCmd_RecordSize
+	.extern PokeathlonCourseCmd_PacketSize
+	.extern PokeathlonCourseCmd_MonCountersSize
+	.extern PokeathlonCourseCmd_ResultsSize
+	.extern PokeathlonCourseCmd_JuiceRecordSize
+	.extern PokeathlonCourseCmd_GetEventDataBuffer
+	.extern PokeathlonCourseCmd_GetRecordBuffer
+	.extern PokeathlonCourseCmd_GetResultsBuffer
 	.extern ov96_021E9A54
-	.extern ov96_021E9A68
+	.extern PokeathlonCourseCmd_GetJuiceRecordBuffer
 	.extern ov96_021EB678
 	.extern ov96_021EB680
 	.extern ov96_021EB688
@@ -74,7 +74,7 @@
 	.extern ov96_021EF18C
 	.extern ov96_021F08E4
 	.extern PokeathlonLampJump_Draw
-	.extern ov96_021F9234
+	.extern PokeathlonHurdleDash_Start
 	.extern ov96_021FCD74
 	.extern ov96_02204DE8
 	.extern PokeathlonBlockSmash_Draw

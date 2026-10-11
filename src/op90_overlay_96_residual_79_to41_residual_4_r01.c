@@ -35,7 +35,7 @@ typedef struct Player {
 
 void ov96_021EB0A4(void *sprite, int x, int y, int *outX, int *outY);
 void ov96_021EAF78(void *sprite, fx32 x, fx32 y, fx32 *outX, fx32 *outY, int *radius);
-void ov96_021E8228(void *course, u8 player, u8 type, u8 index, u32 value);
+void PokeathlonCourse_AddMonCounter(void *course, u8 player, u8 type, u8 index, u32 value);
 BOOL ov96_021FF764(void *course, Player *players, VecFx32 *out);
 
 // @fn ov96_021FF764
@@ -120,7 +120,7 @@ BOOL ov96_021FF764(void *course, Player *players, VecFx32 *out) {
                     q->recs[pIdx].timer = 0;
                     q->recs[pIdx].state = 2;
                     q->lastKind = q->recs[pIdx].kind;
-                    ov96_021E8228(course, q->id, q->idx, 1, 1);
+                    PokeathlonCourse_AddMonCounter(course, q->id, q->idx, 1, 1);
                 }
                 {
                     VecFx32 stop = { 0, 0, 0 };
@@ -131,7 +131,7 @@ BOOL ov96_021FF764(void *course, Player *players, VecFx32 *out) {
                     p->recs[kIdx].timer = 0;
                     p->recs[kIdx].state = 2;
                     p->lastKind = p->recs[kIdx].kind;
-                    ov96_021E8228(course, p->id, p->idx, 1, 1);
+                    PokeathlonCourse_AddMonCounter(course, p->id, p->idx, 1, 1);
                 }
                 GF_ASSERT(p->hit[j] == 0);
                 GF_ASSERT(q->hit[i] == 0);
@@ -151,8 +151,8 @@ BOOL ov96_021FF764(void *course, Player *players, VecFx32 *out) {
                 }
                 q->stun = 6;
                 p->stun = 18;
-                ov96_021E8228(course, q->id, q->idx, 4, 1);
-                ov96_021E8228(course, p->id, p->idx, 4, 1);
+                PokeathlonCourse_AddMonCounter(course, q->id, q->idx, 4, 1);
+                PokeathlonCourse_AddMonCounter(course, p->id, p->idx, 4, 1);
                 break;
             } else {
                 p->hit[j] = 0;

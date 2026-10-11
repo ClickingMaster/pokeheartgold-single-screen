@@ -4,7 +4,7 @@ extern void GF_AssertFail(void);
 extern void ManagedSprite_SetDrawFlag(void *, u32);
 extern void ManagedSprite_SetPositionXYWithSubscreenOffset(void *, s32, s32, s32);
 void ov96_02219BDC(void *, void *, void *, u32, u32, s16, s16);
-extern void ov96_021E6168(void *, u32, u32, void *);
+extern void PokeathlonCourse_GetMonInfo(void *, u32, u32, void *);
 extern void ov96_021EECB8(void *, void *, u32, u32, u32, u32);
 extern void ov96_021EEBE4(void *, void *, u32, u32, u32);
 extern void BufferString(void *, u32, void *, u32, u32, u32);
@@ -37,13 +37,13 @@ void ov96_02219A5C(void *, s32);
 
 void ov96_02219DA8(void *a, u32 b, void *sprite, u32 d, u8 e) {
     u32 v[4];
-    ov96_021E6168(a, d, e, v);
+    PokeathlonCourse_GetMonInfo(a, d, e, v);
     ov96_021EEBE4(sprite, v, 0, 0, b);
 }
 
 void ov96_02219DD0(void *p, s32 idx, u32 c) {
     u32 v[4];
     void *sprite = *(void **)((u8 *)p + 0x60 + (idx + 2) * 4);
-    ov96_021E6168(*(void **)p, idx, c, v);
+    PokeathlonCourse_GetMonInfo(*(void **)p, idx, c, v);
     ov96_021EECB8(sprite, v, U16AT(p, 0x20), U32AT(p, 0x24), idx << 9, U32AT(p, 4));
 }

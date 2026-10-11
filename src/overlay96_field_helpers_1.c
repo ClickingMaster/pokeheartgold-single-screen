@@ -17,11 +17,11 @@ extern u32 MTRandom(void);
 extern void *NARC_New(u32, u32);
 extern void NARC_Delete(void *);
 extern void NARC_ReadWholeMember(void *, u32, void *);
-extern u32 ov96_021E679C(u16,u16);
+extern u32 PokeathlonCourse_GetPerformanceFileId(u16,u16);
 extern u32 ov96_021EDCEC(void *,u32,u32,u32);
 extern void BufferIntegerAsString(void *,u32,s32,u32,u32,u32);
 extern const s32 ov96_0221B058[];
-extern void ov96_021ED5AC(void *,u8,u8); extern void ov96_021ECC38(void *,u8,u16); extern void ov96_021EC298(void *,u8); extern void ov96_021EAA04(void *,u8); extern void *ov96_021EAA20(void *); extern void *ov96_021E8BB0(void *); extern void sub_02006E3C(u8); extern u32 PlayCry(u16,u8);
+extern void ov96_021ED5AC(void *,u8,u8); extern void ov96_021ECC38(void *,u8,u16); extern void ov96_021EC298(void *,u8); extern void PokeathlonCourseMonObjects_Get(void *,u8); extern void *PokeathlonCourseMonObject_GetGfx(void *); extern void *PokeathlonCourseMonGfx_GetInfo(void *); extern void sub_02006E3C(u8); extern u32 PlayCry(u16,u8);
 typedef u32 (*Ov96R42Callback)(void *,int,int);
 int ov96_021EDDA4(void *,Ov96R42Callback,int);
 
@@ -80,6 +80,6 @@ void ov96_021ED8DC(void *course) {
 u32 ov96_021ED954(void *course, u32 idx) {
     u8 data[20]; void *narc; u8 *q; s32 result=75; s32 i;
     narc=NARC_New(0xa9,PokeathlonCourse_GetHeapID(course)); q=(u8 *)PokeathlonCourse_GetParticipantUnk04(course,idx);
-    for(i=0;i<3;i++,q+=0x28){NARC_ReadWholeMember(narc,ov96_021E679C(*(u16 *)q,*(u16 *)(q+2)),data); result-=data[0]+1;result-=data[1]+1;result-=data[2]+1;result-=data[3]+1;result-=data[4]+1;}
+    for(i=0;i<3;i++,q+=0x28){NARC_ReadWholeMember(narc,PokeathlonCourse_GetPerformanceFileId(*(u16 *)q,*(u16 *)(q+2)),data); result-=data[0]+1;result-=data[1]+1;result-=data[2]+1;result-=data[3]+1;result-=data[4]+1;}
     if(result>75)result=75; else if(result<0)result=0; NARC_Delete(narc); return result;
 }

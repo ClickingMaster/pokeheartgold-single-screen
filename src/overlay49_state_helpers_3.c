@@ -10,7 +10,7 @@ void ov49_02265858(void *p) {
 
 void ov49_02265890(void *p, Ov49Actor *a, void *object, u32 type) {
     if(type>=0x1b) GF_AssertFail();
-    ov49_02265948(p,a); a->object=object; a->type=type; a->sub=(u8 *)ov49_02258E60(object,5)+0x28;
+    ov49_02265948(p,a); a->object=object; a->type=type; a->sub=(u8 *)WiFiPlazaObj_GetParam(object,5)+0x28;
     ov49_0226A5A4[a->type](p,a); ov49_02265668(p,a,ov49_0226A610[a->type]);
 }
 

@@ -85,7 +85,7 @@ void MATH_QSort(void *ptr, u32 nmemb, u32 size, Ov96CompareFunc func, void *work
 void Sprite_SetAnimCtrlSeq(Sprite *sprite, int seq);
 void AddTextPrinterParameterizedWithColor(Window *, int, String *, int, int, int, u32, void *);
 void String_Delete(String *str);
-void ov96_021E8318(void *course, u16 v);
+void PokeathlonCourse_SetRecordScore(void *course, u16 v);
 void ov96_0220337C(void *p, u16 v);
 Ov96AnimRec *ov96_021EB594(void *p);
 void ov96_021EB630(void *p, int v);

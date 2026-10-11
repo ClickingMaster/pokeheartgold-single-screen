@@ -61,7 +61,7 @@ BOOL PokeathlonCourse_Init(OverlayManager *manager, int *state) {
         data->maxParticipants = 3;
     }
 
-    system = ov96_021E8770(ov96_021E8A24(), ov96_021E8A2C(), data, specialMode, data->heapId);
+    system = PokeathlonCourseLink_New(PokeathlonCourseCmd_GetTable(), PokeathlonCourseCmd_GetCount(), data, specialMode, data->heapId);
     data->system = system;
 
     PokeathlonCourse_InitStateInfo(&sPokeathlonStateInfoFuncTable, &data->stateInfo);
@@ -72,7 +72,7 @@ BOOL PokeathlonCourse_Init(OverlayManager *manager, int *state) {
 
     PokeathlonCourse_InitPlayerProfiles(data);
 
-    system = ov96_021E92E0(HEAP_ID_POKEATHLON);
+    system = PokeathlonCourseScoreList_New(HEAP_ID_POKEATHLON);
     data->graphicsSystem = system;
 
     if (data->args->mode != 1) {
@@ -162,9 +162,9 @@ BOOL PokeathlonCourse_Main(OverlayManager *manager, int *state) {
                 u8 *dest2;
                 u32 copyCount;
 
-                src = ov96_021E9A14();
+                src = PokeathlonCourseCmd_PacketSize();
                 dest1 = data->dataCopyBuffer1; // Destination buffer 1
-                ov96_021E87B4(0x1B, dest1, src, (int)data->system);
+                PokeathlonCourseLink_SendCommand(0x1B, dest1, src, (int)data->system);
 
                 dest1 = ov96_021E8A20(data->dataCopyBuffer2); // Destination buffer 2
                 dest2 = ov96_021E8A20(data->dataCopySource);  // Source buffer
@@ -213,7 +213,7 @@ BOOL PokeathlonCourse_Exit(OverlayManager *manager, int *state) {
     saveData = *(SaveData **)data->args;
     pokeathlonSave = Save_Pokeathlon_Get(saveData);
     result = PokeathlonSave_GetAgainUnkB00(pokeathlonSave);
-    ov96_021E7F98(data->frameCounter, 59999, result);
+    PokeathlonCourse_AddCapped(data->frameCounter, 59999, result);
 
     // Reset text flags
     TextFlags_SetCanABSpeedUpPrint(FALSE);
@@ -221,9 +221,9 @@ BOOL PokeathlonCourse_Exit(OverlayManager *manager, int *state) {
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
 
     // Free system objects
-    ov96_021E9320(data->graphicsSystem);
+    PokeathlonCourseScoreList_Free(data->graphicsSystem);
     Heap_Free(data->playerProfiles);
-    ov96_021E8810(data->system);
+    PokeathlonCourseLink_Free(data->system);
 
     // Clean up overlay data and heap
     OverlayManager_FreeData(manager);
@@ -427,7 +427,7 @@ void *PokeathlonCourse_GetSystem(PokeathlonCourseData *data) {
 }
 
 BOOL ov96_021E5F24(PokeathlonCourseData *data) {
-    return ov96_021E8828(data->system);
+    return PokeathlonCourseLink_GetNetId(data->system);
 }
 
 PlayerProfile *PokeathlonCourse_GetPlayerProfileFromData(PokeathlonCourseData *data, int index) {
@@ -498,7 +498,7 @@ void PokeathlonCourse_SetStateTransitionType(PokeathlonCourseData *data, u32 tra
 }
 
 void PokeathlonCourse_SetVBlankIntrCB(PokeathlonCourseData *data) {
-    Main_SetVBlankIntrCB(ov96_021E75BC, data);
+    Main_SetVBlankIntrCB(PokeathlonCourse_VBlankCallback, data);
 }
 
 void *PokeathlonCourse_GetGraphicsSystem(PokeathlonCourseData *data) {

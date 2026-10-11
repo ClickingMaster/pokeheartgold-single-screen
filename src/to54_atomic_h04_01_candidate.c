@@ -22,7 +22,7 @@ void ov96_0220DEAC(void *a, void *b, void *course) {
     rp = recs;
     sh = 0;
     for (; i < 12; i++) {
-        spr = ov96_021EAA04(PTR(w, 0x20), (u8)i);
+        spr = PokeathlonCourseMonObjects_Get(PTR(w, 0x20), (u8)i);
         if (e == NULL) {
             GF_AssertFail();
         }
@@ -46,7 +46,7 @@ void ov96_0220DEAC(void *a, void *b, void *course) {
             ManagedSprite_ResetSpriteAnimCtrlState(PTR(e, 0));
             ov96_0220D554(spr, 0);
             ov96_021EB10C(spr, 1.0f, 1.0f);
-            ov96_021EAB38(spr, 1);
+            PokeathlonCourseMonObject_SetDrawFlag(spr, 1);
             BITS(e, 0x18).e.f18 = 0;
             PlaySE(0x8B6);
         }
@@ -54,7 +54,7 @@ void ov96_0220DEAC(void *a, void *b, void *course) {
         if (BITS(e, 0x18).e.f18) {
             BITS(e, 0x18).e.b--;
             if (BITS(e, 0x18).e.b == 0) {
-                ov96_021EAB38(spr, 0);
+                PokeathlonCourseMonObject_SetDrawFlag(spr, 0);
             } else {
                 f32 t;
                 S32(e, 0x14) -= 0x19A;
@@ -71,7 +71,7 @@ void ov96_0220DEAC(void *a, void *b, void *course) {
         } else {
             u8 g = (u8)((BITS(b, 0x1c).n.w24 >> sh) & 3);
             ov96_021EB01C(spr, x, y, 1);
-            ov96_021EAC0C(spr, g + 1);
+            PokeathlonCourseMonObject_SetAnimState(spr, g + 1);
             if ((BITS(b, 0x20).m.n12 >> i) & 1) {
                 void *rec;
                 int q;
@@ -120,7 +120,7 @@ void ov96_0220DEAC(void *a, void *b, void *course) {
         if (rp->spr == NULL) {
             GF_AssertFail();
         }
-        ov96_021EABA8(rp->spr, sh + 7);
+        PokeathlonCourseMonObject_SetDrawPriority(rp->spr, sh + 7);
         rp++;
     }
 }
