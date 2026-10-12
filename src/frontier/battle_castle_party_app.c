@@ -45,7 +45,7 @@
 #include "oam_manager.h"
 #include "unk_0200CE7C.h"
 #include "unk_0200FA24.h"
-#include "unk_02019BA4.h"
+#include "grid_input_handler.h"
 #include "frontier_save_access.h"
 #include "communication_player_state.h"
 #include "unk_02035900.h"

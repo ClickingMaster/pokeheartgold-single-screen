@@ -5,7 +5,7 @@
 #include "constants/pokegear_card.h"
 
 #include "save.h"
-#include "unk_0202F370.h"
+#include "map_markings_ram.h"
 
 #define MOMS_BALANCE_GET 0
 #define MOMS_BALANCE_SET 1

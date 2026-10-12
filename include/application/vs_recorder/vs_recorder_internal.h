@@ -338,6 +338,44 @@ typedef struct VsRecorderDressUp {
     int downloadCount;
 } VsRecorderDressUp; // size 0x2E8
 
+// a box from the server: the sender's profile and the box
+typedef struct VsRecorderBoxDataDownload {
+    u8 header[0x80]; // GlobalTerminalNet_CopyRequestHeader source, starts with the sender's name
+    GlobalTerminalNetBoxForm form;
+} VsRecorderBoxDataDownload; // size 0x21C
+
+// VsRecorderWork.screenWork of the box data screens (send a box of the PC / view boxes by category)
+typedef struct VsRecorderBoxData {
+    PCStorage *storage;
+    GlobalTerminalNetBoxForm form; // the shown box
+    int box;                       // send: box of the PC (0-17)
+    int eva;                       // top screen blend
+    int evb;
+    int fade;
+    int cursor;        // slot of the shown Pokemon (0-29)
+    Window windows[3]; // Pokemon name (box list: list title), box name, message
+    u8 unk_1E4[0x50];
+    Window buttons[6]; // categories; box list: profile button and heading; box: "Next Pokemon"
+    u8 unk_294[0x20];
+    ManagedSprite *monIcons[30];
+    Pokepic *pokepic;                    // the shown Pokemon
+    TouchHitboxController *hitboxes[5];  // send box, send category, view category, box list, box
+    TouchHitboxController *activeHitbox; // one of hitboxes
+    VsRecorderTextSprite exitButton;
+    VsRecorderTextSprite sendButton;
+    int category; // 0-5
+    FrontierCard *card;
+    int downloadCount;
+    VsRecorderBoxDataDownload *downloads[20];
+    VsRecorderBoxDataDownload unk_3DC[20];
+    String *listItems[20][2]; // box name, sender's name
+    VsRecorderListConfig listConfig;
+    VsRecorderProfile profile; // sender of the chosen box
+    BOOL showProfile;          // box list: 1 the sender's profile is shown
+    int cursorX;               // cursor column / row in the box
+    int cursorY;
+} VsRecorderBoxData; // size 0x2F70
+
 struct VsRecorderWork {
     u32 mode;                                // 0x0000, 0 VS Recorder item, 1-6 Global Terminal
     u32 subState;                            // 0x0004, index into the screen's function table
@@ -361,7 +399,7 @@ struct VsRecorderWork {
     u8 colorScheme;                          // 0x005C, Save_Misc
     GF3DVramMan *vramMan;                    // 0x0060
     PokepicManager *pokepicManager;          // 0x0064
-    u8 unk_0068[0x47C - 0x68];               // 0x0068, starts with the OVY_39 client work
+    GlobalTerminalNet netClient;             // 0x0068, Global Terminal server client (OVY_39)
     VsRecorderTouchScroll touchScroll;       // 0x047C
     VsRecorderListWindow listWindow;         // 0x049C
     u8 unk_04EC[0x504 - 0x4EC];              // 0x04EC
@@ -683,6 +721,78 @@ void VsRecorder_OnDressUpCategoryTouch(u32 index, u32 event, void *arg);
 void VsRecorder_CreateDressUpCategoryWindows(VsRecorderWork *work);
 void VsRecorder_RemoveDressUpCategoryWindows(VsRecorderWork *work);
 void VsRecorder_RemovePhotoCaption(VsRecorderWork *work);
+
+// vs_recorder_box_data.c
+void VsRecorder_OnDressUpUploaded(void *arg, GlobalTerminalNetError *error);
+void VsRecorder_OnDressUpListReceived(void *arg, GlobalTerminalNetError *error);
+void VsRecorder_LoadBoxDataOwner(VsRecorderWork *work, int index);
+void VsRecorder_FreeBoxDataOwner(VsRecorderWork *work);
+BOOL VsRecorder_BoxFormHasMon(GlobalTerminalNetBoxForm *form);
+void VsRecorder_SkipToOccupiedSlot(VsRecorderBoxData *boxData);
+void VsRecorder_OnBoxDataSendTouch(u32 index, u32 event, void *arg);
+void VsRecorder_OnBoxDataSendCategoryTouch(u32 index, u32 event, void *arg);
+void VsRecorder_OnBoxDataViewCategoryTouch(u32 index, u32 event, void *arg);
+void VsRecorder_OnBoxListTouch(u32 index, u32 event, void *arg);
+void VsRecorder_OnBoxDataBoxTouch(u32 index, u32 event, void *arg);
+void VsRecorder_CreateBoxDataButtons(VsRecorderWork *work);
+void VsRecorder_FreeBoxDataButtons(VsRecorderWork *work);
+void VsRecorder_SelectFirstBoxMon(VsRecorderBoxData *boxData);
+void VsRecorder_PackBoxForm(SaveData *saveData, PCStorage *storage, int box, GlobalTerminalNetBoxForm *form);
+BOOL VsRecorder_BoxDataInit(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataEnter(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataSendChangeBox(VsRecorderWork *work);
+void VsRecorder_SetBoxDataSendButtonHidden(VsRecorderWork *work, BOOL hidden);
+BOOL VsRecorder_BoxDataSendShowCategories(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataSendSelectCategory(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataSendUpload(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataSendCancelCategory(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataSendQuit(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataViewQuit(VsRecorderWork *work);
+void VsRecorder_CreateBoxDataWindows(VsRecorderWork *work);
+void VsRecorder_CreateBoxDataCategoryButtons(VsRecorderWork *work);
+void VsRecorder_RemoveBoxDataCategoryButtons(VsRecorderWork *work);
+void VsRecorder_RemoveBoxDataWindows(VsRecorderWork *work);
+void VsRecorder_PrintBoxDataMessage(VsRecorderWork *work, int msgId);
+void VsRecorder_PrintBoxDataOwnerMessage(VsRecorderWork *work, int unused);
+void VsRecorder_PrintBoxName(VsRecorderWork *work);
+void VsRecorder_ClearBoxDataInfoWindows(VsRecorderWork *work);
+BOOL VsRecorder_HasAllBits(u32 flags, u32 mask);
+void VsRecorder_PrintBoxMonName(VsRecorderWork *work, int slot);
+void VsRecorder_CreateBoxMonIcons(VsRecorderWork *work);
+void VsRecorder_SetBoxMonIconsDrawFlag(VsRecorderWork *work, BOOL draw);
+void VsRecorder_FreeBoxMonIcons(VsRecorderWork *work);
+void VsRecorder_CreateBoxMonPic(VsRecorderWork *work);
+void VsRecorder_SetBoxMonPicVanished(VsRecorderWork *work, BOOL vanished);
+void VsRecorder_FreeBoxMonPic(VsRecorderWork *work);
+void VsRecorder_ShowBox(VsRecorderWork *work);
+void VsRecorder_RefreshOwnBox(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataSendShow(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataSendMain(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataSendExit(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataViewShow(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataViewSelectCategory(VsRecorderWork *work);
+void VsRecorder_CreateBoxListButtons(VsRecorderWork *work);
+void VsRecorder_PrintBoxListProfileButton(VsRecorderWork *work, u32 msgId);
+void VsRecorder_CreateNextMonButton(VsRecorderWork *work);
+void VsRecorder_RemoveNextMonButton(VsRecorderWork *work);
+void VsRecorder_RemoveBoxListButtons(VsRecorderWork *work);
+void VsRecorder_CreateBoxListTitle(VsRecorderWork *work);
+
+// vs_recorder_box_list_title.c
+void VsRecorder_RemoveBoxListTitle(VsRecorderWork *work);
+
+// vs_recorder_box_list.c
+BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work);
+void VsRecorder_CreateBoxListItems(VsRecorderWork *work);
+void VsRecorder_FreeBoxListItems(VsRecorderWork *work);
+BOOL VsRecorder_BoxListMain(VsRecorderWork *work);
+BOOL VsRecorder_BoxListBack(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataViewOpenBox(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataViewBoxMain(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataViewCloseBox(VsRecorderWork *work);
+BOOL VsRecorder_BoxListShowProfile(VsRecorderWork *work);
+BOOL VsRecorder_BoxListHideProfile(VsRecorderWork *work);
+BOOL VsRecorder_BoxDataViewExit(VsRecorderWork *work);
 
 // other OVY_40 modules (still address-named)
 BOOL VsRecorder_IsNetIdle(VsRecorderWork *work);

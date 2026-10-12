@@ -38,7 +38,7 @@
 #include "frontier_field_support.h"
 #include "unk_0206D494.h"
 #include "unk_02087E70.h"
-#include "unk_02092BE8.h"
+#include "gear_phone_ring_manager.h"
 #include "use_item_on_mon.h"
 
 static BOOL Task_StartBattle(TaskManager *taskManager);

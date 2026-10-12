@@ -99,10 +99,10 @@
 .public Colosseum_GetMixBattleMonsBuffer
 .public Colosseum_RecvMixBattleChoice
 .public Colosseum_ShowOpponentTrainerCard
-.public sub_02059DB0
-.public sub_02059E04
-.public sub_0205A1F0
-.public sub_0205A1F4
+.public UnionRoom_Start
+.public UnionRoom_Stop
+.public UnionRoom_GetFieldSystem
+.public UnionRoom_GetRecord
 .public sub_0205A200
 .public sub_0205A284
 .public sub_0205A358
@@ -174,22 +174,22 @@
 	.public Colosseum_HandleMenuInput
 	.public Colosseum_CloseMenu
 	.public Task_ColosseumTrainerCard
-	.public sub_02059E1C
+	.public UnionRoom_New
 	.public sub_02059E88
 	.public sub_02059EBC
 	.public sub_02059F30
-	.public sub_02059F54
+	.public UnionRoom_AnyOtherPlayerPresent
 	.public sub_02059F78
 	.public sub_02059FF8
-	.public sub_0205A034
-	.public sub_0205A03C
+	.public UnionRoom_SetState
+	.public Task_UnionRoom
 	.public sub_0205A07C
 	.public sub_0205A0A0
 	.public sub_0205A0B4
 	.public sub_0205A114
 	.public sub_0205A144
 	.public sub_0205A1AC
-	.public sub_0205A1D4
+	.public UnionRoom_Delete
 	.public _020FC7CC
 	.public _021D41CC
 	.public _021D41D8

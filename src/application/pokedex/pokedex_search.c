@@ -423,7 +423,7 @@ void PokedexApp_IntersectSpeciesLists(u16 *dst, u32 *count, const u16 *lookup, u
 
 // 15 entries per list page
 u32 PokedexApp_GetListCursorIndex(PokedexAppData *pokedexApp) {
-    return pokedexApp->unk_185A + 15 * pokedexApp->unk_1859;
+    return pokedexApp->listCursor + 15 * pokedexApp->listPage;
 }
 
 u16 PokedexApp_GetCursorSpecies(PokedexAppData *pokedexApp) {

@@ -8,7 +8,7 @@
 #include "scrcmd.h"
 #include "sys_flags.h"
 #include "trainer_memo.h"
-#include "unk_02092BE8.h"
+#include "gear_phone_ring_manager.h"
 #include "update_dex_received.h"
 
 BOOL ScrCmd_MomGiftCheck(ScriptContext *ctx) {

@@ -27,8 +27,8 @@
 #include "sound_playback.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_02019BA4.h"
-#include "unk_02020A0C.h"
+#include "grid_input_handler.h"
+#include "dpad_menu_box.h"
 
 #define NUMBER_ENTRY_MAX_DIGITS       6
 #define NUMBER_ENTRY_NUM_SPRITES      11

@@ -38,7 +38,7 @@ BOOL Pokedex_Init(OverlayManager *man, int *state) {
         SetDexBanksByGiratinaForm(GIRATINA_ALTERED);
     }
     GF_SndHandleSetPlayerVolume(1, 42);
-    appData->unk_185C = 2;
+    appData->language = 2;
     return TRUE;
 }
 

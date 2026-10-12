@@ -14,7 +14,7 @@
 #include "pokemon.h"
 #include "sound_playback.h"
 #include "system.h"
-#include "unk_02020A0C.h"
+#include "dpad_menu_box.h"
 
 FS_EXTERN_OVERLAY(OVY_98);
 

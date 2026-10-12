@@ -13,7 +13,7 @@
 #include "player_avatar.h"
 #include "scrcmd_20.h"
 #include "scrcmd_9.h"
-#include "unk_0204A3F4.h"
+#include "frontier_field_system.h"
 #include "unk_02035900.h"
 #include "unk_0205BFF0.h"
 #include "unk_02096910.h"

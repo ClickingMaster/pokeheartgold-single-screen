@@ -82,7 +82,7 @@
 #include "unk_020755E8.h"
 #include "unk_02087A78.h"
 #include "unk_02088288.h"
-#include "unk_02092BE8.h"
+#include "gear_phone_ring_manager.h"
 #include "legendary_cinematic_manager.h"
 
 FS_EXTERN_OVERLAY(certificates_app);

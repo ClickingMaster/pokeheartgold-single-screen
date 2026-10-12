@@ -75,7 +75,7 @@
 	.extern PokeathlonCirclePush_Main
 	.extern PokeathlonLampJump_Draw
 	.extern PokeathlonHurdleDash_Start
-	.extern ov96_021FCD74
+	.extern PokeathlonRelayRun_Draw
 	.extern ov96_02204DE8
 	.extern PokeathlonBlockSmash_Draw
 	.extern PokeathlonGoalRoll_Draw
@@ -287,10 +287,10 @@ ov96_0221A8E4: ; 0x0221A8E4
 	.word 0
 
 ov96_0221A8F8:
-	.word ov96_021FC768
-	.word ov96_021FCD74
-	.word ov96_021FCD84
-	.word ov96_021FCE10
+	.word PokeathlonRelayRun_Init
+	.word PokeathlonRelayRun_Draw
+	.word PokeathlonRelayRun_ShowResults
+	.word PokeathlonRelayRun_Exit
 	.word 0
 
 ov96_0221A90C:

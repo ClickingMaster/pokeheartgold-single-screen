@@ -6,6 +6,7 @@
 #include "bg_window.h"
 #include "filesystem.h"
 #include "font_sprite.h"
+#include "grid_input_handler.h"
 #include "message_format.h"
 #include "message_printer.h"
 #include "msgdata.h"
@@ -18,7 +19,6 @@
 #include "pokemon_types_def.h"
 #include "sprite_system.h"
 #include "sys_task.h"
-#include "unk_02019BA4.h"
 #include "yes_no_prompt.h"
 
 // Defined in src/bg_cell_manager.c, not declared in bg_cell_manager.h.
@@ -184,18 +184,18 @@ typedef struct PCBoxView {
     YesNoPrompt *yesNoPrompt;          // 0x0434
     u16 yesNoHandler;                  // 0x0438 index into sPCBoxYesNoHandlers
     u16 unk_043A;                      // 0x043A
-    u32 unk_043C;                      // 0x043C
+    u32 rowCursorPos;                  // 0x043C
     u32 fadeNextState;                 // 0x0440
     u32 delay;                         // 0x0444
-    s8 unk_0448;                       // 0x0448
-    u8 unk_0449;                       // 0x0449
-    u8 unk_044A;                       // 0x044A
-    u8 unk_044B;                       // 0x044B
-    u8 unk_044C;                       // 0x044C
+    s8 wallpaperScroll;                // 0x0448
+    u8 wallpaperBuffer;                // 0x0449
+    u8 partyPanelLowered;              // 0x044A
+    u8 cursorHolding;                  // 0x044B
+    u8 dropTarget;                     // 0x044C
     u8 wallpaperSelection;             // 0x044D
     u8 infoWindowToggle : 4;           // 0x044E which of the two info window sets is drawn next
     u8 movesDrawn : 3;
-    u8 unk_044E_7 : 1;
+    u8 restoreIconsOnMenu : 1;
     u8 unk_044F;                     // 0x044F
     NARC *personalNarc;              // 0x0450
     NARC *iconNarc;                  // 0x0454
@@ -206,11 +206,11 @@ typedef struct PCBoxView {
     int touchX;                      // 0x40B8
     int touchY;                      // 0x40BC
     u32 markings;                    // 0x40C0
-    u32 unk_40C4;                    // 0x40C4
+    u32 showOutlineAfterMove;        // 0x40C4
     u8 boxThumbnails[18][0x400];     // 0x40C8
     u16 heldItem;                    // 0x88C8
-    u16 unk_88CA;                    // 0x88CA
-    u32 unk_88CC;                    // 0x88CC
+    u16 itemFromSlot;                // 0x88CA
+    u32 dropCancelled;               // 0x88CC
     u16 monPicBuffer;                // 0x88D0
     u16 spriteDrawLock;              // 0x88D2
     PCBoxPaletteFlash paletteFlash;  // 0x88D4
@@ -231,16 +231,16 @@ struct PCBoxWork {
     u8 unk_20;              // 0x20
     u8 selectedSlot;        // 0x21
     u8 partyLayout;         // 0x22
-    u8 unk_23;              // 0x23
+    u8 partyPanelOpen;      // 0x23
     u8 trayOpen;            // 0x24
     u8 trayBox;             // 0x25
-    u8 unk_26;              // 0x26
-    u8 unk_27;              // 0x27
-    u8 unk_28;              // 0x28
-    u8 unk_29;              // 0x29
-    u8 unk_2A;              // 0x2A
-    u8 unk_2B;              // 0x2B
-    u32 unk_2C;             // 0x2C
+    u8 summaryFromTray;     // 0x26
+    u8 summaryFromHolding;  // 0x27
+    u8 summaryCursorPos;    // 0x28
+    u8 trayFromPartyPanel;  // 0x29
+    u8 moveWithButtons;     // 0x2A
+    u8 moveFromSlot;        // 0x2B
+    u32 returnCursorPos;    // 0x2C
     u32 nextState;          // 0x30
     PCBoxView *view;        // 0x34
 }; // size: 0x38

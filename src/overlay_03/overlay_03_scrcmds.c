@@ -12,7 +12,7 @@
 #include "safari_zone.h"
 #include "scrcmd.h"
 #include "map_object_movement_utilities.h"
-#include "unk_02097268.h"
+#include "safari_zone_encounters.h"
 #include "unk_02097720.h"
 
 BOOL ScrCmd_716(ScriptContext *ctx) {

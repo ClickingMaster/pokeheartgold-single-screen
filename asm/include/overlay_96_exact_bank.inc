@@ -746,26 +746,26 @@
 	.public PokeathlonHurdleDashDust_Spawn
 	.public PokeathlonHurdleDashDust_Scroll
 	.public PokeathlonHurdleDashDust_Remove
-	.public ov96_021FC768
-	.public ov96_021FCD74
-	.public ov96_021FCD84
-	.public ov96_021FCE10
-	.public ov96_021FCEE0
-	.public ov96_021FCF00
-	.public ov96_021FD060
-	.public ov96_021FD0E4
-	.public ov96_021FD128
-	.public ov96_021FD2E0
-	.public ov96_021FD3EC
-	.public ov96_021FD46C
-	.public ov96_021FD4D0
-	.public ov96_021FDA30
-	.public ov96_021FDB64
-	.public ov96_021FDC7C
-	.public ov96_021FDE08
-	.public ov96_021FDE6C
-	.public ov96_021FDE7C
-	.public ov96_021FE538
+	.public PokeathlonRelayRun_Init
+	.public PokeathlonRelayRun_Draw
+	.public PokeathlonRelayRun_ShowResults
+	.public PokeathlonRelayRun_Exit
+	.public PokeathlonRelayRun_SetGfxBanks
+	.public PokeathlonRelayRun_InitBgs
+	.public PokeathlonRelayRun_LoadBgGraphics
+	.public PokeathlonRelayRun_LoadSpriteGraphics
+	.public PokeathlonRelayRun_CreateSprites
+	.public PokeathlonRelayRun_Start
+	.public PokeathlonRelayRun_Play
+	.public PokeathlonRelayRun_SaveScores
+	.public PokeathlonRelayRun_UpdateHost
+	.public PokeathlonRelayRun_PackPacket
+	.public PokeathlonRelayRun_Update
+	.public PokeathlonRelayRun_DrawPacket
+	.public PokeathlonRelayRun_IsTouchingRunner
+	.public PokeathlonRelayRun_IsTouchingSwapButton
+	.public PokeathlonRelayRun_MoveTeams
+	.public PokeathlonRelayRunTeam_UpdateStun
 	.public ov96_021FE550
 	.public ov96_021FEAEC
 	.public ov96_021FEBF0

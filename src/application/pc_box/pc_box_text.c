@@ -11,10 +11,12 @@
 
 #include "bg_cell_manager.h"
 #include "bg_window.h"
+#include "dpad_menu_box.h"
 #include "font.h"
 #include "font_sprite.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
+#include "grid_input_handler.h"
 #include "heap.h"
 #include "item.h"
 #include "message_format.h"
@@ -31,8 +33,6 @@
 #include "string.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02019BA4.h"
-#include "unk_02020A0C.h"
 #include "yes_no_prompt.h"
 
 // Callbacks and layouts of the grid inputs (PCBox_CreateGridInput).
@@ -1192,8 +1192,8 @@ void PCBox_CreateModeGridInput(PCBoxWork *work) {
         break;
     }
     PCBox_FreeGridInput(work);
-    work->view->gridInput = GridInputHandler_Create(sPCBoxGridLayouts[layout].hitboxes, sPCBoxGridLayouts[layout].dpadBoxes, sPCBoxGridLayouts[layout].callbacks, work, TRUE, work->unk_2C, HEAP_ID_10);
-    PCBox_PlaceCursorOnGridInput(work, work->unk_2C);
+    work->view->gridInput = GridInputHandler_Create(sPCBoxGridLayouts[layout].hitboxes, sPCBoxGridLayouts[layout].dpadBoxes, sPCBoxGridLayouts[layout].callbacks, work, TRUE, work->returnCursorPos, HEAP_ID_10);
+    PCBox_PlaceCursorOnGridInput(work, work->returnCursorPos);
 }
 
 void PCBox_CreateGridInput(PCBoxWork *work, int layout, int initialPos) {

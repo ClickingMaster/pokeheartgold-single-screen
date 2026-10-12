@@ -3568,72 +3568,72 @@
 	.public VsRecorder_CreateDressUpCategoryWindows
 	.public VsRecorder_RemoveDressUpCategoryWindows
 	.public VsRecorder_RemovePhotoCaption
-	.public ov40_02236158
-	.public ov40_0223615C
-	.public ov40_02236184
-	.public ov40_022361B0
-	.public ov40_022361C8
-	.public ov40_022361E0
-	.public ov40_02236230
-	.public ov40_022362E4
-	.public ov40_02236320
-	.public ov40_0223635C
-	.public ov40_022363BC
-	.public ov40_022364D0
-	.public ov40_02236534
-	.public ov40_0223655C
-	.public ov40_02236578
-	.public ov40_022365A0
-	.public ov40_022366CC
-	.public ov40_022367B8
-	.public ov40_022368EC
-	.public ov40_02236968
-	.public ov40_02236A58
-	.public ov40_02236A70
-	.public ov40_02236C64
-	.public ov40_02236D60
-	.public ov40_02236E18
-	.public ov40_02236EB4
-	.public ov40_02236F38
-	.public ov40_02236FE0
-	.public ov40_02237008
-	.public ov40_02237030
-	.public ov40_0223707C
-	.public ov40_02237144
-	.public ov40_022371A0
-	.public ov40_022371D4
-	.public ov40_022371E4
-	.public ov40_02237284
-	.public ov40_022373E4
-	.public ov40_02237410
-	.public ov40_02237474
-	.public ov40_02237548
-	.public ov40_02237564
-	.public ov40_0223757C
-	.public ov40_02237644
-	.public ov40_022376FC
-	.public ov40_02237820
-	.public ov40_02237838
-	.public ov40_02237978
-	.public ov40_02237AA8
-	.public ov40_02237AC0
-	.public ov40_02237B7C
-	.public ov40_02237BD4
-	.public ov40_02237C54
-	.public ov40_02237C74
-	.public ov40_02237C9C
-	.public ov40_02237D6C
-	.public ov40_02237D94
-	.public ov40_02238290
-	.public ov40_02238304
-	.public ov40_02238358
-	.public ov40_022383C8
-	.public ov40_0223854C
-	.public ov40_02238820
-	.public ov40_02238838
-	.public ov40_02238A50
-	.public ov40_02238BB0
-	.public ov40_02238D5C
+	.public VsRecorder_OnDressUpUploaded
+	.public VsRecorder_OnDressUpListReceived
+	.public VsRecorder_LoadBoxDataOwner
+	.public VsRecorder_FreeBoxDataOwner
+	.public VsRecorder_BoxFormHasMon
+	.public VsRecorder_SkipToOccupiedSlot
+	.public VsRecorder_OnBoxDataSendTouch
+	.public VsRecorder_OnBoxDataSendCategoryTouch
+	.public VsRecorder_OnBoxDataViewCategoryTouch
+	.public VsRecorder_OnBoxListTouch
+	.public VsRecorder_OnBoxDataBoxTouch
+	.public VsRecorder_CreateBoxDataButtons
+	.public VsRecorder_FreeBoxDataButtons
+	.public VsRecorder_SelectFirstBoxMon
+	.public VsRecorder_PackBoxForm
+	.public VsRecorder_BoxDataInit
+	.public VsRecorder_BoxDataEnter
+	.public VsRecorder_BoxDataSendChangeBox
+	.public VsRecorder_SetBoxDataSendButtonHidden
+	.public VsRecorder_BoxDataSendShowCategories
+	.public VsRecorder_BoxDataSendSelectCategory
+	.public VsRecorder_BoxDataSendUpload
+	.public VsRecorder_BoxDataSendCancelCategory
+	.public VsRecorder_BoxDataSendQuit
+	.public VsRecorder_BoxDataViewQuit
+	.public VsRecorder_CreateBoxDataWindows
+	.public VsRecorder_CreateBoxDataCategoryButtons
+	.public VsRecorder_RemoveBoxDataCategoryButtons
+	.public VsRecorder_RemoveBoxDataWindows
+	.public VsRecorder_PrintBoxDataMessage
+	.public VsRecorder_PrintBoxDataOwnerMessage
+	.public VsRecorder_PrintBoxName
+	.public VsRecorder_ClearBoxDataInfoWindows
+	.public VsRecorder_HasAllBits
+	.public VsRecorder_PrintBoxMonName
+	.public VsRecorder_CreateBoxMonIcons
+	.public VsRecorder_SetBoxMonIconsDrawFlag
+	.public VsRecorder_FreeBoxMonIcons
+	.public VsRecorder_CreateBoxMonPic
+	.public VsRecorder_SetBoxMonPicVanished
+	.public VsRecorder_FreeBoxMonPic
+	.public VsRecorder_ShowBox
+	.public VsRecorder_RefreshOwnBox
+	.public VsRecorder_BoxDataSendShow
+	.public VsRecorder_BoxDataSendMain
+	.public VsRecorder_BoxDataSendExit
+	.public VsRecorder_BoxDataViewShow
+	.public VsRecorder_BoxDataViewSelectCategory
+	.public VsRecorder_CreateBoxListButtons
+	.public VsRecorder_PrintBoxListProfileButton
+	.public VsRecorder_CreateNextMonButton
+	.public VsRecorder_RemoveNextMonButton
+	.public VsRecorder_RemoveBoxListButtons
+	.public VsRecorder_CreateBoxListTitle
+	.public VsRecorder_RemoveBoxListTitle
+	.public VsRecorder_BoxDataViewDownload
+	.public VsRecorder_CreateBoxListItems
+	.public VsRecorder_FreeBoxListItems
+	.public VsRecorder_BoxListMain
+	.public VsRecorder_BoxListBack
+	.public VsRecorder_BoxDataViewOpenBox
+	.public VsRecorder_BoxDataViewBoxMain
+	.public VsRecorder_BoxDataViewCloseBox
+	.public VsRecorder_BoxListShowProfile
+	.public VsRecorder_BoxListHideProfile
+	.public VsRecorder_BoxDataViewExit
 	.public ov40_02238EB8
 	.public ov40_02238EBC
 	.public ov40_02238F00
@@ -4046,10 +4046,10 @@
 	.public VsRecorder_IsVBlankPaused
 	.public VsRecorder_SetVBlankPaused
 	.public VsRecorder_FreeLabeledSprite
-	.public ov40_02236158
-	.public ov40_022361C8
-	.public ov40_022371D4
-	.public ov40_02237564
+	.public VsRecorder_OnDressUpUploaded
+	.public VsRecorder_BoxFormHasMon
+	.public VsRecorder_HasAllBits
+	.public VsRecorder_FreeBoxMonPic
 	.public ov40_02238EB8
 	.public ov40_0223A274
 	.public VsRecorder_GetNet
@@ -4063,8 +4063,8 @@
 	.public VsRecorder_NumberPadFree
 	.public VsRecorder_NumberPadClearAction
 
-	thumb_func_start ov40_0223615C
-ov40_0223615C: ; 0x0223615C
+	thumb_func_start VsRecorder_OnDressUpListReceived
+VsRecorder_OnDressUpListReceived: ; 0x0223615C
 	push {r4, lr}
 	mov r2, #0x86
 	lsl r2, r2, #4
@@ -4084,11 +4084,11 @@ ov40_0223615C: ; 0x0223615C
 _02236180:
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov40_0223615C
+	thumb_func_end VsRecorder_OnDressUpListReceived
 
 
-	thumb_func_start ov40_02236184
-ov40_02236184: ; 0x02236184
+	thumb_func_start VsRecorder_LoadBoxDataOwner
+VsRecorder_LoadBoxDataOwner: ; 0x02236184
 	push {r3, r4, r5, lr}
 	add r5, r1, #0
 	mov r1, #0x86
@@ -4108,11 +4108,11 @@ ov40_02236184: ; 0x02236184
 	pop {r3, r4, r5, pc}
 	nop
 _022361AC: .word 0x00002ED8
-	thumb_func_end ov40_02236184
+	thumb_func_end VsRecorder_LoadBoxDataOwner
 
 
-	thumb_func_start ov40_022361B0
-ov40_022361B0: ; 0x022361B0
+	thumb_func_start VsRecorder_FreeBoxDataOwner
+VsRecorder_FreeBoxDataOwner: ; 0x022361B0
 	mov r1, #0x86
 	lsl r1, r1, #4
 	ldr r1, [r0, r1]
@@ -4123,4 +4123,4 @@ ov40_022361B0: ; 0x022361B0
 	nop
 _022361C0: .word 0x00002ED8
 _022361C4: .word FrontierCard_Delete
-	thumb_func_end ov40_022361B0
+	thumb_func_end VsRecorder_FreeBoxDataOwner

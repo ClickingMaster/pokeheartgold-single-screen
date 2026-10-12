@@ -132,7 +132,7 @@ Static main
     Object asm/global_terminal_app_data.o
     Object asm/bg_cell_manager_data.o
     Object src/bg_cell_manager.o
-    Object src/unk_02019BA4.o
+    Object src/grid_input_handler.o
     Object src/system.o
     Object src/heap.o
     Object src/bg_window.o
@@ -144,7 +144,7 @@ Static main
     Object src/text.o
     Object src/vram_transfer_manager.o
     Object src/texture_animation.o
-    Object src/unk_02020A0C.o
+    Object src/dpad_menu_box.o
     Object src/ascii_util.o
     Object src/geometry_math.o
     Object src/touchpad.o
@@ -209,7 +209,7 @@ Static main
     Object src/update_dex_received.o
     Object src/save_follow_mon.o
     Object src/save_pokegear.o
-    Object src/unk_0202F370.o
+    Object src/map_markings_ram.o
     Object src/safari_zone.o
     Object src/photo_album.o
     Object src/battle_record.o
@@ -306,7 +306,7 @@ Static main
     Object src/scrcmd_battle.o
     Object src/scrcmd_8.o
     Object src/scrcmd_9.o
-    Object src/unk_0204A3F4.o
+    Object src/frontier_field_system.o
     Object src/unk_0204B538.o
     Object src/scrcmd_apricorn.o
     Object src/scrcmd_mystery_gift.o
@@ -343,7 +343,7 @@ Static main
     Object asm/slop_r1_unk_02054954_m08_residual.o
     Object src/slop_r1_field_prop_collect_m08.o
     Object src/field_terrain_dispatch_extended_2.o
-    Object src/unk_02054E00.o
+    Object src/headbutt_tree.o
     Object src/field_bgm.o
     Object src/battle_transition_task.o
     Object src/field_overworld_transition.o
@@ -357,18 +357,7 @@ Static main
     Object src/comm_player_sync.o
     Object src/communication_club_link.o
     Object src/colosseum.o
-    Object src/field_application_tasks_7.o
-    Object src/r40_unk_02059EBC_run1.o
-    Object src/field_application_tasks_8.o
-    Object src/r40_unk_02059F78_run1.o
-    Object src/field_application_tasks_9.o
-    Object src/r40_unk_0205A03C_run1.o
-    Object src/field_application_tasks_10.o
-    Object src/op90_to90_extra2307_residual_1_r01.o
-    Object src/to90_extra2307_run01.o
-    Object src/field_application_tasks_11.o
-    Object src/r40_unk_0205A3B0_run1.o
-    Object src/field_application_tasks_12.o
+    Object src/union_room.o
     Object src/field_link_messages.o
     Object asm/to90_extra2308_anchor.o
     Object src/to90_extra2308_run01.o
@@ -434,7 +423,7 @@ Static main
     Object asm/map_object_behavior_data.o
     Object src/map_object_movement_commands.o
     Object src/map_object_behavior.o
-    Object src/unk_020648EC.o
+    Object src/gymmick_collision.o
     Object src/field_use_item.o
     Object src/map_object_follow.o
     Object src/to50_map_object_follow_callbacks.o
@@ -664,7 +653,7 @@ Static main
     Object src/save_data_write_error.o
     Object src/mart_bag_task.o
     Object src/unk_02092BB8.o
-    Object src/unk_02092BE8.o
+    Object src/gear_phone_ring_manager.o
     Object src/mom_gift.o
     Object src/phone_rematch.o
     Object src/to70_unk_020932E0_extra95_run01.o
@@ -726,14 +715,14 @@ Static main
     Object src/spin_trade_flow.o
     Object asm/spin_trade_flow_data.o
     Object src/unk_020971F8.o
-    Object src/unk_02097268.o
+    Object src/safari_zone_encounters.o
     Object src/unk_02097720.o
     Object src/field_effect_launch_1.o
     Object src/area_light_tasks_1.o
     Object src/legendary_cinematic_manager.o
     Object asm/unk_02097B78_r40_residual_1.o
     Object src/field_cinematic_tasks_1.o
-    Object src/unk_02097D3C.o
+    Object src/view_rankings_task.o
     Object src/pokemon_mood.o
     Object src/unk_02097F6C.o
 
@@ -2045,73 +2034,7 @@ Overlay OVY_18
     Object src/application/pokedex/ov18_021E5C40.o
     Object src/application/pokedex/ov18_021E8BF4.o
     Object src/application/pokedex/pokedex_windows.o
-    Object src/overlay18_sol_partial_4.o
-    Object src/to90_extra2205_run01.o
-    Object src/to90_extra2205_run02.o
-    Object src/to90_extra2205_run03.o
-    Object src/to90_extra2205_run04.o
-    Object src/overlay18_sol_partial_5.o
-    Object src/to90_extra2206_run01.o
-    Object src/to90_extra2206_run02.o
-    Object src/overlay18_sol_partial_6.o
-    Object src/to46_overlay18_residual7.o
-    Object src/overlay18_sol_partial_7.o
-    Object src/overlay18_icon_grid_resources_run1.o
-    Object src/to90_extra2207_run01.o
-    Object src/overlay18_icon_grid_resources_run2.o
-    Object src/to90_extra2507_run01.o
-    Object src/to50_overlay18_r8_gap2_exact.o
-    Object src/op90_to90_extra2252_residual_1_r01.o
-    Object src/to90_extra2252_run01.o
-    Object src/overlay18_icon_grid_resources_run3.o
-    Object src/to90_extra2010_run01.o
-    Object src/to90_extra2296_run01.o
-    Object src/overlay18_sol_partial_8.o
-    Object src/overlay18_area_resource_load.o
-    Object src/overlay18_pokedex_area_ui_run1.o
-    Object src/to90_extra2004_run01.o
-    Object src/overlay18_pokedex_area_ui_run2.o
-    Object src/to47_overlay18_area_ui03_run1.o
-    Object src/to90_extra2005_run01.o
-    Object src/to47_overlay18_area_ui03_run2.o
-    Object src/overlay18_pokedex_area_ui_run3.o
-    Object src/to90_extra2188_run01.o
-    Object src/overlay18_pokedex_area_ui_run4.o
-    Object src/to91_w41448_language_r2_run01.o
-    Object src/overlay18_pokedex_area_ui_run5.o
-    Object src/overlay18_area_sprite_setup.o
-    Object src/overlay18_pokedex_area_ui_asm_06b.o
-    Object src/overlay18_pokedex_area_ui_run6.o
-    Object src/overlay18_area_hit_test.o
-    Object src/overlay18_pokedex_area_ui_run7.o
-    Object src/overlay18_sol_partial_9.o
-    Object src/to90_extra2189_run01.o
-    Object src/overlay18_sol_partial_10.o
-    Object src/overlay18_pokedex_status_sprites_r11.o
-    Object src/overlay18_sol_partial_11.o
-    Object asm/overlay_18_residual_12.o
-    Object src/overlay18_scroll_math.o
-    Object src/overlay18_draw_helper_1.o
-    Object src/overlay18_sol_partial_12.o
-    Object src/to50_overlay18_residual13_exact.o
-    Object src/to91_w41492_pokedex_run01.o
-    Object src/overlay18_sol_partial_13.o
-    Object src/to90_extra2006_run01.o
-    Object src/overlay18_sol_partial_14.o
-    Object src/to90_extra2190_run01.o
-    Object src/to90_extra2190_run02.o
-    Object src/to90_extra2190_run03.o
-    Object src/to90_extra2190_run04.o
-    Object src/overlay18_sol_partial_15.o
-    Object src/overlay18_pokedex_ui_r38_1.o
-    Object src/to90_extra2191_run01.o
-    Object src/overlay18_pokedex_ui_r38_2.o
-    Object src/overlay18_sol_partial_16.o
-    Object src/overlay18_scene_helpers_1.o
-    Object src/overlay18_sol_partial_17.o
-    Object src/to90_extra2192_run01.o
-    Object src/to90_extra2192_run02.o
-    Object src/overlay18_sol_partial_18.o
+    Object src/application/pokedex/pokedex_sprites.o
     Object src/application/pokedex/pokedex_area_sprites.o
     Object src/application/pokedex/pokedex_size_check.o
     Object src/application/pokedex/pokedex_forms.o
@@ -2270,48 +2193,9 @@ Overlay OVY_40
     Object src/application/vs_recorder/vs_recorder_saved_video.o
     Object src/application/vs_recorder/vs_recorder_frontier_record.o
     Object src/application/vs_recorder/vs_recorder_dress_up.o
-    Object src/overlay_40_sol_partial_27.o
-    Object src/r40_overlay_40_residual_28_run1.o
-    Object src/overlay_40_sol_partial_28.o
-    Object src/to80_extra1876_run01.o
-    Object src/overlay40_pc_box_summary_29.o
-    Object src/to41_overlay_40_residual_29_unmatched_2_run1.o
-    Object src/to90_extra2371_run01.o
-    Object src/to41_overlay_40_residual_29_unmatched_2_run2.o
-    Object src/to70_overlay_40_residual_29_unmatched_2_to41_residual_2_extra429_run01.o
-    Object src/to41_overlay_40_residual_29_unmatched_2_run3.o
-    Object src/to90_extra2017_run01.o
-    Object src/to41_overlay_40_residual_29_unmatched_2_run4.o
-    Object src/overlay40_pc_box_state_pair.o
-    Object src/to41_overlay_40_residual_29_unmatched_2_run5.o
-    Object src/to91_w41575_window_message.o
-    Object src/to41_overlay_40_residual_29_unmatched_2_run6.o
-    Object src/to80_extra1877_run01.o
-    Object src/to41_overlay_40_residual_29_unmatched_2_run7.o
-    Object src/overlay_40_sol_partial_29.o
-    Object src/r40_overlay_40_residual_30_prefix_r22_run1.o
-    Object src/to90_extra2373_run01.o
-    Object src/overlay40_party_sprites_r30_run1.o
-    Object src/to70_overlay_40_residual_30_gap_r22_extra460_run01.o
-    Object src/overlay40_party_sprites_r30_run2.o
-    Object src/overlay_40_sol_partial_30.o
-    Object src/to47_overlay40_box_theme_loader.o
-    Object src/overlay40_residual31_run1.o
-    Object src/to80_extra1714_run01.o
-    Object src/to80_extra1520_run01.o
-    Object src/overlay40_residual31_run2.o
-    Object src/to90_extra2486_run01.o
-    Object src/r40_overlay_40_residual_31_residual_3_run1.o
-    Object src/overlay40_residual31_run3.o
-    Object src/op90_op90_overlay_40_residual_31_residual_4_to45_residual_residual_1_r01.o
-    Object src/op90_overlay_40_residual_31_residual_4_to45_residual_r01.o
-    Object src/overlay40_scene_state_37d94.o
-    Object src/overlay40_residual31_run4.o
-    Object src/r40_overlay_40_residual_31_residual_5_run1.o
-    Object src/to70_overlay_40_residual_31_residual_5_extra1203_run01.o
-    Object src/overlay40_residual31_run5.o
-    Object src/to45_ov40_r31_r6_exact.o
-    Object src/r40_overlay_40_residual_31_residual_6_run1.o
+    Object src/application/vs_recorder/vs_recorder_box_data.o
+    Object src/application/vs_recorder/vs_recorder_box_list_title.o
+    Object src/application/vs_recorder/vs_recorder_box_list.o
     Object src/overlay_40_sol_partial_31.o
     Object src/overlay40_pc_box_theme_run1.o
     Object src/to80_extra1695_run01.o
@@ -3319,24 +3203,7 @@ Overlay OVY_96
     Object src/pokeathlon/pokeathlon_hurdle_dash.o
     Object src/op90_overlay_96_residual_70_tail_r01.o
     Object src/pokeathlon/pokeathlon_hurdle_dash_race.o
-    Object src/op90_overlay_96_residual_76_remaining_r01.o
-    Object src/overlay96_exact_bank_76.o
-    Object src/to70_overlay_96_residual_77_part1_extra673_run01.o
-    Object src/overlay96_course_scene_r77_run1.o
-    Object src/to70_overlay_96_residual_77_part2_extra246_run01.o
-    Object src/overlay96_course_scene_r77_run2.o
-    Object src/to80_extra1814_run01.o
-    Object src/op90_to80_extra1814_residual_1_r01.o
-    Object src/overlay96_course_scene_r77_run3.o
-    Object src/overlay96_course_exit_values_r77.o
-    Object src/to90_extra2501_run01.o
-    Object src/op90_to90_extra2501_residual_1_r01.o
-    Object src/overlay96_course_touch_r46_77.o
-    Object src/op90_overlay_96_r77_r46_after_r01.o
-    Object src/overlay96_course_touch_hit_test.o
-    Object src/overlay96_exact_bank_77.o
-    Object src/op90_overlay_96_residual_78_r01.o
-    Object src/overlay96_exact_bank_78.o
+    Object src/pokeathlon/pokeathlon_relay_run.o
     Object src/op90_overlay_96_residual_79_r01.o
     Object src/overlay96_pokeathlon_course_motion_r79.o
     Object src/to41_overlay_96_residual_79_run1.o

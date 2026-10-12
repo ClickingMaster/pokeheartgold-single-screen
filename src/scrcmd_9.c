@@ -30,7 +30,7 @@
 #include "frontier_save_access.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
-#include "unk_0204A3F4.h"
+#include "frontier_field_system.h"
 #include "unk_0204B538.h"
 #include "frontier_field_support.h"
 #include "unk_02096910.h"

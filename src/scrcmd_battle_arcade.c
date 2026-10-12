@@ -24,7 +24,7 @@
 #include "task.h"
 #include "frontier_save_access.h"
 #include "unk_02035900.h"
-#include "unk_0204A3F4.h"
+#include "frontier_field_system.h"
 #include "unk_0205BB1C.h"
 #include "unk_0205BFF0.h"
 #include "unk_02088288.h"

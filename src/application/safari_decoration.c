@@ -35,7 +35,7 @@
 #include "touchpad.h"
 #include "touchscreen.h"
 #include "unk_02026E30.h"
-#include "unk_02097268.h"
+#include "safari_zone_encounters.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 

@@ -22,7 +22,7 @@ _02059F88:
 	bl sub_020376F8
 	cmp r0, #0
 	beq _02059FC8
-	bl sub_02059F54
+	bl UnionRoom_AnyOtherPlayerPresent
 	cmp r0, #1
 	bne _02059FC8
 	ldrb r0, [r5, #0x1c]
@@ -37,7 +37,7 @@ _02059F88:
 	ldr r1, _02059FF0 ; =sub_02059FF8
 	add r0, r4, #0
 	mov r2, #0
-	bl sub_0205A034
+	bl UnionRoom_SetState
 _02059FC8:
 	bl sub_02037FCC
 	cmp r0, #0
@@ -50,7 +50,7 @@ _02059FC8:
 	ldr r1, _02059FF4 ; =sub_02059F30
 	add r0, r4, #0
 	mov r2, #2
-	bl sub_0205A034
+	bl UnionRoom_SetState
 _02059FEA:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
@@ -80,7 +80,7 @@ _0205A00C:
 	ldr r1, _0205A030 ; =sub_02059F30
 	add r0, r4, #0
 	mov r2, #2
-	bl sub_0205A034
+	bl UnionRoom_SetState
 _0205A02E:
 	pop {r4, pc}
 	.balign 4, 0

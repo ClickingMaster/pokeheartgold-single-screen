@@ -7,7 +7,7 @@
 #include "pokegear_apps.h"
 #include "sound_system.h"
 #include "sound_playback.h"
-#include "unk_02092BE8.h"
+#include "gear_phone_ring_manager.h"
 #include "vram_transfer_manager.h"
 
 FS_EXTERN_OVERLAY(pokegear_app);

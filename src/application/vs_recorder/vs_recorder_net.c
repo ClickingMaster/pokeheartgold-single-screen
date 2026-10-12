@@ -7,8 +7,8 @@
 #include "sav_system_info.h"
 
 // server response handlers of the screens, one per request in command order (still address-named)
-void ov40_02236158(void *arg, GlobalTerminalNetError *error);
-void ov40_0223615C(void *arg, GlobalTerminalNetError *error);
+void VsRecorder_OnDressUpUploaded(void *arg, GlobalTerminalNetError *error);
+void VsRecorder_OnDressUpListReceived(void *arg, GlobalTerminalNetError *error);
 void ov40_02238EB8(void *arg, GlobalTerminalNetError *error);
 void ov40_02238EBC(void *arg, GlobalTerminalNetError *error);
 void ov40_0223A324(void *arg, GlobalTerminalNetError *error);
@@ -19,11 +19,11 @@ void ov40_02242E48(void *arg, GlobalTerminalNetError *error);
 
 // the Global Terminal client is embedded in the work (only started in the Global Terminal modes)
 static inline GlobalTerminalNet *VsRecorder_NetClient(VsRecorderWork *work) {
-    return (GlobalTerminalNet *)work->unk_0068;
+    return &work->netClient;
 }
 
 GlobalTerminalNet *VsRecorder_GetNet(VsRecorderWork *work) {
-    return (GlobalTerminalNet *)work->unk_0068;
+    return &work->netClient;
 }
 
 #pragma force_active on
@@ -36,8 +36,8 @@ void VsRecorder_InitNet(VsRecorderWork *work) {
     args.heapID = HEAP_ID_109;
     args.saveData = work->saveData;
     args.callbacks.arg = work;
-    args.callbacks.onResponse[0] = ov40_02236158;
-    args.callbacks.onResponse[1] = ov40_0223615C;
+    args.callbacks.onResponse[0] = VsRecorder_OnDressUpUploaded;
+    args.callbacks.onResponse[1] = VsRecorder_OnDressUpListReceived;
     args.callbacks.onResponse[2] = ov40_02238EB8;
     args.callbacks.onResponse[3] = ov40_02238EBC;
     args.callbacks.onResponse[4] = ov40_0223A324;

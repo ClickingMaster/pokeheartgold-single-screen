@@ -13,6 +13,7 @@
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
+#include "grid_input_handler.h"
 #include "heap.h"
 #include "item.h"
 #include "menu_input_state.h"
@@ -31,7 +32,6 @@
 #include "save_arrays.h"
 #include "sprite_system.h"
 #include "touchscreen.h"
-#include "unk_02019BA4.h"
 #include "yes_no_prompt.h"
 
 extern const GraphicsBanks sPCBoxGfxBanks;
@@ -63,7 +63,7 @@ BOOL PCBox_Init(OverlayManager *manager, int *state) {
     work->bag = Save_Bag_Get(work->args->saveData);
     work->options = Save_PlayerData_GetOptionsAddr(work->args->saveData);
     work->selectedSlot = 0xff;
-    work->unk_2C = 0;
+    work->returnCursorPos = 0;
     work->nextState = 11;
     return TRUE;
 }
@@ -804,7 +804,7 @@ void PCBox_SetupMonMove(PCBoxWork *work, u32 a, u32 b) {
     u32 i;
     u32 count;
     w = work->view->temp;
-    work->view->unk_40C4 = 1;
+    work->view->showOutlineAfterMove = 1;
     for (i = 0; i < 7; i++) {
         w->entries[i].from = 0;
         w->entries[i].to = 0;
@@ -829,7 +829,7 @@ void PCBox_SetupMonMove(PCBoxWork *work, u32 a, u32 b) {
             w->entries[0].to = b;
             w->entries[0].active = 1;
             PCBox_SetupMoveEntryToSlot(work, &w->entries[0]);
-            work->view->unk_40C4 = 0;
+            work->view->showOutlineAfterMove = 0;
             return;
         }
         sA = a - 30;
@@ -843,7 +843,7 @@ void PCBox_SetupMonMove(PCBoxWork *work, u32 a, u32 b) {
         w->entries[sA].to = b;
         w->entries[sA].active = 1;
         PCBox_SetupMoveEntryToSlot(work, &w->entries[sA]);
-        work->view->unk_40C4 = 0;
+        work->view->showOutlineAfterMove = 0;
         return;
     }
     if (a < 30) {
@@ -903,7 +903,7 @@ void ov14_021E6F3C(PCBoxWork *work, u32 a, u32 b) {
     u32 i;
     u32 count;
     w = work->view->temp;
-    work->view->unk_40C4 = 1;
+    work->view->showOutlineAfterMove = 1;
     for (i = 0; i < 7; i++) {
         w->entries[i].from = 0;
         w->entries[i].to = 0;
@@ -937,7 +937,7 @@ void ov14_021E6F3C(PCBoxWork *work, u32 a, u32 b) {
         w->entries[count].to = count + 29;
         w->entries[count].active = 1;
         PCBox_SetupMoveEntryToSprite(work, &w->entries[count]);
-        work->view->unk_40C4 = 0;
+        work->view->showOutlineAfterMove = 0;
     }
 }
 
@@ -945,7 +945,7 @@ void PCBox_SetupMonMoveToPartyEnd(PCBoxWork *work, u32 a, u32 b) {
     PCBoxView *view = work->view;
     PCBoxMoveWork *w = view->temp;
     u32 i;
-    view->unk_40C4 = 1;
+    view->showOutlineAfterMove = 1;
     for (i = 0; i < 7; i++) {
         w->entries[i].from = 0;
         w->entries[i].to = 0;
@@ -1293,42 +1293,42 @@ void PCBox_LoadScrolledWallpaper(PCBoxWork *work, s32 member, u32 direction) {
     u32 tile;
 
     if (direction == 0) {
-        work->view->unk_0448 -= 0x17;
-        if (work->view->unk_0448 < 0) {
-            work->view->unk_0448 += 0x40;
+        work->view->wallpaperScroll -= 0x17;
+        if (work->view->wallpaperScroll < 0) {
+            work->view->wallpaperScroll += 0x40;
         }
     } else if (direction == 1) {
-        work->view->unk_0448 += 0x17;
-        if (work->view->unk_0448 >= 0x40) {
-            work->view->unk_0448 -= 0x40;
+        work->view->wallpaperScroll += 0x17;
+        if (work->view->wallpaperScroll >= 0x40) {
+            work->view->wallpaperScroll -= 0x40;
         }
     }
-    if (work->view->unk_0449 == 0) {
+    if (work->view->wallpaperBuffer == 0) {
         x = 0x25c;
         tile = 0xe;
     } else {
         x = 0xb8;
         tile = 0xf;
     }
-    work->view->unk_0449 ^= 1;
-    PCBox_LoadWallpaper(work, member, work->view->unk_0448, x, tile);
+    work->view->wallpaperBuffer ^= 1;
+    PCBox_LoadWallpaper(work, member, work->view->wallpaperScroll, x, tile);
 }
 
 void PCBox_SwapWallpaper(PCBoxWork *work, s32 member) {
     u32 x;
     u32 tile;
 
-    if (work->view->unk_0449 == 0) {
+    if (work->view->wallpaperBuffer == 0) {
         x = 0x25c;
         tile = 0xe;
     } else {
         x = 0xb8;
         tile = 0xf;
     }
-    work->view->unk_0449 ^= 1;
-    PCBox_LoadWallpaperChars(work, member, work->view->unk_0448, x);
+    work->view->wallpaperBuffer ^= 1;
+    PCBox_LoadWallpaperChars(work, member, work->view->wallpaperScroll, x);
     PaletteData_LoadNarc(work->view->paletteData, NARC_a_0_1_9, member + 0x28, HEAP_ID_10, PLTTBUF_MAIN_BG, 0x20, tile << 4);
-    PCBox_LoadWallpaperTilemap(work, member, work->view->unk_0448, x, tile);
+    PCBox_LoadWallpaperTilemap(work, member, work->view->wallpaperScroll, x, tile);
     ScheduleBgTilemapBufferTransfer(work->view->bgConfig, 3);
 }
 

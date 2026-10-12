@@ -108,7 +108,7 @@ typedef struct VsRecorderVideoSearch {
     u64 videoNumber;                            // 0x4B0
 } VsRecorderVideoSearch;
 
-// vs_recorder_net.c (the Global Terminal client is embedded at VsRecorderWork.unk_0068)
+// vs_recorder_net.c (the Global Terminal client is embedded at VsRecorderWork.netClient)
 BOOL VsRecorder_IsNetIdle(VsRecorderWork *work);
 
 // vs_recorder_number_pad.c

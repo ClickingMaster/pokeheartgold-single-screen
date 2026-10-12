@@ -27,7 +27,7 @@
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
 #include "oam_manager.h"
-#include "unk_02097D3C.h"
+#include "view_rankings_task.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 

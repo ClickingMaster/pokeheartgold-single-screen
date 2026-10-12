@@ -8,7 +8,7 @@
 #include "player_avatar.h"
 #include "safari_zone.h"
 #include "map_object_movement_utilities.h"
-#include "unk_02097268.h"
+#include "safari_zone_encounters.h"
 
 int ov02_0224E31C(s32 x, s32 z);
 BOOL ov02_0224E828(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 state);

@@ -154,7 +154,7 @@ void PokedexApp_DrawCenteredSpeciesName(PokedexAppData *pokedexApp, u32 species,
         String *string;
 
         FillWindowPixelBuffer(&windows[windowId], 0);
-        string = ov18_021E590C(species, pokedexApp->unk_185C, HEAP_ID_POKEDEX_APP);
+        string = ov18_021E590C(species, pokedexApp->language, HEAP_ID_POKEDEX_APP);
         if (Pokedex_GetInternationalViewFlag(pokedexApp->args->pokedex) == TRUE) {
             PokedexApp_PrintString(&windows[windowId], string, 56, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
         } else {
@@ -245,14 +245,14 @@ void PokedexApp_DrawListEntryDetails(PokedexAppData *pokedexApp, u32 species, u3
     ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[19]);
     if (species != SPECIES_NONE) {
         PokedexApp_DrawFlavorText(pokedexApp, species, entry, 11);
-        if (pokedexApp->unk_185C == LANGUAGE_ENGLISH) {
+        if (pokedexApp->language == LANGUAGE_ENGLISH) {
             PokedexApp_DrawHeightLabel(pokedexApp, 12);
             PokedexApp_DrawWeightLabel(pokedexApp, 14);
             PokedexApp_DrawHeight(pokedexApp, species, entry, 13);
             PokedexApp_DrawWeight(pokedexApp, species, entry, 15);
         } else {
             PokedexApp_DrawForeignDexLabel(pokedexApp, 16);
-            PokedexApp_DrawForeignDexNumber(pokedexApp, species, 17, pokedexApp->unk_185C);
+            PokedexApp_DrawForeignDexNumber(pokedexApp, species, 17, pokedexApp->language);
             PokedexApp_DrawForeignSpeciesName(pokedexApp, species, 18);
             PokedexApp_DrawForeignCategory(pokedexApp, species, entry, 19);
         }
@@ -265,7 +265,7 @@ void PokedexApp_DrawFlavorText(PokedexAppData *pokedexApp, u32 species, u32 entr
         u32 x;
 
         FillWindowPixelBuffer(&pokedexApp->windows[windowId], 0);
-        string = ov18_021E59A8(species, pokedexApp->unk_185C, 0, HEAP_ID_POKEDEX_APP);
+        string = ov18_021E59A8(species, pokedexApp->language, 0, HEAP_ID_POKEDEX_APP);
         x = GetWindowWidth(&pokedexApp->windows[windowId]);
         {
             u32 stringWidth = FontID_String_GetWidthMultiline(0, string, 0);
@@ -334,7 +334,7 @@ void PokedexApp_DrawForeignDexLabel(PokedexAppData *pokedexApp, u32 windowId) {
     u32 msgNo;
 
     FillWindowPixelBuffer(&pokedexApp->windows[windowId], 0);
-    msgNo = LanguageToDexFlag(pokedexApp->unk_185C);
+    msgNo = LanguageToDexFlag(pokedexApp->language);
     PokedexApp_PrintMessage(&pokedexApp->windows[windowId], pokedexApp->msgData, msgNo + 122, 56, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
     ScheduleWindowCopyToVram(&pokedexApp->windows[windowId]);
 }
@@ -361,7 +361,7 @@ void PokedexApp_DrawForeignSpeciesName(PokedexAppData *pokedexApp, u32 species, 
     String *string;
 
     FillWindowPixelBuffer(&pokedexApp->windows[windowId], 0);
-    string = ov18_021E590C(species, pokedexApp->unk_185C, HEAP_ID_POKEDEX_APP);
+    string = ov18_021E590C(species, pokedexApp->language, HEAP_ID_POKEDEX_APP);
     PokedexApp_PrintString(&pokedexApp->windows[windowId], string, 0, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 0);
     String_Delete(string);
     ScheduleWindowCopyToVram(&pokedexApp->windows[windowId]);
@@ -372,9 +372,9 @@ void PokedexApp_DrawForeignCategory(PokedexAppData *pokedexApp, u32 species, u32
 
     FillWindowPixelBuffer(&pokedexApp->windows[windowId], 0);
     if (pokedexApp->unk_1030[entry].unk_2 == 2) {
-        string = ov18_021E595C(species, pokedexApp->unk_185C, HEAP_ID_POKEDEX_APP);
+        string = ov18_021E595C(species, pokedexApp->language, HEAP_ID_POKEDEX_APP);
     } else {
-        string = ov18_021E595C(SPECIES_NONE, pokedexApp->unk_185C, HEAP_ID_POKEDEX_APP);
+        string = ov18_021E595C(SPECIES_NONE, pokedexApp->language, HEAP_ID_POKEDEX_APP);
     }
     PokedexApp_PrintString(&pokedexApp->windows[windowId], string, 124, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 1);
     String_Delete(string);
@@ -393,14 +393,14 @@ void PokedexApp_DrawSearchEntryDetails(PokedexAppData *pokedexApp, u32 species, 
     ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[93]);
     if (species != SPECIES_NONE) {
         PokedexApp_DrawFlavorText(pokedexApp, species, entry, 85);
-        if (pokedexApp->unk_185C == LANGUAGE_ENGLISH) {
+        if (pokedexApp->language == LANGUAGE_ENGLISH) {
             PokedexApp_DrawHeightLabel(pokedexApp, 86);
             PokedexApp_DrawWeightLabel(pokedexApp, 88);
             PokedexApp_DrawHeight(pokedexApp, species, entry, 87);
             PokedexApp_DrawWeight(pokedexApp, species, entry, 89);
         } else {
             PokedexApp_DrawForeignDexLabel(pokedexApp, 90);
-            PokedexApp_DrawForeignDexNumber(pokedexApp, species, 91, pokedexApp->unk_185C);
+            PokedexApp_DrawForeignDexNumber(pokedexApp, species, 91, pokedexApp->language);
             PokedexApp_DrawForeignSpeciesName(pokedexApp, species, 92);
             PokedexApp_DrawForeignCategory(pokedexApp, species, entry, 93);
         }

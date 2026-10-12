@@ -23,14 +23,14 @@ typedef struct Params {int a,b,c,d,e;u32 ability[12];} Params;
 
 extern void GfGfx_DisableEngineAPlanes(void);
 extern void GfGfx_DisableEngineBPlanes(void);
-extern void ov96_021FCEE0(void);
+extern void PokeathlonRelayRun_SetGfxBanks(void);
 extern void MI_CpuFill8(void *,u8,u32);
 
 extern void PokeathlonCourse_SetHudPlanes(u8 *,u32);
 extern void PokeathlonCourse_InitObjTransfer(int,int,int,int,int);
 
 
-extern void ov96_021FCF00(void *);
+extern void PokeathlonRelayRun_InitBgs(void *);
 extern void ov96_021FFD4C(State *);
 
 extern void GfGfx_SwapDisplay(void);
@@ -44,11 +44,11 @@ extern void *PokeathlonCourseSpritePool_GetSpriteList(void *);
 extern void *PokeathlonCourseMonObjects_Create(enum HeapID,void*,void*,void *,void *);
 extern void PokeathlonCourseSpritePool_SetResourceId(void *,int,int);
 extern void ov96_022000E4(void *,void *);
-extern void ov96_021FD0E4(void *);
+extern void PokeathlonRelayRun_LoadSpriteGraphics(void *);
 extern void PokeathlonCourseSpritePool_TransferResources(void *);
 extern void **ov96_021E6290(void *,int,void *,void *);
 extern void Sprite_SetDrawPriority(void *,int);
-extern void ov96_021FD128(State *,void *);
+extern void PokeathlonRelayRun_CreateSprites(State *,void *);
 extern void ov96_02200180(void *,void *,void *);
 extern void PokeathlonCourse_GetMonInfo(void *,int,int,MonInfo *);
 extern void *PokeathlonCourse_GetPerformance(void *,int,int);
@@ -73,9 +73,9 @@ extern void ov96_021FFB7C(Actor *,u8,int);
 extern void ov96_02200A64(void *,int);
 extern void ov96_021FEFE8(void *,void *,u8,u8,Actor *);
 extern void ov96_02200E78(void *,u8,Actor *);
-extern void ov96_021FDA30(State *,void *);
+extern void PokeathlonRelayRun_PackPacket(State *,void *);
 extern void ov96_021E634C(void *,int,void *,void *,int,int,Point *);
-extern void ov96_021FD060(State *);
+extern void PokeathlonRelayRun_LoadBgGraphics(State *);
 
 
 extern void WirelessStatusIcon_CreateOnScreenIfConnected(int);

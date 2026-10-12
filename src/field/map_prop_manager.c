@@ -8,7 +8,7 @@
 #include "gf_3d_render.h"
 #include "model_box_test.h"
 #include "geometry_math.h"
-#include "unk_02097268.h"
+#include "safari_zone_encounters.h"
 
 typedef struct MapPropArcData {
     int unk_00;

@@ -44,7 +44,7 @@
 #include "field_warp_state.h"
 #include "trainer_card_data.h"
 #include "unk_020755E8.h"
-#include "unk_02092BE8.h"
+#include "gear_phone_ring_manager.h"
 
 typedef enum StartMenuAction {
     START_MENU_ACTION_POKEDEX,

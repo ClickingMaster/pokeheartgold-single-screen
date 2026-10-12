@@ -28,7 +28,7 @@
 #include "sound_playback.h"
 #include "unk_02009D48.h"
 #include "unk_02013FDC.h"
-#include "unk_02019BA4.h"
+#include "grid_input_handler.h"
 #include "touchpad.h"
 
 #define HOF_SHOWCASE_NUM_WINDOWS 17

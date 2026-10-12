@@ -27,7 +27,7 @@
 #include "field_warp_state.h"
 #include "unk_0206D494.h"
 #include "unk_02088288.h"
-#include "unk_02092BE8.h"
+#include "gear_phone_ring_manager.h"
 
 static void BattleSetup_SetParty(BattleSetup *setup, Party *party, int battlerId);
 static void BattleSetup_SetProfile(BattleSetup *setup, PlayerProfile *profile, int battlerId);

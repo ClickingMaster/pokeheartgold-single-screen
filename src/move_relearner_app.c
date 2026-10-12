@@ -34,7 +34,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02019BA4.h"
+#include "grid_input_handler.h"
 #include "unk_02026E30.h"
 #include "type_icon_resources.h"
 #include "unk_0208805C.h"

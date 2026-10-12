@@ -23,7 +23,7 @@
 #include "comm_player_manager.h"
 #include "unk_0205CB48.h"
 #include "unk_02092BB8.h"
-#include "unk_02092BE8.h"
+#include "gear_phone_ring_manager.h"
 
 FS_EXTERN_OVERLAY(intro_title);
 FS_EXTERN_OVERLAY(OVY_124);

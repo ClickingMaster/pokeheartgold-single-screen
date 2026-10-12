@@ -14,7 +14,7 @@ sub_02059EBC: ; 0x02059EBC
 	str r2, [r0]
 	ldr r1, _02059F28 ; =sub_02059F78
 	add r0, r4, #0
-	bl sub_0205A034
+	bl UnionRoom_SetState
 	pop {r4, pc}
 _02059ED8:
 	ldr r0, [r4, #0x20]
@@ -51,7 +51,7 @@ _02059F18:
 	ldr r1, _02059F2C ; =sub_0205A0B4
 	add r0, r4, #0
 	mov r2, #0xc
-	bl sub_0205A034
+	bl UnionRoom_SetState
 _02059F22:
 	pop {r4, pc}
 	.balign 4, 0

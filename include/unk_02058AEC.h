@@ -4,8 +4,8 @@
 #include "script.h"
 
 void Colosseum_ShowOpponentTrainerCard(FieldSystem *fieldSystem);
-struct UnkStruct_02059E1C *sub_02059DB0(FieldSystem *fieldSystem);
-void sub_02059E04(FieldSystem *fieldSystem);
+struct UnkStruct_02059E1C *UnionRoom_Start(FieldSystem *fieldSystem);
+void UnionRoom_Stop(FieldSystem *fieldSystem);
 int sub_0205A200(struct UnkStruct_02059E1C *fieldSystem_unk80, int objId);
 int sub_0205A284(struct UnkStruct_02059E1C *fieldSystem_unk80, int objId, u16 a2);
 int sub_0205A358(struct UnkStruct_02059E1C *fieldSystem_unk80);

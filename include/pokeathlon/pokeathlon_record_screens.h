@@ -13,7 +13,7 @@
 #include "screen_fade.h"
 #include "sprite_system.h"
 #include "touchscreen.h"
-#include "unk_02019BA4.h"
+#include "grid_input_handler.h"
 
 // Pokeathlon record screens (OVY_99): course records, trophies, medals and event records.
 

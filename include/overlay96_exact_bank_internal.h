@@ -75,7 +75,7 @@ extern void (*ov96_0221D9A0[])(void *);
 void PokeathlonEventIntro_ResetMascot(u8 *);
 void PokeathlonResultsAnnouncement_DrawPlates(u8 *);
 void PokeathlonHurdleDashDust_Remove(void **);
-int ov96_021FCD74(void *);
+int PokeathlonRelayRun_Draw(void *);
 void ov96_02203BC0(u8 *, int);
 BOOL ov96_02203CC4(u8 *, int);
 int ov96_02204DE8(void *);

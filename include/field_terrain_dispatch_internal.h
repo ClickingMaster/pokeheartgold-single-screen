@@ -10,7 +10,7 @@
 #include "map_matrix.h"
 #include "terrain_attributes.h"
 #include "unk_02054648.h"
-#include "unk_020648EC.h"
+#include "gymmick_collision.h"
 
 // Inlined from the external worker's private.h. The original assembly remains
 // the owner of the four tables below, so this snapshot only declares them.

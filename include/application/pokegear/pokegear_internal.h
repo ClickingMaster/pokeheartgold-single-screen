@@ -4,7 +4,7 @@
 #include "global.h"
 
 #include "mail_misc.h"
-#include "unk_02092BE8.h"
+#include "gear_phone_ring_manager.h"
 
 typedef enum PokegearAppId {
     GEAR_APP_CONFIGURE,

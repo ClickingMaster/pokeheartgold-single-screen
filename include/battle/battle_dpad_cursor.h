@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_BATTLE_BATTLE_DPAD_CURSOR_H
 #define POKEHEARTGOLD_BATTLE_BATTLE_DPAD_CURSOR_H
 
-#include "unk_02020A0C.h"
+#include "dpad_menu_box.h"
 
 struct BattleCursor;
 

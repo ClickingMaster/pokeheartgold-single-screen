@@ -23,8 +23,8 @@
 #include "unk_02031B0C.h"
 #include "frontier_field_support.h"
 #include "unk_0206D494.h"
-#include "unk_02092BE8.h"
-#include "unk_02097268.h"
+#include "gear_phone_ring_manager.h"
+#include "safari_zone_encounters.h"
 
 void FieldSystem_StartBugContestTimer(FieldSystem *fieldSystem) {
     RTCDate date;

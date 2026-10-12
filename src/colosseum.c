@@ -22,6 +22,7 @@
 #include "sound_playback.h"
 #include "system.h"
 #include "text.h"
+#include "union_room_internal.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
 #include "map_object_movement_commands.h"
@@ -51,9 +52,9 @@ const u8 _020FC7CC[8] = { 0, 1, 2, 3, 4, 0, 0, 0 };
 
 // Union Room state (union_room.c); defined here for link order.
 ALIGN(4)
-u8 _021D41CC[0xC] = { 0 };
+UnionRoomScratch _021D41CC = { 0 };
 ALIGN(4)
-u8 _021D41D8[0x40] = { 0 };
+void *_021D41D8[UNION_ROOM_MAX_RECORDS] = { 0 };
 
 void Colosseum_OpenSummary(ColosseumEntry *entry, FieldSystem *fieldSystem, Party *party, int partySlot, int mode, enum HeapID heapId) {
     SaveData *saveData = fieldSystem->saveData;

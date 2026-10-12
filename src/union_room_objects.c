@@ -38,8 +38,8 @@ typedef struct UnionRoomPlayerRecord {
     UnionRoomPlayer player; // 0x50
 } UnionRoomPlayerRecord;
 
-FieldSystem *sub_0205A1F0(struct UnkStruct_02059E1C *unionRoom);
-UnionRoomPlayerRecord *sub_0205A1F4(struct UnkStruct_02059E1C *unionRoom, int index);
+FieldSystem *UnionRoom_GetFieldSystem(struct UnkStruct_02059E1C *unionRoom);
+UnionRoomPlayerRecord *UnionRoom_GetRecord(struct UnkStruct_02059E1C *unionRoom, int index);
 s32 sub_02037F94(void);
 s32 sub_02037FCC(void);
 UnkStruct_0206793C *ov01_021FD8E8(LocalMapObject *object, int index);
@@ -72,7 +72,7 @@ UnionRoomObjects *UnionRoomObjects_New(struct UnkStruct_02059E1C *unionRoom) {
     objects->unionRoom = unionRoom;
     objects->enabled = 1;
     objects->task = SysTask_CreateOnMainQueue(UnionRoomObjects_Task, objects, 11);
-    objects->fieldSystem = sub_0205A1F0(unionRoom);
+    objects->fieldSystem = UnionRoom_GetFieldSystem(unionRoom);
     objects->palPad = SaveArray_Get(objects->fieldSystem->saveData, 8);
     objects->avatar = objects->fieldSystem->playerAvatar;
     Heap_CreateAtEnd((enum HeapID)11, (enum HeapID)0x57, 0x2710);
@@ -187,7 +187,7 @@ void UnionRoomObjects_UpdatePlayers(UnionRoomObjects *objects, struct UnkStruct_
     int i;
 
     for (i = 0; i < 10; i++) {
-        UnionRoomPlayerRecord *record = sub_0205A1F4(unionRoom, i);
+        UnionRoomPlayerRecord *record = UnionRoom_GetRecord(unionRoom, i);
         UnionRoomPlayer *player;
         PlayerProfile *profile;
         if (record != NULL) {

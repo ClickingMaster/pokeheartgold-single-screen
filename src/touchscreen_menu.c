@@ -60,7 +60,7 @@
 #include "communication_club_link.h"
 #include "frontier_field_support.h"
 #include "unk_0206D494.h"
-#include "unk_02092BE8.h"
+#include "gear_phone_ring_manager.h"
 
 // Field bottom-screen app 0, the touchscreen start menu (ScrCmd_TouchscreenMenuShow, AppEntry 0 of
 // field_overlay_app_dispatch.c): the start-menu icons (msg 196), the running shoes and action buttons,

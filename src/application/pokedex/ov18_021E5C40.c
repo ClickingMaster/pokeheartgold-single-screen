@@ -1011,7 +1011,7 @@ static void ov18_021E6868(PokedexAppData *pokedexApp) {
     GfGfxLoader_LoadCharDataFromOpenNarc(pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000017_NCGR_lz, pokedexApp->bgConfig, GF_BG_LYR_SUB_0, 0, 0, TRUE, HEAP_ID_POKEDEX_APP);
     GfGfxLoader_LoadScrnDataFromOpenNarc(pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000016_NSCR_lz, pokedexApp->bgConfig, GF_BG_LYR_SUB_0, 0, 0, TRUE, HEAP_ID_POKEDEX_APP);
     GfGfxLoader_LoadCharDataFromOpenNarc(pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000019_NCGR_lz, pokedexApp->bgConfig, GF_BG_LYR_SUB_3, 0, 0, TRUE, HEAP_ID_POKEDEX_APP);
-    if (pokedexApp->unk_185C == 2) {
+    if (pokedexApp->language == 2) {
         GfGfxLoader_LoadScrnDataFromOpenNarc(pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000020_NSCR_lz, pokedexApp->bgConfig, GF_BG_LYR_SUB_3, 0, 0, TRUE, HEAP_ID_POKEDEX_APP);
     } else {
         GfGfxLoader_LoadScrnDataFromOpenNarc(pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000021_NSCR_lz, pokedexApp->bgConfig, GF_BG_LYR_SUB_3, 0, 0, TRUE, HEAP_ID_POKEDEX_APP);
@@ -1107,13 +1107,13 @@ void ov18_021E6C90(u16 *a0) {
 }
 
 void ov18_021E6C98(PokedexAppData *pokedexApp) {
-    u16 *r5 = ov18_021E6AEC(pokedexApp, 15 * pokedexApp->unk_1859);
+    u16 *r5 = ov18_021E6AEC(pokedexApp, 15 * pokedexApp->listPage);
     ov18_021E6CE8(pokedexApp, r5);
     ov18_021E6C90(r5);
 }
 
 void ov18_021E6CC0(PokedexAppData *pokedexApp) {
-    u16 *r5 = ov18_021E6BB8(pokedexApp, 15 * pokedexApp->unk_1859);
+    u16 *r5 = ov18_021E6BB8(pokedexApp, 15 * pokedexApp->listPage);
     ov18_021E6CE8(pokedexApp, r5);
     ov18_021E6C90(r5);
 }
@@ -1147,18 +1147,18 @@ void ov18_021E6D68(PokedexAppData *pokedexApp, u16 species, s16 a2) {
         return;
     }
 
-    s16 r7 = LanguageToDexFlag(pokedexApp->unk_185C);
+    s16 r7 = LanguageToDexFlag(pokedexApp->language);
     for (u32 i = 0; i < 6; ++i) {
         r7 = sub_020912D0(r7, a2);
         s16 r4 = sub_02091294(r7);
-        if (r4 == pokedexApp->unk_185C) {
+        if (r4 == pokedexApp->language) {
             return;
         }
         if (ov18_021E6D10(pokedexApp, species, r4) == TRUE || r4 == GAME_LANGUAGE) {
             int r6 = PokedexApp_GetListCursorIndex(pokedexApp);
-            pokedexApp->unk_185C = r4;
+            pokedexApp->language = r4;
             PokedexApp_DrawCenteredSpeciesName(pokedexApp, species, 6);
-            ov18_021E6F6C(pokedexApp->bgConfig, GF_BG_LYR_SUB_3, pokedexApp->unk_185C, pokedexApp->gfxNarc, HEAP_ID_POKEDEX_APP);
+            ov18_021E6F6C(pokedexApp->bgConfig, GF_BG_LYR_SUB_3, pokedexApp->language, pokedexApp->gfxNarc, HEAP_ID_POKEDEX_APP);
             PokedexApp_DrawListEntryDetails(pokedexApp, species, r6);
             PokedexApp_UpdateCurrentLanguageIcon(pokedexApp, species, 8);
             PokedexApp_UpdateLanguageIcons(pokedexApp, species, 18);
@@ -1186,8 +1186,8 @@ void ov18_021E6E44(PokedexAppData *pokedexApp) {
         }
         PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 8, 1);
     }
-    if (!ov18_021E6D10(pokedexApp, species, pokedexApp->unk_185C)) {
-        pokedexApp->unk_185C = GAME_LANGUAGE;
+    if (!ov18_021E6D10(pokedexApp, species, pokedexApp->language)) {
+        pokedexApp->language = GAME_LANGUAGE;
     }
     PokedexApp_DrawCenteredSpeciesName(pokedexApp, species, 6);
     PokedexApp_DrawListEntryHeader(pokedexApp, species, r6);
@@ -1203,7 +1203,7 @@ void ov18_021E6E44(PokedexAppData *pokedexApp) {
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[7]);
         PokedexApp_SetSpriteVisible(pokedexApp, 10, 0);
     } else {
-        ov18_021E6F6C(pokedexApp->bgConfig, GF_BG_LYR_SUB_3, pokedexApp->unk_185C, pokedexApp->gfxNarc, HEAP_ID_POKEDEX_APP);
+        ov18_021E6F6C(pokedexApp->bgConfig, GF_BG_LYR_SUB_3, pokedexApp->language, pokedexApp->gfxNarc, HEAP_ID_POKEDEX_APP);
         ScheduleWindowCopyToVram(&pokedexApp->windows[7]);
     }
 }
@@ -1505,8 +1505,8 @@ void ov18_021E78AC(PokedexAppData *pokedexApp) {
     } else {
         PokedexApp_SetSearchSummaryVisible(pokedexApp, 0);
         u16 species = PokedexApp_GetCursorSpecies(pokedexApp);
-        if (!ov18_021E6D10(pokedexApp, species, pokedexApp->unk_185C)) {
-            pokedexApp->unk_185C = GAME_LANGUAGE;
+        if (!ov18_021E6D10(pokedexApp, species, pokedexApp->language)) {
+            pokedexApp->language = GAME_LANGUAGE;
         }
         PokedexApp_DrawCenteredSpeciesName(pokedexApp, species, 94);
         PokedexApp_DrawSearchEntryHeader(pokedexApp, species, r6);
@@ -1535,7 +1535,7 @@ void ov18_021E78AC(PokedexAppData *pokedexApp) {
                 PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 22, 0);
             }
             PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 24, 1);
-            ov18_021E6F6C(pokedexApp->bgConfig, GF_BG_LYR_SUB_3, pokedexApp->unk_185C, pokedexApp->gfxNarc, HEAP_ID_POKEDEX_APP);
+            ov18_021E6F6C(pokedexApp->bgConfig, GF_BG_LYR_SUB_3, pokedexApp->language, pokedexApp->gfxNarc, HEAP_ID_POKEDEX_APP);
             ScheduleWindowCopyToVram(&pokedexApp->windows[81]);
         }
     }
@@ -1567,7 +1567,7 @@ void ov18_021E7A80(PokedexAppData *pokedexApp, u16 species, s16 a2) {
         return;
     }
 
-    s16 dexLangFlag = LanguageToDexFlag(pokedexApp->unk_185C);
+    s16 dexLangFlag = LanguageToDexFlag(pokedexApp->language);
     for (int i = 0; i < 6u; ++i) {
         dexLangFlag += a2;
         if (dexLangFlag < 0) {
@@ -1576,13 +1576,13 @@ void ov18_021E7A80(PokedexAppData *pokedexApp, u16 species, s16 a2) {
             dexLangFlag = 0;
         }
         s16 language = sub_02091294(dexLangFlag);
-        if (language == pokedexApp->unk_185C) {
+        if (language == pokedexApp->language) {
             break;
         }
         if (ov18_021E6D10(pokedexApp, species, language) == TRUE || language == GAME_LANGUAGE) {
-            pokedexApp->unk_185C = language;
+            pokedexApp->language = language;
             PokedexApp_DrawCenteredSpeciesName(pokedexApp, species, 94);
-            ov18_021E6F6C(pokedexApp->bgConfig, GF_BG_LYR_SUB_3, pokedexApp->unk_185C, pokedexApp->gfxNarc, HEAP_ID_POKEDEX_APP);
+            ov18_021E6F6C(pokedexApp->bgConfig, GF_BG_LYR_SUB_3, pokedexApp->language, pokedexApp->gfxNarc, HEAP_ID_POKEDEX_APP);
             PokedexApp_DrawSearchEntryDetails(pokedexApp, species, spC);
             PokedexApp_UpdateCurrentLanguageIcon(pokedexApp, species, 24);
             PokedexApp_UpdateLanguageIcons(pokedexApp, species, 53);

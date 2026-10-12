@@ -475,7 +475,7 @@ static BOOL FieldTask_ContinueGame_CommError(TaskManager *taskManager) {
         (*state_p)++;
         break;
     case 2:
-        fieldSystem->unk80 = sub_02059DB0(fieldSystem);
+        fieldSystem->unk80 = UnionRoom_Start(fieldSystem);
         fieldSystem->unk84 = UnionRoomObjects_New(fieldSystem->unk80);
         CallTask_RestoreOverworld(taskManager);
         (*state_p)++;
@@ -1001,7 +1001,7 @@ void sub_02053F14(FieldSystem *fieldSystem) {
     struct UnkTaskEnv_02053E5C *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct UnkTaskEnv_02053E5C));
     MI_CpuClear8(env, sizeof(struct UnkTaskEnv_02053E5C));
     env->location = *location;
-    sub_02059E04(fieldSystem);
+    UnionRoom_Stop(fieldSystem);
     UnionRoomObjects_Delete(fieldSystem->unk84);
     fieldSystem->mapLoadType = 0;
     FieldSystem_CreateTask(fieldSystem, sub_02053E5C, env);
@@ -1061,7 +1061,7 @@ void sub_02054030(TaskManager *taskManager) {
     MI_CpuClear8(env, sizeof(struct UnkTaskEnv_02053E5C));
     _CopyPlayerPosToLocationWorkFacingSouth(location, fieldSystem);
     InitLocation(&env->location, MAP_UNION, -1, 8, 14, DIR_NORTH);
-    fieldSystem->unk80 = sub_02059DB0(fieldSystem);
+    fieldSystem->unk80 = UnionRoom_Start(fieldSystem);
     fieldSystem->unk84 = UnionRoomObjects_New(fieldSystem->unk80);
     fieldSystem->mapLoadType = MAP_LOAD_TYPE_UNION;
     TaskManager_Call(taskManager, sub_02053F70, env);

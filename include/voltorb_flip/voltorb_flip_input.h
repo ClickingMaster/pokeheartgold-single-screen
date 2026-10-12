@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_VOLTORB_FLIP_INPUT_H
 #define POKEHEARTGOLD_VOLTORB_FLIP_INPUT_H
 
-#include "unk_02019BA4.h"
+#include "grid_input_handler.h"
 
 typedef enum VoltorbFlipInput {
     VOLTORB_FLIP_INPUT_GRID_BEGIN = 0,

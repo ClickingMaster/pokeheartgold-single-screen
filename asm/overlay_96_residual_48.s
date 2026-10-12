@@ -178,9 +178,9 @@
 	.public PokeathlonHurdleDashTrack_GetLayoutSize
 	.public PokeathlonHurdleDashStandings_Draw
 	.public PokeathlonHurdleDashDust_Free
-	.public ov96_021FCD74
-	.public ov96_021FDE6C
-	.public ov96_021FE538
+	.public PokeathlonRelayRun_Draw
+	.public PokeathlonRelayRun_IsTouchingSwapButton
+	.public PokeathlonRelayRunTeam_UpdateStun
 	.public ov96_02200BC8
 	.public ov96_02200E78
 	.public ov96_02200EEC

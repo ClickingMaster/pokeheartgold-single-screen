@@ -104,7 +104,7 @@
 	.extern PokeathlonCirclePush_Main
 	.extern PokeathlonLampJump_Draw
 	.extern PokeathlonHurdleDash_Start
-	.extern ov96_021FCD74
+	.extern PokeathlonRelayRun_Draw
 	.extern ov96_02204DE8
 	.extern PokeathlonBlockSmash_Draw
 	.extern PokeathlonGoalRoll_Draw

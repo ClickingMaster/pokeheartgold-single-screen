@@ -15,7 +15,7 @@
 #include "sound_radio.h"
 #include "sys_flags.h"
 #include "sys_vars.h"
-#include "unk_02092BE8.h"
+#include "gear_phone_ring_manager.h"
 
 typedef struct PhoneCallTrigger {
     u8 callerId;

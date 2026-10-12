@@ -45,7 +45,7 @@
 #include "unk_02037C94.h"
 #include "unk_0205BFF0.h"
 #include "unk_0206D494.h"
-#include "unk_02092BE8.h"
+#include "gear_phone_ring_manager.h"
 #include "update_dex_received.h"
 // #include "application/zukanlist/zkn_data/zukan_data.naix"
 

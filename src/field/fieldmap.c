@@ -63,7 +63,7 @@
 #include "unk_02026E30.h"
 #include "unk_02055418.h"
 #include "comm_player_manager.h"
-#include "unk_020648EC.h"
+#include "gymmick_collision.h"
 #include "vram_transfer_manager.h"
 
 enum FieldMapInitState {

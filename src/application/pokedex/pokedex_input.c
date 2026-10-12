@@ -10,8 +10,8 @@
 #include "sprite_system.h"
 #include "system.h"
 #include "touchscreen.h"
-#include "unk_02019BA4.h"
-#include "unk_02020A0C.h"
+#include "grid_input_handler.h"
+#include "dpad_menu_box.h"
 
 extern const TouchscreenHitbox ov18_021FB72C[];
 extern const int ov18_021FB6F0[];
@@ -121,10 +121,10 @@ int PokedexApp_HandleListInput(PokedexAppData *pokedexApp, int mode) {
             x -= 27;
             y -= 4;
             selection = x / 40 + 5 * (y / 40);
-            if (selection == pokedexApp->unk_185A) {
+            if (selection == pokedexApp->listCursor) {
                 return 4;
             }
-            pokedexApp->unk_185A = selection;
+            pokedexApp->listCursor = selection;
             PlaySE(SEQ_SE_GS_ZKN04);
         } else if (input == 14) {
             PlaySE(SEQ_SE_GS_BUTTON01);
@@ -137,42 +137,42 @@ int PokedexApp_HandleListInput(PokedexAppData *pokedexApp, int mode) {
     }
     pokedexApp->unk_0864 = 1;
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
-        if (pokedexApp->unk_185A < 5) {
+        if (pokedexApp->listCursor < 5) {
             return 10;
         }
-        pokedexApp->unk_185A -= 5;
+        pokedexApp->listCursor -= 5;
         PlaySE(SEQ_SE_GS_ZKN03);
         return 0;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
-        if (pokedexApp->unk_185A >= 10 && pokedexApp->unk_185A < 15) {
+        if (pokedexApp->listCursor >= 10 && pokedexApp->listCursor < 15) {
             return 12;
         }
-        pokedexApp->unk_185A += 5;
+        pokedexApp->listCursor += 5;
         PlaySE(SEQ_SE_GS_ZKN03);
         return 0;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_LEFT) {
-        if (pokedexApp->unk_185A != 0) {
-            pokedexApp->unk_185A--;
+        if (pokedexApp->listCursor != 0) {
+            pokedexApp->listCursor--;
             PlaySE(SEQ_SE_GS_ZKN03);
             return 0;
         }
-        if (pokedexApp->unk_1859 != 0) {
-            pokedexApp->unk_185A = 14;
+        if (pokedexApp->listPage != 0) {
+            pokedexApp->listCursor = 14;
             return 9;
         }
         return -1;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_RIGHT) {
-        int selection = pokedexApp->unk_185A + 1;
+        int selection = pokedexApp->listCursor + 1;
         if (selection != 15) {
-            pokedexApp->unk_185A = selection;
+            pokedexApp->listCursor = selection;
             PlaySE(SEQ_SE_GS_ZKN03);
             return 0;
         }
-        if (pokedexApp->unk_1859 + 1 <= PokedexApp_GetLastListPage(pokedexApp, mode)) {
-            pokedexApp->unk_185A = 0;
+        if (pokedexApp->listPage + 1 <= PokedexApp_GetLastListPage(pokedexApp, mode)) {
+            pokedexApp->listCursor = 0;
             return 11;
         }
         return -1;
@@ -715,14 +715,14 @@ u32 ov18_021F7974(PokedexAppData *pokedexApp, int mode) {
             x -= 27;
             y -= 4;
             selection = x / 40 + 5 * (y / 40);
-            if (selection == pokedexApp->unk_185A) {
-                if (pokedexApp->unk_185A == 0 && pokedexApp->unk_1859 == 0) {
+            if (selection == pokedexApp->listCursor) {
+                if (pokedexApp->listCursor == 0 && pokedexApp->listPage == 0) {
                     PlaySE(SEQ_SE_GS_ZKN04);
                     return 2;
                 }
                 return 4;
             }
-            pokedexApp->unk_185A = selection;
+            pokedexApp->listCursor = selection;
             PlaySE(SEQ_SE_GS_ZKN04);
         } else if (input == 2) {
             PlaySE(SEQ_SE_GS_ZKN04);
@@ -732,42 +732,42 @@ u32 ov18_021F7974(PokedexAppData *pokedexApp, int mode) {
         return input;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
-        if (pokedexApp->unk_185A < 5) {
+        if (pokedexApp->listCursor < 5) {
             return 10;
         }
-        pokedexApp->unk_185A -= 5;
+        pokedexApp->listCursor -= 5;
         PlaySE(SEQ_SE_GS_ZKN03);
         return 0;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
-        if (pokedexApp->unk_185A >= 10 && pokedexApp->unk_185A < 15) {
+        if (pokedexApp->listCursor >= 10 && pokedexApp->listCursor < 15) {
             return 12;
         }
-        pokedexApp->unk_185A += 5;
+        pokedexApp->listCursor += 5;
         PlaySE(SEQ_SE_GS_ZKN03);
         return 0;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_LEFT) {
-        if (pokedexApp->unk_185A != 0) {
-            pokedexApp->unk_185A--;
+        if (pokedexApp->listCursor != 0) {
+            pokedexApp->listCursor--;
             PlaySE(SEQ_SE_GS_ZKN03);
             return 0;
         }
-        if (pokedexApp->unk_1859 != 0) {
-            pokedexApp->unk_185A = 14;
+        if (pokedexApp->listPage != 0) {
+            pokedexApp->listCursor = 14;
             return 9;
         }
         return -1;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_RIGHT) {
-        int selection = pokedexApp->unk_185A + 1;
+        int selection = pokedexApp->listCursor + 1;
         if (selection != 15) {
-            pokedexApp->unk_185A = selection;
+            pokedexApp->listCursor = selection;
             PlaySE(SEQ_SE_GS_ZKN03);
             return 0;
         }
-        if (pokedexApp->unk_1859 + 1 <= PokedexApp_GetLastListPage(pokedexApp, mode)) {
-            pokedexApp->unk_185A = 0;
+        if (pokedexApp->listPage + 1 <= PokedexApp_GetLastListPage(pokedexApp, mode)) {
+            pokedexApp->listCursor = 0;
             return 11;
         }
         return -1;

@@ -23,7 +23,7 @@
 #include "pm_version.h"
 #include "pokemon.h"
 #include "scrcmd_9.h"
-#include "unk_0204A3F4.h"
+#include "frontier_field_system.h"
 
 // The Battle Tower inside the Battle Frontier overlay: opponent trainers and their Pokemon generated from the Battle
 // Tower sets, the sample Wi-Fi room used when no room has been downloaded, and the battle setup of a tower battle.

@@ -43,9 +43,9 @@
 #include "save_wifi_history.h"
 #include "script.h"
 #include "unk_02088288.h"
-#include "unk_02092BE8.h"
+#include "gear_phone_ring_manager.h"
 #include "legendary_cinematic_manager.h"
-#include "unk_02097D3C.h"
+#include "view_rankings_task.h"
 
 typedef enum NameScreenType {
     NAME_SCREEN_PLAYER,

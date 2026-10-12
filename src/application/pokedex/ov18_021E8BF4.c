@@ -597,14 +597,14 @@ static int PokedexApp_MainSeq_11(PokedexAppData *pokedexApp) {
         ov18_021E6D68(pokedexApp, PokedexApp_GetCursorSpecies(pokedexApp), 1);
         break;
     case 9:
-        if (pokedexApp->unk_1859 != 0) {
+        if (pokedexApp->listPage != 0) {
             PlaySE(SEQ_SE_GS_ZKN04);
             MI_CpuClear8(&pokedexApp->unk_0868, sizeof(pokedexApp->unk_0868));
             return POKEDEXAPP_MAINSEQ_13;
         }
         break;
     case 10:
-        if (pokedexApp->unk_1859 != 0) {
+        if (pokedexApp->listPage != 0) {
             PlaySE(SEQ_SE_GS_ZKN04);
             MI_CpuClear8(&pokedexApp->unk_0868, sizeof(pokedexApp->unk_0868));
             pokedexApp->unk_0868.state_13.unk_7 = 1;
@@ -612,14 +612,14 @@ static int PokedexApp_MainSeq_11(PokedexAppData *pokedexApp) {
         }
         break;
     case 11:
-        if (pokedexApp->unk_1859 + 1 <= PokedexApp_GetLastListPage(pokedexApp, 1)) {
+        if (pokedexApp->listPage + 1 <= PokedexApp_GetLastListPage(pokedexApp, 1)) {
             PlaySE(SEQ_SE_GS_ZKN04);
             MI_CpuClear8(&pokedexApp->unk_0868, sizeof(pokedexApp->unk_0868));
             return POKEDEXAPP_MAINSEQ_14;
         }
         break;
     case 12:
-        if (pokedexApp->unk_1859 + 1 <= PokedexApp_GetLastListPage(pokedexApp, 1)) {
+        if (pokedexApp->listPage + 1 <= PokedexApp_GetLastListPage(pokedexApp, 1)) {
             PlaySE(SEQ_SE_GS_ZKN04);
             MI_CpuClear8(&pokedexApp->unk_0868, sizeof(pokedexApp->unk_0868));
             pokedexApp->unk_0868.state_13.unk_7 = 1;
@@ -706,8 +706,8 @@ static int PokedexApp_MainSeq_13(PokedexAppData *pokedexApp) {
         PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 6, 0);
         PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 8, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[6]);
-        r4->unk_0 = ov18_021E6AEC(pokedexApp, 15 * (pokedexApp->unk_1859 - 1));
-        r4->unk_6 = ov18_021F2E14(pokedexApp, 1, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->unk_1859 - 1, 1, 1), 15);
+        r4->unk_0 = ov18_021E6AEC(pokedexApp, 15 * (pokedexApp->listPage - 1));
+        r4->unk_6 = ov18_021F2E14(pokedexApp, 1, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage - 1, 1, 1), 15);
         ++r4->unk_4;
         // fallthrough
     case 1:
@@ -721,9 +721,9 @@ static int PokedexApp_MainSeq_13(PokedexAppData *pokedexApp) {
         break;
     case 2:
         if (r4->unk_7 == 1) {
-            pokedexApp->unk_185A += 10;
+            pokedexApp->listCursor += 10;
         }
-        --pokedexApp->unk_1859;
+        --pokedexApp->listPage;
         PokedexApp_MoveSpriteToListCursor(pokedexApp, 5);
         ov18_021E6C90(r4->unk_0);
         ov18_021E6E44(pokedexApp);
@@ -747,8 +747,8 @@ static int PokedexApp_MainSeq_14(PokedexAppData *pokedexApp) {
         PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 6, 0);
         PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 8, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[6]);
-        r4->unk_0 = ov18_021E6AEC(pokedexApp, 15 * pokedexApp->unk_1859);
-        r4->unk_6 = ov18_021F2E14(pokedexApp, 1, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->unk_1859 + 1, 1, 1), 15);
+        r4->unk_0 = ov18_021E6AEC(pokedexApp, 15 * pokedexApp->listPage);
+        r4->unk_6 = ov18_021F2E14(pokedexApp, 1, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage + 1, 1, 1), 15);
         ++r4->unk_4;
         // fallthrough
     case 1:
@@ -762,9 +762,9 @@ static int PokedexApp_MainSeq_14(PokedexAppData *pokedexApp) {
         break;
     case 2:
         if (r4->unk_7 == 1) {
-            pokedexApp->unk_185A -= 10;
+            pokedexApp->listCursor -= 10;
         }
-        ++pokedexApp->unk_1859;
+        ++pokedexApp->listPage;
         PokedexApp_MoveSpriteToListCursor(pokedexApp, 5);
         ov18_021E6C90(r4->unk_0);
         ov18_021E6E44(pokedexApp);
@@ -786,8 +786,8 @@ static int PokedexApp_MainSeq_15(PokedexAppData *pokedexApp) {
         return POKEDEXAPP_MAINSEQ_11;
     }
     if (PokedexApp_DragListScrollbar(pokedexApp, 1, x, y, 1) == 1) {
-        u16 *r4 = ov18_021E6AEC(pokedexApp, 15 * pokedexApp->unk_1859);
-        pokedexApp->unk_185E ^= 1;
+        u16 *r4 = ov18_021E6AEC(pokedexApp, 15 * pokedexApp->listPage);
+        pokedexApp->iconPage ^= 1;
         ov18_021E6CE8(pokedexApp, r4);
         ov18_021E6C90(r4);
         PokedexApp_DrawListIconGrid(pokedexApp, 24);
@@ -802,8 +802,8 @@ static int PokedexApp_MainSeq_15(PokedexAppData *pokedexApp) {
 static int PokedexApp_MainSeq_16(PokedexAppData *pokedexApp) {
     PokedexAppData_UnkSub0868_State16 *r3 = &pokedexApp->unk_0868.state_16;
     if (PokedexApp_DragListScrollbar(pokedexApp, 1, r3->unk_0, r3->unk_2, 1) == 1) {
-        u16 *r4 = ov18_021E6AEC(pokedexApp, 15 * pokedexApp->unk_1859);
-        pokedexApp->unk_185E ^= 1;
+        u16 *r4 = ov18_021E6AEC(pokedexApp, 15 * pokedexApp->listPage);
+        pokedexApp->iconPage ^= 1;
         ov18_021E6CE8(pokedexApp, r4);
         ov18_021E6C90(r4);
         PokedexApp_DrawListIconGrid(pokedexApp, 24);
@@ -996,9 +996,9 @@ static int PokedexApp_MainSeq_23(PokedexAppData *pokedexApp) {
             r5->unk_0 = 15;
         } else {
             PokedexApp_BuildListEntries(pokedexApp, 0);
-            pokedexApp->unk_185A = 0;
-            pokedexApp->unk_1859 = 0;
-            pokedexApp->unk_185C = 2;
+            pokedexApp->listCursor = 0;
+            pokedexApp->listPage = 0;
+            pokedexApp->language = 2;
             r5->unk_0 = 2;
         }
         break;
@@ -1945,14 +1945,14 @@ static int PokedexApp_MainSeq_57(PokedexAppData *pokedexApp) {
         ov18_021E7A80(pokedexApp, PokedexApp_GetCursorSpecies(pokedexApp), 1);
         break;
     case 9:
-        if (pokedexApp->unk_1859 > 0) {
+        if (pokedexApp->listPage > 0) {
             PlaySE(SEQ_SE_GS_ZKN04);
             MI_CpuClear8(&pokedexApp->unk_0868, sizeof(pokedexApp->unk_0868));
             return POKEDEXAPP_MAINSEQ_58;
         }
         break;
     case 10:
-        if (pokedexApp->unk_1859 > 0) {
+        if (pokedexApp->listPage > 0) {
             PlaySE(SEQ_SE_GS_ZKN04);
             MI_CpuClear8(&pokedexApp->unk_0868, sizeof(pokedexApp->unk_0868));
             pokedexApp->unk_0868.state_13.unk_7 = 1;
@@ -1960,14 +1960,14 @@ static int PokedexApp_MainSeq_57(PokedexAppData *pokedexApp) {
         }
         break;
     case 11:
-        if (pokedexApp->unk_1859 + 1 <= PokedexApp_GetLastListPage(pokedexApp, 0)) {
+        if (pokedexApp->listPage + 1 <= PokedexApp_GetLastListPage(pokedexApp, 0)) {
             PlaySE(SEQ_SE_GS_ZKN04);
             MI_CpuClear8(&pokedexApp->unk_0868, sizeof(pokedexApp->unk_0868));
             return POKEDEXAPP_MAINSEQ_59;
         }
         break;
     case 12:
-        if (pokedexApp->unk_1859 + 1 <= PokedexApp_GetLastListPage(pokedexApp, 0)) {
+        if (pokedexApp->listPage + 1 <= PokedexApp_GetLastListPage(pokedexApp, 0)) {
             PlaySE(SEQ_SE_GS_ZKN04);
             MI_CpuClear8(&pokedexApp->unk_0868, sizeof(pokedexApp->unk_0868));
             pokedexApp->unk_0868.state_13.unk_7 = 1;
@@ -2003,9 +2003,9 @@ static int PokedexApp_MainSeq_58(PokedexAppData *pokedexApp) {
         PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 22, 0);
         PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 24, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[94]);
-        r4->unk_0 = ov18_021E6BB8(pokedexApp, 15 * (pokedexApp->unk_1859 - 1));
-        r4->unk_6 = ov18_021F2E14(pokedexApp, 18, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->unk_1859 - 1, 18, 0), 15);
-        if (pokedexApp->unk_1859 == 1) {
+        r4->unk_0 = ov18_021E6BB8(pokedexApp, 15 * (pokedexApp->listPage - 1));
+        r4->unk_6 = ov18_021F2E14(pokedexApp, 18, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage - 1, 18, 0), 15);
+        if (pokedexApp->listPage == 1) {
             ov18_021F3C30(pokedexApp);
         }
         ++r4->unk_4;
@@ -2015,7 +2015,7 @@ static int PokedexApp_MainSeq_58(PokedexAppData *pokedexApp) {
         ov18_021E6CE8(pokedexApp, &r4->unk_0[0x1E0 - 32 * r4->unk_5]);
         PokedexApp_ScrollListIconsBackward(pokedexApp, 59, 8, r4->unk_5 / 5);
         PokedexApp_MoveListScrollbar(pokedexApp, 18, -r4->unk_6);
-        if (pokedexApp->unk_1859 == 1) {
+        if (pokedexApp->listPage == 1) {
             ov18_021F3C54(pokedexApp, 8);
         }
         if (r4->unk_5 == 15) {
@@ -2024,9 +2024,9 @@ static int PokedexApp_MainSeq_58(PokedexAppData *pokedexApp) {
         break;
     case 2:
         if (r4->unk_7 == 1) {
-            pokedexApp->unk_185A += 10;
+            pokedexApp->listCursor += 10;
         }
-        --pokedexApp->unk_1859;
+        --pokedexApp->listPage;
         PokedexApp_MoveSpriteToListCursor(pokedexApp, 0);
         ov18_021E6C90(r4->unk_0);
         ov18_021E78AC(pokedexApp);
@@ -2050,8 +2050,8 @@ static int PokedexApp_MainSeq_59(PokedexAppData *pokedexApp) {
         PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 22, 0);
         PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 24, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[94]);
-        r4->unk_0 = ov18_021E6BB8(pokedexApp, 15 * (pokedexApp->unk_1859));
-        r4->unk_6 = ov18_021F2E14(pokedexApp, 18, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->unk_1859 + 1, 18, 0), 15);
+        r4->unk_0 = ov18_021E6BB8(pokedexApp, 15 * (pokedexApp->listPage));
+        r4->unk_6 = ov18_021F2E14(pokedexApp, 18, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage + 1, 18, 0), 15);
         ++r4->unk_4;
         // fallthrough
     case 1:
@@ -2059,7 +2059,7 @@ static int PokedexApp_MainSeq_59(PokedexAppData *pokedexApp) {
         ov18_021E6CE8(pokedexApp, &r4->unk_0[32 * r4->unk_5]);
         PokedexApp_ScrollListIconsForward(pokedexApp, 59, -8, r4->unk_5 / 5);
         PokedexApp_MoveListScrollbar(pokedexApp, 18, r4->unk_6);
-        if (pokedexApp->unk_1859 == 0) {
+        if (pokedexApp->listPage == 0) {
             ov18_021F3C54(pokedexApp, -8);
         }
         if (r4->unk_5 == 15) {
@@ -2068,9 +2068,9 @@ static int PokedexApp_MainSeq_59(PokedexAppData *pokedexApp) {
         break;
     case 2:
         if (r4->unk_7 == 1) {
-            pokedexApp->unk_185A -= 10;
+            pokedexApp->listCursor -= 10;
         }
-        ++pokedexApp->unk_1859;
+        ++pokedexApp->listPage;
         PokedexApp_MoveSpriteToListCursor(pokedexApp, 0);
         ov18_021E6C90(r4->unk_0);
         ov18_021E78AC(pokedexApp);
@@ -2091,12 +2091,12 @@ static int PokedexApp_MainSeq_60(PokedexAppData *pokedexApp) {
         return POKEDEXAPP_MAINSEQ_57;
     }
     if (PokedexApp_DragListScrollbar(pokedexApp, 18, x, y, 0) == 1) {
-        u16 *r4 = ov18_021E6BB8(pokedexApp, 15 * pokedexApp->unk_1859);
-        pokedexApp->unk_185E ^= 1;
+        u16 *r4 = ov18_021E6BB8(pokedexApp, 15 * pokedexApp->listPage);
+        pokedexApp->iconPage ^= 1;
         ov18_021E6CE8(pokedexApp, r4);
         ov18_021E6C90(r4);
         PokedexApp_DrawListIconGrid(pokedexApp, 59);
-        if (!pokedexApp->unk_1859) {
+        if (!pokedexApp->listPage) {
             ov18_021F3C88(pokedexApp);
         } else {
             PokedexApp_SetSpriteVisible(pokedexApp, 25, 0);
@@ -2113,12 +2113,12 @@ static int PokedexApp_MainSeq_61(PokedexAppData *pokedexApp) {
     PokedexAppData_UnkSub0868_State16 *r3 = &pokedexApp->unk_0868.state_16;
 
     if (PokedexApp_DragListScrollbar(pokedexApp, 18, r3->unk_0, r3->unk_2, 0) == 1) {
-        u16 *r4 = ov18_021E6BB8(pokedexApp, 15 * pokedexApp->unk_1859);
-        pokedexApp->unk_185E ^= 1;
+        u16 *r4 = ov18_021E6BB8(pokedexApp, 15 * pokedexApp->listPage);
+        pokedexApp->iconPage ^= 1;
         ov18_021E6CE8(pokedexApp, r4);
         ov18_021E6C90(r4);
         PokedexApp_DrawListIconGrid(pokedexApp, 59);
-        if (!pokedexApp->unk_1859) {
+        if (!pokedexApp->listPage) {
             ov18_021F3C88(pokedexApp);
         } else {
             PokedexApp_SetSpriteVisible(pokedexApp, 25, 0);
@@ -2292,7 +2292,7 @@ static int PokedexApp_MainSeq_65(PokedexAppData *pokedexApp) {
         ov18_021E78AC(pokedexApp);
         ov18_021EDEB0(pokedexApp);
         ov18_021E659C(pokedexApp);
-        if (pokedexApp->unk_1859) {
+        if (pokedexApp->listPage) {
             ov18_021F3C54(pokedexApp, -40);
         }
         PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, PLTTFADE_OPAQUE_ALL_F & ~(1 << 4), 0, 16, 0, RGB_BLACK);
@@ -3440,8 +3440,8 @@ static void ov18_021EDCD4(PokedexAppData *pokedexApp) {
     PokedexApp_BuildListEntries(pokedexApp, 1);
     u16 species = PokedexApp_GetCursorSpecies(pokedexApp);
     u32 r6 = PokedexApp_GetListCursorIndex(pokedexApp);
-    if (!ov18_021E6D10(pokedexApp, species, pokedexApp->unk_185C)) {
-        pokedexApp->unk_185C = GAME_LANGUAGE;
+    if (!ov18_021E6D10(pokedexApp, species, pokedexApp->language)) {
+        pokedexApp->language = GAME_LANGUAGE;
     }
     PokedexApp_DrawListEntryHeader(pokedexApp, species, r6);
     PokedexApp_DrawListEntryDetails(pokedexApp, species, r6);
@@ -3454,7 +3454,7 @@ static void ov18_021EDCD4(PokedexAppData *pokedexApp) {
     PokedexApp_UpdateListPageArrows(pokedexApp, 2, 1);
     PokedexApp_UpdateListScrollbarSize(pokedexApp, 1, 1);
     PokedexApp_SyncListScrollbarToPage(pokedexApp, 1, 1);
-    ov18_021E6F6C(pokedexApp->bgConfig, GF_BG_LYR_SUB_3, pokedexApp->unk_185C, pokedexApp->gfxNarc, HEAP_ID_POKEDEX_APP);
+    ov18_021E6F6C(pokedexApp->bgConfig, GF_BG_LYR_SUB_3, pokedexApp->language, pokedexApp->gfxNarc, HEAP_ID_POKEDEX_APP);
     ov18_021E6C98(pokedexApp);
 }
 
@@ -3465,8 +3465,8 @@ static void ov18_021EDDA4(PokedexAppData *pokedexApp, int a1) {
 
 static void ov18_021EDDB4(PokedexAppData *pokedexApp) {
     u32 r4 = Pokedex_ConvertToCurrentDexNo(pokedexApp->unk_1858, PokedexApp_FindSpeciesInResults(&pokedexApp->unk_0878, UnkStruct_02092BB8_GetSpecies(pokedexApp->args->unk_08))) - 1;
-    pokedexApp->unk_185A = r4 % 15;
-    pokedexApp->unk_1859 = r4 / 15;
+    pokedexApp->listCursor = r4 % 15;
+    pokedexApp->listPage = r4 / 15;
 }
 
 static BOOL ov18_021EDE04(PokedexAppData *pokedexApp) {
@@ -3513,7 +3513,7 @@ static void ov18_021EDE64(PokedexAppData *pokedexApp) {
 static void ov18_021EDEB0(PokedexAppData *pokedexApp) {
     u8 r4;
 
-    if ((pokedexApp->unk_185A == 0 && pokedexApp->unk_1859 == 0) || PokedexApp_GetCursorSpecies(pokedexApp) == SPECIES_NONE) {
+    if ((pokedexApp->listCursor == 0 && pokedexApp->listPage == 0) || PokedexApp_GetCursorSpecies(pokedexApp) == SPECIES_NONE) {
         r4 = 11;
     } else {
         r4 = 0;

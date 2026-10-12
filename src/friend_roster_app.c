@@ -25,8 +25,8 @@
 #include "sound_playback.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_02019BA4.h"
-#include "unk_02020A0C.h"
+#include "grid_input_handler.h"
+#include "dpad_menu_box.h"
 #include "friend_roster.h"
 
 // Field bottom-screen app 6: when the Friend Roster is full, the player picks the entry to delete

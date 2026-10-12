@@ -2,8 +2,8 @@
 	.include "unk_02058AEC.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0205A03C
-sub_0205A03C: ; 0x0205A03C
+	thumb_func_start Task_UnionRoom
+Task_UnionRoom: ; 0x0205A03C
 	push {r3, r4, r5, r6, r7, lr}
 	str r1, [sp]
 	cmp r1, #0
@@ -37,4 +37,4 @@ _0205A076:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _0205A078: .word _021D41D8
-	thumb_func_end sub_0205A03C
+	thumb_func_end Task_UnionRoom

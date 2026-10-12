@@ -18,8 +18,8 @@
 .public sub_02037F94
 .public sub_02037FCC
 .public FieldSystem_TaskIsRunning
-.public sub_0205A1F0
-.public sub_0205A1F4
+.public UnionRoom_GetFieldSystem
+.public UnionRoom_GetRecord
 .public UnionRoomObjects_New
 .public UnionRoomObjects_RequestLeaveAll
 .public UnionRoomObjects_ResetSlots

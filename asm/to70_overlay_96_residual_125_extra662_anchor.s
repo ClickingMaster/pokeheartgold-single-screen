@@ -154,7 +154,7 @@
 	.extern PokeathlonCirclePush_Main
 	.extern PokeathlonLampJump_Draw
 	.extern PokeathlonHurdleDash_Start
-	.extern ov96_021FCD74
+	.extern PokeathlonRelayRun_Draw
 	.extern ov96_02204DE8
 	.extern PokeathlonBlockSmash_Draw
 	.extern PokeathlonGoalRoll_Draw
@@ -387,9 +387,9 @@
 	.public PokeathlonHurdleDashTrack_GetLayoutSize
 	.public PokeathlonHurdleDashStandings_Draw
 	.public PokeathlonHurdleDashDust_Free
-	.public ov96_021FCD74
-	.public ov96_021FDE6C
-	.public ov96_021FE538
+	.public PokeathlonRelayRun_Draw
+	.public PokeathlonRelayRun_IsTouchingSwapButton
+	.public PokeathlonRelayRunTeam_UpdateStun
 	.public ov96_02200BC8
 	.public ov96_02200E78
 	.public ov96_02200EEC
@@ -1074,9 +1074,9 @@ ov96_0221DC30:
 	.word PokeathlonHurdleDash_CalcScores
 
 ov96_0221DC3C:
-	.word ov96_021FD2E0
-	.word ov96_021FD3EC
-	.word ov96_021FD46C
+	.word PokeathlonRelayRun_Start
+	.word PokeathlonRelayRun_Play
+	.word PokeathlonRelayRun_SaveScores
 
 ov96_0221DC48:
 	.word ov96_02202154

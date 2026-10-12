@@ -29,7 +29,7 @@
 #include "unk_02054648.h"
 #include "unk_0205CB48.h"
 #include "unk_0206D494.h"
-#include "unk_02097268.h"
+#include "safari_zone_encounters.h"
 #include "unk_02097F6C.h"
 #include "wild_encounter.h"
 

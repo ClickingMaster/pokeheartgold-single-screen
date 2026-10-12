@@ -55,7 +55,7 @@
 #include "unk_02037C94.h"
 #include "field_interaction.h"
 #include "unk_02054648.h"
-#include "unk_02054E00.h"
+#include "headbutt_tree.h"
 #include "unk_02055BF0.h"
 #include "communication_club_link.h"
 #include "unk_02058AEC.h"

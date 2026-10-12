@@ -4,7 +4,7 @@
 #include "constants/phone_constants.h"
 
 #include "field_system.h"
-#include "unk_02092BE8.h"
+#include "gear_phone_ring_manager.h"
 
 enum RadioMusicPlayingSeq {
     RADIO_MUSIC_SEQ_NONE = 0,

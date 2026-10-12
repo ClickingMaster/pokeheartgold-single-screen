@@ -21,7 +21,7 @@
 #include "scrcmd_9.h"
 #include "frontier_data_access.h"
 #include "unk_02035900.h"
-#include "unk_0204A3F4.h"
+#include "frontier_field_system.h"
 
 typedef struct FrontierMonNarcData {
     u16 species;

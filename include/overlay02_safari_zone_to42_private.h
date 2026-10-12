@@ -10,7 +10,7 @@
 #include "player_avatar.h"
 #include "safari_zone.h"
 #include "map_object_movement_utilities.h"
-#include "unk_02097268.h"
+#include "safari_zone_encounters.h"
 
 int ov02_0224E4CC(void *fieldSystem, u32 behavior);
 int ov02_0224E4DC(void *fieldSystem, u32 behavior);

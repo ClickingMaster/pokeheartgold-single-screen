@@ -9,7 +9,7 @@
 #include "map_events.h"
 #include "save_local_field_data.h"
 #include "unk_02092BB8.h"
-#include "unk_02092BE8.h"
+#include "gear_phone_ring_manager.h"
 
 FS_EXTERN_OVERLAY(ds_protect);
 

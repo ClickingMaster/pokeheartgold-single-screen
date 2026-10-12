@@ -18,7 +18,7 @@
 #include "touchscreen_list_menu.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_02019BA4.h"
+#include "grid_input_handler.h"
 #include "yes_no_prompt.h"
 
 // Battle Castle (overlay 83): the party app (battle_castle_party_app.c) and the
