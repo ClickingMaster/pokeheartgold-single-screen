@@ -29,7 +29,7 @@ u16 MapCoordToMatrixIndex(FieldSystem *fieldSystem, int coordX, int coordY) {
 void sub_02054EB0(FieldSystem *fieldSystem, int buildModel, BOOL culled) {
     MapPropManager *mapPropManager;
     for (u8 i = 0; i < 4; i++) {
-        ov01_021F630C(i, fieldSystem->mapLoadManager, &mapPropManager);
+        MapLoadManager_GetMapPropManager(i, fieldSystem->mapLoadManager, &mapPropManager);
         if (mapPropManager != 0) {
             for (u8 j = 0; j < MAP_PROP_MAX; j++) {
                 MapProp *mapProp = MapPropManager_GetMapPropByIndex(mapPropManager, j);

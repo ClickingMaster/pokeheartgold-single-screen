@@ -10,7 +10,7 @@
 #include "unk_0200A090.h"
 
 // Defined with overlay 2's Pokecenter healing animation.
-void *ov02_0224B690(enum HeapID heapID, u32 size);
+void *FlyLanding_AllocZeroed(enum HeapID heapID, u32 size);
 
 #pragma force_active on
 #pragma opt_optimizecontrolflow off
@@ -32,10 +32,10 @@ void SpriteGfxManager_Init(SpriteGfxManager *manager, int numSprites, int numCha
     manager->plttMan = Create2DGfxResObjMan(numPltt, GF_GFX_RES_TYPE_PLTT, HEAP_ID_FIELD1);
     manager->cellMan = Create2DGfxResObjMan(numCell, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
     manager->animMan = Create2DGfxResObjMan(numAnim, GF_GFX_RES_TYPE_ANIM, HEAP_ID_FIELD1);
-    manager->charRes = ov02_0224B690(HEAP_ID_FIELD1, numChar * sizeof(SpriteGfxResource));
-    manager->plttRes = ov02_0224B690(HEAP_ID_FIELD1, numPltt * sizeof(SpriteGfxResource));
-    manager->cellRes = ov02_0224B690(HEAP_ID_FIELD1, numCell * sizeof(SpriteGfxResource));
-    manager->animRes = ov02_0224B690(HEAP_ID_FIELD1, numAnim * sizeof(SpriteGfxResource));
+    manager->charRes = FlyLanding_AllocZeroed(HEAP_ID_FIELD1, numChar * sizeof(SpriteGfxResource));
+    manager->plttRes = FlyLanding_AllocZeroed(HEAP_ID_FIELD1, numPltt * sizeof(SpriteGfxResource));
+    manager->cellRes = FlyLanding_AllocZeroed(HEAP_ID_FIELD1, numCell * sizeof(SpriteGfxResource));
+    manager->animRes = FlyLanding_AllocZeroed(HEAP_ID_FIELD1, numAnim * sizeof(SpriteGfxResource));
     i = 0;
     if (numChar > 0) {
         for (; i < numChar; i++) {

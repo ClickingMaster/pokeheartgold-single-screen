@@ -32,9 +32,9 @@ extern const FieldTerrainQueries gTerrainQueries_Simple;
 int Terrain_AbsDiff(int a0, int a1);
 int FieldSystem_GetHeightStep(FieldSystem *fieldSystem, VecFx32 *playerPos, int x, int z, u8 *outKind);
 
-extern int ov01_021F6328(int idx, int stride);
-extern int ov01_021F635C(int chunkIdx, int a1, MapLoadManager *mapLoadManager);
-extern void *ov01_021F65D0(MapLoadManager *mapLoadManager, u8 idx);
+extern int TileIndex_GetQuadrant(int idx, int stride);
+extern int MapLoadManager_GetMapSlotOfMatrixIndex(int chunkIdx, int a1, MapLoadManager *mapLoadManager);
+extern void *MapLoadManager_GetBdhc(MapLoadManager *mapLoadManager, u8 idx);
 extern int Bdhc_GetHeight(int a0, int a1, fx32 x, fx32 z, void *a4, fx32 *outY);
 int Terrain_CalcHeight(FieldSystem *fieldSystem, int a1, int a2, fx32 x, fx32 z, u8 *outKind);
 int Terrain_GetHeight_Bdhc(FieldSystem *fieldSystem, int a1, fx32 x, fx32 z, u8 *outKind);
@@ -45,9 +45,9 @@ BOOL Terrain_GetAttributes_Simple(FieldSystem *fieldSystem, int x, int z, u16 *o
 u8 sub_020548EC(FieldSystem *fieldSystem, int x, int z);
 int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int a1, fx32 x, fx32 z, u8 *outKind);
 
-extern BOOL ov01_021F654C(MapLoadManager *mapLoadManager, int x, int z, u8 *outIdx);
-extern SoundplateStruct *ov01_021F6600(MapLoadManager *mapLoadManager, u8 idx);
-extern int ov01_021F652C(MapLoadManager *mapLoadManager, u8 idx);
+extern BOOL MapLoadManager_GetMapSlotAt(MapLoadManager *mapLoadManager, int x, int z, u8 *outIdx);
+extern SoundplateStruct *MapLoadManager_GetSoundplates(MapLoadManager *mapLoadManager, u8 idx);
+extern int MapLoadManager_GetMapMatrixIndex(MapLoadManager *mapLoadManager, u8 idx);
 u32 FieldSystem_CheckCollisionHeightAndGimmick(FieldSystem *fieldSystem, VecFx32 *playerPos, u32 x, u32 y, u32 *a4);
 void Terrain_MakeTileRect(int a0, int a1, int a2, int a3, int a4, int a5, fx32 *out);
 BOOL MapProp_IsInRect(MapProp *mapProp, fx32 *rect, VecFx32 *offset);
@@ -115,13 +115,13 @@ int Terrain_CalcHeight(FieldSystem *fieldSystem, int objectHeightMode, int objec
     objectPosition.z = objectZ - currentMapOriginZ;
 
     u32 tileIndex = tileX + tileZ * mapMatrixWidthTiles;
-    int tileMapQuadrant = ov01_021F6328(tileIndex, mapMatrixWidthTiles);
-    u32 loadedMapIndex = ov01_021F635C(mapMatrixIndex, tileMapQuadrant, landDataMan);
+    int tileMapQuadrant = TileIndex_GetQuadrant(tileIndex, mapMatrixWidthTiles);
+    u32 loadedMapIndex = MapLoadManager_GetMapSlotOfMatrixIndex(mapMatrixIndex, tileMapQuadrant, landDataMan);
 
     if (loadedMapIndex > QUADRANT_COUNT - 1) {
         bdhcHeightValid = FALSE;
     } else {
-        void *bdhc = ov01_021F65D0(landDataMan, loadedMapIndex);
+        void *bdhc = MapLoadManager_GetBdhc(landDataMan, loadedMapIndex);
         bdhcHeightValid = Bdhc_GetHeight(objectHeightMode, objectHeight, objectPosition.x, objectPosition.z, bdhc, &objectPosition.y);
     }
 
@@ -175,7 +175,7 @@ int Terrain_CalcHeightWithMode(FieldSystem *fieldSystem, int a1, int a2, fx32 x,
 }
 
 int Terrain_GetHeight_Simple(FieldSystem *fieldSystem, int a1, fx32 x, fx32 z, u8 *outKind) {
-    BOOL ok = ov01_021F654C(fieldSystem->mapLoadManager, x / 0x10000, z / 0x10000, NULL);
+    BOOL ok = MapLoadManager_GetMapSlotAt(fieldSystem->mapLoadManager, x / 0x10000, z / 0x10000, NULL);
     if (outKind != NULL) {
         *outKind = ok ? 1 : 0;
     }
@@ -186,11 +186,11 @@ BOOL Terrain_GetAttributes_Loaded(FieldSystem *fieldSystem, int x, int z, u16 *o
     MapLoadManager *mapLoadManager = fieldSystem->mapLoadManager;
     u8 idx;
     u16 *attrs;
-    if (!ov01_021F654C(mapLoadManager, x, z, &idx)) {
+    if (!MapLoadManager_GetMapSlotAt(mapLoadManager, x, z, &idx)) {
         *outAttr = 0xFF;
         return FALSE;
     }
-    attrs = ov01_021F65E4(mapLoadManager, idx);
+    attrs = MapLoadManager_GetPermissions(mapLoadManager, idx);
     *outAttr = attrs[x % 32 + z % 32 * 32];
     return TRUE;
 }
@@ -204,10 +204,10 @@ BOOL Terrain_GetAttributes_Simple(FieldSystem *fieldSystem, int x, int z, u16 *o
 SoundplateStruct *FieldSystem_GetSoundplateAt(FieldSystem *fieldSystem, int x, int z) {
     MapLoadManager *mapLoadManager = fieldSystem->mapLoadManager;
     u8 idx;
-    if (ov01_021F654C(mapLoadManager, x, z, &idx) == 0) {
+    if (MapLoadManager_GetMapSlotAt(mapLoadManager, x, z, &idx) == 0) {
         return NULL;
     }
-    return ov01_021F6600(mapLoadManager, idx);
+    return MapLoadManager_GetSoundplates(mapLoadManager, idx);
 }
 
 void FieldSystem_SetTerrainQueries(void **a0, int a1) {
@@ -348,11 +348,11 @@ BOOL FieldSystem_FindMapPropInRect(FieldSystem *fieldSystem, int buildModel, fx3
     int idx;
     int model;
     for (i = 0; i < 4; i++) {
-        ov01_021F630C(i, fieldSystem->mapLoadManager, &mgr);
+        MapLoadManager_GetMapPropManager(i, fieldSystem->mapLoadManager, &mgr);
         if (mgr == NULL) {
             continue;
         }
-        idx = ov01_021F652C(fieldSystem->mapLoadManager, i);
+        idx = MapLoadManager_GetMapMatrixIndex(fieldSystem->mapLoadManager, i);
         Terrain_GetChunkOrigin(idx, MapMatrix_GetWidth(fieldSystem->mapMatrix), &pos);
         for (j = 0; j < 32; j++) {
             prop = MapPropManager_GetMapPropByIndex(mgr, j);
@@ -380,11 +380,11 @@ BOOL FieldSystem_FindMapPropOfModelsInRect(FieldSystem *fieldSystem, int *models
     int idx;
     int model;
     for (i = 0; i < 4; i++) {
-        ov01_021F630C(i, fieldSystem->mapLoadManager, &mgr);
+        MapLoadManager_GetMapPropManager(i, fieldSystem->mapLoadManager, &mgr);
         if (mgr == NULL) {
             continue;
         }
-        idx = ov01_021F652C(fieldSystem->mapLoadManager, i);
+        idx = MapLoadManager_GetMapMatrixIndex(fieldSystem->mapLoadManager, i);
         Terrain_GetChunkOrigin(idx, MapMatrix_GetWidth(fieldSystem->mapMatrix), &pos);
         for (j = 0; j < 32; j++) {
             prop = MapPropManager_GetMapPropByIndex(mgr, j);
@@ -414,7 +414,7 @@ BOOL FieldSystem_FindMapProp(FieldSystem *fieldSystem, int buildModel, MapProp *
     MapProp *prop;
     int model;
     for (i = 0; i < 4; i++) {
-        ov01_021F630C(i, fieldSystem->mapLoadManager, &mgr);
+        MapLoadManager_GetMapPropManager(i, fieldSystem->mapLoadManager, &mgr);
         if (mgr == NULL) {
             continue;
         }
@@ -426,7 +426,7 @@ BOOL FieldSystem_FindMapProp(FieldSystem *fieldSystem, int buildModel, MapProp *
                     *outProp = prop;
                 }
                 if (outIdx != NULL) {
-                    *outIdx = ov01_021F652C(fieldSystem->mapLoadManager, i);
+                    *outIdx = MapLoadManager_GetMapMatrixIndex(fieldSystem->mapLoadManager, i);
                 }
                 return TRUE;
             }
@@ -443,7 +443,7 @@ BOOL FieldSystem_FindMapPropOfModels(FieldSystem *fieldSystem, int *models, u32 
     MapProp *prop;
     int model;
     for (i = 0; i < 4; i++) {
-        ov01_021F630C(i, fieldSystem->mapLoadManager, &mgr);
+        MapLoadManager_GetMapPropManager(i, fieldSystem->mapLoadManager, &mgr);
         if (mgr == NULL) {
             continue;
         }
@@ -478,9 +478,9 @@ int *FieldSystem_CollectMapPropModelsInRect(FieldSystem *fieldSystem, u32 heapId
     count = 0;
     for (outer = 0; outer < 4; outer++) {
         MapPropManager *manager;
-        ov01_021F630C(outer, fieldSystem->mapLoadManager, &manager);
+        MapLoadManager_GetMapPropManager(outer, fieldSystem->mapLoadManager, &manager);
         if (manager != NULL) {
-            int index = ov01_021F652C(fieldSystem->mapLoadManager, outer);
+            int index = MapLoadManager_GetMapMatrixIndex(fieldSystem->mapLoadManager, outer);
             VecFx32 offset;
             Terrain_GetChunkOrigin(index, MapMatrix_GetWidth(fieldSystem->mapMatrix), &offset);
             u8 inner;

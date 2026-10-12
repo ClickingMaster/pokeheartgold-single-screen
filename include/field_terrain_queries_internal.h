@@ -22,9 +22,9 @@ typedef struct FieldAttrVTable {
 int Terrain_AbsDiff(int a0, int a1);
 int FieldSystem_GetHeightStep(FieldSystem *fieldSystem, VecFx32 *playerPos, int x, int z, u8 *outKind);
 
-extern int ov01_021F6328(int idx, int stride);
-extern int ov01_021F635C(int chunkIdx, int a1, MapLoadManager *mapLoadManager);
-extern void *ov01_021F65D0(MapLoadManager *mapLoadManager, u8 idx);
+extern int TileIndex_GetQuadrant(int idx, int stride);
+extern int MapLoadManager_GetMapSlotOfMatrixIndex(int chunkIdx, int a1, MapLoadManager *mapLoadManager);
+extern void *MapLoadManager_GetBdhc(MapLoadManager *mapLoadManager, u8 idx);
 extern int Bdhc_GetHeight(int a0, int a1, fx32 x, fx32 z, void *a4, fx32 *outY);
 int Terrain_CalcHeight(FieldSystem *fieldSystem, int a1, int a2, fx32 x, fx32 z, u8 *outKind);
 int Terrain_GetHeight_Bdhc(FieldSystem *fieldSystem, int a1, fx32 x, fx32 z, u8 *outKind);
@@ -35,8 +35,8 @@ BOOL Terrain_GetAttributes_Simple(FieldSystem *fieldSystem, int x, int z, u16 *o
 u8 sub_020548EC(FieldSystem *fieldSystem, int x, int z);
 int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int a1, fx32 x, fx32 z, u8 *outKind);
 
-extern BOOL ov01_021F654C(MapLoadManager *mapLoadManager, int x, int z, u8 *outIdx);
-extern SoundplateStruct *ov01_021F6600(MapLoadManager *mapLoadManager, u8 idx);
+extern BOOL MapLoadManager_GetMapSlotAt(MapLoadManager *mapLoadManager, int x, int z, u8 *outIdx);
+extern SoundplateStruct *MapLoadManager_GetSoundplates(MapLoadManager *mapLoadManager, u8 idx);
 
 extern const FieldAttrVTable gTerrainQueries_Bdhc;
 extern const FieldAttrVTable gTerrainQueries_Simple;

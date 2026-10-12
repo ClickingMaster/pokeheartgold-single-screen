@@ -16,13 +16,13 @@ u32 GetMonData(void *mon, int attr, void *ptr);
 void PlayCry(u16 species, u8 form);
 
 void *ov02_0224A418(void *, VecFx32 *);
-void *ov02_0224A9B8(void *, VecFx32 *);
-void ov02_0224A9D8(void *, u32);
+void *FieldMoveCutIn_CreateMonSprite(void *, VecFx32 *);
+void FieldMoveCutIn_CreateScrollSprites(void *, u32);
 void ov02_0224A69C(void *, u32, u32, u32, u32);
 void ov02_0224A450(void *);
 void ov02_02249D40(void *);
-void ov02_0224B72C(void *);
-void ov02_0224B768(void *);
+void FieldMoveCutIn_CreateTrainerClipEffect(void *);
+void FieldMoveCutIn_DestroyTrainerClipEffect(void *);
 
 int ov02_022495E8(void *);
 int ov02_02249658(void *);

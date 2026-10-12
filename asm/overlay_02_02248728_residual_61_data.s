@@ -1312,72 +1312,72 @@
 	.public ov02_0224A69C
 	.public ov02_0224A6A8
 	.public ov02_0224A6D0
-	.public ov02_0224A700
-	.public ov02_0224A7A8
-	.public ov02_0224A7B8
-	.public ov02_0224A800
-	.public ov02_0224A810
-	.public ov02_0224A834
-	.public ov02_0224A868
-	.public ov02_0224A88C
-	.public ov02_0224A8D4
-	.public ov02_0224A9B8
-	.public ov02_0224A9D8
-	.public ov02_0224AA44
-	.public ov02_0224AA80
-	.public ov02_0224AAC8
-	.public ov02_0224AAD4
-	.public ov02_0224AB54
-	.public ov02_0224AB58
-	.public ov02_0224AB8C
-	.public ov02_0224AB9C
-	.public ov02_0224ABCC
-	.public ov02_0224ABF8
-	.public ov02_0224AC04
-	.public ov02_0224AC24
-	.public ov02_0224AC28
-	.public ov02_0224AC38
-	.public ov02_0224ACE0
-	.public ov02_0224ADEC
-	.public ov02_0224ADF0
-	.public ov02_0224AF70
-	.public ov02_0224B0E0
-	.public ov02_0224B158
-	.public ov02_0224B294
-	.public ov02_0224B298
-	.public ov02_0224B2C0
-	.public ov02_0224B2CC
-	.public ov02_0224B314
-	.public ov02_0224B350
-	.public ov02_0224B364
-	.public ov02_0224B3B0
-	.public ov02_0224B3FC
-	.public ov02_0224B418
-	.public ov02_0224B43C
-	.public ov02_0224B448
-	.public ov02_0224B45C
-	.public ov02_0224B494
-	.public ov02_0224B4AC
-	.public ov02_0224B5F0
-	.public ov02_0224B638
-	.public ov02_0224B664
-	.public ov02_0224B68C
-	.public ov02_0224B690
-	.public ov02_0224B6B0
-	.public ov02_0224B6D0
-	.public ov02_0224B6E4
-	.public ov02_0224B72C
-	.public ov02_0224B768
-	.public ov02_0224B784
-	.public ov02_0224B7CC
-	.public ov02_0224B804
-	.public ov02_0224B808
-	.public ov02_0224B87C
-	.public ov02_0224B88C
-	.public ov02_0224B90C
-	.public ov02_0224B938
-	.public ov02_0224B964
-	.public ov02_0224BAA8
+	.public Task_FieldMoveCutIn_UpdateWindow
+	.public FieldMoveCutIn_GetMonPicIds
+	.public FieldMoveCutIn_LoadMonChar
+	.public FieldMoveCutIn_LoadMonPltt
+	.public FieldMoveCutIn_AddMonCharResource
+	.public FieldMoveCutIn_TransferMonChar
+	.public FieldMoveCutIn_AddMonPlttResource
+	.public FieldMoveCutIn_TransferMonPltt
+	.public FieldMoveCutIn_FreeMonResources
+	.public FieldMoveCutIn_CreateMonSprite
+	.public FieldMoveCutIn_CreateScrollSprites
+	.public FieldMoveCutIn_CreateScrollSprite
+	.public CutInScrollSprite_Init
+	.public CutInScrollSprite_Destroy
+	.public CutInScrollSprite_Update
+	.public CutInScrollSprite_Draw
+	.public FieldMoveCutIn_CreateFlyer
+	.public FieldMoveCutIn_GetFlyerStatus
+	.public FieldMoveCutIn_DestroyFlyer
+	.public CutInFlyer_Init
+	.public CutInFlyer_Destroy
+	.public CutInFlyer_Update
+	.public CutInFlyer_Draw
+	.public CutInFlyer_Hide
+	.public FieldMoveCutIn_StartFlyerTakeOff
+	.public CutInFlyer_TakeOff
+	.public CutInFlyer_Idle
+	.public FieldMoveCutIn_StartFlyerPickUp
+	.public CutInFlyer_SwoopDown
+	.public CutInFlyer_PickUpTrainer
+	.public CutInFlyer_FlyAway
+	.public CutInFlyer_Done
+	.public FieldMoveCutIn_CreateTrainerJumpEffect
+	.public TrainerJumpEffect_Stop
+	.public TrainerJumpEffect_StartJump
+	.public TrainerJumpEffect_StartHop
+	.public TrainerJumpEffect_Init
+	.public TrainerJumpEffect_Jump
+	.public TrainerJumpEffect_Hop
+	.public TrainerJumpEffect_Update
+	.public FlyLanding_Start
+	.public FlyLanding_IsDone
+	.public FlyLanding_Delete
+	.public Task_FlyLanding
+	.public FlyLanding_SetPlayerVisible
+	.public FlyLanding_LoadGraphics
+	.public FlyLanding_CreateSprites
+	.public FlyLanding_WaitLanding
+	.public FlyLanding_FreeGraphics
+	.public FlyLanding_Idle
+	.public FlyLanding_AllocZeroed
+	.public FieldMoveCutIn_SetPlayerVisible
+	.public TrainerClipEffect_Init
+	.public TrainerClipEffect_Update
+	.public FieldMoveCutIn_CreateTrainerClipEffect
+	.public FieldMoveCutIn_DestroyTrainerClipEffect
+	.public FieldMoveCutIn_CreateModelEffect
+	.public CutInModelEffect_Init
+	.public CutInModelEffect_Destroy
+	.public CutInModelEffect_Update
+	.public CutInModelEffect_Draw
+	.public FieldMoveCutIn_LoadModel
+	.public FieldMoveCutIn_UnloadModel
+	.public FieldMoveCutIn_StepShowOtherObject
+	.public FieldMoveCutIn_StepWaitModelEffect
+	.public Roamers_GetActiveRoamerBySpecies
 	.public ElevatorAnimCreate
 	.public ElevatorAnimRun
 	.public ov02_0224BF58
@@ -1682,28 +1682,28 @@
 	.public ov02_0224A69C
 	.public ov02_0224A6A8
 	.public ov02_0224A6D0
-	.public ov02_0224A800
-	.public ov02_0224AAC8
-	.public ov02_0224AB54
-	.public ov02_0224AB8C
-	.public ov02_0224AB9C
-	.public ov02_0224ABF8
-	.public ov02_0224AC24
-	.public ov02_0224AC28
-	.public ov02_0224ADEC
-	.public ov02_0224B294
-	.public ov02_0224B2C0
-	.public ov02_0224B350
-	.public ov02_0224B418
-	.public ov02_0224B43C
-	.public ov02_0224B448
-	.public ov02_0224B494
-	.public ov02_0224B68C
-	.public ov02_0224B690
-	.public ov02_0224B6B0
-	.public ov02_0224B768
-	.public ov02_0224B804
-	.public ov02_0224B87C
+	.public FieldMoveCutIn_LoadMonPltt
+	.public CutInScrollSprite_Destroy
+	.public CutInScrollSprite_Draw
+	.public FieldMoveCutIn_GetFlyerStatus
+	.public FieldMoveCutIn_DestroyFlyer
+	.public CutInFlyer_Destroy
+	.public CutInFlyer_Draw
+	.public CutInFlyer_Hide
+	.public CutInFlyer_Idle
+	.public CutInFlyer_Done
+	.public TrainerJumpEffect_Stop
+	.public TrainerJumpEffect_Init
+	.public FlyLanding_Start
+	.public FlyLanding_IsDone
+	.public FlyLanding_Delete
+	.public FlyLanding_SetPlayerVisible
+	.public FlyLanding_Idle
+	.public FlyLanding_AllocZeroed
+	.public FieldMoveCutIn_SetPlayerVisible
+	.public FieldMoveCutIn_DestroyTrainerClipEffect
+	.public CutInModelEffect_Destroy
+	.public CutInModelEffect_Draw
 	.public ov02_0224BFC0
 	.public ov02_0224BFCC
 	.public FieldEscapeRope_Warp
@@ -1770,7 +1770,7 @@ ov02_022532FC: ; 0x022532FC
 	.byte 0x07, 0x00, 0x08, 0x00
 
 ov02_02253300:
-	.word ov02_0224AC28
+	.word CutInFlyer_Hide
 
 ov02_02253304: ; 0x02253304
 	.byte 0x11, 0x00, 0x14, 0x00, 0x17, 0x00
@@ -1785,7 +1785,7 @@ sFlyLandingPhases: ; 0x02253320
 	.word sFlyLandingIdleSteps, sFlyLandingSteps, 0x01, 0x0F
 
 ov02_02253330:
-	.word ov02_0224ACE0, ov02_0224ADEC, 0x00, 0x06
+	.word CutInFlyer_TakeOff, CutInFlyer_Idle, 0x00, 0x06
 	.byte 0x01, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00
 
 ov02_02253348: ; 0x02253348
@@ -1854,16 +1854,16 @@ ov02_02253414: ; 0x02253414
 	.byte 0x00, 0x80, 0x12, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00
 
 ov02_02253420:
-	.word ov02_0224AF70, ov02_0224B0E0, ov02_0224B158, ov02_0224B294
+	.word CutInFlyer_SwoopDown, CutInFlyer_PickUpTrainer, CutInFlyer_FlyAway, CutInFlyer_Done
 
 ov02_02253430: ; 0x02253430
 	.byte 0x00, 0xC0, 0xFF, 0xFF, 0x00, 0xA0, 0xFF, 0xFF, 0x00, 0x90, 0xFF, 0xFF, 0x00, 0x80, 0xFF, 0xFF
 
 ov02_02253440: ; 0x02253440
 	.byte 0x08, 0x00, 0x00, 0x00
-	.word ov02_0224B6D0
+	.word TrainerClipEffect_Init
 	.word FieldEffect_DefaultDestroy
-	.word ov02_0224B6E4
+	.word TrainerClipEffect_Update
 	.word FieldEffect_DefaultDraw
 
 sFlyLandingEffectTemplate: ; 0x02253454
@@ -1875,39 +1875,39 @@ sFlyLandingEffectTemplate: ; 0x02253454
 
 ov02_02253468: ; 0x02253468
 	.byte 0x24, 0x00, 0x00, 0x00
-	.word ov02_0224AA80
-	.word ov02_0224AAC8
-	.word ov02_0224AAD4
-	.word ov02_0224AB54
+	.word CutInScrollSprite_Init
+	.word CutInScrollSprite_Destroy
+	.word CutInScrollSprite_Update
+	.word CutInScrollSprite_Draw
 
 ov02_0225347C: ; 0x0225347C
 	.byte 0x68, 0x00, 0x00, 0x00
-	.word ov02_0224ABCC
-	.word ov02_0224ABF8
-	.word ov02_0224AC04
-	.word ov02_0224AC24
+	.word CutInFlyer_Init
+	.word CutInFlyer_Destroy
+	.word CutInFlyer_Update
+	.word CutInFlyer_Draw
 
 ov02_02253490: ; 0x02253490
 	.byte 0x0C, 0x00, 0x00, 0x00
-	.word ov02_0224B7CC
-	.word ov02_0224B804
-	.word ov02_0224B808
-	.word ov02_0224B87C
+	.word CutInModelEffect_Init
+	.word CutInModelEffect_Destroy
+	.word CutInModelEffect_Update
+	.word CutInModelEffect_Draw
 
 ov02_022534A4: ; 0x022534A4
 	.byte 0x24, 0x00, 0x00, 0x00
-	.word ov02_0224B350
+	.word TrainerJumpEffect_Init
 	.word FieldEffect_DefaultDestroy
-	.word ov02_0224B3FC
+	.word TrainerJumpEffect_Update
 	.word FieldEffect_DefaultDraw
 
 ov02_022534B8: ; 0x022534B8
-	.word ov02_0224B494
-	.word ov02_0224B4AC
-	.word ov02_0224B5F0
-	.word ov02_0224B638
-	.word ov02_0224B664
-	.word ov02_0224B68C
+	.word FlyLanding_SetPlayerVisible
+	.word FlyLanding_LoadGraphics
+	.word FlyLanding_CreateSprites
+	.word FlyLanding_WaitLanding
+	.word FlyLanding_FreeGraphics
+	.word FlyLanding_Idle
 
 sFlyLandingSteps:
 	.word FlyLandingEffect_SwoopIn
@@ -1922,8 +1922,8 @@ sFlyLandingSteps:
 ov02_022534F0: ; 0x022534F0
 	.word ov02_022495D0
 	.word ov02_02249A5C
-	.word ov02_0224B938
-	.word ov02_0224B964
+	.word FieldMoveCutIn_StepShowOtherObject
+	.word FieldMoveCutIn_StepWaitModelEffect
 	.word ov02_02249AD8
 	.word ov02_02249AF0
 	.word ov02_02249B80

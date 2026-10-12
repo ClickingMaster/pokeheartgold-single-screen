@@ -3,6 +3,7 @@
 
 #include "field/field_effect_manager.h"
 #include "field/overlay_01_021FB878.h"
+#include "field/sprite_gfx_manager.h"
 
 #include "field_system.h"
 #include "pokemon.h"
@@ -31,7 +32,7 @@ typedef struct FieldMoveCutIn {
     u16 playerGender;                    // 0x00C
     u16 trainerGraphics;                 // 0x00E, player gender, or 2 for no trainer
     BOOL drawSprites;                    // 0x010
-    int cloudVisibility;                 // 0x014, 1: hidden, 2: inside the window only
+    int scrollSpriteMode;                // 0x014, 1: banner sprites hidden, 2: drawn inside the window only
     BOOL fadeStarted;                    // 0x018
     BOOL flyStarted;                     // 0x01C, the trainer sprite is no longer clipped to the window
     int kind;                            // 0x020, 0: banner only, 1: Fly, 2: Fly with the follower, 3: Fly with an object
@@ -80,5 +81,39 @@ typedef struct FieldMoveCutIn {
     FieldMoveCutInModel model;           // 0x228
     VecFx32 otherObjectOffset;           // 0x2EC, x and z: screen offset of the second map object
 } FieldMoveCutIn;
+
+// The first half of the cut-in (state machines, banner, sprite resources).
+Sprite *ov02_0224A33C(FieldMoveCutIn *cutIn, VecFx32 *pos, int charId, int plttId, int cellId, int animId, int priority, int drawPriority);
+Sprite *ov02_0224A3F0(FieldMoveCutIn *cutIn, VecFx32 *pos, int drawPriority, int animSeq);
+Sprite *ov02_0224A468(FieldMoveCutIn *cutIn, VecFx32 *pos, int drawPriority, int unused);
+
+// field_move_cut_in_effects.c
+void Task_FieldMoveCutIn_UpdateWindow(SysTask *task, void *data);
+void FieldMoveCutIn_GetMonPicIds(FieldMoveCutIn *cutIn, PokepicTemplate *template);
+void *FieldMoveCutIn_LoadMonChar(Pokemon *mon, PokepicTemplate *template, enum HeapID heapID);
+void *FieldMoveCutIn_LoadMonPltt(PokepicTemplate *template, enum HeapID heapID);
+SpriteResource *FieldMoveCutIn_AddMonCharResource(FieldMoveCutIn *cutIn, NARC *narc);
+void FieldMoveCutIn_TransferMonChar(FieldMoveCutIn *cutIn, void *data);
+SpriteResource *FieldMoveCutIn_AddMonPlttResource(FieldMoveCutIn *cutIn, NARC *narc);
+void FieldMoveCutIn_TransferMonPltt(FieldMoveCutIn *cutIn, void *data);
+void FieldMoveCutIn_FreeMonResources(FieldMoveCutIn *cutIn);
+Sprite *FieldMoveCutIn_CreateMonSprite(FieldMoveCutIn *cutIn, VecFx32 *pos);
+void FieldMoveCutIn_CreateScrollSprites(FieldMoveCutIn *cutIn, int mode);
+void FieldMoveCutIn_CreateScrollSprite(FieldMoveCutIn *cutIn, const VecFx32 *position, const VecFx32 *velocity, u32 drawPriority, u32 animSeq, int mode);
+void FieldMoveCutIn_CreateFlyer(FieldMoveCutIn *cutIn);
+u8 FieldMoveCutIn_GetFlyerStatus(FieldMoveCutIn *cutIn);
+void FieldMoveCutIn_DestroyFlyer(FieldMoveCutIn *cutIn);
+void FieldMoveCutIn_StartFlyerTakeOff(FieldMoveCutIn *cutIn);
+void FieldMoveCutIn_StartFlyerPickUp(FieldMoveCutIn *cutIn);
+FieldEffect *FieldMoveCutIn_CreateTrainerJumpEffect(void *effectPool, Sprite *trainerSprite);
+void TrainerJumpEffect_Stop(FieldEffect *effect);
+void TrainerJumpEffect_StartJump(FieldEffect *effect);
+void TrainerJumpEffect_StartHop(FieldEffect *effect);
+void FieldMoveCutIn_SetPlayerVisible(FieldMoveCutIn *cutIn, BOOL visible);
+void FieldMoveCutIn_CreateTrainerClipEffect(FieldMoveCutIn *cutIn);
+void FieldMoveCutIn_DestroyTrainerClipEffect(FieldMoveCutIn *cutIn);
+void FieldMoveCutIn_CreateModelEffect(FieldMoveCutIn *cutIn);
+void FieldMoveCutIn_LoadModel(FieldMoveCutIn *cutIn);
+void FieldMoveCutIn_UnloadModel(FieldMoveCutIn *cutIn);
 
 #endif // POKEHEARTGOLD_FIELD_FIELD_MOVE_CUT_IN_H

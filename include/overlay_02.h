@@ -39,9 +39,9 @@ typedef struct SafariDecorationArgs {
     u8 *unk20; // points to fieldSystem->unk_111
 } SafariDecorationArgs;
 
-SysTask *ov02_0224B418(FieldSystem *fieldSystem, int gender);
-BOOL ov02_0224B43C(SysTask *unk);
-void ov02_0224B448(SysTask *unk);
+SysTask *FlyLanding_Start(FieldSystem *fieldSystem, int gender);
+BOOL FlyLanding_IsDone(SysTask *task);
+void FlyLanding_Delete(SysTask *task);
 struct FieldMoveTaskEnvironment *CreateFieldEscapeRopeTaskEnv(FieldSystem *fieldSystem, enum HeapID heapID);
 struct FieldMoveTaskEnvironment *FieldMoveTask_CreateTeleportEnvironment(FieldSystem *fieldSystem, Pokemon *mon, u8 slotno, enum HeapID heapID);
 struct FieldMoveTaskEnvironment *FieldMoveTask_CreateDigEnvironment(FieldSystem *fieldSystem, Pokemon *mon, u8 slotno, enum HeapID heapID);
@@ -64,6 +64,7 @@ void ShowTrapEffect(TaskManager *taskManager, u8 kind);
 void ShowLegendaryWing(TaskManager *taskManager, u8 kind);
 void ShowHideoutAlarm(TaskManager *taskManager);
 void PokecenterAnimCreate(FieldSystem *fieldSystem, u8 kind);
+BOOL PokecenterAnimRun(TaskManager *taskManager);
 void ElevatorAnimCreate(FieldSystem *fieldSystem, u8 direction, u8 length);
 int PrimoPassword_CheckWallpaper(PlayerProfile *profile, u16 word1, u16 word2, u16 word3, u16 word4, enum HeapID heapID);
 int PrimoPassword_Check2(PlayerProfile *profile, u16 word1, u16 word2, u16 word3, u16 word4, enum HeapID heapID);

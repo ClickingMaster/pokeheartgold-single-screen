@@ -757,14 +757,14 @@ static void sub_02053AA0(TaskManager *taskManager) {
         GF_ASSERT(FALSE);
         return;
     }
-    env->unk4 = ov02_0224B418(fieldSystem, PlayerAvatar_GetGender(fieldSystem->playerAvatar));
+    env->unk4 = FlyLanding_Start(fieldSystem, PlayerAvatar_GetGender(fieldSystem->playerAvatar));
     TaskManager_Call(taskManager, sub_02053AE4, env);
 }
 
 static BOOL sub_02053AE4(TaskManager *taskManager) {
     struct UnkTaskEnv_02053950 *env = TaskManager_GetEnvironment(taskManager);
-    if (ov02_0224B43C(env->unk4) == TRUE) {
-        ov02_0224B448(env->unk4);
+    if (FlyLanding_IsDone(env->unk4) == TRUE) {
+        FlyLanding_Delete(env->unk4);
         return TRUE;
     }
 

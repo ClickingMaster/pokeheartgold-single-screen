@@ -1,9 +1,9 @@
-	.extern ov01_021F4D10
-	.extern ov01_021F4D88
-	.extern ov01_021F4E1C
-	.extern ov01_021F5D8C
-	.extern ov01_021F5E20
-	.extern ov01_021F5EA0
+	.extern LoadSlotMap_Default
+	.extern LoadSlotMap_NoCollision
+	.extern LoadSlotMap_SafariZone
+	.extern InitialLoad_Default
+	.extern InitialLoad_NoCollision
+	.extern InitialLoad_SafariZone
 	.public MapLoadManager_End
 	.public MapLoadManager_ForgetTrackedTarget
 	.public MapLoadManager_FreeNARCAndLoadedMapBuffers
@@ -307,117 +307,117 @@
 	.public _021F6758
 	.public _021F676A
 	.public _021F67B0
-	.public ov01_021F4704
-	.public ov01_021F4728
-	.public ov01_021F474C
-	.public ov01_021F477C
-	.public ov01_021F47A0
-	.public ov01_021F488C
-	.public ov01_021F497C
-	.public ov01_021F49FC
-	.public ov01_021F4A50
-	.public ov01_021F4AAC
-	.public ov01_021F4AE4
-	.public ov01_021F4B1C
-	.public ov01_021F4BE8
-	.public ov01_021F4C6C
-	.public ov01_021F4D10
-	.public ov01_021F4D88
-	.public ov01_021F4E1C
-	.public ov01_021F4E88
-	.public ov01_021F4F0C
-	.public ov01_021F4FB0
-	.public ov01_021F5024
-	.public ov01_021F5038
-	.public ov01_021F54AC
-	.public ov01_021F5568
-	.public ov01_021F55F4
-	.public ov01_021F562C
-	.public ov01_021F5A04
-	.public ov01_021F5A28
+	.public MapMatrixIndex_IsSameColumn
+	.public MapMatrixIndex_IsSameRow
+	.public MapLoadManager_CancelSlotTasks
+	.public MapLoadSlot_CancelTasks
+	.public CalcMapIndicesAroundPosition
+	.public MapLoadManager_AllocMaps
+	.public MapLoadManager_AllocMapsNoCollision
+	.public ReadMapFileHeader
+	.public MapLoadManager_ReadMapFileHeader
+	.public MapLoadManager_ReadSoundplates
+	.public MapLoadManager_ReadPermissions
+	.public MapLoadManager_LoadSafariZoneProps
+	.public MapLoadManager_StartLoadTasks
+	.public MapLoadManager_LoadModelAndBdhc
+	.public LoadSlotMap_Default
+	.public LoadSlotMap_NoCollision
+	.public LoadSlotMap_SafariZone
+	.public LoadMapNow_Default
+	.public LoadMapNow_NoCollision
+	.public LoadMapNow_SafariZone
+	.public MapLoadTasks_AreDone
+	.public MapLoadManager_StartSlot
+	.public MapLoadManager_RequestLoad
+	.public MapLoadManager_ResetMap
+	.public MapLoadManager_SwapMaps
+	.public MapLoadManager_Scroll
+	.public TileIndex_ToMatrixIndex
+	.public TileCoords_ToIndex
 	.public ov01_021F5A30
-	.public ov01_021F5A54
-	.public ov01_021F5A80
-	.public ov01_021F5AE8
+	.public Quadrant_ToMapSlot
+	.public TileIndex_Step
+	.public MapSlot_Step
 	.public ov01_021F5B24
-	.public ov01_021F5B88
-	.public ov01_021F5BBC
-	.public ov01_021F5BF0
-	.public ov01_021F5CB4
-	.public ov01_021F5D10
-	.public ov01_021F5D20
-	.public ov01_021F5D38
-	.public ov01_021F5D8C
-	.public ov01_021F5E20
-	.public ov01_021F5EA0
-	.public ov01_021F5F34
-	.public ov01_021F5F64
-	.public ov01_021F5FB8
-	.public ov01_021F613C
-	.public ov01_021F61DC
-	.public ov01_021F630C
-	.public ov01_021F6320
-	.public ov01_021F6328
-	.public ov01_021F635C
-	.public ov01_021F652C
-	.public ov01_021F654C
-	.public ov01_021F65D0
-	.public ov01_021F65E4
-	.public ov01_021F65F0
-	.public ov01_021F6600
-	.public ov01_021F6614
-	.public ov01_021F6620
-	.public ov01_021F676C
-	.public ov01_021F67B4
-	.public ov01_02206BC0
-	.public ov01_02206BC8
-	.public ov01_02206BD0
-	.public ov01_02206BD8
-	.public ov01_02206BE4
+	.public Direction_GetOpposite
+	.public MapLoadManager_FindOppositeSlot
+	.public MapLoadManager_StartQueuedSlot
+	.public MapLoadManager_StartQueuedLoad
+	.public MapLoadManager_IsCurrentSlotFinished
+	.public MapLoadManager_ClearMapStale
+	.public MapLoadManager_MarkMapsStale
+	.public InitialLoad_Default
+	.public InitialLoad_NoCollision
+	.public InitialLoad_SafariZone
+	.public MapLoadManager_ResetSlots
+	.public MapLoadManager_SetPosition
+	.public CalcMapPosition
+	.public MapLoadManager_OnTileStep
+	.public PositionToTile
+	.public MapLoadManager_GetMapPropManager
+	.public MapLoadManager_GetCurrentMapSlot
+	.public TileIndex_GetQuadrant
+	.public MapLoadManager_GetMapSlotOfMatrixIndex
+	.public MapLoadManager_GetMapMatrixIndex
+	.public MapLoadManager_GetMapSlotAt
+	.public MapLoadManager_GetBdhc
+	.public MapLoadManager_GetPermissions
+	.public MapLoadManager_GetPermissionBytes
+	.public MapLoadManager_GetSoundplates
+	.public MapModelLoad_Cancel
+	.public Task_LoadMapModel
+	.public StartMapModelLoadTask
+	.public LoadMapModel
+	.public sMapLoadFuncs_Default
+	.public sMapLoadFuncs_SafariZone
+	.public sMapLoadFuncs_NoCollision
+	.public sMapModelScale
+	.public sMapModelRotation
 	.public MapLoadManager_ForgetTrackedTarget
 	.public MapLoadManager_FreeNARCAndLoadedMapBuffers
 	.public MapLoadManager_HasEnded
 	.public MapLoadManager_InitialLoad
 	.public MapLoadManager_RenderLoadedMaps
 	.public MapLoadManager_TrackTarget
-	.public ov01_021F4704
-	.public ov01_021F4728
-	.public ov01_021F474C
-	.public ov01_021F477C
-	.public ov01_021F497C
-	.public ov01_021F4AAC
-	.public ov01_021F4AE4
-	.public ov01_021F4E88
-	.public ov01_021F4F0C
-	.public ov01_021F4FB0
-	.public ov01_021F5024
-	.public ov01_021F55F4
-	.public ov01_021F5A04
-	.public ov01_021F5A28
+	.public MapMatrixIndex_IsSameColumn
+	.public MapMatrixIndex_IsSameRow
+	.public MapLoadManager_CancelSlotTasks
+	.public MapLoadSlot_CancelTasks
+	.public MapLoadManager_AllocMapsNoCollision
+	.public MapLoadManager_ReadSoundplates
+	.public MapLoadManager_ReadPermissions
+	.public LoadMapNow_Default
+	.public LoadMapNow_NoCollision
+	.public LoadMapNow_SafariZone
+	.public MapLoadTasks_AreDone
+	.public MapLoadManager_SwapMaps
+	.public TileIndex_ToMatrixIndex
+	.public TileCoords_ToIndex
 	.public ov01_021F5A30
-	.public ov01_021F5A54
-	.public ov01_021F5AE8
-	.public ov01_021F5B88
-	.public ov01_021F5CB4
-	.public ov01_021F5D10
-	.public ov01_021F5D20
-	.public ov01_021F5D38
-	.public ov01_021F5D8C
-	.public ov01_021F5E20
-	.public ov01_021F5EA0
-	.public ov01_021F5F34
-	.public ov01_021F5F64
-	.public ov01_021F61DC
-	.public ov01_021F630C
-	.public ov01_021F6320
-	.public ov01_021F6328
-	.public ov01_021F652C
-	.public ov01_021F65D0
-	.public ov01_021F65E4
-	.public ov01_021F65F0
-	.public ov01_021F6600
-	.public ov01_021F6614
-	.public ov01_021F676C
+	.public Quadrant_ToMapSlot
+	.public MapSlot_Step
+	.public Direction_GetOpposite
+	.public MapLoadManager_StartQueuedLoad
+	.public MapLoadManager_IsCurrentSlotFinished
+	.public MapLoadManager_ClearMapStale
+	.public MapLoadManager_MarkMapsStale
+	.public InitialLoad_Default
+	.public InitialLoad_NoCollision
+	.public InitialLoad_SafariZone
+	.public MapLoadManager_ResetSlots
+	.public MapLoadManager_SetPosition
+	.public PositionToTile
+	.public MapLoadManager_GetMapPropManager
+	.public MapLoadManager_GetCurrentMapSlot
+	.public TileIndex_GetQuadrant
+	.public MapLoadManager_GetMapMatrixIndex
+	.public MapLoadManager_GetBdhc
+	.public MapLoadManager_GetPermissions
+	.public MapLoadManager_GetPermissionBytes
+	.public MapLoadManager_GetSoundplates
+	.public MapModelLoad_Cancel
+	.public StartMapModelLoadTask
 #include "constants/sndseq.h"
 #include "constants/moves.h"
 #include "constants/std_script.h"
@@ -435,23 +435,23 @@
 .text
 	.rodata
 
-ov01_02206BC0: ; 0x02206BC0
-	.word ov01_021F5D8C
-	.word ov01_021F4D10
+sMapLoadFuncs_Default: ; 0x02206BC0
+	.word InitialLoad_Default
+	.word LoadSlotMap_Default
 
-ov01_02206BC8: ; 0x02206BC8
-	.word ov01_021F5EA0
-	.word ov01_021F4E1C
+sMapLoadFuncs_SafariZone: ; 0x02206BC8
+	.word InitialLoad_SafariZone
+	.word LoadSlotMap_SafariZone
 
-ov01_02206BD0: ; 0x02206BD0
-	.word ov01_021F5E20
-	.word ov01_021F4D88
+sMapLoadFuncs_NoCollision: ; 0x02206BD0
+	.word InitialLoad_NoCollision
+	.word LoadSlotMap_NoCollision
 
-ov01_02206BD8: ; 0x02206BD8
+sMapModelScale: ; 0x02206BD8
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 	.byte 0x00, 0x10, 0x00, 0x00
 
-ov01_02206BE4: ; 0x02206BE4
+sMapModelRotation: ; 0x02206BE4
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00

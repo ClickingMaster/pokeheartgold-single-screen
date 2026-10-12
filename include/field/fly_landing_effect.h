@@ -7,7 +7,7 @@
 #include "filesystem.h"
 #include "sprite.h"
 
-// Fly arrival (ov02_0224B418's task): the flying Pokemon swoops in carrying the trainer sprite, drops them, flies off
+// Fly arrival (FlyLanding_Start's task): the flying Pokemon swoops in carrying the trainer sprite, drops them, flies off
 // into the distance, then the trainer sprite is swapped for the player object. A field effect of the task's pool;
 // its update runs the step table of the current phase until a step returns FALSE.
 

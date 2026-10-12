@@ -62,12 +62,12 @@ BOOL ScrCmd_720(ScriptContext *ctx) {
     areaID = areaX / 32 + (areaY / 32 * 3);
 
     areaSet = SafariZone_GetAreaSet(Save_SafariZone_Get(fieldSystem->saveData), 0);
-    u32 temp_r0 = ov01_021F6320(fieldSystem->mapLoadManager);
+    u32 temp_r0 = MapLoadManager_GetCurrentMapSlot(fieldSystem->mapLoadManager);
 
     MapPropManager *mapPropManager;
-    ov01_021F630C((u8)temp_r0, fieldSystem->mapLoadManager, &mapPropManager);
-    sp8 = ov01_021F65E4(fieldSystem->mapLoadManager, (u8)temp_r0);
-    sp4 = ov01_021F65F0(fieldSystem->mapLoadManager, (u8)temp_r0);
+    MapLoadManager_GetMapPropManager((u8)temp_r0, fieldSystem->mapLoadManager, &mapPropManager);
+    sp8 = MapLoadManager_GetPermissions(fieldSystem->mapLoadManager, (u8)temp_r0);
+    sp4 = MapLoadManager_GetPermissionBytes(fieldSystem->mapLoadManager, (u8)temp_r0);
 
     SAFARIZONE_OBJECT *safariObject = &areaSet->areas[areaID].objects[safariObjectID];
 

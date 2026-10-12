@@ -20,8 +20,8 @@ typedef BOOL (*FlyLandingStepFunc)(FlyLandingEffect *effect);
 FieldEffect *FieldEffectPool_AddBasicEffect(struct FieldEffectPool *pool, const FieldEffectBasicTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
 
 // Defined with overlay 2's fly arrival task: a field effect that keeps an object on the trainer sprite.
-FieldEffect *ov02_0224B298(struct FieldEffectPool *pool, Sprite *trainerSprite);
-void ov02_0224B314(FieldEffect *effect);
+FieldEffect *FieldMoveCutIn_CreateTrainerJumpEffect(struct FieldEffectPool *pool, Sprite *trainerSprite);
+void TrainerJumpEffect_StartHop(FieldEffect *effect);
 
 // Callbacks of sFlyLandingEffectTemplate and steps of sFlyLandingPhases (overlay 2's data block).
 BOOL FlyLandingEffect_Init(FieldEffect *effect, FlyLandingEffect *landing);
@@ -156,7 +156,7 @@ void FlyLandingEffect_Start(FieldEffect *effect) {
     Sprite_SetAffineZRotation(landing->flyerSprite, GF_DegreeToSinCosIdx((u16)(landing->rotation / FX32_ONE)));
     Sprite_SetDrawPriority(landing->flyerSprite, 0x84);
     Sprite_SetDrawFlag(landing->flyerSprite, TRUE);
-    landing->trainerEffect = ov02_0224B298(landing->args.pool, landing->args.trainerSprite);
+    landing->trainerEffect = FieldMoveCutIn_CreateTrainerJumpEffect(landing->args.pool, landing->args.trainerSprite);
     landing->cameraZoom = FieldCameraZoom_Start(landing->args.fieldSystem, HEAP_ID_FIELD1);
     FieldCameraZoom_Set(landing->cameraZoom, 1, FX32_CONST(-120), 12);
     {
@@ -221,7 +221,7 @@ BOOL FlyLandingEffect_SwoopIn(FlyLandingEffect *landing) {
 }
 
 BOOL FlyLandingEffect_StartClimb(FlyLandingEffect *landing) {
-    ov02_0224B314(landing->trainerEffect);
+    TrainerJumpEffect_StartHop(landing->trainerEffect);
     FieldCameraZoom_Set(landing->cameraZoom, 2, 0, 12);
     landing->scaleSpeed = 0x400;
     landing->angle = FX32_CONST(128);

@@ -33,8 +33,8 @@ WIP_LOCAL int ov02_022499EC(void *work) {
     vec1 = ov02_022533FC;
     vec2 = ov02_02253414;
     *(Sprite **)((u8 *)work + 0x1e4) = ov02_0224A418(work, &vec1);
-    *(Sprite **)((u8 *)work + 0x1e8) = ov02_0224A9B8(work, &vec2);
-    ov02_0224A9D8(work, 1);
+    *(Sprite **)((u8 *)work + 0x1e8) = FieldMoveCutIn_CreateMonSprite(work, &vec2);
+    FieldMoveCutIn_CreateScrollSprites(work, 1);
     ov02_02249D40(work);
     *(int *)((u8 *)work + 0x10) = 1;
     (*(int *)work)++;

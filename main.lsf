@@ -1098,43 +1098,8 @@ Overlay field
     Object asm/overlay_01_021F3F50_data_local.o
     Object src/field/save_stats_printer.o
     Object src/field/field_motion_blur.o
-    Object src/ov01_21f4704_opus_partial_1.o
-    Object src/to90_extra2174_run01.o
-    Object src/op90_to90_extra2174_residual_1_r01.o
-    Object src/ov01_21f4704_opus_partial_2.o
-    Object src/to58_w20c_ov01_r2.o
-    Object src/ov01_21f4704_opus_partial_3.o
-    Object src/to58_w20c_ov01_r3.o
-    Object src/overlay01_map_chunk_loaders_r6.o
-    Object src/ov01_21f4704_opus_partial_4.o
-    Object src/to45_overlay01_r4_run1.o
-    Object src/to80_extra1501_run01.o
-    Object src/to45_overlay01_r4_run2.o
-    Object src/ov01_21f4704_opus_partial_5.o
-    Object src/op90_to90_extra2175_residual_1_r01.o
-    Object src/to90_extra2175_run01.o
-    Object src/ov01_21f4704_opus_partial_6.o
-    Object src/op90_overlay_01_021F4704_residual_6_r01.o
-    Object src/ov01_21f4704_opus_partial_7.o
-    Object src/to58_w20c_ov01_r7.o
-    Object src/ov01_21f4704_opus_partial_8.o
-    Object src/to70_overlay_01_021F4704_residual_8_extra395_run01.o
-    Object src/op90_to70_overlay_01_021F4704_residual_8_extra395_residual_1_r01.o
-    Object src/ov01_21f4704_opus_partial_9.o
-    Object src/to58_w20c_ov01_r9.o
-    Object src/ov01_21f4704_opus_partial_10.o
-    Object src/to58_w20c_ov01_r10.o
-    Object src/ov01_21f4704_opus_partial_11.o
-    Object src/to70_overlay_01_021F4704_residual_11_extra461_run01.o
-    Object src/ov01_21f4704_opus_partial_12.o
-    Object src/to90_extra1982_run01.o
-    Object src/ov01_21f4704_opus_partial_13.o
-    Object src/to80_extra1869_run01.o
-    Object src/ov01_21f4704_opus_partial_14.o
-    Object src/to90_extra1983_run01.o
-    Object src/ov01_21f4704_opus_partial_15.o
-    Object asm/to70_overlay_01_021F4704_residual_15_extra743_anchor.o
-    Object src/to70_overlay_01_021F4704_residual_15_extra743_run01.o
+    Object asm/map_load_manager_data.o
+    Object src/field/map_load_manager.o
     Object src/field/bottom_screen_app.o
     Object src/field/pal_pad_registration.o
     Object asm/overlay_01_sprite_data.o
@@ -1228,42 +1193,7 @@ Overlay OVY_2
     Object src/overlay02_248728_partial_14.o
     Object src/overlay02_port_r15.o
     Object src/overlay02_248728_partial_15.o
-    Object src/overlay02_port_r16_head.o
-    Object src/slop_r1_overlay02_2_r16.o
-    Object src/overlay02_248728_partial_16.o
-    Object src/overlay02_effect_resources_r17_run1.o
-    Object src/slop_r1_overlay02_2_r17_gap.o
-    Object src/overlay02_effect_resources_r17_run2.o
-    Object src/overlay02_248728_partial_17.o
-    Object src/op90_slop_r1_overlay02_2_residual_18_r01.o
-    Object src/overlay02_248728_partial_18.o
-    Object src/slop_r1_overlay02_2_r19.o
-    Object src/overlay02_248728_partial_19.o
-    Object src/slop_r1_overlay02_2_r20.o
-    Object src/overlay02_248728_partial_20.o
-    Object src/slop_r1_overlay02_2_r21.o
-    Object src/overlay02_248728_partial_21.o
-    Object src/slop_r1_overlay02_2_r22.o
-    Object src/overlay02_248728_partial_22.o
-    Object src/overlay02_parallel_starter_anim_r23.o
-    Object src/overlay02_248728_partial_23.o
-    Object src/slop_r1_overlay02_2_r24.o
-    Object src/overlay02_248728_partial_24.o
-    Object src/slop_r1_overlay02_2_r25.o
-    Object src/overlay02_248728_partial_25.o
-    Object src/slop_r1_overlay02_2_r26_combined.o
-    Object src/overlay02_248728_partial_26.o
-    Object src/slop_r1_overlay02_2_r27.o
-    Object src/overlay02_248728_partial_27.o
-    Object src/slop_r1_overlay02_2_r28.o
-    Object src/overlay02_248728_partial_28.o
-    Object src/slop_r1_overlay02_2_r29.o
-    Object src/overlay02_248728_partial_29.o
-    Object src/slop_r1_overlay02_2_r30.o
-    Object src/overlay02_248728_partial_30.o
-    Object src/slop_r1_overlay02_2_r31.o
-    Object src/overlay02_248728_partial_31.o
-    Object src/overlay02_roamer_pokecenter_r14_run1.o
+    Object src/field/field_move_cut_in_effects.o
     Object src/field/map_prop_anims.o
     Object src/field/field_move_warp_tasks.o
     Object src/field/primo_password.o

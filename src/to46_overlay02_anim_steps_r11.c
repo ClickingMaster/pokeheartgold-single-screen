@@ -5,10 +5,10 @@ int ov02_02249B80(void *);
 int ov02_02249BA8(void *);
 int ov02_02249BD8(void *);
 int ov02_02249C74(void *);
-u8 ov02_0224AB8C(void *);
+u8 FieldMoveCutIn_GetFlyerStatus(void *);
 void ov02_0224A69C(void *, u32, u32, u32, u32);
 void FieldMove_FadeOutToWhite(void);
-void ov02_0224AB9C(void *);
+void FieldMoveCutIn_DestroyFlyer(void *);
 
 int ov02_02249B60(void *p) {
     U32(p, 8)
@@ -17,7 +17,7 @@ int ov02_02249B60(void *p) {
         U32(p, 8) = 0;
         U32(p, 0)
         ++;
-        ov02_0224ADF0(p);
+        FieldMoveCutIn_StartFlyerPickUp(p);
     }
     return 1;
 }
@@ -29,14 +29,14 @@ int ov02_02249B80(void *p) {
         U32(p, 8) = 0;
         U32(p, 0)
         ++;
-        ov02_0224AB58(p);
-        ov02_0224ADF0(p);
+        FieldMoveCutIn_CreateFlyer(p);
+        FieldMoveCutIn_StartFlyerPickUp(p);
     }
     return 1;
 }
 
 int ov02_02249BA8(void *p) {
-    if (ov02_0224AB8C(p) != 3) {
+    if (FieldMoveCutIn_GetFlyerStatus(p) != 3) {
         return 0;
     }
     PlaySE(0x648);
@@ -63,7 +63,7 @@ int ov02_02249BD8(void *p) {
     }
     ov02_0224A69C(p, U32(p, 0x44), U32(p, 0x4c), U32(p, 0x48), U32(p, 0x50));
     U32(p, 0x2c) = 1;
-    if (U32(p, 0x18) == 0 && ov02_0224AB8C(p) == 4) {
+    if (U32(p, 0x18) == 0 && FieldMoveCutIn_GetFlyerStatus(p) == 4) {
         U32(p, 0x18) = 1;
         FieldMove_FadeOutToWhite();
     }
@@ -78,24 +78,24 @@ int ov02_02249BD8(void *p) {
 
 int ov02_02249C74(void *p) {
     if (U32(p, 0x20) == 3) {
-        if (ov02_0224AB8C(p) == 2) {
-            ov02_0224AB9C(p);
+        if (FieldMoveCutIn_GetFlyerStatus(p) == 2) {
+            FieldMoveCutIn_DestroyFlyer(p);
             U32(p, 0) += 2;
         }
         return 0;
     }
-    if (U32(p, 0x18) == 0 && ov02_0224AB8C(p) == 4) {
+    if (U32(p, 0x18) == 0 && FieldMoveCutIn_GetFlyerStatus(p) == 4) {
         U32(p, 0x18) = 1;
         FieldMove_FadeOutToWhite();
     }
-    if (ov02_0224AB8C(p) != 2) {
+    if (FieldMoveCutIn_GetFlyerStatus(p) != 2) {
         return 0;
     }
     if (U32(p, 0x18) == 0) {
         U32(p, 0x18) = 1;
         FieldMove_FadeOutToWhite();
     }
-    ov02_0224AB9C(p);
+    FieldMoveCutIn_DestroyFlyer(p);
     U32(p, 0)
     ++;
     return 0;

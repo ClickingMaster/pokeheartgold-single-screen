@@ -468,9 +468,9 @@
 .public ov02_02249458
 .public ov02_0224953C
 .public ov02_02249548
-.public ov02_0224B418
-.public ov02_0224B43C
-.public ov02_0224B448
+.public FlyLanding_Start
+.public FlyLanding_IsDone
+.public FlyLanding_Delete
 .public ov02_BattleExit_HandleRoamerAction
 .public PlayerStepEvent_RepelCounterDecrement
 .public PokecenterAnimCreate

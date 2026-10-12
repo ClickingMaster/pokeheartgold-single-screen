@@ -1312,72 +1312,72 @@
 	.public ov02_0224A69C
 	.public ov02_0224A6A8
 	.public ov02_0224A6D0
-	.public ov02_0224A700
-	.public ov02_0224A7A8
-	.public ov02_0224A7B8
-	.public ov02_0224A800
-	.public ov02_0224A810
-	.public ov02_0224A834
-	.public ov02_0224A868
-	.public ov02_0224A88C
-	.public ov02_0224A8D4
-	.public ov02_0224A9B8
-	.public ov02_0224A9D8
-	.public ov02_0224AA44
-	.public ov02_0224AA80
-	.public ov02_0224AAC8
-	.public ov02_0224AAD4
-	.public ov02_0224AB54
-	.public ov02_0224AB58
-	.public ov02_0224AB8C
-	.public ov02_0224AB9C
-	.public ov02_0224ABCC
-	.public ov02_0224ABF8
-	.public ov02_0224AC04
-	.public ov02_0224AC24
-	.public ov02_0224AC28
-	.public ov02_0224AC38
-	.public ov02_0224ACE0
-	.public ov02_0224ADEC
-	.public ov02_0224ADF0
-	.public ov02_0224AF70
-	.public ov02_0224B0E0
-	.public ov02_0224B158
-	.public ov02_0224B294
-	.public ov02_0224B298
-	.public ov02_0224B2C0
-	.public ov02_0224B2CC
-	.public ov02_0224B314
-	.public ov02_0224B350
-	.public ov02_0224B364
-	.public ov02_0224B3B0
-	.public ov02_0224B3FC
-	.public ov02_0224B418
-	.public ov02_0224B43C
-	.public ov02_0224B448
-	.public ov02_0224B45C
-	.public ov02_0224B494
-	.public ov02_0224B4AC
-	.public ov02_0224B5F0
-	.public ov02_0224B638
-	.public ov02_0224B664
-	.public ov02_0224B68C
-	.public ov02_0224B690
-	.public ov02_0224B6B0
-	.public ov02_0224B6D0
-	.public ov02_0224B6E4
-	.public ov02_0224B72C
-	.public ov02_0224B768
-	.public ov02_0224B784
-	.public ov02_0224B7CC
-	.public ov02_0224B804
-	.public ov02_0224B808
-	.public ov02_0224B87C
-	.public ov02_0224B88C
-	.public ov02_0224B90C
-	.public ov02_0224B938
-	.public ov02_0224B964
-	.public ov02_0224BAA8
+	.public Task_FieldMoveCutIn_UpdateWindow
+	.public FieldMoveCutIn_GetMonPicIds
+	.public FieldMoveCutIn_LoadMonChar
+	.public FieldMoveCutIn_LoadMonPltt
+	.public FieldMoveCutIn_AddMonCharResource
+	.public FieldMoveCutIn_TransferMonChar
+	.public FieldMoveCutIn_AddMonPlttResource
+	.public FieldMoveCutIn_TransferMonPltt
+	.public FieldMoveCutIn_FreeMonResources
+	.public FieldMoveCutIn_CreateMonSprite
+	.public FieldMoveCutIn_CreateScrollSprites
+	.public FieldMoveCutIn_CreateScrollSprite
+	.public CutInScrollSprite_Init
+	.public CutInScrollSprite_Destroy
+	.public CutInScrollSprite_Update
+	.public CutInScrollSprite_Draw
+	.public FieldMoveCutIn_CreateFlyer
+	.public FieldMoveCutIn_GetFlyerStatus
+	.public FieldMoveCutIn_DestroyFlyer
+	.public CutInFlyer_Init
+	.public CutInFlyer_Destroy
+	.public CutInFlyer_Update
+	.public CutInFlyer_Draw
+	.public CutInFlyer_Hide
+	.public FieldMoveCutIn_StartFlyerTakeOff
+	.public CutInFlyer_TakeOff
+	.public CutInFlyer_Idle
+	.public FieldMoveCutIn_StartFlyerPickUp
+	.public CutInFlyer_SwoopDown
+	.public CutInFlyer_PickUpTrainer
+	.public CutInFlyer_FlyAway
+	.public CutInFlyer_Done
+	.public FieldMoveCutIn_CreateTrainerJumpEffect
+	.public TrainerJumpEffect_Stop
+	.public TrainerJumpEffect_StartJump
+	.public TrainerJumpEffect_StartHop
+	.public TrainerJumpEffect_Init
+	.public TrainerJumpEffect_Jump
+	.public TrainerJumpEffect_Hop
+	.public TrainerJumpEffect_Update
+	.public FlyLanding_Start
+	.public FlyLanding_IsDone
+	.public FlyLanding_Delete
+	.public Task_FlyLanding
+	.public FlyLanding_SetPlayerVisible
+	.public FlyLanding_LoadGraphics
+	.public FlyLanding_CreateSprites
+	.public FlyLanding_WaitLanding
+	.public FlyLanding_FreeGraphics
+	.public FlyLanding_Idle
+	.public FlyLanding_AllocZeroed
+	.public FieldMoveCutIn_SetPlayerVisible
+	.public TrainerClipEffect_Init
+	.public TrainerClipEffect_Update
+	.public FieldMoveCutIn_CreateTrainerClipEffect
+	.public FieldMoveCutIn_DestroyTrainerClipEffect
+	.public FieldMoveCutIn_CreateModelEffect
+	.public CutInModelEffect_Init
+	.public CutInModelEffect_Destroy
+	.public CutInModelEffect_Update
+	.public CutInModelEffect_Draw
+	.public FieldMoveCutIn_LoadModel
+	.public FieldMoveCutIn_UnloadModel
+	.public FieldMoveCutIn_StepShowOtherObject
+	.public FieldMoveCutIn_StepWaitModelEffect
+	.public Roamers_GetActiveRoamerBySpecies
 	.public ElevatorAnimCreate
 	.public ElevatorAnimRun
 	.public ov02_0224BF58
@@ -1682,28 +1682,28 @@
 	.public ov02_0224A69C
 	.public ov02_0224A6A8
 	.public ov02_0224A6D0
-	.public ov02_0224A800
-	.public ov02_0224AAC8
-	.public ov02_0224AB54
-	.public ov02_0224AB8C
-	.public ov02_0224AB9C
-	.public ov02_0224ABF8
-	.public ov02_0224AC24
-	.public ov02_0224AC28
-	.public ov02_0224ADEC
-	.public ov02_0224B294
-	.public ov02_0224B2C0
-	.public ov02_0224B350
-	.public ov02_0224B418
-	.public ov02_0224B43C
-	.public ov02_0224B448
-	.public ov02_0224B494
-	.public ov02_0224B68C
-	.public ov02_0224B690
-	.public ov02_0224B6B0
-	.public ov02_0224B768
-	.public ov02_0224B804
-	.public ov02_0224B87C
+	.public FieldMoveCutIn_LoadMonPltt
+	.public CutInScrollSprite_Destroy
+	.public CutInScrollSprite_Draw
+	.public FieldMoveCutIn_GetFlyerStatus
+	.public FieldMoveCutIn_DestroyFlyer
+	.public CutInFlyer_Destroy
+	.public CutInFlyer_Draw
+	.public CutInFlyer_Hide
+	.public CutInFlyer_Idle
+	.public CutInFlyer_Done
+	.public TrainerJumpEffect_Stop
+	.public TrainerJumpEffect_Init
+	.public FlyLanding_Start
+	.public FlyLanding_IsDone
+	.public FlyLanding_Delete
+	.public FlyLanding_SetPlayerVisible
+	.public FlyLanding_Idle
+	.public FlyLanding_AllocZeroed
+	.public FieldMoveCutIn_SetPlayerVisible
+	.public FieldMoveCutIn_DestroyTrainerClipEffect
+	.public CutInModelEffect_Destroy
+	.public CutInModelEffect_Draw
 	.public ov02_0224BFC0
 	.public ov02_0224BFCC
 	.public FieldEscapeRope_Warp
@@ -1773,7 +1773,7 @@ ov02_02249B60: ; 0x02249B60
 	ldr r1, [r0]
 	add r1, r1, #1
 	str r1, [r0]
-	bl ov02_0224ADF0
+	bl FieldMoveCutIn_StartFlyerPickUp
 _02249B7A:
 	mov r0, #1
 	pop {r3, pc}
@@ -1795,9 +1795,9 @@ ov02_02249B80: ; 0x02249B80
 	ldr r1, [r4]
 	add r1, r1, #1
 	str r1, [r4]
-	bl ov02_0224AB58
+	bl FieldMoveCutIn_CreateFlyer
 	add r0, r4, #0
-	bl ov02_0224ADF0
+	bl FieldMoveCutIn_StartFlyerPickUp
 _02249BA2:
 	mov r0, #1
 	pop {r4, pc}
@@ -1809,7 +1809,7 @@ _02249BA2:
 ov02_02249BA8: ; 0x02249BA8
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov02_0224AB8C
+	bl FieldMoveCutIn_GetFlyerStatus
 	cmp r0, #3
 	beq _02249BB8
 	mov r0, #0
@@ -1885,7 +1885,7 @@ _02249C1E:
 	cmp r0, #0
 	bne _02249C4A
 	add r0, r4, #0
-	bl ov02_0224AB8C
+	bl FieldMoveCutIn_GetFlyerStatus
 	cmp r0, #4
 	bne _02249C4A
 	mov r0, #1
@@ -1924,11 +1924,11 @@ ov02_02249C74: ; 0x02249C74
 	ldr r1, [r4, #0x20]
 	cmp r1, #3
 	bne _02249C96
-	bl ov02_0224AB8C
+	bl FieldMoveCutIn_GetFlyerStatus
 	cmp r0, #2
 	bne _02249C92
 	add r0, r4, #0
-	bl ov02_0224AB9C
+	bl FieldMoveCutIn_DestroyFlyer
 	ldr r0, [r4]
 	add r0, r0, #2
 	str r0, [r4]
@@ -1939,7 +1939,7 @@ _02249C96:
 	ldr r1, [r4, #0x18]
 	cmp r1, #0
 	bne _02249CAC
-	bl ov02_0224AB8C
+	bl FieldMoveCutIn_GetFlyerStatus
 	cmp r0, #4
 	bne _02249CAC
 	mov r0, #1
@@ -1947,7 +1947,7 @@ _02249C96:
 	bl FieldMove_FadeOutToWhite
 _02249CAC:
 	add r0, r4, #0
-	bl ov02_0224AB8C
+	bl FieldMoveCutIn_GetFlyerStatus
 	cmp r0, #2
 	beq _02249CBA
 	mov r0, #0
@@ -1961,7 +1961,7 @@ _02249CBA:
 	bl FieldMove_FadeOutToWhite
 _02249CC8:
 	add r0, r4, #0
-	bl ov02_0224AB9C
+	bl FieldMoveCutIn_DestroyFlyer
 	ldr r0, [r4]
 	add r0, r0, #1
 	str r0, [r4]

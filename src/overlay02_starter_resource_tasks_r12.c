@@ -14,10 +14,10 @@ void ov02_02249D5C(SysTask *task, void *work) {
             }
         }
         if (*(void **)((u8 *)work + 0x218) != NULL) {
-            ov02_0224A834(work, *(void **)((u8 *)work + 0x218));
+            FieldMoveCutIn_TransferMonChar(work, *(void **)((u8 *)work + 0x218));
         }
         if (*(void **)((u8 *)work + 0x21c) != NULL) {
-            ov02_0224A88C(work, *(void **)((u8 *)work + 0x21c));
+            FieldMoveCutIn_TransferMonPltt(work, *(void **)((u8 *)work + 0x21c));
         }
         (*(int *)((u8 *)work + 0x210))++;
         SysTask_CreateOnVWaitQueue(ov02_02249DD8, work, 0x80);

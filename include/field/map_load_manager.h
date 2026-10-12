@@ -16,9 +16,9 @@ void MapLoadManager_FreeNARCAndLoadedMapBuffers(MapLoadManager *mapLoadManager);
 BOOL MapLoadManager_HasEnded(MapLoadManager *mapLoadManager);
 void MapLoadManager_TrackTarget(VecFx32 *vec, MapLoadManager *mapLoadManager);
 void MapLoadManager_ForgetTrackedTarget(MapLoadManager *mapLoadManager);
-void ov01_021F630C(int arg0, MapLoadManager *mapLoadManager, MapPropManager **mapPropManager);
-u8 ov01_021F6320(MapLoadManager *mapLoadManager);
-u16 *ov01_021F65E4(MapLoadManager *mapLoadManager, u8 arg1);
-u8 *ov01_021F65F0(MapLoadManager *mapLoadManager, u8 arg1);
+void MapLoadManager_GetMapPropManager(int arg0, MapLoadManager *mapLoadManager, MapPropManager **mapPropManager);
+u8 MapLoadManager_GetCurrentMapSlot(MapLoadManager *mapLoadManager);
+u16 *MapLoadManager_GetPermissions(MapLoadManager *mapLoadManager, u8 arg1);
+u8 *MapLoadManager_GetPermissionBytes(MapLoadManager *mapLoadManager, u8 arg1);
 
 #endif // POKEHEARTGOLD_FIELD_MAP_LOAD_MANAGER_H

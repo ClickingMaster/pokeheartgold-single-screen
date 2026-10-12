@@ -160,7 +160,7 @@ struct ov02_PokeathlonStarBits {
     u16 s4 : 3;
 };
 
-// ov02_0224A9D8 per-entry rodata (ov02_022535E4, stride 0x14).
+// FieldMoveCutIn_CreateScrollSprites per-entry rodata (ov02_022535E4, stride 0x14).
 typedef struct ov02_A9D8Entry {
     fx32 unk0;
     fx32 unk4;
@@ -232,7 +232,7 @@ extern void FieldSystem_CheckTileCollision(void);               // not in any in
 WIP_LOCAL void WaterfallEffect_Update(void *a0, void *a1, void *a2);
 extern u16 GF_DegreeToSinCosIdxNoWrap(u16 deg);                           // math_util.h, not included
 extern BOOL Save_VarsFlags_CheckFlagInArray(void *varsFlags, u16 flagId); // save_vars_flags.h, not included
-WIP_LOCAL void ov02_0224AAD4(void *a0, void *a1);
+WIP_LOCAL void CutInScrollSprite_Update(void *a0, void *a1);
 WIP_LOCAL void WhirlpoolEffect_Init(void *a0, void *a1, void *a2);
 WIP_LOCAL int HeadbuttEffect_Update(void *a0, void *a1, void *a2);
 WIP_LOCAL int FollowMonRule_Matches(void *a0, void *a1, void *a2);
@@ -296,7 +296,7 @@ extern BOOL FollowMonObject_IsLarge(LocalMapObject *mapObject);                 
 extern void TallGrass_SpawnAt(LocalMapObject *mapObject, int a1, u32 x, u32 z, int a4);                                  // no header included here
 extern void VeryTallGrass_SpawnAt(LocalMapObject *mapObject, int a1, u32 x, u32 z, int a4);                                  // no header included here
 extern BOOL MetatileBehavior_IsVeryTallGrass(u8 tile);                                                               // no header included here
-WIP_LOCAL void ov02_0224A9D8(void *work, int a1);                                                                    // still in asm; forward decl for callers
+WIP_LOCAL void FieldMoveCutIn_CreateScrollSprites(void *work, int a1);                                                                    // still in asm; forward decl for callers
 
 // NewMsgDataFromNarc / MessageFormat_* / Buffer* / MapHeader_GetMapSec are reachable
 // transitively (msgdata.h / message_format.h / map_header.h) — no local externs.
@@ -368,33 +368,33 @@ WIP_LOCAL Sprite *FlyLanding_CreateFlyerSprite(void *mgr);
 WIP_LOCAL void ov02_0224A66C(void *work);
 WIP_LOCAL void ov02_0224A674(void *work);
 WIP_LOCAL void ov02_0224A690(void *work);
-WIP_LOCAL void ov02_0224AAC8(void *a0, void *work);
-WIP_LOCAL void ov02_0224ABF8(void *a0, void *work);
-WIP_LOCAL void ov02_0224B2C0(void *work);
-WIP_LOCAL BOOL ov02_0224B0E0(void *work);
+WIP_LOCAL void CutInScrollSprite_Destroy(void *a0, void *work);
+WIP_LOCAL void CutInFlyer_Destroy(void *a0, void *work);
+WIP_LOCAL void TrainerJumpEffect_Stop(void *work);
+WIP_LOCAL BOOL CutInFlyer_PickUpTrainer(void *work);
 WIP_LOCAL void RockDebris_InitPiece(Field3dObject *obj, Field3dModel *model, NNSFndAllocator *allocator, void **anmResources);
-WIP_LOCAL BOOL ov02_0224B43C(SysTask *task);
+WIP_LOCAL BOOL FlyLanding_IsDone(SysTask *task);
 WIP_LOCAL BOOL MapId_IsSafariZone(int a0);
 WIP_LOCAL BOOL FollowMonInteraction_StepHasMovement(void *a0, u16 *a1);
 WIP_LOCAL Sprite *SpriteGfxManager_CreateSprite(void *mgr, VecFx32 *pos, int charId, int plttId, int cellId, int cellAnmId, int priority, int drawPriority);
 WIP_LOCAL Sprite *FlyLanding_CreateTrainerSprite(void *mgr, int a1);
 WIP_LOCAL int FieldMoveArrival_Finish(void *a0, void *a1, void *work);
 WIP_LOCAL Sprite *ov02_0224A33C(void *mgr, VecFx32 *pos, int charId, int plttId, int cellId, int mode, int priority, int drawPriority);
-WIP_LOCAL Sprite *ov02_0224A9B8(void *mgr, VecFx32 *pos);
+WIP_LOCAL Sprite *FieldMoveCutIn_CreateMonSprite(void *mgr, VecFx32 *pos);
 WIP_LOCAL Sprite *ov02_0224A3F0(void *mgr, VecFx32 *pos, int drawPriority, int seq);
 WIP_LOCAL void ov02_0224A570(NARC *narc, u32 fileId, NNSG2dPaletteData **a2);
 WIP_LOCAL void ov02_0224A5D0(BgConfig *bgConfig, NARC *narc, u32 fileId, NNSG2dScreenData **a3);
-WIP_LOCAL void ov02_0224B88C(void *work);
-WIP_LOCAL void ov02_0224B90C(void *work);
-WIP_LOCAL int ov02_0224B938(void *work);
-WIP_LOCAL void ov02_0224B808(void *a0, void *work);
-WIP_LOCAL void ov02_0224B784(void *work); // still in asm
-WIP_LOCAL int ov02_0224B964(void *work);
+WIP_LOCAL void FieldMoveCutIn_LoadModel(void *work);
+WIP_LOCAL void FieldMoveCutIn_UnloadModel(void *work);
+WIP_LOCAL int FieldMoveCutIn_StepShowOtherObject(void *work);
+WIP_LOCAL void CutInModelEffect_Update(void *a0, void *work);
+WIP_LOCAL void FieldMoveCutIn_CreateModelEffect(void *work); // still in asm
+WIP_LOCAL int FieldMoveCutIn_StepWaitModelEffect(void *work);
 WIP_LOCAL int FieldTeleport_SpinStart(void *a0, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL void ov02_RepelActiveRoamersFromMapNo(RoamerSaveData *roamerSave, u32 mapNo);
 WIP_LOCAL void RockDebris_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
 WIP_LOCAL void ov02_0224A598(BgConfig *bgConfig, NARC *narc, u32 fileId, NNSG2dCharacterData **a3);
-WIP_LOCAL void ov02_0224B314(void *mgr);
+WIP_LOCAL void TrainerJumpEffect_StartHop(void *mgr);
 WIP_LOCAL void FollowMon_PlaceholdersSet(void *work, void *messageFormat);
 WIP_LOCAL void FollowMon_ExpandInteractionMessage(void *work, void *dest, enum HeapID heapID, int strno);
 WIP_LOCAL int FieldEscapeRope_WaitFadeOut(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
@@ -421,7 +421,7 @@ WIP_LOCAL void FollowMonSituation_SetFacing(FieldSystem *fieldSystem, void *arg1
 WIP_LOCAL int FollowMonSituation_ConvertItemPocket(int a0);
 WIP_LOCAL void FollowMonSituation_SetTimeOfDay(FieldSystem *fieldSystem, void *arg1);
 WIP_LOCAL void ov02_0224A288(void *work);
-WIP_LOCAL int ov02_0224B664(void *work);
+WIP_LOCAL int FlyLanding_FreeGraphics(void *work);
 WIP_LOCAL int ov02_02249658(void *work);
 WIP_LOCAL int FieldTeleport_SpinAndFadeOut(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL int FieldDig_SpinAndFadeOut(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
@@ -439,18 +439,18 @@ WIP_LOCAL void ov02_02249FD4(void *work);
 WIP_LOCAL BOOL FollowMonMovement_HasNextStep(void *p);
 WIP_LOCAL BOOL FlyLandingEffect_StartClimb(void *mgr);
 WIP_LOCAL BOOL FlyLandingEffect_Init(void *a0, void *obj);
-WIP_LOCAL void ov02_0224A834(void *mgr, void *src);
+WIP_LOCAL void FieldMoveCutIn_TransferMonChar(void *mgr, void *src);
 WIP_LOCAL Sprite *ov02_0224A418(void *mgr, VecFx32 *pos);
 WIP_LOCAL void CutEffect_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, Field3dObject *obj);
 WIP_LOCAL void RockSmashEffect_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, Field3dObject *obj);
-WIP_LOCAL BOOL ov02_0224B7CC(void *a0, void **out);
-WIP_LOCAL Roamer *ov02_0224BAA8(RoamerSaveData *roamerSave, int a1);
-WIP_LOCAL void ov02_0224B72C(void *work);
-WIP_LOCAL void ov02_0224AB58(void *work);
-WIP_LOCAL void *ov02_0224B298(void *mgr, void *arg1);
+WIP_LOCAL BOOL CutInModelEffect_Init(void *a0, void **out);
+WIP_LOCAL Roamer *Roamers_GetActiveRoamerBySpecies(RoamerSaveData *roamerSave, int a1);
+WIP_LOCAL void FieldMoveCutIn_CreateTrainerClipEffect(void *work);
+WIP_LOCAL void FieldMoveCutIn_CreateFlyer(void *work);
+WIP_LOCAL void *FieldMoveCutIn_CreateTrainerJumpEffect(void *mgr, void *arg1);
 WIP_LOCAL void FlyLandingEffect_Start(void *arg0);
 WIP_LOCAL void *FlyLandingEffect_Create(void *arg0, void *arg1, void *arg2, void *arg3);
-WIP_LOCAL void ov02_0224AA44(void *arg0, VecFx32 *pos, VecFx32 *vec, void *arg3, u32 arg4, void *arg5);
+WIP_LOCAL void FieldMoveCutIn_CreateScrollSprite(void *arg0, VecFx32 *pos, VecFx32 *vec, void *arg3, u32 arg4, void *arg5);
 WIP_LOCAL void RockDebris_UpdatePiece(void *obj);
 WIP_LOCAL void RockClimbDebris_Update(void *a0, void *a1, void *data);
 WIP_LOCAL void RockDebris_Update(void *a0, void *a1, void *data);
@@ -460,9 +460,9 @@ WIP_LOCAL int FlyLandingEffect_StartFlyAway(void *work);
 WIP_LOCAL int FlyLandingEffect_FlyAway(void *work);
 WIP_LOCAL int FlyLandingEffect_SwoopIn(void *work);
 WIP_LOCAL int FlyLandingEffect_Climb(void *work);
-WIP_LOCAL int ov02_0224B158(void *work);
-WIP_LOCAL int ov02_0224AF70(void *work);
-WIP_LOCAL int ov02_0224ACE0(void *work);
+WIP_LOCAL int CutInFlyer_FlyAway(void *work);
+WIP_LOCAL int CutInFlyer_SwoopDown(void *work);
+WIP_LOCAL int CutInFlyer_TakeOff(void *work);
 WIP_LOCAL int ov02_02249BD8(void *work);
 WIP_LOCAL int FollowMonRule_CheckFriendship(int a0, int a1);
 WIP_LOCAL int FollowMonRule_CheckMood(int a0, int a1);
@@ -483,10 +483,10 @@ WIP_LOCAL void PrimoPassword_RotateBitsRight(u8 *arr, int n, u8 val);
 WIP_LOCAL int FieldTeleport_FollowMonWaitSpin(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL int FieldMoveArrival_WaitFadeIn(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL int FieldTeleport_FollowMonSpinStart(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
-WIP_LOCAL void *ov02_0224A7B8(Pokemon *mon, void *arg1, enum HeapID heapID);
-WIP_LOCAL BOOL ov02_0224AA80(void *a0, void *work);
-WIP_LOCAL void ov02_0224B2CC(void *work);
-WIP_LOCAL int ov02_0224B5F0(void *work);
+WIP_LOCAL void *FieldMoveCutIn_LoadMonChar(Pokemon *mon, void *arg1, enum HeapID heapID);
+WIP_LOCAL BOOL CutInScrollSprite_Init(void *a0, void *work);
+WIP_LOCAL void TrainerJumpEffect_StartJump(void *work);
+WIP_LOCAL int FlyLanding_CreateSprites(void *work);
 WIP_LOCAL void CutEffect_InitAtPlayer(void *a0, void *a1, void *data);
 WIP_LOCAL int SwapPositions_GetStepTowards(void *a, void *b);
 WIP_LOCAL void FollowMonSituation_SetTerrain(FieldSystem *fieldSystem, void *work);
@@ -495,23 +495,23 @@ WIP_LOCAL void FollowMonSituation_SetMonCondition(Pokemon *mon, void *work);
 WIP_LOCAL void FollowMonSituation_SetNearbyObjects(FieldSystem *fieldSystem, void *work);
 WIP_LOCAL void FollowMonSituation_SetBestPokeathlonStat(FieldSystem *fieldSystem, int species, int form, void *work);
 WIP_LOCAL void FlyLandingEffect_Start(void *a0);
-WIP_LOCAL void ov02_0224B784(void *work);
+WIP_LOCAL void FieldMoveCutIn_CreateModelEffect(void *work);
 WIP_LOCAL BOOL FollowMonInteraction_TryShowEmote(FieldSystem *fieldSystem, void *a1, void *arg2);
-WIP_LOCAL void ov02_0224B364(void *a0, void *work);
+WIP_LOCAL void TrainerJumpEffect_Jump(void *a0, void *work);
 WIP_LOCAL int FieldMoveArrival_Spin(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL void CutEffect_InitAtFollower(void *a0, void *a1, void *data);
 WIP_LOCAL void HeadbuttEffect_InitAtFollower(void *a0, void *a1, void *data);
 WIP_LOCAL void HeadbuttEffect_InitAtPlayer(void *a0, void *a1, void *data);
-WIP_LOCAL void ov02_0224B3B0(void *a0, void *work);
+WIP_LOCAL void TrainerJumpEffect_Hop(void *a0, void *work);
 WIP_LOCAL void RockSmashEffect_InitAtFollower(void *a0, void *a1, void *data);
 WIP_LOCAL void Field3dObject_SetPosInFrontOfMapObject(void *a0, int a1, void *data);
-WIP_LOCAL void ov02_0224A88C(void *mgr, void *dst);
-WIP_LOCAL void ov02_0224B6E4(void *a0, void *work);
+WIP_LOCAL void FieldMoveCutIn_TransferMonPltt(void *mgr, void *dst);
+WIP_LOCAL void TrainerClipEffect_Update(void *a0, void *work);
 WIP_LOCAL void FieldMoveEffectModel_Load(void *data, int a1, int a2, int a3, void *a4);
 WIP_LOCAL void Field3dObject_SetPosInFrontOfPlayer(void *a0, void *data);
 WIP_LOCAL void RockClimbDebris_UpdatePiece(void *obj);
 WIP_LOCAL void RockClimbDebris_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL BOOL ov02_0224ABCC(void *a0, void *a1);
+WIP_LOCAL BOOL CutInFlyer_Init(void *a0, void *a1);
 WIP_LOCAL void *ov02_0224A468(void *a, VecFx32 *b, int c, int d); // still in asm
 WIP_LOCAL BOOL FieldSystem_FirstAliveMonHasType(FieldSystem *fieldSystem, u8 a1);
 WIP_LOCAL void ov02_02249E90(SysTask *task, void *work);
@@ -524,7 +524,7 @@ WIP_LOCAL BOOL SpriteGfxManager_TransferChar(void *mgr, int a1);
 WIP_LOCAL void SpriteGfxManager_ReleaseCharData(void *mgr, int a1);
 WIP_LOCAL BOOL SpriteGfxManager_TransferPltt(void *mgr, int a1);
 WIP_LOCAL void SpriteGfxManager_ReleasePlttData(void *mgr, int a1);
-WIP_LOCAL int ov02_0224B4AC(void *work);
+WIP_LOCAL int FlyLanding_LoadGraphics(void *work);
 
 // forward decls for functions referenced only from the consolidated rodata tables
 extern void FieldEffect_DefaultDraw(void);
@@ -549,20 +549,20 @@ WIP_LOCAL BOOL ov02_02249B60(void *work);
 WIP_LOCAL BOOL ov02_02249B80(void *work);
 WIP_LOCAL BOOL ov02_02249BA8(void *work);
 WIP_LOCAL int ov02_02249CD8(int *work);
-WIP_LOCAL void ov02_0224AB54(void);
-WIP_LOCAL void ov02_0224AC04(void *a0, u8 *sm);
-WIP_LOCAL void ov02_0224AC24(void);
-WIP_LOCAL int ov02_0224AC28(void *work);
-WIP_LOCAL int ov02_0224ADEC(void);
-WIP_LOCAL int ov02_0224B294(void);
-WIP_LOCAL BOOL ov02_0224B350(void *a0, void *out);
-WIP_LOCAL void ov02_0224B3FC(void *a0, int *a1);
-WIP_LOCAL int ov02_0224B494(void *work);
-WIP_LOCAL int ov02_0224B638(void *work);
-WIP_LOCAL int ov02_0224B68C(void);
-WIP_LOCAL BOOL ov02_0224B6D0(void *a0, void *out);
-WIP_LOCAL void ov02_0224B804(void);
-WIP_LOCAL void ov02_0224B87C(void *a0, void *a1);
+WIP_LOCAL void CutInScrollSprite_Draw(void);
+WIP_LOCAL void CutInFlyer_Update(void *a0, u8 *sm);
+WIP_LOCAL void CutInFlyer_Draw(void);
+WIP_LOCAL int CutInFlyer_Hide(void *work);
+WIP_LOCAL int CutInFlyer_Idle(void);
+WIP_LOCAL int CutInFlyer_Done(void);
+WIP_LOCAL BOOL TrainerJumpEffect_Init(void *a0, void *out);
+WIP_LOCAL void TrainerJumpEffect_Update(void *a0, int *a1);
+WIP_LOCAL int FlyLanding_SetPlayerVisible(void *work);
+WIP_LOCAL int FlyLanding_WaitLanding(void *work);
+WIP_LOCAL int FlyLanding_Idle(void);
+WIP_LOCAL BOOL TrainerClipEffect_Init(void *a0, void *out);
+WIP_LOCAL void CutInModelEffect_Destroy(void);
+WIP_LOCAL void CutInModelEffect_Draw(void *a0, void *a1);
 WIP_LOCAL int FieldEscapeRope_Warp(TaskManager *taskManager, void *a1, void *a2);
 WIP_LOCAL int FieldMove_ShowCutIn(void *a0, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL int FieldMove_WaitCutIn(void *a0, void *a1, void *work);
@@ -649,10 +649,10 @@ WIP_LOCAL void SpriteGfxManager_LoadAnim(void *mgr, void *narc, int resId, int f
 WIP_LOCAL void Sprite_CopyPositionVector(Sprite *sprite, VecFx32 *out);
 WIP_LOCAL int FlyLandingEffect_Idle(void *work);
 WIP_LOCAL void ov02_0224A69C(void *work, int p1, int p2, int p3, int p4);
-WIP_LOCAL void *ov02_0224A800(u16 *a0, enum HeapID heapID);
-WIP_LOCAL u8 ov02_0224AB8C(void *work);
-WIP_LOCAL int ov02_0224AC28(void *work);
-WIP_LOCAL void ov02_0224B87C(void *a0, void *a1);
+WIP_LOCAL void *FieldMoveCutIn_LoadMonPltt(u16 *a0, enum HeapID heapID);
+WIP_LOCAL u8 FieldMoveCutIn_GetFlyerStatus(void *work);
+WIP_LOCAL int CutInFlyer_Hide(void *work);
+WIP_LOCAL void CutInModelEffect_Draw(void *a0, void *a1);
 WIP_LOCAL BOOL SafariZone_CanPlaceObjectOnLand(u8 tile, int flag);
 WIP_LOCAL BOOL SafariZone_CanPlaceObjectOnWater(u8 tile, int flag);
 WIP_LOCAL BOOL SafariZone_CanPlaceObjectOn(u8 tile, int flag, int sel);
@@ -660,7 +660,7 @@ WIP_LOCAL void FollowMonSituation_SetMapId(void *a, void *b);
 WIP_LOCAL BOOL Task_FollowMonInteract(TaskManager *taskman); // big fn, defined later
 WIP_LOCAL void ov02_0224A32C(void *mgr);
 WIP_LOCAL void ov02_02249548(void *work);
-WIP_LOCAL void ov02_0224B448(SysTask *task);
+WIP_LOCAL void FlyLanding_Delete(SysTask *task);
 WIP_LOCAL void RockDebris_InitWithFollower(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
 WIP_LOCAL BOOL CutEffect_IsFinished(Field3dObjectTask *task);
 WIP_LOCAL BOOL RockSmashEffect_IsFinished(Field3dObjectTask *task);
@@ -669,7 +669,7 @@ WIP_LOCAL void WaterfallEffect_Render(Field3dObjectTask *task, FieldSystem *fiel
 WIP_LOCAL void FollowMonSituation_SetMood(FieldSystem *fieldSystem, void *out);
 WIP_LOCAL int ov02_02249CD8(int *work);
 WIP_LOCAL void ov02_0224A450(Sprite *sprite);
-WIP_LOCAL BOOL ov02_0224B350(void *a0, void *out);
+WIP_LOCAL BOOL TrainerJumpEffect_Init(void *a0, void *out);
 WIP_LOCAL void MapObjects_SwapPositions(LocalMapObject *obj1, LocalMapObject *obj2, TaskManager *taskManager);
 // referenced above; full bodies still in asm
 WIP_LOCAL void RockDebris_Init(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
@@ -679,7 +679,7 @@ WIP_LOCAL BOOL Task_SwapMapObjectPositions(TaskManager *taskManager);
 // batch: render loops, alloc helpers, step funcs (some callees still in asm)
 WIP_LOCAL void RockClimbDebris_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
 WIP_LOCAL void RockDebris_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void *ov02_0224B690(enum HeapID heapID, u32 size);
+WIP_LOCAL void *FlyLanding_AllocZeroed(enum HeapID heapID, u32 size);
 WIP_LOCAL void *FieldMoveTaskEnvironment_New(enum HeapID heapID, u32 size);
 WIP_LOCAL void *FollowMonInteraction_New(enum HeapID heapID);
 WIP_LOCAL void ov02_0224A67C(void *work);
@@ -687,25 +687,25 @@ WIP_LOCAL int ov02_02249968(void *work);
 WIP_LOCAL int ov02_02249AC4(void *work);
 WIP_LOCAL int ov02_02249940(void *work);
 WIP_LOCAL int ov02_02249954(void *work);
-WIP_LOCAL void ov02_0224B3FC(void *a0, int *a1);
-WIP_LOCAL BOOL ov02_0224B6D0(void *a0, void *out);
-WIP_LOCAL int ov02_0224B494(void *work);
+WIP_LOCAL void TrainerJumpEffect_Update(void *a0, int *a1);
+WIP_LOCAL BOOL TrainerClipEffect_Init(void *a0, void *out);
+WIP_LOCAL int FlyLanding_SetPlayerVisible(void *work);
 WIP_LOCAL void WhirlpoolEffect_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
 WIP_LOCAL BOOL FollowMonInteraction_StepHasWait(void *a0, void *a1);
 WIP_LOCAL void FollowMonInteraction_PrintGiftMessage(void *work, void *window, int arg2);
 WIP_LOCAL void FollowMon_ExpandGiftMessage(void *work, String *dest, enum HeapID heapID, int flags, u8 a5);
 WIP_LOCAL void ov02_0224A6D0(void *work);
-WIP_LOCAL void ov02_0224A8D4(void *work);
+WIP_LOCAL void FieldMoveCutIn_FreeMonResources(void *work);
 WIP_LOCAL void ov02_02249FD4(void *work);
 WIP_LOCAL void ov02_0224A028(void *work);
-WIP_LOCAL void ov02_0224B364(void *a0, void *a1);
-WIP_LOCAL void ov02_0224B3B0(void *a0, void *a1);
+WIP_LOCAL void TrainerJumpEffect_Jump(void *a0, void *a1);
+WIP_LOCAL void TrainerJumpEffect_Hop(void *a0, void *a1);
 WIP_LOCAL void FieldMoveEffectModel_AnimateLoop(void *data);
 WIP_LOCAL void Field3dObject_SetPosAtPlayer(void *playerAvatar, void *data);
 WIP_LOCAL int FieldSystem_GetSafariAreaIndex(FieldSystem *fieldSystem);
-WIP_LOCAL void ov02_0224B6B0(void *work, BOOL visible);
+WIP_LOCAL void FieldMoveCutIn_SetPlayerVisible(void *work, BOOL visible);
 WIP_LOCAL int FieldTeleport_FollowMonFlash(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void ov02_0224B768(void *work);
+WIP_LOCAL void FieldMoveCutIn_DestroyTrainerClipEffect(void *work);
 WIP_LOCAL void ov02_02249D40(void *work);
 WIP_LOCAL void WaterfallEffect_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
 WIP_LOCAL void RockClimbDebris_UpdatePieces(void *data);
@@ -720,14 +720,14 @@ WIP_LOCAL void ov02_02249EC0(void *work);
 WIP_LOCAL void ov02_02249CF0(void *work);
 
 WIP_LOCAL void FlyLandingEffect_Update(void *a0, u8 *sm);
-WIP_LOCAL void ov02_0224AC04(void *a0, u8 *sm);
+WIP_LOCAL void CutInFlyer_Update(void *a0, u8 *sm);
 WIP_LOCAL void ov02_02249584(SysTask *task, void *sm);
 WIP_LOCAL void WaterfallEffect_Init(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
 WIP_LOCAL void ov02_02249984(SysTask *task, void *sm);
 WIP_LOCAL void ov02_022499B8(SysTask *task, void *sm);
 WIP_LOCAL BOOL ov02_02249BA8(void *work);
-WIP_LOCAL void ov02_0224AB9C(void *work);
-WIP_LOCAL int ov02_0224B638(void *work);
+WIP_LOCAL void FieldMoveCutIn_DestroyFlyer(void *work);
+WIP_LOCAL int FlyLanding_WaitLanding(void *work);
 WIP_LOCAL void FlyLandingEffect_Delete(void *a0);
 WIP_LOCAL int ov02_02249B10(void *work);
 WIP_LOCAL void FollowMonSituation_SetWeather(FieldSystem *fieldSystem, void *out);
@@ -735,8 +735,8 @@ WIP_LOCAL void FollowMonSituation_SetSpeciesAttr(int a0, void *out);
 WIP_LOCAL int FollowMonSituation_ConvertType(int a0);
 WIP_LOCAL void FollowMonInteraction_LoadScript(void *a0, int a1);
 WIP_LOCAL BOOL PlayerStepEvent_RepelCounterDecrement(SaveData *saveData, FieldSystem *fieldSystem);
-WIP_LOCAL void ov02_0224AC38(void *work); // still in asm
-WIP_LOCAL SpriteResource *ov02_0224A868(void *mgr, NARC *narc);
+WIP_LOCAL void FieldMoveCutIn_StartFlyerTakeOff(void *work); // still in asm
+WIP_LOCAL SpriteResource *FieldMoveCutIn_AddMonPlttResource(void *mgr, NARC *narc);
 WIP_LOCAL void RockClimbDebris_FreePiece(void *obj, NNSFndAllocator *alloc);
 WIP_LOCAL void RockDebris_FreePiece(void *obj, NNSFndAllocator *alloc);
 WIP_LOCAL void SpriteGfxManager_Free(void *mgr); // destructor, still in asm
@@ -748,14 +748,14 @@ WIP_LOCAL int FieldEscapeRope_Warp(TaskManager *taskManager, void *a1, void *a2)
 WIP_LOCAL void ov02_0224A6A8(void *work);
 WIP_LOCAL int ov02_02249B38(void *work);
 WIP_LOCAL BOOL ov02_02249B80(void *work);
-WIP_LOCAL SpriteResource *ov02_0224A810(void *mgr, NARC *narc);
+WIP_LOCAL SpriteResource *FieldMoveCutIn_AddMonCharResource(void *mgr, NARC *narc);
 // callees still in asm
-WIP_LOCAL void ov02_0224A700(SysTask *task, void *data);
+WIP_LOCAL void Task_FieldMoveCutIn_UpdateWindow(SysTask *task, void *data);
 WIP_LOCAL void ov02_02249D5C(SysTask *task, void *data);
 WIP_LOCAL void ov02_02249E58(SysTask *task, void *data);
-WIP_LOCAL void ov02_0224AB58(void *work);
+WIP_LOCAL void FieldMoveCutIn_CreateFlyer(void *work);
 
-WIP_LOCAL void ov02_0224A7A8(void *a0, PokepicTemplate *tmpl);
+WIP_LOCAL void FieldMoveCutIn_GetMonPicIds(void *a0, PokepicTemplate *tmpl);
 WIP_LOCAL int ov02_022495D0(void *work);
 WIP_LOCAL int ov02_02249AD8(void *work);
 WIP_LOCAL int ov02_02249754(void *work);
@@ -769,9 +769,9 @@ WIP_LOCAL int FlyLandingEffect_HideFlyer(void *work);
 WIP_LOCAL void ov02_02249F6C(void *work);
 WIP_LOCAL void ov02_0224A4D0(void *work);
 WIP_LOCAL void ov02_02249D18(void *work);
-WIP_LOCAL void ov02_0224ADF0(void *work);
+WIP_LOCAL void FieldMoveCutIn_StartFlyerPickUp(void *work);
 WIP_LOCAL void ov02_0224A6A8(void *work);
-WIP_LOCAL void ov02_0224B45C(SysTask *task, void *data);
+WIP_LOCAL void Task_FlyLanding(SysTask *task, void *data);
 
 WIP_LOCAL int FlyLandingEffect_Done(void);
 WIP_LOCAL NARC *FlyLanding_OpenNarc(void);
@@ -781,12 +781,12 @@ WIP_LOCAL void FieldMove_SetPlayerVisible(FieldSystem *fieldSystem, BOOL visible
 WIP_LOCAL void ov02_0224957C(void *ptr);
 WIP_LOCAL NARC *ov02_0224A074(void);
 WIP_LOCAL void ov02_0224A63C(BgConfig *bgConfig);
-WIP_LOCAL void ov02_0224AB54(void);
-WIP_LOCAL void ov02_0224AC24(void);
-WIP_LOCAL int ov02_0224ADEC(void);
-WIP_LOCAL int ov02_0224B294(void);
-WIP_LOCAL int ov02_0224B68C(void);
-WIP_LOCAL void ov02_0224B804(void);
+WIP_LOCAL void CutInScrollSprite_Draw(void);
+WIP_LOCAL void CutInFlyer_Draw(void);
+WIP_LOCAL int CutInFlyer_Idle(void);
+WIP_LOCAL int CutInFlyer_Done(void);
+WIP_LOCAL int FlyLanding_Idle(void);
+WIP_LOCAL void CutInModelEffect_Destroy(void);
 WIP_LOCAL void FieldMoveEffectModel_Draw(Field3dObject *object);
 WIP_LOCAL void CutEffect_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
 WIP_LOCAL void CutEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);

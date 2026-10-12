@@ -22,8 +22,8 @@ void ov02_02249F6C(void *);
 void ov02_02249FD4(void *);
 void ov02_0224A028(void *);
 
-void ov02_0224A834(void *, void *);
-void ov02_0224A88C(void *, void *);
+void FieldMoveCutIn_TransferMonChar(void *, void *);
+void FieldMoveCutIn_TransferMonPltt(void *, void *);
 NARC *ov02_0224A074(void);
 void ov02_0224A69C(void *, u32, u32, u32, u32);
 void ov02_0224A648(void *);

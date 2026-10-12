@@ -9,8 +9,8 @@ int ov02_022495E8(void *p) {
     v1 = ov02_02253408;
     v2 = ov02_02253384;
     PTR(p, 0x1e4) = ov02_0224A418(p, &v1);
-    PTR(p, 0x1e8) = ov02_0224A9B8(p, &v2);
-    ov02_0224A9D8(p, 1);
+    PTR(p, 0x1e8) = FieldMoveCutIn_CreateMonSprite(p, &v2);
+    FieldMoveCutIn_CreateScrollSprites(p, 1);
     ov02_02249D40(p);
     U32(p, 0x10) = 1;
     U32(p, 0)
@@ -19,7 +19,7 @@ int ov02_022495E8(void *p) {
 }
 
 int ov02_02249658(void *p) {
-    ov02_0224B72C(p);
+    FieldMoveCutIn_CreateTrainerClipEffect(p);
     U32(p, 0x2c) = 0;
     S32(p, 0x54) = -0x40000;
     S32(p, 0x44) = 0xfe000;
@@ -152,7 +152,7 @@ int ov02_022498BC(void *p) {
     ov02_0224A69C(p, U32(p, 0x44), U32(p, 0x4c), U32(p, 0x48), U32(p, 0x50));
     U32(p, 0x2c) = 1;
     if (S32(p, 0x4c) == 0x5f000 && S32(p, 0x50) == 0x61000) {
-        ov02_0224B768(p);
+        FieldMoveCutIn_DestroyTrainerClipEffect(p);
         U32(p, 0x34) = 0x11;
         U32(p, 0)
         ++;
