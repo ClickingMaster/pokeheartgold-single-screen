@@ -3,10 +3,14 @@
 
 #include "global.h"
 
+#include "bg_cell_manager.h"
 #include "bg_window.h"
+#include "filesystem.h"
 #include "message_format.h"
 #include "message_printer.h"
 #include "msgdata.h"
+#include "overlay_manager.h"
+#include "pokepic.h"
 #include "sprite.h"
 #include "sprite_system.h"
 #include "unk_02088288.h"
@@ -64,7 +68,12 @@ typedef struct PokemonSummary {
     u32 numPageWindows;                 // 0x228
     PokemonSummaryArgs *args;           // 0x22C
     PokemonSummaryMon mon;              // 0x230
-    u8 unk29C[0x3FC - 0x29C];           // 0x29C
+    void *camera;                       // 0x29C
+    PokepicManager *pokepicManager;     // 0x2A0
+    u8 unk2A4[0x2CC - 0x2A4];           // 0x2A4
+    void *pokepicAnimManager;           // 0x2CC
+    Pokepic *pokepic;                   // 0x2D0
+    u8 unk2D4[0x3FC - 0x2D4];           // 0x2D4
     SpriteSystem *spriteSystem;         // 0x3FC
     SpriteManager *spriteManager;       // 0x400
     Sprite *sprites[POKEMON_SUMMARY_SPRITE_COUNT]; // 0x404: see pokemon_summary_sprites.c for what each one shows
@@ -76,12 +85,13 @@ typedef struct PokemonSummary {
     String *buffer;                     // 0x7AC
     String *playerName;                 // 0x7B0
     MsgData *moveNames;                 // 0x7B4
-    u8 unk7B8[4];                       // 0x7B8
+    NARC *pokepicAnimNarc;              // 0x7B8
     s8 page;                            // 0x7BC
     u8 moveSlot : 4;                    // 0x7BD: the two move slots being swapped
     u8 swapMoveSlot : 4;
     u8 unk7BE;                          // 0x7BE: one bit per sprite 41..45
-    u8 unk7BF;                          // 0x7BF
+    u8 unk7BF_0 : 4;                    // 0x7BF
+    u8 unk7BF_4 : 4;                    // 1: leave the screen
     u8 sparkleState;                    // 0x7C0: sheen sparkles
     u8 numSparkles;                     // 0x7C1
     u8 unk7C2;                          // 0x7C2
@@ -90,7 +100,8 @@ typedef struct PokemonSummary {
     u8 ribbonRow;                       // 0x7C5
     u8 ribbonCount;                     // 0x7C6
     u8 ribbonId;                        // 0x7C7
-    u8 unk7C8[0x7D4 - 0x7C8];           // 0x7C8
+    u8 unk7C8[0x7D0 - 0x7C8];           // 0x7C8
+    BgCellManager *cellManager;         // 0x7D0
     u32 boxIconSprite;                  // 0x7D4: which of sprites 73/74 shows the box Pokemon's icon next
 } PokemonSummary; // size: 0x7D8
 
@@ -130,6 +141,26 @@ void sub_0208DBF0(PokemonSummary *summary);
 void sub_0208DC68(PokemonSummary *summary, int show);
 void sub_0208DD20(PokemonSummary *summary, int show);
 void sub_0208DDA0(PokemonSummary *summary, int result);
+
+// pokemon_summary.c
+BOOL PokemonSummary_IsPokeathlonUnlocked(SaveData *saveData);
+BOOL PokemonSummary_Init(OverlayManager *manager, int *state);
+BOOL PokemonSummary_Main(OverlayManager *manager, int *state);
+BOOL PokemonSummary_Exit(OverlayManager *manager, int *state);
+void PokemonSummary_VBlank(void *data);
+void PokemonSummary_SetGraphicsBanks(void);
+void PokemonSummary_InitBgs(BgConfig *bgConfig);
+void PokemonSummary_FreeBgs(BgConfig *bgConfig);
+void PokemonSummary_LoadBgGraphics(PokemonSummary *summary, NARC *unused, NARC *narc);
+void PokemonSummary_SetBlend(void);
+void PokemonSummary_InitText(PokemonSummary *summary);
+void PokemonSummary_FreeText(PokemonSummary *summary);
+void PokemonSummary_InitBgCells(PokemonSummary *summary, NARC *narc);
+void PokemonSummary_FreeBgCells(PokemonSummary *summary);
+int PokemonSummary_WaitFadeIn(PokemonSummary *summary);
+int PokemonSummary_HandleInput(PokemonSummary *summary);
+int sub_02088D18(PokemonSummary *summary);
+int sub_02088D34(PokemonSummary *summary);
 
 // pokemon_summary_sprites.c
 void PokemonSummary_InitSpriteSystem(PokemonSummary *summary);

@@ -3,7 +3,7 @@
 #include "fielddata/script/scr_seq/event_T27GYM0101.h"
 
 #include "field_system.h"
-#include "overlay_01_021F72DC.h"
+#include "field/map_object_billboard_motion.h"
 #include "overlay_01_021F944C.h"
 #include "overlay_04.h"
 #include "sound_playback.h"
@@ -166,7 +166,7 @@ static void ApplyFogToMapObjects(FieldSystem *fieldSystem) {
     LocalMapObject *objects = MapObjectManager_GetObjects(fieldSystem->mapObjectManager);
     for (i = 0; i < numObjects; ++i) {
         if (MapObject_CheckActive(objects) == TRUE) {
-            NNS_G3dMdlSetMdlFogEnableFlagAll(BillboardObject_GetModel(ov01_021F72DC(objects)), FALSE);
+            NNS_G3dMdlSetMdlFogEnableFlagAll(BillboardObject_GetModel(MapObject_GetBillboard(objects)), FALSE);
         }
         MapObjectArray_NextObject2(&objects);
     }

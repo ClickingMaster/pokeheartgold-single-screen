@@ -260,7 +260,7 @@ static u32 sub_0204FDA0(UnkStruct_0204FBDC *a0, FieldSystem *fieldSystem, enum H
     unk->moveToLearn = 0;
     unk->unk12 = 0;
     unk->ribbons = Save_SpecialRibbons_Get(saveData);
-    unk->isFlag982Set = sub_0208828C(saveData);
+    unk->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);
     sub_02089D40(unk, unk_020FC3A4);
     sub_0208AD34(unk, Save_PlayerData_GetProfile(saveData));
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, unk);

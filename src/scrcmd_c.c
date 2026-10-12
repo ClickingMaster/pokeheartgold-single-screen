@@ -3049,31 +3049,31 @@ BOOL ScrCmd_307(ScriptContext *ctx) {
     u16 r7 = ScriptGetVar(ctx);
     u16 r2 = ScriptGetVar(ctx);
     u8 r3 = ScriptReadByte(ctx);
-    ov01_021E9AE8(ctx->fieldSystem, r7 + 32 * r4, r2 + 32 * r6, r3);
+    DoorAnimation_Load(ctx->fieldSystem, r7 + 32 * r4, r2 + 32 * r6, r3);
     return FALSE;
 }
 
 BOOL ScrCmd_308(ScriptContext *ctx) {
     u8 r1 = ScriptReadByte(ctx);
-    ov01_021E9C00(ctx->fieldSystem, r1);
+    DoorAnimation_WaitForEnd(ctx->fieldSystem, r1);
     return TRUE;
 }
 
 BOOL ScrCmd_309(ScriptContext *ctx) {
     u8 r1 = ScriptReadByte(ctx);
-    ov01_021E9C20(ctx->fieldSystem, r1);
+    DoorAnimation_Unload(ctx->fieldSystem, r1);
     return FALSE;
 }
 
 BOOL ScrCmd_310(ScriptContext *ctx) {
     u8 r1 = ScriptReadByte(ctx);
-    ov01_021E9BB8(ctx->fieldSystem, r1);
+    DoorAnimation_PlayOpen(ctx->fieldSystem, r1);
     return FALSE;
 }
 
 BOOL ScrCmd_311(ScriptContext *ctx) {
     u8 r1 = ScriptReadByte(ctx);
-    ov01_021E9BDC(ctx->fieldSystem, r1);
+    DoorAnimation_PlayClose(ctx->fieldSystem, r1);
     return FALSE;
 }
 
@@ -4447,7 +4447,7 @@ BOOL ScrCmd_598(ScriptContext *ctx) {
         GF_ASSERT(FALSE);
         return FALSE;
     }
-    ov02_0224E0BC(obj1, obj2, ctx->taskman);
+    MapObjects_SwapPositions(obj1, obj2, ctx->taskman);
     return TRUE;
 }
 

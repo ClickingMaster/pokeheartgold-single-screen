@@ -737,7 +737,7 @@ u32 PCBox_StartSummaryApp(PCBoxWork *work) {
     *(u32 *)args->unk24 = 0;
     args->unk28 = 0;
     args->unk2C = sub_02088288(work->args->saveData);
-    args->isFlag982Set = sub_0208828C(work->args->saveData);
+    args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(work->args->saveData);
     args->menuInputStatePtr = work->args->menuInputStatePtr;
     work->subApp = OverlayManager_New(&gOverlayTemplate_PokemonSummary, args, HEAP_ID_9);
     return 0;

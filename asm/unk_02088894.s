@@ -8,8 +8,8 @@
 	.include "unk_02088288.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02088894
-sub_02088894: ; 0x02088894
+	thumb_func_start PokemonSummary_InitText
+PokemonSummary_InitText: ; 0x02088894
 	push {r4, lr}
 	ldr r2, _02088940 ; =0x0000012E
 	add r4, r0, #0
@@ -93,9 +93,9 @@ _0208894C: .word 0x000007A8
 _02088950: .word 0x000007AC
 _02088954: .word 0x000002EE
 _02088958: .word 0x000007B4
-	thumb_func_end sub_02088894
-	thumb_func_start sub_0208895C
-sub_0208895C: ; 0x0208895C
+	thumb_func_end PokemonSummary_InitText
+	thumb_func_start PokemonSummary_FreeText
+PokemonSummary_FreeText: ; 0x0208895C
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, _020889BC ; =0x000007B4
@@ -140,9 +140,9 @@ _020889C0: .word 0x000007A4
 _020889C4: .word 0x0000079C
 _020889C8: .word 0x000007A8
 _020889CC: .word 0x000007AC
-	thumb_func_end sub_0208895C
-	thumb_func_start sub_020889D0
-sub_020889D0: ; 0x020889D0
+	thumb_func_end PokemonSummary_FreeText
+	thumb_func_start PokemonSummary_InitBgCells
+PokemonSummary_InitBgCells: ; 0x020889D0
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	ldr r0, [r5]
@@ -276,4 +276,4 @@ sub_020889D0: ; 0x020889D0
 	mov r3, #0x4b
 	bl BgCellManager_LoadCellTilemapFromOpenNarc
 	pop {r3, r4, r5, pc}
-	thumb_func_end sub_020889D0
+	thumb_func_end PokemonSummary_InitBgCells

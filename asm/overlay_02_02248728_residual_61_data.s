@@ -1491,13 +1491,13 @@
 	.public ov02_0224E008
 	.public ov02_0224E020
 	.public ov02_0224E074
-	.public ov02_0224E0BC
-	.public ov02_0224E0D4
-	.public ov02_0224E0EC
-	.public ov02_0224E224
-	.public ov02_0224E26C
-	.public ov02_0224E2A0
-	.public ov02_0224E2D4
+	.public MapObjects_SwapPositions
+	.public SwapPositions_CreateTaskEnv
+	.public Task_SwapMapObjectPositions
+	.public SwapPositions_GetStepTowards
+	.public SwapPositions_GetFaceMovement
+	.public SwapPositions_GetTurnAroundMovement
+	.public SwapPositions_GetOppositeStep
 	.public MapId_IsSafariZone
 	.public SafariZone_GetAreaIndexAt
 	.public FieldSystem_GetSafariAreaIndex
@@ -1745,8 +1745,8 @@
 	.public ov02_0224DDE0
 	.public ov02_0224DDF4
 	.public ov02_0224DE08
-	.public ov02_0224E0BC
-	.public ov02_0224E0D4
+	.public MapObjects_SwapPositions
+	.public SwapPositions_CreateTaskEnv
 	.public MapId_IsSafariZone
 	.public SafariZone_GetAreaIndexAt
 	.public FieldSystem_GetSafariAreaIndex

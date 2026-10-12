@@ -80,11 +80,11 @@ void CallFieldTask_Whirlpool(TaskManager *taskManager, int playerDirection, int 
 int MapNumToFloorNo(u32 mapId);
 void PrintCurFloorInNewWindow(FieldSystem *fieldSystem, u8 x, u8 y, u16 *p_ret, MessageFormat *msgFmt, u16 floor);
 int Field_SaveGameNormal(FieldSystem *fieldSystem);
-void ov01_021E9AE8(FieldSystem *fieldSystem, int a1, int a2, u8 a3);
-void ov01_021E9C00(FieldSystem *fieldSystem, u8 a1);
-void ov01_021E9C20(FieldSystem *fieldSystem, u8 a1);
-void ov01_021E9BB8(FieldSystem *fieldSystem, u8 a1);
-void ov01_021E9BDC(FieldSystem *fieldSystem, u8 a1);
+void DoorAnimation_Load(FieldSystem *fieldSystem, int x, int z, u8 tag);
+void DoorAnimation_WaitForEnd(FieldSystem *fieldSystem, u8 tag);
+void DoorAnimation_Unload(FieldSystem *fieldSystem, u8 tag);
+void DoorAnimation_PlayOpen(FieldSystem *fieldSystem, u8 tag);
+void DoorAnimation_PlayClose(FieldSystem *fieldSystem, u8 tag);
 SysTask *Field_PlayerMovementSavingSet(FieldSystem *fieldSystem);
 void Field_PlayerMovementSavingClear(SysTask *task);
 

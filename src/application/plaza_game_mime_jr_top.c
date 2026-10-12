@@ -52,7 +52,7 @@ fx64c FX_SinFx64c(fx32 x);
 fx64c FX_CosFx64c(fx32 x);
 f32 _f_lltof(s64 value);
 
-// Tables in asm/overlay_92_residual_23.s.
+// Tables in asm/plaza_game_mime_jr_top_data.s.
 typedef struct MimeJrTopModelFiles {
     int files[16][2]; // model file, animation file
 } MimeJrTopModelFiles;

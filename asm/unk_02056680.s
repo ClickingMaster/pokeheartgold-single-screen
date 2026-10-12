@@ -41,7 +41,7 @@ FieldTransition_EnterThroughSideDoor: ; 0x02056680
 	beq _020566F0
 	b _020566F4
 _020566A2:
-	bl ov01_021E90C0
+	bl DoorTransition_New
 	str r0, [r4, #0x18]
 	ldr r0, [r5, #0x40]
 	bl PlayerAvatar_GetXCoord
@@ -51,7 +51,7 @@ _020566A2:
 	add r1, r0, #0
 	ldr r2, [r4, #0x18]
 	add r0, r6, #0
-	bl ov01_021E90DC
+	bl DoorTransition_SetPosition
 	ldrh r0, [r4, #2]
 	add r0, r0, #1
 	strh r0, [r4, #2]
@@ -65,11 +65,11 @@ _020566C8:
 	add r0, r5, #0
 	add r1, r6, #0
 	lsr r2, r2, #0x18
-	bl ov01_021E971C
+	bl DoorTransition_WalkOutOfSideDoor
 	cmp r0, #0
 	beq _020566F4
 	ldr r0, [r4, #0x18]
-	bl ov01_021E90D4
+	bl DoorTransition_Free
 	ldrh r0, [r4, #2]
 	add r0, r0, #1
 	strh r0, [r4, #2]

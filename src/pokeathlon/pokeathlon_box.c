@@ -20,12 +20,12 @@
 #include "wireless_status_icon.h"
 
 // functions in asm:
-int sub_020935E0(int);
-void sub_02093A40(u32);
-void sub_02093354(u32);
-u32 sub_020932E0(u32, u32, u32);
-void sub_02093440(u32, BgConfig *, PCStorage *, Party *, u32, u32, BOOL, u32, void *, void *, void *, void *, PokeathlonBox *);
-void sub_02093594(u32);
+int BoxMonSelector_Run(int);
+void BoxMonSelector_RenderSprites(u32);
+void BoxMonSelector_Delete(u32);
+u32 BoxMonSelector_New(u32, u32, u32);
+void BoxMonSelector_Init(u32, BgConfig *, PCStorage *, Party *, u32, u32, BOOL, u32, void *, void *, void *, void *, PokeathlonBox *);
+void BoxMonSelector_VBlank(u32);
 s8 PokemonSummary_GetPokeathlonStarStates(void *, u8, u8, u32, s8);
 
 #define pokeathlonBoxObjCharTransferTemplate _0221FC98
@@ -74,7 +74,7 @@ BOOL PokeathlonBox_Main(OverlayManager *manager) {
         break;
 
     case 3:
-        int res = sub_020935E0(data->unk8);
+        int res = BoxMonSelector_Run(data->unk8);
         if (res == 2) {
             data->unk28 = FALSE;
             data->state = 4;
@@ -98,7 +98,7 @@ BOOL PokeathlonBox_Main(OverlayManager *manager) {
         break;
     }
 
-    sub_02093A40(data->unk8);
+    BoxMonSelector_RenderSprites(data->unk8);
     PokeathlonBox_RenderAndAnimateSprites(data->graphics);
     return FALSE;
 }
@@ -108,7 +108,7 @@ BOOL PokeathlonBox_Exit(OverlayManager *manager) {
 
     Main_SetVBlankIntrCB(NULL, NULL);
     PokeathlonBox_ReleaseGraphics(data->graphics);
-    sub_02093354(data->unk8);
+    BoxMonSelector_Delete(data->unk8);
     FontID_Release(2);
     OamManager_Free();
     ObjCharTransfer_Destroy();
@@ -148,7 +148,7 @@ BOOL ov97_0221E700(OverlayManager *manager) {
 
     PokeathlonBox_SetGraphicsBanks();
 
-    data->unk8 = sub_020932E0(HEAP_ID_POKEATHLON, HEAP_ID_3, 0x13);
+    data->unk8 = BoxMonSelector_New(HEAP_ID_POKEATHLON, HEAP_ID_3, 0x13);
     data->graphics = PokeathlonBox_InitGraphics(HEAP_ID_POKEATHLON);
 
     PokeathlonBox_SetGraphicsModes(data->bgConfig);
@@ -163,7 +163,7 @@ BOOL ov97_0221E700(OverlayManager *manager) {
 
     PCStorage *pcStorage = SaveArray_PCStorage_Get(courseArgs->saveData);
     Party *party = SaveArray_Party_Get(courseArgs->saveData);
-    sub_02093440(data->unk8, data->bgConfig, pcStorage, party, 0, 0, isMode0, 18, &PokeathlonBox_GetLightBoxMon, &PokeathlonBox_GetBoxName, data->selectedMons, &ov97_0221EC14, data);
+    BoxMonSelector_Init(data->unk8, data->bgConfig, pcStorage, party, 0, 0, isMode0, 18, &PokeathlonBox_GetLightBoxMon, &PokeathlonBox_GetBoxName, data->selectedMons, &ov97_0221EC14, data);
 
     WirelessStatusIcon_CreateOnScreenIfConnected(2);
     PokeathlonBox_SetupGraphics(data->graphics, data->bgConfig, data->courseId, courseArgs->field_F);
@@ -201,7 +201,7 @@ void ov97_0221E864(PokeathlonBox *data) {
 }
 
 void ov97_0221E88C(void *data) {
-    sub_02093594(((PokeathlonBox *)data)->unk8);
+    BoxMonSelector_VBlank(((PokeathlonBox *)data)->unk8);
 }
 
 BOOL PokeathlonBox_GetBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *ptr) {

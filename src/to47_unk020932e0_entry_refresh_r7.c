@@ -37,7 +37,7 @@ int sub_02094400(UnkState_020932E0 *ptr) {
     }
     Heap_Free(buf);
     NARC_Delete(narc);
-    ptr->callback = (UnkCallback_020932E0)sub_02094758;
+    ptr->callback = (BoxMonSelectorCallback)sub_02094758;
     sub_02094C88(ptr, ptr->unk_0F);
     sub_02094EB4(ptr);
     CopyRectToBgTilemapRect(ptr->bgConfig, 2, 0, 0, 20, 20, (u8 *)ptr->unk_46D4 + 12, 0, 0, 32, 24);
@@ -75,7 +75,7 @@ int sub_02094528(UnkState_020932E0 *ptr) {
     }
     Heap_Free(buf);
     NARC_Delete(narc);
-    ptr->callback = (UnkCallback_020932E0)sub_02094758;
+    ptr->callback = (BoxMonSelectorCallback)sub_02094758;
     sub_02094C88(ptr, ptr->unk_0F);
     sub_02094EB4(ptr);
     CopyRectToBgTilemapRect(ptr->bgConfig, 2, 0, 0, 20, 20, (u8 *)ptr->unk_46D0 + 12, 0, 0, 20, 20);

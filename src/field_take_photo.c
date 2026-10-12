@@ -12,7 +12,7 @@
 #include "gf_gfx_loader.h"
 #include "launch_application.h"
 #include "field/field_effect_manager.h"
-#include "overlay_01_021F72DC.h"
+#include "field/map_object_billboard_motion.h"
 #include "overlay_01_021F8D80.h"
 #include "overlay_01_021F944C.h"
 #include "field/field_follow_mon.h"

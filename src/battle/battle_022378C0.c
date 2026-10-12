@@ -14,7 +14,7 @@
 #include "unk_02026E84.h"
 #include "link_synchronization.h"
 #include "unk_02037C94.h"
-#include "unk_020755E8.h"
+#include "evolution_scene.h"
 #include "vram_transfer_manager.h"
 
 FS_EXTERN_OVERLAY(OVY_5);
@@ -146,7 +146,7 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
         if (evolutionSpecies) {
             Heap_Create(HEAP_ID_3, HEAP_ID_EVOLUTION, 0x30000);
             mon = Party_GetMonByIndex(setup->party[BATTLER_PLAYER], selectedMonIndex);
-            setup->evolutionTaskData = sub_02075A7C(setup->party[BATTLER_PLAYER], mon, evolutionSpecies, setup->options, setup->unk_164, setup->pokedex, setup->bag, setup->gameStats, evolutionCondition, 3, HEAP_ID_EVOLUTION);
+            setup->evolutionTaskData = EvolutionScene_New(setup->party[BATTLER_PLAYER], mon, evolutionSpecies, setup->options, setup->unk_164, setup->pokedex, setup->bag, setup->gameStats, evolutionCondition, 3, HEAP_ID_EVOLUTION);
             *state = BSTATE_EVOLUTION_MAIN;
         } else {
             *state = BSTATE_EXIT;
@@ -155,8 +155,8 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
     }
     case BSTATE_EVOLUTION_MAIN: {
         void *data = setup->evolutionTaskData;
-        if (sub_02075D3C(data) == TRUE) {
-            sub_02075D4C(data);
+        if (EvolutionScene_IsDone(data) == TRUE) {
+            EvolutionScene_Delete(data);
             Heap_Destroy(HEAP_ID_EVOLUTION);
             *state = BSTATE_EVOLUTION_INIT;
         }

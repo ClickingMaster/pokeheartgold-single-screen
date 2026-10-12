@@ -35,7 +35,7 @@ extern const Pair ov01_02207294[];
 extern const Pair ov01_022072CC[];
 System *ov01_021FA3DC(void *object);
 void *ov01_021FA1D0(System *system);
-void *ov01_021F72DC(void *object);
+void *MapObject_GetBillboard(void *object);
 void *FldObjSys_ReadMModelFromNarc(System *system, u32 id, u32 a2);
 NNSG3dResMdl *BillboardObject_GetModel(void *obj);
 int NNS_G3dMdlGetMdlFogEnableFlag(NNSG3dResMdl *mdl, int idx);
@@ -94,14 +94,14 @@ void ov01_021FA97C(void *object, int mode) {
 
     system = ov01_021FA3DC(object);
     ctx = ov01_021FA1D0(system);
-    old = ov01_021F72DC(object);
+    old = MapObject_GetBillboard(object);
     w = Heap_AllocAtEnd((enum HeapID)4, sizeof(Work));
     memset(w, 0, sizeof(Work));
     w->mode = mode;
     w->owner = object;
     switch (MapObject_GetID(object)) {
     case 0xff:
-        fog = NNS_G3dMdlGetMdlFogEnableFlag(BillboardObject_GetModel(ov01_021F72DC(object)), 0);
+        fog = NNS_G3dMdlGetMdlFogEnableFlag(BillboardObject_GetModel(MapObject_GetBillboard(object)), 0);
         break;
     default:
         fog = 0;

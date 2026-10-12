@@ -9,7 +9,7 @@
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
 
-// A PC box or party Pokemon as the box selector (sub_020932E0..) reads it through its callbacks.
+// A PC box or party Pokemon as the box selector (BoxMonSelector_New..) reads it through its callbacks.
 typedef struct PokewalkerBoxMon {
     u32 species;
     u32 personality;
@@ -89,12 +89,12 @@ typedef struct PokewalkerBoxDisplay {
 } PokewalkerBoxDisplay;                  // size=0x258
 
 // Box selector (ARM9, no header yet).
-void *sub_020932E0(enum HeapID heapId, int count, int flag);
-void sub_02093354(void *boxSelector);
-void sub_02093440(void *boxSelector, BgConfig *bgConfig, PCStorage *storage, Party *party, u32 a4, u32 a5, BOOL a6, u32 a7, void *getMon, void *getBoxName, void *selection, void *onCursorMove, void *arg);
-void sub_02093594(void *boxSelector);
-int sub_020935E0(void *boxSelector);
-void sub_02093A40(void *boxSelector);
+void *BoxMonSelector_New(enum HeapID heapId, int count, int flag);
+void BoxMonSelector_Delete(void *boxSelector);
+void BoxMonSelector_Init(void *boxSelector, BgConfig *bgConfig, PCStorage *storage, Party *party, u32 a4, u32 a5, BOOL a6, u32 a7, void *getMon, void *getBoxName, void *selection, void *onCursorMove, void *arg);
+void BoxMonSelector_VBlank(void *boxSelector);
+int BoxMonSelector_Run(void *boxSelector);
+void BoxMonSelector_RenderSprites(void *boxSelector);
 
 // Modes of the mode table in pokewalker_app.c: enter / update / exit.
 int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app);

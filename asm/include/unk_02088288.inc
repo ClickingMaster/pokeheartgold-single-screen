@@ -121,7 +121,7 @@
 .public CalculateHpBarColor
 .public sub_020880CC
 .public sub_02088288
-.public sub_0208828C
+.public PokemonSummary_IsPokeathlonUnlocked
 .public sub_02089D40
 .public sub_0208A520
 .public sub_0208ACDC
@@ -203,18 +203,18 @@
 	.public PokemonSummary_Init
 	.public PokemonSummary_Main
 	.public PokemonSummary_Exit
-	.public sub_020885DC
-	.public sub_02088610
-	.public sub_02088630
-	.public sub_0208877C
-	.public sub_020887C4
-	.public sub_0208887C
-	.public sub_02088894
-	.public sub_0208895C
-	.public sub_020889D0
-	.public sub_02088AF8
-	.public sub_02088B08
-	.public sub_02088B40
+	.public PokemonSummary_VBlank
+	.public PokemonSummary_SetGraphicsBanks
+	.public PokemonSummary_InitBgs
+	.public PokemonSummary_FreeBgs
+	.public PokemonSummary_LoadBgGraphics
+	.public PokemonSummary_SetBlend
+	.public PokemonSummary_InitText
+	.public PokemonSummary_FreeText
+	.public PokemonSummary_InitBgCells
+	.public PokemonSummary_FreeBgCells
+	.public PokemonSummary_WaitFadeIn
+	.public PokemonSummary_HandleInput
 	.public sub_02088D18
 	.public sub_02088D34
 	.public sub_02088D48
@@ -290,14 +290,14 @@
 	.public _021038B0
 	.public _021038B4
 	.public _021038B8
-	.public _021038C4
+	.public gPokemonSummaryGraphicsModes
 	.public _021038D4
-	.public _021038E8
-	.public _02103904
-	.public _02103920
-	.public _0210393C
-	.public _02103958
-	.public _02103974
-	.public _02103990
+	.public gPokemonSummaryBgTemplate1
+	.public gPokemonSummaryBgTemplate2
+	.public gPokemonSummaryBgTemplate3
+	.public gPokemonSummaryBgTemplate4
+	.public gPokemonSummaryBgTemplate5
+	.public gPokemonSummaryBgTemplate6
+	.public gPokemonSummaryGraphicsBanks
 	.public _021039B8
 	.public _021039E8

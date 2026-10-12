@@ -8,8 +8,8 @@
 	.include "unk_02088288.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_020887C4
-sub_020887C4: ; 0x020887C4
+	thumb_func_start PokemonSummary_LoadBgGraphics
+PokemonSummary_LoadBgGraphics: ; 0x020887C4
 	push {r3, r4, r5, lr}
 	sub sp, #0x10
 	add r5, r0, #0
@@ -95,4 +95,4 @@ sub_020887C4: ; 0x020887C4
 	bl GfGfxLoader_LoadScrnDataFromOpenNarc
 	add sp, #0x10
 	pop {r3, r4, r5, pc}
-	thumb_func_end sub_020887C4
+	thumb_func_end PokemonSummary_LoadBgGraphics

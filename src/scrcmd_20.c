@@ -376,7 +376,7 @@ static u32 sub_0204F448(UnkStruct_0204F284 *a0, FieldSystem *fieldSystem, enum H
     args->moveToLearn = MOVE_NONE;
     args->unk12 = 0;
     args->ribbons = Save_SpecialRibbons_Get(saveData);
-    args->isFlag982Set = sub_0208828C(saveData);
+    args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);
     sub_02089D40(args, unk_020FC224);
     sub_0208AD34(args, Save_PlayerData_GetProfile(saveData));
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, args);

@@ -12,7 +12,7 @@ extern struct OverlayManagerTemplate gOverlayTemplate_PokemonSummary;
 typedef struct PokemonSummaryArgs {
     Party *party;
     Options *options;
-    u8 unk8[0x4];
+    const u16 *playerName; // with playerId and unk10 (gender): tells the player's own Pokemon
     u32 playerId; // with unk10 (gender) and the player's name: tells the player's own Pokemon
     u8 unk10;
     u8 unk11;
@@ -21,6 +21,7 @@ typedef struct PokemonSummaryArgs {
     u8 partySlot;
     u8 unk15;
     u8 unk16;
+    u8 unk17; // set to 1 when the screen is left with B
     u16 moveToLearn;
     u8 unk1A[0x2];
     BOOL natDexEnabled;
@@ -34,7 +35,7 @@ typedef struct PokemonSummaryArgs {
 } PokemonSummaryArgs;
 
 u32 sub_02088288(SaveData *);
-BOOL sub_0208828C(SaveData *);
+BOOL PokemonSummary_IsPokeathlonUnlocked(SaveData *);
 void sub_02089D40(PokemonSummaryArgs *, const u8 *);
 void sub_0208AD34(PokemonSummaryArgs *, PlayerProfile *);
 int sub_0208AD54(void);

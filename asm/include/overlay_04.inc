@@ -95,7 +95,7 @@
 .public MapPropManager_LoadOne
 .public MapLoadManager_TrackTarget
 .public MapLoadManager_ForgetTrackedTarget
-.public ov01_021F72DC
+.public MapObject_GetBillboard
 .public ov01_021FA2D4
 .public ov01_021FA930
 .public DynamicTerrainHeightManager_SetPlate

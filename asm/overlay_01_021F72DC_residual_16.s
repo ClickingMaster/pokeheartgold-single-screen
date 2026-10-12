@@ -9,7 +9,7 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_021F72DC
+	.public MapObject_GetBillboard
 	.public ov01_021F7504
 	.public ov01_021F772C
 	.public ov01_021F7810
@@ -94,12 +94,12 @@
 	.public ov01_021F8A4C
 	.public ov01_021F8BA8
 	.public ov01_021F8BE0
-	.public ov01_021F8C00
+	.public BillboardObject_AlignSequenceFrame
 	.public ov01_021F8C30
 	.public ov01_021F8C3C
 	.public ov01_021F8C64
-	.public ov01_021F8C88
-	.public ov01_021F8CC8
+	.public MapObject_UpdateBillboardVisibility
+	.public MapObject_GetEffectModelOffset
 	.public ov01_021F8CFC
 	.public ov01_021F8D24
 	.public ov01_021F8D28

@@ -257,13 +257,13 @@
 .public Party_GetCount
 .public Party_GetMonByIndex
 .public Party_HasMon
-.public sub_02075A7C
-.public sub_02075D3C
-.public sub_02075D4C
+.public EvolutionScene_New
+.public EvolutionScene_IsDone
+.public EvolutionScene_Delete
 .public GetItemNameIntoString
 .public ItemIdIsMail
 .public sub_02088288
-.public sub_0208828C
+.public PokemonSummary_IsPokeathlonUnlocked
 .public sub_02089D40
 .public sub_0208AD34
 .public LoadDwcOverlay

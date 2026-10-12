@@ -4,15 +4,11 @@
 
 #include "field_system.h"
 #include "map_object.h"
+#include "map_object_movement_commands_internal.h"
 #include "map_object_movement_utilities_internal.h"
 #include "math_util.h"
 #include "player_avatar.h"
 #include "player_avatar_movement.h"
-
-// Defined elsewhere without a header yet.
-u32 GetMovementForDirection(s32 direction, u32 movement);
-void MapObject_ForceSetHeldMovement(LocalMapObject *object, u32 movement);
-BOOL MapObject_RunForcedMovement(LocalMapObject *object);
 
 extern MovementStateFunc _020FD4EC[];
 extern MovementStateFunc _020FD548[];

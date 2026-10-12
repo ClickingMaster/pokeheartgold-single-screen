@@ -9,7 +9,7 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_021F72DC
+	.public MapObject_GetBillboard
 	.public ov01_021F7504
 	.public ov01_021F772C
 	.public ov01_021F7810
@@ -94,20 +94,20 @@
 	.public ov01_021F8A4C
 	.public ov01_021F8BA8
 	.public ov01_021F8BE0
-	.public ov01_021F8C00
+	.public BillboardObject_AlignSequenceFrame
 	.public ov01_021F8C30
 	.public ov01_021F8C3C
 	.public ov01_021F8C64
-	.public ov01_021F8C88
-	.public ov01_021F8CC8
+	.public MapObject_UpdateBillboardVisibility
+	.public MapObject_GetEffectModelOffset
 	.public ov01_021F8CFC
 	.public ov01_021F8D24
 	.public ov01_021F8D28
 	.public ov01_021F8D40
 	.public ov01_021F8D58
 
-	thumb_func_start ov01_021F72DC
-ov01_021F72DC: ; 0x021F72DC
+	thumb_func_start MapObject_GetBillboard
+MapObject_GetBillboard: ; 0x021F72DC
 	push {r4, lr}
 	add r4, r0, #0
 	bl MapObject_GetSpriteID
@@ -233,4 +233,4 @@ _021F73B4:
 _021F73C0: .word 0x00000103
 _021F73C4: .word 0x000003E1
 _021F73C8: .word 0x00000106
-	thumb_func_end ov01_021F72DC
+	thumb_func_end MapObject_GetBillboard

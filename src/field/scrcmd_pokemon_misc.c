@@ -24,7 +24,7 @@
 #include "map_object.h"
 #include "map_section.h"
 #include "math_util.h"
-#include "overlay_01_021F72DC.h"
+#include "field/map_object_billboard_motion.h"
 #include "overlay_01_021F944C.h"
 #include "overlay_02.h"
 #include "overlay_03.h"
@@ -650,7 +650,7 @@ BOOL ScrCmd_699(ScriptContext *ctx) {
             MapObject_SetPositionVector(curObj, &vec);
             MapObject_SetCurrentY(curObj, (y >> 3) / FX32_ONE);
         }
-        sprite = ov01_021F72DC(curObj);
+        sprite = MapObject_GetBillboard(curObj);
         if (sprite) {
             ov01_021FA3E8(curObj, sprite);
             BillboardObject_SetVisible(sprite, 1);

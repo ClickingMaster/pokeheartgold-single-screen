@@ -387,16 +387,8 @@ Static main
     Object src/pokedex_util.o
     Object src/battle_regulation.o
     Object src/battle_link_comm.o
-    Object src/overlay_resource_actor_1.o
-    Object asm/to80_extra1373_anchor.o
-    Object src/to80_extra1373_run01.o
-    Object src/overlay_resource_actor_2.o
-    Object src/to80_extra1614_run01.o
-    Object src/overlay_resource_actor_capture.o
-    Object src/to91_w41522_evolution_graphics.o
-    Object src/overlay_resource_actor_3.o
-    Object src/r40_unk_020755E8_residual_3_run1.o
-    Object src/overlay_resource_actor_4.o
+    Object asm/evolution_scene_data.o
+    Object src/evolution_scene.o
     Object src/particle_scene.o
     Object src/type_icon_resources.o
     Object asm/type_icon_resources_data.o
@@ -423,18 +415,8 @@ Static main
     Object src/summary_graphics_lookup_1.o
     Object asm/unk_02087FD4_residual_1.o
     Object src/unk_0208805C.o
-    Object src/summary_screen_helpers.o
-    Object src/pokemon_summary_lifecycle_1.o
-    Object asm/unk_02088288_residual_1.o
-    Object src/summary_screen_helpers_2.o
-    Object src/summary_graphics_init_1.o
-    Object src/summary_screen_helpers_3.o
-    Object src/summary_field_renderer_1.o
-    Object src/summary_screen_helpers_4.o
-    Object src/summary_text_work_1.o
-    Object src/summary_screen_helpers_5.o
-    Object src/r40_unk_02088B08_run1.o
-    Object src/summary_screen_helpers_6.o
+    Object asm/pokemon_summary_data.o
+    Object src/pokemon_summary.o
     Object src/overlay_comm_state_helpers_1.o
     Object src/summary_screen_helpers_7.o
     Object src/to70_unk_0208931C_extra338_run01.o
@@ -1122,7 +1104,7 @@ Overlay OVY_0
     After main
     Object src/wifi_connection.o
     Object src/voice_chat.o
-    Object asm/to70_overlay_00_thumb_residual_19_extra734_anchor.o
+    Object asm/wifi_connection_data.o
     Object src/voice_chat_conference.o
     Object lib/NitroDWC/asm/dwc_lib_rodata.o
     Object lib/NitroDWC/src/auth_client.o
@@ -1176,18 +1158,7 @@ Overlay field
     Object src/field/field_control.o
     Object src/field/field_sprite_manager.o
     Object src/field/map_prop_animation.o
-    Object src/ov01_21e90c0_opus_partial_1.o
-    Object src/ov01_door_transition_state_m14.o
-    Object src/ov01_21e90c0_opus_partial_2.o
-    Object src/overlay01_door_transition_sideways.o
-    Object src/ov01_21e90c0_opus_partial_3.o
-    Object src/to91_w41481_prop_run01.o
-    Object src/ov01_21e90c0_opus_partial_4.o
-    Object src/op90_overlay_01_021E90C0_residual_4_r01.o
-    Object src/ov01_21e90c0_opus_partial_5.o
-    Object src/to70_to70_overlay_01_021E90C0_residual_5_extra125_residual_1_extra1255_run01.o
-    Object src/to70_overlay_01_021E90C0_residual_5_extra125_run01.o
-    Object src/ov01_21e90c0_opus_partial_6.o
+    Object src/field/door_transition.o
     Object src/field/area_light.o
     Object asm/overlay_01_021E90C0_residual_8.o
     Object src/field/build_model_shapes.o
@@ -1344,40 +1315,7 @@ Overlay field
     Object src/field_overlay_app_dispatch.o
     Object src/field_friendship_exchange.o
     Object asm/overlay_01_sprite_data.o
-    Object src/overlay_01_021F72DC.o
-    Object src/field_map_object_motion_1.o
-    Object src/op90_overlay_01_021F72DC_residual_2_r01.o
-    Object src/field_map_object_motion_2.o
-    Object src/to70_overlay_01_021F72DC_residual_3_extra746_run01.o
-    Object src/field_map_object_motion_3.o
-    Object src/field_map_object_motion_4_residual_4.o
-    Object src/field_map_object_motion_4.o
-    Object src/to45_ov01_motion_sequences_r5.o
-    Object src/to70_overlay_01_motion_dispatch_r5_unmatched_extra750_run01.o
-    Object src/to45_ov01_motion_terminal_r5.o
-    Object src/field_map_object_motion_5.o
-    Object src/to70_overlay_01_021F72DC_residual_6_extra550_run01.o
-    Object src/field_map_object_motion_6.o
-    Object src/to45_overlay01_r7_motion_handlers_exact.o
-    Object src/field_map_object_motion_7.o
-    Object src/field_map_object_motion_8_residual_8.o
-    Object src/field_map_object_motion_8.o
-    Object src/to70_overlay_01_021F72DC_residual_9_extra308_run01.o
-    Object src/to70_to70_overlay_01_021F72DC_residual_9_extra308_residual_1_extra1259_run01.o
-    Object src/field_map_object_motion_9.o
-    Object src/to70_overlay_01_021F72DC_residual_10_extra744_run01.o
-    Object src/field_map_object_motion_10.o
-    Object src/to70_overlay_01_021F72DC_residual_11_extra548_run01.o
-    Object src/field_map_object_motion_11.o
-    Object src/to70_overlay_01_021F72DC_residual_12_extra380_run01.o
-    Object src/to70_to70_overlay_01_021F72DC_residual_12_extra380_residual_1_extra1258_run01.o
-    Object src/field_map_object_motion_12.o
-    Object src/to70_overlay_01_021F72DC_residual_13_extra745_run01.o
-    Object src/field_map_object_motion_13.o
-    Object src/to70_overlay_01_021F72DC_residual_14_extra549_run01.o
-    Object src/field_map_object_motion_14.o
-    Object src/to70_overlay_01_021F72DC_residual_15_extra396_run01.o
-    Object src/field_map_object_motion_15.o
+    Object src/field/map_object_billboard_motion.o
     Object asm/overlay_01_021F72DC_residual_16.o
     Object src/field_object_models.o
     Object src/field_map_object_render_1.o
@@ -1598,8 +1536,7 @@ Overlay OVY_2
     Object src/overlay02_effect_slots_r50_run1.o
     Object src/overlay02_effect_spawn_update.o
     Object src/overlay02_effect_tasks_r50_run2.o
-    Object src/overlay02_248728_partial_50.o
-    Object src/overlay02_follow_movement_task.o
+    Object src/field/map_object_swap_positions.o
     Object src/field/safari_zone_placement.o
     Object src/field/follow_mon_interaction.o
     Object asm/overlay_02_02248728_residual_61_data.o
@@ -1655,7 +1592,7 @@ Object src/battle/battle_anim_util.o
     Object src/battle/battle_anim_effects.o
     Object src/battle/battle_anim_battler_util.o
     Object src/battle/battle_anim_ball.o
-    Object asm/overlay_07_callback_suffix_opus10_residual_2.o
+    Object asm/battle_anim_data.o
 }
 Overlay OVY_8
 {
@@ -2295,7 +2232,7 @@ Overlay trainer_card_signature
 {
     After trainer_card_main
     Object src/overlay_trainer_card_signature.o
-    Object asm/overlay_trainer_card_signature_residual_10.o
+    Object asm/trainer_card_signature_data.o
 }
 Overlay OVY_53
 {
@@ -2626,35 +2563,35 @@ Overlay OVY_89
     Object src/application/footprint_stamp_board.o
     Object src/application/footprint_stamp_texture.o
     Object src/application/footprint_stamp_effects.o
-    Object asm/overlay_89_residual_13_r40_residual_1.o
+    Object asm/footprint_stamp_data.o
 }
 Overlay OVY_90
 {
     After OVY_45
     Object src/application/plaza_game.o
-    Object asm/overlay_90_residual_26.o
+    Object asm/plaza_game_data.o
 }
 Overlay OVY_91
 {
     After OVY_90
     Object src/application/plaza_game_swalot_plop.o
-    Object asm/to53_overlay91_run_086.o
+    Object asm/plaza_game_swalot_plop_data.o
 }
 Overlay OVY_92
 {
     After OVY_90
     Object src/application/plaza_game_mime_jr_top.o
-    Object asm/overlay_92_residual_23.o
+    Object asm/plaza_game_mime_jr_top_data.o
 }
 Overlay OVY_93
 {
     After OVY_90
     Object src/application/wobbuffet_pop.o
-    Object asm/overlay_93_thumb_1_to41_residual_21.o
+    Object asm/wobbuffet_pop_data.o
     Object src/application/wobbuffet_pop_balloon_mesh.o
-    Object asm/overlay_93_arm_residual_3.o
+    Object asm/wobbuffet_pop_balloon_mesh_data.o
     Object src/application/wobbuffet_pop_scene.o
-    Object asm/overlay_93_thumb_2_residual_23.o
+    Object asm/wobbuffet_pop_scene_data.o
 }
 Overlay OVY_94
 {
@@ -2665,7 +2602,7 @@ Overlay OVY_95
 {
     After main
     Object src/hatch_egg_app.o
-    Object asm/overlay_95_residual_15.o
+    Object asm/hatch_egg_app_data.o
 }
 Overlay OVY_96
 {
@@ -2733,13 +2670,13 @@ Overlay OVY_97
 {
     After OVY_96
     Object src/pokeathlon/pokeathlon_box.o
-    Object asm/overlay_97_residual_9.o
+    Object asm/pokeathlon_box_data.o
 }
 Overlay OVY_98
 {
     After OVY_96
     Object src/pokeathlon/pokeathlon_util.o
-    Object asm/overlay_98_residual_8.o
+    Object asm/pokeathlon_util_data.o
 }
 Overlay OVY_99
 {
@@ -2748,7 +2685,7 @@ Overlay OVY_99
     Object src/pokeathlon/pokeathlon_trophies.o
     Object src/pokeathlon/pokeathlon_medals.o
     Object src/pokeathlon/pokeathlon_event_record.o
-    Object asm/to58_overlay99_record_name_data.o
+    Object asm/pokeathlon_record_data.o
 }
 Overlay pokegear
 {
@@ -2820,13 +2757,13 @@ Overlay OVY_102
     Object src/application/easy_chat_app.o
     Object src/application/easy_chat_app_view.o
     Object src/application/easy_chat_app_panels.o
-    Object asm/to80_extra1507_anchor.o
+    Object asm/easy_chat_app_data.o
 }
 Overlay OVY_103
 {
     After OVY_102
     Object src/application/mailbox_app.o
-    Object asm/overlay_103_residual_23.o
+    Object asm/mailbox_app_data.o
 }
 Overlay OVY_104
 {
@@ -2837,13 +2774,13 @@ Overlay OVY_105
 {
     After main
     Object src/application/ship_departure_cutscene.o
-    Object asm/overlay_105_data_to57.o
+    Object asm/ship_departure_cutscene_data.o
 }
 Overlay OVY_106
 {
     After main
     Object src/application/legendary_cinematic.o
-    Object asm/overlay_106_residual_11.o
+    Object asm/legendary_cinematic_data.o
 }
 Overlay OVY_107
 {
@@ -2853,7 +2790,7 @@ Overlay OVY_108
 {
     After main
     Object src/application/safari_area_customizer.o
-    Object asm/to70_overlay_108_residual_18_extra382_anchor.o
+    Object asm/safari_area_customizer_data.o
     Object src/application/safari_decoration.o
     Object asm/overlay_108_021E8850_r2_data.o
 }
@@ -2861,7 +2798,7 @@ Overlay OVY_109
 {
     After main
     Object src/application/photo_album_app.o
-    Object asm/overlay_109_residual_15.o
+    Object asm/photo_album_app_data.o
 }
 Overlay OVY_110
 {
@@ -2872,7 +2809,7 @@ Overlay OVY_111
 {
     After main
     Object src/bug_contest_swap_mon.o
-    Object asm/to70_overlay_111_residual_11_extra369_anchor.o
+    Object asm/bug_contest_swap_mon_data.o
 }
 Overlay OVY_112
 {
@@ -2898,7 +2835,7 @@ Overlay OVY_113
 {
     After main
     Object src/application/unown_report.o
-    Object asm/overlay_113_residual_13_residual_2.o
+    Object asm/unown_report_data.o
 }
 Overlay OVY_114
 {
@@ -2909,7 +2846,7 @@ Overlay OVY_115
 {
     After OVY_31
     Object src/field/encounter_effect_leaders.o
-    Object asm/overlay_115_residual_5.o
+    Object asm/encounter_effect_leaders_data.o
 }
 Overlay OVY_116
 {
@@ -2920,7 +2857,7 @@ Overlay OVY_117
 {
     After OVY_31
     Object src/field/encounter_effect_rocket.o
-    Object asm/op90_overlay_117_residual_2_anchor.o
+    Object asm/encounter_effect_rocket_data.o
 }
 Overlay OVY_118
 {
@@ -2936,7 +2873,7 @@ Overlay OVY_120
 {
     After OVY_31
     Object src/field/encounter_effect_wild.o
-    Object asm/to80_extra1510_anchor.o
+    Object asm/encounter_effect_wild_data.o
 }
 Overlay view_rankings_app
 {

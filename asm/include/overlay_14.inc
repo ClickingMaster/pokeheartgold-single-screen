@@ -274,7 +274,7 @@
 .public NamingScreen_CreateArgs
 .public NamingScreen_DeleteArgs
 .public sub_02088288
-.public sub_0208828C
+.public PokemonSummary_IsPokeathlonUnlocked
 .public sub_02089D40
 .public sub_0208AD34
 .public NNS_G2dGetUnpackedCharacterData

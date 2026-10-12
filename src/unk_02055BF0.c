@@ -15,7 +15,7 @@
 #include "map_preview_graphic.h"
 #include "metatile_behavior.h"
 #include "overlay_01.h"
-#include "overlay_01_021E90C0.h"
+#include "field/door_transition.h"
 #include "overlay_01_021F1AFC.h"
 #include "overlay_01_022031C0.h"
 #include "field/field_follow_mon.h"
@@ -253,13 +253,13 @@ BOOL sub_02056040(TaskManager *man) {
     FieldTransitionEnvironment *fenv = TaskManager_GetEnvironment(man);
     switch (fenv->transitionState) {
     case 0:
-        fenv->unk18 = ov01_021E90C0();
-        ov01_021E90DC(PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), fenv->unk18);
+        fenv->unk18 = DoorTransition_New();
+        DoorTransition_SetPosition(PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), fenv->unk18);
         fenv->transitionState++;
         break;
     case 1:
-        if (ov01_021E90E4(fieldSystem, fenv->unk18)) {
-            ov01_021E90D4(fenv->unk18);
+        if (DoorTransition_WalkIntoDoor(fieldSystem, fenv->unk18)) {
+            DoorTransition_Free(fenv->unk18);
             fenv->transitionState++;
         }
         break;
@@ -278,14 +278,14 @@ BOOL sub_020560C4(TaskManager *man) {
     FieldTransitionEnvironment *fenv = TaskManager_GetEnvironment(man);
     switch (fenv->transitionState) {
     case 0:
-        fenv->unk18 = ov01_021E90C0();
-        ov01_021E90DC(PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), fenv->unk18);
+        fenv->unk18 = DoorTransition_New();
+        DoorTransition_SetPosition(PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), fenv->unk18);
         fenv->transitionState++;
         break;
     case 1: {
         FieldEnvSubUnk18 *info = fenv->unk18;
-        if (ov01_021E98F0(fieldSystem, info, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar))) {
-            ov01_021E90D4(fenv->unk18);
+        if (DoorTransition_WalkIntoSideDoor(fieldSystem, info, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar))) {
+            DoorTransition_Free(fenv->unk18);
             fenv->transitionState++;
         }
         break;
@@ -351,7 +351,7 @@ BOOL sub_02056220(TaskManager *man) {
     PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
     switch (fenv->transitionState) {
     case 0:
-        TaskManager_Call(man, ov01_021E9F78, ov01_021E9C30());
+        TaskManager_Call(man, Task_StairsFadeOut, DoorTransition_NewTaskWork());
         fenv->transitionState++;
         break;
     case 1:
@@ -366,7 +366,7 @@ BOOL sub_02056268(TaskManager *man) {
     PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
     switch (fenv->transitionState) {
     case 0:
-        TaskManager_Call(man, ov01_021E9EEC, ov01_021E9C30());
+        TaskManager_Call(man, Task_StairsFadeToWhite, DoorTransition_NewTaskWork());
         fenv->transitionState++;
         break;
     case 1:
@@ -518,18 +518,18 @@ BOOL sub_02056530(TaskManager *man) {
             fenv->transitionState = 1;
             break;
         }
-        TaskManager_Call(man, ov01_021E9FF8, ov01_021E9C30());
+        TaskManager_Call(man, Task_ArriveWithDirectionalFade, DoorTransition_NewTaskWork());
         fenv->transitionState = 3;
         break;
     case 1:
-        fenv->unk18 = ov01_021E90C0();
-        ov01_021E90DC(PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), fenv->unk18);
+        fenv->unk18 = DoorTransition_New();
+        DoorTransition_SetPosition(PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), fenv->unk18);
         fenv->transitionState++;
         break;
     case 2: {
         FieldEnvSubUnk18 *unk = fenv->unk18;
-        if (ov01_021E9374(fieldSystem, unk)) {
-            ov01_021E90D4(unk);
+        if (DoorTransition_WalkOutOfDoor(fieldSystem, unk)) {
+            DoorTransition_Free(unk);
             MapObject_SetVisible(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar), FALSE);
             return TRUE;
         }
@@ -553,7 +553,7 @@ BOOL sub_020565FC(TaskManager *man) {
             TaskManager_Jump(man, sub_02056530, fenv);
             break;
         } else {
-            TaskManager_Call(man, ov01_021EA128, ov01_021E9C30());
+            TaskManager_Call(man, Task_ArriveWithFade, DoorTransition_NewTaskWork());
             fenv->transitionState++;
             break;
         }

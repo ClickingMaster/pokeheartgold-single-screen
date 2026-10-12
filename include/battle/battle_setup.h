@@ -17,7 +17,7 @@
 #include "save_wifi_history.h"
 #include "trainer_data.h"
 #include "field_warp_state.h"
-#include "unk_020755E8.h"
+#include "evolution_scene.h"
 
 struct BattleSetupSub_138 {
     int unk_0;

@@ -11,7 +11,7 @@
 #include "field_effects.h"
 #include "field_system.h"
 #include "map_object.h"
-#include "overlay_01_021F72DC.h"
+#include "field/map_object_billboard_motion.h"
 #include "overlay_01_021F944C.h"
 #include "field/field_follow_mon.h"
 #include "player_avatar.h"
@@ -246,7 +246,7 @@ void ReflectionEffect_Draw(FieldEffect *effect, ReflectionEffect *work) {
     FieldEffect_GetPosition(effect, &position);
     BillboardObject_SetPosition(work->billboard, &position);
     BillboardObject_SetScale(work->billboard, &work->scale);
-    source = ov01_021F72DC(work->args.mapObject);
+    source = MapObject_GetBillboard(work->args.mapObject);
     BillboardObject_SetSequence(work->billboard, BillboardObject_GetSequence(source));
     BillboardObject_SetFrame(work->billboard, BillboardObject_GetFrame(source));
 }
@@ -461,7 +461,7 @@ void FollowerReflectionEffect_Draw(FieldEffect *effect, ReflectionEffect *work) 
     position.z -= FX32_ONE;
     BillboardObject_SetPosition(work->billboard, &position);
     BillboardObject_SetScale(work->billboard, &work->scale);
-    source = ov01_021F72DC(work->args.mapObject);
+    source = MapObject_GetBillboard(work->args.mapObject);
     BillboardObject_SetSequence(work->billboard, BillboardObject_GetSequence(source));
     BillboardObject_SetFrame(work->billboard, BillboardObject_GetFrame(source));
 }

@@ -8,11 +8,11 @@
 	.include "unk_02088288.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02088630
-sub_02088630: ; 0x02088630
+	thumb_func_start PokemonSummary_InitBgs
+PokemonSummary_InitBgs: ; 0x02088630
 	push {r3, r4, r5, lr}
 	sub sp, #0xb8
-	ldr r5, _02088760 ; =_021038C4
+	ldr r5, _02088760 ; =gPokemonSummaryGraphicsModes
 	add r3, sp, #0xa8
 	add r4, r0, #0
 	add r2, r3, #0
@@ -22,7 +22,7 @@ sub_02088630: ; 0x02088630
 	stmia r3!, {r0, r1}
 	add r0, r2, #0
 	bl SetBothScreensModesAndDisable
-	ldr r5, _02088764 ; =_021038E8
+	ldr r5, _02088764 ; =gPokemonSummaryBgTemplate1
 	add r3, sp, #0x8c
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -40,7 +40,7 @@ sub_02088630: ; 0x02088630
 	add r0, r4, #0
 	mov r1, #1
 	bl BgClearTilemapBufferAndCommit
-	ldr r5, _02088768 ; =_02103904
+	ldr r5, _02088768 ; =gPokemonSummaryBgTemplate2
 	add r3, sp, #0x70
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -68,7 +68,7 @@ sub_02088630: ; 0x02088630
 	mov r2, #3
 	mov r3, #0
 	bl ScheduleSetBgPosText
-	ldr r5, _0208876C ; =_02103920
+	ldr r5, _0208876C ; =gPokemonSummaryBgTemplate3
 	add r3, sp, #0x54
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -83,7 +83,7 @@ sub_02088630: ; 0x02088630
 	add r0, r4, #0
 	mov r3, #0
 	bl InitBgFromTemplate
-	ldr r5, _02088770 ; =_0210393C
+	ldr r5, _02088770 ; =gPokemonSummaryBgTemplate4
 	add r3, sp, #0x38
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -101,7 +101,7 @@ sub_02088630: ; 0x02088630
 	add r0, r4, #0
 	mov r1, #4
 	bl BgClearTilemapBufferAndCommit
-	ldr r5, _02088774 ; =_02103958
+	ldr r5, _02088774 ; =gPokemonSummaryBgTemplate5
 	add r3, sp, #0x1c
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -119,7 +119,7 @@ sub_02088630: ; 0x02088630
 	add r0, r4, #0
 	mov r1, #5
 	bl BgClearTilemapBufferAndCommit
-	ldr r5, _02088778 ; =_02103974
+	ldr r5, _02088778 ; =gPokemonSummaryBgTemplate6
 	add r3, sp, #0
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -147,11 +147,11 @@ sub_02088630: ; 0x02088630
 	add sp, #0xb8
 	pop {r3, r4, r5, pc}
 	nop
-_02088760: .word _021038C4
-_02088764: .word _021038E8
-_02088768: .word _02103904
-_0208876C: .word _02103920
-_02088770: .word _0210393C
-_02088774: .word _02103958
-_02088778: .word _02103974
-	thumb_func_end sub_02088630
+_02088760: .word gPokemonSummaryGraphicsModes
+_02088764: .word gPokemonSummaryBgTemplate1
+_02088768: .word gPokemonSummaryBgTemplate2
+_0208876C: .word gPokemonSummaryBgTemplate3
+_02088770: .word gPokemonSummaryBgTemplate4
+_02088774: .word gPokemonSummaryBgTemplate5
+_02088778: .word gPokemonSummaryBgTemplate6
+	thumb_func_end PokemonSummary_InitBgs

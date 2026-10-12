@@ -48,7 +48,7 @@
 .public SaveArray_Party_Get
 .public _s32_div_f
 .public FieldEffectManager_DestroyEffect
-.public ov01_021F72DC
+.public MapObject_GetBillboard
 .public ov01_021F73CC
 .public ov01_021F73F4
 .public ov01_021F7408

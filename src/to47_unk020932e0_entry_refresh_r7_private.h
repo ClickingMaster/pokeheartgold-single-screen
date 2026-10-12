@@ -1,7 +1,7 @@
 #ifndef PRIVATE_UNK_020932E0_RESIDUAL_7_H
 #define PRIVATE_UNK_020932E0_RESIDUAL_7_H
 
-#include "unk020932e0_opus_partial_internal.h"
+#include "box_mon_selector_internal.h"
 
 typedef struct UnkEntryData_020932E0 {
     u32 species;      // 0x00
@@ -42,7 +42,7 @@ typedef struct UnkState_020932E0 {
     UnkGfxBuf_02094758 gfxBufs[30];      // 0x08D4
     void *unk_463C;                      // 0x463C
     Party *party;                        // 0x4640
-    UnkCallback_020932E0 callback;       // 0x4644
+    BoxMonSelectorCallback callback;       // 0x4644
     UnkFetch_020932E0 fetch;             // 0x4648
     u8 filler_464C[0x46D0 - 0x464C];     // 0x464C
     void *unk_46D0;                      // 0x46D0

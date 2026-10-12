@@ -73,7 +73,7 @@
 .public memset
 .public ov01_021EA3B0
 .public FieldEffectManager_GetFromMapObject
-.public ov01_021F72DC
+.public MapObject_GetBillboard
 .public GetMoveModelNoBySpriteId
 .public ov01_021F9318
 .public ReadMModelFromNarcInternal

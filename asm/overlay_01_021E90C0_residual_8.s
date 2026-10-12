@@ -245,29 +245,29 @@
 	.public _021EA6FE
 	.public _021EA706
 	.public _021EA720
-	.public ov01_021E90C0
-	.public ov01_021E90D4
-	.public ov01_021E90DC
-	.public ov01_021E90E4
-	.public ov01_021E9374
-	.public ov01_021E95CC
-	.public ov01_021E9610
-	.public ov01_021E9700
-	.public ov01_021E971C
-	.public ov01_021E98F0
-	.public ov01_021E9ABC
-	.public ov01_021E9AE8
-	.public ov01_021E9BB8
-	.public ov01_021E9BDC
-	.public ov01_021E9C00
-	.public ov01_021E9C20
-	.public ov01_021E9C30
-	.public ov01_021E9C40
-	.public ov01_021E9EEC
-	.public ov01_021E9F78
-	.public ov01_021E9FF8
-	.public ov01_021EA128
-	.public ov01_021EA1F4
+	.public DoorTransition_New
+	.public DoorTransition_Free
+	.public DoorTransition_SetPosition
+	.public DoorTransition_WalkIntoDoor
+	.public DoorTransition_WalkOutOfDoor
+	.public DoorTransition_StepCameraZoomIn
+	.public DoorTransition_StepCameraZoomOut
+	.public DoorTransition_GetCameraPathIndex
+	.public DoorTransition_WalkOutOfSideDoor
+	.public DoorTransition_WalkIntoSideDoor
+	.public Task_WaitDoorAnimation
+	.public DoorAnimation_Load
+	.public DoorAnimation_PlayOpen
+	.public DoorAnimation_PlayClose
+	.public DoorAnimation_WaitForEnd
+	.public DoorAnimation_Unload
+	.public DoorTransition_NewTaskWork
+	.public Task_WalkOutOfDoorAfterWarp
+	.public Task_StairsFadeToWhite
+	.public Task_StairsFadeOut
+	.public Task_ArriveWithDirectionalFade
+	.public Task_ArriveWithFade
+	.public DoorTransition_ModelSkipsCameraZoom
 	.public AreaLight_ApplyEntry
 	.public AreaLightManager_ApplyActiveEntry
 	.public ov01_021EA3B0
@@ -275,9 +275,9 @@
 	.public AreaLight_FreeEntries
 	.public AreaLight_ParseLight
 	.public AreaLight_ParseColor
-	.public ov01_02206408
-	.public ov01_02206418
-	.public ov01_02206428
+	.public gSideDoorExitModels
+	.public gSideDoorEntryModels
+	.public gDoorCameraPaths
 	.public gAreaLightFilePaths
 	.public gAreaLightFileArea00
 	.public gAreaLightFileArea02
@@ -292,21 +292,21 @@
 	.public AreaLightManager_UpdateActiveTemplate
 	.public GetDoorSE
 	.public LoadAreaOrDungeonLightTxt
-	.public ov01_021E90C0
-	.public ov01_021E90D4
-	.public ov01_021E90DC
-	.public ov01_021E95CC
-	.public ov01_021E9610
-	.public ov01_021E9700
-	.public ov01_021E9ABC
-	.public ov01_021E9BB8
-	.public ov01_021E9BDC
-	.public ov01_021E9C00
-	.public ov01_021E9C20
-	.public ov01_021E9C30
-	.public ov01_021E9EEC
-	.public ov01_021E9F78
-	.public ov01_021EA1F4
+	.public DoorTransition_New
+	.public DoorTransition_Free
+	.public DoorTransition_SetPosition
+	.public DoorTransition_StepCameraZoomIn
+	.public DoorTransition_StepCameraZoomOut
+	.public DoorTransition_GetCameraPathIndex
+	.public Task_WaitDoorAnimation
+	.public DoorAnimation_PlayOpen
+	.public DoorAnimation_PlayClose
+	.public DoorAnimation_WaitForEnd
+	.public DoorAnimation_Unload
+	.public DoorTransition_NewTaskWork
+	.public Task_StairsFadeToWhite
+	.public Task_StairsFadeOut
+	.public DoorTransition_ModelSkipsCameraZoom
 	.public AreaLight_ApplyEntry
 	.public AreaLightManager_ApplyActiveEntry
 	.public ov01_021EA3B0
@@ -315,15 +315,15 @@
 	.public AreaLight_ParseColor
 	.rodata
 
-ov01_02206408: ; 0x02206408
+gSideDoorExitModels: ; 0x02206408
 	.byte 0x0B, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00
 	.byte 0x0C, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00
 
-ov01_02206418: ; 0x02206418
+gSideDoorEntryModels: ; 0x02206418
 	.byte 0x0B, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00
 	.byte 0x0C, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00
 
-ov01_02206428: ; 0x02206428
+gDoorCameraPaths: ; 0x02206428
 	.byte 0x82, 0xE8, 0xC1, 0x05, 0x00, 0x00, 0x00, 0x00, 0xC3, 0xD4, 0x05, 0x00, 0x43, 0xC0, 0xFD, 0xFF, 0xC1, 0xAE, 0x29, 0x00
 	.byte 0x62, 0xE2, 0xC1, 0x05, 0x00, 0x00, 0x00, 0x00, 0x9B, 0x20, 0x05, 0x00, 0xDA, 0x6B, 0xFC, 0xFF, 0xC1, 0x7E, 0x2C, 0x00
 

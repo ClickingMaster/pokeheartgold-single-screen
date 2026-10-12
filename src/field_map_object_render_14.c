@@ -12,7 +12,7 @@ void ov01_021FA8F8(void *p) {
 }
 
 void ov01_021FA930(void *obj, void *arg) {
-    if (ov01_021FA2D4(obj) == TRUE || ov01_021F72DC(obj) == FALSE) {
+    if (ov01_021FA2D4(obj) == TRUE || MapObject_GetBillboard(obj) == FALSE) {
         u32 id = MapObject_GetSpriteID(obj);
         void *manager = MapObject_GetManager(obj);
         sub_0205E420(obj);

@@ -43,7 +43,7 @@
 .public FieldEffectManager_LoadBillboardResource
 .public FieldEffectManager_GetBillboardResource
 .public FieldEffectManager_FreeBillboardResource
-.public ov01_021F72DC
+.public MapObject_GetBillboard
 .public ov01_021F9744
 .public ov01_021FA2D4
 .public Reflection_New

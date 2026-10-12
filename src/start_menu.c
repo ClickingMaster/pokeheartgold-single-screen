@@ -43,7 +43,7 @@
 #include "frontier_field_support.h"
 #include "field_warp_state.h"
 #include "trainer_card_data.h"
-#include "unk_020755E8.h"
+#include "evolution_scene.h"
 #include "gear_phone_ring_manager.h"
 
 typedef enum StartMenuAction {
@@ -833,7 +833,7 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         pokemonSummaryArgs->unk2C = sub_02088288(fieldSystem->saveData);
         pokemonSummaryArgs->unk28 = 0;
         pokemonSummaryArgs->menuInputStatePtr = &fieldSystem->menuInputState;
-        pokemonSummaryArgs->isFlag982Set = sub_0208828C(fieldSystem->saveData);
+        pokemonSummaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
         sub_02089D40(pokemonSummaryArgs, _020FA0B0);
         sub_0208AD34(pokemonSummaryArgs, Save_PlayerData_GetProfile(fieldSystem->saveData));
         PokemonSummary_LearnForget_LaunchApp(fieldSystem, pokemonSummaryArgs);
@@ -854,7 +854,7 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         pokemonSummaryArgs->unk2C = sub_02088288(fieldSystem->saveData);
         pokemonSummaryArgs->unk28 = 0;
         pokemonSummaryArgs->menuInputStatePtr = &fieldSystem->menuInputState;
-        pokemonSummaryArgs->isFlag982Set = sub_0208828C(fieldSystem->saveData);
+        pokemonSummaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
         sub_02089D40(pokemonSummaryArgs, _020FA0AC);
         sub_0208AD34(pokemonSummaryArgs, Save_PlayerData_GetProfile(fieldSystem->saveData));
         PokemonSummary_LearnForget_LaunchApp(fieldSystem, pokemonSummaryArgs);
@@ -879,7 +879,7 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         pokemonSummaryArgs->unk2C = sub_02088288(fieldSystem->saveData);
         pokemonSummaryArgs->unk28 = 0;
         pokemonSummaryArgs->menuInputStatePtr = &fieldSystem->menuInputState;
-        pokemonSummaryArgs->isFlag982Set = sub_0208828C(fieldSystem->saveData);
+        pokemonSummaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
         sub_02089D40(pokemonSummaryArgs, _020FA0AC);
         sub_0208AD34(pokemonSummaryArgs, Save_PlayerData_GetProfile(fieldSystem->saveData));
         PokemonSummary_LearnForget_LaunchApp(fieldSystem, pokemonSummaryArgs);
@@ -1471,9 +1471,9 @@ static void Task_StartMenu_Evolution(TaskManager *taskManager) {
     Pokemon *pokemon = Party_GetMonByIndex(party, unk->partySlot);
     EvolutionTaskData *evolution;
     if (unk->evoType == EVOCTX_LEVELUP) {
-        evolution = sub_02075A7C(party, pokemon, unk->species, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), sub_02088288(fieldSystem->saveData), Save_Pokedex_Get(fieldSystem->saveData), Save_Bag_Get(fieldSystem->saveData), Save_GameStats_Get(fieldSystem->saveData), unk->evoMethod, TRUE, HEAP_ID_EVOLUTION);
+        evolution = EvolutionScene_New(party, pokemon, unk->species, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), sub_02088288(fieldSystem->saveData), Save_Pokedex_Get(fieldSystem->saveData), Save_Bag_Get(fieldSystem->saveData), Save_GameStats_Get(fieldSystem->saveData), unk->evoMethod, TRUE, HEAP_ID_EVOLUTION);
     } else {
-        evolution = sub_02075A7C(party, pokemon, unk->species, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), sub_02088288(fieldSystem->saveData), Save_Pokedex_Get(fieldSystem->saveData), Save_Bag_Get(fieldSystem->saveData), Save_GameStats_Get(fieldSystem->saveData), unk->evoMethod, FALSE, HEAP_ID_EVOLUTION);
+        evolution = EvolutionScene_New(party, pokemon, unk->species, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), sub_02088288(fieldSystem->saveData), Save_Pokedex_Get(fieldSystem->saveData), Save_Bag_Get(fieldSystem->saveData), Save_GameStats_Get(fieldSystem->saveData), unk->evoMethod, FALSE, HEAP_ID_EVOLUTION);
     }
     StartMenuAfterEvoPartySlotBak *newEnv = Heap_Alloc(HEAP_ID_FIELD2, sizeof(StartMenuAfterEvoPartySlotBak));
     newEnv->partySlot = unk->partySlot;
@@ -1487,8 +1487,8 @@ static void Task_StartMenu_WaitEvolution(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
-    if (sub_02075D3C(startMenu->exitTaskEnvironment) == TRUE) {
-        sub_02075D4C(startMenu->exitTaskEnvironment);
+    if (EvolutionScene_IsDone(startMenu->exitTaskEnvironment) == TRUE) {
+        EvolutionScene_Delete(startMenu->exitTaskEnvironment);
         Heap_Destroy(HEAP_ID_EVOLUTION);
         StopBGM(SEQ_GS_SHINKA, 0);
         Sound_SetScene(SOUND_SCENE_NONE);

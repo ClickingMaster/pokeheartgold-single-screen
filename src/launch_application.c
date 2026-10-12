@@ -79,7 +79,7 @@
 #include "unk_02055418.h"
 #include "unk_0205A44C.h"
 #include "unk_0206D494.h"
-#include "unk_020755E8.h"
+#include "evolution_scene.h"
 #include "unk_02087A78.h"
 #include "unk_02088288.h"
 #include "gear_phone_ring_manager.h"
@@ -371,7 +371,7 @@ PokemonSummaryArgs *PokemonSummary_CreateArgs(FieldSystem *fieldSystem, enum Hea
     args->unk2C = sub_02088288(saveData);
     args->ribbons = Save_SpecialRibbons_Get(saveData);
     args->menuInputStatePtr = &fieldSystem->menuInputState;
-    args->isFlag982Set = sub_0208828C(fieldSystem->saveData);
+    args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
     sub_02089D40(args, _020FA1B0);
 
     PlayerProfile *profile = Save_PlayerData_GetProfile(saveData);
@@ -956,18 +956,18 @@ static BOOL Task_WirelessTrade(TaskManager *taskman) {
         int species = GetMonEvolution(NULL, data->wirelessTradeSelectMon.unk3C, EVOCTX_TRADE, heldItem, (int *)&evolutionCondition);
         if (species != SPECIES_NONE) {
             Heap_Create(HEAP_ID_3, HEAP_ID_26, 0x30000);
-            data->tradeSequence.evolutionTaskData = sub_02075A7C(NULL, data->wirelessTradeSelectMon.unk3C, species, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), sub_02088288(fieldSystem->saveData), Save_Pokedex_Get(fieldSystem->saveData), Save_Bag_Get(fieldSystem->saveData), Save_GameStats_Get(fieldSystem->saveData), evolutionCondition, 4, HEAP_ID_26);
+            data->tradeSequence.evolutionTaskData = EvolutionScene_New(NULL, data->wirelessTradeSelectMon.unk3C, species, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), sub_02088288(fieldSystem->saveData), Save_Pokedex_Get(fieldSystem->saveData), Save_Bag_Get(fieldSystem->saveData), Save_GameStats_Get(fieldSystem->saveData), evolutionCondition, 4, HEAP_ID_26);
             data->state = WIRELESS_TRADE_STATE_6;
         } else {
             data->state = WIRELESS_TRADE_STATE_7;
         }
         break;
     case WIRELESS_TRADE_STATE_6:
-        if (sub_02075D3C(data->tradeSequence.evolutionTaskData)) {
+        if (EvolutionScene_IsDone(data->tradeSequence.evolutionTaskData)) {
             CopyPokemonToPokemon(
                 data->wirelessTradeSelectMon.unk3C,
                 Party_GetMonByIndex(data->wirelessTradeSelectMon.party, data->wirelessTradeSelectMon.unk28));
-            sub_02075D4C(data->tradeSequence.evolutionTaskData);
+            EvolutionScene_Delete(data->tradeSequence.evolutionTaskData);
             Heap_Destroy(HEAP_ID_26);
             data->state = WIRELESS_TRADE_STATE_7;
         }
@@ -1347,7 +1347,7 @@ PokemonSummaryArgs *PokemonSummary_LaunchApp(enum HeapID heapID, FieldSystem *fi
     args->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
     args->unk2C = 0;
     args->unk28 = 0;
-    args->isFlag982Set = sub_0208828C(fieldSystem->saveData);
+    args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
     sub_02089D40(args, _020FA0B0);
 
     sub_0208AD34(args, Save_PlayerData_GetProfile(fieldSystem->saveData));

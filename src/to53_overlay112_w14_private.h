@@ -16,7 +16,7 @@ u32 Boxmon_GetIconNaix(void *boxmon);
 u32 GetMonIconNaixEx(void *mon, u32, u32);
 void ToggleBgLayer(u32 layer, u8 enabled);
 void WaitingIcon_Delete(void *ptr);
-void sub_02093594(void *ptr);
+void BoxMonSelector_VBlank(void *ptr);
 void PCStorage_GetBoxName(void *storage, u32 box, void *dest);
 void SpriteList_RenderAndAnimateSprites(void *list);
 void ManagedSprite_SetDrawFlag(void *sprite, int value);

@@ -70,7 +70,7 @@ Colosseum_OpenSummary: ; 0x02058AEC
 	mov r0, #0
 	str r0, [r4, #0x30]
 	add r0, r5, #0
-	bl sub_0208828C
+	bl PokemonSummary_IsPokeathlonUnlocked
 	str r0, [r4, #0x34]
 	ldr r1, _02058B7C ; =_020FC7CC
 	add r0, r4, #0

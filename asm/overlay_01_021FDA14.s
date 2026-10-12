@@ -309,7 +309,7 @@ _021FDC3C:
 	add r1, #0x28
 	bl BillboardObject_SetScale
 	ldr r0, [r5, #0x20]
-	bl ov01_021F72DC
+	bl MapObject_GetBillboard
 	add r4, r0, #0
 	bl BillboardObject_GetSequence
 	add r1, r0, #0
@@ -952,7 +952,7 @@ _021FE144:
 	add r1, #0x28
 	bl BillboardObject_SetScale
 	ldr r0, [r5, #0x20]
-	bl ov01_021F72DC
+	bl MapObject_GetBillboard
 	add r4, r0, #0
 	bl BillboardObject_GetSequence
 	add r1, r0, #0

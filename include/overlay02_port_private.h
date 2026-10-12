@@ -412,9 +412,9 @@ WIP_LOCAL void ov02_022494C4(FieldSystem *fieldSystem, void *a1, void *a2, void 
 WIP_LOCAL int ov02_022499EC(void *work);
 WIP_LOCAL int ov02_022495E8(void *work);
 WIP_LOCAL int ov02_022497C0(void *work);
-WIP_LOCAL int ov02_0224E26C(int a0);
-WIP_LOCAL int ov02_0224E2A0(int a0);
-WIP_LOCAL int ov02_0224E2D4(int a0);
+WIP_LOCAL int SwapPositions_GetFaceMovement(int a0);
+WIP_LOCAL int SwapPositions_GetTurnAroundMovement(int a0);
+WIP_LOCAL int SwapPositions_GetOppositeStep(int a0);
 WIP_LOCAL void FollowMon_GetCoordsInDirection(LocalMapObject *mapObject, int dir, u32 *outX, u32 *outZ);
 WIP_LOCAL int FollowMonMovement_Step(void *a0, LocalMapObject *a1);
 WIP_LOCAL void FollowMonSituation_SetFacing(FieldSystem *fieldSystem, void *arg1);
@@ -488,7 +488,7 @@ WIP_LOCAL BOOL ov02_0224AA80(void *a0, void *work);
 WIP_LOCAL void ov02_0224B2CC(void *work);
 WIP_LOCAL int ov02_0224B5F0(void *work);
 WIP_LOCAL void ov02_0224D1E4(void *a0, void *a1, void *data);
-WIP_LOCAL int ov02_0224E224(void *a, void *b);
+WIP_LOCAL int SwapPositions_GetStepTowards(void *a, void *b);
 WIP_LOCAL void FollowMonSituation_SetTerrain(FieldSystem *fieldSystem, void *work);
 WIP_LOCAL void FollowMon_GetSituation(FieldSystem *fieldSystem, void *work);
 WIP_LOCAL void FollowMonSituation_SetMonCondition(Pokemon *mon, void *work);
@@ -670,11 +670,11 @@ WIP_LOCAL void FollowMonSituation_SetMood(FieldSystem *fieldSystem, void *out);
 WIP_LOCAL int ov02_02249CD8(int *work);
 WIP_LOCAL void ov02_0224A450(Sprite *sprite);
 WIP_LOCAL BOOL ov02_0224B350(void *a0, void *out);
-WIP_LOCAL void ov02_0224E0BC(LocalMapObject *obj1, LocalMapObject *obj2, TaskManager *taskManager);
+WIP_LOCAL void MapObjects_SwapPositions(LocalMapObject *obj1, LocalMapObject *obj2, TaskManager *taskManager);
 // referenced above; full bodies still in asm
 WIP_LOCAL void ov02_0224DCB0(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void *ov02_0224E0D4(LocalMapObject *obj1, LocalMapObject *obj2);
-WIP_LOCAL BOOL ov02_0224E0EC(TaskManager *taskManager);
+WIP_LOCAL void *SwapPositions_CreateTaskEnv(LocalMapObject *obj1, LocalMapObject *obj2);
+WIP_LOCAL BOOL Task_SwapMapObjectPositions(TaskManager *taskManager);
 
 // batch: render loops, alloc helpers, step funcs (some callees still in asm)
 WIP_LOCAL void ov02_0224D98C(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);

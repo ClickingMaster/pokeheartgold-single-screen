@@ -72,7 +72,7 @@ void Colosseum_OpenSummary(ColosseumEntry *entry, FieldSystem *fieldSystem, Part
     args->unk12 = mode;
     args->ribbons = Save_SpecialRibbons_Get(saveData);
     args->menuInputStatePtr = NULL;
-    args->isFlag982Set = sub_0208828C(saveData);
+    args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);
     sub_02089D40(args, _020FC7CC);
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, args);
     entry->summaryArgs = args;

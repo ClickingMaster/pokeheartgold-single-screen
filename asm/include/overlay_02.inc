@@ -496,7 +496,7 @@
 .public ov02_0224D9A4
 .public ov02_0224D9B8
 .public ov02_0224E074
-.public ov02_0224E0BC
+.public MapObjects_SwapPositions
 .public FieldSystem_CanPlaceSafariObject
 .public SafariZone_CanPlaceObjectOnLand
 .public SafariZone_CanPlaceObjectOnWater

@@ -3106,7 +3106,7 @@ GtsViewMon_Init: ; 0x022413AC
 	str r0, [r1]
 	ldr r0, [r4]
 	ldr r0, [r0, #0x20]
-	bl sub_0208828C
+	bl PokemonSummary_IsPokeathlonUnlocked
 	add r1, r4, #0
 	add r1, #0xf0
 	str r0, [r1]

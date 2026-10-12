@@ -153,7 +153,7 @@ extern BOOL ov01_021FC5B8(void *, u32);
 extern void *MapObjectManager_GetMapModelNarc(void *);
 extern void ov01_021FC5CC(void *, u32, void *, u16, u32);
 BOOL ov01_021F98CC(void *, void *, u32, u32, const u16 *);
-extern BOOL ov01_021F72DC(void *);
+extern BOOL MapObject_GetBillboard(void *);
 extern void sub_0205E420(void *);
 extern void ov01_021FA108(void *, u32, void *);
 extern void sub_0205E38C(void *, void *);

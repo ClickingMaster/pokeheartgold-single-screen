@@ -68,7 +68,7 @@ void ov02_0224BFC0(FieldSystem *fieldSystem, u8 a1);
 void ov02_0224BFCC(FieldSystem *fieldSystem, u8 a1);
 void ov02_0224CDB0(FieldSystem *fieldSystem, u8 a1);
 void ov02_0224E074(FieldSystem *fieldSystem, u16 *p_ret, int a2, enum HeapID heapID);
-void ov02_0224E0BC(LocalMapObject *obj1, LocalMapObject *obj2, TaskManager *taskManager);
+void MapObjects_SwapPositions(LocalMapObject *object1, LocalMapObject *object2, TaskManager *taskManager);
 void FieldSystem_FollowMonInteract(FieldSystem *fieldSystem);
 BOOL FieldSystem_FirstAliveMonHasType(FieldSystem *fieldSystem, u8 type);
 void ov02_022507B4(FieldSystem *fieldSystem, u8 count);

@@ -11,7 +11,7 @@
 #include "map_object.h"
 #include "metatile_behavior.h"
 #include "overlay_01.h"
-#include "overlay_01_021E90C0.h"
+#include "field/door_transition.h"
 #include "overlay_01_021F1AFC.h"
 #include "player_avatar.h"
 #include "screen_fade.h"
@@ -32,8 +32,8 @@ typedef struct WiFiPlazaTaskEnv {
 } WiFiPlazaTaskEnv;
 
 // Defined in field overlay / Wi-Fi Plaza sources that have no header yet.
-BOOL ov01_021E971C(FieldSystem *fieldSystem, FieldEnvSubUnk18 *work, u8 direction);
-BOOL ov01_021E9C40(TaskManager *taskMan);
+BOOL DoorTransition_WalkOutOfSideDoor(FieldSystem *fieldSystem, FieldEnvSubUnk18 *work, u8 direction);
+BOOL Task_WalkOutOfDoorAfterWarp(TaskManager *taskMan);
 int sub_02054940(FieldSystem *fieldSystem, int y, fx32 x, fx32 z, u8 *outKind);
 BOOL WiFiPlaza_Init(OverlayManager *man, int *state);
 BOOL WiFiPlaza_Main(OverlayManager *man, int *state);
@@ -49,17 +49,17 @@ BOOL FieldTransition_EnterThroughSideDoor(TaskManager *taskMan) {
     switch (env->transitionState) {
     case 0: {
         int x;
-        env->unk18 = ov01_021E90C0();
+        env->unk18 = DoorTransition_New();
         x = PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
-        ov01_021E90DC(x, PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), env->unk18);
+        DoorTransition_SetPosition(x, PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), env->unk18);
         env->transitionState++;
         break;
     }
     case 1: {
         FieldEnvSubUnk18 *work = env->unk18;
         int direction = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
-        if (ov01_021E971C(fieldSystem, work, direction)) {
-            ov01_021E90D4(env->unk18);
+        if (DoorTransition_WalkOutOfSideDoor(fieldSystem, work, direction)) {
+            DoorTransition_Free(env->unk18);
             env->transitionState++;
         }
         break;
@@ -120,16 +120,16 @@ BOOL FieldTransition_EnterWithDoorExit(TaskManager *taskMan) {
     case 0: {
         FieldEnvSubUnk18 *work;
         int x;
-        env->unk18 = ov01_021E90C0();
+        env->unk18 = DoorTransition_New();
         work = env->unk18;
         x = PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
-        ov01_021E90DC(x, PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), work);
-        TaskManager_Call(taskMan, ov01_021E9C40, work);
+        DoorTransition_SetPosition(x, PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), work);
+        TaskManager_Call(taskMan, Task_WalkOutOfDoorAfterWarp, work);
         env->transitionState++;
         break;
     }
     case 1:
-        ov01_021E90D4(env->unk18);
+        DoorTransition_Free(env->unk18);
         return TRUE;
     }
     return FALSE;

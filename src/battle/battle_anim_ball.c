@@ -148,7 +148,7 @@ typedef struct BattleAnimEmitterCounts {
     u32 counts[22];
 } BattleAnimEmitterCounts;
 
-// asm/overlay_07_callback_suffix_opus10_residual_2.s
+// asm/battle_anim_data.s
 extern const UnkBallDataStaticSpriteKinds sUnkBallDataStaticSpriteKinds;
 extern const UnkBallDataFlashingKinds sUnkBallDataFlashingKinds;
 extern const UnkBallDataFunc sUnkBallDataModeFuncs[];

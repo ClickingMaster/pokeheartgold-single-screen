@@ -167,9 +167,9 @@
 .public BattleLink_SendPartnerTrainer
 .public BattleLink_PreparePartnerParty
 .public BattleLink_SendPartnerParty
-.public sub_02075A7C
-.public sub_02075D3C
-.public sub_02075D4C
+.public EvolutionScene_New
+.public EvolutionScene_IsDone
+.public EvolutionScene_Delete
 .public Save_Bag_New
 .public Save_Bag_Copy
 .public BagCursor_Battle_Init

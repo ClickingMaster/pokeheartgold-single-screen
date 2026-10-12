@@ -357,17 +357,17 @@
 	.public _021083C8
 	.public _021083E4
 	.public _02108400
-	.public sub_020932E0
-	.public sub_02093354
-	.public sub_02093440
-	.public sub_02093594
-	.public sub_020935E0
+	.public BoxMonSelector_New
+	.public BoxMonSelector_Delete
+	.public BoxMonSelector_Init
+	.public BoxMonSelector_VBlank
+	.public BoxMonSelector_Run
 	.public sub_02093630
 	.public sub_0209389C
 	.public sub_02093908
 	.public sub_0209396C
 	.public sub_020939B8
-	.public sub_02093A40
+	.public BoxMonSelector_RenderSprites
 	.public sub_02093A50
 	.public sub_02093B40
 	.public sub_02093B84
@@ -421,13 +421,13 @@
 	.include "global.inc"
 
 	.text
-	.public sub_02093594
-	.public sub_020935E0
+	.public BoxMonSelector_VBlank
+	.public BoxMonSelector_Run
 	.public sub_0209389C
 	.public sub_02093908
 	.public sub_0209396C
 	.public sub_020939B8
-	.public sub_02093A40
+	.public BoxMonSelector_RenderSprites
 	.public sub_02093B40
 	.public sub_02094150
 	.public sub_0209417C

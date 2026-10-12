@@ -58,7 +58,7 @@ void NNS_G3dAnmObjDisableID(NNSG3dAnmObj *anmObj, int id);
 void NNS_G3dAnmObjEnableID(NNSG3dAnmObj *anmObj, int id);
 int NNS_G3dGetResDictIdxByName(const NNSG3dResDict *dict, const NNSG3dResName *name);
 
-// Tables in asm/to53_overlay91_run_086.s.
+// Tables in asm/plaza_game_swalot_plop_data.s.
 extern const u8 _02261BE8[];
 extern const u8 ov91_02261BEC[];
 extern const u8 ov91_02261BF0[];

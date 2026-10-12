@@ -50,11 +50,11 @@
 .public FollowMon_IsActive
 .public VEC_Subtract
 .public FieldMap_FadeScreen
-.public ov01_021E90C0
-.public ov01_021E90D4
-.public ov01_021E90DC
-.public ov01_021E971C
-.public ov01_021E9C40
+.public DoorTransition_New
+.public DoorTransition_Free
+.public DoorTransition_SetPosition
+.public DoorTransition_WalkOutOfSideDoor
+.public Task_WalkOutOfDoorAfterWarp
 .public Field_PlayerAvatar_OrrTransitionFlags
 .public Field_PlayerAvatar_ApplyTransitionFlags
 .public FollowMon_MoveToPlayer
