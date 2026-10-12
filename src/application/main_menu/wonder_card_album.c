@@ -602,7 +602,7 @@ void WonderCardAlbum_CreateMonIconSprites(WonderCardAlbum *album) {
         MainMenuUtil_InitObjTransfer();
         MainMenuUtil_InitSprites();
         MainMenuUtil_LoadSpriteResources(NARC_a_1_1_3, 30, 27, 29, 28, 0);
-        GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, sub_02074490(), GF_PAL_LOCATION_MAIN_OBJ, (enum GFPalSlotOffset)0x60, 0, album->heapId);
+        GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), GF_PAL_LOCATION_MAIN_OBJ, (enum GFPalSlotOffset)0x60, 0, album->heapId);
     }
     x = 178;
     for (i = 0; i < 3; i++, x += 25) {

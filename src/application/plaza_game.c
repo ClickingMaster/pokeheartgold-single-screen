@@ -483,9 +483,9 @@ void PlazaGameGfx_LoadInto(PlazaGameGfx *gfx, PlazaGameGfxRes *gfxRes, NARC *nar
     gfxRes->resources[GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(gfx->managers[GF_GFX_RES_TYPE_CELL], narc, cellFile, FALSE, resId, GF_GFX_RES_TYPE_CELL, heap);
     gfxRes->resources[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(gfx->managers[GF_GFX_RES_TYPE_ANIM], narc, animFile, FALSE, resId, GF_GFX_RES_TYPE_ANIM, heap);
     GF_ASSERT(SpriteTransfer_CreateCharTransferTask_AllocAtEnd(gfxRes->resources[GF_GFX_RES_TYPE_CHAR]));
-    sub_0200A740(gfxRes->resources[GF_GFX_RES_TYPE_CHAR]);
+    GF2DGfxResObj_FreeData(gfxRes->resources[GF_GFX_RES_TYPE_CHAR]);
     GF_ASSERT(SpriteTransfer_CreatePlttTransferTask(gfxRes->resources[GF_GFX_RES_TYPE_PLTT]));
-    sub_0200A740(gfxRes->resources[GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(gfxRes->resources[GF_GFX_RES_TYPE_PLTT]);
     CreateSpriteResourcesHeader(&gfxRes->header, resId, resId, resId, resId, -1, -1, FALSE, 1, gfx->managers[GF_GFX_RES_TYPE_CHAR], gfx->managers[GF_GFX_RES_TYPE_PLTT], gfx->managers[GF_GFX_RES_TYPE_CELL], gfx->managers[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
 }
 

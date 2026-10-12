@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_SPRITE_TRANSFER_H
 #define POKEHEARTGOLD_SPRITE_TRANSFER_H
 
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 BOOL SpriteTransfer_CreateCharTransferTask(SpriteResource *obj);
 void SpriteTransfer_CreateAllCharTransferTasks(GF_2DGfxResObjList *charResObjList);

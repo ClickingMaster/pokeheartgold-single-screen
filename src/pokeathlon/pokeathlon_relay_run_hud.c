@@ -22,7 +22,7 @@
 #include "sprite.h"
 #include "string_util.h"
 #include "text.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 
 // Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries as the course objects use them.
 void PokeathlonCourseSpritePool_LoadChar(void *pool, int narcId, int fileId, int resId, int vram);
@@ -322,7 +322,7 @@ void PokeathlonRelayRunHud_LoadMonIcons(PokeathlonRelayRunHud *hud, PokeathlonCo
     VecFx32 position;
     PokeathlonRelayRunHud *cursor;
     narc = NARC_New(NARC_poketool_icongra_poke_icon, hud->heapId);
-    GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, sub_02074490(), GF_PAL_LOCATION_SUB_OBJ, GF_PAL_SLOT_1_OFFSET, 0x60, hud->heapId);
+    GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), GF_PAL_LOCATION_SUB_OBJ, GF_PAL_SLOT_1_OFFSET, 0x60, hud->heapId);
     // cursor: hud moved on by one file per Pokemon (cursor->map.icons.files[0]), the way the original addresses them
     for (i = 0, cursor = hud, chars = hud->iconChars; i < RELAY_RUN_TEAMS * RELAY_RUN_MEMBERS; cursor = (PokeathlonRelayRunHud *)((u8 *)cursor + sizeof(void *)), mons++, chars++, i++) {
         cursor->map.icons.files[0] = Heap_AllocAtEnd(hud->heapId, 0x1000);

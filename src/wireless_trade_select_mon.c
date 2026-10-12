@@ -54,10 +54,10 @@
 #include "touchscreen_list_menu.h"
 #include "trainer_memo.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "oam_manager.h"
 #include "unk_0200FA24.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 #include "friend_roster.h"
 #include "frontier_save_access.h"
 #include "communication_player_state.h"
@@ -645,7 +645,7 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
     switch (work->exchangeState) {
     case 0:
         LinkSync_StartSync(0x50);
-        sub_0201A728(2);
+        Sys_SetSoftResetDisableFlag(2);
         WirelessTradeSelectMon_ShowWaitingIcon(work);
         i = 0;
         if (Party_GetCount(work->args->party) > 0) {
@@ -811,7 +811,7 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
             ClearFrameAndWindow2(&work->windows[23], TRUE);
             FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
             WirelessTradeSelectMon_PrintMessage(&work->windows[21], 15, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
-            sub_0201A738(2);
+            Sys_ClearSoftResetDisableFlag(2);
             return TRUE;
         }
         break;
@@ -1189,7 +1189,7 @@ void WirelessTradeSelectMon_InitSpriteResources(WirelessTradeSelectMon *work, NA
     SpriteTransfer_CreateCharTransferTask(work->resObjs[1][GF_GFX_RES_TYPE_CHAR]);
     SpriteTransfer_CreateExtPlttTransferTask(work->resObjs[0][GF_GFX_RES_TYPE_PLTT]);
     SpriteTransfer_CreateExtPlttTransferTask(work->resObjs[1][GF_GFX_RES_TYPE_PLTT]);
-    GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, sub_02074490(), GF_PAL_LOCATION_MAIN_OBJ, GF_PAL_SLOT_10_OFFSET, 0x80, HEAP_ID_26);
+    GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), GF_PAL_LOCATION_MAIN_OBJ, GF_PAL_SLOT_10_OFFSET, 0x80, HEAP_ID_26);
 }
 
 u32 WirelessTradeSelectMon_LoadMonPic(u32 side, Pokemon *mon, void *dest, PokepicTemplate *pokepic) {
@@ -1252,7 +1252,7 @@ void WirelessTradeSelectMon_ShowMonDetails(Window *windows, int side, Party *par
     f.party = party;
     f.slot = slot;
     // Pokemon starts with its BoxPokemon.
-    f.yOffset = sub_0207083C((BoxPokemon *)Party_GetMonByIndex(party, slot), 2);
+    f.yOffset = GetBoxMonPicHeight((BoxPokemon *)Party_GetMonByIndex(party, slot), 2);
     sprites = work->detailSprites;
     f.sideOffset = side * sizeof(Sprite *);
     Sprite_SetDrawFlag(*(Sprite **)((u8 *)sprites + f.sideOffset), TRUE);
@@ -1460,7 +1460,7 @@ void WirelessTradeSelectMon_PlayCryOnTouch(WirelessTradeSelectMon *work) {
     species = work->mons[work->cursor].species;
     form = work->mons[work->cursor].form;
     if (species == SPECIES_CHATOT) {
-        sub_02006E4C(Save_Chatot_Get(work->saveData), 0, 100, 0);
+        Chatot_PlayCryWithFallback(Save_Chatot_Get(work->saveData), 0, 100, 0);
     } else {
         PlayCry(species, (u8)form);
     }

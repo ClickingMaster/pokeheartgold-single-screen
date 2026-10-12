@@ -251,7 +251,7 @@
 .public PCStorage_GetMonByIndexPair
 .public GetMonIconNaixEx
 .public GetMonIconPaletteEx
-.public sub_02074490
+.public GetMonIconPlttNaix
 .public Party_AddMon
 .public Party_RemoveMon
 .public Party_GetCount

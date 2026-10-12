@@ -118,7 +118,7 @@ void ShallowWaterRippleEffect_Update(FieldEffect *effect, ShallowWaterRippleEffe
     BOOL loop;
     LocalMapObject *mapObject = work->args.mapObject;
 
-    if (!sub_0205F0F8(mapObject, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
@@ -151,7 +151,7 @@ void ShallowWaterRippleEffect_Draw(FieldEffect *effect, ShallowWaterRippleEffect
     } vecs;
     LocalMapObject *mapObject = work->args.mapObject;
 
-    if (!sub_0205F0F8(mapObject, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }

@@ -21,7 +21,7 @@
 #include "system.h"
 #include "touchscreen.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "swap_3d_buffers.h"
 
 // Graphics core of the Dress-Up editor and the Accessory Portrait renderer: slot objects (3D textured quads of

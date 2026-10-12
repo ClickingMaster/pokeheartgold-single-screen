@@ -47,7 +47,7 @@
 .public AddCharResObjFromOpenNarc
 .public AddPlttResObjFromOpenNarc
 .public AddCellOrAnimResObjFromOpenNarc
-.public sub_0200A740
+.public GF2DGfxResObj_FreeData
 .public DestroySingle2DGfxResObj
 .public SpriteResourceCollection_Find
 .public GF2DGfxResObj_GetResID
@@ -146,8 +146,8 @@
 .public ObjCharTransfer_Destroy
 .public ObjCharTransfer_ClearBuffers
 .public ObjCharTransfer_ResetTransferTasksByResID
-.public sub_02021AC8
-.public sub_02021B5C
+.public ObjCharTransfer_ReserveCharSpace
+.public ObjCharTransfer_FreeCharSpace
 .public ObjPlttTransfer_Init
 .public ObjPlttTransfer_Destroy
 .public ObjPlttTransfer_Reset
@@ -220,8 +220,8 @@
 .public GameStats_AddScore
 .public AllocMonZeroed
 .public GetMonData
-.public sub_02070130
-.public sub_02070848
+.public DP_GetBoxmonSpriteCharAndPlttNarcIds
+.public GetBoxMonPicHeight_PBR
 .public NNS_GfdResetFrmTexVramState
 .public NNS_GfdResetFrmPlttVramState
 .public NNS_G2dGetUnpackedCharacterData

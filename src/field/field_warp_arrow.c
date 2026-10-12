@@ -113,12 +113,12 @@ void WarpArrowEffect_Update(FieldEffect *effect, WarpArrowEffect *work) {
 
     PlayerAvatar *playerAvatar = work->args.playerAvatar;
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(playerAvatar);
-    if (!sub_0205F0A8(mapObject, work->objectId, work->mapId)) {
+    if (!MapObject_CheckIDAndMap(mapObject, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
     int prevDirection = work->direction;
-    work->behavior = sub_0205F504(mapObject);
+    work->behavior = MapObject_GetCurrentMetatileBehavior(mapObject);
     work->direction = WarpArrow_GetWarpDirection(work->behavior);
     work->hidden = FALSE;
     if (work->direction == -1 || work->direction != (int)PlayerAvatar_GetFacingDirection(playerAvatar)) {

@@ -59,7 +59,7 @@ void PokepicManager_Delete(void *mgr);
 void PokepicAnimManager_StopAnim(void *a, int b);
 void PokepicAnimManager_Delete(void *a);
 void Pokepic_StartAnim(void *p, int a);
-void sub_0207294C(void *a, void *b, void *c, int d, int e, u32 f, int g);
+void NARC_StartPokepicAnim(void *a, void *b, void *c, int d, int e, u32 f, int g);
 void *PokepicManager_Create(int heapId);
 int PokemonSummary_GetShownMon(PokemonSummaryScene *a);
 void GetPokemonSpriteCharAndPlttNarcIds(u32 *dest, int species, int c);
@@ -264,10 +264,10 @@ void PokemonSummary_CreatePokepic(PokemonSummaryScene *a) {
 
 void PokemonSummary_StartPokepicAnim(PokemonSummaryScene *a) {
     if (a->unk_280_28) {
-        sub_0207294C(a->pokepicAnimNarc, a->pokepicAnimManager, a->pokepic, 0, 2, a->unk_2D4, 0);
+        NARC_StartPokepicAnim(a->pokepicAnimNarc, a->pokepicAnimManager, a->pokepic, 0, 2, a->unk_2D4, 0);
     } else {
         Pokepic_StartAnim(a->pokepic, 1);
-        sub_0207294C(a->pokepicAnimNarc, a->pokepicAnimManager, a->pokepic, a->species, 2, a->unk_2D4, 0);
+        NARC_StartPokepicAnim(a->pokepicAnimNarc, a->pokepicAnimManager, a->pokepic, a->species, 2, a->unk_2D4, 0);
     }
 }
 

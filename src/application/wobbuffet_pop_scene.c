@@ -1518,7 +1518,7 @@ BOOL WobbuffetPopBonusPopup_Update(WobbuffetPopBonusPopup *popups, WobbuffetPopB
 void WobbuffetPop_NewTextObj(BgConfig *bgConfig, SpriteManager *spriteManager, FontSystem *fontSystem, WobbuffetPopTextObj *textObj, String *string, int fontId, u32 color, int setPalOffset, int plttResId, int x, int y, int centered, int unk_20, int vram, int height) {
     TextOBJTemplate template;
     Window window;
-    UnkStruct_02021AC8 charAlloc;
+    ObjCharSpaceReservation charAlloc;
     TextOBJ *obj;
     int width = FontID_String_GetWidthMultiline(fontId, string, 0);
     int tiles = width / 8;
@@ -1529,7 +1529,7 @@ void WobbuffetPop_NewTextObj(BgConfig *bgConfig, SpriteManager *spriteManager, F
     InitWindow(&window);
     AddTextWindowTopLeftCorner(bgConfig, &window, tiles, height, 0, 0);
     AddTextPrinterParameterizedWithColorAndSpacing(&window, fontId, string, 0, 0, TEXT_SPEED_NOTRANSFER, color, 0, 0, NULL);
-    sub_02021AC8(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_117), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &charAlloc);
+    ObjCharTransfer_ReserveCharSpace(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_117), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &charAlloc);
     if (centered == TRUE) {
         x -= width / 2;
     }
@@ -1559,7 +1559,7 @@ void WobbuffetPop_NewTextObj(BgConfig *bgConfig, SpriteManager *spriteManager, F
 
 void WobbuffetPopTextObj_Free(WobbuffetPopTextObj *textObj) {
     FontOAM_Delete(textObj->textObj);
-    sub_02021B5C(&textObj->charAlloc);
+    ObjCharTransfer_FreeCharSpace(&textObj->charAlloc);
     textObj->textObj = NULL;
 }
 

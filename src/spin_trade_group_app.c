@@ -31,7 +31,7 @@
 #include "text.h"
 #include "sound_playback.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "oam_manager.h"
 #include "unk_0200FA24.h"
 #include "communication_player_state.h"

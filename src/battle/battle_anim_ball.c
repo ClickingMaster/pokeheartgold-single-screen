@@ -22,7 +22,7 @@
 #include "sprite_system.h"
 #include "sys_task_api.h"
 #include "unk_02009D48.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 #include "unk_02091054.h"
 
 fx32 FX_Sqrt(fx32 x); // not declared by the lib/include fx headers
@@ -1900,9 +1900,9 @@ void BattleAnimUtil_LoadMonIntoPic(BattleAnimBattlerPicParams *params, int targe
         if (facing == 2) {
             NARC *narc = NARC_New(NARC_a_1_8_0, heapId);
             // the shadow readers' fourth parameter is not passed
-            ((void (*)(NARC *, s8 *, u16))sub_020729D8)(narc, &shadow.shadowHeight, species);
-            ((void (*)(NARC *, s8 *, u16))sub_020729FC)(narc, &shadow.shadowXOffset, species);
-            ((void (*)(NARC *, u8 *, u16))sub_02072A20)(narc, &shadow.shadowSize, species);
+            ((void (*)(NARC *, s8 *, u16))NARC_ReadPokepicShadowHeight)(narc, &shadow.shadowHeight, species);
+            ((void (*)(NARC *, s8 *, u16))NARC_ReadPokepicShadowXOffset)(narc, &shadow.shadowXOffset, species);
+            ((void (*)(NARC *, u8 *, u16))NARC_ReadPokepicShadowSize)(narc, &shadow.shadowSize, species);
             NARC_Delete(narc);
             Pokepic_SetAttr(params->pokepics[params->battler], POKEPIC_SHADOW_SIZE, shadow.shadowSize);
             y += 36;

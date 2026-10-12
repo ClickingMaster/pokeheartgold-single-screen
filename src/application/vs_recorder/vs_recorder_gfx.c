@@ -105,7 +105,7 @@ void VsRecorder_FreeMenuRowText(VsRecorderWork *work) {
         while (j < 2) {
             TextOBJLayout_Delete((*cursor)->textLayout);
             TextOBJ_Destroy((*cursor)->text);
-            sub_02021B5C(&(*cursor)->charAlloc);
+            ObjCharTransfer_FreeCharSpace(&(*cursor)->charAlloc);
             j++;
             cursor++;
         }
@@ -128,7 +128,7 @@ void VsRecorder_CreateTextSprite(VsRecorderTextSprite *textSprite, VsRecorderGfx
     InitWindow(&window);
     AddTextWindowTopLeftCorner(gfx->bgConfig, &window, 0x14, 2, 0, 0);
     textSprite->textLayout = TextOBJLayout_New(&window, HEAP_ID_109);
-    sub_02021AC8(FontOAM_GetCharSize(&window, vram, HEAP_ID_109), TRUE, vram, &textSprite->charAlloc);
+    ObjCharTransfer_ReserveCharSpace(FontOAM_GetCharSize(&window, vram, HEAP_ID_109), TRUE, vram, &textSprite->charAlloc);
     ManagedSprite_GetPositionXY(textSprite->sprite, &position[1], &position[0]);
     template.fontSystem = gfx->fontSystem;
     template.window = &window;
@@ -164,7 +164,7 @@ void VsRecorder_SetTextSpriteMsg(VsRecorderTextSprite *textSprite, VsRecorderGfx
 void VsRecorder_FreeTextSprite(VsRecorderTextSprite *textSprite) {
     TextOBJLayout_Delete(textSprite->textLayout);
     TextOBJ_Destroy(textSprite->text);
-    sub_02021B5C(&textSprite->charAlloc);
+    ObjCharTransfer_FreeCharSpace(&textSprite->charAlloc);
 }
 
 void ov40_0222D6EC(VsRecorderWork *work, int vram) {

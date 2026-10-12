@@ -1,5 +1,5 @@
-#ifndef POKEHEARTGOLD_UNK_0200A090_H
-#define POKEHEARTGOLD_UNK_0200A090_H
+#ifndef POKEHEARTGOLD_SPRITE_RESOURCE_H
+#define POKEHEARTGOLD_SPRITE_RESOURCE_H
 
 #include "filesystem.h"
 #include "gf_3d_loader.h"
@@ -106,7 +106,7 @@ int LoadAll2DGfxResObjsFromHeader(GF_2DGfxResMan *mgr, const GF_2DGfxResHeader *
 GF_2DGfxResObjList *Create2DGfxResObjList(int num, enum HeapID heapID);
 void Delete2DGfxResObjList(GF_2DGfxResObjList *list);
 BOOL GF2DGfxResObjExistsById(GF_2DGfxResMan *mgr, int a1);
-void sub_0200A740(SpriteResource *obj);
+void GF2DGfxResObj_FreeData(SpriteResource *obj);
 void DestroySingle2DGfxResObj(GF_2DGfxResMan *a0, SpriteResource *a1);
 SpriteResource *SpriteResourceCollection_Find(GF_2DGfxResMan *mgr, int id);
 int GF2DGfxResObj_GetResID(SpriteResource *obj);
@@ -131,4 +131,4 @@ int GF2DGfxResHeader_GetExDat0ByIndex(GF_2DGfxResHeader *header, int idx);
 int GF2DGfxResHeader_GetExDat1ByIndex(GF_2DGfxResHeader *header, int idx);
 void GF2DGfxResObj_LoadExDat(SpriteResource *obj, GfGfxResType type, int vram, int pltt_num, enum HeapID heapID);
 
-#endif // POKEHEARTGOLD_UNK_0200A090_H
+#endif // POKEHEARTGOLD_SPRITE_RESOURCE_H

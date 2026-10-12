@@ -49,7 +49,7 @@ void NitroMain(void) {
     InitSystemForTheGame();
     InitGraphicMemory();
     InitKeypadAndTouchpad();
-    sub_0201A4B0(0);
+    Sys_SetAgbCartridgeVersion(0);
     PM_GetBackLight(&gBacklightTop, NULL);
     Init3DBufferSwapRequestState();
     GF_InitRTCWork();
@@ -294,7 +294,7 @@ void HandleDSLidAction(void) {
             }
             while (1) {
                 trigger = PM_TRIGGER_COVER_OPEN | PM_TRIGGER_CARD;
-                if (gSystem.unk6A && !_02111864) {
+                if (gSystem.agbCartridgeVersion && !_02111864) {
                     trigger |= PM_TRIGGER_CARTRIDGE;
                 }
                 PM_GoSleepMode(trigger, PM_PAD_LOGIC_OR, 0);

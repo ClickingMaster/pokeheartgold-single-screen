@@ -19,7 +19,7 @@
 .public AddCharResObjFromOpenNarc
 .public AddPlttResObjFromOpenNarc
 .public AddCellOrAnimResObjFromOpenNarc
-.public sub_0200A740
+.public GF2DGfxResObj_FreeData
 .public GF2DGfxResObj_GetResID
 .public SpriteTransfer_CreateCharTransferTask_AllocAtEnd
 .public SpriteTransfer_DeleteCharTransferTask
@@ -78,7 +78,7 @@
 .public PlayerAvatar_SetRunningShoesLock
 .public MapObject_GetSpriteID
 .public MapObject_GetScriptID
-.public sub_0205F330
+.public MapObject_GetAnimation
 .public FX_Atan2Idx
 .public GXS_SetGraphicsMode
 .public GX_SetBankForSubBG

@@ -7,7 +7,7 @@
 #include "sprite.h"
 #include "sprite_transfer.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 // Defined with overlay 2's Pokecenter healing animation.
 void *FlyLanding_AllocZeroed(enum HeapID heapID, u32 size);
@@ -80,12 +80,12 @@ void SpriteGfxManager_Free(SpriteGfxManager *manager) {
     }
     for (i = 0; i < manager->cellCount; i++) {
         if (manager->cellNone != manager->cellRes[i].id) {
-            sub_0200A740(manager->cellRes[i].res);
+            GF2DGfxResObj_FreeData(manager->cellRes[i].res);
         }
     }
     for (i = 0; i < manager->animCount; i++) {
         if (manager->animNone != manager->animRes[i].id) {
-            sub_0200A740(manager->animRes[i].res);
+            GF2DGfxResObj_FreeData(manager->animRes[i].res);
         }
     }
     Destroy2DGfxResObjMan(manager->charMan);
@@ -132,7 +132,7 @@ void SpriteGfxManager_ReleaseCharData(SpriteGfxManager *manager, int id) {
 
     for (i = 0; i < manager->charCount; i++) {
         if (id == manager->charRes[i].id) {
-            sub_0200A740(manager->charRes[i].res);
+            GF2DGfxResObj_FreeData(manager->charRes[i].res);
             return;
         }
     }
@@ -171,7 +171,7 @@ void SpriteGfxManager_ReleasePlttData(SpriteGfxManager *manager, int id) {
 
     for (i = 0; i < manager->plttCount; i++) {
         if (id == manager->plttRes[i].id) {
-            sub_0200A740(manager->plttRes[i].res);
+            GF2DGfxResObj_FreeData(manager->plttRes[i].res);
             return;
         }
     }

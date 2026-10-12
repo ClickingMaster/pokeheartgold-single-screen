@@ -13,11 +13,11 @@
 .public MapObject_TestFlagsBits
 .public MapObject_SetFacingDirection
 .public MapObject_SetOrQueueFacing
-.public sub_0205F328
+.public MapObject_SetAnimation
 .public MapObject_GetManager
-.public sub_0205F3C0
-.public sub_0205F3E4
-.public sub_0205F484
+.public MapObject_InitMovementCmdData
+.public MapObject_GetMovementCmdData
+.public MapObject_CallDrawUpdate
 .public MapObject_SetMovementCommand
 .public MapObject_GetMovementCommand
 .public MapObject_SetMovementStep

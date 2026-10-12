@@ -2,7 +2,7 @@
 
 #include "gf_gfx_loader.h"
 #include "sprite_transfer.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 static BOOL TryAddSpriteResourceToObjList(GF_2DGfxResObjList *objList, SpriteResource *spriteResource);
 static void FieldSpriteManager_AddCellOrAnimRes(FieldSpriteManager *fieldSpriteManager, NarcId narcId, int fileId, BOOL compressed, GfGfxResType resType, int resId);

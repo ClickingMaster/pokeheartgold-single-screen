@@ -673,7 +673,7 @@ static void StartMenu_CreateCursor(StartMenuTaskData *startMenu, u8 *a1, u32 a2,
     startMenu->gfxResObj[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(startMenu->gfxResMan[GF_GFX_RES_TYPE_ANIM], NARC_a_0_1_4, 63, TRUE, 0, GF_GFX_RES_TYPE_ANIM, HEAP_ID_FIELD2);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(startMenu->gfxResObj[GF_GFX_RES_TYPE_CHAR]);
     SpriteTransfer_CreatePlttTransferTask(startMenu->gfxResObj[GF_GFX_RES_TYPE_PLTT]);
-    sub_0200A740(startMenu->gfxResObj[GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(startMenu->gfxResObj[GF_GFX_RES_TYPE_PLTT]);
     CreateSpriteResourcesHeader(&startMenu->spriteResourcesHeader, 0, 0, 0, 0, -1, -1, 0, 0, startMenu->gfxResMan[GF_GFX_RES_TYPE_CHAR], startMenu->gfxResMan[GF_GFX_RES_TYPE_PLTT], startMenu->gfxResMan[GF_GFX_RES_TYPE_CELL], startMenu->gfxResMan[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
 
     SpriteTemplate spriteTemplate;

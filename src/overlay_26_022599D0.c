@@ -6,7 +6,7 @@
 static LocalMapObject *ov26_02259A24(FieldSystem *fieldSystem, LocalMapObject *a1, BOOL a2);
 
 static void ov26_022599D0(LocalMapObject *last_talked, u16 movement) {
-    sub_0205FC94(last_talked, movement);
+    MapObject_ChangeMovement(last_talked, movement);
 }
 
 void ov26_022599D8(FieldSystem *fieldSystem, LocalMapObject *last_talked) {

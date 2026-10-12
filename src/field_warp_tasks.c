@@ -287,7 +287,7 @@ static void FieldSystem_CreatePlayerAndMapObjects(FieldSystem *fieldSystem) {
         fieldSystem->playerAvatar = PlayerAvatar_CreateWithParams(fieldSystem->mapObjectManager, fieldSystem->location->x, fieldSystem->location->y, fieldSystem->location->direction, playerSaveData->state, gender, 2, playerSaveData);
         FollowMon_InitMapObject(fieldSystem->mapObjectManager, fieldSystem->location->x, fieldSystem->location->y, fieldSystem->location->direction, fieldSystem->location->mapId);
         Field_InitMapObjectsFromZoneEventData(fieldSystem);
-        sub_0205F55C(fieldSystem->mapObjectManager);
+        MapObjectManager_SuspendMovement(fieldSystem->mapObjectManager);
     }
 }
 
@@ -312,7 +312,7 @@ static void FieldSystem_RestorePlayerAndMapObjects(FieldSystem *fieldSystem) {
     gender = PlayerProfile_GetTrainerGender(Save_PlayerData_GetProfile(fieldSystem->saveData));
     fieldSystem->playerAvatar = PlayerAvatar_CreateWithActiveMapObject(fieldSystem->mapObjectManager, playerSaveData, gender);
     FollowMon_ChangeMon(fieldSystem->mapObjectManager, fieldSystem->location->mapId);
-    sub_0205F55C(fieldSystem->mapObjectManager);
+    MapObjectManager_SuspendMovement(fieldSystem->mapObjectManager);
 }
 
 static void FieldSystem_LoadMapMatrixAndMode(FieldSystem *fieldSystem) {

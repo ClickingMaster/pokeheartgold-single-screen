@@ -11,7 +11,7 @@
 #include "obj_pltt_transfer.h"
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 
 void PokeathlonCourseMonGfx_InitManager(PokeathlonCourseMonGfxManager *manager, u32 count, SpriteList *spriteList) {
     int i;
@@ -306,8 +306,8 @@ BOOL PokeathlonCourseMonGfx_LoadStep(PokeathlonCourseMonGfxLoad *load) {
         }
         if (load->template.vramTransfer == FALSE) {
             mon = &load->manager->mons[index];
-            sub_0200A740(mon->charRes);
-            sub_0200A740(mon->plttRes);
+            GF2DGfxResObj_FreeData(mon->charRes);
+            GF2DGfxResObj_FreeData(mon->plttRes);
         }
         load->current++;
         if (load->current >= load->count) {

@@ -32,7 +32,7 @@
 #include "touchpad.h"
 #include "touchscreen.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "wireless_manager.h"
 #include "communication_player_state.h"
 #include "unk_02035900.h"

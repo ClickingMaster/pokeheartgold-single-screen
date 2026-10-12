@@ -29,7 +29,7 @@ typedef struct EasyChatPageButtonsView EasyChatPageButtonsView;
 
 typedef struct EasyChatButtonText {
     TextOBJ *textObj;             // 0x00
-    UnkStruct_02021AC8 charAlloc; // 0x04
+    ObjCharSpaceReservation charAlloc; // 0x04
 } EasyChatButtonText;             // size: 0x10
 
 struct EasyChatAppView {
@@ -299,7 +299,7 @@ void EasyChatAppView_CreateButtonTexts(EasyChatAppView *view) {
         u32 y;
         u32 j;
 
-        sub_02021AC8(charSize, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &view->buttonTexts[i].charAlloc);
+        ObjCharTransfer_ReserveCharSpace(charSize, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &view->buttonTexts[i].charAlloc);
         template.offset = view->buttonTexts[i].charAlloc.offset;
         template.sprite = NULL;
         ReadMsgDataIntoString(msgData, 11 + i, string);
@@ -327,7 +327,7 @@ void EasyChatAppView_DeleteButtonTexts(EasyChatAppView *view) {
 
     for (i = 0; i < 2; i++) {
         TextOBJ_Destroy(view->buttonTexts[i].textObj);
-        sub_02021B5C(&view->buttonTexts[i].charAlloc);
+        ObjCharTransfer_FreeCharSpace(&view->buttonTexts[i].charAlloc);
         view->buttonTexts[i].textObj = NULL;
     }
     TextOBJLayout_Delete(view->textLayout);

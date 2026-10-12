@@ -1,10 +1,10 @@
 #include <nitro/fs/overlay.h>
 #pragma once
-.public sub_02006EFC
-.public sub_0201A728
-.public sub_0201A738
-.public sub_0201A748
-.public sub_0201A774
+.public Chatot_GetVoiceParam
+.public Sys_SetSoftResetDisableFlag
+.public Sys_ClearSoftResetDisableFlag
+.public Sys_SetAsyncSaveMarker
+.public Sys_ClearAsyncSaveMarker
 .public Heap_Alloc
 .public Heap_Free
 .public _MonEncryptSegment
@@ -59,8 +59,8 @@
 .public Save_Frontier_GetStatic
 .public AllocMonZeroed
 .public SetMonData
-.public sub_02072A98
-.public sub_02072D64
+.public Pokemon_ToBattleRecordMon
+.public Pokemon_FromBattleRecordMon
 .public Party_InitWithMaxSize
 .public Party_AddMon
 .public Party_GetMaxCount

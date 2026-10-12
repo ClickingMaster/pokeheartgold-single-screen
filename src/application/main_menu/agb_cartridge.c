@@ -1461,7 +1461,7 @@ void MigrateBoxMon(AgbBoxMon *agbMon, BoxPokemon *boxMon) {
     }
     if (GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL) == SPECIES_DEOXYS) {
         // the Deoxys form depends on the GBA game it comes from
-        switch (gSystem.unk6A) {
+        switch (gSystem.agbCartridgeVersion) {
         case 0:
         case 1:
         case 2:

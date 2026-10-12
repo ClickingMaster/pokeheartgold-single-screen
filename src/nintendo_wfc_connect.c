@@ -33,7 +33,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "frontier_data_access.h"
 #include "unk_0203170C.h"
 #include "comm_wireless.h"

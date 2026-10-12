@@ -347,7 +347,7 @@ BOOL MapObjectEmoteMarkEffect_Init(FieldEffect *effect, EmoteMarkEffect *work) {
 void MapObjectEmoteMarkEffect_Update(FieldEffect *effect, EmoteMarkEffect *work) {
     VecFx32 position;
     LocalMapObject *mapObject = work->args.mapObject;
-    if (sub_0205F0A8(mapObject, work->objectId, work->mapId) == FALSE) {
+    if (MapObject_CheckIDAndMap(mapObject, work->objectId, work->mapId) == FALSE) {
         GF_AssertFail();
     }
     MapObject_GetDrawPosition(mapObject, &position);

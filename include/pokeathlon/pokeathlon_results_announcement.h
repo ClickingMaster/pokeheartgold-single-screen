@@ -21,7 +21,7 @@
 // A text drawn as sprites, with its slot in the OBJ character VRAM.
 typedef struct PokeathlonResultsAnnouncementText {
     TextOBJ *textObj;                // 0x00
-    UnkStruct_02021AC8 charSlot;     // 0x04
+    ObjCharSpaceReservation charSlot;     // 0x04
 } PokeathlonResultsAnnouncementText; // size: 0x10
 
 // A window the sprite texts are rendered from.

@@ -12,7 +12,7 @@
 .public sub_02005448
 .public PlaySE
 .public PlayCry
-.public sub_02006E4C
+.public Chatot_PlayCryWithFallback
 .public OverlayManager_New
 .public OverlayManager_Delete
 .public OverlayManager_CreateAndGetData
@@ -82,8 +82,8 @@
 .public Main_SetVBlankIntrCB
 .public HBlankInterruptDisable
 .public SetKeyRepeatTimers
-.public sub_0201A728
-.public sub_0201A738
+.public Sys_SetSoftResetDisableFlag
+.public Sys_ClearSoftResetDisableFlag
 .public Heap_Create
 .public Heap_Destroy
 .public Heap_Alloc
@@ -193,14 +193,14 @@
 .public SetMonData
 .public GetMonBaseStat_HandleAlternateForm
 .public GetPokemonSpriteCharAndPlttNarcIds
-.public sub_0207083C
+.public GetBoxMonPicHeight
 .public Mon_GetBoxMon
 .public CopyPokemonToPokemon
 .public Mon_UpdateShayminForm
 .public Pokemon_RemoveCapsule
 .public GetMonIconNaixEx
 .public GetMonIconPaletteEx
-.public sub_02074490
+.public GetMonIconPlttNaix
 .public SaveArray_Party_sizeof
 .public Party_InitWithMaxSize
 .public Party_GetCount

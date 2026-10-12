@@ -13,7 +13,7 @@
 #include "pokemon_types_def.h"
 #include "sprite.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 typedef PartyExtraSub PartyAprijuiceModifier;
 typedef struct PokeathlonTodayPerformance PokeathlonTodayPerformance;

@@ -31,7 +31,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 // Field bottom-screen app 3 (ScrCmd_TouchscreenMenuHide, sBottomScreenApps[3] of field/bottom_screen_app.c):
 // the touch YES/NO buttons of ScrCmd_GetMenuChoice and the touch multichoice list of ScrCmd_MenuExec

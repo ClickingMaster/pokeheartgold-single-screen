@@ -278,7 +278,7 @@ struct FootprintStampBoard {
 
 typedef struct FootprintStampTextSprite {
     TextOBJ *textObj;
-    UnkStruct_02021AC8 charTransfer;
+    ObjCharSpaceReservation charTransfer;
     u16 width;
     u16 unk12;
 } FootprintStampTextSprite;

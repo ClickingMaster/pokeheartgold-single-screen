@@ -14,7 +14,7 @@
 .public BillboardObject_UpdateTextureAnimation
 .public PlayerAvatar_GetMapObject
 .public MapObject_GetPriorityPlusValue
-.public sub_0205F0A8
+.public MapObject_CheckIDAndMap
 .public MapObject_GetID
 .public MapObject_GetMapID
 .public MapObject_GetSpriteID
@@ -25,7 +25,7 @@
 .public MapObject_CheckFlag24
 .public MapObject_CopyPositionVector
 .public MapObject_CopyFacingVector
-.public sub_0206121C
+.public FieldSystem_SnapToTerrainHeight
 .public FieldEffect_RunUpdate
 .public FieldEffect_GetParam
 .public FieldEffect_GetUserData

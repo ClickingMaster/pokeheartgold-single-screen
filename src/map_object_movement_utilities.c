@@ -12,7 +12,7 @@ int sub_020548EC(FieldSystem *fieldSystem, int x, int z); // defined as u8; the 
 int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int y, int x, int z, u8 *floorType);
 void MapObject_GetPreviousCoordsBehind(LocalMapObject *object, int *x, int *z);
 
-BOOL sub_02060BFC(LocalMapObject *self, int x, int y, int z) {
+BOOL MapObject_IsTileOccupiedInLink(LocalMapObject *self, int x, int y, int z) {
     MapObjectManager *manager = MapObject_GetManager(self);
     LocalMapObject *object = MapObjectManager_GetObjects2(manager);
     int count = MapObjectManager_GetObjectCount(manager);
@@ -48,7 +48,7 @@ BOOL sub_02060BFC(LocalMapObject *self, int x, int y, int z) {
     return FALSE;
 }
 
-BOOL sub_02060CA8(LocalMapObject *self, int x, int y, int z) {
+BOOL MapObject_IsTileOccupied(LocalMapObject *self, int x, int y, int z) {
     int objectX;
     int objectZ;
     MapObjectManager *manager = MapObject_GetManager(self);
@@ -125,7 +125,7 @@ BOOL MapObject_IsOutsideMovementRange(LocalMapObject *object, int x, int y, int 
 BOOL MapObject_IsMoveBlockedByBehavior(LocalMapObject *object, int x, int z, int direction) {
     if (sub_0205F8D0(object) == FALSE) {
         FieldSystem *fieldSystem = MapObject_GetFieldSystem(object);
-        u8 objectBehavior = sub_0205F504(object);
+        u8 objectBehavior = MapObject_GetCurrentMetatileBehavior(object);
         u8 behavior = GetMetatileBehavior(fieldSystem, x, z);
         if (behavior == GetMetatileBehavior_None()) {
             return TRUE;
@@ -153,14 +153,14 @@ BOOL sub_02060E54(LocalMapObject *object, int behavior) {
     return 0;
 }
 
-BOOL sub_02060EA4(LocalMapObject *object, int behavior) {
+BOOL MapObject_CheckSandBehavior(LocalMapObject *object, int behavior) {
     if (MetatileBehavior_IsSand(behavior)) {
         return 1;
     }
     return 0;
 }
 
-BOOL sub_02060EBC(LocalMapObject *object, int behavior) {
+BOOL MapObject_CheckSnowBehavior(LocalMapObject *object, int behavior) {
     if (MetatileBehavior_IsSnow(behavior)) {
         return 1;
     }
@@ -248,7 +248,7 @@ BOOL MapObject_UpdateHeight(LocalMapObject *object) {
         return FALSE;
     }
     result = MapObject_CheckFlag29(object);
-    result = sub_02061248(MapObject_GetFieldSystem(object), &adjusted, result);
+    result = FieldSystem_SnapToTerrainHeightEx(MapObject_GetFieldSystem(object), &adjusted, result);
     if (result == TRUE) {
         position.y = adjusted.y;
         MapObject_SetPositionVector(object, &position);
@@ -276,8 +276,8 @@ BOOL MapObject_UpdateMetatileBehaviors(LocalMapObject *object) {
         z = MapObject_GetZCoord(object);
         current = GetMetatileBehavior(fieldSystem, x, z);
     }
-    sub_0205F50C(object, previous);
-    sub_0205F4FC(object, current);
+    MapObject_SetPreviousMetatileBehavior(object, previous);
+    MapObject_SetCurrentMetatileBehavior(object, current);
     if (MetatileBehavior_IsNone(current) == 1) {
         MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK11);
         return 0;
@@ -308,10 +308,10 @@ void SetPositionToTileCenter(int x, int z, VecFx32 *position) {
     position->z = (z << 16) + 0x8000;
 }
 
-void sub_020611DC(LocalMapObject *object) {
+void MapObject_UpdateHiddenMovement(LocalMapObject *object) {
     u32 movement = MapObject_GetMovement(object) - 0x33;
     if (movement <= 3) {
-        sub_0205F430(object);
+        MapObject_CallMovementUpdate(object);
     }
 }
 
@@ -332,7 +332,7 @@ int GetDirectionTowards(int x, int z, int targetX, int targetZ) {
     return 1;
 }
 
-BOOL sub_0206121C(FieldSystem *fieldSystem, VecFx32 *position) {
+BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position) {
     u8 behavior;
     int y = FieldSystem_GetTerrainHeight(fieldSystem, position->y, position->x, position->z, &behavior);
     if (behavior == 0) {
@@ -342,7 +342,7 @@ BOOL sub_0206121C(FieldSystem *fieldSystem, VecFx32 *position) {
     return 1;
 }
 
-BOOL sub_02061248(FieldSystem *fieldSystem, VecFx32 *position, BOOL allowType2) {
+BOOL FieldSystem_SnapToTerrainHeightEx(FieldSystem *fieldSystem, VecFx32 *position, BOOL allowType2) {
     u8 behavior;
     int y = FieldSystem_GetTerrainHeight(fieldSystem, position->y, position->x, position->z, &behavior);
     if (behavior == 0) {

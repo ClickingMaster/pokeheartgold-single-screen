@@ -113,7 +113,7 @@ static void FieldMap_VBlankCallback(void *fsys) {
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
 
-    sub_02023910(MapObjectRender_GetBillboards(sub_0205F1A0(fieldSystem->mapObjectManager)));
+    sub_02023910(MapObjectRender_GetBillboards(MapObjectManager_GetRender(fieldSystem->mapObjectManager)));
 }
 
 BOOL FieldMap_Init(OverlayManager *man, int *state) {
@@ -299,10 +299,10 @@ BOOL FieldMap_Exit(OverlayManager *man, int *state) {
             SysTask_CreateOnMainQueue(Task_AntipiracyRandom, NULL, 7845);
         }
 
-        sub_0205E4C8(fieldSystem->mapObjectManager);
+        MapObjectManager_PauseAllDraw(fieldSystem->mapObjectManager);
         MapObjectManager_FreeRender(fieldSystem->mapObjectManager);
 
-        sub_0205F55C(fieldSystem->mapObjectManager);
+        MapObjectManager_SuspendMovement(fieldSystem->mapObjectManager);
         FieldEffectManager_Free(fieldSystem->fieldEffectManager);
 
         FollowMon_MarkForRecreate(fieldSystem);
@@ -401,7 +401,7 @@ static BOOL FieldMap_ChangeZone(FieldSystem *fieldSystem) {
     Field_InitMapEvents(fieldSystem, newMapID);
     FieldSystem_InitMapOnEnter(fieldSystem, TRUE);
 
-    sub_0205E104(fieldSystem->mapObjectManager, oldMapID, newMapID, Field_GetNumObjectEvents(fieldSystem), (ObjectEvent *)Field_GetObjectEvents(fieldSystem));
+    MapObjectManager_RemoveObjectsNotOnMap(fieldSystem->mapObjectManager, oldMapID, newMapID, Field_GetNumObjectEvents(fieldSystem), (ObjectEvent *)Field_GetObjectEvents(fieldSystem));
 
     FieldBGM_TryFadeOut(fieldSystem, FieldBGM_GetEffective(fieldSystem, fieldSystem->location->mapId), 1);
     Field_InitMapObjectsFromZoneEventData(fieldSystem);
@@ -730,7 +730,7 @@ static void FieldMap_InitFieldEffectsAndObjects(FieldSystem *fieldSystem) {
     if (fieldSystem->unkAC != 0) {
         sub_0205E580(fieldSystem->mapObjectManager);
     } else {
-        sub_0205E520(fieldSystem->mapObjectManager);
+        MapObjectManager_ResumeAllDraw(fieldSystem->mapObjectManager);
         FollowMon_RecreateForMap(fieldSystem);
     }
 
@@ -739,7 +739,7 @@ static void FieldMap_InitFieldEffectsAndObjects(FieldSystem *fieldSystem) {
     if (fieldSystem->unkAC != 0) {
         MapObjectManager_ClearFlagsBits(fieldSystem->mapObjectManager, MAPOBJECTFLAG_SINGLE_MOVEMENT);
     } else {
-        sub_0205F568(fieldSystem->mapObjectManager);
+        MapObjectManager_ResumeMovement(fieldSystem->mapObjectManager);
     }
 
     MapLoadManager_TrackTarget(PlayerAvatar_GetPositionVector(fieldSystem->playerAvatar), fieldSystem->mapLoadManager);

@@ -34,7 +34,7 @@
 #include "system.h"
 #include "text.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "oam_manager.h"
 #include "swap_3d_buffers.h"
 #include "wireless_status_icon.h"
@@ -2191,13 +2191,13 @@ void VisitorProfilesHourSprites_Init(VisitorProfilesHourSprites *hourSprites, Vi
     template.whichScreen = NNS_G2D_VRAM_TYPE_2DSUB;
     hourSprites->resources[0][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], gfx->narc, 20, FALSE, 0, NNS_G2D_VRAM_TYPE_2DSUB, 12, heapID);
     GF_ASSERT(SpriteTransfer_CreatePlttTransferTask(hourSprites->resources[0][GF_GFX_RES_TYPE_PLTT]));
-    sub_0200A740(hourSprites->resources[0][GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(hourSprites->resources[0][GF_GFX_RES_TYPE_PLTT]);
     for (i = 0; i < VISITOR_PROFILES_NUM_HOUR_SPRITES; i++) {
         hourSprites->resources[i][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], gfx->narc, 21 + i * 3, FALSE, i, NNS_G2D_VRAM_TYPE_2DSUB, heapID);
         hourSprites->resources[i][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], gfx->narc, 22 + i * 3, FALSE, i, GF_GFX_RES_TYPE_CELL, heapID);
         hourSprites->resources[i][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], gfx->narc, 23 + i * 3, FALSE, i, GF_GFX_RES_TYPE_ANIM, heapID);
         GF_ASSERT(SpriteTransfer_CreateCharTransferTask_AllocAtEnd(hourSprites->resources[i][GF_GFX_RES_TYPE_CHAR]));
-        sub_0200A740(hourSprites->resources[i][GF_GFX_RES_TYPE_CHAR]);
+        GF2DGfxResObj_FreeData(hourSprites->resources[i][GF_GFX_RES_TYPE_CHAR]);
         CreateSpriteResourcesHeader(&header, i, 0, i, i, -1, -1, 0, 1, gfx->resMan[GF_GFX_RES_TYPE_CHAR], gfx->resMan[GF_GFX_RES_TYPE_PLTT], gfx->resMan[GF_GFX_RES_TYPE_CELL], gfx->resMan[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
         hourSprites->sprites[i] = Sprite_Create(&template);
         Sprite_SetAnimActiveFlag(hourSprites->sprites[i], TRUE);

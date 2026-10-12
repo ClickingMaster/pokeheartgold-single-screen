@@ -12,7 +12,7 @@
 #include "player_data.h"
 #include "pokemon.h"
 #include "pokemon_icon_idx.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 
 // text.h declares these with a u8 font id; the code was compiled against these.
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);

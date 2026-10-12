@@ -17,7 +17,7 @@
 .public AddCharResObjFromOpenNarcWithAtEndFlag
 .public AddPlttResObjFromOpenNarc
 .public AddCellOrAnimResObjFromOpenNarc
-.public sub_0200A740
+.public GF2DGfxResObj_FreeData
 .public DestroySingle2DGfxResObj
 .public SpriteTransfer_CreateCharTransferTask_AllocAtEnd
 .public SpriteTransfer_DeleteCharTransferTask

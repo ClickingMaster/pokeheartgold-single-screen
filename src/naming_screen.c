@@ -1068,7 +1068,7 @@ static void NamingScreen_LoadObjGfx(NamingScreenAppData *data, NARC *narc) {
     if (data->type == NAME_SCREEN_POKEMON) {
         data->monIconCharDaraRaw = GfGfxLoader_GetCharData(NARC_poketool_icongra_poke_icon, GetMonIconNaixEx(data->playerGenderOrMonSpecies, FALSE, data->monForm), FALSE, &data->monIconCharData, HEAP_ID_NAMING_SCREEN);
         DC_FlushRange(data->monIconCharData, 0x200);
-        data->plttDataRaw = GfGfxLoader_GetPlttData(NARC_poketool_icongra_poke_icon, sub_02074490(), &data->plttData, HEAP_ID_NAMING_SCREEN);
+        data->plttDataRaw = GfGfxLoader_GetPlttData(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), &data->plttData, HEAP_ID_NAMING_SCREEN);
         DC_FlushRange(data->plttData, 0x80);
     }
 

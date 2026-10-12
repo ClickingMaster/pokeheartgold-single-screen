@@ -11,8 +11,8 @@
 
 // Defined elsewhere without a header yet.
 void MapObject_ExecuteMovementCommand(LocalMapObject *object);
-void sub_02063A14(LocalMapObject *object);
-BOOL sub_02063A1C(LocalMapObject *object);
+void MapObject_InitTypeBehavior(LocalMapObject *object);
+BOOL MapObject_UpdateTypeBehavior(LocalMapObject *object);
 const MapObjectEffectFlags *MapObject_GetEffectFlags(LocalMapObject *object);
 u32 ov01_022056C4(LocalMapObject *object, u32 direction);
 void Reflection_Spawn(LocalMapObject *object, int kind);
@@ -31,27 +31,27 @@ void FieldShadow_CreateMapObjectShadow(LocalMapObject *object);
 void ov01_021FD684(LocalMapObject *object);
 void GroundDust_Spawn(LocalMapObject *object);
 
-void sub_0205FD20(LocalMapObject *object) {
-    sub_0205F41C(object);
-    sub_02063A14(object);
+void MapObject_CallMovementAndBehaviorInit(LocalMapObject *object) {
+    MapObject_CallMovementInit(object);
+    MapObject_InitTypeBehavior(object);
 }
 
-void sub_0205FD30(LocalMapObject *object) {
-    if (sub_0205F5E8(object, MAPOBJECTFLAG_SINGLE_MOVEMENT) == 0) {
-        sub_0205FE0C(object);
-        sub_0205FE24(object);
-        sub_0205FE48(object);
+void MapObject_UpdateMovement(LocalMapObject *object) {
+    if (MapObject_GetManagerFlagsBitsMask(object, MAPOBJECTFLAG_SINGLE_MOVEMENT) == 0) {
+        MapObject_UpdateHeightIfFlagged(object);
+        MapObject_RestartIfBehaviorsLoaded(object);
+        MapObject_UpdateEffectsBeforeMovement(object);
         if (MapObject_GetFlagsBitsMask(object, MAPOBJECTFLAG_UNK4)) {
             MapObject_ExecuteMovementCommand(object);
-        } else if (!MapObject_CheckMovementPaused(object) && sub_0205FD98(object) == 1 && !sub_02063A1C(object)) {
-            sub_0205F430(object);
+        } else if (!MapObject_CheckMovementPaused(object) && MapObject_CanUpdateMovement(object) == 1 && !MapObject_UpdateTypeBehavior(object)) {
+            MapObject_CallMovementUpdate(object);
         }
-        sub_0205FE6C(object);
-        sub_0205FEA4(object);
+        MapObject_UpdateEffectsAfterMovement(object);
+        MapObject_UpdateEffectsAtStepEnd(object);
     }
 }
 
-BOOL sub_0205FD98(LocalMapObject *object) {
+BOOL MapObject_CanUpdateMovement(LocalMapObject *object) {
     u32 flags;
     if (MapObject_CheckSingleMovement(object) == 1) {
         return 1;
@@ -75,39 +75,39 @@ BOOL sub_0205FD98(LocalMapObject *object) {
     return 1;
 }
 
-void sub_0205FE0C(LocalMapObject *object) {
+void MapObject_UpdateHeightIfFlagged(LocalMapObject *object) {
     if (MapObject_GetFlagsBitsMask(object, MAPOBJECTFLAG_UNK12)) {
         MapObject_UpdateHeight(object);
     }
 }
 
-void sub_0205FE24(LocalMapObject *object) {
+void MapObject_RestartIfBehaviorsLoaded(LocalMapObject *object) {
     if (MapObject_GetFlagsBitsMask(object, MAPOBJECTFLAG_UNK11) && MapObject_UpdateMetatileBehaviors(object) == 1) {
         MapObject_SetStartMovement(object);
     }
 }
 
-void sub_0205FE48(LocalMapObject *object) {
+void MapObject_UpdateEffectsBeforeMovement(LocalMapObject *object) {
     if (MapObject_GetFlagsBitsMask(object, MAPOBJECTFLAG_START_MOVEMENT)) {
-        sub_0205FEDC(object);
+        MapObject_SpawnStartEffects(object);
     }
     MapObject_ClearFlagsBits(object, (MapObjectFlagBits)(MAPOBJECTFLAG_START_MOVEMENT | MAPOBJECTFLAG_UNK16));
 }
 
-void sub_0205FE6C(LocalMapObject *object) {
+void MapObject_UpdateEffectsAfterMovement(LocalMapObject *object) {
     if (MapObject_GetFlagsBitsMask(object, MAPOBJECTFLAG_UNK16)) {
         sub_02060020(object);
     } else if (MapObject_GetFlagsBitsMask(object, MAPOBJECTFLAG_START_MOVEMENT)) {
-        sub_0205FF6C(object);
+        MapObject_SpawnStepStartEffects(object);
     }
     MapObject_ClearFlagsBits(object, (MapObjectFlagBits)(MAPOBJECTFLAG_START_MOVEMENT | MAPOBJECTFLAG_UNK16));
 }
 
-void sub_0205FEA4(LocalMapObject *object) {
+void MapObject_UpdateEffectsAtStepEnd(LocalMapObject *object) {
     if (MapObject_GetFlagsBitsMask(object, MAPOBJECTFLAG_UNK17)) {
         sub_02060114(object);
     } else if (MapObject_GetFlagsBitsMask(object, MAPOBJECTFLAG_END_MOVEMENT)) {
-        sub_0206008C(object);
+        MapObject_SpawnStepEndEffects(object);
     }
     MapObject_ClearFlagsBits(object, (MapObjectFlagBits)(MAPOBJECTFLAG_END_MOVEMENT | MAPOBJECTFLAG_UNK17));
 }
@@ -118,41 +118,41 @@ const s32 gDirectionDeltaX[4] = { 0, 0, -1, 1 };
 const s32 gDirectionDeltaY[4] = { -1, 1, 0, 0 };
 const s32 gOppositeDirections[4] = { 1, 0, 3, 2 };
 
-void sub_0205FEDC(LocalMapObject *object) {
+void MapObject_SpawnStartEffects(LocalMapObject *object) {
     u8 previous;
     u8 current;
     const MapObjectEffectFlags *effect;
     MapObject_UpdateMetatileBehaviors(object);
-    if (sub_0205F73C(object) == 1) {
-        previous = sub_0205F504(object);
-        current = sub_0205F514(object);
+    if (MapObject_IsDrawInitialized(object) == 1) {
+        previous = MapObject_GetCurrentMetatileBehavior(object);
+        current = MapObject_GetPreviousMetatileBehavior(object);
         effect = MapObject_GetEffectFlags(object);
         sub_02060AB8(object, previous, current, effect);
-        sub_020601BC(object, previous, current, effect);
+        MapObject_SpawnTallGrassStanding(object, previous, current, effect);
         MapObject_UpdateShallowWaterRipple(object, previous, current, effect);
         sub_020603DC(object, previous, current, effect);
         sub_020601A4(object, previous, current, effect);
-        sub_02060698(object, previous, current, effect);
+        MapObject_SpawnVeryTallGrassStanding(object, previous, current, effect);
         sub_02060700(object, previous, current, effect);
         MapObject_CreateReflection(object, previous, current, effect);
     }
 }
 
-void sub_0205FF6C(LocalMapObject *object) {
+void MapObject_SpawnStepStartEffects(LocalMapObject *object) {
     u8 previous;
     u8 current;
     const MapObjectEffectFlags *effect;
     MapObject_UpdateMetatileBehaviors(object);
-    if (sub_0205F73C(object) == 1) {
-        previous = sub_0205F504(object);
-        current = sub_0205F514(object);
+    if (MapObject_IsDrawInitialized(object) == 1) {
+        previous = MapObject_GetCurrentMetatileBehavior(object);
+        current = MapObject_GetPreviousMetatileBehavior(object);
         effect = MapObject_GetEffectFlags(object);
         sub_02060AB8(object, previous, current, effect);
-        sub_02060274(object, previous, current, effect);
+        MapObject_SpawnTallGrassOnStep(object, previous, current, effect);
         MapObject_SpawnFootprints(object, previous, current, effect);
         MapObject_UpdateShallowWaterRipple(object, previous, current, effect);
-        sub_020603F8(object, previous, current, effect);
-        sub_020606CC(object, previous, current, effect);
+        MapObject_CreateShadow(object, previous, current, effect);
+        MapObject_SpawnVeryTallGrassOnStep(object, previous, current, effect);
         sub_02060704(object, previous, current, effect);
         MapObject_SpawnPuddleSplashAtPrevious(object, previous, current, effect);
         MapObject_SpawnMudSplashAtPrevious(object, previous, current, effect);
@@ -163,48 +163,48 @@ void sub_0205FF6C(LocalMapObject *object) {
 
 void sub_02060020(LocalMapObject *object) {
     MapObject_UpdateMetatileBehaviors(object);
-    if (sub_0205F73C(object) == 1) {
-        u8 previous = sub_0205F504(object);
-        u8 current = sub_0205F514(object);
+    if (MapObject_IsDrawInitialized(object) == 1) {
+        u8 previous = MapObject_GetCurrentMetatileBehavior(object);
+        u8 current = MapObject_GetPreviousMetatileBehavior(object);
         const MapObjectEffectFlags *effect = MapObject_GetEffectFlags(object);
         sub_02060AB8(object, previous, current, effect);
-        sub_020603F8(object, previous, current, effect);
+        MapObject_CreateShadow(object, previous, current, effect);
         MapObject_CreateReflection(object, previous, current, effect);
         MapObject_ResetShallowWaterRipple(object, previous, current, effect);
         sub_02060AF0(object, previous, current, effect);
     }
 }
 
-void sub_0206008C(LocalMapObject *object) {
-    u8 value = sub_0205F514(object);
+void MapObject_SpawnStepEndEffects(LocalMapObject *object) {
+    u8 value = MapObject_GetPreviousMetatileBehavior(object);
     sub_0205F51C(object, value);
     MapObject_UpdateMetatileBehaviors(object);
-    if (sub_0205F73C(object) == TRUE) {
-        u8 a = sub_0205F504(object);
-        u8 b = sub_0205F514(object);
+    if (MapObject_IsDrawInitialized(object) == TRUE) {
+        u8 a = MapObject_GetCurrentMetatileBehavior(object);
+        u8 b = MapObject_GetPreviousMetatileBehavior(object);
         const MapObjectEffectFlags *effect = MapObject_GetEffectFlags(object);
         sub_020601A4(object, a, b, effect);
         MapObject_SpawnPuddleSplash(object, a, b, effect);
         MapObject_SpawnMudSplash(object, a, b, effect);
         MapObject_UpdateShallowWaterRipple(object, a, b, effect);
         MapObject_UpdateReflection(object, a, b, effect);
-        sub_02060530(object, a, b, effect);
+        MapObject_UpdateShadowVisibility(object, a, b, effect);
     }
 }
 
 void sub_02060114(LocalMapObject *object) {
     MapObject_UpdateMetatileBehaviors(object);
-    if (sub_0205F73C(object) == TRUE) {
-        u8 a = sub_0205F504(object);
-        u8 b = sub_0205F514(object);
+    if (MapObject_IsDrawInitialized(object) == TRUE) {
+        u8 a = MapObject_GetCurrentMetatileBehavior(object);
+        u8 b = MapObject_GetPreviousMetatileBehavior(object);
         const MapObjectEffectFlags *effect = MapObject_GetEffectFlags(object);
         sub_020601A4(object, a, b, effect);
         MapObject_SpawnPuddleSplash(object, a, b, effect);
         MapObject_SpawnMudSplash(object, a, b, effect);
         MapObject_UpdateShallowWaterRipple(object, a, b, effect);
         MapObject_UpdateReflection(object, a, b, effect);
-        sub_02060530(object, a, b, effect);
-        sub_02060274(object, a, b, effect);
+        MapObject_UpdateShadowVisibility(object, a, b, effect);
+        MapObject_SpawnTallGrassOnStep(object, a, b, effect);
         MapObject_SpawnGroundDust(object, a, b, effect);
     }
 }
@@ -214,7 +214,7 @@ void sub_020601A4(LocalMapObject *object, u8 behavior, u8 prevBehavior, const Ma
     sub_0205F9C0(object, &position);
 }
 
-void sub_020601BC(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
+void MapObject_SpawnTallGrassStanding(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
     u32 id = MapObject_GetID(object);
     int x;
     int z;
@@ -248,7 +248,7 @@ void sub_020601BC(LocalMapObject *object, u8 behavior, u8 prevBehavior, const Ma
     }
 }
 
-void sub_02060274(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
+void MapObject_SpawnTallGrassOnStep(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
     u32 id = MapObject_GetID(object);
     int x;
     int z;
@@ -296,7 +296,7 @@ void MapObject_SpawnFootprints(LocalMapObject *object, u8 behavior, u8 prevBehav
             ov01_021FE3F4(object);
         }
     }
-    if (sub_02060EA4(object, prevBehavior) == TRUE) {
+    if (MapObject_CheckSandBehavior(object, prevBehavior) == TRUE) {
         kind = flags->footprints;
         if (kind == 1) {
             Footprints_SpawnInSand(object);
@@ -327,16 +327,16 @@ void MapObject_ResetShallowWaterRipple(LocalMapObject *object, u8 behavior, u8 p
 
 void sub_020603DC(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
     u8 value = sub_0205F524(object);
-    sub_020603F8(object, behavior, value, flags);
+    MapObject_CreateShadow(object, behavior, value, flags);
 }
 
 #define IS_GROUND_EFFECT_TILE(object, behavior)                                                           \
     (MetatileBehavior_IsTallGrass(behavior) == TRUE || MetatileBehavior_IsVeryTallGrass(behavior) == TRUE \
         || sub_02060E54(object, behavior) == TRUE || MetatileBehavior_IsPuddle(behavior) == TRUE          \
-        || MetatileBehavior_IsShallowWater(behavior) == TRUE || sub_02060EBC(object, behavior) == TRUE    \
+        || MetatileBehavior_IsShallowWater(behavior) == TRUE || MapObject_CheckSnowBehavior(object, behavior) == TRUE    \
         || MetatileBehavior_IsMud(behavior) == TRUE || MetatileBehavior_IsReflective(behavior) != FALSE)
 
-void sub_020603F8(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
+void MapObject_CreateShadow(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
     u32 state;
 
     if (MapObjectManager_NotEndMovement(MapObject_GetManager(object)) == FALSE) {
@@ -354,7 +354,7 @@ void sub_020603F8(LocalMapObject *object, u8 behavior, u8 prevBehavior, const Ma
             || sub_02060E54(object, behavior) == TRUE
             || MetatileBehavior_IsPuddle(behavior) == TRUE
             || MetatileBehavior_IsShallowWater(behavior) == TRUE
-            || sub_02060EBC(object, behavior) == TRUE
+            || MapObject_CheckSnowBehavior(object, behavior) == TRUE
             || MetatileBehavior_IsMud(behavior) == TRUE
             || MetatileBehavior_IsReflective(behavior) != FALSE) {
             MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK20);
@@ -378,7 +378,7 @@ void sub_020603F8(LocalMapObject *object, u8 behavior, u8 prevBehavior, const Ma
 
 #pragma force_active on
 
-void sub_02060530(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
+void MapObject_UpdateShadowVisibility(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
     u16 previous;
     if (!MapObjectManager_NotEndMovement(MapObject_GetManager(object))) {
         return;
@@ -389,14 +389,14 @@ void sub_02060530(LocalMapObject *object, u8 behavior, u8 prevBehavior, const Ma
     if (flags->shadow == 2) {
         // called as returning a full word: the matched code narrows the result here
         previous = (u16)((u32(*)(LocalMapObject *))sub_0205F524)(object);
-        if (MetatileBehavior_IsTallGrass(behavior) == 1 || MetatileBehavior_IsVeryTallGrass(behavior) == 1 || MetatileBehavior_IsTallGrass((u8)previous) == 1 || MetatileBehavior_IsVeryTallGrass((u8)previous) == 1 || sub_02060E54(object, behavior) == 1 || MetatileBehavior_IsPuddle(behavior) == 1 || MetatileBehavior_IsShallowWater(behavior) == 1 || sub_02060EBC(object, behavior) == 1 || MetatileBehavior_IsMud(behavior) == 1 || MetatileBehavior_IsReflective(behavior)) {
+        if (MetatileBehavior_IsTallGrass(behavior) == 1 || MetatileBehavior_IsVeryTallGrass(behavior) == 1 || MetatileBehavior_IsTallGrass((u8)previous) == 1 || MetatileBehavior_IsVeryTallGrass((u8)previous) == 1 || sub_02060E54(object, behavior) == 1 || MetatileBehavior_IsPuddle(behavior) == 1 || MetatileBehavior_IsShallowWater(behavior) == 1 || MapObject_CheckSnowBehavior(object, behavior) == 1 || MetatileBehavior_IsMud(behavior) == 1 || MetatileBehavior_IsReflective(behavior)) {
             MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK20);
         } else {
             MapObject_ClearFlagsBits(object, MAPOBJECTFLAG_UNK20);
         }
         return;
     }
-    if (MetatileBehavior_IsTallGrass(behavior) == 1 || MetatileBehavior_IsVeryTallGrass(behavior) == 1 || sub_02060E54(object, behavior) == 1 || MetatileBehavior_IsPuddle(behavior) == 1 || MetatileBehavior_IsShallowWater(behavior) == 1 || sub_02060EBC(object, behavior) == 1 || MetatileBehavior_IsMud(behavior) == 1 || MetatileBehavior_IsReflective(behavior)) {
+    if (MetatileBehavior_IsTallGrass(behavior) == 1 || MetatileBehavior_IsVeryTallGrass(behavior) == 1 || sub_02060E54(object, behavior) == 1 || MetatileBehavior_IsPuddle(behavior) == 1 || MetatileBehavior_IsShallowWater(behavior) == 1 || MapObject_CheckSnowBehavior(object, behavior) == 1 || MetatileBehavior_IsMud(behavior) == 1 || MetatileBehavior_IsReflective(behavior)) {
         MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK20);
     } else {
         MapObject_ClearFlagsBits(object, MAPOBJECTFLAG_UNK20);
@@ -410,21 +410,21 @@ void MapObject_SpawnGroundDust(LocalMapObject *object, u8 behavior, u8 prevBehav
         || MetatileBehavior_IsShallowWater(behavior) == TRUE
         || MetatileBehavior_IsIce(behavior) == TRUE
         || MetatileBehavior_IsMud(behavior) == TRUE
-        || sub_02060EBC(object, behavior) == TRUE
+        || MapObject_CheckSnowBehavior(object, behavior) == TRUE
         || MapObject_CheckVisible(object) != FALSE) {
         return;
     }
     GroundDust_Spawn(object);
 }
 
-void sub_02060698(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
+void MapObject_SpawnVeryTallGrassStanding(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
     int id = MapObject_GetID(object);
     if (MetatileBehavior_IsVeryTallGrass(behavior) == 1 && (id != 0xFD || MapObject_TestFlagsBits(object, MAPOBJECTFLAG_VISIBLE) != 1)) {
         VeryTallGrass_Spawn(object, 0);
     }
 }
 
-void sub_020606CC(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
+void MapObject_SpawnVeryTallGrassOnStep(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
     int id = MapObject_GetID(object);
     if (MetatileBehavior_IsVeryTallGrass(behavior) == 1 && (id != 0xFD || MapObject_TestFlagsBits(object, MAPOBJECTFLAG_VISIBLE) != 1)) {
         VeryTallGrass_Spawn(object, 1);
@@ -653,11 +653,11 @@ u32 MapObject_CheckCollision(LocalMapObject *object, VecFx32 *position, int x, i
         result |= 2;
     }
     if (sub_0203401C(CommState_GetLinkMode())) {
-        if (sub_02060BFC(object, x, y, z) == TRUE) {
+        if (MapObject_IsTileOccupiedInLink(object, x, y, z) == TRUE) {
             result |= 4;
         }
     } else {
-        if (sub_02060CA8(object, x, y, z) == TRUE) {
+        if (MapObject_IsTileOccupied(object, x, y, z) == TRUE) {
             result |= 4;
         }
     }

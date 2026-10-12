@@ -59,7 +59,7 @@ void PokedexApp_LoadSizeCheckResources(PokedexAppData *pokedexApp) {
 
     PokedexApp_LoadMonIconResources(pokedexApp, 1);
     SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 76, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC551);
-    palette = sub_02074490();
+    palette = GetMonIconPlttNaix();
     SpriteSystem_LoadPaletteBufferFromOpenNarc(pokedexApp->paletteData, PLTTBUF_SUB_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->iconNarc, palette, FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, 0xC551);
     SpriteSystem_LoadCellResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 106, TRUE, 0xC55A);
     SpriteSystem_LoadAnimResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 107, TRUE, 0xC55A);

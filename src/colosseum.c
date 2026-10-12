@@ -188,7 +188,7 @@ BOOL Task_ColosseumEntry(TaskManager *taskManager) {
     case 3:
         if (LinkSync_IsSynced(93)) {
             entry->state = 7;
-            sub_0205F55C(entry->fieldSystem->mapObjectManager);
+            MapObjectManager_SuspendMovement(entry->fieldSystem->mapObjectManager);
             entry->callback(TRUE, entry->party);
         } else if (gSystem.newKeys & PAD_BUTTON_B) {
             entry->state = 4;
@@ -199,7 +199,7 @@ BOOL Task_ColosseumEntry(TaskManager *taskManager) {
     case 4:
         if (LinkSync_IsSynced(93)) {
             entry->state = 7;
-            sub_0205F55C(entry->fieldSystem->mapObjectManager);
+            MapObjectManager_SuspendMovement(entry->fieldSystem->mapObjectManager);
             entry->callback(TRUE, entry->party);
         }
 
@@ -632,7 +632,7 @@ ColosseumEntry *Colosseum_GetEntry(FieldSystem *fieldSystem) {
 void Colosseum_PackMixBattleMons(ColosseumEntry *entry, BOOL ready) {
     Party *party = SaveArray_Party_Get(entry->fieldSystem->saveData);
     u8 *buffer = entry->sentMons;
-    u32 size = sub_02070D90();
+    u32 size = Pokemon_sizeof();
     int i;
     *(BOOL *)(buffer + size * COLOSSEUM_MIX_BATTLE_MONS) = ready;
     if (*(BOOL *)(buffer + size * COLOSSEUM_MIX_BATTLE_MONS)) {
@@ -672,7 +672,7 @@ BOOL Colosseum_MixBattleMonsExchanged(ColosseumEntry *entry) {
 }
 
 BOOL Colosseum_OpponentIsReady(ColosseumEntry *entry) {
-    u32 size = sub_02070D90();
+    u32 size = Pokemon_sizeof();
     return *(BOOL *)(entry->receivedMons + size * COLOSSEUM_MIX_BATTLE_MONS);
 }
 
@@ -694,7 +694,7 @@ BOOL Colosseum_MixBattleChoicesExchanged(ColosseumEntry *entry) {
 }
 
 void Colosseum_SetOpponentParty(ColosseumEntry *entry) {
-    u32 size = sub_02070D90();
+    u32 size = Pokemon_sizeof();
     int i;
     Party_InitWithMaxSize(entry->party, COLOSSEUM_MIX_BATTLE_MONS);
     for (i = 0; i < COLOSSEUM_MIX_BATTLE_MONS; i++) {
@@ -704,7 +704,7 @@ void Colosseum_SetOpponentParty(ColosseumEntry *entry) {
 
 // Our Pokemon the opponent picked is replaced with the one we picked from theirs.
 void Colosseum_ExchangeMixBattleMons(ColosseumEntry *entry) {
-    u32 size = sub_02070D90();
+    u32 size = Pokemon_sizeof();
     u8 choice = entry->choice;
     u8 opponentChoice = entry->opponentChoice;
     int i;
@@ -724,7 +724,7 @@ void Colosseum_ShowOpponentMons(ColosseumEntry *entry, int cursor) {
     int i, offset, y;
     if (!WindowIsInUse(window)) {
         speciesNames = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0237_bin, HEAP_ID_FIELD1);
-        monSize = sub_02070D90();
+        monSize = Pokemon_sizeof();
         AddWindowParameterized(entry->fieldSystem->bgConfig, window, GF_BG_LYR_MAIN_3, 21, 9, 10, 8, 13, 10);
         LoadUserFrameGfx1(entry->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 1, 11, 0, HEAP_ID_FIELD1);
         FillWindowPixelBuffer(window, 15);
@@ -819,7 +819,7 @@ void Colosseum_RecvMixBattleMons(int netId, int size, void *data, FieldSystem *f
 }
 
 u32 Colosseum_GetMixBattleMonsSize(void) {
-    u32 size = sub_02070D90();
+    u32 size = Pokemon_sizeof();
     return size * COLOSSEUM_MIX_BATTLE_MONS + 4;
 }
 

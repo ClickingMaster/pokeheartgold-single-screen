@@ -17,7 +17,7 @@
 #include "touchscreen_list_menu.h"
 #include "trade_anim.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "unk_0203170C.h"
 #include "evolution_scene.h"
 #include "unk_02088288.h"

@@ -20,7 +20,7 @@
 #include "sys_task_api.h"
 #include "touch_hitbox_controller.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "vram_transfer_manager.h"
 #include "wifi_plaza_camera.h"
 #include "wifi_plaza_instrument.h"

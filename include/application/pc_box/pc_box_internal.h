@@ -156,7 +156,7 @@ typedef struct PCBoxMenuEntry {
 // Text drawn as sprites (the tray / wallpaper menu titles).
 typedef struct PCBoxTextObj {
     TextOBJ *textObj;
-    UnkStruct_02021AC8 charTransfer;
+    ObjCharSpaceReservation charTransfer;
 } PCBoxTextObj;
 
 // Graphics, text and input state of the app (heap 10, PCBoxWork.view).

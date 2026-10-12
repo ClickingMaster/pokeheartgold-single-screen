@@ -48,7 +48,7 @@ u32 FrontierCard_GetRegion(FrontierCard *card);
 String *FrontierCard_GetGreeting(FrontierCard *card, MailMessage *message, enum HeapID heapId);
 u32 FrontierCard_GetBirthdayMonth(FrontierCard *card);
 u32 FrontierCard_GetAvatar(FrontierCard *card);
-u8 sub_02070438(u16 species, u8 form);
+u8 SanitizeMonForm(u16 species, u8 form);
 
 FrontierCard *FrontierCard_New(enum HeapID heapId) {
     FrontierCard *ret = Heap_Alloc(heapId, sizeof(FrontierCard));
@@ -117,7 +117,7 @@ u32 sub_020315F0(FrontierCard *card) {
     if (card->species >= 495) {
         return 0;
     }
-    return sub_02070438(card->species, card->form);
+    return SanitizeMonForm(card->species, card->form);
 }
 
 u32 FrontierCard_IsEgg(FrontierCard *card) {

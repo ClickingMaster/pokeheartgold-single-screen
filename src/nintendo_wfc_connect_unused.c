@@ -35,7 +35,7 @@
 #include "system.h"
 #include "text.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "unk_0203170C.h"
 #include "comm_wireless.h"
 #include "wireless_status_icon.h"

@@ -8,10 +8,10 @@
 .public PlayerAvatar_GetFacingDirection
 .public PlayerAvatar_GetMapObject
 .public MapObject_GetPriorityPlusValue
-.public sub_0205F0A8
+.public MapObject_CheckIDAndMap
 .public MapObject_GetID
 .public MapObject_GetMapID
-.public sub_0205F504
+.public MapObject_GetCurrentMetatileBehavior
 .public MapObject_GetXCoord
 .public MapObject_GetZCoord
 .public MapObject_CopyPositionVector

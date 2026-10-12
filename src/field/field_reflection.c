@@ -34,7 +34,7 @@
 
 // Puts position->y on the ground of the tile at position->x/z; FALSE while that tile has no ground yet.
 // (unk_0205FD20.h declares it returning void.)
-BOOL sub_0206121C(FieldSystem *fieldSystem, VecFx32 *position);
+BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 // A billboard record (struct FieldEffectRecord, 40 bytes) whose first word is the billboard resource.
 typedef struct ReflectionRecord {
@@ -140,7 +140,7 @@ static inline void Reflection_SpawnWithTemplate(LocalMapObject *mapObject, int k
 }
 
 static inline BOOL ReflectionEffect_IsObjectGone(ReflectionEffect *work, LocalMapObject *mapObject) {
-    return work->spriteId != MapObject_GetSpriteID(mapObject) || !sub_0205F0A8(mapObject, work->objectId, work->mapId) || !MapObject_CheckFlag24(mapObject);
+    return work->spriteId != MapObject_GetSpriteID(mapObject) || !MapObject_CheckIDAndMap(mapObject, work->objectId, work->mapId) || !MapObject_CheckFlag24(mapObject);
 }
 
 Reflection *Reflection_New(FieldEffectManager *manager) {
@@ -286,7 +286,7 @@ void ReflectionEffect_CalcPosition(ReflectionEffect *work, LocalMapObject *mapOb
         yOffset = 0;
     }
     MapObject_CopyPositionVector(mapObject, position);
-    onGround = sub_0206121C(work->args.fieldSystem, position);
+    onGround = FieldSystem_SnapToTerrainHeight(work->args.fieldSystem, position);
     position->x += xOffset;
     position->z += zOffset - 7 * FX32_ONE;
     if (onGround == FALSE) {
@@ -329,7 +329,7 @@ void BillboardReflectionEffect_CalcPosition(BillboardReflectionEffect *work, Vec
     ReflectionDepths depths = sReflectionDepths;
     BOOL onGround;
     *position = work->position;
-    onGround = sub_0206121C(work->args.fieldSystem, position);
+    onGround = FieldSystem_SnapToTerrainHeight(work->args.fieldSystem, position);
     position->z -= 7 * FX32_ONE;
     if (onGround == FALSE) {
         position->y = 0;

@@ -93,11 +93,11 @@ int VsRecorder_WriteRecord(SaveData *saveData, int index) {
     *(u16 *)(gBattleRecord->header + RECORD_HEADER_CRC) = SaveArray_CalcCRC16(saveData, gBattleRecord->header, RECORD_HEADER_CRC_LEN);
     crc = *(u16 *)(gBattleRecord->data + RECORD_DATA_CRC);
     BattleRecord_Encrypt(gBattleRecord->data, RECORD_DATA_CRC, crc + (((u32)(crc ^ 0xFFFF)) << 16));
-    sub_0201A728(8);
+    Sys_SetSoftResetDisableFlag(8);
     result = sub_02027134(saveData, gBattleRecord, index);
     if (result == 2) {
         result = SaveGameNormal(saveData);
     }
-    sub_0201A738(8);
+    Sys_ClearSoftResetDisableFlag(8);
     return result;
 }

@@ -1322,7 +1322,7 @@ void PositionToTile(fx32 x, fx32 z, int *tileX, int *tileZ) {
 void MapLoadManager_End(MapLoadManager *mapLoadManager) {
     u8 i;
 
-    sub_0201A430();
+    FreeFileCache();
     NNS_GfdResetLnkTexVramState();
     NNS_GfdResetLnkPlttVramState();
     for (i = 0; i < 2; i++) {

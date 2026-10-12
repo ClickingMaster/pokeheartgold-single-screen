@@ -1,9 +1,9 @@
 #include <nitro/fs/overlay.h>
 #pragma once
-.public sub_0205FCB4
-.public sub_0205FCB8
-.public sub_0205FCBC
-.public sub_0205FCC0
+.public MapObjectMovement_NoOpInit
+.public MapObjectMovement_NoOpUpdate
+.public MapObjectMovement_NoOpDelete
+.public MapObjectMovement_NoOpRestore
 .public sub_020612B4
 .public sub_020612C0
 .public sub_020612CC
@@ -15,8 +15,8 @@
 .public sub_02061314
 .public sub_02061320
 .public sub_0206132C
-.public sub_02061338
-.public sub_0206139C
+.public RandomLookMovement_Update
+.public RandomLookMovement_Delete
 .public sub_020613A0
 .public sub_020613B0
 .public sub_020613C0
@@ -75,7 +75,7 @@
 .public HiddenObjectMovement_Delete
 .public HiddenObjectMovement_Resume
 .public _020FD198
-.public _020FD1F4
+.public gMapObjectMovementCallbacks
 .public gMovementCmdTable
 .public gMovementCmdSteps_001
 .public gMovementCmdSteps_003

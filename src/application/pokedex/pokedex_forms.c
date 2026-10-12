@@ -10,7 +10,7 @@
 #include "pokedex.h"
 #include "pokemon.h"
 #include "sprite_system.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 
 extern const ManagedSpriteTemplate ov18_021FAC28[];
 extern const u16 ov18_021FA348[];

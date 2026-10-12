@@ -108,7 +108,7 @@ void UnionChatMarkerEffect_Destroy(FieldEffect *effect, UnionChatMarkerEffect *w
 }
 
 void UnionChatMarkerEffect_Update(FieldEffect *effect, UnionChatMarkerEffect *work) {
-    if (!sub_0205F0A8(work->args.mapObject, work->objectId, work->mapId)) {
+    if (!MapObject_CheckIDAndMap(work->args.mapObject, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
     }
 }
@@ -118,7 +118,7 @@ void UnionChatMarkerEffect_Draw(FieldEffect *effect, UnionChatMarkerEffect *work
     VecFx32 position;
     VecFx32 facing;
 
-    if (!sub_0205F0A8(mapObject, work->objectId, work->mapId)) {
+    if (!MapObject_CheckIDAndMap(mapObject, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }

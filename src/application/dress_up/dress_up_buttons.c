@@ -18,7 +18,7 @@
 #include "touch_hitbox_controller.h"
 #include "touchscreen.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 // Button panel of the Dress-Up editor: next / previous page, the accessory and backdrop tabs (a radio pair) and
 // DONE (a text button), driven by touch or by the keys.
@@ -132,7 +132,7 @@ void DressUpButtonPanel_Destroy(DressUpButtonPanel *panel, DressUpGfx *gfx) {
             button++;
         } while (i < 4);
     }
-    sub_02021B5C(&panel->done.charAlloc);
+    ObjCharTransfer_FreeCharSpace(&panel->done.charAlloc);
     DressUpButton_DeleteWithText(&panel->done);
     FontSystem_Delete(panel->fontSystem);
     TouchHitboxController_Destroy(panel->controller);
@@ -318,7 +318,7 @@ void DressUpButton_CreateTextSprite(DressUpTextButton *button, int resId, DressU
     template.x = 0;
     template.y = 19;
     template.plttProxy = SpriteTransfer_GetPaletteProxy(SpriteResourceCollection_Find(gfx->plttResMan, 1), NULL);
-    GF_ASSERT(sub_02021AC8(FontOAM_GetCharSize(label, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_13), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &button->charAlloc));
+    GF_ASSERT(ObjCharTransfer_ReserveCharSpace(FontOAM_GetCharSize(label, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_13), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &button->charAlloc));
     template.charOffset = button->charAlloc.offset;
     DressUpButton_InitWithText(button, &template);
 }

@@ -11,7 +11,7 @@
 .public GF_GetCurrentPlayingBGM
 .public Sound_SetScene
 .public Sound_SetSceneAndPlayBGM
-.public sub_020053A8
+.public Sound_SetPlayerPause
 .public GF_SndSetTrackPitchBySeqNo
 .public GF_SndSetTrackPitchByPlayerNo
 .public sub_02005B78
@@ -30,7 +30,7 @@
 .public IsCryFinished
 .public PlayFanfare
 .public IsFanfarePlaying
-.public sub_02006E3C
+.public Chatot_SetForceDefaultCry
 .public UnloadOverlayByID
 .public HandleLoadOverlay
 .public OverlayManager_New
@@ -65,7 +65,7 @@
 .public AddCharResObjFromNarc
 .public AddPlttResObjFromNarc
 .public AddCellOrAnimResObjFromNarc
-.public sub_0200A740
+.public GF2DGfxResObj_FreeData
 .public GF2DGfxResObj_GetCharDataPtr
 .public SpriteTransfer_CreateCharTransferTask_AllocAtEnd
 .public SpriteTransfer_DeleteCharTransferTask
@@ -221,8 +221,8 @@
 .public ObjCharTransfer_InitEx
 .public ObjCharTransfer_Destroy
 .public ObjCharTransfer_ClearBuffers
-.public sub_02021AC8
-.public sub_02021B5C
+.public ObjCharTransfer_ReserveCharSpace
+.public ObjCharTransfer_FreeCharSpace
 .public ObjPlttTransfer_Init
 .public ObjPlttTransfer_Destroy
 .public ObjPlttTransfer_Reset
@@ -335,7 +335,7 @@
 .public GetMonPicHeightBySpeciesGenderForm
 .public GetMonIconNaixEx
 .public GetMonIconPaletteEx
-.public sub_02074490
+.public GetMonIconPlttNaix
 .public NNS_G2dGetUnpackedBGCharacterData
 .public NNS_G2dGetAnimCtrlCurrentElement
 .public NNS_G2dInitOamManagerModule

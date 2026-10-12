@@ -35,16 +35,16 @@
 .public MapObject_GetFacingDirection
 .public MapObject_SetOrQueueFacing
 .public MapObject_GetParam
-.public sub_0205F328
-.public sub_0205F330
-.public sub_0205F394
-.public sub_0205F398
-.public sub_0205F3BC
-.public sub_0205F3C0
-.public sub_0205F3E4
-.public sub_0205F3E8
-.public sub_0205F40C
-.public sub_0205F484
+.public MapObject_SetAnimation
+.public MapObject_GetAnimation
+.public MapObject_GetMovementData
+.public MapObject_InitBehaviorData
+.public MapObject_GetBehaviorData
+.public MapObject_InitMovementCmdData
+.public MapObject_GetMovementCmdData
+.public MapObject_InitDrawData
+.public MapObject_GetDrawData
+.public MapObject_CallDrawUpdate
 .public MapObject_IncrementMovementStep
 .public MapObject_GetFieldSystem
 .public MapObject_CheckSingleMovement
@@ -62,15 +62,15 @@
 .public MapObject_CopyPositionVector
 .public MapObject_SetPositionVector
 .public MapObject_SetFacingVector
-.public sub_0205F9A0
-.public sub_0205FC94
+.public MapObject_SetDrawOffset
+.public MapObject_ChangeMovement
 .public MapObject_CheckCollisionAt
 .public GetDeltaXByFacingDirection
 .public GetDeltaYByFacingDirection
 .public MapObject_SetPreviousCoordsToCurrent
 .public MapObject_UpdateHeight
 .public GetDirectionTowards
-.public sub_02061248
+.public FieldSystem_SnapToTerrainHeightEx
 .public MapObject_AreBitsSetForMovementScriptInit
 .public MapObject_SetHeldMovement
 .public MapObject_ForceSetHeldMovement
@@ -108,8 +108,8 @@
 .public MapObjectMovementCmd111_Step16
 .public MapObjectMovementCmd111_Step18
 .public MapObjectMovementCmd112_Step0
-.public sub_02063A14
-.public sub_02063A1C
+.public MapObject_InitTypeBehavior
+.public MapObject_UpdateTypeBehavior
 .public ApricornTreeObject_Init
 .public ApricornTreeObject_Update
 .public ApricornTreeObject_Delete
@@ -146,14 +146,14 @@
 .public ov01_02207274
 
 	.public MapObject_StartJumpByOffsetMovement
-	.public sub_02063A40
-	.public sub_02063A5C
-	.public sub_02063A78
+	.public MapObject_CallTypeBehaviorInit
+	.public MapObject_CallTypeBehaviorCheck
+	.public MapObject_CallTypeBehaviorUpdate
 	.public MapObject_IsOffPreviousTile
 	.public MapObject_IsOnPreviousTile
-	.public sub_02063AFC
-	.public sub_02063B00
-	.public sub_02063B04
+	.public TypeBehavior_NoOpInit
+	.public TypeBehavior_NoOpCheck
+	.public TypeBehavior_NoOpUpdate
 	.public sub_02063B08
 	.public sub_02063B20
 	.public sub_02063B9C
@@ -198,8 +198,8 @@
 	.public _020FE0C4
 	.public _020FE0D4
 	.public _020FE0E4
-	.public _020FE104
-	.public _020FE134
-	.public _020FE164
+	.public gMapObjectTypeBehaviorInits
+	.public gMapObjectTypeBehaviorChecks
+	.public gMapObjectTypeBehaviorUpdates
 	.public _020FE194
 	.public _020FE1A4

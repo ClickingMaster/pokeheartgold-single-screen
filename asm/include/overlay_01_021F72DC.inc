@@ -19,11 +19,11 @@
 .public MapObject_GetSpriteID
 .public MapObject_SetFacingDirectionDirect
 .public MapObject_GetFacingDirection
-.public sub_0205F330
+.public MapObject_GetAnimation
 .public MapObject_GetManager
-.public sub_0205F3E8
-.public sub_0205F40C
-.public sub_0205F484
+.public MapObject_InitDrawData
+.public MapObject_GetDrawData
+.public MapObject_CallDrawUpdate
 .public MapObject_SetPreviousX
 .public MapObject_SetPreviousY
 .public MapObject_SetPreviousZ
@@ -35,7 +35,7 @@
 .public MapObject_CopyFacingVector
 .public MapObject_SetFacingVector
 .public MapObject_GetFacingVector
-.public sub_0205FCD4
+.public MapObject_RestoreDrawUpdateCallback
 .public MapObject_ClearHeldMovement
 .public ApricornTreeObject_GetBillboard
 .public FollowMon_GetSpriteID

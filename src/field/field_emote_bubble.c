@@ -250,12 +250,12 @@ void EmoteBubbleEffect_Update(FieldEffect *effect, EmoteBubbleEffect *work) {
     VecFx32 v0;
 
     LocalMapObject *mapObject = work->args.mapObject;
-    if (!sub_0205F0A8(mapObject, work->objectId, work->mapId)) {
+    if (!MapObject_CheckIDAndMap(mapObject, work->objectId, work->mapId)) {
         GF_AssertFail();
     }
     MapObject_CopyPositionVector(mapObject, &position);
     MapObject_CopyFacingVector(mapObject, &facing);
-    sub_0205F990(mapObject, &v1);
+    MapObject_CopyDrawOffset(mapObject, &v1);
     sub_0205F9B0(mapObject, &v0);
     result.x = v0.x + (v1.x + (position.x + facing.x));
     result.y = v0.y + (position.y + v1.y);

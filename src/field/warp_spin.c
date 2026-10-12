@@ -53,9 +53,9 @@ void Task_WarpSpinDeparture(SysTask *sysTask, WarpSpinTask *task) {
     if (task->counter % 2 != 0) {
         WarpSpin_RotatePlayer(task);
     }
-    sub_0205F990(mapObject, &pos);
+    MapObject_CopyDrawOffset(mapObject, &pos);
     pos.y = WARP_SPIN_HEIGHT(task->counter);
-    sub_0205F9A0(mapObject, &pos);
+    MapObject_SetDrawOffset(mapObject, &pos);
     task->counter++;
     if (task->counter == WARP_SPIN_FRAMES) {
         BeginNormalPaletteFade(FADE_SUB_THEN_MAIN, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_FIELD1);
@@ -76,10 +76,10 @@ void Task_WarpSpinArrival(SysTask *sysTask, WarpSpinTask *task) {
     switch (task->state) {
     case 0:
         MapObject_UnpauseMovement(mapObject);
-        sub_0205F990(mapObject, &pos);
+        MapObject_CopyDrawOffset(mapObject, &pos);
         n = WARP_SPIN_FRAMES - task->counter;
         pos.y = WARP_SPIN_HEIGHT(n);
-        sub_0205F9A0(mapObject, &pos);
+        MapObject_SetDrawOffset(mapObject, &pos);
         MapObject_TryUpdateDraw(mapObject);
         PlaySE(SEQ_SE_DP_TELE2);
         task->state = 1;
@@ -87,10 +87,10 @@ void Task_WarpSpinArrival(SysTask *sysTask, WarpSpinTask *task) {
         if (task->counter % 2 != 0) {
             WarpSpin_RotatePlayer(task);
         }
-        sub_0205F990(mapObject, &pos);
+        MapObject_CopyDrawOffset(mapObject, &pos);
         n = WARP_SPIN_FRAMES - task->counter;
         pos.y = WARP_SPIN_HEIGHT(n);
-        sub_0205F9A0(mapObject, &pos);
+        MapObject_SetDrawOffset(mapObject, &pos);
         task->counter++;
         if (task->counter == 2) {
             BeginNormalPaletteFade(FADE_MAIN_THEN_SUB, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_FIELD1);

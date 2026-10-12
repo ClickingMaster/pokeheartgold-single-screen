@@ -26,7 +26,7 @@
 #include "sys_task_api.h"
 #include "sys_vars.h"
 #include "task.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 #include "field_terrain.h"
 #include "overlay_2/overlay_02_02248728.h"
 
@@ -292,7 +292,7 @@ void FieldMoveCutIn_FreeMonResources(FieldMoveCutIn *cutIn) {
     }
     {
         SpriteResource *res = SpriteResourceCollection_Find(cutIn->resMan[GF_GFX_RES_TYPE_CELL], 3);
-        sub_0200A740(res);
+        GF2DGfxResObj_FreeData(res);
         DestroySingle2DGfxResObj(cutIn->resMan[GF_GFX_RES_TYPE_CELL], res);
         for (i = 0; i < 4; i++) {
             if (cutIn->cellResources[i] == res) {
@@ -620,7 +620,7 @@ BOOL CutInFlyer_PickUpTrainer(CutInFlyer *flyer) {
     Sprite_SetAnimCtrlSeq(sprite, 3);
     Sprite_SetDrawFlag(sprite, TRUE);
     FieldMoveCutIn_SetPlayerVisible(flyer->cutIn, TRUE);
-    sub_0205F484(flyer->cutIn->playerObject);
+    MapObject_CallDrawUpdate(flyer->cutIn->playerObject);
     y = Sprite_GetMatrixPtr(sprite)->y;
     flyer->trainerOffsetY = y - Sprite_GetMatrixPtr(flyer->sprite)->y;
     TrainerJumpEffect_Stop(flyer->trainerJumpEffect);
@@ -1007,7 +1007,7 @@ void FieldMoveCutIn_UnloadModel(FieldMoveCutIn *cutIn) {
 
 BOOL FieldMoveCutIn_StepShowOtherObject(FieldMoveCutIn *cutIn) {
     MapObject_SetVisible(cutIn->otherObject, TRUE);
-    sub_0205F484(cutIn->otherObject);
+    MapObject_CallDrawUpdate(cutIn->otherObject);
     FieldMoveCutIn_CreateModelEffect(cutIn);
     cutIn->state++;
     return TRUE;

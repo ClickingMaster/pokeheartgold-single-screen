@@ -93,7 +93,7 @@ static const TutorMove sTutorMoves[] = {
 static u16 GetMoveTutorLearnsetIndex(u16 species, u8 form);
 static u16 GetLearnableTutorMoves(Pokemon *mon, u32 moveTutorNpc, u8 dest[]);
 static MoveTutorLearnset *GetMoveTutorLearnset(enum HeapID heapID, u32 index);
-static BOOL ov01_0220305C(ScriptContext *ctx);
+static BOOL NativeScript_WaitMoveTutorMenu(ScriptContext *ctx);
 
 // get number of pages needed to show learnable moves from move tutor
 BOOL ScrCmd_652(ScriptContext *ctx) {
@@ -302,12 +302,12 @@ BOOL ScrCmd_MoveTutorChooseMove(ScriptContext *ctx) {
     }
     ScriptMenu_AddListItem(*unk, 3, 0xff, 0xfffe);
     FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, 3, 7, GetVarPointer(fieldSystem, ctx->data[0]));
-    SetupNativeScript(ctx, ov01_0220305C);
+    SetupNativeScript(ctx, NativeScript_WaitMoveTutorMenu);
     u16 *unused = GetVarPointer(fieldSystem, ctx->data[0]); // yes, this is needed here to match
     return TRUE;
 }
 
-static BOOL ov01_0220305C(ScriptContext *ctx) {
+static BOOL NativeScript_WaitMoveTutorMenu(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     struct ScriptMenu **unk = FieldSystem_GetTouchscreenChoiceMenuList(fieldSystem);
     u16 *result = GetVarPointer(fieldSystem, ctx->data[0]);

@@ -15,7 +15,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 #include "frontier_save_access.h"
 #include "union_room_avatar.h"
 
@@ -431,7 +431,7 @@ void PalPadDetails_HideForFriendChange(PalPadDetails *details, PalPadGfx *gfx) {
 
 // Top screen: number, name (in the gender colour), group, last meeting and the Union Room avatar.
 void PalPadDetails_DrawProfile(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
-    UnkStruct_02070D3C avatar;
+    TrainerPicFileIds avatar;
     FriendRoster *wifiList = Save_FriendRoster_Get(shared->saveData);
     int gender = FriendRoster_GetEntryField(wifiList, shared->friends.slots[shared->selectedFriend], 8);
     u32 i;
@@ -460,7 +460,7 @@ void PalPadDetails_DrawProfile(PalPadDetails *details, PalPadShared *shared, Pal
     if (PalPadGfx_BufferLastDate(gfx, shared->saveData, shared->friends.slots[shared->selectedFriend])) {
         PalPadDetails_PrintProfileText(&details->profileWindows[4], shared, gfx, 28, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
     }
-    sub_02070D84(GetUnionRoomAvatarAttrBySprite(gender, FriendRoster_GetEntryField(wifiList, shared->friends.slots[shared->selectedFriend], 7), 1), 2, &avatar);
+    GetTrainerPicFileIdsNoLink(GetUnionRoomAvatarAttrBySprite(gender, FriendRoster_GetEntryField(wifiList, shared->friends.slots[shared->selectedFriend], 7), 1), 2, &avatar);
     bitmap = Heap_Alloc(heapId, 80 * 80 / 2);
     sub_020141C4(avatar.narcId, avatar.ncbr_id, heapId, 0, 0, 10, 10, bitmap);
     BlitBitmapRectToWindow(&details->profileWindows[5], bitmap, 0, 0, 80, 80, 0, 0, 80, 80);

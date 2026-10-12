@@ -15,7 +15,7 @@
 #include "sprite.h"
 #include "sprite_transfer.h"
 #include "text.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 
 // NitroSDK MATH_QSort (no header declares it)
 void MATH_QSort(void *base, u32 count, u32 width, int (*compare)(const void *, const void *), void *context);

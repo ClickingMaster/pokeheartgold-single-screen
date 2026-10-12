@@ -292,8 +292,8 @@ void WiFiPlazaSurveyAnswer_Setup(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyM
     answer->resources[GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromOpenNarc(work->resMans[GF_GFX_RES_TYPE_PLTT], work->narc, 0xCC, FALSE, 20, 1, 3, heapID);
     GF_ASSERT(SpriteTransfer_CreateCharTransferTask_AllocAtEnd(answer->resources[GF_GFX_RES_TYPE_CHAR]));
     GF_ASSERT(SpriteTransfer_CreatePlttTransferTask(answer->resources[GF_GFX_RES_TYPE_PLTT]));
-    sub_0200A740(answer->resources[GF_GFX_RES_TYPE_CHAR]);
-    sub_0200A740(answer->resources[GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(answer->resources[GF_GFX_RES_TYPE_CHAR]);
+    GF2DGfxResObj_FreeData(answer->resources[GF_GFX_RES_TYPE_PLTT]);
     answer->resources[GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(work->resMans[GF_GFX_RES_TYPE_CELL], work->narc, 0xCE, FALSE, 20, GF_GFX_RES_TYPE_CELL, heapID);
     answer->resources[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(work->resMans[GF_GFX_RES_TYPE_ANIM], work->narc, 0xCF, FALSE, 20, GF_GFX_RES_TYPE_ANIM, heapID);
     {

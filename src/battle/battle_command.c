@@ -5116,7 +5116,7 @@ BOOL BtlCmd_CheckChatterActivation(BattleSystem *battleSystem, BattleContext *ct
 
     if (ctx->battleMons[ctx->battlerIdAttacker].species == SPECIES_CHATOT && ctx->battleMons[ctx->battlerIdTarget].hp && !(ctx->battleMons[ctx->battlerIdAttacker].status2 & (1 << 21))) {
         if ((BattleSystem_GetBattleSpecial(battleSystem) & BATTLE_SPECIAL_RECORDING) == FALSE) {
-            param = sub_02006EFC(BattleSystem_GetChatotVoice(battleSystem, ctx->battlerIdAttacker));
+            param = Chatot_GetVoiceParam(BattleSystem_GetChatotVoice(battleSystem, ctx->battlerIdAttacker));
         } else {
             param = BattleSystem_GetChatotVoiceParam(battleSystem, ctx->battlerIdAttacker);
         }
@@ -7992,7 +7992,7 @@ enum {
 
 static void BattleSystem_LoadLevelUpNameplate(BattleSystem *battleSystem, GetterWork *data, Pokemon *mon) {
     Window window;
-    UnkStruct_02021AC8 unkStruct;
+    ObjCharSpaceReservation unkStruct;
     TextOBJTemplate textObjTemplate;
     MsgData *msgData;
     MessageFormat *messageFormat;
@@ -8017,9 +8017,9 @@ static void BattleSystem_LoadLevelUpNameplate(BattleSystem *battleSystem, Getter
     data->unkC[0] = SpriteSystem_NewSprite(spriteSystem, spriteManager, &sLevelUpNameplateTemplate);
     ManagedSprite_TickFrame(data->unkC[0]);
     SpriteSystem_LoadCharResObjAtEndWithHardwareMappingType(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, Pokemon_GetIconNaix(mon), 0, NNS_G2D_VRAM_TYPE_2DMAIN, 20022);
-    SpriteSystem_LoadPaletteBuffer(palData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, sub_02074490(), 0, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 20017);
-    SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, sub_0207449C(), 0, 20014);
-    SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, sub_020744A8(), 0, 20014);
+    SpriteSystem_LoadPaletteBuffer(palData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), 0, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 20017);
+    SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconCell64KNaix(), 0, 20014);
+    SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconAnim64KNaix(), 0, 20014);
     data->unkC[1] = SpriteSystem_NewSprite(spriteSystem, spriteManager, &sPokeIconTemplate);
     Sprite_SetPalOffsetRespectVramOffset(data->unkC[1]->sprite, Pokemon_GetIconPalette(mon));
     ManagedSprite_TickFrame(data->unkC[1]);
@@ -8045,7 +8045,7 @@ static void BattleSystem_LoadLevelUpNameplate(BattleSystem *battleSystem, Getter
     InitWindow(&window);
     AddTextWindowTopLeftCorner(bgConfig, &window, 12, 4, 0, 0);
     AddTextPrinterParameterizedWithColor(&window, 0, messageBuffer, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL); // Second param should be something like FONT_ID_0.
-    sub_02021AC8(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, 5), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &unkStruct);
+    ObjCharTransfer_ReserveCharSpace(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, 5), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &unkStruct);
     textObjTemplate.fontSystem = data->tempPointers[POINTER_LEVEL_UP_NAMEPLATE_FONT_SYSTEM];
     textObjTemplate.window = &window;
     textObjTemplate.spriteList = SpriteManager_GetSpriteList(spriteManager);
@@ -8069,7 +8069,7 @@ static void BattleSystem_UnloadLevelUpNameplate(BattleSystem *battleSystem, Gett
     Sprite_DeleteAndFreeResources(data->unkC[0]);
     Sprite_DeleteAndFreeResources(data->unkC[1]);
     FontOAM_Delete(data->unk14);
-    sub_02021B5C(&data->unk18);
+    ObjCharTransfer_FreeCharSpace(&data->unk18);
     SpriteManager_UnloadCharObjById(spriteManager, 0x4E35);
     SpriteManager_UnloadPlttObjById(spriteManager, 0x4E30);
     SpriteManager_UnloadCellObjById(spriteManager, 0x4E2D);

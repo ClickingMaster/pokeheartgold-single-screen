@@ -103,9 +103,9 @@
 .public Options_GetTextFrameDelay
 .public Options_GetFrame
 .public WirelessStatusIcon_CreateIfConnected
-.public sub_02074490
-.public sub_02074494
-.public sub_020744A0
+.public GetMonIconPlttNaix
+.public GetMonIconStaticCellNaix
+.public GetMonIconStaticAnimNaix
 .public NNS_GfdDoVramTransfer
 .public NNS_G2dGetUnpackedCharacterData
 .public NNS_G2dGetUnpackedPaletteData

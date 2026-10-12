@@ -49,7 +49,7 @@
 #include "update_dex_received.h"
 // #include "application/zukanlist/zkn_data/zukan_data.naix"
 
-typedef struct UnkStructScr_648 {
+typedef struct SpeciesListMenu {
     FieldSystem *fieldSystem;
     SysTask *sysTask;
     Window window_8;
@@ -78,26 +78,26 @@ typedef struct UnkStructScr_648 {
     ListMenuItem items[120];
     u16 unk_604[120];
     u16 unk_6F4;
-} SCR_648_STRUCT;
+} SpeciesListMenu;
 
-static BOOL ov01_02200C6C(ScriptContext *ctx);
-static void *ov01_02200C94(enum HeapID heapID, s32 fileId, int *unkPtr);
-static void ov01_02200CB4(SCR_648_STRUCT *unkPtr, MsgData *msgdata);
-static void ov01_02200CBC(FieldSystem *fieldSystem, SCR_648_STRUCT *unkPtr, u8 x, u8 y, u8 a4, u8 a5, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove);
-static SCR_648_STRUCT *ov01_02200D9C(FieldSystem *fieldSystem, u8 x, u8 y, u8 a3, u8 a4, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove);
-static void ov01_02200DF8(SCR_648_STRUCT *unkPtr, int strNo, u16 a2, u32 a3);
-static void ov01_02200E00(SCR_648_STRUCT *unkPtr);
-static void ov01_02200EC8(SCR_648_STRUCT *unkPtr, int strNo, u16 a2, u32 a3);
-static void ov01_02200F54(SCR_648_STRUCT *unkPtr);
-static void ov01_02201064(struct ListMenu *listMenu, s32 a1, u8 unused);
-static void ov01_02201088(struct ListMenu *listMenu, s32 unused1, u8 unused2);
-static void ov01_022010CC(SysTask *sysTask, void *work);
-static void ov01_0220116C(SCR_648_STRUCT *unkPtr);
+static BOOL NativeScript_WaitSpeciesListMenu(ScriptContext *ctx);
+static void *LoadZukanSpeciesList(enum HeapID heapID, s32 fileId, int *unkPtr);
+static void SpeciesListMenu_SetMsgData(SpeciesListMenu *unkPtr, MsgData *msgdata);
+static void SpeciesListMenu_Init(FieldSystem *fieldSystem, SpeciesListMenu *unkPtr, u8 x, u8 y, u8 a4, u8 a5, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove);
+static SpeciesListMenu *SpeciesListMenu_New(FieldSystem *fieldSystem, u8 x, u8 y, u8 a3, u8 a4, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove);
+static void SpeciesListMenu_AddItem(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 a3);
+static void SpeciesListMenu_Show(SpeciesListMenu *unkPtr);
+static void SpeciesListMenu_AddItemInternal(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 a3);
+static void SpeciesListMenu_InitTemplate(SpeciesListMenu *unkPtr);
+static void SpeciesListMenu_ItemPrintFunc(struct ListMenu *listMenu, s32 a1, u8 unused);
+static void SpeciesListMenu_MoveCursorFunc(struct ListMenu *listMenu, s32 unused1, u8 unused2);
+static void SpeciesListMenu_Task(SysTask *sysTask, void *work);
+static void SpeciesListMenu_Close(SpeciesListMenu *unkPtr);
 static void GetHiddenPowerPowerType(Pokemon *mon, s32 *power, s32 *type);
-static LocalMapObject *ov01_02201F98(MapObjectManager *mapObjectManager, u8 unkA, u16 species, u16 form, u32 gender, u32 x, u32 y, u32 mapId);
+static LocalMapObject *FriendshipRoom_CreateStatueObject(MapObjectManager *mapObjectManager, u8 unkA, u16 species, u16 form, u32 gender, u32 x, u32 y, u32 mapId);
 
 // zukan_data_XXXXX
-static u16 ov01_02209AE0[9] = {
+static u16 sSpeciesListZukanFiles[9] = {
     93,
     94,
     95,
@@ -117,7 +117,7 @@ BOOL ScrCmd_648(ScriptContext *ctx) {
     u32 unkPtr_2;
 
     MsgData *msgdata2;
-    SCR_648_STRUCT *unkPtr;
+    SpeciesListMenu *unkPtr;
     u32 *unkG;
     u16 *data;
     u16 *cursorPos;
@@ -145,17 +145,17 @@ BOOL ScrCmd_648(ScriptContext *ctx) {
     cursorPos = GetVarPointer(fieldSystem, unkD);
     itemsAbove = GetVarPointer(fieldSystem, unkE);
 
-    unkPtr = ov01_02200D9C(fieldSystem, 20, 1, 0, 1, input, *msgfmt, window, msgdata, cursorPos, itemsAbove);
+    unkPtr = SpeciesListMenu_New(fieldSystem, 20, 1, 0, 1, input, *msgfmt, window, msgdata, cursorPos, itemsAbove);
 
     unkG = FrontierSpeciesRecords_Load(fieldSystem->saveData, 0xb, &out_1);
 
     if (out_1 == 1) {
-        data = ov01_02200C94(HEAP_ID_FIELD3, ov01_02209AE0[fileIndex], &out_2);
+        data = LoadZukanSpeciesList(HEAP_ID_FIELD3, sSpeciesListZukanFiles[fileIndex], &out_2);
 
         for (i = 0; i < out_2; i++) {
             unkPtr_2 = FrontierSpeciesRecords_Get(fieldSystem->saveData, unkG, sub_0205C144(unkA), data[i]);
             if (unkPtr_2 != 0) {
-                ov01_02200DF8(unkPtr, data[i], 0xff, data[i]);
+                SpeciesListMenu_AddItem(unkPtr, data[i], 0xff, data[i]);
             }
         }
         Heap_Free(data);
@@ -166,36 +166,36 @@ BOOL ScrCmd_648(ScriptContext *ctx) {
 
     msgdata2 = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0191_bin, HEAP_ID_FIELD3);
 
-    ov01_02200CB4(unkPtr, msgdata2);
-    ov01_02200DF8(unkPtr, 0xd, 0xff, 0xfffe);
+    SpeciesListMenu_SetMsgData(unkPtr, msgdata2);
+    SpeciesListMenu_AddItem(unkPtr, 0xd, 0xff, 0xfffe);
     DestroyMsgData(msgdata2);
 
-    ov01_02200CB4(unkPtr, msgdata);
-    ov01_02200E00(unkPtr);
+    SpeciesListMenu_SetMsgData(unkPtr, msgdata);
+    SpeciesListMenu_Show(unkPtr);
 
-    SetupNativeScript(ctx, ov01_02200C6C);
+    SetupNativeScript(ctx, NativeScript_WaitSpeciesListMenu);
 
     DestroyMsgData(msgdata);
 
     return TRUE;
 }
 
-static BOOL ov01_02200C6C(ScriptContext *ctx) {
+static BOOL NativeScript_WaitSpeciesListMenu(ScriptContext *ctx) {
     return *GetVarPointer(ctx->fieldSystem, ctx->data[0]) != 0xEEEE;
 }
 
-static void *ov01_02200C94(enum HeapID heapID, s32 fileId, int *unkPtr) {
+static void *LoadZukanSpeciesList(enum HeapID heapID, s32 fileId, int *unkPtr) {
     u32 size;
     void *data = GfGfxLoader_LoadFromNarc_GetSizeOut(NARC_application_zukanlist_zkn_data_zukan_data, fileId, FALSE, heapID, FALSE, &size);
     *unkPtr = size / 2;
     return data;
 }
 
-static void ov01_02200CB4(SCR_648_STRUCT *unkPtr, MsgData *msgdata) {
+static void SpeciesListMenu_SetMsgData(SpeciesListMenu *unkPtr, MsgData *msgdata) {
     unkPtr->msgdata = msgdata;
 }
 
-static void ov01_02200CBC(FieldSystem *fieldSystem, SCR_648_STRUCT *unkPtr, u8 x, u8 y, u8 a4, u8 a5, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove) {
+static void SpeciesListMenu_Init(FieldSystem *fieldSystem, SpeciesListMenu *unkPtr, u8 x, u8 y, u8 a4, u8 a5, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove) {
     int i;
     unkPtr->msgdata = msgdata;
     unkPtr->unk_207 = unkPtr->unk_207 & ~0x2;
@@ -228,21 +228,21 @@ static void ov01_02200CBC(FieldSystem *fieldSystem, SCR_648_STRUCT *unkPtr, u8 x
     *unkPtr->input = 0xEEEE;
 }
 
-static SCR_648_STRUCT *ov01_02200D9C(FieldSystem *fieldSystem, u8 x, u8 y, u8 a3, u8 a4, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove) {
-    SCR_648_STRUCT *unkPtr = Heap_Alloc(HEAP_ID_FIELD1, sizeof(SCR_648_STRUCT));
+static SpeciesListMenu *SpeciesListMenu_New(FieldSystem *fieldSystem, u8 x, u8 y, u8 a3, u8 a4, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove) {
+    SpeciesListMenu *unkPtr = Heap_Alloc(HEAP_ID_FIELD1, sizeof(SpeciesListMenu));
     if (!unkPtr) {
         return NULL;
     }
-    memset(unkPtr, 0, sizeof(SCR_648_STRUCT));
-    ov01_02200CBC(fieldSystem, unkPtr, x, y, a3, a4, input, msgfmt, window, msgdata, cursorPos, itemsAbove);
+    memset(unkPtr, 0, sizeof(SpeciesListMenu));
+    SpeciesListMenu_Init(fieldSystem, unkPtr, x, y, a3, a4, input, msgfmt, window, msgdata, cursorPos, itemsAbove);
     return unkPtr;
 }
 
-static void ov01_02200DF8(SCR_648_STRUCT *unkPtr, int strNo, u16 a2, u32 a3) {
-    ov01_02200EC8(unkPtr, strNo, a2, a3);
+static void SpeciesListMenu_AddItem(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 a3) {
+    SpeciesListMenu_AddItemInternal(unkPtr, strNo, a2, a3);
 }
 
-static void ov01_02200E00(SCR_648_STRUCT *unkPtr) {
+static void SpeciesListMenu_Show(SpeciesListMenu *unkPtr) {
     u32 unk = unkPtr->totalItems;
     if (unk > 8) {
         AddWindowParameterized(unkPtr->fieldSystem->bgConfig, &unkPtr->window_8, 3, unkPtr->x, unkPtr->y, 11, 0x10, 13, 1);
@@ -251,12 +251,12 @@ static void ov01_02200E00(SCR_648_STRUCT *unkPtr) {
     }
     LoadUserFrameGfx1(unkPtr->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0x3D9, 11, 0, HEAP_ID_FIELD1);
     DrawFrameAndWindow1(&unkPtr->window_8, TRUE, 0x3D9, 11);
-    ov01_02200F54(unkPtr);
+    SpeciesListMenu_InitTemplate(unkPtr);
     unkPtr->listMenu_23C = ListMenuInit(&unkPtr->listMenuTemplate, *unkPtr->cursorPos, *unkPtr->itemsAbove, HEAP_ID_FIELD1);
-    unkPtr->sysTask = SysTask_CreateOnMainQueue(ov01_022010CC, unkPtr, 0);
+    unkPtr->sysTask = SysTask_CreateOnMainQueue(SpeciesListMenu_Task, unkPtr, 0);
 }
 
-static void ov01_02200EC8(SCR_648_STRUCT *unkPtr, int strNo, u16 a2, u32 a3) {
+static void SpeciesListMenu_AddItemInternal(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 a3) {
     String *str = String_New(0x50, HEAP_ID_FIELD1);
     ReadMsgDataIntoString(unkPtr->msgdata, strNo, str);
     StringExpandPlaceholders(unkPtr->msgfmt, unkPtr->stringArr_1C[unkPtr->totalItems], str);
@@ -271,10 +271,10 @@ static void ov01_02200EC8(SCR_648_STRUCT *unkPtr, int strNo, u16 a2, u32 a3) {
     unkPtr->totalItems++;
 }
 
-static void ov01_02200F54(SCR_648_STRUCT *unkPtr) {
+static void SpeciesListMenu_InitTemplate(SpeciesListMenu *unkPtr) {
     unkPtr->listMenuTemplate.items = unkPtr->items;
-    unkPtr->listMenuTemplate.moveCursorFunc = ov01_02201088;
-    unkPtr->listMenuTemplate.itemPrintFunc = ov01_02201064;
+    unkPtr->listMenuTemplate.moveCursorFunc = SpeciesListMenu_MoveCursorFunc;
+    unkPtr->listMenuTemplate.itemPrintFunc = SpeciesListMenu_ItemPrintFunc;
     unkPtr->listMenuTemplate.window = &unkPtr->window_8;
     unkPtr->listMenuTemplate.totalItems = unkPtr->totalItems;
     unkPtr->listMenuTemplate.maxShowed = 8;
@@ -293,7 +293,7 @@ static void ov01_02200F54(SCR_648_STRUCT *unkPtr) {
     unkPtr->listMenuTemplate.data = unkPtr;
 }
 
-static void ov01_02201064(struct ListMenu *listMenu, s32 a1, u8 unused) {
+static void SpeciesListMenu_ItemPrintFunc(struct ListMenu *listMenu, s32 a1, u8 unused) {
     if (a1 == -3) {
         ListMenuOverrideSetColors(listMenu, 3, 0xf, 4);
     } else {
@@ -301,9 +301,9 @@ static void ov01_02201064(struct ListMenu *listMenu, s32 a1, u8 unused) {
     }
 }
 
-static void ov01_02201088(struct ListMenu *listMenu, s32 unused1, u8 unused2) {
+static void SpeciesListMenu_MoveCursorFunc(struct ListMenu *listMenu, s32 unused1, u8 unused2) {
     u16 cursorPos = 0, itemsAbove = 0;
-    SCR_648_STRUCT *unkPtr = (SCR_648_STRUCT *)ListMenuGetTemplateField(listMenu, LISTMENUATTR_DATA);
+    SpeciesListMenu *unkPtr = (SpeciesListMenu *)ListMenuGetTemplateField(listMenu, LISTMENUATTR_DATA);
     ListMenuGetScrollAndRow(listMenu, &cursorPos, &itemsAbove);
     if (unkPtr->cursorPos != 0 && unkPtr->itemsAbove != 0) {
         *unkPtr->cursorPos = cursorPos;
@@ -311,10 +311,10 @@ static void ov01_02201088(struct ListMenu *listMenu, s32 unused1, u8 unused2) {
     }
 }
 
-static void ov01_022010CC(SysTask *sysTask, void *work) {
+static void SpeciesListMenu_Task(SysTask *sysTask, void *work) {
     u16 prev;
     int input;
-    SCR_648_STRUCT *unkPtr = work;
+    SpeciesListMenu *unkPtr = work;
     if (unkPtr->unk_204) {
         unkPtr->unk_204--;
         return;
@@ -331,20 +331,20 @@ static void ov01_022010CC(SysTask *sysTask, void *work) {
             if (((u32)(unkPtr->unk_207 << 0x1f) >> 0x1f) == 1) {
                 PlaySE(SEQ_SE_DP_SELECT);
                 *unkPtr->input = -2;
-                ov01_0220116C(unkPtr);
+                SpeciesListMenu_Close(unkPtr);
             }
         case -1:
             break;
         default:
             PlaySE(SEQ_SE_DP_SELECT);
             *unkPtr->input = input;
-            ov01_0220116C(unkPtr);
+            SpeciesListMenu_Close(unkPtr);
             break;
         }
     }
 }
 
-static void ov01_0220116C(SCR_648_STRUCT *unkPtr) {
+static void SpeciesListMenu_Close(SpeciesListMenu *unkPtr) {
     int i;
     PlaySE(SEQ_SE_DP_SELECT);
     DestroyListMenu(unkPtr->listMenu_23C, NULL, NULL);
@@ -747,7 +747,7 @@ BOOL ScrCmd_OpenAlphHiddenRoom(ScriptContext *ctx) {
     return TRUE;
 }
 
-static u32 ov01_02201B2C(u32 unkA) {
+static u32 ClampToU16Max(u32 unkA) {
     u16 ret = 0xFFFF;
     if (unkA <= ret) {
         ret = unkA;
@@ -763,34 +763,34 @@ BOOL ScrCmd_724(ScriptContext *ctx) {
     Pokeathlon_UnkSubStruct_B00 *unkPtrB = PokeathlonSave_GetUnkB00(Save_Pokeathlon_Get(ctx->fieldSystem->saveData));
 
     if (unkVar <= 9) {
-        *unkPtrA = ov01_02201B2C(unkPtrB->unk44[unkVar]);
+        *unkPtrA = ClampToU16Max(unkPtrB->unk44[unkVar]);
         return FALSE;
     }
 
     switch (unkVar - 10) {
     case 0:
-        *unkPtrA = ov01_02201B2C(unkPtrB->unk8);
+        *unkPtrA = ClampToU16Max(unkPtrB->unk8);
         break;
     case 1:
-        *unkPtrA = ov01_02201B2C(unkPtrB->unk70);
+        *unkPtrA = ClampToU16Max(unkPtrB->unk70);
         break;
     case 2:
-        *unkPtrA = ov01_02201B2C(unkPtrB->unk4);
+        *unkPtrA = ClampToU16Max(unkPtrB->unk4);
         break;
     case 3:
-        *unkPtrA = ov01_02201B2C(unkPtrB->unk14);
+        *unkPtrA = ClampToU16Max(unkPtrB->unk14);
         break;
     case 4:
-        *unkPtrA = ov01_02201B2C(unkPtrB->unk1C);
+        *unkPtrA = ClampToU16Max(unkPtrB->unk1C);
         break;
     case 5:
-        *unkPtrA = ov01_02201B2C(unkPtrB->unk24);
+        *unkPtrA = ClampToU16Max(unkPtrB->unk24);
         break;
     case 6:
-        *unkPtrA = ov01_02201B2C(unkPtrB->unk2C);
+        *unkPtrA = ClampToU16Max(unkPtrB->unk2C);
         break;
     case 7:
-        *unkPtrA = ov01_02201B2C(unkPtrB->unk30);
+        *unkPtrA = ClampToU16Max(unkPtrB->unk30);
         break;
     default:
         *unkPtrA = 0;
@@ -962,13 +962,13 @@ BOOL ScrCmd_CreatePokeathlonFriendshipRoomStatues(ScriptContext *ctx) {
         species = unkPtr->friendshipRoomStatues[i].species;
 
         if (species != SPECIES_NONE && species <= SPECIES_ARCEUS) {
-            ov01_02201F98(fieldSystem->mapObjectManager, (u8)i, species, unkPtr->friendshipRoomStatues[i].form, unkPtr->friendshipRoomStatues[i].gender, sFriendshipRoomStatuesPositions[i][0], sFriendshipRoomStatuesPositions[i][1], fieldSystem->location->mapId);
+            FriendshipRoom_CreateStatueObject(fieldSystem->mapObjectManager, (u8)i, species, unkPtr->friendshipRoomStatues[i].form, unkPtr->friendshipRoomStatues[i].gender, sFriendshipRoomStatuesPositions[i][0], sFriendshipRoomStatuesPositions[i][1], fieldSystem->location->mapId);
         }
     }
     return TRUE;
 }
 
-static LocalMapObject *ov01_02201F98(MapObjectManager *mapObjectManager, u8 unkA, u16 species, u16 form, u32 gender, u32 x, u32 y, u32 mapId) {
+static LocalMapObject *FriendshipRoom_CreateStatueObject(MapObjectManager *mapObjectManager, u8 unkA, u16 species, u16 form, u32 gender, u32 x, u32 y, u32 mapId) {
     LocalMapObject *mapObj;
     u32 spriteId;
     u32 size;
@@ -1134,7 +1134,7 @@ BOOL ScrCmd_GiveSpikyEarPichu(ScriptContext *ctx) {
 
     u32 unkB = Mapsec_FromTypeAndIndex(MAPSECTYPE_NORMAL, MapHeader_GetMapSec(ctx->fieldSystem->location->mapId));
 
-    sub_020720FC(mon, profile, 4, unkB, 0x18, HEAP_ID_FIELD2);
+    MonSetCatchData(mon, profile, 4, unkB, 0x18, HEAP_ID_FIELD2);
 
     Party_AddMon(party, mon);
 

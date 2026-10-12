@@ -479,7 +479,7 @@ void FootprintStamp_UpdateSelectEffects(FootprintStamp *work) {
 void FootprintStamp_CreateTextSprite(FootprintStamp *work, FootprintStampTextSprite *text, String *string, int font, int color, int priority, int plttResId, int x, int y, BOOL centered) {
     TextOBJTemplate template;
     Window window;
-    UnkStruct_02021AC8 charTransfer;
+    ObjCharSpaceReservation charTransfer;
     int width, tiles;
     SpriteManager *spriteManager;
     BgConfig *bgConfig;
@@ -494,7 +494,7 @@ void FootprintStamp_CreateTextSprite(FootprintStamp *work, FootprintStampTextSpr
     InitWindow(&window);
     AddTextWindowTopLeftCorner(bgConfig, &window, (u8)tiles, 2, 0, 0);
     AddTextPrinterParameterizedWithColorAndSpacing(&window, font, string, 0, 0, TEXT_SPEED_NOTRANSFER, color, 0, 0, NULL);
-    sub_02021AC8(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_125), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &charTransfer);
+    ObjCharTransfer_ReserveCharSpace(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_125), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &charTransfer);
     if (centered == TRUE) {
         x -= width / 2;
     }
@@ -523,7 +523,7 @@ void FootprintStamp_CreateTextSprite(FootprintStamp *work, FootprintStampTextSpr
 
 void FootprintStamp_FreeTextSprite(FootprintStampTextSprite *text) {
     FontOAM_Delete(text->textObj);
-    sub_02021B5C(&text->charTransfer);
+    ObjCharTransfer_FreeCharSpace(&text->charTransfer);
 }
 
 void FootprintStamp_GetTextSize(String *string, int font, int *width, int *tiles) {

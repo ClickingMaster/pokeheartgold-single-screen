@@ -2854,7 +2854,7 @@ void BattleAnimScriptCmd_PlayCry(BattleAnimSystem *system) {
     param = *system->scriptPtr;
     system->scriptPtr++;
     context = system->context;
-    sub_02071FDC(context->chatotCry, mode, context->species[context->attacker], context->forms[context->attacker], pan, param, context->isTransformed, system->heapId);
+    PlayCryHandleChatot(context->chatotCry, mode, context->species[context->attacker], context->forms[context->attacker], pan, param, context->isTransformed, system->heapId);
 }
 
 void BattleAnimScriptCmd_WaitForCry(BattleAnimSystem *system) {

@@ -7,7 +7,7 @@
 .public NARC_ReadFile
 .public SysTask_CreateOnMainQueue
 .public SysTask_Destroy
-.public sub_0201A430
+.public FreeFileCache
 .public Heap_Alloc
 .public Heap_AllocAtEnd
 .public Heap_Free

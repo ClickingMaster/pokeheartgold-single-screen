@@ -26,7 +26,7 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "grid_input_handler.h"
 #include "dpad_menu_box.h"
 
@@ -473,11 +473,11 @@ static void NumberEntry_DestroyResourceManagers(NumberEntryData *data) {
 static void NumberEntry_LoadSpriteResources(SpriteResource **resObjs, GF_2DGfxResMan **resMans, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId) {
     resObjs[GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_CHAR], narc, charFileId, FALSE, charId, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_8);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(resObjs[GF_GFX_RES_TYPE_CHAR]);
-    sub_0200A740(resObjs[GF_GFX_RES_TYPE_CHAR]);
+    GF2DGfxResObj_FreeData(resObjs[GF_GFX_RES_TYPE_CHAR]);
 
     resObjs[GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_PLTT], narc, plttFileId, FALSE, plttId, NNS_G2D_VRAM_TYPE_2DSUB, plttNum, HEAP_ID_8);
     SpriteTransfer_CreatePlttTransferTask(resObjs[GF_GFX_RES_TYPE_PLTT]);
-    sub_0200A740(resObjs[GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(resObjs[GF_GFX_RES_TYPE_PLTT]);
 
     resObjs[GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_CELL], narc, cellFileId, FALSE, cellId, GF_GFX_RES_TYPE_CELL, HEAP_ID_8);
     resObjs[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_ANIM], narc, animFileId, FALSE, animId, GF_GFX_RES_TYPE_ANIM, HEAP_ID_8);

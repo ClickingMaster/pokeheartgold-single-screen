@@ -25,7 +25,7 @@
 #include "sprite_transfer.h"
 #include "system.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "vram_transfer_manager.h"
 
 // GBA cartridge access (NitroSDK CTRDG) and the crypto library

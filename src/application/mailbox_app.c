@@ -1274,9 +1274,9 @@ void MailboxAppData_LoadMonIconResources(MailboxAppData *data) {
     for (resId = 0x37F0; resId <= 0x37F2; resId++) {
         SpriteSystem_LoadCharResObjFromOpenNarc(data->spriteSystem, data->spriteManager, data->monIconNarc, GetMonIconNaixEx(SPECIES_NONE, FALSE, 0), FALSE, NNS_G2D_VRAM_TYPE_2DSUB, resId);
     }
-    SpriteSystem_LoadPlttResObjFromOpenNarc(data->spriteSystem, data->spriteManager, data->monIconNarc, sub_02074490(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, 0x37F0);
-    SpriteSystem_LoadCellResObjFromOpenNarc(data->spriteSystem, data->spriteManager, data->monIconNarc, sub_02074494(), FALSE, 0x37F0);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(data->spriteSystem, data->spriteManager, data->monIconNarc, sub_02074498(), FALSE, 0x37F0);
+    SpriteSystem_LoadPlttResObjFromOpenNarc(data->spriteSystem, data->spriteManager, data->monIconNarc, GetMonIconPlttNaix(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, 0x37F0);
+    SpriteSystem_LoadCellResObjFromOpenNarc(data->spriteSystem, data->spriteManager, data->monIconNarc, GetMonIconStaticCellNaix(), FALSE, 0x37F0);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(data->spriteSystem, data->spriteManager, data->monIconNarc, GetMonIconCell32KNaix(), FALSE, 0x37F0);
 }
 
 // Shows the icons of the (up to three) Pokemon the mail's author attached.

@@ -558,10 +558,10 @@ void WiFiPlazaPlayerCard_LoadIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphi
 
     card->iconResources[GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(graphics->resManagers[GF_GFX_RES_TYPE_CHAR], narc, set * 3 + 0x3D, FALSE, 100, NNS_G2D_VRAM_TYPE_2DSUB, heapID);
     GF_ASSERT(SpriteTransfer_CreateCharTransferTask_AllocAtEnd(card->iconResources[GF_GFX_RES_TYPE_CHAR]));
-    sub_0200A740(card->iconResources[GF_GFX_RES_TYPE_CHAR]);
+    GF2DGfxResObj_FreeData(card->iconResources[GF_GFX_RES_TYPE_CHAR]);
     card->iconResources[GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromOpenNarc(graphics->resManagers[GF_GFX_RES_TYPE_PLTT], narc, 0x59, FALSE, 100, NNS_G2D_VRAM_TYPE_2DSUB, 3, heapID);
     GF_ASSERT(SpriteTransfer_CreatePlttTransferTask(card->iconResources[GF_GFX_RES_TYPE_PLTT]));
-    sub_0200A740(card->iconResources[GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(card->iconResources[GF_GFX_RES_TYPE_PLTT]);
     card->iconResources[GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(graphics->resManagers[GF_GFX_RES_TYPE_CELL], narc, set * 3 + 0x3C, FALSE, 100, GF_GFX_RES_TYPE_CELL, heapID);
     card->iconResources[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(graphics->resManagers[GF_GFX_RES_TYPE_ANIM], narc, set * 3 + 0x3B, FALSE, 100, GF_GFX_RES_TYPE_ANIM, heapID);
 
@@ -596,7 +596,7 @@ void WiFiPlazaPlayerCard_FreeIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphi
 #pragma force_active reset
 
 void WiFiPlazaPlayerCard_LoadAvatar(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID, u32 avatar) {
-    UnkStruct_02070D3C files;
+    TrainerPicFileIds files;
     SpriteResourcesHeader header;
     u16 trainerClass, x;
     u16 y;
@@ -610,14 +610,14 @@ void WiFiPlazaPlayerCard_LoadAvatar(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGrap
             y = sWiFiPlazaCardAvatars[i].y;
         }
     }
-    sub_02070D84(trainerClass, 2, &files);
+    GetTrainerPicFileIdsNoLink(trainerClass, 2, &files);
 
     card->avatarResources[GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(graphics->resManagers[GF_GFX_RES_TYPE_CHAR], files.narcId, files.ncgr_id, FALSE, 101, NNS_G2D_VRAM_TYPE_2DSUB, heapID);
     GF_ASSERT(SpriteTransfer_CreateCharTransferTask_AllocAtEnd(card->avatarResources[GF_GFX_RES_TYPE_CHAR]));
     card->avatarResources[GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(graphics->resManagers[GF_GFX_RES_TYPE_PLTT], files.narcId, files.nclr_id, FALSE, 101, NNS_G2D_VRAM_TYPE_2DSUB, 1, heapID);
     WiFiPlazaInfoPanel_TintPalette(GF2DGfxResObj_GetPlttDataPtr(card->avatarResources[GF_GFX_RES_TYPE_PLTT]));
     GF_ASSERT(SpriteTransfer_CreatePlttTransferTask(card->avatarResources[GF_GFX_RES_TYPE_PLTT]));
-    sub_0200A740(card->avatarResources[GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(card->avatarResources[GF_GFX_RES_TYPE_PLTT]);
     card->avatarResources[GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromNarc(graphics->resManagers[GF_GFX_RES_TYPE_CELL], files.narcId, files.ncer_id, FALSE, 101, GF_GFX_RES_TYPE_CELL, heapID);
     card->avatarResources[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(graphics->resManagers[GF_GFX_RES_TYPE_ANIM], files.narcId, files.nanr_id, FALSE, 101, GF_GFX_RES_TYPE_ANIM, heapID);
 
@@ -762,7 +762,7 @@ void WiFiPlazaPlayerCard_LoadMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphi
         if (!SpriteTransfer_CreatePlttTransferTask(cursor->monPltts[0])) {
             GF_AssertFail();
         }
-        sub_0200A740(cursor->monPltts[0]);
+        GF2DGfxResObj_FreeData(cursor->monPltts[0]);
         cursor->monCells[0] = AddCellOrAnimResObjFromOpenNarc(graphics->resManagers[GF_GFX_RES_TYPE_CELL], use, *cell, FALSE, 150 + i, GF_GFX_RES_TYPE_CELL, heapID);
         cursor->monAnims[0] = AddCellOrAnimResObjFromOpenNarc(graphics->resManagers[GF_GFX_RES_TYPE_ANIM], use, *anim, FALSE, 150 + i, GF_GFX_RES_TYPE_ANIM, heapID);
 next:
@@ -784,7 +784,7 @@ next:
             if (!SpriteTransfer_CreateCharTransferTask_AllocAtEnd(card->monChars[0])) {
                 GF_AssertFail();
             }
-            sub_0200A740(card->monChars[0]);
+            GF2DGfxResObj_FreeData(card->monChars[0]);
             CreateSpriteResourcesHeader(&header, 150 + i, 150 + info->source, 150 + info->source, 150 + info->source, -1, -1, FALSE, 0, graphics->resManagers[GF_GFX_RES_TYPE_CHAR], graphics->resManagers[GF_GFX_RES_TYPE_PLTT], graphics->resManagers[GF_GFX_RES_TYPE_CELL], graphics->resManagers[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
             template.spriteList = graphics->spriteList;
             template.header = &header;

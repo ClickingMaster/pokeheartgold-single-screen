@@ -7,7 +7,7 @@
 #include "pokemon_storage_system.h"
 #include "sprite.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 // A PC box or party Pokemon as the box selector (BoxMonSelector_New..) reads it through its callbacks.
 typedef struct PokewalkerBoxMon {

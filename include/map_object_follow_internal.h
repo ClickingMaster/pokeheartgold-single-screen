@@ -62,7 +62,7 @@ void FollowPlayerMovement_UpdateMirror(LocalMapObject *object);
 void FollowPlayerMovement_Delete(LocalMapObject *object);
 u8 FollowPlayerMovement_GetHopFrame(LocalMapObject *object);
 u32 FollowPlayerMovement_GetHopSpeed(LocalMapObject *object);
-void sub_020659B8(LocalMapObject *object);
+void FollowPlayerMovement_DisableBallEffect(LocalMapObject *object);
 void FollowPlayerMovement_Reset(LocalMapObject *object);
 BOOL FollowPlayerState_FollowMonStart(LocalMapObject *object, FollowPlayerMovementState *state);
 BOOL FollowPlayerState_Start(LocalMapObject *object, FollowPlayerMovementState *state);

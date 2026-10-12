@@ -570,7 +570,7 @@ void HatchEggApp_FreeSpriteSystem(HatchEggAppFromBgConfig *app) {
 void HatchEggApp_CreatePokepic(HatchEggApp *app) {
     Pokemon *mon = app->args->hatch.mon;
     u32 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
-    u32 yOffset = sub_0207083C((BoxPokemon *)mon, 2);
+    u32 yOffset = GetBoxMonPicHeight((BoxPokemon *)mon, 2);
     u32 isEgg = FALSE;
     PokepicTemplate template;
     PokepicAnimScript animScript[10];
@@ -585,7 +585,7 @@ void HatchEggApp_StartPokepicAnim(HatchEggApp *app) {
     GetMonNature(app->args->hatch.mon);
     // The call passes an argument Pokepic_StartAnim does not take.
     ((void (*)(Pokepic *, int))Pokepic_StartAnim)(app->pokepic, 1);
-    sub_0207294C(app->narc, app->picManager, app->pokepic, (u16)species, 2, 0, 0);
+    NARC_StartPokepicAnim(app->narc, app->picManager, app->pokepic, (u16)species, 2, 0, 0);
 }
 
 void HatchEggApp_DeletePokepic(HatchEggApp *app) {
@@ -1170,7 +1170,7 @@ BOOL HatchEggApp_Main(OverlayManager *man, int *state) {
             (*state)++;
         }
         species = GetMonData(app->args->hatch.mon, MON_DATA_SPECIES, NULL);
-        sub_020729A4(app->narc, app->animParams, (u16)species, 1);
+        NARC_ReadPokepicCryDelay(app->narc, app->animParams, (u16)species, 1);
         if (species == SPECIES_MANAPHY) {
             app->sceneType = 1;
         } else {

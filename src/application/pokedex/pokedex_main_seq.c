@@ -3482,9 +3482,9 @@ static BOOL PokedexApp_PlayCursorCry(PokedexAppData *pokedexApp) {
             form = PICHU_NORMAL;
         }
     }
-    sub_02006E3C(1);
+    Chatot_SetForceDefaultCry(1);
     PlayCry(species, form);
-    sub_02006E3C(0);
+    Chatot_SetForceDefaultCry(0);
     return TRUE;
 }
 

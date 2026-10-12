@@ -27,7 +27,7 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "unk_02009D48.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 #include "grid_input_handler.h"
 #include "touchpad.h"
 
@@ -720,7 +720,7 @@ void HallOfFameShowcase_ShowMonDetail(HallOfFameShowcase *showcase, u32 index) {
     Save_HOF_GetMonStatsByIndexPair(showcase->hallOfFame, showcase->record, index, &showcase->mon);
     gender = GetGenderBySpeciesAndPersonality(showcase->mon.species, showcase->mon.personality);
     // The prototype in pokemon.h has an extra, unused parameter that no caller passes.
-    ((void (*)(NARC *, s8 *, u16))sub_020729D8)(showcase->pokegraNarc, yOffset, showcase->mon.species);
+    ((void (*)(NARC *, s8 *, u16))NARC_ReadPokepicShadowHeight)(showcase->pokegraNarc, yOffset, showcase->mon.species);
     height = GetMonPicHeightBySpeciesGenderForm(showcase->mon.species, (u8)gender, 2, showcase->mon.form, showcase->mon.personality);
     sprites = showcase->sprites;
     ManagedSprite_SetPositionXYWithSubscreenOffset(showcase->sprites[slot], 64, (s16)(height + 64 - yOffset[0]), FX32_CONST(512));

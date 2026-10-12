@@ -426,8 +426,8 @@ extern int (*const ov85_021EA800[])(SpinTradeApp *app);
 extern const int _021EAA80[];
 
 // Not declared by the owners' headers
-void sub_0201A728(int a0);
-void sub_0201A738(int a0);
+void Sys_SetSoftResetDisableFlag(int a0);
+void Sys_ClearSoftResetDisableFlag(int a0);
 int GetUserFrameGfx2PaletteMember(int frame);
 BOOL sub_02036FD8(int command, void *data, int size);
 void CommState_SetMaxEntries(int count);
@@ -641,7 +641,7 @@ BOOL SpinTradeApp_Init(OverlayManager *man, int *state) {
     CommState_SetErrorWatch(1, 1);
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
-    sub_0201A728(2);
+    Sys_SetSoftResetDisableFlag(2);
     Heap_Create(HEAP_ID_3, HEAP_ID_102, 0x80000);
     app = OverlayManager_CreateAndGetData(man, sizeof(SpinTradeApp), HEAP_ID_102);
     memset(app, 0, sizeof(SpinTradeApp));
@@ -702,7 +702,7 @@ BOOL SpinTradeApp_Exit(OverlayManager *man, int *state) {
     NARC_Delete(app->narc);
     OverlayManager_FreeData(man);
     Heap_Destroy(HEAP_ID_102);
-    sub_0201A738(2);
+    Sys_ClearSoftResetDisableFlag(2);
     return TRUE;
 }
 

@@ -1506,7 +1506,7 @@ BOOL ScrCmd_FacePlayer(ScriptContext *ctx) {
                 && sub_02060E54(*p_lastInteracted, metatile) == FALSE
                 && MetatileBehavior_IsPuddle(metatile) == FALSE
                 && MetatileBehavior_IsShallowWater(metatile) == FALSE
-                && sub_02060EBC(*p_lastInteracted, metatile) == FALSE
+                && MapObject_CheckSnowBehavior(*p_lastInteracted, metatile) == FALSE
                 && MetatileBehavior_IsMud(metatile) == FALSE
                 && MetatileBehavior_IsReflective(metatile) == FALSE) {
                 MapObject_ClearFlagsBits(*p_lastInteracted, MAPOBJECTFLAG_UNK20);
@@ -1561,7 +1561,7 @@ BOOL ScrCmd_107(ScriptContext *ctx) {
     shift_v.y = FX32_CONST(y);
     shift_v.z = FX32_CONST(z);
 
-    sub_0205F9A0(PlayerAvatar_GetMapObject(ctx->fieldSystem->playerAvatar), &shift_v);
+    MapObject_SetDrawOffset(PlayerAvatar_GetMapObject(ctx->fieldSystem->playerAvatar), &shift_v);
     Camera_OffsetLookAtPosAndTarget(&shift_v, ctx->fieldSystem->camera);
     return FALSE;
 }
@@ -1579,7 +1579,7 @@ BOOL ScrCmd_109(ScriptContext *ctx) {
     LocalMapObject *object = MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, objectId);
     u16 arg = ScriptReadHalfword(ctx);
     if (object != NULL) {
-        sub_0205FC94(object, arg);
+        MapObject_ChangeMovement(object, arg);
     }
     return FALSE;
 }
@@ -3777,7 +3777,7 @@ BOOL ScrCmd_523(ScriptContext *ctx) {
     u16 r4 = ScriptGetVar(ctx);
     LocalMapObject *object = MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, objectId);
     GF_ASSERT(object != NULL);
-    sub_0205BED8(ctx->taskman, object, spC, sp8, r6, r4);
+    CallTask_SpinMapObject(ctx->taskman, object, spC, sp8, r6, r4);
     return TRUE;
 }
 
@@ -3787,7 +3787,7 @@ BOOL ScrCmd_524(ScriptContext *ctx) {
     u16 r6 = ScriptGetVar(ctx);
     LocalMapObject *object = MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, objectId);
     GF_ASSERT(object != NULL);
-    sub_0205BFB4(ctx->taskman, object, r7, r6);
+    CallTask_BlinkMapObject(ctx->taskman, object, r7, r6);
     return TRUE;
 }
 
@@ -3832,7 +3832,7 @@ BOOL ScrCmd_526(ScriptContext *ctx) {
 
 BOOL ScrCmd_528(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    *p_ret = gSystem.unk6A;
+    *p_ret = gSystem.agbCartridgeVersion;
     return TRUE;
 }
 
@@ -4478,7 +4478,7 @@ BOOL ScrCmd_FollowMonFacePlayer(ScriptContext *ctx) {
             u8 facingTile = GetMetatileBehavior(ctx->fieldSystem, playerX + deltaX, playerZ + deltaY);
             VecFx32 posVec;
             MapObject_CopyPositionVector(myObject, &posVec);
-            if (FieldSystem_CheckCollisionAndHeight(ctx->fieldSystem, &posVec, playerX + deltaX, playerZ + deltaY, 0) || MetatileBehavior_IsSurfableWater(facingTile) || sub_02060BFC(myObject, playerX + deltaX, playerY, playerZ + deltaY)) {
+            if (FieldSystem_CheckCollisionAndHeight(ctx->fieldSystem, &posVec, playerX + deltaX, playerZ + deltaY, 0) || MetatileBehavior_IsSurfableWater(facingTile) || MapObject_IsTileOccupiedInLink(myObject, playerX + deltaX, playerY, playerZ + deltaY)) {
                 doFace = FALSE;
             }
         }
@@ -4513,7 +4513,7 @@ BOOL ScrCmd_WaitFollowingPokemonMovement(ScriptContext *ctx) {
 BOOL ScrCmd_FollowingPokemonMovement(ScriptContext *ctx) {
     u16 movement = ScriptReadHalfword(ctx);
     if (FollowMon_IsActive(ctx->fieldSystem)) {
-        sub_0205FC94(MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, obj_partner_poke), movement);
+        MapObject_ChangeMovement(MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, obj_partner_poke), movement);
     }
     return TRUE;
 }
@@ -5301,13 +5301,13 @@ BOOL ScrCmd_800(ScriptContext *ctx) {
 BOOL ScrCmd_801(ScriptContext *ctx) {
     Window **p_moneyBox = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MONEY_BOX);
     u16 *p_var = ScriptGetVarPointer(ctx);
-    *p_moneyBox = ov01_021EEF68(ctx->fieldSystem, *p_var);
+    *p_moneyBox = BattleRegulationWindow_New(ctx->fieldSystem, *p_var);
     return FALSE;
 }
 
 BOOL ScrCmd_802(ScriptContext *ctx) {
     Window **p_moneyBox = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MONEY_BOX);
-    ov01_021EEF88(*p_moneyBox);
+    BattleRegulationWindow_Delete(*p_moneyBox);
     return FALSE;
 }
 

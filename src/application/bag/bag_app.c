@@ -505,7 +505,7 @@ BOOL Bag_Exit(OverlayManager *man, int *state) {
     MessageFormat_Delete(app->msgFormat);
     NARC_Delete(app->narc);
     OverlayManager_FreeData(man);
-    sub_02004B10();
+    Sound_ClearSecondaryScene();
     Main_SetVBlankIntrCB(NULL, NULL);
     Heap_Destroy(HEAP_ID_6);
     return TRUE;

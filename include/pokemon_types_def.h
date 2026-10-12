@@ -216,7 +216,7 @@ typedef struct {
     /* 0x088 */ PartyPokemon party;
 } Pokemon; // size: 0xEC
 
-struct UnkPokemonStruct_02072A98 {
+struct BattleRecordMon {
     /* 0x00 */ u32 personality;
     /* 0x04 */ u16 partyDecrypted : 1;
     u16 boxDecrypted : 1;
@@ -291,14 +291,14 @@ struct UnkStruct_02069038 {
     struct Pokeanm anim;
 };
 
-typedef struct UnkStruct_02070D3C {
+typedef struct TrainerPicFileIds {
     NarcId narcId;
     s32 ncgr_id;
     s32 nclr_id;
     s32 ncer_id;
     s32 nanr_id;
     s32 ncbr_id;
-} UnkStruct_02070D3C;
+} TrainerPicFileIds;
 
 struct Evolution {
     u16 method;

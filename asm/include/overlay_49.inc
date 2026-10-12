@@ -42,7 +42,7 @@
 .public AddCharResObjFromOpenNarc
 .public AddPlttResObjFromOpenNarc
 .public AddCellOrAnimResObjFromOpenNarc
-.public sub_0200A740
+.public GF2DGfxResObj_FreeData
 .public DestroySingle2DGfxResObj
 .public GF2DGfxResObj_GetPlttDataPtr
 .public SpriteTransfer_CreateCharTransferTask_AllocAtEnd
@@ -232,7 +232,7 @@
 .public CommState_SetErrorWatch
 .public CommState_SetPlazaLinkMode
 .public WirelessStatusIcon_Create
-.public sub_02070D84
+.public GetTrainerPicFileIdsNoLink
 .public TypeIcon_GetCharFile
 .public TypeIcon_GetPlttFile
 .public TypeIcon_GetPalette

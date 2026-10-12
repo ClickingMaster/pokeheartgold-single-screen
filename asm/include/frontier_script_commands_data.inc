@@ -78,10 +78,10 @@
 .public MailMsg_GetExpandedString
 .public MailMsg_SetMsgBankAndNum
 .public MailMsg_SetFieldI
-.public sub_0201A728
-.public sub_0201A738
-.public sub_0201A748
-.public sub_0201A774
+.public Sys_SetSoftResetDisableFlag
+.public Sys_ClearSoftResetDisableFlag
+.public Sys_SetAsyncSaveMarker
+.public Sys_ClearAsyncSaveMarker
 .public Heap_Alloc
 .public Heap_Free
 .public ToggleBgLayer
@@ -152,9 +152,9 @@
 .public GetPokemonSpriteCharAndPlttNarcIds
 .public Pokemon_GetIconNaix
 .public Pokemon_GetIconPalette
-.public sub_02074490
-.public sub_02074498
-.public sub_020744A4
+.public GetMonIconPlttNaix
+.public GetMonIconCell32KNaix
+.public GetMonIconAnim32KNaix
 .public Party_GetMonByIndex
 .public SaveArray_Party_Get
 .public sub_0207CA9C

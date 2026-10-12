@@ -54,7 +54,7 @@ typedef struct FrontierBrainIntroBurst {
 
 typedef struct FrontierBrainIntroText {
     TextOBJ *textObj;
-    UnkStruct_02021AC8 charTransfer;
+    ObjCharSpaceReservation charTransfer;
     u16 width;
 } FrontierBrainIntroText;
 
@@ -347,7 +347,7 @@ BOOL FrontierBrainIntro_Run(FrontierBrainIntro *intro, enum HeapID heapID, const
 void FrontierBrainIntro_CreateText(FrontierBrainIntro *intro, FrontierBrainIntroText *text, String *string, u32 fontId, int color, int palette, int plttResourceId, int x, int y, int center, FrontierBrainIntroTextCache *cache) {
     TextOBJTemplate textObjTemplate;
     Window window;
-    UnkStruct_02021AC8 charTransfer;
+    ObjCharSpaceReservation charTransfer;
     int width;
     int charLength;
     TextOBJ *textObj;
@@ -373,7 +373,7 @@ void FrontierBrainIntro_CreateText(FrontierBrainIntro *intro, FrontierBrainIntro
         window = cache->window;
     }
 
-    sub_02021AC8(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_101), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &charTransfer);
+    ObjCharTransfer_ReserveCharSpace(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_101), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &charTransfer);
     if (center == TRUE) {
         x -= width / 2;
     }
@@ -405,7 +405,7 @@ void FrontierBrainIntro_CreateText(FrontierBrainIntro *intro, FrontierBrainIntro
 
 void FrontierBrainIntro_DeleteText(FrontierBrainIntroText *text) {
     FontOAM_Delete(text->textObj);
-    sub_02021B5C(&text->charTransfer);
+    ObjCharTransfer_FreeCharSpace(&text->charTransfer);
 }
 
 void FrontierBrainIntro_GetTextSize(String *string, u32 fontId, int *width, int *charLength) {

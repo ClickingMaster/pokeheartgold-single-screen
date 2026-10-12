@@ -27,7 +27,7 @@
 #include "sound_playback.h"
 #include "unk_02009D48.h"
 #include "oam_manager.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 #include "geometry_math.h"
 #include "swap_3d_buffers.h"
 

@@ -123,8 +123,8 @@
 .public Main_SetVBlankIntrCB
 .public HBlankInterruptDisable
 .public SetKeyRepeatTimers
-.public sub_0201A728
-.public sub_0201A738
+.public Sys_SetSoftResetDisableFlag
+.public Sys_ClearSoftResetDisableFlag
 .public Heap_Create
 .public Heap_Destroy
 .public Heap_Alloc
@@ -271,7 +271,7 @@
 .public BoxMonIsShiny
 .public GetBoxmonSpriteCharAndPlttNarcIds
 .public GetMonSpriteCharAndPlttNarcIdsEx
-.public sub_02070438
+.public SanitizeMonForm
 .public Mon_GetBoxMon
 .public CopyBoxPokemonToPokemon
 .public Mon_UpdateShayminForm
@@ -286,7 +286,7 @@
 .public Boxmon_GetIconNaix
 .public GetMonIconNaixEx
 .public GetMonIconPaletteEx
-.public sub_02074490
+.public GetMonIconPlttNaix
 .public Party_GetCount
 .public Party_GetMonByIndex
 .public SaveArray_Party_Get

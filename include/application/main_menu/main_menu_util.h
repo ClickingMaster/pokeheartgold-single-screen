@@ -9,7 +9,7 @@
 #include "save.h"
 #include "sprite.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 // Shared services of the main menu overlay (src/application/main_menu/main_menu_util.c): heap of the crypto library,
 // the Mystery Gift GBA cartridge, screen setup, fades, the message box printer (MainMenuTextPrinter), sprites on both

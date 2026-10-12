@@ -56,25 +56,25 @@ void NNS_SndSetMonoFlag(int flag);
 void NNS_SndSetMasterVolume(int volume);
 void NNS_SndPlayerSetAllocatableChannel(int playerNo, u32 channels);
 
-void sub_02005318(void);
-void sub_02005B20(void);
+void Sound_UnloadSecondarySceneData(void);
+void Sound_PauseOrStopFieldBGM(void);
 void Sound_ClearBGMPauseFlags(void);
 int GF_NNS_SndPlayerGetSeqNo(NNSSndHandle *handle);
 int GF_GetBankBySeqNo(int seqNo);
-void sub_020059E0(u16 seqNo);
-int sub_02005328(int state);
-void sub_02005150(u16 seqNo, u16 previousSeqNo);
-void sub_020051A4(u16 seqNo, int bankNo);
-BOOL sub_02004EB4(u16 seqNo);
-void sub_02005060(int scene);
-void sub_02005AF8(int mode);
-void sub_0200508C(u16 seqNo, int mode);
-void sub_02005228(u16 seqNo, int mode);
-void sub_02005260(u16 seqNo, int mode);
+void Sound_SetReloadFieldSeqFlag(u16 seqNo);
+int Sound_GetSavedHeapLevel(int state);
+void Sound_ResumeFieldBGM(u16 seqNo, u16 previousSeqNo);
+void Sound_ReloadFieldSceneData(u16 seqNo, int bankNo);
+BOOL Sound_PlayFieldBGM(u16 seqNo);
+void Sound_ResetAndLoadSceneSoundEffects(int scene);
+void Sound_SetBGMPlayerChannels(int mode);
+void Sound_PlayBGMForFieldScene(u16 seqNo, int mode);
+void Sound_PlayBGMForBattleScene(u16 seqNo, int mode);
+void Sound_PlayBGMForWifiScene(u16 seqNo, int mode);
 void sub_02005280(u16 seqNo, int mode);
 void sub_020052A4(u16 seqNo, int mode);
-void sub_020052C8(int scene);
-void sub_020052E4(int scene, u16 seqNo, int mode);
+void Sound_LoadSecondarySceneSoundEffects(int scene);
+void Sound_PlayBGMForScene(int scene, u16 seqNo, int mode);
 void sub_02005464(int seqNo, enum SoundHandleNo handleNo);
 u8 GF_GetPlayerNoBySeq(u16 seqNo);
 const struct NNSSndArcBankInfo *GF_GetBankInfoBySeqNo(int seqNo);
@@ -97,7 +97,7 @@ BOOL GF_NowStartMusicId(u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int 
 BOOL GF_NowStartMusicIdEx(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused);
 BOOL GF_FadeStartMusicId(u16 seqNo, u16 fadeOutFrames, int delay, int fadeInFrames, u8 reload, int unused);
 BOOL GF_FadeStartMusicIdEx(int scene, u16 seqNo, u16 fadeOutFrames, int delay, int fadeInFrames, u8 reload, int unused);
-void sub_02005AB0(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused);
+void Sound_PrepareBGMChange(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused);
 void GF_SndSetAllocatableChannelForBGMPlayer(u32 channels);
 
 void GF_SND_BGM_DisableSet(u8 disabled) {
@@ -110,7 +110,7 @@ BOOL GF_SND_BGM_DisableCheck(void) {
     return *value;
 }
 
-void sub_02004A60(u16 seqNo) {
+void Sound_SetCurrentBGM(u16 seqNo) {
     u16 *currentSeqNo = GF_SdatGetAttrPtr(10);
     if (seqNo > SEQ_GS_P_START) {
         Sound_SetPlayingGBSeqNo(seqNo);
@@ -131,7 +131,7 @@ void GF_SetCurrentPlayingBGM(u16 seqNo) {
     *queuedSeqNo = seqNo;
 }
 
-u16 sub_02004AAC(void) {
+u16 GF_GetQueuedBGM(void) {
     u16 *queuedSeqNo = GF_SdatGetAttrPtr(11);
     return *queuedSeqNo;
 }
@@ -157,15 +157,15 @@ void Sound_SetScene(int scene) {
     }
 }
 
-void sub_02004AFC(u8 scene) {
+void Sound_SetSecondaryScene(u8 scene) {
     GF_SdatGetAttrPtr(21);
     u8 *secondaryScene = GF_SdatGetAttrPtr(22);
     *secondaryScene = scene;
 }
 
-void sub_02004B10(void) {
+void Sound_ClearSecondaryScene(void) {
     u8 *secondaryScene = GF_SdatGetAttrPtr(22);
-    sub_02005318();
+    Sound_UnloadSecondarySceneData();
     *secondaryScene = 0;
 }
 
@@ -338,7 +338,7 @@ BOOL Sound_LoadSceneSoundEffects(int scene) {
     return success;
 }
 
-BOOL sub_02004EB4(u16 seqNo) {
+BOOL Sound_PlayFieldBGM(u16 seqNo) {
     return Sound_SetSceneAndPlayBGM(4, seqNo, 1);
 }
 
@@ -358,15 +358,15 @@ BOOL Sound_SetSceneAndPlayBGM(u8 scene, u16 seqNo, int mode) {
     Sound_SetScene(scene);
     switch (scene) {
     case 4:
-        sub_02005AF8(0);
-        sub_0200508C(seqNo, mode);
+        Sound_SetBGMPlayerChannels(0);
+        Sound_PlayBGMForFieldScene(seqNo, mode);
         *fanfareWait = 0;
         break;
     case 5:
-        sub_02005228(seqNo, mode);
+        Sound_PlayBGMForBattleScene(seqNo, mode);
         break;
     case 11:
-        sub_02005260(seqNo, mode);
+        Sound_PlayBGMForWifiScene(seqNo, mode);
         break;
     case 6:
         sub_02005280(seqNo, mode);
@@ -396,23 +396,23 @@ BOOL Sound_SetSceneAndPlayBGM(u8 scene, u16 seqNo, int mode) {
     case 71:
     case 72:
     case 74:
-        sub_020052C8(scene);
+        Sound_LoadSecondarySceneSoundEffects(scene);
         break;
     case 68:
-        sub_020052C8(scene);
+        Sound_LoadSecondarySceneSoundEffects(scene);
         PlayBGM(seqNo);
         break;
     case 1:
-        sub_02005AF8(1);
-        sub_020052E4(scene, seqNo, mode);
+        Sound_SetBGMPlayerChannels(1);
+        Sound_PlayBGMForScene(scene, seqNo, mode);
         break;
     case 14:
-        sub_02005AF8(2);
-        sub_020052E4(scene, seqNo, mode);
+        Sound_SetBGMPlayerChannels(2);
+        Sound_PlayBGMForScene(scene, seqNo, mode);
         break;
     case 2:
-        sub_02005AF8(0);
-        sub_020052E4(scene, seqNo, mode);
+        Sound_SetBGMPlayerChannels(0);
+        Sound_PlayBGMForScene(scene, seqNo, mode);
         break;
     case 3:
     case 8:
@@ -431,10 +431,10 @@ BOOL Sound_SetSceneAndPlayBGM(u8 scene, u16 seqNo, int mode) {
     case 24:
     case 25:
     case 73:
-        sub_020052E4(scene, seqNo, mode);
+        Sound_PlayBGMForScene(scene, seqNo, mode);
         break;
     case 22:
-        sub_020052E4(scene, seqNo, mode);
+        Sound_PlayBGMForScene(scene, seqNo, mode);
         break;
     default:
         return FALSE;
@@ -442,14 +442,14 @@ BOOL Sound_SetSceneAndPlayBGM(u8 scene, u16 seqNo, int mode) {
     return TRUE;
 }
 
-void sub_02005060(int scene) {
+void Sound_ResetAndLoadSceneSoundEffects(int scene) {
     GF_Snd_LoadState(*(int *)GF_SdatGetAttrPtr(24));
     GF_Snd_SaveState(GF_SdatGetAttrPtr(25));
     Sound_LoadSceneSoundEffects(scene);
     GF_Snd_SaveState(GF_SdatGetAttrPtr(26));
 }
 
-void sub_0200508C(u16 seqNo, int mode) {
+void Sound_PlayBGMForFieldScene(u16 seqNo, int mode) {
     int playingSeqNo;
     u8 *reload = GF_SdatGetAttrPtr(12);
     GF_SdatGetAttrPtr(24);
@@ -459,31 +459,31 @@ void sub_0200508C(u16 seqNo, int mode) {
     if (playingSeqNo > SEQ_GS_P_START) {
         currentSeqNo = GBSounds_GetDSSeqNoByGBSeqNo(currentSeqNo);
     }
-    if (*reload != 0 || currentSeqNo != seqNo || sub_02004AAC() == SEQ_GS_BICYCLE) {
-        sub_020059E0(1);
+    if (*reload != 0 || currentSeqNo != seqNo || GF_GetQueuedBGM() == SEQ_GS_BICYCLE) {
+        Sound_SetReloadFieldSeqFlag(1);
         if (_021D05E8[3] == 0 || _021D05E8[1] == 0) {
             StopBGMSEAndCry();
             _021D05E8[1] = 1;
         }
         if (currentSeqNo != seqNo) {
-            sub_020053A8(1, 0);
+            Sound_SetPlayerPause(1, 0);
             Sound_Stop();
         }
         if (*reload == 1) {
-            GF_Snd_LoadState(sub_02005328(2));
+            GF_Snd_LoadState(Sound_GetSavedHeapLevel(2));
             Sound_LoadSceneSoundEffects(4);
             GF_Snd_SaveState(GF_SdatGetAttrPtr(26));
             if (currentSeqNo != seqNo) {
-                sub_020053A8(1, 0);
+                Sound_SetPlayerPause(1, 0);
             }
-            sub_02005150(seqNo, (u16)playingSeqNo);
+            Sound_ResumeFieldBGM(seqNo, (u16)playingSeqNo);
         } else {
             PlayBGM(seqNo);
         }
     }
 }
 
-void sub_02005150(u16 seqNo, u16 previousSeqNo) {
+void Sound_ResumeFieldBGM(u16 seqNo, u16 previousSeqNo) {
     u16 *fieldSeqNo = GF_SdatGetAttrPtr(32);
     if (GF_GetBankBySeqNo(*fieldSeqNo) == BANK_BASIC) {
         GF_Snd_LoadSeqEx(seqNo, 4);
@@ -492,17 +492,17 @@ void sub_02005150(u16 seqNo, u16 previousSeqNo) {
         GF_Snd_LoadSeqEx(*fieldSeqNo, 6);
     }
     GF_Snd_SaveState(GF_SdatGetAttrPtr(27));
-    sub_020053A8(1, 0);
+    Sound_SetPlayerPause(1, 0);
     GF_SndStartFadeInBGM(127, 40, 0);
-    sub_020059E0(0);
+    Sound_SetReloadFieldSeqFlag(0);
 }
 
-void sub_020051A4(u16 seqNo, int bankNo) {
+void Sound_ReloadFieldSceneData(u16 seqNo, int bankNo) {
     u8 *reload = GF_SdatGetAttrPtr(19);
     u16 *fieldSeqNo = GF_SdatGetAttrPtr(32);
     if (*reload == 1 || bankNo == 0) {
-        GF_Snd_LoadState(sub_02005328(1));
-        sub_02004AFC(0);
+        GF_Snd_LoadState(Sound_GetSavedHeapLevel(1));
+        Sound_SetSecondaryScene(0);
         GF_Snd_LoadSeqEx(*fieldSeqNo, 2);
         GF_Snd_SaveState(GF_SdatGetAttrPtr(25));
         Sound_LoadSceneSoundEffects(4);
@@ -517,64 +517,64 @@ void sub_020051A4(u16 seqNo, int bankNo) {
     }
 }
 
-void sub_02005228(u16 seqNo, int mode) {
+void Sound_PlayBGMForBattleScene(u16 seqNo, int mode) {
     GF_SdatGetAttrPtr(24);
-    sub_02005B20();
-    GF_Snd_LoadState(sub_02005328(2));
+    Sound_PauseOrStopFieldBGM();
+    GF_Snd_LoadState(Sound_GetSavedHeapLevel(2));
     Sound_LoadSceneSoundEffects(5);
     GF_Snd_SaveState(GF_SdatGetAttrPtr(26));
-    sub_020059E0(1);
+    Sound_SetReloadFieldSeqFlag(1);
     PlayBGM(seqNo);
 }
 
-void sub_02005260(u16 seqNo, int mode) {
+void Sound_PlayBGMForWifiScene(u16 seqNo, int mode) {
     GF_SdatGetAttrPtr(24);
     Sound_Stop();
     Sound_ClearBGMPauseFlags();
-    sub_02005060(4);
+    Sound_ResetAndLoadSceneSoundEffects(4);
     PlayBGM(seqNo);
 }
 
 void sub_02005280(u16 seqNo, int mode) {
     GF_SdatGetAttrPtr(24);
     Sound_Stop();
-    sub_02005060(6);
-    sub_020059E0(1);
+    Sound_ResetAndLoadSceneSoundEffects(6);
+    Sound_SetReloadFieldSeqFlag(1);
     PlayBGM(seqNo);
 }
 
 void sub_020052A4(u16 seqNo, int mode) {
     GF_SdatGetAttrPtr(24);
     Sound_Stop();
-    sub_02005060(7);
-    sub_020059E0(1);
+    Sound_ResetAndLoadSceneSoundEffects(7);
+    Sound_SetReloadFieldSeqFlag(1);
     PlayBGM(seqNo);
 }
 
-void sub_020052C8(int scene) {
-    sub_02005318();
+void Sound_LoadSecondarySceneSoundEffects(int scene) {
+    Sound_UnloadSecondarySceneData();
     Sound_LoadSceneSoundEffects(scene);
     GF_Snd_SaveState(GF_SdatGetAttrPtr(28));
 }
 
-void sub_020052E4(int scene, u16 seqNo, int mode) {
+void Sound_PlayBGMForScene(int scene, u16 seqNo, int mode) {
     GF_SdatGetAttrPtr(24);
     Sound_Stop();
-    sub_02005060(scene);
+    Sound_ResetAndLoadSceneSoundEffects(scene);
     PlayBGM(seqNo);
 }
 
 void BGM_SaveStateAndPlayNew(u16 seqNo) {
     GetSoundDataPointer();
-    sub_02005B20();
+    Sound_PauseOrStopFieldBGM();
     PlayBGM(seqNo);
 }
 
-void sub_02005318(void) {
-    GF_Snd_LoadState(sub_02005328(4));
+void Sound_UnloadSecondarySceneData(void) {
+    GF_Snd_LoadState(Sound_GetSavedHeapLevel(4));
 }
 
-int sub_02005328(int state) {
+int Sound_GetSavedHeapLevel(int state) {
     int *level;
     GetSoundDataPointer();
     if (state >= 7) {
@@ -608,7 +608,7 @@ int sub_02005328(int state) {
     return *level;
 }
 
-void sub_020053A8(u8 playerNo, u8 pause) {
+void Sound_SetPlayerPause(u8 playerNo, u8 pause) {
     u8 *flag;
     enum SoundHandleNo handleNo;
     if (playerNo == 1) {
@@ -621,7 +621,7 @@ void sub_020053A8(u8 playerNo, u8 pause) {
         return;
     }
     if (pause == 0) {
-        sub_02004A60((u16)GF_NNS_SndPlayerGetSeqNo(GF_GetSoundHandle(handleNo)));
+        Sound_SetCurrentBGM((u16)GF_NNS_SndPlayerGetSeqNo(GF_GetSoundHandle(handleNo)));
     }
     NNS_SndPlayerPause(GF_GetSoundHandle(handleNo), pause);
     *flag = pause;
@@ -716,7 +716,7 @@ int GF_GetBankBySeqNo(int seqNo) {
     return param->bankNo;
 }
 
-BOOL sub_02005518(void) {
+BOOL Sound_IsMicCounterFull(void) {
     return GF_SndWorkMicCounterFull();
 }
 
@@ -990,11 +990,11 @@ void Sound_SetMasterVolume(int volume) {
     NNS_SndSetMasterVolume(volume);
 }
 
-s8 *sub_020059D8(void) {
+s8 *Sound_GetChatotBuffer(void) {
     return _021D0620;
 }
 
-void sub_020059E0(u16 state) {
+void Sound_SetReloadFieldSeqFlag(u16 state) {
     *(u8 *)GF_SdatGetAttrPtr(19) = state;
 }
 
@@ -1004,7 +1004,7 @@ BOOL GF_NowStartMusicId(u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int 
 
 BOOL GF_NowStartMusicIdEx(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused) {
     u8 *secondary = GF_SdatGetAttrPtr(22);
-    sub_02005AB0(scene, seqNo, fadeOutFrames, delay, reload, unused);
+    Sound_PrepareBGMChange(scene, seqNo, fadeOutFrames, delay, reload, unused);
     *secondary = 0;
     GF_SndSetState(5);
     return TRUE;
@@ -1016,27 +1016,27 @@ BOOL GF_FadeStartMusicId(u16 seqNo, u16 fadeOutFrames, int delay, int fadeInFram
 
 BOOL GF_FadeStartMusicIdEx(int scene, u16 seqNo, u16 fadeOutFrames, int delay, int fadeInFrames, u8 reload, int unused) {
     int *fadeIn = GF_SdatGetAttrPtr(9);
-    sub_02005AB0(scene, seqNo, fadeOutFrames, delay, reload, unused);
+    Sound_PrepareBGMChange(scene, seqNo, fadeOutFrames, delay, reload, unused);
     *fadeIn = fadeInFrames;
     GF_SndSetState(6);
     return TRUE;
 }
 
-void sub_02005AB0(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused) {
+void Sound_PrepareBGMChange(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused) {
     const struct NNSSndArcBankInfo **bank = GF_SdatGetAttrPtr(2);
     GF_SndStartFadeOutBGM(0, fadeOutFrames);
-    sub_02004A60(0);
+    Sound_SetCurrentBGM(0);
     GF_SetCurrentPlayingBGM(seqNo);
     GF_SndSetAfterFadeDelayTimer(delay);
     *bank = GF_GetBankInfoBySeqNo(seqNo);
-    sub_020059E0(reload);
+    Sound_SetReloadFieldSeqFlag(reload);
 }
 
 void GF_SndSetAllocatableChannelForBGMPlayer(u32 channels) {
     NNS_SndPlayerSetAllocatableChannel(7, channels);
 }
 
-void sub_02005AF8(int mode) {
+void Sound_SetBGMPlayerChannels(int mode) {
     if (mode == 0) {
         GF_SndSetAllocatableChannelForBGMPlayer(0xA7FE);
         Sound_StopCaptureReverb(0);
@@ -1046,10 +1046,10 @@ void sub_02005AF8(int mode) {
     Sound_IsCaptureActive();
 }
 
-void sub_02005B20(void) {
+void Sound_PauseOrStopFieldBGM(void) {
     if (GF_SndGetFadeTimer() == 0 && GF_NNS_SndPlayerGetSeqNo(GF_GetSoundHandle(0)) != -1) {
         StopBGMSEAndCry();
-        sub_020053A8(1, 1);
+        Sound_SetPlayerPause(1, 1);
     } else {
         Sound_Stop();
     }

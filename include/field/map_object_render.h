@@ -6,7 +6,7 @@
 #include "sprite.h"
 
 // The billboard renderer of the map objects: the resource caches behind every map object's billboard and the
-// queue that loads them over several frames. It lives inside MapObjectManager (sub_0205F1A0).
+// queue that loads them over several frames. It lives inside MapObjectManager (MapObjectManager_GetRender).
 typedef struct MapObjectRender MapObjectRender;
 
 void MapObjectRender_ReleaseUnused(MapObjectManager *manager, MapObjectRender *render);

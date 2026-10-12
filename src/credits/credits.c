@@ -20,7 +20,7 @@
 #include "system.h"
 #include "text.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "oam_manager.h"
 
 #ifdef HEARTGOLD

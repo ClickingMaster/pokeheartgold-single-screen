@@ -36,7 +36,7 @@ void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *sprite, int priority
 // monsters.c / pokemon_icon_idx.c, declared here with the argument types the calls were built with
 void *sub_0201457C(u16 charNarc, u16 charFile, u32 heapId, u32 personality, int a4, int a5, u16 species);
 void *sub_02014450(u16 plttNarc, u16 plttFile, u32 heapId);
-u32 sub_02074490(void);
+u32 GetMonIconPlttNaix(void);
 // in the object linked between the two parts of the top screen code (picture sprites)
 void PokeathlonPennantCaptureDisplay_CreatePicSprites(void *pool, PokeathlonPennantCaptureDisplay *display);
 
@@ -207,7 +207,7 @@ void PokeathlonPennantCaptureDisplay_LoadIcons(PokeathlonPennantCaptureDisplay *
     } current;
 
     narc = NARC_New(NARC_poketool_icongra_poke_icon, display->heapId);
-    iconNarc = sub_02074490();
+    iconNarc = GetMonIconPlttNaix();
     GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, iconNarc, GF_PAL_LOCATION_SUB_OBJ, GF_PAL_SLOT_6_OFFSET, 0x60, display->heapId);
     fileRow = display;
     i = 0;

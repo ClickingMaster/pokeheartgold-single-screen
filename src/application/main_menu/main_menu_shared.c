@@ -206,7 +206,7 @@ int MainMenuUtil_RunSave(void) {
 
     switch (sMainMenuUtilWork->saveState) {
     case SAVE_STATE_START:
-        sub_0201A728(4);
+        Sys_SetSoftResetDisableFlag(4);
         Save_PrepareForAsyncWrite(work->saveData, 2);
         work->saveState++;
         break;
@@ -220,7 +220,7 @@ int MainMenuUtil_RunSave(void) {
             work->saveState = SAVE_STATE_PAUSED;
         }
         if (result == WRITE_STATUS_SUCCESS || result == WRITE_STATUS_TOTAL_FAIL) {
-            sub_0201A738(4);
+            Sys_ClearSoftResetDisableFlag(4);
         }
         return result;
     case SAVE_STATE_DONE:
@@ -244,7 +244,7 @@ void MainMenuUtil_ResumeSave(void) {
 void MainMenuUtil_CancelSave(void) {
     Save_Cancel(sMainMenuUtilWork->saveData);
     sMainMenuUtilWork->saveState = SAVE_STATE_FAILED;
-    sub_0201A738(4);
+    Sys_ClearSoftResetDisableFlag(4);
 }
 
 int MainMenuUtil_GetSaveState(void) {

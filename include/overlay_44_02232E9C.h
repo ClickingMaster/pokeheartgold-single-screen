@@ -115,7 +115,7 @@ typedef struct UnkStruct_ov44_02231800 {
     Window unk1FC;
     SpriteResource *unk20C[4];
     Sprite *unk21C[3];
-    UnkStruct_02021AC8 unk228;
+    ObjCharSpaceReservation unk228;
     TextOBJ *unk234;
     u32 unk238;
     u32 unk23C;

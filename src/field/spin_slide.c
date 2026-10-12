@@ -18,7 +18,7 @@ int GetMovementForDirection(int direction, int movement);
 BOOL PlayerAvatar_CheckCollision(PlayerAvatar *avatar, LocalMapObject *mapObject, int direction);
 
 BOOL PlayerAvatar_TryStartSpinSlide(FieldSystem *fieldSystem, PlayerAvatar *avatar, int facingDirection) {
-    u8 behavior = sub_0205F504(PlayerAvatar_GetMapObject(avatar));
+    u8 behavior = MapObject_GetCurrentMetatileBehavior(PlayerAvatar_GetMapObject(avatar));
     int direction;
 
     if (MetatileBehavior_IsSlideEast(behavior) == TRUE) {
@@ -65,7 +65,7 @@ int SpinSlide_RotateDirection(int direction) {
 BOOL Task_SpinSlide(TaskManager *taskManager) {
     SpinSlideTask *task = TaskManager_GetEnvironment(taskManager);
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(task->avatar);
-    u8 behavior = sub_0205F504(mapObject);
+    u8 behavior = MapObject_GetCurrentMetatileBehavior(mapObject);
 
     switch (task->state) {
     case 0:

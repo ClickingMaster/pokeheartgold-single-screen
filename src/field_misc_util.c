@@ -32,8 +32,8 @@ typedef struct BlinkEnvironment {
 
 extern const u16 sRegiSpecies[3];
 
-static BOOL sub_0205BE28(TaskManager *taskManager);
-static BOOL sub_0205BF6C(TaskManager *taskManager);
+static BOOL Task_SpinMapObject(TaskManager *taskManager);
+static BOOL Task_BlinkMapObject(TaskManager *taskManager);
 
 u32 CountDigits(u32 value) {
     if (value / 10 == 0) {
@@ -223,7 +223,7 @@ BOOL Save_PlayerHasAllRegisInParty(SaveData *saveData) {
     return found == 3;
 }
 
-static BOOL sub_0205BE28(TaskManager *taskManager) {
+static BOOL Task_SpinMapObject(TaskManager *taskManager) {
     SpinEnvironment *environment;
     VecFx32 position;
     int radius;
@@ -242,7 +242,7 @@ static BOOL sub_0205BE28(TaskManager *taskManager) {
     product *= radius;
     position.z = (int)((product + 0x800) >> 12);
     position.y = 0;
-    sub_0205F9A0(environment->object, &position);
+    MapObject_SetDrawOffset(environment->object, &position);
     environment->angle += environment->step;
     if (environment->angle >= 360) {
         environment->angle = 0;
@@ -250,14 +250,14 @@ static BOOL sub_0205BE28(TaskManager *taskManager) {
     }
     if (environment->turns == 0) {
         position.x = position.y = position.z = 0;
-        sub_0205F9A0(environment->object, &position);
+        MapObject_SetDrawOffset(environment->object, &position);
         Heap_Free(environment);
         return TRUE;
     }
     return FALSE;
 }
 
-void sub_0205BED8(TaskManager *taskManager, LocalMapObject *object, u16 turns, u16 step, u16 xRadius, u16 zRadius) {
+void CallTask_SpinMapObject(TaskManager *taskManager, LocalMapObject *object, u16 turns, u16 step, u16 xRadius, u16 zRadius) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     SpinEnvironment *environment = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(SpinEnvironment));
     float value;
@@ -278,10 +278,10 @@ void sub_0205BED8(TaskManager *taskManager, LocalMapObject *object, u16 turns, u
     environment->turns = turns;
     environment->step = step;
     environment->object = object;
-    TaskManager_Call(fieldSystem->taskman, sub_0205BE28, environment);
+    TaskManager_Call(fieldSystem->taskman, Task_SpinMapObject, environment);
 }
 
-static BOOL sub_0205BF6C(TaskManager *taskManager) {
+static BOOL Task_BlinkMapObject(TaskManager *taskManager) {
     BlinkEnvironment *environment;
 
     TaskManager_GetFieldSystem(taskManager);
@@ -298,7 +298,7 @@ static BOOL sub_0205BF6C(TaskManager *taskManager) {
     return FALSE;
 }
 
-void sub_0205BFB4(TaskManager *taskManager, LocalMapObject *object, u16 cycles, u16 interval) {
+void CallTask_BlinkMapObject(TaskManager *taskManager, LocalMapObject *object, u16 cycles, u16 interval) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     BlinkEnvironment *environment = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(BlinkEnvironment));
 
@@ -307,5 +307,5 @@ void sub_0205BFB4(TaskManager *taskManager, LocalMapObject *object, u16 cycles, 
     environment->interval = interval;
     environment->object = object;
     environment->visible = 0;
-    TaskManager_Call(fieldSystem->taskman, sub_0205BF6C, environment);
+    TaskManager_Call(fieldSystem->taskman, Task_BlinkMapObject, environment);
 }

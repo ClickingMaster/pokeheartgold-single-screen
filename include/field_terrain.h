@@ -16,7 +16,7 @@ BOOL FieldSystem_FindMapPropOfModels(FieldSystem *fieldSystem, int *models, u32 
 void Terrain_GetChunkOrigin(int idx, int width, VecFx32 *pos);
 BOOL FieldSystem_CheckCollisionAndHeight(FieldSystem *fieldSystem, VecFx32 *playerPos, int xInFront, int yInFront, int a4);
 u32 FieldSystem_CheckCollisionHeightAndGimmick(FieldSystem *fieldSystem, VecFx32 *playerPos, u32 x, u32 y, u32 *a4);
-BOOL sub_02060BFC(LocalMapObject *playerObj, int xInFront, int playerElev, int yInFront);
+BOOL MapObject_IsTileOccupiedInLink(LocalMapObject *playerObj, int xInFront, int playerElev, int yInFront);
 void FollowPlayerMovement_Reset(LocalMapObject *object);
 
 #endif // POKEHEARTGOLD_FIELD_TERRAIN_H

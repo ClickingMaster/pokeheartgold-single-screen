@@ -26,7 +26,7 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "oam_manager.h"
 #include "frontier_save_access.h"
 #include "unk_02035900.h"
@@ -1333,9 +1333,9 @@ static void ov84_0223F5E4(GAME_BOARD_SUB_3E8 *work, Party *playerParty, Party *o
     Pokemon *opponentMon;
     NARC *narc = NARC_New(NARC_poketool_icongra_poke_icon, HEAP_ID_GAME_BOARD);
 
-    work->resourceObj[3][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(work->resourceMan[1], NARC_poketool_icongra_poke_icon, sub_02074490(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 3, HEAP_ID_GAME_BOARD);
-    work->resourceObj[3][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(work->resourceMan[2], narc, sub_02074498(), FALSE, 3, GF_GFX_RES_TYPE_CELL, HEAP_ID_GAME_BOARD);
-    work->resourceObj[3][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(work->resourceMan[3], narc, sub_020744A4(), FALSE, 3, GF_GFX_RES_TYPE_ANIM, HEAP_ID_GAME_BOARD);
+    work->resourceObj[3][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(work->resourceMan[1], NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 3, HEAP_ID_GAME_BOARD);
+    work->resourceObj[3][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(work->resourceMan[2], narc, GetMonIconCell32KNaix(), FALSE, 3, GF_GFX_RES_TYPE_CELL, HEAP_ID_GAME_BOARD);
+    work->resourceObj[3][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(work->resourceMan[3], narc, GetMonIconAnim32KNaix(), FALSE, 3, GF_GFX_RES_TYPE_ANIM, HEAP_ID_GAME_BOARD);
 
     for (i = 0; i < 4; i++) {
         if (i == 3) {

@@ -646,9 +646,9 @@ void PokemonSummary_ReadMon(PokemonSummary *summary, Pokemon *mon, PokemonSummar
 void PokemonSummary_PlayCry(PokemonSummary *summary) {
     u8 delay;
     if (summary->mon.isEgg == FALSE) {
-        sub_020729A4(summary->pokepicAnimNarc, &delay, summary->mon.species, 1);
+        NARC_ReadPokepicCryDelay(summary->pokepicAnimNarc, &delay, summary->mon.species, 1);
         if (summary->mon.species == SPECIES_CHATOT) {
-            sub_02006EA0((SOUND_CHATOT *)summary->args->unk28, 0, 100, 0, delay);
+            Chatot_PlayCryWithDelayedFallback((SOUND_CHATOT *)summary->args->unk28, 0, 100, 0, delay);
         } else {
             PlayCryDelayed(summary->mon.species, delay, summary->mon.form);
         }

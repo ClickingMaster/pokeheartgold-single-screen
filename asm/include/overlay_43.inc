@@ -33,7 +33,7 @@
 .public AddCharResObjFromOpenNarc
 .public AddPlttResObjFromOpenNarc
 .public AddCellOrAnimResObjFromOpenNarc
-.public sub_0200A740
+.public GF2DGfxResObj_FreeData
 .public DestroySingle2DGfxResObj
 .public SpriteTransfer_CreateCharTransferTask_AllocAtEnd
 .public SpriteTransfer_DeleteCharTransferTask
@@ -176,7 +176,7 @@
 .public Save_VarsFlags_Get
 .public GetUnionRoomAvatarAttrBySprite
 .public Save_VarsFlags_FlypointFlagAction
-.public sub_02070D84
+.public GetTrainerPicFileIdsNoLink
 .public NamingScreen_CreateArgs
 .public NamingScreen_DeleteArgs
 .public CodeEntryArgs_New

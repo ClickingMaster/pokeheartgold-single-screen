@@ -1510,7 +1510,7 @@ void PokeathlonHurdleDashStandings_LoadResources(PokeathlonHurdleDashStandings *
     standings->resources[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(standings->resMans[GF_GFX_RES_TYPE_ANIM], NARC_a_1_5_6, 22, FALSE, 0x80, GF_GFX_RES_TYPE_ANIM, standings->heapId);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(standings->resources[GF_GFX_RES_TYPE_CHAR]);
     SpriteTransfer_CreateExtPlttTransferTask(standings->resources[GF_GFX_RES_TYPE_PLTT]);
-    GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, sub_02074490(), GF_PAL_LOCATION_SUB_OBJ, GF_PAL_SLOT_3_OFFSET, 0, standings->heapId);
+    GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), GF_PAL_LOCATION_SUB_OBJ, GF_PAL_SLOT_3_OFFSET, 0, standings->heapId);
 }
 
 void PokeathlonHurdleDashStandings_InitResourcesHeader(PokeathlonHurdleDashStandings *standings) {

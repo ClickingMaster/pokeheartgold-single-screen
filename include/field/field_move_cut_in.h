@@ -10,7 +10,7 @@
 #include "sprite.h"
 #include "sys_task.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 // The field move cut-in of overlay 2: the banner with the Pokemon flying across the screen when a field move is
 // used, and the Fly take-off animations (the trainer, or the trainer with another map object, carried away by the

@@ -1,4 +1,4 @@
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 #include "global.h"
 
@@ -257,7 +257,7 @@ BOOL GF2DGfxResObjExistsById(GF_2DGfxResMan *mgr, int a1) {
     return GF2dGfxRawResMan_DoesNotHaveObjWithId(mgr->resourceMgr, a1);
 }
 
-void sub_0200A740(SpriteResource *obj) {
+void GF2DGfxResObj_FreeData(SpriteResource *obj) {
     GF_ASSERT(obj != NULL);
     destroyResObjExtra(obj);
     GF2dGfxRawResObj_ReplaceData(obj->resource, NULL);

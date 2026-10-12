@@ -154,7 +154,7 @@ void FollowMonBillboard_SetShadowAnchored(LocalMapObject *object, BOOL anchored)
     VecFx32 offset;
     fx32 *p;
 
-    work = (FollowMonBillboardWork *)sub_0205F40C(object);
+    work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
     if (anchored) {
         p = (fx32 *)&offset;
         p[0] = 0;
@@ -172,16 +172,16 @@ void FollowMonBillboard_SetShadowAnchored(LocalMapObject *object, BOOL anchored)
 }
 
 void FollowMonBillboard_SetHeight(LocalMapObject *object, s8 height) {
-    ((FollowMonBillboardWork *)sub_0205F40C(object))->height = height;
+    ((FollowMonBillboardWork *)MapObject_GetDrawData(object))->height = height;
 }
 
 void FollowMonBillboard_AddHeight(LocalMapObject *object, s8 delta) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)sub_0205F40C(object);
+    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
     work->height = work->height + delta;
 }
 
 BOOL FollowMonBillboard_IsShadowFollowing(LocalMapObject *object) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)sub_0205F40C(object);
+    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
     if (work->shadowAnchored) {
         return FALSE;
     }
@@ -189,7 +189,7 @@ BOOL FollowMonBillboard_IsShadowFollowing(LocalMapObject *object) {
 }
 
 void FollowMonBillboard_GetShadowOffset(LocalMapObject *object, VecFx32 *offset) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)sub_0205F40C(object);
+    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
     offset->x = work->shadowOffsetX << 12;
     offset->z = work->shadowOffsetZ << 12;
     offset->y = 0;
@@ -227,12 +227,12 @@ BOOL FollowMonBillboard_IsBobFrame(u8 direction, LocalMapObject *object, Sprite 
 }
 
 void FollowMonBillboard_LoadSequence(BOOL alternate, LocalMapObject *object) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)sub_0205F40C(object);
+    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
     ov01_02205808(alternate, object, work->billboard);
 }
 
 void FollowMonBillboard_ResetPalette(LocalMapObject *object) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)sub_0205F40C(object);
+    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
     work->paletteApplied = FALSE;
 }
 
@@ -243,11 +243,11 @@ void LegendaryBirdObject_Init(LocalMapObject *object) {
     offset.x = 0;
     offset.y = 0;
     offset.z = 0;
-    sub_0205F9A0(object, &offset);
+    MapObject_SetDrawOffset(object, &offset);
 }
 
 void LegendaryBirdObject_Update(LocalMapObject *object) {
-    LegendaryBirdObject *work = (LegendaryBirdObject *)sub_0205F40C(object);
+    LegendaryBirdObject *work = (LegendaryBirdObject *)MapObject_GetDrawData(object);
     Sprite *billboard = work->billboard;
 
     if (MapObject_IsBillboardPending(object) == TRUE) {
@@ -256,8 +256,8 @@ void LegendaryBirdObject_Update(LocalMapObject *object) {
     if (billboard == NULL) {
         return;
     }
-    sLegendaryBirdAnimateFuncs[sub_0205F330(object)](object, billboard, work);
-    work->sequence = sub_0205F330(object);
+    sLegendaryBirdAnimateFuncs[MapObject_GetAnimation(object)](object, billboard, work);
+    work->sequence = MapObject_GetAnimation(object);
     MapObject_UpdateBillboardPosition(object, billboard);
     LegendaryBirdObject_UpdateVisibility(object, billboard);
 }
@@ -267,7 +267,7 @@ void LegendaryBirdObject_Delete(LocalMapObject *object) {
 }
 
 void LegendaryBirdObject_Pause(LocalMapObject *object) {
-    LegendaryBirdObject *work = (LegendaryBirdObject *)sub_0205F40C(object);
+    LegendaryBirdObject *work = (LegendaryBirdObject *)MapObject_GetDrawData(object);
 
     if (work->billboard != NULL) {
         BillboardObject_SaveState(work->billboard, &work->savedState);
@@ -277,7 +277,7 @@ void LegendaryBirdObject_Pause(LocalMapObject *object) {
 }
 
 void LegendaryBirdObject_Resume(LocalMapObject *object) {
-    LegendaryBirdObject *work = (LegendaryBirdObject *)sub_0205F40C(object);
+    LegendaryBirdObject *work = (LegendaryBirdObject *)MapObject_GetDrawData(object);
 
     if (MapObject_IsBillboardPending(object) == TRUE) {
         return;
@@ -293,7 +293,7 @@ void LegendaryBirdObject_Resume(LocalMapObject *object) {
 }
 
 void LegendaryBirdObject_CreateBillboard(LocalMapObject *object) {
-    LegendaryBirdObject *work = (LegendaryBirdObject *)sub_0205F3E8(object, sizeof(LegendaryBirdObject));
+    LegendaryBirdObject *work = (LegendaryBirdObject *)MapObject_InitDrawData(object, sizeof(LegendaryBirdObject));
     MapObject_CreateBillboard(object, work);
 }
 
@@ -326,7 +326,7 @@ void LegendaryBirdObject_UpdateVisibility(LocalMapObject *object, Sprite *billbo
 }
 
 void LegendaryBirdObject_DeleteBillboard(LocalMapObject *object) {
-    LegendaryBirdObject *work = (LegendaryBirdObject *)sub_0205F40C(object);
+    LegendaryBirdObject *work = (LegendaryBirdObject *)MapObject_GetDrawData(object);
     MapObject_DeleteBillboard(object, work);
 }
 
@@ -341,15 +341,15 @@ void MapObjectManager_InitRender(MapObjectManager *mapObjectManager, int arg1, i
     FldObjSys_OpenMModelNarc(mapObjectManager);
     count = MapObjectManager_GetObjectCount(mapObjectManager);
     priority = MapObjectManager_GetPriority(mapObjectManager) - 1;
-    MapObjectRender_Init(sub_0205F1A0(mapObjectManager), mapObjectManager, count, priority, arg1, objectsToPreload, objectIDs, arg4);
+    MapObjectRender_Init(MapObjectManager_GetRender(mapObjectManager), mapObjectManager, count, priority, arg1, objectsToPreload, objectIDs, arg4);
     MapObjectManager_SetFlagsBits(mapObjectManager, (MapObjectFlagBits)1);
 }
 
 void MapObjectManager_FreeRender(MapObjectManager *mapObjectManager) {
-    if (sub_0205F5D4(mapObjectManager) != TRUE) {
+    if (MapObjectManager_IsRenderInitialized(mapObjectManager) != TRUE) {
         GF_AssertFail();
     }
-    MapObjectRender_Free(sub_0205F1A0(mapObjectManager));
+    MapObjectRender_Free(MapObjectManager_GetRender(mapObjectManager));
     MapObjectManager_ClearFlagsBits(mapObjectManager, (MapObjectFlagBits)1);
     FldObjSys_CloseMModelNarc(mapObjectManager);
 }
@@ -370,7 +370,7 @@ void MapObject_TryUpdateDraw(LocalMapObject *object) {
         return;
     }
     if (MapObject_CheckMovementPaused(object) == FALSE || MapObject_CheckFlag4(object) != FALSE) {
-        sub_0205F484(object);
+        MapObject_CallDrawUpdate(object);
     }
 }
 
@@ -439,7 +439,7 @@ void MapObject_GetDrawPosition(LocalMapObject *object, VecFx32 *dest) {
 
     MapObject_CopyPositionVector(object, &position);
     MapObject_CopyFacingVector(object, &facing);
-    sub_0205F990(object, &offset2);
+    MapObject_CopyDrawOffset(object, &offset2);
     sub_0205F9B0(object, &offset3);
     dest->x = position.x + facing.x + offset2.x + offset3.x;
     dest->y = position.y + facing.y + offset2.y + offset3.y;
@@ -449,7 +449,7 @@ void MapObject_GetDrawPosition(LocalMapObject *object, VecFx32 *dest) {
 void MapObject_SetFacingAndUpdateDraw(LocalMapObject *object, u32 direction) {
     MapObject_SetFacingDirection(object, direction);
     if (MapObject_CheckFlag14(object) == TRUE) {
-        sub_0205F484(object);
+        MapObject_CallDrawUpdate(object);
     }
 }
 

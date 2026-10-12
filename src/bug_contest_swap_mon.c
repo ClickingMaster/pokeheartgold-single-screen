@@ -617,9 +617,9 @@ void BugContestSwapMon_LoadSpriteGfx(BugContestSwapMon *swapMon) {
     for (i = 0; i < 2; i++) {
         SpriteSystem_LoadCharResObjFromOpenNarc(spriteSystem, spriteManager, swapMon->narc, 9, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, i + 1);
     }
-    swapMon->iconPalette = SpriteSystem_LoadPlttResObjFromOpenNarc(spriteSystem, spriteManager, narc, sub_02074490(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 1);
-    SpriteSystem_LoadCellResObjFromOpenNarc(spriteSystem, spriteManager, narc, sub_0207449C(), FALSE, 1);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, narc, sub_020744A8(), FALSE, 1);
+    swapMon->iconPalette = SpriteSystem_LoadPlttResObjFromOpenNarc(spriteSystem, spriteManager, narc, GetMonIconPlttNaix(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 1);
+    SpriteSystem_LoadCellResObjFromOpenNarc(spriteSystem, spriteManager, narc, GetMonIconCell64KNaix(), FALSE, 1);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, narc, GetMonIconAnim64KNaix(), FALSE, 1);
     NARC_Delete(narc);
 }
 

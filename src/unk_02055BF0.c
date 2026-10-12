@@ -304,7 +304,7 @@ BOOL sub_0205613C(TaskManager *man) {
     case 0:
         if (FollowMon_IsActive(fieldSystem) && FollowMon_IsVisible(fieldSystem)) {
             if (MapObject_IsMovementPaused(FollowMon_GetMapObject(fieldSystem))) {
-                sub_0205FC94(FollowMon_GetMapObject(fieldSystem), 55);
+                MapObject_ChangeMovement(FollowMon_GetMapObject(fieldSystem), 55);
                 fenv->transitionState++;
             }
         } else {
@@ -386,7 +386,7 @@ BOOL sub_020562B0(TaskManager *man) {
         MapObject_ClearHeldMovementIfActive(obj);
         Field_PlayerAvatar_OrrTransitionFlags(fieldSystem->playerAvatar, 512);
         Field_PlayerAvatar_ApplyTransitionFlags(fieldSystem->playerAvatar);
-        sub_0205F328(obj, 0);
+        MapObject_SetAnimation(obj, 0);
         fenv->unk18 = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FieldEnvSubUnk18));
         fenv18 = fenv->unk18;
         fenv18->state = 0;
@@ -472,7 +472,7 @@ BOOL sub_02056424(TaskManager *man) {
             MapObject_ClearHeldMovementIfActive(obj);
             Field_PlayerAvatar_OrrTransitionFlags(fieldSystem->playerAvatar, 512);
             Field_PlayerAvatar_ApplyTransitionFlags(fieldSystem->playerAvatar);
-            sub_0205F328(obj, 0);
+            MapObject_SetAnimation(obj, 0);
             fenv->unk18 = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FieldEnvSubUnk18));
             fenv->unk18->state = 0;
             PlayerAvatar_ToggleAutomaticHeightUpdating(fieldSystem->playerAvatar, FALSE);

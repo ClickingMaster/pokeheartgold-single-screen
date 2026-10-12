@@ -56,7 +56,7 @@ void SoundSys_ToggleGBSounds(void) {
     } else {
         sub_02005C08(0);
     }
-    if (sub_02004AAC() == 0) {
+    if (GF_GetQueuedBGM() == 0) {
         u16 seqNo = GF_GetCurrentPlayingBGM();
         u8 volume = GF_SndWorkGetGbSoundsVolume();
         if (seqNo != GBSounds_GetGBSeqNoByDSSeqNo(seqNo)) {

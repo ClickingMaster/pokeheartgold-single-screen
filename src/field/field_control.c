@@ -478,7 +478,7 @@ static BOOL FieldSystem_CheckWildEncounter(FieldSystem *fieldSystem) {
 
     if (Save_VarsFlags_CheckPalParkSysFlag(Save_VarsFlags_Get(fieldSystem->saveData)) == TRUE) {
         if (CatchingShow_CheckWildEncounter(fieldSystem, x, z) == TRUE) {
-            sub_020511F8(fieldSystem, CatchingShow_GetBattleDataTransfer(fieldSystem)); // Encounter_NewVsPalParkTransfer?
+            FieldSystem_StartPalParkEncounter(fieldSystem, CatchingShow_GetBattleDataTransfer(fieldSystem)); // Encounter_NewVsPalParkTransfer?
             return TRUE;
         }
         return FALSE;
@@ -633,7 +633,7 @@ static BOOL FieldSystem_ProcessStep(FieldSystem *fieldSystem) {
     if (FieldSystem_IsSaveGymmickTypeEqualTo(fieldSystem, GYMMICK_BLACKTHORN) && BlackthornGymmick_TryStartPlatformAction(fieldSystem)) {
         return TRUE;
     } else if (PlayerAvatar_TryStartSpinSlide(fieldSystem, fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar)) == 1) {
-        ViridianGymmick_HandleTileAction(fieldSystem, sub_0205F504(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)));
+        ViridianGymmick_HandleTileAction(fieldSystem, MapObject_GetCurrentMetatileBehavior(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)));
         return TRUE;
     }
 

@@ -837,9 +837,9 @@ void UnownReport_InitSpriteSystem(UnownReportApp *app) {
     SpriteSystem_InitManagerWithCapacities(app->spriteSystem, app->iconManager, &capacities);
     SpriteManager_SetSpriteList(app->iconManager, SpriteManager_GetSpriteList(app->spriteManager));
     app->iconNarc = NARC_New(NARC_poketool_icongra_poke_icon, app->heapID);
-    SpriteSystem_LoadPlttResObjFromOpenNarc(app->spriteSystem, app->iconManager, app->iconNarc, sub_02074490(), FALSE, 1, 3, 1);
-    SpriteSystem_LoadCellResObjFromOpenNarc(app->spriteSystem, app->iconManager, app->iconNarc, sub_02074494(), FALSE, 1);
-    SpriteSystem_LoadAnimResObj(app->spriteSystem, app->iconManager, NARC_poketool_icongra_poke_icon, sub_020744A0(), FALSE, 1);
+    SpriteSystem_LoadPlttResObjFromOpenNarc(app->spriteSystem, app->iconManager, app->iconNarc, GetMonIconPlttNaix(), FALSE, 1, 3, 1);
+    SpriteSystem_LoadCellResObjFromOpenNarc(app->spriteSystem, app->iconManager, app->iconNarc, GetMonIconStaticCellNaix(), FALSE, 1);
+    SpriteSystem_LoadAnimResObj(app->spriteSystem, app->iconManager, NARC_poketool_icongra_poke_icon, GetMonIconStaticAnimNaix(), FALSE, 1);
     for (i = 0; i < 7; i++) {
         SpriteSystem_LoadCharResObjFromOpenNarc(app->spriteSystem, app->iconManager, app->iconNarc, GetMonIconNaixEx(SPECIES_UNOWN, FALSE, i), FALSE, NNS_G2D_VRAM_TYPE_2DSUB, i + 1);
     }

@@ -10,7 +10,7 @@
 #include "sprite.h"
 #include "touchpad_internal.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "yes_no_prompt.h"
 
 // Union Room group drawing (OVY_37): up to 5 members draw on a shared canvas with 8 pen colours

@@ -190,8 +190,8 @@ struct EvolutionTaskData {
     u8 form;                                // 0x80
     u8 unk_81[3];                           // 0x81
     NARC *pokegraNarc;                      // 0x84
-    u8 unk_88;                              // 0x88, sub_020729A4 of species
-    u8 unk_89;                              // 0x89, sub_020729A4 of newSpecies
+    u8 unk_88;                              // 0x88, NARC_ReadPokepicCryDelay of species
+    u8 unk_89;                              // 0x89, NARC_ReadPokepicCryDelay of newSpecies
     u8 menuState;                           // 0x8A
     u8 menuResult;                          // 0x8B, enum EvolutionMenuResult
     Window menuWindows[2];                  // 0x8C
@@ -445,8 +445,8 @@ EvolutionTaskData *EvolutionScene_New(Party *party, Pokemon *mon, int species, O
     data->heapId = heapID;
     data->summaryApp = NULL;
     data->pokegraNarc = NARC_New(NARC_a_1_8_0, heapID);
-    sub_020729A4(data->pokegraNarc, &data->unk_88, data->species, 1);
-    sub_020729A4(data->pokegraNarc, &data->unk_89, data->newSpecies, 1);
+    NARC_ReadPokepicCryDelay(data->pokegraNarc, &data->unk_88, data->species, 1);
+    NARC_ReadPokepicCryDelay(data->pokegraNarc, &data->unk_89, data->newSpecies, 1);
 
     data->paletteData = PaletteData_Init(heapID);
     PaletteData_SetAutoTransparent(data->paletteData, TRUE);
@@ -615,7 +615,7 @@ void EvolutionScene_Run(EvolutionTaskData *data) {
         if (PaletteData_GetSelectedBuffersBitmask(data->paletteData) == 0) {
             PokepicAnimScript animScript[10];
 
-            sub_0207294C(data->pokegraNarc, data->pokepicAnimManager, data->oldPokepic, data->species, 2, 0, 0);
+            NARC_StartPokepicAnim(data->pokegraNarc, data->pokepicAnimManager, data->oldPokepic, data->species, 2, 0, 0);
             NARC_ReadPokepicAnimScript(data->pokegraNarc, animScript, data->species, 1);
             Pokepic_SetAnimScript(data->oldPokepic, animScript);
             EVO_START_POKEPIC_ANIM(data->oldPokepic);
@@ -706,7 +706,7 @@ void EvolutionScene_Run(EvolutionTaskData *data) {
         if (PaletteData_GetSelectedBuffersBitmask(data->paletteData) == 0 && !ParticleScene_IsActive(data->particleScene)) {
             PokepicAnimScript animScript[10];
 
-            sub_0207294C(data->pokegraNarc, data->pokepicAnimManager, data->newPokepic, data->newSpecies, 2, 0, 0);
+            NARC_StartPokepicAnim(data->pokegraNarc, data->pokepicAnimManager, data->newPokepic, data->newSpecies, 2, 0, 0);
             NARC_ReadPokepicAnimScript(data->pokegraNarc, animScript, data->newSpecies, 1);
             Pokepic_SetAnimScript(data->newPokepic, animScript);
             EVO_START_POKEPIC_ANIM(data->newPokepic);
@@ -961,7 +961,7 @@ void EvolutionScene_Run(EvolutionTaskData *data) {
         if (PaletteData_GetSelectedBuffersBitmask(data->paletteData) == 0) {
             PokepicAnimScript animScript[10];
 
-            sub_0207294C(data->pokegraNarc, data->pokepicAnimManager, data->oldPokepic, data->species, 2, 0, 0);
+            NARC_StartPokepicAnim(data->pokegraNarc, data->pokepicAnimManager, data->oldPokepic, data->species, 2, 0, 0);
             NARC_ReadPokepicAnimScript(data->pokegraNarc, animScript, data->species, 1);
             Pokepic_SetAnimScript(data->oldPokepic, animScript);
             EVO_START_POKEPIC_ANIM(data->oldPokepic);

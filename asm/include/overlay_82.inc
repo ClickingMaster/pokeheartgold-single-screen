@@ -140,9 +140,9 @@
 .public GetMonData
 .public Pokemon_GetIconNaix
 .public Pokemon_GetIconPalette
-.public sub_02074490
-.public sub_02074498
-.public sub_020744A4
+.public GetMonIconPlttNaix
+.public GetMonIconCell32KNaix
+.public GetMonIconAnim32KNaix
 .public Party_GetCount
 .public Party_GetMonByIndex
 .public SaveArray_IsNatDexEnabled

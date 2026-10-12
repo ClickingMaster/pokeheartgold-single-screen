@@ -33,7 +33,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "field_interaction.h"
 
 // Field bottom-screen app 4: the Dowsing Machine (field_use_item.c Task_ActivateDowsingMchnUI).
@@ -346,10 +346,10 @@ void DowsingMchn_DestroyResourceManagers(DowsingMchn *dowsing) {
 void DowsingMchn_LoadSpriteResources(SpriteResource **resObjs, GF_2DGfxResMan **resMans, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId) {
     resObjs[GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_CHAR], narc, charFileId, TRUE, charId, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_8);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(resObjs[GF_GFX_RES_TYPE_CHAR]);
-    sub_0200A740(resObjs[GF_GFX_RES_TYPE_CHAR]);
+    GF2DGfxResObj_FreeData(resObjs[GF_GFX_RES_TYPE_CHAR]);
     resObjs[GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_PLTT], narc, plttFileId, FALSE, plttId, NNS_G2D_VRAM_TYPE_2DSUB, plttNum, HEAP_ID_8);
     SpriteTransfer_CreatePlttTransferTask(resObjs[GF_GFX_RES_TYPE_PLTT]);
-    sub_0200A740(resObjs[GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(resObjs[GF_GFX_RES_TYPE_PLTT]);
     resObjs[GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_CELL], narc, cellFileId, TRUE, cellId, GF_GFX_RES_TYPE_CELL, HEAP_ID_8);
     resObjs[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_ANIM], narc, animFileId, TRUE, animId, GF_GFX_RES_TYPE_ANIM, HEAP_ID_8);
 }
@@ -869,7 +869,7 @@ void DowsingMchn_UpdateActionLabel(DowsingMchn *dowsing) {
         LocalMapObject *playerObj = PlayerAvatar_GetMapObject(FieldSystem_GetPlayerAvatar(dowsing->fieldSystem));
         u32 spriteId = MapObject_GetSpriteID(playerObj);
         if ((u32)(spriteId - SPRITE_FISHINGHERO) <= SPRITE_FISH_HEROINE - SPRITE_FISHINGHERO) {
-            actionType = sub_0205F330(playerObj) == 1 ? 3 : 4;
+            actionType = MapObject_GetAnimation(playerObj) == 1 ? 3 : 4;
         } else {
             actionType = dowsing->actionType;
         }

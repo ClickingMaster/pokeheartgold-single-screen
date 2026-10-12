@@ -81,7 +81,7 @@
 .public GetMonData
 .public GetMonIconNaixEx
 .public GetMonIconPaletteEx
-.public sub_02074490
+.public GetMonIconPlttNaix
 .public Party_GetCount
 .public Party_GetMonByIndex
 .public BoxMonSelector_New

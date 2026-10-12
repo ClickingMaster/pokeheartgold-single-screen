@@ -854,9 +854,9 @@ void MailView_CreateMonIcons(MailView *mailView) {
     SpriteSystem_InitManagerWithCapacities(mailView->spriteSystem, mailView->spriteManager, &resourceCounts);
     thunk_ClearMainOAM(mailView->heapID);
 
-    SpriteSystem_LoadPlttResObj(mailView->spriteSystem, mailView->spriteManager, NARC_poketool_icongra_poke_icon, sub_02074490(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 0);
-    SpriteSystem_LoadCellResObj(mailView->spriteSystem, mailView->spriteManager, NARC_poketool_icongra_poke_icon, sub_02074494(), FALSE, 0);
-    SpriteSystem_LoadAnimResObj(mailView->spriteSystem, mailView->spriteManager, NARC_poketool_icongra_poke_icon, sub_020744A0(), FALSE, 0);
+    SpriteSystem_LoadPlttResObj(mailView->spriteSystem, mailView->spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 0);
+    SpriteSystem_LoadCellResObj(mailView->spriteSystem, mailView->spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconStaticCellNaix(), FALSE, 0);
+    SpriteSystem_LoadAnimResObj(mailView->spriteSystem, mailView->spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconStaticAnimNaix(), FALSE, 0);
 
     i = 0;
     iconOffset = i;

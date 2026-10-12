@@ -72,9 +72,9 @@
 .public GetMonSpriteCharAndPlttNarcIdsEx
 .public GetMonIconNaixEx
 .public GetMonIconPaletteEx
-.public sub_02074490
-.public sub_0207449C
-.public sub_020744A8
+.public GetMonIconPlttNaix
+.public GetMonIconCell64KNaix
+.public GetMonIconAnim64KNaix
 .public NNS_G2dGetImageLocation
 .public NNS_G2dGetImagePaletteLocation
 .public GX_LoadOBJ

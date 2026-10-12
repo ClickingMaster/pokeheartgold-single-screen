@@ -9,15 +9,15 @@
 #include "map_object_movement_utilities_internal.h"
 
 void FollowPartnerMovement_Init(LocalMapObject *object) {
-    FollowPartnerMovementState *state = (FollowPartnerMovementState *)sub_0205F370(object, sizeof(FollowPartnerMovementState));
+    FollowPartnerMovementState *state = (FollowPartnerMovementState *)MapObject_InitMovementData(object, sizeof(FollowPartnerMovementState));
     FollowPartnerMovement_FindPartner(object, state);
-    sub_0205F328(object, 0);
+    MapObject_SetAnimation(object, 0);
     MapObject_ClearSingleMovement(object);
     state->partnerKnown = FALSE;
 }
 
 void FollowPartnerMovement_Update(LocalMapObject *object) {
-    FollowPartnerMovementState *state = (FollowPartnerMovementState *)sub_0205F394(object);
+    FollowPartnerMovementState *state = (FollowPartnerMovementState *)MapObject_GetMovementData(object);
 
     if (FollowPartnerMovement_FindPartner(object, state) != FALSE) {
         while (gFollowPartnerStates[state->state](object, state) == TRUE) {
@@ -29,7 +29,7 @@ void FollowPartnerMovement_Delete(LocalMapObject *object) {
 }
 
 void FollowPartnerMovement_Resume(LocalMapObject *object) {
-    ((FollowPartnerMovementState *)sub_0205F394(object))->partnerKnown = FALSE;
+    ((FollowPartnerMovementState *)MapObject_GetMovementData(object))->partnerKnown = FALSE;
 }
 
 BOOL FollowPartnerState_Start(LocalMapObject *object, FollowPartnerMovementState *state) {

@@ -22,7 +22,7 @@
 #include "sprite.h"
 #include "system.h"
 #include "text.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 

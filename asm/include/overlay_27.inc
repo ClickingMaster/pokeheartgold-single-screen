@@ -25,7 +25,7 @@
 .public AddCharResObjFromNarc
 .public AddPlttResObjFromNarc
 .public AddCellOrAnimResObjFromNarc
-.public sub_0200A740
+.public GF2DGfxResObj_FreeData
 .public SpriteTransfer_CreateCharTransferTask_AllocAtEnd
 .public SpriteTransfer_DeleteCharTransferTask
 .public SpriteTransfer_CreatePlttTransferTask
@@ -116,7 +116,7 @@
 .public PlayerAvatar_SetRunningShoesLock
 .public MapObject_GetSpriteID
 .public MapObject_GetScriptID
-.public sub_0205F330
+.public MapObject_GetAnimation
 .public Save_VarsFlags_CheckSafariSysFlag
 .public Save_VarsFlags_CheckBugContestFlag
 .public Save_VarsFlags_CheckPalParkSysFlag
@@ -126,7 +126,7 @@
 .public GetMonData
 .public Pokemon_GetIconNaix
 .public Pokemon_GetIconPalette
-.public sub_02074490
+.public GetMonIconPlttNaix
 .public GetItemIndexMapping
 .public Bag_GetRegisteredItem1
 .public Bag_GetRegisteredItem2

@@ -17,7 +17,7 @@
 
 // Puts position->y on the ground of the tile at position->x/z; FALSE while that tile has no ground yet.
 // (unk_0205FD20.h declares it returning void.)
-BOOL sub_0206121C(FieldSystem *fieldSystem, VecFx32 *position);
+BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 4).
 typedef struct SurfMount {
@@ -102,11 +102,11 @@ FieldEffect *SurfMountEffect_Create(LocalMapObject *mapObject, u32 x, u32 z, u32
         FieldSystem *fieldSystem = MapObject_GetFieldSystem(mapObject);
         position.x = (x << 16) + (2 << 14);
         position.z = (z << 16) + (2 << 14);
-        sub_0206121C(fieldSystem, &position);
+        FieldSystem_SnapToTerrainHeight(fieldSystem, &position);
     } else {
         offset = ov01_022090D0;
         MapObject_CopyPositionVector(mapObject, &position);
-        sub_0205F9A0(mapObject, &offset);
+        MapObject_SetDrawOffset(mapObject, &offset);
     }
     return FieldEffectManager_CreateEffect(args.manager, &ov01_022090DC, &position, bobbing, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
@@ -129,7 +129,7 @@ void SurfMountEffect_Destroy(FieldEffect *effect, SurfMountEffect *work) {
     LocalMapObject *mapObject = work->args.mapObject;
     VecFx32 offset = { 0, 0, 0 };
 
-    sub_0205F9A0(mapObject, &offset);
+    MapObject_SetDrawOffset(mapObject, &offset);
 }
 
 void SurfMountEffect_Update(FieldEffect *effect, SurfMountEffect *work) {
@@ -139,7 +139,7 @@ void SurfMountEffect_Update(FieldEffect *effect, SurfMountEffect *work) {
     int facing;
     fx32 height;
 
-    if (!sub_0205F0A8(mapObject, work->objectId, work->mapId)) {
+    if (!MapObject_CheckIDAndMap(mapObject, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
@@ -164,7 +164,7 @@ void SurfMountEffect_Update(FieldEffect *effect, SurfMountEffect *work) {
         offset.x = 0;
         offset.y = work->height + 4 * FX32_ONE;
         offset.z = 4 * FX32_ONE;
-        sub_0205F9A0(mapObject, &offset);
+        MapObject_SetDrawOffset(mapObject, &offset);
         MapObject_CopyPositionVector(mapObject, &position);
         position.y += work->height - FX32_ONE;
         FieldEffect_SetPosition(effect, &position);

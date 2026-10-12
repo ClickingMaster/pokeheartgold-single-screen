@@ -28,11 +28,11 @@ typedef struct CryStopTaskData {
 // against (e.g. GF_GetBankInfoBySeqNo returns a bank info pointer, Sound_SetWaveOutPan takes a u32 pan)
 int GF_GetBankBySeqNo(int seqNo);
 u16 GBSounds_GetGBSeqNoByDSSeqNo(u16 seqNo);
-void sub_020051A4(u16 seqNo, int bankNo);
+void Sound_ReloadFieldSceneData(u16 seqNo, int bankNo);
 u8 GF_GetPlayerNoBySeq(u16 seqNo);
-int sub_02005328(int state);
+int Sound_GetSavedHeapLevel(int state);
 void sub_02005464(int seqNo, enum SoundHandleNo handleNo);
-void sub_020059E0(u16 seqNo);
+void Sound_SetReloadFieldSeqFlag(u16 seqNo);
 void GF_SndSetFadeTimer(u32 frames);
 void Sound_StopWaveOut(int handleNo);
 int sub_02005BFC(void);
@@ -40,7 +40,7 @@ void GF_SndSetTrackPitchBySeqNo(u16 seqNo, u32 trackMask, int pitch);
 void Sound_StopWaveOutAndFreeBuffer(int handleNo);
 void Sound_FreeWaveOutChannel(int handleNo);
 BOOL Sound_IsWaveOutPlaying(int handleNo);
-void sub_02006DB8(void);
+void Chatot_StopCry(void);
 void GF_SndHandleSetTrackPan(int handleNo, u32 trackMask, int pan);
 void GF_SndHandleSetTrackPitch(int handleNo, u32 trackMask, int pitch);
 void Sound_SetWaveOutPan(int handleNo, u8 pan);
@@ -108,7 +108,7 @@ BOOL PlayBGM(u16 seqNo) {
         GF_ASSERT(FALSE);
         return FALSE;
     }
-    sub_020059E0(0);
+    Sound_SetReloadFieldSeqFlag(0);
     if (!success) {
         sub_02004920(seqNo);
     }
@@ -117,7 +117,7 @@ BOOL PlayBGM(u16 seqNo) {
 }
 
 void sub_02005DA0(u16 seqNo, enum SoundHandleNo handleNo) {
-    sub_02004A60(seqNo);
+    Sound_SetCurrentBGM(seqNo);
     sub_02005464(seqNo, handleNo);
     GF_SndSetState(1);
     if (handleNo == SND_HANDLE_FIELD) {
@@ -126,7 +126,7 @@ void sub_02005DA0(u16 seqNo, enum SoundHandleNo handleNo) {
 }
 
 BOOL PlayBGMOnBGMPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo) {
-    GF_Snd_LoadState(sub_02005328(3));
+    GF_Snd_LoadState(Sound_GetSavedHeapLevel(3));
     GF_Snd_LoadSeq(seqNo);
     return Sound_StartSeq(handleNo, -1, -1, -1, seqNo, 1);
 }
@@ -134,7 +134,7 @@ BOOL PlayBGMOnBGMPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo) {
 BOOL PlayBGMOnFieldPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo) {
     GF_SdatGetAttrPtr(19);
     u16 *fieldSeqNo = GF_SdatGetAttrPtr(32);
-    sub_020051A4(seqNo, GF_GetBankBySeqNo(GF_NNS_SndPlayerGetSeqNo(GF_GetSoundHandle(SND_HANDLE_FIELD))));
+    Sound_ReloadFieldSceneData(seqNo, GF_GetBankBySeqNo(GF_NNS_SndPlayerGetSeqNo(GF_GetSoundHandle(SND_HANDLE_FIELD))));
     SndRadio_StopSeq(0);
     return Sound_StartSeq(handleNo, -1, GF_GetBankBySeqNo(*fieldSeqNo), -1, seqNo, 1);
 }
@@ -156,7 +156,7 @@ BOOL sub_02005E44(u16 seqNo) {
         sub_02004920(seqNo);
     }
     SndRadio_StopSeq(0);
-    sub_02004A60(seqNo);
+    Sound_SetCurrentBGM(seqNo);
     GF_SndSetState(1);
     return success;
 }
@@ -176,7 +176,7 @@ void StopBGM(u16 seqNo, int fadeFrames) {
 
 void ClearPlayingBGM(void) {
     SndRadio_StopSeq(0);
-    sub_02004A60(0);
+    Sound_SetCurrentBGM(0);
     GF_SetCurrentPlayingBGM(0);
     Sound_SetPlayingGBSeqNo(0);
     GF_SndSetState(0);
@@ -353,8 +353,8 @@ BOOL PlayCry(u16 species, u8 form) {
     if (species != CRY_BANK_SHAYMIN_SKY && (species > CRY_BANK_MAX || species == 0)) {
         species = SPECIES_BULBASAUR;
     }
-    if (species == SPECIES_CHATOT && sub_02006D04(*chatot, 0, 127, 0) == 1) {
-        sub_02006E3C(0);
+    if (species == SPECIES_CHATOT && Chatot_PlayCry(*chatot, 0, 127, 0) == 1) {
+        Chatot_SetForceDefaultCry(0);
         return TRUE;
     }
     if (*useChorus == 0) {
@@ -367,7 +367,7 @@ BOOL PlayCry(u16 species, u8 form) {
         success = Sound_StartSeq(SND_HANDLE_CHORUS, -1, species, -1, 2, 0);
         sub_02005464(species, SND_HANDLE_CHORUS);
     }
-    sub_02006E3C(0);
+    Chatot_SetForceDefaultCry(0);
     return success;
 }
 
@@ -390,7 +390,7 @@ void StopCry(int fadeFrames) {
         Sound_StopWaveOutAndFreeBuffer(15);
         Sound_FreeWaveOutChannel(15);
     }
-    sub_02006DB8();
+    Chatot_StopCry();
     ClearQueuedCries();
 }
 
@@ -457,7 +457,7 @@ BOOL PlayCryEx(u32 pattern, u16 species, int pan, int volume, int heapId, u8 for
             }
             return TRUE;
         default:
-            sub_02006E3C(1);
+            Chatot_SetForceDefaultCry(1);
             break;
         }
     }
@@ -710,7 +710,7 @@ void ClearQueuedCries(void) {
 BOOL PlayChorusCryWithPitch(u16 species, int pitch, u8 form) {
     u8 *useChorus = GF_SdatGetAttrPtr(18);
     *useChorus = 1;
-    sub_02006E3C(1);
+    Chatot_SetForceDefaultCry(1);
     BOOL success = PlayCry(species, form);
     GF_SndHandleSetTrackPitch(SND_HANDLE_CHORUS, 0xFFFF, pitch);
     return success;
@@ -728,7 +728,7 @@ BOOL PlayFanfare(u16 seqNo) {
     StartFanfareWaitTimer(seqNo);
     u8 playerNo = GF_GetPlayerNoBySeq(GF_GetCurrentPlayingBGM());
     if (playerNo != 255) {
-        sub_020053A8(playerNo, TRUE);
+        Sound_SetPlayerPause(playerNo, TRUE);
     } else {
         SndRadio_PausePlayer(TRUE);
     }
@@ -753,7 +753,7 @@ BOOL sub_02006B84(void) {
 
 void StopFanfare(int fadeFrames) {
     NNS_SndPlayerStopSeq(GF_GetSoundHandle(SND_HANDLE_ME), fadeFrames);
-    GF_Snd_LoadState(sub_02005328(6));
+    GF_Snd_LoadState(Sound_GetSavedHeapLevel(6));
 }
 
 BOOL IsFanfarePlaying(void) {
@@ -764,7 +764,7 @@ BOOL IsFanfarePlaying(void) {
     StopFanfare(0);
     u8 playerNo = GF_GetPlayerNoBySeq(GF_GetCurrentPlayingBGM());
     if (playerNo != 255) {
-        sub_020053A8(playerNo, FALSE);
+        Sound_SetPlayerPause(playerNo, FALSE);
     }
     SndRadio_PausePlayer(FALSE);
     return FALSE;

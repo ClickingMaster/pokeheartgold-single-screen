@@ -145,8 +145,8 @@
 .public CopyPokemonToPokemon
 .public UpdateMonAbility
 .public NARC_ReadPokepicAnimScript
-.public sub_0207294C
-.public sub_020729A4
+.public NARC_StartPokepicAnim
+.public NARC_ReadPokepicCryDelay
 .public Party_AddMon
 .public Party_GetMaxCount
 .public Party_GetCount

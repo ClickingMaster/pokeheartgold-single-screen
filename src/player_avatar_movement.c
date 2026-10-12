@@ -193,7 +193,7 @@ void PlayerAvatar_PlayTerrainSounds(PlayerAvatar *avatar) {
         return;
     }
     object = PlayerAvatar_GetMapObject(avatar);
-    behavior = sub_0205F504(object);
+    behavior = MapObject_GetCurrentMetatileBehavior(object);
     direction = GetMovementDirection(MapObject_GetMovementCommand(object));
     if (direction == -1) {
         previous = behavior;
@@ -227,8 +227,8 @@ void PlayerAvatar_PlayTerrainSounds(PlayerAvatar *avatar) {
 
 void PlayerAvatar_PlayFootstepSound(LocalMapObject *object, PlayerAvatar *avatar) {
     int direction = GetMovementDirection(MapObject_GetMovementCommand(object));
-    u8 behavior = sub_0205F504(object);
-    u8 current = sub_0205F504(object);
+    u8 behavior = MapObject_GetCurrentMetatileBehavior(object);
+    u8 current = MapObject_GetCurrentMetatileBehavior(object);
     u16 sequence;
     int state;
 
@@ -377,7 +377,7 @@ void PlayerAvatar_StopAndFace(PlayerAvatar *avatar, int direction) {
     PlayerAvatar_SetPlayerMoveState(avatar, PLAYER_MOVE_STATE_NONE);
     mapObject = PlayerAvatar_GetMapObject(avatar);
     MapObject_SetFacingDirection(mapObject, direction);
-    sub_0205F328(mapObject, 0);
+    MapObject_SetAnimation(mapObject, 0);
     MapObject_SetPreviousCoordsToCurrent(mapObject);
     MapObject_ClearHeldMovement(mapObject);
     MapObject_SetHeldMovement(mapObject, GetMovementForDirection(direction, MOVEMENT_FACE_UP));
@@ -390,7 +390,7 @@ BOOL PlayerAvatar_TryForcedMovement(PlayerAvatar *avatar, int value) {
 
 int PlayerAvatar_GetForcedMovementKind(PlayerAvatar *avatar, int value) {
     int i = 0;
-    int behavior = sub_0205F504(PlayerAvatar_GetMapObject(avatar));
+    int behavior = MapObject_GetCurrentMetatileBehavior(PlayerAvatar_GetMapObject(avatar));
     if (PlayerAvatar_IsOnCyclingRoadSlope(avatar, behavior, value) == TRUE) {
         return 2;
     }
@@ -490,7 +490,7 @@ int PlayerAvatar_GetSlopeInDirection(PlayerAvatar *avatar, int direction) {
     MapObject_CopyPositionVector(mapObject, &original);
     position = original;
     OffsetPositionInDirection(direction, &position, FX32_ONE * 4);
-    if (!sub_0206121C(fieldSystem, &position) || original.y == position.y) {
+    if (!FieldSystem_SnapToTerrainHeight(fieldSystem, &position) || original.y == position.y) {
         return 0;
     }
     if (original.y > position.y) {
@@ -651,12 +651,12 @@ void PlayerAvatar_FootStep(PlayerAvatar *avatar, LocalMapObject *mapObject, int 
             if (PlayerSaveData_CheckRunningShoes(PlayerAvatar_GetPlayerSaveData(avatar)) == TRUE && IsRunButtonHeld(avatar, heldKeys) == TRUE) {
                 kind = 0x58;
             }
-            movement = sub_0205D44C(mapObject, (u8)sub_0205F504(mapObject), kind);
+            movement = sub_0205D44C(mapObject, (u8)MapObject_GetCurrentMetatileBehavior(mapObject), kind);
             PlayerAvatar_CountStep(avatar);
             PlayerAvatar_SetFlag6(avatar);
         }
     } else if (collision == 0 || collision == 0x20) {
-        movement = sub_0205D44C(mapObject, (u8)sub_0205F504(mapObject), MOVEMENT_RUN_UP);
+        movement = sub_0205D44C(mapObject, (u8)MapObject_GetCurrentMetatileBehavior(mapObject), MOVEMENT_RUN_UP);
         PlayerAvatar_CountStep(avatar);
         PlayerAvatar_SetFlag6(avatar);
     } else {
@@ -936,7 +936,7 @@ u32 MapObject_GetCollisionInDirection(PlayerAvatar *avatar, LocalMapObject *mapO
     if (MapObject_IsMoveBlockedByBehavior(mapObject, x + dx, z + dz, direction) == TRUE) {
         result |= 2;
     }
-    if (sub_02060BFC(mapObject, x + dx, y, z + dz) == TRUE) {
+    if (MapObject_IsTileOccupiedInLink(mapObject, x + dx, y, z + dz) == TRUE) {
         result |= 4;
     }
     return result;
@@ -1056,7 +1056,7 @@ BOOL PlayerAvatar_IsBikeBlockedInDirection(PlayerAvatar *avatar, LocalMapObject 
         if (sub_02060E54(mapObject, behavior)) {
             return TRUE;
         }
-        if (sub_02060EBC(mapObject, behavior)) {
+        if (MapObject_CheckSnowBehavior(mapObject, behavior)) {
             return TRUE;
         }
         if (MetatileBehavior_IsVeryTallGrass_Int(behavior)) {

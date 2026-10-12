@@ -18,7 +18,7 @@
 #include "sprite.h"
 #include "sprite_transfer.h"
 #include "text.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 
 // Sprite scene of the event and the course helpers (OVY_96, not yet tidied).
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonCirclePushMonView *view);

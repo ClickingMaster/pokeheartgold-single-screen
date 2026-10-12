@@ -83,9 +83,9 @@
 .public MapObject_GetFacingDirection
 .public MapObject_SetNextFacingDirection
 .public MapObject_GetNextFacingDirection
-.public sub_0205F328
+.public MapObject_SetAnimation
 .public MapObject_GetMovementCommand
-.public sub_0205F504
+.public MapObject_GetCurrentMetatileBehavior
 .public MapObject_GetFieldSystem
 .public MapObject_GetPreviousXCoord
 .public MapObject_GetPreviousZCoord
@@ -93,11 +93,11 @@
 .public MapObject_GetYCoord
 .public MapObject_GetZCoord
 .public MapObject_CopyPositionVector
-.public sub_02060BFC
+.public MapObject_IsTileOccupiedInLink
 .public MapObject_IsOutsideMovementRange
 .public MapObject_IsMoveBlockedByBehavior
 .public sub_02060E54
-.public sub_02060EBC
+.public MapObject_CheckSnowBehavior
 .public sub_02060EEC
 .public GetDeltaXByFacingDirection
 .public GetDeltaYByFacingDirection
@@ -106,7 +106,7 @@
 .public sub_02060FE0
 .public OffsetPositionInDirection
 .public GetOppositeDirection
-.public sub_0206121C
+.public FieldSystem_SnapToTerrainHeight
 .public MapObject_AreBitsSetForMovementScriptInit
 .public MapObject_SetHeldMovement
 .public MapObject_IsMovementPaused

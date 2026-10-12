@@ -31,7 +31,7 @@ BOOL GiveMon(enum HeapID heapID, SaveData *saveData, int species, int level, int
         mon = AllocMonZeroed(heapID);
         ZeroMonData(mon);
         CreateMon(mon, species, level, 32, FALSE, 0, 0, 0);
-        sub_020720FC(mon, profile, ITEM_POKE_BALL, ball, encounterType, heapID);
+        MonSetCatchData(mon, profile, ITEM_POKE_BALL, ball, encounterType, heapID);
         sp1C = heldItem;
         SetMonData(mon, MON_DATA_HELD_ITEM, &sp1C);
         SetMonData(mon, MON_DATA_FORM, &form);

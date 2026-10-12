@@ -84,9 +84,9 @@ static BOOL ov02_022523D0(TaskManager *taskMan) {
         }
         MapObjectManager *mapObjectMan = MapObject_GetManager(fieldSystem->followMon.mapObject);
         u32 spriteId = MapObject_GetSpriteID(fieldSystem->followMon.mapObject);
-        sub_0205E420(fieldSystem->followMon.mapObject);
+        MapObject_ClearSprite(fieldSystem->followMon.mapObject);
         MapObjectRender_ReleaseSpriteResources(mapObjectMan, spriteId, fieldSystem->followMon.mapObject);
-        sub_0205E38C(fieldSystem->followMon.mapObject, SPRITE_FOLLOWER_MON_SHAYMIN);
+        MapObject_SetSpriteAndInitDraw(fieldSystem->followMon.mapObject, SPRITE_FOLLOWER_MON_SHAYMIN);
         (*state)++;
         break;
     case 3:

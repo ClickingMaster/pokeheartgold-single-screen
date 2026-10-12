@@ -8,7 +8,7 @@
 .public Sound_SetSceneAndPlayBGM
 .public PlaySE
 .public PlayCryDelayed
-.public sub_02006EA0
+.public Chatot_PlayCryWithDelayedFallback
 .public OverlayManager_CreateAndGetData
 .public OverlayManager_GetData
 .public OverlayManager_FreeData
@@ -104,8 +104,8 @@
 .public GetMonNature
 .public GetMonGender
 .public MonIsShiny
-.public sub_02070D90
-.public sub_02070D94
+.public Pokemon_sizeof
+.public BoxPokemon_sizeof
 .public Mon_GetBoxMon
 .public MonSwapMoves
 .public BoxMonSwapMoves
@@ -113,7 +113,7 @@
 .public MonGetFlavorPreference
 .public Pokemon_HasPokerus
 .public Pokemon_IsImmuneToPokerus
-.public sub_020729A4
+.public NARC_ReadPokepicCryDelay
 .public GetMoveMaxPP
 .public Party_GetMonByIndex
 .public MoveIsHM

@@ -17,7 +17,7 @@
 #include "sprite.h"
 #include "sprite_system.h"
 #include "unk_02009D48.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 #include "pokedex_language.h"
 #include "pokedex_language_order.h"
 
@@ -203,9 +203,9 @@ void PokedexApp_LoadMonIconResources(PokedexAppData *pokedexApp, u32 count) {
     for (i = 0; i < count; i++) {
         SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 76, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xC550 + i);
     }
-    SpriteSystem_LoadPaletteBufferFromOpenNarc(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->iconNarc, sub_02074490(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 0xC550);
-    SpriteSystem_LoadCellResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->iconNarc, sub_0207449C(), FALSE, 0xC550);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->iconNarc, sub_020744A8(), FALSE, 0xC550);
+    SpriteSystem_LoadPaletteBufferFromOpenNarc(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->iconNarc, GetMonIconPlttNaix(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 0xC550);
+    SpriteSystem_LoadCellResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->iconNarc, GetMonIconCell64KNaix(), FALSE, 0xC550);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->iconNarc, GetMonIconAnim64KNaix(), FALSE, 0xC550);
 }
 
 void PokedexApp_UnloadMonIconResources(PokedexAppData *pokedexApp, u32 count) {

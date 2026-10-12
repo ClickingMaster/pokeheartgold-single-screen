@@ -35,7 +35,7 @@
 .public PlayerAvatar_GetZCoord
 .public PlayerAvatar_GetMapObject
 .public MapObject_Remove
-.public sub_0205F1A0
+.public MapObjectManager_GetRender
 .public MapObjectManager_GetMapModelNarc
 .public MapObject_GetID
 .public MapObject_GetSpriteID
@@ -43,7 +43,7 @@
 .public MapObject_GetFacingDirection
 .public MapObject_GetParam
 .public MapObject_GetManager
-.public sub_0205F484
+.public MapObject_CallDrawUpdate
 .public MapObject_GetFieldSystem
 .public MapObject_CheckVisible
 .public MapObject_PauseMovement
@@ -62,7 +62,7 @@
 .public GetMovementForDirection
 .public FollowPlayerMovement_GetHopFrame
 .public FollowPlayerMovement_GetHopSpeed
-.public sub_020659B8
+.public FollowPlayerMovement_DisableBallEffect
 .public FollowPlayerMovement_Reset
 .public FollowMon_InitMapObject
 .public FollowMon_GetMapObject

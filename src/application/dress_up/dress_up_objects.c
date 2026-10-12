@@ -64,7 +64,7 @@ void DressUpMon_CreateEx(DressUpMonPic *monPic, PokepicManager *pokepicManager, 
     void *buffer;
     NNSG2dCharacterData *character;
     (void)GetMonData(mon, MON_DATA_SPECIES, NULL);
-    sub_02070130(template, &mon->box, 2);
+    DP_GetBoxmonSpriteCharAndPlttNarcIds(template, &mon->box, 2);
     monPic->pokepic = PokepicManager_CreatePokepic(pokepicManager, template, 192, 56, 0, 0, NULL, NULL);
     DressUpMon_GetSize(monPic, &width, &height);
     width /= 2;
@@ -74,7 +74,7 @@ void DressUpMon_CreateEx(DressUpMonPic *monPic, PokepicManager *pokepicManager, 
     monPic->hitbox.rect.left = 192 - width;
     monPic->hitbox.rect.right = 192 + width;
     DressUpMon_MakeClampedRect(&monPic->hitbox, 192, 56, width, height);
-    margin = sub_02070848(&mon->box, 2);
+    margin = GetBoxMonPicHeight_PBR(&mon->box, 2);
     buffer = GfGfxLoader_LoadFromNarc((NarcId) template->narcID, template->charDataID, FALSE, heapID, FALSE);
     NNS_G2dGetUnpackedCharacterData(buffer, &character);
     UnscanPokepic(character->pRawData, (NarcId) template->narcID);

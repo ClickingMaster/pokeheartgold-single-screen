@@ -29,7 +29,7 @@
 #include "trade_sequence_internal.h"
 #include "unk_02009D48.h"
 #include "unk_0200FA24.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 #include "wireless_status_icon.h"
 
 #define TRADE_SEQUENCE_NUM_SCENES       7

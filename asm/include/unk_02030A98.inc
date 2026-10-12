@@ -95,7 +95,7 @@
 .public FrontierCard_GetBirthdayMonth
 .public FrontierCard_GetAvatar
 .public GetUnionRoomAvatarAttrBySprite
-.public sub_02070438
+.public SanitizeMonForm
 .public LocationGmmDatRegionCountGetByCountryMsgNo
 .public OS_GetOwnerInfo
 .public MI_CpuFill8

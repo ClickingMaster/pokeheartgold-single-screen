@@ -13,8 +13,8 @@
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
 #include "systask_environment.h"
-#include "unk_0200A090.h"
-#include "unk_02013FDC.h"
+#include "sprite_resource.h"
+#include "char_tiles.h"
 
 // Window decorations: the text printer's down arrow and the waiting icon (NARC a/0/3/8 members 0x16/0x17 drawn
 // over frame tiles 10-11), map signposts (NARC a/0/3/6) and the framed Pokemon picture window (a/0/3/8 0x2F-0x32).

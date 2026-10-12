@@ -213,7 +213,7 @@ BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course) {
     case 1:
         if (PokeathlonCourse_IsStartAnimDone(course)) {
             layout->startState++;
-            sub_020053A8(7, 0);
+            Sound_SetPlayerPause(7, 0);
         }
         break;
     case 2:
@@ -705,7 +705,7 @@ u32 PokeathlonCourse_State_WaitRoundStart(PokeathlonCourseData *course) {
             Sound_SetScene(0);
             Sound_SetSceneAndPlayBGM(24, SEQ_GS_PT_GAME, 0);
         }
-        sub_020053A8(7, 1);
+        Sound_SetPlayerPause(7, 1);
         PokeathlonCourse_SetStateField07(course, 17);
         if (!GF_heap_c_dummy_return_true(HEAP_ID_POKEATHLON)) {
             GF_AssertFail();

@@ -19,7 +19,7 @@
 .public GetPokemonSpriteCharAndPlttNarcIds
 .public GetBoxmonSpriteCharAndPlttNarcIds
 .public NARC_ReadPokepicAnimScript
-.public sub_0207294C
+.public NARC_StartPokepicAnim
 .public PokemonSummary_GetShownMon
 .public PokemonSummary_Init3D
 .public PokemonSummary_DrawPokepic

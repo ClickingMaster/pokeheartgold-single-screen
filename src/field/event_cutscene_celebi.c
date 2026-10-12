@@ -91,7 +91,7 @@ static BOOL Task_CelebiTimeTravelCutscene(TaskManager *taskMan) {
         break;
     case CTT_STATE_2:
         if (IsPaletteFadeFinished()) {
-            sub_0205F484(FollowMon_GetMapObject(data->fieldSystem));
+            MapObject_CallDrawUpdate(FollowMon_GetMapObject(data->fieldSystem));
             data->unkF0 = 1;
             (*state)++;
         }

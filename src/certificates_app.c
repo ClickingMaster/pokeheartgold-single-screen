@@ -22,7 +22,7 @@
 #include "screen_fade.h"
 #include "system.h"
 #include "text.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 #include "unk_0205BB1C.h"
 
 typedef struct CertificatesApp_Data {
@@ -752,7 +752,7 @@ static void ov78_021E66D4(Sprite *sprite, Pokemon *pokemon, enum HeapID heapID, 
 
     NARC *narc = NARC_New(NARC_data_mmodel_mmodel, heapID);
 
-    if (sub_02070438(species, form) == 0) {
+    if (SanitizeMonForm(species, form) == 0) {
         form = 0;
     }
 

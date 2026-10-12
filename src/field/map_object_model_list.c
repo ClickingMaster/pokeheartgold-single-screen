@@ -194,7 +194,7 @@ void MapObjectModelEffect_Update(FieldEffect *effect, MapObjectModelEffect *work
     VecFx32 facing;
 
     LocalMapObject *mapObject = work->args.mapObject;
-    if (!sub_0205F0A8(mapObject, work->objectId, work->mapId)) {
+    if (!MapObject_CheckIDAndMap(mapObject, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }

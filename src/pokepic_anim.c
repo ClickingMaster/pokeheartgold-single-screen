@@ -190,11 +190,11 @@ void PokepicAnimManager_Delete(PokepicAnimManager *mgr) {
 
 #pragma force_active on
 
-void PokepicAnimManager_StartAnim(void *managerArg, void *picArg, struct UnkStruct_0207294C *params, u8 index) {
+void PokepicAnimManager_StartAnim(void *managerArg, void *picArg, struct PokepicAnimParams *params, u8 index) {
     PokepicAnimManager *mgr = managerArg;
     Pokepic *pic = picArg;
-    int scriptId = params->unk_0;
-    int delay = params->unk_2;
+    int scriptId = params->scriptId;
+    int delay = params->delay;
     if (index >= mgr->count) {
         GF_AssertFail();
     }
@@ -209,7 +209,7 @@ void PokepicAnimManager_StartAnim(void *managerArg, void *picArg, struct UnkStru
         delay = 0;
     }
     mgr->anims[index].scriptId = scriptId;
-    mgr->anims[index].reverseX = mgr->allowReverse ? params->unk_4 : 0;
+    mgr->anims[index].reverseX = mgr->allowReverse ? params->reverseX : 0;
     mgr->anims[index].data = AllocAtEndAndReadWholeNarcMemberByIdPair(NARC_a_0_9_0, mgr->anims[index].scriptId, mgr->heapId);
     mgr->anims[index].cursor = mgr->anims[index].data;
     mgr->anims[index].done = 0;

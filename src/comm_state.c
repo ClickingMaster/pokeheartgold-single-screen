@@ -1136,7 +1136,7 @@ void CommState_WifiShutdown(void) {
 
 void CommState_EndWifiSession(void) {
     if (gCommState) {
-        sub_0201A738(1);
+        Sys_ClearSoftResetDisableFlag(1);
         CommPlayerInfo_Free();
         CommState_SetState(CommState_ShutdownWaitStopped, 5);
     }
@@ -1191,13 +1191,13 @@ void CommState_InitWfcSession(SaveData *saveData) {
         gCommState->unk55 = 1;
         gCommState->saveData = saveData;
         CommState_SetErrorWatch(0, 1);
-        sub_0201A728(1);
+        Sys_SetSoftResetDisableFlag(1);
     }
 }
 
 void CommState_FreeWfcSession(void) {
     if (gCommState) {
-        sub_0201A738(1);
+        Sys_ClearSoftResetDisableFlag(1);
         CommState_SetErrorWatch(0, 0);
         Heap_Free(gCommState);
         gCommState = NULL;
@@ -1215,13 +1215,13 @@ void CommState_InitMysteryGiftWfcSession(SaveData *saveData) {
         gCommState->unk55 = 1;
         gCommState->saveData = saveData;
         CommState_SetErrorWatch(0, 1);
-        sub_0201A728(1);
+        Sys_SetSoftResetDisableFlag(1);
     }
 }
 
 void CommState_FreeMysteryGiftWfcSession(void) {
     if (gCommState) {
-        sub_0201A738(1);
+        Sys_ClearSoftResetDisableFlag(1);
         CommState_SetErrorWatch(0, 0);
         Heap_Free(gCommState);
         gCommState = NULL;
@@ -1238,13 +1238,13 @@ void CommState_InitWiiMessageWfcSession(SaveData *saveData) {
         gCommState->unk55 = 1;
         gCommState->saveData = saveData;
         CommState_SetErrorWatch(0, 1);
-        sub_0201A728(1);
+        Sys_SetSoftResetDisableFlag(1);
     }
 }
 
 void CommState_FreeWiiMessageWfcSession(void) {
     if (gCommState) {
-        sub_0201A738(1);
+        Sys_ClearSoftResetDisableFlag(1);
         CommState_SetErrorWatch(0, 0);
         Heap_Free(gCommState);
         gCommState = NULL;
@@ -1310,7 +1310,7 @@ UnkStruct_ov44_0223197C *CommState_StartWifiClub(SaveData *saveData, u32 arg1) {
     if (sub_02037474()) {
         return NULL;
     }
-    sub_0201A728(1);
+    Sys_SetSoftResetDisableFlag(1);
     Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_15, 28800);
     CommState_Init(saveData, 23);
     gCommState->wifiClubData = Heap_Alloc(HEAP_ID_15, arg1);
@@ -1324,7 +1324,7 @@ UnkStruct_ov44_0223197C *CommState_StartWifiClub(SaveData *saveData, u32 arg1) {
 void CommState_StartWifiPlaza(SaveData *saveData, s32 arg1) {
     Save_PlayerData_GetProfile(saveData);
     if (!sub_02037474()) {
-        sub_0201A728(1);
+        Sys_SetSoftResetDisableFlag(1);
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_15, 28800);
         CommState_Init(saveData, 33);
         gCommState->wifiClubData = NULL;
@@ -1453,7 +1453,7 @@ void CommState_SetErrorScreen(s8 arg0) {
 }
 
 u8 CommState_GetErrorScreen(void) {
-    if (sub_0201A79C()) {
+    if (Sys_IsAsyncSaveInProgress()) {
         return 0;
     }
     if (gCommState) {
@@ -1476,7 +1476,7 @@ void sub_020399FC(void) {
 }
 
 void CommState_CheckLinkError(void) {
-    if (CommState_ReportsErrors() && (sub_02037700() || CommState_HasWifiFailed() || CommState_CheckDwcError() || gCommState->errorKind || CommState_HasPlazaLobbyFailed()) && !sub_0201A79C() && !CommState_GetErrorScreen()) {
+    if (CommState_ReportsErrors() && (sub_02037700() || CommState_HasWifiFailed() || CommState_CheckDwcError() || gCommState->errorKind || CommState_HasPlazaLobbyFailed()) && !Sys_IsAsyncSaveInProgress() && !CommState_GetErrorScreen()) {
         Sound_Stop();
         Save_Cancel(gCommState->saveData);
         gSystem.touchpadReadAuto = TRUE;
@@ -1648,7 +1648,7 @@ void CommState_PlazaWaitLogout(void) {
     WifiConnection_Update(0);
     CommState_PlazaUpdateLobby();
     if (ov45_0222E944()) {
-        sub_0201A738(1);
+        Sys_ClearSoftResetDisableFlag(1);
         CommPlayerInfo_Free();
         CommState_SetState(CommState_ShutdownWaitStopped, 5);
         sub_0203786C(0);

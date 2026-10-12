@@ -36,7 +36,7 @@
 #include "system.h"
 #include "touchscreen_list_menu.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "comm_wireless.h"
 #include "comm_state.h"
 #include "network_overlay_loader.h"
@@ -596,7 +596,7 @@ void Gts_InitSpriteResources(GtsApp *app) {
     SpriteTransfer_CreateExtPlttTransferTask(app->resources[5]);
 
     // The Pokemon icon palettes, at 0x60 and darkened (each color component halved) at 0xC0.
-    rawPalette = GfGfxLoader_GetPlttData(NARC_poketool_icongra_poke_icon, sub_02074490(), &palette, HEAP_ID_61);
+    rawPalette = GfGfxLoader_GetPlttData(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), &palette, HEAP_ID_61);
     DC_FlushRange(palette->pRawData, 0x60);
     GX_LoadOBJPltt(palette->pRawData, 0x60, 0x60);
     {

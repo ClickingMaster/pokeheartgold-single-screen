@@ -131,7 +131,7 @@ FieldEffect *RockClimbEffect_Create(LocalMapObject *mapObject, int x, int z, int
     if (follow == FALSE) {
         position.x = (x << 16) + 0x8000;
         position.z = (z << 16) + 0x8000;
-        sub_0206121C(args.fieldSystem, &position);
+        FieldSystem_SnapToTerrainHeight(args.fieldSystem, &position);
     } else {
         MapObject_CopyPositionVector(mapObject, &position);
     }
@@ -166,7 +166,7 @@ void RockClimbEffect_Update(FieldEffect *effect, RockClimbEffect *work) {
 
     if (work->follow) {
         memset(&offset, 0, sizeof(offset));
-        sub_0205F9A0(mapObject, &offset);
+        MapObject_SetDrawOffset(mapObject, &offset);
         MapObject_CopyPositionVector(mapObject, &position);
         FieldEffect_SetPosition(effect, &position);
     }

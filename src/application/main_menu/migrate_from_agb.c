@@ -41,7 +41,7 @@
 #include "title_screen.h"
 #include "touchscreen.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
@@ -60,8 +60,8 @@ BOOL NNS_G2dGetUnpackedBGCharacterData(void *file, NNSG2dCharacterData **charDat
 BOOL OS_IsTickAvailable(void);
 void OS_InitTick(void);
 u64 OS_GetTick(void);
-void sub_0201A728(int a0);
-void sub_0201A738(int a0);
+void Sys_SetSoftResetDisableFlag(int a0);
+void Sys_ClearSoftResetDisableFlag(int a0);
 
 extern int _02111864;
 extern const ObjCharTransferTemplate _0223B4E8;
@@ -314,9 +314,9 @@ void MigrateFromAgb_SaveMigrationRecord(MigrateFromAgbApp *app) {
     MigratedPokemon *migrated = Save_MigratedPokemon_Get(app->saveData);
     u32 trainerId = PmAgbCartridge_GetTrainerId();
     MigratedPokemon_RecordMigration(migrated, trainerId);
-    sub_0201A728(4);
+    Sys_SetSoftResetDisableFlag(4);
     SaveGameNormal(app->saveData);
-    sub_0201A738(4);
+    Sys_ClearSoftResetDisableFlag(4);
 }
 
 #pragma force_active on
@@ -432,7 +432,7 @@ void MigrateFromAgb_InitSpriteResources(MigrateFromAgbApp *app) {
     app->resources[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(app->resMan[GF_GFX_RES_TYPE_ANIM], NARC_a_1_1_3, 28, TRUE, 0, GF_GFX_RES_TYPE_ANIM, HEAP_ID_76);
     SpriteTransfer_CreateCharTransferTask(app->resources[GF_GFX_RES_TYPE_CHAR]);
     SpriteTransfer_CreateExtPlttTransferTask(app->resources[GF_GFX_RES_TYPE_PLTT]);
-    GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, sub_02074490(), GF_PAL_LOCATION_MAIN_OBJ, GF_PAL_SLOT_8_OFFSET, 0, HEAP_ID_76);
+    GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), GF_PAL_LOCATION_MAIN_OBJ, GF_PAL_SLOT_8_OFFSET, 0, HEAP_ID_76);
 }
 
 void MigrateFromAgb_InitSpriteHeader(MigrateFromAgbApp *app) {
@@ -591,7 +591,7 @@ void MigrateFromAgb_ShowBox(MigrateFromAgbApp *app) {
             species = MigrateFromAgb_GetBoxMonSpecies(app, app->box, i);
             isEgg = MigrateFromAgb_GetBoxMonIsEgg(app, app->box, i);
             form = MigrateFromAgb_GetBoxMonPersonality(app, app->box, i);
-            form = MigrateFromAgb_GetMonForm(TranslateAgbSpecies(species), form, gSystem.unk6A);
+            form = MigrateFromAgb_GetMonForm(TranslateAgbSpecies(species), form, gSystem.agbCartridgeVersion);
             MigrateFromAgb_PrepareBoxIcon(species, isEgg, form, i, app->slots[i].mon, file, narc);
             Sprite_SetDrawFlag(app->slots[i].mon, TRUE);
             if (AGB_GetBoxMonData(&app->storage->boxes[app->box][i], AGB_MON_DATA_HELD_ITEM, NULL)) {
@@ -1073,7 +1073,7 @@ void MigrateFromAgb_ShowConfirmScreen(MigrateFromAgbApp *app) {
         Sprite_SetDrawFlag(app->pickIcons[i], TRUE);
         species = MigrateFromAgb_GetBoxMonSpecies(app, app->picks[i].box, app->picks[i].slot);
         isEgg = MigrateFromAgb_GetBoxMonIsEgg(app, app->picks[i].box, app->picks[i].slot);
-        MigrateFromAgb_LoadMonIcon(species, isEgg, MigrateFromAgb_GetBoxMonPersonality(app, app->picks[i].box, app->picks[i].slot), gSystem.unk6A, i, app->pickIcons[i]);
+        MigrateFromAgb_LoadMonIcon(species, isEgg, MigrateFromAgb_GetBoxMonPersonality(app, app->picks[i].box, app->picks[i].slot), gSystem.agbCartridgeVersion, i, app->pickIcons[i]);
     }
     GfGfxLoader_LoadScrnData(NARC_a_1_1_3, 25, app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0x600, TRUE, HEAP_ID_76);
     BgTilemapRectChangePalette(app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 32, 24, ov74_0223C960[app->agbVersion]);
@@ -1571,7 +1571,7 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
             app->save.state = 0;
             app->waitingIcon = WaitingIcon_New(&app->msgWindow, 0x3D2);
             *state = 21;
-            sub_0201A728(4);
+            Sys_SetSoftResetDisableFlag(4);
             break;
         case YESNORESPONSE_NO:
             YesNoPrompt_Reset(app->yesNoPrompt);
@@ -1599,7 +1599,7 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
             }
             MigrateFromAgb_PrintText(app, &app->msgBox, 0);
             *state = 22;
-            sub_0201A738(4);
+            Sys_ClearSoftResetDisableFlag(4);
         }
         break;
     }

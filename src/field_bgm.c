@@ -20,7 +20,7 @@ void Sound_ClearBGMPauseFlags();
 void GF_FadeStartMusicId(int, int, int, int, int, void *);
 void GF_NowStartMusicId(int, int, int, int, void *);
 void sub_02005CF4(BOOL);
-BOOL sub_02004EB4(u16);
+BOOL Sound_PlayFieldBGM(u16);
 
 // clang-format off
 // Class, Eyes meet theme
@@ -245,7 +245,7 @@ BOOL FieldBGM_PlayEffectiveForMapHeader(FieldSystem *fieldSystem, u32 mapId) {
 }
 
 BOOL sub_02055198(FieldSystem *fieldSystem, u16 seqNo) {
-    BOOL res = sub_02004EB4(seqNo);
+    BOOL res = Sound_PlayFieldBGM(seqNo);
     if (res == TRUE && fieldSystem != NULL) {
         FieldSystem_ProcessSoundplate(fieldSystem, FALSE);
     }

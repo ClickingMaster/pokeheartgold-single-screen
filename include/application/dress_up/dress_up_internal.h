@@ -25,7 +25,7 @@
 #include "touch_hitbox_controller.h"
 #include "touchscreen.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "yes_no_prompt.h"
 
 #define DRESS_UP_IMAGE_MAX     0x76 // 100 accessories + 18 backdrops
@@ -323,7 +323,7 @@ typedef struct DressUpButton {
 typedef struct DressUpTextButton {
     DressUpButton button;         // 0x00
     TextOBJ *textObj;             // 0x10
-    UnkStruct_02021AC8 charAlloc; // 0x14, VRAM for the text
+    ObjCharSpaceReservation charAlloc; // 0x14, VRAM for the text
 } DressUpTextButton;              // size 0x20
 
 // page arrows, the two tabs and DONE

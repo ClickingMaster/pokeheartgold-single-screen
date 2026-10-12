@@ -2143,8 +2143,8 @@ void SwalotPlopDemo_Init(SwalotPlopDemo *demo, SwalotPlopGfx *gfx, enum HeapID h
     if (!SpriteTransfer_CreatePlttTransferTask(demo->res[GF_GFX_RES_TYPE_PLTT])) {
         GF_AssertFail();
     }
-    sub_0200A740(demo->res[GF_GFX_RES_TYPE_CHAR]);
-    sub_0200A740(demo->res[GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(demo->res[GF_GFX_RES_TYPE_CHAR]);
+    GF2DGfxResObj_FreeData(demo->res[GF_GFX_RES_TYPE_PLTT]);
     CreateSpriteResourcesHeader(&demo->header, 120, 120, 120, 120, -1, -1, FALSE, 0, gfx->resMan[GF_GFX_RES_TYPE_CHAR], gfx->resMan[GF_GFX_RES_TYPE_PLTT], gfx->resMan[GF_GFX_RES_TYPE_CELL], gfx->resMan[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
     template.spriteList = gfx->spriteList;
     template.header = &demo->header;
@@ -2503,8 +2503,8 @@ void SwalotPlopGfx_LoadSpriteRes(SwalotPlopGfx *gfx, NARC *narc, enum HeapID hea
     if (!SpriteTransfer_CreatePlttTransferTask(gfx->res[GF_GFX_RES_TYPE_PLTT])) {
         GF_AssertFail();
     }
-    sub_0200A740(gfx->res[GF_GFX_RES_TYPE_CHAR]);
-    sub_0200A740(gfx->res[GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(gfx->res[GF_GFX_RES_TYPE_CHAR]);
+    GF2DGfxResObj_FreeData(gfx->res[GF_GFX_RES_TYPE_PLTT]);
     CreateSpriteResourcesHeader(&gfx->header, 200, 200, 200, 200, -1, -1, FALSE, 0, gfx->resMan[GF_GFX_RES_TYPE_CHAR], gfx->resMan[GF_GFX_RES_TYPE_PLTT], gfx->resMan[GF_GFX_RES_TYPE_CELL], gfx->resMan[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
 }
 
@@ -2857,8 +2857,8 @@ void SwalotPlopGfx_InitShotViews(SwalotPlopGfx *gfx, NARC *narc, enum HeapID hea
     if (!SpriteTransfer_CreatePlttTransferTask(gfx->shotRes[GF_GFX_RES_TYPE_PLTT])) {
         GF_AssertFail();
     }
-    sub_0200A740(gfx->shotRes[GF_GFX_RES_TYPE_CHAR]);
-    sub_0200A740(gfx->shotRes[GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(gfx->shotRes[GF_GFX_RES_TYPE_CHAR]);
+    GF2DGfxResObj_FreeData(gfx->shotRes[GF_GFX_RES_TYPE_PLTT]);
 
     CreateSpriteResourcesHeader(&gfx->shotHeader, 100, 100, 100, 100, -1, -1, FALSE, 0, gfx->resMan[GF_GFX_RES_TYPE_CHAR], gfx->resMan[GF_GFX_RES_TYPE_PLTT], gfx->resMan[GF_GFX_RES_TYPE_CELL], gfx->resMan[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
 
@@ -3512,8 +3512,8 @@ void SwalotPlopCombo_Init(SwalotPlopCombo *combo, SwalotPlopGfx *gfx, NARC *narc
     combo->res[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], narc, 8, FALSE, 140, GF_GFX_RES_TYPE_ANIM, heapId);
     GF_ASSERT(SpriteTransfer_CreateCharTransferTask_UpdateMappingTypeFromHW_AllocAtEnd(combo->res[GF_GFX_RES_TYPE_CHAR]));
     GF_ASSERT(SpriteTransfer_CreatePlttTransferTask(combo->res[GF_GFX_RES_TYPE_PLTT]));
-    sub_0200A740(combo->res[GF_GFX_RES_TYPE_CHAR]);
-    sub_0200A740(combo->res[GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(combo->res[GF_GFX_RES_TYPE_CHAR]);
+    GF2DGfxResObj_FreeData(combo->res[GF_GFX_RES_TYPE_PLTT]);
     CreateSpriteResourcesHeader(&combo->header, 140, 140, 140, 140, -1, -1, FALSE, 0, gfx->resMan[GF_GFX_RES_TYPE_CHAR], gfx->resMan[GF_GFX_RES_TYPE_PLTT], gfx->resMan[GF_GFX_RES_TYPE_CELL], gfx->resMan[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
     spriteTemplate.spriteList = gfx->spriteList;
     spriteTemplate.header = &combo->header;
@@ -3527,10 +3527,10 @@ void SwalotPlopCombo_Init(SwalotPlopCombo *combo, SwalotPlopGfx *gfx, NARC *narc
     combo->string = String_New(0x10, heapId);
     AddTextWindowTopLeftCorner(gfx->bgConfig, &combo->window, 3, 2, 0, 0);
     combo->textLayout = TextOBJLayout_New(&combo->window, heapId);
-    GF_ASSERT(sub_02021AC8(TextOBJLayout_GetCharSize(combo->textLayout, NNS_G2D_VRAM_TYPE_2DMAIN), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &combo->charTransfer) == TRUE);
+    GF_ASSERT(ObjCharTransfer_ReserveCharSpace(TextOBJLayout_GetCharSize(combo->textLayout, NNS_G2D_VRAM_TYPE_2DMAIN), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &combo->charTransfer) == TRUE);
     combo->textPltt = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_graphic_font, 7, FALSE, 150, NNS_G2D_VRAM_TYPE_2DMAIN, 1, heapId);
     GF_ASSERT(SpriteTransfer_CreatePlttTransferTask(combo->textPltt));
-    sub_0200A740(combo->textPltt);
+    GF2DGfxResObj_FreeData(combo->textPltt);
     textTemplate.fontSystem = gfx->fontSystem;
     textTemplate.window = &combo->window;
     textTemplate.spriteList = gfx->spriteList;
@@ -3556,7 +3556,7 @@ void SwalotPlopCombo_Free(SwalotPlopCombo *combo, SwalotPlopGfx *gfx) {
     TextOBJ_Destroy(combo->textObj);
     SpriteTransfer_DeletePlttTransferTask(combo->textPltt);
     DestroySingle2DGfxResObj(gfx->resMan[GF_GFX_RES_TYPE_PLTT], combo->textPltt);
-    sub_02021B5C(&combo->charTransfer);
+    ObjCharTransfer_FreeCharSpace(&combo->charTransfer);
     TextOBJLayout_Delete(combo->textLayout);
     String_Delete(combo->string);
     Sprite_Delete(combo->sprite);

@@ -363,8 +363,8 @@ void PalPadGfx_InitSpriteSystem(PalPadGfx *gfx, enum HeapID heapId) {
     gfx->spriteResources[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(gfx->resourceManagers[GF_GFX_RES_TYPE_ANIM], gfx->narc, 3, TRUE, 100, GF_GFX_RES_TYPE_ANIM, heapId);
     GF_ASSERT(SpriteTransfer_CreateCharTransferTask_AllocAtEnd(gfx->spriteResources[GF_GFX_RES_TYPE_CHAR]));
     GF_ASSERT(SpriteTransfer_CreatePlttTransferTask(gfx->spriteResources[GF_GFX_RES_TYPE_PLTT]));
-    sub_0200A740(gfx->spriteResources[GF_GFX_RES_TYPE_CHAR]);
-    sub_0200A740(gfx->spriteResources[GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(gfx->spriteResources[GF_GFX_RES_TYPE_CHAR]);
+    GF2DGfxResObj_FreeData(gfx->spriteResources[GF_GFX_RES_TYPE_PLTT]);
     CreateSpriteResourcesHeader(&gfx->spriteHeader, 100, 100, 100, 100, -1, -1, 0, 0, gfx->resourceManagers[GF_GFX_RES_TYPE_CHAR], gfx->resourceManagers[GF_GFX_RES_TYPE_PLTT], gfx->resourceManagers[GF_GFX_RES_TYPE_CELL], gfx->resourceManagers[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
 }
 

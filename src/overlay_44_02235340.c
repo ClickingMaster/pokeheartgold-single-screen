@@ -21,7 +21,7 @@
 #include "sprite.h"
 #include "text.h"
 #include "sound_playback.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "oam_manager.h"
 #include "communication_player_state.h"
 #include "unk_02035900.h"

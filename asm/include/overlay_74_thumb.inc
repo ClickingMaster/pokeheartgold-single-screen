@@ -15,7 +15,7 @@
 .public FontID_String_GetCenterAlignmentX
 .public Sound_SetScene
 .public Sound_SetSceneAndPlayBGM
-.public sub_02005AF8
+.public Sound_SetBGMPlayerChannels
 .public Sound_Stop
 .public PlaySE
 .public PlayCry
@@ -93,11 +93,11 @@
 .public YesNoPrompt_HandleInput
 .public YesNoPrompt_Reset
 .public Main_SetVBlankIntrCB
-.public sub_0201A4B0
+.public Sys_SetAgbCartridgeVersion
 .public Sys_SetSleepDisableFlag
 .public Sys_ClearSleepDisableFlag
-.public sub_0201A728
-.public sub_0201A738
+.public Sys_SetSoftResetDisableFlag
+.public Sys_ClearSoftResetDisableFlag
 .public Heap_Create
 .public Heap_Destroy
 .public Heap_Alloc
@@ -279,7 +279,7 @@
 .public Mon_GetBoxMon
 .public GetMonIconNaixEx
 .public GetMonIconPaletteEx
-.public sub_02074490
+.public GetMonIconPlttNaix
 .public GetItemIndexMapping
 .public UpConvertItemId_Gen3to4
 .public GetItemIconCell

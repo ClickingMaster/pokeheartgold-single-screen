@@ -64,7 +64,7 @@ enum FishingRodState {
     FISHING_ROD_STATE_FINISH,
 };
 
-// The player's fishing animations (sub_0205F328).
+// The player's fishing animations (MapObject_SetAnimation).
 enum FishingRodAnim {
     FISHING_ROD_ANIM_IDLE,
     FISHING_ROD_ANIM_CAST,
@@ -273,7 +273,7 @@ int FishingRodState_StartCast(FishingRod *rod, PlayerAvatar *avatar, LocalMapObj
         MapObject_ClearHeldMovementIfActive(object);
         Field_PlayerAvatar_OrrTransitionFlags(avatar, PLAYER_TRANSITION_FISHING);
         Field_PlayerAvatar_ApplyTransitionFlags(avatar);
-        sub_0205F328(object, FISHING_ROD_ANIM_CAST);
+        MapObject_SetAnimation(object, FISHING_ROD_ANIM_CAST);
         rod->state = FISHING_ROD_STATE_CAST;
     }
     return 0;
@@ -313,7 +313,7 @@ int FishingRodState_WaitBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObje
     if (rod->biteDelay > 0) {
         return 0;
     }
-    sub_0205F328(object, FISHING_ROD_ANIM_BITE);
+    MapObject_SetAnimation(object, FISHING_ROD_ANIM_BITE);
     if (FishingRod_FollowMonNoticesBite(rod)) {
         rod->emoteMark = EmoteMark_Spawn(FollowMon_GetMapObject(rod->fieldSystem), 0, 1);
     } else {
@@ -338,7 +338,7 @@ int FishingRodState_WaitReel(FishingRod *rod, PlayerAvatar *avatar, LocalMapObje
 
 int FishingRodState_Hooked(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     EmoteMark_Hide(rod->emoteMark);
-    sub_0205F328(object, FISHING_ROD_ANIM_REEL);
+    MapObject_SetAnimation(object, FISHING_ROD_ANIM_REEL);
     rod->timer = 0;
     rod->state = FISHING_ROD_STATE_SHOW_LANDED;
     return 0;
@@ -373,7 +373,7 @@ int FishingRodState_Landed(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject
 }
 
 int FishingRodState_ReeledTooSoon(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
-    sub_0205F328(object, FISHING_ROD_ANIM_IDLE);
+    MapObject_SetAnimation(object, FISHING_ROD_ANIM_IDLE);
     FishingRod_PrintMessage(rod, msg_0040_00051);
     rod->timer = 16;
     rod->state = FISHING_ROD_STATE_WAIT_FAIL_MESSAGE;
@@ -381,7 +381,7 @@ int FishingRodState_ReeledTooSoon(FishingRod *rod, PlayerAvatar *avatar, LocalMa
 }
 
 int FishingRodState_GotAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
-    sub_0205F328(object, FISHING_ROD_ANIM_IDLE);
+    MapObject_SetAnimation(object, FISHING_ROD_ANIM_IDLE);
     FishingRod_PrintMessage(rod, msg_0040_00050);
     rod->timer = 16;
     rod->state = FISHING_ROD_STATE_WAIT_FAIL_MESSAGE;
@@ -404,7 +404,7 @@ int FishingRodState_WaitNoBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapOb
     if (rod->timer != 0) {
         return 0;
     }
-    sub_0205F328(object, FISHING_ROD_ANIM_IDLE);
+    MapObject_SetAnimation(object, FISHING_ROD_ANIM_IDLE);
     FishingRod_PrintMessage(rod, msg_0040_00049);
     rod->timer = 16;
     rod->state = FISHING_ROD_STATE_WAIT_FAIL_MESSAGE;

@@ -53,7 +53,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "unk_02035900.h"
 #include "field_interaction.h"
 #include "comm_player_manager.h"
@@ -513,7 +513,7 @@ int TouchscreenMenu_GetActionType(TouchscreenMenuData *data) {
     }
     if (!FieldSystem_IsPlayerMovementAllowed(fieldSystem)) {
         playerObj = PlayerAvatar_GetMapObject(FieldSystem_GetPlayerAvatar(fieldSystem));
-        int facing = sub_0205F330(playerObj);
+        int facing = MapObject_GetAnimation(playerObj);
         u32 spriteId = MapObject_GetSpriteID(playerObj);
         if ((u32)(spriteId - SPRITE_FISHINGHERO) <= SPRITE_FISH_HEROINE - SPRITE_FISHINGHERO) {
             return facing == 1 ? 3 : 4;
@@ -843,7 +843,7 @@ void TouchscreenMenu_LoadIconResources(FieldSystem *fieldSystem, GF_2DGfxResMan 
                     compressed = FALSE;
                     narcId = NARC_poketool_icongra_poke_icon;
                     plttNum = 3;
-                    plttFileId = sub_02074490();
+                    plttFileId = GetMonIconPlttNaix();
                     charFileId = Pokemon_GetIconNaix(contest->mon);
                 } else {
                     charFileId = 18;
@@ -875,9 +875,9 @@ void TouchscreenMenu_LoadIconResources(FieldSystem *fieldSystem, GF_2DGfxResMan 
     resObjs[GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(resMans[GF_GFX_RES_TYPE_CHAR], narcId, charFileId, compressed, resId, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_8);
     resObjs[GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(resMans[GF_GFX_RES_TYPE_PLTT], narcId, plttFileId, FALSE, resId, NNS_G2D_VRAM_TYPE_2DSUB, plttNum, HEAP_ID_8);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(resObjs[GF_GFX_RES_TYPE_CHAR]);
-    sub_0200A740(resObjs[GF_GFX_RES_TYPE_CHAR]);
+    GF2DGfxResObj_FreeData(resObjs[GF_GFX_RES_TYPE_CHAR]);
     SpriteTransfer_CreatePlttTransferTask(resObjs[GF_GFX_RES_TYPE_PLTT]);
-    sub_0200A740(resObjs[GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(resObjs[GF_GFX_RES_TYPE_PLTT]);
 }
 
 // Pixel coordinate to fx32, rounded away from zero (the float conversion is what the code does).

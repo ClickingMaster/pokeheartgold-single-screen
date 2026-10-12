@@ -478,7 +478,7 @@ BOOL MapObjectRender_GetBillboardResource(MapObjectManager *manager, u32 spriteI
     BillboardResourceSlot *slots;
     MapObjectRender *render;
 
-    render = sub_0205F1A0(manager);
+    render = MapObjectManager_GetRender(manager);
     slots = render->resourceSlots;
     count = render->objectCount;
 
@@ -1027,7 +1027,7 @@ BOOL ov01_021FA094(MapObjectManager *manager, u32 sequenceId, LocalMapObject *sk
 
 // Frees the dynamic model, sequence and texture of the sprite unless a map object other than skip uses them
 void MapObjectRender_ReleaseSpriteResources(MapObjectManager *manager, u32 spriteId, LocalMapObject *skip) {
-    MapObjectRender *render = sub_0205F1A0(manager);
+    MapObjectRender *render = MapObjectManager_GetRender(manager);
     u32 modelId = SpriteId_GetBillboardModelId(spriteId);
     u32 sequenceId;
     if (ov01_021F9EEC(render, modelId) == 1 && !ov01_021FA01C(manager, modelId, skip)) {
@@ -1231,7 +1231,7 @@ void ov01_021FA370(MapObjectRender *render, u32 spriteId, MapObjectBillboardReso
 #pragma force_active reset
 
 MapObjectRender *MapObject_GetRender(LocalMapObject *object) {
-    return sub_0205F1A0(MapObject_GetManager(object));
+    return MapObjectManager_GetRender(MapObject_GetManager(object));
 }
 
 int MapObject_UpdateBillboardPosition(LocalMapObject *object, Sprite *billboard) {
@@ -1515,9 +1515,9 @@ void ov01_021FA804(MapObjectRender *render, PendingBillboard *pending) {
     }
     MapObject_SetBillboardPending(pending->object, FALSE);
     if (MapObject_TestFlagsBits(pending->object, MAPOBJECTFLAG_UNK21) == TRUE) {
-        sub_0205F4C0(pending->object);
+        MapObject_CallDrawResume(pending->object);
     } else {
-        sub_0205F484(pending->object);
+        MapObject_CallDrawUpdate(pending->object);
     }
     pending->object = NULL;
     pending->billboard = NULL;
@@ -1567,9 +1567,9 @@ void MapObject_ChangeBillboardSprite(LocalMapObject *object, u32 spriteId) {
     if (MapObject_IsBillboardPending(object) == TRUE || MapObject_GetBillboard(object) == FALSE) {
         u32 oldSpriteId = MapObject_GetSpriteID(object);
         MapObjectManager *manager = MapObject_GetManager(object);
-        sub_0205E420(object);
+        MapObject_ClearSprite(object);
         MapObjectRender_ReleaseSpriteResources(manager, oldSpriteId, object);
-        sub_0205E38C(object, spriteId);
+        MapObject_SetSpriteAndInitDraw(object, spriteId);
     } else {
         ov01_021FA97C(object, spriteId);
     }
@@ -1664,9 +1664,9 @@ void ov01_021FA97C(LocalMapObject *object, u32 spriteId) {
         MapObject_CopyPositionVector(object, &reflectionPosition);
         work->reflection = Reflection_SpawnForBillboard(FieldEffectManager_GetFromMapObject(object), &work->resource, work->billboard, &reflectionPosition, reflectionKind, priority);
     }
-    sub_0205E420(object);
+    MapObject_ClearSprite(object);
     MapObjectRender_ReleaseSpriteResources(render->manager, oldSpriteId, object);
-    sub_0205E38C(object, spriteId);
+    MapObject_SetSpriteAndInitDraw(object, spriteId);
     MapObjectManager_GetPriority(render->manager);
     task = SysTask_CreateOnVWaitQueue((SysTaskFunc)ov01_021FAB9C, work, 0xFF);
     GF_ASSERT(task != NULL);

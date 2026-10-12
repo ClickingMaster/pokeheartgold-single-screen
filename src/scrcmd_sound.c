@@ -69,7 +69,7 @@ BOOL ScrCmd_FadeInBGM(ScriptContext *ctx) {
 BOOL ScrCmd_086(ScriptContext *ctx) {
     u8 var0 = ScriptReadByte(ctx);
     u8 var1 = ScriptReadByte(ctx);
-    sub_020053A8(var0, var1);
+    Sound_SetPlayerPause(var0, var1);
     return FALSE;
 }
 
@@ -165,7 +165,7 @@ BOOL ScrCmd_ChatotHasCry(ScriptContext *ctx) {
 
 BOOL ScrCmd_ChatotStartRecording(ScriptContext *ctx) {
     u16 *retPtr = ScriptGetVarPointer(ctx);
-    GF_ASSERT(sub_02005518());
+    GF_ASSERT(Sound_IsMicCounterFull());
     if (!Chatot_StartRecording()) {
         *retPtr = TRUE;
         return FALSE;

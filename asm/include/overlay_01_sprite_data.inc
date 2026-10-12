@@ -51,7 +51,7 @@
 .public CameraFocusObject_Resume
 .public ov01_02206CF0
 .public ov01_02206D00
-.public ov01_0220724C
+.public gCameraFocusObjectDrawCallbacks
 .public ov01_02207260
 .public ov01_02207274
 .public ov01_02207294
@@ -59,4 +59,4 @@
 .public ov01_02207318
 .public ov01_022073D8
 .public ov01_022074A8
-.public ov01_02209A38
+.public gMapObjectDrawCallbacks

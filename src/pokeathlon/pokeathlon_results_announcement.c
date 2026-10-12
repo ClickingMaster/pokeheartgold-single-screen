@@ -23,7 +23,7 @@
 #include "sprite_transfer.h"
 #include "system.h"
 #include "text.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "wireless_status_icon.h"
 
 // Declared by no public header.
@@ -1039,11 +1039,11 @@ void PokeathlonResultsAnnouncement_InitTextWindows(PokeathlonResultsAnnouncement
 
 void PokeathlonResultsAnnouncement_CreateText(PokeathlonResultsAnnouncementPlates *plates, PokeathlonResultsAnnouncementTextWindow *window, String *string, int x, int dx, int dy, Sprite *parent, PokeathlonResultsAnnouncementText *out) {
     TextOBJTemplate template;
-    UnkStruct_02021AC8 charSlot;
+    ObjCharSpaceReservation charSlot;
     TextOBJ *textObj;
     FillWindowPixelBufferText_AssumeTileSize32(&window->window, 0);
     AddTextPrinterParameterizedWithColorAndSpacing(&window->window, 0, string, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0, 0, NULL);
-    sub_02021AC8(window->charSize, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &charSlot);
+    ObjCharTransfer_ReserveCharSpace(window->charSize, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &charSlot);
     template.fontSystem = plates->fontSystem;
     template.window = &window->window;
     template.spriteList = plates->spriteList;
@@ -1067,7 +1067,7 @@ void PokeathlonResultsAnnouncement_CreateText(PokeathlonResultsAnnouncementPlate
 void PokeathlonResultsAnnouncement_DestroyText(PokeathlonResultsAnnouncementText *text) {
     if (text->textObj != NULL) {
         TextOBJ_Destroy(text->textObj);
-        sub_02021B5C(&text->charSlot);
+        ObjCharTransfer_FreeCharSpace(&text->charSlot);
         text->textObj = NULL;
     }
 }
@@ -1174,11 +1174,11 @@ void PokeathlonResultsAnnouncement_SetScore(PokeathlonResultsAnnouncementScorebo
 
 void PokeathlonResultsAnnouncement_CreateScoreboardText(PokeathlonResultsAnnouncementScoreboard *scoreboard, PokeathlonResultsAnnouncementTextWindow *window, String *string, int x, int dx, int dy, Sprite *parent, PokeathlonResultsAnnouncementText *out) {
     TextOBJTemplate template;
-    UnkStruct_02021AC8 charSlot;
+    ObjCharSpaceReservation charSlot;
     TextOBJ *textObj;
     FillWindowPixelBufferText_AssumeTileSize32(&window->window, 0);
     AddTextPrinterParameterizedWithColorAndSpacing(&window->window, 0, string, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0, 0, NULL);
-    sub_02021AC8(window->charSize, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, &charSlot);
+    ObjCharTransfer_ReserveCharSpace(window->charSize, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, &charSlot);
     template.fontSystem = scoreboard->fontSystem;
     template.window = &window->window;
     template.spriteList = PokeathlonCourseSpritePool_GetSpriteList(scoreboard->scene);
@@ -1202,7 +1202,7 @@ void PokeathlonResultsAnnouncement_CreateScoreboardText(PokeathlonResultsAnnounc
 void PokeathlonResultsAnnouncement_DestroyScoreboardText(PokeathlonResultsAnnouncementText *text) {
     if (text->textObj != NULL) {
         TextOBJ_Destroy(text->textObj);
-        sub_02021B5C(&text->charSlot);
+        ObjCharTransfer_FreeCharSpace(&text->charSlot);
         text->textObj = NULL;
     }
 }

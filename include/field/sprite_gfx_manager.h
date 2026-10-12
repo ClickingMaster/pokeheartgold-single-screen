@@ -4,7 +4,7 @@
 #include "filesystem.h"
 #include "sprite.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 // Sprite list plus char / palette / cell / animation resources of the overlay 2 field animations (cut-ins), on the
 // main screen. Resources are looked up by id; a slot whose id is the kind's `none` id is free.

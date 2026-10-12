@@ -640,7 +640,7 @@ struct GetterWork {
     UnkBallData *ballData;
     ManagedSprite *unkC[2];
     TextOBJ *unk14;
-    UnkStruct_02021AC8 unk18;
+    ObjCharSpaceReservation unk18;
     int captureType;
     int state;
     int ballID;

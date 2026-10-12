@@ -43,7 +43,7 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 
 // The command the battle controller sent to this battler (BattleController_RecvData copies it to 0x94).
 #define OPPONENT_COMMAND(opponentData) ((void *)&(opponentData)->unk8C[8])
@@ -2006,9 +2006,9 @@ void OpponentData_PlayEncounterAnimation(BattleSystem *battleSystem, OpponentDat
 }
 
 // The NARC readers take a fourth parameter these calls never set.
-#define READ_POKEPIC_SHADOW_HEIGHT(narc, ret, species)   ((void (*)(NARC *, s8 *, u16))sub_020729D8)(narc, ret, species)
-#define READ_POKEPIC_SHADOW_X_OFFSET(narc, ret, species) ((void (*)(NARC *, s8 *, u16))sub_020729FC)(narc, ret, species)
-#define READ_POKEPIC_SHADOW_SIZE(narc, ret, species)     ((void (*)(NARC *, u8 *, u16))sub_02072A20)(narc, ret, species)
+#define READ_POKEPIC_SHADOW_HEIGHT(narc, ret, species)   ((void (*)(NARC *, s8 *, u16))NARC_ReadPokepicShadowHeight)(narc, ret, species)
+#define READ_POKEPIC_SHADOW_X_OFFSET(narc, ret, species) ((void (*)(NARC *, s8 *, u16))NARC_ReadPokepicShadowXOffset)(narc, ret, species)
+#define READ_POKEPIC_SHADOW_SIZE(narc, ret, species)     ((void (*)(NARC *, u8 *, u16))NARC_ReadPokepicShadowSize)(narc, ret, species)
 
 void OpponentData_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonEncounter *packet) {
     PokepicTemplate pokepicTemplate;
@@ -2232,7 +2232,7 @@ void OpponentData_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opp
     s16 x;
     int position;
     PokepicTemplate template;
-    UnkStruct_02070D3C files;
+    TrainerPicFileIds files;
     OpponentTrainerEncounterWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentTrainerEncounterWork));
 
     work->state = 0;
@@ -2266,7 +2266,7 @@ void OpponentData_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opp
     work->managedSprite = opponentData->managedSprite;
     if (work->facing == 0 && (BattleSystem_GetBattleType(battleSystem) == BATTLE_TYPE_NONE || BattleSystem_GetBattleType(battleSystem) == BATTLE_TYPE_SAFARI || BattleSystem_GetBattleType(battleSystem) == BATTLE_TYPE_ROAMER || BattleSystem_GetBattleType(battleSystem) == BATTLE_TYPE_PAL_PARK || BattleSystem_GetBattleType(battleSystem) == BATTLE_TYPE_TUTORIAL || BattleSystem_GetBattleType(battleSystem) == BATTLE_TYPE_BUG_CONTEST)) {
         pokepicManager = BattleSystem_GetPokepicManager(battleSystem);
-        sub_02070D84(packet->trainerClass, work->facing, &files);
+        GetTrainerPicFileIdsNoLink(packet->trainerClass, work->facing, &files);
         template.narcID = files.narcId;
         template.charDataID = files.ncbr_id;
         template.palDataID = files.nclr_id;
@@ -5987,7 +5987,7 @@ void Task_PlayFaintAnimation(SysTask *task, void *data) {
         break;
     case 4:
         value = work->facing == 2 ? 117 : -117;
-        sub_0207204C(BattleSystem_GetChatotVoice(work->battleSystem, work->battlerId), 5, work->species, work->form, value, 127, work->isTransformed, HEAP_ID_BATTLE, 0);
+        PlayCryDelayedHandleChatot(BattleSystem_GetChatotVoice(work->battleSystem, work->battlerId), 5, work->species, work->form, value, 127, work->isTransformed, HEAP_ID_BATTLE, 0);
         work->state++;
     case 5:
         if (!IsCryFinished()) {
@@ -7102,7 +7102,7 @@ ManagedSprite *BattleControllerOpponent_CreateTrainerSprite(BattleSystem *battle
     } else {
         battlerPosition = 0;
     }
-    return sub_02070C24(spriteSystem, spriteManager, paletteData, x, y, trainerClass, battlerPosition, isLink, resTag, HEAP_ID_BATTLE);
+    return CreateTrainerPicSprite(spriteSystem, spriteManager, paletteData, x, y, trainerClass, battlerPosition, isLink, resTag, HEAP_ID_BATTLE);
 }
 
 void ov12_02261B80(BattleSystem *battleSystem, OpponentData *opponentData, BattleAnimSystem *animSystem, MoveAnimData *animData) {
@@ -7308,8 +7308,8 @@ void BattleControllerOpponent_PlayMonAnimAndCry(BattleSystem *battleSystem, int 
 
     if (BattleSystem_AreBattleAnimationsOn(battleSystem) == TRUE) {
         POKEPIC_START_ANIM(pokepic, 1);
-        sub_0207294C((NARC *)narc, BattleSystem_GetPokepicAnimManager(battleSystem), pokepic, species, facing, 0, battlerId);
-        sub_020729A4((NARC *)narc, &cryDelay, species, battlerType);
+        NARC_StartPokepicAnim((NARC *)narc, BattleSystem_GetPokepicAnimManager(battleSystem), pokepic, species, facing, 0, battlerId);
+        NARC_ReadPokepicCryDelay((NARC *)narc, &cryDelay, species, battlerType);
     }
     if (facing == 2) {
         pan = 117;
@@ -7319,7 +7319,7 @@ void BattleControllerOpponent_PlayMonAnimAndCry(BattleSystem *battleSystem, int 
     if (cryDelay == 0) {
         cryDelay = 8;
     }
-    sub_0207204C(BattleSystem_GetChatotVoice(battleSystem, battlerId), cryParam, species, form, pan, 127, 0, HEAP_ID_BATTLE, cryDelay);
+    PlayCryDelayedHandleChatot(BattleSystem_GetChatotVoice(battleSystem, battlerId), cryParam, species, form, pan, 127, 0, HEAP_ID_BATTLE, cryDelay);
 }
 
 #pragma force_active reset

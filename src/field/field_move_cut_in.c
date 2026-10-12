@@ -26,7 +26,7 @@
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 // A step of the cut-in's step table: TRUE to run the next step in the same frame.
 typedef BOOL (*FieldMoveCutInStep)(FieldMoveCutIn *cutIn);
@@ -627,12 +627,12 @@ void Task_FieldMoveCutIn_ReleaseSpriteData(SysTask *task, void *data) {
     if (cutIn->transferStep == 1) {
         for (i = 0; i < 4; i++) {
             if (cutIn->charResources[i] != NULL) {
-                sub_0200A740(cutIn->charResources[i]);
+                GF2DGfxResObj_FreeData(cutIn->charResources[i]);
             }
         }
         for (i = 0; i < 3; i++) {
             if (cutIn->plttResources[i] != NULL) {
-                sub_0200A740(cutIn->plttResources[i]);
+                GF2DGfxResObj_FreeData(cutIn->plttResources[i]);
             }
         }
         if (cutIn->monCharData != NULL) {
@@ -662,7 +662,7 @@ void Task_FieldMoveCutIn_ReleaseFlySpriteData(SysTask *task, void *data) {
     FieldMoveCutIn *cutIn = data;
     SpriteResource *res = SpriteResourceCollection_Find(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], 0);
     if (cutIn->transferStep == 1) {
-        sub_0200A740(res);
+        GF2DGfxResObj_FreeData(res);
         cutIn->transferDone = TRUE;
         SysTask_Destroy(task);
     }
@@ -783,12 +783,12 @@ void FieldMoveCutIn_FreeSpriteResources(FieldMoveCutIn *cutIn) {
     }
     for (i = 0; i < 4; i++) {
         if (cutIn->cellResources[i] != NULL) {
-            sub_0200A740(cutIn->cellResources[i]);
+            GF2DGfxResObj_FreeData(cutIn->cellResources[i]);
         }
     }
     for (i = 0; i < 2; i++) {
         if (cutIn->animResources[i] != NULL) {
-            sub_0200A740(cutIn->animResources[i]);
+            GF2DGfxResObj_FreeData(cutIn->animResources[i]);
         }
     }
     Destroy2DGfxResObjMan(cutIn->resMan[GF_GFX_RES_TYPE_CHAR]);

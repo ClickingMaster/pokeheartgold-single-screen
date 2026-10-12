@@ -297,7 +297,7 @@ void PokedexEntryPopup_FreeSprites(PokedexEntryPopup *popup) {
 void PokedexEntryPopup_LoadSpriteResources(SpriteResource **resources, GF_2DGfxResMan **managers, enum HeapID heapId, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId) {
     resources[0] = AddCharResObjFromOpenNarc(managers[0], narc, charFileId, TRUE, charId, NNS_G2D_VRAM_TYPE_2DMAIN, heapId);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(resources[0]);
-    sub_0200A740(resources[0]);
+    GF2DGfxResObj_FreeData(resources[0]);
     if (plttFileId != -1) {
         resources[1] = PokedexEntryPopup_LoadPaletteResource(managers[1], heapId, narc, plttFileId, plttNum, plttId);
     }
@@ -308,7 +308,7 @@ void PokedexEntryPopup_LoadSpriteResources(SpriteResource **resources, GF_2DGfxR
 SpriteResource *PokedexEntryPopup_LoadPaletteResource(GF_2DGfxResMan *manager, enum HeapID heapId, NARC *narc, int fileId, int plttNum, int id) {
     SpriteResource *resource = AddPlttResObjFromOpenNarc(manager, narc, fileId, FALSE, id, NNS_G2D_VRAM_TYPE_2DMAIN, plttNum, heapId);
     SpriteTransfer_CreatePlttTransferTask(resource);
-    sub_0200A740(resource);
+    GF2DGfxResObj_FreeData(resource);
     return resource;
 }
 

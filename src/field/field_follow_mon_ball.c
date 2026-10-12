@@ -24,7 +24,7 @@
 
 // Puts position->y on the ground of the tile at position->x/z; FALSE while that tile has no ground yet.
 // (unk_0205FD20.h declares it returning void.)
-BOOL sub_0206121C(FieldSystem *fieldSystem, VecFx32 *position);
+BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 // The following Pokemon's billboard (field map object motion, still unnamed).
 void *ov01_021F771C(MapObjectManager *manager);
 // billboard_lists.c
@@ -168,7 +168,7 @@ BOOL FollowMonBallEffect_InitBurst(FieldEffect *effect, FollowMonBallEffect *wor
     work->objectId = MapObject_GetID(work->args.mapObject);
     work->mapId = MapObject_GetMapID(work->args.mapObject);
     position = work->args.position;
-    work->onGround = sub_0206121C(work->args.fieldSystem, &position);
+    work->onGround = FieldSystem_SnapToTerrainHeight(work->args.fieldSystem, &position);
     FieldEffect_SetPosition(effect, &position);
     Field3dObject_SetPos(&work->args.ball->ball, &position);
     Field3dObject_SetPos(&work->args.ball->burst, &position);
@@ -183,14 +183,14 @@ void FollowMonBallEffect_UpdateRelease(FieldEffect *effect, FollowMonBallEffect 
     LocalMapObject *mapObject = work->args.mapObject;
     VecFx32 position;
     VecFx32 ground;
-    if (!sub_0205F0F8(mapObject, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
     if (work->onGround == FALSE) {
         FieldEffect_GetPosition(effect, &position);
         ground = work->args.position;
-        work->onGround = sub_0206121C(work->args.fieldSystem, &ground);
+        work->onGround = FieldSystem_SnapToTerrainHeight(work->args.fieldSystem, &ground);
         if (work->onGround == TRUE) {
             position.y = ground.y;
             FieldEffect_SetPosition(effect, &position);
@@ -206,7 +206,7 @@ void FollowMonBallEffect_UpdateRelease(FieldEffect *effect, FollowMonBallEffect 
         Field3dObject_SetActiveFlag(&work->args.ball->ball, FALSE);
         Field3dObject_SetActiveFlag(&work->args.ball->burst, TRUE);
         sub_02069DC8(mapObject, FALSE);
-        sub_0205F484(mapObject);
+        MapObject_CallDrawUpdate(mapObject);
         Field3dModelAnimation_FrameSet(&work->args.ball->burstAnimation, 0);
         work->state = 2;
     case 2:
@@ -219,7 +219,7 @@ void FollowMonBallEffect_UpdateRelease(FieldEffect *effect, FollowMonBallEffect 
 
 void FollowMonBallEffect_DrawRelease(FieldEffect *effect, FollowMonBallEffect *work) {
     VecFx32 position;
-    if (!sub_0205F0F8(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
@@ -231,14 +231,14 @@ void FollowMonBallEffect_DrawRelease(FieldEffect *effect, FollowMonBallEffect *w
 void FollowMonBallEffect_UpdateBurst(FieldEffect *effect, FollowMonBallEffect *work) {
     VecFx32 position;
     VecFx32 ground;
-    if (!sub_0205F0F8(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
     if (work->onGround == FALSE) {
         FieldEffect_GetPosition(effect, &position);
         ground = work->args.position;
-        work->onGround = sub_0206121C(work->args.fieldSystem, &ground);
+        work->onGround = FieldSystem_SnapToTerrainHeight(work->args.fieldSystem, &ground);
         if (work->onGround == TRUE) {
             position.y = ground.y;
             FieldEffect_SetPosition(effect, &position);
@@ -260,7 +260,7 @@ void FollowMonBallEffect_UpdateBurst(FieldEffect *effect, FollowMonBallEffect *w
 
 void FollowMonBallEffect_DrawBurst(FieldEffect *effect, FollowMonBallEffect *work) {
     VecFx32 position;
-    if (!sub_0205F0F8(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
@@ -277,7 +277,7 @@ BOOL FollowMonBallEffect_InitRecallWhite(FieldEffect *effect, FollowMonBallEffec
     work->objectId = MapObject_GetID(work->args.mapObject);
     work->mapId = MapObject_GetMapID(work->args.mapObject);
     position = work->args.position;
-    work->onGround = sub_0206121C(work->args.fieldSystem, &position);
+    work->onGround = FieldSystem_SnapToTerrainHeight(work->args.fieldSystem, &position);
     FieldEffect_SetPosition(effect, &position);
     Field3dObject_SetPos(&work->args.ball->ball, &position);
     Field3dObject_SetActiveFlag(&work->args.ball->ball, FALSE);
@@ -295,14 +295,14 @@ void FollowMonBallEffect_UpdateRecallWhite(FieldEffect *effect, FollowMonBallEff
     u32 plttKey2;
     u32 direction;
 
-    if (!sub_0205F0F8(owner, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(owner, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
     if (work->onGround == FALSE) {
         FieldEffect_GetPosition(effect, &position);
         ground = work->args.position;
-        work->onGround = sub_0206121C(work->args.fieldSystem, &ground);
+        work->onGround = FieldSystem_SnapToTerrainHeight(work->args.fieldSystem, &ground);
         if (work->onGround == TRUE) {
             position.y = ground.y;
             FieldEffect_SetPosition(effect, &position);
@@ -358,7 +358,7 @@ void FollowMonBallEffect_UpdateRecallWhite(FieldEffect *effect, FollowMonBallEff
 
 void FollowMonBallEffect_DrawBall(FieldEffect *effect, FollowMonBallEffect *work) {
     VecFx32 position;
-    if (!sub_0205F0F8(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
@@ -385,7 +385,7 @@ BOOL FollowMonBallEffect_InitRecall(FieldEffect *effect, FollowMonBallEffect *wo
 
 void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, FollowMonBallEffect *work) {
     LocalMapObject *mapObject = work->args.mapObject;
-    if (!sub_0205F0F8(mapObject, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }

@@ -1541,11 +1541,11 @@ LocalMapObject *FollowMon_InitMapObject(MapObjectManager *mapObjectManager, int 
             } else if (playerState == PLAYER_STATE_CYCLING) {
                 Save_FollowMon_SetUnused2bitField(2, Save_FollowMon_Get(fieldSystem->saveData));
                 sub_0206A054(fieldSystem);
-                sub_0205FC94(FollowMon_GetMapObject(fieldSystem), 56);
+                MapObject_ChangeMovement(FollowMon_GetMapObject(fieldSystem), 56);
             } else if (playerState == PLAYER_STATE_SURFING) {
                 Save_FollowMon_SetUnused2bitField(2, Save_FollowMon_Get(fieldSystem->saveData));
                 sub_0206A054(fieldSystem);
-                sub_0205FC94(FollowMon_GetMapObject(fieldSystem), 56);
+                MapObject_ChangeMovement(FollowMon_GetMapObject(fieldSystem), 56);
             } else {
                 GF_ASSERT(FALSE);
             }

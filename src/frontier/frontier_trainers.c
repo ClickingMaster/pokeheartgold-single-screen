@@ -292,7 +292,7 @@ void ov80_0222A334(SaveData *saveData, Pokemon *mon) {
     String *string;
     int mapSec;
 
-    sub_0207217C(mon, Save_PlayerData_GetProfile(saveData), 4, 0, 0, HEAP_ID_FIELD2);
+    MonSetCatchDataNoHealBall(mon, Save_PlayerData_GetProfile(saveData), 4, 0, 0, HEAP_ID_FIELD2);
     mapSec = MapHeader_GetMapSec(275);
     MonSetTrainerMemo(mon, profile, 0, mapSec, HEAP_ID_FIELD2);
     msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 193, HEAP_ID_FIELD2);

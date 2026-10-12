@@ -473,7 +473,7 @@ void BoxMonSelector_InitSpriteResources(BoxMonSelector *selector) {
     selector->spriteResources[3] = AddCellOrAnimResObjFromNarc(selector->resManagers[3], NARC_a_1_5_1, 6, TRUE, 0, GF_GFX_RES_TYPE_ANIM, selector->heapId);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(selector->spriteResources[0]);
     SpriteTransfer_CreateExtPlttTransferTask(selector->spriteResources[1]);
-    GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, sub_02074490(), GF_PAL_LOCATION_MAIN_OBJ, GF_PAL_SLOT_8_OFFSET, 0, selector->heapId);
+    GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), GF_PAL_LOCATION_MAIN_OBJ, GF_PAL_SLOT_8_OFFSET, 0, selector->heapId);
 }
 
 #pragma force_active off

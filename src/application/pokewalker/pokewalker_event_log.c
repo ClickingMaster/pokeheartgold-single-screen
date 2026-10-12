@@ -32,7 +32,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 
 // Entry of NARC_fielddata_tsurepoke_tp_param (by SpeciesToOverworldModelIndexOffset).
 typedef struct FollowMonModelParam {
@@ -871,7 +871,7 @@ void PokewalkerEventLog_LoadMonSprite(PokewalkerEventLogMonSprite *monSprite, u1
     }
     monSprite->species = species;
     narc = NARC_New(NARC_data_mmodel_mmodel, (enum HeapID)heapId);
-    if (!sub_02070438(species, form)) {
+    if (!SanitizeMonForm(species, form)) {
         form = 0;
     }
     modelFile = NARC_AllocAndReadWholeMember(narc, PokewalkerEventLog_GetMonModelFileId(species, form, gender), (enum HeapID)heapId);

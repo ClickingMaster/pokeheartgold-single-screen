@@ -43,13 +43,13 @@
 .public BillboardGfxSequence_Init
 .public MetatileBehavior_IsPuddle
 .public MetatileBehavior_IsReflective
-.public sub_0205E38C
-.public sub_0205E420
+.public MapObject_SetSpriteAndInitDraw
+.public MapObject_ClearSprite
 .public MapObjectManager_GetNextObjectWithFlagFromIndex
 .public MapObject_GetPriorityPlusValue
 .public MapObjectManager_GetObjectCount
 .public MapObjectManager_GetPriority
-.public sub_0205F1A0
+.public MapObjectManager_GetRender
 .public MapObjectManager_GetObjects2
 .public MapObjectArray_NextObject
 .public MapObjectManager_GetMapModelNarc
@@ -60,8 +60,8 @@
 .public MapObject_GetID
 .public MapObject_GetSpriteID
 .public MapObject_GetManager
-.public sub_0205F484
-.public sub_0205F4C0
+.public MapObject_CallDrawUpdate
+.public MapObject_CallDrawResume
 .public MapObject_CheckActive
 .public MapObject_CheckFlag24
 .public MapObject_CopyPositionVector

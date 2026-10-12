@@ -16,15 +16,15 @@
 #include "field_terrain.h"
 
 void FollowPlayerMovement_Init(LocalMapObject *object) {
-    FollowPlayerMovementState *state = (FollowPlayerMovementState *)sub_0205F370(object, sizeof(FollowPlayerMovementState));
+    FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_InitMovementData(object, sizeof(FollowPlayerMovementState));
     FollowPlayerMovement_CheckPlayer(object, state);
-    sub_0205F328(object, 0);
+    MapObject_SetAnimation(object, 0);
     MapObject_ClearSingleMovement(object);
     MapObject_ClearFlag18(object, FALSE);
 }
 
 void FollowPlayerMovement_UpdateFollowMon(LocalMapObject *object) {
-    FollowPlayerMovementState *state = (FollowPlayerMovementState *)sub_0205F394(object);
+    FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_GetMovementData(object);
     if (FollowPlayerMovement_CheckPlayer(object, state)) {
         MapObject_ClearFlag18(object, FALSE);
         while (gFollowMonFollowPlayerStates[state->state](object, state) == TRUE) {
@@ -33,7 +33,7 @@ void FollowPlayerMovement_UpdateFollowMon(LocalMapObject *object) {
 }
 
 void FollowPlayerMovement_Update(LocalMapObject *object) {
-    FollowPlayerMovementState *state = (FollowPlayerMovementState *)sub_0205F394(object);
+    FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_GetMovementData(object);
     if (FollowPlayerMovement_CheckPlayer(object, state)) {
         while (gFollowPlayerStates[state->state](object, state) == TRUE) {
         }
@@ -41,7 +41,7 @@ void FollowPlayerMovement_Update(LocalMapObject *object) {
 }
 
 void FollowPlayerMovement_UpdateMirror(LocalMapObject *object) {
-    FollowPlayerMovementState *state = (FollowPlayerMovementState *)sub_0205F394(object);
+    FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_GetMovementData(object);
     if (FollowPlayerMovement_CheckPlayer(object, state)) {
         while (gMirrorPlayerStates[state->state](object, state) == TRUE) {
         }
@@ -93,22 +93,22 @@ void FollowPlayerMovement_Delete(LocalMapObject *object) {
 }
 
 u8 FollowPlayerMovement_GetHopFrame(LocalMapObject *object) {
-    return ((FollowPlayerMovementState *)sub_0205F394(object))->hopFrame;
+    return ((FollowPlayerMovementState *)MapObject_GetMovementData(object))->hopFrame;
 }
 
 u32 FollowPlayerMovement_GetHopSpeed(LocalMapObject *object) {
-    FollowPlayerMovementState *state = (FollowPlayerMovementState *)sub_0205F394(object);
+    FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_GetMovementData(object);
     return state->hopSpeed;
 }
 
-void sub_020659B8(LocalMapObject *object) {
-    FollowPlayerMovementState *state = (FollowPlayerMovementState *)sub_0205F394(object);
+void FollowPlayerMovement_DisableBallEffect(LocalMapObject *object) {
+    FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_GetMovementData(object);
     state->noBallEffect = TRUE;
 }
 
 void FollowPlayerMovement_Reset(LocalMapObject *object) {
     FieldSystem *fieldSystem = MapObject_GetFieldSystem(object);
-    FollowPlayerMovementState *state = (FollowPlayerMovementState *)sub_0205F394(object);
+    FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_GetMovementData(object);
 
     MapObject_ClearSingleMovement(object);
     MapObject_ClearEndMovement(object);

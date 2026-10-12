@@ -13,10 +13,10 @@
 .public Save_GetPartyLead
 .public Save_GetPartyLeadAlive
 .public Save_PlayerHasAllRegisInParty
-.public sub_0205BED8
-.public sub_0205BFB4
+.public CallTask_SpinMapObject
+.public CallTask_BlinkMapObject
 .public MapObject_SetVisible
-.public sub_0205F9A0
+.public MapObject_SetDrawOffset
 .public GetMonData
 .public Party_GetCount
 .public Party_GetMonByIndex

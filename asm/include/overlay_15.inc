@@ -5,7 +5,7 @@
 .public TextFlags_SetCanTouchSpeedUpPrint
 .public FontID_String_GetWidth
 .public LoadFontPal1
-.public sub_02004B10
+.public Sound_ClearSecondaryScene
 .public Sound_SetSceneAndPlayBGM
 .public SoundSys_GetGBSoundsState
 .public SoundSys_ToggleGBSounds

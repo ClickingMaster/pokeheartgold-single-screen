@@ -35,7 +35,7 @@
 #include "system.h"
 #include "sound_playback.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "oam_manager.h"
 #include "unk_0200FA24.h"
 #include "bg_cell_manager.h"
@@ -3281,7 +3281,7 @@ void BattleFactorySpriteGfx_Init(BattleFactorySpriteGfx *gfx) {
     gfx->resObj[3][3] = AddCellOrAnimResObjFromNarc(gfx->resMan[3], NARC_a_1_8_4, 0x2D, TRUE, 3, GF_GFX_RES_TYPE_ANIM, HEAP_ID_100);
     for (i = 0; i < 2; i++) {
         gfx->resObj[i + 4][0] = AddCharResObjFromNarc(gfx->resMan[0], NARC_a_1_8_4, 0x2E, TRUE, i + 4, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_100);
-        gfx->resObj[i + 4][1] = AddPlttResObjFromNarc(gfx->resMan[1], NARC_poketool_icongra_poke_icon, sub_02074490(), FALSE, i + 4, NNS_G2D_VRAM_TYPE_2DSUB, 3, HEAP_ID_100);
+        gfx->resObj[i + 4][1] = AddPlttResObjFromNarc(gfx->resMan[1], NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), FALSE, i + 4, NNS_G2D_VRAM_TYPE_2DSUB, 3, HEAP_ID_100);
         gfx->resObj[i + 4][2] = AddCellOrAnimResObjFromNarc(gfx->resMan[2], NARC_a_1_8_4, 0x2F, TRUE, i + 4, GF_GFX_RES_TYPE_CELL, HEAP_ID_100);
         gfx->resObj[i + 4][3] = AddCellOrAnimResObjFromNarc(gfx->resMan[3], NARC_a_1_8_4, 0x30, TRUE, i + 4, GF_GFX_RES_TYPE_ANIM, HEAP_ID_100);
     }

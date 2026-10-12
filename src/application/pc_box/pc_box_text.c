@@ -175,7 +175,7 @@ void PCBox_CreateTrayTextObjs(PCBoxView *view) {
     textObj = &view->textObjs[0];
     InitWindow(&window);
     AddTextWindowTopLeftCorner(view->bgConfig, &window, 12, 2, 0, 2);
-    sub_02021AC8(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_10), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &textObj->charTransfer);
+    ObjCharTransfer_ReserveCharSpace(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_10), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &textObj->charTransfer);
     template.fontSystem = view->fontSystem;
     template.window = &window;
     template.spriteList = SpriteManager_GetSpriteList(view->spriteManager);
@@ -196,7 +196,7 @@ void PCBox_CreateTrayTextObjs(PCBoxView *view) {
     textObj = &view->textObjs[1];
     InitWindow(&window);
     AddTextWindowTopLeftCorner(view->bgConfig, &window, 5, 2, 0, 2);
-    sub_02021AC8(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_10), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &textObj->charTransfer);
+    ObjCharTransfer_ReserveCharSpace(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_10), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &textObj->charTransfer);
     template.fontSystem = view->fontSystem;
     template.window = &window;
     template.spriteList = SpriteManager_GetSpriteList(view->spriteManager);
@@ -224,7 +224,7 @@ void PCBox_DestroyTrayTextObjs(PCBoxView *view) {
     charTransfer = (u8 *)&view->textObjs[0].charTransfer;
     slot = (u8 *)view;
     for (; i < 2; i++) {
-        sub_02021B5C((UnkStruct_02021AC8 *)charTransfer);
+        ObjCharTransfer_FreeCharSpace((ObjCharSpaceReservation *)charTransfer);
         FontOAM_Delete(*(TextOBJ **)(slot + offsetof(PCBoxView, textObjs[0].textObj)));
         charTransfer += sizeof(PCBoxTextObj);
         slot += sizeof(PCBoxTextObj);

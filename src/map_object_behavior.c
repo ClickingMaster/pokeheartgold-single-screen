@@ -21,30 +21,30 @@
 #include "sys_task_api.h"
 #include "unk_02055418.h"
 
-void sub_02063A14(LocalMapObject *object) {
-    sub_02063A40(object);
+void MapObject_InitTypeBehavior(LocalMapObject *object) {
+    MapObject_CallTypeBehaviorInit(object);
 }
 
-BOOL sub_02063A1C(LocalMapObject *object) {
-    if (!sub_02063A5C(object)) {
+BOOL MapObject_UpdateTypeBehavior(LocalMapObject *object) {
+    if (!MapObject_CallTypeBehaviorCheck(object)) {
         return FALSE;
     }
-    if (sub_02063A78(object)) {
+    if (MapObject_CallTypeBehaviorUpdate(object)) {
         return TRUE;
     }
     return FALSE;
 }
 
-void sub_02063A40(LocalMapObject *object) {
-    _020FE104[MapObject_GetType(object)](object);
+void MapObject_CallTypeBehaviorInit(LocalMapObject *object) {
+    gMapObjectTypeBehaviorInits[MapObject_GetType(object)](object);
 }
 
-BOOL sub_02063A5C(LocalMapObject *object) {
-    return _020FE134[MapObject_GetType(object)](object);
+BOOL MapObject_CallTypeBehaviorCheck(LocalMapObject *object) {
+    return gMapObjectTypeBehaviorChecks[MapObject_GetType(object)](object);
 }
 
-BOOL sub_02063A78(LocalMapObject *object) {
-    return _020FE164[MapObject_GetType(object)](object);
+BOOL MapObject_CallTypeBehaviorUpdate(LocalMapObject *object) {
+    return gMapObjectTypeBehaviorUpdates[MapObject_GetType(object)](object);
 }
 
 BOOL MapObject_IsOffPreviousTile(LocalMapObject *object) {
@@ -71,24 +71,24 @@ BOOL MapObject_IsOnPreviousTile(LocalMapObject *object) {
     return FALSE;
 }
 
-void sub_02063AFC(LocalMapObject *object) {
+void TypeBehavior_NoOpInit(LocalMapObject *object) {
 }
 
-int sub_02063B00(LocalMapObject *object) {
+int TypeBehavior_NoOpCheck(LocalMapObject *object) {
     return 0;
 }
 
-int sub_02063B04(LocalMapObject *object) {
+int TypeBehavior_NoOpUpdate(LocalMapObject *object) {
     return 0;
 }
 
 void sub_02063B08(LocalMapObject *object) {
-    TrainerBehaviorState *state = (TrainerBehaviorState *)sub_0205F398(object, 9);
+    TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_InitBehaviorData(object, 9);
     state->limit = MapObject_GetParam(object, 1);
 }
 
 BOOL sub_02063B20(LocalMapObject *object) {
-    TrainerBehaviorState *state = (TrainerBehaviorState *)sub_0205F3BC(object);
+    TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
     switch (state->state) {
     case 0:
         if (MapObject_IsOffPreviousTile(object) == TRUE) {
@@ -119,7 +119,7 @@ BOOL sub_02063B20(LocalMapObject *object) {
 }
 
 BOOL sub_02063B9C(LocalMapObject *object) {
-    TrainerBehaviorState *state = (TrainerBehaviorState *)sub_0205F3BC(object);
+    TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
     switch (state->turnState) {
     case 0: {
         FourValues dirTable = _020FE0C4;
@@ -159,13 +159,13 @@ BOOL sub_02063B9C(LocalMapObject *object) {
 }
 
 void sub_02063C88(LocalMapObject *object) {
-    TrainerBehaviorState *state = (TrainerBehaviorState *)sub_0205F398(object, 9);
+    TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_InitBehaviorData(object, 9);
     state->limit = MapObject_GetParam(object, 1);
     state->sequence = (MapObject_GetType(object) != 5);
 }
 
 BOOL sub_02063CB4(LocalMapObject *object) {
-    TrainerBehaviorState *state = (TrainerBehaviorState *)sub_0205F3BC(object);
+    TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
     switch (state->state) {
     case 0:
         if (MapObject_IsOffPreviousTile(object) == TRUE) {
@@ -197,7 +197,7 @@ BOOL sub_02063CB4(LocalMapObject *object) {
 
 BOOL sub_02063D30(LocalMapObject *object) {
     DirectionMovementTable sp0 = _020FE0E4;
-    volatile TrainerBehaviorState *state = (TrainerBehaviorState *)sub_0205F3BC(object);
+    volatile TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
     int i;
     int dir;
     switch (state->turnState) {
@@ -248,15 +248,15 @@ search_check:
 }
 
 void ApricornTreeObject_Init(LocalMapObject *object) {
-    ApricornTreeState *state = (ApricornTreeState *)sub_0205F3E8(object, 0x18);
+    ApricornTreeState *state = (ApricornTreeState *)MapObject_InitDrawData(object, 0x18);
     state->spriteId = 0x106;
     state->apricorns = 0;
-    sub_0205F484(object);
+    MapObject_CallDrawUpdate(object);
 }
 
 void ApricornTreeObject_Update(LocalMapObject *object) {
-    MapObjectSpriteState *spriteState = (MapObjectSpriteState *)sub_0205F394(object);
-    ApricornTreeState *state = (ApricornTreeState *)sub_0205F40C(object);
+    MapObjectSpriteState *spriteState = (MapObjectSpriteState *)MapObject_GetMovementData(object);
+    ApricornTreeState *state = (ApricornTreeState *)MapObject_GetDrawData(object);
     int apricorn = sub_02055780(MapObject_GetFieldSystem(object), object);
     if (MapObject_IsBillboardPending(object) == TRUE) {
         return;
@@ -288,7 +288,7 @@ void ApricornTreeObject_Update(LocalMapObject *object) {
     }
     MapObject_UpdateBillboardPosition(object, state->billboard);
     if (MapObject_IsBillboardAnimPaused(object) == 0) {
-        switch (sub_0205F330(object)) {
+        switch (MapObject_GetAnimation(object)) {
         case 0:
             if (BillboardObject_GetSequence(state->billboard) != 0) {
                 BillboardObject_SetSequence(state->billboard, 0);
@@ -321,12 +321,12 @@ void ApricornTreeObject_Update(LocalMapObject *object) {
 }
 
 void ApricornTreeObject_Delete(LocalMapObject *object) {
-    ApricornTreeState *state = (ApricornTreeState *)sub_0205F40C(object);
+    ApricornTreeState *state = (ApricornTreeState *)MapObject_GetDrawData(object);
     ov01_021F95CC(object, &state->billboard, state->spriteId);
 }
 
 void ApricornTreeObject_Pause(LocalMapObject *object) {
-    ApricornTreeState *state = (ApricornTreeState *)sub_0205F40C(object);
+    ApricornTreeState *state = (ApricornTreeState *)MapObject_GetDrawData(object);
     if (state->billboard != NULL) {
         BillboardObject_SaveState(state->billboard, &state->savedState);
     }
@@ -335,7 +335,7 @@ void ApricornTreeObject_Pause(LocalMapObject *object) {
 }
 
 void ApricornTreeObject_Resume(LocalMapObject *object) {
-    ApricornTreeState *state = (ApricornTreeState *)sub_0205F40C(object);
+    ApricornTreeState *state = (ApricornTreeState *)MapObject_GetDrawData(object);
     if (MapObject_IsBillboardPending(object) == TRUE) {
         return;
     }
@@ -359,7 +359,7 @@ void *ApricornTreeObject_GetBillboard(LocalMapObject *object) {
         GF_AssertFail();
         return NULL;
     }
-    return ((ApricornTreeState *)sub_0205F40C(object))->billboard;
+    return ((ApricornTreeState *)MapObject_GetDrawData(object))->billboard;
 }
 
 u32 GetApricornTreeSpriteId(int apricorn, int apricornCount) {
@@ -797,7 +797,7 @@ BOOL sub_020648A0(TrainerApproachWork *work) {
 
 BOOL sub_020648C8(TrainerApproachWork *work) {
     MapObject_ClearHeldMovementIfActive(work->trainer);
-    sub_0205FC94(work->trainer, 0);
+    MapObject_ChangeMovement(work->trainer, 0);
     work->state = 17;
     return TRUE;
 }

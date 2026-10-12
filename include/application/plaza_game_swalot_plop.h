@@ -19,7 +19,7 @@
 #include "pm_string.h"
 #include "sprite.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 // SWALOT Plop (overlay 91), a Wi-Fi Plaza game: every player flicks berries on the touch
 // screen towards a spinning SWALOT; berries that land in its mouth score points, and
@@ -268,7 +268,7 @@ typedef struct SwalotPlopCombo {
     Window window;                   // 0x38
     TextOBJ *textObj;                // 0x48
     TextOBJLayout *textLayout;       // 0x4C
-    UnkStruct_02021AC8 charTransfer; // 0x50
+    ObjCharSpaceReservation charTransfer; // 0x50
     String *string;                  // 0x5C
     SpriteResource *textPltt;        // 0x60
     SwalotPlopCurve slideX;          // 0x64

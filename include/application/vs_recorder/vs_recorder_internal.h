@@ -108,7 +108,7 @@ typedef struct VsRecorderMenuRow {
     TouchscreenHitbox *hitbox;
     TextOBJ *text;
     TextOBJLayout *textLayout;
-    UnkStruct_02021AC8 charAlloc;
+    ObjCharSpaceReservation charAlloc;
 } VsRecorderMenuRow; // size 0x28
 
 // a sprite with a one-line text label, used by several screens
@@ -117,7 +117,7 @@ typedef struct VsRecorderTextSprite {
     ManagedSprite *sprite;
     TextOBJ *text;
     TextOBJLayout *textLayout;
-    UnkStruct_02021AC8 charAlloc;
+    ObjCharSpaceReservation charAlloc;
 } VsRecorderTextSprite; // size 0x1C
 
 // the resource block of VsRecorderWork from narc to fontSystem (0x14-0x54); the text sprite helpers get &work->narc

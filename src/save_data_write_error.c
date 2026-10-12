@@ -79,7 +79,7 @@ void ShowSaveDataWriteError(enum HeapID heapID, int code) {
     SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
     SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
 
-    sub_0201A0E0();
+    SetVBlankIntrToDmaOnly();
 
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);

@@ -374,9 +374,9 @@ void sub_0205876C(void) {
     }
     CommState_GetSelectedOrder(data);
     if (gCommClubLink->party == NULL) {
-        sub_02051598(gCommClubLink->fieldSystem, data, battleType);
+        FieldSystem_StartCommClubLinkBattle(gCommClubLink->fieldSystem, data, battleType);
     } else {
-        sub_020515FC(gCommClubLink->fieldSystem, gCommClubLink->party, battleType);
+        FieldSystem_StartCommClubLinkBattleWithParty(gCommClubLink->fieldSystem, gCommClubLink->party, battleType);
         Heap_Free(gCommClubLink->party);
         gCommClubLink->party = NULL;
     }

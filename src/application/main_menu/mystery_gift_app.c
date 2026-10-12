@@ -52,7 +52,7 @@
 #include "text.h"
 #include "title_screen.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "comm_wireless.h"
 #include "unk_02035900.h"
 #include "wireless_status_icon.h"
@@ -907,7 +907,7 @@ BOOL MysteryGiftApp_Init(OverlayManager *manager, int *state) {
     MainMenuUtil_SetCryptoHeap(HEAP_ID_84);
     if (MainMenuUtil_GetCartridgeGiftSize()) {
         data->receiveMode = 2;
-        sub_0201A4B0(gGameVersion);
+        Sys_SetAgbCartridgeVersion(gGameVersion);
         MainMenuUtil_EnableCartridgePullOutCheck(TRUE);
     }
     data->unk_05C8 = 29;
@@ -2159,7 +2159,7 @@ BOOL MysteryGiftApp_Exit(OverlayManager *manager, int *state) {
     OverlayManager_FreeData(manager);
     Heap_Destroy(HEAP_ID_84);
     if (data->receiveMode == 2) {
-        sub_0201A4B0(0);
+        Sys_SetAgbCartridgeVersion(0);
     }
     MainMenuUtil_EnableCartridgePullOutCheck(FALSE);
     return TRUE;

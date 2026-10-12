@@ -351,8 +351,8 @@ void ov42_02227720(UnkStruct_ov42_02227060 *arg0, s32 arg1, s32 arg2, s32 arg3, 
     if (arg0->unk4 != 0) {
         ov42_02227E78(arg0, arg0->unk10[arg1].unk8, 1);
     }
-    sub_0200A740(arg0->unk10[arg1].unk4);
-    sub_0200A740(arg0->unk10[arg1].unk8);
+    GF2DGfxResObj_FreeData(arg0->unk10[arg1].unk4);
+    GF2DGfxResObj_FreeData(arg0->unk10[arg1].unk8);
     arg0->unk10[arg1].unkC = arg2;
     arg0->unk10[arg1].unk10 = arg3;
     arg0->unk10[arg1].unk0 = 0;
@@ -369,7 +369,7 @@ void ov42_02227874(UnkStruct_ov42_02227060 *arg0, s32 arg1, s32 arg2, s32 arg3, 
         GF2DGfxResObj_GetCharDataPtr(arg0->unk10[arg1].unk4)->szByte = 5120;
     }
     GF_ASSERT(SpriteTransfer_CreateCharTransferTask_UpdateMappingTypeFromHW_AllocAtEnd(arg0->unk10[arg1].unk4));
-    sub_0200A740(arg0->unk10[arg1].unk4);
+    GF2DGfxResObj_FreeData(arg0->unk10[arg1].unk4);
     arg0->unk10[arg1].unk8 = NULL;
     arg0->unk10[arg1].unkC = arg2;
     arg0->unk10[arg1].unk10 = arg3;
@@ -428,7 +428,7 @@ void ov42_022279FC(UnkStruct_ov42_02227060 *arg0, s32 arg1, enum HeapID heapID) 
     if (SpriteTransfer_CreateCharTransferTask_UpdateMappingTypeFromHW_AllocAtEnd(arg0->unk22B8[0]) == 0) {
         GF_ASSERT(FALSE);
     }
-    sub_0200A740(arg0->unk22B8[0]);
+    GF2DGfxResObj_FreeData(arg0->unk22B8[0]);
     CreateSpriteResourcesHeader(&arg0->unk22C8, 288, sp30 + 512, 288, 288, -1, -1, 0, 0, arg0->unk22F0[0], arg0->unk22F0[1], arg0->unk22F0[2], arg0->unk22F0[3], 0, 0);
 }
 
@@ -455,7 +455,7 @@ void ov42_02227B6C(UnkStruct_ov42_02227060 *arg0, s32 arg1, enum HeapID heapID) 
     if (arg0->unk4 != 0) {
         ov42_02227E78(arg0, arg0->unk2300, 8);
     }
-    sub_0200A740(arg0->unk2300);
+    GF2DGfxResObj_FreeData(arg0->unk2300);
 }
 
 void ov42_02227BE0(UnkStruct_ov42_02227060 *arg0) {

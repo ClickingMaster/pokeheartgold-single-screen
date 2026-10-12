@@ -2537,9 +2537,9 @@ static void BattleInput_LoadPokemonIconResources(BattleInput *battleInput) {
     spriteManager = BattleSystem_GetSpriteManager(battleInput->battleSystem);
     palette = BattleSystem_GetPaletteData(battleInput->battleSystem);
 
-    SpriteSystem_LoadPaletteBuffer(palette, PLTTBUF_SUB_OBJ, spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, sub_02074490(), 0, 3, NNS_G2D_VRAM_TYPE_2DSUB, 20022);
-    SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, sub_02074498(), 0, 20021);
-    SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, sub_020744A4(), 0, 20021);
+    SpriteSystem_LoadPaletteBuffer(palette, PLTTBUF_SUB_OBJ, spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), 0, 3, NNS_G2D_VRAM_TYPE_2DSUB, 20022);
+    SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconCell32KNaix(), 0, 20021);
+    SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconAnim32KNaix(), 0, 20021);
 }
 
 static void BattleInput_FreePokemonIconResources(BattleInput *battleInput) {
@@ -2722,7 +2722,7 @@ static void String_GetFontLength(String *str, u32 fontId, int *lengthOut, int *c
 static void BattleInput_CreateTextObject(BattleInput *battleInput, BattleInputTextObject *battleTextObj, String *str, u32 fontId, int textColor, int palOffset, int palId, int x, int y, int centerText, BattleInputMoveMemory_DisplayObj *param10) {
     TextOBJTemplate textObjTemplate;
     Window window;
-    UnkStruct_02021AC8 charTransferAlloc;
+    ObjCharSpaceReservation charTransferAlloc;
     int size;
     TextOBJ *textObj;
     BgConfig *bgConfig;
@@ -2750,7 +2750,7 @@ static void BattleInput_CreateTextObject(BattleInput *battleInput, BattleInputTe
     }
 
     size = FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DSUB, 5);
-    sub_02021AC8(size, 1, NNS_G2D_VRAM_TYPE_2DSUB, &charTransferAlloc);
+    ObjCharTransfer_ReserveCharSpace(size, 1, NNS_G2D_VRAM_TYPE_2DSUB, &charTransferAlloc);
 
     if (centerText == 1) {
         x -= fontLength / 2;
@@ -2789,7 +2789,7 @@ static void BattleInput_DeleteTextObjects(BattleInput *battleInput) {
     for (int i = 0; i < 13; i++) {
         if (battleInput->textObj[i].textObj != NULL) {
             FontOAM_Delete(battleInput->textObj[i].textObj);
-            sub_02021B5C(&battleInput->textObj[i].unk4);
+            ObjCharTransfer_FreeCharSpace(&battleInput->textObj[i].unk4);
             battleInput->textObj[i].textObj = NULL;
         }
     }

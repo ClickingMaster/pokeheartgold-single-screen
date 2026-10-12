@@ -18,7 +18,7 @@
 
 // Puts position->y on the ground of the tile at position->x/z; FALSE while that tile has no ground yet.
 // (unk_0205FD20.h declares it returning void.)
-BOOL sub_0206121C(FieldSystem *fieldSystem, VecFx32 *position);
+BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 12).
 typedef struct VeryTallGrass {
@@ -142,7 +142,7 @@ BOOL VeryTallGrassEffect_Init(FieldEffect *effect, VeryTallGrassEffect *work) {
     position.x = work->args.x << 16;
     position.z = work->args.z << 16;
     position.y = MapObject_GetPositionVectorYCoord(work->args.mapObject);
-    work->onGround = sub_0206121C(work->args.fieldSystem, &position);
+    work->onGround = FieldSystem_SnapToTerrainHeight(work->args.fieldSystem, &position);
     position.x += 2 << 14;
     position.z += 0x12 << 12;
     FieldEffect_SetPosition(effect, &position);
@@ -167,7 +167,7 @@ void VeryTallGrassEffect_Update(FieldEffect *effect, VeryTallGrassEffect *work) 
     VecFx32 position;
     LocalMapObject *mapObject = work->args.mapObject;
 
-    if (!sub_0205F0F8(mapObject, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
@@ -181,7 +181,7 @@ void VeryTallGrassEffect_Update(FieldEffect *effect, VeryTallGrassEffect *work) 
         position.x = work->args.x << 16;
         position.z = work->args.z << 16;
         position.y = current.y;
-        work->onGround = sub_0206121C(work->args.fieldSystem, &position);
+        work->onGround = FieldSystem_SnapToTerrainHeight(work->args.fieldSystem, &position);
         if (work->onGround == TRUE) {
             current.y = position.y;
             FieldEffect_SetPosition(effect, &current);
@@ -218,7 +218,7 @@ void VeryTallGrassEffect_Update(FieldEffect *effect, VeryTallGrassEffect *work) 
 void VeryTallGrassEffect_Draw(FieldEffect *effect, VeryTallGrassEffect *work) {
     VecFx32 position;
 
-    if (!sub_0205F0F8(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }

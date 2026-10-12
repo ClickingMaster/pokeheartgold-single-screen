@@ -11,7 +11,7 @@
 #include "pokepic.h"
 #include "sprite.h"
 #include "sys_task_api.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 // Sprites of the popup: 0 banner, 1 and 2 the type icons, 3 the footprint
 typedef struct PokedexEntryPopupSprite {

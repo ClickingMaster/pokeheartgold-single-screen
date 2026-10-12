@@ -47,7 +47,7 @@ static Encounter *Encounter_New(BattleSetup *setup, s32 effect, s32 bgm, u32 *wi
 static void Encounter_Delete(Encounter *encounter);
 static void sub_02050724(BattleSetup *setup, FieldSystem *fieldSystem);
 static BOOL Task_StartEncounter(TaskManager *taskManager);
-static void sub_0205087C(s32 flag, FieldSystem *fieldSystem);
+static void RecordLinkBattleResult(s32 flag, FieldSystem *fieldSystem);
 static BOOL Task_020508B8(TaskManager *taskManager);
 static BOOL Task_02050960(TaskManager *taskManager);
 static BOOL Task_020509F0(TaskManager *taskManager);
@@ -55,8 +55,8 @@ static BOOL Task_WildEncounter(TaskManager *taskManager);
 static BOOL Task_SafariEncounter(TaskManager *taskManager);
 static BOOL Task_BugContestEncounter(TaskManager *taskManager);
 static BOOL Task_TutorialBattle(TaskManager *taskManager);
-static u32 sub_02051474(LinkBattleRuleset *ruleset, u32 battleType);
-static void sub_02051660(FieldSystem *fieldSystem, BattleSetup *setup);
+static u32 Encounter_GetLinkBattleMode(LinkBattleRuleset *ruleset, u32 battleType);
+static void Encounter_AddBattleScore(FieldSystem *fieldSystem, BattleSetup *setup);
 
 static BOOL Task_StartBattle(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
@@ -155,7 +155,7 @@ static BOOL Task_StartEncounter(TaskManager *taskManager) { // todo: better name
             HealParty(SaveArray_Party_Get(fieldSystem->saveData));
         }
 
-        sub_02051660(fieldSystem, encounter->setup);
+        Encounter_AddBattleScore(fieldSystem, encounter->setup);
         CallTask_RestoreOverworld(taskManager);
         (*state)++;
         break;
@@ -177,7 +177,7 @@ static void CallTask_StartEncounter(TaskManager *taskManager, BattleSetup *setup
     TaskManager_Call(taskManager, Task_StartEncounter, encounter);
 }
 
-static void sub_0205087C(s32 flag, FieldSystem *fieldSystem) {
+static void RecordLinkBattleResult(s32 flag, FieldSystem *fieldSystem) {
     switch (flag & 0xF) {
     case 1:
     case 6:
@@ -209,7 +209,7 @@ static BOOL Task_020508B8(TaskManager *taskManager) {
         (*state)++;
         break;
     case 3:
-        sub_0205087C(encounter->setup->winFlag, fieldSystem);
+        RecordLinkBattleResult(encounter->setup->winFlag, fieldSystem);
         sub_02052444(encounter->setup, fieldSystem);
         GameStats_AddScore(Save_GameStats_Get(fieldSystem->saveData), SCORE_EVENT_LINK_BATTLE);
         Encounter_GetResult(encounter, fieldSystem);
@@ -237,7 +237,7 @@ static BOOL Task_02050960(TaskManager *taskManager) {
         (*state)++;
         break;
     case 1:
-        sub_0205087C(encounter->setup->winFlag, fieldSystem);
+        RecordLinkBattleResult(encounter->setup->winFlag, fieldSystem);
         sub_02052444(encounter->setup, fieldSystem);
         GameStats_AddScore(Save_GameStats_Get(fieldSystem->saveData), SCORE_EVENT_LINK_BATTLE);
         Encounter_GetResult(encounter, fieldSystem);
@@ -312,7 +312,7 @@ static void WildEncounter_Delete(WildEncounter *encounter) {
     Heap_Free(encounter);
 }
 
-void sub_02050B08(FieldSystem *fieldSystem, BattleSetup *setup) {
+void FieldSystem_StartWildEncounter(FieldSystem *fieldSystem, BattleSetup *setup) {
     SaveVarsFlags *flags = Save_VarsFlags_Get(fieldSystem->saveData);
     s32 effect = BattleSetup_GetWildTransitionEffect(setup);
     s32 bgm = BattleSetup_GetWildBattleMusic(setup);
@@ -380,7 +380,7 @@ static BOOL Task_WildEncounter(TaskManager *taskManager) {
             HealParty(SaveArray_Party_Get(fieldSystem->saveData));
         }
 
-        sub_02051660(fieldSystem, encounter->setup);
+        Encounter_AddBattleScore(fieldSystem, encounter->setup);
         CallTask_RestoreOverworld(taskManager);
 
         encounter->state++;
@@ -428,7 +428,7 @@ static BOOL Task_SafariEncounter(TaskManager *taskManager) {
             sub_020930C4(fieldSystem);
         }
 
-        sub_02051660(fieldSystem, encounter->setup);
+        Encounter_AddBattleScore(fieldSystem, encounter->setup);
 
         if (*safariBalls == 0 && encounter->setup->winFlag != BATTLE_OUTCOME_MON_CAUGHT) {
             Location *location = LocalFieldData_GetDynamicWarp(Save_LocalFieldData_Get(fieldSystem->saveData));
@@ -504,7 +504,7 @@ static BOOL Task_BugContestEncounter(TaskManager *taskManager) {
             return FALSE;
         }
 
-        sub_02051660(fieldSystem, encounter->setup);
+        Encounter_AddBattleScore(fieldSystem, encounter->setup);
 
         if (encounter->setup->winFlag == BATTLE_OUTCOME_MON_CAUGHT) {
             BugContest_PromptSwapPokemon(taskManager, encounter->setup->bugContestMon);
@@ -598,7 +598,7 @@ static BOOL Task_PalParkEncounter(TaskManager *taskManager) {
     case 3:
         sub_02050724(encounter->setup, fieldSystem);
         FieldSystem_UpdateCatchingShowResult(fieldSystem, encounter->setup);
-        sub_02051660(fieldSystem, encounter->setup);
+        Encounter_AddBattleScore(fieldSystem, encounter->setup);
         (*state)++;
         break;
     case 4:
@@ -625,7 +625,7 @@ static BOOL Task_PalParkEncounter(TaskManager *taskManager) {
     return FALSE;
 }
 
-void sub_020511F8(FieldSystem *fieldSystem, BattleSetup *setup) {
+void FieldSystem_StartPalParkEncounter(FieldSystem *fieldSystem, BattleSetup *setup) {
     Encounter *encounter = Encounter_New(setup, BattleSetup_GetWildTransitionEffect(setup), BattleSetup_GetWildBattleMusic(setup), NULL);
     FieldSystem_CreateTask(fieldSystem, Task_PalParkEncounter, encounter);
 }
@@ -748,7 +748,7 @@ void CallTask_020508B8(TaskManager *taskManager, void *param1, u32 battleType) {
     TaskManager_Call(taskManager, Task_020508B8, encounter);
 }
 
-static u32 sub_02051474(LinkBattleRuleset *ruleset, u32 battleType) {
+static u32 Encounter_GetLinkBattleMode(LinkBattleRuleset *ruleset, u32 battleType) {
     int var = sub_02029264(ruleset);
     u32 mode;
 
@@ -802,7 +802,7 @@ void CallTask_02050960(TaskManager *taskManager, s32 target, s32 maxLevel, u32 f
     TaskManager_Call(taskManager, Task_02050960, encounter);
 }
 
-static BOOL sub_02051540(TaskManager *taskManager) {
+static BOOL Task_CommClubLinkBattle(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     Encounter *encounter = TaskManager_GetEnvironment(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
@@ -822,7 +822,7 @@ static BOOL sub_02051540(TaskManager *taskManager) {
     return FALSE;
 }
 
-void sub_02051598(FieldSystem *fieldSystem, void *param1, s32 battleType) {
+void FieldSystem_StartCommClubLinkBattle(FieldSystem *fieldSystem, void *param1, s32 battleType) {
     Encounter *encounter;
     BattleSetup *setup = BattleSetup_New(HEAP_ID_FIELD2, battleType);
     u32 var;
@@ -830,14 +830,14 @@ void sub_02051598(FieldSystem *fieldSystem, void *param1, s32 battleType) {
     sub_020522F0(setup, fieldSystem, param1);
     BattleRecord_Create(fieldSystem->saveData, HEAP_ID_FIELD2, &var);
 
-    setup->unk1B2 = sub_02051474(fieldSystem->linkBattleRuleset, battleType);
+    setup->unk1B2 = Encounter_GetLinkBattleMode(fieldSystem->linkBattleRuleset, battleType);
 
     encounter = Encounter_New(setup, BattleSetup_GetWildTransitionEffect(setup), BattleSetup_GetWildBattleMusic(setup), NULL);
 
-    FieldSystem_CreateTask(fieldSystem, sub_02051540, encounter);
+    FieldSystem_CreateTask(fieldSystem, Task_CommClubLinkBattle, encounter);
 }
 
-void sub_020515FC(FieldSystem *fieldSystem, Party *party, s32 battleType) {
+void FieldSystem_StartCommClubLinkBattleWithParty(FieldSystem *fieldSystem, Party *party, s32 battleType) {
     Encounter *encounter;
     BattleSetup *setup = BattleSetup_New(HEAP_ID_FIELD2, battleType);
     u32 var;
@@ -845,14 +845,14 @@ void sub_020515FC(FieldSystem *fieldSystem, Party *party, s32 battleType) {
     sub_020520B0(setup, fieldSystem, party, NULL);
     BattleRecord_Create(fieldSystem->saveData, HEAP_ID_FIELD2, &var);
 
-    setup->unk1B2 = sub_02051474(fieldSystem->linkBattleRuleset, battleType);
+    setup->unk1B2 = Encounter_GetLinkBattleMode(fieldSystem->linkBattleRuleset, battleType);
 
     encounter = Encounter_New(setup, BattleSetup_GetWildTransitionEffect(setup), BattleSetup_GetWildBattleMusic(setup), NULL);
 
-    FieldSystem_CreateTask(fieldSystem, sub_02051540, encounter);
+    FieldSystem_CreateTask(fieldSystem, Task_CommClubLinkBattle, encounter);
 }
 
-static void sub_02051660(FieldSystem *fieldSystem, BattleSetup *setup) {
+static void Encounter_AddBattleScore(FieldSystem *fieldSystem, BattleSetup *setup) {
     Pokemon *mon;
     u32 battleType = setup->battleType;
     u32 winFlag = setup->winFlag;

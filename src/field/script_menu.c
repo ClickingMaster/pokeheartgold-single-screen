@@ -807,13 +807,13 @@ u8 ScriptMenu_GetCount(ScriptMenu *menu) {
     return menu->count;
 }
 
-Window *ov01_021EEF68(FieldSystem *fieldSystem, u16 a1) {
+Window *BattleRegulationWindow_New(FieldSystem *fieldSystem, u16 a1) {
     Window *windows = AllocWindows(HEAP_ID_FIELD1, 1);
     ov03_02256730(fieldSystem, windows, a1);
     return windows;
 }
 
-void ov01_021EEF88(Window *window) {
+void BattleRegulationWindow_Delete(Window *window) {
     EraseFrameAndWindow1(window, 0);
     WindowArray_Delete(window, 1);
 }

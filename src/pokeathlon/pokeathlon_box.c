@@ -16,7 +16,7 @@
 #include "system.h"
 #include "text.h"
 #include "oam_manager.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 #include "wireless_status_icon.h"
 
 // functions in asm:

@@ -10,7 +10,7 @@
 #include "pm_string.h"
 #include "sprite.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "yes_no_prompt.h"
 
 // The card payload at the start of TrainerCardAppArgs, as the trainer card viewer reads it.

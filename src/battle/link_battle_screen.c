@@ -1649,9 +1649,9 @@ void LinkBattleScreen_InitPartySprites(LinkBattleScreen *screen) {
 void LinkBattleScreen_LoadMonIconGfx(LinkBattleScreen *screen) {
     NARC *narc = NARC_New(NARC_poketool_icongra_poke_icon, screen->args->heapId);
     u32 i;
-    SpriteSystem_LoadPlttResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, sub_02074490(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB808);
-    SpriteSystem_LoadCellResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, sub_02074498(), FALSE, 0xB809);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, sub_020744A4(), FALSE, 0xB809);
+    SpriteSystem_LoadPlttResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, GetMonIconPlttNaix(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB808);
+    SpriteSystem_LoadCellResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, GetMonIconCell32KNaix(), FALSE, 0xB809);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, GetMonIconAnim32KNaix(), FALSE, 0xB809);
     for (i = 0; i < PARTY_SIZE; i++) {
         SpriteSystem_LoadCharResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, screen->monInfo[i].iconNaix, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB809 + i);
     }

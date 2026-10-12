@@ -383,7 +383,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
         ++taskData->state;
         break;
     case FIELD_PHOTO_DO_VIEW_STATE_3:
-        MapObjectRender_ReleaseUnused(fieldSystem->mapObjectManager, sub_0205F1A0(fieldSystem->mapObjectManager));
+        MapObjectRender_ReleaseUnused(fieldSystem->mapObjectManager, MapObjectManager_GetRender(fieldSystem->mapObjectManager));
         ov01_022043D8(fieldSystem->unkC8);
         ov01_02204424(fieldSystem->unkC8);
         ov01_021EB1E8(fieldSystem->unk4->textureManager);
@@ -397,7 +397,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
         PhotoMon *mon = &photo->party[taskData->placeObjectCounter];
         if (mon->species != SPECIES_NONE) {
             taskData->parent->mapObjects[taskData->placeObjectCounter] = createPartymonMapObject(fieldSystem->mapObjectManager, mon->species, mon->form, mon->gender, DIR_SOUTH, photo->x + sPhotoMonCoordOffsets[taskData->placeObjectCounter].x, photo->y + sPhotoMonCoordOffsets[taskData->placeObjectCounter].y, mon->shiny);
-            sub_0205F47C(taskData->parent->mapObjects[taskData->placeObjectCounter], ov01_021F7918);
+            MapObject_SetDrawUpdateCallback(taskData->parent->mapObjects[taskData->placeObjectCounter], ov01_021F7918);
         } else {
             taskData->parent->mapObjects[taskData->placeObjectCounter] = NULL;
         }
@@ -414,7 +414,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
             MapObject_CopyFacingVector(mapObject, &facingVec);
             facingVec.y -= FX32_CONST(2);
             MapObject_SetFacingVector(mapObject, &facingVec);
-            sub_0205F484(mapObject);
+            MapObject_CallDrawUpdate(mapObject);
         }
         ++taskData->placeObjectCounter;
         if (taskData->placeObjectCounter >= photo->numMons) {
@@ -433,7 +433,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
         MapObject_CopyFacingVector(taskData->parent->mapObjects[0], &facingVec);
         facingVec.y -= FX32_CONST(2);
         MapObject_SetFacingVector(taskData->parent->mapObjects[0], &facingVec);
-        sub_0205F484(taskData->parent->mapObjects[0]);
+        MapObject_CallDrawUpdate(taskData->parent->mapObjects[0]);
         taskData->state = FIELD_PHOTO_DO_VIEW_STATE_8;
         break;
     }
@@ -441,7 +441,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
         PhotoMon *mon = &photo->party[0];
         if (mon->species != SPECIES_NONE) {
             taskData->parent->mapObjects[1] = createPartymonMapObject(fieldSystem->mapObjectManager, mon->species, mon->form, mon->gender, DIR_SOUTH, photo->x + sSoloPhotoMonCoordOffsets.x, photo->y + sSoloPhotoMonCoordOffsets.y, mon->shiny);
-            sub_0205F47C(taskData->parent->mapObjects[1], ov01_021F7918);
+            MapObject_SetDrawUpdateCallback(taskData->parent->mapObjects[1], ov01_021F7918);
         } else {
             taskData->parent->mapObjects[1] = NULL;
         }
@@ -454,7 +454,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
             MapObject_CopyFacingVector(taskData->parent->mapObjects[1], &facingVec);
             facingVec.y -= FX32_CONST(2);
             MapObject_SetFacingVector(taskData->parent->mapObjects[1], &facingVec);
-            sub_0205F484(taskData->parent->mapObjects[1]);
+            MapObject_CallDrawUpdate(taskData->parent->mapObjects[1]);
             LocalMapObject *mapObject = taskData->parent->mapObjects[1];
             if (MapObject_IsShinyPokemon(mapObject)) {
                 FollowMonBillboard_LoadSequence(1, mapObject);
@@ -611,7 +611,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
         takePhoto->state = TAKE_PHOTO_STATE_05;
         break;
     case TAKE_PHOTO_STATE_05:
-        MapObjectRender_ReleaseUnused(fieldSystem->mapObjectManager, sub_0205F1A0(fieldSystem->mapObjectManager));
+        MapObjectRender_ReleaseUnused(fieldSystem->mapObjectManager, MapObjectManager_GetRender(fieldSystem->mapObjectManager));
         takePhoto->state = TAKE_PHOTO_STATE_ADJUST_PLAYER_FACING_VEC;
         break;
     case TAKE_PHOTO_STATE_ADJUST_PLAYER_FACING_VEC:
@@ -635,7 +635,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
         PhotoMon *mon = &takePhoto->pPhoto->party[takePhoto->curMon];
         if (mon->species != SPECIES_NONE) {
             takePhoto->mapObjects[takePhoto->curMon] = createPartymonMapObject(fieldSystem->mapObjectManager, mon->species, mon->form, mon->gender, DIR_SOUTH, takePhoto->pPhoto->x + sPhotoMonCoordOffsets[takePhoto->curMon].x, takePhoto->pPhoto->y + sPhotoMonCoordOffsets[takePhoto->curMon].y, mon->shiny);
-            sub_0205F47C(takePhoto->mapObjects[takePhoto->curMon], ov01_021F7918);
+            MapObject_SetDrawUpdateCallback(takePhoto->mapObjects[takePhoto->curMon], ov01_021F7918);
         } else {
             takePhoto->mapObjects[takePhoto->curMon] = NULL;
         }
@@ -654,7 +654,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
                 MapObject_CopyFacingVector(mapObject, &facingVec);
                 facingVec.y -= FX32_CONST(2);
                 MapObject_SetFacingVector(mapObject, &facingVec);
-                sub_0205F484(mapObject);
+                MapObject_CallDrawUpdate(mapObject);
             }
             takePhoto->positionMonDelayCounter = 0;
             if (takePhoto->curMon >= takePhoto->pPhoto->numMons) {
@@ -675,7 +675,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
             MapObject_CopyFacingVector(takePhoto->mapObjects[0], &facingVec);
             facingVec.y -= FX32_CONST(2);
             MapObject_SetFacingVector(takePhoto->mapObjects[0], &facingVec);
-            sub_0205F484(takePhoto->mapObjects[0]);
+            MapObject_CallDrawUpdate(takePhoto->mapObjects[0]);
             takePhoto->positionMonDelayCounter = 0;
             takePhoto->state = TAKE_PHOTO_STATE_NPC_PHOTO_PLACE_MON;
         }
@@ -684,7 +684,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
         PhotoMon *mon = &takePhoto->pPhoto->party[takePhoto->curMon];
         if (mon->species != SPECIES_NONE) {
             takePhoto->mapObjects[1] = createPartymonMapObject(fieldSystem->mapObjectManager, mon->species, mon->form, mon->gender, DIR_SOUTH, takePhoto->pPhoto->x + sSoloPhotoMonCoordOffsets.x, takePhoto->pPhoto->y + sSoloPhotoMonCoordOffsets.y, mon->shiny);
-            sub_0205F47C(takePhoto->mapObjects[1], ov01_021F7918);
+            MapObject_SetDrawUpdateCallback(takePhoto->mapObjects[1], ov01_021F7918);
         } else {
             GF_ASSERT(FALSE);
             takePhoto->mapObjects[1] = NULL;
@@ -703,7 +703,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
                 MapObject_CopyFacingVector(mapObject, &facingVec);
                 facingVec.y -= FX32_CONST(2);
                 MapObject_SetFacingVector(mapObject, &facingVec);
-                sub_0205F484(mapObject);
+                MapObject_CallDrawUpdate(mapObject);
             }
             takePhoto->positionMonDelayCounter = 0;
             takePhoto->shutterDelayCounter = 0;
@@ -808,7 +808,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
             } else {
                 sub_02069DC8(followMon, FALSE);
             }
-            sub_0205F484(followMon);
+            MapObject_CallDrawUpdate(followMon);
         }
         takePhoto->state = TAKE_PHOTO_STATE_EXIT;
         break;
@@ -825,9 +825,9 @@ static void sub_0206B82C(PlayerAvatar *playerAvatar, u8 state, u8 gender) {
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(playerAvatar);
     MapObjectManager *mapObjectManager = MapObject_GetManager(mapObject);
     int gfxId = MapObject_GetSpriteID(mapObject);
-    sub_0205E420(mapObject);
+    MapObject_ClearSprite(mapObject);
     MapObjectRender_ReleaseSpriteResources(mapObjectManager, gfxId, mapObject);
-    sub_0205E38C(mapObject, spriteId);
+    MapObject_SetSpriteAndInitDraw(mapObject, spriteId);
     int r0 = PlayerAvatar_GetUnk34(playerAvatar);
     if (r0 != 0) {
         FieldEffectManager_DestroyEffect(r0);

@@ -18,7 +18,7 @@
 
 // Puts position->y on the ground of the tile at position->x/z; FALSE while that tile has no ground yet.
 // (unk_0205FD20.h declares it returning void.)
-BOOL sub_0206121C(FieldSystem *fieldSystem, VecFx32 *position);
+BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 13).
 typedef struct UnkOv01_021FFC0C {
@@ -96,7 +96,7 @@ BOOL ov01_021FFCA8(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work) {
     position.x = work->args.x << 16;
     position.z = work->args.z << 16;
     position.y = MapObject_GetPositionVectorYCoord(work->args.mapObject);
-    work->onGround = sub_0206121C(work->args.fieldSystem, &position);
+    work->onGround = FieldSystem_SnapToTerrainHeight(work->args.fieldSystem, &position);
     position.x += 0x1E << 10;
     position.y -= 2 << 14;
     position.z += 0xD << 12;
@@ -125,7 +125,7 @@ void ov01_021FFD70(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work) {
     int x;
     int z;
 
-    if (!sub_0205F0F8(mapObject, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
@@ -139,7 +139,7 @@ void ov01_021FFD70(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work) {
         vecs.target.x = work->args.x << 16;
         vecs.target.z = work->args.z << 16;
         vecs.target.y = vecs.current.y;
-        work->onGround = sub_0206121C(work->args.fieldSystem, &vecs.target);
+        work->onGround = FieldSystem_SnapToTerrainHeight(work->args.fieldSystem, &vecs.target);
         if (work->onGround == TRUE) {
             vecs.current.y = vecs.target.y;
             FieldEffect_SetPosition(effect, &vecs.current);
@@ -158,7 +158,7 @@ void ov01_021FFD70(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work) {
         work->state = 2;
         // fallthrough
     case 2:
-        if (!sub_0205F0F8(mapObject, work->spriteId, work->objectId, work->mapId)) {
+        if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
             FieldEffectManager_DestroyEffect((int)effect);
             return;
         }
@@ -178,7 +178,7 @@ void ov01_021FFD70(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work) {
 void ov01_021FFE98(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work) {
     VecFx32 position;
 
-    if (!sub_0205F0A8(work->args.mapObject, work->objectId, work->mapId)) {
+    if (!MapObject_CheckIDAndMap(work->args.mapObject, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }

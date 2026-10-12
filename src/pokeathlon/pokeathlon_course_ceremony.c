@@ -1912,7 +1912,7 @@ BOOL PokeathlonCourseCeremony_AwardNextMon(PokeathlonCourseData *course, Pokeath
         PokeathlonCourseCeremony_AddPoints(ceremony->scores, ceremony->team, (u16)points);
         PokeathlonCourseCeremony_StartCry(ceremony, (u8)index);
         monForm = PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonObject_GetGfx(PokeathlonCourseMonObjects_Get(ceremony->objects, (u8)index)));
-        sub_02006E3C(1);
+        Chatot_SetForceDefaultCry(1);
         PlayCry(monForm[0], (u8)monForm[1]);
         PokeathlonCourseCeremony_NextMon(ceremony);
         return TRUE;

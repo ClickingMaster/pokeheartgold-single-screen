@@ -120,8 +120,8 @@ struct BankTransactionWork {
     int mode;
 };
 
-Window *ov01_021EEF68(FieldSystem *fieldSystem, u16 a1);
-void ov01_021EEF88(Window *window);
+Window *BattleRegulationWindow_New(FieldSystem *fieldSystem, u16 a1);
+void BattleRegulationWindow_Delete(Window *window);
 BOOL FollowMon_IsNextToPlayer(FieldSystem *fieldSystem);
 
 void Field_SaveStatsPrinter_PrintTouchSave(struct SaveStatsPrinter *printer);

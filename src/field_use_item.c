@@ -279,7 +279,7 @@ static BOOL Task_MountOrDismountBicycle(TaskManager *taskManager) {
                 } else {
                     r6 = 0x38;
                 }
-                sub_0205FC94(FollowMon_GetMapObject(fieldSystem), r6);
+                MapObject_ChangeMovement(FollowMon_GetMapObject(fieldSystem), r6);
                 (*state_p)++;
             }
         } else {

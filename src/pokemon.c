@@ -47,16 +47,16 @@ u32 MaskOfFlagNo(int flagno);
 void GetBoxmonSpriteCharAndPlttNarcIds(PokepicTemplate *pokepicTemplate, BoxPokemon *boxMon, u8 whichFacing, BOOL a3);
 void DP_GetMonSpriteCharAndPlttNarcIdsEx(PokepicTemplate *pokepicTemplate, u16 species, u8 gender, u8 whichFacing, u8 shiny, u8 form, u32 pid);
 void GetMonSpriteCharAndPlttNarcIdsEx(PokepicTemplate *pokepicTemplate, u16 species, u8 gender, u8 whichFacing, u8 shiny, u8 form, u32 pid);
-u8 sub_02070438(u16 species, u8 form);
-u8 sub_02070854(BoxPokemon *boxMon, u8 whichFacing, BOOL a2);
+u8 SanitizeMonForm(u16 species, u8 form);
+u8 GetBoxMonPicHeightEx(BoxPokemon *boxMon, u8 whichFacing, BOOL a2);
 u8 GetMonPicHeightBySpeciesGenderForm_PBR(u16 species, u8 gender, u8 whichFacing, u8 form, u32 pid);
 u8 GetMonPicHeightBySpeciesGenderForm(u16 species, u8 gender, u8 whichFacing, u8 form, u32 pid);
-void sub_02070D3C(s32 trainer_class, s32 a1, BOOL a2, struct UnkStruct_02070D3C *a3);
+void GetTrainerPicFileIds(s32 trainer_class, s32 a1, BOOL a2, struct TrainerPicFileIds *a3);
 int TrainerClassToBackpicID(int trainer_class, int a1);
 void LoadMonEvolutionTable(u16 species, struct Evolution *evoTable);
 BOOL MonHasMove(Pokemon *mon, u16 move_id);
-void sub_0207213C(BoxPokemon *boxMon, PlayerProfile *playerProfile, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID);
-void sub_02072190(BoxPokemon *boxMon, PlayerProfile *a1, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID);
+void BoxMonSetCatchData(BoxPokemon *boxMon, PlayerProfile *playerProfile, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID);
+void BoxMonSetCatchDataNoHealBall(BoxPokemon *boxMon, PlayerProfile *a1, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID);
 
 #define ENCRY_ARGS_PTY(mon)    (u16 *)&(mon)->party, sizeof((mon)->party), (mon)->box.personality
 #define ENCRY_ARGS_BOX(boxMon) (u16 *)&(boxMon)->dataBlocks, sizeof((boxMon)->dataBlocks), (boxMon)->checksum
@@ -2155,7 +2155,7 @@ void GetPokemonSpriteCharAndPlttNarcIds(PokepicTemplate *pokepicTemplate, Pokemo
     GetBoxmonSpriteCharAndPlttNarcIds(pokepicTemplate, &mon->box, whichFacing, FALSE);
 }
 
-void sub_02070130(PokepicTemplate *pokepicTemplate, BoxPokemon *boxMon, u8 whichFacing) {
+void DP_GetBoxmonSpriteCharAndPlttNarcIds(PokepicTemplate *pokepicTemplate, BoxPokemon *boxMon, u8 whichFacing) {
     GetBoxmonSpriteCharAndPlttNarcIds(pokepicTemplate, boxMon, whichFacing, TRUE);
 }
 
@@ -2187,7 +2187,7 @@ void GetMonSpriteCharAndPlttNarcIdsEx(PokepicTemplate *pokepicTemplate, u16 spec
     pokepicTemplate->species = SPECIES_NONE;
     pokepicTemplate->isAnimated = FALSE;
     pokepicTemplate->personality = 0;
-    form = sub_02070438(species, form);
+    form = SanitizeMonForm(species, form);
     switch (species) {
     case SPECIES_BURMY:
         pokepicTemplate->narcID = NARC_poketool_pokegra_otherpoke;
@@ -2277,7 +2277,7 @@ void GetMonSpriteCharAndPlttNarcIdsEx(PokepicTemplate *pokepicTemplate, u16 spec
     }
 }
 
-u8 sub_02070438(u16 species, u8 form) {
+u8 SanitizeMonForm(u16 species, u8 form) {
     switch (species) {
     case SPECIES_BURMY:
         if (form > BURMY_FORM_MAX - 1) {
@@ -2353,7 +2353,7 @@ u8 sub_02070438(u16 species, u8 form) {
     return form;
 }
 
-void sub_02070560(PokepicTemplate *pokepicTemplate, u16 species, u8 whichFacing, u8 gender, u32 shiny) {
+void DP_GetDefaultMonSpriteCharAndPlttNarcIds(PokepicTemplate *pokepicTemplate, u16 species, u8 whichFacing, u8 gender, u32 shiny) {
     pokepicTemplate->narcID = NARC_pbr_pokegra;
     pokepicTemplate->charDataID = (u16)(species * 6 + whichFacing + (gender == MON_FEMALE ? 0 : 1));
     pokepicTemplate->palDataID = (u16)(shiny + (species * 6 + 4));
@@ -2363,7 +2363,7 @@ void DP_GetMonSpriteCharAndPlttNarcIdsEx(PokepicTemplate *pokepicTemplate, u16 s
     pokepicTemplate->species = SPECIES_NONE;
     pokepicTemplate->isAnimated = FALSE;
     pokepicTemplate->personality = 0;
-    form = sub_02070438(species, form);
+    form = SanitizeMonForm(species, form);
     switch (species) {
     case SPECIES_BURMY:
         pokepicTemplate->narcID = NARC_pbr_otherpoke;
@@ -2426,7 +2426,7 @@ void DP_GetMonSpriteCharAndPlttNarcIdsEx(PokepicTemplate *pokepicTemplate, u16 s
             pokepicTemplate->charDataID = (u16)(whichFacing / 2 + 0x86 + form * 2);
             pokepicTemplate->palDataID = (u16)(shiny + 0xEA);
         } else {
-            sub_02070560(pokepicTemplate, species, whichFacing, gender, shiny);
+            DP_GetDefaultMonSpriteCharAndPlttNarcIds(pokepicTemplate, species, whichFacing, gender, shiny);
         }
         break;
     case SPECIES_ROTOM: // normal, fan, mow, wash, heat, frost
@@ -2435,7 +2435,7 @@ void DP_GetMonSpriteCharAndPlttNarcIdsEx(PokepicTemplate *pokepicTemplate, u16 s
             pokepicTemplate->charDataID = (u16)(whichFacing / 2 + 0x8A + form * 2);
             pokepicTemplate->palDataID = (u16)(shiny + 0xEC + form * 2);
         } else {
-            sub_02070560(pokepicTemplate, species, whichFacing, gender, shiny);
+            DP_GetDefaultMonSpriteCharAndPlttNarcIds(pokepicTemplate, species, whichFacing, gender, shiny);
         }
         break;
     case SPECIES_GIRATINA: // altered, origin
@@ -2444,7 +2444,7 @@ void DP_GetMonSpriteCharAndPlttNarcIdsEx(PokepicTemplate *pokepicTemplate, u16 s
             pokepicTemplate->charDataID = (u16)(whichFacing / 2 + 0x96 + form * 2);
             pokepicTemplate->palDataID = (u16)(shiny + 0xF8 + form * 2);
         } else {
-            sub_02070560(pokepicTemplate, species, whichFacing, gender, shiny);
+            DP_GetDefaultMonSpriteCharAndPlttNarcIds(pokepicTemplate, species, whichFacing, gender, shiny);
         }
         break;
     case SPECIES_PICHU: // spiky-ear
@@ -2453,11 +2453,11 @@ void DP_GetMonSpriteCharAndPlttNarcIdsEx(PokepicTemplate *pokepicTemplate, u16 s
             pokepicTemplate->charDataID = (u16)(whichFacing / 2 + 0x9C);
             pokepicTemplate->palDataID = (u16)(shiny + 0xFE);
         } else {
-            sub_02070560(pokepicTemplate, species, whichFacing, gender, shiny);
+            DP_GetDefaultMonSpriteCharAndPlttNarcIds(pokepicTemplate, species, whichFacing, gender, shiny);
         }
         break;
     default:
-        sub_02070560(pokepicTemplate, species, whichFacing, gender, shiny);
+        DP_GetDefaultMonSpriteCharAndPlttNarcIds(pokepicTemplate, species, whichFacing, gender, shiny);
         if (species == SPECIES_SPINDA && whichFacing == MON_PIC_FACING_FRONT) {
             pokepicTemplate->species = SPECIES_SPINDA;
             pokepicTemplate->isAnimated = FALSE;
@@ -2467,15 +2467,15 @@ void DP_GetMonSpriteCharAndPlttNarcIdsEx(PokepicTemplate *pokepicTemplate, u16 s
     }
 }
 
-u8 sub_0207083C(BoxPokemon *boxMon, u8 whichFacing) {
-    return sub_02070854(boxMon, whichFacing, FALSE);
+u8 GetBoxMonPicHeight(BoxPokemon *boxMon, u8 whichFacing) {
+    return GetBoxMonPicHeightEx(boxMon, whichFacing, FALSE);
 }
 
-u8 sub_02070848(BoxPokemon *boxMon, u8 whichFacing) {
-    return sub_02070854(boxMon, whichFacing, TRUE);
+u8 GetBoxMonPicHeight_PBR(BoxPokemon *boxMon, u8 whichFacing) {
+    return GetBoxMonPicHeightEx(boxMon, whichFacing, TRUE);
 }
 
-u8 sub_02070854(BoxPokemon *boxMon, u8 whichFacing, BOOL a2) {
+u8 GetBoxMonPicHeightEx(BoxPokemon *boxMon, u8 whichFacing, BOOL a2) {
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES_OR_EGG, NULL);
     u8 gender = GetBoxMonGender(boxMon);
     u32 pid = GetBoxMonData(boxMon, MON_DATA_PERSONALITY, NULL);
@@ -2502,7 +2502,7 @@ u8 GetMonPicHeightBySpeciesGenderForm(u16 species, u8 gender, u8 whichFacing, u8
     s32 fileId;
     u8 ret;
 
-    form = sub_02070438(species, form);
+    form = SanitizeMonForm(species, form);
     switch (species) {
     case SPECIES_BURMY:
         narcId = NARC_poketool_pokegra_height_o;
@@ -2584,7 +2584,7 @@ u8 GetMonPicHeightBySpeciesGenderForm_PBR(u16 species, u8 gender, u8 whichFacing
     s32 fileId;
     u8 ret;
 
-    form = sub_02070438(species, form);
+    form = SanitizeMonForm(species, form);
     switch (species) {
     case SPECIES_BURMY:
         narcId = NARC_pbr_dp_height_o;
@@ -2675,24 +2675,24 @@ u8 GetMonPicHeightBySpeciesGenderForm_PBR(u16 species, u8 gender, u8 whichFacing
     return ret;
 }
 
-static const struct ManagedSpriteTemplate _020FF588 = {
+static const struct ManagedSpriteTemplate sTrainerPicSpriteTemplate = {
     0, 0, 0, 0, 0, 0, NNS_G2D_VRAM_TYPE_2DMAIN, { 0x4E2F, 0x4E2A, 0x4E27, 0x4E27, -1u, -1u },
            2, 1
 };
 
-static const int _020FF50C[] = {
+static const int sTrainerPicDrawPriorities[] = {
     0, 1, 1, 2, 0, 3
 };
 
-struct ManagedSprite *sub_02070C24(SpriteSystem *renderer, SpriteManager *gfxHandler, PaletteData *plttData, int x, int y, int trainerClass, int battlerPosition, BOOL isLink, int resTag, enum HeapID heapID) {
+struct ManagedSprite *CreateTrainerPicSprite(SpriteSystem *renderer, SpriteManager *gfxHandler, PaletteData *plttData, int x, int y, int trainerClass, int battlerPosition, BOOL isLink, int resTag, enum HeapID heapID) {
     struct ManagedSpriteTemplate spriteResourcesTemplate;
     struct ManagedSprite *object;
     NARC *narc;
-    struct UnkStruct_02070D3C fileIDs;
+    struct TrainerPicFileIds fileIDs;
     int plttNum;
 
     plttNum = 1;
-    sub_02070D3C(trainerClass, battlerPosition, isLink, &fileIDs);
+    GetTrainerPicFileIds(trainerClass, battlerPosition, isLink, &fileIDs);
     if (trainerClass == TRAINERCLASS_CASTLE_VALET) {
         plttNum = 2;
     }
@@ -2702,12 +2702,12 @@ struct ManagedSprite *sub_02070C24(SpriteSystem *renderer, SpriteManager *gfxHan
     SpriteSystem_LoadCellResObjFromOpenNarc(renderer, gfxHandler, narc, fileIDs.ncer_id, FALSE, resTag + 0x4E27);
     SpriteSystem_LoadAnimResObjFromOpenNarc(renderer, gfxHandler, narc, fileIDs.nanr_id, FALSE, resTag + 0x4E27);
     NARC_Delete(narc);
-    spriteResourcesTemplate = _020FF588;
+    spriteResourcesTemplate = sTrainerPicSpriteTemplate;
     spriteResourcesTemplate.resIdList[GF_GFX_RES_TYPE_CHAR] = resTag + 0x4E2F;
     spriteResourcesTemplate.resIdList[GF_GFX_RES_TYPE_PLTT] = resTag + 0x4E2A;
     spriteResourcesTemplate.resIdList[GF_GFX_RES_TYPE_CELL] = resTag + 0x4E27;
     spriteResourcesTemplate.resIdList[GF_GFX_RES_TYPE_ANIM] = resTag + 0x4E27;
-    spriteResourcesTemplate.drawPriority = _020FF50C[resTag];
+    spriteResourcesTemplate.drawPriority = sTrainerPicDrawPriorities[resTag];
     object = SpriteSystem_NewSprite(renderer, gfxHandler, &spriteResourcesTemplate);
     Sprite_SetPalOffsetRespectVramOffset(object->sprite, 0);
     ManagedSprite_SetPositionXY(object, x, y);
@@ -2716,7 +2716,7 @@ struct ManagedSprite *sub_02070C24(SpriteSystem *renderer, SpriteManager *gfxHan
     return object;
 }
 
-void sub_02070D3C(s32 trainer_class, s32 battlerPosition, BOOL isLink, struct UnkStruct_02070D3C *a3) {
+void GetTrainerPicFileIds(s32 trainer_class, s32 battlerPosition, BOOL isLink, struct TrainerPicFileIds *a3) {
     if (battlerPosition == 2) {
         a3->narcId = NARC_a_0_5_8;
         a3->ncgr_id = trainer_class * 5 + 0;
@@ -2735,15 +2735,15 @@ void sub_02070D3C(s32 trainer_class, s32 battlerPosition, BOOL isLink, struct Un
     }
 }
 
-void sub_02070D84(s32 trainer_class, s32 battlerSide, struct UnkStruct_02070D3C *a2) {
-    sub_02070D3C(trainer_class, battlerSide, FALSE, a2);
+void GetTrainerPicFileIdsNoLink(s32 trainer_class, s32 battlerSide, struct TrainerPicFileIds *a2) {
+    GetTrainerPicFileIds(trainer_class, battlerSide, FALSE, a2);
 }
 
-u32 sub_02070D90(void) {
+u32 Pokemon_sizeof(void) {
     return sizeof(Pokemon);
 }
 
-u32 sub_02070D94(void) {
+u32 BoxPokemon_sizeof(void) {
     return sizeof(BoxPokemon);
 }
 
@@ -3670,46 +3670,46 @@ void LoadLevelUpLearnset_HandleAlternateForm(int species, int form, u16 *levelUp
     ReadWholeNarcMemberByIdPair(levelUpLearnset, NARC_poketool_personal_wotbl, ResolveMonForm(species, form));
 }
 
-void sub_02071FDC(SOUND_CHATOT *r6, u32 r5, u16 r4, s32 unused, s32 sp18, u32 sp1C, u32 sp20, u32 sp24) {
+void PlayCryHandleChatot(SOUND_CHATOT *r6, u32 r5, u16 r4, s32 unused, s32 sp18, u32 sp1C, u32 sp20, u32 sp24) {
 #pragma unused(unused)
     if (r4 == SPECIES_CHATOT) {
-        if (!sub_02006F30((int)r5)) {
-            sub_02006E3C(1);
+        if (!Chatot_CryPatternUsesRecording((int)r5)) {
+            Chatot_SetForceDefaultCry(1);
             PlayCryEx(r5, r4, sp18, sp1C, sp24, 0);
         } else {
             if (sp20) {
-                sub_02006E3C(1);
+                Chatot_SetForceDefaultCry(1);
             }
-            sub_02006E4C(r6, 0, sp1C, sp18);
+            Chatot_PlayCryWithFallback(r6, 0, sp1C, sp18);
         }
     } else {
         PlayCryEx(r5, r4, sp18, sp1C, sp24, 0);
     }
 }
 
-void sub_0207204C(SOUND_CHATOT *r7, u32 r6, u16 r5, s32 r4, s32 sp20, u32 sp24, u32 sp28, u32 sp2C, u8 sp30) {
+void PlayCryDelayedHandleChatot(SOUND_CHATOT *r7, u32 r6, u16 r5, s32 r4, s32 sp20, u32 sp24, u32 sp28, u32 sp2C, u8 sp30) {
     if (r5 == SPECIES_CHATOT) {
-        if (!sub_02006F30((int)r6)) {
-            sub_02006E3C(1);
+        if (!Chatot_CryPatternUsesRecording((int)r6)) {
+            Chatot_SetForceDefaultCry(1);
             PlayCryDelayedEx(r6, r5, sp20, sp24, sp2C, sp30, r4);
         } else {
             if (sp28) {
-                sub_02006E3C(1);
+                Chatot_SetForceDefaultCry(1);
             }
-            sub_02006EA0(r7, 0, sp24, sp20, sp30);
+            Chatot_PlayCryWithDelayedFallback(r7, 0, sp24, sp20, sp30);
         }
     } else {
         PlayCryDelayedEx(r6, r5, sp20, sp24, sp2C, sp30, r4);
     }
 }
 
-void sub_020720D4(Pokemon *mon) {
+void PlayMonCry(Pokemon *mon) {
     PlayCry(GetMonData(mon, MON_DATA_SPECIES, NULL), GetMonData(mon, MON_DATA_FORM, NULL));
 }
 
-void sub_020720FC(Pokemon *mon, PlayerProfile *a1, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID) {
+void MonSetCatchData(Pokemon *mon, PlayerProfile *a1, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID) {
     u32 hp;
-    sub_0207213C(&mon->box, a1, pokeball, a3, encounterType, heapID);
+    BoxMonSetCatchData(&mon->box, a1, pokeball, a3, encounterType, heapID);
     if (pokeball == ITEM_HEAL_BALL) {
         hp = GetMonData(mon, MON_DATA_MAX_HP, NULL);
         SetMonData(mon, MON_DATA_HP, &hp);
@@ -3718,19 +3718,19 @@ void sub_020720FC(Pokemon *mon, PlayerProfile *a1, u32 pokeball, u32 a3, u32 enc
     }
 }
 
-void sub_0207213C(BoxPokemon *boxMon, PlayerProfile *playerProfile, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID) {
+void BoxMonSetCatchData(BoxPokemon *boxMon, PlayerProfile *playerProfile, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID) {
     BoxMonSetTrainerMemo(boxMon, playerProfile, 0, a3, heapID);
     SetBoxMonData(boxMon, MON_DATA_MET_GAME, (void *)&gGameVersion);
     SetBoxMonData(boxMon, MON_DATA_POKEBALL, &pokeball);
     SetBoxMonData(boxMon, MON_DATA_MET_TERRAIN, &encounterType);
 }
 
-void sub_0207217C(Pokemon *mon, PlayerProfile *a1, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID) {
-    sub_02072190(&mon->box, a1, pokeball, a3, encounterType, heapID);
+void MonSetCatchDataNoHealBall(Pokemon *mon, PlayerProfile *a1, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID) {
+    BoxMonSetCatchDataNoHealBall(&mon->box, a1, pokeball, a3, encounterType, heapID);
 }
 
-void sub_02072190(BoxPokemon *boxMon, PlayerProfile *a1, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID) {
-    sub_0207213C(boxMon, a1, pokeball, a3, encounterType, heapID);
+void BoxMonSetCatchDataNoHealBall(BoxPokemon *boxMon, PlayerProfile *a1, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID) {
+    BoxMonSetCatchData(boxMon, a1, pokeball, a3, encounterType, heapID);
 }
 
 static const u16 sItemOdds[2][2] = {
@@ -4186,46 +4186,46 @@ void RestoreBoxMonPP(BoxPokemon *boxMon) {
 }
 
 void NARC_ReadPokepicAnimScript(NARC *narc, PokepicAnimScript *dest, u16 species, u16 a3) {
-    struct UnkStruct_02072914 sp4;
+    struct PokepicSpeciesAnimData sp4;
     int r5 = (a3 & 1 ? 0 : 1);
-    NARC_ReadFromMember(narc, 0, species * sizeof(struct UnkStruct_02072914), sizeof(struct UnkStruct_02072914), &sp4);
-    MI_CpuCopy8(&sp4.unk0[r5].unk_3[0], dest, sizeof(PokepicAnimScript) * 10);
+    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
+    MI_CpuCopy8(&sp4.facings[r5].animScripts[0], dest, sizeof(PokepicAnimScript) * 10);
 }
 
-void sub_0207294C(NARC *narc, void *a1, void *a2, u16 a3, int a4, int a5, int a6) {
-    struct UnkStruct_02072914 spA;
-    struct UnkStruct_0207294C sp4;
+void NARC_StartPokepicAnim(NARC *narc, void *a1, void *a2, u16 a3, int a4, int a5, int a6) {
+    struct PokepicSpeciesAnimData spA;
+    struct PokepicAnimParams sp4;
     int r4 = (a4 == 2 ? 0 : 1);
-    NARC_ReadFromMember(narc, 0, a3 * sizeof(struct UnkStruct_02072914), sizeof(struct UnkStruct_02072914), &spA);
-    sp4.unk_0 = spA.unk0[r4].unk_1;
-    sp4.unk_2 = spA.unk0[r4].unk_2;
-    sp4.unk_4 = a5;
+    NARC_ReadFromMember(narc, 0, a3 * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &spA);
+    sp4.scriptId = spA.facings[r4].animScriptId;
+    sp4.delay = spA.facings[r4].animDelay;
+    sp4.reverseX = a5;
     PokepicAnimManager_StartAnim(a1, a2, &sp4, a6);
 }
 
-void sub_020729A4(NARC *narc, u8 *ret, u16 species, u16 isFrontpic) {
-    struct UnkStruct_02072914 sp4;
+void NARC_ReadPokepicCryDelay(NARC *narc, u8 *ret, u16 species, u16 isFrontpic) {
+    struct PokepicSpeciesAnimData sp4;
     int r5 = (isFrontpic & 1 ? 0 : 1);
-    NARC_ReadFromMember(narc, 0, species * sizeof(struct UnkStruct_02072914), sizeof(struct UnkStruct_02072914), &sp4);
-    *ret = sp4.unk0[r5].unk_0;
+    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
+    *ret = sp4.facings[r5].cryDelay;
 }
 
-void sub_020729D8(NARC *narc, s8 *ret, u16 a2, u16 a3) {
-    struct UnkStruct_02072914 sp4;
-    NARC_ReadFromMember(narc, 0, a2 * sizeof(struct UnkStruct_02072914), sizeof(struct UnkStruct_02072914), &sp4);
-    *ret = sp4.unk_56;
+void NARC_ReadPokepicShadowHeight(NARC *narc, s8 *ret, u16 a2, u16 a3) {
+    struct PokepicSpeciesAnimData sp4;
+    NARC_ReadFromMember(narc, 0, a2 * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
+    *ret = sp4.shadowHeight;
 }
 
-void sub_020729FC(NARC *narc, s8 *ret, u16 a2, u16 a3) {
-    struct UnkStruct_02072914 sp4;
-    NARC_ReadFromMember(narc, 0, a2 * sizeof(struct UnkStruct_02072914), sizeof(struct UnkStruct_02072914), &sp4);
-    *ret = sp4.unk_57;
+void NARC_ReadPokepicShadowXOffset(NARC *narc, s8 *ret, u16 a2, u16 a3) {
+    struct PokepicSpeciesAnimData sp4;
+    NARC_ReadFromMember(narc, 0, a2 * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
+    *ret = sp4.shadowXOffset;
 }
 
-void sub_02072A20(NARC *narc, u8 *ret, u16 a2, u16 a3) {
-    struct UnkStruct_02072914 sp4;
-    NARC_ReadFromMember(narc, 0, a2 * sizeof(struct UnkStruct_02072914), sizeof(struct UnkStruct_02072914), &sp4);
-    *ret = sp4.unk_58;
+void NARC_ReadPokepicShadowSize(NARC *narc, u8 *ret, u16 a2, u16 a3) {
+    struct PokepicSpeciesAnimData sp4;
+    NARC_ReadFromMember(narc, 0, a2 * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
+    *ret = sp4.shadowSize;
 }
 
 BOOL SetTrMonCapsule(int a0, Pokemon *mon, enum HeapID heapID) {
@@ -4244,7 +4244,7 @@ BOOL SetTrMonCapsule(int a0, Pokemon *mon, enum HeapID heapID) {
     return TRUE;
 }
 
-void sub_02072A98(Pokemon *mon, struct UnkPokemonStruct_02072A98 *dest) {
+void Pokemon_ToBattleRecordMon(Pokemon *mon, struct BattleRecordMon *dest) {
     PokemonDataBlockA *dbA; // r5
     PokemonDataBlockB *dbB; // sp4
     PokemonDataBlockC *dbC; // r7
@@ -4324,7 +4324,7 @@ void sub_02072A98(Pokemon *mon, struct UnkPokemonStruct_02072A98 *dest) {
     }
 }
 
-void sub_02072D64(const struct UnkPokemonStruct_02072A98 *src, Pokemon *mon) {
+void Pokemon_FromBattleRecordMon(const struct BattleRecordMon *src, Pokemon *mon) {
     PokemonDataBlockA *dbA; // r5
     PokemonDataBlockB *dbB; // r6
     PokemonDataBlockC *dbC; // r7

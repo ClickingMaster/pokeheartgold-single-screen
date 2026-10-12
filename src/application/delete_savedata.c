@@ -110,7 +110,7 @@ const OverlayManagerTemplate gApplication_DeleteSave = {
     .ovy_id = FS_OVERLAY_ID_NONE,
 };
 
-extern void sub_02005AF8(u32 a0);
+extern void Sound_SetBGMPlayerChannels(u32 a0);
 
 static void DeleteSavedataApp_OnVBlank(DeleteSavedataApp_Data *data);
 static void DeleteSavedataApp_SetupBgConfig(DeleteSavedataApp_Data *data);
@@ -147,7 +147,7 @@ BOOL DeleteSavedataApp_Main(OverlayManager *manager, int *state) {
     switch (*state) {
     case STATE_SETUP:
         StopBGM(SEQ_GS_POKEMON_THEME, 0);
-        sub_02005AF8(0);
+        Sound_SetBGMPlayerChannels(0);
         Sound_SetScene(SOUND_SCENE_NONE);
 
         SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);

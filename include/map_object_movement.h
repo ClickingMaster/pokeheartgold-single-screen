@@ -50,7 +50,7 @@ typedef struct MovementListEntry {
 
 typedef BOOL (*MovementStateFunc)(LocalMapObject *object, u8 *state);
 
-void sub_02061284(LocalMapObject *object, u32 value);
+void RandomLookMovement_Init(LocalMapObject *object, u32 value);
 void sub_020612B4(LocalMapObject *object);
 void sub_020612C0(LocalMapObject *object);
 void sub_020612CC(LocalMapObject *object);
@@ -62,8 +62,8 @@ void sub_02061308(LocalMapObject *object);
 void sub_02061314(LocalMapObject *object);
 void sub_02061320(LocalMapObject *object);
 void sub_0206132C(LocalMapObject *object);
-void sub_02061338(LocalMapObject *object);
-void sub_0206139C(LocalMapObject *object);
+void RandomLookMovement_Update(LocalMapObject *object);
+void RandomLookMovement_Delete(LocalMapObject *object);
 void sub_020613A0(LocalMapObject *object);
 void sub_020613B0(LocalMapObject *object);
 void sub_020613C0(LocalMapObject *object);

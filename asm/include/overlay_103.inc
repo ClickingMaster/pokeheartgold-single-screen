@@ -143,9 +143,9 @@
 .public Mailbox_DeleteSlotI
 .public Mailbox_AllocAndFetchMailI
 .public GetMonIconNaixEx
-.public sub_02074490
-.public sub_02074494
-.public sub_02074498
+.public GetMonIconPlttNaix
+.public GetMonIconStaticCellNaix
+.public GetMonIconCell32KNaix
 .public Party_GetCount
 .public Party_GetMonByIndex
 .public SaveArray_Party_Get

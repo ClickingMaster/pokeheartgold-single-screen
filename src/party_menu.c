@@ -631,7 +631,7 @@ static BOOL PartyMenuApp_Exit(OverlayManager *manager, int *pState) {
         PokedexData_UnloadAndDelete(partyMenu->pokedex);
     }
     if (partyMenu->args->context == PARTY_MENU_CONTEXT_0) {
-        sub_02004B10();
+        Sound_ClearSecondaryScene();
     }
     FontID_Release(4);
     OverlayManager_FreeData(manager);

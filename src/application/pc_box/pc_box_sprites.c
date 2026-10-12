@@ -22,7 +22,7 @@
 #include "sprite.h"
 #include "sprite_system.h"
 #include "type_icon_resources.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 
 // Some calls pass full-width values to u16 / s16 parameters, as the original code did: those go through a cast of
 // the function.
@@ -202,9 +202,9 @@ void PCBox_LoadMonIconResources(PCBoxView *view) {
     for (i = 0; i < PC_BOX_SLOT_COUNT; i++) {
         SpriteSystem_LoadCharResObj(view->spriteSystem, view->spriteManager, NARC_a_0_1_9, 0x4E, TRUE, 1, 0xC0F9 + i);
     }
-    SpriteSystem_LoadPlttResObj(view->spriteSystem, view->spriteManager, NARC_poketool_icongra_poke_icon, sub_02074490(), FALSE, 3, 1, 0xC0F9);
-    SpriteSystem_LoadCellResObj(view->spriteSystem, view->spriteManager, NARC_poketool_icongra_poke_icon, sub_0207449C(), FALSE, 0xC0F9);
-    SpriteSystem_LoadAnimResObj(view->spriteSystem, view->spriteManager, NARC_poketool_icongra_poke_icon, sub_020744A8(), FALSE, 0xC0F9);
+    SpriteSystem_LoadPlttResObj(view->spriteSystem, view->spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), FALSE, 3, 1, 0xC0F9);
+    SpriteSystem_LoadCellResObj(view->spriteSystem, view->spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconCell64KNaix(), FALSE, 0xC0F9);
+    SpriteSystem_LoadAnimResObj(view->spriteSystem, view->spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconAnim64KNaix(), FALSE, 0xC0F9);
 }
 
 void PCBox_CreateMonIconSprites(PCBoxView *view) {

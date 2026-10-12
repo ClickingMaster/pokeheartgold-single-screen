@@ -31,7 +31,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 #include "palette_vram_addr.h"
 #include "unk_0206D494.h"
 
@@ -2109,9 +2109,9 @@ static void Task_RegisterHallOfFame_IndivMonAnimAndCry(SysTask *task, void *task
     u8 sp4;
     RegisterHofTaskData_IndivMonAnimAndCry *showPic = (RegisterHofTaskData_IndivMonAnimAndCry *)taskData;
     if (showPic->startCry == TRUE) {
-        sub_020729A4(showPic->narc, &sp4, showPic->hofMon->species, showPic->isFrontpic);
+        NARC_ReadPokepicCryDelay(showPic->narc, &sp4, showPic->hofMon->species, showPic->isFrontpic);
         if (showPic->hofMon->species == SPECIES_CHATOT) {
-            sub_02006EA0(NULL, 0, 100, 0, sp4);
+            Chatot_PlayCryWithDelayedFallback(NULL, 0, 100, 0, sp4);
         } else {
             PlayCryDelayed(showPic->hofMon->species, sp4, showPic->hofMon->form);
         }
@@ -2342,7 +2342,7 @@ static void RegisterHallOfFame_WholePartyScene_DeleteWindows(RegisterHallOfFameD
 
 static void RegisterHallOfFame_WholePartyScene_CreateSprites(RegisterHallOfFameData *data) {
 
-    UnkStruct_02070D3C sp2C;
+    TrainerPicFileIds sp2C;
     UnkStruct_02014E30 sp1C = ov63_0221FAF0;
     NARC *narc = NARC_New(NARC_a_0_0_8, HEAP_ID_REGISTER_HALL_OF_FAME);
     u32 i;
@@ -2390,9 +2390,9 @@ static void RegisterHallOfFame_WholePartyScene_CreateSprites(RegisterHallOfFameD
     ManagedSprite_SetDrawFlag(data->monPics[REGHOF_PIC_WHOLE_PLAYER_SHADOW], FALSE);
 
     if (PlayerProfile_GetTrainerGender(data->args->profile) == TRAINER_FEMALE) {
-        sub_02070D84(TRAINERCLASS_PKMN_TRAINER_LYRA, 2, &sp2C);
+        GetTrainerPicFileIdsNoLink(TRAINERCLASS_PKMN_TRAINER_LYRA, 2, &sp2C);
     } else {
-        sub_02070D84(TRAINERCLASS_PKMN_TRAINER_ETHAN, 2, &sp2C);
+        GetTrainerPicFileIdsNoLink(TRAINERCLASS_PKMN_TRAINER_ETHAN, 2, &sp2C);
     }
     r4 = Heap_Alloc(HEAP_ID_REGISTER_HALL_OF_FAME, 0x1900);
     sub_020143E0(sp2C.narcId, sp2C.ncbr_id, HEAP_ID_REGISTER_HALL_OF_FAME, &sp1C, r4);

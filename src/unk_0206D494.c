@@ -228,7 +228,7 @@ static u32 sub_0206D7B8(LocalMapObject *object, u32 x, u32 height, u32 y) {
     if (MetatileBehavior_IsIce(GetMetatileBehavior(MapObject_GetFieldSystem(object), x, y)) == FALSE) {
         flags |= 4;
     }
-    if (sub_02060BFC(object, x, height, y) == 1) {
+    if (MapObject_IsTileOccupiedInLink(object, x, height, y) == 1) {
         flags |= 2;
     }
     return flags;

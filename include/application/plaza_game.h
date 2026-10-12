@@ -11,7 +11,7 @@
 #include "sprite.h"
 #include "sys_task_api.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "yes_no_prompt.h"
 
 // Shared code of the Wi-Fi Plaza games (SWALOT Plop, MIME JR. Top and WOBBUFFET Pop,

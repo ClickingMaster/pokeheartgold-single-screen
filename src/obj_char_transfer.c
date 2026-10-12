@@ -319,7 +319,7 @@ void ObjCharTransfer_DeleteTaskCopyByProxyPtr(const NNSG2dImageProxy *proxy) {
     }
 }
 
-BOOL sub_02021AC8(u32 size, BOOL atEnd, NNS_G2D_VRAM_TYPE vram, UnkStruct_02021AC8 *a3) {
+BOOL ObjCharTransfer_ReserveCharSpace(u32 size, BOOL atEnd, NNS_G2D_VRAM_TYPE vram, ObjCharSpaceReservation *a3) {
     u32 offsetMain;
     u32 offsetSub;
     u32 sizeMain;
@@ -353,7 +353,7 @@ BOOL sub_02021AC8(u32 size, BOOL atEnd, NNS_G2D_VRAM_TYPE vram, UnkStruct_02021A
     return ret;
 }
 
-void sub_02021B5C(UnkStruct_02021AC8 *a0) {
+void ObjCharTransfer_FreeCharSpace(ObjCharSpaceReservation *a0) {
     if (a0->isAtEnd) {
         if (a0->vram & NNS_G2D_VRAM_TYPE_2DMAIN) {
             u32 blockMax = ObjCharTransfer_CalcBlockNumLimit(a0->size, sObjCharTransferTasksManager->blockSizeMain);

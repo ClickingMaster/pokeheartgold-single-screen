@@ -118,7 +118,7 @@ void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapId) {
     void *buf;
 
     buf = Heap_AllocAtEnd(heapId, 0x258);
-    sub_0201A3F8(gWirelessStatusIconNclr, &buf);
+    Sys_ReadFileIntoBuffer(gWirelessStatusIconNclr, &buf);
     DC_FlushRange(buf, 0x258);
     return buf;
 }
@@ -129,7 +129,7 @@ void WirelessStatusIcon_LoadPalette(int engine, int isWifi, u32 plttBase, enum H
 
     buf = Heap_AllocAtEnd(heapId, 0x258);
     if (buf != NULL) {
-        sub_0201A3F8(gWirelessStatusIconNclr, &buf);
+        Sys_ReadFileIntoBuffer(gWirelessStatusIconNclr, &buf);
         DC_FlushRange(buf, 0x258);
         NNS_G2dGetUnpackedPaletteData(buf, &plttData);
         if (engine == 1) {
@@ -146,12 +146,12 @@ NNSG2dCharacterData *WirelessStatusIcon_GetCharData(int isWifi, u32 mapping, u32
 
     if (isWifi != 0) {
         GF_ASSERT(mapping != 0x00300010);
-        sub_0201A3F8(gWirelessStatusIconWifiNcgr, &buf);
+        Sys_ReadFileIntoBuffer(gWirelessStatusIconWifiNcgr, &buf);
     } else if (mapping != 0x00300010) {
-        sub_0201A3F8(gWirelessStatusIconWmNcgr, &buf);
+        Sys_ReadFileIntoBuffer(gWirelessStatusIconWmNcgr, &buf);
         DC_FlushRange(buf, 0x258);
     } else {
-        sub_0201A3F8(gWirelessStatusIconWm256kNcgr, &buf);
+        Sys_ReadFileIntoBuffer(gWirelessStatusIconWm256kNcgr, &buf);
         DC_FlushRange(buf, 0x4C0);
     }
     NNS_G2dGetUnpackedBGCharacterData(buf, &charData);

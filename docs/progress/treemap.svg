@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · ae275d2ef · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · e2cfbc694 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -257,9 +257,9 @@ lib/NitroSDK/src/gx/gx_load2d.c</title></rect>
 <rect x="237.788" y="397.121" width="28.892" height="17.611" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_model.o
 3,180 bytes · C-only source
 lib/NitroSystem/src/g3d_model.c</title></rect>
-<rect x="237.788" y="414.732" width="28.892" height="17.224" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_0200A090.o
+<rect x="237.788" y="414.732" width="28.892" height="17.224" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sprite_resource.o
 3,110 bytes · C-only source
-src/unk_0200A090.c</title></rect>
+src/sprite_resource.c</title></rect>
 <rect x="266.680" y="397.121" width="13.964" height="34.835" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / touchscreen_list_menu.o
 3,040 bytes · C-only source
 src/touchscreen_list_menu.c</title></rect>
@@ -531,9 +531,9 @@ lib/NitroDWC/src/dwc_nvram.c</title></rect>
 <rect x="167.588" y="503.120" width="17.814" height="14.479" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / ctrdg_flash_common.o
 1,612 bytes · C-only source
 lib/NitroSDK/src/ctrdg/ctrdg_flash_common.c</title></rect>
-<rect x="185.402" y="503.120" width="17.792" height="14.479" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_02013FDC.o
+<rect x="185.402" y="503.120" width="17.792" height="14.479" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / char_tiles.o
 1,610 bytes · C-only source
-src/unk_02013FDC.c</title></rect>
+src/char_tiles.c</title></rect>
 <rect x="167.588" y="517.599" width="11.874" height="21.669" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_link.o
 1,608 bytes · C-only source
 lib/libCPS/src/cps_link.c</title></rect>

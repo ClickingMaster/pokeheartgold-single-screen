@@ -33,7 +33,7 @@
 .public AddCharResObjFromOpenNarc
 .public AddPlttResObjFromOpenNarc
 .public AddCellOrAnimResObjFromOpenNarc
-.public sub_0200A740
+.public GF2DGfxResObj_FreeData
 .public DestroySingle2DGfxResObj
 .public SpriteResourceCollection_Find
 .public SpriteTransfer_CreateCharTransferTask_AllocAtEnd
@@ -212,7 +212,7 @@
 .public TaskManager_GetFieldSystem
 .public TaskManager_GetEnvironment
 .public TaskManager_GetStatePtr
-.public sub_02050B08
+.public FieldSystem_StartWildEncounter
 .public FieldSystem_StartForcedWildBattle
 .public BattleSetup_New
 .public BattleSetup_New_SafariZone
@@ -250,8 +250,8 @@
 .public PlayerAvatar_GetState
 .public PlayerAvatar_GetGender
 .public PlayerAvatar_IsRunning
-.public sub_0205E38C
-.public sub_0205E420
+.public MapObject_SetSpriteAndInitDraw
+.public MapObject_ClearSprite
 .public MapObjectManager_GetFirstActiveObjectByID
 .public MapObjectManager_GetObjectCount
 .public MapObjectManager_GetObjects
@@ -260,9 +260,9 @@
 .public MapObject_GetSpriteID
 .public MapObject_SetFacingDirectionDirect
 .public MapObject_GetFacingDirection
-.public sub_0205F328
+.public MapObject_SetAnimation
 .public MapObject_GetManager
-.public sub_0205F484
+.public MapObject_CallDrawUpdate
 .public MapObject_GetFieldSystem
 .public MapObject_CheckActive
 .public MapObject_SetVisible

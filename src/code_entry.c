@@ -72,7 +72,7 @@ typedef struct CodeEntryRange {
 } CodeEntryRange;
 
 typedef struct CodeEntryButtonLabelAlloc {
-    UnkStruct_02021AC8 charAlloc;
+    ObjCharSpaceReservation charAlloc;
 } CodeEntryButtonLabelAlloc;
 
 typedef struct CodeEntryApp {
@@ -1435,9 +1435,9 @@ void CodeEntry_InitFont(CodeEntryApp *app) {
 void CodeEntry_FreeButtonLabels(CodeEntryApp *app) {
     FontID_Release(2);
     FontOAM_Delete(app->buttonLabels[0]);
-    sub_02021B5C(&app->buttonLabelAllocs[0].charAlloc);
+    ObjCharTransfer_FreeCharSpace(&app->buttonLabelAllocs[0].charAlloc);
     FontOAM_Delete(app->buttonLabels[1]);
-    sub_02021B5C(&app->buttonLabelAllocs[1].charAlloc);
+    ObjCharTransfer_FreeCharSpace(&app->buttonLabelAllocs[1].charAlloc);
     FontSystem_Delete(app->fontSystem);
 }
 
@@ -1467,7 +1467,7 @@ void CodeEntry_CreateButtonLabel(CodeEntryApp *app, int button, int x, int y, in
     AddTextWindowTopLeftCorner(app->bgConfig, &window, 10, 2, 0, 0);
     AddTextPrinterParameterizedWithColor(&window, 2, string, FontID_String_GetCenterAlignmentX(2, string, 0, 80), 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 2), NULL);
     size = FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_108);
-    sub_02021AC8(size, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &app->buttonLabelAllocs[button].charAlloc);
+    ObjCharTransfer_ReserveCharSpace(size, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &app->buttonLabelAllocs[button].charAlloc);
     centerX = (app->hitboxes[button + CODE_ENTRY_HITBOX_BACK].rect.left + app->hitboxes[button + CODE_ENTRY_HITBOX_BACK].rect.right) / 2;
     centerY = (app->hitboxes[button + CODE_ENTRY_HITBOX_BACK].rect.top + app->hitboxes[button + CODE_ENTRY_HITBOX_BACK].rect.bottom) / 2;
     template.fontSystem = app->fontSystem;

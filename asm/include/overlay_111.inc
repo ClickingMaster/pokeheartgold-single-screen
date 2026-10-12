@@ -106,9 +106,9 @@
 .public Mon_GetBoxMon
 .public Pokemon_GetIconNaix
 .public Pokemon_GetIconPalette
-.public sub_02074490
-.public sub_0207449C
-.public sub_020744A8
+.public GetMonIconPlttNaix
+.public GetMonIconCell64KNaix
+.public GetMonIconAnim64KNaix
 .public CalculateHpBarPixelsLength
 .public CalculateHpBarColor
 .public NNS_G2dGetImageLocation

@@ -177,7 +177,7 @@ BOOL FieldTransition_EnterRising(TaskManager *taskMan) {
         if (MapObject_AreBitsSetForMovementScriptInit(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)) && IsPaletteFadeFinished()) {
             if (FollowMon_IsActive(fieldSystem)) {
                 FollowMon_MoveToPlayer(fieldSystem, 0);
-                sub_0205FC94(FollowMon_GetMapObject(fieldSystem), 0x30);
+                MapObject_ChangeMovement(FollowMon_GetMapObject(fieldSystem), 0x30);
                 sub_02069DC8(FollowMon_GetMapObject(fieldSystem), TRUE);
             }
             env->transitionState++;
@@ -232,7 +232,7 @@ BOOL FieldTransition_EnterSinking(TaskManager *taskMan) {
         if (MapObject_AreBitsSetForMovementScriptInit(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)) && IsPaletteFadeFinished()) {
             if (FollowMon_IsActive(fieldSystem)) {
                 FollowMon_MoveToPlayer(fieldSystem, 1);
-                sub_0205FC94(FollowMon_GetMapObject(fieldSystem), 0x30);
+                MapObject_ChangeMovement(FollowMon_GetMapObject(fieldSystem), 0x30);
                 sub_02069DC8(FollowMon_GetMapObject(fieldSystem), TRUE);
             }
             env->transitionState++;
@@ -330,7 +330,7 @@ void FieldTransition_PlaceBelowFloor(FieldSystem *fieldSystem) {
     MapObject_ClearHeldMovementIfActive(object);
     Field_PlayerAvatar_OrrTransitionFlags(fieldSystem->playerAvatar, 2 << 8);
     Field_PlayerAvatar_ApplyTransitionFlags(fieldSystem->playerAvatar);
-    sub_0205F328(object, 0);
+    MapObject_SetAnimation(object, 0);
 }
 
 void FieldTransition_PlaceAboveFloor(FieldSystem *fieldSystem) {
@@ -351,7 +351,7 @@ void FieldTransition_PlaceAboveFloor(FieldSystem *fieldSystem) {
     MapObject_ClearHeldMovementIfActive(object);
     Field_PlayerAvatar_OrrTransitionFlags(fieldSystem->playerAvatar, 2 << 8);
     Field_PlayerAvatar_ApplyTransitionFlags(fieldSystem->playerAvatar);
-    sub_0205F328(object, 0);
+    MapObject_SetAnimation(object, 0);
 }
 
 void CallTask_WiFiPlaza(TaskManager *taskMan, u16 parameter) {

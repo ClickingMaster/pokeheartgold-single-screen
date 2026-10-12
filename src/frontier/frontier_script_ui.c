@@ -37,7 +37,7 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 
 typedef void (*FrontierPrintMailMessageFunc)(FrontierSystem *system, int speed, u16 bank, u16 number, u16 field0, s16 field1, u8 canABSpeedUp);
 typedef u32 (*FrontierObjectGetPosFunc)(UnkStruct_ov42_02228110 *object);
@@ -705,9 +705,9 @@ void FrontierMap_DeleteMonSprite(FrontierMap *map, u32 id) {
 }
 
 void FrontierMap_LoadMonIconResources(FrontierMap *map) {
-    SpriteSystem_LoadPaletteBuffer(map->paletteData, PLTTBUF_MAIN_OBJ, map->spriteSystem, map->spriteManager, NARC_poketool_icongra_poke_icon, sub_02074490(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, FRONTIER_MON_ICON_ID_BASE);
-    SpriteSystem_LoadCellResObj(map->spriteSystem, map->spriteManager, NARC_poketool_icongra_poke_icon, sub_02074498(), FALSE, FRONTIER_MON_ICON_ID_BASE);
-    SpriteSystem_LoadAnimResObj(map->spriteSystem, map->spriteManager, NARC_poketool_icongra_poke_icon, sub_020744A4(), FALSE, FRONTIER_MON_ICON_ID_BASE);
+    SpriteSystem_LoadPaletteBuffer(map->paletteData, PLTTBUF_MAIN_OBJ, map->spriteSystem, map->spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, FRONTIER_MON_ICON_ID_BASE);
+    SpriteSystem_LoadCellResObj(map->spriteSystem, map->spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconCell32KNaix(), FALSE, FRONTIER_MON_ICON_ID_BASE);
+    SpriteSystem_LoadAnimResObj(map->spriteSystem, map->spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconAnim32KNaix(), FALSE, FRONTIER_MON_ICON_ID_BASE);
 }
 
 void FrontierMap_UnloadMonIconResources(FrontierMap *map) {

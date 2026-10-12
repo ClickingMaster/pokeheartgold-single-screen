@@ -31,7 +31,7 @@ typedef struct {
 
 typedef struct {
     u16 capacity, count;
-    struct UnkPokemonStruct_02072A98 mons[6];
+    struct BattleRecordMon mons[6];
 } BattleRecordParty;
 
 // gBattleRecord->data, encrypted while stored: the BattleSetup, the parties and every battler's inputs.
@@ -213,23 +213,23 @@ BOOL BattleRecord_IsSlotValid(SaveData *save, enum HeapID heapId, int *out, int 
 int BattleRecord_WriteSlot(SaveData *save, BattleRecord *record, int index, u16 *state) {
     switch (*state) {
     case 0: {
-        sub_0201A728(8);
-        sub_0201A748((enum HeapID)11);
+        Sys_SetSoftResetDisableFlag(8);
+        Sys_SetAsyncSaveMarker((enum HeapID)11);
         int result = sub_02027134(save, record, index);
         if (result == 2) {
             Save_PrepareForAsyncWrite(save, 2);
             (*state)++;
             return 0;
         }
-        sub_0201A738(8);
+        Sys_ClearSoftResetDisableFlag(8);
         return result;
     }
     case 1: {
         int result = Save_WriteFileAsync(save);
         if (result == 2 || result == 3) {
             *state = 0;
-            sub_0201A774();
-            sub_0201A738(8);
+            Sys_ClearAsyncSaveMarker();
+            Sys_ClearSoftResetDisableFlag(8);
         }
         return result;
     }
@@ -318,7 +318,7 @@ void BattleRecord_FillHeader(SaveData *save, void *header, void *recordData, int
             }
         }
         for (int j = 0; j < partySize; j++) {
-            struct UnkPokemonStruct_02072A98 *mon = &data->parties[battler].mons[j];
+            struct BattleRecordMon *mon = &data->parties[battler].mons[j];
             if (!mon->isEgg && !mon->checksumFailed) {
                 summary->species[k] = mon->species;
                 summary->forms[k] = mon->form;
@@ -387,7 +387,7 @@ BOOL BattleRecord_IsValid(SaveData *save, BattleRecord *record) {
     }
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 6; j++) {
-            struct UnkPokemonStruct_02072A98 *mon = &((BattleRecordData *)data)->parties[i].mons[j];
+            struct BattleRecordMon *mon = &((BattleRecordData *)data)->parties[i].mons[j];
             if (mon->species > 495) {
                 return FALSE;
             }
@@ -466,7 +466,7 @@ void BattleRecord_StoreSetup(BattleSetup *setup) {
     for (int i = 0; i < 4; i++) {
         BattleRecordParty_FromParty(setup->party[i], &data->parties[i]);
         PlayerProfile_Copy(setup->profile[i], &data->profiles[i]);
-        data->chatot[i] = sub_02006EFC(setup->chatot[i]);
+        data->chatot[i] = Chatot_GetVoiceParam(setup->chatot[i]);
     }
     Options_Copy(setup->options, &data->options);
 }
@@ -532,7 +532,7 @@ void BattleRecordParty_FromParty(Party *party, BattleRecordParty *record) {
     record->capacity = Party_GetMaxCount(party);
     record->count = Party_GetCount(party);
     for (int i = 0; i < record->count; i++) {
-        sub_02072A98(Party_GetMonByIndex(party, i), &record->mons[i]);
+        Pokemon_ToBattleRecordMon(Party_GetMonByIndex(party, i), &record->mons[i]);
     }
 }
 
@@ -541,7 +541,7 @@ void BattleRecordParty_ToParty(BattleRecordParty *record, Party *party) {
     Pokemon *mon = AllocMonZeroed((enum HeapID)11);
     Party_InitWithMaxSize(party, record->capacity);
     for (int i = 0; i < record->count; i++) {
-        sub_02072D64(&record->mons[i], mon);
+        Pokemon_FromBattleRecordMon(&record->mons[i], mon);
         SetMonData(mon, 162, &value);
         Party_AddMon(party, mon);
     }

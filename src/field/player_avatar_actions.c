@@ -598,7 +598,7 @@ BOOL Task_Surf(TaskManager *taskManager) {
             Field_PlayerAvatar_SetSprite(work->playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_SURFING, PlayerAvatar_GetGender(work->playerAvatar)));
             if (FollowMon_IsActive(work->fieldSystem)) {
                 FollowMon_MoveToPlayer(work->fieldSystem, (u8)work->direction);
-                sub_0205FC94(FollowMon_GetMapObject(work->fieldSystem), 56);
+                MapObject_ChangeMovement(FollowMon_GetMapObject(work->fieldSystem), 56);
             }
             FieldSystem_ProcessSoundplate(work->fieldSystem, FALSE);
             FieldMoveTask_FreeWork(work);
@@ -665,7 +665,7 @@ BOOL Task_StopSurfing(TaskManager *taskManager) {
                 FollowMon_MoveToPlayer(work->fieldSystem, (u8)work->direction);
                 sub_02069DC8(FollowMon_GetMapObject(work->fieldSystem), TRUE);
                 FollowMon_SetFacingDirection(work->fieldSystem, 1);
-                sub_0205FC94(FollowMon_GetMapObject(work->fieldSystem), 0x30);
+                MapObject_ChangeMovement(FollowMon_GetMapObject(work->fieldSystem), 0x30);
             }
             if (!CheckFlag99A(Save_VarsFlags_Get(work->fieldSystem->saveData))) {
                 FieldBGM_TryFadeOut(work->fieldSystem, FieldBGM_GetForMapHeader(work->fieldSystem, work->fieldSystem->location->mapId), 4);
@@ -1052,7 +1052,7 @@ int WaterfallDown_Init(WaterfallWork *work, TaskManager *taskManager) {
     int x = MapObject_GetXCoord(work->mapObject) + (GetDeltaXByFacingDirection(1) << 1);
     int z = MapObject_GetZCoord(work->mapObject) + (GetDeltaYByFacingDirection(1) << 1);
     SetPositionToTileCenter(x, z, &work->targetPos);
-    sub_0206121C(work->fieldSystem, &work->targetPos);
+    FieldSystem_SnapToTerrainHeight(work->fieldSystem, &work->targetPos);
     work->progress = 0;
     work->targetX = x;
     work->targetY = (work->targetPos.y >> 3) / FX32_ONE;
@@ -1193,7 +1193,7 @@ int Whirlpool_CheckNextTile(WaterfallWork *work) {
         return 0;
     }
     MapObject_GetNextFacingDirection(work->mapObject);
-    if (MetatileBehavior_IsWhirlpool(sub_0205F504(work->mapObject)) == TRUE) {
+    if (MetatileBehavior_IsWhirlpool(MapObject_GetCurrentMetatileBehavior(work->mapObject)) == TRUE) {
         work->state = 3;
         return 2;
     }
@@ -1206,7 +1206,7 @@ int Whirlpool_CheckNextTile(WaterfallWork *work) {
 void Field_PlayerAvatar_TryEnterPoketchPose(PlayerAvatar *playerAvatar) {
     u32 flags;
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(playerAvatar);
-    if (sub_0205F73C(mapObject) != FALSE && PlayerAvatar_GetState(playerAvatar) == PLAYER_STATE_WALKING && MapObject_GetSpriteID(mapObject) - SPRITE_POKEHERO > 1) {
+    if (MapObject_IsDrawInitialized(mapObject) != FALSE && PlayerAvatar_GetState(playerAvatar) == PLAYER_STATE_WALKING && MapObject_GetSpriteID(mapObject) - SPRITE_POKEHERO > 1) {
         flags = PlayerAvatar_GetTransitionFlags(playerAvatar);
         Field_PlayerAvatar_OrrTransitionFlags(playerAvatar, PLAYER_TRANSITION_POKETCH);
         Field_PlayerAvatar_ApplyTransitionFlags(playerAvatar);
@@ -1217,7 +1217,7 @@ void Field_PlayerAvatar_TryEnterPoketchPose(PlayerAvatar *playerAvatar) {
 void Field_PlayerAvatar_TryLeavePoketchPose(PlayerAvatar *playerAvatar) {
     u32 flags;
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(playerAvatar);
-    if (sub_0205F73C(mapObject) != FALSE && PlayerAvatar_GetState(playerAvatar) == PLAYER_STATE_WALKING) {
+    if (MapObject_IsDrawInitialized(mapObject) != FALSE && PlayerAvatar_GetState(playerAvatar) == PLAYER_STATE_WALKING) {
         switch (MapObject_GetSpriteID(mapObject)) {
         case SPRITE_POKEHERO:
         case SPRITE_POKEHEROINE:
@@ -1287,7 +1287,7 @@ void Field_PlayerMovementSavingClear(SysTask *task) {
 }
 
 void PlayerMovementSaving_Update(SysTask *task, void *data) {
-    sub_0205F484(PlayerAvatar_GetMapObject(((PlayerSavingPoseWork *)data)->playerAvatar));
+    MapObject_CallDrawUpdate(PlayerAvatar_GetMapObject(((PlayerSavingPoseWork *)data)->playerAvatar));
 }
 
 void FieldMoveAnim_Init(FieldSystem *fieldSystem, Pokemon *mon, FieldMoveAnim *anim) {

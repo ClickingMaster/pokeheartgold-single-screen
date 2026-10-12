@@ -16,7 +16,7 @@
 
 // Puts position->y on the ground of the tile at position->x/z; FALSE while that tile has no ground yet.
 // (unk_0205FD20.h declares it returning void.)
-BOOL sub_0206121C(FieldSystem *fieldSystem, VecFx32 *position);
+BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 8).
 typedef struct TallGrass {
@@ -187,7 +187,7 @@ BOOL TallGrassEffect_Init(FieldEffect *effect, TallGrassEffect *work) {
     position.x = work->args.x << 16;
     position.z = work->args.z << 16;
     position.y = MapObject_GetPositionVectorYCoord(work->args.mapObject);
-    work->onGround = sub_0206121C(work->args.fieldSystem, &position);
+    work->onGround = FieldSystem_SnapToTerrainHeight(work->args.fieldSystem, &position);
     position.x = position.x + (2 << 14);
     position.z = position.z + (0x12 << 12);
     FieldEffect_SetPosition(effect, &position);
@@ -213,7 +213,7 @@ void TallGrassEffect_Update(FieldEffect *effect, TallGrassEffect *work) {
     int x;
     int z;
 
-    if (!sub_0205F0F8(mapObject, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
@@ -227,7 +227,7 @@ void TallGrassEffect_Update(FieldEffect *effect, TallGrassEffect *work) {
         position.x = work->args.x << 16;
         position.z = work->args.z << 16;
         position.y = current.y;
-        work->onGround = sub_0206121C(work->args.fieldSystem, &position);
+        work->onGround = FieldSystem_SnapToTerrainHeight(work->args.fieldSystem, &position);
         if (work->onGround == TRUE) {
             current.y = position.y;
             FieldEffect_SetPosition(effect, &current);
@@ -246,7 +246,7 @@ void TallGrassEffect_Update(FieldEffect *effect, TallGrassEffect *work) {
         work->state = 2;
         // fallthrough
     case 2:
-        if (!sub_0205F0F8(mapObject, work->spriteId, work->objectId, work->mapId)) {
+        if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
             FieldEffectManager_DestroyEffect((int)effect);
             return;
         }
@@ -270,7 +270,7 @@ void TallGrassEffect_Update(FieldEffect *effect, TallGrassEffect *work) {
 void TallGrassEffect_Draw(FieldEffect *effect, TallGrassEffect *work) {
     VecFx32 position;
 
-    if (!sub_0205F0F8(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
@@ -288,7 +288,7 @@ BOOL ov01_021FF394(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
     position.x = (work->args.x << 16) + 0x8000;
     position.z = (work->args.z << 16) + 0x9000;
     position.y = 0;
-    sub_0206121C(work->args.fieldSystem, &position);
+    FieldSystem_SnapToTerrainHeight(work->args.fieldSystem, &position);
     position.y += FX32_ONE;
     FieldEffect_SetPosition(effect, &position);
     switch (work->kind) {

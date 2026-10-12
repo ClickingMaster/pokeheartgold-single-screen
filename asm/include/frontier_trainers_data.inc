@@ -35,7 +35,7 @@
 .public GetMonBaseStat
 .public GetNatureFromPersonality
 .public CalcShininessByOtIdAndPersonality
-.public sub_0207217C
+.public MonSetCatchDataNoHealBall
 .public MaskOfFlagNo
 .public Party_AddMon
 .public CalculateHpBarColor

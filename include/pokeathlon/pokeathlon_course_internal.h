@@ -14,7 +14,7 @@
 #include "sprite.h"
 #include "sys_task.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 // Shared by the Pokeathlon course translation units of OVY_96 (course flow, link commands, Pokemon sprites,
 // scores, sprite resources).

@@ -582,7 +582,7 @@ void PokeathlonBlockSmash_LoadSpriteResources(PokeathlonBlockSmash *work) {
     SpriteSystem_LoadPlttResObj(spriteSystem, spriteManager, NARC_a_2_3_2, 11, FALSE, 3, vram, 10001);
     SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_a_2_3_2, 13, TRUE, 10001);
     SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_a_2_3_2, 14, TRUE, 10001);
-    work->icons.plttId = SpriteSystem_LoadPlttResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, sub_02074490(), FALSE, 3, vram, 10002);
+    work->icons.plttId = SpriteSystem_LoadPlttResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), FALSE, 3, vram, 10002);
 }
 
 #pragma opt_propagation off

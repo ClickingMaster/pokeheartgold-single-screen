@@ -259,7 +259,7 @@ BOOL FieldSystem_PerformLandOrSurfEncounterCheck(FieldSystem *fieldSystem) {
             battleSetup = BattleSetup_New(HEAP_ID_FIELD2, BATTLE_TYPE_ROAMER);
             BattleSetup_InitFromFieldSystem(battleSetup, fieldSystem);
             initRoamingWildmon(encounterGen.playerId, roamer, battleSetup);
-            sub_02050B08(fieldSystem, battleSetup);
+            FieldSystem_StartWildEncounter(fieldSystem, battleSetup);
             return TRUE;
         }
         return FALSE;
@@ -313,7 +313,7 @@ BOOL FieldSystem_PerformLandOrSurfEncounterCheck(FieldSystem *fieldSystem) {
         return FALSE;
     }
     if (found) {
-        sub_02050B08(fieldSystem, battleSetup);
+        FieldSystem_StartWildEncounter(fieldSystem, battleSetup);
         fieldSystem->encounterInhibitSteps = 0;
         fieldSystem->reverseTurnFrameSteps = 0;
     } else {

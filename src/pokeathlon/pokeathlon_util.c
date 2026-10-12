@@ -11,7 +11,7 @@
 #include "pokemon.h"
 #include "pokemon_icon_idx.h"
 #include "screen_fade.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 
 #define MON_PIC_BUFFER_SIZE 0xC80
 
@@ -149,15 +149,15 @@ void PokeathlonUtil_LoadMonIconResources(PokeathlonSpriteContext *ctx, const int
     } else {
         fileId = 0x1D;
     }
-    cellFileId = sub_0207449C();
-    animFileId = sub_020744A8();
+    cellFileId = GetMonIconCell64KNaix();
+    animFileId = GetMonIconAnim64KNaix();
     for (i = 0; i < count; i++) {
         SpriteSystem_LoadCharResObj(spriteSystem, spriteManager, NARC_a_1_7_7, fileId, TRUE, _0221F194[screen], resIds[GF_GFX_RES_TYPE_CHAR] + i);
     }
     SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, cellFileId, FALSE, resIds[GF_GFX_RES_TYPE_CELL]);
     SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, animFileId, FALSE, resIds[GF_GFX_RES_TYPE_ANIM]);
     if (ctx->paletteOffset == -1) {
-        ctx->paletteOffset = SpriteSystem_LoadPlttResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, sub_02074490(), FALSE, 3, _0221F194[screen], resIds[GF_GFX_RES_TYPE_PLTT]);
+        ctx->paletteOffset = SpriteSystem_LoadPlttResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), FALSE, 3, _0221F194[screen], resIds[GF_GFX_RES_TYPE_PLTT]);
     }
 }
 

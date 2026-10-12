@@ -25,7 +25,7 @@
 .public AddCharResObjFromOpenNarc
 .public AddPlttResObjFromOpenNarc
 .public AddCellOrAnimResObjFromOpenNarc
-.public sub_0200A740
+.public GF2DGfxResObj_FreeData
 .public DestroySingle2DGfxResObj
 .public SpriteTransfer_CreateCharTransferTask_UpdateMappingTypeFromHW_AllocAtEnd
 .public SpriteTransfer_DeleteCharTransferTask
@@ -116,8 +116,8 @@
 .public ObjCharTransfer_InitEx
 .public ObjCharTransfer_Destroy
 .public ObjCharTransfer_ClearBuffers
-.public sub_02021AC8
-.public sub_02021B5C
+.public ObjCharTransfer_ReserveCharSpace
+.public ObjCharTransfer_FreeCharSpace
 .public ObjPlttTransfer_Init
 .public ObjPlttTransfer_Destroy
 .public ObjPlttTransfer_Reset

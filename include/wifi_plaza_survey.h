@@ -15,7 +15,7 @@
 #include "save.h"
 #include "sprite.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 // Wi-Fi Plaza "Plaza Survey", started by the Wi-Fi Plaza lobby overlay (OVY_45): mode 0 asks the
 // player to take part and answer this week's question, mode 1 shows the results of this Wi-Fi Plaza

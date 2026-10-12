@@ -65,13 +65,13 @@ typedef struct WeatherManager {
     SysTask *task;
 } WeatherManager;
 
-typedef struct UnkWeatherStruct_021EB830 {
+typedef struct WeatherLerp {
     u32 unk0;
     u32 unk4;
     u32 unk8;
     int unkC;
     int unk10;
-} UnkWeatherStruct_021EB830;
+} WeatherLerp;
 typedef void (*UnkWeatherSystemSub0Sub8Func)(WeatherSystem_Sub0_Sub8 *, int);
 typedef struct UnkStruct_021EC504 {
     WeatherSystem_Sub0_Sub8 *unk0;
@@ -91,11 +91,11 @@ typedef void (*UnkLinkedListFunc)(WeatherObject *);
 
 typedef struct WeatherFogChange {
     FogData *fog;
-    UnkWeatherStruct_021EB830 unk4;
-    UnkWeatherStruct_021EB830 unk18;
-    UnkWeatherStruct_021EB830 unk2C;
-    UnkWeatherStruct_021EB830 unk40;
-    UnkWeatherStruct_021EB830 unk54;
+    WeatherLerp unk4;
+    WeatherLerp unk18;
+    WeatherLerp unk2C;
+    WeatherLerp unk40;
+    WeatherLerp unk54;
 } WeatherFogChange;
 
 typedef struct UnkStruct_021EC774 {
@@ -121,7 +121,7 @@ typedef struct UnkStruct_021ED474 {
 } UnkStruct_021ED474;
 
 typedef struct UnkStruct_021ED584 {
-    UnkWeatherStruct_021EB830 unk0;
+    WeatherLerp unk0;
     UnkStruct_021EC774 unk1C;
     WeatherFogChange unk50;
 } UnkStruct_021ED584;

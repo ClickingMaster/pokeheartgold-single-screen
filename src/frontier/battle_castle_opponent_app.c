@@ -42,7 +42,7 @@
 #include "oam_manager.h"
 #include "message_printer_number.h"
 #include "unk_0200FA24.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 #include "frontier_save_access.h"
 #include "communication_player_state.h"
 #include "unk_02035900.h"
@@ -2803,9 +2803,9 @@ void BattleCastle_InitSpriteGfx(BattleCastleSpriteGfx *gfx, Party *party, u8 isL
     BattleCastle_LoadPartyListGfx(gfx);
 
     narc = NARC_New(NARC_poketool_icongra_poke_icon, HEAP_ID_107);
-    gfx->resObj[10][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_poketool_icongra_poke_icon, sub_02074490(), FALSE, 10, NNS_G2D_VRAM_TYPE_2DMAIN, 3, HEAP_ID_107);
-    gfx->resObj[10][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], narc, sub_02074498(), FALSE, 5, GF_GFX_RES_TYPE_CELL, HEAP_ID_107);
-    gfx->resObj[10][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], narc, sub_020744A4(), FALSE, 5, GF_GFX_RES_TYPE_ANIM, HEAP_ID_107);
+    gfx->resObj[10][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), FALSE, 10, NNS_G2D_VRAM_TYPE_2DMAIN, 3, HEAP_ID_107);
+    gfx->resObj[10][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], narc, GetMonIconCell32KNaix(), FALSE, 5, GF_GFX_RES_TYPE_CELL, HEAP_ID_107);
+    gfx->resObj[10][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], narc, GetMonIconAnim32KNaix(), FALSE, 5, GF_GFX_RES_TYPE_ANIM, HEAP_ID_107);
     for (i = 0; i < 4; i++) {
         Pokemon *mon;
 

@@ -112,7 +112,7 @@ typedef struct MainMenuButton {
     MainMenuPrintFunction printFunction;
 } MainMenuButton;
 
-extern void sub_02005AF8(u32 a0);
+extern void Sound_SetBGMPlayerChannels(u32 a0);
 extern void SystemCard_RebootIntoFile(const char *path);
 extern void CommState_StartBeaconWatch(SaveData *saveData);
 extern void CommState_StopBeaconWatch(void);
@@ -515,7 +515,7 @@ static void DetectInsertedGBACart(MainMenuAppData *data) {
         version = VERSION_EMERALD;
         break;
     }
-    sub_0201A4B0(version);
+    Sys_SetAgbCartridgeVersion(version);
 
     if (Pokedex_GetNatDexFlag(data->pokedex) && gGameLanguage == PmAgbCartridge_GetLanguage()) {
         data->connectedAgbGame = PmAgbCartridge_GetVersionInternal() + 1;
@@ -1345,7 +1345,7 @@ BOOL MainMenuApp_Init(OverlayManager *manager, int *state) {
     if (!Save_FileExists(data->saveData)) {
         data->dontHaveSavedata = TRUE;
     }
-    sub_02005AF8(0);
+    Sound_SetBGMPlayerChannels(0);
     Sound_SetScene(SOUND_SCENE_NONE);
 
     return TRUE;

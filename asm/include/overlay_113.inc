@@ -110,9 +110,9 @@
 .public Save_VarsFlags_GetUnownReportLevel
 .public GetMonIconNaixEx
 .public GetMonIconPaletteEx
-.public sub_02074490
-.public sub_02074494
-.public sub_020744A0
+.public GetMonIconPlttNaix
+.public GetMonIconStaticCellNaix
+.public GetMonIconStaticAnimNaix
 .public MI_CpuFill8
 .public _s32_div_f
 .public gSystem

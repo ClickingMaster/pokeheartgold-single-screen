@@ -62,7 +62,7 @@ u32 PokewalkerApp_GetSpeciesIconFile(u16 species) {
 }
 
 int PokewalkerApp_GetPictureFile(int species, int gender, int form) {
-    int base = sub_02070438((u16)species, (u8)form);
+    int base = SanitizeMonForm((u16)species, (u8)form);
     switch (species) {
     case SPECIES_BURMY:
         return base + 0x26E;
@@ -853,7 +853,7 @@ BOOL ov112_021EAAE4(PokewalkerApp *app, PokewalkerAppMotion *motion) {
 }
 
 void PokewalkerApp_LoadMonIconPalettes(void) {
-    GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, sub_02074490(), GF_PAL_LOCATION_MAIN_OBJ, (enum GFPalSlotOffset)0xA0, 0x60, HEAP_ID_154);
+    GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), GF_PAL_LOCATION_MAIN_OBJ, (enum GFPalSlotOffset)0xA0, 0x60, HEAP_ID_154);
 }
 
 void PokewalkerApp_LoadMonIcon(PokewalkerApp *app, int slot, int species, int form) {

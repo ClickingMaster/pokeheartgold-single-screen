@@ -86,7 +86,7 @@ typedef struct SafariAreaCustomizer {
     FontSystem *fontSystem;                           // 0x0039C
     TextOBJLayout *fontLayout;                           // 0x003A0
     TextOBJ *textObj;                                         // 0x003A4
-    UnkStruct_02021AC8 charTransfer;                          // 0x003A8
+    ObjCharSpaceReservation charTransfer;                          // 0x003A8
     Window windows[15];                                       // 0x003B4
     Window textObjWindow;                                     // 0x004A4
     ListMenuItem *areaMenuItems;                              // 0x004B4
@@ -1356,7 +1356,7 @@ void SafariAreaCustomizer_CreateCancelTextObj(SafariAreaCustomizer *s) {
     template.y = 172;
     template.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
     template.heapID = s->heapId;
-    sub_02021AC8(size, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, &s->charTransfer);
+    ObjCharTransfer_ReserveCharSpace(size, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, &s->charTransfer);
     template.offset = s->charTransfer.offset;
     template.sprite = NULL;
     s->textObj = TextOBJ_Create(&template, s->fontLayout);
@@ -1366,7 +1366,7 @@ void SafariAreaCustomizer_CreateCancelTextObj(SafariAreaCustomizer *s) {
 
 void SafariAreaCustomizer_DeleteCancelTextObj(SafariAreaCustomizer *s) {
     TextOBJ_Destroy(s->textObj);
-    sub_02021B5C(&s->charTransfer);
+    ObjCharTransfer_FreeCharSpace(&s->charTransfer);
     s->textObj = NULL;
     TextOBJLayout_Delete(s->fontLayout);
 }

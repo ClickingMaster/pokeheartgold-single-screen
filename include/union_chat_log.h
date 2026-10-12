@@ -10,7 +10,7 @@
 #include "sprite.h"
 #include "sys_task.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 // Field bottom-screen app 8 in the Union Room: a scrolling log of the chat messages of the players
 // in the room. Shown instead of the touch start menu; the "Menu" bar returns to it.

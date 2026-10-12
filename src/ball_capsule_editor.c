@@ -130,7 +130,7 @@ typedef struct BallCapsuleEditor {
     GF3DVramMan *vramMan;                                    // 0x258
     FontSystem *fontSystem;                          // 0x25C
     TextOBJ *buttonLabels[2];                                // 0x260, OK / CANCEL
-    UnkStruct_02021AC8 buttonLabelChars[2];                  // 0x268
+    ObjCharSpaceReservation buttonLabelChars[2];                  // 0x268
     u32 unk_280;                                             // 0x280
     void *pokepicAnim;                                       // 0x284, PokepicAnimManager_New
     BOOL sortSeals;                                          // 0x288
@@ -1039,9 +1039,9 @@ void BallCapsuleEditor_FreeFonts(BallCapsuleEditor *editor) {
     FontID_Release(4);
     FontID_Release(2);
     FontOAM_Delete(editor->buttonLabels[0]);
-    sub_02021B5C(&editor->buttonLabelChars[0]);
+    ObjCharTransfer_FreeCharSpace(&editor->buttonLabelChars[0]);
     FontOAM_Delete(editor->buttonLabels[1]);
-    sub_02021B5C(&editor->buttonLabelChars[1]);
+    ObjCharTransfer_FreeCharSpace(&editor->buttonLabelChars[1]);
     FontSystem_Delete(editor->fontSystem);
 }
 
@@ -1073,7 +1073,7 @@ void BallCapsuleEditor_CreateButtonLabel(BallCapsuleEditor *editor, int index, i
     AddTextWindowTopLeftCorner(editor->display.bgConfig, &window, 10, 2, 0, 0);
     AddTextPrinterParameterizedWithColor(&window, 2, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 2), NULL);
     chars = FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_52);
-    sub_02021AC8(chars, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, &editor->buttonLabelChars[index]);
+    ObjCharTransfer_ReserveCharSpace(chars, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, &editor->buttonLabelChars[index]);
     template.fontSystem = editor->fontSystem;
     template.window = &window;
     template.spriteList = SpriteManager_GetSpriteList(editor->display.spriteManager);
@@ -1330,9 +1330,9 @@ void BallCapsuleEditor_LoadMonIconResources(BallCapsuleEditor *editor) {
     SpriteManager *spriteManager = editor->display.spriteManager;
     PaletteData *paletteData = editor->display.paletteData;
 
-    SpriteSystem_LoadPaletteBuffer(paletteData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, sub_02074490(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 16000);
-    SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, sub_0207449C(), FALSE, 17000);
-    SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, sub_020744A8(), FALSE, 18000);
+    SpriteSystem_LoadPaletteBuffer(paletteData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 16000);
+    SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconCell64KNaix(), FALSE, 17000);
+    SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconAnim64KNaix(), FALSE, 18000);
 }
 
 void BallCapsuleEditor_CreateMonIcons(BallCapsuleEditor *editor) {
@@ -3144,7 +3144,7 @@ void BallCapsuleEditor_CreatePreviewPokepic(BallCapsuleEditor *editor) {
 
     GetPokemonSpriteCharAndPlttNarcIds(&template, editor->previewMon, 2);
     species = GetMonData(editor->previewMon, MON_DATA_SPECIES, NULL);
-    y = sub_0207083C((BoxPokemon *)editor->previewMon, 2);
+    y = GetBoxMonPicHeight((BoxPokemon *)editor->previewMon, 2);
     editor->display.pokepicY = y;
     NARC_ReadPokepicAnimScript(editor->pokepicAnimNarc, animScript, (u16)species, 1);
     editor->display.pokepic = PokepicManager_CreatePokepic(editor->display.pokepicManager, &template, 192, y + 48, -640, 0, animScript, NULL);
@@ -3155,7 +3155,7 @@ void BallCapsuleEditor_StartPreviewPokepicAnim(BallCapsuleEditor *editor) {
 
     GetMonNature(editor->previewMon);
     ((void (*)(Pokepic *, int))Pokepic_StartAnim)(editor->display.pokepic, 1); // called with an extra argument
-    sub_0207294C(editor->pokepicAnimNarc, editor->pokepicAnim, editor->display.pokepic, (u16)species, 2, 0, 0);
+    NARC_StartPokepicAnim(editor->pokepicAnimNarc, editor->pokepicAnim, editor->display.pokepic, (u16)species, 2, 0, 0);
 }
 
 #pragma force_active reset

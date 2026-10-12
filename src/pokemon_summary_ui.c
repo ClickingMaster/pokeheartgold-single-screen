@@ -248,7 +248,7 @@ BOOL PokemonSummary_CanShowMonAt(PokemonSummary *summary, int slot) {
 
     switch (summary->args->unk11) {
     case 0:
-        size = sub_02070D90();
+        size = Pokemon_sizeof();
         mons = (u8 *)summary->args->party;
         offset = slot * size;
         if (GetMonData((Pokemon *)(mons + offset), MON_DATA_SPECIES, NULL) != SPECIES_NONE) {
@@ -272,7 +272,7 @@ BOOL PokemonSummary_CanShowMonAt(PokemonSummary *summary, int slot) {
         }
         break;
     case 2:
-        size = sub_02070D94();
+        size = BoxPokemon_sizeof();
         mons = (u8 *)summary->args->party;
         offset = slot * size;
         if (GetBoxMonData((BoxPokemon *)(mons + offset), MON_DATA_SPECIES, NULL) != SPECIES_NONE) {
@@ -306,7 +306,7 @@ int PokemonSummary_FindNextMonInArray(PokemonSummary *summary, int direction) {
         if (slot < 0 || slot >= summary->args->partyCount) {
             return -1;
         }
-        size = sub_02070D90();
+        size = Pokemon_sizeof();
         mons = (u8 *)summary->args->party;
         if (GetMonData((Pokemon *)(mons + slot * size), MON_DATA_SPECIES, NULL) != SPECIES_NONE) {
             if (GetMonData((Pokemon *)(mons + slot * size), MON_DATA_IS_EGG, NULL) == 0 || PokemonSummary_CanShowEgg(summary) == TRUE) {
@@ -342,7 +342,7 @@ int PokemonSummary_FindNextBoxMon(PokemonSummary *summary, int direction) {
         if (slot < 0 || slot >= summary->args->partyCount) {
             return -1;
         }
-        size = sub_02070D94();
+        size = BoxPokemon_sizeof();
         mons = (u8 *)summary->args->party;
         if (GetBoxMonData((BoxPokemon *)(mons + slot * size), MON_DATA_SPECIES, NULL) != SPECIES_NONE) {
             if (GetBoxMonData((BoxPokemon *)(mons + slot * size), MON_DATA_IS_EGG, NULL) == 0 || PokemonSummary_CanShowEgg(summary) == TRUE) {
@@ -356,11 +356,11 @@ void *PokemonSummary_GetShownMon(PokemonSummary *summary) {
     PokemonSummaryArgs *args = summary->args;
     switch (args->unk11) {
     case 0:
-        return (u8 *)args->party + args->partySlot * sub_02070D90();
+        return (u8 *)args->party + args->partySlot * Pokemon_sizeof();
     case 1:
         return Party_GetMonByIndex(args->party, args->partySlot);
     case 2:
-        return (u8 *)args->party + args->partySlot * sub_02070D94();
+        return (u8 *)args->party + args->partySlot * BoxPokemon_sizeof();
     default:
         return NULL;
     }

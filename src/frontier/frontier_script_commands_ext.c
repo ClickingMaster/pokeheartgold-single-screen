@@ -514,8 +514,8 @@ BOOL FrtCmd_115(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(system->frontierWork);
     FrontierScript_ReadVarPtr(ctx);
-    sub_0201A728(4);
-    sub_0201A748(system->heapId);
+    Sys_SetSoftResetDisableFlag(4);
+    Sys_SetAsyncSaveMarker(system->heapId);
     Save_PrepareForAsyncWrite(args->saveData, 2);
     FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitSave);
     return TRUE;
@@ -524,13 +524,13 @@ BOOL FrtCmd_115(FrontierScriptContext *ctx) {
 BOOL FrontierScriptNative_WaitSave(FrontierScriptContext *ctx) {
     int result = Save_WriteFileAsync(Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork)->saveData);
     if (result == 2) {
-        sub_0201A774();
-        sub_0201A738(4);
+        Sys_ClearAsyncSaveMarker();
+        Sys_ClearSoftResetDisableFlag(4);
         return TRUE;
     }
     if (result == 3) {
-        sub_0201A774();
-        sub_0201A738(4);
+        Sys_ClearAsyncSaveMarker();
+        Sys_ClearSoftResetDisableFlag(4);
         return TRUE;
     }
     return FALSE;

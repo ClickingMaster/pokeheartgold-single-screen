@@ -50,34 +50,34 @@ struct System {
     u16 touchHeld;
     u8 touchpadReadAuto;
     u8 screensFlipped;
-    u8 unk6A;
+    u8 agbCartridgeVersion;
     u8 lidClosedPauseDisabled;
     u8 softResetDisabled;
     BOOL unk70;
-    u32 *unk74;
+    u32 *asyncSaveMarker;
 }; // size=0x478
 
 extern struct System gSystem;
 
-void sub_0201A0E0(void);
+void SetVBlankIntrToDmaOnly(void);
 void Main_SetVBlankIntrCB(GFIntrCB cb, void *arg);
 void HBlankInterruptDisable(void);
 BOOL Main_SetHBlankIntrCB(GFIntrCB cb, void *arg);
 void InitSystemForTheGame(void);
 void InitGraphicMemory(void);
 void *Sys_AllocAndReadFile(enum HeapID heapID, const char *path);
-void sub_0201A3F8(const char *path, void **mem);
-void sub_0201A430(void);
+void Sys_ReadFileIntoBuffer(const char *path, void **mem);
+void FreeFileCache(void);
 void InitKeypadAndTouchpad(void);
-void sub_0201A4B0(int a0);
+void Sys_SetAgbCartridgeVersion(int a0);
 void Sys_SetSleepDisableFlag(int a0);
 void Sys_ClearSleepDisableFlag(int a0);
 void ReadKeypadAndTouchpad(void);
 void SetKeyRepeatTimers(int cont, int start);
-void sub_0201A728(int a0);
-void sub_0201A738(int a0);
-void sub_0201A748(enum HeapID heapID);
-void sub_0201A774(void);
-BOOL sub_0201A79C(void);
+void Sys_SetSoftResetDisableFlag(int a0);
+void Sys_ClearSoftResetDisableFlag(int a0);
+void Sys_SetAsyncSaveMarker(enum HeapID heapID);
+void Sys_ClearAsyncSaveMarker(void);
+BOOL Sys_IsAsyncSaveInProgress(void);
 
 #endif // POKEHEARTGOLD_SYSTEM_H

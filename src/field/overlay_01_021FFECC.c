@@ -87,7 +87,7 @@ void ov01_021FFF5C(LocalMapObject *mapObject, int a1) {
     int z = MapObject_GetZCoord(mapObject);
 
     SetPositionToTileCenter(x, z, &temp);
-    sub_0206121C(fieldSystem, &temp);
+    FieldSystem_SnapToTerrainHeight(fieldSystem, &temp);
 
     temp2.unk0 = a1;
     temp2.manager = manager;
@@ -114,7 +114,7 @@ static BOOL ov01_021FFFCC(FieldEffect *effect, UnkOv01_021FFFCD *a1) {
 static BOOL ov01_021FFFFC(FieldEffect *effect, UnkOv01_021FFFCD *a1) {
     LocalMapObject *mapObject = a1->args.mapObject;
 
-    BOOL val = sub_0205F0A8(mapObject, a1->localMapObjectId, a1->mapId);
+    BOOL val = MapObject_CheckIDAndMap(mapObject, a1->localMapObjectId, a1->mapId);
     if (val == TRUE) {
         return HiddenObjectMovement_SetCoverEffect(mapObject, 0);
     }

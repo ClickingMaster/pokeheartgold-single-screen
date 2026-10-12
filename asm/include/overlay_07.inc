@@ -161,10 +161,10 @@
 .public GetMonData
 .public GetMonSpriteCharAndPlttNarcIdsEx
 .public GetMonPicHeightBySpeciesGenderForm
-.public sub_02071FDC
-.public sub_020729D8
-.public sub_020729FC
-.public sub_02072A20
+.public PlayCryHandleChatot
+.public NARC_ReadPokepicShadowHeight
+.public NARC_ReadPokepicShadowXOffset
+.public NARC_ReadPokepicShadowSize
 .public sub_02091084
 .public sub_0209109C
 .public FX_Div

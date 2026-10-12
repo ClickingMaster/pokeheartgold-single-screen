@@ -262,7 +262,7 @@ void UnionRoomObjects_UpdateMapObjects(UnionRoomObjects *objects, MapObjectManag
                     MapObject_ClearHeldMovementIfActive(object);
                     MapObject_SetFlag19(object, FALSE);
                     if (cursor->slots[0].request == 1 && cursor->slots[0].isWandering == 0) {
-                        sub_0205FC94(object, 3);
+                        MapObject_ChangeMovement(object, 3);
                         MapObject_SetXRange(object, 1);
                         MapObject_SetYRange(object, 1);
                         cursor->slots[0].isWandering = 1;
@@ -334,7 +334,7 @@ void UnionRoomSlot_Appear(UnionRoomSlot *slot, LocalMapObject *object, u32 x, u3
 
     if (initialX != x || initialZ != z) {
         PlaySE(0x64E);
-        sub_0205E3AC(object, slot->sprite);
+        MapObject_ChangeSprite(object, slot->sprite);
         UnionRoomSlot_DestroyEffects(slot, FALSE);
         MapObject_SetPositionFromXYZAndDirection(object, initialX, initialY, initialZ, TRUE);
         MapObject_SetFacingDirectionDirect(object, TRUE);
@@ -356,7 +356,7 @@ void UnionRoomSlot_Appear(UnionRoomSlot *slot, LocalMapObject *object, u32 x, u3
 void UnionRoomSlot_Leave(UnionRoomSlot *slot, LocalMapObject *object) {
     MapObject_SetHeldMovement(object, 0x43);
     MapObject_SetFlag19(object, TRUE);
-    sub_0205FC94(object, 0);
+    MapObject_ChangeMovement(object, 0);
     UnionRoomSlot_DestroyEffects(slot, TRUE);
     slot->emoteActive = 0;
     slot->emoteTimer = 0;
@@ -396,7 +396,7 @@ void UnionRoomObjects_RestoreAfterScript(MapObjectManager *mapObjectManager, Uni
                 if (slot->state == 1) {
                     object = MapObjectManager_GetFirstActiveObjectByID(mapObjectManager, i + 1);
                     GF_ASSERT(object != NULL);
-                    sub_0205E3AC(object, slot->sprite);
+                    MapObject_ChangeSprite(object, slot->sprite);
                     MapObject_SetFacingDirectionDirect(object, TRUE);
                     MapObject_SetHeldMovement(object, 0x44);
                     MapObject_SetVisible(object, FALSE);

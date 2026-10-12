@@ -59,8 +59,8 @@
 .public FillWindowPixelRect
 .public TextPrinterCheckActive
 .public AddTextPrinterParameterizedWithColor
-.public sub_02021AC8
-.public sub_02021B5C
+.public ObjCharTransfer_ReserveCharSpace
+.public ObjCharTransfer_FreeCharSpace
 .public ObjCharTransfer_PopTaskManager
 .public ObjCharTransfer_PushTaskManager
 .public Sprite_SetPalOffsetRespectVramOffset
@@ -91,9 +91,9 @@
 .public PCStorage_SetActiveBox
 .public Pokemon_GetIconNaix
 .public Pokemon_GetIconPalette
-.public sub_02074490
-.public sub_0207449C
-.public sub_020744A8
+.public GetMonIconPlttNaix
+.public GetMonIconCell64KNaix
+.public GetMonIconAnim64KNaix
 .public Party_AddMon
 .public Party_GetMonByIndex
 .public Pokedex_IsNatDexEnabled

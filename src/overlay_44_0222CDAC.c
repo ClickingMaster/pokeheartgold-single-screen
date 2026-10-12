@@ -29,7 +29,7 @@
 #include "text.h"
 #include "touch_hitbox_controller.h"
 #include "sound_playback.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "oam_manager.h"
 #include "font_sprite.h"
 #include "touchpad.h"
@@ -4831,8 +4831,8 @@ void ov44_02231420(UnkStruct_ov44_022319EC *arg0, NARC *arg1, enum HeapID arg2) 
     arg0->unkB1C.unk20C[3] = AddCellOrAnimResObjFromOpenNarc(arg0->unk2BC[3], arg1, NARC_a_0_4_2, FALSE, 30, GF_GFX_RES_TYPE_ANIM, arg2);
     GF_ASSERT(SpriteTransfer_CreateCharTransferTask_UpdateMappingTypeFromHW_AllocAtEnd(arg0->unkB1C.unk20C[0]) != 0);
     GF_ASSERT(SpriteTransfer_CreatePlttTransferTask(arg0->unkB1C.unk20C[1]) != 0);
-    sub_0200A740(arg0->unkB1C.unk20C[0]);
-    sub_0200A740(arg0->unkB1C.unk20C[1]);
+    GF2DGfxResObj_FreeData(arg0->unkB1C.unk20C[0]);
+    GF2DGfxResObj_FreeData(arg0->unkB1C.unk20C[1]);
 
     SpriteResourcesHeader spriteResourcesHeader;
     CreateSpriteResourcesHeader(&spriteResourcesHeader, 30, 30, 30, 30, -1, -1, 0, 0, arg0->unk2BC[0], arg0->unk2BC[1], arg0->unk2BC[2], arg0->unk2BC[3], 0, 0);
@@ -4853,7 +4853,7 @@ void ov44_02231420(UnkStruct_ov44_022319EC *arg0, NARC *arg1, enum HeapID arg2) 
     AddTextPrinterParameterizedWithColor(&window, 2, string, FontID_String_GetCenterAlignmentX(2, string, 0, 64), 0, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     String_Delete(string);
     TextOBJLayout *temp_r0_4 = TextOBJLayout_New(&window, arg2);
-    GF_ASSERT(sub_02021AC8(TextOBJLayout_GetCharSize(temp_r0_4, NNS_G2D_VRAM_TYPE_2DSUB), TRUE, NNS_G2D_VRAM_TYPE_2DSUB, &arg0->unkB1C.unk228) != 0);
+    GF_ASSERT(ObjCharTransfer_ReserveCharSpace(TextOBJLayout_GetCharSize(temp_r0_4, NNS_G2D_VRAM_TYPE_2DSUB), TRUE, NNS_G2D_VRAM_TYPE_2DSUB, &arg0->unkB1C.unk228) != 0);
 
     TextOBJTemplate textObjTemplate;
     textObjTemplate.fontSystem = arg0->unk2CC;
@@ -4878,7 +4878,7 @@ void ov44_02231420(UnkStruct_ov44_022319EC *arg0, NARC *arg1, enum HeapID arg2) 
 void ov44_022316B0(UnkStruct_ov44_022319EC *arg0) {
     TouchHitboxController_Destroy(arg0->unkB1C.unk244);
     TextOBJ_Destroy(arg0->unkB1C.unk234);
-    sub_02021B5C(&arg0->unkB1C.unk228);
+    ObjCharTransfer_FreeCharSpace(&arg0->unkB1C.unk228);
 
     for (s32 i = 0; i < 3; i++) {
         Sprite_Delete(arg0->unkB1C.unk21C[i]);

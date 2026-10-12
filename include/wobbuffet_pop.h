@@ -226,7 +226,7 @@ typedef struct WobbuffetPopBonusPopup {
 // A text OBJ made by WobbuffetPop_NewTextObj.
 typedef struct WobbuffetPopTextObj {
     TextOBJ *textObj;             // 0x00
-    UnkStruct_02021AC8 charAlloc; // 0x04
+    ObjCharSpaceReservation charAlloc; // 0x04
     u16 width;                    // 0x10
     u8 unk_12[2];                 // 0x12
 } WobbuffetPopTextObj;

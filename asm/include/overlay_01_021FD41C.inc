@@ -4,7 +4,7 @@
 .public SysTask_Destroy
 .public GF_RTC_GetTimeOfDay
 .public MapObject_GetPriorityPlusValue
-.public sub_0205F0F8
+.public MapObject_CheckSpriteIDAndMap
 .public MapObjectManager_GetPriority
 .public MapObject_TestFlagsBits
 .public MapObject_GetID
@@ -12,7 +12,7 @@
 .public MapObject_GetSpriteID
 .public MapObject_GetFacingDirection
 .public sub_0205F544
-.public sub_0205F5E8
+.public MapObject_GetManagerFlagsBitsMask
 .public MapObject_CheckFlag25
 .public MapObject_CopyPositionVector
 .public FieldEffect_GetParam

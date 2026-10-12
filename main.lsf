@@ -32,7 +32,7 @@ Static main
     Object src/gf_gfx_loader.o
     Object src/pokepic.o
     Object src/unk_02009D48.o
-    Object src/unk_0200A090.o
+    Object src/sprite_resource.o
     Object src/sprite_transfer.o
     Object src/oam_manager.o
     Object asm/oam_manager_data.o
@@ -53,7 +53,7 @@ Static main
     Object src/screen_window_wipe.o
     Object src/font_sprite.o
     Object asm/font_sprite_data.o
-    Object src/unk_02013FDC.o
+    Object src/char_tiles.o
     Object src/gf_rtc.o
     Object src/list_menu_items.o
     Object src/scanline_effect.o

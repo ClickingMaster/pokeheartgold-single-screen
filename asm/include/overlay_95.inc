@@ -152,11 +152,11 @@
 .public SetMonData
 .public GetMonNature
 .public GetPokemonSpriteCharAndPlttNarcIds
-.public sub_0207083C
+.public GetBoxMonPicHeight
 .public Mon_GetBoxMon
 .public NARC_ReadPokepicAnimScript
-.public sub_0207294C
-.public sub_020729A4
+.public NARC_StartPokepicAnim
+.public NARC_ReadPokepicCryDelay
 .public NNS_G2dSetupSoftwareSpriteCamera
 .public G2x_SetBlendAlpha_
 .public G3X_SetFog

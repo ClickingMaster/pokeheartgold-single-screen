@@ -75,7 +75,7 @@ typedef struct BattleInputMoveMemory {
 
 typedef struct BattleInputTextObject {
     TextOBJ *textObj;
-    UnkStruct_02021AC8 unk4;
+    ObjCharSpaceReservation unk4;
     u16 fontLength;
 } BattleInputTextObject;
 

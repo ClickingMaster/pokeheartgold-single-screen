@@ -1,5 +1,5 @@
-#ifndef POKEHEARTGOLD_UNK_02013FDC_H
-#define POKEHEARTGOLD_UNK_02013FDC_H
+#ifndef POKEHEARTGOLD_CHAR_TILES_H
+#define POKEHEARTGOLD_CHAR_TILES_H
 
 #include "filesystem.h"
 
@@ -22,4 +22,4 @@ void sub_02014540(NarcId narcId, s32 fileId, enum HeapID heapID, void *dest, u32
 void *sub_0201457C(NarcId narcId, s32 fileId, enum HeapID heapID, u32 personality, BOOL isAnimated, int whichFacing, int species);
 void sub_020145B4(const void *texSrc, int texDim, int x, int y, int w, int h, void *dest);
 
-#endif // POKEHEARTGOLD_UNK_02013FDC_H
+#endif // POKEHEARTGOLD_CHAR_TILES_H

@@ -185,8 +185,8 @@
 .public GF_TouchpadResetSampling
 .public GF_TouchpadStartSampling
 .public GF_TouchpadStopSampling
-.public sub_02021AC8
-.public sub_02021B5C
+.public ObjCharTransfer_ReserveCharSpace
+.public ObjCharTransfer_FreeCharSpace
 .public GfGfx_SetBanks
 .public GfGfx_EngineATogglePlanes
 .public GfGfx_EngineASetPlanes
@@ -245,9 +245,9 @@
 .public PCStorage_SetBoxModified
 .public Boxmon_GetIconNaix
 .public Boxmon_GetIconPalette
-.public sub_02074490
-.public sub_0207449C
-.public sub_020744A8
+.public GetMonIconPlttNaix
+.public GetMonIconCell64KNaix
+.public GetMonIconAnim64KNaix
 .public Party_AddMon
 .public Party_RemoveMon
 .public Party_GetCount

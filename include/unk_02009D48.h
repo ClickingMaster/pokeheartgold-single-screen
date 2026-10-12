@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_UNK_02009D48_H
 #define POKEHEARTGOLD_UNK_02009D48_H
 
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 typedef struct SpriteResourcesHeader {
     const NNSG2dImageProxy *imageProxy;

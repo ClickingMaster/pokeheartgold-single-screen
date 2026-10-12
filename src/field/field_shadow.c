@@ -239,11 +239,11 @@ void FieldShadowEffect_Destroy(FieldEffect *effect, FieldShadowEffect *work) {
 void FieldShadowEffect_Update(FieldEffect *effect, FieldShadowEffect *work) {
     VecFx32 pos;
     LocalMapObject *object = work->args.mapObject;
-    if (!sub_0205F0F8(object, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(object, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
-    if (sub_0205F5E8(object, (MapObjectFlagBits)8)) {
+    if (MapObject_GetManagerFlagsBitsMask(object, (MapObjectFlagBits)8)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
@@ -337,7 +337,7 @@ void ov01_021FD8E8(LocalMapObject *object, int index) {
 void ov01_021FD92C(FieldEffect *effect, FieldShadowEffect *work) {
     VecFx32 pos;
     LocalMapObject *object = work->args.mapObject;
-    if (!sub_0205F0F8(object, work->spriteId, work->objectId, work->mapId)) {
+    if (!MapObject_CheckSpriteIDAndMap(object, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }

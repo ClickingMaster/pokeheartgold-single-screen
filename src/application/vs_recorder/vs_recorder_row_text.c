@@ -59,7 +59,7 @@ void VsRecorder_CreateMenuRowText(VsRecorderWork *work) {
             AddTextWindowTopLeftCorner(work->bgConfig, &window, 20, 2, 0, 0);
             rows[j]->textLayout = TextOBJLayout_New(&window, HEAP_ID_109);
             size = FontOAM_GetCharSize(&window, vrams.v[j], HEAP_ID_109);
-            sub_02021AC8(size, TRUE, vrams.v[j], &rows[j]->charAlloc);
+            ObjCharTransfer_ReserveCharSpace(size, TRUE, vrams.v[j], &rows[j]->charAlloc);
             ManagedSprite_GetPositionXY(rows[j]->sprite, &x, &y);
             template.fontSystem = work->fontSystem;
             template.window = &window;

@@ -157,8 +157,8 @@ _020FCD4C:
 	.word 0x00000003
 	.word sub_02061B2C
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCD60:
 	.word 0x00000036
@@ -172,14 +172,14 @@ _020FCD74:
 	.word FollowPlayerMovement_Init
 	.word FollowPlayerMovement_Update
 	.word FollowPlayerMovement_Delete
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpRestore
 
 _020FCD88:
 	.word 0x00000003
 	.word sub_02061B1C
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCD9C:
 	.word 0x00000035
@@ -192,8 +192,8 @@ _020FCDB0:
 	.word 0x00000003
 	.word sub_020616F0
 	.word sub_020616FC
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCDC4:
 	.word 0x00000033
@@ -206,309 +206,309 @@ _020FCDD8:
 	.word 0x00000003
 	.word sub_02061B6C
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCDEC:
 	.word 0x00000003
 	.word FollowPlayerMovement_Init
 	.word FollowPlayerMovement_UpdateMirror
 	.word FollowPlayerMovement_Delete
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpRestore
 
 _020FCE00:
 	.word 0x00000003
 	.word sub_02061B7C
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCE14:
 	.word 0x00000003
 	.word sub_02061B8C
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCE28:
 	.word 0x00000003
 	.word sub_02061B9C
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCE3C:
 	.word 0x00000003
 	.word sub_02061BAC
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCE50:
 	.word 0x00000003
 	.word sub_02061BCC
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCE64:
 	.word 0x00000003
 	.word sub_02061BDC
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCE78:
 	.word 0x00000003
 	.word sub_02061BEC
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCE8C:
 	.word 0x00000003
 	.word sub_02061BFC
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCEA0:
 	.word 0x00000003
 	.word sub_02061C0C
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCEB4:
 	.word 0x00000003
 	.word sub_02061D80
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCEC8:
 	.word 0
-	.word sub_0205FCB4
-	.word sub_0205FCB8
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpInit
+	.word MapObjectMovement_NoOpUpdate
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCEDC:
 	.word 0x00000001
-	.word sub_0205FCB4
-	.word sub_0205FCB8
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpInit
+	.word MapObjectMovement_NoOpUpdate
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCEF0:
 	.word 0x00000003
 	.word sub_02061D90
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCF04:
 	.word 0x00000003
 	.word sub_02061BBC
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCF18:
 	.word 0x00000003
 	.word sub_02061DA0
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCF2C:
 	.word 0x00000003
 	.word sub_020613C0
 	.word sub_020613F8
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCF40:
 	.word 0x00000003
 	.word sub_02061DB0
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCF54:
 	.word 0x00000003
 	.word sub_02061DC0
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCF68:
 	.word 0x00000003
 	.word sub_020612D8
-	.word sub_02061338
-	.word sub_0206139C
-	.word sub_0205FCC0
+	.word RandomLookMovement_Update
+	.word RandomLookMovement_Delete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCF7C:
 	.word 0x00000003
 	.word sub_02061B5C
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCF90:
 	.word 0x00000003
 	.word sub_02061B4C
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCFA4:
 	.word 0x00000003
 	.word sub_02061B3C
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCFB8:
 	.word 0x00000003
 	.word sub_020612E4
-	.word sub_02061338
-	.word sub_0206139C
-	.word sub_0205FCC0
+	.word RandomLookMovement_Update
+	.word RandomLookMovement_Delete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCFCC:
 	.word 0x00000003
 	.word sub_02061DD0
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCFE0:
 	.word 0x00000003
 	.word sub_0206197C
 	.word sub_0206199C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FCFF4:
 	.word 0x00000003
 	.word sub_02061844
 	.word sub_02061850
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD008:
 	.word 0x00000003
 	.word sub_02061DE0
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD01C:
 	.word 0x00000003
 	.word sub_020616E4
 	.word sub_020616FC
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD030:
 	.word 0x00000003
 	.word sub_020616B4
 	.word sub_0206166C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD044:
 	.word 0x00000003
 	.word sub_020616A8
 	.word sub_0206166C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD058:
 	.word 0x00000003
 	.word sub_02061314
-	.word sub_02061338
-	.word sub_0206139C
-	.word sub_0205FCC0
+	.word RandomLookMovement_Update
+	.word RandomLookMovement_Delete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD06C:
 	.word 0x00000003
 	.word sub_02061DF0
 	.word sub_02061C1C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD080:
 	.word 0x00000003
 	.word sub_02061320
-	.word sub_02061338
-	.word sub_0206139C
-	.word sub_0205FCC0
+	.word RandomLookMovement_Update
+	.word RandomLookMovement_Delete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD094:
 	.word 0x00000003
 	.word sub_0206132C
-	.word sub_02061338
-	.word sub_0206139C
-	.word sub_0205FCC0
+	.word RandomLookMovement_Update
+	.word RandomLookMovement_Delete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD0A8:
 	.word 0x00000003
 	.word FollowPlayerMovement_Init
 	.word FollowPlayerMovement_UpdateFollowMon
 	.word FollowPlayerMovement_Delete
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpRestore
 
 _020FD0BC:
 	.word 0x00000003
 	.word sub_02061308
-	.word sub_02061338
-	.word sub_0206139C
-	.word sub_0205FCC0
+	.word RandomLookMovement_Update
+	.word RandomLookMovement_Delete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD0D0:
 	.word 0x00000003
 	.word sub_020612FC
-	.word sub_02061338
-	.word sub_0206139C
-	.word sub_0205FCC0
+	.word RandomLookMovement_Update
+	.word RandomLookMovement_Delete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD0E4:
 	.word 0x00000003
 	.word sub_020612F0
-	.word sub_02061338
-	.word sub_0206139C
-	.word sub_0205FCC0
+	.word RandomLookMovement_Update
+	.word RandomLookMovement_Delete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD0F8:
 	.word 0x00000003
 	.word sub_02061690
 	.word sub_0206166C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD10C:
 	.word 0x00000003
 	.word sub_0206169C
 	.word sub_0206166C
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD120:
 	.word 0x00000003
 	.word sub_020612CC
-	.word sub_02061338
-	.word sub_0206139C
-	.word sub_0205FCC0
+	.word RandomLookMovement_Update
+	.word RandomLookMovement_Delete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD134:
 	.word 0x00000003
 	.word sub_020612C0
-	.word sub_02061338
-	.word sub_0206139C
-	.word sub_0205FCC0
+	.word RandomLookMovement_Update
+	.word RandomLookMovement_Delete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD148:
 	.word 0x00000003
@@ -521,22 +521,22 @@ _020FD15C:
 	.word 0x00000003
 	.word sub_020613B0
 	.word sub_020613F8
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD170:
 	.word 0x00000003
 	.word sub_020613A0
 	.word sub_020613F8
-	.word sub_0205FCBC
-	.word sub_0205FCC0
+	.word MapObjectMovement_NoOpDelete
+	.word MapObjectMovement_NoOpRestore
 
 _020FD184:
 	.word 0x00000002
 	.word sub_020612B4
-	.word sub_02061338
-	.word sub_0206139C
-	.word sub_0205FCC0
+	.word RandomLookMovement_Update
+	.word RandomLookMovement_Delete
+	.word MapObjectMovement_NoOpRestore
 _020FD198:
 	.word _020FCCF8
 	.word _020FCD08
@@ -561,8 +561,8 @@ _020FD198:
 	.word _020FCBF8
 	.word _020FCCC8
 	.word 0
-	.public _020FD1F4
-_020FD1F4:
+	.public gMapObjectMovementCallbacks
+gMapObjectMovementCallbacks:
 	.word _020FCEC8
 	.word _020FCEDC
 	.word _020FD184

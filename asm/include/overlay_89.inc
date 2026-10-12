@@ -138,8 +138,8 @@
 .public GF_TouchpadResetSampling
 .public GF_TouchpadStartSampling
 .public GF_TouchpadStopSampling
-.public sub_02021AC8
-.public sub_02021B5C
+.public ObjCharTransfer_ReserveCharSpace
+.public ObjCharTransfer_FreeCharSpace
 .public GfGfx_SetBanks
 .public GfGfx_DisableEngineAPlanes
 .public GfGfx_EngineATogglePlanes

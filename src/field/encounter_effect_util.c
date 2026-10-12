@@ -112,7 +112,7 @@ void EncounterEffect_LoadSpriteResources(NARC *narc, EncounterEffectSpriteManage
     resources->resourceObjects[GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(spriteManager->resourceManagers[GF_GFX_RES_TYPE_CELL], narc, cellMember, FALSE, resourceId, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
     resources->resourceObjects[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(spriteManager->resourceManagers[GF_GFX_RES_TYPE_ANIM], narc, animMember, FALSE, resourceId, GF_GFX_RES_TYPE_ANIM, HEAP_ID_FIELD1);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(resources->resourceObjects[GF_GFX_RES_TYPE_CHAR]);
-    sub_0200A740(resources->resourceObjects[GF_GFX_RES_TYPE_CHAR]);
+    GF2DGfxResObj_FreeData(resources->resourceObjects[GF_GFX_RES_TYPE_CHAR]);
     SpriteTransfer_CreatePlttTransferTask(resources->resourceObjects[GF_GFX_RES_TYPE_PLTT]);
     CreateSpriteResourcesHeader(&resources->header, resourceId, resourceId, resourceId, resourceId, -1, -1, FALSE, 0, spriteManager->resourceManagers[GF_GFX_RES_TYPE_CHAR], spriteManager->resourceManagers[GF_GFX_RES_TYPE_PLTT], spriteManager->resourceManagers[GF_GFX_RES_TYPE_CELL], spriteManager->resourceManagers[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
 }

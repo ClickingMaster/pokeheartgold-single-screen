@@ -14,7 +14,7 @@ void VBlankCB_DmaTasksFramecounter(void);
 void VBlankCB_DmaOnly(void);
 void CallHBlankIntrCallback(void);
 void HBlankIntrRegsToggle(BOOL enable);
-void sub_0201A1B4(void);
+void InitHeapSystem(void);
 void ApplyButtonModeToInput(void);
 
 void VBlankCB_DmaTasksFramecounter(void) {
@@ -29,7 +29,7 @@ void VBlankCB_DmaOnly(void) {
     MI_WaitDma(GX_DEFAULT_DMAID);
 }
 
-void sub_0201A0E0(void) {
+void SetVBlankIntrToDmaOnly(void) {
     OS_DisableIrqMask(OS_IE_VBLANK);
     OS_SetIrqFunction(OS_IE_VBLANK, VBlankCB_DmaOnly);
     OS_EnableIrqMask(OS_IE_VBLANK);
@@ -90,7 +90,7 @@ static const struct HeapParam sDefaultHeapSpec[] = {
     { 0x11D000, OS_ARENA_MAIN },
 };
 
-void sub_0201A1B4(void) {
+void InitHeapSystem(void) {
     u32 lowEntropyBuffer[OS_LOW_ENTROPY_DATA_SIZE / sizeof(u32)];
     u8 digest[MATH_MD5_DIGEST_SIZE];
     u32 heap_size_pre;
@@ -119,7 +119,7 @@ void InitSystemForTheGame(void) {
     GX_SetPower(GX_POWER_ALL);
     GX_Init();
     OS_InitTick();
-    sub_0201A1B4();
+    InitHeapSystem();
     gSystem.mainTaskQueue = SysTaskQueue_PlacementNew(160, OS_AllocFromArenaLo(OS_ARENA_MAIN, SysTaskQueue_GetArenaSize(160), 4));
     gSystem.vblankTaskQueue = SysTaskQueue_PlacementNew(32, OS_AllocFromArenaLo(OS_ARENA_MAIN, SysTaskQueue_GetArenaSize(32), 4));
     gSystem.vwaitTaskQueue = SysTaskQueue_PlacementNew(32, OS_AllocFromArenaLo(OS_ARENA_MAIN, SysTaskQueue_GetArenaSize(32), 4));
@@ -142,7 +142,7 @@ void InitSystemForTheGame(void) {
     gSystem.hBlankIntr = NULL;
     gSystem.unk10 = NULL;
     gSystem.unk14 = NULL;
-    gSystem.unk74 = NULL;
+    gSystem.asyncSaveMarker = NULL;
     gSystem.vblankCounter = 0;
     gSystem.screensFlipped = 0;
     CARD_SetCacheFlushThreshold(0x500, 0x2400);
@@ -181,7 +181,7 @@ void *Sys_AllocAndReadFile(enum HeapID heapID, const char *path) {
     return ret;
 }
 
-void sub_0201A3F8(const char *path, void **mem) {
+void Sys_ReadFileIntoBuffer(const char *path, void **mem) {
     FSFile file;
     u32 size;
     FS_InitFile(&file);
@@ -194,7 +194,7 @@ void sub_0201A3F8(const char *path, void **mem) {
     }
 }
 
-void sub_0201A430(void) {
+void FreeFileCache(void) {
     int i;
 
     for (i = 127; i > -1; i--) {
@@ -230,8 +230,8 @@ void InitKeypadAndTouchpad(void) {
     }
 }
 
-void sub_0201A4B0(int a0) {
-    gSystem.unk6A = a0;
+void Sys_SetAgbCartridgeVersion(int a0) {
+    gSystem.agbCartridgeVersion = a0;
 }
 
 void Sys_SetSleepDisableFlag(int a0) {
@@ -358,29 +358,29 @@ void SetKeyRepeatTimers(int cont, int start) {
     gSystem.keyRepeatStartDelay = start;
 }
 
-void sub_0201A728(int a0) {
+void Sys_SetSoftResetDisableFlag(int a0) {
     gSystem.softResetDisabled |= a0;
 }
 
-void sub_0201A738(int a0) {
+void Sys_ClearSoftResetDisableFlag(int a0) {
     gSystem.softResetDisabled &= ~a0;
 }
 
-void sub_0201A748(enum HeapID heapID) {
-    GF_ASSERT(gSystem.unk74 == NULL);
-    gSystem.unk74 = Heap_AllocAtEnd(heapID, sizeof(u32));
-    *gSystem.unk74 = 0x2F93A1BC;
+void Sys_SetAsyncSaveMarker(enum HeapID heapID) {
+    GF_ASSERT(gSystem.asyncSaveMarker == NULL);
+    gSystem.asyncSaveMarker = Heap_AllocAtEnd(heapID, sizeof(u32));
+    *gSystem.asyncSaveMarker = 0x2F93A1BC;
 }
 
-void sub_0201A774(void) {
-    GF_ASSERT(gSystem.unk74 != NULL);
-    *gSystem.unk74 = 0;
-    Heap_Free(gSystem.unk74);
-    gSystem.unk74 = NULL;
+void Sys_ClearAsyncSaveMarker(void) {
+    GF_ASSERT(gSystem.asyncSaveMarker != NULL);
+    *gSystem.asyncSaveMarker = 0;
+    Heap_Free(gSystem.asyncSaveMarker);
+    gSystem.asyncSaveMarker = NULL;
 }
 
-BOOL sub_0201A79C(void) {
-    if (gSystem.unk74 != NULL && *gSystem.unk74 == 0x2F93A1BC) {
+BOOL Sys_IsAsyncSaveInProgress(void) {
+    if (gSystem.asyncSaveMarker != NULL && *gSystem.asyncSaveMarker == 0x2F93A1BC) {
         return TRUE;
     } else {
         return FALSE;

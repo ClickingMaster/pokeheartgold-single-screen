@@ -42,9 +42,9 @@
 	.public _020FE0C4
 	.public _020FE0D4
 	.public _020FE0E4
-	.public _020FE104
-	.public _020FE134
-	.public _020FE164
+	.public gMapObjectTypeBehaviorInits
+	.public gMapObjectTypeBehaviorChecks
+	.public gMapObjectTypeBehaviorUpdates
 	.public _020FE194
 	.public _020FE1A4
 
@@ -65,48 +65,48 @@ _020FE0E4:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00
-	.public _020FE104
-_020FE104:
-	.word sub_02063AFC
-	.word sub_02063AFC
-	.word sub_02063AFC
-	.word sub_02063AFC
+	.public gMapObjectTypeBehaviorInits
+gMapObjectTypeBehaviorInits:
+	.word TypeBehavior_NoOpInit
+	.word TypeBehavior_NoOpInit
+	.word TypeBehavior_NoOpInit
+	.word TypeBehavior_NoOpInit
 	.word sub_02063B08
 	.word sub_02063C88
 	.word sub_02063C88
-	.word sub_02063AFC
-	.word sub_02063AFC
-	.word sub_02063AFC
-	.word sub_02063AFC
-	.word sub_02063AFC
-	.public _020FE134
-_020FE134:
-	.word sub_02063B00
-	.word sub_02063B00
-	.word sub_02063B00
-	.word sub_02063B00
+	.word TypeBehavior_NoOpInit
+	.word TypeBehavior_NoOpInit
+	.word TypeBehavior_NoOpInit
+	.word TypeBehavior_NoOpInit
+	.word TypeBehavior_NoOpInit
+	.public gMapObjectTypeBehaviorChecks
+gMapObjectTypeBehaviorChecks:
+	.word TypeBehavior_NoOpCheck
+	.word TypeBehavior_NoOpCheck
+	.word TypeBehavior_NoOpCheck
+	.word TypeBehavior_NoOpCheck
 	.word sub_02063B20
 	.word sub_02063CB4
 	.word sub_02063CB4
-	.word sub_02063B00
-	.word sub_02063B00
-	.word sub_02063B00
-	.word sub_02063B00
-	.word sub_02063B00
-	.public _020FE164
-_020FE164:
-	.word sub_02063B04
-	.word sub_02063B04
-	.word sub_02063B04
-	.word sub_02063B04
+	.word TypeBehavior_NoOpCheck
+	.word TypeBehavior_NoOpCheck
+	.word TypeBehavior_NoOpCheck
+	.word TypeBehavior_NoOpCheck
+	.word TypeBehavior_NoOpCheck
+	.public gMapObjectTypeBehaviorUpdates
+gMapObjectTypeBehaviorUpdates:
+	.word TypeBehavior_NoOpUpdate
+	.word TypeBehavior_NoOpUpdate
+	.word TypeBehavior_NoOpUpdate
+	.word TypeBehavior_NoOpUpdate
 	.word sub_02063B9C
 	.word sub_02063D30
 	.word sub_02063D30
-	.word sub_02063B04
-	.word sub_02063B04
-	.word sub_02063B04
-	.word sub_02063B04
-	.word sub_02063B04
+	.word TypeBehavior_NoOpUpdate
+	.word TypeBehavior_NoOpUpdate
+	.word TypeBehavior_NoOpUpdate
+	.word TypeBehavior_NoOpUpdate
+	.word TypeBehavior_NoOpUpdate
 	; File boundary?
 	.public _020FE194
 _020FE194:

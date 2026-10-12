@@ -47,7 +47,7 @@ FS_EXTERN_OVERLAY(OVY_25);
 // map_object_follow_2.c / r40_unk_020659A8_run1.c / map_object_follow_3.c (no header).
 u8 FollowPlayerMovement_GetHopFrame(LocalMapObject *object);
 u32 FollowPlayerMovement_GetHopSpeed(LocalMapObject *object);
-void sub_020659B8(LocalMapObject *object);
+void FollowPlayerMovement_DisableBallEffect(LocalMapObject *object);
 // unk_02062108.c: the movement for a direction (movement + direction).
 u32 GetMovementForDirection(u32 direction, u32 movement);
 // field object models (still in asm or crammed).
@@ -64,7 +64,7 @@ NNSG3dTexKey BillboardObject_GetTexKey(void *billboard);
 void *Texture_GetPaletteData(NNSG3dResTex *texture, u32 index);
 void *Texture_GetImageData(NNSG3dResTex *texture, u32 index);
 
-// The render data of the map object manager (sub_0205F1A0); only the billboard sequence bank is used here.
+// The render data of the map object manager (MapObjectManager_GetRender); only the billboard sequence bank is used here.
 typedef struct MapObjectRenderData {
     u8 unk00[0xFC];
     ResourceBank *sequenceBank;
@@ -362,12 +362,12 @@ BOOL FollowMon_CheckVisibleFlag(FieldSystem *fieldSystem) {
 }
 
 void ov01_022057D0(FieldSystem *fieldSystem) {
-    sub_020659B8(FollowMon_GetMapObject(fieldSystem));
+    FollowPlayerMovement_DisableBallEffect(FollowMon_GetMapObject(fieldSystem));
 }
 
 #pragma force_active on
 void ov01_022057DC(MapObjectManager *manager) {
-    BillboardSequenceData *sequence = ResourceBank_Get(((MapObjectRenderData *)sub_0205F1A0(manager))->sequenceBank, BILLBOARD_SEQUENCE_FOLLOW_MON_ALT);
+    BillboardSequenceData *sequence = ResourceBank_Get(((MapObjectRenderData *)MapObjectManager_GetRender(manager))->sequenceBank, BILLBOARD_SEQUENCE_FOLLOW_MON_ALT);
     int count = sequence->count, i;
     u8 *flags = (u8 *)(sequence->frames + count);
     flags += count;
@@ -395,7 +395,7 @@ void ov01_02205808(BOOL alternate, LocalMapObject *object, void *billboard) {
 }
 
 void ov01_02205870(BOOL alternate, LocalMapObject *object, void *billboard, void *record) {
-    MapObjectRenderData *renderData = sub_0205F1A0(MapObject_GetManager(object));
+    MapObjectRenderData *renderData = MapObjectManager_GetRender(MapObject_GetManager(object));
     void *sequence = ResourceBank_Get(renderData->sequenceBank, alternate ? BILLBOARD_SEQUENCE_FOLLOW_MON_ALT : BILLBOARD_SEQUENCE_FOLLOW_MON);
     BillboardGfxSequence_Init(sequence, (u8 *)record + 0xC);
 }
@@ -717,7 +717,7 @@ BOOL ov01_02205F00(TaskManager *taskMan) {
     switch (*state) {
     case 0:
         FollowPlayerMovement_Reset(fieldSystem->followMon.mapObject);
-        sub_0205F484(fieldSystem->followMon.mapObject);
+        MapObject_CallDrawUpdate(fieldSystem->followMon.mapObject);
         ++*state;
         break;
     case 1:

@@ -2750,9 +2750,9 @@ void BattlePartyMenu_LoadMonIconResources(BattlePartyMenu *menu) {
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(menu->context->battleSystem);
     u32 i;
 
-    SpriteSystem_LoadPaletteBufferFromOpenNarc(menu->paletteData, PLTTBUF_SUB_OBJ, spriteSystem, menu->spriteManager, narc, sub_02074490(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, 0xB007);
-    SpriteSystem_LoadCellResObjFromOpenNarc(spriteSystem, menu->spriteManager, narc, sub_02074498(), FALSE, 0xB007);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, menu->spriteManager, narc, sub_020744A4(), FALSE, 0xB007);
+    SpriteSystem_LoadPaletteBufferFromOpenNarc(menu->paletteData, PLTTBUF_SUB_OBJ, spriteSystem, menu->spriteManager, narc, GetMonIconPlttNaix(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, 0xB007);
+    SpriteSystem_LoadCellResObjFromOpenNarc(spriteSystem, menu->spriteManager, narc, GetMonIconCell32KNaix(), FALSE, 0xB007);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, menu->spriteManager, narc, GetMonIconAnim32KNaix(), FALSE, 0xB007);
     for (i = 0; i < 6; i++) {
         if (menu->mons[i].species != SPECIES_NONE) {
             SpriteSystem_LoadCharResObjFromOpenNarc(spriteSystem, menu->spriteManager, narc, Pokemon_GetIconNaix(menu->mons[i].mon), FALSE, NNS_G2D_VRAM_TYPE_2DSUB, 0xB007 + i);

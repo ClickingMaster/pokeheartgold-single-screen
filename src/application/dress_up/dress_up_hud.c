@@ -19,7 +19,7 @@
 #include "sys_task_api.h"
 #include "text.h"
 #include "unk_02009D48.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 
 // Editor sub screen (message box, accessory count meter, an unused countdown with its pulse tween), message and
 // sprite resource helpers shared by the buttons, and the backdrop animation of the finished design.
@@ -303,11 +303,11 @@ void DressUpHud_DestroyCountIcons(DressUpCountIcons *icons, GF_2DGfxResMan **res
 void DressUp_LoadSpriteRes(SpriteResource **resources, GF_2DGfxResMan **resMans, enum HeapID heapID, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttCount, int baseId) {
     resources[GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_CHAR], narc, charFileId, FALSE, baseId + charFileId, NNS_G2D_VRAM_TYPE_2DSUB, heapID);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(resources[GF_GFX_RES_TYPE_CHAR]);
-    sub_0200A740(resources[GF_GFX_RES_TYPE_CHAR]);
+    GF2DGfxResObj_FreeData(resources[GF_GFX_RES_TYPE_CHAR]);
 
     resources[GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_PLTT], narc, plttFileId, FALSE, baseId + plttFileId, NNS_G2D_VRAM_TYPE_2DSUB, plttCount, heapID);
     SpriteTransfer_CreatePlttTransferTask(resources[GF_GFX_RES_TYPE_PLTT]);
-    sub_0200A740(resources[GF_GFX_RES_TYPE_PLTT]);
+    GF2DGfxResObj_FreeData(resources[GF_GFX_RES_TYPE_PLTT]);
 
     resources[GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_CELL], narc, cellFileId, FALSE, baseId + cellFileId, GF_GFX_RES_TYPE_CELL, heapID);
     resources[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_ANIM], narc, animFileId, FALSE, baseId + animFileId, GF_GFX_RES_TYPE_ANIM, heapID);

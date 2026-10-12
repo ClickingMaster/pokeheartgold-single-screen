@@ -247,7 +247,7 @@ void BattleCastle_ReviveParty(Party *party) {
 
 void BattleCastle_SetMonOriginalTrainer(BattleCastleData *data, Pokemon *mon) {
     PlayerProfile *profile = Save_PlayerData_GetProfile(data->saveData);
-    sub_0207217C(mon, profile, 4, 0, 0, HEAP_ID_FIELD2);
+    MonSetCatchDataNoHealBall(mon, profile, 4, 0, 0, HEAP_ID_FIELD2);
 }
 
 void BattleCastle_AddMonToParty(BattleCastleData *data, Party *party, Pokemon *mon) {

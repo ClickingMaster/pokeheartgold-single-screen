@@ -17,7 +17,7 @@
 #include "pokemon.h"
 #include "pokemon_icon_idx.h"
 #include "text.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 
 // Bitmaps of the upload image (asm data).
 extern const u8 ov112_021F5588[];

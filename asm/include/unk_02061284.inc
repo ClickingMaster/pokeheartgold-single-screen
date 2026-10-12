@@ -21,9 +21,9 @@
 .public MapObject_GetParam
 .public MapObject_GetXRange
 .public MapObject_GetYRange
-.public sub_0205F328
-.public sub_0205F370
-.public sub_0205F394
+.public MapObject_SetAnimation
+.public MapObject_InitMovementData
+.public MapObject_GetMovementData
 .public MapObject_GetFieldSystem
 .public MapObject_SetSingleMovement
 .public MapObject_ClearSingleMovement
@@ -50,8 +50,8 @@
 .public sub_02061314
 .public sub_02061320
 .public sub_0206132C
-.public sub_02061338
-.public sub_0206139C
+.public RandomLookMovement_Update
+.public RandomLookMovement_Delete
 .public sub_020613A0
 .public sub_020613B0
 .public sub_020613C0
@@ -98,7 +98,7 @@
 .public MapObject_RunForcedMovement
 .public _s32_div_f
 
-	.public sub_02061284
+	.public RandomLookMovement_Init
 	.public sub_020613D0
 	.public MapObject_GetMovementBounds
 	.public MapObject_IsWithinMovementBounds

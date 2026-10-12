@@ -6,7 +6,7 @@
 .public BillboardObject_SetVisible
 .public BillboardObject_GetModel
 .public GF_AssertFail
-.public sub_0205F0A8
+.public MapObject_CheckIDAndMap
 .public MapObject_GetID
 .public MapObject_GetMapID
 .public MapObject_GetPriority

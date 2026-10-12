@@ -99,8 +99,8 @@
 .public Main_SetVBlankIntrCB
 .public HBlankInterruptDisable
 .public SetKeyRepeatTimers
-.public sub_0201A728
-.public sub_0201A738
+.public Sys_SetSoftResetDisableFlag
+.public Sys_ClearSoftResetDisableFlag
 .public Heap_Create
 .public Heap_Destroy
 .public Heap_Alloc

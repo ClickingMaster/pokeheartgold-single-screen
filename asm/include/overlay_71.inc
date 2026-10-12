@@ -139,9 +139,9 @@
 .public GetBoxMonData
 .public GetMonBaseStat_HandleAlternateForm
 .public GetBoxmonSpriteCharAndPlttNarcIds
-.public sub_02070854
+.public GetBoxMonPicHeightEx
 .public NARC_ReadPokepicAnimScript
-.public sub_020729A4
+.public NARC_ReadPokepicCryDelay
 .public NNS_G2dSetupSoftwareSpriteCamera
 .public NNS_G2dInitOamManagerModule
 .public NNS_G2dInitImageProxy

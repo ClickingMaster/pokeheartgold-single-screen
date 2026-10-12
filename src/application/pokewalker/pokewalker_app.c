@@ -48,7 +48,7 @@ BOOL PokewalkerApp_Init(OverlayManager *manager, int *state) {
     *(volatile u32 *)0x04001000 &= 0xFFFFE0FF;
     *(volatile u16 *)0x04000050 = 0;
     *(volatile u16 *)0x04001050 = 0;
-    sub_0201A728(0x10);
+    Sys_SetSoftResetDisableFlag(0x10);
     Heap_Create(HEAP_ID_3, HEAP_ID_154, 0x70000);
     app = OverlayManager_CreateAndGetData(manager, sizeof(PokewalkerApp), HEAP_ID_154);
     memset(app, 0, sizeof(PokewalkerApp));
@@ -143,7 +143,7 @@ BOOL PokewalkerApp_Exit(OverlayManager *manager, int *state) {
     OverlayManager_FreeData(manager);
     Main_SetVBlankIntrCB(NULL, NULL);
     Heap_Destroy(HEAP_ID_154);
-    sub_0201A738(0x10);
+    Sys_ClearSoftResetDisableFlag(0x10);
     RegisterMainOverlay(FS_OVERLAY_ID(intro_title), &gApplication_TitleScreen);
     return TRUE;
 }

@@ -772,7 +772,7 @@ static void ov62_021E61AC(MicTestInput *input, enum HeapID heapID, MICCallback a
     input->mic.full_callback = a2;
     input->mic.full_arg = micTest;
 
-    input->unk34 = sub_02005518();
+    input->unk34 = Sound_IsMicCounterFull();
 }
 
 static void ov62_021E61FC(MicTestInput *input) {
@@ -781,7 +781,7 @@ static void ov62_021E61FC(MicTestInput *input) {
 }
 
 static void ov62_021E620C(MicTestInput *input) {
-    u32 next = sub_02005518();
+    u32 next = Sound_IsMicCounterFull();
 
     if (next == 0 || input->unk34 == 0) {
         if (input->unk30 == 0) {

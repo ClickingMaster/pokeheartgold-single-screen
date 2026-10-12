@@ -7,7 +7,7 @@
 .public BillboardObject_SetFrame
 .public BillboardObject_GetSequenceFrame
 .public MapObject_GetPriorityPlusValue
-.public sub_0205F0F8
+.public MapObject_CheckSpriteIDAndMap
 .public MapObject_TestFlagsBits
 .public MapObject_GetID
 .public MapObject_GetMapID
@@ -18,7 +18,7 @@
 .public MapObject_GetZCoord
 .public MapObject_CopyPositionVector
 .public MapObject_GetPositionVectorYCoord
-.public sub_0206121C
+.public FieldSystem_SnapToTerrainHeight
 .public FieldEffect_GetParam
 .public FieldEffect_GetUserData
 .public FieldEffect_SetPosition

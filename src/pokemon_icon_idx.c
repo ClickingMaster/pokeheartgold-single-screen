@@ -37,7 +37,7 @@ u32 GetMonIconNaixEx(u32 species, BOOL isEgg, u32 form) {
         }
     }
 
-    form = sub_02070438(species, form);
+    form = SanitizeMonForm(species, form);
     if (form != 0) {
         if (species == SPECIES_DEOXYS) {
             return form + 503 - 1;
@@ -68,12 +68,12 @@ u32 GetMonIconNaixEx(u32 species, BOOL isEgg, u32 form) {
 u32 GetBattleMonIconNaixEx(u32 species, BOOL isEgg, u32 form) {
     if (!isEgg) {
         if (species == SPECIES_CASTFORM) {
-            form = sub_02070438(species, form);
+            form = SanitizeMonForm(species, form);
             if (form != 0) {
                 return form + 547 - 1;
             }
         } else if (species == SPECIES_CHERRIM) {
-            form = sub_02070438(species, form);
+            form = SanitizeMonForm(species, form);
             if (form != 0) {
                 return form + 550 - 1;
             }
@@ -713,30 +713,30 @@ const u8 Pokemon_GetIconPalette(Pokemon *mon) {
     return Boxmon_GetIconPalette(Mon_GetBoxMon(mon));
 }
 
-u32 sub_02074490(void) {
+u32 GetMonIconPlttNaix(void) {
     return 0;
 }
 
-u32 sub_02074494(void) {
+u32 GetMonIconStaticCellNaix(void) {
     return 2;
 }
 
-u32 sub_02074498(void) {
+u32 GetMonIconCell32KNaix(void) {
     return 4;
 }
 
-u32 sub_0207449C(void) {
+u32 GetMonIconCell64KNaix(void) {
     return 6;
 }
 
-u32 sub_020744A0(void) {
+u32 GetMonIconStaticAnimNaix(void) {
     return 1;
 }
 
-u32 sub_020744A4(void) {
+u32 GetMonIconAnim32KNaix(void) {
     return 3;
 }
 
-u32 sub_020744A8(void) {
+u32 GetMonIconAnim64KNaix(void) {
     return 5;
 }

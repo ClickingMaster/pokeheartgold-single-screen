@@ -7,7 +7,7 @@
 #include "overlay_42.h"
 #include "overlay_44_02232E9C.h"
 #include "sprite_transfer.h"
-#include "unk_0200A090.h"
+#include "sprite_resource.h"
 #include "vram_transfer_manager.h"
 
 typedef struct UnkStruct_ov44_0223560F {
@@ -415,8 +415,8 @@ void ov44_0223237C(UnkStruct_ov44_02231A7C *arg0, enum HeapID heapID, NARC *narc
     arg0->unk13C[3] = AddCellOrAnimResObjFromOpenNarc(arg0->unk12C[3], narc, NARC_a_0_4_0, FALSE, 50, GF_GFX_RES_TYPE_ANIM, heapID);
     GF_ASSERT(SpriteTransfer_CreateCharTransferTask_AllocAtEnd(arg0->unk13C[0]) == TRUE);
     GF_ASSERT(SpriteTransfer_CreatePlttTransferTask(arg0->unk13C[1]) == TRUE);
-    sub_0200A740(arg0->unk13C[0]);
-    sub_0200A740(arg0->unk13C[1]);
+    GF2DGfxResObj_FreeData(arg0->unk13C[0]);
+    GF2DGfxResObj_FreeData(arg0->unk13C[1]);
     CreateSpriteResourcesHeader(&arg0->unk14C, 50, 50, 50, 50, -1, -1, 0, 2, arg0->unk12C[0], arg0->unk12C[1], arg0->unk12C[2], arg0->unk12C[3], 0, 0);
 }
 

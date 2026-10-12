@@ -302,8 +302,8 @@ ov01_022071C8:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x5C, 0x00, 0x00, 0x00, 0x5F, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 
-	.public ov01_0220724C
-ov01_0220724C:
+	.public gCameraFocusObjectDrawCallbacks
+gCameraFocusObjectDrawCallbacks:
 	.word CameraFocusObject_Init
 	.word CameraFocusObject_Update
 	.word CameraFocusObject_Delete
@@ -1340,8 +1340,8 @@ ov01_022074A8: ; 0x022074A8
 
 	.data
 
-	.public ov01_02209A38
-ov01_02209A38:
+	.public gMapObjectDrawCallbacks
+gMapObjectDrawCallbacks:
 	.word ov01_02206D28
 	.word ov01_02206DB4
 	.word ov01_02206DC8

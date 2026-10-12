@@ -2,7 +2,7 @@
 #pragma once
 .public SysTask_CreateOnVWaitQueue
 .public SysTask_Destroy
-.public sub_0201A3F8
+.public Sys_ReadFileIntoBuffer
 .public Heap_AllocAtEnd
 .public Heap_Free
 .public GF_AssertFail

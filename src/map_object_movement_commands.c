@@ -357,7 +357,7 @@ BOOL MapObjectMovementCmd098_Step2(LocalMapObject *object) {
 
 void MapObject_StartFaceMovement(LocalMapObject *object, u32 direction) {
     MapObject_SetFacingDirection(object, direction);
-    sub_0205F328(object, 0);
+    MapObject_SetAnimation(object, 0);
     MapObject_SetPreviousCoordsToCurrent(object);
     MapObject_IncrementMovementStep(object);
 }
@@ -383,7 +383,7 @@ BOOL MapObjectMovementCmd003_Step0(LocalMapObject *object) {
 }
 
 void MapObject_StartWalkMovement(LocalMapObject *object, u32 direction, u32 distance, s32 duration, u16 animation) {
-    WalkMovementWork *work = (WalkMovementWork *)sub_0205F3C0(object, sizeof(WalkMovementWork));
+    WalkMovementWork *work = (WalkMovementWork *)MapObject_InitMovementCmdData(object, sizeof(WalkMovementWork));
 
     work->animation = animation;
     work->timer = duration;
@@ -391,13 +391,13 @@ void MapObject_StartWalkMovement(LocalMapObject *object, u32 direction, u32 dist
     work->distance = distance;
     MapObject_MoveCoordsInDirection(object, direction);
     MapObject_SetOrQueueFacing(object, direction);
-    sub_0205F328(object, animation);
+    MapObject_SetAnimation(object, animation);
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_START_MOVEMENT);
     MapObject_IncrementMovementStep(object);
 }
 
 BOOL MapObjectMovementCmd090_Step1(LocalMapObject *object) {
-    WalkMovementWork *work = (WalkMovementWork *)sub_0205F3E4(object);
+    WalkMovementWork *work = (WalkMovementWork *)MapObject_GetMovementCmdData(object);
 
     MapObject_OffsetPositionInDirection(object, work->direction, work->distance);
     MapObject_UpdateHeight(object);
@@ -407,8 +407,8 @@ BOOL MapObjectMovementCmd090_Step1(LocalMapObject *object) {
     }
     MapObject_SetFlagsBits(object, (MapObjectFlagBits)(MAPOBJECTFLAG_END_MOVEMENT | MAPOBJECTFLAG_UNK5));
     MapObject_SetPreviousCoordsToCurrent(object);
-    sub_0205F484(object);
-    sub_0205F328(object, 0);
+    MapObject_CallDrawUpdate(object);
+    MapObject_SetAnimation(object, 0);
     MapObject_IncrementMovementStep(object);
     return TRUE;
 }
@@ -554,25 +554,25 @@ BOOL MapObjectMovementCmd091_Step0(LocalMapObject *object) {
 }
 
 void MapObject_StartWalkInPlaceMovement(LocalMapObject *object, int direction, int duration, int animation) {
-    WalkInPlaceMovementWork *work = (WalkInPlaceMovementWork *)sub_0205F3C0(object, sizeof(WalkInPlaceMovementWork));
+    WalkInPlaceMovementWork *work = (WalkInPlaceMovementWork *)MapObject_InitMovementCmdData(object, sizeof(WalkInPlaceMovementWork));
 
     work->animation = animation;
     work->timer = duration + 1;
     MapObject_SetFacingDirection(object, direction);
-    sub_0205F328(object, animation);
+    MapObject_SetAnimation(object, animation);
     MapObject_SetPreviousCoordsToCurrent(object);
     MapObject_IncrementMovementStep(object);
 }
 
 BOOL MapObjectMovementCmd040_Step1(LocalMapObject *object) {
-    WalkInPlaceMovementWork *work = (WalkInPlaceMovementWork *)sub_0205F3E4(object);
+    WalkInPlaceMovementWork *work = (WalkInPlaceMovementWork *)MapObject_GetMovementCmdData(object);
 
     work->timer--;
     if (work->timer > 0) {
         return FALSE;
     }
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK5);
-    sub_0205F328(object, 0);
+    MapObject_SetAnimation(object, 0);
     MapObject_IncrementMovementStep(object);
     return TRUE;
 }
@@ -678,7 +678,7 @@ BOOL MapObjectMovementCmd043_Step0(LocalMapObject *object) {
 }
 
 void MapObject_StartJumpMovement(LocalMapObject *object, s8 direction, int distance, s8 duration, u16 animation, s16 heightTable, u16 heightStep) {
-    JumpMovementWork *work = (JumpMovementWork *)sub_0205F3C0(object, sizeof(JumpMovementWork));
+    JumpMovementWork *work = (JumpMovementWork *)MapObject_InitMovementCmdData(object, sizeof(JumpMovementWork));
 
     work->direction = direction;
     work->distance = distance;
@@ -693,7 +693,7 @@ void MapObject_StartJumpMovement(LocalMapObject *object, s8 direction, int dista
     }
     MapObject_SetFlagsBits(object, (MapObjectFlagBits)(MAPOBJECTFLAG_UNK16 | MAPOBJECTFLAG_START_MOVEMENT));
     MapObject_SetOrQueueFacing(object, direction);
-    sub_0205F328(object, animation);
+    MapObject_SetAnimation(object, animation);
     MapObject_IncrementMovementStep(object);
     if (!MapObject_CheckVisible(object)) {
         PlaySE(SEQ_SE_DP_DANSA);
@@ -703,7 +703,7 @@ void MapObject_StartJumpMovement(LocalMapObject *object, s8 direction, int dista
 #pragma force_active on
 
 BOOL MapObjectMovementCmd092_Step1(LocalMapObject *object) {
-    JumpMovementWork *work = (JumpMovementWork *)sub_0205F3E4(object);
+    JumpMovementWork *work = (JumpMovementWork *)MapObject_GetMovementCmdData(object);
     VecFx32 offset;
 
     if (work->distance) {
@@ -745,8 +745,8 @@ BOOL MapObjectMovementCmd092_Step1(LocalMapObject *object) {
     }
     MapObject_SetFlagsBits(object, (MapObjectFlagBits)(MAPOBJECTFLAG_UNK17 | MAPOBJECTFLAG_END_MOVEMENT | MAPOBJECTFLAG_UNK5));
     MapObject_SetPreviousCoordsToCurrent(object);
-    sub_0205F484(object);
-    sub_0205F328(object, 0);
+    MapObject_CallDrawUpdate(object);
+    MapObject_SetAnimation(object, 0);
     MapObject_IncrementMovementStep(object);
     if (!MapObject_CheckVisible(object)) {
         PlaySE(SEQ_SE_DP_SUTYA2);
@@ -857,14 +857,14 @@ BOOL MapObjectMovementCmd095_Step0(LocalMapObject *object) {
 }
 
 void MapObject_StartDelayMovement(LocalMapObject *object, s32 duration) {
-    s32 *timer = (s32 *)sub_0205F3C0(object, sizeof(s32));
+    s32 *timer = (s32 *)MapObject_InitMovementCmdData(object, sizeof(s32));
 
     *timer = duration;
     MapObject_IncrementMovementStep(object);
 }
 
 BOOL MapObjectMovementCmd064_Step1(LocalMapObject *object) {
-    s32 *timer = (s32 *)sub_0205F3E4(object);
+    s32 *timer = (s32 *)MapObject_GetMovementCmdData(object);
 
     if (*timer != 0) {
         (*timer)--;
@@ -910,15 +910,15 @@ BOOL MapObjectMovementCmd066_Step0(LocalMapObject *object) {
 }
 
 BOOL MapObjectMovementCmd067_Step0(LocalMapObject *object) {
-    RiseMovementWork *work = (RiseMovementWork *)sub_0205F3C0(object, sizeof(RiseMovementWork));
+    RiseMovementWork *work = (RiseMovementWork *)MapObject_InitMovementCmdData(object, sizeof(RiseMovementWork));
     work->delta = FX32_ONE * 16;
-    sub_0205F328(object, 0);
+    MapObject_SetAnimation(object, 0);
     MapObject_IncrementMovementStep(object);
     return TRUE;
 }
 
 BOOL MapObjectMovementCmd067_Step1(LocalMapObject *object) {
-    RiseMovementWork *work = (RiseMovementWork *)sub_0205F3E4(object);
+    RiseMovementWork *work = (RiseMovementWork *)MapObject_GetMovementCmdData(object);
     work->height += work->delta;
     VecFx32 offset = { 0, 0, 0 };
     offset.y = work->height;
@@ -931,16 +931,16 @@ BOOL MapObjectMovementCmd067_Step1(LocalMapObject *object) {
 }
 
 BOOL MapObjectMovementCmd068_Step0(LocalMapObject *object) {
-    RiseMovementWork *work = (RiseMovementWork *)sub_0205F3C0(object, sizeof(RiseMovementWork));
+    RiseMovementWork *work = (RiseMovementWork *)MapObject_InitMovementCmdData(object, sizeof(RiseMovementWork));
     work->height = FX32_ONE * 320;
     work->delta = -FX32_ONE * 16;
-    sub_0205F328(object, 0);
+    MapObject_SetAnimation(object, 0);
     MapObject_IncrementMovementStep(object);
     return TRUE;
 }
 
 BOOL MapObjectMovementCmd068_Step1(LocalMapObject *object) {
-    RiseMovementWork *work = (RiseMovementWork *)sub_0205F3E4(object);
+    RiseMovementWork *work = (RiseMovementWork *)MapObject_GetMovementCmdData(object);
     work->height += work->delta;
     if (work->height < 0) {
         work->height = 0;
@@ -992,14 +992,14 @@ BOOL MapObjectMovementCmd074_Step0(LocalMapObject *object) {
 }
 
 void MapObject_StartEmoteMovement(LocalMapObject *object, u32 type) {
-    EmoteMovementWork *work = (EmoteMovementWork *)sub_0205F3C0(object, sizeof(EmoteMovementWork));
+    EmoteMovementWork *work = (EmoteMovementWork *)MapObject_InitMovementCmdData(object, sizeof(EmoteMovementWork));
     work->type = type;
     work->effect = EmoteMark_Spawn(object, type, 1);
     MapObject_IncrementMovementStep(object);
 }
 
 BOOL MapObjectMovementCmd075_Step1(LocalMapObject *object) {
-    EmoteMovementWork *work = (EmoteMovementWork *)sub_0205F3E4(object);
+    EmoteMovementWork *work = (EmoteMovementWork *)MapObject_GetMovementCmdData(object);
     if (EmoteMark_IsDone(work->effect) == TRUE) {
         FieldEffect_Destroy(work->effect);
         MapObject_IncrementMovementStep(object);
@@ -1019,19 +1019,19 @@ BOOL MapObjectMovementCmd103_Step0(LocalMapObject *object) {
 }
 
 void MapObject_StartVariableSpeedWalk(LocalMapObject *object, u32 direction, u32 count, u32 animation) {
-    VariableSpeedWalkWork *work = (VariableSpeedWalkWork *)sub_0205F3C0(object, sizeof(VariableSpeedWalkWork));
+    VariableSpeedWalkWork *work = (VariableSpeedWalkWork *)MapObject_InitMovementCmdData(object, sizeof(VariableSpeedWalkWork));
     work->direction = direction;
     work->animation = animation;
     work->count = count;
     MapObject_MoveCoordsInDirection(object, direction);
     MapObject_SetOrQueueFacing(object, direction);
-    sub_0205F328(object, animation);
+    MapObject_SetAnimation(object, animation);
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_START_MOVEMENT);
     MapObject_IncrementMovementStep(object);
 }
 
 BOOL MapObject_UpdateVariableSpeedWalk(LocalMapObject *object, const u32 *distances) {
-    VariableSpeedWalkWork *work = (VariableSpeedWalkWork *)sub_0205F3E4(object);
+    VariableSpeedWalkWork *work = (VariableSpeedWalkWork *)MapObject_GetMovementCmdData(object);
     MapObject_OffsetPositionInDirection(object, work->direction, distances[work->index]);
     MapObject_UpdateHeight(object);
     work->index++;
@@ -1040,8 +1040,8 @@ BOOL MapObject_UpdateVariableSpeedWalk(LocalMapObject *object, const u32 *distan
     }
     MapObject_SetFlagsBits(object, (MapObjectFlagBits)(MAPOBJECTFLAG_END_MOVEMENT | MAPOBJECTFLAG_UNK5));
     MapObject_SetPreviousCoordsToCurrent(object);
-    sub_0205F484(object);
-    sub_0205F328(object, 0);
+    MapObject_CallDrawUpdate(object);
+    MapObject_SetAnimation(object, 0);
     MapObject_IncrementMovementStep(object);
     return TRUE;
 }
@@ -1128,18 +1128,18 @@ BOOL MapObjectMovementCmd098_Step1(LocalMapObject *object) {
 }
 
 BOOL MapObjectMovementCmd100_Step0(LocalMapObject *object) {
-    sub_0205F3C0(object, sizeof(s32));
-    sub_0205F328(object, 9);
+    MapObject_InitMovementCmdData(object, sizeof(s32));
+    MapObject_SetAnimation(object, 9);
     MapObject_IncrementMovementStep(object);
     return FALSE;
 }
 
 BOOL MapObjectMovementCmd100_Step1(LocalMapObject *object) {
-    s32 *timer = (s32 *)sub_0205F3E4(object);
+    s32 *timer = (s32 *)MapObject_GetMovementCmdData(object);
     (*timer)++;
     if (*timer >= 8) {
         MapObject_SetFacingDirection(object, DIR_SOUTH);
-        sub_0205F328(object, 0);
+        MapObject_SetAnimation(object, 0);
         MapObject_IncrementMovementStep(object);
     }
     return FALSE;
@@ -1148,7 +1148,7 @@ BOOL MapObjectMovementCmd100_Step1(LocalMapObject *object) {
 BOOL MapObjectMovementCmd101_Step0(LocalMapObject *object) {
     int effect;
 
-    sub_0205F3C0(object, sizeof(s32));
+    MapObject_InitMovementCmdData(object, sizeof(s32));
     effect = HiddenObjectMovement_GetCoverEffect(object);
     if (effect) {
         FieldEffect_Destroy(effect);
@@ -1163,7 +1163,7 @@ BOOL MapObjectMovementCmd101_Step0(LocalMapObject *object) {
 }
 
 BOOL MapObjectMovementCmd101_Step1(LocalMapObject *object) {
-    s32 *index = (s32 *)sub_0205F3E4(object);
+    s32 *index = (s32 *)MapObject_GetMovementCmdData(object);
     const fx32 *heights = gJumpHeightTables[0];
     VecFx32 offset = { 0, 0, 0 };
 
@@ -1182,21 +1182,21 @@ BOOL MapObjectMovementCmd101_Step1(LocalMapObject *object) {
 }
 
 BOOL MapObjectMovementCmd102_Step0(LocalMapObject *object) {
-    sub_0205F3C0(object, sizeof(u32));
-    sub_0205F328(object, 0);
+    MapObject_InitMovementCmdData(object, sizeof(u32));
+    MapObject_SetAnimation(object, 0);
     MapObject_IncrementMovementStep(object);
     return FALSE;
 }
 
 BOOL MapObjectMovementCmd104_Step0(LocalMapObject *object) {
-    sub_0205F3C0(object, sizeof(u32));
-    sub_0205F328(object, 1);
+    MapObject_InitMovementCmdData(object, sizeof(u32));
+    MapObject_SetAnimation(object, 1);
     MapObject_IncrementMovementStep(object);
     return FALSE;
 }
 
 BOOL MapObjectMovementCmd102_Step1(LocalMapObject *object) {
-    u32 *timer = (u32 *)sub_0205F3E4(object);
+    u32 *timer = (u32 *)MapObject_GetMovementCmdData(object);
     (*timer)++;
     if (*timer < 21) {
         return FALSE;
@@ -1211,7 +1211,7 @@ void MapObject_StartJumpByOffsetMovement(LocalMapObject *object, int dx, int dy,
     fx32 time;
     JumpByOffsetWork *work;
 
-    work = (JumpByOffsetWork *)sub_0205F3C0(object, sizeof(JumpByOffsetWork));
+    work = (JumpByOffsetWork *)MapObject_InitMovementCmdData(object, sizeof(JumpByOffsetWork));
     work->data = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(JumpOffsetData));
     MI_CpuFill8(work->data, 0, sizeof(JumpOffsetData));
     work->direction = direction;
@@ -1230,7 +1230,7 @@ void MapObject_StartJumpByOffsetMovement(LocalMapObject *object, int dx, int dy,
     MapObject_SetPreviousCoordsToCurrent(object);
     MapObject_SetFlagsBits(object, (MapObjectFlagBits)(MAPOBJECTFLAG_UNK16 | MAPOBJECTFLAG_START_MOVEMENT));
     MapObject_SetOrQueueFacing(object, direction);
-    sub_0205F328(object, animation);
+    MapObject_SetAnimation(object, animation);
     MapObject_IncrementMovementStep(object);
     if (!MapObject_CheckVisible(object)) {
         PlaySE(SEQ_SE_DP_DANSA);
@@ -1241,7 +1241,7 @@ void MapObject_StartJumpByOffsetMovement(LocalMapObject *object, int dx, int dy,
 
 BOOL MapObjectMovementCmd108_Step1(LocalMapObject *object) {
     VecFx32 position;
-    JumpByOffsetWork *work = (JumpByOffsetWork *)sub_0205F3E4(object);
+    JumpByOffsetWork *work = (JumpByOffsetWork *)MapObject_GetMovementCmdData(object);
     s64 progress;
     fx32 sine;
     fx32 targetY;
@@ -1256,7 +1256,7 @@ BOOL MapObjectMovementCmd108_Step1(LocalMapObject *object) {
     position.x = work->data->origin.x + (fx32)(((s64)work->data->stepX * progress + 0x800) >> 12);
     position.y = 0;
     position.z = work->data->origin.z + (fx32)(((s64)work->data->stepZ * progress + 0x800) >> 12);
-    if (sub_02061248(MapObject_GetFieldSystem(object), &position, MapObject_CheckFlag29(object))) {
+    if (FieldSystem_SnapToTerrainHeightEx(MapObject_GetFieldSystem(object), &position, MapObject_CheckFlag29(object))) {
         work->height = position.y;
     } else {
         position.y = work->height;
@@ -1268,7 +1268,7 @@ BOOL MapObjectMovementCmd108_Step1(LocalMapObject *object) {
     position.y = targetY - position.y;
     position.x = 0;
     position.z = 0;
-    sub_0205F9A0(object, &position);
+    MapObject_SetDrawOffset(object, &position);
     work->timer--;
     work->step++;
     if (work->timer > 0) {
@@ -1276,7 +1276,7 @@ BOOL MapObjectMovementCmd108_Step1(LocalMapObject *object) {
     }
     position.x = position.y = position.z = 0;
     MapObject_SetFacingVector(object, &position);
-    sub_0205F9A0(object, &position);
+    MapObject_SetDrawOffset(object, &position);
     MapObject_AddCurrentX(object, work->data->dx);
     MapObject_AddCurrentY(object, work->data->dy);
     MapObject_AddCurrentZ(object, work->data->dz);
@@ -1302,8 +1302,8 @@ BOOL MapObjectMovementCmd108_Step1(LocalMapObject *object) {
     MapObject_UpdateHeight(object);
     MapObject_SetFlagsBits(object, (MapObjectFlagBits)(MAPOBJECTFLAG_UNK17 | MAPOBJECTFLAG_END_MOVEMENT));
     MapObject_SetPreviousCoordsToCurrent(object);
-    sub_0205F484(object);
-    sub_0205F328(object, 0);
+    MapObject_CallDrawUpdate(object);
+    MapObject_SetAnimation(object, 0);
     MapObject_IncrementMovementStep(object);
     if (!MapObject_CheckVisible(object)) {
         PlaySE(SEQ_SE_DP_SUTYA2);

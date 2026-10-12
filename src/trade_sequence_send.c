@@ -270,7 +270,7 @@ BOOL TradeSequenceSend_ShowMessages(TradeSequenceSend *send, u32 *state) {
             if (GetBoxMonData(TradeSequence_GetSentBoxMon(send->ts), MON_DATA_IS_EGG, NULL) == FALSE) {
                 u8 cryDelay;
                 ((void (*)(Pokepic *, int))Pokepic_StartAnim)(send->pokepic, 1); // the original call passes a 2nd argument
-                sub_020729A4(send->pokeAnimNarc, &cryDelay, TradeSequence_GetSentSpecies(send->ts), 1);
+                NARC_ReadPokepicCryDelay(send->pokeAnimNarc, &cryDelay, TradeSequence_GetSentSpecies(send->ts), 1);
                 u16 species = TradeSequence_GetSentSpecies(send->ts);
                 PlayCryDelayed(species, cryDelay, (u8)TradeSequence_GetSentForm(send->ts));
             }
@@ -368,7 +368,7 @@ Pokepic *TradeSequenceSend_CreateMonPic(TradeSequenceSend *send) {
     GetBoxmonSpriteCharAndPlttNarcIds(&template, boxMon, 2, FALSE);
     NARC_ReadPokepicAnimScript(send->pokeAnimNarc, send->animScript, TradeSequence_GetSentSpecies(send->ts), 1);
     {
-        int y = sub_02070854(boxMon, 2, FALSE) + 80;
+        int y = GetBoxMonPicHeightEx(boxMon, 2, FALSE) + 80;
         return PokepicManager_CreatePokepic(send->pokepicManager, &template, 128, y, 0, 0, send->animScript, NULL);
     }
 }

@@ -12,7 +12,7 @@
 #include "bg_window.h"
 #include "pokemon_types_def.h"
 #include "sys_task.h"
-#include "unk_02013FDC.h"
+#include "char_tiles.h"
 
 typedef struct WaitingIcon WaitingIcon;
 typedef struct PokemonPicWindow PokemonPicWindow;

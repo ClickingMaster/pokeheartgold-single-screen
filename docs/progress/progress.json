@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "ae275d2effd9869ffa85af57f13d67321b75e326",
+  "commit": "e2cfbc69409fafe7ade50b959c333be8aa252a1f",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "38e60662ea71e48fae398e10fceba065b3b8487290a3d1af053576bfc63a992a",
+    "ARM9": "06b172eb88e94bd78e4e05e6429849e0743c6b395d9d28fc3302bdf5046b54a8",
     "ARM7": "d726d92f810e881692e1b4d2ec232d6ca89b38985dcb26b08751c0037036d92a"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -7305,6 +7305,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "char_tiles.o",
+      "bytes": 1610,
+      "status": "c",
+      "source": "src/char_tiles.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "check_savedata.o",
       "bytes": 1174,
       "status": "c",
@@ -12565,6 +12573,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "sprite_resource.o",
+      "bytes": 3110,
+      "status": "c",
+      "source": "src/sprite_resource.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "sprite_system.o",
       "bytes": 5080,
       "status": "c",
@@ -12889,22 +12905,6 @@
       "bytes": 840,
       "status": "c",
       "source": "src/unk_02009D48.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "unk_0200A090.o",
-      "bytes": 3110,
-      "status": "c",
-      "source": "src/unk_0200A090.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "unk_02013FDC.o",
-      "bytes": 1610,
-      "status": "c",
-      "source": "src/unk_02013FDC.c"
     },
     {
       "cpu": "ARM9",
