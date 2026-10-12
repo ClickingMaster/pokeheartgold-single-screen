@@ -9,25 +9,25 @@ void sub_0200FF5C(FadeBlankPair *data, int index) {
     data->values[index] = 0;
 }
 
-void sub_0200FF88(void *a0, u32 a1, u32 a2, u32 a3, enum HeapID heapId) {
-    FadeSetTaskData *data = Heap_AllocAtEnd(heapId, sizeof(FadeSetTaskData));
-    data->a0 = a0;
-    data->a1 = a1;
-    data->a2 = a2;
-    data->a3 = a3;
-    SysTask_CreateOnVWaitQueue(sub_0200FFD8, data, 0x400);
+void sub_0200FF88(void *blankPair, void *data, void (*callback)(void *data), int screen, enum HeapID heapId) {
+    FadeSetTaskData *task = Heap_AllocAtEnd(heapId, sizeof(FadeSetTaskData));
+    task->blankPair = blankPair;
+    task->data = data;
+    task->callback = callback;
+    task->screen = screen;
+    SysTask_CreateOnVWaitQueue(sub_0200FFD8, task, 0x400);
 }
 
-void sub_0200FFB4(FadeBlankPair *fade, int index, enum HeapID heapId) {
+void sub_0200FFB4(void *blankPair, int screen, enum HeapID heapId) {
     FadeClearTaskData *data = Heap_AllocAtEnd(heapId, sizeof(FadeClearTaskData));
-    data->data = fade;
-    data->index = index;
+    data->data = blankPair;
+    data->index = screen;
     SysTask_CreateOnVWaitQueue(sub_0200FFF8, data, 0x400);
 }
 
 void sub_0200FFD8(SysTask *task, void *arg) {
     FadeSetTaskData *data = arg;
-    sub_0200FEE4(data->a0, data->a1, data->a2, data->a3);
+    sub_0200FEE4(data->blankPair, data->data, data->callback, data->screen);
     SysTask_Destroy(task);
     Heap_Free(data);
 }
@@ -50,33 +50,36 @@ u16 sub_02010018(u8 *data, u16 color) {
 }
 
 u16 sub_0201002C(u8 *data) {
-    FadeParam *param;
+    ScreenFade *fade;
     if (*(u32 *)(data + 0xC) == 1) {
-        param = (FadeParam *)(data + 0x14);
+        fade = (ScreenFade *)(data + 0x14);
     } else {
-        param = (FadeParam *)(data + 0x44);
+        fade = (ScreenFade *)(data + 0x44);
     }
-    if (param->state == 1) {
-        return param->color;
+    if (fade->fadeOut == TRUE) {
+        return fade->color;
     }
     return *(u16 *)(data + 0x150);
 }
 
 void sub_02010050(SysTask *task, void *arg) {
-    FadeParam *param = arg;
-    SetMasterBrightness((PMLCDTarget)param->screen, 0);
+    ScreenFade *fade = arg;
+    SetMasterBrightness(fade->screen, 0);
     SysTask_Destroy(task);
 }
 
-void sub_02010064(FadeParam *param) {
-    if (param->state == 0 && (param->color == 0x7FFF || param->color == 0) && param->task == NULL) {
-        SysTask_CreateOnVWaitQueue(sub_02010050, param, 0x400);
+// A fade in from black or white done by a window wipe: the master brightness goes back to neutral on the next VBlank.
+void sub_02010064(ScreenFade *fade) {
+    if (fade->fadeOut == FALSE && (fade->color == RGB_WHITE || fade->color == RGB_BLACK) && !fade->isBrightnessFade) {
+        SysTask_CreateOnVWaitQueue(sub_02010050, fade, 0x400);
     }
 }
 
-void sub_02010094(FadeParam *param) {
-    if (param->state == 1 && (param->color == 0x7FFF || param->color == 0) && param->task == NULL) {
-        SetMasterBrightnessByColor((PMLCDTarget)param->screen, param->color);
-        ResetVisibleHardwareWindows((PMLCDTarget)param->screen);
+// A fade out to black or white done by a window wipe: the screen is left at full brightness of that color with
+// the windows off.
+void sub_02010094(ScreenFade *fade) {
+    if (fade->fadeOut == TRUE && (fade->color == RGB_WHITE || fade->color == RGB_BLACK) && !fade->isBrightnessFade) {
+        SetMasterBrightnessByColor((PMLCDTarget)fade->screen, fade->color);
+        ResetVisibleHardwareWindows((PMLCDTarget)fade->screen);
     }
 }

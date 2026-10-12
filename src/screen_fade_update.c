@@ -65,17 +65,17 @@ void sub_0200FE78(u32 *dst, u32 a1, u32 a2, u32 a3) {
     dst[4] = a3;
 }
 
-void sub_0200FE84(FadeParam *dst, u32 a1, u32 a2, u32 a3, u32 a4, u32 a5, u32 a6, u32 a7, u32 a8, u32 a9, u16 color) {
-    dst->unk00 = a1;
-    dst->unk04 = a2;
-    dst->unk08 = a3;
-    dst->unk0C = a4;
-    dst->unk14 = a5;
-    dst->screen = a6;
-    dst->unk18 = a7;
-    dst->unk1C = a8;
-    dst->unk20 = a9;
-    dst->color = color;
+void sub_0200FE84(ScreenFade *fade, u32 type, int steps, int framesPerStep, int state, void *effect, int screen, WindowRegisterQueue *regQueue, void *blankPair, enum HeapID heapId, u16 color) {
+    fade->type = type;
+    fade->steps = steps;
+    fade->framesPerStep = framesPerStep;
+    fade->state = state;
+    fade->effect = effect;
+    fade->screen = screen;
+    fade->regQueue = regQueue;
+    fade->blankPair = blankPair;
+    fade->heapId = heapId;
+    fade->color = color;
 }
 
 void sub_0200FEB0(FadeBlankPair *data) {
