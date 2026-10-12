@@ -6,7 +6,7 @@ void sub_02011DEC(FadeWork11DEC *work, const FadeConfig11DEC *config, s32 steps,
     s16 *buffer;
     s32 step = (config->end - config->start) / steps;
 
-    sub_02010E64(work, config->direction, arg4, arg7);
+    ScanlineBufferController_Init(work, config->direction, arg4, arg7);
     work->phase = 2 << 18;
     work->current = config->start;
     work->step = step;
@@ -27,5 +27,5 @@ void sub_02011DEC(FadeWork11DEC *work, const FadeConfig11DEC *config, s32 steps,
     } else {
         sub_02011068(arg5, 2, arg4, work->value);
     }
-    sub_0200FF88(work->arg6, (u32)work, (u32)sub_02010C38, arg4, arg7);
+    sub_0200FF88(work->arg6, (u32)work, (u32)ScanlineWindow_HBlankCallback, arg4, arg7);
 }

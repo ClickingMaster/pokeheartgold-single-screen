@@ -5,7 +5,7 @@ void sub_02011918(LocalFadeEffect *work, const LocalFadeParam *param, u32 repeat
     int step;
 
     step = sub_02010A6C(param->start, param->end, repeats);
-    sub_02010E64(work, param->direction, screen, heapId);
+    ScanlineBufferController_Init(work, param->direction, screen, heapId);
     work->current = param->start << 7;
     work->initial = param->initial;
     work->increment = param->increment;
@@ -26,5 +26,5 @@ void sub_02011918(LocalFadeEffect *work, const LocalFadeParam *param, u32 repeat
     } else {
         sub_02011068(arg5, 2, screen, work->value);
     }
-    sub_0200FF88(work->arg6, work, sub_02010C38, screen, heapId);
+    sub_0200FF88(work->arg6, work, ScanlineWindow_HBlankCallback, screen, heapId);
 }

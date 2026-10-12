@@ -21,7 +21,7 @@ void sub_02012090(EffectWork12090 *work, const EffectConfig12090 *config, u32 ar
             i++;
         } while (i < config->count);
     }
-    sub_02010E64(work, config->mode, arg4, heapId);
+    ScanlineBufferController_Init(work, config->mode, arg4, heapId);
     work->f[5] = arg2;
     work->f[6] = arg3;
     work->f[7] = 0;
@@ -38,5 +38,5 @@ void sub_02012090(EffectWork12090 *work, const EffectConfig12090 *config, u32 ar
     } else {
         sub_02011068((void *)work->f[9], 2, arg4, work->f[8]);
     }
-    sub_0200FF88((void *)work->f[10], work, sub_02010C38, arg4, heapId);
+    sub_0200FF88((void *)work->f[10], work, ScanlineWindow_HBlankCallback, arg4, heapId);
 }

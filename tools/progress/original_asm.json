@@ -277,28 +277,28 @@
   {
    "function": "OS_GetLockID",
    "cpu": "ARM9",
-   "source": "lib/NitroSDK/src/os/to91_w41407_spin_retained.c",
+   "source": "lib/NitroSDK/src/os/os_spin_lock_id.c",
    "kind": "asm",
    "reason": "clz (inline-asm only)"
   },
   {
    "function": "OS_ReleaseLockID",
    "cpu": "ARM9",
-   "source": "lib/NitroSDK/src/os/to91_w41407_spin_retained.c",
+   "source": "lib/NitroSDK/src/os/os_spin_lock_id.c",
    "kind": "asm",
    "reason": "mov rX,#0x80000000; mov rX,rX,lsr rN kept unfolded with pl/mi predicates; MWCC always folds a single-use shift into the orr operand and hoists the load"
   },
   {
    "function": "OS_UnLockCard",
    "cpu": "ARM9",
-   "source": "lib/NitroSDK/src/os/to91_w41407_spin_retained.c",
+   "source": "lib/NitroSDK/src/os/os_spin_lock_id.c",
    "kind": "asm",
    "reason": "tail jump via bx r1 (see OS_UnLockCartridge)"
   },
   {
    "function": "OS_UnLockCartridge",
    "cpu": "ARM9",
-   "source": "lib/NitroSDK/src/os/to91_w41407_spin_retained.c",
+   "source": "lib/NitroSDK/src/os/os_spin_lock_id.c",
    "kind": "asm",
    "reason": "tail jump via `ldr r1,=f; bx r1`: MWCC tail calls always go through ip (bx r1 occurs 0x in MWCC 2.0 ARM9 code)"
   },
@@ -802,14 +802,14 @@
   {
    "function": "_020D9960",
    "cpu": "ARM9",
-   "source": "src/op90_to90_extra2545_residual_2_r01.c",
+   "source": "lib/NitroSDK/src/dgt_hash2_arm4_small.c",
    "kind": "asm",
    "reason": "SHA-1 round constants in .text read by negative pc-relative loads from DGTi_hash2_arm4_small, which saves ip in its prologue (non-AAPCS) and keeps hash state in 5-register ldm/stm with ror"
   },
   {
    "function": "OSi_AlarmHandler",
    "cpu": "ARM9",
-   "source": "src/op90_to90_os_alarm_handler_r01.c",
+   "source": "lib/NitroSDK/src/os/os_alarm_irq_handler.c",
    "kind": "asm",
    "reason": "ARM9 `pop {..,lr}; bx lr` epilogue (MWCC 2.0 ARM9 always pops pc; 0 occurrences); push {r0,lr}; bl; pop {r0,lr}; bx lr: preserves r0 for the caller (non-AAPCS) and ARM9 pop-lr/bx epilogue"
   },
@@ -823,21 +823,21 @@
   {
    "function": "OSi_DoBoot",
    "cpu": "ARM9",
-   "source": "src/op90_to90_reset_boot_r01.c",
+   "source": "lib/NitroSDK/src/os/os_reset_boot.c",
    "kind": "asm",
    "reason": "11-register ldm/stm"
   },
   {
    "function": "OSi_CpuClear32",
    "cpu": "ARM9",
-   "source": "src/op90_to90_reset_clear32_r01.c",
+   "source": "lib/NitroSDK/src/os/os_reset_clear32.c",
    "kind": "asm",
    "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
   },
   {
    "function": "OS_ResetSystem",
    "cpu": "ARM9",
-   "source": "src/op90_to90_reset_reset_system_r01.c",
+   "source": "lib/NitroSDK/src/os/os_reset_system.c",
    "kind": "asm",
    "reason": "explicit sp manipulation (mov/ldr/sub sp,reg)"
   },

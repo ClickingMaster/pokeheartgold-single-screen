@@ -69,9 +69,9 @@ typedef struct EffectWork {
 void *sub_02010EE0(void *, int);
 void sub_02010A8C(void *, const void *);
 void sub_02010EC8(void *);
-void sub_02010E64(void *, int, u32, u32);
+void ScanlineBufferController_Init(void *, int, u32, u32);
 void sub_02010F00(SysTask *, void *);
-void sub_02010C38(void);
+void ScanlineWindow_HBlankCallback(void);
 void sub_02010F34(u32, void *, int);
 void sub_02010F84(void *, u8, u8, u32, u32, s32, s32, s32, s32, u32);
 void sub_02011068(void *, int, u32, u32);

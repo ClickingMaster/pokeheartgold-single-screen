@@ -281,7 +281,7 @@ $(BUILD_DIR)/lib/NitroSDK/src/snd/SND_command.o: lib/NitroSDK/src/snd/SND_comman
 
 $(BUILD_DIR)/lib/NitroSDK/src/os/os_spinLock.o: lib/NitroSDK/src/os/os_spinLock.snd-section-map.json tools/nitro-section-renames/rename_snd_sections.py
 
-$(BUILD_DIR)/lib/NitroSDK/src/os/to91_w41407_spin_retained.o: lib/NitroSDK/src/os/to91_w41407_spin_retained.snd-section-map.json tools/nitro-section-renames/rename_snd_sections.py
+$(BUILD_DIR)/lib/NitroSDK/src/os/os_spin_lock_id.o: lib/NitroSDK/src/os/os_spin_lock_id.snd-section-map.json tools/nitro-section-renames/rename_snd_sections.py
 
 $(BUILD_DIR)/src/to90_w41411_palette10_run01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
@@ -331,7 +331,7 @@ $(BUILD_DIR)/lib/MSL_C/src/msl_strtoull_core.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_strtoull_core.o: private EXCCFLAGS := -Cpp_exceptions on
 $(BUILD_DIR)/lib/MSL_C/src/msl_strtoul.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_strtoul.o: private EXCCFLAGS := -Cpp_exceptions on
-$(BUILD_DIR)/src/op90_to65_nitro_unified_residual_26_r01.o: private MWCCVER := 2.0/sp2
+$(BUILD_DIR)/lib/NitroSDK/src/rtc/rtc_convert_date_time_to_second.o: private MWCCVER := 2.0/sp2
 $(BUILD_DIR)/lib/libCPS/src/cps_startup.o: private MWCCVER := 2.0/sp1p5
 $(BUILD_DIR)/src/g2d_cell_culling.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/MSL_C/src/msl_strtold_core.o: private MWCCVER := 2.0/sp2p3
@@ -365,15 +365,15 @@ $(BUILD_DIR)/lib/NitroSDK/src/os/os_vram_exclusive_clz.o: private MWCCVER := 2.0
 $(BUILD_DIR)/lib/MSL_C/src/msl_semihosting.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_throw.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/ov45_02239df0.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_to90_os_alarm_handler_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/NitroSDK/src/os/os_alarm_irq_handler.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/fx/fx_mtx43_rot.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/fx/fx_mtx44_rot.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mi/mi_memory.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/fx/fx_mtx43_scale.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to90_extra2545_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to90_reset_reset_system_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to90_reset_boot_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to90_reset_clear32_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/NitroSDK/src/dgt_hash2_arm4_small.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/NitroSDK/src/os/os_reset_system.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/NitroSDK/src/os/os_reset_boot.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/NitroSDK/src/os/os_reset_clear32.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_transfer_control.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/math/math_qsort.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/src/nitrocrypto_rc4.o: private MWCCVER := 2.0/sp2p3

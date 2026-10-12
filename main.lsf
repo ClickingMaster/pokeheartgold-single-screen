@@ -61,10 +61,7 @@ Static main
     Object src/palette_fade_effects_2.o
     Object src/r40_unk_020109D8_run1.o
     Object src/palette_fade_effects_3.o
-    Object src/brightness_transition_1.o
-    Object src/to70_unk_02010AB0_extra78_run01.o
-    Object src/to80_extra1363_run01.o
-    Object src/brightness_transition_2.o
+    Object src/brightness_transition.o
     Object src/palette_fade_effects_4.o
     Object src/text_render_helpers_1.o
     Object src/palette_fade_effects_5.o
@@ -463,7 +460,6 @@ Static main
     Object src/field_effect_launch_1.o
     Object src/area_light_tasks_1.o
     Object src/legendary_cinematic_manager.o
-    Object asm/unk_02097B78_r40_residual_1.o
     Object src/field_cinematic_tasks_1.o
     Object src/view_rankings_task.o
     Object src/pokemon_mood.o
@@ -562,7 +558,7 @@ Static main
     Object lib/asm/vct_control_bss.o
     Object lib/libVCT/src/vct_mix.o
     Object lib/libVCT/src/vct_main.o
-    Object lib/asm/to59_nnsys_anchor.o
+    Object lib/asm/nnsys_data.o
     Object lib/NitroSystem/src/fnd_list.o
     Object lib/NitroSystem/src/fnd_heapcommon.o
     Object lib/NitroSystem/src/fnd_expheap.o
@@ -579,7 +575,7 @@ Static main
     Object lib/NitroSystem/src/gfd_linked_list_tex_vram_man_reset.o
     Object lib/NitroSystem/src/gfd_linked_list_pltt_vram_man.o
     Object lib/NitroSystem/src/gfd_linked_list_pltt_vram_man_reset.o
-    Object lib/asm/to59_nnsys_anchor_own2.o
+    Object lib/asm/nnsys_g2d_bss.o
     Object lib/NitroSystem/src/g2d_load.o
     Object lib/NitroSystem/src/g2d_softsprite.o
     Object lib/NitroSystem/src/g2d_animation.o
@@ -609,7 +605,7 @@ Static main
     Object lib/NitroSystem/src/g3d_kernel.o
     Object lib/NitroSystem/src/g3d_mdl_bind.o
     Object lib/NitroSystem/src/g3d_glb.o
-    Object lib/asm/to59_nnsys_anchor_own3.o
+    Object lib/asm/nnsys_g3d_snd_bss.o
     Object lib/NitroSystem/src/g3d_glb_state.o
     Object lib/NitroSystem/src/g3d_anm_blend.o
     Object lib/NitroSystem/src/g3d_draw.o
@@ -654,7 +650,7 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/NitroSystem/src/snd_arc.o
     Object lib/NitroSystem/src/snd_heap.o
     Object lib/NitroSystem/src/snd_arc_loader.o
-    Object lib/asm/to59_nnsys_anchor_own4.o
+    Object lib/asm/nnsys_snd_arc_strm_bss.o
     Object lib/NitroSystem/src/snd_arc_loader_wave.o
     Object lib/NitroSystem/src/snd_arc_player.o
     Object lib/NitroSystem/src/snd_arc_strm.o
@@ -707,13 +703,13 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/NitroSDK/src/os/os_irqTable.o
     Object lib/NitroSDK/src/os/os_interrupt.o
     Object lib/NitroSDK/src/os/os_spinLock.o
-    Object lib/NitroSDK/src/os/to91_w41407_spin_retained.o
-    Object lib/NitroSDK/src/os/to90_spin_run01.o
-    Object lib/NitroSDK/src/os/to90_spin_run02.o
-    Object lib/NitroSDK/src/os/to90_spin_run03.o
+    Object lib/NitroSDK/src/os/os_spin_lock_id.o
+    Object lib/NitroSDK/src/os/os_spin_lock_word.o
+    Object lib/NitroSDK/src/os/os_spin_lock_cartridge.o
+    Object lib/NitroSDK/src/os/os_spin_lock_card.o
     Object lib/NitroSDK/src/os/os_printf.o
     Object lib/NitroSDK/src/os/os_thread.o
-    Object lib/NitroSDK/src/os/to90_os_thread_getter16.o
+    Object lib/NitroSDK/src/os/os_thread_available.o
     Object lib/NitroSDK/src/os/os_context.o
     Object lib/NitroSDK/src/os/os_emulator.o
     Object lib/NitroSDK/src/os/os_message.o
@@ -726,20 +722,19 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/NitroSDK/src/os/os_tcm.o
     Object lib/NitroSDK/src/os/os_protectionUnit.o
     Object lib/NitroSDK/src/os/os_protectionRegion.o
-    Object lib/NitroSDK/asm/to91_os_exception_anchor.o
-    Object lib/NitroSDK/src/os/to91_os_exception_init.o
-    Object lib/NitroSDK/asm/to91_os_exception_residual.o
+    Object lib/NitroSDK/asm/os_exception_work.o
+    Object lib/NitroSDK/src/os/os_exception_init.o
+    Object lib/NitroSDK/asm/os_exception_handler.o
     Object lib/NitroSDK/src/os/os_timer.o
     Object lib/NitroSDK/src/os/os_tick.o
-    Object lib/NitroSDK/src/os/to90_os_alarm_prefix.o
-    Object src/op90_to90_os_alarm_handler_r01.o
-    Object lib/NitroSDK/src/os/to90_os_alarm_suffix.o
+    Object lib/NitroSDK/src/os/os_alarm_before_handler.o
+    Object lib/NitroSDK/src/os/os_alarm_irq_handler.o
+    Object lib/NitroSDK/src/os/os_alarm_after_handler.o
     Object lib/NitroSDK/src/os/os_valarm.o
     Object lib/NitroSDK/src/os/os_system.o
-    Object lib/NitroSDK/src/os/to91_os_system_pure.o
-    Object lib/NitroSDK/src/os/to90_reset_pure.o
-    Object lib/NitroSDK/asm/op90_to90_reset_reset_system_anchor.o
-    Object src/op90_to90_reset_reset_system_r01.o
+    Object lib/NitroSDK/src/os/os_wait_vblank.o
+    Object lib/NitroSDK/src/os/os_reset_core.o
+    Object lib/NitroSDK/src/os/os_reset_system.o
     Object lib/NitroSDK/src/os/os_ownerInfo.o
     Object lib/NitroSDK/src/os/os_vram_exclusive_clz.o
     Object lib/NitroSDK/src/os/os_vramExclusive.o
@@ -759,29 +754,29 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/NitroSDK/src/mi/mi_init.o
     Object lib/NitroSDK/src/snd/snd_interface.o
     Object lib/asm/nitro_sdk_data.o
-    Object src/to65_to65_nitro_unified_residual_01_extra17_run01.o
-    Object src/to65_to65_nitro_unified_residual_03_extra18_run01.o
-    Object src/to65_to65_nitro_unified_residual_05_extra19_run01.o
-    Object src/to90_extra2122_run01.o
-    Object src/to90_extra2123_run01.o
-    Object src/op90_op90_to90_extra2123_residual_1_residual_1_r01.o
-    Object src/op90_to90_extra2123_residual_1_r01.o
-    Object src/to90_extra2124_run01.o
-    Object src/to90_extra2125_run01.o
-    Object src/to90_extra2126_run01.o
+    Object lib/NitroSDK/src/snd/snd_player_tempo_ratio.o
+    Object lib/NitroSDK/src/snd/snd_master_volume.o
+    Object lib/NitroSDK/src/snd/snd_read_driver_info.o
+    Object lib/NitroSDK/src/snd/snd_flush_command.o
+    Object lib/NitroSDK/src/snd/snd_player_local_variable.o
+    Object lib/NitroSDK/src/snd/snd_read_channel_info.o
+    Object lib/NitroSDK/src/snd/snd_read_track_info.o
+    Object lib/NitroSDK/src/snd/snd_destroy_bank.o
+    Object lib/NitroSDK/src/snd/snd_next_inst_data.o
+    Object lib/NitroSDK/src/fs/fs_send_command.o
     Object lib/NitroSDK/src/dgt_hash.o
-    Object src/op90_to90_extra2545_residual_2_r01.o
+    Object lib/NitroSDK/src/dgt_hash2_arm4_small.o
     Object lib/NitroSDK/src/tp.o
     Object lib/NitroSDK/src/mic.o
     Object lib/NitroSDK/src/pm.o
     Object lib/NitroSDK/src/rtc/rtc_api.o
-    Object src/op90_to65_nitro_unified_residual_26_r01.o
-    Object src/to90_extra2127_run01.o
-    Object src/op90_to90_extra2127_residual_1_r01.o
-    Object src/to90_extra2127_run02.o
-    Object src/op90_to90_extra2128_residual_1_r01.o
-    Object src/to90_extra2128_run01.o
-    Object src/to65_to65_nitro_unified_residual_36_extra22_run01.o
+    Object lib/NitroSDK/src/rtc/rtc_convert_date_time_to_second.o
+    Object lib/NitroSDK/src/card/card_cache_flush_threshold.o
+    Object lib/NitroSDK/src/card/card_identify_backup.o
+    Object lib/NitroSDK/src/card/card_request_stream_command.o
+    Object lib/NitroSDK/src/card/card_try_read_dma.o
+    Object lib/NitroSDK/src/card/card_read_card.o
+    Object lib/NitroSDK/src/card/card_terminate_pulled_out.o
     Object lib/NitroSDK/src/card/card_spi_wait_cycles.o
     Object lib/NitroSDK/src/card/card_spi_wait_init.o
     Object lib/NitroSDK/src/card/card_spi_wait.o
@@ -967,9 +962,9 @@ Autoload ITCM
 {
     Address 0x01FF8000
     Object lib/NitroSDK/src/os/os_irqHandler.o (.itcm)
-    Object lib/NitroSDK/src/os/to90_reset_pure.o (.itcm)
-    Object src/op90_to90_reset_boot_r01.o (.itcm)
-    Object src/op90_to90_reset_clear32_r01.o (.itcm)
+    Object lib/NitroSDK/src/os/os_reset_core.o (.itcm)
+    Object lib/NitroSDK/src/os/os_reset_boot.o (.itcm)
+    Object lib/NitroSDK/src/os/os_reset_clear32.o (.itcm)
     Object lib/NitroSDK/src/mi/mi_dma.o (.itcm)
     Object lib/NitroSDK/src/mi/mi_dma_gxcommand.o (.itcm)
 }

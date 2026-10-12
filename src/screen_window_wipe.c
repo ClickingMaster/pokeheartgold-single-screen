@@ -4,7 +4,7 @@
 #include <nitro/gx/g2.h>
 
 // Palette fade module (not merged yet): declared with the types its callers here were matched against
-extern void sub_02010E64(ClockWipeScanlines *scanlines, u8 window, int screen, enum HeapID heapId);
+extern void ScanlineBufferController_Init(ClockWipeScanlines *scanlines, u8 window, int screen, enum HeapID heapId);
 extern void sub_02010EC8(ClockWipeScanlines *scanlines);
 extern s16 *sub_02010EE0(ClockWipeScanlines *scanlines, int index);
 extern void sub_02010F00(SysTask *task, void *scanlines);
@@ -12,7 +12,7 @@ extern void sub_02010F34(int queued, WindowRegisterQueue *regQueue, int screen);
 extern void sub_02010F84(WindowRegisterQueue *regQueue, u8 insideMask, u8 outsideMask, u8 window, int screen, int left, int top, int right, int bottom, int queued);
 extern void sub_02010FEC(WindowRegisterQueue *regQueue, int window, int screen, int queued);
 extern void sub_02011068(WindowRegisterQueue *regQueue, int a1, int screen, int queued);
-extern void sub_02010C38(void);
+extern void ScanlineWindow_HBlankCallback(void);
 extern void sub_0200FF88(void *blankPair, ClockWipe *wipe, void (*callback)(void), int screen, enum HeapID heapId);
 extern void sub_0200FFB4(void *blankPair, int screen, enum HeapID heapId);
 
@@ -52,7 +52,7 @@ BOOL ClockWipe_Update(ClockWipeFade *fade) {
 void ClockWipe_Init(ClockWipe *wipe, const ClockWipeConfig *config, int steps, int framesPerStep, int screen, WindowRegisterQueue *regQueue, void *blankPair, enum HeapID heapId) {
     s16 *buffer;
 
-    sub_02010E64(&wipe->scanlines, config->window, screen, heapId);
+    ScanlineBufferController_Init(&wipe->scanlines, config->window, screen, heapId);
     wipe->unused14 = 0x7FFF80;
     wipe->centerX = config->centerX;
     wipe->centerY = config->centerY;
@@ -79,7 +79,7 @@ void ClockWipe_Init(ClockWipe *wipe, const ClockWipeConfig *config, int steps, i
     } else {
         sub_02011068(regQueue, 2, screen, wipe->queued);
     }
-    sub_0200FF88(wipe->blankPair, wipe, sub_02010C38, screen, heapId);
+    sub_0200FF88(wipe->blankPair, wipe, ScanlineWindow_HBlankCallback, screen, heapId);
 }
 
 BOOL ClockWipe_Step(ClockWipe *wipe) {

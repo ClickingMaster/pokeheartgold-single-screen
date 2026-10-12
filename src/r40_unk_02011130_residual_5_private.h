@@ -28,13 +28,13 @@ typedef struct LocalFadeEffect {
 } LocalFadeEffect;
 
 int sub_02010A6C(int start, int end, int divisor);
-void sub_02010E64(void *work, int direction, u32 screen, u32 heapId);
+void ScanlineBufferController_Init(void *work, int direction, u32 screen, u32 heapId);
 void sub_02011D08(void *work);
 void sub_02010F00(SysTask *task, void *work);
 s16 *sub_02010EE0(void *work, int index);
 void sub_02010F84(u32, u8, u8, int, u32, int, int, int, int, u32);
 void sub_02011068(u32, int, u32, u32);
-void sub_02010C38(void);
+void ScanlineWindow_HBlankCallback(void);
 void sub_0200FF88(u32, void *, void (*)(void), u32, u32);
 void sub_02011BF0(LocalFadeEffect *, const LocalFadeParam *, u32, u32, u32, u32, u32, u32);
 

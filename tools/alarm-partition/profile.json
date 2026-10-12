@@ -143,11 +143,11 @@
   },
   "roles": {
     "prefix": {
-      "source": "lib/NitroSDK/src/os/to90_os_alarm_prefix.c",
+      "source": "lib/NitroSDK/src/os/os_alarm_before_handler.c",
       "sha256": "eebd4fb17080c7ec9fee39760782e2d2649f3d01525ca3bb2a32a540d4d6d779"
     },
     "suffix": {
-      "source": "lib/NitroSDK/src/os/to90_os_alarm_suffix.c",
+      "source": "lib/NitroSDK/src/os/os_alarm_after_handler.c",
       "sha256": "eebd4fb17080c7ec9fee39760782e2d2649f3d01525ca3bb2a32a540d4d6d779"
     },
     "handler": {

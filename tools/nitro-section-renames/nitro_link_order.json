@@ -2,29 +2,29 @@
   "objects": [
     "lib/NitroSDK/src/snd/snd_interface.o",
     "lib/asm/nitro_sdk_data.o",
-    "src/to65_to65_nitro_unified_residual_01_extra17_run01.o",
-    "src/to65_to65_nitro_unified_residual_03_extra18_run01.o",
-    "src/to65_to65_nitro_unified_residual_05_extra19_run01.o",
-    "src/to90_extra2122_run01.o",
-    "src/to90_extra2123_run01.o",
-    "src/op90_op90_to90_extra2123_residual_1_residual_1_r01.o",
-    "src/op90_to90_extra2123_residual_1_r01.o",
-    "src/to90_extra2124_run01.o",
-    "src/to90_extra2125_run01.o",
-    "src/to90_extra2126_run01.o",
+    "lib/NitroSDK/src/snd/snd_player_tempo_ratio.o",
+    "lib/NitroSDK/src/snd/snd_master_volume.o",
+    "lib/NitroSDK/src/snd/snd_read_driver_info.o",
+    "lib/NitroSDK/src/snd/snd_flush_command.o",
+    "lib/NitroSDK/src/snd/snd_player_local_variable.o",
+    "lib/NitroSDK/src/snd/snd_read_channel_info.o",
+    "lib/NitroSDK/src/snd/snd_read_track_info.o",
+    "lib/NitroSDK/src/snd/snd_destroy_bank.o",
+    "lib/NitroSDK/src/snd/snd_next_inst_data.o",
+    "lib/NitroSDK/src/fs/fs_send_command.o",
     "lib/NitroSDK/src/dgt_hash.o",
-    "src/op90_to90_extra2545_residual_2_r01.o",
+    "lib/NitroSDK/src/dgt_hash2_arm4_small.o",
     "lib/NitroSDK/src/tp.o",
     "lib/NitroSDK/src/mic.o",
     "lib/NitroSDK/src/pm.o",
     "lib/NitroSDK/src/rtc/rtc_api.o",
-    "src/op90_to65_nitro_unified_residual_26_r01.o",
-    "src/to90_extra2127_run01.o",
-    "src/op90_to90_extra2127_residual_1_r01.o",
-    "src/to90_extra2127_run02.o",
-    "src/op90_to90_extra2128_residual_1_r01.o",
-    "src/to90_extra2128_run01.o",
-    "src/to65_to65_nitro_unified_residual_36_extra22_run01.o",
+    "lib/NitroSDK/src/rtc/rtc_convert_date_time_to_second.o",
+    "lib/NitroSDK/src/card/card_cache_flush_threshold.o",
+    "lib/NitroSDK/src/card/card_identify_backup.o",
+    "lib/NitroSDK/src/card/card_request_stream_command.o",
+    "lib/NitroSDK/src/card/card_try_read_dma.o",
+    "lib/NitroSDK/src/card/card_read_card.o",
+    "lib/NitroSDK/src/card/card_terminate_pulled_out.o",
     "lib/NitroSDK/src/card/card_spi_wait_cycles.o",
     "lib/NitroSDK/src/card/card_spi_wait_init.o",
     "lib/NitroSDK/src/card/card_spi_wait.o",
@@ -81,7 +81,7 @@
         "selector": ".text.snd_00"
       },
       {
-        "path": "src/to65_to65_nitro_unified_residual_01_extra17_run01.o",
+        "path": "lib/NitroSDK/src/snd/snd_player_tempo_ratio.o",
         "selector": ".text"
       },
       {
@@ -89,7 +89,7 @@
         "selector": ".text.snd_01"
       },
       {
-        "path": "src/to65_to65_nitro_unified_residual_03_extra18_run01.o",
+        "path": "lib/NitroSDK/src/snd/snd_master_volume.o",
         "selector": ".text"
       },
       {
@@ -97,7 +97,7 @@
         "selector": ".text.snd_02"
       },
       {
-        "path": "src/to65_to65_nitro_unified_residual_05_extra19_run01.o",
+        "path": "lib/NitroSDK/src/snd/snd_read_driver_info.o",
         "selector": ".text"
       },
       {
@@ -113,7 +113,7 @@
         "selector": ".text.snd_04"
       },
       {
-        "path": "src/to90_extra2122_run01.o",
+        "path": "lib/NitroSDK/src/snd/snd_flush_command.o",
         "selector": ".text"
       },
       {
@@ -129,15 +129,15 @@
         "selector": ".text.snd_05"
       },
       {
-        "path": "src/to90_extra2123_run01.o",
+        "path": "lib/NitroSDK/src/snd/snd_player_local_variable.o",
         "selector": ".text"
       },
       {
-        "path": "src/op90_op90_to90_extra2123_residual_1_residual_1_r01.o",
+        "path": "lib/NitroSDK/src/snd/snd_read_channel_info.o",
         "selector": ".text"
       },
       {
-        "path": "src/op90_to90_extra2123_residual_1_r01.o",
+        "path": "lib/NitroSDK/src/snd/snd_read_track_info.o",
         "selector": ".text"
       },
       {
@@ -153,7 +153,7 @@
         "selector": ".text.snd_06"
       },
       {
-        "path": "src/to90_extra2124_run01.o",
+        "path": "lib/NitroSDK/src/snd/snd_destroy_bank.o",
         "selector": ".text"
       },
       {
@@ -161,7 +161,7 @@
         "selector": ".text.snd_07"
       },
       {
-        "path": "src/to90_extra2125_run01.o",
+        "path": "lib/NitroSDK/src/snd/snd_next_inst_data.o",
         "selector": ".text"
       },
       {
@@ -189,7 +189,7 @@
         "selector": ".text"
       },
       {
-        "path": "src/to90_extra2126_run01.o",
+        "path": "lib/NitroSDK/src/fs/fs_send_command.o",
         "selector": ".text"
       },
       {
@@ -213,7 +213,7 @@
         "selector": ".text"
       },
       {
-        "path": "src/op90_to90_extra2545_residual_2_r01.o",
+        "path": "lib/NitroSDK/src/dgt_hash2_arm4_small.o",
         "selector": ".text"
       },
       {
@@ -245,7 +245,7 @@
         "selector": ".text"
       },
       {
-        "path": "src/op90_to65_nitro_unified_residual_26_r01.o",
+        "path": "lib/NitroSDK/src/rtc/rtc_convert_date_time_to_second.o",
         "selector": ".text"
       },
       {
@@ -257,15 +257,15 @@
         "selector": ".text"
       },
       {
-        "path": "src/to90_extra2127_run01.o",
+        "path": "lib/NitroSDK/src/card/card_cache_flush_threshold.o",
         "selector": ".text"
       },
       {
-        "path": "src/op90_to90_extra2127_residual_1_r01.o",
+        "path": "lib/NitroSDK/src/card/card_identify_backup.o",
         "selector": ".text"
       },
       {
-        "path": "src/to90_extra2127_run02.o",
+        "path": "lib/NitroSDK/src/card/card_request_stream_command.o",
         "selector": ".text"
       },
       {
@@ -277,11 +277,11 @@
         "selector": ".text.card_rom_prefix"
       },
       {
-        "path": "src/op90_to90_extra2128_residual_1_r01.o",
+        "path": "lib/NitroSDK/src/card/card_try_read_dma.o",
         "selector": ".text"
       },
       {
-        "path": "src/to90_extra2128_run01.o",
+        "path": "lib/NitroSDK/src/card/card_read_card.o",
         "selector": ".text"
       },
       {
@@ -297,7 +297,7 @@
         "selector": ".text.card_pullout_prefix"
       },
       {
-        "path": "src/to65_to65_nitro_unified_residual_36_extra22_run01.o",
+        "path": "lib/NitroSDK/src/card/card_terminate_pulled_out.o",
         "selector": ".text"
       },
       {
@@ -564,20 +564,20 @@
     {
       "input": [
         "os_spinLock.o (.text)",
-        "to91_w41407_spin_retained.o (.text)",
-        "to90_spin_run01.o (.text)",
-        "to90_spin_run02.o (.text)",
-        "to90_spin_run03.o (.text)"
+        "os_spin_lock_id.o (.text)",
+        "os_spin_lock_word.o (.text)",
+        "os_spin_lock_cartridge.o (.text)",
+        "os_spin_lock_card.o (.text)"
       ],
       "output": [
         "os_spinLock.o (.text.spin_OS_InitLock)",
-        "to90_spin_run01.o (.text)",
-        "to91_w41407_spin_retained.o (.text.spin_OS_UnLockCartridge)",
-        "to90_spin_run02.o (.text)",
-        "to91_w41407_spin_retained.o (.text.spin_OS_UnLockCard)",
-        "to90_spin_run03.o (.text)",
-        "to91_w41407_spin_retained.o (.text.spin_OS_GetLockID)",
-        "to91_w41407_spin_retained.o (.text.spin_OS_ReleaseLockID)"
+        "os_spin_lock_word.o (.text)",
+        "os_spin_lock_id.o (.text.spin_OS_UnLockCartridge)",
+        "os_spin_lock_cartridge.o (.text)",
+        "os_spin_lock_id.o (.text.spin_OS_UnLockCard)",
+        "os_spin_lock_card.o (.text)",
+        "os_spin_lock_id.o (.text.spin_OS_GetLockID)",
+        "os_spin_lock_id.o (.text.spin_OS_ReleaseLockID)"
       ],
       "previous": "os_interrupt.o (.text)",
       "next": "os_printf.o (.text)",

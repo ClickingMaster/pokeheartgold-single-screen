@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "88755fbff7fbf5f17684d493cd57395d44a33c62",
+  "commit": "f3146d8f2e9644a767ba287222304373346a4997",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "4535dfcd6997d2949fe15f46b864994f9a05b2fb0124fd66569daf8905448203",
+    "ARM9": "1881aaaf1955ef9e21c75da234a5c776f3f0e740a963324e132689149cb9b350",
     "ARM7": "b2662a5cfe0fe61203405adb1b3cd633b24d0b1b806a72ddbdec71c77f845bb3"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -82,28 +82,6 @@
     {
       "cpu": "ARM9",
       "module": "ITCM",
-      "object": "op90_to90_reset_boot_r01.o",
-      "bytes": 204,
-      "status": "original_asm",
-      "source": "src/op90_to90_reset_boot_r01.c",
-      "functions": [
-        "OSi_DoBoot"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "ITCM",
-      "object": "op90_to90_reset_clear32_r01.o",
-      "bytes": 20,
-      "status": "original_asm",
-      "source": "src/op90_to90_reset_clear32_r01.c",
-      "functions": [
-        "OSi_CpuClear32"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "ITCM",
       "object": "os_irqHandler.o",
       "bytes": 436,
       "status": "original_asm",
@@ -116,10 +94,32 @@
     {
       "cpu": "ARM9",
       "module": "ITCM",
-      "object": "to90_reset_pure.o",
+      "object": "os_reset_boot.o",
+      "bytes": 204,
+      "status": "original_asm",
+      "source": "lib/NitroSDK/src/os/os_reset_boot.c",
+      "functions": [
+        "OSi_DoBoot"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "ITCM",
+      "object": "os_reset_clear32.o",
+      "bytes": 20,
+      "status": "original_asm",
+      "source": "lib/NitroSDK/src/os/os_reset_clear32.c",
+      "functions": [
+        "OSi_CpuClear32"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "ITCM",
+      "object": "os_reset_core.o",
       "bytes": 436,
       "status": "c",
-      "source": "lib/NitroSDK/src/os/to90_reset_pure.c"
+      "source": "lib/NitroSDK/src/os/os_reset_core.c"
     },
     {
       "cpu": "ARM9",
@@ -8161,18 +8161,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "brightness_transition_1.o",
-      "bytes": 324,
+      "object": "brightness_transition.o",
+      "bytes": 1046,
       "status": "c",
-      "source": "src/brightness_transition_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "brightness_transition_2.o",
-      "bytes": 100,
-      "status": "c",
-      "source": "src/brightness_transition_2.c"
+      "source": "src/brightness_transition.c"
     },
     {
       "cpu": "ARM9",
@@ -8189,6 +8181,38 @@
       "bytes": 686,
       "status": "c",
       "source": "src/camera_translation.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "card_cache_flush_threshold.o",
+      "bytes": 20,
+      "status": "c",
+      "source": "lib/NitroSDK/src/card/card_cache_flush_threshold.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "card_identify_backup.o",
+      "bytes": 900,
+      "status": "c",
+      "source": "lib/NitroSDK/src/card/card_identify_backup.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "card_read_card.o",
+      "bytes": 240,
+      "status": "c",
+      "source": "lib/NitroSDK/src/card/card_read_card.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "card_request_stream_command.o",
+      "bytes": 496,
+      "status": "c",
+      "source": "lib/NitroSDK/src/card/card_request_stream_command.c"
     },
     {
       "cpu": "ARM9",
@@ -8213,6 +8237,22 @@
       "bytes": 80,
       "status": "c",
       "source": "lib/NitroSDK/src/card/card_spi_wait_init.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "card_terminate_pulled_out.o",
+      "bytes": 140,
+      "status": "c",
+      "source": "lib/NitroSDK/src/card/card_terminate_pulled_out.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "card_try_read_dma.o",
+      "bytes": 396,
+      "status": "c",
+      "source": "lib/NitroSDK/src/card/card_try_read_dma.c"
     },
     {
       "cpu": "ARM9",
@@ -8733,6 +8773,17 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "dgt_hash2_arm4_small.o",
+      "bytes": 660,
+      "status": "original_asm",
+      "source": "lib/NitroSDK/src/dgt_hash2_arm4_small.c",
+      "functions": [
+        "_020D9960"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "dialog_box.o",
       "bytes": 502,
       "status": "c",
@@ -9169,6 +9220,14 @@
       "bytes": 1360,
       "status": "c",
       "source": "src/frontier_state.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "fs_send_command.o",
+      "bytes": 420,
+      "status": "c",
+      "source": "lib/NitroSDK/src/fs/fs_send_command.c"
     },
     {
       "cpu": "ARM9",
@@ -11692,79 +11751,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "op90_op90_to90_extra2123_residual_1_residual_1_r01.o",
-      "bytes": 400,
-      "status": "c",
-      "source": "src/op90_op90_to90_extra2123_residual_1_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to65_nitro_unified_residual_26_r01.o",
-      "bytes": 100,
-      "status": "c",
-      "source": "src/op90_to65_nitro_unified_residual_26_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to90_extra2123_residual_1_r01.o",
-      "bytes": 268,
-      "status": "c",
-      "source": "src/op90_to90_extra2123_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to90_extra2127_residual_1_r01.o",
-      "bytes": 900,
-      "status": "c",
-      "source": "src/op90_to90_extra2127_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to90_extra2128_residual_1_r01.o",
-      "bytes": 396,
-      "status": "c",
-      "source": "src/op90_to90_extra2128_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to90_extra2545_residual_2_r01.o",
-      "bytes": 660,
-      "status": "original_asm",
-      "source": "src/op90_to90_extra2545_residual_2_r01.c",
-      "functions": [
-        "_020D9960"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to90_os_alarm_handler_r01.o",
-      "bytes": 16,
-      "status": "original_asm",
-      "source": "src/op90_to90_os_alarm_handler_r01.c",
-      "functions": [
-        "OSi_AlarmHandler"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to90_reset_reset_system_r01.o",
-      "bytes": 188,
-      "status": "original_asm",
-      "source": "src/op90_to90_reset_reset_system_r01.c",
-      "functions": [
-        "OS_ResetSystem"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "op90_unk_02012204_r01.o",
       "bytes": 88,
       "status": "c",
@@ -11801,6 +11787,33 @@
       "bytes": 2024,
       "status": "c",
       "source": "src/orbit_cursor.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "os_alarm_after_handler.o",
+      "bytes": 240,
+      "status": "c",
+      "source": "lib/NitroSDK/src/os/os_alarm_after_handler.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "os_alarm_before_handler.o",
+      "bytes": 780,
+      "status": "c",
+      "source": "lib/NitroSDK/src/os/os_alarm_before_handler.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "os_alarm_irq_handler.o",
+      "bytes": 16,
+      "status": "original_asm",
+      "source": "lib/NitroSDK/src/os/os_alarm_irq_handler.c",
+      "functions": [
+        "OSi_AlarmHandler"
+      ]
     },
     {
       "cpu": "ARM9",
@@ -11865,6 +11878,38 @@
       "bytes": 208,
       "status": "c",
       "source": "lib/NitroSDK/src/os/os_entropy.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "os_exception_handler.o",
+      "bytes": 280,
+      "status": "original_asm",
+      "source": "lib/NitroSDK/src/os/os_exception.c",
+      "functions": [
+        "OSi_ExceptionHandler",
+        "OSi_GetAndDisplayContext",
+        "OSi_SetExContext"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "os_exception_handler.o",
+      "bytes": 124,
+      "status": "inline_asm",
+      "source": "lib/NitroSDK/src/os/os_exception.c",
+      "functions": [
+        "OSi_DisplayExContext"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "os_exception_init.o",
+      "bytes": 112,
+      "status": "c",
+      "source": "lib/NitroSDK/src/os/os_exception_init.c"
     },
     {
       "cpu": "ARM9",
@@ -11961,10 +12006,67 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "os_reset_core.o",
+      "bytes": 180,
+      "status": "c",
+      "source": "lib/NitroSDK/src/os/os_reset_core.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "os_reset_system.o",
+      "bytes": 188,
+      "status": "original_asm",
+      "source": "lib/NitroSDK/src/os/os_reset_system.c",
+      "functions": [
+        "OS_ResetSystem"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "os_spinLock.o",
       "bytes": 204,
       "status": "c",
       "source": "lib/NitroSDK/src/os/os_spinLock.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "os_spin_lock_card.o",
+      "bytes": 56,
+      "status": "c",
+      "source": "lib/NitroSDK/src/os/os_spin_lock_card.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "os_spin_lock_cartridge.o",
+      "bytes": 136,
+      "status": "c",
+      "source": "lib/NitroSDK/src/os/os_spin_lock_cartridge.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "os_spin_lock_id.o",
+      "bytes": 160,
+      "status": "original_asm",
+      "source": "lib/NitroSDK/src/os/os_spin_lock_id.c",
+      "functions": [
+        "OS_GetLockID",
+        "OS_ReleaseLockID",
+        "OS_UnLockCard",
+        "OS_UnLockCartridge"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "os_spin_lock_word.o",
+      "bytes": 396,
+      "status": "c",
+      "source": "lib/NitroSDK/src/os/os_spin_lock_word.c"
     },
     {
       "cpu": "ARM9",
@@ -12025,6 +12127,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "os_thread_available.o",
+      "bytes": 16,
+      "status": "c",
+      "source": "lib/NitroSDK/src/os/os_thread_available.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "os_tick.o",
       "bytes": 528,
       "status": "c",
@@ -12072,6 +12182,14 @@
       "bytes": 116,
       "status": "c",
       "source": "lib/NitroSDK/src/os/os_wait_irq.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "os_wait_vblank.o",
+      "bytes": 28,
+      "status": "c",
+      "source": "lib/NitroSDK/src/os/os_wait_vblank.c"
     },
     {
       "cpu": "ARM9",
@@ -12751,6 +12869,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "rtc_convert_date_time_to_second.o",
+      "bytes": 100,
+      "status": "c",
+      "source": "lib/NitroSDK/src/rtc/rtc_convert_date_time_to_second.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "rtc_convert_post.o",
       "bytes": 712,
       "status": "c",
@@ -13271,10 +13397,26 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "snd_destroy_bank.o",
+      "bytes": 152,
+      "status": "c",
+      "source": "lib/NitroSDK/src/snd/snd_destroy_bank.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "snd_fader.o",
       "bytes": 164,
       "status": "c",
       "source": "lib/NitroSystem/src/snd_fader.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "snd_flush_command.o",
+      "bytes": 444,
+      "status": "c",
+      "source": "lib/NitroSDK/src/snd/snd_flush_command.c"
     },
     {
       "cpu": "ARM9",
@@ -13295,10 +13437,66 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "snd_master_volume.o",
+      "bytes": 32,
+      "status": "c",
+      "source": "lib/NitroSDK/src/snd/snd_master_volume.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "snd_next_inst_data.o",
+      "bytes": 432,
+      "status": "c",
+      "source": "lib/NitroSDK/src/snd/snd_next_inst_data.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "snd_player.o",
       "bytes": 2820,
       "status": "c",
       "source": "lib/NitroSystem/src/snd_player.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "snd_player_local_variable.o",
+      "bytes": 72,
+      "status": "c",
+      "source": "lib/NitroSDK/src/snd/snd_player_local_variable.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "snd_player_tempo_ratio.o",
+      "bytes": 24,
+      "status": "c",
+      "source": "lib/NitroSDK/src/snd/snd_player_tempo_ratio.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "snd_read_channel_info.o",
+      "bytes": 400,
+      "status": "c",
+      "source": "lib/NitroSDK/src/snd/snd_read_channel_info.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "snd_read_driver_info.o",
+      "bytes": 32,
+      "status": "c",
+      "source": "lib/NitroSDK/src/snd/snd_read_driver_info.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "snd_read_track_info.o",
+      "bytes": 268,
+      "status": "c",
+      "source": "lib/NitroSDK/src/snd/snd_read_track_info.c"
     },
     {
       "cpu": "ARM9",
@@ -13815,46 +14013,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to65_to65_nitro_unified_residual_01_extra17_run01.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_01_extra17_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_to65_nitro_unified_residual_03_extra18_run01.o",
-      "bytes": 32,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_03_extra18_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_to65_nitro_unified_residual_05_extra19_run01.o",
-      "bytes": 32,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_05_extra19_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_to65_nitro_unified_residual_36_extra22_run01.o",
-      "bytes": 140,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_36_extra22_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_unk_02010AB0_extra78_run01.o",
-      "bytes": 66,
-      "status": "c",
-      "source": "src/to70_unk_02010AB0_extra78_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to70_unk_02011130_residual_6_extra1072_run01.o",
       "bytes": 86,
       "status": "c",
@@ -13863,138 +14021,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to80_extra1363_run01.o",
-      "bytes": 556,
-      "status": "c",
-      "source": "src/to80_extra1363_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to80_extra1612_run01.o",
       "bytes": 232,
       "status": "c",
       "source": "src/to80_extra1612_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2122_run01.o",
-      "bytes": 444,
-      "status": "c",
-      "source": "src/to90_extra2122_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2123_run01.o",
-      "bytes": 72,
-      "status": "c",
-      "source": "src/to90_extra2123_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2124_run01.o",
-      "bytes": 152,
-      "status": "c",
-      "source": "src/to90_extra2124_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2125_run01.o",
-      "bytes": 432,
-      "status": "c",
-      "source": "src/to90_extra2125_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2126_run01.o",
-      "bytes": 420,
-      "status": "c",
-      "source": "src/to90_extra2126_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2127_run01.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/to90_extra2127_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2127_run02.o",
-      "bytes": 496,
-      "status": "c",
-      "source": "src/to90_extra2127_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2128_run01.o",
-      "bytes": 240,
-      "status": "c",
-      "source": "src/to90_extra2128_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_os_alarm_prefix.o",
-      "bytes": 780,
-      "status": "c",
-      "source": "lib/NitroSDK/src/os/to90_os_alarm_prefix.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_os_alarm_suffix.o",
-      "bytes": 240,
-      "status": "c",
-      "source": "lib/NitroSDK/src/os/to90_os_alarm_suffix.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_os_thread_getter16.o",
-      "bytes": 16,
-      "status": "c",
-      "source": "lib/NitroSDK/src/os/to90_os_thread_getter16.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_reset_pure.o",
-      "bytes": 180,
-      "status": "c",
-      "source": "lib/NitroSDK/src/os/to90_reset_pure.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_spin_run01.o",
-      "bytes": 396,
-      "status": "c",
-      "source": "lib/NitroSDK/src/os/to90_spin_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_spin_run02.o",
-      "bytes": 136,
-      "status": "c",
-      "source": "lib/NitroSDK/src/os/to90_spin_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_spin_run03.o",
-      "bytes": 56,
-      "status": "c",
-      "source": "lib/NitroSDK/src/os/to90_spin_run03.c"
     },
     {
       "cpu": "ARM9",
@@ -14019,60 +14049,6 @@
       "bytes": 64,
       "status": "cpp",
       "source": "src/to91_msl_shared_ptr_char_d1.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to91_os_exception_init.o",
-      "bytes": 112,
-      "status": "c",
-      "source": "lib/NitroSDK/src/os/to91_os_exception_init.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to91_os_exception_residual.o",
-      "bytes": 280,
-      "status": "original_asm",
-      "source": "lib/NitroSDK/src/os/os_exception.c",
-      "functions": [
-        "OSi_ExceptionHandler",
-        "OSi_GetAndDisplayContext",
-        "OSi_SetExContext"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to91_os_exception_residual.o",
-      "bytes": 124,
-      "status": "inline_asm",
-      "source": "lib/NitroSDK/src/os/os_exception.c",
-      "functions": [
-        "OSi_DisplayExContext"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to91_os_system_pure.o",
-      "bytes": 28,
-      "status": "c",
-      "source": "lib/NitroSDK/src/os/to91_os_system_pure.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to91_w41407_spin_retained.o",
-      "bytes": 160,
-      "status": "original_asm",
-      "source": "lib/NitroSDK/src/os/to91_w41407_spin_retained.c",
-      "functions": [
-        "OS_GetLockID",
-        "OS_ReleaseLockID",
-        "OS_UnLockCard",
-        "OS_UnLockCartridge"
-      ]
     },
     {
       "cpu": "ARM9",

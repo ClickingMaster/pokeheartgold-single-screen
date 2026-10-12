@@ -4,8 +4,8 @@
 .public SysTask_Destroy
 .public sub_0200FF88
 .public sub_0200FFB4
-.public sub_02010C38
-.public sub_02010E64
+.public ScanlineWindow_HBlankCallback
+.public ScanlineBufferController_Init
 .public sub_02010EC8
 .public sub_02010EE0
 .public sub_02010F00

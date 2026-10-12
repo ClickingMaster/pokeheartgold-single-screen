@@ -112,7 +112,7 @@ LIB_CXX_OBJS              = $(LIB_CXX_SRCS:%.cpp=$(BUILD_DIR)/%.o)
 LIB_ASM_OBJS              = $(LIB_ASM_SRCS:%.s=$(BUILD_DIR)/%.o)
 ALL_GAME_OBJS             = $(C_OBJS) $(CXX_OBJS) $(ASM_OBJS) $(GLOBAL_ASM_OBJS)
 ifeq ($(PROC),arm946e)
-LIB_ASM_OBJS += $(BUILD_DIR)/lib/NitroSDK/asm/to91_os_exception_anchor.o $(BUILD_DIR)/lib/NitroSDK/asm/to91_os_exception_residual.o
+LIB_ASM_OBJS += $(BUILD_DIR)/lib/NitroSDK/asm/os_exception_work.o $(BUILD_DIR)/lib/NitroSDK/asm/os_exception_handler.o
 endif
 ALL_LIB_OBJS              = $(LIB_C_OBJS) $(LIB_CXX_OBJS) $(LIB_ASM_OBJS)
 ALL_OBJS                  = $(ALL_GAME_OBJS) $(ALL_LIB_OBJS)
@@ -187,15 +187,15 @@ $(DEPFILES):
 ifeq ($(PROC),arm946e)
 
 # Derive retained native exception groups from the unchanged SDK producer.
-$(BUILD_DIR)/lib/NitroSDK/asm/to91_os_exception_anchor.o: $(BUILD_DIR)/lib/NitroSDK/src/os/os_exception.o tools/nitro-section-renames/partition_os_exception.py
+$(BUILD_DIR)/lib/NitroSDK/asm/os_exception_work.o: $(BUILD_DIR)/lib/NitroSDK/src/os/os_exception.o tools/nitro-section-renames/partition_os_exception.py
 	@mkdir -p $(dir $@)
 	$(PYTHON) tools/nitro-section-renames/partition_os_exception.py $< $@ anchor
-$(BUILD_DIR)/lib/NitroSDK/asm/to91_os_exception_residual.o: $(BUILD_DIR)/lib/NitroSDK/src/os/os_exception.o tools/nitro-section-renames/partition_os_exception.py
+$(BUILD_DIR)/lib/NitroSDK/asm/os_exception_handler.o: $(BUILD_DIR)/lib/NitroSDK/src/os/os_exception.o tools/nitro-section-renames/partition_os_exception.py
 	@mkdir -p $(dir $@)
 	$(PYTHON) tools/nitro-section-renames/partition_os_exception.py $< $@ residual
 endif
 $(BUILD_DIR)/lib/NitroSDK/src/os/os_thread.o: lib/NitroSDK/src/os/os_thread.os-thread-section-map.json tools/nitro-section-renames/rename_os_thread_sections.py
-$(BUILD_DIR)/lib/NitroSDK/src/os/to90_reset_pure.o: lib/NitroSDK/src/os/to90_reset_pure.os-reset-section-map.json tools/nitro-section-renames/rename_os_reset_sections.py
+$(BUILD_DIR)/lib/NitroSDK/src/os/os_reset_core.o: lib/NitroSDK/src/os/os_reset_core.os-reset-section-map.json tools/nitro-section-renames/rename_os_reset_sections.py
 
 $(BUILD_DIR)/%.o: %.c
 $(BUILD_DIR)/%.o: %.c $(BUILD_DIR)/%.d
@@ -265,7 +265,7 @@ clean-tools:
 ifeq ($(PROC),arm946e)
 $(LCF): tools/nitro-section-renames/nitro_link_order.json tools/nitro-section-renames/patch_nitro_lcf.py
 $(LCF): tools/nitro-section-renames/patch_os_thread_lcf.py lib/NitroSDK/src/os/os_thread.os-thread-section-map.json
-$(LCF): tools/nitro-section-renames/patch_os_reset_lcf.py lib/NitroSDK/src/os/to90_reset_pure.os-reset-section-map.json
+$(LCF): tools/nitro-section-renames/patch_os_reset_lcf.py lib/NitroSDK/src/os/os_reset_core.os-reset-section-map.json
 endif
 
 $(LCF): $(LSF) $(LCF_TEMPLATE)

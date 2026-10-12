@@ -49,7 +49,7 @@ sub_02011918: ; 0x02011918
 	ldr r3, [sp, #0x44]
 	add r0, r5, #0
 	add r2, r6, #0
-	bl sub_02010E64
+	bl ScanlineBufferController_Init
 	mov r0, #0
 	ldrsh r1, [r4, r0]
 	lsl r1, r1, #7
@@ -120,7 +120,7 @@ _020119C8:
 	bl sub_02011068
 _020119D4:
 	ldr r0, [sp, #0x44]
-	ldr r2, _020119F0 ; =sub_02010C38
+	ldr r2, _020119F0 ; =ScanlineWindow_HBlankCallback
 	str r0, [sp]
 	ldr r0, [r5, #0x34]
 	add r1, r5, #0
@@ -131,5 +131,5 @@ _020119D4:
 	.balign 4, 0
 _020119E8: .word sub_02010F00
 _020119EC: .word 0x000003FF
-_020119F0: .word sub_02010C38
+_020119F0: .word ScanlineWindow_HBlankCallback
 	thumb_func_end sub_02011918

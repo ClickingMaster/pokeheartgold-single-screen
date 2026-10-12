@@ -6,7 +6,7 @@ from pathlib import Path
 def rewrite(text):
     rows = text.splitlines(keepends=True)
     old = [i for i, line in enumerate(rows) if line.strip() == 'os_thread.o (.text)']
-    getter = [i for i, line in enumerate(rows) if line.strip() == 'to90_os_thread_getter16.o (.text)']
+    getter = [i for i, line in enumerate(rows) if line.strip() == 'os_thread_available.o (.text)']
     if len(old) != 1 or len(getter) != 1:
         raise ValueError('exactly one original and one new getter text selector required')
     at = old[0]
@@ -26,7 +26,7 @@ def rewrite(text):
     indent = rows[at][:-len(rows[at].lstrip())]
     newline = '\r\n' if rows[at].endswith('\r\n') else '\n'
     replacement = [indent + 'os_thread.o (.text.os_thread_before_getter)' + newline,
-                   indent + 'to90_os_thread_getter16.o (.text)' + newline,
+                   indent + 'os_thread_available.o (.text)' + newline,
                    indent + 'os_thread.o (.text.os_thread_after_getter)' + newline]
     return ''.join(rows[:at] + replacement + rows[getter[0] + 1:])
 

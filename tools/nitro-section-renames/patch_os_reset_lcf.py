@@ -20,18 +20,18 @@ def rewrite(text):
     if [x.strip() for x in rows[i:i+len(vs)]]!=list(vs):raise ValueError('reset replacement objects not contiguous: '+repr(vs))
     return i,i+len(vs)-1
   raise ValueError('unique exact reset selector required: '+repr(values))
- main=one('to90_reset_pure.o (.text)')
- asm,asm_last=one_of('to90_reset_reset_system.o (.text)',('op90_to90_reset_reset_system_anchor.o (.text)','op90_to90_reset_reset_system_r01.o (.text)'))
+ main=one('os_reset_core.o (.text)')
+ asm,asm_last=one_of('to90_reset_reset_system.o (.text)','os_reset_system.o (.text)')
  system=one('os_system.o (.text)')
- split_system=[i for i,x in enumerate(rows) if x.strip()=='to91_os_system_pure.o (.text)']
+ split_system=[i for i,x in enumerate(rows) if x.strip()=='os_wait_vblank.o (.text)']
  if split_system:
   preceding_system=(len(split_system)==1 and split_system[0]==system+1 and main==system+2)
  else:
   preceding_system=(main==system+1)
  if asm!=main+1 or not preceding_system or rows[asm_last+1].strip()!='os_ownerInfo.o (.text)':raise ValueError('original reset main neighbors/order')
- entry=one('to90_reset_pure.o (.itcm)')
- boot,_=one_of('to90_reset_boot.o (.itcm)','op90_to90_reset_boot_r01.o (.itcm)')
- clear,_=one_of('to90_reset_clear32.o (.itcm)','op90_to90_reset_clear32_r01.o (.itcm)')
+ entry=one('os_reset_core.o (.itcm)')
+ boot,_=one_of('to90_reset_boot.o (.itcm)','os_reset_boot.o (.itcm)')
+ clear,_=one_of('to90_reset_clear32.o (.itcm)','os_reset_clear32.o (.itcm)')
  if (boot,clear)!=(entry+1,entry+2) or rows[entry-1].strip()!='os_irqHandler.o (.itcm)' or rows[clear+1].strip()!='mi_dma.o (.itcm)':raise ValueError('original reset ITCM neighbors/order')
  if any('.to90_reset_' in x for x in rows):raise ValueError('already reset-routed')
  rows[main]=rows[main].replace('(.text)','(.text.to90_reset_main_C)')

@@ -49,8 +49,8 @@
 .public FadeFunc_40
 .public FadeFunc_41
 .public FadeFunc_42
-.public sub_02010C38
-.public sub_02010E64
+.public ScanlineWindow_HBlankCallback
+.public ScanlineBufferController_Init
 .public sub_02010EC8
 .public sub_02010EE0
 .public sub_02010F00
@@ -89,9 +89,9 @@
 	.public sub_02010A7C
 	.public sub_02010A8C
 	.public sub_02010AB0
-	.public sub_02010B14
-	.public sub_02010BB4
-	.public sub_02010BF4
+	.public BrightnessTransition_Start
+	.public BrightnessTransition_Run
+	.public BrightnessTransition_Step
 	.public sub_02010ED0
 	.public sub_02011080
 	.public sub_020110C4

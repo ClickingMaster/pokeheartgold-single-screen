@@ -24,6 +24,14 @@ typedef struct BrightnessController {
     u16 setting;
 } BrightnessController;
 
+// Per-scanline horizontal bounds of one window (0x604 bytes).
+typedef struct ScanlineWindowBuffer {
+    s16 left[192];
+    s16 right[192];
+    u8 pad300[0x300];
+    u32 window; // 0x600: 0 or 1
+} ScanlineWindowBuffer;
+
 typedef struct ScanlineBufferController {
     void *buffer;
     s32 count;
@@ -37,8 +45,10 @@ void SetMasterBrightness(int, int);
 s32 sub_02010A6C(s32, s32, s32);
 
 void sub_02010AB0(s32 *, s32 *, s32 *, const u8 *, const u8 *, s32);
-void sub_02010B14(BrightnessController *, BOOL);
-BOOL sub_02010BB4(BrightnessController *);
-BOOL sub_02010BF4(void *);
-void sub_02010E64(ScanlineBufferController *, int, int, u32);
+void BrightnessTransition_Start(BrightnessController *, BOOL);
+BOOL BrightnessTransition_Run(BrightnessController *);
+BOOL BrightnessTransition_Step(BrightnessTransition *);
+void ScanlineWindow_HBlankCallback(ScanlineBufferController *);
+ScanlineWindowBuffer *sub_02010EE0(ScanlineBufferController *, int);
+void ScanlineBufferController_Init(ScanlineBufferController *, int, int, u32);
 #endif

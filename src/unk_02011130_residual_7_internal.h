@@ -27,14 +27,14 @@ typedef struct FadeWork11DEC {
     u32 arg7;
 } FadeWork11DEC;
 
-void sub_02010E64(void *work, u32 direction, u32 arg4, u32 arg7);
+void ScanlineBufferController_Init(void *work, u32 direction, u32 arg4, u32 arg7);
 void sub_02011F10(void *work);
 void sub_02010F00(SysTask *task, void *work);
 s16 *sub_02010EE0(void *work, int screen);
 void sub_02010F84(u32 arg5, u32 mode1, u32 mode2, u32 direction, u32 arg4,
                   s32 first, s32 zero, s32 second, s32 amount, u32 value);
 void sub_02011068(u32 arg5, int screen, u32 arg4, u32 value);
-void sub_02010C38(void);
+void ScanlineWindow_HBlankCallback(void);
 void sub_0200FF88(u32 arg6, u32 work, u32 callback, u32 arg4, u32 arg7);
 void sub_02011DEC(FadeWork11DEC *work, const FadeConfig11DEC *config, s32 steps, s32 interval,
                   u32 arg4, u32 arg5, u32 arg6, u32 arg7);

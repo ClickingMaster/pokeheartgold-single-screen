@@ -4,7 +4,7 @@ void sub_0201268C(FadeEffect *effect, const FadeParam *param, u32 unk2, u32 unk3
     effect->start = param->start;
     effect->current = param->start;
     effect->delta = param->end - param->start;
-    sub_02010E64(effect, 2, unk4, heapId);
+    ScanlineBufferController_Init(effect, 2, unk4, heapId);
     effect->duration = unk2;
     effect->frame = 0;
     effect->delay = unk3;
@@ -20,5 +20,5 @@ void sub_0201268C(FadeEffect *effect, const FadeParam *param, u32 unk2, u32 unk3
     sub_02010F84(unk5, param->unk04, param->unk05, 0, unk4, 0, 0, 0xFF, 0xC0, effect->color);
     sub_02010F84(unk5, param->unk04, param->unk05, 1, unk4, 0, 0, 0xFF, 0xC0, effect->color);
     sub_02011068(unk5, 3, unk4, effect->color);
-    sub_0200FF88(effect->unk34, effect, sub_02010C38, unk4, heapId);
+    sub_0200FF88(effect->unk34, effect, ScanlineWindow_HBlankCallback, unk4, heapId);
 }

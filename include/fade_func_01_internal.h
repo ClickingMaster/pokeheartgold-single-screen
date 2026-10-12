@@ -10,8 +10,8 @@ typedef struct FadeWork {
     u32 topScreen;
     u32 bottomScreen;
 } FadeWork;
-void sub_02010B14(FadeWork *, u32, u32);
-BOOL sub_02010BB4(FadeWork *);
+void BrightnessTransition_Start(FadeWork *, u32, u32);
+BOOL BrightnessTransition_Run(FadeWork *);
 void sub_0200FCDC(u16);
 void sub_0201289C(FadeWork *, const void *);
 BOOL sub_020128E0(FadeWork *);

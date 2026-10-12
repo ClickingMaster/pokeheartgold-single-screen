@@ -61,10 +61,10 @@ typedef struct Interpolation {
 extern int _s32_div_f(int, int);
 extern void *sub_02010EE0(void *, int);
 extern int sub_020109D8(int, int);
-extern void sub_02010E64(void *, int, u32, u32);
+extern void ScanlineBufferController_Init(void *, int, u32, u32);
 extern void sub_020127B8(void *);
 extern void sub_02010F00(SysTask *, void *);
-extern void sub_02010C38(void);
+extern void ScanlineWindow_HBlankCallback(void);
 extern void sub_02010F84(u32, u8, u8, int, u32, int, int, int, int, u32);
 extern void sub_02011068(u32, int, u32, u32);
 extern void sub_0200FF88(u32, void *, void (*)(void), u32, u32);

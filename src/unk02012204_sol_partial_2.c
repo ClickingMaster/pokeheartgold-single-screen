@@ -52,7 +52,7 @@ void sub_02012358(EffectWork *work, const ShortVector4 *param, u32 arg2, u32 arg
     work->interp.value = 0;
     work->interp.start = param->start;
     work->interp.delta = param->end - param->start;
-    sub_02010E64(work, 2, arg10, heapId);
+    ScanlineBufferController_Init(work, 2, arg10, heapId);
     work->steps = arg2;
     work->currentStep = 0;
     work->interval = arg3;
@@ -70,7 +70,7 @@ void sub_02012358(EffectWork *work, const ShortVector4 *param, u32 arg2, u32 arg
     sub_02010F84(arg5, param->a, param->b, 0, arg10, buffer0[0x180], 0, buffer0[0x240], 0xC0, work->value);
     sub_02010F84(arg5, param->a, param->b, 1, arg10, buffer1[0x180], 0, buffer1[0x240], 0xC0, work->value);
     sub_02011068(arg5, 3, arg10, work->value);
-    sub_0200FF88(work->arg6, (u32)work, (u32)sub_02010C38, arg10, heapId);
+    sub_0200FF88(work->arg6, (u32)work, (u32)ScanlineWindow_HBlankCallback, arg10, heapId);
 }
 
 BOOL sub_02012454(EffectWork *work) {

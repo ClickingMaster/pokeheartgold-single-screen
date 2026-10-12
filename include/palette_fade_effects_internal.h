@@ -94,8 +94,8 @@ typedef struct RepeatingFadeC {
 } RepeatingFadeC;
 
 extern void sub_0200FCDC(u16 color);
-extern void sub_02010B14(FadeWork *work);
-extern BOOL sub_02010BB4(FadeWork *work);
+extern void BrightnessTransition_Start(FadeWork *work);
+extern BOOL BrightnessTransition_Run(FadeWork *work);
 extern void sub_0201164C(FadeWork *work, const void *param);
 extern BOOL sub_0201169C(FadeWork *work);
 extern void sub_020116EC(FadeWork *work, const void *a, const void *b);
