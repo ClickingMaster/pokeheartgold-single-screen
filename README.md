@@ -1,6 +1,13 @@
 # Pokémon HeartGold and SoulSilver
 
-This is a work-in-progress disassembly of Pokémon HeartGold and SoulSilver. For instructions on how to set up the repository, please read [INSTALL.md](INSTALL.md).
+**Not affiliated with pret.**
+
+pret doesn't accept AI-generated code, so don't send anything from here upstream.
+Please don't bother them about this fork; keep everything here.
+
+Fully decompiled: everything's C/C++ and both ROMs build byte-for-byte. Built with LLM agents.
+
+Setup is in [INSTALL.md](INSTALL.md).
 
 [![Source-language coverage treemap](docs/progress/treemap.svg)](INSTALL.md#progress-reports)
 
