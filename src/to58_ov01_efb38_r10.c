@@ -5,8 +5,8 @@ BOOL ov01_021F07E0(void *arg) {
     if (p[0x2E] == 0) {
         return TRUE;
     }
-    BOOL done = ov01_021EFE44((Interp *)p);
-    ov01_021EFE44((Interp *)(p + 0x14));
+    BOOL done = EncounterEffectInterp_Update((Interp *)p);
+    EncounterEffectInterp_Update((Interp *)(p + 0x14));
     u32 width = p[0x2C];
     s16 left = *(s32 *)p - (width >> 1);
     s16 right = left + width;

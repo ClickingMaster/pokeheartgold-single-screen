@@ -474,7 +474,7 @@
 .public ov02_BattleExit_HandleRoamerAction
 .public PlayerStepEvent_RepelCounterDecrement
 .public PokecenterAnimCreate
-.public ov02_0224BDE8
+.public ElevatorAnimCreate
 .public ov02_0224BF58
 .public ov02_0224BFC0
 .public ov02_0224BFCC

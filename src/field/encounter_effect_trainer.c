@@ -97,8 +97,8 @@ typedef struct BallFallEffectWork {
 } BallFallEffectWork;
 
 BOOL ov01_021EFE30(EncounterEffectTask *effect);
-void ov01_021EFE70(EncounterEffectInterp *interp, s32 start, s32 end, s32 duration);
-BOOL ov01_021EFE80(EncounterEffectInterp *interp);
+void EncounterEffectInterp_InitFx(EncounterEffectInterp *interp, s32 start, s32 end, s32 duration);
+BOOL EncounterEffectInterp_UpdateFx(EncounterEffectInterp *interp);
 void *ov01_021EFFEC(void);
 void ov01_021F0028(void *flash);
 void ov01_021F0050(EncounterEffectTask *effect, void *flash, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
@@ -146,7 +146,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         effect->state++;
         break;
     case 1:
-        ov01_021EFCF8(1, -16, -16, &effect->fadeDone, 2);
+        EncounterEffect_StartFlash(1, -16, -16, &effect->fadeDone, 2);
         effect->state++;
         break;
     case 2:
@@ -155,20 +155,20 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         }
         break;
     case 3:
-        ov01_021EFEC8(&work->scale, 41, FX32_ONE, 2, 10);
+        EncounterEffectQuadInterp_Init(&work->scale, 41, FX32_ONE, 2, 10);
         ov01_021F074C(&scale, work->scale.value, work->scale.value, work->scale.value);
         for (i = 0; i < 2; i++) {
             Sprite_SetDrawFlag(work->sprites[i], TRUE);
             Sprite_SetAffineOverwriteMode(work->sprites[i], 2);
             Sprite_SetAffineScale(work->sprites[i], &scale);
         }
-        ov01_021EFE34(&work->rotation, 0, 0xFFFF, 10);
+        EncounterEffectInterp_Init(&work->rotation, 0, 0xFFFF, 10);
         effect->state++;
         break;
     case 4:
-        done = ov01_021EFF28(&work->scale);
+        done = EncounterEffectQuadInterp_Update(&work->scale);
         ov01_021F074C(&scale, work->scale.value, work->scale.value, work->scale.value);
-        ov01_021EFE44(&work->rotation);
+        EncounterEffectInterp_Update(&work->rotation);
         for (i = 0; i < 2; i++) {
             Sprite_SetAffineScale(work->sprites[i], &scale);
         }
@@ -182,22 +182,22 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         ov01_021F0050(effect, work->flash, 96, 6, 0, FX32_CONST(255), FX32_CONST(10));
         Sprite_SetAnimCtrlSeq(work->sprites[0], 1);
         Sprite_SetAnimCtrlSeq(work->sprites[1], 2);
-        ov01_021EFEC8(&work->movement, 0, FX32_CONST(255), FX32_CONST(10), 6);
+        EncounterEffectQuadInterp_Init(&work->movement, 0, FX32_CONST(255), FX32_CONST(10), 6);
         distance = Camera_GetDistance(work->camera);
-        ov01_021EFEC8(&work->cameraDistance, distance, distance - (125 << 14), -FX32_CONST(10), 6);
+        EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (125 << 14), -FX32_CONST(10), 6);
         Sprite_SetAffineZRotation(work->sprites[0], 0);
         Sprite_SetAffineZRotation(work->sprites[1], 0);
         effect->state++;
         break;
     case 6:
-        ov01_021EFF28(&work->movement);
+        EncounterEffectQuadInterp_Update(&work->movement);
         ov01_021F074C(&leftPos, FX32_CONST(128) - work->movement.value, FX32_CONST(96), 0);
         left = leftPos;
         ov01_021F074C(&rightPos, FX32_CONST(128) + work->movement.value, FX32_CONST(96), 0);
         right = rightPos;
         Sprite_SetMatrix(work->sprites[0], &left);
         Sprite_SetMatrix(work->sprites[1], &right);
-        ov01_021EFF28(&work->cameraDistance);
+        EncounterEffectQuadInterp_Update(&work->cameraDistance);
         Camera_SetDistance(work->cameraDistance.value, work->camera);
         if (ov01_021EFE30(effect)) {
             effect->state++;
@@ -214,7 +214,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         ov01_021F06EC(&work->spriteManager, &work->spriteResources);
         ov01_021F05F4(&work->spriteManager);
         ov01_021F0028(work->flash);
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
         break;
     }
     if (effect->state != 7) {
@@ -255,7 +255,7 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         effect->state++;
         break;
     case 1:
-        ov01_021EFCF8(1, 16, -16, &effect->fadeDone, 2);
+        EncounterEffect_StartFlash(1, 16, -16, &effect->fadeDone, 2);
         effect->state++;
         break;
     case 2:
@@ -264,7 +264,7 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         }
         break;
     case 3:
-        ov01_021EFE70(&work->position, -FX32_CONST(192), FX32_CONST(192), 8);
+        EncounterEffectInterp_InitFx(&work->position, -FX32_CONST(192), FX32_CONST(192), 8);
         Sprite_SetDrawFlag(work->sprites[0], TRUE);
         Sprite_SetDrawFlag(work->sprites[1], TRUE);
         ov01_021F074C(&topPos0, FX32_CONST(128) - work->position.value, FX32_CONST(64), 0);
@@ -273,18 +273,18 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         bottom0 = bottomPos0;
         Sprite_SetMatrix(work->sprites[0], &top0);
         Sprite_SetMatrix(work->sprites[1], &bottom0);
-        ov01_021EFE34(&work->rotation, 0, 0x1FFFE, 8);
+        EncounterEffectInterp_Init(&work->rotation, 0, 0x1FFFE, 8);
         effect->state++;
         break;
     case 4:
-        done = ov01_021EFE80(&work->position);
+        done = EncounterEffectInterp_UpdateFx(&work->position);
         ov01_021F074C(&topPos1, FX32_CONST(128) - work->position.value, FX32_CONST(64), 0);
         top1 = topPos1;
         ov01_021F074C(&bottomPos1, FX32_CONST(128) + work->position.value, FX32_CONST(128), 0);
         bottom1 = bottomPos1;
         Sprite_SetMatrix(work->sprites[0], &top1);
         Sprite_SetMatrix(work->sprites[1], &bottom1);
-        ov01_021EFE44(&work->rotation);
+        EncounterEffectInterp_Update(&work->rotation);
         Sprite_SetAffineZRotation(work->sprites[0], (u16)work->rotation.value);
         Sprite_SetAffineZRotation(work->sprites[1], (u16)-work->rotation.value);
         if (done == TRUE) {
@@ -294,11 +294,11 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
     case 5:
         ov01_021F02C4(effect, work->flash, 8, FX32_ONE, FX32_ONE);
         distance = Camera_GetDistance(work->camera);
-        ov01_021EFEC8(&work->cameraDistance, distance, distance - (125 << 14), -FX32_CONST(10), 8);
+        EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (125 << 14), -FX32_CONST(10), 8);
         effect->state++;
         break;
     case 6:
-        ov01_021EFF28(&work->cameraDistance);
+        EncounterEffectQuadInterp_Update(&work->cameraDistance);
         Camera_SetDistance(work->cameraDistance.value, work->camera);
         if (ov01_021EFE30(effect) == TRUE) {
             effect->state++;
@@ -315,7 +315,7 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         ov01_021F06EC(&work->spriteManager, &work->spriteResources);
         ov01_021F05F4(&work->spriteManager);
         ov01_021F029C(work->flash);
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
         break;
     }
     if (effect->state != 7) {
@@ -352,7 +352,7 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
         effect->state++;
         break;
     case 1:
-        ov01_021EFCF8(1, -16, -16, &effect->fadeDone, 2);
+        EncounterEffect_StartFlash(1, -16, -16, &effect->fadeDone, 2);
         effect->state++;
         break;
     case 2:
@@ -366,21 +366,21 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
         }
         break;
     case 3:
-        ov01_021EFE34(&work->blend, 0, 16, 8);
+        EncounterEffectInterp_Init(&work->blend, 0, 16, 8);
         G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, 0, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3, work->blend.value, 16 - work->blend.value);
         for (i = 0; i < 2; i++) {
             Sprite_SetDrawFlag(work->sprites[i], TRUE);
             Sprite_SetAffineOverwriteMode(work->sprites[i], 2);
             Sprite_SetOamMode(work->sprites[i], GX_OAM_MODE_XLU);
         }
-        ov01_021EFE34(&work->rotation, 0, 0xFFFF, 8);
+        EncounterEffectInterp_Init(&work->rotation, 0, 0xFFFF, 8);
         effect->state++;
         break;
     case 4:
-        done = ov01_021EFE44(&work->blend);
+        done = EncounterEffectInterp_Update(&work->blend);
         reg_G2_BLDALPHA = (u16)(work->blend.value | ((16 - work->blend.value) << 8));
         angle = (u16)work->rotation.value;
-        if (ov01_021EFE44(&work->rotation) == FALSE) {
+        if (EncounterEffectInterp_Update(&work->rotation) == FALSE) {
             Sprite_SetAffineZRotation(work->sprites[0], (u16)work->rotation.value);
             Sprite_SetAffineZRotation(work->sprites[1], (u32)(angle << 16) >> 16);
         } else {
@@ -397,7 +397,7 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
         effect->state++;
         break;
     case 5:
-        ov01_021EFEC8(&work->scale, FX32_ONE, 41, 410, 8);
+        EncounterEffectQuadInterp_Init(&work->scale, FX32_ONE, 41, 410, 8);
         ov01_021F074C(&scalePos5, work->scale.value, work->scale.value, work->scale.value);
         scale5 = scalePos5;
         for (i = 0; i < 2; i++) {
@@ -405,19 +405,19 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
         }
         {
             s32 distance = Camera_GetDistance(work->camera);
-            ov01_021EFEC8(&work->cameraDistance, distance, distance - (125 << 14), -FX32_CONST(10), 8);
+            EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (125 << 14), -FX32_CONST(10), 8);
         }
         BeginNormalPaletteFade(3, 24, 0, RGB_BLACK, 8, 1, HEAP_ID_FIELD1);
         effect->state++;
         break;
     case 6:
-        done = ov01_021EFF28(&work->scale);
+        done = EncounterEffectQuadInterp_Update(&work->scale);
         ov01_021F074C(&scalePos6, work->scale.value, work->scale.value, work->scale.value);
         scale6 = scalePos6;
         for (i = 0; i < 2; i++) {
             Sprite_SetAffineScale(work->sprites[i], &scale6);
         }
-        ov01_021EFF28(&work->cameraDistance);
+        EncounterEffectQuadInterp_Update(&work->cameraDistance);
         Camera_SetDistance(work->cameraDistance.value, work->camera);
         if (done == TRUE && IsPaletteFadeFinished() == TRUE) {
             effect->state++;
@@ -435,7 +435,7 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
         }
         ov01_021F06EC(&work->spriteManager, &work->spriteResources);
         ov01_021F05F4(&work->spriteManager);
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
         return;
     }
     if (work->waveActive == TRUE) {
@@ -480,7 +480,7 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         effect->state++;
         break;
     case 1:
-        ov01_021EFCF8(1, 16, -16, &effect->fadeDone, 2);
+        EncounterEffect_StartFlash(1, 16, -16, &effect->fadeDone, 2);
         effect->state++;
         break;
     case 2:
@@ -496,9 +496,9 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
     case 3:
         if (--work->timer < 0) {
             distance = Camera_GetDistance(work->camera);
-            ov01_021EFEC8(&work->cameraDistance, distance, distance - (125 << 14), -FX32_CONST(10), 16);
-            ov01_021EFE34(&work->rotation[0], 0, 0xFFFF, 6);
-            ov01_021EFE34(&work->y[0], 231, -32, 6);
+            EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (125 << 14), -FX32_CONST(10), 16);
+            EncounterEffectInterp_Init(&work->rotation[0], 0, 0xFFFF, 6);
+            EncounterEffectInterp_Init(&work->y[0], 231, -32, 6);
             ov01_021F0788(work->trails[0], 43, 43, 312, 0, 6, work->window, 86, 64, 15);
             ov01_021F074C(&position, FX32_CONST(43), FX32_CONST(231), 0);
             Sprite_SetMatrix(work->sprites[0], &position);
@@ -510,8 +510,8 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         break;
     case 4:
         if (--work->timer < 0) {
-            ov01_021EFE34(&work->y[1], 231, -32, 6);
-            ov01_021EFE34(&work->rotation[1], 0, -0xFFFF, 6);
+            EncounterEffectInterp_Init(&work->y[1], 231, -32, 6);
+            EncounterEffectInterp_Init(&work->rotation[1], 0, -0xFFFF, 6);
             ov01_021F0788(work->trails[1], 215, 215, 312, 0, 6, work->window, 86, 64, 15);
             ov01_021F074C(&position, FX32_CONST(215), FX32_CONST(231), 1);
             Sprite_SetMatrix(work->sprites[1], &position);
@@ -523,8 +523,8 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         break;
     case 5:
         if (--work->timer < 0) {
-            ov01_021EFE34(&work->y[2], 231, -32, 6);
-            ov01_021EFE34(&work->rotation[2], 0, 0xFFFF, 6);
+            EncounterEffectInterp_Init(&work->y[2], 231, -32, 6);
+            EncounterEffectInterp_Init(&work->rotation[2], 0, 0xFFFF, 6);
             ov01_021F0788(work->trails[2], 129, 129, 312, 0, 6, work->window, 86, 64, 15);
             ov01_021F074C(&position, FX32_CONST(129), FX32_CONST(231), 2);
             Sprite_SetMatrix(work->sprites[2], &position);
@@ -534,7 +534,7 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         }
         break;
     case 6:
-        ov01_021EFF28(&work->cameraDistance);
+        EncounterEffectQuadInterp_Update(&work->cameraDistance);
         Camera_SetDistance(work->cameraDistance.value, work->camera);
         if (work->active[0] == FALSE && work->active[1] == FALSE && work->active[2] == FALSE) {
             effect->state++;
@@ -558,7 +558,7 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         WindowArray_Delete(work->window, 1);
         BG_ClearCharDataRange(GF_BG_LYR_MAIN_3, 32, 0, HEAP_ID_FIELD1);
         BgClearTilemapBufferAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
         return;
     }
     if (work->waveActive == TRUE) {
@@ -569,8 +569,8 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
             if (ov01_021F07E0(work->trails[i])) {
                 work->active[i] = FALSE;
             }
-            ov01_021EFE44(&work->y[i]);
-            ov01_021EFE44(&work->rotation[i]);
+            EncounterEffectInterp_Update(&work->y[i]);
+            EncounterEffectInterp_Update(&work->rotation[i]);
             Sprite_SetAffineZRotation(work->sprites[i], (u16)work->rotation[i].value);
             matrix = *Sprite_GetMatrixPtr(work->sprites[i]);
             matrix.y = work->y[i].value << FX32_SHIFT;
@@ -606,7 +606,7 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
         effect->state++;
         break;
     case 1:
-        ov01_021EFCF8(1, -16, -16, &effect->fadeDone, 2);
+        EncounterEffect_StartFlash(1, -16, -16, &effect->fadeDone, 2);
         effect->state++;
         break;
     case 2:
@@ -615,26 +615,26 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
         }
         break;
     case 3:
-        ov01_021EFEC8(&work->y, 0, FX32_CONST(256), FX32_CONST(2), 12);
+        EncounterEffectQuadInterp_Init(&work->y, 0, FX32_CONST(256), FX32_CONST(2), 12);
         Sprite_SetDrawFlag(work->sprite, TRUE);
-        ov01_021EFEC8(&work->scaleX, 410, FX32_CONST(2), 0, 12);
-        ov01_021EFEC8(&work->scaleY, 410, FX32_CONST(2), 0, 12);
+        EncounterEffectQuadInterp_Init(&work->scaleX, 410, FX32_CONST(2), 0, 12);
+        EncounterEffectQuadInterp_Init(&work->scaleY, 410, FX32_CONST(2), 0, 12);
         ov01_021F074C(&scale, work->scaleX.value, work->scaleY.value, 0);
         Sprite_SetScaleAndAffineType(work->sprite, &scale, 2);
-        ov01_021EFE34(&work->rotation, 0, 0xFFFF, 12);
+        EncounterEffectInterp_Init(&work->rotation, 0, 0xFFFF, 12);
         effect->state++;
         break;
     case 4:
-        done = ov01_021EFF28(&work->y);
+        done = EncounterEffectQuadInterp_Update(&work->y);
         x = 2 << 18;
         ov01_021F074C(&position, x, work->y.value - (x >> 2), 0);
         matrix = position;
         Sprite_SetMatrix(work->sprite, &matrix);
-        ov01_021EFF28(&work->scaleX);
-        ov01_021EFF28(&work->scaleY);
+        EncounterEffectQuadInterp_Update(&work->scaleX);
+        EncounterEffectQuadInterp_Update(&work->scaleY);
         ov01_021F074C(&scale, work->scaleX.value, work->scaleY.value, 0);
         Sprite_SetAffineScale(work->sprite, &scale);
-        ov01_021EFE44(&work->rotation);
+        EncounterEffectInterp_Update(&work->rotation);
         Sprite_SetAffineZRotation(work->sprite, (u16)work->rotation.value);
         if (done == TRUE) {
             Sprite_SetDrawFlag(work->sprite, FALSE);
@@ -644,12 +644,12 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
     case 5:
         HBlankSystem_Stop(effect->fieldSystem->unk4->hBlankSystem);
         distance = Camera_GetDistance(work->camera);
-        ov01_021EFEC8(&work->cameraDistance, distance, distance - (250 << 14), FX32_CONST(10), 8);
+        EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (250 << 14), FX32_CONST(10), 8);
         BeginNormalPaletteFade(3, 18, 0, RGB_BLACK, 8, 1, HEAP_ID_FIELD1);
         effect->state++;
         break;
     case 6:
-        ov01_021EFF28(&work->cameraDistance);
+        EncounterEffectQuadInterp_Update(&work->cameraDistance);
         Camera_SetDistance(work->cameraDistance.value, work->camera);
         if (IsPaletteFadeFinished()) {
             effect->state++;
@@ -664,7 +664,7 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
         Sprite_Delete(work->sprite);
         ov01_021F06EC(&work->spriteManager, &work->spriteResources);
         ov01_021F05F4(&work->spriteManager);
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
         break;
     }
 
@@ -705,7 +705,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
         effect->state++;
         break;
     case 1:
-        ov01_021EFCF8(1, 16, -16, &effect->fadeDone, 2);
+        EncounterEffect_StartFlash(1, 16, -16, &effect->fadeDone, 2);
         effect->state++;
         break;
     case 2:
@@ -716,11 +716,11 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
         break;
     case 3:
         if (--work->timer <= 0) {
-            ov01_021EFE34(&work->y[0], -32, 224, 5);
+            EncounterEffectInterp_Init(&work->y[0], -32, 224, 5);
             ov01_021F074C(&position, FX32_CONST(128), -FX32_CONST(32), 0);
             Sprite_SetMatrix(work->sprites[0], &position);
             Sprite_SetDrawFlag(work->sprites[0], TRUE);
-            ov01_021EFE34(&work->rotation[0], 0, 0xFFFF, 5);
+            EncounterEffectInterp_Init(&work->rotation[0], 0, 0xFFFF, 5);
             Sprite_SetAffineOverwriteMode(work->sprites[0], 2);
             work->active[0] = TRUE;
             effect->state++;
@@ -729,11 +729,11 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
         break;
     case 4:
         if (--work->timer <= 0) {
-            ov01_021EFE34(&work->y[1], -32, 224, 5);
+            EncounterEffectInterp_Init(&work->y[1], -32, 224, 5);
             ov01_021F074C(&position, FX32_CONST(208), -FX32_CONST(32), 0);
             Sprite_SetMatrix(work->sprites[1], &position);
             Sprite_SetDrawFlag(work->sprites[1], TRUE);
-            ov01_021EFE34(&work->rotation[1], 0, -0xFFFF, 5);
+            EncounterEffectInterp_Init(&work->rotation[1], 0, -0xFFFF, 5);
             Sprite_SetAffineOverwriteMode(work->sprites[1], 2);
             work->active[1] = TRUE;
             effect->state++;
@@ -742,11 +742,11 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
         break;
     case 5:
         if (--work->timer <= 0) {
-            ov01_021EFE34(&work->y[2], -32, 224, 5);
+            EncounterEffectInterp_Init(&work->y[2], -32, 224, 5);
             ov01_021F074C(&position, FX32_CONST(48), -FX32_CONST(32), 0);
             Sprite_SetMatrix(work->sprites[2], &position);
             Sprite_SetDrawFlag(work->sprites[2], TRUE);
-            ov01_021EFE34(&work->rotation[2], 0, 0xFFFF, 5);
+            EncounterEffectInterp_Init(&work->rotation[2], 0, 0xFFFF, 5);
             Sprite_SetAffineOverwriteMode(work->sprites[2], 2);
             work->active[2] = TRUE;
             effect->state++;
@@ -763,13 +763,13 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
     case 7:
         ov01_021F0A0C(work->circleWipe, 1, 1, work->window, 15);
         distance = Camera_GetDistance(work->camera);
-        ov01_021EFEC8(&work->cameraDistance, distance, distance - (125 << 15), FX32_CONST(10), 64);
+        EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (125 << 15), FX32_CONST(10), 64);
         effect->state++;
         break;
     case 8:
         done = ov01_021F0A4C(work->circleWipe);
         ScheduleWindowCopyToVram(work->window);
-        ov01_021EFF28(&work->cameraDistance);
+        EncounterEffectQuadInterp_Update(&work->cameraDistance);
         Camera_SetDistance(work->cameraDistance.value, work->camera);
         if (done == TRUE) {
             effect->state++;
@@ -791,14 +791,14 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
         WindowArray_Delete(work->window, 1);
         BG_ClearCharDataRange(GF_BG_LYR_MAIN_3, 32, 0, HEAP_ID_FIELD1);
         BgClearTilemapBufferAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
         break;
     }
 
     for (i = 0; i < BALL_DROP_SPRITE_COUNT; i++) {
         if (work->active[i] == TRUE) {
-            done = ov01_021EFE44(&work->y[i]);
-            ov01_021EFE44(&work->rotation[i]);
+            done = EncounterEffectInterp_Update(&work->y[i]);
+            EncounterEffectInterp_Update(&work->rotation[i]);
             if (done) {
                 work->active[i] = FALSE;
             }

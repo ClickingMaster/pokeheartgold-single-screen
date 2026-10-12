@@ -52,7 +52,7 @@ void EncounterEffect_KimonoGirl(SysTask *task, EncounterEffectTask *effect) {
         effect->state = 1;
         break;
     case 1:
-        ov01_021EFCF8(1, -16, -16, &effect->fadeDone, 2);
+        EncounterEffect_StartFlash(1, -16, -16, &effect->fadeDone, 2);
         effect->state = 2;
         break;
     case 2:
@@ -61,14 +61,14 @@ void EncounterEffect_KimonoGirl(SysTask *task, EncounterEffectTask *effect) {
         }
         break;
     case 3:
-        ov01_021EFEC8(&work->scroll, FX32_CONST(128), 0, FX32_CONST(5), 18);
+        EncounterEffectQuadInterp_Init(&work->scroll, FX32_CONST(128), 0, FX32_CONST(5), 18);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
         work->scrolling = TRUE;
         effect->state = 4;
         break;
     case 4:
-        if (ov01_021EFF28(&work->scroll)) {
+        if (EncounterEffectQuadInterp_Update(&work->scroll)) {
             effect->state = 5;
         }
         break;
@@ -84,12 +84,12 @@ void EncounterEffect_KimonoGirl(SysTask *task, EncounterEffectTask *effect) {
         }
         break;
     case 6:
-        ov01_021EFEC8(&work->scroll, 0, FX32_CONST(128), FX32_CONST(5), 18);
+        EncounterEffectQuadInterp_Init(&work->scroll, 0, FX32_CONST(128), FX32_CONST(5), 18);
         work->scrolling = TRUE;
         effect->state = 7;
         break;
     case 7:
-        if (ov01_021EFF28(&work->scroll)) {
+        if (EncounterEffectQuadInterp_Update(&work->scroll)) {
             effect->state = 8;
         }
         break;
@@ -99,7 +99,7 @@ void EncounterEffect_KimonoGirl(SysTask *task, EncounterEffectTask *effect) {
         if (effect->done) {
             *effect->done = TRUE;
         }
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
         return;
     }
     if (work->scrolling) {

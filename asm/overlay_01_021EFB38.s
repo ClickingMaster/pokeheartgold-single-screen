@@ -9,12 +9,12 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_021EFB38
-	.public ov01_021EFB64
-	.public ov01_021EFC04
-	.public ov01_021EFD3C
-	.public ov01_021EFEC8
-	.public ov01_021EFF28
+	.public Task_RunEncounterEffect
+	.public EncounterEffect_LoadOverlay
+	.public EncounterEffect_UnloadOverlay
+	.public Task_EncounterEffectFlash
+	.public EncounterEffectQuadInterp_Init
+	.public EncounterEffectQuadInterp_Update
 	.public ov01_021EFFEC
 	.public ov01_021F0050
 	.public ov01_021F010C
@@ -50,21 +50,21 @@
 	.public ov01_022067FC
 	.public ov01_02206844
 	.public ov01_0220689C
-	.public ov01_022068C4
+	.public sEncounterEffectFuncs
 	.public ov01_02206980
-	.public ov01_02209B64
-	.public ov01_021EFC94
-	.public ov01_021EFCDC
-	.public ov01_021EFCF8
+	.public sEncounterEffectState
+	.public EncounterEffect_Start
+	.public EncounterEffect_Finish
+	.public EncounterEffect_StartFlash
 	.public ov01_021EFE30
-	.public ov01_021EFE34
-	.public ov01_021EFE44
-	.public ov01_021EFE70
-	.public ov01_021EFE80
-	.public ov01_021EFF90
-	.public ov01_021EFFB0
-	.public ov01_021EFFBC
-	.public ov01_021EFFD8
+	.public EncounterEffectInterp_Init
+	.public EncounterEffectInterp_Update
+	.public EncounterEffectInterp_InitFx
+	.public EncounterEffectInterp_UpdateFx
+	.public EncounterEffect_SetMasterBrightness
+	.public BrightnessInterp_Init
+	.public BrightnessInterp_Update
+	.public Task_ApplyBrightness
 	.public ov01_021F0028
 	.public ov01_021F00DC
 	.public ov01_021F029C
@@ -107,16 +107,16 @@
 	.public ov01_021F12D0
 	.public ov01_021F12E8
 
-	thumb_func_start ov01_021EFB38
-ov01_021EFB38: ; 0x021EFB38
+	thumb_func_start Task_RunEncounterEffect
+Task_RunEncounterEffect: ; 0x021EFB38
 	push {r3, lr}
-	ldr r2, _021EFB5C ; =ov01_02209B64
+	ldr r2, _021EFB5C ; =sEncounterEffectState
 	ldr r2, [r2, #4]
 	lsl r3, r2, #2
-	ldr r2, _021EFB60 ; =ov01_022068C4
+	ldr r2, _021EFB60 ; =sEncounterEffectFuncs
 	ldr r2, [r2, r3]
 	blx r2
-	ldr r0, _021EFB5C ; =ov01_02209B64
+	ldr r0, _021EFB5C ; =sEncounterEffectState
 	ldr r1, [r0, #8]
 	add r1, r1, #1
 	str r1, [r0, #8]
@@ -126,13 +126,13 @@ ov01_021EFB38: ; 0x021EFB38
 	bl OS_SetTick
 	pop {r3, pc}
 	.balign 4, 0
-_021EFB5C: .word ov01_02209B64
-_021EFB60: .word ov01_022068C4
-	thumb_func_end ov01_021EFB38
+_021EFB5C: .word sEncounterEffectState
+_021EFB60: .word sEncounterEffectFuncs
+	thumb_func_end Task_RunEncounterEffect
 
 
-	thumb_func_start ov01_021EFB64
-ov01_021EFB64: ; 0x021EFB64
+	thumb_func_start EncounterEffect_LoadOverlay
+EncounterEffect_LoadOverlay: ; 0x021EFB64
 	push {r3, lr}
 	cmp r0, #0xc
 	blt _021EFB78
@@ -205,11 +205,11 @@ _021EFBF4: .word FS_OVERLAY_ID(OVY_118)
 _021EFBF8: .word FS_OVERLAY_ID(OVY_120)
 _021EFBFC: .word FS_OVERLAY_ID(OVY_119)
 _021EFC00: .word FS_OVERLAY_ID(OVY_114)
-	thumb_func_end ov01_021EFB64
+	thumb_func_end EncounterEffect_LoadOverlay
 
 
-	thumb_func_start ov01_021EFC04
-ov01_021EFC04: ; 0x021EFC04
+	thumb_func_start EncounterEffect_UnloadOverlay
+EncounterEffect_UnloadOverlay: ; 0x021EFC04
 	push {r3, lr}
 	cmp r0, #0xc
 	blt _021EFC16
@@ -274,4 +274,4 @@ _021EFC84: .word FS_OVERLAY_ID(OVY_118)
 _021EFC88: .word FS_OVERLAY_ID(OVY_120)
 _021EFC8C: .word FS_OVERLAY_ID(OVY_119)
 _021EFC90: .word FS_OVERLAY_ID(OVY_114)
-	thumb_func_end ov01_021EFC04
+	thumb_func_end EncounterEffect_UnloadOverlay

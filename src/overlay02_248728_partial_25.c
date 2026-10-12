@@ -53,7 +53,7 @@ int SafariZone_CanPlaceObjectOnLand(void *, u32);
 int SafariZone_CanPlaceObjectOnWater(void *, u32);
 int FollowMonInteraction_StepHasMovement(void *, u16 *);
 void FieldSystem_FollowMonInteract(void *);
-void ov02_02248C98(void *, void *);
+void Sprite_CopyPositionVector(void *, void *);
 void ov02_02249444(void *, u32);
 void ov02_02249548(void *);
 int ov02_02249940(void *);

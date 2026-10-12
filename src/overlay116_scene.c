@@ -44,7 +44,7 @@ void ov116_0225F054(void *arg0, Ov116Task *task) {
         task->state++;
         break;
     case 1:
-        ov01_021EFCF8(1, 0x10, 0x10, &task->done, 1);
+        EncounterEffect_StartFlash(1, 0x10, 0x10, &task->done, 1);
         task->state++;
         break;
     case 2:
@@ -86,7 +86,7 @@ void ov116_0225F054(void *arg0, Ov116Task *task) {
         if (task->completionFlag != NULL) {
             *task->completionFlag = 1;
         }
-        ov01_021EFCDC(task, arg0);
+        EncounterEffect_Finish(task, arg0);
         SetMasterBrightnessByColor(1, 0x7FFF);
         break;
     }
@@ -105,7 +105,7 @@ void ov116_0225F1BC(void *arg0, Ov116Task *task, const Ov116Sequence *seq) {
         task->state++;
         break;
     case 1:
-        ov01_021EFCF8(1, 0x10, 0x10, &task->done, 1);
+        EncounterEffect_StartFlash(1, 0x10, 0x10, &task->done, 1);
         task->state++;
         break;
     case 2:
@@ -117,12 +117,12 @@ void ov116_0225F1BC(void *arg0, Ov116Task *task, const Ov116Sequence *seq) {
         s32 start;
         work->effect = (void *)FieldMotionBlur_Start(seq->angleX, seq->angleY);
         start = Camera_GetPerspectiveAngle(task->fieldSystem->camera);
-        ov01_021EFE34(&work->perspectiveInterp[0], start, start + seq->perspectiveDelta, seq->unk00);
+        EncounterEffectInterp_Init(&work->perspectiveInterp[0], start, start + seq->perspectiveDelta, seq->unk00);
         task->state++;
         break;
     }
     case 4:
-        done = ov01_021EFE44(&work->perspectiveInterp[0]);
+        done = EncounterEffectInterp_Update(&work->perspectiveInterp[0]);
         Camera_SetPerspectiveAngle((u16)work->perspectiveInterp[0], task->fieldSystem->camera);
         if (done == 1) {
             task->state++;
@@ -133,13 +133,13 @@ void ov116_0225F1BC(void *arg0, Ov116Task *task, const Ov116Sequence *seq) {
         s32 start;
         if (--work->delay < 0) {
             start = Camera_GetDistance(task->fieldSystem->camera);
-            ov01_021EFEC8(&work->distanceInterp[0], start, start + seq->distanceDelta, seq->distanceDuration, seq->duration);
+            EncounterEffectQuadInterp_Init(&work->distanceInterp[0], start, start + seq->distanceDelta, seq->distanceDuration, seq->duration);
             task->state++;
         }
         break;
     }
     case 6:
-        done = ov01_021EFF28(&work->distanceInterp[0]);
+        done = EncounterEffectQuadInterp_Update(&work->distanceInterp[0]);
         Camera_SetDistance(work->distanceInterp[0], task->fieldSystem->camera);
         if (done == 1) {
             task->state++;
@@ -162,7 +162,7 @@ void ov116_0225F1BC(void *arg0, Ov116Task *task, const Ov116Sequence *seq) {
         if (task->completionFlag != NULL) {
             *task->completionFlag = 1;
         }
-        ov01_021EFCDC(task, arg0);
+        EncounterEffect_Finish(task, arg0);
         SetMasterBrightnessByColor(1, 0x7FFF);
         break;
     }

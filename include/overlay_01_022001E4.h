@@ -5,5 +5,6 @@
 
 int EmoteMark_Spawn(LocalMapObject *obj, int a0, int a1);
 BOOL EmoteMark_IsDone(int a0);
+void EmoteMark_Hide(int effect);
 
 #endif // POKEHEARTGOLD_OVERLAY_01_022001E4_H

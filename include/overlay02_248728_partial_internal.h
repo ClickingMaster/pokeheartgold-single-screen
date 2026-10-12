@@ -87,7 +87,7 @@ extern void ov02_02249D5C(void *);
 extern void ov02_02249E58(void *);
 extern void ov02_0224A700(void *);
 extern void FieldEffectPool_Delete(void *);
-extern void ov02_0224886C(void *);
+extern void SpriteGfxManager_Free(void *);
 extern void FollowMon_StartRecall(void *);
 extern void ov02_0224AB58(void *);
 extern void ov02_0224AC38(void *);

@@ -3,43 +3,43 @@
 void ov01_021F0FB8(u32 count) {
     Triple value = { 0, 0, 0 };
     u32 i;
-    if (!*(void **)ov01_02209B64) {
+    if (!*(void **)sEncounterEffectState) {
         GF_ASSERT(FALSE);
     }
-    if (!*(void **)(*(u8 **)ov01_02209B64 + 8)) {
+    if (!*(void **)(*(u8 **)sEncounterEffectState + 8)) {
         GF_ASSERT(FALSE);
     }
     for (i = 0; i < count; i++) {
-        ParticleSystem_CreateEmitter(*(void **)(*(u8 **)ov01_02209B64 + 8), i, &value);
+        ParticleSystem_CreateEmitter(*(void **)(*(u8 **)sEncounterEffectState + 8), i, &value);
     }
 }
 
 BOOL ov01_021F1008(void) {
-    u8 *p = *(u8 **)ov01_02209B64;
+    u8 *p = *(u8 **)sEncounterEffectState;
     void *q;
     if (!p) {
         GF_ASSERT(FALSE);
     }
-    q = *(void **)(*(u8 **)ov01_02209B64 + 8);
+    q = *(void **)(*(u8 **)sEncounterEffectState + 8);
     if (!q) {
         return TRUE;
     }
     ParticleSystem_CalcAll(q);
-    return ParticleSystem_GetActiveEmitterCount(*(void **)(*(u8 **)ov01_02209B64 + 8)) == 0;
+    return ParticleSystem_GetActiveEmitterCount(*(void **)(*(u8 **)sEncounterEffectState + 8)) == 0;
 }
 
 BOOL ov01_021F1044(void) {
-    return ParticleSystem_GetActiveEmitterCount(*(void **)(*(u8 **)ov01_02209B64 + 8)) == 0;
+    return ParticleSystem_GetActiveEmitterCount(*(void **)(*(u8 **)sEncounterEffectState + 8)) == 0;
 }
 
 void ov01_021F1060(void) {
-    if (!*(void **)ov01_02209B64) {
+    if (!*(void **)sEncounterEffectState) {
         GF_ASSERT(FALSE);
     }
-    ParticleSystem_Free(*(void **)(*(u8 **)ov01_02209B64 + 8));
-    Heap_Free(*(void **)(*(u8 **)ov01_02209B64 + 0xC));
-    *(void **)(*(u8 **)ov01_02209B64 + 8) = NULL;
-    *(void **)(*(u8 **)ov01_02209B64 + 0xC) = NULL;
+    ParticleSystem_Free(*(void **)(*(u8 **)sEncounterEffectState + 8));
+    Heap_Free(*(void **)(*(u8 **)sEncounterEffectState + 0xC));
+    *(void **)(*(u8 **)sEncounterEffectState + 8) = NULL;
+    *(void **)(*(u8 **)sEncounterEffectState + 0xC) = NULL;
 }
 
 void ov01_021F1094(SysTask *task, void *v) {

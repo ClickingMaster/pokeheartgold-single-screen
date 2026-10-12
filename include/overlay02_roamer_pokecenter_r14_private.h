@@ -45,7 +45,7 @@ void sub_02054DC8(int, int, VecFx32 *);
 void MapProp_GetTranslation(VecFx32 *, void *);
 void TaskManager_Call(void *, void *, void *);
 BOOL PokecenterAnimRun(void *);
-BOOL ov02_0224BE24(void *);
+BOOL ElevatorAnimRun(void *);
 BOOL sub_02054C90(void *, int *, u32, void **, int *);
 void *AreaDataManager_GetMapPropTexture(void *);
 void *MapProp_GetRenderSurface(void *);
@@ -61,6 +61,6 @@ void ov02_RepelActiveRoamersFromMapNo(void *, u32);
 void *ov02_0224BAA8(void *, u32);
 BOOL PlayerStepEvent_RepelCounterDecrement(void *, void *);
 void PokecenterAnimCreate(void *, u8);
-void ov02_0224BDE8(void *, u8, u8);
+void ElevatorAnimCreate(void *, u8, u8);
 void ov02_0224BF58(void *, u8);
 #endif

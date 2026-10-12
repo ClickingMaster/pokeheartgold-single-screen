@@ -95,7 +95,7 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
         effect->state++;
         break;
     case 1:
-        ov01_021EFCF8(1, -16, -16, &effect->fadeDone, 2);
+        EncounterEffect_StartFlash(1, -16, -16, &effect->fadeDone, 2);
         effect->state++;
         break;
     case 2:
@@ -107,10 +107,10 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
         break;
     case 3:
         if (--work->timer < 0) {
-            ov01_021EFEC8(&work->x[work->next], ov117_0225FAF4[work->next * 8], ov117_0225FAF8[work->next * 8], ov117_0225FAFC[work->next * 8], 8);
-            ov01_021EFEC8(&work->y[work->next], ov117_0225FB00[work->next * 8], ov117_0225FB04[work->next * 8], ov117_0225FB08[work->next * 8], 8);
-            ov01_021EFEC8(&work->scale[work->next], FX32_CONST(2), 41, -0x666, 8);
-            ov01_021EFE34(&work->rotation[work->next], 0, ov117_0225FB10[work->next * 8], 8);
+            EncounterEffectQuadInterp_Init(&work->x[work->next], ov117_0225FAF4[work->next * 8], ov117_0225FAF8[work->next * 8], ov117_0225FAFC[work->next * 8], 8);
+            EncounterEffectQuadInterp_Init(&work->y[work->next], ov117_0225FB00[work->next * 8], ov117_0225FB04[work->next * 8], ov117_0225FB08[work->next * 8], 8);
+            EncounterEffectQuadInterp_Init(&work->scale[work->next], FX32_CONST(2), 41, -0x666, 8);
+            EncounterEffectInterp_Init(&work->rotation[work->next], 0, ov117_0225FB10[work->next * 8], 8);
             Sprite_SetDrawFlag(work->sprites[work->next], TRUE);
             ov01_021F074C(&position, ov117_0225FAF4[work->next * 8], ov117_0225FB00[work->next * 8], 0);
             Sprite_SetMatrix(work->sprites[work->next], &position);
@@ -151,15 +151,15 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
         }
         ov01_021F06EC(&work->spriteManager, &work->spriteResources);
         ov01_021F05F4(&work->spriteManager);
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
         break;
     }
     for (i = 0; i < ROCKET_EFFECT_SPRITE_COUNT; i++) {
         if (work->active[i] == TRUE) {
-            done = ov01_021EFF28(&work->x[i]);
-            ov01_021EFF28(&work->y[i]);
-            ov01_021EFF28(&work->scale[i]);
-            ov01_021EFE44(&work->rotation[i]);
+            done = EncounterEffectQuadInterp_Update(&work->x[i]);
+            EncounterEffectQuadInterp_Update(&work->y[i]);
+            EncounterEffectQuadInterp_Update(&work->scale[i]);
+            EncounterEffectInterp_Update(&work->rotation[i]);
             if (done) {
                 work->active[i] = FALSE;
                 Sprite_SetDrawFlag(work->sprites[i], FALSE);
@@ -268,7 +268,7 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
             G2_SetWnd0Position(0, 96, 255, 96);
         }
         ov01_021F12B4(&work->wave, HEAP_ID_FIELD1);
-        ov01_021EFCF8(1, 16, -16, &effect->fadeDone, 1);
+        EncounterEffect_StartFlash(1, 16, -16, &effect->fadeDone, 1);
         effect->state++;
         break;
     }
@@ -286,12 +286,12 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
     case 3:
         reg_GX_DISPCNT = (reg_GX_DISPCNT & 0xFFFF1FFF) | REG_GX_DISPCNT_W0_MASK;
         ToggleBgLayer(GF_BG_LYR_MAIN_3, GF_PLANE_TOGGLE_ON);
-        ov01_021EFEC8(&work->slide, 0, FX32_CONST(96), FX32_CONST(4), 4);
+        EncounterEffectQuadInterp_Init(&work->slide, 0, FX32_CONST(96), FX32_CONST(4), 4);
         effect->state++;
         // fallthrough
     case 4:
         BgSetPosTextAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_ADD_X, 24);
-        if (!ov01_021EFF28(&work->slide)) {
+        if (!EncounterEffectQuadInterp_Update(&work->slide)) {
             int height = work->slide.value >> FX32_SHIFT;
 
             reg_G2_WIN0H = 255;
@@ -353,7 +353,7 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
         break;
     case 9:
         if (--work->timer <= 0) {
-            ov01_021EFEC8(&work->slide, work->position.x, FX32_CONST(-96), FX32_CONST(2), 8);
+            EncounterEffectQuadInterp_Init(&work->slide, work->position.x, FX32_CONST(-96), FX32_CONST(2), 8);
             work->timer = 8;
             ToggleBgLayer(GF_BG_LYR_MAIN_3, GF_PLANE_TOGGLE_OFF);
             effect->state++;
@@ -371,7 +371,7 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
             }
         }
         Sprite_SetMatrix(work->sprite, &work->position);
-        if (ov01_021EFF28(&work->slide)) {
+        if (EncounterEffectQuadInterp_Update(&work->slide)) {
             reg_GXS_DB_DISPCNT &= 0xFFFEFFFF;
             BG_SetMaskColor(GF_BG_LYR_SUB_0, RGB_BLACK);
             BeginNormalPaletteFade(0, 0, 0, RGB_WHITE, 4, 1, HEAP_ID_FIELD1);
@@ -397,7 +397,7 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
         BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 32, 0, HEAP_ID_FIELD1);
         BgClearTilemapBufferAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
         BgClearTilemapBufferAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1);
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
         break;
     }
     if (work->waveActive == TRUE) {

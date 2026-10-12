@@ -3,9 +3,9 @@
 	.public ov01_022067FC
 	.public ov01_02206844
 	.public ov01_0220689C
-	.public ov01_022068C4
+	.public sEncounterEffectFuncs
 	.public ov01_02206980
-	.public ov01_02209B64
+	.public sEncounterEffectState
 #include "constants/sndseq.h"
 #include "constants/moves.h"
 #include "constants/std_script.h"
@@ -17,12 +17,12 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_021EFB38
-	.public ov01_021EFB64
-	.public ov01_021EFC04
-	.public ov01_021EFD3C
-	.public ov01_021EFEC8
-	.public ov01_021EFF28
+	.public Task_RunEncounterEffect
+	.public EncounterEffect_LoadOverlay
+	.public EncounterEffect_UnloadOverlay
+	.public Task_EncounterEffectFlash
+	.public EncounterEffectQuadInterp_Init
+	.public EncounterEffectQuadInterp_Update
 	.public ov01_021EFFEC
 	.public ov01_021F0050
 	.public ov01_021F010C
@@ -84,7 +84,7 @@ ov01_0220689C: ; 0x0220689C
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00
 
-ov01_022068C4: ; 0x022068C4
+sEncounterEffectFuncs: ; 0x022068C4
 	.word EncounterEffect_WildRowsWhite
 	.word EncounterEffect_WildRowsBlack
 	.word EncounterEffect_WildWaveWhite
@@ -138,5 +138,5 @@ ov01_02206980: ; 0x02206980
 
 	.bss
 
-ov01_02209B64: ; 0x02209B64
+sEncounterEffectState: ; 0x02209B64
 	.space 0xC

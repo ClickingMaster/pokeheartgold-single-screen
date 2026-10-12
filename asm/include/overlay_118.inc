@@ -12,9 +12,9 @@
 .public GfGfx_EngineATogglePlanes
 .public GfGfx_EngineASetPlanes
 .public memset
-.public ov01_021EFCDC
-.public ov01_021EFCF8
-.public ov01_021EFEC8
-.public ov01_021EFF28
+.public EncounterEffect_Finish
+.public EncounterEffect_StartFlash
+.public EncounterEffectQuadInterp_Init
+.public EncounterEffectQuadInterp_Update
 .public ov01_021F0500
 .public EncounterEffect_KimonoGirl

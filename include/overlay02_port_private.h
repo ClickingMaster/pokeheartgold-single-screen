@@ -376,7 +376,7 @@ WIP_LOCAL void RockDebris_InitPiece(Field3dObject *obj, Field3dModel *model, NNS
 WIP_LOCAL BOOL ov02_0224B43C(SysTask *task);
 WIP_LOCAL BOOL MapId_IsSafariZone(int a0);
 WIP_LOCAL BOOL FollowMonInteraction_StepHasMovement(void *a0, u16 *a1);
-WIP_LOCAL Sprite *ov02_02248C10(void *mgr, VecFx32 *pos, int charId, int plttId, int cellId, int cellAnmId, int priority, int drawPriority);
+WIP_LOCAL Sprite *SpriteGfxManager_CreateSprite(void *mgr, VecFx32 *pos, int charId, int plttId, int cellId, int cellAnmId, int priority, int drawPriority);
 WIP_LOCAL Sprite *ov02_02248D18(void *mgr, int a1);
 WIP_LOCAL int FieldMoveArrival_Finish(void *a0, void *a1, void *work);
 WIP_LOCAL Sprite *ov02_0224A33C(void *mgr, VecFx32 *pos, int charId, int plttId, int cellId, int mode, int priority, int drawPriority);
@@ -474,7 +474,7 @@ WIP_LOCAL void RockClimbDebris_UpdateOffsets(void *data);
 WIP_LOCAL void RockClimbDebris_InitPiece(Field3dObject *obj, Field3dModel *model, NNSFndAllocator *allocator, void **anmResources);
 WIP_LOCAL void RockClimbDebris_Init(void *a0, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL void RockDebris_Spawn(void *data);
-WIP_LOCAL BOOL ov02_0224BE24(TaskManager *taskManager);
+WIP_LOCAL BOOL ElevatorAnimRun(TaskManager *taskManager);
 WIP_LOCAL BOOL Task_HallOfFameBallAnim(TaskManager *taskManager);
 WIP_LOCAL BOOL PokecenterAnimRun(TaskManager *taskManager);
 WIP_LOCAL int PrimoPassword_DecodeWallpaper(WallpaperPasswordBank *bank, u16 trainerId, u16 a, u16 b, u16 c, u16 d);
@@ -520,10 +520,10 @@ WIP_LOCAL void FollowMon_TryShakeGrass(void *a0, LocalMapObject *obj, u8 dir);
 WIP_LOCAL BOOL FieldMoveEffectModel_AnimateOnce(void *obj);
 WIP_LOCAL void ov02_022507B4(FieldSystem *fieldSystem, u8 a1);
 WIP_LOCAL BOOL ov02_022507E8(TaskManager *taskManager); // still in asm
-WIP_LOCAL BOOL ov02_022489F0(void *mgr, int a1);
-WIP_LOCAL void ov02_02248A24(void *mgr, int a1);
-WIP_LOCAL BOOL ov02_02248AC8(void *mgr, int a1);
-WIP_LOCAL void ov02_02248AFC(void *mgr, int a1);
+WIP_LOCAL BOOL SpriteGfxManager_TransferChar(void *mgr, int a1);
+WIP_LOCAL void SpriteGfxManager_ReleaseCharData(void *mgr, int a1);
+WIP_LOCAL BOOL SpriteGfxManager_TransferPltt(void *mgr, int a1);
+WIP_LOCAL void SpriteGfxManager_ReleasePlttData(void *mgr, int a1);
 WIP_LOCAL int ov02_0224B4AC(void *work);
 
 // forward decls for functions referenced only from the consolidated rodata tables
@@ -641,12 +641,12 @@ typedef struct AuditGfxWork {
     AuditResSlot *animRes;
 } AuditGfxWork;
 
-WIP_LOCAL void ov02_02248728(AuditGfxWork *mgr, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9);
-WIP_LOCAL void ov02_02248980(void *mgr, void *narc, int resId, int flag);
-WIP_LOCAL void ov02_02248A58(void *mgr, void *narc, int resId, int flag);
-WIP_LOCAL void ov02_02248B30(void *mgr, void *narc, int resId, int flag);
-WIP_LOCAL void ov02_02248BA0(void *mgr, void *narc, int resId, int flag);
-WIP_LOCAL void ov02_02248C98(Sprite *sprite, VecFx32 *out);
+WIP_LOCAL void SpriteGfxManager_Init(AuditGfxWork *mgr, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9);
+WIP_LOCAL void SpriteGfxManager_LoadChar(void *mgr, void *narc, int resId, int flag);
+WIP_LOCAL void SpriteGfxManager_LoadPltt(void *mgr, void *narc, int resId, int flag);
+WIP_LOCAL void SpriteGfxManager_LoadCell(void *mgr, void *narc, int resId, int flag);
+WIP_LOCAL void SpriteGfxManager_LoadAnim(void *mgr, void *narc, int resId, int flag);
+WIP_LOCAL void Sprite_CopyPositionVector(Sprite *sprite, VecFx32 *out);
 WIP_LOCAL int ov02_02248E10(void *work);
 WIP_LOCAL void ov02_0224A69C(void *work, int p1, int p2, int p3, int p4);
 WIP_LOCAL void *ov02_0224A800(u16 *a0, enum HeapID heapID);
@@ -739,7 +739,7 @@ WIP_LOCAL void ov02_0224AC38(void *work); // still in asm
 WIP_LOCAL SpriteResource *ov02_0224A868(void *mgr, NARC *narc);
 WIP_LOCAL void RockClimbDebris_FreePiece(void *obj, NNSFndAllocator *alloc);
 WIP_LOCAL void RockDebris_FreePiece(void *obj, NNSFndAllocator *alloc);
-WIP_LOCAL void ov02_0224886C(void *mgr); // destructor, still in asm
+WIP_LOCAL void SpriteGfxManager_Free(void *mgr); // destructor, still in asm
 WIP_LOCAL int FieldDig_Warp(TaskManager *taskManager, void *a1, void *a2);
 WIP_LOCAL int FieldMove_ShowCutIn(void *a0, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL int FieldMove_WaitCutIn(void *a0, void *a1, void *work);
@@ -822,6 +822,6 @@ WIP_LOCAL void FieldMoveEffectModel_Unload(void *obj, void *fieldSystem);
 // Field3dObjectTaskTemplate data (rodata) defined later in the file's .rodata.
 // Declared extern here so the create wrappers' relocations resolve by name.
 
-// ov02_02248728
+// SpriteGfxManager_Init
 
 #endif // OVERLAY02_PORT_PRIVATE_H

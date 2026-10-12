@@ -1,5 +1,5 @@
 #include "field_overlay_effects_internal.h"
-void ov01_021EFEC8(void *, s32, s32, s32, s32);
+void EncounterEffectQuadInterp_Init(void *, s32, s32, s32, s32);
 void ov01_021F0050(void *, void *, s32, s32, s32, s32, s32);
 void ov01_021F0050(void *root, void *arg, s32 value, s32 duration, s32 start, s32 end, s32 middle) {
     u8 *p = arg;
@@ -12,7 +12,7 @@ void ov01_021F0050(void *root, void *arg, s32 value, s32 duration, s32 start, s3
     *(s32 *)(p + 0x18) = value;
     *(s32 *)(p + 0x1C) = 0;
     *(void **)(p + 0x2C) = r + 0x18;
-    ov01_021EFEC8(p, start, end, middle, duration);
+    EncounterEffectQuadInterp_Init(p, start, end, middle, duration);
     if (start >= 0) {
         *(volatile u16 *)0x04000040 = 0xFF - start;
         *(volatile u16 *)0x04000044 = 0xC0;

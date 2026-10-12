@@ -23,11 +23,11 @@ extern u8 SDK_OVERLAY_OVY_119_ID;
 extern u8 SDK_OVERLAY_OVY_120_ID;
 #define LOCAL_OVERLAY_ID(name) ((FSOverlayID) & SDK_OVERLAY_##name##_ID)
 
-extern OverlayEffectGlobal ov01_02209B64;
-extern const OverlayEffectCallback ov01_022068C4[];
+extern OverlayEffectGlobal sEncounterEffectState;
+extern const OverlayEffectCallback sEncounterEffectFuncs[];
 
-void ov01_021EFB38(void *, void *);
-void ov01_021EFB64(s32);
-void ov01_021EFC04(s32);
+void Task_RunEncounterEffect(void *, void *);
+void EncounterEffect_LoadOverlay(s32);
+void EncounterEffect_UnloadOverlay(s32);
 
 #endif

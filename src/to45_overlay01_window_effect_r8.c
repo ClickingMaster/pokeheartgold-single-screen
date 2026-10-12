@@ -23,7 +23,7 @@ void ov01_021F03F8(Ov01R8Work *work);
 void ov01_021F0360(void *unused, Ov01R8Work *work);
 void ov01_021F0454(NARC *narc, int screenMember, int characterMember, int paletteMember, int palette, int paletteSize, BgConfig *bgConfig, int bgId);
 void SysTask_Destroy(SysTask *task);
-BOOL ov01_021EFF28(void *interp);
+BOOL EncounterEffectQuadInterp_Update(void *interp);
 void HBlankTask_Delete(void *task);
 
 void ov01_021F0360(void *unused, Ov01R8Work *work) {
@@ -32,8 +32,8 @@ void ov01_021F0360(void *unused, Ov01R8Work *work) {
 
     switch (work->state) {
     case 0:
-        ov01_021EFF28(&work->second);
-        if (ov01_021EFF28(&work->first)) {
+        EncounterEffectQuadInterp_Update(&work->second);
+        if (EncounterEffectQuadInterp_Update(&work->first)) {
             work->state++;
         }
         first = work->first >> 12;

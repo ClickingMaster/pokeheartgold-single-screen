@@ -50,8 +50,8 @@ void ov01_021F0788(void *v, s32 a, s32 b, s32 c, s32 d, s32 duration, void *wind
     if (p[0x2E]) {
         GF_ASSERT(FALSE);
     }
-    ov01_021EFE34((Interp *)p, a, b, duration);
-    ov01_021EFE34((Interp *)(p + 0x14), c, d, duration);
+    EncounterEffectInterp_Init((Interp *)p, a, b, duration);
+    EncounterEffectInterp_Init((Interp *)(p + 0x14), c, d, duration);
     *(void **)(p + 0x28) = window;
     p[0x2C] = width;
     p[0x2D] = height;

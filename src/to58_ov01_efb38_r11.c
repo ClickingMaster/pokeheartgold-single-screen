@@ -12,8 +12,8 @@ BOOL ov01_021F08C0(void *arg) {
     s16 top = *(s32 *)(p + 0x14) - (height >> 1);
     s16 bottom = top + height;
     ov01_021F0960(*(void **)(p + 0x28), top, bottom, left, right, 0);
-    BOOL done = ov01_021EFE44((Interp *)p);
-    ov01_021EFE44((Interp *)(p + 0x14));
+    BOOL done = EncounterEffectInterp_Update((Interp *)p);
+    EncounterEffectInterp_Update((Interp *)(p + 0x14));
     width = p[0x2C];
     left = *(s32 *)p - (width >> 1);
     right = left + width;

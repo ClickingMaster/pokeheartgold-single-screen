@@ -134,7 +134,7 @@ _0225F12C:
 	sub r1, #0x11
 	add r2, r1, #0
 	add r3, r4, #4
-	bl ov01_021EFCF8
+	bl EncounterEffect_StartFlash
 	mov r0, #2
 	str r0, [r4]
 	b _0225F218
@@ -154,7 +154,7 @@ _0225F150:
 	lsl r1, r1, #0x12
 	mov r2, #0
 	lsl r3, r3, #0xc
-	bl ov01_021EFEC8
+	bl EncounterEffectQuadInterp_Init
 	mov r0, #2
 	mov r1, #1
 	bl GfGfx_EngineATogglePlanes
@@ -168,7 +168,7 @@ _0225F150:
 	b _0225F218
 _0225F17E:
 	add r0, r5, #0
-	bl ov01_021EFF28
+	bl EncounterEffectQuadInterp_Update
 	cmp r0, #0
 	beq _0225F218
 	mov r0, #5
@@ -212,7 +212,7 @@ _0225F1CC:
 	mov r1, #0
 	lsl r2, r2, #0x12
 	lsl r3, r3, #0xc
-	bl ov01_021EFEC8
+	bl EncounterEffectQuadInterp_Init
 	mov r0, #1
 	str r0, [r5, #0x1c]
 	mov r0, #7
@@ -220,7 +220,7 @@ _0225F1CC:
 	b _0225F218
 _0225F1EA:
 	add r0, r5, #0
-	bl ov01_021EFF28
+	bl EncounterEffectQuadInterp_Update
 	cmp r0, #0
 	beq _0225F218
 	mov r0, #8
@@ -238,7 +238,7 @@ _0225F1FA:
 _0225F20C:
 	add r0, r4, #0
 	add r1, r6, #0
-	bl ov01_021EFCDC
+	bl EncounterEffect_Finish
 	add sp, #0x14
 	pop {r3, r4, r5, r6, pc}
 _0225F218:

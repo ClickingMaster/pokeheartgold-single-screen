@@ -90,7 +90,7 @@ _0225F0BA:
 	str r0, [sp]
 	add r2, r1, #0
 	add r3, r4, #4
-	bl ov01_021EFCF8
+	bl EncounterEffect_StartFlash
 	ldr r0, [r4]
 	add sp, #0xc
 	add r0, r0, #1
@@ -198,7 +198,7 @@ _0225F178:
 _0225F196:
 	add r0, r4, #0
 	add r1, r6, #0
-	bl ov01_021EFCDC
+	bl EncounterEffect_Finish
 	ldr r1, _0225F1B4 ; =0x00007FFF
 	mov r0, #1
 	bl SetMasterBrightnessByColor
@@ -268,7 +268,7 @@ _0225F222:
 	str r0, [sp]
 	add r2, r1, #0
 	add r3, r4, #4
-	bl ov01_021EFCF8
+	bl EncounterEffect_StartFlash
 	ldr r0, [r4]
 	add sp, #0xc
 	add r0, r0, #1
@@ -299,7 +299,7 @@ _0225F24A:
 	ldrb r3, [r6]
 	add r0, r5, #0
 	add r2, r1, r2
-	bl ov01_021EFE34
+	bl EncounterEffectInterp_Init
 	ldr r0, [r4]
 	add sp, #0xc
 	add r0, r0, #1
@@ -308,7 +308,7 @@ _0225F24A:
 _0225F276:
 	add r0, r5, #0
 	add r0, #8
-	bl ov01_021EFE44
+	bl EncounterEffectInterp_Update
 	add r7, r0, #0
 	ldr r0, [r5, #8]
 	ldr r1, [r4, #0x10]
@@ -341,7 +341,7 @@ _0225F2A0:
 	ldr r3, [r6, #0xc]
 	add r0, r5, #0
 	add r2, r1, r2
-	bl ov01_021EFEC8
+	bl EncounterEffectQuadInterp_Init
 	ldr r0, [r4]
 	add sp, #0xc
 	add r0, r0, #1
@@ -350,7 +350,7 @@ _0225F2A0:
 _0225F2CE:
 	add r0, r5, #0
 	add r0, #0x1c
-	bl ov01_021EFF28
+	bl EncounterEffectQuadInterp_Update
 	ldr r1, [r4, #0x10]
 	add r6, r0, #0
 	ldr r0, [r5, #0x1c]
@@ -408,7 +408,7 @@ _0225F328:
 _0225F346:
 	add r0, r4, #0
 	add r1, r7, #0
-	bl ov01_021EFCDC
+	bl EncounterEffect_Finish
 	ldr r1, _0225F35C ; =0x00007FFF
 	mov r0, #1
 	bl SetMasterBrightnessByColor

@@ -15,9 +15,9 @@ typedef struct BattleTransitionTaskEnv {
     u32 bgm;
 } BattleTransitionTaskEnv;
 
-extern void ov01_021EFB64(int effect);
-extern void ov01_021EFC04(int effect);
-extern void ov01_021EFC94(int effect, FieldSystem *fieldSystem, int *done);
+extern void EncounterEffect_LoadOverlay(int effect);
+extern void EncounterEffect_UnloadOverlay(int effect);
+extern void EncounterEffect_Start(int effect, FieldSystem *fieldSystem, int *done);
 
 static BOOL Task_BattleTransition(TaskManager *taskMan);
 void CallTask_BattleTransition(TaskManager *taskMan, int effect, int bgm);
@@ -28,14 +28,14 @@ static BOOL Task_BattleTransition(TaskManager *taskMan) {
 
     switch (env->state) {
     case 0:
-        ov01_021EFB64(env->effect);
-        ov01_021EFC94(env->effect, fieldSystem, &env->done);
+        EncounterEffect_LoadOverlay(env->effect);
+        EncounterEffect_Start(env->effect, fieldSystem, &env->done);
         Sound_SetSceneAndPlayBGM(5, env->bgm, 1);
         env->state++;
         break;
     case 1:
         if (env->done == 1) {
-            ov01_021EFC04(env->effect);
+            EncounterEffect_UnloadOverlay(env->effect);
             Heap_Free(env);
             return TRUE;
         }

@@ -7,6 +7,6 @@
 .public TaskManager_GetFieldSystem
 .public TaskManager_GetEnvironment
 .public CallTask_BattleTransition
-.public ov01_021EFB64
-.public ov01_021EFC04
-.public ov01_021EFC94
+.public EncounterEffect_LoadOverlay
+.public EncounterEffect_UnloadOverlay
+.public EncounterEffect_Start

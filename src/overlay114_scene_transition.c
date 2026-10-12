@@ -22,7 +22,7 @@ void ov114_0225F020(void *task, Ov114Task *ctx) {
         ctx->state++;
         break;
     case 1:
-        ov01_021EFCF8(1, 16, -16, &ctx->done, 2);
+        EncounterEffect_StartFlash(1, 16, -16, &ctx->done, 2);
         ctx->state++;
         break;
     case 2:
@@ -31,13 +31,13 @@ void ov114_0225F020(void *task, Ov114Task *ctx) {
         }
         break;
     case 3:
-        ov01_021EFE34(&work->fade, 0, 16, 12);
+        EncounterEffectInterp_Init(&work->fade, 0, 16, 12);
         G2x_SetBlendAlpha_(0x04000050, 0, 15, work->fade.value, 16 - work->fade.value);
         Sprite_SetDrawFlag(work->sprite19c, TRUE);
         ctx->state++;
         break;
     case 4:
-        done = ov01_021EFE44(&work->fade);
+        done = EncounterEffectInterp_Update(&work->fade);
         *(vu16 *)0x04000052 = (u16)(((16 - work->fade.value) << 8) | work->fade.value);
         if (done == TRUE) {
             *(vu16 *)0x04000050 = 0;
@@ -46,7 +46,7 @@ void ov114_0225F020(void *task, Ov114Task *ctx) {
         }
         break;
     case 5:
-        ov01_021EFEC8(&work->scale, 1 << 12, 0x19a, 1, 6);
+        EncounterEffectQuadInterp_Init(&work->scale, 1 << 12, 0x19a, 1, 6);
         Sprite_SetAffineOverwriteMode(work->sprite19c, 2);
         ov01_021F074C(&tmp5, work->scale.value, work->scale.value, work->scale.value);
         scale5 = tmp5;
@@ -56,7 +56,7 @@ void ov114_0225F020(void *task, Ov114Task *ctx) {
         ctx->state++;
         break;
     case 6:
-        done = ov01_021EFF28(&work->scale);
+        done = EncounterEffectQuadInterp_Update(&work->scale);
         ov01_021F074C(&tmp6, work->scale.value, work->scale.value, work->scale.value);
         scale6 = tmp6;
         Sprite_SetAffineScale(work->sprite19c, &scale6);
@@ -73,7 +73,7 @@ void ov114_0225F020(void *task, Ov114Task *ctx) {
         Sprite_Delete(work->sprite19c);
         ov01_021F06EC(work->spriteResources, &work->resource168);
         ov01_021F05F4(work->spriteResources);
-        ov01_021EFCDC(ctx, task);
+        EncounterEffect_Finish(ctx, task);
         break;
     }
 
@@ -104,7 +104,7 @@ void ov114_0225F280(void *task, Ov114Task *ctx) {
         ctx->state++;
         break;
     case 1:
-        ov01_021EFCF8(1, 16, -16, &ctx->done, 2);
+        EncounterEffect_StartFlash(1, 16, -16, &ctx->done, 2);
         ctx->state++;
         break;
     case 2:
@@ -113,8 +113,8 @@ void ov114_0225F280(void *task, Ov114Task *ctx) {
         }
         break;
     case 3:
-        ov01_021EFEC8(&work->horiz, 0, 2 << 18, 0x19a, 4);
-        ov01_021EFEC8(&work->vert, 0, 10 << 16, 0x19a, 4);
+        EncounterEffectQuadInterp_Init(&work->horiz, 0, 2 << 18, 0x19a, 4);
+        EncounterEffectQuadInterp_Init(&work->vert, 0, 10 << 16, 0x19a, 4);
         for (i = 0; i < 4; i++) {
             Sprite_SetDrawFlag(work->sprites170[i], TRUE);
         }
@@ -124,7 +124,7 @@ void ov114_0225F280(void *task, Ov114Task *ctx) {
         i = 0;
         interp = &work->horiz;
         while (i < 2) {
-            done = ov01_021EFF28(interp);
+            done = EncounterEffectQuadInterp_Update(interp);
             i++;
             interp = (Interp *)((u8 *)interp + 0x18);
         }
@@ -161,7 +161,7 @@ void ov114_0225F280(void *task, Ov114Task *ctx) {
         }
         ov01_021F06EC(work->spriteResources, &work->resource13c);
         ov01_021F05F4(work->spriteResources);
-        ov01_021EFCDC(ctx, task);
+        EncounterEffect_Finish(ctx, task);
         break;
     }
 

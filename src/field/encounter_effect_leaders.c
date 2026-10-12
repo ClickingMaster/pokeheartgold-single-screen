@@ -96,8 +96,8 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
 void LeadersEffect_LoadBlendedSpritePalette(Sprite *sprite, enum HeapID heapID, s32 member, u8 amount, u16 color);
 
 BOOL ov01_021EFE30(EncounterEffectTask *effect);
-void ov01_021EFE70(EncounterEffectInterp *interp, s32 start, s32 end, s32 duration);
-BOOL ov01_021EFE80(EncounterEffectInterp *interp);
+void EncounterEffectInterp_InitFx(EncounterEffectInterp *interp, s32 start, s32 end, s32 duration);
+BOOL EncounterEffectInterp_UpdateFx(EncounterEffectInterp *interp);
 void ov01_021F0454(NARC *narc, int member1, int member2, int member3, int arg4, int arg5, BgConfig *bgConfig, int bgId);
 void ov01_021F074C(VecFx32 *vec, fx32 x, fx32 y, fx32 z);
 void *ov01_021F0B44(void);
@@ -150,9 +150,9 @@ void ScaleSprites_Init(ScaleSprites *scaleSprites, EncounterEffectSpriteManager 
         if (i != SCALE_SPRITE_COUNT - 1) {
             Sprite_SetAffineOverwriteMode(scaleSprites->sprites[i], 2);
             Sprite_SetAnimCtrlSeq(scaleSprites->sprites[i], 1);
-            ov01_021EFE70(&scaleSprites->scale[i], FX32_CONST(2), FX32_CONST(1), 6);
+            EncounterEffectInterp_InitFx(&scaleSprites->scale[i], FX32_CONST(2), FX32_CONST(1), 6);
         } else {
-            ov01_021EFE70(&scaleSprites->scale[i], FX32_CONST(1), FX32_CONST(1), 6);
+            EncounterEffectInterp_InitFx(&scaleSprites->scale[i], FX32_CONST(1), FX32_CONST(1), 6);
         }
     }
 }
@@ -182,7 +182,7 @@ BOOL ScaleSprites_Update(ScaleSprites *scaleSprites) {
         }
     }
     for (i = 0; i < scaleSprites->count; i++) {
-        finished = ov01_021EFE80(&scaleSprites->scale[i]);
+        finished = EncounterEffectInterp_UpdateFx(&scaleSprites->scale[i]);
         ov01_021F074C(&scale, scaleSprites->scale[i].value, scaleSprites->scale[i].value, scaleSprites->scale[i].value);
         Sprite_SetAffineScale(scaleSprites->sprites[i], &scale);
         Sprite_SetDrawFlag(scaleSprites->sprites[i], TRUE);
@@ -261,7 +261,7 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
         effect->state++;
         break;
     case 1:
-        ov01_021EFCF8(1, 16, 16, &effect->fadeDone, 1);
+        EncounterEffect_StartFlash(1, 16, 16, &effect->fadeDone, 1);
         effect->state++;
         break;
     case 2:
@@ -296,7 +296,7 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
         }
         break;
     case 6:
-        ov01_021EFEC8(&work->slide, FX32_CONST(272), params->endX, -FX32_CONST(64), 4);
+        EncounterEffectQuadInterp_Init(&work->slide, FX32_CONST(272), params->endX, -FX32_CONST(64), 4);
         Sprite_SetDrawFlag(work->leaderSprite, TRUE);
         Sprite_SetPriority(work->leaderSprite, 1);
         ov01_021F074C(&position, work->slide.value, FX32_CONST(66), 0);
@@ -304,7 +304,7 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
         effect->state++;
         break;
     case 7:
-        done = ov01_021EFF28(&work->slide);
+        done = EncounterEffectQuadInterp_Update(&work->slide);
         ov01_021F074C(&position, work->slide.value, FX32_CONST(66), 0);
         Sprite_SetMatrix(work->leaderSprite, &position);
         if (done == TRUE) {
@@ -312,13 +312,13 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
         }
         break;
     case 8:
-        ov01_021EFE34(&work->brightness, 0, 16, 3);
+        EncounterEffectInterp_Init(&work->brightness, 0, 16, 3);
         work->timer = 10;
         effect->state++;
         break;
     case 9:
         if (--work->timer < 0) {
-            done = ov01_021EFE44(&work->brightness);
+            done = EncounterEffectInterp_Update(&work->brightness);
             ov01_021F0DC8(&work->brightness);
             if (done == TRUE) {
                 LeadersEffect_LoadBlendedSpritePalette(work->leaderSprite, heapID, params->spriteMembers[0], 0, RGB_BLACK);
@@ -330,11 +330,11 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
         }
         break;
     case 10:
-        ov01_021EFE34(&work->brightness, 16, 0, 3);
+        EncounterEffectInterp_Init(&work->brightness, 16, 0, 3);
         effect->state++;
         break;
     case 11:
-        done = ov01_021EFE44(&work->brightness);
+        done = EncounterEffectInterp_Update(&work->brightness);
         ov01_021F0DC8(&work->brightness);
         if (done == TRUE) {
             effect->state++;
@@ -384,103 +384,103 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
 
 void EncounterEffect_LeaderFalkner(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022603B0) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderBugsy(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022603C4) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderWhitney(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022603D8) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderMorty(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022603EC) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderJasmine(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_02260400) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderChuck(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_02260414) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderPryce(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_02260428) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderClair(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_0226043C) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderBrock(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_02260450) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderMisty(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_02260464) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderLtSurge(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_02260478) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderErika(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_0226048C) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderJanine(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022604A0) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderSabrina(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022604B4) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderBlaine(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022604C8) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderBlue(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022604DC) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_Rival(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &_02260374) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
@@ -554,7 +554,7 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
         effect->state++;
         break;
     case 2:
-        ov01_021EFCF8(1, 16, 16, &effect->fadeDone, 1);
+        EncounterEffect_StartFlash(1, 16, 16, &effect->fadeDone, 1);
         effect->unk_08 = 0;
         effect->state++;
         break;
@@ -574,7 +574,7 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
         }
         break;
     case 5:
-        ov01_021EFEC8(&work->x, -FX32_CONST(128), FX32_CONST(56), FX32_CONST(80), 6);
+        EncounterEffectQuadInterp_Init(&work->x, -FX32_CONST(128), FX32_CONST(56), FX32_CONST(80), 6);
         ov01_021F074C(&pos, work->x.value, FX32_CONST(92), 0);
         Sprite_SetMatrix(work->sprites[0], &pos);
         pos.y += FX32_CONST(4);
@@ -582,7 +582,7 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
         Sprite_SetMatrix(work->sprites[2], &pos);
         Sprite_SetDrawFlag(work->sprites[0], TRUE);
         Sprite_SetDrawFlag(work->sprites[2], TRUE);
-        ov01_021EFEC8(&work->slide, FX32_CONST(384), FX32_CONST(200), -FX32_CONST(80), 6);
+        EncounterEffectQuadInterp_Init(&work->slide, FX32_CONST(384), FX32_CONST(200), -FX32_CONST(80), 6);
         ov01_021F074C(&pos, work->slide.value, FX32_CONST(92), 0);
         Sprite_SetMatrix(work->sprites[1], &pos);
         pos.y += FX32_CONST(4);
@@ -610,14 +610,14 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
         } else {
             ScaleSprites_Update(&work->scaleSprites);
         }
-        ov01_021EFF28(&work->x);
+        EncounterEffectQuadInterp_Update(&work->x);
         ov01_021F074C(&pos, work->x.value, FX32_CONST(92), 0);
         work->playerPos = pos;
         Sprite_SetMatrix(work->sprites[0], &pos);
         pos.y += FX32_CONST(4);
         pos.x += FX32_CONST(16);
         Sprite_SetMatrix(work->sprites[2], &pos);
-        ready = ov01_021EFF28(&work->slide);
+        ready = EncounterEffectQuadInterp_Update(&work->slide);
         ov01_021F074C(&pos, work->slide.value, FX32_CONST(92), 0);
         work->opponentPos = pos;
         Sprite_SetMatrix(work->sprites[1], &pos);
@@ -632,13 +632,13 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
         ready = ScaleSprites_Update(&work->scaleSprites);
         done = ov01_021F1044();
         if (ready && done) {
-            ov01_021EFE34(&work->fade, 0, 16, 3);
+            EncounterEffectInterp_Init(&work->fade, 0, 16, 3);
             ov01_021F1060();
             effect->state++;
         }
         break;
     case 8:
-        ready = ov01_021EFE44(&work->fade);
+        ready = EncounterEffectInterp_Update(&work->fade);
         ov01_021F0DC8(&work->fade);
         if (ready == TRUE) {
             LeadersEffect_LoadBlendedSpritePalette(work->sprites[0], heapID, work->playerMember, 0, RGB_BLACK);
@@ -652,13 +652,13 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
         }
         break;
     case 9:
-        ov01_021EFE34(&work->fade, 16, 0, 6);
+        EncounterEffectInterp_Init(&work->fade, 16, 0, 6);
         ov01_021F0FB8(4);
         SetBgPriority(GF_BG_LYR_MAIN_0, 1);
         effect->state++;
         break;
     case 10:
-        ready = ov01_021EFE44(&work->fade);
+        ready = EncounterEffectInterp_Update(&work->fade);
         ov01_021F0DC8(&work->fade);
         if (ready == TRUE) {
             effect->state++;
@@ -669,16 +669,16 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
         if (effect->fadeDone > 0) {
             effect->fadeDone--;
         } else {
-            ov01_021EFEC8(&work->x, 0, -FX32_CONST(2), 0, params->shakeFrames);
-            ov01_021EFEC8(&work->y, 0, -FX32_CONST(2), 0, params->shakeFrames);
+            EncounterEffectQuadInterp_Init(&work->x, 0, -FX32_CONST(2), 0, params->shakeFrames);
+            EncounterEffectQuadInterp_Init(&work->y, 0, -FX32_CONST(2), 0, params->shakeFrames);
             effect->fadeDone = 0;
             effect->state++;
         }
         break;
     case 12:
         effect->fadeDone++;
-        ready = ov01_021EFF28(&work->x);
-        ov01_021EFF28(&work->y);
+        ready = EncounterEffectQuadInterp_Update(&work->x);
+        EncounterEffectQuadInterp_Update(&work->y);
         if ((effect->fadeDone / 2) % 2 == 0) {
             ov01_021F074C(&pos, work->playerPos.x + work->x.value, work->playerPos.y + work->y.value, 0);
         } else {
@@ -706,14 +706,14 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
         if (ready) {
             effect->state++;
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
-            ov01_021EFEC8(&work->x, 0, FX32_CONST(192), FX32_CONST(24), 16);
-            ov01_021EFEC8(&work->y, 0, FX32_CONST(192), FX32_CONST(24), 16);
+            EncounterEffectQuadInterp_Init(&work->x, 0, FX32_CONST(192), FX32_CONST(24), 16);
+            EncounterEffectQuadInterp_Init(&work->y, 0, FX32_CONST(192), FX32_CONST(24), 16);
             BeginNormalPaletteFade(3, 0, 0, RGB_WHITE, 8, 1, HEAP_ID_FIELD1);
         }
         break;
     case 13:
-        ov01_021EFF28(&work->x);
-        ov01_021EFF28(&work->y);
+        EncounterEffectQuadInterp_Update(&work->x);
+        EncounterEffectQuadInterp_Update(&work->y);
         ov01_021F074C(&pos, work->playerPos.x - work->x.value, work->playerPos.y - work->y.value, 0);
         Sprite_SetMatrix(work->sprites[0], &pos);
         pos.y += FX32_CONST(4);
@@ -777,30 +777,30 @@ void LeadersEffect_LoadBlendedSpritePalette(Sprite *sprite, enum HeapID heapID, 
 
 void EncounterEffect_EliteFourWill(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &ov115_02260388) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_EliteFourKoga(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &ov115_02260390) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_EliteFourBruno(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &ov115_02260398) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_EliteFourKaren(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &ov115_022603A0) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_Champion(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &ov115_022603A8) == TRUE) {
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
     }
 }

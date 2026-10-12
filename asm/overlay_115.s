@@ -125,7 +125,7 @@ _0225F038:
 	add r0, r4, #0
 	lsr r2, r1, #1
 	mov r3, #6
-	bl ov01_021EFE70
+	bl EncounterEffectInterp_InitFx
 	b _0225F08C
 _0225F07E:
 	mov r1, #1
@@ -133,7 +133,7 @@ _0225F07E:
 	add r0, r4, #0
 	add r2, r1, #0
 	mov r3, #6
-	bl ov01_021EFE70
+	bl EncounterEffectInterp_InitFx
 _0225F08C:
 	add r6, r6, #1
 	add r5, r5, #4

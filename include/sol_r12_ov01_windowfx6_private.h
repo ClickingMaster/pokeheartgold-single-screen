@@ -20,7 +20,7 @@ typedef struct Ov01WindowEffect {
 
 void *Heap_Alloc(u32, u32);
 void SysTask_Destroy(SysTask *);
-BOOL ov01_021EFF28(Ov01WindowEffect *);
+BOOL EncounterEffectQuadInterp_Update(Ov01WindowEffect *);
 void HBlankTask_Delete(void *);
 void ov01_021F010C(SysTask *, Ov01WindowEffect *);
 void ov01_021F0174(Ov01WindowEffect *);

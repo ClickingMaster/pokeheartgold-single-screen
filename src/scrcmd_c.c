@@ -3572,7 +3572,7 @@ BOOL ScrCmd_PokeCenAnim(ScriptContext *ctx) {
 BOOL ScrCmd_ElevatorAnim(ScriptContext *ctx) {
     u16 direction = ScriptGetVar(ctx);
     u16 length = ScriptGetVar(ctx);
-    ov02_0224BDE8(ctx->fieldSystem, direction, length);
+    ElevatorAnimCreate(ctx->fieldSystem, direction, length);
     return TRUE;
 }
 

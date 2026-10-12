@@ -375,7 +375,7 @@ WIP_LOCAL void RockDebris_InitPiece(Field3dObject *obj, Field3dModel *model, NNS
 WIP_LOCAL BOOL ov02_0224B43C(SysTask *task);
 WIP_LOCAL BOOL MapId_IsSafariZone(int a0);
 WIP_LOCAL BOOL FollowMonInteraction_StepHasMovement(void *a0, u16 *a1);
-WIP_LOCAL Sprite *ov02_02248C10(void *mgr, VecFx32 *pos, int charId, int plttId, int cellId, int cellAnmId, int priority, int drawPriority);
+WIP_LOCAL Sprite *SpriteGfxManager_CreateSprite(void *mgr, VecFx32 *pos, int charId, int plttId, int cellId, int cellAnmId, int priority, int drawPriority);
 WIP_LOCAL Sprite *ov02_02248D18(void *mgr, int a1);
 WIP_LOCAL int FieldMoveArrival_Finish(void *a0, void *a1, void *work);
 WIP_LOCAL Sprite *ov02_0224A33C(void *mgr, VecFx32 *pos, int charId, int plttId, int cellId, int mode, int priority, int drawPriority);
@@ -473,7 +473,7 @@ WIP_LOCAL void RockClimbDebris_UpdateOffsets(void *data);
 WIP_LOCAL void RockClimbDebris_InitPiece(Field3dObject *obj, Field3dModel *model, NNSFndAllocator *allocator, void **anmResources);
 WIP_LOCAL void RockClimbDebris_Init(void *a0, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL void RockDebris_Spawn(void *data);
-WIP_LOCAL BOOL ov02_0224BE24(TaskManager *taskManager);
+WIP_LOCAL BOOL ElevatorAnimRun(TaskManager *taskManager);
 WIP_LOCAL BOOL Task_HallOfFameBallAnim(TaskManager *taskManager);
 WIP_LOCAL BOOL PokecenterAnimRun(TaskManager *taskManager);
 WIP_LOCAL int PrimoPassword_DecodeWallpaper(WallpaperPasswordBank *bank, u16 trainerId, u16 a, u16 b, u16 c, u16 d);
@@ -519,10 +519,10 @@ WIP_LOCAL void FollowMon_TryShakeGrass(void *a0, LocalMapObject *obj, u8 dir);
 WIP_LOCAL BOOL FieldMoveEffectModel_AnimateOnce(void *obj);
 WIP_LOCAL void ov02_022507B4(FieldSystem *fieldSystem, u8 a1);
 WIP_LOCAL BOOL ov02_022507E8(TaskManager *taskManager); // still in asm
-WIP_LOCAL BOOL ov02_022489F0(void *mgr, int a1);
-WIP_LOCAL void ov02_02248A24(void *mgr, int a1);
-WIP_LOCAL BOOL ov02_02248AC8(void *mgr, int a1);
-WIP_LOCAL void ov02_02248AFC(void *mgr, int a1);
+WIP_LOCAL BOOL SpriteGfxManager_TransferChar(void *mgr, int a1);
+WIP_LOCAL void SpriteGfxManager_ReleaseCharData(void *mgr, int a1);
+WIP_LOCAL BOOL SpriteGfxManager_TransferPltt(void *mgr, int a1);
+WIP_LOCAL void SpriteGfxManager_ReleasePlttData(void *mgr, int a1);
 WIP_LOCAL int ov02_0224B4AC(void *work);
 
 // forward decls for functions referenced only from the consolidated rodata tables
@@ -640,12 +640,12 @@ typedef struct AuditGfxWork {
     AuditResSlot *animRes;
 } AuditGfxWork;
 
-WIP_LOCAL void ov02_02248728(void *mgr, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9);
-WIP_LOCAL void ov02_02248980(void *mgr, void *narc, int resId, int flag);
-WIP_LOCAL void ov02_02248A58(void *mgr, void *narc, int resId, int flag);
-WIP_LOCAL void ov02_02248B30(void *mgr, void *narc, int resId, int flag);
-WIP_LOCAL void ov02_02248BA0(void *mgr, void *narc, int resId, int flag);
-WIP_LOCAL void ov02_02248C98(Sprite *sprite, VecFx32 *out);
+WIP_LOCAL void SpriteGfxManager_Init(void *mgr, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9);
+WIP_LOCAL void SpriteGfxManager_LoadChar(void *mgr, void *narc, int resId, int flag);
+WIP_LOCAL void SpriteGfxManager_LoadPltt(void *mgr, void *narc, int resId, int flag);
+WIP_LOCAL void SpriteGfxManager_LoadCell(void *mgr, void *narc, int resId, int flag);
+WIP_LOCAL void SpriteGfxManager_LoadAnim(void *mgr, void *narc, int resId, int flag);
+WIP_LOCAL void Sprite_CopyPositionVector(Sprite *sprite, VecFx32 *out);
 WIP_LOCAL int ov02_02248E10(void *work);
 WIP_LOCAL void ov02_0224A69C(void *work, int p1, int p2, int p3, int p4);
 WIP_LOCAL void *ov02_0224A800(u16 *a0, enum HeapID heapID);
@@ -738,7 +738,7 @@ WIP_LOCAL void ov02_0224AC38(void *work); // still in asm
 WIP_LOCAL SpriteResource *ov02_0224A868(void *mgr, NARC *narc);
 WIP_LOCAL void RockClimbDebris_FreePiece(void *obj, NNSFndAllocator *alloc);
 WIP_LOCAL void RockDebris_FreePiece(void *obj, NNSFndAllocator *alloc);
-WIP_LOCAL void ov02_0224886C(void *mgr); // destructor, still in asm
+WIP_LOCAL void SpriteGfxManager_Free(void *mgr); // destructor, still in asm
 WIP_LOCAL int FieldDig_Warp(TaskManager *taskManager, void *a1, void *a2);
 WIP_LOCAL int FieldMove_ShowCutIn(void *a0, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL int FieldMove_WaitCutIn(void *a0, void *a1, void *work);
@@ -821,7 +821,7 @@ WIP_LOCAL void FieldMoveEffectModel_Unload(void *obj, void *fieldSystem);
 // Field3dObjectTaskTemplate data (rodata) defined later in the file's .rodata.
 // Declared extern here so the create wrappers' relocations resolve by name.
 
-// ov02_02248728
+// SpriteGfxManager_Init
 
 static inline void AuditFillSlotIds(AuditResSlot *slot, int count, int emptyId) {
     int i;
@@ -846,30 +846,30 @@ extern const fx32 ov02_02253520[12];
 WIP_LOCAL int ov02_0224B4AC(void *work) {
     NARC *narc;
     *(void **)((u8 *)work + 0x170) = FieldEffectPool_New(4, 0x20);
-    ov02_02248728((u8 *)work + 0x18, 0x20, 2, 2, 2, 1, 4, 4, 4, 2);
+    SpriteGfxManager_Init((u8 *)work + 0x18, 0x20, 2, 2, 2, 1, 4, 4, 4, 2);
     narc = ov02_022493F0();
-    ov02_02248980((u8 *)work + 0x18, narc, 0xb, 0);
-    ov02_02248A58((u8 *)work + 0x18, narc, 6, 0);
-    ov02_02248B30((u8 *)work + 0x18, narc, 0xc, 0);
-    ov02_022489F0((u8 *)work + 0x18, 0);
-    ov02_02248AC8((u8 *)work + 0x18, 0);
-    ov02_02248A24((u8 *)work + 0x18, 0);
-    ov02_02248AFC((u8 *)work + 0x18, 0);
+    SpriteGfxManager_LoadChar((u8 *)work + 0x18, narc, 0xb, 0);
+    SpriteGfxManager_LoadPltt((u8 *)work + 0x18, narc, 6, 0);
+    SpriteGfxManager_LoadCell((u8 *)work + 0x18, narc, 0xc, 0);
+    SpriteGfxManager_TransferChar((u8 *)work + 0x18, 0);
+    SpriteGfxManager_TransferPltt((u8 *)work + 0x18, 0);
+    SpriteGfxManager_ReleaseCharData((u8 *)work + 0x18, 0);
+    SpriteGfxManager_ReleasePlttData((u8 *)work + 0x18, 0);
     if (*(int *)((u8 *)work + 0xc) == 0) {
-        ov02_02248980((u8 *)work + 0x18, narc, 0x11, 2);
-        ov02_02248B30((u8 *)work + 0x18, narc, 0x12, 2);
-        ov02_02248BA0((u8 *)work + 0x18, narc, 0x13, 1);
-        ov02_022489F0((u8 *)work + 0x18, 2);
-        ov02_02248A24((u8 *)work + 0x18, 2);
+        SpriteGfxManager_LoadChar((u8 *)work + 0x18, narc, 0x11, 2);
+        SpriteGfxManager_LoadCell((u8 *)work + 0x18, narc, 0x12, 2);
+        SpriteGfxManager_LoadAnim((u8 *)work + 0x18, narc, 0x13, 1);
+        SpriteGfxManager_TransferChar((u8 *)work + 0x18, 2);
+        SpriteGfxManager_ReleaseCharData((u8 *)work + 0x18, 2);
     } else {
-        ov02_02248980((u8 *)work + 0x18, narc, 0x14, 2);
-        ov02_02248A58((u8 *)work + 0x18, narc, 7, 1);
-        ov02_02248B30((u8 *)work + 0x18, narc, 0x15, 2);
-        ov02_02248BA0((u8 *)work + 0x18, narc, 0x16, 1);
-        ov02_022489F0((u8 *)work + 0x18, 2);
-        ov02_02248AC8((u8 *)work + 0x18, 1);
-        ov02_02248A24((u8 *)work + 0x18, 2);
-        ov02_02248AFC((u8 *)work + 0x18, 1);
+        SpriteGfxManager_LoadChar((u8 *)work + 0x18, narc, 0x14, 2);
+        SpriteGfxManager_LoadPltt((u8 *)work + 0x18, narc, 7, 1);
+        SpriteGfxManager_LoadCell((u8 *)work + 0x18, narc, 0x15, 2);
+        SpriteGfxManager_LoadAnim((u8 *)work + 0x18, narc, 0x16, 1);
+        SpriteGfxManager_TransferChar((u8 *)work + 0x18, 2);
+        SpriteGfxManager_TransferPltt((u8 *)work + 0x18, 1);
+        SpriteGfxManager_ReleaseCharData((u8 *)work + 0x18, 2);
+        SpriteGfxManager_ReleasePlttData((u8 *)work + 0x18, 1);
     }
     NARC_Delete(narc);
     (*(int *)work)++;
@@ -897,7 +897,7 @@ WIP_LOCAL int ov02_0224B638(void *work) {
 
 WIP_LOCAL int ov02_0224B664(void *work) {
     FieldEffectPool_Delete(*(void **)((u8 *)work + 0x170));
-    ov02_0224886C((u8 *)work + 0x18);
+    SpriteGfxManager_Free((u8 *)work + 0x18);
     *(int *)((u8 *)work + 0x10) = 0;
     *(int *)((u8 *)work + 4) = 1;
     (*(int *)work)++;

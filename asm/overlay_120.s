@@ -69,11 +69,11 @@ WildEffectCell_Update: ; 0x0225F08C
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
 _0225F0A2:
-	bl ov01_021EFE44
+	bl EncounterEffectInterp_Update
 	add r5, r0, #0
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov01_021EFE44
+	bl EncounterEffectInterp_Update
 	add r7, r5, #0
 	ldr r1, [r4]
 	orr r7, r0

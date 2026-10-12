@@ -11,7 +11,7 @@ void ov01_021F0C7C(SysTask *task, void *v) {
     Interp *p = v;
     switch (p->screen) {
     case 0:
-        if (ov01_021EFE44(p) == TRUE) {
+        if (EncounterEffectInterp_Update(p) == TRUE) {
             p->screen++;
         }
         break;

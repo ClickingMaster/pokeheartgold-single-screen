@@ -7,7 +7,7 @@ WIP_LOCAL Sprite *ov02_02248CAC(void *mgr) {
     Sprite *sprite;
 
     affineScale = ov02_02253360;
-    sprite = ov02_02248C10(mgr, &pos, 0, 0, 0, 2, 0, 0x84);
+    sprite = SpriteGfxManager_CreateSprite(mgr, &pos, 0, 0, 0, 2, 0, 0x84);
     Sprite_SetAffineOverwriteMode(sprite, 2);
     Sprite_SetAffineMatrix(sprite, &affineMatrix);
     Sprite_SetAffineScale(sprite, &affineScale);
@@ -24,7 +24,7 @@ WIP_LOCAL Sprite *ov02_02248D18(void *mgr, int a1) {
     if (a1 == 1) {
         plttId = 1;
     }
-    sprite = ov02_02248C10(mgr, &pos, 2, plttId, 2, 1, 0, 0x83);
+    sprite = SpriteGfxManager_CreateSprite(mgr, &pos, 2, plttId, 2, 1, 0, 0x83);
     Sprite_SetDrawFlag(sprite, FALSE);
     Sprite_SetAnimCtrlSeq(sprite, 6);
     return sprite;

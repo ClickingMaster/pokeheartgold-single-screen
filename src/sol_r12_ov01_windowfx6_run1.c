@@ -6,7 +6,7 @@ void ov01_021F010C(SysTask *task, Ov01WindowEffect *effect) {
 
     switch (effect->state) {
     case 0:
-        if (ov01_021EFF28(effect)) {
+        if (EncounterEffectQuadInterp_Update(effect)) {
             effect->state++;
         }
         value = effect->value >> 12;

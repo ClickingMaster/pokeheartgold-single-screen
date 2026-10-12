@@ -177,8 +177,8 @@ void WildEffectCell_Free(WildEffectCell *cell) {
 
 void WildEffectCell_Start(WildEffectCell *cell, int x, int y, int duration, Window *window, s32 startWidth, s32 startHeight, s32 endWidth, s32 endHeight, u8 fillColor) {
     GF_ASSERT(!cell->active);
-    ov01_021EFE34(&cell->width, startWidth, endWidth, duration);
-    ov01_021EFE34(&cell->height, startHeight, endHeight, duration);
+    EncounterEffectInterp_Init(&cell->width, startWidth, endWidth, duration);
+    EncounterEffectInterp_Init(&cell->height, startHeight, endHeight, duration);
     cell->window = window;
     cell->x = x;
     cell->y = y;
@@ -196,8 +196,8 @@ BOOL WildEffectCell_Update(WildEffectCell *cell) {
     if (cell->active == FALSE) {
         return TRUE;
     }
-    done = ov01_021EFE44(&cell->width);
-    done |= ov01_021EFE44(&cell->height);
+    done = EncounterEffectInterp_Update(&cell->width);
+    done |= EncounterEffectInterp_Update(&cell->height);
     halfWidth = cell->width.value / 2;
     x = cell->x;
     halfHeight = cell->height.value / 2;
@@ -486,7 +486,7 @@ void EncounterEffect_PkmnTrainerRed(SysTask *task, EncounterEffectTask *effect) 
         break;
     }
     case 1:
-        ov01_021EFCF8(1, -16, -16, &effect->fadeDone, 2);
+        EncounterEffect_StartFlash(1, -16, -16, &effect->fadeDone, 2);
         effect->state = 2;
         break;
     case 2:
@@ -514,7 +514,7 @@ void EncounterEffect_PkmnTrainerRed(SysTask *task, EncounterEffectTask *effect) 
         Sprite_Delete(work->sprite);
         ov01_021F06EC(&work->spriteManager, &work->spriteResources);
         ov01_021F05F4(&work->spriteManager);
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
         return;
     }
     if (effect->state != 5) {
@@ -642,7 +642,7 @@ void WildEffect_RunCellGridRows(SysTask *task, EncounterEffectTask *effect, BOOL
     }
     case 1:
         brightness = white ? 16 : -16;
-        ov01_021EFCF8(1, brightness, brightness, &effect->fadeDone, 2);
+        EncounterEffect_StartFlash(1, brightness, brightness, &effect->fadeDone, 2);
         effect->state = 2;
         break;
     case 2:
@@ -670,7 +670,7 @@ void WildEffect_RunCellGridRows(SysTask *task, EncounterEffectTask *effect, BOOL
         ClearWindowTilemapAndCopyToVram(work->window);
         RemoveWindow(work->window);
         WindowArray_Delete(work->window, 1);
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
         break;
     }
 }
@@ -716,7 +716,7 @@ void WildEffect_RunCellGridDiagonals(SysTask *task, EncounterEffectTask *effect,
     }
     case 1:
         brightness = white ? 16 : -16;
-        ov01_021EFCF8(1, brightness, brightness, &effect->fadeDone, 2);
+        EncounterEffect_StartFlash(1, brightness, brightness, &effect->fadeDone, 2);
         effect->state = 2;
         break;
     case 2:
@@ -744,7 +744,7 @@ void WildEffect_RunCellGridDiagonals(SysTask *task, EncounterEffectTask *effect,
         ClearWindowTilemapAndCopyToVram(work->window);
         RemoveWindow(work->window);
         WindowArray_Delete(work->window, 1);
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
         break;
     }
 }
@@ -872,8 +872,8 @@ void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white) 
             break;
         }
         BG_SetMaskColor(GF_BG_LYR_MAIN_1, 0);
-        ov01_021EFEC8(&work->bg1Scroll, 0, FX32_CONST(320), 0, 18);
-        ov01_021EFEC8(&work->bg3Scroll, 0, FX32_CONST(320), FX32_CONST(8), 30);
+        EncounterEffectQuadInterp_Init(&work->bg1Scroll, 0, FX32_CONST(320), 0, 18);
+        EncounterEffectQuadInterp_Init(&work->bg3Scroll, 0, FX32_CONST(320), FX32_CONST(8), 30);
         WildEffectSine_Init(&work->bg3Sine, 0, 16, 15);
         ScheduleSetBgPosText(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, work->bg1Scroll.value >> FX32_SHIFT);
         ScheduleSetBgPosText(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, 0);
@@ -887,7 +887,7 @@ void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white) 
             } else {
                 brightness = -16;
             }
-            ov01_021EFCF8(1, brightness, brightness, &effect->fadeDone, 2);
+            EncounterEffect_StartFlash(1, brightness, brightness, &effect->fadeDone, 2);
         }
         effect->state = 2;
         break;
@@ -925,15 +925,15 @@ void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white) 
             *effect->done = TRUE;
         }
         ov01_021F12D0(&work->wave);
-        ov01_021EFCDC(effect, task);
+        EncounterEffect_Finish(effect, task);
         return;
     }
     if (work->bg1Scrolling) {
-        work->bg1Done = ov01_021EFF28(&work->bg1Scroll);
+        work->bg1Done = EncounterEffectQuadInterp_Update(&work->bg1Scroll);
         ScheduleSetBgPosText(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_Y, work->bg1Scroll.value >> FX32_SHIFT);
     }
     if (work->bg3Scrolling) {
-        work->bg3Done = ov01_021EFF28(&work->bg3Scroll);
+        work->bg3Done = EncounterEffectQuadInterp_Update(&work->bg3Scroll);
         WildEffectSine_Update(&work->bg3Sine);
         ScheduleSetBgPosText(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, work->bg3Scroll.value >> FX32_SHIFT);
         ScheduleSetBgPosText(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, work->bg3Sine.value);

@@ -1207,18 +1207,18 @@
 	.public _02250A58
 	.public _02250A5C
 	.public _02253E20
-	.public ov02_02248728
-	.public ov02_0224886C
-	.public ov02_02248980
-	.public ov02_022489F0
-	.public ov02_02248A24
-	.public ov02_02248A58
-	.public ov02_02248AC8
-	.public ov02_02248AFC
-	.public ov02_02248B30
-	.public ov02_02248BA0
-	.public ov02_02248C10
-	.public ov02_02248C98
+	.public SpriteGfxManager_Init
+	.public SpriteGfxManager_Free
+	.public SpriteGfxManager_LoadChar
+	.public SpriteGfxManager_TransferChar
+	.public SpriteGfxManager_ReleaseCharData
+	.public SpriteGfxManager_LoadPltt
+	.public SpriteGfxManager_TransferPltt
+	.public SpriteGfxManager_ReleasePlttData
+	.public SpriteGfxManager_LoadCell
+	.public SpriteGfxManager_LoadAnim
+	.public SpriteGfxManager_CreateSprite
+	.public Sprite_CopyPositionVector
 	.public ov02_02248CAC
 	.public ov02_02248D18
 	.public ov02_02248D58
@@ -1378,8 +1378,8 @@
 	.public ov02_0224B938
 	.public ov02_0224B964
 	.public ov02_0224BAA8
-	.public ov02_0224BDE8
-	.public ov02_0224BE24
+	.public ElevatorAnimCreate
+	.public ElevatorAnimRun
 	.public ov02_0224BF58
 	.public ov02_0224BFC0
 	.public ov02_0224BFCC
@@ -1643,7 +1643,7 @@
 
 	.text
 	.public FieldSystem_FollowMonInteract
-	.public ov02_02248C98
+	.public Sprite_CopyPositionVector
 	.public ov02_02248D8C
 	.public ov02_02248DE4
 	.public ov02_02248E10
