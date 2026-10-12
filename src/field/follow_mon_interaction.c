@@ -105,23 +105,23 @@ typedef struct PokeathlonStarBits {
     u16 stamina : 3;
 } PokeathlonStarBits;
 
-typedef struct Ov02_022507E8Env {
+typedef struct FollowMonJumpOnSpotEnv {
     u16 count;
     u16 done;
     EventObjectMovementMan *movement;
-} Ov02_022507E8Env;
+} FollowMonJumpOnSpotEnv;
 
-typedef struct Ov02_022508D8Env {
+typedef struct FollowMonGrowAndShrinkEnv {
     u16 wait;
     u16 frame;
-} Ov02_022508D8Env;
+} FollowMonGrowAndShrinkEnv;
 
 extern const ShinyLeafMasks sShinyLeafMasks;
 extern const ShinyLeafMonDataIds sShinyLeafMonDataIds;
-extern const u8 ov02_02253A70[];
+extern const u8 sFollowMonJumpOnSpotMovements[];
 extern const u32 sNatureGroups[];
-extern const VecFx32 ov02_02253B24;
-extern const VecFx32 ov02_02253B30;
+extern const VecFx32 sFollowMonGrowScale;
+extern const VecFx32 sFollowMonShrinkScale;
 
 // Overlay 1 map object model helpers.
 void *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager);
@@ -169,8 +169,8 @@ BOOL FollowMonRule_CheckFriendship(int rule, int friendship);
 BOOL FollowMonRule_CheckMood(int rule, int mood);
 BOOL FollowMonRule_CheckSpeciesAttr(u32 rule, u32 value);
 BOOL FollowMonRule_CheckShinyLeaf(int leaf, u8 shinyLeaves);
-BOOL ov02_022507E8(TaskManager *taskManager);
-BOOL ov02_022508D8(TaskManager *taskManager);
+BOOL Task_FollowMonJumpOnSpot(TaskManager *taskManager);
+BOOL Task_FollowMonGrowAndShrink(TaskManager *taskManager);
 
 void FieldSystem_FollowMonInteract(FieldSystem *fieldSystem) {
     TaskManager_Call(fieldSystem->taskman, Task_FollowMonInteract, NULL);
@@ -550,7 +550,7 @@ void FollowMonSituation_SetTimeOfDay(FieldSystem *fieldSystem, FollowMonSituatio
 }
 
 void FollowMonSituation_SetMood(FieldSystem *fieldSystem, FollowMonSituation *situation) {
-    situation->mood = FieldSystem_UnkSub108_GetMonMood(fieldSystem->unk108);
+    situation->mood = FollowMonMood_Get(fieldSystem->followMonMood);
 }
 
 void FollowMonSituation_SetBestPokeathlonStat(FieldSystem *fieldSystem, int species, int form, FollowMonSituation *situation) {
@@ -1215,7 +1215,7 @@ void FollowMon_PlaceholdersSet(FieldSystem *fieldSystem, MessageFormat *messageF
 
 void FollowMon_ApplyInteractionEffects(FieldSystem *fieldSystem, FollowMonInteraction *interaction) {
     Pokemon *mon = GetFirstAliveMonInParty_CrashIfNone(SaveArray_Party_Get(fieldSystem->saveData));
-    int mood = FieldSystem_UnkSub108_GetMonMood(fieldSystem->unk108);
+    int mood = FollowMonMood_Get(fieldSystem->followMonMood);
     int value = mood;
 
     value += fieldSystem->followMonInteraction->moodChange;
@@ -1224,7 +1224,7 @@ void FollowMon_ApplyInteractionEffects(FieldSystem *fieldSystem, FollowMonIntera
     } else if (value < -127) {
         value = -127;
     }
-    FieldSystem_UnkSub108_SetMonMood(fieldSystem->unk108, (s8)value);
+    FollowMonMood_Set(fieldSystem->followMonMood, (s8)value);
     value = GetMonData(mon, MON_DATA_FRIENDSHIP, NULL);
     value += fieldSystem->followMonInteraction->friendshipChange;
     if (value > 255) {
@@ -1453,18 +1453,18 @@ BOOL FieldSystem_FirstAliveMonHasType(FieldSystem *fieldSystem, u8 type) {
     return FALSE;
 }
 
-void ov02_022507B4(FieldSystem *fieldSystem, u8 count) {
+void FollowMon_JumpOnSpot(FieldSystem *fieldSystem, u8 count) {
     if ((u32)(FollowMon_GetSpecies(fieldSystem->followMon.mapObject) - SPECIES_DIGLETT) > 1) {
-        Ov02_022507E8Env *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(Ov02_022507E8Env));
+        FollowMonJumpOnSpotEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FollowMonJumpOnSpotEnv));
         env->count = count;
         env->done = 0;
-        TaskManager_Call(fieldSystem->taskman, ov02_022507E8, env);
+        TaskManager_Call(fieldSystem->taskman, Task_FollowMonJumpOnSpot, env);
     }
 }
 
-BOOL ov02_022507E8(TaskManager *taskManager) {
+BOOL Task_FollowMonJumpOnSpot(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    Ov02_022507E8Env *env = TaskManager_GetEnvironment(taskManager);
+    FollowMonJumpOnSpotEnv *env = TaskManager_GetEnvironment(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
 
     switch (*state) {
@@ -1479,7 +1479,7 @@ BOOL ov02_022507E8(TaskManager *taskManager) {
         break;
     case 2: {
         u8 direction = MapObject_GetFacingDirection(fieldSystem->followMon.mapObject);
-        env->movement = EventObjectMovementMan_Create(fieldSystem->followMon.mapObject, (const MovementScriptCommand *)(ov02_02253A70 + direction * 0x14));
+        env->movement = EventObjectMovementMan_Create(fieldSystem->followMon.mapObject, (const MovementScriptCommand *)(sFollowMonJumpOnSpotMovements + direction * 0x14));
         (*state)++;
         break;
     }
@@ -1501,24 +1501,24 @@ BOOL ov02_022507E8(TaskManager *taskManager) {
     return FALSE;
 }
 
-BOOL ov02_022508B4(FieldSystem *fieldSystem) {
-    Ov02_022508D8Env *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(Ov02_022508D8Env));
+BOOL FollowMon_StartGrowAndShrink(FieldSystem *fieldSystem) {
+    FollowMonGrowAndShrinkEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FollowMonGrowAndShrinkEnv));
     env->wait = 0;
     env->frame = 0;
-    TaskManager_Call(fieldSystem->taskman, ov02_022508D8, env);
+    TaskManager_Call(fieldSystem->taskman, Task_FollowMonGrowAndShrink, env);
     return TRUE;
 }
 
 // Grows the billboard to 1.5 times its size over 10 frames, holds it for 10 frames, then shrinks it back.
-BOOL ov02_022508D8(TaskManager *taskManager) {
+BOOL Task_FollowMonGrowAndShrink(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
-    Ov02_022508D8Env *env = TaskManager_GetEnvironment(taskManager);
+    FollowMonGrowAndShrinkEnv *env = TaskManager_GetEnvironment(taskManager);
 
     switch (*state) {
     case 0: {
         VecFx32 scale;
-        scale = ov02_02253B24;
+        scale = sFollowMonGrowScale;
         env->frame++;
         scale.x = (s32)((double)env->frame * 2048.0 / 10.0 + 4096.0);
         scale.y = (s32)((double)env->frame * 2048.0 / 10.0 + 4096.0);
@@ -1538,7 +1538,7 @@ BOOL ov02_022508D8(TaskManager *taskManager) {
         break;
     case 2: {
         VecFx32 scale;
-        scale = ov02_02253B30;
+        scale = sFollowMonShrinkScale;
         env->frame++;
         if (env->frame >= 10) {
             (*state)++;

@@ -1258,10 +1258,10 @@ void BattleAnimFunc_PulseBattlerSprite(BattleAnimSystem *system) {
     Pokepic *pokepic;
     if (BattleAnimSystem_GetArg(system, 0) == 0) {
         pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(system));
-        work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
+        work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetAttacker(work->system));
     } else {
         pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetDefender(work->system));
-        work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetDefender(work->system));
+        work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetDefender(work->system));
     }
     work->y = Pokepic_GetAttr(pokepic, POKEPIC_Y);
     work->y -= Pokepic_GetAttr(pokepic, POKEPIC_SHADOW_H);
@@ -1340,13 +1340,13 @@ void BattleAnimFunc_StretchBattler(BattleAnimSystem *system) {
     switch ((int)BattleAnimSystem_GetArg(system, 0)) {
     case BATTLE_ANIM_TARGET_PICS | BATTLE_ANIM_ROLE_ATTACKER:
     case BATTLE_ANIM_TARGET_PICS | BATTLE_ANIM_ROLE_ATTACKER_PARTNER:
-        work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
+        work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetAttacker(work->system));
         BattleAnimUtil_CollectPicsByFlags(work->system, BattleAnimSystem_GetArg(system, 0), targets, &count);
         work->pokepic = targets[0].pokepic;
         break;
     case BATTLE_ANIM_TARGET_PICS | BATTLE_ANIM_ROLE_DEFENDER:
     case BATTLE_ANIM_TARGET_PICS | BATTLE_ANIM_ROLE_DEFENDER_PARTNER:
-        work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetDefender(work->system));
+        work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetDefender(work->system));
         BattleAnimUtil_CollectPicsByFlags(work->system, BattleAnimSystem_GetArg(system, 0), targets, &count);
         work->pokepic = targets[0].pokepic;
         break;
@@ -1697,7 +1697,7 @@ void BattleAnimFunc_ShakeAndScaleBattler(BattleAnimSystem *system) {
     work->timer = 0;
     work->delay = BattleAnimSystem_GetArg(system, 4);
     work->baseY = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
-    work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetAttacker(work->system));
     end = BattleAnimSystem_GetArg(system, 0);
     BattleAnimUtil_InitScaleMotion(&work->scale, 100, 100, (s16)end, BattleAnimSystem_GetArg(system, 2));
     BattleAnimUtil_InitShake(&work->shake, 2, 0, 0, 10);
@@ -1770,7 +1770,7 @@ void BattleAnimFunc_ShakeAndScaleBattlerXY(BattleAnimSystem *system) {
     work->scaleY = BattleAnimSystem_GetArg(work->system, 4);
     work->duration = BattleAnimSystem_GetArg(work->system, 5);
     BattleAnimSystem_GetBattlerScreenPos(system, BattleAnimSystem_GetAttacker(work->system), NULL, &work->baseY);
-    work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->baseY += work->height;
     startX = (s32)BattleAnimSystem_GetArg(system, 0) >> 16;
     endX = BattleAnimSystem_GetArg(system, 0) & 0xFF;
@@ -1783,7 +1783,7 @@ void BattleAnimFunc_ShakeAndScaleBattlerXY(BattleAnimSystem *system) {
 
 #pragma force_active reset
 
-void ov07_0222519C(SysTask *task, void *data) {
+void BattleAnimTask_EndObjWindow(SysTask *task, void *data) {
     BattleAnimObjWindowWork *work = data;
     reg_GX_DISPCNT &= ~(REG_GX_DISPCNT_W0_MASK | REG_GX_DISPCNT_W1_MASK | REG_GX_DISPCNT_OW_MASK);
     BattleAnimBackground_ResetLayer(work->common.system, GF_BG_LYR_MAIN_2);
@@ -1794,7 +1794,7 @@ void ov07_0222519C(SysTask *task, void *data) {
 #pragma force_active on
 
 // Shows the battle background on BG2 through an OBJ window made of battler sprite 0 at 1.2 scale
-void ov07_022251CC(BattleAnimSystem *system) {
+void BattleAnimFunc_ShowBattleBgInObjWindow(BattleAnimSystem *system) {
     BattleAnimObjWindowWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimObjWindowWork));
     BattleAnimSystem_GetArg(system, 0);
     BattleAnimUtil_InitCommonWork(system, &work->common);
@@ -1806,7 +1806,7 @@ void ov07_022251CC(BattleAnimSystem *system) {
     reg_GX_DISPCNT = (reg_GX_DISPCNT & ~(REG_GX_DISPCNT_W0_MASK | REG_GX_DISPCNT_W1_MASK | REG_GX_DISPCNT_OW_MASK)) | REG_GX_DISPCNT_OW_MASK;
     reg_G2_WINOUT = (reg_G2_WINOUT & ~0x3F) | (GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ);
     reg_G2_WINOUT = (reg_G2_WINOUT & 0xFFFFC0FF) | ((GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2) << 8);
-    BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, ov07_0222519C, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_EndObjWindow, work);
 }
 
 void BattleAnimTask_MoveBattlerBy(SysTask *task, void *data) {
@@ -1965,7 +1965,7 @@ void BattleAnimFunc_MoveBattlerLinear(BattleAnimSystem *system) {
 }
 
 // Moves a battler off the screen (arg 0 == 0) or from off the screen back to its place
-void ov07_02225640(BattleAnimSystem *system) {
+void BattleAnimFunc_MoveBattlerOffscreen(BattleAnimSystem *system) {
     int toHome;
     int battler;
     int count;
@@ -2036,7 +2036,7 @@ void BattleAnimFunc_ResetBattlerPosition(BattleAnimSystem *system) {
 
     BattleAnimUtil_GetBattlerPosition(system, battler, &home);
     BattleAnimUtil_CollectPicsByFlags(system, role, &target, &count);
-    height = (s16)ov07_0221FAA0(system, battler);
+    height = (s16)BattleAnimSystem_GetBattlerHeight(system, battler);
     Pokepic_SetAttr(target.pokepic, POKEPIC_X, home.x);
     Pokepic_SetAttr(target.pokepic, POKEPIC_Y, home.y + height);
 }
@@ -2071,7 +2071,7 @@ void BattleAnimFunc_BlendSpritePalette(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_WaitPaletteBlend, work);
 }
 
-void ov07_02225904(SysTask *task, void *data) {
+void BattleAnimTask_ChangeBattlerHeight(SysTask *task, void *data) {
     BattleAnimBattlerHeightWork *work = data;
     if (work->common.state[0] == 0) {
         work->timer++;
@@ -2105,7 +2105,7 @@ void ov07_02225904(SysTask *task, void *data) {
 }
 
 // Shrinks (arg 1 == 0) or grows a battler's visible height while moving it down or up
-void ov07_02225990(BattleAnimSystem *system) {
+void BattleAnimFunc_ChangeBattlerHeight(BattleAnimSystem *system) {
     BattleAnimBattlerHeightWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimBattlerHeightWork));
     int role, battler, count;
     BattleAnimUtil_InitCommonWork(system, &work->common);
@@ -2144,11 +2144,11 @@ void ov07_02225990(BattleAnimSystem *system) {
     work->visibleX = 0;
     work->visibleY = 0;
     work->visibleWidth = 80;
-    work->visibleHeight = 80 - ov07_0221FAA0(system, battler);
+    work->visibleHeight = 80 - BattleAnimSystem_GetBattlerHeight(system, battler);
     work->interval = BattleAnimSystem_GetArg(system, 4);
     work->timer = 0;
     Pokepic_SetVisible(work->target.pokepic, work->visibleX, work->visibleY, work->visibleWidth, work->visibleHeight);
-    BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, ov07_02225904, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_ChangeBattlerHeight, work);
 }
 
 #pragma force_active reset
@@ -2262,7 +2262,7 @@ void ov07_02225C50(SysTask *task, void *data) {
 
 #pragma force_active on
 
-void ov07_02225CC4(BattleAnimSystem *system) {
+void BattleAnimFunc_RevealBattler(BattleAnimSystem *system) {
     BattleAnimRevealBattlerWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimRevealBattlerWork));
     int flags, count;
     BattleAnimUtil_InitCommonWork(system, &work->common);
@@ -2272,14 +2272,14 @@ void ov07_02225CC4(BattleAnimSystem *system) {
     BattleAnimUtil_CollectPicsByFlags(system, flags, &work->target, &count);
     flags = BattleAnimUtil_GetRoleBattler(system, flags);
     if (BattleAnimSystem_GetArg(system, 5)) {
-        work->height = 80 - ov07_0221FAA0(system, flags);
+        work->height = 80 - BattleAnimSystem_GetBattlerHeight(system, flags);
         work->maxHeight = 0;
         Pokepic_SetVisible(work->target.pokepic, 0, work->height, 80, 0);
         BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, ov07_02225C50, work);
     } else {
         work->y = Pokepic_GetAttr(work->target.pokepic, POKEPIC_Y);
         work->baseY = work->y;
-        work->height = 80 - ov07_0221FAA0(system, flags);
+        work->height = 80 - BattleAnimSystem_GetBattlerHeight(system, flags);
         work->maxHeight = work->height;
         if (work->step > 0) {
             Pokepic_SetVisible(work->target.pokepic, 0, 0, 80, work->height);
@@ -2714,7 +2714,7 @@ void BattleAnimTask_PlaySpriteAnimOnce(SysTask *task, void *data) {
 }
 
 // Moves the sprite by (arg 0, arg 1) and plays its animation once
-void ov07_02226838(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite) {
+void BattleAnimSpriteFunc_MoveSpriteAndAnimate(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite) {
     BattleAnimSpriteWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimSpriteWork));
     BattleAnimUtil_InitCommonWork(system, &work->common);
     work->sprite = sprite;
@@ -2828,7 +2828,7 @@ void BattleAnimTask_PlaySpriteAnimOnce2(SysTask *task, void *data) {
 
 // Places the sprite above the defender (below it when the defender is on the player side) and plays its
 // animation once
-void ov07_02226A9C(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite) {
+void BattleAnimSpriteFunc_SpriteAboveDefender(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite) {
     BattleAnimSpriteOrbitWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimSpriteOrbitWork));
     BattleAnimUtil_InitCommonWork(system, &work->common);
     work->sprite = sprite;
@@ -2858,7 +2858,7 @@ void ov07_02226A9C(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteM
 #pragma force_active on
 
 // Moves the sprite along an arc from the lower left, waits for its animation, then blends it out
-void ov07_02226B2C(SysTask *task, void *data) {
+void BattleAnimTask_SpriteArc(SysTask *task, void *data) {
     BattleAnimSpriteArcWork *work = data;
     switch (work->common.state[0]) {
     case 0:
@@ -2901,13 +2901,13 @@ void ov07_02226B2C(SysTask *task, void *data) {
     SpriteSystem_DrawSprites(work->common.unk_10);
 }
 
-void ov07_02226C4C(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite) {
+void BattleAnimSpriteFunc_SpriteArc(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite) {
     BattleAnimSpriteArcWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimSpriteArcWork));
     BattleAnimUtil_InitCommonWork(system, &work->common);
     work->sprite = sprite;
     ManagedSprite_SetPositionXY(work->sprite, -30, 160);
     ManagedSprite_SetPriority(work->sprite, BattleAnimSystem_GetBgPriority(work->common.system, 2));
-    BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, ov07_02226B2C, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_SpriteArc, work);
 }
 
 #pragma force_active reset

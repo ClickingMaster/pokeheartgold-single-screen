@@ -803,7 +803,7 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
 
     switch (*state) {
     case 0:
-        album->saveData = ((UnkStruct_02111868_sub *)OverlayManager_GetArgs(manager))->saveData;
+        album->saveData = ((MainOverlayArgs *)OverlayManager_GetArgs(manager))->saveData;
         album->mysteryGift = Save_MysteryGift_Get(album->saveData);
         album->options = Save_PlayerData_GetOptionsAddr(album->saveData);
         album->frame = Options_GetFrame(album->options);

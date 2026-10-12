@@ -16,5 +16,5 @@
 .public BattleInput_ChangeMenu
 .public BattleInput_CheckTouch
 .public BattleInput_CheckFeedbackDone
-.public ov12_0226BEC4
-.public ov12_0226BEF0
+.public BattleRecordingStop_CreateTask
+.public BattleRecordingStop_DestroyTask

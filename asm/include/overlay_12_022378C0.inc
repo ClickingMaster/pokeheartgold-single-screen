@@ -248,4 +248,4 @@
 .public BattleInput_LoadDefaultResources
 .public BattleInput_ChangeMenu
 .public BattleInput_LoadBallGaugeResources
-.public ov12_0226BEF0
+.public BattleRecordingStop_DestroyTask

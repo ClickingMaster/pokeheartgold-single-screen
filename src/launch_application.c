@@ -356,7 +356,7 @@ PartyMenuArgs *PartyMenu_LaunchApp_Unk5(FieldSystem *fieldSystem, int partySlot)
 }
 
 PokemonSummaryArgs *PokemonSummary_CreateArgs(FieldSystem *fieldSystem, enum HeapID heapID, int a2) {
-    static const u8 _020FA1B0[] = { 0x00, 0x01, 0x02, 0x03, 0x04 };
+    static const u8 sPartySummaryPages[] = { 0x00, 0x01, 0x02, 0x03, 0x04 };
     SaveData *saveData = fieldSystem->saveData;
     PokemonSummaryArgs *args = Heap_AllocAtEnd(heapID, sizeof(PokemonSummaryArgs));
     MI_CpuFill8(args, 0, sizeof(PokemonSummaryArgs));
@@ -372,7 +372,7 @@ PokemonSummaryArgs *PokemonSummary_CreateArgs(FieldSystem *fieldSystem, enum Hea
     args->ribbons = Save_SpecialRibbons_Get(saveData);
     args->menuInputStatePtr = &fieldSystem->menuInputState;
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
-    PokemonSummary_SetPages(args, _020FA1B0);
+    PokemonSummary_SetPages(args, sPartySummaryPages);
 
     PlayerProfile *profile = Save_PlayerData_GetProfile(saveData);
     PokemonSummaryArgs_SetPlayer(args, profile);
@@ -380,7 +380,7 @@ PokemonSummaryArgs *PokemonSummary_CreateArgs(FieldSystem *fieldSystem, enum Hea
 }
 
 PokemonSummaryArgs *LearnForgetMove_LaunchApp(enum HeapID heapID, FieldSystem *fieldSystem, u8 partySlot, u16 moveToLearn) {
-    static const u8 _020FA1A8[] = { 0x01, 0x04 };
+    static const u8 sLearnForgetSummaryPages[] = { 0x01, 0x04 };
     PokemonSummaryArgs *args = Heap_Alloc(heapID, sizeof(PokemonSummaryArgs));
     MI_CpuFill8(args, 0, sizeof(PokemonSummaryArgs));
     args->party = SaveArray_Party_Get(fieldSystem->saveData);
@@ -393,7 +393,7 @@ PokemonSummaryArgs *LearnForgetMove_LaunchApp(enum HeapID heapID, FieldSystem *f
     args->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
     args->unk2C = 0;
     args->menuInputStatePtr = &fieldSystem->menuInputState;
-    PokemonSummary_SetPages(args, _020FA1A8);
+    PokemonSummary_SetPages(args, sLearnForgetSummaryPages);
     PokemonSummaryArgs_SetPlayer(args, Save_PlayerData_GetProfile(fieldSystem->saveData));
     PokemonSummary_LearnForget_LaunchApp(fieldSystem, args);
     return args;
@@ -1212,8 +1212,8 @@ NintendoWifiConnectArgs *NintendoWifiConnection_LaunchApp(FieldSystem *fieldSyst
 }
 
 void LaunchApplication_DeadstrippedFunction(FieldSystem *fieldSystem) {
-    static const OverlayManagerTemplate _020FA444 = { NintendoWfcUnused_Init, NintendoWfcUnused_Main, NintendoWfcUnused_Exit, FS_OVERLAY_ID(OVY_72) };
-    FieldSystem_LaunchApplication(fieldSystem, &_020FA444, NULL);
+    static const OverlayManagerTemplate sOverlayTemplate_NintendoWfcUnused = { NintendoWfcUnused_Init, NintendoWfcUnused_Main, NintendoWfcUnused_Exit, FS_OVERLAY_ID(OVY_72) };
+    FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_NintendoWfcUnused, NULL);
 }
 
 static const OverlayManagerTemplate sOverlayTemplate_GeonetGlobe = { GeonetGlobe_Init, GeonetGlobe_Main, GeonetGlobe_Exit, FS_OVERLAY_ID(OVY_69) };

@@ -309,9 +309,9 @@
 .public FollowMon_GetSpecies
 .public FollowMon_IsActive
 .public FollowMon_IsVisible
-.public FieldSystem_UnkSub108_AddMonMood
-.public FieldSystem_UnkSub108_SetMonMood
-.public FieldSystem_UnkSub108_GetMonMood
+.public FollowMonMood_Add
+.public FollowMonMood_Set
+.public FollowMonMood_Get
 .public FieldSystem_BugContest_Get
 .public BugContest_GetSportBallsAddr
 .public ZeroMonData
@@ -507,8 +507,8 @@
 .public FollowMonInteraction_New
 .public FollowMonInteraction_Delete
 .public FieldSystem_FirstAliveMonHasType
-.public ov02_022507B4
-.public ov02_022508B4
+.public FollowMon_JumpOnSpot
+.public FollowMon_StartGrowAndShrink
 .public ov02_02250A60
 .public LegendCutscene_EndClearBellAnim
 .public LegendCutscene_ClearBellRiseFromBag

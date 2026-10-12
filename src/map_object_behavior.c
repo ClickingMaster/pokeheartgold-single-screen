@@ -317,7 +317,7 @@ void ApricornTreeObject_Update(LocalMapObject *object) {
         }
         BillboardObject_AdvanceFrame(state->billboard, FX32_ONE);
     }
-    ov01_021FA40C(object, state->billboard);
+    MapObject_SetBillboardVisibleFromFlags(object, state->billboard);
 }
 
 void ApricornTreeObject_Delete(LocalMapObject *object) {

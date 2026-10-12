@@ -1,4 +1,4 @@
-#include "overlay_01_021EA824.h"
+#include "field_fog.h"
 
 #include "global.h"
 
@@ -13,23 +13,23 @@ void Fog_Free(FogData **fog) {
     *fog = NULL;
 }
 
-BOOL ov01_021EA854(FogData *fog) {
+BOOL Fog_IsEnabled(FogData *fog) {
     return fog->enable;
 }
 
-GXFogSlope ov01_021EA858(FogData *fog) {
+GXFogSlope Fog_GetSlope(FogData *fog) {
     return fog->fogSlope;
 }
 
-int ov01_021EA85C(FogData *fog) {
+int Fog_GetOffset(FogData *fog) {
     return fog->fogOffset;
 }
 
-u16 ov01_021EA860(FogData *fog) {
-    return fog->unk10;
+u16 Fog_GetColor(FogData *fog) {
+    return fog->color;
 }
 
-void ov01_021EA864(FogData *fog, s32 arg1, BOOL enable, GXFogBlend fogMode, GXFogSlope fogSlope, int fogOffset) {
+void Fog_Set(FogData *fog, s32 arg1, BOOL enable, GXFogBlend fogMode, GXFogSlope fogSlope, int fogOffset) {
     if (arg1 & 1 << 0) {
         fog->enable = enable;
     }
@@ -45,17 +45,17 @@ void ov01_021EA864(FogData *fog, s32 arg1, BOOL enable, GXFogBlend fogMode, GXFo
     G3X_SetFog(fog->enable, fog->fogMode, fog->fogSlope, fog->fogOffset);
 }
 
-void ov01_021EA89C(FogData *fog, u32 arg1, u16 arg2, u32 arg3) {
+void Fog_SetColor(FogData *fog, u32 arg1, u16 arg2, u32 arg3) {
     if (arg1 & 1 << 4) {
-        fog->unk10 = arg2;
+        fog->color = arg2;
     }
     if (arg1 & 1 << 5) {
-        fog->unk14 = arg3;
+        fog->alpha = arg3;
     }
-    reg_G3X_FOG_COLOR = fog->unk10 | (fog->unk14 << 16);
+    reg_G3X_FOG_COLOR = fog->color | (fog->alpha << 16);
 }
 
-void ov01_021EA8C4(FogData *fog, const void *src) {
+void Fog_SetTable(FogData *fog, const void *src) {
     MIi_CpuCopy32(src, fog->fogTable, 32);
     G3X_SetFogTable(fog->fogTable);
 }

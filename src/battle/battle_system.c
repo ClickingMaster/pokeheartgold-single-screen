@@ -13,7 +13,7 @@
 #include "battle/battle_hp_bar.h"
 #include "battle/battle_input.h"
 #include "battle/overlay_12_0224E4FC.h"
-#include "battle/overlay_12_0226BEC4.h"
+#include "battle/battle_recording_stop.h"
 #include "msgdata/msg/msg_0197.h"
 
 #include "msgdata.h"
@@ -187,7 +187,7 @@ u16 *BattleSystem_GetRecvBufferEndPos(BattleSystem *battleSystem) {
     return &battleSystem->recvEndPos;
 }
 
-UnkBattleSystemSub1D0 *BattleSystem_GetMonPicDataList(BattleSystem *battleSystem) {
+MonPicData *BattleSystem_GetMonPicDataList(BattleSystem *battleSystem) {
     return &battleSystem->monPicData[0];
 }
 
@@ -983,28 +983,28 @@ void BattleSystem_SetWaitingIcon(BattleSystem *battleSystem, void *a1) {
     battleSystem->waitingIcon = a1;
 }
 
-UnkBattleSystemSub1D0 *BattleSystem_GetMonPicData(BattleSystem *battleSystem, int index) {
+MonPicData *BattleSystem_GetMonPicData(BattleSystem *battleSystem, int index) {
     return &battleSystem->monPicData[index];
 }
 
-u8 *MonPicData_GetCharBuffer(UnkBattleSystemSub1D0 *ptr, int index) {
+u8 *MonPicData_GetCharBuffer(MonPicData *ptr, int index) {
     GF_ASSERT(index < 4);
-    return ptr[index].unk0;
+    return ptr[index].charBuffer;
 }
 
-void MonPicData_SetNarcId(UnkBattleSystemSub1D0 *ptr, int index, int a2) {
+void MonPicData_SetNarcId(MonPicData *ptr, int index, int a2) {
     GF_ASSERT(index < 4);
-    ptr[index].unk4 = a2;
+    ptr[index].narcId = a2;
 }
 
-void MonPicData_SetPaletteId(UnkBattleSystemSub1D0 *ptr, int index, int a2) {
+void MonPicData_SetPaletteId(MonPicData *ptr, int index, int a2) {
     GF_ASSERT(index < 4);
-    ptr[index].unk8 = a2;
+    ptr[index].paletteId = a2;
 }
 
-void MonPicData_SetHeight(UnkBattleSystemSub1D0 *ptr, int index, int a2) {
+void MonPicData_SetHeight(MonPicData *ptr, int index, int a2) {
     GF_ASSERT(index < 4);
-    ptr[index].unkC = a2;
+    ptr[index].height = a2;
 }
 
 void ov12_0223BBF0(BattleSystem *battleSystem, u8 a1) {
@@ -1231,7 +1231,7 @@ void BattleSystem_StartRecordingStopTask(BattleSystem *battleSystem) {
     if (!(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING) || battleSystem->recordingStopTask) {
         return;
     }
-    battleSystem->recordingStopTask = ov12_0226BEC4(battleSystem);
+    battleSystem->recordingStopTask = BattleRecordingStop_CreateTask(battleSystem);
 }
 
 u8 BattleSystem_GetChatotVoiceParam(BattleSystem *battleSystem, int battlerId) {

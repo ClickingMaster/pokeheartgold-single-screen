@@ -985,7 +985,7 @@ Overlay field
     Object src/field/area_light.o
     Object asm/door_transition_area_light_data.o
     Object src/field/build_model_shapes.o
-    Object src/overlay_01_021EA824.o
+    Object src/field_fog.o
     Object src/field/field_model_attributes.o
     Object src/field/field_camera.o
     Object asm/field_camera_data.o
@@ -1196,7 +1196,7 @@ Overlay OVY_12
     Object src/battle/party_gauge.o
     Object src/battle/battle_cursor.o
     Object src/battle/battle_finger.o
-    Object src/battle/overlay_12_0226BEC4.o
+    Object src/battle/battle_recording_stop.o
 }
 Overlay OVY_13
 {

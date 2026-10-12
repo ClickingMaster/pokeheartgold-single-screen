@@ -509,12 +509,12 @@ typedef struct BattleTerrain {
     u16 unused;
 } BattleTerrain; // size: 0x10
 
-typedef struct UnkBattleSystemSub1D0 {
-    u8 *unk0;
-    int unk4;
-    int unk8;
-    int unkC;
-} UnkBattleSystemSub1D0;
+typedef struct MonPicData {
+    u8 *charBuffer;
+    int narcId;
+    int paletteId;
+    int height;
+} MonPicData;
 
 typedef struct UnkBattleSystemSub220 {
     int unk0;
@@ -569,7 +569,7 @@ struct BattleSystem {
     u32 *linkScreenArgs;
     void *pokepicAnimManager; // related to animations
     u32 *cellTransferState;
-    UnkBattleSystemSub1D0 monPicData[4];
+    MonPicData monPicData[4];
     UnkBattleSystemSub220 unk210;
     GameStats *gameStats;
     u8 *bgTiles;

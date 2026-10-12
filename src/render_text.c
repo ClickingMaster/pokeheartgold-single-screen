@@ -131,8 +131,8 @@ RenderResult RenderText(TextPrinter *printer) {
                 u16 field = MsgArray_ControlCodeGetField(
                     printer->template.currentChar.raw, 0);
                 if (field == 0xff) {
-                    u8 r2 = printer->template.unk1B;
-                    printer->template.unk1B = ((printer->template.fgColor - 1) / 2 + 100);
+                    u8 r2 = printer->template.savedColor;
+                    printer->template.savedColor = ((printer->template.fgColor - 1) / 2 + 100);
 
                     if (r2 < 100 || r2 >= 107) {
                         break;
@@ -141,7 +141,7 @@ RenderResult RenderText(TextPrinter *printer) {
                     field = (r2 - 100);
                 } else {
                     if (field >= 100) {
-                        printer->template.unk1B = field;
+                        printer->template.savedColor = field;
                         break;
                     }
                 }
@@ -192,7 +192,7 @@ RenderResult RenderText(TextPrinter *printer) {
 
                 return RENDER_UPDATE;
             case 0x202:
-                printer->unk2E = MsgArray_ControlCodeGetField(
+                printer->callbackParam = MsgArray_ControlCodeGetField(
                     printer->template.currentChar.raw, 0);
                 printer->template.currentChar.raw = MsgArray_SkipControlCode(printer->template.currentChar.raw);
 

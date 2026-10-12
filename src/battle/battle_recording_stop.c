@@ -1,4 +1,4 @@
-#include "battle/overlay_12_0226BEC4.h"
+#include "battle/battle_recording_stop.h"
 
 #include "global.h"
 
@@ -9,23 +9,23 @@
 #include "sys_task.h"
 #include "sound_playback.h"
 
-static void ov12_0226BF04(SysTask *task, void *data);
+static void Task_BattleRecordingStop(SysTask *task, void *data);
 
-SysTask *ov12_0226BEC4(BattleSystem *battleSystem) {
-    UnkBattleStruct_0226BEC4 *unk;
-    unk = Heap_Alloc(HEAP_ID_BATTLE, sizeof(UnkBattleStruct_0226BEC4));
-    MI_CpuFill8(unk, 0, sizeof(UnkBattleStruct_0226BEC4));
+SysTask *BattleRecordingStop_CreateTask(BattleSystem *battleSystem) {
+    BattleRecordingStopWork *unk;
+    unk = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleRecordingStopWork));
+    MI_CpuFill8(unk, 0, sizeof(BattleRecordingStopWork));
     unk->battleSystem = battleSystem;
-    return SysTask_CreateOnMainQueue(ov12_0226BF04, unk, 1000);
+    return SysTask_CreateOnMainQueue(Task_BattleRecordingStop, unk, 1000);
 }
 
-void ov12_0226BEF0(SysTask *task) {
+void BattleRecordingStop_DestroyTask(SysTask *task) {
     Heap_Free(SysTask_GetData(task));
     SysTask_Destroy(task);
 }
 
-static void ov12_0226BF04(SysTask *task, void *_data) {
-    UnkBattleStruct_0226BEC4 *data = _data;
+static void Task_BattleRecordingStop(SysTask *task, void *_data) {
+    BattleRecordingStopWork *data = _data;
     BattleInput *battleInput = BattleSystem_GetBattleInput(data->battleSystem);
 
     switch (data->state) {

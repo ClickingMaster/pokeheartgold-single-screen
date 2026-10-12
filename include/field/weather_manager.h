@@ -5,7 +5,7 @@
 
 #include "field/field_texture_manager.h"
 
-#include "overlay_01_021EA824.h"
+#include "field_fog.h"
 #include "sprite.h"
 #include "task.h"
 
@@ -34,14 +34,14 @@ typedef struct WeatherDraw {
     SysTask *task;
 } WeatherDraw;
 
-typedef struct UnkWeatherStruct_021EC078 {
+typedef struct WeatherBgGfxFiles {
     void *unk0;
     void *unk4;
     void *unk8;
     NNSG2dScreenData *unkC;
     NNSG2dCharacterData *unk10;
     NNSG2dPaletteData *unk14;
-} UnkWeatherStruct_021EC078;
+} WeatherBgGfxFiles;
 
 typedef struct WeatherSystem WeatherSystem;
 typedef struct WeatherEntry WeatherEntry;
@@ -114,17 +114,17 @@ typedef struct WeatherParticleTaskData {
     s32 data[10];
 } WeatherParticleTaskData;
 
-typedef struct UnkStruct_021ED474 {
+typedef struct WeatherFogTaskData {
     WeatherFogTableFade unk1C;
     WeatherFogChange unk50;
     s32 data[10];
-} UnkStruct_021ED474;
+} WeatherFogTaskData;
 
-typedef struct UnkStruct_021ED584 {
+typedef struct WeatherMistTaskData {
     WeatherLerp unk0;
     WeatherFogTableFade unk1C;
     WeatherFogChange unk50;
-} UnkStruct_021ED584;
+} WeatherMistTaskData;
 
 typedef struct UnkStruct_021ED710_Sub_Sub4 {
     fx32 unk0;
@@ -146,14 +146,14 @@ typedef struct UnkStruct_021ED710_Sub {
     u16 unk30[4][192];
 } UnkStruct_021ED710_Sub;
 
-typedef struct UnkStruct_021ED710 {
+typedef struct WeatherFlashTaskData {
     UnkStruct_021ED710_Sub unk0;
     void *unk62C;
     u16 unk630;
     u16 unk632;
-} UnkStruct_021ED710;
+} WeatherFlashTaskData;
 
-void ov01_021EB1E8(FieldTextureManager *textureManager);
+void FieldTextureManager_KeepTextures(FieldTextureManager *textureManager);
 WeatherManager *WeatherManager_New(FieldSystem *fieldSystem);
 void WeatherManager_Delete(WeatherManager *weatherManager);
 void WeatherManager_SetWeather(WeatherManager *weatherManager, int a1);

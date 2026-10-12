@@ -139,7 +139,7 @@
 .public BillboardObject_RestoreState
 .public MapObject_IsBillboardPending
 .public MapObject_UpdateBillboardPosition
-.public ov01_021FA40C
+.public MapObject_SetBillboardVisibleFromFlags
 .public ApricornRegrowth_Spawn
 .public EmoteMark_IsDone
 .public EmoteMark_Spawn

@@ -41,7 +41,7 @@ typedef struct TextPrinterTemplate {
     u8 fgColor, bgColor, shadowColor;
     u16 glyphTable;
     u8 unk1A;
-    u8 unk1B;
+    u8 savedColor;
 } TextPrinterTemplate;
 
 typedef BOOL (*PrinterCallback_t)(TextPrinterTemplate *template, u16 glyphId);
@@ -58,8 +58,8 @@ typedef struct TextPrinter {
     u8 delayCounter;
     u8 scrollDistance;
     u8 id;
-    u8 unk2D;
-    u16 unk2E;
+    u8 callbackResult;
+    u16 callbackParam;
     u16 *focusIndicatorGfx;
 } TextPrinter;
 

@@ -548,7 +548,7 @@ BOOL OakSpeech_Init(OverlayManager *ovyMan, int *pState) {
     OakSpeechData *data = OverlayManager_CreateAndGetData(ovyMan, sizeof(OakSpeechData), HEAP_ID_OAKS_SPEECH);
     memset(data, 0, sizeof(OakSpeechData));
     data->heapID = HEAP_ID_OAKS_SPEECH;
-    UnkStruct_02111868_sub *mainOvyArgs = OverlayManager_GetArgs(ovyMan);
+    MainOverlayArgs *mainOvyArgs = OverlayManager_GetArgs(ovyMan);
     data->saveData = mainOvyArgs->saveData;
     data->options = Save_PlayerData_GetOptionsAddr(data->saveData);
     data->state = OAK_SPEECH_MAIN_STATE_START_TUTORIAL_MUSIC;

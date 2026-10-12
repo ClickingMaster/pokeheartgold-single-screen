@@ -3,17 +3,17 @@
 	.include "global.inc"
 
 	.public ov01_022089CC
-	.public ov01_022089D8
+	.public gPlayerWalkSlightlyFasterFrameSteps
 	.public gPlayerFishingBillboardMotions
-	.public ov01_022089F8
-	.public ov01_02208A08
-	.public ov01_02208A18
-	.public ov01_02208A28
-	.public ov01_02208A38
-	.public ov01_02208A48
-	.public ov01_02208A64
-	.public ov01_02208A80
-	.public ov01_02208AA0
+	.public gPlayerFishingSequences
+	.public gWalkSlightlyFasterFrameSteps
+	.public gPlayerLadderSequences
+	.public gPlayerApricornShakeSequences
+	.public gPlayerCyclingStandSequences
+	.public gPlayerWalkSlightlyFastFrameSteps
+	.public gWalkSlightlyFastFrameSteps
+	.public gWalkEverSoSlightlyFastFrameSteps
+	.public gPlayerWalkEverSoSlightlyFastFrameSteps
 	.public gNpcBillboardMotions
 	.public gPlayerCyclingBillboardMotions
 	.public gPcWomanBillboardMotions
@@ -23,83 +23,83 @@
 	.public BillboardMotion_AnimateNormalSpeed
 	.public BillboardMotion_AnimateDoubleSpeed
 	.public BillboardMotion_AnimateQuadSpeed
-	.public ov01_021F7A90
-	.public ov01_021F7B14
-	.public ov01_021F7B90
-	.public ov01_021F7C80
-	.public ov01_021F7CBC
-	.public ov01_021F7EE4
-	.public ov01_021F7F54
-	.public ov01_021F7FC8
-	.public ov01_021F801C
-	.public ov01_021F8070
-	.public ov01_021F80C4
-	.public ov01_021F8164
-	.public ov01_021F81FC
-	.public ov01_021F829C
-	.public ov01_021F8374
+	.public BillboardMotion_WalkSlightlyFast
+	.public BillboardMotion_WalkSlightlyFaster
+	.public BillboardMotion_WalkEverSoSlightlyFast
+	.public BillboardMotion_PcWomanStand
+	.public BillboardMotion_PcWomanBow
+	.public PlayerBillboardMotion_Stand
+	.public PlayerBillboardMotion_AnimateHalfSpeed
+	.public PlayerBillboardMotion_AnimateNormalSpeed
+	.public PlayerBillboardMotion_AnimateDoubleSpeed
+	.public PlayerBillboardMotion_AnimateQuadSpeed
+	.public PlayerBillboardMotion_WalkSlightlyFast
+	.public PlayerBillboardMotion_WalkSlightlyFaster
+	.public PlayerBillboardMotion_WalkEverSoSlightlyFast
+	.public PlayerBillboardMotion_Run
+	.public PlayerBillboardMotion_CyclingStand
 	.public ov01_021F8400
 	.public ov01_021F847C
-	.public ov01_021F856C
-	.public ov01_021F85BC
-	.public ov01_021F85F4
-	.public ov01_021F86B8
+	.public PlayerBillboardMotion_FishingIdle
+	.public PlayerBillboardMotion_FishingCast
+	.public PlayerBillboardMotion_FishingBite
+	.public PlayerBillboardMotion_FishingReel
 	.public ov01_021F8804
 	.public ov01_021F883C
-	.public ov01_021F8BA8
+	.public PlayerBillboardMotion_ApricornShake
 
 	.text
 	.rodata
 
 ov01_022089CC: ; 0x022089CC
-	.word ov01_021F8BA8
+	.word PlayerBillboardMotion_ApricornShake
 	.word ov01_021F8804
 	.word ov01_021F883C
 
-ov01_022089D8: ; 0x022089D8
+gPlayerWalkSlightlyFasterFrameSteps: ; 0x022089D8
 	.byte 0x00, 0x30, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00
 	.byte 0x00, 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 gPlayerFishingBillboardMotions: ; 0x022089E8
-	.word ov01_021F856C
-	.word ov01_021F85BC
-	.word ov01_021F85F4
-	.word ov01_021F86B8
+	.word PlayerBillboardMotion_FishingIdle
+	.word PlayerBillboardMotion_FishingCast
+	.word PlayerBillboardMotion_FishingBite
+	.word PlayerBillboardMotion_FishingReel
 
-ov01_022089F8: ; 0x022089F8
+gPlayerFishingSequences: ; 0x022089F8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 
-ov01_02208A08: ; 0x02208A08
+gWalkSlightlyFasterFrameSteps: ; 0x02208A08
 	.byte 0x00, 0x30, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00
 	.byte 0x00, 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov01_02208A18: ; 0x02208A18
+gPlayerLadderSequences: ; 0x02208A18
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 
-ov01_02208A28: ; 0x02208A28
+gPlayerApricornShakeSequences: ; 0x02208A28
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 
-ov01_02208A38: ; 0x02208A38
+gPlayerCyclingStandSequences: ; 0x02208A38
 	.byte 0x06, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00
 	.byte 0x08, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00
 
-ov01_02208A48: ; 0x02208A48
+gPlayerWalkSlightlyFastFrameSteps: ; 0x02208A48
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 	.byte 0x00, 0x20, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov01_02208A64: ; 0x02208A64
+gWalkSlightlyFastFrameSteps: ; 0x02208A64
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov01_02208A80: ; 0x02208A80
+gWalkEverSoSlightlyFastFrameSteps: ; 0x02208A80
 	.byte 0x00, 0x20, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov01_02208AA0: ; 0x02208AA0
+gPlayerWalkEverSoSlightlyFastFrameSteps: ; 0x02208AA0
 	.byte 0x00, 0x20, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
@@ -110,42 +110,42 @@ gNpcBillboardMotions: ; 0x02208AC0
 	.word BillboardMotion_AnimateNormalSpeed
 	.word BillboardMotion_AnimateDoubleSpeed
 	.word BillboardMotion_AnimateQuadSpeed
-	.word ov01_021F7A90
-	.word ov01_021F7B14
-	.word ov01_021F7B90
+	.word BillboardMotion_WalkSlightlyFast
+	.word BillboardMotion_WalkSlightlyFaster
+	.word BillboardMotion_WalkEverSoSlightlyFast
 
 gPlayerCyclingBillboardMotions: ; 0x02208AE4
-	.word ov01_021F8374
-	.word ov01_021F7F54
-	.word ov01_021F7F54
-	.word ov01_021F7FC8
-	.word ov01_021F801C
-	.word ov01_021F80C4
-	.word ov01_021F80C4
-	.word ov01_021F80C4
+	.word PlayerBillboardMotion_CyclingStand
+	.word PlayerBillboardMotion_AnimateHalfSpeed
+	.word PlayerBillboardMotion_AnimateHalfSpeed
+	.word PlayerBillboardMotion_AnimateNormalSpeed
+	.word PlayerBillboardMotion_AnimateDoubleSpeed
+	.word PlayerBillboardMotion_WalkSlightlyFast
+	.word PlayerBillboardMotion_WalkSlightlyFast
+	.word PlayerBillboardMotion_WalkSlightlyFast
 	.word ov01_021F8400
 	.word ov01_021F847C
 
 gPcWomanBillboardMotions: ; 0x02208B0C
-	.word ov01_021F7C80
+	.word BillboardMotion_PcWomanStand
 	.word BillboardMotion_AnimateHalfSpeed
 	.word BillboardMotion_AnimateHalfSpeed
 	.word BillboardMotion_AnimateNormalSpeed
 	.word BillboardMotion_AnimateDoubleSpeed
 	.word BillboardMotion_AnimateQuadSpeed
-	.word ov01_021F7A90
-	.word ov01_021F7B14
-	.word ov01_021F7B90
-	.word ov01_021F7CBC
+	.word BillboardMotion_WalkSlightlyFast
+	.word BillboardMotion_WalkSlightlyFaster
+	.word BillboardMotion_WalkEverSoSlightlyFast
+	.word BillboardMotion_PcWomanBow
 
 gPlayerWalkingBillboardMotions: ; 0x02208B34
-	.word ov01_021F7EE4
-	.word ov01_021F7F54
-	.word ov01_021F7F54
-	.word ov01_021F7FC8
-	.word ov01_021F801C
-	.word ov01_021F8070
-	.word ov01_021F80C4
-	.word ov01_021F8164
-	.word ov01_021F81FC
-	.word ov01_021F829C
+	.word PlayerBillboardMotion_Stand
+	.word PlayerBillboardMotion_AnimateHalfSpeed
+	.word PlayerBillboardMotion_AnimateHalfSpeed
+	.word PlayerBillboardMotion_AnimateNormalSpeed
+	.word PlayerBillboardMotion_AnimateDoubleSpeed
+	.word PlayerBillboardMotion_AnimateQuadSpeed
+	.word PlayerBillboardMotion_WalkSlightlyFast
+	.word PlayerBillboardMotion_WalkSlightlyFaster
+	.word PlayerBillboardMotion_WalkEverSoSlightlyFast
+	.word PlayerBillboardMotion_Run

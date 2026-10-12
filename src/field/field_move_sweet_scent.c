@@ -89,11 +89,11 @@ BOOL Task_UseSweetScentInField(TaskManager *taskManager) {
         u8 kind;
         if (FieldSystem_FirstAliveMonHasType(fieldSystem, 12)) {
             kind = 2;
-            FieldSystem_UnkSub108_AddMonMood(fieldSystem->unk108, 1);
+            FollowMonMood_Add(fieldSystem->followMonMood, 1);
         } else {
             kind = 1;
         }
-        ov02_022507B4(fieldSystem, kind);
+        FollowMon_JumpOnSpot(fieldSystem, kind);
         ++*state;
         break;
     }

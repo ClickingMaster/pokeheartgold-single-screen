@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · fcd72e638 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · dbe0f481c · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -2629,9 +2629,9 @@ src/battle/battle_cursor.c</title></rect>
 <rect x="455.197" y="462.055" width="6.520" height="12.368" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_12 / battle_terrain.o
 504 bytes · C-only source
 src/battle/battle_terrain.c</title></rect>
-<rect x="461.717" y="462.055" width="6.080" height="7.263" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_12 / overlay_12_0226BEC4.o
+<rect x="461.717" y="462.055" width="6.080" height="7.263" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_12 / battle_recording_stop.o
 276 bytes · C-only source
-src/battle/overlay_12_0226BEC4.c</title></rect>
+src/battle/battle_recording_stop.c</title></rect>
 <rect x="461.717" y="469.318" width="6.080" height="5.105" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_12 / battle_pokepic_bob.o
 194 bytes · C-only source
 src/battle/battle_pokepic_bob.c</title></rect>
@@ -3785,9 +3785,9 @@ src/field/map_load_buffers.c</title></rect>
 <rect x="603.124" y="709.030" width="7.789" height="4.273" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / field_bottom_screen.o
 208 bytes · C-only source
 src/field/field_bottom_screen.c</title></rect>
-<rect x="603.124" y="713.302" width="7.789" height="3.698" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / overlay_01_021EA824.o
+<rect x="603.124" y="713.302" width="7.789" height="3.698" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / field_fog.o
 180 bytes · C-only source
-src/overlay_01_021EA824.c</title></rect>
+src/field_fog.c</title></rect>
 <rect x="610.913" y="709.030" width="4.577" height="4.614" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / scrcmd_moneybox.o
 132 bytes · C-only source
 src/field/scrcmd_moneybox.c</title></rect>

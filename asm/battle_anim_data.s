@@ -165,7 +165,7 @@
 	.extern BattleAnimScriptCmd_JumpBySide
 	.extern BattleAnimScriptCmd_JumpByWeather
 	.extern ov07_0221D214
-	.extern ov07_0221D23C
+	.extern BattleAnimScriptCmd_JumpIfAttackerActive
 	.extern BattleAnimScriptCmd_JumpIfSameSide
 	.extern ov07_0221D2B0
 	.extern BattleAnimScriptCmd_Jump
@@ -311,25 +311,25 @@
 	.extern BattleAnimFunc_SlideBattler2
 	.extern BattleAnimFunc_ShakeAndScaleBattler
 	.extern BattleAnimFunc_ShakeAndScaleBattlerXY
-	.extern ov07_022251CC
+	.extern BattleAnimFunc_ShowBattleBgInObjWindow
 	.extern BattleAnimFunc_MoveBattlerBy
 	.extern BattleAnimFunc_MoveBattlerSin
 	.extern BattleAnimFunc_MoveBattlerLinear
-	.extern ov07_02225640
+	.extern BattleAnimFunc_MoveBattlerOffscreen
 	.extern BattleAnimFunc_ResetBattlerPosition
 	.extern BattleAnimFunc_BlendSpritePalette
-	.extern ov07_02225990
-	.extern ov07_02225CC4
+	.extern BattleAnimFunc_ChangeBattlerHeight
+	.extern BattleAnimFunc_RevealBattler
 	.extern BattleAnimFunc_ShakeBg
 	.extern BattleAnimFunc_SpriteMosaic
 	.extern BattleAnimFunc_MoveEmitter
 	.extern ov07_022262E8
 	.extern BattleAnimFunc_MoveEmitterArc
 	.extern BattleAnimFunc_EmitterSinMotion
-	.extern ov07_02226838
+	.extern BattleAnimSpriteFunc_MoveSpriteAndAnimate
 	.extern BattleAnimSpriteFunc_SpriteOrbit
-	.extern ov07_02226A9C
-	.extern ov07_02226C4C
+	.extern BattleAnimSpriteFunc_SpriteAboveDefender
+	.extern BattleAnimSpriteFunc_SpriteArc
 	.extern BattleAnimFunc_SetBgPaletteGrayscale
 	.extern BattleAnimFunc_DropSpriteStepwise
 	.extern BattleAnimFunc_AnimateSprites
@@ -666,7 +666,7 @@ sBattleAnimScriptCmdTable: ; 0x02234DE8
 	.word BattleAnimScriptCmd_WaitForButtonCombo
 	.word BattleAnimScriptCmd_BrightnessFlash
 	.word BattleAnimScriptCmd_SwitchBackgroundWithFadeWait
-	.word ov07_0221D23C
+	.word BattleAnimScriptCmd_JumpIfAttackerActive
 
 sBattleAnimBackgroundFiles: ; 0x02234F48
 	.byte 0x3B, 0x00, 0x00, 0x00, 0x27, 0x01, 0x00, 0x00
@@ -1167,10 +1167,10 @@ sBattleAnimSpriteFuncTable: ; 0x0223649C
 	.word BattleAnimSpriteFunc_SpriteQuad
 	.word BattleAnimSpriteFunc_FlashingSpritesAroundAttacker
 	.word BattleAnimSpriteFunc_SpriteTrailToDefender
-	.word ov07_02226838
+	.word BattleAnimSpriteFunc_MoveSpriteAndAnimate
 	.word BattleAnimSpriteFunc_SpriteOrbit
-	.word ov07_02226A9C
-	.word ov07_02226C4C
+	.word BattleAnimSpriteFunc_SpriteAboveDefender
+	.word BattleAnimSpriteFunc_SpriteArc
 	.word BattleAnimSpriteFunc_RisingShrinkSprites
 	.word BattleAnimSpriteFunc_SpriteRowSequence
 	.word BattleAnimSpriteFunc_PaletteCycleSprite
@@ -1233,7 +1233,7 @@ sBattleAnimFuncTable: ; 0x02236520
 	.word BattleAnimFunc_ShakeAndScaleBattler
 	.word BattleAnimFunc_ShakeAndScaleBattlerXY
 	.word BattleAnimFunc_WaveAttackerOnBg
-	.word ov07_022251CC
+	.word BattleAnimFunc_ShowBattleBgInObjWindow
 	.word BattleAnimFunc_MoveBattlerBy
 	.word BattleAnimFunc_ShrinkSpriteOnDefender
 	.word BattleAnimFunc_AttackerDashAfterimages
@@ -1241,10 +1241,10 @@ sBattleAnimFuncTable: ; 0x02236520
 	.word BattleAnimFunc_MoveBattlerLinear
 	.word BattleAnimFunc_ResetBattlerPosition
 	.word BattleAnimFunc_BlendSpritePalette
-	.word ov07_02225990
+	.word BattleAnimFunc_ChangeBattlerHeight
 	.word BattleAnimFunc_MoveEmitter
 	.word BattleAnimFunc_MoveEmitterArc
-	.word ov07_02225CC4
+	.word BattleAnimFunc_RevealBattler
 	.word BattleAnimFunc_ShakeBg
 	.word BattleAnimFunc_SpriteMosaic
 	.word ov07_0222B640
@@ -1254,7 +1254,7 @@ sBattleAnimFuncTable: ; 0x02236520
 	.word BattleAnimFunc_SetBgPaletteGrayscale
 	.word BattleAnimFunc_DropSpriteStepwise
 	.word BattleAnimFunc_BattleBgWave
-	.word ov07_02225640
+	.word BattleAnimFunc_MoveBattlerOffscreen
 	.word BattleAnimFunc_AnimateSprites
 	.word BattleAnimFunc_WipeOutDefender
 	.word BattleAnimFunc_ObjWindowBgScrollUp

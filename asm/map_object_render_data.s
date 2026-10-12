@@ -1,6 +1,6 @@
-	.public ov01_02208B64
-	.public ov01_02208B70
-	.public ov01_02208B80
+	.public gMapObjectBillboardScale
+	.public gFacingBillboardStandSequences
+	.public gFacingBillboardWalkSequences
 	.public ov01_02208B90
 #include "constants/sndseq.h"
 #include "constants/moves.h"
@@ -39,17 +39,17 @@
 	.public MapObjectManager_IsSequenceInUse
 	.public MapObjectRender_ReleaseSpriteResources
 	.public MapObjectBillboards_CreateBillboard
-	.public ov01_021FA370
-	.public ov01_021FA470
-	.public ov01_021FA564
-	.public ov01_021FA668
+	.public MapObjectRender_InitBillboardResource
+	.public MapObjectRender_LoadOrQueueTexture
+	.public MapObjectRender_TextureLoadTask
+	.public MapObjectRender_QueueTextureTransfer
 	.public MapObjectRender_CancelTextureTransfer
-	.public ov01_021FA6E0
-	.public ov01_021FA71C
+	.public MapObjectRender_TextureTransferTask
+	.public MapObjectRender_TextureReleaseTask
 	.public MapObjectRender_QueueBillboard
-	.public ov01_021FA854
-	.public ov01_021FA97C
-	.public ov01_021FAB9C
+	.public MapObjectRender_CreateQueue
+	.public MapObject_ChangeBillboardSpriteKeepingCopy
+	.public SpriteChangeWork_Task
 	.public SpriteId_GetBillboardInfo
 	.include "overlay_01_021F944C.inc"
 	.include "global.inc"
@@ -57,13 +57,13 @@
 .text
 	.rodata
 
-ov01_02208B64: ; 0x02208B64
+gMapObjectBillboardScale: ; 0x02208B64
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 
-ov01_02208B70: ; 0x02208B70
+gFacingBillboardStandSequences: ; 0x02208B70
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 
-ov01_02208B80: ; 0x02208B80
+gFacingBillboardWalkSequences: ; 0x02208B80
 	.byte 0x04, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00
 
 ov01_02208B90: ; 0x02208B90

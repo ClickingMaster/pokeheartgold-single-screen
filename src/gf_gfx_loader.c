@@ -269,7 +269,7 @@ static void GfGfxLoader_LoadScrnDataInternal(void *data, BgConfig *bgConfig, GFB
 }
 
 static void GfGfxLoader_GXLoadPalWithSrcOffsetInternal(void *data, enum GFPalLoadLocation location, u32 srcOffset, enum GFPalSlotOffset palSlotOffset, u32 szByte) {
-    static void (*const _020F5968[])(const void *pSrc, u32 offset, u32 szByte) = {
+    static void (*const sGXLoadPlttFuncs[])(const void *pSrc, u32 offset, u32 szByte) = {
         GX_LoadBGPltt,
         GX_LoadOBJPltt,
         GX_LoadBGExtPltt,
@@ -290,26 +290,26 @@ static void GfGfxLoader_GXLoadPalWithSrcOffsetInternal(void *data, enum GFPalLoa
             switch (location) {
             case GF_PAL_LOCATION_MAIN_BGEXT:
                 GX_BeginLoadBGExtPltt();
-                _020F5968[location](pPlttData->pRawData, palSlotOffset, szByte);
+                sGXLoadPlttFuncs[location](pPlttData->pRawData, palSlotOffset, szByte);
                 GX_EndLoadBGExtPltt();
                 break;
             case GF_PAL_LOCATION_SUB_BGEXT:
                 GXS_BeginLoadBGExtPltt();
-                _020F5968[location](pPlttData->pRawData, palSlotOffset, szByte);
+                sGXLoadPlttFuncs[location](pPlttData->pRawData, palSlotOffset, szByte);
                 GXS_EndLoadBGExtPltt();
                 break;
             case GF_PAL_LOCATION_MAIN_OBJEXT:
                 GX_BeginLoadOBJExtPltt();
-                _020F5968[location](pPlttData->pRawData, palSlotOffset, szByte);
+                sGXLoadPlttFuncs[location](pPlttData->pRawData, palSlotOffset, szByte);
                 GX_EndLoadOBJExtPltt();
                 break;
             case GF_PAL_LOCATION_SUB_OBJEXT:
                 GXS_BeginLoadOBJExtPltt();
-                _020F5968[location](pPlttData->pRawData, palSlotOffset, szByte);
+                sGXLoadPlttFuncs[location](pPlttData->pRawData, palSlotOffset, szByte);
                 GXS_EndLoadOBJExtPltt();
                 break;
             default:
-                _020F5968[location](pPlttData->pRawData, palSlotOffset, szByte);
+                sGXLoadPlttFuncs[location](pPlttData->pRawData, palSlotOffset, szByte);
                 break;
             }
         }
@@ -355,7 +355,7 @@ void bar() {
 
 static u32 GfGfxLoader_LoadImageMappingInternal(void *data, int layout, u32 szByte, NNS_G2D_VRAM_TYPE type, u32 baseAddr, NNSG2dImageProxy *pImgProxy) {
     u32 size = 0;
-    static void (*const _020F5950[])(const NNSG2dCharacterData *pSrcData, u32 baseAddr, NNS_G2D_VRAM_TYPE type, NNSG2dImageProxy *pImgProxy) = {
+    static void (*const sLoadImageMappingFuncs[])(const NNSG2dCharacterData *pSrcData, u32 baseAddr, NNS_G2D_VRAM_TYPE type, NNSG2dImageProxy *pImgProxy) = {
         NNS_G2dLoadImage1DMapping,
         NNS_G2dLoadImage2DMapping,
     };
@@ -366,7 +366,7 @@ static u32 GfGfxLoader_LoadImageMappingInternal(void *data, int layout, u32 szBy
             if (szByte != 0) {
                 pCharData->szByte = szByte;
             }
-            _020F5950[layout](pCharData, baseAddr, type, pImgProxy);
+            sLoadImageMappingFuncs[layout](pCharData, baseAddr, type, pImgProxy);
             size = pCharData->szByte;
         }
         Heap_Free(data);

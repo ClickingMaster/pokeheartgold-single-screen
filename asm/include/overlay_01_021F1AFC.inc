@@ -90,7 +90,7 @@
 .public FollowMon_GetMapObject
 .public FollowMon_HideUntilStep
 .public FollowMon_IsActive
-.public FieldSystem_UnkSub108_AddMonMood
+.public FollowMonMood_Add
 .public GetMonData
 .public Party_GetMonByIndex
 .public SaveArray_Party_Get
@@ -131,4 +131,4 @@
 .public RockClimbDebris_Create
 .public RockClimbDebris_Delete
 .public FieldSystem_FirstAliveMonHasType
-.public ov02_022507B4
+.public FollowMon_JumpOnSpot

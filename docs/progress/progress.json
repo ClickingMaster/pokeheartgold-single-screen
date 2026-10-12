@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "fcd72e638eeb611785f89bb30780c7c544e71a2d",
+  "commit": "dbe0f481c67291e608a59810c9a8aee31f10dfc1",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "7789c474530499df435fcc8fce51029eeda8ed9111ce8a3c487fc6560b547c08",
+    "ARM9": "a7305a807b8b7fdf3e97b326609538575c5d5a002499ad793fe0c8ce223664c4",
     "ARM7": "d726d92f810e881692e1b4d2ec232d6ca89b38985dcb26b08751c0037036d92a"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -820,6 +820,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_12",
+      "object": "battle_recording_stop.o",
+      "bytes": 276,
+      "status": "c",
+      "source": "src/battle/battle_recording_stop.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_12",
       "object": "battle_system.o",
       "bytes": 10090,
       "status": "c",
@@ -840,14 +848,6 @@
       "bytes": 41720,
       "status": "c",
       "source": "src/battle/overlay_12_0224E4FC.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_12",
-      "object": "overlay_12_0226BEC4.o",
-      "bytes": 276,
-      "status": "c",
-      "source": "src/battle/overlay_12_0226BEC4.c"
     },
     {
       "cpu": "ARM9",
@@ -6309,6 +6309,14 @@
     {
       "cpu": "ARM9",
       "module": "field",
+      "object": "field_fog.o",
+      "bytes": 180,
+      "status": "c",
+      "source": "src/field_fog.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "field",
       "object": "field_follow_mon.o",
       "bytes": 3802,
       "status": "c",
@@ -6609,14 +6617,6 @@
       "bytes": 2068,
       "status": "c",
       "source": "src/field/map_prop_render.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "overlay_01_021EA824.o",
-      "bytes": 180,
-      "status": "c",
-      "source": "src/overlay_01_021EA824.c"
     },
     {
       "cpu": "ARM9",

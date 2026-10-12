@@ -695,7 +695,7 @@ void BattleAnimFunc_AttackerGrowFlashRed(BattleAnimSystem *system) {
     work->system = system;
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(system));
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
-    work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetAttacker(work->system));
     end = BattleAnimSystem_GetArg(system, 0);
     BattleAnimUtil_InitScaleMotion(&work->scale, 100, 100, (s16)end, BattleAnimSystem_GetArg(system, 2));
     BattleAnimUtil_InitShake(&work->shake, 2, 0, 0, 10);
@@ -766,7 +766,7 @@ void BattleAnimFunc_AttackerSquashStretch(BattleAnimSystem *system) {
     work->system = system;
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(system));
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
-    work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetAttacker(work->system));
     BattleAnimUtil_InitScaleMotionXY(&work->scale, 100, 150, 100, 50, 100, 10);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_AttackerSquashStretch, work);
 }
@@ -857,9 +857,9 @@ void BattleAnimFunc_AttackerAfterimages(BattleAnimSystem *system) {
     work->evb = 6;
     BattleAnimUtil_SetBlendWithBattleBg(work->system, -1, -1);
     reg_G2_BLDALPHA = work->eva | (work->evb << 8);
-    paletteMember = ov07_0221FA80(work->system, BattleAnimSystem_GetAttacker(work->system));
+    paletteMember = BattleAnimSystem_GetBattlerPaletteId(work->system, BattleAnimSystem_GetAttacker(work->system));
     priority = ov07_0221FAE8(work->system);
-    narcId = (NarcId)ov07_0221FA90(work->system, BattleAnimSystem_GetAttacker(work->system));
+    narcId = (NarcId)BattleAnimSystem_GetBattlerNarcId(work->system, BattleAnimSystem_GetAttacker(work->system));
     for (i = 0; i < 4; i++) {
         work->sprites[i] = BattleAnimSystem_GetBattlerSprite(work->system, i);
         ManagedSprite_SetOamMode(work->sprites[i], GX_OAM_MODE_XLU);
@@ -988,7 +988,7 @@ void BattleAnimFunc_AttackerStretchSteps(BattleAnimSystem *system) {
     work->system = system;
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
-    work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetAttacker(work->system));
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_AttackerStretchSteps, work);
 }
 
@@ -1059,7 +1059,7 @@ void BattleAnimFunc_AttackerLeapOffscreen(BattleAnimSystem *system) {
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
     work->baseY = work->y;
-    work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetAttacker(work->system));
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_AttackerLeapOffscreen, work);
 }
 
@@ -1336,7 +1336,7 @@ void BattleAnimFunc_AttackerHop(BattleAnimSystem *system) {
     work->system = system;
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
-    work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetAttacker(work->system));
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_AttackerHop, work);
 }
 
@@ -1397,8 +1397,8 @@ void BattleAnimFunc_ShowAttackerObjWindowSprites(BattleAnimSystem *system) {
     GX_SetVisibleWnd(GX_WNDMASK_OW);
     G2_SetWndOutsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, FALSE);
     BattleAnim_SetObjWindowInsidePlane(GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_OBJ, FALSE);
-    member = ov07_0221FA80(work->system, BattleAnimSystem_GetAttacker(work->system));
-    narcId = (NarcId)ov07_0221FA90(work->system, BattleAnimSystem_GetAttacker(work->system));
+    member = BattleAnimSystem_GetBattlerPaletteId(work->system, BattleAnimSystem_GetAttacker(work->system));
+    narcId = (NarcId)BattleAnimSystem_GetBattlerNarcId(work->system, BattleAnimSystem_GetAttacker(work->system));
     paletteOffset = ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(work->sprites[0]->sprite), NNS_G2D_VRAM_TYPE_2DMAIN);
     paletteData = BattleAnimSystem_GetPaletteData(work->system);
     PaletteData_LoadNarc_CustomTint(paletteData, narcId, member, BattleAnimSystem_GetHeapID(system), PLTTBUF_MAIN_OBJ, 0x20, (u16)(paletteOffset * 16), 0x100, 0x100, 0x100);
@@ -1516,7 +1516,7 @@ void BattleAnimFunc_AttackerSquashAfterimages(BattleAnimSystem *system) {
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
     work->y = work->y - Pokepic_GetAttr(work->pokepic, POKEPIC_SHADOW_H);
-    work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetAttacker(work->system));
     BattleAnimUtil_SetBlendWithBattleBg(work->system, -1, -1);
     reg_G2_BLDALPHA = 12 | (6 << 8);
     for (i = 0; i < 3; i++) {
@@ -2438,7 +2438,7 @@ void ov07_02229BFC(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteM
     work->evb = 16;
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
-    work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetAttacker(work->system));
     layer2 = ov07_0221FAF8(system, 2);
     layer1 = ov07_0221FAF8(system, 1);
     BattleAnimUtil_SetBlendWithMask(work->system, (1 << layer2) | (1 << layer1) | GX_BLEND_PLANEMASK_BG0, -1, -1);
@@ -3172,7 +3172,7 @@ void BattleAnimFunc_ShrinkSpriteOnDefender(BattleAnimSystem *system) {
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->common.system, BattleAnimSystem_GetDefender(work->common.system));
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
     work->baseY = work->y;
-    work->height = ov07_0221FAA0(work->common.system, BattleAnimSystem_GetDefender(work->common.system));
+    work->height = BattleAnimSystem_GetBattlerHeight(work->common.system, BattleAnimSystem_GetDefender(work->common.system));
     work->sprite = BattleAnimSystem_GetBattlerSprite(system, 0);
     work->sprite2 = BattleAnimSystem_GetBattlerSprite(system, 1);
     work->sprite3 = BattleAnimSystem_GetBattlerSprite(system, 2);
@@ -3262,8 +3262,8 @@ void BattleAnimFunc_AttackerDashAfterimages(BattleAnimSystem *system) {
     work->sprite1 = BattleAnimSystem_GetBattlerSprite(work->common.system, 0);
     work->sprite2 = BattleAnimSystem_GetBattlerSprite(work->common.system, 1);
     work->dy = -Pokepic_GetAttr(work->pokepic, POKEPIC_SHADOW_H);
-    member = ov07_0221FA80(work->common.system, BattleAnimSystem_GetAttacker(work->common.system));
-    narcId = (NarcId)ov07_0221FA90(work->common.system, BattleAnimSystem_GetAttacker(work->common.system));
+    member = BattleAnimSystem_GetBattlerPaletteId(work->common.system, BattleAnimSystem_GetAttacker(work->common.system));
+    narcId = (NarcId)BattleAnimSystem_GetBattlerNarcId(work->common.system, BattleAnimSystem_GetAttacker(work->common.system));
     sprite = work->sprite1;
     ManagedSprite_SetPriority(sprite, ov07_0221FAE8(work->common.system) + 1);
     paletteOffset = ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(sprite->sprite), NNS_G2D_VRAM_TYPE_2DMAIN);

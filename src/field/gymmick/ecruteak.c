@@ -36,14 +36,14 @@ void GymmickInit_Ecruteak(FieldSystem *fieldSystem) {
     MI_CpuClear8(fieldSystem->mapSystems->localData, sizeof(EcruteakGymmickLocalData));
     EcruteakGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     fieldSystem->unk11C = FX32_CONST(0.0625);
-    ov01_021EA864(fieldSystem->fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x0020, 0);
-    ov01_021EA89C(fieldSystem->fog, -1, 0, 31);
+    Fog_Set(fieldSystem->fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x0020, 0);
+    Fog_SetColor(fieldSystem->fog, -1, 0, 31);
 
     s8 fogTable[32];
     for (int i = 0; i < 32; ++i) {
         fogTable[i] = -1;
     }
-    ov01_021EA8C4(fieldSystem->fog, (u32 *)fogTable);
+    Fog_SetTable(fieldSystem->fog, (u32 *)fogTable);
     ApplyFogToMapObjects(fieldSystem);
 
     for (int i = 0; i < NUM_CANDLES; ++i) {

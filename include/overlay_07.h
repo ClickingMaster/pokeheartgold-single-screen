@@ -30,7 +30,7 @@ typedef struct BattleAnimSetup {
     SpriteSystem *spriteSystem;
     BgConfig *bgConfig;
     PaletteData *paletteData;
-    UnkBattleSystemSub1D0 *picData[4];
+    MonPicData *picData[4];
     u8 battlerTypes[4];
     Pokepic *pokepics[4];
     u32 battleType;

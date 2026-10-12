@@ -155,7 +155,7 @@ struct BattleAnimBattlerSprites {
     PaletteData *paletteData;
     int resIds[4];
     ManagedSprite *sprites[4];
-    UnkBattleSystemSub1D0 *picData[4];
+    MonPicData *picData[4];
     u8 battlerTypes[4];
     Pokepic *pokepics[4];
 };
@@ -1136,7 +1136,7 @@ void ov07_0221D214(BattleAnimSystem *system) {
 
 #pragma force_active on
 
-void ov07_0221D23C(BattleAnimSystem *system) {
+void BattleAnimScriptCmd_JumpIfAttackerActive(BattleAnimSystem *system) {
     system->scriptPtr++;
     if (system->context->attackerActive) {
         system->scriptPtr += *system->scriptPtr;
@@ -1352,9 +1352,9 @@ void BattleAnimScriptCmd_CopyBattlerToBg(BattleAnimSystem *system) {
     follow = *system->scriptPtr;
     system->scriptPtr++;
     battler = BattleAnimSystem_GetBattlerByRole(system, role);
-    tiles = system->context->picData[battler]->unk0;
-    paletteNarc = (NarcId)system->context->picData[battler]->unk4;
-    paletteMember = system->context->picData[battler]->unk8;
+    tiles = system->context->picData[battler]->charBuffer;
+    paletteNarc = (NarcId)system->context->picData[battler]->narcId;
+    paletteMember = system->context->picData[battler]->paletteId;
     MI_CpuFill8(BgGetCharPtr(GF_BG_LYR_MAIN_2), 0, 0x1900);
     ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_OFF);
     BG_LoadCharTilesData(system->bgConfig, GF_BG_LYR_MAIN_2, tiles, 0xC80, 0);
@@ -1425,7 +1425,7 @@ void BattleAnimScriptCmd_CreateBattlerSprite(BattleAnimSystem *system) {
     ManagedSpriteTemplate template;
     Pokepic *pokepic;
     ManagedSprite *sprite;
-    UnkBattleSystemSub1D0 *picData;
+    MonPicData *picData;
     u32 paletteNarc, paletteMember;
     s16 x, y;
     int i;
@@ -1443,9 +1443,9 @@ void BattleAnimScriptCmd_CreateBattlerSprite(BattleAnimSystem *system) {
     resIds[5] = 0;
     battler = BattleAnimSystem_GetBattlerByRole(system, role);
     picData = system->context->picData[battler];
-    paletteNarc = picData->unk4;
-    paletteMember = picData->unk8;
-    pixels = picData->unk0;
+    paletteNarc = picData->narcId;
+    paletteMember = picData->paletteId;
+    pixels = picData->charBuffer;
     pokepic = BattleAnimSystem_GetBattlerPokepic(system, battler);
     if (pokepic) {
         x = Pokepic_GetAttr(pokepic, POKEPIC_X);
@@ -2988,16 +2988,16 @@ PaletteData *BattleAnimSystem_GetPaletteData(BattleAnimSystem *system) {
     return system->paletteData;
 }
 
-int ov07_0221FA80(BattleAnimSystem *system, int battler) {
-    return system->context->picData[battler]->unk8;
+int BattleAnimSystem_GetBattlerPaletteId(BattleAnimSystem *system, int battler) {
+    return system->context->picData[battler]->paletteId;
 }
 
-int ov07_0221FA90(BattleAnimSystem *system, int battler) {
-    return system->context->picData[battler]->unk4;
+int BattleAnimSystem_GetBattlerNarcId(BattleAnimSystem *system, int battler) {
+    return system->context->picData[battler]->narcId;
 }
 
-int ov07_0221FAA0(BattleAnimSystem *system, int battler) {
-    return system->context->picData[battler]->unkC;
+int BattleAnimSystem_GetBattlerHeight(BattleAnimSystem *system, int battler) {
+    return system->context->picData[battler]->height;
 }
 
 BOOL BattleAnimSystem_IsDoubleBattle(BattleAnimSystem *system) {
@@ -3063,7 +3063,7 @@ BattleAnimBattlerSprites *BattleAnimBattlerSprites_New(BattleSystem *battleSyste
     int slot;
     int resId;
     Pokepic *pokepic;
-    UnkBattleSystemSub1D0 *picData;
+    MonPicData *picData;
     ManagedSprite *sprite;
     NarcId paletteNarc;
     int paletteMember;
@@ -3108,9 +3108,9 @@ BattleAnimBattlerSprites *BattleAnimBattlerSprites_New(BattleSystem *battleSyste
         resIds[4] = 0;
         resIds[5] = 0;
         picData = sprites->picData[slot];
-        paletteNarc = (NarcId)picData->unk4;
-        paletteMember = picData->unk8;
-        pixels = picData->unk0;
+        paletteNarc = (NarcId)picData->narcId;
+        paletteMember = picData->paletteId;
+        pixels = picData->charBuffer;
         pokepic = sprites->pokepics[slot];
         if (pokepic == NULL) {
             continue;

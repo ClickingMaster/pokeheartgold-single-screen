@@ -14,8 +14,8 @@
 
 	.rodata
 
-	.public ov01_02206CF0
-ov01_02206CF0: ; 0x02206CF0
+	.public gResidentBillboardSequenceIds
+gResidentBillboardSequenceIds: ; 0x02206CF0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x00, 0x16, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00
 
 	.public ov01_02206D00
@@ -310,8 +310,8 @@ gCameraFocusObjectDrawCallbacks:
 	.word CameraFocusObject_Pause
 	.word CameraFocusObject_Resume
 
-	.public ov01_02207260
-ov01_02207260: ; 0x02207260
+	.public gResidentBillboardModelIds
+gResidentBillboardModelIds: ; 0x02207260
 	.word 0x00000000, 0x00000001, 0x00000002, 0x0000000A
 	.word 0x000000FF
 
@@ -326,8 +326,8 @@ ov01_02207274:
 	.word SPRITE_BONGURI_W
 	.word SPRITE_BONGURI_BK
 
-	.public ov01_02207294
-ov01_02207294: ; 0x02207294
+	.public gBillboardModelNarcMembers
+gBillboardModelNarcMembers: ; 0x02207294
 	.short 0x0000, 0x010A // NARC_mmodel_mmodel_00000266_NSBMD
 	.short 0x0001, 0x010B // NARC_mmodel_mmodel_00000267_NSBMD
 	.short 0x0002, 0x010C // NARC_mmodel_mmodel_00000268_NSBMD
@@ -343,8 +343,8 @@ ov01_02207294: ; 0x02207294
 	.short 0x000F, 0x0117 // NARC_mmodel_mmodel_00000279_NSBMD
 	.short 0x00FF, 0x0000
 
-	.public ov01_022072CC
-ov01_022072CC: ; 0x022072CC
+	.public gBillboardSequenceNarcMembers
+gBillboardSequenceNarcMembers: ; 0x022072CC
 	.short 0x0000, 0x0118 // NARC_mmodel_mmodel_00000280_bin
 	.short 0x0001, 0x0119 // NARC_mmodel_mmodel_00000281_bin
 	.short 0x0003, 0x011A // NARC_mmodel_mmodel_00000282_bin
@@ -365,8 +365,8 @@ ov01_022072CC: ; 0x022072CC
 	.short 0x001C, 0x0128 // NARC_mmodel_mmodel_00000296_bin
 	.short 0x00FF, 0x0000
 
-	.public ov01_02207318
-ov01_02207318: ; 0x02207318
+	.public gSpriteBillboardInfos
+gSpriteBillboardInfos: ; 0x02207318
 	.byte 0x00, 0x00, 0x00, 0x00
 	.word ov01_022070D8
 	.byte 0x00, 0x00, 0x01, 0x00
@@ -416,8 +416,8 @@ ov01_02207318: ; 0x02207318
 	.byte 0x00, 0x00, 0x05, 0x00
 	.word ov01_022070D8
 
-	.public ov01_022073D8
-ov01_022073D8: ; 0x022073D8
+	.public gEffectModelOffsets
+gEffectModelOffsets: ; 0x022073D8
 	.word 0x000000B7, 0x00000000, 0x00000000, 0x00000000
 	.word 0x00000100, 0x00000000, 0x00000000, 0x00000000
 	.word 0x00000101, 0x00000000, 0x00000000, 0x00000000
@@ -432,8 +432,8 @@ ov01_022073D8: ; 0x022073D8
 	.word 0x00000121, 0x00000000, 0x00000000, 0x00000000
 	.word 0x0000FFFF, 0x00000000, 0x00000000, 0x00000000
 
-	.public ov01_022074A8
-ov01_022074A8: ; 0x022074A8
+	.public gObjectEventGraphicsInfos
+gObjectEventGraphicsInfos: ; 0x022074A8
 	; TODO: When decompiling, the second column should derive from files/data/mmodel/mmodel.naix
 	.short SPRITE_BABYBOY1, MMODEL_BABYBOY1, 0x000 | (0 << 10)
 	.short SPRITE_BABYGIRL1, MMODEL_BABYGIRL1, 0x000 | (0 << 10)

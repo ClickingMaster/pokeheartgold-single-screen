@@ -93,10 +93,10 @@ BOOL FollowPartnerMovement_HasPartnerMoved(LocalMapObject *object, FollowPartner
 BOOL FollowPartnerMovement_StartStep(LocalMapObject *object, FollowPartnerMovementState *state);
 
 void HiddenObjectMovement_Init(LocalMapObject *object, int coverType);
-void sub_0206630C(LocalMapObject *object);
-void sub_02066318(LocalMapObject *object);
-void sub_02066324(LocalMapObject *object);
-void sub_02066330(LocalMapObject *object);
+void HiddenObjectMovement_InitCover0(LocalMapObject *object);
+void HiddenObjectMovement_InitCover1(LocalMapObject *object);
+void HiddenObjectMovement_InitCover2(LocalMapObject *object);
+void HiddenObjectMovement_InitCover3(LocalMapObject *object);
 void HiddenObjectMovement_Update(LocalMapObject *object);
 void HiddenObjectMovement_Delete(LocalMapObject *object);
 void HiddenObjectMovement_Resume(LocalMapObject *object);

@@ -100,7 +100,7 @@ BOOL ov36_TitleScreen_NewGame_AppInit(OverlayManager *man, int *state) {
 
 BOOL ov36_TitleScreen_NewGame_AppExec(OverlayManager *man, int *state) {
 #pragma unused(state)
-    SaveData *saveData = ((struct UnkStruct_02111868_sub *)OverlayManager_GetArgs(man))->saveData;
+    SaveData *saveData = ((struct MainOverlayArgs *)OverlayManager_GetArgs(man))->saveData;
     NewGame_InitSaveData(HEAPID_OV36, saveData);
 
     return TRUE;
@@ -124,7 +124,7 @@ BOOL ov36_App_InitGameState_AfterOakSpeech_AppInit(OverlayManager *man, int *sta
 
 BOOL ov36_App_InitGameState_AfterOakSpeech_AppExec(OverlayManager *man, int *state) {
 #pragma unused(state)
-    struct UnkStruct_02111868_sub *unk_work = OverlayManager_GetArgs(man);
+    struct MainOverlayArgs *unk_work = OverlayManager_GetArgs(man);
     SaveData *saveData = unk_work->saveData;
     InitGameStateAfterOakSpeech_Internal(HEAPID_OV36, saveData, TRUE);
     IGTCounter_Start(Save_PlayerData_GetIGTAddr(saveData));
@@ -149,7 +149,7 @@ BOOL ov36_App_MainMenu_SelectOption_Continue_AppInit(OverlayManager *man, int *s
 }
 
 BOOL ov36_App_MainMenu_SelectOption_Continue_AppExec(OverlayManager *man, int *state) {
-    struct UnkStruct_02111868_sub *unk_work = OverlayManager_GetArgs(man);
+    struct MainOverlayArgs *unk_work = OverlayManager_GetArgs(man);
     SaveData *saveData = unk_work->saveData;
     SysInfo *sys_info = Save_SysInfo_Get(saveData);
 

@@ -26,7 +26,7 @@
 #include "map_events_internal.h"
 #include "map_matrix.h"
 #include "menu_input_state.h"
-#include "overlay_01_021EA824.h" // replace with field/fog.h
+#include "field_fog.h"
 #include "field/field_effect_manager.h"
 #include "overlay_manager.h"
 #include "photo_types_def.h"
@@ -114,12 +114,12 @@ typedef struct MapObjectsToPreload {
     int ids[MAX_MAP_OBJECTS_TO_PRELOAD];
 } MapObjectsToPreload;
 
-typedef struct FieldSystemUnkSub108 {
+typedef struct FollowMonMood {
     u32 personality;
     u16 species;
     u16 isRegistered;
     Pokemon *mon;
-} FieldSystemUnkSub108;
+} FollowMonMood;
 
 // One entry of the following Pokemon's interaction tables: the conditions under which the interaction script
 // is picked. Zero means "any" for every condition.
@@ -267,7 +267,7 @@ struct FieldSystem {
     int lastStartMenuAction;
     FollowMon followMon; // E4
     TimeOfDayPropAnimManager *timeOfDayPropAnims;
-    FieldSystemUnkSub108 *unk108;
+    FollowMonMood *followMonMood;
     MenuInputStateMgr menuInputState; // Tracks whether the last menu input was touch or keypad
     u8 startMenuInputState;
     u8 unk_111[3];

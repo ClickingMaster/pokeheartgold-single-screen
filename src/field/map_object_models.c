@@ -61,7 +61,7 @@ void LegendaryBirdObject_DeleteBillboard(LocalMapObject *object);
 
 // Per sprite id, from overlay_01_sprite_data.s: the graphics info (terminated by spriteId 0xFFFF) and the effect flags
 // its unk4_0 field selects.
-extern ObjectEventGraphicsInfo ov01_022074A8[];
+extern ObjectEventGraphicsInfo gObjectEventGraphicsInfos[];
 extern u16 ov01_02206D00[];
 
 static const LegendaryBirdAnimateFunc sLegendaryBirdAnimateFuncs[] = {
@@ -375,7 +375,7 @@ void MapObject_TryUpdateDraw(LocalMapObject *object) {
 }
 
 ObjectEventGraphicsInfo *ObjectEvent_GetGraphicsInfo(u32 spriteId) {
-    ObjectEventGraphicsInfo *info = ov01_022074A8;
+    ObjectEventGraphicsInfo *info = gObjectEventGraphicsInfos;
 
     do {
         if (info->spriteId == spriteId) {

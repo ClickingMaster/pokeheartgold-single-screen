@@ -539,12 +539,12 @@ BOOL Task_Surf(TaskManager *taskManager) {
         } else {
             u8 count;
             if (FieldSystem_FirstAliveMonHasType(work->fieldSystem, TYPE_WATER)) {
-                FieldSystem_UnkSub108_AddMonMood(work->fieldSystem->unk108, 1);
+                FollowMonMood_Add(work->fieldSystem->followMonMood, 1);
                 count = 2;
             } else {
                 count = 1;
             }
-            ov02_022507B4(work->fieldSystem, count);
+            FollowMon_JumpOnSpot(work->fieldSystem, count);
             work->state = 3;
         }
         break;
@@ -800,12 +800,12 @@ int RockClimb_WaitCutIn(RockClimbWork *work, TaskManager *taskManager) {
 int RockClimb_FollowMonReact(RockClimbWork *work, TaskManager *taskManager) {
     u8 count;
     if (FieldSystem_FirstAliveMonHasType(work->fieldSystem, TYPE_NORMAL)) {
-        FieldSystem_UnkSub108_AddMonMood(work->fieldSystem->unk108, 1);
+        FollowMonMood_Add(work->fieldSystem->followMonMood, 1);
         count = 2;
     } else {
         count = 1;
     }
-    ov02_022507B4(work->fieldSystem, count);
+    FollowMon_JumpOnSpot(work->fieldSystem, count);
     work->state++;
     return 0;
 }

@@ -22,7 +22,7 @@ void FieldSystem_Init(OverlayManager *man, FieldSystem *fieldSystem) {
     u32 key = 2441 * 4073; // these are both prime
     FS_LoadOverlay(MI_PROCESSOR_ARM9, FS_OVERLAY_ID(ds_protect));
     key += 769 * (!DSProt_DetectNotFlashcart(ov124_02260D68)); // 769 is prime
-    UnkStruct_02111868_sub *args = OverlayManager_GetArgs(man);
+    MainOverlayArgs *args = OverlayManager_GetArgs(man);
     fieldSystem->saveData = args->saveData;
     fieldSystem->taskman = NULL;
     key += 47 * (!DSProt_DetectNotDummy(ov124_02260D6C)); // 47 is prime
@@ -38,7 +38,7 @@ void FieldSystem_Init(OverlayManager *man, FieldSystem *fieldSystem) {
         ov124_02260D1C(fieldSystem);
     }
     fieldSystem->unkA8 = UnkStruct_02092BB8_New(HEAP_ID_FIELD2);
-    fieldSystem->unk108 = FieldSystem_UnkSub108_Alloc(HEAP_ID_FIELD2);
+    fieldSystem->followMonMood = FollowMonMood_New(HEAP_ID_FIELD2);
     fieldSystem->phoneRingManager = GearPhoneRingManager_New(HEAP_ID_FIELD2, fieldSystem);
     fieldSystem->judgeStatPosition = 0;
     if ((key + key2) % 4073) {

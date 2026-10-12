@@ -85,7 +85,7 @@ extern const u32 ov01_02207274[];
 int MapObject_RequestBillboard(LocalMapObject *object, void **billboard, u32 spriteId);
 void MapObject_CancelAndFreeBillboard(LocalMapObject *object, void **billboard, u32 spriteId);
 BOOL MapObject_IsBillboardAnimPaused(LocalMapObject *object);
-void ov01_021FA40C(LocalMapObject *object, void *billboard);
+void MapObject_SetBillboardVisibleFromFlags(LocalMapObject *object, void *billboard);
 void BillboardObject_SaveState(void *billboard, VecFx32 *state);
 void BillboardObject_RestoreState(void *billboard, VecFx32 *state);
 void ApricornRegrowth_Spawn(LocalMapObject *object);

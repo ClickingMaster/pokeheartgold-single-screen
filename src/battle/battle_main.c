@@ -13,7 +13,7 @@
 #include "battle/battle_setup.h"
 #include "battle/battle_system.h"
 #include "battle/overlay_12_0224E4FC.h"
-#include "battle/overlay_12_0226BEC4.h"
+#include "battle/battle_recording_stop.h"
 
 #include "bag.h"
 #include "bag_cursor.h"
@@ -156,7 +156,7 @@ void Battle_BattleInit(OverlayManager *manager) {
     battleSystem->bgConfig = BgConfig_Alloc(HEAP_ID_BATTLE);
     battleSystem->window = AllocWindows(HEAP_ID_BATTLE, 3);
     for (i = 0; i < 4; i++) {
-        battleSystem->monPicData[i].unk0 = Heap_Alloc(HEAP_ID_BATTLE, 3200);
+        battleSystem->monPicData[i].charBuffer = Heap_Alloc(HEAP_ID_BATTLE, 3200);
     }
     GF_CreateVramTransferManager(64, HEAP_ID_BATTLE);
 
@@ -318,7 +318,7 @@ void Battle_BattleExit(OverlayManager *man) {
     setup->unk1B4 = BattleContext_Get(battleSystem, battleSystem->ctx, 3, 0);
     setup->unk1C4 = battleSystem->isRecordingPaused;
     for (i = 0; i < 4; i++) {
-        Heap_Free(battleSystem->monPicData[i].unk0);
+        Heap_Free(battleSystem->monPicData[i].charBuffer);
     }
     Heap_Free(battleSystem->msgBuffer);
     PaletteData_FreeBuffers(battleSystem->palette, PLTTBUF_MAIN_BG);
@@ -361,7 +361,7 @@ void Battle_BattleExit(OverlayManager *man) {
         Sound_SetMasterVolume(127);
     }
     if (battleSystem->recordingStopTask) {
-        ov12_0226BEF0(battleSystem->recordingStopTask);
+        BattleRecordingStop_DestroyTask(battleSystem->recordingStopTask);
     }
     Heap_Free(battleSystem);
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_6));

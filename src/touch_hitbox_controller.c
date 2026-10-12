@@ -3,9 +3,9 @@
 #include "global.h"
 
 static void TouchHitboxControllerTemplate_Init(TouchHitboxControllerTemplate *template);
-static int sub_02026D88(TouchHitboxControllerTemplate *template, u32 unused, u32 touchNew);
-static int sub_02026DA4(TouchHitboxControllerTemplate *template, u32 touchHeld, u32 unused);
-static void sub_02026DD8(TouchHitboxControllerTemplate *template, u8 a1);
+static int TouchHitbox_StateIdle(TouchHitboxControllerTemplate *template, u32 unused, u32 touchNew);
+static int TouchHitbox_StateHeld(TouchHitboxControllerTemplate *template, u32 touchHeld, u32 unused);
+static void TouchHitbox_SetState(TouchHitboxControllerTemplate *template, u8 a1);
 
 TouchHitboxController *TouchHitboxController_Create(const TouchscreenHitbox *hitboxes, u32 numTemplates, TouchHitboxControllerCallback callback, void *callbackArg, enum HeapID heapID) {
     GF_ASSERT(numTemplates != 0);
@@ -31,7 +31,7 @@ TouchHitboxController *TouchHitboxController_Create(const TouchscreenHitbox *hit
 }
 
 static void TouchHitboxControllerTemplate_Init(TouchHitboxControllerTemplate *template) {
-    template->unkCallbackNum = 0;
+    template->state = 0;
     template->touchActive = FALSE;
     template->numFramesActive = 0;
 }
@@ -42,10 +42,10 @@ void TouchHitboxController_Destroy(TouchHitboxController *controller) {
     Heap_Free(controller);
 }
 
-typedef int (*TouchHitboxControllerTemplate_UnkCallback)(TouchHitboxControllerTemplate *template, u32 touchHeld, u32 touchNew);
-static const TouchHitboxControllerTemplate_UnkCallback _020F6450[] = {
-    sub_02026D88,
-    sub_02026DA4,
+typedef int (*TouchHitboxStateFunc)(TouchHitboxControllerTemplate *template, u32 touchHeld, u32 touchNew);
+static const TouchHitboxStateFunc sTouchHitboxStateFuncs[] = {
+    TouchHitbox_StateIdle,
+    TouchHitbox_StateHeld,
 };
 
 BOOL TouchHitboxController_IsTriggered(TouchHitboxController *controller) {
@@ -74,7 +74,7 @@ BOOL TouchHitboxController_IsTriggered(TouchHitboxController *controller) {
     }
 
     for (i = 0; i < controller->numTemplates; i++) {
-        int event = _020F6450[controller->templates[i].unkCallbackNum](&controller->templates[i], touchHeld, touchNew);
+        int event = sTouchHitboxStateFuncs[controller->templates[i].state](&controller->templates[i], touchHeld, touchNew);
         if (event != -1) {
             controller->callback(i, event, controller->callbackArg);
         }
@@ -83,16 +83,16 @@ BOOL TouchHitboxController_IsTriggered(TouchHitboxController *controller) {
     return triggered;
 }
 
-static int sub_02026D88(TouchHitboxControllerTemplate *template, u32 unused, u32 touchNew) {
+static int TouchHitbox_StateIdle(TouchHitboxControllerTemplate *template, u32 unused, u32 touchNew) {
     if (template->touchActive && touchNew) {
-        sub_02026DD8(template, 1);
+        TouchHitbox_SetState(template, 1);
         return 0;
     }
 
     return -1;
 }
 
-static int sub_02026DA4(TouchHitboxControllerTemplate *template, u32 touchHeld, u32 unused) {
+static int TouchHitbox_StateHeld(TouchHitboxControllerTemplate *template, u32 touchHeld, u32 unused) {
     if (template->touchActive) {
         if (template->numFramesActive < 0xFFFF) {
             template->numFramesActive++;
@@ -101,15 +101,15 @@ static int sub_02026DA4(TouchHitboxControllerTemplate *template, u32 touchHeld, 
     }
 
     if (touchHeld) {
-        sub_02026DD8(template, 0);
+        TouchHitbox_SetState(template, 0);
         return 3;
     } else {
-        sub_02026DD8(template, 0);
+        TouchHitbox_SetState(template, 0);
         return 1;
     }
 }
 
-static void sub_02026DD8(TouchHitboxControllerTemplate *template, u8 a1) {
-    template->unkCallbackNum = a1;
+static void TouchHitbox_SetState(TouchHitboxControllerTemplate *template, u8 a1) {
+    template->state = a1;
     template->numFramesActive = 0;
 }

@@ -542,7 +542,7 @@ BOOL LockCapsuleCard_Main(OverlayManager *manager, int *state) {
 
     switch (*state) {
     case 0:
-        view->saveData = ((UnkStruct_02111868_sub *)OverlayManager_GetArgs(manager))->saveData;
+        view->saveData = ((MainOverlayArgs *)OverlayManager_GetArgs(manager))->saveData;
         view->mysteryGift = Save_MysteryGift_Get(view->saveData);
         view->options = Save_PlayerData_GetOptionsAddr(view->saveData);
         view->frame = Options_GetFrame(view->options);

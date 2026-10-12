@@ -4,8 +4,8 @@
 
 	.text
 
-    thumb_func_start ov12_0226BEC4
-ov12_0226BEC4: ; 0x0226BEC4
+    thumb_func_start BattleRecordingStop_CreateTask
+BattleRecordingStop_CreateTask: ; 0x0226BEC4
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	mov r0, #5
@@ -16,18 +16,18 @@ ov12_0226BEC4: ; 0x0226BEC4
 	add r4, r0, #0
 	bl MI_CpuFill8
 	mov r2, #0xfa
-	ldr r0, _0226BEEC ; =ov12_0226BF04
+	ldr r0, _0226BEEC ; =Task_BattleRecordingStop
 	add r1, r4, #0
 	lsl r2, r2, #2
 	str r5, [r4]
 	bl SysTask_CreateOnMainQueue
 	pop {r3, r4, r5, pc}
 	nop
-_0226BEEC: .word ov12_0226BF04
-	thumb_func_end ov12_0226BEC4
+_0226BEEC: .word Task_BattleRecordingStop
+	thumb_func_end BattleRecordingStop_CreateTask
 
-	thumb_func_start ov12_0226BEF0
-ov12_0226BEF0: ; 0x0226BEF0
+	thumb_func_start BattleRecordingStop_DestroyTask
+BattleRecordingStop_DestroyTask: ; 0x0226BEF0
 	push {r4, lr}
 	add r4, r0, #0
 	bl SysTask_GetData
@@ -35,10 +35,10 @@ ov12_0226BEF0: ; 0x0226BEF0
 	add r0, r4, #0
 	bl SysTask_Destroy
 	pop {r4, pc}
-	thumb_func_end ov12_0226BEF0
+	thumb_func_end BattleRecordingStop_DestroyTask
 
-	thumb_func_start ov12_0226BF04
-ov12_0226BF04: ; 0x0226BF04
+	thumb_func_start Task_BattleRecordingStop
+Task_BattleRecordingStop: ; 0x0226BF04
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
 	add r4, r1, #0
@@ -139,4 +139,4 @@ _0226BFCE:
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _0226BFD4: .word 0x000005DD
-	thumb_func_end ov12_0226BF04
+	thumb_func_end Task_BattleRecordingStop

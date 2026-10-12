@@ -148,7 +148,7 @@ _020FCD28:
 
 _020FCD38:
 	.word 0x00000034
-	.word sub_02066318
+	.word HiddenObjectMovement_InitCover1
 	.word HiddenObjectMovement_Update
 	.word HiddenObjectMovement_Delete
 	.word HiddenObjectMovement_Resume
@@ -162,7 +162,7 @@ _020FCD4C:
 
 _020FCD60:
 	.word 0x00000036
-	.word sub_02066330
+	.word HiddenObjectMovement_InitCover3
 	.word HiddenObjectMovement_Update
 	.word HiddenObjectMovement_Delete
 	.word HiddenObjectMovement_Resume
@@ -183,7 +183,7 @@ _020FCD88:
 
 _020FCD9C:
 	.word 0x00000035
-	.word sub_02066324
+	.word HiddenObjectMovement_InitCover2
 	.word HiddenObjectMovement_Update
 	.word HiddenObjectMovement_Delete
 	.word HiddenObjectMovement_Resume
@@ -197,7 +197,7 @@ _020FCDB0:
 
 _020FCDC4:
 	.word 0x00000033
-	.word sub_0206630C
+	.word HiddenObjectMovement_InitCover0
 	.word HiddenObjectMovement_Update
 	.word HiddenObjectMovement_Delete
 	.word HiddenObjectMovement_Resume

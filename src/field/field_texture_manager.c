@@ -31,7 +31,7 @@ FieldTextureManager *FieldTextureManager_Init(void) {
         textureManager->textureSlots[i].animationData = NULL;
         textureManager->textureSlots[i].fileData = NULL;
     }
-    textureManager->unk188 = 0;
+    textureManager->keepTextures = 0;
     return textureManager;
 }
 
@@ -82,7 +82,7 @@ int FieldTextureManager_AddAnimatedTexture(FieldTextureManager *textureManager, 
 void FieldTextureManager_Free(FieldTextureManager *textureManager) {
     s32 i;
     TextureSlot *slot;
-    if (textureManager == NULL || textureManager->unk188 != 0) {
+    if (textureManager == NULL || textureManager->keepTextures != 0) {
         return;
     }
     i = 0;

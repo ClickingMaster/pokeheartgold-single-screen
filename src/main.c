@@ -27,17 +27,17 @@ FS_EXTERN_OVERLAY(OVY_36);
 extern const OverlayManagerTemplate gApplication_IntroMovie;
 extern const OverlayManagerTemplate ov36_App_MainMenu_SelectOption_Continue;
 
-struct UnkStruct_02111868 {
+struct MainOverlayState {
     FSOverlayID mainOverlayId;
     OverlayManager *overlayManager;
     FSOverlayID queuedMainOverlayId;
     const OverlayManagerTemplate *queuedMainOverlayTemplate;
-    struct UnkStruct_02111868_sub unk_10;
+    struct MainOverlayArgs args;
 };
 
 int _02111864;
 PMBackLightSwitch gBacklightTop;
-struct UnkStruct_02111868 _02111868;
+struct MainOverlayState gMainOverlayState;
 
 static void HandleCommunicationErrorScreen(void);
 static void DoSoftReset(u32 param);
@@ -58,26 +58,26 @@ void NitroMain(void) {
     FontID_Alloc(0, HEAP_ID_3);
     FontID_Alloc(1, HEAP_ID_3);
     FontID_Alloc(3, HEAP_ID_3);
-    _02111868.unk_10.unk_00 = -1;
-    _02111868.unk_10.saveData = SaveData_New();
+    gMainOverlayState.args.unk_00 = -1;
+    gMainOverlayState.args.saveData = SaveData_New();
     sub_02005D00();
-    InitSoundData(Save_Chatot_Get(_02111868.unk_10.saveData), Save_PlayerData_GetOptionsAddr(_02111868.unk_10.saveData));
+    InitSoundData(Save_Chatot_Get(gMainOverlayState.args.saveData), Save_PlayerData_GetOptionsAddr(gMainOverlayState.args.saveData));
     Init_Timer3();
     if (Comm_LoadAndInitDwc(3) == 3) {
         ShowWFCUserInfoWarning(HEAP_ID_3, 0);
     }
-    if (!Save_FlashChipIsDetected(_02111868.unk_10.saveData)) {
+    if (!Save_FlashChipIsDetected(gMainOverlayState.args.saveData)) {
         ShowSaveDataReadError(HEAP_ID_DEFAULT);
     } else {
         switch (OS_GetResetParameter()) {
         case 0:
-            _02111868.unk_10.unk_04 = 0;
+            gMainOverlayState.args.unk_04 = 0;
             RegisterMainOverlay(FS_OVERLAY_ID(intro_title), &gApplication_IntroMovie);
             break;
         case 1:
             SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
             SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
-            _02111868.unk_10.unk_04 = 1;
+            gMainOverlayState.args.unk_04 = 1;
             RegisterMainOverlay(FS_OVERLAY_ID(OVY_36), &ov36_App_MainMenu_SelectOption_Continue);
             break;
         default:
@@ -131,38 +131,38 @@ void NitroMain(void) {
 }
 
 void Main_ResetOverlayManager(void) {
-    _02111868.mainOverlayId = FS_OVERLAY_ID_NONE;
-    _02111868.overlayManager = NULL;
-    _02111868.queuedMainOverlayId = FS_OVERLAY_ID_NONE;
-    _02111868.queuedMainOverlayTemplate = NULL;
+    gMainOverlayState.mainOverlayId = FS_OVERLAY_ID_NONE;
+    gMainOverlayState.overlayManager = NULL;
+    gMainOverlayState.queuedMainOverlayId = FS_OVERLAY_ID_NONE;
+    gMainOverlayState.queuedMainOverlayTemplate = NULL;
 }
 
 static void Main_RunOverlayManager(void) {
-    if (_02111868.overlayManager == NULL) {
-        if (_02111868.queuedMainOverlayTemplate == NULL) {
+    if (gMainOverlayState.overlayManager == NULL) {
+        if (gMainOverlayState.queuedMainOverlayTemplate == NULL) {
             return;
         }
-        if (_02111868.queuedMainOverlayId != FS_OVERLAY_ID_NONE) {
-            HandleLoadOverlay(_02111868.queuedMainOverlayId, OVY_LOAD_NORMAL);
+        if (gMainOverlayState.queuedMainOverlayId != FS_OVERLAY_ID_NONE) {
+            HandleLoadOverlay(gMainOverlayState.queuedMainOverlayId, OVY_LOAD_NORMAL);
         }
-        _02111868.mainOverlayId = _02111868.queuedMainOverlayId;
-        _02111868.overlayManager = OverlayManager_New(_02111868.queuedMainOverlayTemplate, &_02111868.unk_10, HEAP_ID_DEFAULT);
-        _02111868.queuedMainOverlayId = FS_OVERLAY_ID_NONE;
-        _02111868.queuedMainOverlayTemplate = NULL;
+        gMainOverlayState.mainOverlayId = gMainOverlayState.queuedMainOverlayId;
+        gMainOverlayState.overlayManager = OverlayManager_New(gMainOverlayState.queuedMainOverlayTemplate, &gMainOverlayState.args, HEAP_ID_DEFAULT);
+        gMainOverlayState.queuedMainOverlayId = FS_OVERLAY_ID_NONE;
+        gMainOverlayState.queuedMainOverlayTemplate = NULL;
     }
-    if (OverlayManager_Run(_02111868.overlayManager)) {
-        OverlayManager_Delete(_02111868.overlayManager);
-        _02111868.overlayManager = NULL;
-        if (_02111868.mainOverlayId != FS_OVERLAY_ID_NONE) {
-            UnloadOverlayByID(_02111868.mainOverlayId);
+    if (OverlayManager_Run(gMainOverlayState.overlayManager)) {
+        OverlayManager_Delete(gMainOverlayState.overlayManager);
+        gMainOverlayState.overlayManager = NULL;
+        if (gMainOverlayState.mainOverlayId != FS_OVERLAY_ID_NONE) {
+            UnloadOverlayByID(gMainOverlayState.mainOverlayId);
         }
     }
 }
 
 void RegisterMainOverlay(FSOverlayID overlayId, const OverlayManagerTemplate *template) {
-    GF_ASSERT(_02111868.queuedMainOverlayTemplate == NULL);
-    _02111868.queuedMainOverlayId = overlayId;
-    _02111868.queuedMainOverlayTemplate = template;
+    GF_ASSERT(gMainOverlayState.queuedMainOverlayTemplate == NULL);
+    gMainOverlayState.queuedMainOverlayId = overlayId;
+    gMainOverlayState.queuedMainOverlayTemplate = template;
 }
 
 static void WaitForVBlank(void) {

@@ -128,11 +128,11 @@ BOOL FieldTask_Fly(void *task) {
         if (FollowMon_IsVisible(fs)) {
             if (FieldSystem_FirstAliveMonHasType(fs, 2)) {
                 kind = 2;
-                FieldSystem_UnkSub108_AddMonMood(*(void **)(fs + 0x108), 1);
+                FollowMonMood_Add(*(void **)(fs + 0x108), 1);
             } else {
                 kind = 1;
             }
-            ov02_022507B4(fs, kind);
+            FollowMon_JumpOnSpot(fs, kind);
             env->flag = 1;
             env->state = 2;
         } else {

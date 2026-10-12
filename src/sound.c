@@ -66,7 +66,7 @@ struct SND_WORK {
 }; // size: 0xBEC88
 
 SND_WORK sSoundWork;
-u32 _0211194C;
+u32 gSoundState;
 u32 _02111950;
 u32 sSndHeapFreeSize;
 
@@ -148,7 +148,7 @@ void GF_SndCallback(void) {
     SND_WORK *work;
 
     work = GetSoundDataPointer();
-    switch (_0211194C) {
+    switch (gSoundState) {
     case 1:
         GF_SndSetState(2);
         break;
@@ -187,7 +187,7 @@ void GF_SndSetState(u32 state) {
 
     work = GetSoundDataPointer();
     work->unk_BEBEC = 0;
-    _0211194C = state;
+    gSoundState = state;
 }
 
 BOOL GF_SndIsFanfarePlaying(void) {

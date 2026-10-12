@@ -386,7 +386,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
         MapObjectRender_ReleaseUnused(fieldSystem->mapObjectManager, MapObjectManager_GetRender(fieldSystem->mapObjectManager));
         MapPropAnimationPoolList_PauseAll(fieldSystem->mapPropAnimationPools);
         MapPropAnimationPoolList_RewindAll(fieldSystem->mapPropAnimationPools);
-        ov01_021EB1E8(fieldSystem->mapSystems->textureManager);
+        FieldTextureManager_KeepTextures(fieldSystem->mapSystems->textureManager);
         if (photo->subjectSpriteId) {
             taskData->state = FIELD_PHOTO_DO_VIEW_STATE_6;
         } else {
@@ -713,7 +713,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
     case TAKE_PHOTO_STATE_13:
         MapPropAnimationPoolList_PauseAll(fieldSystem->mapPropAnimationPools);
         MapPropAnimationPoolList_RewindAll(fieldSystem->mapPropAnimationPools);
-        ov01_021EB1E8(fieldSystem->mapSystems->textureManager);
+        FieldTextureManager_KeepTextures(fieldSystem->mapSystems->textureManager);
         takePhoto->state = TAKE_PHOTO_STATE_DRAW_CAMERA_GFX;
         break;
     case TAKE_PHOTO_STATE_DRAW_CAMERA_GFX:

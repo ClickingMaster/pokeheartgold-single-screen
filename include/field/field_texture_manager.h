@@ -31,7 +31,7 @@ struct FieldTextureManager {
     void *dataBuffer;
     TextureDataHeader *dataHeader;
     TextureSlot textureSlots[MAX_TEXTURE_KEYS];
-    u32 unk188;
+    u32 keepTextures;
 };
 
 FieldTextureManager *FieldTextureManager_Init();

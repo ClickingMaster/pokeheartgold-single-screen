@@ -95,7 +95,7 @@ u8 AddTextPrinterParameterized(Window *window, FontID fontId, String *string, u3
     template.shadowColor = sFonts[fontId].shadowColor;
     template.glyphTable = 0;
     template.unk1A = 0;
-    template.unk1B = 0xFF;
+    template.savedColor = 0xFF;
 
     return AddTextPrinter(&template, textSpeed, callback);
 }
@@ -118,7 +118,7 @@ u8 AddTextPrinterParameterizedWithColor(Window *window, FontID fontId, String *s
     template.bgColor = (color >> 0) & 0xFF;
     template.glyphTable = 0;
     template.unk1A = 0;
-    template.unk1B = 0xFF;
+    template.savedColor = 0xFF;
 
     return AddTextPrinter(&template, textSpeed, callback);
 }
@@ -141,7 +141,7 @@ u8 AddTextPrinterParameterizedWithColorAndSpacing(Window *window, int fontId, St
     template.bgColor = (color >> 0) & 0xFF;
     template.glyphTable = 0;
     template.unk1A = 0;
-    template.unk1B = 0xFF;
+    template.savedColor = 0xFF;
 
     return AddTextPrinter(&template, textSpeed, callback);
 }
@@ -157,7 +157,7 @@ static u8 AddTextPrinter(TextPrinterTemplate *template, u32 speed, PrinterCallba
     printer->textSpeedBottom = speed;
     printer->delayCounter = 0;
     printer->scrollDistance = 0;
-    printer->unk2D = 0;
+    printer->callbackResult = 0;
     for (int i = 0; i < 7; i++) {
         printer->subStructFields[i] = 0;
     }
@@ -203,8 +203,8 @@ static void RunTextPrinter(SysTask *task, TextPrinter *printer) {
         return;
     }
 
-    if (printer->unk2D == 0) {
-        printer->unk2E = 0;
+    if (printer->callbackResult == 0) {
+        printer->callbackParam = 0;
 
         GenerateFontHalfRowLookupTable(printer->template.fgColor, printer->template.bgColor, printer->template.shadowColor);
 
@@ -214,7 +214,7 @@ static void RunTextPrinter(SysTask *task, TextPrinter *printer) {
             // fallthrough
         case RENDER_UPDATE:
             if (printer->callback != NULL) {
-                printer->unk2D = printer->callback(&printer->template, printer->unk2E);
+                printer->callbackResult = printer->callback(&printer->template, printer->callbackParam);
             }
             return;
         case RENDER_FINISH:
@@ -222,7 +222,7 @@ static void RunTextPrinter(SysTask *task, TextPrinter *printer) {
             return;
         }
     } else {
-        printer->unk2D = printer->callback(&printer->template, printer->unk2E);
+        printer->callbackResult = printer->callback(&printer->template, printer->callbackParam);
     }
 }
 

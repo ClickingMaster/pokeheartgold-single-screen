@@ -67,10 +67,10 @@
 .public FollowPartnerMovement_Update
 .public FollowPartnerMovement_Delete
 .public FollowPartnerMovement_Resume
-.public sub_0206630C
-.public sub_02066318
-.public sub_02066324
-.public sub_02066330
+.public HiddenObjectMovement_InitCover0
+.public HiddenObjectMovement_InitCover1
+.public HiddenObjectMovement_InitCover2
+.public HiddenObjectMovement_InitCover3
 .public HiddenObjectMovement_Update
 .public HiddenObjectMovement_Delete
 .public HiddenObjectMovement_Resume

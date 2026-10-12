@@ -1750,7 +1750,7 @@ void BattleAnimFunc_AttackerStretchUp(BattleAnimSystem *system) {
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(system));
     BattleAnimUtil_InitScaleMotion(&work->scale, 10, 10, 15, 8);
     work->delay = 4;
-    work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_AttackerStretchUp, work);
 }
@@ -2173,7 +2173,7 @@ void BattleAnimSpriteFunc_FanSpritesAroundAttacker(BattleAnimSystem *system, Spr
     x = Pokepic_GetAttr(work->pokepic, POKEPIC_X);
     y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
     work->y = y;
-    work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetAttacker(work->system));
     BattleAnimSystem_GetSpriteTemplate(&template, work->system);
     for (i = 0; i < 6; i++) {
         int angle;
@@ -2470,7 +2470,7 @@ void BattleAnimFunc_DarkSpriteJump(BattleAnimSystem *system) {
     defenderY = Pokepic_GetAttr(defenderPokepic, POKEPIC_Y);
     defenderY -= Pokepic_GetAttr(defenderPokepic, POKEPIC_SHADOW_H);
     work->y = y;
-    work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->sprites[0] = BattleAnimSystem_GetBattlerSprite(work->system, 0);
     ManagedSprite_SetDrawPriority(work->sprites[0], 100);
     ManagedSprite_SetPriority(work->sprites[0], 1);
@@ -3102,7 +3102,7 @@ void BattleAnimTask_StretchShakeDefender(SysTask *task, void *data) {
 void BattleAnimFunc_StretchShakeDefender(BattleAnimSystem *system) {
     BattleAnimStretchShakeWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimStretchShakeWork));
     work->system = system;
-    work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetDefender(system));
+    work->height = BattleAnimSystem_GetBattlerHeight(work->system, BattleAnimSystem_GetDefender(system));
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetDefender(work->system));
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
     work->x = Pokepic_GetAttr(work->pokepic, POKEPIC_X);

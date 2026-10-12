@@ -1533,7 +1533,7 @@ LocalMapObject *FollowMon_InitMapObject(MapObjectManager *mapObjectManager, int 
             fieldSystem->followMon.active = TRUE;
 
             FieldSystem_SetFollowerPokeParam(fieldSystem, species, form, shiny, gender);
-            FieldSystem_UnkSub108_Set(fieldSystem->unk108, mon, species, GetMonData(mon, MON_DATA_PERSONALITY, NULL));
+            FollowMonMood_SetMon(fieldSystem->followMonMood, mon, species, GetMonData(mon, MON_DATA_PERSONALITY, NULL));
             int playerState = PlayerAvatar_GetState(fieldSystem->playerAvatar);
 
             if (playerState == PLAYER_STATE_WALKING || playerState == PLAYER_STATE_ROCKET) {
@@ -1575,7 +1575,7 @@ void FollowMon_ChangeMon(MapObjectManager *mapObjectManager, u32 mapno) {
         int playerState;
         LocalMapObject *followPokeObj;
 
-        FieldSystem_UnkSub108_Set(fieldSystem->unk108, mon, species, GetMonData(mon, MON_DATA_PERSONALITY, NULL));
+        FollowMonMood_SetMon(fieldSystem->followMonMood, mon, species, GetMonData(mon, MON_DATA_PERSONALITY, NULL));
 
         if (FollowMon_GetPermissionBySpeciesAndMap(species, mapno)) {
             followPokeObj = MapObjectManager_GetFirstActiveObjectByID(fieldSystem->mapObjectManager, obj_partner_poke);
@@ -1915,11 +1915,11 @@ static LocalMapObject *FollowMon_CreateMapObject(MapObjectManager *mapObjectMana
     return mapObject;
 }
 
-FieldSystemUnkSub108 *FieldSystem_UnkSub108_Alloc(enum HeapID heapID) {
-    FieldSystemUnkSub108 *ret;
+FollowMonMood *FollowMonMood_New(enum HeapID heapID) {
+    FollowMonMood *ret;
 
-    ret = Heap_Alloc(heapID, sizeof(FieldSystemUnkSub108));
-    MI_CpuClear8(ret, sizeof(FieldSystemUnkSub108));
+    ret = Heap_Alloc(heapID, sizeof(FollowMonMood));
+    MI_CpuClear8(ret, sizeof(FollowMonMood));
     ret->species = 0;
     ret->personality = 0;
     ret->isRegistered = FALSE;
@@ -1927,7 +1927,7 @@ FieldSystemUnkSub108 *FieldSystem_UnkSub108_Alloc(enum HeapID heapID) {
     return ret;
 }
 
-void FieldSystem_UnkSub108_AddMonMood(FieldSystemUnkSub108 *unk, s8 by) {
+void FollowMonMood_Add(FollowMonMood *unk, s8 by) {
     s8 mood;
 
     if (unk->mon == NULL) {
@@ -1946,7 +1946,7 @@ void FieldSystem_UnkSub108_AddMonMood(FieldSystemUnkSub108 *unk, s8 by) {
     SetMonData(unk->mon, MON_DATA_MOOD, &mood);
 }
 
-void FieldSystem_UnkSub108_SetMonMood(FieldSystemUnkSub108 *unk, s8 mood) {
+void FollowMonMood_Set(FollowMonMood *unk, s8 mood) {
     if (unk->mon == NULL) {
         GF_ASSERT(FALSE);
         return;
@@ -1955,7 +1955,7 @@ void FieldSystem_UnkSub108_SetMonMood(FieldSystemUnkSub108 *unk, s8 mood) {
     SetMonData(unk->mon, MON_DATA_MOOD, &mood);
 }
 
-s8 FieldSystem_UnkSub108_GetMonMood(FieldSystemUnkSub108 *unk) {
+s8 FollowMonMood_Get(FollowMonMood *unk) {
     if (unk->mon == NULL) {
         GF_ASSERT(FALSE);
         return 0;
@@ -1964,7 +1964,7 @@ s8 FieldSystem_UnkSub108_GetMonMood(FieldSystemUnkSub108 *unk) {
     return GetMonData(unk->mon, MON_DATA_MOOD, NULL);
 }
 
-void FieldSystem_UnkSub108_Set(FieldSystemUnkSub108 *a0, Pokemon *mon, u16 species, u32 personality) {
+void FollowMonMood_SetMon(FollowMonMood *a0, Pokemon *mon, u16 species, u32 personality) {
     s8 mood;
     if (species != SPECIES_NONE && (a0->isRegistered == FALSE || a0->species != species || a0->personality != personality)) {
         a0->species = species;
@@ -1976,7 +1976,7 @@ void FieldSystem_UnkSub108_Set(FieldSystemUnkSub108 *a0, Pokemon *mon, u16 speci
     }
 }
 
-void FieldSystem_UnkSub108_MoveMoodTowardsNeutral(FieldSystemUnkSub108 *a0) {
+void FollowMonMood_MoveTowardsNeutral(FollowMonMood *a0) {
     s8 mood;
     if (a0->mon == NULL) {
         GF_ASSERT(FALSE);

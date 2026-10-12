@@ -42,7 +42,7 @@ typedef struct BattleAnimContext {
     SPLEmitter *emitters[16];        // 0x5C
     u8 unk_9C[0x10];
     SpriteSystem *spriteSystem;        // 0xAC
-    UnkBattleSystemSub1D0 *picData[4]; // 0xB0
+    MonPicData *picData[4]; // 0xB0
     u8 battlerTypes[4];                // 0xC0
     Pokepic *pokepics[4];              // 0xC4
     u32 battleType;                    // 0xD4
@@ -137,7 +137,7 @@ struct BattleAnimSystem {
 typedef struct BattleAnimBattlerPicParams {
     int battler;
     int sourceBattler;
-    UnkBattleSystemSub1D0 *picData[4];
+    MonPicData *picData[4];
     Pokepic *pokepics[4];
     u16 species[4];
     u8 genders[4];
@@ -212,7 +212,7 @@ void ov07_0221D148(BattleAnimSystem *system);
 void BattleAnimScriptCmd_JumpBySide(BattleAnimSystem *system);
 void BattleAnimScriptCmd_JumpByWeather(BattleAnimSystem *system);
 void ov07_0221D214(BattleAnimSystem *system);
-void ov07_0221D23C(BattleAnimSystem *system);
+void BattleAnimScriptCmd_JumpIfAttackerActive(BattleAnimSystem *system);
 void BattleAnimScriptCmd_JumpIfSameSide(BattleAnimSystem *system);
 void ov07_0221D2B0(BattleAnimSystem *system);
 void BattleAnimScriptCmd_Jump(BattleAnimSystem *system);
@@ -324,9 +324,9 @@ u8 BattleAnimSystem_GetBattlerForm(BattleAnimSystem *system, int battler);
 u32 BattleAnimSystem_GetBattlerPersonality(BattleAnimSystem *system, int battler);
 Pokepic *BattleAnimSystem_GetBattlerPokepic(BattleAnimSystem *system, int battler);
 PaletteData *BattleAnimSystem_GetPaletteData(BattleAnimSystem *system);
-int ov07_0221FA80(BattleAnimSystem *system, int battler);
-int ov07_0221FA90(BattleAnimSystem *system, int battler);
-int ov07_0221FAA0(BattleAnimSystem *system, int battler);
+int BattleAnimSystem_GetBattlerPaletteId(BattleAnimSystem *system, int battler);
+int BattleAnimSystem_GetBattlerNarcId(BattleAnimSystem *system, int battler);
+int BattleAnimSystem_GetBattlerHeight(BattleAnimSystem *system, int battler);
 BOOL BattleAnimSystem_IsDoubleBattle(BattleAnimSystem *system);
 BOOL BattleAnimSystem_IsBattlerSemiInvulnerable(BattleAnimSystem *system, int battler);
 int ov07_0221FAE8(BattleAnimSystem *system);

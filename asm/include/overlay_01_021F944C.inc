@@ -94,7 +94,7 @@
 .public MapObject_SetBillboardPending
 .public MapObject_IsBillboardPending
 .public MapObject_UpdateBillboardPosition
-.public ov01_021FA40C
+.public MapObject_SetBillboardVisibleFromFlags
 .public Facing_GetBillboardStandSequence
 .public Facing_GetBillboardWalkSequence
 .public ov01_021FA464
@@ -106,9 +106,9 @@
 .public ResourceBank_Contains
 .public ResourceBank_LoadFromNarc
 .public Reflection_SpawnForBillboard
-.public ov01_02206CF0
-.public ov01_02207260
-.public ov01_02207294
-.public ov01_022072CC
-.public ov01_02207318
-.public ov01_022074A8
+.public gResidentBillboardSequenceIds
+.public gResidentBillboardModelIds
+.public gBillboardModelNarcMembers
+.public gBillboardSequenceNarcMembers
+.public gSpriteBillboardInfos
+.public gObjectEventGraphicsInfos

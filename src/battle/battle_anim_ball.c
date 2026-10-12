@@ -59,7 +59,7 @@ typedef BOOL (*UnkBallDataFunc)(UnkBallData *data);
 typedef struct BattleAnimBattlerPicParams {
     int battler;
     int sourceBattler;
-    UnkBattleSystemSub1D0 *picData[4];
+    MonPicData *picData[4];
     Pokepic *pokepics[4];
     u16 species[4];
     u8 genders[4];
@@ -1889,12 +1889,12 @@ void BattleAnimUtil_LoadMonIntoPic(BattleAnimBattlerPicParams *params, int targe
     picTemplate = Pokepic_GetTemplate(params->pokepics[params->battler]);
     *picTemplate = template;
     Pokepic_ScheduleReloadFromNarc(params->pokepics[params->battler]);
-    CharTiles_LoadMonPicAsObjFromNarc((NarcId)picTemplate->narcID, picTemplate->charDataID, heapId, params->picData[params->battler]->unk0, personality, FALSE, facing, picTemplate->species);
-    params->picData[params->battler]->unk4 = picTemplate->narcID;
-    params->picData[params->battler]->unk8 = picTemplate->palDataID;
-    params->picData[params->battler]->unkC = GetMonPicHeightBySpeciesGenderForm(species, gender, facing, form, personality);
+    CharTiles_LoadMonPicAsObjFromNarc((NarcId)picTemplate->narcID, picTemplate->charDataID, heapId, params->picData[params->battler]->charBuffer, personality, FALSE, facing, picTemplate->species);
+    params->picData[params->battler]->narcId = picTemplate->narcID;
+    params->picData[params->battler]->paletteId = picTemplate->palDataID;
+    params->picData[params->battler]->height = GetMonPicHeightBySpeciesGenderForm(species, gender, facing, form, personality);
     {
-        s8 height = params->picData[params->battler]->unkC;
+        s8 height = params->picData[params->battler]->height;
         y = ov07_02234B5C(params->battlerTypes[params->battler], 1);
         Pokepic_SetAttr(params->pokepics[params->battler], POKEPIC_Y, y + height);
         if (facing == 2) {
@@ -1934,14 +1934,14 @@ void BattleAnimUtil_RestorePic(BattleAnimBattlerPicParams *params, enum HeapID h
     } else {
         facing = 0;
     }
-    CharTiles_LoadMonPicAsObjFromNarc((NarcId)picTemplate->narcID, picTemplate->charDataID, heapId, params->picData[params->battler]->unk0, personality, FALSE, facing, picTemplate->species);
-    params->picData[params->battler]->unk4 = picTemplate->narcID;
-    params->picData[params->battler]->unk8 = picTemplate->palDataID;
-    params->picData[params->battler]->unkC = GetMonPicHeightBySpeciesGenderForm((u16)species, (u8)gender, (u8)facing, (u8)form, personality);
+    CharTiles_LoadMonPicAsObjFromNarc((NarcId)picTemplate->narcID, picTemplate->charDataID, heapId, params->picData[params->battler]->charBuffer, personality, FALSE, facing, picTemplate->species);
+    params->picData[params->battler]->narcId = picTemplate->narcID;
+    params->picData[params->battler]->paletteId = picTemplate->palDataID;
+    params->picData[params->battler]->height = GetMonPicHeightBySpeciesGenderForm((u16)species, (u8)gender, (u8)facing, (u8)form, personality);
     int battler = params->battler;
     u32 slot = battler * sizeof(Pokepic *); // byte offset of the battler's pointers, kept from before the call
     int offset = ov07_02234B5C(params->battlerTypes[battler], 1);
-    int height = (*(UnkBattleSystemSub1D0 **)((u8 *)params->picData + slot))->unkC;
+    int height = (*(MonPicData **)((u8 *)params->picData + slot))->height;
     Pokepic_SetAttr(*(Pokepic **)((u8 *)params->pokepics + slot), POKEPIC_Y, height + offset);
 }
 
@@ -1973,12 +1973,12 @@ void ov07_02234A20(BattleAnimBattlerPicParams *params, enum HeapID heapId) {
     picTemplate = Pokepic_GetTemplate(params->pokepics[params->battler]);
     *picTemplate = template;
     Pokepic_ScheduleReloadFromNarc(params->pokepics[params->battler]);
-    CharTiles_LoadPicAsObjFromNarc((NarcId)picTemplate->narcID, picTemplate->charDataID, heapId, params->picData[params->battler]->unk0);
-    params->picData[params->battler]->unk4 = template.narcID;
-    params->picData[params->battler]->unk8 = template.palDataID;
+    CharTiles_LoadPicAsObjFromNarc((NarcId)picTemplate->narcID, picTemplate->charDataID, heapId, params->picData[params->battler]->charBuffer);
+    params->picData[params->battler]->narcId = template.narcID;
+    params->picData[params->battler]->paletteId = template.palDataID;
     ReadWholeNarcMemberByIdPair(&height, NARC_poketool_pokegra_height_o, member);
-    params->picData[params->battler]->unkC = height;
-    y = ov07_02234B5C(params->battlerTypes[params->battler], 1) + params->picData[params->battler]->unkC;
+    params->picData[params->battler]->height = height;
+    y = ov07_02234B5C(params->battlerTypes[params->battler], 1) + params->picData[params->battler]->height;
     Pokepic_SetAttr(params->pokepics[params->battler], POKEPIC_Y, y);
     if (params->battlerTypes[params->battler] & BATTLER_TYPE_IS_ENEMY) {
         Pokepic_SetAttr(params->pokepics[params->battler], POKEPIC_SHADOW_SIZE, 1);

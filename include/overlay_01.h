@@ -66,7 +66,7 @@ void ScriptMenu_ShowMultichoiceGrid(struct ScriptMenu *menu, u8 a1);
 void ScriptMenu_SetAnchorRight(struct ScriptMenu *menu, int set);
 void ScriptMenu_SetAnchorBottom(struct ScriptMenu *menu, int set);
 void ScriptMenu_AddListItem(struct ScriptMenu *menu, int a1, int a2, int a3);
-void ov01_021F7704(LocalMapObject *object);
+void FollowMonDraw_ClearBob(LocalMapObject *object);
 void MapObject_SetFacingAndUpdateDraw(LocalMapObject *object, u32 dir);
 u8 FollowMonObject_IsLarge(LocalMapObject *object);
 void MapObject_GetCoordsBehind(LocalMapObject *object, int *p_x, int *p_y);

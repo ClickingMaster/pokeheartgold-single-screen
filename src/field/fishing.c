@@ -566,7 +566,7 @@ u8 FishingRod_GetMoodReelBonus(FishingRod *rod) {
     u8 rodType;
 
     if (FollowMon_IsActive(rod->fieldSystem)) {
-        mood = FieldSystem_UnkSub108_GetMonMood(rod->fieldSystem->unk108);
+        mood = FollowMonMood_Get(rod->fieldSystem->followMonMood);
         if (mood <= -10) {
             bucket = 0;
         } else if (mood >= -9 && mood <= 9) {

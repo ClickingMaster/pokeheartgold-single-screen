@@ -1144,7 +1144,7 @@ BOOL ScrCmd_ApplyMovement(ScriptContext *ctx) {
         return FALSE;
     }
     if (person == obj_partner_poke) {
-        ov01_021F7704(object);
+        FollowMonDraw_ClearBob(object);
     }
     movementMan = EventObjectMovementMan_Create(object, (const MovementScriptCommand *)(ctx->script_ptr + offset));
     movementCounter = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_ACTIVE_MOVEMENT_COUNTER);
@@ -4900,13 +4900,13 @@ BOOL ScrCmd_730(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_731(ScriptContext *ctx) {
-    ov02_022508B4(ctx->fieldSystem);
+    FollowMon_StartGrowAndShrink(ctx->fieldSystem);
     return TRUE;
 }
 
 BOOL ScrCmd_732(ScriptContext *ctx) {
     s8 mood = ScriptReadByte(ctx);
-    FieldSystem_UnkSub108_AddMonMood(ctx->fieldSystem->unk108, mood);
+    FollowMonMood_Add(ctx->fieldSystem->followMonMood, mood);
     return FALSE;
 }
 
@@ -4923,7 +4923,7 @@ BOOL ScrCmd_733(ScriptContext *ctx) {
 
 BOOL ScrCmd_734(ScriptContext *ctx) {
     u8 r1 = ScriptReadByte(ctx);
-    ov02_022507B4(ctx->fieldSystem, r1);
+    FollowMon_JumpOnSpot(ctx->fieldSystem, r1);
     return TRUE;
 }
 

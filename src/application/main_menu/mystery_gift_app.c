@@ -358,7 +358,7 @@ void MysteryGiftApp_SaveReceivedGift(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
     UnkWonderCardSubstruct_104 *header = &data->receivedHeader;
     WonderCard *card = &data->receivedCard;
-    SaveData *saveData = ((UnkStruct_02111868_sub *)OverlayManager_GetArgs(manager))->saveData;
+    SaveData *saveData = ((MainOverlayArgs *)OverlayManager_GetArgs(manager))->saveData;
     BOOL isCard;
     MysteryGiftSave *mysteryGift;
     RTCDate date;
@@ -890,7 +890,7 @@ void MysteryGiftApp_StopReceiving(MysteryGiftAppData *data) {
 
 BOOL MysteryGiftApp_Init(OverlayManager *manager, int *state) {
     MysteryGiftAppData *data;
-    UnkStruct_02111868_sub *args;
+    MainOverlayArgs *args;
 
     MysteryGiftApp_SetOverlayManager(manager);
     Heap_Create(HEAP_ID_3, HEAP_ID_84, 0x30000);

@@ -308,11 +308,11 @@ BOOL Task_FieldDig(TaskManager *taskManager) {
             u8 count;
             if (FieldSystem_FirstAliveMonHasType(fieldSystem, TYPE_GROUND)) {
                 count = 2;
-                FieldSystem_UnkSub108_AddMonMood(fieldSystem->unk108, 1);
+                FollowMonMood_Add(fieldSystem->followMonMood, 1);
             } else {
                 count = 1;
             }
-            ov02_022507B4(fieldSystem, count);
+            FollowMon_JumpOnSpot(fieldSystem, count);
             break;
         }
         // fallthrough
@@ -397,11 +397,11 @@ BOOL Task_FieldTeleport(TaskManager *taskManager) {
             u8 count;
             if (FieldSystem_FirstAliveMonHasType(fieldSystem, TYPE_PSYCHIC)) {
                 count = 2;
-                FieldSystem_UnkSub108_AddMonMood(fieldSystem->unk108, 1);
+                FollowMonMood_Add(fieldSystem->followMonMood, 1);
             } else {
                 count = 1;
             }
-            ov02_022507B4(fieldSystem, count);
+            FollowMon_JumpOnSpot(fieldSystem, count);
             break;
         }
         // fallthrough

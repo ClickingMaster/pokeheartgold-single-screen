@@ -1328,7 +1328,7 @@ BOOL MainMenuApp_Init(OverlayManager *manager, int *state) {
     SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
     SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
 
-    UnkStruct_02111868_sub *args = OverlayManager_GetArgs(manager);
+    MainOverlayArgs *args = OverlayManager_GetArgs(manager);
     data->saveData = args->saveData;
 
     data->mysteryGift = Save_MysteryGift_Get(data->saveData);

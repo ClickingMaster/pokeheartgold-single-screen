@@ -127,7 +127,7 @@ BOOL DeleteSavedataApp_Init(OverlayManager *manager, int *state) {
     memset(data, 0, sizeof(DeleteSavedataApp_Data));
     data->heapID = HEAP_ID_DELETE_SAVEDATA;
     data->mainState = MAINSTATE_ASK_TO_DELETE;
-    UnkStruct_02111868_sub *args = OverlayManager_GetArgs(manager);
+    MainOverlayArgs *args = OverlayManager_GetArgs(manager);
     data->savedata = args->saveData;
 
     return TRUE;

@@ -685,7 +685,7 @@ static BOOL FieldSystem_ProcessStep(FieldSystem *fieldSystem) {
     }
 
     if (FollowMon_IsVisible(fieldSystem)) {
-        FieldSystem_UnkSub108_MoveMoodTowardsNeutral(fieldSystem->unk108);
+        FollowMonMood_MoveTowardsNeutral(fieldSystem->followMonMood);
     }
 
     return FALSE;

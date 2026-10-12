@@ -288,7 +288,7 @@ BOOL ConnectToRanger_Init(OverlayManager *manager, int *state) {
     ConnectToRangerApp *app = MainMenuUtil_CreateAppData(manager, HEAP_ID_83, sizeof(ConnectToRangerApp), 0x20000);
     app->heapID = HEAP_ID_83;
     app->bgConfig = BgConfig_Alloc(HEAP_ID_83);
-    app->saveData = ((UnkStruct_02111868_sub *)OverlayManager_GetArgs(manager))->saveData;
+    app->saveData = ((MainOverlayArgs *)OverlayManager_GetArgs(manager))->saveData;
     app->profile = Save_PlayerData_GetProfile(app->saveData);
     app->pokedex = Save_Pokedex_Get(app->saveData);
     app->options = Save_PlayerData_GetOptionsAddr(app->saveData);

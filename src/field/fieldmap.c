@@ -42,7 +42,7 @@
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "overlay_01.h"
-#include "overlay_01_021EA824.h"
+#include "field_fog.h"
 #include "field/field_effect_manager.h"
 #include "field/bottom_screen_app.h"
 #include "field/map_object_models.h"

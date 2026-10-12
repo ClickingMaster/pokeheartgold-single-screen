@@ -15,19 +15,19 @@ void HiddenObjectMovement_Init(LocalMapObject *object, int coverType) {
     MapObject_SetFacingVector(object, &offset);
 }
 
-void sub_0206630C(LocalMapObject *object) {
+void HiddenObjectMovement_InitCover0(LocalMapObject *object) {
     HiddenObjectMovement_Init(object, 0);
 }
 
-void sub_02066318(LocalMapObject *object) {
+void HiddenObjectMovement_InitCover1(LocalMapObject *object) {
     HiddenObjectMovement_Init(object, 1);
 }
 
-void sub_02066324(LocalMapObject *object) {
+void HiddenObjectMovement_InitCover2(LocalMapObject *object) {
     HiddenObjectMovement_Init(object, 2);
 }
 
-void sub_02066330(LocalMapObject *object) {
+void HiddenObjectMovement_InitCover3(LocalMapObject *object) {
     HiddenObjectMovement_Init(object, 3);
 }
 

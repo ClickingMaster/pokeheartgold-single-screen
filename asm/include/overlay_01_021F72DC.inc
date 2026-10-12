@@ -41,7 +41,7 @@
 .public FollowMon_GetSpriteID
 .public FollowMon_SetObjectParams
 .public FieldSystem_SetFollowerPokeParam
-.public FieldSystem_UnkSub108_Set
+.public FollowMonMood_SetMon
 .public GetMonData
 .public GetMonGender
 .public MonIsShiny
@@ -57,7 +57,7 @@
 .public FollowMonDraw_Delete
 .public FollowMonDraw_Pause
 .public FollowMonDraw_Resume
-.public ov01_021F7704
+.public FollowMonDraw_ClearBob
 .public MapObjectManager_GetFollowMonBillboard
 .public BillboardDraw_UpdateNpc
 .public BillboardDraw_UpdatePositionOnly
@@ -103,4 +103,4 @@
 .public MapObject_HasFollowMonSprite
 .public FollowMonBillboard_SetResource
 .public MapObject_SetBillboardSepia
-.public ov01_022073D8
+.public gEffectModelOffsets

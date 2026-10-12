@@ -119,7 +119,7 @@ BOOL CheckSavedataApp_Init(OverlayManager *manager, int *state) {
     memset(data, 0, sizeof(CheckSavedataApp_Data));
     data->heapID = HEAP_ID_DELETE_SAVEDATA;
     data->mainState = MAINSTATE_CHECK_SAVE_FLAGS;
-    UnkStruct_02111868_sub *args = OverlayManager_GetArgs(manager);
+    MainOverlayArgs *args = OverlayManager_GetArgs(manager);
     data->saveData = args->saveData;
 
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
