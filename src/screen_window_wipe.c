@@ -4,9 +4,9 @@
 #include <nitro/gx/g2.h>
 
 // Palette fade module (not merged yet): declared with the types its callers here were matched against
-extern void ScanlineBufferController_Init(ClockWipeScanlines *scanlines, u8 window, int screen, enum HeapID heapId);
-extern void sub_02010EC8(ClockWipeScanlines *scanlines);
-extern s16 *sub_02010EE0(ClockWipeScanlines *scanlines, int index);
+extern void ScanlineBufferController_Init(ScreenWipeScanlines *scanlines, u8 window, int screen, enum HeapID heapId);
+extern void sub_02010EC8(ScreenWipeScanlines *scanlines);
+extern s16 *sub_02010EE0(ScreenWipeScanlines *scanlines, int index);
 extern void sub_02010F00(SysTask *task, void *scanlines);
 extern void sub_02010F34(int queued, WindowRegisterQueue *regQueue, int screen);
 extern void sub_02010F84(WindowRegisterQueue *regQueue, u8 insideMask, u8 outsideMask, u8 window, int screen, int left, int top, int right, int bottom, int queued);

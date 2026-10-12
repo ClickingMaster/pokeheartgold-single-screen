@@ -52,9 +52,9 @@ void RocketEffect_LoadBgScreen(EncounterEffectTask *effect, u8 bgId, int member)
 String *RocketEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID);
 void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, const RocketExecutiveIntroParams *params);
 
-void ov01_021F0454(NARC *narc, int member1, int member2, int member3, int arg4, int arg5, BgConfig *bgConfig, int bgId);
-void ov01_021F074C(VecFx32 *vec, fx32 x, fx32 y, fx32 z);
-void ov01_021F1310(EncounterEffectHBlankWave *wave, int unused);
+void EncounterEffect_LoadBgGraphics(NARC *narc, int member1, int member2, int member3, int arg4, int arg5, BgConfig *bgConfig, int bgId);
+void EncounterEffect_SetVecFx32(VecFx32 *vec, fx32 x, fx32 y, fx32 z);
+void EncounterEffectHBlankWave_AlternateDirection(EncounterEffectHBlankWave *wave, int unused);
 
 // One entry per grunt sprite, 8 words apart: start/end/velocity of x, start/end/velocity of y,
 // delay before the sprite appears, rotation
@@ -85,10 +85,10 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
         effect->work = Heap_Alloc(HEAP_ID_FIELD1, sizeof(TeamRocketEffectWork));
         memset(effect->work, 0, sizeof(TeamRocketEffectWork));
         work = effect->work;
-        ov01_021F05C4(&work->spriteManager, ROCKET_EFFECT_SPRITE_COUNT, 1);
-        ov01_021F0614(effect->narc, &work->spriteManager, &work->spriteResources, 3, 1, 156, 158, 157, 600000);
+        EncounterEffect_InitSprites(&work->spriteManager, ROCKET_EFFECT_SPRITE_COUNT, 1);
+        EncounterEffect_LoadSpriteResources(effect->narc, &work->spriteManager, &work->spriteResources, 3, 1, 156, 158, 157, 600000);
         for (i = 0; i < ROCKET_EFFECT_SPRITE_COUNT; i++) {
-            work->sprites[i] = ov01_021F0718(&work->spriteManager, &work->spriteResources, 0, 0, 0, 0);
+            work->sprites[i] = EncounterEffect_CreateSprite(&work->spriteManager, &work->spriteResources, 0, 0, 0, 0);
             Sprite_SetDrawFlag(work->sprites[i], FALSE);
         }
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -112,9 +112,9 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
             EncounterEffectQuadInterp_Init(&work->scale[work->next], FX32_CONST(2), 41, -0x666, 8);
             EncounterEffectInterp_Init(&work->rotation[work->next], 0, ov117_0225FB10[work->next * 8], 8);
             Sprite_SetDrawFlag(work->sprites[work->next], TRUE);
-            ov01_021F074C(&position, ov117_0225FAF4[work->next * 8], ov117_0225FB00[work->next * 8], 0);
+            EncounterEffect_SetVecFx32(&position, ov117_0225FAF4[work->next * 8], ov117_0225FB00[work->next * 8], 0);
             Sprite_SetMatrix(work->sprites[work->next], &position);
-            ov01_021F074C(&scale, FX32_CONST(2), FX32_CONST(2), 0);
+            EncounterEffect_SetVecFx32(&scale, FX32_CONST(2), FX32_CONST(2), 0);
             Sprite_SetScaleAndAffineType(work->sprites[work->next], &scale, 2);
             work->active[work->next] = TRUE;
             work->next++;
@@ -149,8 +149,8 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
         for (i = 0; i < ROCKET_EFFECT_SPRITE_COUNT; i++) {
             Sprite_Delete(work->sprites[i]);
         }
-        ov01_021F06EC(&work->spriteManager, &work->spriteResources);
-        ov01_021F05F4(&work->spriteManager);
+        EncounterEffect_FreeSpriteResources(&work->spriteManager, &work->spriteResources);
+        EncounterEffect_FreeSprites(&work->spriteManager);
         EncounterEffect_Finish(effect, task);
         break;
     }
@@ -164,9 +164,9 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
                 work->active[i] = FALSE;
                 Sprite_SetDrawFlag(work->sprites[i], FALSE);
             }
-            ov01_021F074C(&position, work->x[i].value, work->y[i].value, 0);
+            EncounterEffect_SetVecFx32(&position, work->x[i].value, work->y[i].value, 0);
             Sprite_SetMatrix(work->sprites[i], &position);
-            ov01_021F074C(&scale, work->scale[i].value, work->scale[i].value, 0);
+            EncounterEffect_SetVecFx32(&scale, work->scale[i].value, work->scale[i].value, 0);
             Sprite_SetAffineScale(work->sprites[i], &scale);
             Sprite_SetAffineZRotation(work->sprites[i], (u16)work->rotation[i].value);
         }
@@ -236,9 +236,9 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
         effect->work = Heap_Alloc(heapID, sizeof(RocketExecutiveEffectWork));
         memset(effect->work, 0, sizeof(RocketExecutiveEffectWork));
         work = effect->work;
-        ov01_021F05C4(&work->spriteManager, 1, 1);
-        ov01_021F0614(effect->narc, &work->spriteManager, &work->spriteResources, params->spriteMembers[0], 1, params->spriteMembers[1], params->spriteMembers[2], params->spriteMembers[3], 600000);
-        work->sprite = ov01_021F0718(&work->spriteManager, &work->spriteResources, FX32_CONST(320), FX32_CONST(128), 0, 0);
+        EncounterEffect_InitSprites(&work->spriteManager, 1, 1);
+        EncounterEffect_LoadSpriteResources(effect->narc, &work->spriteManager, &work->spriteResources, params->spriteMembers[0], 1, params->spriteMembers[1], params->spriteMembers[2], params->spriteMembers[3], 600000);
+        work->sprite = EncounterEffect_CreateSprite(&work->spriteManager, &work->spriteResources, FX32_CONST(320), FX32_CONST(128), 0, 0);
         Sprite_SetDrawFlag(work->sprite, FALSE);
         Sprite_SetOamMode(work->sprite, GX_OAM_MODE_XLU);
         Sprite_SetPriority(work->sprite, 0);
@@ -254,20 +254,20 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
         ToggleBgLayer(GF_BG_LYR_MAIN_1, GF_PLANE_TOGGLE_OFF);
         ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_OFF);
         ToggleBgLayer(GF_BG_LYR_MAIN_3, GF_PLANE_TOGGLE_OFF);
-        ov01_021F0454(effect->narc, 217, 216, 215, 0, 2, effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1);
+        EncounterEffect_LoadBgGraphics(effect->narc, 217, 216, 215, 0, 2, effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1);
         GfGfxLoader_GXLoadPalFromOpenNarc(effect->narc, 16, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_2_OFFSET, 32, heapID);
         AddWindowParameterized(effect->fieldSystem->bgConfig, &work->window, GF_BG_LYR_MAIN_2, 0, 20, 16, 2, 2, 1);
         FillWindowPixelBuffer(&work->window, 0);
         string = RocketEffect_GetTrainerNameString(params->trainerId, heapID);
         AddTextPrinterParameterizedWithColor(&work->window, 0, string, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), NULL);
         String_Delete(string);
-        ov01_021F0454(effect->narc, 218, 216, 215, 0, 2, effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
+        EncounterEffect_LoadBgGraphics(effect->narc, 218, 216, 215, 0, 2, effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
         {
             G2_SetWnd0InsidePlane(GX_WND_PLANEMASK_BG3, TRUE);
             G2_SetWndOutsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_OBJ, TRUE);
             G2_SetWnd0Position(0, 96, 255, 96);
         }
-        ov01_021F12B4(&work->wave, HEAP_ID_FIELD1);
+        EncounterEffectHBlankWave_Init(&work->wave, HEAP_ID_FIELD1);
         EncounterEffect_StartFlash(1, 16, -16, &effect->fadeDone, 1);
         effect->state++;
         break;
@@ -387,11 +387,11 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
         if (effect->done) {
             *effect->done = TRUE;
         }
-        ov01_021F12D0(&work->wave);
+        EncounterEffectHBlankWave_Free(&work->wave);
         work->waveActive = FALSE;
         Sprite_Delete(work->sprite);
-        ov01_021F06EC(&work->spriteManager, &work->spriteResources);
-        ov01_021F05F4(&work->spriteManager);
+        EncounterEffect_FreeSpriteResources(&work->spriteManager, &work->spriteResources);
+        EncounterEffect_FreeSprites(&work->spriteManager);
         RemoveWindow(&work->window);
         BG_ClearCharDataRange(GF_BG_LYR_MAIN_3, 32, 0, HEAP_ID_FIELD1);
         BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 32, 0, HEAP_ID_FIELD1);
@@ -401,7 +401,7 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
         break;
     }
     if (work->waveActive == TRUE) {
-        ov01_021F1310(&work->wave, 2);
+        EncounterEffectHBlankWave_AlternateDirection(&work->wave, 2);
     }
     if (effect->state != 12) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);

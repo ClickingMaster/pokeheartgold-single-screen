@@ -20,21 +20,21 @@
 	.public _020127A6
 	.public _020127AC
 	.public _020127B0
-	.public sub_020124B0
-	.public sub_020125D4
-	.public sub_020125EC
-	.public sub_0201262C
-	.public sub_0201268C
-	.public sub_0201275C
+	.public SectorWipe_BuildScanlines
+	.public SectorWipe_Interpolate
+	.public MirroredSectorWipe_Begin
+	.public MirroredSectorWipe_Update
+	.public MirroredSectorWipe_Init
+	.public MirroredSectorWipe_Step
 	.include "unk_0201010C.inc"
 	.include "global.inc"
 	.text
-	.public sub_020125D4
-	.public sub_020125EC
-	.public sub_0201262C
-	.public sub_0201275C
-	thumb_func_start sub_0201268C
-sub_0201268C: ; 0x0201268C
+	.public SectorWipe_Interpolate
+	.public MirroredSectorWipe_Begin
+	.public MirroredSectorWipe_Update
+	.public MirroredSectorWipe_Step
+	thumb_func_start MirroredSectorWipe_Init
+MirroredSectorWipe_Init: ; 0x0201268C
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x20
 	add r4, r1, #0
@@ -70,7 +70,7 @@ sub_0201268C: ; 0x0201268C
 	ldrh r0, [r4, #6]
 	str r0, [r5, #0x28]
 	add r0, r5, #0
-	bl sub_020127B8
+	bl MirroredSectorWipe_BuildScanlines
 	ldr r0, _02012750 ; =sub_02010F00
 	ldr r2, _02012754 ; =0x000003FF
 	add r1, r5, #0
@@ -128,4 +128,4 @@ sub_0201268C: ; 0x0201268C
 _02012750: .word sub_02010F00
 _02012754: .word 0x000003FF
 _02012758: .word ScanlineWindow_HBlankCallback
-	thumb_func_end sub_0201268C
+	thumb_func_end MirroredSectorWipe_Init

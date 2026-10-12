@@ -12,7 +12,7 @@ typedef struct KimonoGirlEffectWork {
     BOOL scrolling;
 } KimonoGirlEffectWork;
 
-void ov01_021F0500(NARC *narc, int member1, int member2, int member3, int arg4, int arg5, BgConfig *bgConfig, int bgId1, int bgId2);
+void EncounterEffect_LoadBgGraphicsMirrored(NARC *narc, int member1, int member2, int member3, int arg4, int arg5, BgConfig *bgConfig, int bgId1, int bgId2);
 extern void sub_0200FC20(); // called without its color argument here
 
 // BgTemplates for BG1 and BG3 (512x256, 16 colors; screen base 0x0000 / 0x1000, char base 0x4000 /
@@ -42,7 +42,7 @@ void EncounterEffect_KimonoGirl(SysTask *task, EncounterEffectTask *effect) {
         FreeBgTilemapBuffer(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
         InitBgFromTemplate(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, (const BgTemplate *)gKimonoGirlEffectBg3Template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
-        ov01_021F0500(effect->narc, 168, 167, 166, 0, 0, effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, GF_BG_LYR_MAIN_3);
+        EncounterEffect_LoadBgGraphicsMirrored(effect->narc, 168, 167, 166, 0, 0, effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, GF_BG_LYR_MAIN_3);
         SetBgPriority(2, 0);
         SetBgPriority(8, 0);
         BG_SetMaskColor(GF_BG_LYR_MAIN_1, 0);

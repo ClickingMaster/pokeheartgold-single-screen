@@ -3,34 +3,34 @@
 	.include "global.inc"
 	.text
 	.public sub_02011130
-	.public sub_0201164C
-	.public sub_0201169C
-	.public sub_020116EC
-	.public sub_02011744
-	.public sub_020117A0
-	.public sub_020117FC
-	.public sub_02011884
-	.public sub_020118BC
-	.public sub_02011918
-	.public sub_020119F4
-	.public sub_02011A44
-	.public sub_02011AD8
-	.public sub_02011B5C
-	.public sub_02011B94
-	.public sub_02011BF0
-	.public sub_02011CB8
-	.public sub_02011D08
-	.public sub_02011D60
-	.public sub_02011D98
-	.public sub_02011DEC
-	.public sub_02011EC0
-	.public sub_02011F10
-	.public sub_02011FF8
-	.public sub_02012030
-	.public sub_02012090
-	.public sub_020121A4
-	thumb_func_start sub_02011918
-sub_02011918: ; 0x02011918
+	.public RectWipe_Begin
+	.public RectWipe_Update
+	.public DoubleRectWipe_Begin
+	.public DoubleRectWipe_Update
+	.public RectWipe_Init
+	.public RectWipe_Step
+	.public CircleWipe_Begin
+	.public CircleWipe_Update
+	.public CircleWipe_Init
+	.public CircleWipe_Step
+	.public CircleWipe_GetScanlineSpan
+	.public CircleWipe_BuildScanlines
+	.public WedgeWipe_Begin
+	.public WedgeWipe_Update
+	.public WedgeWipe_Init
+	.public WedgeWipe_Step
+	.public WedgeWipe_BuildScanlines
+	.public SlopeWipe_Begin
+	.public SlopeWipe_Update
+	.public SlopeWipe_Init
+	.public SlopeWipe_Step
+	.public SlopeWipe_BuildScanlines
+	.public MultiRectWipe_Begin
+	.public MultiRectWipe_Update
+	.public MultiRectWipe_Init
+	.public MultiRectWipe_Step
+	thumb_func_start CircleWipe_Init
+CircleWipe_Init: ; 0x02011918
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x24
 	add r5, r0, #0
@@ -75,7 +75,7 @@ sub_02011918: ; 0x02011918
 	ldrb r0, [r4, #0xb]
 	str r0, [r5, #0x2c]
 	add r0, r5, #0
-	bl sub_02011AD8
+	bl CircleWipe_BuildScanlines
 	ldr r0, _020119E8 ; =sub_02010F00
 	ldr r2, _020119EC ; =0x000003FF
 	add r1, r5, #0
@@ -132,4 +132,4 @@ _020119D4:
 _020119E8: .word sub_02010F00
 _020119EC: .word 0x000003FF
 _020119F0: .word ScanlineWindow_HBlankCallback
-	thumb_func_end sub_02011918
+	thumb_func_end CircleWipe_Init

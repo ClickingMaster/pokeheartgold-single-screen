@@ -13,9 +13,9 @@ void ov114_0225F020(void *task, Ov114Task *ctx) {
         ctx->work = Heap_Alloc(4, 0x1a4);
         memset(ctx->work, 0, 0x1a4);
         work = ctx->work;
-        ov01_021F05C4(work->spriteResources, 1, 1);
-        ov01_021F0614(ctx->spriteManager, work->spriteResources, &work->resource168, 0, 1, 7, 9, 8, 0x927c0);
-        work->sprite19c = ov01_021F0718(work->spriteResources, &work->resource168, 2 << 18, 6 << 16, 0, 0);
+        EncounterEffect_InitSprites(work->spriteResources, 1, 1);
+        EncounterEffect_LoadSpriteResources(ctx->spriteManager, work->spriteResources, &work->resource168, 0, 1, 7, 9, 8, 0x927c0);
+        work->sprite19c = EncounterEffect_CreateSprite(work->spriteResources, &work->resource168, 2 << 18, 6 << 16, 0, 0);
         Sprite_SetDrawFlag(work->sprite19c, FALSE);
         Sprite_SetOamMode(work->sprite19c, 1);
         GfGfx_EngineATogglePlanes(0x10, TRUE);
@@ -48,7 +48,7 @@ void ov114_0225F020(void *task, Ov114Task *ctx) {
     case 5:
         EncounterEffectQuadInterp_Init(&work->scale, 1 << 12, 0x19a, 1, 6);
         Sprite_SetAffineOverwriteMode(work->sprite19c, 2);
-        ov01_021F074C(&tmp5, work->scale.value, work->scale.value, work->scale.value);
+        EncounterEffect_SetVecFx32(&tmp5, work->scale.value, work->scale.value, work->scale.value);
         scale5 = tmp5;
         Sprite_SetAffineScale(work->sprite19c, &scale5);
         HBlankSystem_Stop(*(void **)((u8 *)*(void **)((u8 *)ctx->fieldSystem + 4) + 0x1c));
@@ -57,7 +57,7 @@ void ov114_0225F020(void *task, Ov114Task *ctx) {
         break;
     case 6:
         done = EncounterEffectQuadInterp_Update(&work->scale);
-        ov01_021F074C(&tmp6, work->scale.value, work->scale.value, work->scale.value);
+        EncounterEffect_SetVecFx32(&tmp6, work->scale.value, work->scale.value, work->scale.value);
         scale6 = tmp6;
         Sprite_SetAffineScale(work->sprite19c, &scale6);
         if (done == TRUE && IsPaletteFadeFinished() == TRUE) {
@@ -71,8 +71,8 @@ void ov114_0225F020(void *task, Ov114Task *ctx) {
             *ctx->completionFlag = 1;
         }
         Sprite_Delete(work->sprite19c);
-        ov01_021F06EC(work->spriteResources, &work->resource168);
-        ov01_021F05F4(work->spriteResources);
+        EncounterEffect_FreeSpriteResources(work->spriteResources, &work->resource168);
+        EncounterEffect_FreeSprites(work->spriteResources);
         EncounterEffect_Finish(ctx, task);
         break;
     }
@@ -94,10 +94,10 @@ void ov114_0225F280(void *task, Ov114Task *ctx) {
         ctx->work = Heap_Alloc(4, 0x1b0);
         memset(ctx->work, 0, 0x1b0);
         work = ctx->work;
-        ov01_021F05C4(work->spriteResources, 4, 1);
-        ov01_021F0614(ctx->spriteManager, work->spriteResources, &work->resource13c, 0, 1, 4, 6, 5, 0x927c0);
+        EncounterEffect_InitSprites(work->spriteResources, 4, 1);
+        EncounterEffect_LoadSpriteResources(ctx->spriteManager, work->spriteResources, &work->resource13c, 0, 1, 4, 6, 5, 0x927c0);
         for (i = 0; i < 4; i++) {
-            work->sprites170[i] = ov01_021F0718(work->spriteResources, &work->resource13c, 2 << 18, 6 << 16, 0, 0);
+            work->sprites170[i] = EncounterEffect_CreateSprite(work->spriteResources, &work->resource13c, 2 << 18, 6 << 16, 0, 0);
             Sprite_SetDrawFlag(work->sprites170[i], FALSE);
         }
         GfGfx_EngineATogglePlanes(0x10, TRUE);
@@ -128,13 +128,13 @@ void ov114_0225F280(void *task, Ov114Task *ctx) {
             i++;
             interp = (Interp *)((u8 *)interp + 0x18);
         }
-        ov01_021F074C(&matrix, 2 << 18, (6 << 16) - work->horiz.value, 0);
+        EncounterEffect_SetVecFx32(&matrix, 2 << 18, (6 << 16) - work->horiz.value, 0);
         Sprite_SetMatrix(work->sprites170[0], &matrix);
-        ov01_021F074C(&matrix, 2 << 18, work->horiz.value + (6 << 16), 0);
+        EncounterEffect_SetVecFx32(&matrix, 2 << 18, work->horiz.value + (6 << 16), 0);
         Sprite_SetMatrix(work->sprites170[1], &matrix);
-        ov01_021F074C(&matrix, (2 << 18) - work->vert.value, 6 << 16, 0);
+        EncounterEffect_SetVecFx32(&matrix, (2 << 18) - work->vert.value, 6 << 16, 0);
         Sprite_SetMatrix(work->sprites170[2], &matrix);
-        ov01_021F074C(&matrix, work->vert.value + (2 << 18), 6 << 16, 0);
+        EncounterEffect_SetVecFx32(&matrix, work->vert.value + (2 << 18), 6 << 16, 0);
         Sprite_SetMatrix(work->sprites170[3], &matrix);
         if (done == TRUE) {
             ctx->state++;
@@ -159,8 +159,8 @@ void ov114_0225F280(void *task, Ov114Task *ctx) {
         for (i = 0; i < 4; i++) {
             Sprite_Delete(work->sprites170[i]);
         }
-        ov01_021F06EC(work->spriteResources, &work->resource13c);
-        ov01_021F05F4(work->spriteResources);
+        EncounterEffect_FreeSpriteResources(work->spriteResources, &work->resource13c);
+        EncounterEffect_FreeSprites(work->spriteResources);
         EncounterEffect_Finish(ctx, task);
         break;
     }

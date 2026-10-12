@@ -202,7 +202,7 @@ BOOL WildEffectCell_Update(WildEffectCell *cell) {
     x = cell->x;
     halfHeight = cell->height.value / 2;
     y = cell->y;
-    ov01_021F0960(cell->window, y - halfHeight, y + halfHeight, x - halfWidth, x + halfWidth, cell->fillColor);
+    EncounterEffect_FillWindowRect(cell->window, y - halfHeight, y + halfHeight, x - halfWidth, x + halfWidth, cell->fillColor);
     return done;
 }
 
@@ -246,7 +246,7 @@ BOOL WildEffectRandomFill_Update(WildEffectRandomFill *fill) {
             row = (u32)index / CELL_GRID_WIDTH;
             x = column * CELL_SIZE;
             y = row * CELL_SIZE;
-            ov01_021F0960(fill->window, y, y + CELL_SIZE, x, x + CELL_SIZE, fill->fillColor);
+            EncounterEffect_FillWindowRect(fill->window, y, y + CELL_SIZE, x, x + CELL_SIZE, fill->fillColor);
             fill->filled++;
         }
     }
@@ -475,7 +475,7 @@ void EncounterEffect_PkmnTrainerRed(SysTask *task, EncounterEffectTask *effect) 
         BG_LoadPlttData(GF_BG_LYR_MAIN_3, &black, sizeof(black), 30);
         FillWindowPixelBuffer(work->window, 0);
         ScheduleWindowCopyToVram(work->window);
-        ov01_021F05C4(&work->spriteManager, 2, 1);
+        EncounterEffect_InitSprites(&work->spriteManager, 2, 1);
         RedEffect_CreateSprite(effect->narc, &work->sprite, &work->spriteManager, &work->spriteResources, 0);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         work->hBlankSystem = effect->fieldSystem->unk4->hBlankSystem;
@@ -512,8 +512,8 @@ void EncounterEffect_PkmnTrainerRed(SysTask *task, EncounterEffectTask *effect) 
         RemoveWindow(work->window);
         WindowArray_Delete(work->window, 1);
         Sprite_Delete(work->sprite);
-        ov01_021F06EC(&work->spriteManager, &work->spriteResources);
-        ov01_021F05F4(&work->spriteManager);
+        EncounterEffect_FreeSpriteResources(&work->spriteManager, &work->spriteResources);
+        EncounterEffect_FreeSprites(&work->spriteManager);
         EncounterEffect_Finish(effect, task);
         return;
     }
@@ -595,8 +595,8 @@ BOOL RedEffect_SecondFlash(RedEffectWork *work, u32 *state) {
 
 void RedEffect_CreateSprite(NARC *narc, Sprite **sprite, EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources *spriteResources, int variant) {
     GF_ASSERT(variant != 2);
-    ov01_021F0614(narc, spriteManager, spriteResources, ov120_02260200[variant * 4], 1, ov120_022601F4[variant * 4], ov120_022601FC[variant * 4], ov120_022601F8[variant * 4], 600000);
-    *sprite = ov01_021F0718(spriteManager, spriteResources, FX32_CONST(128), FX32_CONST(96), 0, 0);
+    EncounterEffect_LoadSpriteResources(narc, spriteManager, spriteResources, ov120_02260200[variant * 4], 1, ov120_022601F4[variant * 4], ov120_022601FC[variant * 4], ov120_022601F8[variant * 4], 600000);
+    *sprite = EncounterEffect_CreateSprite(spriteManager, spriteResources, FX32_CONST(128), FX32_CONST(96), 0, 0);
     Sprite_SetDrawFlag(*sprite, TRUE);
     Sprite_SetDrawPriority(*sprite, 16);
     Sprite_SetPriority(*sprite, 1);
@@ -893,13 +893,13 @@ void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white) 
         break;
     case 2:
         if (effect->fadeDone) {
-            ov01_021F12B4(&work->wave, 4);
+            EncounterEffectHBlankWave_Init(&work->wave, 4);
             effect->state = 3;
         }
         break;
     case 3:
         work->timer = 10;
-        ov01_021F12E8(&work->wave, 0, 191, 3410, 0x3000, 400, (void *)&reg_G2_BG0HOFS, 0, 4);
+        EncounterEffectHBlankWave_Start(&work->wave, 0, 191, 3410, 0x3000, 400, (void *)&reg_G2_BG0HOFS, 0, 4);
         work->bg3Scrolling = TRUE;
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
         effect->state = 4;
@@ -924,7 +924,7 @@ void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white) 
         if (effect->done) {
             *effect->done = TRUE;
         }
-        ov01_021F12D0(&work->wave);
+        EncounterEffectHBlankWave_Free(&work->wave);
         EncounterEffect_Finish(effect, task);
         return;
     }

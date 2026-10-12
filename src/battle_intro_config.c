@@ -143,7 +143,7 @@ u32 BattleStartGetTransition(u32 param, BattleSetupLite *setup) {
     }
     result = _020FC40A[param].transition;
     if (result == 0xffff) {
-        result = ov01_021F0D20(setup);
+        result = EncounterEffect_GetDefaultEffect(setup);
     }
     return result;
 }

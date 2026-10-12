@@ -20,12 +20,6 @@ FS_EXTERN_OVERLAY(OVY_118);
 FS_EXTERN_OVERLAY(OVY_119);
 FS_EXTERN_OVERLAY(OVY_120);
 
-typedef struct EncounterEffectState {
-    void *unk_00;
-    s32 effect;
-    u32 frameCount;
-} EncounterEffectState;
-
 // Master brightness fade of one screen (1: main, otherwise sub).
 typedef struct BrightnessInterp {
     EncounterEffectInterp interp;
@@ -48,7 +42,6 @@ typedef struct EncounterEffectFlash {
 // NitroSDK gx.c; the SDK headers in lib/include only declare the getter.
 void GXx_SetMasterBrightness_(vu16 *reg, s32 brightness);
 
-extern EncounterEffectState sEncounterEffectState;
 extern void (*const sEncounterEffectFuncs[])(SysTask *task, EncounterEffectTask *effect);
 
 void Task_EncounterEffectFlash(SysTask *task, void *data);
@@ -58,8 +51,8 @@ BOOL BrightnessInterp_Update(BrightnessInterp *interp);
 void Task_ApplyBrightness(SysTask *task, void *data);
 
 void Task_RunEncounterEffect(SysTask *task, EncounterEffectTask *effect) {
-    sEncounterEffectFuncs[sEncounterEffectState.effect](task, effect);
-    sEncounterEffectState.frameCount++;
+    sEncounterEffectFuncs[gEncounterEffectState.effect](task, effect);
+    gEncounterEffectState.frameCount++;
     OS_GetTick();
     OS_SetTick(0);
 }
@@ -132,8 +125,8 @@ void EncounterEffect_Start(s32 effect, FieldSystem *fieldSystem, BOOL *done) {
     EncounterEffectTask *effectTask;
     SysTask *task;
     BOOL *taskDone;
-    sEncounterEffectState.effect = effect;
-    sEncounterEffectState.frameCount = 0;
+    gEncounterEffectState.effect = effect;
+    gEncounterEffectState.frameCount = 0;
     task = CreateSysTaskAndEnvironment((SysTaskFunc)Task_RunEncounterEffect, sizeof(EncounterEffectTask), 5, HEAP_ID_FIELD1);
     effectTask = SysTask_GetData(task);
     effectTask->fieldSystem = fieldSystem;

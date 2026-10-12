@@ -106,7 +106,7 @@ _0225F0A2:
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	asr r3, r3, #0x10
-	bl ov01_021F0960
+	bl EncounterEffect_FillWindowRect
 	add r0, r7, #0
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}

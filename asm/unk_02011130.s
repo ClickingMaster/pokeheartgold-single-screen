@@ -3,32 +3,32 @@
 	.include "global.inc"
 	.text
 	.public sub_02011130
-	.public sub_0201164C
-	.public sub_0201169C
-	.public sub_020116EC
-	.public sub_02011744
-	.public sub_020117A0
-	.public sub_020117FC
-	.public sub_02011884
-	.public sub_020118BC
-	.public sub_02011918
-	.public sub_020119F4
-	.public sub_02011A44
-	.public sub_02011AD8
-	.public sub_02011B5C
-	.public sub_02011B94
-	.public sub_02011BF0
-	.public sub_02011CB8
-	.public sub_02011D08
-	.public sub_02011D60
-	.public sub_02011D98
-	.public sub_02011DEC
-	.public sub_02011EC0
-	.public sub_02011F10
-	.public sub_02011FF8
-	.public sub_02012030
-	.public sub_02012090
-	.public sub_020121A4
+	.public RectWipe_Begin
+	.public RectWipe_Update
+	.public DoubleRectWipe_Begin
+	.public DoubleRectWipe_Update
+	.public RectWipe_Init
+	.public RectWipe_Step
+	.public CircleWipe_Begin
+	.public CircleWipe_Update
+	.public CircleWipe_Init
+	.public CircleWipe_Step
+	.public CircleWipe_GetScanlineSpan
+	.public CircleWipe_BuildScanlines
+	.public WedgeWipe_Begin
+	.public WedgeWipe_Update
+	.public WedgeWipe_Init
+	.public WedgeWipe_Step
+	.public WedgeWipe_BuildScanlines
+	.public SlopeWipe_Begin
+	.public SlopeWipe_Update
+	.public SlopeWipe_Init
+	.public SlopeWipe_Step
+	.public SlopeWipe_BuildScanlines
+	.public MultiRectWipe_Begin
+	.public MultiRectWipe_Update
+	.public MultiRectWipe_Init
+	.public MultiRectWipe_Step
 	thumb_func_start sub_02011130
 sub_02011130: ; 0x02011130
 	push {r3, r4, r5, lr}

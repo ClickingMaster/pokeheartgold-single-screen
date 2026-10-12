@@ -68,39 +68,7 @@ Static main
     Object src/r40_unk_02011080_run1.o
     Object src/palette_fade_effects_6.o
     Object src/unk_02011130.o
-    Object src/palette_fade_11130_1.o
-    Object src/r40_unk_02011130_residual_2_run1.o
-    Object src/palette_fade_11130_2.o
-    Object src/r40_unk_02011130_residual_3_run1.o
-    Object src/palette_fade_11130_3.o
-    Object src/r40_unk_02011130_residual_4_run1.o
-    Object src/palette_fade_11130_4.o
-    Object src/r40_unk_02011130_residual_5_run1.o
-    Object src/palette_fade_11130_5.o
-    Object src/to70_unk_02011130_residual_6_extra1072_run01.o
-    Object src/palette_fade_11130_6.o
-    Object src/to58_bank_fade_response.o
-    Object src/palette_fade_11130_7.o
-    Object src/to80_extra1612_run01.o
-    Object src/palette_fade_11130_8.o
-    Object src/to50_palette_fade_12090.o
-    Object src/palette_fade_11130_9.o
-    Object src/palette_fade_effects_7.o
-    Object src/unk02012204_sol_partial_1.o
-    Object src/op90_unk_02012204_r01.o
-    Object src/unk02012204_sol_partial_2.o
-    Object src/palette_fade_effects_8.o
-    Object src/op90_unk_020124B0_r01.o
-    Object src/unk020124b0_sol_partial_1.o
-    Object src/r40_unk_020124B0_residual_2_run1.o
-    Object src/unk020124b0_sol_partial_2.o
-    Object src/palette_fade_effects_9.o
-    Object src/op90_unk_020127B8_r01.o
-    Object src/unk020127b8_sol_partial_1.o
-    Object src/r40_unk_020127B8_residual_2_run1.o
-    Object src/unk020127b8_sol_partial_2.o
-    Object src/palette_fade_effects_10.o
-    Object src/unk_02012A90_opus_partial_1.o
+    Object src/screen_wipe_effects.o
     Object src/screen_window_wipe.o
     Object src/font_sprite.o
     Object asm/font_sprite_data.o
@@ -1051,41 +1019,11 @@ Overlay field
     Object src/field/scrcmd_message.o
     Object src/field/draw_map_name.o
     Object src/field/encounter_effect.o
-    Object src/to90_extra2173_run01.o
-    Object src/field_overlay_effects_4.o
-    Object src/to58_ov01_efb38_r5.o
-    Object src/field_overlay_effects_5.o
-    Object src/sol_r12_ov01_windowfx6_run1.o
-    Object src/to70_sol_r12_ov01_windowfx6_middle_extra888_run01.o
-    Object src/sol_r12_ov01_windowfx6_run2.o
-    Object src/field_overlay_effects_6.o
-    Object src/to58_ov01_efb38_r7.o
-    Object src/field_overlay_effects_7.o
-    Object src/to45_overlay01_window_effect_r8.o
-    Object src/op90_to45_overlay01_window_effect_r8_residual_r01.o
-    Object src/field_overlay_effects_8.o
-    Object src/to58_ov01_efb38_r9.o
-    Object src/field_overlay_effects_9.o
-    Object src/to58_ov01_efb38_r10.o
-    Object src/field_overlay_effects_10.o
-    Object src/to58_ov01_efb38_r11.o
-    Object src/field_overlay_effects_11.o
-    Object src/to80_extra1499_run01.o
-    Object src/field_overlay_effects_12.o
-    Object src/to90_extra2354_run01.o
-    Object src/field_overlay_effects_13.o
-    Object src/to58_ov01_efb38_r14.o
-    Object src/field_overlay_effects_14.o
-    Object src/to80_extra1868_run01.o
-    Object src/field_overlay_effects_15.o
-    Object src/to70_overlay_01_021EFB38_residual_16_extra477_run01.o
-    Object src/field_overlay_effects_16.o
-    Object src/to70_overlay_01_021EFB38_residual_17_extra263_run01.o
-    Object src/field_overlay_effects_17.o
-    Object src/to91_w41562_particle_offsets.o
-    Object src/field_overlay_effects_18.o
+    Object src/field/encounter_effect_wipe.o
+    Object src/field/encounter_effect_util.o
+    Object src/field/encounter_effect_particles.o
     Object asm/op90_overlay_01_021EFB38_residual_19_anchor.o
-    Object src/op90_overlay_01_021EFB38_residual_19_r01.o
+    Object src/field/encounter_effect_wave_direction.o
     Object src/field/field_effect_manager.o
     Object asm/to80_extra1765_anchor.o
     Object src/field/field_effect_manager_texture.o

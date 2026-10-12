@@ -105,7 +105,7 @@ _0225F038:
 	ldr r1, [sp, #0xc]
 	ldr r2, [sp, #0x10]
 	add r3, r7, #0
-	bl ov01_021F0718
+	bl EncounterEffect_CreateSprite
 	str r0, [r5, #4]
 	mov r1, #0
 	bl Sprite_SetDrawFlag

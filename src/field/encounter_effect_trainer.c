@@ -99,22 +99,22 @@ typedef struct BallFallEffectWork {
 BOOL ov01_021EFE30(EncounterEffectTask *effect);
 void EncounterEffectInterp_InitFx(EncounterEffectInterp *interp, s32 start, s32 end, s32 duration);
 BOOL EncounterEffectInterp_UpdateFx(EncounterEffectInterp *interp);
-void *ov01_021EFFEC(void);
-void ov01_021F0028(void *flash);
-void ov01_021F0050(EncounterEffectTask *effect, void *flash, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
-void *ov01_021F0250(void);
-void ov01_021F029C(void *flash);
-void ov01_021F02C4(EncounterEffectTask *effect, void *flash, s32 arg2, s32 arg3, s32 arg4);
-void ov01_021F074C(VecFx32 *vec, fx32 x, fx32 y, fx32 z);
-void *ov01_021F0768(int heapID);
-void ov01_021F0780(void *trail);
-void ov01_021F0788(void *trail, int arg1, int arg2, int arg3, int arg4, int arg5, Window *window, int arg7, int arg8, int arg9);
-BOOL ov01_021F07E0(void *trail);
-void *ov01_021F09BC(enum HeapID heapID);
-void ov01_021F09EC(void *circleWipe);
-void ov01_021F0A0C(void *circleWipe, u8 arg1, u8 arg2, Window *window, u8 fillColor);
-BOOL ov01_021F0A4C(void *circleWipe);
-void ov01_021F1310(EncounterEffectHBlankWave *wave, int unused);
+void *StripeWipe_New(void);
+void StripeWipe_Free(void *flash);
+void StripeWipe_Start(EncounterEffectTask *effect, void *flash, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
+void *SplitWipe_New(void);
+void SplitWipe_Free(void *flash);
+void SplitWipe_Start(EncounterEffectTask *effect, void *flash, s32 arg2, s32 arg3, s32 arg4);
+void EncounterEffect_SetVecFx32(VecFx32 *vec, fx32 x, fx32 y, fx32 z);
+void *RectTrail_New(int heapID);
+void RectTrail_Free(void *trail);
+void RectTrail_Start(void *trail, int arg1, int arg2, int arg3, int arg4, int arg5, Window *window, int arg7, int arg8, int arg9);
+BOOL RectTrail_Update(void *trail);
+void *BlockWipe_New(enum HeapID heapID);
+void BlockWipe_Free(void *circleWipe);
+void BlockWipe_Start(void *circleWipe, u8 arg1, u8 arg2, Window *window, u8 fillColor);
+BOOL BlockWipe_Update(void *circleWipe);
+void EncounterEffectHBlankWave_AlternateDirection(EncounterEffectHBlankWave *wave, int unused);
 void sub_0200FC20(u16 color);
 
 void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect) {
@@ -134,11 +134,11 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         memset(effect->work, 0, sizeof(SpinZoomEffectWork));
         work = effect->work;
         work->camera = effect->fieldSystem->camera;
-        work->flash = ov01_021EFFEC();
-        ov01_021F05C4(&work->spriteManager, 2, 1);
-        ov01_021F0614(effect->narc, &work->spriteManager, &work->spriteResources, 0, 1, 7, 9, 8, 600000);
+        work->flash = StripeWipe_New();
+        EncounterEffect_InitSprites(&work->spriteManager, 2, 1);
+        EncounterEffect_LoadSpriteResources(effect->narc, &work->spriteManager, &work->spriteResources, 0, 1, 7, 9, 8, 600000);
         for (i = 0; i < 2; i++) {
-            work->sprites[i] = ov01_021F0718(&work->spriteManager, &work->spriteResources, FX32_CONST(128), FX32_CONST(96), 0, 0);
+            work->sprites[i] = EncounterEffect_CreateSprite(&work->spriteManager, &work->spriteResources, FX32_CONST(128), FX32_CONST(96), 0, 0);
             Sprite_SetDrawFlag(work->sprites[i], FALSE);
             Sprite_SetDrawPriority(work->sprites[i], i * 2);
         }
@@ -156,7 +156,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         break;
     case 3:
         EncounterEffectQuadInterp_Init(&work->scale, 41, FX32_ONE, 2, 10);
-        ov01_021F074C(&scale, work->scale.value, work->scale.value, work->scale.value);
+        EncounterEffect_SetVecFx32(&scale, work->scale.value, work->scale.value, work->scale.value);
         for (i = 0; i < 2; i++) {
             Sprite_SetDrawFlag(work->sprites[i], TRUE);
             Sprite_SetAffineOverwriteMode(work->sprites[i], 2);
@@ -167,7 +167,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         break;
     case 4:
         done = EncounterEffectQuadInterp_Update(&work->scale);
-        ov01_021F074C(&scale, work->scale.value, work->scale.value, work->scale.value);
+        EncounterEffect_SetVecFx32(&scale, work->scale.value, work->scale.value, work->scale.value);
         EncounterEffectInterp_Update(&work->rotation);
         for (i = 0; i < 2; i++) {
             Sprite_SetAffineScale(work->sprites[i], &scale);
@@ -179,7 +179,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         }
         break;
     case 5:
-        ov01_021F0050(effect, work->flash, 96, 6, 0, FX32_CONST(255), FX32_CONST(10));
+        StripeWipe_Start(effect, work->flash, 96, 6, 0, FX32_CONST(255), FX32_CONST(10));
         Sprite_SetAnimCtrlSeq(work->sprites[0], 1);
         Sprite_SetAnimCtrlSeq(work->sprites[1], 2);
         EncounterEffectQuadInterp_Init(&work->movement, 0, FX32_CONST(255), FX32_CONST(10), 6);
@@ -191,9 +191,9 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         break;
     case 6:
         EncounterEffectQuadInterp_Update(&work->movement);
-        ov01_021F074C(&leftPos, FX32_CONST(128) - work->movement.value, FX32_CONST(96), 0);
+        EncounterEffect_SetVecFx32(&leftPos, FX32_CONST(128) - work->movement.value, FX32_CONST(96), 0);
         left = leftPos;
-        ov01_021F074C(&rightPos, FX32_CONST(128) + work->movement.value, FX32_CONST(96), 0);
+        EncounterEffect_SetVecFx32(&rightPos, FX32_CONST(128) + work->movement.value, FX32_CONST(96), 0);
         right = rightPos;
         Sprite_SetMatrix(work->sprites[0], &left);
         Sprite_SetMatrix(work->sprites[1], &right);
@@ -211,9 +211,9 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         for (i = 0; i < 2; i++) {
             Sprite_Delete(work->sprites[i]);
         }
-        ov01_021F06EC(&work->spriteManager, &work->spriteResources);
-        ov01_021F05F4(&work->spriteManager);
-        ov01_021F0028(work->flash);
+        EncounterEffect_FreeSpriteResources(&work->spriteManager, &work->spriteResources);
+        EncounterEffect_FreeSprites(&work->spriteManager);
+        StripeWipe_Free(work->flash);
         EncounterEffect_Finish(effect, task);
         break;
     }
@@ -243,11 +243,11 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         memset(effect->work, 0, sizeof(SpinApartEffectWork));
         work = effect->work;
         work->camera = effect->fieldSystem->camera;
-        work->flash = ov01_021F0250();
-        ov01_021F05C4(&work->spriteManager, 2, 1);
-        ov01_021F0614(effect->narc, &work->spriteManager, &work->spriteResources, 0, 1, 4, 6, 5, 600000);
+        work->flash = SplitWipe_New();
+        EncounterEffect_InitSprites(&work->spriteManager, 2, 1);
+        EncounterEffect_LoadSpriteResources(effect->narc, &work->spriteManager, &work->spriteResources, 0, 1, 4, 6, 5, 600000);
         for (i = 0; i < 2; i++) {
-            work->sprites[i] = ov01_021F0718(&work->spriteManager, &work->spriteResources, FX32_CONST(128), 0, 0, 0);
+            work->sprites[i] = EncounterEffect_CreateSprite(&work->spriteManager, &work->spriteResources, FX32_CONST(128), 0, 0, 0);
             Sprite_SetDrawFlag(work->sprites[i], FALSE);
             Sprite_SetAffineOverwriteMode(work->sprites[i], 2);
         }
@@ -267,9 +267,9 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         EncounterEffectInterp_InitFx(&work->position, -FX32_CONST(192), FX32_CONST(192), 8);
         Sprite_SetDrawFlag(work->sprites[0], TRUE);
         Sprite_SetDrawFlag(work->sprites[1], TRUE);
-        ov01_021F074C(&topPos0, FX32_CONST(128) - work->position.value, FX32_CONST(64), 0);
+        EncounterEffect_SetVecFx32(&topPos0, FX32_CONST(128) - work->position.value, FX32_CONST(64), 0);
         top0 = topPos0;
-        ov01_021F074C(&bottomPos0, FX32_CONST(128) + work->position.value, FX32_CONST(128), 0);
+        EncounterEffect_SetVecFx32(&bottomPos0, FX32_CONST(128) + work->position.value, FX32_CONST(128), 0);
         bottom0 = bottomPos0;
         Sprite_SetMatrix(work->sprites[0], &top0);
         Sprite_SetMatrix(work->sprites[1], &bottom0);
@@ -278,9 +278,9 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         break;
     case 4:
         done = EncounterEffectInterp_UpdateFx(&work->position);
-        ov01_021F074C(&topPos1, FX32_CONST(128) - work->position.value, FX32_CONST(64), 0);
+        EncounterEffect_SetVecFx32(&topPos1, FX32_CONST(128) - work->position.value, FX32_CONST(64), 0);
         top1 = topPos1;
-        ov01_021F074C(&bottomPos1, FX32_CONST(128) + work->position.value, FX32_CONST(128), 0);
+        EncounterEffect_SetVecFx32(&bottomPos1, FX32_CONST(128) + work->position.value, FX32_CONST(128), 0);
         bottom1 = bottomPos1;
         Sprite_SetMatrix(work->sprites[0], &top1);
         Sprite_SetMatrix(work->sprites[1], &bottom1);
@@ -292,7 +292,7 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         }
         break;
     case 5:
-        ov01_021F02C4(effect, work->flash, 8, FX32_ONE, FX32_ONE);
+        SplitWipe_Start(effect, work->flash, 8, FX32_ONE, FX32_ONE);
         distance = Camera_GetDistance(work->camera);
         EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (125 << 14), -FX32_CONST(10), 8);
         effect->state++;
@@ -312,9 +312,9 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         for (i = 0; i < 2; i++) {
             Sprite_Delete(work->sprites[i]);
         }
-        ov01_021F06EC(&work->spriteManager, &work->spriteResources);
-        ov01_021F05F4(&work->spriteManager);
-        ov01_021F029C(work->flash);
+        EncounterEffect_FreeSpriteResources(&work->spriteManager, &work->spriteResources);
+        EncounterEffect_FreeSprites(&work->spriteManager);
+        SplitWipe_Free(work->flash);
         EncounterEffect_Finish(effect, task);
         break;
     }
@@ -339,12 +339,12 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
         memset(effect->work, 0, sizeof(FadeSpinEffectWork));
         work = effect->work;
         work->camera = effect->fieldSystem->camera;
-        ov01_021F12B4(&work->wave, HEAP_ID_FIELD1);
+        EncounterEffectHBlankWave_Init(&work->wave, HEAP_ID_FIELD1);
         work->timer = 12;
-        ov01_021F05C4(&work->spriteManager, 2, 1);
-        ov01_021F0614(effect->narc, &work->spriteManager, &work->spriteResources, 0, 1, 7, 9, 8, 600000);
+        EncounterEffect_InitSprites(&work->spriteManager, 2, 1);
+        EncounterEffect_LoadSpriteResources(effect->narc, &work->spriteManager, &work->spriteResources, 0, 1, 7, 9, 8, 600000);
         for (i = 0; i < 2; i++) {
-            work->sprites[i] = ov01_021F0718(&work->spriteManager, &work->spriteResources, FX32_CONST(128), FX32_CONST(96), 0, 0);
+            work->sprites[i] = EncounterEffect_CreateSprite(&work->spriteManager, &work->spriteResources, FX32_CONST(128), FX32_CONST(96), 0, 0);
             Sprite_SetDrawFlag(work->sprites[i], FALSE);
             Sprite_SetDrawPriority(work->sprites[i], i);
         }
@@ -358,7 +358,7 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
     case 2:
         work->timer--;
         if (work->timer == 0) {
-            ov01_021F12E8(&work->wave, 0, 191, 682, FX32_CONST(12), 800, (void *)&reg_G2_BG0HOFS, 0, HEAP_ID_FIELD1);
+            EncounterEffectHBlankWave_Start(&work->wave, 0, 191, 682, FX32_CONST(12), 800, (void *)&reg_G2_BG0HOFS, 0, HEAP_ID_FIELD1);
             work->waveActive = TRUE;
         }
         if (effect->fadeDone) {
@@ -398,7 +398,7 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
         break;
     case 5:
         EncounterEffectQuadInterp_Init(&work->scale, FX32_ONE, 41, 410, 8);
-        ov01_021F074C(&scalePos5, work->scale.value, work->scale.value, work->scale.value);
+        EncounterEffect_SetVecFx32(&scalePos5, work->scale.value, work->scale.value, work->scale.value);
         scale5 = scalePos5;
         for (i = 0; i < 2; i++) {
             Sprite_SetAffineScale(work->sprites[i], &scale5);
@@ -412,7 +412,7 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
         break;
     case 6:
         done = EncounterEffectQuadInterp_Update(&work->scale);
-        ov01_021F074C(&scalePos6, work->scale.value, work->scale.value, work->scale.value);
+        EncounterEffect_SetVecFx32(&scalePos6, work->scale.value, work->scale.value, work->scale.value);
         scale6 = scalePos6;
         for (i = 0; i < 2; i++) {
             Sprite_SetAffineScale(work->sprites[i], &scale6);
@@ -428,18 +428,18 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
         if (effect->done != NULL) {
             *effect->done = TRUE;
         }
-        ov01_021F12D0(&work->wave);
+        EncounterEffectHBlankWave_Free(&work->wave);
         work->waveActive = FALSE;
         for (i = 0; i < 2; i++) {
             Sprite_Delete(work->sprites[i]);
         }
-        ov01_021F06EC(&work->spriteManager, &work->spriteResources);
-        ov01_021F05F4(&work->spriteManager);
+        EncounterEffect_FreeSpriteResources(&work->spriteManager, &work->spriteResources);
+        EncounterEffect_FreeSprites(&work->spriteManager);
         EncounterEffect_Finish(effect, task);
         return;
     }
     if (work->waveActive == TRUE) {
-        ov01_021F1310(&work->wave, 2);
+        EncounterEffectHBlankWave_AlternateDirection(&work->wave, 2);
     }
     if (effect->state != 7) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
@@ -460,15 +460,15 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         memset(effect->work, 0, sizeof(BallDropEffectWork));
         work = effect->work;
         work->camera = effect->fieldSystem->camera;
-        ov01_021F12B4(&work->wave, HEAP_ID_FIELD1);
+        EncounterEffectHBlankWave_Init(&work->wave, HEAP_ID_FIELD1);
         work->timer = 14;
-        ov01_021F05C4(&work->spriteManager, BALL_DROP_SPRITE_COUNT, 1);
-        ov01_021F0614(effect->narc, &work->spriteManager, &work->spriteResources, 0, 1, 4, 6, 5, 600000);
+        EncounterEffect_InitSprites(&work->spriteManager, BALL_DROP_SPRITE_COUNT, 1);
+        EncounterEffect_LoadSpriteResources(effect->narc, &work->spriteManager, &work->spriteResources, 0, 1, 4, 6, 5, 600000);
         for (i = 0; i < BALL_DROP_SPRITE_COUNT; i++) {
-            work->sprites[i] = ov01_021F0718(&work->spriteManager, &work->spriteResources, 0, 0, 0, 0);
+            work->sprites[i] = EncounterEffect_CreateSprite(&work->spriteManager, &work->spriteResources, 0, 0, 0, 0);
             Sprite_SetDrawFlag(work->sprites[i], FALSE);
             Sprite_SetAffineOverwriteMode(work->sprites[i], 2);
-            work->trails[i] = ov01_021F0768(HEAP_ID_FIELD1);
+            work->trails[i] = RectTrail_New(HEAP_ID_FIELD1);
         }
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         work->window = AllocWindows(HEAP_ID_FIELD1, 1);
@@ -485,7 +485,7 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         break;
     case 2:
         if (--work->timer == 0) {
-            ov01_021F12E8(&work->wave, 0, 191, 682, FX32_CONST(12), 800, (void *)&reg_G2_BG0HOFS, 0, HEAP_ID_FIELD1);
+            EncounterEffectHBlankWave_Start(&work->wave, 0, 191, 682, FX32_CONST(12), 800, (void *)&reg_G2_BG0HOFS, 0, HEAP_ID_FIELD1);
             work->waveActive = TRUE;
         }
         if (effect->fadeDone) {
@@ -499,8 +499,8 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
             EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (125 << 14), -FX32_CONST(10), 16);
             EncounterEffectInterp_Init(&work->rotation[0], 0, 0xFFFF, 6);
             EncounterEffectInterp_Init(&work->y[0], 231, -32, 6);
-            ov01_021F0788(work->trails[0], 43, 43, 312, 0, 6, work->window, 86, 64, 15);
-            ov01_021F074C(&position, FX32_CONST(43), FX32_CONST(231), 0);
+            RectTrail_Start(work->trails[0], 43, 43, 312, 0, 6, work->window, 86, 64, 15);
+            EncounterEffect_SetVecFx32(&position, FX32_CONST(43), FX32_CONST(231), 0);
             Sprite_SetMatrix(work->sprites[0], &position);
             Sprite_SetDrawFlag(work->sprites[0], TRUE);
             work->active[0] = TRUE;
@@ -512,8 +512,8 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         if (--work->timer < 0) {
             EncounterEffectInterp_Init(&work->y[1], 231, -32, 6);
             EncounterEffectInterp_Init(&work->rotation[1], 0, -0xFFFF, 6);
-            ov01_021F0788(work->trails[1], 215, 215, 312, 0, 6, work->window, 86, 64, 15);
-            ov01_021F074C(&position, FX32_CONST(215), FX32_CONST(231), 1);
+            RectTrail_Start(work->trails[1], 215, 215, 312, 0, 6, work->window, 86, 64, 15);
+            EncounterEffect_SetVecFx32(&position, FX32_CONST(215), FX32_CONST(231), 1);
             Sprite_SetMatrix(work->sprites[1], &position);
             Sprite_SetDrawFlag(work->sprites[1], TRUE);
             work->active[1] = TRUE;
@@ -525,8 +525,8 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         if (--work->timer < 0) {
             EncounterEffectInterp_Init(&work->y[2], 231, -32, 6);
             EncounterEffectInterp_Init(&work->rotation[2], 0, 0xFFFF, 6);
-            ov01_021F0788(work->trails[2], 129, 129, 312, 0, 6, work->window, 86, 64, 15);
-            ov01_021F074C(&position, FX32_CONST(129), FX32_CONST(231), 2);
+            RectTrail_Start(work->trails[2], 129, 129, 312, 0, 6, work->window, 86, 64, 15);
+            EncounterEffect_SetVecFx32(&position, FX32_CONST(129), FX32_CONST(231), 2);
             Sprite_SetMatrix(work->sprites[2], &position);
             Sprite_SetDrawFlag(work->sprites[2], TRUE);
             work->active[2] = TRUE;
@@ -545,14 +545,14 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         if (effect->done != NULL) {
             *effect->done = TRUE;
         }
-        ov01_021F12D0(&work->wave);
+        EncounterEffectHBlankWave_Free(&work->wave);
         work->waveActive = FALSE;
         for (i = 0; i < BALL_DROP_SPRITE_COUNT; i++) {
             Sprite_Delete(work->sprites[i]);
-            ov01_021F0780(work->trails[i]);
+            RectTrail_Free(work->trails[i]);
         }
-        ov01_021F06EC(&work->spriteManager, &work->spriteResources);
-        ov01_021F05F4(&work->spriteManager);
+        EncounterEffect_FreeSpriteResources(&work->spriteManager, &work->spriteResources);
+        EncounterEffect_FreeSprites(&work->spriteManager);
         ClearWindowTilemapAndCopyToVram(work->window);
         RemoveWindow(work->window);
         WindowArray_Delete(work->window, 1);
@@ -562,11 +562,11 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         return;
     }
     if (work->waveActive == TRUE) {
-        ov01_021F1310(&work->wave, 2);
+        EncounterEffectHBlankWave_AlternateDirection(&work->wave, 2);
     }
     for (i = 0; i < BALL_DROP_SPRITE_COUNT; i++) {
         if (work->active[i] == TRUE) {
-            if (ov01_021F07E0(work->trails[i])) {
+            if (RectTrail_Update(work->trails[i])) {
                 work->active[i] = FALSE;
             }
             EncounterEffectInterp_Update(&work->y[i]);
@@ -598,9 +598,9 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
         memset(effect->work, 0, sizeof(RisingBallEffectWork));
         work = effect->work;
         work->camera = effect->fieldSystem->camera;
-        ov01_021F05C4(&work->spriteManager, 1, 1);
-        ov01_021F0614(effect->narc, &work->spriteManager, &work->spriteResources, 0, 1, 4, 6, 5, 600000);
-        work->sprite = ov01_021F0718(&work->spriteManager, &work->spriteResources, FX32_CONST(128), -FX32_CONST(32), 0, 0);
+        EncounterEffect_InitSprites(&work->spriteManager, 1, 1);
+        EncounterEffect_LoadSpriteResources(effect->narc, &work->spriteManager, &work->spriteResources, 0, 1, 4, 6, 5, 600000);
+        work->sprite = EncounterEffect_CreateSprite(&work->spriteManager, &work->spriteResources, FX32_CONST(128), -FX32_CONST(32), 0, 0);
         Sprite_SetDrawFlag(work->sprite, FALSE);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         effect->state++;
@@ -619,7 +619,7 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
         Sprite_SetDrawFlag(work->sprite, TRUE);
         EncounterEffectQuadInterp_Init(&work->scaleX, 410, FX32_CONST(2), 0, 12);
         EncounterEffectQuadInterp_Init(&work->scaleY, 410, FX32_CONST(2), 0, 12);
-        ov01_021F074C(&scale, work->scaleX.value, work->scaleY.value, 0);
+        EncounterEffect_SetVecFx32(&scale, work->scaleX.value, work->scaleY.value, 0);
         Sprite_SetScaleAndAffineType(work->sprite, &scale, 2);
         EncounterEffectInterp_Init(&work->rotation, 0, 0xFFFF, 12);
         effect->state++;
@@ -627,12 +627,12 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
     case 4:
         done = EncounterEffectQuadInterp_Update(&work->y);
         x = 2 << 18;
-        ov01_021F074C(&position, x, work->y.value - (x >> 2), 0);
+        EncounterEffect_SetVecFx32(&position, x, work->y.value - (x >> 2), 0);
         matrix = position;
         Sprite_SetMatrix(work->sprite, &matrix);
         EncounterEffectQuadInterp_Update(&work->scaleX);
         EncounterEffectQuadInterp_Update(&work->scaleY);
-        ov01_021F074C(&scale, work->scaleX.value, work->scaleY.value, 0);
+        EncounterEffect_SetVecFx32(&scale, work->scaleX.value, work->scaleY.value, 0);
         Sprite_SetAffineScale(work->sprite, &scale);
         EncounterEffectInterp_Update(&work->rotation);
         Sprite_SetAffineZRotation(work->sprite, (u16)work->rotation.value);
@@ -662,8 +662,8 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
             *effect->done = TRUE;
         }
         Sprite_Delete(work->sprite);
-        ov01_021F06EC(&work->spriteManager, &work->spriteResources);
-        ov01_021F05F4(&work->spriteManager);
+        EncounterEffect_FreeSpriteResources(&work->spriteManager, &work->spriteResources);
+        EncounterEffect_FreeSprites(&work->spriteManager);
         EncounterEffect_Finish(effect, task);
         break;
     }
@@ -688,10 +688,10 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
         memset(effect->work, 0, sizeof(BallFallEffectWork));
         work = effect->work;
         work->camera = effect->fieldSystem->camera;
-        ov01_021F05C4(&work->spriteManager, BALL_DROP_SPRITE_COUNT, 1);
-        ov01_021F0614(effect->narc, &work->spriteManager, &work->spriteResources, 0, 1, 4, 6, 5, 600000);
+        EncounterEffect_InitSprites(&work->spriteManager, BALL_DROP_SPRITE_COUNT, 1);
+        EncounterEffect_LoadSpriteResources(effect->narc, &work->spriteManager, &work->spriteResources, 0, 1, 4, 6, 5, 600000);
         for (i = 0; i < BALL_DROP_SPRITE_COUNT; i++) {
-            work->sprites[i] = ov01_021F0718(&work->spriteManager, &work->spriteResources, 0, -32, 0, 0);
+            work->sprites[i] = EncounterEffect_CreateSprite(&work->spriteManager, &work->spriteResources, 0, -32, 0, 0);
             Sprite_SetDrawFlag(work->sprites[i], FALSE);
         }
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -701,7 +701,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
         BG_LoadPlttData(GF_BG_LYR_MAIN_3, black, sizeof(black[0]), 30);
         FillWindowPixelBuffer(work->window, 0);
         ScheduleWindowCopyToVram(work->window);
-        work->circleWipe = ov01_021F09BC(HEAP_ID_FIELD1);
+        work->circleWipe = BlockWipe_New(HEAP_ID_FIELD1);
         effect->state++;
         break;
     case 1:
@@ -717,7 +717,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
     case 3:
         if (--work->timer <= 0) {
             EncounterEffectInterp_Init(&work->y[0], -32, 224, 5);
-            ov01_021F074C(&position, FX32_CONST(128), -FX32_CONST(32), 0);
+            EncounterEffect_SetVecFx32(&position, FX32_CONST(128), -FX32_CONST(32), 0);
             Sprite_SetMatrix(work->sprites[0], &position);
             Sprite_SetDrawFlag(work->sprites[0], TRUE);
             EncounterEffectInterp_Init(&work->rotation[0], 0, 0xFFFF, 5);
@@ -730,7 +730,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
     case 4:
         if (--work->timer <= 0) {
             EncounterEffectInterp_Init(&work->y[1], -32, 224, 5);
-            ov01_021F074C(&position, FX32_CONST(208), -FX32_CONST(32), 0);
+            EncounterEffect_SetVecFx32(&position, FX32_CONST(208), -FX32_CONST(32), 0);
             Sprite_SetMatrix(work->sprites[1], &position);
             Sprite_SetDrawFlag(work->sprites[1], TRUE);
             EncounterEffectInterp_Init(&work->rotation[1], 0, -0xFFFF, 5);
@@ -743,7 +743,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
     case 5:
         if (--work->timer <= 0) {
             EncounterEffectInterp_Init(&work->y[2], -32, 224, 5);
-            ov01_021F074C(&position, FX32_CONST(48), -FX32_CONST(32), 0);
+            EncounterEffect_SetVecFx32(&position, FX32_CONST(48), -FX32_CONST(32), 0);
             Sprite_SetMatrix(work->sprites[2], &position);
             Sprite_SetDrawFlag(work->sprites[2], TRUE);
             EncounterEffectInterp_Init(&work->rotation[2], 0, 0xFFFF, 5);
@@ -761,13 +761,13 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
         }
         break;
     case 7:
-        ov01_021F0A0C(work->circleWipe, 1, 1, work->window, 15);
+        BlockWipe_Start(work->circleWipe, 1, 1, work->window, 15);
         distance = Camera_GetDistance(work->camera);
         EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (125 << 15), FX32_CONST(10), 64);
         effect->state++;
         break;
     case 8:
-        done = ov01_021F0A4C(work->circleWipe);
+        done = BlockWipe_Update(work->circleWipe);
         ScheduleWindowCopyToVram(work->window);
         EncounterEffectQuadInterp_Update(&work->cameraDistance);
         Camera_SetDistance(work->cameraDistance.value, work->camera);
@@ -783,9 +783,9 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
         for (i = 0; i < BALL_DROP_SPRITE_COUNT; i++) {
             Sprite_Delete(work->sprites[i]);
         }
-        ov01_021F06EC(&work->spriteManager, &work->spriteResources);
-        ov01_021F05F4(&work->spriteManager);
-        ov01_021F09EC(work->circleWipe);
+        EncounterEffect_FreeSpriteResources(&work->spriteManager, &work->spriteResources);
+        EncounterEffect_FreeSprites(&work->spriteManager);
+        BlockWipe_Free(work->circleWipe);
         ClearWindowTilemapAndCopyToVram(work->window);
         RemoveWindow(work->window);
         WindowArray_Delete(work->window, 1);

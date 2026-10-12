@@ -14,21 +14,21 @@
 	.public _02012A18
 	.public _02012A72
 	.public _02012A86
-	.public sub_020127B8
-	.public sub_02012884
-	.public sub_0201289C
-	.public sub_020128E0
-	.public sub_02012940
-	.public sub_02012A2C
+	.public MirroredSectorWipe_BuildScanlines
+	.public MirroredSectorWipe_Interpolate
+	.public LineShutterWipe_Begin
+	.public LineShutterWipe_Update
+	.public LineShutterWipe_Init
+	.public LineShutterWipe_Step
 	.include "unk_0201010C.inc"
 	.include "global.inc"
 	.text
-	.public sub_02012884
-	.public sub_0201289C
-	.public sub_020128E0
-	.public sub_02012A2C
-	thumb_func_start sub_02012940
-sub_02012940: ; 0x02012940
+	.public MirroredSectorWipe_Interpolate
+	.public LineShutterWipe_Begin
+	.public LineShutterWipe_Update
+	.public LineShutterWipe_Step
+	thumb_func_start LineShutterWipe_Init
+LineShutterWipe_Init: ; 0x02012940
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x20
 	ldr r7, [sp, #0x38]
@@ -142,4 +142,4 @@ _02012A18:
 	bl sub_02011068
 	add sp, #0x20
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end sub_02012940
+	thumb_func_end LineShutterWipe_Init

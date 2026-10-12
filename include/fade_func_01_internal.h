@@ -13,8 +13,8 @@ typedef struct FadeWork {
 void BrightnessTransition_Start(FadeWork *, u32, u32);
 BOOL BrightnessTransition_Run(FadeWork *);
 void sub_0200FCDC(u16);
-void sub_0201289C(FadeWork *, const void *);
-BOOL sub_020128E0(FadeWork *);
+void LineShutterWipe_Begin(FadeWork *, const void *);
+BOOL LineShutterWipe_Update(FadeWork *);
 extern const u8 _020F5D60[];
 typedef struct FadeParam {
     const void *first;

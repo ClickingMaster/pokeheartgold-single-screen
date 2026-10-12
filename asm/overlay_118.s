@@ -98,7 +98,7 @@ _0225F050:
 	str r0, [sp, #0x10]
 	ldr r0, [r4, #0x20]
 	mov r3, #0xa6
-	bl ov01_021F0500
+	bl EncounterEffect_LoadBgGraphicsMirrored
 	mov r0, #2
 	mov r1, #0
 	bl SetBgPriority

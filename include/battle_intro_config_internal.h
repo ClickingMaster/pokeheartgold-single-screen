@@ -29,7 +29,7 @@ extern const PackedBattleParam _020FC3CA[32];
 extern const BattleIntroMusic _020FC40A[45];
 
 void GF_AssertFail(void);
-u32 ov01_021F0D20(BattleSetupLite *);
+u32 EncounterEffect_GetDefaultEffect(BattleSetupLite *);
 void *Save_VarsFlags_Get(void *);
 BOOL Save_VarsFlags_FlypointFlagAction(void *, int, int);
 u32 MapHeader_GetRegionNo(u32);

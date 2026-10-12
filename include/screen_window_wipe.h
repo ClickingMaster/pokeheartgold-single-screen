@@ -35,14 +35,14 @@ typedef struct ClockWipeFade {
     enum HeapID heapId;
 } ClockWipeFade; // size: 0x24
 
-typedef struct ClockWipeScanlines {
+typedef struct ScreenWipeScanlines {
     void *buffer;
     int count;
     int screen;
-} ClockWipeScanlines; // the palette fade module's scanline buffer
+} ScreenWipeScanlines; // the palette fade module's scanline buffer
 
 typedef struct ClockWipe {
-    ClockWipeScanlines scanlines;
+    ScreenWipeScanlines scanlines;
     int centerX;
     int centerY;
     int unused14;

@@ -33,19 +33,19 @@
 	.public _02012DCC
 	.public _02012DCE
 	.public _02012DD4
-	.public sub_02012A90
-	.public sub_02012ACC
-	.public sub_02012B1C
-	.public sub_02012B80
-	.public sub_02012BE8
-	.public sub_02012C68
-	.public sub_02012CDC
-	.public sub_02012D4C
+	.public LineShutterWipe_BuildLines
+	.public LineShutterWipe_FillRange
+	.public RectShutterWipe_Begin
+	.public RectShutterWipe_Update
+	.public RectShutterWipe_InitRectFirst
+	.public RectShutterWipe_StepRectFirst
+	.public RectShutterWipe_InitShutterFirst
+	.public RectShutterWipe_StepShutterFirst
 	.include "unk_0201010C.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02012A90
-sub_02012A90: ; 0x02012A90
+	thumb_func_start LineShutterWipe_BuildLines
+LineShutterWipe_BuildLines: ; 0x02012A90
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	mov r0, #0x31
@@ -69,7 +69,7 @@ _02012AA6:
 	ldr r3, [r5, r3]
 	add r0, r0, r4
 	add r1, r5, #0
-	bl sub_02012ACC
+	bl LineShutterWipe_FillRange
 	ldr r0, [r5, r7]
 	add r6, r6, #1
 	add r4, r4, #4
@@ -77,9 +77,9 @@ _02012AA6:
 	blt _02012AA6
 _02012ACA:
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end sub_02012A90
-	thumb_func_start sub_02012ACC
-sub_02012ACC: ; 0x02012ACC
+	thumb_func_end LineShutterWipe_BuildLines
+	thumb_func_start LineShutterWipe_FillRange
+LineShutterWipe_FillRange: ; 0x02012ACC
 	push {r3, r4, r5, r6, r7, lr}
 	add r7, r0, #0
 	ldrb r6, [r7]
@@ -126,9 +126,9 @@ _02012B12:
 	blt _02012B04
 _02012B1A:
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end sub_02012ACC
-	thumb_func_start sub_02012B1C
-sub_02012B1C: ; 0x02012B1C
+	thumb_func_end LineShutterWipe_FillRange
+	thumb_func_start RectShutterWipe_Begin
+RectShutterWipe_Begin: ; 0x02012B1C
 	push {r3, r4, r5, lr}
 	sub sp, #0x10
 	add r5, r0, #0
@@ -157,7 +157,7 @@ sub_02012B1C: ; 0x02012B1C
 	ldr r2, [r5, #4]
 	ldr r3, [r5, #8]
 	add r1, r4, #0
-	bl sub_02012BE8
+	bl RectShutterWipe_InitRectFirst
 	b _02012B76
 _02012B5E:
 	str r1, [sp]
@@ -170,16 +170,16 @@ _02012B5E:
 	ldr r2, [r5, #4]
 	ldr r3, [r5, #8]
 	add r1, r4, #0
-	bl sub_02012CDC
+	bl RectShutterWipe_InitShutterFirst
 _02012B76:
 	ldr r0, [r5, #0xc]
 	add r0, r0, #1
 	str r0, [r5, #0xc]
 	add sp, #0x10
 	pop {r3, r4, r5, pc}
-	thumb_func_end sub_02012B1C
-	thumb_func_start sub_02012B80
-sub_02012B80: ; 0x02012B80
+	thumb_func_end RectShutterWipe_Begin
+	thumb_func_start RectShutterWipe_Update
+RectShutterWipe_Update: ; 0x02012B80
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	ldr r1, [r5, #0xc]
@@ -198,11 +198,11 @@ _02012B98:
 	cmp r1, #0
 	bne _02012BA8
 	add r1, r5, #0
-	bl sub_02012C68
+	bl RectShutterWipe_StepRectFirst
 	b _02012BAE
 _02012BA8:
 	add r1, r5, #0
-	bl sub_02012D4C
+	bl RectShutterWipe_StepShutterFirst
 _02012BAE:
 	cmp r0, #1
 	bne _02012BDE
@@ -233,9 +233,9 @@ _02012BDE:
 	pop {r3, r4, r5, pc}
 	nop
 _02012BE4: .word 0x00000386
-	thumb_func_end sub_02012B80
-	thumb_func_start sub_02012BE8
-sub_02012BE8: ; 0x02012BE8
+	thumb_func_end RectShutterWipe_Update
+	thumb_func_start RectShutterWipe_InitRectFirst
+RectShutterWipe_InitRectFirst: ; 0x02012BE8
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
 	add r4, r1, #0
@@ -273,7 +273,7 @@ sub_02012BE8: ; 0x02012BE8
 	ldr r0, [sp, #0x24]
 	str r0, [sp, #4]
 	add r0, r5, #0
-	bl sub_020117A0
+	bl RectWipe_Init
 	ldrb r0, [r4, #8]
 	cmp r0, #0
 	bne _02012C4C
@@ -297,9 +297,9 @@ _02012C58:
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _02012C64: .word 0x00000385
-	thumb_func_end sub_02012BE8
-	thumb_func_start sub_02012C68
-sub_02012C68: ; 0x02012C68
+	thumb_func_end RectShutterWipe_InitRectFirst
+	thumb_func_start RectShutterWipe_StepRectFirst
+RectShutterWipe_StepRectFirst: ; 0x02012C68
 	push {r4, r5, r6, lr}
 	sub sp, #0x10
 	add r4, r1, #0
@@ -315,7 +315,7 @@ sub_02012C68: ; 0x02012C68
 	beq _02012CD0
 	b _02012CD2
 _02012C84:
-	bl sub_020117FC
+	bl RectWipe_Step
 	cmp r0, #1
 	bne _02012CD2
 	ldr r2, _02012CD8 ; =0x00000385
@@ -338,11 +338,11 @@ _02012C84:
 	ldr r3, [r4, #8]
 	add r0, #0x4c
 	add r1, #0xc
-	bl sub_02012940
+	bl LineShutterWipe_Init
 	b _02012CD2
 _02012CBA:
 	add r0, #0x4c
-	bl sub_02012A2C
+	bl LineShutterWipe_Step
 	cmp r0, #1
 	bne _02012CD2
 	ldr r0, _02012CD8 ; =0x00000385
@@ -359,9 +359,9 @@ _02012CD2:
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 _02012CD8: .word 0x00000385
-	thumb_func_end sub_02012C68
-	thumb_func_start sub_02012CDC
-sub_02012CDC: ; 0x02012CDC
+	thumb_func_end RectShutterWipe_StepRectFirst
+	thumb_func_start RectShutterWipe_InitShutterFirst
+RectShutterWipe_InitShutterFirst: ; 0x02012CDC
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	add r4, r1, #0
@@ -407,7 +407,7 @@ sub_02012CDC: ; 0x02012CDC
 	add r0, r5, #0
 	add r0, #0x4c
 	add r1, #0xc
-	bl sub_02012940
+	bl LineShutterWipe_Init
 	ldr r0, _02012D48 ; =0x00000385
 	mov r1, #0
 	strb r1, [r5, r0]
@@ -415,9 +415,9 @@ sub_02012CDC: ; 0x02012CDC
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _02012D48: .word 0x00000385
-	thumb_func_end sub_02012CDC
-	thumb_func_start sub_02012D4C
-sub_02012D4C: ; 0x02012D4C
+	thumb_func_end RectShutterWipe_InitShutterFirst
+	thumb_func_start RectShutterWipe_StepShutterFirst
+RectShutterWipe_StepShutterFirst: ; 0x02012D4C
 	push {r4, r5, r6, lr}
 	sub sp, #8
 	add r4, r1, #0
@@ -434,7 +434,7 @@ sub_02012D4C: ; 0x02012D4C
 	b _02012DCE
 _02012D68:
 	add r0, #0x4c
-	bl sub_02012A2C
+	bl LineShutterWipe_Step
 	cmp r0, #1
 	bne _02012DCE
 	ldr r2, _02012DD4 ; =0x00000385
@@ -451,7 +451,7 @@ _02012D68:
 	ldr r1, [r5, r1]
 	ldr r3, [r4, #8]
 	add r0, r5, #0
-	bl sub_020117A0
+	bl RectWipe_Init
 	mov r0, #0xe
 	lsl r0, r0, #6
 	ldr r3, [r5, r0]
@@ -471,7 +471,7 @@ _02012DAC:
 	bl sub_02011068
 	b _02012DCE
 _02012DB8:
-	bl sub_020117FC
+	bl RectWipe_Step
 	cmp r0, #1
 	bne _02012DCE
 	ldr r0, _02012DD4 ; =0x00000385
@@ -488,4 +488,4 @@ _02012DCE:
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 _02012DD4: .word 0x00000385
-	thumb_func_end sub_02012D4C
+	thumb_func_end RectShutterWipe_StepShutterFirst

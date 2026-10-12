@@ -16,5 +16,5 @@
 .public EncounterEffect_StartFlash
 .public EncounterEffectQuadInterp_Init
 .public EncounterEffectQuadInterp_Update
-.public ov01_021F0500
+.public EncounterEffect_LoadBgGraphicsMirrored
 .public EncounterEffect_KimonoGirl

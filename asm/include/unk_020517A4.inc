@@ -8,4 +8,4 @@
 .public GetFirstAliveMonInParty_CrashIfNone
 .public Save_VarsFlags_FlypointFlagAction
 .public GetMonData
-.public ov01_021F0D20
+.public EncounterEffect_GetDefaultEffect

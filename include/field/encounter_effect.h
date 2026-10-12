@@ -4,6 +4,7 @@
 #include "bg_window.h"
 #include "field_system.h"
 #include "filesystem.h"
+#include "scanline_effect.h"
 #include "sprite.h"
 #include "sys_task.h"
 
@@ -48,18 +49,20 @@ typedef struct EncounterEffectQuadInterp {
 // Sprite manager and one resource set (character, palette, cell, animation) set up by overlay 01
 typedef struct EncounterEffectSpriteManager {
     SpriteList *spriteList;
-    u8 unk_04[0x128];
-    void *resourceManagers[4];
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resourceManagers[4];
 } EncounterEffectSpriteManager;
 
 typedef struct EncounterEffectSpriteResources {
-    void *resourceObjects[4];
-    u8 unk_10[0x24];
+    SpriteResource *resourceObjects[4];
+    SpriteResourcesHeader header;
 } EncounterEffectSpriteResources;
 
 // HBlank BG offset wave run by overlay 01
 typedef struct EncounterEffectHBlankWave {
-    u8 unk_00[0xC];
+    ScanlineEffect *effect;
+    SysTask *task; // swaps the scanline buffers every other frame
+    u32 frames;
 } EncounterEffectHBlankWave;
 
 // Encounter effect core (src/field/encounter_effect.c): overlay loading, the effect task, brightness flashes
@@ -78,16 +81,35 @@ BOOL EncounterEffectInterp_UpdateFx(EncounterEffectInterp *interp);
 void EncounterEffectQuadInterp_Init(EncounterEffectQuadInterp *interp, s32 start, s32 end, s32 velocity, s32 duration);
 BOOL EncounterEffectQuadInterp_Update(EncounterEffectQuadInterp *interp);
 
-// Overlay 01 helpers used by the effects
-void ov01_021F05C4(EncounterEffectSpriteManager *spriteManager, int maxSprites, int resourceCount);
-void ov01_021F05F4(EncounterEffectSpriteManager *spriteManager);
-void ov01_021F0614(NARC *narc, EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources *resources, u32 charMember, int compressed, u32 plttMember, u32 cellMember, u32 animMember, u32 resourceId);
-void ov01_021F06EC(EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources *resources);
-Sprite *ov01_021F0718(EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources *resources, int x, int y, int z, int animSeq);
-void ov01_021F0960(Window *window, s16 top, s16 bottom, s16 left, s16 right, u8 fillColor);
-void ov01_021F12B4(EncounterEffectHBlankWave *wave, int heapID);
-void ov01_021F12D0(EncounterEffectHBlankWave *wave);
-void ov01_021F12E8(EncounterEffectHBlankWave *wave, int startLine, int endLine, int arg3, int arg4, int arg5, void *reg, int arg7, int heapID);
+// Window wipes and BG loaders (src/field/encounter_effect_wipe.c)
+void EncounterEffect_LoadBgGraphics(NARC *narc, int screenMember, int charMember, int paletteMember, int palette, int paletteCount, BgConfig *bgConfig, int bgId);
+void EncounterEffect_LoadBgGraphicsMirrored(NARC *narc, int screenMember, int charMember, int paletteMember, int palette, int paletteCount, BgConfig *bgConfig, int bgId, int mirrorBgId);
+
+// Sprites, filled rectangles, wipes and main screen brightness (src/field/encounter_effect_util.c)
+void EncounterEffect_InitSprites(EncounterEffectSpriteManager *spriteManager, int maxSprites, int resourceCount);
+void EncounterEffect_FreeSprites(EncounterEffectSpriteManager *spriteManager);
+void EncounterEffect_LoadSpriteResources(NARC *narc, EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources *resources, int plttMember, int plttCount, int charMember, int cellMember, int animMember, int resourceId);
+void EncounterEffect_FreeSpriteResources(EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources *resources);
+Sprite *EncounterEffect_CreateSprite(EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources *resources, fx32 x, fx32 y, fx32 z, int priority);
+void EncounterEffect_SetVecFx32(VecFx32 *vec, fx32 x, fx32 y, fx32 z);
+void EncounterEffect_FillWindowRect(Window *window, s16 top, s16 bottom, s16 left, s16 right, u8 fill);
+SysTask *EncounterEffect_ApplyMainBrightness(EncounterEffectInterp *brightness);
+
+// State of the running encounter effect (src/field/encounter_effect.c)
+typedef struct EncounterEffectParticles EncounterEffectParticles;
+
+typedef struct EncounterEffectState {
+    EncounterEffectParticles *particles; // particle mode of the leader effects (src/field/encounter_effect_particles.c)
+    s32 effect;
+    u32 frameCount;
+} EncounterEffectState;
+
+extern EncounterEffectState gEncounterEffectState;
+
+// HBlank BG offset wave (src/field/encounter_effect_particles.c)
+void EncounterEffectHBlankWave_Init(EncounterEffectHBlankWave *wave, int heapID);
+void EncounterEffectHBlankWave_Free(EncounterEffectHBlankWave *wave);
+void EncounterEffectHBlankWave_Start(EncounterEffectHBlankWave *wave, u8 firstLine, u8 lastLine, u32 step, fx32 amplitude, s16 speed, void *destination, u32 fill, u32 priority);
 
 // Effect callbacks (entries of overlay 01's effect table)
 void EncounterEffect_WildRowsWhite(SysTask *task, EncounterEffectTask *effect);

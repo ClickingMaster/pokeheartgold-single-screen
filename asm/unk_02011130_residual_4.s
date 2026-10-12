@@ -3,34 +3,34 @@
 	.include "global.inc"
 	.text
 	.public sub_02011130
-	.public sub_0201164C
-	.public sub_0201169C
-	.public sub_020116EC
-	.public sub_02011744
-	.public sub_020117A0
-	.public sub_020117FC
-	.public sub_02011884
-	.public sub_020118BC
-	.public sub_02011918
-	.public sub_020119F4
-	.public sub_02011A44
-	.public sub_02011AD8
-	.public sub_02011B5C
-	.public sub_02011B94
-	.public sub_02011BF0
-	.public sub_02011CB8
-	.public sub_02011D08
-	.public sub_02011D60
-	.public sub_02011D98
-	.public sub_02011DEC
-	.public sub_02011EC0
-	.public sub_02011F10
-	.public sub_02011FF8
-	.public sub_02012030
-	.public sub_02012090
-	.public sub_020121A4
-	thumb_func_start sub_02011A44
-sub_02011A44: ; 0x02011A44
+	.public RectWipe_Begin
+	.public RectWipe_Update
+	.public DoubleRectWipe_Begin
+	.public DoubleRectWipe_Update
+	.public RectWipe_Init
+	.public RectWipe_Step
+	.public CircleWipe_Begin
+	.public CircleWipe_Update
+	.public CircleWipe_Init
+	.public CircleWipe_Step
+	.public CircleWipe_GetScanlineSpan
+	.public CircleWipe_BuildScanlines
+	.public WedgeWipe_Begin
+	.public WedgeWipe_Update
+	.public WedgeWipe_Init
+	.public WedgeWipe_Step
+	.public WedgeWipe_BuildScanlines
+	.public SlopeWipe_Begin
+	.public SlopeWipe_Update
+	.public SlopeWipe_Init
+	.public SlopeWipe_Step
+	.public SlopeWipe_BuildScanlines
+	.public MultiRectWipe_Begin
+	.public MultiRectWipe_Update
+	.public MultiRectWipe_Init
+	.public MultiRectWipe_Step
+	thumb_func_start CircleWipe_GetScanlineSpan
+CircleWipe_GetScanlineSpan: ; 0x02011A44
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	str r1, [sp]
@@ -106,9 +106,9 @@ _02011AC4:
 _02011AD4:
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
-	thumb_func_end sub_02011A44
-	thumb_func_start sub_02011AD8
-sub_02011AD8: ; 0x02011AD8
+	thumb_func_end CircleWipe_GetScanlineSpan
+	thumb_func_start CircleWipe_BuildScanlines
+CircleWipe_BuildScanlines: ; 0x02011AD8
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	mov r1, #0
@@ -128,7 +128,7 @@ _02011AEA:
 	ldr r0, [r5, #0xc]
 	ldr r1, [r5, #0x10]
 	add r3, r4, #0
-	bl sub_02011A44
+	bl CircleWipe_GetScanlineSpan
 	b _02011B3E
 _02011B04:
 	lsl r0, r2, #1
@@ -159,7 +159,7 @@ _02011B2C:
 	ldr r0, [r5, #0xc]
 	ldr r1, [r5, #0x10]
 	add r3, r4, #0
-	bl sub_02011A44
+	bl CircleWipe_GetScanlineSpan
 _02011B3E:
 	mov r0, #3
 	ldr r1, [sp, #0xc]
@@ -176,4 +176,4 @@ _02011B3E:
 	add sp, #0x10
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end sub_02011AD8
+	thumb_func_end CircleWipe_BuildScanlines

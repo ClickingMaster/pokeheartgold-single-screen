@@ -15,44 +15,44 @@
 	.public Task_EncounterEffectFlash
 	.public EncounterEffectQuadInterp_Init
 	.public EncounterEffectQuadInterp_Update
-	.public ov01_021EFFEC
-	.public ov01_021F0050
-	.public ov01_021F010C
-	.public ov01_021F0174
-	.public ov01_021F01D0
-	.public ov01_021F0250
-	.public ov01_021F02C4
-	.public ov01_021F0360
-	.public ov01_021F03C8
-	.public ov01_021F03F8
-	.public ov01_021F0454
-	.public ov01_021F0500
-	.public ov01_021F0614
-	.public ov01_021F07E0
-	.public ov01_021F08C0
-	.public ov01_021F0A4C
-	.public ov01_021F0B78
-	.public ov01_021F0CDC
-	.public ov01_021F0D20
-	.public ov01_021F0DDC
-	.public ov01_021F0F08
-	.public ov01_021F10C8
-	.public ov01_021F1148
-	.public ov01_021F1224
-	.public ov01_021F1250
-	.public ov01_021F1310
+	.public StripeWipe_New
+	.public StripeWipe_Start
+	.public Task_StripeWipe_Update
+	.public StripeWipe_End
+	.public HBlank_StripeWipe
+	.public SplitWipe_New
+	.public SplitWipe_Start
+	.public Task_SplitWipe_Update
+	.public HBlank_SplitWipe
+	.public SplitWipe_End
+	.public EncounterEffect_LoadBgGraphics
+	.public EncounterEffect_LoadBgGraphicsMirrored
+	.public EncounterEffect_LoadSpriteResources
+	.public RectTrail_Update
+	.public MovingRect_Update
+	.public BlockWipe_Update
+	.public ZigzagWipe_Start
+	.public ZigzagWipe_End
+	.public EncounterEffect_GetDefaultEffect
+	.public EncounterEffect_StartParticleMode
+	.public EncounterEffect_LoadParticles
+	.public Task_ParticleSetup_Main
+	.public EncounterEffect_SetupParticleGraphics
+	.public EncounterEffectParticles_AllocTexVram
+	.public EncounterEffectParticles_AllocPlttVram
+	.public EncounterEffectHBlankWave_AlternateDirection
 	.include "overlay_01_021EFB38.inc"
 	.include "global.inc"
 
 	.text
 	.public ov01_022067D0
-	.public ov01_022067E0
-	.public ov01_022067FC
-	.public ov01_02206844
-	.public ov01_0220689C
+	.public sParticleBaseScale
+	.public sParticleGraphicsModes
+	.public sParticleCaptureBgTemplate
+	.public sParticleGraphicsBanks
 	.public sEncounterEffectFuncs
-	.public ov01_02206980
-	.public sEncounterEffectState
+	.public sBlockWipeColumnOrder
+	.public gEncounterEffectState
 	.public EncounterEffect_Start
 	.public EncounterEffect_Finish
 	.public EncounterEffect_StartFlash
@@ -65,58 +65,58 @@
 	.public BrightnessInterp_Init
 	.public BrightnessInterp_Update
 	.public Task_ApplyBrightness
-	.public ov01_021F0028
-	.public ov01_021F00DC
-	.public ov01_021F029C
-	.public ov01_021F0330
-	.public ov01_021F05C4
-	.public ov01_021F05F4
-	.public ov01_021F06EC
-	.public ov01_021F0718
-	.public ov01_021F074C
-	.public ov01_021F0768
-	.public ov01_021F0780
-	.public ov01_021F0788
-	.public ov01_021F0848
-	.public ov01_021F0860
-	.public ov01_021F0868
-	.public ov01_021F0960
-	.public ov01_021F09BC
-	.public ov01_021F09EC
-	.public ov01_021F0A0C
-	.public ov01_021F0B44
-	.public ov01_021F0B5C
-	.public ov01_021F0C40
-	.public ov01_021F0C7C
-	.public ov01_021F0CA8
-	.public ov01_021F0DB0
-	.public ov01_021F0DC8
-	.public ov01_021F0E74
-	.public ov01_021F0E90
-	.public ov01_021F0EAC
-	.public ov01_021F0EC0
-	.public ov01_021F0FB8
-	.public ov01_021F1008
-	.public ov01_021F1044
-	.public ov01_021F1060
-	.public ov01_021F1094
-	.public ov01_021F1210
-	.public ov01_021F127C
-	.public ov01_021F1290
-	.public ov01_021F12B4
-	.public ov01_021F12D0
-	.public ov01_021F12E8
+	.public StripeWipe_Free
+	.public Task_StripeWipe_Begin
+	.public SplitWipe_Free
+	.public Task_SplitWipe_Begin
+	.public EncounterEffect_InitSprites
+	.public EncounterEffect_FreeSprites
+	.public EncounterEffect_FreeSpriteResources
+	.public EncounterEffect_CreateSprite
+	.public EncounterEffect_SetVecFx32
+	.public RectTrail_New
+	.public RectTrail_Free
+	.public RectTrail_Start
+	.public MovingRect_New
+	.public MovingRect_Free
+	.public MovingRect_Start
+	.public EncounterEffect_FillWindowRect
+	.public BlockWipe_New
+	.public BlockWipe_Free
+	.public BlockWipe_Start
+	.public ZigzagWipe_New
+	.public ZigzagWipe_Free
+	.public Task_ZigzagWipe_Begin
+	.public Task_ZigzagWipe_Update
+	.public HBlank_ZigzagWipe
+	.public Task_ApplyMainBrightness
+	.public EncounterEffect_ApplyMainBrightness
+	.public EncounterEffect_RequestParticleSetup
+	.public EncounterEffect_IsParticleSetupDone
+	.public EncounterEffect_DrawParticles
+	.public EncounterEffect_EndParticleMode
+	.public EncounterEffect_CreateEmitters
+	.public EncounterEffect_UpdateParticles
+	.public EncounterEffect_AreParticlesDone
+	.public EncounterEffect_FreeParticles
+	.public Task_ParticleSetup_VWait
+	.public EncounterEffect_FreeParticleGraphics
+	.public EncounterEffectHBlankWave_StartTask
+	.public Task_EncounterEffectHBlankWave
+	.public EncounterEffectHBlankWave_Init
+	.public EncounterEffectHBlankWave_Free
+	.public EncounterEffectHBlankWave_Start
 
 	thumb_func_start Task_RunEncounterEffect
 Task_RunEncounterEffect: ; 0x021EFB38
 	push {r3, lr}
-	ldr r2, _021EFB5C ; =sEncounterEffectState
+	ldr r2, _021EFB5C ; =gEncounterEffectState
 	ldr r2, [r2, #4]
 	lsl r3, r2, #2
 	ldr r2, _021EFB60 ; =sEncounterEffectFuncs
 	ldr r2, [r2, r3]
 	blx r2
-	ldr r0, _021EFB5C ; =sEncounterEffectState
+	ldr r0, _021EFB5C ; =gEncounterEffectState
 	ldr r1, [r0, #8]
 	add r1, r1, #1
 	str r1, [r0, #8]
@@ -126,7 +126,7 @@ Task_RunEncounterEffect: ; 0x021EFB38
 	bl OS_SetTick
 	pop {r3, pc}
 	.balign 4, 0
-_021EFB5C: .word sEncounterEffectState
+_021EFB5C: .word gEncounterEffectState
 _021EFB60: .word sEncounterEffectFuncs
 	thumb_func_end Task_RunEncounterEffect
 
