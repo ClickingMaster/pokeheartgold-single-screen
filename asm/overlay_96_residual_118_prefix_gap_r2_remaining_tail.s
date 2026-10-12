@@ -5,8 +5,8 @@
 
 	.text
 
-	.extern ov96_02217FD0
-	.type ov96_02217FD0, @function
+	.extern PokeathlonRingDrop_UpdateStamina
+	.type PokeathlonRingDrop_UpdateStamina, @function
 
 	.extern PokeathlonCourse_RunSubStateLoop
 	.extern PokeathlonCourse_InitStateInfo
@@ -228,13 +228,13 @@
 	.public PokeathlonRingDrop_IsOnSwitchButton
 	.public PokeathlonRingDrop_DecayVelocity
 	.public PokeathlonRingDrop_GetMonState
-	.public ov96_02215FA0
-	.public ov96_02217890
-	.public ov96_02217DBC
-	.public ov96_022186B8
-	.public ov96_02218A50
-	.public ov96_022193E4
-	.public ov96_0221978C
+	.public PokeathlonRingDrop_GetDirection
+	.public PokeathlonRingDrop_IsAttackState
+	.public PokeathlonRingDrop_FreeMonObjects
+	.public PokeathlonRingDropMon_SetDestination
+	.public PokeathlonRingDropMon_Respawn
+	.public PokeathlonRingDrop_AddScoreWindow
+	.public PokeathlonRingDropUi_GetScore
 	.public ov96_02219FDC
 	.public ov96_0221A670
 	.public ov96_0221A680
@@ -242,14 +242,14 @@
 	.public ov96_0221A69C
 	.public ov96_0221A720
 
-	.extern ov96_02217DC8
-	.type ov96_02217DC8, @function
+	.extern PokeathlonRingDropMon_ApplyPushReaction
+	.type PokeathlonRingDropMon_ApplyPushReaction, @function
 
-	.extern ov96_02217E08
-	.type ov96_02217E08, @function
+	.extern PokeathlonRingDropMon_GetPushReaction
+	.type PokeathlonRingDropMon_GetPushReaction, @function
 
-	thumb_func_start ov96_022180CC
-ov96_022180CC: ; 0x022180CC
+	thumb_func_start PokeathlonRingDrop_UpdateMons
+PokeathlonRingDrop_UpdateMons: ; 0x022180CC
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x24
 	str r0, [sp]
@@ -357,13 +357,13 @@ _0221819A:
 	cmp r0, #0
 	beq _022181CC
 	add r0, r4, #0
-	bl ov96_0221862C
+	bl PokeathlonRingDropMon_CanSwitch
 	cmp r0, #0
 	bne _022181C4
 	b _022182FC
 _022181C4:
 	add r0, r4, #0
-	bl ov96_0221910C
+	bl PokeathlonRingDropMon_StartSwitch
 	b _022182FC
 _022181CC:
 	bl ov96_021E6104
@@ -445,7 +445,7 @@ _02218266:
 _0221826A:
 	add r0, r4, #0
 	add r1, r5, #0
-	bl ov96_022186B8
+	bl PokeathlonRingDropMon_SetDestination
 	b _022182FC
 _02218274:
 	lsl r0, r1, #3
@@ -521,7 +521,7 @@ _022182FC:
 	add r0, r5, #0
 	ldr r1, [sp, #4]
 	add r0, #0xc
-	bl ov96_02218B1C
+	bl PokeathlonRingDropMon_Update
 	ldr r0, [sp, #8]
 	add r5, #0xa8
 	add r0, r0, #1
@@ -531,20 +531,20 @@ _022182FC:
 	b _022180DE
 _02218314:
 	ldr r0, [sp, #4]
-	bl ov96_02217E7C
+	bl PokeathlonRingDrop_UpdateCollisions
 	ldr r0, [sp]
 	ldr r1, [sp, #4]
-	bl ov96_02217FD0
+	bl PokeathlonRingDrop_UpdateStamina
 	add sp, #0x24
 	pop {r4, r5, r6, r7, pc}
 	nop
 _02218328: .word 0xDFFFFFFF
 _0221832C: .word 0xBFFFFFFF
-	thumb_func_end ov96_022180CC
+	thumb_func_end PokeathlonRingDrop_UpdateMons
 
 
-	thumb_func_start ov96_02218330
-ov96_02218330: ; 0x02218330
+	thumb_func_start PokeathlonRingDrop_BuildFramePacket
+PokeathlonRingDrop_BuildFramePacket: ; 0x02218330
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x24
 	str r0, [sp]
@@ -791,7 +791,7 @@ _022184E4:
 _02218504: .word 0xFFFFCFFF
 _02218508: .word 0xFFFF3FFF
 _0221850C: .word 0x7FFFFFFF
-	thumb_func_end ov96_02218330
+	thumb_func_end PokeathlonRingDrop_BuildFramePacket
 
 
-	thumb_func_start ov96_02218510
+	thumb_func_start PokeathlonRingDrop_SetMonAffineCenter

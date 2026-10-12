@@ -4,7 +4,7 @@
 
 #include "follow_mon.h"
 #include "math_util.h"
-#include "overlay_01_021F467C.h"
+#include "field/field_motion_blur.h"
 #include "overlay_01_021F944C.h"
 #include "field/field_follow_mon.h"
 #include "screen_fade.h"
@@ -18,7 +18,7 @@ typedef struct CelebiTimeTravelCutsceneTaskData {
     u16 unk0;
     u8 unk2;
     u8 isSwirlFinished;
-    u32 unk4;
+    FieldMotionBlur *motionBlur;
     FieldSystem *fieldSystem; // 0x8
     NNSFndAllocator alloc;    // 0xC
     Field3dModel model;       // 0x1C
@@ -112,7 +112,7 @@ static BOOL Task_CelebiTimeTravelCutscene(TaskManager *taskMan) {
     case CTT_STATE_WAIT_UNLOAD_RESOURCES:
         if (IsPaletteFadeFinished() && ov02_022526EC(data)) {
             CelebiCutscene_UnloadResources(data);
-            ov01_021F46DC(&data->unk4);
+            FieldMotionBlur_Stop(&data->motionBlur);
             Heap_Free(data);
             return TRUE;
         }
@@ -128,7 +128,7 @@ static BOOL Task_CelebiTimeTravelCutscene(TaskManager *taskMan) {
 }
 
 static void CelebiCutscene_StartSwirlTask(CelebiTimeTravelCutsceneTaskData *data) {
-    data->unk4 = ov01_021F467C(3, 13);
+    data->motionBlur = FieldMotionBlur_Start(3, 13);
     SysTask_CreateOnMainQueue(Task_CelebiCutsceneSwirl, data, 0);
     data->unk2 = 0;
 }

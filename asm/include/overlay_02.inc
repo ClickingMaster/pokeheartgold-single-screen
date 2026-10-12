@@ -401,8 +401,8 @@
 .public MapProp_GetResModel
 .public MapPropManager_GetMapPropByIndex_Checked_RequireActive
 .public MapPropManager_LoadOne
-.public ov01_021F467C
-.public ov01_021F46DC
+.public FieldMotionBlur_Start
+.public FieldMotionBlur_Stop
 .public ov01_021F6A9C
 .public ov01_021F6ABC
 .public ov01_021F6AEC

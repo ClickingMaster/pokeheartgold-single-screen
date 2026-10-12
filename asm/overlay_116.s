@@ -107,7 +107,7 @@ _0225F0D2:
 _0225F0E0:
 	mov r0, #3
 	mov r1, #0xf
-	bl ov01_021F467C
+	bl FieldMotionBlur_Start
 	mov r2, #0
 	str r0, [r5]
 	mov r0, #0xc
@@ -186,7 +186,7 @@ _0225F178:
 	mov r0, #1
 	bl SetMasterBrightnessByColor
 	add r0, r5, #0
-	bl ov01_021F46DC
+	bl FieldMotionBlur_Stop
 	ldr r0, _0225F1B8 ; =0x04000050
 	mov r1, #0
 	strh r1, [r0]
@@ -288,7 +288,7 @@ _0225F242:
 _0225F24A:
 	ldrh r0, [r6, #0x10]
 	ldrh r1, [r6, #0x12]
-	bl ov01_021F467C
+	bl FieldMotionBlur_Start
 	str r0, [r5]
 	ldr r0, [r4, #0x10]
 	ldr r0, [r0, #0x24]
@@ -396,7 +396,7 @@ _0225F328:
 	mov r0, #1
 	bl SetMasterBrightnessByColor
 	add r0, r5, #0
-	bl ov01_021F46DC
+	bl FieldMotionBlur_Stop
 	ldr r0, _0225F360 ; =0x04000050
 	mov r1, #0
 	strh r1, [r0]

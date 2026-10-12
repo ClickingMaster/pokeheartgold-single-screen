@@ -26,7 +26,7 @@ typedef struct R123Rec {
 } R123Rec;
 typedef u32 (*R123Unary)(u32);
 extern void ov96_0221A400(R123Rec *);
-extern int ov96_02215FA0(const VecFx32 *);
+extern int PokeathlonRingDrop_GetDirection(const VecFx32 *);
 extern void (*ov96_0221D9A0[])(void *);
 extern R123Unary ov96_0221D9C8[];
 extern void *PokeathlonCourseScoreList_GetRanked(void *, u8);

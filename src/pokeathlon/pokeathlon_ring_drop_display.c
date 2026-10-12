@@ -41,7 +41,11 @@ BOOL PlaySE_SetVolume(u16 seqNo, int volume);
 // NitroSDK MATH_QSort (no header declares it)
 void MATH_QSort(void *base, u32 count, u32 width, int (*compare)(const void *, const void *), void *context);
 
-// Course helpers, mon objects and the Ring Drop parts that are not yet tidied (OVY_96).
+// The code calls these with an int member.
+#define PokeathlonRingDropUi_SetMemberSwitching(ui, participant, member, switching) (((void (*)(PokeathlonRingDropUi *, u8, int, int))PokeathlonRingDropUi_SetSwitching)((ui), (participant), (member), (switching)))
+#define PokeathlonRingDrop_GetTeamMemberParams(course, participant, member)         (((PokeathlonRingDropMemberParams * (*)(PokeathlonCourseData *, u8, int)) PokeathlonRingDrop_GetMemberParams)((course), (participant), (member)))
+
+// Course helpers, mon objects and the computer participants (OVY_96).
 void *PokeathlonCourseSprites_CreateResources(int heapId, int a1, int a2);
 void PokeathlonCourseSprites_FreeResources(void *resources);
 void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, u32 timer);
@@ -57,16 +61,6 @@ void ov96_021EAF60(void *monObjects, u8 index, int a2, u16 *palette);
 void PokeathlonCourseObject_SetCenterPosition(void *object, int x, int y, int a3);
 void PokeathlonCourseObject_CenterToGround(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
 void PokeathlonCourseObject_SetScale(void *object, f32 scaleX, f32 scaleY);
-void ov96_02218510(void *object, int a1);
-u8 *ov96_0221935C(PokeathlonCourseData *course, u8 participant, int member);
-void ov96_022193CC(int seqNo, BOOL own);
-void ov96_0221966C(void *ui, u8 participant, u8 rank, u8 (*sorted)[2]);
-void ov96_022196E4(void *ui, u32 seconds);
-void ov96_02219770(void *ui, BOOL a1, BOOL a2);
-BOOL ov96_02219794(void *ui, u8 participant, u8 member);
-BOOL ov96_02219940(void *ui, u8 participant, u8 member);
-void ov96_0221996C(void *ui, u8 participant, int member, int a3);
-int ov96_022186CC(int a0);
 
 #pragma force_active on
 
@@ -216,7 +210,7 @@ void PokeathlonRingDropDisplay_SwitchOut(PokeathlonRingDropMonSprites *mon, s16 
         ManagedSprite_SetDrawFlag(mon->switchSprite, TRUE);
         PokeathlonCourseMonObject_SetDrawFlag(mon->monObject, 0);
         mon->switchFrames = 0;
-        ov96_022193CC(SEQ_SE_GS_W100, own);
+        PokeathlonRingDrop_PlaySE(SEQ_SE_GS_W100, own);
         mon->switchStep++;
         break;
     case 1:
@@ -231,12 +225,12 @@ void PokeathlonRingDropDisplay_SwitchOut(PokeathlonRingDropMonSprites *mon, s16 
         break;
     case 2:
         if (own) {
-            if (ov96_02219794(ui, participant, mon->member)) {
+            if (PokeathlonRingDropUi_RunSwitch(ui, participant, mon->member)) {
                 input->switchState = 1;
                 mon->switchStep++;
             }
         } else if (cpu) {
-            if (ov96_02219940(ui, participant, mon->member)) {
+            if (PokeathlonRingDropUi_WaitSwitch(ui, participant, mon->member)) {
                 input->switchState = 1;
                 mon->switchStep++;
             }
@@ -261,7 +255,7 @@ void PokeathlonRingDropDisplay_SwitchIn(PokeathlonRingDropMonSprites *mon, s16 *
         ManagedSprite_SetPositionXYWithSubscreenOffset(mon->switchSprite, position[0], position[1] - 400, FX32_CONST(480));
         ManagedSprite_SetDrawFlag(mon->switchSprite, TRUE);
         mon->switchFrames = 0;
-        ov96_022193CC(SEQ_SE_GS_NAGERU, own);
+        PokeathlonRingDrop_PlaySE(SEQ_SE_GS_NAGERU, own);
         mon->switchStep++;
         break;
     case 1:
@@ -295,7 +289,7 @@ void PokeathlonRingDropDisplay_EndSwitch(PokeathlonRingDropMonSprites *mon, cons
     ManagedSprite_SetPositionXYWithSubscreenOffset(mon->dustSprite, position[0], position[1], FX32_CONST(480));
     ManagedSprite_ResetSpriteAnimCtrlState(mon->dustSprite);
     ManagedSprite_SetDrawFlag(mon->switchSprite, FALSE);
-    ov96_022193CC(SEQ_SE_GS_BOWA2, own);
+    PokeathlonRingDrop_PlaySE(SEQ_SE_GS_BOWA2, own);
     if (report) {
         input->switchState = 0;
     }
@@ -341,7 +335,7 @@ void PokeathlonRingDropDisplay_UpdateSwitch(PokeathlonRingDropMonPacket *packet,
     switch (mon->switchState) {
     case 1:
         if (changed) {
-            ov96_0221996C(ui, participant, packet->member, 1);
+            PokeathlonRingDropUi_SetMemberSwitching(ui, participant, packet->member, 1);
         }
         PokeathlonRingDropDisplay_SwitchOut(mon, position, ui, participant, input, hostCpu, own);
         break;
@@ -351,7 +345,7 @@ void PokeathlonRingDropDisplay_UpdateSwitch(PokeathlonRingDropMonPacket *packet,
     case 0:
         if (changed) {
             PokeathlonRingDropDisplay_EndSwitch(mon, position, input, report, own);
-            ov96_0221996C(ui, participant, packet->member, 0);
+            PokeathlonRingDropUi_SetMemberSwitching(ui, participant, packet->member, 0);
         }
         break;
     }
@@ -369,7 +363,7 @@ int PokeathlonRingDropDisplay_CompareDepth(const void *a, const void *b) {
     return -1;
 }
 
-int PokeathlonRingDropDisplay_CompareRanks(const void *a, const void *b) {
+int PokeathlonRingDropDisplay_CompareScores(const void *a, const void *b) {
     if (*(const u8 *)a == *(const u8 *)b) {
         return 0;
     }
@@ -402,12 +396,12 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
     f32 scaleY;
 
     ringDrop = PokeathlonCourse_GetHeapAllocPtr4(course);
-    if (framePacket->marks.bits.switchPressed && !display->switchPressed) {
+    if (framePacket->marks.bits.bumped && !display->bumped) {
         PlaySE(SEQ_SE_GS_IDOUHIT);
     }
     participant = 0;
     index = 0;
-    display->switchPressed = framePacket->marks.bits.switchPressed;
+    display->bumped = framePacket->marks.bits.bumped;
     packet = framePacket->mons;
     mon = display->mons;
     for (; participant < RING_DROP_PARTICIPANTS; participant++, packet++, mon++, index += RING_DROP_TEAM_SIZE) {
@@ -433,11 +427,11 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
                 BOOL nextReady = ((marks >> (next * 2)) & 3) == 1;
                 int afterNext = (u8)((member + 1) % RING_DROP_TEAM_SIZE + index);
                 BOOL afterNextReady = ((marks >> (afterNext * 2)) & 3) == 1;
-                ov96_02219770(display->ui, nextReady, afterNextReady);
+                PokeathlonRingDropUi_ShowNextReady(display->ui, nextReady, afterNextReady);
             }
         }
         if (mon->hit && packet->hit) {
-            int other = packet->opponent;
+            int other = packet->attacker;
             showHit = FALSE;
             if (other <= participant) {
                 other--;
@@ -487,8 +481,8 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
             }
         }
         mon->hit = packet->hit;
-        mon->opponent = packet->opponent;
-        PokeathlonCourseMonObject_SetAnimState(monObject, packet->power + 1);
+        mon->attacker = packet->attacker;
+        PokeathlonCourseMonObject_SetAnimState(monObject, packet->direction + 1);
         if (packet->state == 4 && mon->state != 4) {
             ov96_021EAF60(ringDrop->monObjects, objectIndex, 1, mon->palettes[team][1]);
         } else if (mon->state == 4 && packet->state != 4) {
@@ -501,15 +495,15 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
                 PlaySE_SetVolume(SEQ_SE_GS_TACKLEHATUDOU2, 64);
             }
         } else if (packet->state == 12 && mon->state != 12) {
-            if (ov96_0221935C(course, (u8)participant, team)[24]) {
+            if (PokeathlonRingDrop_GetTeamMemberParams(course, participant, team)->jumpType) {
                 PlaySE(SEQ_SE_GS_PRESSCHAKUCHI);
             }
         }
         if (packet->state == 6 && mon->state != 6) {
-            ManagedSprite_SetAnimNoRestart(mon->chargeSprite, (u16)(packet->power + 11));
+            ManagedSprite_SetAnimNoRestart(mon->chargeSprite, (u16)(packet->direction + 11));
             ManagedSprite_SetDrawFlag(mon->chargeSprite, TRUE);
         } else if ((packet->state != 6 && mon->state == 6) || (packet->state == 7 && mon->state == 5)) {
-            ManagedSprite_SetAnim(mon->chargeSprite, (u16)(packet->power + 15));
+            ManagedSprite_SetAnim(mon->chargeSprite, (u16)(packet->direction + 15));
             ManagedSprite_SetDrawFlag(mon->chargeSprite, TRUE);
         }
         if (ManagedSprite_IsAnimated(mon->chargeSprite) == TRUE) {
@@ -547,7 +541,7 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
                 mon->jumpFrames = 6;
                 mon->jumpScale = FX32_ONE;
                 PlaySE(SEQ_SE_GS_PUSH02);
-                ov96_0221996C(display->ui, (u8)participant, team, 1);
+                PokeathlonRingDropUi_SetMemberSwitching(display->ui, (u8)participant, team, 1);
                 if (participant == ov96_021E5F24(course) || hostCpu) {
                     mon->recordJump = TRUE;
                 }
@@ -555,8 +549,8 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
                 ManagedSprite_SetPositionXYWithSubscreenOffset(mon->dustSprite, packet->x, packet->y, FX32_CONST(480));
                 ManagedSprite_SetDrawFlag(mon->dustSprite, TRUE);
                 ManagedSprite_ResetSpriteAnimCtrlState(mon->dustSprite);
-                ov96_022193CC(SEQ_SE_GS_BOWA2, participant == ov96_021E5F24(course));
-                ov96_0221996C(display->ui, (u8)participant, team, 0);
+                PokeathlonRingDrop_PlaySE(SEQ_SE_GS_BOWA2, participant == ov96_021E5F24(course));
+                PokeathlonRingDropUi_SetMemberSwitching(display->ui, (u8)participant, team, 0);
                 PokeathlonCourseMonObject_SetDrawFlag(monObject, 1);
                 mon->jumping = FALSE;
             }
@@ -567,11 +561,11 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
         if (mon->jumping) {
             if (mon->recordJump) {
                 if (hostCpu) {
-                    if (ov96_02219940(ringDrop->ui, (u8)participant, (u8)mon->member)) {
+                    if (PokeathlonRingDropUi_WaitSwitch(ringDrop->ui, (u8)participant, (u8)mon->member)) {
                         mon->recordJump = FALSE;
                     }
                 } else {
-                    if (ov96_02219794(ringDrop->ui, (u8)participant, (u8)mon->member)) {
+                    if (PokeathlonRingDropUi_RunSwitch(ringDrop->ui, (u8)participant, (u8)mon->member)) {
                         mon->recordJump = FALSE;
                     }
                 }
@@ -602,10 +596,10 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
                 }
             }
             if (packet->state == 8) {
-                u8 *record = ov96_0221935C(course, (u8)participant, team);
+                PokeathlonRingDropMemberParams *params = PokeathlonRingDrop_GetTeamMemberParams(course, participant, team);
                 u32 frames;
                 if (!mon->squashFrames) {
-                    if (!record[24]) {
+                    if (!params->jumpType) {
                         if (participant == ov96_021E5F24(course)) {
                             PlaySE(SEQ_SE_DP_BOX03);
                         }
@@ -621,11 +615,11 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
             }
             if (packet->state != 8 && packet->state != 5) {
                 if (mon->squashFrames) {
-                    ov96_02218510(monObject, 1);
+                    PokeathlonRingDrop_SetMonAffineCenter(monObject, 1);
                     mon->squashFrames = 0;
                 }
             } else {
-                ov96_02218510(monObject, 0);
+                PokeathlonRingDrop_SetMonAffineCenter(monObject, 0);
             }
             PokeathlonCourseObject_SetScale(monObject, scaleX, scaleY);
         }
@@ -746,16 +740,16 @@ void PokeathlonRingDropDisplay_Update(PokeathlonRingDropDisplay *display, Pokeat
     display->status = status;
     for (i = 0; i < RING_DROP_PARTICIPANTS; i++) {
         sorted[i][1] = (u8)i;
-        sorted[i][0] = packet->mons[i].rank;
+        sorted[i][0] = packet->mons[i].score;
     }
-    MATH_QSort(sorted, RING_DROP_PARTICIPANTS, 2, PokeathlonRingDropDisplay_CompareRanks, NULL);
+    MATH_QSort(sorted, RING_DROP_PARTICIPANTS, 2, PokeathlonRingDropDisplay_CompareScores, NULL);
     for (i = 0; i < RING_DROP_PARTICIPANTS; i++) {
-        if (packet->mons[i].rank != display->ranks[i]) {
-            ov96_0221966C(display->ui, (u8)i, packet->mons[i].rank, sorted);
+        if (packet->mons[i].score != display->scores[i]) {
+            PokeathlonRingDropUi_SetRanks(display->ui, (u8)i, packet->mons[i].score, sorted[0]);
         }
-        display->ranks[i] = packet->mons[i].rank;
+        display->scores[i] = packet->mons[i].score;
     }
-    ov96_022196E4(ringDrop->ui, packet->timer / 30);
+    PokeathlonRingDropUi_SetTimer(ringDrop->ui, packet->timer / 30);
 }
 
 void PokeathlonRingDropDisplay_Free(PokeathlonRingDropDisplay *display) {
@@ -800,9 +794,10 @@ void PokeathlonRingDropDisplay_StopAnimations(PokeathlonRingDropDisplay *display
     ManagedSprite_SetAnimateFlag(display->statusSprite, FALSE);
 }
 
-BOOL ov96_0221785C(int state) {
+// A Pokemon falling on another (a press) cannot be pushed itself.
+BOOL PokeathlonRingDropMon_CanBePushed(int state, int attackerState) {
     switch (state) {
-    case 11:
+    case RING_DROP_MON_JUMP_FALL:
         return FALSE;
     default:
         return TRUE;
@@ -811,8 +806,8 @@ BOOL ov96_0221785C(int state) {
 
 #pragma force_active reset
 
-void ov96_02217868(PokeathlonRingDropMon *mon, int a1) {
-    if (mon->state != 6 && mon->state != 11) {
-        mon->flags.bits.direction = ov96_022186CC(a1);
+void PokeathlonRingDropMon_FaceDirection(PokeathlonRingDropMon *mon, const VecFx32 *direction) {
+    if (mon->state != RING_DROP_MON_DASH && mon->state != RING_DROP_MON_JUMP_FALL) {
+        mon->flags.bits.direction = PokeathlonRingDrop_VecToDirection(direction);
     }
 }

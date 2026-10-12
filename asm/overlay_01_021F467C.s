@@ -11,16 +11,16 @@
 	.include "asm/macros.inc"
 	.public _021F46BA
 	.public _021F46D8
-	.public ov01_021F467C
-	.public ov01_021F46DC
+	.public FieldMotionBlur_Start
+	.public FieldMotionBlur_Stop
 	.public ov01_02206B94
 	.include "overlay_01_021F467C.inc"
 	.include "global.inc"
 
 	.text
 
-	thumb_func_start ov01_021F467C
-ov01_021F467C: ; 0x021F467C
+	thumb_func_start FieldMotionBlur_Start
+FieldMotionBlur_Start: ; 0x021F467C
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x2c
 	add r5, r0, #0
@@ -56,24 +56,24 @@ _021F46BA:
 	add r0, sp, #0
 	str r5, [sp, #0x20]
 	str r4, [sp, #0x24]
-	bl ov01_021F4464
+	bl FieldCapture_Start
 	str r0, [r7]
 	add r0, r7, #0
 	add sp, #0x2c
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
 _021F46D8: .word ov01_02206B94
-	thumb_func_end ov01_021F467C
+	thumb_func_end FieldMotionBlur_Start
 
-	thumb_func_start ov01_021F46DC
-ov01_021F46DC: ; 0x021F46DC
+	thumb_func_start FieldMotionBlur_Stop
+FieldMotionBlur_Stop: ; 0x021F46DC
 	push {r4, lr}
 	add r4, r0, #0
 	mov r1, #1
 	ldr r0, [r4]
 	mov r2, #0
 	add r3, r1, #0
-	bl ov01_021F44B4
+	bl FieldCapture_Stop
 	mov r0, #4
 	bl GX_SetBankForBG
 	mov r0, #0xe
@@ -83,7 +83,7 @@ ov01_021F46DC: ; 0x021F46DC
 	mov r0, #4
 	bl Heap_FreeExplicit
 	pop {r4, pc}
-	thumb_func_end ov01_021F46DC
+	thumb_func_end FieldMotionBlur_Stop
 
 	.rodata
 

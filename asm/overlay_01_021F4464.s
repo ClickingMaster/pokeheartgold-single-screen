@@ -9,21 +9,21 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_021F4464
-	.public ov01_021F44B4
-	.public ov01_021F4544
-	.public ov01_021F4584
-	.public ov01_021F45E4
+	.public FieldCapture_Start
+	.public FieldCapture_Stop
+	.public FieldCapture_Task
+	.public FieldCapture_StartTask
+	.public FieldCapture_Init
 	.include "overlay_01_021F4464.inc"
 	.include "global.inc"
 
 	.text
 
-	thumb_func_start ov01_021F4464
-ov01_021F4464: ; 0x021F4464
+	thumb_func_start FieldCapture_Start
+FieldCapture_Start: ; 0x021F4464
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
-	ldr r0, _021F44AC ; =ov01_021F4544
+	ldr r0, _021F44AC ; =FieldCapture_Task
 	ldr r3, [r5, #0x28]
 	mov r1, #0x38
 	mov r2, #5
@@ -46,20 +46,20 @@ _021F4480:
 	bl GX_GetBankForLCDC
 	str r0, [r4]
 	add r0, r4, #4
-	bl ov01_021F45E4
-	ldr r0, _021F44B0 ; =ov01_021F4584
+	bl FieldCapture_Init
+	ldr r0, _021F44B0 ; =FieldCapture_StartTask
 	add r1, r4, #0
 	mov r2, #0
 	bl SysTask_CreateOnVWaitQueue
 	add r0, r4, #0
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-_021F44AC: .word ov01_021F4544
-_021F44B0: .word ov01_021F4584
-	thumb_func_end ov01_021F4464
+_021F44AC: .word FieldCapture_Task
+_021F44B0: .word FieldCapture_StartTask
+	thumb_func_end FieldCapture_Start
 
-	thumb_func_start ov01_021F44B4
-ov01_021F44B4: ; 0x021F44B4
+	thumb_func_start FieldCapture_Stop
+FieldCapture_Stop: ; 0x021F44B4
 	push {r4, lr}
 	add r4, r0, #0
 	add r0, r1, #0
@@ -129,10 +129,10 @@ _021F452A:
 _021F4538: .word 0x06820000
 _021F453C: .word 0x06840000
 _021F4540: .word 0x06860000
-	thumb_func_end ov01_021F44B4
+	thumb_func_end FieldCapture_Stop
 
-	thumb_func_start ov01_021F4544
-ov01_021F4544: ; 0x021F4544
+	thumb_func_start FieldCapture_Task
+FieldCapture_Task: ; 0x021F4544
 	push {r4, r5, r6, r7}
 	ldr r0, [r1, #0x30]
 	cmp r0, #0
@@ -166,10 +166,10 @@ _021F457C:
 	bx lr
 	.balign 4, 0
 _021F4580: .word 0x04000064
-	thumb_func_end ov01_021F4544
+	thumb_func_end FieldCapture_Task
 
-	thumb_func_start ov01_021F4584
-ov01_021F4584: ; 0x021F4584
+	thumb_func_start FieldCapture_StartTask
+FieldCapture_StartTask: ; 0x021F4584
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -218,10 +218,10 @@ _021F45CE:
 	add r0, r5, #0
 	bl SysTask_Destroy
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov01_021F4584
+	thumb_func_end FieldCapture_StartTask
 
-	thumb_func_start ov01_021F45E4
-ov01_021F45E4: ; 0x021F45E4
+	thumb_func_start FieldCapture_Init
+FieldCapture_Init: ; 0x021F45E4
 	push {r4, r5, r6, lr}
 	add r4, r0, #0
 	ldr r0, [r4]
@@ -297,4 +297,4 @@ _021F466C: .word 0x06820000
 _021F4670: .word 0x06840000
 _021F4674: .word 0x06860000
 _021F4678: .word 0x04000064
-	thumb_func_end ov01_021F45E4
+	thumb_func_end FieldCapture_Init

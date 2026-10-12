@@ -225,34 +225,34 @@
 	.public PokeathlonRingDrop_IsOnSwitchButton
 	.public PokeathlonRingDrop_DecayVelocity
 	.public PokeathlonRingDrop_GetMonState
-	.public ov96_02215FA0
-	.public ov96_02217890
-	.public ov96_02217DBC
-	.public ov96_022186B8
-	.public ov96_02218A50
-	.public ov96_022193E4
-	.public ov96_0221978C
+	.public PokeathlonRingDrop_GetDirection
+	.public PokeathlonRingDrop_IsAttackState
+	.public PokeathlonRingDrop_FreeMonObjects
+	.public PokeathlonRingDropMon_SetDestination
+	.public PokeathlonRingDropMon_Respawn
+	.public PokeathlonRingDrop_AddScoreWindow
+	.public PokeathlonRingDropUi_GetScore
 	.public ov96_02219FDC
 	.public ov96_0221A670
 	.public ov96_0221A680
 	.public ov96_0221A690
 	.public ov96_0221A69C
 	.public ov96_0221A720
-	.public ov96_02219940
-	.public ov96_0221996C
-	.public ov96_02219A08
-	.public ov96_02219A5C
-	.public ov96_02219B30
-	.public ov96_02219BC4
-	.public ov96_02219BDC
-	.public ov96_02219DA8
-	.public ov96_02219DD0
-	.public ov96_02219F20
-	.public ov96_02219F50
+	.public PokeathlonRingDropUi_WaitSwitch
+	.public PokeathlonRingDropUi_SetSwitching
+	.public PokeathlonRingDropUi_AddWindows
+	.public PokeathlonRingDropUi_DrawScore
+	.public PokeathlonRingDropUi_PrintNames
+	.public PokeathlonRingDropUi_PrintMessage
+	.public PokeathlonRingDropUi_PrintMessageAt
+	.public PokeathlonRingDropUi_LoadMonPic
+	.public PokeathlonRingDropUi_LoadMonIcon
+	.public PokeathlonRingDropUi_SetPicPosition
+	.public PokeathlonRingDropUi_ShowSwitching
 
 
-	thumb_func_start ov96_02219E00
-ov96_02219E00: ; 0x02219E00
+	thumb_func_start PokeathlonRingDropUi_NewTimerSprite
+PokeathlonRingDropUi_NewTimerSprite: ; 0x02219E00
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x38
 	ldr r6, _02219E5C ; =ov96_0221D944
@@ -300,13 +300,13 @@ _02219E2E:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02219E5C: .word ov96_0221D944
-	thumb_func_end ov96_02219E00
+	thumb_func_end PokeathlonRingDropUi_NewTimerSprite
 
 
 
 
-	thumb_func_start ov96_02219E60
-ov96_02219E60: ; 0x02219E60
+	thumb_func_start PokeathlonRingDropUi_CreateTimerSprites
+PokeathlonRingDropUi_CreateTimerSprites: ; 0x02219E60
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x14
 	add r6, r0, #0
@@ -318,7 +318,7 @@ ov96_02219E60: ; 0x02219E60
 	ldr r1, [r6, #0xc]
 	mov r2, #0x72
 	mov r3, #0xb4
-	bl ov96_02219E00
+	bl PokeathlonRingDropUi_NewTimerSprite
 	mov r1, #0xe
 	str r0, [r6, #0x64]
 	bl ManagedSprite_SetPaletteOverride
@@ -366,13 +366,13 @@ _02219E88:
 	add sp, #0x14
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov96_02219E60
+	thumb_func_end PokeathlonRingDropUi_CreateTimerSprites
 
 
 
 
-	thumb_func_start ov96_02219EE0
-ov96_02219EE0: ; 0x02219EE0
+	thumb_func_start PokeathlonRingDropUi_PrintNextName
+PokeathlonRingDropUi_PrintNextName: ; 0x02219EE0
 	push {r4, lr}
 	sub sp, #8
 	add r4, r0, #0
@@ -398,8 +398,8 @@ ov96_02219EE0: ; 0x02219EE0
 	ldr r1, [r4, #0x1c]
 	ldr r2, [r4, #0x18]
 	add r0, #0x40
-	bl ov96_02219BC4
+	bl PokeathlonRingDropUi_PrintMessage
 	add sp, #8
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov96_02219EE0
+	thumb_func_end PokeathlonRingDropUi_PrintNextName

@@ -22,7 +22,7 @@ BOOL ov96_0221A05C(const VecFx32 *a, const VecFx32 *b, int direction) {
     VecFx32 d;
     VEC_Subtract(b, a, &d);
     VEC_Normalize(&d, &d);
-    if (ov96_02215FA0(&d) == direction) {
+    if (PokeathlonRingDrop_GetDirection(&d) == direction) {
         return TRUE;
     }
     return FALSE;

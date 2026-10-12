@@ -6,7 +6,7 @@
 .public GX_SetBankForBG
 .public GX_ResetBankForBG
 .public MIi_CpuClear32
-.public ov01_021F4464
-.public ov01_021F44B4
-.public ov01_021F467C
-.public ov01_021F46DC
+.public FieldCapture_Start
+.public FieldCapture_Stop
+.public FieldMotionBlur_Start
+.public FieldMotionBlur_Stop

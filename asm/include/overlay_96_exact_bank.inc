@@ -1310,13 +1310,13 @@
 	.public PokeathlonRingDrop_GetMonStamina
 	.public PokeathlonRingDrop_GetMonStaminaPercent
 	.public PokeathlonRingDrop_IsMonSwitching
-	.public ov96_02215EB0
-	.public ov96_02215ECC
+	.public PokeathlonRingDrop_IsMonPushed
+	.public PokeathlonRingDrop_CanMonAct
 	.public PokeathlonRingDrop_SetMonTarget
-	.public ov96_02215F2C
-	.public ov96_02215F64
-	.public ov96_02215F80
-	.public ov96_02215FA0
+	.public PokeathlonRingDrop_RequestJump
+	.public PokeathlonRingDrop_StartMonSwitch
+	.public PokeathlonRingDrop_SetMonDestination
+	.public PokeathlonRingDrop_GetDirection
 	.public PokeathlonRingDrop_SetGfxBanks
 	.public PokeathlonRingDrop_Update
 	.public PokeathlonRingDrop_OnFinish
@@ -1333,81 +1333,81 @@
 	.public PokeathlonRingDropDisplay_EndSwitch
 	.public PokeathlonRingDropDisplay_UpdateSwitch
 	.public PokeathlonRingDropDisplay_CompareDepth
-	.public PokeathlonRingDropDisplay_CompareRanks
+	.public PokeathlonRingDropDisplay_CompareScores
 	.public PokeathlonRingDropDisplay_ApplyFramePacket
 	.public PokeathlonRingDropDisplay_Init
 	.public PokeathlonRingDropDisplay_Update
 	.public PokeathlonRingDropDisplay_Free
 	.public PokeathlonRingDropDisplay_StopAnimations
-	.public ov96_0221785C
-	.public ov96_02217868
-	.public ov96_02217890
-	.public ov96_022178A0
-	.public ov96_02217AE4
-	.public ov96_02217B84
-	.public ov96_02217DBC
-	.public ov96_02217DC8
-	.public ov96_02217E08
-	.public ov96_02217E7C
-	.public ov96_02217FD0
-	.public ov96_022180CC
-	.public ov96_02218330
-	.public ov96_02218510
-	.public ov96_02218578
-	.public ov96_02218598
-	.public ov96_0221862C
-	.public ov96_02218688
-	.public ov96_022186B8
-	.public ov96_022186CC
-	.public ov96_02218744
-	.public ov96_02218784
-	.public ov96_022187A8
-	.public ov96_02218934
-	.public ov96_02218A50
-	.public ov96_02218A68
-	.public ov96_02218AF0
-	.public ov96_02218B1C
-	.public ov96_02218DF8
-	.public ov96_02218EB8
-	.public ov96_02218F18
-	.public ov96_02218F58
-	.public ov96_02218FD4
-	.public ov96_02218FFC
-	.public ov96_02219030
-	.public ov96_0221910C
-	.public ov96_02219174
-	.public ov96_0221918C
-	.public ov96_0221935C
-	.public ov96_02219398
-	.public ov96_022193CC
-	.public ov96_022193E4
-	.public ov96_022193F8
-	.public ov96_02219460
-	.public ov96_022194C4
-	.public ov96_022195C8
-	.public ov96_022195E8
-	.public ov96_0221964C
-	.public ov96_0221966C
-	.public ov96_022196E4
-	.public ov96_02219770
-	.public ov96_0221978C
-	.public ov96_02219794
-	.public ov96_02219940
-	.public ov96_0221996C
-	.public ov96_022199A8
-	.public ov96_02219A08
-	.public ov96_02219A5C
-	.public ov96_02219B30
-	.public ov96_02219BC4
-	.public ov96_02219BDC
-	.public ov96_02219C30
-	.public ov96_02219DA8
-	.public ov96_02219DD0
-	.public ov96_02219E00
-	.public ov96_02219E60
-	.public ov96_02219EE0
-	.public ov96_02219F20
-	.public ov96_02219F50
+	.public PokeathlonRingDropMon_CanBePushed
+	.public PokeathlonRingDropMon_FaceDirection
+	.public PokeathlonRingDrop_IsAttackState
+	.public PokeathlonRingDropMon_Push
+	.public PokeathlonRingDrop_CreateMonObjects
+	.public PokeathlonRingDrop_InitMons
+	.public PokeathlonRingDrop_FreeMonObjects
+	.public PokeathlonRingDropMon_ApplyPushReaction
+	.public PokeathlonRingDropMon_GetPushReaction
+	.public PokeathlonRingDrop_UpdateCollisions
+	.public PokeathlonRingDrop_UpdateStamina
+	.public PokeathlonRingDrop_UpdateMons
+	.public PokeathlonRingDrop_BuildFramePacket
+	.public PokeathlonRingDrop_SetMonAffineCenter
+	.public PokeathlonRingDropMon_SetState
+	.public PokeathlonRingDropMon_Collide
+	.public PokeathlonRingDropMon_CanSwitch
+	.public PokeathlonRingDropMon_CanAct
+	.public PokeathlonRingDropMon_SetDestination
+	.public PokeathlonRingDrop_VecToDirection
+	.public PokeathlonRingDropMon_CanCollide
+	.public PokeathlonRingDrop_ClearContacts
+	.public PokeathlonRingDropMon_Move
+	.public PokeathlonRingDropMon_IsOutOfRing
+	.public PokeathlonRingDropMon_Respawn
+	.public PokeathlonRingDropMon_ResetToStart
+	.public PokeathlonRingDropMon_ApplyGravity
+	.public PokeathlonRingDropMon_Update
+	.public PokeathlonRingDropMon_StartDash
+	.public PokeathlonRingDropMon_EndDash
+	.public PokeathlonRingDropMon_UpdateDash
+	.public PokeathlonRingDropMon_StartJump
+	.public PokeathlonRingDropMon_Land
+	.public PokeathlonRingDropMon_Stagger
+	.public PokeathlonRingDropMon_FallOut
+	.public PokeathlonRingDropMon_StartSwitch
+	.public PokeathlonRingDropMon_DrainStamina
+	.public PokeathlonRingDrop_InitMemberParams
+	.public PokeathlonRingDrop_GetMemberParams
+	.public PokeathlonRingDropMon_NextMember
+	.public PokeathlonRingDrop_PlaySE
+	.public PokeathlonRingDrop_AddScoreWindow
+	.public PokeathlonRingDrop_PrintScore
+	.public PokeathlonRingDropMon_UpdateStatus
+	.public PokeathlonRingDropUi_New
+	.public PokeathlonRingDropUi_Init
+	.public PokeathlonRingDropUi_Free
+	.public PokeathlonRingDropUi_StopAnimations
+	.public PokeathlonRingDropUi_SetRanks
+	.public PokeathlonRingDropUi_SetTimer
+	.public PokeathlonRingDropUi_ShowNextReady
+	.public PokeathlonRingDropUi_GetScore
+	.public PokeathlonRingDropUi_RunSwitch
+	.public PokeathlonRingDropUi_WaitSwitch
+	.public PokeathlonRingDropUi_SetSwitching
+	.public PokeathlonRingDropUi_NewSprite
+	.public PokeathlonRingDropUi_AddWindows
+	.public PokeathlonRingDropUi_DrawScore
+	.public PokeathlonRingDropUi_PrintNames
+	.public PokeathlonRingDropUi_PrintMessage
+	.public PokeathlonRingDropUi_PrintMessageAt
+	.public PokeathlonRingDropUi_CreateSprites
+	.public PokeathlonRingDropUi_LoadMonPic
+	.public PokeathlonRingDropUi_LoadMonIcon
+	.public PokeathlonRingDropUi_NewTimerSprite
+	.public PokeathlonRingDropUi_CreateTimerSprites
+	.public PokeathlonRingDropUi_PrintNextName
+	.public PokeathlonRingDropUi_SetPicPosition
+	.public PokeathlonRingDropUi_ShowSwitching
 	.public ov96_02219F7C
 	.public ov96_02219FDC
 	.public ov96_02219FE4

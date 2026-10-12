@@ -9,5 +9,5 @@
 .public GX_SetBankForLCDC
 .public GX_GetBankForLCDC
 .public MIi_CpuClearFast
-.public ov01_021F4464
-.public ov01_021F44B4
+.public FieldCapture_Start
+.public FieldCapture_Stop

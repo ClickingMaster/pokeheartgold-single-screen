@@ -17,8 +17,8 @@
 .public ov01_021EFE44
 .public ov01_021EFEC8
 .public ov01_021EFF28
-.public ov01_021F467C
-.public ov01_021F46DC
+.public FieldMotionBlur_Start
+.public FieldMotionBlur_Stop
 .public ov116_0225F054
 .public ov116_0225F364
 .public ov116_0225F374

@@ -434,13 +434,13 @@
 	.public PokeathlonRingDrop_IsOnSwitchButton
 	.public PokeathlonRingDrop_DecayVelocity
 	.public PokeathlonRingDrop_GetMonState
-	.public ov96_02215FA0
-	.public ov96_02217890
-	.public ov96_02217DBC
-	.public ov96_022186B8
-	.public ov96_02218A50
-	.public ov96_022193E4
-	.public ov96_0221978C
+	.public PokeathlonRingDrop_GetDirection
+	.public PokeathlonRingDrop_IsAttackState
+	.public PokeathlonRingDrop_FreeMonObjects
+	.public PokeathlonRingDropMon_SetDestination
+	.public PokeathlonRingDropMon_Respawn
+	.public PokeathlonRingDrop_AddScoreWindow
+	.public PokeathlonRingDropUi_GetScore
 	.public ov96_02219FDC
 	.public ov96_0221A670
 	.public ov96_0221A680

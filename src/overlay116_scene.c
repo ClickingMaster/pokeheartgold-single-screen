@@ -53,7 +53,7 @@ void ov116_0225F054(void *arg0, Ov116Task *task) {
         }
         break;
     case 3:
-        work->effect = (void *)ov01_021F467C(3, 0xF);
+        work->effect = (void *)FieldMotionBlur_Start(3, 0xF);
         work->index = 0;
         work->delay = sPanKeys[work->index].delay;
         task->state++;
@@ -81,7 +81,7 @@ void ov116_0225F054(void *arg0, Ov116Task *task) {
         break;
     case 7:
         SetMasterBrightnessByColor(1, 0x7FFF);
-        ov01_021F46DC(work);
+        FieldMotionBlur_Stop(work);
         *(vu16 *)0x04000050 = 0;
         if (task->completionFlag != NULL) {
             *task->completionFlag = 1;
@@ -115,7 +115,7 @@ void ov116_0225F1BC(void *arg0, Ov116Task *task, const Ov116Sequence *seq) {
         break;
     case 3: {
         s32 start;
-        work->effect = (void *)ov01_021F467C(seq->angleX, seq->angleY);
+        work->effect = (void *)FieldMotionBlur_Start(seq->angleX, seq->angleY);
         start = Camera_GetPerspectiveAngle(task->fieldSystem->camera);
         ov01_021EFE34(&work->perspectiveInterp[0], start, start + seq->perspectiveDelta, seq->unk00);
         task->state++;
@@ -157,7 +157,7 @@ void ov116_0225F1BC(void *arg0, Ov116Task *task, const Ov116Sequence *seq) {
         break;
     case 9:
         SetMasterBrightnessByColor(1, 0x7FFF);
-        ov01_021F46DC(work);
+        FieldMotionBlur_Stop(work);
         *(vu16 *)0x04000050 = 0;
         if (task->completionFlag != NULL) {
             *task->completionFlag = 1;

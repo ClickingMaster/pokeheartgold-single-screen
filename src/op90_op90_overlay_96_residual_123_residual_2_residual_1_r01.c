@@ -21,8 +21,8 @@ extern u8 PokeathlonRingDrop_GetMonStamina(void *, u8);
 extern int PokeathlonRingDrop_GetMonState(void *, u8);
 extern int PokeathlonRingDrop_IsMonSwitching(void *, u8);
 extern void PokeathlonRingDrop_SetMonTarget(void *, u8, Pt16 *);
-extern void ov96_02215F2C(void *, u8);
-extern void ov96_02215F80(void *, u8, Pt16 *);
+extern void PokeathlonRingDrop_RequestJump(void *, u8);
+extern void PokeathlonRingDrop_SetMonDestination(void *, u8, Pt16 *);
 extern BOOL ov96_0221A034(VecFx32 *, VecFx32 *, fx32);
 extern BOOL ov96_0221A05C(VecFx32 *, VecFx32 *, u8);
 extern const u8 ov96_0221D97C[];
@@ -100,7 +100,7 @@ void ov96_0221A08C(Work *w) {
         chance += ov96_0221D978[closeCount - 1];
     }
     if (r < chance) {
-        ov96_02215F2C(w->owner, w->id);
+        PokeathlonRingDrop_RequestJump(w->owner, w->id);
         w->delay = 20;
         return;
     }
@@ -138,7 +138,7 @@ void ov96_0221A08C(Work *w) {
     } else if (r < 100) {
         dest.x = MTRandom() % 145 + 56;
         dest.y = MTRandom() % 80 + 72;
-        ov96_02215F80(w->owner, w->id, &dest);
+        PokeathlonRingDrop_SetMonDestination(w->owner, w->id, &dest);
         w->delay = 10;
     }
 }

@@ -30,7 +30,7 @@ extern int PokeathlonCourseCeremony_Main(void *course);
 extern void PokeathlonCourseCeremony_Exit(void);
 extern void PokeathlonCirclePushDisplay_LoadMonPics(void);
 extern void ov96_022107D4(void);
-extern void ov96_022186CC(void);
+extern void PokeathlonRingDrop_VecToDirection(void);
 extern void PokeathlonCourseMonGfx_ShiftLargeUp(void *ptr);
 extern void PokeathlonCourseMonObjects_Free(u8 *ptr);
 extern void OamManager_Free(void);
@@ -63,8 +63,8 @@ extern void thunk_UpdateCellTransferStateManager(void);
 extern void PokeathlonResultsAnnouncement_HidePlate(void *ptr);
 extern void PokeathlonDiscCatch_Approach0(void *ptr, int value);
 extern void PokeathlonRingDrop_Decay(void *ptr, int value);
-extern void ov96_02219398(void *ptr);
-extern void ov96_02218A68(void *ptr);
+extern void PokeathlonRingDropMon_NextMember(void *ptr);
+extern void PokeathlonRingDropMon_ResetToStart(void *ptr);
 
 #endif
 extern void PokeathlonEventIntro_SetMascotAnim(void *);
@@ -105,5 +105,5 @@ void *ov96_021FC0D0(void **, u32);
 u8 PokeathlonBlockSmashBlock_GetState(u8 *);
 u8 PokeathlonBlockSmashMon_GetMode(u8 *);
 void ov96_0221022C(u8 *);
-void ov96_022193E4(u8 *);
+void PokeathlonRingDrop_AddScoreWindow(u8 *);
 void ov96_0221A69C(float);

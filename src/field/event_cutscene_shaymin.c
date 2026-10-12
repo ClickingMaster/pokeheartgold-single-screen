@@ -4,7 +4,7 @@
 
 #include "follow_mon.h"
 #include "math_util.h"
-#include "overlay_01_021F467C.h"
+#include "field/field_motion_blur.h"
 #include "overlay_01_021F944C.h"
 #include "field/field_follow_mon.h"
 #include "field/field_shaymin_form_change.h"

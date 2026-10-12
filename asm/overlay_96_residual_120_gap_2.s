@@ -225,13 +225,13 @@
 	.public PokeathlonRingDrop_IsOnSwitchButton
 	.public PokeathlonRingDrop_DecayVelocity
 	.public PokeathlonRingDrop_GetMonState
-	.public ov96_02215FA0
-	.public ov96_02217890
-	.public ov96_02217DBC
-	.public ov96_022186B8
-	.public ov96_02218A50
-	.public ov96_022193E4
-	.public ov96_0221978C
+	.public PokeathlonRingDrop_GetDirection
+	.public PokeathlonRingDrop_IsAttackState
+	.public PokeathlonRingDrop_FreeMonObjects
+	.public PokeathlonRingDropMon_SetDestination
+	.public PokeathlonRingDropMon_Respawn
+	.public PokeathlonRingDrop_AddScoreWindow
+	.public PokeathlonRingDropUi_GetScore
 	.public ov96_02219FDC
 	.public ov96_0221A670
 	.public ov96_0221A680
@@ -240,8 +240,8 @@
 	.public ov96_0221A720
 
 
-	thumb_func_start ov96_02218B1C
-ov96_02218B1C: ; 0x02218B1C
+	thumb_func_start PokeathlonRingDropMon_Update
+PokeathlonRingDropMon_Update: ; 0x02218B1C
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r0, #0
@@ -283,11 +283,11 @@ _02218B4C: ; jump table
 	.short _02218B74 - _02218B4C - 2 ; case 12
 _02218B66:
 	add r0, r4, #0
-	bl ov96_02218F18
+	bl PokeathlonRingDropMon_UpdateDash
 	b _02218B74
 _02218B6E:
 	add r0, r4, #0
-	bl ov96_022187A8
+	bl PokeathlonRingDropMon_Move
 _02218B74:
 	ldr r0, [r4, #0x14]
 	cmp r0, #0xc
@@ -322,11 +322,11 @@ _02218BA2:
 	bl GF_AssertFail
 _02218BAE:
 	add r0, r4, #0
-	bl ov96_02218934
+	bl PokeathlonRingDropMon_IsOutOfRing
 	cmp r0, #0
 	beq _02218BC0
 	add r0, r4, #0
-	bl ov96_02219030
+	bl PokeathlonRingDropMon_FallOut
 	b _02218DE4
 _02218BC0:
 	ldr r0, [r4, #0x60]
@@ -334,7 +334,7 @@ _02218BC0:
 	lsr r1, r1, #0x1f
 	beq _02218BD0
 	add r0, r4, #0
-	bl ov96_02218F58
+	bl PokeathlonRingDropMon_StartJump
 	b _02218DE4
 _02218BD0:
 	lsl r0, r0, #1
@@ -343,7 +343,7 @@ _02218BD0:
 	add r1, r4, #0
 	add r0, r4, #0
 	add r1, #0x1c
-	bl ov96_02218DF8
+	bl PokeathlonRingDropMon_StartDash
 	b _02218DE4
 _02218BE2:
 	mov r1, #0x5e
@@ -357,7 +357,7 @@ _02218BE2:
 	bgt _02218CD8
 	add r0, r4, #0
 	mov r1, #1
-	bl ov96_02218578
+	bl PokeathlonRingDropMon_SetState
 	b _02218DE4
 _02218BFE:
 	mov r1, #0x5b
@@ -370,18 +370,18 @@ _02218BFE:
 	cmp r0, #0
 	bgt _02218CD8
 	add r0, r4, #0
-	bl ov96_02218A50
+	bl PokeathlonRingDropMon_Respawn
 	add r0, r4, #0
 	mov r1, #4
-	bl ov96_02218578
+	bl PokeathlonRingDropMon_SetState
 	b _02218DE4
 _02218C20:
 	add r0, r4, #0
-	bl ov96_02218934
+	bl PokeathlonRingDropMon_IsOutOfRing
 	cmp r0, #0
 	beq _02218C32
 	add r0, r4, #0
-	bl ov96_02219030
+	bl PokeathlonRingDropMon_FallOut
 	b _02218DE4
 _02218C32:
 	mov r1, #0x58
@@ -395,15 +395,15 @@ _02218C32:
 	bgt _02218CD8
 	add r0, r4, #0
 	mov r1, #1
-	bl ov96_02218578
+	bl PokeathlonRingDropMon_SetState
 	b _02218DE4
 _02218C4E:
 	add r0, r4, #0
-	bl ov96_02218934
+	bl PokeathlonRingDropMon_IsOutOfRing
 	cmp r0, #0
 	beq _02218C60
 	add r0, r4, #0
-	bl ov96_02219030
+	bl PokeathlonRingDropMon_FallOut
 	b _02218DE4
 _02218C60:
 	ldr r1, [r4, #0x60]
@@ -414,7 +414,7 @@ _02218C60:
 	lsr r0, r0, #0x1f
 	beq _02218C76
 	add r0, r4, #0
-	bl ov96_02218F58
+	bl PokeathlonRingDropMon_StartJump
 	b _02218DE4
 _02218C76:
 	lsl r0, r1, #1
@@ -423,7 +423,7 @@ _02218C76:
 	add r1, r4, #0
 	add r0, r4, #0
 	add r1, #0x1c
-	bl ov96_02218DF8
+	bl PokeathlonRingDropMon_StartDash
 	b _02218DE4
 _02218C88:
 	mov r1, #0x5a
@@ -441,7 +441,7 @@ _02218C88:
 	strb r1, [r0]
 	add r0, r4, #0
 	mov r1, #9
-	bl ov96_02218578
+	bl PokeathlonRingDropMon_SetState
 	b _02218DE4
 _02218CAC:
 	ldr r0, [r4, #4]
@@ -474,7 +474,7 @@ _02218CDA:
 	add r0, #0x5a
 	strb r1, [r0]
 	add r0, r4, #0
-	bl ov96_02218578
+	bl PokeathlonRingDropMon_SetState
 	b _02218DE4
 _02218CEA:
 	mov r1, #0x5a
@@ -492,20 +492,20 @@ _02218CEA:
 	strb r1, [r0]
 	add r0, r4, #0
 	mov r1, #0xb
-	bl ov96_02218578
+	bl PokeathlonRingDropMon_SetState
 	b _02218DE4
 _02218D0E:
 	ldr r0, [r4, #0x50]
 	cmp r0, #0
 	bne _02218D2C
 	add r0, r4, #0
-	bl ov96_02218FD4
+	bl PokeathlonRingDropMon_Land
 	add r0, r4, #0
-	bl ov96_02218934
+	bl PokeathlonRingDropMon_IsOutOfRing
 	cmp r0, #0
 	beq _02218DE4
 	add r0, r4, #0
-	bl ov96_02219030
+	bl PokeathlonRingDropMon_FallOut
 	b _02218DE4
 _02218D2C:
 	ldr r1, [r4, #4]
@@ -533,7 +533,7 @@ _02218D46:
 	bgt _02218DE4
 	add r0, r4, #0
 	mov r1, #1
-	bl ov96_02218578
+	bl PokeathlonRingDropMon_SetState
 	b _02218DE4
 _02218D62:
 	mov r1, #0x59
@@ -550,7 +550,7 @@ _02218D62:
 	add r0, #0x59
 	strb r1, [r0]
 	add r0, r4, #0
-	bl ov96_02218578
+	bl PokeathlonRingDropMon_SetState
 	b _02218DE4
 _02218D84:
 	mov r1, #0x59
@@ -583,7 +583,7 @@ _02218D84:
 	mov r1, #7
 	str r0, [r2]
 	add r0, r4, #0
-	bl ov96_02218578
+	bl PokeathlonRingDropMon_SetState
 	b _02218DE4
 _02218DC6:
 	mov r1, #0x59
@@ -596,27 +596,27 @@ _02218DC6:
 	cmp r0, #0
 	bgt _02218DE4
 	add r0, r4, #0
-	bl ov96_02218EB8
+	bl PokeathlonRingDropMon_EndDash
 	b _02218DE4
 _02218DE0:
 	bl GF_AssertFail
 _02218DE4:
 	add r0, r4, #0
-	bl ov96_02218AF0
+	bl PokeathlonRingDropMon_ApplyGravity
 _02218DEA:
 	add sp, #0xc
 	pop {r4, r5, pc}
 	nop
 _02218DF0: .word ov96_0221D7D0
 _02218DF4: .word ov96_0221D69C
-	thumb_func_end ov96_02218B1C
+	thumb_func_end PokeathlonRingDropMon_Update
 
 
 
 
 
-	thumb_func_start ov96_02218DF8
-ov96_02218DF8: ; 0x02218DF8
+	thumb_func_start PokeathlonRingDropMon_StartDash
+PokeathlonRingDropMon_StartDash: ; 0x02218DF8
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -689,7 +689,7 @@ _02218E38:
 _02218E86:
 	add r0, r5, #0
 	add r0, #0x38
-	bl ov96_022186CC
+	bl PokeathlonRingDrop_VecToDirection
 	lsl r0, r0, #0x1c
 	ldr r2, [r5, #0x60]
 	ldr r1, _02218EB4 ; =0xFFF0FFFF
@@ -703,11 +703,11 @@ _02218E86:
 	strb r1, [r0]
 	add r0, r5, #0
 	mov r1, #5
-	bl ov96_02218578
+	bl PokeathlonRingDropMon_SetState
 _02218EAC:
 	add sp, #0xc
 	pop {r4, r5, pc}
 	.balign 4, 0
 _02218EB0: .word 0xBFFFFFFF
 _02218EB4: .word 0xFFF0FFFF
-	thumb_func_end ov96_02218DF8
+	thumb_func_end PokeathlonRingDropMon_StartDash
