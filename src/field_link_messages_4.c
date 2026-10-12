@@ -4,9 +4,9 @@ void sub_0205AB88(MailMessage *mailMessage) {
     struct UnkSub_0205AA4C sp0;
     sub_0205AA4C(&sp0);
     sp0.unk1C = 0;
-    sub_02035838(mailMessage);
-    sub_02035854(&sp0);
-    sub_0203588C();
+    CommWireless_SetMail(mailMessage);
+    CommWireless_SetRuleset(&sp0);
+    CommWireless_RefreshBeacon();
 }
 
 void sub_0205ABB0(struct UnkStruct_02059E1C *p) {

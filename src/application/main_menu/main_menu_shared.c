@@ -18,7 +18,7 @@
 #include "system.h"
 
 u16 MATH_CalcCRC16(const MATHCRC16Table *table, const void *data, u32 dataLength);
-u8 *sub_02035754(int index);
+u8 *CommWireless_GetParentInfo(int index);
 BOOL CTRDG_IsAgbCartridge(void);
 void CTRDG_TerminateForPulledOut(void);
 
@@ -119,7 +119,7 @@ void MainMenuUtil_DecryptWonderCard(UnkWonderCardSubstruct_104 *header, WonderCa
     MATHi_CRC16InitTableRev(table, 0xA001);
     crc = MATH_CalcCRC16(table, header, sizeof(UnkWonderCardSubstruct_104));
     Heap_Free(table);
-    mac = sub_02035754(0);
+    mac = CommWireless_GetParentInfo(0);
     bytes = (u8 *)key;
     bytes[0] = mac[4];
     bytes[1] = mac[5];

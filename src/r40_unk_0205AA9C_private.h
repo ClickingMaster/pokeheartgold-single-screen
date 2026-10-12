@@ -8,7 +8,7 @@
 #include "player_data.h"
 
 extern const s32 _020FC898[7];
-PlayerProfile *sub_02035798(int objId);
+PlayerProfile *CommWireless_GetParentProfile(int objId);
 PlayerProfile *CommPlayerInfo_GetProfile(int netId);
 int Comm_GetLocalNetId(void);
 void sub_0205AA9C(MessageFormat *msgFmt, u16 mode, u16 objId, PlayerProfile *profile, SaveEasyChat *easyChat);

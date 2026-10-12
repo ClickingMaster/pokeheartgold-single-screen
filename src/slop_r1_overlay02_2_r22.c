@@ -194,7 +194,7 @@ extern void *Save_VarsFlags_Get(SaveData *saveData);                            
 extern BOOL Save_VarsFlags_CheckSafariSysFlag(void *varsFlags);                                              // save_vars_flags.h, not included
 extern BOOL sub_0202F620(void *safariZone);                                                                  // no header included here
 extern fx32 sub_02054774(FieldSystem *fieldSystem, fx32 refHeight, fx32 xFx32, fx32 zFx32, u8 *outSelector); // unk_02054648.h, not included
-WIP_LOCAL BOOL ov02_0224E35C(FieldSystem *fieldSystem);
+WIP_LOCAL BOOL FieldSystem_CanPlaceSafariObject(FieldSystem *fieldSystem);
 // --- Task_FollowMonInteract (0x02250110) deps ---
 extern void ClearFrameAndWindow2(Window *window, BOOL dont_copy_to_vram);                                                   // render_window.h, not included
 extern void RemoveWindow(Window *window);                                                                                   // render_window.h, not included
@@ -219,7 +219,7 @@ extern void *FieldCameraZoom_Start(FieldSystem *fieldSystem, int a1);           
 extern void FieldCameraZoom_Set(void *a0, int a1, fx32 a2, int a3);                                                               // no header included here
 extern void *Save_SafariZone_Get(SaveData *saveData);                                                                       // safari_zone.h, not included
 extern void *SafariZone_GetAreaSet(void *safari_zone, int area_set_no);                                                     // safari_zone.h, not included
-extern int ov02_0224EE4C(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);                              // still in asm
+extern int SafariZone_FindSpotFor2x2Object(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);                              // still in asm
 // Runtime and residual-assembly references used by declarations below.
 extern void _s32_div_f(void);                 // int-division runtime
 extern void _fadd(void);                      // soft-float runtime (asm bl)
@@ -235,8 +235,8 @@ WIP_LOCAL void ov02_0224AAD4(void *a0, void *a1);
 WIP_LOCAL void ov02_0224D5B4(void *a0, void *a1, void *a2);
 WIP_LOCAL int ov02_0224DB9C(void *a0, void *a1, void *a2);
 WIP_LOCAL int FollowMonRule_Matches(void *a0, void *a1, void *a2);
-WIP_LOCAL int ov02_0224E828(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);
-WIP_LOCAL int ov02_0224EB48(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);
+WIP_LOCAL int SafariZone_FindSpotFor1x2Object(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);
+WIP_LOCAL int SafariZone_FindSpotFor2x1Object(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);
 
 typedef struct ov02_BF58Cfg {
     int unk0;
@@ -373,7 +373,7 @@ WIP_LOCAL void ov02_0224B2C0(void *work);
 WIP_LOCAL BOOL ov02_0224B0E0(void *work);
 WIP_LOCAL void ov02_0224DEA8(Field3dObject *obj, Field3dModel *model, NNSFndAllocator *allocator, void **anmResources);
 WIP_LOCAL BOOL ov02_0224B43C(SysTask *task);
-WIP_LOCAL BOOL ov02_0224E308(int a0);
+WIP_LOCAL BOOL MapId_IsSafariZone(int a0);
 WIP_LOCAL BOOL FollowMonInteraction_StepHasMovement(void *a0, u16 *a1);
 WIP_LOCAL Sprite *ov02_02248C10(void *mgr, VecFx32 *pos, int charId, int plttId, int cellId, int cellAnmId, int priority, int drawPriority);
 WIP_LOCAL Sprite *ov02_02248D18(void *mgr, int a1);
@@ -652,9 +652,9 @@ WIP_LOCAL void *ov02_0224A800(u16 *a0, enum HeapID heapID);
 WIP_LOCAL u8 ov02_0224AB8C(void *work);
 WIP_LOCAL int ov02_0224AC28(void *work);
 WIP_LOCAL void ov02_0224B87C(void *a0, void *a1);
-WIP_LOCAL BOOL ov02_0224E4CC(u8 tile, int flag);
-WIP_LOCAL BOOL ov02_0224E4DC(u8 tile, int flag);
-WIP_LOCAL BOOL ov02_0224EF6C(u8 tile, int flag, int sel);
+WIP_LOCAL BOOL SafariZone_CanPlaceObjectOnLand(u8 tile, int flag);
+WIP_LOCAL BOOL SafariZone_CanPlaceObjectOnWater(u8 tile, int flag);
+WIP_LOCAL BOOL SafariZone_CanPlaceObjectOn(u8 tile, int flag, int sel);
 WIP_LOCAL void FollowMonSituation_SetMapId(void *a, void *b);
 WIP_LOCAL BOOL Task_FollowMonInteract(TaskManager *taskman); // big fn, defined later
 WIP_LOCAL void ov02_0224A32C(void *mgr);
@@ -701,7 +701,7 @@ WIP_LOCAL void ov02_0224B364(void *a0, void *a1);
 WIP_LOCAL void ov02_0224B3B0(void *a0, void *a1);
 WIP_LOCAL void ov02_0224D1AC(void *data);
 WIP_LOCAL void ov02_0224D0AC(void *playerAvatar, void *data);
-WIP_LOCAL int ov02_0224E340(FieldSystem *fieldSystem);
+WIP_LOCAL int FieldSystem_GetSafariAreaIndex(FieldSystem *fieldSystem);
 WIP_LOCAL void ov02_0224B6B0(void *work, BOOL visible);
 WIP_LOCAL int ov02_0224C680(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
 WIP_LOCAL void ov02_0224B768(void *work);
@@ -712,7 +712,7 @@ WIP_LOCAL void ov02_0224E008(void *data);
 WIP_LOCAL int ov02_022495B8(void *work);
 WIP_LOCAL void ov02_02249DD8(SysTask *task, void *work);
 // callees still in asm
-WIP_LOCAL int ov02_0224E31C(u32 x, u32 z);
+WIP_LOCAL int SafariZone_GetAreaIndexAt(u32 x, u32 z);
 WIP_LOCAL void ov02_0224D700(void *p);
 WIP_LOCAL void ov02_0224DE6C(void *p);
 WIP_LOCAL void ov02_02249EC0(void *work);

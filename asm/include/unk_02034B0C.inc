@@ -39,47 +39,47 @@
 .public sub_02033FC4
 .public sub_0203401C
 .public CommPlayerInfo_DropDisconnected
-.public sub_02034B0C
-.public sub_02034BE4
-.public sub_02034D8C
-.public sub_02034DB8
-.public sub_02034DCC
-.public sub_02034DE0
-.public sub_02034E2C
-.public sub_02034EF0
-.public sub_02034F64
-.public sub_02034FE8
-.public sub_0203507C
-.public sub_020350A8
-.public sub_0203511C
-.public sub_02035150
-.public sub_02035184
-.public sub_02035198
-.public sub_020351AC
-.public sub_020351DC
-.public sub_02035218
-.public sub_0203528C
-.public sub_020355C8
-.public sub_02035630
-.public sub_02035650
-.public sub_02035664
-.public sub_0203567C
-.public sub_0203569C
-.public sub_020356C0
-.public sub_020356EC
-.public sub_02035754
-.public sub_02035784
-.public sub_02035798
-.public sub_020357C4
+.public CommWireless_Init
+.public CommWireless_IsInitialized
+.public CommWireless_StartUp
+.public CommWireless_IsStartedUp
+.public CommWireless_IsOn
+.public CommWireless_Terminate
+.public CommWireless_ClearParents
+.public CommWireless_StartParent
+.public CommWireless_StartScan
+.public CommWireless_Stop
+.public CommWireless_RequestStopAndFree
+.public CommWireless_SetManagerEnded
+.public CommWireless_CountParents
+.public CommWireless_GetParentSlot
+.public CommWireless_IsParentListChanged
+.public CommWireless_ClearParentListChanged
+.public CommWireless_GetParentMemberCount
+.public CommWireless_CopyParentProfile
+.public CommWireless_ConnectToParent
+.public CommWireless_UpdateParents
+.public CommWireless_Main
+.public CommWireless_IsManagerEnded
+.public CommWireless_Exists
+.public CommWireless_IsIdle
+.public CommWireless_GetConnectedChildren
+.public CommWireless_IsLinkLost
+.public CommWireless_SetLostWhenAlone
+.public CommWireless_SetDetectDrops
+.public CommWireless_GetParentInfo
+.public CommWireless_GetProfile
+.public CommWireless_GetParentProfile
+.public CommWireless_SetMacAddress
 .public sub_020357FC
 .public sub_0203581C
-.public sub_02035838
-.public sub_02035854
-.public sub_02035878
-.public sub_0203588C
-.public sub_020358B0
-.public sub_020358B8
-.public sub_020358D0
+.public CommWireless_SetMail
+.public CommWireless_SetRuleset
+.public CommWireless_GetRuleset
+.public CommWireless_RefreshBeacon
+.public CommWireless_HasSentBeacons
+.public CommWireless_SetCustomBeacon
+.public CommWireless_GetParentMail
 .public sub_020367A8
 .public sub_02036904
 .public sub_02037474
@@ -95,20 +95,20 @@
 .public WM_GetDispersionBeaconPeriod
 .public WM_GetNextTgid
 
-	.public sub_02034BF8
-	.public sub_02034C20
-	.public sub_02034C94
-	.public sub_02034D60
-	.public sub_02034D78
-	.public sub_02034DF0
-	.public sub_02034E64
-	.public sub_02034E8C
-	.public sub_020350D4
-	.public sub_020352D8
-	.public sub_020353B8
-	.public sub_0203540C
-	.public sub_020355DC
-	.public sub_02035610
-	.public sub_02035724
-	.public _020F6A88
-	.public _021D4134
+	.public CommWireless_BytesEqual
+	.public CommWireless_OnParentFound
+	.public CommWireless_StoreFoundParent
+	.public CommWireless_OnStartedUp
+	.public CommWireless_OnTerminated
+	.public CommWireless_InitManager
+	.public CommWireless_SetRenewTgid
+	.public CommWireless_ResetFlags
+	.public CommWireless_Free
+	.public CommWireless_BuildBeacon
+	.public CommWireless_UpdateBeaconMemberCount
+	.public CommWireless_Update
+	.public CommWireless_IsAidConnected
+	.public CommWireless_CountConnected
+	.public CommWireless_GetBeaconPeriod
+	.public gCommWirelessAnyBssid
+	.public gCommWireless

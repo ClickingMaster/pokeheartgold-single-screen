@@ -189,7 +189,7 @@
 	.public ov96_02203CD4
 	.public ov96_022043AC
 	.public ov96_022043B8
-	.public ov96_02204DE8
+	.public PokeathlonPennantCapture_Draw
 	.public PokeathlonPennantCapture_TickFreezeTimer
 	.public PokeathlonPennantCapture_AddPoint2D
 	.public PokeathlonPennantCapture_ResetPennantSpots

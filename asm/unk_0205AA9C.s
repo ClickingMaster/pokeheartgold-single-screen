@@ -19,7 +19,7 @@ sub_0205AA9C: ; 0x0205AA9C
 	cmp r4, #0
 	bne _0205AAC2
 	sub r0, r7, #1
-	bl sub_02035798
+	bl CommWireless_GetParentProfile
 	b _0205AACE
 _0205AAC2:
 	bl Comm_GetLocalNetId

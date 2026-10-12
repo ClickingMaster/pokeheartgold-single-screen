@@ -39,7 +39,7 @@
 #include "sprite_system.h"
 #include "sys_task_api.h"
 #include "system.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
 #include "communication_club_link.h"
@@ -725,7 +725,7 @@ BOOL FrtCmd_055(FrontierScriptContext *ctx) {
 }
 
 BOOL ov80_0222D244(void) {
-    if (sub_02037D78() != TRUE && sub_02035650() != TRUE) {
+    if (sub_02037D78() != TRUE && CommWireless_Exists() != TRUE) {
         return TRUE;
     }
     return FALSE;

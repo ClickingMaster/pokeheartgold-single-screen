@@ -72,9 +72,9 @@
 .public PalPad_GetNthEntry
 .public PalPadEntry_GetFromUnk68Array
 .public PalPad_PlayerIdIsFriendOrMutual
-.public sub_02035754
-.public sub_02035784
-.public sub_02035798
+.public CommWireless_GetParentInfo
+.public CommWireless_GetProfile
+.public CommWireless_GetParentProfile
 .public FieldSystem_TaskIsRunning
 .public sub_0205AA84
 .public FieldMessage_LoadTextPalettes

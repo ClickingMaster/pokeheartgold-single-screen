@@ -24,7 +24,7 @@
 .public BuildModelShapes_GetShapeCount
 .public BuildModelShapes_GetShapeRange
 .public BuildModelShapes_GetShapes
-.public ov01_021EA9B0
+.public ModelAttributes_ApplyToModel
 .public MapPropManager_New
 .public MapPropManager_Free
 .public MapPropManager_Reset

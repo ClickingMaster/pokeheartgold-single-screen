@@ -78,7 +78,7 @@ void PokeathlonHurdleDashDust_Remove(void **);
 int PokeathlonRelayRun_Draw(void *);
 void ov96_02203BC0(u8 *, int);
 BOOL ov96_02203CC4(u8 *, int);
-int ov96_02204DE8(void *);
+int PokeathlonPennantCapture_Draw(void *);
 float ov96_022073F0(u8 *, int);
 int PokeathlonBlockSmash_Draw(void *);
 void PokeathlonDiscCatchDisc_Remove(u32 *);

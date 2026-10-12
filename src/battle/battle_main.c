@@ -123,7 +123,7 @@ extern void sub_02037930(int mode);
 extern void sub_020399FC(int a0, BgConfig *bgConfig);
 extern void WirelessStatusIcon_SetLevel(int linkLevel);
 extern int ov00_021EC9D4(void);
-extern BOOL sub_02035650(void);
+extern BOOL CommWireless_Exists(void);
 extern int WM_GetLinkLevel(void);
 
 #pragma force_active on
@@ -1604,7 +1604,7 @@ void ov12_0223A7A0(void) {
     WirelessStatusIcon_Create();
     if (sub_02039998()) {
         WirelessStatusIcon_SetLevel(3 - ov00_021EC9D4());
-    } else if (sub_02035650()) {
+    } else if (CommWireless_Exists()) {
         WirelessStatusIcon_SetLevel(3 - WM_GetLinkLevel());
     }
 }

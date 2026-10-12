@@ -5,7 +5,7 @@
 	thumb_func_start sub_02039BA0
 sub_02039BA0: ; 0x02039BA0
 	push {r3, lr}
-	bl sub_02034DB8
+	bl CommWireless_IsStartedUp
 	cmp r0, #0
 	beq _02039C04
 	mov r1, #0x30

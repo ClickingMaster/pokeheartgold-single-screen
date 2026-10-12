@@ -153,7 +153,7 @@ void sub_02058328(void) {
 }
 
 void sub_0205832C(void) {
-    if (sub_02034DB8()) {
+    if (CommWireless_IsStartedUp()) {
         ov03_02255BEC();
         CommClubLink_SetState(sub_02058348, 0);
     }
@@ -428,7 +428,7 @@ void sub_020588A0(void) {
 }
 
 void sub_020588B4(void) {
-    if (sub_02035664()) {
+    if (CommWireless_IsIdle()) {
         CommClubLink_SetState(sub_0205836C, 10);
     }
 }

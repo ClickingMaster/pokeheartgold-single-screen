@@ -44,7 +44,7 @@ int sub_0205A750(struct UnkStruct_02059E1C *p, int objId, int a2, struct Message
     if (a2 == 0) {
         return sub_0205A544(p, objId - 1);
     }
-    profile = sub_02035798(objId - 1);
+    profile = CommWireless_GetParentProfile(objId - 1);
     if (profile == NULL) {
         sub_020398D4(1, 1);
         sub_02039AD8(1);

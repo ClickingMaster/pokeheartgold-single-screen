@@ -34,14 +34,6 @@ struct AreaLightManager {
     u32 unk10;                        // 0x10
 };
 
-// model_attributes_helpers_1.c (no header declares them yet)
-void ov01_021EAAB8(ModelAttributes *ma, int idx, s16 x, s16 y, s16 z);
-void ov01_021EAAE0(ModelAttributes *ma, int idx, u16 color);
-void ov01_021EAAF4(ModelAttributes *ma, u16 v, int a, int b);
-void ov01_021EAB08(ModelAttributes *ma, u16 v, int a);
-void ov01_021EAB1C(ModelAttributes *ma, u16 v, int a, int b);
-void ov01_021EAB30(ModelAttributes *ma, u16 v, int a);
-
 extern const char *const gAreaLightFilePaths[AREA_LIGHT_FILE_COUNT];
 
 AreaLightManager *AreaLightManager_New(ModelAttributes *areaModelAttributes, const u32 archiveID) {
@@ -118,17 +110,17 @@ void AreaLight_ApplyEntry(AreaLightEntry *entry, ModelAttributes *modelAttribute
     color = (const u16 *)entry;
     for (; i < 4; i++, dir += 3, color++) {
         if (entry->lightMask & (1 << i)) {
-            ov01_021EAAB8(modelAttributes, i, dir[7], dir[8], dir[9]);
-            ov01_021EAAE0(modelAttributes, i, color[3]);
+            ModelAttributes_SetLightVector(modelAttributes, i, dir[7], dir[8], dir[9]);
+            ModelAttributes_SetLightColor(modelAttributes, i, color[3]);
         } else {
-            ov01_021EAAB8(modelAttributes, i, 0, 0, 0);
-            ov01_021EAAE0(modelAttributes, i, 0);
+            ModelAttributes_SetLightVector(modelAttributes, i, 0, 0, 0);
+            ModelAttributes_SetLightColor(modelAttributes, i, 0);
         }
     }
-    ov01_021EAAF4(modelAttributes, entry->diffuse, 0, 0);
-    ov01_021EAB08(modelAttributes, entry->ambient, 1);
-    ov01_021EAB1C(modelAttributes, entry->specular, 0, 0);
-    ov01_021EAB30(modelAttributes, entry->emission, 1);
+    ModelAttributes_SetDiffuse(modelAttributes, entry->diffuse, 0, 0);
+    ModelAttributes_SetAmbient(modelAttributes, entry->ambient, 1);
+    ModelAttributes_SetSpecular(modelAttributes, entry->specular, 0, 0);
+    ModelAttributes_SetEmission(modelAttributes, entry->emission, 1);
 }
 
 void AreaLightManager_ApplyActiveEntry(AreaLightManager *areaLightManager) {

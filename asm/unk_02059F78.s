@@ -17,7 +17,7 @@ _02059F88:
 	ldr r1, [r0]
 	add r1, r1, #1
 	str r1, [r0]
-	bl sub_02035878
+	bl CommWireless_GetRuleset
 	add r5, r0, #0
 	bl sub_020376F8
 	cmp r0, #0

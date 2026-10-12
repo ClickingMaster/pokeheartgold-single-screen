@@ -200,7 +200,7 @@ void ov01_021F3A3C(const VecFx32 *position, AreaDataManager *areaDataManager, BO
         }
         BuildModelShapes *r4 = AreaDataManager_GetBuildModelShapes(areaDataManager);
         if (a2 == TRUE) {
-            ov01_021EA9B0(modelAttributes, mapProp->render->model, 0xF33);
+            ModelAttributes_ApplyToModel(modelAttributes, mapProp->render->model, 0xF33);
         }
         u16 sp14;
         BuildModelShapes_GetShapeCount(mapProp->buildModel, r4, &sp14);

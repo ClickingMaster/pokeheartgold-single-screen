@@ -879,11 +879,11 @@
 	.public ov96_022043C0
 	.public ov96_022044A0
 	.public ov96_0220472C
-	.public ov96_022047EC
-	.public ov96_02204DE8
-	.public ov96_02204DF8
-	.public ov96_02204E58
-	.public ov96_02204F20
+	.public PokeathlonPennantCapture_Init
+	.public PokeathlonPennantCapture_Draw
+	.public PokeathlonPennantCapture_ShowResults
+	.public PokeathlonPennantCapture_Exit
+	.public PokeathlonPennantCapture_SetGfxBanks
 	.public PokeathlonPennantCapture_InitBgs
 	.public PokeathlonPennantCapture_LoadBgGfx
 	.public PokeathlonPennantCapture_LoadSpriteResources

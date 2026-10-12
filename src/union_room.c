@@ -5,7 +5,7 @@
 #include "mail_message.h"
 #include "sys_task_api.h"
 #include "union_room_internal.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
 #include "unk_02091564.h"
@@ -15,9 +15,9 @@
 BOOL Comm_GetLocalNetId(void);
 BOOL Comm_SendCommand(int command, void *data, int size);
 BOOL sub_02037108(int command, void *data, int size);
-UnionRoomRecord *sub_02035754(int netId);
-BOOL sub_02035798(int netId);
-u8 *sub_02035878(void);
+UnionRoomRecord *CommWireless_GetParentInfo(int netId);
+BOOL CommWireless_GetParentProfile(int netId);
+u8 *CommWireless_GetRuleset(void);
 void sub_02037F18(void);
 BOOL sub_02037FCC(void);
 BOOL sub_02037F94(void);
@@ -89,7 +89,7 @@ struct UnkStruct_02059E1C *UnionRoom_New(FieldSystem *fieldSystem) {
 
 void sub_02059E88(struct UnkStruct_02059E1C *unionRoom) {
     MailMessage message;
-    if (sub_02035650() != 0) {
+    if (CommWireless_Exists() != 0) {
         MailMsg_Init_Default(&message);
         sub_0205AB88(&message);
         sub_0205AA6C(unionRoom, &message);
@@ -148,7 +148,7 @@ void sub_02059F78(struct UnkStruct_02059E1C *unionRoom) {
     }
 
     _021D41CC.waitFrames++;
-    profile = sub_02035878();
+    profile = CommWireless_GetRuleset();
     if (sub_020376F8() != 0 && UnionRoom_AnyOtherPlayerPresent() == TRUE && profile[0x1C] != 4) {
         CommPlayerInfo_SendLocal();
         sub_020398D4(1, 1);
@@ -196,7 +196,7 @@ void Task_UnionRoom(SysTask *task, struct UnkStruct_02059E1C *unionRoom) {
         return;
     }
     for (i = 0; i < UNION_ROOM_MAX_RECORDS; i++) {
-        unionRoom->records[i] = sub_02035754(i);
+        unionRoom->records[i] = CommWireless_GetParentInfo(i);
         _021D41D8[i] = unionRoom->records[i];
     }
     if (local.unionRoom->state != NULL) {
@@ -299,7 +299,7 @@ UnionRoomRecord *UnionRoom_GetRecord(struct UnkStruct_02059E1C *unionRoom, int n
 int sub_0205A200(struct UnkStruct_02059E1C *unionRoom, int objId) {
     UnionRoomRecord *record;
     UnionRoomRecordInfo *info;
-    BOOL present = sub_02035798(objId - 1);
+    BOOL present = CommWireless_GetParentProfile(objId - 1);
     sub_0205ABB0(unionRoom);
     if (!present) {
         return 5;

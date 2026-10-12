@@ -9,7 +9,7 @@ void sub_0205AA9C(MessageFormat *msgFmt, u16 mode, u16 objId, PlayerProfile *pro
 
     msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 0x2E2, HEAP_ID_FIELD1);
     if (mode == 0) {
-        selected = sub_02035798(objId - 1);
+        selected = CommWireless_GetParentProfile(objId - 1);
     } else {
         selected = CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1);
     }

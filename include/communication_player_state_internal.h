@@ -53,7 +53,7 @@ void *Save_FriendGroup_Get(void *save);
 void *Save_WiFiHistory_Get(void *save);
 u8 WifiHistory_GetPlayerCountry(void *wifi);
 u8 WiFiHistory_GetPlayerRegion(void *wifi);
-void sub_020357C4(void *a, int b);
+void CommWireless_SetMacAddress(void *a, int b);
 void Comm_SendCommand(int a, void *b, int c);
 BOOL Comm_IsNetIdConnected(u16 netId);
 int Comm_CountConnected(void);

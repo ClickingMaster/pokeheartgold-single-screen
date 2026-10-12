@@ -68,7 +68,7 @@ extern void PlayerAvatar_CopyPositionVector(void *, void *);
 extern void Field3dObject_SetPosEx(void *, s32, s32, s32);
 extern s32 PlayerAvatar_GetXCoord(void *);
 extern s32 PlayerAvatar_GetZCoord(void *);
-extern int ov02_0224E31C(s32, s32);
+extern int SafariZone_GetAreaIndexAt(s32, s32);
 extern void *Heap_Alloc(u32, u32);
 extern void ov02_0224ADF0(void *);
 extern void GF_AssertFail(void);

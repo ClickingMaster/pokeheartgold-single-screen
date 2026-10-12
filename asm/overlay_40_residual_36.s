@@ -3761,70 +3761,70 @@
 	.public VsRecorder_VideoSearchOverwriteMain
 	.public VsRecorder_VideoSearchOverwriteNo
 	.public VsRecorder_VideoSearchSave
-	.public ov40_0223FD8C
-	.public ov40_0223FF8C
-	.public ov40_02240238
-	.public ov40_02240290
-	.public ov40_02240418
-	.public ov40_02240520
-	.public ov40_02240544
-	.public ov40_022405F0
-	.public ov40_022406C8
-	.public ov40_0224085C
-	.public ov40_022408AC
-	.public ov40_02240910
-	.public ov40_0224092C
-	.public ov40_02240B40
-	.public ov40_02240B58
-	.public ov40_02240B70
-	.public ov40_02240B90
-	.public ov40_02240D50
-	.public ov40_02240E28
-	.public ov40_02240F24
-	.public ov40_02241054
-	.public ov40_02241114
-	.public ov40_02241144
-	.public ov40_022413EC
-	.public ov40_02241404
-	.public ov40_0224141C
-	.public ov40_02241434
-	.public ov40_0224144C
-	.public ov40_02241464
-	.public ov40_0224147C
-	.public ov40_02241488
-	.public ov40_022417A4
-	.public ov40_022417DC
-	.public ov40_02241948
-	.public ov40_02241A34
-	.public ov40_02241A54
-	.public ov40_02241AB0
-	.public ov40_02241AFC
-	.public ov40_02241BDC
-	.public ov40_02241C10
-	.public ov40_02241C70
-	.public ov40_02241CD8
-	.public ov40_02241D10
-	.public ov40_02241E14
-	.public ov40_02241E40
-	.public ov40_02241ED4
-	.public ov40_02241F3C
-	.public ov40_02241F74
-	.public ov40_02241FD0
-	.public ov40_02242084
-	.public ov40_022420B4
-	.public ov40_02242110
-	.public ov40_022421FC
-	.public ov40_0224222C
-	.public ov40_02242378
-	.public ov40_02242490
-	.public ov40_0224253C
-	.public ov40_022425E8
-	.public ov40_022428D4
-	.public ov40_02242AEC
-	.public ov40_02242CFC
-	.public ov40_02242DF0
-	.public ov40_02242E14
-	.public ov40_02242E48
+	.public VsRecorder_VideoSearchDownloadVideo
+	.public VsRecorder_VideoSearchResume
+	.public VsRecorder_VideoSearchInit
+	.public VsRecorder_VideoSearchEnter
+	.public VsRecorder_NumberSearchShowPad
+	.public VsRecorder_NumberSearchPadMain
+	.public VsRecorder_NumberSearchClosePad
+	.public VsRecorder_NumberSearchExit
+	.public VsRecorder_NumberSearchDownloadVideo
+	.public VsRecorder_LoadFoundVideoDetails
+	.public VsRecorder_LoadSearchResultDetails
+	.public VsRecorder_FreeFoundVideoDetails
+	.public VsRecorder_NumberSearchShowDetails
+	.public VsRecorder_NumberSearchDetailsMain
+	.public VsRecorder_NumberSearchToggleProfile
+	.public VsRecorder_NumberSearchPlay
+	.public VsRecorder_NumberSearchExitDetails
+	.public VsRecorder_SetSearchSlotButtonName
+	.public VsRecorder_ShowSearchMessage
+	.public VsRecorder_PrintSearchMessage
+	.public VsRecorder_CreateSearchSlotButtons
+	.public VsRecorder_FreeSearchSlotButtons
+	.public VsRecorder_NumberSearchShowSlots
+	.public VsRecorder_NumberSearchSlotsMain
+	.public VsRecorder_NumberSearchSlotsCancel
+	.public VsRecorder_NumberSearchReturnToDetails
+	.public VsRecorder_NumberSearchConfirmOverwrite
+	.public VsRecorder_NumberSearchOverwriteMain
+	.public VsRecorder_NumberSearchOverwriteNo
+	.public VsRecorder_NumberSearchSave
+	.public VsRecorder_NumberSearchResume
+	.public VsRecorder_SendVideoShowCursor
+	.public VsRecorder_SendVideoUpload
+	.public VsRecorder_SendVideoExit
+	.public VsRecorder_RemoveSearchDetailsButtonWindow
+	.public VsRecorder_PrintSearchDetailsButtonLabel
+	.public VsRecorder_CreateSearchDetailsButtonWindow
+	.public VsRecorder_CreateSearchOverwriteWindows
+	.public VsRecorder_RemoveSearchOverwriteWindows
+	.public VsRecorder_OnNumberSearchDetailsTouch
+	.public VsRecorder_OnNumberSearchSlotTouch
+	.public VsRecorder_OnNumberSearchOverwriteTouch
+	.public VsRecorder_OnSearchConditionTouch
+	.public VsRecorder_OnSpeciesGroupTouch
+	.public VsRecorder_OnSearchDetailsTouch
+	.public VsRecorder_OnSearchSlotTouch
+	.public VsRecorder_OnSearchOverwriteTouch
+	.public VsRecorder_SetNumberPadButtonsMode
+	.public VsRecorder_CreateNumberPadButtons
+	.public VsRecorder_FreeNumberPadButtons
+	.public VsRecorder_SetSearchButtonsMode
+	.public VsRecorder_CreateSearchButtons
+	.public VsRecorder_FreeSearchButtons
+	.public VsRecorder_FoundVideoToggleProfile
+	.public VsRecorder_FoundVideoShowSlots
+	.public VsRecorder_FoundVideoConfirmOverwrite
+	.public VsRecorder_FoundVideoOverwriteNo
+	.public VsRecorder_FoundVideoSave
+	.public VsRecorder_FoundVideoReturnToDetails
+	.public VsRecorder_FoundVideoSlotsCancel
+	.public VsRecorder_FoundVideoPlay
+	.public VsRecorder_OnVideoUploaded
+	.public VsRecorder_OnVideoDownloaded
+	.public VsRecorder_OnVideoSaveReported
 	.public VsRecorder_PrintVideoNumber
 	.public VsRecorder_NewNumberPadConfig
 	.public VsRecorder_FreeNumberPadConfig
@@ -3968,8 +3968,8 @@
 	.public sVsRecorderSearchButtonMsgIds
 	.public ov40_02245668
 	.public sVsRecorderSearchSaveSlotHitboxes
-	.public ov40_02245684
-	.public ov40_02245694
+	.public sVsRecorderSearchSlotMsgIds
+	.public sVsRecorderSearchSlotAnims
 	.public ov40_022456A4
 	.public sVsRecorderSearchDetailHitboxes
 	.public sVsRecorderSearchConditionHitboxes
@@ -3988,15 +3988,15 @@
 	.public sVsRecorderSearchConditionWindows
 	.public sVsRecorderSearchResultIconPositions
 	.public ov40_022459C0
-	.public ov40_02245B30
-	.public ov40_02245B44
+	.public sVsRecorderSendVideoSubStates
+	.public sVsRecorderNumberSearchSubStates
 	.public sVsRecorderVideoSearchSubStates
 	.public sVsRecorderNumberPadStates
 	.public sVsRecorderNumberPadStartX
 	.public sVsRecorderNumberPadKeys
 	.public sVsRecorderDeleteYesHitbox
 	.public sVsRecorderDeleteNoHitbox
-	.public ov40_02245CA8
+	.public sVsRecorderDeleteSubStates
 	.public ov40_02245CD4
 	.public ov40_02245CE8
 	.public sVsRecorderSearchSpeciesGroupStarts
@@ -4057,14 +4057,14 @@
 	.public VsRecorder_UpdateNet
 	.public VsRecorder_FreeNet
 	.public VsRecorder_VideoSearchSave
-	.public ov40_0224147C
-	.public ov40_02242E48
+	.public VsRecorder_NumberSearchSave
+	.public VsRecorder_OnVideoSaveReported
 	.public VsRecorder_NumberPadSetState
 	.public VsRecorder_NumberPadFree
 	.public VsRecorder_NumberPadClearAction
 
-	thumb_func_start ov40_0223FD8C
-ov40_0223FD8C: ; 0x0223FD8C
+	thumb_func_start VsRecorder_VideoSearchDownloadVideo
+VsRecorder_VideoSearchDownloadVideo: ; 0x0223FD8C
 	push {r3, r4, r5, lr}
 	sub sp, #8
 	mov r1, #0x86
@@ -4300,13 +4300,13 @@ _0223FF7C: .word 0x0000057D
 _0223FF80: .word 0x0000413C
 _0223FF84: .word 0x00000878
 _0223FF88: .word 0x00001D4C
-	thumb_func_end ov40_0223FD8C
+	thumb_func_end VsRecorder_VideoSearchDownloadVideo
 
 
 
 
-	thumb_func_start ov40_0223FF8C
-ov40_0223FF8C: ; 0x0223FF8C
+	thumb_func_start VsRecorder_VideoSearchResume
+VsRecorder_VideoSearchResume: ; 0x0223FF8C
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	mov r1, #0x86
@@ -4398,10 +4398,10 @@ _0223FFEC:
 	mov r1, #1
 	bl GfGfx_EngineBTogglePlanes
 	add r0, r4, #0
-	bl ov40_02242110
+	bl VsRecorder_CreateSearchButtons
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_022420B4
+	bl VsRecorder_SetSearchButtonsMode
 	add r0, r5, #0
 	add r1, r4, #0
 	add r0, #0x10
@@ -4445,16 +4445,16 @@ _0223FFEC:
 	str r0, [r4, #8]
 	b _022401FA
 _022400AE:
-	bl ov40_022408AC
+	bl VsRecorder_LoadSearchResultDetails
 	mov r0, #0x6d
 	str r0, [sp]
 	ldr r0, _02240214 ; =sVsRecorderSearchDetailHitboxes
-	ldr r2, _02240218 ; =ov40_02241E40
+	ldr r2, _02240218 ; =VsRecorder_OnSearchDetailsTouch
 	mov r1, #4
 	add r3, r4, #0
 	bl TouchHitboxController_Create
 	ldr r1, _0224021C ; =0x00000608
-	ldr r2, _02240220 ; =ov40_02241ED4
+	ldr r2, _02240220 ; =VsRecorder_OnSearchSlotTouch
 	str r0, [r5, r1]
 	mov r0, #0x6d
 	str r0, [sp]
@@ -4463,7 +4463,7 @@ _022400AE:
 	add r3, r4, #0
 	bl TouchHitboxController_Create
 	ldr r1, _02240228 ; =0x0000060C
-	ldr r2, _0224022C ; =ov40_02241F3C
+	ldr r2, _0224022C ; =VsRecorder_OnSearchOverwriteTouch
 	str r0, [r5, r1]
 	mov r0, #0x6d
 	str r0, [sp]
@@ -4536,7 +4536,7 @@ _0224015A:
 	mov r1, #1
 	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	add r0, r4, #0
-	bl ov40_02241AB0
+	bl VsRecorder_CreateSearchDetailsButtonWindow
 	mov r0, #4
 	mov r1, #1
 	bl GfGfx_EngineATogglePlanes
@@ -4603,21 +4603,21 @@ _02240208: .word 0x0000413C
 _0224020C: .word 0x0000079C
 _02240210: .word 0x0000FFFF
 _02240214: .word sVsRecorderSearchDetailHitboxes
-_02240218: .word ov40_02241E40
+_02240218: .word VsRecorder_OnSearchDetailsTouch
 _0224021C: .word 0x00000608
-_02240220: .word ov40_02241ED4
+_02240220: .word VsRecorder_OnSearchSlotTouch
 _02240224: .word sVsRecorderSearchSaveSlotHitboxes
 _02240228: .word 0x0000060C
-_0224022C: .word ov40_02241F3C
+_0224022C: .word VsRecorder_OnSearchOverwriteTouch
 _02240230: .word sVsRecorderSearchOverwriteHitboxes
 _02240234: .word 0x000006D8
-	thumb_func_end ov40_0223FF8C
+	thumb_func_end VsRecorder_VideoSearchResume
 
 
 
 
-	thumb_func_start ov40_02240238
-ov40_02240238: ; 0x02240238
+	thumb_func_start VsRecorder_VideoSearchInit
+VsRecorder_VideoSearchInit: ; 0x02240238
 	push {r3, r4, r5, lr}
 	mov r1, #0x7a
 	add r5, r0, #0
@@ -4654,13 +4654,13 @@ ov40_02240238: ; 0x02240238
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov40_02240238
+	thumb_func_end VsRecorder_VideoSearchInit
 
 
 
 
-	thumb_func_start ov40_02240290
-ov40_02240290: ; 0x02240290
+	thumb_func_start VsRecorder_VideoSearchEnter
+VsRecorder_VideoSearchEnter: ; 0x02240290
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	mov r1, #0x86
@@ -4838,13 +4838,13 @@ _022403FA:
 _02240414:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov40_02240290
+	thumb_func_end VsRecorder_VideoSearchEnter
 
 
 
 
-	thumb_func_start ov40_02240418
-ov40_02240418: ; 0x02240418
+	thumb_func_start VsRecorder_NumberSearchShowPad
+VsRecorder_NumberSearchShowPad: ; 0x02240418
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x18
 	mov r1, #0x86
@@ -4912,7 +4912,7 @@ _0224043A:
 	add r2, #0xb4
 	str r5, [r4, r2]
 	add r0, r5, #0
-	bl ov40_02241FD0
+	bl VsRecorder_CreateNumberPadButtons
 	ldr r0, [r5, #8]
 	add r0, r0, #1
 	str r0, [r5, #8]
@@ -4973,13 +4973,13 @@ _02240516:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _0224051C: .word 0x000004AC
-	thumb_func_end ov40_02240418
+	thumb_func_end VsRecorder_NumberSearchShowPad
 
 
 
 
-	thumb_func_start ov40_02240520
-ov40_02240520: ; 0x02240520
+	thumb_func_start VsRecorder_NumberSearchPadMain
+VsRecorder_NumberSearchPadMain: ; 0x02240520
 	push {r4, lr}
 	add r4, r0, #0
 	mov r0, #0x86
@@ -4997,13 +4997,13 @@ ov40_02240520: ; 0x02240520
 _02240540:
 	mov r0, #0
 	pop {r4, pc}
-	thumb_func_end ov40_02240520
+	thumb_func_end VsRecorder_NumberSearchPadMain
 
 
 
 
-	thumb_func_start ov40_02240544
-ov40_02240544: ; 0x02240544
+	thumb_func_start VsRecorder_NumberSearchClosePad
+VsRecorder_NumberSearchClosePad: ; 0x02240544
 	push {r4, r5, lr}
 	sub sp, #0xc
 	mov r1, #0x86
@@ -5052,7 +5052,7 @@ _02240588:
 	mov r1, #0
 	bl GfGfx_EngineATogglePlanes
 	add r0, r5, #0
-	bl ov40_02242084
+	bl VsRecorder_FreeNumberPadButtons
 	ldr r0, [r5, #8]
 	add r0, r0, #1
 	str r0, [r5, #8]
@@ -5086,13 +5086,13 @@ _022405E6:
 	pop {r4, r5, pc}
 	.balign 4, 0
 _022405EC: .word 0x000004AC
-	thumb_func_end ov40_02240544
+	thumb_func_end VsRecorder_NumberSearchClosePad
 
 
 
 
-	thumb_func_start ov40_022405F0
-ov40_022405F0: ; 0x022405F0
+	thumb_func_start VsRecorder_NumberSearchExit
+VsRecorder_NumberSearchExit: ; 0x022405F0
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	mov r0, #0x86
@@ -5187,13 +5187,13 @@ _022406C2:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov40_022405F0
+	thumb_func_end VsRecorder_NumberSearchExit
 
 
 
 
-	thumb_func_start ov40_022406C8
-ov40_022406C8: ; 0x022406C8
+	thumb_func_start VsRecorder_NumberSearchDownloadVideo
+VsRecorder_NumberSearchDownloadVideo: ; 0x022406C8
 	push {r3, r4, r5, r6, lr}
 	sub sp, #4
 	mov r1, #0x86
@@ -5379,13 +5379,13 @@ _0224084C: .word 0x00002604
 _02240850: .word 0x00000878
 _02240854: .word 0x000004BC
 _02240858: .word 0x00001D4C
-	thumb_func_end ov40_022406C8
+	thumb_func_end VsRecorder_NumberSearchDownloadVideo
 
 
 
 
-	thumb_func_start ov40_0224085C
-ov40_0224085C: ; 0x0224085C
+	thumb_func_start VsRecorder_LoadFoundVideoDetails
+VsRecorder_LoadFoundVideoDetails: ; 0x0224085C
 	push {r4, lr}
 	mov r1, #0x86
 	lsl r1, r1, #4
@@ -5421,13 +5421,13 @@ ov40_0224085C: ; 0x0224085C
 	pop {r4, pc}
 	nop
 _022408A8: .word 0x000004BC
-	thumb_func_end ov40_0224085C
+	thumb_func_end VsRecorder_LoadFoundVideoDetails
 
 
 
 
-	thumb_func_start ov40_022408AC
-ov40_022408AC: ; 0x022408AC
+	thumb_func_start VsRecorder_LoadSearchResultDetails
+VsRecorder_LoadSearchResultDetails: ; 0x022408AC
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	mov r0, #0x86
@@ -5473,13 +5473,13 @@ ov40_022408AC: ; 0x022408AC
 	.balign 4, 0
 _02240908: .word 0x000004D4
 _0224090C: .word 0x00002608
-	thumb_func_end ov40_022408AC
+	thumb_func_end VsRecorder_LoadSearchResultDetails
 
 
 
 
-	thumb_func_start ov40_02240910
-ov40_02240910: ; 0x02240910
+	thumb_func_start VsRecorder_FreeFoundVideoDetails
+VsRecorder_FreeFoundVideoDetails: ; 0x02240910
 	push {r4, lr}
 	mov r1, #0x86
 	lsl r1, r1, #4
@@ -5492,13 +5492,13 @@ ov40_02240910: ; 0x02240910
 	ldr r0, [r4]
 	bl FrontierCard_Delete
 	pop {r4, pc}
-	thumb_func_end ov40_02240910
+	thumb_func_end VsRecorder_FreeFoundVideoDetails
 
 
 
 
-	thumb_func_start ov40_0224092C
-ov40_0224092C: ; 0x0224092C
+	thumb_func_start VsRecorder_NumberSearchShowDetails
+VsRecorder_NumberSearchShowDetails: ; 0x0224092C
 	push {r3, r4, r5, lr}
 	sub sp, #0x10
 	mov r1, #0x86
@@ -5594,18 +5594,18 @@ _0224096C:
 	mov r1, #2
 	bl SetBgPriority
 	add r0, r4, #0
-	bl ov40_0224085C
+	bl VsRecorder_LoadFoundVideoDetails
 	add r0, r4, #0
-	bl ov40_02242110
+	bl VsRecorder_CreateSearchButtons
 	mov r0, #0x6d
 	str r0, [sp]
 	ldr r0, _02240B20 ; =sVsRecorderSearchDetailHitboxes
-	ldr r2, _02240B24 ; =ov40_02241C10
+	ldr r2, _02240B24 ; =VsRecorder_OnNumberSearchDetailsTouch
 	mov r1, #4
 	add r3, r4, #0
 	bl TouchHitboxController_Create
 	ldr r1, _02240B28 ; =0x00000608
-	ldr r2, _02240B2C ; =ov40_02241C70
+	ldr r2, _02240B2C ; =VsRecorder_OnNumberSearchSlotTouch
 	str r0, [r5, r1]
 	mov r0, #0x6d
 	str r0, [sp]
@@ -5614,7 +5614,7 @@ _0224096C:
 	add r3, r4, #0
 	bl TouchHitboxController_Create
 	ldr r1, _02240B34 ; =0x0000060C
-	ldr r2, _02240B38 ; =ov40_02241CD8
+	ldr r2, _02240B38 ; =VsRecorder_OnNumberSearchOverwriteTouch
 	str r0, [r5, r1]
 	mov r0, #0x6d
 	str r0, [sp]
@@ -5690,7 +5690,7 @@ _02240AB4:
 	mov r1, #1
 	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	add r0, r4, #0
-	bl ov40_02241AB0
+	bl VsRecorder_CreateSearchDetailsButtonWindow
 	mov r0, #4
 	mov r1, #1
 	bl GfGfx_EngineATogglePlanes
@@ -5723,11 +5723,11 @@ _02240B18:
 	pop {r3, r4, r5, pc}
 	nop
 _02240B20: .word sVsRecorderSearchDetailHitboxes
-_02240B24: .word ov40_02241C10
+_02240B24: .word VsRecorder_OnNumberSearchDetailsTouch
 _02240B28: .word 0x00000608
-_02240B2C: .word ov40_02241C70
+_02240B2C: .word VsRecorder_OnNumberSearchSlotTouch
 _02240B30: .word sVsRecorderSearchSaveSlotHitboxes
 _02240B34: .word 0x0000060C
-_02240B38: .word ov40_02241CD8
+_02240B38: .word VsRecorder_OnNumberSearchOverwriteTouch
 _02240B3C: .word sVsRecorderSearchOverwriteHitboxes
-	thumb_func_end ov40_0224092C
+	thumb_func_end VsRecorder_NumberSearchShowDetails

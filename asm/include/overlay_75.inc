@@ -126,9 +126,9 @@
 .public sub_02031780
 .public sub_020317BC
 .public sub_0203186C
-.public sub_02034D8C
-.public sub_02034DB8
-.public sub_02034DE0
+.public CommWireless_StartUp
+.public CommWireless_IsStartedUp
+.public CommWireless_Terminate
 .public sub_02039528
 .public sub_0203957C
 .public sub_020399EC

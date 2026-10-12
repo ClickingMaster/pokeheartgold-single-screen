@@ -35,7 +35,7 @@
 #include "sys_flags.h"
 #include "system.h"
 #include "sound_playback.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 #include "unk_02037C94.h"
 #include "unk_0205A44C.h"
 #include "union_room_objects.h"
@@ -655,7 +655,7 @@ static BOOL StartMenu_HandleTouchInput(TaskManager *taskManager, FieldSystem *fi
 }
 
 static void sub_0203C69C(StartMenuTaskData *startMenu, FieldSystem *fieldSystem) {
-    if (sub_02035650() && startMenu->unk_350) {
+    if (CommWireless_Exists() && startMenu->unk_350) {
         UnionRoomObjects_RequestLeaveAll(fieldSystem->unk84);
         sub_02037FF0();
         sub_0205A904(0);
@@ -1235,7 +1235,7 @@ static BOOL Task_StartMenu_HandleReturn_RemovedEasyChatThing(TaskManager *taskMa
     if (!sub_02090D48(startMenu->exitTaskEnvironment)) {
         MailMessage mailMessage;
         sub_02090D60(startMenu->exitTaskEnvironment, &mailMessage);
-        if (sub_02035650()) {
+        if (CommWireless_Exists()) {
             sub_0205AB88(&mailMessage);
             sub_0205AA6C(fieldSystem->unk80, &mailMessage);
         }

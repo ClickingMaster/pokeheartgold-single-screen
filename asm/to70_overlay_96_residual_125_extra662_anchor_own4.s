@@ -105,7 +105,7 @@
 	.extern PokeathlonLampJump_Draw
 	.extern PokeathlonHurdleDash_Start
 	.extern PokeathlonRelayRun_Draw
-	.extern ov96_02204DE8
+	.extern PokeathlonPennantCapture_Draw
 	.extern PokeathlonBlockSmash_Draw
 	.extern PokeathlonGoalRoll_Draw
 	.extern PokeathlonEvent_PennantCapturePoints

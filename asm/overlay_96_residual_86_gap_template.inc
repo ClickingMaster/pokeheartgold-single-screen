@@ -190,7 +190,7 @@
 	.public ov96_02203CD4
 	.public ov96_022043AC
 	.public ov96_022043B8
-	.public ov96_02204DE8
+	.public PokeathlonPennantCapture_Draw
 	.public PokeathlonPennantCapture_TickFreezeTimer
 	.public PokeathlonPennantCapture_AddPoint2D
 	.public PokeathlonPennantCapture_ResetPennantSpots
@@ -241,8 +241,8 @@
 	.public PokeathlonEvent_SnowThrowPoints
 
 	.if 0
-	thumb_func_start ov96_02204DF8
-ov96_02204DF8: ; 0x02204DF8
+	thumb_func_start PokeathlonPennantCapture_ShowResults
+PokeathlonPennantCapture_ShowResults: ; 0x02204DF8
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -284,11 +284,11 @@ _02204E0C:
 	mov r0, #1
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
-	thumb_func_end ov96_02204DF8
+	thumb_func_end PokeathlonPennantCapture_ShowResults
 
 
-	thumb_func_start ov96_02204E58
-ov96_02204E58: ; 0x02204E58
+	thumb_func_start PokeathlonPennantCapture_Exit
+PokeathlonPennantCapture_Exit: ; 0x02204E58
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	bl PokeathlonCourse_GetHeapAllocPtr4
@@ -362,11 +362,11 @@ ov96_02204E58: ; 0x02204E58
 	nop
 _02204F18: .word gSystem + 0x60
 _02204F1C: .word 0x04000050
-	thumb_func_end ov96_02204E58
+	thumb_func_end PokeathlonPennantCapture_Exit
 
 
-	thumb_func_start ov96_02204F20
-ov96_02204F20: ; 0x02204F20
+	thumb_func_start PokeathlonPennantCapture_SetGfxBanks
+PokeathlonPennantCapture_SetGfxBanks: ; 0x02204F20
 	push {r4, lr}
 	sub sp, #0x28
 	ldr r4, _02204F3C ; =ov96_0221CB9C
@@ -383,7 +383,7 @@ _02204F2A:
 	pop {r4, pc}
 	.balign 4, 0
 _02204F3C: .word ov96_0221CB9C
-	thumb_func_end ov96_02204F20
+	thumb_func_end PokeathlonPennantCapture_SetGfxBanks
 	.endif
 
 	.if R86_GAP == 1

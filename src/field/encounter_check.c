@@ -934,7 +934,7 @@ static BOOL FieldSystem_GenerateSafariEncounter(FieldSystem *fieldSystem, Pokemo
     u16 species;
     u8 level;
     EncounterSlot *encSlots;
-    int area = ov02_0224E340(fieldSystem);
+    int area = FieldSystem_GetSafariAreaIndex(fieldSystem);
     TimeOfDayWildParam timeOfDay = GF_RTC_GetTimeOfDayWildParam();
 
     switch (encType) {

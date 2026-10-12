@@ -4,12 +4,12 @@
 
 	.bss
 
-	.public _021D4134
-_021D4134:
+	.public gCommWireless
+gCommWireless:
 	.space 0xC
 
 	.rodata
 
-	.public _020F6A88
-_020F6A88:
+	.public gCommWirelessAnyBssid
+gCommWirelessAnyBssid:
 	.byte 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF

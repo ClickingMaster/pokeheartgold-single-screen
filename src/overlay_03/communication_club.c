@@ -13,7 +13,7 @@
 #include "text.h"
 #include "sound_playback.h"
 #include "communication_player_state.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
 #include "unk_02037C94.h"
@@ -276,7 +276,7 @@ static void ov03_02254120(struct ListMenu *list, s32 index_unused, u8 y_unused) 
 }
 
 static void ov03_02254150(ListMenu *list, u16 cursorPos_unused, u8 itemsAbove) {
-    s32 res = sub_0203511C();
+    s32 res = CommWireless_CountParents();
     u16 cursorPos = 0;
     if (sCommClubManager->listMenu) {
         ListMenuGetScrollAndRow(sCommClubManager->listMenu, &cursorPos, NULL);
@@ -284,7 +284,7 @@ static void ov03_02254150(ListMenu *list, u16 cursorPos_unused, u8 itemsAbove) {
     cursorPos += itemsAbove;
     FillWindowPixelRect(&sCommClubManager->windows[0], 15, 8, itemsAbove * 16, (GetWindowWidth(&sCommClubManager->windows[0]) * 8) - 8, 16);
     if (cursorPos < res) {
-        sub_020351DC(cursorPos, sCommClubManager->playerProfile[1]);
+        CommWireless_CopyParentProfile(cursorPos, sCommClubManager->playerProfile[1]);
         BufferIntegerAsString(sCommClubManager->messageFormat[0], 0, cursorPos + 1, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
         BufferPlayersName(sCommClubManager->messageFormat[0], 1, sCommClubManager->playerProfile[1]);
         ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_00076, sCommClubManager->string[1]); // {STRVAR_1 51, 0, 0}:{STRVAR_1 3, 1, 0}
@@ -406,7 +406,7 @@ static void ov03_02254500(void *arg0, CommClubManager *commClubManager) {
             return;
         }
         int listInput;
-        if (sub_02035184() == 0) {
+        if (CommWireless_IsParentListChanged() == 0) {
             listInput = ListMenu_ProcessInput(sCommClubManager->listMenu);
             if (listInput == -1) {
                 if (commClubManager->unkA2 == 0) {
@@ -434,9 +434,9 @@ static void ov03_02254500(void *arg0, CommClubManager *commClubManager) {
         default:
             PlaySE(SEQ_SE_DP_SELECT);
             ListMenuGetCurrentItemArrayId(commClubManager->listMenu, &commClubManager->connectionIndex);
-            if (sub_0203511C() > commClubManager->connectionIndex) {
+            if (CommWireless_CountParents() > commClubManager->connectionIndex) {
                 ov03_02254600(commClubManager);
-                commClubManager->connectionIndex = sub_02035150(commClubManager->connectionIndex);
+                commClubManager->connectionIndex = CommWireless_GetParentSlot(commClubManager->connectionIndex);
                 sub_02058164(commClubManager->connectionIndex);
                 LinkSync_ClearValues();
                 ov03_02254B4C(&ov03_02254660);
@@ -446,9 +446,9 @@ static void ov03_02254500(void *arg0, CommClubManager *commClubManager) {
 }
 
 static void ov03_02254600(CommClubManager *commClubManager_unused) {
-    if (sub_02035184() || sCommClubManager->unk98) {
+    if (CommWireless_IsParentListChanged() || sCommClubManager->unk98) {
         sCommClubManager->unk98 = 0;
-        sub_02035198();
+        CommWireless_ClearParentListChanged();
         FillWindowPixelRect(&sCommClubManager->windows[0], 15, 8, 0, 12, 80);
         ov03_02254120(sCommClubManager->listMenu, LISTMENUATTR_MOVECURSORFUNC, 0);
         CopyWindowToVram(&sCommClubManager->windows[0]);
@@ -477,7 +477,7 @@ static void ov03_022546B0(void *arg0, CommClubManager *commClubManager) {
         sCommClubManager->unkA1 = 1;
         return;
     }
-    sub_020351DC(commClubManager->connectionIndex, sCommClubManager->playerProfile[1]);
+    CommWireless_CopyParentProfile(commClubManager->connectionIndex, sCommClubManager->playerProfile[1]);
     BufferPlayersName(commClubManager->messageFormat[2], 1, sCommClubManager->playerProfile[1]);
     if (ov03_02255B70() <= 2) {
         ov03_02253E20(1, TRUE);
@@ -1332,7 +1332,7 @@ static void ov03_022557CC(CommClubManager *commClubManager) {
 }
 
 static void ov03_02255804(CommClubManager *commClubManager) {
-    sub_020351DC(commClubManager->connectionIndex, sCommClubManager->playerProfile[1]);
+    CommWireless_CopyParentProfile(commClubManager->connectionIndex, sCommClubManager->playerProfile[1]);
     BufferPlayersName(commClubManager->messageFormat[2], 1, sCommClubManager->playerProfile[1]);
     ov03_02253E20(4, TRUE);
     commClubManager->connectedCount = Comm_CountConnected();
@@ -1447,7 +1447,7 @@ static void ov03_02255A2C(SysTask *task) {
 }
 
 static void ov03_02255A70(CommClubManager *commClubManager) {
-    sub_020351DC(commClubManager->connectionIndex, sCommClubManager->playerProfile[1]);
+    CommWireless_CopyParentProfile(commClubManager->connectionIndex, sCommClubManager->playerProfile[1]);
     BufferPlayersName(commClubManager->messageFormat[2], 1, sCommClubManager->playerProfile[1]);
     ov03_02253E20(5, TRUE);
     sub_02058180();
@@ -1482,7 +1482,7 @@ static void ov03_02255B44(CommClubManager *commClubManager_unused) {
     sCommClubManager->retCode = 2;
     sub_020398D4(1, 1);
     CommPlayerInfo_SendLocal();
-    sub_020356C0(1);
+    CommWireless_SetLostWhenAlone(1);
 }
 
 static int ov03_02255B70() {

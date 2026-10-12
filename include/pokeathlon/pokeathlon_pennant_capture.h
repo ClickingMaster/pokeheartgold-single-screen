@@ -124,17 +124,17 @@ typedef struct PokeathlonPennantCapture {
     enum HeapID heapId;                                   // 0x014
     void *bgCharsFile;                                    // 0x018: the file bgChars points into
     NNSG2dCharacterData *bgChars;                         // 0x01C: the animated BG0 tiles (6 frames)
-    void *unk020;                                         // 0x020
+    void *spritePool;                                     // 0x020
     PokeathlonPennantCapturePlayer players[4];            // 0x024
     PokeathlonPennantCaptureTouch touches[4];             // 0x304: host: the participants' touch state
     BOOL dragging[4];                                     // 0x334: the touch started on the own Pokemon
-    u32 unk344;                                           // 0x344
-    void *unk348;                                         // 0x348
+    void *monResources;                                   // 0x344: PokeathlonCourseSpriteResources
+    void *monObjects;                                     // 0x348: PokeathlonCourseMonObjects
     void *pickupEffects[4];                               // 0x34C: SEQ_SE_GS_THLON06, used in turn
     void *dropEffects[4];                                 // 0x35C: SEQ_SE_GS_SAA, used in turn
     struct PokeathlonPennantCaptureCpu *cpu;              // 0x36C
     struct PokeathlonPennantCaptureDisplay *display;      // 0x370
-    u32 unk374;                                           // 0x374
+    u32 layoutChoice;                                     // 0x374: host: the field layout it picked (0-19), sent to everyone as layoutFileId
     u32 layoutFileId;                                     // 0x378: field layout member in NARC 227
     PokeathlonPennantCaptureObstacle obstacles[20];       // 0x37C
     PokeathlonPennantCaptureFieldItem fieldItems[10];     // 0x46C
@@ -320,6 +320,13 @@ typedef struct PokeathlonPennantCaptureSpriteIds {
     u32 ids[2];
 } PokeathlonPennantCaptureSpriteIds;
 
+// pokeathlon_pennant_capture.c
+BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course);
+BOOL PokeathlonPennantCapture_Draw(PokeathlonCourseData *course);
+BOOL PokeathlonPennantCapture_ShowResults(PokeathlonCourseData *course);
+BOOL PokeathlonPennantCapture_Exit(PokeathlonCourseData *course);
+void PokeathlonPennantCapture_SetGfxBanks(void);
+
 // pokeathlon_pennant_capture_field.c
 void PokeathlonPennantCapture_UpdatePlayers(PokeathlonCourseData *course);
 void PokeathlonPennantCapture_TickFreezeTimer(PokeathlonCourseData *course, PokeathlonPennantCapture *work, PokeathlonPennantCapturePlayer *player);
@@ -384,8 +391,8 @@ void PokeathlonPennantCaptureDisplay_PrintName(PokeathlonPennantCaptureDisplay *
 void PokeathlonPennantCaptureDisplay_GetPicVramOffsets(void *pool, PokeathlonPennantCaptureDisplay *display);
 void PokeathlonPennantCaptureDisplay_InitWindow(PokeathlonPennantCaptureDisplay *display);
 void PokeathlonPennantCaptureDisplay_ShowStatus(void **sprites, int show);
-PokeathlonPennantCaptureCpu *PokeathlonPennantCaptureCpu_New(enum HeapID heapId, int cpuCount);
-void PokeathlonPennantCaptureCpu_SetPlayer(PokeathlonPennantCaptureCpu *cpu, int participant, PokeathlonPennantCapturePlayer *player);
+PokeathlonPennantCaptureCpu *PokeathlonPennantCaptureCpu_New(enum HeapID heapId, int cpuCount, int mode);
+void PokeathlonPennantCaptureCpu_SetPlayer(PokeathlonPennantCaptureCpu *cpu, u8 participant, PokeathlonPennantCapturePlayer *player);
 void PokeathlonPennantCaptureCpu_SetPennants(PokeathlonPennantCaptureCpu *cpu, PokeathlonPennantCapturePennant *pennants);
 void PokeathlonPennantCaptureCpu_SetObstacles(PokeathlonPennantCaptureCpu *cpu, const u8 *spots);
 void PokeathlonPennantCaptureCpu_Delete(PokeathlonPennantCaptureCpu *cpu);

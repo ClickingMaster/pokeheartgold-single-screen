@@ -62,9 +62,9 @@
 .public GfGfx_DisableEngineAPlanes
 .public GfGfx_DisableEngineBPlanes
 .public TouchscreenHitbox_TouchNewIsIn
-.public sub_02034D8C
-.public sub_02034DB8
-.public sub_02034DE0
+.public CommWireless_StartUp
+.public CommWireless_IsStartedUp
+.public CommWireless_Terminate
 .public sub_02039FD8
 .public WirelessStatusIcon_SetLevel
 .public sub_02087E10

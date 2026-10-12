@@ -38,7 +38,7 @@ extern const char gWirelessStatusIconWm256kNcgr[];
 extern const u8 *gWirelessStatusIconAnims[];
 extern WirelessStatusIcon *gWirelessStatusIcon;
 
-int sub_02034DCC(void);
+int CommWireless_IsOn(void);
 
 WirelessStatusIcon *WirelessStatusIcon_New(int a0, enum HeapID heapId, int x, int y, int isWifi, void *anims, int screen, int plttBase);
 void WirelessStatusIcon_Task(SysTask *task, void *data);
@@ -356,7 +356,7 @@ void WirelessStatusIcon_CreateOnScreen(int screen) {
 }
 
 void WirelessStatusIcon_CreateAt(int x, int y, int isWifi, int screen, u32 plttBase) {
-    if (sub_02034DCC() != 0) {
+    if (CommWireless_IsOn() != 0) {
         if (gWirelessStatusIcon != NULL) {
             WirelessStatusIcon_Destroy();
         }

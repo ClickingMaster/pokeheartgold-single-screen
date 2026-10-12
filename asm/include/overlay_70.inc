@@ -209,9 +209,9 @@
 .public sub_0203189C
 .public Save_Pokewalker_Get
 .public Pokewalker_UnlockCourse
-.public sub_02034D8C
-.public sub_02034DB8
-.public sub_02034DE0
+.public CommWireless_StartUp
+.public CommWireless_IsStartedUp
+.public CommWireless_Terminate
 .public sub_02039418
 .public sub_0203946C
 .public sub_020399EC

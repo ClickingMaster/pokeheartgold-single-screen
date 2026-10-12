@@ -37,7 +37,7 @@ BOOL ScrCmd_718(ScriptContext *ctx) {
 BOOL ScrCmd_719(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
-    *GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)) = ov02_0224E754(fieldSystem, GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)));
+    *GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)) = FieldSystem_GetFacingSafariObject(fieldSystem, GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)));
     return FALSE;
 }
 
@@ -104,7 +104,7 @@ BOOL ScrCmd_720(ScriptContext *ctx) {
 
 BOOL ScrCmd_721(ScriptContext *ctx) {
     u16 *var = GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx));
-    *var = ov02_0224E698(ctx->fieldSystem);
+    *var = FieldSystem_CheckSafariObjectPlacement(ctx->fieldSystem);
     return FALSE;
 }
 

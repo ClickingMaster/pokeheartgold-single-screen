@@ -39,10 +39,10 @@ typedef struct UnionChatLogPeer {
     UnionChatLogPeerChat chat; // 0x50
 } UnionChatLogPeer;
 
-// wireless_connection_state_8.c; its header declares sub_02035798 with another return type than
+// wireless_connection_state_8.c; its header declares CommWireless_GetParentProfile with another return type than
 // field_link_messages_internal.h, so the two are declared here.
-extern UnionChatLogPeer *sub_02035754(int index);
-extern PlayerProfile *sub_02035784(void);
+extern UnionChatLogPeer *CommWireless_GetParentInfo(int index);
+extern PlayerProfile *CommWireless_GetProfile(void);
 
 extern const int sUnionChatLogRowPressBgOffsets[];
 extern const s32 sUnionChatLogSpriteYOffsets[];
@@ -460,7 +460,7 @@ int UnionChatLog_HandleTouchButtons(UnionChatLogData *data) {
                     int index = UnionChatLog_AddLogIndex(data->log->head, data->scroll + hit - 2);
                     int i;
                     for (i = 0; i < 10; i++) {
-                        UnionChatLogPeer *peer = sub_02035754(i);
+                        UnionChatLogPeer *peer = CommWireless_GetParentInfo(i);
                         if (peer) {
                             register UnionChatLogPeerChat *chat = &peer->chat;
                             if (data->unionRoom->slots[i].state == 2 && chat->trainerId == data->log->slots[index].unkC) {
@@ -470,7 +470,7 @@ int UnionChatLog_HandleTouchButtons(UnionChatLogData *data) {
                             }
                         }
                     }
-                    if (PlayerProfile_GetTrainerID(sub_02035784()) == data->log->slots[index].unkC) {
+                    if (PlayerProfile_GetTrainerID(CommWireless_GetProfile()) == data->log->slots[index].unkC) {
                         PlaySE(SEQ_SE_DP_BUTTON3);
                         data->unionRoom->slots[50].trigger = 1;
                     }
@@ -709,12 +709,12 @@ void UnionChatLog_CollectMessages(UnionChatLogData *data) {
 
     if (!FieldSystem_TaskIsRunning(data->fieldSystem)) {
         for (i = 0; i < 16; i++) {
-            UnionChatLogPeer *peer = sub_02035754(i);
+            UnionChatLogPeer *peer = CommWireless_GetParentInfo(i);
             if (peer != NULL) {
                 UnionChatLogPeerChat *chat = &peer->chat;
                 MailMessage *message = &chat->message;
                 if (UnionChatLog_IsNewMessage(data, message, chat->trainerId)) {
-                    PlayerProfile *profile = sub_02035798(i);
+                    PlayerProfile *profile = CommWireless_GetParentProfile(i);
                     UnionChatLog_AppendMessage(data, profile, message, chat->trainerId);
                 }
             }

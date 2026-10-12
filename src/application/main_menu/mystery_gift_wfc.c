@@ -8,7 +8,7 @@
 #include "heap.h"
 #include "overlay_manager.h"
 #include "system.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 #include "wifi_connection.h"
 
 // Mystery Gift > Get via Nintendo Wi-Fi Connection: connects, downloads the gift file of the game (into
@@ -77,7 +77,7 @@ void LoadOVY38(void);
 void UnloadOVY38(void);
 void WirelessStatusIcon_Create(void);
 void WirelessStatusIcon_Destroy(void);
-void sub_02034DE0(void);
+void CommWireless_Terminate(void);
 
 extern MysteryGiftWfcStatus sMysteryGiftWfcStatus;
 extern const char ov74_0223D038[];
@@ -177,7 +177,7 @@ void MysteryGiftWfc_Shutdown(void) {
     sub_020394F4();
     UnloadOVY38();
     UnloadDwcOverlay();
-    sub_02034DE0();
+    CommWireless_Terminate();
 }
 
 #pragma force_active on
@@ -192,14 +192,14 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
     }
     switch (*state) {
     case WFC_STATE_LOAD_OVERLAYS:
-        sub_02034D8C();
+        CommWireless_StartUp();
         LoadDwcOverlay();
         LoadOVY38();
         sub_02039FD8(3);
         *state = WFC_STATE_WAIT_OVERLAYS;
         break;
     case WFC_STATE_WAIT_OVERLAYS:
-        if (sub_02034DB8()) {
+        if (CommWireless_IsStartedUp()) {
             ov00_021EC294(MysteryGiftWfc_Alloc, MysteryGiftWfc_Free);
             sub_020394A0(data->saveData);
             *state = WFC_STATE_INIT;

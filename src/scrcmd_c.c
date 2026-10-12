@@ -73,7 +73,7 @@
 #include "text.h"
 #include "trainer_memo.h"
 #include "friend_roster.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
 #include "unk_02037C94.h"
@@ -2944,7 +2944,7 @@ BOOL ScrCmd_283(ScriptContext *ctx) {
 }
 
 BOOL sub_02044658(ScriptContext *ctx) {
-    if (sub_02037D78() != TRUE && sub_02035650() != TRUE) {
+    if (sub_02037D78() != TRUE && CommWireless_Exists() != TRUE) {
         return TRUE;
     } else {
         return FALSE;

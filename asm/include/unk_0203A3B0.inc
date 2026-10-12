@@ -6,7 +6,7 @@
 .public Heap_AllocAtEnd
 .public Heap_Free
 .public GF_AssertFail
-.public sub_02034DCC
+.public CommWireless_IsOn
 .public Comm_CountConnected
 .public sub_02037474
 .public sub_02039998

@@ -102,7 +102,7 @@ extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, Strin
 // Other modules (not in a header yet).
 extern void RTC_ConvertDayToDate(RTCDate *date, s32 day);
 extern void WirelessStatusIcon_Create(void);
-extern void sub_020358B8(void *a0);
+extern void CommWireless_SetCustomBeacon(void *a0);
 extern void LinkSync_StartSync(u8 a0);
 extern int LinkSync_IsSynced(u8 a0);
 extern BOOL sub_02037D78(void);
@@ -939,7 +939,7 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
     case 19: {
         int numReceivers = 0;
         if (Comm_IsNetIdConnected(0)) {
-            sub_020358B8(&album->shareHeader);
+            CommWireless_SetCustomBeacon(&album->shareHeader);
             numReceivers = WonderCardAlbum_UpdateReceiverList(album, &album->windows[16]);
             if (numReceivers == 0 && album->receiversShown != 0) {
                 FillWindowPixelBuffer(&album->windows[16], 0);

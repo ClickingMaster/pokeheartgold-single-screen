@@ -37,7 +37,7 @@
 #include "frontier_save_access.h"
 #include "unk_0203170C.h"
 #include "communication_player_state.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
 #include "unk_02037C94.h"
@@ -1786,7 +1786,7 @@ s32 ov44_0222BBA4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 }
 
 s32 ov44_0222BC78(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
-    if (sub_02034DB8() != 0) {
+    if (CommWireless_IsStartedUp() != 0) {
 
     } else {
         if (ov44_02231BB0(&arg0->unk38C) == 1) {

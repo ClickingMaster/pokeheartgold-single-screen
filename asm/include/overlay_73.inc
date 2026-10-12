@@ -168,9 +168,9 @@
 .public sub_0203189C
 .public Wireless_GetConnectedBitmap
 .public CommPlayerInfo_GetProfile
-.public sub_02034D8C
-.public sub_02034DB8
-.public sub_02034DE0
+.public CommWireless_StartUp
+.public CommWireless_IsStartedUp
+.public CommWireless_Terminate
 .public Comm_SendCommand
 .public Comm_CountConnected
 .public Comm_GetLocalNetId

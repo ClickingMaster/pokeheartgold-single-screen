@@ -70,9 +70,9 @@ extern VsRecorderScreenFunc ov40_02245368[];
 extern VsRecorderScreenFunc ov40_02245470[];
 extern VsRecorderScreenFunc sVsRecorderVideoListSubStates[];
 extern VsRecorderScreenFunc sVsRecorderVideoSearchSubStates[];
-extern VsRecorderScreenFunc ov40_02245B44[];
-extern VsRecorderScreenFunc ov40_02245B30[];
-extern VsRecorderScreenFunc ov40_02245CA8[];
+extern VsRecorderScreenFunc sVsRecorderNumberSearchSubStates[];
+extern VsRecorderScreenFunc sVsRecorderSendVideoSubStates[];
+extern VsRecorderScreenFunc sVsRecorderDeleteSubStates[];
 
 #pragma force_active on
 
@@ -355,18 +355,18 @@ BOOL VsRecorder_Main(VsRecorderWork *work, int *screen) {
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_SEARCH_NUMBER:
-        done = ov40_02245B44[work->subState](work);
+        done = sVsRecorderNumberSearchSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_SEND_VIDEO:
-        done = ov40_02245B30[work->subState](work);
+        done = sVsRecorderSendVideoSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_EXIT:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_NONE, TRUE, screen);
         break;
     case VS_RECORDER_SCREEN_DELETE:
-        done = ov40_02245CA8[work->subState](work);
+        done = sVsRecorderDeleteSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_MESSAGE:

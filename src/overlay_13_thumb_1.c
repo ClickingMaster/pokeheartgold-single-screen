@@ -6,7 +6,7 @@
 
 #include "overlay_00_thumb.h"
 #include "overlay_13_arm_2.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 
 void ov13_0221BA00(enum HeapID HeapID) {
     for (int playerNo = 0; playerNo < 32; playerNo++) {
@@ -14,7 +14,7 @@ void ov13_0221BA00(enum HeapID HeapID) {
         NNS_SndPlayerSetPlayableSeqCount(playerNo, 1);
         NNS_SndPlayerSetAllocatableChannel(playerNo, 0);
     }
-    sub_02034D8C();
+    CommWireless_StartUp();
     OS_InitTick();
     OS_InitAlarm();
     OSIntrMode interrupts = OS_DisableInterrupts();

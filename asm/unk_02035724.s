@@ -2,8 +2,8 @@
 	.include "unk_02034B0C.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02035724
-sub_02035724: ; 0x02035724
+	thumb_func_start CommWireless_GetBeaconPeriod
+CommWireless_GetBeaconPeriod: ; 0x02035724
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	bl WM_GetDispersionBeaconPeriod
@@ -30,4 +30,4 @@ _0203574E:
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end sub_02035724
+	thumb_func_end CommWireless_GetBeaconPeriod

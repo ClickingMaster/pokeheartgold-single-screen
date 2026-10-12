@@ -1498,19 +1498,19 @@
 	.public ov02_0224E26C
 	.public ov02_0224E2A0
 	.public ov02_0224E2D4
-	.public ov02_0224E308
-	.public ov02_0224E31C
-	.public ov02_0224E340
-	.public ov02_0224E35C
-	.public ov02_0224E4CC
-	.public ov02_0224E4DC
+	.public MapId_IsSafariZone
+	.public SafariZone_GetAreaIndexAt
+	.public FieldSystem_GetSafariAreaIndex
+	.public FieldSystem_CanPlaceSafariObject
+	.public SafariZone_CanPlaceObjectOnLand
+	.public SafariZone_CanPlaceObjectOnWater
 	.public ov02_0224E640
-	.public ov02_0224E698
-	.public ov02_0224E754
-	.public ov02_0224E828
-	.public ov02_0224EB48
-	.public ov02_0224EE4C
-	.public ov02_0224EF6C
+	.public FieldSystem_CheckSafariObjectPlacement
+	.public FieldSystem_GetFacingSafariObject
+	.public SafariZone_FindSpotFor1x2Object
+	.public SafariZone_FindSpotFor2x1Object
+	.public SafariZone_FindSpotFor2x2Object
+	.public SafariZone_CanPlaceObjectOn
 	.public FollowMon_SelectInteraction
 	.public FollowMon_GetSituation
 	.public FollowMonRule_Matches
@@ -1747,11 +1747,11 @@
 	.public ov02_0224DE08
 	.public ov02_0224E0BC
 	.public ov02_0224E0D4
-	.public ov02_0224E308
-	.public ov02_0224E31C
-	.public ov02_0224E340
-	.public ov02_0224E4CC
-	.public ov02_0224E4DC
+	.public MapId_IsSafariZone
+	.public SafariZone_GetAreaIndexAt
+	.public FieldSystem_GetSafariAreaIndex
+	.public SafariZone_CanPlaceObjectOnLand
+	.public SafariZone_CanPlaceObjectOnWater
 	.public FollowMonSituation_SetMapId
 	.public FollowMonSituation_SetMood
 	.public FollowMonInteraction_New

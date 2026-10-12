@@ -12,7 +12,7 @@
 #include "player_data.h"
 #include "sys_task_api.h"
 #include "communication_command.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 
 // DS-wireless link used by Mystery Gift to receive a Wonder Card from a distribution system. The link
 // is driven by a small state callback run from a task every frame.
@@ -44,7 +44,7 @@ extern void sub_02037E9C(void);
 extern int sub_02037088(int a0, void *a1, void *a2);
 extern void sub_02038114(void *a0, void *a1);
 extern void sub_02038148(void *a0, int a1);
-extern void *sub_020358D0(int a0);
+extern void *CommWireless_GetParentMail(int a0);
 
 // The pieces of this module that poll the work pointer read it as volatile.
 #define VOLATILE_WORK (*(MysteryGiftCommWork *volatile *)&sMysteryGiftCommWork)
@@ -91,7 +91,7 @@ void ov74_02229C0C(void) {
 #pragma force_active reset
 
 void ov74_02229C44(void) {
-    if (sub_02034DB8()) {
+    if (CommWireless_IsStartedUp()) {
         MysteryGiftComm_SetState(ov74_02229C5C, 0);
     }
 }
@@ -162,7 +162,7 @@ void ov74_02229D50(int channel) {
 int ov74_02229D6C(void *dst) {
     int i;
     for (i = 0; i < 16; i++) {
-        u8 *src = sub_020358D0(i);
+        u8 *src = CommWireless_GetParentMail(i);
         if (src != NULL && *(u16 *)(src + 0x4C) != 0) {
             memcpy((u8 *)dst + 0x8C, src, 0x50);
             return i;

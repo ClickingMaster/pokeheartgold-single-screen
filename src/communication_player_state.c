@@ -112,7 +112,7 @@ void CommPlayerInfo_RecvPlayerEntry(int netId, int unused, void *src) {
         return;
     }
     MI_CpuCopy8(src, &gCommPlayerInfo->entries[netId], sizeof(CommPlayerInfoEntry));
-    sub_020357C4(gCommPlayerInfo->entries[netId].mac, netId);
+    CommWireless_SetMacAddress(gCommPlayerInfo->entries[netId].mac, netId);
     gCommPlayerInfo->status[netId] = 1;
     if (netId == Comm_GetLocalNetId()) {
         gCommPlayerInfo->status[netId] = 3;

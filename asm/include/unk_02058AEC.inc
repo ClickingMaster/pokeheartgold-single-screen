@@ -43,10 +43,10 @@
 .public Save_SpecialRibbons_Get
 .public CommPlayerInfo_SendLocal
 .public CommPlayerInfo_GetProfile
-.public sub_02035650
-.public sub_02035754
-.public sub_02035798
-.public sub_02035878
+.public CommWireless_Exists
+.public CommWireless_GetParentInfo
+.public CommWireless_GetParentProfile
+.public CommWireless_GetRuleset
 .public sub_02036FD8
 .public Comm_SendCommand
 .public sub_02037088

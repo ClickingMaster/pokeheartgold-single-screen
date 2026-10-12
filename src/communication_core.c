@@ -44,15 +44,15 @@ extern u32 Comm_GetCommandSize(int command);
 extern int Comm_CommandHasBuffer(int command);
 extern void *Comm_GetCommandBuffer(int command, int netId, int size);
 extern void CommPlayerInfo_Free(void);
-extern void sub_02034E2C(void);
-extern int sub_02034EF0(int, int, int);
-extern int sub_02034F64(int, int);
-extern int sub_0203507C(void);
-extern int sub_02035218(int);
-extern BOOL sub_020355C8(int);
-extern int sub_02035650(void);
-extern int sub_0203567C(void);
-extern int sub_0203569C(void);
+extern void CommWireless_ClearParents(void);
+extern int CommWireless_StartParent(int, int, int);
+extern int CommWireless_StartScan(int, int);
+extern int CommWireless_RequestStopAndFree(void);
+extern int CommWireless_ConnectToParent(int);
+extern BOOL CommWireless_Main(int);
+extern int CommWireless_Exists(void);
+extern int CommWireless_GetConnectedChildren(void);
+extern int CommWireless_IsLinkLost(void);
 extern int sub_020357FC(void);
 extern void sub_0203581C(void);
 extern BOOL WifiConnection_SendToHost(void *frame, int size);
@@ -263,7 +263,7 @@ void sub_02035ED0(int slot) {
 int sub_02035ED8(int a, int b, int c, int d) {
     int result = 1;
     if (!sub_02034044(sub_0203993C())) {
-        result = sub_02034EF0(a, b, d);
+        result = CommWireless_StartParent(a, b, d);
         Wireless_SetChildJoinedCallback(sub_02035ED0);
     }
     Comm_InitWork(a, c);
@@ -273,7 +273,7 @@ int sub_02035ED8(int a, int b, int c, int d) {
 int sub_02035F14(int a, int b, int c) {
     int result = 1;
     if (!sub_02034044(sub_0203993C())) {
-        result = sub_02034F64(a, b);
+        result = CommWireless_StartScan(a, b);
     }
     Comm_InitWork(a, c);
     gCommSendStages.stage[1] = 4;
@@ -346,7 +346,7 @@ void sub_02036024(void) {
         if (sub_02034044(sub_0203993C())) {
             WifiConnection_Shutdown();
             destroy = 1;
-        } else if (sub_0203507C()) {
+        } else if (CommWireless_RequestStopAndFree()) {
             destroy = 1;
         }
     }
@@ -369,7 +369,7 @@ void sub_02036024(void) {
 }
 
 int sub_020360E4(int value) {
-    return sub_02035218(value);
+    return CommWireless_ConnectToParent(value);
 }
 
 void Comm_VBlankSendTask(void) {
@@ -385,7 +385,7 @@ void Comm_VBlankSendTask(void) {
 void sub_0203611C(void) {
     if (sub_020357FC()) {
         if (Comm_GetLocalNetId() == 0) {
-            if (sub_0203567C() == 0) {
+            if (CommWireless_GetConnectedChildren() == 0) {
                 sub_02036024();
             }
         } else {
@@ -423,13 +423,13 @@ BOOL Comm_Update(void) {
             }
             gCommCore.updateLock = 1;
         }
-        sub_020355C8(*(u16 *)(gCommCore.work + 0x694));
+        CommWireless_Main(*(u16 *)(gCommCore.work + 0x694));
         if (Comm_GetLocalNetId() == 0) {
             Comm_ResetDisconnectedNetIds();
         }
         sub_0203611C();
     } else {
-        sub_020355C8(0);
+        CommWireless_Main(0);
     }
     sub_02039A00(0);
     LinkSync_Update();
@@ -460,7 +460,7 @@ void sub_02036274(void) {
     gCommCore.updateLock = 0;
     if (gCommCore.work != NULL) {
         Comm_Reset();
-        sub_02034E2C();
+        CommWireless_ClearParents();
     }
     gCommCore.updateLock = lock;
 }
@@ -1311,7 +1311,7 @@ int sub_02037474(void) {
     if (gCommCore.work != NULL && sub_02034044(sub_0203993C())) {
         return 1;
     }
-    return sub_02035650();
+    return CommWireless_Exists();
 }
 
 void sub_02037498(int value) {
@@ -1433,7 +1433,7 @@ int sub_020376EC(int command) {
 }
 
 int sub_020376F8(void) {
-    return sub_0203567C();
+    return CommWireless_GetConnectedChildren();
 }
 
 int sub_02037700(void) {
@@ -1441,7 +1441,7 @@ int sub_02037700(void) {
         sub_020398D4(1, 1);
         return 1;
     }
-    return sub_0203569C();
+    return CommWireless_IsLinkLost();
 }
 
 int sub_0203772C(u16 linkMode) {

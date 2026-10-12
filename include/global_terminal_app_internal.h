@@ -7,7 +7,7 @@
 #include "overlay_manager.h"
 #include "sound_system.h"
 #include "system.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 #include "unk_02037C94.h"
 #include "network_overlay_loader.h"
 
@@ -35,8 +35,8 @@ void LoadOVY38(void);
 void UnloadOVY38(void);
 void WirelessStatusIcon_SetLevel(int a0);
 const OverlayManagerTemplate *sub_02087E10(u8 a0);
-BOOL sub_02034DB8(void);
-void sub_02034DE0(void);
+BOOL CommWireless_IsStartedUp(void);
+void CommWireless_Terminate(void);
 void ov00_021EC294(void *(*alloc)(int, u32, int), void (*free)(int, void *, u32));
 int ov00_021EC9D4(void);
 void ov00_021ECB40(void);

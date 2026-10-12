@@ -34,8 +34,8 @@ void sub_0205A904(int command) {
         break;
     }
     data.command = command;
-    sub_02035854(&data);
-    sub_0203588C();
+    CommWireless_SetRuleset(&data);
+    CommWireless_RefreshBeacon();
 }
 
 int sub_0205A9A0(struct LinkMessageStateA904 *state, MessageFormat *msgFmt) {

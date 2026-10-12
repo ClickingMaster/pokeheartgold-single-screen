@@ -36,7 +36,7 @@
 #include "unk_0200A090.h"
 #include "frontier_data_access.h"
 #include "unk_0203170C.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 #include "unk_02037C94.h"
 #include "wireless_status_icon.h"
 #include "unk_02069528.h"
@@ -233,7 +233,7 @@ int GameStats_GetResponseLength(void);
 // Defined in other ARM9 sources; not declared in their headers.
 BOOL LoadOVY38(void);
 void UnloadOVY38(void);
-void sub_02034DE0(void);
+void CommWireless_Terminate(void);
 void sub_02039418(SaveData *saveData);
 void sub_0203946C(void);
 void sub_020399EC(void);
@@ -824,7 +824,7 @@ BOOL NintendoWfc_Init(OverlayManager *man, int *state) {
         break;
     }
     case 1:
-        sub_02034D8C();
+        CommWireless_StartUp();
         FontID_Alloc(4, HEAP_ID_67);
         *state = 0;
         return TRUE;
@@ -841,7 +841,7 @@ BOOL NintendoWfc_Main(OverlayManager *man, int *state) {
     ov00_021ECB40();
     switch (*state) {
     case 0:
-        if (sub_02034DB8()) {
+        if (CommWireless_IsStartedUp()) {
             sNintendoWfcGlobal.heap = wfc->expHeap;
             ov00_021EC294(NintendoWfc_Alloc, NintendoWfc_Free);
             *state = 1;
@@ -888,7 +888,7 @@ BOOL NintendoWfc_Exit(OverlayManager *man, int *state) {
     DestroyMsgData(wfc->msgDataTower);
     MessageFormat_Delete(wfc->msgFormat);
     ov72_02238160(wfc);
-    sub_02034DE0();
+    CommWireless_Terminate();
     Heap_Free(wfc->bgConfig);
     OverlayManager_FreeData(man);
     Main_SetVBlankIntrCB(NULL, NULL);

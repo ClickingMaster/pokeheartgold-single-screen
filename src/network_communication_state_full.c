@@ -12,7 +12,7 @@
 #include "wireless_manager.h"
 #include "communication_command.h"
 #include "communication_player_state.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 #include "link_synchronization.h"
 #include "wireless_status_icon.h"
 #include "network_overlay_loader.h"
@@ -70,7 +70,7 @@ s32 sub_02037C94(void) {
 void sub_02037C98(SaveData *saveData, s8 arg1) {
     if (_021D4150 == NULL) {
         GF_ASSERT(saveData);
-        sub_02034D8C();
+        CommWireless_StartUp();
         _021D4150 = Heap_Alloc(HEAP_ID_15, sizeof(UnkStruct_sub_02039C6C));
         ;
         MI_CpuClear8(_021D4150, sizeof(UnkStruct_sub_02039C6C));
@@ -100,7 +100,7 @@ void sub_02037D2C(void) {
             Heap_Destroy(HEAP_ID_48);
         }
         WirelessStatusIcon_Destroy();
-        sub_02034DE0();
+        CommWireless_Terminate();
         Heap_Free(_021D4150);
         Heap_Destroy(HEAP_ID_15);
         _021D4150 = NULL;
@@ -150,7 +150,7 @@ void sub_02037E4C(void) {
     if (_021D4150->unk44) {
         _021D4150->unk44--;
     }
-    if (sub_02034FE8() && !_021D4150->unk44) {
+    if (CommWireless_Stop() && !_021D4150->unk44) {
         sub_02036024();
         sub_020381C0(sub_02038408, 0);
     }
@@ -303,7 +303,7 @@ void sub_0203817C(void) {
     }
     if (sub_02039998()) {
         WirelessStatusIcon_SetLevel(3 - ov00_021EC9D4());
-    } else if (sub_02035650()) {
+    } else if (CommWireless_Exists()) {
         WirelessStatusIcon_SetLevel(3 - WM_GetLinkLevel());
     }
 }
@@ -315,26 +315,26 @@ void sub_020381C0(void (*arg0)(), int arg1) {
 
 void sub_020381D0(void) {
     if (!sub_02039998()) {
-        if (!sub_02035664()) {
+        if (!CommWireless_IsIdle()) {
             return;
         } else {
             sub_020374E4();
-            sub_020350A8(1);
+            CommWireless_SetManagerEnded(1);
         }
     }
     sub_020381C0(sub_02038404, 0);
 }
 
 void sub_020381FC(void) {
-    if (sub_02034FE8()) {
+    if (CommWireless_Stop()) {
         sub_0203622C();
         sub_020381C0(sub_020381D0, 0);
     }
 }
 
 void sub_02038218(void) {
-    if (sub_02034DB8()) {
-        sub_02034B0C(_021D4150->unk2C, 1);
+    if (CommWireless_IsStartedUp()) {
+        CommWireless_Init(_021D4150->unk2C, 1);
         CommPlayerInfo_Init(_021D4150->unk28, _021D4150->unk30);
         if (sub_02035ED8(1, 1, 512, 1)) {
             sub_02035FD8();
@@ -356,8 +356,8 @@ void sub_0203827C(void) {
 }
 
 void sub_02038294(void) {
-    if (sub_02034DB8()) {
-        sub_02034B0C(_021D4150->unk2C, 1);
+    if (CommWireless_IsStartedUp()) {
+        CommWireless_Init(_021D4150->unk2C, 1);
         CommPlayerInfo_Init(_021D4150->unk28, _021D4150->unk30);
         if (sub_02035F14(1, 1, 512)) {
             sub_02035FD8();
@@ -367,11 +367,11 @@ void sub_02038294(void) {
 }
 
 void sub_020382DC(void) {
-    sub_0203528C();
+    CommWireless_UpdateParents();
 }
 
 void sub_020382E4(void) {
-    sub_0203528C();
+    CommWireless_UpdateParents();
     if (sub_020360E4(_021D4150->unk4D)) {
         sub_020381C0(sub_0203830C, 10);
     }
@@ -387,7 +387,7 @@ void sub_0203830C(void) {
 }
 
 void sub_02038344(void) {
-    sub_02034FE8();
+    CommWireless_Stop();
     sub_020381C0(sub_02038358, 2);
 }
 
@@ -396,7 +396,7 @@ void sub_02038358(void) {
         _021D4150->unk44--;
         return;
     }
-    if (sub_02035664() && sub_02035F14(0, 1, 512)) {
+    if (CommWireless_IsIdle() && sub_02035F14(0, 1, 512)) {
         sub_02035FD8();
         sub_020381C0(sub_020382E4, 10);
     }
@@ -409,7 +409,7 @@ void sub_02038398(void) {
 }
 
 void sub_020383B0(void) {
-    sub_02034FE8();
+    CommWireless_Stop();
     sub_020381C0(sub_020383C4, 2);
 }
 
@@ -418,7 +418,7 @@ void sub_020383C4(void) {
         _021D4150->unk44--;
         return;
     }
-    if (sub_02035664() && sub_02035F14(0, 1, 512)) {
+    if (CommWireless_IsIdle() && sub_02035F14(0, 1, 512)) {
         sub_02035FD8();
         sub_020381C0(sub_020382DC, 10);
     }
@@ -449,7 +449,7 @@ void sub_02038418(void) {
 }
 
 void sub_02038460(void) {
-    if (sub_02034FE8()) {
+    if (CommWireless_Stop()) {
         sub_0203622C();
         sub_020381C0(sub_02038538, 0);
     }
@@ -459,15 +459,15 @@ void sub_0203847C(void) {
     if (_021D4150->unk44) {
         _021D4150->unk44--;
     }
-    if (sub_02034FE8() && !_021D4150->unk44) {
+    if (CommWireless_Stop() && !_021D4150->unk44) {
         sub_02036024();
         sub_020381C0(sub_02038408, 0);
     }
 }
 
 void sub_020384B4(void) {
-    if (sub_02034DB8()) {
-        sub_02034B0C(_021D4150->unk2C, 1);
+    if (CommWireless_IsStartedUp()) {
+        CommWireless_Init(_021D4150->unk2C, 1);
         Wireless_SetMaxEntries(_021D4150->unk4A);
         CommPlayerInfo_Init(_021D4150->unk28, 0);
         if (sub_02035F14(1, 1, 512)) {
@@ -478,24 +478,24 @@ void sub_020384B4(void) {
 }
 
 void sub_02038508(void) {
-    sub_0203528C();
+    CommWireless_UpdateParents();
     if (_021D4150->unk44) {
         _021D4150->unk44--;
         return;
     }
-    if (sub_02034FE8()) {
+    if (CommWireless_Stop()) {
         sub_020381C0(sub_02038550, 0);
     }
 }
 
 void sub_02038538(void) {
-    if (sub_02034FE8()) {
+    if (CommWireless_Stop()) {
         sub_020381C0(sub_02038550, 0);
     }
 }
 
 void sub_02038550(void) {
-    if (sub_02035664() && sub_02035ED8(0, _021D4150->unk52, 512, 1)) {
+    if (CommWireless_IsIdle() && sub_02035ED8(0, _021D4150->unk52, 512, 1)) {
         // Equivalent to MATH_Rand32(&_021D4150->mathRandContext, 0);
         MATHRandContext32 *mathRandContext = &_021D4150->mathRandContext;
         mathRandContext->x = (mathRandContext->mul * mathRandContext->x) + mathRandContext->add;
@@ -507,7 +507,7 @@ void sub_02038550(void) {
 }
 
 void sub_020385B8(void) {
-    if (!sub_020358B0()) {
+    if (!CommWireless_HasSentBeacons()) {
         if (sub_020376F8()) {
             _021D4150->unk52 = 1;
             WirelessStatusIcon_Create();
@@ -519,13 +519,13 @@ void sub_020385B8(void) {
             return;
         }
     }
-    if (sub_02034FE8()) {
+    if (CommWireless_Stop()) {
         sub_020381C0(sub_02038610, 0);
     }
 }
 
 void sub_02038610(void) {
-    if (sub_02035664() && sub_02035F14(0, 0, 512)) {
+    if (CommWireless_IsIdle() && sub_02035F14(0, 0, 512)) {
         sub_02035FD8();
         // Equivalent to u32 rand = MATH_Rand32(&_021D4150->mathRandContext, 32)
         MATHRandContext32 *mathRandContext = &_021D4150->mathRandContext;
@@ -538,20 +538,20 @@ void sub_02038610(void) {
 }
 
 void sub_02038668(void) {
-    if (sub_02034FE8()) {
+    if (CommWireless_Stop()) {
         sub_020381C0(sub_02038680, 0);
     }
 }
 
 void sub_02038680(void) {
-    if (sub_02035664() && sub_02035F14(0, 0, 512)) {
+    if (CommWireless_IsIdle() && sub_02035F14(0, 0, 512)) {
         sub_02035FD8();
         sub_020381C0(sub_020386AC, 100);
     }
 }
 
 void sub_020386AC(void) {
-    if (sub_020351AC(_021D4150->unk4D) && sub_020360E4(_021D4150->unk4D)) {
+    if (CommWireless_GetParentMemberCount(_021D4150->unk4D) && sub_020360E4(_021D4150->unk4D)) {
         sub_020381C0(sub_02038710, 100);
         return;
     }
@@ -618,7 +618,7 @@ void sub_02038800(void) {
 
 void sub_02038804(void) {
     _021D4150->unk4C = 0;
-    if (sub_02034FE8()) {
+    if (CommWireless_Stop()) {
         if (_021D4150->unk48) {
             _021D4150->unk48--;
             sub_020381C0(sub_02038680, 0);
@@ -630,7 +630,7 @@ void sub_02038804(void) {
 
 void sub_02038854(void) {
     if (!sub_020376F8()) {
-        if (!sub_02039918() && sub_02034FE8()) {
+        if (!sub_02039918() && CommWireless_Stop()) {
             sub_020381C0(sub_02038610, 0);
         }
     } else if (!Comm_GetLocalNetId()) {
@@ -642,7 +642,7 @@ void sub_02038854(void) {
 }
 
 void sub_020388A8(void) {
-    if (sub_02035664() && sub_02035ED8(0, _021D4150->unk52, 512, 0)) {
+    if (CommWireless_IsIdle() && sub_02035ED8(0, _021D4150->unk52, 512, 0)) {
         sub_02035FD8();
         sub_020381C0(sub_02038404, 0);
     }
@@ -691,13 +691,13 @@ void sub_0203898C(s8 arg0) {
 }
 
 void sub_020389BC(void) {
-    if (sub_02034FE8()) {
+    if (CommWireless_Stop()) {
         sub_020381C0(sub_020389D4, 0);
     }
 }
 
 void sub_020389D4(void) {
-    if (sub_02035664()) {
+    if (CommWireless_IsIdle()) {
         _021D4150->unk4E = 13;
         if (sub_02035F14(0, 0, 512)) {
             sub_02035FE4();
@@ -707,7 +707,7 @@ void sub_020389D4(void) {
 }
 
 void sub_02038A10(void) {
-    if (sub_020351AC(_021D4150->unk4D) && sub_020360E4(_021D4150->unk4D)) {
+    if (CommWireless_GetParentMemberCount(_021D4150->unk4D) && sub_020360E4(_021D4150->unk4D)) {
         sub_020381C0(sub_02038A94, 100);
         return;
     }
@@ -819,7 +819,7 @@ void sub_02038C1C(s8 arg0) {
 }
 
 void sub_02038C34(void) {
-    sub_0203528C();
+    CommWireless_UpdateParents();
 }
 
 void sub_02038C3C(u32 arg0, s32 arg1) {
@@ -849,8 +849,8 @@ void sub_02038CC4(void) {
 }
 
 void sub_02038CE8(void) {
-    if (sub_02034DB8()) {
-        sub_02034B0C(_021D4150->unk2C, 0);
+    if (CommWireless_IsStartedUp()) {
+        CommWireless_Init(_021D4150->unk2C, 0);
         CommPlayerInfo_Init(_021D4150->unk28, 0);
         Wireless_SetBeaconCallback(sub_02038C3C);
         sub_020381C0(sub_02038CC4, 0);
@@ -898,8 +898,8 @@ BOOL sub_02038D90(void) {
 }
 
 void sub_02038E00(void) {
-    if (sub_02034DB8()) {
-        sub_02034B0C(_021D4150->unk2C, 1);
+    if (CommWireless_IsStartedUp()) {
+        CommWireless_Init(_021D4150->unk2C, 1);
         CommPlayerInfo_Init(_021D4150->unk28, 0);
         if (sub_02035ED8(1, 1, 512, 1)) {
             sub_02035FD8();
@@ -909,8 +909,8 @@ void sub_02038E00(void) {
 }
 
 void sub_02038E48(void) {
-    if (sub_02034DB8()) {
-        sub_02034B0C(_021D4150->unk2C, 1);
+    if (CommWireless_IsStartedUp()) {
+        CommWireless_Init(_021D4150->unk2C, 1);
         CommPlayerInfo_Init(_021D4150->unk28, 0);
         if (sub_02035F14(1, 1, 512)) {
             sub_02035FD8();
@@ -1294,7 +1294,7 @@ void sub_0203960C(void) {
 }
 
 void sub_02039694(void) {
-    if (sub_02034DB8()) {
+    if (CommWireless_IsStartedUp()) {
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_48, 0x35400);
         if (sub_02035ED8(1, 1, 512, 1)) {
             WifiConnection_Init(_021D4150->unk28, 48, 0x2C400, sub_02033FC4(_021D4150->unk4E) + 1);
@@ -1405,8 +1405,8 @@ void sub_020398D4(s8 arg0, s8 arg1) {
             _021D4150->unk4B = 0;
         }
     }
-    sub_020356C0(arg0);
-    sub_020356EC(arg0);
+    CommWireless_SetLostWhenAlone(arg0);
+    CommWireless_SetDetectDrops(arg0);
 }
 
 BOOL sub_02039918(void) {
@@ -1497,10 +1497,10 @@ void sub_02039A00(void) {
 }
 
 BOOL sub_02039AA4(void) {
-    if (sub_02035630() || !sub_02037D78()) {
+    if (CommWireless_IsManagerEnded() || !sub_02037D78()) {
         return TRUE;
     }
-    if (!sub_02034BE4()) {
+    if (!CommWireless_IsInitialized()) {
         return TRUE;
     }
     if (Wireless_HasFatalError()) {
@@ -1544,7 +1544,7 @@ void sub_02039B7C(void) {
 }
 
 void sub_02039BA0(void) {
-    if (sub_02034DB8()) {
+    if (CommWireless_IsStartedUp()) {
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_48, 0x60000);
         if (sub_02035ED8(1, 1, 512, 1)) {
             WifiConnection_Init(_021D4150->unk28, 48, 0x58000, sub_02033FC4(_021D4150->unk4E) + 1);

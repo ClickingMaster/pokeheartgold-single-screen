@@ -18,7 +18,7 @@ _0205A04A:
 	lsl r7, r7, #4
 _0205A054:
 	add r0, r6, #0
-	bl sub_02035754
+	bl CommWireless_GetParentInfo
 	mov r1, #0x11
 	lsl r1, r1, #4
 	str r0, [r4, r1]

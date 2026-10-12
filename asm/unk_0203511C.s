@@ -2,8 +2,8 @@
 	.include "unk_02034B0C.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0203511C
-sub_0203511C: ; 0x0203511C
+	thumb_func_start CommWireless_CountParents
+CommWireless_CountParents: ; 0x0203511C
 	push {r4, lr}
 	bl sub_02037474
 	cmp r0, #0
@@ -11,7 +11,7 @@ sub_0203511C: ; 0x0203511C
 	mov r0, #0
 	pop {r4, pc}
 _0203512A:
-	ldr r1, _02035148 ; =_021D4134
+	ldr r1, _02035148 ; =gCommWireless
 	mov r0, #0
 	ldr r4, [r1, #8]
 	ldr r1, _0203514C ; =0x00000D44
@@ -28,13 +28,13 @@ _0203513C:
 	blt _02035134
 	pop {r4, pc}
 	nop
-_02035148: .word _021D4134
+_02035148: .word gCommWireless
 _0203514C: .word 0x00000D44
-	thumb_func_end sub_0203511C
-	thumb_func_start sub_02035150
-sub_02035150: ; 0x02035150
+	thumb_func_end CommWireless_CountParents
+	thumb_func_start CommWireless_GetParentSlot
+CommWireless_GetParentSlot: ; 0x02035150
 	push {r3, r4, r5, lr}
-	ldr r1, _0203517C ; =_021D4134
+	ldr r1, _0203517C ; =gCommWireless
 	mov r4, #0
 	ldr r5, [r1, #8]
 	ldr r1, _02035180 ; =0x00000D44
@@ -58,6 +58,6 @@ _0203516C:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-_0203517C: .word _021D4134
+_0203517C: .word gCommWireless
 _02035180: .word 0x00000D44
-	thumb_func_end sub_02035150
+	thumb_func_end CommWireless_GetParentSlot

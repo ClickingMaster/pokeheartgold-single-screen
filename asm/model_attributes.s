@@ -128,8 +128,8 @@ _021EA9AC:
 	pop {r4, r5, r6, r7, pc}
 	thumb_func_end ModelAttributes_ApplyGlobal
 
-	thumb_func_start ov01_021EA9B0
-ov01_021EA9B0: ; 0x021EA9B0
+	thumb_func_start ModelAttributes_ApplyToModel
+ModelAttributes_ApplyToModel: ; 0x021EA9B0
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	mov r0, #1
@@ -262,10 +262,10 @@ _021EAAA0:
 	bl NNS_G3dMdlSetMdlXLDepthUpdateAll
 _021EAAB6:
 	pop {r4, r5, r6, pc}
-	thumb_func_end ov01_021EA9B0
+	thumb_func_end ModelAttributes_ApplyToModel
 
-	thumb_func_start ov01_021EAAB8
-ov01_021EAAB8: ; 0x021EAAB8
+	thumb_func_start ModelAttributes_SetLightVector
+ModelAttributes_SetLightVector: ; 0x021EAAB8
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	mov r0, #6
@@ -285,10 +285,10 @@ ov01_021EAAB8: ; 0x021EAAB8
 	ldrsh r3, [r3, r4]
 	bl NNS_G3dGlbLightVector
 	pop {r4, r5, r6, pc}
-	thumb_func_end ov01_021EAAB8
+	thumb_func_end ModelAttributes_SetLightVector
 
-	thumb_func_start ov01_021EAAE0
-ov01_021EAAE0: ; 0x021EAAE0
+	thumb_func_start ModelAttributes_SetLightColor
+ModelAttributes_SetLightColor: ; 0x021EAAE0
 	push {r4, lr}
 	add r4, r0, #0
 	add r4, #0x18
@@ -298,10 +298,10 @@ ov01_021EAAE0: ; 0x021EAAE0
 	ldrh r1, [r4, r3]
 	bl NNS_G3dGlbLightColor
 	pop {r4, pc}
-	thumb_func_end ov01_021EAAE0
+	thumb_func_end ModelAttributes_SetLightColor
 
-	thumb_func_start ov01_021EAAF4
-ov01_021EAAF4: ; 0x021EAAF4
+	thumb_func_start ModelAttributes_SetDiffuse
+ModelAttributes_SetDiffuse: ; 0x021EAAF4
 	push {r3, lr}
 	strh r1, [r0, #0x20]
 	str r2, [r0, #0x28]
@@ -312,10 +312,10 @@ ov01_021EAAF4: ; 0x021EAAF4
 	bl ModelAttributes_ApplyGlobal
 _021EAB06:
 	pop {r3, pc}
-	thumb_func_end ov01_021EAAF4
+	thumb_func_end ModelAttributes_SetDiffuse
 
-	thumb_func_start ov01_021EAB08
-ov01_021EAB08: ; 0x021EAB08
+	thumb_func_start ModelAttributes_SetAmbient
+ModelAttributes_SetAmbient: ; 0x021EAB08
 	push {r3, lr}
 	strh r1, [r0, #0x22]
 	cmp r2, #1
@@ -326,10 +326,10 @@ ov01_021EAB08: ; 0x021EAB08
 _021EAB18:
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021EAB08
+	thumb_func_end ModelAttributes_SetAmbient
 
-	thumb_func_start ov01_021EAB1C
-ov01_021EAB1C: ; 0x021EAB1C
+	thumb_func_start ModelAttributes_SetSpecular
+ModelAttributes_SetSpecular: ; 0x021EAB1C
 	push {r3, lr}
 	strh r1, [r0, #0x24]
 	str r2, [r0, #0x2c]
@@ -340,10 +340,10 @@ ov01_021EAB1C: ; 0x021EAB1C
 	bl ModelAttributes_ApplyGlobal
 _021EAB2E:
 	pop {r3, pc}
-	thumb_func_end ov01_021EAB1C
+	thumb_func_end ModelAttributes_SetSpecular
 
-	thumb_func_start ov01_021EAB30
-ov01_021EAB30: ; 0x021EAB30
+	thumb_func_start ModelAttributes_SetEmission
+ModelAttributes_SetEmission: ; 0x021EAB30
 	push {r3, lr}
 	strh r1, [r0, #0x26]
 	cmp r2, #1
@@ -354,7 +354,7 @@ ov01_021EAB30: ; 0x021EAB30
 _021EAB40:
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021EAB30
+	thumb_func_end ModelAttributes_SetEmission
 
 	thumb_func_start ModelAttributes_SetPolygonMode
 ModelAttributes_SetPolygonMode: ; 0x021EAB44

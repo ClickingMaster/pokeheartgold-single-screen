@@ -2,8 +2,8 @@
 	.include "unk_02034B0C.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0203540C
-sub_0203540C: ; 0x0203540C
+	thumb_func_start CommWireless_Update
+CommWireless_Update: ; 0x0203540C
 	push {r4, r5, r6, lr}
 	sub sp, #8
 	add r4, r0, #0
@@ -11,14 +11,14 @@ sub_0203540C: ; 0x0203540C
 	add r5, r0, #0
 	bl CommPlayerInfo_DropDisconnected
 	add r6, r0, #0
-	bl sub_020353B8
+	bl CommWireless_UpdateBeaconMemberCount
 	bl Wireless_GetAid
 	cmp r0, #0
 	bne _0203544A
-	bl sub_0203567C
+	bl CommWireless_GetConnectedChildren
 	cmp r0, #0
 	bne _0203544A
-	ldr r0, _020355AC ; =_021D4134
+	ldr r0, _020355AC ; =gCommWireless
 	ldr r3, _020355B0 ; =0x00000D95
 	ldr r1, [r0, #8]
 	ldrb r0, [r1, r3]
@@ -31,7 +31,7 @@ sub_0203540C: ; 0x0203540C
 	orr r0, r2
 	strb r0, [r1, r3]
 _0203544A:
-	ldr r0, _020355AC ; =_021D4134
+	ldr r0, _020355AC ; =gCommWireless
 	ldr r3, _020355B4 ; =0x00000D8E
 	ldr r2, [r0, #8]
 	ldr r0, _020355B8 ; =0x0000FFFF
@@ -40,7 +40,7 @@ _0203544A:
 	bne _0203545A
 	strh r4, [r2, r3]
 _0203545A:
-	ldr r0, _020355AC ; =_021D4134
+	ldr r0, _020355AC ; =gCommWireless
 	ldr r3, _020355B0 ; =0x00000D95
 	ldr r1, [r0, #8]
 	ldrb r0, [r1, r3]
@@ -59,7 +59,7 @@ _0203545A:
 _0203547A:
 	cmp r6, #0
 	beq _02035490
-	ldr r0, _020355AC ; =_021D4134
+	ldr r0, _020355AC ; =gCommWireless
 	ldr r2, _020355B0 ; =0x00000D95
 	ldr r0, [r0, #8]
 	mov r1, #1
@@ -97,13 +97,13 @@ _020354B0: ; jump table
 	.short _0203550E - _020354B0 - 2 ; case 8
 	.short _0203550E - _020354B0 - 2 ; case 9
 _020354C4:
-	ldr r0, _020355AC ; =_021D4134
+	ldr r0, _020355AC ; =gCommWireless
 	ldr r2, [r0, #8]
 	ldr r0, _020355BC ; =0x00000D92
 	ldrb r1, [r2, r0]
 	cmp r1, #1
 	bne _020354D8
-	bl sub_020350D4
+	bl CommWireless_Free
 	add sp, #8
 	pop {r4, r5, r6, pc}
 _020354D8:
@@ -114,7 +114,7 @@ _020354D8:
 	add sp, #8
 	pop {r4, r5, r6, pc}
 _020354E4:
-	ldr r0, _020355AC ; =_021D4134
+	ldr r0, _020355AC ; =gCommWireless
 	ldr r1, [r0, #8]
 	ldr r0, _020355BC ; =0x00000D92
 	ldrb r0, [r1, r0]
@@ -124,7 +124,7 @@ _020354E4:
 	cmp r0, #0
 	bne _020355A6
 _020354F8:
-	ldr r0, _020355AC ; =_021D4134
+	ldr r0, _020355AC ; =gCommWireless
 	ldr r1, [r0, #8]
 	ldr r0, _020355BC ; =0x00000D92
 	ldrb r0, [r1, r0]
@@ -135,7 +135,7 @@ _020354F8:
 	cmp r0, #0
 	pop {r4, r5, r6, pc}
 _0203550E:
-	ldr r0, _020355AC ; =_021D4134
+	ldr r0, _020355AC ; =gCommWireless
 	ldr r3, [r0, #8]
 	cmp r3, #0
 	beq _020355A6
@@ -150,7 +150,7 @@ _0203550E:
 	pop {r4, r5, r6, pc}
 _02035528:
 	bl Wireless_SelectChannel
-	ldr r3, _020355AC ; =_021D4134
+	ldr r3, _020355AC ; =gCommWireless
 	ldr r2, _020355C0 ; =0x00000D91
 	ldr r4, [r3, #8]
 	ldrb r1, [r4, r2]
@@ -166,7 +166,7 @@ _02035544:
 	sub r0, r1, #1
 	strb r0, [r4, r2]
 _02035548:
-	ldr r0, _020355AC ; =_021D4134
+	ldr r0, _020355AC ; =gCommWireless
 	ldr r1, [r0, #8]
 	ldr r0, _020355C4 ; =0x00000D8C
 	ldrh r5, [r1, r0]
@@ -176,10 +176,10 @@ _02035548:
 	lsr r0, r0, #0x1f
 	beq _02035562
 	bl WM_GetNextTgid
-	ldr r1, _020355AC ; =_021D4134
+	ldr r1, _020355AC ; =gCommWireless
 	strh r0, [r1]
 _02035562:
-	bl sub_020352D8
+	bl CommWireless_BuildBeacon
 	bl sub_0203993C
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
@@ -188,9 +188,9 @@ _02035562:
 	bl sub_0203993C
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
-	bl sub_02035724
+	bl CommWireless_GetBeaconPeriod
 	str r0, [sp]
-	ldr r1, _020355AC ; =_021D4134
+	ldr r1, _020355AC ; =gCommWireless
 	ldr r0, _020355B0 ; =0x00000D95
 	ldr r2, [r1, #8]
 	add r3, r4, #0
@@ -202,7 +202,7 @@ _02035562:
 	ldrh r1, [r1]
 	mov r0, #0
 	bl Wireless_StartParent
-	ldr r0, _020355AC ; =_021D4134
+	ldr r0, _020355AC ; =gCommWireless
 	ldr r1, [r0, #8]
 	mov r0, #0xd9
 	lsl r0, r0, #4
@@ -211,11 +211,11 @@ _020355A6:
 	add sp, #8
 	pop {r4, r5, r6, pc}
 	nop
-_020355AC: .word _021D4134
+_020355AC: .word gCommWireless
 _020355B0: .word 0x00000D95
 _020355B4: .word 0x00000D8E
 _020355B8: .word 0x0000FFFF
 _020355BC: .word 0x00000D92
 _020355C0: .word 0x00000D91
 _020355C4: .word 0x00000D8C
-	thumb_func_end sub_0203540C
+	thumb_func_end CommWireless_Update

@@ -231,23 +231,8 @@ Static main
     Object src/communication_command.o
     Object src/communication_player_state.o
     Object asm/communication_player_state_data.o
-    Object src/to50_network_state_init.o
-    Object asm/to50_network_state_data.o
-    Object src/wireless_connection_state.o
-    Object src/to46_wireless_connection_packet_import.o
-    Object src/wireless_connection_state_2.o
-    Object src/r40_unk_0203511C_run1.o
-    Object src/wireless_connection_state_3.o
-    Object src/wireless_connection_actions.o
-    Object src/wireless_connection_state_4.o
-    Object src/r40_unk_0203540C_run1.o
-    Object src/wireless_connection_state_5.o
-    Object src/r40_unk_020355DC_run1.o
-    Object src/wireless_connection_state_6.o
-    Object src/r40_unk_0203569C_run1.o
-    Object src/wireless_connection_state_7.o
-    Object src/r40_unk_02035724_run1.o
-    Object src/wireless_connection_state_8.o
+    Object asm/comm_wireless_data.o
+    Object src/comm_wireless.o
     Object src/communication_core.o
     Object src/link_synchronization.o
     Object asm/link_synchronization_data.o
@@ -1236,7 +1221,7 @@ Overlay field
     Object asm/overlay_01_021E90C0_residual_8.o
     Object src/field/build_model_shapes.o
     Object src/overlay_01_021EA824.o
-    Object src/model_attributes_helpers_1.o
+    Object src/field/field_model_attributes.o
     Object src/field/field_camera.o
     Object asm/overlay_01_021EABA8_residual_2.o
     Object src/bottom_screen_dispatch_1.o
@@ -1644,15 +1629,7 @@ Overlay OVY_2
     Object src/overlay02_effect_tasks_r50_run2.o
     Object src/overlay02_248728_partial_50.o
     Object src/overlay02_follow_movement_task.o
-    Object src/overlay02_248728_partial_51.o
-    Object src/overlay02_safari_placement_check.o
-    Object src/overlay02_248728_partial_52.o
-    Object src/op90_overlay_02_02248728_to42_prefix_r01.o
-    Object src/overlay02_safari_zone_queries_to42.o
-    Object src/op90_op90_overlay_02_02248728_to42_gap_residual_1_r01.o
-    Object src/op90_overlay_02_02248728_to42_gap_r01.o
-    Object src/op90_overlay_02_02248728_to42_gap_r02.o
-    Object src/overlay02_safari_object_behavior_to42.o
+    Object src/field/safari_zone_placement.o
     Object src/field/follow_mon_interaction.o
     Object asm/overlay_02_02248728_residual_61_data.o
     Object src/field/legend_cutscene_camera.o
@@ -1772,22 +1749,9 @@ Overlay OVY_13
     Object lib/NitroSDK/src/mb/mb_beacon_fixed.o
     Object lib/NitroSDK/src/mb/mb_beacon_volat_init.o
     Object lib/NitroSDK/src/mb/mb_beacon_volat.o
-    Object src/to80_extra1453_run01.o
-    Object src/to90_extra1952_run01.o
-    Object src/to80_extra1453_run02.o
-    Object src/to70_mb_extra10_run09.o
-    Object src/to80_extra1854_run01.o
-    Object src/to80_extra1454_run01.o
-    Object src/op90_to80_extra1454_residual_2_r01.o
-    Object src/to80_extra1454_run02.o
+    Object lib/NitroSDK/src/mb/mb_wm_callbacks.o
     Object lib/NitroSDK/src/mb/mb_init.o
-    Object src/to70_mb_extra10_run10.o
-    Object src/to80_extra1455_run01.o
-    Object src/to70_mb_extra10_run11.o
-    Object src/to80_extra1668_run01.o
-    Object src/to70_mb_extra10_run12.o
-    Object src/to80_extra1445_run01.o
-    Object src/to70_mb_extra10_run13.o
+    Object lib/NitroSDK/src/mb/mb_parent_start_end.o
     Object lib/NitroSDK/src/mb/mb_disconnect.o
     Object lib/NitroSDK/src/mb/mb_comm_params.o
     Object lib/NitroSDK/src/mb/mb_wm_error.o
@@ -1809,7 +1773,7 @@ Overlay OVY_13
     Object src/wifi_setup_crypto.o
     Object src/wifi_setup_md5.o
     Object src/wifi_setup_api.o
-    Object asm/to53_overlay13_r24_data.o
+    Object asm/wifi_setup_data.o
     Object lib/NitroDWC/asm/wifi_setup_dwc_data.o
     Object src/wifi_setup_busy_icon.o
     Object lib/NitroDWC/asm/wifi_setup_ui_parts_bss.o
@@ -1827,7 +1791,7 @@ Overlay OVY_13
     Object src/wifi_setup_app.o
     Object lib/NitroDWC/asm/wifi_setup_screens_bss.o
     Object src/wifi_setup_screens.o
-    Object src/op90_to61_overlay_13_arm_2_residual_5_residual_7_r01.o
+    Object src/wifi_setup_address_entry_init.o
     Object lib/NitroDWC/asm/wifi_setup_address_entry_rodata.o
     Object src/wifi_setup_address_entry.o
     Object src/wifi_setup_error_screen.o
@@ -2054,13 +2018,7 @@ Overlay OVY_40
     Object src/application/vs_recorder/vs_recorder_video_list.o
     Object src/application/vs_recorder/vs_recorder_net.o
     Object src/application/vs_recorder/vs_recorder_video_search.o
-    Object src/to41_overlay_40_residual_36_run1.o
-    Object src/overlay40_trainer_card_touch.o
-    Object src/to70_overlay_40_residual_36_mid_extra357_run01.o
-    Object src/overlay40_trainer_card_panels.o
-    Object src/overlay_40_sol_partial_36.o
-    Object src/overlay40_trainer_card_pages.o
-    Object src/overlay_40_sol_partial_37.o
+    Object src/application/vs_recorder/vs_recorder_video_transfer.o
     Object src/application/vs_recorder/vs_recorder_number_pad.o
     Object src/application/vs_recorder/vs_recorder_delete.o
     Object src/application/vs_recorder/vs_recorder_battle_names.o
@@ -2881,9 +2839,7 @@ Overlay OVY_96
     Object src/overlay96_course_r85_run1.o
     Object src/op90_overlay_96_residual_85_prefix_r01.o
     Object src/overlay96_course_r85_sort.o
-    Object src/op90_overlay_96_residual_85_suffix_r01.o
-    Object src/overlay96_exact_bank_85.o
-    Object src/overlay96_course_scene_start_r86.o
+    Object src/pokeathlon/pokeathlon_pennant_capture.o
     Object asm/to90_extra1935_anchor.o
     Object src/pokeathlon/pokeathlon_pennant_capture_play.o
     Object src/pokeathlon/pokeathlon_pennant_capture_field.o

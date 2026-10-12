@@ -609,14 +609,14 @@ static u16 GetInteractedMetatileScript(FieldSystem *fieldSystem, u8 metatileBeha
         PlayerProfile *profile = Save_PlayerData_GetProfile(fieldSystem->saveData);
         if (Field_PlayerCanSurfOnTile(fieldSystem->playerAvatar, standingTile, metatileBehavior) && PlayerProfile_TestBadgeFlag(profile, BADGE_FOG) && GetIdxOfFirstPartyMonWithMove(SaveArray_Party_Get(fieldSystem->saveData), MOVE_SURF) != 0xFF) {
             return std_field_surf;
-        } else if (ov02_0224E35C(fieldSystem) && ov02_0224E4CC(metatileBehavior, ov01_021E7B70(fieldSystem))) {
+        } else if (FieldSystem_CanPlaceSafariObject(fieldSystem) && SafariZone_CanPlaceObjectOnLand(metatileBehavior, ov01_021E7B70(fieldSystem))) {
             return std_safari_place_object;
         }
     } else if (MetatileBehavior_IsWaterfall(metatileBehavior)) {
         return std_field_waterfall;
     } else if (MetatileBehavior_IsWhirlpool(metatileBehavior)) {
         return std_field_whirlpool;
-    } else if (ov02_0224E35C(fieldSystem) && ov02_0224E4DC(metatileBehavior, ov01_021E7B70(fieldSystem))) {
+    } else if (FieldSystem_CanPlaceSafariObject(fieldSystem) && SafariZone_CanPlaceObjectOnWater(metatileBehavior, ov01_021E7B70(fieldSystem))) {
         return std_safari_place_object;
     }
 

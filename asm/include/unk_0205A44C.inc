@@ -26,10 +26,10 @@
 .public CommPlayerInfo_GetProfile
 .public CommPlayerInfo_GetCountry
 .public CommPlayerInfo_GetRegion
-.public sub_02035798
-.public sub_02035838
-.public sub_02035854
-.public sub_0203588C
+.public CommWireless_GetParentProfile
+.public CommWireless_SetMail
+.public CommWireless_SetRuleset
+.public CommWireless_RefreshBeacon
 .public sub_02036FD8
 .public Comm_SendCommand
 .public Comm_GetLocalNetId

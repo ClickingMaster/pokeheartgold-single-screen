@@ -127,7 +127,7 @@
 .public Options_GetFrame
 .public GameStats_Inc
 .public BattleRecord_StoreSetup
-.public sub_02035650
+.public CommWireless_Exists
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
 .public sub_020378AC

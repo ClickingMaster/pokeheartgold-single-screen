@@ -12,7 +12,7 @@
 #include <nitro/code32.h>
 
 // Address entry screen (0x02231C8C-0x02232770). gWifiSetupAddressEntry is allocated and filled with
-// the stored address by ov13_02231B18 (src/op90_to61_overlay_13_arm_2_residual_5_residual_7_r01.c),
+// the stored address by WifiSetupAddressEntry_Init (src/wifi_setup_address_entry_init.c),
 // which then runs WifiSetupAddressEntry_FadeIn. The digits are typed on the numeric keypad; OK
 // checks the address and asks for confirmation before it is stored.
 
@@ -32,7 +32,7 @@ typedef struct WifiSetupFieldLimit {
 // screen frees its work through it.
 extern void *gWifiSetupTextEntry[];
 
-// Screen layout (defined in src/op90_to61_overlay_13_arm_2_residual_5_residual_7_r01.c): starts
+// Screen layout (defined in src/wifi_setup_address_entry_init.c): starts
 // with the field limit; the u16 at index 7 and 8 are the position of the digits.
 extern const WifiSetupFieldLimit ov13_02245480;
 extern WifiSetupAddressFuncs ov13_022454AC;

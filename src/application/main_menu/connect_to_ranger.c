@@ -36,7 +36,7 @@
 #include "system.h"
 #include "text.h"
 #include "title_screen.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 #include "wireless_status_icon.h"
 
 // Main menu option "Connect to Pokemon Ranger": receives the Manaphy Egg from Pokemon Ranger over DS
@@ -113,7 +113,7 @@ extern const u8 ov74_0223C1F4[];
 extern const GraphicsModes _0223B330;
 extern const GraphicsBanks _0223B340;
 
-extern void sub_02034DE0(void);
+extern void CommWireless_Terminate(void);
 extern void WirelessStatusIcon_SetLevel(int a0);
 
 // Wireless link with Pokemon Ranger (link_status part of this overlay)
@@ -497,12 +497,12 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
     switch (CONNECT_STATE) {
     case RANGER_CONNECT_START:
         ConnectToRanger_EncodePlayerData(app);
-        sub_02034D8C();
+        CommWireless_StartUp();
         app->linkStarted = TRUE;
         CONNECT_STATE = RANGER_CONNECT_WAIT_LINK;
         break;
     case RANGER_CONNECT_WAIT_LINK:
-        if (sub_02034DB8()) {
+        if (CommWireless_IsStartedUp()) {
             RangerLink_Init(ov74_0223BD5C, app->linkWork);
             app->linkInitialised = TRUE;
             WirelessStatusIcon_Create();
@@ -669,7 +669,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
     case RANGER_CONNECT_DONE:
         if (RangerLink_IsFinished()) {
             if (app->linkStarted == TRUE) {
-                sub_02034DE0();
+                CommWireless_Terminate();
                 WirelessStatusIcon_Destroy();
                 app->linkStarted = FALSE;
             }
@@ -694,7 +694,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
     case RANGER_CONNECT_ERROR:
         if (RangerLink_IsFinished()) {
             if (app->linkStarted == TRUE) {
-                sub_02034DE0();
+                CommWireless_Terminate();
                 WirelessStatusIcon_Destroy();
                 app->linkStarted = FALSE;
             }
@@ -705,7 +705,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         break;
     case RANGER_CONNECT_CANCEL:
         if (RangerLink_IsFinished() && app->linkStarted == TRUE) {
-            sub_02034DE0();
+            CommWireless_Terminate();
             WirelessStatusIcon_Destroy();
             app->linkStarted = FALSE;
             if (app->waitingIcon) {

@@ -135,7 +135,7 @@
 .public BattleRecord_Save
 .public BattleRecord_AreAiFlagsValid
 .public CommPlayerInfo_GetProfile
-.public sub_02035650
+.public CommWireless_Exists
 .public Comm_CountConnected
 .public sub_02037474
 .public Comm_GetLocalNetId

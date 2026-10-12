@@ -497,12 +497,12 @@
 .public ov02_0224D9B8
 .public ov02_0224E074
 .public ov02_0224E0BC
-.public ov02_0224E35C
-.public ov02_0224E4CC
-.public ov02_0224E4DC
+.public FieldSystem_CanPlaceSafariObject
+.public SafariZone_CanPlaceObjectOnLand
+.public SafariZone_CanPlaceObjectOnWater
 .public SafariDecoration_CreateArgs
-.public ov02_0224E698
-.public ov02_0224E754
+.public FieldSystem_CheckSafariObjectPlacement
+.public FieldSystem_GetFacingSafariObject
 .public FieldSystem_FollowMonInteract
 .public FollowMonInteraction_New
 .public FollowMonInteraction_Delete
@@ -540,4 +540,4 @@
 .public ov02_022531B4
 .public BugContest_GetEncounterSlot
 .public ov02_022494C4
-.public ov02_0224E340
+.public FieldSystem_GetSafariAreaIndex

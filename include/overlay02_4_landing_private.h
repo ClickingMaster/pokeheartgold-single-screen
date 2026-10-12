@@ -28,8 +28,8 @@
 // Current-tree header declarations differ from the candidate's matching-time
 // opaque signatures. Shadow them while including public headers, then restore
 // the real linker names below.
-#define ov02_0224E698 ov02_0224E698_CurrentHeaderDecl
-#define ov02_0224E754 ov02_0224E754_CurrentHeaderDecl
+#define FieldSystem_CheckSafariObjectPlacement ov02_0224E698_CurrentHeaderDecl
+#define FieldSystem_GetFacingSafariObject ov02_0224E754_CurrentHeaderDecl
 #define AreaDataManager_GetMapPropTexture ov01_021FB9E0_CurrentHeaderDecl
 #define PlayCry       PlayCry_CurrentHeaderDecl
 
@@ -117,8 +117,8 @@
 #undef Save_SafariZone_Get
 #undef SafariZone_GetAreaSet
 #undef SafariZone_GetObjectUnlockLevel
-#undef ov02_0224E698
-#undef ov02_0224E754
+#undef FieldSystem_CheckSafariObjectPlacement
+#undef FieldSystem_GetFacingSafariObject
 #undef AreaDataManager_GetMapPropTexture
 #undef PlayCry
 
@@ -207,7 +207,7 @@ extern void *Save_VarsFlags_Get(SaveData *saveData);                            
 extern BOOL Save_VarsFlags_CheckSafariSysFlag(void *varsFlags);                                              // save_vars_flags.h, not included
 extern BOOL sub_0202F620(void *safariZone);                                                                  // no header included here
 extern fx32 sub_02054774(FieldSystem *fieldSystem, fx32 refHeight, fx32 xFx32, fx32 zFx32, u8 *outSelector); // unk_02054648.h, not included
-WIP_LOCAL BOOL ov02_0224E35C(FieldSystem *fieldSystem);
+WIP_LOCAL BOOL FieldSystem_CanPlaceSafariObject(FieldSystem *fieldSystem);
 // --- Task_FollowMonInteract (0x02250110) deps ---
 extern void ClearFrameAndWindow2(Window *window, BOOL dont_copy_to_vram);                                                   // render_window.h, not included
 extern void RemoveWindow(Window *window);                                                                                   // render_window.h, not included
@@ -232,8 +232,8 @@ extern void *FieldCameraZoom_Start(FieldSystem *fieldSystem, int a1);           
 extern void FieldCameraZoom_Set(void *a0, int a1, fx32 a2, int a3);                                                               // no header included here
 extern void *Save_SafariZone_Get(SaveData *saveData);                                                                       // safari_zone.h, not included
 extern void *SafariZone_GetAreaSet(void *safari_zone, int area_set_no);                                                     // safari_zone.h, not included
-extern int ov02_0224EE4C(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);                              // still in asm
-WIP_LOCAL int ov02_0224E698(void *work);
+extern int SafariZone_FindSpotFor2x2Object(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);                              // still in asm
+WIP_LOCAL int FieldSystem_CheckSafariObjectPlacement(void *work);
 // --- NONMATCHING-finalization deps (asm-only references) ---
 extern void _s32_div_f(void);                 // int-division runtime
 extern void _fadd(void);                      // soft-float runtime (asm bl)
@@ -249,8 +249,8 @@ WIP_LOCAL void ov02_0224AAD4(void *a0, void *a1);
 WIP_LOCAL void ov02_0224D5B4(void *a0, void *a1, void *a2);
 WIP_LOCAL int ov02_0224DB9C(void *a0, void *a1, void *a2);
 WIP_LOCAL int FollowMonRule_Matches(void *a0, void *a1, void *a2);
-WIP_LOCAL int ov02_0224E828(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);
-WIP_LOCAL int ov02_0224EB48(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);
+WIP_LOCAL int SafariZone_FindSpotFor1x2Object(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);
+WIP_LOCAL int SafariZone_FindSpotFor2x1Object(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);
 typedef struct ov02_BF58Cfg {
     int unk0;
     int unk4;
@@ -289,7 +289,7 @@ extern int GetDeltaXByFacingDirection(int direction);                     // unk
 extern int GetDeltaYByFacingDirection(int direction);                     // unk_0205FD20.h, not included
 extern PlayerProfile *Save_PlayerData_GetProfile(SaveData *saveData);     // player_data.h, not included
 extern u32 PlayerProfile_GetTrainerGender(PlayerProfile *profile);        // player_data.h, not included
-WIP_LOCAL int ov02_0224E754(void *work, u16 *out);
+WIP_LOCAL int FieldSystem_GetFacingSafariObject(void *work, u16 *out);
 extern BOOL FollowMon_IsNextToPlayer(FieldSystem *fieldSystem);                                                                 // overlay_01.h, not included
 extern int FieldSystem_GetLeadMonIndex(FieldSystem *fieldSystem);                                                                  // overlay_01.h, not included
 extern void PlayCryEx(int, int, int, int, int, int);                                                                 // sound_02004A44.h, not included
@@ -384,7 +384,7 @@ WIP_LOCAL void ov02_0224B2C0(void *work);
 WIP_LOCAL BOOL ov02_0224B0E0(void *work);
 WIP_LOCAL void ov02_0224DEA8(Field3dObject *obj, Field3dModel *model, NNSFndAllocator *allocator, void **anmResources);
 WIP_LOCAL BOOL ov02_0224B43C(SysTask *task);
-WIP_LOCAL BOOL ov02_0224E308(int a0);
+WIP_LOCAL BOOL MapId_IsSafariZone(int a0);
 WIP_LOCAL BOOL FollowMonInteraction_StepHasMovement(void *a0, u16 *a1);
 WIP_LOCAL Sprite *ov02_02248C10(void *mgr, VecFx32 *pos, int charId, int plttId, int cellId, int cellAnmId, int priority, int drawPriority);
 WIP_LOCAL Sprite *ov02_02248D18(void *mgr, int a1);

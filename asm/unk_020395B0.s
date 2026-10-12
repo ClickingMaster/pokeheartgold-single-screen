@@ -119,7 +119,7 @@ _02039690: .word sub_02038E90
 	thumb_func_start sub_02039694
 sub_02039694: ; 0x02039694
 	push {r3, lr}
-	bl sub_02034DB8
+	bl CommWireless_IsStartedUp
 	cmp r0, #0
 	beq _020396EE
 	mov r2, #0xd5

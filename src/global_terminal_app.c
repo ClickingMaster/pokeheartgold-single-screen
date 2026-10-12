@@ -34,7 +34,7 @@ BOOL GlobalTerminalApp_Main(OverlayManager *man, int *state) {
         *state = 1;
         break;
     case 1:
-        if (sub_02034DB8()) {
+        if (CommWireless_IsStartedUp()) {
             sDwcHeap = data->dwcHeap;
             ov00_021EC294(GlobalTerminalApp_DwcAlloc, GlobalTerminalApp_DwcFree);
             data->wifiLoaded = 1;
@@ -107,7 +107,7 @@ void GlobalTerminalApp_LoadWifi(GlobalTerminalApp *data) {
         sub_02039FD8(HEAP_ID_123);
         data->heapBuffer = Heap_Alloc(HEAP_ID_123, 0x20020);
         data->dwcHeap = NNS_FndCreateExpHeapEx((void *)(((u32)data->heapBuffer + 0x1F) & ~0x1F), 0x20000, 0);
-        sub_02034D8C();
+        CommWireless_StartUp();
         Sys_ClearSleepDisableFlag(4);
     }
 }
@@ -118,7 +118,7 @@ void GlobalTerminalApp_UnloadWifi(GlobalTerminalApp *data) {
         Heap_Free(data->heapBuffer);
         UnloadOVY38();
         UnloadDwcOverlay();
-        sub_02034DE0();
+        CommWireless_Terminate();
         data->wifiLoaded = 0;
     }
 }

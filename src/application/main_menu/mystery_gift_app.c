@@ -53,7 +53,7 @@
 #include "title_screen.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 #include "unk_02035900.h"
 #include "wireless_status_icon.h"
 
@@ -85,7 +85,7 @@ typedef struct MysteryGiftLinkState {
 extern BOOL CTRDG_IsExisting();
 extern int WM_GetLinkLevel(void);
 extern fx32 FX_Sqrt(fx32 value);
-extern void sub_02034DE0(void);
+extern void CommWireless_Terminate(void);
 extern void WirelessStatusIcon_SetLevel(int a0);
 extern void sub_02038D28(SaveData *saveData);
 extern void sub_02038D64(void);
@@ -2214,7 +2214,7 @@ void ov74_0222CE6C(int choice) {
 #pragma force_active reset
 
 void ov74_0222CEC0(void) {
-    sub_02034DE0();
+    CommWireless_Terminate();
     Heap_Free(ov74_0223D0A8.linkWork);
     WirelessStatusIcon_Destroy();
     ov74_0223D0A8.linkWork = NULL;
@@ -2239,11 +2239,11 @@ void ov74_0222CEE0(MysteryGiftAppData *data) {
     }
     switch (ov74_0223D0A8.state) {
     case 37:
-        sub_02034D8C();
+        CommWireless_StartUp();
         ov74_0223D0A8.state = 38;
         break;
     case 38:
-        if (sub_02034DB8() == TRUE) {
+        if (CommWireless_IsStartedUp() == TRUE) {
             void *linkWork;
 
             ov74_0223D0A8.count = 0;

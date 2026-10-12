@@ -3750,70 +3750,70 @@
 	.public VsRecorder_VideoSearchOverwriteMain
 	.public VsRecorder_VideoSearchOverwriteNo
 	.public VsRecorder_VideoSearchSave
-	.public ov40_0223FD8C
-	.public ov40_0223FF8C
-	.public ov40_02240238
-	.public ov40_02240290
-	.public ov40_02240418
-	.public ov40_02240520
-	.public ov40_02240544
-	.public ov40_022405F0
-	.public ov40_022406C8
-	.public ov40_0224085C
-	.public ov40_022408AC
-	.public ov40_02240910
-	.public ov40_0224092C
-	.public ov40_02240B40
-	.public ov40_02240B58
-	.public ov40_02240B70
-	.public ov40_02240B90
-	.public ov40_02240D50
-	.public ov40_02240E28
-	.public ov40_02240F24
-	.public ov40_02241054
-	.public ov40_02241114
-	.public ov40_02241144
-	.public ov40_022413EC
-	.public ov40_02241404
-	.public ov40_0224141C
-	.public ov40_02241434
-	.public ov40_0224144C
-	.public ov40_02241464
-	.public ov40_0224147C
-	.public ov40_02241488
-	.public ov40_022417A4
-	.public ov40_022417DC
-	.public ov40_02241948
-	.public ov40_02241A34
-	.public ov40_02241A54
-	.public ov40_02241AB0
-	.public ov40_02241AFC
-	.public ov40_02241BDC
-	.public ov40_02241C10
-	.public ov40_02241C70
-	.public ov40_02241CD8
-	.public ov40_02241D10
-	.public ov40_02241E14
-	.public ov40_02241E40
-	.public ov40_02241ED4
-	.public ov40_02241F3C
-	.public ov40_02241F74
-	.public ov40_02241FD0
-	.public ov40_02242084
-	.public ov40_022420B4
-	.public ov40_02242110
-	.public ov40_022421FC
-	.public ov40_0224222C
-	.public ov40_02242378
-	.public ov40_02242490
-	.public ov40_0224253C
-	.public ov40_022425E8
-	.public ov40_022428D4
-	.public ov40_02242AEC
-	.public ov40_02242CFC
-	.public ov40_02242DF0
-	.public ov40_02242E14
-	.public ov40_02242E48
+	.public VsRecorder_VideoSearchDownloadVideo
+	.public VsRecorder_VideoSearchResume
+	.public VsRecorder_VideoSearchInit
+	.public VsRecorder_VideoSearchEnter
+	.public VsRecorder_NumberSearchShowPad
+	.public VsRecorder_NumberSearchPadMain
+	.public VsRecorder_NumberSearchClosePad
+	.public VsRecorder_NumberSearchExit
+	.public VsRecorder_NumberSearchDownloadVideo
+	.public VsRecorder_LoadFoundVideoDetails
+	.public VsRecorder_LoadSearchResultDetails
+	.public VsRecorder_FreeFoundVideoDetails
+	.public VsRecorder_NumberSearchShowDetails
+	.public VsRecorder_NumberSearchDetailsMain
+	.public VsRecorder_NumberSearchToggleProfile
+	.public VsRecorder_NumberSearchPlay
+	.public VsRecorder_NumberSearchExitDetails
+	.public VsRecorder_SetSearchSlotButtonName
+	.public VsRecorder_ShowSearchMessage
+	.public VsRecorder_PrintSearchMessage
+	.public VsRecorder_CreateSearchSlotButtons
+	.public VsRecorder_FreeSearchSlotButtons
+	.public VsRecorder_NumberSearchShowSlots
+	.public VsRecorder_NumberSearchSlotsMain
+	.public VsRecorder_NumberSearchSlotsCancel
+	.public VsRecorder_NumberSearchReturnToDetails
+	.public VsRecorder_NumberSearchConfirmOverwrite
+	.public VsRecorder_NumberSearchOverwriteMain
+	.public VsRecorder_NumberSearchOverwriteNo
+	.public VsRecorder_NumberSearchSave
+	.public VsRecorder_NumberSearchResume
+	.public VsRecorder_SendVideoShowCursor
+	.public VsRecorder_SendVideoUpload
+	.public VsRecorder_SendVideoExit
+	.public VsRecorder_RemoveSearchDetailsButtonWindow
+	.public VsRecorder_PrintSearchDetailsButtonLabel
+	.public VsRecorder_CreateSearchDetailsButtonWindow
+	.public VsRecorder_CreateSearchOverwriteWindows
+	.public VsRecorder_RemoveSearchOverwriteWindows
+	.public VsRecorder_OnNumberSearchDetailsTouch
+	.public VsRecorder_OnNumberSearchSlotTouch
+	.public VsRecorder_OnNumberSearchOverwriteTouch
+	.public VsRecorder_OnSearchConditionTouch
+	.public VsRecorder_OnSpeciesGroupTouch
+	.public VsRecorder_OnSearchDetailsTouch
+	.public VsRecorder_OnSearchSlotTouch
+	.public VsRecorder_OnSearchOverwriteTouch
+	.public VsRecorder_SetNumberPadButtonsMode
+	.public VsRecorder_CreateNumberPadButtons
+	.public VsRecorder_FreeNumberPadButtons
+	.public VsRecorder_SetSearchButtonsMode
+	.public VsRecorder_CreateSearchButtons
+	.public VsRecorder_FreeSearchButtons
+	.public VsRecorder_FoundVideoToggleProfile
+	.public VsRecorder_FoundVideoShowSlots
+	.public VsRecorder_FoundVideoConfirmOverwrite
+	.public VsRecorder_FoundVideoOverwriteNo
+	.public VsRecorder_FoundVideoSave
+	.public VsRecorder_FoundVideoReturnToDetails
+	.public VsRecorder_FoundVideoSlotsCancel
+	.public VsRecorder_FoundVideoPlay
+	.public VsRecorder_OnVideoUploaded
+	.public VsRecorder_OnVideoDownloaded
+	.public VsRecorder_OnVideoSaveReported
 	.public VsRecorder_PrintVideoNumber
 	.public VsRecorder_NewNumberPadConfig
 	.public VsRecorder_FreeNumberPadConfig
@@ -3956,8 +3956,8 @@
 	.public sVsRecorderSearchButtonMsgIds
 	.public ov40_02245668
 	.public sVsRecorderSearchSaveSlotHitboxes
-	.public ov40_02245684
-	.public ov40_02245694
+	.public sVsRecorderSearchSlotMsgIds
+	.public sVsRecorderSearchSlotAnims
 	.public ov40_022456A4
 	.public sVsRecorderSearchDetailHitboxes
 	.public sVsRecorderSearchConditionHitboxes
@@ -3976,15 +3976,15 @@
 	.public sVsRecorderSearchConditionWindows
 	.public sVsRecorderSearchResultIconPositions
 	.public ov40_022459C0
-	.public ov40_02245B30
-	.public ov40_02245B44
+	.public sVsRecorderSendVideoSubStates
+	.public sVsRecorderNumberSearchSubStates
 	.public sVsRecorderVideoSearchSubStates
 	.public sVsRecorderNumberPadStates
 	.public sVsRecorderNumberPadStartX
 	.public sVsRecorderNumberPadKeys
 	.public sVsRecorderDeleteYesHitbox
 	.public sVsRecorderDeleteNoHitbox
-	.public ov40_02245CA8
+	.public sVsRecorderDeleteSubStates
 	.public ov40_02245CD4
 	.public ov40_02245CE8
 	.public sVsRecorderSearchSpeciesGroupStarts
@@ -4045,8 +4045,8 @@
 	.public VsRecorder_UpdateNet
 	.public VsRecorder_FreeNet
 	.public VsRecorder_VideoSearchSave
-	.public ov40_0224147C
-	.public ov40_02242E48
+	.public VsRecorder_NumberSearchSave
+	.public VsRecorder_OnVideoSaveReported
 	.public VsRecorder_NumberPadSetState
 	.public VsRecorder_NumberPadFree
 	.public VsRecorder_NumberPadClearAction
@@ -4490,11 +4490,11 @@ sVsRecorderSearchSaveSlotHitboxes: ; 0x02245674
 	.byte 0x19, 0x39, 0x32, 0xD2, 0x3D, 0x5D, 0x32, 0xD2, 0x61, 0x81, 0x32, 0xD2
 	.byte 0x85, 0xA5, 0x32, 0xD2
 
-ov40_02245684: ; 0x02245684
+sVsRecorderSearchSlotMsgIds: ; 0x02245684
 	.byte 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00
 
-ov40_02245694: ; 0x02245694
+sVsRecorderSearchSlotAnims: ; 0x02245694
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
 
@@ -4628,39 +4628,39 @@ ov40_022459C0:
 	.byte 0xBE, 0x00, 0x00, 0x00, 0x1F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xBF, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov40_02245B30: ; 0x02245B30
-	.word ov40_02240238
-	.word ov40_02240290
-	.word ov40_022417A4
-	.word ov40_022417DC
-	.word ov40_02241948
+sVsRecorderSendVideoSubStates: ; 0x02245B30
+	.word VsRecorder_VideoSearchInit
+	.word VsRecorder_VideoSearchEnter
+	.word VsRecorder_SendVideoShowCursor
+	.word VsRecorder_SendVideoUpload
+	.word VsRecorder_SendVideoExit
 
-ov40_02245B44: ; 0x02245B44
-	.word ov40_02240238
-	.word ov40_02240290
-	.word ov40_02240418
-	.word ov40_02240520
-	.word ov40_02240544
-	.word ov40_022405F0
-	.word ov40_022406C8
-	.word ov40_0224092C
-	.word ov40_02240B40
-	.word ov40_02240B58
-	.word ov40_02240B70
-	.word ov40_02240B90
-	.word ov40_02241144
-	.word ov40_022413EC
-	.word ov40_02241404
-	.word ov40_02241434
-	.word ov40_0224144C
-	.word ov40_02241464
-	.word ov40_0224147C
-	.word ov40_02241488
-	.word ov40_0224141C
+sVsRecorderNumberSearchSubStates: ; 0x02245B44
+	.word VsRecorder_VideoSearchInit
+	.word VsRecorder_VideoSearchEnter
+	.word VsRecorder_NumberSearchShowPad
+	.word VsRecorder_NumberSearchPadMain
+	.word VsRecorder_NumberSearchClosePad
+	.word VsRecorder_NumberSearchExit
+	.word VsRecorder_NumberSearchDownloadVideo
+	.word VsRecorder_NumberSearchShowDetails
+	.word VsRecorder_NumberSearchDetailsMain
+	.word VsRecorder_NumberSearchToggleProfile
+	.word VsRecorder_NumberSearchPlay
+	.word VsRecorder_NumberSearchExitDetails
+	.word VsRecorder_NumberSearchShowSlots
+	.word VsRecorder_NumberSearchSlotsMain
+	.word VsRecorder_NumberSearchSlotsCancel
+	.word VsRecorder_NumberSearchConfirmOverwrite
+	.word VsRecorder_NumberSearchOverwriteMain
+	.word VsRecorder_NumberSearchOverwriteNo
+	.word VsRecorder_NumberSearchSave
+	.word VsRecorder_NumberSearchResume
+	.word VsRecorder_NumberSearchReturnToDetails
 
 sVsRecorderVideoSearchSubStates: ; 0x02245B98
-	.word ov40_02240238
-	.word ov40_02240290
+	.word VsRecorder_VideoSearchInit
+	.word VsRecorder_VideoSearchEnter
 	.word VsRecorder_VideoSearchShowConditions
 	.word VsRecorder_VideoSearchConditionsMain
 	.word VsRecorder_VideoSearchExit
@@ -4688,8 +4688,8 @@ sVsRecorderVideoSearchSubStates: ; 0x02245B98
 	.word VsRecorder_VideoSearchOverwriteMain
 	.word VsRecorder_VideoSearchOverwriteNo
 	.word VsRecorder_VideoSearchSave
-	.word ov40_0223FD8C
-	.word ov40_0223FF8C
+	.word VsRecorder_VideoSearchDownloadVideo
+	.word VsRecorder_VideoSearchResume
 	.word VsRecorder_VideoSearchReturnToDetails
 
 sVsRecorderNumberPadStates: ; 0x02245C18
@@ -4716,7 +4716,7 @@ sVsRecorderDeleteYesHitbox: ; 0x02245CA0
 sVsRecorderDeleteNoHitbox: ; 0x02245CA4
 	.byte 0x28, 0x48, 0x90, 0xE8
 
-ov40_02245CA8: ; 0x02245CA8
+sVsRecorderDeleteSubStates: ; 0x02245CA8
 	.word VsRecorder_DeleteInit
 	.word VsRecorder_DeleteEnter
 	.word VsRecorder_DeleteMain

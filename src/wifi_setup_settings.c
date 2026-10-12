@@ -103,7 +103,7 @@ extern void WifiSetupSaveScreen_Init(void);
 extern void WifiSetupConnectionList_Init(void);
 extern void WifiSetupMethodMenu_Init(void);
 extern void WifiSetupConnectionTest_Init(void);
-extern void ov13_02231B18(void);
+extern void WifiSetupAddressEntry_Init(void);
 
 void WifiSetupSettings_Init(void) {
     u8 *record = WifiSetupConnections_GetEdit();
@@ -528,7 +528,7 @@ void WifiSetupSettings_Exit(void) {
         }
         WifiSetupApp_SetTransition(2, 0);
         WifiSetupApp_SetScreenArgs(kind, 0);
-        WifiSetupApp_SetStateFunc(ov13_02231B18);
+        WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_Init);
         break;
     }
     case 11: {

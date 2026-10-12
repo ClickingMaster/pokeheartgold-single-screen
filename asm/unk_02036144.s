@@ -77,7 +77,7 @@ _020361E0:
 	ldr r1, [r0, #8]
 	ldr r0, _02036228 ; =0x00000694
 	ldrh r0, [r1, r0]
-	bl sub_020355C8
+	bl CommWireless_Main
 	bl Comm_GetLocalNetId
 	cmp r0, #0
 	bne _020361F8
@@ -87,7 +87,7 @@ _020361F8:
 	b _02036204
 _020361FE:
 	mov r0, #0
-	bl sub_020355C8
+	bl CommWireless_Main
 _02036204:
 	mov r0, #0
 	bl sub_02039A00

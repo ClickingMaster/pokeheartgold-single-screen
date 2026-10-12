@@ -106,7 +106,7 @@
 .public Options_GetFrame
 .public Wireless_GetConnectedBitmap
 .public CommPlayerInfo_GetProfile
-.public sub_020356EC
+.public CommWireless_SetDetectDrops
 .public Comm_SendCommand
 .public sub_02037108
 .public Comm_CountConnected

@@ -23,8 +23,8 @@ struct LinkMessageStateA904 {
 };
 extern const s32 _020FC9D4[20];
 void sub_0205A8B4(struct UnkSub_0205A904 *data, int mode);
-void sub_02035854(void *data);
-void sub_0203588C(void);
+void CommWireless_SetRuleset(void *data);
+void CommWireless_RefreshBeacon(void);
 void sub_0205A904(int command);
 int sub_0205A9A0(struct LinkMessageStateA904 *state, MessageFormat *msgFmt);
 #endif

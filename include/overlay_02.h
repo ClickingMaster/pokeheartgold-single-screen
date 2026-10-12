@@ -79,10 +79,10 @@ void ov02_BattleExit_HandleRoamerAction(FieldSystem *fieldSystem, BattleSetup *s
 void ShakeScreen(TaskManager *taskManager, u32 amplitudeX, u32 amplitudeY, u32 repeats, u16 period);
 void LanceFliesAway(TaskManager *taskManager, LocalMapObject *lance, LocalMapObject *dragoniteObject);
 void OpenAlphHiddenRoom(TaskManager *taskManager, u32 msgNo);
-int ov02_0224E340(FieldSystem *fieldSystem);
+int FieldSystem_GetSafariAreaIndex(FieldSystem *fieldSystem);
 
-u16 ov02_0224E698(FieldSystem *fieldSystem);
-u16 ov02_0224E754(FieldSystem *fieldSystem, u16 *varPointer);
+u16 FieldSystem_CheckSafariObjectPlacement(FieldSystem *fieldSystem);
+u16 FieldSystem_GetFacingSafariObject(FieldSystem *fieldSystem, u16 *objectIndex);
 
 SafariDecorationArgs *SafariDecoration_CreateArgs(FieldSystem *fieldSystem, enum HeapID heapID);
 

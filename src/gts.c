@@ -37,7 +37,7 @@
 #include "touchscreen_list_menu.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 #include "unk_02037C94.h"
 #include "network_overlay_loader.h"
 #include "vram_transfer_manager.h"
@@ -75,7 +75,7 @@ void ov00_021EC294(void *(*alloc)(void *, u32, int), void (*free)(void *, void *
 int ov00_021EC9D4(void);
 BOOL LoadOVY38(void);
 void UnloadOVY38(void);
-void sub_02034DE0(void);
+void CommWireless_Terminate(void);
 
 // Other GTS screens.
 void Gts_LoadSubScreenBg(GtsApp *app);
@@ -408,7 +408,7 @@ BOOL Gts_Init(OverlayManager *man, int *state) {
         *state = 1;
         break;
     case 1:
-        sub_02034D8C();
+        CommWireless_StartUp();
         TextFlags_SetCanTouchSpeedUpPrint(TRUE);
         *state = 0;
         return TRUE;
@@ -425,7 +425,7 @@ BOOL Gts_Main(OverlayManager *man, int *state) {
     GtsServer_Update();
     switch (*state) {
     case 0:
-        if (sub_02034DB8()) {
+        if (CommWireless_IsStartedUp()) {
             gGtsGlobals.heap = app->heap;
             ov00_021EC294(Gts_Alloc, Gts_Free);
             *state = 1;
@@ -486,7 +486,7 @@ BOOL Gts_Exit(OverlayManager *man, int *state) {
     DestroyMsgData(app->countryNames);
     MessageFormat_Delete(app->msgFormat);
     ov70_0223887C(app);
-    sub_02034DE0();
+    CommWireless_Terminate();
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
     Heap_Free(app->bgConfig);
     Heap_Free(app->args);

@@ -220,7 +220,7 @@ _02246A18:
 	str r0, [r5]
 	b _02246ADE
 _02246A24:
-	bl sub_02034DB8
+	bl CommWireless_IsStartedUp
 	cmp r0, #0
 	beq _02246ADE
 	ldr r1, [r4, #0x10]
@@ -385,7 +385,7 @@ WiiMessageSettings_LoadNetworkOverlays: ; 0x02246B48
 	mov r2, #0
 	bl NNS_FndCreateExpHeapEx
 	str r0, [r4, #0x10]
-	bl sub_02034D8C
+	bl CommWireless_StartUp
 	mov r0, #4
 	bl Sys_ClearSleepDisableFlag
 _02246B8E:
@@ -409,7 +409,7 @@ WiiMessageSettings_UnloadNetworkOverlays: ; 0x02246B98
 	bl Heap_Free
 	bl UnloadOVY38
 	bl UnloadDwcOverlay
-	bl sub_02034DE0
+	bl CommWireless_Terminate
 	ldr r0, _02246BC8 ; =FS_OVERLAY_ID(OVY_70)
 	bl UnloadOverlayByID
 	mov r0, #0

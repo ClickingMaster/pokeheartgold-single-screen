@@ -44,7 +44,7 @@
 #include "touchpad.h"
 #include "friend_roster.h"
 #include "unk_0203170C.h"
-#include "unk_02034B0C.h"
+#include "comm_wireless.h"
 #include "unk_02037C94.h"
 #include "wireless_status_icon.h"
 #include "network_overlay_loader.h"
@@ -254,7 +254,7 @@ void sub_02085438(NumberEntryArgs *args);
 // Network and server functions without a header.
 BOOL LoadOVY38(void);
 void UnloadOVY38(void);
-void sub_02034DE0(void);
+void CommWireless_Terminate(void);
 void WirelessStatusIcon_SetLevel(int a0);
 void sub_02039528(SaveData *saveData);
 void sub_0203957C(void);
@@ -433,7 +433,7 @@ BOOL WiiMessageSettings_Main(OverlayManager *man, int *state) {
         *state = 1;
         break;
     case 1:
-        if (sub_02034DB8()) {
+        if (CommWireless_IsStartedUp()) {
             _02249BE0 = app->expHeap;
             ov00_021EC294(WiiMessageSettings_Alloc, WiiMessageSettings_Free);
             app->networkLoaded = TRUE;
@@ -490,7 +490,7 @@ void WiiMessageSettings_LoadNetworkOverlays(WiiMessageSettings *app) {
         sub_02039FD8(HEAP_ID_115);
         app->expHeapMemory = Heap_Alloc(HEAP_ID_115, 0x20020);
         app->expHeap = NNS_FndCreateExpHeapEx((void *)(((u32)app->expHeapMemory + 0x1F) & ~0x1F), 0x20000, 0);
-        sub_02034D8C();
+        CommWireless_StartUp();
         Sys_ClearSleepDisableFlag(4);
     }
 }
@@ -501,7 +501,7 @@ void WiiMessageSettings_UnloadNetworkOverlays(WiiMessageSettings *app) {
         Heap_Free(app->expHeapMemory);
         UnloadOVY38();
         UnloadDwcOverlay();
-        sub_02034DE0();
+        CommWireless_Terminate();
         UnloadOverlayByID(FS_OVERLAY_ID(OVY_70));
         app->networkLoaded = FALSE;
     }

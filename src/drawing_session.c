@@ -50,7 +50,7 @@ extern BOOL sub_02037108(int command, const void *data, int size);
 extern int sub_0203783C(void);
 extern int sub_02037854(void);
 extern void sub_02038C1C(int count);
-extern void sub_020356EC(BOOL value);
+extern void CommWireless_SetDetectDrops(BOOL value);
 extern void UnionRoomObjects_ResetSlots(struct UnionRoomObjects *unionRoom);
 extern void DrawingSessionLink_RegisterCommands(DrawingSessionWork *work); // wireless_room_packets.c: registers the command table
 
@@ -175,7 +175,7 @@ BOOL DrawingSession_Init(OverlayManager *man, int *state) {
         WirelessStatusIcon_Create();
         if (Comm_GetLocalNetId() == 0) {
             sub_0205A904(1);
-            sub_020356EC(TRUE);
+            CommWireless_SetDetectDrops(TRUE);
         }
         NARC_Delete(narc);
         (*state)++;
@@ -273,7 +273,7 @@ BOOL DrawingSession_Exit(OverlayManager *man, int *state) {
         UnionRoomObjects_ResetSlots(args->unk0);
         GX_SetDispSelect(GX_DISP_SELECT_MAIN_SUB);
         sub_0205A904(0);
-        sub_020356EC(FALSE);
+        CommWireless_SetDetectDrops(FALSE);
         (*state)++;
         break;
     case 2:

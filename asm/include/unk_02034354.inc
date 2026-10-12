@@ -46,7 +46,7 @@
 .public CommPlayerInfo_RecordBattleResult
 .public CommPlayerInfo_RecordTrades
 .public CommPlayerInfo_SetProfile
-.public sub_020357C4
+.public CommWireless_SetMacAddress
 .public Comm_SendCommand
 .public Comm_IsNetIdConnected
 .public Comm_CountConnected

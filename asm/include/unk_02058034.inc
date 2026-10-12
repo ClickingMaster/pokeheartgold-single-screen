@@ -11,8 +11,8 @@
 .public CommPlayerInfo_SendLocal
 .public CommPlayerInfo_HostRedistribute
 .public CommPlayerInfo_GetProfile
-.public sub_02034DB8
-.public sub_02035664
+.public CommWireless_IsStartedUp
+.public CommWireless_IsIdle
 .public sub_02035FD8
 .public sub_02035FE4
 .public sub_02036010

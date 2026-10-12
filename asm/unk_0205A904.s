@@ -77,8 +77,8 @@ _0205A98E:
 	add r0, sp, #0
 	strb r4, [r0, #0x1c]
 	add r0, sp, #0
-	bl sub_02035854
-	bl sub_0203588C
+	bl CommWireless_SetRuleset
+	bl CommWireless_RefreshBeacon
 	add sp, #0x20
 	pop {r4, pc}
 	thumb_func_end sub_0205A904

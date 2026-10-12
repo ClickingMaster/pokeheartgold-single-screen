@@ -76,7 +76,7 @@
 	.extern PokeathlonLampJump_Draw
 	.extern PokeathlonHurdleDash_Start
 	.extern PokeathlonRelayRun_Draw
-	.extern ov96_02204DE8
+	.extern PokeathlonPennantCapture_Draw
 	.extern PokeathlonBlockSmash_Draw
 	.extern PokeathlonGoalRoll_Draw
 	.extern PokeathlonEvent_PennantCapturePoints
@@ -273,10 +273,10 @@ ov96_0221A8BC: ; 0x0221A8BC
 	.word 0
 
 ov96_0221A8D0:
-	.word ov96_022047EC
-	.word ov96_02204DE8
-	.word ov96_02204DF8
-	.word ov96_02204E58
+	.word PokeathlonPennantCapture_Init
+	.word PokeathlonPennantCapture_Draw
+	.word PokeathlonPennantCapture_ShowResults
+	.word PokeathlonPennantCapture_Exit
 	.word 0
 
 ov96_0221A8E4: ; 0x0221A8E4

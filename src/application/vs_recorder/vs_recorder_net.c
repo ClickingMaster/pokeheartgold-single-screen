@@ -13,9 +13,9 @@ void VsRecorder_OnBoxUploaded(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_OnBoxListReceived(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_OnRankingsHeaderReceived(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_OnRankingsReceived(void *arg, GlobalTerminalNetError *error);
-void ov40_02242DF0(void *arg, GlobalTerminalNetError *error);
-void ov40_02242E14(void *arg, GlobalTerminalNetError *error);
-void ov40_02242E48(void *arg, GlobalTerminalNetError *error);
+void VsRecorder_OnVideoUploaded(void *arg, GlobalTerminalNetError *error);
+void VsRecorder_OnVideoDownloaded(void *arg, GlobalTerminalNetError *error);
+void VsRecorder_OnVideoSaveReported(void *arg, GlobalTerminalNetError *error);
 
 // the Global Terminal client is embedded in the work (only started in the Global Terminal modes)
 static inline GlobalTerminalNet *VsRecorder_NetClient(VsRecorderWork *work) {
@@ -42,10 +42,10 @@ void VsRecorder_InitNet(VsRecorderWork *work) {
     args.callbacks.onResponse[3] = VsRecorder_OnBoxListReceived;
     args.callbacks.onResponse[4] = VsRecorder_OnRankingsHeaderReceived;
     args.callbacks.onResponse[5] = VsRecorder_OnRankingsReceived;
-    args.callbacks.onResponse[6] = ov40_02242DF0;
+    args.callbacks.onResponse[6] = VsRecorder_OnVideoUploaded;
     args.callbacks.onResponse[7] = (GlobalTerminalNetResponseFunc)VsRecorder_OnVideoListReceived;
-    args.callbacks.onResponse[8] = ov40_02242E14;
-    args.callbacks.onResponse[9] = ov40_02242E48;
+    args.callbacks.onResponse[8] = VsRecorder_OnVideoDownloaded;
+    args.callbacks.onResponse[9] = VsRecorder_OnVideoSaveReported;
     args.messageFunc = NULL;
     args.messageArg = work;
     GlobalTerminalNet_Init(VsRecorder_NetClient(work), &args);

@@ -513,8 +513,8 @@ BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course) {
         u8 finished = 1;
         finished &= frame->words[4] >> 31;
         if (finished) {
-            PokeathlonCourseSpritePool_PauseAnims(work->unk020);
-            PokeathlonCourseObjects_PauseAnims(work->unk348, 1);
+            PokeathlonCourseSpritePool_PauseAnims(work->spritePool);
+            PokeathlonCourseObjects_PauseAnims(work->monObjects, 1);
             PokeathlonCourse_SetFinishCallback(course, PokeathlonPennantCapture_UpdateOwnScore);
             return TRUE;
         }

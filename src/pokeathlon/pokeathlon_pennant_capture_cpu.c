@@ -65,7 +65,7 @@ void PokeathlonPennantCaptureDisplay_ShowStatus(void **sprites, int show) {
     PokeathlonCourseSpritePoolSprite_Show(sprites[1], 1, show);
 }
 
-PokeathlonPennantCaptureCpu *PokeathlonPennantCaptureCpu_New(enum HeapID heapId, int cpuCount) {
+PokeathlonPennantCaptureCpu *PokeathlonPennantCaptureCpu_New(enum HeapID heapId, int cpuCount, int mode) {
     PokeathlonPennantCaptureCpu *cpu = Heap_Alloc(heapId, sizeof(PokeathlonPennantCaptureCpu));
     MI_CpuFill8(cpu, 0, sizeof(PokeathlonPennantCaptureCpu));
     cpu->cpuCount = cpuCount;
@@ -76,7 +76,7 @@ PokeathlonPennantCaptureCpu *PokeathlonPennantCaptureCpu_New(enum HeapID heapId,
     return cpu;
 }
 
-void PokeathlonPennantCaptureCpu_SetPlayer(PokeathlonPennantCaptureCpu *cpu, int participant, PokeathlonPennantCapturePlayer *player) {
+void PokeathlonPennantCaptureCpu_SetPlayer(PokeathlonPennantCaptureCpu *cpu, u8 participant, PokeathlonPennantCapturePlayer *player) {
     cpu->players[participant].player = player;
 }
 
