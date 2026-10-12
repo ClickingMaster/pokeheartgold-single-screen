@@ -1636,7 +1636,7 @@ Overlay field
     Object src/field/map_load_buffers.o
     Object src/field_terrain_height_math.o
     Object src/field_resource_stream.o
-    Object src/dynamic_terrain_height_manager_1.o
+    Object src/field/dynamic_terrain_height.o
     Object src/field/hblank_system.o
     Object src/field/field_poison_effect.o
     Object src/area_data_manager_1.o
@@ -2056,109 +2056,8 @@ Overlay OVY_14
     After main
     Object src/application/pc_box/pc_box.o
     Object src/application/pc_box/pc_box_ui.o
-    Object src/to90_extra2368_run01.o
-    Object src/to41_overlay_14_residual_20_run9.o
-    Object src/overlay_14_sol_partial_20.o
-    Object src/to52_overlay14_r21.o
-    Object src/overlay_14_sol_partial_21.o
-    Object src/overlay14_input_dispatch_r22_run1.o
-    Object src/overlay14_input_dispatch_r46_22.o
-    Object src/overlay14_input_dispatch_r22_run2.o
-    Object src/overlay_14_sol_partial_22.o
-    Object src/to52_r5_overlay14_transition_r23.o
-    Object src/overlay_14_sol_partial_23.o
-    Object src/overlay14_box_transition_handlers.o
-    Object src/overlay_14_sol_partial_24.o
-    Object src/overlay14_box_input_state_run1.o
-    Object src/to70_overlay_14_residual_25_residual_1_extra1194_run01.o
-    Object src/overlay14_box_input_state_run2.o
-    Object src/overlay14_box_input_state_prefix.o
-    Object src/overlay14_box_input_state_tail.o
-    Object src/overlay14_box_input_state_run3.o
-    Object src/overlay_14_sol_partial_25.o
-    Object src/to70_overlay_14_residual_26_extra768_run01.o
-    Object src/overlay_14_sol_partial_26.o
-    Object src/to52_overlay14_r27_exact.o
-    Object src/overlay_14_sol_partial_27.o
-    Object src/r40_overlay_14_residual_28_run1.o
-    Object src/overlay_14_sol_partial_28.o
-    Object src/overlay14_box_navigation.o
-    Object src/overlay_14_sol_partial_29.o
-    Object src/to52_overlay14_residual30.o
-    Object src/overlay_14_sol_partial_30.o
-    Object src/to70_overlay_14_residual_31_extra1195_run01.o
-    Object src/overlay_14_sol_partial_31.o
-    Object src/to46_overlay14_residual32.o
-    Object src/overlay_14_sol_partial_32.o
-    Object src/to70_to70_overlay_14_residual_33_extra464_residual_1_extra1268_run01.o
-    Object src/to70_overlay_14_residual_33_extra464_run01.o
-    Object src/overlay_14_sol_partial_33.o
-    Object src/overlay14_box_selection_menu.o
-    Object src/overlay_14_sol_partial_34.o
-    Object src/overlay_14_state_handlers_ee4e4.o
-    Object src/overlay_14_sol_partial_35.o
-    Object src/to80_extra1773_run01.o
-    Object src/overlay_14_sol_partial_36.o
-    Object src/overlay14_box_actions.o
-    Object src/overlay_14_sol_partial_37.o
-    Object src/overlay14_box_move_actions_r38_run1.o
-    Object src/to80_extra1692_run01.o
-    Object src/overlay14_box_move_actions_r38_run2.o
-    Object src/to70_overlay_14_residual_38_part2_extra941_run01.o
-    Object src/overlay14_box_move_actions_r38_run3.o
-    Object src/overlay_14_sol_partial_38.o
-    Object src/overlay14_box_item_actions.o
-    Object src/overlay_14_sol_partial_39.o
-    Object src/r40_overlay_14_residual_40_run1.o
-    Object src/overlay_14_sol_partial_40.o
-    Object src/to80_extra1774_run01.o
-    Object src/overlay_14_sol_partial_41.o
-    Object src/to80_extra1513_run01.o
-    Object src/overlay_14_sol_partial_42.o
-    Object src/to70_overlay_14_residual_43_extra942_run01.o
-    Object src/overlay_14_sol_partial_43.o
-    Object src/to70_overlay_14_residual_44_extra943_run01.o
-    Object src/overlay_14_sol_partial_44.o
-    Object src/to47_overlay14_box_action_handlers.o
-    Object src/overlay_14_sol_partial_45.o
-    Object src/to70_overlay_14_residual_46_extra769_run01.o
-    Object src/overlay_14_sol_partial_46.o
-    Object src/to70_overlay_14_residual_47_extra482_run01.o
-    Object src/overlay_14_sol_partial_47.o
-    Object src/overlay14_sprite_anim_helpers_r48.o
-    Object src/overlay_14_sol_partial_48.o
-    Object src/to70_overlay_14_residual_49_extra944_run01.o
-    Object src/overlay_14_sol_partial_49.o
-    Object src/overlay14_sprite_manager.o
-    Object src/overlay_14_sol_partial_50.o
-    Object src/overlay14_icon_helpers_1.o
-    Object src/to47_overlay14_icon_batch_setup.o
-    Object src/overlay14_icon_helpers_2.o
-    Object src/to70_overlay_14_residual_51_residual_2_extra572_run01.o
-    Object src/overlay14_icon_helpers_3.o
-    Object src/to70_overlay_14_residual_51_residual_3_extra945_run01.o
-    Object src/overlay14_icon_helpers_4.o
-    Object src/to70_overlay_14_residual_51_residual_4_extra946_run01.o
-    Object src/overlay14_icon_helpers_5.o
-    Object src/overlay14_box_sprite_layouts_r51.o
-    Object src/overlay14_icon_helpers_6.o
-    Object src/op90_op90_overlay_14_residual_51_residual_6_residual_1_r01.o
-    Object src/op90_overlay_14_residual_51_residual_6_r01.o
-    Object src/overlay14_icon_helpers_7.o
-    Object src/overlay_14_sol_partial_51.o
-    Object src/to52_r7_overlay14_r52.o
-    Object src/overlay_14_sol_partial_52.o
-    Object src/overlay14_item_sprite_resources.o
-    Object src/overlay_14_sol_partial_53.o
-    Object src/overlay14_box_sprite_setup_run1.o
-    Object src/to90_extra1998_run01.o
-    Object src/overlay14_box_sprite_setup_run2.o
-    Object src/to90_extra1999_run01.o
-    Object src/overlay_14_sol_partial_54.o
-    Object src/overlay14_box_sprite_controls.o
-    Object src/overlay_14_sol_partial_55.o
-    Object src/to70_overlay_14_residual_56_extra770_run01.o
-    Object src/overlay_14_sol_partial_56.o
+    Object src/application/pc_box/pc_box_states.o
+    Object src/application/pc_box/pc_box_sprites.o
     Object src/to41_overlay_14_residual_57_run1.o
     Object src/to47_overlay14_box_tile_buffer.o
     Object src/to41_overlay_14_residual_57_run2.o
@@ -3554,48 +3453,7 @@ Overlay OVY_96
     Object src/pokeathlon/pokeathlon_results_announcement.o
     Object src/pokeathlon/pokeathlon_hurdle_dash.o
     Object src/op90_overlay_96_residual_70_tail_r01.o
-    Object src/overlay96_exact_bank_70.o
-    Object src/to47r5_overlay96_selection_update.o
-    Object src/overlay96_pokeathlon_medal_grid_run1.o
-    Object src/to80_extra1586_run01.o
-    Object src/overlay96_pokeathlon_medal_grid_run2.o
-    Object src/to90_extra1963_run01.o
-    Object src/op90_op90_to90_extra1963_residual_1_residual_1_r01.o
-    Object src/op90_to90_extra1963_residual_1_r01.o
-    Object src/to80_extra1594_run01.o
-    Object src/to50_overlay96_r71u3_exact.o
-    Object src/overlay96_pokeathlon_medal_grid_run3.o
-    Object src/to90_extra1934_run01.o
-    Object src/overlay96_pokeathlon_medal_grid_run4.o
-    Object src/to70_to70_overlay_96_residual_71_unmatched_5_extra672_residual_1_extra1324_run01.o
-    Object src/to70_overlay_96_residual_71_unmatched_5_extra672_run01.o
-    Object src/overlay96_pokeathlon_medal_grid_run5.o
-    Object src/to90_extra2400_run01.o
-    Object src/op90_to90_extra2400_residual_1_r01.o
-    Object src/overlay96_course_feedback_r71u6.o
-    Object src/overlay96_pokeathlon_medal_grid_run6.o
-    Object src/overlay96_exact_bank_71.o
-    Object src/to70_overlay_96_residual_72_extra1041_run01.o
-    Object src/overlay96_exact_bank_72.o
-    Object src/overlay96_participant_helpers_1.o
-    Object src/to70_overlay_96_residual_73_extra523_run01.o
-    Object src/overlay96_participant_helpers_2.o
-    Object src/overlay96_exact_bank_73.o
-    Object src/to70_overlay_96_residual_74_extra1042_run01.o
-    Object src/overlay96_sprite_1.o
-    Object src/to80_extra1813_run01.o
-    Object src/overlay96_sprite_2.o
-    Object src/to70_overlay_96_residual_74_residual_3_extra881_run01.o
-    Object src/overlay96_sprite_3.o
-    Object src/to90_extra2240_run01.o
-    Object src/overlay96_sprite_4.o
-    Object src/overlay96_exact_bank_74.o
-    Object src/r40_overlay_96_residual_75_run1.o
-    Object src/op90_overlay_96_residual_75_r01.o
-    Object src/r40_overlay_96_residual_75_run2.o
-    Object src/op90_overlay_96_residual_75_r40_residual_2_r01.o
-    Object src/overlay96_exact_bank_75.o
-    Object src/overlay96_effect_pool_r76.o
+    Object src/pokeathlon/pokeathlon_hurdle_dash_race.o
     Object src/op90_overlay_96_residual_76_remaining_r01.o
     Object src/overlay96_exact_bank_76.o
     Object src/to70_overlay_96_residual_77_part1_extra673_run01.o

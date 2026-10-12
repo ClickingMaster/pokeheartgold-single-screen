@@ -98,8 +98,8 @@
 .public ov01_021F72DC
 .public ov01_021FA2D4
 .public ov01_021FA930
-.public ov01_021FB3E4
-.public ov01_021FB4A0
+.public DynamicTerrainHeightManager_SetPlate
+.public DynamicTerrainHeightManager_SetPlateHeight
 .public ov01_021FB9E0
 .public Field3dModel_LoadFromFilesystem
 .public Field3dModel_Unload

@@ -39,7 +39,7 @@ typedef struct {
     u8 pad[4];
     u16 big;
 } Data;
-void *ov96_021FC0D0(void *a, u32 b);
+void *PokeathlonHurdleDashTrack_GetLaneHurdles(void *a, u32 b);
 void *PokeathlonCourseMonObjects_Get(void *a, u8 b);
 void *PokeathlonCourseMonObject_GetGfx(void *h);
 Data *PokeathlonCourseMonGfx_GetInfo(void *a);
@@ -81,7 +81,7 @@ void ov96_021FA0E8(void *course, Params *params, u32 (*table)[2], void *a3, void
     obj->x68 = 1;
     obj->x64 = 1.0f;
     obj->x8 = 0;
-    obj->x20 = ov96_021FC0D0(a3, slot);
+    obj->x20 = PokeathlonHurdleDashTrack_GetLaneHurdles(a3, slot);
     switch (slot) {
     case 0:
         obj->x14 = 0;

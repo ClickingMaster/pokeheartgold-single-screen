@@ -1,4 +1,4 @@
-#include "field/overlay_01_021FB368.h"
+#include "field/dynamic_terrain_height.h"
 
 #include "field_system.h"
 #include "overlay_01.h"
@@ -52,14 +52,14 @@ void GymmickInit_Violet(FieldSystem *fieldSystem) {
         FX32_CONST(0x148),
     };
     MapPropManager_LoadOne(fieldSystem->mapPropManager, 111, &sp18, 0, fieldSystem->mapPropAnimationManager);
-    ov01_021FB3E4(0, 14, 19, 3, 3, FX32_CONST(32), fieldSystem->dynamicTerrainHeightManager);
+    DynamicTerrainHeightManager_SetPlate(0, 14, 19, 3, 3, FX32_CONST(32), fieldSystem->dynamicTerrainHeightManager);
     fx32 y = GymmickInit_Violet_sub(gymmick->violet.liftState);
     MapProp *mapProp = MapPropManager_FindMapPropByBuildModel(fieldSystem->mapPropManager, 111);
     VecFx32 translation;
     MapProp_GetTranslation(&translation, mapProp);
     translation.y = y;
     MapProp_SetTranslation(mapProp, &translation);
-    ov01_021FB4A0(0, y, fieldSystem->dynamicTerrainHeightManager);
+    DynamicTerrainHeightManager_SetPlateHeight(0, y, fieldSystem->dynamicTerrainHeightManager);
     G3X_SetEdgeColorTable(sEdgeColorTable);
 }
 
@@ -152,7 +152,7 @@ static void SysTask_ElevatorUp(SysTask *sysTask, void *taskData) {
         MapProp_SetTranslation(mapProp, &elevatorTranslation);
     } break;
     case 4:
-        ov01_021FB4A0(0, ELEVATOR_Y_UP, fieldSystem->dynamicTerrainHeightManager);
+        DynamicTerrainHeightManager_SetPlateHeight(0, ELEVATOR_Y_UP, fieldSystem->dynamicTerrainHeightManager);
         PlayerAvatar_ToggleAutomaticHeightUpdatingImmediate(fieldSystem->playerAvatar, TRUE);
         PlaySE(SEQ_SE_DP_KI_GASYAN);
         SysTask_Destroy(sysTask);
@@ -189,7 +189,7 @@ static void SysTask_ElevatorDown(SysTask *sysTask, void *taskData) {
         MapProp_SetTranslation(mapProp, &elevatorTranslation);
     } break;
     case 4:
-        ov01_021FB4A0(0, ELEVATOR_Y_DOWN, fieldSystem->dynamicTerrainHeightManager);
+        DynamicTerrainHeightManager_SetPlateHeight(0, ELEVATOR_Y_DOWN, fieldSystem->dynamicTerrainHeightManager);
         PlayerAvatar_ToggleAutomaticHeightUpdatingImmediate(fieldSystem->playerAvatar, TRUE);
         PlaySE(SEQ_SE_DP_KI_GASYAN);
         SysTask_Destroy(sysTask);

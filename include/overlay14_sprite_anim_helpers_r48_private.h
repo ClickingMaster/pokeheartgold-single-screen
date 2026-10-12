@@ -1,9 +1,0 @@
-#ifndef POKEHEARTGOLD_OVERLAY14_SPRITE_ANIM_HELPERS_R48_PRIVATE_H
-#define POKEHEARTGOLD_OVERLAY14_SPRITE_ANIM_HELPERS_R48_PRIVATE_H
-
-#include "global.h"
-
-void PCBox_TickSprites(void *work);
-void PCBox_SetSpriteAnim(void *work, u32 index, u32 anim);
-
-#endif // POKEHEARTGOLD_OVERLAY14_SPRITE_ANIM_HELPERS_R48_PRIVATE_H

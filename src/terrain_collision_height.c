@@ -35,7 +35,7 @@ int sub_02054654(FieldSystem *fieldSystem, int objectHeightMode, int objectHeigh
     tileZ = objectZ / 0x10000;
 
     u8 dynHeightPlateIndex;
-    dynHeightPlateFound = ov01_021FB42C(tileX, tileZ, fieldSystem->dynamicTerrainHeightManager, &dynHeightPlateIndex);
+    dynHeightPlateFound = DynamicTerrainHeightManager_FindPlate(tileX, tileZ, fieldSystem->dynamicTerrainHeightManager, &dynHeightPlateIndex);
 
     mapMatrixX = tileX / MAP_TILES_COUNT_X;
     mapMatrixZ = tileZ / MAP_TILES_COUNT_Z;
@@ -61,7 +61,7 @@ int sub_02054654(FieldSystem *fieldSystem, int objectHeightMode, int objectHeigh
     u8 newObjectHeightSource;
 
     if (dynHeightPlateFound) {
-        fx32 dynamicHeight = ov01_021FB474(dynHeightPlateIndex, fieldSystem->dynamicTerrainHeightManager);
+        fx32 dynamicHeight = DynamicTerrainHeightManager_GetPlateHeight(dynHeightPlateIndex, fieldSystem->dynamicTerrainHeightManager);
 
         if (bdhcHeightValid) {
             if (dynamicHeight <= objectPosition.y) {

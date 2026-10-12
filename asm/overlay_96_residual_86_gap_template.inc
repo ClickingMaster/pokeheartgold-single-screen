@@ -167,18 +167,18 @@
 	.public PokeathlonResultsAnnouncement_SetPlatePos
 	.public PokeathlonResultsAnnouncement_GetPlateRank
 	.public PokeathlonHurdleDash_Start
-	.public ov96_021FA340
-	.public ov96_021FBE3C
-	.public ov96_021FBE44
-	.public ov96_021FBE4C
-	.public ov96_021FBE9C
-	.public ov96_021FBEA0
-	.public ov96_021FC0D0
-	.public ov96_021FC0E4
-	.public ov96_021FC0E8
-	.public ov96_021FC0F4
-	.public ov96_021FC314
-	.public ov96_021FC690
+	.public PokeathlonHurdleDashRunner_GetHurdle
+	.public PokeathlonHurdleDash_FreeHurdles
+	.public PokeathlonHurdleDash_GetHurdle
+	.public PokeathlonHurdle_SetSprites
+	.public PokeathlonHurdle_IsVisible
+	.public PokeathlonHurdle_IsStanding
+	.public PokeathlonHurdleDashTrack_GetLaneHurdles
+	.public PokeathlonHurdleDashTrack_GetLayoutToSend
+	.public PokeathlonHurdleDashTrack_GetLayout
+	.public PokeathlonHurdleDashTrack_GetLayoutSize
+	.public PokeathlonHurdleDashStandings_Draw
+	.public PokeathlonHurdleDashDust_Free
 	.public ov96_021FCD74
 	.public ov96_021FDE6C
 	.public ov96_021FE538

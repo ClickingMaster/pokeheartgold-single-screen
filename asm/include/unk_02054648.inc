@@ -36,8 +36,8 @@
 .public ov01_021F65E4
 .public ov01_021F6600
 .public ov01_021FAE50
-.public ov01_021FB42C
-.public ov01_021FB474
+.public DynamicTerrainHeightManager_FindPlate
+.public DynamicTerrainHeightManager_GetPlateHeight
 
 	.public sub_02054648
 	.public sub_02054654

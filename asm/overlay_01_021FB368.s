@@ -14,8 +14,8 @@
 
 	.text
 
-	thumb_func_start ov01_021FB368
-ov01_021FB368: ; 0x021FB368
+	thumb_func_start DynamicTerrainHeightPlate_Contains
+DynamicTerrainHeightPlate_Contains: ; 0x021FB368
 	push {r4, r5}
 	ldr r3, [r2, #0x14]
 	cmp r3, #0
@@ -48,7 +48,7 @@ _021FB39C:
 	pop {r4, r5}
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov01_021FB368
+	thumb_func_end DynamicTerrainHeightPlate_Contains
 
 	thumb_func_start DynamicTerrainHeightManager_New
 DynamicTerrainHeightManager_New: ; 0x021FB3A4
@@ -86,8 +86,8 @@ _021FB3E0:
 	pop {r4, r5, r6, pc}
 	thumb_func_end DynamicTerrainHeightManager_New
 
-	thumb_func_start ov01_021FB3E4
-ov01_021FB3E4: ; 0x021FB3E4
+	thumb_func_start DynamicTerrainHeightManager_SetPlate
+DynamicTerrainHeightManager_SetPlate: ; 0x021FB3E4
 	push {r4, r5}
 	ldr r5, [sp, #0x10]
 	mov r4, #0x18
@@ -114,7 +114,7 @@ ov01_021FB3E4: ; 0x021FB3E4
 	str r1, [r0, #0x14]
 	pop {r4, r5}
 	bx lr
-	thumb_func_end ov01_021FB3E4
+	thumb_func_end DynamicTerrainHeightManager_SetPlate
 
 	thumb_func_start DynamicTerrainHeightManager_Free
 DynamicTerrainHeightManager_Free: ; 0x021FB418
@@ -128,8 +128,8 @@ DynamicTerrainHeightManager_Free: ; 0x021FB418
 	.balign 4, 0
 	thumb_func_end DynamicTerrainHeightManager_Free
 
-	thumb_func_start ov01_021FB42C
-ov01_021FB42C: ; 0x021FB42C
+	thumb_func_start DynamicTerrainHeightManager_FindPlate
+DynamicTerrainHeightManager_FindPlate: ; 0x021FB42C
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r0, #0
 	add r7, r1, #0
@@ -150,7 +150,7 @@ _021FB446:
 	add r0, r6, #0
 	add r1, r7, #0
 	add r2, r2, r3
-	bl ov01_021FB368
+	bl DynamicTerrainHeightPlate_Contains
 	cmp r0, #0
 	beq _021FB462
 	ldr r0, [sp]
@@ -168,10 +168,10 @@ _021FB46E:
 	mov r0, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FB42C
+	thumb_func_end DynamicTerrainHeightManager_FindPlate
 
-	thumb_func_start ov01_021FB474
-ov01_021FB474: ; 0x021FB474
+	thumb_func_start DynamicTerrainHeightManager_GetPlateHeight
+DynamicTerrainHeightManager_GetPlateHeight: ; 0x021FB474
 	push {r4, r5, r6, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -194,10 +194,10 @@ _021FB498:
 	add r0, r0, r6
 	ldr r0, [r0, #0x10]
 	pop {r4, r5, r6, pc}
-	thumb_func_end ov01_021FB474
+	thumb_func_end DynamicTerrainHeightManager_GetPlateHeight
 
-	thumb_func_start ov01_021FB4A0
-ov01_021FB4A0: ; 0x021FB4A0
+	thumb_func_start DynamicTerrainHeightManager_SetPlateHeight
+DynamicTerrainHeightManager_SetPlateHeight: ; 0x021FB4A0
 	push {r4, r5, r6, lr}
 	add r6, r2, #0
 	add r5, r0, #0
@@ -214,4 +214,4 @@ _021FB4B2:
 	str r4, [r0, #0x10]
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FB4A0
+	thumb_func_end DynamicTerrainHeightManager_SetPlateHeight

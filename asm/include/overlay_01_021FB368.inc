@@ -4,8 +4,8 @@
 .public Heap_Free
 .public GF_AssertFail
 .public DynamicTerrainHeightManager_New
-.public ov01_021FB3E4
+.public DynamicTerrainHeightManager_SetPlate
 .public DynamicTerrainHeightManager_Free
-.public ov01_021FB42C
-.public ov01_021FB474
-.public ov01_021FB4A0
+.public DynamicTerrainHeightManager_FindPlate
+.public DynamicTerrainHeightManager_GetPlateHeight
+.public DynamicTerrainHeightManager_SetPlateHeight

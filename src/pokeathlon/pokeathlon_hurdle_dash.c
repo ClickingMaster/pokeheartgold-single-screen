@@ -60,30 +60,30 @@ void PokeathlonCourseSpritePool_SetSurfaceCoords(void *scene, int a1, int a2, in
 SpriteList *PokeathlonCourseSpritePool_GetSpriteList(u8 *scene);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *sprite, int a1);
 void ov96_021FA0E8(PokeathlonCourseData *course, const PokeathlonHurdleDashTable *table, const PokeathlonHurdleDashParams *params, void *a3, void *scene, void *monSpriteManager, u8 member, PokeathlonHurdleDashRunner *runner);
-BOOL ov96_021FA6D0(PokeathlonCourseData *course, PokeathlonHurdleDash *hurdleDash);
-void ov96_021FAF1C(PokeathlonCourseData *course);
-u32 ov96_021FB60C(PokeathlonHurdleDash *hurdleDash);
-void ov96_021FB630(PokeathlonCourseData *course);
-void ov96_021FB7C8(PokeathlonHurdleDash *hurdleDash);
-void ov96_021FB808(PokeathlonHurdleDash *hurdleDash, s32 total);
-void ov96_021FBBB4(PokeathlonCourseData *course, const PokeathlonHurdleDashTable *table);
-void ov96_021FBDBC(PokeathlonHurdleDash *hurdleDash);
-s32 ov96_021FBDEC(s32 frames);
-void *ov96_021FC028(enum HeapID heapId);
-void ov96_021FC05C(void *a0);
-void ov96_021FC07C(u8 **a0, void *scene);
-void *ov96_021FC0E4(void *a0);
-void *ov96_021FC0E8(void *a0);
-int ov96_021FC0F4(void *a0);
-void ov96_021FC144(void *a0);
-void *ov96_021FC188(enum HeapID heapId);
-void ov96_021FC1A8(void *a0);
-void ov96_021FC214(void *a0, int species);
-void ov96_021FC2B4(void *a0, BOOL a1);
-void ov96_021FC314(void *a0);
-void *ov96_021FC618(enum HeapID heapId);
-void ov96_021FC630(void *a0, void *scene, int a2);
-void ov96_021FC690(void *a0);
+BOOL PokeathlonHurdleDash_UpdateRunners(PokeathlonCourseData *course, PokeathlonHurdleDash *hurdleDash);
+void PokeathlonHurdleDash_SyncRace(PokeathlonCourseData *course);
+u32 PokeathlonHurdleDash_HaveAllStopped(PokeathlonHurdleDash *hurdleDash);
+void PokeathlonHurdleDash_UpdateCpuParticipants(PokeathlonCourseData *course);
+void PokeathlonHurdleDash_InitTimeWindow(PokeathlonHurdleDash *hurdleDash);
+void PokeathlonHurdleDash_PrintTime(PokeathlonHurdleDash *hurdleDash, s32 total);
+void PokeathlonHurdleDash_InitCpuRunners(PokeathlonCourseData *course, const PokeathlonHurdleDashTable *table);
+void PokeathlonHurdleDash_CountFrame(PokeathlonHurdleDash *hurdleDash);
+s32 PokeathlonHurdleDash_RoundTime(s32 frames);
+void *PokeathlonHurdleDashTrack_New(enum HeapID heapId);
+void PokeathlonHurdleDashTrack_Free(void *a0);
+void PokeathlonHurdleDashTrack_CreateHurdleSprites(u8 **a0, void *scene);
+void *PokeathlonHurdleDashTrack_GetLayoutToSend(void *a0);
+void *PokeathlonHurdleDashTrack_GetLayout(void *a0);
+int PokeathlonHurdleDashTrack_GetLayoutSize(void *a0);
+void PokeathlonHurdleDashTrack_LoadRandomLayout(void *a0);
+void *PokeathlonHurdleDashStandings_New(enum HeapID heapId);
+void PokeathlonHurdleDashStandings_Free(void *a0);
+void PokeathlonHurdleDashStandings_Init(void *a0, int species);
+void PokeathlonHurdleDashStandings_SetDrawFlag(void *a0, BOOL a1);
+void PokeathlonHurdleDashStandings_Draw(void *a0);
+void *PokeathlonHurdleDashDust_New(enum HeapID heapId);
+void PokeathlonHurdleDashDust_CreateSprites(void *a0, void *scene, int a2);
+void PokeathlonHurdleDashDust_Free(void *a0);
 void ov96_0221A56C(void *gfx, int a1);
 
 extern const PokeathlonHurdleDashSceneConfig ov96_0221C404;
@@ -119,34 +119,34 @@ BOOL PokeathlonHurdleDash_Play(PokeathlonCourseData *course, u8 *state) {
         BOOL finished;
         u8 i;
         u32 total;
-        ov96_021FBDBC(hurdleDash);
-        finished = ov96_021FA6D0(course, hurdleDash);
-        ov96_021FB630(course);
+        PokeathlonHurdleDash_CountFrame(hurdleDash);
+        finished = PokeathlonHurdleDash_UpdateRunners(course, hurdleDash);
+        PokeathlonHurdleDash_UpdateCpuParticipants(course);
         if (finished) {
             total = 0;
             for (i = 0; i < 3; i++) {
                 total += hurdleDash->runners[i].time;
             }
             PokeathlonCourse_SetRecordScore(course, (u16)total);
-            ov96_021FB808(hurdleDash, total);
+            PokeathlonHurdleDash_PrintTime(hurdleDash, total);
             (*state)++;
         }
         break;
     }
     case 2: {
         u8 ready = PokeathlonCourse_RunFinish(course);
-        if (ov96_021FB60C(hurdleDash) && ready) {
+        if (PokeathlonHurdleDash_HaveAllStopped(hurdleDash) && ready) {
             (*state)++;
         }
-        ov96_021FBDBC(hurdleDash);
-        ov96_021FA6D0(course, hurdleDash);
-        ov96_021FB630(course);
+        PokeathlonHurdleDash_CountFrame(hurdleDash);
+        PokeathlonHurdleDash_UpdateRunners(course, hurdleDash);
+        PokeathlonHurdleDash_UpdateCpuParticipants(course);
         break;
     }
     case 3: {
         u8 *block;
-        ov96_021FBDBC(hurdleDash);
-        ov96_021FB630(course);
+        PokeathlonHurdleDash_CountFrame(hurdleDash);
+        PokeathlonHurdleDash_UpdateCpuParticipants(course);
         block = ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course));
         block[9] = TRUE;
         block = ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
@@ -163,7 +163,7 @@ BOOL PokeathlonHurdleDash_Play(PokeathlonCourseData *course, u8 *state) {
         }
         break;
     }
-    ov96_021FAF1C(course);
+    PokeathlonHurdleDash_SyncRace(course);
     return FALSE;
 }
 
@@ -189,7 +189,7 @@ BOOL PokeathlonHurdleDash_CalcScores(PokeathlonCourseData *course, u8 *state) {
     for (i = 0; i < 3; i++) {
         total += hurdleDash->runners[i].time;
     }
-    PokeathlonCourse_SetField5E0_AtIndex(course, (u8)self, (u16)ov96_021FBDEC(total));
+    PokeathlonCourse_SetField5E0_AtIndex(course, (u8)self, (u16)PokeathlonHurdleDash_RoundTime(total));
     if (self == 0) {
         // the host simulates the races of the participants without a player
         count = PokeathlonCourse_GetParticipantCount(course);
@@ -201,8 +201,8 @@ BOOL PokeathlonHurdleDash_CalcScores(PokeathlonCourseData *course, u8 *state) {
                 int index = (participant - count) * 3 + member;
                 if (hurdleDash->cpuRunners[index].finished == FALSE) {
                     speed = hurdleDash->cpuRunners[index].speed;
-                    if (speed < hurdleDash->cpuRunners[index].minSpeed) {
-                        speed = hurdleDash->cpuRunners[index].minSpeed;
+                    if (speed < hurdleDash->cpuRunners[index].topSpeed) {
+                        speed = hurdleDash->cpuRunners[index].topSpeed;
                     }
                     frames = (float)(0x1000 - hurdleDash->cpuRunners[index].distance) / speed;
                     framesLeft = (int)frames;
@@ -213,7 +213,7 @@ BOOL PokeathlonHurdleDash_CalcScores(PokeathlonCourseData *course, u8 *state) {
                 }
                 sum += hurdleDash->cpuRunners[index].time;
             }
-            PokeathlonCourse_SetField5E0_AtIndex(course, (u8)participant, (u16)ov96_021FBDEC(sum));
+            PokeathlonCourse_SetField5E0_AtIndex(course, (u8)participant, (u16)PokeathlonHurdleDash_RoundTime(sum));
         }
     }
     return TRUE;
@@ -250,11 +250,11 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         hurdleDash = PokeathlonCourse_AllocPtr4FromHeap(course, sizeof(PokeathlonHurdleDash));
         MI_CpuFill8(hurdleDash, 0, sizeof(PokeathlonHurdleDash));
         hurdleDash->bgConfig = BgConfig_Alloc(HEAP_ID_138);
-        hurdleDash->unkD8 = ov96_021FC028(hurdleDash->heapId);
-        hurdleDash->unkDC = ov96_021FC618(hurdleDash->heapId);
-        a = ov96_021FC0E4(hurdleDash->unkD8);
-        b = ov96_021FC0E8(hurdleDash->unkD8);
-        c = ov96_021FC0F4(hurdleDash->unkD8);
+        hurdleDash->track = PokeathlonHurdleDashTrack_New(hurdleDash->heapId);
+        hurdleDash->dust = PokeathlonHurdleDashDust_New(hurdleDash->heapId);
+        a = PokeathlonHurdleDashTrack_GetLayoutToSend(hurdleDash->track);
+        b = PokeathlonHurdleDashTrack_GetLayout(hurdleDash->track);
+        c = PokeathlonHurdleDashTrack_GetLayoutSize(hurdleDash->track);
         PokeathlonCourse_SetField3A4(course, (u32)a, (u32)b, (u32)c);
         PokeathlonCourse_SetHudPlanes(course, 8);
         charTransfer.maxTasks = 107;
@@ -267,7 +267,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         hurdleDash->heapId = HEAP_ID_138;
         FontID_Alloc(4, HEAP_ID_138);
         PokeathlonHurdleDash_InitBgs(hurdleDash->bgConfig);
-        ov96_021FB7C8(hurdleDash);
+        PokeathlonHurdleDash_InitTimeWindow(hurdleDash);
         gSystem.screensFlipped = TRUE;
         GfGfx_SwapDisplay();
         PokeathlonCourse_IncrementField1ED(course);
@@ -339,8 +339,8 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
             Sprite_SetMatrix(hurdleDash->sprites[i], &spritePos);
             Sprite_SetAnimCtrlSeq(hurdleDash->sprites[i], ov96_0221C3EC[i]);
         }
-        ov96_021FC630(hurdleDash->unkDC, hurdleDash->scene, 1);
-        hurdleDash->unk228 = ov96_021FC188(hurdleDash->heapId);
+        PokeathlonHurdleDashDust_CreateSprites(hurdleDash->dust, hurdleDash->scene, 1);
+        hurdleDash->standings = PokeathlonHurdleDashStandings_New(hurdleDash->heapId);
         {
             u16(*out)[2];
             i = 0;
@@ -355,8 +355,8 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
                 }
             }
         }
-        ov96_021FC214(hurdleDash->unk228, (int)mons);
-        ov96_021FC2B4(hurdleDash->unk228, FALSE);
+        PokeathlonHurdleDashStandings_Init(hurdleDash->standings, (int)mons);
+        PokeathlonHurdleDashStandings_SetDrawFlag(hurdleDash->standings, FALSE);
         for (i = 0; i < 3; i++) {
             PokeathlonCourse_GetMonInfo(course, ov96_021E5F24(course), i, &views[i]);
             spriteInfo[i + 5] = (u32)ov96_021E6108(PokeathlonCourse_GetPerformance(course, ov96_021E5F24(course), i));
@@ -399,13 +399,13 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         break;
     case 6:
         if (ov96_021E5F24(course) == 0) {
-            ov96_021FC144(hurdleDash->unkD8);
+            PokeathlonHurdleDashTrack_LoadRandomLayout(hurdleDash->track);
         }
         PokeathlonCourse_IncrementField1ED(course);
         break;
     case 7: {
         u8 *dataCopy;
-        ov96_021FC07C(hurdleDash->unkD8, hurdleDash->scene);
+        PokeathlonHurdleDashTrack_CreateHurdleSprites(hurdleDash->track, hurdleDash->scene);
         Sprite_SetDrawPriority(*ov96_021E6290(course, 272, hurdleDash->unk3A0, hurdleDash->scene), 1);
         numberX = ov96_0221C410;
         ReadWholeNarcMemberByIdPair(&params, NARC_a_1_7_0, 10);
@@ -413,14 +413,14 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         {
             int k;
             for (k = 0; k < 3; k++) {
-                ov96_021FA0E8(course, &table, &params, hurdleDash->unkD8, hurdleDash->scene, hurdleDash->monSpriteManager, (u8)k, &hurdleDash->runners[k]);
+                ov96_021FA0E8(course, &table, &params, hurdleDash->track, hurdleDash->scene, hurdleDash->monSpriteManager, (u8)k, &hurdleDash->runners[k]);
                 numberPos[k][0] = numberX.x[k];
                 numberPos[k][1] = 392;
             }
         }
         ov96_021E634C(course, 0, hurdleDash->unk3A0, hurdleDash->scene, 1, 3, numberPos);
         if (ov96_021E5F24(course) == 0) {
-            ov96_021FBBB4(course, &table);
+            PokeathlonHurdleDash_InitCpuRunners(course, &table);
         }
         dataCopy = PokeathlonCourse_GetDataCopyArea(course);
         {
@@ -455,7 +455,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
 
 BOOL PokeathlonHurdleDash_Draw(PokeathlonCourseData *course) {
     PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetHeapAllocPtr4(course);
-    ov96_021FC314(hurdleDash->unk228);
+    PokeathlonHurdleDashStandings_Draw(hurdleDash->standings);
     PokeathlonCourseSpritePool_Draw(hurdleDash->scene);
     return TRUE;
 }
@@ -488,10 +488,10 @@ BOOL PokeathlonHurdleDash_Exit(PokeathlonCourseData *course) {
 
     WirelessStatusIcon_Destroy();
     PokeathlonCourseLink_SetCheckSize(PokeathlonCourse_GetSystem(course), 0);
-    ov96_021FC1A8(hurdleDash->unk228);
+    PokeathlonHurdleDashStandings_Free(hurdleDash->standings);
     PokeathlonCourse_ResetField3A4(course);
-    ov96_021FC690(hurdleDash->unkDC);
-    ov96_021FC05C(hurdleDash->unkD8);
+    PokeathlonHurdleDashDust_Free(hurdleDash->dust);
+    PokeathlonHurdleDashTrack_Free(hurdleDash->track);
     FreeBgTilemapBuffer(hurdleDash->bgConfig, GF_BG_LYR_MAIN_0);
     FreeBgTilemapBuffer(hurdleDash->bgConfig, GF_BG_LYR_MAIN_1);
     FreeBgTilemapBuffer(hurdleDash->bgConfig, GF_BG_LYR_MAIN_2);
