@@ -92,7 +92,7 @@ void PCBox_VBlankCallback(SysTask *task, void *data) {
     if (work->view->updateFunc != NULL && work->view->updateFunc(work) == 0) {
         work->view->updateFunc = NULL;
     }
-    ov14_021E5A14(work);
+    PCBox_UpdateDetailPanel(work);
     PaletteData_PushTransparentBuffers(work->view->paletteData);
     DoScheduledBgGpuUpdates(work->view->bgConfig);
     PCBox_TickSprites(work->view);
@@ -103,7 +103,7 @@ void PCBox_VBlankCallback(SysTask *task, void *data) {
     OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
-void ov14_021E5A14(PCBoxWork *work) {
+void PCBox_UpdateDetailPanel(PCBoxWork *work) {
     if (work->args->unk8 != PC_BOX_MODE_MOVE_ITEMS) {
         BgCellManager_UpdateCellMove(work->view->panels, 0x10);
         return;
@@ -637,7 +637,7 @@ u32 ov14_021E6814(PCBoxWork *work) {
             pos[1] = w->entries[j].px + (w->entries[j].dx * w->timer >> 16) * w->entries[j].sx;
             pos[0] = w->entries[j].py + (w->entries[j].dy * w->timer >> 16) * w->entries[j].sy;
             ManagedSprite_SetPositionXY(work->view->sprites[s], pos[1], pos[0]);
-            ov14_021F31E0(work->view, w->entries[j].from, w->entries[j].to);
+            PCBox_SetMovingIconPriority(work->view, w->entries[j].from, w->entries[j].to);
         }
     }
     return 1;
@@ -976,7 +976,7 @@ u32 PCBox_GetMoveEntryTarget(PCBoxWork *work, u32 v) {
     return 0xFF;
 }
 
-void ov14_021E70E0(PCBoxWork *work, u32 a) {
+void PCBox_SetupPartyShiftAfterRelease(PCBoxWork *work, u32 a) {
     PCBoxMoveWork *w = work->view->temp;
     u32 i;
     u32 slot = a - 30;
@@ -1143,13 +1143,13 @@ void PCBox_FreeMonInfo(PCBoxMonInfo *monInfo) {
 }
 
 void PCBox_DrawMonInfo(PCBoxWork *work, PCBoxMonInfo *monInfo) {
-    u32 base = ov14_021F5404(work, monInfo);
+    u32 base = PCBox_DrawMoveWindows(work, monInfo);
     u32 i;
 
     for (i = 0; i < 4; i++) {
         BgCellManager_PutWindowTiles(work->view->panels, 0x10, &work->view->windows[base + i]);
     }
-    ov14_021E88A4(work->view->panels);
+    PCBox_HideMovesPanel(work->view->panels);
     PCBox_ShowMonPic(work, monInfo, 2);
     PCBox_SetSpriteVisible(work->view, (work->view->monPicBuffer ^ 1) + 2, 1);
     PCBox_SetSpriteVisible(work->view, work->view->monPicBuffer + 2, 0);
@@ -1167,7 +1167,7 @@ void PCBox_DrawMonItemInfo(PCBoxWork *work, PCBoxMonInfo *monInfo) {
         BgCellManager_PutWindowTiles(work->view->panels, 0x10, &work->view->windows[base + 1]);
         PCBox_LoadInfoItemIcon(work->view, monInfo->heldItem);
     }
-    ov14_021E8944(work->view->panels);
+    PCBox_HideItemInfoPanel(work->view->panels);
     PCBox_ShowMonPic(work, monInfo, 2);
     PCBox_SetSpriteVisible(work->view, (work->view->monPicBuffer ^ 1) + 2, 1);
     PCBox_SetSpriteVisible(work->view, work->view->monPicBuffer + 2, 0);
@@ -1226,9 +1226,9 @@ void PCBox_ClearMonInfo(PCBoxWork *work) {
     PCBox_ClearMonInfoWindows(work->view);
     PCBox_DrawMarkings(work, 0);
     if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
-        ov14_021E8944(work->view->panels);
+        PCBox_HideItemInfoPanel(work->view->panels);
     } else {
-        ov14_021E88A4(work->view->panels);
+        PCBox_HideMovesPanel(work->view->panels);
     }
 }
 
@@ -1314,7 +1314,7 @@ void PCBox_LoadScrolledWallpaper(PCBoxWork *work, s32 member, u32 direction) {
     PCBox_LoadWallpaper(work, member, work->view->unk_0448, x, tile);
 }
 
-void ov14_021E78AC(PCBoxWork *work, s32 member) {
+void PCBox_SwapWallpaper(PCBoxWork *work, s32 member) {
     u32 x;
     u32 tile;
 

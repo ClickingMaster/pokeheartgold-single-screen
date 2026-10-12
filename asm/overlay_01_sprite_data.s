@@ -113,11 +113,11 @@ ov01_02206DDC:
 
 	.public ov01_02206DF0
 ov01_02206DF0:
-	.word sub_02063E50
-	.word sub_02063E70
-	.word sub_02063FE4
-	.word sub_02063FFC
-	.word sub_0206402C
+	.word ApricornTreeObject_Init
+	.word ApricornTreeObject_Update
+	.word ApricornTreeObject_Delete
+	.word ApricornTreeObject_Pause
+	.word ApricornTreeObject_Resume
 
 	.public ov01_02206E04
 ov01_02206E04:

@@ -37,7 +37,7 @@ void *ov01_021F72DC(void *object) {
         return ((void **)sub_0205F40C(object))[0];
     }
     if (spriteId >= 0x106 && spriteId <= 0x10D) {
-        return sub_02064084(object);
+        return ApricornTreeObject_GetBillboard(object);
     }
     return ((void **)sub_0205F40C(object))[1];
 }

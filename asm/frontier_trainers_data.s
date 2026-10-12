@@ -92,7 +92,7 @@
 	.public FrontierTrainer_Load
 	.public FrontierMon_Generate
 	.public FrontierMon_ToPokemon
-	.public ov80_0222A30C
+	.public FrontierTrainer_GetClassSprite
 	.public ov80_0222A334
 	.public ov80_0222A3BC
 	.public Frontier_SetSpriteAnim
@@ -108,9 +108,9 @@
 	.public Frontier_BufferPartnerName
 	.public ov80_0222A7EC
 	.public ov80_0222A840
-	.public ov80_0223B628
-	.public ov80_0223B62A
-	.include "overlay_80_02229EE0.inc"
+	.public gFrontierTrainerClassSprites
+	.public gFrontierTrainerClassSpriteValues
+	.include "frontier_trainers_data.inc"
 	.include "global.inc"
 
 	.text
@@ -133,10 +133,10 @@
 _0223B620: ; 0x0223B620
 	.byte 0xD5, 0x00, 0x9D, 0x00, 0xEA, 0x00, 0xD9, 0x00
 
-ov80_0223B628: ; 0x0223B628
+gFrontierTrainerClassSprites: ; 0x0223B628
 	.byte 0x5A, 0x00
 
-ov80_0223B62A: ; 0x0223B62A
+gFrontierTrainerClassSpriteValues: ; 0x0223B62A
 	.byte 0x8D, 0x00, 0x5B, 0x00, 0x8E, 0x00
 	.byte 0x5C, 0x00, 0x8F, 0x00, 0x5D, 0x00, 0x90, 0x00, 0x5E, 0x00, 0x91, 0x00, 0x02, 0x00, 0x04, 0x00
 	.byte 0x03, 0x00, 0x06, 0x00, 0x3C, 0x00, 0x03, 0x00, 0x3D, 0x00, 0x08, 0x00, 0x20, 0x00, 0x3E, 0x00

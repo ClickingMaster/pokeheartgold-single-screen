@@ -1,10 +1,10 @@
 #include <nitro/fs/overlay.h>
 #pragma once
-.public sub_02063E50
-.public sub_02063E70
-.public sub_02063FE4
-.public sub_02063FFC
-.public sub_0206402C
+.public ApricornTreeObject_Init
+.public ApricornTreeObject_Update
+.public ApricornTreeObject_Delete
+.public ApricornTreeObject_Pause
+.public ApricornTreeObject_Resume
 .public ov01_021F73CC
 .public ov01_021F73F4
 .public ov01_021F7408

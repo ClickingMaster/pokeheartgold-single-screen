@@ -9,8 +9,7 @@
 #include "frontier/frontier_script_context.h"
 #include "frontier/frontier_system.h"
 #include "frontier/frontier_transition.h"
-#include "frontier/overlay_80.h"
-#include "frontier/overlay_80_02239960.h"
+#include "frontier/frontier_particles.h"
 
 #include "battle_record.h"
 #include "battle_recording.h"
@@ -89,9 +88,9 @@ void *Frontier_GetMap(void *frontierWork);
 BOOL sub_02096BF8(u8 *data, u16 value);
 BOOL BattleRecord_Load(SaveData *saveData, enum HeapID heapId, int *result, BattleSetup *setup, int index);
 void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u32 idx, u32 on);
-void *ov80_022399A4(void *manager, u32 index, u32 member, u32 camera);
-void ov80_02239A1C(void *manager, u32 index);
-BOOL ov80_02239A74(void *manager);
+void *FrontierParticles_CreateSystem(void *manager, u32 index, u32 member, u32 camera);
+void FrontierParticles_DestroySystem(void *manager, u32 index);
+BOOL FrontierParticles_AreAllDone(void *manager);
 void FrontierMap_CreateMonSprite(FrontierMap *map, Pokemon *mon, int heapId, int a3, int x, int y, int a6, int a7, int a8, int a9);
 void FrontierMap_DeleteMonSprite(FrontierMap *map, u16 id);
 void FrontierMap_ShakeTask(SysTask *task, FrontierMapShake *shake);
@@ -1213,13 +1212,13 @@ BOOL FrtCmd_065(FrontierScriptContext *ctx) {
     u16 index = FrontierScript_ReadVar(ctx);
     u16 member = FrontierScript_ReadVar(ctx);
     u16 camera = FrontierScript_ReadVar(ctx);
-    ov80_022399A4((void *)map->unk10, index, member, camera);
+    FrontierParticles_CreateSystem((void *)map->particleManager, index, member, camera);
     return FALSE;
 }
 
 BOOL FrtCmd_066(FrontierScriptContext *ctx) {
     FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
-    ov80_02239A1C((void *)map->unk10, FrontierScript_ReadVar(ctx));
+    FrontierParticles_DestroySystem((void *)map->particleManager, FrontierScript_ReadVar(ctx));
     return FALSE;
 }
 
@@ -1227,7 +1226,7 @@ BOOL FrtCmd_067(FrontierScriptContext *ctx) {
     FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     u16 index = FrontierScript_ReadVar(ctx);
     u16 resource = FrontierScript_ReadVar(ctx);
-    ParticleSystem_CreateEmitterWithParam(ov80_02239A60(map->unk10, index), resource, NULL, NULL);
+    ParticleSystem_CreateEmitterWithParam(FrontierParticles_GetSystem(map->particleManager, index), resource, NULL, NULL);
     return FALSE;
 }
 
@@ -1237,7 +1236,7 @@ BOOL FrtCmd_068(FrontierScriptContext *ctx) {
 }
 
 BOOL FrontierScriptNative_WaitMapEffect(FrontierScriptContext *ctx) {
-    return ov80_02239A74((void *)((FrontierMap *)Frontier_GetMap(ctx->frontierSystem->frontierWork))->unk10) == TRUE;
+    return FrontierParticles_AreAllDone((void *)((FrontierMap *)Frontier_GetMap(ctx->frontierSystem->frontierWork))->particleManager) == TRUE;
 }
 
 // Shakes the map: offset x / y, flipped every interval + 1 frames, count times.

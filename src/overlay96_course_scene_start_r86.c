@@ -10,7 +10,7 @@ int ov96_02204DF8(void *course) {
         PokeathlonCourse_AddScoreEntry(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, 0x124);
     }
     PokeathlonCourseScoreList_Rank(gfx, 1);
-    ov96_0221A56C(gfx, 1);
+    PokeathlonEvent_CalcPoints(gfx, 1);
     PokeathlonCourseScoreList_AddPointsToTotals(gfx);
     PokeathlonCourseScoreList_SaveEventPoints(gfx, 1);
     return 1;

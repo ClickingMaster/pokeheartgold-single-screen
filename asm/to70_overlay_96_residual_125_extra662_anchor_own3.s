@@ -79,11 +79,11 @@
 	.extern ov96_02204DE8
 	.extern PokeathlonBlockSmash_Draw
 	.extern PokeathlonGoalRoll_Draw
-	.extern ov96_0221A670
-	.extern ov96_0221A680
-	.extern ov96_0221A690
-	.extern ov96_0221A69C
-	.extern ov96_0221A720
+	.extern PokeathlonEvent_PennantCapturePoints
+	.extern PokeathlonEvent_CirclePushPoints
+	.extern PokeathlonEvent_BlockSmashPoints
+	.extern PokeathlonEvent_DiscCatchPoints
+	.extern PokeathlonEvent_Event8Points
 	.extern ov96_0221DC80
 	.extern ov96_0221DC88
 	.extern ov96_0221DC90

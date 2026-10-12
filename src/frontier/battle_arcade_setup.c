@@ -7,7 +7,7 @@
 
 #include "battle/battle_setup.h"
 #include "frontier/frontier.h"
-#include "frontier/overlay_80_022340E8.h"
+#include "frontier/battle_arcade_data.h"
 
 #include "assert.h"
 #include "communication_player_state.h"
@@ -163,7 +163,7 @@ BattleSetup *BattleArcade_NewBattleSetup(ArcadeContext *ctx, FrontierLaunchArgs 
     }
     Heap_Free(mon);
     BattleSetup_SetAllySideBattlersToPlayer(setup);
-    Heap_Free(FrontierTrainer_Load(&trainer, ctx->trainerIds[ctx->unk11], HEAP_ID_FIELD2, 204));
+    Heap_Free(FrontierTrainer_Load(&trainer, ctx->trainerIds[ctx->battleNo], HEAP_ID_FIELD2, 204));
     FrontierTrainer_SetBattleTrainer(setup, &trainer, opponentCount, BATTLER_ENEMY, HEAP_ID_FIELD2);
     Party_InitWithMaxSize(setup->party[BATTLER_ENEMY], BattleArcade_GetOpponentMonCount(ctx->type, FALSE));
     for (i = 0; i < BATTLER_MAX; i++) {
@@ -180,7 +180,7 @@ BattleSetup *BattleArcade_NewBattleSetup(ArcadeContext *ctx, FrontierLaunchArgs 
     case 3:
         BattleSetup_SetAllySideBattlersToPlayer(setup);
         PlayerProfile_Copy(CommPlayerInfo_GetProfile(1 - Comm_GetLocalNetId()), setup->profile[BATTLER_PLAYER2]);
-        Heap_Free(FrontierTrainer_Load(&trainer, ctx->trainerIds[ctx->unk11 + 7], HEAP_ID_FIELD2, 204));
+        Heap_Free(FrontierTrainer_Load(&trainer, ctx->trainerIds[ctx->battleNo + 7], HEAP_ID_FIELD2, 204));
         FrontierTrainer_SetBattleTrainer(setup, &trainer, opponentCount, BATTLER_ENEMY2, HEAP_ID_FIELD2);
         Party_InitWithMaxSize(setup->party[BATTLER_ENEMY2], BattleArcade_GetOpponentMonCount(ctx->type, FALSE));
         mon = AllocMonZeroed(HEAP_ID_FIELD2);
@@ -271,7 +271,7 @@ u32 BattleArcade_GetTrainerAIFlags(ArcadeContext *ctx) {
     s32 aiFlags;
 
     if (ctx->type == 0) {
-        u16 *trainerId = &ctx->trainerIds[ctx->unk11];
+        u16 *trainerId = &ctx->trainerIds[ctx->battleNo];
         u16 id = *trainerId;
         if (id == 311 || id == 312) {
             return 7;
@@ -295,11 +295,11 @@ u32 BattleArcade_GetTrainerAIFlags(ArcadeContext *ctx) {
 }
 
 u32 BattleArcade_GetRound(ArcadeContext *ctx) {
-    u16 round = ctx->unk1A;
+    u16 round = ctx->round;
 
     if (BattleArcade_MultiplayerCheck(ctx->type) == TRUE) {
-        u16 partnerRound = ctx->unkA76;
-        if (partnerRound > ctx->unk1A) {
+        u16 partnerRound = ctx->partnerRound;
+        if (partnerRound > ctx->round) {
             round = partnerRound;
         }
     }

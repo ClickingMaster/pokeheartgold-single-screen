@@ -44,7 +44,7 @@ BOOL FrtCmd_132(void *ctx) {
         ov80_022357B4(data, *(void **)((u8 *)args + 8));
         break;
     case 0x29:
-        *dst = ov80_02235898(data, value);
+        *dst = BattleTower_GetTrainerSprite(data, value);
         break;
     case 0x2C:
         ov80_022358B0(data, value);

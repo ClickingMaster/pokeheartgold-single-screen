@@ -45,9 +45,9 @@ u32 FrontierMap_GetParam(u32 mapId, u32 field);
 void FrontierMap_InitEffect(void *map, void *effect, u32 mapId);
 void FrontierMap_ExitEffect(void *map, void *effect, u32 mapId);
 int ov80_0222A7EC(void *profile);
-u32 ov80_02239960(enum HeapID heapID);
-void ov80_02239980(u32 resourceManager);
-void ov80_02239A38(void);
+u32 FrontierParticles_New(enum HeapID heapID);
+void FrontierParticles_Free(u32 resourceManager);
+void FrontierParticles_Update(void);
 
 // Not in frontier/frontier_map.h: the script commands declare these with u32 indexes (their code depends on it).
 ManagedSprite *FrontierMap_CreateSprite(FrontierMap *map, u16 index, u16 resourceId);
@@ -119,7 +119,7 @@ void *FrontierMap_Init(void *frontier) {
     GF_TouchpadResetSampling();
     GF_TouchpadStartSampling(4);
     FrontierMap_InitSpriteSystem(map);
-    map->unk10 = ov80_02239960(HEAP_ID_101);
+    map->particleManager = FrontierParticles_New(HEAP_ID_101);
     FrontierMap_InitMapObjects(map, mapId, profile);
     map->objectTask = SysTask_CreateOnMainQueue((SysTaskFunc)FrontierMap_ObjectTask, map, 60000);
     map->eventTask = SysTask_CreateOnMainQueue((SysTaskFunc)FrontierMap_EventTask, map, 61000);
@@ -151,7 +151,7 @@ void FrontierMap_Free(FrontierMap *map) {
     ToggleBgLayer(GF_BG_LYR_SUB_0, GF_PLANE_TOGGLE_OFF);
     FreeBgTilemapBuffer(map->bgConfig, GF_BG_LYR_SUB_0);
     FrontierMap_FreeSpriteSystem(map);
-    ov80_02239980(map->unk10);
+    FrontierParticles_Free(map->particleManager);
     GF_DestroyVramTransferManager();
     PaletteData_FreeBuffers(map->paletteData, PLTTBUF_MAIN_BG);
     PaletteData_FreeBuffers(map->paletteData, PLTTBUF_SUB_BG);
@@ -265,7 +265,7 @@ void FrontierMap_Update(SysTask *task, FrontierMap *map) {
     }
     SpriteSystem_DrawSprites(map->spriteManager);
     SpriteSystem_UpdateTransfer();
-    ov80_02239A38();
+    FrontierParticles_Update();
     RequestSwap3DBuffers(GX_SORTMODE_MANUAL, GX_BUFFERMODE_Z);
 }
 

@@ -87,7 +87,7 @@
 	.public ov80_0223D4D6
 	.public ov80_0223D4D8
 	.public ov80_0223D4DA
-	.include "overlay_80_02237A70.inc"
+	.include "battle_castle_setup_data.inc"
 	.include "global.inc"
 
     .text

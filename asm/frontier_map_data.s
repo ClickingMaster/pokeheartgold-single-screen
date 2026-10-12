@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "overlay_80_02238648.inc"
+	.include "frontier_map_data.inc"
 	.include "global.inc"
 
     .text

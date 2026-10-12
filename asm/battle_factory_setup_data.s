@@ -110,7 +110,7 @@
 	.public BattleFactory_GetRound
 	.public gBattleFactoryTrainerSetRanges
     .include "asm/macros.inc"
-	.include "overlay_80_02236B78.inc"
+	.include "battle_factory_setup_data.inc"
 	.include "global.inc"
 
     .text

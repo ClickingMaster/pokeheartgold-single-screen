@@ -108,7 +108,7 @@
 	.public ov80_0223DB30
 	.public ov80_0223DB64
 	.public ov80_0223DB98
-	.include "overlay_80_0223A00C.inc"
+	.include "frontier_brain_intro_data.inc"
 	.include "global.inc"
 
     .text

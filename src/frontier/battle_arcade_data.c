@@ -1,4 +1,4 @@
-#include "frontier/overlay_80_022340E8.h"
+#include "frontier/battle_arcade_data.h"
 
 #include "global.h"
 
@@ -45,7 +45,7 @@ typedef void (*ArcadeEventFunc)(ArcadeContext *ctx, Party *party, int count);
 // BlendPalette called without narrowing its arguments
 typedef void (*BlendPaletteWideFunc)(const void *src, void *dst, int size, int cur, int target);
 
-extern ArcadeContext *ov80_0223DD4C;
+extern ArcadeContext *gBattleArcadeData;
 extern const u8 ov80_0223BE88[];
 extern const u8 ov80_0223BE90[];
 extern const u8 ov80_0223BE98[];
@@ -76,7 +76,7 @@ int BattleArcade_GetMonLevel(ArcadeContext *ctx);
 void FrontierMon_ToPokemon(ArcadeFrontierMon *frontierMon, Pokemon *mon, int level);
 void BattleArcade_AddMonToParty(ArcadeContext *ctx, Party *party, Pokemon *mon);
 void *FrontierTrainer_Load(void *trainer, u16 trainerId, u32 heapId, u32 a3);
-void ov80_0222A30C(u8 a0);
+void FrontierTrainer_GetClassSprite(u8 a0);
 ManagedSprite *FrontierMap_CreateMonIcon(FrontierMap *map, Pokemon *mon, int index, int x, int y);
 void FrontierMap_DeleteMonIcon(FrontierMap *map, ManagedSprite *sprite, int index);
 ManagedSprite *ov80_0222F3FC(FrontierMap *map, int x, int y);
@@ -118,7 +118,7 @@ void ov80_02235320(ArcadeContext *ctx);
 
 static inline void BattleArcadeData_AllocContext(void) {
     ArcadeContextStorage *storage = Heap_Alloc(HEAP_ID_FIELD2, sizeof(ArcadeContextStorage));
-    ov80_0223DD4C = &storage->context;
+    gBattleArcadeData = &storage->context;
     MI_CpuFill8(storage, 0, sizeof(ArcadeContextStorage));
 }
 
@@ -130,9 +130,9 @@ static inline void BattleArcadeData_AddPartyMon(Party *party, u16 slot) {
         u32 item;
     } data;
 
-    mon = Party_GetMonByIndex(party, ov80_0223DD4C->partySlots[slot]);
-    Party_AddMon(ov80_0223DD4C->playerParty, mon);
-    mon = Party_GetMonByIndex(ov80_0223DD4C->playerParty, slot);
+    mon = Party_GetMonByIndex(party, gBattleArcadeData->partySlots[slot]);
+    Party_AddMon(gBattleArcadeData->playerParty, mon);
+    mon = Party_GetMonByIndex(gBattleArcadeData->playerParty, slot);
     data.item = 0;
     SetMonData(mon, MON_DATA_HELD_ITEM, &data.item);
     if (GetMonData(mon, MON_DATA_LEVEL, NULL) > 50) {
@@ -145,7 +145,7 @@ static inline void BattleArcadeData_AddPartyMon(Party *party, u16 slot) {
 #pragma force_active on
 u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u16 slot1, u16 slot2, u16 *resultVar) {
     u16 i;
-    ArcadeContext *ctx[1]; // re-loaded from ov80_0223DD4C before each group of accesses; an array to match
+    ArcadeContext *ctx[1]; // re-loaded from gBattleArcadeData before each group of accesses; an array to match
     ArcadeContext *saved;
     u32 index;
     int count;
@@ -156,81 +156,81 @@ u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u1
     Pokemon *mon;
 
     BattleArcadeData_AllocContext();
-    ctx[0] = ov80_0223DD4C;
-    ctx[0]->unk8 = (u32)Save_Frontier_GetArcadeChallenge(saveData);
+    ctx[0] = gBattleArcadeData;
+    ctx[0]->challenge = (u32)Save_Frontier_GetArcadeChallenge(saveData);
     ctx[0]->saveData = saveData;
     ctx[0]->heapId = HEAP_ID_FIELD2;
-    ctx[0] = ov80_0223DD4C;
+    ctx[0] = gBattleArcadeData;
     ctx[0]->playerParty = SaveArray_Party_Alloc(HEAP_ID_FIELD2);
     ctx[0]->opponentParty = SaveArray_Party_Alloc(HEAP_ID_FIELD2);
     ((ArcadeContextStorage *)ctx[0])->resultVar = resultVar;
     ctx[0]->eventId = 0x20;
-    record = (void *)ctx[0]->unk8;
+    record = (void *)ctx[0]->challenge;
     typeRecord = Save_Frontier_GetArcadeFlags(saveData);
 
     if (resume == FALSE) {
         u8 flag;
 
-        ctx[0] = ov80_0223DD4C;
+        ctx[0] = gBattleArcadeData;
         ctx[0]->type = type;
-        ctx[0]->unk11 = 0;
+        ctx[0]->battleNo = 0;
         ctx[0]->cursorSpeed = 3;
         ctx[0]->randomFlag = 0;
         ArcadeChallenge_Clear(record);
-        if (ov80_0223DD4C->type == 3) {
-            flag = Save_VarsFlags_GetVar4052(Save_VarsFlags_Get(ov80_0223DD4C->saveData));
+        if (gBattleArcadeData->type == 3) {
+            flag = Save_VarsFlags_GetVar4052(Save_VarsFlags_Get(gBattleArcadeData->saveData));
         } else {
-            flag = ArcadeFlags_GetField(typeRecord, 8, ov80_0223DD4C->type, 0, 0);
+            flag = ArcadeFlags_GetField(typeRecord, 8, gBattleArcadeData->type, 0, 0);
         }
         if (flag == 1) {
-            ctx[0] = ov80_0223DD4C;
+            ctx[0] = gBattleArcadeData;
             frontier = Save_Frontier_GetStatic(ctx[0]->saveData);
-            index = sub_0205C2C0(ov80_0223DD4C->type);
+            index = sub_0205C2C0(gBattleArcadeData->type);
             ctx[0]->winStreak = FrontierSave_GetStat(frontier, index, sub_0205C268(sub_0205C2C0(ctx[0]->type)));
         } else {
-            ov80_0223DD4C->winStreak = 0;
+            gBattleArcadeData->winStreak = 0;
         }
-        ctx[0] = ov80_0223DD4C;
-        ctx[0]->unk1A = ctx[0]->winStreak / 7;
+        ctx[0] = gBattleArcadeData;
+        ctx[0]->round = ctx[0]->winStreak / 7;
         ctx[0]->unk24 = 0;
         ctx[0]->partySlots[0] = slot0;
         ctx[0]->partySlots[1] = slot1;
         ctx[0]->partySlots[2] = slot2;
     } else {
-        ov80_0223DD4C->type = ArcadeChallenge_GetField(record, 0, 0, 0, 0);
+        gBattleArcadeData->type = ArcadeChallenge_GetField(record, 0, 0, 0, 0);
         i = ArcadeChallenge_GetField(record, 2, 0, 0, 0);
-        ctx[0] = ov80_0223DD4C;
-        ctx[0]->unk11 = i;
+        ctx[0] = gBattleArcadeData;
+        ctx[0]->battleNo = i;
         ctx[0]->cursorSpeed = ArcadeChallenge_GetField(record, 3, 0, 0, 0);
         ctx[0]->randomFlag = ArcadeChallenge_GetField(record, 1, 0, 0, 0);
-        saved = (ArcadeContext *)ov80_0223DD4C; // the redundant cast is needed to match
+        saved = (ArcadeContext *)gBattleArcadeData; // the redundant cast is needed to match
         frontier = Save_Frontier_GetStatic(saved->saveData);
-        index = sub_0205C2C0(ov80_0223DD4C->type);
+        index = sub_0205C2C0(gBattleArcadeData->type);
         saved->winStreak = FrontierSave_GetStat(frontier, index, sub_0205C268(sub_0205C2C0(ctx[0]->type)));
-        saved->unk1A = saved->winStreak / 7;
+        saved->round = saved->winStreak / 7;
         for (i = 0; i < 3; i++) {
-            ctx[0] = ov80_0223DD4C;
+            ctx[0] = gBattleArcadeData;
             ctx[0]->partySlots[i] = ArcadeChallenge_GetField(record, 6, (u8)i, 0, 0);
         }
     }
 
     for (i = 0; i < 3; i++) {
-        ctx[0] = ov80_0223DD4C;
+        ctx[0] = gBattleArcadeData;
         mon = Party_GetMonByIndex(SaveArray_Party_Get(ctx[0]->saveData), ctx[0]->partySlots[i]);
-        ctx[0] = ov80_0223DD4C;
+        ctx[0] = gBattleArcadeData;
         ctx[0]->heldItems[i] = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
     }
 
     party = SaveArray_Party_Get(ctx[0]->saveData);
-    count = BattleArcade_GetMonCount(ov80_0223DD4C->type, 0);
+    count = BattleArcade_GetMonCount(gBattleArcadeData->type, 0);
     for (i = 0; i < count; i++) {
         BattleArcadeData_AddPartyMon(party, i);
     }
 
-    if (BattleArcade_MultiplayerCheck(ov80_0223DD4C->type) == TRUE) {
-        ov80_0222A840(ov80_0223DD4C->saveData);
+    if (BattleArcade_MultiplayerCheck(gBattleArcadeData->type) == TRUE) {
+        ov80_0222A840(gBattleArcadeData->saveData);
     }
-    return (u32)ov80_0223DD4C;
+    return (u32)gBattleArcadeData;
 }
 #pragma force_active reset
 
@@ -251,11 +251,11 @@ void BattleArcadeData_InitNew(ArcadeContext *ctx) {
     u32 i;
 
     BattleArcade_GetRoundTrainerIds(ctx->type, rank, ctx->trainerIds, 14);
-    battleNo = ctx->unk11;
+    battleNo = ctx->battleNo;
     count = BattleArcade_GetOpponentMonCount(ctx->type, 1);
     multiplayer = BattleArcade_MultiplayerCheck(ctx->type);
-    unk320 = ctx->unk320;
-    FrontierTrainer_GenerateMons(count, ctx->trainerIds[battleNo], ctx->trainerIds[battleNo + 7], ctx->unk314, ctx->opponentMons, ctx->unk31C, unk320, multiplayer);
+    unk320 = ctx->personalities;
+    FrontierTrainer_GenerateMons(count, ctx->trainerIds[battleNo], ctx->trainerIds[battleNo + 7], ctx->setIds, ctx->opponentMons, ctx->ivs, unk320, multiplayer);
 
     rank = BattleArcade_GetRound(ctx);
     for (i = 0; i < 3; i++) {
@@ -277,11 +277,11 @@ void BattleArcadeData_InitResume(ArcadeContext *ctx) {
 
     BattleArcadeData_RestoreHeldItems(ctx);
     for (i = 0; i < 14; i++) {
-        ctx->trainerIds[i] = ArcadeChallenge_GetField((void *)ctx->unk8, 5, (u8)i, 0, 0);
+        ctx->trainerIds[i] = ArcadeChallenge_GetField((void *)ctx->challenge, 5, (u8)i, 0, 0);
     }
     for (i = 0; i < 4; i++) {
-        monIds[i] = ArcadeChallenge_GetField((void *)ctx->unk8, 7, (u8)i, 0, 0);
-        ctx->unk314[i] = monIds[i];
+        monIds[i] = ArcadeChallenge_GetField((void *)ctx->challenge, 7, (u8)i, 0, 0);
+        ctx->setIds[i] = monIds[i];
     }
     FrontierMon_GenerateList(frontierMons, monIds, (u8 *)unkFlags, NULL, unkValues, 4, HEAP_ID_FIELD2, 205);
     mon = AllocMonZeroed(HEAP_ID_FIELD2);
@@ -299,7 +299,7 @@ void BattleArcadeData_RestoreHeldItems(ArcadeContext *ctx) {
 
     for (i = 0; i < count; i++) {
         Pokemon *mon = Party_GetMonByIndex(ctx->playerParty, i);
-        u16 item = ArcadeChallenge_GetField((void *)ctx->unk8, 4, (u8)i, 0, NULL);
+        u16 item = ArcadeChallenge_GetField((void *)ctx->challenge, 4, (u8)i, 0, NULL);
         SetMonData(mon, MON_DATA_HELD_ITEM, &item);
     }
 }
@@ -353,14 +353,14 @@ void BattleArcadeData_SaveRecord(ArcadeContext *ctx, u32 mode) {
     BattleArcade_GetOpponentMonCount(ctx->type, 1);
 
     value.byte = ctx->type;
-    ArcadeChallenge_SetField((void *)ctx->unk8, 0, 0, 0, &value.byte);
-    ArcadeChallenge_SetSaved((void *)ctx->unk8, 1);
-    value.byte = ctx->unk11;
-    ArcadeChallenge_SetField((void *)ctx->unk8, 2, 0, 0, &value.byte);
+    ArcadeChallenge_SetField((void *)ctx->challenge, 0, 0, 0, &value.byte);
+    ArcadeChallenge_SetSaved((void *)ctx->challenge, 1);
+    value.byte = ctx->battleNo;
+    ArcadeChallenge_SetField((void *)ctx->challenge, 2, 0, 0, &value.byte);
     value.byte = ctx->cursorSpeed;
-    ArcadeChallenge_SetField((void *)ctx->unk8, 3, 0, 0, &value.byte);
+    ArcadeChallenge_SetField((void *)ctx->challenge, 3, 0, 0, &value.byte);
     value.byte = ctx->randomFlag;
-    ArcadeChallenge_SetField((void *)ctx->unk8, 1, 0, 0, &value.byte);
+    ArcadeChallenge_SetField((void *)ctx->challenge, 1, 0, 0, &value.byte);
 
     frontier = Save_Frontier_GetStatic(ctx->saveData);
     index = sub_0205C2C0(ctx->type);
@@ -383,46 +383,46 @@ void BattleArcadeData_SaveRecord(ArcadeContext *ctx, u32 mode) {
 
     for (i = 0; i < 14; i = (u16)(i + 1)) {
         value.buffer.halfword = ctx->trainerIds[i];
-        ArcadeChallenge_SetField((void *)ctx->unk8, 5, (u8)i, 0, &value.buffer.halfword);
+        ArcadeChallenge_SetField((void *)ctx->challenge, 5, (u8)i, 0, &value.buffer.halfword);
     }
     for (i = 0; i < 3; i = (u16)(i + 1)) {
         value.byte = ctx->partySlots[i];
-        ArcadeChallenge_SetField((void *)ctx->unk8, 6, (u8)i, 0, &value.byte);
+        ArcadeChallenge_SetField((void *)ctx->challenge, 6, (u8)i, 0, &value.byte);
     }
     count = Party_GetCount(ctx->playerParty);
     for (i = 0; i < count; i = (u16)(i + 1)) {
         value.buffer.halfword = (u16)GetMonData(Party_GetMonByIndex(ctx->playerParty, i), MON_DATA_HELD_ITEM, NULL);
-        ArcadeChallenge_SetField((void *)ctx->unk8, 4, (u8)i, 0, &value.buffer.halfword);
+        ArcadeChallenge_SetField((void *)ctx->challenge, 4, (u8)i, 0, &value.buffer.halfword);
     }
     count = Party_GetCount(ctx->opponentParty);
     for (i = 0; i < count; i = (u16)(i + 1)) {
         Party_GetMonByIndex(ctx->opponentParty, i);
-        value.buffer.halfword = ctx->unk314[i];
-        ArcadeChallenge_SetField((void *)ctx->unk8, 7, (u8)i, 0, &value.buffer.halfword);
+        value.buffer.halfword = ctx->setIds[i];
+        ArcadeChallenge_SetField((void *)ctx->challenge, 7, (u8)i, 0, &value.buffer.halfword);
     }
 }
 #pragma force_active reset
 
 u32 BattleArcade_IncBattleNo(ArcadeContext *ctx) {
-    ctx->unk11++;
-    return ctx->unk11;
+    ctx->battleNo++;
+    return ctx->battleNo;
 }
 
 u32 BattleArcade_GetBattleNo(ArcadeContext *ctx) {
-    return ctx->unk11;
+    return ctx->battleNo;
 }
 
-u32 ov80_02234774(ArcadeContext *ctx, u8 partner) {
+u32 BattleArcade_GetTrainerSprite(ArcadeContext *ctx, u8 partner) {
     u8 trainer[0x30];
     u8 index = BattleArcade_GetTrainerIndex(ctx, partner);
     void *data = FrontierTrainer_Load(trainer, ctx->trainerIds[index], HEAP_ID_FIELD2, 0xCC);
 
     Heap_Free(data);
-    ov80_0222A30C(*(u16 *)(trainer + 4));
+    FrontierTrainer_GetClassSprite(*(u16 *)(trainer + 4));
 }
 
 u32 BattleArcade_GetTrainerIndex(ArcadeContext *ctx, u32 partner) {
-    return (u16)(ctx->unk11 + partner * 7);
+    return (u16)(ctx->battleNo + partner * 7);
 }
 
 void ov80_022347B8(ArcadeContext *ctx) {
@@ -431,10 +431,10 @@ void ov80_022347B8(ArcadeContext *ctx) {
 
 void ov80_022347C4(ArcadeContext *ctx) {
     ctx->unk2F = 1;
-    if (ctx->unk1A < 8) {
-        ctx->unk1A++;
+    if (ctx->round < 8) {
+        ctx->round++;
     }
-    ctx->unk11 = 0;
+    ctx->battleNo = 0;
     BattleArcadeData_SaveRecord(ctx, 0);
 }
 
@@ -443,14 +443,14 @@ void BattleArcade_SetPartyBeforeBattle(ArcadeContext *ctx) {
 }
 
 void BattleArcade_SetPartyAfterBattle(ArcadeContext *ctx) {
-    u8 battleNo = ctx->unk11;
+    u8 battleNo = ctx->battleNo;
     u32 count = BattleArcade_GetOpponentMonCount(ctx->type, 1);
     u32 multiplayer;
     u32 *unk320;
 
     multiplayer = BattleArcade_MultiplayerCheck(ctx->type);
-    unk320 = ctx->unk320;
-    FrontierTrainer_GenerateMons(count, ctx->trainerIds[battleNo], ctx->trainerIds[battleNo + 7], ctx->unk314, ctx->opponentMons, ctx->unk31C, unk320, multiplayer);
+    unk320 = ctx->personalities;
+    FrontierTrainer_GenerateMons(count, ctx->trainerIds[battleNo], ctx->trainerIds[battleNo + 7], ctx->setIds, ctx->opponentMons, ctx->ivs, unk320, multiplayer);
     BattleArcade_SetOpponentParty(ctx);
 }
 
@@ -1013,7 +1013,7 @@ void ov80_02235320(ArcadeContext *ctx) {
 
 u32 ov80_02235324(ArcadeContext *ctx) {
     u32 type = ctx->type;
-    u32 round = ctx->unk1A;
+    u32 round = ctx->round;
     u32 result;
 
     if (type <= 1) {

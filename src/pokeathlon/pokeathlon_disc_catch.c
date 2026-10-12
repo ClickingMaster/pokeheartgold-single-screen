@@ -63,7 +63,7 @@ void PokeathlonCourseObject_GroundToCenter(void *monPic, s32 x, s32 y, s32 *outX
 BOOL PokeathlonCourseObject_IsInTouchRange(void *monPic, fx32 x, fx32 y, s32 targetX, s32 targetY);
 void PokeathlonCourseObject_SetScale(void *monPic, f32 scaleX, f32 scaleY);
 void PokeathlonCourseObjects_PauseAnims(void *monPics, int a1);
-void ov96_0221A56C(void *graphics, u32 a1);
+void PokeathlonEvent_CalcPoints(void *graphics, u32 a1);
 
 // The runtime's division, called directly once.
 s32 _s32_div_f(s32 dividend, s32 divisor);
@@ -928,7 +928,7 @@ u32 ov96_0220E60C(PokeathlonCourseData *course) {
         PokeathlonCourse_AddScoreEntry(course, graphics, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, 295);
     }
     PokeathlonCourseScoreList_Rank(graphics, 1);
-    ov96_0221A56C(graphics, 4);
+    PokeathlonEvent_CalcPoints(graphics, 4);
     PokeathlonCourseScoreList_AddPointsToTotals(graphics);
     PokeathlonCourseScoreList_SaveEventPoints(graphics, 4);
     return 1;

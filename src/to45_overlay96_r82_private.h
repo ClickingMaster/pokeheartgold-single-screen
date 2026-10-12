@@ -44,7 +44,7 @@ extern void *PokeathlonCourse_GetMonStats(void *, void *, void *);
 extern void PokeathlonCourseScoreList_Init(void *);
 extern void PokeathlonCourse_AddScoreEntry(void *, void *, u32, u32, u32, u32, u32);
 extern void PokeathlonCourseScoreList_Rank(void *, u32);
-extern void ov96_0221A56C(void *, u32);
+extern void PokeathlonEvent_CalcPoints(void *, u32);
 extern void PokeathlonCourseScoreList_AddPointsToTotals(void *);
 extern void PokeathlonCourseScoreList_SaveEventPoints(void *, u32);
 extern void ov96_02203CE4(void *);

@@ -7,7 +7,7 @@
 #include "frontier/frontier.h"
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_script_context.h"
-#include "frontier/overlay_80_02229EE0.h"
+#include "frontier/frontier_trainers.h"
 
 #include "frontier_save_access.h"
 #include "heap.h"
@@ -26,8 +26,8 @@ u16 FrontierScript_GetVar(FrontierScriptContext *ctx, u16 index);
 void FrontierScript_PrintMessageEntry(FrontierScriptContext *ctx, u16 *message);
 
 extern const OverlayManagerTemplate ov80_0223BE24;
-extern const OverlayManagerTemplate ov80_0223BE34;
-extern const OverlayManagerTemplate ov80_0223BE44;
+extern const OverlayManagerTemplate gOverlayTemplate_BattleCastlePartyApp;
+extern const OverlayManagerTemplate gOverlayTemplate_BattleCastleOpponentApp;
 
 u32 sub_0205C1F0(u8 type);
 u32 sub_0205C268(u32 stat);
@@ -105,7 +105,7 @@ BOOL FrtCmd_CastleFree(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_CastleLaunchPartyApp(FrontierScriptContext *ctx) {
-    return BattleCastle_LaunchApp(ctx, &ov80_0223BE34);
+    return BattleCastle_LaunchApp(ctx, &gOverlayTemplate_BattleCastlePartyApp);
 }
 
 BOOL FrtCmd_164(FrontierScriptContext *ctx) {
@@ -138,7 +138,7 @@ BOOL FrtCmd_CastleStartBattle(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_CastleLaunchOpponentApp(FrontierScriptContext *ctx) {
-    return BattleCastle_LaunchApp(ctx, &ov80_0223BE44);
+    return BattleCastle_LaunchApp(ctx, &gOverlayTemplate_BattleCastleOpponentApp);
 }
 
 void BattleCastle_FillAppArgs(BattleCastleAppArgs *args, BattleCastleData *data) {
@@ -233,7 +233,7 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         *result = BattleCastle_GetRound(data);
         break;
     case 20:
-        *result = ov80_02232E68(data, arg);
+        *result = BattleCastleData_GetTrainerSprite(data, arg);
         break;
     case 21:
         ov80_02232E9C(data);

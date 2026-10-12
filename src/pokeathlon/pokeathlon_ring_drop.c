@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_ring_drop_cpu.h"
+
 #include "assert.h"
 #include "bg_window.h"
 #include "gf_gfx_planes.h"
@@ -29,10 +31,7 @@ void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, void *gfx, int
 BOOL PokeathlonCourseMonObjects_IsLoaded(void *monObjects);
 void PokeathlonCourseObject_CenterToGround(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
 void PokeathlonCourseObjects_PauseAnims(void *monObjects, int a1);
-struct PokeathlonRingDropCpu *ov96_02219F7C(PokeathlonCourseData *course, enum HeapID heapId);
-void ov96_02219FDC(struct PokeathlonRingDropCpu *cpu);
-void ov96_02219FE4(struct PokeathlonRingDropCpu *cpu);
-void ov96_0221A56C(void *gfx, int a1);
+void PokeathlonEvent_CalcPoints(void *gfx, int a1);
 
 extern const GraphicsBanks ov96_0221D774;
 
@@ -228,7 +227,7 @@ BOOL PokeathlonRingDrop_Init(PokeathlonCourseData *course) {
         break;
     case 3: {
         u8 participant = ov96_021E5F24(course);
-        ringDrop->cpu = ov96_02219F7C(course, ringDrop->heapId);
+        ringDrop->cpu = PokeathlonRingDropCpu_New(course, ringDrop->heapId);
         ringDrop->ui = PokeathlonRingDropUi_New(ringDrop->spriteSystem, ringDrop->spriteManager, ringDrop->resources, ringDrop->bgConfig, ringDrop->msgData, ringDrop->msgFormat, participant, ringDrop->heapId, course);
         PokeathlonCourse_IncrementField1ED(course);
         break;
@@ -273,7 +272,7 @@ BOOL ov96_02215CE8(PokeathlonCourseData *course) {
         PokeathlonCourse_AddScoreEntry(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, 298);
     }
     PokeathlonCourseScoreList_Rank(gfx, 1);
-    ov96_0221A56C(gfx, 7);
+    PokeathlonEvent_CalcPoints(gfx, 7);
     PokeathlonCourseScoreList_AddPointsToTotals(gfx);
     PokeathlonCourseScoreList_SaveEventPoints(gfx, 7);
     return TRUE;
@@ -282,7 +281,7 @@ BOOL ov96_02215CE8(PokeathlonCourseData *course) {
 BOOL PokeathlonRingDrop_Exit(PokeathlonCourseData *course) {
     PokeathlonRingDrop *ringDrop = PokeathlonCourse_GetHeapAllocPtr4(course);
 
-    ov96_02219FDC(ringDrop->cpu);
+    PokeathlonRingDropCpu_Free(ringDrop->cpu);
     PokeathlonRingDropUi_Free(ringDrop->ui);
     PokeathlonRingDropDisplay_Free(&ringDrop->display);
     PokeathlonRingDrop_FreeMonObjects(ringDrop);
@@ -463,7 +462,7 @@ void PokeathlonRingDrop_Update(PokeathlonCourseData *course) {
                 }
             }
         }
-        ov96_02219FE4(ringDrop->cpu);
+        PokeathlonRingDropCpu_Update(ringDrop->cpu);
         PokeathlonRingDrop_UpdateMons(ringDrop->players, course);
         if (packet->timer == 0) {
             packet->finished = TRUE;

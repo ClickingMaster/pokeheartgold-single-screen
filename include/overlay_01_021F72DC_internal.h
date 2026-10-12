@@ -4,6 +4,6 @@
 void *ov01_021F72DC(void *object);
 int MapObject_GetSpriteID(void *object);
 void *sub_0205F40C(void *object);
-void *sub_02064084(void *object);
+void *ApricornTreeObject_GetBillboard(void *object);
 
 #endif

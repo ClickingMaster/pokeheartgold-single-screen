@@ -19,7 +19,7 @@ Autoload WRAM
 	Object lib/src/OS_irqTable.o
 	Object lib/src/OS_interrupt.o
 	Object lib/src/os_spinlock_arm7.o
-	Object lib/asm/to90_arm7_spinlock_alias_card.o
+	Object lib/asm/os_unlock_card_alias.o
 	Object lib/src/os_lock_id_arm7.o
 	Object lib/src/OS_thread.o
 	Object lib/src/OS_context.o
@@ -47,7 +47,7 @@ Autoload WRAM
 	Object lib/src/EXI_genPort.o
 	Object lib/src/PAD_xyButton.o
 	Object lib/src/sound_driver.o
-	Object asm/to90_arm7_sub_wram_1_anchor.o
+	Object asm/sound_card_pad_data.o
 	Object lib/src/sound_channel.o
 	Object lib/src/sound_main.o
 	Object lib/src/sound_ex_channel.o
@@ -66,13 +66,13 @@ Autoload WRAM
 	Object asm/to90_arm7_wram160_r8_anchor_own1.o
 	Object lib/src/power_manager_driver.o
 	Object lib/src/mic_command.o
-	Object asm/op90_to90_arm7_sub_wram_2_residual_6_own1.o
-	Object asm/to90_arm7_wram160_r8_anchor_own2.o
+	Object asm/mic_calib_bss.o
+	Object asm/mic_cartridge_bss.o
 	Object lib/src/mic_driver.o
 	Object lib/src/cartridge_driver.o
 	Object lib/src/nvram_init.o
 	Object lib/src/nvram_command.o
-	Object asm/to90_arm7_wram160_r8_anchor_own3.o
+	Object asm/rtc_wvr_bss.o
 	Object lib/src/nvram_driver.o
 	Object lib/src/rtc_driver.o
 	Object lib/src/wvr_driver.o
@@ -87,9 +87,9 @@ Autoload WRAM
 Autoload EXT_WRAM
 {
 	Address 0x06000000
-	Object lib/asm/to90_arm7_WM_sp_anchor.o
+	Object lib/asm/wmsp_bss.o
 	Object lib/src/wmsp_system.o
-	Object asm/to90_arm7_sub_ext_wram_anchor.o
+	Object asm/wireless_rodata.o
 	Object lib/src/wmsp_indicate.o
 	Object lib/src/wmsp_alarm.o
 	Object lib/src/wmsp_request.o

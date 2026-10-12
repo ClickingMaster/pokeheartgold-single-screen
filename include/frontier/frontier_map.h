@@ -104,7 +104,7 @@ typedef struct FrontierMap {
     PaletteData *paletteData;
     void *frontier; // 0x08, the frontier application's work
     GF3DVramMan *vramMan;
-    u32 unk10; // 0x10, frontier resource manager (ov80_02239960), a handle as in frontier/overlay_80_02239960.h
+    u32 particleManager; // 0x10, from FrontierParticles_New (frontier/frontier_particles.h)
     UnkStruct_ov42_022280A8 *objectManager;
     UnkStruct_ov42_02227F68 *unk18;
     UnkStruct_ov44_02232914 camera;

@@ -329,16 +329,16 @@
 	.public ov80_0223BD44
 	.public ov80_0223BD4C
 	.public ov80_0223BD80
-	.public ov80_0223BDB4
-	.public ov80_0223BDC4
-	.public ov80_0223BDD4
-	.public ov80_0223BDE0
-	.public ov80_0223BDEC
-	.public ov80_0223BDFC
-	.public ov80_0223BE10
+	.public gOverlayTemplate_BattleFactoryRentalApp
+	.public gOverlayTemplate_BattleFactoryTradeApp
+	.public gBattleFactoryBattlePoints
+	.public gBattleFactoryMultiBattlePoints
+	.public gOverlayTemplate_BattleHallApp
+	.public gBattleHallBattlePoints
+	.public gBattleHallMultiBattlePoints
 	.public ov80_0223BE24
-	.public ov80_0223BE34
-	.public ov80_0223BE44
+	.public gOverlayTemplate_BattleCastlePartyApp
+	.public gOverlayTemplate_BattleCastleOpponentApp
 	.public ov80_0223BE54
 	.public ov80_0223BE60
 	.public ov80_0223BE6C
@@ -493,7 +493,7 @@
 	.public FrontierScriptNative_WaitMessageEntry
 .public ov80_0223BE6C
 	.include "asm/macros.inc"
-	.include "overlay_80_0222BDF4.inc"
+	.include "frontier_script_commands_data.inc"
 	.include "global.inc"
 
 .text
@@ -742,35 +742,35 @@ ov80_0223BD80: ; 0x0223BD80
 	.byte 0xD0, 0x07, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov80_0223BDB4: ; 0x0223BDB4
+gOverlayTemplate_BattleFactoryRentalApp: ; 0x0223BDB4
 	.word BattleFactoryApp_Init
 	.word BattleFactoryApp_Main
 	.word BattleFactoryApp_Exit
 	.word FS_OVERLAY_ID(OVY_81)
 
-ov80_0223BDC4: ; 0x0223BDC4
+gOverlayTemplate_BattleFactoryTradeApp: ; 0x0223BDC4
 	.word BattleFactoryApp_Init
 	.word BattleFactoryApp_Main
 	.word BattleFactoryApp_Exit
 	.word FS_OVERLAY_ID(OVY_81)
 
-ov80_0223BDD4: ; 0x0223BDD4
+gBattleFactoryBattlePoints: ; 0x0223BDD4
 	.byte 0x00, 0x05, 0x05, 0x05, 0x05, 0x07, 0x07, 0x08, 0x09, 0x00, 0x00, 0x00
 
-ov80_0223BDE0: ; 0x0223BDE0
+gBattleFactoryMultiBattlePoints: ; 0x0223BDE0
 	.byte 0x00, 0x0A, 0x0B, 0x0C, 0x0D, 0x10, 0x11, 0x13, 0x15, 0x00, 0x00, 0x00
 
-ov80_0223BDEC: ; 0x0223BDEC
+gOverlayTemplate_BattleHallApp: ; 0x0223BDEC
 	.word BattleHallApp_Init
 	.word BattleHallApp_Main
 	.word BattleHallApp_Exit
 	.word FS_OVERLAY_ID(OVY_82)
 
-ov80_0223BDFC: ; 0x0223BDFC
+gBattleHallBattlePoints: ; 0x0223BDFC
 	.byte 0x00, 0x01, 0x01, 0x01
 	.byte 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x04, 0x04, 0x06, 0x06, 0x08, 0x08, 0x0A, 0x0A, 0x0C, 0x00
 
-ov80_0223BE10: ; 0x0223BE10
+gBattleHallMultiBattlePoints: ; 0x0223BE10
 	.byte 0x00, 0x06, 0x06, 0x06, 0x08, 0x08, 0x08, 0x0A, 0x0A, 0x0A, 0x0C, 0x0C, 0x0E, 0x0F, 0x11, 0x11
 	.byte 0x14, 0x14, 0x17, 0x00
 
@@ -778,13 +778,13 @@ ov80_0223BE24: ; 0x0223BE24
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x53, 0x00, 0x00, 0x00
 
-ov80_0223BE34: ; 0x0223BE34
+gOverlayTemplate_BattleCastlePartyApp: ; 0x0223BE34
 	.word BattleCastlePartyApp_Init
 	.word BattleCastlePartyApp_Main
 	.word BattleCastlePartyApp_Exit
 	.word FS_OVERLAY_ID(OVY_83)
 
-ov80_0223BE44: ; 0x0223BE44
+gOverlayTemplate_BattleCastleOpponentApp: ; 0x0223BE44
 	.word BattleCastleOpponentApp_Init
 	.word BattleCastleOpponentApp_Main
 	.word BattleCastleOpponentApp_Exit

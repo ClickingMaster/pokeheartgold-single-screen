@@ -37,7 +37,7 @@
 .public MapObject_GetFacingVector
 .public sub_0205FCD4
 .public MapObject_ClearHeldMovement
-.public sub_02064084
+.public ApricornTreeObject_GetBillboard
 .public FollowMon_GetSpriteID
 .public FollowMon_SetObjectParams
 .public FieldSystem_SetFollowerPokeParam

@@ -4,7 +4,7 @@
 #include "frontier/battle_castle_data.h"
 #include "frontier/battle_factory_data.h"
 #include "frontier/battle_hall_data.h"
-#include "frontier/overlay_80_022340E8.h"
+#include "frontier/battle_arcade_data.h"
 
 // Link messages of the facilities' script side (frontier_link_messages.c).
 typedef struct ArcadeMonsMessage ArcadeMonsMessage;

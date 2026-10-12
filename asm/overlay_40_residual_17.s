@@ -3825,39 +3825,39 @@
 	.public ov40_02242DF0
 	.public ov40_02242E14
 	.public ov40_02242E48
-	.public ov40_02242E4C
-	.public ov40_02242FAC
-	.public ov40_02242FF8
-	.public ov40_0224301C
-	.public ov40_022430A0
-	.public ov40_0224320C
-	.public ov40_02243224
-	.public ov40_0224326C
-	.public ov40_02243284
-	.public ov40_022432AC
-	.public ov40_02243538
-	.public ov40_0224355C
-	.public ov40_02243614
-	.public ov40_022436D4
-	.public ov40_022437C0
-	.public ov40_0224395C
-	.public ov40_022439B8
-	.public ov40_022439CC
-	.public ov40_022439F4
-	.public ov40_02243A28
-	.public ov40_02243B48
-	.public ov40_02243B94
-	.public ov40_02243C54
-	.public ov40_02243D64
-	.public ov40_02243E80
-	.public ov40_02243EB0
-	.public ov40_02243EEC
-	.public ov40_02243F38
-	.public ov40_02243F88
-	.public ov40_02244054
-	.public ov40_02244060
-	.public ov40_022440A0
-	.public ov40_022441F8
+	.public VsRecorder_PrintVideoNumber
+	.public VsRecorder_NewNumberPadConfig
+	.public VsRecorder_FreeNumberPadConfig
+	.public VsRecorder_NumberPadSetGroup
+	.public VsRecorder_NumberPadInitLayout
+	.public VsRecorder_NumberPadSetState
+	.public VsRecorder_NumberPadInit
+	.public VsRecorder_NumberPadFree
+	.public VsRecorder_NumberPadInput
+	.public VsRecorder_NumberPadSwitchGroup
+	.public VsRecorder_NumberPadMain
+	.public VsRecorder_NumberPadConfirm
+	.public VsRecorder_NumberPadBack
+	.public VsRecorder_NumberPadInitHitboxes
+	.public VsRecorder_OnNumberPadTouch
+	.public VsRecorder_NumberPadRunAction
+	.public VsRecorder_NumberPadClearAction
+	.public VsRecorder_NumberPadFindGroupFirst
+	.public VsRecorder_NumberPadFindGroupLast
+	.public VsRecorder_NumberPadLoadGfx
+	.public VsRecorder_NumberPadShowSprites
+	.public VsRecorder_NumberPadFreeSprites
+	.public VsRecorder_NumberPadCreateDigitSprites
+	.public VsRecorder_NumberPadCreateCursors
+	.public VsRecorder_NumberPadSetCursorDrawFlag
+	.public VsRecorder_NumberPadMoveCursor
+	.public VsRecorder_NumberPadPlaceKeyCursor
+	.public VsRecorder_NumberPadPlaceCursorOnKey
+	.public VsRecorder_NumberPadUpdateCursors
+	.public VsRecorder_GetDigitAnim
+	.public VsRecorder_NumberPadUpdateEnabled
+	.public VsRecorder_NumberPadLayoutDigits
+	.public VsRecorder_NumberPadUpdateHitboxes
 	.public VsRecorder_ShowDeleteWindow
 	.public VsRecorder_HideDeleteWindow
 	.public VsRecorder_PrintDeleteMessage
@@ -3991,17 +3991,17 @@
 	.public ov40_02245B30
 	.public ov40_02245B44
 	.public ov40_02245B98
-	.public ov40_02245C18
-	.public ov40_02245C28
-	.public ov40_02245C40
+	.public sVsRecorderNumberPadStates
+	.public sVsRecorderNumberPadStartX
+	.public sVsRecorderNumberPadKeys
 	.public sVsRecorderDeleteYesHitbox
 	.public sVsRecorderDeleteNoHitbox
 	.public ov40_02245CA8
 	.public ov40_02245CD4
 	.public ov40_02245CE8
 	.public ov40_02245E44
-	.public ov40_02245E58
-	.public ov40_02245E74
+	.public sVsRecorderDigitScalesOldGroup
+	.public sVsRecorderDigitScalesNewGroup
 	.include "overlay_40.inc"
 	.include "global.inc"
 
@@ -4059,9 +4059,9 @@
 	.public ov40_0223FD80
 	.public ov40_0224147C
 	.public ov40_02242E48
-	.public ov40_0224320C
-	.public ov40_0224326C
-	.public ov40_022439B8
+	.public VsRecorder_NumberPadSetState
+	.public VsRecorder_NumberPadFree
+	.public VsRecorder_NumberPadClearAction
 
 	thumb_func_start VsRecorder_ImportBattleRecord
 VsRecorder_ImportBattleRecord: ; 0x0222FB40

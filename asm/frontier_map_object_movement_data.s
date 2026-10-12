@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "overlay_80_02239BF0.inc"
+	.include "frontier_map_object_movement_data.inc"
 	.include "global.inc"
 	.public FrontierMapMovement_LookAround
 	.public ov80_0223DB24

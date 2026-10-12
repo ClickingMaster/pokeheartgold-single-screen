@@ -26,8 +26,8 @@ typedef struct BattleFactoryTrainer {
 } BattleFactoryTrainer;
 
 extern BattleFactoryData *gBattleFactoryData;
-extern const u8 ov80_0223BDD4[];
-extern const u8 ov80_0223BDE0[];
+extern const u8 gBattleFactoryBattlePoints[];
+extern const u8 gBattleFactoryMultiBattlePoints[];
 
 void *Save_Frontier_GetFactoryChallenge(SaveData *saveData);
 void FactoryChallenge_Clear(void *challenge);
@@ -40,7 +40,7 @@ u32 sub_0205C074(u8 type, u8 levelMode);
 u32 sub_0205C268(u32 stat);
 void ov80_0222A840(SaveData *saveData);
 void *FrontierTrainer_Load(BattleFactoryTrainer *trainer, int trainerId, enum HeapID heapId, int narcId);
-int ov80_0222A30C(int trainerClass);
+int FrontierTrainer_GetClassSprite(int trainerClass);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
 void ov80_0222A3BC(SaveData *saveData, Party *party, Pokemon *mon);
 int BattleFactory_GetPartySize(int type);
@@ -419,13 +419,13 @@ u8 BattleFactory_GetBattleNo(BattleFactoryData *data) {
     return data->battleNo;
 }
 
-int ov80_02230794(BattleFactoryData *data, int partner) {
+int BattleFactory_GetTrainerSprite(BattleFactoryData *data, int partner) {
     BattleFactoryTrainer trainer;
     void *raw;
     int index = (u8)(data->battleNo + partner * 7);
     raw = FrontierTrainer_Load(&trainer, data->trainerIds[index], HEAP_ID_FIELD2, NARC_a_2_0_2);
     Heap_Free(raw);
-    return ov80_0222A30C((u8)trainer.trainerClass);
+    return FrontierTrainer_GetClassSprite((u8)trainer.trainerClass);
 }
 
 void ov80_022307C8(BattleFactoryData *data) {
@@ -586,9 +586,9 @@ int BattleFactory_GetWonBattlePoints(BattleFactoryData *data) {
     u16 round = data->round;
     int points;
     if (type <= 1) {
-        points = round >= 8 ? 9 : ov80_0223BDD4[round];
+        points = round >= 8 ? 9 : gBattleFactoryBattlePoints[round];
     } else {
-        points = round >= 8 ? 21 : ov80_0223BDE0[round];
+        points = round >= 8 ? 21 : gBattleFactoryMultiBattlePoints[round];
     }
     // the Factory Head's battles (21st and 49th)
     if (type == 0) {

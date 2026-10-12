@@ -1,6 +1,0 @@
-#ifndef POKEHEARTGOLD_OVERLAY_80_H
-#define POKEHEARTGOLD_OVERLAY_80_H
-
-void BattleRecord_Delete(void);
-
-#endif // POKEHEARTGOLD_OVERLAY_80_H

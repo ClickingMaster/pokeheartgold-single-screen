@@ -40,7 +40,7 @@ _02064218:
 	ldr r0, [sp, #4]
 	add r1, r7, #0
 	add r2, sp, #8
-	bl sub_020642C4
+	bl TrainerSight_FindPlayer
 	mov r1, #0
 	mvn r1, r1
 	str r0, [sp]

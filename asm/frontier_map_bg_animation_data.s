@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "overlay_80_02239D74.inc"
+	.include "frontier_map_bg_animation_data.inc"
 	.include "global.inc"
 	.public FrontierMapBgAnim_CreateTileAnim
 	.public FrontierMapBgAnim_TileTask

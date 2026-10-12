@@ -119,7 +119,7 @@ void VsRecorder_ShowTopMessage(void *p, int a);
 void VsRecorder_HideTopMessage(void *p);
 void VsRecorder_AddGameStatsScore(void *p, int a);
 void VsRecorder_ShowMessageScreen(void *p, int a, u32 b, u32 c);
-void ov40_02242E4C(void *w, void *p);
+void VsRecorder_PrintVideoNumber(void *w, void *p);
 int GlobalTerminalNet_RequestVideoUpload(void *a, void *b);
 BOOL BattleRecord_Load(void *a, int b, int *c, void *d, int e);
 void *FrontierCard_New(int a);

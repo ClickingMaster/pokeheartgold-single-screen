@@ -1,5 +1,5 @@
-#ifndef PRIVATE_OVERLAY_80_02235438_H
-#define PRIVATE_OVERLAY_80_02235438_H
+#ifndef POKEHEARTGOLD_FRONTIER_SCRIPT_COMMANDS_MISC_INTERNAL_H
+#define POKEHEARTGOLD_FRONTIER_SCRIPT_COMMANDS_MISC_INTERNAL_H
 
 #include "global.h"
 
@@ -38,7 +38,7 @@ u32 FrontierFieldSystem_0204AC7C(void *data);
 u32 ov80_022358E8(void *data);
 u32 FrontierFieldSystem_GetBattleTowerMode(void *data);
 void ov80_022357B4(void *data, void *saveData);
-u32 ov80_02235898(void *data, u32 value);
+u32 BattleTower_GetTrainerSprite(void *data, u32 value);
 void ov80_022358B0(void *data, u32 value);
 void FrontierFieldSystem_0204AD04(void *data, void *saveData);
 void FrontierFieldSystem_0204AE20(void *data, void *saveData);

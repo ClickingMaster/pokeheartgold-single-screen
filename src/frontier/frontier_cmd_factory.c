@@ -9,8 +9,8 @@
 #include "frontier/frontier.h"
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_script_context.h"
-#include "frontier/overlay_80_02229EE0.h"
-#include "frontier/overlay_80_0222BDF4.h"
+#include "frontier/frontier_trainers.h"
+#include "frontier/frontier_script_commands.h"
 
 #include "bg_window.h"
 #include "heap.h"
@@ -23,8 +23,8 @@
 
 // Script commands of the Battle Factory (BattleFactoryData, frontier/battle_factory_data.h).
 
-extern const OverlayManagerTemplate ov80_0223BDB4;
-extern const OverlayManagerTemplate ov80_0223BDC4;
+extern const OverlayManagerTemplate gOverlayTemplate_BattleFactoryRentalApp;
+extern const OverlayManagerTemplate gOverlayTemplate_BattleFactoryTradeApp;
 
 u32 FactoryChallenge_GetSaved(void *challenge);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
@@ -71,7 +71,7 @@ BOOL FrtCmd_FactoryLaunchRentalApp(FrontierScriptContext *ctx) {
     args->playerParty = data->playerParty;
     args->opponentParty = data->opponentParty;
     args->data = data;
-    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &ov80_0223BDB4, args, 0, BattleFactory_OnAppExit);
+    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &gOverlayTemplate_BattleFactoryRentalApp, args, 0, BattleFactory_OnAppExit);
     return TRUE;
 }
 
@@ -113,7 +113,7 @@ BOOL FrtCmd_FactoryLaunchTradeApp(FrontierScriptContext *ctx) {
     args->playerParty = data->playerParty;
     args->opponentParty = data->opponentParty;
     args->data = data;
-    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &ov80_0223BDC4, args, 0, BattleFactory_OnAppExit);
+    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &gOverlayTemplate_BattleFactoryTradeApp, args, 0, BattleFactory_OnAppExit);
     return TRUE;
 }
 
@@ -258,7 +258,7 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         *var = BattleFactory_GetRound(data);
         break;
     case 20:
-        *var = ov80_02230794(data, arg);
+        *var = BattleFactory_GetTrainerSprite(data, arg);
         break;
     case 21:
         ov80_022307C8(data);
@@ -385,7 +385,7 @@ BOOL FrontierScriptNative_WaitFactoryLink(FrontierScriptContext *ctx) {
 
 BOOL FrtCmd_FactoryPrintMsg(FrontierScriptContext *ctx) {
     FrontierLaunchArgs *launchArgs = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
-    u8 index = FrontierScript_ReadShort(ctx);
+    u8 index = FrontierScript_ReadByte(ctx);
     BattleFactoryData *data = Frontier_GetData(ctx->frontierSystem->frontierWork);
     if (data == NULL) {
         return FALSE;

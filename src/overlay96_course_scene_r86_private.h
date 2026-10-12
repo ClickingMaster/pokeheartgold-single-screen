@@ -23,7 +23,7 @@ void PokeathlonCourseScoreList_AddPointsToTotals(void *);
 void PokeathlonCourseScoreList_SaveEventPoints(void *, int);
 void PokeathlonCourse_AddScoreEntry(void *, void *, int, u16, int, int, int);
 void PokeathlonCourseScoreList_Rank(void *, int);
-void ov96_0221A56C(void *, int);
+void PokeathlonEvent_CalcPoints(void *, int);
 void WirelessStatusIcon_Destroy(void);
 void Main_SetVBlankIntrCB(void *, void *);
 void Main_SetHBlankIntrCB(void *, void *);

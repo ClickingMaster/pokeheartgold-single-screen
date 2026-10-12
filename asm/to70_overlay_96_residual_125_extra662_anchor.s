@@ -158,11 +158,11 @@
 	.extern ov96_02204DE8
 	.extern PokeathlonBlockSmash_Draw
 	.extern PokeathlonGoalRoll_Draw
-	.extern ov96_0221A670
-	.extern ov96_0221A680
-	.extern ov96_0221A690
-	.extern ov96_0221A69C
-	.extern ov96_0221A720
+	.extern PokeathlonEvent_PennantCapturePoints
+	.extern PokeathlonEvent_CirclePushPoints
+	.extern PokeathlonEvent_BlockSmashPoints
+	.extern PokeathlonEvent_DiscCatchPoints
+	.extern PokeathlonEvent_Event8Points
 	.extern ov96_0221DC80
 	.extern ov96_0221DC88
 	.extern ov96_0221DC90
@@ -441,12 +441,12 @@
 	.public PokeathlonRingDropMon_Respawn
 	.public PokeathlonRingDrop_AddScoreWindow
 	.public PokeathlonRingDropUi_GetScore
-	.public ov96_02219FDC
-	.public ov96_0221A670
-	.public ov96_0221A680
-	.public ov96_0221A690
-	.public ov96_0221A69C
-	.public ov96_0221A720
+	.public PokeathlonRingDropCpu_Free
+	.public PokeathlonEvent_PennantCapturePoints
+	.public PokeathlonEvent_CirclePushPoints
+	.public PokeathlonEvent_BlockSmashPoints
+	.public PokeathlonEvent_DiscCatchPoints
+	.public PokeathlonEvent_Event8Points
 	.extern ov96_0221DC80
 	.extern ov96_0221DC88
 	.extern ov96_0221DC90
@@ -1027,27 +1027,27 @@ ov96_0221D99C: ; 0x0221D99C
 	.byte 0x64, 0x50, 0x46, 0x3C
 
 ov96_0221D9A0: ; 0x0221D9A0
-	.word ov96_0221A57C
-	.word ov96_0221A57C
-	.word ov96_0221A57C
-	.word ov96_0221A57C
-	.word ov96_0221A57C
-	.word ov96_0221A57C
-	.word ov96_0221A57C
-	.word ov96_0221A57C
-	.word ov96_0221A57C
-	.word ov96_0221A5B8
+	.word PokeathlonEvent_CalcPointsFromScores
+	.word PokeathlonEvent_CalcPointsFromScores
+	.word PokeathlonEvent_CalcPointsFromScores
+	.word PokeathlonEvent_CalcPointsFromScores
+	.word PokeathlonEvent_CalcPointsFromScores
+	.word PokeathlonEvent_CalcPointsFromScores
+	.word PokeathlonEvent_CalcPointsFromScores
+	.word PokeathlonEvent_CalcPointsFromScores
+	.word PokeathlonEvent_CalcPointsFromScores
+	.word PokeathlonEvent_CalcPointsFromRanks
 
 ov96_0221D9C8: ; 0x0221D9C8
-	.word ov96_0221A640
-	.word ov96_0221A670
-	.word ov96_0221A680
-	.word ov96_0221A690
-	.word ov96_0221A69C
-	.word ov96_0221A6B0
-	.word ov96_0221A6D0
-	.word ov96_0221A700
-	.word ov96_0221A720
+	.word PokeathlonEvent_HurdleDashPoints
+	.word PokeathlonEvent_PennantCapturePoints
+	.word PokeathlonEvent_CirclePushPoints
+	.word PokeathlonEvent_BlockSmashPoints
+	.word PokeathlonEvent_DiscCatchPoints
+	.word PokeathlonEvent_LampJumpPoints
+	.word PokeathlonEvent_Event6Points
+	.word PokeathlonEvent_RingDropPoints
+	.word PokeathlonEvent_Event8Points
 	.word 0
 
 	.data

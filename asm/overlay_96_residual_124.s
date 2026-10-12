@@ -232,15 +232,15 @@
 	.public PokeathlonRingDropMon_Respawn
 	.public PokeathlonRingDrop_AddScoreWindow
 	.public PokeathlonRingDropUi_GetScore
-	.public ov96_02219FDC
-	.public ov96_0221A670
-	.public ov96_0221A680
-	.public ov96_0221A690
-	.public ov96_0221A69C
-	.public ov96_0221A720
+	.public PokeathlonRingDropCpu_Free
+	.public PokeathlonEvent_PennantCapturePoints
+	.public PokeathlonEvent_CirclePushPoints
+	.public PokeathlonEvent_BlockSmashPoints
+	.public PokeathlonEvent_DiscCatchPoints
+	.public PokeathlonEvent_Event8Points
 
-	thumb_func_start ov96_0221A6B0
-ov96_0221A6B0: ; 0x0221A6B0
+	thumb_func_start PokeathlonEvent_LampJumpPoints
+PokeathlonEvent_LampJumpPoints: ; 0x0221A6B0
 	push {r3, lr}
 	bl _ffltu
 	bl _f2d
@@ -248,15 +248,15 @@ ov96_0221A6B0: ; 0x0221A6B0
 	mov r2, #0
 	bl _ddiv
 	bl _d2f
-	bl ov96_0221A61C
+	bl PokeathlonEvent_ClampPoints
 	pop {r3, pc}
 	.balign 4, 0
 _0221A6CC: .word 0x400C0000
-	thumb_func_end ov96_0221A6B0
+	thumb_func_end PokeathlonEvent_LampJumpPoints
 
 
-	thumb_func_start ov96_0221A6D0
-ov96_0221A6D0: ; 0x0221A6D0
+	thumb_func_start PokeathlonEvent_Event6Points
+PokeathlonEvent_Event6Points: ; 0x0221A6D0
 	push {r3, lr}
 	bl _ffltu
 	bl _f2d
@@ -269,16 +269,16 @@ ov96_0221A6D0: ; 0x0221A6D0
 	mov r0, #0
 	bl _dmul
 	bl _d2f
-	bl ov96_0221A61C
+	bl PokeathlonEvent_ClampPoints
 	pop {r3, pc}
 	.balign 4, 0
 _0221A6F8: .word 0x40900000
 _0221A6FC: .word 0x40240000
-	thumb_func_end ov96_0221A6D0
+	thumb_func_end PokeathlonEvent_Event6Points
 
 
-	thumb_func_start ov96_0221A700
-ov96_0221A700: ; 0x0221A700
+	thumb_func_start PokeathlonEvent_RingDropPoints
+PokeathlonEvent_RingDropPoints: ; 0x0221A700
 	push {r3, lr}
 	bl _ffltu
 	bl _f2d
@@ -286,8 +286,8 @@ ov96_0221A700: ; 0x0221A700
 	mov r2, #0
 	bl _dmul
 	bl _d2f
-	bl ov96_0221A61C
+	bl PokeathlonEvent_ClampPoints
 	pop {r3, pc}
 	.balign 4, 0
 _0221A71C: .word 0x3FF80000
-	thumb_func_end ov96_0221A700
+	thumb_func_end PokeathlonEvent_RingDropPoints

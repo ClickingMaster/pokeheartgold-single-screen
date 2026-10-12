@@ -122,29 +122,29 @@ void PCBox_DrawBoxThumbnailMons(PCBoxWork *work, u32 box, void *dst) {
     }
 }
 
-void ov14_021F4B90(PCBoxView *view, u32 i, s32 x, s32 y, u32 v) {
+void PCBox_PlaceSpriteOnTop(PCBoxView *view, u32 i, s32 x, s32 y, u32 v) {
     ((void (*)(ManagedSprite *, s32, s32))ManagedSprite_SetPositionXY)(view->sprites[i], x, y);
     PCBox_SetSpriteVisible(view, i, v);
     PCBox_SetSpritePriority(view, i, 0);
 }
 
-void ov14_021F4BC0(PCBoxWork *work) {
+void PCBox_SetupDepositBoxSprites(PCBoxWork *work) {
     u32 i;
     s16 x;
     s16 y;
 
-    ov14_021F4B90(work->view, 4, 12, 84, 1);
-    ov14_021F4B90(work->view, 5, 244, 84, 1);
-    ov14_021F4B90(work->view, 6, 43, 84, 1);
-    ov14_021F4B90(work->view, 7, 128, 65, 1);
-    ov14_021F4B90(work->view, 8, 128, 77, 1);
+    PCBox_PlaceSpriteOnTop(work->view, 4, 12, 84, 1);
+    PCBox_PlaceSpriteOnTop(work->view, 5, 244, 84, 1);
+    PCBox_PlaceSpriteOnTop(work->view, 6, 43, 84, 1);
+    PCBox_PlaceSpriteOnTop(work->view, 7, 128, 65, 1);
+    PCBox_PlaceSpriteOnTop(work->view, 8, 128, 77, 1);
     for (i = 0; i < 6; i++) {
         ManagedSprite_GetPositionXY(work->view->sprites[15 + i], &x, &y);
-        ov14_021F4B90(work->view, 15 + i, x, 84, 1);
+        PCBox_PlaceSpriteOnTop(work->view, 15 + i, x, 84, 1);
     }
     PCBox_LoadTrayPageThumbnails(work);
     PCBox_SetSpriteAnim(work->view, 7, 5);
-    ov14_021F46F4(work->view);
+    PCBox_PlaceTrayTextObjs(work->view);
     TextOBJ_SetSpritesDrawFlag(work->view->textObjs[0].textObj, TRUE);
     TextOBJ_SetSpritesDrawFlag(work->view->textObjs[1].textObj, TRUE);
     TextOBJ_SetPriority(work->view->textObjs[0].textObj, 0);
@@ -402,7 +402,7 @@ void PCBox_ClearMonInfoWindows(PCBoxView *view) {
 
 // Draws the four moves of the mon into the move windows of the back buffer (9-12 or 13-16) and returns the
 // first window id.
-int ov14_021F5404(PCBoxWork *work, PCBoxMonInfo *monInfo) {
+int PCBox_DrawMoveWindows(PCBoxWork *work, PCBoxMonInfo *monInfo) {
     NNSG2dCharacterData *charData;
     const u8 *second;
     void *allocation, *pixels;
@@ -478,7 +478,7 @@ u32 PCBox_PrintItemNameAndDesc(PCBoxWork *work, u16 itemId) {
 
 #pragma force_active reset
 
-void ov14_021F5620(PCBoxWork *work) {
+void PCBox_PrintModeTitle(PCBoxWork *work) {
     void *msg;
 
     msg = PCBox_LoadBoxMessages();
@@ -643,7 +643,7 @@ void PCBox_DrawPartyButton(PCBoxWork *work, u32 style) {
 
 #pragma force_active on
 
-void ov14_021F5C94(PCBoxWork *work, u32 win, u32 msgId) {
+void PCBox_DrawTabWindow(PCBoxWork *work, u32 win, u32 msgId) {
     Window *w = &work->view->windows[win];
     u8 width;
     NNSG2dCharacterData *chr;
@@ -674,11 +674,11 @@ void ov14_021F5C94(PCBoxWork *work, u32 win, u32 msgId) {
 
 #pragma force_active reset
 
-void ov14_021F5E94(PCBoxWork *work, u32 unused) {
+void PCBox_DrawTrayTab(PCBoxWork *work, u32 unused) {
     if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
-        ov14_021F5C94(work, 0x19, 0x40);
+        PCBox_DrawTabWindow(work, 0x19, 0x40);
     } else {
-        ov14_021F5C94(work, 0x19, 0x3d);
+        PCBox_DrawTabWindow(work, 0x19, 0x3d);
     }
 }
 
@@ -690,7 +690,7 @@ void PCBox_DrawExitButton(PCBoxWork *work, u32 style) {
     PCBox_DrawButtonWindow(work, 0x1b, 0x4c, style);
 }
 
-void ov14_021F5ED4(PCBoxWork *work, u32 style) {
+void PCBox_DrawMenuExitButton(PCBoxWork *work, u32 style) {
     PCBox_DrawButtonWindow(work, 0x1c, 0x47, style);
 }
 
@@ -705,7 +705,7 @@ void PCBox_DrawActionMenu(PCBoxWork *work, const PCBoxMenuEntry *list, u32 count
             PCBox_DrawButtonWindow(work, 0x21 - i, e->msgId, 0);
             BgCellManager_SetCellPalette(work->view->panels, 7 - i, 0, 0, (u8)v[1], (u8)v[0], 0xc);
         } else {
-            ov14_021F5C94(work, 0x21 - i, e->msgId);
+            PCBox_DrawTabWindow(work, 0x21 - i, e->msgId);
             BgCellManager_SetCellPalette(work->view->panels, 7 - i, 0, 0, (u8)v[1], (u8)v[0], 2);
         }
     }
@@ -811,23 +811,23 @@ void PCBox_AttachPanelWindows(PCBoxView *view) {
     PCBox_AttachWindowToPanel(view->panels, 0xf, (Window *)(&view->windows[43]));
 }
 
-void ov14_021F62CC(PCBoxView *view) {
+void PCBox_AttachPartyButtonWindow(PCBoxView *view) {
     PCBox_AttachWindowToPanel(view->panels, 8, &view->windows[24]);
 }
 
-void ov14_021F62E4(PCBoxView *view) {
+void PCBox_AttachTrayTabWindow(PCBoxView *view) {
     PCBox_AttachWindowToPanel(view->panels, 9, &view->windows[25]);
 }
 
-void ov14_021F62FC(PCBoxView *view) {
+void PCBox_AttachReturnButtonWindow(PCBoxView *view) {
     PCBox_AttachWindowToPanel(view->panels, 0xa, &view->windows[26]);
 }
 
-void ov14_021F6314(PCBoxWork *work) {
+void PCBox_AttachMenuExitButtonWindow(PCBoxWork *work) {
     PCBoxView *view = work->view;
 
     PCBox_AttachWindowToPanel(view->panels, 11, &view->windows[28]);
-    ov14_021F5ED4(work, 0);
+    PCBox_DrawMenuExitButton(work, 0);
 }
 
 void PCBox_PrintCenteredLabel(PCBoxView *view, u32 windowIndex, u32 messageId, u32 unused) {
@@ -845,24 +845,24 @@ void PCBox_DrawConfirmCancel(PCBoxView *view) {
     PCBox_PrintCenteredLabel(view, 0x23, 0x49, 0);
 }
 
-void ov14_021F63A8(PCBoxView *view) {
+void PCBox_PrintPartyPanelSwitchLabel(PCBoxView *view) {
     PCBox_PrintCenteredLabel(view, 0x24, 0x4a, 0);
 }
 
-void ov14_021F63B8(PCBoxView *view) {
+void PCBox_PrintPartyPanelExitLabel(PCBoxView *view) {
     PCBox_PrintCenteredLabel(view, 0x24, 0x4b, 0);
 }
 
 #pragma force_active on
 
-void ov14_021F63C8(PCBoxView *view) {
+void PCBox_AttachMarkingMenuWindows(PCBoxView *view) {
     BgCellManager_PutWindowTiles(view->panels, 2, &view->windows[34]);
     BgCellManager_PutWindowTiles(view->panels, 2, &view->windows[35]);
 }
 
 #pragma force_active reset
 
-void ov14_021F63F0(PCBoxView *view) {
+void PCBox_AttachPartyPanelLabelWindow(PCBoxView *view) {
     BgCellManager_PutWindowTiles(view->panels, 1, &view->windows[36]);
 }
 
@@ -928,11 +928,11 @@ void PCBox_CloseMessageWindow(PCBoxView *view, int windowId) {
 
 #pragma force_active reset
 
-void ov14_021F6678(PCBoxView *view, u32 idx) {
+void PCBox_ClearWindowFrameNoTransfer(PCBoxView *view, u32 idx) {
     ClearFrameAndWindow2(&view->windows[idx], 1);
 }
 
-void ov14_021F6688(PCBoxView *view, u32 idx) {
+void PCBox_ClearWindowFrame(PCBoxView *view, u32 idx) {
     ClearFrameAndWindow2(&view->windows[idx], 0);
 }
 
@@ -1155,7 +1155,7 @@ void PCBox_PrintPanelHint(PCBoxWork *work, u32 idx, u32 kind) {
     DestroyMsgData(msgData);
 }
 
-void ov14_021F69F0(PCBoxWork *work, int windowId) {
+void PCBox_DrawWindowFrame(PCBoxWork *work, int windowId) {
     DrawFrame2AroundWindow(&work->view->windows[windowId], 910, 10);
     ScheduleWindowCopyToVram(&work->view->windows[windowId]);
 }
@@ -1168,7 +1168,7 @@ s32 PCBox_FindTouchedPartySlot(void) {
     return TouchscreenHitbox_FindRectAtTouchNew(sPCBoxPartyHitboxes);
 }
 
-s32 ov14_021F6A34(void) {
+s32 PCBox_FindTouchedTrayPartySlot(void) {
     return TouchscreenHitbox_FindRectAtTouchNew(ov14_021F8630);
 }
 
@@ -1227,13 +1227,13 @@ void PCBox_PlaceCursorOnGridInput(PCBoxWork *work, int target) {
     ManagedSprite_SetPositionXY(work->view->sprites[9], pos.x, pos.y);
 }
 
-void ov14_021F6B60(PCBoxWork *work, int target) {
+void PCBox_GridOnButton(PCBoxWork *work, int target) {
     GridInputHandler_SetNextInput(work->view->gridInput, (u8)target);
     PCBox_PlaceCursorOnGridInput(work, target);
 }
 
 #pragma force_active reset
 
-void ov14_021F6B7C(PCBoxWork *work) {
+void PCBox_GridOnSwitchToTouchMode(PCBoxWork *work) {
     PCBox_SetSpriteVisible(work->view, 9, 0);
 }

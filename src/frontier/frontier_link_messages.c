@@ -2,7 +2,7 @@
 
 #include "global.h"
 
-#include "frontier/overlay_80_022340E8.h"
+#include "frontier/battle_arcade_data.h"
 #include "frontier/battle_arcade_setup.h"
 
 #include "heap.h"
@@ -654,7 +654,7 @@ void *BattleCastleLink_GetRecvMonBuffer(int netId, BattleCastleData *work, int s
 BOOL BattleArcadeLink_SendWinStreak(ArcadeContext *ctx) {
     Save_Frontier_GetArcadeFlags(ctx->saveData);
     ctx->linkBuffer[1] = ctx->winStreak;
-    ctx->linkBuffer[2] = ctx->unk1A;
+    ctx->linkBuffer[2] = ctx->round;
     return Comm_SendCommand(0x41, ctx->linkBuffer, 0x28) == TRUE;
 }
 
@@ -662,7 +662,7 @@ void BattleArcadeLink_ReceiveWinStreak(int netId, int size, const u16 *data, Arc
     ctx->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         ctx->multiWinStreak = data[1];
-        ctx->unkA76 = data[2];
+        ctx->partnerRound = data[2];
     }
 }
 
@@ -700,14 +700,14 @@ BOOL BattleArcadeLink_SendOpponentMons(ArcadeContext *ctx) {
     i = 0;
     cursor = (u8 *)ctx;
     for (; i < 4; i++, cursor += 2) {
-        ((ArcadeContext *)cursor)->linkBuffer[0] = ((ArcadeContext *)cursor)->unk314[0];
+        ((ArcadeContext *)cursor)->linkBuffer[0] = ((ArcadeContext *)cursor)->setIds[0];
     }
     {
         u8 *second;
         int j = 0;
         second = (u8 *)ctx;
         for (; j < 4; j++, second += 2) {
-            ((ArcadeContext *)second)->linkBuffer[4] = ctx->unk31C[j];
+            ((ArcadeContext *)second)->linkBuffer[4] = ctx->ivs[j];
         }
     }
     {
@@ -717,8 +717,8 @@ BOOL BattleArcadeLink_SendOpponentMons(ArcadeContext *ctx) {
         word = (u8 *)ctx;
         packet = (u8 *)ctx + 16;
         for (; i < 4; i++, word += 4, packet += 2) {
-            ((ArcadeContext *)packet)->linkBuffer[0] = ((ArcadeContext *)word)->unk320[0];
-            ((ArcadeContext *)packet)->linkBuffer[4] = ((ArcadeContext *)word)->unk320[0] >> 16;
+            ((ArcadeContext *)packet)->linkBuffer[0] = ((ArcadeContext *)word)->personalities[0];
+            ((ArcadeContext *)packet)->linkBuffer[4] = ((ArcadeContext *)word)->personalities[0] >> 16;
         }
     }
     if (Comm_SendCommand(0x43, ctx->linkBuffer, 40) == TRUE) {
@@ -744,18 +744,18 @@ void BattleArcadeLink_ReceiveOpponentMons(int netId, int size, ArcadeMonsMessage
         return;
     }
     for (i = 0; i < 4; i++) {
-        ctx->unk314[i] = msg->setIds[i];
+        ctx->setIds[i] = msg->setIds[i];
     }
     for (i = 0; i < 4; i++) {
-        ctx->unk31C[i] = msg->ivs[i];
+        ctx->ivs[i] = msg->ivs[i];
     }
     {
         u8 *cursor;
         i = 0;
         cursor = (u8 *)msg + 16;
         for (; i < 4; i++, cursor += 2) {
-            ctx->unk320[i] = *(u16 *)cursor;
-            ctx->unk320[i] |= (u32) * (u16 *)(cursor + 8) << 16;
+            ctx->personalities[i] = *(u16 *)cursor;
+            ctx->personalities[i] |= (u32) * (u16 *)(cursor + 8) << 16;
         }
     }
 }

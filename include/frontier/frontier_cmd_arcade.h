@@ -2,8 +2,8 @@
 #define POKEHEARTGOLD_FRONTIER_CMD_ARCADE
 
 #include "frontier/frontier_script_context.h"
-#include "frontier/overlay_80_0222BDF4.h"
-#include "frontier/overlay_80_022340E8.h"
+#include "frontier/frontier_script_commands.h"
+#include "frontier/battle_arcade_data.h"
 
 #include "battle_arcade_game_board.h"
 

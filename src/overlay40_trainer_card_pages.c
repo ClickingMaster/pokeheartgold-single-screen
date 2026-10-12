@@ -145,7 +145,7 @@ int ov40_022417DC(void *p) {
             WORD(p, 8) = 0xFF;
         } else {
             VsRecorder_ShowTopMessage(p, 0x77);
-            ov40_02242E4C(w, p);
+            VsRecorder_PrintVideoNumber(w, p);
             StopSE(0x57D, 0);
             PlaySE(0x577);
             WORD(p, 8)

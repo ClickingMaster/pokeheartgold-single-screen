@@ -77,7 +77,7 @@
 	.public ov80_0223D516
 	.public ov80_0223D518
 	.public ov80_0223D51A
-	.include "overlay_80_02238034.inc"
+	.include "battle_arcade_setup_data.inc"
 	.include "global.inc"
 
     .text

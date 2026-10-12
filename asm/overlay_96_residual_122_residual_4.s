@@ -232,12 +232,12 @@
 	.public PokeathlonRingDropMon_Respawn
 	.public PokeathlonRingDrop_AddScoreWindow
 	.public PokeathlonRingDropUi_GetScore
-	.public ov96_02219FDC
-	.public ov96_0221A670
-	.public ov96_0221A680
-	.public ov96_0221A690
-	.public ov96_0221A69C
-	.public ov96_0221A720
+	.public PokeathlonRingDropCpu_Free
+	.public PokeathlonEvent_PennantCapturePoints
+	.public PokeathlonEvent_CirclePushPoints
+	.public PokeathlonEvent_BlockSmashPoints
+	.public PokeathlonEvent_DiscCatchPoints
+	.public PokeathlonEvent_Event8Points
 	.public PokeathlonRingDropUi_WaitSwitch
 	.public PokeathlonRingDropUi_SetSwitching
 	.public PokeathlonRingDropUi_AddWindows

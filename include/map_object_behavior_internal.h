@@ -1,14 +1,43 @@
 #ifndef POKEHEARTGOLD_MAP_OBJECT_BEHAVIOR_INTERNAL_H
 #define POKEHEARTGOLD_MAP_OBJECT_BEHAVIOR_INTERNAL_H
-#include "global.h"
 
+#include "field_system.h"
 #include "map_object.h"
-#include "overlay_01.h"
-#include "overlay_01_022001E4.h"
 #include "player_avatar.h"
-#include "sys_task.h"
 #include "sys_task_api.h"
-#include "field_effects.h"
+
+typedef struct TrainerBehaviorState {
+    u8 state;
+    u8 turnState;
+    s8 count;
+    s8 limit;
+    s8 direction;
+    s8 sequence;
+    s8 index;
+    s8 turns;
+    s8 timer;
+} TrainerBehaviorState;
+
+typedef struct ApricornTreeState {
+    u32 spriteId;
+    u32 apricorns;
+    void *billboard;
+    VecFx32 savedState;
+} ApricornTreeState;
+
+typedef struct MapObjectSpriteState {
+    u16 unk0;
+    u16 unk2;
+} MapObjectSpriteState;
+
+typedef struct EngageParams {
+    int x;
+    int z;
+    int scriptId;
+    int trainerNum;
+    int isDouble;
+    LocalMapObject *object;
+} EngageParams;
 
 typedef struct TrainerApproachWork {
     int state;
@@ -22,79 +51,89 @@ typedef struct TrainerApproachWork {
     int effect;
     LocalMapObject *trainer;
     PlayerAvatar *player;
-    void *fieldSystem;
+    FieldSystem *fieldSystem;
 } TrainerApproachWork;
 
-u32 GetMovementForDirection(u32, u32);
-int GetDirectionTowards(int, int, int, int);
-void MapObject_StartJumpByOffsetMovement(LocalMapObject *, int, int, int, int, int, int);
-BOOL MapObject_IsMovementPaused(LocalMapObject *);
-BOOL MapObject_AreBitsSetForMovementScriptInit(LocalMapObject *);
-void MapObject_SetHeldMovement(LocalMapObject *, u32);
-void MapObject_ClearHeldMovementIfActive(LocalMapObject *);
+typedef struct FourValues {
+    u32 values[4];
+} FourValues;
 
-BOOL sub_0206464C(TrainerApproachWork *);
-BOOL sub_02064668(TrainerApproachWork *);
-BOOL sub_02064694(TrainerApproachWork *);
-BOOL sub_020646DC(TrainerApproachWork *);
-BOOL sub_02064714(TrainerApproachWork *);
-BOOL sub_02064730(TrainerApproachWork *);
-BOOL sub_02064748(TrainerApproachWork *);
-BOOL sub_02064764(TrainerApproachWork *);
-BOOL sub_02064778(TrainerApproachWork *);
-BOOL sub_02064790(TrainerApproachWork *);
-BOOL sub_020647A8(TrainerApproachWork *);
-BOOL sub_020647C0(TrainerApproachWork *);
-BOOL sub_020647E8(TrainerApproachWork *);
-BOOL sub_02064808(TrainerApproachWork *);
-BOOL sub_02064824(TrainerApproachWork *);
-BOOL sub_020648A0(TrainerApproachWork *);
-BOOL sub_020648C8(TrainerApproachWork *);
-BOOL sub_020648E4(TrainerApproachWork *);
-int sub_020643B8(LocalMapObject *, int, int, int, int, int);
-int sub_020643E4(LocalMapObject *, int, int, int, int, int);
-int sub_02064410(LocalMapObject *, int, int, int, int, int);
-int sub_0206443C(LocalMapObject *, int, int, int, int, int);
-u32 MapObject_GetTrainerNum(LocalMapObject *);
-BOOL sub_02063A94(LocalMapObject *);
-BOOL sub_02063AC8(LocalMapObject *);
+typedef struct TwoByTwoValues {
+    u32 values[2][2];
+} TwoByTwoValues;
 
-BOOL MapObjectMovementCmd105_Step0(LocalMapObject *o);
-BOOL MapObjectMovementCmd105_Step2(LocalMapObject *o);
-BOOL MapObjectMovementCmd105_Step4(LocalMapObject *o);
-BOOL MapObjectMovementCmd105_Step6(LocalMapObject *o);
-BOOL MapObjectMovementCmd105_Step8(LocalMapObject *o);
-BOOL MapObjectMovementCmd106_Step0(LocalMapObject *o);
-BOOL MapObjectMovementCmd106_Step2(LocalMapObject *o);
-BOOL MapObjectMovementCmd106_Step4(LocalMapObject *o);
-BOOL MapObjectMovementCmd106_Step6(LocalMapObject *o);
-BOOL MapObjectMovementCmd107_Step0(LocalMapObject *o);
-BOOL MapObjectMovementCmd107_Step2(LocalMapObject *o);
-BOOL MapObjectMovementCmd107_Step4(LocalMapObject *o);
-BOOL MapObjectMovementCmd107_Step6(LocalMapObject *o);
-BOOL MapObjectMovementCmd107_Step8(LocalMapObject *o);
-BOOL MapObjectMovementCmd107_Step10(LocalMapObject *o);
-BOOL MapObjectMovementCmd107_Step12(LocalMapObject *o);
-BOOL MapObjectMovementCmd109_Step12(LocalMapObject *o);
-BOOL MapObjectMovementCmd108_Step0(LocalMapObject *o);
-BOOL MapObjectMovementCmd110_Step0(LocalMapObject *o);
-BOOL MapObjectMovementCmd108_Step2(LocalMapObject *o);
-BOOL MapObjectMovementCmd111_Step0(LocalMapObject *o);
-BOOL MapObjectMovementCmd111_Step2(LocalMapObject *o);
-BOOL MapObjectMovementCmd111_Step4(LocalMapObject *o);
-BOOL MapObjectMovementCmd111_Step6(LocalMapObject *o);
-BOOL MapObjectMovementCmd111_Step10(LocalMapObject *o);
-BOOL MapObjectMovementCmd111_Step14(LocalMapObject *o);
-BOOL MapObjectMovementCmd111_Step16(LocalMapObject *o);
-BOOL MapObjectMovementCmd111_Step18(LocalMapObject *o);
-BOOL MapObjectMovementCmd112_Step0(LocalMapObject *o);
-int sub_020643B8(LocalMapObject *o, int range, int targetX, int targetZ, int unusedX, int unusedZ);
-int sub_020643E4(LocalMapObject *o, int range, int targetX, int targetZ, int unusedX, int unusedZ);
-int sub_02064410(LocalMapObject *o, int range, int targetX, int targetZ, int unusedX, int unusedZ);
-int sub_0206443C(LocalMapObject *o, int range, int targetX, int targetZ, int unusedX, int unusedZ);
+typedef struct DirectionMovementTable {
+    u32 values[2][4];
+} DirectionMovementTable;
+
+typedef void (*MapObjectAction)(LocalMapObject *object);
+typedef BOOL (*MapObjectPredicate)(LocalMapObject *object);
+typedef int (*TrainerSightFunc)(LocalMapObject *object, int range, int targetX, int targetZ, int unused);
+typedef BOOL (*TrainerApproachStateFunc)(TrainerApproachWork *work);
+
+extern const FourValues _020FE0C4;
+extern const TwoByTwoValues _020FE0D4;
+extern const DirectionMovementTable _020FE0E4;
+extern const MapObjectAction _020FE104[];
+extern const MapObjectPredicate _020FE134[];
+extern const MapObjectPredicate _020FE164[];
+extern const TrainerSightFunc _020FE194[];
+extern const TrainerApproachStateFunc _020FE1A4[];
+
+// Defined elsewhere without a header yet.
+extern const u32 ov01_02207274[];
+int ov01_021F94C0(LocalMapObject *object, void **billboard, u32 spriteId);
+void ov01_021F95CC(LocalMapObject *object, void **billboard, u32 spriteId);
+BOOL ov01_021F9344(LocalMapObject *object);
+void ov01_021FA40C(LocalMapObject *object, void *billboard);
+void ov01_021F9610(void *billboard, VecFx32 *state);
+void ov01_021F9630(void *billboard, VecFx32 *state);
+void ApricornRegrowth_Spawn(LocalMapObject *object);
+
+void sub_02063A14(LocalMapObject *object);
+BOOL sub_02063A1C(LocalMapObject *object);
+void sub_02063A40(LocalMapObject *object);
+BOOL sub_02063A5C(LocalMapObject *object);
+BOOL sub_02063A78(LocalMapObject *object);
+BOOL MapObject_IsOffPreviousTile(LocalMapObject *object);
+BOOL MapObject_IsOnPreviousTile(LocalMapObject *object);
+void sub_02063AFC(LocalMapObject *object);
+int sub_02063B00(LocalMapObject *object);
+int sub_02063B04(LocalMapObject *object);
+void sub_02063B08(LocalMapObject *object);
+BOOL sub_02063B20(LocalMapObject *object);
+BOOL sub_02063B9C(LocalMapObject *object);
+void sub_02063C88(LocalMapObject *object);
+BOOL sub_02063CB4(LocalMapObject *object);
+BOOL sub_02063D30(LocalMapObject *object);
+void ApricornTreeObject_Init(LocalMapObject *object);
+void ApricornTreeObject_Update(LocalMapObject *object);
+void ApricornTreeObject_Delete(LocalMapObject *object);
+void ApricornTreeObject_Pause(LocalMapObject *object);
+void ApricornTreeObject_Resume(LocalMapObject *object);
+void *ApricornTreeObject_GetBillboard(LocalMapObject *object);
+u32 GetApricornTreeSpriteId(int apricorn, int apricornCount);
+BOOL TryGetSeenByNpcTrainers(FieldSystem *fieldSystem, BOOL doublesEligible);
+BOOL CheckSeenByNpcTrainers(FieldSystem *fieldSystem, MapObjectManager *manager, PlayerAvatar *avatar, LocalMapObject *exclude, EngageParams *out);
+void GetEngagingTrainerParams(EngageParams *out, LocalMapObject *object, int x, int z);
+int MapObject_GetTrainerSightType(LocalMapObject *object);
+int TrainerSight_FindPlayer(LocalMapObject *object, PlayerAvatar *player, int *outDir);
+int TrainerSight_GetDistanceInDirection(LocalMapObject *object, int direction, int range, int targetX, int targetZ, int unused);
+int TrainerSight_GetDistanceNorth(LocalMapObject *object, int range, int targetX, int targetZ, int unused);
+int TrainerSight_GetDistanceSouth(LocalMapObject *object, int range, int targetX, int targetZ, int unused);
+int TrainerSight_GetDistanceWest(LocalMapObject *object, int range, int targetX, int targetZ, int unused);
+int TrainerSight_GetDistanceEast(LocalMapObject *object, int range, int targetX, int targetZ, int unused);
+int TrainerSight_IsPathBlocked(LocalMapObject *object, int direction, int distance);
 u32 MapObject_GetTrainerNum(LocalMapObject *object);
-BOOL sub_02063A94(LocalMapObject *object);
-BOOL sub_02063AC8(LocalMapObject *object);
+u32 sub_02064518(LocalMapObject *object);
+LocalMapObject *MapObjectManager_FindTrainerPartner(void *unused, MapObjectManager *manager, LocalMapObject *exclude, u32 trainerNum);
+SysTask *TrainerApproach_Start(FieldSystem *fieldSystem, LocalMapObject *trainer, PlayerAvatar *player, int movement, int remaining, int unk10, int unk14, int unk18);
+BOOL TrainerApproach_IsDone(SysTask *task);
+void TrainerApproach_Delete(SysTask *task);
+SysTask *TrainerApproach_CreateTask(FieldSystem *fieldSystem, LocalMapObject *trainer, PlayerAvatar *player, int movement, int remaining, int unk10, int unk14, int unk18);
+BOOL TrainerApproach_GetDone(SysTask *task);
+void TrainerApproach_DestroyTask(SysTask *task);
+void TrainerApproach_Task(SysTask *task, void *data);
 BOOL sub_0206464C(TrainerApproachWork *work);
 BOOL sub_02064668(TrainerApproachWork *work);
 BOOL sub_02064694(TrainerApproachWork *work);
@@ -114,4 +153,4 @@ BOOL sub_020648A0(TrainerApproachWork *work);
 BOOL sub_020648C8(TrainerApproachWork *work);
 BOOL sub_020648E4(TrainerApproachWork *work);
 
-#endif
+#endif // POKEHEARTGOLD_MAP_OBJECT_BEHAVIOR_INTERNAL_H

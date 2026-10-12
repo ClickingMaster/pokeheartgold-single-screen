@@ -9,7 +9,6 @@
 #include "battle/battle_setup.h"
 #include "field/encounter_check.h"
 #include "fielddata/script/scr_seq/event_D10R0101.h"
-#include "frontier/overlay_80.h"
 
 #include "blackout.h"
 #include "catching_show.h"
@@ -28,6 +27,7 @@
 #include "sound.h"
 #include "sound_system.h"
 #include "sys_flags.h"
+#include "battle_record.h"
 #include "battle_recording.h"
 #include "communication_player_state.h"
 #include "unk_020517A4.h"

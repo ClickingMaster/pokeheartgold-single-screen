@@ -84,7 +84,7 @@ void PokeathlonHurdleDashStandings_Draw(void *a0);
 void *PokeathlonHurdleDashDust_New(enum HeapID heapId);
 void PokeathlonHurdleDashDust_CreateSprites(void *a0, void *scene, int a2);
 void PokeathlonHurdleDashDust_Free(void *a0);
-void ov96_0221A56C(void *gfx, int a1);
+void PokeathlonEvent_CalcPoints(void *gfx, int a1);
 
 extern const PokeathlonHurdleDashSceneConfig ov96_0221C404;
 extern const PokeathlonHurdleDashNumberX ov96_0221C410;
@@ -477,7 +477,7 @@ BOOL PokeathlonHurdleDash_ShowResults(PokeathlonCourseData *course) {
         PokeathlonCourse_AddScoreEntry2(course, gfx, i, (u16)frames, seconds, (frames % 30) * 10 / 30, 0, 1, 3, 1, 291);
     }
     PokeathlonCourseScoreList_Rank(gfx, 2);
-    ov96_0221A56C(gfx, 0);
+    PokeathlonEvent_CalcPoints(gfx, 0);
     PokeathlonCourseScoreList_AddPointsToTotals(gfx);
     PokeathlonCourseScoreList_SaveEventPoints(gfx, 0);
     return TRUE;

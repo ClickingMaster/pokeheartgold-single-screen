@@ -8,7 +8,7 @@
 #include "frontier/battle_hall_setup.h"
 #include "frontier/frontier.h"
 #include "frontier/frontier_script_context.h"
-#include "frontier/overlay_80_02229EE0.h"
+#include "frontier/frontier_trainers.h"
 
 #include "gf_gfx_planes.h"
 #include "heap.h"
@@ -25,7 +25,7 @@ u16 FrontierScript_GetVar(FrontierScriptContext *ctx, u16 index);
 void FrontierScript_PrintMessageEntry(FrontierScriptContext *ctx, u16 *message);
 
 extern const OverlayManagerTemplate gOverlayTemplate_Battle;
-extern const OverlayManagerTemplate ov80_0223BDEC;
+extern const OverlayManagerTemplate gOverlayTemplate_BattleHallApp;
 
 u32 HallChallenge_GetSaved(void *challenge);
 u32 HallTypeRanks_Get(u8 cell, void *ranks);
@@ -33,7 +33,7 @@ void HallTypeRanks_Set(u8 cell, void *ranks, u8 rank);
 void OS_ResetSystem(u32 parameter);
 // Defined in battle_hall_data.c and battle_hall_setup.c with other types (returning nothing, int); declared as
 // these callers use them.
-u32 ov80_022317D0(BattleHallData *data, u8 index);
+u32 BattleHallData_GetTrainerSprite(BattleHallData *data, u8 index);
 u32 BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value);
 int BattleHall_GetPartySize(u8 type);
 // unk_02096910.h declares it with a parameter; this call passes none.
@@ -104,7 +104,7 @@ BOOL FrtCmd_HallLaunchApp(FrontierScriptContext *ctx) {
         // multi battles (mode 2 or 3; 0xFE is -2 as a u8): the partner's Pokemon
         Party_AddMon(args->party, data->partnerMon);
     }
-    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &ov80_0223BDEC, args, 0, BattleHall_OnAppExit);
+    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &gOverlayTemplate_BattleHallApp, args, 0, BattleHall_OnAppExit);
     return TRUE;
 }
 
@@ -181,7 +181,7 @@ BOOL FrtCmd_HallAction(FrontierScriptContext *ctx) {
         }
         break;
     case 20:
-        *result = ov80_022317D0(data, arg);
+        *result = BattleHallData_GetTrainerSprite(data, arg);
         break;
     case 21:
         BattleHallData_ClearRanks(data);
@@ -242,7 +242,7 @@ BOOL FrtCmd_HallAction(FrontierScriptContext *ctx) {
         *result = HallTypeRanks_Get(data->cell, data->typeRanks[data->type]);
         break;
     case 34:
-        *result = ov80_02231888(data);
+        *result = BattleHallData_GetWonBattlePoints(data);
         break;
     case 15: {
         Party *party = SaveArray_Party_Get(launchArgs->saveData);

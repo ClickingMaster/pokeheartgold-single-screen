@@ -11,7 +11,7 @@
 #include "sound_system.h"
 #include "sys_flags.h"
 #include "sys_vars.h"
-#include "unk_020632B0.h"
+#include "map_object_behavior.h"
 
 BOOL ScrCmd_GetTrainerPathToPlayer(ScriptContext *ctx) {
     int *sp18, *encounterType, *sp10, *r7;
@@ -37,7 +37,7 @@ BOOL ScrCmd_GetTrainerPathToPlayer(ScriptContext *ctx) {
         r7 = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_1_FIELD_18);
     }
 
-    *r7 = sub_0206457C(fieldSystem, *localMapObject, fieldSystem->playerAvatar, *sp10, *sp18, 0, *encounterType, trainerNum);
+    *r7 = TrainerApproach_Start(fieldSystem, *localMapObject, fieldSystem->playerAvatar, *sp10, *sp18, 0, *encounterType, trainerNum);
     return FALSE;
 }
 
@@ -58,8 +58,8 @@ BOOL ScrCmd_TrainerStepTowardsPlayer(ScriptContext *ctx) {
         return TRUE;
     }
 
-    if (sub_02064598() == TRUE) {
-        sub_020645AC(*r5);
+    if (TrainerApproach_IsDone() == TRUE) {
+        TrainerApproach_Delete(*r5);
         *r5 = 0;
         *var1 = 1;
     }

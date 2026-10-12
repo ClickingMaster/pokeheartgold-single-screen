@@ -61,7 +61,7 @@
 #include "unk_02058AEC.h"
 #include "unk_0205A44C.h"
 #include "unk_0205CB48.h"
-#include "unk_020632B0.h"
+#include "map_object_behavior.h"
 #include "unk_0206D494.h"
 
 static BOOL FieldSystem_CheckSign(FieldSystem *fieldSystem);

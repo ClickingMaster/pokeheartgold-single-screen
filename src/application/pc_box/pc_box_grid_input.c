@@ -11,12 +11,12 @@
 
 extern const TouchscreenHitbox ov14_021F86C8[];
 
-void ov14_021F6B8C(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_GridOnKeyMove(PCBoxWork *work, u32 a1, u32 a2) {
     PCBox_StartCursorSlide(work->view, a1, a2);
     PCBox_SetPendingUpdateFunc(work->view, PCBox_UpdateCursorSlide);
 }
 
-void ov14_021F6BA4(PCBoxWork *work, u32 a1) {
+void PCBox_GridOnTouch(PCBoxWork *work, u32 a1) {
     GridInputHandler_SetNextInput(work->view->gridInput, (u8)a1);
     PCBox_PlaceCursorOnGridInput(work, a1);
 }
@@ -44,7 +44,7 @@ u32 PCBox_GetDepositMenuInput(PCBoxWork *work) {
     return input;
 }
 
-void ov14_021F6C3C(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_DepositGridOnButton(PCBoxWork *work, u32 a1, u32 a2) {
     u32 v = a1;
     if (a2 != -1) {
         if (PCBox_IsActionMenuOpen(work->view->panels) == 0) {
@@ -62,7 +62,7 @@ void ov14_021F6C3C(PCBoxWork *work, u32 a1, u32 a2) {
     PCBox_PlaceCursorOnGridInput(work, v);
 }
 
-void ov14_021F6C94(PCBoxWork *work, u32 a1) {
+void PCBox_DepositBoxGridOnButton(PCBoxWork *work, u32 a1) {
     u8 xy[2];
     if (a1 - 6 <= 1) {
         a1 = work->trayBox % 6;
@@ -79,7 +79,7 @@ void ov14_021F6C94(PCBoxWork *work, u32 a1) {
     }
 }
 
-void ov14_021F6D14(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_DepositBoxGridOnKeyMove(PCBoxWork *work, u32 a1, u32 a2) {
     if ((s32)a1 >= 0 && (s32)a1 <= 5) {
         PCBox_SetSpriteAnim(work->view, 9, 14);
     } else {
@@ -131,7 +131,7 @@ void ov14_021F6D14(PCBoxWork *work, u32 a1, u32 a2) {
     PCBox_SetPendingUpdateFunc(work->view, PCBox_UpdateCursorSlide);
 }
 
-void ov14_021F6E68(PCBoxWork *work, u32 a1) {
+void PCBox_DepositBoxGridOnTouch(PCBoxWork *work, u32 a1) {
     GridInputHandler_SetNextInput(work->view->gridInput, (u8)a1);
     if (a1 != (6) && a1 != (7)) {
         PCBox_PlaceCursorOnGridInput(work, a1);
@@ -161,7 +161,7 @@ u32 PCBox_GetWithdrawMenuInput(PCBoxWork *work) {
     return input;
 }
 
-void ov14_021F6F08(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_WithdrawGridOnButton(PCBoxWork *work, u32 a1, u32 a2) {
     u32 v = a1;
     if (a2 != -1) {
         if (PCBox_IsActionMenuOpen(work->view->panels) == 0) {
@@ -181,7 +181,7 @@ void ov14_021F6F08(PCBoxWork *work, u32 a1, u32 a2) {
     PCBox_PlaceCursorOnGridInput(work, v);
 }
 
-void ov14_021F6F70(PCBoxWork *work, u32 a1) {
+void PCBox_WithdrawGridOnTouch(PCBoxWork *work, u32 a1) {
     GridInputHandler_SetNextInput(work->view->gridInput, (u8)a1);
     if (a1 != (31) && a1 != (32)) {
         PCBox_PlaceCursorOnGridInput(work, a1);
@@ -210,7 +210,7 @@ u32 PCBox_GetMoveModeMenuInput(PCBoxWork *work) {
     return input;
 }
 
-void ov14_021F7010(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_MoveModeGridOnButton(PCBoxWork *work, u32 a1, u32 a2) {
     u32 v = a1;
     if (a2 != -1) {
         if (PCBox_IsActionMenuOpen(work->view->panels) == 0) {
@@ -239,12 +239,12 @@ void ov14_021F7010(PCBoxWork *work, u32 a1, u32 a2) {
     PCBox_PlaceCursorOnGridInput(work, v);
 }
 
-void ov14_021F708C(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_MoveModeGridOnKeyMove(PCBoxWork *work, u32 a1, u32 a2) {
     PCBox_StartCursorSlide(work->view, a1, a2);
     PCBox_SetPendingUpdateFunc(work->view, PCBox_UpdateCursorSlide);
 }
 
-void ov14_021F70A4(PCBoxWork *work, u32 a1) {
+void PCBox_MoveModeGridOnTouch(PCBoxWork *work, u32 a1) {
     GridInputHandler_SetNextInput(work->view->gridInput, (u8)a1);
     PCBox_PlaceCursorOnGridInput(work, a1);
 }
@@ -259,7 +259,7 @@ u32 PCBox_GetBoxTrayInput(PCBoxWork *work) {
     return input;
 }
 
-void ov14_021F70F4(PCBoxWork *work, u32 a1) {
+void PCBox_TrayGridOnButton(PCBoxWork *work, u32 a1) {
     u8 xy[2];
     if (a1 - 43 <= 1) {
         a1 = work->trayBox % 6 + 37;
@@ -278,7 +278,7 @@ void ov14_021F70F4(PCBoxWork *work, u32 a1) {
     }
 }
 
-void ov14_021F7184(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_TrayGridOnKeyMove(PCBoxWork *work, u32 a1, u32 a2) {
     if (work->view->unk_044B == 0) {
         if ((s32)a1 >= 37 && (s32)a1 <= 42) {
             PCBox_SetSpriteAnim(work->view, 9, 14);
@@ -333,7 +333,7 @@ void ov14_021F7184(PCBoxWork *work, u32 a1, u32 a2) {
     PCBox_SetPendingUpdateFunc(work->view, PCBox_UpdateCursorSlide);
 }
 
-void ov14_021F7308(PCBoxWork *work, u32 a1) {
+void PCBox_TrayGridOnTouch(PCBoxWork *work, u32 a1) {
     if ((s32)a1 >= 37 && (s32)a1 <= 42) {
         work->view->unk_043C = a1;
     }
@@ -343,7 +343,7 @@ void ov14_021F7308(PCBoxWork *work, u32 a1) {
     }
 }
 
-u32 ov14_021F7340(PCBoxWork *work) {
+u32 PCBox_GetTrayHoldingInput(PCBoxWork *work) {
     u32 input;
     if (PCBox_IsChangeBoxButtonShown(work->view->panels) == 0) {
         GridInputHandler_ClearEnabledFlag(work->view->gridInput, 45);
@@ -370,7 +370,7 @@ u32 PCBox_GetMoveModePartyMenuInput(PCBoxWork *work) {
     return input;
 }
 
-void ov14_021F73E4(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_MoveModePartyGridOnButton(PCBoxWork *work, u32 a1, u32 a2) {
     u32 v = a1;
     if (a2 != -1) {
         if (PCBox_IsActionMenuOpen(work->view->panels) == 0) {
@@ -390,12 +390,12 @@ void ov14_021F73E4(PCBoxWork *work, u32 a1, u32 a2) {
     PCBox_PlaceCursorOnGridInput(work, v);
 }
 
-void ov14_021F7444(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_MoveModePartyGridOnKeyMove(PCBoxWork *work, u32 a1, u32 a2) {
     if (PCBox_IsActionMenuOpen(work->view->panels) == 1) {
         if ((s32)a1 <= 6 && (s32)a2 >= 7) {
             PCBox_ClearMonInfoAndSelection(work);
             PCBox_StartCursorSlide(work->view, a1, a2);
-            PCBox_SetPendingUpdateFunc(work->view, ov14_021EA180);
+            PCBox_SetPendingUpdateFunc(work->view, PCBox_WaitDeselectThenButtons);
             return;
         }
     } else if (a1 == 12 && a2 == 7) {
@@ -428,7 +428,7 @@ u32 PCBox_GetItemModeMenuInput(PCBoxWork *work) {
     return input;
 }
 
-void ov14_021F7528(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_ItemModeGridOnButton(PCBoxWork *work, u32 a1, u32 a2) {
     u32 v = a1;
     if (a2 != -1) {
         if (PCBox_IsActionMenuOpen(work->view->panels) == 0) {
@@ -457,12 +457,12 @@ void ov14_021F7528(PCBoxWork *work, u32 a1, u32 a2) {
     PCBox_PlaceCursorOnGridInput(work, v);
 }
 
-void ov14_021F7594(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_ItemModeGridOnKeyMove(PCBoxWork *work, u32 a1, u32 a2) {
     PCBox_StartCursorSlide(work->view, a1, a2);
     PCBox_SetPendingUpdateFunc(work->view, PCBox_UpdateCursorSlide);
 }
 
-void ov14_021F75AC(PCBoxWork *work, u32 a1) {
+void PCBox_ItemModeGridOnTouch(PCBoxWork *work, u32 a1) {
     GridInputHandler_SetNextInput(work->view->gridInput, (u8)a1);
     PCBox_PlaceCursorOnGridInput(work, a1);
 }
@@ -482,7 +482,7 @@ u32 PCBox_GetItemModePartyMenuInput(PCBoxWork *work) {
     return input;
 }
 
-void ov14_021F7620(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_ItemModePartyGridOnButton(PCBoxWork *work, u32 a1, u32 a2) {
     u32 v = a1;
     if (a2 != -1) {
         if (PCBox_IsActionMenuOpen(work->view->panels) == 0) {
@@ -502,12 +502,12 @@ void ov14_021F7620(PCBoxWork *work, u32 a1, u32 a2) {
     PCBox_PlaceCursorOnGridInput(work, v);
 }
 
-void ov14_021F7670(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_ItemModePartyGridOnKeyMove(PCBoxWork *work, u32 a1, u32 a2) {
     PCBox_StartCursorSlide(work->view, a1, a2);
     PCBox_SetPendingUpdateFunc(work->view, PCBox_UpdateCursorSlide);
 }
 
-void ov14_021F7688(PCBoxWork *work, u32 a1) {
+void PCBox_BoxMenuGridOnButton(PCBoxWork *work, u32 a1) {
     u8 xy[2];
     if (a1 - 6 <= 1) {
         a1 = work->trayBox % 6;
@@ -523,7 +523,7 @@ void ov14_021F7688(PCBoxWork *work, u32 a1) {
     }
 }
 
-void ov14_021F7700(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_BoxMenuGridOnKeyMove(PCBoxWork *work, u32 a1, u32 a2) {
     if ((s32)a1 >= 0 && (s32)a1 <= 5) {
         PCBox_SetSpriteAnim(work->view, 9, 14);
     } else {
@@ -575,14 +575,14 @@ void ov14_021F7700(PCBoxWork *work, u32 a1, u32 a2) {
     PCBox_SetPendingUpdateFunc(work->view, PCBox_UpdateCursorSlide);
 }
 
-void ov14_021F7854(PCBoxWork *work, u32 a1) {
+void PCBox_BoxMenuGridOnTouch(PCBoxWork *work, u32 a1) {
     GridInputHandler_SetNextInput(work->view->gridInput, (u8)a1);
     if (a1 != (6) && a1 != (7)) {
         PCBox_PlaceCursorOnGridInput(work, a1);
     }
 }
 
-void ov14_021F7878(PCBoxWork *work, u32 a1) {
+void PCBox_WallpaperGridOnButton(PCBoxWork *work, u32 a1) {
     u8 xy[2];
     if (a1 - 4 <= 1) {
         a1 = work->view->wallpaperSelection % 4;
@@ -598,7 +598,7 @@ void ov14_021F7878(PCBoxWork *work, u32 a1) {
     }
 }
 
-void ov14_021F78F8(PCBoxWork *work, u32 a1, u32 a2) {
+void PCBox_WallpaperGridOnKeyMove(PCBoxWork *work, u32 a1, u32 a2) {
     if ((s32)a1 >= 0 && (s32)a1 <= 3) {
         PCBox_SetSpriteAnim(work->view, 9, 14);
     } else {
@@ -650,14 +650,14 @@ void ov14_021F78F8(PCBoxWork *work, u32 a1, u32 a2) {
     PCBox_SetPendingUpdateFunc(work->view, PCBox_UpdateCursorSlide);
 }
 
-void ov14_021F7A2C(PCBoxWork *work, u32 a1) {
+void PCBox_WallpaperGridOnTouch(PCBoxWork *work, u32 a1) {
     GridInputHandler_SetNextInput(work->view->gridInput, (u8)a1);
     if (a1 != (4) && a1 != (5)) {
         PCBox_PlaceCursorOnGridInput(work, a1);
     }
 }
 
-u32 ov14_021F7A50(PCBoxWork *work) {
+u32 PCBox_GetItemTrayHoldingInput(PCBoxWork *work) {
     u32 input;
     GridInputHandler_ClearEnabledFlag(work->view->gridInput, 43);
     GridInputHandler_ClearEnabledFlag(work->view->gridInput, 44);

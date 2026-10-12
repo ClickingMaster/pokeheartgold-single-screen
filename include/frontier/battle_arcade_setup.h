@@ -3,7 +3,7 @@
 
 #include "battle/battle_setup.h"
 #include "frontier/frontier.h"
-#include "frontier/overlay_80_022340E8.h"
+#include "frontier/battle_arcade_data.h"
 
 #include "party.h"
 #include "pokemon.h"

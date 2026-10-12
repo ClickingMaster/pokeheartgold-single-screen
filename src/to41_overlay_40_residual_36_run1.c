@@ -266,7 +266,7 @@ int ov40_02240418(void *p) {
         values[0] = 2;
         values[1] = 5;
         values[2] = 5;
-        PTR(w, 0x4ac) = ov40_02242FAC(0x6d, 0xc, values, Save_PlayerData_GetOptionsAddr(PTR(p, 0x830)));
+        PTR(w, 0x4ac) = VsRecorder_NewNumberPadConfig(0x6d, 0xc, values, Save_PlayerData_GetOptionsAddr(PTR(p, 0x830)));
         PTR(obj, 0x220) = PTR(p, 0x14);
         PTR(obj, 0x224) = PTR(p, 0x18);
         PTR(obj, 0x228) = PTR(p, 0x1c);
@@ -302,7 +302,7 @@ int ov40_02240418(void *p) {
 int ov40_02240520(void *p) {
     void *w = PTR(p, 0x860);
 
-    if (ov40_02243538((u8 *)w + 0x1d4) == 1) {
+    if (VsRecorder_NumberPadMain((u8 *)w + 0x1d4) == 1) {
         VsRecorder_SetSubState(p, 4);
     }
     return 0;
@@ -316,7 +316,7 @@ int ov40_02240544(void *p) {
     case 0:
         VsRecorder_HideNotice(p);
         VsRecorder_ApplyBlend(w, (u8 *)w + 4, 8, 0x12, 8, 0x12, 0);
-        ov40_02242FF8(PTR(w, 0x4ac));
+        VsRecorder_FreeNumberPadConfig(PTR(w, 0x4ac));
         WORD(p, 8)
         ++;
     case 1:

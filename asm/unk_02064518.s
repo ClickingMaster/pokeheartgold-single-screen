@@ -19,8 +19,8 @@ sub_02064518: ; 0x02064518
 	.balign 4, 0
 _0206451C: .word MapObject_GetTrainerNum
 	thumb_func_end sub_02064518
-	thumb_func_start sub_02064520
-sub_02064520: ; 0x02064520
+	thumb_func_start MapObjectManager_FindTrainerPartner
+MapObjectManager_FindTrainerPartner: ; 0x02064520
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
 	add r5, r1, #0
@@ -40,7 +40,7 @@ _02064540:
 	ldr r0, [sp]
 	cmp r0, r4
 	beq _02064560
-	bl sub_02064298
+	bl MapObject_GetTrainerSightType
 	sub r0, r0, #1
 	cmp r0, #1
 	bhi _02064560
@@ -65,9 +65,9 @@ _02064570:
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end sub_02064520
-	thumb_func_start sub_0206457C
-sub_0206457C: ; 0x0206457C
+	thumb_func_end MapObjectManager_FindTrainerPartner
+	thumb_func_start TrainerApproach_Start
+TrainerApproach_Start: ; 0x0206457C
 	push {r4, lr}
 	sub sp, #0x10
 	ldr r4, [sp, #0x18]
@@ -78,31 +78,31 @@ sub_0206457C: ; 0x0206457C
 	str r4, [sp, #8]
 	ldr r4, [sp, #0x24]
 	str r4, [sp, #0xc]
-	bl sub_020645B4
+	bl TrainerApproach_CreateTask
 	add sp, #0x10
 	pop {r4, pc}
-	thumb_func_end sub_0206457C
-	thumb_func_start sub_02064598
-sub_02064598: ; 0x02064598
+	thumb_func_end TrainerApproach_Start
+	thumb_func_start TrainerApproach_IsDone
+TrainerApproach_IsDone: ; 0x02064598
 	push {r4, lr}
 	add r4, r0, #0
 	bne _020645A2
 	bl GF_AssertFail
 _020645A2:
 	add r0, r4, #0
-	bl sub_0206460C
+	bl TrainerApproach_GetDone
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end sub_02064598
-	thumb_func_start sub_020645AC
-sub_020645AC: ; 0x020645AC
-	ldr r3, _020645B0 ; =sub_02064618
+	thumb_func_end TrainerApproach_IsDone
+	thumb_func_start TrainerApproach_Delete
+TrainerApproach_Delete: ; 0x020645AC
+	ldr r3, _020645B0 ; =TrainerApproach_DestroyTask
 	bx r3
 	.balign 4, 0
-_020645B0: .word sub_02064618
-	thumb_func_end sub_020645AC
-	thumb_func_start sub_020645B4
-sub_020645B4: ; 0x020645B4
+_020645B0: .word TrainerApproach_DestroyTask
+	thumb_func_end TrainerApproach_Delete
+	thumb_func_start TrainerApproach_CreateTask
+TrainerApproach_CreateTask: ; 0x020645B4
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r6, r1, #0
@@ -133,7 +133,7 @@ _020645CE:
 	str r0, [r4, #0x18]
 	str r5, [r4, #0x2c]
 	str r6, [r4, #0x24]
-	ldr r0, _02064608 ; =sub_02064630
+	ldr r0, _02064608 ; =TrainerApproach_Task
 	str r7, [r4, #0x28]
 	bl SysTask_CreateOnMainQueue
 	add r4, r0, #0
@@ -143,18 +143,18 @@ _02064604:
 	add r0, r4, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-_02064608: .word sub_02064630
-	thumb_func_end sub_020645B4
-	thumb_func_start sub_0206460C
-sub_0206460C: ; 0x0206460C
+_02064608: .word TrainerApproach_Task
+	thumb_func_end TrainerApproach_CreateTask
+	thumb_func_start TrainerApproach_GetDone
+TrainerApproach_GetDone: ; 0x0206460C
 	push {r3, lr}
 	bl SysTask_GetData
 	ldr r0, [r0, #4]
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end sub_0206460C
-	thumb_func_start sub_02064618
-sub_02064618: ; 0x02064618
+	thumb_func_end TrainerApproach_GetDone
+	thumb_func_start TrainerApproach_DestroyTask
+TrainerApproach_DestroyTask: ; 0x02064618
 	push {r4, lr}
 	add r4, r0, #0
 	bl SysTask_GetData
@@ -164,9 +164,9 @@ sub_02064618: ; 0x02064618
 	add r0, r4, #0
 	bl SysTask_Destroy
 	pop {r4, pc}
-	thumb_func_end sub_02064618
-	thumb_func_start sub_02064630
-sub_02064630: ; 0x02064630
+	thumb_func_end TrainerApproach_DestroyTask
+	thumb_func_start TrainerApproach_Task
+TrainerApproach_Task: ; 0x02064630
 	push {r3, r4, r5, lr}
 	ldr r4, _02064648 ; =_020FE1A4
 	add r5, r1, #0
@@ -181,4 +181,4 @@ _02064636:
 	pop {r3, r4, r5, pc}
 	nop
 _02064648: .word _020FE1A4
-	thumb_func_end sub_02064630
+	thumb_func_end TrainerApproach_Task

@@ -81,7 +81,7 @@ void PokeathlonGoalRollCpu_Free(void *p);
 void PokeathlonScreenShake_Init(void **p, void *a, void *b);
 void PokeathlonRingDrop_GetDirection(void);
 u16 PokeathlonRingDropUi_GetScore(u8 *p);
-void ov96_02219FDC(void *p);
+void PokeathlonRingDropCpu_Free(void *p);
 void PokeathlonCourse_SetHudPlanes(u8 *p, u32 v);
 void PokeathlonCourse_SetRecordScore(u8 *p, u16 v);
 u32 PokeathlonCourseCmd_ProfilesSize(void);

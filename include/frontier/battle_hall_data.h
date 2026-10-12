@@ -2,7 +2,7 @@
 #define POKEHEARTGOLD_FRONTIER_BATTLE_HALL_DATA_H
 
 #include "battle/battle_setup.h"
-#include "frontier/overlay_80_02229EE0.h"
+#include "frontier/frontier_trainers.h"
 
 #include "party.h"
 #include "pokemon.h"
@@ -97,7 +97,7 @@ u8 BattleHallData_NextBattle(BattleHallData *data);
 u8 BattleHallData_GetBattleNo(BattleHallData *data);
 void BattleHallData_ClearRanks(BattleHallData *data);
 void BattleHallData_EndRound(BattleHallData *data);
-u8 ov80_02231888(BattleHallData *data);
+u8 BattleHallData_GetWonBattlePoints(BattleHallData *data);
 u16 BattleHall_GetSavedTypeRank(SaveData *saveData, int type, int cell, u16 *low, u16 *high);
 void BattleHall_SetSavedTypeRank(SaveData *saveData, u8 type, s32 cell, u8 rank);
 void BattleHallData_ResetMaxedRanks(BattleHallData *data);

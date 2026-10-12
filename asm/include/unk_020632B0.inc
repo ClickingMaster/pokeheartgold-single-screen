@@ -110,17 +110,17 @@
 .public MapObjectMovementCmd112_Step0
 .public sub_02063A14
 .public sub_02063A1C
-.public sub_02063E50
-.public sub_02063E70
-.public sub_02063FE4
-.public sub_02063FFC
-.public sub_0206402C
-.public sub_02064084
+.public ApricornTreeObject_Init
+.public ApricornTreeObject_Update
+.public ApricornTreeObject_Delete
+.public ApricornTreeObject_Pause
+.public ApricornTreeObject_Resume
+.public ApricornTreeObject_GetBillboard
 .public TryGetSeenByNpcTrainers
 .public sub_02064518
-.public sub_0206457C
-.public sub_02064598
-.public sub_020645AC
+.public TrainerApproach_Start
+.public TrainerApproach_IsDone
+.public TrainerApproach_Delete
 .public FieldEffect_Destroy
 .public FX_Div
 .public MI_CpuFill8
@@ -149,8 +149,8 @@
 	.public sub_02063A40
 	.public sub_02063A5C
 	.public sub_02063A78
-	.public sub_02063A94
-	.public sub_02063AC8
+	.public MapObject_IsOffPreviousTile
+	.public MapObject_IsOnPreviousTile
 	.public sub_02063AFC
 	.public sub_02063B00
 	.public sub_02063B04
@@ -160,23 +160,23 @@
 	.public sub_02063C88
 	.public sub_02063CB4
 	.public sub_02063D30
-	.public sub_020640A4
+	.public GetApricornTreeSpriteId
 	.public CheckSeenByNpcTrainers
 	.public GetEngagingTrainerParams
-	.public sub_02064298
-	.public sub_020642C4
-	.public sub_0206439C
-	.public sub_020643B8
-	.public sub_020643E4
-	.public sub_02064410
-	.public sub_0206443C
-	.public sub_02064468
+	.public MapObject_GetTrainerSightType
+	.public TrainerSight_FindPlayer
+	.public TrainerSight_GetDistanceInDirection
+	.public TrainerSight_GetDistanceNorth
+	.public TrainerSight_GetDistanceSouth
+	.public TrainerSight_GetDistanceWest
+	.public TrainerSight_GetDistanceEast
+	.public TrainerSight_IsPathBlocked
 	.public MapObject_GetTrainerNum
-	.public sub_02064520
-	.public sub_020645B4
-	.public sub_0206460C
-	.public sub_02064618
-	.public sub_02064630
+	.public MapObjectManager_FindTrainerPartner
+	.public TrainerApproach_CreateTask
+	.public TrainerApproach_GetDone
+	.public TrainerApproach_DestroyTask
+	.public TrainerApproach_Task
 	.public sub_0206464C
 	.public sub_02064668
 	.public sub_02064694

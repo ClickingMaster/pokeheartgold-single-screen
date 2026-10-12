@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "overlay_80_022340E8.inc"
+	.include "battle_arcade_data_tables.inc"
 	.include "global.inc"
 
     .text
@@ -49,5 +49,5 @@ ov80_0223DCB8: ; 0x0223DCB8
 
     .bss
 
-ov80_0223DD4C: ; 0x0223DD4C
+gBattleArcadeData: ; 0x0223DD4C
 	.space 0x4

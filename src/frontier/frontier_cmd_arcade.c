@@ -5,10 +5,10 @@
 #include "battle/battle_setup.h"
 #include "frontier/frontier.h"
 #include "frontier/frontier_script_context.h"
-#include "frontier/overlay_80_02229EE0.h"
-#include "frontier/overlay_80_022340E8.h"
+#include "frontier/frontier_trainers.h"
+#include "frontier/battle_arcade_data.h"
 #include "frontier/battle_arcade_setup.h"
-#include "frontier/overlay_80_02239960.h"
+#include "frontier/frontier_particles.h"
 #include "library/spl_emitter.h"
 
 #include "launch_application.h"
@@ -199,7 +199,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
     int i;
     PlayerProfile *profile;
 
-    u32 action = FrontierScript_ReadShort(ctx);
+    u32 action = FrontierScript_ReadByte(ctx);
     u8 var0 = FrontierScript_ReadVar(ctx);
     u8 var1 = FrontierScript_ReadVar(ctx);
     u16 *out = FrontierScript_ReadVarPtr(ctx);
@@ -226,7 +226,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         OS_ResetSystem(0);
         break;
     case 9:
-        *out = ArcadeChallenge_GetSaved(arcadeCtx->unk8);
+        *out = ArcadeChallenge_GetSaved(arcadeCtx->challenge);
         break;
     case 10:
         BattleArcadeData_SaveRecord(arcadeCtx, 2);
@@ -259,7 +259,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         *out = BattleArcade_GetRound(arcadeCtx);
         break;
     case 20:
-        *out = ov80_02234774(arcadeCtx, var0);
+        *out = BattleArcade_GetTrainerSprite(arcadeCtx, var0);
         break;
     case 21:
         ov80_022347B8(arcadeCtx);
@@ -372,8 +372,8 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         ov80_02233F1C(ctx, arcadeCtx, var0);
         break;
     case 40:
-        FrontierTrainer_LoadRecord(&arcadeCtx->unkF4[0], arcadeCtx->trainerIds[arcadeCtx->unk11], 0xb, 0xcc);
-        FrontierTrainer_LoadRecord(&arcadeCtx->unkF4[1], arcadeCtx->trainerIds[arcadeCtx->unk11 + 7], 0xb, 0xcc);
+        FrontierTrainer_LoadRecord(&arcadeCtx->trainers[0], arcadeCtx->trainerIds[arcadeCtx->battleNo], 0xb, 0xcc);
+        FrontierTrainer_LoadRecord(&arcadeCtx->trainers[1], arcadeCtx->trainerIds[arcadeCtx->battleNo + 7], 0xb, 0xcc);
         break;
     case 41:
         BattleArcade_SetPlayerMonSpriteVisible(arcadeCtx, frontierMap, var0, var1);
@@ -414,7 +414,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         }
         break;
     case 49:
-        FrontierMon_GenerateList(arcadeCtx->opponentMons, arcadeCtx->unk314, arcadeCtx->unk31C, arcadeCtx->unk320, NULL, 4, 0xb, 0xcd);
+        FrontierMon_GenerateList(arcadeCtx->opponentMons, arcadeCtx->setIds, arcadeCtx->ivs, arcadeCtx->personalities, NULL, 4, 0xb, 0xcd);
         break;
     case 50:
         BattleArcade_SetOpponentParty(arcadeCtx);
@@ -433,7 +433,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
 
 static void ov80_02233F1C(FrontierScriptContext *ctx, ArcadeContext *arcadeCtx, u32 a2) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(ctx->frontierSystem);
-    ParticleSystem_CreateEmitterWithParam(ov80_02239A60(map->unk10, 0), a2, ov80_02233F40, arcadeCtx);
+    ParticleSystem_CreateEmitterWithParam(FrontierParticles_GetSystem(map->particleManager, 0), a2, ov80_02233F40, arcadeCtx);
 }
 
 extern const VecFx32 ov80_0223BE6C; //{-1, 0, 0}
@@ -490,14 +490,14 @@ static BOOL ov80_02234028(FrontierScriptContext *ctx) {
 
 BOOL FrtCmd_ArcadePrintMsg(FrontierScriptContext *ctx) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
-    u8 index = FrontierScript_ReadShort(ctx);
+    u8 index = FrontierScript_ReadByte(ctx);
     ArcadeContext *arcadeCtx = Frontier_GetData(ctx->frontierSystem->frontierWork);
 
     if (arcadeCtx == NULL) {
         return FALSE;
     }
 
-    u16 *msg = arcadeCtx->unkF4[index].unk18;
+    u16 *msg = arcadeCtx->trainers[index].unk18;
     FrontierScript_PrintMessageEntry(ctx, msg);
 
     return TRUE;

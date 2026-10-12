@@ -2,7 +2,7 @@
 #define POKEHEARTGOLD_FRONTIER_BATTLE_FACTORY_DATA_H
 
 #include "battle/battle_setup.h"
-#include "frontier/overlay_80_02229EE0.h"
+#include "frontier/frontier_trainers.h"
 
 #include "party.h"
 #include "save.h"
@@ -89,7 +89,7 @@ int BattleFactory_GetAppResult(BattleFactoryAppLaunchArgs *args, u32 index);
 void BattleFactoryData_SaveRecord(BattleFactoryData *data, int mode);
 u8 BattleFactory_IncBattleNo(BattleFactoryData *data);
 u8 BattleFactory_GetBattleNo(BattleFactoryData *data);
-int ov80_02230794(BattleFactoryData *data, int partner);
+int BattleFactory_GetTrainerSprite(BattleFactoryData *data, int partner);
 void ov80_022307C8(BattleFactoryData *data);
 void BattleFactory_CompleteRound(BattleFactoryData *data);
 void BattleFactory_SetRentalParty(BattleFactoryData *data);

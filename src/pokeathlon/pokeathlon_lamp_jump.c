@@ -76,7 +76,7 @@ void PokeathlonCourseSpritePool_Draw(void *scene);
 void PokeathlonCourseSpritePool_SetSurfaceCoords(void *scene, int a1, int a2, int a3, int a4);
 void *PokeathlonCourseSpritePool_GetSpriteList(void *scene);
 void PokeathlonCourseSpritePool_PauseAnims(void *scene, int a1);
-void ov96_0221A56C(void *gfx, u32 a1);
+void PokeathlonEvent_CalcPoints(void *gfx, u32 a1);
 void PokeathlonLampJump_InitCamera(PokeathlonLampJump *lampJump);
 void PokeathlonLampJump_Draw3D(PokeathlonLampJump *lampJump);
 void PokeathlonLampJump_CalcTrampolineSurface(s32 (*a0)[128]);
@@ -286,7 +286,7 @@ BOOL ov96_021F54D4(PokeathlonCourseData *course) {
         PokeathlonCourse_AddScoreEntry(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, 0x128);
     }
     PokeathlonCourseScoreList_Rank(gfx, 1);
-    ov96_0221A56C(gfx, 5);
+    PokeathlonEvent_CalcPoints(gfx, 5);
     PokeathlonCourseScoreList_AddPointsToTotals(gfx);
     PokeathlonCourseScoreList_SaveEventPoints(gfx, 5);
     return TRUE;

@@ -36,8 +36,8 @@ typedef struct BattleHallTrainerPair {
     u16 partnerTrainerId;
 } BattleHallTrainerPair;
 
-extern const u8 ov80_0223BDFC[];
-extern const u8 ov80_0223BE10[];
+extern const u8 gBattleHallBattlePoints[];
+extern const u8 gBattleHallMultiBattlePoints[];
 
 int FrontierSpeciesRecords_UpdateFromStat(void *saveData, int stat, int stat2, int substat, int stat3, int heapID, int *out1, int *out2);
 void HallChallenge_Clear(void *challenge);
@@ -54,13 +54,13 @@ int sub_0205C11C(int type);
 int sub_0205C144(int type);
 u32 sub_0205C268(u32 stat);
 void *FrontierTrainer_Load(BattleHallTrainerRecord *record, u32 trainerId, enum HeapID heapID, u32 narcId);
-void ov80_0222A30C(u8 trainerClass);
+void FrontierTrainer_GetClassSprite(u8 trainerClass);
 void ov80_0222A840(void *saveData);
 // Defined in battle_hall_setup.c with other types (returning u8 and int); declared as these callers use them.
 int BattleHall_GetLevelRank(BattleHallData *data);
 u8 BattleHall_GetPartySize(u8 type);
 // Not in battle_hall_data.h: frontier_cmd_hall.c uses their (undefined) return values.
-void ov80_022317D0(BattleHallData *data, u32 index);
+void BattleHallData_GetTrainerSprite(BattleHallData *data, u32 index);
 void BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value);
 
 #pragma force_active on
@@ -322,10 +322,10 @@ u8 BattleHallData_GetBattleNo(BattleHallData *data) {
     return data->battleNo;
 }
 
-void ov80_022317D0(BattleHallData *data, u32 index) {
+void BattleHallData_GetTrainerSprite(BattleHallData *data, u32 index) {
     BattleHallTrainerRecord trainer;
     Heap_Free(FrontierTrainer_Load(&trainer, data->trainerIds[(u8)(index + data->battleNo * 2)], HEAP_ID_FIELD2, 204));
-    ov80_0222A30C((u8)trainer.trainerClass);
+    FrontierTrainer_GetClassSprite((u8)trainer.trainerClass);
 }
 
 void BattleHallData_ClearRanks(BattleHallData *data) {
@@ -368,7 +368,7 @@ void BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value) {
     }
 }
 
-u8 ov80_02231888(BattleHallData *data) {
+u8 BattleHallData_GetWonBattlePoints(BattleHallData *data) {
     u8 type = data->type;
     u16 round = data->round;
     u8 ret;
@@ -377,13 +377,13 @@ u8 ov80_02231888(BattleHallData *data) {
         if (round >= HALL_MAX_ROUND) {
             ret = 12;
         } else {
-            ret = ov80_0223BDFC[round];
+            ret = gBattleHallBattlePoints[round];
         }
     } else {
         if (round >= HALL_MAX_ROUND) {
             ret = 23;
         } else {
-            ret = ov80_0223BE10[round];
+            ret = gBattleHallMultiBattlePoints[round];
         }
     }
     if (type == 0) {

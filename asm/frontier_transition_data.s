@@ -110,7 +110,7 @@
 	.public FrontierHBlankDma_GetBuffer
 	.public ov80_0223DBE0
 	.public ov80_0223DBEC
-	.include "overlay_80_0223AC24.inc"
+	.include "frontier_transition_data.inc"
 	.include "global.inc"
 
     .text

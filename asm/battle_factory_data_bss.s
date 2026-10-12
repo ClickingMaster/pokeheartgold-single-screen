@@ -132,7 +132,7 @@
 	.public BattleFactoryData_SaveRecord
 	.public BattleFactory_IncBattleNo
 	.public BattleFactory_GetBattleNo
-	.public ov80_02230794
+	.public BattleFactory_GetTrainerSprite
 	.public ov80_022307C8
 	.public BattleFactory_CompleteRound
 	.public BattleFactory_SetRentalParty
@@ -142,7 +142,7 @@
 	.public BattleFactory_IncTradeCount
 	.public BattleFactory_SendBuffer
 	.public BattleFactory_GetWonBattlePoints
-	.include "overlay_80_0222FD08.inc"
+	.include "battle_factory_data_bss.inc"
 	.include "global.inc"
 
     .text
@@ -152,7 +152,7 @@
 	.public BattleFactory_GetAppResult
 	.public BattleFactory_IncBattleNo
 	.public BattleFactory_GetBattleNo
-	.public ov80_02230794
+	.public BattleFactory_GetTrainerSprite
 	.public ov80_022307C8
 	.public BattleFactory_CompleteRound
 	.public BattleFactory_TradeMon

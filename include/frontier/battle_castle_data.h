@@ -3,7 +3,7 @@
 
 #include "battle/battle_setup.h"
 #include "frontier/frontier_system.h"
-#include "frontier/overlay_80_02229EE0.h"
+#include "frontier/frontier_trainers.h"
 
 #include "bg_window.h"
 #include "party.h"
@@ -94,7 +94,7 @@ void BattleCastleData_ReadAppResult(BattleCastleData *data, BattleCastleAppArgs 
 void BattleCastleData_Save(BattleCastleData *data, int mode);
 u8 BattleCastleData_NextBattle(BattleCastleData *data);
 u8 BattleCastleData_GetBattleNo(BattleCastleData *data);
-u32 ov80_02232E68(BattleCastleData *data, u32 index);
+u32 BattleCastleData_GetTrainerSprite(BattleCastleData *data, u32 index);
 void ov80_02232E9C(BattleCastleData *data);
 void BattleCastleData_EndRound(BattleCastleData *data);
 void ov80_02232F00(BattleCastleData *data);

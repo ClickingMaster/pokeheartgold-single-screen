@@ -222,7 +222,7 @@ _021F73A0:
 	cmp r0, r1
 	bgt _021F73B4
 	add r0, r4, #0
-	bl sub_02064084
+	bl ApricornTreeObject_GetBillboard
 	pop {r4, pc}
 _021F73B4:
 	add r0, r4, #0

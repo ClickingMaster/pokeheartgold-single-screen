@@ -6,7 +6,7 @@
 #include "constants/sndseq.h"
 
 #include "frontier/battle_castle.h"
-#include "frontier/overlay_80_022340E8.h"
+#include "frontier/battle_arcade_data.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0031.h"
 

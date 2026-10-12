@@ -85,15 +85,15 @@ typedef struct FrontierMonParam {
 } FrontierMonParam;
 
 extern const u16 _0223B620[];
-extern const u16 ov80_0223B628[];
-extern const u16 ov80_0223B62A[];
+extern const u16 gFrontierTrainerClassSprites[];
+extern const u16 gFrontierTrainerClassSpriteValues[];
 
 void *FrontierData_AllocMember(s32 fileId, enum HeapID heapID, NarcId narcId);
 void FrontierData_ReadMember(void *dest, s32 fileId, NarcId narcId);
 void *FrontierTrainer_Load(FrontierTrainerRecord *record, int trainerId, enum HeapID heapID, NarcId narcId);
 u32 FrontierMon_Generate(FrontierMon *mon, u32 setId, u32 otId, u32 pid, u8 iv, u8 itemIndex, BOOL useItemTable, enum HeapID heapID, NarcId narcId);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-u16 ov80_0222A30C(u16 value);
+u16 FrontierTrainer_GetClassSprite(u16 value);
 void ov80_0222A334(SaveData *saveData, Pokemon *mon);
 void ov80_0222A3BC(SaveData *saveData, Party *party, Pokemon *mon);
 void Frontier_SetSpriteAnim(Sprite *sprite, int anim);
@@ -270,13 +270,13 @@ void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level) {
 }
 #pragma force_active reset
 
-u16 ov80_0222A30C(u16 value) {
+u16 FrontierTrainer_GetClassSprite(u16 value) {
     u32 i = 0;
-    const u16 *key = ov80_0223B628;
+    const u16 *key = gFrontierTrainerClassSprites;
 
     do {
         if (value == *key) {
-            return ov80_0223B62A[i * 2];
+            return gFrontierTrainerClassSpriteValues[i * 2];
         }
         i++;
         key += 2;

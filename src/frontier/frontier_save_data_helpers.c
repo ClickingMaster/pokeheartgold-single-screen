@@ -45,9 +45,9 @@ void ov80_022357B4(void *data, void *saveData) {
     }
 }
 
-u32 ov80_02235898(void *data, u32 index) {
+u32 BattleTower_GetTrainerSprite(void *data, u32 index) {
     u8 *p = data;
-    return ov80_0222A30C((u8) * (u16 *)(p + index * 0x110 + 0x7C));
+    return FrontierTrainer_GetClassSprite((u8) * (u16 *)(p + index * 0x110 + 0x7C));
 }
 
 void ov80_022358B0(void *data, u32 value) {

@@ -12,14 +12,14 @@
 	.include "unk_020632B0.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_020642C4
-sub_020642C4: ; 0x020642C4
+	thumb_func_start TrainerSight_FindPlayer
+TrainerSight_FindPlayer: ; 0x020642C4
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x14
 	add r5, r0, #0
 	add r4, r1, #0
 	str r2, [sp, #8]
-	bl sub_02064298
+	bl MapObject_GetTrainerSightType
 	cmp r0, #1
 	bne _02064332
 	add r0, r4, #0
@@ -41,7 +41,7 @@ sub_020642C4: ; 0x020642C4
 	add r0, r5, #0
 	add r1, r4, #0
 	add r3, r7, #0
-	bl sub_0206439C
+	bl TrainerSight_GetDistanceInDirection
 	add r6, r0, #0
 	mov r0, #0
 	mvn r0, r0
@@ -50,7 +50,7 @@ sub_020642C4: ; 0x020642C4
 	add r0, r5, #0
 	add r1, r4, #0
 	add r2, r6, #0
-	bl sub_02064468
+	bl TrainerSight_IsPathBlocked
 	cmp r0, #0
 	bne _0206432A
 	ldr r0, [sp, #8]
@@ -85,7 +85,7 @@ _02064352:
 	ldr r3, [sp, #0x10]
 	add r0, r5, #0
 	add r1, r4, #0
-	bl sub_0206439C
+	bl TrainerSight_GetDistanceInDirection
 	add r6, r0, #0
 	mov r0, #0
 	mvn r0, r0
@@ -94,7 +94,7 @@ _02064352:
 	add r0, r5, #0
 	add r1, r4, #0
 	add r2, r6, #0
-	bl sub_02064468
+	bl TrainerSight_IsPathBlocked
 	cmp r0, #0
 	bne _02064386
 	ldr r0, [sp, #8]
@@ -115,4 +115,4 @@ _02064394:
 	mvn r0, r0
 	add sp, #0x14
 	pop {r4, r5, r6, r7, pc}
-	thumb_func_end sub_020642C4
+	thumb_func_end TrainerSight_FindPlayer

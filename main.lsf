@@ -431,27 +431,9 @@ Static main
     Object asm/unk_data_020FD978.o
     Object asm/map_object_movement_commands_data.o
     Object asm/map_object_movement_command_steps.o
-    Object asm/unk_020632B0_residual_2.o
+    Object asm/map_object_behavior_data.o
     Object src/map_object_movement_commands.o
-    Object src/unk_02063A14.o
-    Object src/map_object_behavior_2.o
-    Object src/map_object_trainer_behavior.o
-    Object src/trainer_turn_sequence.o
-    Object src/map_object_trainer_behavior_2.o
-    Object src/r40_unk_02063D30_run1.o
-    Object src/map_object_trainer_behavior_3.o
-    Object src/trainer_encounter_start.o
-    Object src/r40_unk_020640C8_run1.o
-    Object src/map_object_trainer_behavior_4.o
-    Object src/r40_unk_020642C4_run1.o
-    Object src/map_object_trainer_behavior_5.o
-    Object src/map_object_behavior_3.o
-    Object src/to50_map_object_collision_probe.o
-    Object src/map_object_behavior_4.o
-    Object src/unk_02064518.o
-    Object src/map_object_behavior_5.o
-    Object src/r40_unk_02064824_run1.o
-    Object src/map_object_behavior_6.o
+    Object src/map_object_behavior.o
     Object src/unk_020648EC.o
     Object src/field_use_item.o
     Object src/map_object_follow.o
@@ -757,7 +739,7 @@ Static main
 
     ### Vendor libraries ###
     Object asm/middleware.o
-    Object lib/asm/to70_jn_spl_extra07_anchor.o
+    Object lib/asm/spl_data.o
     Object lib/src/spl_manager.o
     Object lib/src/spl_draw.o
     Object lib/src/spl_emitter.o
@@ -1147,76 +1129,76 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/NitroSDK/src/math/MATH_pop.o
     Object lib/NitroSDK/src/math/MATH_dgt.o
     Object lib/NitroSDK/src/math/MATH_crc.o
-    Object lib/MSL_C/asm/to70_MSL_ARM_abort_exit_extra102_anchor.o
+    Object lib/MSL_C/asm/msl_abort_exit_data.o
     Object lib/MSL_C/src/msl_abort_exit.o
     Object lib/MSL_C/src/msl_abort_exit_core.o
     Object lib/MSL_c/asm/MSL_ARM_critical_regions_NITRO.o
-    Object lib/MSL_C/asm/to90_extra2309_anchor.o
+    Object lib/MSL_C/asm/msl_arm_math_exceptions.o
     Object lib/MSL_C/src/msl_arm_math.o
-    Object lib/MSL_C/asm/to70_MSL_Common_alloc_extra116_anchor.o
+    Object lib/MSL_C/asm/msl_alloc_exceptions.o
     Object lib/MSL_C/src/msl_alloc.o
-    Object lib/MSL_C/asm/op90_MSL_Common_ansi_files_anchor.o
+    Object lib/MSL_C/asm/msl_ansi_files_data.o
     Object lib/MSL_C/src/msl_ansi_files.o
     Object lib/MSL_C/src/arith.o
-    Object lib/MSL_C/asm/to70_MSL_Common_assert_extra117_anchor.o
+    Object lib/MSL_C/asm/msl_assert_data.o
     Object lib/MSL_C/src/msl_assert.o
-    Object lib/MSL_C/asm/to59_msl_buffer_exception.o
+    Object lib/MSL_C/asm/msl_buffer_io_exceptions.o
     Object lib/MSL_C/src/msl_buffer_io.o
     Object lib/MSL_C/asm/MSL_Common_ctype.o
     Object lib/MSL_C/src/msl_direct_io_fread.o
-    Object lib/MSL_C/asm/to90_extra1964_anchor.o
+    Object lib/MSL_C/asm/msl_direct_io_exceptions.o
     Object lib/MSL_C/src/msl_direct_io_read.o
     Object lib/MSL_C/src/msl_direct_io_write.o
     Object lib/MSL_C/asm/MSL_Common_errno.o
-    Object lib/MSL_C/asm/to70_MSL_Common_file_io_extra109_anchor.o
+    Object lib/MSL_C/asm/msl_file_io_exceptions.o
     Object lib/MSL_C/src/msl_file_io.o
     Object lib/MSL_C/src/msl_filepos_ftell_core.o
     Object lib/MSL_C/src/msl_filepos_ftell.o
-    Object lib/MSL_C/asm/to90_extra2110_anchor.o
+    Object lib/MSL_C/asm/msl_file_pos_exceptions.o
     Object lib/MSL_C/src/msl_filepos_fseek_core.o
     Object lib/MSL_C/src/msl_filepos_fseek.o
     Object lib/MSL_C/src/msl_filepos_rewind.o
     Object lib/MSL_C/asm/MSL_Common_float.o
     Object lib/MSL_C/src/msl_mbstring.o
-    Object lib/MSL_C/asm/to70_msl_mbstring_residual_anchor.o
+    Object lib/MSL_C/asm/msl_locale_data.o
     Object lib/MSL_C/src/msl_mbstring_mbstowcs.o
     Object lib/MSL_C/src/msl_mbstring_wcstombs.o
-    Object lib/MSL_C/asm/to59_msl_mem_exception.o
+    Object lib/MSL_C/asm/msl_mem_exceptions.o
     Object lib/MSL_C/src/msl_mem.o
     Object lib/MSL_C/src/msl_mem_funcs.o
-    Object lib/MSL_C/asm/to70_MSL_Common_printf_extra110_anchor.o
+    Object lib/MSL_C/asm/msl_printf_data.o
     Object lib/MSL_C/src/msl_printf_formatter.o
     Object lib/MSL_C/src/msl_qsort.o
     Object lib/MSL_C/src/rand.o
-    Object lib/asm/to90_scanf_interval_v5_anchor.o
-    Object lib/asm/op90_to91_w41418_StringRead_prefix_anchor.o
+    Object lib/asm/msl_scanf_data.o
+    Object lib/asm/msl_scanf_string_read_types.o
     Object lib/MSL_C/src/msl_scanf_sformatter.o
     Object lib/MSL_C/src/msl_scanf_string_read.o
     Object lib/MSL_C/src/msl_scanf_vsscanf.o
     Object lib/MSL_C/src/msl_scanf_sscanf.o
-    Object lib/MSL_C/asm/to70_MSL_Common_signal_extra118_anchor.o
+    Object lib/MSL_C/asm/msl_signal_data.o
     Object lib/MSL_C/src/msl_signal.o
     Object lib/MSL_C/src/msl_string_strlen.o
     Object lib/MSL_C/src/msl_string_strcpy.o
     Object lib/MSL_C/src/msl_string_strncpy_strcat.o
     Object lib/MSL_C/src/msl_string_strcmp.o
     Object lib/MSL_C/src/msl_string_strncmp_strchr.o
-    Object lib/MSL_C/asm/to70_MSL_Common_string_residual2_extra81_anchor.o
+    Object lib/MSL_C/asm/msl_string_strtok_data.o
     Object lib/MSL_C/src/msl_string_strtok.o
     Object lib/MSL_C/src/msl_string_strstr.o
-    Object lib/MSL_C/asm/to70_MSL_Common_strtold_extra119_anchor.o
+    Object lib/MSL_C/asm/msl_strtold_data.o
     Object lib/MSL_C/src/msl_strtold_core.o
     Object lib/MSL_C/src/msl_strtold.o
     Object lib/MSL_C/src/msl_strtoul_core.o
     Object lib/MSL_C/src/msl_strtoull_core.o
     Object lib/MSL_C/src/msl_strtoul.o
-    Object lib/MSL_C/asm/op90_to59_msl_strtoul_residual_residual_1.o
+    Object lib/MSL_C/asm/msl_strtol_exceptions.o
     Object lib/MSL_C/src/msl_strtol.o
     Object lib/MSL_C/src/msl_wchar_io.o
     Object lib/MSL_C/asm/MSL_Common_wctype.o
-    Object lib/MSL_C/asm/to70_MSL_Common_wmem_extra120_anchor.o
+    Object lib/MSL_C/asm/msl_wmem_exceptions.o
     Object lib/MSL_C/src/msl_wmem.o
-    Object lib/MSL_C/asm/to70_MSL_Common_wprintf_extra111_anchor.o
+    Object lib/MSL_C/asm/msl_wprintf_data.o
     Object lib/MSL_C/src/msl_wprintf_formatter.o
     Object lib/MSL_C/src/msl_wstring_wcslen.o
     Object lib/MSL_C/src/msl_wstring_wcscpy.o
@@ -1226,9 +1208,9 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/MSL_C/src/msl_s_fabs.o
     Object lib/MSL_C/src/msl_s_frexp.o
     Object lib/MSL_C/src/msl_s_ldexp.o
-    Object lib/MSL_C/asm/to90_extra2310_anchor.o
+    Object lib/MSL_C/asm/msl_w_pow_exceptions.o
     Object lib/MSL_C/src/msl_w_pow.o
-    Object lib/MSL_C/asm/to70_MSL_fp_ansi_extra112_anchor.o
+    Object lib/MSL_C/asm/msl_fp_ansi_data.o
     Object lib/MSL_C/src/msl_fp_ansi_rounddec.o
     Object lib/MSL_C/src/msl_fp_ansi_timesdec.o
     Object lib/MSL_C/src/msl_fp_ansi_str2dec.o
@@ -1238,32 +1220,32 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/MSL_C/src/msl_fp_ansi_num2dec_internal.o
     Object lib/MSL_C/src/msl_fp_ansi_num2dec.o
     Object lib/MSL_C/src/msl_fp_ansi_dec2num.o
-    Object lib/MSL_C/asm/to70_MSL_math_extra113_anchor.o
+    Object lib/MSL_C/asm/msl_math_exceptions.o
     Object lib/MSL_C/src/msl_math.o
-    Object lib/MSL_C/asm/to70_MSL_ARM_pool_alloc_NITRO_extra115_anchor.o
+    Object lib/MSL_C/asm/msl_pool_alloc_exceptions.o
     Object lib/MSL_C/src/msl_pool_alloc.o
     Object lib/MSL_C/src/msl_string_extras.o
-    Object lib/MSL_C/asm/to70_MSL_CPP_NITRO_Ai_LE_extra108_anchor.o
+    Object lib/MSL_C/asm/msl_cpp_shared_ptr_data.o
     Object lib/MSL_C/src/msl_shared_ptr_create.o
     Object src/to91_msl_shared_ptr_char_d1.o
     Object lib/MSL_C/src/msl_shared_ptr_destroy.o
     Object lib/MSL_C/src/msl_shared_ptr_release.o
     Object lib/MSL_C/src/msl_shared_ptr_release_weak.o
     Object lib/MSL_C/src/msl_vector_length_error.o
-    Object lib/asm/to90_msl_interval_demo_anchor.o
+    Object lib/asm/msl_cpp_runtime_data.o
     Object lib/MSL_C/src/msl_fp_runtime.o
     Object lib/MSL_C/src/msl_fp_init.o
-    Object lib/asm/op90_to90_w41415_fp_init4_suffix_anchor.o
+    Object lib/asm/msl_fp_emulation_types.o
     Object lib/MSL_C/src/msl_semihosting.o
     Object lib/MSL_C/src/msl_console_io.o
     Object lib/MSL_C/src/msl_exception_table.o
     Object lib/MSL_C/src/msl_unwind_stack.o
-    Object lib/asm/to90_msl_interval_demo_eh_mid.o
+    Object lib/asm/msl_eh_search_exceptions.o
     Object lib/MSL_C/src/msl_exception_lookup.o
     Object lib/MSL_C/src/msl_unexpected.o
     Object lib/MSL_C/src/msl_bad_exception_dtor.o
     Object lib/MSL_C/src/msl_handle_unexpected.o
-    Object lib/asm/to90_msl_interval_demo_eh_tail.o
+    Object lib/asm/msl_cpp_runtime_exceptions.o
     Object lib/MSL_C/src/msl_exception_throw.o
     Object lib/MSL_C/src/msl_std_exception_classes.o
     Object src/to91_msl_scalar_new.o
@@ -1274,7 +1256,7 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/MSL_C/src/msl_type_info.o
     Object lib/MSL_C/src/msl_exception_handlers.o
     Object lib/MSL_C/src/msl_exception_frames.o
-    Object lib/asm/op90_to91_w41419_ExitProcess_prefix_anchor.o
+    Object lib/asm/msl_eh_throw_types.o
     Object lib/MSL_C/src/msl_transfer_control.o
     Object lib/MSL_C/src/msl_throw.o
     Object lib/MSL_C/src/msl_exit_process.o
@@ -1306,14 +1288,14 @@ Overlay OVY_0
     Object src/voice_chat.o
     Object asm/to70_overlay_00_thumb_residual_19_extra734_anchor.o
     Object src/voice_chat_conference.o
-    Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor.o
+    Object lib/NitroDWC/asm/dwc_lib_rodata.o
     Object lib/NitroDWC/src/auth_client.o
-    Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor_own2.o
+    Object lib/NitroDWC/asm/dwc_lib_data.o
     Object lib/NitroDWC/src/auth_request.o
     Object lib/NitroDWC/src/auth_http.o
     Object lib/NitroDWC/src/auth_netcheck.o
     Object lib/NitroDWC/src/net_common.o
-    Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor_own1.o
+    Object lib/NitroDWC/asm/dwc_lib_bss.o
     Object lib/NitroDWC/src/dwc_main.o
     Object lib/NitroDWC/src/dwc_login.o
     Object lib/NitroDWC/src/friend_manager.o
@@ -1329,7 +1311,7 @@ Overlay OVY_0
     Object lib/NitroDWC/src/ap_connect_control.o
     Object lib/NitroDWC/src/ap_connect.o
     Object lib/NitroDWC/src/available_check_poll.o
-    Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor_own1_own1.o
+    Object lib/NitroDWC/asm/dwc_gamespy_bss.o
     Object lib/NitroDWC/src/gs_platform.o
     Object lib/NitroDWC/src/gp_api.o
     Object lib/NitroDWC/src/gp_main.o
@@ -2381,34 +2363,7 @@ Overlay OVY_40
     Object src/overlay_40_sol_partial_36.o
     Object src/overlay40_trainer_card_pages.o
     Object src/overlay_40_sol_partial_37.o
-    Object src/op90_overlay_40_residual_38_prefix_r01.o
-    Object src/overlay40_currency_display_r38.o
-    Object src/op90_overlay_40_residual_38_tail_r01.o
-    Object src/overlay_40_sol_partial_38.o
-    Object src/to70_overlay_40_residual_39_extra958_run01.o
-    Object src/overlay_40_sol_partial_39.o
-    Object src/overlay40_pc_box_transition_r40_run1.o
-    Object src/to70_overlay_40_residual_40_gap1_extra1205_run01.o
-    Object src/overlay40_pc_box_transition_r40_run2.o
-    Object src/r40_overlay_40_residual_40_gap2_run1.o
-    Object src/to70_overlay_40_residual_40_gap2_extra52_run01.o
-    Object src/op90_to80_extra1828_residual_1_r01.o
-    Object src/to80_extra1828_run01.o
-    Object src/overlay40_pc_box_transition_r40_run3.o
-    Object src/overlay_40_sol_partial_40.o
-    Object src/overlay40_pc_box_wallpaper_run1.o
-    Object src/op90_overlay_40_residual_41_unmatched_1_prefix_r01.o
-    Object src/overlay40_pc_box_wallpaper_teardown_r41.o
-    Object src/to52_r2_w03/to52_r2_w03_overlay40_r41_exact.o
-    Object src/to91_w41519_wallpaper_run01.o
-    Object src/overlay40_pc_box_wallpaper_run2.o
-    Object src/op90_overlay_40_residual_41_unmatched_2_r01.o
-    Object src/op90_overlay_40_residual_41_unmatched_2_r02.o
-    Object src/r40_overlay_40_residual_41_unmatched_2_run1.o
-    Object src/overlay40_pc_box_wallpaper_run3.o
-    Object src/r40_overlay_40_residual_41_unmatched_3_run1.o
-    Object src/to70_to70_overlay_40_residual_41_unmatched_3_extra159_residual_1_extra1270_run01.o
-    Object src/to70_overlay_40_residual_41_unmatched_3_extra159_run01.o
+    Object src/application/vs_recorder/vs_recorder_number_pad.o
     Object src/application/vs_recorder/vs_recorder_delete.o
     Object src/application/vs_recorder/vs_recorder_battle_names.o
     Object asm/to91_w41503_battle_names_anchor.o
@@ -2653,21 +2608,7 @@ Overlay OVY_45
     Object src/chat_callbacks.o
     Object src/chat_channel.o
     Object src/chat_cipher.o
-    Object src/ov45_022496ac.o
-    Object src/ov45_0224983c.o
-    Object src/ov45_02249904.o
-    Object src/ov45_02249958.o
-    Object src/ov45_02249a0c.o
-    Object src/ov45_0224a14c.o
-    Object src/ov45_0224a578.o
-    Object src/ov45_0224a5e4.o
-    Object src/ov45_0224a630.o
-    Object src/ov45_0224a708.o
-    Object src/ov45_0224a9f8.o
-    Object src/ov45_0224aa2c.o
-    Object src/ov45_0224aba0.o
-    Object src/ov45_0224ad24.o
-    Object src/ov45_0224afd8.o
+    Object src/chat_requests.o
     Object src/ov45_0224b0fc.o
     Object src/ov45_0224b310.o
     Object src/ov45_0224b474.o
@@ -3242,7 +3183,7 @@ Overlay OVY_80
     Object src/frontier/frontier_map_tile_blink.o
     Object src/frontier/frontier_map.o
     Object asm/frontier_map_data.o
-    Object src/frontier/frontier_resource_manager.o
+    Object src/frontier/frontier_particles.o
     Object src/frontier/frontier_map_sprites.o
     Object asm/frontier_map_sprites_data.o
     Object src/frontier/frontier_map_object_movement.o
@@ -3489,24 +3430,10 @@ Overlay OVY_96
     Object src/pokeathlon/pokeathlon_ring_drop_field.o
     Object src/pokeathlon/pokeathlon_ring_drop_mon.o
     Object src/pokeathlon/pokeathlon_ring_drop_ui.o
-    Object src/to80_extra1891_run01.o
-    Object src/overlay96_exact_bank_122.o
-    Object src/to80_extra1805_run01.o
-    Object src/overlay96_event_behavior_r14_run1.o
-    Object src/op90_op90_overlay_96_residual_123_residual_2_residual_1_r01.o
-    Object src/op90_overlay_96_residual_123_residual_2_r01.o
-    Object src/overlay96_event_behavior_r14_run2.o
-    Object src/to70_to70_overlay_96_residual_123_residual_3_extra220_residual_1_extra1323_run01.o
-    Object src/to70_overlay_96_residual_123_residual_3_extra220_run01.o
-    Object src/overlay96_event_behavior_r14_run3.o
-    Object src/to70_overlay_96_residual_123_residual_4_extra1034_run01.o
-    Object src/overlay96_event_behavior_r14_run4.o
-    Object src/to80_extra1577_run01.o
-    Object src/overlay96_exact_bank_123.o
-    Object src/r40_overlay_96_residual_124_run1.o
-    Object src/overlay96_exact_bank_124.o
+    Object src/pokeathlon/pokeathlon_ring_drop_cpu.o
+    Object src/pokeathlon/pokeathlon_event_points.o
     Object asm/to70_overlay_96_residual_125_extra662_anchor.o
-    Object src/to70_overlay_96_residual_125_extra662_run01.o
+    Object src/pokeathlon/pokeathlon_event_rank_points.o
     Object src/pokeathlon/pokeathlon_data.o
 }
 Overlay OVY_97

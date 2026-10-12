@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "overlay_80_0222ACA0.inc"
+	.include "frontier_map_params_data.inc"
 	.include "global.inc"
 
     .public ov80_0222ADCC

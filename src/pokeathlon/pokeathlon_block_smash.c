@@ -57,7 +57,7 @@ void PokeathlonCourseMonObjects_Load(void *monPics, int count, void *mons, void 
 BOOL PokeathlonCourseMonObjects_IsLoaded(void *monPics);
 void PokeathlonCourseObjects_PauseAnims(void *monPics, int a1);
 void PokeathlonCourse_LoadMonIcon(ManagedSprite *sprite, void *mon, u16 plttId, NARC *narc, u32 offset, enum HeapID heapId);
-void ov96_0221A56C(void *graphics, int a1);
+void PokeathlonEvent_CalcPoints(void *graphics, int a1);
 
 typedef struct PokeathlonBlockSmashBannerPosition {
     u16 x;
@@ -456,7 +456,7 @@ BOOL ov96_02209748(PokeathlonCourseData *course) {
         PokeathlonCourse_AddScoreEntry(course, graphics, i, value, 0, 3, 294);
     }
     PokeathlonCourseScoreList_Rank(graphics, 1);
-    ov96_0221A56C(graphics, 3);
+    PokeathlonEvent_CalcPoints(graphics, 3);
     PokeathlonCourseScoreList_AddPointsToTotals(graphics);
     PokeathlonCourseScoreList_SaveEventPoints(graphics, 3);
     return TRUE;

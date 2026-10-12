@@ -78,7 +78,7 @@ void PokeathlonCourseMonObject_SetAffineMatrix(void *object, VecFx32 *matrix);
 void PokeathlonCourseMonObject_SetAnimState(void *object, int state);
 void PokeathlonCourseMonObject_Move(void *object, int dx, int dy, int anim, int a4);
 void ov96_021EAF60(void *objects, u8 index, int a2, void *palette);
-void ov96_0221A56C(void *scoreList, int mode);
+void PokeathlonEvent_CalcPoints(void *scoreList, int mode);
 void ov96_021F3EC0(PokeathlonCourseSpritePool *pool, PokeathlonCirclePushDisplay *display);
 int ov96_021E6104(); // called with and without an argument
 Sprite **ov96_021E6290(PokeathlonCourseData *course, int a1, void *resources, PokeathlonCourseSpritePool *pool);
@@ -407,7 +407,7 @@ BOOL PokeathlonCirclePush_CalcResults(PokeathlonCourseData *course) {
         PokeathlonCourse_AddScoreEntry(course, scoreList, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, 293);
     }
     PokeathlonCourseScoreList_Rank(scoreList, 1);
-    ov96_0221A56C(scoreList, 2);
+    PokeathlonEvent_CalcPoints(scoreList, 2);
     PokeathlonCourseScoreList_AddPointsToTotals(scoreList);
     PokeathlonCourseScoreList_SaveEventPoints(scoreList, 2);
     return TRUE;

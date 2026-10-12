@@ -1408,31 +1408,31 @@
 	.public PokeathlonRingDropUi_PrintNextName
 	.public PokeathlonRingDropUi_SetPicPosition
 	.public PokeathlonRingDropUi_ShowSwitching
-	.public ov96_02219F7C
-	.public ov96_02219FDC
-	.public ov96_02219FE4
-	.public ov96_0221A00C
-	.public ov96_0221A034
-	.public ov96_0221A05C
-	.public ov96_0221A08C
-	.public ov96_0221A314
-	.public ov96_0221A3AC
-	.public ov96_0221A400
-	.public ov96_0221A56C
-	.public ov96_0221A57C
-	.public ov96_0221A5B8
-	.public ov96_0221A5D4
-	.public ov96_0221A61C
-	.public ov96_0221A640
-	.public ov96_0221A670
-	.public ov96_0221A680
-	.public ov96_0221A690
-	.public ov96_0221A69C
-	.public ov96_0221A6B0
-	.public ov96_0221A6D0
-	.public ov96_0221A700
-	.public ov96_0221A720
-	.public ov96_0221A730
+	.public PokeathlonRingDropCpu_New
+	.public PokeathlonRingDropCpu_Free
+	.public PokeathlonRingDropCpu_Update
+	.public PokeathlonRingDropCpu_InitPlayer
+	.public PokeathlonRingDrop_IsNear
+	.public PokeathlonRingDrop_IsInDirection
+	.public PokeathlonRingDropCpu_Decide
+	.public PokeathlonRingDropCpu_GoSwitch
+	.public PokeathlonRingDropCpu_ShouldSwitch
+	.public PokeathlonRingDropCpu_UpdatePlayer
+	.public PokeathlonEvent_CalcPoints
+	.public PokeathlonEvent_CalcPointsFromScores
+	.public PokeathlonEvent_CalcPointsFromRanks
+	.public PokeathlonEvent_Saturate
+	.public PokeathlonEvent_ClampPoints
+	.public PokeathlonEvent_HurdleDashPoints
+	.public PokeathlonEvent_PennantCapturePoints
+	.public PokeathlonEvent_CirclePushPoints
+	.public PokeathlonEvent_BlockSmashPoints
+	.public PokeathlonEvent_DiscCatchPoints
+	.public PokeathlonEvent_LampJumpPoints
+	.public PokeathlonEvent_Event6Points
+	.public PokeathlonEvent_RingDropPoints
+	.public PokeathlonEvent_Event8Points
+	.public PokeathlonEvent_CalcRankPoints
 	.public _0221A7D8
 	.public subOverlayTemplate
 	.public ov96_0221A7F4
