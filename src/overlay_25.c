@@ -262,8 +262,8 @@ BOOL ScrCmd_ShowTrainerHouseIntroMessage(ScriptContext *ctx) {
     } else {
         MI_CpuCopy16(&(trainerHouse->sets[trainerNum].trainer.introMessage), &intro, sizeof(MailMessage));
     }
-    ov01_021EF564(ctx, intro.msg_bank, intro.msg_no, intro.fields[0], intro.fields[1], TRUE);
-    SetupNativeScript(ctx, ov01_021EF348);
+    ovFieldMain_ShowEasyChatMessage(ctx, intro.msg_bank, intro.msg_no, intro.fields[0], intro.fields[1], TRUE);
+    SetupNativeScript(ctx, ScrNative_WaitTextPrinter);
     return TRUE;
 }
 

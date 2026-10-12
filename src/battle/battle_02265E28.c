@@ -19,13 +19,13 @@
 #define UNK_RES_4E25 0x4E25
 #define UNK_RES_4E26 0x4E26
 
-void ov12_02265E28(UnkBattleSystemSub17C *a0);
-void ov12_02265F34(UnkBattleSystemSub17C *arg0);
-void ov12_02265F68(UnkBattleSystemSub17C *arg0);
-void ov12_02265F7C(UnkBattleSystemSub17C *arg0);
-void ov12_02265FD4(UnkBattleSystemSub17C *arg0, BattleSystem *bsys, s32 unk8, s32 unk9);
+void BattleTerrain_LoadResources(BattleTerrain *a0);
+void BattleTerrain_CreateSprite(BattleTerrain *arg0);
+void BattleTerrain_DeleteSprite(BattleTerrain *arg0);
+void BattleTerrain_UnloadResources(BattleTerrain *arg0);
+void BattleTerrain_Init(BattleTerrain *arg0, BattleSystem *bsys, s32 unk8, s32 unk9);
 
-static const u16 ov12_0226E0A0[] = {
+static const u16 sEnemyTerrainCharFiles[] = {
     0x88,
     0x92,
     0x82,
@@ -52,7 +52,7 @@ static const u16 ov12_0226E0A0[] = {
     0xB0
 };
 
-static const u16 ov12_0226E0D0[] = {
+static const u16 sPlayerTerrainCharFiles[] = {
     0x87,
     0x91,
     0x7F,
@@ -79,12 +79,12 @@ static const u16 ov12_0226E0D0[] = {
     0xAF
 };
 
-static const ManagedSpriteTemplate ov12_0226E100[] = {
+static const ManagedSpriteTemplate sTerrainSpriteTemplates[] = {
     { .x = 0x150,  .y = 0x88, .z = 0, .animation = 0, .drawPriority = 0x3E8, .pal = 0, .vram = NNS_G2D_VRAM_TYPE_2DMAIN, .resIdList = { UNK_RES_4E2D, UNK_RES_4E29, UNK_RES_4E25, UNK_RES_4E25, -1, -1 }, .bgPriority = 3, .vramTransfer = 0 },
     { .x = 0xFFB0, .y = 0x58, .z = 0, .animation = 0, .drawPriority = 0x3E8, .pal = 0, .vram = NNS_G2D_VRAM_TYPE_2DMAIN, .resIdList = { UNK_RES_4E2E, UNK_RES_4E29, UNK_RES_4E26, UNK_RES_4E26, -1, -1 }, .bgPriority = 3, .vramTransfer = 0 }
 };
 
-static const u16 ov12_0226E168[][3] __attribute__((aligned(4))) = {
+static const u16 sTerrainPaletteFiles[][3] __attribute__((aligned(4))) = {
     { 0x07, 0x08, 0x09 },
     { 0x16, 0x17, 0x18 },
     { 0x01, 0x02, 0x03 },
@@ -111,26 +111,26 @@ static const u16 ov12_0226E168[][3] __attribute__((aligned(4))) = {
     { 0x43, 0x44, 0x45 }
 };
 
-void ov12_02265E28(UnkBattleSystemSub17C *a0) {
+void BattleTerrain_LoadResources(BattleTerrain *a0) {
     u32 r6;
     void *narc = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
 
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(a0->battleSystem);
     SpriteManager *spriteManager = BattleSystem_GetSpriteManager(a0->battleSystem);
-    u32 subfile = ov12_0223B52C(a0->battleSystem);
+    u32 subfile = BattleSystem_GetBgTimeOfDay(a0->battleSystem);
 
     u16 charFile;
     u32 charResId;
     u32 cellFile;
     u32 animFile;
     if (a0->unk8 == 0) {
-        charFile = ov12_0226E0D0[a0->unk9];
+        charFile = sPlayerTerrainCharFiles[a0->unk9];
         charResId = UNK_RES_4E2D;
         cellFile = 0x80;
         r6 = charResId - 8;
         animFile = 0x81;
     } else {
-        charFile = ov12_0226E0A0[a0->unk9];
+        charFile = sEnemyTerrainCharFiles[a0->unk9];
         charResId = UNK_RES_4E2E;
         cellFile = 0x83;
         r6 = charResId - 8;
@@ -139,10 +139,10 @@ void ov12_02265E28(UnkBattleSystemSub17C *a0) {
     SpriteSystem_LoadCharResObjFromOpenNarc(spriteSystem, spriteManager, narc, charFile, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, charResId);
 
     void *palette = BattleSystem_GetPaletteData(a0->battleSystem);
-    SpriteSystem_LoadPaletteBufferFromOpenNarc(palette, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, narc, ov12_0226E168[a0->unk9][subfile], FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, UNK_RES_4E29);
+    SpriteSystem_LoadPaletteBufferFromOpenNarc(palette, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, narc, sTerrainPaletteFiles[a0->unk9][subfile], FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, UNK_RES_4E29);
 
     palette = BattleSystem_GetPaletteData(a0->battleSystem);
-    PaletteData_LoadNarc(palette, NARC_a_0_0_8, ov12_0226E168[a0->unk9][subfile], HEAP_ID_BATTLE, PLTTBUF_MAIN_BG, 0x20, 0x70);
+    PaletteData_LoadNarc(palette, NARC_a_0_0_8, sTerrainPaletteFiles[a0->unk9][subfile], HEAP_ID_BATTLE, PLTTBUF_MAIN_BG, 0x20, 0x70);
 
     SpriteSystem_LoadCellResObjFromOpenNarc(spriteSystem, spriteManager, narc, cellFile, TRUE, r6);
 
@@ -151,24 +151,24 @@ void ov12_02265E28(UnkBattleSystemSub17C *a0) {
     NARC_Delete(narc);
 }
 
-void ov12_02265F34(UnkBattleSystemSub17C *arg0) {
+void BattleTerrain_CreateSprite(BattleTerrain *arg0) {
     SpriteSystem *spriteSystem; // r5
     ManagedSprite *managed;
 
     spriteSystem = BattleSystem_GetSpriteSystem(arg0->battleSystem);
-    managed = SpriteSystem_NewSprite(spriteSystem, BattleSystem_GetSpriteManager(arg0->battleSystem), &ov12_0226E100[arg0->unk8]);
+    managed = SpriteSystem_NewSprite(spriteSystem, BattleSystem_GetSpriteManager(arg0->battleSystem), &sTerrainSpriteTemplates[arg0->unk8]);
     arg0->unk0 = managed;
     Sprite_TickFrame(managed->sprite);
 }
 
-void ov12_02265F68(UnkBattleSystemSub17C *arg0) {
+void BattleTerrain_DeleteSprite(BattleTerrain *arg0) {
     if (arg0->unk0) {
         Sprite_DeleteAndFreeResources(arg0->unk0);
         arg0->unk0 = NULL;
     }
 }
 
-void ov12_02265F7C(UnkBattleSystemSub17C *arg0) {
+void BattleTerrain_UnloadResources(BattleTerrain *arg0) {
     SpriteManager *manager = BattleSystem_GetSpriteManager(arg0->battleSystem);
     s32 resId = arg0->unk8 == 0 ? UNK_RES_4E2D : UNK_RES_4E2E;
     u32 temp = resId - 8;
@@ -178,15 +178,15 @@ void ov12_02265F7C(UnkBattleSystemSub17C *arg0) {
     SpriteManager_UnloadAnimObjById(manager, temp);
 }
 
-void ov12_02265FC4(UnkBattleSystemSub17C *arg0, s32 flag) {
+void BattleTerrain_SetDrawFlag(BattleTerrain *arg0, s32 flag) {
     ManagedSprite *sprite = arg0->unk0;
     if (sprite) {
         ManagedSprite_SetDrawFlag(sprite, flag);
     }
 }
 
-void ov12_02265FD4(UnkBattleSystemSub17C *arg0, BattleSystem *bsys, s32 unk8, s32 unk9) {
-    MIi_CpuClearFast(0, (void *)arg0, sizeof(UnkBattleSystemSub17C));
+void BattleTerrain_Init(BattleTerrain *arg0, BattleSystem *bsys, s32 unk8, s32 unk9) {
+    MIi_CpuClearFast(0, (void *)arg0, sizeof(BattleTerrain));
     arg0->battleSystem = bsys;
     arg0->unk8 = unk8;
     arg0->unk9 = unk9;
@@ -194,12 +194,12 @@ void ov12_02265FD4(UnkBattleSystemSub17C *arg0, BattleSystem *bsys, s32 unk8, s3
         GF_AssertFail();
         arg0->unk9 = 0;
     }
-    ov12_02265E28(arg0);
-    ov12_02265F34(arg0);
+    BattleTerrain_LoadResources(arg0);
+    BattleTerrain_CreateSprite(arg0);
 }
 
-void ov12_02266008(UnkBattleSystemSub17C *arg0) {
-    ov12_02265F68(arg0);
-    ov12_02265F7C(arg0);
-    MIi_CpuClearFast(0, (void *)arg0, sizeof(UnkBattleSystemSub17C));
+void BattleTerrain_Free(BattleTerrain *arg0) {
+    BattleTerrain_DeleteSprite(arg0);
+    BattleTerrain_UnloadResources(arg0);
+    MIi_CpuClearFast(0, (void *)arg0, sizeof(BattleTerrain));
 }

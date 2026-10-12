@@ -141,7 +141,7 @@ BOOL Colosseum_FinishSummary(ColosseumEntry *entry, FieldSystem *fieldSystem) {
 }
 
 BOOL Colosseum_WaitFieldResumed(ColosseumEntry *entry) {
-    if (sub_020505C8(entry->fieldSystem) != 0) {
+    if (FieldSystem_IsOverworldRestored(entry->fieldSystem) != 0) {
         FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_IN);
         sub_02056E60();
         return TRUE;
@@ -911,7 +911,7 @@ BOOL Task_ColosseumTrainerCard(TaskManager *taskManager) {
         env->state++;
         break;
     case 6:
-        if (!sub_020505C8(fieldSystem)) {
+        if (!FieldSystem_IsOverworldRestored(fieldSystem)) {
             FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_IN);
             sub_02056E60();
             env->state++;
@@ -942,7 +942,7 @@ void Colosseum_ShowOpponentTrainerCard(FieldSystem *fieldSystem) {
             env->netId = i;
             env->state = 0;
             FieldSystem_CreateTask(fieldSystem, Task_ColosseumTrainerCard, env);
-            sub_0203E2F4();
+            FieldSystem_PauseProcesses();
             return;
         }
     }

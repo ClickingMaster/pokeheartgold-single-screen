@@ -109,7 +109,7 @@ void UnionChatLog_Task(SysTask *task, void *taskData) {
     UnionChatLogData *data = taskData;
     FieldSystem *fieldSystem = data->fieldSystem;
     BgConfig *bgConfig = data->bgConfig;
-    if (fieldSystem->unk84 == NULL) {
+    if (fieldSystem->unionRoomObjects == NULL) {
         return;
     }
     switch (data->state) {
@@ -198,12 +198,12 @@ UnionChatLogData *UnionChatLog_Init(FieldSystem *fieldSystem) {
     UnionChatLogData *data = SysTask_GetData(task);
     data->fieldSystem = fieldSystem;
     data->bgConfig = fieldSystem->bgConfig;
-    data->unionRoom = (Manager *)fieldSystem->unk84;
-    data->unk_08 = fieldSystem->unk80;
+    data->unionRoom = (Manager *)fieldSystem->unionRoomObjects;
+    data->unk_08 = fieldSystem->unionRoom;
     data->profile = Save_PlayerData_GetProfile(fieldSystem->saveData);
     data->state = UNION_CHAT_LOG_STATE_RUNNING;
     data->task = task;
-    data->log = (UnionChatLogMessages *)((Manager *)fieldSystem->unk84)->messages;
+    data->log = (UnionChatLogMessages *)((Manager *)fieldSystem->unionRoomObjects)->messages;
     UnionChatLog_InitBgs(data->bgConfig);
     UnionChatLog_InitText(data);
     SetKeyRepeatTimers(4, 8);

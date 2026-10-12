@@ -65,7 +65,7 @@ void *SpinTradeFlow_New(FieldSystem *fieldSystem) {
     memset(work, 0, sizeof(SpinTradeFlow));
     work->fieldSystem = fieldSystem;
     work->saveData = fieldSystem->saveData;
-    work->unk14 = fieldSystem->unk84;
+    work->unk14 = fieldSystem->unionRoomObjects;
     work->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     work->gameStats = Save_GameStats_Get(fieldSystem->saveData);
     work->frame = Options_GetFrame(work->options);

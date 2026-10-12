@@ -27,6 +27,6 @@ BOOL FieldInput_Process_Colosseum(FieldInput *fieldInput, FieldSystem *fieldSyst
 BOOL FieldInput_Process_UnionRoom(FieldInput *fieldInput, FieldSystem *fieldSystem);
 BOOL FieldInput_Process_BattleTower(FieldInput *fieldInput, FieldSystem *fieldSystem);
 void FieldSystem_ProcessSoundplate(FieldSystem *fieldSystem, BOOL wipeEnvironmentSound);
-u32 ov01_021E7F54(FieldSystem *fieldSystem);
+u32 FieldSystem_GetFacingActionType(FieldSystem *fieldSystem);
 
 #endif // POKEHEARTGOLD_FIELD_CONTROL_H

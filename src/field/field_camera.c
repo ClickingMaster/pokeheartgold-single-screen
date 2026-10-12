@@ -63,12 +63,12 @@ void FieldCamera_Create(const VecFx32 *target, FieldSystem *fieldSystem, u32 pre
     if (withHistory) {
         Camera_History_New(7, 6, 2, HEAP_ID_FIELD1, fieldSystem->camera);
     }
-    fieldSystem->unk28 = FieldCameraShift_New(HEAP_ID_FIELD1);
+    fieldSystem->cameraShift = FieldCameraShift_New(HEAP_ID_FIELD1);
     FieldCamera_InitShift(fieldSystem, presetNo);
 }
 
 void FieldCamera_Delete(FieldSystem *fieldSystem) {
-    FieldCameraShift_Free(fieldSystem->unk28);
+    FieldCameraShift_Free(fieldSystem->cameraShift);
     Camera_UnsetStaticPtr();
     Camera_History_Delete(fieldSystem->camera);
     Camera_Delete(fieldSystem->camera);
@@ -85,7 +85,7 @@ void FieldCameraShift_Free(FieldCameraShift *shift) {
 }
 
 void FieldCamera_InitShift(FieldSystem *fieldSystem, u32 presetNo) {
-    FieldCameraShift *shift = fieldSystem->unk28;
+    FieldCameraShift *shift = fieldSystem->cameraShift;
     u8 mode;
 
     shift->camera = fieldSystem->camera;

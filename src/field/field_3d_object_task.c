@@ -41,7 +41,7 @@ void Field3dObjectTaskManager_RunDrawTasks(Field3dObjectTaskManager *manager) {
 
 static void Task_Field3dObject_Update(SysTask *task, void *taskData) {
     Field3dObjectTask *objTask = (Field3dObjectTask *)taskData;
-    if (sub_0203DF8C(objTask->manager->fieldSystem)) {
+    if (FieldSystem_IsFieldMapRunning(objTask->manager->fieldSystem)) {
         if (objTask->param->updateFunc != NULL) {
             objTask->param->updateFunc(objTask, objTask->manager->fieldSystem, objTask->data);
         }
@@ -50,7 +50,7 @@ static void Task_Field3dObject_Update(SysTask *task, void *taskData) {
 
 static void Task_Field3dObject_Render(SysTask *task, void *taskData) {
     Field3dObjectTask *objTask = (Field3dObjectTask *)taskData;
-    if (sub_0203DF8C(objTask->manager->fieldSystem)) {
+    if (FieldSystem_IsFieldMapRunning(objTask->manager->fieldSystem)) {
         if (objTask->param->renderFunc != NULL) {
             objTask->param->renderFunc(objTask, objTask->manager->fieldSystem, objTask->data);
         }

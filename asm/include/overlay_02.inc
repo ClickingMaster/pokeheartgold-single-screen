@@ -220,7 +220,7 @@
 .public BattleSetup_Delete
 .public BattleSetup_InitFromFieldSystem
 .public sub_02052544
-.public sub_02053B04
+.public JumpTask_FieldMoveWarp
 .public GetFirstAliveMonInParty_CrashIfNone
 .public GetIdxOfFirstAliveMonInParty_CrashIfNone
 .public Terrain_GetHeight_Bdhc

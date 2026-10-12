@@ -179,7 +179,7 @@ BOOL FieldTask_Fly(void *task) {
             }
             GetFlyWarpData(map, &warp);
             GetSpecialSpawnWarpData(map, LocalFieldData_GetSpecialSpawnWarpPtr(local));
-            sub_02053908(task, warp.map, -1, warp.y, warp.dir, 1);
+            JumpTask_FlyWarp(task, warp.map, -1, warp.y, warp.dir, 1);
             Heap_Free(env);
         }
         break;

@@ -95,7 +95,7 @@
 .public Save_LocalFieldData_Get
 .public FieldSystem_ShouldDrawStartMenuIcon
 .public FieldSystem_GetFacingObject
-.public sub_0203DF8C
+.public FieldSystem_IsFieldMapRunning
 .public FieldSystem_IsPlayerMovementAllowed
 .public MapSceneScriptCheck
 .public Save_VarsFlags_Get
@@ -147,7 +147,7 @@
 .public _fflt
 .public _fsub
 .public gSystem
-.public ov01_021E7F54
+.public FieldSystem_GetFacingActionType
 .public ScriptMenu_GetListItems
 .public ScriptMenu_GetCount
 .public ScriptMenu_IsCancellable

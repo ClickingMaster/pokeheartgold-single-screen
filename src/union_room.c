@@ -45,13 +45,13 @@ struct UnkStruct_02059E1C *UnionRoom_Start(FieldSystem *fieldSystem) {
     if (fieldSystem == NULL) {
         GF_AssertFail();
     }
-    if (fieldSystem->unk80 != NULL) {
+    if (fieldSystem->unionRoom != NULL) {
         return NULL;
     }
     Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_31, 0xA80);
     unionRoom = UnionRoom_New(fieldSystem);
     if (unionRoom == NULL) {
-        unionRoom = fieldSystem->unk80;
+        unionRoom = fieldSystem->unionRoom;
     }
     sub_02091574(fieldSystem);
     CommState_SetMaxEntries(2);
@@ -60,7 +60,7 @@ struct UnkStruct_02059E1C *UnionRoom_Start(FieldSystem *fieldSystem) {
 }
 
 void UnionRoom_Stop(FieldSystem *fieldSystem) {
-    struct UnkStruct_02059E1C *unionRoom = fieldSystem->unk80;
+    struct UnkStruct_02059E1C *unionRoom = fieldSystem->unionRoom;
     if (unionRoom != NULL) {
         UnionRoom_SetState(unionRoom, sub_0205A07C, 5);
     }
@@ -69,7 +69,7 @@ void UnionRoom_Stop(FieldSystem *fieldSystem) {
 struct UnkStruct_02059E1C *UnionRoom_New(FieldSystem *fieldSystem) {
     struct UnkStruct_02059E1C *unionRoom;
     SaveData *saveData;
-    if (fieldSystem->unk80 != NULL) {
+    if (fieldSystem->unionRoom != NULL) {
         return NULL;
     }
     saveData = FieldSystem_GetSaveData(fieldSystem);
@@ -463,12 +463,12 @@ void sub_0205A40C(void) {
 }
 
 void sub_0205A410(int netId, int size, void *data, FieldSystem *fieldSystem) {
-    UnionRoom_SetState(fieldSystem->unk80, sub_02059EBC, 2);
-    UnionRoom_ResetTalk(fieldSystem->unk80);
+    UnionRoom_SetState(fieldSystem->unionRoom, sub_02059EBC, 2);
+    UnionRoom_ResetTalk(fieldSystem->unionRoom);
 }
 
 void sub_0205A430(int netId, int size, const u8 *data, FieldSystem *fieldSystem) {
-    struct UnkStruct_02059E1C *unionRoom = fieldSystem->unk80;
+    struct UnkStruct_02059E1C *unionRoom = fieldSystem->unionRoom;
     if (unionRoom->unk44 == 0) {
         unionRoom->unk30 = *data;
         _021D41CC.lastChoice = *data;

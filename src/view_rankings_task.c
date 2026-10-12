@@ -34,7 +34,7 @@ static BOOL Task_ViewRankingsApp(TaskManager *taskManager) {
         }
 
         LaunchApp_ViewRankings(fieldSystem, taskData->args);
-        sub_0203E30C();
+        FieldSystem_ResumeProcesses();
         taskData->state++;
         break;
     case 2:
@@ -46,7 +46,7 @@ static BOOL Task_ViewRankingsApp(TaskManager *taskManager) {
         FieldSystem_LoadFieldOverlay(fieldSystem);
         break;
     case 3:
-        if (sub_020505C8(fieldSystem)) {
+        if (FieldSystem_IsOverworldRestored(fieldSystem)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_FIELD1);
             taskData->state++;
         }

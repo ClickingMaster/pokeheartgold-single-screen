@@ -41,11 +41,11 @@ void Task_UpdateCriticalHpMusic(SysTask *task, void *data);
 void VBlankTask_ScrollBattleBackground(SysTask *task, void *data);
 void Battle_StaticInit(void);
 void ov12_0223A664(BattleSystem *battleSystem, BattleSetup *setup);
-void ov12_0223A7A0(void);
+void Battle_CreateWirelessStatusIcon(void);
 
 // Defined in other modules that have no header declaring them yet.
 void BattleController_ProcessQueue(BattleSystem *battleSystem, int a1);
-void ov12_02265FD4(UnkBattleSystemSub17C *dest, BattleSystem *battleSystem, s32 idx, s32 terrain);
+void BattleTerrain_Init(BattleTerrain *dest, BattleSystem *battleSystem, s32 idx, s32 terrain);
 void BgConfig_InitBattleMenuBackgrounds(BgConfig *bgConfig);
 void LoadUserFrameGfx2WithFill(BgConfig *bgConfig, u8 bgId, u16 baseTile, u8 color, u8 type, enum HeapID heapId);
 u32 GetUserFrameGfx2TilesMember(u32 frame);

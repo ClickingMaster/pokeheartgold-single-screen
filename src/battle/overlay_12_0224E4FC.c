@@ -1441,8 +1441,8 @@ int ov12_022506D4(BattleSystem *battleSystem, BattleContext *ctx, int battlerIdA
         int battleType = BattleSystem_GetBattleType(battleSystem);
         int side = BattleSystem_GetFieldSide(battleSystem, battlerIdAttacker) ^ 1;
         int battlerIdOpponents[2];
-        battlerIdOpponents[0] = ov12_0223ABB8(battleSystem, battlerIdAttacker, 0);
-        battlerIdOpponents[1] = ov12_0223ABB8(battleSystem, battlerIdAttacker, 2);
+        battlerIdOpponents[0] = BattleSystem_GetOpponentBattler(battleSystem, battlerIdAttacker, 0);
+        battlerIdOpponents[1] = BattleSystem_GetOpponentBattler(battleSystem, battlerIdAttacker, 2);
 
         if (battleType & BATTLE_TYPE_DOUBLES) {
             if (ctx->fieldSideConditionData[side].followMeFlag && ctx->battleMons[ctx->fieldSideConditionData[side].battlerIdFollowMe].hp) {
@@ -2680,7 +2680,7 @@ BOOL CanSwitchMon(BattleSystem *battleSystem, BattleContext *ctx, int battlerId)
     party = BattleSystem_GetParty(battleSystem, battlerId);
     partySize = BattleSystem_GetPartySize(battleSystem, battlerId);
 
-    if ((battleType & BATTLE_TYPE_MULTI) || ((battleType & BATTLE_TYPE_TAG) && (ov12_0223AB0C(battleSystem, battlerId) & 1))) {
+    if ((battleType & BATTLE_TYPE_MULTI) || ((battleType & BATTLE_TYPE_TAG) && (BattleSystem_GetBattlerType(battleSystem, battlerId) & 1))) {
         start = 0;
         cntMax = 1;
         monIndex1 = ctx->selectedMonIndex[battlerId];
@@ -3190,8 +3190,8 @@ int TryAbilityOnEntry(BattleSystem *battleSystem, BattleContext *ctx) {
 
             for (i = 0; i < maxBattlers; i++) {
                 battlerId = ctx->turnOrder[i];
-                battlerIdTargetR = ov12_0223ABB8(battleSystem, battlerId, 0);
-                battlerIdTargetL = ov12_0223ABB8(battleSystem, battlerId, 2);
+                battlerIdTargetR = BattleSystem_GetOpponentBattler(battleSystem, battlerId, 0);
+                battlerIdTargetL = BattleSystem_GetOpponentBattler(battleSystem, battlerId, 2);
                 ctx->battlerIdLeechSeeded = ov12_022585B8(battleSystem, ctx, battlerIdTargetR, battlerIdTargetL);
                 if (!ctx->battleMons[battlerId].traceFlag && ctx->battlerIdLeechSeeded != 0xFF && ctx->battleMons[battlerId].hp && ctx->battleMons[battlerId].item != ITEM_GRISEOUS_ORB && ctx->battleMons[ctx->battlerIdLeechSeeded].hp && GetBattlerAbility(ctx, battlerId) == ABILITY_TRACE) {
                     ctx->battleMons[battlerId].traceFlag = TRUE;
@@ -3419,8 +3419,8 @@ int TryAbilityOnEntry(BattleSystem *battleSystem, BattleContext *ctx) {
                     if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES) {
                         int battlerIdTargets[2];
 
-                        battlerIdTargets[0] = ov12_0223ABB8(battleSystem, battlerId, 0);
-                        battlerIdTargets[1] = ov12_0223ABB8(battleSystem, battlerId, 2);
+                        battlerIdTargets[0] = BattleSystem_GetOpponentBattler(battleSystem, battlerId, 0);
+                        battlerIdTargets[1] = BattleSystem_GetOpponentBattler(battleSystem, battlerId, 2);
 
                         if (ctx->battleMons[battlerIdTargets[0]].hp && ctx->battleMons[battlerIdTargets[0]].item && ctx->battleMons[battlerIdTargets[1]].hp && ctx->battleMons[battlerIdTargets[1]].item) {
                             ctx->itemTemp = ctx->battleMons[battlerIdTargets[BattleSystem_Random(battleSystem) & 1]].item;
@@ -3560,8 +3560,8 @@ int Battler_GetRandomOpposingBattlerId(BattleSystem *battleSystem, BattleContext
     battleType = BattleSystem_GetBattleType(battleSystem);
 
     if (battleType & BATTLE_TYPE_DOUBLES) {
-        battlerIdTargets[0] = ov12_0223ABB8(battleSystem, battlerId, 0);
-        battlerIdTargets[1] = ov12_0223ABB8(battleSystem, battlerId, 2);
+        battlerIdTargets[0] = BattleSystem_GetOpponentBattler(battleSystem, battlerId, 0);
+        battlerIdTargets[1] = BattleSystem_GetOpponentBattler(battleSystem, battlerId, 2);
         i = BattleSystem_Random(battleSystem) & 1;
         battlerIdTarget = battlerIdTargets[i];
         if (!ctx->battleMons[battlerIdTarget].hp) {
@@ -5428,8 +5428,8 @@ void ov12_02256F78(BattleSystem *battleSystem, BattleContext *ctx, int battlerId
     int flag;
     u32 battleType = BattleSystem_GetBattleType(battleSystem);
 
-    if (((battleType & BATTLE_TYPE_DOUBLES) && !(battleType & (BATTLE_TYPE_MULTI | BATTLE_TYPE_TAG))) || ((battleType & BATTLE_TYPE_TAG) && !(ov12_0223AB0C(battleSystem, battlerId) & 1))) {
-        if (ov12_0223AB0C(battleSystem, battlerId) == 4 || ov12_0223AB0C(battleSystem, battlerId) == 5) {
+    if (((battleType & BATTLE_TYPE_DOUBLES) && !(battleType & (BATTLE_TYPE_MULTI | BATTLE_TYPE_TAG))) || ((battleType & BATTLE_TYPE_TAG) && !(BattleSystem_GetBattlerType(battleSystem, battlerId) & 1))) {
+        if (BattleSystem_GetBattlerType(battleSystem, battlerId) == 4 || BattleSystem_GetBattlerType(battleSystem, battlerId) == 5) {
             flag = 1;
         } else {
             flag = 0;
@@ -5628,7 +5628,7 @@ int CalcMoveDamage(BattleSystem *battleSystem, BattleContext *ctx, u32 moveNo, u
         monAtk *= 2;
     }
 
-    if (calcAttacker.ability == ABILITY_SLOW_START && (int)(ov12_022581D4(battleSystem, ctx, 3, 0) - GetBattlerVar(ctx, battlerIdAttacker, BMON_DATA_SLOW_START_TURN_NUMBER, NULL)) < 5) {
+    if (calcAttacker.ability == ABILITY_SLOW_START && (int)(BattleContext_Get(battleSystem, ctx, 3, 0) - GetBattlerVar(ctx, battlerIdAttacker, BMON_DATA_SLOW_START_TURN_NUMBER, NULL)) < 5) {
         monAtk /= 2;
     }
 
@@ -6218,7 +6218,7 @@ BOOL BattleController_TryEmitExitRecording(BattleSystem *battleSystem, BattleCon
     return FALSE;
 }
 
-int ov12_022581D4(BattleSystem *battleSystem, BattleContext *ctx, int var, int battlerId) {
+int BattleContext_Get(BattleSystem *battleSystem, BattleContext *ctx, int var, int battlerId) {
     switch (var) {
     case 0:
         return ctx->fieldSideConditionFlags[BattleSystem_GetFieldSide(battleSystem, battlerId)];
@@ -6256,7 +6256,7 @@ int ov12_022581D4(BattleSystem *battleSystem, BattleContext *ctx, int var, int b
     return 0;
 }
 
-void ov12_022582B8(BattleSystem *battleSystem, BattleContext *ctx, int var, int battlerId, int data) {
+void BattleContext_Set(BattleSystem *battleSystem, BattleContext *ctx, int var, int battlerId, int data) {
     switch (var) {
     case 0:
         ctx->fieldSideConditionFlags[BattleSystem_GetFieldSide(battleSystem, battlerId)] = data;

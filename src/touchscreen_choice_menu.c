@@ -82,7 +82,7 @@ typedef struct TouchscreenChoiceMenuData {
     u8 unk_38C[8];
     int selection;
     u32 unk_398;
-    void (*selectionCallback)(void *arg, int selection); // ScrCmd_MenuExec: sub_02047908
+    void (*selectionCallback)(void *arg, int selection); // ScrCmd_MenuExec: MenuExec_PrintItemHelp
     void *selectionCallbackArg;
 } TouchscreenChoiceMenuData; // size: 0x3A4
 

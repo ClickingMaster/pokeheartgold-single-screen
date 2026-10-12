@@ -195,7 +195,7 @@ SysTask *DowsingMchn_Init(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSyst
     dowsing->args = args;
     dowsing->task = task;
     dowsing->touchActive = FALSE;
-    dowsing->actionType = ov01_021E7F54(dowsing->fieldSystem);
+    dowsing->actionType = FieldSystem_GetFacingActionType(dowsing->fieldSystem);
     if (dowsing->actionType == 1) {
         FieldSystem_GetFacingObject(dowsing->fieldSystem, &facingObj);
         if (IsScriptIdWithoutTalkAction(MapObject_GetScriptID(facingObj)) == TRUE || IsSpriteIdWithoutTalkAction(MapObject_GetSpriteID(facingObj)) == TRUE) {
@@ -874,7 +874,7 @@ void DowsingMchn_UpdateActionLabel(DowsingMchn *dowsing) {
             actionType = dowsing->actionType;
         }
     } else {
-        actionType = ov01_021E7F54(dowsing->fieldSystem);
+        actionType = FieldSystem_GetFacingActionType(dowsing->fieldSystem);
         if (actionType == 1) {
             LocalMapObject *facingObj;
             FieldSystem_GetFacingObject(dowsing->fieldSystem, &facingObj);
@@ -906,7 +906,7 @@ BOOL DowsingMchn_HandleButton(const TouchscreenHitbox *hitbox, Sprite *sprite, i
 }
 
 void DowsingMchn_HandleActionButton(DowsingMchn *dowsing) {
-    if (sub_0203DF8C(dowsing->fieldSystem) == TRUE) {
+    if (FieldSystem_IsFieldMapRunning(dowsing->fieldSystem) == TRUE) {
         DowsingMchn_UpdateActionLabel(dowsing);
     }
     if (DowsingMchn_HandleButton(&sDowsingMchnActionButtonHitbox, dowsing->sprites[DOWSING_MCHN_SPRITE_ACTION], 5, 6)) {

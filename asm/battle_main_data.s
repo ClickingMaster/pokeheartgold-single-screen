@@ -21,8 +21,8 @@
 	.public Task_UpdateCriticalHpMusic
 	.public Battle_LinkInit
 	.public Battle_LinkMain
-	.public ov12_0223A0D4
-	.public ov12_0223A260
+	.public Battle_PartyPreviewInit
+	.public Battle_VsScreenInit
 	.public Battle_EndInit
 	.public ov12_0223A664
 	.public sLinkSinglesBattlerTypes
@@ -53,11 +53,11 @@
 	.public VBlankTask_ScrollBattleBackground
 	.public Battle_StaticInit
 	.public Battle_LinkExit
-	.public ov12_0223A218
-	.public ov12_0223A3A8
+	.public Battle_PartyPreviewMain
+	.public Battle_VsScreenMain
 	.public Battle_EndMain
 	.public BattleSystem_SetupTextFlags
-	.public ov12_0223A7A0
+	.public Battle_CreateWirelessStatusIcon
 	.rodata
 
 sSinglesBattlerTypes:

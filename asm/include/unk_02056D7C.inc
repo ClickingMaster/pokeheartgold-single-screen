@@ -23,8 +23,8 @@
 .public CommState_GetLinkMode
 .public Field_GetNumObjectEvents
 .public Field_GetObjectEvents
-.public sub_0203E2F4
-.public sub_0203E30C
+.public FieldSystem_PauseProcesses
+.public FieldSystem_ResumeProcesses
 .public FieldSystem_CheckTileCollision
 .public CommPlayerManager_Init
 .public CommPlayerManager_RemoveAllAvatars

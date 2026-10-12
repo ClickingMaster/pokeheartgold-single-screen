@@ -183,7 +183,7 @@ BOOL SetupBytecodeScript(ScriptContext *ctx, const u8 *ptr);
 void SetupNativeScript(ScriptContext *ctx, ScrCmdFunc ptr);
 BOOL ScrNative_WaitApplication_DestroyTaskData(ScriptContext *ctx);
 void StopScript(ScriptContext *ctx);
-void sub_0203FD68(ScriptContext *ctx, TaskManager *unk);
+void ScriptContext_SetTaskManager(ScriptContext *ctx, TaskManager *unk);
 BOOL RunScriptCommand(ScriptContext *ctx);
 BOOL ScriptPush(ScriptContext *ctx, const u8 *ptr);
 const u8 *ScriptPop(ScriptContext *ctx);

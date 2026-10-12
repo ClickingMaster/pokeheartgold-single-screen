@@ -23,9 +23,9 @@ struct ErrorContinueEnv {
 struct FishingRodWork;
 
 // TODO: does this struct have more members?
-struct UnkStruct_Ov01_021EF4C4 {
+struct MessagePrintOptions {
     u8 textFrameDelay;
-    u8 unk1;
+    u8 autoScroll;
     u8 fontId;
 };
 
@@ -50,9 +50,9 @@ BOOL Field_PlayerCanSurfOnTile(PlayerAvatar *fieldPlayerAvatar, int standingTile
 BOOL MetatileBehavior_IsRockClimbInDirection(int facingTile, int facingDirection);
 BOOL FieldSystem_FacingModelIsHeadbuttTree(FieldSystem *fieldSystem);
 BOOL Task_UseSweetScentInField(TaskManager *taskManager);
-BOOL ov01_021EF348(ScriptContext *ctx);
-void ov01_021EF4C4(struct UnkStruct_Ov01_021EF4C4 *, ScriptContext *ctx);
-void ov01_021EF4DC(ScriptContext *ctx, MsgData *msg_data, u16 msg_no, u8 can_ab_speed_up, struct UnkStruct_Ov01_021EF4C4 *);
+BOOL ScrNative_WaitTextPrinter(ScriptContext *ctx);
+void ovFieldMain_InitMessagePrintOptions(struct MessagePrintOptions *, ScriptContext *ctx);
+void ovFieldMain_ShowMessage(ScriptContext *ctx, MsgData *msg_data, u16 msg_no, u8 can_ab_speed_up, struct MessagePrintOptions *);
 struct ScriptMenu *ScriptMenu_Create(FieldSystem *fieldSystem, u8 x, u8 y, u8 initCursorPos, u8 cancellable, u16 *ret_p, MessageFormat *msgFmt, Window *window, MsgData *msgData);
 struct ScriptMenu **FieldSystem_GetTouchscreenChoiceMenuList(FieldSystem *fieldSystem);
 void ScriptMenu_AddItem(struct ScriptMenu *menu, u32 msgId, u32 value);

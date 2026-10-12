@@ -117,8 +117,8 @@ void EncounterEffect_EndParticleMode(void) {
     }
     ParticleSystem_FreeAll();
     EncounterEffect_FreeParticleGraphics(gEncounterEffectState.particles->fieldSystem);
-    ov01_021E631C(gEncounterEffectState.particles->fieldSystem, TRUE);
-    ov01_021E6340(gEncounterEffectState.particles->fieldSystem, TRUE);
+    FieldSystem_SetFieldMapRenderEnabled(gEncounterEffectState.particles->fieldSystem, TRUE);
+    FieldSystem_SetFieldMapTextureFreeEnabled(gEncounterEffectState.particles->fieldSystem, TRUE);
     Heap_Free(gEncounterEffectState.particles);
     gEncounterEffectState.particles = NULL;
 }
@@ -219,8 +219,8 @@ void Task_ParticleSetup_Main(SysTask *task, void *data) {
         NNS_G3dGlbSetBaseTrans(&position);
         NNS_G3dGlbSetBaseScale(&scale);
         NNS_G3dGlbSetBaseRot(&rotation);
-        ov01_021E631C(particles->fieldSystem, FALSE);
-        ov01_021E6340(particles->fieldSystem, FALSE);
+        FieldSystem_SetFieldMapRenderEnabled(particles->fieldSystem, FALSE);
+        FieldSystem_SetFieldMapTextureFreeEnabled(particles->fieldSystem, FALSE);
         SetBgPriority(GF_BG_LYR_MAIN_0, 0);
         particles->setupDone = TRUE;
         SysTask_Destroy(task);
@@ -237,7 +237,7 @@ void EncounterEffect_SetupParticleGraphics(FieldSystem *fieldSystem) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
     modes = sParticleGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    Thunk_ov01_021E6138(fieldSystem->bgConfig);
+    FieldMap_ClearBgLayer3(fieldSystem->bgConfig);
     reg_G2_BG3CNT = (reg_G2_BG3CNT & 0x43) | 0x4884;
     SetBgPriority(GF_BG_LYR_MAIN_3, 3);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);

@@ -46,7 +46,7 @@ static void ov12_0226BF04(SysTask *task, void *_data) {
         }
         break;
     case 2:
-        if (ov12_0223C080(data->battleSystem) == TRUE && BattleInput_CheckTouch(battleInput) == TRUE) {
+        if (BattleSystem_CanPauseRecording(data->battleSystem) == TRUE && BattleInput_CheckTouch(battleInput) == TRUE) {
             PlaySE(1501);
             data->state++;
         }
@@ -54,7 +54,7 @@ static void ov12_0226BF04(SysTask *task, void *_data) {
     case 3:
         data->delay++;
         if (data->delay > 8) {
-            ov12_0223BFFC(data->battleSystem, 0);
+            BattleSystem_PauseRecording(data->battleSystem, 0);
             data->state++;
         }
         break;

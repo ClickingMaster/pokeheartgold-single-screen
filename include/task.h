@@ -34,7 +34,7 @@ BOOL FieldSystem_RunTaskFrame(FieldSystem *fieldSystem);
 BOOL FieldSystem_TaskIsRunning(FieldSystem *fieldSystem);
 BOOL FieldSystem_ApplicationIsRunning(FieldSystem *fieldSystem);
 void FieldSystem_LoadFieldOverlay(FieldSystem *fieldSystem);
-BOOL sub_020505C8(FieldSystem *fieldSystem);
+BOOL FieldSystem_IsOverworldRestored(FieldSystem *fieldSystem);
 void CallApplicationAsTask(TaskManager *taskManager, const OverlayManagerTemplate *template, void *work);
 FieldSystem *TaskManager_GetFieldSystem(TaskManager *taskManager);
 void *TaskManager_GetEnvironment(TaskManager *taskManager);

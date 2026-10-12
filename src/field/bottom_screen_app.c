@@ -206,7 +206,7 @@ SysTask *BottomScreenApps_CreateTask(BgConfig *bgConfig, u16 *lastTouchMenuInput
 
     task = CreateSysTaskAndEnvironment(Task_BottomScreenApps, sizeof(BottomScreenAppManager), 10, HEAP_ID_FIELD1);
     manager = SysTask_GetData(task);
-    manager->appId = fieldSystem->unk1C;
+    manager->appId = fieldSystem->savedBottomScreenAppId;
     manager->state = BOTTOM_SCREEN_APP_STATE_INIT;
     manager->app = NULL;
     manager->nextAppId = 0;

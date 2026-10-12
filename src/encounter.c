@@ -432,7 +432,7 @@ static BOOL Task_SafariEncounter(TaskManager *taskManager) {
 
         if (*safariBalls == 0 && encounter->setup->winFlag != BATTLE_OUTCOME_MON_CAUGHT) {
             Location *location = LocalFieldData_GetDynamicWarp(Save_LocalFieldData_Get(fieldSystem->saveData));
-            sub_020537A8(taskManager, location);
+            CallTask_ChangeMap(taskManager, location);
         } else {
             *state = 5;
             return FALSE;

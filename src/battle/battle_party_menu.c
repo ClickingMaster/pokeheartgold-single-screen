@@ -397,7 +397,7 @@ void BattlePartyMenu_Create(BattlePartyContext *context) {
     menu->state = 0;
     menu->activeMon = context->selectedMon;
     menu->canToggleView = 0;
-    menu->battlerPosition = ov12_0223AB0C(context->battleSystem, context->battlerId);
+    menu->battlerPosition = BattleSystem_GetBattlerType(context->battleSystem, context->battlerId);
 }
 
 void BattlePartyMenu_Task(SysTask *task, void *data) {

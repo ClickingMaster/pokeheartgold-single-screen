@@ -996,7 +996,7 @@ static const OverlayManagerTemplate _020FA2B4 = { RecordMixing_Init, RecordMixin
 
 void sub_0203F4C8(FieldSystem *fieldSystem) {
     UnkStruct_0203F4C8 *args = Heap_Alloc(HEAP_ID_FIELD3, sizeof(UnkStruct_0203F4C8));
-    args->unk0 = fieldSystem->unk84;
+    args->unk0 = fieldSystem->unionRoomObjects;
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     FieldSystem_LaunchApplication(fieldSystem, &_020FA2C4, args);
 }
@@ -1004,7 +1004,7 @@ void sub_0203F4C8(FieldSystem *fieldSystem) {
 RecordMixingArgs *sub_0203F4F8(FieldSystem *fieldSystem) {
     RecordMixingArgs *args = Heap_Alloc(HEAP_ID_FIELD2, sizeof(RecordMixingArgs));
     args->saveData = fieldSystem->saveData;
-    args->unk4 = fieldSystem->unk84;
+    args->unk4 = fieldSystem->unionRoomObjects;
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     args->gameStats = Save_GameStats_Get(fieldSystem->saveData);
     args->menuInputStatePtr = &fieldSystem->menuInputState;

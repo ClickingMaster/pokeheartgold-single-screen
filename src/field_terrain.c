@@ -11,7 +11,7 @@
 #include "map_matrix.h"
 #include "terrain_attributes.h"
 
-// Field terrain queries (ARM9 static 0x02054648-0x02054E40). FieldSystem.unk60 points at one of two query tables,
+// Field terrain queries (ARM9 static 0x02054648-0x02054E40). FieldSystem.terrainQueries points at one of two query tables,
 // chosen by the map's useSimpleTerrainCollisions: the BDHC one reads heights from the loaded map chunks' BDHC data
 // (and the dynamic height plates) and attributes from the loaded chunks, the simple one has no heights and reads
 // attributes from the whole map's TerrainAttributes. Attribute bits: 0-7 metatile behavior, 15 collision.
@@ -22,7 +22,7 @@ typedef struct FieldTerrainQueries {
     BOOL (*getAttributes)(FieldSystem *fieldSystem, int x, int z, u16 *outAttributes);
 } FieldTerrainQueries;
 
-#define FS_TERRAIN_QUERIES(fieldSystem) ((const FieldTerrainQueries *)(fieldSystem)->unk60)
+#define FS_TERRAIN_QUERIES(fieldSystem) ((const FieldTerrainQueries *)(fieldSystem)->terrainQueries)
 
 extern const u16 _020FC5FC[];
 extern const FieldTerrainQueries gTerrainQueries_Bdhc;

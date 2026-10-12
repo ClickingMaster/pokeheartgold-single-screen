@@ -211,7 +211,7 @@
 .public BattleSystem_GetTerrainId
 .public BattleSystem_GetBattlerIdPartner
 .public BattleSystem_GetBattleSpecial
-.public ov12_0223B52C
+.public BattleSystem_GetBgTimeOfDay
 .public BattleSystem_CheckEvolution
 .public BattleSystem_GetFrame
 .public BattleSystem_TryChangeForm
@@ -223,15 +223,15 @@
 .public BattleSystem_SetCriticalHpMusicFlag
 .public BattleSystem_GetCriticalHpMusicDelay
 .public BattleSystem_SetCriticalHpMusicDelay
-.public ov12_0223BFC0
-.public ov12_0223BFCC
+.public BattleSystem_GetNetworkId
+.public BattleSystem_GetLinkPosition
 .public BattleSystem_IsRecordingPaused
 .public BattleContext_New
 .public BattleContext_Main
 .public BattleContext_Delete
 .public ov12_02256F28
-.public ov12_022581D4
-.public ov12_022582B8
+.public BattleContext_Get
+.public BattleContext_Set
 .public OpponentData_New
 .public ov12_02258DB0
 .public OpponentData_RunCommand
@@ -240,7 +240,7 @@
 .public OpponentData_GetInputMode
 .public OpponentData_GetHpBar
 .public BattleController_ProcessQueue
-.public ov12_02265FD4
+.public BattleTerrain_Init
 .public BgConfig_InitBattleMenuBackgrounds
 .public BgConfig_CleanupBattleMenuBackgrounds
 .public BattleInput_NewInit

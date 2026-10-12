@@ -85,9 +85,9 @@
 .public _u32_div_f
 .public NNS_G3dGlb
 .public Thunk_BgConfig_Init
-.public Thunk_ov01_021E6138
-.public ov01_021E631C
-.public ov01_021E6340
+.public FieldMap_ClearBgLayer3
+.public FieldSystem_SetFieldMapRenderEnabled
+.public FieldSystem_SetFieldMapTextureFreeEnabled
 .public EncounterEffect_LoadOverlay
 .public EncounterEffect_UnloadOverlay
 .public EncounterEffect_Start

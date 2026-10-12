@@ -1046,7 +1046,7 @@ u32 ov03_02258120(MartData *data, u16 itemID) {
 }
 
 static void ov03_02258164(FieldSystem *fieldSystem, MartData *data_unused) {
-    FieldSystem_SwitchBottomScreenApp(fieldSystem, fieldSystem->unk1C, NULL);
+    FieldSystem_SwitchBottomScreenApp(fieldSystem, fieldSystem->savedBottomScreenAppId, NULL);
 }
 
 static u8 ov03_02258170(FieldSystem *fieldSystem, MartData *data) {

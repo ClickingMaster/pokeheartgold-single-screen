@@ -854,7 +854,7 @@ static BOOL Task_RegisteredItem_GoToApp(TaskManager *taskManager) {
         env->state = 4;
         break;
     case 4:
-        if (sub_020505C8(fieldSystem)) {
+        if (FieldSystem_IsOverworldRestored(fieldSystem)) {
             MapObjectManager_PauseAllMovement(fieldSystem->mapObjectManager);
             FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_IN);
             env->state = 5;

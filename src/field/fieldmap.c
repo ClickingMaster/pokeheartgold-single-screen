@@ -81,31 +81,31 @@ FS_EXTERN_OVERLAY(OVY_4);
 static BOOL FieldSystem_HasNoGymmick(FieldSystem *fieldSystem);
 static BOOL FieldSystem_UpdateLocationToPlayerPosition(FieldSystem *fieldSystem);
 static BOOL FieldMap_ChangeZone(FieldSystem *fieldSystem);
-static void ov01_021E5FC0(FieldSystem *fieldSystem, u8 flag);
-static void ov01_021E6028(void);
+static void FieldMap_UpdateFrame(FieldSystem *fieldSystem, u8 flag);
+static void FieldMap_SetVramBanks(void);
 static void BgConfig_Init(BgConfig *bgConfig);
-static void ov01_021E6138(BgConfig *bgConfig);
+static void FieldMap_FreeBgLayers(BgConfig *bgConfig);
 static void OamManager_Init(void);
 static void Thunk_OamManager_Free(void);
-static void ov01_021E61E0(void);
-static void ov01_021E6214(void);
-static void ov01_021E6220(FieldSystem *fieldSystem);
-static void ov01_021E6364(FieldSystem *fieldSystem);
+static void FieldMap_InitObjVramTransfer(void);
+static void FieldMap_FreeObjVramTransfer(void);
+static void FieldMap_Render3D(FieldSystem *fieldSystem);
+static void FieldMap_InitUpdateFlags(FieldSystem *fieldSystem);
 static void InitGraphicsAndManagers(FieldSystem *fieldSystem);
 static void FieldSystem_InitMapLoadManager(FieldSystem *fieldSystem);
-static void ov01_021E64A4(FieldSystem *fieldSystem);
-static void ov01_021E6580(FieldSystem *fieldSystem);
-static BOOL ov01_021E662C(void);
+static void FieldMap_InitFieldEffectsAndObjects(FieldSystem *fieldSystem);
+static void FieldMap_InitCameraAndEnvironment(FieldSystem *fieldSystem);
+static BOOL FieldMap_DSProtCardSpiCheck(void);
 static MapObjectsToPreload *FetchMapObjectsToPreload(enum HeapID heapID, u16 modelBank);
 static const int *MapObjectsToPreload_GetIDs(const MapObjectsToPreload *mapObjectsToPreload);
 static int MapObjectsToPreload_GetCount(const MapObjectsToPreload *mapObjectsToPreload);
 static void MapObjectsToPreload_Free(MapObjectsToPreload *mapObjectsToPreload);
-static GFIntrCB ov01_021E66A8(void);
-static GFIntrCB ov01_021E66B8(void);
-static GFIntrCB ov01_021E66C8(void);
-static void ov01_021E66D8(void);
-static void ov01_021E66DC(void);
-static void ov01_021E66E0(void);
+static GFIntrCB FieldMapInit_DSProtDummyCallback(void);
+static GFIntrCB FieldMapInit_DSProtFlashcartCallback(void);
+static GFIntrCB FieldMapExit_DSProtDummyCallback(void);
+static void FieldMapInit_DSProtEmulatorCallback(void);
+static void FieldMapExit_DSProtFlashcartCallback(void);
+static void FieldMapExit_DSProtEmulatorCallback(void);
 
 static void FieldMap_VBlankCallback(void *fsys) {
     FieldSystem *fieldSystem = fsys;
@@ -131,13 +131,13 @@ BOOL FieldMap_Init(OverlayManager *man, int *state) {
         G2_BlendNone();
         G2S_BlendNone();
 
-        offset += (0x4CF * DSProt_DetectDummy(&ov01_021E66A8));
+        offset += (0x4CF * DSProt_DetectDummy(&FieldMapInit_DSProtDummyCallback));
 
         ResetVisibleHardwareWindows(PM_LCD_TOP);
         ResetVisibleHardwareWindows(PM_LCD_BOTTOM);
-        ov01_021E6364(fieldSystem);
+        FieldMap_InitUpdateFlags(fieldSystem);
 
-        offset += (0x6B * (DSProt_DetectNotEmulator(&ov01_021E66D8) == FALSE));
+        offset += (0x6B * (DSProt_DetectNotEmulator(&FieldMapInit_DSProtEmulatorCallback) == FALSE));
 
         FieldMapChange_Set3DDisplay(fieldSystem);
         fieldSystem->unk11C = 8;
@@ -158,7 +158,7 @@ BOOL FieldMap_Init(OverlayManager *man, int *state) {
             }
         }
 
-        offset += DSProt_DetectFlashcart(&ov01_021E66B8) * 0x3A1;
+        offset += DSProt_DetectFlashcart(&FieldMapInit_DSProtFlashcartCallback) * 0x3A1;
 
         Heap_Create(HEAP_ID_3, HEAP_ID_FIELD1, fieldSystem->mapLoadMode->unk_4);
         GF_ASSERT(fieldSystem->unk4 == NULL);
@@ -173,13 +173,13 @@ BOOL FieldMap_Init(OverlayManager *man, int *state) {
             SysTask_CreateOnMainQueue(Task_AntipiracyRandom, NULL, 123);
         }
 
-        ov01_021E6028();
+        FieldMap_SetVramBanks();
 
         GF_CreateVramTransferManager(128, HEAP_ID_FIELD1);
         BillboardLists_Create(4, HEAP_ID_FIELD1);
         GF3dRender_InitSimpleManager(HEAP_ID_FIELD1);
 
-        ov01_021E61E0();
+        FieldMap_InitObjVramTransfer();
         OamManager_Init();
 
         GfGfx_SwapDisplay();
@@ -201,8 +201,8 @@ BOOL FieldMap_Init(OverlayManager *man, int *state) {
         fieldSystem->mapPropManager = MapPropManager_New(HEAP_ID_FIELD1, fieldSystem->renderObjManager);
 
         FieldSystem_InitMapLoadManager(fieldSystem);
-        ov01_021E64A4(fieldSystem);
-        ov01_021E6580(fieldSystem);
+        FieldMap_InitFieldEffectsAndObjects(fieldSystem);
+        FieldMap_InitCameraAndEnvironment(fieldSystem);
 
         WeatherManager_SetWeather(fieldSystem->unk4->weatherManager, LocalFieldData_GetWeatherType(Save_LocalFieldData_Get(fieldSystem->saveData)));
 
@@ -224,7 +224,7 @@ BOOL FieldMap_Init(OverlayManager *man, int *state) {
             ret = TRUE;
             fieldSystem->runningFieldMap = TRUE;
         }
-        if (ov01_021E662C() == FALSE) {
+        if (FieldMap_DSProtCardSpiCheck() == FALSE) {
             SysTask_CreateOnMainQueue(Task_AntipiracyMath, NULL, 1000);
             SysTask_CreateOnMainQueue(Task_AntipiracyMath, NULL, 1400);
         }
@@ -242,7 +242,7 @@ BOOL FieldMap_Main(OverlayManager *man, int *state) {
         FieldMap_ChangeZone(fieldSystem);
     }
 
-    ov01_021E5FC0(fieldSystem, fieldSystem->unkBC);
+    FieldMap_UpdateFrame(fieldSystem, fieldSystem->fieldMapUpdateFlags);
 
     if (fieldSystem->runningFieldMap) {
         return FALSE;
@@ -262,7 +262,7 @@ BOOL FieldMap_Exit(OverlayManager *man, int *state) {
 
         Gymmick_Free(fieldSystem);
 
-        offset += 0x23B * DSProt_DetectDummy(&ov01_021E66C8);
+        offset += 0x23B * DSProt_DetectDummy(&FieldMapExit_DSProtDummyCallback);
 
         MapLoadManager_ForgetTrackedTarget(fieldSystem->mapLoadManager);
 
@@ -275,7 +275,7 @@ BOOL FieldMap_Exit(OverlayManager *man, int *state) {
         GF_ASSERT(fieldSystem->mapPropAnimationManager != NULL);
         MapLoadManager_End(fieldSystem->mapLoadManager);
 
-        offset += 0x18D * (DSProt_DetectNotFlashcart(&ov01_021E66DC) == FALSE);
+        offset += 0x18D * (DSProt_DetectNotFlashcart(&FieldMapExit_DSProtFlashcartCallback) == FALSE);
 
         MapPropAnimationManager_UnloadAllAnimations(fieldSystem->mapPropAnimationManager);
         MapPropAnimationManager_Free(fieldSystem->mapPropAnimationManager);
@@ -284,7 +284,7 @@ BOOL FieldMap_Exit(OverlayManager *man, int *state) {
         ov01_02204634(fieldSystem->unkCC);
         ov01_02204278(fieldSystem->unkC8);
 
-        BOOL notEmulator = DSProt_DetectNotEmulator(&ov01_021E66E0) == FALSE;
+        BOOL notEmulator = DSProt_DetectNotEmulator(&FieldMapExit_DSProtEmulatorCallback) == FALSE;
         u32 unkVal = notEmulator * 0x8B + offset;
 
         FieldTextureManager_FreeAllSlots(fieldSystem->unk4->textureManager);
@@ -333,14 +333,14 @@ BOOL FieldMap_Exit(OverlayManager *man, int *state) {
             ModelAttributes_Free(&fieldSystem->modelAttributes);
             Thunk_OamManager_Free();
             FollowMonInteraction_Delete(fieldSystem->followMonInteraction);
-            ov01_021E6138(fieldSystem->bgConfig);
+            FieldMap_FreeBgLayers(fieldSystem->bgConfig);
             FieldSystem_EndBottomScreen(fieldSystem);
             (*state)++;
         }
         break;
     case 2:
         if (FieldSystem_IsBottomScreenDone(fieldSystem)) {
-            ov01_021E6214();
+            FieldMap_FreeObjVramTransfer();
             BillboardLists_Delete();
             GF_DestroyVramTransferManager();
             GF3dRender_DeleteSimpleManager();
@@ -399,7 +399,7 @@ static BOOL FieldMap_ChangeZone(FieldSystem *fieldSystem) {
     fieldSystem->location->mapId = newMapID;
 
     Field_InitMapEvents(fieldSystem, newMapID);
-    sub_02053038(fieldSystem, TRUE);
+    FieldSystem_InitMapOnEnter(fieldSystem, TRUE);
 
     sub_0205E104(fieldSystem->mapObjectManager, oldMapID, newMapID, Field_GetNumObjectEvents(fieldSystem), (ObjectEvent *)Field_GetObjectEvents(fieldSystem));
 
@@ -413,14 +413,14 @@ static BOOL FieldMap_ChangeZone(FieldSystem *fieldSystem) {
     return TRUE;
 }
 
-static void ov01_021E5FC0(FieldSystem *fieldSystem, u8 flag) {
+static void FieldMap_UpdateFrame(FieldSystem *fieldSystem, u8 flag) {
     if (FieldSystem_TaskIsRunning(fieldSystem) == FALSE) {
         FieldSystem_StartBugContestTimer(fieldSystem);
     }
 
     AreaLightManager_UpdateActiveTemplate(fieldSystem->areaLightManager);
     ov01_022047DC(fieldSystem->unk104);
-    FieldCameraShift_Update(fieldSystem->unk28);
+    FieldCameraShift_Update(fieldSystem->cameraShift);
     Signpost_DoCurrentCommand(fieldSystem);
 
     if (flag & (1 << 0)) {
@@ -433,11 +433,11 @@ static void ov01_021E5FC0(FieldSystem *fieldSystem, u8 flag) {
         MapLoadManager_Tick(fieldSystem->mapLoadManager);
     }
     if (flag & (1 << 2)) {
-        ov01_021E6220(fieldSystem);
+        FieldMap_Render3D(fieldSystem);
     }
 }
 
-static void ov01_021E6028(void) {
+static void FieldMap_SetVramBanks(void) {
     GraphicsBanks banks = {
         .bg = GX_VRAM_BG_128_C,
         .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
@@ -457,8 +457,8 @@ void Thunk_BgConfig_Init(BgConfig *bgConfig) {
     BgConfig_Init(bgConfig);
 }
 
-void Thunk_ov01_021E6138(BgConfig *bgConfig) {
-    ov01_021E6138(bgConfig);
+void FieldMap_ClearBgLayer3(BgConfig *bgConfig) {
+    FieldMap_FreeBgLayers(bgConfig);
 }
 
 static const BgTemplate sBgTemplate_1 = {
@@ -535,7 +535,7 @@ static void BgConfig_Init(BgConfig *bgConfig) {
     GX_LoadBGPltt(&val, 0, 2);
 }
 
-static void ov01_021E6138(BgConfig *bgConfig) {
+static void FieldMap_FreeBgLayers(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(1 << 0, FALSE);
     GfGfx_EngineATogglePlanes(1 << 1, FALSE);
     GfGfx_EngineATogglePlanes(1 << 2, FALSE);
@@ -562,7 +562,7 @@ static void FieldMap_InitModelAttributes(ModelAttributes *modelAttributes) {
     ModelAttributes_ApplyGlobal(modelAttributes, 0x400000);                   // MODEL_ATTRIBUTES_LAST_BIT
 }
 
-static void ov01_021E61E0(void) {
+static void FieldMap_InitObjVramTransfer(void) {
     ObjCharTransferTemplate template = {
         .maxTasks = 20,
         .sizeMain = 0x8000,
@@ -577,12 +577,12 @@ static void ov01_021E61E0(void) {
     ObjPlttTransfer_Reset();
 }
 
-static void ov01_021E6214(void) {
+static void FieldMap_FreeObjVramTransfer(void) {
     ObjCharTransfer_Destroy();
     ObjPlttTransfer_Destroy();
 }
 
-static void ov01_021E6220(FieldSystem *fieldSystem) {
+static void FieldMap_Render3D(FieldSystem *fieldSystem) {
     CameraAngle camAngle;
 
     Thunk_G3X_Reset();
@@ -621,24 +621,24 @@ static void ov01_021E6220(FieldSystem *fieldSystem) {
     RequestSwap3DBuffers(GX_SORTMODE_AUTO, gG3dDepthBufferingMode);
 }
 
-void ov01_021E631C(FieldSystem *fieldSystem, BOOL setFlag) {
+void FieldSystem_SetFieldMapRenderEnabled(FieldSystem *fieldSystem, BOOL setFlag) {
     if (setFlag == TRUE) {
-        fieldSystem->unkBC |= (1 << 2);
+        fieldSystem->fieldMapUpdateFlags |= (1 << 2);
     } else {
-        fieldSystem->unkBC &= ~(1 << 2);
+        fieldSystem->fieldMapUpdateFlags &= ~(1 << 2);
     }
 }
 
-void ov01_021E6340(FieldSystem *fieldSystem, BOOL setFlag) {
+void FieldSystem_SetFieldMapTextureFreeEnabled(FieldSystem *fieldSystem, BOOL setFlag) {
     if (setFlag == TRUE) {
-        fieldSystem->unkBC |= (1 << 0);
+        fieldSystem->fieldMapUpdateFlags |= (1 << 0);
     } else {
-        fieldSystem->unkBC &= ~(1 << 0);
+        fieldSystem->fieldMapUpdateFlags &= ~(1 << 0);
     }
 }
 
-static void ov01_021E6364(FieldSystem *fieldSystem) {
-    fieldSystem->unkBC = ((1 << 3) | (1 << 0) | (1 << 1) | (1 << 2));
+static void FieldMap_InitUpdateFlags(FieldSystem *fieldSystem) {
+    fieldSystem->fieldMapUpdateFlags = ((1 << 3) | (1 << 0) | (1 << 1) | (1 << 2));
 }
 
 void FieldMap_FadeScreen(const u8 fadeType) {
@@ -703,7 +703,7 @@ extern int defaultFieldEffectRenderers[]; /* = {
     FIELD_EFFECT_RENDERER_INVALID
 };*/
 
-static void ov01_021E64A4(FieldSystem *fieldSystem) {
+static void FieldMap_InitFieldEffectsAndObjects(FieldSystem *fieldSystem) {
     fieldSystem->fieldEffectManager = FieldEffectManager_New(fieldSystem, FIELD_EFFECT_RENDERER_COUNT, HEAP_ID_FIELD1);
 
     FieldEffectManager_InitAnimManagerList(fieldSystem->fieldEffectManager, 80);
@@ -745,7 +745,7 @@ static void ov01_021E64A4(FieldSystem *fieldSystem) {
     MapLoadManager_TrackTarget(PlayerAvatar_GetPositionVector(fieldSystem->playerAvatar), fieldSystem->mapLoadManager);
 }
 
-static void ov01_021E6580(FieldSystem *fieldSystem) {
+static void FieldMap_InitCameraAndEnvironment(FieldSystem *fieldSystem) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, 1);
     GfGfx_BothDispOn();
     fieldSystem->modelAttributes = ModelAttributes_Init();
@@ -771,7 +771,7 @@ static void ov01_021E6580(FieldSystem *fieldSystem) {
     Main_SetVBlankIntrCB(FieldMap_VBlankCallback, fieldSystem);
 }
 
-static BOOL ov01_021E662C(void) {
+static BOOL FieldMap_DSProtCardSpiCheck(void) {
     CARD_SpiWaitGetStatus();
     return CARD_SpiWaitGetStatus() == 170;
 }
@@ -808,23 +808,23 @@ static void MapObjectsToPreload_Free(MapObjectsToPreload *mapObjectsToPreload) {
     Heap_Free(mapObjectsToPreload);
 }
 
-static GFIntrCB ov01_021E66A8(void) {
+static GFIntrCB FieldMapInit_DSProtDummyCallback(void) {
     return Heap_AllocAtEnd(HEAP_ID_3, 1000);
 }
 
-static GFIntrCB ov01_021E66B8(void) {
+static GFIntrCB FieldMapInit_DSProtFlashcartCallback(void) {
     return Heap_AllocAtEnd(HEAP_ID_3, 1000);
 }
 
-static GFIntrCB ov01_021E66C8(void) {
+static GFIntrCB FieldMapExit_DSProtDummyCallback(void) {
     return Heap_AllocAtEnd(HEAP_ID_3, 1000);
 }
 
-static void ov01_021E66D8(void) {
+static void FieldMapInit_DSProtEmulatorCallback(void) {
 }
 
-static void ov01_021E66DC(void) {
+static void FieldMapExit_DSProtFlashcartCallback(void) {
 }
 
-static void ov01_021E66E0(void) {
+static void FieldMapExit_DSProtEmulatorCallback(void) {
 }

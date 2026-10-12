@@ -56,7 +56,7 @@ static BOOL Task_PokeathlonCourse(TaskManager *taskman) {
         work->args->unk0C = work->unk0C;
         work->args->unk0F = work->unk0E;
         PokeathlonCourse_LaunchApp(fieldSystem, (PokeathlonCourseArgs *)work->args);
-        sub_0203E30C();
+        FieldSystem_ResumeProcesses();
         work->state = 1;
         break;
     case 1:
@@ -67,7 +67,7 @@ static BOOL Task_PokeathlonCourse(TaskManager *taskman) {
         FieldSystem_LoadFieldOverlay(fieldSystem);
         break;
     case 2:
-        if (!sub_020505C8(fieldSystem)) {
+        if (!FieldSystem_IsOverworldRestored(fieldSystem)) {
             break;
         }
         work->state = 3;

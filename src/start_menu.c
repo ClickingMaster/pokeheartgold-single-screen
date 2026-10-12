@@ -384,7 +384,7 @@ static BOOL Task_StartMenu(TaskManager *taskManager) {
         Task_StartMenu_WaitEvolution(taskManager);
         break;
     case START_MENU_STATE_RETURN:
-        if (sub_020505C8(fieldSystem)) {
+        if (FieldSystem_IsOverworldRestored(fieldSystem)) {
             MapObjectManager_PauseAllMovement(fieldSystem->mapObjectManager);
             Task_StartMenu_DrawCursor(taskManager);
             fieldSystem->unkD2_0 = 1;
@@ -393,7 +393,7 @@ static BOOL Task_StartMenu(TaskManager *taskManager) {
         }
         break;
     case START_MENU_STATE_10:
-        if (sub_020505C8(fieldSystem)) {
+        if (FieldSystem_IsOverworldRestored(fieldSystem)) {
             FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_IN);
             startMenu->state = START_MENU_STATE_11;
         }
@@ -407,7 +407,7 @@ static BOOL Task_StartMenu(TaskManager *taskManager) {
         }
         break;
     case START_MENU_STATE_12:
-        if (sub_020505C8(fieldSystem)) {
+        if (FieldSystem_IsOverworldRestored(fieldSystem)) {
             MapObjectManager_PauseAllMovement(fieldSystem->mapObjectManager);
             FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_IN);
             startMenu->state = START_MENU_STATE_13;
@@ -589,16 +589,16 @@ static BOOL Task_StartMenu_HandleInput(TaskManager *taskManager) {
 }
 
 static BOOL StartMenu_HandleKeyInput(TaskManager *taskManager, FieldSystem *fieldSystem, StartMenuTaskData *startMenu) {
-    if (fieldSystem->unkD3 < startMenu->numActiveButtons) {
+    if (fieldSystem->startMenuCursorPos < startMenu->numActiveButtons) {
         PlaySE(SEQ_SE_DP_SELECT);
         MenuInputStateMgr_SetState(&fieldSystem->menuInputState, MENU_INPUT_STATE_BUTTONS);
-        startMenu->selectedIndex = fieldSystem->unkD3;
+        startMenu->selectedIndex = fieldSystem->startMenuCursorPos;
         if (sStartMenuActions[startMenu->selectionToAction[startMenu->selectedIndex]].func == STARTMENUTASKFUNC_CANCEL) {
             startMenu->state = START_MENU_STATE_CLOSE;
         } else if (sStartMenuActions[startMenu->selectionToAction[startMenu->selectedIndex]].func != STARTMENUTASKFUNC_NONE) {
             if (FieldSystem_StartMenuActionIsAvailable(fieldSystem, (StartMenuAction)startMenu->selectionToAction[startMenu->selectedIndex])) {
                 TaskFunc func = sStartMenuActions[startMenu->selectionToAction[startMenu->selectedIndex]].func;
-                sub_0203DF64(fieldSystem, 0);
+                FieldSystem_SetStartMenuInputState(fieldSystem, 0);
                 FieldSystem_RequestTouchscreenMenuSelectedIconAnim(fieldSystem);
                 fieldSystem->lastTouchMenuInput = 0;
                 fieldSystem->lastStartMenuAction = startMenu->selectionToAction[startMenu->selectedIndex];
@@ -629,10 +629,10 @@ static BOOL StartMenu_HandleTouchInput(TaskManager *taskManager, FieldSystem *fi
     case 8:
     case 9:
     case 10:
-        fieldSystem->unkD3 = fieldSystem->lastTouchMenuInput - 2;
-        if (fieldSystem->unkD3 < startMenu->numActiveButtons) {
+        fieldSystem->startMenuCursorPos = fieldSystem->lastTouchMenuInput - 2;
+        if (fieldSystem->startMenuCursorPos < startMenu->numActiveButtons) {
             PlaySE(SEQ_SE_DP_SELECT);
-            startMenu->selectedIndex = fieldSystem->unkD3;
+            startMenu->selectedIndex = fieldSystem->startMenuCursorPos;
             if (sStartMenuActions[startMenu->selectionToAction[startMenu->selectedIndex]].func == STARTMENUTASKFUNC_CANCEL) {
                 startMenu->state = START_MENU_STATE_CLOSE;
                 fieldSystem->lastTouchMenuInput = 0;
@@ -640,7 +640,7 @@ static BOOL StartMenu_HandleTouchInput(TaskManager *taskManager, FieldSystem *fi
                 if (FieldSystem_StartMenuActionIsAvailable(fieldSystem, (StartMenuAction)startMenu->selectionToAction[startMenu->selectedIndex])) {
                     TaskFunc func = sStartMenuActions[startMenu->selectionToAction[startMenu->selectedIndex]].func;
                     fieldSystem->lastTouchMenuInput = 0;
-                    sub_0203DF64(fieldSystem, 1);
+                    FieldSystem_SetStartMenuInputState(fieldSystem, 1);
                     FieldSystem_RequestTouchscreenMenuSelectedIconAnim(fieldSystem);
                     fieldSystem->lastStartMenuAction = startMenu->selectionToAction[startMenu->selectedIndex];
                     return func(taskManager);
@@ -656,7 +656,7 @@ static BOOL StartMenu_HandleTouchInput(TaskManager *taskManager, FieldSystem *fi
 
 static void sub_0203C69C(StartMenuTaskData *startMenu, FieldSystem *fieldSystem) {
     if (CommWireless_Exists() && startMenu->unk_350) {
-        UnionRoomObjects_RequestLeaveAll(fieldSystem->unk84);
+        UnionRoomObjects_RequestLeaveAll(fieldSystem->unionRoomObjects);
         CommState_ResumeAlternateSearch();
         UnionRoom_SetBeaconActivity(0);
     }
@@ -1237,7 +1237,7 @@ static BOOL Task_StartMenu_HandleReturn_RemovedEasyChatThing(TaskManager *taskMa
         sub_02090D60(startMenu->exitTaskEnvironment, &mailMessage);
         if (CommWireless_Exists()) {
             UnionRoom_BroadcastChatMessage(&mailMessage);
-            UnionRoom_SetOwnChatMessage(fieldSystem->unk80, &mailMessage);
+            UnionRoom_SetOwnChatMessage(fieldSystem->unionRoom, &mailMessage);
         }
         startMenu->state = START_MENU_STATE_10;
     } else {
@@ -1245,7 +1245,7 @@ static BOOL Task_StartMenu_HandleReturn_RemovedEasyChatThing(TaskManager *taskMa
     }
     EasyChat_FreeArgs(startMenu->exitTaskEnvironment);
     FieldSystem_LoadFieldOverlay(fieldSystem);
-    UnionRoomObjects_RequestLeaveAll(fieldSystem->unk84);
+    UnionRoomObjects_RequestLeaveAll(fieldSystem->unionRoomObjects);
     return FALSE;
 }
 

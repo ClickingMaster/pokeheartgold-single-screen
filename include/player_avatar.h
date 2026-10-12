@@ -95,7 +95,7 @@ void PlayerSaveData_Init(PlayerSaveData *playerSaveData);
 BOOL PlayerSaveData_CheckRunningShoes(PlayerSaveData *playerSaveData);
 void PlayerSaveData_SetRunningShoesFlag(PlayerSaveData *playerSaveData, BOOL flag);
 s32 PlayerSaveData_GetState(PlayerSaveData *playerSaveData);
-void sub_0205C810(PlayerAvatar *avatar, VecFx32 *position, u32 direction);
+void PlayerAvatar_SetPositionAndDirection(PlayerAvatar *avatar, VecFx32 *position, u32 direction);
 void PlayerAvatar_SetMapObjectYPosition(PlayerAvatar *avatar, fx32 yVal);
 void PlayerAvatar_ToggleAutomaticHeightUpdating(PlayerAvatar *avatar, u8 flag);
 void PlayerAvatar_ToggleAutomaticHeightUpdatingImmediate(PlayerAvatar *avatar, BOOL flag);

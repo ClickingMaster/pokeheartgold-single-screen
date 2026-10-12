@@ -199,7 +199,7 @@ BOOL Task_Blackout(TaskManager *taskManager) {
         deathSpawn = LocalFieldData_GetBlackoutSpawn(localFieldData);
         GetDeathWarpData(deathSpawn, &deathWarp);
         GetSpecialSpawnWarpData(deathSpawn, LocalFieldData_GetSpecialSpawnWarpPtr(localFieldData));
-        sub_020537A8(taskManager, &deathWarp);
+        CallTask_ChangeMap(taskManager, &deathWarp);
         FieldSystem_ClearFollowingTrainer(fieldSystem);
         HealParty(SaveArray_Party_Get(fieldSystem->saveData));
         (*state)++;

@@ -36,7 +36,7 @@ enum FieldMoveStepResult {
     FIELD_MOVE_STEP_DONE,  // the task is over (warp started): free the environment
 };
 
-// What sub_02053B04 is told about the warp, and which animation the arrival task plays.
+// What JumpTask_FieldMoveWarp is told about the warp, and which animation the arrival task plays.
 enum FieldMoveWarpKind {
     FIELD_MOVE_WARP_ESCAPE_ROPE,
     FIELD_MOVE_WARP_DIG,
@@ -192,7 +192,7 @@ int FieldEscapeRope_WaitFadeOut(TaskManager *taskManager, FieldSystem *fieldSyst
 
 // Escape Rope warps to the special spawn point of the last cave entrance.
 int FieldEscapeRope_Warp(TaskManager *taskManager, FieldSystem *fieldSystem, FieldMoveTaskEnvironment *env) {
-    sub_02053B04(taskManager, LocalFieldData_GetSpecialSpawnWarpPtr(Save_LocalFieldData_Get(fieldSystem->saveData)), env->kind);
+    JumpTask_FieldMoveWarp(taskManager, LocalFieldData_GetSpecialSpawnWarpPtr(Save_LocalFieldData_Get(fieldSystem->saveData)), env->kind);
     return FIELD_MOVE_STEP_DONE;
 }
 
@@ -530,7 +530,7 @@ int FieldTeleport_Warp(TaskManager *taskManager, FieldSystem *fieldSystem, Field
     u16 spawnId = LocalFieldData_GetBlackoutSpawn(localFieldData);
     GetFlyWarpData(spawnId, &warp);
     GetSpecialSpawnWarpData(spawnId, LocalFieldData_GetSpecialSpawnWarpPtr(localFieldData));
-    sub_02053B04(taskManager, &warp, env->kind);
+    JumpTask_FieldMoveWarp(taskManager, &warp, env->kind);
     return FIELD_MOVE_STEP_DONE;
 }
 
@@ -615,6 +615,6 @@ int FieldDig_WaitFadeOut(TaskManager *taskManager, FieldSystem *fieldSystem, Fie
 
 // Dig warps to the special spawn point of the last cave entrance, like Escape Rope.
 int FieldDig_Warp(TaskManager *taskManager, FieldSystem *fieldSystem, FieldMoveTaskEnvironment *env) {
-    sub_02053B04(taskManager, LocalFieldData_GetSpecialSpawnWarpPtr(Save_LocalFieldData_Get(fieldSystem->saveData)), env->kind);
+    JumpTask_FieldMoveWarp(taskManager, LocalFieldData_GetSpecialSpawnWarpPtr(Save_LocalFieldData_Get(fieldSystem->saveData)), env->kind);
     return FIELD_MOVE_STEP_DONE;
 }

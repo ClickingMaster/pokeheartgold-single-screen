@@ -19,7 +19,7 @@ typedef struct FieldAttrVTable {
     BOOL (*getAttr)(FieldSystem *fieldSystem, int x, int z, u16 *outAttr);
 } FieldAttrVTable;
 
-#define FS_VT(fieldSystem) ((const FieldAttrVTable *)(fieldSystem)->unk60)
+#define FS_VT(fieldSystem) ((const FieldAttrVTable *)(fieldSystem)->terrainQueries)
 
 int Terrain_AbsDiff(int a0, int a1);
 int FieldSystem_GetHeightStep(FieldSystem *fieldSystem, VecFx32 *playerPos, int x, int z, u8 *outKind);

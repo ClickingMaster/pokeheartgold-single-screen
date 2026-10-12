@@ -36,73 +36,73 @@
 #include "union_room_objects.h"
 #include "unk_0206793C.h"
 
-struct UnkTaskEnv_02053688 {
-    int unk0;
+struct WarpWithStairsSoundEnv {
+    int state;
     Location location;
     int unk18;
 };
 
-struct UnkTaskEnv_02053950 {
-    int unk0;
-    SysTask *unk4;
+struct FlyWarpEnv {
+    int state;
+    SysTask *flyLanding;
     Location location;
     u8 padding[4];
 };
 
-struct UnkTaskEnv_02053B3C {
-    int unk0;
-    int unk4;
+struct FieldMoveWarpEnv {
+    int state;
+    int kind;
     SysTask *unk8;
     Location location;
 };
 
-struct UnkTaskEnv_02053CCC {
-    int unk0;
-    int unk4;
+struct WarpPanelEnv {
+    int state;
+    int spinDone;
     Location location;
-    UnkStruct_0206793C *unk1C;
+    UnkStruct_0206793C *followMonBall;
 };
 
-struct UnkTaskEnv_02053E5C {
+struct UnionRoomWarpEnv {
     int unk0;
-    int unk4;
+    int spinDone;
     Location location;
 };
 
-static void sub_02052F30(FieldSystem *fieldSystem);
-static void sub_02052F94(FieldSystem *fieldSystem, Location *location);
-static void sub_0205316C(FieldSystem *fieldSystem);
-static void sub_02053210(FieldSystem *fieldSystem);
-static void sub_0205323C(FieldSystem *fieldSystem);
-static void sub_02053284(FieldSystem *fieldSystem);
-static void sub_02053324(FieldSystem *fieldSystem);
+static void FieldSystem_UpdateMapLoadTypeForMap(FieldSystem *fieldSystem);
+static void FieldSystem_EnterLocation(FieldSystem *fieldSystem, Location *location);
+static void FieldSystem_CreatePlayerAndMapObjects(FieldSystem *fieldSystem);
+static void FieldSystem_DeletePlayerAndMapObjects(FieldSystem *fieldSystem);
+static void FieldSystem_RestorePlayerAndMapObjects(FieldSystem *fieldSystem);
+static void FieldSystem_LoadMapMatrixAndMode(FieldSystem *fieldSystem);
+static void FieldSystem_UnloadMapMode(FieldSystem *fieldSystem);
 static void _CopyPlayerPosToLocationWorkFacingSouth(Location *location, FieldSystem *fieldSystem);
 static BOOL _IsPlayerStandingInFrontOfUnionRoomReception(FieldSystem *fieldSystem);
 static void _SetDynamicWarpToUnionRoomExit(FieldSystem *fieldSystem);
 static BOOL FieldTask_NewGame(TaskManager *taskManager);
 static BOOL FieldTask_ContinueGame_Normal(TaskManager *taskManager);
 static BOOL FieldTask_ContinueGame_CommError(TaskManager *taskManager);
-static BOOL sub_02053688(TaskManager *taskManager);
-static void sub_02053710(TaskManager *taskManager, Location *location);
-static BOOL sub_02053740(TaskManager *taskManager);
+static BOOL Task_WarpWithStairsSound(TaskManager *taskManager);
+static void CallTask_WarpWithStairsSound(TaskManager *taskManager, Location *location);
+static BOOL Task_ChangeMap(TaskManager *taskManager);
 static BOOL Task_ScriptWarp(TaskManager *taskManager);
-static BOOL sub_02053950(TaskManager *taskManager);
-static void sub_020539D8(TaskManager *taskManager);
-static BOOL sub_020539E8(TaskManager *taskManager);
-static void sub_02053A14(TaskManager *taskManager);
-static BOOL sub_02053A2C(TaskManager *taskManager);
-static void sub_02053AA0(TaskManager *taskManager);
-static BOOL sub_02053AE4(TaskManager *taskManager);
-static BOOL sub_02053B3C(TaskManager *taskManager);
-static void sub_02053BE8(TaskManager *taskManager);
-static BOOL sub_02053BF8(TaskManager *taskManager);
-static void sub_02053C24(TaskManager *taskManager);
-static BOOL sub_02053C3C(TaskManager *taskManager);
-static void sub_02053C90(TaskManager *taskManager);
-static BOOL sub_02053CCC(TaskManager *taskManager);
-static BOOL sub_02053E5C(TaskManager *taskManager);
-static BOOL sub_02053F70(TaskManager *taskManager);
-static BOOL sub_020540A4(TaskManager *taskManager);
+static BOOL Task_FlyWarp(TaskManager *taskManager);
+static void CallTask_FlyWarpLeaveOverworld(TaskManager *taskManager);
+static BOOL Task_FlyWarpLeaveOverworld(TaskManager *taskManager);
+static void CallTask_FlyWarpArrive(TaskManager *taskManager);
+static BOOL Task_FlyWarpArrive(TaskManager *taskManager);
+static void CallTask_FlyLanding(TaskManager *taskManager);
+static BOOL Task_WaitFlyLanding(TaskManager *taskManager);
+static BOOL Task_FieldMoveWarp(TaskManager *taskManager);
+static void CallTask_FieldMoveWarpLeaveOverworld(TaskManager *taskManager);
+static BOOL Task_FieldMoveWarpLeaveOverworld(TaskManager *taskManager);
+static void CallTask_FieldMoveWarpArrive(TaskManager *taskManager);
+static BOOL Task_FieldMoveWarpArrive(TaskManager *taskManager);
+static void CallTask_FieldMoveArrivalAnim(TaskManager *taskManager);
+static BOOL Task_WarpPanel(TaskManager *taskManager);
+static BOOL Task_ExitUnionRoom(TaskManager *taskManager);
+static BOOL Task_EnterUnionRoom(TaskManager *taskManager);
+static BOOL Task_WarpToColosseum(TaskManager *taskManager);
 
 static const struct MapLoadMode sMapLoadModes[] = {
     { .fieldBottomScreen = 1,
@@ -167,7 +167,7 @@ static const struct MapLoadMode sMapLoadModes[] = {
      .unk6 = 12 },
 };
 
-static void sub_02052F30(FieldSystem *fieldSystem) {
+static void FieldSystem_UpdateMapLoadTypeForMap(FieldSystem *fieldSystem) {
     BOOL battleTower = FALSE;
 
     switch (fieldSystem->location->mapId) {
@@ -195,7 +195,7 @@ static void sub_02052F30(FieldSystem *fieldSystem) {
     }
 }
 
-static void sub_02052F94(FieldSystem *fieldSystem, Location *location) {
+static void FieldSystem_EnterLocation(FieldSystem *fieldSystem, Location *location) {
     LocalFieldData *localFieldData = Save_LocalFieldData_Get(fieldSystem->saveData);
     Location *r2 = LocalFieldData_GetPreviousPosition(localFieldData);
     const WarpEvent *warp;
@@ -219,7 +219,7 @@ void FieldMapChange_Set3DDisplay(FieldSystem *fieldSystem) {
     gSystem.screensFlipped = fieldSystem->mapLoadMode->switchScreens;
 }
 
-void sub_02053038(FieldSystem *fieldSystem, BOOL isConnection) {
+void FieldSystem_InitMapOnEnter(FieldSystem *fieldSystem, BOOL isConnection) {
     u32 mapId = fieldSystem->location->mapId;
     LocalFieldData *localFieldData = Save_LocalFieldData_Get(fieldSystem->saveData);
     SaveVarsFlags *varsFlags;
@@ -273,7 +273,7 @@ void sub_02053038(FieldSystem *fieldSystem, BOOL isConnection) {
     ClearFlag99A(Save_VarsFlags_Get(fieldSystem->saveData));
 }
 
-static void sub_0205316C(FieldSystem *fieldSystem) {
+static void FieldSystem_CreatePlayerAndMapObjects(FieldSystem *fieldSystem) {
     u32 gender;
     struct PlayerSaveData *playerSaveData;
     if (fieldSystem->unkAC) {
@@ -291,7 +291,7 @@ static void sub_0205316C(FieldSystem *fieldSystem) {
     }
 }
 
-static void sub_02053210(FieldSystem *fieldSystem) {
+static void FieldSystem_DeletePlayerAndMapObjects(FieldSystem *fieldSystem) {
     if (fieldSystem->unkAC) {
         PlayerAvatar_DeleteFromMap(fieldSystem->playerAvatar);
     } else {
@@ -302,7 +302,7 @@ static void sub_02053210(FieldSystem *fieldSystem) {
     }
 }
 
-static void sub_0205323C(FieldSystem *fieldSystem) {
+static void FieldSystem_RestorePlayerAndMapObjects(FieldSystem *fieldSystem) {
     u32 gender;
     struct PlayerSaveData *playerSaveData;
 
@@ -315,12 +315,12 @@ static void sub_0205323C(FieldSystem *fieldSystem) {
     sub_0205F55C(fieldSystem->mapObjectManager);
 }
 
-static void sub_02053284(FieldSystem *fieldSystem) {
+static void FieldSystem_LoadMapMatrixAndMode(FieldSystem *fieldSystem) {
     SaveVarsFlags *varsFlags;
 
-    sub_02052F30(fieldSystem);
+    FieldSystem_UpdateMapLoadTypeForMap(fieldSystem);
 
-    GF_ASSERT(fieldSystem->unk60 == NULL);
+    GF_ASSERT(fieldSystem->terrainQueries == NULL);
 
     MapMatrix_Load(fieldSystem->location->mapId, fieldSystem->mapMatrix);
     varsFlags = Save_VarsFlags_Get(fieldSystem->saveData);
@@ -335,15 +335,15 @@ static void sub_02053284(FieldSystem *fieldSystem) {
     fieldSystem->mapLoadMode = &sMapLoadModes[fieldSystem->mapLoadType];
     fieldSystem->skipMapAttributes = fieldSystem->mapLoadMode->skipMapAttributes;
     fieldSystem->bottomScreenType = fieldSystem->mapLoadMode->fieldBottomScreen;
-    FieldSystem_SetTerrainQueries(&fieldSystem->unk60, fieldSystem->mapLoadMode->useSimpleTerrainCollisions);
+    FieldSystem_SetTerrainQueries(&fieldSystem->terrainQueries, fieldSystem->mapLoadMode->useSimpleTerrainCollisions);
     if (fieldSystem->mapLoadMode->useSeparateTerrainAttributes) {
         TerrainAttributes_New(fieldSystem, fieldSystem->mapLoadMode->separateTerrainAttributesBlockCount);
     }
 }
 
-static void sub_02053324(FieldSystem *fieldSystem) {
-    GF_ASSERT(fieldSystem->unk60 != NULL);
-    fieldSystem->unk60 = NULL;
+static void FieldSystem_UnloadMapMode(FieldSystem *fieldSystem) {
+    GF_ASSERT(fieldSystem->terrainQueries != NULL);
+    fieldSystem->terrainQueries = NULL;
     fieldSystem->bottomScreenType = 7;
     if (fieldSystem->mapLoadMode->useSeparateTerrainAttributes) {
         TerrainAttributes_Free(fieldSystem);
@@ -390,10 +390,10 @@ static BOOL FieldTask_NewGame(TaskManager *taskManager) {
 
     switch (*state_p) {
     case 0:
-        sub_02052F94(fieldSystem, fieldSystem->location);
-        sub_02053284(fieldSystem);
-        sub_02053038(fieldSystem, FALSE);
-        sub_0205316C(fieldSystem);
+        FieldSystem_EnterLocation(fieldSystem, fieldSystem->location);
+        FieldSystem_LoadMapMatrixAndMode(fieldSystem);
+        FieldSystem_InitMapOnEnter(fieldSystem, FALSE);
+        FieldSystem_CreatePlayerAndMapObjects(fieldSystem);
         (*state_p)++;
         break;
     case 1:
@@ -427,15 +427,15 @@ static BOOL FieldTask_ContinueGame_Normal(TaskManager *taskManager) {
                 _SetDynamicWarpToUnionRoomExit(fieldSystem);
             }
             ClearFlag966(varsFlags);
-            sub_02052F94(fieldSystem, LocalFieldData_GetDynamicWarp(localFieldData));
-            sub_02053284(fieldSystem);
-            sub_02053038(fieldSystem, FALSE);
-            sub_0205316C(fieldSystem);
+            FieldSystem_EnterLocation(fieldSystem, LocalFieldData_GetDynamicWarp(localFieldData));
+            FieldSystem_LoadMapMatrixAndMode(fieldSystem);
+            FieldSystem_InitMapOnEnter(fieldSystem, FALSE);
+            FieldSystem_CreatePlayerAndMapObjects(fieldSystem);
         } else {
-            sub_02052F94(fieldSystem, NULL);
-            sub_02053284(fieldSystem);
+            FieldSystem_EnterLocation(fieldSystem, NULL);
+            FieldSystem_LoadMapMatrixAndMode(fieldSystem);
             FieldSystem_StartBugContestTimer(fieldSystem);
-            sub_0205323C(fieldSystem);
+            FieldSystem_RestorePlayerAndMapObjects(fieldSystem);
         }
         FieldSystem_RandomizeRoamers(fieldSystem);
         *state_p = 2;
@@ -469,15 +469,15 @@ static BOOL FieldTask_ContinueGame_CommError(TaskManager *taskManager) {
         (*state_p)++;
         break;
     case 1:
-        sub_02052F94(fieldSystem, &env->location);
-        sub_02053284(fieldSystem);
-        sub_02053038(fieldSystem, FALSE);
-        sub_0205316C(fieldSystem);
+        FieldSystem_EnterLocation(fieldSystem, &env->location);
+        FieldSystem_LoadMapMatrixAndMode(fieldSystem);
+        FieldSystem_InitMapOnEnter(fieldSystem, FALSE);
+        FieldSystem_CreatePlayerAndMapObjects(fieldSystem);
         (*state_p)++;
         break;
     case 2:
-        fieldSystem->unk80 = UnionRoom_Start(fieldSystem);
-        fieldSystem->unk84 = UnionRoomObjects_New(fieldSystem->unk80);
+        fieldSystem->unionRoom = UnionRoom_Start(fieldSystem);
+        fieldSystem->unionRoomObjects = UnionRoomObjects_New(fieldSystem->unionRoom);
         CallTask_RestoreOverworld(taskManager);
         (*state_p)++;
         break;
@@ -518,20 +518,20 @@ TaskManager *CallFieldTask_ContinueGame_CommError(FieldSystem *fieldSystem) {
     return FieldSystem_CreateTask(fieldSystem, FieldTask_ContinueGame_CommError, env);
 }
 
-static BOOL sub_02053688(TaskManager *taskManager) {
+static BOOL Task_WarpWithStairsSound(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    struct UnkTaskEnv_02053688 *env = TaskManager_GetEnvironment(taskManager);
+    struct WarpWithStairsSoundEnv *env = TaskManager_GetEnvironment(taskManager);
 
-    switch (env->unk0) {
+    switch (env->state) {
     case 0:
         PlaySE(SEQ_SE_DP_KAIDAN2);
         FieldBGM_TryFadeIn(fieldSystem, env->location.mapId);
         CallTask_FadeOutAndLeaveOverworld(taskManager);
-        env->unk0++;
+        env->state++;
         break;
     case 1:
-        sub_020537A8(taskManager, &env->location);
-        env->unk0++;
+        CallTask_ChangeMap(taskManager, &env->location);
+        env->state++;
         break;
     case 2:
         if (GF_SndGetFadeTimer() != 0) {
@@ -539,7 +539,7 @@ static BOOL sub_02053688(TaskManager *taskManager) {
         }
         FieldBGM_PlayForMapHeader(fieldSystem, env->location.mapId, FALSE);
         CallTask_RestoreOverworldAndFadeIn(taskManager);
-        env->unk0++;
+        env->state++;
         break;
     case 3:
         Heap_Free(env);
@@ -549,31 +549,31 @@ static BOOL sub_02053688(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void sub_02053710(TaskManager *taskManager, Location *location) {
-    struct UnkTaskEnv_02053688 *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct UnkTaskEnv_02053688));
-    env->unk0 = 0;
+static void CallTask_WarpWithStairsSound(TaskManager *taskManager, Location *location) {
+    struct WarpWithStairsSoundEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct WarpWithStairsSoundEnv));
+    env->state = 0;
     env->location = *location;
-    TaskManager_Call(taskManager, sub_02053688, env);
+    TaskManager_Call(taskManager, Task_WarpWithStairsSound, env);
 }
 
-static BOOL sub_02053740(TaskManager *taskManager) {
+static BOOL Task_ChangeMap(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     struct ErrorContinueEnv *env = TaskManager_GetEnvironment(taskManager);
 
     switch (env->state) {
     case 0:
-        sub_02053210(fieldSystem);
-        sub_02053324(fieldSystem);
+        FieldSystem_DeletePlayerAndMapObjects(fieldSystem);
+        FieldSystem_UnloadMapMode(fieldSystem);
         env->state++;
         break;
     case 1:
-        sub_02052F94(fieldSystem, &env->location);
-        sub_02053284(fieldSystem);
-        sub_02053038(fieldSystem, FALSE);
+        FieldSystem_EnterLocation(fieldSystem, &env->location);
+        FieldSystem_LoadMapMatrixAndMode(fieldSystem);
+        FieldSystem_InitMapOnEnter(fieldSystem, FALSE);
         env->state++;
         break;
     case 2:
-        sub_0205316C(fieldSystem);
+        FieldSystem_CreatePlayerAndMapObjects(fieldSystem);
         Heap_Free(env);
         return TRUE;
     }
@@ -581,19 +581,19 @@ static BOOL sub_02053740(TaskManager *taskManager) {
     return FALSE;
 }
 
-void sub_020537A8(TaskManager *taskManager, const Location *location) {
+void CallTask_ChangeMap(TaskManager *taskManager, const Location *location) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     struct ErrorContinueEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct ErrorContinueEnv));
-    if (sub_0203DF7C(fieldSystem)) {
+    if (FieldSystem_IsFieldMapLoaded(fieldSystem)) {
         GF_ASSERT(FALSE);
         return;
     }
     env->state = 0;
     env->location = *location;
-    TaskManager_Call(taskManager, sub_02053740, env);
+    TaskManager_Call(taskManager, Task_ChangeMap, env);
 }
 
-void sub_020537F0(TaskManager *taskManager, u32 mapId, int warpId, int x, int y, int direction) {
+void CallTask_ChangeMapToCoords(TaskManager *taskManager, u32 mapId, int warpId, int x, int y, int direction) {
     Location location = {
         mapId,
         warpId,
@@ -602,7 +602,7 @@ void sub_020537F0(TaskManager *taskManager, u32 mapId, int warpId, int x, int y,
         direction
     };
 
-    sub_020537A8(taskManager, &location);
+    CallTask_ChangeMap(taskManager, &location);
 }
 
 static BOOL Task_ScriptWarp(TaskManager *taskManager) {
@@ -616,7 +616,7 @@ static BOOL Task_ScriptWarp(TaskManager *taskManager) {
         env->state++;
         break;
     case 1:
-        sub_020537A8(taskManager, &env->location);
+        CallTask_ChangeMap(taskManager, &env->location);
         env->state++;
         break;
     case 2:
@@ -642,7 +642,7 @@ void CallTask_ScriptWarp(TaskManager *taskManager, u32 mapId, int warpId, int x,
     TaskManager_Call(taskManager, Task_ScriptWarp, env);
 }
 
-TaskManager *sub_020538C0(FieldSystem *fieldSystem, u32 mapId, int warpId, int x, int y, int direction) {
+TaskManager *CallFieldTask_FlyWarp(FieldSystem *fieldSystem, u32 mapId, int warpId, int x, int y, int direction) {
     Location location = {
         mapId,
         warpId,
@@ -650,14 +650,14 @@ TaskManager *sub_020538C0(FieldSystem *fieldSystem, u32 mapId, int warpId, int x
         y,
         direction
     };
-    struct UnkTaskEnv_02053950 *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct UnkTaskEnv_02053950));
-    env->unk0 = 0;
-    env->unk4 = 0;
+    struct FlyWarpEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct FlyWarpEnv));
+    env->state = 0;
+    env->flyLanding = 0;
     env->location = location;
-    return FieldSystem_CreateTask(fieldSystem, sub_02053950, env);
+    return FieldSystem_CreateTask(fieldSystem, Task_FlyWarp, env);
 }
 
-void sub_02053908(TaskManager *taskManager, u32 mapId, int warpId, int x, int y, int direction) {
+void JumpTask_FlyWarp(TaskManager *taskManager, u32 mapId, int warpId, int x, int y, int direction) {
     Location location = {
         mapId,
         warpId,
@@ -665,35 +665,35 @@ void sub_02053908(TaskManager *taskManager, u32 mapId, int warpId, int x, int y,
         y,
         direction
     };
-    struct UnkTaskEnv_02053950 *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct UnkTaskEnv_02053950));
-    env->unk0 = 0;
-    env->unk4 = NULL;
+    struct FlyWarpEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct FlyWarpEnv));
+    env->state = 0;
+    env->flyLanding = NULL;
     env->location = location;
-    TaskManager_Jump(taskManager, sub_02053950, env);
+    TaskManager_Jump(taskManager, Task_FlyWarp, env);
 }
 
-static BOOL sub_02053950(TaskManager *taskManager) {
+static BOOL Task_FlyWarp(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    struct UnkTaskEnv_02053950 *env = TaskManager_GetEnvironment(taskManager);
+    struct FlyWarpEnv *env = TaskManager_GetEnvironment(taskManager);
     Location *location = &env->location;
-    switch (env->unk0) {
+    switch (env->state) {
     case 0:
         FieldBGM_TryFadeIn(fieldSystem, location->mapId);
-        sub_020539D8(taskManager);
-        env->unk0++;
+        CallTask_FlyWarpLeaveOverworld(taskManager);
+        env->state++;
         break;
     case 1:
         PlayerAvatar_SetState(fieldSystem->playerAvatar, PLAYER_STATE_WALKING);
-        sub_020537A8(taskManager, &env->location);
-        env->unk0++;
+        CallTask_ChangeMap(taskManager, &env->location);
+        env->state++;
         break;
     case 2:
         if (GF_SndGetFadeTimer() != 0) {
             break;
         }
         FieldSystem_ResetStateOnFlyWarp(fieldSystem);
-        sub_02053A14(taskManager);
-        env->unk0++;
+        CallTask_FlyWarpArrive(taskManager);
+        env->state++;
         break;
     case 3:
         Heap_Free(env);
@@ -703,11 +703,11 @@ static BOOL sub_02053950(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void sub_020539D8(TaskManager *taskManager) {
-    TaskManager_Call(taskManager, sub_020539E8, NULL);
+static void CallTask_FlyWarpLeaveOverworld(TaskManager *taskManager) {
+    TaskManager_Call(taskManager, Task_FlyWarpLeaveOverworld, NULL);
 }
 
-static BOOL sub_020539E8(TaskManager *taskManager) {
+static BOOL Task_FlyWarpLeaveOverworld(TaskManager *taskManager) {
     u32 *state_p = TaskManager_GetStatePtr(taskManager);
 
     switch (*state_p) {
@@ -722,11 +722,11 @@ static BOOL sub_020539E8(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void sub_02053A14(TaskManager *taskManager) {
-    TaskManager_Call(taskManager, sub_02053A2C, TaskManager_GetEnvironment(taskManager));
+static void CallTask_FlyWarpArrive(TaskManager *taskManager) {
+    TaskManager_Call(taskManager, Task_FlyWarpArrive, TaskManager_GetEnvironment(taskManager));
 }
 
-static BOOL sub_02053A2C(TaskManager *taskManager) {
+static BOOL Task_FlyWarpArrive(TaskManager *taskManager) {
     u32 *state_p = TaskManager_GetStatePtr(taskManager);
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     switch (*state_p) {
@@ -740,7 +740,7 @@ static BOOL sub_02053A2C(TaskManager *taskManager) {
         fieldSystem->environmentSoundState = ENVIRONMENT_SOUND_NONE;
         FieldBGM_PlayForMapHeader(fieldSystem, fieldSystem->location->mapId, TRUE);
         FieldSystem_DrawMapNameAnimation(fieldSystem);
-        sub_02053AA0(taskManager);
+        CallTask_FlyLanding(taskManager);
         (*state_p)++;
         break;
     case 2:
@@ -750,66 +750,66 @@ static BOOL sub_02053A2C(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void sub_02053AA0(TaskManager *taskManager) {
+static void CallTask_FlyLanding(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    struct UnkTaskEnv_02053950 *env = TaskManager_GetEnvironment(taskManager);
-    if (!sub_0203DF7C(fieldSystem)) {
+    struct FlyWarpEnv *env = TaskManager_GetEnvironment(taskManager);
+    if (!FieldSystem_IsFieldMapLoaded(fieldSystem)) {
         GF_ASSERT(FALSE);
         return;
     }
-    env->unk4 = FlyLanding_Start(fieldSystem, PlayerAvatar_GetGender(fieldSystem->playerAvatar));
-    TaskManager_Call(taskManager, sub_02053AE4, env);
+    env->flyLanding = FlyLanding_Start(fieldSystem, PlayerAvatar_GetGender(fieldSystem->playerAvatar));
+    TaskManager_Call(taskManager, Task_WaitFlyLanding, env);
 }
 
-static BOOL sub_02053AE4(TaskManager *taskManager) {
-    struct UnkTaskEnv_02053950 *env = TaskManager_GetEnvironment(taskManager);
-    if (FlyLanding_IsDone(env->unk4) == TRUE) {
-        FlyLanding_Delete(env->unk4);
+static BOOL Task_WaitFlyLanding(TaskManager *taskManager) {
+    struct FlyWarpEnv *env = TaskManager_GetEnvironment(taskManager);
+    if (FlyLanding_IsDone(env->flyLanding) == TRUE) {
+        FlyLanding_Delete(env->flyLanding);
         return TRUE;
     }
 
     return FALSE;
 }
 
-void sub_02053B04(TaskManager *taskManager, Location *location, int a2) {
-    struct UnkTaskEnv_02053B3C *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct UnkTaskEnv_02053B3C));
-    env->unk0 = 0;
-    env->unk4 = a2;
+void JumpTask_FieldMoveWarp(TaskManager *taskManager, Location *location, int a2) {
+    struct FieldMoveWarpEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct FieldMoveWarpEnv));
+    env->state = 0;
+    env->kind = a2;
     env->unk8 = NULL;
     env->location = *location;
-    TaskManager_Jump(taskManager, sub_02053B3C, env);
+    TaskManager_Jump(taskManager, Task_FieldMoveWarp, env);
 }
 
-static BOOL sub_02053B3C(TaskManager *taskManager) {
+static BOOL Task_FieldMoveWarp(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    struct UnkTaskEnv_02053B3C *env = TaskManager_GetEnvironment(taskManager);
+    struct FieldMoveWarpEnv *env = TaskManager_GetEnvironment(taskManager);
     Location *location = &env->location;
 
-    switch (env->unk0) {
+    switch (env->state) {
     case 0:
         FieldBGM_TryFadeIn(fieldSystem, location->mapId);
-        sub_02053BE8(taskManager);
-        env->unk0++;
+        CallTask_FieldMoveWarpLeaveOverworld(taskManager);
+        env->state++;
         break;
     case 1:
         PlayerAvatar_SetState(fieldSystem->playerAvatar, PLAYER_STATE_WALKING);
-        sub_020537A8(taskManager, &env->location);
-        env->unk0++;
+        CallTask_ChangeMap(taskManager, &env->location);
+        env->state++;
         break;
     case 2:
         if (GF_SndGetFadeTimer() != 0) {
             break;
         }
         FieldBGM_PlayForMapHeader(fieldSystem, location->mapId, FALSE);
-        if (env->unk4 == 2) {
+        if (env->kind == 2) {
             sub_02067BA4(fieldSystem);
-        } else if (env->unk4 == 0 || env->unk4 == 1) {
+        } else if (env->kind == 0 || env->kind == 1) {
             FieldSystem_ClearSafariSysFlag(fieldSystem);
         } else {
             GF_ASSERT(FALSE);
         }
-        sub_02053C24(taskManager);
-        env->unk0++;
+        CallTask_FieldMoveWarpArrive(taskManager);
+        env->state++;
         break;
     case 3:
         Heap_Free(env);
@@ -819,11 +819,11 @@ static BOOL sub_02053B3C(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void sub_02053BE8(TaskManager *taskManager) {
-    TaskManager_Call(taskManager, sub_02053BF8, NULL);
+static void CallTask_FieldMoveWarpLeaveOverworld(TaskManager *taskManager) {
+    TaskManager_Call(taskManager, Task_FieldMoveWarpLeaveOverworld, NULL);
 }
 
-static BOOL sub_02053BF8(TaskManager *taskManager) {
+static BOOL Task_FieldMoveWarpLeaveOverworld(TaskManager *taskManager) {
     u32 *state_p = TaskManager_GetStatePtr(taskManager);
 
     switch (*state_p) {
@@ -838,15 +838,15 @@ static BOOL sub_02053BF8(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void sub_02053C24(TaskManager *taskManager) {
-    struct UnkTaskEnv_02053B3C *env = TaskManager_GetEnvironment(taskManager);
-    TaskManager_Call(taskManager, sub_02053C3C, env);
+static void CallTask_FieldMoveWarpArrive(TaskManager *taskManager) {
+    struct FieldMoveWarpEnv *env = TaskManager_GetEnvironment(taskManager);
+    TaskManager_Call(taskManager, Task_FieldMoveWarpArrive, env);
 }
 
-static BOOL sub_02053C3C(TaskManager *taskManager) {
+static BOOL Task_FieldMoveWarpArrive(TaskManager *taskManager) {
     u32 *state_p = TaskManager_GetStatePtr(taskManager);
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    struct UnkTaskEnv_02053B3C *env = TaskManager_GetEnvironment(taskManager); // unused
+    struct FieldMoveWarpEnv *env = TaskManager_GetEnvironment(taskManager); // unused
 
     switch (*state_p) {
     case 0:
@@ -855,7 +855,7 @@ static BOOL sub_02053C3C(TaskManager *taskManager) {
         break;
     case 1:
         FieldSystem_DrawMapNameAnimation(fieldSystem);
-        sub_02053C90(taskManager);
+        CallTask_FieldMoveArrivalAnim(taskManager);
         (*state_p)++;
         break;
     case 2:
@@ -865,49 +865,49 @@ static BOOL sub_02053C3C(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void sub_02053C90(TaskManager *taskManager) {
+static void CallTask_FieldMoveArrivalAnim(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    struct UnkTaskEnv_02053B3C *env = TaskManager_GetEnvironment(taskManager);
+    struct FieldMoveWarpEnv *env = TaskManager_GetEnvironment(taskManager);
 
-    if (!sub_0203DF7C(fieldSystem)) {
+    if (!FieldSystem_IsFieldMapLoaded(fieldSystem)) {
         GF_ASSERT(FALSE);
         return;
     }
-    TaskManager_Call(taskManager, Task_FieldMoveArrival, FieldMoveTask_CreateArrivalEnvironment(fieldSystem, HEAP_ID_FIELD1, env->unk4));
+    TaskManager_Call(taskManager, Task_FieldMoveArrival, FieldMoveTask_CreateArrivalEnvironment(fieldSystem, HEAP_ID_FIELD1, env->kind));
 }
 
-static BOOL sub_02053CCC(TaskManager *taskManager) {
+static BOOL Task_WarpPanel(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    struct UnkTaskEnv_02053CCC *env = TaskManager_GetEnvironment(taskManager);
+    struct WarpPanelEnv *env = TaskManager_GetEnvironment(taskManager);
     Location *location = &env->location;
     struct LocalMapObject *follow_mon_obj;
 
-    switch (env->unk0) {
+    switch (env->state) {
     case 0:
-        env->unk1C = 0;
+        env->followMonBall = 0;
         if (FollowMon_IsActive(fieldSystem)
             && !FollowMon_CheckVisibleFlag(fieldSystem)
             && PlayerAvatar_GetState(fieldSystem->playerAvatar) != 1) {
-            env->unk1C = FollowMonBall_Spawn(FollowMon_GetMapObject(fieldSystem), 1);
+            env->followMonBall = FollowMonBall_Spawn(FollowMon_GetMapObject(fieldSystem), 1);
         }
-        env->unk0++;
+        env->state++;
         break;
     case 1:
-        if (env->unk1C == 0 || !FieldEffect_IsActive(env->unk1C)) {
-            FieldSystem_StartWarpSpin(fieldSystem, 1, &env->unk4);
-            env->unk0++;
+        if (env->followMonBall == 0 || !FieldEffect_IsActive(env->followMonBall)) {
+            FieldSystem_StartWarpSpin(fieldSystem, 1, &env->spinDone);
+            env->state++;
         }
         break;
     case 2:
-        if (env->unk4) {
+        if (env->spinDone) {
             FieldBGM_TryFadeIn(fieldSystem, location->mapId);
             CallTask_LeaveOverworld(taskManager);
-            env->unk0++;
+            env->state++;
         }
         break;
     case 3:
-        sub_020537A8(taskManager, location);
-        env->unk0++;
+        CallTask_ChangeMap(taskManager, location);
+        env->state++;
         break;
     case 4:
         if (GF_SndGetFadeTimer() != 0) {
@@ -915,11 +915,11 @@ static BOOL sub_02053CCC(TaskManager *taskManager) {
         }
         FieldBGM_PlayForMapHeader(fieldSystem, location->mapId, FALSE);
         CallTask_RestoreOverworld(taskManager);
-        env->unk0++;
+        env->state++;
         break;
     case 5:
-        env->unk4 = 0;
-        FieldSystem_StartWarpSpin(fieldSystem, 0, &env->unk4);
+        env->spinDone = 0;
+        FieldSystem_StartWarpSpin(fieldSystem, 0, &env->spinDone);
         if (FollowMon_IsActive(fieldSystem)) {
             follow_mon_obj = FollowMon_GetMapObject(fieldSystem);
             if (FollowMon_GetPermissionBySpeciesAndMap(FollowMon_GetSpecies(follow_mon_obj), location->mapId)) {
@@ -927,11 +927,11 @@ static BOOL sub_02053CCC(TaskManager *taskManager) {
                 FollowMon_MoveToPlayer(fieldSystem, 1);
             }
         }
-        env->unk0++;
+        env->state++;
         break;
     case 6:
-        if (env->unk4) {
-            env->unk0++;
+        if (env->spinDone) {
+            env->state++;
         }
         break;
     case 7:
@@ -942,39 +942,39 @@ static BOOL sub_02053CCC(TaskManager *taskManager) {
     return FALSE;
 }
 
-TaskManager *sub_02053E08(FieldSystem *fieldSystem, u32 mapId, int warpId) {
-    struct UnkTaskEnv_02053CCC *env;
+TaskManager *CallFieldTask_WarpPanel(FieldSystem *fieldSystem, u32 mapId, int warpId) {
+    struct WarpPanelEnv *env;
     Location location;
     int direction;
 
-    env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct UnkTaskEnv_02053CCC));
-    MI_CpuClear8(env, sizeof(struct UnkTaskEnv_02053CCC));
+    env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct WarpPanelEnv));
+    MI_CpuClear8(env, sizeof(struct WarpPanelEnv));
     direction = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
     InitLocation(&location, mapId, warpId, 0, 0, direction);
     env->location = location;
-    return FieldSystem_CreateTask(fieldSystem, sub_02053CCC, env);
+    return FieldSystem_CreateTask(fieldSystem, Task_WarpPanel, env);
 }
 
-static BOOL sub_02053E5C(TaskManager *taskManager) {
+static BOOL Task_ExitUnionRoom(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    struct UnkTaskEnv_02053E5C *env = TaskManager_GetEnvironment(taskManager);
+    struct UnionRoomWarpEnv *env = TaskManager_GetEnvironment(taskManager);
     u32 *state_p = TaskManager_GetStatePtr(taskManager);
     Location *location = &env->location;
 
     switch (*state_p) {
     case 0:
         FieldBGM_TryFadeIn(fieldSystem, location->mapId);
-        FieldSystem_StartWarpSpin(fieldSystem, 1, &env->unk4);
+        FieldSystem_StartWarpSpin(fieldSystem, 1, &env->spinDone);
         (*state_p)++;
         break;
     case 1:
-        if (env->unk4) {
+        if (env->spinDone) {
             CallTask_LeaveOverworld(taskManager);
             (*state_p)++;
         }
         break;
     case 2:
-        sub_020537A8(taskManager, location);
+        CallTask_ChangeMap(taskManager, location);
         (*state_p)++;
         break;
     case 3:
@@ -997,21 +997,21 @@ static BOOL sub_02053E5C(TaskManager *taskManager) {
     return FALSE;
 }
 
-void sub_02053F14(FieldSystem *fieldSystem) {
+void CallFieldTask_ExitUnionRoom(FieldSystem *fieldSystem) {
     Location *location = LocalFieldData_GetDynamicWarp(Save_LocalFieldData_Get(fieldSystem->saveData));
-    struct UnkTaskEnv_02053E5C *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct UnkTaskEnv_02053E5C));
-    MI_CpuClear8(env, sizeof(struct UnkTaskEnv_02053E5C));
+    struct UnionRoomWarpEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct UnionRoomWarpEnv));
+    MI_CpuClear8(env, sizeof(struct UnionRoomWarpEnv));
     env->location = *location;
     UnionRoom_Stop(fieldSystem);
-    UnionRoomObjects_Delete(fieldSystem->unk84);
+    UnionRoomObjects_Delete(fieldSystem->unionRoomObjects);
     fieldSystem->mapLoadType = 0;
-    FieldSystem_CreateTask(fieldSystem, sub_02053E5C, env);
-    fieldSystem->unk80 = NULL;
+    FieldSystem_CreateTask(fieldSystem, Task_ExitUnionRoom, env);
+    fieldSystem->unionRoom = NULL;
 }
 
-static BOOL sub_02053F70(TaskManager *taskManager) {
+static BOOL Task_EnterUnionRoom(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    struct UnkTaskEnv_02053E5C *env = TaskManager_GetEnvironment(taskManager);
+    struct UnionRoomWarpEnv *env = TaskManager_GetEnvironment(taskManager);
     u32 *state_p = TaskManager_GetStatePtr(taskManager);
     Location *location = &env->location;
 
@@ -1026,7 +1026,7 @@ static BOOL sub_02053F70(TaskManager *taskManager) {
         (*state_p)++;
         break;
     case 2:
-        sub_020537A8(taskManager, location);
+        CallTask_ChangeMap(taskManager, location);
         (*state_p)++;
         break;
     case 3:
@@ -1038,12 +1038,12 @@ static BOOL sub_02053F70(TaskManager *taskManager) {
         (*state_p)++;
         break;
     case 4:
-        env->unk4 = 0;
-        FieldSystem_StartWarpSpin(fieldSystem, 0, &env->unk4);
+        env->spinDone = 0;
+        FieldSystem_StartWarpSpin(fieldSystem, 0, &env->spinDone);
         (*state_p)++;
         break;
     case 5:
-        if (env->unk4) {
+        if (env->spinDone) {
             (*state_p)++;
         }
         break;
@@ -1055,33 +1055,33 @@ static BOOL sub_02053F70(TaskManager *taskManager) {
     return FALSE;
 }
 
-void sub_02054030(TaskManager *taskManager) {
+void CallTask_EnterUnionRoom(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     Location *location = LocalFieldData_GetDynamicWarp(Save_LocalFieldData_Get(fieldSystem->saveData));
-    struct UnkTaskEnv_02053E5C *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct UnkTaskEnv_02053E5C));
-    MI_CpuClear8(env, sizeof(struct UnkTaskEnv_02053E5C));
+    struct UnionRoomWarpEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct UnionRoomWarpEnv));
+    MI_CpuClear8(env, sizeof(struct UnionRoomWarpEnv));
     _CopyPlayerPosToLocationWorkFacingSouth(location, fieldSystem);
     InitLocation(&env->location, MAP_UNION, -1, 8, 14, DIR_NORTH);
-    fieldSystem->unk80 = UnionRoom_Start(fieldSystem);
-    fieldSystem->unk84 = UnionRoomObjects_New(fieldSystem->unk80);
+    fieldSystem->unionRoom = UnionRoom_Start(fieldSystem);
+    fieldSystem->unionRoomObjects = UnionRoomObjects_New(fieldSystem->unionRoom);
     fieldSystem->mapLoadType = MAP_LOAD_TYPE_UNION;
-    TaskManager_Call(taskManager, sub_02053F70, env);
+    TaskManager_Call(taskManager, Task_EnterUnionRoom, env);
 }
 
-static BOOL sub_020540A4(TaskManager *taskManager) {
+static BOOL Task_WarpToColosseum(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    struct UnkTaskEnv_02053688 *env = TaskManager_GetEnvironment(taskManager);
+    struct WarpWithStairsSoundEnv *env = TaskManager_GetEnvironment(taskManager);
 
-    switch (env->unk0) {
+    switch (env->state) {
     case 0:
         PlaySE(SEQ_SE_DP_KAIDAN2);
         FieldBGM_TryFadeIn(fieldSystem, env->location.mapId);
         CallTask_FadeOutAndLeaveOverworld(taskManager);
-        env->unk0++;
+        env->state++;
         break;
     case 1:
-        sub_020537A8(taskManager, &env->location);
-        env->unk0++;
+        CallTask_ChangeMap(taskManager, &env->location);
+        env->state++;
         break;
     case 2:
         if (GF_SndGetFadeTimer() != 0) {
@@ -1089,7 +1089,7 @@ static BOOL sub_020540A4(TaskManager *taskManager) {
         }
         FieldBGM_PlayForMapHeader(fieldSystem, env->location.mapId, FALSE);
         CallTask_RestoreOverworld(taskManager);
-        env->unk0++;
+        env->state++;
         break;
     case 3:
         Heap_Free(env);
@@ -1099,12 +1099,12 @@ static BOOL sub_020540A4(TaskManager *taskManager) {
     return FALSE;
 }
 
-void sub_0205412C(TaskManager *taskManager, u32 mapId, int warpId, int x, int y, int direction) {
-    struct UnkTaskEnv_02053688 *env;
+void CallTask_WarpToColosseum(TaskManager *taskManager, u32 mapId, int warpId, int x, int y, int direction) {
+    struct WarpWithStairsSoundEnv *env;
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     _CopyPlayerPosToLocationWorkFacingSouth(LocalFieldData_GetDynamicWarp(Save_LocalFieldData_Get(fieldSystem->saveData)), fieldSystem);
     fieldSystem->mapLoadType = MAP_LOAD_TYPE_COLOSSEUM;
-    env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct UnkTaskEnv_02053688));
+    env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct WarpWithStairsSoundEnv));
     {
         Location location = {
             mapId,
@@ -1113,15 +1113,15 @@ void sub_0205412C(TaskManager *taskManager, u32 mapId, int warpId, int x, int y,
             y,
             direction
         };
-        env->unk0 = 0;
+        env->state = 0;
         env->location = location;
     }
-    TaskManager_Call(taskManager, sub_020540A4, env);
+    TaskManager_Call(taskManager, Task_WarpToColosseum, env);
 }
 
-void sub_02054190(TaskManager *taskManager) {
+void CallTask_ReturnFromColosseum(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     Location *location = LocalFieldData_GetDynamicWarp(Save_LocalFieldData_Get(fieldSystem->saveData));
     fieldSystem->mapLoadType = 0;
-    sub_02053710(fieldSystem->taskman, location);
+    CallTask_WarpWithStairsSound(fieldSystem->taskman, location);
 }

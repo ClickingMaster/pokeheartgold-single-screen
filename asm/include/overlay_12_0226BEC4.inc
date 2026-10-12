@@ -11,8 +11,8 @@
 .public GF_AssertFail
 .public MI_CpuFill8
 .public BattleSystem_GetBattleInput
-.public ov12_0223BFFC
-.public ov12_0223C080
+.public BattleSystem_PauseRecording
+.public BattleSystem_CanPauseRecording
 .public BattleInput_ChangeMenu
 .public BattleInput_CheckTouch
 .public BattleInput_CheckFeedbackDone

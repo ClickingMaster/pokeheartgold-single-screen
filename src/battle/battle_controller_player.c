@@ -219,7 +219,7 @@ static void BattleControllerPlayer_PokemonAppear(BattleSystem *battleSystem, Bat
         ctx->command = CONTROLLER_COMMAND_RUN_SCRIPT;
     } else {
         SortMonsBySpeed(battleSystem, ctx);
-        ov12_0223C0C4(battleSystem);
+        BattleSystem_StartRecordingStopTask(battleSystem);
         ctx->command = CONTROLLER_COMMAND_SELECTION_SCREEN_INIT;
     }
 }
@@ -453,7 +453,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
                     break;
                 } else if (ov12_02251A28(battleSystem, ctx, battlerId, ctx->battleBuffer[battlerId][0] - 1, &msg) == 0) {
                     if (BattleSystem_GetBattleSpecial(battleSystem) & BATTLE_SPECIAL_RECORDING) {
-                        ov12_0223BFFC(battleSystem, 1);
+                        BattleSystem_PauseRecording(battleSystem, 1);
                         BattleController_TryEmitExitRecording(battleSystem, BattleSystem_GetBattleContext(battleSystem));
                     } else {
                         BattleController_EmitPrintSelectionMessage(battleSystem, battlerId, msg);
@@ -512,7 +512,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
 
             v8 = BattlerCanSwitch(battleSystem, ctx, battlerId);
 
-            if (((ov12_0223AB0C(battleSystem, battlerId) == 4) || (ov12_0223AB0C(battleSystem, battlerId) == 5)) && ((battleType == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES)) || (battleType == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_LINK)) || (battleType == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_FRONTIER)) || ((battleType == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_TAG)) && (ov12_0223AB0C(battleSystem, battlerId) == 4)))) {
+            if (((BattleSystem_GetBattlerType(battleSystem, battlerId) == 4) || (BattleSystem_GetBattlerType(battleSystem, battlerId) == 5)) && ((battleType == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES)) || (battleType == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_LINK)) || (battleType == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_FRONTIER)) || ((battleType == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_TAG)) && (BattleSystem_GetBattlerType(battleSystem, battlerId) == 4)))) {
                 partnerId = BattleSystem_GetBattlerIdPartner(battleSystem, battlerId);
 
                 if (ctx->playerActions[partnerId].command == CONTROLLER_COMMAND_POKEMON_INPUT) {
@@ -539,7 +539,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
                 ctx->unk_0[battlerId] = SSI_STATE_12;
             } else if ((battleType & BATTLE_TYPE_TRAINER) && !(battleType & BATTLE_TYPE_LINK)) {
                 if (BattleSystem_GetBattleSpecial(battleSystem) & BATTLE_SPECIAL_RECORDING) {
-                    ov12_0223BFFC(battleSystem, 1);
+                    BattleSystem_PauseRecording(battleSystem, 1);
                     BattleController_TryEmitExitRecording(battleSystem, BattleSystem_GetBattleContext(battleSystem));
                 } else {
                     msg.tag = TAG_NONE;
@@ -550,7 +550,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
                 }
             } else if (CantEscape(battleSystem, ctx, battlerId, &msg)) {
                 if (BattleSystem_GetBattleSpecial(battleSystem) & BATTLE_SPECIAL_RECORDING) {
-                    ov12_0223BFFC(battleSystem, 1);
+                    BattleSystem_PauseRecording(battleSystem, 1);
                     BattleController_TryEmitExitRecording(battleSystem, BattleSystem_GetBattleContext(battleSystem));
                 } else {
                     BattleController_EmitPrintSelectionMessage(battleSystem, battlerId, msg);
@@ -1893,7 +1893,7 @@ static u32 TryDisobedience(BattleSystem *battleSystem, BattleContext *ctx, int *
         return 0;
     }
 
-    if ((battleType & BATTLE_TYPE_AI) && ov12_0223AB0C(battleSystem, ctx->battlerIdAttacker) == 4) {
+    if ((battleType & BATTLE_TYPE_AI) && BattleSystem_GetBattlerType(battleSystem, ctx->battlerIdAttacker) == 4) {
         return 0;
     }
 
@@ -3500,7 +3500,7 @@ static BOOL ov12_0224D7EC(BattleSystem *battleSystem, BattleContext *ctx) {
 
     for (battlerId = 0; battlerId < maxBattlers; battlerId++) {
         if ((battleType == (BATTLE_TYPE_AI | BATTLE_TYPE_MULTI | BATTLE_TYPE_DOUBLES) || battleType == (BATTLE_TYPE_AI | BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_MULTI)) && BattleSystem_GetFieldSide(battleSystem, battlerId) == 0) {
-            if (ov12_0223AB0C(battleSystem, battlerId) == 2 && ctx->battleMons[battlerId].hp == 0) {
+            if (BattleSystem_GetBattlerType(battleSystem, battlerId) == 2 && ctx->battleMons[battlerId].hp == 0) {
                 int hp = 0;
                 Party *party = BattleSystem_GetParty(battleSystem, battlerId);
                 BattleSystem_GetOpponentData(battleSystem, battlerId);
@@ -3969,33 +3969,33 @@ static void ov12_0224E414(BattleSystem *battleSystem, BattleContext *ctx) {
         if (ctx->playerActions[battler].command != CONTROLLER_COMMAND_40) {
             if (ctx->unk_314C[battler] & 1) {
                 data = ctx->playerActions[battler].command - CONTROLLER_COMMAND_FIGHT_INPUT + BATTLE_INPUT_FIGHT;
-                ov12_0223BDDC(battleSystem, battler, data);
+                BattleSystem_RecordInput(battleSystem, battler, data);
             }
 
             switch (ctx->playerActions[battler].command) {
             case CONTROLLER_COMMAND_FIGHT_INPUT:
                 if (ctx->unk_314C[battler] & (1 << 1)) {
                     data = ctx->playerActions[battler].unk8;
-                    ov12_0223BDDC(battleSystem, battler, data);
+                    BattleSystem_RecordInput(battleSystem, battler, data);
                 }
 
                 if (ctx->unk_314C[battler] & (1 << 2)) {
                     data = ctx->playerActions[battler].unk4 + 1;
-                    ov12_0223BDDC(battleSystem, battler, data);
+                    BattleSystem_RecordInput(battleSystem, battler, data);
                 }
                 break;
             case CONTROLLER_COMMAND_ITEM_INPUT:
                 data = ctx->playerActions[battler].unk8 & 0xFF;
-                ov12_0223BDDC(battleSystem, battler, data);
+                BattleSystem_RecordInput(battleSystem, battler, data);
                 data = (ctx->playerActions[battler].unk8 & 0xFF00) >> 16;
-                ov12_0223BDDC(battleSystem, battler, data);
+                BattleSystem_RecordInput(battleSystem, battler, data);
                 break;
             case CONTROLLER_COMMAND_POKEMON_INPUT:
                 data = ctx->playerActions[battler].unk8 + 1;
-                ov12_0223BDDC(battleSystem, battler, data);
+                BattleSystem_RecordInput(battleSystem, battler, data);
                 break;
             case CONTROLLER_COMMAND_RUN_INPUT:
-                ov12_0223BDDC(battleSystem, battler, TRUE);
+                BattleSystem_RecordInput(battleSystem, battler, TRUE);
                 break;
             default:
                 break;

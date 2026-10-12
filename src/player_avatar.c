@@ -483,7 +483,7 @@ static void PlayerAvatar_SetPlayerSaveDataState(PlayerAvatar *avatar, s32 state)
     PlayerSaveData_SetState(PlayerAvatar_GetPlayerSaveData(avatar), state);
 }
 
-void sub_0205C810(PlayerAvatar *avatar, VecFx32 *position, u32 direction) {
+void PlayerAvatar_SetPositionAndDirection(PlayerAvatar *avatar, VecFx32 *position, u32 direction) {
     MapObject_SetPositionFromVectorAndDirection(PlayerAvatar_GetMapObject(avatar), position, direction);
     PlayerAvatar_SetMoveState(avatar, AVATAR_MOVE_STATE_NONE);
     PlayerAvatar_SetPlayerMoveState(avatar, PLAYER_MOVE_STATE_NONE);

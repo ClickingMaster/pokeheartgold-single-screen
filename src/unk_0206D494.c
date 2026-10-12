@@ -397,7 +397,7 @@ void BugContest_WarpToJudging(TaskManager *taskManager, FieldSystem *fieldSystem
     warp.y = 50;
     warp.direction = 0;
     LocalFieldData_SetDynamicWarp(localFieldData, &warp);
-    sub_020537A8(taskManager, LocalFieldData_GetDynamicWarp(localFieldData));
+    CallTask_ChangeMap(taskManager, LocalFieldData_GetDynamicWarp(localFieldData));
 }
 
 void BugContest_PromptSwapPokemon(TaskManager *taskManager, Pokemon *mon) {

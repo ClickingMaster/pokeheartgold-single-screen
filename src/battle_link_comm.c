@@ -12,8 +12,8 @@ void BattleLink_Start(BattleSystem *battle) {
     send->state = 0;
     recv->battle = battle;
     recv->state = 0;
-    ov12_0223BBFC(battle, &send->state);
-    ov12_0223BC08(battle, &recv->state);
+    BattleSystem_SetLinkSendStatePtr(battle, &send->state);
+    BattleSystem_SetLinkRecvStatePtr(battle, &recv->state);
     SysTask_CreateOnMainQueue(BattleLink_SendTask, send, 0);
     SysTask_CreateOnMainQueue(BattleLink_RecvTask, recv, 0);
 }
@@ -142,8 +142,8 @@ void BattleLink_QueueSendData(BattleSystem *battle, int command, int battler, u8
 
     header = Heap_Alloc(HEAP_ID_BATTLE, 4);
     buffer = BattleSystem_GetSendBufferPtr(battle);
-    write = ov12_0223A960(battle);
-    end = ov12_0223A96C(battle);
+    write = BattleSystem_GetSendBufferWritePos(battle);
+    end = BattleSystem_GetSendBufferEndPos(battle);
     if ((u32)(*write + 5 + size) > 0x1000) {
         *end = *write;
         *write = 0;
@@ -165,8 +165,8 @@ void BattleLink_QueueSendData(BattleSystem *battle, int command, int battler, u8
 void BattleLink_RecvData(int sender, int size, u8 *data, BattleSystem *battle) {
     int i;
     u8 *buffer = BattleSystem_GetRecvBufferPtr(battle);
-    u16 *write = ov12_0223A984(battle);
-    u16 *end = ov12_0223A990(battle);
+    u16 *write = BattleSystem_GetRecvBufferWritePos(battle);
+    u16 *end = BattleSystem_GetRecvBufferEndPos(battle);
     if (*write + size + 1 > 4096) {
         *end = *write;
         *write = 0;
@@ -364,9 +364,9 @@ void BattleLink_RecvPartnerParty(int sender, int unused, void *data, BattleLinkW
 void BattleLink_SendTask(SysTask *task, void *ptr) {
     BattleLinkTask *work = ptr;
     u8 *buffer = BattleSystem_GetSendBufferPtr(work->battle);
-    u16 *read = ov12_0223A954(work->battle);
-    u16 *write = ov12_0223A960(work->battle);
-    u16 *end = ov12_0223A96C(work->battle);
+    u16 *read = BattleSystem_GetSendBufferReadPos(work->battle);
+    u16 *write = BattleSystem_GetSendBufferWritePos(work->battle);
+    u16 *end = BattleSystem_GetSendBufferEndPos(work->battle);
     switch (work->state) {
     case 0: {
         int size;
@@ -397,9 +397,9 @@ void BattleLink_SendTask(SysTask *task, void *ptr) {
 void BattleLink_RecvTask(SysTask *task, void *ptr) {
     BattleLinkTask *work = ptr;
     u8 *buffer = BattleSystem_GetRecvBufferPtr(work->battle);
-    u16 *read = ov12_0223A978(work->battle);
-    u16 *write = ov12_0223A984(work->battle);
-    u16 *end = ov12_0223A990(work->battle);
+    u16 *read = BattleSystem_GetRecvBufferReadPos(work->battle);
+    u16 *write = BattleSystem_GetRecvBufferWritePos(work->battle);
+    u16 *end = BattleSystem_GetRecvBufferEndPos(work->battle);
     switch (work->state) {
     case 0:
         if (*read == *write) {
@@ -422,9 +422,9 @@ void BattleLink_RecvTask(SysTask *task, void *ptr) {
 }
 
 void BattleLink_RecvEnd(int sender, int unused, void *data, BattleSystem *battle) {
-    ov12_0223BC14(battle, 255);
-    ov12_0223BC20(battle, 255);
-    ov12_0223BC2C(battle, 1);
+    BattleSystem_SetLinkSendState(battle, 255);
+    BattleSystem_SetLinkRecvState(battle, 255);
+    BattleSystem_SetBattleFinished(battle, 1);
 }
 
 void BattleLink_BuildPalPad(PlayerProfile *profile, SavePalPad *friends, SavePalPad *out) {

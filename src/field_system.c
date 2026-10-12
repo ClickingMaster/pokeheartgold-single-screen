@@ -101,37 +101,37 @@ void FieldSystem_LoadFieldOverlayInternal(FieldSystem *fieldSystem) {
     fieldSystem->processManager->parent = OverlayManager_New(&ov01_02206378, fieldSystem, HEAP_ID_FIELD2);
 }
 
-void sub_0203DF34(FieldSystem *fieldSystem) {
+void FieldSystem_ClearRunningFieldMap(FieldSystem *fieldSystem) {
     fieldSystem->runningFieldMap = FALSE;
 }
 
-u8 sub_0203DF3C(FieldSystem *fieldSystem) {
-    GF_ASSERT(fieldSystem->unk_110 == 0 || fieldSystem->unk_110 == 1);
+u8 FieldSystem_GetStartMenuInputState(FieldSystem *fieldSystem) {
+    GF_ASSERT(fieldSystem->startMenuInputState == 0 || fieldSystem->startMenuInputState == 1);
 
-    return fieldSystem->unk_110;
+    return fieldSystem->startMenuInputState;
 }
 
-void sub_0203DF64(FieldSystem *fieldSystem, int a1) {
+void FieldSystem_SetStartMenuInputState(FieldSystem *fieldSystem, int a1) {
     GF_ASSERT(a1 == 0 || a1 == 1);
-    fieldSystem->unk_110 = a1;
+    fieldSystem->startMenuInputState = a1;
 }
 
-BOOL sub_0203DF7C(FieldSystem *fieldSystem) {
+BOOL FieldSystem_IsFieldMapLoaded(FieldSystem *fieldSystem) {
     return fieldSystem->processManager->parent != NULL;
 }
 
-BOOL sub_0203DF8C(FieldSystem *fieldSystem) {
+BOOL FieldSystem_IsFieldMapRunning(FieldSystem *fieldSystem) {
     return fieldSystem->processManager->parent != NULL && fieldSystem->runningFieldMap;
 }
 
-BOOL sub_0203DFA4(FieldSystem *fieldSystem) {
+BOOL FieldSystem_IsChildAppRunning(FieldSystem *fieldSystem) {
     return fieldSystem->processManager->child != NULL;
 }
 
 void FieldSystem_LaunchApplication(FieldSystem *fieldSystem, const OverlayManagerTemplate *template, void *parentWork) {
     GF_ASSERT(fieldSystem->processManager->child == NULL);
 
-    sub_0203DF34(fieldSystem);
+    FieldSystem_ClearRunningFieldMap(fieldSystem);
 
     fieldSystem->processManager->child = OverlayManager_New(template, parentWork, HEAP_ID_FIELD2);
 }
@@ -284,12 +284,12 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
     }
 }
 
-void sub_0203E2F4() {
+void FieldSystem_PauseProcesses() {
     sFieldSysPtr->processManager->isPaused = TRUE;
     sub_02037504();
 }
 
-void sub_0203E30C() {
+void FieldSystem_ResumeProcesses() {
     sFieldSysPtr->processManager->isPaused = FALSE;
     sub_020374E4();
 }
@@ -301,8 +301,8 @@ int sub_0203E324() {
     return sFieldSysPtr->unk4->unk14;
 }
 
-void sub_0203E33C(FieldSystem *fieldSystem, int a1) {
-    fieldSystem->unk1C = a1;
+void FieldSystem_SetSavedBottomScreenAppId(FieldSystem *fieldSystem, int a1) {
+    fieldSystem->savedBottomScreenAppId = a1;
 }
 
 BgConfig *FieldSystem_GetBgConfigPtr(FieldSystem *fieldSystem) {

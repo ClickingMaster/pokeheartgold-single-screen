@@ -67,7 +67,7 @@
 .public System_GetTouchHeldCoords
 .public String_Delete
 .public FieldSystem_GetFacingObject
-.public sub_0203DF8C
+.public FieldSystem_IsFieldMapRunning
 .public FieldSystem_IsPlayerMovementAllowed
 .public AllocAndFetchNearbyHiddenItems
 .public FieldSystem_TaskIsRunning
@@ -88,7 +88,7 @@
 .public _s32_div_f
 .public _u32_div_f
 .public gSystem
-.public ov01_021E7F54
+.public FieldSystem_GetFacingActionType
 .public IsSpriteIdWithoutTalkAction
 .public IsScriptIdWithoutTalkAction
 .public DowsingMchn_Init

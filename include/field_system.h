@@ -211,10 +211,10 @@ struct FieldSystem {
     TaskManager *taskman;
     MapEvents *mapEvents;
     int bottomScreenType;
-    int unk1C;
+    int savedBottomScreenAppId;
     Location *location;
     Camera *camera;
-    void *unk28;
+    void *cameraShift;
     MapLoadManager *mapLoadManager;
     MapMatrix *mapMatrix;
     AreaDataManager *areaDataManager;
@@ -228,7 +228,7 @@ struct FieldSystem {
     MapPropAnimationManager *mapPropAnimationManager;
     MapPropOneShotAnimationManager *mapPropOneShotAnimationManager;
     TerrainAttributes *terrainAttributes;
-    void *unk60;
+    void *terrainQueries;
     BOOL skipMapAttributes;
     Signpost *signpost;
     BOOL runningFieldMap;
@@ -238,8 +238,8 @@ struct FieldSystem {
     u16 lastFacingDirection;   // 0x7A, used to determine whether the following field should be incremented
     u16 reverseTurnFrameSteps; // 0x7C, turning back and forth in place will increase the effective encounter rate
     u16 encounterInhibitSteps; // 0x7E, don't generate an encounter in the first 4 steps on a new map
-    struct UnkStruct_02059E1C *unk80;
-    struct UnionRoomObjects *unk84;
+    struct UnkStruct_02059E1C *unionRoom;
+    struct UnionRoomObjects *unionRoomObjects;
     u8 filler_88[0x8];
     int unk90;
     BagCursor *bagCursor;
@@ -251,7 +251,7 @@ struct FieldSystem {
     u32 unkAC;
     void *unkB0;
     s64 unkB4;
-    int unkBC;                   // flags?
+    int fieldMapUpdateFlags;     // FieldMap_UpdateFrame steps: bit 0 texture free, 1 map load tick, 2 3D render, 3 ov01_02204350
     Field3dRenderObjManager *renderObjManager;
     int environmentSoundState;   // Used to keep track of the active weather/soundplate sound and their associated loading status.
     FieldSystemUnkSubC8 *unkC8;
@@ -260,7 +260,7 @@ struct FieldSystem {
     u8 unkD2_0 : 6;
     u8 textbox_open : 1;
     u8 unkD2_7 : 1;
-    u8 unkD3;
+    u8 startMenuCursorPos;
     SysTask *touchSaveTask;    // bottom screen type 4 (bottom_screen_app.c)
     SysTask *bottomScreenTask; // the bottom-screen app manager, or the view photo task
     FieldViewPhoto *viewPhotoTask;
@@ -269,7 +269,7 @@ struct FieldSystem {
     FieldSystemUnkSub104 *unk104;
     FieldSystemUnkSub108 *unk108;
     MenuInputStateMgr menuInputState; // Tracks whether the last menu input was touch or keypad
-    u8 unk_110;
+    u8 startMenuInputState;
     u8 unk_111[3];
     GearPhoneRingManager *phoneRingManager;
     BugContest *bugContest;
@@ -308,21 +308,21 @@ BOOL Field_NewGame_AppInit(OverlayManager *man, int *unused);
 BOOL Field_AppExec(OverlayManager *man, int *unused);
 BOOL Field_AppExit(OverlayManager *man, int *unused);
 void FieldSystem_LoadFieldOverlayInternal(FieldSystem *fieldSystem);
-void sub_0203DF34(FieldSystem *fieldSystem);
-u8 sub_0203DF3C(FieldSystem *fieldSystem);
-void sub_0203DF64(FieldSystem *fieldSystem, int a1);
-BOOL sub_0203DF7C(FieldSystem *fieldSystem);
-BOOL sub_0203DF8C(FieldSystem *fieldSystem);
-BOOL sub_0203DFA4(FieldSystem *fieldSystem);
+void FieldSystem_ClearRunningFieldMap(FieldSystem *fieldSystem);
+u8 FieldSystem_GetStartMenuInputState(FieldSystem *fieldSystem);
+void FieldSystem_SetStartMenuInputState(FieldSystem *fieldSystem, int a1);
+BOOL FieldSystem_IsFieldMapLoaded(FieldSystem *fieldSystem);
+BOOL FieldSystem_IsFieldMapRunning(FieldSystem *fieldSystem);
+BOOL FieldSystem_IsChildAppRunning(FieldSystem *fieldSystem);
 void FieldSystem_LaunchApplication(FieldSystem *fieldSystem, const OverlayManagerTemplate *template, void *parentWork);
 FieldSystem *FieldSystem_New(OverlayManager *man);
 void FieldSystem_Delete(OverlayManager *man);
 BOOL FieldSystem_IsPlayerMovementAllowed(FieldSystem *fieldSystem);
 void FieldSystem_Control(FieldSystem *fieldSystem);
-void sub_0203E2F4();
-void sub_0203E30C();
+void FieldSystem_PauseProcesses();
+void FieldSystem_ResumeProcesses();
 int sub_0203E324();
-void sub_0203E33C(FieldSystem *fieldSystem, int a1);
+void FieldSystem_SetSavedBottomScreenAppId(FieldSystem *fieldSystem, int a1);
 BgConfig *FieldSystem_GetBgConfigPtr(FieldSystem *fieldSystem);
 SaveData *FieldSystem_GetSaveData(FieldSystem *fieldSystem);
 void Task_AntipiracyRandom();

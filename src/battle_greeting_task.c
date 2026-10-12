@@ -69,7 +69,7 @@ BOOL Task_EditBattleGreeting(TaskManager *taskManager) {
         }
         break;
     case 2:
-        if (sub_020505C8(work->fieldSystem)) {
+        if (FieldSystem_IsOverworldRestored(work->fieldSystem)) {
             FieldMap_FadeScreen(1);
             work->state = 3;
         }

@@ -188,7 +188,7 @@ void SetUpScriptContextForMap(FieldSystem *fieldSystem, ScriptContext *ctx, u16 
     r6 = LoadScriptsAndMessagesByMapId(fieldSystem, ctx, scriptId);
     SetupBytecodeScript(ctx, ctx->mapScripts);
     ScriptRunByIndex(ctx, r6);
-    sub_0203FD68(ctx, fieldSystem->taskman);
+    ScriptContext_SetTaskManager(ctx, fieldSystem->taskman);
 }
 
 u16 LoadScriptsAndMessagesByMapId(FieldSystem *fieldSystem, ScriptContext *ctx, u16 scriptId) {
@@ -331,7 +331,7 @@ void *FieldSysGetAttrAddr(FieldSystem *fieldSystem, enum ScriptEnvField field) {
     return FieldSysGetAttrAddrInternal(unk, field);
 }
 
-void sub_0204031C(FieldSystem *fieldSystem) {
+void Script_ReopenStartMenuOnEnd(FieldSystem *fieldSystem) {
     ScriptEnvironment *unk = TaskManager_GetEnvironment(fieldSystem->taskman);
     if (FieldSystem_MapIsNotMysteryZone(fieldSystem) == TRUE) {
         unk->scrctx_end_cb = sub_0203BD64;

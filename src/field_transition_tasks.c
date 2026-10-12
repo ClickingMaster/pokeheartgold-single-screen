@@ -267,7 +267,7 @@ void FieldTransition_PlaceInsideSideDoor(FieldSystem *fieldSystem) {
         playerPosition.x += FX32_ONE * 16;
     }
     playerPosition.y = FieldSystem_GetTerrainHeight(fieldSystem, playerPosition.y, playerPosition.x, playerPosition.z, NULL);
-    sub_0205C810(fieldSystem->playerAvatar, &playerPosition, direction);
+    PlayerAvatar_SetPositionAndDirection(fieldSystem->playerAvatar, &playerPosition, direction);
     Camera_SetLookAtTargetAndRecalcPos(PlayerAvatar_GetPositionVector(fieldSystem->playerAvatar), fieldSystem->camera);
     Camera_SetFixedTarget(PlayerAvatar_GetPositionVector(fieldSystem->playerAvatar), fieldSystem->camera);
     Camera_OffsetLookAtPosAndTarget(&delta, fieldSystem->camera);
@@ -301,7 +301,7 @@ void FieldTransition_PlaceOffWarpStairs(FieldSystem *fieldSystem) {
         direction = DIR_EAST;
     }
     playerPosition.y = FieldSystem_GetTerrainHeight(fieldSystem, playerPosition.y, playerPosition.x, playerPosition.z, NULL);
-    sub_0205C810(fieldSystem->playerAvatar, &playerPosition, direction);
+    PlayerAvatar_SetPositionAndDirection(fieldSystem->playerAvatar, &playerPosition, direction);
     Camera_SetLookAtTargetAndRecalcPos(PlayerAvatar_GetPositionVector(fieldSystem->playerAvatar), fieldSystem->camera);
     Camera_SetFixedTarget(PlayerAvatar_GetPositionVector(fieldSystem->playerAvatar), fieldSystem->camera);
     Camera_OffsetLookAtPosAndTarget(&delta, fieldSystem->camera);
@@ -323,7 +323,7 @@ void FieldTransition_PlaceBelowFloor(FieldSystem *fieldSystem) {
     PlayerAvatar_CopyPositionVector(fieldSystem->playerAvatar, &position);
     PlayerAvatar_ToggleAutomaticHeightUpdating(fieldSystem->playerAvatar, FALSE);
     position.y -= 2 << 16;
-    sub_0205C810(fieldSystem->playerAvatar, &position, 0);
+    PlayerAvatar_SetPositionAndDirection(fieldSystem->playerAvatar, &position, 0);
     Camera_SetLookAtTargetAndRecalcPos(PlayerAvatar_GetPositionVector(fieldSystem->playerAvatar), fieldSystem->camera);
     Camera_SetFixedTarget(PlayerAvatar_GetPositionVector(fieldSystem->playerAvatar), fieldSystem->camera);
     Camera_OffsetLookAtPosAndTarget(&delta, fieldSystem->camera);
@@ -344,7 +344,7 @@ void FieldTransition_PlaceAboveFloor(FieldSystem *fieldSystem) {
     PlayerAvatar_CopyPositionVector(fieldSystem->playerAvatar, &position);
     PlayerAvatar_ToggleAutomaticHeightUpdating(fieldSystem->playerAvatar, FALSE);
     position.y += 2 << 16;
-    sub_0205C810(fieldSystem->playerAvatar, &position, 0);
+    PlayerAvatar_SetPositionAndDirection(fieldSystem->playerAvatar, &position, 0);
     Camera_SetLookAtTargetAndRecalcPos(PlayerAvatar_GetPositionVector(fieldSystem->playerAvatar), fieldSystem->camera);
     Camera_SetFixedTarget(PlayerAvatar_GetPositionVector(fieldSystem->playerAvatar), fieldSystem->camera);
     Camera_OffsetLookAtPosAndTarget(&delta, fieldSystem->camera);

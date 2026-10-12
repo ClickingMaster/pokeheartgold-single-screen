@@ -341,7 +341,7 @@ static int ViewPhotoFieldTask_RestorePlayerOverworldPosition(FieldSystem *fieldS
     Location location;
 
     InitLocation(&location, viewPhoto->savedMapId, -1, viewPhoto->x, viewPhoto->z, viewPhoto->savedDirection);
-    sub_020537A8(taskManager, &location);
+    CallTask_ChangeMap(taskManager, &location);
     return VIEW_PHOTO_STATE_QUIT2;
 }
 
@@ -357,7 +357,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
         {
             Location location;
             InitLocation(&location, photo->mapId, -1, photo->x, photo->y, DIR_SOUTH);
-            sub_020537A8(taskManager, &location);
+            CallTask_ChangeMap(taskManager, &location);
         }
         ++taskData->state;
         break;
@@ -590,14 +590,14 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
         takePhoto->state = TAKE_PHOTO_STATE_INIT_LEAVE_OVERWORLD;
         break;
     case TAKE_PHOTO_STATE_INIT_LEAVE_OVERWORLD:
-        sub_0203E33C(fieldSystem, 3);
+        FieldSystem_SetSavedBottomScreenAppId(fieldSystem, 3);
         CallTask_LeaveOverworld(taskManager);
         takePhoto->state = TAKE_PHOTO_STATE_SAVE_PLAYER_STATE;
         break;
     case TAKE_PHOTO_STATE_SAVE_PLAYER_STATE:
         FieldSystem_SetWarpResetSuppressed(fieldSystem, 1);
         FieldTakePhoto_SetLocationBuf(takePhoto, DIR_SOUTH, takePhoto->pPhoto->y, takePhoto->pPhoto->x, takePhoto->pPhoto->mapId);
-        sub_020537A8(taskManager, &takePhoto->locationBuf);
+        CallTask_ChangeMap(taskManager, &takePhoto->locationBuf);
         takePhoto->state = TAKE_PHOTO_STATE_INIT_RESTORE_OVERWORLD;
         break;
     case TAKE_PHOTO_STATE_INIT_RESTORE_OVERWORLD:
@@ -778,14 +778,14 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
     case TAKE_PHOTO_STATE_UNLOAD:
         GF_RTC_UnfreezeTime();
         FieldTakePhoto_RemoveAllMapObjects(takePhoto);
-        sub_0203E33C(fieldSystem, 0);
+        FieldSystem_SetSavedBottomScreenAppId(fieldSystem, 0);
         CallTask_LeaveOverworld(taskManager);
         takePhoto->state = TAKE_PHOTO_STATE_RESTORE_PLAYER;
         break;
     case TAKE_PHOTO_STATE_RESTORE_PLAYER:
         FieldSystem_SetWarpResetSuppressed(fieldSystem, 0);
         FieldTakePhoto_SetLocationBuf(takePhoto, takePhoto->savedDirection, takePhoto->savedZ, takePhoto->savedX, takePhoto->savedMapId);
-        sub_020537A8(taskManager, &takePhoto->locationBuf);
+        CallTask_ChangeMap(taskManager, &takePhoto->locationBuf);
         takePhoto->state = TAKE_PHOTO_STATE_RESUME_OVERWORLD_AFTER;
         break;
     case TAKE_PHOTO_STATE_RESUME_OVERWORLD_AFTER:

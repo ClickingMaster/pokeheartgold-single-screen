@@ -798,7 +798,7 @@ int BattleBagMenu_CheckTouchHitbox(BattleBagMenu *menu, const TouchscreenHitbox 
 int BattleBagMenu_GetBattlerSelectedMonIndex(BattleBagMenu *menu) {
     BattleBagContext *context = menu->context;
     BattleContext *battleContext = BattleSystem_GetBattleContext(context->battleSystem);
-    return ov12_022581D4(menu->context->battleSystem, battleContext, 2, context->battlerId);
+    return BattleContext_Get(menu->context->battleSystem, battleContext, 2, context->battlerId);
 }
 
 void BattleBagMenu_ConsumeItem(BattleSystem *battleSystem, u16 item, u8 pocket, enum HeapID heapID) {

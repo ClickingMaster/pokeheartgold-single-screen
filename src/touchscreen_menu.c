@@ -300,7 +300,7 @@ SysTask *TouchscreenMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, Fie
     data->msgFormat = msgFormat;
     data->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, msgBank, HEAP_ID_8);
     TouchscreenMenu_InitIconFlags(data);
-    data->selection = TouchscreenMenu_GetSlotFromMenuIndex(data, fieldSystem->unkD3);
+    data->selection = TouchscreenMenu_GetSlotFromMenuIndex(data, fieldSystem->startMenuCursorPos);
     TouchscreenMenu_ValidateSelection(data);
     TouchscreenMenu_LoadSpriteResources(data);
     TouchscreenMenu_CreateSprites(data);
@@ -522,7 +522,7 @@ int TouchscreenMenu_GetActionType(TouchscreenMenuData *data) {
             return data->actionType;
         }
     }
-    actionType = ov01_021E7F54(fieldSystem);
+    actionType = FieldSystem_GetFacingActionType(fieldSystem);
     if (actionType == 1) {
         FieldSystem_GetFacingObject(fieldSystem, &facingObj);
         if (IsScriptIdWithoutTalkAction(MapObject_GetScriptID(facingObj)) || IsSpriteIdWithoutTalkAction(MapObject_GetSpriteID(facingObj))) {
@@ -596,7 +596,7 @@ BOOL ov27_0225A714(TouchscreenMenuData *data) {
 #pragma force_active reset
 
 void ov27_0225A7B0(TouchscreenMenuData *data) {
-    if (sub_0203DF8C(data->fieldSystem) == TRUE) {
+    if (FieldSystem_IsFieldMapRunning(data->fieldSystem) == TRUE) {
         TouchscreenMenu_UpdateActionLabel(data);
     }
     if (data->layout == TOUCHSCREEN_MENU_LAYOUT_NORMAL) {
@@ -752,8 +752,8 @@ void TouchscreenMenu_ShowNewIcons(TouchscreenMenuData *data) {
         CopyWindowToVram(&data->menuWindow);
     }
     if (oldCount != count) {
-        data->fieldSystem->unkD3 = 0;
-        data->selection = TouchscreenMenu_GetSlotFromMenuIndex(data, data->fieldSystem->unkD3);
+        data->fieldSystem->startMenuCursorPos = 0;
+        data->selection = TouchscreenMenu_GetSlotFromMenuIndex(data, data->fieldSystem->startMenuCursorPos);
         TouchscreenMenu_ValidateSelection(data);
     }
     if (TouchscreenMenu_HasRunningShoes(data) == TRUE && data->runningShoesShown == FALSE) {
@@ -1061,7 +1061,7 @@ void TouchscreenMenu_HandleDpadInput(TouchscreenMenuData *data) {
             Sprite_SetAnimCtrlSeq(data->sprites[data->selection], 1);
         }
         TouchscreenMenu_HighlightIcon(data, data->selection);
-        data->fieldSystem->unkD3 = TouchscreenMenu_GetMenuIndex(data, data->selection);
+        data->fieldSystem->startMenuCursorPos = TouchscreenMenu_GetMenuIndex(data, data->selection);
     }
 }
 
@@ -1128,7 +1128,7 @@ BOOL TouchscreenMenu_HandleTouchInput(TouchscreenMenuData *data) {
         } else if (data->sprites[hit - 1] != NULL) {
             if (hit < 8) {
                 data->selection = hit - 1;
-                data->fieldSystem->unkD3 = TouchscreenMenu_GetMenuIndex(data, data->selection);
+                data->fieldSystem->startMenuCursorPos = TouchscreenMenu_GetMenuIndex(data, data->selection);
                 TouchscreenMenu_HighlightIcon(data, data->selection);
             }
             *data->lastTouchMenuInput = TouchscreenMenu_GetMenuIndex(data, hit - 1) + 2;
@@ -1505,7 +1505,7 @@ int TouchscreenMenu_GetSlotFromMenuIndex(TouchscreenMenuData *data, int menuInde
         }
     }
     if (slot == -1) {
-        data->fieldSystem->unkD3 = 0;
+        data->fieldSystem->startMenuCursorPos = 0;
         slot = 0;
     }
     return slot;
@@ -1518,8 +1518,8 @@ void TouchscreenMenu_ValidateSelection(TouchscreenMenuData *data) {
     if (!data->icons[data->selection].shown) {
         for (i = 0; i < TOUCHSCREEN_MENU_NUM_ICONS; i++) {
             if (data->icons[i].shown) {
-                data->fieldSystem->unkD3 = i;
-                data->selection = TouchscreenMenu_GetSlotFromMenuIndex(data, data->fieldSystem->unkD3);
+                data->fieldSystem->startMenuCursorPos = i;
+                data->selection = TouchscreenMenu_GetSlotFromMenuIndex(data, data->fieldSystem->startMenuCursorPos);
                 return;
             }
         }

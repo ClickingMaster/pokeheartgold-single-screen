@@ -880,12 +880,12 @@ void CommPlayerManager_SetLocalFacing(int facing) {
 }
 
 void sub_02057F58(void) {
-    sub_0203E2F4();
+    FieldSystem_PauseProcesses();
     gCommPlayerManager->unk_ED = 0;
 }
 
 void sub_02057F70(void) {
-    sub_0203E30C();
+    FieldSystem_ResumeProcesses();
     sub_02057358(1);
 }
 

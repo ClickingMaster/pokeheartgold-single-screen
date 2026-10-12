@@ -104,7 +104,7 @@ _0226BF76:
 	pop {r3, r4, r5, r6, r7, pc}
 _0226BF8A:
 	ldr r0, [r4]
-	bl ov12_0223C080
+	bl BattleSystem_CanPauseRecording
 	cmp r0, #1
 	bne _0226BFCE
 	add r0, r5, #0
@@ -129,7 +129,7 @@ _0226BFB0:
 	ble _0226BFCE
 	ldr r0, [r4]
 	mov r1, #0
-	bl ov12_0223BFFC
+	bl BattleSystem_PauseRecording
 	mov r0, #4
 	ldrsh r0, [r4, r0]
 	add r0, r0, #1

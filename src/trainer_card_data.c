@@ -224,7 +224,7 @@ void TrainerCardData_SetBadges(PlayerProfile *profile, FieldSystem *fieldSystem,
 void LinkTrainerCard_StartTask(FieldSystem *fieldSystem) {
     LinkTrainerCardTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(LinkTrainerCardTaskEnv));
     env->state = 0;
-    env->partnerCard = UnionRoom_AllocTrainerCards(fieldSystem->unk80);
+    env->partnerCard = UnionRoom_AllocTrainerCards(fieldSystem->unionRoom);
     TaskManager_Call(fieldSystem->taskman, Task_LinkTrainerCard, env);
 }
 
@@ -234,7 +234,7 @@ BOOL Task_LinkTrainerCard(TaskManager *taskManager) {
 
     switch (env->state) {
     case 0:
-        UnionRoom_SendTrainerCard(fieldSystem->unk80);
+        UnionRoom_SendTrainerCard(fieldSystem->unionRoom);
         env->state = 1;
     case 1:
         if (env->partnerCard->received != 0) {
@@ -248,7 +248,7 @@ BOOL Task_LinkTrainerCard(TaskManager *taskManager) {
         break;
     case 11:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
-            UnionRoom_FreeTrainerCards(fieldSystem->unk80);
+            UnionRoom_FreeTrainerCards(fieldSystem->unionRoom);
             Heap_Free(env);
             return TRUE;
         }

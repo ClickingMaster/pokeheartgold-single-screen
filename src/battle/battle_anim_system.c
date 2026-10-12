@@ -3079,10 +3079,10 @@ BattleAnimBattlerSprites *BattleAnimBattlerSprites_New(BattleSystem *battleSyste
     sprites->paletteData = BattleSystem_GetPaletteData(battleSystem);
     for (i = 0; i < 4; i++) {
         sprites->sprites[i] = NULL;
-        sprites->picData[i] = ov12_0223BB88(battleSystem, i);
+        sprites->picData[i] = BattleSystem_GetMonPicData(battleSystem, i);
     }
-    ov12_0223C1C4(battleSystem, sprites->battlerTypes);
-    ov12_0223C1F4(battleSystem, (void **)sprites->pokepics);
+    BattleSystem_GetBattlerTypes(battleSystem, sprites->battlerTypes);
+    BattleSystem_GetPokepics(battleSystem, (void **)sprites->pokepics);
     narc = NARC_New(NARC_a_0_0_8, heapId);
     for (i = 0; i < 4; ++i) {
         if ((i == sprites->battler || sprites->battler == 0xFF) && sprites->pokepics[i] != NULL) {

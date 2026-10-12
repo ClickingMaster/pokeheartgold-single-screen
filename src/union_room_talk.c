@@ -19,7 +19,7 @@
 #include "union_room_avatar.h"
 #include "unk_02035900.h"
 
-// Union Room talk (ARM9 static 0x0205A44C-0x0205AC88): the part of the Union Room object (FieldSystem.unk80,
+// Union Room talk (ARM9 static 0x0205A44C-0x0205AC88): the part of the Union Room object (FieldSystem.unionRoom,
 // union_room.c) used while the player talks to another player: the link commands of the talk menu (choice,
 // reply, cancel, battle party choice, trainer card exchange), the script messages for what a player is doing,
 // the activity and chat message broadcast in the player's beacon, and the language greeting learned from a
@@ -116,15 +116,15 @@ extern const int _020FC99C[7][2];
 extern const int gUnionRoomChatMsgs[20];
 
 void UnionRoom_RecvTalkChoice(int netId, int size, u8 *data, FieldSystem *fieldSystem) {
-    fieldSystem->unk80->talkChoiceReceived = 1;
-    fieldSystem->unk80->talkChoice = *data;
+    fieldSystem->unionRoom->talkChoiceReceived = 1;
+    fieldSystem->unionRoom->talkChoice = *data;
     if (*data == 4) {
         sub_020388E0();
     }
 }
 
 void UnionRoom_RecvTalkCancel(int netId, int size, u8 *data, FieldSystem *fieldSystem) {
-    fieldSystem->unk80->partnerCancelled = 1;
+    fieldSystem->unionRoom->partnerCancelled = 1;
 }
 
 BOOL UnionRoom_PartnerCancelled(struct UnkStruct_02059E1C *unionRoom) {
@@ -145,11 +145,11 @@ void UnionRoom_RecvTrainerCard(int netId, int size, void *data) {
 }
 
 TrainerCardData *UnionRoom_GetTrainerCardBuffer(int netId, FieldSystem *fieldSystem) {
-    return fieldSystem->unk80->cards[netId];
+    return fieldSystem->unionRoom->cards[netId];
 }
 
 void UnionRoom_RecvBattleChoice(int netId, int size, u8 *data, FieldSystem *fieldSystem) {
-    fieldSystem->unk80->battleChoice[netId] = *data;
+    fieldSystem->unionRoom->battleChoice[netId] = *data;
 }
 
 int UnionRoom_GetBattleCancel(struct UnkStruct_02059E1C *unionRoom) {

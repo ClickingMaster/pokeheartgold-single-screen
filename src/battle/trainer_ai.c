@@ -3450,7 +3450,7 @@ static BOOL AI_HasSuperEffectiveMove(BattleSystem *battleSystem, BattleContext *
 
     // Look at the slot directly across from us on the opposite side. i.e.,
     // AI slot 1 looks at player slot 1, AI slot 2 looks at player slot 2.
-    oppositeSlot = ov12_0223AB0C(battleSystem, battler) ^ 1;
+    oppositeSlot = BattleSystem_GetBattlerType(battleSystem, battler) ^ 1;
     defender = BattleSystem_GetBattlerFromBattlerType(battleSystem, oppositeSlot);
 
     if ((ctx->switchInFlag & MaskOfFlagNo(defender)) == FALSE) {
@@ -3939,7 +3939,7 @@ static BOOL TrainerAI_ShouldUseItem(BattleSystem *battleSystem, int battler) {
 
     // Don't let the AI partners ever use items in battle against trainers.
     if ((battleSystem->battleType & BATTLE_TYPE_TRAINER_WITH_AI_PARTNER) == BATTLE_TYPE_TRAINER_WITH_AI_PARTNER
-        && ov12_0223AB0C(battleSystem, battler) == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
+        && BattleSystem_GetBattlerType(battleSystem, battler) == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
         return result;
     }
 

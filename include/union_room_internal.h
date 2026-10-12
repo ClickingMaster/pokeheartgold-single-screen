@@ -8,7 +8,7 @@
 #include "save.h"
 #include "sys_task_api.h"
 
-// Union Room connection manager (ARM9 static 0x02059DB0-0x0205A44C): FieldSystem.unk80 while the player is in the
+// Union Room connection manager (ARM9 static 0x02059DB0-0x0205A44C): FieldSystem.unionRoom while the player is in the
 // Union Room. A SysTask polls the other players' records every frame and runs the current state function, which
 // drives the wireless connection (searching, connecting as parent or child, disconnecting). The rest of the object
 // (talk messages, 0x0205A44C+) is handled by the Union Room talk code, which keeps its own view of this struct

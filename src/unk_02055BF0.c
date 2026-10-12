@@ -176,7 +176,7 @@ BOOL sub_02055DBC(TaskManager *man) {
         env->state++;
         break;
     case 4:
-        sub_020537A8(man, &env->location);
+        CallTask_ChangeMap(man, &env->location);
         env->state++;
         break;
     case 5:

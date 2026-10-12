@@ -72,15 +72,15 @@ BOOL FieldSystem_TaskIsRunning(FieldSystem *fieldSystem) {
 }
 
 BOOL FieldSystem_ApplicationIsRunning(FieldSystem *fieldSystem) {
-    return sub_0203DF7C(fieldSystem) || sub_0203DFA4(fieldSystem);
+    return FieldSystem_IsFieldMapLoaded(fieldSystem) || FieldSystem_IsChildAppRunning(fieldSystem);
 }
 
 void FieldSystem_LoadFieldOverlay(FieldSystem *fieldSystem) {
     FieldSystem_LoadFieldOverlayInternal(fieldSystem);
 }
 
-BOOL sub_020505C8(FieldSystem *fieldSystem) {
-    return sub_0203DF8C(fieldSystem) != FALSE;
+BOOL FieldSystem_IsOverworldRestored(FieldSystem *fieldSystem) {
+    return FieldSystem_IsFieldMapRunning(fieldSystem) != FALSE;
 }
 
 static BOOL Task_RunApplicationUntilComplete(TaskManager *taskManager) {

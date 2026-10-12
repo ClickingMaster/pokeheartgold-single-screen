@@ -1213,7 +1213,7 @@ BOOL BtlCmd_CalcCrit(BattleSystem *battleSystem, BattleContext *ctx) {
     if ((BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_TUTORIAL) || (BattleSystem_GetBattleSpecial(battleSystem) & BATTLE_SPECIAL_FIRST_RIVAL)) {
         ctx->criticalMultiplier = 1;
     } else {
-        ctx->criticalMultiplier = TryCriticalHit(battleSystem, ctx, ctx->battlerIdAttacker, ctx->battlerIdTarget, ctx->criticalCnt, ov12_022581D4(battleSystem, ctx, 0, ctx->battlerIdTarget));
+        ctx->criticalMultiplier = TryCriticalHit(battleSystem, ctx, ctx->battlerIdAttacker, ctx->battlerIdTarget, ctx->criticalCnt, BattleContext_Get(battleSystem, ctx, 0, ctx->battlerIdTarget));
     }
 
     return FALSE;
@@ -1381,7 +1381,7 @@ BOOL BtlCmd_WaitMonSelection(BattleSystem *battleSystem, BattleContext *ctx) {
     if (switchCnt == 0) {
         for (battlerId = 0; battlerId < maxBattlers; battlerId++) {
             if ((ctx->unk_13C[battlerId] & 1) && BattleBuffer_GetNext(ctx, battlerId)) {
-                ov12_0223BDDC(battleSystem, battlerId, ctx->battleBuffer[battlerId][0]);
+                BattleSystem_RecordInput(battleSystem, battlerId, ctx->battleBuffer[battlerId][0]);
             }
         }
         ctx->battleStatus2 &= 0xf0ffffff;
@@ -4080,8 +4080,8 @@ BOOL BtlCmd_TryImprison(BattleSystem *battleSystem, BattleContext *ctx) {
 
     adrs = BattleScriptReadWord(ctx);
 
-    battlerIdA = ov12_0223ABB8(battleSystem, ctx->battlerIdAttacker, 0);
-    battlerIdB = ov12_0223ABB8(battleSystem, ctx->battlerIdAttacker, 2);
+    battlerIdA = BattleSystem_GetOpponentBattler(battleSystem, ctx->battlerIdAttacker, 0);
+    battlerIdB = BattleSystem_GetOpponentBattler(battleSystem, ctx->battlerIdAttacker, 2);
 
     ctx->battleMons[battlerIdA].moveEffectFlags |= MOVE_EFFECT_FLAG_IMPRISON;
     ctx->battleMons[battlerIdB].moveEffectFlags |= MOVE_EFFECT_FLAG_IMPRISON;
@@ -4992,7 +4992,7 @@ BOOL BtlCmd_WaitYesNoResult(BattleSystem *battleSystem, BattleContext *ctx) {
             BattleScriptIncrementPointer(ctx, adrsYes);
         }
 
-        ov12_0223BDDC(battleSystem, 0, selection);
+        BattleSystem_RecordInput(battleSystem, 0, selection);
     }
 
     ctx->battleContinueFlag = TRUE;
@@ -5401,7 +5401,7 @@ BOOL BtlCmd_CheckWhiteout(BattleSystem *battleSystem, BattleContext *ctx) {
             }
         }
 
-        if ((battleType == 75 || battleType == 74) && BattleSystem_GetFieldSide(battleSystem, battlerId) == 0 && ov12_0223AB0C(battleSystem, battlerId) == 2) {
+        if ((battleType == 75 || battleType == 74) && BattleSystem_GetFieldSide(battleSystem, battlerId) == 0 && BattleSystem_GetBattlerType(battleSystem, battlerId) == 2) {
 
         } else {
             for (i = 0; i < Party_GetCount(party2); i++) {
@@ -6201,7 +6201,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
         SetBgPriority(GF_BG_LYR_MAIN_1, 1);
         SetBgPriority(GF_BG_LYR_MAIN_2, 0);
 
-        ov12_0223C224(data->battleSystem, 1);
+        BattleSystem_SetHpBarPriority(data->battleSystem, 1);
 
         LoadUserFrameGfx1Tiles(bgConfig, 2, 1, 0, HEAP_ID_BATTLE);
         PaletteData_LoadNarc(palette, NARC_a_0_3_8, GetUserFrameGfx1PaletteMember(), HEAP_ID_BATTLE, PLTTBUF_MAIN_BG, 0x20, 8 * 0x10);
@@ -6225,14 +6225,14 @@ static void Task_GetExp(SysTask *task, void *inData) {
             msg.tag = TAG_STAT;
             msg.param[0] = stats.stats[i];
 
-            ov12_0223C4E8(data->battleSystem, window, msgLoader, &msg, 0, 16 * i, 0, 0, 0);
+            BattleSystem_PrintMessageToWindow(data->battleSystem, window, msgLoader, &msg, 0, 16 * i, 0, 0, 0);
             // "+{0}"
             msg.id = msg_0197_00948;
             msg.tag = TAG_NUMBERS;
             msg.param[0] = GetMonData(mon, monData.stats[i], NULL) - oldStats->stats[i];
             msg.numDigits = 2;
 
-            ov12_0223C4E8(data->battleSystem, window, msgLoader, &msg, 80, 16 * i, 0, 0, 0);
+            BattleSystem_PrintMessageToWindow(data->battleSystem, window, msgLoader, &msg, 80, 16 * i, 0, 0, 0);
         }
 
         data->state = STATE_GET_EXP_LEVEL_UP_SUMMARY_PRINT_DIFF_WAIT;
@@ -6251,7 +6251,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
             msg.param[0] = GetMonData(mon, monData.stats[i], NULL);
             msg.numDigits = 3;
 
-            ov12_0223C4E8(data->battleSystem, window, msgLoader, &msg, 72, 16 * i, 0x2, 36, 0);
+            BattleSystem_PrintMessageToWindow(data->battleSystem, window, msgLoader, &msg, 72, 16 * i, 0x2, 36, 0);
         }
 
         data->state = STATE_GET_EXP_LEVEL_UP_SUMMARY_PRINT_TRUE_WAIT;
@@ -6275,7 +6275,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
         SetBgPriority(GF_BG_LYR_MAIN_1, 0);
         SetBgPriority(GF_BG_LYR_MAIN_2, 1);
 
-        ov12_0223C224(data->battleSystem, 0);
+        BattleSystem_SetHpBarPriority(data->battleSystem, 0);
 
         if (data->ctx->selectedMonIndex[expBattler] != slot) {
             BattleSystem_UnloadLevelUpNameplate(data->battleSystem, data);
@@ -6787,7 +6787,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
         break;
     case STATE_GET_POKEMON_CHECK_MON_DATA:
         if (!UnkBallData_IsBallAnimationPlaying(data->ballData, BALL_ANIM_FADE) && !(data->tempData[DATA_GET_POKEMON_FRAME_COUNTER]--, data->tempData[DATA_GET_POKEMON_FRAME_COUNTER])) {
-            ov12_0223BD8C(data->battleSystem, battlerId);
+            BattleSystem_SetCaughtBattlerId(data->battleSystem, battlerId);
             Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]); // Get the data of the caught Pokemon.
             if (BattleSystem_GetBattleType(data->battleSystem) & (BATTLE_TYPE_PAL_PARK | BATTLE_TYPE_TUTORIAL)) {           // If this was the Catching Demo or a Pal Park encounter...
                 ov12_022567D4(data->battleSystem, data->ctx, BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]));
@@ -6821,7 +6821,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
             data->tempData[DATA_GET_POKEMON_PRINTER_ID] = BattleSystem_PrintBattleMessage(data->battleSystem, msgData, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
             data->tempData[DATA_GET_POKEMON_FRAME_COUNTER] = 30;
             data->state = STATE_GET_POKEMON_FADE_TO_POKEDEX;
-            ov12_0223BB44(data->battleSystem);
+            BattleSystem_AddSpeciesCaughtScore(data->battleSystem);
         }
         break;
     case STATE_GET_POKEMON_FADE_TO_POKEDEX:
@@ -6840,8 +6840,8 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
             UnkBallData_Delete(data->ballData);
             PokepicManager_DeleteAllPics(pokepicManager);
             ov12_02237CC4(data->battleSystem);
-            ov12_02265FC4(ov12_0223A8F4(data->battleSystem, 0), 0);
-            ov12_02265FC4(ov12_0223A8F4(data->battleSystem, 1), 0);
+            BattleTerrain_SetDrawFlag(BattleSystem_GetBattleTerrain(data->battleSystem, 0), 0);
+            BattleTerrain_SetDrawFlag(BattleSystem_GetBattleTerrain(data->battleSystem, 1), 0);
             OpponentData_SetSpriteDrawFlag(BattleSystem_GetOpponentData(data->battleSystem, BATTLER_PLAYER), 0);
             UnkStruct_50C unkStruct;
             unkStruct.bgConfig = BattleSystem_GetBgConfig(data->battleSystem);

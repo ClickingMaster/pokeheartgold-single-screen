@@ -357,7 +357,7 @@ typedef struct BattleControllerPacketIncrementGameStat {
     u16 id;
 } BattleControllerPacketIncrementGameStat;
 
-// Commands that also carry the record data of a recorded link battle (see ov12_0223BE68)
+// Commands that also carry the record data of a recorded link battle (see BattleSystem_PackRecordUpdate)
 typedef struct BattleControllerPacketRecordData {
     u8 command;
     u8 escapedMask;
@@ -412,12 +412,12 @@ void BattleController_SendData(BattleSystem *battleSystem, int direction, int ba
 
     if (direction == 1) {
         buffer = BattleSystem_GetRecvBufferPtr(battleSystem);
-        writePos = ov12_0223A984(battleSystem);
-        endPos = ov12_0223A990(battleSystem);
+        writePos = BattleSystem_GetRecvBufferWritePos(battleSystem);
+        endPos = BattleSystem_GetRecvBufferEndPos(battleSystem);
     } else {
         buffer = BattleSystem_GetSendBufferPtr(battleSystem);
-        writePos = ov12_0223A960(battleSystem);
-        endPos = ov12_0223A96C(battleSystem);
+        writePos = BattleSystem_GetSendBufferWritePos(battleSystem);
+        endPos = BattleSystem_GetSendBufferEndPos(battleSystem);
     }
     if (*writePos + 5u + size > 0x1000) {
         *endPos = *writePos;
@@ -460,7 +460,7 @@ BOOL BattleController_RecvData(BattleSystem *battleSystem, const u8 *data) {
     } else if (direction == 2) {
         int command = data[4];
         int netId = data[5];
-        if (ov12_0223B688(battleSystem)) {
+        if (BattleSystem_IsServer(battleSystem)) {
             ov12_0224ED00(battleSystem->ctx, netId, battlerId, command);
         }
         ret = TRUE;
@@ -478,14 +478,14 @@ void BattleController_ProcessQueue(BattleSystem *battleSystem, int direction) {
 
     if (direction == 1) {
         buffer = BattleSystem_GetRecvBufferPtr(battleSystem);
-        readPos = ov12_0223A978(battleSystem);
-        writePos = ov12_0223A984(battleSystem);
-        endPos = ov12_0223A990(battleSystem);
+        readPos = BattleSystem_GetRecvBufferReadPos(battleSystem);
+        writePos = BattleSystem_GetRecvBufferWritePos(battleSystem);
+        endPos = BattleSystem_GetRecvBufferEndPos(battleSystem);
     } else {
         buffer = BattleSystem_GetSendBufferPtr(battleSystem);
-        readPos = ov12_0223A954(battleSystem);
-        writePos = ov12_0223A960(battleSystem);
-        endPos = ov12_0223A96C(battleSystem);
+        readPos = BattleSystem_GetSendBufferReadPos(battleSystem);
+        writePos = BattleSystem_GetSendBufferWritePos(battleSystem);
+        endPos = BattleSystem_GetSendBufferEndPos(battleSystem);
     }
     if (*readPos != *writePos) {
         if (*readPos == *endPos) {
@@ -533,7 +533,7 @@ void BattleController_EmitPokemonEncounter(BattleSystem *battleSystem, int battl
     packet.shiny = battleSystem->ctx->battleMons[battlerId].shiny;
     packet.species = battleSystem->ctx->battleMons[battlerId].species;
     packet.personality = battleSystem->ctx->battleMons[battlerId].personality;
-    packet.battlerType = ov12_02256748(battleSystem->ctx, battlerId, ov12_0223AB0C(battleSystem, battlerId), TRUE);
+    packet.battlerType = ov12_02256748(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), TRUE);
     packet.form = battleSystem->ctx->battleMons[battlerId].form;
     for (i = 0; i < MAX_MON_MOVES; i++) {
         packet.moves[i] = GetBattlerVar(battleSystem->ctx, battlerId, BMON_DATA_MOVE1 + i, NULL);
@@ -553,12 +553,12 @@ void BattleController_EmitPokemonSlideIn(BattleSystem *battleSystem, int battler
     packet.shiny = battleSystem->ctx->battleMons[battlerId].shiny;
     packet.species = battleSystem->ctx->battleMons[battlerId].species;
     packet.personality = battleSystem->ctx->battleMons[battlerId].personality;
-    packet.battlerType = ov12_02256748(battleSystem->ctx, battlerId, ov12_0223AB0C(battleSystem, battlerId), TRUE);
+    packet.battlerType = ov12_02256748(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), TRUE);
     packet.selectedMonIndex = battleSystem->ctx->selectedMonIndex[battlerId];
     packet.form = battleSystem->ctx->battleMons[battlerId].form;
     packet.ball = battleSystem->ctx->battleMons[battlerId].ball;
     packet.partnerSelectedMonIndex = battleSystem->ctx->selectedMonIndex[BattleSystem_GetBattlerIdPartner(battleSystem, battlerId)];
-    ov12_0223B854(battleSystem, battlerId, packet.selectedMonIndex);
+    BattleSystem_FlagMonBattled(battleSystem, battlerId, packet.selectedMonIndex);
     for (i = 0; i < MAX_MON_MOVES; i++) {
         packet.moves[i] = GetBattlerVar(battleSystem->ctx, battlerId, BMON_DATA_MOVE1 + i, NULL);
         packet.movePPCur[i] = GetBattlerVar(battleSystem->ctx, battlerId, BMON_DATA_CUR_PP_1 + i, NULL);
@@ -583,7 +583,7 @@ void BattleController_EmitPokemonSendOut(BattleSystem *battleSystem, int battler
     }
     packet.shiny = battleSystem->ctx->battleMons[battlerId].shiny;
     packet.species = battleSystem->ctx->battleMons[battlerId].species;
-    packet.battlerType = ov12_02256748(battleSystem->ctx, battlerId, ov12_0223AB0C(battleSystem, battlerId), FALSE);
+    packet.battlerType = ov12_02256748(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), FALSE);
     packet.selectedMonIndex = battleSystem->ctx->selectedMonIndex[battlerId];
     packet.form = battleSystem->ctx->battleMons[battlerId].form;
     if (ball) {
@@ -593,7 +593,7 @@ void BattleController_EmitPokemonSendOut(BattleSystem *battleSystem, int battler
     }
     packet.unk_14 = a3;
     packet.isSubstitute = !!(battleSystem->ctx->battleMons[battlerId].status2 & STATUS2_SUBSTITUTE);
-    ov12_0223B854(battleSystem, battlerId, packet.selectedMonIndex);
+    BattleSystem_FlagMonBattled(battleSystem, battlerId, packet.selectedMonIndex);
     for (int i = 0; i < MAX_MON_MOVES; i++) {
         packet.moves[i] = GetBattlerVar(battleSystem->ctx, battlerId, BMON_DATA_MOVE1 + i, NULL);
         packet.movePPCur[i] = GetBattlerVar(battleSystem->ctx, battlerId, BMON_DATA_CUR_PP_1 + i, NULL);
@@ -853,7 +853,7 @@ void BattleController_EmitSelectCommand(BattleSystem *battleSystem, BattleContex
             }
         }
     } else {
-        battler = ov12_0223ABB8(battleSystem, battlerId, 2);
+        battler = BattleSystem_GetOpponentBattler(battleSystem, battlerId, 2);
         party = BattleSystem_GetParty(battleSystem, battler);
         count = 0;
         for (i = 0; i < Party_GetCount(party); i++) {
@@ -1491,7 +1491,7 @@ void BattleController_EmitShowWaitMessage(BattleSystem *battleSystem, int battle
     packet.command = 55;
     packet.recordSize = 0;
     if ((battleType & BATTLE_TYPE_LINK) && BattleRecord_Exists() == TRUE && !(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
-        packet.recordSize = ov12_0223BE68(battleSystem, packet.record);
+        packet.recordSize = BattleSystem_PackRecordUpdate(battleSystem, packet.record);
         GF_ASSERT(packet.recordSize < 28);
         BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
     }
@@ -1548,7 +1548,7 @@ void BattleController_EmitRunAwayMessage(BattleSystem *battleSystem, BattleConte
         }
     }
     if ((battleType & BATTLE_TYPE_LINK) && BattleRecord_Exists() == TRUE && !(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
-        packet.recordSize = ov12_0223BE68(battleSystem, packet.record);
+        packet.recordSize = BattleSystem_PackRecordUpdate(battleSystem, packet.record);
         GF_ASSERT(packet.recordSize < 28);
     }
     BattleController_EmitPacket(battleSystem, 1, 0, &packet, sizeof(packet));
@@ -1561,7 +1561,7 @@ void BattleController_EmitForefitMessage(BattleSystem *battleSystem) {
     packet.command = 61;
     packet.recordSize = 0;
     if ((battleType & BATTLE_TYPE_LINK) && BattleRecord_Exists() == TRUE && !(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
-        packet.recordSize = ov12_0223BE68(battleSystem, packet.record);
+        packet.recordSize = BattleSystem_PackRecordUpdate(battleSystem, packet.record);
         GF_ASSERT(packet.recordSize < 28);
     }
     BattleController_EmitPacket(battleSystem, 1, 0, &packet, sizeof(packet));
@@ -1622,7 +1622,7 @@ void BattleController_EmitSetBattleResults(BattleSystem *battleSystem) {
     packet.outcomeFlags = BattleSystem_GetBattleOutcomeFlags(battleSystem);
     packet.recordSize = 0;
     if ((battleType & BATTLE_TYPE_LINK) && BattleRecord_Exists() == TRUE && !(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
-        packet.recordSize = ov12_0223BE68(battleSystem, packet.record);
+        packet.recordSize = BattleSystem_PackRecordUpdate(battleSystem, packet.record);
         GF_ASSERT(packet.recordSize <= 28);
     }
     BattleController_EmitPacket(battleSystem, 1, 0, &packet, sizeof(packet));
@@ -1667,7 +1667,7 @@ BOOL BattleController_RecvLinkData(BattleSystem *battleSystem, u8 *data) {
     } else if (direction == 2) {
         int command = data[4];
         int netId = data[5];
-        if (ov12_0223B688(battleSystem)) {
+        if (BattleSystem_IsServer(battleSystem)) {
             ov12_0224ED00(battleSystem->ctx, netId, battlerId, command);
         }
     }
@@ -1760,7 +1760,7 @@ void BattleController_InitBallGaugePacket(BattleSystem *battleSystem, BattleCont
         || ((battleType & BATTLE_TYPE_TAG) && BattleSystem_GetFieldSide(battleSystem, battlerId) != 0)
         || (battleType == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_MULTI | BATTLE_TYPE_AI) && BattleSystem_GetFieldSide(battleSystem, battlerId) != 0)
         || battleType == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_MULTI | BATTLE_TYPE_AI | BATTLE_TYPE_FRONTIER)) {
-        if (ov12_0223AB0C(battleSystem, battlerId) == BATTLER_TYPE_PLAYER_SIDE_SLOT_1 || ov12_0223AB0C(battleSystem, battlerId) == BATTLER_TYPE_ENEMY_SIDE_SLOT_1) {
+        if (BattleSystem_GetBattlerType(battleSystem, battlerId) == BATTLER_TYPE_PLAYER_SIDE_SLOT_1 || BattleSystem_GetBattlerType(battleSystem, battlerId) == BATTLER_TYPE_ENEMY_SIDE_SLOT_1) {
             partner = battlerId;
             battlerId = BattleSystem_GetBattlerIdPartner(battleSystem, battlerId);
         } else {

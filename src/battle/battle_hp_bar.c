@@ -35,12 +35,12 @@ static const s8 sHpBarArrowXOffsets[] = {
     0,
 };
 
-typedef struct UnkStruct_ov12_0226D408 {
+typedef struct HpBarVramRegion {
     u16 offset;
     u16 size;
-} UnkStruct_ov12_0226D408;
+} HpBarVramRegion;
 
-static const UnkStruct_ov12_0226D408 ov12_0226D680[][4] = {
+static const HpBarVramRegion sNicknameVramRegions[][4] = {
     {
      { 0x260, 0xA0 },
      { 0x360, 0xA0 },
@@ -79,7 +79,7 @@ static const UnkStruct_ov12_0226D408 ov12_0226D680[][4] = {
      },
 };
 
-static const UnkStruct_ov12_0226D408 ov12_0226D4B0[][2] = {
+static const HpBarVramRegion sGenderIconVramRegions[][2] = {
     {
      { 0xA60, 0x40 },
      { 0xB60, 0x40 },
@@ -106,7 +106,7 @@ static const UnkStruct_ov12_0226D408 ov12_0226D4B0[][2] = {
      },
 };
 
-static const UnkStruct_ov12_0226D408 ov12_0226D420[][2] = {
+static const HpBarVramRegion sLevelVramRegions[][2] = {
     {
      { 0xAA0, 0x60 },
      { 0xBA0, 0x60 },
@@ -133,7 +133,7 @@ static const UnkStruct_ov12_0226D408 ov12_0226D420[][2] = {
      },
 };
 
-static const UnkStruct_ov12_0226D408 ov12_0226D450[][2] = {
+static const HpBarVramRegion sCurrentHpVramRegions[][2] = {
     {
      { 0, 0 },
      { 0xD00, 0x60 },
@@ -160,7 +160,7 @@ static const UnkStruct_ov12_0226D408 ov12_0226D450[][2] = {
      },
 };
 
-static const UnkStruct_ov12_0226D408 ov12_0226D3F0[] = {
+static const HpBarVramRegion sMaxHpVramRegions[] = {
     { 0xD80, 0x60 },
     { 0x6A0, 0x60 },
     { 0xC80, 0x60 },
@@ -169,7 +169,7 @@ static const UnkStruct_ov12_0226D408 ov12_0226D3F0[] = {
     { 0x6A0, 0x60 },
 };
 
-static const UnkStruct_ov12_0226D408 ov12_0226D480[][2] = {
+static const HpBarVramRegion sHpGaugeVramRegions[][2] = {
     {
      { 0x4E0, 0 },
      { 0xC20, 0xC0 },
@@ -196,7 +196,7 @@ static const UnkStruct_ov12_0226D408 ov12_0226D480[][2] = {
      },
 };
 
-static const UnkStruct_ov12_0226D408 ov12_0226D3C0[] = {
+static const HpBarVramRegion sCaughtIconVramRegions[] = {
     { 0x460, 0x20 },
     { 0x420, 0x20 },
     { 0x440, 0x20 },
@@ -205,7 +205,7 @@ static const UnkStruct_ov12_0226D408 ov12_0226D3C0[] = {
     { 0x420, 0x20 },
 };
 
-static const UnkStruct_ov12_0226D408 ov12_0226D390[] = {
+static const HpBarVramRegion sStatusIconVramRegions[] = {
     { 0x480, 0x60 },
     { 0x440, 0x60 },
     { 0x460, 0x60 },
@@ -214,21 +214,21 @@ static const UnkStruct_ov12_0226D408 ov12_0226D390[] = {
     { 0x440, 0x60 },
 };
 
-static const UnkStruct_ov12_0226D408 ov12_0226D370[] = {
+static const HpBarVramRegion sBallsLabelVramRegions[] = {
     { 0x240, 0xC0 },
     { 0x340, 0xC0 },
     { 0xA00, 0xE0 },
     { 0xB00, 0xE0 },
 };
 
-static const UnkStruct_ov12_0226D408 ov12_0226D380[] = {
+static const HpBarVramRegion sBallsLeftVramRegions[] = {
     { 0x440, 0xC0 },
     { 0x540, 0xC0 },
     { 0xC00, 0xE0 },
     { 0xD00, 0xE0 },
 };
 
-static const UnkStruct_ov12_0226D408 ov12_0226D3A8[] = {
+static const HpBarVramRegion ov12_0226D3A8[] = {
     { 0,     0    },
     { 0,     0    },
     { 0x4C0, 0x40 },
@@ -237,7 +237,7 @@ static const UnkStruct_ov12_0226D408 ov12_0226D3A8[] = {
     { 0,     0    },
 };
 
-static const UnkStruct_ov12_0226D408 ov12_0226D3D8[] = {
+static const HpBarVramRegion ov12_0226D3D8[] = {
     { 0,     0    },
     { 0,     0    },
     { 0xCC0, 0x20 },
@@ -246,7 +246,7 @@ static const UnkStruct_ov12_0226D408 ov12_0226D3D8[] = {
     { 0,     0    },
 };
 
-static const UnkStruct_ov12_0226D408 ov12_0226D408[] = {
+static const HpBarVramRegion ov12_0226D408[] = {
     { 0,     0    },
     { 0,     0    },
     { 0xC60, 0x20 },
@@ -255,27 +255,27 @@ static const UnkStruct_ov12_0226D408 ov12_0226D408[] = {
     { 0,     0    },
 };
 
-static void ov12_02264824(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, PaletteData *plttData, int barType);
-static void ov12_022648EC(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, PaletteData *plttData, int barType);
-static ManagedSprite *ov12_02264968(SpriteSystem *spriteSystem, SpriteManager *spriteManager, int barType);
-static void ov12_02264B28(BattleHpBar *hpBar);
-static void ov12_02264B4C(BattleHpBar *hpBar);
-static void ov12_02264B60(BattleHpBar *hpBar);
-static void ov12_02264B94(BattleHpBar *hpBar);
-static void ov12_02264F00(BattleHpBar *hpBar, int a1);
-static void ov12_02264F44(BattleHpBar *hpBar, int x, int y);
-static void ov12_02265054(SysTask *task, void *data);
-static void ov12_0226516C(BattleHpBar *hpBar);
-static void ov12_022652D0(BattleHpBar *hpBar);
-static void ov12_02265354(BattleHpBar *hpBar);
-static void ov12_02265474(BattleHpBar *hpBar, u32 num);
-static void ov12_02265500(BattleHpBar *hpBar);
-static void ov12_02265560(BattleHpBar *hpBar);
-static void ov12_022655B0(BattleHpBar *hpBar, int a1);
+static void BattleHpBar_LoadBoxResources(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, PaletteData *plttData, int barType);
+static void BattleHpBar_LoadArrowResources(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, PaletteData *plttData, int barType);
+static ManagedSprite *BattleHpBar_CreateBoxSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, int barType);
+static void BattleHpBar_DeleteBoxSprite(BattleHpBar *hpBar);
+static void BattleHpBar_DeleteArrowSprite(BattleHpBar *hpBar);
+static void BattleHpBar_UnloadBoxResources(BattleHpBar *hpBar);
+static void BattleHpBar_UnloadArrowResources(BattleHpBar *hpBar);
+static void BattleHpBar_SetArrowDrawFlag(BattleHpBar *hpBar, int a1);
+static void BattleHpBar_SetOffset(BattleHpBar *hpBar, int x, int y);
+static void Task_BattleHpBarSlide(SysTask *task, void *data);
+static void BattleHpBar_DrawNickname(BattleHpBar *hpBar);
+static void BattleHpBar_DrawGenderIcon(BattleHpBar *hpBar);
+static void BattleHpBar_DrawLevel(BattleHpBar *hpBar);
+static void BattleHpBar_DrawCurrentHp(BattleHpBar *hpBar, u32 num);
+static void BattleHpBar_DrawMaxHp(BattleHpBar *hpBar);
+static void BattleHpBar_DrawCaughtIcon(BattleHpBar *hpBar);
+static void BattleHpBar_DrawStatusIcon(BattleHpBar *hpBar, int a1);
 static void BattleHpBar_PrintSafariOrParkBallsString(BattleHpBar *hpBar, u32 flag);
 static void BattleHpBar_PrintNumRemainingSafariOrParkBalls(BattleHpBar *hpBar, u32 flag);
-static int ov12_022657E4(BattleHpBar *hpBar, BOOL isExp);
-static void ov12_02265878(BattleHpBar *hpBar, u8 isExp);
+static int BattleHpBar_StepGauge(BattleHpBar *hpBar, BOOL isExp);
+static void BattleHpBar_DrawGauge(BattleHpBar *hpBar, u8 isExp);
 static int BattleHpBar_CalculatePixelsChangeFrame(s32 maxHp, s32 curHp, s32 deltaHp, s32 *pHpCalc, u8 tilesWide, u16 hpChange);
 static u8 BattleHpBar_Util_MakeHpBarPixelBuffer(s32 maxHp, s32 hp, s32 deltaHp, s32 *pHpCalc, u8 *pixelBuf, u8 tilesWide);
 static u32 BattleHpBar_Util_GetPixelsToGain(s32 exp, s32 gainedExp, s32 maxExp, u8 tilesWide);
@@ -283,9 +283,9 @@ static const u8 *BattleHpBar_Util_GetComponentRawGraphic(int componentId);
 static const ManagedSpriteTemplate *BattleHpBar_Util_GetHpBoxSpriteTemplate(u8 barType);
 static const ManagedSpriteTemplate *BattleHpBar_Util_GetArrowSpriteTemplate(u8 barType);
 static void Task_ExpBarFullFlash(SysTask *task, void *data);
-static void ov12_02265D78(BattleHpBar *hpBar);
-static void ov12_02265DA0(BattleHpBar *hpBar);
-static void ov12_02265DC4(SysTask *task, void *data);
+static void BattleHpBar_StartBobTask(BattleHpBar *hpBar);
+static void BattleHpBar_StopBobTask(BattleHpBar *hpBar);
+static void Task_BattleHpBarBob(SysTask *task, void *data);
 
 static const ManagedSpriteTemplate sSpriteTemplate_HpBarSinglePlayer = {
     .x = 0xC0,
@@ -449,7 +449,7 @@ static const ManagedSpriteTemplate sSpriteTemplate_HpBarSafariOrPark = {
 
 #include "battle/battle_hp_bar_data.h"
 
-static void ov12_02264824(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, PaletteData *plttData, int barType) {
+static void BattleHpBar_LoadBoxResources(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, PaletteData *plttData, int barType) {
     const ManagedSpriteTemplate *pRes = BattleHpBar_Util_GetHpBoxSpriteTemplate(barType);
 
     SpriteSystem_LoadCharResObjFromOpenNarc(spriteSystem, spriteManager, narc, pRes->resIdList[GF_GFX_RES_TYPE_CHAR], TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, pRes->resIdList[GF_GFX_RES_TYPE_CHAR]);
@@ -462,7 +462,7 @@ static void ov12_02264824(SpriteSystem *spriteSystem, SpriteManager *spriteManag
     }
 }
 
-static void ov12_022648EC(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, PaletteData *plttData, int barType) {
+static void BattleHpBar_LoadArrowResources(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, PaletteData *plttData, int barType) {
     const ManagedSpriteTemplate *pRes = BattleHpBar_Util_GetArrowSpriteTemplate(barType);
 
     if (pRes != NULL) {
@@ -473,7 +473,7 @@ static void ov12_022648EC(SpriteSystem *spriteSystem, SpriteManager *spriteManag
     }
 }
 
-static ManagedSprite *ov12_02264968(SpriteSystem *spriteSystem, SpriteManager *spriteManager, int barType) {
+static ManagedSprite *BattleHpBar_CreateBoxSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, int barType) {
     const ManagedSpriteTemplate *pRes = BattleHpBar_Util_GetHpBoxSpriteTemplate(barType);
 
     ManagedSprite *ret = SpriteSystem_NewSprite(spriteSystem, spriteManager, pRes);
@@ -481,7 +481,7 @@ static ManagedSprite *ov12_02264968(SpriteSystem *spriteSystem, SpriteManager *s
     return ret;
 }
 
-void ov12_0226498C(BattleHpBar *hpBar, u32 num, u32 flag) {
+void BattleHpBar_Draw(BattleHpBar *hpBar, u32 num, u32 flag) {
     GF_ASSERT(hpBar->boxObj != NULL);
     if (hpBar->type == HP_BAR_TYPE_SAFARI) {
         flag &= 0xC00;
@@ -499,7 +499,7 @@ void ov12_0226498C(BattleHpBar *hpBar, u32 num, u32 flag) {
     case HP_BAR_TYPE_DOUBLE_PLAYER_LHS:
     case HP_BAR_TYPE_DOUBLE_PLAYER_RHS:
         flag &= ~0x220;
-        if (hpBar->unk_4F_3 == 0) {
+        if (hpBar->showHpNumbers == 0) {
             flag &= ~6;
         } else {
             flag &= ~1;
@@ -517,59 +517,59 @@ void ov12_0226498C(BattleHpBar *hpBar, u32 num, u32 flag) {
     }
 
     if (flag & 1) {
-        ov12_02264DCC(hpBar, 0);
-        ov12_022657E4(hpBar, FALSE);
+        BattleHpBar_InitHpChange(hpBar, 0);
+        BattleHpBar_StepGauge(hpBar, FALSE);
     }
 
     if (flag & 2) {
-        ov12_02265474(hpBar, num);
+        BattleHpBar_DrawCurrentHp(hpBar, num);
     }
 
     if (flag & 4) {
-        ov12_02265500(hpBar);
+        BattleHpBar_DrawMaxHp(hpBar);
     }
 
     if (flag & 0x80 || flag & 0x40) {
-        ov12_022652D0(hpBar);
+        BattleHpBar_DrawGenderIcon(hpBar);
     }
 
     if (flag & 8) {
-        ov12_02265354(hpBar);
+        BattleHpBar_DrawLevel(hpBar);
     }
 
     if (flag & 0x10) {
-        ov12_0226516C(hpBar);
+        BattleHpBar_DrawNickname(hpBar);
     }
 
     if (flag & 0x20) {
-        ov12_02264E34(hpBar, 0);
-        ov12_022657E4(hpBar, TRUE);
+        BattleHpBar_InitExpChange(hpBar, 0);
+        BattleHpBar_StepGauge(hpBar, TRUE);
     }
 
     if (flag & 0x200) {
-        ov12_02265560(hpBar);
+        BattleHpBar_DrawCaughtIcon(hpBar);
     }
 
     if (flag & 0x100) {
-        switch (hpBar->unk_4A) {
+        switch (hpBar->status) {
         case 0:
         default:
-            ov12_022655B0(hpBar, 38);
+            BattleHpBar_DrawStatusIcon(hpBar, 38);
             break;
         case 1:
-            ov12_022655B0(hpBar, 47);
+            BattleHpBar_DrawStatusIcon(hpBar, 47);
             break;
         case 2:
-            ov12_022655B0(hpBar, 50);
+            BattleHpBar_DrawStatusIcon(hpBar, 50);
             break;
         case 3:
-            ov12_022655B0(hpBar, 53);
+            BattleHpBar_DrawStatusIcon(hpBar, 53);
             break;
         case 4:
-            ov12_022655B0(hpBar, 44);
+            BattleHpBar_DrawStatusIcon(hpBar, 44);
             break;
         case 5:
-            ov12_022655B0(hpBar, 41);
+            BattleHpBar_DrawStatusIcon(hpBar, 41);
             break;
         }
     }
@@ -583,7 +583,7 @@ void ov12_0226498C(BattleHpBar *hpBar, u32 num, u32 flag) {
     }
 }
 
-static void ov12_02264B28(BattleHpBar *hpBar) {
+static void BattleHpBar_DeleteBoxSprite(BattleHpBar *hpBar) {
     if (hpBar->sysTask != NULL) {
         SysTask_Destroy(hpBar->sysTask);
         hpBar->sysTask = NULL;
@@ -594,14 +594,14 @@ static void ov12_02264B28(BattleHpBar *hpBar) {
     }
 }
 
-static void ov12_02264B4C(BattleHpBar *hpBar) {
+static void BattleHpBar_DeleteArrowSprite(BattleHpBar *hpBar) {
     if (hpBar->arrowObj != NULL) {
         Sprite_DeleteAndFreeResources(hpBar->arrowObj);
         hpBar->arrowObj = NULL;
     }
 }
 
-static void ov12_02264B60(BattleHpBar *hpBar) {
+static void BattleHpBar_UnloadBoxResources(BattleHpBar *hpBar) {
     const ManagedSpriteTemplate *tmplate = BattleHpBar_Util_GetHpBoxSpriteTemplate(hpBar->type);
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(hpBar->battleSystem);
     SpriteManager *spriteManager = BattleSystem_GetSpriteManager(hpBar->battleSystem);
@@ -610,7 +610,7 @@ static void ov12_02264B60(BattleHpBar *hpBar) {
     SpriteManager_UnloadAnimObjById(spriteManager, tmplate->resIdList[GF_GFX_RES_TYPE_ANIM]);
 }
 
-static void ov12_02264B94(BattleHpBar *hpBar) {
+static void BattleHpBar_UnloadArrowResources(BattleHpBar *hpBar) {
     const ManagedSpriteTemplate *tmplate = BattleHpBar_Util_GetArrowSpriteTemplate(hpBar->type);
     if (tmplate != NULL) {
         SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(hpBar->battleSystem);
@@ -636,10 +636,10 @@ void BattleHpBar_LoadResources(BattleHpBar *hpBar) {
 
     tmplate = BattleHpBar_Util_GetHpBoxSpriteTemplate(hpBar->type);
 
-    ov12_02264824(spriteSystem, spriteManager, narc, plttData, hpBar->type);
-    hpBar->boxObj = ov12_02264968(spriteSystem, spriteManager, hpBar->type);
+    BattleHpBar_LoadBoxResources(spriteSystem, spriteManager, narc, plttData, hpBar->type);
+    hpBar->boxObj = BattleHpBar_CreateBoxSprite(spriteSystem, spriteManager, hpBar->type);
 
-    ov12_022648EC(spriteSystem, spriteManager, narc, plttData, hpBar->type);
+    BattleHpBar_LoadArrowResources(spriteSystem, spriteManager, narc, plttData, hpBar->type);
     if (hpBar->arrowObj) {
         Sprite_SetPositionXY(hpBar->arrowObj->sprite, tmplate->x - sHpBarArrowXOffsets[hpBar->type], tmplate->y + 0);
     }
@@ -648,13 +648,13 @@ void BattleHpBar_LoadResources(BattleHpBar *hpBar) {
 
 
 void BattleHpBar_FreeResources(BattleHpBar *hpBar) {
-    ov12_02264B28(hpBar);
-    ov12_02264B60(hpBar);
-    ov12_02264B4C(hpBar);
-    ov12_02264B94(hpBar);
+    BattleHpBar_DeleteBoxSprite(hpBar);
+    BattleHpBar_UnloadBoxResources(hpBar);
+    BattleHpBar_DeleteArrowSprite(hpBar);
+    BattleHpBar_UnloadArrowResources(hpBar);
 }
 
-void ov12_02264C84(BattleHpBar *hpBar) {
+void BattleHpBar_ToggleHpNumbers(BattleHpBar *hpBar) {
     const u8 *src;
     void *vramBaseAddr;
     NNSG2dImageProxy *imgProxy;
@@ -662,17 +662,17 @@ void ov12_02264C84(BattleHpBar *hpBar) {
     switch (hpBar->type) {
     case HP_BAR_TYPE_DOUBLE_PLAYER_LHS:
     case HP_BAR_TYPE_DOUBLE_PLAYER_RHS:
-        hpBar->unk_4F_3 ^= 1;
+        hpBar->showHpNumbers ^= 1;
         vramBaseAddr = G2_GetOBJCharPtr();
         imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
-        if (hpBar->unk_4F_3 == 1) {
+        if (hpBar->showHpNumbers == 1) {
             src = BattleHpBar_Util_GetComponentRawGraphic(70);
             MI_CpuCopy16(src, (void *)((u32)vramBaseAddr + ov12_0226D3A8[hpBar->type].offset + 0x20 + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), 0x20);
             src = BattleHpBar_Util_GetComponentRawGraphic(71);
             MI_CpuCopy16(src, (void *)((u32)vramBaseAddr + ov12_0226D3D8[hpBar->type].offset + 0x20 + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), 0x20);
             src = BattleHpBar_Util_GetComponentRawGraphic(69);
             MI_CpuCopy16(src, (void *)((u32)vramBaseAddr + ov12_0226D408[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D408[hpBar->type].size);
-            ov12_0226498C(hpBar, hpBar->hp, 6);
+            BattleHpBar_Draw(hpBar, hpBar->hp, 6);
         } else {
             src = BattleHpBar_Util_GetComponentRawGraphic(66);
             MI_CpuCopy16(src, (void *)((u32)vramBaseAddr + ov12_0226D3A8[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D3A8[hpBar->type].size);
@@ -680,12 +680,12 @@ void ov12_02264C84(BattleHpBar *hpBar) {
             MI_CpuCopy16(src, (void *)((u32)vramBaseAddr + ov12_0226D3D8[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D3D8[hpBar->type].size);
             src = BattleHpBar_Util_GetComponentRawGraphic(38);
             MI_CpuCopy16(src, (void *)((u32)vramBaseAddr + ov12_0226D3D8[hpBar->type].offset + 0x20 + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), 0x20);
-            ov12_0226498C(hpBar, hpBar->hp, 1);
+            BattleHpBar_Draw(hpBar, hpBar->hp, 1);
         }
     }
 }
 
-void ov12_02264DCC(BattleHpBar *hpBar, int hp) {
+void BattleHpBar_InitHpChange(BattleHpBar *hpBar, int hp) {
     hpBar->hpCalc = 0x80000000;
     if (hpBar->hp + hp < 0) {
         hp -= (hpBar->hp + hp);
@@ -702,18 +702,18 @@ void ov12_02264DCC(BattleHpBar *hpBar, int hp) {
     }
 }
 
-int ov12_02264E00(BattleHpBar *hpBar) {
-    int r4 = ov12_022657E4(hpBar, FALSE);
+int BattleHpBar_UpdateHpChange(BattleHpBar *hpBar) {
+    int r4 = BattleHpBar_StepGauge(hpBar, FALSE);
     if (r4 == -1) {
         hpBar->hp -= hpBar->gainedHp;
-        ov12_0226498C(hpBar, hpBar->hp, 2);
+        BattleHpBar_Draw(hpBar, hpBar->hp, 2);
     } else {
-        ov12_0226498C(hpBar, r4, 2);
+        BattleHpBar_Draw(hpBar, r4, 2);
     }
     return r4;
 }
 
-void ov12_02264E34(BattleHpBar *hpBar, int exp) {
+void BattleHpBar_InitExpChange(BattleHpBar *hpBar, int exp) {
     hpBar->expCalc = 0x80000000;
     if (hpBar->exp + exp < 0) {
         exp -= (hpBar->exp + exp);
@@ -730,34 +730,34 @@ void ov12_02264E34(BattleHpBar *hpBar, int exp) {
     }
 }
 
-int ov12_02264E68(BattleHpBar *hpBar) {
-    int ret = ov12_022657E4(hpBar, TRUE);
+int BattleHpBar_UpdateExpChange(BattleHpBar *hpBar) {
+    int ret = BattleHpBar_StepGauge(hpBar, TRUE);
     if (ret == -1) {
         hpBar->exp -= hpBar->gainedExp;
     }
     return ret;
 }
 
-void ov12_02264E84(BattleHpBar *hpBar) {
+void BattleHpBar_StartActiveEffect(BattleHpBar *hpBar) {
     if (hpBar->arrowObj != NULL) {
         Sprite_SetAnimActiveFlag(hpBar->arrowObj->sprite, TRUE);
-        ov12_02264F00(hpBar, 1);
+        BattleHpBar_SetArrowDrawFlag(hpBar, 1);
     }
     if (!(BattleSystem_GetBattleType(hpBar->battleSystem) & (BATTLE_TYPE_PAL_PARK | BATTLE_TYPE_SAFARI))) {
-        ov12_02265D78(hpBar);
+        BattleHpBar_StartBobTask(hpBar);
     }
 }
 
-void ov12_02264EB4(BattleHpBar *hpBar) {
+void BattleHpBar_StopActiveEffect(BattleHpBar *hpBar) {
     if (hpBar->arrowObj != NULL) {
         Sprite_SetAnimActiveFlag(hpBar->arrowObj->sprite, FALSE);
         Sprite_SetAnimationFrame(hpBar->arrowObj->sprite, 0);
-        ov12_02264F00(hpBar, 0);
+        BattleHpBar_SetArrowDrawFlag(hpBar, 0);
     }
-    ov12_02265DA0(hpBar);
+    BattleHpBar_StopBobTask(hpBar);
 }
 
-void ov12_02264EE0(BattleHpBar *hpBar, int prio) {
+void BattleHpBar_SetPriority(BattleHpBar *hpBar, int prio) {
     if (hpBar->boxObj != NULL) {
         ManagedSprite_SetPriority(hpBar->boxObj, prio);
         if (hpBar->arrowObj != NULL) {
@@ -766,7 +766,7 @@ void ov12_02264EE0(BattleHpBar *hpBar, int prio) {
     }
 }
 
-static void ov12_02264F00(BattleHpBar *hpBar, int a1) {
+static void BattleHpBar_SetArrowDrawFlag(BattleHpBar *hpBar, int a1) {
     if (hpBar->arrowObj != NULL) {
         if (!(BattleSystem_GetBattleType(hpBar->battleSystem) & (BATTLE_TYPE_PAL_PARK | BATTLE_TYPE_SAFARI)) || a1 != TRUE) {
             ManagedSprite_SetDrawFlag(hpBar->arrowObj, a1);
@@ -777,11 +777,11 @@ static void ov12_02264F00(BattleHpBar *hpBar, int a1) {
 void BattleHpBar_SetEnabled(BattleHpBar *hpBar, BOOL a1) {
     if (hpBar->boxObj != NULL) {
         ManagedSprite_SetDrawFlag(hpBar->boxObj, a1);
-        ov12_02264F00(hpBar, a1);
+        BattleHpBar_SetArrowDrawFlag(hpBar, a1);
     }
 }
 
-static void ov12_02264F44(BattleHpBar *hpBar, int x, int y) {
+static void BattleHpBar_SetOffset(BattleHpBar *hpBar, int x, int y) {
     const ManagedSpriteTemplate *tmplate;
 
     GF_ASSERT(hpBar->boxObj);
@@ -797,11 +797,11 @@ static void ov12_02264F44(BattleHpBar *hpBar, int x, int y) {
 }
 
 
-void ov12_02264FB0(BattleHpBar *hpBar, BOOL a1) {
+void BattleHpBar_StartSlide(BattleHpBar *hpBar, BOOL a1) {
     GF_ASSERT(hpBar != NULL);
     GF_ASSERT(hpBar->boxObj != NULL);
-    hpBar->unk_4F_1 = FALSE;
-    hpBar->unk_4F_0 = a1;
+    hpBar->slideDone = FALSE;
+    hpBar->slideOut = a1;
     if (!a1) {
         switch (hpBar->type) {
         case HP_BAR_TYPE_SINGLE_PLAYER:
@@ -809,19 +809,19 @@ void ov12_02264FB0(BattleHpBar *hpBar, BOOL a1) {
         case HP_BAR_TYPE_DOUBLE_PLAYER_RHS:
         case HP_BAR_TYPE_SAFARI:
         case HP_BAR_TYPE_PALPARK:
-            ov12_02264F44(hpBar, 160, 0);
+            BattleHpBar_SetOffset(hpBar, 160, 0);
             break;
         default:
-            ov12_02264F44(hpBar, -160, 0);
+            BattleHpBar_SetOffset(hpBar, -160, 0);
             break;
         }
     } else {
-        ov12_02264F44(hpBar, 0, 0);
+        BattleHpBar_SetOffset(hpBar, 0, 0);
     }
-    SysTask_CreateOnMainQueue(ov12_02265054, hpBar, 990);
+    SysTask_CreateOnMainQueue(Task_BattleHpBarSlide, hpBar, 990);
 }
 
-static void ov12_02265054(SysTask *task, void *data) {
+static void Task_BattleHpBarSlide(SysTask *task, void *data) {
     BattleHpBar *hpBar = data;
     s16 x, y;
     const ManagedSpriteTemplate *r6;
@@ -837,7 +837,7 @@ static void ov12_02265054(SysTask *task, void *data) {
     case HP_BAR_TYPE_DOUBLE_PLAYER_RHS:
     case HP_BAR_TYPE_SAFARI:
     case HP_BAR_TYPE_PALPARK:
-        if (hpBar->unk_4F_0 == 0) {
+        if (hpBar->slideOut == 0) {
             x -= 24;
             if (x < r6->x) {
                 x = r6->x;
@@ -852,7 +852,7 @@ static void ov12_02265054(SysTask *task, void *data) {
         }
         break;
     default:
-        if (hpBar->unk_4F_0 == 0) {
+        if (hpBar->slideOut == 0) {
             x += 24;
             if (x > r6->x) {
                 x = r6->x;
@@ -873,14 +873,14 @@ static void ov12_02265054(SysTask *task, void *data) {
     }
 
     if (r4 > 0) {
-        hpBar->unk_4F_1 = TRUE;
+        hpBar->slideDone = TRUE;
         SysTask_Destroy(task);
         return;
     }
 }
 
 
-static void ov12_0226516C(BattleHpBar *hpBar) {
+static void BattleHpBar_DrawNickname(BattleHpBar *hpBar) {
     BgConfig *bgConfig;
     u8 *srcBuf;
     NNSG2dImageProxy *imgProxy;
@@ -917,23 +917,23 @@ static void ov12_0226516C(BattleHpBar *hpBar) {
         pixelBuffer = srcBuf;
         pixelBuffer2 = srcBuf + 0x100;
 
-        MI_CpuCopy16(pixelBuffer, (void *)((u32)vramAddr + ov12_0226D680[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D680[hpBar->type][0].size);
-        MI_CpuCopy16(pixelBuffer2, (void *)((u32)vramAddr + ov12_0226D680[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D680[hpBar->type][1].size);
-        MI_CpuCopy16(pixelBuffer + ov12_0226D680[hpBar->type][0].size, (void *)((u32)vramAddr + ov12_0226D680[hpBar->type][2].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D680[hpBar->type][2].size);
-        MI_CpuCopy16(pixelBuffer2 + ov12_0226D680[hpBar->type][1].size, (void *)((u32)vramAddr + ov12_0226D680[hpBar->type][3].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D680[hpBar->type][3].size);
+        MI_CpuCopy16(pixelBuffer, (void *)((u32)vramAddr + sNicknameVramRegions[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sNicknameVramRegions[hpBar->type][0].size);
+        MI_CpuCopy16(pixelBuffer2, (void *)((u32)vramAddr + sNicknameVramRegions[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sNicknameVramRegions[hpBar->type][1].size);
+        MI_CpuCopy16(pixelBuffer + sNicknameVramRegions[hpBar->type][0].size, (void *)((u32)vramAddr + sNicknameVramRegions[hpBar->type][2].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sNicknameVramRegions[hpBar->type][2].size);
+        MI_CpuCopy16(pixelBuffer2 + sNicknameVramRegions[hpBar->type][1].size, (void *)((u32)vramAddr + sNicknameVramRegions[hpBar->type][3].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sNicknameVramRegions[hpBar->type][3].size);
     }
     RemoveWindow(&window);
     String_Delete(string);
     String_Delete(string2);
 }
 
-static void ov12_022652D0(BattleHpBar *hpBar) {
+static void BattleHpBar_DrawGenderIcon(BattleHpBar *hpBar) {
     int r0, r4;
 
-    if (hpBar->unk49 == 0) {
+    if (hpBar->gender == 0) {
         r0 = 74;
         r4 = 62;
-    } else if (hpBar->unk49 == 1) {
+    } else if (hpBar->gender == 1) {
         r0 = 72;
         r4 = 60;
     } else {
@@ -944,11 +944,11 @@ static void ov12_022652D0(BattleHpBar *hpBar) {
     const u8 *r7 = BattleHpBar_Util_GetComponentRawGraphic(r4);
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
-    MI_CpuCopy16(r7, (void *)((u32)vramAddr + ov12_0226D4B0[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D4B0[hpBar->type][0].size);
-    MI_CpuCopy16(sp0, (void *)((u32)vramAddr + ov12_0226D4B0[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D4B0[hpBar->type][1].size);
+    MI_CpuCopy16(r7, (void *)((u32)vramAddr + sGenderIconVramRegions[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sGenderIconVramRegions[hpBar->type][0].size);
+    MI_CpuCopy16(sp0, (void *)((u32)vramAddr + sGenderIconVramRegions[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sGenderIconVramRegions[hpBar->type][1].size);
 }
 
-static void ov12_02265354(BattleHpBar *hpBar) {
+static void BattleHpBar_DrawLevel(BattleHpBar *hpBar) {
     int j, i, k;
     u8 *r4 = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
     u8 *r7 = Heap_Alloc(HEAP_ID_BATTLE, 0xC0);
@@ -956,8 +956,8 @@ static void ov12_02265354(BattleHpBar *hpBar) {
     sub_0200CEB0(BattleSystem_GetLevelNumPrinter(hpBar->battleSystem), hpBar->level, 3, PRINTING_MODE_LEFT_ALIGN, (void *)r4);
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
-    MI_CpuCopy16((void *)((u32)vramAddr + ov12_0226D420[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), r7, ov12_0226D420[hpBar->type][0].size);
-    MI_CpuCopy16((void *)((u32)vramAddr + ov12_0226D420[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), r7 + 0x60, ov12_0226D420[hpBar->type][1].size);
+    MI_CpuCopy16((void *)((u32)vramAddr + sLevelVramRegions[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), r7, sLevelVramRegions[hpBar->type][0].size);
+    MI_CpuCopy16((void *)((u32)vramAddr + sLevelVramRegions[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), r7 + 0x60, sLevelVramRegions[hpBar->type][1].size);
     k = 0;
     for (i = 0; i < 0x60; i += 0x20) {
         for (j = 0; j < 0x10; ++j) {
@@ -969,38 +969,38 @@ static void ov12_02265354(BattleHpBar *hpBar) {
     }
     u8 *buf1 = r7;
     u8 *buf2 = r7 + 0x60;
-    MI_CpuCopy16(buf1, (void *)((u32)vramAddr + ov12_0226D420[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D420[hpBar->type][0].size);
-    MI_CpuCopy16(buf2, (void *)((u32)vramAddr + ov12_0226D420[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D420[hpBar->type][1].size);
+    MI_CpuCopy16(buf1, (void *)((u32)vramAddr + sLevelVramRegions[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sLevelVramRegions[hpBar->type][0].size);
+    MI_CpuCopy16(buf2, (void *)((u32)vramAddr + sLevelVramRegions[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sLevelVramRegions[hpBar->type][1].size);
     Heap_Free(r4);
     Heap_Free(r7);
 }
 
-static void ov12_02265474(BattleHpBar *hpBar, u32 num) {
+static void BattleHpBar_DrawCurrentHp(BattleHpBar *hpBar, u32 num) {
     u8 *r4 = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
     MI_CpuFill8(r4, 0xFF, 0x60);
     sub_0200CEB0(BattleSystem_GetHpNumPrinter(hpBar->battleSystem), num, 3, PRINTING_MODE_RIGHT_ALIGN, (void *)r4);
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
 
-    MI_CpuCopy16(r4, (void *)((u32)vramAddr + ov12_0226D450[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D450[hpBar->type][0].size);
-    MI_CpuCopy16(r4 + ov12_0226D450[hpBar->type][0].size, (void *)((u32)vramAddr + ov12_0226D450[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D450[hpBar->type][1].size);
+    MI_CpuCopy16(r4, (void *)((u32)vramAddr + sCurrentHpVramRegions[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sCurrentHpVramRegions[hpBar->type][0].size);
+    MI_CpuCopy16(r4 + sCurrentHpVramRegions[hpBar->type][0].size, (void *)((u32)vramAddr + sCurrentHpVramRegions[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sCurrentHpVramRegions[hpBar->type][1].size);
     Heap_Free(r4);
 }
 
-static void ov12_02265500(BattleHpBar *hpBar) {
+static void BattleHpBar_DrawMaxHp(BattleHpBar *hpBar) {
     u8 *r4 = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
     MI_CpuFill8(r4, 0xFF, 0x60);
     sub_0200CEB0(BattleSystem_GetHpNumPrinter(hpBar->battleSystem), hpBar->maxHp, 3, PRINTING_MODE_LEFT_ALIGN, (void *)r4);
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
 
-    MI_CpuCopy16(r4, (void *)((u32)vramAddr + ov12_0226D3F0[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D3F0[hpBar->type].size);
+    MI_CpuCopy16(r4, (void *)((u32)vramAddr + sMaxHpVramRegions[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sMaxHpVramRegions[hpBar->type].size);
     Heap_Free(r4);
 }
 
-static void ov12_02265560(BattleHpBar *hpBar) {
+static void BattleHpBar_DrawCaughtIcon(BattleHpBar *hpBar) {
     const u8 *r4;
-    if (hpBar->unk4B == 1) {
+    if (hpBar->caught == 1) {
         r4 = BattleHpBar_Util_GetComponentRawGraphic(59);
     } else {
         r4 = BattleHpBar_Util_GetComponentRawGraphic(38);
@@ -1008,15 +1008,15 @@ static void ov12_02265560(BattleHpBar *hpBar) {
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
 
-    MI_CpuCopy16(r4, (void *)((u32)vramAddr + ov12_0226D3C0[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D3C0[hpBar->type].size);
+    MI_CpuCopy16(r4, (void *)((u32)vramAddr + sCaughtIconVramRegions[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sCaughtIconVramRegions[hpBar->type].size);
 }
 
-static void ov12_022655B0(BattleHpBar *hpBar, int a1) {
+static void BattleHpBar_DrawStatusIcon(BattleHpBar *hpBar, int a1) {
     const u8 *r4 = BattleHpBar_Util_GetComponentRawGraphic(a1);
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
 
-    MI_CpuCopy16(r4, (void *)((u32)vramAddr + ov12_0226D390[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D390[hpBar->type].size);
+    MI_CpuCopy16(r4, (void *)((u32)vramAddr + sStatusIconVramRegions[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sStatusIconVramRegions[hpBar->type].size);
 }
 
 static void BattleHpBar_PrintSafariOrParkBallsString(BattleHpBar *hpBar, u32 flag) {
@@ -1048,10 +1048,10 @@ static void BattleHpBar_PrintSafariOrParkBallsString(BattleHpBar *hpBar, u32 fla
         imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
         ptr1 = windowBuf;
         ptr2 = windowBuf + 0x1A0;
-        MI_CpuCopy16(ptr1, (void *)((u32)vramAddr + ov12_0226D370[0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D370[0].size);
-        MI_CpuCopy16(ptr2, (void *)((u32)vramAddr + ov12_0226D370[1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D370[1].size);
-        MI_CpuCopy16(ptr1 + ov12_0226D370[0].size, (void *)((u32)vramAddr + ov12_0226D370[2].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D370[2].size);
-        MI_CpuCopy16(ptr2 + ov12_0226D370[1].size, (void *)((u32)vramAddr + ov12_0226D370[3].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D370[3].size);
+        MI_CpuCopy16(ptr1, (void *)((u32)vramAddr + sBallsLabelVramRegions[0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sBallsLabelVramRegions[0].size);
+        MI_CpuCopy16(ptr2, (void *)((u32)vramAddr + sBallsLabelVramRegions[1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sBallsLabelVramRegions[1].size);
+        MI_CpuCopy16(ptr1 + sBallsLabelVramRegions[0].size, (void *)((u32)vramAddr + sBallsLabelVramRegions[2].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sBallsLabelVramRegions[2].size);
+        MI_CpuCopy16(ptr2 + sBallsLabelVramRegions[1].size, (void *)((u32)vramAddr + sBallsLabelVramRegions[3].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sBallsLabelVramRegions[3].size);
     }
 
     RemoveWindow(&window);
@@ -1078,7 +1078,7 @@ static void BattleHpBar_PrintNumRemainingSafariOrParkBalls(BattleHpBar *hpBar, u
     } else {
         string2 = NewString_ReadMsgData(msgData, msg_0197_01221); // Left: $1
     }
-    BufferIntegerAsString(msgFormat, 0, hpBar->unk27, 2, PRINTING_MODE_RIGHT_ALIGN, TRUE);
+    BufferIntegerAsString(msgFormat, 0, hpBar->safariBallCount, 2, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     StringExpandPlaceholders(msgFormat, string, string2);
     AddTextWindowTopLeftCorner(bgConfig, &window, 13, 2, 0, 15);
     AddTextPrinterParameterizedWithColorAndSpacing(&window, 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(14, 2, 15), 0, 0, NULL);
@@ -1093,10 +1093,10 @@ static void BattleHpBar_PrintNumRemainingSafariOrParkBalls(BattleHpBar *hpBar, u
         imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
         ptr1 = windowBuf;
         ptr2 = windowBuf + 0x1A0;
-        MI_CpuCopy16(ptr1, (void *)((u32)vramAddr + ov12_0226D380[0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D380[0].size);
-        MI_CpuCopy16(ptr2, (void *)((u32)vramAddr + ov12_0226D380[1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D380[1].size);
-        MI_CpuCopy16(ptr1 + ov12_0226D380[0].size, (void *)((u32)vramAddr + ov12_0226D380[2].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D380[2].size);
-        MI_CpuCopy16(ptr2 + ov12_0226D380[1].size, (void *)((u32)vramAddr + ov12_0226D380[3].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), ov12_0226D380[3].size);
+        MI_CpuCopy16(ptr1, (void *)((u32)vramAddr + sBallsLeftVramRegions[0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sBallsLeftVramRegions[0].size);
+        MI_CpuCopy16(ptr2, (void *)((u32)vramAddr + sBallsLeftVramRegions[1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sBallsLeftVramRegions[1].size);
+        MI_CpuCopy16(ptr1 + sBallsLeftVramRegions[0].size, (void *)((u32)vramAddr + sBallsLeftVramRegions[2].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sBallsLeftVramRegions[2].size);
+        MI_CpuCopy16(ptr2 + sBallsLeftVramRegions[1].size, (void *)((u32)vramAddr + sBallsLeftVramRegions[3].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sBallsLeftVramRegions[3].size);
     }
 
     RemoveWindow(&window);
@@ -1104,7 +1104,7 @@ static void BattleHpBar_PrintNumRemainingSafariOrParkBalls(BattleHpBar *hpBar, u
     String_Delete(string2);
 }
 
-static int ov12_022657E4(BattleHpBar *hpBar, BOOL isExp) {
+static int BattleHpBar_StepGauge(BattleHpBar *hpBar, BOOL isExp) {
     int ret;
     if (isExp == FALSE) {
         ret = BattleHpBar_CalculatePixelsChangeFrame(hpBar->maxHp, hpBar->hp, hpBar->gainedHp, &hpBar->hpCalc, 6, 1);
@@ -1116,8 +1116,8 @@ static int ov12_022657E4(BattleHpBar *hpBar, BOOL isExp) {
         }
         ret = BattleHpBar_CalculatePixelsChangeFrame(hpBar->maxExp, hpBar->exp, hpBar->gainedExp, &hpBar->expCalc, 12, abs(hpBar->gainedExp / denom));
     }
-    if (isExp != FALSE || hpBar->unk_4F_3 != TRUE) {
-        ov12_02265878(hpBar, isExp);
+    if (isExp != FALSE || hpBar->showHpNumbers != TRUE) {
+        BattleHpBar_DrawGauge(hpBar, isExp);
     }
     if (ret == -1) {
         // we done
@@ -1130,7 +1130,7 @@ static int ov12_022657E4(BattleHpBar *hpBar, BOOL isExp) {
     return ret;
 }
 
-static void ov12_02265878(BattleHpBar *hpBar, u8 isExp) {
+static void BattleHpBar_DrawGauge(BattleHpBar *hpBar, u8 isExp) {
     u8 i;
     u8 pixelBuffer[12];
     u8 tmp;
@@ -1157,12 +1157,12 @@ static void ov12_02265878(BattleHpBar *hpBar, u8 isExp) {
             break;
         }
         src = BattleHpBar_Util_GetComponentRawGraphic(tmp);
-        sizeTop = ov12_0226D480[hpBar->type][0].size / 32;
+        sizeTop = sHpGaugeVramRegions[hpBar->type][0].size / 32;
         for (i = 0; i < 6; ++i) {
             if (i < sizeTop) {
-                MI_CpuCopy16(src + pixelBuffer[i] * 32, (void *)((u32)vramAddr + ov12_0226D480[hpBar->type][0].offset + i * 32 + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), 0x20);
+                MI_CpuCopy16(src + pixelBuffer[i] * 32, (void *)((u32)vramAddr + sHpGaugeVramRegions[hpBar->type][0].offset + i * 32 + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), 0x20);
             } else {
-                MI_CpuCopy16(src + pixelBuffer[i] * 32, (void *)((u32)vramAddr + ov12_0226D480[hpBar->type][1].offset + (i - sizeTop) * 32 + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), 0x20);
+                MI_CpuCopy16(src + pixelBuffer[i] * 32, (void *)((u32)vramAddr + sHpGaugeVramRegions[hpBar->type][1].offset + (i - sizeTop) * 32 + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), 0x20);
             }
         }
         break;
@@ -1456,27 +1456,27 @@ void ov12_02265D70(BattleHpBar *hpBar) {
 void ov12_02265D74(BattleHpBar *hpBar) {
 }
 
-static void ov12_02265D78(BattleHpBar *hpBar) {
+static void BattleHpBar_StartBobTask(BattleHpBar *hpBar) {
     if (hpBar->sysTask == NULL) {
-        hpBar->unk54 = 0;
-        hpBar->sysTask = SysTask_CreateOnMainQueue(ov12_02265DC4, hpBar, 1010);
+        hpBar->bobAngle = 0;
+        hpBar->sysTask = SysTask_CreateOnMainQueue(Task_BattleHpBarBob, hpBar, 1010);
     }
 }
 
-static void ov12_02265DA0(BattleHpBar *hpBar) {
+static void BattleHpBar_StopBobTask(BattleHpBar *hpBar) {
     if (hpBar->sysTask != NULL) {
         SysTask_Destroy(hpBar->sysTask);
         hpBar->sysTask = NULL;
     }
-    hpBar->unk54 = 0;
-    ov12_02264F44(hpBar, 0, 0);
+    hpBar->bobAngle = 0;
+    BattleHpBar_SetOffset(hpBar, 0, 0);
 }
 
-static void ov12_02265DC4(SysTask *task, void *data) {
+static void Task_BattleHpBarBob(SysTask *task, void *data) {
     BattleHpBar *hpBar = data;
-    hpBar->unk54 += 20;
-    if (hpBar->unk54 >= 360) {
-        hpBar->unk54 -= 360;
+    hpBar->bobAngle += 20;
+    if (hpBar->bobAngle >= 360) {
+        hpBar->bobAngle -= 360;
     }
-    ov12_02264F44(hpBar, 0, FX_Mul(GF_SinDegNoWrap(hpBar->unk54), FX32_CONST(1.5)) / FX32_ONE);
+    BattleHpBar_SetOffset(hpBar, 0, FX_Mul(GF_SinDegNoWrap(hpBar->bobAngle), FX32_CONST(1.5)) / FX32_ONE);
 }

@@ -2256,8 +2256,8 @@ static void BattleInput_CreateTargetMenuObjects(BattleInput *battleInput, int pa
     BattleInput_GetMonsHitArray(battleInput, monsHit, 0);
     BattleInput_LoadPokemonIconResources(battleInput);
     ov12_022686BC(battleInput);
-    ov12_0223C1C4(battleInput->battleSystem, v10);
-    ov12_0223C1A0(battleInput->battleSystem, v11);
+    BattleSystem_GetBattlerTypes(battleInput->battleSystem, v10);
+    BattleSystem_GetBattlerIdsByType(battleInput->battleSystem, v11);
 
     strPokemonName = String_New(24, HEAP_ID_BATTLE);
 
@@ -3091,7 +3091,7 @@ static void BattleInput_GetMonsHitArray(BattleInput *battleInput, u8 *monsHit, i
     int battlerId;
 
     menu = &battleInput->menu.target;
-    ov12_0223C1A0(battleInput->battleSystem, battlerIdBuffer);
+    BattleSystem_GetBattlerIdsByType(battleInput->battleSystem, battlerIdBuffer);
 
     for (i = 0; i < 4; i++) {
         battlerId = battlerIdBuffer[2 + i];
@@ -4424,7 +4424,7 @@ static int BattleInput_CatchingTutorialMain(BattleInput *battleInput) {
     PaletteData *palette = BattleSystem_GetPaletteData(battleInput->battleSystem);
     int ret = TOUCH_MENU_NO_INPUT;
 
-    if (ov12_0223BB04(battleInput->battleSystem) == 0) {
+    if (BattleSystem_GetTutorialState(battleInput->battleSystem) == 0) {
         GF_ASSERT(battleInput->tutorial.state < NELEMS(ov12_0226E260));
         ret = ov12_0226E260[battleInput->tutorial.state](battleInput);
     } else {

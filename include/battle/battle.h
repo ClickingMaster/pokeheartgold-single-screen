@@ -445,12 +445,12 @@ typedef struct BattleHpBar {
     ManagedSprite *boxObj;
     ManagedSprite *arrowObj;
     BattleSystem *battleSystem;
-    SysTask *unk10;
+    SysTask *task;
     Window unk14;
     u8 battlerId;
     u8 type;
     u8 monId;
-    u8 unk27;
+    u8 safariBallCount;
     s32 hp;
     s32 maxHp;
     s32 gainedHp;
@@ -460,18 +460,18 @@ typedef struct BattleHpBar {
     s32 gainedExp;
     s32 expCalc;
     u8 level;
-    u8 unk49;
-    u8 unk_4A;
-    u8 unk4B;
-    u8 unk4C;
-    u8 unk4D;
+    u8 gender;
+    u8 status;
+    u8 caught;
+    u8 command;
+    u8 delay;
     u8 unk4E;
-    u8 unk_4F_0 : 1;
-    u8 unk_4F_1 : 1;
+    u8 slideOut : 1;
+    u8 slideDone : 1;
     u8 unk_4F_2 : 1;
-    u8 unk_4F_3 : 1;
+    u8 showHpNumbers : 1;
     SysTask *sysTask;
-    u16 unk54;
+    u16 bobAngle;
 } BattleHpBar;
 
 typedef struct UnkBallData UnkBallData;
@@ -499,7 +499,7 @@ typedef struct OpponentData {
     u8 unk1A9[3];
 } OpponentData;
 
-typedef struct UnkBattleSystemSub17C {
+typedef struct BattleTerrain {
     ManagedSprite *unk0;
     BattleSystem *battleSystem;
     u8 unk8;
@@ -507,7 +507,7 @@ typedef struct UnkBattleSystemSub17C {
     s16 unkA;
     s16 unkC;
     u16 unused;
-} UnkBattleSystemSub17C; // size: 0x10
+} BattleTerrain; // size: 0x10
 
 typedef struct UnkBattleSystemSub1D0 {
     u8 *unk0;
@@ -556,7 +556,7 @@ struct BattleSystem {
     u16 trainerId[4];
     u8 trainerGender[4];
     Trainer trainers[4];
-    UnkBattleSystemSub17C unk17C[2]; // Battle Background..?
+    BattleTerrain unk17C[2]; // Battle Background..?
     BattleInput *battleInput;
     u32 *unk1A0[2];
     BattleNumberPrinter *hpNumPrinter;

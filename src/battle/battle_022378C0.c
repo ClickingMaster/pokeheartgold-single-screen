@@ -74,26 +74,26 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
         }
         break;
     case BSTATE_UNK_A_INIT:
-        if (ov12_0223A0D4(man) == TRUE) {
+        if (Battle_PartyPreviewInit(man) == TRUE) {
             *state = BSTATE_UNK_A_MAIN;
         } else {
             *state = BSTATE_UNK_B_INIT;
         }
         break;
     case BSTATE_UNK_A_MAIN:
-        if (ov12_0223A218(man) == TRUE) {
+        if (Battle_PartyPreviewMain(man) == TRUE) {
             *state = BSTATE_UNK_B_INIT;
         }
         break;
     case BSTATE_UNK_B_INIT:
-        if (ov12_0223A260(man) == TRUE) {
+        if (Battle_VsScreenInit(man) == TRUE) {
             *state = BSTATE_UNK_B_MAIN;
         } else {
             *state = BSTATE_BATTLE_INIT;
         }
         break;
     case BSTATE_UNK_B_MAIN:
-        if (ov12_0223A3A8(man) == TRUE) {
+        if (Battle_VsScreenMain(man) == TRUE) {
             UnloadOverlayByID(FS_OVERLAY_ID(OVY_5));
             *state = BSTATE_SYNC;
             LinkSync_StartSync(0x3D);
@@ -213,7 +213,7 @@ void ov12_02237BB8(BattleSystem *battleSystem) {
     NARC *unkNarcA = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
     NARC *unkNarcB = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
 
-    battleSystem->battleInput = BattleInput_NewInit(unkNarcA, unkNarcB, battleSystem, BattleSystem_GetTrainerGender(battleSystem, ov12_0223BFC0(battleSystem)), battleSystem->unk1C0);
+    battleSystem->battleInput = BattleInput_NewInit(unkNarcA, unkNarcB, battleSystem, BattleSystem_GetTrainerGender(battleSystem, BattleSystem_GetNetworkId(battleSystem)), battleSystem->unk1C0);
 
     FontID_Alloc(4, HEAP_ID_BATTLE);
 
@@ -285,7 +285,7 @@ void ov12_02237D00(BattleSystem *battleSystem) {
     LoadUserFrameGfx2WithFill(battleSystem->bgConfig, GF_BG_LYR_MAIN_1, 1, 10, frame, HEAP_ID_BATTLE);
 
     GfGfxLoader_LoadCharData(NARC_a_0_0_7, battleSystem->backgroundId + 3, battleSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_BATTLE);
-    PaletteData_LoadNarc(battleSystem->palette, NARC_a_0_0_7, battleSystem->backgroundId * 3 + 0xB0 + ov12_0223B52C(battleSystem), HEAP_ID_BATTLE, (PaletteBufferId)0, 0, 0);
+    PaletteData_LoadNarc(battleSystem->palette, NARC_a_0_0_7, battleSystem->backgroundId * 3 + 0xB0 + BattleSystem_GetBgTimeOfDay(battleSystem), HEAP_ID_BATTLE, (PaletteBufferId)0, 0, 0);
     PaletteData_LoadNarc(battleSystem->palette, NARC_a_0_3_8, GetUserFrameGfx2PaletteMember(frame), HEAP_ID_BATTLE, (PaletteBufferId)0, 0x20, 0xA0);
     PaletteData_LoadNarc(battleSystem->palette, NARC_graphic_font, 8, HEAP_ID_BATTLE, (PaletteBufferId)0, 0x20, 0xB0);
     GfGfxLoader_LoadScrnData(NARC_a_0_0_7, 2, battleSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_BATTLE);

@@ -306,7 +306,7 @@ BOOL Task_PalPadRegistration(TaskManager *taskman) {
     case PAL_PAD_REGISTRATION_STATE_END:
         PalPadRegistration_Free(registration);
         Heap_Free(registration);
-        sub_0203E30C();
+        FieldSystem_ResumeProcesses();
         return TRUE;
     }
     return FALSE;

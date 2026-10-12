@@ -91,7 +91,7 @@ BOOL sub_020978D0(TaskManager *taskManager) {
         env->state = 3;
         break;
     case 3:
-        sub_020537F0(taskManager, env->mapId, -1, env->x, env->y, env->param2);
+        CallTask_ChangeMapToCoords(taskManager, env->mapId, -1, env->x, env->y, env->param2);
         env->state = 4;
         break;
     case 4:

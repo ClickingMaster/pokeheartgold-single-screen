@@ -65,7 +65,7 @@ static BOOL CreateStarter(TaskManager *taskManager) {
             }
         }
         ChooseStarter_LaunchApp(fieldSystem, env->args);
-        sub_0203E30C();
+        FieldSystem_ResumeProcesses();
         env->state = 2;
         break;
     case 2:
@@ -87,7 +87,7 @@ static BOOL CreateStarter(TaskManager *taskManager) {
         break;
     }
     case 4:
-        if (!sub_020505C8(fieldSystem)) {
+        if (!FieldSystem_IsOverworldRestored(fieldSystem)) {
             break;
         }
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_FIELD1);

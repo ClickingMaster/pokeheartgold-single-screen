@@ -162,7 +162,7 @@ void Battle_BattleInit(OverlayManager *manager) {
 
     archive7 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
     archive8 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
-    gender = BattleSystem_GetTrainerGender(battleSystem, ov12_0223BFC0(battleSystem));
+    gender = BattleSystem_GetTrainerGender(battleSystem, BattleSystem_GetNetworkId(battleSystem));
     battleSystem->battleInput = BattleInput_NewInit(archive7, archive8, battleSystem, gender, battleSystem->unk1C0);
     NARC_Delete(archive7);
     NARC_Delete(archive8);
@@ -202,7 +202,7 @@ void Battle_BattleInit(OverlayManager *manager) {
     battleSystem->msgBuffer = String_New(320, HEAP_ID_BATTLE);
     MIi_CpuCopy16(PaletteData_GetUnfadedBuf(battleSystem->palette, PLTTBUF_MAIN_BG), battleSystem->unk2228, 224);
     MIi_CpuCopy16(PaletteData_GetUnfadedBuf(battleSystem->palette, PLTTBUF_MAIN_OBJ), battleSystem->unk2308, 224);
-    colorIndex = ov12_0223B52C(battleSystem);
+    colorIndex = BattleSystem_GetBgTimeOfDay(battleSystem);
     PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_MAIN_BG, PLTTSEL_BOTH, (u16)sBattleBgFillColors[battleSystem->backgroundId][colorIndex], 0, 112);
     PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_MAIN_BG, PLTTSEL_BOTH, (u16)sBattleBgFillColors[battleSystem->backgroundId][colorIndex], 192, 256);
     PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_MAIN_OBJ, PLTTSEL_BOTH, (u16)sBattleBgFillColors[battleSystem->backgroundId][colorIndex], 0, 223);
@@ -311,11 +311,11 @@ void Battle_BattleExit(OverlayManager *man) {
     setup->safariBalls = battleSystem->safariBallCnt;
     setup->winFlag = battleSystem->battleOutcomeFlag & 0x3F;
     setup->unk_170 = battleSystem->unk243C;
-    setup->levelUpFlag = ov12_022581D4(battleSystem, battleSystem->ctx, 4, 0);
-    setup->unk138.unk_0 += ov12_022581D4(battleSystem, battleSystem->ctx, 3, 0);
-    setup->unk138.unk_4 += ov12_022581D4(battleSystem, battleSystem->ctx, 6, 0) + ov12_022581D4(battleSystem, battleSystem->ctx, 6, 2);
-    setup->unk138.unk_8 += ov12_022581D4(battleSystem, battleSystem->ctx, 7, 0) + ov12_022581D4(battleSystem, battleSystem->ctx, 7, 2);
-    setup->unk1B4 = ov12_022581D4(battleSystem, battleSystem->ctx, 3, 0);
+    setup->levelUpFlag = BattleContext_Get(battleSystem, battleSystem->ctx, 4, 0);
+    setup->unk138.unk_0 += BattleContext_Get(battleSystem, battleSystem->ctx, 3, 0);
+    setup->unk138.unk_4 += BattleContext_Get(battleSystem, battleSystem->ctx, 6, 0) + BattleContext_Get(battleSystem, battleSystem->ctx, 6, 2);
+    setup->unk138.unk_8 += BattleContext_Get(battleSystem, battleSystem->ctx, 7, 0) + BattleContext_Get(battleSystem, battleSystem->ctx, 7, 2);
+    setup->unk1B4 = BattleContext_Get(battleSystem, battleSystem->ctx, 3, 0);
     setup->unk1C4 = battleSystem->isRecordingPaused;
     for (i = 0; i < 4; i++) {
         Heap_Free(battleSystem->unk1D0[i].unk0);
@@ -415,7 +415,7 @@ void Battle_InitBackgrounds(BattleSystem *battleSystem, BgConfig *bgConfig) {
     LoadUserFrameGfx2WithFill(bgConfig, GF_BG_LYR_MAIN_1, 1, 10, frame, HEAP_ID_BATTLE);
 
     GfGfxLoader_LoadCharData(NARC_a_0_0_7, battleSystem->backgroundId + 3, bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_BATTLE);
-    PaletteData_LoadNarc(battleSystem->palette, NARC_a_0_0_7, battleSystem->backgroundId * 3 + 0xB0 + ov12_0223B52C(battleSystem), HEAP_ID_BATTLE, (PaletteBufferId)0, 0, 0);
+    PaletteData_LoadNarc(battleSystem->palette, NARC_a_0_0_7, battleSystem->backgroundId * 3 + 0xB0 + BattleSystem_GetBgTimeOfDay(battleSystem), HEAP_ID_BATTLE, (PaletteBufferId)0, 0, 0);
     PaletteData_LoadNarc(battleSystem->palette, NARC_a_0_3_8, GetUserFrameGfx2PaletteMember(frame), HEAP_ID_BATTLE, (PaletteBufferId)0, 0x20, 0xA0);
     PaletteData_LoadNarc(battleSystem->palette, NARC_graphic_font, 8, HEAP_ID_BATTLE, (PaletteBufferId)0, 0x20, 0xB0);
     GfGfxLoader_LoadScrnData(NARC_a_0_0_7, 2, bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_BATTLE);
@@ -437,17 +437,17 @@ void ov12_022389B8(BattleSystem *battleSystem) {
     int i;
     Terrain terrain = BattleSystem_GetTerrainId(battleSystem);
 
-    ov12_02265FD4(&battleSystem->unk17C[0], battleSystem, 0, terrain);
-    ov12_02265FD4(&battleSystem->unk17C[1], battleSystem, 1, terrain);
+    BattleTerrain_Init(&battleSystem->unk17C[0], battleSystem, 0, terrain);
+    BattleTerrain_Init(&battleSystem->unk17C[1], battleSystem, 1, terrain);
 
     ctx = BattleSystem_GetBattleContext(battleSystem);
 
     for (i = 0; i < battleSystem->maxBattlers; i++) {
-        int battlerId = ov12_022581D4(battleSystem, ctx, 2, i);
+        int battlerId = BattleContext_Get(battleSystem, ctx, 2, i);
         ov12_02258DB0(battleSystem, battleSystem->opponentData[i], BattleSystem_GetMonBall(battleSystem, BattleSystem_GetPartyMon(battleSystem, i, battlerId)), battlerId);
     }
 
-    ov12_0223A7A0();
+    Battle_CreateWirelessStatusIcon();
 }
 
 void BgConfig_CleanupBattleBackgrounds(BgConfig *bgConfig) {
@@ -540,7 +540,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
 
     if (battleSystem->battleType & BATTLE_TYPE_LINK) {
         BattleLink_Start(battleSystem);
-        u8 networkID = ov12_0223BFC0(battleSystem);
+        u8 networkID = BattleSystem_GetNetworkId(battleSystem);
 
         ov12_0223A664(battleSystem, setup);
 
@@ -567,13 +567,13 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
                         break;
                     }
                 }
-                ov12_022582B8(battleSystem, battleSystem->ctx, 2, i, slot);
+                BattleContext_Set(battleSystem, battleSystem->ctx, 2, i, slot);
             }
             ov12_02256F28(battleSystem, battleSystem->ctx);
         } else if (battleSystem->battleType & BATTLE_TYPE_MULTI) {
             for (i = 0; i < BATTLER_MAX; i++) {
                 battlerInitData.battler = i;
-                battlerInitData.battlerType = sLinkMultiBattlerTypes[ov12_0223BFCC(battleSystem, networkID)][ov12_0223BFCC(battleSystem, i)];
+                battlerInitData.battlerType = sLinkMultiBattlerTypes[BattleSystem_GetLinkPosition(battleSystem, networkID)][BattleSystem_GetLinkPosition(battleSystem, i)];
                 battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
             }
             battleSystem->maxBattlers = i;
@@ -590,7 +590,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
                         break;
                     }
                 }
-                ov12_022582B8(battleSystem, battleSystem->ctx, 2, i, slot);
+                BattleContext_Set(battleSystem, battleSystem->ctx, 2, i, slot);
             }
             ov12_02256F28(battleSystem, battleSystem->ctx);
         } else if (battleSystem->battleType & BATTLE_TYPE_DOUBLES) {
@@ -608,7 +608,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
                 for (slot = 0; slot < Party_GetCount(battleSystem->trainerParty[i & 1]); slot++) {
                     mon = Party_GetMonByIndex(battleSystem->trainerParty[i & 1], slot);
                     if (i > 1) {
-                        if (ov12_022581D4(battleSystem, battleSystem->ctx, 2, i & 1) != slot
+                        if (BattleContext_Get(battleSystem, battleSystem->ctx, 2, i & 1) != slot
                             && GetMonData(mon, MON_DATA_SPECIES, NULL)
                             && GetMonData(mon, MON_DATA_IS_EGG, NULL) == FALSE
                             && GetMonData(mon, MON_DATA_HP, NULL)) {
@@ -620,7 +620,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
                         break;
                     }
                 }
-                ov12_022582B8(battleSystem, battleSystem->ctx, 2, i, slot);
+                BattleContext_Set(battleSystem, battleSystem->ctx, 2, i, slot);
             }
         } else {
             for (i = 0; i < BATTLER_MAX / 2; i++) {
@@ -640,7 +640,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
                         break;
                     }
                 }
-                ov12_022582B8(battleSystem, battleSystem->ctx, 2, i, slot);
+                BattleContext_Set(battleSystem, battleSystem->ctx, 2, i, slot);
             }
         }
         ov12_02256F28(battleSystem, battleSystem->ctx);
@@ -672,7 +672,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
                     break;
                 }
             }
-            ov12_022582B8(battleSystem, battleSystem->ctx, 2, i, slot);
+            BattleContext_Set(battleSystem, battleSystem->ctx, 2, i, slot);
             if (i == 0) {
                 playerSlot = slot;
             }
@@ -699,7 +699,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
                     break;
                 }
             }
-            ov12_022582B8(battleSystem, battleSystem->ctx, 2, i, slot);
+            BattleContext_Set(battleSystem, battleSystem->ctx, 2, i, slot);
         }
         ov12_02256F28(battleSystem, battleSystem->ctx);
         battleSystem->unk23FC = 1;
@@ -718,7 +718,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
             for (slot = 0; slot < Party_GetCount(battleSystem->trainerParty[i & 1]); slot++) {
                 mon = Party_GetMonByIndex(battleSystem->trainerParty[i & 1], slot);
                 if (i > 1) {
-                    if (ov12_022581D4(battleSystem, battleSystem->ctx, 2, i & 1) != slot
+                    if (BattleContext_Get(battleSystem, battleSystem->ctx, 2, i & 1) != slot
                         && GetMonData(mon, MON_DATA_SPECIES, NULL)
                         && GetMonData(mon, MON_DATA_IS_EGG, NULL) == FALSE
                         && GetMonData(mon, MON_DATA_HP, NULL)) {
@@ -730,7 +730,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
                     break;
                 }
             }
-            ov12_022582B8(battleSystem, battleSystem->ctx, 2, i, slot);
+            BattleContext_Set(battleSystem, battleSystem->ctx, 2, i, slot);
         }
         ov12_02256F28(battleSystem, battleSystem->ctx);
         battleSystem->unk23FC = 1;
@@ -752,7 +752,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
                     break;
                 }
             }
-            ov12_022582B8(battleSystem, battleSystem->ctx, 2, i, slot);
+            BattleContext_Set(battleSystem, battleSystem->ctx, 2, i, slot);
         }
         ov12_02256F28(battleSystem, battleSystem->ctx);
         battleSystem->unk23FC = 1;
@@ -1053,7 +1053,7 @@ void Battle_LinkInit(OverlayManager *man, BattleSetup *setup) {
     Main_SetVBlankIntrCB(Battle_LinkVBlankCallback, work);
     PaletteData_BeginPaletteFade(work->palette, 5, 0xFFFF, 0, 0x10, 0, 0);
     work->waitingIcon = WaitingIcon_New(work->window, 1);
-    ov12_0223A7A0();
+    Battle_CreateWirelessStatusIcon();
 }
 
 BOOL Battle_LinkMain(OverlayManager *man) {
@@ -1297,7 +1297,7 @@ void Battle_LinkExit(OverlayManager *man) {
 
 #pragma force_active on
 
-BOOL ov12_0223A0D4(OverlayManager *man) {
+BOOL Battle_PartyPreviewInit(OverlayManager *man) {
     BattleSystem *battleSystem = OverlayManager_CreateAndGetData(man, sizeof(BattleSystem), HEAP_ID_BATTLE);
     BattleSetup *setup = OverlayManager_GetArgs(man);
     u8 netId;
@@ -1345,7 +1345,7 @@ BOOL ov12_0223A0D4(OverlayManager *man) {
 
 #pragma force_active reset
 
-BOOL ov12_0223A218(OverlayManager *man) {
+BOOL Battle_PartyPreviewMain(OverlayManager *man) {
     BattleSystem *battleSystem = OverlayManager_GetData(man);
     int i;
 
@@ -1363,7 +1363,7 @@ BOOL ov12_0223A218(OverlayManager *man) {
 
 #pragma force_active on
 
-BOOL ov12_0223A260(OverlayManager *man) {
+BOOL Battle_VsScreenInit(OverlayManager *man) {
     BattleSystem *battleSystem = OverlayManager_GetData(man);
     u8 netId;
     int i;
@@ -1406,7 +1406,7 @@ BOOL ov12_0223A260(OverlayManager *man) {
 
 #pragma force_active reset
 
-BOOL ov12_0223A3A8(OverlayManager *man) {
+BOOL Battle_VsScreenMain(OverlayManager *man) {
     BattleSystem *battleSystem = OverlayManager_GetData(man);
     int i;
 
@@ -1600,7 +1600,7 @@ void ov12_0223A664(BattleSystem *battleSystem, BattleSetup *setup) {
 
 #pragma force_active reset
 
-void ov12_0223A7A0(void) {
+void Battle_CreateWirelessStatusIcon(void) {
     WirelessStatusIcon_Create();
     if (CommState_IsWifi()) {
         WirelessStatusIcon_SetLevel(3 - ov00_021EC9D4());

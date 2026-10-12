@@ -25,17 +25,17 @@ typedef struct MessageBox {
 } MessageBox;
 
 static void ovFieldMain_ShowMessageInField(ScriptContext *ctx, MsgData *messageData, u32 messageNum);
-static void ov01_021EF5C8(ScriptContext *ctx, MessageFormat *messageFormat, u8 messageNum, u32 canABSpeedUp);
+static void ovFieldMain_ShowMessageWithFormat(ScriptContext *ctx, MessageFormat *messageFormat, u8 messageNum, u32 canABSpeedUp);
 static u32 ovFieldMain_GetTextFrameDelay(ScriptContext *ctx);
 static void ovFieldMain_GetMsgBoxParameters(FieldSystem *fieldSystem, MessageBox *messageBox);
 static void ovFieldMain_GetMsgBoxParametersEx(FieldSystem *fieldSystem, MessageFormat *messageFormat, MessageBox *messageBox);
 static void ovFieldMain_CreateMessageBox(FieldSystem *fieldSystem, MessageBox *messageBox);
 static void ovFieldMain_ReadAndExpandMsgDataViaBuffer(MessageBox *messageBox, MsgData *messageData, u32 messageNum);
 static void ovFieldMain_GetFormattedECMessage(MessageBox *messageBox, u16 messageBank, u16 messageNum, u16 word1, u16 word2);
-static void ov01_021EF758(MessageBox *messageBox, FontID fontId, u32 textFrameDelay, BOOL canABSpeedUp, u32 a4);
+static void ovFieldMain_PrintMessageEx(MessageBox *messageBox, FontID fontId, u32 textFrameDelay, BOOL canABSpeedUp, u32 a4);
 static void ovFieldMain_AddTextPrinterParameterized(MessageBox *messageBox, FontID fontId);
 
-const u16 ov01_022067C8[] = {
+const u16 gScriptStdMsgBanks[] = {
     NARC_msg_msg_0752_bin, // day of the week siblings
     NARC_msg_msg_0211_bin, // field moves
     NARC_msg_msg_0030_bin, // cameron the photographer
@@ -51,10 +51,10 @@ BOOL ScrCmd_NonNPCMsg(ScriptContext *ctx) {
 BOOL ScrCmd_GetStdMsgNaix(ScriptContext *ctx) {
     u16 r5 = ScriptGetVar(ctx);
     u16 *fileIdPtr = ScriptGetVarPointer(ctx);
-    if (r5 >= NELEMS(ov01_022067C8)) {
+    if (r5 >= NELEMS(gScriptStdMsgBanks)) {
         *fileIdPtr = 0;
     } else {
-        *fileIdPtr = ov01_022067C8[r5];
+        *fileIdPtr = gScriptStdMsgBanks[r5];
     }
     return FALSE;
 }
@@ -72,9 +72,9 @@ BOOL ScrCmd_MsgBoxExtern(ScriptContext *ctx) {
     u16 fileId = ScriptGetVar(ctx);
     u16 messageNum = ScriptGetVar(ctx);
     MsgData *messageData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, fileId, HEAP_ID_FIELD3);
-    ov01_021EF4DC(ctx, messageData, messageNum, TRUE, NULL);
+    ovFieldMain_ShowMessage(ctx, messageData, messageNum, TRUE, NULL);
     DestroyMsgData(messageData);
-    SetupNativeScript(ctx, ov01_021EF348);
+    SetupNativeScript(ctx, ScrNative_WaitTextPrinter);
     return TRUE;
 }
 
@@ -83,7 +83,7 @@ BOOL ScrCmd_441(ScriptContext *ctx) {
     u16 messageNum = ScriptReadHalfword(ctx);
     u16 word1 = ScriptReadHalfword(ctx);
     u16 word2 = ScriptReadHalfword(ctx);
-    ov01_021EF564(ctx, messageBank, messageNum, word1, (s16)word2, 0xFF);
+    ovFieldMain_ShowEasyChatMessage(ctx, messageBank, messageNum, word1, (s16)word2, 0xFF);
     return FALSE;
 }
 
@@ -92,8 +92,8 @@ BOOL ScrCmd_442(ScriptContext *ctx) {
     u16 messageNum = ScriptReadHalfword(ctx);
     u16 word1 = ScriptReadHalfword(ctx);
     u16 word2 = ScriptReadHalfword(ctx);
-    ov01_021EF564(ctx, messageBank, messageNum, word1, (s16)word2, TRUE);
-    SetupNativeScript(ctx, ov01_021EF348);
+    ovFieldMain_ShowEasyChatMessage(ctx, messageBank, messageNum, word1, (s16)word2, TRUE);
+    SetupNativeScript(ctx, ScrNative_WaitTextPrinter);
     return TRUE;
 }
 
@@ -106,12 +106,12 @@ BOOL ScrCmd_443(ScriptContext *ctx) {
     MailMessage *intro = &frontierFsys->unk78[index].introMessage;
     if (intro->msg_bank == 0xFFFF) {
         MsgData *messageData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 723, HEAP_ID_FIELD3);
-        ov01_021EF4DC(ctx, messageData, intro->msg_no, TRUE, NULL);
+        ovFieldMain_ShowMessage(ctx, messageData, intro->msg_no, TRUE, NULL);
         DestroyMsgData(messageData);
     } else {
-        ov01_021EF564(ctx, intro->msg_bank, intro->msg_no, intro->fields[0], intro->fields[1], TRUE);
+        ovFieldMain_ShowEasyChatMessage(ctx, intro->msg_bank, intro->msg_no, intro->fields[0], intro->fields[1], TRUE);
     }
-    SetupNativeScript(ctx, ov01_021EF348);
+    SetupNativeScript(ctx, ScrNative_WaitTextPrinter);
     return TRUE;
 }
 
@@ -123,55 +123,55 @@ BOOL ScrCmd_444(ScriptContext *ctx) {
     u8 r3 = ScriptReadByte(ctx);
     u8 numLegendaryPokemonSeen = 0;
     MessageFormat *messageFormat = sub_0204B538(fieldSystem->saveData, numEligiblePokemon, r2, r3, &numLegendaryPokemonSeen);
-    ov01_021EF5C8(ctx, messageFormat, baseMessageNum + numLegendaryPokemonSeen, TRUE);
+    ovFieldMain_ShowMessageWithFormat(ctx, messageFormat, baseMessageNum + numLegendaryPokemonSeen, TRUE);
     MessageFormat_Delete(messageFormat);
-    SetupNativeScript(ctx, ov01_021EF348);
+    SetupNativeScript(ctx, ScrNative_WaitTextPrinter);
     return TRUE;
 }
 
 BOOL ScrCmd_527(ScriptContext *ctx) {
-    struct UnkStruct_Ov01_021EF4C4 unkStruct;
+    struct MessagePrintOptions unkStruct;
     u16 messageNum = ScriptReadHalfword(ctx);
-    ov01_021EF4C4(&unkStruct, ctx);
+    ovFieldMain_InitMessagePrintOptions(&unkStruct, ctx);
     unkStruct.fontId = 3;
-    ov01_021EF4DC(ctx, ctx->msgdata, messageNum, FALSE, &unkStruct);
-    SetupNativeScript(ctx, ov01_021EF348);
+    ovFieldMain_ShowMessage(ctx, ctx->msgdata, messageNum, FALSE, &unkStruct);
+    SetupNativeScript(ctx, ScrNative_WaitTextPrinter);
     return TRUE;
 }
 
 BOOL ScrCmd_NPCMsg(ScriptContext *ctx) {
     u8 messageNum = ScriptReadByte(ctx);
-    ov01_021EF4DC(ctx, ctx->msgdata, messageNum, TRUE, NULL);
-    SetupNativeScript(ctx, ov01_021EF348);
+    ovFieldMain_ShowMessage(ctx, ctx->msgdata, messageNum, TRUE, NULL);
+    SetupNativeScript(ctx, ScrNative_WaitTextPrinter);
     return TRUE;
 }
 
-BOOL ov01_021EF348(ScriptContext *ctx) {
+BOOL ScrNative_WaitTextPrinter(ScriptContext *ctx) {
     u8 *textPrinterNumPtr = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_TEXT_PRINTER_NUMBER);
     return DialogBox_IsPrintFinished(*textPrinterNumPtr);
 }
 
 BOOL ScrCmd_NonNPCMsgVar(ScriptContext *ctx) {
     u16 messageNum = ScriptGetVar(ctx);
-    ov01_021EF4DC(ctx, ctx->msgdata, (u8)messageNum, TRUE, NULL);
-    SetupNativeScript(ctx, ov01_021EF348);
+    ovFieldMain_ShowMessage(ctx, ctx->msgdata, (u8)messageNum, TRUE, NULL);
+    SetupNativeScript(ctx, ScrNative_WaitTextPrinter);
     return TRUE;
 }
 
 BOOL ScrCmd_592(ScriptContext *ctx) {
-    struct UnkStruct_Ov01_021EF4C4 unkStruct;
+    struct MessagePrintOptions unkStruct;
     u16 messageNum = ScriptGetVar(ctx);
-    ov01_021EF4C4(&unkStruct, ctx);
-    unkStruct.unk1 = 1;
-    ov01_021EF4DC(ctx, ctx->msgdata, (u8)messageNum, TRUE, &unkStruct);
-    SetupNativeScript(ctx, ov01_021EF348);
+    ovFieldMain_InitMessagePrintOptions(&unkStruct, ctx);
+    unkStruct.autoScroll = 1;
+    ovFieldMain_ShowMessage(ctx, ctx->msgdata, (u8)messageNum, TRUE, &unkStruct);
+    SetupNativeScript(ctx, ScrNative_WaitTextPrinter);
     return TRUE;
 }
 
 BOOL ScrCmd_NPCMsgVar(ScriptContext *ctx) {
     u16 messageNum = ScriptGetVar(ctx);
-    ov01_021EF4DC(ctx, ctx->msgdata, (u8)messageNum, FALSE, NULL);
-    SetupNativeScript(ctx, ov01_021EF348);
+    ovFieldMain_ShowMessage(ctx, ctx->msgdata, (u8)messageNum, FALSE, NULL);
+    SetupNativeScript(ctx, ScrNative_WaitTextPrinter);
     return TRUE;
 }
 
@@ -181,29 +181,29 @@ BOOL ScrCmd_GenderMsgBox(ScriptContext *ctx) {
     u8 messageNumFemale = ScriptReadByte(ctx);
     u32 gender = PlayerProfile_GetTrainerGender(Save_PlayerData_GetProfile(FieldSystem_GetSaveData(ctx->fieldSystem)));
     if (gender != PLAYER_GENDER_MALE) {
-        ov01_021EF4DC(ctx, ctx->msgdata, messageNumFemale, TRUE, NULL);
+        ovFieldMain_ShowMessage(ctx, ctx->msgdata, messageNumFemale, TRUE, NULL);
     } else {
-        ov01_021EF4DC(ctx, ctx->msgdata, messageNumMale, TRUE, NULL);
+        ovFieldMain_ShowMessage(ctx, ctx->msgdata, messageNumMale, TRUE, NULL);
     }
-    SetupNativeScript(ctx, ov01_021EF348);
+    SetupNativeScript(ctx, ScrNative_WaitTextPrinter);
     return TRUE;
 }
 
 BOOL ScrCmd_455(ScriptContext *ctx) {
     LocalMapObject **objPtr = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_LAST_INTERACTED);
     u8 mapObjectType = MapObject_GetType(*objPtr);
-    ov01_021EF4DC(ctx, ctx->msgdata, mapObjectType, TRUE, NULL);
-    SetupNativeScript(ctx, ov01_021EF348);
+    ovFieldMain_ShowMessage(ctx, ctx->msgdata, mapObjectType, TRUE, NULL);
+    SetupNativeScript(ctx, ScrNative_WaitTextPrinter);
     return TRUE;
 }
 
-void ov01_021EF4C4(struct UnkStruct_Ov01_021EF4C4 *unkStruct, ScriptContext *ctx) {
+void ovFieldMain_InitMessagePrintOptions(struct MessagePrintOptions *unkStruct, ScriptContext *ctx) {
     unkStruct->textFrameDelay = ovFieldMain_GetTextFrameDelay(ctx);
-    unkStruct->unk1 = 0;
+    unkStruct->autoScroll = 0;
     unkStruct->fontId = 1;
 }
 
-void ov01_021EF4DC(ScriptContext *ctx, MsgData *messageData, u16 messageNum, u8 canABSpeedUp, struct UnkStruct_Ov01_021EF4C4 *unkStruct) {
+void ovFieldMain_ShowMessage(ScriptContext *ctx, MsgData *messageData, u16 messageNum, u8 canABSpeedUp, struct MessagePrintOptions *unkStruct) {
     MessageBox messageBox;
     ovFieldMain_GetMsgBoxParameters(ctx->fieldSystem, &messageBox);
     ovFieldMain_CreateMessageBox(ctx->fieldSystem, &messageBox);
@@ -217,10 +217,10 @@ void ov01_021EF4DC(ScriptContext *ctx, MsgData *messageData, u16 messageNum, u8 
         fontId = 1;
     } else {
         textFrameDelay = unkStruct->textFrameDelay;
-        unk1 = unkStruct->unk1;
+        unk1 = unkStruct->autoScroll;
         fontId = unkStruct->fontId;
     }
-    ov01_021EF758(&messageBox, fontId, textFrameDelay, canABSpeedUp, unk1);
+    ovFieldMain_PrintMessageEx(&messageBox, fontId, textFrameDelay, canABSpeedUp, unk1);
 }
 
 static void ovFieldMain_ShowMessageInField(ScriptContext *ctx, MsgData *messageData, u32 messageNum) {
@@ -232,24 +232,24 @@ static void ovFieldMain_ShowMessageInField(ScriptContext *ctx, MsgData *messageD
 }
 
 // word2 needs to be signed to match
-void ov01_021EF564(ScriptContext *ctx, u16 messageBank, u16 messageNum, u16 word1, s16 word2, u8 canABSpeedUp) {
+void ovFieldMain_ShowEasyChatMessage(ScriptContext *ctx, u16 messageBank, u16 messageNum, u16 word1, s16 word2, u8 canABSpeedUp) {
     MessageBox messageBox;
     ovFieldMain_GetMsgBoxParameters(ctx->fieldSystem, &messageBox);
     ovFieldMain_CreateMessageBox(ctx->fieldSystem, &messageBox);
     ovFieldMain_GetFormattedECMessage(&messageBox, messageBank, messageNum, word1, (u16)word2);
     if (canABSpeedUp != 0xFF) {
-        ov01_021EF758(&messageBox, 1, ovFieldMain_GetTextFrameDelay(ctx), canABSpeedUp, 0);
+        ovFieldMain_PrintMessageEx(&messageBox, 1, ovFieldMain_GetTextFrameDelay(ctx), canABSpeedUp, 0);
     } else {
         ovFieldMain_AddTextPrinterParameterized(&messageBox, 1);
     }
 }
 
-static void ov01_021EF5C8(ScriptContext *ctx, MessageFormat *messageFormat, u8 messageNum, u32 canABSpeedUp) {
+static void ovFieldMain_ShowMessageWithFormat(ScriptContext *ctx, MessageFormat *messageFormat, u8 messageNum, u32 canABSpeedUp) {
     MessageBox messageBox;
     ovFieldMain_GetMsgBoxParametersEx(ctx->fieldSystem, messageFormat, &messageBox);
     ovFieldMain_CreateMessageBox(ctx->fieldSystem, &messageBox);
     ovFieldMain_ReadAndExpandMsgDataViaBuffer(&messageBox, ctx->msgdata, messageNum);
-    ov01_021EF758(&messageBox, 1, ovFieldMain_GetTextFrameDelay(ctx), canABSpeedUp, 0);
+    ovFieldMain_PrintMessageEx(&messageBox, 1, ovFieldMain_GetTextFrameDelay(ctx), canABSpeedUp, 0);
 }
 
 static u32 ovFieldMain_GetTextFrameDelay(ScriptContext *ctx) {
@@ -300,7 +300,7 @@ static void ovFieldMain_GetFormattedECMessage(MessageBox *messageBox, u16 messag
     String_Delete(string);
 }
 
-static void ov01_021EF758(MessageBox *messageBox, FontID fontId, u32 textFrameDelay, BOOL canABSpeedUp, u32 a4) {
+static void ovFieldMain_PrintMessageEx(MessageBox *messageBox, FontID fontId, u32 textFrameDelay, BOOL canABSpeedUp, u32 a4) {
     *(messageBox->textPrinterNumPtr) = DialogBox_PrintMessageEx(messageBox->window, messageBox->message, fontId, textFrameDelay, canABSpeedUp, a4);
 }
 

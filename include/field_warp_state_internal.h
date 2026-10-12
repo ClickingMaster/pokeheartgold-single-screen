@@ -82,7 +82,7 @@ extern int GetSpawnIdForFlyMap();
 extern void GetFlyWarpData();
 extern void *LocalFieldData_GetSpecialSpawnWarpPtr();
 extern void GetSpecialSpawnWarpData();
-extern void sub_02053908();
+extern void JumpTask_FlyWarp();
 extern const u16 _020FE7AC[];
 
 #endif

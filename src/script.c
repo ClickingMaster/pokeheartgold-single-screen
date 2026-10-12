@@ -38,7 +38,7 @@ void StopScript(ScriptContext *ctx) {
     ctx->script_ptr = NULL;
 }
 
-void sub_0203FD68(ScriptContext *ctx, TaskManager *unk) {
+void ScriptContext_SetTaskManager(ScriptContext *ctx, TaskManager *unk) {
     ctx->taskman = unk;
 }
 

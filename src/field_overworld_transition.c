@@ -18,7 +18,7 @@ BOOL Task_RestoreOverworldAndFadeIn(TaskManager *taskManager);
 
 BOOL Task_LeaveOverworld(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    if (!sub_0203DF7C(fieldSystem)) {
+    if (!FieldSystem_IsFieldMapLoaded(fieldSystem)) {
         return TRUE;
     }
     return FALSE;
@@ -26,17 +26,17 @@ BOOL Task_LeaveOverworld(TaskManager *taskManager) {
 
 void CallTask_LeaveOverworld(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    if (!sub_0203DF7C(fieldSystem)) {
+    if (!FieldSystem_IsFieldMapLoaded(fieldSystem)) {
         GF_AssertFail();
         return;
     }
-    sub_0203DF34(fieldSystem);
+    FieldSystem_ClearRunningFieldMap(fieldSystem);
     TaskManager_Call(taskManager, Task_LeaveOverworld, NULL);
 }
 
 BOOL Task_RestoreOverworld(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    if (sub_020505C8(fieldSystem)) {
+    if (FieldSystem_IsOverworldRestored(fieldSystem)) {
         return TRUE;
     }
     return FALSE;
@@ -44,7 +44,7 @@ BOOL Task_RestoreOverworld(TaskManager *taskManager) {
 
 void CallTask_RestoreOverworld(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    if (sub_0203DF7C(fieldSystem)) {
+    if (FieldSystem_IsFieldMapLoaded(fieldSystem)) {
         GF_AssertFail();
         return;
     }
@@ -61,7 +61,7 @@ BOOL Task_WaitPaletteFade(TaskManager *taskManager) {
 
 // Fades both screens to black and waits for the fade.
 void PaletteFadeUntilFinished(TaskManager *taskManager) {
-    if (!sub_0203DF7C(TaskManager_GetFieldSystem(taskManager))) {
+    if (!FieldSystem_IsFieldMapLoaded(TaskManager_GetFieldSystem(taskManager))) {
         GF_AssertFail();
         return;
     }
@@ -70,7 +70,7 @@ void PaletteFadeUntilFinished(TaskManager *taskManager) {
 }
 
 void CallTask_FadeFromBlack(TaskManager *taskManager) {
-    if (!sub_0203DF7C(TaskManager_GetFieldSystem(taskManager))) {
+    if (!FieldSystem_IsFieldMapLoaded(TaskManager_GetFieldSystem(taskManager))) {
         GF_AssertFail();
         return;
     }
