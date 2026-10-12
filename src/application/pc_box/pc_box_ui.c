@@ -726,9 +726,9 @@ u32 PCBox_StartSummaryApp(PCBoxWork *work) {
         args->partySlot = work->selectedSlot - PC_BOX_SLOT_PARTY_START;
     }
     args->options = work->options;
-    sub_0208AD34(args, Save_PlayerData_GetProfile(work->args->saveData));
+    PokemonSummaryArgs_SetPlayer(args, Save_PlayerData_GetProfile(work->args->saveData));
     args->unk12 = 0;
-    sub_02089D40(args, ov14_021F7D0C);
+    PokemonSummary_SetPages(args, ov14_021F7D0C);
     args->unk16 = 0;
     ((u8 *)args)[0x17] = 0;
     args->moveToLearn = 0;

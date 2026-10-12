@@ -220,19 +220,19 @@ BOOL ScrCmd_795(ScriptContext *ctx) {
     u8 x = ScriptGetVar(ctx);
     u8 y = ScriptGetVar(ctx);
     Window **moneyBox = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MONEY_BOX);
-    *moneyBox = ov01_021EED60(ctx->fieldSystem, x, y);
+    *moneyBox = SavingsBox_New(ctx->fieldSystem, x, y);
     return FALSE;
 }
 
 BOOL ScrCmd_796(ScriptContext *ctx) {
     Window **moneyBox = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MONEY_BOX);
-    ov01_021EEE30(*moneyBox);
+    SavingsBox_Delete(*moneyBox);
     return FALSE;
 }
 
 // Unused
 BOOL ScrCmd_797(ScriptContext *ctx) {
     Window **moneyBox = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MONEY_BOX);
-    ov01_021EEE44(ctx->fieldSystem, *moneyBox);
+    SavingsBox_Update(ctx->fieldSystem, *moneyBox);
     return FALSE;
 }

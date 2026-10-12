@@ -55,8 +55,8 @@
 .public Save_Bag_Get
 .public sub_02088288
 .public PokemonSummary_IsPokeathlonUnlocked
-.public sub_02089D40
-.public sub_0208AD34
+.public PokemonSummary_SetPages
+.public PokemonSummaryArgs_SetPlayer
 .public MI_CpuFill8
 .public MI_CpuCopy8
 .public gOverlayTemplate_PartyMenu

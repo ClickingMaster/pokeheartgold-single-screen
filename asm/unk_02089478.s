@@ -8,8 +8,8 @@
 	.include "unk_02088288.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02089478
-sub_02089478: ; 0x02089478
+	thumb_func_start PokemonSummary_UpdateCondition
+PokemonSummary_UpdateCondition: ; 0x02089478
 	push {r4, r5, r6, lr}
 	sub sp, #8
 	ldr r1, _020895E8 ; =gSystem
@@ -26,7 +26,7 @@ _0208948A:
 	ldrb r1, [r1, #0x11]
 	cmp r1, #2
 	bne _020894AE
-	bl sub_0208A520
+	bl PokemonSummary_GetShownMon
 	add r6, r0, #0
 	mov r0, #0x13
 	bl AllocMonZeroed
@@ -36,7 +36,7 @@ _0208948A:
 	bl CopyBoxPokemonToPokemon
 	b _020894B4
 _020894AE:
-	bl sub_0208A520
+	bl PokemonSummary_GetShownMon
 	add r4, r0, #0
 _020894B4:
 	ldr r0, _020895EC ; =0x000007BE
@@ -195,4 +195,4 @@ _020895F8: .word 0x00000277
 _020895FC: .word 0x00000279
 _02089600: .word 0x0000027A
 _02089604: .word 0x000003E2
-	thumb_func_end sub_02089478
+	thumb_func_end PokemonSummary_UpdateCondition

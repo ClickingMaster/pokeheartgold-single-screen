@@ -367,8 +367,8 @@ int GtsViewMon_Init(GtsApp *app, int state) {
     app->summaryArgs.options = app->args->options;
     app->summaryArgs.ribbons = Save_SpecialRibbons_Get(app->args->saveData);
     app->summaryArgs.isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(app->args->saveData);
-    sub_02089D40(&app->summaryArgs, sGtsViewMonSummaryPages);
-    sub_0208AD34(&app->summaryArgs, app->args->profile);
+    PokemonSummary_SetPages(&app->summaryArgs, sGtsViewMonSummaryPages);
+    PokemonSummaryArgs_SetPlayer(&app->summaryArgs, app->args->profile);
     app->tradeSequence = OverlayManager_New(&gOverlayTemplate_PokemonSummary, &app->summaryArgs, HEAP_ID_61);
     app->reloadGraphics = TRUE;
     return 2;

@@ -1653,13 +1653,13 @@ void WirelessTradeSelectMon_OpenSummary(WirelessTradeSelectMon *work, u32 ofPart
         work->summaryArgs.party = work->party;
         work->summaryArgs.partyCount = Party_GetCount(work->args->party);
         work->summaryArgs.unk28 = 0;
-        sub_0208AD34(&work->summaryArgs, CommPlayerInfo_GetProfile(Comm_GetLocalNetId()));
+        PokemonSummaryArgs_SetPlayer(&work->summaryArgs, CommPlayerInfo_GetProfile(Comm_GetLocalNetId()));
     } else {
         work->summaryArgs.party = work->partnerParty;
         work->summaryArgs.partyCount = Party_GetCount(work->partnerParty);
         // The partner's Chatot cry.
         work->summaryArgs.unk28 = (int)&work->chatot[Comm_GetLocalNetId() ^ 1];
-        sub_0208AD34(&work->summaryArgs, CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1));
+        PokemonSummaryArgs_SetPlayer(&work->summaryArgs, CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1));
     }
 
     work->summaryArgs.unk11 = 1;
@@ -1670,7 +1670,7 @@ void WirelessTradeSelectMon_OpenSummary(WirelessTradeSelectMon *work, u32 ofPart
     work->summaryArgs.natDexEnabled = work->args->natDexEnabled;
     work->summaryArgs.options = work->args->options;
     work->summaryArgs.ribbons = Save_SpecialRibbons_Get(work->args->saveData);
-    sub_02089D40(&work->summaryArgs, sWirelessTradeSelectMonSummaryPages);
+    PokemonSummary_SetPages(&work->summaryArgs, sWirelessTradeSelectMonSummaryPages);
     work->summaryApp = OverlayManager_New(&gOverlayTemplate_PokemonSummary, &work->summaryArgs, HEAP_ID_26);
     work->summaryOfPartner = ofPartner;
 }

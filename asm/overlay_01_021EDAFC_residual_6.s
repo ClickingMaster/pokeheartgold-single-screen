@@ -1,52 +1,52 @@
-.public ov01_021EDAFC
-.public ov01_021EDC28
-.public ov01_021EDC7C
-.public ov01_021EDC84
-.public ov01_021EDD68
-.public ov01_021EDDD8
-.public ov01_021EDE18
-.public ov01_021EDE8C
-.public ov01_021EDF00
-.public ov01_021EDF38
-.public ov01_021EDF78
-.public MoveTutorMenu_SetListItem
-.public ov01_021EDFA4
-.public ov01_021EE014
-.public ov01_021EE01C
-.public ov01_021EE0EC
-.public MoveTutorMenu_SetListItem_Internal
-.public ov01_021EE2E4
-.public ov01_021EE324
-.public ov01_021EE434
-.public ov01_021EE458
-.public ov01_021EE49C
-.public ov01_021EE568
-.public ov01_021EE5D0
-.public ov01_021EE634
+.public ScriptMenu_Init
+.public ScriptMenu_New
+.public ScriptMenu_AddItem
+.public ScriptMenu_ShowMultichoice
+.public ScriptMenu_AppendItem
+.public ScriptMenu_GetItemsWidth
+.public ScriptMenu_SetupMultichoiceTemplate
+.public ScriptMenu_MultichoiceTask
+.public ScriptMenu_Free
+.public ScriptMenu_CloseMultichoice
+.public ScriptMenu_Create
+.public ScriptMenu_AddListItem
+.public ScriptMenu_ShowList
+.public ScriptMenu_ShowListWithWidth
+.public ScriptMenu_OpenListWindow
+.public ScriptMenu_ShowListAtPosition
+.public ScriptMenu_AppendListItem
+.public ScriptMenu_GetListItemsWidth
+.public ScriptMenu_SetupListTemplate
+.public ScriptMenu_ListItemPrintCallback
+.public ScriptMenu_ListMoveCursorCallback
+.public ScriptMenu_ListTask
+.public ScriptMenu_CloseList
+.public ScriptMenu_PrintHelpMessage
+.public ScriptMenu_PrintCursorHelpMessage
 .public PrintCurFloorInNewWindow
-.public ov01_021EE754
-.public ov01_021EE7B8
+.public ScriptMenu_PrintMessage
+.public ScriptMenu_FloorWindowTask
 .public MapNumToFloorNo
-.public ov01_021EE934
-.public ov01_021EE974
-.public ov01_021EEA44
+.public GetFloorNameMessage
+.public ScriptMenu_ShowMultichoiceGrid
+.public ScriptMenu_SetupGridTemplate
 .public FieldSystem_ShowMoneyBox
 .public MoneyBoxSys_Delete
 .public MoneyBoxSys_Update
-.public ov01_021EEC00
-.public ov01_021EEC68
-.public ov01_021EEC7C
-.public ov01_021EED60
-.public ov01_021EEE30
-.public ov01_021EEE44
-.public ov01_021EEF58
-.public ov01_021EEF60
+.public PointsBox_New
+.public PointsBox_Delete
+.public PointsBox_Update
+.public SavingsBox_New
+.public SavingsBox_Delete
+.public SavingsBox_Update
+.public ScriptMenu_GetListItems
+.public ScriptMenu_GetCount
 .public ov01_021EEF68
 .public ov01_021EEF88
-.public ov01_021EEF9C
-.public ov01_021EF00C
-.public ov01_021EF018
-.public ov01_021EF034
+.public ScriptMenu_PrintItemHelpMessage
+.public ScriptMenu_IsCancellable
+.public ScriptMenu_SetAnchorRight
+.public ScriptMenu_SetAnchorBottom
 #include "constants/sndseq.h"
 #include "constants/moves.h"
 #include "constants/std_script.h"
@@ -63,37 +63,37 @@
 
 	.text
 	.public MoneyBoxSys_Delete
-	.public MoveTutorMenu_SetListItem
-	.public MoveTutorMenu_SetListItem_Internal
-	.public ov01_021EDAFC
-	.public ov01_021EDC28
-	.public ov01_021EDC7C
-	.public ov01_021EDC84
-	.public ov01_021EDD68
-	.public ov01_021EDDD8
-	.public ov01_021EDE18
-	.public ov01_021EDF00
-	.public ov01_021EDF38
-	.public ov01_021EDF78
-	.public ov01_021EE014
-	.public ov01_021EE01C
-	.public ov01_021EE2E4
-	.public ov01_021EE324
-	.public ov01_021EE434
-	.public ov01_021EE458
-	.public ov01_021EE568
-	.public ov01_021EE5D0
-	.public ov01_021EE634
-	.public ov01_021EE7B8
-	.public ov01_021EE934
-	.public ov01_021EEC68
-	.public ov01_021EEE30
-	.public ov01_021EEF58
-	.public ov01_021EEF60
+	.public ScriptMenu_AddListItem
+	.public ScriptMenu_AppendListItem
+	.public ScriptMenu_Init
+	.public ScriptMenu_New
+	.public ScriptMenu_AddItem
+	.public ScriptMenu_ShowMultichoice
+	.public ScriptMenu_AppendItem
+	.public ScriptMenu_GetItemsWidth
+	.public ScriptMenu_SetupMultichoiceTemplate
+	.public ScriptMenu_Free
+	.public ScriptMenu_CloseMultichoice
+	.public ScriptMenu_Create
+	.public ScriptMenu_ShowListWithWidth
+	.public ScriptMenu_OpenListWindow
+	.public ScriptMenu_GetListItemsWidth
+	.public ScriptMenu_SetupListTemplate
+	.public ScriptMenu_ListItemPrintCallback
+	.public ScriptMenu_ListMoveCursorCallback
+	.public ScriptMenu_CloseList
+	.public ScriptMenu_PrintHelpMessage
+	.public ScriptMenu_PrintCursorHelpMessage
+	.public ScriptMenu_FloorWindowTask
+	.public GetFloorNameMessage
+	.public PointsBox_Delete
+	.public SavingsBox_Delete
+	.public ScriptMenu_GetListItems
+	.public ScriptMenu_GetCount
 	.public ov01_021EEF68
 	.public ov01_021EEF88
-	.public ov01_021EEF9C
-	.public ov01_021EF00C
+	.public ScriptMenu_PrintItemHelpMessage
+	.public ScriptMenu_IsCancellable
 
 	thumb_func_start MapNumToFloorNo
 MapNumToFloorNo: ; 0x021EE81C

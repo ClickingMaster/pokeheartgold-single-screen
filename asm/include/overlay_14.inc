@@ -275,8 +275,8 @@
 .public NamingScreen_DeleteArgs
 .public sub_02088288
 .public PokemonSummary_IsPokeathlonUnlocked
-.public sub_02089D40
-.public sub_0208AD34
+.public PokemonSummary_SetPages
+.public PokemonSummaryArgs_SetPlayer
 .public NNS_G2dGetUnpackedCharacterData
 .public NNS_G2dGetImageLocation
 .public NNS_G2dGetImagePaletteLocation

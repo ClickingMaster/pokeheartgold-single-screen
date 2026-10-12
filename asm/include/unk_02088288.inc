@@ -122,10 +122,10 @@
 .public sub_020880CC
 .public sub_02088288
 .public PokemonSummary_IsPokeathlonUnlocked
-.public sub_02089D40
-.public sub_0208A520
-.public sub_0208ACDC
-.public sub_0208AD34
+.public PokemonSummary_SetPages
+.public PokemonSummary_GetShownMon
+.public PokemonSummary_GetRibbonAt
+.public PokemonSummaryArgs_SetPlayer
 .public sub_0208AD54
 .public sub_0208AD58
 .public sub_0208AD5C
@@ -217,81 +217,81 @@
 	.public PokemonSummary_HandleInput
 	.public sub_02088D18
 	.public sub_02088D34
-	.public sub_02088D48
-	.public sub_02088E68
-	.public sub_02088E98
-	.public sub_02089028
-	.public sub_02089208
-	.public sub_020892F4
-	.public sub_02089308
-	.public sub_0208931C
-	.public sub_0208942C
-	.public sub_02089454
-	.public sub_02089478
-	.public sub_02089608
-	.public sub_02089658
-	.public sub_02089670
-	.public sub_02089680
-	.public sub_02089698
-	.public sub_02089794
-	.public sub_020897C0
-	.public sub_020897F0
-	.public sub_0208981C
-	.public sub_02089C50
-	.public sub_02089CB4
-	.public sub_02089D68
-	.public sub_02089E14
-	.public sub_02089E30
-	.public sub_02089E80
-	.public sub_02089E98
-	.public sub_02089F50
-	.public sub_02089F98
-	.public sub_0208A0EC
-	.public sub_0208A1A0
-	.public sub_0208A234
-	.public sub_0208A2C0
-	.public sub_0208A2E0
-	.public sub_0208A310
-	.public sub_0208A3CC
-	.public sub_0208A3F4
-	.public sub_0208A45C
-	.public sub_0208A4B8
-	.public sub_0208A564
-	.public sub_0208A63C
-	.public sub_0208A71C
-	.public sub_0208A79C
-	.public sub_0208A7F8
-	.public sub_0208A834
-	.public sub_0208A8F4
-	.public sub_0208A950
-	.public sub_0208A9C4
-	.public sub_0208AA9C
-	.public sub_0208AB58
-	.public sub_0208ADB8
-	.public sub_0208ADCC
-	.public sub_0208ADDC
-	.public sub_0208AE08
-	.public sub_0208AE48
-	.public sub_0208AE88
-	.public sub_0208AEB4
-	.public sub_0208AEC4
-	.public sub_0208AED4
-	.public sub_0208AF08
+	.public PokemonSummary_HandleMoveSelectInput
+	.public PokemonSummary_StartMoveSwap
+	.public PokemonSummary_HandleMoveSwapInput
+	.public PokemonSummary_HandleForgetMoveInput
+	.public PokemonSummary_HandleForgetMoveConfirmInput
+	.public PokemonSummary_OpenRibbonList
+	.public PokemonSummary_CloseRibbonList
+	.public PokemonSummary_HandleRibbonInput
+	.public PokemonSummary_WaitRibbonPageUp
+	.public PokemonSummary_WaitRibbonPageDown
+	.public PokemonSummary_UpdateCondition
+	.public PokemonSummary_ShowConditionChanges
+	.public PokemonSummary_WaitConditionExit
+	.public PokemonSummary_StartFadeOut
+	.public PokemonSummary_WaitFadeOut
+	.public PokemonSummary_FlashButton
+	.public PokemonSummary_ChangeMonByButton
+	.public PokemonSummary_ReadShownMon
+	.public PokemonSummary_ReadBoxMon
+	.public PokemonSummary_ReadMon
+	.public PokemonSummary_PlayCry
+	.public PokemonSummary_ShowFirstPage
+	.public PokemonSummary_SetPage
+	.public PokemonSummary_ChangePage
+	.public PokemonSummary_ScrollPage
+	.public PokemonSummary_HasPage
+	.public PokemonSummary_HandleTouchInput
+	.public PokemonSummary_LoadBgScreen
+	.public PokemonSummary_LoadPageBgs
+	.public PokemonSummary_DrawHpBar
+	.public PokemonSummary_DrawExpBar
+	.public PokemonSummary_ShowMon
+	.public PokemonSummary_ChangeMon
+	.public PokemonSummary_FindNextMon
+	.public PokemonSummary_CanShowMonAt
+	.public PokemonSummary_CanShowEgg
+	.public PokemonSummary_FindNextMonInArray
+	.public PokemonSummary_FindNextPartyMon
+	.public PokemonSummary_FindNextBoxMon
+	.public PokemonSummary_SlideInMoveInfo
+	.public PokemonSummary_SlideOutMoveInfo
+	.public PokemonSummary_MoveMoveCursor
+	.public PokemonSummary_ShowSelectedMoveInfo
+	.public PokemonSummary_ShowMoveInfo
+	.public PokemonSummary_SwapMoves
+	.public PokemonSummary_InitForgetMove
+	.public PokemonSummary_UpdateForgetMovePage
+	.public PokemonSummary_SlideInRibbonList
+	.public PokemonSummary_SlideOutRibbonList
+	.public PokemonSummary_MoveRibbonCursor
+	.public PokemonSummary_SetMenuInputState
+	.public PokemonSummary_GetTouchedMove
+	.public PokemonSummary_GetMoveSwapTouch
+	.public PokemonSummary_GetMoveSelectTouch
+	.public PokemonSummary_GetForgetMoveTouch
+	.public PokemonSummary_GetForgetConfirmTouch
+	.public PokemonSummary_GetMonButtonTouch
+	.public PokemonSummary_GetRibbonTouch
+	.public PokemonSummary_ShowForgetConfirm
+	.public PokemonSummary_DrawForgetConfirm
 	.public sub_0208AF70
 	.public sub_0208AFA0
-	.public sub_0208AFE8
-	.public sub_0208B044
-	.public sub_0208B068
-	.public sub_0208B08C
-	.public sub_0208B0B0
-	.public sub_0208B0F4
-	.public sub_0208B118
-	.public _021038AC
-	.public _021038B0
-	.public _021038B4
-	.public _021038B8
+	.public PokemonSummary_StartButtonFlash
+	.public PokemonSummary_FlashCancelButton
+	.public PokemonSummary_FlashConfirmButton
+	.public PokemonSummary_FlashSwapButton
+	.public PokemonSummary_FlashMonButton
+	.public PokemonSummary_FlashRibbonCancelButton
+	.public PokemonSummary_DrawMonButtons
+	.public gPokemonSummaryCancelButtonHitbox
+	.public gPokemonSummarySwapButtonHitbox
+	.public gPokemonSummaryConfirmButtonHitbox
+	.public gPokemonSummaryMonButtonHitboxes
 	.public gPokemonSummaryGraphicsModes
-	.public _021038D4
+	.public gPokemonSummaryMoveHitboxes
 	.public gPokemonSummaryBgTemplate1
 	.public gPokemonSummaryBgTemplate2
 	.public gPokemonSummaryBgTemplate3
@@ -299,5 +299,5 @@
 	.public gPokemonSummaryBgTemplate5
 	.public gPokemonSummaryBgTemplate6
 	.public gPokemonSummaryGraphicsBanks
-	.public _021039B8
-	.public _021039E8
+	.public gPokemonSummaryPageScreens
+	.public gPokemonSummaryRibbonHitboxes

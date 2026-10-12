@@ -36,8 +36,8 @@ typedef struct PokemonSummaryArgs {
 
 u32 sub_02088288(SaveData *);
 BOOL PokemonSummary_IsPokeathlonUnlocked(SaveData *);
-void sub_02089D40(PokemonSummaryArgs *, const u8 *);
-void sub_0208AD34(PokemonSummaryArgs *, PlayerProfile *);
+void PokemonSummary_SetPages(PokemonSummaryArgs *, const u8 *);
+void PokemonSummaryArgs_SetPlayer(PokemonSummaryArgs *, PlayerProfile *);
 int sub_0208AD54(void);
 int sub_0208AD58(void);
 int sub_0208AD5C(void);

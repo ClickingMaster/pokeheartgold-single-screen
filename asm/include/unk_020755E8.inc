@@ -164,7 +164,7 @@
 .public ParticleScene_Free
 .public Bag_TakeItem
 .public Bag_GetQuantity
-.public sub_02089D40
+.public PokemonSummary_SetPages
 .public MIi_CpuClear16
 .public MIi_CpuClear32
 .public MIi_CpuClearFast

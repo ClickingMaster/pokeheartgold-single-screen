@@ -873,7 +873,7 @@ static void sub_02053C90(TaskManager *taskManager) {
         GF_ASSERT(FALSE);
         return;
     }
-    TaskManager_Call(taskManager, ov02_0224C1F8, ov02_0224C1D8(fieldSystem, 4, env->unk4));
+    TaskManager_Call(taskManager, Task_FieldMoveArrival, FieldMoveTask_CreateArrivalEnvironment(fieldSystem, HEAP_ID_FIELD1, env->unk4));
 }
 
 static BOOL sub_02053CCC(TaskManager *taskManager) {

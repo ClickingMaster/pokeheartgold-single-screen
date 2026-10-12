@@ -2330,8 +2330,8 @@ void BattleFactoryApp_CreateSummaryArgs(BattleFactoryApp *app) {
     app->summaryArgs->natDexEnabled = SaveArray_IsNatDexEnabled(app->saveData);
     app->summaryArgs->unk2C = 0;
     app->summaryArgs->isFlag982Set = 0;
-    sub_02089D40(app->summaryArgs, _02243458);
-    sub_0208AD34(app->summaryArgs, Save_PlayerData_GetProfile(app->saveData));
+    PokemonSummary_SetPages(app->summaryArgs, _02243458);
+    PokemonSummaryArgs_SetPlayer(app->summaryArgs, Save_PlayerData_GetProfile(app->saveData));
 }
 
 BOOL BattleFactoryApp_IsScreen(BattleFactoryApp *app, u8 screen) {

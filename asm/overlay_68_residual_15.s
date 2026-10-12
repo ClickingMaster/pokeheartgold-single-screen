@@ -162,7 +162,7 @@ MoveRelearner_OpenSummary: ; 0x021E74D8
 	str r2, [r4, r0]
 	add r0, r4, r1
 	add r1, sp, #0
-	bl sub_02089D40
+	bl PokemonSummary_SetPages
 	mov r1, #0x17
 	lsl r1, r1, #4
 	ldr r0, _021E7564 ; =gOverlayTemplate_PokemonSummary

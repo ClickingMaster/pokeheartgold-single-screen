@@ -45,8 +45,8 @@
 .public MoveCategoryIcon_GetCharFile
 .public MoveCategoryIcon_GetPalette
 .public MoveCategoryIcon_GetNarc
-.public sub_0208A520
-.public sub_0208ACDC
+.public PokemonSummary_GetShownMon
+.public PokemonSummary_GetRibbonAt
 .public PokemonSummary_InitSpriteSystem
 .public PokemonSummary_FreeSpriteSystem
 .public PokemonSummary_UpdateSpriteAnims

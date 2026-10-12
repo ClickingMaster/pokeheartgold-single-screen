@@ -153,8 +153,8 @@ u32 FrontierPartySelect_LaunchSummary(FrontierPartySelectEnv *env, FieldSystem *
     args->ribbons = Save_SpecialRibbons_Get(saveData);
     args->menuInputStatePtr = &fieldSystem->menuInputState;
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);
-    sub_02089D40(args, gFrontierSummaryPages);
-    sub_0208AD34(args, Save_PlayerData_GetProfile(saveData));
+    PokemonSummary_SetPages(args, gFrontierSummaryPages);
+    PokemonSummaryArgs_SetPlayer(args, Save_PlayerData_GetProfile(saveData));
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, args);
     *env->runningApp = args;
     return 3;

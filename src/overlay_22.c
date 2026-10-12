@@ -8,27 +8,27 @@
 #include "script.h"
 #include "script_manager.h"
 
-extern Window *ov01_021EEC00(struct FieldSystem *fieldSystem, u8 type, u8 x, u8 y);
+extern Window *PointsBox_New(struct FieldSystem *fieldSystem, u8 type, u8 x, u8 y);
 
 BOOL ScrCmd_116(ScriptContext *ctx) {
     u8 type = ScriptReadByte(ctx);
     u16 x = ScriptGetVar(ctx);
     u16 y = ScriptGetVar(ctx);
     Window **window = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_POINTS_BOX);
-    *window = ov01_021EEC00(ctx->fieldSystem, type, x, y);
+    *window = PointsBox_New(ctx->fieldSystem, type, x, y);
     return FALSE;
 }
 
 BOOL ScrCmd_117(ScriptContext *ctx) {
     Window **window = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_POINTS_BOX);
-    ov01_021EEC68(*window);
+    PointsBox_Delete(*window);
     return FALSE;
 }
 
 BOOL ScrCmd_118(ScriptContext *ctx) {
     u8 type = ScriptReadByte(ctx);
     Window **window = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_POINTS_BOX);
-    ov01_021EEC7C(ctx->fieldSystem, *window, type);
+    PointsBox_Update(ctx->fieldSystem, *window, type);
     return FALSE;
 }
 

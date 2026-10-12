@@ -188,8 +188,8 @@
 .public sub_02074490
 .public Party_GetMonByIndex
 .public SaveArray_IsNatDexEnabled
-.public sub_02089D40
-.public sub_0208AD34
+.public PokemonSummary_SetPages
+.public PokemonSummaryArgs_SetPlayer
 .public sub_02096910
 .public NNS_G2dSetupSoftwareSpriteCamera
 .public NNS_G2dInitOamManagerModule

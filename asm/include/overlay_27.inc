@@ -148,9 +148,9 @@
 .public _fsub
 .public gSystem
 .public ov01_021E7F54
-.public ov01_021EEF58
-.public ov01_021EEF60
-.public ov01_021EF00C
+.public ScriptMenu_GetListItems
+.public ScriptMenu_GetCount
+.public ScriptMenu_IsCancellable
 .public FieldSystem_SwitchBottomScreenApp
 .public IsSpriteIdWithoutTalkAction
 .public IsScriptIdWithoutTalkAction

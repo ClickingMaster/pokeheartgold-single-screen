@@ -3113,12 +3113,12 @@ GtsViewMon_Init: ; 0x022413AC
 	add r0, r4, #0
 	ldr r1, _02241460 ; =sGtsViewMonSummaryPages
 	add r0, #0xbc
-	bl sub_02089D40
+	bl PokemonSummary_SetPages
 	ldr r1, [r4]
 	add r0, r4, #0
 	ldr r1, [r1, #0x1c]
 	add r0, #0xbc
-	bl sub_0208AD34
+	bl PokemonSummaryArgs_SetPlayer
 	add r1, r4, #0
 	ldr r0, _02241464 ; =gOverlayTemplate_PokemonSummary
 	add r1, #0xbc

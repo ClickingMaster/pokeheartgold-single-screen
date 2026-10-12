@@ -64,7 +64,7 @@
 PokemonSummary_LoadPartyIcons: ; 0x0208BECC
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r0, #0
-	bl sub_0208A520
+	bl PokemonSummary_GetShownMon
 	add r7, r0, #0
 	mov r0, #0x8b
 	lsl r0, r0, #2
@@ -108,7 +108,7 @@ _0208BF06:
 	b _0208BF64
 _0208BF1C:
 	add r0, r6, #0
-	bl sub_0208A520
+	bl PokemonSummary_GetShownMon
 	add r7, r0, #0
 	bl Pokemon_GetIconPalette
 	add r1, r0, #0

@@ -1066,8 +1066,8 @@ void BattleHallApp_CreateSummaryArgs(BattleHallApp *app) {
     app->summaryArgs->unk2C = sub_02088288(app->saveData);
     app->summaryArgs->ribbons = Save_SpecialRibbons_Get(app->saveData);
     app->summaryArgs->isFlag982Set = 0;
-    sub_02089D40(app->summaryArgs, _0223FE20);
-    sub_0208AD34(app->summaryArgs, Save_PlayerData_GetProfile(app->saveData));
+    PokemonSummary_SetPages(app->summaryArgs, _0223FE20);
+    PokemonSummaryArgs_SetPlayer(app->summaryArgs, Save_PlayerData_GetProfile(app->saveData));
 }
 
 void BattleHallApp_SetMainState(BattleHallApp *app, int *state, int nextState) {

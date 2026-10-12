@@ -59,7 +59,7 @@ typedef struct TouchscreenChoiceMenuData {
     u32 state;
     u16 *result;
     u32 unk_08;
-    struct UnkStruct_ov01_021EDC28 *menu; // ScrCmd_MenuExec list
+    struct ScriptMenu *menu; // ScrCmd_MenuExec list
     int frameCounter;
     u32 unk_14;
     BgConfig *bgConfig;
@@ -87,9 +87,9 @@ typedef struct TouchscreenChoiceMenuData {
 } TouchscreenChoiceMenuData; // size: 0x3A4
 
 // field_move_tutor_menu_internal.h declares these, but its prototypes conflict with text.h.
-ListMenuItem *ov01_021EEF58(struct UnkStruct_ov01_021EDC28 *menu);
-u8 ov01_021EEF60(struct UnkStruct_ov01_021EDC28 *menu);
-u8 ov01_021EF00C(struct UnkStruct_ov01_021EDC28 *menu);
+ListMenuItem *ScriptMenu_GetListItems(struct ScriptMenu *menu);
+u8 ScriptMenu_GetCount(struct ScriptMenu *menu);
+u8 ScriptMenu_IsCancellable(struct ScriptMenu *menu);
 
 typedef BOOL (*TouchscreenChoiceMenuStateFunc)(TouchscreenChoiceMenuData *data);
 
@@ -283,8 +283,8 @@ void TouchscreenChoiceMenu_HideYesNo(TouchscreenChoiceMenuData *data) {
 
 // The list background of NARC 239 is file itemCount (2-8).
 void TouchscreenChoiceMenu_ShowList(TouchscreenChoiceMenuData *data) {
-    ListMenuItem *items = ov01_021EEF58(data->menu);
-    int count = ov01_021EEF60(data->menu);
+    ListMenuItem *items = ScriptMenu_GetListItems(data->menu);
+    int count = ScriptMenu_GetCount(data->menu);
     NARC *narc = NARC_New(NARC_a_2_3_7, HEAP_ID_8);
     int i;
 
@@ -305,7 +305,7 @@ void TouchscreenChoiceMenu_ShowList(TouchscreenChoiceMenuData *data) {
 #pragma force_active reset
 
 void TouchscreenChoiceMenu_HideList(TouchscreenChoiceMenuData *data) {
-    int count = ov01_021EEF60(data->menu);
+    int count = ScriptMenu_GetCount(data->menu);
     int i;
 
     BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_SUB_0);
@@ -495,7 +495,7 @@ BOOL TouchscreenChoiceMenu_State_ListInput(TouchscreenChoiceMenuData *data) {
         data->state = TOUCHSCREEN_CHOICE_MENU_STATE_LIST_END;
         PlaySE(SEQ_SE_DP_SELECT);
     } else if (gSystem.newKeys & PAD_BUTTON_B) {
-        if (ov01_021EF00C(data->menu)) { // cancellable: select the last row
+        if (ScriptMenu_IsCancellable(data->menu)) { // cancellable: select the last row
             data->selection = data->itemCount - 1;
             TouchscreenChoiceMenu_SetListCursorPos(data, data->itemCount, data->selection);
             TouchscreenChoiceMenu_SetListCursorPressed(data, data->itemCount);
@@ -521,7 +521,7 @@ BOOL TouchscreenChoiceMenu_State_ListEnd(TouchscreenChoiceMenuData *data) {
 }
 
 BOOL TouchscreenChoiceMenu_State_ListWriteResult(TouchscreenChoiceMenuData *data) {
-    ListMenuItem *items = ov01_021EEF58(data->menu);
+    ListMenuItem *items = ScriptMenu_GetListItems(data->menu);
     *data->result = items[data->selection].value;
     data->state = TOUCHSCREEN_CHOICE_MENU_STATE_IDLE;
     return FALSE;

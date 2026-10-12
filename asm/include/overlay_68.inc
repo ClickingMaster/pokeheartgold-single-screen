@@ -151,7 +151,7 @@
 .public MoveCategoryIcon_LoadChar
 .public sub_020880CC
 .public BgConfig_LoadAssetFromOpenNarc
-.public sub_02089D40
+.public PokemonSummary_SetPages
 .public NNS_G2dSetupSoftwareSpriteCamera
 .public NNS_G3dGlbFlushP
 .public NNS_G3dInit

@@ -41,7 +41,7 @@ Colosseum_OpenSummary: ; 0x02058AEC
 	bl Save_PlayerData_GetProfile
 	add r1, r0, #0
 	add r0, r4, #0
-	bl sub_0208AD34
+	bl PokemonSummaryArgs_SetPlayer
 	add r0, r5, #0
 	bl SaveArray_IsNatDexEnabled
 	str r0, [r4, #0x1c]
@@ -74,7 +74,7 @@ Colosseum_OpenSummary: ; 0x02058AEC
 	str r0, [r4, #0x34]
 	ldr r1, _02058B7C ; =_020FC7CC
 	add r0, r4, #0
-	bl sub_02089D40
+	bl PokemonSummary_SetPages
 	ldr r1, _02058B80 ; =gOverlayTemplate_PokemonSummary
 	add r0, r6, #0
 	add r2, r4, #0

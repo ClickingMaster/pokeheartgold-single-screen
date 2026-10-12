@@ -1383,31 +1383,31 @@
 	.public ov02_0224BF58
 	.public ov02_0224BFC0
 	.public ov02_0224BFCC
-	.public ov02_0224C05C
-	.public ov02_0224C0B0
-	.public ov02_0224C14C
-	.public ov02_0224C1B8
-	.public ov02_0224C1D8
-	.public ov02_0224C1F8
-	.public ov02_0224C234
-	.public ov02_0224C2A8
-	.public ov02_0224C2EC
-	.public ov02_0224C338
-	.public ov02_0224C4B4
-	.public ov02_0224C4D8
-	.public ov02_0224C660
-	.public ov02_0224C680
-	.public ov02_0224C698
-	.public ov02_0224C6DC
-	.public ov02_0224C71C
-	.public ov02_0224C75C
-	.public ov02_0224C7D4
-	.public ov02_0224C840
-	.public ov02_0224C87C
-	.public ov02_0224C8D0
-	.public ov02_0224C93C
-	.public ov02_0224C9B8
-	.public ov02_0224CA38
+	.public FieldEscapeRope_SpinStart
+	.public FieldEscapeRope_SpinAndFadeOut
+	.public FieldEscapeRope_WaitFadeOut
+	.public FieldEscapeRope_Warp
+	.public FieldMoveTask_CreateArrivalEnvironment
+	.public Task_FieldMoveArrival
+	.public FieldMoveArrival_FadeIn
+	.public FieldMoveArrival_WaitFadeIn
+	.public FieldMoveArrival_Spin
+	.public FieldMoveArrival_Finish
+	.public FieldMove_ShowCutIn
+	.public FieldMove_WaitCutIn
+	.public FieldMoveTaskEnvironment_New
+	.public FieldTeleport_FollowMonFlash
+	.public FieldTeleport_FollowMonSpinStart
+	.public FieldTeleport_FollowMonWaitSpin
+	.public FieldTeleport_SpinStart
+	.public FieldTeleport_SpinAndFadeOut
+	.public FieldTeleport_WaitFadeOut
+	.public FieldTeleport_Warp
+	.public FieldDig_SinkStart
+	.public FieldDig_DigHole
+	.public FieldDig_SpinAndFadeOut
+	.public FieldDig_WaitFadeOut
+	.public FieldDig_Warp
 	.public PrimoPassword_RotateBitsRight
 	.public PrimoPassword_DecodeWallpaper
 	.public PrimoPassword_DecodeCheck2
@@ -1706,12 +1706,12 @@
 	.public ov02_0224B87C
 	.public ov02_0224BFC0
 	.public ov02_0224BFCC
-	.public ov02_0224C1B8
-	.public ov02_0224C1D8
-	.public ov02_0224C4D8
-	.public ov02_0224C660
-	.public ov02_0224C680
-	.public ov02_0224CA38
+	.public FieldEscapeRope_Warp
+	.public FieldMoveTask_CreateArrivalEnvironment
+	.public FieldMove_WaitCutIn
+	.public FieldMoveTaskEnvironment_New
+	.public FieldTeleport_FollowMonFlash
+	.public FieldDig_Warp
 	.public ov02_0224D0AC
 	.public ov02_0224D1DC
 	.public ov02_0224D278
@@ -2002,48 +2002,48 @@ ov02_022536E8: ; 0x022536E8
 	.byte 0x21, 0x00, 0x00, 0x00, 0x8A, 0x00, 0x00, 0x00
 
 ov02_022536F0: ; 0x022536F0
-	.word ov02_0224C234
-	.word ov02_0224C2A8
-	.word ov02_0224C2EC
-	.word ov02_0224C338
+	.word FieldMoveArrival_FadeIn
+	.word FieldMoveArrival_WaitFadeIn
+	.word FieldMoveArrival_Spin
+	.word FieldMoveArrival_Finish
 
 ov02_02253700: ; 0x02253700
-	.word ov02_0224C05C
-	.word ov02_0224C0B0
-	.word ov02_0224C14C
-	.word ov02_0224C1B8
+	.word FieldEscapeRope_SpinStart
+	.word FieldEscapeRope_SpinAndFadeOut
+	.word FieldEscapeRope_WaitFadeOut
+	.word FieldEscapeRope_Warp
 
 ov02_02253710: ; 0x02253710
-	.word ov02_0224C87C
-	.word ov02_0224C8D0
-	.word ov02_0224C93C
-	.word ov02_0224C9B8
-	.word ov02_0224CA38
+	.word FieldDig_SinkStart
+	.word FieldDig_DigHole
+	.word FieldDig_SpinAndFadeOut
+	.word FieldDig_WaitFadeOut
+	.word FieldDig_Warp
 
 ov02_02253724: ; 0x02253724
-	.word ov02_0224C4B4
-	.word ov02_0224C4D8
-	.word ov02_0224C71C
-	.word ov02_0224C75C
-	.word ov02_0224C7D4
-	.word ov02_0224C840
+	.word FieldMove_ShowCutIn
+	.word FieldMove_WaitCutIn
+	.word FieldTeleport_SpinStart
+	.word FieldTeleport_SpinAndFadeOut
+	.word FieldTeleport_WaitFadeOut
+	.word FieldTeleport_Warp
 
 ov02_0225373C: ; 0x0225373C
-	.word ov02_0224C680
-	.word ov02_0224C698
-	.word ov02_0224C6DC
-	.word ov02_0224C75C
-	.word ov02_0224C7D4
-	.word ov02_0224C840
+	.word FieldTeleport_FollowMonFlash
+	.word FieldTeleport_FollowMonSpinStart
+	.word FieldTeleport_FollowMonWaitSpin
+	.word FieldTeleport_SpinAndFadeOut
+	.word FieldTeleport_WaitFadeOut
+	.word FieldTeleport_Warp
 
 ov02_02253754: ; 0x02253754
-	.word ov02_0224C4B4
-	.word ov02_0224C4D8
-	.word ov02_0224C87C
-	.word ov02_0224C8D0
-	.word ov02_0224C93C
-	.word ov02_0224C9B8
-	.word ov02_0224CA38
+	.word FieldMove_ShowCutIn
+	.word FieldMove_WaitCutIn
+	.word FieldDig_SinkStart
+	.word FieldDig_DigHole
+	.word FieldDig_SpinAndFadeOut
+	.word FieldDig_WaitFadeOut
+	.word FieldDig_Warp
 
 ov02_02253770: ; 0x02253770
 	.byte 0x01, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x02, 0x00, 0x02, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x02, 0x00

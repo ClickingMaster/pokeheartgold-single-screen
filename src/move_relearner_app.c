@@ -1326,7 +1326,7 @@ int MoveRelearner_OpenSummary(MoveRelearner *relearner) {
     relearner->summary.unk2C = 1;
     relearner->summary.unk28 = 0;
     relearner->summary.menuInputStatePtr = NULL;
-    sub_02089D40(&relearner->summary, pages);
+    PokemonSummary_SetPages(&relearner->summary, pages);
     relearner->summaryManager = OverlayManager_New(&gOverlayTemplate_PokemonSummary, &relearner->summary, HEAP_ID_66);
     return MOVE_RELEARNER_STATE_RUN_SUMMARY;
 }

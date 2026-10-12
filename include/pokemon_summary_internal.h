@@ -15,11 +15,11 @@
 #include "sprite_system.h"
 #include "unk_02088288.h"
 
-// Pokemon summary screen work (0x7D8 bytes). Only the parts the summary text and sprite code use are typed so far.
+// Pokemon summary screen work (0x7D8 bytes), used by src/pokemon_summary*.c.
 
 #define POKEMON_SUMMARY_SPRITE_COUNT 115
 
-// The shown Pokemon, read once from the Pokemon or box Pokemon (sub_0208981C).
+// The shown Pokemon, read once from the Pokemon or box Pokemon (PokemonSummary_ReadMon).
 typedef struct PokemonSummaryMon {
     String *speciesName;  // 0x00
     String *nickname;     // 0x04
@@ -89,7 +89,7 @@ typedef struct PokemonSummary {
     s8 page;                            // 0x7BC
     u8 moveSlot : 4;                    // 0x7BD: the two move slots being swapped
     u8 swapMoveSlot : 4;
-    u8 unk7BE;                          // 0x7BE: one bit per sprite 41..45
+    u8 unk7BE;                          // 0x7BE: condition stats that changed (bits 0-4); the button flash step
     u8 unk7BF_0 : 4;                    // 0x7BF
     u8 unk7BF_4 : 4;                    // 1: leave the screen
     u8 sparkleState;                    // 0x7C0: sheen sparkles
@@ -100,7 +100,15 @@ typedef struct PokemonSummary {
     u8 ribbonRow;                       // 0x7C5
     u8 ribbonCount;                     // 0x7C6
     u8 ribbonId;                        // 0x7C7
-    u8 unk7C8[0x7D0 - 0x7C8];           // 0x7C8
+    u8 flashX;                          // 0x7C8: the touched button being flashed (PokemonSummary_FlashButton)
+    u8 flashY;                          // 0x7C9
+    u8 flashWidth;                      // 0x7CA
+    u8 flashHeight;                     // 0x7CB
+    u8 flashPalette : 4;                // 0x7CC
+    u8 restorePalette : 4;
+    u8 flashBgId;                       // 0x7CD
+    u8 flashTimer;                      // 0x7CE
+    u8 flashNextState;                  // 0x7CF
     BgCellManager *cellManager;         // 0x7D0
     u32 boxIconSprite;                  // 0x7D4: which of sprites 73/74 shows the box Pokemon's icon next
 } PokemonSummary; // size: 0x7D8
@@ -141,6 +149,81 @@ void sub_0208DBF0(PokemonSummary *summary);
 void sub_0208DC68(PokemonSummary *summary, int show);
 void sub_0208DD20(PokemonSummary *summary, int show);
 void sub_0208DDA0(PokemonSummary *summary, int result);
+
+// pokemon_summary_states.c
+int PokemonSummary_HandleMoveSelectInput(PokemonSummary *summary);
+int PokemonSummary_StartMoveSwap(PokemonSummary *summary);
+int PokemonSummary_HandleMoveSwapInput(PokemonSummary *summary);
+int PokemonSummary_HandleForgetMoveInput(PokemonSummary *summary);
+int PokemonSummary_HandleForgetMoveConfirmInput(PokemonSummary *summary);
+int PokemonSummary_OpenRibbonList(PokemonSummary *summary);
+int PokemonSummary_CloseRibbonList(PokemonSummary *summary);
+int PokemonSummary_HandleRibbonInput(PokemonSummary *summary);
+int PokemonSummary_WaitRibbonPageUp(PokemonSummary *summary);
+int PokemonSummary_WaitRibbonPageDown(PokemonSummary *summary);
+int PokemonSummary_UpdateCondition(PokemonSummary *summary);
+int PokemonSummary_ShowConditionChanges(PokemonSummary *summary);
+int PokemonSummary_WaitConditionExit(PokemonSummary *summary);
+int PokemonSummary_StartFadeOut(PokemonSummary *summary);
+int PokemonSummary_WaitFadeOut(PokemonSummary *summary);
+int PokemonSummary_FlashButton(PokemonSummary *summary);
+int PokemonSummary_ChangeMonByButton(PokemonSummary *summary);
+void PokemonSummary_ReadShownMon(PokemonSummary *summary);
+void PokemonSummary_ReadBoxMon(PokemonSummary *summary, BoxPokemon *boxMon, PokemonSummaryMon *out);
+void PokemonSummary_ReadMon(PokemonSummary *summary, Pokemon *mon, PokemonSummaryMon *out);
+void PokemonSummary_PlayCry(PokemonSummary *summary);
+void PokemonSummary_ShowFirstPage(PokemonSummary *summary);
+void PokemonSummary_SetPage(PokemonSummary *summary, int page);
+void PokemonSummary_ChangePage(PokemonSummary *summary, int page);
+void PokemonSummary_ScrollPage(PokemonSummary *summary, int direction);
+
+// pokemon_summary_ui.c
+BOOL PokemonSummary_HasPage(PokemonSummary *summary, int page);
+int PokemonSummary_HandleTouchInput(PokemonSummary *summary);
+void PokemonSummary_LoadBgScreen(PokemonSummary *summary, BgConfig *bgConfig, int member, int bgId);
+void PokemonSummary_LoadPageBgs(PokemonSummary *summary);
+void PokemonSummary_DrawHpBar(PokemonSummary *summary);
+void PokemonSummary_DrawExpBar(PokemonSummary *summary);
+void PokemonSummary_ShowMon(PokemonSummary *summary, u8 slot);
+void PokemonSummary_ChangeMon(PokemonSummary *summary, int direction);
+int PokemonSummary_FindNextMon(PokemonSummary *summary, int direction);
+BOOL PokemonSummary_CanShowMonAt(PokemonSummary *summary, int slot);
+BOOL PokemonSummary_CanShowEgg(PokemonSummary *summary);
+int PokemonSummary_FindNextMonInArray(PokemonSummary *summary, int direction);
+int PokemonSummary_FindNextPartyMon(PokemonSummary *summary, int direction);
+int PokemonSummary_FindNextBoxMon(PokemonSummary *summary, int direction);
+void *PokemonSummary_GetShownMon(PokemonSummary *summary); // Pokemon or BoxPokemon (args->unk11 == 2)
+BOOL PokemonSummary_SlideInMoveInfo(PokemonSummary *summary);
+BOOL PokemonSummary_SlideOutMoveInfo(PokemonSummary *summary);
+BOOL PokemonSummary_MoveMoveCursor(PokemonSummary *summary, int direction);
+void PokemonSummary_ShowSelectedMoveInfo(PokemonSummary *summary);
+void PokemonSummary_ShowMoveInfo(PokemonSummary *summary, int move);
+void PokemonSummary_SwapMoves(PokemonSummary *summary);
+void PokemonSummary_InitForgetMove(PokemonSummary *summary);
+void PokemonSummary_UpdateForgetMovePage(PokemonSummary *summary);
+BOOL PokemonSummary_SlideInRibbonList(PokemonSummary *summary);
+BOOL PokemonSummary_SlideOutRibbonList(PokemonSummary *summary);
+void PokemonSummary_MoveRibbonCursor(PokemonSummary *summary, int direction);
+u8 PokemonSummary_GetRibbonAt(PokemonSummary *summary, u8 cell);
+void PokemonSummary_SetMenuInputState(PokemonSummary *summary, int state);
+int PokemonSummary_GetTouchedMove(PokemonSummary *summary);
+int PokemonSummary_GetMoveSwapTouch(PokemonSummary *summary);
+int PokemonSummary_GetMoveSelectTouch(PokemonSummary *summary);
+int PokemonSummary_GetForgetMoveTouch(PokemonSummary *summary);
+int PokemonSummary_GetForgetConfirmTouch(PokemonSummary *summary);
+int PokemonSummary_GetMonButtonTouch(PokemonSummary *summary);
+int PokemonSummary_GetRibbonTouch(PokemonSummary *summary);
+int PokemonSummary_ShowForgetConfirm(PokemonSummary *summary);
+void PokemonSummary_DrawForgetConfirm(PokemonSummary *summary, int show);
+void sub_0208AF70(PokemonSummary *summary);
+void sub_0208AFA0(PokemonSummary *summary, int value);
+int PokemonSummary_StartButtonFlash(PokemonSummary *summary, u8 bgId, u8 x, u8 y, u8 width, u8 height, u8 palette, u8 restorePalette, u8 nextState);
+int PokemonSummary_FlashCancelButton(PokemonSummary *summary, u8 nextState);
+int PokemonSummary_FlashConfirmButton(PokemonSummary *summary, u8 nextState);
+int PokemonSummary_FlashSwapButton(PokemonSummary *summary, u8 nextState);
+int PokemonSummary_FlashMonButton(PokemonSummary *summary, int which, u8 nextState);
+int PokemonSummary_FlashRibbonCancelButton(PokemonSummary *summary, u8 nextState);
+void PokemonSummary_DrawMonButtons(PokemonSummary *summary);
 
 // pokemon_summary.c
 BOOL PokemonSummary_IsPokeathlonUnlocked(SaveData *saveData);

@@ -33,7 +33,7 @@
 .public GetMoveAttr
 .public GetMoveMaxPP
 .public Pokedex_ConvertToCurrentDexNo
-.public sub_0208A520
+.public PokemonSummary_GetShownMon
 .public PokemonSummary_AddWindows
 .public PokemonSummary_AddPageWindows
 .public PokemonSummary_RemovePageWindows

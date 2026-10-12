@@ -119,7 +119,7 @@ PokemonSummary_Init: ; 0x02088298
 	add r1, r5, #0
 	bl PokemonSummary_InitBgCells
 	add r0, r4, #0
-	bl sub_020897C0
+	bl PokemonSummary_ReadShownMon
 	add r0, r4, #0
 	bl PokemonSummary_InitSpriteSystem
 	add r0, r4, #0
@@ -135,7 +135,7 @@ PokemonSummary_Init: ; 0x02088298
 	add r0, r4, #0
 	bl PokemonSummary_AddWindows
 	add r0, r4, #0
-	bl sub_02089CB4
+	bl PokemonSummary_ShowFirstPage
 	add r0, r4, #0
 	bl PokemonSummary_CreateCamera
 	ldr r0, _0208841C ; =PokemonSummary_VBlank
@@ -238,67 +238,67 @@ _020884A4:
 	str r0, [r4]
 	b _0208854A
 _020884AC:
-	bl sub_02088D48
+	bl PokemonSummary_HandleMoveSelectInput
 	str r0, [r4]
 	b _0208854A
 _020884B4:
-	bl sub_02088E68
+	bl PokemonSummary_StartMoveSwap
 	str r0, [r4]
 	b _0208854A
 _020884BC:
-	bl sub_02088E98
+	bl PokemonSummary_HandleMoveSwapInput
 	str r0, [r4]
 	b _0208854A
 _020884C4:
-	bl sub_02089028
+	bl PokemonSummary_HandleForgetMoveInput
 	str r0, [r4]
 	b _0208854A
 _020884CC:
-	bl sub_02089208
+	bl PokemonSummary_HandleForgetMoveConfirmInput
 	str r0, [r4]
 	b _0208854A
 _020884D4:
-	bl sub_020892F4
+	bl PokemonSummary_OpenRibbonList
 	str r0, [r4]
 	b _0208854A
 _020884DC:
-	bl sub_02089308
+	bl PokemonSummary_CloseRibbonList
 	str r0, [r4]
 	b _0208854A
 _020884E4:
-	bl sub_0208931C
+	bl PokemonSummary_HandleRibbonInput
 	str r0, [r4]
 	b _0208854A
 _020884EC:
-	bl sub_0208942C
+	bl PokemonSummary_WaitRibbonPageUp
 	str r0, [r4]
 	b _0208854A
 _020884F4:
-	bl sub_02089454
+	bl PokemonSummary_WaitRibbonPageDown
 	str r0, [r4]
 	b _0208854A
 _020884FC:
-	bl sub_02089698
+	bl PokemonSummary_FlashButton
 	str r0, [r4]
 	b _0208854A
 _02088504:
-	bl sub_02089478
+	bl PokemonSummary_UpdateCondition
 	str r0, [r4]
 	b _0208854A
 _0208850C:
-	bl sub_02089608
+	bl PokemonSummary_ShowConditionChanges
 	str r0, [r4]
 	b _0208854A
 _02088514:
-	bl sub_02089658
+	bl PokemonSummary_WaitConditionExit
 	str r0, [r4]
 	b _0208854A
 _0208851C:
-	bl sub_02089670
+	bl PokemonSummary_StartFadeOut
 	str r0, [r4]
 	b _0208854A
 _02088524:
-	bl sub_02089680
+	bl PokemonSummary_WaitFadeOut
 	cmp r0, #1
 	bne _0208854A
 	mov r0, #1
@@ -314,7 +314,7 @@ _02088530:
 	str r0, [r4]
 	b _0208854A
 _02088544:
-	bl sub_02089794
+	bl PokemonSummary_ChangeMonByButton
 	str r0, [r4]
 _0208854A:
 	add r0, r5, #0
@@ -377,25 +377,25 @@ _020885D8: .word 0x04000050
 
 	.rodata
 
-	.public _021038AC
-_021038AC:
+	.public gPokemonSummaryCancelButtonHitbox
+gPokemonSummaryCancelButtonHitbox:
 	.byte 0xA5, 0xBC, 0xBE, 0xF9
-	.public _021038B0
-_021038B0:
+	.public gPokemonSummarySwapButtonHitbox
+gPokemonSummarySwapButtonHitbox:
 	.byte 0x88, 0x97, 0x08, 0x57
-	.public _021038B4
-_021038B4:
+	.public gPokemonSummaryConfirmButtonHitbox
+gPokemonSummaryConfirmButtonHitbox:
 	.byte 0x98, 0xB7, 0x08, 0x7F
-	.public _021038B8
-_021038B8:
+	.public gPokemonSummaryMonButtonHitboxes
+gPokemonSummaryMonButtonHitboxes:
 	.byte 0x28, 0x3F, 0xC0, 0xEF, 0x68, 0x7F, 0xC0, 0xEF
 	.byte 0xFF, 0x00, 0x00, 0x00
 	.public gPokemonSummaryGraphicsModes
 gPokemonSummaryGraphicsModes:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
-	.public _021038D4
-_021038D4:
+	.public gPokemonSummaryMoveHitboxes
+gPokemonSummaryMoveHitboxes:
 	.byte 0x08, 0x27, 0x08, 0x7F, 0x28, 0x47, 0x08, 0x7F, 0x48, 0x67, 0x08, 0x7F
 	.byte 0x68, 0x87, 0x08, 0x7F, 0xFF, 0x00, 0x00, 0x00
 	.public gPokemonSummaryBgTemplate1
@@ -430,14 +430,14 @@ gPokemonSummaryGraphicsBanks:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00
-	.public _021039B8
-_021039B8:
+	.public gPokemonSummaryPageScreens
+gPokemonSummaryPageScreens:
 	.word 13, 12, 14
 	.word 19, 17, 18
 	.word 10, 9, 9
 	.word 13, 12, 12
-	.public _021039E8
-_021039E8:
+	.public gPokemonSummaryRibbonHitboxes
+gPokemonSummaryRibbonHitboxes:
 	.byte 0x08, 0x27, 0x10, 0x2F, 0x08, 0x27, 0x30, 0x4F
 	.byte 0x08, 0x27, 0x50, 0x70, 0x30, 0x4F, 0x10, 0x2F, 0x30, 0x4F, 0x30, 0x4F, 0x30, 0x4F, 0x50, 0x70
 	.byte 0x58, 0x77, 0x10, 0x2F, 0x58, 0x77, 0x30, 0x4F, 0x58, 0x77, 0x50, 0x70, 0x0C, 0x33, 0x74, 0x8B

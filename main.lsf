@@ -417,37 +417,8 @@ Static main
     Object src/unk_0208805C.o
     Object asm/pokemon_summary_data.o
     Object src/pokemon_summary.o
-    Object src/overlay_comm_state_helpers_1.o
-    Object src/summary_screen_helpers_7.o
-    Object src/to70_unk_0208931C_extra338_run01.o
-    Object src/summary_screen_helpers_8.o
-    Object src/r40_unk_02089478_run1.o
-    Object src/summary_screen_helpers_9.o
-    Object src/summary_serializer_helpers_1.o
-    Object src/summary_serializer_record.o
-    Object src/summary_serializer_helpers_2.o
-    Object src/summary_screen_helpers_10.o
-    Object src/r40_unk_02089D68_run1.o
-    Object src/summary_screen_helpers_11.o
-    Object src/summary_ui_stats.o
-    Object src/summary_screen_helpers_12.o
-    Object src/summary_transition_task_1.o
-    Object src/summary_screen_helpers_13.o
-    Object src/field_ui_8a3f4_1.o
-    Object src/to70_unk_0208A3F4_extra914_run01.o
-    Object src/field_ui_8a3f4_2.o
-    Object src/to80_extra1365_run01.o
-    Object src/to70_unk_0208A3F4_residual_2_extra378_run01.o
-    Object src/field_ui_8a3f4_3.o
-    Object src/to90_extra2107_run01.o
-    Object src/field_ui_8a3f4_4.o
-    Object src/summary_screen_helpers_14.o
-    Object src/unk_0208AED4_decomp_1.o
-    Object src/op90_unk_0208AED4_r01.o
-    Object src/summary_screen_helpers_15.o
-    Object src/r40_unk_0208B0B0_run1.o
-    Object src/summary_screen_helpers_16.o
-    Object src/r40_unk_0208B118_run1.o
+    Object src/pokemon_summary_states.o
+    Object src/pokemon_summary_ui.o
     Object src/pokemon_summary_sprites.o
     Object asm/pokemon_summary_sprites_data.o
     Object src/pokemon_summary_text.o
@@ -485,47 +456,8 @@ Static main
     Object src/gear_phone_ring_manager.o
     Object src/mom_gift.o
     Object src/phone_rematch.o
-    Object src/to70_unk_020932E0_extra95_run01.o
-    Object src/to80_extra1367_run01.o
-    Object src/unk020932e0_opus_partial_1.o
-    Object src/to80_extra1376_run01.o
-    Object src/unk020932e0_opus_partial_2.o
-    Object src/to70_unk_020932E0_residual_3_extra423_run01.o
-    Object src/unk020932e0_opus_partial_3.o
-    Object src/unk020932e0_residual_4_b84.o
-    Object src/to90_extra2109_run01.o
-    Object src/unk020932e0_residual_4_e7c_f84.o
-    Object src/unk020932e0_residual_4_tail.o
-    Object src/unk020932e0_opus_partial_4.o
-    Object src/to70_unk_020932E0_residual_5_extra716_run01.o
-    Object src/unk020932e0_opus_partial_5.o
-    Object src/op90_unk_020932E0_residual_6_r01.o
-    Object src/unk020932e0_opus_partial_6.o
-    Object src/to47_unk020932e0_entry_refresh_r7.o
-    Object src/op90_unk_020932E0_residual_7_r01.o
-    Object src/unk020932e0_opus_partial_7.o
-    Object src/to80_extra1908_run01.o
-    Object src/unk020932e0_opus_partial_8.o
-    Object src/to80_extra1369_run01.o
-    Object src/to70_unk_020932E0_residual_9_extra200_run01.o
-    Object src/unk020932e0_opus_partial_9.o
-    Object src/to80_extra1368_run01.o
-    Object src/to70_unk_020932E0_residual_10_extra142_run01.o
-    Object src/unk020932e0_opus_partial_10.o
-    Object src/to70_unk_020932E0_residual_11_extra312_run01.o
-    Object src/unk020932e0_opus_partial_11.o
-    Object src/op90_to70_unk_020932E0_residual_12_extra255_residual_1_r01.o
-    Object src/to70_unk_020932E0_residual_12_extra255_run01.o
-    Object src/unk020932e0_opus_partial_12.o
-    Object src/unk020932e0_r13_prefix_to50.o
-    Object src/to91_w41564_sprite_selection.o
-    Object src/unk020932e0_r13_run1.o
-    Object src/op90_unk_020932E0_residual_13_gap_r01.o
-    Object src/unk020932e0_r13_run2.o
-    Object src/unk020932e0_opus_partial_13.o
-    Object src/to70_unk_020932E0_residual_14_extra715_run01.o
-    Object src/unk020932e0_opus_partial_14.o
-    Object asm/unk_020932E0_residual_15.o
+    Object src/box_mon_selector.o
+    Object asm/box_mon_selector_data.o
     Object asm/grid_cursor_data.o
     Object src/grid_cursor.o
     Object src/pokeathlon_course_task.o
@@ -1138,31 +1070,7 @@ Overlay field
     Object src/field/field_bottom_screen.o
     Object src/field/field_texture_manager.o
     Object src/field/weather_manager.o
-    Object src/field_move_tutor_menu_1.o
-    Object src/to58_ov01_edafc_live.o
-    Object src/field_move_tutor_menu_2.o
-    Object src/to70_overlay_01_021EDAFC_residual_2_extra736_run01.o
-    Object src/field_move_tutor_menu_3.o
-    Object src/to90_extra2353_run01.o
-    Object src/field_move_tutor_menu_4.o
-    Object src/to58_ov01_edafc_r4.o
-    Object src/field_move_tutor_menu_5.o
-    Object src/op90_to70_overlay_01_021EDAFC_residual_5_extra233_residual_1_r01.o
-    Object src/to70_overlay_01_021EDAFC_residual_5_extra233_run01.o
-    Object src/field_move_tutor_menu_6.o
-    Object src/r40_overlay_01_021EDAFC_residual_6_run1.o
-    Object src/field_move_tutor_menu_7.o
-    Object src/to45_overlay01_menu_money_r14.o
-    Object src/field_move_tutor_menu_8.o
-    Object src/to58_ov01_edafc_r8_head.o
-    Object src/to70_to58_ov01_edafc_r8_tail_extra906_run01.o
-    Object src/field_move_tutor_menu_9.o
-    Object src/to70_to70_overlay_01_021EDAFC_residual_9_extra185_residual_1_extra1256_run01.o
-    Object src/to70_overlay_01_021EDAFC_residual_9_extra185_run01.o
-    Object src/field_move_tutor_menu_10.o
-    Object src/to90_extra2473_run01.o
-    Object src/field_move_tutor_menu_11.o
-    Object src/to58_ov01_edafc_r11.o
+    Object src/field/script_menu.o
     Object src/field/scrcmd_message.o
     Object src/field/draw_map_name.o
     Object src/overlay_01_021EFB38.o
@@ -1331,12 +1239,12 @@ Overlay field
     Object src/field/field_poison_effect.o
     Object src/field/area_data.o
     Object asm/overlay_01_021FB878_residual_3.o
-    Object src/field_honey_sweet_scent.o
+    Object src/field/honey_sweet_scent.o
     Object src/field_effect_registry_1.o
     Object asm/overlay_01_data_02208BFC.o
     Object src/field_fishing.o
     Object src/field/field_camera_zoom.o
-    Object src/field_sweet_scent_task.o
+    Object src/field/field_move_sweet_scent.o
     Object src/field/map_object_model_list.o
     Object src/field/field_shadow.o
     Object asm/overlay_01_021FD41C_residual_4.o
@@ -1459,15 +1367,7 @@ Overlay OVY_2
     Object src/overlay02_slop_r14_tail.o
     Object src/to70_overlay_02_02248728_r14_residual_2_slop_residual_extra751_run01.o
     Object src/overlay02_248728_partial_32.o
-    Object src/to47_overlay02_escape_rope_r4.o
-    Object src/overlay02_248728_partial_33.o
-    Object src/overlay02_field_dig.o
-    Object src/overlay02_248728_partial_34.o
-    Object src/to70_overlay_02_02248728_residual_35_extra226_run01.o
-    Object src/to70_to70_overlay_02_02248728_residual_35_extra226_residual_1_extra1261_run01.o
-    Object src/overlay02_248728_partial_35.o
-    Object src/overlay02_field_transition_r36.o
-    Object src/overlay02_248728_partial_36.o
+    Object src/field/field_move_warp_tasks.o
     Object src/field/primo_password.o
     Object src/overlay02_slop_r37_props.o
     Object src/overlay02_248728_partial_37.o

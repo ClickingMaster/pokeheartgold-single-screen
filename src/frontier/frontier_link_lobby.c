@@ -174,8 +174,8 @@ void FrontierLinkLobby_LaunchSummary(void *frontierWork, FrontierLinkLobby *lobb
     lobby->summaryArgs->unk12 = 0;
     lobby->summaryArgs->ribbons = Save_SpecialRibbons_Get(lobby->saveData);
     lobby->summaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(lobby->saveData);
-    sub_02089D40(lobby->summaryArgs, ov80_0223C040);
-    sub_0208AD34(lobby->summaryArgs, Save_PlayerData_GetProfile(lobby->saveData));
+    PokemonSummary_SetPages(lobby->summaryArgs, ov80_0223C040);
+    PokemonSummaryArgs_SetPlayer(lobby->summaryArgs, Save_PlayerData_GetProfile(lobby->saveData));
     Frontier_LaunchApplication(frontierWork, &gOverlayTemplate_PokemonSummary, lobby->summaryArgs, 0, NULL);
 }
 

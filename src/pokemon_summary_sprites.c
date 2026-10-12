@@ -32,8 +32,6 @@ extern const u8 gPokemonSummaryBallPalettes[];
 extern const u8 gPokemonSummaryPartySlotPositions[][2];
 
 // Declared with the types their call sites were matched against.
-BoxPokemon *sub_0208A520(PokemonSummary *summary);
-u8 sub_0208ACDC(PokemonSummary *summary, u8 slot);
 NarcId MoveCategoryIcon_GetNarc(u32 category); // the definition takes no argument; the call passes one
 
 // Called with an int where the prototype has a u8.
@@ -312,7 +310,7 @@ void PokemonSummary_UpdatePokeathlonStars(PokemonSummary *summary) {
     BoxPokemon *mon;
 
     if (summary->page == 2 && summary->args->isFlag982Set) {
-        mon = sub_0208A520(summary);
+        mon = PokemonSummary_GetShownMon(summary);
         MI_CpuFill8(&data.aprijuice, 0, sizeof(PartyExtraSub));
         CalcBoxMonPokeathlonPerformance(mon, &data.performance);
         if (summary->args->unk11 == 1) {
@@ -514,7 +512,7 @@ void PokemonSummary_LoadMonIcon(PokemonSummary *summary, void *mon, int sprite) 
 
 // Sprite 19: the shown Pokemon's icon.
 void PokemonSummary_LoadShownMonIcon(PokemonSummary *summary) {
-    void *mon = sub_0208A520(summary);
+    void *mon = PokemonSummary_GetShownMon(summary);
     int palette;
     PokemonSummary_LoadMonIcon(summary, mon, 19);
     palette = GetMonIconPaletteEx(summary->mon.species, summary->mon.form, summary->mon.isEgg);
@@ -524,7 +522,7 @@ void PokemonSummary_LoadShownMonIcon(PokemonSummary *summary) {
 
 // Sprites 73..78: the party's icons (only the shown Pokemon's when not viewing a party).
 void PokemonSummary_LoadPartyIcons(PokemonSummary *summary) {
-    void *mon = sub_0208A520(summary);
+    void *mon = PokemonSummary_GetShownMon(summary);
     int count;
     int i;
 
@@ -542,7 +540,7 @@ void PokemonSummary_LoadPartyIcons(PokemonSummary *summary) {
     for (i = 0; i < count; i++) {
         switch (summary->args->unk11) {
         case 0:
-            mon = sub_0208A520(summary);
+            mon = PokemonSummary_GetShownMon(summary);
             thunk_Sprite_SetPaletteOverride(summary->sprites[73 + i], Pokemon_GetIconPalette(mon) + 12);
             break;
         case 2:
@@ -574,7 +572,7 @@ void sub_0208BFD0(PokemonSummary *summary) {
     if (summary->args->unk11 != 2) {
         return;
     }
-    mon = sub_0208A520(summary);
+    mon = PokemonSummary_GetShownMon(summary);
     if (summary->boxIconSprite == 0) {
         thunk_Sprite_SetDrawFlag(summary->sprites[73], TRUE);
         thunk_Sprite_SetDrawFlag(summary->sprites[74], FALSE);
@@ -658,7 +656,7 @@ void PokemonSummary_ShowRibbonSprites(PokemonSummary *summary) {
         for (i = 0; i < 9; i++) {
             if (i < summary->ribbonCount) {
                 Sprite_SetDrawFlag(summary->sprites[54 + i], TRUE);
-                PokemonSummary_SetRibbonSprite(summary, sub_0208ACDC(summary, (u8)i), (u8)i);
+                PokemonSummary_SetRibbonSprite(summary, PokemonSummary_GetRibbonAt(summary, (u8)i), (u8)i);
             }
         }
         Sprite_SetAnimCtrlSeq(summary->sprites[66], 0);
@@ -670,7 +668,7 @@ void PokemonSummary_UpdateRibbonSprites(PokemonSummary *summary) {
     for (i = 0; i < 9; i++) {
         if (summary->ribbonRow * 9 + i < summary->ribbonCount) {
             Sprite_SetDrawFlag(summary->sprites[54 + i], TRUE);
-            PokemonSummary_SetRibbonSprite(summary, sub_0208ACDC(summary, (u8)i), (u8)i);
+            PokemonSummary_SetRibbonSprite(summary, PokemonSummary_GetRibbonAt(summary, (u8)i), (u8)i);
         } else {
             Sprite_SetDrawFlag(summary->sprites[54 + i], FALSE);
         }

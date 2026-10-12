@@ -2,6 +2,7 @@
 #define POKEHEARTGOLD_OVERLAY_02_H
 
 #include "battle/battle_setup.h"
+#include "field/field_3d_object_task.h"
 #include "field/headbutt.h"
 
 #include "heap.h"
@@ -47,8 +48,11 @@ struct FieldMoveTaskEnvironment *FieldMoveTask_CreateDigEnvironment(FieldSystem 
 BOOL Task_FieldEscapeRope(TaskManager *taskManager);
 BOOL Task_FieldTeleport(TaskManager *taskManager);
 BOOL Task_FieldDig(TaskManager *taskManager);
-BOOL ov02_0224C1F8(TaskManager *taskManager);
-void *ov02_0224C1D8(FieldSystem *fieldSystem, int a1, int a2);
+BOOL Task_FieldMoveArrival(TaskManager *taskManager);
+FieldMoveTaskEnvironment *FieldMoveTask_CreateArrivalEnvironment(FieldSystem *fieldSystem, enum HeapID heapID, int kind);
+Field3dObjectTask *ov02_0224DDE0(FieldSystem *fieldSystem);
+Field3dObjectTask *ov02_0224DDF4(FieldSystem *fieldSystem);
+void ov02_0224DE08(Field3dObjectTask *task);
 
 // TODO: define the struct, figure out what a1 is
 void *ov02_02249458(FieldSystem *fieldSystem, int a1, Pokemon *mon, int gender);

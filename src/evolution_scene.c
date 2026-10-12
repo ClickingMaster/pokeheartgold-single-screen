@@ -824,7 +824,7 @@ void EvolutionScene_Run(EvolutionTaskData *data) {
             data->summaryArgs->unk12 = 2;
             data->summaryArgs->unk28 = 0;
             data->summaryArgs->menuInputStatePtr = NULL;
-            sub_02089D40(data->summaryArgs, gEvolutionSummaryPages);
+            PokemonSummary_SetPages(data->summaryArgs, gEvolutionSummaryPages);
             EvolutionScene_OpenSummary(data);
             data->state++;
         }

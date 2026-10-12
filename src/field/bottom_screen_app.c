@@ -44,7 +44,7 @@ typedef struct TouchscreenChoiceMenuView {
     u32 state;
     void *result;
     u8 unk_08[0x4];
-    struct UnkStruct_ov01_021EDC28 *menu;
+    struct ScriptMenu *menu;
 } TouchscreenChoiceMenuView;
 
 // The apps' entry points, declared with the template's signatures.
@@ -86,7 +86,7 @@ void FieldSystem_SetTouchscreenChoiceMenuState(FieldSystem *fieldSystem, int app
 u32 FieldSystem_GetTouchscreenChoiceMenuState(FieldSystem *fieldSystem);
 u8 FieldSystem_GetBottomScreenAppId(FieldSystem *fieldSystem);
 u8 FieldSystem_GetBottomScreenAppState(FieldSystem *fieldSystem);
-struct UnkStruct_ov01_021EDC28 **FieldSystem_GetTouchscreenChoiceMenuList(FieldSystem *fieldSystem);
+struct ScriptMenu **FieldSystem_GetTouchscreenChoiceMenuList(FieldSystem *fieldSystem);
 void FieldSystem_SetTouchscreenChoiceMenuCallback(FieldSystem *fieldSystem, void *callback, void *arg);
 SysTask *BottomScreenApps_CreateTask(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem);
 void BottomScreenApps_ExitApp(FieldSystem *fieldSystem);
@@ -320,7 +320,7 @@ u8 FieldSystem_GetBottomScreenAppState(FieldSystem *fieldSystem) {
     return manager->state;
 }
 
-struct UnkStruct_ov01_021EDC28 **FieldSystem_GetTouchscreenChoiceMenuList(FieldSystem *fieldSystem) {
+struct ScriptMenu **FieldSystem_GetTouchscreenChoiceMenuList(FieldSystem *fieldSystem) {
     BottomScreenAppManager *manager = SysTask_GetData(fieldSystem->bottomScreenTask);
     TouchscreenChoiceMenuView *menu = SysTask_GetData(manager->app);
     return &menu->menu;

@@ -51,39 +51,6 @@ void PokemonSummary_CreateCamera(PokemonSummary *summary);
 void PokemonSummary_StartPokepicAnim(PokemonSummary *summary);
 void PokemonSummary_DrawPokepic(PokemonSummary *summary);
 void PokemonSummary_FreePokepicAndCamera(PokemonSummary *summary);
-void sub_020897C0(PokemonSummary *summary);
-void sub_02089CB4(PokemonSummary *summary);
-void sub_02089C50(PokemonSummary *summary);
-void sub_02089E30(PokemonSummary *summary, int direction);
-int sub_02089E98(PokemonSummary *summary);
-void sub_0208A2C0(PokemonSummary *summary, int direction);
-int sub_0208A2E0(PokemonSummary *summary, int direction);
-int sub_0208A564(PokemonSummary *summary);
-int sub_0208A63C(PokemonSummary *summary);
-void sub_0208ADB8(PokemonSummary *summary, int state);
-int sub_0208ADCC(PokemonSummary *summary);
-int sub_0208AEB4(PokemonSummary *summary);
-int sub_0208AEC4(PokemonSummary *summary);
-void sub_0208AFA0(PokemonSummary *summary, int value);
-int sub_0208B044(PokemonSummary *summary, u8 state);
-int sub_0208B0B0(PokemonSummary *summary, int direction, u8 state);
-u32 sub_02088D48(PokemonSummary *summary);
-u32 sub_02088E68(PokemonSummary *summary);
-u32 sub_02088E98(PokemonSummary *summary);
-u32 sub_02089028(PokemonSummary *summary);
-u32 sub_02089208(PokemonSummary *summary);
-u32 sub_020892F4(PokemonSummary *summary);
-u32 sub_02089308(PokemonSummary *summary);
-u32 sub_0208931C(PokemonSummary *summary);
-u32 sub_0208942C(PokemonSummary *summary);
-u32 sub_02089454(PokemonSummary *summary);
-u32 sub_02089698(PokemonSummary *summary);
-u32 sub_02089478(PokemonSummary *summary);
-u32 sub_02089608(PokemonSummary *summary);
-u32 sub_02089658(PokemonSummary *summary);
-u32 sub_02089670(PokemonSummary *summary);
-u32 sub_02089680(PokemonSummary *summary);
-u32 sub_02089794(PokemonSummary *summary);
 
 u32 sub_02088288(SaveData *saveData) {
     return 1;
@@ -130,7 +97,7 @@ BOOL PokemonSummary_Init(OverlayManager *manager, int *state) {
     FontID_Alloc(4, HEAP_ID_19);
     PokemonSummary_InitText(summary);
     PokemonSummary_InitBgCells(summary, graphicsNarc);
-    sub_020897C0(summary);
+    PokemonSummary_ReadShownMon(summary);
     PokemonSummary_InitSpriteSystem(summary);
     PokemonSummary_CreateSprites(summary);
     PokemonSummary_CreatePokepic(summary);
@@ -138,7 +105,7 @@ BOOL PokemonSummary_Init(OverlayManager *manager, int *state) {
     PokemonSummary_UpdateStatusSprite(summary);
     PokemonSummary_LoadPartyIcons(summary);
     PokemonSummary_AddWindows(summary);
-    sub_02089CB4(summary);
+    PokemonSummary_ShowFirstPage(summary);
     PokemonSummary_CreateCamera(summary);
     Main_SetVBlankIntrCB(PokemonSummary_VBlank, summary);
     reg_GX_POWCNT |= 0x8000;
@@ -172,52 +139,52 @@ BOOL PokemonSummary_Main(OverlayManager *manager, int *state) {
         *state = sub_02088D34(summary);
         break;
     case 5:
-        *state = sub_02088D48(summary);
+        *state = PokemonSummary_HandleMoveSelectInput(summary);
         break;
     case 7:
-        *state = sub_02088E68(summary);
+        *state = PokemonSummary_StartMoveSwap(summary);
         break;
     case 6:
-        *state = sub_02088E98(summary);
+        *state = PokemonSummary_HandleMoveSwapInput(summary);
         break;
     case 8:
-        *state = sub_02089028(summary);
+        *state = PokemonSummary_HandleForgetMoveInput(summary);
         break;
     case 9:
-        *state = sub_02089208(summary);
+        *state = PokemonSummary_HandleForgetMoveConfirmInput(summary);
         break;
     case 10:
-        *state = sub_020892F4(summary);
+        *state = PokemonSummary_OpenRibbonList(summary);
         break;
     case 11:
-        *state = sub_02089308(summary);
+        *state = PokemonSummary_CloseRibbonList(summary);
         break;
     case 12:
-        *state = sub_0208931C(summary);
+        *state = PokemonSummary_HandleRibbonInput(summary);
         break;
     case 13:
-        *state = sub_0208942C(summary);
+        *state = PokemonSummary_WaitRibbonPageUp(summary);
         break;
     case 14:
-        *state = sub_02089454(summary);
+        *state = PokemonSummary_WaitRibbonPageDown(summary);
         break;
     case 15:
-        *state = sub_02089698(summary);
+        *state = PokemonSummary_FlashButton(summary);
         break;
     case 16:
-        *state = sub_02089478(summary);
+        *state = PokemonSummary_UpdateCondition(summary);
         break;
     case 17:
-        *state = sub_02089608(summary);
+        *state = PokemonSummary_ShowConditionChanges(summary);
         break;
     case 18:
-        *state = sub_02089658(summary);
+        *state = PokemonSummary_WaitConditionExit(summary);
         break;
     case 21:
-        *state = sub_02089670(summary);
+        *state = PokemonSummary_StartFadeOut(summary);
         break;
     case 22:
-        if (sub_02089680(summary) == 1) {
+        if (PokemonSummary_WaitFadeOut(summary) == 1) {
             return TRUE;
         }
         break;
@@ -226,7 +193,7 @@ BOOL PokemonSummary_Main(OverlayManager *manager, int *state) {
         *state = 2;
         break;
     case 20:
-        *state = sub_02089794(summary);
+        *state = PokemonSummary_ChangeMonByButton(summary);
         break;
     }
     PokemonSummary_UpdateSpriteAnims(summary);
@@ -393,7 +360,7 @@ int PokemonSummary_WaitFadeIn(PokemonSummary *summary) {
 
     if (IsPaletteFadeFinished() == TRUE) {
         PokemonSummary_StartPokepicAnim(summary);
-        sub_02089C50(summary);
+        PokemonSummary_PlayCry(summary);
         mode = summary->args->unk12;
         if (mode == 2) {
             return 8;
@@ -415,26 +382,26 @@ int PokemonSummary_HandleInput(PokemonSummary *summary) {
         return 21;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_LEFT) {
-        sub_02089E30(summary, -1);
+        PokemonSummary_ScrollPage(summary, -1);
         return 2;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_RIGHT) {
-        sub_02089E30(summary, 1);
+        PokemonSummary_ScrollPage(summary, 1);
         return 2;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
-        sub_0208A2C0(summary, -1);
+        PokemonSummary_ChangeMon(summary, -1);
         return 19;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
-        sub_0208A2C0(summary, 1);
+        PokemonSummary_ChangeMon(summary, 1);
         return 19;
     }
     if (gSystem.newKeys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
         summary->args->unk17 = 1;
-        sub_0208ADB8(summary, 0);
-        return sub_0208B044(summary, 21);
+        PokemonSummary_SetMenuInputState(summary, 0);
+        return PokemonSummary_FlashCancelButton(summary, 21);
     }
     if (gSystem.newKeys & PAD_BUTTON_A) {
         switch (summary->page) {
@@ -452,7 +419,7 @@ int PokemonSummary_HandleInput(PokemonSummary *summary) {
         }
     }
     if (summary->page == 1) {
-        selection = sub_0208ADCC(summary);
+        selection = PokemonSummary_GetTouchedMove(summary);
         if (selection != -1 && summary->mon.moves[selection] != MOVE_NONE) {
             PlaySE(SEQ_SE_DP_SYU01);
             summary->moveSlot = selection;
@@ -460,7 +427,7 @@ int PokemonSummary_HandleInput(PokemonSummary *summary) {
         }
     }
     if (summary->page == 2) {
-        selection = sub_0208AEC4(summary);
+        selection = PokemonSummary_GetRibbonTouch(summary);
         if (selection != -1 && selection < 9 && selection < summary->ribbonCount) {
             PlaySE(SEQ_SE_DP_DECIDE);
             summary->ribbonCursor = selection;
@@ -468,27 +435,27 @@ int PokemonSummary_HandleInput(PokemonSummary *summary) {
         }
     }
     if (summary->args->unk11 == 2) {
-        selection = sub_0208AEB4(summary);
+        selection = PokemonSummary_GetMonButtonTouch(summary);
         if (selection == 0) {
-            if (sub_0208A2E0(summary, -1) != -1) {
+            if (PokemonSummary_FindNextMon(summary, -1) != -1) {
                 PlaySE(SEQ_SE_DP_DECIDE);
-                return sub_0208B0B0(summary, 0, 20);
+                return PokemonSummary_FlashMonButton(summary, 0, 20);
             }
             return 2;
         }
         if (selection == 1) {
-            if (sub_0208A2E0(summary, 1) != -1) {
+            if (PokemonSummary_FindNextMon(summary, 1) != -1) {
                 PlaySE(SEQ_SE_DP_DECIDE);
-                return sub_0208B0B0(summary, 1, 20);
+                return PokemonSummary_FlashMonButton(summary, 1, 20);
             }
             return 2;
         }
     }
-    return sub_02089E98(summary);
+    return PokemonSummary_HandleTouchInput(summary);
 }
 
 int sub_02088D18(PokemonSummary *summary) {
-    if (sub_0208A564(summary) == TRUE) {
+    if (PokemonSummary_SlideInMoveInfo(summary) == TRUE) {
         sub_0208AFA0(summary, 1);
         return 5;
     }
@@ -496,7 +463,7 @@ int sub_02088D18(PokemonSummary *summary) {
 }
 
 int sub_02088D34(PokemonSummary *summary) {
-    if (sub_0208A63C(summary) == TRUE) {
+    if (PokemonSummary_SlideOutMoveInfo(summary) == TRUE) {
         return 2;
     }
     return 4;

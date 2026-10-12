@@ -60,7 +60,7 @@ void Colosseum_OpenSummary(ColosseumEntry *entry, FieldSystem *fieldSystem, Part
     SaveData *saveData = fieldSystem->saveData;
     PokemonSummaryArgs *args = Heap_AllocAtEnd(heapId, sizeof(PokemonSummaryArgs));
     MI_CpuFill8(args, 0, sizeof(PokemonSummaryArgs));
-    sub_0208AD34(args, Save_PlayerData_GetProfile(fieldSystem->saveData));
+    PokemonSummaryArgs_SetPlayer(args, Save_PlayerData_GetProfile(fieldSystem->saveData));
     args->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
     args->unk2C = sub_02088288(saveData);
     args->options = Save_PlayerData_GetOptionsAddr(saveData);
@@ -73,7 +73,7 @@ void Colosseum_OpenSummary(ColosseumEntry *entry, FieldSystem *fieldSystem, Part
     args->ribbons = Save_SpecialRibbons_Get(saveData);
     args->menuInputStatePtr = NULL;
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);
-    sub_02089D40(args, _020FC7CC);
+    PokemonSummary_SetPages(args, _020FC7CC);
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, args);
     entry->summaryArgs = args;
 }

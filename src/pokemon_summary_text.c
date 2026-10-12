@@ -32,9 +32,6 @@ extern const WindowTemplate gPokemonSummaryStatsWindowTemplates[];
 extern const WindowTemplate gPokemonSummaryWindowTemplates[34];
 extern const s8 gNatureStatMods[][5];
 
-// Declared with the types their call sites were matched against.
-BoxPokemon *sub_0208A520(PokemonSummary *summary);
-
 // PokemonSummary_PrintTrainerMemo calls it with three arguments.
 #define sub_0208E600_3(mon, isMine, heapID) ((Unk0208E600 * (*)(void *, int, enum HeapID)) sub_0208E600)(mon, isMine, heapID)
 
@@ -422,7 +419,7 @@ void PokemonSummary_PrintMemo(PokemonSummary *summary) {
 
     ScheduleWindowCopyToVram(&summary->windows[1]);
     FillWindowPixelBuffer(&summary->pageWindows[6], 0);
-    boxMon = sub_0208A520(summary);
+    boxMon = PokemonSummary_GetShownMon(summary);
     isMine = PokemonSummary_IsPlayersMon(summary);
     if (summary->args->unk11 == 2) {
         mon = AllocMonZeroed(HEAP_ID_19);

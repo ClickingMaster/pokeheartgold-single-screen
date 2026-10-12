@@ -252,7 +252,7 @@ BOOL ScrCmd_MoveTutorChooseMove(ScriptContext *ctx) {
     s32 numLearnableMoves;
     BOOL showNextButton;
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    struct UnkStruct_ov01_021EDC28 **unk = FieldSystem_GetTouchscreenChoiceMenuList(fieldSystem);
+    struct ScriptMenu **unk = FieldSystem_GetTouchscreenChoiceMenuList(fieldSystem);
     u16 resultVarId;
     MsgData *messageData;
     u16 showAsTwoColumns;
@@ -285,7 +285,7 @@ BOOL ScrCmd_MoveTutorChooseMove(ScriptContext *ctx) {
     }
     u16 *result = GetVarPointer(fieldSystem, resultVarId);
     Window *window = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_WINDOW);
-    *unk = ov01_021EDF78(fieldSystem, 1, 1, 0, 1, result, *messageFormat, window, ctx->msgdata);
+    *unk = ScriptMenu_Create(fieldSystem, 1, 1, 0, 1, result, *messageFormat, window, ctx->msgdata);
     messageData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0750_bin, HEAP_ID_FIELD3);
     String *string = String_New(0x10, HEAP_ID_FIELD3);
     showAsTwoColumns = (numLearnableMoves + showNextButton >= 4) ? 1 : 0;
@@ -293,14 +293,14 @@ BOOL ScrCmd_MoveTutorChooseMove(ScriptContext *ctx) {
         ReadMsgDataIntoString(messageData, sTutorMoves[learnableMoves[i + numMovesToSkip]].move, string);
         BufferString(*messageFormat, 0, string, 2, 1, 2);
         BufferIntegerAsString(*messageFormat, 1, sTutorMoves[learnableMoves[i + numMovesToSkip]].cost, 2, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-        MoveTutorMenu_SetListItem(*unk, showAsTwoColumns, 0xff, sTutorMoves[learnableMoves[i + numMovesToSkip]].move);
+        ScriptMenu_AddListItem(*unk, showAsTwoColumns, 0xff, sTutorMoves[learnableMoves[i + numMovesToSkip]].move);
     }
     String_Delete(string);
     DestroyMsgData(messageData);
     if (showNextButton) {
-        MoveTutorMenu_SetListItem(*unk, 2, 0xff, 0xfffd);
+        ScriptMenu_AddListItem(*unk, 2, 0xff, 0xfffd);
     }
-    MoveTutorMenu_SetListItem(*unk, 3, 0xff, 0xfffe);
+    ScriptMenu_AddListItem(*unk, 3, 0xff, 0xfffe);
     FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, 3, 7, GetVarPointer(fieldSystem, ctx->data[0]));
     SetupNativeScript(ctx, ov01_0220305C);
     u16 *unused = GetVarPointer(fieldSystem, ctx->data[0]); // yes, this is needed here to match
@@ -309,12 +309,12 @@ BOOL ScrCmd_MoveTutorChooseMove(ScriptContext *ctx) {
 
 static BOOL ov01_0220305C(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    struct UnkStruct_ov01_021EDC28 **unk = FieldSystem_GetTouchscreenChoiceMenuList(fieldSystem);
+    struct ScriptMenu **unk = FieldSystem_GetTouchscreenChoiceMenuList(fieldSystem);
     u16 *result = GetVarPointer(fieldSystem, ctx->data[0]);
     if (*result == 0xeeee) {
         return FALSE;
     }
-    ov01_021EDF00(*unk);
+    ScriptMenu_Free(*unk);
     return TRUE;
 }
 

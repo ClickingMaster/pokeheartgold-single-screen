@@ -29,7 +29,7 @@ struct UnkStruct_Ov01_021EF4C4 {
     u8 fontId;
 };
 
-struct UnkStruct_ov01_021EDC28;
+struct ScriptMenu;
 
 void FieldSystem_DrawMapNameAnimation(FieldSystem *fieldSystem);
 u32 GetHoneySweetScentWorkSize(void);
@@ -53,19 +53,19 @@ BOOL Task_UseSweetScentInField(TaskManager *taskManager);
 BOOL ov01_021EF348(ScriptContext *ctx);
 void ov01_021EF4C4(struct UnkStruct_Ov01_021EF4C4 *, ScriptContext *ctx);
 void ov01_021EF4DC(ScriptContext *ctx, MsgData *msg_data, u16 msg_no, u8 can_ab_speed_up, struct UnkStruct_Ov01_021EF4C4 *);
-struct UnkStruct_ov01_021EDC28 *ov01_021EDF78(FieldSystem *fieldSystem, u8 x, u8 y, u8 initCursorPos, u8 cancellable, u16 *ret_p, MessageFormat *msgFmt, Window *window, MsgData *msgData);
-struct UnkStruct_ov01_021EDC28 **FieldSystem_GetTouchscreenChoiceMenuList(FieldSystem *fieldSystem);
-void ov01_021EDC7C(struct UnkStruct_ov01_021EDC28 *menu, u32 msgId, u32 value);
-void ov01_021EDC84(struct UnkStruct_ov01_021EDC28 *menu);
-void ov01_021EDF00(struct UnkStruct_ov01_021EDC28 *menu);
-void ov01_021EDF38(struct UnkStruct_ov01_021EDC28 *menu);
-void ov01_021EE014(struct UnkStruct_ov01_021EDC28 *menu, u16 a1);
-void ov01_021EE0EC(struct UnkStruct_ov01_021EDC28 *menu, u16 *a1, u16 *a2);
-void ov01_021EDFA4(struct UnkStruct_ov01_021EDC28 *menu);
-void ov01_021EE974(struct UnkStruct_ov01_021EDC28 *menu, u8 a1);
-void ov01_021EF018(struct UnkStruct_ov01_021EDC28 *menu, u8 a1);
-void ov01_021EF034(struct UnkStruct_ov01_021EDC28 *menu, u8 a1);
-void MoveTutorMenu_SetListItem(struct UnkStruct_ov01_021EDC28 *menu, int a1, int a2, int a3);
+struct ScriptMenu *ScriptMenu_Create(FieldSystem *fieldSystem, u8 x, u8 y, u8 initCursorPos, u8 cancellable, u16 *ret_p, MessageFormat *msgFmt, Window *window, MsgData *msgData);
+struct ScriptMenu **FieldSystem_GetTouchscreenChoiceMenuList(FieldSystem *fieldSystem);
+void ScriptMenu_AddItem(struct ScriptMenu *menu, u32 msgId, u32 value);
+void ScriptMenu_ShowMultichoice(struct ScriptMenu *menu);
+void ScriptMenu_Free(struct ScriptMenu *menu);
+void ScriptMenu_CloseMultichoice(struct ScriptMenu *menu);
+void ScriptMenu_ShowListWithWidth(struct ScriptMenu *menu, u16 a1);
+void ScriptMenu_ShowListAtPosition(struct ScriptMenu *menu, u16 *a1, u16 *a2);
+void ScriptMenu_ShowList(struct ScriptMenu *menu);
+void ScriptMenu_ShowMultichoiceGrid(struct ScriptMenu *menu, u8 a1);
+void ScriptMenu_SetAnchorRight(struct ScriptMenu *menu, int set);
+void ScriptMenu_SetAnchorBottom(struct ScriptMenu *menu, int set);
+void ScriptMenu_AddListItem(struct ScriptMenu *menu, int a1, int a2, int a3);
 void ov01_021F7704(LocalMapObject *object);
 void ov01_021F9408(LocalMapObject *object, u32 dir);
 u8 FollowMonObject_IsLarge(LocalMapObject *object);
@@ -77,7 +77,7 @@ void CallFieldTask_RockClimb(TaskManager *taskManager, int playerDirection, int 
 void CallFieldTask_Surf(TaskManager *taskManager, int playerDirection, int partySlot);
 void CallFieldTask_Waterfall(TaskManager *taskManager, int playerDirection, int partySlot);
 void CallFieldTask_Whirlpool(TaskManager *taskManager, int playerDirection, int partySlot);
-int MapNumToFloorNo(u32 mapId);
+int MapNumToFloorNo(int mapId);
 void PrintCurFloorInNewWindow(FieldSystem *fieldSystem, u8 x, u8 y, u16 *p_ret, MessageFormat *msgFmt, u16 floor);
 int Field_SaveGameNormal(FieldSystem *fieldSystem);
 void DoorAnimation_Load(FieldSystem *fieldSystem, int x, int z, u8 tag);
@@ -99,10 +99,10 @@ void ov01_02205AEC(FieldSystem *fieldSystem);
 void MapObject_SetPositionNextTo(LocalMapObject *playerObj, LocalMapObject *tsurePokeObj, int a2, int a3);
 void FieldSystem_SetTouchscreenChoiceMenuState(FieldSystem *fieldSystem, int a1, int a2, void *a3);
 
-typedef BOOL (*UnkCallback_021F6B34)(struct UnkStruct_ov01_021EDC28 *menu, int idx);
+typedef BOOL (*UnkCallback_021F6B34)(struct ScriptMenu *menu, int idx);
 
-void FieldSystem_SetTouchscreenChoiceMenuCallback(FieldSystem *fieldSystem, UnkCallback_021F6B34 cb, struct UnkStruct_ov01_021EDC28 *menu);
-void ov01_021EEF9C(struct UnkStruct_ov01_021EDC28 *menu, int idx);
+void FieldSystem_SetTouchscreenChoiceMenuCallback(FieldSystem *fieldSystem, UnkCallback_021F6B34 cb, struct ScriptMenu *menu);
+void ScriptMenu_PrintItemHelpMessage(struct ScriptMenu *menu, int idx);
 
 struct UnkStruct_020FACDC {
     int filler_00[12 / sizeof(int)];

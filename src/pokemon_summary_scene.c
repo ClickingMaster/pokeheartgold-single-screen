@@ -61,7 +61,7 @@ void PokepicAnimManager_Delete(void *a);
 void Pokepic_StartAnim(void *p, int a);
 void sub_0207294C(void *a, void *b, void *c, int d, int e, u32 f, int g);
 void *PokepicManager_Create(int heapId);
-int sub_0208A520(PokemonSummaryScene *a);
+int PokemonSummary_GetShownMon(PokemonSummaryScene *a);
 void GetPokemonSpriteCharAndPlttNarcIds(u32 *dest, int species, int c);
 void GetBoxmonSpriteCharAndPlttNarcIds(u32 *dest, int species, int c, int d);
 void NARC_ReadPokepicAnimScript(void *narc, void *dest, u16 species, int d);
@@ -249,7 +249,7 @@ void PokemonSummary_CreatePokepic(PokemonSummaryScene *a) {
     int species;
 
     a->pokepicManager = PokepicManager_Create(0x13);
-    species = sub_0208A520(a);
+    species = PokemonSummary_GetShownMon(a);
     if (((struct UnkStruct22C *)a->unk_22C)->unk_11 == 2) {
         GetBoxmonSpriteCharAndPlttNarcIds(sp10, species, 2, 0);
     } else {

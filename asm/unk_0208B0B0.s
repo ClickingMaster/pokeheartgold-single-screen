@@ -8,8 +8,8 @@
 	.include "unk_02088288.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0208B0B0
-sub_0208B0B0: ; 0x0208B0B0
+	thumb_func_start PokemonSummary_FlashMonButton
+PokemonSummary_FlashMonButton: ; 0x0208B0B0
 	push {lr}
 	sub sp, #0x14
 	cmp r1, #0
@@ -25,7 +25,7 @@ sub_0208B0B0: ; 0x0208B0B0
 	str r2, [sp, #0x10]
 	mov r2, #0x18
 	mov r3, #5
-	bl sub_0208AFE8
+	bl PokemonSummary_StartButtonFlash
 	add sp, #0x14
 	pop {pc}
 _0208B0D6:
@@ -40,7 +40,7 @@ _0208B0D6:
 	str r2, [sp, #0x10]
 	mov r2, #0x18
 	mov r3, #0xd
-	bl sub_0208AFE8
+	bl PokemonSummary_StartButtonFlash
 	add sp, #0x14
 	pop {pc}
-	thumb_func_end sub_0208B0B0
+	thumb_func_end PokemonSummary_FlashMonButton

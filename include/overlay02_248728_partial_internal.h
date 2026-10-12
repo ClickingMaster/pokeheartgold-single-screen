@@ -76,7 +76,7 @@ extern void MapObject_UnpauseMovement(void *);
 extern void *Save_LocalFieldData_Get(void *);
 extern void *LocalFieldData_GetSpecialSpawnWarpPtr(void *);
 extern void sub_02053B04(void *, void *, void *);
-extern void *ov02_0224C660(u32, u32);
+extern void *FieldMoveTaskEnvironment_New(u32, u32);
 extern void BeginNormalPaletteFade(u32, u32, u32, u32, u32, u32, u32);
 extern void ov02_0224A6A8(void *);
 extern void *SysTask_CreateOnMainQueue(void *, void *, u32);

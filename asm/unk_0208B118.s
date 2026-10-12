@@ -8,14 +8,14 @@
 	.include "unk_02088288.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0208B118
-sub_0208B118: ; 0x0208B118
+	thumb_func_start PokemonSummary_DrawMonButtons
+PokemonSummary_DrawMonButtons: ; 0x0208B118
 	push {r4, lr}
 	sub sp, #0x10
 	mov r1, #0
 	mvn r1, r1
 	add r4, r0, #0
-	bl sub_0208A2E0
+	bl PokemonSummary_FindNextMon
 	mov r1, #0
 	mvn r1, r1
 	cmp r0, r1
@@ -47,7 +47,7 @@ _0208B140:
 _0208B162:
 	add r0, r4, #0
 	mov r1, #1
-	bl sub_0208A2E0
+	bl PokemonSummary_FindNextMon
 	mov r1, #0
 	mvn r1, r1
 	cmp r0, r1
@@ -79,4 +79,4 @@ _0208B186:
 	bl ScheduleBgTilemapBufferTransfer
 	add sp, #0x10
 	pop {r4, pc}
-	thumb_func_end sub_0208B118
+	thumb_func_end PokemonSummary_DrawMonButtons

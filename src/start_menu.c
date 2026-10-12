@@ -834,8 +834,8 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         pokemonSummaryArgs->unk28 = 0;
         pokemonSummaryArgs->menuInputStatePtr = &fieldSystem->menuInputState;
         pokemonSummaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
-        sub_02089D40(pokemonSummaryArgs, _020FA0B0);
-        sub_0208AD34(pokemonSummaryArgs, Save_PlayerData_GetProfile(fieldSystem->saveData));
+        PokemonSummary_SetPages(pokemonSummaryArgs, _020FA0B0);
+        PokemonSummaryArgs_SetPlayer(pokemonSummaryArgs, Save_PlayerData_GetProfile(fieldSystem->saveData));
         PokemonSummary_LearnForget_LaunchApp(fieldSystem, pokemonSummaryArgs);
         startMenu->exitTaskEnvironment = pokemonSummaryArgs;
         StartMenu_SetExitTaskFunc(startMenu, sub_0203D580);
@@ -855,8 +855,8 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         pokemonSummaryArgs->unk28 = 0;
         pokemonSummaryArgs->menuInputStatePtr = &fieldSystem->menuInputState;
         pokemonSummaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
-        sub_02089D40(pokemonSummaryArgs, _020FA0AC);
-        sub_0208AD34(pokemonSummaryArgs, Save_PlayerData_GetProfile(fieldSystem->saveData));
+        PokemonSummary_SetPages(pokemonSummaryArgs, _020FA0AC);
+        PokemonSummaryArgs_SetPlayer(pokemonSummaryArgs, Save_PlayerData_GetProfile(fieldSystem->saveData));
         PokemonSummary_LearnForget_LaunchApp(fieldSystem, pokemonSummaryArgs);
         UnkStruct_0203D580 *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(UnkStruct_0203D580));
         unk->itemId = partyMenuArgs->itemId;
@@ -880,8 +880,8 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         pokemonSummaryArgs->unk28 = 0;
         pokemonSummaryArgs->menuInputStatePtr = &fieldSystem->menuInputState;
         pokemonSummaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
-        sub_02089D40(pokemonSummaryArgs, _020FA0AC);
-        sub_0208AD34(pokemonSummaryArgs, Save_PlayerData_GetProfile(fieldSystem->saveData));
+        PokemonSummary_SetPages(pokemonSummaryArgs, _020FA0AC);
+        PokemonSummaryArgs_SetPlayer(pokemonSummaryArgs, Save_PlayerData_GetProfile(fieldSystem->saveData));
         PokemonSummary_LearnForget_LaunchApp(fieldSystem, pokemonSummaryArgs);
         UnkStruct_0203D580 *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(UnkStruct_0203D580));
         unk->itemId = ITEM_NONE;

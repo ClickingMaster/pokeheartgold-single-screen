@@ -372,10 +372,10 @@ PokemonSummaryArgs *PokemonSummary_CreateArgs(FieldSystem *fieldSystem, enum Hea
     args->ribbons = Save_SpecialRibbons_Get(saveData);
     args->menuInputStatePtr = &fieldSystem->menuInputState;
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
-    sub_02089D40(args, _020FA1B0);
+    PokemonSummary_SetPages(args, _020FA1B0);
 
     PlayerProfile *profile = Save_PlayerData_GetProfile(saveData);
-    sub_0208AD34(args, profile);
+    PokemonSummaryArgs_SetPlayer(args, profile);
     return args;
 }
 
@@ -393,8 +393,8 @@ PokemonSummaryArgs *LearnForgetMove_LaunchApp(enum HeapID heapID, FieldSystem *f
     args->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
     args->unk2C = 0;
     args->menuInputStatePtr = &fieldSystem->menuInputState;
-    sub_02089D40(args, _020FA1A8);
-    sub_0208AD34(args, Save_PlayerData_GetProfile(fieldSystem->saveData));
+    PokemonSummary_SetPages(args, _020FA1A8);
+    PokemonSummaryArgs_SetPlayer(args, Save_PlayerData_GetProfile(fieldSystem->saveData));
     PokemonSummary_LearnForget_LaunchApp(fieldSystem, args);
     return args;
 }
@@ -1348,9 +1348,9 @@ PokemonSummaryArgs *PokemonSummary_LaunchApp(enum HeapID heapID, FieldSystem *fi
     args->unk2C = 0;
     args->unk28 = 0;
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
-    sub_02089D40(args, _020FA0B0);
+    PokemonSummary_SetPages(args, _020FA0B0);
 
-    sub_0208AD34(args, Save_PlayerData_GetProfile(fieldSystem->saveData));
+    PokemonSummaryArgs_SetPlayer(args, Save_PlayerData_GetProfile(fieldSystem->saveData));
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, args);
     return args;
 }

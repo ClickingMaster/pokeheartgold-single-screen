@@ -8,8 +8,8 @@
 	.include "unk_02088288.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02089D68
-sub_02089D68: ; 0x02089D68
+	thumb_func_start PokemonSummary_SetPage
+PokemonSummary_SetPage: ; 0x02089D68
 	push {r3, r4, r5, lr}
 	sub sp, #0x10
 	add r4, r1, #0
@@ -68,7 +68,7 @@ sub_02089D68: ; 0x02089D68
 	add r0, r5, #0
 	bl PokemonSummary_PrintPage
 	add r0, r5, #0
-	bl sub_02089F98
+	bl PokemonSummary_LoadPageBgs
 	mov r0, #0x8b
 	lsl r0, r0, #2
 	ldr r0, [r5, r0]
@@ -76,15 +76,15 @@ sub_02089D68: ; 0x02089D68
 	cmp r0, #2
 	bne _02089E0C
 	add r0, r5, #0
-	bl sub_0208A950
+	bl PokemonSummary_UpdateForgetMovePage
 _02089E0C:
 	add sp, #0x10
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _02089E10: .word 0x000007BC
-	thumb_func_end sub_02089D68
-	thumb_func_start sub_02089E14
-sub_02089E14: ; 0x02089E14
+	thumb_func_end PokemonSummary_SetPage
+	thumb_func_start PokemonSummary_ChangePage
+PokemonSummary_ChangePage: ; 0x02089E14
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	ldr r0, _02089E2C ; =0x000005E1
@@ -93,13 +93,13 @@ sub_02089E14: ; 0x02089E14
 	lsl r1, r4, #0x18
 	add r0, r5, #0
 	lsr r1, r1, #0x18
-	bl sub_02089D68
+	bl PokemonSummary_SetPage
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _02089E2C: .word 0x000005E1
-	thumb_func_end sub_02089E14
-	thumb_func_start sub_02089E30
-sub_02089E30: ; 0x02089E30
+	thumb_func_end PokemonSummary_ChangePage
+	thumb_func_start PokemonSummary_ScrollPage
+PokemonSummary_ScrollPage: ; 0x02089E30
 	push {r3, r4, r5, r6, r7, lr}
 	add r3, r0, #0
 	ldr r0, _02089E7C ; =0x000007BC
@@ -138,9 +138,9 @@ _02089E66:
 	cmp r1, r0
 	beq _02089E7A
 	add r0, r3, #0
-	bl sub_02089E14
+	bl PokemonSummary_ChangePage
 _02089E7A:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02089E7C: .word 0x000007BC
-	thumb_func_end sub_02089E30
+	thumb_func_end PokemonSummary_ScrollPage
