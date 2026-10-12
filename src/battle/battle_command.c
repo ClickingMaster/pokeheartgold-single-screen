@@ -1192,7 +1192,7 @@ BOOL BtlCmd_GoToMoveScript(BattleSystem *battleSystem, BattleContext *ctx) {
     ctx->moveNoCur = ctx->moveTemp;
 
     if (unkA == 0) {
-        ctx->battlerIdTarget = ov12_022506D4(battleSystem, ctx, ctx->battlerIdAttacker, (u16)ctx->moveTemp, 1, 0);
+        ctx->battlerIdTarget = BattleSystem_GetMoveTarget(battleSystem, ctx, ctx->battlerIdAttacker, (u16)ctx->moveTemp, 1, 0);
         ov12_02250A18(battleSystem, ctx, ctx->battlerIdAttacker, ctx->moveTemp);
         ctx->playerActions[ctx->battlerIdAttacker].unk4 = ctx->battlerIdTarget;
     }
@@ -2084,7 +2084,7 @@ BOOL BtlCmd_SetMirrorMove(BattleSystem *battleSystem, BattleContext *ctx) {
         ctx->battleStatus &= ~BATTLE_STATUS_NO_ATTACK_MESSAGE;
         ctx->battleStatus &= ~BATTLE_STATUS_MOVE_ANIMATIONS_OFF;
         ctx->moveNoCur = move;
-        ctx->battlerIdTarget = ov12_022506D4(battleSystem, ctx, ctx->battlerIdAttacker, move, 1, 0);
+        ctx->battlerIdTarget = BattleSystem_GetMoveTarget(battleSystem, ctx, ctx->battlerIdAttacker, move, 1, 0);
         if (ctx->battlerIdTarget == BATTLER_NONE) {
             ctx->commandNext = CONTROLLER_COMMAND_39;
             BattleScriptJump(ctx, NARC_a_0_0_1, BATTLE_SUBSCRIPT_NO_TARGET);
@@ -3976,7 +3976,7 @@ BOOL BtlCmd_MagicCoat(BattleSystem *battleSystem, BattleContext *ctx) {
     } else if (ctx->trainerAIData.moveData[ctx->moveNoCur].range == RANGE_ADJACENT_OPPONENTS || ctx->trainerAIData.moveData[ctx->moveNoCur].range == RANGE_ALL_ADJACENT) {
         ctx->battlerIdTarget = battlerId;
     } else {
-        side = ov12_022506D4(battleSystem, ctx, ctx->battlerIdAttacker, (u16)ctx->moveNoCur, 1, 0);
+        side = BattleSystem_GetMoveTarget(battleSystem, ctx, ctx->battlerIdAttacker, (u16)ctx->moveNoCur, 1, 0);
         if (ctx->selfTurnData[side].lightningRodFlag || ctx->selfTurnData[side].stormDrainFlag) {
             ctx->battlerIdTarget = side;
         } else {
@@ -4235,7 +4235,7 @@ BOOL BtlCmd_TryPursuit(BattleSystem *battleSystem, BattleContext *ctx) {
                     if (GetBattlerAbility(ctx, ctx->battlerIdSwitch) == ABILITY_PRESSURE && ctx->battleMons[battlerId].movePPCur[moveIndex]) {
                         ctx->battleMons[battlerId].movePPCur[moveIndex]--;
                     }
-                    ov12_02252D14(battleSystem, ctx);
+                    BattleContext_ResetMoveStatus(battleSystem, ctx);
                     ctx->battlerIdAttacker = battlerId;
                     ctx->battlerIdTarget = ctx->battlerIdSwitch;
                     ctx->unk_2158 = 20;
@@ -4266,7 +4266,7 @@ BOOL BtlCmd_TryPursuit(BattleSystem *battleSystem, BattleContext *ctx) {
 BOOL BtlCmd_ApplyTypeEffectiveness(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    ctx->damage = ov12_02251D28(battleSystem, ctx, ctx->moveNoCur, ctx->moveType, ctx->battlerIdAttacker, ctx->battlerIdTarget, ctx->damage, &ctx->moveStatusFlag);
+    ctx->damage = BattleSystem_ApplyTypeEffectiveness(battleSystem, ctx, ctx->moveNoCur, ctx->moveType, ctx->battlerIdAttacker, ctx->battlerIdTarget, ctx->damage, &ctx->moveStatusFlag);
 
     return FALSE;
 }
@@ -4815,7 +4815,7 @@ BOOL BtlCmd_IfMovedThisTurn(BattleSystem *battleSystem, BattleContext *ctx) {
     int adrs = BattleScriptReadWord(ctx);
     int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
-    if (ov12_0225561C(ctx, battlerId) == TRUE) {
+    if (BattleContext_IsActionDone(ctx, battlerId) == TRUE) {
         BattleScriptIncrementPointer(ctx, adrs);
     }
 
@@ -5764,7 +5764,7 @@ BOOL BtlCmd_223(BattleSystem *battleSystem, BattleContext *ctx) {
 BOOL BtlCmd_EndScript(BattleSystem *battleSystem, BattleContext *ctx) {
     ctx->battleContinueFlag = TRUE;
 
-    return ov12_0224EC74(ctx);
+    return BattleScript_Return(ctx);
 }
 
 int BattleScriptReadWord(BattleContext *ctx) {
@@ -5784,7 +5784,7 @@ static void BattleScriptJump(BattleContext *ctx, NarcId narcId, int adrs) {
 }
 
 static void BattleScriptGotoSubscript(BattleContext *ctx, NarcId narcId, int adrs) {
-    ov12_0224EBDC(ctx, narcId, adrs);
+    BattleScript_Call(ctx, narcId, adrs);
 }
 
 static void *BattleScriptGetVarPointer(BattleSystem *battleSystem, BattleContext *ctx, int var) {
@@ -6064,7 +6064,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
                 totalExp = totalExp * 150 / 100;
             }
 
-            if (!ov12_022568B0(data->battleSystem, mon)) {
+            if (!BattleSystem_IsPlayerOT(data->battleSystem, mon)) {
                 if (GetMonData(mon, MON_DATA_LANGUAGE, NULL) != gGameLanguage) {
                     totalExp = totalExp * 170 / 100;
                 } else {

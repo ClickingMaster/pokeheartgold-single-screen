@@ -62,21 +62,21 @@ static const u16 sCharactersticMsgs[6][5] = {
 };
 
 static MetCondition MonMetCondition(Pokemon *mon, BOOL isMine);
-static void FormatNature(Unk0208E600 *a0);
-static void FormatDateAndLocationMet(Unk0208E600 *a0, int msgNo);
-static void FormatDateAndLocation_Migrated(Unk0208E600 *a0, int msgNo);
-static void FormatCharacteristic(Unk0208E600 *a0);
-static void FormatFlavorPreference(Unk0208E600 *a0);
-static void FormatDateAndLocation_Egg(Unk0208E600 *a0, int msgNo, BOOL hatched);
-static void FormatEggWatch(Unk0208E600 *a0);
+static void FormatNature(TrainerMemo *a0);
+static void FormatDateAndLocationMet(TrainerMemo *a0, int msgNo);
+static void FormatDateAndLocation_Migrated(TrainerMemo *a0, int msgNo);
+static void FormatCharacteristic(TrainerMemo *a0);
+static void FormatFlavorPreference(TrainerMemo *a0);
+static void FormatDateAndLocation_Egg(TrainerMemo *a0, int msgNo, BOOL hatched);
+static void FormatEggWatch(TrainerMemo *a0);
 static void BoxMon_ClearMetDateAndLocation(BoxPokemon *boxMon, int setMetDateParam);
 static void BoxMon_SetMetDateAndLocation(BoxPokemon *boxMon, int mapsec, int setMetDateParam);
 static void BoxMon_SetFatefulEncounter(BoxPokemon *boxMon);
 static void BoxMon_CopyLevelToMetLevel(BoxPokemon *boxMon);
 static void BoxMon_SetOriginalTrainerData(BoxPokemon *boxMon, PlayerProfile *profile, enum HeapID heapID);
 
-Unk0208E600 *sub_0208E600(Pokemon *mon, BOOL isMine, enum HeapID heapID, int a3) {
-    Unk0208E600 *ptr = Heap_Alloc(heapID, sizeof(Unk0208E600));
+TrainerMemo *TrainerMemo_New(Pokemon *mon, BOOL isMine, enum HeapID heapID, int a3) {
+    TrainerMemo *ptr = Heap_Alloc(heapID, sizeof(TrainerMemo));
     ptr->heapID = heapID;
     ptr->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0302_bin, heapID);
     ptr->msgFmt = MessageFormat_New_Custom(9, 32, ptr->heapID);
@@ -277,7 +277,7 @@ Unk0208E600 *sub_0208E600(Pokemon *mon, BOOL isMine, enum HeapID heapID, int a3)
     return ptr;
 }
 
-void sub_0208E994(Unk0208E600 *a0) {
+void TrainerMemo_Delete(TrainerMemo *a0) {
     if (a0->notepad.nature) {
         Heap_Free(a0->notepad.nature);
     }
@@ -329,7 +329,7 @@ BOOL MonMetadataMatchesEvent(u8 eventNo, Pokemon *mon, BOOL isMine) {
     return FALSE;
 }
 
-static void FormatNature(Unk0208E600 *a0) {
+static void FormatNature(TrainerMemo *a0) {
     int nature = GetMonNature(a0->mon);
     if (nature <= NATURE_QUIRKY) {
         a0->notepad.nature = String_New(0x48, a0->heapID);
@@ -337,7 +337,7 @@ static void FormatNature(Unk0208E600 *a0) {
     }
 }
 
-static void FormatDateAndLocationMet(Unk0208E600 *a0, int msgNo) {
+static void FormatDateAndLocationMet(TrainerMemo *a0, int msgNo) {
     String *str = String_New(0x240, a0->heapID);
     a0->notepad.dateLocationMet = String_New(0x240, a0->heapID);
 
@@ -357,7 +357,7 @@ static void FormatDateAndLocationMet(Unk0208E600 *a0, int msgNo) {
     String_Delete(str);
 }
 
-static void FormatDateAndLocation_Migrated(Unk0208E600 *a0, int msgNo) {
+static void FormatDateAndLocation_Migrated(TrainerMemo *a0, int msgNo) {
     int version;
 
     String *str = String_New(0x120, a0->heapID);
@@ -407,7 +407,7 @@ static void FormatDateAndLocation_Migrated(Unk0208E600 *a0, int msgNo) {
     String_Delete(str);
 }
 
-static void FormatDateAndLocation_Egg(Unk0208E600 *a0, int msgNo, BOOL hatched) {
+static void FormatDateAndLocation_Egg(TrainerMemo *a0, int msgNo, BOOL hatched) {
     String *str = String_New(0x168, a0->heapID);
     a0->notepad.dateLocationMet = String_New(0x168, a0->heapID);
 
@@ -429,7 +429,7 @@ static void FormatDateAndLocation_Egg(Unk0208E600 *a0, int msgNo, BOOL hatched) 
     String_Delete(str);
 }
 
-static void FormatCharacteristic(Unk0208E600 *a0) {
+static void FormatCharacteristic(TrainerMemo *a0) {
     int index;
     int maxIv;
 
@@ -593,7 +593,7 @@ static void FormatCharacteristic(Unk0208E600 *a0) {
     ReadMsgDataIntoString(a0->msgData, sCharactersticMsgs[index][maxIv % 5], a0->notepad.characteristic);
 }
 
-static void FormatFlavorPreference(Unk0208E600 *a0) {
+static void FormatFlavorPreference(TrainerMemo *a0) {
     a0->notepad.flavorPreference = String_New(0x48, a0->heapID);
     int index = 0;
     for (int flavor = FLAVOR_START; flavor < FLAVOR_MAX; flavor++) {
@@ -605,7 +605,7 @@ static void FormatFlavorPreference(Unk0208E600 *a0) {
     ReadMsgDataIntoString(a0->msgData, sFlavorMsgs[index], a0->notepad.flavorPreference);
 }
 
-static void FormatEggWatch(Unk0208E600 *a0) {
+static void FormatEggWatch(TrainerMemo *a0) {
     int msgNo;
 
     int eggCycles = GetMonData(a0->mon, MON_DATA_FRIENDSHIP, NULL);

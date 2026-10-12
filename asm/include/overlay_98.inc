@@ -41,7 +41,7 @@
 .public ManagedSprite_SetDrawFlag
 .public ManagedSprite_SetPaletteOverride
 .public SetMasterBrightnessByColor
-.public sub_02014510
+.public CharTiles_LoadMonRectAsObjFromNarc
 .public Main_SetVBlankIntrCB
 .public HBlankInterruptDisable
 .public Heap_Alloc

@@ -135,7 +135,7 @@ void OakSpeech_InitSpriteEngine(OakSpeechData *data) {
             .manmRes = 0xFFFF,
             .headerId = NARC_resdat_resdat_00000078_bin,
         };
-        sub_0200D294(data->spriteRenderer, data->spriteGfxHandler, &fileIdList);
+        SpriteSystem_LoadResourceDataFromFileIdList(data->spriteRenderer, data->spriteGfxHandler, &fileIdList);
     }
 }
 

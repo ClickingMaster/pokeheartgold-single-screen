@@ -203,7 +203,7 @@ void PokeathlonCourseMonGfx_Load(PokeathlonCourseMonGfxManager *manager, Pokeath
     tex = NNS_G3dGetTex(model);
     texData = (u8 *)tex + tex->texInfo.ofsTex;
     for (i = 0, offset = 0; i < 8; i++) {
-        sub_020145B4(texData + offset, dim, 0, 0, dim, dim, manager->buffer);
+        CharTiles_CopyRectFromBuffer(texData + offset, dim, 0, 0, dim, dim, manager->buffer);
         if (!vramTransfer) {
             if (manager->shiftLargeUp && info->isLarge) {
                 for (j = 0; j < 0x800; j++) {

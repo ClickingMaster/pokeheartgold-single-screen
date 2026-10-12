@@ -119,7 +119,7 @@
 .public MoveIsHM
 .public CalculateHpBarPixelsLength
 .public CalculateHpBarColor
-.public sub_020880CC
+.public BeginAppScreenFade
 .public sub_02088288
 .public PokemonSummary_IsPokeathlonUnlocked
 .public PokemonSummary_SetPages

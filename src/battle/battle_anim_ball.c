@@ -1889,7 +1889,7 @@ void BattleAnimUtil_LoadMonIntoPic(BattleAnimBattlerPicParams *params, int targe
     picTemplate = Pokepic_GetTemplate(params->pokepics[params->battler]);
     *picTemplate = template;
     Pokepic_ScheduleReloadFromNarc(params->pokepics[params->battler]);
-    sub_02014540((NarcId)picTemplate->narcID, picTemplate->charDataID, heapId, params->picData[params->battler]->unk0, personality, FALSE, facing, picTemplate->species);
+    CharTiles_LoadMonPicAsObjFromNarc((NarcId)picTemplate->narcID, picTemplate->charDataID, heapId, params->picData[params->battler]->unk0, personality, FALSE, facing, picTemplate->species);
     params->picData[params->battler]->unk4 = picTemplate->narcID;
     params->picData[params->battler]->unk8 = picTemplate->palDataID;
     params->picData[params->battler]->unkC = GetMonPicHeightBySpeciesGenderForm(species, gender, facing, form, personality);
@@ -1934,7 +1934,7 @@ void BattleAnimUtil_RestorePic(BattleAnimBattlerPicParams *params, enum HeapID h
     } else {
         facing = 0;
     }
-    sub_02014540((NarcId)picTemplate->narcID, picTemplate->charDataID, heapId, params->picData[params->battler]->unk0, personality, FALSE, facing, picTemplate->species);
+    CharTiles_LoadMonPicAsObjFromNarc((NarcId)picTemplate->narcID, picTemplate->charDataID, heapId, params->picData[params->battler]->unk0, personality, FALSE, facing, picTemplate->species);
     params->picData[params->battler]->unk4 = picTemplate->narcID;
     params->picData[params->battler]->unk8 = picTemplate->palDataID;
     params->picData[params->battler]->unkC = GetMonPicHeightBySpeciesGenderForm((u16)species, (u8)gender, (u8)facing, (u8)form, personality);
@@ -1973,7 +1973,7 @@ void ov07_02234A20(BattleAnimBattlerPicParams *params, enum HeapID heapId) {
     picTemplate = Pokepic_GetTemplate(params->pokepics[params->battler]);
     *picTemplate = template;
     Pokepic_ScheduleReloadFromNarc(params->pokepics[params->battler]);
-    sub_02014400((NarcId)picTemplate->narcID, picTemplate->charDataID, heapId, params->picData[params->battler]->unk0);
+    CharTiles_LoadPicAsObjFromNarc((NarcId)picTemplate->narcID, picTemplate->charDataID, heapId, params->picData[params->battler]->unk0);
     params->picData[params->battler]->unk4 = template.narcID;
     params->picData[params->battler]->unk8 = template.palDataID;
     ReadWholeNarcMemberByIdPair(&height, NARC_poketool_pokegra_height_o, member);

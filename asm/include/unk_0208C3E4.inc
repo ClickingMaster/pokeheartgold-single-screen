@@ -10,7 +10,7 @@
 .public BufferAbilityName
 .public BufferItemName
 .public StringExpandPlaceholders
-.public sub_0200CDAC
+.public MessagePrinter_PrintGlyph
 .public DrawFrameAndWindow2
 .public Heap_Free
 .public BgCommitTilemapBufferToVram
@@ -54,7 +54,7 @@
 .public sub_0208DDA0
 .public GetRibbonAttr
 .public GetRibbonDescGmm
-.public sub_0208E600
-.public sub_0208E994
+.public TrainerMemo_New
+.public TrainerMemo_Delete
 .public gOverlayTemplate_Battle
 .public gNatureStatMods

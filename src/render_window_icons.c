@@ -356,8 +356,8 @@ void PokemonPicWindow_LoadMonGfx(PokemonPicWindow *picWindow, Pokemon *mon) {
 
 // The sprite has two 10x10 tile frames side by side in the picture graphic.
 void PokemonPicWindow_LoadGfx(PokemonPicWindow *picWindow, PokepicTemplate *template) {
-    UnkStruct_02014E30 frame0Rect;
-    UnkStruct_02014E30 frame1Rect;
+    TileRect frame0Rect;
+    TileRect frame1Rect;
     void *buffer;
     SpriteResource *resource;
     NNSG2dImageProxy *imageProxy;
@@ -365,16 +365,16 @@ void PokemonPicWindow_LoadGfx(PokemonPicWindow *picWindow, PokepicTemplate *temp
 
     buffer = Heap_Alloc((enum HeapID)picWindow->spriteManager.heapID, 0x1900);
     frame0Rect = sPokemonPicFrame0Rect;
-    sub_020143E0((NarcId) template->narcID, template->charDataID, (enum HeapID)picWindow->spriteManager.heapID, &frame0Rect, buffer);
+    CharTiles_LoadRectAsObjFromNarc((NarcId) template->narcID, template->charDataID, (enum HeapID)picWindow->spriteManager.heapID, &frame0Rect, buffer);
     frame1Rect = sPokemonPicFrame1Rect;
-    sub_020143E0((NarcId) template->narcID, template->charDataID, (enum HeapID)picWindow->spriteManager.heapID, &frame1Rect, (u8 *)buffer + 0xC80);
+    CharTiles_LoadRectAsObjFromNarc((NarcId) template->narcID, template->charDataID, (enum HeapID)picWindow->spriteManager.heapID, &frame1Rect, (u8 *)buffer + 0xC80);
     resource = SpriteResourceCollection_Find(picWindow->spriteManager.spriteResManagers[GF_GFX_RES_TYPE_CHAR], 0x15CD5);
     imageProxy = SpriteTransfer_GetCharProxy(resource);
     location = NNS_G2dGetImageLocation(imageProxy, NNS_G2D_VRAM_TYPE_2DMAIN);
     DC_FlushRange(buffer, 0x1900);
     GX_LoadOBJ(buffer, location, 0x1900);
     Heap_Free(buffer);
-    buffer = sub_02014450((NarcId) template->narcID, template->palDataID, (enum HeapID)picWindow->spriteManager.heapID);
+    buffer = AllocAndLoadPltt16FromNarc((NarcId) template->narcID, template->palDataID, (enum HeapID)picWindow->spriteManager.heapID);
     resource = SpriteResourceCollection_Find(picWindow->spriteManager.spriteResManagers[GF_GFX_RES_TYPE_PLTT], 0x15CD5);
     imageProxy = (NNSG2dImageProxy *)SpriteTransfer_GetPaletteProxy(resource, imageProxy);
     location = NNS_G2dGetImagePaletteLocation((NNSG2dImagePaletteProxy *)imageProxy, NNS_G2D_VRAM_TYPE_2DMAIN);

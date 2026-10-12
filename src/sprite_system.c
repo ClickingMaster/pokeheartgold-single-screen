@@ -73,7 +73,7 @@ BOOL SpriteSystem_Init(SpriteSystem *spriteSystem, const OamManagerParam *oamMan
     if (spriteSystem->hasOamManager == TRUE) {
         OamManager_Create(oamManagerParam->fromOBJmain, oamManagerParam->numOBJmain, oamManagerParam->fromAffineMain, oamManagerParam->numAffineMain, oamManagerParam->fromOBJsub, oamManagerParam->numOBJsub, oamManagerParam->fromAffineSub, oamManagerParam->numAffineSub, spriteSystem->heapID);
     }
-    spriteSystem->cellTransferState = sub_02020654(0x20, spriteSystem->heapID);
+    spriteSystem->cellTransferState = CreateCellTransferStateManager(0x20, spriteSystem->heapID);
     ObjCharTransfer_ClearBuffers();
     ObjPlttTransfer_Reset();
     return TRUE;
@@ -128,7 +128,7 @@ static void SpriteManager_FreeResources(SpriteManager *spriteManager) {
 }
 
 static void SpriteSystem_FreeVramTransfers(SpriteSystem *spriteSystem) {
-    sub_0202067C(spriteSystem->cellTransferState);
+    DestroyCellTransferStateManager(spriteSystem->cellTransferState);
     ObjCharTransfer_Destroy();
     ObjPlttTransfer_Destroy();
     if (spriteSystem->hasOamManager == TRUE) {
@@ -228,11 +228,11 @@ static BOOL SpriteSystem_LoadResourceDataFromFilepaths(SpriteSystem *spriteSyste
     return TRUE;
 }
 
-BOOL sub_0200D294(SpriteSystem *spriteSystem, SpriteManager *spriteManager, const ResdatIdList *fileIdList) {
+BOOL SpriteSystem_LoadResourceDataFromFileIdList(SpriteSystem *spriteSystem, SpriteManager *spriteManager, const ResdatIdList *fileIdList) {
     return SpriteSystem_LoadResourceDataFromFilepaths(spriteSystem, spriteManager, fileIdList, 2, 1);
 }
 
-BOOL sub_0200D2A4(SpriteSystem *spriteSystem, SpriteManager *spriteManager, const ResdatIdList *fileIdList, int loadCharMode, int loadPlttMode) {
+BOOL SpriteSystem_LoadResourceDataFromFileIdListEx(SpriteSystem *spriteSystem, SpriteManager *spriteManager, const ResdatIdList *fileIdList, int loadCharMode, int loadPlttMode) {
     return SpriteSystem_LoadResourceDataFromFilepaths(spriteSystem, spriteManager, fileIdList, loadCharMode, loadPlttMode);
 }
 
@@ -1029,13 +1029,13 @@ void SpriteManager_SetSpriteList(SpriteManager *spriteManager, SpriteList *sprit
     spriteManager->spriteList = spriteList;
 }
 
-void sub_0200E2B8(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, int fileId, BOOL compressed, int resId) {
+void SpriteSystem_ReplaceCharResObjFromOpenNarc(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, int fileId, BOOL compressed, int resId) {
     SpriteResource *obj = SpriteResourceCollection_Find(spriteManager->_2dGfxResMan[GF_GFX_RES_TYPE_CHAR], resId);
     ReplaceCharResObjFromOpenNarc(spriteManager->_2dGfxResMan[GF_GFX_RES_TYPE_CHAR], obj, narc, fileId, compressed, spriteSystem->heapID);
     SpriteTransfer_ReplaceCharData(obj);
 }
 
-void sub_0200E2EC(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, int fileId, BOOL compressed, int resId) {
+void SpriteSystem_ReplacePlttResObjFromOpenNarc(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, int fileId, BOOL compressed, int resId) {
     SpriteResource *obj = SpriteResourceCollection_Find(spriteManager->_2dGfxResMan[GF_GFX_RES_TYPE_PLTT], resId);
     ReplacePlttResObjFromOpenNarc(spriteManager->_2dGfxResMan[GF_GFX_RES_TYPE_PLTT], obj, narc, fileId, compressed, spriteSystem->heapID);
     SpriteTransfer_ReplacePlttData(obj);

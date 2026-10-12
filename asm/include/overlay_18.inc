@@ -122,7 +122,7 @@
 .public SysTask_Destroy
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_02014510
+.public CharTiles_LoadMonRectAsObjFromNarc
 .public MenuInputStateMgr_GetState
 .public MenuInputStateMgr_SetState
 .public BgCellManager_New
@@ -245,11 +245,11 @@
 .public GetMonIconCell64KNaix
 .public GetMonIconAnim64KNaix
 .public Pokedex_ConvertToCurrentDexNo
-.public sub_020880CC
+.public BeginAppScreenFade
 .public LanguageToDexFlag
 .public DexFlagToLanguage
-.public sub_020912AC
-.public sub_020912D0
+.public GetDexLanguageCycleFlag
+.public CycleDexLanguageFlag
 .public SetDexBanksByGiratinaForm
 .public GetPokedexDataNarcID
 .public GetDexWeightMsgBank

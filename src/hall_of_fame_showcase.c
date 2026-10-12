@@ -75,7 +75,7 @@ extern const GraphicsModes sShowcaseGraphicsModes;
 extern const OamCharTransferParam sShowcaseOamCharTransferParam;
 extern const SpriteResourceCountsListUnion sShowcaseSpriteResourceCounts;
 extern const OamManagerParam sShowcaseOamManagerParam;
-extern const UnkStruct_02014E30 sShowcaseMonPicRect;
+extern const TileRect sShowcaseMonPicRect;
 extern const GridCallbacks sShowcaseGridCallbacks;
 extern const s16 sShowcaseIconPositions[];
 extern const s16 sShowcaseIconPositionsY[];
@@ -693,7 +693,7 @@ static inline void HallOfFameShowcase_PrintMonDetail(HallOfFameShowcase *showcas
 
 void HallOfFameShowcase_ShowMonDetail(HallOfFameShowcase *showcase, u32 index) {
     PokepicTemplate pokepic;
-    UnkStruct_02014E30 picRect = sShowcaseMonPicRect;
+    TileRect picRect = sShowcaseMonPicRect;
     s8 yOffset[4];
     s32 firstWindow;
     u32 gender;
@@ -728,7 +728,7 @@ void HallOfFameShowcase_ShowMonDetail(HallOfFameShowcase *showcase, u32 index) {
     buffer = Heap_AllocAtEnd(HEAP_ID_59, 3200);
     personality = showcase->mon.personality;
     GetMonSpriteCharAndPlttNarcIdsEx(&pokepic, showcase->mon.species, GetGenderBySpeciesAndPersonality(showcase->mon.species, personality), 2, (u8)shiny, showcase->mon.form, personality);
-    sub_02014510((NarcId)pokepic.narcID, pokepic.charDataID, HEAP_ID_59, &picRect, buffer, showcase->mon.personality, FALSE, 2, showcase->mon.species);
+    CharTiles_LoadMonRectAsObjFromNarc((NarcId)pokepic.narcID, pokepic.charDataID, HEAP_ID_59, &picRect, buffer, showcase->mon.personality, FALSE, 2, showcase->mon.species);
     HallOfFameShowcase_LoadSubObjChar(buffer, NNS_G2dGetImageLocation(Sprite_GetImageProxy(sprites[slot]->sprite), NNS_G2D_VRAM_TYPE_2DSUB), 3200);
     Heap_Free(buffer);
     GfGfxLoader_GXLoadPal((NarcId)pokepic.narcID, pokepic.palDataID, GF_PAL_LOCATION_SUB_OBJ, (enum GFPalSlotOffset)NNS_G2dGetImagePaletteLocation(Sprite_GetPaletteProxy(sprites[slot]->sprite), NNS_G2D_VRAM_TYPE_2DSUB), 32, HEAP_ID_59);
@@ -818,14 +818,14 @@ void HallOfFameShowcase_CreatePartyIcon(HallOfFameShowcase *showcase, u32 sprite
     buffer = Heap_Alloc(HEAP_ID_59, tileSize);
     // Krabby and Kingler (species 98, 99) walk sideways: their icon uses other frames of the texture.
     if ((u16)(showcase->mon.species + 0xFF9E) <= 1) {
-        sub_020145B4(texData + tileSize * 6, dim, 0, 0, dim, dim, buffer);
+        CharTiles_CopyRectFromBuffer(texData + tileSize * 6, dim, 0, 0, dim, dim, buffer);
         HallOfFameShowcase_LoadMainObjChar(buffer, imageLocation, tileSize);
-        sub_020145B4(texData + tileSize * 7, dim, 0, 0, dim, dim, buffer);
+        CharTiles_CopyRectFromBuffer(texData + tileSize * 7, dim, 0, 0, dim, dim, buffer);
         HallOfFameShowcase_LoadMainObjChar(buffer, imageLocation + tileSize, tileSize);
     } else {
-        sub_020145B4(texData + tileSize * 2, dim, 0, 0, dim, dim, buffer);
+        CharTiles_CopyRectFromBuffer(texData + tileSize * 2, dim, 0, 0, dim, dim, buffer);
         HallOfFameShowcase_LoadMainObjChar(buffer, imageLocation, tileSize);
-        sub_020145B4(texData + tileSize * 3, dim, 0, 0, dim, dim, buffer);
+        CharTiles_CopyRectFromBuffer(texData + tileSize * 3, dim, 0, 0, dim, dim, buffer);
         HallOfFameShowcase_LoadMainObjChar(buffer, imageLocation + tileSize, tileSize);
     }
     Heap_Free(buffer);

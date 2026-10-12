@@ -134,7 +134,7 @@ BOOL BattleSystem_CanPauseRecording(BattleSystem *battleSystem);
 void BattleSystem_StartRecordingStopTask(BattleSystem *battleSystem);
 u8 BattleSystem_GetChatotVoiceParam(BattleSystem *battleSystem, int battlerId);
 Pokemon *BattleSystem_GetBugContestCaughtMon(BattleSystem *battleSystem);
-u8 ov12_0223C140(BattleSystem *battleSystem, u32 battlerId);
+u8 BattleSystem_GetFollowMonSlot(BattleSystem *battleSystem, u32 battlerId);
 void BattleSystem_GetBattlerIdsByType(BattleSystem *battleSystem, u8 *buffer);
 void BattleSystem_GetBattlerTypes(BattleSystem *battleSystem, u8 *buffer);
 void BattleSystem_GetPokepics(BattleSystem *battleSystem, void **a1);

@@ -3176,7 +3176,7 @@ BOOL BallCapsuleEditor_GrowPreviewPokepic(BallCapsuleEditor *editor) {
     }
     Pokepic_AddAttr(editor->display.pokepic, POKEPIC_AFFINEW, 0x20);
     Pokepic_AddAttr(editor->display.pokepic, POKEPIC_AFFINEH, 0x20);
-    sub_0200914C(editor->display.pokepic, editor->display.pokepicY);
+    Pokepic_SetYOffsetForAffineHeight(editor->display.pokepic, editor->display.pokepicY);
     return TRUE;
 }
 
@@ -3191,7 +3191,7 @@ BOOL BallCapsuleEditor_ShrinkPreviewPokepic(BallCapsuleEditor *editor) {
     }
     Pokepic_AddAttr(editor->display.pokepic, POKEPIC_AFFINEW, -0x20);
     Pokepic_AddAttr(editor->display.pokepic, POKEPIC_AFFINEH, -0x20);
-    sub_0200914C(editor->display.pokepic, editor->display.pokepicY);
+    Pokepic_SetYOffsetForAffineHeight(editor->display.pokepic, editor->display.pokepicY);
     return TRUE;
 }
 

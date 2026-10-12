@@ -3,7 +3,7 @@
 .public GF_GetCurrentPlayingBGM
 .public GF_SetVolumeBySeqNo
 .public PlayBGM
-.public sub_02005E44
+.public PlayBGMOnBGMPlayerInField
 .public StopBGM
 .public PlaySE
 .public PlaySE_SetVolume
@@ -43,7 +43,7 @@
 .public SysTask_Destroy
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_020145B4
+.public CharTiles_CopyRectFromBuffer
 .public Main_SetVBlankIntrCB
 .public HBlankInterruptDisable
 .public Heap_Alloc

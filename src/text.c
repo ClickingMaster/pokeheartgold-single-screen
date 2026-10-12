@@ -18,9 +18,9 @@ static BOOL TextPrinterSysTaskIsActive(u8 printerId);
 static u8 AddTextPrinter(TextPrinterTemplate *template, u32 speed, PrinterCallback_t callback);
 static void RunTextPrinter(SysTask *task, TextPrinter *printer);
 static RenderResult RenderFont(TextPrinter *printer);
-static void sub_020204B8(TextPrinter *printer);
+static void TextPrinter_InitFocusIndicatorGfx(TextPrinter *printer);
 static u16 *LoadScreenFocusIndicatorGraphics(void);
-static void sub_02020548(TextPrinter *printer);
+static void TextPrinter_FreeFocusIndicatorGfx(TextPrinter *printer);
 
 void SetFontsPointer(const struct FontInfo *fonts) {
     sFonts = fonts;
@@ -51,7 +51,7 @@ static void DestroyTextPrinterSysTask(u8 printerId) {
 
     TextPrinter *printer = SysTask_GetData(sTextPrinterTasks[printerId]);
     if (printer != NULL) {
-        sub_02020548(printer);
+        TextPrinter_FreeFocusIndicatorGfx(printer);
         Heap_Free(printer);
     }
 
@@ -166,7 +166,7 @@ static u8 AddTextPrinter(TextPrinterTemplate *template, u32 speed, PrinterCallba
     printer->callback = callback;
     _021D1F6C = 0;
 
-    sub_020204B8(printer);
+    TextPrinter_InitFocusIndicatorGfx(printer);
 
     if (speed != TEXT_SPEED_NOTRANSFER && speed != TEXT_SPEED_INSTANT) {
         printer->textSpeedBottom--;
@@ -192,7 +192,7 @@ static u8 AddTextPrinter(TextPrinterTemplate *template, u32 speed, PrinterCallba
         CopyWindowToVram(printer->template.window);
     }
 
-    sub_02020548(printer);
+    TextPrinter_FreeFocusIndicatorGfx(printer);
     Heap_Free(printer);
 
     return MAX_TEXT_PRINTERS;
@@ -278,8 +278,8 @@ void DecompressGlyphTile(const u8 *src, u8 *dest) {
     dest16[15] = sFontHalfRowLookupTable[(u32)src16[7] & 0xFF];
 }
 
-static void sub_020204B8(TextPrinter *printer) {
-    printer->unk30 = NULL;
+static void TextPrinter_InitFocusIndicatorGfx(TextPrinter *printer) {
+    printer->focusIndicatorGfx = NULL;
 }
 
 static u16 *LoadScreenFocusIndicatorGraphics(void) {
@@ -296,18 +296,18 @@ static u16 *LoadScreenFocusIndicatorGraphics(void) {
 void RenderScreenFocusIndicatorTile(TextPrinter *printer, u32 unusedX, u32 unusedY, u16 fieldNum) {
     Window *window = printer->template.window;
 
-    if (printer->unk30 == NULL) {
-        printer->unk30 = LoadScreenFocusIndicatorGraphics();
+    if (printer->focusIndicatorGfx == NULL) {
+        printer->focusIndicatorGfx = LoadScreenFocusIndicatorGraphics();
     }
 
-    u16 *startAddr = (void *)printer->unk30 + (fieldNum * (24 * 8 * sizeof(u16)));
+    u16 *startAddr = (void *)printer->focusIndicatorGfx + (fieldNum * (24 * 8 * sizeof(u16)));
     u16 destX = (GetWindowWidth(window) - 3) * 8;
     BlitBitmapRectToWindow(window, startAddr, 0, 0, 24, 32, destX, 0, 24, 32);
 }
 
-static void sub_02020548(TextPrinter *printer) {
-    if (printer->unk30 != NULL) {
-        Heap_Free(printer->unk30);
-        printer->unk30 = NULL;
+static void TextPrinter_FreeFocusIndicatorGfx(TextPrinter *printer) {
+    if (printer->focusIndicatorGfx != NULL) {
+        Heap_Free(printer->focusIndicatorGfx);
+        printer->focusIndicatorGfx = NULL;
     }
 }

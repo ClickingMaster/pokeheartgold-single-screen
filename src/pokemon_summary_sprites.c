@@ -70,7 +70,7 @@ void PokemonSummary_InitSpriteSystem(PokemonSummary *summary) {
     SpriteSystem_Init(summary->spriteSystem, &oamManagerParam, &oamTransferParam, 32);
     SpriteSystem_InitSprites(summary->spriteSystem, summary->spriteManager, POKEMON_SUMMARY_SPRITE_COUNT);
     resdatIds = gPokemonSummarySpriteResdatIds;
-    sub_0200D294(summary->spriteSystem, summary->spriteManager, &resdatIds);
+    SpriteSystem_LoadResourceDataFromFileIdList(summary->spriteSystem, summary->spriteManager, &resdatIds);
 }
 
 #pragma force_active off

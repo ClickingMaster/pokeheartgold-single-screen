@@ -322,8 +322,8 @@ void PokeathlonSnowThrowDisplay_LoadMonPics(PokeathlonSnowThrowDisplay *display,
     // (steps a byte pointer through monPics, as built)
     do {
         GetMonSpriteCharAndPlttNarcIdsEx(&template, mons->species, mons->gender, 0, mons->isShiny, (u8)mons->form, mons->personality);
-        ((PokeathlonSnowThrowMonPic *)(pic + offsetof(PokeathlonSnowThrowDisplay, monPics)))->character = sub_0201457C((NarcId) template.narcID, template.charDataID, display->heapId, mons->personality, FALSE, 0, mons->species);
-        ((PokeathlonSnowThrowMonPic *)(pic + offsetof(PokeathlonSnowThrowDisplay, monPics)))->palette = sub_02014450((NarcId) template.narcID, template.palDataID, display->heapId);
+        ((PokeathlonSnowThrowMonPic *)(pic + offsetof(PokeathlonSnowThrowDisplay, monPics)))->character = CharTiles_AllocAndLoadMonPicAsObjFromNarc((NarcId) template.narcID, template.charDataID, display->heapId, mons->personality, FALSE, 0, mons->species);
+        ((PokeathlonSnowThrowMonPic *)(pic + offsetof(PokeathlonSnowThrowDisplay, monPics)))->palette = AllocAndLoadPltt16FromNarc((NarcId) template.narcID, template.palDataID, display->heapId);
         mons++;
         pic += sizeof(PokeathlonSnowThrowMonPic);
         i++;

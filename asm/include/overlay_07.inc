@@ -91,8 +91,8 @@
 .public SysTask_CreateOnVBlankQueue
 .public SysTask_CreateOnVWaitQueue
 .public SysTask_Destroy
-.public sub_02014400
-.public sub_02014540
+.public CharTiles_LoadPicAsObjFromNarc
+.public CharTiles_LoadMonPicAsObjFromNarc
 .public DoubleBuffer_New
 .public DoubleBuffer_Delete
 .public DoubleBuffer_GetCurrent

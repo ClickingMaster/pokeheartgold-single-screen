@@ -58,6 +58,6 @@ u16 GF_GetVolumeBySeqNo();
 
 void sub_02005448(); // One original caller passes the sequence through the existing r0 value.
 void Sound_SetScene(int a0);
-void sub_02005BEC(BOOL);
+void Sound_SetSelectSEMuted(BOOL);
 
 #endif // POKEHEARTGOLD_SOUND_SYSTEM_H

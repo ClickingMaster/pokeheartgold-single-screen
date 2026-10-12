@@ -7,11 +7,11 @@
 
 // The PC mailbox (overlay 103): lists the stored mail, ten per page, and lets the player read, erase or give
 // a piece of mail to a party Pokemon.
-typedef struct UnkStruct_0203F074 {
+typedef struct MailboxAppArgs {
     SaveData *saveData;
     FieldSystem *fieldSystem;
     MenuInputStateMgr *menuInputStatePtr;
-} UnkStruct_0203F074;
+} MailboxAppArgs;
 
 BOOL MailboxApp_Init(OverlayManager *man, int *state);
 BOOL MailboxApp_Main(OverlayManager *man, int *state);

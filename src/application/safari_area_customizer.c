@@ -1803,7 +1803,7 @@ void SafariAreaCustomizer_CreateSpriteManager(SafariAreaCustomizer *s) {
     if (s->spriteSystem != NULL) {
         s->spriteManager = SpriteManager_New(s->spriteSystem);
         SpriteSystem_InitSprites(s->spriteSystem, s->spriteManager, 140);
-        sub_0200D2A4(s->spriteSystem, s->spriteManager, &ov108_021EA97C, 2, 0);
+        SpriteSystem_LoadResourceDataFromFileIdListEx(s->spriteSystem, s->spriteManager, &ov108_021EA97C, 2, 0);
         SafariAreaCustomizerSpriteRes_SetSpriteList(s->spriteRes, SpriteManager_GetSpriteList(s->spriteManager));
     }
 }

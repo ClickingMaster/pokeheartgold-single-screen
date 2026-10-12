@@ -39,29 +39,29 @@
 	.public _0206366E
 	.public _0206367C
 	.public _02063680
-	.public _020FE0C4
-	.public _020FE0D4
-	.public _020FE0E4
+	.public gLookSidewaysAxisByFacing
+	.public gLookSidewaysDirections
+	.public gTypeBehaviorSpinOrders
 	.public gMapObjectTypeBehaviorInits
 	.public gMapObjectTypeBehaviorChecks
 	.public gMapObjectTypeBehaviorUpdates
 	.public _020FE194
-	.public _020FE1A4
+	.public gTrainerApproachStateFuncs
 
 	.text
 	.public MapObjectMovementCmd108_Step1
 	.rodata
 
-	.public _020FE0C4
-_020FE0C4:
+	.public gLookSidewaysAxisByFacing
+gLookSidewaysAxisByFacing:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
-	.public _020FE0D4
-_020FE0D4:
+	.public gLookSidewaysDirections
+gLookSidewaysDirections:
 	.byte 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
-	.public _020FE0E4
-_020FE0E4:
+	.public gTypeBehaviorSpinOrders
+gTypeBehaviorSpinOrders:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00
@@ -71,9 +71,9 @@ gMapObjectTypeBehaviorInits:
 	.word TypeBehavior_NoOpInit
 	.word TypeBehavior_NoOpInit
 	.word TypeBehavior_NoOpInit
-	.word sub_02063B08
-	.word sub_02063C88
-	.word sub_02063C88
+	.word TypeBehavior_LookSidewaysInit
+	.word TypeBehavior_SpinInit
+	.word TypeBehavior_SpinInit
 	.word TypeBehavior_NoOpInit
 	.word TypeBehavior_NoOpInit
 	.word TypeBehavior_NoOpInit
@@ -85,9 +85,9 @@ gMapObjectTypeBehaviorChecks:
 	.word TypeBehavior_NoOpCheck
 	.word TypeBehavior_NoOpCheck
 	.word TypeBehavior_NoOpCheck
-	.word sub_02063B20
-	.word sub_02063CB4
-	.word sub_02063CB4
+	.word TypeBehavior_LookSidewaysCheck
+	.word TypeBehavior_SpinCheck
+	.word TypeBehavior_SpinCheck
 	.word TypeBehavior_NoOpCheck
 	.word TypeBehavior_NoOpCheck
 	.word TypeBehavior_NoOpCheck
@@ -99,9 +99,9 @@ gMapObjectTypeBehaviorUpdates:
 	.word TypeBehavior_NoOpUpdate
 	.word TypeBehavior_NoOpUpdate
 	.word TypeBehavior_NoOpUpdate
-	.word sub_02063B9C
-	.word sub_02063D30
-	.word sub_02063D30
+	.word TypeBehavior_LookSidewaysUpdate
+	.word TypeBehavior_SpinUpdate
+	.word TypeBehavior_SpinUpdate
 	.word TypeBehavior_NoOpUpdate
 	.word TypeBehavior_NoOpUpdate
 	.word TypeBehavior_NoOpUpdate
@@ -114,23 +114,23 @@ _020FE194:
 	.word TrainerSight_GetDistanceSouth
 	.word TrainerSight_GetDistanceWest
 	.word TrainerSight_GetDistanceEast
-	.public _020FE1A4
-_020FE1A4:
-	.word sub_0206464C
-	.word sub_02064668
-	.word sub_02064694
-	.word sub_020646DC
-	.word sub_02064714
-	.word sub_02064730
-	.word sub_02064748
-	.word sub_02064764
-	.word sub_02064778
-	.word sub_02064790
-	.word sub_020647A8
-	.word sub_020647C0
-	.word sub_020647E8
-	.word sub_02064808
-	.word sub_02064824
-	.word sub_020648A0
-	.word sub_020648C8
-	.word sub_020648E4
+	.public gTrainerApproachStateFuncs
+gTrainerApproachStateFuncs:
+	.word TrainerApproach_UnpauseTrainer
+	.word TrainerApproach_FaceDirection
+	.word TrainerApproach_WaitForPlayer
+	.word TrainerApproach_StartFace
+	.word TrainerApproach_WaitFace
+	.word TrainerApproach_SpawnExclamation
+	.word TrainerApproach_WaitExclamation
+	.word TrainerApproach_StartReveal
+	.word TrainerApproach_WaitReveal
+	.word TrainerApproach_Wait
+	.word TrainerApproach_CheckDistance
+	.word TrainerApproach_StartStep
+	.word TrainerApproach_WaitStep
+	.word TrainerApproach_WaitArrived
+	.word TrainerApproach_TurnPlayer
+	.word TrainerApproach_WaitPlayerTurn
+	.word TrainerApproach_ResetTrainerMovement
+	.word TrainerApproach_Finish

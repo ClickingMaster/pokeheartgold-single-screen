@@ -23,165 +23,165 @@ ov01_02206D00: ; 0x02206D00
 	.short 0x0891, 0x0911, 0x0012, 0x0000, 0x0002, 0x0001, 0x0801, 0x0811
 	.short 0x0821, 0x0000
 
-	.public ov01_02206D14
-ov01_02206D14:
-	.word ov01_021F7478
-	.word ov01_021F7810
-	.word ov01_021F74B4
-	.word ov01_021F74C8
-	.word ov01_021F7504
+	.public gLargeFollowMonDrawCallbacks
+gLargeFollowMonDrawCallbacks:
+	.word FollowMonDraw_Init
+	.word FollowMonDraw_UpdateLarge
+	.word FollowMonDraw_Delete
+	.word FollowMonDraw_Pause
+	.word FollowMonDraw_Resume
 
-	.public ov01_02206D28
-ov01_02206D28:
-	.word ov01_021F73CC
-	.word ov01_021F772C
-	.word ov01_021F73F4
-	.word ov01_021F7408
-	.word ov01_021F7434
+	.public gNpcDrawCallbacks
+gNpcDrawCallbacks:
+	.word BillboardDraw_Init
+	.word BillboardDraw_UpdateNpc
+	.word BillboardDraw_Delete
+	.word BillboardDraw_Pause
+	.word BillboardDraw_Resume
 
-	.public ov01_02206D3C
-ov01_02206D3C:
+	.public gLegendaryBirdDrawCallbacks
+gLegendaryBirdDrawCallbacks:
 	.word LegendaryBirdObject_Init
 	.word LegendaryBirdObject_Update
 	.word LegendaryBirdObject_Delete
 	.word LegendaryBirdObject_Pause
 	.word LegendaryBirdObject_Resume
 
-	.public ov01_02206D50
-ov01_02206D50:
-	.word ov01_021F73CC
-	.word ov01_021F7C14
-	.word ov01_021F73F4
-	.word ov01_021F7408
-	.word ov01_021F7434
+	.public gPcWomanDrawCallbacks
+gPcWomanDrawCallbacks:
+	.word BillboardDraw_Init
+	.word BillboardDraw_UpdatePcWoman
+	.word BillboardDraw_Delete
+	.word BillboardDraw_Pause
+	.word BillboardDraw_Resume
 
-	.public ov01_02206D64
-ov01_02206D64:
-	.word ov01_021F7DA8
-	.word ov01_021F8A4C
-	.word ov01_021F7DD0
-	.word ov01_021F7DFC
-	.word ov01_021F7E28
+	.public gPlayerPoketchDrawCallbacks
+gPlayerPoketchDrawCallbacks:
+	.word PlayerDraw_Init
+	.word PlayerDraw_UpdatePoketch
+	.word PlayerDraw_Delete
+	.word PlayerDraw_Pause
+	.word PlayerDraw_Resume
 
-	.public ov01_02206D78
-ov01_02206D78:
-	.word ov01_021F7DA8
-	.word ov01_021F894C
-	.word ov01_021F7DD0
-	.word ov01_021F7DFC
-	.word ov01_021F7E28
+	.public gPlayerUseHmOrSavingDrawCallbacks
+gPlayerUseHmOrSavingDrawCallbacks:
+	.word PlayerDraw_Init
+	.word PlayerDraw_UpdateUseHmOrSaving
+	.word PlayerDraw_Delete
+	.word PlayerDraw_Pause
+	.word PlayerDraw_Resume
 
-	.public ov01_02206D8C
-ov01_02206D8C:
-	.word ov01_021F7DA8
-	.word ov01_021F8B30
-	.word ov01_021F7DD0
-	.word ov01_021F7DFC
-	.word ov01_021F7E28
+	.public gPlayerApricornShakeDrawCallbacks
+gPlayerApricornShakeDrawCallbacks:
+	.word PlayerDraw_Init
+	.word PlayerDraw_UpdateApricornShake
+	.word PlayerDraw_Delete
+	.word PlayerDraw_Pause
+	.word PlayerDraw_Resume
 
-	.public ov01_02206DA0
-ov01_02206DA0:
-	.word ov01_021F7DA8
-	.word ov01_021F878C
-	.word ov01_021F7DD0
-	.word ov01_021F7DFC
-	.word ov01_021F7E28
+	.public gPlayerLadderDrawCallbacks
+gPlayerLadderDrawCallbacks:
+	.word PlayerDraw_Init
+	.word PlayerDraw_UpdateLadder
+	.word PlayerDraw_Delete
+	.word PlayerDraw_Pause
+	.word PlayerDraw_Resume
 
-	.public ov01_02206DB4
-ov01_02206DB4:
-	.word ov01_021F73CC
-	.word ov01_021F77A4
-	.word ov01_021F73F4
-	.word ov01_021F7408
-	.word ov01_021F7434
+	.public gUnanimatedObjectDrawCallbacks
+gUnanimatedObjectDrawCallbacks:
+	.word BillboardDraw_Init
+	.word BillboardDraw_UpdatePositionOnly
+	.word BillboardDraw_Delete
+	.word BillboardDraw_Pause
+	.word BillboardDraw_Resume
 
-	.public ov01_02206DC8
-ov01_02206DC8:
-	.word ov01_021F73CC
-	.word ov01_021F77D0
-	.word ov01_021F73F4
-	.word ov01_021F7408
-	.word ov01_021F7434
+	.public gLoopingObjectDrawCallbacks
+gLoopingObjectDrawCallbacks:
+	.word BillboardDraw_Init
+	.word BillboardDraw_UpdateLooping
+	.word BillboardDraw_Delete
+	.word BillboardDraw_Pause
+	.word BillboardDraw_Resume
 
-	.public ov01_02206DDC
-ov01_02206DDC:
-	.word ov01_021F7DA8
-	.word ov01_021F89B8
-	.word ov01_021F7DD0
-	.word ov01_021F7DFC
-	.word ov01_021F7E28
+	.public gPlayerWateringDrawCallbacks
+gPlayerWateringDrawCallbacks:
+	.word PlayerDraw_Init
+	.word PlayerDraw_UpdateWatering
+	.word PlayerDraw_Delete
+	.word PlayerDraw_Pause
+	.word PlayerDraw_Resume
 
-	.public ov01_02206DF0
-ov01_02206DF0:
+	.public gApricornTreeDrawCallbacks
+gApricornTreeDrawCallbacks:
 	.word ApricornTreeObject_Init
 	.word ApricornTreeObject_Update
 	.word ApricornTreeObject_Delete
 	.word ApricornTreeObject_Pause
 	.word ApricornTreeObject_Resume
 
-	.public ov01_02206E04
-ov01_02206E04:
-	.word ov01_021F8CFC
-	.word ov01_021F8D24
-	.word ov01_021F8D28
-	.word ov01_021F8D40
-	.word ov01_021F8D58
+	.public gModelObjectDrawCallbacks
+gModelObjectDrawCallbacks:
+	.word ModelObjectDraw_Init
+	.word ModelObjectDraw_Update
+	.word ModelObjectDraw_Delete
+	.word ModelObjectDraw_Pause
+	.word ModelObjectDraw_Resume
 
-	.public ov01_02206E18
-ov01_02206E18:
-	.word ov01_021F7DA8
-	.word ov01_021F84F4
-	.word ov01_021F7DD0
-	.word ov01_021F7DFC
-	.word ov01_021F7E28
+	.public gPlayerFishingDrawCallbacks
+gPlayerFishingDrawCallbacks:
+	.word PlayerDraw_Init
+	.word PlayerDraw_UpdateFishing
+	.word PlayerDraw_Delete
+	.word PlayerDraw_Pause
+	.word PlayerDraw_Resume
 
 	.public ov01_02206E2C
 ov01_02206E2C:
-	.word ov01_021F73CC
+	.word BillboardDraw_Init
 	.word ov01_021F7CE4
-	.word ov01_021F73F4
-	.word ov01_021F7408
-	.word ov01_021F7434
+	.word BillboardDraw_Delete
+	.word BillboardDraw_Pause
+	.word BillboardDraw_Resume
 
-	.public ov01_02206E40
-ov01_02206E40:
-	.word ov01_021F7DA8
-	.word ov01_021F7E6C
-	.word ov01_021F7DD0
-	.word ov01_021F7DFC
-	.word ov01_021F7E28
+	.public gPlayerWalkingDrawCallbacks
+gPlayerWalkingDrawCallbacks:
+	.word PlayerDraw_Init
+	.word PlayerDraw_UpdateWalking
+	.word PlayerDraw_Delete
+	.word PlayerDraw_Pause
+	.word PlayerDraw_Resume
 
-	.public ov01_02206E54
-ov01_02206E54:
-	.word ov01_021F7DA8
-	.word ov01_021F88F0
-	.word ov01_021F7DD0
-	.word ov01_021F7DFC
-	.word ov01_021F7E28
+	.public gPlayerSurfingDrawCallbacks
+gPlayerSurfingDrawCallbacks:
+	.word PlayerDraw_Init
+	.word PlayerDraw_UpdateSurfing
+	.word PlayerDraw_Delete
+	.word PlayerDraw_Pause
+	.word PlayerDraw_Resume
 
-	.public ov01_02206E68
-ov01_02206E68:
-	.word ov01_021F7DA8
-	.word ov01_021F8AB0
-	.word ov01_021F7DD0
-	.word ov01_021F7DFC
-	.word ov01_021F7E28
+	.public gPlayerHealDrawCallbacks
+gPlayerHealDrawCallbacks:
+	.word PlayerDraw_Init
+	.word PlayerDraw_UpdateHeal
+	.word PlayerDraw_Delete
+	.word PlayerDraw_Pause
+	.word PlayerDraw_Resume
 
-	.public ov01_02206E7C
-ov01_02206E7C:
-	.word ov01_021F7DA8
-	.word ov01_021F82F0
-	.word ov01_021F7DD0
-	.word ov01_021F7DFC
-	.word ov01_021F7E28
+	.public gPlayerCyclingDrawCallbacks
+gPlayerCyclingDrawCallbacks:
+	.word PlayerDraw_Init
+	.word PlayerDraw_UpdateCycling
+	.word PlayerDraw_Delete
+	.word PlayerDraw_Pause
+	.word PlayerDraw_Resume
 
-	.public ov01_02206E90
-ov01_02206E90:
-	.word ov01_021F7478
-	.word ov01_021F7894
-	.word ov01_021F74B4
-	.word ov01_021F74C8
-	.word ov01_021F7504
+	.public gFollowMonDrawCallbacks
+gFollowMonDrawCallbacks:
+	.word FollowMonDraw_Init
+	.word FollowMonDraw_Update
+	.word FollowMonDraw_Delete
+	.word FollowMonDraw_Pause
+	.word FollowMonDraw_Resume
 
 	.public ov01_02206EA4
 ov01_02206EA4:
@@ -1342,23 +1342,23 @@ ov01_022074A8: ; 0x022074A8
 
 	.public gMapObjectDrawCallbacks
 gMapObjectDrawCallbacks:
-	.word ov01_02206D28
-	.word ov01_02206DB4
-	.word ov01_02206DC8
-	.word ov01_02206E40
-	.word ov01_02206E7C
-	.word ov01_02206D78
-	.word ov01_02206DDC
-	.word ov01_02206E54
-	.word ov01_02206E18
-	.word ov01_02206DA0
-	.word ov01_02206E68
-	.word ov01_02206D64
-	.word ov01_02206D50
-	.word ov01_02206D3C
+	.word gNpcDrawCallbacks
+	.word gUnanimatedObjectDrawCallbacks
+	.word gLoopingObjectDrawCallbacks
+	.word gPlayerWalkingDrawCallbacks
+	.word gPlayerCyclingDrawCallbacks
+	.word gPlayerUseHmOrSavingDrawCallbacks
+	.word gPlayerWateringDrawCallbacks
+	.word gPlayerSurfingDrawCallbacks
+	.word gPlayerFishingDrawCallbacks
+	.word gPlayerLadderDrawCallbacks
+	.word gPlayerHealDrawCallbacks
+	.word gPlayerPoketchDrawCallbacks
+	.word gPcWomanDrawCallbacks
+	.word gLegendaryBirdDrawCallbacks
 	.word ov01_02206E2C
-	.word ov01_02206E04
-	.word ov01_02206D14
-	.word ov01_02206E90
-	.word ov01_02206DF0
-	.word ov01_02206D8C
+	.word gModelObjectDrawCallbacks
+	.word gLargeFollowMonDrawCallbacks
+	.word gFollowMonDrawCallbacks
+	.word gApricornTreeDrawCallbacks
+	.word gPlayerApricornShakeDrawCallbacks

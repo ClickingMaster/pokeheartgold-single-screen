@@ -49,7 +49,7 @@
 .public StringExpandPlaceholders
 .public MessagePrinter_New
 .public MessagePrinter_Delete
-.public sub_0200CDAC
+.public MessagePrinter_PrintGlyph
 .public SpriteSystem_Alloc
 .public SpriteManager_New
 .public SpriteSystem_GetRenderer
@@ -107,7 +107,7 @@
 .public TextOBJLayout_New
 .public TextOBJLayout_Delete
 .public TextOBJ_CopyFromBGWindow
-.public sub_02014510
+.public CharTiles_LoadMonRectAsObjFromNarc
 .public YesNoPrompt_Create
 .public YesNoPrompt_Destroy
 .public YesNoPrompt_InitFromTemplate

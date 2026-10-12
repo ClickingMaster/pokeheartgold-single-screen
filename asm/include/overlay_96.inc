@@ -14,7 +14,7 @@
 .public Sound_SetPlayerPause
 .public GF_SndSetTrackPitchBySeqNo
 .public GF_SndSetTrackPitchByPlayerNo
-.public sub_02005B78
+.public GF_SndReadSeqVariable
 .public PlayBGM
 .public StopBGM
 .public GF_SndStartFadeOutBGM
@@ -24,7 +24,7 @@
 .public PlaySE_SetPitch
 .public StopSE
 .public IsSEPlaying
-.public sub_02006190
+.public GF_SndCountPlayingSeqOnPlayer
 .public SetPlayerPan
 .public PlayCry
 .public IsCryFinished
@@ -156,10 +156,10 @@
 .public TextOBJLayout_Delete
 .public TextOBJLayout_GetCharSize
 .public TextOBJ_Destroy
-.public sub_02014450
-.public sub_02014510
-.public sub_0201457C
-.public sub_020145B4
+.public AllocAndLoadPltt16FromNarc
+.public CharTiles_LoadMonRectAsObjFromNarc
+.public CharTiles_AllocAndLoadMonPicAsObjFromNarc
+.public CharTiles_CopyRectFromBuffer
 .public Main_SetVBlankIntrCB
 .public Main_SetHBlankIntrCB
 .public Heap_Create
@@ -211,9 +211,9 @@
 .public GF_CreateVramTransferManager
 .public GF_DestroyVramTransferManager
 .public GF_RunVramTransferTasks
-.public sub_02020654
+.public CreateCellTransferStateManager
 .public thunk_UpdateCellTransferStateManager
-.public sub_0202067C
+.public DestroyCellTransferStateManager
 .public CalcAngleBetweenVecs
 .public Point2D_IsLeftOfLine
 .public Point2D_SegmentsIntersect

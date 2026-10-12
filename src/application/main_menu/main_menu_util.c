@@ -50,7 +50,7 @@ u32 GetMonGender(void *mon);
 u32 MonIsShiny(void *mon);
 void GetMonSpriteCharAndPlttNarcIdsEx(void *template, u16 species, u8 gender, int whichFacing, u8 shiny, u8 form, int personality);
 u32 GetMonData(void *mon, int field, void *dest);
-void sub_02014494(u16 narcId, u16 charId, enum HeapID heapId, int x, int y, int width, int height, void *dest, u32 personality, int a9, int whichFacing, int species);
+void CharTiles_LoadMonObjBlocksFromNarc(u16 narcId, u16 charId, enum HeapID heapId, int x, int y, int width, int height, void *dest, u32 personality, int a9, int whichFacing, int species);
 u32 GetItemIndexMapping(u16 itemId, int attr);
 u32 GetItemIconCell(u32 plttId);
 u32 GetItemIconAnim(u32 cell);
@@ -590,7 +590,7 @@ void MainMenuUtil_LoadGiftMonSprite(Sprite *sprite, Pokemon *mon, int species, i
     GetMonSpriteCharAndPlttNarcIdsEx(narcIds, species, gender, 2, shiny, form, 0);
     {
         u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
-        sub_02014494(narcIds[0], narcIds[1], gMainMenuUtilWork.heapId, 0, 0, 10, 10, charData, personality, 0, 2, species);
+        CharTiles_LoadMonObjBlocksFromNarc(narcIds[0], narcIds[1], gMainMenuUtilWork.heapId, 0, 0, 10, 10, charData, personality, 0, 2, species);
     }
     DC_FlushRange(charData, 0xC80);
     GXS_LoadOBJ(charData, NNS_G2dGetImageLocation(Sprite_GetImageProxy(sprite), NNS_G2D_VRAM_TYPE_2DSUB) + 0xC80, 0xC80);

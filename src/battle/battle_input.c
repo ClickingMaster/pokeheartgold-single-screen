@@ -1342,7 +1342,7 @@ void *BattleInput_NewInit(NARC *unused, NARC *unused2, BattleSystem *battleSyste
 
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < MAX_MON_MOVES; j++) {
-            battleInput->moveMemory[i].typeIcon[j] = Heap_Alloc(HEAP_ID_BATTLE, sub_0208805C(6));
+            battleInput->moveMemory[i].typeIcon[j] = Heap_Alloc(HEAP_ID_BATTLE, GetOamCharSize(6));
         }
     }
 
@@ -2898,7 +2898,7 @@ void BattleInput_LoadFightMenuText(BattleInput *battleInput, int battlerId, cons
     int ppColor;
     MsgData *msgLoader = BattleSystem_GetMessageLoader(battleInput->battleSystem);
     moveDisplayObj = BattleInput_GetMoveMemory(battleInput, battlerId);
-    size = sub_0208805C(6);
+    size = GetOamCharSize(6);
     strPP = NewString_ReadMsgData(msgLoader, msg_0197_00938); // PP
     messageFormat = BattleSystem_GetMessageFormat(battleInput->battleSystem);
     strSlashFormatted = String_New((2 + 2 + 1 + 2) * 2 + 2, HEAP_ID_BATTLE);
@@ -2989,7 +2989,7 @@ static void BattleInput_CreateMoveTypeIcons(BattleInput *battleInput) {
 
             NNSG2dImageProxy *proxy = Sprite_GetImageProxy(battleInput->spriteTypeIcons[i]->sprite);
 
-            MI_CpuCopy16(moveDisplayObj->typeIcon[i], (void *)(G2S_GetOBJCharPtr() + (u32)proxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DSUB]), sub_0208805C(6));
+            MI_CpuCopy16(moveDisplayObj->typeIcon[i], (void *)(G2S_GetOBJCharPtr() + (u32)proxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DSUB]), GetOamCharSize(6));
         }
     }
 }

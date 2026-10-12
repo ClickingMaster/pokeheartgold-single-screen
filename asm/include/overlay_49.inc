@@ -156,9 +156,9 @@
 .public GF_CreateVramTransferManager
 .public GF_DestroyVramTransferManager
 .public GF_RunVramTransferTasks
-.public sub_02020654
+.public CreateCellTransferStateManager
 .public thunk_UpdateCellTransferStateManager
-.public sub_0202067C
+.public DestroyCellTransferStateManager
 .public ObjCharTransfer_InitEx
 .public ObjCharTransfer_Destroy
 .public ObjCharTransfer_ClearBuffers

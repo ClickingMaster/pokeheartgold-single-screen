@@ -34,7 +34,7 @@
 .public SpriteSystem_TransferOam
 .public SpriteSystem_DestroySpriteManager
 .public SpriteSystem_Free
-.public sub_0200D2A4
+.public SpriteSystem_LoadResourceDataFromFileIdListEx
 .public SpriteSystem_CreateSpriteFromResourceHeader
 .public SpriteSystem_InitManagerWithCapacities
 .public SpriteSystem_LoadCharResObjFromOpenNarc
@@ -47,7 +47,7 @@
 .public ManagedSprite_SetDrawFlag
 .public SpriteManager_GetSpriteList
 .public SpriteManager_SetSpriteList
-.public sub_0200E2B8
+.public SpriteSystem_ReplaceCharResObjFromOpenNarc
 .public LoadUserFrameGfx2
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished

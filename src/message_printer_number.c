@@ -1,11 +1,11 @@
 #include "message_printer_number.h"
 
-void sub_0200CE7C(MessagePrinter *msgPrinter, u8 glyphId, u32 num, u32 ndigits, PrintingMode mode, Window *window, u32 x, u32 y) {
-    sub_0200CDAC(msgPrinter, glyphId, window, x, y);
+void MessagePrinter_PrintGlyphAndUInt(MessagePrinter *msgPrinter, u8 glyphId, u32 num, u32 ndigits, PrintingMode mode, Window *window, u32 x, u32 y) {
+    MessagePrinter_PrintGlyph(msgPrinter, glyphId, window, x, y);
     PrintUIntOnWindow(msgPrinter, num, ndigits, mode, window, x + 16, y);
 }
 
-void sub_0200CEB0(BattleNumberPrinter *unk, u32 num, u32 ndigits, PrintingMode strConvMode, u16 *dest) {
+void BattleNumberPrinter_PrintUInt(BattleNumberPrinter *unk, u32 num, u32 ndigits, PrintingMode strConvMode, u16 *dest) {
     u8 fillVal = (unk->fillVal << 4) | unk->fillVal;
     ConvertUIntToDecimalString(unk->strbuf, num, strConvMode, ndigits);
     for (int i = 0; unk->strbuf[i] != EOS; ++i) {

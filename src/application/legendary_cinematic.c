@@ -606,7 +606,7 @@ int HoOhCinematic_PlayFirstScene(LegendaryCinematic *cinematic) {
     } else if (frame == 40) {
         PlaySE(SEQ_SE_GS_HAKKOUTAI_SYUTUGEN);
     } else if (frame == 78) {
-        sub_02005E44(SEQ_GS_E_HOUOU);
+        PlayBGMOnBGMPlayerInField(SEQ_GS_E_HOUOU);
         PlaySE(SEQ_SE_GS_HAKKOUTAI_HIROGARI2);
     } else if (frame == 98) {
         PlaySE(SEQ_SE_GS_HAKKOUTAI_HIROGARI);
@@ -880,7 +880,7 @@ void ArceusCinematic_LoadArceusSprite(LegendaryCinematic *cinematic) {
     src = (u8 *)tex + tex->texInfo.ofsTex;
     buffer = Heap_Alloc(HEAP_ID_153, 0x800);
     for (i = 0; i < 8; i++) {
-        sub_020145B4(src, 8, 0, 0, 8, 8, buffer);
+        CharTiles_CopyRectFromBuffer(src, 8, 0, 0, 8, 8, buffer);
         ArceusCinematic_LoadObjChar(buffer, dest, 0x800);
         src += 0x800;
         dest += 0x800;

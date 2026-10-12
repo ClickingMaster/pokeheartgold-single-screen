@@ -26,7 +26,7 @@
 .public Pokepic_StartPaletteFade
 .public Pokepic_StartPaletteFadeAll
 .public Pokepic_ResumePaletteFade
-.public sub_0200914C
+.public Pokepic_SetYOffsetForAffineHeight
 .public Pokepic_ScheduleReloadFromNarc
 .public Pokepic_GetTemplate
 .public PokepicManager_SetG3UpdateFlagsMask
@@ -54,7 +54,7 @@
 .public SysTask_Destroy
 .public WaitingIcon_New
 .public WaitingIcon_Delete
-.public sub_02014540
+.public CharTiles_LoadMonPicAsObjFromNarc
 .public PaletteBlink_SetState
 .public PokepicAnimManager_GetAnimState
 .public Heap_Alloc
@@ -218,16 +218,16 @@
 .public BattleSystem_GetNetworkId
 .public BattleSystem_GetLinkPosition
 .public BattleSystem_PauseRecording
-.public ov12_0223C140
+.public BattleSystem_GetFollowMonSlot
 .public BattleSystem_GetBattlerIdsByType
 .public BattleSystem_GetBattlerTypes
 .public BattleSystem_GetPokepics
 .public BattleSystem_PrintTrainerMessage
 .public BattleSystem_PrintBattleMessage
 .public GetBattlerVar
-.public ov12_022506D4
-.public ov12_02251D28
-.public ov12_02252054
+.public BattleSystem_GetMoveTarget
+.public BattleSystem_ApplyTypeEffectiveness
+.public CalcTypeEffectivenessFlags
 .public CheckAbilityActive
 .public CalculateTypeEffectiveness
 .public GetBattlerAbility
@@ -247,7 +247,7 @@
 .public OpponentData_SetInputTasks
 .public OpponentData_GetBattlerType
 .public OpponentData_GetInputMode
-.public ov12_02261270
+.public OpponentData_GetPokepic
 .public OpponentData_GetHpBar
 .public OpponentData_GetCursorPosition
 .public OpponentData_SetSpriteDrawFlag

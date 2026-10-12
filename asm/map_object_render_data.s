@@ -13,40 +13,40 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_021F9704
+	.public MapObjectRender_GetBillboardResourceSlot
 	.public MapObjectRender_GetBillboardResource
-	.public ov01_021F9778
-	.public ov01_021F9798
-	.public ov01_021F97BC
-	.public ov01_021F9808
-	.public ov01_021F98CC
-	.public ov01_021F9918
-	.public ov01_021F9980
-	.public ov01_021F9B54
-	.public ov01_021F9B84
-	.public ov01_021F9BAC
-	.public ov01_021F9BD4
-	.public ov01_021F9C78
-	.public ov01_021F9CA8
-	.public ov01_021F9CD0
-	.public ov01_021F9CF8
-	.public ov01_021F9DD0
-	.public ov01_021F9E04
-	.public ov01_021F9E30
-	.public ov01_021F9E9C
-	.public ov01_021F9FCC
-	.public ov01_021FA01C
-	.public ov01_021FA094
+	.public MapObjectRender_ReleaseBillboardResource
+	.public MapObjectRender_ReleaseAllBillboardResources
+	.public MapObjectManager_IsSpriteUsedByOtherActiveObject
+	.public MapObjectRender_CreateResourceBanks
+	.public MapObjectRender_LoadIntoBank
+	.public MapObjectRender_LoadSpriteTexture
+	.public MapObjectRender_LoadResidentSpriteTextures
+	.public MapObjectRender_AddDynamicModelId
+	.public MapObjectRender_IsDynamicModel
+	.public MapObjectRender_RemoveDynamicModelId
+	.public MapObjectRender_FreeUnusedModels
+	.public MapObjectRender_AddDynamicSequenceId
+	.public MapObjectRender_IsDynamicSequence
+	.public MapObjectRender_RemoveDynamicSequenceId
+	.public MapObjectRender_FreeUnusedSequences
+	.public MapObjectRender_AddDynamicTextureId
+	.public MapObjectRender_RemoveDynamicTextureId
+	.public MapObjectRender_FreeUnusedTextures
+	.public MapObjectRender_IsDynamicTexture
+	.public MapObjectManager_IsSpriteInUse
+	.public MapObjectManager_IsModelInUse
+	.public MapObjectManager_IsSequenceInUse
 	.public MapObjectRender_ReleaseSpriteResources
-	.public ov01_021FA31C
+	.public MapObjectBillboards_CreateBillboard
 	.public ov01_021FA370
 	.public ov01_021FA470
 	.public ov01_021FA564
 	.public ov01_021FA668
-	.public ov01_021FA6A4
+	.public MapObjectRender_CancelTextureTransfer
 	.public ov01_021FA6E0
 	.public ov01_021FA71C
-	.public ov01_021FA75C
+	.public MapObjectRender_QueueBillboard
 	.public ov01_021FA854
 	.public ov01_021FA97C
 	.public ov01_021FAB9C

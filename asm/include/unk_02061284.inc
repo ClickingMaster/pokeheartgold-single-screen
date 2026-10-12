@@ -39,99 +39,99 @@
 .public MapObject_SetPreviousCoordsToCurrent
 .public GetOppositeDirection
 .public GetDirectionTowards
-.public sub_020612B4
-.public sub_020612C0
-.public sub_020612CC
-.public sub_020612D8
-.public sub_020612E4
-.public sub_020612F0
-.public sub_020612FC
-.public sub_02061308
-.public sub_02061314
-.public sub_02061320
-.public sub_0206132C
+.public RandomLookMovement_InitAnyDirection
+.public RandomLookMovement_InitUpLeft
+.public RandomLookMovement_InitUpRight
+.public RandomLookMovement_InitDownLeft
+.public RandomLookMovement_InitDownRight
+.public RandomLookMovement_InitUpDownLeft
+.public RandomLookMovement_InitUpDownRight
+.public RandomLookMovement_InitUpLeftRight
+.public RandomLookMovement_InitDownLeftRight
+.public RandomLookMovement_InitUpDown
+.public RandomLookMovement_InitLeftRight
 .public RandomLookMovement_Update
 .public RandomLookMovement_Delete
-.public sub_020613A0
-.public sub_020613B0
-.public sub_020613C0
-.public sub_020613F8
-.public sub_0206166C
-.public sub_02061690
-.public sub_0206169C
-.public sub_020616A8
-.public sub_020616B4
-.public sub_020616E4
-.public sub_020616F0
-.public sub_020616FC
-.public sub_02061844
-.public sub_02061850
-.public sub_0206197C
-.public sub_0206199C
-.public sub_02061B1C
-.public sub_02061B2C
-.public sub_02061B3C
-.public sub_02061B4C
-.public sub_02061B5C
-.public sub_02061B6C
-.public sub_02061B7C
-.public sub_02061B8C
-.public sub_02061B9C
-.public sub_02061BAC
-.public sub_02061BBC
-.public sub_02061BCC
-.public sub_02061BDC
-.public sub_02061BEC
-.public sub_02061BFC
-.public sub_02061C0C
-.public sub_02061C1C
-.public sub_02061D80
-.public sub_02061D90
-.public sub_02061DA0
-.public sub_02061DB0
-.public sub_02061DC0
-.public sub_02061DD0
-.public sub_02061DE0
-.public sub_02061DF0
+.public RandomWalkMovement_InitAnyDirection
+.public RandomWalkMovement_InitUpDown
+.public RandomWalkMovement_InitLeftRight
+.public RandomWalkMovement_Update
+.public FaceDirectionMovement_Update
+.public FaceDirectionMovement_InitUp
+.public FaceDirectionMovement_InitDown
+.public FaceDirectionMovement_InitLeft
+.public FaceDirectionMovement_InitRight
+.public SpinMovement_InitCounterclockwise
+.public SpinMovement_InitClockwise
+.public SpinMovement_Update
+.public AlternatingSpinMovement_Init
+.public AlternatingSpinMovement_Update
+.public BackAndForthMovement_Init
+.public BackAndForthMovement_Update
+.public PathMovement_InitTable14
+.public PathMovement_InitTable15
+.public PathMovement_InitTable16
+.public PathMovement_InitTable17
+.public PathMovement_InitTable18
+.public PathMovement_InitTable19
+.public PathMovement_InitTable20
+.public PathMovement_InitTable21
+.public PathMovement_InitTable22
+.public PathMovement_InitTable23
+.public PathMovement_InitTable24
+.public PathMovement_InitTable25
+.public PathMovement_InitTable26
+.public PathMovement_InitTable27
+.public PathMovement_InitTable28
+.public PathMovement_InitTable29
+.public PathMovement_Update
+.public PathMovement_InitTable30
+.public PathMovement_InitTable31
+.public PathMovement_InitTable32
+.public PathMovement_InitTable33
+.public PathMovement_InitTable34
+.public PathMovement_InitTable35
+.public PathMovement_InitTable36
+.public PathMovement_InitTable37
 .public MapObject_ForceSetHeldMovement
 .public GetMovementForDirection
 .public MapObject_RunForcedMovement
 .public _s32_div_f
 
 	.public RandomLookMovement_Init
-	.public sub_020613D0
+	.public RandomWalkMovement_Init
 	.public MapObject_GetMovementBounds
 	.public MapObject_IsWithinMovementBounds
-	.public sub_02061648
-	.public sub_020616C0
-	.public sub_02061720
-	.public sub_02061754
-	.public sub_02061770
-	.public sub_020617AC
-	.public sub_02061874
-	.public sub_02061894
-	.public sub_020618B0
-	.public sub_020618C8
-	.public sub_020619C0
-	.public sub_020619FC
-	.public sub_02061ABC
-	.public sub_02061AEC
-	.public sub_02061C40
-	.public sub_02061D50
+	.public FaceDirectionMovement_Init
+	.public SpinMovement_Init
+	.public SpinMovement_FaceNearbyPlayer
+	.public SpinMovement_WaitFace
+	.public SpinMovement_Wait
+	.public SpinMovement_Turn
+	.public AlternatingSpinMovement_Face
+	.public AlternatingSpinMovement_WaitFace
+	.public AlternatingSpinMovement_Wait
+	.public AlternatingSpinMovement_Turn
+	.public BackAndForthMovement_FaceStart
+	.public BackAndForthMovement_Step
+	.public BackAndForthMovement_WaitStep
+	.public PathMovement_Init
+	.public PathMovement_Step
+	.public PathMovement_WaitStep
 	.public DirectionList_Count
 	.public DirectionList_GetRandom
 	.public GetRandomDirectionFromTable
 	.public GetDirectionTable
 	.public MapObject_GetDirectionToNearbyPlayer
-	.public sub_02061F5C
-	.public sub_02062050
-	.public sub_02062064
-	.public sub_0206207C
-	.public sub_020620F8
-	.public _020FD4EC
-	.public _020FD548
-	.public _020FD5A0
-	.public _020FD7B8
+	.public MapObject_GetAllowedDirectionToNearbyPlayer
+	.public MapObject_SpinsWhileWalking
+	.public WalkingSpin_Init
+	.public WalkingSpin_TurnBeforeStep
+	.public WalkingSpin_EndStep
+	.public gPathMovementStateFuncs
+	.public gBackAndForthMovementStateFuncs
+	.public gAlternatingSpinMovementStateFuncs
+	.public gRandomLookDelays
 
 	.public _020FD4F4
 	.public _020FD500
@@ -147,7 +147,7 @@
 	.public _020FD590
 	.public _020FD5B0
 	.public _020FD5C0
-	.public _020FD5D0
+	.public gSpinMovementStateFuncs
 	.public _020FD5E0
 	.public _020FD5F0
 	.public _020FD600
@@ -171,12 +171,12 @@
 	.public _020FD720
 	.public _020FD730
 	.public _020FD740
-	.public _020FD754
-	.public _020FD768
-	.public _020FD77C
+	.public gSpinCounterclockwiseOrder
+	.public gSpinClockwiseOrder
+	.public gAlternatingSpinCounterclockwiseOrder
 	.public _020FD790
-	.public _020FD7A4
+	.public gAlternatingSpinClockwiseOrder
 	.public _020FD7CC
-	.public _020FD7E0
-	.public _020FD800
-	.public _020FD838
+	.public gWalkingSpinOrders
+	.public gPlayerAwareMovementTypes
+	.public gMovementDirectionTables

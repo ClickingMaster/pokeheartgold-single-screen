@@ -64,7 +64,7 @@
 .public WaitingIcon_Delete
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_02014494
+.public CharTiles_LoadMonObjBlocksFromNarc
 .public IsNighttime
 .public ListMenuItems_New
 .public ListMenuItems_Delete

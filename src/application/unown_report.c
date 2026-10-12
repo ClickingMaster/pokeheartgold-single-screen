@@ -831,7 +831,7 @@ void UnownReport_InitSpriteSystem(UnownReportApp *app) {
     thunk_ClearSubOAM(app->heapID);
     app->spriteManager = SpriteManager_New(app->spriteSystem);
     SpriteSystem_InitSprites(app->spriteSystem, app->spriteManager, 17);
-    sub_0200D2A4(app->spriteSystem, app->spriteManager, &ov113_021E6B74, 0, 0);
+    SpriteSystem_LoadResourceDataFromFileIdListEx(app->spriteSystem, app->spriteManager, &ov113_021E6B74, 0, 0);
     capacities = ov113_021E6BB8;
     app->iconManager = SpriteManager_New(app->spriteSystem);
     SpriteSystem_InitManagerWithCapacities(app->spriteSystem, app->iconManager, &capacities);
@@ -937,7 +937,7 @@ void UnownReport_DeleteSpriteObjects(UnownReportApp *app) {
 // The icon graphics of slot `icon` are replaced with those of `form`
 void UnownReport_LoadIcon(UnownReportApp *app, int icon, int form) {
     u32 fileId = GetMonIconNaixEx(SPECIES_UNOWN, FALSE, form);
-    sub_0200E2B8(app->spriteSystem, app->iconManager, app->iconNarc, fileId, FALSE, icon + 1);
+    SpriteSystem_ReplaceCharResObjFromOpenNarc(app->spriteSystem, app->iconManager, app->iconNarc, fileId, FALSE, icon + 1);
 }
 
 void UnownReport_UpdateArrows(UnownReportApp *app) {

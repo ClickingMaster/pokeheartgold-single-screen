@@ -5,6 +5,6 @@
 #include "sprite.h"
 
 Sprite *MapObject_GetBillboard(LocalMapObject *object);
-void ov01_021F7918(LocalMapObject *object);
+void FollowMonDraw_UpdatePositionOnly(LocalMapObject *object);
 
 #endif // POKEHEARTGOLD_FIELD_MAP_OBJECT_BILLBOARD_MOTION_H

@@ -34,7 +34,7 @@
 #include "frontier_save_access.h"
 #include "unk_0205BFF0.h"
 
-// Facilities, as passed in UnkStruct_0203FAB4.unk5
+// Facilities, as passed in FrontierRecordsAppArgs.unk5
 #define FRONTIER_RECORDS_TOWER        1
 #define FRONTIER_RECORDS_FACTORY_LV50 2
 #define FRONTIER_RECORDS_FACTORY_OPEN 3
@@ -245,7 +245,7 @@ void FrontierRecordsApp_RemoveReturnButtonWindow(Window *window);
 
 BOOL FrontierRecordsApp_Init(OverlayManager *man, int *state) {
     FrontierRecordsApp *app;
-    UnkStruct_0203FAB4 *args;
+    FrontierRecordsAppArgs *args;
 
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);

@@ -397,7 +397,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
         PhotoMon *mon = &photo->party[taskData->placeObjectCounter];
         if (mon->species != SPECIES_NONE) {
             taskData->parent->mapObjects[taskData->placeObjectCounter] = createPartymonMapObject(fieldSystem->mapObjectManager, mon->species, mon->form, mon->gender, DIR_SOUTH, photo->x + sPhotoMonCoordOffsets[taskData->placeObjectCounter].x, photo->y + sPhotoMonCoordOffsets[taskData->placeObjectCounter].y, mon->shiny);
-            MapObject_SetDrawUpdateCallback(taskData->parent->mapObjects[taskData->placeObjectCounter], ov01_021F7918);
+            MapObject_SetDrawUpdateCallback(taskData->parent->mapObjects[taskData->placeObjectCounter], FollowMonDraw_UpdatePositionOnly);
         } else {
             taskData->parent->mapObjects[taskData->placeObjectCounter] = NULL;
         }
@@ -441,7 +441,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
         PhotoMon *mon = &photo->party[0];
         if (mon->species != SPECIES_NONE) {
             taskData->parent->mapObjects[1] = createPartymonMapObject(fieldSystem->mapObjectManager, mon->species, mon->form, mon->gender, DIR_SOUTH, photo->x + sSoloPhotoMonCoordOffsets.x, photo->y + sSoloPhotoMonCoordOffsets.y, mon->shiny);
-            MapObject_SetDrawUpdateCallback(taskData->parent->mapObjects[1], ov01_021F7918);
+            MapObject_SetDrawUpdateCallback(taskData->parent->mapObjects[1], FollowMonDraw_UpdatePositionOnly);
         } else {
             taskData->parent->mapObjects[1] = NULL;
         }
@@ -635,7 +635,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
         PhotoMon *mon = &takePhoto->pPhoto->party[takePhoto->curMon];
         if (mon->species != SPECIES_NONE) {
             takePhoto->mapObjects[takePhoto->curMon] = createPartymonMapObject(fieldSystem->mapObjectManager, mon->species, mon->form, mon->gender, DIR_SOUTH, takePhoto->pPhoto->x + sPhotoMonCoordOffsets[takePhoto->curMon].x, takePhoto->pPhoto->y + sPhotoMonCoordOffsets[takePhoto->curMon].y, mon->shiny);
-            MapObject_SetDrawUpdateCallback(takePhoto->mapObjects[takePhoto->curMon], ov01_021F7918);
+            MapObject_SetDrawUpdateCallback(takePhoto->mapObjects[takePhoto->curMon], FollowMonDraw_UpdatePositionOnly);
         } else {
             takePhoto->mapObjects[takePhoto->curMon] = NULL;
         }
@@ -684,7 +684,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
         PhotoMon *mon = &takePhoto->pPhoto->party[takePhoto->curMon];
         if (mon->species != SPECIES_NONE) {
             takePhoto->mapObjects[1] = createPartymonMapObject(fieldSystem->mapObjectManager, mon->species, mon->form, mon->gender, DIR_SOUTH, takePhoto->pPhoto->x + sSoloPhotoMonCoordOffsets.x, takePhoto->pPhoto->y + sSoloPhotoMonCoordOffsets.y, mon->shiny);
-            MapObject_SetDrawUpdateCallback(takePhoto->mapObjects[1], ov01_021F7918);
+            MapObject_SetDrawUpdateCallback(takePhoto->mapObjects[1], FollowMonDraw_UpdatePositionOnly);
         } else {
             GF_ASSERT(FALSE);
             takePhoto->mapObjects[1] = NULL;

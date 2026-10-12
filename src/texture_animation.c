@@ -20,7 +20,7 @@ typedef struct TextureFrame {
 } TextureFrame;
 void *NNS_G3dGetResDataByName(const NNSG3dResDict *, const NNSG3dResName *);
 u32 BillboardGfxSequence_GetTexPlttIndex(void *, u32);
-void sub_02020B3C(NNSG3dResName *, const char *);
+void Ascii_SetResName(NNSG3dResName *, const char *);
 TextureAnimationPool *TextureAnimationPool_New(int count, enum HeapID heapID);
 void TextureAnimationPool_Free(TextureAnimationPool *pool);
 TextureAnimation *TextureAnimationPool_Add(TextureAnimationPool *pool, void *resource, NNSG3dResTex *texture, u32 textureKey, u32 paletteKey, fx32 frame);
@@ -153,7 +153,7 @@ u32 Texture_GetImageVramOffset(NNSG3dResTex *texture, u32 *entry) {
 u32 Texture_GetImageVramOffsetByName(NNSG3dResTex *texture, const char *name) {
     NNSG3dResName key;
     u32 *entry;
-    sub_02020B3C(&key, name);
+    Ascii_SetResName(&key, name);
     entry = texture ? NNS_G3dGetResDataByName(&texture->dict, &key) : NULL;
     if (entry == NULL) {
         return 0;
@@ -198,7 +198,7 @@ u32 Texture_GetImageSizeByIndex(NNSG3dResTex *texture, u32 index) {
 u32 Texture_GetImageSizeByName(NNSG3dResTex *texture, const char *name) {
     NNSG3dResName key;
     u32 *entry;
-    sub_02020B3C(&key, name);
+    Ascii_SetResName(&key, name);
     entry = texture ? NNS_G3dGetResDataByName(&texture->dict, &key) : NULL;
     return Texture_GetImageSize(texture, entry);
 }

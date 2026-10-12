@@ -133,7 +133,7 @@ FS_EXTERN_OVERLAY(view_rankings_app);
 
 static PartyMenuArgs *PartyMenu_CreateArgs(enum HeapID heapID, FieldSystem *fieldSystem, int a2, PartyMenuContext context);
 static BOOL Task_OpenPartyMenuForUnionRoomBattleSelect(TaskManager *taskman);
-static BOOL sub_0203E878(TaskManager *taskman);
+static BOOL Task_EasyChat(TaskManager *taskman);
 static void PokegearPhone_LaunchApp_Impl(FieldSystem *fieldSystem, PokegearArgs *args);
 static void PokegearTownMap_LaunchApp_Impl(FieldSystem *fieldSystem, PokegearArgs *args);
 static void SafariAreaCustomizer_LaunchApp_Impl(FieldSystem *fieldSystem, SafariAreaCustomizerArgs *args);
@@ -150,10 +150,10 @@ static void PokeathlonCourseRecord_LaunchApp_Impl(FieldSystem *fieldSystem, Poke
 static void PokeathlonMedals_LaunchApp_Impl(FieldSystem *fieldSystem, PokeathlonMedalsArgs *args);
 static void PokeathlonEventRecord_LaunchApp_Impl(FieldSystem *fieldSystem, PokeathlonEventRecordArgs *args);
 static void PokeathlonUnk_LaunchApp_Impl(FieldSystem *fieldSystem, UnkStruct_0203EFA0 *args);
-static void sub_0203EFD4(FieldSystem *fieldSystem, UseMailArgs *args);
-static UnkStruct_0203F0D0 *sub_0203F0D0(enum HeapID heapID, SaveData *saveData, int slot, int *a3, int a4);
-static BOOL sub_0203F134(TaskManager *taskman);
-static BOOL sub_0203F1E8(FieldSystem *fieldSystem, UnkStruct_0203F0D0 *args);
+static void UseMail_LaunchApp_Impl(FieldSystem *fieldSystem, UseMailArgs *args);
+static DressUpArgs *DressUp_CreateArgs(enum HeapID heapID, SaveData *saveData, int slot, int *a3, int a4);
+static BOOL Task_DressUp(TaskManager *taskman);
+static BOOL DressUp_LaunchApp_Impl(FieldSystem *fieldSystem, DressUpArgs *args);
 static void InitWirelessTradeSelectMonArgs(WirelessTradeSelectMonArgs *a0, FieldSystem *fieldSystem);
 static void WirelessTradeSelectMon_FreeArgs(WirelessTradeSelectMonArgs *a0);
 static BOOL Task_WirelessTrade(TaskManager *taskman);
@@ -189,7 +189,7 @@ void Bag_LaunchApp(FieldSystem *fieldSystem, BagView *args) {
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }
 
-BagView *sub_0203E3FC(FieldSystem *fieldSystem, ItemCheckUseData *taskman) {
+BagView *Bag_LaunchApp_AllPockets(FieldSystem *fieldSystem, ItemCheckUseData *taskman) {
     BagView *bagView = Bag_CreateView(Save_Bag_Get(fieldSystem->saveData), sAllPockets, HEAP_ID_FIELD2);
     sub_0207789C(bagView, fieldSystem->saveData, 0, fieldSystem->bagCursor, &fieldSystem->menuInputState);
     sub_020778E8(bagView, fieldSystem->mapLoadType);
@@ -280,7 +280,7 @@ PartyMenuArgs *PartyMenu_LaunchApp_Unk4(enum HeapID heapID, FieldSystem *fieldSy
     return args;
 }
 
-int sub_0203E5F8(PartyMenuArgs *partyWork) {
+int PartyMenuArgs_GetSelectedAction(PartyMenuArgs *partyWork) {
     return partyWork->selectedAction;
 }
 
@@ -408,24 +408,24 @@ void PCBox_LaunchApp(FieldSystem *fieldSystem, PCBoxArgs *args) {
     FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_PCBox, args);
 }
 
-static BOOL sub_0203E878(TaskManager *taskman) {
+static BOOL Task_EasyChat(TaskManager *taskman) {
     MsgBankMsgNo msgBankMsgNo;
     MailMessage mailMessage;
 
     int *state = (int *)TaskManager_GetStatePtr(taskman);
-    UnkStruct_0203E878 *data = TaskManager_GetEnvironment(taskman);
+    EasyChatTaskData *data = TaskManager_GetEnvironment(taskman);
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
     switch (*state) {
-    case UNK_0203E878_STATE_0:
+    case EASY_CHAT_TASK_STATE_LAUNCH:
         EasyChat_LaunchApp(fieldSystem, data->easyChat);
         (*state)++;
         break;
-    case UNK_0203E878_STATE_1:
+    case EASY_CHAT_TASK_STATE_WAIT:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
             (*state)++;
         }
         break;
-    case UNK_0203E878_STATE_2:
+    case EASY_CHAT_TASK_STATE_FINISH:
         if (sub_02090D48(data->easyChat) || !sub_02090D4C(data->easyChat)) {
             data->unk0->unk0 = 0;
         } else {
@@ -456,11 +456,11 @@ static BOOL sub_0203E878(TaskManager *taskman) {
     return FALSE;
 }
 
-void sub_0203E960(TaskManager *taskman, int a1, UnkStruct_0203E8C8 *a2, u16 *a3, u16 *a4) {
+void CallTask_EasyChat(TaskManager *taskman, int a1, UnkStruct_0203E8C8 *a2, u16 *a3, u16 *a4) {
     EasyChatArgs *args;
 
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
-    UnkStruct_0203E878 *data = Heap_Alloc(HEAP_ID_FIELD3, sizeof(UnkStruct_0203E878));
+    EasyChatTaskData *data = Heap_Alloc(HEAP_ID_FIELD3, sizeof(EasyChatTaskData));
     data->unk0 = a2;
     data->unk4 = a3;
     data->unk8 = a4;
@@ -487,7 +487,7 @@ void sub_0203E960(TaskManager *taskman, int a1, UnkStruct_0203E8C8 *a2, u16 *a3,
         sub_02090D20(data->easyChat, mailMessage);
         sub_02090D34(data->easyChat);
     }
-    TaskManager_Call(taskman, sub_0203E878, data);
+    TaskManager_Call(taskman, Task_EasyChat, data);
 }
 
 void EasyChat_LaunchApp(FieldSystem *fieldSystem, EasyChatArgs *args) {
@@ -749,15 +749,15 @@ UnkStruct_0203EFA0 *PokeathlonUnk_LaunchApp(FieldSystem *fieldSystem) {
     return args;
 }
 
-static void sub_0203EFD4(FieldSystem *fieldSystem, UseMailArgs *args) {
-    static const OverlayManagerTemplate _020FA434 = { ov55_UnkApp_Init, ov55_UnkApp_Main, ov55_UnkApp_Exit, FS_OVERLAY_ID(OVY_55) };
+static void UseMail_LaunchApp_Impl(FieldSystem *fieldSystem, UseMailArgs *args) {
+    static const OverlayManagerTemplate sOverlayTemplate_UseMail = { ov55_UnkApp_Init, ov55_UnkApp_Main, ov55_UnkApp_Exit, FS_OVERLAY_ID(OVY_55) };
     args->menuInputStatePtr = &fieldSystem->menuInputState;
-    FieldSystem_LaunchApplication(fieldSystem, &_020FA434, args);
+    FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_UseMail, args);
 }
 
-UseMailArgs *sub_0203EFEC(FieldSystem *fieldSystem, u16 a1, u8 partyIdx, u8 mailType, enum HeapID heapID) {
+UseMailArgs *UseMail_LaunchApp_Compose(FieldSystem *fieldSystem, u16 a1, u8 partyIdx, u8 mailType, enum HeapID heapID) {
     UseMailArgs *args = sub_02090E68(FieldSystem_GetSaveData(fieldSystem), a1, partyIdx, mailType, HEAP_ID_FIELD2);
-    sub_0203EFD4(fieldSystem, args);
+    UseMail_LaunchApp_Impl(fieldSystem, args);
     return args;
 }
 
@@ -769,35 +769,35 @@ UseMailArgs *UseMail_CreateArgs(FieldSystem *fieldSystem, int n, u8 mailId, enum
     } else {
         args = sub_02090EC0(FieldSystem_GetSaveData(fieldSystem), n, mailId, heapID);
     }
-    sub_0203EFD4(fieldSystem, args);
+    UseMail_LaunchApp_Impl(fieldSystem, args);
     return args;
 }
 
-UseMailArgs *sub_0203F050(FieldSystem *fieldSystem, Pokemon *mon, enum HeapID heapID) {
+UseMailArgs *UseMail_LaunchApp_ReadMonMail(FieldSystem *fieldSystem, Pokemon *mon, enum HeapID heapID) {
     UseMailArgs *args = sub_02090F00(FieldSystem_GetSaveData(fieldSystem), mon, heapID);
-    sub_0203EFD4(fieldSystem, args);
+    UseMail_LaunchApp_Impl(fieldSystem, args);
     return args;
 }
 
-UnkStruct_0203F074 *sub_0203F074(FieldSystem *fieldSystem, enum HeapID heapID) {
-    static const OverlayManagerTemplate _020FA2F4 = { MailboxApp_Init, MailboxApp_Main, MailboxApp_Exit, FS_OVERLAY_ID(OVY_103) };
-    UnkStruct_0203F074 *args = Heap_Alloc(heapID, sizeof(UnkStruct_0203F074));
+MailboxAppArgs *Mailbox_LaunchApp(FieldSystem *fieldSystem, enum HeapID heapID) {
+    static const OverlayManagerTemplate sOverlayTemplate_Mailbox = { MailboxApp_Init, MailboxApp_Main, MailboxApp_Exit, FS_OVERLAY_ID(OVY_103) };
+    MailboxAppArgs *args = Heap_Alloc(heapID, sizeof(MailboxAppArgs));
     args->saveData = FieldSystem_GetSaveData(fieldSystem);
     args->fieldSystem = fieldSystem;
     args->menuInputStatePtr = &fieldSystem->menuInputState;
-    FieldSystem_LaunchApplication(fieldSystem, &_020FA2F4, args);
+    FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_Mailbox, args);
     return args;
 }
 
-void sub_0203F0A8(FieldSystem *fieldSystem, BattleRoomResultsArgs *args) {
-    static const OverlayManagerTemplate _020FA2E4 = { BattleRoomResults_Init, BattleRoomResults_Main, BattleRoomResults_Exit, FS_OVERLAY_ID(OVY_67) };
-    OverlayManagerTemplate template = _020FA2E4;
+void BattleRoomResults_LaunchApp(FieldSystem *fieldSystem, BattleRoomResultsArgs *args) {
+    static const OverlayManagerTemplate sOverlayTemplate_BattleRoomResults = { BattleRoomResults_Init, BattleRoomResults_Main, BattleRoomResults_Exit, FS_OVERLAY_ID(OVY_67) };
+    OverlayManagerTemplate template = sOverlayTemplate_BattleRoomResults;
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }
 
-static UnkStruct_0203F0D0 *sub_0203F0D0(enum HeapID heapID, SaveData *saveData, int partyIdx, int *a3, int a4) {
-    UnkStruct_0203F0D0 *ptr = Heap_Alloc(heapID, sizeof(UnkStruct_0203F0D0));
-    memset(ptr, 0, sizeof(UnkStruct_0203F0D0));
+static DressUpArgs *DressUp_CreateArgs(enum HeapID heapID, SaveData *saveData, int partyIdx, int *a3, int a4) {
+    DressUpArgs *ptr = Heap_Alloc(heapID, sizeof(DressUpArgs));
+    memset(ptr, 0, sizeof(DressUpArgs));
     ptr->mon = Party_GetMonByIndex(SaveArray_Party_Get(saveData), partyIdx);
     SaveFashionData *fashionSave = Save_FashionData_Get(saveData);
     SaveFashionDataSub *var1 = Save_FashionData_GetEntry(fashionSave, 0);
@@ -812,16 +812,16 @@ static UnkStruct_0203F0D0 *sub_0203F0D0(enum HeapID heapID, SaveData *saveData, 
     return ptr;
 }
 
-static BOOL sub_0203F134(TaskManager *taskman) {
+static BOOL Task_DressUp(TaskManager *taskman) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
-    UnkStruct_0203F134 *data = TaskManager_GetEnvironment(taskman);
+    DressUpTaskData *data = TaskManager_GetEnvironment(taskman);
 
     switch (data->state) {
-    case UNK_0203F134_STATE_0:
-        sub_0203F1E8(fieldSystem, data->unkC);
+    case DRESS_UP_TASK_STATE_LAUNCH:
+        DressUp_LaunchApp_Impl(fieldSystem, data->unkC);
         data->state++;
         break;
-    case UNK_0203F134_STATE_1:
+    case DRESS_UP_TASK_STATE_WAIT:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
             u16 *ptr = data->unk4;
             if (ptr != NULL) {
@@ -840,18 +840,18 @@ static BOOL sub_0203F134(TaskManager *taskman) {
     return FALSE;
 }
 
-void sub_0203F198(TaskManager *taskman, u16 *ret, SaveData *saveData, u16 a3, u16 a4) {
-    UnkStruct_0203F134 *data = Heap_Alloc(HEAP_ID_FIELD3, sizeof(UnkStruct_0203F134));
-    memset(data, 0, sizeof(UnkStruct_0203F134));
-    data->unkC = sub_0203F0D0(HEAP_ID_FIELD3, saveData, a3, &data->unk8, a4);
+void CallTask_DressUp(TaskManager *taskman, u16 *ret, SaveData *saveData, u16 a3, u16 a4) {
+    DressUpTaskData *data = Heap_Alloc(HEAP_ID_FIELD3, sizeof(DressUpTaskData));
+    memset(data, 0, sizeof(DressUpTaskData));
+    data->unkC = DressUp_CreateArgs(HEAP_ID_FIELD3, saveData, a3, &data->unk8, a4);
     data->unk4 = ret;
-    TaskManager_Call(taskman, sub_0203F134, data);
+    TaskManager_Call(taskman, Task_DressUp, data);
 }
 
-static BOOL sub_0203F1E8(FieldSystem *fieldSystem, UnkStruct_0203F0D0 *args) {
-    static OverlayManagerTemplate _0210F9AC = { DressUp_Init, DressUp_Main, DressUp_Exit, FS_OVERLAY_ID(OVY_41) };
+static BOOL DressUp_LaunchApp_Impl(FieldSystem *fieldSystem, DressUpArgs *args) {
+    static OverlayManagerTemplate sOverlayTemplate_DressUp = { DressUp_Init, DressUp_Main, DressUp_Exit, FS_OVERLAY_ID(OVY_41) };
     args->menuInputStatePtr = &fieldSystem->menuInputState;
-    FieldSystem_LaunchApplication(fieldSystem, &_0210F9AC, args);
+    FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_DressUp, args);
     return TRUE;
 }
 
@@ -991,24 +991,24 @@ void CallTask_WirelessTrade(TaskManager *taskman) {
     TaskManager_Call(taskman, Task_WirelessTrade, data);
 }
 
-static const OverlayManagerTemplate _020FA2C4 = { DrawingSession_Init, DrawingSession_Main, DrawingSession_Exit, FS_OVERLAY_ID(OVY_37) };
-static const OverlayManagerTemplate _020FA2B4 = { RecordMixing_Init, RecordMixing_Main, RecordMixing_Exit, FS_OVERLAY_ID(OVY_73) };
+static const OverlayManagerTemplate sOverlayTemplate_DrawingSession = { DrawingSession_Init, DrawingSession_Main, DrawingSession_Exit, FS_OVERLAY_ID(OVY_37) };
+static const OverlayManagerTemplate sOverlayTemplate_RecordMixing = { RecordMixing_Init, RecordMixing_Main, RecordMixing_Exit, FS_OVERLAY_ID(OVY_73) };
 
-void sub_0203F4C8(FieldSystem *fieldSystem) {
-    UnkStruct_0203F4C8 *args = Heap_Alloc(HEAP_ID_FIELD3, sizeof(UnkStruct_0203F4C8));
+void DrawingSession_LaunchApp(FieldSystem *fieldSystem) {
+    DrawingSessionArgs *args = Heap_Alloc(HEAP_ID_FIELD3, sizeof(DrawingSessionArgs));
     args->unk0 = fieldSystem->unionRoomObjects;
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    FieldSystem_LaunchApplication(fieldSystem, &_020FA2C4, args);
+    FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_DrawingSession, args);
 }
 
-RecordMixingArgs *sub_0203F4F8(FieldSystem *fieldSystem) {
+RecordMixingArgs *RecordMixing_LaunchApp(FieldSystem *fieldSystem) {
     RecordMixingArgs *args = Heap_Alloc(HEAP_ID_FIELD2, sizeof(RecordMixingArgs));
     args->saveData = fieldSystem->saveData;
     args->unk4 = fieldSystem->unionRoomObjects;
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     args->gameStats = Save_GameStats_Get(fieldSystem->saveData);
     args->menuInputStatePtr = &fieldSystem->menuInputState;
-    FieldSystem_LaunchApplication(fieldSystem, &_020FA2B4, args);
+    FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_RecordMixing, args);
     return args;
 }
 
@@ -1168,9 +1168,9 @@ void TrainerCardSignature_LaunchApp(FieldSystem *fieldSystem) {
     FieldSystem_LaunchApplication(fieldSystem, &template, fieldSystem->saveData);
 }
 
-void sub_0203F844(FieldSystem *fieldSystem, u16 a1) {
-    static const OverlayManagerTemplate _020FA264 = { Gts_Init, Gts_Main, Gts_Exit, FS_OVERLAY_ID(OVY_70) };
-    OverlayManagerTemplate template = _020FA264;
+void Gts_LaunchApp(FieldSystem *fieldSystem, u16 a1) {
+    static const OverlayManagerTemplate sOverlayTemplate_Gts = { Gts_Init, Gts_Main, Gts_Exit, FS_OVERLAY_ID(OVY_70) };
+    OverlayManagerTemplate template = sOverlayTemplate_Gts;
 
     GtsArgs *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(GtsArgs));
     args->unk0 = Save_Gts_Get(fieldSystem->saveData);
@@ -1286,14 +1286,14 @@ CertificatesArgs *Certificates_LaunchApp(FieldSystem *fieldSystem, enum HeapID h
     return args;
 }
 
-UnkStruct_0203FAB4 *sub_0203FAB4(FieldSystem *fieldSystem, u8 a1, u8 a2, u16 a3, enum HeapID heapID) {
-    static OverlayManagerTemplate _0210F9BC = { FrontierRecordsApp_Init, FrontierRecordsApp_Main, FrontierRecordsApp_Exit, FS_OVERLAY_ID(OVY_86) };
-    UnkStruct_0203FAB4 *args = Heap_Alloc(heapID, sizeof(UnkStruct_0203FAB4));
+FrontierRecordsAppArgs *FrontierRecords_LaunchApp(FieldSystem *fieldSystem, u8 a1, u8 a2, u16 a3, enum HeapID heapID) {
+    static OverlayManagerTemplate sOverlayTemplate_FrontierRecords = { FrontierRecordsApp_Init, FrontierRecordsApp_Main, FrontierRecordsApp_Exit, FS_OVERLAY_ID(OVY_86) };
+    FrontierRecordsAppArgs *args = Heap_Alloc(heapID, sizeof(FrontierRecordsAppArgs));
     args->unk4 = a1;
     args->unk5 = a2;
     args->unk6 = a3;
     args->unk0 = fieldSystem->saveData;
-    FieldSystem_LaunchApplication(fieldSystem, &_0210F9BC, args);
+    FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_FrontierRecords, args);
     return args;
 }
 
@@ -1355,12 +1355,12 @@ PokemonSummaryArgs *PokemonSummary_LaunchApp(enum HeapID heapID, FieldSystem *fi
     return args;
 }
 
-void sub_0203FC14(FieldSystem *fieldSystem, u16 a1, u16 a2) {
-    static const OverlayManagerTemplate _020FA1C4 = { GlobalTerminalApp_Init, GlobalTerminalApp_Main, GlobalTerminalApp_Exit, FS_OVERLAY_ID(OVY_39) };
-    OverlayManagerTemplate template = _020FA1C4;
+void GlobalTerminal_LaunchApp(FieldSystem *fieldSystem, u16 a1, u16 a2) {
+    static const OverlayManagerTemplate sOverlayTemplate_GlobalTerminal = { GlobalTerminalApp_Init, GlobalTerminalApp_Main, GlobalTerminalApp_Exit, FS_OVERLAY_ID(OVY_39) };
+    OverlayManagerTemplate template = sOverlayTemplate_GlobalTerminal;
 
-    UnkStruct_0203FC14 *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(UnkStruct_0203FC14));
-    MI_CpuFill8(args, 0, sizeof(UnkStruct_0203FC14));
+    GlobalTerminalLaunchArgs *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(GlobalTerminalLaunchArgs));
+    MI_CpuFill8(args, 0, sizeof(GlobalTerminalLaunchArgs));
     args->fieldSystem = fieldSystem;
     args->saveData = fieldSystem->saveData;
     args->unk8 = a1;
@@ -1379,9 +1379,9 @@ void sub_0203FC68(FieldSystem *fieldSystem, void *args) {
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }
 
-void sub_0203FC90(FieldSystem *fieldSystem, void *args) {
-    static const OverlayManagerTemplate _020FA1D4 = { ShipDepartureCutscene_Init, ShipDepartureCutscene_Main, ShipDepartureCutscene_Exit, FS_OVERLAY_ID(OVY_105) };
-    OverlayManagerTemplate template = _020FA1D4;
+void ShipDepartureCutscene_LaunchApp(FieldSystem *fieldSystem, void *args) {
+    static const OverlayManagerTemplate sOverlayTemplate_ShipDepartureCutscene = { ShipDepartureCutscene_Init, ShipDepartureCutscene_Main, ShipDepartureCutscene_Exit, FS_OVERLAY_ID(OVY_105) };
+    OverlayManagerTemplate template = sOverlayTemplate_ShipDepartureCutscene;
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }
 

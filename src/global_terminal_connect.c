@@ -56,7 +56,7 @@ enum GlobalTerminalConnectState {
 
 // view of GlobalTerminalApp (include/overlay_app_manager_internal.h defines a file-scope static, so it is not included)
 typedef struct GlobalTerminalConnectArgs {
-    UnkStruct_0203FC14 *launchArgs; // 0x00
+    GlobalTerminalLaunchArgs *launchArgs; // 0x00
     BOOL disconnect;                // 0x04, second run after the VS Recorder: only disconnect
     u8 unk_08[0x14 - 0x08];         // 0x08
     u8 unk_14[0x7C - 0x14];         // 0x14

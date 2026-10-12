@@ -75,7 +75,7 @@
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
 .public SetMasterBrightnessByColor
-.public sub_02014494
+.public CharTiles_LoadMonObjBlocksFromNarc
 .public GF_RTC_CopyDate
 .public ListMenuItems_New
 .public ListMenuItems_Delete

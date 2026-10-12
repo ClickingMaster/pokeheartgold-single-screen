@@ -53,7 +53,7 @@ typedef struct DrawingSessionState {
 struct DrawingSessionWork {
     BgConfig *bgConfig;
     u32 unk_004;
-    UnkStruct_0203F4C8 *args;
+    DrawingSessionArgs *args;
     MessageFormat *msgFormat;
     MsgData *msgData;
     String *memberNames[DRAWING_SESSION_MAX_MEMBERS];

@@ -357,7 +357,7 @@ void MoveRelearner_Setup(MoveRelearner *relearner) {
     MoveRelearner_PrintSelectedMove(relearner);
     MoveRelearner_PrintStaticTexts(relearner);
     MoveRelearner_CreateGridInput(relearner);
-    sub_020880CC(0, HEAP_ID_66);
+    BeginAppScreenFade(0, HEAP_ID_66);
     Main_SetVBlankIntrCB((GFIntrCB)MoveRelearner_VBlankCB, relearner);
     NARC_Delete(narc);
 }
@@ -643,7 +643,7 @@ int MoveRelearner_AskAfterSummary(MoveRelearner *relearner) {
 #pragma force_active reset
 
 int MoveRelearner_FadeOut(MoveRelearner *relearner) {
-    sub_020880CC(1, HEAP_ID_66);
+    BeginAppScreenFade(1, HEAP_ID_66);
     relearner->nextState = MOVE_RELEARNER_STATE_EXIT;
     return MOVE_RELEARNER_STATE_WAIT_FADE;
 }
@@ -1305,7 +1305,7 @@ void MoveRelearner_UpdateScrollArrows(MoveRelearner *relearner, int which, BOOL 
 #pragma force_active reset
 
 int MoveRelearner_FadeOutToSummary(MoveRelearner *relearner) {
-    sub_020880CC(1, HEAP_ID_66);
+    BeginAppScreenFade(1, HEAP_ID_66);
     relearner->nextState = MOVE_RELEARNER_STATE_OPEN_SUMMARY;
     return MOVE_RELEARNER_STATE_WAIT_FADE;
 }

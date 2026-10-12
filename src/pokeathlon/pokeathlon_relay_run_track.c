@@ -26,7 +26,7 @@ void PokeathlonCourseObject_GetCollisionCircle(void *object, fx32 x, fx32 y, fx3
 fx32 FX_Sqrt(fx32 x);
 
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
-u32 sub_02006190(u32 playerNo);
+u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
 
 extern const PokeathlonRelayRunHitTable ov96_0221C5FC; // edges: RELAY_RUN_HIT_TOP, _RIGHT, _BOTTOM, _LEFT
 extern const PokeathlonRelayRunHitTable ov96_0221C60C; // corners: RELAY_RUN_HIT_TOP_LEFT ..
@@ -184,11 +184,11 @@ void PokeathlonRelayRun_DrawTeams(PokeathlonCourseData *course, int own, Pokeath
                 PokeathlonCourseMonObject_SetAnim(monObject, 21);
                 exhausted = TRUE;
                 if (isOwn) {
-                    if (!sub_02006190(3)) {
+                    if (!GF_SndCountPlayingSeqOnPlayer(3)) {
                         PokeathlonRelayRun_PlaySEIfOnScreen(screenX, SEQ_SE_GS_W146, isOwn);
                     }
                 } else {
-                    if (!sub_02006190(4)) {
+                    if (!GF_SndCountPlayingSeqOnPlayer(4)) {
                         PokeathlonRelayRun_PlaySEIfOnScreen(screenX, SEQ_SE_GS_W146, isOwn);
                     }
                 }

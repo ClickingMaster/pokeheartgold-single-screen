@@ -892,7 +892,7 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         break;
     }
     case PARTY_MENU_ACTION_RETURN_6:
-        startMenu->exitTaskEnvironment = sub_0203EFEC(fieldSystem, 2, partyMenuArgs->partySlot, ItemToMailId(partyMenuArgs->itemId), HEAP_ID_FIELD2);
+        startMenu->exitTaskEnvironment = UseMail_LaunchApp_Compose(fieldSystem, 2, partyMenuArgs->partySlot, ItemToMailId(partyMenuArgs->itemId), HEAP_ID_FIELD2);
         if (partyMenuArgs->context == PARTY_MENU_CONTEXT_10) {
             startMenu->exitTaskEnvironment2 = sub_0203D818(partyMenuArgs->itemId, 0, partyMenuArgs->partySlot);
         } else {
@@ -901,7 +901,7 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         StartMenu_SetExitTaskFunc(startMenu, Task_ReturnToMenuFromMail);
         break;
     case PARTY_MENU_ACTION_RETURN_READ_MAIL:
-        startMenu->exitTaskEnvironment = sub_0203F050(fieldSystem, Party_GetMonByIndex(SaveArray_Party_Get(fieldSystem->saveData), partyMenuArgs->partySlot), HEAP_ID_FIELD2);
+        startMenu->exitTaskEnvironment = UseMail_LaunchApp_ReadMonMail(fieldSystem, Party_GetMonByIndex(SaveArray_Party_Get(fieldSystem->saveData), partyMenuArgs->partySlot), HEAP_ID_FIELD2);
         startMenu->exitTaskEnvironment2 = sub_0203D818(partyMenuArgs->itemId, 2, partyMenuArgs->partySlot);
         StartMenu_SetExitTaskFunc(startMenu, Task_ReturnToMenuFromMail);
         break;
@@ -963,12 +963,12 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         break;
     }
     case PARTY_MENU_ACTION_RETURN_10:
-        startMenu->exitTaskEnvironment = sub_0203E3FC(fieldSystem, &startMenu->itemCheckUseData);
+        startMenu->exitTaskEnvironment = Bag_LaunchApp_AllPockets(fieldSystem, &startMenu->itemCheckUseData);
         StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn);
         break;
     default:
         if (partyMenuArgs->context == PARTY_MENU_CONTEXT_USE_ITEM || partyMenuArgs->context == PARTY_MENU_CONTEXT_TM_HM || partyMenuArgs->context == PARTY_MENU_CONTEXT_REPLACE_MOVE_TMHM || partyMenuArgs->context == PARTY_MENU_CONTEXT_EVO_STONE || partyMenuArgs->context == PARTY_MENU_CONTEXT_REPLACE_MOVE_LEVELUP) {
-            startMenu->exitTaskEnvironment = sub_0203E3FC(fieldSystem, &startMenu->itemCheckUseData);
+            startMenu->exitTaskEnvironment = Bag_LaunchApp_AllPockets(fieldSystem, &startMenu->itemCheckUseData);
             if (partyMenuArgs->partySlot >= 6) {
                 sub_020778E0(startMenu->exitTaskEnvironment, 0);
             } else {
@@ -976,7 +976,7 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
             }
             StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn);
         } else if (partyMenuArgs->context == PARTY_MENU_CONTEXT_9) {
-            startMenu->exitTaskEnvironment = sub_0203E3FC(fieldSystem, &startMenu->itemCheckUseData);
+            startMenu->exitTaskEnvironment = Bag_LaunchApp_AllPockets(fieldSystem, &startMenu->itemCheckUseData);
             StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn);
         } else {
             FieldSystem_LoadFieldOverlay(fieldSystem);
@@ -1001,7 +1001,7 @@ static BOOL Task_StartMenu_Bag(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
-    startMenu->exitTaskEnvironment = sub_0203E3FC(fieldSystem, &startMenu->itemCheckUseData);
+    startMenu->exitTaskEnvironment = Bag_LaunchApp_AllPockets(fieldSystem, &startMenu->itemCheckUseData);
     sub_020778E0(startMenu->exitTaskEnvironment, 0);
     startMenu->exitTaskFunc = Task_StartMenu_HandleReturn;
     FieldSystem_TryStorePlayerLocation(fieldSystem);
@@ -1060,7 +1060,7 @@ static BOOL Task_StartMenu_HandleReturn(TaskManager *taskManager) {
         Pokemon *pokemon = Party_GetMonByIndex(party, monSlot);
         Heap_Free(startMenu->exitTaskEnvironment2);
         if (ItemIdIsMail(itemId) == TRUE && !GetMonData(pokemon, MON_DATA_HELD_ITEM, NULL)) {
-            startMenu->exitTaskEnvironment = sub_0203EFEC(fieldSystem, 2, monSlot, ItemToMailId(itemId), HEAP_ID_FIELD2);
+            startMenu->exitTaskEnvironment = UseMail_LaunchApp_Compose(fieldSystem, 2, monSlot, ItemToMailId(itemId), HEAP_ID_FIELD2);
             startMenu->exitTaskEnvironment2 = sub_0203D818(itemId, 0, monSlot);
             StartMenu_SetExitTaskFunc(startMenu, Task_ReturnToMenuFromMail);
         } else {
@@ -1350,7 +1350,7 @@ static BOOL sub_0203D6C8(TaskManager *taskManager) {
 
     BagCursor_Field_PocketSetPosition(fieldSystem->bagCursor, POCKET_BERRIES, 0, 0);
     Heap_FreeExplicit(HEAP_ID_FIELD2, startMenu->exitTaskEnvironment);
-    startMenu->exitTaskEnvironment = sub_0203E3FC(fieldSystem, &startMenu->itemCheckUseData);
+    startMenu->exitTaskEnvironment = Bag_LaunchApp_AllPockets(fieldSystem, &startMenu->itemCheckUseData);
     StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn);
     return FALSE;
 }
@@ -1360,7 +1360,7 @@ BOOL Task_ReturnToMenuFromAppItem(TaskManager *taskManager) {
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
     Heap_FreeExplicit(HEAP_ID_FIELD2, startMenu->exitTaskEnvironment);
-    startMenu->exitTaskEnvironment = sub_0203E3FC(fieldSystem, &startMenu->itemCheckUseData);
+    startMenu->exitTaskEnvironment = Bag_LaunchApp_AllPockets(fieldSystem, &startMenu->itemCheckUseData);
     StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn);
     return FALSE;
 }
@@ -1405,7 +1405,7 @@ BOOL Task_ReturnToMenuFromMail(TaskManager *taskManager) {
     switch (unk->kind) {
     case 3:
         sub_02090F90(startMenu->exitTaskEnvironment);
-        startMenu->exitTaskEnvironment = sub_0203E3FC(fieldSystem, &startMenu->itemCheckUseData);
+        startMenu->exitTaskEnvironment = Bag_LaunchApp_AllPockets(fieldSystem, &startMenu->itemCheckUseData);
         StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn);
         break;
     case 2:
@@ -1427,7 +1427,7 @@ BOOL Task_ReturnToMenuFromMail(TaskManager *taskManager) {
             sub_0203D940(fieldSystem, startMenu, 11);
         } else {
             sub_02090F90(startMenu->exitTaskEnvironment);
-            startMenu->exitTaskEnvironment = sub_0203E3FC(fieldSystem, &startMenu->itemCheckUseData);
+            startMenu->exitTaskEnvironment = Bag_LaunchApp_AllPockets(fieldSystem, &startMenu->itemCheckUseData);
             StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn);
         }
         break;
@@ -1454,7 +1454,7 @@ BOOL Task_ReturnToMenuFromVSRecorder(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
-    startMenu->exitTaskEnvironment = sub_0203E3FC(fieldSystem, &startMenu->itemCheckUseData);
+    startMenu->exitTaskEnvironment = Bag_LaunchApp_AllPockets(fieldSystem, &startMenu->itemCheckUseData);
     StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn);
     return FALSE;
 }
@@ -1493,7 +1493,7 @@ static void Task_StartMenu_WaitEvolution(TaskManager *taskManager) {
         StopBGM(SEQ_GS_SHINKA, 0);
         Sound_SetScene(SOUND_SCENE_NONE);
         FieldBGM_PlayEffectiveForMapHeader(fieldSystem, fieldSystem->location->mapId);
-        startMenu->exitTaskEnvironment = sub_0203E3FC(fieldSystem, &startMenu->itemCheckUseData);
+        startMenu->exitTaskEnvironment = Bag_LaunchApp_AllPockets(fieldSystem, &startMenu->itemCheckUseData);
         StartMenuAfterEvoPartySlotBak *unk = startMenu->exitTaskEnvironment2;
         sub_020778E0(startMenu->exitTaskEnvironment, unk->partySlot);
         Heap_Free(startMenu->exitTaskEnvironment2);

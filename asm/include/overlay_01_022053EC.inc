@@ -78,7 +78,7 @@
 .public NNS_G3dGetTex
 .public MIi_CpuCopy16
 .public MI_CpuFill8
-.public ov01_021F771C
+.public MapObjectManager_GetFollowMonBillboard
 .public FollowMonBillboard_ResetPalette
 .public GetMoveModelNoBySpriteId
 .public MapObjectRender_GetBillboardResource

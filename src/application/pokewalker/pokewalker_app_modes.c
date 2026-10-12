@@ -44,7 +44,7 @@ extern const BgTemplate sBoxDisplayBgTemplateSub1;
 extern const BgTemplate sBoxDisplayBgTemplateSub3;
 
 void PokewalkerApp_ShowMonPicture(PokewalkerApp *app);
-BOOL sub_02006B84(void);
+BOOL IsFanfarePlayingOrWaiting(void);
 void NNS_G2dInitOamManagerModule(void);
 
 enum StrollReportState {
@@ -158,7 +158,7 @@ int PokewalkerApp_LinkSave_PrintSaving(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_LinkSave_WaitSaving(PokewalkerApp *app) {
-    if (!TextPrinterCheckActive(app->textPrinterId) && app->unk_1F2D6 == 31 && !sub_02006B84()) {
+    if (!TextPrinterCheckActive(app->textPrinterId) && app->unk_1F2D6 == 31 && !IsFanfarePlayingOrWaiting()) {
         IsFanfarePlaying();
         PokewalkerApp_CreateWaitingIcon(app);
         return 2;

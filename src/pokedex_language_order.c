@@ -16,7 +16,7 @@ static const u8 sDexCycleTable[] = {
 };
 
 // Get dex cycle value at index
-int sub_020912AC(int index) {
+int GetDexLanguageCycleFlag(int index) {
     GF_ASSERT(index < 6);
 
     if (index < 6) {
@@ -27,7 +27,7 @@ int sub_020912AC(int index) {
 }
 
 // Get dex cycle value with offset wrapping
-s16 sub_020912D0(s16 value, u32 offset) {
+s16 CycleDexLanguageFlag(s16 value, u32 offset) {
     u32 i;
 
     for (i = 0; i < 6; i++) {

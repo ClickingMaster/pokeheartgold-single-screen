@@ -134,7 +134,7 @@
 .public MapObject_IsBillboardAnimPaused
 .public MapObject_SetFacingAndUpdateDraw
 .public MapObject_RequestBillboard
-.public ov01_021F95CC
+.public MapObject_CancelAndFreeBillboard
 .public BillboardObject_SaveState
 .public BillboardObject_RestoreState
 .public MapObject_IsBillboardPending
@@ -154,12 +154,12 @@
 	.public TypeBehavior_NoOpInit
 	.public TypeBehavior_NoOpCheck
 	.public TypeBehavior_NoOpUpdate
-	.public sub_02063B08
-	.public sub_02063B20
-	.public sub_02063B9C
-	.public sub_02063C88
-	.public sub_02063CB4
-	.public sub_02063D30
+	.public TypeBehavior_LookSidewaysInit
+	.public TypeBehavior_LookSidewaysCheck
+	.public TypeBehavior_LookSidewaysUpdate
+	.public TypeBehavior_SpinInit
+	.public TypeBehavior_SpinCheck
+	.public TypeBehavior_SpinUpdate
 	.public GetApricornTreeSpriteId
 	.public CheckSeenByNpcTrainers
 	.public GetEngagingTrainerParams
@@ -177,29 +177,29 @@
 	.public TrainerApproach_GetDone
 	.public TrainerApproach_DestroyTask
 	.public TrainerApproach_Task
-	.public sub_0206464C
-	.public sub_02064668
-	.public sub_02064694
-	.public sub_020646DC
-	.public sub_02064714
-	.public sub_02064730
-	.public sub_02064748
-	.public sub_02064764
-	.public sub_02064778
-	.public sub_02064790
-	.public sub_020647A8
-	.public sub_020647C0
-	.public sub_020647E8
-	.public sub_02064808
-	.public sub_02064824
-	.public sub_020648A0
-	.public sub_020648C8
-	.public sub_020648E4
-	.public _020FE0C4
-	.public _020FE0D4
-	.public _020FE0E4
+	.public TrainerApproach_UnpauseTrainer
+	.public TrainerApproach_FaceDirection
+	.public TrainerApproach_WaitForPlayer
+	.public TrainerApproach_StartFace
+	.public TrainerApproach_WaitFace
+	.public TrainerApproach_SpawnExclamation
+	.public TrainerApproach_WaitExclamation
+	.public TrainerApproach_StartReveal
+	.public TrainerApproach_WaitReveal
+	.public TrainerApproach_Wait
+	.public TrainerApproach_CheckDistance
+	.public TrainerApproach_StartStep
+	.public TrainerApproach_WaitStep
+	.public TrainerApproach_WaitArrived
+	.public TrainerApproach_TurnPlayer
+	.public TrainerApproach_WaitPlayerTurn
+	.public TrainerApproach_ResetTrainerMovement
+	.public TrainerApproach_Finish
+	.public gLookSidewaysAxisByFacing
+	.public gLookSidewaysDirections
+	.public gTypeBehaviorSpinOrders
 	.public gMapObjectTypeBehaviorInits
 	.public gMapObjectTypeBehaviorChecks
 	.public gMapObjectTypeBehaviorUpdates
 	.public _020FE194
-	.public _020FE1A4
+	.public gTrainerApproachStateFuncs

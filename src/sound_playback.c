@@ -35,7 +35,7 @@ void sub_02005464(int seqNo, enum SoundHandleNo handleNo);
 void Sound_SetReloadFieldSeqFlag(u16 seqNo);
 void GF_SndSetFadeTimer(u32 frames);
 void Sound_StopWaveOut(int handleNo);
-int sub_02005BFC(void);
+int Sound_IsSelectSEMuted(void);
 void GF_SndSetTrackPitchBySeqNo(u16 seqNo, u32 trackMask, int pitch);
 void Sound_StopWaveOutAndFreeBuffer(int handleNo);
 void Sound_FreeWaveOutChannel(int handleNo);
@@ -60,8 +60,8 @@ void NNS_SndPlayerSetTrackPan(NNSSndHandle *handle, u32 trackMask, int pan);
 BOOL NNS_SndArcPlayerStartSeqEx(NNSSndHandle *handle, int playerNo, int bankNo, int playerPrio, int seqNo);
 
 void ClearPlayingBGM(void);
-BOOL sub_02005D10(u16 seqNo);
-void sub_02005DA0(u16 seqNo, enum SoundHandleNo handleNo);
+BOOL PlayBGMDirect(u16 seqNo);
+void Sound_OnBGMStarted(u16 seqNo, enum SoundHandleNo handleNo);
 BOOL PlayBGMOnBGMPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo);
 BOOL PlayBGMOnFieldPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo);
 BOOL Sound_StartSeq(enum SoundHandleNo handleNo, int playerNo, int bankNo, int playerPrio, u16 seqNo, u8 useGBSounds);
@@ -70,7 +70,7 @@ BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 BOOL PlaySEEx(enum SoundHandleNo handleNo, int playerNo, int bankNo, int playerPrio, int seqNo);
 BOOL PlaySE_SetVolume(u16 seqNo, u16 volume);
 void SetSeqTrackPan(u16 seqNo, u32 trackMask, int pan);
-u32 sub_02006190(u32 playerNo);
+u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
 void SetPlayerPan(int playerNo, int pan);
 void SetAllSEPan(int pan);
 BOOL IsShayminSkyCry(u16 species, u8 form);
@@ -78,21 +78,21 @@ void ClearQueuedCries(void);
 void sub_02006820(int species, int handleNo, int volume);
 void StartCryStopTask(int frames, int heapId);
 BOOL PlayChorusCryWithPitch(u16 species, int pitch, u8 form);
-void sub_02006AF4(u16 species, int pitch, int volume, int pan, int heapId);
+void PlayReversedCry(u16 species, int pitch, int volume, int pan, int heapId);
 void CryStopTask(SysTask *task, void *data);
 void DestroyCryStopTask(void);
-BOOL sub_02006B84(void);
+BOOL IsFanfarePlayingOrWaiting(void);
 void StopFanfare(int fadeFrames);
 void StartFanfareWaitTimer(u16 unused);
 
-BOOL sub_02005D10(u16 seqNo) {
+BOOL PlayBGMDirect(u16 seqNo) {
     BOOL success;
     enum SoundHandleNo handleNo = GF_GetSndHandleByPlayerNo(GF_GetPlayerNoBySeq(seqNo));
     success = Sound_StartSeq(handleNo, -1, -1, -1, seqNo, 1);
     if (!success) {
-        sub_02004920(seqNo);
+        GF_SndOnStartSeqFailed(seqNo);
     }
-    sub_02005DA0(seqNo, handleNo);
+    Sound_OnBGMStarted(seqNo, handleNo);
     return success;
 }
 
@@ -110,13 +110,13 @@ BOOL PlayBGM(u16 seqNo) {
     }
     Sound_SetReloadFieldSeqFlag(0);
     if (!success) {
-        sub_02004920(seqNo);
+        GF_SndOnStartSeqFailed(seqNo);
     }
-    sub_02005DA0(seqNo, handleNo);
+    Sound_OnBGMStarted(seqNo, handleNo);
     return success;
 }
 
-void sub_02005DA0(u16 seqNo, enum SoundHandleNo handleNo) {
+void Sound_OnBGMStarted(u16 seqNo, enum SoundHandleNo handleNo) {
     Sound_SetCurrentBGM(seqNo);
     sub_02005464(seqNo, handleNo);
     GF_SndSetState(1);
@@ -139,7 +139,7 @@ BOOL PlayBGMOnFieldPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo) 
     return Sound_StartSeq(handleNo, -1, GF_GetBankBySeqNo(*fieldSeqNo), -1, seqNo, 1);
 }
 
-BOOL sub_02005E44(u16 seqNo) {
+BOOL PlayBGMOnBGMPlayerInField(u16 seqNo) {
     BOOL success;
     u8 *scene = GF_SdatGetAttrPtr(21);
     if (*scene != 4) {
@@ -153,7 +153,7 @@ BOOL sub_02005E44(u16 seqNo) {
     GF_Snd_LoadSeqEx(seqNo, 1);
     success = Sound_StartSeq(SND_HANDLE_BGM, -1, -1, -1, seqNo, 1);
     if (!success) {
-        sub_02004920(seqNo);
+        GF_SndOnStartSeqFailed(seqNo);
     }
     SndRadio_StopSeq(0);
     Sound_SetCurrentBGM(seqNo);
@@ -211,7 +211,7 @@ u32 GF_SndGetFadeTimer(void) {
     return *timer;
 }
 
-u32 sub_02005F94(u16 seqNo) {
+u32 GF_SndCountPlayingSeqBySeqNo(u16 seqNo) {
     return GF_SndPlayerCountPlayingSeqByPlayerNo(GF_GetPlayerNoBySeq(seqNo));
 }
 
@@ -268,13 +268,13 @@ BOOL PlaySEWithFieldBank(u16 seqNo) {
 }
 
 BOOL PlaySEEx(enum SoundHandleNo handleNo, int playerNo, int bankNo, int playerPrio, int seqNo) {
-    if (sub_02005BFC() == 1 && (u32)seqNo - SEQ_SE_DP_SELECT <= 1) {
+    if (Sound_IsSelectSEMuted() == 1 && (u32)seqNo - SEQ_SE_DP_SELECT <= 1) {
         return FALSE;
     }
     BOOL success = Sound_StartSeq(handleNo, playerNo, bankNo, playerPrio, seqNo, 0);
     sub_02005464(seqNo, handleNo);
     if (!success) {
-        sub_02004920(seqNo);
+        GF_SndOnStartSeqFailed(seqNo);
     }
     return success;
 }
@@ -313,7 +313,7 @@ BOOL IsSEPlaying(u16 seqNo) {
     return GF_SndPlayerCountPlayingSeqByPlayerNo(GF_GetPlayerNoBySeq(seqNo));
 }
 
-u32 sub_02006190(u32 playerNo) {
+u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo) {
     return GF_SndPlayerCountPlayingSeqByPlayerNo(playerNo);
 }
 
@@ -498,7 +498,7 @@ BOOL PlayCryEx(u32 pattern, u16 species, int pan, int volume, int heapId, u8 for
         Sound_SetWaveOutPan(14, wavePan);
         StartCryStopTask(15, heapId);
         Sound_SetWaveOutSpeed(14, 34304);
-        sub_02006AF4(species, -64, chorusVolume, wavePan, heapId);
+        PlayReversedCry(species, -64, chorusVolume, wavePan, heapId);
         Sound_SetWaveOutSpeed(15, 34304);
         break;
     case 5:
@@ -716,7 +716,7 @@ BOOL PlayChorusCryWithPitch(u16 species, int pitch, u8 form) {
     return success;
 }
 
-void sub_02006AF4(u16 species, int unused, int volume, int pan, int heapId) {
+void PlayReversedCry(u16 species, int unused, int volume, int pan, int heapId) {
     u8 *useChorus = GF_SdatGetAttrPtr(18);
     *useChorus = 1;
     Sound_AllocWaveOutChannel(15);
@@ -739,7 +739,7 @@ BOOL PlayFanfare(u16 seqNo) {
     return success;
 }
 
-BOOL sub_02006B84(void) {
+BOOL IsFanfarePlayingOrWaiting(void) {
     u16 *waitTimer = GF_SdatGetAttrPtr(14);
     if (GF_SndPlayerCountPlayingSeqByPlayerNo(2) != 0) {
         return TRUE;
@@ -758,7 +758,7 @@ void StopFanfare(int fadeFrames) {
 
 BOOL IsFanfarePlaying(void) {
     GF_SdatGetAttrPtr(14);
-    if (sub_02006B84() == 1) {
+    if (IsFanfarePlayingOrWaiting() == 1) {
         return TRUE;
     }
     StopFanfare(0);

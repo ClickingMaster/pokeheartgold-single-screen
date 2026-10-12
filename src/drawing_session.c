@@ -242,7 +242,7 @@ BOOL DrawingSession_Main(OverlayManager *man, int *state) {
 
 BOOL DrawingSession_Exit(OverlayManager *man, int *state) {
     DrawingSessionWork *work;
-    UnkStruct_0203F4C8 *args;
+    DrawingSessionArgs *args;
     s32 i;
     work = OverlayManager_GetData(man);
     args = OverlayManager_GetArgs(man);

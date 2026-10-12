@@ -37,16 +37,16 @@
 	.include "global.inc"
 
 	.text
-	.public sub_020613F8
+	.public RandomWalkMovement_Update
 	.public MapObject_GetMovementBounds
 	.public MapObject_IsWithinMovementBounds
 	.rodata
 
-	.public _020FD4EC
-	.public _020FD4EC
-_020FD4EC:
-	.word sub_02061C40
-	.word sub_02061D50
+	.public gPathMovementStateFuncs
+	.public gPathMovementStateFuncs
+gPathMovementStateFuncs:
+	.word PathMovement_Step
+	.word PathMovement_WaitStep
 	.public _020FD4F4
 _020FD4F4:
 	.word 0, 2, -1
@@ -68,12 +68,12 @@ _020FD530:
 	.public _020FD53C
 _020FD53C:
 	.word 2, 3, -1
-	.public _020FD548
-	.public _020FD548
-_020FD548:
-	.word sub_020619C0
-	.word sub_020619FC
-	.word sub_02061ABC
+	.public gBackAndForthMovementStateFuncs
+	.public gBackAndForthMovementStateFuncs
+gBackAndForthMovementStateFuncs:
+	.word BackAndForthMovement_FaceStart
+	.word BackAndForthMovement_Step
+	.word BackAndForthMovement_WaitStep
 	.public _020FD554
 _020FD554:
 	.word 0, 1, -1
@@ -89,25 +89,25 @@ _020FD580:
 	.public _020FD590
 _020FD590:
 	.word 0, 3, 1, 2
-	.public _020FD5A0
-	.public _020FD5A0
-_020FD5A0:
-	.word sub_02061874
-	.word sub_02061894
-	.word sub_020618B0
-	.word sub_020618C8
+	.public gAlternatingSpinMovementStateFuncs
+	.public gAlternatingSpinMovementStateFuncs
+gAlternatingSpinMovementStateFuncs:
+	.word AlternatingSpinMovement_Face
+	.word AlternatingSpinMovement_WaitFace
+	.word AlternatingSpinMovement_Wait
+	.word AlternatingSpinMovement_Turn
 	.public _020FD5B0
 _020FD5B0:
 	.word 1, 2, 3, 0
 	.public _020FD5C0
 _020FD5C0:
 	.word 1, 3, 0, 2
-	.public _020FD5D0
-_020FD5D0:
-	.word sub_02061720
-	.word sub_02061754
-	.word sub_02061770
-	.word sub_020617AC
+	.public gSpinMovementStateFuncs
+gSpinMovementStateFuncs:
+	.word SpinMovement_FaceNearbyPlayer
+	.word SpinMovement_WaitFace
+	.word SpinMovement_Wait
+	.word SpinMovement_Turn
 	.public _020FD5E0
 _020FD5E0:
 	.word 0x00000001, 0x00000002, 0x00000000, 0x00000003
@@ -178,47 +178,47 @@ _020FD730:
 _020FD740:
 	.word 0x00000000, 0x00000001, 0x00000002, 0x00000003
 	.word 0xFFFFFFFF
-	.public _020FD754
-_020FD754:
+	.public gSpinCounterclockwiseOrder
+gSpinCounterclockwiseOrder:
 	.word 0x00000000, 0x00000002, 0x00000001
 	.word 0x00000003, 0xFFFFFFFF
-	.public _020FD768
-_020FD768:
+	.public gSpinClockwiseOrder
+gSpinClockwiseOrder:
 	.word 0x00000000, 0x00000003
 	.word 0x00000001, 0x00000002, 0xFFFFFFFF
-	.public _020FD77C
-_020FD77C:
+	.public gAlternatingSpinCounterclockwiseOrder
+gAlternatingSpinCounterclockwiseOrder:
 	.word 0x00000000
 	.word 0x00000002, 0x00000001, 0x00000003, 0xFFFFFFFF
 	.public _020FD790
 _020FD790:
 	.word 0x00000000, 0x00000001, 0x00000002, 0x00000003
 	.word 0xFFFFFFFF
-	.public _020FD7A4
-_020FD7A4:
+	.public gAlternatingSpinClockwiseOrder
+gAlternatingSpinClockwiseOrder:
 	.word 0x00000000, 0x00000003, 0x00000001
 	.word 0x00000002, 0xFFFFFFFF
-	.public _020FD7B8
-	.public _020FD7B8
-_020FD7B8:
+	.public gRandomLookDelays
+	.public gRandomLookDelays
+gRandomLookDelays:
 	.word 0x00000010, 0x00000020
 	.word 0x00000030, 0x00000040, 0xFFFFFFFF
 	.public _020FD7CC
 _020FD7CC:
 	.word 0x00000000
 	.word 0x00000001, 0x00000002, 0x00000003, 0xFFFFFFFF
-	.public _020FD7E0
-_020FD7E0:
+	.public gWalkingSpinOrders
+gWalkingSpinOrders:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
-	.public _020FD800
-_020FD800:
+	.public gPlayerAwareMovementTypes
+gPlayerAwareMovementTypes:
 	.byte 0x02, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00
 	.byte 0x09, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00
 	.byte 0x0D, 0x00, 0x00, 0x00, 0x2D, 0x00, 0x00, 0x00, 0x2E, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00
 	.byte 0x13, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00
-	.public _020FD838
-_020FD838:
+	.public gMovementDirectionTables
+gMovementDirectionTables:
 	.word 0, _020FD7CC
 	.word 0x00000001, _020FD4F4
 	.word 0x00000002, _020FD518

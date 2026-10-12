@@ -1198,7 +1198,7 @@ static void BerryPotsApp_SetupSpriteRendererAndGfxHandler(BerryPotsAppData *data
 
     data->spriteGfxHandler1 = SpriteManager_New(data->spriteRenderer);
     SpriteSystem_InitSprites(data->spriteRenderer, data->spriteGfxHandler1, 25);
-    sub_0200D2A4(data->spriteRenderer, data->spriteGfxHandler1, &ov17_02203D78, 0, 0);
+    SpriteSystem_LoadResourceDataFromFileIdListEx(data->spriteRenderer, data->spriteGfxHandler1, &ov17_02203D78, 0, 0);
 
     data->itemIconNarc = NARC_New(NARC_itemtool_itemdata_item_icon, data->heapID);
 
@@ -1285,15 +1285,15 @@ static void ov17_02203404(BerryPotsAppData *data, int index) {
         berryId--;
     }
 
-    sub_0200E2B8(data->spriteRenderer, data->spriteGfxHandler1, data->berryPotsAppNarc, berryId + 76, FALSE, index + 1);
-    sub_0200E2EC(data->spriteRenderer, data->spriteGfxHandler1, data->berryPotsAppNarc, berryId + 12, FALSE, index + 1);
+    SpriteSystem_ReplaceCharResObjFromOpenNarc(data->spriteRenderer, data->spriteGfxHandler1, data->berryPotsAppNarc, berryId + 76, FALSE, index + 1);
+    SpriteSystem_ReplacePlttResObjFromOpenNarc(data->spriteRenderer, data->spriteGfxHandler1, data->berryPotsAppNarc, berryId + 12, FALSE, index + 1);
 }
 
 static void ov17_02203460(BerryPotsAppData *data, u8 index) {
     u16 itemId = BerryIdToItemId(data->unk20[index].berryId);
 
-    sub_0200E2B8(data->spriteRenderer, data->spriteGfxHandler2, data->itemIconNarc, GetItemIndexMapping(itemId, ITEMNARC_NCGR), FALSE, 4000);
-    sub_0200E2EC(data->spriteRenderer, data->spriteGfxHandler2, data->itemIconNarc, GetItemIndexMapping(itemId, ITEMNARC_NCLR), FALSE, 4000);
+    SpriteSystem_ReplaceCharResObjFromOpenNarc(data->spriteRenderer, data->spriteGfxHandler2, data->itemIconNarc, GetItemIndexMapping(itemId, ITEMNARC_NCGR), FALSE, 4000);
+    SpriteSystem_ReplacePlttResObjFromOpenNarc(data->spriteRenderer, data->spriteGfxHandler2, data->itemIconNarc, GetItemIndexMapping(itemId, ITEMNARC_NCLR), FALSE, 4000);
 }
 
 ManagedSprite *ov17_022034C8(BerryPotsAppData *data, s16 x, s16 y, u8 unused) {

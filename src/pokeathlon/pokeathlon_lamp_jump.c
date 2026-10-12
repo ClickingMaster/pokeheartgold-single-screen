@@ -25,7 +25,7 @@
 
 // sound_playback.c (no header declares them)
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
-u32 sub_02006190(u32 playerNo);
+u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
 
 // Course helpers, sprite scene and the rest of the event (OVY_96, not yet tidied).
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
@@ -154,7 +154,7 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
         gSystem.screensFlipped = TRUE;
         GfGfx_SwapDisplay();
         GF_CreateVramTransferManager(12, lampJump->heapId);
-        lampJump->cellTransferState = sub_02020654(12, lampJump->heapId);
+        lampJump->cellTransferState = CreateCellTransferStateManager(12, lampJump->heapId);
         PokeathlonCourse_IncrementField1ED(course);
         break;
     case 1:
@@ -326,7 +326,7 @@ BOOL PokeathlonLampJump_Exit(PokeathlonCourseData *course) {
     Main_SetHBlankIntrCB(NULL, NULL);
     gSystem.screensFlipped = FALSE;
     GfGfx_SwapDisplay();
-    sub_0202067C(lampJump->cellTransferState);
+    DestroyCellTransferStateManager(lampJump->cellTransferState);
     GF_DestroyVramTransferManager();
     PokeathlonCourse_FreePtr4HeapAlloc(course);
     reg_G2_BLDCNT = 0;
@@ -619,7 +619,7 @@ void PokeathlonLampJump_UpdateMonSprites(PokeathlonCourseData *course) {
         if (mon->unk26) {
             PokeathlonCourseSpritePoolSprite_Show(mon->effectSprite, 1, 1);
             ov96_021EAD08(mon->sprite, 20);
-            if (!sub_02006190(ov96_0221DC18[i])) {
+            if (!GF_SndCountPlayingSeqOnPlayer(ov96_0221DC18[i])) {
                 PlaySEOnPlayer(SEQ_SE_GS_W146, ov96_0221DC18[i]);
             }
         } else {

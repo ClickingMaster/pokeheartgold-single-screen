@@ -1217,7 +1217,7 @@ void AICmd_CalcMaxEffectiveness(BattleSystem *battleSystem, BattleContext *ctx) 
         int moveType = TrainerAI_MoveType(battleSystem, ctx, ctx->trainerAIData.attacker, move);
 
         if (move) {
-            damage = ov12_02251D28(battleSystem,
+            damage = BattleSystem_ApplyTypeEffectiveness(battleSystem,
                 ctx,
                 move,
                 moveType,
@@ -1255,7 +1255,7 @@ void AICmd_IfMoveEffectivenessEquals(BattleSystem *battleSystem, BattleContext *
     u32 damage = TYPE_MULTI_BASE_DAMAGE;
     u32 effectiveness = 0;
 
-    damage = ov12_02251D28(battleSystem,
+    damage = BattleSystem_ApplyTypeEffectiveness(battleSystem,
         ctx,
         ctx->trainerAIData.move,
         TrainerAI_MoveType(battleSystem, ctx, ctx->trainerAIData.attacker, ctx->trainerAIData.move),
@@ -2978,7 +2978,7 @@ static s32 TrainerAI_CalcDamage(BattleSystem *battleSystem, BattleContext *ctx, 
         ctx->battleStatus |= BATTLE_STATUS_IGNORE_TYPE_EFFECTIVENESS;
     }
 
-    damage = ov12_02251D28(battleSystem,
+    damage = BattleSystem_ApplyTypeEffectiveness(battleSystem,
         ctx,
         move,
         type,
@@ -3187,7 +3187,7 @@ static BOOL AI_CannotDamageWonderGuard(BattleSystem *battleSystem, BattleContext
 
             if (move) {
                 effectiveness = 0;
-                ov12_02251D28(battleSystem, ctx, move, moveType, battler, battler ^ 1, 0, &effectiveness);
+                BattleSystem_ApplyTypeEffectiveness(battleSystem, ctx, move, moveType, battler, battler ^ 1, 0, &effectiveness);
 
                 if (effectiveness & MOVE_STATUS_SUPER_EFFECTIVE) {
                     return FALSE;
@@ -3209,7 +3209,7 @@ static BOOL AI_CannotDamageWonderGuard(BattleSystem *battleSystem, BattleContext
 
                     if (move) {
                         effectiveness = 0;
-                        ov12_02252054(ctx,
+                        CalcTypeEffectivenessFlags(ctx,
                             move,
                             moveType,
                             GetMonData(mon, MON_DATA_ABILITY, NULL),
@@ -3274,7 +3274,7 @@ static BOOL AI_OnlyIneffectiveMoves(BattleSystem *battleSystem, BattleContext *c
 
             effectiveness = 0;
             if (ctx->battleMons[defender1].hp) {
-                ov12_02251D28(battleSystem, ctx, move, type, battler, defender1, 0, &effectiveness);
+                BattleSystem_ApplyTypeEffectiveness(battleSystem, ctx, move, type, battler, defender1, 0, &effectiveness);
             }
 
             if ((effectiveness & MOVE_STATUS_NO_EFFECT) == FALSE) {
@@ -3283,7 +3283,7 @@ static BOOL AI_OnlyIneffectiveMoves(BattleSystem *battleSystem, BattleContext *c
 
             effectiveness = 0;
             if (ctx->battleMons[defender2].hp) {
-                ov12_02251D28(battleSystem, ctx, move, type, battler, defender2, 0, &effectiveness);
+                BattleSystem_ApplyTypeEffectiveness(battleSystem, ctx, move, type, battler, defender2, 0, &effectiveness);
             }
 
             if ((effectiveness & MOVE_STATUS_NO_EFFECT) == FALSE) {
@@ -3328,7 +3328,7 @@ static BOOL AI_OnlyIneffectiveMoves(BattleSystem *battleSystem, BattleContext *c
                 if (move && ctx->trainerAIData.moveData[move].power) {
                     effectiveness = 0;
                     if (ctx->battleMons[defender1].hp) {
-                        ov12_02252054(ctx,
+                        CalcTypeEffectivenessFlags(ctx,
                             move,
                             type,
                             GetMonData(mon, MON_DATA_ABILITY, NULL),
@@ -3346,7 +3346,7 @@ static BOOL AI_OnlyIneffectiveMoves(BattleSystem *battleSystem, BattleContext *c
 
                     effectiveness = 0;
                     if (ctx->battleMons[defender2].hp) {
-                        ov12_02252054(ctx,
+                        CalcTypeEffectivenessFlags(ctx,
                             move,
                             type,
                             GetMonData(mon, MON_DATA_ABILITY, NULL),
@@ -3387,7 +3387,7 @@ static BOOL AI_OnlyIneffectiveMoves(BattleSystem *battleSystem, BattleContext *c
                 if (move && ctx->trainerAIData.moveData[move].power) {
                     effectiveness = 0;
                     if (ctx->battleMons[defender1].hp) {
-                        ov12_02252054(ctx,
+                        CalcTypeEffectivenessFlags(ctx,
                             move,
                             type,
                             GetMonData(mon, MON_DATA_ABILITY, NULL),
@@ -3405,7 +3405,7 @@ static BOOL AI_OnlyIneffectiveMoves(BattleSystem *battleSystem, BattleContext *c
 
                     effectiveness = 0;
                     if (ctx->battleMons[defender2].hp) {
-                        ov12_02252054(ctx,
+                        CalcTypeEffectivenessFlags(ctx,
                             move,
                             type,
                             GetMonData(mon, MON_DATA_ABILITY, NULL),
@@ -3461,7 +3461,7 @@ static BOOL AI_HasSuperEffectiveMove(BattleSystem *battleSystem, BattleContext *
 
             if (move) {
                 effectiveness = 0;
-                ov12_02251D28(battleSystem, ctx, move, type, battler, defender, 0, &effectiveness);
+                BattleSystem_ApplyTypeEffectiveness(battleSystem, ctx, move, type, battler, defender, 0, &effectiveness);
 
                 // If the defending mon is weak to our move, return TRUE 90-100% of the time.
                 if (effectiveness & MOVE_STATUS_SUPER_EFFECTIVE) {
@@ -3488,7 +3488,7 @@ static BOOL AI_HasSuperEffectiveMove(BattleSystem *battleSystem, BattleContext *
 
             if (move) {
                 effectiveness = 0;
-                ov12_02251D28(battleSystem, ctx, move, type, battler, defender, 0, &effectiveness);
+                BattleSystem_ApplyTypeEffectiveness(battleSystem, ctx, move, type, battler, defender, 0, &effectiveness);
 
                 // If the defending mon is weak to our move, return TRUE 90-100% of the time.
                 if (effectiveness & MOVE_STATUS_SUPER_EFFECTIVE) {
@@ -3647,7 +3647,7 @@ static BOOL AI_HasPartyMemberWithSuperEffectiveMove(BattleSystem *battleSystem, 
             effectiveness = 0;
             moveType = TrainerAI_MoveType(battleSystem, ctx, ctx->moveNoHitBattler[battler], ctx->moveNoHit[battler]);
 
-            ov12_02252054(ctx,
+            CalcTypeEffectivenessFlags(ctx,
                 ctx->moveNoHit[battler],
                 moveType,
                 GetBattlerAbility(ctx, ctx->moveNoHitBattler[battler]),
@@ -3664,7 +3664,7 @@ static BOOL AI_HasPartyMemberWithSuperEffectiveMove(BattleSystem *battleSystem, 
 
                     if (move) {
                         effectiveness = 0;
-                        ov12_02252054(ctx,
+                        CalcTypeEffectivenessFlags(ctx,
                             move,
                             moveType,
                             GetMonData(mon, MON_DATA_ABILITY, NULL),

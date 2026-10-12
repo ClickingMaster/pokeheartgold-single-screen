@@ -3,7 +3,7 @@
 
 #include "overlay_manager.h"
 
-// The GTS (Global Trade System) app, launched by sub_0203F844 with a GtsArgs.
+// The GTS (Global Trade System) app, launched by Gts_LaunchApp with a GtsArgs.
 BOOL Gts_Init(OverlayManager *man, int *state);
 BOOL Gts_Main(OverlayManager *man, int *state);
 BOOL Gts_Exit(OverlayManager *man, int *state);

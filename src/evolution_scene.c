@@ -77,7 +77,7 @@ u32 GetUserFrameGfx2PaletteMember(u32 frame);
 void LoadUserFrameGfx2WithFill(BgConfig *bgConfig, u8 bgId, u16 baseTile, u8 color, u8 frame, enum HeapID heapId);
 
 // sound_playback.c, not in its header
-BOOL sub_02005D10(u16 seqNo);
+BOOL PlayBGMDirect(u16 seqNo);
 
 // The scene calls Pokepic_StartAnim() with a second argument, which the function ignores.
 #define EVO_START_POKEPIC_ANIM(pokepic) ((void (*)(Pokepic *, int))Pokepic_StartAnim)(pokepic, 0)
@@ -435,8 +435,8 @@ EvolutionTaskData *EvolutionScene_New(Party *party, Pokemon *mon, int species, O
     FontID_Alloc(4, heapID);
     data = Heap_Alloc(heapID, sizeof(EvolutionTaskData));
     MI_CpuClearFast(data, sizeof(EvolutionTaskData));
-    MI_CpuClear16(GetMainBgPlttAddr(), sub_02026E8C());
-    MI_CpuClear16(GetSubBgPlttAddr(), sub_02026E9C());
+    MI_CpuClear16(GetMainBgPlttAddr(), GetMainBgPlttSize());
+    MI_CpuClear16(GetSubBgPlttAddr(), GetSubBgPlttSize());
     data->party = party;
     data->mon = mon;
     data->species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -632,7 +632,7 @@ void EvolutionScene_Run(EvolutionTaskData *data) {
     case EVO_STATE_WAIT_CRY:
         if (!TextPrinterCheckActive(data->printerId) && !IsCryFinished() && PokepicAnimManager_GetAnimState(data->pokepicAnimManager, 0) == TRUE && !Pokepic_IsAnimFinished(data->oldPokepic)) {
             PaletteBlink_SetState(data->paletteBlink, 1);
-            sub_02005D10(SEQ_GS_SHINKA);
+            PlayBGMDirect(SEQ_GS_SHINKA);
             data->timer = 20;
             data->state = EVO_STATE_START_PARTICLES;
         }

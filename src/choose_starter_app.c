@@ -1181,8 +1181,8 @@ static void createMonSprites(struct ChooseStarterAppWork *work) {
             MonIsShiny(work->choices[i]),
             0,
             0);
-        spriteData->charDatas[i] = sub_0201442C((NarcId)spriteData->pokepicTemplate.narcID, spriteData->pokepicTemplate.charDataID, work->heapID);
-        spriteData->plttDatas[i] = sub_02014450((NarcId)spriteData->pokepicTemplate.narcID, spriteData->pokepicTemplate.palDataID, work->heapID);
+        spriteData->charDatas[i] = CharTiles_AllocAndLoadPicAsObjFromNarc((NarcId)spriteData->pokepicTemplate.narcID, spriteData->pokepicTemplate.charDataID, work->heapID);
+        spriteData->plttDatas[i] = AllocAndLoadPltt16FromNarc((NarcId)spriteData->pokepicTemplate.narcID, spriteData->pokepicTemplate.palDataID, work->heapID);
         loadOneMonObj(spriteData->charResMan, spriteData->plttResMan, spriteData->charDatas[i], spriteData->plttDatas[i], i);
         createOneMonRender(spriteData, i, work->heapID);
     }

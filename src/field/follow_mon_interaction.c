@@ -124,7 +124,7 @@ extern const VecFx32 ov02_02253B24;
 extern const VecFx32 ov02_02253B30;
 
 // Overlay 1 map object model helpers.
-void *ov01_021F771C(MapObjectManager *manager);
+void *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager);
 void FollowMonBillboard_SetShadowAnchored(LocalMapObject *object, BOOL set);
 void FollowMonBillboard_SetHeight(LocalMapObject *object, s8 a1);
 void FollowMonBillboard_AddHeight(LocalMapObject *object, s8 a1);
@@ -1522,7 +1522,7 @@ BOOL ov02_022508D8(TaskManager *taskManager) {
         env->frame++;
         scale.x = (s32)((double)env->frame * 2048.0 / 10.0 + 4096.0);
         scale.y = (s32)((double)env->frame * 2048.0 / 10.0 + 4096.0);
-        BillboardObject_SetScale(ov01_021F771C(fieldSystem->mapObjectManager), &scale);
+        BillboardObject_SetScale(MapObjectManager_GetFollowMonBillboard(fieldSystem->mapObjectManager), &scale);
         if (env->frame >= 10) {
             env->frame = 0;
             env->wait = 0;
@@ -1546,7 +1546,7 @@ BOOL ov02_022508D8(TaskManager *taskManager) {
             scale.x = (s32)((double)(10 - env->frame) * 2048.0 / 10.0 + 4096.0);
             scale.y = (s32)((double)(10 - env->frame) * 2048.0 / 10.0 + 4096.0);
         }
-        BillboardObject_SetScale(ov01_021F771C(fieldSystem->mapObjectManager), &scale);
+        BillboardObject_SetScale(MapObjectManager_GetFollowMonBillboard(fieldSystem->mapObjectManager), &scale);
         break;
     }
     case 3:

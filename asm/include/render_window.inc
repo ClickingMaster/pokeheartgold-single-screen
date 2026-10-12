@@ -36,8 +36,8 @@
 .public WaitingIcon_DeleteWithoutRestore
 .public DrawPokemonPicFromSpecies
 .public DrawPokemonPicFromMon
-.public sub_020143E0
-.public sub_02014450
+.public CharTiles_LoadRectAsObjFromNarc
+.public AllocAndLoadPltt16FromNarc
 .public Heap_Alloc
 .public Heap_Free
 .public Heap_FreeExplicit

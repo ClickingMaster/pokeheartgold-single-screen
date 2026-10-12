@@ -448,7 +448,7 @@ int LinkBattleScreen_InitPartyScreen(LinkBattleScreen *screen) {
         LinkBattleScreen_DrawAllMonPanelText(screen);
         LinkBattleScreen_StashPanelTilemaps(screen);
         WirelessStatusIcon_Create();
-        sub_020880CC(0, screen->args->heapId);
+        BeginAppScreenFade(0, screen->args->heapId);
         Main_SetVBlankIntrCB(LinkBattleScreen_VBlankCallback, screen);
         return 1;
     }
@@ -470,7 +470,7 @@ int LinkBattleScreen_InitVsScreen(LinkBattleScreen *screen) {
         LinkBattleScreen_InitParticles(screen);
         break;
     case 2:
-        sub_020880CC(0, screen->args->heapId);
+        BeginAppScreenFade(0, screen->args->heapId);
         Main_SetVBlankIntrCB(LinkBattleScreen_VBlankCallback, screen);
         screen->frame = 0;
         screen->shakeRangeX = 8;
@@ -509,7 +509,7 @@ int LinkBattleScreen_InitResultScreen(LinkBattleScreen *screen) {
         WirelessStatusIcon_Create();
         break;
     case 2:
-        sub_020880CC(0, screen->args->heapId);
+        BeginAppScreenFade(0, screen->args->heapId);
         Main_SetVBlankIntrCB(LinkBattleScreen_VBlankCallback, screen);
         screen->frame = 0;
         screen->shakeRangeX = 4;
@@ -894,7 +894,7 @@ int LinkBattleScreen_SlidePartyPanelsIn(LinkBattleScreen *screen) {
 }
 
 int LinkBattleScreen_StartExit(LinkBattleScreen *screen) {
-    sub_020880CC(1, screen->args->heapId);
+    BeginAppScreenFade(1, screen->args->heapId);
     screen->taskState = 2;
     return 1;
 }
@@ -1756,13 +1756,13 @@ void LinkBattleScreen_PrintMonName(LinkBattleScreen *screen, MsgData *msgData, M
 
 void LinkBattleScreen_PrintMonLevel(LinkBattleScreen *screen, MsgData *unused, MessagePrinter *printer, MessageFormat *unused2, String *unused3, u32 index) {
     Window *window = &screen->partyWindows[index * 4 + 1];
-    sub_0200CE7C(printer, 1, screen->monInfo[index].level, 3, PRINTING_MODE_LEFT_ALIGN, window, 0, 2);
+    MessagePrinter_PrintGlyphAndUInt(printer, 1, screen->monInfo[index].level, 3, PRINTING_MODE_LEFT_ALIGN, window, 0, 2);
 }
 
 void LinkBattleScreen_PrintMonHp(LinkBattleScreen *screen, MsgData *unused, MessagePrinter *printer, MessageFormat *unused2, String *unused3, u32 index) {
     Window *window = &screen->partyWindows[index * 4 + 2];
     PrintUIntOnWindow(printer, screen->monInfo[index].hp, 3, PRINTING_MODE_RIGHT_ALIGN, window, 0, 2);
-    sub_0200CDAC(printer, 0, window, 24, 2);
+    MessagePrinter_PrintGlyph(printer, 0, window, 24, 2);
     PrintUIntOnWindow(printer, screen->monInfo[index].maxHp, 3, PRINTING_MODE_LEFT_ALIGN, window, 32, 2);
 }
 

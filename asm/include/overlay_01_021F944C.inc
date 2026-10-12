@@ -83,7 +83,7 @@
 .public MapObject_RequestBillboard
 .public MapObject_CreateBillboard
 .public MapObject_DeleteBillboard
-.public ov01_021F95CC
+.public MapObject_CancelAndFreeBillboard
 .public BillboardObject_SaveState
 .public BillboardObject_RestoreState
 .public MapObjectRender_GetBillboardResource

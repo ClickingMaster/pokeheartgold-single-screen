@@ -60,7 +60,7 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
         if (!CommState_IsWifi()) {
             GameStats_Inc(setup->gameStats, GAME_STAT_LOCAL_LINK_BATTLES);
             if (setup->battleType != 0x8F) {
-                sub_02005BEC(1);
+                Sound_SetSelectSEMuted(1);
             }
         } else {
             GameStats_Inc(setup->gameStats, GAME_STAT_WIFI_BATTLES);
@@ -113,7 +113,7 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
     case BSTATE_BATTLE_MAIN:
         if (Battle_BattleMain(man) == TRUE) {
             Battle_BattleExit(man);
-            sub_02005BEC(0);
+            Sound_SetSelectSEMuted(0);
             *state = BSTATE_END_INIT;
         }
         break;
@@ -206,7 +206,7 @@ void ov12_02237BB8(BattleSystem *battleSystem) {
 
     ov12_0223BBF0(battleSystem, 0);
 
-    int size = sub_02026E9C();
+    int size = GetSubBgPlttSize();
     void *data = GetSubBgPlttAddr();
     MIi_CpuClear16(0, data, size);
 

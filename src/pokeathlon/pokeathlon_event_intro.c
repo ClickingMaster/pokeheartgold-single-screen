@@ -27,7 +27,7 @@ FS_EXTERN_OVERLAY(OVY_98);
 
 // Not declared by a header yet.
 void SetBothScreensBrightnessByColor(u16 color);
-void sub_02005B78(u16 seqNo, u32 variable, s16 *value);
+void GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value);
 
 // Trainer class -> overworld model of the NPC trainer, as two parallel columns of one table.
 extern const struct {
@@ -328,7 +328,7 @@ void PokeathlonEventIntro_SetBanks(void) {
 // Whether the sequence variable of the playing BGM has reached value (the screen follows the music).
 BOOL PokeathlonEventIntro_IsBgmAt(u32 variable, s16 value) {
     s16 current;
-    sub_02005B78(GF_GetCurrentPlayingBGM(), variable, &current);
+    GF_SndReadSeqVariable(GF_GetCurrentPlayingBGM(), variable, &current);
     return current >= value;
 }
 

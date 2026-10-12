@@ -14,7 +14,7 @@ void OpponentData_Free(BattleSystem *battleSystem, OpponentData *opponentData, i
 void OpponentData_SetInputTasks(BattleSystem *battleSystem, OpponentData *opponentData);
 
 u8 OpponentData_GetBattlerType(OpponentData *opponentData);
-void *ov12_02261270(OpponentData *opponentData);
+void *OpponentData_GetPokepic(OpponentData *opponentData);
 u32 OpponentData_GetInputMode(OpponentData *opponentData);
 BattleHpBar *OpponentData_GetHpBar(OpponentData *opponentData);
 BattleCursorPosition *OpponentData_GetCursorPosition(OpponentData *opponentData);

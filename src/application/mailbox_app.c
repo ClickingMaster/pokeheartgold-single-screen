@@ -105,7 +105,7 @@ typedef struct MailboxAppData {
 typedef struct MailboxApp {
     Options *options;         // 0x00
     Mailbox *mailbox;         // 0x04
-    UnkStruct_0203F074 *args; // 0x08
+    MailboxAppArgs *args; // 0x08
     MailboxAppData *data;     // 0x0C
     OverlayManager *subApp;   // 0x10
     void *subAppArgs;         // 0x14

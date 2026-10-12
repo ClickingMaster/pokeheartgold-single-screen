@@ -1509,7 +1509,7 @@ void ApricornBoxScreen_InitSpriteSystem(ApricornBoxScreen *screen) {
     thunk_ClearSubOAM(screen->heapId);
     screen->spriteManager = SpriteManager_New(screen->spriteSystem);
     SpriteSystem_InitSprites(screen->spriteSystem, screen->spriteManager, 15);
-    sub_0200D2A4(screen->spriteSystem, screen->spriteManager, &sApricornBoxSpriteResources, 0, 0);
+    SpriteSystem_LoadResourceDataFromFileIdListEx(screen->spriteSystem, screen->spriteManager, &sApricornBoxSpriteResources, 0, 0);
     screen->spawner = TouchscreenListMenuSpawner_Create(screen->heapId, NULL);
 }
 
@@ -3097,7 +3097,7 @@ void AprijuiceScreen_InitSpriteSystem(AprijuiceScreen *screen) {
     thunk_ClearSubOAM(screen->heapId);
     screen->spriteManager = SpriteManager_New(screen->spriteSystem);
     SpriteSystem_InitSprites(screen->spriteSystem, screen->spriteManager, 34);
-    sub_0200D2A4(screen->spriteSystem, screen->spriteManager, &sAprijuiceSpriteResources, 0, 0);
+    SpriteSystem_LoadResourceDataFromFileIdListEx(screen->spriteSystem, screen->spriteManager, &sAprijuiceSpriteResources, 0, 0);
 }
 
 void AprijuiceScreen_FreeSpriteSystem(AprijuiceScreen *screen) {

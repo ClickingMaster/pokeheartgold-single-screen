@@ -24,7 +24,7 @@ u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *stri
 u32 MATH_CountPopulation(u32 value);
 
 extern const u32 _0221F194[2];
-extern const UnkStruct_02014E30 ov98_0221F19C;
+extern const TileRect ov98_0221F19C;
 
 void *PokeathlonUtil_GetSpriteSystem(PokeathlonSpriteContext *ctx) {
     GF_ASSERT(ctx != NULL);
@@ -118,7 +118,7 @@ void ov98_0221E784(SpriteSystem *system, SpriteManager *manager, const int *reso
 
 void PokeathlonUtil_LoadMonPicSprite(ManagedSprite *sprite, const PokeathlonMonInfo *mon, BOOL isMain, BOOL grayscale, enum HeapID heapId) {
     PokepicTemplate pokepic;
-    UnkStruct_02014E30 rect;
+    TileRect rect;
     void *charBuf;
 
     if (mon->species == SPECIES_NONE) {
@@ -129,7 +129,7 @@ void PokeathlonUtil_LoadMonPicSprite(ManagedSprite *sprite, const PokeathlonMonI
     GetMonSpriteCharAndPlttNarcIdsEx(&pokepic, mon->species, mon->gender, MON_PIC_FACING_FRONT, mon->shiny, mon->form, mon->personality);
     rect = ov98_0221F19C;
     charBuf = Heap_AllocAtEnd(heapId, MON_PIC_BUFFER_SIZE);
-    sub_02014510((NarcId)pokepic.narcID, pokepic.charDataID, heapId, &rect, charBuf, mon->personality, FALSE, MON_PIC_FACING_FRONT, mon->species);
+    CharTiles_LoadMonRectAsObjFromNarc((NarcId)pokepic.narcID, pokepic.charDataID, heapId, &rect, charBuf, mon->personality, FALSE, MON_PIC_FACING_FRONT, mon->species);
     PokeathlonUtil_LoadSpriteChars(sprite, charBuf, MON_PIC_BUFFER_SIZE);
     PokeathlonUtil_LoadSpritePalette(sprite, (NarcId)pokepic.narcID, pokepic.palDataID, isMain, grayscale, heapId);
     ManagedSprite_SetDrawFlag(sprite, TRUE);

@@ -4,12 +4,12 @@
 #include "overlay_manager.h"
 #include "save.h"
 
-typedef struct UnkStruct_0203FAB4 {
+typedef struct FrontierRecordsAppArgs {
     SaveData *unk0;
     u8 unk4;
     u8 unk5;
     u16 unk6;
-} UnkStruct_0203FAB4;
+} FrontierRecordsAppArgs;
 
 BOOL FrontierRecordsApp_Init(OverlayManager *man, int *state);
 BOOL FrontierRecordsApp_Main(OverlayManager *man, int *state);

@@ -63,12 +63,12 @@ typedef enum PocketType {
     POCKET_TYPE_BERRIES,
 } PocketType;
 
-typedef struct UnkStruct_0203FC14 {
+typedef struct GlobalTerminalLaunchArgs {
     FieldSystem *fieldSystem;
     SaveData *saveData;
     int unk8;
     u8 unkC;
-} UnkStruct_0203FC14;
+} GlobalTerminalLaunchArgs;
 
 struct UnkStruct_ScrCmd230 {
     u8 filler_00[0x30];
@@ -112,7 +112,7 @@ PartyMenuArgs *PartyMenu_LaunchApp_Unk2(enum HeapID heapID, FieldSystem *fieldSy
 PartyMenuArgs *PartyMenu_LaunchApp_InGameTrade(enum HeapID heapID, FieldSystem *fieldSystem); // todo: party trade screen
 PartyMenuArgs *SelectPartyMonAndLearnMove(TaskManager *taskManager, enum HeapID heapID);      // todo: union party select screen
 int PartyMenuArgs_GetSlot(struct PartyMenuArgs *partyWork);
-int sub_0203E5F8(struct PartyMenuArgs *partyWork);
+int PartyMenuArgs_GetSelectedAction(struct PartyMenuArgs *partyWork);
 void VsRecorder_LaunchApp(FieldSystem *fieldSystem, SaveData *saveData);
 SafariDecorationArgs *SafariDecoration_LaunchApp(FieldSystem *fieldSystem);
 void GeonetGlobe_LaunchApp(FieldSystem *fieldSystem);
@@ -123,19 +123,19 @@ PokemonSummaryArgs *LearnForgetMove_LaunchApp(enum HeapID heapID, FieldSystem *f
 ApricornBoxArgs *sub_0203ED80(FieldSystem *fieldSystem, u32 a1, u16 *a2);
 BugContestSwapMonArgs *BugContestSwapMon_LaunchApp(FieldSystem *fieldSystem, Pokemon *a1, Pokemon *a2, BOOL a3);
 PokemonSummaryArgs *PokemonSummary_LaunchApp(enum HeapID heapID, FieldSystem *fieldSystem, u16 partySlot, u16 moveToLearn);
-void sub_0203F198(TaskManager *taskManager, u16 *ret, SaveData *saveData, u16 a3, u16 a4);
+void CallTask_DressUp(TaskManager *taskManager, u16 *ret, SaveData *saveData, u16 a3, u16 a4);
 BOOL AccessoryPortrait_LaunchApp(FieldSystem *fieldSystem, FashionAppData *fashionData);
-void sub_0203F0A8(FieldSystem *fieldSystem, BattleRoomResultsArgs *unk);
+void BattleRoomResults_LaunchApp(FieldSystem *fieldSystem, BattleRoomResultsArgs *unk);
 void PCBox_LaunchApp(FieldSystem *fieldSystem, PCBoxArgs *pcBoxData);
 void CallTask_WirelessTrade(TaskManager *taskManager);
-void sub_0203F4C8(FieldSystem *fieldSystem);
-RecordMixingArgs *sub_0203F4F8(FieldSystem *fieldSystem);
+void DrawingSession_LaunchApp(FieldSystem *fieldSystem);
+RecordMixingArgs *RecordMixing_LaunchApp(FieldSystem *fieldSystem);
 HallOfFame *HallOfFameShowcase_LaunchApp(FieldSystem *fieldSystem);
-void sub_0203F844(FieldSystem *fieldSystem, u16 a1);
+void Gts_LaunchApp(FieldSystem *fieldSystem, u16 a1);
 BagView *Bag_LaunchApp_WithPocket(FieldSystem *fieldSystem, u8 pocketType);
 int BagView_SelectResult(BagView *bagView);
 void MoveRelearner_LaunchApp(FieldSystem *fieldSystem, MoveRelearnerArgs *moveRelearner);
-BagView *sub_0203E3FC(FieldSystem *fieldSystem, ItemCheckUseData *itemCheckUseData);
+BagView *Bag_LaunchApp_AllPockets(FieldSystem *fieldSystem, ItemCheckUseData *itemCheckUseData);
 void Bag_LaunchApp(FieldSystem *fieldSystem, BagView *bagView);
 void PokemonSummary_LearnForget_LaunchApp(FieldSystem *fieldSystem, PokemonSummaryArgs *pokemonSummayArgs);
 PokemonSummaryArgs *PokemonSummary_CreateArgs(FieldSystem *fieldSystem, enum HeapID heapID, int a2);
@@ -146,27 +146,27 @@ PokegearArgs *PokegearTownMap_LaunchApp(FieldSystem *fieldSystem, int kind);
 SafariAreaCustomizerArgs *SafariAreaCustomizer_LaunchApp(FieldSystem *fieldSystem);
 PhotoAlbumArgs *PhotoAlbum_LaunchApp(FieldSystem *fieldSystem, int unused, int initialCursorPos);
 OptionsMenuArgs *OptionsMenu_LaunchApp(FieldSystem *fieldSystem);
-UseMailArgs *sub_0203EFEC(FieldSystem *fieldSystem, u16 a1, u8 partyIdx, u8 mailType, enum HeapID heapID);
-UseMailArgs *sub_0203F050(FieldSystem *fieldSystem, Pokemon *mon, enum HeapID heapID);
+UseMailArgs *UseMail_LaunchApp_Compose(FieldSystem *fieldSystem, u16 a1, u8 partyIdx, u8 mailType, enum HeapID heapID);
+UseMailArgs *UseMail_LaunchApp_ReadMonMail(FieldSystem *fieldSystem, Pokemon *mon, enum HeapID heapID);
 void TrainerCard_LaunchApp(FieldSystem *fieldSystem, TrainerCardAppArgs *a1);
 int Pokedex_LaunchApp(FieldSystem *fieldSystem, PokedexArgs *a1);
 NintendoWifiConnectArgs *NintendoWifiConnection_LaunchApp(FieldSystem *fieldSystem, u16 a1, u16 a2);
 void PokeathlonCourse_LaunchApp(FieldSystem *fieldSystem, PokeathlonCourseArgs *args);
 void sub_0203FC68(FieldSystem *fieldSystem, void *args);
-void sub_0203FC90(FieldSystem *fieldSystem, void *args);
+void ShipDepartureCutscene_LaunchApp(FieldSystem *fieldSystem, void *args);
 LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *a0, UnkStruct_0203FCC4 *a1, u16 a2, u16 a3, enum HeapID a4);
 void LaunchApp_ViewRankings(FieldSystem *fieldSystem, ViewRankingsArgs *args);
 PartyMenuArgs *PartyMenu_LaunchApp_Unk1(FieldSystem *fieldSystem, FieldMoveCheckData *fieldMoveCheckData, u8 partySlot);
 void CallTask_NamingScreen(TaskManager *taskManager, NameScreenType type, int species, int maxLen, int initPos, const u16 *defaultStr, u16 *retVar);
-void sub_0203E960(TaskManager *a0, int a1, UnkStruct_0203E8C8 *a2, u16 *a3, u16 *a4);
+void CallTask_EasyChat(TaskManager *a0, int a1, UnkStruct_0203E8C8 *a2, u16 *a3, u16 *a4);
 void TrainerCardSignature_LaunchApp(FieldSystem *fieldSystem);
 void HatchEggInParty(FieldSystem *fieldSystem);
-UnkStruct_0203F074 *sub_0203F074(FieldSystem *fieldSystem, enum HeapID heapID);
+MailboxAppArgs *Mailbox_LaunchApp(FieldSystem *fieldSystem, enum HeapID heapID);
 CertificatesArgs *Certificates_LaunchApp(FieldSystem *fieldSystem, enum HeapID heapID, u16 certificateId);
 PartyMenuArgs *PartyMenu_LaunchApp_Unk4(enum HeapID heapID, FieldSystem *fieldSystem, u16 partySlot);
-UnkStruct_0203FAB4 *sub_0203FAB4(FieldSystem *fieldSystem, u8 a1, u8 a2, u16 a3, enum HeapID heapID);
+FrontierRecordsAppArgs *FrontierRecords_LaunchApp(FieldSystem *fieldSystem, u8 a1, u8 a2, u16 a3, enum HeapID heapID);
 ScratchOffCardsArgs *ScratchOffCards_LaunchApp(FieldSystem *fieldSystem, enum HeapID heapID);
-void sub_0203FC14(FieldSystem *fieldSystem, u16 a1, u16 a2);
+void GlobalTerminal_LaunchApp(FieldSystem *fieldSystem, u16 a1, u16 a2);
 PokegearArgs *PokegearPhone_LaunchApp(FieldSystem *fieldSystem);
 PokeathlonMedalsArgs *PokeathlonMedals_LaunchApp(FieldSystem *fieldSystem);
 PokeathlonEventRecordArgs *PokeathlonEventRecord_LaunchApp(FieldSystem *fieldSystem);

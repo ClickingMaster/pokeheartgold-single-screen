@@ -18,7 +18,7 @@
 .public PaletteData_SetAutoTransparent
 .public PaletteData_FillPaletteInBuffer
 .public Sound_SetMasterVolume
-.public sub_02005BEC
+.public Sound_SetSelectSEMuted
 .public PlaySE
 .public StopSE
 .public IsSEPlaying
@@ -98,8 +98,8 @@
 .public GF_CreateVramTransferManager
 .public GF_DestroyVramTransferManager
 .public GF_RunVramTransferTasks
-.public sub_02020654
-.public sub_0202067C
+.public CreateCellTransferStateManager
+.public DestroyCellTransferStateManager
 .public GF_TouchpadResetSampling
 .public GF_TouchpadStartSampling
 .public GF_TouchpadStopSampling
@@ -113,9 +113,9 @@
 .public String_Delete
 .public RequestSwap3DBuffers
 .public GetMainBgPlttAddr
-.public sub_02026E8C
+.public GetMainBgPlttSize
 .public GetSubBgPlttAddr
-.public sub_02026E9C
+.public GetSubBgPlttSize
 .public GF_3DVramMan_Create
 .public GF_3DVramMan_Delete
 .public PlayerProfile_New

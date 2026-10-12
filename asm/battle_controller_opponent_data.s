@@ -65,7 +65,7 @@
 	.extern BattleControllerOpponent_PlaySong
 	.extern BattleControllerOpponent_SetBattleResults
 	.extern BattleControllerOpponent_BlankMessage
-	.extern ov12_02259930
+	.extern BattleControllerOpponent_ScreenFade
 	.public TrainerAI_GetSwitchedPartySlot
 	.public TrainerAI_PostKOSwitchIn
 	.public TrainerAI_GetSwitchedPartySlot
@@ -142,7 +142,7 @@
 	.public BattleControllerOpponent_SetBattleResults
 	.public BattleControllerOpponent_BlankMessage
 	.public OpponentData_ClearCommand
-	.public ov12_02259930
+	.public BattleControllerOpponent_ScreenFade
 	.public OpponentData_PlayEncounterAnimation
 	.public OpponentData_PokemonEncounter
 	.public OpponentData_PokemonSlideIn
@@ -196,19 +196,19 @@
 	.public OpponentData_SwapToSubstituteSprite
 	.public OpponentData_PlayMoveSE
 	.public OpponentData_PlaySong
-	.public ov12_0225B454
+	.public OpponentData_ScreenFade
 	.public Task_PokemonEncounter
 	.public Task_GiratinaEncounter
-	.public ov12_0225B960
-	.public ov12_0225BE38
-	.public ov12_0225C18C
-	.public ov12_0225C6C8
-	.public ov12_0225C9BC
-	.public ov12_0225CC58
+	.public Task_PokemonSlideIn
+	.public Task_FollowMonSlideIn
+	.public Task_PokemonSendOut
+	.public Task_FollowMonSendOut
+	.public Task_RecallPokemon
+	.public Task_RecallFollowMon
 	.public Task_PokemonEnterBall
 	.public Task_TrainerEncounter
-	.public ov12_0225D138
-	.public ov12_0225D644
+	.public Task_ThrowPokeball
+	.public Task_ThrowPokeballWithFollowMon
 	.public Task_TrainerSlideOut
 	.public Task_TrainerSlideIn
 	.public Task_HealthbarSlideIn
@@ -256,11 +256,11 @@
 	.public Task_HidePartyGauge
 	.public Task_SpriteToOAM
 	.public Task_OAMToSprite
-	.public ov12_02260D84
+	.public Task_OpponentScreenFade
 	.public OpponentData_SetInputTasks
 	.public OpponentData_GetBattlerType
 	.public OpponentData_GetInputMode
-	.public ov12_02261270
+	.public OpponentData_GetPokepic
 	.public OpponentData_GetCursorPosition
 	.public OpponentData_ResetCursorPosition
 	.public OpponentData_SetSpriteDrawFlag
@@ -273,11 +273,11 @@
 	.public BattleControllerOpponent_GetRunAwayMessage
 	.public BattleControllerOpponent_GetForfeitMessage
 	.public BattleControllerOpponent_CreateTrainerSprite
-	.public ov12_02261B80
-	.public ov12_02261CA8
-	.public ov12_02261D30
+	.public OpponentData_StartMoveAnimation
+	.public BattleController_InitBattlerPicParams
+	.public MoveAnim_GetDisplayFlags
 	.public ov12_02261DC8
-	.public ov12_02261E40
+	.public Task_FlashBrightness
 	.public ov12_02261EB8
 	.public ov12_02261ED4
 	.public BattleControllerOpponent_GetVersionTrainerClass
@@ -369,7 +369,7 @@ sOpponentCommandHandlers: ; 0x0226D010
 	.word BattleControllerOpponent_PlaySong
 	.word BattleControllerOpponent_SetBattleResults
 	.word BattleControllerOpponent_BlankMessage
-	.word ov12_02259930
+	.word BattleControllerOpponent_ScreenFade
 
 ov12_0226D120: ; 0x0226D120
 	.byte 0x06, 0x01, 0x08, 0x03, 0x07, 0x05, 0x00, 0x00

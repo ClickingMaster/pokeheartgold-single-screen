@@ -1921,7 +1921,7 @@ BOOL ScrCmd_154(ScriptContext *ctx) {
     u16 r4 = ScriptGetVar(ctx);
     u16 *r6 = ScriptGetVarPointer(ctx);
     u16 sp0 = ScriptGetVar(ctx);
-    sub_0203F198(ctx->fieldSystem->taskman, r6, ctx->fieldSystem->saveData, r4, sp0);
+    CallTask_DressUp(ctx->fieldSystem->taskman, r6, ctx->fieldSystem->saveData, r4, sp0);
     return TRUE;
 }
 
@@ -1983,7 +1983,7 @@ BOOL ScrCmd_408(ScriptContext *ctx) {
     BattleRoomResultsArgs **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     *p_work = Heap_Alloc(HEAP_ID_FIELD2, sizeof(struct BattleRoomResultsArgs));
     InitUnkStructScrCmd408(*p_work, r7, sp0, ctx);
-    sub_0203F0A8(ctx->fieldSystem, *p_work);
+    BattleRoomResults_LaunchApp(ctx->fieldSystem, *p_work);
     SetupNativeScript(ctx, ScrNative_WaitApplication_DestroyTaskData);
     return TRUE;
 }
@@ -1999,7 +1999,7 @@ BOOL ScrCmd_158(ScriptContext *ctx) { // todo: PC box screen
 }
 
 BOOL ScrCmd_159(ScriptContext *ctx) {
-    sub_0203F4C8(ctx->fieldSystem);
+    DrawingSession_LaunchApp(ctx->fieldSystem);
     SetupNativeScript(ctx, ScrNative_WaitApplication);
     return TRUE;
 }
@@ -2016,7 +2016,7 @@ BOOL ScrCmd_161(ScriptContext *ctx) {
 
 BOOL ScrCmd_162(ScriptContext *ctx) {
     void **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-    *p_work = sub_0203F4F8(ctx->fieldSystem);
+    *p_work = RecordMixing_LaunchApp(ctx->fieldSystem);
     SetupNativeScript(ctx, ScrNative_WaitApplication_DestroyTaskData);
     return TRUE;
 }
@@ -2051,7 +2051,7 @@ BOOL ScrCmd_165(ScriptContext *ctx) {
     u16 *r4 = ScriptGetVarPointer(ctx);
     if (Comm_HasWifiProfile(ctx->fieldSystem->saveData)) {
         *r4 = 1;
-        sub_0203F844(ctx->fieldSystem, r6);
+        Gts_LaunchApp(ctx->fieldSystem, r6);
         SetupNativeScript(ctx, ScrNative_WaitApplication);
     } else {
         *r4 = 0;
@@ -2162,7 +2162,7 @@ BOOL ScrCmd_492(ScriptContext *ctx) {
     u16 *r3 = ScriptGetVarPointer(ctx);
 
     *r3 = 0xFFFF;
-    sub_0203E960(ctx->fieldSystem->taskman, r4, r6, r3, NULL);
+    CallTask_EasyChat(ctx->fieldSystem->taskman, r4, r6, r3, NULL);
     return TRUE;
 }
 
@@ -2173,7 +2173,7 @@ BOOL ScrCmd_PromptEasyChat(ScriptContext *ctx) {
 
     *r4 = 0xFFFF;
     *r0 = 0xFFFF;
-    sub_0203E960(ctx->fieldSystem->taskman, 1, r6, r4, r0);
+    CallTask_EasyChat(ctx->fieldSystem->taskman, 1, r6, r4, r0);
     return TRUE;
 }
 
@@ -3228,8 +3228,8 @@ BOOL ScrCmd_MakeObjectVisible(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_376(ScriptContext *ctx) {                                                                // todo: mail screen
-    UnkStruct_0203F074 **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA); // MailAppData
-    *p_work = sub_0203F074(ctx->fieldSystem, HEAP_ID_FIELD2);
+    MailboxAppArgs **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA); // MailAppData
+    *p_work = Mailbox_LaunchApp(ctx->fieldSystem, HEAP_ID_FIELD2);
     SetupNativeScript(ctx, ScrNative_WaitApplication_DestroyTaskData);
     return TRUE;
 }
@@ -3968,7 +3968,7 @@ BOOL ScrCmd_552(ScriptContext *ctx) {
     if (*r6 == 7) {
         *r6 = 255;
     }
-    *r5 = sub_0203E5F8(*partyMenu);
+    *r5 = PartyMenuArgs_GetSelectedAction(*partyMenu);
     *r5 = (*r5 == TRUE);
     Heap_Free(*partyMenu);
     *partyMenu = NULL;
@@ -4177,7 +4177,7 @@ BOOL ScrCmd_631(ScriptContext *ctx) {
     u16 r6 = ScriptGetVar(ctx);
     u16 r7 = ScriptGetVar(ctx);
     u16 r3 = ScriptGetVar(ctx);
-    *p_work = sub_0203FAB4(ctx->fieldSystem, r6, r7, r3, HEAP_ID_FIELD3);
+    *p_work = FrontierRecords_LaunchApp(ctx->fieldSystem, r6, r7, r3, HEAP_ID_FIELD3);
     SetupNativeScript(ctx, ScrNative_WaitApplication_DestroyTaskData);
     return TRUE;
 }
@@ -4213,7 +4213,7 @@ BOOL ScrCmd_662(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     if (Comm_HasWifiProfile(ctx->fieldSystem->saveData)) {
         *p_ret = 1;
-        sub_0203FC14(ctx->fieldSystem, r7, r6);
+        GlobalTerminal_LaunchApp(ctx->fieldSystem, r7, r6);
         SetupNativeScript(ctx, ScrNative_WaitApplication);
     } else {
         *p_ret = 0;

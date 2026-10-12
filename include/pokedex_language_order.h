@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-int sub_020912AC(int index);
-s16 sub_020912D0(s16 a0, u32 a2);
+int GetDexLanguageCycleFlag(int index);
+s16 CycleDexLanguageFlag(s16 a0, u32 a2);
 
 #endif // POKEHEARTGOLD_POKEDEX_LANGUAGE_ORDER_H

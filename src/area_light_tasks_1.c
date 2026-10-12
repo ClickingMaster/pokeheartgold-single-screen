@@ -51,7 +51,7 @@ BOOL sub_02097A48(TaskManager *taskManager) {
 
     switch (*state) {
     case 0:
-        sub_0203FC90(fieldSystem, env);
+        ShipDepartureCutscene_LaunchApp(fieldSystem, env);
         break;
     case 1:
         if (FieldSystem_ApplicationIsRunning(fieldSystem)) {

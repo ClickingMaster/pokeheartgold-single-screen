@@ -107,7 +107,7 @@ void DressUpGfx_FreeRawResTables(DressUpGfxResources *resources) {
 
 BOOL DressUp_Init(OverlayManager *man, int *state) {
     DressUpWork *work;
-    UnkStruct_0203F0D0 *args;
+    DressUpArgs *args;
 
     Heap_Create(HEAP_ID_3, HEAP_ID_13, 0x20000);
     Heap_Create(HEAP_ID_3, HEAP_ID_14, 0x40000);
@@ -144,7 +144,7 @@ BOOL DressUp_Init(OverlayManager *man, int *state) {
 BOOL DressUp_Main(OverlayManager *man, int *state) {
     DressUpWork *work = OverlayManager_GetData(man);
     BOOL done = FALSE;
-    UnkStruct_0203F0D0 *args = OverlayManager_GetArgs(man);
+    DressUpArgs *args = OverlayManager_GetArgs(man);
 
     switch (*state) {
     case 0:
@@ -251,7 +251,7 @@ BOOL DressUp_Main(OverlayManager *man, int *state) {
 
 BOOL DressUp_Exit(OverlayManager *man, int *state) {
     DressUpWork *work = OverlayManager_GetData(man);
-    UnkStruct_0203F0D0 *args = OverlayManager_GetArgs(man);
+    DressUpArgs *args = OverlayManager_GetArgs(man);
 
     if (work->saveRequested == TRUE) {
         GameStats_AddScore(args->gameStats, SCORE_EVENT_POKEMON_DRESSED);

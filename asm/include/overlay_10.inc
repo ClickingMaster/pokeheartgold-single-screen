@@ -25,8 +25,8 @@
 .public GetBattlerVar
 .public CheckSortSpeed
 .public StruggleCheck
-.public ov12_02251D28
-.public ov12_02252054
+.public BattleSystem_ApplyTypeEffectiveness
+.public CalcTypeEffectivenessFlags
 .public CheckAbilityActive
 .public CurseUserIsGhost
 .public GetBattlerAbility

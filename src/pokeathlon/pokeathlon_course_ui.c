@@ -22,7 +22,7 @@ void ResetAllTextPrinters(void);
 
 extern const WindowTemplate ov96_0221B19A[2];
 extern const u32 ov96_0221B1BC[6];
-extern const UnkStruct_02014E30 ov96_0221B1AC;
+extern const TileRect ov96_0221B1AC;
 
 static inline void *GetTexDictData(NNSG3dResTex *tex, u32 index) {
     if (tex) {
@@ -293,7 +293,7 @@ void PokeathlonCourse_LoadTrainerPicIntoSprite(Sprite *sprite, int fileId, int i
     offset = (*(u32 *)GetTexDictData(tex, index) & 0xFFFF) << 3;
     texData = (u8 *)tex + tex->texInfo.ofsTex;
     buffer = Heap_AllocAtEnd(heapId, 0x200);
-    sub_020145B4(texData + offset, 4, 0, 0, 4, 4, buffer);
+    CharTiles_CopyRectFromBuffer(texData + offset, 4, 0, 0, 4, 4, buffer);
     PokeathlonCourse_LoadSpriteChars(sprite, buffer, 0x200);
     Heap_Free(buffer);
     vramType = Sprite_GetVramType(sprite);
@@ -348,7 +348,7 @@ void PokeathlonCourse_LoadMonPicWithPalette(ManagedSprite *sprite, PokeathlonCou
 
 void PokeathlonCourse_LoadMonPicEx(ManagedSprite *sprite, PokeathlonCourseObjectInfo *info, BOOL mainScreen, u32 grayScale, enum HeapID heapId, BOOL loadPalette) {
     PokepicTemplate template;
-    UnkStruct_02014E30 rect;
+    TileRect rect;
     void *buffer;
     if (info->species == SPECIES_NONE) {
         ManagedSprite_SetDrawFlag(sprite, FALSE);
@@ -357,7 +357,7 @@ void PokeathlonCourse_LoadMonPicEx(ManagedSprite *sprite, PokeathlonCourseObject
     GetMonSpriteCharAndPlttNarcIdsEx(&template, info->species, info->gender, 2, info->shiny, (u8)info->form, info->personality);
     rect = ov96_0221B1AC;
     buffer = Heap_AllocAtEnd(heapId, 0xC80);
-    sub_02014510((NarcId) template.narcID, template.charDataID, heapId, &rect, buffer, info->personality, FALSE, 2, info->species);
+    CharTiles_LoadMonRectAsObjFromNarc((NarcId) template.narcID, template.charDataID, heapId, &rect, buffer, info->personality, FALSE, 2, info->species);
     PokeathlonCourse_LoadSpriteChars(sprite->sprite, buffer, 0xC80);
     if (loadPalette) {
         PokeathlonCourse_LoadSpritePalette(sprite, (NarcId) template.narcID, template.palDataID, mainScreen, grayScale, heapId);

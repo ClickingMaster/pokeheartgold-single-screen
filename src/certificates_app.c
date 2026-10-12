@@ -693,7 +693,7 @@ void ov78_021E65BC(Sprite *sprite, s32 narcMemberNum, u8 a2, enum HeapID heapID)
 
     const void *address = NNS_G3dGetTexData(tex);
     void *buffer = Heap_AllocAtEnd(heapID, 0x200);
-    sub_020145B4(address + (a2 * 0x200), 4, 0, 0, 4, 4, buffer);
+    CharTiles_CopyRectFromBuffer(address + (a2 * 0x200), 4, 0, 0, 4, 4, buffer);
     ov78_021E656C(sprite, buffer, 0x200, 0);
     Heap_Free(buffer);
 
@@ -761,7 +761,7 @@ static void ov78_021E66D4(Sprite *sprite, Pokemon *pokemon, enum HeapID heapID, 
     NNSG3dResTex *tex = NNS_G3dGetTex(header);
     void *address = (void *)tex + tex->texInfo.ofsTex;
     void *buffer = Heap_AllocAtEnd(heapID, bufferSize);
-    sub_020145B4(address + (bufferSize * 2), unk, 0, 0, unk, unk, buffer);
+    CharTiles_CopyRectFromBuffer(address + (bufferSize * 2), unk, 0, 0, unk, unk, buffer);
     ov78_021E656C(sprite, buffer, bufferSize, 0);
     Heap_Free(buffer);
     Sprite_GetVramType(sprite);

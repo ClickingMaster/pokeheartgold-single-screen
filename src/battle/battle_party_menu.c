@@ -1787,7 +1787,7 @@ void BattlePartyMenu_PrintMonLevel(BattlePartyMenu *menu, int window, int slot, 
     int offset = window << 4;
     u32 level = menu->mons[slot].level;
 
-    sub_0200CE7C(menu->msgPrinter, 1, level, 3, PRINTING_MODE_LEFT_ALIGN, (Window *)((u8 *)menu->pageWindows + offset), x + 8, y);
+    MessagePrinter_PrintGlyphAndUInt(menu->msgPrinter, 1, level, 3, PRINTING_MODE_LEFT_ALIGN, (Window *)((u8 *)menu->pageWindows + offset), x + 8, y);
     ScheduleWindowCopyToVram((Window *)((u8 *)menu->pageWindows + offset));
 }
 
@@ -1798,7 +1798,7 @@ void BattlePartyMenu_PrintMonHP(BattlePartyMenu *menu, int window, int slot, u32
     u32 offset = window * sizeof(Window);
 
     PrintUIntOnWindow(menu->msgPrinter, mon->hp, 3, PRINTING_MODE_RIGHT_ALIGN, (Window *)((u8 *)menu->pageWindows + offset), x, y);
-    sub_0200CDAC(menu->msgPrinter, 0, (Window *)((u8 *)menu->pageWindows + offset), x + 24, y);
+    MessagePrinter_PrintGlyph(menu->msgPrinter, 0, (Window *)((u8 *)menu->pageWindows + offset), x + 24, y);
     x += 32;
     PrintUIntOnWindow(menu->msgPrinter, mon->maxHp, 3, PRINTING_MODE_LEFT_ALIGN, (Window *)((u8 *)menu->pageWindows + offset), x, y);
     ScheduleWindowCopyToVram((Window *)((u8 *)menu->pageWindows + offset));

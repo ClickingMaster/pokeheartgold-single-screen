@@ -462,7 +462,7 @@ void PalPadDetails_DrawProfile(PalPadDetails *details, PalPadShared *shared, Pal
     }
     GetTrainerPicFileIdsNoLink(GetUnionRoomAvatarAttrBySprite(gender, FriendRoster_GetEntryField(wifiList, shared->friends.slots[shared->selectedFriend], 7), 1), 2, &avatar);
     bitmap = Heap_Alloc(heapId, 80 * 80 / 2);
-    sub_020141C4(avatar.narcId, avatar.ncbr_id, heapId, 0, 0, 10, 10, bitmap);
+    CharTiles_LoadRectFromNarc(avatar.narcId, avatar.ncbr_id, heapId, 0, 0, 10, 10, bitmap);
     BlitBitmapRectToWindow(&details->profileWindows[5], bitmap, 0, 0, 80, 80, 0, 0, 80, 80);
     Heap_Free(bitmap);
     GfGfxLoader_GXLoadPal(avatar.narcId, avatar.nclr_id, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, 32, heapId);

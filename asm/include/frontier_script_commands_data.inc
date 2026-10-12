@@ -72,7 +72,7 @@
 .public IsPaletteFadeFinished
 .public ResetVisibleHardwareWindows
 .public SetMasterBrightnessByColor
-.public sub_02014494
+.public CharTiles_LoadMonObjBlocksFromNarc
 .public ParticleSystem_CreateEmitterWithParam
 .public MailMsg_Init
 .public MailMsg_GetExpandedString

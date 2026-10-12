@@ -14,7 +14,7 @@ BOOL ScrNative_WaitFanfare(ScriptContext *ctx);
 BOOL ScrCmd_575(ScriptContext *ctx) {
     u16 var0 = ScriptReadHalfword(ctx);
     u16 *retPtr = ScriptGetVarPointer(ctx);
-    *retPtr = sub_02005F94(var0);
+    *retPtr = GF_SndCountPlayingSeqBySeqNo(var0);
     return FALSE;
 }
 
@@ -75,7 +75,7 @@ BOOL ScrCmd_086(ScriptContext *ctx) {
 
 BOOL ScrCmd_TempBGM(ScriptContext *ctx) {
     u16 var0 = ScriptReadHalfword(ctx);
-    sub_02005E44(var0);
+    PlayBGMOnBGMPlayerInField(var0);
     return FALSE;
 }
 

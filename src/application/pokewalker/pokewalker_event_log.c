@@ -79,7 +79,7 @@ void PokewalkerBoxDisplay_LoadMonPicture(PokewalkerBoxDisplaySprites *sprites, P
     NNSG2dPaletteData *palette;
     void *plttFile;
     GetMonSpriteCharAndPlttNarcIdsEx(&pokepic, info->species, info->gender, 2, info->isShiny, info->form, info->personality);
-    sub_02014540((NarcId)pokepic.narcID, pokepic.charDataID, sprites->heapId, sprites->monCharData, info->personality, FALSE, 2, info->species);
+    CharTiles_LoadMonPicAsObjFromNarc((NarcId)pokepic.narcID, pokepic.charDataID, sprites->heapId, sprites->monCharData, info->personality, FALSE, 2, info->species);
     plttFile = AllocAndReadWholeNarcMemberByIdPair((NarcId)pokepic.narcID, pokepic.palDataID, sprites->heapId);
     if (NNS_G2dGetUnpackedPaletteData(plttFile, &palette) != TRUE) {
         GF_AssertFail();
@@ -879,7 +879,7 @@ void PokewalkerEventLog_LoadMonSprite(PokewalkerEventLogMonSprite *monSprite, u1
     pixels = (u8 *)tex + tex->texInfo.ofsTex;
     buf = Heap_AllocAtEnd((enum HeapID)heapId, size);
     for (i = 0, offset = 0; i < 8; i++) {
-        sub_020145B4(pixels + offset, dim, 0, 0, dim, dim, buf);
+        CharTiles_CopyRectFromBuffer(pixels + offset, dim, 0, 0, dim, dim, buf);
         PokewalkerEventLog_LoadSpriteCharData(sprite, buf, size, offset);
         offset += size;
     }

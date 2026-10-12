@@ -555,7 +555,7 @@ int PokewalkerApp_LoadMonPicture(BoxPokemon *boxMon, void *buffer, PokepicTempla
     GetBoxmonSpriteCharAndPlttNarcIds(template, boxMon, 2, FALSE);
     personality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY, NULL);
     species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
-    sub_02014494((NarcId) template->narcID, template->charDataID, HEAP_ID_154, 0, 0, 10, 10, buffer, personality, FALSE, 2, species);
+    CharTiles_LoadMonObjBlocksFromNarc((NarcId) template->narcID, template->charDataID, HEAP_ID_154, 0, 0, 10, 10, buffer, personality, FALSE, 2, species);
     DC_FlushRange(buffer, 0xC80);
     if (screen == 0) {
         GX_LoadOBJ(buffer, 0xB80, 0xC80);

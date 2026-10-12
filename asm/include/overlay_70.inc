@@ -64,7 +64,7 @@
 .public MessageFormat_ResetBuffers
 .public MessagePrinter_New
 .public MessagePrinter_Delete
-.public sub_0200CDAC
+.public MessagePrinter_PrintGlyph
 .public PrintUIntOnWindow
 .public SysTask_CreateOnVBlankQueue
 .public SysTask_Destroy
@@ -78,7 +78,7 @@
 .public WaitingIcon_Delete
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_02014494
+.public CharTiles_LoadMonObjBlocksFromNarc
 .public ListMenuItems_New
 .public ListMenuItems_Delete
 .public ListMenuItems_AppendFromMsgData

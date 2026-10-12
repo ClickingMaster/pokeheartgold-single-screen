@@ -306,7 +306,7 @@ void PCBox_PrintNickname(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
 void PCBox_PrintLevel(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
     FillWindowPixelBuffer(&view->windows[win], 0);
     if (!monInfo->isEgg) {
-        sub_0200CDAC(view->msgPrinter, 1, &view->windows[win], 0, 5);
+        MessagePrinter_PrintGlyph(view->msgPrinter, 1, &view->windows[win], 0, 5);
         BufferIntegerAsString(view->msgFormat, 0, monInfo->level, 3, PRINTING_MODE_LEFT_ALIGN, 1);
         PCBox_PrintExpandedMsg(view, view->msgData, win, 0x5a, 0x10, 0, 0, 0x10200, 0);
     }
@@ -334,7 +334,7 @@ void PCBox_PrintDexNumber(PCBoxWork *work, PCBoxMonInfo *monInfo, u32 win) {
     if (!monInfo->isEgg) {
         dexno = Pokedex_ConvertToCurrentDexNo(SaveArray_IsNatDexEnabled(work->args->saveData), monInfo->species);
         if (dexno) {
-            sub_0200CDAC(work->view->msgPrinter, 2, &work->view->windows[win], 0, 5);
+            MessagePrinter_PrintGlyph(work->view->msgPrinter, 2, &work->view->windows[win], 0, 5);
             BufferIntegerAsString(work->view->msgFormat, 0, dexno, 3, PRINTING_MODE_LEADING_ZEROS, 1);
             PCBox_PrintExpandedMsg(work->view, work->view->msgData, win, 0x5b, 0x10, 0, 0, 0x10200, 0);
         }

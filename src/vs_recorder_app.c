@@ -174,7 +174,7 @@ BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId) {
     case 2:
         GF_SndHandleSetPlayerVolume(1, 0x7F);
         GF_SndHandleSetPlayerVolume(7, 0x7F);
-        sub_02005B68(TRUE);
+        Sound_SetChatotRecordingDisabled(TRUE);
         if (VsRecorderApp_IsFrontierBrainClass(work->setup->trainer[BATTLER_ENEMY].data.trainerClass) == TRUE) {
             Sound_SetSceneAndPlayBGM(5, 0x47B, 1);
         } else {
@@ -192,7 +192,7 @@ BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId) {
             Heap_Free(work->setup->bagCursor);
             BattleSetup_Delete(work->setup);
             OverlayManager_Delete(work->manager);
-            sub_02005B68(FALSE);
+            Sound_SetChatotRecordingDisabled(FALSE);
             Sound_SetScene(0);
             bgm = FieldBGM_GetEffective(work->fieldSystem, work->fieldSystem->location->mapId);
             Sound_SetFieldBGM(FieldBGM_GetForMapHeader(work->fieldSystem, work->fieldSystem->location->mapId));

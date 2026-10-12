@@ -39,10 +39,10 @@ int _02111864;
 PMBackLightSwitch gBacklightTop;
 struct UnkStruct_02111868 _02111868;
 
-static void sub_02000F60(void);
+static void HandleCommunicationErrorScreen(void);
 static void DoSoftReset(u32 param);
 static void Main_RunOverlayManager(void);
-static void sub_02000FD8(u32 a0, int a1);
+static void ShowCommunicationErrorAndReset(u32 a0, int a1);
 static BOOL sub_02001098(int a0);
 
 void NitroMain(void) {
@@ -93,7 +93,7 @@ void NitroMain(void) {
     _02111864 = 0;
     OS_InitTick();
     while (1) {
-        sub_02000F60();
+        HandleCommunicationErrorScreen();
         HandleDSLidAction();
         ReadKeypadAndTouchpad();
         if ((gSystem.heldKeysRaw & (PAD_BUTTON_START | PAD_BUTTON_SELECT | PAD_BUTTON_L | PAD_BUTTON_R)) == (PAD_BUTTON_START | PAD_BUTTON_SELECT | PAD_BUTTON_L | PAD_BUTTON_R)) {
@@ -102,7 +102,7 @@ void NitroMain(void) {
             }
         }
         if (Comm_Update()) {
-            sub_02000F60();
+            HandleCommunicationErrorScreen();
             OS_GetTick();
             Main_RunOverlayManager();
             OS_GetTick();
@@ -165,7 +165,7 @@ void RegisterMainOverlay(FSOverlayID overlayId, const OverlayManagerTemplate *te
     _02111868.queuedMainOverlayTemplate = template;
 }
 
-static void sub_02000F14(void) {
+static void WaitForVBlank(void) {
     Comm_Update();
     OS_WaitIrq(TRUE, OS_IE_VBLANK);
     gSystem.vblankCounter++;
@@ -175,27 +175,27 @@ static void sub_02000F14(void) {
     }
 }
 
-static void sub_02000F40(u32 param) {
+static void WaitForVBlankOrReset(u32 param) {
     if (CommState_IsLinkDown() && CARD_TryWaitBackupAsync() == TRUE) {
         OS_ResetSystem(param);
     }
-    sub_02000F14();
+    WaitForVBlank();
 }
 
-static void sub_02000F60(void) {
+static void HandleCommunicationErrorScreen(void) {
     int r1 = CommState_GetErrorScreen();
     switch (r1) {
     case 5:
-        sub_02000FD8(0, r1);
+        ShowCommunicationErrorAndReset(0, r1);
         break;
     case 1:
-        sub_02000FD8(1, r1);
+        ShowCommunicationErrorAndReset(1, r1);
         break;
     case 2:
-        sub_02000FD8(0, r1);
+        ShowCommunicationErrorAndReset(0, r1);
         break;
     case 3:
-        sub_02000FD8(1, r1);
+        ShowCommunicationErrorAndReset(1, r1);
         break;
     }
 }
@@ -208,11 +208,11 @@ static void DoSoftReset(u32 param) {
     }
     while (TRUE) {
         HandleDSLidAction();
-        sub_02000F40(param);
+        WaitForVBlankOrReset(param);
     }
 }
 
-static void sub_02000FD8(u32 a0, int a1) {
+static void ShowCommunicationErrorAndReset(u32 a0, int a1) {
     int sp4;
     int r7;
     int r4;
@@ -241,7 +241,7 @@ static void sub_02000FD8(u32 a0, int a1) {
     }
     ShowCommunicationError(HEAP_ID_DEFAULT, r5, 0);
     CommState_StopForReset();
-    sub_02000F14();
+    WaitForVBlank();
     DoSoundUpdateFrame();
     while (1) {
         HandleDSLidAction();
@@ -254,7 +254,7 @@ static void sub_02000FD8(u32 a0, int a1) {
             break;
         }
         DoSoundUpdateFrame();
-        sub_02000F14();
+        WaitForVBlank();
         if (r4 < 10) {
             r4++;
         }

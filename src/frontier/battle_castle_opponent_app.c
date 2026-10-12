@@ -300,7 +300,7 @@ extern const BgTemplate ov83_022480F4;
 extern const GraphicsBanks ov83_02248150;
 extern const u8 ov83_02248178[4]; // sprite resource manager sizes
 extern const ObjCharTransferTemplate ov83_0224817C;
-extern const UnkStruct_02014E30 ov83_0224818C;
+extern const TileRect ov83_0224818C;
 extern const struct {
     const WindowTemplate *templates;
     u32 count;
@@ -1497,7 +1497,7 @@ void BattleCastleOpponentApp_PrintPartyHp(BattleCastleOpponentApp *app, Window *
         } else {
             mon = Party_GetMonByIndex(app->party, i);
             PrintUIntOnWindow(app->msgPrinter, GetMonData(mon, MON_DATA_HP, NULL), 3, PRINTING_MODE_RIGHT_ALIGN, window, x + i * 64, 1);
-            sub_0200CDAC(app->msgPrinter, 0, window, x + 24 + i * 64, 1);
+            MessagePrinter_PrintGlyph(app->msgPrinter, 0, window, x + 24 + i * 64, 1);
             PrintUIntOnWindow(app->msgPrinter, GetMonData(mon, MON_DATA_MAX_HP, NULL), 3, PRINTING_MODE_LEFT_ALIGN, window, x + 32 + i * 64, 1);
         }
     }
@@ -1524,7 +1524,7 @@ void BattleCastleOpponentApp_PrintPartyLevels(BattleCastleOpponentApp *app, Wind
     for (i = 0; i < numMons; i++, x += 64, genderX += 64) {
         mon = Party_GetMonByIndex(app->party, i);
         value = GetMonData(mon, MON_DATA_LEVEL, NULL);
-        sub_0200CE7C(app->msgPrinter, 1, value, 3, PRINTING_MODE_LEFT_ALIGN, window, x, 1);
+        MessagePrinter_PrintGlyphAndUInt(app->msgPrinter, 1, value, 3, PRINTING_MODE_LEFT_ALIGN, window, x, 1);
         value = GetMonData(mon, MON_DATA_GENDER, NULL);
         BattleCastleOpponentApp_PrintGenderSymbol(app, window, genderX, 1, 0, value);
     }
@@ -3023,7 +3023,7 @@ void ov83_02247630(BattleCastleSprite *sprite, int x, u32 y) {
 // Front picture of a mon into the sub screen sprite; species SPECIES_NONE shows a placeholder
 void BattleCastleSprite_LoadMonPic(BattleCastleSprite *sprite, BoxPokemon *boxMon, u16 species, u32 personality) {
     PokepicTemplate pokepic;
-    UnkStruct_02014E30 rect = ov83_0224818C;
+    TileRect rect = ov83_0224818C;
     NNSG2dCharacterData *charData;
     void *file;
     void *buffer;
@@ -3035,7 +3035,7 @@ void BattleCastleSprite_LoadMonPic(BattleCastleSprite *sprite, BoxPokemon *boxMo
     buffer = Heap_AllocAtEnd(HEAP_ID_107, 0xC80);
     if (species != SPECIES_NONE) {
         GetBoxmonSpriteCharAndPlttNarcIds(&pokepic, boxMon, 2, FALSE);
-        sub_02014510((NarcId)pokepic.narcID, pokepic.charDataID, HEAP_ID_107, &rect, buffer, personality, FALSE, 2, species);
+        CharTiles_LoadMonRectAsObjFromNarc((NarcId)pokepic.narcID, pokepic.charDataID, HEAP_ID_107, &rect, buffer, personality, FALSE, 2, species);
         narcId = pokepic.narcID;
         plttId = pokepic.palDataID;
     } else {

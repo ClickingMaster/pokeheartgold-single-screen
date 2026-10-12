@@ -401,7 +401,7 @@ static BOOL PartyMenuApp_Main(OverlayManager *manager, int *pState) {
         }
         break;
     case PARTY_MENU_STATE_BEGIN_EXIT:
-        sub_020880CC(1, HEAP_ID_PARTY_MENU);
+        BeginAppScreenFade(1, HEAP_ID_PARTY_MENU);
         *pState = PARTY_MENU_STATE_WAIT_EXIT_FADE_OUT;
         break;
     case PARTY_MENU_STATE_WAIT_EXIT_FADE_OUT:

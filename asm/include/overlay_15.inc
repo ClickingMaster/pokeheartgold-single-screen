@@ -42,7 +42,7 @@
 .public MessagePrinter_New
 .public MessagePrinter_Delete
 .public PrintUIntOnWindow
-.public sub_0200CE7C
+.public MessagePrinter_PrintGlyphAndUInt
 .public SpriteSystem_Alloc
 .public SpriteManager_New
 .public SpriteSystem_GetRenderer
@@ -195,8 +195,8 @@
 .public BagCursor_Field_GetPocket
 .public BagCursor_Field_PocketSetPosition
 .public BagCursor_Field_SetPocket
-.public sub_020880CC
-.public sub_020881C0
+.public BeginAppScreenFade
+.public HandleNumberSelectInput
 .public NNS_G2dGetUnpackedBGCharacterData
 .public NNS_G3dAnmObjInit
 .public NNS_G3dRenderObjAddAnmObj

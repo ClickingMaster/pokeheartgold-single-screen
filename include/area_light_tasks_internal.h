@@ -16,7 +16,7 @@ typedef struct NightTaskEnv {
 } NightTaskEnv;
 void LoadAreaOrDungeonLightTxt(u32 archiveId, ModelAttributes *attributes);
 void sub_020979A8(FieldSystem *, u8, u8, u32, u32, u32);
-void sub_0203FC90(FieldSystem *, void *);
+void ShipDepartureCutscene_LaunchApp(FieldSystem *, void *);
 void CallTask_LeaveOverworld(TaskManager *);
 void CallTask_RestoreOverworldAndFadeIn(TaskManager *);
 void sub_020979EC(FieldSystem *, u8, void *);

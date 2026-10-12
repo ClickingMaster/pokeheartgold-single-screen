@@ -41,7 +41,7 @@ extern const SpriteResourceCountsListUnion ov14_021F80D4;
 extern const OamManagerParam ov14_021F80EC;
 extern const PCBoxScreenPos sPCBoxPartySlotPositions[6];
 extern const u8 ov14_021F808C[6][2];
-extern const UnkStruct_02014E30 ov14_021F8098;
+extern const TileRect ov14_021F8098;
 extern const u8 ov14_021F8068[];
 extern const s8 sPCBoxOutlineOffsetsX[];
 extern const s8 sPCBoxOutlineOffsetsY[];
@@ -580,7 +580,7 @@ void PCBox_CreateMonPicSprites(PCBoxWork *work) {
 
 void PCBox_LoadMonPic(PCBoxView *view, PCBoxMonInfo *monInfo, u32 index) {
     PokepicTemplate pic;
-    UnkStruct_02014E30 dims = ov14_021F8098;
+    TileRect dims = ov14_021F8098;
     void *buf;
     u32 location;
     u16 species;
@@ -592,7 +592,7 @@ void PCBox_LoadMonPic(PCBoxView *view, PCBoxMonInfo *monInfo, u32 index) {
     } else {
         species = monInfo->species;
     }
-    sub_02014510((NarcId)pic.narcID, pic.charDataID, HEAP_ID_10, &dims, buf, monInfo->personality, FALSE, 2, species);
+    CharTiles_LoadMonRectAsObjFromNarc((NarcId)pic.narcID, pic.charDataID, HEAP_ID_10, &dims, buf, monInfo->personality, FALSE, 2, species);
     location = NNS_G2dGetImageLocation(Sprite_GetImageProxy(view->sprites[index]->sprite), NNS_G2D_VRAM_TYPE_2DSUB);
     DC_FlushRange(buf, 0xc80);
     GXS_LoadOBJ(buf, location, 0xc80);

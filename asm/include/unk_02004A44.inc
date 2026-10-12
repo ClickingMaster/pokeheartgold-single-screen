@@ -81,11 +81,11 @@
 .public Sound_SetBGMPlayerChannels
 .public GF_SndHandleSetPlayerVolume
 .public sub_02005B58
-.public sub_02005B68
-.public sub_02005B78
+.public Sound_SetChatotRecordingDisabled
+.public GF_SndReadSeqVariable
 .public sub_02005BA8
-.public sub_02005BEC
-.public sub_02005BFC
+.public Sound_SetSelectSEMuted
+.public Sound_IsSelectSEMuted
 .public SoundSys_GetGBSoundsState
 .public SoundSys_ToggleGBSounds
 .public GBSounds_GetGBSeqNoByDSSeqNo

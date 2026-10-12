@@ -30,7 +30,7 @@
 .public FieldEffectManager_LoadNarcMember
 .public FieldEffectManager_CreateEffect
 .public FieldEffectManager_DestroyEffect
-.public ov01_021F771C
+.public MapObjectManager_GetFollowMonBillboard
 .public Field3dModel_LoadFromData
 .public Field3dModel_UnloadKeepData
 .public Field3dModelAnimation_LoadFromFilesystem

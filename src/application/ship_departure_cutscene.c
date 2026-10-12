@@ -111,7 +111,7 @@ BOOL ShipDepartureCutscene_Main(OverlayManager *man, int *state) {
     case 0:
         anmObj = model->anmObj[0];
         if (anmObj->frame + FX32_ONE == NNS_G3dAnmObjGetNumFrame(anmObj)) {
-            sub_020880CC(1, HEAP_ID_151);
+            BeginAppScreenFade(1, HEAP_ID_151);
             (*state)++;
         }
         break;
@@ -123,7 +123,7 @@ BOOL ShipDepartureCutscene_Main(OverlayManager *man, int *state) {
                 done = TRUE;
             } else {
                 ShipDepartureCutscene_InitCamera(cutscene);
-                sub_020880CC(done, HEAP_ID_151);
+                BeginAppScreenFade(done, HEAP_ID_151);
                 *state = done;
             }
         }

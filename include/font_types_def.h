@@ -60,7 +60,7 @@ typedef struct TextPrinter {
     u8 id;
     u8 unk2D;
     u16 unk2E;
-    u16 *unk30;
+    u16 *focusIndicatorGfx;
 } TextPrinter;
 
 typedef enum RenderResult {

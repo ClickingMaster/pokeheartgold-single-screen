@@ -55,7 +55,7 @@ s32 Ascii_StrToL(const s8 *str) {
     return num;
 }
 
-void sub_02020B3C(NNSG3dResName *resName, const s8 *input) {
+void Ascii_SetResName(NNSG3dResName *resName, const s8 *input) {
     // memset(resName, 0, NNS_G3D_RESNAME_SIZE);
     // strncpy(resName->name, input, NNS_G3D_RESNAME_SIZE);
 

@@ -621,7 +621,7 @@ void WiFiPlazaRoom_InitGraphics(WiFiPlazaRoomGraphics *graphics, SaveData *save,
     for (j = 0; j < 4; j++) {
         graphics->resManagers[j] = Create2DGfxResObjMan(24, (GfGfxResType)j, heapID);
     }
-    graphics->cellTransfer = sub_02020654(24, heapID);
+    graphics->cellTransfer = CreateCellTransferStateManager(24, heapID);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     graphics->vramManager = GF_3DVramMan_Create(heapID, GF_3D_TEXALLOC_LNK, 2, GF_3D_PLTTALLOC_LNK, 4, WiFiPlazaRoom_Setup3D);
@@ -644,7 +644,7 @@ void WiFiPlazaRoom_FreeGraphics(WiFiPlazaRoomGraphics *graphics) {
         FreeBgTilemapBuffer(graphics->bgConfig, (u8)*bgIds);
     }
     Heap_Free(graphics->bgConfig);
-    sub_0202067C(graphics->cellTransfer);
+    DestroyCellTransferStateManager(graphics->cellTransfer);
     // cellTransfer = NULL, then resManagers[0-3] (the offset is kept in a register)
     offset = offsetof(WiFiPlazaRoomGraphics, cellTransfer);
     j = 0;

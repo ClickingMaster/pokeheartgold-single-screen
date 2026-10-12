@@ -1149,7 +1149,7 @@ void PokedexApp_CycleListEntryLanguage(PokedexAppData *pokedexApp, u16 species, 
 
     s16 r7 = LanguageToDexFlag(pokedexApp->language);
     for (u32 i = 0; i < 6; ++i) {
-        r7 = sub_020912D0(r7, a2);
+        r7 = CycleDexLanguageFlag(r7, a2);
         s16 r4 = DexFlagToLanguage(r7);
         if (r4 == pokedexApp->language) {
             return;

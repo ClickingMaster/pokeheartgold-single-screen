@@ -1974,7 +1974,7 @@ void GtsSelector_PrintButtonLabel(BgCellManager *cellManager, MsgData *msgData, 
 // "page/pageCount", page 0-based.
 void GtsSelector_PrintPageNumber(BgCellManager *cellManager, MessagePrinter *printer, Window *window, int page, int pageCount) {
     PrintUIntOnWindow(printer, page + 1, 2, PRINTING_MODE_RIGHT_ALIGN, window, 0, 0);
-    sub_0200CDAC(printer, 0, window, 16, 0);
+    MessagePrinter_PrintGlyph(printer, 0, window, 16, 0);
     PrintUIntOnWindow(printer, pageCount, 2, PRINTING_MODE_LEFT_ALIGN, window, 24, 0);
     CopyWindowPixelsToVram_TextMode(window);
     BgCellManager_PutWindowTiles(cellManager, 0, window);

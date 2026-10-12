@@ -34,8 +34,8 @@ Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(void *sprite);
 void *PokeathlonCourseSpritePool_GetSpriteList(void *pool);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *sprite, int priority);
 // monsters.c / pokemon_icon_idx.c, declared here with the argument types the calls were built with
-void *sub_0201457C(u16 charNarc, u16 charFile, u32 heapId, u32 personality, int a4, int a5, u16 species);
-void *sub_02014450(u16 plttNarc, u16 plttFile, u32 heapId);
+void *CharTiles_AllocAndLoadMonPicAsObjFromNarc(u16 charNarc, u16 charFile, u32 heapId, u32 personality, int a4, int a5, u16 species);
+void *AllocAndLoadPltt16FromNarc(u16 plttNarc, u16 plttFile, u32 heapId);
 u32 GetMonIconPlttNaix(void);
 // in the object linked between the two parts of the top screen code (picture sprites)
 void PokeathlonPennantCaptureDisplay_CreatePicSprites(void *pool, PokeathlonPennantCaptureDisplay *display);
@@ -265,8 +265,8 @@ void PokeathlonPennantCaptureDisplay_LoadMonPics(PokeathlonPennantCaptureDisplay
 
     for (; i < 3; i++) {
         GetMonSpriteCharAndPlttNarcIdsEx((PokepicTemplate *)ids, mons[i].species, mons[i].gender, 2, mons[i].shiny, (u8)mons[i].form, mons[i].personality);
-        display->monPics[i].character = sub_0201457C(ids[0], ids[1], display->heapId, mons[i].personality, 0, 2, mons[i].species);
-        display->monPics[i].palette = sub_02014450(ids[0], ids[2], display->heapId);
+        display->monPics[i].character = CharTiles_AllocAndLoadMonPicAsObjFromNarc(ids[0], ids[1], display->heapId, mons[i].personality, 0, 2, mons[i].species);
+        display->monPics[i].palette = AllocAndLoadPltt16FromNarc(ids[0], ids[2], display->heapId);
     }
 }
 

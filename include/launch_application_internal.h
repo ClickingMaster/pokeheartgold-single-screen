@@ -13,16 +13,16 @@ typedef enum PartyMenuMoveSelectState {
     PMMS_FREE,
 } PartyMenuMoveSelectState;
 
-typedef enum Unk0203E878State {
-    UNK_0203E878_STATE_0,
-    UNK_0203E878_STATE_1,
-    UNK_0203E878_STATE_2,
-} Unk0203E878State;
+typedef enum EasyChatTaskState {
+    EASY_CHAT_TASK_STATE_LAUNCH,
+    EASY_CHAT_TASK_STATE_WAIT,
+    EASY_CHAT_TASK_STATE_FINISH,
+} EasyChatTaskState;
 
-typedef enum Unk0203F134State {
-    UNK_0203F134_STATE_0,
-    UNK_0203F134_STATE_1,
-} Unk0203F134State;
+typedef enum DressUpTaskState {
+    DRESS_UP_TASK_STATE_LAUNCH,
+    DRESS_UP_TASK_STATE_WAIT,
+} DressUpTaskState;
 
 typedef enum WirelessTradeState {
     WIRELESS_TRADE_STATE_0,
@@ -41,15 +41,15 @@ typedef struct UnkStruct_0203E6D4 {
     u8 unk8[0x4];
 } UnkStruct_0203E6D4;
 
-typedef struct UnkStruct_0203E878 {
+typedef struct EasyChatTaskData {
     UnkStruct_0203E8C8 *unk0;
     u16 *unk4;
     u16 *unk8;
     EasyChatArgs *easyChat;
     int unk10;
-} UnkStruct_0203E878;
+} EasyChatTaskData;
 
-typedef struct UnkStruct_0203F0D0 {
+typedef struct DressUpArgs {
     Pokemon *mon;
     SaveFashionDataSub *unk4;
     FashionCase *fashionCase;
@@ -59,14 +59,14 @@ typedef struct UnkStruct_0203F0D0 {
     int *unk18;
     int unk1C;
     MenuInputStateMgr *menuInputStatePtr;
-} UnkStruct_0203F0D0;
+} DressUpArgs;
 
-typedef struct UnkStruct_0203F134 {
+typedef struct DressUpTaskData {
     int state;
     u16 *unk4;
     int unk8;
-    UnkStruct_0203F0D0 *unkC;
-} UnkStruct_0203F134;
+    DressUpArgs *unkC;
+} DressUpTaskData;
 
 typedef struct WirelessTradeSelectMonArgs {
     FieldSystem *fieldSystem;
@@ -111,10 +111,10 @@ typedef struct WirelessTradeData {
     TradeSequenceArgs tradeSequence;
 } WirelessTradeData;
 
-typedef struct UnkStruct_0203F4C8 {
+typedef struct DrawingSessionArgs {
     struct UnionRoomObjects *unk0;
     Options *options;
-} UnkStruct_0203F4C8;
+} DrawingSessionArgs;
 
 typedef struct NamingScreenData {
     int state;

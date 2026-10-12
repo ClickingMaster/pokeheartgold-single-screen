@@ -13,7 +13,7 @@ typedef struct BattleNumberPrinter {
     int fillVal;
 } BattleNumberPrinter;
 
-void sub_0200CE7C(MessagePrinter *msgPrinter, u8 glyphId, u32 num, u32 ndigits, PrintingMode mode, Window *window, u32 x, u32 y);
-void sub_0200CEB0(BattleNumberPrinter *unk, u32 num, u32 ndigits, PrintingMode strConvMode, u16 *dest);
+void MessagePrinter_PrintGlyphAndUInt(MessagePrinter *msgPrinter, u8 glyphId, u32 num, u32 ndigits, PrintingMode mode, Window *window, u32 x, u32 y);
+void BattleNumberPrinter_PrintUInt(BattleNumberPrinter *unk, u32 num, u32 ndigits, PrintingMode strConvMode, u16 *dest);
 
 #endif // POKEHEARTGOLD_MESSAGE_PRINTER_NUMBER_H

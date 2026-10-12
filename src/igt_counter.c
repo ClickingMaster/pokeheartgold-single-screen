@@ -16,7 +16,7 @@ void IGTCounter_Start(IGT *igt) {
     sIGTCounter.unk14 = 0;
     sIGTCounter.unk8 = 0;
     sIGTCounter.igt = igt;
-    sIGTCounter.unk18 = sub_020254FC();
+    sIGTCounter.unk18 = GetTimer3Ticks();
 }
 
 void IGTCounter_Update(void) {
@@ -24,8 +24,8 @@ void IGTCounter_Update(void) {
         return;
     }
 
-    u64 val = sub_020254FC();
-    u64 val2 = sub_02025504(val - sIGTCounter.unk18);
+    u64 val = GetTimer3Ticks();
+    u64 val2 = Timer3TicksToSeconds(val - sIGTCounter.unk18);
     if (sIGTCounter.unk8 >= val2) {
         return;
     }

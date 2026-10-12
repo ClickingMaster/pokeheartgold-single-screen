@@ -101,7 +101,7 @@ extern const TradeSequenceSceneMainFunc sTradeSequenceSceneMain[];
 extern const TradeSequenceSceneExitFunc sTradeSequenceSceneExit[];
 extern const u32 sTradeSequenceSceneModes[];
 extern const s32 sTradeSequenceBgZoomCenterY[];
-extern const UnkStruct_02014E30 sTradeSequenceMonPicSettings;
+extern const TileRect sTradeSequenceMonPicSettings;
 
 extern s32 sTradeSequenceDeferredFreeCount;
 extern void *sTradeSequenceDeferredFrees[TRADE_SEQUENCE_MAX_DEFERRED];
@@ -484,7 +484,7 @@ void TradeSequence_LoadMonPicToBg(TradeSequence *ts, u32 whichMon, u32 bgId, u32
     void *buffer = Heap_AllocAtEnd(HEAP_ID_56, size);
 
     struct {
-        UnkStruct_02014E30 settings;
+        TileRect settings;
         PokepicTemplate template;
     } local; // keeps the original stack layout
 
@@ -510,7 +510,7 @@ void TradeSequence_LoadMonPicToBg(TradeSequence *ts, u32 whichMon, u32 bgId, u32
         if (GetBoxMonData(boxMon, MON_DATA_IS_EGG, NULL) == TRUE && species == SPECIES_SPINDA) {
             species = SPECIES_EGG;
         }
-        sub_02014510((NarcId)local.template.narcID, local.template.charDataID, HEAP_ID_56, &local.settings, buffer, personality, large, 2, species);
+        CharTiles_LoadMonRectAsObjFromNarc((NarcId)local.template.narcID, local.template.charDataID, HEAP_ID_56, &local.settings, buffer, personality, large, 2, species);
         DC_FlushRange(buffer, size);
         BG_LoadCharTilesData(ts->bgConfig, (u8)bgId, buffer, size, 0);
         ReleaseBoxMonLock(boxMon, lock);

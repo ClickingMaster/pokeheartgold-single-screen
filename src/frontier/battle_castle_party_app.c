@@ -1655,7 +1655,7 @@ void BattleCastlePartyApp_PrintMonHp(BattleCastlePartyApp *app, Window *window, 
         maxHpX = 36;
     }
     PrintUIntOnWindow(app->msgPrinter, GetMonData(mon, MON_DATA_HP, NULL), 3, PRINTING_MODE_RIGHT_ALIGN, window, hpX, y);
-    sub_0200CDAC(app->msgPrinter, 0, window, slashX, y); // "/"
+    MessagePrinter_PrintGlyph(app->msgPrinter, 0, window, slashX, y); // "/"
     PrintUIntOnWindow(app->msgPrinter, GetMonData(mon, MON_DATA_MAX_HP, NULL), 3, PRINTING_MODE_LEFT_ALIGN, window, maxHpX, y);
 }
 #pragma force_active reset
@@ -1696,7 +1696,7 @@ void BattleCastlePartyApp_PrintMonLevelAndGender(BattleCastlePartyApp *app, Wind
         y = 0;
         genderX = 48;
     }
-    sub_0200CE7C(app->msgPrinter, 1, GetMonData(mon, MON_DATA_LEVEL, NULL), 3, PRINTING_MODE_LEFT_ALIGN, window, levelX, y); // "Lv. {n}"
+    MessagePrinter_PrintGlyphAndUInt(app->msgPrinter, 1, GetMonData(mon, MON_DATA_LEVEL, NULL), 3, PRINTING_MODE_LEFT_ALIGN, window, levelX, y); // "Lv. {n}"
     BattleCastlePartyApp_PrintGenderSymbol(app, window, genderX, y, 0, GetMonData(mon, MON_DATA_GENDER, NULL));
 }
 #pragma force_active reset

@@ -399,7 +399,7 @@ int sub_02027158(SaveData *saveData, struct FrontierSpeciesRecords *data) {
 }
 
 u32 PCStorage_GetSizeOfBox(void) {
-    return sub_02074120();
+    return PCBox_sizeof();
 }
 
 u32 PCStorage_GetNumBoxes(void) {

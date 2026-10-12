@@ -5,7 +5,7 @@
 #include "filesystem_files_def.h"
 #include "gf_gfx_loader.h"
 
-static const u16 _020F5C24[][2] = {
+static const u16 sMessagePrinterGlyphs[][2] = {
     { 0x0140, 0x0008 },
     { 0x0160, 0x0010 },
     { 0x01A0, 0x0010 },
@@ -66,8 +66,8 @@ void MessagePrinter_Delete(MessagePrinter *messagePrinter) {
     }
 }
 
-void sub_0200CDAC(MessagePrinter *messagePrinter, u8 glyphId, Window *window, u32 x, u32 y) {
-    BlitBitmapRectToWindow(window, messagePrinter->ppCharData->pRawData + _020F5C24[glyphId][0], 0, 0, _020F5C24[glyphId][1], 8, x, y, _020F5C24[glyphId][1], 8);
+void MessagePrinter_PrintGlyph(MessagePrinter *messagePrinter, u8 glyphId, Window *window, u32 x, u32 y) {
+    BlitBitmapRectToWindow(window, messagePrinter->ppCharData->pRawData + sMessagePrinterGlyphs[glyphId][0], 0, 0, sMessagePrinterGlyphs[glyphId][1], 8, x, y, sMessagePrinterGlyphs[glyphId][1], 8);
 }
 
 void PrintUIntOnWindow(MessagePrinter *messagePrinter, u32 num, u32 ndigits, PrintingMode mode, Window *window, u32 x, u32 y) {

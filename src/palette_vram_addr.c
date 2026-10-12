@@ -6,7 +6,7 @@ u16 *GetMainBgPlttAddr(void) {
     return (u16 *)HW_BG_PLTT;
 }
 
-int sub_02026E8C(void) {
+int GetMainBgPlttSize(void) {
     return HW_BG_PLTT_SIZE;
 }
 
@@ -14,7 +14,7 @@ u16 *GetSubBgPlttAddr(void) {
     return (u16 *)HW_DB_BG_PLTT;
 }
 
-int sub_02026E9C(void) {
+int GetSubBgPlttSize(void) {
     return HW_BG_PLTT_SIZE;
 }
 

@@ -464,7 +464,7 @@ void Gts_LoadMonPicture(Pokemon *mon) {
     GetPokemonSpriteCharAndPlttNarcIds(&pokepic, mon, 2);
     personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     species = GetMonData(mon, MON_DATA_SPECIES, NULL);
-    sub_02014494((NarcId)pokepic.narcID, pokepic.charDataID, HEAP_ID_61, 0, 0, 10, 10, buf, personality, FALSE, 2, species);
+    CharTiles_LoadMonObjBlocksFromNarc((NarcId)pokepic.narcID, pokepic.charDataID, HEAP_ID_61, 0, 0, 10, 10, buf, personality, FALSE, 2, species);
     DC_FlushRange(buf, 0xC80);
     GX_LoadOBJ(buf, 0x4A00, 0xC80);
     GfGfxLoader_GXLoadPal((NarcId)pokepic.narcID, pokepic.palDataID, GF_PAL_LOCATION_MAIN_OBJ, GF_PAL_SLOT_13_OFFSET, 0x20, HEAP_ID_61);

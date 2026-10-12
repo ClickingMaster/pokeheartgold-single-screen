@@ -27,7 +27,7 @@ extern const SpriteResourceCountsListUnion sSpriteResourceCapacities;
 extern const ManagedSpriteTemplate sMonIconSpriteTemplate;
 extern const ManagedSpriteTemplate ov18_021FABC0; // Pokemon picture, first of the pair
 extern const ManagedSpriteTemplate ov18_021FABF4; // Pokemon picture, second of the pair
-extern const UnkStruct_02014E30 ov18_021FA328;
+extern const TileRect ov18_021FA328;
 extern const ManagedSpriteTemplate sFootprintSpriteTemplate;
 extern const ManagedSpriteTemplate sTypeIconSpriteTemplate;
 extern const ManagedSpriteTemplate sLanguageIconSpriteTemplate;
@@ -431,7 +431,7 @@ void PokedexApp_CreateMonPicSprites(PokedexAppData *pokedexApp, int index) {
 // only, anything else fills the palette with black.
 void PokedexApp_LoadMonPicToSprite(PokedexAppData *pokedexApp, int species, u8 form, u8 gender, u8 facing, int sprite, int mode) {
     PokepicTemplate pokepic;
-    UnkStruct_02014E30 rect = ov18_021FA328;
+    TileRect rect = ov18_021FA328;
     void *buffer = Heap_AllocAtEnd(HEAP_ID_POKEDEX_APP, 3200);
     u32 personality, location, palette;
     ManagedSprite **sprites;
@@ -445,7 +445,7 @@ void PokedexApp_LoadMonPicToSprite(PokedexAppData *pokedexApp, int species, u8 f
     }
     // compiled against a prototype with an int species (no narrowing at the call)
     ((void (*)(PokepicTemplate *, int, u8, u8, u8, u8, u32))GetMonSpriteCharAndPlttNarcIdsEx)(&pokepic, species, gender, facing, 0, form, personality);
-    sub_02014510((NarcId)pokepic.narcID, pokepic.charDataID, HEAP_ID_POKEDEX_APP, &rect, buffer, personality, FALSE, facing, species);
+    CharTiles_LoadMonRectAsObjFromNarc((NarcId)pokepic.narcID, pokepic.charDataID, HEAP_ID_POKEDEX_APP, &rect, buffer, personality, FALSE, facing, species);
     sprites = pokedexApp->sprites;
     index = sprite;
     location = NNS_G2dGetImageLocation(Sprite_GetImageProxy(sprites[index]->sprite), NNS_G2D_VRAM_TYPE_2DSUB);
@@ -722,10 +722,10 @@ void PokedexApp_UpdateLanguageIcons(PokedexAppData *pokedexApp, u16 species, int
         shown = 0;
         for (index = (s16)(first + 5); (u32)index >= (u32)first; index--) {
             u32 which = index - first;
-            int language = DexFlagToLanguage(sub_020912AC(which));
+            int language = DexFlagToLanguage(GetDexLanguageCycleFlag(which));
             if (PokedexApp_HasCaughtInLanguage(pokedexApp, species, (u16)language) == TRUE || language == GAME_LANGUAGE) {
                 int current = LanguageToDexFlag(pokedexApp->language);
-                int flag = sub_020912AC(which);
+                int flag = GetDexLanguageCycleFlag(which);
                 s16 x, y;
                 if (flag == current) {
                     PokedexApp_SetSpriteAnim(pokedexApp, index, flag);

@@ -1202,7 +1202,7 @@ u32 WirelessTradeSelectMon_LoadMonPic(u32 side, Pokemon *mon, void *dest, Pokepi
     if (GetMonData(mon, MON_DATA_IS_EGG, NULL) == TRUE && species == SPECIES_SPINDA) {
         species = SPECIES_EGG;
     }
-    sub_02014494((NarcId)pokepic->narcID, pokepic->charDataID, HEAP_ID_26, 0, 0, 10, 10, dest, personality, FALSE, 2, species);
+    CharTiles_LoadMonObjBlocksFromNarc((NarcId)pokepic->narcID, pokepic->charDataID, HEAP_ID_26, 0, 0, 10, 10, dest, personality, FALSE, 2, species);
     DC_FlushRange(dest, WIRELESS_TRADE_MON_PIC_SIZE);
     return side + 1;
 }

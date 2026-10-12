@@ -395,7 +395,7 @@
 .public GetBattlerVar
 .public ov12_022567D4
 .public BattleBuffer_GetNext
-.public ov12_022568B0
+.public BattleSystem_IsPlayerOT
 .public OpponentData_SetSpriteDrawFlag
 .public BattleController_EmitPokemonSendOut
 .public BattleController_EmitPokemonEnterBall

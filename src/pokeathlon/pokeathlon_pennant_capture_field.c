@@ -22,7 +22,7 @@ fx32 FX_Sqrt(fx32 x);
 
 // sound_playback.c (no header declares them)
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
-u32 sub_02006190(u32 playerNo);
+u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
 
 // Course helpers and the rest of the event (OVY_96, not yet tidied).
 u8 *ov96_021E8A20(void *block);
@@ -410,10 +410,10 @@ void PokeathlonPennantCapture_ApplyFrame(PokeathlonCourseData *course, int viewe
                 player->flashTimer = 0;
                 remote = TRUE;
                 if (self == i) {
-                    if (sub_02006190(3) == 0) {
+                    if (GF_SndCountPlayingSeqOnPlayer(3) == 0) {
                         PokeathlonPennantCapture_PlaySEIfOnScreen(position.x / FX32_ONE, position.y / FX32_ONE, SEQ_SE_GS_W146, 1);
                     }
-                } else if (sub_02006190(4) == 0) {
+                } else if (GF_SndCountPlayingSeqOnPlayer(4) == 0) {
                     PokeathlonPennantCapture_PlaySEIfOnScreen(position.x / FX32_ONE, position.y / FX32_ONE, SEQ_SE_GS_W146, 0);
                 }
             } else {

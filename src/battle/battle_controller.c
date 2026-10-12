@@ -461,7 +461,7 @@ BOOL BattleController_RecvData(BattleSystem *battleSystem, const u8 *data) {
         int command = data[4];
         int netId = data[5];
         if (BattleSystem_IsServer(battleSystem)) {
-            ov12_0224ED00(battleSystem->ctx, netId, battlerId, command);
+            BattleContext_RemoveLinkBufferEntry(battleSystem->ctx, netId, battlerId, command);
         }
         ret = TRUE;
     }
@@ -504,13 +504,13 @@ void BattleController_EmitPacket(BattleSystem *battleSystem, int direction, int 
     if ((battleSystem->battleType & BATTLE_TYPE_LINK) && !(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
         if (direction == 1) {
             for (i = 0; i < Comm_CountConnected(); i++) {
-                ov12_0224ECC4(battleSystem->ctx, i, battlerId, *(const u8 *)data);
+                BattleContext_AddLinkBufferEntry(battleSystem->ctx, i, battlerId, *(const u8 *)data);
             }
         }
         BattleLink_QueueSendData(battleSystem, direction, battlerId, (u8 *)data, size);
     } else {
         if (direction == 1) {
-            ov12_0224ECC4(battleSystem->ctx, 0, battlerId, *(const u8 *)data);
+            BattleContext_AddLinkBufferEntry(battleSystem->ctx, 0, battlerId, *(const u8 *)data);
         }
         BattleController_SendData(battleSystem, direction, battlerId, data, size);
     }
@@ -1668,7 +1668,7 @@ BOOL BattleController_RecvLinkData(BattleSystem *battleSystem, u8 *data) {
         int command = data[4];
         int netId = data[5];
         if (BattleSystem_IsServer(battleSystem)) {
-            ov12_0224ED00(battleSystem->ctx, netId, battlerId, command);
+            BattleContext_RemoveLinkBufferEntry(battleSystem->ctx, netId, battlerId, command);
         }
     }
     return ret;
@@ -1719,13 +1719,13 @@ void BattleController_InitMoveAnimData(BattleSystem *battleSystem, BattleContext
         }
     }
     if (attacker != BATTLER_NONE) {
-        slot = ov12_0223C140(battleSystem, attacker);
+        slot = BattleSystem_GetFollowMonSlot(battleSystem, attacker);
         if (slot != 0xFF && slot == ctx->selectedMonIndex[attacker]) {
             animData->attackerActive = TRUE;
         }
     }
     if (defender != BATTLER_NONE) {
-        slot = ov12_0223C140(battleSystem, defender);
+        slot = BattleSystem_GetFollowMonSlot(battleSystem, defender);
         if (slot != 0xFF && slot == ctx->selectedMonIndex[defender]) {
             animData->defenderActive = TRUE;
         }

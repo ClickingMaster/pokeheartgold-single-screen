@@ -13,7 +13,7 @@
 .public PaletteData_PushTransparentBuffers
 .public PaletteData_GetSelectedBuffersBitmask
 .public PaletteData_SetAutoTransparent
-.public sub_02005D10
+.public PlayBGMDirect
 .public StopBGM
 .public PlaySE
 .public GF_IsAnySEPlaying
@@ -123,9 +123,9 @@
 .public String_Delete
 .public RequestSwap3DBuffers
 .public GetMainBgPlttAddr
-.public sub_02026E8C
+.public GetMainBgPlttSize
 .public GetSubBgPlttAddr
-.public sub_02026E9C
+.public GetSubBgPlttSize
 .public GF_3DVramMan_Delete
 .public Pokedex_SetMonCaughtFlag
 .public Options_GetTextFrameDelay

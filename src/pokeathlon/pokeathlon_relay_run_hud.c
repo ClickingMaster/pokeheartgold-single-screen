@@ -355,8 +355,8 @@ void PokeathlonRelayRunHud_LoadMonPics(PokeathlonRelayRunHud *hud, const Pokeath
     // cursor: hud moved on by one picture per member (cursor->pics[0]), the way the original addresses them
     for (i = 0, cursor = hud; i < RELAY_RUN_MEMBERS; i++, mon++, cursor = (PokeathlonRelayRunHud *)((u8 *)cursor + sizeof(PokeathlonRelayRunHudPic))) {
         GetMonSpriteCharAndPlttNarcIdsEx(&template, mon->species, mon->gender, 2, mon->isShiny, (u8)mon->form, mon->personality);
-        cursor->pics[0].chars = sub_0201457C((NarcId) template.narcID, template.charDataID, hud->heapId, mon->personality, FALSE, 2, mon->species);
-        cursor->pics[0].palette = sub_02014450((NarcId) template.narcID, template.palDataID, hud->heapId);
+        cursor->pics[0].chars = CharTiles_AllocAndLoadMonPicAsObjFromNarc((NarcId) template.narcID, template.charDataID, hud->heapId, mon->personality, FALSE, 2, mon->species);
+        cursor->pics[0].palette = AllocAndLoadPltt16FromNarc((NarcId) template.narcID, template.palDataID, hud->heapId);
     }
 }
 

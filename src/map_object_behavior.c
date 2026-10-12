@@ -82,12 +82,12 @@ int TypeBehavior_NoOpUpdate(LocalMapObject *object) {
     return 0;
 }
 
-void sub_02063B08(LocalMapObject *object) {
+void TypeBehavior_LookSidewaysInit(LocalMapObject *object) {
     TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_InitBehaviorData(object, 9);
     state->limit = MapObject_GetParam(object, 1);
 }
 
-BOOL sub_02063B20(LocalMapObject *object) {
+BOOL TypeBehavior_LookSidewaysCheck(LocalMapObject *object) {
     TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
     switch (state->state) {
     case 0:
@@ -118,18 +118,18 @@ BOOL sub_02063B20(LocalMapObject *object) {
     return FALSE;
 }
 
-BOOL sub_02063B9C(LocalMapObject *object) {
+BOOL TypeBehavior_LookSidewaysUpdate(LocalMapObject *object) {
     TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
     switch (state->turnState) {
     case 0: {
-        FourValues dirTable = _020FE0C4;
+        FourValues dirTable = gLookSidewaysAxisByFacing;
         int dir = MapObject_GetFacingDirection(object);
         state->direction = dir;
         state->sequence = dirTable.values[dir];
         state->turnState++;
     }
     case 1: {
-        TwoByTwoValues moveTable = _020FE0D4;
+        TwoByTwoValues moveTable = gLookSidewaysDirections;
         MapObject_ForceSetHeldMovement(object, GetMovementForDirection(moveTable.values[state->sequence][state->index], 0));
         state->turnState++;
     }
@@ -158,13 +158,13 @@ BOOL sub_02063B9C(LocalMapObject *object) {
     return FALSE;
 }
 
-void sub_02063C88(LocalMapObject *object) {
+void TypeBehavior_SpinInit(LocalMapObject *object) {
     TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_InitBehaviorData(object, 9);
     state->limit = MapObject_GetParam(object, 1);
     state->sequence = (MapObject_GetType(object) != 5);
 }
 
-BOOL sub_02063CB4(LocalMapObject *object) {
+BOOL TypeBehavior_SpinCheck(LocalMapObject *object) {
     TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
     switch (state->state) {
     case 0:
@@ -195,8 +195,8 @@ BOOL sub_02063CB4(LocalMapObject *object) {
     return FALSE;
 }
 
-BOOL sub_02063D30(LocalMapObject *object) {
-    DirectionMovementTable sp0 = _020FE0E4;
+BOOL TypeBehavior_SpinUpdate(LocalMapObject *object) {
+    DirectionMovementTable sp0 = gTypeBehaviorSpinOrders;
     volatile TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
     int i;
     int dir;
@@ -266,7 +266,7 @@ void ApricornTreeObject_Update(LocalMapObject *object) {
         MapObject_SetSpriteID(object, state->spriteId);
         MapObject_RequestBillboard(object, &state->billboard, state->spriteId);
     } else if (apricorn != state->apricorns) {
-        ov01_021F95CC(object, &state->billboard, state->spriteId);
+        MapObject_CancelAndFreeBillboard(object, &state->billboard, state->spriteId);
         state->spriteId = GetApricornTreeSpriteId(FieldSystem_ApricornTree_TryGetApricorn(MapObject_GetFieldSystem(object), object), apricorn);
         MapObject_SetSpriteID(object, state->spriteId);
         if (state->spriteId != 0xFFFF) {
@@ -322,7 +322,7 @@ void ApricornTreeObject_Update(LocalMapObject *object) {
 
 void ApricornTreeObject_Delete(LocalMapObject *object) {
     ApricornTreeState *state = (ApricornTreeState *)MapObject_GetDrawData(object);
-    ov01_021F95CC(object, &state->billboard, state->spriteId);
+    MapObject_CancelAndFreeBillboard(object, &state->billboard, state->spriteId);
 }
 
 void ApricornTreeObject_Pause(LocalMapObject *object) {
@@ -330,7 +330,7 @@ void ApricornTreeObject_Pause(LocalMapObject *object) {
     if (state->billboard != NULL) {
         BillboardObject_SaveState(state->billboard, &state->savedState);
     }
-    ov01_021F95CC(object, &state->billboard, state->spriteId);
+    MapObject_CancelAndFreeBillboard(object, &state->billboard, state->spriteId);
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK21);
 }
 
@@ -607,11 +607,11 @@ SysTask *TrainerApproach_CreateTask(FieldSystem *fieldSystem, LocalMapObject *tr
         GF_AssertFail();
     }
     memset(work, 0, sizeof(TrainerApproachWork));
-    work->movement = movement;
-    work->remaining = remaining;
+    work->direction = movement;
+    work->distance = remaining;
     work->unk10 = unk10;
-    work->unk14 = unk14;
-    work->unk18 = unk18;
+    work->encounterType = unk14;
+    work->trainerIndex = unk18;
     work->fieldSystem = fieldSystem;
     work->trainer = trainer;
     work->player = player;
@@ -635,10 +635,10 @@ void TrainerApproach_DestroyTask(SysTask *task) {
 
 void TrainerApproach_Task(SysTask *task, void *data) {
     TrainerApproachWork *work = data;
-    while (_020FE1A4[work->state](work) == TRUE) {}
+    while (gTrainerApproachStateFuncs[work->state](work) == TRUE) {}
 }
 
-BOOL sub_0206464C(TrainerApproachWork *work) {
+BOOL TrainerApproach_UnpauseTrainer(TrainerApproachWork *work) {
     LocalMapObject *object = work->trainer;
     if (MapObject_CheckSingleMovement(object) == TRUE) {
         MapObject_UnpauseMovement(object);
@@ -647,18 +647,18 @@ BOOL sub_0206464C(TrainerApproachWork *work) {
     return TRUE;
 }
 
-BOOL sub_02064668(TrainerApproachWork *work) {
+BOOL TrainerApproach_FaceDirection(TrainerApproachWork *work) {
     LocalMapObject *object = work->trainer;
     if (MapObject_CheckSingleMovement(object) == TRUE) {
         return FALSE;
     }
-    MapObject_SetFacingAndUpdateDraw(work->trainer, work->movement);
+    MapObject_SetFacingAndUpdateDraw(work->trainer, work->direction);
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_MOVEMENT_PAUSED);
     work->state = 2;
     return TRUE;
 }
 
-BOOL sub_02064694(TrainerApproachWork *work) {
+BOOL TrainerApproach_WaitForPlayer(TrainerApproachWork *work) {
     LocalMapObject *player = PlayerAvatar_GetMapObject(work->player);
     if (!MapObject_IsMovementPaused(player)) {
         return FALSE;
@@ -676,19 +676,19 @@ BOOL sub_02064694(TrainerApproachWork *work) {
     }
 }
 
-BOOL sub_020646DC(TrainerApproachWork *work) {
+BOOL TrainerApproach_StartFace(TrainerApproachWork *work) {
     if (!MapObject_AreBitsSetForMovementScriptInit(work->trainer)) {
         return FALSE;
     }
-    if (work->movement == -1) {
+    if (work->direction == -1) {
         GF_AssertFail();
     }
-    MapObject_SetHeldMovement(work->trainer, GetMovementForDirection(work->movement, 0));
+    MapObject_SetHeldMovement(work->trainer, GetMovementForDirection(work->direction, 0));
     work->state = 4;
     return FALSE;
 }
 
-BOOL sub_02064714(TrainerApproachWork *work) {
+BOOL TrainerApproach_WaitFace(TrainerApproachWork *work) {
     if (!MapObject_IsMovementPaused(work->trainer)) {
         return FALSE;
     }
@@ -696,13 +696,13 @@ BOOL sub_02064714(TrainerApproachWork *work) {
     return TRUE;
 }
 
-BOOL sub_02064730(TrainerApproachWork *work) {
+BOOL TrainerApproach_SpawnExclamation(TrainerApproachWork *work) {
     work->effect = EmoteMark_Spawn(work->trainer, 0, 0);
     work->state = 6;
     return FALSE;
 }
 
-BOOL sub_02064748(TrainerApproachWork *work) {
+BOOL TrainerApproach_WaitExclamation(TrainerApproachWork *work) {
     if (EmoteMark_IsDone(work->effect) == TRUE) {
         FieldEffect_Destroy(work->effect);
         work->state = 9;
@@ -710,20 +710,20 @@ BOOL sub_02064748(TrainerApproachWork *work) {
     return FALSE;
 }
 
-BOOL sub_02064764(TrainerApproachWork *work) {
+BOOL TrainerApproach_StartReveal(TrainerApproachWork *work) {
     MapObject_SetHeldMovement(work->trainer, 0x65);
     work->state = 8;
     return FALSE;
 }
 
-BOOL sub_02064778(TrainerApproachWork *work) {
+BOOL TrainerApproach_WaitReveal(TrainerApproachWork *work) {
     if (MapObject_IsMovementPaused(work->trainer) == TRUE) {
         work->state = 9;
     }
     return FALSE;
 }
 
-BOOL sub_02064790(TrainerApproachWork *work) {
+BOOL TrainerApproach_Wait(TrainerApproachWork *work) {
     if (++work->timer >= 30) {
         work->timer = 0;
         work->state = 10;
@@ -731,8 +731,8 @@ BOOL sub_02064790(TrainerApproachWork *work) {
     return FALSE;
 }
 
-BOOL sub_020647A8(TrainerApproachWork *work) {
-    if (work->remaining <= 1) {
+BOOL TrainerApproach_CheckDistance(TrainerApproachWork *work) {
+    if (work->distance <= 1) {
         work->state = 13;
         return TRUE;
     }
@@ -740,24 +740,24 @@ BOOL sub_020647A8(TrainerApproachWork *work) {
     return TRUE;
 }
 
-BOOL sub_020647C0(TrainerApproachWork *work) {
+BOOL TrainerApproach_StartStep(TrainerApproachWork *work) {
     if (MapObject_AreBitsSetForMovementScriptInit(work->trainer) == TRUE) {
-        MapObject_SetHeldMovement(work->trainer, GetMovementForDirection(work->movement, 12));
+        MapObject_SetHeldMovement(work->trainer, GetMovementForDirection(work->direction, 12));
         work->state = 12;
     }
     return FALSE;
 }
 
-BOOL sub_020647E8(TrainerApproachWork *work) {
+BOOL TrainerApproach_WaitStep(TrainerApproachWork *work) {
     if (!MapObject_IsMovementPaused(work->trainer)) {
         return FALSE;
     }
-    work->remaining--;
+    work->distance--;
     work->state = 10;
     return TRUE;
 }
 
-BOOL sub_02064808(TrainerApproachWork *work) {
+BOOL TrainerApproach_WaitArrived(TrainerApproachWork *work) {
     if (++work->timer < 8) {
         return FALSE;
     }
@@ -766,14 +766,14 @@ BOOL sub_02064808(TrainerApproachWork *work) {
     return TRUE;
 }
 
-BOOL sub_02064824(TrainerApproachWork *work) {
+BOOL TrainerApproach_TurnPlayer(TrainerApproachWork *work) {
     LocalMapObject *object = PlayerAvatar_GetMapObject(work->player);
     int x = MapObject_GetXCoord(object);
     int z = MapObject_GetZCoord(object);
     int tx = MapObject_GetXCoord(work->trainer);
     int tz = MapObject_GetZCoord(work->trainer);
     int direction = GetDirectionTowards(x, z, tx, tz);
-    if (direction != PlayerAvatar_GetFacingDirection(work->player) && (work->unk18 == 0 || work->unk14 == 2)) {
+    if (direction != PlayerAvatar_GetFacingDirection(work->player) && (work->trainerIndex == 0 || work->encounterType == 2)) {
         if (MapObject_AreBitsSetForMovementScriptInit(object) == TRUE) {
             MapObject_ClearFlagsBits(object, MAPOBJECTFLAG_UNK7);
             MapObject_SetHeldMovement(object, GetMovementForDirection(direction, 0));
@@ -785,7 +785,7 @@ BOOL sub_02064824(TrainerApproachWork *work) {
     return FALSE;
 }
 
-BOOL sub_020648A0(TrainerApproachWork *work) {
+BOOL TrainerApproach_WaitPlayerTurn(TrainerApproachWork *work) {
     LocalMapObject *player = PlayerAvatar_GetMapObject(work->player);
     if (!MapObject_IsMovementPaused(player)) {
         return FALSE;
@@ -795,14 +795,14 @@ BOOL sub_020648A0(TrainerApproachWork *work) {
     return TRUE;
 }
 
-BOOL sub_020648C8(TrainerApproachWork *work) {
+BOOL TrainerApproach_ResetTrainerMovement(TrainerApproachWork *work) {
     MapObject_ClearHeldMovementIfActive(work->trainer);
     MapObject_ChangeMovement(work->trainer, 0);
     work->state = 17;
     return TRUE;
 }
 
-BOOL sub_020648E4(TrainerApproachWork *work) {
+BOOL TrainerApproach_Finish(TrainerApproachWork *work) {
     work->done = TRUE;
     return FALSE;
 }

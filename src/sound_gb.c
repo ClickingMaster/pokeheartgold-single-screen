@@ -9,11 +9,11 @@ void NNS_SndPlayerSetTrackAllocatableChannel(NNSSndHandle *handle, u32 tracks, u
 u8 GF_GetPlayerNoBySeq(u16 seqNo);
 void GF_SndHandleSetTrackPitch(int handleNo, u32 tracks, int pitch);
 void sub_02005B58(u8 value);
-void sub_02005B68(u8 value);
-BOOL sub_02005B78(u16 seqNo, u32 variable, s16 *value);
+void Sound_SetChatotRecordingDisabled(u8 value);
+BOOL GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value);
 void sub_02005BA8(u16 seqNo);
-int sub_02005BFC(void);
-void sub_02005C08(u8 enabled);
+int Sound_IsSelectSEMuted(void);
+void SoundSys_SetGBSoundsState(u8 enabled);
 u16 GBSounds_GetGBSeqNoByDSSeqNo(u16 seqNo);
 u16 GBSounds_GetDSSeqNoByGBSeqNo(u16 seqNo);
 void GBSounds_SetAllocatableChannels(void);
@@ -22,10 +22,10 @@ void sub_02005CF4(BOOL enabled);
 void sub_02005B58(u8 value) {
     *(u8 *)GF_SdatGetAttrPtr(53) = value;
 }
-void sub_02005B68(u8 value) {
+void Sound_SetChatotRecordingDisabled(u8 value) {
     *(u8 *)GF_SdatGetAttrPtr(54) = value;
 }
-BOOL sub_02005B78(u16 seqNo, u32 variable, s16 *value) {
+BOOL GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value) {
     GF_ASSERT(value != NULL);
     GF_ASSERT(variable <= 15);
     return NNS_SndPlayerReadVariable(GF_GetSoundHandle(GF_GetSndHandleByPlayerNo(GF_GetPlayerNoBySeq(seqNo))), variable, value);
@@ -38,13 +38,13 @@ void sub_02005BA8(u16 seqNo) {
         state[1] = 0;
     }
 }
-void sub_02005BEC(BOOL enabled) {
+void Sound_SetSelectSEMuted(BOOL enabled) {
     *(u8 *)GF_SdatGetAttrPtr(56) = enabled;
 }
-int sub_02005BFC(void) {
+int Sound_IsSelectSEMuted(void) {
     return *(u8 *)GF_SdatGetAttrPtr(56);
 }
-void sub_02005C08(u8 enabled) {
+void SoundSys_SetGBSoundsState(u8 enabled) {
     *(u8 *)GF_SdatGetAttrPtr(57) = enabled;
 }
 BOOL SoundSys_GetGBSoundsState(void) {
@@ -52,9 +52,9 @@ BOOL SoundSys_GetGBSoundsState(void) {
 }
 void SoundSys_ToggleGBSounds(void) {
     if (SoundSys_GetGBSoundsState() == 0) {
-        sub_02005C08(1);
+        SoundSys_SetGBSoundsState(1);
     } else {
-        sub_02005C08(0);
+        SoundSys_SetGBSoundsState(0);
     }
     if (GF_GetQueuedBGM() == 0) {
         u16 seqNo = GF_GetCurrentPlayingBGM();

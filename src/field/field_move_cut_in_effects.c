@@ -225,12 +225,12 @@ void FieldMoveCutIn_GetMonPicIds(FieldMoveCutIn *cutIn, PokepicTemplate *templat
 void *FieldMoveCutIn_LoadMonChar(Pokemon *mon, PokepicTemplate *template, enum HeapID heapID) {
     void *buffer = Heap_Alloc(HEAP_ID_FIELD1, 0xc80);
     GF_ASSERT(buffer);
-    sub_02014540((NarcId)template->narcID, template->charDataID, heapID, buffer, GetMonData(mon, MON_DATA_PERSONALITY, NULL), FALSE, 2, template->species);
+    CharTiles_LoadMonPicAsObjFromNarc((NarcId)template->narcID, template->charDataID, heapID, buffer, GetMonData(mon, MON_DATA_PERSONALITY, NULL), FALSE, 2, template->species);
     return buffer;
 }
 
 void *FieldMoveCutIn_LoadMonPltt(PokepicTemplate *template, enum HeapID heapID) {
-    return sub_02014450((NarcId)template->narcID, template->palDataID, heapID);
+    return AllocAndLoadPltt16FromNarc((NarcId)template->narcID, template->palDataID, heapID);
 }
 
 SpriteResource *FieldMoveCutIn_AddMonCharResource(FieldMoveCutIn *cutIn, NARC *narc) {

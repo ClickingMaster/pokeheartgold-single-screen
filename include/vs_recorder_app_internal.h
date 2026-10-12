@@ -54,7 +54,7 @@ extern const VsRecorderRootMenu _021037B8[];
 
 void BattleRecord_RestoreSetup(BattleSetup *setup, SaveData *saveData);
 void *BattleRecord_Get(void);
-void sub_02005B68(BOOL enabled);
+void Sound_SetChatotRecordingDisabled(BOOL enabled);
 
 VsRecorderWork *VsRecorderApp_GetRecorderWork(OverlayManager *manager);
 void VsRecorderApp_Create(OverlayManager *manager, u32 mode);

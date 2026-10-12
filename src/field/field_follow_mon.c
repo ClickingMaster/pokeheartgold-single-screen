@@ -54,7 +54,7 @@ u32 GetMovementForDirection(u32 direction, u32 movement);
 BOOL MapObjectRender_GetBillboardResource(MapObjectManager *manager, u32 spriteId, void *record);
 u32 Facing_GetBillboardStandSequence(u32 direction);
 // The following Pokemon's billboard (field map object motion, still unnamed).
-void *ov01_021F771C(MapObjectManager *manager);
+void *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager);
 void BillboardGfxSequence_Init(void *sequence, void *dest);
 // billboard_lists.c
 void BillboardObject_SetResource(void *billboard, void *record);
@@ -600,7 +600,7 @@ BOOL ov01_02205B14(TaskManager *taskMan) {
         }
         FollowMon_MoveToPlayer(fieldSystem, DIR_NORTH);
         scale = ov01_02209704;
-        BillboardObject_SetScale(ov01_021F771C(fieldSystem->mapObjectManager), &scale);
+        BillboardObject_SetScale(MapObjectManager_GetFollowMonBillboard(fieldSystem->mapObjectManager), &scale);
         sub_02069E84(fieldSystem->followMon.mapObject, 1);
         env->state++;
         break;
@@ -685,7 +685,7 @@ BOOL Task_FollowMonRecall(TaskManager *taskMan) {
             u32 plttKey, plttAddr;
             FollowMon_MoveToPlayer(fieldSystem, DIR_NORTH);
             scale = sFollowMonRecallScale;
-            billboard = ov01_021F771C(fieldSystem->mapObjectManager);
+            billboard = MapObjectManager_GetFollowMonBillboard(fieldSystem->mapObjectManager);
             BillboardObject_SetScale(billboard, &scale);
             plttKey = BillboardObject_GetPlttKey(billboard);
             plttAddr = BillboardObject_GetPlttKey(billboard);
@@ -841,7 +841,7 @@ BOOL Task_FollowMonFlash(TaskManager *taskMan) {
                 (*state)++;
             }
             BlendPalette(env->original, env->blended, 32, (u8)env->blend, 0xFFFF);
-            billboard = ov01_021F771C(fieldSystem->mapObjectManager);
+            billboard = MapObjectManager_GetFollowMonBillboard(fieldSystem->mapObjectManager);
             plttKey = BillboardObject_GetPlttKey(billboard);
             plttAddr = BillboardObject_GetPlttKey(billboard);
             GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_PLTT, (u16)plttAddr * 8, env->blended, ((plttKey & 0xFFFF0000) >> 16) * 8);
@@ -859,7 +859,7 @@ BOOL Task_FollowMonFlash(TaskManager *taskMan) {
                 (*state)++;
             }
             BlendPalette(env->original, env->blended, 32, (u8)env->blend, 0xFFFF);
-            billboard = ov01_021F771C(fieldSystem->mapObjectManager);
+            billboard = MapObjectManager_GetFollowMonBillboard(fieldSystem->mapObjectManager);
             plttKey = BillboardObject_GetPlttKey(billboard);
             plttAddr = BillboardObject_GetPlttKey(billboard);
             GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_PLTT, (u16)plttAddr * 8, env->blended, ((plttKey & 0xFFFF0000) >> 16) * 8);

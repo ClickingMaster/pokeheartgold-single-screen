@@ -1126,7 +1126,7 @@ void PhotoAlbumApp_InitSpriteSystem(PhotoAlbumApp *app) {
     thunk_ClearSubOAM(app->heapId);
     app->spriteManager = SpriteManager_New(app->spriteSystem);
     SpriteSystem_InitSprites(app->spriteSystem, app->spriteManager, 5);
-    sub_0200D2A4(app->spriteSystem, app->spriteManager, &ov109_021E78A8, 2, 1);
+    SpriteSystem_LoadResourceDataFromFileIdListEx(app->spriteSystem, app->spriteManager, &ov109_021E78A8, 2, 1);
 }
 
 void PhotoAlbumApp_FreeSpriteSystem(PhotoAlbumApp *app) {

@@ -463,7 +463,7 @@ int PokemonSummary_WaitConditionExit(PokemonSummary *summary) {
 
 // State 21.
 int PokemonSummary_StartFadeOut(PokemonSummary *summary) {
-    sub_020880CC(1, HEAP_ID_19);
+    BeginAppScreenFade(1, HEAP_ID_19);
     return 22;
 }
 

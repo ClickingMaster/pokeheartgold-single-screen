@@ -17,8 +17,8 @@
 typedef struct WaitingIcon WaitingIcon;
 typedef struct PokemonPicWindow PokemonPicWindow;
 
-extern const UnkStruct_02014E30 sPokemonPicFrame1Rect;
-extern const UnkStruct_02014E30 sPokemonPicFrame0Rect;
+extern const TileRect sPokemonPicFrame1Rect;
+extern const TileRect sPokemonPicFrame0Rect;
 extern const SpriteResourceCountsListUnion sPokemonPicWindowResourceCounts;
 extern const ManagedSpriteTemplate sPokemonPicWindowSpriteTemplate;
 

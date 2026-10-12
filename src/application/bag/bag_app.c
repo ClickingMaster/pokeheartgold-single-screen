@@ -465,7 +465,7 @@ BOOL Bag_Main(OverlayManager *man, int *state) {
         *state = BagApp_State_ButtonFeedback(app);
         break;
     case 36:
-        sub_020880CC(1, HEAP_ID_6);
+        BeginAppScreenFade(1, HEAP_ID_6);
         *state = 37;
         break;
     case 37:
@@ -1740,7 +1740,7 @@ int BagApp_UseSelectedItem(BagApp *app) {
         app->task = BagApp_UseItemInPlaceTask;
         return 13;
     }
-    sub_020880CC(1, HEAP_ID_6);
+    BeginAppScreenFade(1, HEAP_ID_6);
     app->bagView->unk68 = 0;
     return 37;
 }
@@ -1788,7 +1788,7 @@ int BagApp_UseTMHMTask(BagApp *app) {
         switch (answer) {
         case YESNORESPONSE_YES: {
             BagApp_DestroyYesNoPrompt(app);
-            sub_020880CC(1, HEAP_ID_6);
+            BeginAppScreenFade(1, HEAP_ID_6);
             app->bagView->unk68 = 0;
             return 37;
         }
@@ -1907,14 +1907,14 @@ int BagApp_UseItemInPlaceTask(BagApp *app) {
 
 int ov15_021FBC6C(BagApp *app) {
     BagApp_CloseItemMenuWindows(app);
-    sub_020880CC(1, HEAP_ID_6);
+    BeginAppScreenFade(1, HEAP_ID_6);
     app->bagView->unk68 = 1;
     return 37;
 }
 
 int BagApp_ItemAction_Confirm(BagApp *app) {
     BagApp_CloseItemMenuWindows(app);
-    sub_020880CC(1, HEAP_ID_6);
+    BeginAppScreenFade(1, HEAP_ID_6);
     app->bagView->unk68 = 3;
     return 37;
 }
@@ -2024,7 +2024,7 @@ int BagApp_State_TrashQuantityInput(BagApp *app) {
             break;
         }
     } else {
-        result = sub_020881C0(&app->quantity, app->maxQuantity);
+        result = HandleNumberSelectInput(&app->quantity, app->maxQuantity);
         if (!result) {
             if (gSystem.newKeys & PAD_BUTTON_A) {
                 result = 3;
@@ -2218,7 +2218,7 @@ int BagApp_ItemAction_Give(BagApp *app) {
     BagApp_CloseItemMenuWindows(app);
     BagApp_ShowCancelButton(app, FALSE);
     BagApp_HideCursor(app);
-    sub_020880CC(1, HEAP_ID_6);
+    BeginAppScreenFade(1, HEAP_ID_6);
     app->bagView->unk68 = 2;
     return 37;
 }
@@ -2617,7 +2617,7 @@ int BagApp_State_SellQuantityInput(BagApp *app) {
             break;
         }
     } else {
-        result = sub_020881C0(&app->quantity, app->maxQuantity);
+        result = HandleNumberSelectInput(&app->quantity, app->maxQuantity);
         if (!result) {
             if (gSystem.newKeys & PAD_BUTTON_A) {
                 result = 3;
@@ -2793,7 +2793,7 @@ int BagApp_ItemAction_ChooseForBerryPatch(BagApp *app) {
     BagApp_CloseItemMenuWindows(app);
     BagApp_ShowCancelButton(app, FALSE);
     BagApp_HideCursor(app);
-    sub_020880CC(1, HEAP_ID_6);
+    BeginAppScreenFade(1, HEAP_ID_6);
     app->bagView->unk68 = 4;
     return 37;
 }
@@ -3466,7 +3466,7 @@ void BagApp_PrintTMHMNumber(BagApp *app, Window *window, ItemSlot *slot, int y) 
     u16 itemId = slot->id;
     if (itemId < ITEM_HM01) {
         u16 number = itemId - ITEM_TM01 + 1;
-        sub_0200CE7C(app->msgPrinter, 2, number, 2, PRINTING_MODE_LEADING_ZEROS, window, 0, y + 5);
+        MessagePrinter_PrintGlyphAndUInt(app->msgPrinter, 2, number, 2, PRINTING_MODE_LEADING_ZEROS, window, 0, y + 5);
         BagApp_MeasureQuantityText(app, slot->quantity, (u16)y, 0x10200);
     } else {
         u16 number = itemId - ITEM_HM01 + 1;

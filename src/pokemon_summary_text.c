@@ -33,7 +33,7 @@ extern const WindowTemplate gPokemonSummaryWindowTemplates[34];
 extern const s8 gNatureStatMods[][5];
 
 // PokemonSummary_PrintTrainerMemo calls it with three arguments.
-#define sub_0208E600_3(mon, isMine, heapID) ((Unk0208E600 * (*)(void *, int, enum HeapID)) sub_0208E600)(mon, isMine, heapID)
+#define sub_0208E600_3(mon, isMine, heapID) ((TrainerMemo * (*)(void *, int, enum HeapID)) TrainerMemo_New)(mon, isMine, heapID)
 
 void PokemonSummary_AddWindows(PokemonSummary *summary) {
     u16 i;
@@ -138,7 +138,7 @@ void PokemonSummary_PrintLevel(PokemonSummary *summary) {
     FillWindowPixelBuffer(window, 0);
     value = summary->mon.isEgg;
     if (value == 0) {
-        sub_0200CDAC(summary->numberPrinter, 1, window, 0, 5);
+        MessagePrinter_PrintGlyph(summary->numberPrinter, 1, window, 0, 5);
         template = NewString_ReadMsgData(summary->msgData, 3);
         value = summary->mon.level;
         BufferIntegerAsString(summary->msgFormat, 0, value, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
@@ -390,7 +390,7 @@ void PokemonSummary_PrintInfo(PokemonSummary *summary) {
 
 // The trainer memo: nature, where and when it was met, characteristic, egg watch.
 void PokemonSummary_PrintTrainerMemo(Window *window, void *mon, int isMine) {
-    Unk0208E600 *memo = sub_0208E600_3(mon, isMine, HEAP_ID_19);
+    TrainerMemo *memo = sub_0208E600_3(mon, isMine, HEAP_ID_19);
     if (memo->notepad.nature != NULL) {
         AddTextPrinterParameterizedWithColor(window, 0, memo->notepad.nature, 6, (memo->notepad.natureLine - 1) * 16, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     }
@@ -404,7 +404,7 @@ void PokemonSummary_PrintTrainerMemo(Window *window, void *mon, int isMine) {
         AddTextPrinterParameterizedWithColor(window, 0, memo->notepad.eggWatch, 6, (memo->notepad.eggWatchLine - 1) * 16, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     }
     FillBgTilemapRect(window->bgConfig, GF_BG_LYR_MAIN_1, 0, 16, 5, 2, 18, 0);
-    sub_0208E994(memo);
+    TrainerMemo_Delete(memo);
 }
 
 int PokemonSummary_CountShinyLeaves(PokemonSummary *summary) {

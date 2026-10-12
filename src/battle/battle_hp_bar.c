@@ -953,7 +953,7 @@ static void BattleHpBar_DrawLevel(BattleHpBar *hpBar) {
     u8 *r4 = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
     u8 *r7 = Heap_Alloc(HEAP_ID_BATTLE, 0xC0);
     MI_CpuFill8(r4, 0xFF, 0x60);
-    sub_0200CEB0(BattleSystem_GetLevelNumPrinter(hpBar->battleSystem), hpBar->level, 3, PRINTING_MODE_LEFT_ALIGN, (void *)r4);
+    BattleNumberPrinter_PrintUInt(BattleSystem_GetLevelNumPrinter(hpBar->battleSystem), hpBar->level, 3, PRINTING_MODE_LEFT_ALIGN, (void *)r4);
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
     MI_CpuCopy16((void *)((u32)vramAddr + sLevelVramRegions[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), r7, sLevelVramRegions[hpBar->type][0].size);
@@ -978,7 +978,7 @@ static void BattleHpBar_DrawLevel(BattleHpBar *hpBar) {
 static void BattleHpBar_DrawCurrentHp(BattleHpBar *hpBar, u32 num) {
     u8 *r4 = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
     MI_CpuFill8(r4, 0xFF, 0x60);
-    sub_0200CEB0(BattleSystem_GetHpNumPrinter(hpBar->battleSystem), num, 3, PRINTING_MODE_RIGHT_ALIGN, (void *)r4);
+    BattleNumberPrinter_PrintUInt(BattleSystem_GetHpNumPrinter(hpBar->battleSystem), num, 3, PRINTING_MODE_RIGHT_ALIGN, (void *)r4);
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
 
@@ -990,7 +990,7 @@ static void BattleHpBar_DrawCurrentHp(BattleHpBar *hpBar, u32 num) {
 static void BattleHpBar_DrawMaxHp(BattleHpBar *hpBar) {
     u8 *r4 = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
     MI_CpuFill8(r4, 0xFF, 0x60);
-    sub_0200CEB0(BattleSystem_GetHpNumPrinter(hpBar->battleSystem), hpBar->maxHp, 3, PRINTING_MODE_LEFT_ALIGN, (void *)r4);
+    BattleNumberPrinter_PrintUInt(BattleSystem_GetHpNumPrinter(hpBar->battleSystem), hpBar->maxHp, 3, PRINTING_MODE_LEFT_ALIGN, (void *)r4);
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
 

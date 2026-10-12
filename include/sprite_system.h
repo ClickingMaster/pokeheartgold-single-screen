@@ -107,8 +107,8 @@ void SpriteSystem_TransferOam(void);
 void SpriteSystem_UpdateTransfer(void);
 void SpriteSystem_DestroySpriteManager(SpriteSystem *spriteSystem, SpriteManager *spriteManager);
 void SpriteSystem_Free(SpriteSystem *spriteSystem);
-BOOL sub_0200D294(SpriteSystem *spriteSystem, SpriteManager *spriteManager, const ResdatIdList *fileIdList);
-BOOL sub_0200D2A4(SpriteSystem *spriteSystem, SpriteManager *spriteManager, const ResdatIdList *fileIdList, int loadCharMode, int loadPlttMode);
+BOOL SpriteSystem_LoadResourceDataFromFileIdList(SpriteSystem *spriteSystem, SpriteManager *spriteManager, const ResdatIdList *fileIdList);
+BOOL SpriteSystem_LoadResourceDataFromFileIdListEx(SpriteSystem *spriteSystem, SpriteManager *spriteManager, const ResdatIdList *fileIdList, int loadCharMode, int loadPlttMode);
 Sprite *SpriteSystem_CreateSpriteFromResourceHeader(SpriteSystem *spriteSystem, SpriteManager *spriteManager, const UnmanagedSpriteTemplate *template);
 BOOL SpriteSystem_InitManagerWithCapacities(SpriteSystem *spriteSystem, SpriteManager *spriteManager, SpriteResourceCountsListUnion *countsArray);
 BOOL SpriteSystem_LoadCharResObj(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NarcId narcId, int fileId, BOOL compressed, int vram, int resId);
@@ -209,7 +209,7 @@ void SpriteSystem_ReplaceCharResObj(SpriteSystem *spriteSystem, SpriteManager *s
 void SpriteSystem_ReplacePlttResObj(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NarcId narcId, int fileId, BOOL compressed, int resId);
 SpriteList *SpriteManager_GetSpriteList(SpriteManager *spriteManager);
 void SpriteManager_SetSpriteList(SpriteManager *spriteManager, SpriteList *spriteList);
-void sub_0200E2B8(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, int fileId, BOOL compressed, int resId);
-void sub_0200E2EC(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, int fileId, BOOL compressed, int resId);
+void SpriteSystem_ReplaceCharResObjFromOpenNarc(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, int fileId, BOOL compressed, int resId);
+void SpriteSystem_ReplacePlttResObjFromOpenNarc(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, int fileId, BOOL compressed, int resId);
 
 #endif // POKEHEARTGOLD_SPRITE_SYSTEM_H

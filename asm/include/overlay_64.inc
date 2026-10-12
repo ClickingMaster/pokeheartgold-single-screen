@@ -53,8 +53,8 @@
 .public ManagedSprite_SetPositionXYWithSubscreenOffset
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_02014510
-.public sub_020145B4
+.public CharTiles_LoadMonRectAsObjFromNarc
+.public CharTiles_CopyRectFromBuffer
 .public GridInputHandler_Create
 .public GridInputHandler_Free
 .public GridInputHandler_HandleInput_AllowHold

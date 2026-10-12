@@ -149,7 +149,7 @@
 .public MoveCategoryIcon_GetPalette
 .public MoveCategoryIcon_GetNarc
 .public MoveCategoryIcon_LoadChar
-.public sub_020880CC
+.public BeginAppScreenFade
 .public BgConfig_LoadAssetFromOpenNarc
 .public PokemonSummary_SetPages
 .public NNS_G2dSetupSoftwareSpriteCamera

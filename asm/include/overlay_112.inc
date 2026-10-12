@@ -16,7 +16,7 @@
 .public PlaySE
 .public IsSEPlaying
 .public PlayFanfare
-.public sub_02006B84
+.public IsFanfarePlayingOrWaiting
 .public IsFanfarePlaying
 .public OverlayManager_New
 .public OverlayManager_Delete
@@ -114,9 +114,9 @@
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
 .public ResetVisibleHardwareWindows
-.public sub_02014494
-.public sub_02014540
-.public sub_020145B4
+.public CharTiles_LoadMonObjBlocksFromNarc
+.public CharTiles_LoadMonPicAsObjFromNarc
+.public CharTiles_CopyRectFromBuffer
 .public GF_RTC_TimeToSec
 .public GF_RTC_DateTimeToSec
 .public MailMsg_Copy

@@ -120,7 +120,7 @@ typedef BOOL (*BugContestSwapMonStateFunc)(BugContestSwapMon *swapMon);
 typedef void (*SwapMonTextPrintOnWindowUntruncated)(BgConfig *bgConfig, Window *window, MessageFormat *messageFormat, MsgData *msgData, int msgId, int bgLayer, int x, int y, u32 color, enum HeapID heapID);
 
 // message_printer_number.h declares glyphId as u8; SwapMonText_PrintNumber passes it untruncated
-void sub_0200CE7C(MessagePrinter *msgPrinter, int glyphId, u32 num, u32 ndigits, PrintingMode mode, Window *window, u32 x, u32 y);
+void MessagePrinter_PrintGlyphAndUInt(MessagePrinter *msgPrinter, int glyphId, u32 num, u32 ndigits, PrintingMode mode, Window *window, u32 x, u32 y);
 
 typedef struct BugContestSwapMonBgTemplates {
     BgTemplate templates[5];
@@ -943,7 +943,7 @@ void SwapMonText_PrintStringWithColor(SwapMonText *text, Window *window, int msg
 void SwapMonText_PrintNumber(SwapMonText *text, Window *window, int value, int digits, BOOL withGlyph, int glyphId) {
     FillWindowPixelBuffer(window, 0);
     if (withGlyph) {
-        sub_0200CE7C(text->messagePrinter, glyphId, value, digits, PRINTING_MODE_RIGHT_ALIGN, window, 0, 0);
+        MessagePrinter_PrintGlyphAndUInt(text->messagePrinter, glyphId, value, digits, PRINTING_MODE_RIGHT_ALIGN, window, 0, 0);
     } else {
         PrintUIntOnWindow(text->messagePrinter, value, digits, PRINTING_MODE_RIGHT_ALIGN, window, 0, 0);
     }

@@ -16,6 +16,6 @@ void sub_02058720(void);
 BOOL sub_02058740(void);
 void CommClubLink_SetCardReceived(void);
 void CommClubLink_GetCard(void);
-int sub_020881C0(s16 *quantity, u16 a1);
+int HandleNumberSelectInput(s16 *quantity, u16 a1);
 
 #endif // POKEHEARTGOLD_COMMUNICATION_CLUB_LINK_H

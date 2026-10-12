@@ -265,7 +265,7 @@ static int PokedexApp_MainSeq_00(PokedexAppData *pokedexApp) {
     SetKeyRepeatTimers(4, 8);
     PokedexApp_LoadSearchTables(pokedexApp);
     PokedexApp_LoadSizeData(pokedexApp);
-    sub_020880CC(0, HEAP_ID_POKEDEX_APP);
+    BeginAppScreenFade(0, HEAP_ID_POKEDEX_APP);
     FontID_Alloc(4, HEAP_ID_POKEDEX_APP);
     pokedexApp->gfxNarc = NARC_New(NARC_graphic_zukan_gra, HEAP_ID_POKEDEX_APP);
     PokedexApp_ResetSearchCriteria(pokedexApp);

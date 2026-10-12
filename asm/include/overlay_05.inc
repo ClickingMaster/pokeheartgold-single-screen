@@ -31,9 +31,9 @@
 .public StringExpandPlaceholders
 .public MessagePrinter_New
 .public MessagePrinter_Delete
-.public sub_0200CDAC
+.public MessagePrinter_PrintGlyph
 .public PrintUIntOnWindow
-.public sub_0200CE7C
+.public MessagePrinter_PrintGlyphAndUInt
 .public SpriteSystem_Alloc
 .public SpriteManager_New
 .public SpriteSystem_Init
@@ -157,7 +157,7 @@
 .public sub_0207CAAC
 .public CalculateHpBarPixelsLength
 .public CalculateHpBarColor
-.public sub_020880CC
+.public BeginAppScreenFade
 .public Pokemon_GetStatusIconId
 .public NNS_G2dGetUnpackedPaletteData
 .public G2x_SetBlendAlpha_

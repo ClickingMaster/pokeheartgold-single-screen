@@ -1163,7 +1163,7 @@ void SafariDecoration_InitSprites(SafariDecoration *decor) {
     SpriteSystem_Init(decor->spriteSystem, &ov108_021EABA8, &ov108_021EAAD0, 1);
     decor->spriteManager = SpriteManager_New(decor->spriteSystem);
     SpriteSystem_InitSprites(decor->spriteSystem, decor->spriteManager, 4);
-    sub_0200D2A4(decor->spriteSystem, decor->spriteManager, &ov108_021EAAB0, 0, 0);
+    SpriteSystem_LoadResourceDataFromFileIdListEx(decor->spriteSystem, decor->spriteManager, &ov108_021EAAB0, 0, 0);
     thunk_ClearMainOAM(decor->heapId);
     thunk_ClearSubOAM(decor->heapId);
 }

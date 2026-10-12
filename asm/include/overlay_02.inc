@@ -62,8 +62,8 @@
 .public ClearFrameAndWindow2
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_02014450
-.public sub_02014540
+.public AllocAndLoadPltt16FromNarc
+.public CharTiles_LoadMonPicAsObjFromNarc
 .public GF_RTC_GetTimeOfDay
 .public GF_RTC_GetTimeOfDayWildParam
 .public WallpaperPasswordBank_Create
@@ -408,7 +408,7 @@
 .public FieldSystem_GetTouchscreenChoiceMenuState
 .public FieldSystem_GetBottomScreenAppId
 .public FieldSystem_GetBottomScreenAppState
-.public ov01_021F771C
+.public MapObjectManager_GetFollowMonBillboard
 .public FollowMonBillboard_SetShadowAnchored
 .public FollowMonBillboard_SetHeight
 .public FollowMonBillboard_AddHeight

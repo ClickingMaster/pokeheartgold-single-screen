@@ -388,7 +388,7 @@ void sub_0207EB24(PartyMenu *partyMenu) {
         .manmRes = 0xFFFF,
         .headerId = NARC_resdat_resdat_00000084_bin,
     };
-    sub_0200D294(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, &_021018B4);
+    SpriteSystem_LoadResourceDataFromFileIdList(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, &_021018B4);
 }
 
 void sub_0207EBE4(PartyMenu *partyMenu, u8 partySlot, u16 x, u16 y, NARC *narc) {
@@ -399,7 +399,7 @@ void sub_0207EBE4(PartyMenu *partyMenu, u8 partySlot, u16 x, u16 y, NARC *narc) 
     partyMenu->monsDrawState[partySlot].iconX = x;
     partyMenu->monsDrawState[partySlot].iconY = y;
 
-    sub_0200E2B8(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, narc, Pokemon_GetIconNaix(mon), FALSE, partySlot + 4);
+    SpriteSystem_ReplaceCharResObjFromOpenNarc(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, narc, Pokemon_GetIconNaix(mon), FALSE, partySlot + 4);
 
     isEgg = GetMonData(mon, MON_DATA_IS_EGG, NULL);
 

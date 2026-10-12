@@ -33,14 +33,14 @@ static const u8 sStatChangeTable[][2];
 static BOOL CheckFlyingImmunity(BattleContext *ctx, int item, int index);
 static void ApplyEffectivenessFlags(int effectiveness, u32 *moveStatusFlag);
 static int GetMoveStatusChangeScript(BattleContext *ctx, int statChangeType, u32 flag);
-static int ov12_022583B4(BattleContext *ctx, int battlerId, int typeEffectiveness, int damage, int moveDamage, u32 *flag);
-static int ov12_02258440(BattleContext *ctx, int moveNo);
+static int ApplyTypeMultiplier(BattleContext *ctx, int battlerId, int typeEffectiveness, int damage, int moveDamage, u32 *flag);
+static int CheckChargeMoveHitTurn(BattleContext *ctx, int moveNo);
 static u8 Battler_GetType(BattleContext *ctx, int battlerId, int var);
-static void ov12_02258584(BattleContext *ctx, u8 battlerId);
-static void ov12_0225859C(BattleContext *ctx, u8 battlerId);
-static void ov12_022585A8(BattleContext *ctx, u8 battlerId);
-static int ov12_022585B8(BattleSystem *battleSystem, BattleContext *ctx, int battlerIdTarget1, int battlerIdTarget2);
-static BOOL ov12_0225865C(BattleContext *ctx, int moveNo);
+static void TrainerAIData_ClearMoves(BattleContext *ctx, u8 battlerId);
+static void TrainerAIData_ClearAbility(BattleContext *ctx, u8 battlerId);
+static void TrainerAIData_ClearHeldItem(BattleContext *ctx, u8 battlerId);
+static int ChooseTraceTarget(BattleSystem *battleSystem, BattleContext *ctx, int battlerIdTarget1, int battlerIdTarget2);
+static BOOL IsFixedDamageMove(BattleContext *ctx, int moveNo);
 static int GetDynamicMoveType(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int moveNo);
 
 void BattleSystem_GetBattleMon(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u8 selectedMon) {
@@ -185,13 +185,13 @@ void ReadBattleScriptFromNarc(BattleContext *ctx, NarcId narcId, int fileId) {
 }
 
 // PushBattleScriptFromNarc..?
-void ov12_0224EBDC(BattleContext *ctx, NarcId narcId, int fileId) {
+void BattleScript_Call(BattleContext *ctx, NarcId narcId, int fileId) {
     GF_ASSERT(GetNarcMemberSizeByIdPair(narcId, fileId) < 1600);
-    GF_ASSERT(ctx->unk_B8 < 4);
-    ctx->unk_BC[ctx->unk_B8] = ctx->scriptNarcId;
-    ctx->unk_CC[ctx->unk_B8] = ctx->scriptFileId;
-    ctx->unk_DC[ctx->unk_B8] = ctx->scriptSeqNo;
-    ctx->unk_B8++;
+    GF_ASSERT(ctx->scriptStackDepth < 4);
+    ctx->scriptStackNarcId[ctx->scriptStackDepth] = ctx->scriptNarcId;
+    ctx->scriptStackFileId[ctx->scriptStackDepth] = ctx->scriptFileId;
+    ctx->scriptStackSeqNo[ctx->scriptStackDepth] = ctx->scriptSeqNo;
+    ctx->scriptStackDepth++;
     ctx->scriptNarcId = narcId;
     ctx->scriptFileId = fileId;
     ctx->scriptSeqNo = 0;
@@ -199,18 +199,18 @@ void ov12_0224EBDC(BattleContext *ctx, NarcId narcId, int fileId) {
 }
 
 // BattleScript_Pop..?
-BOOL ov12_0224EC74(BattleContext *ctx) {
-    if (ctx->unk_B8) {
-        ctx->unk_B8--;
-        ReadBattleScriptFromNarc(ctx, ctx->unk_BC[ctx->unk_B8], ctx->unk_CC[ctx->unk_B8]);
-        ctx->scriptSeqNo = ctx->unk_DC[ctx->unk_B8];
+BOOL BattleScript_Return(BattleContext *ctx) {
+    if (ctx->scriptStackDepth) {
+        ctx->scriptStackDepth--;
+        ReadBattleScriptFromNarc(ctx, ctx->scriptStackNarcId[ctx->scriptStackDepth], ctx->scriptStackFileId[ctx->scriptStackDepth]);
+        ctx->scriptSeqNo = ctx->scriptStackSeqNo[ctx->scriptStackDepth];
         return FALSE;
     }
     return TRUE;
 }
 
 // Link_QueueAdd..?
-void ov12_0224ECC4(BattleContext *ctx, int id, int battlerId, int index) {
+void BattleContext_AddLinkBufferEntry(BattleContext *ctx, int id, int battlerId, int index) {
     int i;
 
     for (i = 0; i < 16; i++) {
@@ -224,7 +224,7 @@ void ov12_0224ECC4(BattleContext *ctx, int id, int battlerId, int index) {
 }
 
 // Link_QueueReset..?
-void ov12_0224ED00(BattleContext *ctx, int id, int battlerId, int index) {
+void BattleContext_RemoveLinkBufferEntry(BattleContext *ctx, int id, int battlerId, int index) {
     int i;
 
     GF_ASSERT(index != 0);
@@ -1354,7 +1354,7 @@ BOOL ov12_02250490(BattleSystem *battleSystem, BattleContext *ctx, int *out) {
     return ret;
 }
 
-int ov12_022506D4(BattleSystem *battleSystem, BattleContext *ctx, int battlerIdAttacker, u16 moveNo, int a4, int range) {
+int BattleSystem_GetMoveTarget(BattleSystem *battleSystem, BattleContext *ctx, int battlerIdAttacker, u16 moveNo, int a4, int range) {
     int battlerIdTarget = BATTLER_NONE;
     int moveRange;
 
@@ -1532,7 +1532,7 @@ void ov12_02250A18(BattleSystem *battleSystem, BattleContext *ctx, int battlerId
     }
 }
 
-BOOL ov12_02250BBC(BattleSystem *battleSystem, BattleContext *ctx) {
+BOOL BattleContext_TryRedirectAbility(BattleSystem *battleSystem, BattleContext *ctx) {
     BOOL ret = FALSE;
 
     if (!(ctx->moveStatusFlag & MOVE_STATUS_FAIL) && ctx->selfTurnData[ctx->battlerIdTarget].lightningRodFlag) {
@@ -1557,7 +1557,7 @@ BOOL ov12_02250BBC(BattleSystem *battleSystem, BattleContext *ctx) {
 void CopyBattleMonToPartyMon(BattleSystem *battleSystem, BattleContext *ctx, int battlerId) {
 
     if (!ctx->battleMons[battlerId].item) {
-        ov12_022585A8(ctx, battlerId);
+        TrainerAIData_ClearHeldItem(ctx, battlerId);
     }
 
     BattleController_EmitBattleMonToPartyMonCopy(battleSystem, ctx, battlerId);
@@ -1863,9 +1863,9 @@ void InitSwitchWork(BattleSystem *battleSystem, BattleContext *ctx, int battlerI
         ctx->moveNoCopiedHit[i][battlerId] = 0;
     }
 
-    ov12_02258584(ctx, battlerId);
-    ov12_0225859C(ctx, battlerId);
-    ov12_022585A8(ctx, battlerId);
+    TrainerAIData_ClearMoves(ctx, battlerId);
+    TrainerAIData_ClearAbility(ctx, battlerId);
+    TrainerAIData_ClearHeldItem(ctx, battlerId);
 }
 
 void InitFaintedWork(BattleSystem *battleSystem, BattleContext *ctx, int battlerId) {
@@ -1935,13 +1935,13 @@ void InitFaintedWork(BattleSystem *battleSystem, BattleContext *ctx, int battler
 
     ctx->unk_13C[battlerId] &= ~1;
 
-    ov12_02258584(ctx, battlerId);
-    ov12_0225859C(ctx, battlerId);
-    ov12_022585A8(ctx, battlerId);
+    TrainerAIData_ClearMoves(ctx, battlerId);
+    TrainerAIData_ClearAbility(ctx, battlerId);
+    TrainerAIData_ClearHeldItem(ctx, battlerId);
 }
 
 // BattleContext_InitTurnData..? BattleContext_InitStartTurn..?
-void ov12_02251710(BattleSystem *battleSystem, BattleContext *ctx) {
+void BattleContext_ResetTurnData(BattleSystem *battleSystem, BattleContext *ctx) {
     int battlerId;
 
     for (battlerId = 0; battlerId < 4; battlerId++) {
@@ -2008,7 +2008,7 @@ u32 StruggleCheck(BattleSystem *battleSystem, BattleContext *ctx, int battlerId,
 }
 
 // Buffer messages related to being unable to select moves?
-BOOL ov12_02251A28(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int movePos, BattleMessage *msg) {
+BOOL BattleContext_CheckMoveSelectable(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int movePos, BattleMessage *msg) {
     BOOL ret = TRUE;
 
     if (StruggleCheck(battleSystem, ctx, battlerId, 0, STRUGGLE_CHECK_DISABLED) & MaskOfFlagNo(movePos)) {
@@ -2225,7 +2225,7 @@ BOOL ov12_02251C74(BattleContext *ctx, int battlerIdAttacker, int battlerIdTarge
     return ret;
 }
 
-int ov12_02251D28(BattleSystem *battleSystem, BattleContext *ctx, int moveNo, int moveTypeDefault, int battlerIdAttacker, int battlerIdTarget, int damage, u32 *moveStatusFlag) {
+int BattleSystem_ApplyTypeEffectiveness(BattleSystem *battleSystem, BattleContext *ctx, int moveNo, int moveTypeDefault, int battlerIdAttacker, int battlerIdTarget, int damage, u32 *moveStatusFlag) {
     int i;
     int seffectMod; // this variable is not used but is required to match
     u8 moveType;
@@ -2285,7 +2285,7 @@ int ov12_02251D28(BattleSystem *battleSystem, BattleContext *ctx, int moveNo, in
                 // sTypeEffectiveness[i][TYPETABLE_DEFENDER] -> sp10
                 if (sTypeEffectiveness[i][TYPETABLE_DEFENDER] == GetBattlerVar(ctx, battlerIdTarget, BMON_DATA_TYPE_1, NULL)) {
                     if (ov12_02251C74(ctx, battlerIdAttacker, battlerIdTarget, i) == TRUE) {
-                        damage = ov12_022583B4(ctx, battlerIdAttacker, sTypeEffectiveness[i][TYPETABLE_EFFECT], damage, movePower, moveStatusFlag);
+                        damage = ApplyTypeMultiplier(ctx, battlerIdAttacker, sTypeEffectiveness[i][TYPETABLE_EFFECT], damage, movePower, moveStatusFlag);
                         if (sTypeEffectiveness[i][TYPETABLE_EFFECT] == TYPE_MUL_SUPER_EFFECTIVE) {
                             seffectMod *= 2;
                         }
@@ -2293,7 +2293,7 @@ int ov12_02251D28(BattleSystem *battleSystem, BattleContext *ctx, int moveNo, in
                 }
                 if (sTypeEffectiveness[i][TYPETABLE_DEFENDER] == GetBattlerVar(ctx, battlerIdTarget, BMON_DATA_TYPE_2, NULL) && GetBattlerVar(ctx, battlerIdTarget, BMON_DATA_TYPE_1, NULL) != GetBattlerVar(ctx, battlerIdTarget, BMON_DATA_TYPE_2, NULL)) {
                     if (ov12_02251C74(ctx, battlerIdAttacker, battlerIdTarget, i) == TRUE) {
-                        damage = ov12_022583B4(ctx, battlerIdAttacker, sTypeEffectiveness[i][TYPETABLE_EFFECT], damage, movePower, moveStatusFlag);
+                        damage = ApplyTypeMultiplier(ctx, battlerIdAttacker, sTypeEffectiveness[i][TYPETABLE_EFFECT], damage, movePower, moveStatusFlag);
                         if (sTypeEffectiveness[i][TYPETABLE_EFFECT] == TYPE_MUL_SUPER_EFFECTIVE) {
                             seffectMod *= 2;
                         }
@@ -2304,7 +2304,7 @@ int ov12_02251D28(BattleSystem *battleSystem, BattleContext *ctx, int moveNo, in
         } while (sTypeEffectiveness[i][TYPETABLE_ATTACKER] != TYPE_ENDTABLE);
     }
 
-    if (CheckBattlerAbilityIfNotIgnored(ctx, battlerIdAttacker, battlerIdTarget, ABILITY_WONDER_GUARD) == TRUE && ov12_02258440(ctx, moveNo) && (!(*moveStatusFlag & MOVE_STATUS_SUPER_EFFECTIVE) || ((*moveStatusFlag & MOVE_STATUS_ANY_EFFECTIVE) == MOVE_STATUS_ANY_EFFECTIVE)) && movePower) {
+    if (CheckBattlerAbilityIfNotIgnored(ctx, battlerIdAttacker, battlerIdTarget, ABILITY_WONDER_GUARD) == TRUE && CheckChargeMoveHitTurn(ctx, moveNo) && (!(*moveStatusFlag & MOVE_STATUS_SUPER_EFFECTIVE) || ((*moveStatusFlag & MOVE_STATUS_ANY_EFFECTIVE) == MOVE_STATUS_ANY_EFFECTIVE)) && movePower) {
         *moveStatusFlag |= MOVE_STATUS_WONDER_GUARD_IMMUNE;
     } else if (!(ctx->battleStatus & BATTLE_STATUS_IGNORE_TYPE_EFFECTIVENESS) && !(ctx->battleStatus & BATTLE_STATUS_IGNORE_TYPE_IMMUNITY)) {
         if ((*moveStatusFlag & MOVE_STATUS_SUPER_EFFECTIVE) && movePower) {
@@ -2328,7 +2328,7 @@ int ov12_02251D28(BattleSystem *battleSystem, BattleContext *ctx, int moveNo, in
     return damage;
 }
 
-void ov12_02252054(BattleContext *ctx, int moveNo, int moveTypeDefault, int abilityAttacker, int abilityTarget, int item, int type1, int type2, u32 *moveStatusFlag) {
+void CalcTypeEffectivenessFlags(BattleContext *ctx, int moveNo, int moveTypeDefault, int abilityAttacker, int abilityTarget, int item, int type1, int type2, u32 *moveStatusFlag) {
     int i;
     u8 moveType;
 
@@ -2370,7 +2370,7 @@ void ov12_02252054(BattleContext *ctx, int moveNo, int moveTypeDefault, int abil
         } while (sTypeEffectiveness[i][0] != TYPE_ENDTABLE);
     }
 
-    if (abilityAttacker != ABILITY_MOLD_BREAKER && abilityTarget == ABILITY_WONDER_GUARD && ov12_02258440(ctx, moveNo) && (!(*moveStatusFlag & MOVE_STATUS_SUPER_EFFECTIVE) || (*moveStatusFlag & MOVE_STATUS_ANY_EFFECTIVE) == MOVE_STATUS_ANY_EFFECTIVE)) {
+    if (abilityAttacker != ABILITY_MOLD_BREAKER && abilityTarget == ABILITY_WONDER_GUARD && CheckChargeMoveHitTurn(ctx, moveNo) && (!(*moveStatusFlag & MOVE_STATUS_SUPER_EFFECTIVE) || (*moveStatusFlag & MOVE_STATUS_ANY_EFFECTIVE) == MOVE_STATUS_ANY_EFFECTIVE)) {
         *moveStatusFlag |= MOVE_STATUS_NO_EFFECT;
     }
 }
@@ -2413,7 +2413,7 @@ static void ApplyEffectivenessFlags(int effectiveness, u32 *moveStatusFlag) {
     }
 }
 
-BOOL ov12_02252218(BattleContext *ctx, int battlerId) {
+BOOL BattleContext_HasMoveFailed(BattleContext *ctx, int battlerId) {
     if (ctx->moveFail[battlerId].paralysis || ctx->moveFail[battlerId].noEffect || ctx->moveFail[battlerId].imprison || ctx->moveFail[battlerId].infatuation || ctx->moveFail[battlerId].disabled || ctx->moveFail[battlerId].unk0_5 || ctx->moveFail[battlerId].flinch || ctx->moveFail[battlerId].gravity || ctx->moveFail[battlerId].confusion) {
         return TRUE;
     }
@@ -2882,7 +2882,7 @@ BOOL CheckMoveEffectOnField(BattleSystem *battleSystem, BattleContext *ctx, int 
     return ret;
 }
 
-void ov12_02252D14(BattleSystem *battleSystem, BattleContext *ctx) {
+void BattleContext_ResetMoveStatus(BattleSystem *battleSystem, BattleContext *ctx) {
     ctx->moveStatusFlag = 0;
     ctx->criticalMultiplier = 1;
     ctx->battleStatus &= (0x100000 ^ 0xFFFFFFFF);
@@ -2969,7 +2969,7 @@ BOOL BattleContext_CheckMoveHealBlocked(BattleSystem *battleSystem, BattleContex
     return ret;
 }
 
-void ov12_02252E30(BattleSystem *battleSystem, BattleContext *ctx) {
+void BattleContext_UpdateLastResortMoves(BattleSystem *battleSystem, BattleContext *ctx) {
     int i;
 
     if (ctx->moveNoTemp == MOVE_LAST_RESORT || ctx->battleMons[ctx->battlerIdAttacker].unk88.lastResortCount == MAX_MON_MOVES) {
@@ -3062,7 +3062,7 @@ int BattleContext_CheckMoveImmunityFromAbility(BattleContext *ctx, int battlerId
     return script;
 }
 
-BOOL ov12_02253068(BattleSystem *battleSystem, BattleContext *ctx, int battlerId) {
+BOOL BattleContext_TryEndOfTurnAbility(BattleSystem *battleSystem, BattleContext *ctx, int battlerId) {
     BOOL ret = FALSE;
     int script;
 
@@ -3192,7 +3192,7 @@ int TryAbilityOnEntry(BattleSystem *battleSystem, BattleContext *ctx) {
                 battlerId = ctx->turnOrder[i];
                 battlerIdTargetR = BattleSystem_GetOpponentBattler(battleSystem, battlerId, 0);
                 battlerIdTargetL = BattleSystem_GetOpponentBattler(battleSystem, battlerId, 2);
-                ctx->battlerIdLeechSeeded = ov12_022585B8(battleSystem, ctx, battlerIdTargetR, battlerIdTargetL);
+                ctx->battlerIdLeechSeeded = ChooseTraceTarget(battleSystem, ctx, battlerIdTargetR, battlerIdTargetL);
                 if (!ctx->battleMons[battlerId].traceFlag && ctx->battlerIdLeechSeeded != 0xFF && ctx->battleMons[battlerId].hp && ctx->battleMons[battlerId].item != ITEM_GRISEOUS_ORB && ctx->battleMons[ctx->battlerIdLeechSeeded].hp && GetBattlerAbility(ctx, battlerId) == ABILITY_TRACE) {
                     ctx->battleMons[battlerId].traceFlag = TRUE;
                     ctx->battlerIdTemp = battlerId;
@@ -3313,8 +3313,8 @@ int TryAbilityOnEntry(BattleSystem *battleSystem, BattleContext *ctx) {
                                 moveNo = ctx->battleMons[battlerIdCheck].moves[index];
                                 if (moveNo) {
                                     moveStatus = 0;
-                                    ctx->damage = ov12_02251D28(battleSystem, ctx, moveNo, 0, battlerIdCheck, battlerId, ctx->damage, &moveStatus);
-                                    if (!(moveStatus & MOVE_STATUS_NO_EFFECT) && !ov12_0225865C(ctx, moveNo) && ((moveStatus & MOVE_STATUS_SUPER_EFFECTIVE) || (ctx->trainerAIData.moveData[moveNo].effect == MOVE_EFFECT_ONE_HIT_KO && ctx->battleMons[battlerId].level <= ctx->battleMons[battlerIdCheck].level))) {
+                                    ctx->damage = BattleSystem_ApplyTypeEffectiveness(battleSystem, ctx, moveNo, 0, battlerIdCheck, battlerId, ctx->damage, &moveStatus);
+                                    if (!(moveStatus & MOVE_STATUS_NO_EFFECT) && !IsFixedDamageMove(ctx, moveNo) && ((moveStatus & MOVE_STATUS_SUPER_EFFECTIVE) || (ctx->trainerAIData.moveData[moveNo].effect == MOVE_EFFECT_ONE_HIT_KO && ctx->battleMons[battlerId].level <= ctx->battleMons[battlerIdCheck].level))) {
                                         flag = TRUE;
                                         break;
                                     }
@@ -4512,7 +4512,7 @@ u16 GetBattlerHeldItem(BattleContext *ctx, int battlerId) {
     return ctx->battleMons[battlerId].item;
 }
 
-BOOL ov12_0225561C(BattleContext *ctx, int battlerId) {
+BOOL BattleContext_IsActionDone(BattleContext *ctx, int battlerId) {
     return ctx->playerActions[battlerId].command == CONTROLLER_COMMAND_40;
 }
 
@@ -5157,7 +5157,7 @@ BOOL TryFling(BattleSystem *battleSystem, BattleContext *ctx, int battlerId) {
     return TRUE;
 }
 
-void ov12_022565E0(BattleSystem *battleSystem, BattleContext *ctx) {
+void BattleContext_UpdateMetronomeItem(BattleSystem *battleSystem, BattleContext *ctx) {
     if (GetBattlerHeldItemEffect(ctx, ctx->battlerIdAttacker) == HOLD_EFFECT_BOOST_REPEATED) {
         if (!(ctx->battleMons[ctx->battlerIdAttacker].status2 & STATUS2_RAMPAGE) && !(ctx->battleMons[ctx->battlerIdAttacker].status2 & STATUS2_UPROAR) && !(ctx->battleStatus & BATTLE_STATUS_CHARGE_MOVE_HIT) && !(ctx->battleMons[ctx->battlerIdAttacker].status2 & STATUS2_LOCKED_INTO_MOVE)) {
             if (ctx->moveNoMetronome[ctx->battlerIdAttacker] == ctx->moveNoTemp) {
@@ -5174,7 +5174,7 @@ void ov12_022565E0(BattleSystem *battleSystem, BattleContext *ctx) {
     }
 }
 
-void ov12_02256694(BattleSystem *battleSystem, BattleContext *ctx) {
+void BattleContext_UndoMetronomeItemOnFail(BattleSystem *battleSystem, BattleContext *ctx) {
     if (GetBattlerHeldItemEffect(ctx, ctx->battlerIdAttacker) == HOLD_EFFECT_BOOST_REPEATED) {
         if ((ctx->moveStatusFlag & MOVE_STATUS_FAIL) && ctx->moveNoMetronome[ctx->battlerIdAttacker] == ctx->moveNoTemp && ctx->battleMons[ctx->battlerIdAttacker].unk88.metronomeTurns && !(ctx->selfTurnData[ctx->battlerIdAttacker].rolloutCount) && !(ctx->battleMons[ctx->battlerIdAttacker].status2 & STATUS2_RAMPAGE) && !(ctx->battleMons[ctx->battlerIdAttacker].status2 & STATUS2_UPROAR) && !(ctx->battleStatus & BATTLE_STATUS_CHARGE_MOVE_HIT) && !(ctx->battleMons[ctx->battlerIdAttacker].status2 & STATUS2_LOCKED_INTO_MOVE)) {
             ctx->battleMons[ctx->battlerIdAttacker].unk88.metronomeTurns--;
@@ -5250,7 +5250,7 @@ BOOL BattlerCheckSubstitute(BattleContext *ctx, int battlerId) {
     return ret;
 }
 
-BOOL ov12_02256854(BattleSystem *battleSystem, BattleContext *ctx) {
+BOOL BattleContext_IsAttackerPlayerOT(BattleSystem *battleSystem, BattleContext *ctx) {
     PlayerProfile *profile = BattleSystem_GetPlayerProfile(battleSystem, BATTLER_PLAYER);
     u32 trainerId = PlayerProfile_GetTrainerID(profile);
     u32 gender = PlayerProfile_GetTrainerGender(profile);
@@ -5263,7 +5263,7 @@ BOOL ov12_02256854(BattleSystem *battleSystem, BattleContext *ctx) {
     return FALSE;
 }
 
-BOOL ov12_022568B0(BattleSystem *battleSystem, Pokemon *mon) {
+BOOL BattleSystem_IsPlayerOT(BattleSystem *battleSystem, Pokemon *mon) {
     PlayerProfile *profile = BattleSystem_GetPlayerProfile(battleSystem, BATTLER_PLAYER);
     u32 trainerId = PlayerProfile_GetTrainerID(profile);
     u32 gender = PlayerProfile_GetTrainerGender(profile);
@@ -6107,7 +6107,7 @@ s32 GetItemVar(BattleContext *ctx, u16 itemNo, u16 var) {
     return GetItemAttr_PreloadedItemData(itemData, var);
 }
 
-int ov12_02257E98(BattleSystem *battleSystem, BattleContext *ctx, int side) {
+int BattleSystem_GetFirstBattlerOnSide(BattleSystem *battleSystem, BattleContext *ctx, int side) {
     int battlerId;
     int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
 
@@ -6447,7 +6447,7 @@ static int GetMoveStatusChangeScript(BattleContext *ctx, int statChangeType, u32
     return sMoveStatusChangeScripts[flag & (0x7FFFFF)];
 }
 
-static int ov12_022583B4(BattleContext *ctx, int battlerId, int typeEffectiveness, int damage, int moveDamage, u32 *flag) {
+static int ApplyTypeMultiplier(BattleContext *ctx, int battlerId, int typeEffectiveness, int damage, int moveDamage, u32 *flag) {
     if (!(ctx->battleStatus & BATTLE_STATUS_IGNORE_TYPE_EFFECTIVENESS) && !(ctx->battleStatus & BATTLE_STATUS_IGNORE_TYPE_IMMUNITY) && damage) {
         damage = DamageDivide(damage * typeEffectiveness, 10);
     }
@@ -6481,7 +6481,7 @@ static int ov12_022583B4(BattleContext *ctx, int battlerId, int typeEffectivenes
     return damage;
 }
 
-static int ov12_02258440(BattleContext *ctx, int moveNo) {
+static int CheckChargeMoveHitTurn(BattleContext *ctx, int moveNo) {
     switch (ctx->trainerAIData.moveData[moveNo].effect) {
     case MOVE_EFFECT_BIDE:
     case MOVE_EFFECT_CHARGE_TURN_HIGH_CRIT:
@@ -6569,21 +6569,21 @@ static u8 Battler_GetType(BattleContext *ctx, int battlerId, int var) {
     return type;
 }
 
-static void ov12_02258584(BattleContext *ctx, u8 battlerId) {
+static void TrainerAIData_ClearMoves(BattleContext *ctx, u8 battlerId) {
     for (int i = 0; i < MAX_MON_MOVES; i++) {
         ctx->trainerAIData.moves[battlerId][i] = MOVE_NONE;
     }
 }
 
-static void ov12_0225859C(BattleContext *ctx, u8 battlerId) {
+static void TrainerAIData_ClearAbility(BattleContext *ctx, u8 battlerId) {
     ctx->trainerAIData.abilities[battlerId] = ABILITY_NONE;
 }
 
-static void ov12_022585A8(BattleContext *ctx, u8 battlerId) {
+static void TrainerAIData_ClearHeldItem(BattleContext *ctx, u8 battlerId) {
     ctx->trainerAIData.heldItems[battlerId] = ITEM_NONE;
 }
 
-static int ov12_022585B8(BattleSystem *battleSystem, BattleContext *ctx, int battlerIdTarget1, int battlerIdTarget2) {
+static int ChooseTraceTarget(BattleSystem *battleSystem, BattleContext *ctx, int battlerIdTarget1, int battlerIdTarget2) {
     int ret = BATTLER_NONE;
 
     if (ctx->battleMons[battlerIdTarget1].ability != ABILITY_FORECAST && ctx->battleMons[battlerIdTarget1].ability != ABILITY_TRACE && ctx->battleMons[battlerIdTarget1].ability != ABILITY_MULTITYPE && ctx->battleMons[battlerIdTarget1].hp && ctx->battleMons[battlerIdTarget2].hp && ctx->battleMons[battlerIdTarget2].ability != ABILITY_FORECAST && ctx->battleMons[battlerIdTarget2].ability != ABILITY_TRACE && ctx->battleMons[battlerIdTarget2].ability != ABILITY_MULTITYPE) {
@@ -6601,7 +6601,7 @@ static int ov12_022585B8(BattleSystem *battleSystem, BattleContext *ctx, int bat
     return ret;
 }
 
-static const u16 ov12_0226CB64[] = {
+static const u16 sFixedDamageMoveEffects[] = {
     MOVE_EFFECT_40_DAMAGE_FLAT,
     MOVE_EFFECT_LEVEL_DAMAGE_FLAT,
     MOVE_EFFECT_RANDOM_DAMAGE_1_TO_150_LEVEL,
@@ -6610,9 +6610,9 @@ static const u16 ov12_0226CB64[] = {
     MOVE_EFFECT_METAL_BURST
 };
 
-static BOOL ov12_0225865C(BattleContext *ctx, int moveNo) {
-    for (int i = 0; i < NELEMS(ov12_0226CB64); i++) {
-        if (ov12_0226CB64[i] == ctx->trainerAIData.moveData[moveNo].effect) {
+static BOOL IsFixedDamageMove(BattleContext *ctx, int moveNo) {
+    for (int i = 0; i < NELEMS(sFixedDamageMoveEffects); i++) {
+        if (sFixedDamageMoveEffects[i] == ctx->trainerAIData.moveData[moveNo].effect) {
             return TRUE;
         }
     }

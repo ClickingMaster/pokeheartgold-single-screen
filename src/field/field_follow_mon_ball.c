@@ -26,7 +26,7 @@
 // (unk_0205FD20.h declares it returning void.)
 BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 // The following Pokemon's billboard (field map object motion, still unnamed).
-void *ov01_021F771C(MapObjectManager *manager);
+void *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager);
 // billboard_lists.c
 void BillboardObject_SetScale(void *billboard, VecFx32 *scale);
 NNSG3dPlttKey BillboardObject_GetPlttKey(void *billboard);
@@ -311,7 +311,7 @@ void FollowMonBallEffect_UpdateRecallWhite(FieldEffect *effect, FollowMonBallEff
     switch (work->state) {
     case 0:
         mapObject = FollowMon_GetMapObject(work->args.fieldSystem);
-        billboard = ov01_021F771C(work->args.fieldSystem->mapObjectManager);
+        billboard = MapObjectManager_GetFollowMonBillboard(work->args.fieldSystem->mapObjectManager);
         plttKey = BillboardObject_GetPlttKey(billboard);
         plttKey2 = BillboardObject_GetPlttKey(billboard);
         GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_PLTT, (u16)plttKey2 << 3, sFollowMonWhitePalette, ((plttKey & 0xFFFF0000) >> 16) << 3);
@@ -330,7 +330,7 @@ void FollowMonBallEffect_UpdateRecallWhite(FieldEffect *effect, FollowMonBallEff
         ++work->timer;
         scale.x = FX32_ONE / work->timer;
         scale.y = FX32_ONE / work->timer;
-        BillboardObject_SetScale(ov01_021F771C(work->args.fieldSystem->mapObjectManager), &scale);
+        BillboardObject_SetScale(MapObjectManager_GetFollowMonBillboard(work->args.fieldSystem->mapObjectManager), &scale);
         if (work->coordinate) {
             mapObject = FollowMon_GetMapObject(work->args.fieldSystem);
             {
@@ -393,7 +393,7 @@ void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, FollowMonBallEffect *
     case 0: {
         LocalMapObject *followMon = FollowMon_GetMapObject(work->args.fieldSystem);
         u8 direction;
-        ov01_021F771C(work->args.fieldSystem->mapObjectManager);
+        MapObjectManager_GetFollowMonBillboard(work->args.fieldSystem->mapObjectManager);
         if (FollowMonObject_IsLarge(followMon)) {
             direction = MapObject_GetFacingDirection(followMon);
             MapObject_CopyPositionVector(followMon, &work->position);
@@ -410,7 +410,7 @@ void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, FollowMonBallEffect *
         work->timer++;
         scale.x = FX32_ONE / work->timer;
         scale.y = FX32_ONE / work->timer;
-        BillboardObject_SetScale(ov01_021F771C(work->args.fieldSystem->mapObjectManager), &scale);
+        BillboardObject_SetScale(MapObjectManager_GetFollowMonBillboard(work->args.fieldSystem->mapObjectManager), &scale);
         if (work->coordinate) {
             LocalMapObject *followMon = FollowMon_GetMapObject(work->args.fieldSystem);
             s32 delta = work->timer * (s32)((u32)work->coordinateStep << FX32_SHIFT);
