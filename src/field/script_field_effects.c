@@ -139,11 +139,8 @@ typedef struct LanceFliesAwayEnv {
 extern const WindowTemplate sAlphHiddenRoomWindowTemplate;
 extern const FieldAnimModelTemplate sLegendaryWingModels[];
 extern const TrapEffectTemplate sTrapEffects[];
-extern const u16 *ov02_02253D80[];
-extern const u16 *ov02_02253D84[];
-
-// Defined with overlay 2's field move cut-in tasks, which have no header yet.
-SysTask *FieldMoveCutIn_StartFlyWithObject(FieldSystem *fieldSystem, Pokemon *mon, LocalMapObject *obj1, LocalMapObject *obj2);
+extern const u16 *sLegendaryWingLoopAnimLists[];
+extern const u16 *sLegendaryWingEndAnimLists[];
 
 Ov02_02245B80Env *ov02_02245B9C(FieldSystem *fieldSystem);
 BOOL ov02_02245BC8(TaskManager *taskManager);
@@ -429,7 +426,7 @@ BOOL Task_ShowLegendaryWing(TaskManager *taskManager) {
     }
     case 1:
         if (FieldAnimModel_Animate(env->model)) {
-            FieldAnimModel_SetAnimations(env->model, NARC_demo_legend, ov02_02253D80[env->kind * 2], 3);
+            FieldAnimModel_SetAnimations(env->model, NARC_demo_legend, sLegendaryWingLoopAnimLists[env->kind * 2], 3);
             env->animTask = SysTask_CreateOnMainQueue(LegendaryWing_AnimateLoop, env, 0);
             QueueScript(taskManager, 3, NULL, NULL);
             env->state++;
@@ -442,7 +439,7 @@ BOOL Task_ShowLegendaryWing(TaskManager *taskManager) {
         if (!FieldAnimModel_Animate(env->model)) {
             break;
         }
-        FieldAnimModel_SetAnimations(env->model, NARC_demo_legend, ov02_02253D84[env->kind * 2], 3);
+        FieldAnimModel_SetAnimations(env->model, NARC_demo_legend, sLegendaryWingEndAnimLists[env->kind * 2], 3);
         env->state++;
     case 4:
         if (!FieldAnimModel_Animate(env->model)) {

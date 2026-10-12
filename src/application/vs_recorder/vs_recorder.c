@@ -42,7 +42,7 @@ BOOL OrbitCursor_SetActive(void *banner, int a1);
 BOOL OrbitCursor_SetVisible(void *banner, int a1);
 void WirelessStatusIcon_ShowOnBothScreens(int a0, enum HeapID heapID);
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapID);
-void sub_02088030(VsRecorderWork *work);
+void VsRecorderApp_CountMenuChoices(VsRecorderWork *work);
 
 extern const GraphicsModes _02244C44;
 extern const OamCharTransferParam ov40_02244C54;
@@ -141,7 +141,7 @@ void VsRecorder_InitResources(VsRecorderWork *work) {
     work->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0013_bin, HEAP_ID_109);
     work->recordMsgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0026_bin, HEAP_ID_109);
     VsRecorder_LoadSavedVideos(work);
-    sub_02088030(work);
+    VsRecorderApp_CountMenuChoices(work);
     VsRecorder_LoadFrameBg(work);
     VsRecorder_StartVBlankTask(work);
 }

@@ -360,7 +360,7 @@ void PokeathlonRelayRunHud_PrintMonName(PokeathlonRelayRunHud *hud, s32 member);
 void PokeathlonRelayRunHud_PrintLaps(PokeathlonRelayRunHud *hud);
 
 // Defined further on in the event (still under their address names).
-void ov96_02200C8C(void *spritePool, PokeathlonRelayRunHud *hud);
+void PokeathlonRelayRunHud_CreatePicFrames(void *spritePool, PokeathlonRelayRunHud *hud);
 void PokeathlonRelayRunHud_InitWindows(PokeathlonRelayRunHud *hud);
 struct PokeathlonRelayRunCpu *PokeathlonRelayRunCpu_New(enum HeapID heapId, int cpuCount, int mode);
 void PokeathlonRelayRunCpu_SetTeam(struct PokeathlonRelayRunCpu *cpu, u8 index, PokeathlonRelayRunTeam *team);

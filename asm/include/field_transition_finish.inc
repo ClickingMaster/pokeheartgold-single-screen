@@ -6,5 +6,5 @@
 	.public gOverlayTemplate_VsRecorderAppMode3
 	.public gOverlayTemplate_VsRecorderAppMode2
 	.public gOverlayTemplate_VsRecorderAppMode1
-	.public _021028A0
+	.public gFrontierBrainTrainerClasses
 	.public gVsRecorderAppTemplates

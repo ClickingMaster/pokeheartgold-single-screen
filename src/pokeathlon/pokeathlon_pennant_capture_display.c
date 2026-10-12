@@ -38,7 +38,7 @@ void *sub_0201457C(u16 charNarc, u16 charFile, u32 heapId, u32 personality, int 
 void *sub_02014450(u16 plttNarc, u16 plttFile, u32 heapId);
 u32 sub_02074490(void);
 // in the object linked between the two parts of the top screen code (picture sprites)
-void ov96_02208914(void *pool, PokeathlonPennantCaptureDisplay *display);
+void PokeathlonPennantCaptureDisplay_CreatePicSprites(void *pool, PokeathlonPennantCaptureDisplay *display);
 
 extern const u8 ov96_0221CBC4[];
 extern const u8 ov96_0221CBC8[];
@@ -177,7 +177,7 @@ void PokeathlonPennantCaptureDisplay_CreateSprites(PokeathlonPennantCaptureDispl
     PokeathlonCourseSpritePoolSprite_SetAnim(display->goalSprite, 4);
     PokeathlonCourseSpritePoolSprite_Show(display->goalSprite, 1, 1);
     PokeathlonCourseSpritePoolSprite_SetPosition(display->goalSprite, &initialPosition);
-    ov96_02208914(pool, display);
+    PokeathlonPennantCaptureDisplay_CreatePicSprites(pool, display);
     for (i = 0; i < 2; i++) {
         display->timerDigits[i] = ov96_021EA2C4(resources, PokeathlonCourseSpritePool_GetSpriteList(pool), 3, display->heapId);
         Sprite_SetDrawFlag(display->timerDigits[i], TRUE);

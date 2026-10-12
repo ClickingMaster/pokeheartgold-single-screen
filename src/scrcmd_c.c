@@ -15,7 +15,7 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0202.h"
 #include "overlay_2/event_cutscene.h"
-#include "overlay_2/overlay_02_02251E74.h"
+#include "overlay_2/fashion_case_gifts.h"
 #include "overlay_2/overlay_02_gear_phone.h"
 
 #include "alph_puzzle.h"
@@ -5403,7 +5403,7 @@ BOOL ScrCmd_829(ScriptContext *ctx) {
 
 BOOL ScrCmd_830(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    if (ov02_02253134(ctx->fieldSystem->saveData) == TRUE) {
+    if (FashionCase_GiftAccessoriesFull(ctx->fieldSystem->saveData) == TRUE) {
         *p_ret = TRUE;
     } else {
         *p_ret = FALSE;
@@ -5413,13 +5413,13 @@ BOOL ScrCmd_830(ScriptContext *ctx) {
 
 BOOL ScrCmd_831(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    *p_ret = ov02_0225316C();
+    *p_ret = FashionCase_GetRandomGiftAccessory();
     return FALSE;
 }
 
 BOOL ScrCmd_832(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    if (ov02_02253188(ctx->fieldSystem->saveData) == TRUE) {
+    if (FashionCase_HasAllBackdrops(ctx->fieldSystem->saveData) == TRUE) {
         *p_ret = TRUE;
     } else {
         *p_ret = FALSE;
@@ -5429,7 +5429,7 @@ BOOL ScrCmd_832(ScriptContext *ctx) {
 
 BOOL ScrCmd_833(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    *p_ret = ov02_022531B4(ctx->fieldSystem->saveData);
+    *p_ret = FashionCase_GetRandomMissingBackdrop(ctx->fieldSystem->saveData);
     return FALSE;
 }
 

@@ -58,6 +58,7 @@ void RockDebris_Delete(Field3dObjectTask *task);
 void *FieldMoveCutIn_Start(FieldSystem *fieldSystem, int a1, Pokemon *mon, int gender);
 BOOL FieldMoveCutIn_IsFinished(void *work);
 void FieldMoveCutIn_Delete(void *work);
+SysTask *FieldMoveCutIn_StartFlyWithObject(FieldSystem *fieldSystem, Pokemon *mon, LocalMapObject *object, LocalMapObject *otherObject);
 
 void ov02_02245B80(TaskManager *taskManager);
 void ShowTrapEffect(TaskManager *taskManager, u8 kind);

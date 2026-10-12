@@ -46,7 +46,7 @@ typedef struct VsRecorderPartyIconOrder {
     int slots[2][6];
 } VsRecorderPartyIconOrder;
 
-// asm/to91_w41503_battle_names_anchor.s
+// asm/vs_recorder_data.s
 extern const TouchscreenHitbox sVsRecorderVideoListOpenHitbox;
 extern const TouchscreenHitbox sVsRecorderVideoListExitHitbox;
 extern const TouchscreenHitbox sVsRecorderOverwriteHitboxes[2];

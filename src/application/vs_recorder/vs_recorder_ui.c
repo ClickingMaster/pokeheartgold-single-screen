@@ -62,7 +62,7 @@ void VsRecorder_SetStep(VsRecorderWork *work, u32 step) {
 }
 
 void VsRecorder_RefreshMenu(VsRecorderWork *work) {
-    sub_02088030(work);
+    VsRecorderApp_CountMenuChoices(work);
     VsRecorder_RefreshChoiceRows(work);
     work->menuCursor = 0;
 }

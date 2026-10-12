@@ -25,7 +25,7 @@ typedef struct WiFiPlazaInstrumentStep {
 typedef void (*WiFiPlazaInstrumentBurstStartFunc)(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj);
 typedef BOOL (*WiFiPlazaInstrumentBurstUpdateFunc)(WiFiPlazaInstrumentBurst *burst);
 
-// rodata of this overlay (asm/to90_extra2491_anchor.s)
+// rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const u8 ov49_0226A450[];
 extern const WiFiPlazaInstrumentBurstEvent ov49_0226A454[];
 extern const WiFiPlazaInstrumentBurstEvent ov49_0226A45C[];

@@ -35,7 +35,7 @@ typedef struct VsRecorderNumberPadKeys {
     VsRecorderNumberPadKey keys[12];
 } VsRecorderNumberPadKeys;
 
-// asm/to91_w41503_battle_names_anchor.s
+// asm/vs_recorder_data.s
 extern const VsRecorderNumberPadFunc sVsRecorderNumberPadStates[];
 extern const VsRecorderNumberPadStartX sVsRecorderNumberPadStartX;
 extern const VsRecorderNumberPadKeys sVsRecorderNumberPadKeys;

@@ -212,7 +212,7 @@
 	.public PokeathlonCourseMonObject_GetSpritePosition
 	.public PokeathlonCourseMonObject_GetPosition
 	.public PokeathlonCourseMonObject_Move
-	.public ov96_021EAF60
+	.public PokeathlonCourseMonObjects_SetPalette
 	.public PokeathlonCourseObject_SetTouchRadius
 	.public PokeathlonCourseObject_SetCollision
 	.public PokeathlonCourseObject_GetCollisionCircle
@@ -508,7 +508,7 @@
 	.public PokeathlonCirclePushDisplay_LoadScreens
 	.public PokeathlonCirclePushDisplay_LoadPics
 	.public PokeathlonCirclePushDisplay_LoadSpriteResources
-	.public ov96_021F3EC0
+	.public PokeathlonCirclePushDisplay_CreatePicSprites
 	.public PokeathlonCirclePushDisplay_CreateSprites
 	.public PokeathlonCirclePushDisplay_PrintPlayerNames
 	.public PokeathlonCirclePushDisplay_SetRound
@@ -675,7 +675,7 @@
 	.public PokeathlonHurdleDash_InitBgs
 	.public PokeathlonHurdleDash_LoadBgTiles
 	.public PokeathlonHurdleDash_LoadBgScreens
-	.public ov96_021FA0E8
+	.public PokeathlonHurdleDashRunner_Init
 	.public PokeathlonHurdleDashRunner_GetHurdle
 	.public PokeathlonHurdleDash_UpdateRunner
 	.public PokeathlonHurdleDash_UpdateRunners
@@ -812,7 +812,7 @@
 	.public PokeathlonRelayRunHud_GetBenchMember
 	.public PokeathlonRelayRunHud_PrintMonName
 	.public PokeathlonRelayRunHud_PrintLaps
-	.public ov96_02200C8C
+	.public PokeathlonRelayRunHud_CreatePicFrames
 	.public PokeathlonRelayRunHud_GetPicVramOffsets
 	.public PokeathlonRelayRunHud_InitWindows
 	.public PokeathlonRelayRunCpu_New
@@ -952,7 +952,7 @@
 	.public PokeathlonPennantCaptureDisplay_SetPennants
 	.public PokeathlonPennantCaptureDisplay_ShowPoint
 	.public PokeathlonPennantCaptureDisplay_PrintName
-	.public ov96_02208914
+	.public PokeathlonPennantCaptureDisplay_CreatePicSprites
 	.public PokeathlonPennantCaptureDisplay_GetPicVramOffsets
 	.public PokeathlonPennantCaptureDisplay_InitWindow
 	.public PokeathlonPennantCaptureDisplay_ShowStatus

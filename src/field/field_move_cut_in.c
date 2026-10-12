@@ -36,28 +36,6 @@ void *FieldEffectPool_New(enum HeapID heapID, int count);
 void FieldEffectPool_Delete(void *pool);
 void FieldEffectPool_DrawAll(void *pool);
 
-// Defined with the rest of the cut-in in overlay 2 (Pokemon sprite, clouds, flyer effect, trainer clip effect).
-void Task_FieldMoveCutIn_UpdateWindow(SysTask *task, void *data);
-void FieldMoveCutIn_GetMonPicIds(FieldMoveCutIn *cutIn, PokepicTemplate *template);
-void *FieldMoveCutIn_LoadMonChar(Pokemon *mon, PokepicTemplate *template, enum HeapID heapID);
-void *FieldMoveCutIn_LoadMonPltt(PokepicTemplate *template, enum HeapID heapID);
-SpriteResource *FieldMoveCutIn_AddMonCharResource(FieldMoveCutIn *cutIn, NARC *narc);
-void FieldMoveCutIn_TransferMonChar(FieldMoveCutIn *cutIn, void *charData);
-SpriteResource *FieldMoveCutIn_AddMonPlttResource(FieldMoveCutIn *cutIn, NARC *narc);
-void FieldMoveCutIn_TransferMonPltt(FieldMoveCutIn *cutIn, void *plttData);
-void FieldMoveCutIn_FreeMonResources(FieldMoveCutIn *cutIn);
-Sprite *FieldMoveCutIn_CreateMonSprite(FieldMoveCutIn *cutIn, VecFx32 *pos);
-void FieldMoveCutIn_CreateScrollSprites(FieldMoveCutIn *cutIn, int a1);
-void FieldMoveCutIn_CreateFlyer(FieldMoveCutIn *cutIn);
-u8 FieldMoveCutIn_GetFlyerStatus(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_DestroyFlyer(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_StartFlyerTakeOff(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_StartFlyerPickUp(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_SetPlayerVisible(FieldMoveCutIn *cutIn, BOOL visible);
-void FieldMoveCutIn_CreateTrainerClipEffect(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_DestroyTrainerClipEffect(FieldMoveCutIn *cutIn);
-
-SysTask *FieldMoveCutIn_StartFlyWithObject(FieldSystem *fieldSystem, Pokemon *mon, LocalMapObject *object, LocalMapObject *otherObject);
 FieldMoveCutIn *FieldMoveCutIn_New(FieldSystem *fieldSystem);
 void FieldMoveCutIn_Free(FieldMoveCutIn *cutIn);
 void Task_FieldMoveCutIn(SysTask *task, void *data);
@@ -107,11 +85,8 @@ NARC *FieldMoveCutIn_OpenNarc(void);
 void FieldMoveCutIn_LoadSpriteResources(FieldMoveCutIn *cutIn, NARC *narc);
 void FieldMoveCutIn_FreeSpriteResources(FieldMoveCutIn *cutIn);
 void FieldMoveCutIn_DrawSprites(FieldMoveCutIn *cutIn);
-Sprite *FieldMoveCutIn_CreateSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, int charId, int plttId, int cellId, int animId, int priority, int drawPriority);
-Sprite *FieldMoveCutIn_CreateEffectSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, int drawPriority, int seq);
 Sprite *FieldMoveCutIn_CreateTrainerSprite(FieldMoveCutIn *cutIn, VecFx32 *pos);
 void CutInSprite_StartAnimation(Sprite *sprite);
-Sprite *FieldMoveCutIn_CreateFlyerSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, int drawPriority, int unused);
 void FieldMoveCutIn_LoadFlyResources(FieldMoveCutIn *cutIn);
 void CutInBanner_LoadPalette(NARC *narc, u32 fileId, NNSG2dPaletteData **pltt);
 void CutInBanner_LoadChar(BgConfig *bgConfig, NARC *narc, u32 fileId, NNSG2dCharacterData **chars);
@@ -851,9 +826,9 @@ Sprite *FieldMoveCutIn_CreateSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, int cha
     return sprite;
 }
 
-Sprite *FieldMoveCutIn_CreateEffectSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, int drawPriority, int seq) {
+Sprite *FieldMoveCutIn_CreateEffectSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, int drawPriority, int animSeq) {
     Sprite *sprite = FieldMoveCutIn_CreateSprite(cutIn, pos, 1, 0, 1, 0, 0, drawPriority);
-    Sprite_SetAnimCtrlSeq(sprite, seq);
+    Sprite_SetAnimCtrlSeq(sprite, animSeq);
     return sprite;
 }
 

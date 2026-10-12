@@ -59,7 +59,7 @@ void PokeathlonCourseSpritePool_Draw(u8 *scene);
 void PokeathlonCourseSpritePool_SetSurfaceCoords(void *scene, int a1, int a2, int a3, int a4);
 SpriteList *PokeathlonCourseSpritePool_GetSpriteList(u8 *scene);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *sprite, int a1);
-void ov96_021FA0E8(PokeathlonCourseData *course, const PokeathlonHurdleDashTable *table, const PokeathlonHurdleDashParams *params, void *a3, void *scene, void *monSpriteManager, u8 member, PokeathlonHurdleDashRunner *runner);
+void PokeathlonHurdleDashRunner_Init(PokeathlonCourseData *course, const PokeathlonHurdleDashTable *table, const PokeathlonHurdleDashParams *params, void *a3, void *scene, void *monSpriteManager, u8 member, PokeathlonHurdleDashRunner *runner);
 BOOL PokeathlonHurdleDash_UpdateRunners(PokeathlonCourseData *course, PokeathlonHurdleDash *hurdleDash);
 void PokeathlonHurdleDash_SyncRace(PokeathlonCourseData *course);
 u32 PokeathlonHurdleDash_HaveAllStopped(PokeathlonHurdleDash *hurdleDash);
@@ -413,7 +413,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         {
             int k;
             for (k = 0; k < 3; k++) {
-                ov96_021FA0E8(course, &table, &params, hurdleDash->track, hurdleDash->scene, hurdleDash->monSpriteManager, (u8)k, &hurdleDash->runners[k]);
+                PokeathlonHurdleDashRunner_Init(course, &table, &params, hurdleDash->track, hurdleDash->scene, hurdleDash->monSpriteManager, (u8)k, &hurdleDash->runners[k]);
                 numberPos[k][0] = numberX.x[k];
                 numberPos[k][1] = 392;
             }

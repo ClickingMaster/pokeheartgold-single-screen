@@ -66,7 +66,7 @@ typedef struct VsRecorderSearchButtonMsgIds {
     u32 msgIds[3];
 } VsRecorderSearchButtonMsgIds;
 
-// asm/to91_w41503_battle_names_anchor.s
+// asm/vs_recorder_data.s
 extern const TouchscreenHitbox sVsRecorderSearchResultOpenHitbox;
 extern const TouchscreenHitbox sVsRecorderSearchBackHitbox;
 extern const VsRecorderSearchButtonMsgIds sVsRecorderSearchButtonMsgIds;

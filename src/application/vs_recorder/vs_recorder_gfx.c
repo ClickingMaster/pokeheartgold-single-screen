@@ -244,7 +244,7 @@ void VsRecorder_FreeMenuRows(VsRecorderWork *work) {
 void VsRecorder_RebuildMenuRowsParent(VsRecorderWork *work) {
     VsRecorder_LoadMenuRowGfx(work);
     VsRecorder_MenuPop(work);
-    sub_02088030(work);
+    VsRecorderApp_CountMenuChoices(work);
     VsRecorder_CreateMenuRowSprites(work);
     VsRecorder_SetMenuRowsDrawFlag(work, TRUE);
     VsRecorder_RefreshChoiceRows(work);
@@ -257,7 +257,7 @@ void VsRecorder_RebuildMenuRowsParent(VsRecorderWork *work) {
 void VsRecorder_RebuildMenuRows(VsRecorderWork *work) {
     VsRecorder_LoadMenuRowGfx(work);
     VsRecorder_MenuPop(work);
-    sub_02088030(work);
+    VsRecorderApp_CountMenuChoices(work);
     VsRecorder_CreateMenuRowSprites(work);
     VsRecorder_SetMenuRowsDrawFlag(work, TRUE);
     VsRecorder_RefreshChoiceRows(work);

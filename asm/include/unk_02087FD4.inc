@@ -2,7 +2,7 @@
 #pragma once
 .public GF_AssertFail
 .public sub_02087E1C
-.public sub_02087FF8
-.public sub_02088030
+.public VsRecorderApp_GetStartMenu
+.public VsRecorderApp_CountMenuChoices
 .public gOverlayTemplate_Battle
 .public gNatureStatMods

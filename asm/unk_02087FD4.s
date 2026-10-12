@@ -13,8 +13,8 @@
 
 	.text
 
-	thumb_func_start sub_02087FD4
-sub_02087FD4: ; 0x02087FD4
+	thumb_func_start VsRecorderApp_GetRootMenu
+VsRecorderApp_GetRootMenu: ; 0x02087FD4
 	push {r3, lr}
 	cmp r0, #7
 	blt _02087FE6
@@ -33,10 +33,10 @@ _02087FE6:
 	.balign 4, 0
 _02087FF0: .word _02103754
 _02087FF4: .word _021037B8
-	thumb_func_end sub_02087FD4
+	thumb_func_end VsRecorderApp_GetRootMenu
 
-	thumb_func_start sub_02087FF8
-sub_02087FF8: ; 0x02087FF8
+	thumb_func_start VsRecorderApp_GetStartMenu
+VsRecorderApp_GetStartMenu: ; 0x02087FF8
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
@@ -57,15 +57,15 @@ _0208800C:
 	pop {r3, r4, r5, pc}
 _0208801E:
 	add r0, r4, #0
-	bl sub_02087FD4
+	bl VsRecorderApp_GetRootMenu
 	pop {r3, r4, r5, pc}
 	nop
 _02088028: .word _0210357C
 _0208802C: .word _02102DC0
-	thumb_func_end sub_02087FF8
+	thumb_func_end VsRecorderApp_GetStartMenu
 
-	thumb_func_start sub_02088030
-sub_02088030: ; 0x02088030
+	thumb_func_start VsRecorderApp_CountMenuChoices
+VsRecorderApp_CountMenuChoices: ; 0x02088030
 	push {r3, r4}
 	ldr r1, _02088058 ; =0x00000818
 	mov r3, #0
@@ -89,7 +89,7 @@ _0208804A:
 	bx lr
 	nop
 _02088058: .word 0x00000818
-	thumb_func_end sub_02088030
+	thumb_func_end VsRecorderApp_CountMenuChoices
 
 	.rodata
 

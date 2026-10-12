@@ -59,7 +59,7 @@ BOOL VsRecorder_IsNetIdle(void *p);
 BOOL GlobalTerminalNet_IsIdle(void *p);
 void VsRecorder_FreeButtonGfx(void *p);
 void SysTask_Destroy(void *task);
-void sub_02088030(void *p);
+void VsRecorderApp_CountMenuChoices(void *p);
 void ManagedSprite_SetPositionXY(void *sprite, int x, int y);
 
 static inline void clear_windows(void *base, int count) {

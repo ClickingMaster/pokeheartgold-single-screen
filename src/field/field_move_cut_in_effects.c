@@ -64,7 +64,7 @@ typedef struct CutInScrollSprite {
     CutInScrollSpriteArgs args;
 } CutInScrollSprite;
 
-// The flying Pokemon (FieldMoveCutIn.flyerEffect): a small state machine per mode (step tables ov02_022533C0).
+// The flying Pokemon (FieldMoveCutIn.flyerEffect): a small state machine per mode (step tables sCutInFlyerModeSteps).
 typedef struct CutInFlyer {
     u8 mode;               // 0: hidden, 1: take off, 2: pick up the trainer and fly away
     u8 step;
@@ -137,21 +137,21 @@ typedef struct FlyLanding {
 
 typedef BOOL (*FlyLandingStep)(FlyLanding *landing);
 
-extern const CutInScrollSpriteTemplate ov02_022535E4[];
-extern const FieldEffectBasicTemplate ov02_02253468;
-extern const FieldEffectBasicTemplate ov02_0225347C;
-extern const FieldEffectBasicTemplate ov02_022534A4;
-extern const FieldEffectBasicTemplate ov02_02253440;
-extern const FieldEffectBasicTemplate ov02_02253490;
-extern CutInFlyerStep *const ov02_022533C0[3];
-extern FlyLandingStep const ov02_022534B8[6];
-extern const VecFx32 ov02_022533E4;
-extern const VecFx32 ov02_022533F0;
-extern const VecFx32 ov02_02253354;
-extern const VecFx32 ov02_0225336C;
-extern const VecFx32 ov02_02253378;
-extern const fx32 ov02_02253520[12];
-extern const fx32 ov02_02253430[4];
+extern const CutInScrollSpriteTemplate sCutInScrollSpriteTemplates[];
+extern const FieldEffectBasicTemplate sCutInScrollSpriteEffectTemplate;
+extern const FieldEffectBasicTemplate sCutInFlyerEffectTemplate;
+extern const FieldEffectBasicTemplate sTrainerJumpEffectTemplate;
+extern const FieldEffectBasicTemplate sTrainerClipEffectTemplate;
+extern const FieldEffectBasicTemplate sCutInModelEffectTemplate;
+extern CutInFlyerStep *const sCutInFlyerModeSteps[3];
+extern FlyLandingStep const sFlyLandingTaskSteps[6];
+extern const VecFx32 sCutInFlyerTakeOffOrigin;
+extern const VecFx32 sCutInFlyerTakeOffScale;
+extern const VecFx32 sCutInFlyerPickUpPos;
+extern const VecFx32 sCutInFlyerPickUpScale;
+extern const VecFx32 sCutInFlyerTrainerScale;
+extern const fx32 sTrainerJumpOffsets[12];
+extern const fx32 sTrainerHopOffsets[4];
 
 void Task_FlyLanding(SysTask *task, void *data);
 void *FlyLanding_AllocZeroed(enum HeapID heapID, u32 size);
@@ -312,7 +312,7 @@ Sprite *FieldMoveCutIn_CreateMonSprite(FieldMoveCutIn *cutIn, VecFx32 *pos) {
 
 void FieldMoveCutIn_CreateScrollSprites(FieldMoveCutIn *cutIn, int mode) {
     int i;
-    const CutInScrollSpriteTemplate *template = ov02_022535E4;
+    const CutInScrollSpriteTemplate *template = sCutInScrollSpriteTemplates;
     VecFx32 position;
     VecFx32 velocity;
     u32 animSeq;
@@ -341,7 +341,7 @@ void FieldMoveCutIn_CreateScrollSprite(FieldMoveCutIn *cutIn, const VecFx32 *pos
     args.mode = mode;
     args.cutIn = cutIn;
     args.velocity = *velocity;
-    FieldEffectPool_AddBasicEffect(cutIn->effectPool, &ov02_02253468, position, animSeq, &args, 0x85);
+    FieldEffectPool_AddBasicEffect(cutIn->effectPool, &sCutInScrollSpriteEffectTemplate, position, animSeq, &args, 0x85);
 }
 
 BOOL CutInScrollSprite_Init(FieldEffect *effect, CutInScrollSprite *work) {
@@ -391,7 +391,7 @@ void CutInScrollSprite_Draw(FieldEffect *effect, CutInScrollSprite *work) {
 void FieldMoveCutIn_CreateFlyer(FieldMoveCutIn *cutIn) {
     VecFx32 pos = { 0, 0, 0 };
     FieldMoveCutIn *userData = cutIn;
-    cutIn->flyerEffect = FieldEffectPool_AddBasicEffect(cutIn->effectPool, &ov02_0225347C, &pos, 0, &userData, 0x82);
+    cutIn->flyerEffect = FieldEffectPool_AddBasicEffect(cutIn->effectPool, &sCutInFlyerEffectTemplate, &pos, 0, &userData, 0x82);
 }
 
 u8 FieldMoveCutIn_GetFlyerStatus(FieldMoveCutIn *cutIn) {
@@ -422,7 +422,7 @@ void CutInFlyer_Destroy(FieldEffect *effect, CutInFlyer *flyer) {
 }
 
 void CutInFlyer_Update(FieldEffect *effect, CutInFlyer *flyer) {
-    CutInFlyerStep *steps = ov02_022533C0[flyer->mode];
+    CutInFlyerStep *steps = sCutInFlyerModeSteps[flyer->mode];
     while (steps[flyer->step](flyer) == TRUE) {
     }
 }
@@ -440,8 +440,8 @@ void FieldMoveCutIn_StartFlyerTakeOff(FieldMoveCutIn *cutIn) {
     VecFx32 origin;
     VecFx32 scale;
     CutInFlyer *flyer;
-    origin = ov02_022533E4;
-    scale = ov02_022533F0;
+    origin = sCutInFlyerTakeOffOrigin;
+    scale = sCutInFlyerTakeOffScale;
     flyer = FieldEffect_GetState(cutIn->flyerEffect);
     flyer->mode = 1;
     flyer->step = 0;
@@ -504,8 +504,8 @@ BOOL CutInFlyer_Idle(CutInFlyer *flyer) {
 }
 
 void FieldMoveCutIn_StartFlyerPickUp(FieldMoveCutIn *cutIn) {
-    VecFx32 position = ov02_02253354;
-    VecFx32 scale = ov02_0225336C;
+    VecFx32 position = sCutInFlyerPickUpPos;
+    VecFx32 scale = sCutInFlyerPickUpScale;
     VecFx32 matrix;
     VecFx32 trainerScale;
     CutInFlyer *flyer = FieldEffect_GetState(cutIn->flyerEffect);
@@ -545,7 +545,7 @@ void FieldMoveCutIn_StartFlyerPickUp(FieldMoveCutIn *cutIn) {
         values[1] = 0;
         values[2] = 0;
     }
-    trainerScale = ov02_02253378;
+    trainerScale = sCutInFlyerTrainerScale;
     sprite = flyer->cutIn->trainerSprite;
     Sprite_SetAffineOverwriteMode(sprite, 2);
     Sprite_SetAffineMatrix(sprite, &matrix);
@@ -696,7 +696,7 @@ FieldEffect *FieldMoveCutIn_CreateTrainerJumpEffect(void *effectPool, Sprite *tr
     TrainerJumpArgs args;
 
     args.sprite = trainerSprite;
-    return FieldEffectPool_AddBasicEffect(effectPool, &ov02_022534A4, &pos, 0, &args, 0x81);
+    return FieldEffectPool_AddBasicEffect(effectPool, &sTrainerJumpEffectTemplate, &pos, 0, &args, 0x81);
 }
 
 void TrainerJumpEffect_Stop(FieldEffect *effect) {
@@ -743,7 +743,7 @@ BOOL TrainerJumpEffect_Init(FieldEffect *effect, TrainerJump *jump) {
 void TrainerJumpEffect_Jump(FieldEffect *effect, TrainerJump *jump) {
     VecFx32 pos;
     if (jump->step == 0) {
-        jump->offsetY = ov02_02253520[jump->frame];
+        jump->offsetY = sTrainerJumpOffsets[jump->frame];
         FieldEffect_GetPosition(effect, &pos);
         pos.y = pos.y + jump->offsetY;
         Sprite_SetMatrix(jump->sprite, &pos);
@@ -758,7 +758,7 @@ void TrainerJumpEffect_Jump(FieldEffect *effect, TrainerJump *jump) {
 void TrainerJumpEffect_Hop(FieldEffect *effect, TrainerJump *jump) {
     VecFx32 pos;
     if (jump->step == 0) {
-        jump->offsetY = ov02_02253430[jump->frame];
+        jump->offsetY = sTrainerHopOffsets[jump->frame];
         FieldEffect_GetPosition(effect, &pos);
         pos.y = pos.y + jump->offsetY;
         Sprite_SetMatrix(jump->sprite, &pos);
@@ -799,7 +799,7 @@ void FlyLanding_Delete(SysTask *task) {
 
 void Task_FlyLanding(SysTask *task, void *data) {
     FlyLanding *landing = data;
-    FlyLandingStep const *steps = ov02_022534B8;
+    FlyLandingStep const *steps = sFlyLandingTaskSteps;
     while (steps[landing->state](landing) == TRUE) {
     }
     if (landing->drawSprites != FALSE) {
@@ -924,7 +924,7 @@ void FieldMoveCutIn_CreateTrainerClipEffect(FieldMoveCutIn *cutIn) {
 
     userData.sprite = cutIn->trainerSprite;
     userData.cutIn = cutIn;
-    cutIn->trainerClipEffect = FieldEffectPool_AddBasicEffect(cutIn->effectPool, &ov02_02253440, &pos, 0, &userData, 0x87);
+    cutIn->trainerClipEffect = FieldEffectPool_AddBasicEffect(cutIn->effectPool, &sTrainerClipEffectTemplate, &pos, 0, &userData, 0x87);
 }
 
 void FieldMoveCutIn_DestroyTrainerClipEffect(FieldMoveCutIn *cutIn) {
@@ -939,7 +939,7 @@ void FieldMoveCutIn_CreateModelEffect(FieldMoveCutIn *cutIn) {
     FieldMoveCutIn *userData = cutIn;
     FieldMoveCutIn_LoadModel(cutIn);
     MapObject_CopyPositionVector(cutIn->otherObject, &pos);
-    cutIn->modelEffect = FieldEffectPool_AddBasicEffect(cutIn->effectPool, &ov02_02253490, &pos, 0, &userData, 0x83);
+    cutIn->modelEffect = FieldEffectPool_AddBasicEffect(cutIn->effectPool, &sCutInModelEffectTemplate, &pos, 0, &userData, 0x83);
 }
 
 BOOL CutInModelEffect_Init(FieldEffect *effect, CutInModelEffect *work) {

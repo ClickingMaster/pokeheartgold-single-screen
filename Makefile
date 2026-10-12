@@ -283,7 +283,7 @@ $(BUILD_DIR)/lib/NitroSDK/src/os/os_spinLock.o: lib/NitroSDK/src/os/os_spinLock.
 
 $(BUILD_DIR)/lib/NitroSDK/src/os/os_spin_lock_id.o: lib/NitroSDK/src/os/os_spin_lock_id.snd-section-map.json tools/nitro-section-renames/rename_snd_sections.py
 
-$(BUILD_DIR)/src/to90_w41411_palette10_run01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/pokeathlon/pokeathlon_course_mon_palette.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_scanf_string_read.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_task_thread.o: private MWCCVER := 2.0/sp2p3
@@ -347,10 +347,10 @@ $(BUILD_DIR)/src/wifi_plaza_survey_answer.o: private MWCFLAGS := $(filter-out -i
 $(BUILD_DIR)/lib/MSL_C/src/msl_e_pow.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_e_pow.o: private EXCCFLAGS := -Cpp_exceptions on
 $(BUILD_DIR)/src/application/vs_recorder/vs_recorder_row_text.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_overlay_96_residual_80_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/pokeathlon/pokeathlon_relay_run_pic_frames.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/wifi_setup_address_entry_init.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_to70_to52_r5_overlay96_r90_gap4_tail_extra260_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_to80_extra1591_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/pokeathlon/pokeathlon_pennant_capture_pic_sprites.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/pokeathlon/pokeathlon_circle_push_pic_sprites.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/wifi_setup_keypad_layout.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/wifi_setup_keyboard_layout.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/NitroSDK/src/fx/fx_mtx33_identity.o: private MWCCVER := 2.0/sp2p3
@@ -378,7 +378,7 @@ $(BUILD_DIR)/lib/MSL_C/src/msl_transfer_control.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/math/math_qsort.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/src/nitrocrypto_rc4.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/wifi_setup_worker.o: private MWCCVER := 2.0/sp1
-$(BUILD_DIR)/src/op90_overlay_96_residual_70_tail_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/pokeathlon/pokeathlon_hurdle_dash_runner.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/wifi_setup_connect.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/application/footprint_stamp_texture.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/NitroSystem/src/g2d_renderer_mtx_cache.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))

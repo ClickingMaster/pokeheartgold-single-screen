@@ -32,7 +32,7 @@ typedef struct VsRecorderSlotButtonTable {
     int values[4];
 } VsRecorderSlotButtonTable;
 
-// asm/to91_w41503_battle_names_anchor.s
+// asm/vs_recorder_data.s
 extern const VsRecorderSlotButtonTable sVsRecorderSearchSlotMsgIds;
 extern const VsRecorderSlotButtonTable sVsRecorderSearchSlotAnims;
 extern const TouchscreenHitbox sVsRecorderSearchSaveSlotHitboxes[4];

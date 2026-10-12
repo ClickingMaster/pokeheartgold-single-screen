@@ -897,6 +897,6 @@ void VsRecorder_FreeNet(VsRecorderWork *work);
 
 // main ARM9 (vs_recorder_app.c launcher, banner object)
 void VsRecorderApp_SetResult(void *result, u32 first, u32 second);
-void sub_02088030(VsRecorderWork *work);
+void VsRecorderApp_CountMenuChoices(VsRecorderWork *work);
 
 #endif // POKEHEARTGOLD_APPLICATION_VS_RECORDER_VS_RECORDER_INTERNAL_H

@@ -1,36 +1,51 @@
+#include "application/vs_recorder/vs_recorder_screens.h"
+
+#include "bag_cursor.h"
+#include "battle_record.h"
+#include "battle_recording.h"
+#include "field_bgm.h"
+#include "game_stats.h"
+#include "global_terminal_app_internal.h"
+#include "heap.h"
+#include "poke_overlay.h"
+#include "sound_system.h"
 #include "vs_recorder_app_internal.h"
 
-void *VsRecorderApp_GetRecorderWork(OverlayManager *manager) {
-    return ((void **)OverlayManager_GetArgs(manager))[5];
+FS_EXTERN_OVERLAY(OVY_39);
+FS_EXTERN_OVERLAY(OVY_40);
+
+VsRecorderWork *VsRecorderApp_GetRecorderWork(OverlayManager *manager) {
+    return ((VsRecorderApp *)OverlayManager_GetArgs(manager))->recorder;
 }
 
-void VsRecorderApp_SetResult(VsRecorderAppResult *pair, u32 first, u32 second) {
+void VsRecorderApp_SetResult(void *result, u32 first, u32 second) {
+    VsRecorderAppResult *pair = result;
     pair->first = first;
     pair->second = second;
 }
 
 void VsRecorderApp_Create(OverlayManager *manager, u32 mode) {
     VsRecorderApp *work;
-    u8 *large;
-    void *args;
-    void *value;
-    u32 index;
+    VsRecorderWork *recorder;
+    FieldSystem *fieldSystem;
+    const VsRecorderMenuEntry *menu;
+    int depth;
 
-    Heap_Create((enum HeapID)3, (enum HeapID)0x7E, 0x10000);
-    work = OverlayManager_CreateAndGetData(manager, sizeof(VsRecorderApp), (enum HeapID)0x7E);
+    Heap_Create(HEAP_ID_3, HEAP_ID_126, 0x10000);
+    work = OverlayManager_CreateAndGetData(manager, sizeof(VsRecorderApp), HEAP_ID_126);
     MI_CpuFill8(work, 0, sizeof(VsRecorderApp));
-    args = OverlayManager_GetArgs(manager);
-    work->args = args;
-    work->saveData = ((void **)args)[3];
-    work->large = Heap_Alloc((enum HeapID)0x7E, 0x4170);
-    MI_CpuFill8(work->large, 0, 0x4170);
-    *(void **)(work->large + 0x868) = &work->result;
-    *(void **)(work->large + 0x830) = work->saveData;
-    *(u32 *)work->large = mode;
-    large = work->large;
-    value = sub_02087FF8(large, *(u32 *)large);
-    index = *(u32 *)(large + 0x6D8);
-    *(void **)(large + 0x81C + index * 4) = value;
+    fieldSystem = OverlayManager_GetArgs(manager);
+    work->fieldSystem = fieldSystem;
+    work->saveData = fieldSystem->saveData;
+    work->recorder = Heap_Alloc(HEAP_ID_126, sizeof(VsRecorderWork));
+    MI_CpuFill8(work->recorder, 0, sizeof(VsRecorderWork));
+    work->recorder->result = &work->result;
+    work->recorder->saveData = work->saveData;
+    work->recorder->mode = mode;
+    recorder = work->recorder;
+    menu = VsRecorderApp_GetStartMenu(recorder, recorder->mode);
+    depth = recorder->menuDepth;
+    recorder->menuStack[depth] = menu;
 }
 
 BOOL VsRecorderApp_InitMode0(OverlayManager *manager, int *state) {
@@ -72,7 +87,7 @@ BOOL VsRecorderApp_Main(OverlayManager *manager, int *state) {
     VsRecorderApp *work = OverlayManager_GetData(manager);
     switch (*state) {
     case 0:
-        if (VsRecorderApp_RunMenu(work, (enum HeapID)0x7E)) {
+        if (VsRecorderApp_RunMenu(work, HEAP_ID_126)) {
             if (work->result == 1) {
                 *state = 1;
                 work->state = 0;
@@ -82,7 +97,7 @@ BOOL VsRecorderApp_Main(OverlayManager *manager, int *state) {
         }
         break;
     case 1:
-        if (VsRecorderApp_RunPlayback(work, (enum HeapID)0x7E)) {
+        if (VsRecorderApp_RunPlayback(work, HEAP_ID_126)) {
             *state = 0;
             work->state = 0;
         }
@@ -96,17 +111,17 @@ BOOL VsRecorderApp_Exit(OverlayManager *manager, int *state) {
     if (BattleRecord_Exists() == TRUE) {
         BattleRecord_Delete();
     }
-    Heap_Free(work->large);
+    Heap_Free(work->recorder);
     OverlayManager_FreeData(manager);
     GF_SndHandleSetPlayerVolume(1, 0x7F);
     GF_SndHandleSetPlayerVolume(7, 0x7F);
-    Heap_Destroy((enum HeapID)0x7E);
+    Heap_Destroy(HEAP_ID_126);
     return TRUE;
 }
 
 BOOL VsRecorderApp_RunMenu(VsRecorderApp *work, enum HeapID heapId) {
     if (work->state == 0) {
-        if (*(u32 *)work->large == 0) {
+        if (work->recorder->mode == 0) {
             work->manager = OverlayManager_New(&gOverlayTemplate_VsRecorderMenu, work, heapId);
         } else {
             work->manager = OverlayManager_New(&gOverlayTemplate_VsRecorderMenuFromTerminal, work, heapId);
@@ -115,6 +130,81 @@ BOOL VsRecorderApp_RunMenu(VsRecorderApp *work, enum HeapID heapId) {
     } else if (OverlayManager_Run(work->manager)) {
         OverlayManager_Delete(work->manager);
         return TRUE;
+    }
+    return FALSE;
+}
+
+BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId) {
+    BOOL result;
+    u16 bgm;
+    FSOverlayID overlayId;
+
+    switch (work->state) {
+    case 0:
+        if (work->recorder->mode != 0) {
+            UnloadOverlayByID(FS_OVERLAY_ID(OVY_39));
+            UnloadOVY38();
+        }
+        work->state++;
+        break;
+    case 1:
+        work->setup = BattleSetup_New(heapId, 0);
+        if (!BattleRecord_Exists()) {
+            BattleRecord_Load(work->saveData, heapId, &result, work->setup, work->recorder->selection);
+        } else {
+            BattleRecord_RestoreSetup(work->setup, work->saveData);
+            result = TRUE;
+        }
+        work->setup->bagCursor = BagCursor_New(heapId);
+        work->setup->gameStats = Save_GameStats_Get(work->saveData);
+        overlayId = FS_OVERLAY_ID(OVY_40);
+        if (HandleLoadOverlay(overlayId, OVY_LOAD_ASYNC) == TRUE) {
+            VsRecorder_SanitizeBattleSetupNames(BattleRecord_Get(), work->setup, heapId);
+            UnloadOverlayByID(overlayId);
+        }
+        work->recorder->battleResult = 1;
+        if (result != TRUE) {
+            Heap_Free(work->setup->bagCursor);
+            BattleSetup_Delete(work->setup);
+            work->state = 0;
+            return TRUE;
+        }
+        work->state++;
+        break;
+    case 2:
+        GF_SndHandleSetPlayerVolume(1, 0x7F);
+        GF_SndHandleSetPlayerVolume(7, 0x7F);
+        sub_02005B68(TRUE);
+        if (VsRecorderApp_IsFrontierBrainClass(work->setup->trainer[BATTLER_ENEMY].data.trainerClass) == TRUE) {
+            Sound_SetSceneAndPlayBGM(5, 0x47B, 1);
+        } else {
+            Sound_SetSceneAndPlayBGM(5, 0x45D, 1);
+        }
+        work->manager = OverlayManager_New(&gOverlayTemplate_Battle, work->setup, heapId);
+        work->state++;
+        break;
+    default:
+        if (OverlayManager_Run(work->manager)) {
+            work->recorder->battleResult = work->setup->unk1C4;
+            if (work->recorder->mode != 0 && work->recorder->battleResult == 0) {
+                *(u8 *)work->recorder->unk_0878 = 1;
+            }
+            Heap_Free(work->setup->bagCursor);
+            BattleSetup_Delete(work->setup);
+            OverlayManager_Delete(work->manager);
+            sub_02005B68(FALSE);
+            Sound_SetScene(0);
+            bgm = FieldBGM_GetEffective(work->fieldSystem, work->fieldSystem->location->mapId);
+            Sound_SetFieldBGM(FieldBGM_GetForMapHeader(work->fieldSystem, work->fieldSystem->location->mapId));
+            sub_02055198(NULL, bgm);
+            work->state = 0;
+            if (work->recorder->mode != 0) {
+                LoadOVY38();
+                HandleLoadOverlay(FS_OVERLAY_ID(OVY_39), OVY_LOAD_ASYNC);
+            }
+            return TRUE;
+        }
+        break;
     }
     return FALSE;
 }

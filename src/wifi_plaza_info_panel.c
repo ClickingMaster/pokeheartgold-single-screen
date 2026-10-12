@@ -22,7 +22,7 @@
 // type_icon_resources.c (no header declares it)
 int TypeIcon_GetPlttFile(void);
 
-// rodata of this overlay (asm/to90_extra2491_anchor.s)
+// rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const u8 ov49_022696EC[];
 extern const s8 ov49_022696F0[];
 extern const TouchscreenHitbox sWiFiPlazaPanelButtonHitbox[];

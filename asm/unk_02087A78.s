@@ -129,7 +129,7 @@ _02087D0C:
 	ldr r0, [r5, #0x10]
 	add r0, #0x5d
 	ldrb r0, [r0]
-	bl sub_02087E34
+	bl VsRecorderApp_IsFrontierBrainClass
 	cmp r0, #1
 	bne _02087D3C
 	ldr r1, _02087E04 ; =0x0000047B
@@ -254,8 +254,8 @@ gOverlayTemplate_VsRecorderAppMode2:
 	.public gOverlayTemplate_VsRecorderAppMode1
 gOverlayTemplate_VsRecorderAppMode1:
 	.word VsRecorderApp_InitMode1, VsRecorderApp_Main, VsRecorderApp_Exit, 0xFFFFFFFF
-	.public _021028A0
-_021028A0:
+	.public gFrontierBrainTrainerClasses
+gFrontierBrainTrainerClasses:
 	.word 0x61
 	.word 0x63
 	.word 0x64

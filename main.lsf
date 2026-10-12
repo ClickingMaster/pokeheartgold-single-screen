@@ -355,11 +355,7 @@ Static main
     Object src/code_entry.o
     Object src/orbit_cursor.o
     Object src/vs_recorder_app.o
-    Object src/vs_recorder_playback.o
-    Object asm/vs_recorder_app_data.o
-    Object src/vs_recorder_app_2.o
     Object src/vs_recorder_menu_app.o
-    Object src/vs_recorder_screen_table.o
     Object asm/vs_recorder_screen_data.o
     Object src/unk_0208805C.o
     Object asm/pokemon_summary_data.o
@@ -1107,7 +1103,7 @@ Overlay OVY_2
 {
     After field
     Object src/field/script_field_effects.o
-    Object asm/overlay_02_02245B80_residual_6.o
+    Object asm/script_field_effects_data.o
     Object src/field/encounter_check.o
     Object src/field/sprite_gfx_manager.o
     Object src/field/fly_landing_effect.o
@@ -1120,13 +1116,13 @@ Overlay OVY_2
     Object src/field/map_object_swap_positions.o
     Object src/field/safari_zone_placement.o
     Object src/field/follow_mon_interaction.o
-    Object asm/overlay_02_02248728_residual_61_data.o
+    Object asm/field_move_effects_data.o
     Object src/field/legend_cutscene_camera.o
     Object src/field/overlay_2_gear_phone.o
     Object src/field/event_cutscene_shaymin.o
     Object src/field/event_cutscene_celebi.o
     Object src/field/event_cutscene_sinjoh.o
-    Object src/overlay_02_02251E74.o
+    Object src/field/fashion_case_gifts.o
 }
 Overlay OVY_3
 {
@@ -1346,12 +1342,10 @@ Overlay OVY_18
     Object src/application/pokedex/pokedex_size_check.o
     Object src/application/pokedex/pokedex_forms.o
     Object src/application/pokedex/pokedex_input.o
-    Object asm/overlay_18_residual_34_gap_2_module03_residual.o
     Object src/application/pokedex/pokedex_search.o
-    Object asm/overlay_18_residual_36_module03_residual.o
     Object src/application/pokedex/pokedex_entry_popup.o
     Object src/application/pokedex/pokedex_text_util.o
-    Object asm/overlay_18_residual_45_r40_residual_1.o
+    Object asm/pokedex_rodata.o
 }
 Overlay OVY_19
 {
@@ -1488,7 +1482,7 @@ Overlay OVY_40
     After OVY_39
     Object src/application/vs_recorder/vs_recorder.o
     Object src/application/vs_recorder/vs_recorder_ui.o
-    Object asm/to91_w41503_battle_names_anchor_own1.o
+    Object asm/vs_recorder_app_rodata.o
     Object src/application/vs_recorder/vs_recorder_row_text.o
     Object src/application/vs_recorder/vs_recorder_gfx.o
     Object src/application/vs_recorder/vs_recorder_windows.o
@@ -1511,7 +1505,7 @@ Overlay OVY_40
     Object src/application/vs_recorder/vs_recorder_number_pad.o
     Object src/application/vs_recorder/vs_recorder_delete.o
     Object src/application/vs_recorder/vs_recorder_battle_names.o
-    Object asm/to91_w41503_battle_names_anchor.o
+    Object asm/vs_recorder_data.o
     Object src/application/vs_recorder/vs_recorder_record.o
 }
 Overlay OVY_41
@@ -1577,10 +1571,10 @@ Overlay OVY_45
     Object src/wifi_plaza_lobby_events.o
     Object src/wifi_plaza_lobby_matches.o
     Object src/wifi_plaza_player_objects.o
-    Object asm/to80_extra1528_anchor.o
+    Object asm/wifi_plaza_lobby_data.o
     Object src/wifi_plaza_sprite_culling.o
     Object src/wifi_plaza_time_zone.o
-    Object lib/NitroDWC/asm/to60_overlay_45_arm_anchor.o
+    Object lib/NitroDWC/asm/dwc_lobby_data.o
     Object src/ov45_022310b0.o
     Object src/ov45_022310c0.o
     Object src/ov45_02231144.o
@@ -1607,7 +1601,7 @@ Overlay OVY_45
     Object src/ov45_02232b9c.o
     Object src/ov45_02232ddc.o
     Object src/ov45_02232e60.o
-    Object lib/NitroDWC/asm/to60_overlay_45_arm_anchor_own1.o
+    Object lib/NitroDWC/asm/dwc_lobby_chat_data.o
     Object src/ov45_022383e0.o
     Object src/ov45_02238450.o
     Object src/ov45_022384bc.o
@@ -1795,7 +1789,7 @@ Overlay OVY_49
     Object src/wifi_plaza_talk.o
     Object src/wifi_plaza_instrument.o
     Object src/wifi_plaza_event.o
-    Object asm/to90_extra2491_anchor.o
+    Object asm/wifi_plaza_map_rodata.o
     Object src/wifi_plaza_mover_markers.o
 }
 Overlay trainer_card
@@ -2193,38 +2187,37 @@ Overlay OVY_96
     Object src/pokeathlon/pokeathlon_course_mon_gfx.o
     Object src/pokeathlon/pokeathlon_course_scores.o
     Object src/pokeathlon/pokeathlon_course_sprites.o
-    Object src/to90_w41411_palette10_run01.o
+    Object src/pokeathlon/pokeathlon_course_mon_palette.o
     Object src/pokeathlon/pokeathlon_course_objects.o
     Object src/pokeathlon/pokeathlon_course_ceremony.o
     Object src/pokeathlon/pokeathlon_course_ui.o
     Object src/pokeathlon/pokeathlon_event_intro.o
     Object src/pokeathlon/pokeathlon_circle_push.o
-    Object asm/to70_overlay_96_residual_125_extra662_anchor_own1.o
-    Object src/op90_to80_extra1591_residual_1_r01.o
-    Object asm/to70_overlay_96_residual_125_extra662_anchor_own2.o
+    Object asm/pokeathlon_course_rodata.o
+    Object src/pokeathlon/pokeathlon_circle_push_pic_sprites.o
+    Object asm/pokeathlon_lamp_jump_hurdle_dash_rodata.o
     Object src/pokeathlon/pokeathlon_circle_push_display.o
     Object src/pokeathlon/pokeathlon_lamp_jump.o
-    Object asm/to70_overlay_96_residual_125_extra662_anchor_own4.o
+    Object asm/pokeathlon_course_data.o
     Object src/pokeathlon/pokeathlon_lamp_jump_stage.o
     Object src/pokeathlon/pokeathlon_results_announcement.o
     Object src/pokeathlon/pokeathlon_hurdle_dash.o
-    Object src/op90_overlay_96_residual_70_tail_r01.o
+    Object src/pokeathlon/pokeathlon_hurdle_dash_runner.o
     Object src/pokeathlon/pokeathlon_hurdle_dash_race.o
     Object src/pokeathlon/pokeathlon_relay_run.o
     Object src/pokeathlon/pokeathlon_relay_run_track.o
     Object src/pokeathlon/pokeathlon_relay_run_hud.o
-    Object src/op90_overlay_96_residual_80_r01.o
-    Object asm/to70_overlay_96_residual_125_extra662_anchor_own3.o
+    Object src/pokeathlon/pokeathlon_relay_run_pic_frames.o
+    Object asm/pokeathlon_snow_throw_pennant_capture_rodata.o
     Object src/pokeathlon/pokeathlon_relay_run_cpu.o
     Object src/pokeathlon/pokeathlon_snow_throw.o
     Object src/pokeathlon/pokeathlon_snow_throw_display.o
     Object src/pokeathlon/pokeathlon_snow_throw_cpu.o
     Object src/pokeathlon/pokeathlon_pennant_capture.o
-    Object asm/to90_extra1935_anchor.o
     Object src/pokeathlon/pokeathlon_pennant_capture_play.o
     Object src/pokeathlon/pokeathlon_pennant_capture_field.o
     Object src/pokeathlon/pokeathlon_pennant_capture_display.o
-    Object src/op90_to70_to52_r5_overlay96_r90_gap4_tail_extra260_residual_1_r01.o
+    Object src/pokeathlon/pokeathlon_pennant_capture_pic_sprites.o
     Object src/pokeathlon/pokeathlon_pennant_capture_cpu.o
     Object src/pokeathlon/pokeathlon_block_smash.o
     Object src/pokeathlon/pokeathlon_block_smash_teams.o
@@ -2243,7 +2236,7 @@ Overlay OVY_96
     Object src/pokeathlon/pokeathlon_ring_drop_ui.o
     Object src/pokeathlon/pokeathlon_ring_drop_cpu.o
     Object src/pokeathlon/pokeathlon_event_points.o
-    Object asm/to70_overlay_96_residual_125_extra662_anchor.o
+    Object asm/pokeathlon_event_data.o
     Object src/pokeathlon/pokeathlon_event_rank_points.o
     Object src/pokeathlon/pokeathlon_data.o
 }
@@ -2396,7 +2389,7 @@ Overlay OVY_112
 {
     After main
     Object src/application/pokewalker/pokewalker_ir.o
-Object asm/op90_to57_r3_07_overlay112_016_residual_bss_head.o
+Object asm/pokewalker_ir_bss.o
 Object src/application/pokewalker/pokewalker_ir_requests.o
 Object src/application/pokewalker/pokewalker_ir_status.o
 Object src/application/pokewalker/pokewalker_app.o
@@ -2410,7 +2403,7 @@ Object src/application/pokewalker/pokewalker_stroll.o
 Object src/application/pokewalker/pokewalker_app_modes.o
 Object src/application/pokewalker/pokewalker_event_log.o
 Object src/application/pokewalker/pokewalker_trainer_house.o
-Object asm/to53_overlay112_202.o
+Object asm/pokewalker_data.o
 }
 Overlay OVY_113
 {

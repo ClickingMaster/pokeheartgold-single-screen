@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "6f46b927763c8672f7531d905dd6d1618a79ae50",
+  "commit": "667040ca36784661360ba147f6e1ce8635dce2a9",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "53c777d5f34faaf83a15c7c36dec7dfe28ece756c567b5802b1f28d510388a50",
+    "ARM9": "fb0779cf2bcb3da9423bce69ea0229a9929371d871064990bc5b4c11e2e34c78",
     "ARM7": "b2662a5cfe0fe61203405adb1b3cd633b24d0b1b806a72ddbdec71c77f845bb3"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -1636,6 +1636,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_2",
+      "object": "fashion_case_gifts.o",
+      "bytes": 232,
+      "status": "c",
+      "source": "src/field/fashion_case_gifts.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_2",
       "object": "field_move_cut_in.o",
       "bytes": 4734,
       "status": "c",
@@ -1704,14 +1712,6 @@
       "bytes": 1096,
       "status": "c",
       "source": "src/field/map_prop_anims.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_2",
-      "object": "overlay_02_02251E74.o",
-      "bytes": 232,
-      "status": "c",
-      "source": "src/overlay_02_02251E74.c"
     },
     {
       "cpu": "ARM9",
@@ -5447,38 +5447,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_96",
-      "object": "op90_overlay_96_residual_70_tail_r01.o",
-      "bytes": 600,
-      "status": "c",
-      "source": "src/op90_overlay_96_residual_70_tail_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_96",
-      "object": "op90_overlay_96_residual_80_r01.o",
-      "bytes": 240,
-      "status": "c",
-      "source": "src/op90_overlay_96_residual_80_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_96",
-      "object": "op90_to70_to52_r5_overlay96_r90_gap4_tail_extra260_residual_1_r01.o",
-      "bytes": 188,
-      "status": "c",
-      "source": "src/op90_to70_to52_r5_overlay96_r90_gap4_tail_extra260_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_96",
-      "object": "op90_to80_extra1591_residual_1_r01.o",
-      "bytes": 192,
-      "status": "c",
-      "source": "src/op90_to80_extra1591_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_96",
       "object": "pokeathlon_block_smash.o",
       "bytes": 8874,
       "status": "c",
@@ -5511,6 +5479,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_96",
+      "object": "pokeathlon_circle_push_pic_sprites.o",
+      "bytes": 192,
+      "status": "c",
+      "source": "src/pokeathlon/pokeathlon_circle_push_pic_sprites.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_96",
       "object": "pokeathlon_course.o",
       "bytes": 1856,
       "status": "c",
@@ -5539,6 +5515,14 @@
       "bytes": 2188,
       "status": "c",
       "source": "src/pokeathlon/pokeathlon_course_mon_gfx.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_96",
+      "object": "pokeathlon_course_mon_palette.o",
+      "bytes": 10,
+      "status": "c",
+      "source": "src/pokeathlon/pokeathlon_course_mon_palette.c"
     },
     {
       "cpu": "ARM9",
@@ -5679,6 +5663,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_96",
+      "object": "pokeathlon_hurdle_dash_runner.o",
+      "bytes": 600,
+      "status": "c",
+      "source": "src/pokeathlon/pokeathlon_hurdle_dash_runner.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_96",
       "object": "pokeathlon_lamp_jump.o",
       "bytes": 4520,
       "status": "c",
@@ -5727,6 +5719,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_96",
+      "object": "pokeathlon_pennant_capture_pic_sprites.o",
+      "bytes": 188,
+      "status": "c",
+      "source": "src/pokeathlon/pokeathlon_pennant_capture_pic_sprites.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_96",
       "object": "pokeathlon_pennant_capture_play.o",
       "bytes": 3822,
       "status": "c",
@@ -5755,6 +5755,14 @@
       "bytes": 4172,
       "status": "c",
       "source": "src/pokeathlon/pokeathlon_relay_run_hud.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_96",
+      "object": "pokeathlon_relay_run_pic_frames.o",
+      "bytes": 240,
+      "status": "c",
+      "source": "src/pokeathlon/pokeathlon_relay_run_pic_frames.c"
     },
     {
       "cpu": "ARM9",
@@ -5843,14 +5851,6 @@
       "bytes": 2998,
       "status": "c",
       "source": "src/pokeathlon/pokeathlon_snow_throw_display.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_96",
-      "object": "to90_w41411_palette10_run01.o",
-      "bytes": 10,
-      "status": "c",
-      "source": "src/to90_w41411_palette10_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -13281,41 +13281,17 @@
       "cpu": "ARM9",
       "module": "main",
       "object": "vs_recorder_app.o",
-      "bytes": 444,
+      "bytes": 916,
       "status": "c",
       "source": "src/vs_recorder_app.c"
     },
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "vs_recorder_app_2.o",
-      "bytes": 94,
-      "status": "c",
-      "source": "src/vs_recorder_app_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "vs_recorder_menu_app.o",
-      "bytes": 356,
+      "bytes": 586,
       "status": "c",
       "source": "src/vs_recorder_menu_app.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "vs_recorder_playback.o",
-      "bytes": 472,
-      "status": "c",
-      "source": "src/vs_recorder_playback.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "vs_recorder_screen_table.o",
-      "bytes": 136,
-      "status": "c",
-      "source": "src/vs_recorder_screen_table.c"
     },
     {
       "cpu": "ARM9",

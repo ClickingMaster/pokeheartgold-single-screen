@@ -534,10 +534,10 @@
 .public FieldSystem_BeginCelebiTimeTravelCutsceneTask
 .public FieldSystem_BeginSinjohCutsceneTask
 .public FieldSystem_BeginSinjohGetEggCutsceneTask
-.public ov02_02253134
-.public ov02_0225316C
-.public ov02_02253188
-.public ov02_022531B4
+.public FashionCase_GiftAccessoriesFull
+.public FashionCase_GetRandomGiftAccessory
+.public FashionCase_HasAllBackdrops
+.public FashionCase_GetRandomMissingBackdrop
 .public BugContest_GetEncounterSlot
 .public FieldMoveCutIn_StartFlyWithObject
 .public FieldSystem_GetSafariAreaIndex

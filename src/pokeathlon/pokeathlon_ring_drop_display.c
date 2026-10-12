@@ -57,7 +57,7 @@ void PokeathlonCourseMonObject_SetDrawFlag(void *object, int a1);
 void PokeathlonCourseMonObject_SetDrawPriority(void *object, int priority);
 void PokeathlonCourseMonObject_SetAnimState(void *object, int anim);
 void PokeathlonCourseMonObject_SetAnim(void *object, int anim);
-void ov96_021EAF60(void *monObjects, u8 index, int a2, u16 *palette);
+void PokeathlonCourseMonObjects_SetPalette(void *monObjects, u8 index, int a2, u16 *palette);
 void PokeathlonCourseObject_SetCenterPosition(void *object, int x, int y, int a3);
 void PokeathlonCourseObject_CenterToGround(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
 void PokeathlonCourseObject_SetScale(void *object, f32 scaleX, f32 scaleY);
@@ -484,9 +484,9 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
         mon->attacker = packet->attacker;
         PokeathlonCourseMonObject_SetAnimState(monObject, packet->direction + 1);
         if (packet->state == 4 && mon->state != 4) {
-            ov96_021EAF60(ringDrop->monObjects, objectIndex, 1, mon->palettes[team][1]);
+            PokeathlonCourseMonObjects_SetPalette(ringDrop->monObjects, objectIndex, 1, mon->palettes[team][1]);
         } else if (mon->state == 4 && packet->state != 4) {
-            ov96_021EAF60(ringDrop->monObjects, objectIndex, 1, mon->palettes[team][0]);
+            PokeathlonCourseMonObjects_SetPalette(ringDrop->monObjects, objectIndex, 1, mon->palettes[team][0]);
         }
         if (packet->state == 5 && mon->state != 5) {
             if (participant == ov96_021E5F24(course)) {

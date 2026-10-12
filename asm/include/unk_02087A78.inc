@@ -36,7 +36,7 @@
 .public VsRecorderApp_SetResult
 .public VsRecorderApp_GetTemplate
 .public sub_02087E1C
-.public sub_02087FF8
+.public VsRecorderApp_GetStartMenu
 .public LoadOVY38
 .public UnloadOVY38
 .public MI_CpuFill8
@@ -59,12 +59,12 @@
 	.public VsRecorderApp_Exit
 	.public VsRecorderApp_RunMenu
 	.public VsRecorderApp_RunPlayback
-	.public sub_02087E34
+	.public VsRecorderApp_IsFrontierBrainClass
 	.public gOverlayTemplate_VsRecorderAppMode6
 	.public gOverlayTemplate_VsRecorderAppMode5
 	.public gOverlayTemplate_VsRecorderAppMode4
 	.public gOverlayTemplate_VsRecorderAppMode3
 	.public gOverlayTemplate_VsRecorderAppMode2
 	.public gOverlayTemplate_VsRecorderAppMode1
-	.public _021028A0
+	.public gFrontierBrainTrainerClasses
 	.public gVsRecorderAppTemplates

@@ -45,9 +45,9 @@ typedef struct ElevatorAnim {
 } ElevatorAnim;
 
 // Poke Ball positions on the healing machine, relative to it (x, y and z of one VecFx32 per ball; asm data)
-extern const VecFx32 ov02_02253D90[];
-extern const VecFx32 ov02_02253D94[];
-extern const VecFx32 ov02_02253D98[];
+extern const VecFx32 sHealingMachineBallOffsets[];
+extern const VecFx32 sHealingMachineBallOffsetsY[];
+extern const VecFx32 sHealingMachineBallOffsetsZ[];
 // area_data.c; not declared in field/area_data.h while overlay 2's private headers declare it with other types
 NNSG3dResFileHeader **AreaDataManager_GetMapPropModel(u32 mapPropId, AreaDataManager *areaDataManager);
 
@@ -97,9 +97,9 @@ BOOL PokecenterAnimRun(TaskManager *taskManager) {
         break;
     case 1: {
         VecFx32 rotation = { 0 };
-        pos.x = anim->machinePos.x + ov02_02253D90[anim->ballIndex].x;
-        pos.y = anim->machinePos.y + ov02_02253D94[anim->ballIndex].x;
-        pos.z = anim->machinePos.z + ov02_02253D98[anim->ballIndex].x;
+        pos.x = anim->machinePos.x + sHealingMachineBallOffsets[anim->ballIndex].x;
+        pos.y = anim->machinePos.y + sHealingMachineBallOffsetsY[anim->ballIndex].x;
+        pos.z = anim->machinePos.z + sHealingMachineBallOffsetsZ[anim->ballIndex].x;
         PlaySE(SEQ_SE_DP_BOWA);
         anim->ballProps[anim->ballIndex] = MapPropManager_LoadOne(fieldSystem->mapPropManager, MAP_PROP_HEALING_POKE_BALL, &pos, &rotation, fieldSystem->mapPropAnimationManager);
         anim->state++;

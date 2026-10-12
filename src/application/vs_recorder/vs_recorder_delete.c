@@ -16,7 +16,7 @@
 #include "text.h"
 #include "touchscreen.h"
 
-// YES / NO of the delete prompt (asm/to91_w41503_battle_names_anchor.s)
+// YES / NO of the delete prompt (asm/vs_recorder_data.s)
 extern const TouchscreenHitbox sVsRecorderDeleteYesHitbox;
 extern const TouchscreenHitbox sVsRecorderDeleteNoHitbox;
 

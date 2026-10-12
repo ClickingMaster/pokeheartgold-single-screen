@@ -16,9 +16,9 @@
 	.public gNatureStatMods
 
 	.text
-	.public sub_02087FD4
-	.public sub_02087FF8
-	.public sub_02088030
+	.public VsRecorderApp_GetRootMenu
+	.public VsRecorderApp_GetStartMenu
+	.public VsRecorderApp_CountMenuChoices
 	.rodata
 
 _021028D4:

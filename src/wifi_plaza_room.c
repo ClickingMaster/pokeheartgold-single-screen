@@ -28,7 +28,7 @@
 // unk_02037C94.c (no header declares it)
 BOOL CommState_HasPlazaLobbyFailed(void);
 
-// rodata of this overlay (asm/to90_extra2491_anchor.s)
+// rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const u8 sWiFiPlazaListArrowY[2];
 extern const u32 sWiFiPlazaRoomMsgBanks[4];
 extern const GraphicsModes sWiFiPlazaRoomGraphicsModes;

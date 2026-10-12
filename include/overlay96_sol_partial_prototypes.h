@@ -88,7 +88,7 @@ u32 PokeathlonCourseCmd_ProfilesSize(void);
 void *PokeathlonCourseCmd_GetEventDataBuffer(int unused, void *course);
 void *PokeathlonCourseCmd_GetResultsBuffer(int unused, void *course);
 void PokeathlonCourseMonObject_GetPosition(u8 *p, u32 *a, u32 *b);
-void ov96_021EAF60(void *owner, u8 index, u32 screen, void *palette);
+void PokeathlonCourseMonObjects_SetPalette(void *owner, u8 index, u32 screen, void *palette);
 void PokeathlonCourseObjects_ShiftLargeUp(u8 *p);
 void PokeathlonCourseSpritePoolSprite_SetAnim(void **p, int v);
 BOOL PokeathlonCourseSpritePoolSprite_TryChangeAnim(void **p, int v);

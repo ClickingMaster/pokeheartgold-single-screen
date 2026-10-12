@@ -19,7 +19,7 @@ void CommState_EndPlazaMatch(void);
 s32 CommState_GetPlazaMatchStatus(void);
 void CommState_SetPlazaLinkMode(void);
 
-// rodata of this overlay (asm/to90_extra2491_anchor.s)
+// rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const u8 sWiFiPlazaGameStatusHeights[2];
 extern const ListMenuTemplate sWiFiPlazaGameEntryMenuTemplate;
 

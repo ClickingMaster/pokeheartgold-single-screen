@@ -77,9 +77,9 @@ void PokeathlonCourseMonObject_SetAffineOverwriteMode(void *object, int mode);
 void PokeathlonCourseMonObject_SetAffineMatrix(void *object, VecFx32 *matrix);
 void PokeathlonCourseMonObject_SetAnimState(void *object, int state);
 void PokeathlonCourseMonObject_Move(void *object, int dx, int dy, int anim, int a4);
-void ov96_021EAF60(void *objects, u8 index, int a2, void *palette);
+void PokeathlonCourseMonObjects_SetPalette(void *objects, u8 index, int a2, void *palette);
 void PokeathlonEvent_CalcPoints(void *scoreList, int mode);
-void ov96_021F3EC0(PokeathlonCourseSpritePool *pool, PokeathlonCirclePushDisplay *display);
+void PokeathlonCirclePushDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonCirclePushDisplay *display);
 int ov96_021E6104(); // called with and without an argument
 Sprite **ov96_021E6290(PokeathlonCourseData *course, int a1, void *resources, PokeathlonCourseSpritePool *pool);
 
@@ -245,7 +245,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         }
         circlePush->markerSprite = *ov96_021E6290(course, 0, circlePush->spriteResources, circlePush->spritePool);
         Sprite_SetDrawPriority(circlePush->markerSprite, 1);
-        ov96_021F3EC0(circlePush->spritePool, circlePush->display);
+        PokeathlonCirclePushDisplay_CreatePicSprites(circlePush->spritePool, circlePush->display);
         PokeathlonCirclePushDisplay_CreateSprites(circlePush->spritePool, circlePush->display);
         PokeathlonCourse_IncrementField1ED(course);
         break;
@@ -1080,10 +1080,10 @@ void PokeathlonCirclePush_UpdateScreen(PokeathlonCourseData *course) {
             PokeathlonCourseMonObject_SetDrawFlag(mon->object, 1);
             if (state == 2 && circlePush->grayed[i] == 0) {
                 circlePush->grayed[i] = 1;
-                ov96_021EAF60(circlePush->objects, i, 1, mon->grayPalette);
+                PokeathlonCourseMonObjects_SetPalette(circlePush->objects, i, 1, mon->grayPalette);
             } else if (state == 1 && circlePush->grayed[i] == 1) {
                 circlePush->grayed[i] = 0;
-                ov96_021EAF60(circlePush->objects, i, 1, mon->palette);
+                PokeathlonCourseMonObjects_SetPalette(circlePush->objects, i, 1, mon->palette);
             }
             outOfRing[i] = 0;
             x = packet->x[i];

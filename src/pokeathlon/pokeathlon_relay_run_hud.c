@@ -297,7 +297,7 @@ void PokeathlonRelayRunHud_CreateSprites(PokeathlonRelayRunHud *hud, void *sprit
     platePosition.x = FX32_CONST(128);
     platePosition.y = FX32_CONST(568);
     PokeathlonCourseSpritePoolSprite_SetPosition(plate, &platePosition);
-    ov96_02200C8C(spritePool, hud);
+    PokeathlonRelayRunHud_CreatePicFrames(spritePool, hud);
     for (j = 0; j < 6; j++) {
         hud->timerSprites[j] = ov96_021EA2C4(monResources, PokeathlonCourseSpritePool_GetSpriteList(spritePool), 3, hud->heapId);
         Sprite_SetDrawFlag(hud->timerSprites[j], TRUE);

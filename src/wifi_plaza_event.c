@@ -16,7 +16,7 @@
 // sound_playback.c (no header declares it)
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 
-// rodata of this overlay (asm/to90_extra2491_anchor.s)
+// rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const u16 sWiFiPlazaLight1Colors[];
 extern const u16 sWiFiPlazaLightColorSets[][5];
 extern void (*const ov49_0226A84C[])(UnkStruct_ov49_02268A0C *effect, int arg);

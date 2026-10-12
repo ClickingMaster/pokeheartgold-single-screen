@@ -38,7 +38,7 @@ void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *model, u32 alpha);
 void NNS_G3dAnmObjDisableID(NNSG3dAnmObj *anmObj, int id);
 void NNS_G3dReleaseMdlSet(NNSG3dResMdlSet *mdlSet);
 
-// rodata of this overlay (asm/to90_extra2491_anchor.s)
+// rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const s32 sWiFiPlazaPropTagShiftX[2];
 extern const WiFiPlazaModelsOffset ov49_02269A7C[]; // x / z cell offsets in front of a mover,
 extern const WiFiPlazaModelsOffset ov49_02269A7E[]; // the z column labelled separately

@@ -47,7 +47,7 @@ void PokeathlonCourseMonObject_SetDrawFlag(void *object, int draw);
 void PokeathlonCourseMonObject_SetAnimState(void *object, int state);
 void PokeathlonCourseMonObject_SetAnim(void *object, int anim);
 BOOL PokeathlonCourseMonObject_IsAnimated(void *object);
-void ov96_021EAF60(void *objects, u8 index, int a2, void *palette);
+void PokeathlonCourseMonObjects_SetPalette(void *objects, u8 index, int a2, void *palette);
 
 extern const GraphicsBanks ov96_0221B030;
 extern const s32 ov96_0221B088[];
@@ -844,7 +844,7 @@ void PokeathlonCourseCeremony_LoadWinnerMonPics(PokeathlonCourseData *course, in
         PokeathlonCourse_LoadMonPicWithPalette(ceremony->monPicSprites[i], &info, TRUE, FALSE, ceremony->heapId, FALSE);
         GetMonSpriteCharAndPlttNarcIdsEx(&template, info.species, info.gender, 2, info.shiny, info.form, info.personality);
         file = GfGfxLoader_GetPlttData((NarcId) template.narcID, template.palDataID, &palette, ceremony->heapId);
-        ov96_021EAF60(ceremony->objects, i * 3 + 1, 1, palette->pRawData);
+        PokeathlonCourseMonObjects_SetPalette(ceremony->objects, i * 3 + 1, 1, palette->pRawData);
         Heap_Free(file);
     }
 }
