@@ -132,7 +132,7 @@ typedef struct MapLoadPair {
 } MapLoadPair;
 
 void ov01_021FB354(void *a0);
-void ov01_021FACB4(void *a0);
+void MapLoadBuffers_Free(void *a0);
 int ov01_021F5BF0(MapLoadManager *mapLoadManager);
 void ov01_021F5568(int idx, MapLoadManager *mapLoadManager);
 void ov01_021F474C(MapLoadManager *mapLoadManager, int idx);
@@ -153,8 +153,8 @@ void *ov01_021FB254(void);
 void ov01_021FB360(void *bufs);
 int ov01_021FBA00(void *areaDataManager);
 
-void ov01_021FACE4(u32 index, void *buffers, void **out);
-void ov01_021FACEC(u32 index, void *buffers, void **out);
+void MapLoadBuffers_GetPrimary(u32 index, void *buffers, void **out);
+void MapLoadBuffers_GetSecondary(u32 index, void *buffers, void **out);
 
 typedef struct MapLoadIds {
     int unk00;

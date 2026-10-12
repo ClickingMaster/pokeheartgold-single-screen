@@ -39,7 +39,7 @@ BOOL sub_02057C94(void);
 void sub_020376E0(int, void *);
 BOOL CommPlayerManager_GetMoveTimer(int);
 void sub_02057F58(void);
-void sub_02059538(FieldSystem *, void (*)(int, Party *));
+void Colosseum_StartEntry(FieldSystem *, void (*)(int, Party *));
 BOOL sub_02036010(void);
 void sub_02035FD8(void);
 void sub_02035FE4(void);

@@ -7,7 +7,7 @@ extern int MapMatrix_GetMatrixId(void *);
 extern int MapMatrix_GetMapAltitude(void *, int, u16, u16, int);
 void ov01_021F5FB8(int position, int width, void *matrix, int *vector);
 extern int MapMatrix_GetHeight(void *);
-extern void *ov01_021FAC44(int);
+extern void *MapLoadBuffers_New(int);
 extern void ov01_021F5F34(void *);
 extern void GF_AssertFail(void);
 extern const u32 ov01_02206BC0[];
@@ -47,7 +47,7 @@ void *MapLoadManager_New(void *matrix, void *field, void *arg2, void *arg3, void
         GF_AssertFail();
     }
     W(manager, 0x104) = (u32)arg6;
-    W(manager, 0) = (u32)ov01_021FAC44(flag);
+    W(manager, 0) = (u32)MapLoadBuffers_New(flag);
     W(manager, 0xb8) = (u32)field;
     W(manager, 0xc0) = (u32)matrix;
     W(manager, 0xbc) = (u32)arg2;

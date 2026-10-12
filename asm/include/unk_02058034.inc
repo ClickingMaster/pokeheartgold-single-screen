@@ -67,7 +67,7 @@
 .public CommClubLink_SetCardReceived
 .public CommClubLink_GetCard
 .public sub_02058AA0
-.public sub_02059538
+.public Colosseum_StartEntry
 .public TrainerCardData_Build
 .public SaveArray_Party_Alloc
 .public Party_Copy

@@ -2,8 +2,8 @@
 	.include "unk_02058AEC.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_020597A8
-sub_020597A8: ; 0x020597A8
+	thumb_func_start Colosseum_SetOpponentParty
+Colosseum_SetOpponentParty: ; 0x020597A8
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	bl sub_02070D90
@@ -24,4 +24,4 @@ _020597BC:
 	blt _020597BC
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end sub_020597A8
+	thumb_func_end Colosseum_SetOpponentParty

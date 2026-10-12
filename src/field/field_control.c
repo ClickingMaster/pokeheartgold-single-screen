@@ -356,7 +356,7 @@ BOOL FieldInput_Process_Colosseum(FieldInput *input, FieldSystem *fieldSystem) {
     }
 
     if (input->interact) {
-        sub_02059D44(fieldSystem);
+        Colosseum_ShowOpponentTrainerCard(fieldSystem);
         return TRUE;
     }
 

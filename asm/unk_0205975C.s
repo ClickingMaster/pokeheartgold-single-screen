@@ -2,8 +2,8 @@
 	.include "unk_02058AEC.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0205975C
-sub_0205975C: ; 0x0205975C
+	thumb_func_start Colosseum_SendMixBattleChoice
+Colosseum_SendMixBattleChoice: ; 0x0205975C
 	push {r4, lr}
 	add r4, r0, #0
 	add r0, #0x86
@@ -35,4 +35,4 @@ _02059782:
 _02059794:
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end sub_0205975C
+	thumb_func_end Colosseum_SendMixBattleChoice

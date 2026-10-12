@@ -31,7 +31,7 @@ void ov01_021F676C(void *a0, void *a1, void *a2, void *a3, void *a4, void *a5, v
 
 void MapLoadManager_FreeNARCAndLoadedMapBuffers(MapLoadManager *mapLoadManager) {
     NARC_Delete(mapLoadManager->narc);
-    ov01_021FACB4(mapLoadManager->slots[0].unk00);
+    MapLoadBuffers_Free(mapLoadManager->slots[0].unk00);
     Heap_Free(mapLoadManager);
 }
 

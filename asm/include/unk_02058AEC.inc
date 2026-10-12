@@ -93,12 +93,12 @@
 .public sub_02057E08
 .public sub_02057F70
 .public CommClubLink_GetCard
-.public sub_02059538
-.public sub_02059AE4
-.public sub_02059B08
-.public sub_02059B18
-.public sub_02059B34
-.public sub_02059D44
+.public Colosseum_StartEntry
+.public Colosseum_RecvMixBattleMons
+.public Colosseum_GetMixBattleMonsSize
+.public Colosseum_GetMixBattleMonsBuffer
+.public Colosseum_RecvMixBattleChoice
+.public Colosseum_ShowOpponentTrainerCard
 .public sub_02059DB0
 .public sub_02059E04
 .public sub_0205A1F0
@@ -150,30 +150,30 @@
 .public gSystem
 .public FieldMap_FadeScreen
 
-	.public sub_02058AEC
-	.public sub_02058B84
-	.public sub_02058C80
-	.public sub_02058CD8
-	.public sub_02058D04
-	.public sub_02058D24
-	.public sub_02058D4C
-	.public sub_02059478
-	.public sub_020594C8
-	.public sub_02059650
-	.public sub_0205969C
-	.public sub_020596A8
-	.public sub_020596F0
-	.public sub_02059738
-	.public sub_02059748
-	.public sub_0205975C
-	.public sub_02059798
-	.public sub_020597A8
-	.public sub_020597D4
-	.public sub_02059820
-	.public sub_0205993C
-	.public sub_02059A08
-	.public sub_02059AD8
-	.public sub_02059B64
+	.public Colosseum_OpenSummary
+	.public Colosseum_OpenPartyMenu
+	.public Colosseum_FinishPartyMenu
+	.public Colosseum_FinishSummary
+	.public Colosseum_WaitFieldResumed
+	.public Colosseum_AnyPlayerCancelled
+	.public Task_ColosseumEntry
+	.public Colosseum_PrintMessage
+	.public Colosseum_RemoveWindows
+	.public Colosseum_FreeEntry
+	.public Colosseum_GetEntry
+	.public Colosseum_PackMixBattleMons
+	.public Colosseum_SendMixBattleMons
+	.public Colosseum_MixBattleMonsExchanged
+	.public Colosseum_OpponentIsReady
+	.public Colosseum_SendMixBattleChoice
+	.public Colosseum_MixBattleChoicesExchanged
+	.public Colosseum_SetOpponentParty
+	.public Colosseum_ExchangeMixBattleMons
+	.public Colosseum_ShowOpponentMons
+	.public Colosseum_ShowChoiceMenu
+	.public Colosseum_HandleMenuInput
+	.public Colosseum_CloseMenu
+	.public Task_ColosseumTrainerCard
 	.public sub_02059E1C
 	.public sub_02059E88
 	.public sub_02059EBC

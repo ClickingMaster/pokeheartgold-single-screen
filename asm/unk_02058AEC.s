@@ -21,8 +21,8 @@ _020FC7CC:
 
 	.text
 
-	thumb_func_start sub_02058AEC
-sub_02058AEC: ; 0x02058AEC
+	thumb_func_start Colosseum_OpenSummary
+Colosseum_OpenSummary: ; 0x02058AEC
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
 	add r7, r0, #0
@@ -85,9 +85,9 @@ sub_02058AEC: ; 0x02058AEC
 	nop
 _02058B7C: .word _020FC7CC
 _02058B80: .word gOverlayTemplate_PokemonSummary
-	thumb_func_end sub_02058AEC
-	thumb_func_start sub_02058B84
-sub_02058B84: ; 0x02058B84
+	thumb_func_end Colosseum_OpenSummary
+	thumb_func_start Colosseum_OpenPartyMenu
+Colosseum_OpenPartyMenu: ; 0x02058B84
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r0, r1, #0
@@ -210,4 +210,4 @@ _02058C5C:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _02058C7C: .word gOverlayTemplate_PartyMenu
-	thumb_func_end sub_02058B84
+	thumb_func_end Colosseum_OpenPartyMenu

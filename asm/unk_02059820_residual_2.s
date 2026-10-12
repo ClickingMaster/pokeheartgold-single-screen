@@ -2,9 +2,9 @@
 	.include "unk_02058AEC.inc"
 	.include "global.inc"
 	.text
-	.public sub_0205993C
-	thumb_func_start sub_02059A08
-sub_02059A08: ; 0x02059A08
+	.public Colosseum_ShowChoiceMenu
+	thumb_func_start Colosseum_HandleMenuInput
+Colosseum_HandleMenuInput: ; 0x02059A08
 	push {r4, lr}
 	sub sp, #8
 	add r4, r0, #0
@@ -110,4 +110,4 @@ _02059A94:
 	nop
 _02059AD0: .word gSystem
 _02059AD4: .word 0x000005DC
-	thumb_func_end sub_02059A08
+	thumb_func_end Colosseum_HandleMenuInput

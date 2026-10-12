@@ -3,7 +3,10 @@
 
 #include "global.h"
 
+#include "application/dress_up/accessory_portrait.h"
+
 #include "bg_window.h"
+#include "fashion_case.h"
 #include "filesystem.h"
 #include "font_sprite.h"
 #include "gf_3d_vramman.h"
@@ -40,6 +43,7 @@ String *FrontierCard_GetGreeting(FrontierCard *card, MailMessage *message, enum 
 u32 FrontierCard_GetBirthdayMonth(FrontierCard *card);
 u32 FrontierCard_GetAvatar(FrontierCard *card);
 FrontierCard *FrontierCard_New(enum HeapID heapID);
+void FrontierCard_Delete(FrontierCard *card);
 void FrontierCard_InitFromSave(FrontierCard *card, SaveData *saveData);
 
 // battle_record.c (not in battle_recording.h)
@@ -49,6 +53,11 @@ void *BattleRecord_CopyHeader(enum HeapID heapID);
 FrontierCard *BattleRecord_CopyProfile(enum HeapID heapID);
 void BattleRecord_Import(void *profile, void *summary, void *data, void *battle, SaveData *save);
 u64 BattleRecordHeader_GetField(void *summary, int field, int index);
+
+// save_fashion.c (not in fashion_case.h)
+SaveFashionDataSub *FashionEntry_New(enum HeapID heapID);
+void FashionEntry_GetMonSecondText(SaveFashionDataSub *entry, String *string);
+u16 FashionEntry_GetMailMessageWord(SaveFashionDataSub *entry);
 
 // one step of a screen; TRUE when the screen is done
 typedef BOOL (*VsRecorderScreenFunc)(VsRecorderWork *work);
@@ -290,6 +299,45 @@ typedef struct VsRecorderFrontierRecord {
     int evb;
 } VsRecorderFrontierRecord; // size 0xDC
 
+// a dress-up photo from the server: the sender's profile and the photo
+typedef struct VsRecorderDressUpDownload {
+    u8 header[0x80]; // GlobalTerminalNet_CopyRequestHeader source
+    GlobalTerminalNetDressUpForm form;
+} VsRecorderDressUpDownload;
+
+// VsRecorderWork.screenWork of the dress-up photo screens (send the own photo / view photos of a species)
+typedef struct VsRecorderDressUp {
+    int eva; // top screen blend
+    int evb;
+    int fade;
+    BOOL showProfile; // view: 0 the photo, 1 the sender's profile
+    Window caption;   // the Pokemon's name and the phrase, under the photo
+    u8 unk_20[0xB0];
+    Window windows[9]; // species groups; [0] is the photo / profile toggle while a photo is shown
+    u8 unk_160[0x38];
+    VsRecorderTextSprite exitButton;
+    VsRecorderTextSprite sendButton;
+    TouchHitboxController *hitboxes; // species groups
+    int speciesCount;                // seen species of the chosen group
+    int listSize;                    // whole species list
+    u16 *speciesList;                // seen species of the group first
+    MsgData *speciesNames;
+    BOOL categoryChosen;
+    VsRecorderListEntry *entries; // species list window
+    VsRecorderListConfig listConfig;
+    AccessoryPortraitConfig portraitConfig;
+    AccessoryPortrait *portrait;
+    SaveFashionDataSub *ownPhoto;
+    int unk_230;
+    int photoIndex;
+    SaveFashionDataSub *photo; // unpacked downloaded photo
+    VsRecorderDressUpDownload *downloads[5];
+    VsRecorderProfile profile;
+    FrontierCard *uploadCard;
+    int species; // chosen species
+    int downloadCount;
+} VsRecorderDressUp; // size 0x2E8
+
 struct VsRecorderWork {
     u32 mode;                                // 0x0000, 0 VS Recorder item, 1-6 Global Terminal
     u32 subState;                            // 0x0004, index into the screen's function table
@@ -313,7 +361,10 @@ struct VsRecorderWork {
     u8 colorScheme;                          // 0x005C, Save_Misc
     GF3DVramMan *vramMan;                    // 0x0060
     PokepicManager *pokepicManager;          // 0x0064
-    u8 unk_0068[0x504 - 0x68];               // 0x0068, starts with the OVY_39 client work
+    u8 unk_0068[0x47C - 0x68];               // 0x0068, starts with the OVY_39 client work
+    VsRecorderTouchScroll touchScroll;       // 0x047C
+    VsRecorderListWindow listWindow;         // 0x049C
+    u8 unk_04EC[0x504 - 0x4EC];              // 0x04EC
     VsRecorderMessageScreen messageScreen;   // 0x0504
     u32 unk_0520;                            // 0x0520
     u32 vblankBusy;                          // 0x0524
@@ -596,7 +647,45 @@ void VsRecorder_PlaceFrontierSprites(VsRecorderWork *work);
 BOOL VsRecorder_FrontierEnter(VsRecorderWork *work);
 BOOL VsRecorder_FrontierMain(VsRecorderWork *work);
 
+// vs_recorder_dress_up.c
+BOOL VsRecorder_FrontierExit(VsRecorderWork *work);
+BOOL VsRecorder_DressUpInit(VsRecorderWork *work);
+BOOL VsRecorder_DressUpEnter(VsRecorderWork *work);
+BOOL VsRecorder_DressUpSendShow(VsRecorderWork *work);
+BOOL VsRecorder_DressUpSendMain(VsRecorderWork *work);
+BOOL VsRecorder_DressUpSendUpload(VsRecorderWork *work);
+BOOL VsRecorder_DressUpSendExit(VsRecorderWork *work);
+BOOL VsRecorder_DressUpViewInit(VsRecorderWork *work);
+BOOL VsRecorder_DressUpViewSelectCategory(VsRecorderWork *work);
+BOOL VsRecorder_DressUpViewSelectSpecies(VsRecorderWork *work);
+BOOL VsRecorder_DressUpViewExit(VsRecorderWork *work);
+BOOL VsRecorder_DressUpViewDownload(VsRecorderWork *work);
+BOOL VsRecorder_DressUpViewShowPhoto(VsRecorderWork *work);
+BOOL VsRecorder_DressUpViewMain(VsRecorderWork *work);
+BOOL VsRecorder_DressUpViewClosePhoto(VsRecorderWork *work);
+BOOL VsRecorder_DressUpViewToggleProfile(VsRecorderWork *work);
+BOOL VsRecorder_DressUpViewChangePhoto(VsRecorderWork *work);
+void VsRecorder_RemoveDressUpToggleWindow(VsRecorderWork *work);
+void VsRecorder_PrintDressUpToggleLabel(VsRecorderWork *work, u32 msgId);
+void VsRecorder_CreateDressUpToggleWindow(VsRecorderWork *work);
+void VsRecorder_DressUpVBlankCB(void *data);
+void VsRecorder_SetPhotoWindow(void);
+void VsRecorder_DisablePhotoWindow(void);
+void VsRecorder_SetDressUpSendButtonHidden(VsRecorderWork *work, BOOL hidden);
+void VsRecorder_CreateDressUpButtons(VsRecorderWork *work);
+void VsRecorder_FreeDressUpButtons(VsRecorderWork *work);
+void VsRecorder_PrintOwnPhotoCaption(VsRecorderWork *work);
+void VsRecorder_PrintPhotoCaption(VsRecorderWork *work, int index);
+BOOL VsRecorder_DressUpCategoryHasSeen(VsRecorderWork *work, int category);
+void VsRecorder_BuildDressUpSpeciesList(VsRecorderWork *work, int category);
+void VsRecorder_FreeDressUpSpeciesList(VsRecorderWork *work);
+void VsRecorder_OnDressUpCategoryTouch(u32 index, u32 event, void *arg);
+void VsRecorder_CreateDressUpCategoryWindows(VsRecorderWork *work);
+void VsRecorder_RemoveDressUpCategoryWindows(VsRecorderWork *work);
+void VsRecorder_RemovePhotoCaption(VsRecorderWork *work);
+
 // other OVY_40 modules (still address-named)
+BOOL VsRecorder_IsNetIdle(VsRecorderWork *work);
 GlobalTerminalNet *VsRecorder_GetNet(VsRecorderWork *work);
 u32 VsRecorder_WriteRecordAsync(SaveData *save, u32 a1, u32 a2, u16 *a3, void *a4);
 int VsRecorder_WriteRecord(SaveData *save, int index);

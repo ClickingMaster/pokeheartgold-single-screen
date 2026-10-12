@@ -3533,41 +3533,41 @@
 	.public VsRecorder_PlaceFrontierSprites
 	.public VsRecorder_FrontierEnter
 	.public VsRecorder_FrontierMain
-	.public ov40_02233F28
-	.public ov40_0223414C
-	.public ov40_022341E0
-	.public ov40_02234330
-	.public ov40_02234470
-	.public ov40_022344D8
-	.public ov40_0223480C
-	.public ov40_02234A14
-	.public ov40_02234A38
-	.public ov40_02234BBC
-	.public ov40_02234D94
-	.public ov40_02234F98
-	.public ov40_0223512C
-	.public ov40_0223527C
-	.public ov40_0223534C
-	.public ov40_02235434
-	.public ov40_02235644
-	.public ov40_0223584C
-	.public ov40_02235868
-	.public ov40_022358C0
-	.public ov40_02235900
-	.public ov40_02235940
-	.public ov40_02235994
-	.public ov40_022359B4
-	.public ov40_02235A30
-	.public ov40_02235B10
-	.public ov40_02235B4C
-	.public ov40_02235C7C
-	.public ov40_02235DAC
-	.public ov40_02235E34
-	.public ov40_02235FA0
-	.public ov40_02235FD0
-	.public ov40_02235FFC
-	.public ov40_0223610C
-	.public ov40_02236130
+	.public VsRecorder_FrontierExit
+	.public VsRecorder_DressUpInit
+	.public VsRecorder_DressUpEnter
+	.public VsRecorder_DressUpSendShow
+	.public VsRecorder_DressUpSendMain
+	.public VsRecorder_DressUpSendUpload
+	.public VsRecorder_DressUpSendExit
+	.public VsRecorder_DressUpViewInit
+	.public VsRecorder_DressUpViewSelectCategory
+	.public VsRecorder_DressUpViewSelectSpecies
+	.public VsRecorder_DressUpViewExit
+	.public VsRecorder_DressUpViewDownload
+	.public VsRecorder_DressUpViewShowPhoto
+	.public VsRecorder_DressUpViewMain
+	.public VsRecorder_DressUpViewClosePhoto
+	.public VsRecorder_DressUpViewToggleProfile
+	.public VsRecorder_DressUpViewChangePhoto
+	.public VsRecorder_RemoveDressUpToggleWindow
+	.public VsRecorder_PrintDressUpToggleLabel
+	.public VsRecorder_CreateDressUpToggleWindow
+	.public VsRecorder_DressUpVBlankCB
+	.public VsRecorder_SetPhotoWindow
+	.public VsRecorder_DisablePhotoWindow
+	.public VsRecorder_SetDressUpSendButtonHidden
+	.public VsRecorder_CreateDressUpButtons
+	.public VsRecorder_FreeDressUpButtons
+	.public VsRecorder_PrintOwnPhotoCaption
+	.public VsRecorder_PrintPhotoCaption
+	.public VsRecorder_DressUpCategoryHasSeen
+	.public VsRecorder_BuildDressUpSpeciesList
+	.public VsRecorder_FreeDressUpSpeciesList
+	.public VsRecorder_OnDressUpCategoryTouch
+	.public VsRecorder_CreateDressUpCategoryWindows
+	.public VsRecorder_RemoveDressUpCategoryWindows
+	.public VsRecorder_RemovePhotoCaption
 	.public ov40_02236158
 	.public ov40_0223615C
 	.public ov40_02236184

@@ -383,7 +383,6 @@ $(BUILD_DIR)/src/wifi_setup_worker.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/src/op90_overlay_96_residual_70_tail_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/wifi_setup_connect.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/application/footprint_stamp_texture.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_overlay_80_022310C4_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/NitroSystem/src/g2d_renderer_mtx_cache.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/libCPS/src/cps_reset.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/libCPS/src/cps_ip_frag.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))

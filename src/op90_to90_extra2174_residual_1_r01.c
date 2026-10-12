@@ -10,8 +10,8 @@ void ov01_021F488C(MapLoadManager *mapLoadManager, int a1) {
         MI_CpuFill8(chunk, 0, sizeof(MapLoadedChunk));
         mapLoadManager->maps[i] = chunk;
         mapLoadManager->maps[i]->unk864 = 0;
-        ov01_021FACE4(i, mapLoadManager->slots[0].unk00, &mapLoadManager->maps[i]->unk854);
-        ov01_021FACEC(i, mapLoadManager->slots[0].unk00, &mapLoadManager->maps[i]->unk858);
+        MapLoadBuffers_GetPrimary(i, mapLoadManager->slots[0].unk00, &mapLoadManager->maps[i]->unk854);
+        MapLoadBuffers_GetSecondary(i, mapLoadManager->slots[0].unk00, &mapLoadManager->maps[i]->unk858);
         mapLoadManager->maps[i]->unk868 = MapPropManager_New(HEAP_ID_FIELD1, mapLoadManager->unkBC);
         mapLoadManager->maps[i]->unk860 = -1;
         MI_CpuFillFast(mapLoadManager->maps[i], -1, 0x800);

@@ -3,25 +3,24 @@
 
 #include "frontier/battle_castle_data.h"
 #include "frontier/battle_factory_data.h"
+#include "frontier/battle_hall_data.h"
 #include "frontier/overlay_80_022340E8.h"
 
-// Link messages of the facilities' script side (frontier_link_messages.c). The Hall work struct is a view of the
-// Battle Hall's script work, defined in frontier_link_messages.c.
-typedef struct HallLinkWork HallLinkWork;
+// Link messages of the facilities' script side (frontier_link_messages.c).
 typedef struct ArcadeMonsMessage ArcadeMonsMessage;
 
-void ov80_0222AEF8(int netId, int size, void *data, HallLinkWork *work);
-BOOL ov80_0222AF10(HallLinkWork *work);
-void ov80_0222AF3C(int netId, int size, void *data, HallLinkWork *work);
-BOOL ov80_0222AF54(HallLinkWork *work);
-void ov80_0222AF84(int netId, int size, const u16 *data, HallLinkWork *work);
-BOOL ov80_0222AFB8(HallLinkWork *work);
-void ov80_0222AFEC(int netId, int size, const u16 *data, HallLinkWork *work);
-BOOL ov80_0222B024(HallLinkWork *work, u16 value);
-void ov80_0222B048(int netId, int size, const u16 *data, HallLinkWork *work);
-BOOL ov80_0222B070(HallLinkWork *work);
-void BattleHallLink_ReceivePartnerMon(int netId, int size, const void *data, HallLinkWork *work);
-void *BattleHallLink_GetRecvMonBuffer(int netId, HallLinkWork *work, int size);
+void ov80_0222AEF8(int netId, int size, void *data, BattleHallData *work);
+BOOL ov80_0222AF10(BattleHallData *work);
+void ov80_0222AF3C(int netId, int size, void *data, BattleHallData *work);
+BOOL BattleHallLink_SendTrainerIds(BattleHallData *work);
+void BattleHallLink_ReceiveTrainerIds(int netId, int size, const u16 *data, BattleHallData *work);
+BOOL BattleHallLink_SendSetIds(BattleHallData *work);
+void BattleHallLink_ReceiveSetIds(int netId, int size, const u16 *data, BattleHallData *work);
+BOOL ov80_0222B024(BattleHallData *work, u16 value);
+void ov80_0222B048(int netId, int size, const u16 *data, BattleHallData *work);
+BOOL BattleHallLink_SendPartyMon(BattleHallData *work);
+void BattleHallLink_ReceivePartnerMon(int netId, int size, const void *data, BattleHallData *work);
+void *BattleHallLink_GetRecvMonBuffer(int netId, BattleHallData *work, int size);
 BOOL ov80_0222B108(BattleFactoryData *work);
 void ov80_0222B140(int netId, int size, const u16 *data, BattleFactoryData *work);
 BOOL BattleFactoryLink_SendTrainerIds(BattleFactoryData *work);

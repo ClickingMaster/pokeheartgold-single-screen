@@ -24,8 +24,8 @@ _02108594:
 	.word BattleFactory_ReceiveSwap, sub_020342B8, 0
 	.word ov80_0222AEF8, sub_020342B8, 0
 	.word ov80_0222AF3C, sub_020342B8, 0
-	.word ov80_0222AF84, sub_020342B8, 0
-	.word ov80_0222AFEC, sub_020342B8, 0
+	.word BattleHallLink_ReceiveTrainerIds, sub_020342B8, 0
+	.word BattleHallLink_ReceiveSetIds, sub_020342B8, 0
 	.word ov80_0222B048, sub_020342B8, 0
 	.word BattleHallLink_ReceivePartnerMon, sub_020342B8, BattleHallLink_GetRecvMonBuffer
 	.word BattleHall_ReceivePing, sub_020342B8, 0

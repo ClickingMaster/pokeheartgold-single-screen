@@ -26,17 +26,17 @@
 	.public VsRecorder_NewMessageFormat
 	.public ov40_0222DD68
 	.public VsRecorder_SanitizeName
-	.public ov40_02235B4C
-	.public ov40_02235C7C
-	.public ov40_02235DAC
-	.public ov40_02235E34
+	.public VsRecorder_PrintOwnPhotoCaption
+	.public VsRecorder_PrintPhotoCaption
+	.public VsRecorder_DressUpCategoryHasSeen
+	.public VsRecorder_BuildDressUpSpeciesList
 	.public ov40_02245CD4
 	.public FashionEntry_GetMonSecondText
 	.public FashionEntry_GetMailMessageWord
 	.text
 
-	thumb_func_start ov40_02235B4C
-ov40_02235B4C: ; 0x02235B4C
+	thumb_func_start VsRecorder_PrintOwnPhotoCaption
+VsRecorder_PrintOwnPhotoCaption: ; 0x02235B4C
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x24
 	add r5, r0, #0
@@ -169,11 +169,11 @@ _02235C72:
 	pop {r4, r5, r6, r7, pc}
 	nop
 _02235C78: .word 0x000F0D00
-	thumb_func_end ov40_02235B4C
+	thumb_func_end VsRecorder_PrintOwnPhotoCaption
 
 
-	thumb_func_start ov40_02235C7C
-ov40_02235C7C: ; 0x02235C7C
+	thumb_func_start VsRecorder_PrintPhotoCaption
+VsRecorder_PrintPhotoCaption: ; 0x02235C7C
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x24
 	add r5, r0, #0
@@ -306,11 +306,11 @@ _02235DA2:
 	pop {r4, r5, r6, r7, pc}
 	nop
 _02235DA8: .word 0x000F0D00
-	thumb_func_end ov40_02235C7C
+	thumb_func_end VsRecorder_PrintPhotoCaption
 
 
-	thumb_func_start ov40_02235DAC
-ov40_02235DAC: ; 0x02235DAC
+	thumb_func_start VsRecorder_DressUpCategoryHasSeen
+VsRecorder_DressUpCategoryHasSeen: ; 0x02235DAC
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	add r5, r0, #0
@@ -379,11 +379,11 @@ _02235E1E:
 	nop
 _02235E2C: .word ov40_02245CD4
 _02235E30: .word 0x0000FFFF
-	thumb_func_end ov40_02235DAC
+	thumb_func_end VsRecorder_DressUpCategoryHasSeen
 
 
-	thumb_func_start ov40_02235E34
-ov40_02235E34: ; 0x02235E34
+	thumb_func_start VsRecorder_BuildDressUpSpeciesList
+VsRecorder_BuildDressUpSpeciesList: ; 0x02235E34
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -568,4 +568,4 @@ _02235F7C:
 	.balign 4, 0
 _02235F98: .word ov40_02245CD4
 _02235F9C: .word 0x0000FFFF
-	thumb_func_end ov40_02235E34
+	thumb_func_end VsRecorder_BuildDressUpSpeciesList

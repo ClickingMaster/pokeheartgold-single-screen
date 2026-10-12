@@ -326,7 +326,7 @@ void sub_020586A0(void) {
             return;
         }
         sub_02057F58();
-        sub_02059538(gCommClubLink->fieldSystem, sub_02058640);
+        Colosseum_StartEntry(gCommClubLink->fieldSystem, sub_02058640);
         CommClubLink_SetState(sub_02058690, 0);
     }
 }

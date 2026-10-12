@@ -61,6 +61,6 @@ void FrontierLinkLobby_Free(FrontierLinkLobby *lobby);
 BOOL FrontierLinkLobby_Send(FrontierLinkLobby *lobby, int kind, u16 a, u16 b);
 void FrontierLinkLobby_RunPartyApp(void *frontierWork, FrontierLinkLobby *lobby, u32 kind);
 
-extern const u8 ov80_0223D4C0[20];
+extern const u8 gBattleHallCellTypes[20];
 
 #endif // POKEHEARTGOLD_FRONTIER_LINK_LOBBY_H

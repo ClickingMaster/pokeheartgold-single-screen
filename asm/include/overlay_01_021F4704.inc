@@ -64,10 +64,10 @@
 .public ov01_021F65E4
 .public ov01_021F65F0
 .public ov01_021F6600
-.public ov01_021FAC44
-.public ov01_021FACB4
-.public ov01_021FACE4
-.public ov01_021FACEC
+.public MapLoadBuffers_New
+.public MapLoadBuffers_Free
+.public MapLoadBuffers_GetPrimary
+.public MapLoadBuffers_GetSecondary
 .public ov01_021FB254
 .public ov01_021FB270
 .public ov01_021FB2E8

@@ -356,23 +356,7 @@ Static main
     Object asm/comm_player_manager_data.o
     Object src/comm_player_sync.o
     Object src/communication_club_link.o
-    Object src/field_object_manager_1.o
-    Object src/field_application_tasks.o
-    Object src/to51_unk_02058D4C.o
-    Object src/field_application_controller_helpers_1.o
-    Object src/field_application_tasks_2.o
-    Object src/to70_unk_020596F0_extra1073_run01.o
-    Object src/field_application_tasks_3.o
-    Object src/r40_unk_0205975C_run1.o
-    Object src/field_application_tasks_4.o
-    Object src/r40_unk_020597A8_run1.o
-    Object src/field_application_tasks_5.o
-    Object src/to90_extra2104_run01.o
-    Object src/list_menu_render_1.o
-    Object src/r40_unk_02059820_residual_2_run1.o
-    Object src/field_application_tasks_6.o
-    Object src/to90_extra2105_run01.o
-    Object src/field_task_launch_1.o
+    Object src/colosseum.o
     Object src/field_application_tasks_7.o
     Object src/r40_unk_02059EBC_run1.o
     Object src/field_application_tasks_8.o
@@ -1651,8 +1635,7 @@ Overlay field
     Object asm/op90_to52_r2_w13_overlay01_r14_residual_anchor.o
     Object src/op90_to52_r2_w13_overlay01_r14_residual_r01.o
     Object src/to52_r2_w13/to52_r2_w13_overlay01_r14_exact.o
-    Object src/slop_small_overlay_01_021FAC44.o
-    Object src/field_large_buffer_manager_1.o
+    Object src/field/map_load_buffers.o
     Object src/field_terrain_height_math.o
     Object src/field_resource_stream.o
     Object src/dynamic_terrain_height_manager_1.o
@@ -2524,26 +2507,7 @@ Overlay OVY_40
     Object src/application/vs_recorder/vs_recorder_menu.o
     Object src/application/vs_recorder/vs_recorder_saved_video.o
     Object src/application/vs_recorder/vs_recorder_frontier_record.o
-    Object src/to45_overlay40_r27_u14_exact.o
-    Object src/overlay40_pc_box_grid_run14.o
-    Object src/to70_overlay_40_residual_27_unmatched_15_prefix_extra1202_run01.o
-    Object src/overlay40_box_transition_tail.o
-    Object src/overlay40_pc_box_grid_run15.o
-    Object src/to52_r2_w06/to52_r2_w06_overlay40_pc_box_mode_transition_prefix.o
-    Object src/r42_overlay40_pc_box_mode_transition_last.o
-    Object src/r42_overlay40_pc_box_mode_transition_run1.o
-    Object src/to46_overlay40_mode_transition_tail.o
-    Object src/overlay40_pc_box_grid_run16.o
-    Object src/r40_overlay_40_residual_27_unmatched_17_run1.o
-    Object src/overlay40_pc_box_grid_run17.o
-    Object src/to70_overlay_40_residual_27_unmatched_18_extra585_run01.o
-    Object src/overlay40_pc_box_grid_run18.o
-    Object src/to45_ov40_r27_u19_exact.o
-    Object src/to70_to45_overlay40_r27_u19_residual_extra162_run01.o
-    Object src/op90_to70_to45_overlay40_r27_u19_residual_extra162_residual_1_r01.o
-    Object src/overlay40_pc_box_grid_run19.o
-    Object src/op90_overlay_40_residual_27_unmatched_20_r01.o
-    Object src/overlay40_pc_box_grid_run20.o
+    Object src/application/vs_recorder/vs_recorder_dress_up.o
     Object src/overlay_40_sol_partial_27.o
     Object src/r40_overlay_40_residual_28_run1.o
     Object src/overlay_40_sol_partial_28.o
@@ -3490,18 +3454,8 @@ Overlay OVY_80
     Object src/frontier/frontier_cmd_factory.o
     Object src/frontier/battle_factory_data.o
     Object asm/battle_factory_data_bss.o
-    Object src/ov80_2230b8c_partial_1.o
-    Object src/op90_overlay_80_022310C4_r01.o
-    Object src/overlay_80_022310C4_opus_partial_1.o
-    Object src/to70_overlay_80_022310C4_residual_2_extra362_run01.o
-    Object src/overlay_80_022310C4_opus_partial_2.o
-    Object src/frontier/ov80_frontier_state_prepare.o
-    Object src/to80_extra1701_run01.o
-    Object src/overlay_80_022310C4_opus_partial_3.o
-    Object src/to70_overlay_80_022310C4_residual_4_extra845_run01.o
-    Object src/overlay_80_02231930.o
-    Object src/overlay_80_022310C4_opus_partial_4.o
-    Object src/to90_extra2043_run01.o
+    Object src/frontier/frontier_cmd_hall.o
+    Object src/frontier/battle_hall_data.o
     Object src/frontier/frontier_cmd_castle.o
     Object src/frontier/battle_castle_challenge.o
     Object src/frontier/frontier_cmd_arcade.o
@@ -3514,16 +3468,12 @@ Overlay OVY_80
     Object src/frontier/frontier_link_lobby.o
     Object src/frontier/battle_tower_setup.o
     Object src/frontier/battle_factory_setup.o
-    Object asm/overlay_80_02236B78_residual_4.o
-    Object src/overlay80_frontier_setup_r22_run1.o
-    Object src/to56_r2_w03_overlay80_37334.o
-    Object src/op90_to56_r2_w03_overlay80_37448_residual_r01.o
-    Object src/op90_op90_to56_r2_w03_overlay80_37448_residual_residual_1_r01.o
-    Object src/overlay80_frontier_setup_r22_run2.o
+    Object asm/battle_factory_setup_data.o
+    Object src/frontier/battle_hall_setup.o
     Object src/frontier/battle_castle_setup.o
-    Object asm/overlay_80_02237A70_residual_4.o
+    Object asm/battle_castle_setup_data.o
     Object src/frontier/battle_arcade_setup.o
-    Object asm/overlay_80_02238034_residual_4.o
+    Object asm/battle_arcade_setup_data.o
     Object src/frontier/frontier_map_tile_blink.o
     Object src/frontier/frontier_map.o
     Object asm/frontier_map_data.o

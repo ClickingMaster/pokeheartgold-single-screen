@@ -6,6 +6,8 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0441.h"
 
+#include "frontier/battle_hall_data.h"
+
 #include "bg_window.h"
 #include "filesystem.h"
 #include "font.h"
@@ -63,18 +65,6 @@ FS_EXTERN_OVERLAY(OVY_80);
 #define HALL_STATE_LINK_SYNC    4
 #define HALL_STATE_FADE_OUT     5
 #define HALL_STATE_CLOSE_PROMPT 6
-
-typedef struct BattleHallAppArgs {
-    SaveData *saveData; // 0x00
-    u8 mode;            // 0x04
-    u8 cursor;          // 0x05
-    u16 result;         // 0x06
-    void *hallRecords;  // 0x08
-    Party *party;       // 0x0C
-    u8 unk_10[4];       // 0x10
-    u16 *unk_14;        // 0x14
-    u16 battleNo;       // 0x18
-} BattleHallAppArgs;
 
 typedef struct BattleHallSprite {
     u8 unk_00[0xC];
@@ -160,8 +150,8 @@ extern const ObjCharTransferTemplate ov82_0223FEF0;
 extern const WindowTemplate ov82_0223FF00[4];
 
 // Frontier overlay (80) helpers
-u8 ov80_02237920(u8 index);
-u32 ov80_0223792C(u8 mode);
+u8 BattleHall_GetCellType(u8 index);
+u32 BattleHall_IsMultiType(u8 mode);
 void Frontier_BufferPartnerName(void *a0, u32 a1);
 
 // Not declared by the owners' headers yet
@@ -271,14 +261,14 @@ BOOL BattleHallApp_Init(OverlayManager *man, int *state) {
     app->options = Save_PlayerData_GetOptionsAddr(app->saveData);
     app->party = args->party;
     app->hallRecords = args->hallRecords;
-    app->unk_21C = args->unk_14;
+    app->unk_21C = args->partnerLevel;
     app->battleNo = args->battleNo + 1;
     app->cursor = args->cursor;
     app->partnerCursor = NO_LINK_CHOICE;
     app->linkChoice = NO_LINK_CHOICE;
     app->savedCursor = NO_SAVED_CURSOR;
     BattleHallApp_InitGraphics(app);
-    if (ov80_0223792C(app->mode) == TRUE) {
+    if (BattleHall_IsMultiType(app->mode) == TRUE) {
         sub_02096910(app);
     }
     *state = HALL_STATE_FADE_IN;
@@ -312,7 +302,7 @@ BOOL BattleHallApp_Main(OverlayManager *man, int *state) {
             } else if (app->openSummary == 1) {
                 BattleHallApp_SetMainState(app, state, HALL_STATE_SUMMARY);
                 return FALSE;
-            } else if (ov80_0223792C(app->mode) == TRUE) {
+            } else if (BattleHall_IsMultiType(app->mode) == TRUE) {
                 BattleHallApp_SetMainState(app, state, HALL_STATE_LINK_SYNC);
             } else {
                 BattleHallApp_SetMainState(app, state, HALL_STATE_FADE_OUT);
@@ -324,7 +314,7 @@ BOOL BattleHallApp_Main(OverlayManager *man, int *state) {
             if (app->reselect == 1) {
                 app->reselect = 0;
                 BattleHallApp_SetMainState(app, state, HALL_STATE_SELECT);
-            } else if (ov80_0223792C(app->mode) == TRUE) {
+            } else if (BattleHall_IsMultiType(app->mode) == TRUE) {
                 BattleHallApp_SetMainState(app, state, HALL_STATE_LINK_SYNC);
             } else {
                 BattleHallApp_SetMainState(app, state, HALL_STATE_FADE_OUT);
@@ -367,14 +357,14 @@ BOOL BattleHallApp_Exit(OverlayManager *man) {
 BOOL BattleHallApp_FadeIn(BattleHallApp *app) {
     switch (app->subState) {
     case 0:
-        if (app->linkReady == 0 && ov80_0223792C(app->mode) == TRUE) {
+        if (app->linkReady == 0 && BattleHall_IsMultiType(app->mode) == TRUE) {
             LinkSync_ClearPackets();
             LinkSync_StartSync(0x70);
         }
         app->subState++;
         break;
     case 1:
-        if (app->linkReady == 0 && ov80_0223792C(app->mode) == TRUE) {
+        if (app->linkReady == 0 && BattleHall_IsMultiType(app->mode) == TRUE) {
             if (LinkSync_IsSynced(0x70) == TRUE) {
                 LinkSync_ClearPackets();
                 app->linkReady = 1;
@@ -459,7 +449,7 @@ BOOL BattleHallApp_SelectType(BattleHallApp *app) {
         if (!BattleHallApp_HandleConfirm(app) && !BattleHallApp_HandleTouch(app)) {
             break;
         }
-        if (ov80_02237920(app->cursor) == TYPE_CELL_EMPTY) {
+        if (BattleHall_GetCellType(app->cursor) == TYPE_CELL_EMPTY) {
             // The empty cell opens the Pokemon's summary
             PlaySE(SEQ_SE_DP_DECIDE);
             BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 6, 1, HEAP_ID_105);
@@ -468,7 +458,7 @@ BOOL BattleHallApp_SelectType(BattleHallApp *app) {
             break;
         }
         if (BattleHallApp_IsMatronMode(app) == 1) {
-            if (ov80_02237920(app->cursor) != TYPE_MYSTERY) {
+            if (BattleHall_GetCellType(app->cursor) != TYPE_MYSTERY) {
                 PlaySE(SEQ_SE_DP_BOX03);
                 return FALSE;
             }
@@ -477,13 +467,13 @@ BOOL BattleHallApp_SelectType(BattleHallApp *app) {
                 PlaySE(SEQ_SE_DP_BOX03);
                 return FALSE;
             }
-            if (ov80_02237920(app->cursor) == TYPE_MYSTERY) {
+            if (BattleHall_GetCellType(app->cursor) == TYPE_MYSTERY) {
                 PlaySE(SEQ_SE_DP_BOX03);
                 return FALSE;
             }
         }
         PlaySE(SEQ_SE_DP_DECIDE);
-        if (!ov80_0223792C(app->mode)) {
+        if (!BattleHall_IsMultiType(app->mode)) {
             BattleHallApp_SetCellPalette(app->bgConfig, app->cursor, 1);
             ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_3);
         }
@@ -494,7 +484,7 @@ BOOL BattleHallApp_SelectType(BattleHallApp *app) {
         app->brightness++;
         BattleHallApp_SetBrightness(-app->brightness);
         if (app->brightness == 8) {
-            if (!ov80_0223792C(app->mode)) {
+            if (!BattleHall_IsMultiType(app->mode)) {
                 BattleHallApp_ShowConfirmPrompt(app);
                 app->subState = 3;
             } else {
@@ -783,7 +773,7 @@ void BattleHallApp_ResumeAfterSummary(BattleHallApp *app) {
     BattleHallApp_DisableDisplay();
     app->bgConfig = BgConfig_Alloc(HEAP_ID_105);
     BattleHallApp_InitGraphics(app);
-    if (ov80_02237920(app->cursor) == TYPE_CELL_EMPTY) {
+    if (BattleHall_GetCellType(app->cursor) == TYPE_CELL_EMPTY) {
         BattleHallSprite_SetAnim(app->cursorSprite, 2);
         BattleHallSprite_SetPosition(app->cursorSprite, 128, 168);
     }
@@ -919,7 +909,7 @@ void BattleHallApp_InitBgLayers(BgConfig *bgConfig) {
 
 // In link mode the top 16 lines of the main screen are masked
 void BattleHallApp_InitLinkWindow(BattleHallApp *app) {
-    if (ov80_0223792C(app->mode) != FALSE) {
+    if (BattleHall_IsMultiType(app->mode) != FALSE) {
         reg_GX_DISPCNT &= ~(REG_GX_DISPCNT_W0_MASK | REG_GX_DISPCNT_W1_MASK | REG_GX_DISPCNT_OW_MASK);
         G2_SetWnd0InsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, FALSE);
         G2_SetWndOutsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, TRUE);
@@ -1000,9 +990,9 @@ void BattleHallApp_PrintTypeNames(BattleHallApp *app, Window *window, int fg, in
     for (row = 0, base = 0, y = 16; row < TYPE_GRID_ROWS; base += TYPE_GRID_COLUMNS, y += 36, row++) {
         for (column = 0, x = 1; column < TYPE_GRID_COLUMNS; column++, x += 64) {
             index = column + base;
-            if (ov80_02237920(index) != TYPE_CELL_EMPTY) {
+            if (BattleHall_GetCellType(index) != TYPE_CELL_EMPTY) {
                 String_SetEmpty(string);
-                ReadMsgDataIntoString(msgData, ov80_02237920(index), string);
+                ReadMsgDataIntoString(msgData, BattleHall_GetCellType(index), string);
                 AddTextPrinterParameterizedWithColor(window, fontId, string, x, y, 0, MAKE_TEXT_COLOR(fg, shadow, bg), NULL);
             }
         }
@@ -1031,7 +1021,7 @@ void BattleHallApp_PrintTypeRanks(BattleHallApp *app, Window *window) {
         int x = 18;
         do {
             int index = column + base;
-            u32 type = ov80_02237920((u8)index);
+            u32 type = BattleHall_GetCellType((u8)index);
             if (type != TYPE_CELL_EMPTY && type != TYPE_MYSTERY) {
                 u8 rank = (u8)(HallTypeRanks_Get(BattleHallApp_GetRecordIndex((u8)index), app->hallRecords) + 1);
                 if (rank > MAX_TYPE_RANK) {
@@ -1091,12 +1081,12 @@ void BattleHallApp_HandleDpad(BattleHallApp *app, int unused) {
     u8 type;
 
     if (gSystem.newKeys & PAD_KEY_LEFT) {
-        if (ov80_02237920(app->cursor) != TYPE_CELL_EMPTY) {
+        if (BattleHall_GetCellType(app->cursor) != TYPE_CELL_EMPTY) {
             app->prevCursor = app->cursor;
         }
         if (app->cursor % 4 == 0) {
             app->cursor += 3;
-        } else if (ov80_02237920(app->cursor) == TYPE_CELL_EMPTY) {
+        } else if (BattleHall_GetCellType(app->cursor) == TYPE_CELL_EMPTY) {
             app->cursor = 16;
         } else {
             app->cursor--;
@@ -1104,12 +1094,12 @@ void BattleHallApp_HandleDpad(BattleHallApp *app, int unused) {
         moved = TRUE;
     }
     if (gSystem.newKeys & PAD_KEY_RIGHT) {
-        if (ov80_02237920(app->cursor) != TYPE_CELL_EMPTY) {
+        if (BattleHall_GetCellType(app->cursor) != TYPE_CELL_EMPTY) {
             app->prevCursor = app->cursor;
         }
         if (app->cursor % 4 == 3) {
             app->cursor -= 3;
-        } else if (ov80_02237920(app->cursor) == TYPE_CELL_EMPTY) {
+        } else if (BattleHall_GetCellType(app->cursor) == TYPE_CELL_EMPTY) {
             app->cursor = 19;
         } else {
             app->cursor++;
@@ -1117,12 +1107,12 @@ void BattleHallApp_HandleDpad(BattleHallApp *app, int unused) {
         moved = TRUE;
     }
     if (gSystem.newKeys & PAD_KEY_UP) {
-        if (ov80_02237920(app->cursor) != TYPE_CELL_EMPTY) {
+        if (BattleHall_GetCellType(app->cursor) != TYPE_CELL_EMPTY) {
             app->prevCursor = app->cursor;
         }
         if (app->cursor < 4) {
             app->cursor += 16;
-        } else if (ov80_02237920(app->cursor) == TYPE_CELL_EMPTY) {
+        } else if (BattleHall_GetCellType(app->cursor) == TYPE_CELL_EMPTY) {
             if (app->prevCursor == 16) {
                 app->cursor = 13;
             } else if (app->prevCursor == 19) {
@@ -1140,7 +1130,7 @@ void BattleHallApp_HandleDpad(BattleHallApp *app, int unused) {
         moved = TRUE;
     }
     if (gSystem.newKeys & PAD_KEY_DOWN) {
-        if (ov80_02237920(app->cursor) != TYPE_CELL_EMPTY) {
+        if (BattleHall_GetCellType(app->cursor) != TYPE_CELL_EMPTY) {
             app->prevCursor = app->cursor;
         }
         if (app->cursor >= 16) {
@@ -1154,7 +1144,7 @@ void BattleHallApp_HandleDpad(BattleHallApp *app, int unused) {
         PlaySE(SEQ_SE_DP_SELECT);
         BattleHallSprite_SetPosition(app->cursorSprite, BattleHallApp_GetCursorX(app), BattleHallApp_GetCursorY(app));
     }
-    type = ov80_02237920(app->cursor);
+    type = BattleHall_GetCellType(app->cursor);
     if (type == TYPE_CELL_EMPTY) {
         BattleHallSprite_SetAnim(app->cursorSprite, 2);
         BattleHallSprite_SetPosition(app->cursorSprite, 128, 168);
@@ -1181,7 +1171,7 @@ BOOL BattleHallApp_HandleTouch(BattleHallApp *app) {
                 if (left <= x && x <= right && top <= y && y <= bottom) {
                     app->cursor = column + row * 4;
                     BattleHallSprite_SetPosition(app->cursorSprite, BattleHallApp_GetCursorX(app), BattleHallApp_GetCursorY(app));
-                    if (ov80_02237920(app->cursor) == TYPE_CELL_EMPTY) {
+                    if (BattleHall_GetCellType(app->cursor) == TYPE_CELL_EMPTY) {
                         BattleHallSprite_SetAnim(app->cursorSprite, 2);
                         BattleHallSprite_SetPosition(app->cursorSprite, 128, 168);
                     } else {
@@ -1321,7 +1311,7 @@ u8 BattleHallApp_IsMatronMode(BattleHallApp *app) {
 BOOL BattleHallApp_SendLinkCommand(BattleHallApp *app, u16 command, u16 arg) {
     u32 id;
 
-    if (ov80_0223792C(app->mode) == FALSE) {
+    if (BattleHall_IsMultiType(app->mode) == FALSE) {
         return FALSE;
     }
     switch (command) {
@@ -1417,7 +1407,7 @@ void BattleHallApp_ShowConfirmPrompt(BattleHallApp *app) {
 
     BattleHallSprite_SetVisible(app->monIcon, FALSE);
     BattleHallApp_DrawMessageFrame(&app->windows[0], Options_GetFrame(app->options));
-    BufferTypeName(app->msgFormat, 0, ov80_02237920(app->cursor));
+    BufferTypeName(app->msgFormat, 0, BattleHall_GetCellType(app->cursor));
     rank = HallTypeRanks_Get(BattleHallApp_GetRecordIndex(app->cursor), app->hallRecords) + 1;
     if (rank > MAX_TYPE_RANK) {
         rank = MAX_TYPE_RANK;

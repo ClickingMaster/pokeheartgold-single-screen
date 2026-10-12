@@ -3,7 +3,7 @@
 
 #include "script.h"
 
-void sub_02059D44(FieldSystem *fieldSystem);
+void Colosseum_ShowOpponentTrainerCard(FieldSystem *fieldSystem);
 struct UnkStruct_02059E1C *sub_02059DB0(FieldSystem *fieldSystem);
 void sub_02059E04(FieldSystem *fieldSystem);
 int sub_0205A200(struct UnkStruct_02059E1C *fieldSystem_unk80, int objId);
@@ -17,9 +17,9 @@ void sub_0205A408(void);
 void sub_0205A430(void);
 void sub_0205A40C(void);
 void sub_0205A410(void);
-void sub_02059AE4(void);
-u32 sub_02059B08(void);
-void sub_02059B18(void);
-void sub_02059B34(void);
+void Colosseum_RecvMixBattleMons(void);
+u32 Colosseum_GetMixBattleMonsSize(void);
+void Colosseum_GetMixBattleMonsBuffer(void);
+void Colosseum_RecvMixBattleChoice(void);
 
 #endif // POKEHEARTGOLD_UNK_02058AEC_H

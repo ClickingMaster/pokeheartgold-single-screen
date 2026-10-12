@@ -19,8 +19,8 @@
 // messages it got, also its own echo, and ignores its own data; most only take the partner's data when the local
 // player is not the parent (net id 0), whose data wins.
 //   Battle Factory 0x16-0x1C, Battle Hall 0x21-0x26, Battle Castle 0x2A-0x30, Battle Arcade 0x41-0x46.
-// The facilities' script work structs are defined by their own modules; the Hall view below only names the
-// fields the messages use (the Battle Factory and Castle use BattleFactoryData and BattleCastleData).
+// The facilities' script work structs are defined by their own modules (BattleHallData, BattleFactoryData,
+// BattleCastleData, ArcadeContext).
 
 #define LINK_MON_BUFFER_SIZE 0x200
 
@@ -29,125 +29,103 @@ BOOL sub_02036FD8(int command, void *data, int size);
 u32 BattleCastle_GetPartySize(u8 type, int a1);
 u32 BattleFactory_GetPartySize(u8 type);
 
-// Battle Hall script work (view).
-struct HallLinkWork {
-    u8 filler_000[0x18];
-    u16 unk_018[20];                        // 0x018
-    u8 filler_040[0x220];
-    u8 partySlot;                           // 0x260
-    u8 filler_261[7];
-    u16 unk_268[20];                        // 0x268
-    u8 filler_290[0x46C];
-    SaveData *saveData;                     // 0x6FC
-    u8 filler_700[0x2C];
-    u16 linkBuffer[22];                     // 0x72C
-    u8 filler_758[0x2C];
-    u8 linkMonBuffer[LINK_MON_BUFFER_SIZE]; // 0x784
-    u8 linkRecvMon[2][LINK_MON_BUFFER_SIZE]; // 0x984
-    u8 filler_D84[4];
-    u8 unk_D88;                             // 0xD88
-    u8 filler_D89[3];
-    Pokemon *partnerMon;                    // 0xD8C
-    u8 linkMessageCount;                    // 0xD90
-};
-
 // Battle Hall
 
-void ov80_0222AEF8(int netId, int size, void *data, HallLinkWork *work) {
+void ov80_0222AEF8(int netId, int size, void *data, BattleHallData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         return;
     }
 }
 
-BOOL ov80_0222AF10(HallLinkWork *work) {
+BOOL ov80_0222AF10(BattleHallData *work) {
     Save_PlayerData_GetProfile(work->saveData);
     return Comm_SendCommand(0x22, work->linkBuffer, 0x2C) == TRUE;
 }
 
-void ov80_0222AF3C(int netId, int size, void *data, HallLinkWork *work) {
+void ov80_0222AF3C(int netId, int size, void *data, BattleHallData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         return;
     }
 }
 
-BOOL ov80_0222AF54(HallLinkWork *work) {
+BOOL BattleHallLink_SendTrainerIds(BattleHallData *work) {
     u8 *p = (u8 *)work;
     u16 *buffer = work->linkBuffer;
     u16 *dst = buffer;
     int i;
     for (i = 0; i < 20; i++) {
-        *dst++ = ((HallLinkWork *)p)->unk_018[0];
+        *dst++ = ((BattleHallData *)p)->trainerIds[0];
         p += 2;
     }
     return Comm_SendCommand(0x23, buffer, 0x2C) == TRUE;
 }
 
-void ov80_0222AF84(int netId, int size, const u16 *data, HallLinkWork *work) {
+void BattleHallLink_ReceiveTrainerIds(int netId, int size, const u16 *data, BattleHallData *work) {
     u8 *p = (u8 *)work;
     int i;
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         for (i = 0; i < 20; i++) {
-            ((HallLinkWork *)p)->unk_018[0] = *data++;
+            ((BattleHallData *)p)->trainerIds[0] = *data++;
             p += 2;
         }
     }
 }
 
-BOOL ov80_0222AFB8(HallLinkWork *work) {
+BOOL BattleHallLink_SendSetIds(BattleHallData *work) {
     u8 *p = (u8 *)work;
     u16 *buffer = work->linkBuffer;
     int i = 0;
     u16 *dst = buffer;
     while (i < 20) {
-        *dst++ = ((HallLinkWork *)p)->unk_268[0];
+        *dst++ = ((BattleHallData *)p)->setIds[0];
         p += 2;
         i++;
     }
     return Comm_SendCommand(0x24, buffer, 0x2C) == TRUE;
 }
 
-void ov80_0222AFEC(int netId, int size, const u16 *data, HallLinkWork *work) {
+void BattleHallLink_ReceiveSetIds(int netId, int size, const u16 *data, BattleHallData *work) {
     u8 *p = (u8 *)work;
     int i;
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         for (i = 0; i < 20; i++) {
-            ((HallLinkWork *)p)->unk_268[0] = *data++;
+            ((BattleHallData *)p)->setIds[0] = *data++;
             p += 2;
         }
     }
 }
 
-BOOL ov80_0222B024(HallLinkWork *work, u16 value) {
+BOOL ov80_0222B024(BattleHallData *work, u16 value) {
     work->linkBuffer[0] = value;
     return Comm_SendCommand(0x25, work->linkBuffer, 0x2C) == TRUE;
 }
 
-void ov80_0222B048(int netId, int size, const u16 *data, HallLinkWork *work) {
+void ov80_0222B048(int netId, int size, const u16 *data, BattleHallData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
-        work->unk_D88 = *data;
+        work->partnerValue = *data;
     }
 }
 
-BOOL ov80_0222B070(HallLinkWork *work) {
+BOOL BattleHallLink_SendPartyMon(BattleHallData *work) {
     u32 size = SizeOfStructPokemon();
-    Pokemon *mon = Party_GetMonByIndex(SaveArray_Party_Get(work->saveData), work->partySlot);
+    Pokemon *mon = Party_GetMonByIndex(SaveArray_Party_Get(work->saveData), work->partySlots[0]);
     MI_CpuCopy8(mon, work->linkMonBuffer, size);
     return sub_02036FD8(0x26, work->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
 }
 
-void BattleHallLink_ReceivePartnerMon(int netId, int size, const void *data, HallLinkWork *work) {
+void BattleHallLink_ReceivePartnerMon(int netId, int size, const void *data, BattleHallData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         MI_CpuCopy8(data, work->partnerMon, SizeOfStructPokemon());
     }
 }
 
-void *BattleHallLink_GetRecvMonBuffer(int netId, HallLinkWork *work, int size) {
+void *BattleHallLink_GetRecvMonBuffer(int netId, BattleHallData *work, int size) {
     GF_ASSERT(size <= LINK_MON_BUFFER_SIZE);
     return work->linkRecvMon[netId];
 }

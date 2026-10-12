@@ -1,11 +1,11 @@
 	.include "asm/macros.inc"
 	.include "overlay_40.inc"
 	.include "global.inc"
-	.public ov40_02235940
+	.public VsRecorder_SetPhotoWindow
 	.text
 
-	thumb_func_start ov40_02235940
-ov40_02235940: ; 0x02235940
+	thumb_func_start VsRecorder_SetPhotoWindow
+VsRecorder_SetPhotoWindow: ; 0x02235940
 	push {r4, r5}
 	mov r0, #1
 	lsl r0, r0, #0x1a
@@ -46,4 +46,4 @@ ov40_02235940: ; 0x02235940
 _02235988: .word 0xFFFF1FFF
 _0223598C: .word 0x000048B8
 _02235990: .word 0x00001090
-	thumb_func_end ov40_02235940
+	thumb_func_end VsRecorder_SetPhotoWindow

@@ -187,7 +187,7 @@ void FrontierLinkLobby_ReadSummaryResult(void *frontierWork, FrontierLinkLobby *
     lobby->appResult = 0;
 }
 
-const u8 ov80_0223D4C0[20] __attribute__((aligned(4))) = {
+const u8 gBattleHallCellTypes[20] __attribute__((aligned(4))) = {
     0x00,
     0x0A,
     0x0B,

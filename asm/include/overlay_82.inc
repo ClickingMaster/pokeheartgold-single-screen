@@ -159,8 +159,8 @@
 .public gOverlayTemplate_PokemonSummary
 .public gSystem
 .public Frontier_BufferPartnerName
-.public ov80_02237920
-.public ov80_0223792C
+.public BattleHall_GetCellType
+.public BattleHall_IsMultiType
 .public BattleHallApp_Init
 .public BattleHallApp_Main
 .public BattleHallApp_Exit

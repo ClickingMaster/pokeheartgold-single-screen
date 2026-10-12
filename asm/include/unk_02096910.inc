@@ -20,8 +20,8 @@
 .public MI_CpuCopy8
 .public ov80_0222AEF8
 .public ov80_0222AF3C
-.public ov80_0222AF84
-.public ov80_0222AFEC
+.public BattleHallLink_ReceiveTrainerIds
+.public BattleHallLink_ReceiveSetIds
 .public ov80_0222B048
 .public BattleHallLink_ReceivePartnerMon
 .public BattleHallLink_GetRecvMonBuffer
