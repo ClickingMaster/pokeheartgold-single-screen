@@ -90,13 +90,13 @@ void FashionEntry_SetMon(SaveFashionDataSub *entry, Pokemon *mon, int value);
 void FashionEntry_Copy(SaveFashionDataSub *dst, SaveFashionDataSub *src);
 void FashionMon_GetSecondText(SaveFashionMon *mon, String *string);
 void FashionEntry_PlaceItem(SaveFashionDataSub *entry, FashionSource *source, int index);
-void sub_0202BD60(SaveFashionDataSub *entry, int value);
+void FashionEntry_SetBackdrop(SaveFashionDataSub *entry, int value);
 void FashionEntry_SetMonSecondText(SaveFashionDataSub *entry, String *string, u8 value);
 BOOL FashionEntry_IsItemPlaced(SaveFashionDataSub *entry, int index);
 SaveFashionMon *FashionEntry_GetMon(SaveFashionDataSub *entry);
 u8 *FashionEntry_GetItem(SaveFashionDataSub *entry, int index);
 void FashionEntry_GetMonSecondText(SaveFashionDataSub *entry, String *string);
-u8 sub_0202BE80(SaveFashionDataSub *entry);
+u8 FashionEntry_GetBackdrop(SaveFashionDataSub *entry);
 u16 FashionEntry_GetMailMessageWord(SaveFashionDataSub *entry);
 s8 FashionMon_GetZ(SaveFashionMon *mon);
 u8 FashionMon_GetX(SaveFashionMon *mon);
@@ -473,7 +473,7 @@ void FashionEntry_PlaceItem(SaveFashionDataSub *entry_, FashionSource *source, i
     entry->mask |= mask;
 }
 
-void sub_0202BD60(SaveFashionDataSub *entry_, int value) {
+void FashionEntry_SetBackdrop(SaveFashionDataSub *entry_, int value) {
     FashionEntry *entry = (FashionEntry *)entry_;
     GF_ASSERT(IsValidFashionMagic(entry->magic));
     entry->unk_70 = value;
@@ -525,7 +525,7 @@ void FashionEntry_GetMonSecondText(SaveFashionDataSub *entry_, String *string) {
     FashionMon_GetSecondText(&entry->mon, string);
 }
 
-u8 sub_0202BE80(SaveFashionDataSub *entry_) {
+u8 FashionEntry_GetBackdrop(SaveFashionDataSub *entry_) {
     FashionEntry *entry = (FashionEntry *)entry_;
     GF_ASSERT(IsValidFashionMagic(entry->magic));
     return entry->unk_70;

@@ -205,7 +205,7 @@ void FollowMonBallEffect_UpdateRelease(FieldEffect *effect, FollowMonBallEffect 
     case 1:
         Field3dObject_SetActiveFlag(&work->args.ball->ball, FALSE);
         Field3dObject_SetActiveFlag(&work->args.ball->burst, TRUE);
-        sub_02069DC8(mapObject, FALSE);
+        FollowMon_HideUntilStep(mapObject, FALSE);
         MapObject_CallDrawUpdate(mapObject);
         Field3dModelAnimation_FrameSet(&work->args.ball->burstAnimation, 0);
         work->state = 2;
@@ -420,7 +420,7 @@ void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, FollowMonBallEffect *
         if (work->timer >= FOLLOW_MON_BALL_SHRINK_FRAMES) {
             work->state++;
             Field3dObject_SetActiveFlag(&work->args.ball->ball, TRUE);
-            sub_02069DC8(mapObject, TRUE);
+            FollowMon_HideUntilStep(mapObject, TRUE);
             work->timer = 0;
         }
     } break;

@@ -69,7 +69,7 @@ int BattleDpadCursor_HandleInput(BattleDpadCursor *cursor) {
                 cursor->prevPosition = 0xFF;
             }
             cursor->position = input;
-            ov12_0226BAFC(cursor->battleCursor, x, w, y, h);
+            BattleCursor_SetRect(cursor->battleCursor, x, w, y, h);
             PlaySE(SEQ_SE_DP_SELECT);
         }
         return -1;

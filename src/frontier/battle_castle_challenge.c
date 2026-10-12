@@ -24,13 +24,13 @@
 // The Battle Castle's script data (frontier/battle_castle_data.h): the challenge (party, opponents, saved records),
 // the castle points and their windows.
 
-u32 sub_0205C174(u8 type, u8 slot);
-u32 sub_0205C1A0(u32 type);
-u32 sub_0205C1C8(u32 type);
-u32 sub_0205C1F0(u32 type);
-u32 sub_0205C218(u32 type);
-u32 sub_0205C240(u32 type);
-u32 sub_0205C268(u32 stat);
+u32 BattleCastle_GetRankStat(u8 type, u8 slot);
+u32 BattleCastle_GetWinStreakStat(u32 type);
+u32 BattleCastle_GetBestStreakStat(u32 type);
+u32 BattleCastle_GetPointsStat(u32 type);
+u32 BattleCastle_GetSpentPointsStat(u32 type);
+u32 BattleCastle_GetBestStreakPointsStat(u32 type);
+u32 FrontierStat_GetFriendIndex(u32 stat);
 u32 CastleChallenge_GetField(void *challenge, u32 field, u8 index, u32 a3, u32 a4);
 void CastleChallenge_SetField(void *challenge, int field, u8 index, int a3, void *value);
 void CastleChallenge_SetSaved(void *challenge, int saved);
@@ -108,21 +108,21 @@ BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 typ
         }
         if (hasStreak == 1) {
             frontierSave = Save_Frontier_GetStatic(sBattleCastleData->saveData);
-            stat = sub_0205C1A0(sBattleCastleData->type);
-            sBattleCastleData->winStreak = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C1A0(sBattleCastleData->type)));
+            stat = BattleCastle_GetWinStreakStat(sBattleCastleData->type);
+            sBattleCastleData->winStreak = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetWinStreakStat(sBattleCastleData->type)));
         } else {
             data = sBattleCastleData;
             data->winStreak = 0;
             frontierSave = Save_Frontier_GetStatic(data->saveData);
-            stat = sub_0205C1F0(sBattleCastleData->type);
-            FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C1F0(data->type)), 0);
+            stat = BattleCastle_GetPointsStat(sBattleCastleData->type);
+            FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(data->type)), 0);
             frontierSave = Save_Frontier_GetStatic(sBattleCastleData->saveData);
-            stat = sub_0205C218(type);
-            FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C218(type)), 0);
+            stat = BattleCastle_GetSpentPointsStat(type);
+            FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetSpentPointsStat(type)), 0);
             for (i = 0; i < 3; i++) {
                 frontierSave = Save_Frontier_GetStatic(sBattleCastleData->saveData);
-                stat = sub_0205C174(sBattleCastleData->type, (u8)i);
-                FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C174(sBattleCastleData->type, (u8)i)), 1);
+                stat = BattleCastle_GetRankStat(sBattleCastleData->type, (u8)i);
+                FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetRankStat(sBattleCastleData->type, (u8)i)), 1);
             }
         }
         data = sBattleCastleData;
@@ -132,11 +132,11 @@ BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 typ
         data->partySlots[1] = slot1;
         data->partySlots[2] = slot2;
         frontierSave = Save_Frontier_GetStatic((*(BattleCastleData *volatile *)&sBattleCastleData)->saveData);
-        stat = sub_0205C1F0(sBattleCastleData->type);
-        data->points = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C1F0(data->type)));
+        stat = BattleCastle_GetPointsStat(sBattleCastleData->type);
+        data->points = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(data->type)));
         frontierSave = Save_Frontier_GetStatic(sBattleCastleData->saveData);
-        stat = sub_0205C1F0(sBattleCastleData->type);
-        FrontierSave_AddStat(frontierSave, stat, sub_0205C268(sub_0205C1F0(data->type)), 10);
+        stat = BattleCastle_GetPointsStat(sBattleCastleData->type);
+        FrontierSave_AddStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(data->type)), 10);
     } else {
         BattleCastleData *saved;
         u32 zero = 0;
@@ -145,8 +145,8 @@ BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 typ
         data->battleNo = CastleChallenge_GetField(challenge, 1, zero, zero, zero);
         saved = sBattleCastleData;
         frontierSave = Save_Frontier_GetStatic(saved->saveData);
-        stat = sub_0205C1A0(sBattleCastleData->type);
-        saved->winStreak = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C1A0(data->type)));
+        stat = BattleCastle_GetWinStreakStat(sBattleCastleData->type);
+        saved->winStreak = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetWinStreakStat(data->type)));
         saved->round = saved->winStreak / 7;
         for (i = 0; i < 3; i++) {
             u8 slot = CastleChallenge_GetField(challenge, 7, (u8)i, zero, zero);
@@ -340,28 +340,28 @@ void BattleCastleData_Save(BattleCastleData *data, int mode) {
     CastleChallenge_SetSaved(data->challenge, 1);
     value.byte = data->battleNo;
     CastleChallenge_SetField(data->challenge, 1, 0, 0, &value.byte);
-    stat = sub_0205C1A0(data->type);
-    FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C1A0(data->type)), data->winStreak);
+    stat = BattleCastle_GetWinStreakStat(data->type);
+    FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetWinStreakStat(data->type)), data->winStreak);
     if (mode != 2) {
-        stat = sub_0205C1C8(data->type);
-        oldBest = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C1C8(data->type)));
-        stat = sub_0205C1C8(data->type);
-        FrontierSave_RaiseStat(frontierSave, stat, sub_0205C268(sub_0205C1C8(data->type)), data->winStreak);
-        stat = sub_0205C1C8(data->type);
-        best = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C1C8(data->type)));
-        stat = sub_0205C1F0(data->type);
-        points = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C1F0(data->type)));
+        stat = BattleCastle_GetBestStreakStat(data->type);
+        oldBest = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetBestStreakStat(data->type)));
+        stat = BattleCastle_GetBestStreakStat(data->type);
+        FrontierSave_RaiseStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetBestStreakStat(data->type)), data->winStreak);
+        stat = BattleCastle_GetBestStreakStat(data->type);
+        best = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetBestStreakStat(data->type)));
+        stat = BattleCastle_GetPointsStat(data->type);
+        points = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(data->type)));
         if (data->winStreak == oldBest) {
-            stat = sub_0205C240(data->type);
-            FrontierSave_RaiseStat(frontierSave, stat, sub_0205C268(sub_0205C240(data->type)), (u16)points);
+            stat = BattleCastle_GetBestStreakPointsStat(data->type);
+            FrontierSave_RaiseStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetBestStreakPointsStat(data->type)), (u16)points);
         } else if (oldBest < best) {
-            stat = sub_0205C240(data->type);
-            FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C240(data->type)), (u16)points);
+            stat = BattleCastle_GetBestStreakPointsStat(data->type);
+            FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetBestStreakPointsStat(data->type)), (u16)points);
         }
         value.byte = data->hasStreak;
         CastleFlags_SetField(castleFlags, 9, data->type, 0, &value.byte);
         if (data->type == 3) {
-            FrontierSave_SetStat(frontierSave, 108, sub_0205C268(108), data->hasStreak);
+            FrontierSave_SetStat(frontierSave, 108, FrontierStat_GetFriendIndex(108), data->hasStreak);
         }
     }
     for (i = 0; i < 14; i++) {
@@ -420,8 +420,8 @@ void ov80_02232E9C(BattleCastleData *data) {
     int i;
     for (i = 0; i < 3; i++) {
         FrontierSave *frontierSave = Save_Frontier_GetStatic(data->saveData);
-        u32 stat = sub_0205C174(data->type, (u8)i);
-        u32 substat = sub_0205C268(sub_0205C174(data->type, (u8)i));
+        u32 stat = BattleCastle_GetRankStat(data->type, (u8)i);
+        u32 substat = FrontierStat_GetFriendIndex(BattleCastle_GetRankStat(data->type, (u8)i));
         FrontierSave_SetStat(frontierSave, stat, substat, 1);
     }
     BattleCastleData_Save(data, 1);
@@ -576,20 +576,20 @@ int BattleCastleData_CalcPointsEarned(BattleCastleData *data) {
 
 void BattleCastle_AddPoints(SaveData *saveData, u32 type, s32 amount) {
     FrontierSave *frontierSave = Save_Frontier_GetStatic(saveData);
-    u32 stat = sub_0205C1F0(type);
-    u32 substat = sub_0205C268(sub_0205C1F0(type));
+    u32 stat = BattleCastle_GetPointsStat(type);
+    u32 substat = FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(type));
     {
         s32 points = FrontierSave_GetStat(frontierSave, stat, substat);
         points += amount;
         if (points > 9999) {
             frontierSave = Save_Frontier_GetStatic(saveData);
-            stat = sub_0205C1F0(type);
-            substat = sub_0205C268(sub_0205C1F0(type));
+            stat = BattleCastle_GetPointsStat(type);
+            substat = FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(type));
             FrontierSave_SetStat(frontierSave, stat, substat, 9999);
         } else {
             frontierSave = Save_Frontier_GetStatic(saveData);
-            stat = sub_0205C1F0(type);
-            substat = sub_0205C268(sub_0205C1F0(type));
+            stat = BattleCastle_GetPointsStat(type);
+            substat = FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(type));
             FrontierSave_AddStat(frontierSave, stat, substat, amount);
         }
     }
@@ -687,22 +687,22 @@ void BattleCastle_PrintPoints(FrontierSystem *system, BattleCastleData *data) {
     if (!BattleCastle_IsMultiType(data->type)) {
         GF_ASSERT(system->castlePointsWindows[0]);
         frontierSave = Save_Frontier_GetStatic(data->saveData);
-        stat = sub_0205C1F0(data->type);
-        points = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C1F0(data->type)));
+        stat = BattleCastle_GetPointsStat(data->type);
+        points = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(data->type)));
         BattleCastle_PrintPlayerPoints(system, system->castlePointsWindows[0], Save_PlayerData_GetProfile(data->saveData), points);
     } else {
         GF_ASSERT(system->castlePointsWindows[0]);
         GF_ASSERT(system->castlePointsWindows[1]);
         if (!Comm_GetLocalNetId()) {
             frontierSave = Save_Frontier_GetStatic(data->saveData);
-            stat = sub_0205C1F0(data->type);
-            points = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C1F0(data->type)));
+            stat = BattleCastle_GetPointsStat(data->type);
+            points = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(data->type)));
             partnerPoints = data->partnerPoints;
         } else {
             points = data->partnerPoints;
             frontierSave = Save_Frontier_GetStatic(data->saveData);
-            stat = sub_0205C1F0(data->type);
-            partnerPoints = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C1F0(data->type)));
+            stat = BattleCastle_GetPointsStat(data->type);
+            partnerPoints = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(data->type)));
         }
         BattleCastle_PrintPlayerPoints(system, system->castlePointsWindows[0], CommPlayerInfo_GetProfile(0), points);
         BattleCastle_PrintPlayerPoints(system, system->castlePointsWindows[1], CommPlayerInfo_GetProfile(1), partnerPoints);

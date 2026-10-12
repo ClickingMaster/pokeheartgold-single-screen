@@ -194,15 +194,15 @@ u32 GearPhoneRingManager_TryRandomCall(GearPhoneRingManager *gearPhone, PhoneBoo
     hour = (u8)Save_SysInfo_RTC_Get(gearPhone->saveData)->time.hour;
     bugContest = Save_VarsFlags_CheckBugContestFlag(varsFlags);
     numCallers = 0;
-    i = sub_0202AAD4(miscData, timeOfDay);
+    i = SaveMisc_PhoneRecentCallers_Count(miscData, timeOfDay);
     if (i == numCandidates) {
-        sub_0202AA9C(miscData, timeOfDay);
+        SaveMisc_PhoneRecentCallers_Clear(miscData, timeOfDay);
     }
     for (i = 0; i < numCandidates; i++) {
         if (mapId == phoneBook->entries[candidates[i]].mapId) {
             continue;
         }
-        if (sub_0202AA44(miscData, timeOfDay, candidates[i])) {
+        if (SaveMisc_PhoneRecentCallers_Contains(miscData, timeOfDay, candidates[i])) {
             continue;
         }
         if (candidates[i] == 8) {

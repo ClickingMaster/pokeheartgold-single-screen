@@ -159,9 +159,9 @@
 .public Pokedex_GetSeenFormNum_Unown
 .public Save_Pokedex_Get
 .public Save_Misc_Get
-.public sub_0202AA44
-.public sub_0202AA9C
-.public sub_0202AAD4
+.public SaveMisc_PhoneRecentCallers_Contains
+.public SaveMisc_PhoneRecentCallers_Clear
+.public SaveMisc_PhoneRecentCallers_Count
 .public Save_FashionData_GetFashionCase
 .public FashionCase_CanGiveAccessory
 .public FashionCase_HasWallpaper
@@ -219,7 +219,7 @@
 .public BattleSetup_New_BugContest
 .public BattleSetup_Delete
 .public BattleSetup_InitFromFieldSystem
-.public sub_02052544
+.public BattleSetup_SetFishing
 .public JumpTask_FieldMoveWarp
 .public GetFirstAliveMonInParty_CrashIfNone
 .public GetIdxOfFirstAliveMonInParty_CrashIfNone
@@ -286,7 +286,7 @@
 .public Save_VarsFlags_CheckSafariSysFlag
 .public Save_VarsFlags_CheckBugContestFlag
 .public Save_VarsFlags_GetFollowerTrainerNum
-.public sub_02066BE8
+.public Save_VarsFlags_SetRoamerStatus
 .public Save_VarsFlags_IsInRocketTakeover
 .public RoamerLocationUpdateRand
 .public GetRoamMapByLocationIdx
@@ -304,7 +304,7 @@
 .public FieldEffect_DefaultDraw
 .public FieldEffect_DefaultDestroy
 .public FollowMon_GetMapObject
-.public sub_02069DC8
+.public FollowMon_HideUntilStep
 .public FollowMon_SetObjectParams
 .public FollowMon_GetSpecies
 .public FollowMon_IsActive

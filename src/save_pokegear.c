@@ -96,11 +96,11 @@ u16 Pokegear_GetUnlockedSkins(SavePokegear *pokegear) {
     return pokegear->unlockedSkins;
 }
 
-BOOL sub_0202EEA4(SavePokegear *pokegear) {
+BOOL Pokegear_GetMapZoomed(SavePokegear *pokegear) {
     return pokegear->unk_1;
 }
 
-void sub_0202EEA8(SavePokegear *pokegear, u8 a1) {
+void Pokegear_SetMapZoomed(SavePokegear *pokegear, u8 a1) {
     pokegear->unk_1 = a1;
 }
 
@@ -297,13 +297,13 @@ u32 PhoneCallPersistentState_MomSavings_BalanceAction(PhoneCallPersistentState *
     return callPersistentState->bankBalance;
 }
 
-void sub_0202F198(PhoneCallPersistentState *callPersistentState, u8 idx) {
+void PhoneCallPersistentState_MomGift_SetNormalGiftGiven(PhoneCallPersistentState *callPersistentState, u8 idx) {
     if (idx < 9) {
         callPersistentState->unk_144 |= (1 << idx);
     }
 }
 
-BOOL sub_0202F1B4(PhoneCallPersistentState *callPersistentState, u8 idx) {
+BOOL PhoneCallPersistentState_MomGift_IsNormalGiftGiven(PhoneCallPersistentState *callPersistentState, u8 idx) {
     return (callPersistentState->unk_144 >> idx) & 1;
 }
 
@@ -355,7 +355,7 @@ int PhoneCallPersistentState_BlackBeltKenji_GetWaitDays(PhoneCallPersistentState
     return callPersistentState->kenjiWaitDays;
 }
 
-void sub_0202F294(PhoneCallPersistentState *callPersistentState, int days) {
+void PhoneCallPersistentState_BlackBeltKenji_UpdateWaitDays(PhoneCallPersistentState *callPersistentState, int days) {
     callPersistentState->kenjiActive = FALSE;
     PhoneCallPersistentState_PhoneRematches_GiftItemIdSet(callPersistentState, PHONE_CONTACT_KENJI, ITEM_NONE);
     PhoneCallPersistentState_PhoneRematches_SetSeeking(callPersistentState, PHONE_CONTACT_KENJI, FALSE);

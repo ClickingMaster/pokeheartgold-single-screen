@@ -40,7 +40,7 @@ BOOL FashionEntry_IsItemPlaced(SaveFashionDataSub *entry, int index);
 SaveFashionMon *FashionEntry_GetMon(SaveFashionDataSub *entry);
 u8 *FashionEntry_GetItem(SaveFashionDataSub *entry, int index);
 void FashionEntry_GetMonSecondText(SaveFashionDataSub *entry, String *string);
-u8 sub_0202BE80(SaveFashionDataSub *entry);
+u8 FashionEntry_GetBackdrop(SaveFashionDataSub *entry);
 u16 FashionEntry_GetMailMessageWord(SaveFashionDataSub *entry);
 s8 FashionMon_GetZ(SaveFashionMon *mon);
 u8 FashionMon_GetX(SaveFashionMon *mon);
@@ -213,7 +213,7 @@ void AccessoryPortrait_ReadFashionData(AccessoryPortraitArgs *args, SaveFashionD
             args->count++;
         }
     }
-    args->background = sub_0202BE80(fashionData);
+    args->background = FashionEntry_GetBackdrop(fashionData);
 }
 
 void AccessoryPortrait_LoadAccessoryGfx(AccessoryPortrait *portrait, DressUpGfxResources *resources, AccessoryPortraitArgs *args, enum HeapID heapID) {

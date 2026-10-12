@@ -11,7 +11,7 @@
 #include "field/map_prop_animation.h"
 #include "field/model_attributes.h"
 #include "field/field_texture_manager.h"
-#include "field/overlay_01_02204004.h"
+#include "field/map_prop_render.h"
 #include "field/signpost.h"
 #include "field/weather_manager.h"
 
@@ -93,7 +93,7 @@ typedef struct FieldEnvSubUnk18 {
     u32 direction;
 } FieldEnvSubUnk18;
 
-typedef struct FieldSystemUnkSub4 {
+typedef struct FieldMapSystems {
     u32 unk0;
     Field3dObjectTaskManager *field3dObjectTaskManager;
     FieldDrawMapNameInfo *drawMapNameInfo;
@@ -102,9 +102,9 @@ typedef struct FieldSystemUnkSub4 {
     u32 unk14;
     UnkStruct_020556FC *unk18;
     HBlankSystem *hBlankSystem;
-    void *unk20;
-    void *unk24;
-} FieldSystemUnkSub4;
+    void *poisonEffect;
+    void *localData;
+} FieldMapSystems;
 
 #define MAP_OBJECT_PRELOAD_SENTINEL 0xFFFF
 #define MAX_MAP_OBJECTS_TO_PRELOAD  24
@@ -205,7 +205,7 @@ typedef struct FollowMonInteraction {
 
 struct FieldSystem {
     FieldProcessManager *processManager;
-    FieldSystemUnkSub4 *unk4;
+    FieldMapSystems *mapSystems;
     BgConfig *bgConfig;
     SaveData *saveData;
     TaskManager *taskman;
@@ -251,11 +251,11 @@ struct FieldSystem {
     u32 unkAC;
     void *unkB0;
     s64 unkB4;
-    int fieldMapUpdateFlags;     // FieldMap_UpdateFrame steps: bit 0 texture free, 1 map load tick, 2 3D render, 3 ov01_02204350
+    int fieldMapUpdateFlags;     // FieldMap_UpdateFrame steps: bit 0 texture free, 1 map load tick, 2 3D render, 3 MapPropAnimationPoolList_Update
     Field3dRenderObjManager *renderObjManager;
     int environmentSoundState;   // Used to keep track of the active weather/soundplate sound and their associated loading status.
-    FieldSystemUnkSubC8 *unkC8;
-    void *unkCC;
+    MapPropAnimationPoolList *mapPropAnimationPools;
+    void *areaMapAnimation;
     u16 lastTouchMenuInput;
     u8 unkD2_0 : 6;
     u8 textbox_open : 1;
@@ -266,7 +266,7 @@ struct FieldSystem {
     FieldViewPhoto *viewPhotoTask;
     int lastStartMenuAction;
     FollowMon followMon; // E4
-    FieldSystemUnkSub104 *unk104;
+    TimeOfDayPropAnimManager *timeOfDayPropAnims;
     FieldSystemUnkSub108 *unk108;
     MenuInputStateMgr menuInputState; // Tracks whether the last menu input was touch or keypad
     u8 startMenuInputState;

@@ -405,7 +405,7 @@ void FollowMonDraw_Resume(LocalMapObject *object) {
             if (MapObject_HasFollowMonSprite(object)) {
                 MapObject_SetBillboardSepia((void *)TRUE, object, work->sprite);
             } else if (MapObject_IsShinyPokemon(object)) {
-                ov01_02205808(TRUE, object, work->sprite);
+                FollowMonBillboard_SetResource(TRUE, object, work->sprite);
             }
             BillboardObject_RestoreState(work->sprite, work->unk4);
             MapObject_UpdateBillboardPosition(object, work->sprite);
@@ -496,7 +496,7 @@ void FollowMonDraw_UpdateLarge(LocalMapObject *object) {
         if (MapObject_HasFollowMonSprite(object)) {
             MapObject_SetBillboardSepia((void *)TRUE, object, work->sprite);
         } else if (MapObject_IsShinyPokemon(object)) {
-            ov01_02205808(TRUE, object, sprite);
+            FollowMonBillboard_SetResource(TRUE, object, sprite);
         }
     }
     direction = MapObject_GetFacingDirection(object);
@@ -519,7 +519,7 @@ void FollowMonDraw_Update(LocalMapObject *object) {
         if (MapObject_HasFollowMonSprite(object)) {
             MapObject_SetBillboardSepia((void *)TRUE, object, work->sprite);
         } else if (MapObject_IsShinyPokemon(object)) {
-            ov01_02205808(TRUE, object, sprite);
+            FollowMonBillboard_SetResource(TRUE, object, sprite);
         }
     }
     direction = MapObject_GetFacingDirection(object);
@@ -543,7 +543,7 @@ void FollowMonDraw_UpdatePositionOnly(LocalMapObject *object) {
     if (!work->active) {
         work->active = TRUE;
         if (MapObject_IsShinyPokemon(object)) {
-            ov01_02205808(TRUE, object, sprite);
+            FollowMonBillboard_SetResource(TRUE, object, sprite);
         }
     }
     MapObject_UpdateBillboardPosition(object, sprite);

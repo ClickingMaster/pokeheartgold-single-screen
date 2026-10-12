@@ -471,11 +471,11 @@ void CutEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, FieldMo
 }
 
 Field3dObjectTask *CutEffect_CreateAtPlayer(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->unk4->field3dObjectTaskManager, &sCutEffectAtPlayerTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sCutEffectAtPlayerTemplate);
 }
 
 Field3dObjectTask *CutEffect_CreateAtFollower(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->unk4->field3dObjectTaskManager, &sCutEffectAtFollowerTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sCutEffectAtFollowerTemplate);
 }
 
 void CutEffect_Delete(Field3dObjectTask *task) {
@@ -527,11 +527,11 @@ void RockSmashEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, F
 }
 
 Field3dObjectTask *RockSmashEffect_CreateAtPlayer(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->unk4->field3dObjectTaskManager, &sRockSmashEffectAtPlayerTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sRockSmashEffectAtPlayerTemplate);
 }
 
 Field3dObjectTask *RockSmashEffect_CreateAtFollower(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->unk4->field3dObjectTaskManager, &sRockSmashEffectAtFollowerTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sRockSmashEffectAtFollowerTemplate);
 }
 
 void RockSmashEffect_Delete(Field3dObjectTask *task) {
@@ -606,7 +606,7 @@ void WaterfallEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, W
 }
 
 Field3dObjectTask *WaterfallEffect_Create(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->unk4->field3dObjectTaskManager, &sWaterfallEffectTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sWaterfallEffectTemplate);
 }
 
 void WaterfallEffect_Delete(Field3dObjectTask *task) {
@@ -654,7 +654,7 @@ void WhirlpoolEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, W
 }
 
 Field3dObjectTask *WhirlpoolEffect_Create(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->unk4->field3dObjectTaskManager, &sWhirlpoolEffectTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sWhirlpoolEffectTemplate);
 }
 
 void WhirlpoolEffect_Delete(Field3dObjectTask *task) {
@@ -797,7 +797,7 @@ void RockClimbDebris_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, R
 }
 
 Field3dObjectTask *RockClimbDebris_Create(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->unk4->field3dObjectTaskManager, &sRockClimbDebrisTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sRockClimbDebrisTemplate);
 }
 
 void RockClimbDebris_Delete(Field3dObjectTask *task) {
@@ -912,11 +912,11 @@ void HeadbuttEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, He
 }
 
 Field3dObjectTask *HeadbuttEffect_CreateAtPlayer(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->unk4->field3dObjectTaskManager, &sHeadbuttEffectAtPlayerTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sHeadbuttEffectAtPlayerTemplate);
 }
 
 Field3dObjectTask *HeadbuttEffect_CreateAtFollower(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->unk4->field3dObjectTaskManager, &sHeadbuttEffectAtFollowerTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sHeadbuttEffectAtFollowerTemplate);
 }
 
 void HeadbuttEffect_Delete(Field3dObjectTask *task) {
@@ -983,11 +983,11 @@ void RockDebris_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, RockDe
 }
 
 Field3dObjectTask *RockDebris_Create(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->unk4->field3dObjectTaskManager, &sRockDebrisTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sRockDebrisTemplate);
 }
 
 Field3dObjectTask *RockDebris_CreateWithFollower(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->unk4->field3dObjectTaskManager, &sRockDebrisWithFollowerTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sRockDebrisWithFollowerTemplate);
 }
 
 void RockDebris_Delete(Field3dObjectTask *task) {

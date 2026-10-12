@@ -29,8 +29,8 @@ extern const OverlayManagerTemplate ov80_0223BE24;
 extern const OverlayManagerTemplate gOverlayTemplate_BattleCastlePartyApp;
 extern const OverlayManagerTemplate gOverlayTemplate_BattleCastleOpponentApp;
 
-u32 sub_0205C1F0(u8 type);
-u32 sub_0205C268(u32 stat);
+u32 BattleCastle_GetPointsStat(u8 type);
+u32 FrontierStat_GetFriendIndex(u32 stat);
 u32 CastleChallenge_GetSaved(void *challenge);
 void OS_ResetSystem(u32 parameter);
 u32 Comm_GetLocalNetId(void);
@@ -354,15 +354,15 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
             FrontierSave *frontierSave;
             if (arg == 0) {
                 frontierSave = Save_Frontier_GetStatic(launchArgs->saveData);
-                stat = sub_0205C1F0(data->type);
-                data->savedPoints = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C1F0(type)));
+                stat = BattleCastle_GetPointsStat(data->type);
+                data->savedPoints = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(type)));
                 frontierSave = Save_Frontier_GetStatic(launchArgs->saveData);
-                stat = sub_0205C1F0(data->type);
-                FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C1F0(data->type)), data->points);
+                stat = BattleCastle_GetPointsStat(data->type);
+                FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(data->type)), data->points);
             } else {
                 frontierSave = Save_Frontier_GetStatic(launchArgs->saveData);
-                stat = sub_0205C1F0(data->type);
-                FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C1F0(type)), data->savedPoints);
+                stat = BattleCastle_GetPointsStat(data->type);
+                FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(type)), data->savedPoints);
             }
         }
         break;
@@ -439,8 +439,8 @@ BOOL FrtCmd_CastleGetPoints(FrontierScriptContext *ctx) {
     u16 *result = FrontierScript_ReadVarPtr(ctx);
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
     FrontierSave *frontierSave = Save_Frontier_GetStatic(args->saveData);
-    u32 stat = sub_0205C1F0((u8)type);
-    *result = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C1F0((u8)type)));
+    u32 stat = BattleCastle_GetPointsStat((u8)type);
+    *result = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat((u8)type)));
     return FALSE;
 }
 

@@ -181,7 +181,7 @@
 .public GF_3DVramMan_Create
 .public GF_3DVramMan_Delete
 .public SaveArray_PCStorage_Get
-.public sub_02027134
+.public SaveBattleRecord
 .public SaveGameNormal
 .public Save_NumModifiedPCBoxesIsMany
 .public SaveArray_CalcCRC16
@@ -192,9 +192,9 @@
 .public Pokedex_CheckMonSeenFlag
 .public Save_Pokedex_Get
 .public Save_Misc_Get
-.public sub_0202AC1C
-.public sub_0202AC38
-.public sub_0202AC60
+.public SaveMisc_SetVsRecorderColorScheme
+.public SaveMisc_GetExtraChunkKeys
+.public SaveMisc_SetExtraChunkKeys
 .public FashionEntry_New
 .public Save_FashionData_GetEntry
 .public FashionEntry_IsSaved

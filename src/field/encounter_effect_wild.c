@@ -478,7 +478,7 @@ void EncounterEffect_PkmnTrainerRed(SysTask *task, EncounterEffectTask *effect) 
         EncounterEffect_InitSprites(&work->spriteManager, 2, 1);
         RedEffect_CreateSprite(effect->narc, &work->sprite, &work->spriteManager, &work->spriteResources, 0);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
-        work->hBlankSystem = effect->fieldSystem->unk4->hBlankSystem;
+        work->hBlankSystem = effect->fieldSystem->mapSystems->hBlankSystem;
         WildEffectStep_Init(&work->steps[0], (WildEffectStepFunc)RedEffect_FillScreen);
         WildEffectStep_Init(&work->steps[1], (WildEffectStepFunc)RedEffect_FirstFlash);
         WildEffectStep_Init(&work->steps[2], (WildEffectStepFunc)RedEffect_SecondFlash);

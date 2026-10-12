@@ -216,7 +216,7 @@ u8 Mail_GetVersion(const Mail *mail) {
     return mail->author_version;
 }
 
-u16 sub_0202B404(Mail *mail, u8 r1, u8 r4, u16 r3) {
+u16 Mail_GetMonIconData(Mail *mail, u8 r1, u8 r4, u16 r3) {
     int i;
     union MailPatternData sp0;
     if (r1 < NELEMS(mail->mon_icons)) {
@@ -246,7 +246,7 @@ u16 sub_0202B404(Mail *mail, u8 r1, u8 r4, u16 r3) {
     return 0;
 }
 
-u16 sub_0202B4E4(const Mail *mail) {
+u16 Mail_GetFormFlags(const Mail *mail) {
     return mail->form_flags;
 }
 

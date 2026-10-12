@@ -681,8 +681,8 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
             }
             app->action = input;
             BattleCastlePartyApp_CloseHealMenu(app);
-            cpStat = sub_0205C1F0(app->frontierType);
-            points = FrontierSave_GetStat(app->frontierSave, cpStat, sub_0205C268(sub_0205C1F0(app->frontierType)));
+            cpStat = BattleCastle_GetPointsStat(app->frontierType);
+            points = FrontierSave_GetStat(app->frontierSave, cpStat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType)));
             BattleCastlePartyApp_BufferNumber(app, 0, ov83_02247D48[CASTLE_RANK_HEAL][rank], 4, 0);
             app->printerId = BattleCastlePartyApp_ShowMessage(app, msg_0031_00038, 1);
             BattleCastlePartyApp_ShowYesNoPrompt(app);
@@ -702,8 +702,8 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
         case YESNORESPONSE_YES:
             BattleCastlePrompt_Hide(&app->yesNoPrompt);
             mon = Party_GetMonByIndex(app->party, BattleCastle_GetMonIndex(app->numMons, app->cursorPos));
-            cpStat = sub_0205C1F0(app->frontierType);
-            points = FrontierSave_GetStat(app->frontierSave, cpStat, sub_0205C268(sub_0205C1F0(app->frontierType)));
+            cpStat = BattleCastle_GetPointsStat(app->frontierType);
+            points = FrontierSave_GetStat(app->frontierSave, cpStat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType)));
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_HEAL);
             healOption = app->listCursorPos;
             if (rank < ov83_02247F4C[healOption].minRank) {
@@ -761,8 +761,8 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
         switch (input) {
         case YESNORESPONSE_YES:
             BattleCastlePrompt_Hide(&app->yesNoPrompt);
-            cpStat = sub_0205C1F0(app->frontierType);
-            points = FrontierSave_GetStat(app->frontierSave, cpStat, sub_0205C268(sub_0205C1F0(app->frontierType)));
+            cpStat = BattleCastle_GetPointsStat(app->frontierType);
+            points = FrontierSave_GetStat(app->frontierSave, cpStat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType)));
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_HEAL);
             if (points < ov83_02247D48[CASTLE_RANK_HEAL][rank]) {
                 BattleCastle_DrawWindowFrame(&app->windows[CASTLE_PARTY_WIN_MESSAGE], Options_GetFrame(app->options));
@@ -942,8 +942,8 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
         switch (input) {
         case YESNORESPONSE_YES:
             BattleCastlePrompt_Hide(&app->yesNoPrompt);
-            cpStat = sub_0205C1F0(app->frontierType);
-            points = FrontierSave_GetStat(app->frontierSave, cpStat, sub_0205C268(sub_0205C1F0(app->frontierType)));
+            cpStat = BattleCastle_GetPointsStat(app->frontierType);
+            points = FrontierSave_GetStat(app->frontierSave, cpStat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType)));
             if (points < BattleCastlePartyApp_GetRentalCost(app, app->unk_860, app->action)) {
                 BattleCastle_DrawWindowFrame(&app->windows[CASTLE_PARTY_WIN_MESSAGE], Options_GetFrame(app->options));
                 app->printerId = BattleCastlePartyApp_ShowMessage(app, msg_0031_00032, 1);
@@ -986,8 +986,8 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
         switch (input) {
         case YESNORESPONSE_YES:
             BattleCastlePrompt_Hide(&app->yesNoPrompt);
-            cpStat = sub_0205C1F0(app->frontierType);
-            points = FrontierSave_GetStat(app->frontierSave, cpStat, sub_0205C268(sub_0205C1F0(app->frontierType)));
+            cpStat = BattleCastle_GetPointsStat(app->frontierType);
+            points = FrontierSave_GetStat(app->frontierSave, cpStat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType)));
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_RENTAL);
             if (points < ov83_02247D4E[rank]) {
                 BattleCastle_DrawWindowFrame(&app->windows[CASTLE_PARTY_WIN_MESSAGE], Options_GetFrame(app->options));
@@ -1840,7 +1840,7 @@ void BattleCastlePartyApp_PrintItemGridHeader(BattleCastlePartyApp *app, int mod
     }
     BattleCastle_PrintString(&app->windows[CASTLE_PARTY_WIN_GRID_PLAYER_NAME], name, 0, 0, 0, color, CASTLE_ALIGN_LEFT);
     String_Delete(name);
-    BattleCastlePartyApp_BufferNumber(app, 0, FrontierSave_GetStat(app->frontierSave, sub_0205C1F0(app->frontierType), sub_0205C268(sub_0205C1F0(app->frontierType))), 4, PRINTING_MODE_RIGHT_ALIGN);
+    BattleCastlePartyApp_BufferNumber(app, 0, FrontierSave_GetStat(app->frontierSave, BattleCastle_GetPointsStat(app->frontierType), FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType))), 4, PRINTING_MODE_RIGHT_ALIGN);
     width = GetWindowWidth(&app->windows[CASTLE_PARTY_WIN_GRID_POINTS]) * 8;
     BattleCastlePartyApp_PrintExpandedMessage(app, &app->windows[CASTLE_PARTY_WIN_GRID_POINTS], app->msgData, msg_0031_00002, width, 0, 0, CASTLE_PARTY_TEXT_COLOR, CASTLE_ALIGN_RIGHT); // "{n} CP"
     ScheduleWindowCopyToVram(&app->windows[CASTLE_PARTY_WIN_GRID_TITLE]);
@@ -2590,8 +2590,8 @@ void BattleCastlePartyApp_PrintCastlePoints(BattleCastlePartyApp *app, Window *w
     if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
         x = x1 + 72;
         FillWindowPixelRect(window, 0, x, y = y1 + 1, 48, 16);
-        points = sub_0205C1F0(app->frontierType);
-        points = FrontierSave_GetStat(app->frontierSave, points, sub_0205C268(sub_0205C1F0(app->frontierType)));
+        points = BattleCastle_GetPointsStat(app->frontierType);
+        points = FrontierSave_GetStat(app->frontierSave, points, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType)));
         BattleCastlePartyApp_BufferNumber(app, 0, points, 4, 0);
         app->printerId = BattleCastlePartyApp_AddMessage(app, window, 2, x, y, 0xFF, 1, 2, 0, 0); // "{points} CP"
     } else {
@@ -2601,13 +2601,13 @@ void BattleCastlePartyApp_PrintCastlePoints(BattleCastlePartyApp *app, Window *w
         FillWindowPixelRect(window, 0, 64, 0, 48, 16);
         FillWindowPixelRect(window, 0, 192, 0, 48, 16);
         if (Comm_GetLocalNetId() == 0) {
-            points = sub_0205C1F0(app->frontierType);
-            leftPoints = FrontierSave_GetStat(app->frontierSave, points, sub_0205C268(sub_0205C1F0(app->frontierType)));
+            points = BattleCastle_GetPointsStat(app->frontierType);
+            leftPoints = FrontierSave_GetStat(app->frontierSave, points, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType)));
             rightPoints = app->partnerPoints;
         } else {
             leftPoints = app->partnerPoints;
-            points = sub_0205C1F0(app->frontierType);
-            rightPoints = FrontierSave_GetStat(app->frontierSave, points, sub_0205C268(sub_0205C1F0(app->frontierType)));
+            points = BattleCastle_GetPointsStat(app->frontierType);
+            rightPoints = FrontierSave_GetStat(app->frontierSave, points, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType)));
         }
         BattleCastlePartyApp_BufferNumber(app, 0, leftPoints, 4, 0);
         BattleCastlePartyApp_PrintExpandedMessage(app, window, app->msgData, 2, 112, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
@@ -2759,8 +2759,8 @@ void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action)
             BattleCastle_SpendPoints(app->frontierSave, app->frontierType, ov83_02247D48[kind][rank]);
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, kind);
             frontierSave = Save_Frontier_GetStatic(app->saveData);
-            stat = sub_0205C174(app->frontierType, kind);
-            FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C174(app->frontierType, kind)), (u16)(rank + 1));
+            stat = BattleCastle_GetRankStat(app->frontierType, kind);
+            FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetRankStat(app->frontierType, kind)), (u16)(rank + 1));
             if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
                 if (action == CASTLE_PARTY_ACTION_HEAL_RANK_UP) {
                     app->flags.bits.linkResume = 1;
@@ -2789,8 +2789,8 @@ void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action)
             BattleCastle_SpendPoints(app->frontierSave, app->frontierType, ov83_02247D48[kind][rank]);
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, kind);
             frontierSave = Save_Frontier_GetStatic(app->saveData);
-            stat = sub_0205C174(app->frontierType, kind);
-            FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C174(app->frontierType, kind)), (u16)(rank + 1));
+            stat = BattleCastle_GetRankStat(app->frontierType, kind);
+            FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetRankStat(app->frontierType, kind)), (u16)(rank + 1));
             if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
                 if (action == CASTLE_PARTY_ACTION_HEAL_RANK_UP) {
                     app->flags.bits.linkResume = 1;

@@ -47,6 +47,6 @@
 .public MapPropManager_LoadOne
 .public ov01_021F3C9C
 .public AreaDataManager_GetBuildModelShapes
-.public ov01_022040F8
-.public ov01_0220411C
-.public ov01_02204154
+.public Field3dObjectList_GetOrAddInstance
+.public Field3dObjectList_ReleaseInstance
+.public Field3dObjectList_HasModelFile

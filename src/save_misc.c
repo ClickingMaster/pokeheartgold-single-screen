@@ -112,7 +112,7 @@ static const u8 _020F677C[3][2] = {
     { 6, 2 },
 };
 
-BOOL sub_0202AA44(SAVE_MISC_DATA *saveMiscData, int a1, int a2) {
+BOOL SaveMisc_PhoneRecentCallers_Contains(SAVE_MISC_DATA *saveMiscData, int a1, int a2) {
     int i;
     if (a1 > NELEMS(_020F677C) - 1) {
         return FALSE;
@@ -128,7 +128,7 @@ BOOL sub_0202AA44(SAVE_MISC_DATA *saveMiscData, int a1, int a2) {
     return FALSE;
 }
 
-void sub_0202AA9C(SAVE_MISC_DATA *saveMiscData, int a1) {
+void SaveMisc_PhoneRecentCallers_Clear(SAVE_MISC_DATA *saveMiscData, int a1) {
     int i;
     if (a1 > NELEMS(_020F677C) - 1) {
         return;
@@ -138,7 +138,7 @@ void sub_0202AA9C(SAVE_MISC_DATA *saveMiscData, int a1) {
     }
 }
 
-u8 sub_0202AAD4(SAVE_MISC_DATA *saveMiscData, int a1) {
+u8 SaveMisc_PhoneRecentCallers_Count(SAVE_MISC_DATA *saveMiscData, int a1) {
     int n = 0;
     int i, min, max;
     if (a1 > NELEMS(_020F677C) - 1) {
@@ -154,7 +154,7 @@ u8 sub_0202AAD4(SAVE_MISC_DATA *saveMiscData, int a1) {
     return n;
 }
 
-void sub_0202AB18(SAVE_MISC_DATA *saveMiscData, u8 a1, u8 a2, u8 a3) {
+void SaveMisc_PhoneRecentCallers_Add(SAVE_MISC_DATA *saveMiscData, u8 a1, u8 a2, u8 a3) {
     int i, len, min, max;
     if (a1 > NELEMS(_020F677C) - 1) {
         return;
@@ -169,7 +169,7 @@ void sub_0202AB18(SAVE_MISC_DATA *saveMiscData, u8 a1, u8 a2, u8 a3) {
         }
     }
     if (a2 == len + 1) {
-        sub_0202AA9C(saveMiscData, a1);
+        SaveMisc_PhoneRecentCallers_Clear(saveMiscData, a1);
         saveMiscData->unk_0280[_020F677C[a1][0]] = a3;
         return;
     }
@@ -195,21 +195,21 @@ void SaveMisc_SetBattleGreeting(SAVE_MISC_DATA *saveMiscData, MailMessage *mailM
     saveMiscData->battleGreetingEC = *mailMessage;
 }
 
-void sub_0202AC0C(SAVE_MISC_DATA *saveMiscData, u8 *a1) {
+void SaveMisc_GetVsRecorderColorScheme(SAVE_MISC_DATA *saveMiscData, u8 *a1) {
     *a1 = saveMiscData->unk_029B_1;
 }
 
-void sub_0202AC1C(SAVE_MISC_DATA *saveMiscData, u8 a1) {
+void SaveMisc_SetVsRecorderColorScheme(SAVE_MISC_DATA *saveMiscData, u8 a1) {
     saveMiscData->unk_029B_1 = a1;
 }
 
-void sub_0202AC38(SAVE_MISC_DATA *saveMiscData, int a1, u32 *a2, u32 *a3, u8 *a4) {
+void SaveMisc_GetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int a1, u32 *a2, u32 *a3, u8 *a4) {
     *a2 = saveMiscData->unk_02A8[0][a1 - 1];
     *a3 = saveMiscData->unk_02A8[1][a1 - 1];
     *a4 = saveMiscData->unk_02D0[a1 - 1];
 }
 
-void sub_0202AC60(SAVE_MISC_DATA *saveMiscData, int a1, u32 a2, u32 a3, u8 a4) {
+void SaveMisc_SetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int a1, u32 a2, u32 a3, u8 a4) {
     saveMiscData->unk_02A8[0][a1 - 1] = a2;
     saveMiscData->unk_02A8[1][a1 - 1] = a3;
     saveMiscData->unk_02D0[a1 - 1] = a4;

@@ -21,9 +21,9 @@ static BOOL Task_VermilionGymmick_AnimateGateAction(TaskManager *taskman);
 
 void GymmickInit_Vermilion(FieldSystem *fieldSystem) {
     GymmickUnion *gymmickUnion = Save_Gymmick_AssertMagic_GetData(Save_GetGymmickPtr(FieldSystem_GetSaveData(fieldSystem)), GYMMICK_VERMILION);
-    fieldSystem->unk4->unk24 = Heap_Alloc(HEAP_ID_FIELD1, sizeof(VermilionGymmickLocalData));
-    MI_CpuClear8(fieldSystem->unk4->unk24, sizeof(VermilionGymmickLocalData));
-    VermilionGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    fieldSystem->mapSystems->localData = Heap_Alloc(HEAP_ID_FIELD1, sizeof(VermilionGymmickLocalData));
+    MI_CpuClear8(fieldSystem->mapSystems->localData, sizeof(VermilionGymmickLocalData));
+    VermilionGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     localData->fieldSystem = fieldSystem;
 
     if (gymmickUnion->vermilion.gates[0]) {
@@ -44,8 +44,8 @@ void GymmickInit_Vermilion(FieldSystem *fieldSystem) {
 }
 
 void GymmickFree_Vermilion(FieldSystem *fieldSystem) {
-    Heap_Free(fieldSystem->unk4->unk24);
-    fieldSystem->unk4->unk24 = NULL;
+    Heap_Free(fieldSystem->mapSystems->localData);
+    fieldSystem->mapSystems->localData = NULL;
 }
 
 u8 VermilionGymmick_SwitchCheck(FieldSystem *fieldSystem, u8 canId) {

@@ -138,7 +138,7 @@ BattleSetup *BattleArcade_NewBattleSetup(ArcadeContext *ctx, FrontierLaunchArgs 
     playerCount = BattleArcade_GetMonCount(ctx->type, FALSE);
     opponentCount = BattleArcade_GetOpponentMonCount(ctx->type, FALSE);
     setup = BattleSetup_New(HEAP_ID_FIELD2, BattleArcade_GetBattleType(ctx->type));
-    sub_02051D18(setup, NULL, args->saveData, args->mapId, args->bagCursor, args->unk1C);
+    BattleSetup_InitFromSaveData(setup, NULL, args->saveData, args->mapId, args->bagCursor, args->unk1C);
     setup->battleBg = BATTLE_BG_BATTLE_ARCADE;
     setup->terrain = TERRAIN_BATTLE_ARCADE;
     setup->weatherType = ctx->weather;

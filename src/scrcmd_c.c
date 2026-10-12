@@ -2291,7 +2291,7 @@ BOOL ScrCmd_180(ScriptContext *ctx) {
 BOOL ScrCmd_FlashEffect(ScriptContext *ctx) {
     LocalFieldData *localFieldData = Save_LocalFieldData_Get(ctx->fieldSystem->saveData);
     LocalFieldData_SetWeatherType(localFieldData, 12);
-    WeatherManager_ChangeWeather(ctx->fieldSystem->unk4->weatherManager, LocalFieldData_GetWeatherType(localFieldData));
+    WeatherManager_ChangeWeather(ctx->fieldSystem->mapSystems->weatherManager, LocalFieldData_GetWeatherType(localFieldData));
     return TRUE;
 }
 
@@ -3841,9 +3841,9 @@ BOOL ScrCmd_530(ScriptContext *ctx) {
     u8 action = ScriptReadByte(ctx);
     SaveVarsFlags *varsFlags = Save_VarsFlags_Get(ctx->fieldSystem->saveData);
     if (action) {
-        sub_02066C1C(varsFlags, r6);
+        Save_VarsFlags_SetMapEventKey(varsFlags, r6);
     } else {
-        sub_02066C4C(varsFlags, r6);
+        Save_VarsFlags_ClearMapEventKey(varsFlags, r6);
     }
     return FALSE;
 }
@@ -3870,7 +3870,7 @@ BOOL ScrCmd_536(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_537(ScriptContext *ctx) {
-    sub_02066D60(ctx->fieldSystem->saveData);
+    Save_VarsFlags_RandomizeVar4041(ctx->fieldSystem->saveData);
     return FALSE;
 }
 
@@ -3925,7 +3925,7 @@ BOOL ScrCmd_546(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     SaveVarsFlags *varsFlags = Save_VarsFlags_Get(ctx->fieldSystem->saveData);
     GF_ASSERT(mode <= 1);
-    *p_ret = sub_02066BC0(varsFlags, mode);
+    *p_ret = Save_VarsFlags_CheckEventKey(varsFlags, mode);
     return FALSE;
 }
 
@@ -4452,7 +4452,7 @@ BOOL ScrCmd_598(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_599(ScriptContext *ctx) {
-    ov01_02205AEC(ctx->fieldSystem);
+    FollowMon_StartHopIntoBall(ctx->fieldSystem);
     return TRUE;
 }
 
@@ -4541,8 +4541,8 @@ BOOL ScrCmd_606(ScriptContext *ctx) {
     if (FollowMon_IsActive(ctx->fieldSystem)) {
         LocalMapObject *object = FollowMon_GetMapObject(ctx->fieldSystem);
         if (FollowMon_GetPermissionBySpeciesAndMap(FollowMon_GetSpecies(object), ctx->fieldSystem->location->mapId)) {
-            sub_02069E84(object, 1);
-            sub_02069DEC(object, TRUE);
+            FollowMon_SetReleaseBallPending(object, 1);
+            FollowMon_SetHideUntilStepBit(object, TRUE);
             FollowMon_MoveToPlayer(ctx->fieldSystem, 1);
         }
     }

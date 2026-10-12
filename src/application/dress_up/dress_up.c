@@ -41,7 +41,7 @@ void FashionEntry_MarkSaved(SaveFashionDataSub *entry);
 void FashionEntry_Clear(SaveFashionDataSub *entry);
 void FashionEntry_SetMon(SaveFashionDataSub *entry, Pokemon *mon, DressUpMonPic *monPic);
 void FashionEntry_PlaceItem(SaveFashionDataSub *entry, DressUpSlot *slot, int index);
-void sub_0202BD60(SaveFashionDataSub *entry, int value);
+void FashionEntry_SetBackdrop(SaveFashionDataSub *entry, int value);
 void FashionEntry_SetMonSecondText(SaveFashionDataSub *entry, String *string, u32 gender); // u8 in save_fashion.c; the caller does not truncate
 
 typedef struct DressUpTransition {
@@ -671,7 +671,7 @@ void DressUp_SaveDesign(SaveFashionDataSub *entry, DressUpCanvas *canvas, Player
             count++;
         }
     }
-    sub_0202BD60(entry, (u8)canvas->backdropId);
+    FashionEntry_SetBackdrop(entry, (u8)canvas->backdropId);
     FashionEntry_MarkSaved(entry);
 }
 

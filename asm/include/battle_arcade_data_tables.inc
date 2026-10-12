@@ -27,9 +27,9 @@
 .public FrontierSave_SetStat
 .public FrontierSave_RaiseStat
 .public Save_VarsFlags_Get
-.public sub_0205C268
-.public sub_0205C2C0
-.public sub_0205C2E8
+.public FrontierStat_GetFriendIndex
+.public BattleArcade_GetWinStreakStat
+.public BattleArcade_GetBestStreakStat
 .public Save_VarsFlags_GetVar4052
 .public AllocMonZeroed
 .public CalcMonLevelAndStats

@@ -343,7 +343,7 @@ SysTask *ZigzagWipe_Start(EncounterEffectTask *effect, ZigzagWipe *wipe, s32 dur
         GF_AssertFail();
     }
     effect->unk_18 = FALSE;
-    wipe->hBlankSystem = effect->fieldSystem->unk4->hBlankSystem;
+    wipe->hBlankSystem = effect->fieldSystem->mapSystems->hBlankSystem;
     wipe->state = 0;
     wipe->done = &effect->unk_18;
     EncounterEffectInterp_Init(&wipe->edge, 255, 0, duration);

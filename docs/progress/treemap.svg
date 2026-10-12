@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 292fb5594 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · fcd72e638 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -302,9 +302,9 @@ src/pokemon_summary.c</title></rect>
 <rect x="80.464" y="478.467" width="17.157" height="25.516" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / communication_club_link.o
 2,736 bytes · C-only source
 src/communication_club_link.c</title></rect>
-<rect x="97.621" y="431.956" width="35.260" height="12.397" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_20.o
+<rect x="97.621" y="431.956" width="35.260" height="12.397" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_battle_hall.o
 2,732 bytes · C-only source
-src/scrcmd_20.c</title></rect>
+src/scrcmd_battle_hall.c</title></rect>
 <rect x="97.621" y="444.353" width="17.708" height="24.613" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_strbuf.o
 2,724 bytes · C-only source
 src/scrcmd_strbuf.c</title></rect>
@@ -1139,9 +1139,9 @@ src/mail_message.c</title></rect>
 <rect x="209.432" y="609.525" width="11.813" height="8.560" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / os_message.o
 632 bytes · C-only source
 lib/NitroSDK/src/os/os_message.c</title></rect>
-<rect x="209.432" y="618.085" width="11.813" height="8.533" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / player_avatar_anim_indices.o
+<rect x="209.432" y="618.085" width="11.813" height="8.533" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / frontier_stat_ids.o
 630 bytes · C-only source
-src/player_avatar_anim_indices.c</title></rect>
+src/frontier_stat_ids.c</title></rect>
 <rect x="221.246" y="609.525" width="5.879" height="17.093" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / socl_startup.o
 628 bytes · C-only source
 lib/NitroWiFi/src/socl_startup.c</title></rect>
@@ -2626,15 +2626,15 @@ src/battle/battle_finger.c</title></rect>
 <rect x="455.197" y="453.166" width="12.600" height="8.889" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_12 / battle_cursor.o
 700 bytes · C-only source
 src/battle/battle_cursor.c</title></rect>
-<rect x="455.197" y="462.055" width="6.520" height="12.368" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_12 / battle_02265E28.o
+<rect x="455.197" y="462.055" width="6.520" height="12.368" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_12 / battle_terrain.o
 504 bytes · C-only source
-src/battle/battle_02265E28.c</title></rect>
+src/battle/battle_terrain.c</title></rect>
 <rect x="461.717" y="462.055" width="6.080" height="7.263" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_12 / overlay_12_0226BEC4.o
 276 bytes · C-only source
 src/battle/overlay_12_0226BEC4.c</title></rect>
-<rect x="461.717" y="469.318" width="6.080" height="5.105" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_12 / battle_02261FD4.o
+<rect x="461.717" y="469.318" width="6.080" height="5.105" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_12 / battle_pokepic_bob.o
 194 bytes · C-only source
-src/battle/battle_02261FD4.c</title></rect>
+src/battle/battle_pokepic_bob.c</title></rect>
 <rect x="308.240" y="259.445" width="159.557" height="214.978" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="311.240" y="262.445" width="105.000" height="22" rx="3" fill="#101722" opacity="0.88"/>
 <text x="317.240" y="278.445" font-size="12">ARM9 / OVY_12</text>
@@ -3599,9 +3599,9 @@ src/field/map_prop_animation.c</title></rect>
 <rect x="538.769" y="621.048" width="26.670" height="12.695" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / field_follow_mon_ball.o
 2,116 bytes · C-only source
 src/field/field_follow_mon_ball.c</title></rect>
-<rect x="517.891" y="633.743" width="24.054" height="13.756" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / overlay_01_02204004.o
+<rect x="517.891" y="633.743" width="24.054" height="13.756" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / map_prop_render.o
 2,068 bytes · C-only source
-src/field/overlay_01_02204004.c</title></rect>
+src/field/map_prop_render.c</title></rect>
 <rect x="517.891" y="647.499" width="24.054" height="13.636" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / encounter_effect_util.o
 2,050 bytes · C-only source
 src/field/encounter_effect_util.c</title></rect>

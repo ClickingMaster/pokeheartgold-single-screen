@@ -168,15 +168,15 @@ BOOL ShouldUseAlternateLakeOfRage(SaveData *saveData, u32 map_no) {
 
     if (Save_VarsFlags_CheckFlagInArray(state, FLAG_ROCKET_HIDEOUT_CLEARED) == FALSE) {
         // The player hasn't cleared the Rocket Hideout in Mahogany Town yet.
-        sub_02066C4C(state, 1);
+        Save_VarsFlags_ClearMapEventKey(state, 1);
         return FALSE;
     }
 
     if (!MapAndDayCheck(map_no, &date)) {
-        sub_02066C4C(state, 1);
+        Save_VarsFlags_ClearMapEventKey(state, 1);
         return FALSE;
     } else {
-        sub_02066C1C(state, 1);
+        Save_VarsFlags_SetMapEventKey(state, 1);
         return TRUE;
     }
 }

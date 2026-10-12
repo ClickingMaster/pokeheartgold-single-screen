@@ -32,9 +32,9 @@
 static void BattleSetup_SetParty(BattleSetup *setup, Party *party, int battlerId);
 static void BattleSetup_SetProfile(BattleSetup *setup, PlayerProfile *profile, int battlerId);
 static void BattleSetup_SetChatotVoiceClip(BattleSetup *setup, SOUND_CHATOT *chatot, int battlerId);
-static void sub_0205230C(FieldSystem *fieldSystem, PlayerProfile *profile1, PlayerProfile *profile2);
+static void FieldSystem_DepositBattleMoneyToMomsSavings(FieldSystem *fieldSystem, PlayerProfile *profile1, PlayerProfile *profile2);
 static Terrain FieldSystem_GetTerrainFromStandingTile(FieldSystem *fieldSystem, BattleBg battleBg);
-static void sub_02052504(BattleSetup *setup, FieldSystem *fieldSystem);
+static void BattleSetup_SetBattleBgAndTerrain(BattleSetup *setup, FieldSystem *fieldSystem);
 
 BattleSetup *BattleSetup_New(enum HeapID heapID, u32 battleTypeFlags) {
     int i;
@@ -118,7 +118,7 @@ BattleSetup *BattleSetup_New_Tutorial(enum HeapID heapID, FieldSystem *fieldSyst
         DestroyMsgData(msgData);
     }
     PlayerProfile_SetTrainerGender(setup->profile[BATTLER_PLAYER], PlayerProfile_GetTrainerGender(profile) ^ 1);
-    sub_02052504(setup, fieldSystem);
+    BattleSetup_SetBattleBgAndTerrain(setup, fieldSystem);
     Options_Copy(options, setup->options);
     setup->timeOfDay = Field_GetTimeOfDay(fieldSystem);
     Bag_AddItem(setup->bag, ITEM_POKE_BALL, 20, heapID);
@@ -185,7 +185,7 @@ static void BattleSetup_SetChatotVoiceClip(BattleSetup *setup, SOUND_CHATOT *cha
     Chatot_Copy(setup->chatot[battlerId], chatot);
 }
 
-void sub_02051D18(BattleSetup *setup, FieldSystem *fieldSystem, SaveData *saveData, u32 mapno, BagCursor *bagCursor, void *arg5) {
+void BattleSetup_InitFromSaveData(BattleSetup *setup, FieldSystem *fieldSystem, SaveData *saveData, u32 mapno, BagCursor *bagCursor, void *arg5) {
     PlayerProfile *profile;
     Party *party;
     Bag *bag;
@@ -210,7 +210,7 @@ void sub_02051D18(BattleSetup *setup, FieldSystem *fieldSystem, SaveData *saveDa
         if (battle_bg == BATTLE_BG_CAVE_1 || battle_bg == BATTLE_BG_CAVE_2 || battle_bg == BATTLE_BG_CAVE_3) {
             forceNite = TRUE;
         }
-        sub_02052504(setup, fieldSystem);
+        BattleSetup_SetBattleBgAndTerrain(setup, fieldSystem);
         setup->timeOfDay = Field_GetTimeOfDay(fieldSystem);
         if (forceNite) {
             setup->timeOfDay = RTC_TIMEOFDAY_NITE;
@@ -255,7 +255,7 @@ void sub_02051D18(BattleSetup *setup, FieldSystem *fieldSystem, SaveData *saveDa
 }
 
 void BattleSetup_InitFromFieldSystem(BattleSetup *setup, FieldSystem *fieldSystem) {
-    sub_02051D18(setup, fieldSystem, fieldSystem->saveData, fieldSystem->location->mapId, fieldSystem->bagCursor, fieldSystem->unkB0);
+    BattleSetup_InitFromSaveData(setup, fieldSystem, fieldSystem->saveData, fieldSystem->location->mapId, fieldSystem->bagCursor, fieldSystem->unkB0);
     BattleSetup_SetAllySideBattlersToPlayer(setup);
 }
 
@@ -307,7 +307,7 @@ void BattleSetup_InitForFixedLevelFacility(BattleSetup *setup, FieldSystem *fiel
     BattleSetup_SetAllySideBattlersToPlayer(setup);
 }
 
-void sub_020520B0(BattleSetup *setup, FieldSystem *fieldSystem, Party *party, u8 *partySlots) {
+void BattleSetup_InitForLinkBattleWithParty(BattleSetup *setup, FieldSystem *fieldSystem, Party *party, u8 *partySlots) {
     PlayerProfile *profile;
     Bag *bag;
     Pokedex *pokedex;
@@ -387,11 +387,11 @@ void sub_020520B0(BattleSetup *setup, FieldSystem *fieldSystem, Party *party, u8
     }
 }
 
-void sub_020522F0(BattleSetup *setup, FieldSystem *fieldSystem, void *partySlots) {
-    sub_020520B0(setup, fieldSystem, SaveArray_Party_Get(fieldSystem->saveData), partySlots);
+void BattleSetup_InitForLinkBattle(BattleSetup *setup, FieldSystem *fieldSystem, void *partySlots) {
+    BattleSetup_InitForLinkBattleWithParty(setup, fieldSystem, SaveArray_Party_Get(fieldSystem->saveData), partySlots);
 }
 
-static void sub_0205230C(FieldSystem *fieldSystem, PlayerProfile *profile1, PlayerProfile *profile2) {
+static void FieldSystem_DepositBattleMoneyToMomsSavings(FieldSystem *fieldSystem, PlayerProfile *profile1, PlayerProfile *profile2) {
     SaveVarsFlags *vars_flags = Save_VarsFlags_Get(fieldSystem->saveData);
     PhoneCallPersistentState *savings = SaveData_GetPhoneCallPersistentState(fieldSystem->saveData);
 
@@ -415,7 +415,7 @@ static void sub_0205230C(FieldSystem *fieldSystem, PlayerProfile *profile1, Play
     }
 }
 
-void sub_0205239C(BattleSetup *setup, FieldSystem *fieldSystem) {
+void BattleSetup_CopyResultsToSaveData(BattleSetup *setup, FieldSystem *fieldSystem) {
     PlayerProfile *profile;
     Party *party;
     Bag *bag;
@@ -428,7 +428,7 @@ void sub_0205239C(BattleSetup *setup, FieldSystem *fieldSystem) {
     bag = Save_Bag_Get(fieldSystem->saveData);
     pokedex = Save_Pokedex_Get(fieldSystem->saveData);
 
-    sub_0205230C(fieldSystem, profile, setup->profile[BATTLER_PLAYER]);
+    FieldSystem_DepositBattleMoneyToMomsSavings(fieldSystem, profile, setup->profile[BATTLER_PLAYER]);
     PlayerProfile_Copy(setup->profile[BATTLER_PLAYER], profile);
     Party_Copy(setup->party[BATTLER_PLAYER], party);
     Save_Bag_Copy(setup->bag, bag);
@@ -446,7 +446,7 @@ void sub_0205239C(BattleSetup *setup, FieldSystem *fieldSystem) {
     }
 }
 
-void sub_02052444(BattleSetup *setup, FieldSystem *fieldSystem) {
+void BattleSetup_CopyPokedexToSaveData(BattleSetup *setup, FieldSystem *fieldSystem) {
     PlayerProfile *profile;
     Party *party;
     Bag *bag;
@@ -460,7 +460,7 @@ void sub_02052444(BattleSetup *setup, FieldSystem *fieldSystem) {
     Pokedex_Copy(setup->pokedex, pokedex);
 }
 
-static const Terrain _020FC4C0[] = {
+static const Terrain sBattleBgTerrains[] = {
     [BATTLE_BG_GENERAL] = TERRAIN_PLAIN,
     [BATTLE_BG_OCEAN] = TERRAIN_WATER,
     [BATTLE_BG_CITY] = TERRAIN_BUILDING,
@@ -510,15 +510,15 @@ static Terrain FieldSystem_GetTerrainFromStandingTile(FieldSystem *fieldSystem, 
     if (MetatileBehavior_IsSurfableWater(behavior)) {
         return TERRAIN_WATER;
     }
-    if (battleBg < NELEMS(_020FC4C0)) {
-        return _020FC4C0[battleBg];
+    if (battleBg < NELEMS(sBattleBgTerrains)) {
+        return sBattleBgTerrains[battleBg];
     }
 
     GF_ASSERT(FALSE);
     return TERRAIN_MAX;
 }
 
-static void sub_02052504(BattleSetup *setup, FieldSystem *fieldSystem) {
+static void BattleSetup_SetBattleBgAndTerrain(BattleSetup *setup, FieldSystem *fieldSystem) {
     PlayerSaveData *player = LocalFieldData_GetPlayer(Save_LocalFieldData_Get(fieldSystem->saveData));
     setup->battleBg = MapHeader_GetBattleBg(fieldSystem->location->mapId);
 
@@ -529,9 +529,9 @@ static void sub_02052504(BattleSetup *setup, FieldSystem *fieldSystem) {
     setup->terrain = FieldSystem_GetTerrainFromStandingTile(fieldSystem, setup->battleBg);
 }
 
-void sub_02052544(BattleSetup *setup) {
+void BattleSetup_SetFishing(BattleSetup *setup) {
     setup->terrain = TERRAIN_WATER;
-    setup->unk_1D0 = TRUE;
+    setup->isFishing = TRUE;
 }
 
 BOOL IsBattleResultWin(u32 result) {

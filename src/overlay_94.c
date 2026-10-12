@@ -90,7 +90,7 @@ BOOL PartyMenu_AnimateIconFormChange(PartyMenu *partyMenu) {
     case 5:
         work->effectTimer++;
         if (work->effectTimer == work->duration) {
-            sub_0207ECE0(partyMenu, partyMenu->partyMonIndex);
+            PartyMenu_ReloadMonIconGraphics(partyMenu, partyMenu->partyMonIndex);
         }
         _RunParticleSystem();
         if (work->effectTimer > work->duration) {

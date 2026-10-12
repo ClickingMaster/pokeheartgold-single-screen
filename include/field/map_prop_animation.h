@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_FIELD_MAP_PROP_ANIMATION_H
 #define POKEHEARTGOLD_FIELD_MAP_PROP_ANIMATION_H
 
-#include "field/overlay_01_02204004.h"
+#include "field/map_prop_render.h"
 
 #include "filesystem.h"
 
@@ -45,7 +45,7 @@ typedef struct MapPropAnimationManager {
     BicycleSlopeAnimation bicycleSlopeAnimations[MAP_PROP_ANIMATION_MANAGER_MAX_BICYCLE_SLOPE_ANIMATIONS];
     NARC *animNARC;
     NARC *animListNARC;
-    FieldSystemUnkSubCC_Sub0 *unk138;
+    MapPropAnimationPool *animationPool;
 } MapPropAnimationManager; // Size: 0x13C
 
 typedef struct MapPropOneShotAnimationList {
@@ -67,7 +67,7 @@ typedef struct MapPropOneShotAnimationManager {
     MapPropOneShotAnimation items[MAP_PROP_ONE_SHOT_ANIMATION_MANAGER_MAX_ITEMS];
 } MapPropOneShotAnimationManager; // Size: 0x380
 
-MapPropAnimationManager *MapPropAnimationManager_Init(NARC *animListNARC, FieldSystemUnkSubC8 *unkSubC8);
+MapPropAnimationManager *MapPropAnimationManager_Init(NARC *animListNARC, MapPropAnimationPoolList *unkSubC8);
 BOOL MapPropAnimationManager_AddAnimationToRenderObj(const int mapPropModelID, const int mapPropAnimID, const BOOL isDeferred, NNSG3dRenderObj *renderObj, MapPropAnimationManager *manager);
 void MapPropAnimationManager_UnloadAllAnimations(MapPropAnimationManager *manager);
 void MapPropAnimationManager_RemoveAnimationFromRenderObj(MapPropAnimationManager *mapPropAnimationManager, NNSG3dRenderObj *renderObj, const int mapPropModelID, const int mapPropAnimIndex);
@@ -89,7 +89,7 @@ void MapPropOneShotAnimationManager_PlayAnimationWithSoundEffect(MapPropOneShotA
 void MapPropOneShotAnimationManager_UnloadAnimation(MapPropAnimationManager *animManager, MapPropOneShotAnimationManager *oneShotAnimManager, const int tag);
 const BOOL MapPropOneShotAnimationManager_IsAnimationLoopFinished(MapPropOneShotAnimationManager *const oneShotAnimManager, const int tag);
 const int MapPropOneShotAnimationManager_GetAnimationMapPropModelID(MapPropOneShotAnimationManager *const oneShotAnimManager, const int tag);
-void ov01_021E8F3C(int fileCount, NNSG3dResMdl *resMdl, NNSG3dRenderObj *renderObj, NNSG3dResTex *resTex, MapPropAnimListFile *animListFile, MapPropAnimationManager *mapPropAnimationManager, FieldSystemUnkSub104 *unk104);
+void MapPropAnimationManager_LoadPropAnimations(int fileCount, NNSG3dResMdl *resMdl, NNSG3dRenderObj *renderObj, NNSG3dResTex *resTex, MapPropAnimListFile *animListFile, MapPropAnimationManager *mapPropAnimationManager, TimeOfDayPropAnimManager *unk104);
 void ov01_021E90B0(MapPropOneShotAnimationManager *oneShotAnimManager, const int tag, u8 arg2);
 
 #endif // POKEHEARTGOLD_FIELD_MAP_PROP_ANIMATION_H

@@ -1540,18 +1540,18 @@ LocalMapObject *FollowMon_InitMapObject(MapObjectManager *mapObjectManager, int 
                 Save_FollowMon_SetUnused2bitField(1, Save_FollowMon_Get(fieldSystem->saveData));
             } else if (playerState == PLAYER_STATE_CYCLING) {
                 Save_FollowMon_SetUnused2bitField(2, Save_FollowMon_Get(fieldSystem->saveData));
-                sub_0206A054(fieldSystem);
+                FollowMon_Hide(fieldSystem);
                 MapObject_ChangeMovement(FollowMon_GetMapObject(fieldSystem), 56);
             } else if (playerState == PLAYER_STATE_SURFING) {
                 Save_FollowMon_SetUnused2bitField(2, Save_FollowMon_Get(fieldSystem->saveData));
-                sub_0206A054(fieldSystem);
+                FollowMon_Hide(fieldSystem);
                 MapObject_ChangeMovement(FollowMon_GetMapObject(fieldSystem), 56);
             } else {
                 GF_ASSERT(FALSE);
             }
 
             if (Save_FollowMon_GetInhibitFlagState(Save_FollowMon_Get(fieldSystem->saveData))) {
-                sub_0206A054(fieldSystem);
+                FollowMon_Hide(fieldSystem);
             }
         }
     }
@@ -1598,20 +1598,20 @@ void FollowMon_ChangeMon(MapObjectManager *mapObjectManager, u32 mapno) {
                     Save_FollowMon_SetUnused2bitField(1, Save_FollowMon_Get(fieldSystem->saveData));
                 } else if (playerState == PLAYER_STATE_CYCLING) {
                     Save_FollowMon_SetUnused2bitField(2, Save_FollowMon_Get(fieldSystem->saveData));
-                    sub_0206A040(fieldSystem->followMon.mapObject, TRUE);
+                    FollowMon_SetVisibleFlag(fieldSystem->followMon.mapObject, TRUE);
                 } else if (playerState == PLAYER_STATE_SURFING) {
                     Save_FollowMon_SetUnused2bitField(2, Save_FollowMon_Get(fieldSystem->saveData));
-                    sub_0206A040(fieldSystem->followMon.mapObject, TRUE);
+                    FollowMon_SetVisibleFlag(fieldSystem->followMon.mapObject, TRUE);
                 } else {
                     GF_ASSERT(FALSE);
                 }
 
-                if (sub_02069E14(fieldSystem->followMon.mapObject)) {
-                    sub_0206A040(fieldSystem->followMon.mapObject, TRUE);
+                if (FollowMon_IsHiddenUntilStep(fieldSystem->followMon.mapObject)) {
+                    FollowMon_SetVisibleFlag(fieldSystem->followMon.mapObject, TRUE);
                 }
 
                 if (Save_FollowMon_GetInhibitFlagState(Save_FollowMon_Get(fieldSystem->saveData))) {
-                    sub_0206A054(fieldSystem);
+                    FollowMon_Hide(fieldSystem);
                 }
                 MapObject_ClearFlag18(fieldSystem->followMon.mapObject, FALSE);
             }
@@ -1663,16 +1663,16 @@ u32 FollowMon_GetSpriteID(int species, u16 form, u32 gender) {
     return ret;
 }
 
-void sub_02069DC8(LocalMapObject *mapObject, BOOL enableBit) {
-    sub_0206A040(mapObject, enableBit);
+void FollowMon_HideUntilStep(LocalMapObject *mapObject, BOOL enableBit) {
+    FollowMon_SetVisibleFlag(mapObject, enableBit);
     if (enableBit) {
-        sub_02069DEC(mapObject, TRUE);
+        FollowMon_SetHideUntilStepBit(mapObject, TRUE);
     } else {
-        sub_02069DEC(mapObject, FALSE);
+        FollowMon_SetHideUntilStepBit(mapObject, FALSE);
     }
 }
 
-void sub_02069DEC(LocalMapObject *mapObject, BOOL enableBit) {
+void FollowMon_SetHideUntilStepBit(LocalMapObject *mapObject, BOOL enableBit) {
     int value = MapObject_GetParam(mapObject, 2);
     u8 flag0 = value & 1;
     u32 flag1 = enableBit;
@@ -1683,7 +1683,7 @@ void sub_02069DEC(LocalMapObject *mapObject, BOOL enableBit) {
     MapObject_SetParam(mapObject, value, 2);
 }
 
-u8 sub_02069E14(LocalMapObject *mapObject) {
+u8 FollowMon_IsHiddenUntilStep(LocalMapObject *mapObject) {
     return (MapObject_GetParam(mapObject, 2) >> 1) & 1;
 }
 
@@ -1697,7 +1697,7 @@ void sub_02069E28(LocalMapObject *mapObject, u32 a1) { // todo: figure out what 
     MapObject_SetParam(mapObject, param, 2);
 }
 
-void sub_02069E50(LocalMapObject *mapObject, u8 a1) {
+void FollowMon_SetHopMovement(LocalMapObject *mapObject, u8 a1) {
     int param;
     u32 b;
 
@@ -1711,7 +1711,7 @@ void sub_02069E50(LocalMapObject *mapObject, u8 a1) {
     MapObject_SetParam(mapObject, param, 2);
 }
 
-void sub_02069E84(LocalMapObject *mapObject, u8 a1) {
+void FollowMon_SetReleaseBallPending(LocalMapObject *mapObject, u8 a1) {
     int param;
     u8 a;
     u32 b;
@@ -1727,7 +1727,7 @@ void sub_02069E84(LocalMapObject *mapObject, u8 a1) {
     MapObject_SetParam(mapObject, param, 2);
 }
 
-u8 sub_02069EAC(LocalMapObject *mapObject) {
+u8 FollowMon_IsReleaseBallPending(LocalMapObject *mapObject) {
     return (MapObject_GetParam(mapObject, 2) >> 2) & 1;
 }
 
@@ -1735,7 +1735,7 @@ u8 sub_02069EC0(LocalMapObject *mapObject) {
     return (MapObject_GetParam(mapObject, 2) >> 8) & 3;
 }
 
-u8 sub_02069ED4(LocalMapObject *mapObject) {
+u8 FollowMon_GetHopMovement(LocalMapObject *mapObject) {
     return (MapObject_GetParam(mapObject, 2) >> 10) & 0x3F;
 }
 
@@ -1826,15 +1826,15 @@ BOOL FollowMon_GetPermissionBySpeciesAndMap(int species, u32 mapNo) {
     return ret;
 }
 
-void sub_0206A040(LocalMapObject *mapObject, BOOL enableBit) {
+void FollowMon_SetVisibleFlag(LocalMapObject *mapObject, BOOL enableBit) {
     MapObject_SetVisible(mapObject, enableBit);
     MapObject_SetFlag19(mapObject, enableBit);
 }
 
-void sub_0206A054(FieldSystem *fieldSystem) {
+void FollowMon_Hide(FieldSystem *fieldSystem) {
     LocalMapObject *obj = fieldSystem->followMon.mapObject;
-    sub_02069DC8(obj, TRUE);
-    sub_02069DEC(obj, FALSE);
+    FollowMon_HideUntilStep(obj, TRUE);
+    FollowMon_SetHideUntilStepBit(obj, FALSE);
 }
 
 static void FollowMon_Clear(FollowMon *followMon) {
@@ -1910,7 +1910,7 @@ static LocalMapObject *FollowMon_CreateMapObject(MapObjectManager *mapObjectMana
     MapObject_SetFlagsBits(mapObject, (MapObjectFlagBits)(MAPOBJECTFLAG_UNK13 | MAPOBJECTFLAG_KEEP));
     MapObject_ClearFlagsBits(mapObject, (MapObjectFlagBits)(MAPOBJECTFLAG_UNK8 | MAPOBJECTFLAG_UNK7));
     MapObject_SetFlag29(mapObject, TRUE);
-    sub_02069DC8(mapObject, TRUE);
+    FollowMon_HideUntilStep(mapObject, TRUE);
 
     return mapObject;
 }

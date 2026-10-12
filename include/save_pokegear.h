@@ -72,8 +72,8 @@ u8 Pokegear_GetMapUnlockLevel(SavePokegear *pokegear);
 u32 Pokegear_GetSkin(SavePokegear *pokegear);
 void Pokegear_SetSkin(SavePokegear *pokegear, u32 skin);
 u16 Pokegear_GetUnlockedSkins(SavePokegear *pokegear);
-BOOL sub_0202EEA4(SavePokegear *pokegear);
-void sub_0202EEA8(SavePokegear *pokegear, u8 a1);
+BOOL Pokegear_GetMapZoomed(SavePokegear *pokegear);
+void Pokegear_SetMapZoomed(SavePokegear *pokegear, u8 a1);
 void Pokegear_SetRadioCursorCoords(SavePokegear *pokegear, u8 x, u8 y);
 void Pokegear_GetRadioCursorCoords(SavePokegear *pokegear, s16 *px, s16 *py);
 u8 SavePokegear_FindEmptyPhonebookSlot(SavePokegear *pokegear);
@@ -90,8 +90,8 @@ BOOL PhoneCallPersistentState_PhoneRematches_IsSeeking(PhoneCallPersistentState 
 void PhoneCallPersistentState_PhoneRematches_GiftItemIdSet(PhoneCallPersistentState *callPersistentState, u8 idx, u16 itemId);
 u16 PhoneCallPersistentState_PhoneRematches_GiftItemIdGet(PhoneCallPersistentState *callPersistentState, u8 idx);
 u32 PhoneCallPersistentState_MomSavings_BalanceAction(PhoneCallPersistentState *callPersistentState, int action, u32 operand);
-void sub_0202F198(PhoneCallPersistentState *callPersistentState, u8 idx);
-BOOL sub_0202F1B4(PhoneCallPersistentState *callPersistentState, u8 idx);
+void PhoneCallPersistentState_MomGift_SetNormalGiftGiven(PhoneCallPersistentState *callPersistentState, u8 idx);
+BOOL PhoneCallPersistentState_MomGift_IsNormalGiftGiven(PhoneCallPersistentState *callPersistentState, u8 idx);
 void PhoneCallPersistentState_MomGiftQueue_Put(PhoneCallPersistentState *callPersistentState, u16 itemID, u16 quantity);
 void PhoneCallPersistentState_MomGiftQueue_Get(PhoneCallPersistentState *callPersistentState);
 u16 PhoneCallPersistentState_MomGiftQueue_Peek(PhoneCallPersistentState *callPersistentState, u8 idx, u16 *pItemID);
@@ -99,7 +99,7 @@ BOOL PhoneCallPersistentState_MomGiftQueue_IsFull(PhoneCallPersistentState *call
 void PhoneCallPersistentState_BlackBeltKenji_SetActiveFlag(PhoneCallPersistentState *callPersistentState, BOOL flag);
 BOOL PhoneCallPersistentState_BlackBeltKenji_GetActiveFlag(PhoneCallPersistentState *callPersistentState);
 int PhoneCallPersistentState_BlackBeltKenji_GetWaitDays(PhoneCallPersistentState *callPersistentState);
-void sub_0202F294(PhoneCallPersistentState *callPersistentState, int a1);
+void PhoneCallPersistentState_BlackBeltKenji_UpdateWaitDays(PhoneCallPersistentState *callPersistentState, int a1);
 void PhoneCallPersistentState_SafariZoneArrangement_Set(PhoneCallPersistentState *callPersistentState, u8 *areas, u8 numAreas);
 u8 *PhoneCallPersistentState_SafariZoneArrangement_AllocAndGet(PhoneCallPersistentState *callPersistentState, u8 *numAreasRet, enum HeapID heapID);
 

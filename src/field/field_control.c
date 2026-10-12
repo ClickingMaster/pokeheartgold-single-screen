@@ -362,7 +362,7 @@ BOOL FieldInput_Process_Colosseum(FieldInput *input, FieldSystem *fieldSystem) {
 
     if (input->menu) {
         PlaySE(SEQ_SE_DP_WIN_OPEN);
-        sub_0203BD20(fieldSystem); // StartMenu_OpenColosseum?
+        StartMenu_InitColosseum(fieldSystem); // StartMenu_OpenColosseum?
         return TRUE;
     }
 
@@ -406,7 +406,7 @@ BOOL FieldInput_Process_UnionRoom(FieldInput *input, FieldSystem *fieldSystem) {
 
     if (input->menu && Comm_CountConnected() <= 1 && FieldSystem_IsBottomScreenAppReady(fieldSystem)) {
         PlaySE(SEQ_SE_DP_WIN_OPEN);
-        sub_0203BCDC(fieldSystem); // StartMenu_OpenUnionRoom?
+        StartMenu_InitUnionRoom(fieldSystem); // StartMenu_OpenUnionRoom?
         UnionRoom_SetBeaconActivity(4);
         CommState_RefuseJoinsAndRestart(); // CommManager_PauseUnionServer?
         return TRUE;
@@ -800,10 +800,10 @@ static BOOL FieldSystem_UpdatePoison(FieldSystem *fieldSystem) {
     case FIELD_POISON_NONE:
         return FALSE;
     case FIELD_POISON_DAMAGE:
-        FieldSystem_DoPoisonEffect(fieldSystem->unk4->unk20);
+        FieldSystem_DoPoisonEffect(fieldSystem->mapSystems->poisonEffect);
         return FALSE;
     case FIELD_POISON_SURVIVE:
-        FieldSystem_DoPoisonEffect(fieldSystem->unk4->unk20);
+        FieldSystem_DoPoisonEffect(fieldSystem->mapSystems->poisonEffect);
         StartMapSceneScript(fieldSystem, std_survive_poisoning, NULL);
         return TRUE;
     default:

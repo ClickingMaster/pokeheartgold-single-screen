@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "292fb5594cb945a8e22917ae339eb0feece7d934",
+  "commit": "fcd72e638eeb611785f89bb30780c7c544e71a2d",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "dfb5ac01be6e8d283b03156b2a2e6b050437ddae2f0832fd66e3b7e070a96e5b",
+    "ARM9": "7789c474530499df435fcc8fce51029eeda8ed9111ce8a3c487fc6560b547c08",
     "ARM7": "d726d92f810e881692e1b4d2ec232d6ca89b38985dcb26b08751c0037036d92a"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -740,22 +740,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_12",
-      "object": "battle_02261FD4.o",
-      "bytes": 194,
-      "status": "c",
-      "source": "src/battle/battle_02261FD4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_12",
-      "object": "battle_02265E28.o",
-      "bytes": 504,
-      "status": "c",
-      "source": "src/battle/battle_02265E28.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_12",
       "object": "battle_command.o",
       "bytes": 46728,
       "status": "c",
@@ -828,10 +812,26 @@
     {
       "cpu": "ARM9",
       "module": "OVY_12",
+      "object": "battle_pokepic_bob.o",
+      "bytes": 194,
+      "status": "c",
+      "source": "src/battle/battle_pokepic_bob.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_12",
       "object": "battle_system.o",
       "bytes": 10090,
       "status": "c",
       "source": "src/battle/battle_system.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_12",
+      "object": "battle_terrain.o",
+      "bytes": 504,
+      "status": "c",
+      "source": "src/battle/battle_terrain.c"
     },
     {
       "cpu": "ARM9",
@@ -6605,6 +6605,14 @@
     {
       "cpu": "ARM9",
       "module": "field",
+      "object": "map_prop_render.o",
+      "bytes": 2068,
+      "status": "c",
+      "source": "src/field/map_prop_render.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "field",
       "object": "overlay_01_021EA824.o",
       "bytes": 180,
       "status": "c",
@@ -6617,14 +6625,6 @@
       "bytes": 362,
       "status": "c",
       "source": "src/field/overlay_01_021FFECC.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "overlay_01_02204004.o",
-      "bytes": 2068,
-      "status": "c",
-      "source": "src/field/overlay_01_02204004.c"
     },
     {
       "cpu": "ARM9",
@@ -8244,6 +8244,14 @@
       "bytes": 1178,
       "status": "c",
       "source": "src/frontier_save.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "frontier_stat_ids.o",
+      "bytes": 630,
+      "status": "c",
+      "source": "src/frontier_stat_ids.c"
     },
     {
       "cpu": "ARM9",
@@ -11330,14 +11338,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "player_avatar_anim_indices.o",
-      "bytes": 630,
-      "status": "c",
-      "source": "src/player_avatar_anim_indices.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "player_avatar_movement.o",
       "bytes": 5420,
       "status": "c",
@@ -11893,14 +11893,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "scrcmd_20.o",
-      "bytes": 2732,
-      "status": "c",
-      "source": "src/scrcmd_20.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "scrcmd_8.o",
       "bytes": 612,
       "status": "c",
@@ -11945,6 +11937,14 @@
       "bytes": 1424,
       "status": "c",
       "source": "src/scrcmd_battle_castle.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "scrcmd_battle_hall.o",
+      "bytes": 2732,
+      "status": "c",
+      "source": "src/scrcmd_battle_hall.c"
     },
     {
       "cpu": "ARM9",

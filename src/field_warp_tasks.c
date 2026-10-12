@@ -244,7 +244,7 @@ void FieldSystem_InitMapOnEnter(FieldSystem *fieldSystem, BOOL isConnection) {
     }
     varsFlags = Save_VarsFlags_Get(fieldSystem->saveData);
     weather = FieldSystem_GetWeather_HandleDiamondDust(fieldSystem, mapId);
-    if (sub_02066C74(varsFlags, 1) && mapId == MAP_LAKE_OF_RAGE) {
+    if (Save_VarsFlags_CheckMapEventKey(varsFlags, 1) && mapId == MAP_LAKE_OF_RAGE) {
         weather = 0;
     }
     if (weather == 9 && SysFlagDefogCheck(varsFlags) == TRUE) {
@@ -324,10 +324,10 @@ static void FieldSystem_LoadMapMatrixAndMode(FieldSystem *fieldSystem) {
 
     MapMatrix_Load(fieldSystem->location->mapId, fieldSystem->mapMatrix);
     varsFlags = Save_VarsFlags_Get(fieldSystem->saveData);
-    if (sub_02066C74(varsFlags, 0)) {
+    if (Save_VarsFlags_CheckMapEventKey(varsFlags, 0)) {
         RemoveMahoganyTownAntennaTree(fieldSystem->mapMatrix);
     }
-    SetLakeOfRageWaterLevel(fieldSystem->mapMatrix, sub_02066C74(varsFlags, 1));
+    SetLakeOfRageWaterLevel(fieldSystem->mapMatrix, Save_VarsFlags_CheckMapEventKey(varsFlags, 1));
     PlaceSafariZoneAreas(fieldSystem->mapMatrix, fieldSystem->saveData);
 
     GF_ASSERT(fieldSystem->mapLoadType < 6);
@@ -923,7 +923,7 @@ static BOOL Task_WarpPanel(TaskManager *taskManager) {
         if (FollowMon_IsActive(fieldSystem)) {
             follow_mon_obj = FollowMon_GetMapObject(fieldSystem);
             if (FollowMon_GetPermissionBySpeciesAndMap(FollowMon_GetSpecies(follow_mon_obj), location->mapId)) {
-                sub_02069E84(follow_mon_obj, 1);
+                FollowMon_SetReleaseBallPending(follow_mon_obj, 1);
                 FollowMon_MoveToPlayer(fieldSystem, 1);
             }
         }

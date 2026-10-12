@@ -180,7 +180,7 @@ SysTask *TouchMartApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSyste
     TouchMartApp_PrintMoney(data);
     TouchMartApp_PrintPageNumber(data);
     TouchMartApp_PrintItemList(data);
-    ov03_022581BC(data->martData);
+    MartData_CreateSprites(data->martData);
     reg_GXS_DB_DISPCNT &= 0xFFFF1FFF;
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
@@ -509,7 +509,7 @@ void TouchMartApp_PrintItemList(TouchMartAppData *data) {
             if (ov31_0225E12C(data->martData, index, itemId)) {
                 int price;
                 martData2 = data->martData;
-                price = ov03_02258120(martData2, (u16)itemId);
+                price = MartData_GetItemPrice(martData2, (u16)itemId);
                 TouchMartApp_PrintPrice(data->messageFormat, data->msgData, window, price, martData2->martType);
             }
             i++;
@@ -662,7 +662,7 @@ void TouchMartApp_PrintSelectedItem(TouchMartAppData *data) {
         int price;
         martData = data->martData;
         itemId = martData->unk268[index];
-        price = ov03_02258120(martData, itemId);
+        price = MartData_GetItemPrice(martData, itemId);
         TouchMartApp_PrintPrice(data->messageFormat, data->msgData, &data->windows[TOUCH_MART_WINDOW_SELECTED_ITEM], price, martData->martType);
     }
     ScheduleWindowCopyToVram(&data->windows[TOUCH_MART_WINDOW_SELECTED_ITEM]);
@@ -679,7 +679,7 @@ void TouchMartApp_PrintInBag(TouchMartAppData *data, int unused) {
     String_Delete(template);
     string = String_New(5, HEAP_ID_FIELD2);
     template = NewString_ReadMsgData(data->msgData, msg_0435_00036);
-    count = ov03_02257978(data->martData, data->martData->item);
+    count = MartData_GetOwnedQuantity(data->martData, data->martData->item);
     BufferIntegerAsString(data->messageFormat, 0, count, 3, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     StringExpandPlaceholders(data->messageFormat, string, template);
     width = FontID_String_GetWidth(0, string, 0);
@@ -905,7 +905,7 @@ String *TouchMartApp_GetCannotAffordMessage(MartData *martData, MsgData *msgData
     } else {
         amount = PlayerProfile_GetMoney(martData->playerProfile);
     }
-    result = ov03_02257814(martData, amount);
+    result = MartData_CheckCannotBuy(martData, amount);
     if (result == 2) {
         return NewString_ReadMsgData(msgData, msg_0435_00025);
     }

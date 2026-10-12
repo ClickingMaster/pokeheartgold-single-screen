@@ -42,13 +42,13 @@ struct PlayerAvatar {
     u32 unk3c;
 }; // size: 0x40
 
-u32 sub_0205C268(u32 param0);
-u8 sub_0205C278(void);
+u32 FrontierStat_GetFriendIndex(u32 param0);
+u8 Comm_GetPartnerGameVersion(void);
 u8 sub_0205C298(SaveData *saveData);
-u8 sub_0205C2C0(u32 param0);
-u8 sub_0205C2E8(u32 param0);
-u8 sub_0205C310(u32 param0);
-u8 sub_0205C350(u32 param0);
+u8 BattleArcade_GetWinStreakStat(u32 param0);
+u8 BattleArcade_GetBestStreakStat(u32 param0);
+u8 BattleTower_GetWinStreakStat(u32 param0);
+u8 BattleTower_GetBestStreakStat(u32 param0);
 PlayerAvatar *PlayerAvatar_CreateWithParams(MapObjectManager *manager, u32 x, u32 z, u32 direction, s32 state, u32 gender, u32 param6, PlayerSaveData *playerSaveData);
 PlayerAvatar *PlayerAvatar_CreateWithActiveMapObject(MapObjectManager *manager, PlayerSaveData *playerSaveData, u32 gender);
 void PlayerAvatar_InitMapFeatures(PlayerAvatar *avatar);

@@ -29,8 +29,8 @@
 .public BattleFinger_FreeResources
 .public BattleFinger_New
 .public BattleFinger_Delete
-.public ov12_0226BCFC
-.public ov12_0226BD2C
+.public BattleFinger_EnableWithOffset
+.public BattleFinger_Enable
 .public BattleFinger_Disable
-.public ov12_0226BD4C
-.public ov12_0226BD50
+.public BattleFinger_SetTouchDelay
+.public BattleFinger_HasTouched

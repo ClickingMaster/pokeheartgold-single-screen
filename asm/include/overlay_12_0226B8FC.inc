@@ -26,9 +26,9 @@
 .public BattleCursor_FreeResources
 .public BattleCursor_New
 .public BattleCursor_Delete
-.public ov12_0226BA4C
-.public ov12_0226BAFC
-.public ov12_0226BB1C
-.public ov12_0226BB40
+.public BattleCursor_SetCornersWithOffset
+.public BattleCursor_SetRect
+.public BattleCursor_SetRectWithOffset
+.public BattleCursor_ShowExtraSpriteWithOffset
 .public BattleCursor_Disable
-.public ov12_0226BB84
+.public BattleCursor_HideExtraSprite

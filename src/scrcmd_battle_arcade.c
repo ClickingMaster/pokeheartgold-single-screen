@@ -36,26 +36,26 @@ typedef enum BattleArcadeChallengeType {
     BATTLE_ARCADE_CHALLENGE_TYPE_MULTI,
 } BattleArcadeChallengeType;
 
-typedef struct UnkStruct_0204FBDC {
+typedef struct FrontierSelectMonsEnv {
     u32 state;
     u8 challengeType;
     u8 partySlot;
     u8 selectedOrder[3];
     u8 filler[2];
-    void **unk0c;
-} UnkStruct_0204FBDC;
+    void **appArgs;
+} FrontierSelectMonsEnv;
 
-static void sub_0204FFB0(SaveData *, void *, u8);
-static void sub_0205011C(TaskManager *, void *, BattleArcadeChallengeType);
-static BOOL sub_02050150(TaskManager *);
-static void sub_02050060(TaskManager *, u16, u16, u16 *);
-static BOOL sub_020500A0(TaskManager *);
-static u32 sub_020501B8(UnkStruct_0204FBDC *, FieldSystem *, u32);
-static u32 sub_02050290(UnkStruct_0204FBDC *, FieldSystem *);
-static u32 sub_020502E0(UnkStruct_0204FBDC *, FieldSystem *, enum HeapID);
-static u32 sub_02050370(UnkStruct_0204FBDC *, FieldSystem *);
+static void BattleArcade_ResetStreak(SaveData *, void *, u8);
+static void BattleArcade_StartSelectMons(TaskManager *, void *, BattleArcadeChallengeType);
+static BOOL Task_BattleArcadeSelectMons(TaskManager *);
+static void BattleArcade_StartTeamCheck(TaskManager *, u16, u16, u16 *);
+static BOOL Task_BattleArcadeTeamCheck(TaskManager *);
+static u32 BattleArcadeSelectMons_OpenPartyMenu(FrontierSelectMonsEnv *, FieldSystem *, u32);
+static u32 BattleArcadeSelectMons_WaitPartyMenu(FrontierSelectMonsEnv *, FieldSystem *);
+static u32 BattleArcadeSelectMons_OpenSummary(FrontierSelectMonsEnv *, FieldSystem *, enum HeapID);
+static u32 BattleArcadeSelectMons_WaitSummary(FrontierSelectMonsEnv *, FieldSystem *);
 
-static const u8 unk_020FC3AC[] = {
+static const u8 sBattleArcadeSummaryPages[] = {
     0,
     1,
     2,
@@ -76,13 +76,13 @@ BOOL ScrCmd_643(ScriptContext *ctx) {
         break;
     case 1: // Unused
         if (arg1 == 3) {
-            *result = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), 110, sub_0205C268(110));
+            *result = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), 110, FrontierStat_GetFriendIndex(110));
         } else {
             *result = ArcadeFlags_GetField(unk0, 8, arg1, 0, 0);
         }
         break;
     case 3: // Unused
-        sub_0204FFB0(ctx->fieldSystem->saveData, unk0, arg1);
+        BattleArcade_ResetStreak(ctx->fieldSystem->saveData, unk0, arg1);
         break;
     case 4: {
         BattleArcadeChallengeType challengeType;
@@ -93,7 +93,7 @@ BOOL ScrCmd_643(ScriptContext *ctx) {
         } else {
             challengeType = BATTLE_ARCADE_CHALLENGE_TYPE_MULTI;
         }
-        sub_0205011C(ctx->taskman, unk1, challengeType);
+        BattleArcade_StartSelectMons(ctx->taskman, unk1, challengeType);
         return TRUE;
     }
     default:
@@ -106,40 +106,40 @@ BOOL ScrCmd_643(ScriptContext *ctx) {
 
 BOOL ScrCmd_646(ScriptContext *ctx) {
     u16 unk = ScriptGetVar(ctx);
-    sub_0204FFB0(ctx->fieldSystem->saveData, Save_Frontier_GetArcadeFlags(ctx->fieldSystem->saveData), unk);
+    BattleArcade_ResetStreak(ctx->fieldSystem->saveData, Save_Frontier_GetArcadeFlags(ctx->fieldSystem->saveData), unk);
     return FALSE;
 }
 
-static void sub_0204FFB0(SaveData *saveData, void *a1, u8 a2) {
+static void BattleArcade_ResetStreak(SaveData *saveData, void *a1, u8 a2) {
     u8 unk;
     unk = 0;
     ArcadeFlags_SetField(a1, 8, a2, 0, &unk);
     if (a2 == 3) {
-        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 110, sub_0205C268(110), 0);
+        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 110, FrontierStat_GetFriendIndex(110), 0);
     }
-    FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), sub_0205C2C0(a2), sub_0205C268(sub_0205C2C0(a2)), 0);
+    FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), BattleArcade_GetWinStreakStat(a2), FrontierStat_GetFriendIndex(BattleArcade_GetWinStreakStat(a2)), 0);
 }
 
 BOOL ScrCmd_644(ScriptContext *ctx) {
     u16 firstMon = ScriptGetVar(ctx);
     u16 secondMon = ScriptGetVar(ctx);
     u16 *result = ScriptGetVarPointer(ctx);
-    sub_02050060(ctx->taskman, firstMon, secondMon, result);
+    BattleArcade_StartTeamCheck(ctx->taskman, firstMon, secondMon, result);
     return TRUE;
 }
 
-static void sub_02050060(TaskManager *taskManager, u16 firstMon, u16 secondMon, u16 *result) {
-    UnkStruct_02050060 *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(UnkStruct_02050060));
-    memset(unk, 0, sizeof(UnkStruct_02050060));
+static void BattleArcade_StartTeamCheck(TaskManager *taskManager, u16 firstMon, u16 secondMon, u16 *result) {
+    BattleArcadeTeamCheck *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BattleArcadeTeamCheck));
+    memset(unk, 0, sizeof(BattleArcadeTeamCheck));
     unk->playerTeam[0] = firstMon;
     unk->playerTeam[1] = secondMon;
     unk->result = result;
     sub_02091574(unk);
-    TaskManager_Call(taskManager, sub_020500A0, unk);
+    TaskManager_Call(taskManager, Task_BattleArcadeTeamCheck, unk);
 }
 
-static BOOL sub_020500A0(TaskManager *taskManager) {
-    UnkStruct_02050060 *unk = TaskManager_GetEnvironment(taskManager);
+static BOOL Task_BattleArcadeTeamCheck(TaskManager *taskManager) {
+    BattleArcadeTeamCheck *unk = TaskManager_GetEnvironment(taskManager);
     switch (unk->state) {
     case 0:
         if (Comm_SendCommand(134, unk, 16) == 1) {
@@ -147,7 +147,7 @@ static BOOL sub_020500A0(TaskManager *taskManager) {
         }
         break;
     case 1:
-        if (unk->unk01 >= 2) {
+        if (unk->numReceived >= 2) {
             *unk->result = 0;
             if (unk->playerTeam[0] == unk->partnerTeam[0] || unk->playerTeam[0] == unk->partnerTeam[1]) {
                 *unk->result += 1;
@@ -165,30 +165,30 @@ static BOOL sub_020500A0(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void sub_0205011C(TaskManager *taskManager, void *a1, BattleArcadeChallengeType challengeType) {
+static void BattleArcade_StartSelectMons(TaskManager *taskManager, void *a1, BattleArcadeChallengeType challengeType) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    UnkStruct_0204FBDC *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(UnkStruct_0204FBDC));
-    MI_CpuFill8(unk, 0, sizeof(UnkStruct_0204FBDC));
+    FrontierSelectMonsEnv *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(FrontierSelectMonsEnv));
+    MI_CpuFill8(unk, 0, sizeof(FrontierSelectMonsEnv));
     unk->challengeType = challengeType;
-    unk->unk0c = a1;
-    TaskManager_Call(fieldSystem->taskman, sub_02050150, unk);
+    unk->appArgs = a1;
+    TaskManager_Call(fieldSystem->taskman, Task_BattleArcadeSelectMons, unk);
 }
 
-static BOOL sub_02050150(TaskManager *taskManager) {
+static BOOL Task_BattleArcadeSelectMons(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    UnkStruct_0204FBDC *unk = TaskManager_GetEnvironment(taskManager);
+    FrontierSelectMonsEnv *unk = TaskManager_GetEnvironment(taskManager);
     switch (unk->state) {
     case 0:
-        unk->state = sub_020501B8(unk, fieldSystem, HEAP_ID_FIELD2);
+        unk->state = BattleArcadeSelectMons_OpenPartyMenu(unk, fieldSystem, HEAP_ID_FIELD2);
         break;
     case 1:
-        unk->state = sub_02050290(unk, fieldSystem);
+        unk->state = BattleArcadeSelectMons_WaitPartyMenu(unk, fieldSystem);
         break;
     case 2:
-        unk->state = sub_020502E0(unk, fieldSystem, HEAP_ID_FIELD2);
+        unk->state = BattleArcadeSelectMons_OpenSummary(unk, fieldSystem, HEAP_ID_FIELD2);
         break;
     case 3:
-        unk->state = sub_02050370(unk, fieldSystem);
+        unk->state = BattleArcadeSelectMons_WaitSummary(unk, fieldSystem);
         break;
     case 4:
         Heap_Free(unk);
@@ -197,7 +197,7 @@ static BOOL sub_02050150(TaskManager *taskManager) {
     return FALSE;
 }
 
-static u32 sub_020501B8(UnkStruct_0204FBDC *a0, FieldSystem *fieldSystem, u32 a2) {
+static u32 BattleArcadeSelectMons_OpenPartyMenu(FrontierSelectMonsEnv *a0, FieldSystem *fieldSystem, u32 a2) {
     PartyMenuArgs *partyMenu = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PartyMenuArgs));
     MIi_CpuClearFast(0, (u32 *)partyMenu, sizeof(PartyMenuArgs));
     partyMenu->party = SaveArray_Party_Get(fieldSystem->saveData);
@@ -220,15 +220,15 @@ static u32 sub_020501B8(UnkStruct_0204FBDC *a0, FieldSystem *fieldSystem, u32 a2
         partyMenu->maxMonsToSelect = 2;
     }
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PartyMenu, partyMenu);
-    *(a0->unk0c) = partyMenu;
+    *(a0->appArgs) = partyMenu;
     return 1;
 }
 
-static u32 sub_02050290(UnkStruct_0204FBDC *a0, FieldSystem *fieldSystem) {
+static u32 BattleArcadeSelectMons_WaitPartyMenu(FrontierSelectMonsEnv *a0, FieldSystem *fieldSystem) {
     if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
         return TRUE;
     }
-    PartyMenuArgs *partyMenu = *(a0->unk0c);
+    PartyMenuArgs *partyMenu = *(a0->appArgs);
     switch (partyMenu->partySlot) {
     case 7:
         return 4;
@@ -238,11 +238,11 @@ static u32 sub_02050290(UnkStruct_0204FBDC *a0, FieldSystem *fieldSystem) {
     MI_CpuCopy8(partyMenu->selectedOrder, a0->selectedOrder, 3);
     a0->partySlot = partyMenu->partySlot;
     Heap_Free(partyMenu);
-    *(a0->unk0c) = NULL;
+    *(a0->appArgs) = NULL;
     return 2;
 }
 
-static u32 sub_020502E0(UnkStruct_0204FBDC *a0, FieldSystem *fieldSystem, enum HeapID heapID) {
+static u32 BattleArcadeSelectMons_OpenSummary(FrontierSelectMonsEnv *a0, FieldSystem *fieldSystem, enum HeapID heapID) {
     SaveData *saveData = fieldSystem->saveData;
     PokemonSummaryArgs *unk = Heap_AllocAtEnd(heapID, sizeof(PokemonSummaryArgs));
     MI_CpuFill8(unk, 0, sizeof(PokemonSummaryArgs));
@@ -257,26 +257,26 @@ static u32 sub_020502E0(UnkStruct_0204FBDC *a0, FieldSystem *fieldSystem, enum H
     unk->unk12 = 0;
     unk->ribbons = Save_SpecialRibbons_Get(saveData);
     unk->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);
-    PokemonSummary_SetPages(unk, unk_020FC3AC);
+    PokemonSummary_SetPages(unk, sBattleArcadeSummaryPages);
     PokemonSummaryArgs_SetPlayer(unk, Save_PlayerData_GetProfile(saveData));
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, unk);
-    *(a0->unk0c) = unk;
+    *(a0->appArgs) = unk;
     return 3;
 }
 
-static u32 sub_02050370(UnkStruct_0204FBDC *a0, FieldSystem *fieldSystem) {
+static u32 BattleArcadeSelectMons_WaitSummary(FrontierSelectMonsEnv *a0, FieldSystem *fieldSystem) {
     if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
         return 3;
     }
-    PokemonSummaryArgs *pokemonSummaryArgs = *(a0->unk0c);
+    PokemonSummaryArgs *pokemonSummaryArgs = *(a0->appArgs);
     a0->partySlot = pokemonSummaryArgs->partySlot;
     Heap_Free(pokemonSummaryArgs);
-    *(a0->unk0c) = NULL;
+    *(a0->appArgs) = NULL;
     return 0;
 }
 
-void sub_02050398(u32 a0, u32 unused, UnkStruct_02050060 *a2, UnkStruct_02050060 *a3) {
-    a3->unk01++;
+void BattleArcade_RecvPartnerTeam(u32 a0, u32 unused, BattleArcadeTeamCheck *a2, BattleArcadeTeamCheck *a3) {
+    a3->numReceived++;
     if (Comm_GetLocalNetId() != a0) {
         a3->partnerTeam[0] = a2->playerTeam[0];
         a3->partnerTeam[1] = a2->playerTeam[1];

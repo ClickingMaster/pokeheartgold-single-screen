@@ -1,6 +1,6 @@
 #include "field/map_load_manager.h"
 #include "field/overlay_01_021FB878.h"
-#include "field/overlay_01_02204004.h"
+#include "field/map_prop_render.h"
 
 #include "field_system.h"
 #include "follow_mon.h"
@@ -247,9 +247,9 @@ static const AzaleaGymmickSpinarakRoute *const sSpinarakRoutes_Froms[] = {
 
 void GymmickInit_Azalea(FieldSystem *fieldSystem) {
     GymmickUnion *gymmickUnion = Save_Gymmick_AssertMagic_GetData(Save_GetGymmickPtr(FieldSystem_GetSaveData(fieldSystem)), GYMMICK_AZALEA);
-    fieldSystem->unk4->unk24 = Heap_Alloc(HEAP_ID_FIELD1, sizeof(AzaleaGymmickLocalData));
-    MI_CpuFill8(fieldSystem->unk4->unk24, 0, sizeof(AzaleaGymmickLocalData));
-    AzaleaGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    fieldSystem->mapSystems->localData = Heap_Alloc(HEAP_ID_FIELD1, sizeof(AzaleaGymmickLocalData));
+    MI_CpuFill8(fieldSystem->mapSystems->localData, 0, sizeof(AzaleaGymmickLocalData));
+    AzaleaGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     for (int i = 0; i < 4; ++i) {
         VecFx32 spinarakPos = { 0, 0, 0 };
         u8 spider = gymmickUnion->azalea.spiders[i];
@@ -332,7 +332,7 @@ void FlipAzaleaGymSwitch(FieldSystem *fieldSystem, u8 switchNo) {
 }
 
 void BeginAzaleaGymSpinarakRide(FieldSystem *fieldSystem, u8 spinarakNo) {
-    AzaleaGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    AzaleaGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     AzaleaGymmickSpinarakRideData *rideData = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(AzaleaGymmickSpinarakRideData));
     rideData->state = 0;
     rideData->fieldSystem = fieldSystem;
@@ -439,14 +439,14 @@ static int AzaleaGymmick_GetMovementDoneParams(BOOL sign, fx32 cur, fx32 delta, 
 }
 
 void GymmickFree_Azalea(FieldSystem *fieldSystem) {
-    Heap_Free(fieldSystem->unk4->unk24);
-    fieldSystem->unk4->unk24 = NULL;
+    Heap_Free(fieldSystem->mapSystems->localData);
+    fieldSystem->mapSystems->localData = NULL;
 }
 
 static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData) {
     AzaleaGymmickSpinarakRideData *rideData = taskData;
     FieldSystem *fieldSystem = rideData->fieldSystem;
-    AzaleaGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    AzaleaGymmickLocalData *localData = fieldSystem->mapSystems->localData;
 
     switch (rideData->state) {
     case 2:

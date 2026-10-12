@@ -6,7 +6,7 @@
 .public CommCmd_GetSizeVariable
 .public Comm_SendCommand
 .public Comm_GetLocalNetId
-.public sub_0205C268
+.public FrontierStat_GetFriendIndex
 .public GetMonData
 .public Party_GetMonByIndex
 .public SaveArray_Party_Get

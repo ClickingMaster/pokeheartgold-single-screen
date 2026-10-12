@@ -136,8 +136,8 @@
 .public Mail_GetAuthorNamePtr
 .public Mail_GetAuthorGender
 .public Mail_GetType
-.public sub_0202B404
-.public sub_0202B4E4
+.public Mail_GetMonIconData
+.public Mail_GetFormFlags
 .public Mail_GetUnk20Array
 .public Save_Mailbox_Get
 .public Mailbox_DeleteSlotI
@@ -154,11 +154,11 @@
 .public Bag_AddItem
 .public Bag_TakeItem
 .public Save_Bag_Get
-.public sub_02090E68
-.public sub_02090F6C
-.public sub_02090F70
-.public sub_02090F90
-.public sub_02091004
+.public UseMailArgs_NewCompose
+.public UseMailArgs_WasMailWritten
+.public UseMailArgs_GiveMailToMon
+.public UseMailArgs_Free
+.public Mailbox_MoveMessageToMon
 .public NNS_G2dGetImageLocation
 .public G2x_SetBlendAlpha_
 .public GXS_LoadOBJ

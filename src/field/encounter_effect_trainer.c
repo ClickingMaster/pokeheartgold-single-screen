@@ -642,7 +642,7 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
         }
         break;
     case 5:
-        HBlankSystem_Stop(effect->fieldSystem->unk4->hBlankSystem);
+        HBlankSystem_Stop(effect->fieldSystem->mapSystems->hBlankSystem);
         distance = Camera_GetDistance(work->camera);
         EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (250 << 14), FX32_CONST(10), 8);
         BeginNormalPaletteFade(3, 18, 0, RGB_BLACK, 8, 1, HEAP_ID_FIELD1);
@@ -657,7 +657,7 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
         break;
     case 7:
         SetMasterBrightnessByColor(1, RGB_BLACK);
-        HBlankSystem_Start(effect->fieldSystem->unk4->hBlankSystem);
+        HBlankSystem_Start(effect->fieldSystem->mapSystems->hBlankSystem);
         if (effect->done != NULL) {
             *effect->done = TRUE;
         }

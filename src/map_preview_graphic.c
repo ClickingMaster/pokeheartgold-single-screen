@@ -937,7 +937,7 @@ static int sub_0206A694(UnkStruct_0206A388 *unk, FieldSystem *fsys) {
             if (FollowMon_IsActive(fsys)) {
                 FollowMon_MoveToPlayer(fsys, 1);
                 MapObject_ChangeMovement(FollowMon_GetMapObject(fsys), MOVEMENT_WALK_UNK_48);
-                sub_02069DC8(FollowMon_GetMapObject(fsys), TRUE);
+                FollowMon_HideUntilStep(FollowMon_GetMapObject(fsys), TRUE);
             }
             unkSub->state++;
         }

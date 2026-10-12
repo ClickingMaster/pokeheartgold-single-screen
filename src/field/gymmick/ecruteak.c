@@ -32,9 +32,9 @@ static void ApplyFogToMapObjects(FieldSystem *fieldSystem);
 
 void GymmickInit_Ecruteak(FieldSystem *fieldSystem) {
     GymmickUnion *gymmickUnion = Save_Gymmick_AssertMagic_GetData(Save_GetGymmickPtr(FieldSystem_GetSaveData(fieldSystem)), GYMMICK_ECRUTEAK);
-    fieldSystem->unk4->unk24 = Heap_Alloc(HEAP_ID_FIELD1, sizeof(EcruteakGymmickLocalData));
-    MI_CpuClear8(fieldSystem->unk4->unk24, sizeof(EcruteakGymmickLocalData));
-    EcruteakGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    fieldSystem->mapSystems->localData = Heap_Alloc(HEAP_ID_FIELD1, sizeof(EcruteakGymmickLocalData));
+    MI_CpuClear8(fieldSystem->mapSystems->localData, sizeof(EcruteakGymmickLocalData));
+    EcruteakGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     fieldSystem->unk11C = FX32_CONST(0.0625);
     ov01_021EA864(fieldSystem->fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x0020, 0);
     ov01_021EA89C(fieldSystem->fog, -1, 0, 31);
@@ -57,12 +57,12 @@ void GymmickInit_Ecruteak(FieldSystem *fieldSystem) {
 }
 
 void GymmickFree_Ecruteak(FieldSystem *fieldSystem) {
-    Heap_Free(fieldSystem->unk4->unk24);
-    fieldSystem->unk4->unk24 = NULL;
+    Heap_Free(fieldSystem->mapSystems->localData);
+    fieldSystem->mapSystems->localData = NULL;
 }
 
 void EcruteakGymmick_BindCandleToTrainerObject(FieldSystem *fieldSystem) {
-    EcruteakGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    EcruteakGymmickLocalData *localData = fieldSystem->mapSystems->localData;
 
     LocalMapObject **attrPtr = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_0_EVENT);
     u8 candleIdx = MortyGymTrainerObjectToCandleIdx(*attrPtr);
@@ -76,12 +76,12 @@ void EcruteakGymmick_BindCandleToTrainerObject(FieldSystem *fieldSystem) {
 }
 
 void EcruteakGymmick_UnbindCandleFromTrainerObject(FieldSystem *fieldSystem) {
-    EcruteakGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    EcruteakGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     SysTask_Destroy(localData->sysTask);
 }
 
 void EcruteakGymmick_ExtinguishCandle(FieldSystem *fieldSystem, ScriptEnvField field) {
-    EcruteakGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    EcruteakGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     LocalMapObject **attrPtr = FieldSysGetAttrAddr(fieldSystem, field);
     localData->candleIdx = MortyGymTrainerObjectToCandleIdx(*attrPtr);
     localData->mapObject = *attrPtr;
@@ -95,7 +95,7 @@ void EcruteakGymmick_ExtinguishCandle(FieldSystem *fieldSystem, ScriptEnvField f
 
 static void SysTask_MoveCandleToFollowMapObject(SysTask *task, void *data) {
     FieldSystem *fieldSystem = data;
-    EcruteakGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    EcruteakGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     VecFx32 objectPos;
     MapObject_CopyPositionVector(localData->mapObject, &objectPos);
     MapProp_SetTranslation(MapPropManager_GetMapPropByIndex(fieldSystem->mapPropManager, localData->candleMapProps[localData->candleIdx]), &objectPos);
@@ -103,7 +103,7 @@ static void SysTask_MoveCandleToFollowMapObject(SysTask *task, void *data) {
 
 static BOOL Task_ExtinguishCandle(TaskManager *taskman) {
     EcruteakExtinguishCandleTaskData *taskData = TaskManager_GetEnvironment(taskman);
-    EcruteakGymmickLocalData *localData = taskData->fieldSystem->unk4->unk24;
+    EcruteakGymmickLocalData *localData = taskData->fieldSystem->mapSystems->localData;
 
     switch (taskData->state) {
     case 0:

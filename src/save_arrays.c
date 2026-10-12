@@ -380,22 +380,22 @@ int SaveHallOfFame(SaveData *saveData, HallOfFame *hallOfFame) {
     return WriteExtraSaveChunk(saveData, 0, hallOfFame);
 }
 
-struct BattleRecord *sub_0202711C(SaveData *saveData, enum HeapID heapID, int *ret_p, int idx) {
+struct BattleRecord *LoadBattleRecord(SaveData *saveData, enum HeapID heapID, int *ret_p, int idx) {
     int sp4;
-    return sub_020284A4(saveData, heapID, idx + 2, ret_p, &sp4);
+    return ReadExtraSaveChunkKeyed(saveData, heapID, idx + 2, ret_p, &sp4);
 }
 
-int sub_02027134(SaveData *saveData, struct BattleRecord *data, int idx) {
-    return sub_02028230(saveData, idx + 2, data);
+int SaveBattleRecord(SaveData *saveData, struct BattleRecord *data, int idx) {
+    return WriteExtraSaveChunkKeyed(saveData, idx + 2, data);
 }
 
-struct FrontierSpeciesRecords *sub_02027144(SaveData *saveData, enum HeapID heapID, int *ret_p) {
+struct FrontierSpeciesRecords *LoadFrontierSpeciesRecords(SaveData *saveData, enum HeapID heapID, int *ret_p) {
     int sp4;
-    return sub_020284A4(saveData, heapID, 1, ret_p, &sp4);
+    return ReadExtraSaveChunkKeyed(saveData, heapID, 1, ret_p, &sp4);
 }
 
-int sub_02027158(SaveData *saveData, struct FrontierSpeciesRecords *data) {
-    return sub_02028230(saveData, 1, data);
+int SaveFrontierSpeciesRecords(SaveData *saveData, struct FrontierSpeciesRecords *data) {
+    return WriteExtraSaveChunkKeyed(saveData, 1, data);
 }
 
 u32 PCStorage_GetSizeOfBox(void) {

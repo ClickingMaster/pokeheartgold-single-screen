@@ -182,7 +182,7 @@ u32 sub_0204A6F8(SaveData *saveData, u32 towerMode) {
     if (towerMode == TOWER_MODE_WIFI_PRACTICE) {
         return FALSE;
     } else if (towerMode == TOWER_MODE_6) {
-        return FrontierSave_GetStat(Save_Frontier_GetStatic(saveData), 113, sub_0205C268(113));
+        return FrontierSave_GetStat(Save_Frontier_GetStatic(saveData), 113, FrontierStat_GetFriendIndex(113));
     } else {
         return FrontierSave_GetStat(Save_Frontier_GetStatic(saveData), 2 * towerMode + 1, 0xff);
     }
@@ -209,12 +209,12 @@ u32 sub_0204A764(SaveData *saveData) {
         return towerMode;
     }
     if (towerMode == TOWER_MODE_6) {
-        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 100, sub_0205C268(100), 0);
+        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 100, FrontierStat_GetFriendIndex(100), 0);
     } else {
         FrontierData_FlagAction(frontierData, towerMode + 8, 2);
     }
     FrontierData_TowerRoundAction(frontierData, towerMode, 2);
-    FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), sub_0205C310(towerMode), sub_0205C268(sub_0205C310(towerMode)), 0);
+    FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), BattleTower_GetWinStreakStat(towerMode), FrontierStat_GetFriendIndex(BattleTower_GetWinStreakStat(towerMode)), 0);
     if (towerMode != TOWER_MODE_WIFI && towerMode != TOWER_MODE_6) {
         BattleTower_AdvanceSeed(saveData);
     }
@@ -284,7 +284,7 @@ FrontierFieldSystem *FrontierFieldSystem_New(SaveData *saveData, BOOL resumeFrom
         if (unk0 != 0) {
             u32 unk0;
             if (frontierFsys->towerMode == TOWER_MODE_6) {
-                unk0 = FrontierSave_GetStat(frontierSaveData, 113, sub_0205C268(113));
+                unk0 = FrontierSave_GetStat(frontierSaveData, 113, FrontierStat_GetFriendIndex(113));
             } else {
                 unk0 = FrontierSave_GetStat(frontierSaveData, 2 * frontierFsys->towerMode + 1, 0xff);
             }
@@ -434,16 +434,16 @@ void FrontierFieldSystem_0204AD04(FrontierFieldSystem *frontierFsys, SaveData *s
         return;
     }
     u32 unk4 = frontierFsys->towerMode == TOWER_MODE_6 ? 112 : frontierFsys->towerMode * 2;
-    FrontierSave_GetStat(frontierSaveData, unk4, sub_0205C268(unk4));
-    FrontierSave_RaiseStat(frontierSaveData, unk4, sub_0205C268(unk4), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
+    FrontierSave_GetStat(frontierSaveData, unk4, FrontierStat_GetFriendIndex(unk4));
+    FrontierSave_RaiseStat(frontierSaveData, unk4, FrontierStat_GetFriendIndex(unk4), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
     if (frontierFsys->towerMode == TOWER_MODE_6) {
-        FrontierSave_GetStat(Save_Frontier_GetStatic(saveData), 100, sub_0205C268(100));
+        FrontierSave_GetStat(Save_Frontier_GetStatic(saveData), 100, FrontierStat_GetFriendIndex(100));
     } else {
         FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, 0);
     }
-    u32 unk = FrontierSave_SetStat(frontierSaveData, unk4 + 1, sub_0205C268(unk4 + 1), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
+    u32 unk = FrontierSave_SetStat(frontierSaveData, unk4 + 1, FrontierStat_GetFriendIndex(unk4 + 1), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
     if (frontierFsys->towerMode == TOWER_MODE_6) {
-        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 100, sub_0205C268(100), 0);
+        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 100, FrontierStat_GetFriendIndex(100), 0);
     } else {
         FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, 2);
     }
@@ -468,18 +468,18 @@ void FrontierFieldSystem_0204AE20(FrontierFieldSystem *frontierFsys, SaveData *s
     FrontierSave *frontierSaveData = Save_Frontier_GetStatic(saveData);
     u32 unk4 = frontierFsys->towerMode == TOWER_MODE_6 ? 112 : frontierFsys->towerMode * 2;
     if (frontierFsys->towerMode == TOWER_MODE_6) {
-        FrontierSave_GetStat(Save_Frontier_GetStatic(saveData), 100, sub_0205C268(100));
+        FrontierSave_GetStat(Save_Frontier_GetStatic(saveData), 100, FrontierStat_GetFriendIndex(100));
     } else {
         FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, 0);
     }
-    u32 unk6 = FrontierSave_SetStat(frontierSaveData, unk4 + 1, sub_0205C268(unk4 + 1), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
+    u32 unk6 = FrontierSave_SetStat(frontierSaveData, unk4 + 1, FrontierStat_GetFriendIndex(unk4 + 1), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
     if (frontierFsys->towerMode == TOWER_MODE_6) {
-        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 100, sub_0205C268(100), 1);
+        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 100, FrontierStat_GetFriendIndex(100), 1);
     } else {
         FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, 1);
     }
-    FrontierSave_GetStat(frontierSaveData, unk4, sub_0205C268(unk4));
-    FrontierSave_RaiseStat(frontierSaveData, unk4, sub_0205C268(unk4), unk6);
+    FrontierSave_GetStat(frontierSaveData, unk4, FrontierStat_GetFriendIndex(unk4));
+    FrontierSave_RaiseStat(frontierSaveData, unk4, FrontierStat_GetFriendIndex(unk4), unk6);
     GameStats_Add(gameStats, GAME_STAT_BATTLE_TOWER_WIN_COUNT, 7);
     FrontierData_TowerRoundAction(frontierFsys->frontierData, frontierFsys->towerMode, 3);
     if (frontierFsys->towerMode != TOWER_MODE_6) {
@@ -650,7 +650,7 @@ BOOL FrontierFieldSystem_TryGiveOtherTowerRibbons(FrontierFieldSystem *frontierF
 u16 FrontierFieldSystem_0204B258(FrontierFieldSystem *frontierFsys, SaveData *saveData) {
     u8 unk;
     if (frontierFsys->towerMode == TOWER_MODE_6) {
-        unk = FrontierSave_GetStat(Save_Frontier_GetStatic(saveData), 100, sub_0205C268(100));
+        unk = FrontierSave_GetStat(Save_Frontier_GetStatic(saveData), 100, FrontierStat_GetFriendIndex(100));
     } else {
         unk = FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, 0);
     }

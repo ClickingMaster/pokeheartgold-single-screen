@@ -267,7 +267,7 @@ BattleSetup *BattleFactory_NewBattleSetup(BattleFactoryData *data, FrontierLaunc
     HealParty(data->playerParty);
     HealParty(data->opponentParty);
     setup = BattleSetup_New(HEAP_ID_FIELD2, BattleFactory_GetBattleType(data->type));
-    sub_02051D18(setup, NULL, args->saveData, args->mapId, args->bagCursor, args->unk1C);
+    BattleSetup_InitFromSaveData(setup, NULL, args->saveData, args->mapId, args->bagCursor, args->unk1C);
     setup->battleBg = BATTLE_BG_BATTLE_FACTORY;
     setup->terrain = TERRAIN_BATTLE_FACTORY;
     Party_InitWithMaxSize(setup->party[BATTLER_PLAYER], playerCount);

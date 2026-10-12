@@ -124,11 +124,11 @@ void FollowPlayerMovement_Reset(LocalMapObject *object) {
 }
 
 static inline void FollowMon_SpawnStepEffects(LocalMapObject *object) {
-    if (sub_02069EAC(object)) {
+    if (FollowMon_IsReleaseBallPending(object)) {
         FollowMonBall_Spawn(object, 0);
-        sub_02069E84(object, 0);
+        FollowMon_SetReleaseBallPending(object, 0);
     } else {
-        sub_02069DC8(object, FALSE);
+        FollowMon_HideUntilStep(object, FALSE);
     }
     FollowMon_SpawnGrassEffects(object);
 }
@@ -147,7 +147,7 @@ BOOL FollowPlayerState_FollowMonStart(LocalMapObject *object, FollowPlayerMoveme
         if (fieldSystem->followMon.unk8 == MapObject_GetXCoord(object) && fieldSystem->followMon.unkC == MapObject_GetZCoord(object)) {
             fieldSystem->followMon.unk1C = 0;
             state->state = 3;
-            if (sub_02069E14(object) && !state->noBallEffect) {
+            if (FollowMon_IsHiddenUntilStep(object) && !state->noBallEffect) {
                 FollowMon_SpawnStepEffects(object);
             }
             if (sub_020623C8(FollowMon_GetMovement(object))) {
@@ -156,7 +156,7 @@ BOOL FollowPlayerState_FollowMonStart(LocalMapObject *object, FollowPlayerMoveme
             return TRUE;
         }
         if (FollowPlayerMovement_StartFollowMonStep(object, state) == TRUE) {
-            if (sub_02069E14(object)) {
+            if (FollowMon_IsHiddenUntilStep(object)) {
                 FollowMon_SpawnStepEffects(object);
             }
             MapObject_SetSingleMovement(object);
@@ -174,7 +174,7 @@ BOOL FollowPlayerState_Start(LocalMapObject *object, FollowPlayerMovementState *
     MapObject_ClearEndMovement(object);
     if (FollowPlayerMovement_HasPlayerMoved(object, state) == TRUE) {
         FollowPlayerMovement_UpdatePlayerCoords(object, state);
-        if (sub_02069E14(object)) {
+        if (FollowMon_IsHiddenUntilStep(object)) {
             FollowMon_SpawnStepEffects(object);
         }
         if (FollowPlayerMovement_StartStep(object) == TRUE) {
@@ -218,7 +218,7 @@ BOOL FollowPlayerState_Hop(LocalMapObject *object, FollowPlayerMovementState *st
             state->hopSpeed = 0;
             return FALSE;
         }
-        MapObject_ForceSetHeldMovement(object, sub_02069ED4(object));
+        MapObject_ForceSetHeldMovement(object, FollowMon_GetHopMovement(object));
     }
     state->hopFrame++;
     return FALSE;
@@ -334,7 +334,7 @@ BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlaye
         if (fastMovement) {
             movement = FollowMon_GetFasterMovement(movement, sub_020623D8(movement));
             state->hopSpeed = GetMovementSpeed(movement);
-            sub_02069E50(object, (u8)movement);
+            FollowMon_SetHopMovement(object, (u8)movement);
             nextState = 2;
             state->hopCount = 0;
             state->hopFrame = 0;
@@ -345,7 +345,7 @@ BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlaye
             }
             movement = FollowMon_GetFasterMovement(movement, (u32)playerMovement);
             state->hopSpeed = GetMovementSpeed(movement);
-            sub_02069E50(object, (u8)movement);
+            FollowMon_SetHopMovement(object, (u8)movement);
             nextState = 2;
             state->hopCount = 0;
             state->hopFrame = 0;

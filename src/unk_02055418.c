@@ -81,11 +81,11 @@ void sub_02055508(FieldSystem *fieldSystem, int days) {
     Roamers_SetRand(Save_Roamers_Get(fieldSystem->saveData), Save_FriendGroup_GetCurrentSeed(Save_FriendGroup_Get(fieldSystem->saveData)));
     Party_UpdatePokerus(SaveArray_Party_Get(fieldSystem->saveData), days);
     Save_LCRNGAdvanceLotoID(fieldSystem->saveData, (u16)days);
-    sub_02066D60(fieldSystem->saveData);
+    Save_VarsFlags_RandomizeVar4041(fieldSystem->saveData);
     BattleTower_InitSeed(fieldSystem->saveData);
     WiFiHistory_UpgradeAllLocationsState(Save_WiFiHistory_Get(fieldSystem->saveData));
     sub_020556B8(fieldSystem);
-    sub_0202F294(SaveData_GetPhoneCallPersistentState(fieldSystem->saveData), days);
+    PhoneCallPersistentState_BlackBeltKenji_UpdateWaitDays(SaveData_GetPhoneCallPersistentState(fieldSystem->saveData), days);
     if (!hasPenalty) {
         sub_02031CCC(Save_ApricornBox_Get(fieldSystem->saveData), days);
         SaveData_SafariZone_CheckAreasWithUpdatedEncounters(fieldSystem->saveData, days);

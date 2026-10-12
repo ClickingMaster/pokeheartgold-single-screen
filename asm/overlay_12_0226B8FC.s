@@ -92,7 +92,7 @@ ov12_0226B9A4: ; 0x0226B9A4
 	sub sp, #0x38
 	add r5, r3, #0
 	mov ip, r2
-	ldr r3, _0226BA1C ; =ov12_0226EBA0
+	ldr r3, _0226BA1C ; =sBattleCursorSpriteTemplate
 	add r6, r0, #0
 	add r7, r1, #0
 	add r2, sp, #4
@@ -145,7 +145,7 @@ _0226B9EE:
 	add sp, #0x38
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_0226BA1C: .word ov12_0226EBA0
+_0226BA1C: .word sBattleCursorSpriteTemplate
 _0226BA20: .word ov12_0226BB90
 _0226BA24: .word 0x00009C40
 	thumb_func_end ov12_0226B9A4
@@ -170,8 +170,8 @@ _0226BA30:
 	pop {r4, r5, r6, pc}
 	thumb_func_end ov12_0226BA28
 
-	thumb_func_start ov12_0226BA4C
-ov12_0226BA4C: ; 0x0226BA4C
+	thumb_func_start BattleCursor_SetCornersWithOffset
+BattleCursor_SetCornersWithOffset: ; 0x0226BA4C
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	lsl r1, r1, #0x10
@@ -232,10 +232,10 @@ _0226BAC2:
 	cmp r4, #4
 	blt _0226BAC2
 	pop {r4, r5, r6, pc}
-	thumb_func_end ov12_0226BA4C
+	thumb_func_end BattleCursor_SetCornersWithOffset
 
-	thumb_func_start ov12_0226BAD4
-ov12_0226BAD4: ; 0x0226BAD4
+	thumb_func_start BattleCursor_SetCorners
+BattleCursor_SetCorners: ; 0x0226BAD4
 	push {r4, lr}
 	sub sp, #0x18
 	ldr r4, [sp, #0x20]
@@ -251,14 +251,14 @@ ov12_0226BAD4: ; 0x0226BAD4
 	mov r4, #3
 	lsl r4, r4, #0x12
 	str r4, [sp, #0x14]
-	bl ov12_0226BA4C
+	bl BattleCursor_SetCornersWithOffset
 	add sp, #0x18
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov12_0226BAD4
+	thumb_func_end BattleCursor_SetCorners
 
-	thumb_func_start ov12_0226BAFC
-ov12_0226BAFC: ; 0x0226BAFC
+	thumb_func_start BattleCursor_SetRect
+BattleCursor_SetRect: ; 0x0226BAFC
 	push {r3, r4, lr}
 	sub sp, #0x14
 	add r4, r2, #0
@@ -270,14 +270,14 @@ ov12_0226BAFC: ; 0x0226BAFC
 	str r2, [sp, #0x10]
 	add r2, r3, #0
 	add r3, r4, #0
-	bl ov12_0226BAD4
+	bl BattleCursor_SetCorners
 	add sp, #0x14
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov12_0226BAFC
+	thumb_func_end BattleCursor_SetRect
 
-	thumb_func_start ov12_0226BB1C
-ov12_0226BB1C: ; 0x0226BB1C
+	thumb_func_start BattleCursor_SetRectWithOffset
+BattleCursor_SetRectWithOffset: ; 0x0226BB1C
 	push {r4, lr}
 	sub sp, #0x18
 	add r4, r2, #0
@@ -291,14 +291,14 @@ ov12_0226BB1C: ; 0x0226BB1C
 	str r2, [sp, #0x14]
 	add r2, r3, #0
 	add r3, r4, #0
-	bl ov12_0226BA4C
+	bl BattleCursor_SetCornersWithOffset
 	add sp, #0x18
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov12_0226BB1C
+	thumb_func_end BattleCursor_SetRectWithOffset
 
-	thumb_func_start ov12_0226BB40
-ov12_0226BB40: ; 0x0226BB40
+	thumb_func_start BattleCursor_ShowExtraSpriteWithOffset
+BattleCursor_ShowExtraSpriteWithOffset: ; 0x0226BB40
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r3, #0
@@ -316,7 +316,7 @@ ov12_0226BB40: ; 0x0226BB40
 	mov r1, #1
 	bl ManagedSprite_SetDrawFlag
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov12_0226BB40
+	thumb_func_end BattleCursor_ShowExtraSpriteWithOffset
 
 	thumb_func_start ov12_0226BB68
 ov12_0226BB68: ; 0x0226BB68
@@ -336,15 +336,15 @@ _0226BB70:
 	.balign 4, 0
 	thumb_func_end ov12_0226BB68
 
-	thumb_func_start ov12_0226BB84
-ov12_0226BB84: ; 0x0226BB84
+	thumb_func_start BattleCursor_HideExtraSprite
+BattleCursor_HideExtraSprite: ; 0x0226BB84
 	ldr r3, _0226BB8C ; =ManagedSprite_SetDrawFlag
 	ldr r0, [r0, #0x10]
 	mov r1, #0
 	bx r3
 	.balign 4, 0
 _0226BB8C: .word ManagedSprite_SetDrawFlag
-	thumb_func_end ov12_0226BB84
+	thumb_func_end BattleCursor_HideExtraSprite
 
 	thumb_func_start ov12_0226BB90
 ov12_0226BB90: ; 0x0226BB90
@@ -375,7 +375,7 @@ _0226BBC0:
 	thumb_func_end ov12_0226BB90
 
 .rodata
-ov12_0226EBA0: ; 0x0226EBA0
+sBattleCursorSpriteTemplate: ; 0x0226EBA0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00

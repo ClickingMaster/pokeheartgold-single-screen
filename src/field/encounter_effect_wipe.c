@@ -85,7 +85,7 @@ void StripeWipe_Start(EncounterEffectTask *effect, StripeWipe *wipe, u32 stripeH
         GF_AssertFail();
     }
     effect->unk_18 = FALSE;
-    wipe->hBlankSystem = effect->fieldSystem->unk4->hBlankSystem;
+    wipe->hBlankSystem = effect->fieldSystem->mapSystems->hBlankSystem;
     wipe->stripeHeight = stripeHeight;
     wipe->state = 0;
     wipe->done = &effect->unk_18;
@@ -204,7 +204,7 @@ void SplitWipe_Start(EncounterEffectTask *effect, SplitWipe *wipe, s32 duration,
         GF_AssertFail();
     }
     effect->unk_18 = FALSE;
-    wipe->hBlankSystem = effect->fieldSystem->unk4->hBlankSystem;
+    wipe->hBlankSystem = effect->fieldSystem->mapSystems->hBlankSystem;
     wipe->middleLine = 96;
     wipe->state = 0;
     wipe->done = &effect->unk_18;

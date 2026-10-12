@@ -35,9 +35,9 @@ u32 FactoryChallenge_GetField(void *challenge, int field, u8 index, int a3);
 void FactoryChallenge_SetField(void *challenge, int field, u8 index, void *value);
 void FactoryChallenge_SetSaved(void *challenge, int saved);
 int FactoryFlags_GetField(int flags, int field, u8 index, int a3);
-u32 sub_0205C01C(u8 type, u8 levelMode);
-u32 sub_0205C074(u8 type, u8 levelMode);
-u32 sub_0205C268(u32 stat);
+u32 BattleFactory_GetBestStreakStat(u8 type, u8 levelMode);
+u32 BattleFactory_GetBestTradeCountStat(u8 type, u8 levelMode);
+u32 FrontierStat_GetFriendIndex(u32 stat);
 void ov80_0222A840(SaveData *saveData);
 void *FrontierTrainer_Load(BattleFactoryTrainer *trainer, int trainerId, enum HeapID heapId, int narcId);
 int FrontierTrainer_GetClassSprite(int trainerClass);
@@ -95,12 +95,12 @@ BattleFactoryData *BattleFactoryData_Alloc(SaveData *saveData, int resume, u8 ty
         if (hasStreak == 1) {
             first = gBattleFactoryData;
             frontier = Save_Frontier_GetStatic(first->saveData);
-            stat = sub_0205BFF0(first->levelMode, first->type);
-            first->winStreak = FrontierSave_GetStat(frontier, stat, sub_0205C268(sub_0205BFF0(first->levelMode, first->type)));
+            stat = BattleFactory_GetWinStreakStat(first->levelMode, first->type);
+            first->winStreak = FrontierSave_GetStat(frontier, stat, FrontierStat_GetFriendIndex(BattleFactory_GetWinStreakStat(first->levelMode, first->type)));
             second = gBattleFactoryData;
             frontier = Save_Frontier_GetStatic(second->saveData);
-            stat = sub_0205C048(second->levelMode, second->type);
-            tradeCount = FrontierSave_GetStat(frontier, stat, sub_0205C268(sub_0205C048(first->levelMode, first->type)));
+            stat = BattleFactory_GetTradeCountStat(second->levelMode, second->type);
+            tradeCount = FrontierSave_GetStat(frontier, stat, FrontierStat_GetFriendIndex(BattleFactory_GetTradeCountStat(first->levelMode, first->type)));
         } else {
             second = gBattleFactoryData;
             second->winStreak = 0;
@@ -121,12 +121,12 @@ BattleFactoryData *BattleFactoryData_Alloc(SaveData *saveData, int resume, u8 ty
         initial->battleNo = FactoryChallenge_GetField(challenge, 2, 0, 0);
         first = gBattleFactoryData;
         frontier = Save_Frontier_GetStatic(first->saveData);
-        stat = sub_0205BFF0(first->levelMode, first->type);
-        first->winStreak = FrontierSave_GetStat(frontier, stat, sub_0205C268(sub_0205BFF0(initial->levelMode, initial->type)));
+        stat = BattleFactory_GetWinStreakStat(first->levelMode, first->type);
+        first->winStreak = FrontierSave_GetStat(frontier, stat, FrontierStat_GetFriendIndex(BattleFactory_GetWinStreakStat(initial->levelMode, initial->type)));
         second = gBattleFactoryData;
         frontier = Save_Frontier_GetStatic(second->saveData);
-        stat = sub_0205C048(second->levelMode, second->type);
-        second->tradeCount = FrontierSave_GetStat(frontier, stat, sub_0205C268(sub_0205C048(first->levelMode, first->type)));
+        stat = BattleFactory_GetTradeCountStat(second->levelMode, second->type);
+        second->tradeCount = FrontierSave_GetStat(frontier, stat, FrontierStat_GetFriendIndex(BattleFactory_GetTradeCountStat(first->levelMode, first->type)));
     }
     data = gBattleFactoryData;
     data->round = data->winStreak / 7;
@@ -358,17 +358,17 @@ void BattleFactoryData_SaveRecord(BattleFactoryData *data, int mode) {
     FactoryChallenge_SetSaved(data->challenge, 1);
     value.byte = data->battleNo;
     FactoryChallenge_SetField(data->challenge, 2, 0, &value.byte);
-    FrontierSave_SetStat(frontier, sub_0205C048(data->levelMode, data->type), sub_0205C268(sub_0205C048(data->levelMode, data->type)), data->tradeCount);
-    FrontierSave_SetStat(frontier, sub_0205BFF0(data->levelMode, data->type), sub_0205C268(sub_0205BFF0(data->levelMode, data->type)), data->winStreak);
+    FrontierSave_SetStat(frontier, BattleFactory_GetTradeCountStat(data->levelMode, data->type), FrontierStat_GetFriendIndex(BattleFactory_GetTradeCountStat(data->levelMode, data->type)), data->tradeCount);
+    FrontierSave_SetStat(frontier, BattleFactory_GetWinStreakStat(data->levelMode, data->type), FrontierStat_GetFriendIndex(BattleFactory_GetWinStreakStat(data->levelMode, data->type)), data->winStreak);
     if (mode != 2) {
-        u32 old = FrontierSave_GetStat(frontier, sub_0205C01C(data->levelMode, data->type), sub_0205C268(sub_0205C01C(data->levelMode, data->type)));
+        u32 old = FrontierSave_GetStat(frontier, BattleFactory_GetBestStreakStat(data->levelMode, data->type), FrontierStat_GetFriendIndex(BattleFactory_GetBestStreakStat(data->levelMode, data->type)));
         u32 new;
-        FrontierSave_RaiseStat(frontier, sub_0205C01C(data->levelMode, data->type), sub_0205C268(sub_0205C01C(data->levelMode, data->type)), data->winStreak);
-        new = FrontierSave_GetStat(frontier, sub_0205C01C(data->levelMode, data->type), sub_0205C268(sub_0205C01C(data->levelMode, data->type)));
+        FrontierSave_RaiseStat(frontier, BattleFactory_GetBestStreakStat(data->levelMode, data->type), FrontierStat_GetFriendIndex(BattleFactory_GetBestStreakStat(data->levelMode, data->type)), data->winStreak);
+        new = FrontierSave_GetStat(frontier, BattleFactory_GetBestStreakStat(data->levelMode, data->type), FrontierStat_GetFriendIndex(BattleFactory_GetBestStreakStat(data->levelMode, data->type)));
         if (data->winStreak == old) {
-            FrontierSave_RaiseStat(frontier, sub_0205C074(data->levelMode, data->type), sub_0205C268(sub_0205C074(data->levelMode, data->type)), data->tradeCount);
+            FrontierSave_RaiseStat(frontier, BattleFactory_GetBestTradeCountStat(data->levelMode, data->type), FrontierStat_GetFriendIndex(BattleFactory_GetBestTradeCountStat(data->levelMode, data->type)), data->tradeCount);
         } else if (old < new) {
-            FrontierSave_SetStat(frontier, sub_0205C074(data->levelMode, data->type), sub_0205C268(sub_0205C074(data->levelMode, data->type)), data->tradeCount);
+            FrontierSave_SetStat(frontier, BattleFactory_GetBestTradeCountStat(data->levelMode, data->type), FrontierStat_GetFriendIndex(BattleFactory_GetBestTradeCountStat(data->levelMode, data->type)), data->tradeCount);
         }
         value.byte = data->hasStreak;
         FactoryFlags_SetField(flags, 10, (u8)(data->type + data->levelMode * 4), &value.byte);
@@ -379,7 +379,7 @@ void BattleFactoryData_SaveRecord(BattleFactoryData *data, int mode) {
             } else {
                 stat = 104;
             }
-            FrontierSave_SetStat(frontier, stat, sub_0205C268(stat), data->hasStreak);
+            FrontierSave_SetStat(frontier, stat, FrontierStat_GetFriendIndex(stat), data->hasStreak);
         }
     }
     for (i = 0; i < 14; i++) {

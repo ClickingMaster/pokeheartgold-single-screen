@@ -222,7 +222,7 @@ Static main
     Object src/scrcmd_17.o
     Object src/scrcmd_items.o
     Object src/scrcmd_move_relearner.o
-    Object src/scrcmd_20.o
+    Object src/scrcmd_battle_hall.o
     Object src/scrcmd_battle_castle.o
     Object src/scrcmd_battle_arcade.o
     Object src/save_vars_flags.o
@@ -260,7 +260,7 @@ Static main
     Object src/metatile_behavior.o
     Object asm/unk_0205BB1C.o
     Object src/field_misc_util.o
-    Object src/player_avatar_anim_indices.o
+    Object src/frontier_stat_ids.o
     Object src/player_avatar.o
     Object asm/player_avatar_movement_data.o
     Object src/player_avatar_movement.o
@@ -1071,7 +1071,7 @@ Overlay field
     Object src/field/field_emote_bubble.o
     Object asm/field_flash_darkness_data.o
     Object src/field/field_flash_darkness.o
-    Object src/field/overlay_01_02204004.o
+    Object src/field/map_prop_render.o
     Object src/field/apricorn_tree_anim.o
     Object src/field/rock_smash_item.o
     Object src/field/headbutt.o
@@ -1188,10 +1188,10 @@ Overlay OVY_12
     Object src/battle/overlay_12_0224E4FC.o
     Object src/battle/battle_controller_opponent.o
     Object asm/battle_controller_opponent_data.o
-    Object src/battle/battle_02261FD4.o
+    Object src/battle/battle_pokepic_bob.o
     Object src/battle/battle_controller.o
     Object src/battle/battle_hp_bar.o
-    Object src/battle/battle_02265E28.o
+    Object src/battle/battle_terrain.o
     Object src/battle/battle_input.o
     Object src/battle/party_gauge.o
     Object src/battle/battle_cursor.o

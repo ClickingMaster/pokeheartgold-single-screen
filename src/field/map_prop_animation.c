@@ -1,5 +1,5 @@
 #include "field/map_prop_animation.h"
-#include "field/overlay_01_02204004.h"
+#include "field/map_prop_render.h"
 
 #include "sound_playback.h"
 
@@ -9,7 +9,7 @@
 
 #define ANIM_ARCHIVE_ID_NONE -1
 
-static void ov01_021E87A8(NARC *narc, FieldSystemUnkSubCC_Sub0 *unkCC_Sub0, MapPropAnimation *animation, int fileID, NNSG3dResMdl *resMdl, NNSG3dResTex *resTex);
+static void MapPropAnimation_LoadAnimObj(NARC *narc, MapPropAnimationPool *unkCC_Sub0, MapPropAnimation *animation, int fileID, NNSG3dResMdl *resMdl, NNSG3dResTex *resTex);
 
 static BOOL BicycleSlopeAnimation_Load(BicycleSlopeAnimation *bicycleSlopeAnims, NNSG3dRenderObj *renderObj, MapPropAnimation *animation, const u8 animID) {
     int i;
@@ -35,17 +35,17 @@ static BOOL BicycleSlopeAnimation_Load(BicycleSlopeAnimation *bicycleSlopeAnims,
 }
 
 // Some equivalent to pokeplatinum's MapPropAnimation_LoadAnimationObj.
-void ov01_021E87A8(NARC *narc, FieldSystemUnkSubCC_Sub0 *unkCC_Sub0, MapPropAnimation *animation, int fileID, NNSG3dResMdl *resMdl, NNSG3dResTex *resTex) {
+void MapPropAnimation_LoadAnimObj(NARC *narc, MapPropAnimationPool *unkCC_Sub0, MapPropAnimation *animation, int fileID, NNSG3dResMdl *resMdl, NNSG3dResTex *resTex) {
     GF_ASSERT(fileID != ANIM_ARCHIVE_ID_NONE);
     
     void *anim = NARC_AllocAndReadWholeMember(narc, fileID, HEAP_ID_FIELD1);
     
     GF_ASSERT(anim != NULL);
     
-    ov01_02204470(unkCC_Sub0, animation, anim, resMdl, resTex);
+    MapPropAnimationPool_LoadAnimObj(unkCC_Sub0, animation, anim, resMdl, resTex);
 }
 
-MapPropAnimationManager *MapPropAnimationManager_Init(NARC *animListNARC, FieldSystemUnkSubC8 *unkSubC8) {
+MapPropAnimationManager *MapPropAnimationManager_Init(NARC *animListNARC, MapPropAnimationPoolList *unkSubC8) {
     int i;
     MapPropAnimationManager *mapPropAnimationManager = Heap_Alloc(HEAP_ID_FIELD1, sizeof(MapPropAnimationManager));
     
@@ -64,7 +64,7 @@ MapPropAnimationManager *MapPropAnimationManager_Init(NARC *animListNARC, FieldS
     
     mapPropAnimationManager->animNARC = NARC_New(NARC_a_1_0_6, HEAP_ID_FIELD1);
     mapPropAnimationManager->animListNARC = animListNARC;
-    mapPropAnimationManager->unk138 = ov01_022041D8(unkSubC8, HEAP_ID_FIELD1, 0x10);
+    mapPropAnimationManager->animationPool = MapPropAnimationPoolList_AddPool(unkSubC8, HEAP_ID_FIELD1, 0x10);
     return mapPropAnimationManager;
 }
 
@@ -113,13 +113,13 @@ static MapPropAnimationData *MapPropAnimationManager_LoadPropAnimationForOneShot
     for (i = 0; i < MAP_PROP_ANIMATION_MANAGER_MAX_ANIMATIONS; i++) {
         if (!mapPropAnimationManager->animations[i].loaded) {
             mapPropAnimationManager->animations[i].loaded = TRUE;
-            MapPropAnimation *animation = ov01_022042FC(mapPropAnimationManager->unk138);
+            MapPropAnimation *animation = MapPropAnimationPool_Alloc(mapPropAnimationManager->animationPool);
             GF_ASSERT(animation != NULL);
             MapPropAnimation_Init(animation, animationLoopCount, animationPaused, animationReversed);
             mapPropAnimationManager->animations[i].animArchiveID = animArchiveID;
             mapPropAnimationManager->animations[i].unkC = arg3;
             // MapPropAnimation_LoadAnimationObj?
-            ov01_021E87A8(mapPropAnimationManager->animNARC, mapPropAnimationManager->unk138, animation, animArchiveID, mapPropModel, mapPropTexture);
+            MapPropAnimation_LoadAnimObj(mapPropAnimationManager->animNARC, mapPropAnimationManager->animationPool, animation, animArchiveID, mapPropModel, mapPropTexture);
             mapPropAnimationManager->animations[i].animation = animation;
             
             MapPropAnimation_GoToFirstFrame(mapPropAnimationManager->animations[i].animation);
@@ -188,8 +188,8 @@ static void MapPropAnimationManager_UnloadAnimation(MapPropAnimationData *animat
 
     if (animationData->loaded) {
         if (animationData->loaded == TRUE) { // Technically different than the check above, but the same in practice.
-            ov01_02204500(manager->unk138, animationData->animation);
-            ov01_0220431C(manager->unk138, animationData->animation);
+            MapPropAnimationPool_FreeAnimObj(manager->animationPool, animationData->animation);
+            MapPropAnimationPool_Release(manager->animationPool, animationData->animation);
         }
         animationData->loaded = FALSE;
         animationData->unkC = 0;
@@ -478,7 +478,7 @@ const int MapPropOneShotAnimationManager_GetAnimationMapPropModelID(MapPropOneSh
     return oneShotAnimation->mapPropModelID;
 }
 
-void ov01_021E8F3C(int fileCount, NNSG3dResMdl *resMdl, NNSG3dRenderObj *renderObj, NNSG3dResTex *resTex, MapPropAnimListFile *animListFile, MapPropAnimationManager *mapPropAnimationManager, FieldSystemUnkSub104 *unk104) {
+void MapPropAnimationManager_LoadPropAnimations(int fileCount, NNSG3dResMdl *resMdl, NNSG3dRenderObj *renderObj, NNSG3dResTex *resTex, MapPropAnimListFile *animListFile, MapPropAnimationManager *mapPropAnimationManager, TimeOfDayPropAnimManager *unk104) {
     int archiveID;
     int i, j;
     u8 k = 0;
@@ -502,7 +502,7 @@ void ov01_021E8F3C(int fileCount, NNSG3dResMdl *resMdl, NNSG3dRenderObj *renderO
                     
             mapPropAnimationManager->animations[j].loaded = TRUE;
                     
-            MapPropAnimation *mapPropAnimation = ov01_022042FC(mapPropAnimationManager->unk138);
+            MapPropAnimation *mapPropAnimation = MapPropAnimationPool_Alloc(mapPropAnimationManager->animationPool);
     
             GF_ASSERT(mapPropAnimation != NULL);
     
@@ -514,7 +514,7 @@ void ov01_021E8F3C(int fileCount, NNSG3dResMdl *resMdl, NNSG3dRenderObj *renderO
                     
             mapPropAnimationManager->animations[j].animArchiveID = archiveID;
             mapPropAnimationManager->animations[j].unkC = FALSE;
-            ov01_021E87A8(mapPropAnimationManager->animNARC, mapPropAnimationManager->unk138, mapPropAnimation, archiveID, resMdl, resTex);
+            MapPropAnimation_LoadAnimObj(mapPropAnimationManager->animNARC, mapPropAnimationManager->animationPool, mapPropAnimation, archiveID, resMdl, resTex);
             mapPropAnimationManager->animations[j].animation = mapPropAnimation;
             MapPropAnimation_GoToFirstFrame(mapPropAnimationManager->animations[j].animation);
                 
@@ -538,8 +538,8 @@ void ov01_021E8F3C(int fileCount, NNSG3dResMdl *resMdl, NNSG3dRenderObj *renderO
     }
         
     if (animListFile->flags == (1 << 3)) {
-        MapPropAnimation_AddToRenderObj(renderObj, timeOfDayAnimations[ov01_02204834(unk104)]); // FieldSystemUnkSub104_GetTimeOfDayVisualState
-        ov01_0220476C(unk104, renderObj, &timeOfDayAnimations[0], 4);
+        MapPropAnimation_AddToRenderObj(renderObj, timeOfDayAnimations[TimeOfDayPropAnimManager_GetVisualState(unk104)]); // FieldSystemUnkSub104_GetTimeOfDayVisualState
+        TimeOfDayPropAnimManager_AddProp(unk104, renderObj, &timeOfDayAnimations[0], 4);
     }
 }
 

@@ -254,7 +254,7 @@ static PokegearAppMainState Pokegear_MainStep_LaunchDebug(PokegearAppData *pokeg
 
     pokegearApp->easyChatArgs = EasyChat_CreateArgs(0, 0, pokegearApp->args->saveData, pokegearApp->args->menuInputStatePtr, pokegearApp->heapID);
     pokegearApp->mapSessionState.word = EC_WORD_NULL;
-    sub_02090D14(pokegearApp->easyChatArgs, pokegearApp->mapSessionState.word);
+    EasyChatArgs_SetWord(pokegearApp->easyChatArgs, pokegearApp->mapSessionState.word);
     pokegearApp->childApplication = OverlayManager_New(&sOverlayTemplate_EasyChat, pokegearApp->easyChatArgs, pokegearApp->heapID);
     return POKEGEAR_APP_MAIN_STATE_RUN_DEBUG;
 }
@@ -264,8 +264,8 @@ static PokegearAppMainState Pokegear_MainStep_RunDebug(PokegearAppData *pokegear
         return POKEGEAR_APP_MAIN_STATE_RUN_DEBUG;
     }
 
-    if (!sub_02090D48(pokegearApp->easyChatArgs)) {
-        pokegearApp->mapSessionState.word = sub_02090D50(pokegearApp->easyChatArgs);
+    if (!EasyChatArgs_IsCancelled(pokegearApp->easyChatArgs)) {
+        pokegearApp->mapSessionState.word = EasyChatArgs_GetWord(pokegearApp->easyChatArgs);
     }
 
     EasyChat_FreeArgs(pokegearApp->easyChatArgs);

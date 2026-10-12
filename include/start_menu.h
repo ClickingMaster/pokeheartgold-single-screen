@@ -76,15 +76,15 @@ typedef struct UnkStruct_0203D818 {
 
 BOOL FieldSystem_MapIsNotMysteryZone(FieldSystem *fieldSystem);
 void StartMenu_Init(FieldSystem *fieldSystem);
-void sub_0203BCDC(FieldSystem *fieldSystem);
-void sub_0203BD20(FieldSystem *fieldSystem);
-void sub_0203BD64(FieldSystem *fieldSystem);
+void StartMenu_InitUnionRoom(FieldSystem *fieldSystem);
+void StartMenu_InitColosseum(FieldSystem *fieldSystem);
+void StartMenu_ReopenAfterScript(FieldSystem *fieldSystem);
 BOOL FieldSystem_ShouldDrawStartMenuIcon(FieldSystem *fieldSystem, StartMenuIcon icon);
 void StartMenu_SetExitTaskFunc(StartMenuTaskData *env, TaskFunc func);
 BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager);
 BOOL Task_ReturnToMenuFromAppItem(TaskManager *taskManager);
 BOOL Task_UseFlyInField(TaskManager *taskManager);
-UnkStruct_0203D818 *sub_0203D818(u16 itemId, u8 kind, u8 partySlot);
+UnkStruct_0203D818 *StartMenu_CreateMailReturnInfo(u16 itemId, u8 kind, u8 partySlot);
 BOOL Task_ReturnToMenuFromMail(TaskManager *taskManager);
 BOOL Task_ReturnToMenuFromVSRecorder(TaskManager *taskManager);
 

@@ -131,7 +131,7 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
         }
         break;
     case 5:
-        HBlankSystem_Stop(effect->fieldSystem->unk4->hBlankSystem);
+        HBlankSystem_Stop(effect->fieldSystem->mapSystems->hBlankSystem);
         BeginNormalPaletteFade(3, 34, 0, RGB_BLACK, 12, 1, HEAP_ID_FIELD1);
         effect->state++;
         break;
@@ -142,7 +142,7 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
         break;
     case 7:
         SetMasterBrightnessByColor(1, RGB_BLACK);
-        HBlankSystem_Start(effect->fieldSystem->unk4->hBlankSystem);
+        HBlankSystem_Start(effect->fieldSystem->mapSystems->hBlankSystem);
         if (effect->done != NULL) {
             *effect->done = TRUE;
         }

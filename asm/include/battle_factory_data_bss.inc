@@ -19,11 +19,11 @@
 .public FrontierSave_SetStat
 .public FrontierSave_RaiseStat
 .public Save_VarsFlags_Get
-.public sub_0205BFF0
-.public sub_0205C01C
-.public sub_0205C048
-.public sub_0205C074
-.public sub_0205C268
+.public BattleFactory_GetWinStreakStat
+.public BattleFactory_GetBestStreakStat
+.public BattleFactory_GetTradeCountStat
+.public BattleFactory_GetBestTradeCountStat
+.public FrontierStat_GetFriendIndex
 .public Save_VarsFlags_GetVar4052
 .public AllocMonZeroed
 .public GetMonData

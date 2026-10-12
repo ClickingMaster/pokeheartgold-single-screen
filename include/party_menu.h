@@ -430,22 +430,22 @@ typedef enum PartyMenu3dEngineToggle {
 } PartyMenu3dEngineToggle;
 
 void PartyMenu_Toggle3dEngine(PartyMenu *partyMenu, PartyMenu3dEngineToggle toggle);
-BOOL sub_02079E38(PartyMenu *partyMenu, u8 partySlot);
-u16 *sub_0207A16C(PartyMenu *partyMenu);
-void sub_0207AB84(PartyMenu *partyMenu, u8 partySlot);
-void sub_0207A7F4(PartyMenu *partyMenu, u8 partySlot);
-u8 sub_0207B364(PartyMenu *partyMenu, u8 selection);
-u8 sub_0207B418(PartyMenu *partyMenu, u8 selection);
-u8 sub_0207B4A0(PartyMenu *partyMenu, u8 selection);
-int sub_0207B5EC(u8 a0, u8 partySlot);
+BOOL PartyMenu_LoadMonDrawState(PartyMenu *partyMenu, u8 partySlot);
+u16 *PartyMenu_GetHpBarFrameTiles(PartyMenu *partyMenu);
+void PartyMenu_SetCursorSlot(PartyMenu *partyMenu, u8 partySlot);
+void PartyMenu_UpdateMonPanelPalette(PartyMenu *partyMenu, u8 partySlot);
+u8 PartyMenu_GetLinkBattleEntryStatus(PartyMenu *partyMenu, u8 selection);
+u8 PartyMenu_GetBattleHallEntryStatus(PartyMenu *partyMenu, u8 selection);
+u8 PartyMenu_GetArcadeCastleEntryStatus(PartyMenu *partyMenu, u8 selection);
+int PartyMenu_IsLeadPanelSlot(u8 a0, u8 partySlot);
 u32 sub_0207CA9C(void);
 u32 sub_0207CAA0(void);
 u32 sub_0207CAA4(void);
 u32 sub_0207CAA8(void);
-void sub_0207CAAC(enum HeapID heapID, u16 *a1, u16 *a2, u16 *a3);
+void PartyMenu_LoadPanelTilemaps(enum HeapID heapID, u16 *a1, u16 *a2, u16 *a3);
 void PartyMenu_FormChangeScene_End(PartyMenu *partyMenu);
 void PartyMenu_DeleteContextMenuAndList(PartyMenu *partyMenu);
-void sub_0207CB3C(PartyMenu *partyMenu, MenuInputState menuInputState);
+void PartyMenu_SetMenuInputState(PartyMenu *partyMenu, MenuInputState menuInputState);
 void PartyMenu_FormChangeScene_Begin(PartyMenu *partyMenu);
 
 #endif // POKEHEARTGOLD_PARTY_MENU_H

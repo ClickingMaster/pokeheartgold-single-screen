@@ -276,8 +276,8 @@ void Battle_BattleExit(OverlayManager *man) {
     if (!(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
         BattleRecord_StoreSetup(setup);
     }
-    if (battleSystem->unk2445) {
-        ov12_02237ED0(battleSystem, 0);
+    if (battleSystem->trainerAIOverlayLoaded) {
+        BattleSystem_SetTrainerAIOverlayLoaded(battleSystem, 0);
     }
     if (setup->battleType & 0xAA4) {
         color = 0;
@@ -338,7 +338,7 @@ void Battle_BattleExit(OverlayManager *man) {
     }
     PokepicManager_Delete(battleSystem->pokepicManager);
     if (battleSystem->unk23FD != 2) {
-        ov12_02237B6C(battleSystem);
+        BattleSystem_FreeGraphics(battleSystem);
     }
     TextFlags_SetCanABSpeedUpPrint(FALSE);
     TextFlags_SetAutoScrollParam(0);
@@ -444,7 +444,7 @@ void ov12_022389B8(BattleSystem *battleSystem) {
 
     for (i = 0; i < battleSystem->maxBattlers; i++) {
         int battlerId = BattleContext_Get(battleSystem, ctx, 2, i);
-        ov12_02258DB0(battleSystem, battleSystem->opponentData[i], BattleSystem_GetMonBall(battleSystem, BattleSystem_GetPartyMon(battleSystem, i, battlerId)), battlerId);
+        OpponentData_CreateBallData(battleSystem, battleSystem->opponentData[i], BattleSystem_GetMonBall(battleSystem, BattleSystem_GetPartyMon(battleSystem, i, battlerId)), battlerId);
     }
 
     Battle_CreateWirelessStatusIcon();
@@ -509,7 +509,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
     battleSystem->unk2428 = setup->unk_164;
     battleSystem->metBill = setup->metBill;
     battleSystem->unk2474_1 = setup->momsSavingsActive;
-    battleSystem->isFishing = setup->unk_1D0;
+    battleSystem->isFishing = setup->isFishing;
     battleSystem->weather = setup->weatherType;
     battleSystem->gameStats = setup->gameStats;
 

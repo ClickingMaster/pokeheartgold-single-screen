@@ -133,7 +133,7 @@ void BattleRecord_Create(SaveData *save, enum HeapID heapId, u32 *out) {
         Heap_Free(gBattleRecord);
         gBattleRecord = NULL;
     }
-    gBattleRecord = sub_0202711C(save, heapId, (int *)out, 0);
+    gBattleRecord = LoadBattleRecord(save, heapId, (int *)out, 0);
     BattleRecord_Init(gBattleRecord);
 }
 
@@ -162,7 +162,7 @@ BOOL BattleRecord_Load(SaveData *save, enum HeapID heapId, int *out, void *battl
         Heap_Free(gBattleRecord);
         gBattleRecord = NULL;
     }
-    gBattleRecord = sub_0202711C(save, heapId, out, index);
+    gBattleRecord = LoadBattleRecord(save, heapId, out, index);
     if (*out != 1) {
         *out = 3;
         return TRUE;
@@ -186,7 +186,7 @@ BOOL BattleRecord_Load(SaveData *save, enum HeapID heapId, int *out, void *battl
 }
 
 BOOL BattleRecord_IsSlotValid(SaveData *save, enum HeapID heapId, int *out, int index) {
-    BattleRecord *record = sub_0202711C(save, heapId, out, index);
+    BattleRecord *record = LoadBattleRecord(save, heapId, out, index);
     if (*out != 1) {
         *out = 3;
         Heap_Free(record);
@@ -215,7 +215,7 @@ int BattleRecord_WriteSlot(SaveData *save, BattleRecord *record, int index, u16 
     case 0: {
         Sys_SetSoftResetDisableFlag(8);
         Sys_SetAsyncSaveMarker((enum HeapID)11);
-        int result = sub_02027134(save, record, index);
+        int result = SaveBattleRecord(save, record, index);
         if (result == 2) {
             Save_PrepareForAsyncWrite(save, 2);
             (*state)++;

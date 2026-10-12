@@ -9,9 +9,9 @@
 .public Heap_Alloc
 .public Heap_Free
 .public Pokedex_CheckMonSeenFlag
-.public sub_02090D7C
-.public sub_02090D80
-.public sub_02090D84
+.public EasyChatArgs_GetPokedex
+.public EasyChatArgs_GetEasyChat
+.public EasyChatArgs_GetGameCleared
 .public ECMenu_New
 .public ECMenu_Delete
 .public ECMenu_GetCategoryCount

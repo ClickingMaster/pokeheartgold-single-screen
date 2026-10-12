@@ -95,7 +95,7 @@ void Field_SaveStatsPrinter_Print(struct SaveStatsPrinter *printer);
 void Field_SaveStatsPrinter_RemoveFromScreen(struct SaveStatsPrinter *printer);
 void Field_SaveStatsPrinter_Delete(struct SaveStatsPrinter *printer);
 void FieldSystem_ShowEmoteBubble(FieldSystem *fieldSystem, LocalMapObject *partnerPokeObj, int a2);
-void ov01_02205AEC(FieldSystem *fieldSystem);
+void FollowMon_StartHopIntoBall(FieldSystem *fieldSystem);
 void MapObject_SetPositionNextTo(LocalMapObject *playerObj, LocalMapObject *tsurePokeObj, int a2, int a3);
 void FieldSystem_SetTouchscreenChoiceMenuState(FieldSystem *fieldSystem, int a1, int a2, void *a3);
 

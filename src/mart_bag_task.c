@@ -19,7 +19,7 @@ BOOL MartBag_WaitBagViewExit(FieldSystem *fieldSystem, MartReturnEnv *env) {
         return 24;
     }
     if (env->result != NULL) {
-        env->result[1] = sub_0207791C(env->bagView);
+        env->result[1] = BagView_GetSellCount(env->bagView);
     }
     Heap_Free(env->bagView);
     FieldSystem_LoadFieldOverlay(fieldSystem);

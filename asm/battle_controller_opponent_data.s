@@ -71,7 +71,7 @@
 	.public TrainerAI_GetSwitchedPartySlot
 	.public TrainerAI_GetMoveType
 	.public OpponentData_New
-	.public ov12_02258DB0
+	.public OpponentData_CreateBallData
 	.public OpponentData_RunCommand
 	.public OpponentData_Free
 	.public BattleControllerOpponent_Nop
@@ -278,8 +278,8 @@
 	.public MoveAnim_GetDisplayFlags
 	.public ov12_02261DC8
 	.public Task_FlashBrightness
-	.public ov12_02261EB8
-	.public ov12_02261ED4
+	.public BattleSystem_StopRecordingDataCorrupted
+	.public BattleSystem_StopRecordingTooLong
 	.public BattleControllerOpponent_GetVersionTrainerClass
 	.public BattleControllerOpponent_PlayMonAnimAndCry
 	.public sOpponentCommandHandlers

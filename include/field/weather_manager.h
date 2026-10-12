@@ -44,8 +44,8 @@ typedef struct UnkWeatherStruct_021EC078 {
 } UnkWeatherStruct_021EC078;
 
 typedef struct WeatherSystem WeatherSystem;
-typedef struct WeatherSystem_Sub0 WeatherSystem_Sub0;
-typedef struct WeatherSystem_Sub0_Sub8 WeatherSystem_Sub0_Sub8;
+typedef struct WeatherEntry WeatherEntry;
+typedef struct WeatherWork WeatherWork;
 typedef struct WeatherObject WeatherObject;
 struct WeatherObject {
     WeatherSystem *weatherSystem;
@@ -72,9 +72,9 @@ typedef struct WeatherLerp {
     int unkC;
     int unk10;
 } WeatherLerp;
-typedef void (*UnkWeatherSystemSub0Sub8Func)(WeatherSystem_Sub0_Sub8 *, int);
-typedef struct UnkStruct_021EC504 {
-    WeatherSystem_Sub0_Sub8 *unk0;
+typedef void (*WeatherSpawnFunc)(WeatherWork *, int);
+typedef struct WeatherSpawnRamp {
+    WeatherWork *unk0;
     s16 unk4;
     s16 unk6;
     s16 unk8;
@@ -84,10 +84,10 @@ typedef struct UnkStruct_021EC504 {
     s16 unk10;
     s16 unk12;
     s32 unk14;
-    UnkWeatherSystemSub0Sub8Func unk18;
-} UnkStruct_021EC504;
+    WeatherSpawnFunc unk18;
+} WeatherSpawnRamp;
 
-typedef void (*UnkLinkedListFunc)(WeatherObject *);
+typedef void (*WeatherObjectFunc)(WeatherObject *);
 
 typedef struct WeatherFogChange {
     FogData *fog;
@@ -98,31 +98,31 @@ typedef struct WeatherFogChange {
     WeatherLerp unk54;
 } WeatherFogChange;
 
-typedef struct UnkStruct_021EC774 {
+typedef struct WeatherFogTableFade {
     FogData *fog;
     u8 unk4[0x20];
     s32 unk24;
     s32 unk28;
     s16 unk2C;
     s16 unk2E;
-} UnkStruct_021EC774;
+} WeatherFogTableFade;
 
-typedef struct UnkStruct_021EC94C {
-    UnkStruct_021EC504 unk0;
-    UnkStruct_021EC774 unk1C;
+typedef struct WeatherParticleTaskData {
+    WeatherSpawnRamp unk0;
+    WeatherFogTableFade unk1C;
     WeatherFogChange unk50;
     s32 data[10];
-} UnkStruct_021EC94C;
+} WeatherParticleTaskData;
 
 typedef struct UnkStruct_021ED474 {
-    UnkStruct_021EC774 unk1C;
+    WeatherFogTableFade unk1C;
     WeatherFogChange unk50;
     s32 data[10];
 } UnkStruct_021ED474;
 
 typedef struct UnkStruct_021ED584 {
     WeatherLerp unk0;
-    UnkStruct_021EC774 unk1C;
+    WeatherFogTableFade unk1C;
     WeatherFogChange unk50;
 } UnkStruct_021ED584;
 

@@ -20,7 +20,7 @@
 .public FieldEffect_SetPosition
 .public FieldEffect_GetPosition
 .public FollowMon_GetMapObject
-.public sub_02069DC8
+.public FollowMon_HideUntilStep
 .public _s32_div_f
 .public FieldEffectManager_HeapAllocAndFill
 .public FieldEffectManager_HeapFree

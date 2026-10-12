@@ -6,7 +6,7 @@
 #include "field/field_3d_object_task.h"
 #include "field/map_prop_animation.h"
 #include "field/overlay_01_021FB878.h"
-#include "field/overlay_01_02204004.h"
+#include "field/map_prop_render.h"
 #include "fielddata/script/scr_seq/event_D17R0110.h"
 #include "fielddata/script/scr_seq/event_D40R0107.h"
 
@@ -260,32 +260,32 @@ static const u8 sBg2TilemapFileIDs[] = {
 void LegendCutscene_BeginClearBellAnim(FieldSystem *fieldSystem) {
     ClearBellCutsceneCamera *cam;
 
-    fieldSystem->unk4->unk24 = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(ClearBellCutsceneCamera));
-    cam = fieldSystem->unk4->unk24;
+    fieldSystem->mapSystems->localData = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(ClearBellCutsceneCamera));
+    cam = fieldSystem->mapSystems->localData;
 
     cam->translation = CreateCameraTranslationWrapper(HEAP_ID_FIELD1, fieldSystem->camera);
     cam->gameVersion = gGameVersion;
     cam->lookAtTarget = Camera_GetLookAtCamTarget(fieldSystem->camera);
     cam->lookAtPos = Camera_GetLookAtCamPos(fieldSystem->camera);
-    cam->field3dObjectTaskManager = fieldSystem->unk4->field3dObjectTaskManager;
+    cam->field3dObjectTaskManager = fieldSystem->mapSystems->field3dObjectTaskManager;
     ClearBellCutscene_CreateField3dObjectTask(cam);
 }
 
 void LegendCutscene_EndClearBellAnim(FieldSystem *fieldSystem) {
-    ClearBellCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     DeleteCameraTranslationWrapper(cam->translation);
-    Heap_Free(fieldSystem->unk4->unk24);
-    fieldSystem->unk4->unk24 = NULL;
+    Heap_Free(fieldSystem->mapSystems->localData);
+    fieldSystem->mapSystems->localData = NULL;
 }
 
 void LegendCutscene_ClearBellRiseFromBag(FieldSystem *fieldSystem) {
-    ClearBellCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     ClearBellCutscene3dObjectTaskData *draw3dTaskData = (ClearBellCutscene3dObjectTaskData *)Field3dObjectTask_GetData(cam->draw3dTask);
     draw3dTaskData->state = CLEAR_BELL_ANIM_STATE_RISE_BEGIN;
 }
 
 void LegendCutscene_ClearBellShimmer(FieldSystem *fieldSystem, u8 shimmerClearBellOnly) {
-    ClearBellCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     ClearBellCutscene3dObjectTaskData *draw3dTaskData = (ClearBellCutscene3dObjectTaskData *)Field3dObjectTask_GetData(cam->draw3dTask);
     if (draw3dTaskData->state != CLEAR_BELL_ANIM_STATE_IDLE_LOOP) {
         GF_ASSERT(FALSE);
@@ -302,14 +302,14 @@ void ov02_02250B30(FieldSystem *fieldSystem) {
 }
 
 static void startBellShimmer(FieldSystem *fieldSystem) {
-    ClearBellCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     ClearBellCutscene3dObjectTaskData *taskData = (ClearBellCutscene3dObjectTaskData *)Field3dObjectTask_GetData(cam->draw3dTask);
     taskData->state = CLEAR_BELL_ANIM_STATE_SHIMMER_BEGIN;
 }
 
 static BOOL Task_WaitShimmerEffectAndRestart(TaskManager *taskman) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
-    ClearBellCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     ClearBellCutscene3dObjectTaskData *taskData = (ClearBellCutscene3dObjectTaskData *)Field3dObjectTask_GetData(cam->draw3dTask);
     if (taskData->state == CLEAR_BELL_ANIM_STATE_IDLE_LOOP) {
         startBellShimmer(fieldSystem);
@@ -332,7 +332,7 @@ static void ClearBellCutscene_CreateField3dObjectTask(ClearBellCutsceneCamera *c
 
 static void Field3dObjectTaskInit_ClearBellCutscene(Field3dObjectTask *task, FieldSystem *fieldSystem, void *taskData) {
     ClearBellCutscene3dObjectTaskData *kimonoDanceObjData = (ClearBellCutscene3dObjectTaskData *)taskData;
-    ClearBellCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     kimonoDanceObjData->gameVersion = cam->gameVersion;
     HeapExp_FndInitAllocator(&kimonoDanceObjData->allocator, HEAP_ID_FIELD1, 0x20);
     Field3dModel_LoadFromFilesystem(&kimonoDanceObjData->clearBellRisingModel, NARC_demo_legend, NARC_legend_legend_00000018_NSBMD, HEAP_ID_FIELD1);
@@ -553,7 +553,7 @@ static BOOL ov02_02251320(TaskManager *taskman) {
     u32 *pState = TaskManager_GetStatePtr(taskman);
     UnkStruct_FieldSysC0_SubC *unkC0_SubC;
     u8 i;
-    ClearBellCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     ClearBellCutscene3dObjectTaskData *taskData = Field3dObjectTask_GetData(cam->draw3dTask);
 
     switch (*pState) {
@@ -589,7 +589,7 @@ static BOOL ov02_02251320(TaskManager *taskman) {
 }
 
 void LegendCutscene_MoveCamera(FieldSystem *fieldSystem, u8 scene) {
-    ClearBellCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     ClearBellCutscene3dObjectTaskData *taskData = (ClearBellCutscene3dObjectTaskData *)Field3dObjectTask_GetData(cam->draw3dTask);
 
     GF_ASSERT(scene < 3);
@@ -609,7 +609,7 @@ void LegendCutscene_MoveCamera(FieldSystem *fieldSystem, u8 scene) {
 
 void LegendCutscene_StartPanCameraTo(FieldSystem *fieldSystem, u8 destination) {
     int duration;
-    ClearBellCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     ClearBellCutscene3dObjectTaskData *taskData = (ClearBellCutscene3dObjectTaskData *)Field3dObjectTask_GetData(cam->draw3dTask);
 
     CameraTranslationPathTemplate template;
@@ -641,7 +641,7 @@ void LegendCutscene_WaitCameraPan(FieldSystem *fieldSystem) {
 
 static BOOL Task_WaitCameraPan(TaskManager *taskman) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
-    ClearBellCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     if (IsCameraTranslationFinished(cam->translation)) {
         Camera_GetLookAtCamTarget(fieldSystem->camera);
         Camera_GetCurrentTarget(fieldSystem->camera);
@@ -800,7 +800,7 @@ static BOOL Task_BirdFinalApproach(TaskManager *taskman) {
 }
 
 void LegendCutscene_BeginWavesOrLeavesEffect(FieldSystem *fieldSystem) {
-    ClearBellCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     if (cam->gameVersion == VERSION_SOULSILVER) {
         beginWavesEffect(fieldSystem);
     } else {
@@ -809,7 +809,7 @@ void LegendCutscene_BeginWavesOrLeavesEffect(FieldSystem *fieldSystem) {
 }
 
 static void beginWavesEffect(FieldSystem *fieldSystem) {
-    ClearBellCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     ClearBellCutscene3dObjectTaskData *taskData = (ClearBellCutscene3dObjectTaskData *)Field3dObjectTask_GetData(cam->draw3dTask);
     ClearBellCutscene3dObjectTaskData_SoulSilver *wavesEffectData = &taskData->wavesEffect;
 
@@ -829,7 +829,7 @@ static void beginWavesEffect(FieldSystem *fieldSystem) {
 }
 
 static void beginLeavesEffect(FieldSystem *fieldSystem) {
-    ClearBellCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     ClearBellCutscene3dObjectTaskData *taskData = (ClearBellCutscene3dObjectTaskData *)Field3dObjectTask_GetData(cam->draw3dTask);
     ClearBellCutscene3dObjectTaskData_HeartGold *leavesEffectData = &taskData->leavesEffect;
 
@@ -860,7 +860,7 @@ static void beginLeavesEffect(FieldSystem *fieldSystem) {
 }
 
 void LegendCutscene_EndWavesOrLeavesEffect(FieldSystem *fieldSystem) {
-    ClearBellCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     ClearBellCutscene3dObjectTaskData *taskData = (ClearBellCutscene3dObjectTaskData *)Field3dObjectTask_GetData(cam->draw3dTask);
     SysTask_Destroy(taskData->task);
     taskData->task = NULL;
@@ -925,8 +925,8 @@ static void Task_LeavesEffect(SysTask *task, void *taskData) {
 void LegendCutscene_BeginLugiaArrivesEffect(FieldSystem *fieldSystem) {
     LugiaArrivesCutsceneCamera *cam;
 
-    fieldSystem->unk4->unk24 = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(LugiaArrivesCutsceneCamera));
-    cam = fieldSystem->unk4->unk24;
+    fieldSystem->mapSystems->localData = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(LugiaArrivesCutsceneCamera));
+    cam = fieldSystem->mapSystems->localData;
 
     cam->gameVersion = gGameVersion;
     if (cam->gameVersion == VERSION_HEARTGOLD) {
@@ -949,15 +949,15 @@ void LegendCutscene_BeginLugiaArrivesEffect(FieldSystem *fieldSystem) {
 }
 
 void LegendCutscene_EndLugiaArrivesEffect(FieldSystem *fieldSystem) {
-    LugiaArrivesCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    LugiaArrivesCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     GF_ASSERT(cam->gameVersion != VERSION_HEARTGOLD);
-    Heap_Free(fieldSystem->unk4->unk24);
-    fieldSystem->unk4->unk24 = NULL;
+    Heap_Free(fieldSystem->mapSystems->localData);
+    fieldSystem->mapSystems->localData = NULL;
 }
 
 void LegendCutscene_LugiaArrivesEffectCameraPan(FieldSystem *fieldSystem) {
     CameraTranslationPathTemplate template;
-    LugiaArrivesCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    LugiaArrivesCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     if (cam->gameVersion == VERSION_HEARTGOLD) {
         GF_ASSERT(FALSE);
         return;
@@ -974,7 +974,7 @@ void LegendCutscene_LugiaArrivesEffectCameraPan(FieldSystem *fieldSystem) {
 
 static BOOL Task_LugiaArrivesEffectCameraPan(TaskManager *taskman) {
     FieldSystem *fieldSystem = (FieldSystem *)TaskManager_GetEnvironment(taskman);
-    LugiaArrivesCutsceneCamera *cam = fieldSystem->unk4->unk24;
+    LugiaArrivesCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     GFCameraTranslationWrapper *trans = cam->translation;
 
     if (IsCameraTranslationFinished(trans)) {

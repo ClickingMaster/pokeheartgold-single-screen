@@ -94,7 +94,7 @@ int VsRecorder_WriteRecord(SaveData *saveData, int index) {
     crc = *(u16 *)(gBattleRecord->data + RECORD_DATA_CRC);
     BattleRecord_Encrypt(gBattleRecord->data, RECORD_DATA_CRC, crc + (((u32)(crc ^ 0xFFFF)) << 16));
     Sys_SetSoftResetDisableFlag(8);
-    result = sub_02027134(saveData, gBattleRecord, index);
+    result = SaveBattleRecord(saveData, gBattleRecord, index);
     if (result == 2) {
         result = SaveGameNormal(saveData);
     }

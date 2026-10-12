@@ -1448,7 +1448,7 @@ void LinkBattleScreen_LoadPartyBgGraphics(LinkBattleScreen *screen) {
     BG_LoadPlttData(GF_BG_LYR_MAIN_3, paletteData->pRawData, (u16)paletteData->szByte, 0);
     memcpy(screen->panelPalettes, (u8 *)paletteData->pRawData + 0x60, sizeof(screen->panelPalettes));
     Heap_Free(nclrFile);
-    sub_0207CAAC(screen->args->heapId, screen->panelTilemaps[0], screen->panelTilemaps[1], screen->panelTilemaps[2]);
+    PartyMenu_LoadPanelTilemaps(screen->args->heapId, screen->panelTilemaps[0], screen->panelTilemaps[1], screen->panelTilemaps[2]);
     NARC_Delete(narc);
 }
 

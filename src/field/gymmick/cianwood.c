@@ -17,9 +17,9 @@ static int CianwoodGymmick_RebindAnimationObjectsAndGetCount(FieldSystem *fieldS
 
 void GymmickInit_Cianwood(FieldSystem *fieldSystem) {
     GymmickUnion *gymmickUnion = Save_Gymmick_AssertMagic_GetData(Save_GetGymmickPtr(FieldSystem_GetSaveData(fieldSystem)), GYMMICK_CIANWOOD);
-    fieldSystem->unk4->unk24 = Heap_Alloc(HEAP_ID_FIELD1, sizeof(CianwoodGymmickLocalData));
-    MI_CpuClear8(fieldSystem->unk4->unk24, sizeof(CianwoodGymmickLocalData));
-    CianwoodGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    fieldSystem->mapSystems->localData = Heap_Alloc(HEAP_ID_FIELD1, sizeof(CianwoodGymmickLocalData));
+    MI_CpuClear8(fieldSystem->mapSystems->localData, sizeof(CianwoodGymmickLocalData));
+    CianwoodGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     localData->fieldSystem = fieldSystem;
 
     if (gymmickUnion->cianwood.winch) {
@@ -37,8 +37,8 @@ void GymmickInit_Cianwood(FieldSystem *fieldSystem) {
 }
 
 void GymmickFree_Cianwood(FieldSystem *fieldSystem) {
-    Heap_Free(fieldSystem->unk4->unk24);
-    fieldSystem->unk4->unk24 = NULL;
+    Heap_Free(fieldSystem->mapSystems->localData);
+    fieldSystem->mapSystems->localData = NULL;
 }
 
 BOOL CianwoodGymmick_ActivateWinch(FieldSystem *fieldSystem) {
@@ -47,7 +47,7 @@ BOOL CianwoodGymmick_ActivateWinch(FieldSystem *fieldSystem) {
         return FALSE;
     }
     GymmickUnion *gymmickUnion = Save_Gymmick_AssertMagic_GetData(gymmick, GYMMICK_CIANWOOD);
-    CianwoodGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    CianwoodGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     if (localData == NULL) {
         return FALSE;
     }

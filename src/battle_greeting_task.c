@@ -57,8 +57,8 @@ BOOL Task_EditBattleGreeting(TaskManager *taskManager) {
 
     switch (work->state) {
     case 0:
-        sub_02090D20(work->easyChat, &work->message);
-        sub_02090D34(work->easyChat);
+        EasyChatArgs_SetMailMessage(work->easyChat, &work->message);
+        EasyChatArgs_SetCancelled(work->easyChat);
         EasyChat_LaunchApp(work->fieldSystem, work->easyChat);
         work->state = 1;
         break;
@@ -76,12 +76,12 @@ BOOL Task_EditBattleGreeting(TaskManager *taskManager) {
         break;
     case 3:
         if (IsPaletteFadeFinished()) {
-            if (sub_02090D48(work->easyChat)) {
+            if (EasyChatArgs_IsCancelled(work->easyChat)) {
                 *work->result = 0;
                 work->state = 4;
             } else {
                 *work->result = 1;
-                sub_02090D60(work->easyChat, &work->message);
+                EasyChatArgs_GetMailMessage(work->easyChat, &work->message);
                 SaveMisc_SetBattleGreeting(work->misc, &work->message);
                 work->state = 4;
             }

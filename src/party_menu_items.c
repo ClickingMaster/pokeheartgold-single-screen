@@ -400,8 +400,8 @@ int PartyMenu_ItemUseFunc_WaitTextPrinterThenExit(PartyMenu *partyMenu) {
 
 static int PartyMenu_ItemUseFunc_StatusHealEtc(PartyMenu *partyMenu) {
     UseItemOnMonInParty(partyMenu->args->party, partyMenu->args->itemId, partyMenu->partyMonIndex, 0, PartyMenu_GetCurrentMapSec(partyMenu), HEAP_ID_PARTY_MENU);
-    sub_02079E38(partyMenu, partyMenu->partyMonIndex);
-    sub_0207D5DC(partyMenu, partyMenu->partyMonIndex);
+    PartyMenu_LoadMonDrawState(partyMenu, partyMenu->partyMonIndex);
+    PartyMenu_DrawPartyMonsList_Default(partyMenu, partyMenu->partyMonIndex);
     PartyMenu_CommitPartyMonPanelWindowsToVram_InVBlank(partyMenu, partyMenu->partyMonIndex);
     PartyMenu_DrawMonStatusIcon(partyMenu, partyMenu->partyMonIndex, partyMenu->monsDrawState[partyMenu->partyMonIndex].status);
     PartyMenu_GetItemUseMessage(partyMenu, partyMenu->args->itemId, 0);
@@ -421,8 +421,8 @@ static int PartyMenu_ItemUseFunc_EVDown(PartyMenu *partyMenu) {
     u8 spDefEv = GetMonData(mon, MON_DATA_SPDEF_EV, NULL);
     u8 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, NULL);
     UseItemOnMonInParty(partyMenu->args->party, partyMenu->args->itemId, partyMenu->partyMonIndex, 0, PartyMenu_GetCurrentMapSec(partyMenu), HEAP_ID_PARTY_MENU);
-    sub_02079E38(partyMenu, partyMenu->partyMonIndex);
-    sub_0207D5DC(partyMenu, partyMenu->partyMonIndex);
+    PartyMenu_LoadMonDrawState(partyMenu, partyMenu->partyMonIndex);
+    PartyMenu_DrawPartyMonsList_Default(partyMenu, partyMenu->partyMonIndex);
     PartyMenu_CommitPartyMonPanelWindowsToVram_InVBlank(partyMenu, partyMenu->partyMonIndex);
     PartyMenu_DrawMonStatusIcon(partyMenu, partyMenu->partyMonIndex, partyMenu->monsDrawState[partyMenu->partyMonIndex].status);
     if (
@@ -462,7 +462,7 @@ static int PartyMenu_ItemUseFunc_HPRestore(PartyMenu *partyMenu) {
         partyMenu->monsDrawState[partyMenu->partyMonIndex].status = PARTY_MON_STATUS_ICON_OK;
         PartyMenu_PrintMonLevelOnWindow(partyMenu, partyMenu->partyMonIndex);
     }
-    sub_0207A7F4(partyMenu, partyMenu->partyMonIndex);
+    PartyMenu_UpdateMonPanelPalette(partyMenu, partyMenu->partyMonIndex);
     partyMenu->itemUseCallback = PartyMenu_ItemUseFunc_HPRestoreAnimLoop;
     PlaySE(SEQ_SE_DP_KAIFUKU);
     return PARTY_MENU_STATE_ITEM_USE_CB;
@@ -515,11 +515,11 @@ int PartyMenu_Subtask_SacredAsh(PartyMenu *partyMenu) {
             ReadMsgDataIntoString(partyMenu->msgData, msg_0300_00102, partyMenu->formattedStrBuf);
             PartyMenu_PrintMessageOnWindow34(partyMenu, -1, TRUE);
             partyMenu->itemUseCallback = PartyMenu_ItemUseFunc_WaitTextPrinterThenExit;
-            sub_0207F240(partyMenu, 0, 1);
+            PartyMenu_ShowCursorAtSlot(partyMenu, 0, 1);
             partyMenu->partyMonIndex = 7;
             return PARTY_MENU_STATE_ITEM_USE_CB;
         } else if (partyMenu->partyMonIndex != 0) {
-            sub_0207A7F4(partyMenu, 0);
+            PartyMenu_UpdateMonPanelPalette(partyMenu, 0);
         }
         // fallthrough
     case 1:
@@ -533,8 +533,8 @@ int PartyMenu_Subtask_SacredAsh(PartyMenu *partyMenu) {
         partyMenu->monsDrawState[partyMenu->partyMonIndex].status = PARTY_MON_STATUS_ICON_OK;
         PartyMenu_DrawMonStatusIcon(partyMenu, partyMenu->partyMonIndex, partyMenu->monsDrawState[partyMenu->partyMonIndex].status);
         PartyMenu_PrintMonLevelOnWindow(partyMenu, partyMenu->partyMonIndex);
-        sub_0207A7F4(partyMenu, partyMenu->partyMonIndex);
-        sub_0207F240(partyMenu, partyMenu->partyMonIndex, 1);
+        PartyMenu_UpdateMonPanelPalette(partyMenu, partyMenu->partyMonIndex);
+        PartyMenu_ShowCursorAtSlot(partyMenu, partyMenu->partyMonIndex, 1);
         PlaySE(SEQ_SE_DP_KAIFUKU);
         ++partyMenu->afterTextPrinterState;
         break;
@@ -557,7 +557,7 @@ int PartyMenu_Subtask_SacredAsh(PartyMenu *partyMenu) {
             partyMenu->partyMonIndex = PartyMenu_SacredAshGetNextMonId(partyMenu, last + 1);
             if (partyMenu->partyMonIndex != 0xFF) {
                 ClearFrameAndWindow2(&partyMenu->windows[PARTY_MENU_WINDOW_ID_34], FALSE);
-                sub_0207A7F4(partyMenu, last);
+                PartyMenu_UpdateMonPanelPalette(partyMenu, last);
                 partyMenu->afterTextPrinterState = 1;
             } else {
                 Bag_TakeItem(partyMenu->args->bag, partyMenu->args->itemId, 1, HEAP_ID_PARTY_MENU);
@@ -594,9 +594,9 @@ static int PartyMenu_ItemUseFunc_LevelUp(PartyMenu *partyMenu) {
         partyMenu->monsDrawState[partyMenu->partyMonIndex].status = PARTY_MON_STATUS_ICON_OK;
         PartyMenu_PrintMonLevelOnWindow(partyMenu, partyMenu->partyMonIndex);
     }
-    sub_0207A7F4(partyMenu, partyMenu->partyMonIndex);
+    PartyMenu_UpdateMonPanelPalette(partyMenu, partyMenu->partyMonIndex);
     partyMenu->itemUseCallback = PartyMenu_ItemUseFunc_HPRestoreAnimLoop;
-    sub_0207D5DC(partyMenu, partyMenu->partyMonIndex);
+    PartyMenu_DrawPartyMonsList_Default(partyMenu, partyMenu->partyMonIndex);
     PartyMenu_CommitPartyMonPanelWindowsToVram_InVBlank(partyMenu, partyMenu->partyMonIndex);
     PartyMenu_PrintMessageOnWindow34(partyMenu, -1, TRUE);
     partyMenu->itemUseCallback = PartyMenu_ItemUseFunc_LevelUpLearnMovesLoop;
@@ -619,14 +619,14 @@ static int PartyMenu_ItemUseFunc_LevelUpLearnMovesLoop(PartyMenu *partyMenu) {
     case 1:
         if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) || System_GetTouchNew() == TRUE) {
             PlaySE(SEQ_SE_DP_SELECT);
-            sub_0207DF98(partyMenu);
+            PartyMenu_LevelUpPrintNewStats(partyMenu);
             partyMenu->levelUpLearnMovesLoopState = 2;
         }
         break;
     case 2:
         if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) || System_GetTouchNew() == TRUE) {
             PlaySE(SEQ_SE_DP_SELECT);
-            sub_0207E04C(partyMenu);
+            PartyMenu_LevelUpCloseStatsWindow(partyMenu);
             partyMenu->levelUpLearnMovesLoopState = 3;
             partyMenu->args->levelUpMoveSearchState = 0;
         }
@@ -947,7 +947,7 @@ void PartyMenu_SelectMoveForPpRestoreOrPpUp(PartyMenu *partyMenu, BOOL isPpResto
     contextMenu.unk_0B_0 = 0;
     contextMenu.unk_0B_4 = 0;
     contextMenu.scrollEnabled = 1;
-    sub_0207E54C(partyMenu, contextMenu.numItems, 0, 1);
+    PartyMenu_DrawContextMenuButtonFrames(partyMenu, contextMenu.numItems, 0, 1);
     partyMenu->contextMenuCursor = PartyMenu_CreateContextMenuCursor(partyMenu, &contextMenu, 0, HEAP_ID_PARTY_MENU, 1);
 }
 

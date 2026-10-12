@@ -8,7 +8,7 @@
 // (local player, AI, link partner, recorded battle, Safari Zone, Pal Park).
 
 OpponentData *OpponentData_New(BattleSystem *battleSystem, const u8 *data);
-void ov12_02258DB0(BattleSystem *battleSystem, OpponentData *opponentData, u16 ball, int a3);
+void OpponentData_CreateBallData(BattleSystem *battleSystem, OpponentData *opponentData, u16 ball, int a3);
 void OpponentData_RunCommand(BattleSystem *battleSystem, OpponentData *opponentData);
 void OpponentData_Free(BattleSystem *battleSystem, OpponentData *opponentData, int mode);
 void OpponentData_SetInputTasks(BattleSystem *battleSystem, OpponentData *opponentData);

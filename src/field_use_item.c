@@ -297,8 +297,8 @@ static BOOL Task_MountOrDismountBicycle(TaskManager *taskManager) {
             }
             FollowMon_MoveToPlayer(fieldSystem, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             if (FollowMon_IsActive(fieldSystem)) {
-                sub_02069E84(FollowMon_GetMapObject(fieldSystem), 1);
-                sub_02069DC8(FollowMon_GetMapObject(fieldSystem), TRUE);
+                FollowMon_SetReleaseBallPending(FollowMon_GetMapObject(fieldSystem), 1);
+                FollowMon_HideUntilStep(FollowMon_GetMapObject(fieldSystem), TRUE);
             }
         } else {
             if (SndRadio_GetSeqNo() == 0) {
@@ -310,7 +310,7 @@ static BOOL Task_MountOrDismountBicycle(TaskManager *taskManager) {
             Field_PlayerAvatar_ApplyTransitionFlags(fieldSystem->playerAvatar);
             FollowMon_StartRecall(fieldSystem);
             if (FollowMon_IsActive(fieldSystem)) {
-                sub_02069E84(FollowMon_GetMapObject(fieldSystem), FALSE);
+                FollowMon_SetReleaseBallPending(FollowMon_GetMapObject(fieldSystem), FALSE);
             }
         }
         (*state_p)++;
@@ -373,7 +373,7 @@ static void ItemMenuUseFunc_Mail(struct ItemMenuUseData *data, const struct Item
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(data->taskManager);
     StartMenuTaskData *env = TaskManager_GetEnvironment(data->taskManager);
     UseMailArgs *mailWork = UseMail_CreateArgs(fieldSystem, 3, ItemToMailId(data->itemId), HEAP_ID_FIELD2);
-    env->exitTaskEnvironment2 = sub_0203D818(data->itemId, 3, 0);
+    env->exitTaskEnvironment2 = StartMenu_CreateMailReturnInfo(data->itemId, 3, 0);
     env->exitTaskEnvironment = mailWork;
     StartMenu_SetExitTaskFunc(env, Task_ReturnToMenuFromMail);
 }

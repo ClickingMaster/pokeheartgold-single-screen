@@ -251,7 +251,7 @@ BattleSetup *BattleHall_NewBattleSetup(BattleHallData *data, FrontierLaunchArgs 
 
     HealParty(party);
     setup = BattleSetup_New(HEAP_ID_FIELD2, BattleHall_GetBattleType(data->type));
-    sub_02051D18(setup, NULL, args->saveData, args->mapId, args->bagCursor, args->unk1C);
+    BattleSetup_InitFromSaveData(setup, NULL, args->saveData, args->mapId, args->bagCursor, args->unk1C);
     setup->battleBg = BATTLE_BG_BATTLE_HALL;
     setup->terrain = TERRAIN_BATTLE_HALL;
     Party_InitWithMaxSize(setup->party[BATTLER_PLAYER], playerCount);

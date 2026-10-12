@@ -16,8 +16,8 @@
 #include "gf_g2d_renderer.h"
 
 static void WeatherTask_ChangeWeather(SysTask *task, void *data);
-static void ov01_021EB3F0(SysTask *task, void *data);
-static BOOL ov01_021EB4B4(u32 weather, u32 nextWeather);
+static void WeatherTask_ChangeWeatherOverlapped(SysTask *task, void *data);
+static BOOL Weather_ShouldOverlapChange(u32 weather, u32 nextWeather);
 static void WeatherDraw_Init(WeatherDraw *weatherDraw);
 static void WeatherDrawTask_RendAndAnimateSprites(SysTask *task, void *data);
 static void Weather_Init2DGfxRes(GF_2DGfxResHeader *headerList, u32 a1, u32 a2);
@@ -34,97 +34,97 @@ static void WeatherSystem_LoadSpriteResources(WeatherSystem *weatherSystem, s32 
 static SpriteResource *Weather_AddResObjFromOpenNarc(GF_2DGfxResHeader *headerList, s32 resourceType, s32 headerIndex, GF_2DGfxResMan *resMan, NARC *narc, BOOL atEnd);
 static void WeatherSystem_FreeSpriteResources(WeatherSystem *weatherSystem, s32 a1, WeatherSpriteResources *a2);
 static BOOL WeatherSystem_Init(WeatherSystem *weatherSystem, int weather);
-static BOOL ov01_021EBA08(WeatherSystem *weatherSystem, int weather);
+static BOOL WeatherSystem_LoadAsync(WeatherSystem *weatherSystem, int weather);
 static BOOL WeatherSystem_Start(WeatherSystem *weatherSystem, int weather, u32 a2, u32 a3);
-static void ov01_021EBB40(WeatherSystem *weatherSystem, int weather, u16 a2);
-static void ov01_021EBB68(WeatherSystem *weatherSystem, int weather);
+static void WeatherSystem_RequestStop(WeatherSystem *weatherSystem, int weather, u16 a2);
+static void WeatherSystem_StopNow(WeatherSystem *weatherSystem, int weather);
 static void WeatherSystem_Unload(WeatherSystem *weatherSystem, u32 weather);
-static void ov01_021EBCA4(WeatherSystem_Sub0 *a0);
-static void ov01_021EBD18(WeatherSystem *weatherSystem, u16 a1);
-static BOOL ov01_021EBD34(WeatherSystem *weatherSystem, WeatherSystem_Sub0 *a1);
-static void ov01_021EBD70(SysTask *task, void *data);
-static BOOL ov01_021EBE4C(WeatherSystem *weatherSystem, WeatherSystem_Sub0 *a1);
-static BOOL ov01_021EBEB8(WeatherSystem_Sub0 *a0);
+static void WeatherEntry_EndTask(WeatherEntry *a0);
+static void WeatherSystem_LoadBgGfx(WeatherSystem *weatherSystem, u16 a1);
+static BOOL WeatherSystem_LoadSprites(WeatherSystem *weatherSystem, WeatherEntry *a1);
+static void WeatherTask_LoadAsync(SysTask *task, void *data);
+static BOOL WeatherSystem_AllocWork(WeatherSystem *weatherSystem, WeatherEntry *a1);
+static BOOL WeatherEntry_AllocSpriteResources(WeatherEntry *a0);
 static void WeatherSystem_LoadCellResource(WeatherSystem *weatherSystem, u32 headerIndex, WeatherSpriteResources *a2);
 static void WeatherSystem_LoadAnimResource(WeatherSystem *weatherSystem, u32 headerIndex, WeatherSpriteResources *a2);
 static void WeatherSystem_LoadCharResource(WeatherSystem *weatherSystem, u32 headerIndex, WeatherSpriteResources *a2);
 static void WeatherSystem_LoadPlttResource(WeatherSystem *weatherSystem, u32 headerIndex, WeatherSpriteResources *a2);
-static void ov01_021EBFD0(WeatherSystem *weatherSystem, WeatherSystem_Sub0 *a1);
-static void ov01_021EC028(WeatherSystem_Sub0_Sub8 *a0);
-static void ov01_021EC058(WeatherSystem_Sub0_Sub8 *a0);
-static void ov01_021EC078(WeatherSystem *weatherSystem, u16 a1);
-static void ov01_021EC0C0(WeatherSystem *weatherSystem, u16 a1);
-static void ov01_021EC114(WeatherSystem *weatherSystem, u16 a1);
-static void ov01_021EC1BC(WeatherObject *a0, int a1);
-static void ov01_021EC1E4(WeatherObject *a0);
-static void *WeatherSystem_AddObject(WeatherSystem_Sub0_Sub8 *a0, int a1);
-static void ov01_021EC240(SpriteResourcesHeader *header, WeatherSystem *weatherSystem, WeatherSpriteResources *a2, u32 a3, u32 a4);
+static void WeatherSystem_InitSpriteTemplate(WeatherSystem *weatherSystem, WeatherEntry *a1);
+static void WeatherWork_CreateSprites(WeatherWork *a0);
+static void WeatherWork_DeleteSprites(WeatherWork *a0);
+static void WeatherSystem_LoadBgPalette(WeatherSystem *weatherSystem, u16 a1);
+static void WeatherSystem_LoadBgChars(WeatherSystem *weatherSystem, u16 a1);
+static void WeatherSystem_LoadBgScreen(WeatherSystem *weatherSystem, u16 a1);
+static void WeatherObject_InitData(WeatherObject *a0, int a1);
+static void WeatherObject_ClearData(WeatherObject *a0);
+static void *WeatherSystem_AddObject(WeatherWork *a0, int a1);
+static void WeatherSystem_InitSpriteResourcesHeader(SpriteResourcesHeader *header, WeatherSystem *weatherSystem, WeatherSpriteResources *a2, u32 a3, u32 a4);
 static void WeatherObject_Delete(WeatherObject *a0);
 static void WeatherObject_DeleteAll(WeatherObject *a0);
-static void ov01_021EC2E4(WeatherObject *a0, UnkLinkedListFunc func);
-static void ov01_021EC300(void *data);
+static void WeatherObject_ForEach(WeatherObject *a0, WeatherObjectFunc func);
+static void WeatherWork_Nop(void *data);
 static VecFx32 WeatherObject_GetPosition(WeatherObject *a0);
-static void ov01_021EC31C(fx32 *x, fx32 *z, WeatherSystem_Sub0_Sub8 *a0);
-static void ov01_021EC470(WeatherSystem_Sub0_Sub8 *a0, int *xOut, int *zOut);
-static void ov01_021EC4A8(WeatherSystem_Sub0_Sub8 *a0, fx32 *x, fx32 *y);
-static void ov01_021EC504(UnkStruct_021EC504 *arg0, WeatherSystem_Sub0_Sub8 *arg1, s16 arg2, s16 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, UnkWeatherSystemSub0Sub8Func arg9);
-static void ov01_021EC52C(UnkStruct_021EC504 *arg0, s16 arg1, s16 arg2, s16 arg3, s32 arg4);
-static s32 ov01_021EC538(UnkStruct_021EC504 *arg0);
-static void ov01_021EC5FC(WeatherFogChange *arg0, UnkStruct_021EC774 *arg1, FogData *fog, GXFogSlope fogSlope, s32 fogOffset, GXRgb rgb, s32 arg6, s32 arg7);
-static BOOL ov01_021EC650(WeatherFogChange *arg0, UnkStruct_021EC774 *arg1, s32 arg2);
-static void ov01_021EC678(FogData *fog, GXFogSlope fogSlope, s32 fogOffset, GXRgb rgb);
-static void ov01_021EC6A4(WeatherFogChange *fogChange, FogData *fog, s32 arg2, s32 arg3, GXRgb rgb, s32 arg5);
-static BOOL ov01_021EC728(WeatherFogChange *arg0);
-static void ov01_021EC774(UnkStruct_021EC774 *a0);
-static void ov01_021EC790(UnkStruct_021EC774 *arg0, s32 arg1, s32 arg2);
-static s32 ov01_021EC7AC(UnkStruct_021EC774 *arg0);
-static void ov01_021EC7C8(UnkStruct_021EC774 *arg0);
-static s32 ov01_021EC7E8(UnkStruct_021EC774 *arg0);
-static void ov01_021EC828(UnkStruct_021EC774 *arg0);
-static void ov01_021EC85C(WeatherSystem_Sub0_Sub8 *a0, UnkWeatherSystemSub0Sub8Func a1, int a2, int a3, int a4, UnkLinkedListFunc a5);
-static WeatherObject *WeatherSystem_GetFreeObject(WeatherSystem_Sub0_Sub8 *a0);
+static void WeatherWork_GetCameraScroll(fx32 *x, fx32 *z, WeatherWork *a0);
+static void WeatherWork_ScrollObjectsInt(WeatherWork *a0, int *xOut, int *zOut);
+static void WeatherWork_ScrollObjects(WeatherWork *a0, fx32 *x, fx32 *y);
+static void WeatherSpawnRamp_Init(WeatherSpawnRamp *arg0, WeatherWork *arg1, s16 arg2, s16 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, WeatherSpawnFunc arg9);
+static void WeatherSpawnRamp_SetTarget(WeatherSpawnRamp *arg0, s16 arg1, s16 arg2, s16 arg3, s32 arg4);
+static s32 WeatherSpawnRamp_Update(WeatherSpawnRamp *arg0);
+static void WeatherFog_Start(WeatherFogChange *arg0, WeatherFogTableFade *arg1, FogData *fog, GXFogSlope fogSlope, s32 fogOffset, GXRgb rgb, s32 arg6, s32 arg7);
+static BOOL WeatherFog_Update(WeatherFogChange *arg0, WeatherFogTableFade *arg1, s32 arg2);
+static void Weather_SetFog(FogData *fog, GXFogSlope fogSlope, s32 fogOffset, GXRgb rgb);
+static void WeatherFogChange_Init(WeatherFogChange *fogChange, FogData *fog, s32 arg2, s32 arg3, GXRgb rgb, s32 arg5);
+static BOOL WeatherFogChange_Step(WeatherFogChange *arg0);
+static void WeatherFogTableFade_Clear(WeatherFogTableFade *a0);
+static void WeatherFogTableFade_Start(WeatherFogTableFade *arg0, s32 arg1, s32 arg2);
+static s32 WeatherFogTableFade_Update(WeatherFogTableFade *arg0);
+static void WeatherFogTableFade_SetFull(WeatherFogTableFade *arg0);
+static s32 WeatherFogTableFade_Step(WeatherFogTableFade *arg0);
+static void WeatherFogTableFade_BuildTable(WeatherFogTableFade *arg0);
+static void Weather_SpawnAndPreAdvance(WeatherWork *a0, WeatherSpawnFunc a1, int a2, int a3, int a4, WeatherObjectFunc a5);
+static WeatherObject *WeatherSystem_GetFreeObject(WeatherWork *a0);
 static void WeatherTask_Sunny(SysTask *task, void *data);
 static void WeatherTask_Rain(SysTask *task, void *data);
-static void Rain_AddDrops(WeatherSystem_Sub0_Sub8 *a0, int arg1);
+static void Rain_AddDrops(WeatherWork *a0, int arg1);
 static void Rain_UpdateDrop(WeatherObject *a0);
 static void WeatherTask_Snow(SysTask *task, void *data);
-static void Snow_AddFlakes(WeatherSystem_Sub0_Sub8 *a0, int a1);
+static void Snow_AddFlakes(WeatherWork *a0, int a1);
 static void Snow_UpdateFlake(WeatherObject *a0);
 static void WeatherTask_DiamondDust(SysTask *task, void *data);
-static void DiamondDust_AddSparkles(WeatherSystem_Sub0_Sub8 *a0, int a1);
+static void DiamondDust_AddSparkles(WeatherWork *a0, int a1);
 static void DiamondDust_UpdateSparkle(WeatherObject *a0);
-static void WeatherTask_RunFogOnly(WeatherSystem_Sub0_Sub8 *a0, UnkStruct_021ED474 *a1, GXFogSlope fogSlope, s32 arg3, GXRgb arg4, s32 arg5, s32 arg6);
+static void WeatherTask_RunFogOnly(WeatherWork *a0, UnkStruct_021ED474 *a1, GXFogSlope fogSlope, s32 arg3, GXRgb arg4, s32 arg5, s32 arg6);
 static void WeatherTask_Mist(SysTask *task, void *data);
 static void WeatherTask_Flash(SysTask *task, void *data);
 static void WeatherTask_Flash2(SysTask *task, void *data);
 static void WeatherTask_LowLight(SysTask *task, void *data);
 static void WeatherTask_DelayedRainSE(SysTask *task, void *data);
-static void Weather_PlayLoopSE(WeatherSystem_Sub0_Sub8 *a0, u32 sndSeq);
-static void Weather_StopLoopSE(WeatherSystem_Sub0_Sub8 *arg0);
+static void Weather_PlayLoopSE(WeatherWork *a0, u32 sndSeq);
+static void Weather_StopLoopSE(WeatherWork *arg0);
 
-struct WeatherSystem_Sub0_Sub8 {
+struct WeatherWork {
     WeatherSystem *weatherSystem;
-    WeatherSystem_Sub0 *unk4;
+    WeatherEntry *unk4;
     WeatherSpriteResources *unk8;
     WeatherObject linkedListDummy;
     WeatherObject linkedList[64];
-    SysTask *unkF48;
+    SysTask *weatherTask;
     VecFx32 cameraTarget;
-    void *unkF58;
-    u32 unkF5C;
+    void *taskData;
+    u32 loopSEPlaying;
     u16 sndSeq;
-    u16 unkF62;
-    u16 unkF64;
-    u16 unkF66;
-    s32 unkF68;
-    SysTask *unkF6C;
+    u16 state;
+    u16 fogMode;
+    u16 stopRequest;
+    s32 seDelay;
+    SysTask *seDelayTask;
 };
 
-struct WeatherSystem_Sub0 {
+struct WeatherEntry {
     u16 unk0;
     u16 unk2;
     int unk4;
-    WeatherSystem_Sub0_Sub8 *unk8;
+    WeatherWork *unk8;
     WeatherSpriteResources *weatherSpriteResources;
     u16 unk10;
     u16 unk12;
@@ -133,7 +133,7 @@ struct WeatherSystem_Sub0 {
 };
 
 struct WeatherSystem {
-    WeatherSystem_Sub0 *unk0;
+    WeatherEntry *unk0;
     const WeatherGfxNarcData *unk4;
     WeatherDraw weatherDraw;
     FieldSystem *fieldSystem;
@@ -212,12 +212,12 @@ BOOL WeatherManager_ChangeWeather(WeatherManager *weatherManager, s32 weather) {
     GF_ASSERT(weatherManager->task == NULL);
 
     weatherManager->nextWeather = weather;
-    if (ov01_021EB4B4(weatherManager->weather, weatherManager->nextWeather) == 0) {
+    if (Weather_ShouldOverlapChange(weatherManager->weather, weatherManager->nextWeather) == 0) {
         weatherManager->state = 0;
         weatherManager->task = SysTask_CreateOnMainQueue(WeatherTask_ChangeWeather, weatherManager, 0);
     } else {
         weatherManager->state = 0;
-        weatherManager->task = SysTask_CreateOnMainQueue(ov01_021EB3F0, weatherManager, 0);
+        weatherManager->task = SysTask_CreateOnMainQueue(WeatherTask_ChangeWeatherOverlapped, weatherManager, 0);
     }
 
     return TRUE;
@@ -267,7 +267,7 @@ static void WeatherTask_ChangeWeather(SysTask *task, void *data) {
     }
 }
 
-static void ov01_021EB3F0(SysTask *task, void *data) {
+static void WeatherTask_ChangeWeatherOverlapped(SysTask *task, void *data) {
     WeatherManager *weatherManager = data;
     switch (weatherManager->state) {
     case 0:
@@ -304,7 +304,7 @@ static void ov01_021EB3F0(SysTask *task, void *data) {
     }
 }
 
-static BOOL ov01_021EB4B4(u32 weather, u32 nextWeather) {
+static BOOL Weather_ShouldOverlapChange(u32 weather, u32 nextWeather) {
     return FALSE;
 }
 
@@ -384,7 +384,7 @@ static void WeatherDraw_SetSpriteMatrix(Sprite *sprite, VecFx32 *matrix) {
     Sprite_SetMatrix(sprite, matrix);
 }
 
-static WeatherSystem_Sub0 sWeatherEntries[] = {
+static WeatherEntry sWeatherEntries[] = {
     {
      .unk0 = 0xFFFF,
      .unk2 = 0xFFFF,
@@ -637,7 +637,7 @@ static BOOL WeatherSystem_Process(WeatherSystem *weatherSystem, int state, int w
         ret = WeatherSystem_Init(weatherSystem, weather);
         break;
     case 1:
-        ret = ov01_021EBA08(weatherSystem, weather);
+        ret = WeatherSystem_LoadAsync(weatherSystem, weather);
         break;
     case 2:
         ret = WeatherSystem_Start(weatherSystem, weather, 0, 1);
@@ -653,26 +653,26 @@ static BOOL WeatherSystem_Process(WeatherSystem *weatherSystem, int state, int w
         }
         break;
     case 5:
-        ov01_021EBB40(weatherSystem, weather, 1);
+        WeatherSystem_RequestStop(weatherSystem, weather, 1);
         break;
     case 6:
-        ov01_021EBB68(weatherSystem, weather);
+        WeatherSystem_StopNow(weatherSystem, weather);
         break;
     case 7:
-        ov01_021EBB40(weatherSystem, weather, 0);
+        WeatherSystem_RequestStop(weatherSystem, weather, 0);
         break;
     case 8:
         WeatherSystem_Unload(weatherSystem, weather);
         break;
     case 9:
-        WeatherSystem_Sub0 *v1 = &weatherSystem->unk0[weather];
-        if (v1->unk8 && v1->unk8->unkF5C == TRUE) {
+        WeatherEntry *v1 = &weatherSystem->unk0[weather];
+        if (v1->unk8 && v1->unk8->loopSEPlaying == TRUE) {
             PlaySE(v1->unk8->sndSeq);
         }
         break;
     case 10:
-        WeatherSystem_Sub0 *v2 = &weatherSystem->unk0[weather];
-        if (v2->unk8 && v2->unk8->unkF5C == TRUE) {
+        WeatherEntry *v2 = &weatherSystem->unk0[weather];
+        if (v2->unk8 && v2->unk8->loopSEPlaying == TRUE) {
             StopSE(v2->unk8->sndSeq, 0);
         }
         break;
@@ -687,7 +687,7 @@ static u16 WeatherSystem_GetState(WeatherSystem *weatherSystem, int weather) {
     if (weather >= 14) {
         return 0;
     }
-    WeatherSystem_Sub0 *v0 = &weatherSystem->unk0[weather];
+    WeatherEntry *v0 = &weatherSystem->unk0[weather];
     return v0->unk10;
 }
 
@@ -770,13 +770,13 @@ static void WeatherSystem_FreeSpriteResources(WeatherSystem *weatherSystem, s32 
 }
 
 static BOOL WeatherSystem_Init(WeatherSystem *weatherSystem, int weather) {
-    WeatherSystem_Sub0 *v0 = &weatherSystem->unk0[weather];
+    WeatherEntry *v0 = &weatherSystem->unk0[weather];
     if (v0->unk8 == 0) {
-        if (ov01_021EBE4C(weatherSystem, v0) == FALSE) {
+        if (WeatherSystem_AllocWork(weatherSystem, v0) == FALSE) {
             return FALSE;
         }
 
-        if (ov01_021EBD34(weatherSystem, v0) == FALSE) {
+        if (WeatherSystem_LoadSprites(weatherSystem, v0) == FALSE) {
             Heap_Free(v0->unk8);
             v0->unk8 = NULL;
             return FALSE;
@@ -785,27 +785,27 @@ static BOOL WeatherSystem_Init(WeatherSystem *weatherSystem, int weather) {
         v0->unk8->unk8 = v0->weatherSpriteResources;
 
         if (v0->unk0 != 0xFFFF) {
-            ov01_021EC028(v0->unk8);
+            WeatherWork_CreateSprites(v0->unk8);
         }
 
-        ov01_021EBD18(weatherSystem, v0->unk2);
+        WeatherSystem_LoadBgGfx(weatherSystem, v0->unk2);
         v0->unk10 = 2;
     }
 
     return TRUE;
 }
 
-static BOOL ov01_021EBA08(WeatherSystem *weatherSystem, int weather) {
-    WeatherSystem_Sub0 *v0 = &weatherSystem->unk0[weather];
+static BOOL WeatherSystem_LoadAsync(WeatherSystem *weatherSystem, int weather) {
+    WeatherEntry *v0 = &weatherSystem->unk0[weather];
     if (v0->unk8) {
         return TRUE;
     }
 
-    if (ov01_021EBE4C(weatherSystem, v0) == 0) {
+    if (WeatherSystem_AllocWork(weatherSystem, v0) == 0) {
         return FALSE;
     }
 
-    v0->task = SysTask_CreateOnMainQueue(ov01_021EBD70, v0, 1);
+    v0->task = SysTask_CreateOnMainQueue(WeatherTask_LoadAsync, v0, 1);
     v0->unk10 = 1;
     v0->unk12 = 0;
 
@@ -813,7 +813,7 @@ static BOOL ov01_021EBA08(WeatherSystem *weatherSystem, int weather) {
 }
 
 static BOOL WeatherSystem_Start(WeatherSystem *weatherSystem, int weather, u32 a2, u32 a3) {
-    WeatherSystem_Sub0 *v0 = &weatherSystem->unk0[weather];
+    WeatherEntry *v0 = &weatherSystem->unk0[weather];
 
     if (v0->unk0 != 0xFFFF && v0->weatherSpriteResources == 0) {
         return FALSE;
@@ -827,27 +827,27 @@ static BOOL WeatherSystem_Start(WeatherSystem *weatherSystem, int weather, u32 a
         return FALSE;
     }
 
-    v0->unk8->unkF48 = SysTask_CreateOnMainQueue(v0->unk18, v0->unk8, 4);
+    v0->unk8->weatherTask = SysTask_CreateOnMainQueue(v0->unk18, v0->unk8, 4);
 
-    if (v0->unk8->unkF48 == NULL) {
+    if (v0->unk8->weatherTask == NULL) {
         return FALSE;
     }
 
     v0->unk10 = 3;
-    v0->unk8->unkF62 = a2;
-    v0->unk8->unkF66 = 0;
+    v0->unk8->state = a2;
+    v0->unk8->stopRequest = 0;
     v0->unk8->linkedListDummy.next = &v0->unk8->linkedListDummy;
     v0->unk8->linkedListDummy.prev = &v0->unk8->linkedListDummy;
-    v0->unk8->unkF64 = a3;
-    v0->unk8->unkF5C = 0;
+    v0->unk8->fogMode = a3;
+    v0->unk8->loopSEPlaying = 0;
 
     v0->unk8->cameraTarget = NNS_G3dGlb.camTarget;
 
     if (v0->unk4 > 0) {
-        v0->unk8->unkF58 = Heap_Alloc(HEAP_ID_FIELD1, v0->unk4);
-        memset(v0->unk8->unkF58, 0, v0->unk4);
+        v0->unk8->taskData = Heap_Alloc(HEAP_ID_FIELD1, v0->unk4);
+        memset(v0->unk8->taskData, 0, v0->unk4);
     } else {
-        v0->unk8->unkF58 = NULL;
+        v0->unk8->taskData = NULL;
     }
 
     if (v0->unk2 != 0xFFFF) {
@@ -859,24 +859,24 @@ static BOOL WeatherSystem_Start(WeatherSystem *weatherSystem, int weather, u32 a
     return TRUE;
 }
 
-static void ov01_021EBB40(WeatherSystem *weatherSystem, int weather, u16 a2) {
-    WeatherSystem_Sub0 *v0 = &weatherSystem->unk0[weather];
+static void WeatherSystem_RequestStop(WeatherSystem *weatherSystem, int weather, u16 a2) {
+    WeatherEntry *v0 = &weatherSystem->unk0[weather];
     if (v0->unk10 == 3) {
-        v0->unk8->unkF66 = 5;
-        v0->unk8->unkF64 = a2;
+        v0->unk8->stopRequest = 5;
+        v0->unk8->fogMode = a2;
     }
 }
 
-static void ov01_021EBB68(WeatherSystem *weatherSystem, int weather) {
-    WeatherSystem_Sub0 *v0 = &weatherSystem->unk0[weather];
+static void WeatherSystem_StopNow(WeatherSystem *weatherSystem, int weather) {
+    WeatherEntry *v0 = &weatherSystem->unk0[weather];
     if (WeatherSystem_GetState(weatherSystem, weather) == 3) {
-        v0->unk8->unkF62 = 5;
+        v0->unk8->state = 5;
         v0->unk18(NULL, v0->unk8);
     }
 }
 
 static void WeatherSystem_Unload(WeatherSystem *weatherSystem, u32 weather) {
-    WeatherSystem_Sub0 *v0 = &weatherSystem->unk0[weather];
+    WeatherEntry *v0 = &weatherSystem->unk0[weather];
 
     if (v0->unk2 != 0xFFFF) {
         GfGfx_EngineATogglePlanes(4, 0);
@@ -900,16 +900,16 @@ static void WeatherSystem_Unload(WeatherSystem *weatherSystem, u32 weather) {
         WeatherObject_DeleteAll(&v0->unk8->linkedListDummy);
 
         if (v0->unk0 != 0xFFFF) {
-            ov01_021EC058(v0->unk8);
+            WeatherWork_DeleteSprites(v0->unk8);
         }
 
-        if (v0->unk8->unkF5C == 1) {
+        if (v0->unk8->loopSEPlaying == 1) {
             Weather_StopLoopSE(v0->unk8);
         }
 
-        if (v0->unk8->unkF58) {
-            Heap_FreeExplicit(HEAP_ID_FIELD1, v0->unk8->unkF58);
-            v0->unk8->unkF58 = NULL;
+        if (v0->unk8->taskData) {
+            Heap_FreeExplicit(HEAP_ID_FIELD1, v0->unk8->taskData);
+            v0->unk8->taskData = NULL;
         }
 
         if (v0->unk10 == 1) {
@@ -917,11 +917,11 @@ static void WeatherSystem_Unload(WeatherSystem *weatherSystem, u32 weather) {
                 SysTask_Destroy(v0->task);
             }
         } else if (v0->unk10 == 3) {
-            SysTask_Destroy(v0->unk8->unkF48);
+            SysTask_Destroy(v0->unk8->weatherTask);
         }
 
-        if (v0->unk8->unkF6C) {
-            SysTask_Destroy(v0->unk8->unkF6C);
+        if (v0->unk8->seDelayTask) {
+            SysTask_Destroy(v0->unk8->seDelayTask);
         }
 
         Heap_FreeExplicit(HEAP_ID_FIELD1, v0->unk8);
@@ -931,7 +931,7 @@ static void WeatherSystem_Unload(WeatherSystem *weatherSystem, u32 weather) {
     ov01_021EA864(weatherSystem->fieldSystem->fog, 1, FALSE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x8000, 0);
 }
 
-static void ov01_021EBCA4(WeatherSystem_Sub0 *a0) {
+static void WeatherEntry_EndTask(WeatherEntry *a0) {
     if (a0->unk2 != 0xFFFF) {
         GfGfx_EngineATogglePlanes(4, 0);
         G2_SetBG2Priority(3);
@@ -942,40 +942,40 @@ static void ov01_021EBCA4(WeatherSystem_Sub0 *a0) {
     if (a0->unk8 != NULL) {
         WeatherObject_DeleteAll(&a0->unk8->linkedListDummy);
 
-        if (a0->unk8->unkF5C == 1) {
+        if (a0->unk8->loopSEPlaying == 1) {
             Weather_StopLoopSE(a0->unk8);
         }
 
         if (a0->unk10 == 3) {
-            SysTask_Destroy(a0->unk8->unkF48);
+            SysTask_Destroy(a0->unk8->weatherTask);
             a0->unk10 = 2;
         }
     }
 }
 
-static void ov01_021EBD18(WeatherSystem *weatherSystem, u16 a1) {
-    ov01_021EC078(weatherSystem, a1);
-    ov01_021EC0C0(weatherSystem, a1);
-    ov01_021EC114(weatherSystem, a1);
+static void WeatherSystem_LoadBgGfx(WeatherSystem *weatherSystem, u16 a1) {
+    WeatherSystem_LoadBgPalette(weatherSystem, a1);
+    WeatherSystem_LoadBgChars(weatherSystem, a1);
+    WeatherSystem_LoadBgScreen(weatherSystem, a1);
 }
 
-static BOOL ov01_021EBD34(WeatherSystem *weatherSystem, WeatherSystem_Sub0 *a1) {
+static BOOL WeatherSystem_LoadSprites(WeatherSystem *weatherSystem, WeatherEntry *a1) {
     if (a1->unk0 != 0xFFFF && a1->weatherSpriteResources == NULL) {
-        if (ov01_021EBEB8(a1) == FALSE) {
+        if (WeatherEntry_AllocSpriteResources(a1) == FALSE) {
             return FALSE;
         }
         WeatherSystem_LoadSpriteResources(weatherSystem, a1->unk0, a1->weatherSpriteResources);
-        ov01_021EBFD0(weatherSystem, a1);
+        WeatherSystem_InitSpriteTemplate(weatherSystem, a1);
     }
     return TRUE;
 }
 
-static void ov01_021EBD70(SysTask *task, void *data) {
-    WeatherSystem_Sub0 *v0 = data;
+static void WeatherTask_LoadAsync(SysTask *task, void *data) {
+    WeatherEntry *v0 = data;
     WeatherSystem *weatherSystem = v0->unk8->weatherSystem;
     switch (v0->unk12) {
     case 0:
-        GF_ASSERT(ov01_021EBEB8(v0));
+        GF_ASSERT(WeatherEntry_AllocSpriteResources(v0));
         v0->unk12++;
         break;
     case 1:
@@ -983,7 +983,7 @@ static void ov01_021EBD70(SysTask *task, void *data) {
         v0->unk12++;
         break;
     case 2:
-        ov01_021EC078(weatherSystem, v0->unk2);
+        WeatherSystem_LoadBgPalette(weatherSystem, v0->unk2);
         v0->unk12++;
         break;
     case 3:
@@ -991,7 +991,7 @@ static void ov01_021EBD70(SysTask *task, void *data) {
         v0->unk12++;
         break;
     case 4:
-        ov01_021EC0C0(weatherSystem, v0->unk2);
+        WeatherSystem_LoadBgChars(weatherSystem, v0->unk2);
         v0->unk12++;
         break;
     case 5:
@@ -999,7 +999,7 @@ static void ov01_021EBD70(SysTask *task, void *data) {
         v0->unk12++;
         break;
     case 6:
-        ov01_021EC114(weatherSystem, v0->unk2);
+        WeatherSystem_LoadBgScreen(weatherSystem, v0->unk2);
         v0->unk12++;
         break;
     case 7:
@@ -1007,10 +1007,10 @@ static void ov01_021EBD70(SysTask *task, void *data) {
         v0->unk12++;
         break;
     case 8:
-        ov01_021EBFD0(weatherSystem, v0);
+        WeatherSystem_InitSpriteTemplate(weatherSystem, v0);
         v0->unk8->unk8 = v0->weatherSpriteResources;
         if (v0->unk0 != 0xFFFF) {
-            ov01_021EC028(v0->unk8);
+            WeatherWork_CreateSprites(v0->unk8);
         }
         v0->unk10 = 2;
         v0->unk12 = 0;
@@ -1019,30 +1019,30 @@ static void ov01_021EBD70(SysTask *task, void *data) {
     }
 }
 
-static BOOL ov01_021EBE4C(WeatherSystem *weatherSystem, WeatherSystem_Sub0 *a1) {
+static BOOL WeatherSystem_AllocWork(WeatherSystem *weatherSystem, WeatherEntry *a1) {
     if (a1->unk8) {
         return TRUE;
     }
 
-    a1->unk8 = Heap_Alloc(HEAP_ID_FIELD1, sizeof(WeatherSystem_Sub0_Sub8));
+    a1->unk8 = Heap_Alloc(HEAP_ID_FIELD1, sizeof(WeatherWork));
     if (a1->unk8 == NULL) {
         return FALSE;
     }
-    memset(a1->unk8, 0, sizeof(WeatherSystem_Sub0_Sub8));
+    memset(a1->unk8, 0, sizeof(WeatherWork));
 
     a1->unk8->weatherSystem = weatherSystem;
-    a1->unk8->unkF62 = 0;
-    a1->unk8->unkF66 = 0;
+    a1->unk8->state = 0;
+    a1->unk8->stopRequest = 0;
     a1->unk8->linkedListDummy.next = &a1->unk8->linkedListDummy;
     a1->unk8->linkedListDummy.prev = &a1->unk8->linkedListDummy;
-    a1->unk8->unkF58 = NULL;
+    a1->unk8->taskData = NULL;
     a1->unk8->unk4 = a1;
-    a1->unk8->unkF6C = NULL;
+    a1->unk8->seDelayTask = NULL;
 
     return TRUE;
 }
 
-static BOOL ov01_021EBEB8(WeatherSystem_Sub0 *a0) {
+static BOOL WeatherEntry_AllocSpriteResources(WeatherEntry *a0) {
     if (a0->unk0 != 0xFFFF) {
         if (a0->weatherSpriteResources != NULL) {
             return TRUE;
@@ -1084,9 +1084,9 @@ static void WeatherSystem_LoadPlttResource(WeatherSystem *weatherSystem, u32 hea
     }
 }
 
-static void ov01_021EBFD0(WeatherSystem *weatherSystem, WeatherSystem_Sub0 *a1) {
+static void WeatherSystem_InitSpriteTemplate(WeatherSystem *weatherSystem, WeatherEntry *a1) {
     if (a1->unk0 != 0xFFFF) {
-        ov01_021EC240(&a1->weatherSpriteResources->spriteResHeader, weatherSystem, a1->weatherSpriteResources, 0, 1);
+        WeatherSystem_InitSpriteResourcesHeader(&a1->weatherSpriteResources->spriteResHeader, weatherSystem, a1->weatherSpriteResources, 0, 1);
         memset(&a1->weatherSpriteResources->spriteTemplate, 0, sizeof(SpriteTemplate));
         a1->weatherSpriteResources->spriteTemplate.spriteList = weatherSystem->weatherDraw.spriteList;
         a1->weatherSpriteResources->spriteTemplate.header = &a1->weatherSpriteResources->spriteResHeader;
@@ -1097,7 +1097,7 @@ static void ov01_021EBFD0(WeatherSystem *weatherSystem, WeatherSystem_Sub0 *a1) 
     }
 }
 
-static void ov01_021EC028(WeatherSystem_Sub0_Sub8 *a0) {
+static void WeatherWork_CreateSprites(WeatherWork *a0) {
     for (int i = 0; i < 64; i++) {
         a0->linkedList[i].unk4 = Sprite_CreateAffine(&a0->unk8->spriteTemplate);
         Sprite_SetDrawFlag(a0->linkedList[i].unk4, 0);
@@ -1105,7 +1105,7 @@ static void ov01_021EC028(WeatherSystem_Sub0_Sub8 *a0) {
     }
 }
 
-static void ov01_021EC058(WeatherSystem_Sub0_Sub8 *a0) {
+static void WeatherWork_DeleteSprites(WeatherWork *a0) {
     for (int i = 0; i < 64; i++) {
         if (a0->linkedList[i].unk4) {
             Sprite_Delete(a0->linkedList[i].unk4);
@@ -1114,7 +1114,7 @@ static void ov01_021EC058(WeatherSystem_Sub0_Sub8 *a0) {
     }
 }
 
-static void ov01_021EC078(WeatherSystem *weatherSystem, u16 a1) {
+static void WeatherSystem_LoadBgPalette(WeatherSystem *weatherSystem, u16 a1) {
     UnkWeatherStruct_021EC078 v0;
     if (a1 != 0xFFFF) {
         v0.unk0 = NARC_AllocAndReadWholeMember(weatherSystem->narc, weatherSystem->unk4[a1].paletteId, HEAP_ID_FIELD1);
@@ -1125,7 +1125,7 @@ static void ov01_021EC078(WeatherSystem *weatherSystem, u16 a1) {
     }
 }
 
-static void ov01_021EC0C0(WeatherSystem *weatherSystem, u16 a1) {
+static void WeatherSystem_LoadBgChars(WeatherSystem *weatherSystem, u16 a1) {
     UnkWeatherStruct_021EC078 v0;
     if (a1 != 0xFFFF) {
         v0.unk4 = NARC_AllocAndReadWholeMember(weatherSystem->narc, weatherSystem->unk4[a1].charId, HEAP_ID_FIELD1);
@@ -1136,7 +1136,7 @@ static void ov01_021EC0C0(WeatherSystem *weatherSystem, u16 a1) {
     }
 }
 
-static void ov01_021EC114(WeatherSystem *weatherSystem, u16 a1) {
+static void WeatherSystem_LoadBgScreen(WeatherSystem *weatherSystem, u16 a1) {
     UnkWeatherStruct_021EC078 v0;
     if (a1 != 0xFFFF) {
         GfGfx_EngineATogglePlanes(4, 0);
@@ -1152,19 +1152,19 @@ static void ov01_021EC114(WeatherSystem *weatherSystem, u16 a1) {
     }
 }
 
-static void ov01_021EC1BC(WeatherObject *a0, int a1) {
+static void WeatherObject_InitData(WeatherObject *a0, int a1) {
     GF_ASSERT(a0->unk8 == 0);
     GF_ASSERT(a1 > 0);
     GF_ASSERT(a1 <= 0x28u);
     a0->unk8 = a0->unk10;
 }
 
-static void ov01_021EC1E4(WeatherObject *a0) {
+static void WeatherObject_ClearData(WeatherObject *a0) {
     a0->unk8 = NULL;
     memset(a0->unk10, 0, 10 * sizeof(u32));
 }
 
-static void *WeatherSystem_AddObject(WeatherSystem_Sub0_Sub8 *a0, int a1) {
+static void *WeatherSystem_AddObject(WeatherWork *a0, int a1) {
     WeatherSystem *weatherSystem = a0->weatherSystem;
     WeatherObject *v0 = WeatherSystem_GetFreeObject(a0);
     if (v0 == NULL) {
@@ -1176,7 +1176,7 @@ static void *WeatherSystem_AddObject(WeatherSystem_Sub0_Sub8 *a0, int a1) {
     a0->linkedListDummy.prev->next = v0;
     a0->linkedListDummy.prev = v0;
 
-    ov01_021EC1BC(v0, a1);
+    WeatherObject_InitData(v0, a1);
     if (v0->unk8 == NULL) {
         return NULL;
     }
@@ -1186,7 +1186,7 @@ static void *WeatherSystem_AddObject(WeatherSystem_Sub0_Sub8 *a0, int a1) {
     return v0;
 }
 
-static void ov01_021EC240(SpriteResourcesHeader *header, WeatherSystem *weatherSystem, WeatherSpriteResources *a2, u32 a3, u32 a4) {
+static void WeatherSystem_InitSpriteResourcesHeader(SpriteResourcesHeader *header, WeatherSystem *weatherSystem, WeatherSpriteResources *a2, u32 a3, u32 a4) {
     int resID[4];
 
     for (int i = 0; i < 4; i++) {
@@ -1201,7 +1201,7 @@ static void WeatherObject_Delete(WeatherObject *a0) {
     a0->next->prev = a0->prev;
 
     Sprite_SetDrawFlag(a0->unk4, 0);
-    ov01_021EC1E4(a0);
+    WeatherObject_ClearData(a0);
 
     Sprite *temp = a0->unk4;
     memset(a0, 0, sizeof(WeatherObject));
@@ -1219,7 +1219,7 @@ static void WeatherObject_DeleteAll(WeatherObject *a0) {
     }
 }
 
-static void ov01_021EC2E4(WeatherObject *a0, UnkLinkedListFunc func) {
+static void WeatherObject_ForEach(WeatherObject *a0, WeatherObjectFunc func) {
     WeatherObject *cur = a0->next;
     WeatherObject *next = cur->next;
 
@@ -1230,14 +1230,14 @@ static void ov01_021EC2E4(WeatherObject *a0, UnkLinkedListFunc func) {
     }
 }
 
-static void ov01_021EC300(void *data) {
+static void WeatherWork_Nop(void *data) {
 }
 
 static VecFx32 WeatherObject_GetPosition(WeatherObject *a0) {
     return *Sprite_GetMatrixPtr(a0->unk4);
 }
 
-static void ov01_021EC31C(fx32 *x, fx32 *z, WeatherSystem_Sub0_Sub8 *a0) {
+static void WeatherWork_GetCameraScroll(fx32 *x, fx32 *z, WeatherWork *a0) {
     VecFx32 cameraTarget = NNS_G3dGlb.camTarget;
     fx32 xScale, zScale;
     fx32 dx, dz;
@@ -1288,9 +1288,9 @@ static void ov01_021EC31C(fx32 *x, fx32 *z, WeatherSystem_Sub0_Sub8 *a0) {
     *z = zScale;
 }
 
-static void ov01_021EC470(WeatherSystem_Sub0_Sub8 *a0, int *xOut, int *zOut) {
+static void WeatherWork_ScrollObjectsInt(WeatherWork *a0, int *xOut, int *zOut) {
     fx32 x, z;
-    ov01_021EC4A8(a0, &x, &z);
+    WeatherWork_ScrollObjects(a0, &x, &z);
 
     if (xOut) {
         *xOut = x >> FX32_SHIFT;
@@ -1306,11 +1306,11 @@ static void ov01_021EC470(WeatherSystem_Sub0_Sub8 *a0, int *xOut, int *zOut) {
     }
 }
 
-static void ov01_021EC4A8(WeatherSystem_Sub0_Sub8 *a0, fx32 *x, fx32 *y) {
+static void WeatherWork_ScrollObjects(WeatherWork *a0, fx32 *x, fx32 *y) {
     WeatherObject *cur;
     fx32 xScale, yScale;
     VecFx32 matrix;
-    ov01_021EC31C(&xScale, &yScale, a0);
+    WeatherWork_GetCameraScroll(&xScale, &yScale, a0);
 
     cur = a0->linkedListDummy.next;
     while (cur != &a0->linkedListDummy) {
@@ -1332,7 +1332,7 @@ static void ov01_021EC4A8(WeatherSystem_Sub0_Sub8 *a0, fx32 *x, fx32 *y) {
     }
 }
 
-static void ov01_021EC504(UnkStruct_021EC504 *arg0, WeatherSystem_Sub0_Sub8 *arg1, s16 arg2, s16 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, UnkWeatherSystemSub0Sub8Func arg9) {
+static void WeatherSpawnRamp_Init(WeatherSpawnRamp *arg0, WeatherWork *arg1, s16 arg2, s16 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, WeatherSpawnFunc arg9) {
     arg0->unk0 = arg1;
     arg0->unk4 = arg2;
     arg0->unk6 = 0;
@@ -1346,14 +1346,14 @@ static void ov01_021EC504(UnkStruct_021EC504 *arg0, WeatherSystem_Sub0_Sub8 *arg
     arg0->unk18 = arg9;
 }
 
-static void ov01_021EC52C(UnkStruct_021EC504 *arg0, s16 arg1, s16 arg2, s16 arg3, s32 arg4) {
+static void WeatherSpawnRamp_SetTarget(WeatherSpawnRamp *arg0, s16 arg1, s16 arg2, s16 arg3, s32 arg4) {
     arg0->unkC = arg1;
     arg0->unkE = arg2;
     arg0->unk10 = arg3;
     arg0->unk14 = arg4;
 }
 
-static s32 ov01_021EC538(UnkStruct_021EC504 *arg0) {
+static s32 WeatherSpawnRamp_Update(WeatherSpawnRamp *arg0) {
     s16 temp_r0;
     s16 temp_r0_2;
     s16 temp_r0_4;
@@ -1415,28 +1415,28 @@ static s32 ov01_021EC538(UnkStruct_021EC504 *arg0) {
     return var_r4;
 }
 
-static void ov01_021EC5FC(WeatherFogChange *arg0, UnkStruct_021EC774 *arg1, FogData *fog, GXFogSlope fogSlope, s32 fogOffset, GXRgb rgb, s32 arg6, s32 arg7) {
+static void WeatherFog_Start(WeatherFogChange *arg0, WeatherFogTableFade *arg1, FogData *fog, GXFogSlope fogSlope, s32 fogOffset, GXRgb rgb, s32 arg6, s32 arg7) {
     arg1->fog = fog;
     if (arg7 != 0) {
         if (arg7 == 1) {
-            ov01_021EC678(fog, fogSlope, fogOffset, rgb);
-            ov01_021EC774(arg1);
-            ov01_021EC790(arg1, arg6, 1);
+            Weather_SetFog(fog, fogSlope, fogOffset, rgb);
+            WeatherFogTableFade_Clear(arg1);
+            WeatherFogTableFade_Start(arg1, arg6, 1);
         } else if (arg7 == 2) {
-            ov01_021EC6A4(arg0, fog, fogSlope, fogOffset, rgb, 0x7F * arg6);
+            WeatherFogChange_Init(arg0, fog, fogSlope, fogOffset, rgb, 0x7F * arg6);
         }
     }
 }
 
-static BOOL ov01_021EC650(WeatherFogChange *arg0, UnkStruct_021EC774 *arg1, s32 arg2) {
+static BOOL WeatherFog_Update(WeatherFogChange *arg0, WeatherFogTableFade *arg1, s32 arg2) {
     s32 var_r4;
 
     var_r4 = 1;
     if (arg2 != 0) {
         if (arg2 == 1) {
-            var_r4 = ov01_021EC7AC(arg1);
+            var_r4 = WeatherFogTableFade_Update(arg1);
         } else if (arg2 == 2) {
-            if (ov01_021EC728(arg0) == 0) {
+            if (WeatherFogChange_Step(arg0) == 0) {
                 var_r4 = 0;
             }
         }
@@ -1444,12 +1444,12 @@ static BOOL ov01_021EC650(WeatherFogChange *arg0, UnkStruct_021EC774 *arg1, s32 
     return var_r4;
 }
 
-static void ov01_021EC678(FogData *fog, GXFogSlope fogSlope, s32 fogOffset, GXRgb rgb) {
+static void Weather_SetFog(FogData *fog, GXFogSlope fogSlope, s32 fogOffset, GXRgb rgb) {
     ov01_021EA864(fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, fogSlope, fogOffset);
     ov01_021EA89C(fog, -1, rgb, 0x1F);
 }
 
-static void ov01_021EC6A4(WeatherFogChange *fogChange, FogData *fog, s32 arg2, s32 arg3, GXRgb rgb, s32 arg5) {
+static void WeatherFogChange_Init(WeatherFogChange *fogChange, FogData *fog, s32 arg2, s32 arg3, GXRgb rgb, s32 arg5) {
     int slope = ov01_021EA858(fog);
     int offset = ov01_021EA85C(fog);
     GXRgb rgb2 = ov01_021EA860(fog);
@@ -1463,25 +1463,25 @@ static void ov01_021EC6A4(WeatherFogChange *fogChange, FogData *fog, s32 arg2, s
     WeatherLerp_Init(&fogChange->unk54, slope, arg2, arg5);
 }
 
-static BOOL ov01_021EC728(WeatherFogChange *arg0) {
+static BOOL WeatherFogChange_Step(WeatherFogChange *arg0) {
     BOOL ret = WeatherLerp_Step(&arg0->unk4);
     WeatherLerp_Step(&arg0->unk18);
     WeatherLerp_Step(&arg0->unk2C);
     WeatherLerp_Step(&arg0->unk40);
     WeatherLerp_Step(&arg0->unk54);
-    ov01_021EC678(arg0->fog, (GXFogSlope)arg0->unk54.unk0, arg0->unk4.unk0, GX_RGB(arg0->unk18.unk0, arg0->unk2C.unk0, arg0->unk40.unk0));
+    Weather_SetFog(arg0->fog, (GXFogSlope)arg0->unk54.unk0, arg0->unk4.unk0, GX_RGB(arg0->unk18.unk0, arg0->unk2C.unk0, arg0->unk40.unk0));
 
     return ret;
 }
 
-static void ov01_021EC774(UnkStruct_021EC774 *a0) {
+static void WeatherFogTableFade_Clear(WeatherFogTableFade *a0) {
     for (int i = 0; i < 32; i++) {
         a0->unk4[i] = 0;
     }
     ov01_021EA8C4(a0->fog, a0->unk4);
 }
 
-static void ov01_021EC790(UnkStruct_021EC774 *arg0, s32 arg1, s32 arg2) {
+static void WeatherFogTableFade_Start(WeatherFogTableFade *arg0, s32 arg1, s32 arg2) {
     arg0->unk24 = 0x7F;
     arg0->unk28 = 0;
     arg0->unk2C = arg1;
@@ -1492,26 +1492,26 @@ static void ov01_021EC790(UnkStruct_021EC774 *arg0, s32 arg1, s32 arg2) {
     arg0->unk2E = -1;
 }
 
-static s32 ov01_021EC7AC(UnkStruct_021EC774 *arg0) {
+static s32 WeatherFogTableFade_Update(WeatherFogTableFade *arg0) {
     s32 temp_r4;
 
-    temp_r4 = ov01_021EC7E8(arg0);
+    temp_r4 = WeatherFogTableFade_Step(arg0);
     if (arg0->unk28 == 0) {
         ov01_021EA8C4(arg0->fog, arg0->unk4);
     }
     return temp_r4;
 }
 
-static void ov01_021EC7C8(UnkStruct_021EC774 *arg0) {
+static void WeatherFogTableFade_SetFull(WeatherFogTableFade *arg0) {
     arg0->unk24 = 1;
     arg0->unk28 = 0;
     arg0->unk2C = 0;
     arg0->unk2E = 1;
-    ov01_021EC828(arg0);
+    WeatherFogTableFade_BuildTable(arg0);
     ov01_021EA8C4(arg0->fog, arg0->unk4);
 }
 
-static s32 ov01_021EC7E8(UnkStruct_021EC774 *arg0) {
+static s32 WeatherFogTableFade_Step(WeatherFogTableFade *arg0) {
     s32 temp_r0;
     s32 temp_r2;
     s32 var_r4;
@@ -1526,7 +1526,7 @@ static s32 ov01_021EC7E8(UnkStruct_021EC774 *arg0) {
         arg0->unk28 = temp_r2;
         if (temp_r2 >= (s32)arg0->unk2C) {
             arg0->unk28 = 0;
-            ov01_021EC828(arg0);
+            WeatherFogTableFade_BuildTable(arg0);
             temp_r0 = arg0->unk24 - 1;
             arg0->unk24 = temp_r0;
             if (temp_r0 <= 0) {
@@ -1537,7 +1537,7 @@ static s32 ov01_021EC7E8(UnkStruct_021EC774 *arg0) {
     return var_r4;
 }
 
-static void ov01_021EC828(UnkStruct_021EC774 *arg0) {
+static void WeatherFogTableFade_BuildTable(WeatherFogTableFade *arg0) {
     int i;
     int v0;
     int v1;
@@ -1554,7 +1554,7 @@ static void ov01_021EC828(UnkStruct_021EC774 *arg0) {
     }
 }
 
-static void ov01_021EC85C(WeatherSystem_Sub0_Sub8 *a0, UnkWeatherSystemSub0Sub8Func a1, int a2, int a3, int a4, UnkLinkedListFunc a5) {
+static void Weather_SpawnAndPreAdvance(WeatherWork *a0, WeatherSpawnFunc a1, int a2, int a3, int a4, WeatherObjectFunc a5) {
     a1(a0, a2);
 
     int i, j;
@@ -1584,7 +1584,7 @@ static void ov01_021EC85C(WeatherSystem_Sub0_Sub8 *a0, UnkWeatherSystemSub0Sub8F
     }
 }
 
-static WeatherObject *WeatherSystem_GetFreeObject(WeatherSystem_Sub0_Sub8 *a0) {
+static WeatherObject *WeatherSystem_GetFreeObject(WeatherWork *a0) {
     for (int i = 0; i < 64; i++) {
         if (a0->linkedList[i].weatherSystem == NULL) {
             return &a0->linkedList[i];
@@ -1594,72 +1594,72 @@ static WeatherObject *WeatherSystem_GetFreeObject(WeatherSystem_Sub0_Sub8 *a0) {
 }
 
 static void WeatherTask_Sunny(SysTask *task, void *data) {
-    WeatherSystem_Sub0_Sub8 *arg1 = data;
-    u16 temp_r2 = arg1->unkF62;
+    WeatherWork *arg1 = data;
+    u16 temp_r2 = arg1->state;
     switch (temp_r2) {
     case 0:
-        arg1->unkF62 = 1;
+        arg1->state = 1;
         break;
     case 1:
-        arg1->unkF62 = 3;
+        arg1->state = 3;
         break;
     case 2:
-        arg1->unkF62 = 3;
+        arg1->state = 3;
         break;
     case 3:
-        if (arg1->unkF66 == 5) {
-            arg1->unkF62 = 4;
+        if (arg1->stopRequest == 5) {
+            arg1->state = 4;
         }
         break;
     case 4:
-        arg1->unkF62 = 5;
+        arg1->state = 5;
         break;
     case 5:
-        ov01_021EBCA4(arg1->unk4);
+        WeatherEntry_EndTask(arg1->unk4);
         break;
     }
 }
 
 static void WeatherTask_Rain(SysTask *task, void *data) {
-    WeatherSystem_Sub0_Sub8 *v0 = data;
+    WeatherWork *v0 = data;
 
-    UnkStruct_021EC94C *v1 = v0->unkF58;
+    WeatherParticleTaskData *v1 = v0->taskData;
 
-    switch (v0->unkF62) {
+    switch (v0->state) {
     case 0:
-        ov01_021EC504(&v1->unk0, v0, 1, 8, 20, 1, -1, 1, 2, Rain_AddDrops);
-        ov01_021EC5FC(&v1->unk50, &v1->unk1C, v0->weatherSystem->fieldSystem->fog, GX_FOGSLOPE_0x1000, 0x726F, 0x6b5a, 1, v0->unkF64);
+        WeatherSpawnRamp_Init(&v1->unk0, v0, 1, 8, 20, 1, -1, 1, 2, Rain_AddDrops);
+        WeatherFog_Start(&v1->unk50, &v1->unk1C, v0->weatherSystem->fieldSystem->fog, GX_FOGSLOPE_0x1000, 0x726F, 0x6b5a, 1, v0->fogMode);
 
         v1->data[0] = 0;
-        v0->unkF6C = SysTask_CreateOnMainQueue(WeatherTask_DelayedRainSE, v0, 100);
-        v0->unkF68 = 30;
-        v0->unkF62 = 1;
+        v0->seDelayTask = SysTask_CreateOnMainQueue(WeatherTask_DelayedRainSE, v0, 100);
+        v0->seDelay = 30;
+        v0->state = 1;
         break;
     case 1:
-        int v2 = ov01_021EC538(&v1->unk0);
+        int v2 = WeatherSpawnRamp_Update(&v1->unk0);
         if (v1->data[0] > 0) {
             v1->data[0]--;
         } else {
-            int v3 = ov01_021EC650(&v1->unk50, &v1->unk1C, v0->unkF64);
+            int v3 = WeatherFog_Update(&v1->unk50, &v1->unk1C, v0->fogMode);
             if (v3 == 1 && v2 == 3) {
-                v0->unkF62 = 3;
+                v0->state = 3;
             }
         }
         break;
     case 2:
-        ov01_021EC504(&v1->unk0, v0, 20, 1, 20, 1, -1, 1, 2, Rain_AddDrops);
+        WeatherSpawnRamp_Init(&v1->unk0, v0, 20, 1, 20, 1, -1, 1, 2, Rain_AddDrops);
 
-        if (v0->unkF64) {
+        if (v0->fogMode) {
             v1->unk1C.fog = v0->weatherSystem->fieldSystem->fog;
-            ov01_021EC678(v1->unk1C.fog, GX_FOGSLOPE_0x1000, 0x726f, GX_RGB(26, 26, 26));
-            ov01_021EC7C8(&v1->unk1C);
+            Weather_SetFog(v1->unk1C.fog, GX_FOGSLOPE_0x1000, 0x726f, GX_RGB(26, 26, 26));
+            WeatherFogTableFade_SetFull(&v1->unk1C);
         }
 
-        ov01_021EC85C(v0, Rain_AddDrops, 20, 10, 1, Rain_UpdateDrop);
+        Weather_SpawnAndPreAdvance(v0, Rain_AddDrops, 20, 10, 1, Rain_UpdateDrop);
 
-        v0->unkF6C = SysTask_CreateOnMainQueue(WeatherTask_DelayedRainSE, v0, 100);
-        v0->unkF68 = 30;
-        v0->unkF62 = 3;
+        v0->seDelayTask = SysTask_CreateOnMainQueue(WeatherTask_DelayedRainSE, v0, 100);
+        v0->seDelay = 30;
+        v0->state = 3;
         break;
     case 3:
         if (v1->unk0.unk6-- <= 0) {
@@ -1667,52 +1667,52 @@ static void WeatherTask_Rain(SysTask *task, void *data) {
             v1->unk0.unk6 = v1->unk0.unk8;
         }
 
-        if (v0->unkF66 == 5) {
-            ov01_021EC52C(&v1->unk0, 0, 8, 1, -2);
+        if (v0->stopRequest == 5) {
+            WeatherSpawnRamp_SetTarget(&v1->unk0, 0, 8, 1, -2);
 
-            if (v0->unkF64) {
-                ov01_021EC790(&v1->unk1C, 1, 0);
+            if (v0->fogMode) {
+                WeatherFogTableFade_Start(&v1->unk1C, 1, 0);
             }
             v1->data[0] = 0;
-            v0->unkF62 = 4;
+            v0->state = 4;
             Weather_StopLoopSE(v0);
         }
         break;
     case 4:
-        int ret = ov01_021EC538(&v1->unk0);
+        int ret = WeatherSpawnRamp_Update(&v1->unk0);
         if (v1->data[0] > 0) {
             v1->data[0]--;
         } else {
             int vUnk;
-            if (v0->unkF64) {
-                vUnk = ov01_021EC7AC(&v1->unk1C);
+            if (v0->fogMode) {
+                vUnk = WeatherFogTableFade_Update(&v1->unk1C);
             } else {
                 vUnk = 1;
             }
 
             if (vUnk == 1 && ret == 3) {
                 if (v0->linkedListDummy.next == &v0->linkedListDummy) {
-                    v0->unkF62 = 5;
+                    v0->state = 5;
                 }
             }
         }
         break;
     case 5:
-        if (v0->unkF64) {
+        if (v0->fogMode) {
             ov01_021EA864(v1->unk1C.fog, 1, FALSE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x8000, 0);
         }
-        ov01_021EBCA4(v0->unk4);
+        WeatherEntry_EndTask(v0->unk4);
         break;
     }
 
-    if (v0->unkF62 != 5 && v0->unkF62 != 0) {
-        ov01_021EC2E4(&v0->linkedListDummy, Rain_UpdateDrop);
-        ov01_021EC470(v0, NULL, NULL);
-        ov01_021EC300(v0);
+    if (v0->state != 5 && v0->state != 0) {
+        WeatherObject_ForEach(&v0->linkedListDummy, Rain_UpdateDrop);
+        WeatherWork_ScrollObjectsInt(v0, NULL, NULL);
+        WeatherWork_Nop(v0);
     }
 }
 
-static void Rain_AddDrops(WeatherSystem_Sub0_Sub8 *a0, int arg1) {
+static void Rain_AddDrops(WeatherWork *a0, int arg1) {
     for (int i = 0; i < arg1; i++) {
         WeatherObject *v0 = WeatherSystem_AddObject(a0, 32);
         if (v0 == NULL) {
@@ -1784,45 +1784,45 @@ static void Rain_UpdateDrop(WeatherObject *a0) {
 }
 
 static void WeatherTask_Snow(SysTask *task, void *data) {
-    WeatherSystem_Sub0_Sub8 *v0 = data;
+    WeatherWork *v0 = data;
 
-    UnkStruct_021EC94C *v1 = v0->unkF58;
+    WeatherParticleTaskData *v1 = v0->taskData;
 
-    switch (v0->unkF62) {
+    switch (v0->state) {
     case 0:
-        ov01_021EC504(&v1->unk0, v0, 1, 30, 6, 3, -5, 2, 1, Snow_AddFlakes);
+        WeatherSpawnRamp_Init(&v1->unk0, v0, 1, 30, 6, 3, -5, 2, 1, Snow_AddFlakes);
 
-        ov01_021EC5FC(&v1->unk50, &v1->unk1C, v0->weatherSystem->fieldSystem->fog, GX_FOGSLOPE_0x1000, 0x726F, GX_RGB(24, 24, 24), 2, v0->unkF64);
+        WeatherFog_Start(&v1->unk50, &v1->unk1C, v0->weatherSystem->fieldSystem->fog, GX_FOGSLOPE_0x1000, 0x726F, GX_RGB(24, 24, 24), 2, v0->fogMode);
 
         v1->data[0] = 8;
         v1->data[1] = 0;
-        v0->unkF62 = 1;
+        v0->state = 1;
         break;
     case 1:
-        int v2 = ov01_021EC538(&v1->unk0);
+        int v2 = WeatherSpawnRamp_Update(&v1->unk0);
         if (v1->data[0] > 0) {
             v1->data[0]--;
         } else {
-            int v3 = ov01_021EC650(&v1->unk50, &v1->unk1C, v0->unkF64);
+            int v3 = WeatherFog_Update(&v1->unk50, &v1->unk1C, v0->fogMode);
             if (v3 == 1 && v2 == 3) {
-                v0->unkF62 = 3;
+                v0->state = 3;
             }
         }
         break;
     case 2:
-        ov01_021EC504(&v1->unk0, v0, 6, 3, 6, 3, -5, 2, 1, Snow_AddFlakes);
+        WeatherSpawnRamp_Init(&v1->unk0, v0, 6, 3, 6, 3, -5, 2, 1, Snow_AddFlakes);
 
-        if (v0->unkF64) {
+        if (v0->fogMode) {
             v1->unk1C.fog = v0->weatherSystem->fieldSystem->fog;
-            ov01_021EC678(v1->unk1C.fog, GX_FOGSLOPE_0x1000, 0x726f, GX_RGB(24, 24, 24));
-            ov01_021EC7C8(&v1->unk1C);
+            Weather_SetFog(v1->unk1C.fog, GX_FOGSLOPE_0x1000, 0x726f, GX_RGB(24, 24, 24));
+            WeatherFogTableFade_SetFull(&v1->unk1C);
         }
 
         v1->data[1] = 0;
 
-        ov01_021EC85C(v0, Snow_AddFlakes, 20, 2, 3, Snow_UpdateFlake);
+        Weather_SpawnAndPreAdvance(v0, Snow_AddFlakes, 20, 2, 3, Snow_UpdateFlake);
 
-        v0->unkF62 = 3;
+        v0->state = 3;
         break;
     case 3:
         if (v1->unk0.unk6-- <= 0) {
@@ -1830,59 +1830,59 @@ static void WeatherTask_Snow(SysTask *task, void *data) {
             v1->unk0.unk6 = v1->unk0.unk8;
         }
 
-        if (v0->unkF66 == 5) {
-            ov01_021EC52C(&v1->unk0, 0, 30, 5, -3);
+        if (v0->stopRequest == 5) {
+            WeatherSpawnRamp_SetTarget(&v1->unk0, 0, 30, 5, -3);
 
-            if (v0->unkF64) {
-                ov01_021EC790(&v1->unk1C, 1, 0);
+            if (v0->fogMode) {
+                WeatherFogTableFade_Start(&v1->unk1C, 1, 0);
             }
             v1->data[0] = 0;
-            v0->unkF62 = 4;
+            v0->state = 4;
         }
         break;
     case 4:
-        int ret = ov01_021EC538(&v1->unk0);
+        int ret = WeatherSpawnRamp_Update(&v1->unk0);
         if (v1->data[0] > 0) {
             v1->data[0]--;
         } else {
             int vUnk;
-            if (v0->unkF64) {
-                vUnk = ov01_021EC7AC(&v1->unk1C);
+            if (v0->fogMode) {
+                vUnk = WeatherFogTableFade_Update(&v1->unk1C);
             } else {
                 vUnk = 1;
             }
 
             if (vUnk == 1 && ret == 3) {
                 if (v0->linkedListDummy.next == &v0->linkedListDummy) {
-                    v0->unkF62 = 5;
+                    v0->state = 5;
                 }
             }
         }
         break;
     case 5:
-        if (v0->unkF64) {
+        if (v0->fogMode) {
             ov01_021EA864(v1->unk1C.fog, 1, FALSE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x8000, 0);
         }
-        ov01_021EBCA4(v0->unk4);
+        WeatherEntry_EndTask(v0->unk4);
         break;
     }
 
-    if (v0->unkF62 != 5 && v0->unkF62 != 0) {
-        ov01_021EC2E4(&v0->linkedListDummy, Snow_UpdateFlake);
-        ov01_021EC470(v0, NULL, NULL);
-        ov01_021EC300(v0);
+    if (v0->state != 5 && v0->state != 0) {
+        WeatherObject_ForEach(&v0->linkedListDummy, Snow_UpdateFlake);
+        WeatherWork_ScrollObjectsInt(v0, NULL, NULL);
+        WeatherWork_Nop(v0);
     }
 }
 
 static const ov01_0220674C[] = { 2, 2, 2, 2 };
 static const ov01_0220673C[] = { 16, 32, 16, 10 };
 
-static void Snow_AddFlakes(WeatherSystem_Sub0_Sub8 *a0, int a1) {
+static void Snow_AddFlakes(WeatherWork *a0, int a1) {
     int table0[4];
     table0 = ov01_0220673C;
     int table1[4];
     table1 = ov01_0220674C;
-    UnkStruct_021EC94C *v0 = a0->unkF58;
+    WeatherParticleTaskData *v0 = a0->taskData;
 
     for (int i = 0; i < a1; i++) {
         WeatherObject *v1 = WeatherSystem_AddObject(a0, 32);
@@ -1951,42 +1951,42 @@ static void Snow_UpdateFlake(WeatherObject *a0) {
 }
 
 static void WeatherTask_DiamondDust(SysTask *task, void *data) {
-    WeatherSystem_Sub0_Sub8 *v0 = data;
+    WeatherWork *v0 = data;
 
-    UnkStruct_021EC94C *v1 = v0->unkF58;
+    WeatherParticleTaskData *v1 = v0->taskData;
 
-    switch (v0->unkF62) {
+    switch (v0->state) {
     case 0:
-        ov01_021EC504(&v1->unk0, v0, 2, 16, 20, 2, -2, 4, 2, DiamondDust_AddSparkles);
+        WeatherSpawnRamp_Init(&v1->unk0, v0, 2, 16, 20, 2, -2, 4, 2, DiamondDust_AddSparkles);
 
-        ov01_021EC5FC(&v1->unk50, &v1->unk1C, v0->weatherSystem->fieldSystem->fog, GX_FOGSLOPE_0x1000, 0x716F, GX_RGB(26, 26, 26), 1, v0->unkF64);
+        WeatherFog_Start(&v1->unk50, &v1->unk1C, v0->weatherSystem->fieldSystem->fog, GX_FOGSLOPE_0x1000, 0x716F, GX_RGB(26, 26, 26), 1, v0->fogMode);
 
         v1->data[0] = 0;
-        v0->unkF62 = 1;
+        v0->state = 1;
         break;
     case 1:
-        int v2 = ov01_021EC538(&v1->unk0);
+        int v2 = WeatherSpawnRamp_Update(&v1->unk0);
         if (v1->data[0] > 0) {
             v1->data[0]--;
         } else {
-            int v3 = ov01_021EC650(&v1->unk50, &v1->unk1C, v0->unkF64);
+            int v3 = WeatherFog_Update(&v1->unk50, &v1->unk1C, v0->fogMode);
             if (v3 == 1 && v2 == 3) {
-                v0->unkF62 = 3;
+                v0->state = 3;
             }
         }
         break;
     case 2:
-        ov01_021EC504(&v1->unk0, v0, 20, 2, 20, 2, -2, 4, 2, DiamondDust_AddSparkles);
+        WeatherSpawnRamp_Init(&v1->unk0, v0, 20, 2, 20, 2, -2, 4, 2, DiamondDust_AddSparkles);
 
-        if (v0->unkF64) {
+        if (v0->fogMode) {
             v1->unk1C.fog = v0->weatherSystem->fieldSystem->fog;
-            ov01_021EC678(v1->unk1C.fog, GX_FOGSLOPE_0x1000, 0x716f, GX_RGB(26, 26, 26));
-            ov01_021EC7C8(&v1->unk1C);
+            Weather_SetFog(v1->unk1C.fog, GX_FOGSLOPE_0x1000, 0x716f, GX_RGB(26, 26, 26));
+            WeatherFogTableFade_SetFull(&v1->unk1C);
         }
 
-        ov01_021EC85C(v0, DiamondDust_AddSparkles, 20, 10, 1, DiamondDust_UpdateSparkle);
+        Weather_SpawnAndPreAdvance(v0, DiamondDust_AddSparkles, 20, 10, 1, DiamondDust_UpdateSparkle);
 
-        v0->unkF62 = 3;
+        v0->state = 3;
         break;
     case 3:
         if (v1->unk0.unk6-- <= 0) {
@@ -1994,46 +1994,46 @@ static void WeatherTask_DiamondDust(SysTask *task, void *data) {
             v1->unk0.unk6 = v1->unk0.unk8;
         }
 
-        if (v0->unkF66 == 5) {
-            ov01_021EC52C(&v1->unk0, 0, 16, 6, -10);
+        if (v0->stopRequest == 5) {
+            WeatherSpawnRamp_SetTarget(&v1->unk0, 0, 16, 6, -10);
 
-            if (v0->unkF64) {
-                ov01_021EC790(&v1->unk1C, 1, 0);
+            if (v0->fogMode) {
+                WeatherFogTableFade_Start(&v1->unk1C, 1, 0);
             }
             v1->data[0] = 20;
-            v0->unkF62 = 4;
+            v0->state = 4;
         }
         break;
     case 4:
-        int ret = ov01_021EC538(&v1->unk0);
+        int ret = WeatherSpawnRamp_Update(&v1->unk0);
         if (v1->data[0] > 0) {
             v1->data[0]--;
         } else {
-            int vUnk = ov01_021EC650(&v1->unk50, &v1->unk1C, v0->unkF64);
+            int vUnk = WeatherFog_Update(&v1->unk50, &v1->unk1C, v0->fogMode);
 
             if (vUnk == 1 && ret == 3) {
                 if (v0->linkedListDummy.next == &v0->linkedListDummy) {
-                    v0->unkF62 = 5;
+                    v0->state = 5;
                 }
             }
         }
         break;
     case 5:
-        if (v0->unkF64) {
+        if (v0->fogMode) {
             ov01_021EA864(v1->unk1C.fog, 1, FALSE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x8000, 0);
         }
-        ov01_021EBCA4(v0->unk4);
+        WeatherEntry_EndTask(v0->unk4);
         break;
     }
 
-    if (v0->unkF62 != 5 && v0->unkF62 != 0) {
-        ov01_021EC2E4(&v0->linkedListDummy, DiamondDust_UpdateSparkle);
-        ov01_021EC470(v0, NULL, NULL);
-        ov01_021EC300(v0);
+    if (v0->state != 5 && v0->state != 0) {
+        WeatherObject_ForEach(&v0->linkedListDummy, DiamondDust_UpdateSparkle);
+        WeatherWork_ScrollObjectsInt(v0, NULL, NULL);
+        WeatherWork_Nop(v0);
     }
 }
 
-static void DiamondDust_AddSparkles(WeatherSystem_Sub0_Sub8 *a0, int a1) {
+static void DiamondDust_AddSparkles(WeatherWork *a0, int a1) {
     VecFx32 vec;
     for (int i = 0; i < a1; i++) {
         WeatherObject *v0 = WeatherSystem_AddObject(a0, 32);
@@ -2097,98 +2097,98 @@ static void DiamondDust_UpdateSparkle(WeatherObject *a0) {
     }
 }
 
-static void WeatherTask_RunFogOnly(WeatherSystem_Sub0_Sub8 *a0, UnkStruct_021ED474 *a1, GXFogSlope fogSlope, s32 arg3, GXRgb arg4, s32 arg5, s32 arg6) {
-    switch (a0->unkF62) {
+static void WeatherTask_RunFogOnly(WeatherWork *a0, UnkStruct_021ED474 *a1, GXFogSlope fogSlope, s32 arg3, GXRgb arg4, s32 arg5, s32 arg6) {
+    switch (a0->state) {
     case 0:
-        ov01_021EC5FC(&a1->unk50, &a1->unk1C, a0->weatherSystem->fieldSystem->fog, fogSlope, arg3, arg4, arg5, a0->unkF64);
-        a0->unkF62 = 1;
+        WeatherFog_Start(&a1->unk50, &a1->unk1C, a0->weatherSystem->fieldSystem->fog, fogSlope, arg3, arg4, arg5, a0->fogMode);
+        a0->state = 1;
         break;
     case 1:
-        int v3 = ov01_021EC650(&a1->unk50, &a1->unk1C, a0->unkF64);
+        int v3 = WeatherFog_Update(&a1->unk50, &a1->unk1C, a0->fogMode);
         if (v3 == 1) {
-            a0->unkF62 = 3;
+            a0->state = 3;
         }
         break;
     case 2:
-        if (a0->unkF64 != 0) {
+        if (a0->fogMode != 0) {
             a1->unk1C.fog = a0->weatherSystem->fieldSystem->fog;
-            ov01_021EC678(a1->unk1C.fog, fogSlope, arg3, arg4);
-            ov01_021EC7C8(&a1->unk1C);
+            Weather_SetFog(a1->unk1C.fog, fogSlope, arg3, arg4);
+            WeatherFogTableFade_SetFull(&a1->unk1C);
         }
-        a0->unkF62 = 3;
+        a0->state = 3;
         break;
     case 3:
-        if (a0->unkF66 == 5) {
-            if (a0->unkF64 != 0) {
-                ov01_021EC790(&a1->unk1C, arg6, 0);
+        if (a0->stopRequest == 5) {
+            if (a0->fogMode != 0) {
+                WeatherFogTableFade_Start(&a1->unk1C, arg6, 0);
             }
-            a0->unkF62 = 4;
+            a0->state = 4;
         }
         break;
     case 4:
         int ret;
-        if (a0->unkF64 != 0) {
-            ret = ov01_021EC7AC(&a1->unk1C);
+        if (a0->fogMode != 0) {
+            ret = WeatherFogTableFade_Update(&a1->unk1C);
         } else {
             ret = 1;
         }
 
         if (ret == 1) {
-            a0->unkF62 = 5;
+            a0->state = 5;
         }
         break;
     case 5:
-        if (a0->unkF64 != 0) {
+        if (a0->fogMode != 0) {
             ov01_021EA864(a1->unk1C.fog, 1, FALSE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x8000, 0);
         }
-        ov01_021EBCA4(a0->unk4);
+        WeatherEntry_EndTask(a0->unk4);
         break;
     }
 }
 
 static void WeatherTask_Mist(SysTask *task, void *data) {
-    WeatherSystem_Sub0_Sub8 *v0 = data;
-    UnkStruct_021ED584 *v1 = v0->unkF58;
+    WeatherWork *v0 = data;
+    UnkStruct_021ED584 *v1 = v0->taskData;
 
-    switch (v0->unkF62) {
+    switch (v0->state) {
     case 0:
-        ov01_021EC5FC(&v1->unk50, &v1->unk1C, v0->weatherSystem->fieldSystem->fog, GX_FOGSLOPE_0x0200, 0x7555, 0x7fff, 1, v0->unkF64);
+        WeatherFog_Start(&v1->unk50, &v1->unk1C, v0->weatherSystem->fieldSystem->fog, GX_FOGSLOPE_0x0200, 0x7555, 0x7fff, 1, v0->fogMode);
         WeatherLerp_Init(&v1->unk0, 0, 9, 30);
         Weather_SetBlendAlpha(0, 16);
         GfGfx_EngineATogglePlanes(4, 1);
-        v0->unkF62 = 1;
+        v0->state = 1;
         break;
     case 1:
-        int v2 = ov01_021EC7AC(&v1->unk1C);
+        int v2 = WeatherFogTableFade_Update(&v1->unk1C);
         int v3 = WeatherLerp_Step(&v1->unk0);
         Weather_SetBlendAlpha(v1->unk0.unk0, 16 - v1->unk0.unk0);
         if (v2 == 1 && v3 == 1) {
-            v0->unkF62 = 3;
+            v0->state = 3;
         }
         break;
     case 2:
-        if (v0->unkF64 != 0) {
+        if (v0->fogMode != 0) {
             v1->unk1C.fog = v0->weatherSystem->fieldSystem->fog;
-            ov01_021EC678(v1->unk1C.fog, GX_FOGSLOPE_0x0200, 0x7555, 0x7fff);
-            ov01_021EC7C8(&v1->unk1C);
+            Weather_SetFog(v1->unk1C.fog, GX_FOGSLOPE_0x0200, 0x7555, 0x7fff);
+            WeatherFogTableFade_SetFull(&v1->unk1C);
         }
         Weather_SetBlendAlpha(9, 7);
         GfGfx_EngineATogglePlanes(4, 1);
-        v0->unkF62 = 3;
+        v0->state = 3;
         break;
     case 3:
-        if (v0->unkF66 == 5) {
-            if (v0->unkF64 != 0) {
-                ov01_021EC790(&v1->unk1C, 1, 0);
+        if (v0->stopRequest == 5) {
+            if (v0->fogMode != 0) {
+                WeatherFogTableFade_Start(&v1->unk1C, 1, 0);
             }
             WeatherLerp_Init(&v1->unk0, 9, 0, 30);
-            v0->unkF62 = 4;
+            v0->state = 4;
         }
         break;
     case 4:
         int v4;
-        if (v0->unkF64 != 0) {
-            v4 = ov01_021EC7AC(&v1->unk1C);
+        if (v0->fogMode != 0) {
+            v4 = WeatherFogTableFade_Update(&v1->unk1C);
         } else {
             v4 = 1;
         }
@@ -2196,25 +2196,25 @@ static void WeatherTask_Mist(SysTask *task, void *data) {
         int v5 = WeatherLerp_Step(&v1->unk0);
         Weather_SetBlendAlpha(v1->unk0.unk0, 16 - v1->unk0.unk0);
         if (v4 == 1 && v5 == 1) {
-            v0->unkF62 = 5;
+            v0->state = 5;
         }
         break;
     case 5:
-        if (v0->unkF64 != 0) {
+        if (v0->fogMode != 0) {
             ov01_021EA864(v1->unk1C.fog, 1, FALSE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x8000, 0);
         }
-        ov01_021EBCA4(v0->unk4);
+        WeatherEntry_EndTask(v0->unk4);
         break;
     }
 }
 
 static void WeatherTask_Flash(SysTask *task, void *data) {
-    WeatherSystem_Sub0_Sub8 *v0 = data;
+    WeatherWork *v0 = data;
     WeatherSystem *weatherSystem = v0->weatherSystem;
     FieldSystem *fieldSystem = weatherSystem->fieldSystem;
-    UnkStruct_021ED710 *v1 = v0->unkF58;
+    UnkStruct_021ED710 *v1 = v0->taskData;
 
-    switch (v0->unkF62) {
+    switch (v0->state) {
     case 0:
         v1->unk62C = FlashDarkness_Show(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
         ov01_021EA864(fieldSystem->fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x0020, 0);
@@ -2227,10 +2227,10 @@ static void WeatherTask_Flash(SysTask *task, void *data) {
             ov01_021EA8C4(fieldSystem->fog, v2);
         }
         v1->unk630 = 0;
-        v0->unkF62 = 1;
+        v0->state = 1;
         break;
     case 1:
-        v0->unkF62 = 3;
+        v0->state = 3;
         break;
     case 2:
         v1->unk62C = FlashDarkness_Show(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
@@ -2244,12 +2244,12 @@ static void WeatherTask_Flash(SysTask *task, void *data) {
             ov01_021EA8C4(fieldSystem->fog, v2);
         }
         v1->unk630 = 0;
-        v0->unkF62 = 3;
+        v0->state = 3;
         break;
     case 3:
-        if (v0->unkF66 == 5) {
+        if (v0->stopRequest == 5) {
             v1->unk632 = 0;
-            v0->unkF62 = 4;
+            v0->state = 4;
         }
         break;
     case 4:
@@ -2274,24 +2274,24 @@ static void WeatherTask_Flash(SysTask *task, void *data) {
             float v3 = 1.0 + (v1->unk630 * 3.0) / 24.0;
             FlashDarkness_SetScale(v1->unk62C, v3);
             if (v3 >= 4.0) {
-                v0->unkF62 = 5;
+                v0->state = 5;
             }
             break;
         }
         break;
     case 5:
-        ov01_021EBCA4(v0->unk4);
+        WeatherEntry_EndTask(v0->unk4);
         break;
     }
 }
 
 static void WeatherTask_Flash2(SysTask *task, void *data) {
-    WeatherSystem_Sub0_Sub8 *v0 = data;
+    WeatherWork *v0 = data;
     WeatherSystem *weatherSystem = v0->weatherSystem;
     FieldSystem *fieldSystem = weatherSystem->fieldSystem;
-    UnkStruct_021ED710 *v1 = v0->unkF58;
+    UnkStruct_021ED710 *v1 = v0->taskData;
 
-    switch (v0->unkF62) {
+    switch (v0->state) {
     case 0:
         v1->unk62C = FlashDarkness_Show(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
         ov01_021EA864(fieldSystem->fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x0020, 0);
@@ -2304,10 +2304,10 @@ static void WeatherTask_Flash2(SysTask *task, void *data) {
             ov01_021EA8C4(fieldSystem->fog, v2);
         }
         FlashDarkness_SetScale(v1->unk62C, 4);
-        v0->unkF62 = 1;
+        v0->state = 1;
         break;
     case 1:
-        v0->unkF62 = 3;
+        v0->state = 3;
         break;
     case 2:
         v1->unk62C = FlashDarkness_Show(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
@@ -2321,45 +2321,45 @@ static void WeatherTask_Flash2(SysTask *task, void *data) {
             ov01_021EA8C4(fieldSystem->fog, v2);
         }
         FlashDarkness_SetScale(v1->unk62C, 4);
-        v0->unkF62 = 3;
+        v0->state = 3;
         break;
     case 3:
-        if (v0->unkF66 == 5) {
-            v0->unkF62 = 4;
+        if (v0->stopRequest == 5) {
+            v0->state = 4;
         }
         break;
     case 4:
-        v0->unkF62 = 5;
+        v0->state = 5;
         break;
     case 5:
-        ov01_021EBCA4(v0->unk4);
+        WeatherEntry_EndTask(v0->unk4);
         break;
     }
 }
 
 static void WeatherTask_LowLight(SysTask *task, void *data) {
-    WeatherSystem_Sub0_Sub8 *v0 = data;
-    WeatherTask_RunFogOnly(v0, v0->unkF58, GX_FOGSLOPE_0x4000, 0x4B6F, 0x421, 0, 0);
+    WeatherWork *v0 = data;
+    WeatherTask_RunFogOnly(v0, v0->taskData, GX_FOGSLOPE_0x4000, 0x4B6F, 0x421, 0, 0);
 }
 
 static void WeatherTask_DelayedRainSE(SysTask *task, void *data) {
-    WeatherSystem_Sub0_Sub8 *v0 = data;
-    if (--v0->unkF68 <= 0) {
+    WeatherWork *v0 = data;
+    if (--v0->seDelay <= 0) {
         Weather_PlayLoopSE(v0, SEQ_SE_DP_T_AME);
         SysTask_Destroy(task);
-        v0->unkF6C = 0;
+        v0->seDelayTask = 0;
     }
 }
 
-static void Weather_PlayLoopSE(WeatherSystem_Sub0_Sub8 *a0, u32 sndSeq) {
-    GF_ASSERT(a0->unkF5C == 0);
+static void Weather_PlayLoopSE(WeatherWork *a0, u32 sndSeq) {
+    GF_ASSERT(a0->loopSEPlaying == 0);
 
-    a0->unkF5C = 1;
+    a0->loopSEPlaying = 1;
     a0->sndSeq = sndSeq;
     PlaySE(sndSeq);
 }
 
-static void Weather_StopLoopSE(WeatherSystem_Sub0_Sub8 *arg0) {
+static void Weather_StopLoopSE(WeatherWork *arg0) {
     StopSE(arg0->sndSeq, 0);
-    arg0->unkF5C = 0;
+    arg0->loopSEPlaying = 0;
 }

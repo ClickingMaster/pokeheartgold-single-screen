@@ -79,7 +79,7 @@ static void FieldSystem_InitPokegearArgs(FieldSystem *sys, PokegearArgs *pokegea
             if (pokegearArgs->isScriptedCall == 3) {
                 PhoneCallPersistentState_ClearCallTriggerFlag(SaveData_GetPhoneCallPersistentState(sys->saveData), Unk_struct.callTriggerID);
             } else if (pokegearArgs->isScriptedCall == 0) {
-                sub_0202AB18(Save_Misc_Get(sys->saveData), Unk_struct.unk_0, Unk_struct.unk_1, pokegearArgs->callerId);
+                SaveMisc_PhoneRecentCallers_Add(Save_Misc_Get(sys->saveData), Unk_struct.unk_0, Unk_struct.unk_1, pokegearArgs->callerId);
             }
             gearRingingManagerReset(phoneRingMgr);
             pokegearArgs->isScriptedLaunch = 1;

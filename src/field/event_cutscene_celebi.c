@@ -84,7 +84,7 @@ static BOOL Task_CelebiTimeTravelCutscene(TaskManager *taskMan) {
     case CTT_STATE_LOAD_RESOURCES:
         if (IsPaletteFadeFinished()) {
             CelebiCutscene_LoadResources(data);
-            sub_02069DC8(FollowMon_GetMapObject(data->fieldSystem), 1);
+            FollowMon_HideUntilStep(FollowMon_GetMapObject(data->fieldSystem), 1);
             BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 4, 1, HEAP_ID_FIELD1);
             (*state)++;
         }

@@ -111,9 +111,9 @@
 .public UnkBallData_New
 .public UnkBallData_Delete
 .public UnkBallData_GetMode
-.public ov12_02237B6C
-.public ov12_02237CC4
-.public ov12_02237D00
+.public BattleSystem_FreeGraphics
+.public BattleSystem_FreeMainBgLayers
+.public BattleSystem_ReinitMainBgLayers
 .public BattleSystem_GetBgConfig
 .public BattleSystem_GetWindow
 .public BattleSystem_GetBattleType

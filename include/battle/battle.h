@@ -491,8 +491,8 @@ typedef struct OpponentData {
     u8 battlerType;
     u8 unk196;
     u8 unk197;
-    SysTask *unk198;
-    u16 unk19C;
+    SysTask *pokepicBobTask;
+    u16 pokepicBobAngle;
     int unk1A0;
     u32 *unk1A4;
     u8 unk1A8;
@@ -614,7 +614,7 @@ struct BattleSystem {
     int caughtBattlerId;
     int unk2440;
     u8 unk2442;
-    u8 unk2445;
+    u8 trainerAIOverlayLoaded;
     u16 networkId;
     u32 rand;
     u32 randTemp;

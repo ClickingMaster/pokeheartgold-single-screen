@@ -75,10 +75,10 @@
 .public GX_SetBankForSubOBJ
 .public MI_CpuFill8
 .public _s32_div_f
-.public ov03_02257814
-.public ov03_02257978
-.public ov03_02258120
-.public ov03_022581BC
+.public MartData_CheckCannotBuy
+.public MartData_GetOwnedQuantity
+.public MartData_GetItemPrice
+.public MartData_CreateSprites
 .public TouchMartApp_Init
 .public TouchMartApp_Exit
 .public TouchMartApp_IsExitDone

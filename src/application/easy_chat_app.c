@@ -258,9 +258,9 @@ EasyChatApp *EasyChatApp_Create(OverlayManager *man) {
 
     MI_CpuFill8(app, 0, sizeof(EasyChatApp));
     app->args = OverlayManager_GetArgs(man);
-    app->type = sub_02090D70(app->args);
-    app->menuInputState = (MenuInputState)sub_02090E44(app->args);
-    sub_02090D8C(app->args, (MailMessage *)app->words, &app->message);
+    app->type = EasyChatArgs_GetType(app->args);
+    app->menuInputState = (MenuInputState)EasyChatArgs_GetMenuInputState(app->args);
+    EasyChatArgs_CopyMessage(app->args, (MailMessage *)app->words, &app->message);
     if (app->type == 2) {
         EasyChatMessageCursor_Init(&app->messageCursor, &app->message);
     }
@@ -326,7 +326,7 @@ u8 EasyChatMessageCursor_GetIndex(EasyChatMessageCursor *cursor) {
 }
 
 void EasyChatApp_Delete(EasyChatApp *app, OverlayManager *man) {
-    sub_02090E5C(app->args, app->menuInputState);
+    EasyChatArgs_SetMenuInputState(app->args, app->menuInputState);
     TouchHitboxController_Destroy(app->touchHitboxes);
     EasyChatAppView_Delete(app->view);
     ECMenu_Delete(app->menu);
@@ -1482,7 +1482,7 @@ void EasyChatApp_SubHandler_ConfirmFinish(EasyChatApp *app, u32 *state) {
             if (app->type == 2) {
                 MailMsg_SetTrailingFieldsEmpty(&app->message);
             }
-            sub_02090E04(app->args, (MailMessage *)app->words, &app->message);
+            EasyChatArgs_SetResult(app->args, (MailMessage *)app->words, &app->message);
             EasyChatApp_SetHandler(app, (EasyChatAppHandler)EasyChatApp_Handler_Exit);
             *state = 3;
             break;
@@ -1532,7 +1532,7 @@ void EasyChatApp_SubHandler_ConfirmQuit(EasyChatApp *app, u32 *state) {
 }
 
 BOOL EasyChatApp_HasChanged(EasyChatApp *app) {
-    if (sub_02090DC0(app->args, (MailMessage *)app->words, &app->message)) {
+    if (EasyChatArgs_MessageEquals(app->args, (MailMessage *)app->words, &app->message)) {
         return FALSE;
     }
     return TRUE;
@@ -1661,7 +1661,7 @@ BOOL EasyChatApp_CanScrollWordListDown(EasyChatApp *app) {
 }
 
 u32 ov102_021E9084(EasyChatApp *app) {
-    return sub_02090D78(app->args);
+    return EasyChatArgs_GetFrame(app->args);
 }
 
 u8 ov102_021E9090(EasyChatApp *app) {

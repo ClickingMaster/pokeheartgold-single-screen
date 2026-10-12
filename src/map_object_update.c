@@ -14,7 +14,7 @@ void MapObject_ExecuteMovementCommand(LocalMapObject *object);
 void MapObject_InitTypeBehavior(LocalMapObject *object);
 BOOL MapObject_UpdateTypeBehavior(LocalMapObject *object);
 const MapObjectEffectFlags *MapObject_GetEffectFlags(LocalMapObject *object);
-u32 ov01_022056C4(LocalMapObject *object, u32 direction);
+u32 MapObject_GetAdjacentTileBehavior(LocalMapObject *object, u32 direction);
 void Reflection_Spawn(LocalMapObject *object, int kind);
 void Reflection_SpawnForFollower(LocalMapObject *object, int kind);
 void TallGrass_Spawn(LocalMapObject *object, int mode);
@@ -500,8 +500,8 @@ void MapObject_CreateReflection(LocalMapObject *object, u8 behavior, u8 prevBeha
                         first = MapObject_GetMetatileBehaviorInDirection(object, 1);
                         second = MapObject_GetMetatileBehaviorInDirection(object, 3);
                         third = MapObject_GetMetatileBehaviorInDirection(object, 2);
-                        fourth = ov01_022056C4(object, 4);
-                        fifth = ov01_022056C4(object, 5);
+                        fourth = MapObject_GetAdjacentTileBehavior(object, 4);
+                        fifth = MapObject_GetAdjacentTileBehavior(object, 5);
                         found = FALSE;
                         if (MetatileBehavior_HasReflectiveSurface(first) == TRUE) {
                             foundBehavior = first;
@@ -599,8 +599,8 @@ void MapObject_UpdateReflection(LocalMapObject *object, u8 behavior, u8 prevBeha
         u8 first = MapObject_GetMetatileBehaviorInDirection(object, 1);
         u8 second = MapObject_GetMetatileBehaviorInDirection(object, 3);
         u8 third = MapObject_GetMetatileBehaviorInDirection(object, 2);
-        u8 fourth = ov01_022056C4(object, 4);
-        u8 fifth = ov01_022056C4(object, 5);
+        u8 fourth = MapObject_GetAdjacentTileBehavior(object, 4);
+        u8 fifth = MapObject_GetAdjacentTileBehavior(object, 5);
         BOOL found = FALSE;
 
         if (MetatileBehavior_HasReflectiveSurface(first) == TRUE) {

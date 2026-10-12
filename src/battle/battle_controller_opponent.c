@@ -13,7 +13,7 @@
 
 #include "battle/battle.h"
 #include "battle/battle_022378C0.h"
-#include "battle/battle_02261FD4.h"
+#include "battle/battle_pokepic_bob.h"
 #include "battle/battle_anim_internal.h"
 #include "battle/battle_controller.h"
 #include "battle/battle_cursor.h"
@@ -1122,8 +1122,8 @@ void BattleController_InitBattlerPicParams(BattleSystem *battleSystem, MoveAnimD
 void MoveAnim_GetDisplayFlags(u8 *disableHpBar, u8 *updateG3, BOOL isEffect, int effect, u16 move);
 BOOL ov12_02261DC8(OpponentTrainerEncounterWork *work, ManagedSprite *unused);
 void Task_FlashBrightness(SysTask *task, s32 *state);
-void ov12_02261EB8(BattleSystem *battleSystem);
-void ov12_02261ED4(BattleSystem *battleSystem);
+void BattleSystem_StopRecordingDataCorrupted(BattleSystem *battleSystem);
+void BattleSystem_StopRecordingTooLong(BattleSystem *battleSystem);
 u8 BattleControllerOpponent_GetVersionTrainerClass(BattleSystem *battleSystem, int battlerId, u8 trainerClass);
 
 int TrainerAI_PostKOSwitchIn(BattleSystem *battleSystem, int battler) {
@@ -1416,7 +1416,7 @@ OpponentData *OpponentData_New(BattleSystem *battleSystem, const u8 *data) {
 
 #pragma force_active on
 
-void ov12_02258DB0(BattleSystem *battleSystem, OpponentData *opponentData, u16 ball, int a3) {
+void OpponentData_CreateBallData(BattleSystem *battleSystem, OpponentData *opponentData, u16 ball, int a3) {
     UnkStruct_134 ballParams;
 
     if ((BattleSystem_GetBattleType(battleSystem) & (BATTLE_TYPE_SAFARI | BATTLE_TYPE_PAL_PARK)) == 0) {
@@ -1455,7 +1455,7 @@ void OpponentData_Free(BattleSystem *battleSystem, OpponentData *opponentData, i
     if (opponentData->managedSprite != NULL) {
         Sprite_DeleteAndFreeResources(opponentData->managedSprite);
     }
-    ov12_02262014(opponentData);
+    OpponentData_StopPokepicBobTask(opponentData);
     NARC_Delete((NARC *)opponentData->unk1A4);
     Heap_Free(opponentData);
 }
@@ -1720,7 +1720,7 @@ done:
 
 void BattleControllerOpponent_CancelSelection(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleHpBar_StopActiveEffect(&opponentData->hpBar);
-    ov12_02262014(opponentData);
+    OpponentData_StopPokepicBobTask(opponentData);
     BattleController_EmitCommandComplete(battleSystem, opponentData->unk194, OPPONENT_COMMAND_ID(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
@@ -1819,7 +1819,7 @@ void BattleControllerOpponent_EndSelection(BattleSystem *battleSystem, OpponentD
         }
         BattleHpBar_StopActiveEffect(&opponentData->hpBar);
         BattleInput_DisableBallGauge(battleInput);
-        ov12_02262014(opponentData);
+        OpponentData_StopPokepicBobTask(opponentData);
     }
     BattleController_EmitCommandComplete(battleSystem, opponentData->unk194, 47);
     OpponentData_ClearCommand(opponentData);
@@ -4430,7 +4430,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
         break;
     case 3:
         BattleHpBar_StartActiveEffect(work->hpBar);
-        ov12_02261FD4(opponent, work->battleSystem);
+        OpponentData_StartPokepicBobTask(opponent, work->battleSystem);
         work->state = 4;
     case 4:
         if (BattleInput_CheckFeedbackDone(battleInput) != 0) {
@@ -4517,7 +4517,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
                 BattleInput_Deadstriped_022698AC(battleInput, 0);
                 ov12_02265D74(hpBar);
                 BattleHpBar_StopActiveEffect(work->hpBar);
-                ov12_02262014(opponent);
+                OpponentData_StopPokepicBobTask(opponent);
                 NARC_Delete(narc0);
                 NARC_Delete(narc1);
                 break;
@@ -4529,7 +4529,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
                 BattleInput_Deadstriped_022698AC(battleInput, 0);
                 ov12_02265D74(hpBar);
                 BattleHpBar_StopActiveEffect(work->hpBar);
-                ov12_02262014(opponent);
+                OpponentData_StopPokepicBobTask(opponent);
                 NARC_Delete(narc0);
                 NARC_Delete(narc1);
                 break;
@@ -4561,7 +4561,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
             BattleInput_Deadstriped_022698AC(battleInput, 0);
             ov12_02265D74(hpBar);
             BattleHpBar_StopActiveEffect(work->hpBar);
-            ov12_02262014(opponent);
+            OpponentData_StopPokepicBobTask(opponent);
             BattleInput_DisableBallGauge(battleInput);
             work->state = 8;
             NARC_Delete(narc0);
@@ -4624,10 +4624,10 @@ void Task_RecordedSelectCommand(SysTask *task, void *data) {
     OpponentSelectCommandWork *work = data;
     u8 input;
     if (BattleSystem_ReadRecordedInput(work->battleSystem, work->battlerId, &input) == TRUE) {
-        ov12_02261ED4(work->battleSystem);
+        BattleSystem_StopRecordingTooLong(work->battleSystem);
     }
     if (input == 0 || input > 4 || input == 2) {
-        ov12_02261EB8(work->battleSystem);
+        BattleSystem_StopRecordingDataCorrupted(work->battleSystem);
     }
     BattleController_ReplyCommandSelection(work->battleSystem, work->battlerId, input);
     BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
@@ -4695,7 +4695,7 @@ void Task_PlayerSelectMove(SysTask *task, void *data) {
                 BattleInput_Deadstriped_022698AC(battleInput, 0);
                 ov12_02265D74(hpBar);
                 BattleHpBar_StopActiveEffect(work->hpBar);
-                ov12_02262014(opponent);
+                OpponentData_StopPokepicBobTask(opponent);
             }
             BattleInput_DisableBallGauge(battleInput);
         }
@@ -4762,14 +4762,14 @@ void Task_RecordedSelectMove(SysTask *task, void *data) {
     OpponentSelectMoveWork *work = data;
     u8 input;
     if (BattleSystem_ReadRecordedInput(work->battleSystem, work->battlerId, &input) == TRUE) {
-        ov12_02261ED4(work->battleSystem);
+        BattleSystem_StopRecordingTooLong(work->battleSystem);
     }
     if (input == 0 || input > 4) {
-        ov12_02261EB8(work->battleSystem);
+        BattleSystem_StopRecordingDataCorrupted(work->battleSystem);
     } else {
         u16 move = GetBattlerVar(BattleSystem_GetBattleContext(work->battleSystem), work->battlerId, BMON_DATA_MOVE1 + input - 1, NULL);
         if (move == MOVE_NONE || move > NUM_MOVES) {
-            ov12_02261EB8(work->battleSystem);
+            BattleSystem_StopRecordingDataCorrupted(work->battleSystem);
         }
     }
     BattleController_ReplyMoveSelection(work->battleSystem, work->battlerId, input);
@@ -4823,7 +4823,7 @@ void Task_PlayerSelectTarget(SysTask *task, void *data) {
     case 2:
         if (work->input != 0xFF) {
             BattleHpBar_StopActiveEffect(work->hpBar);
-            ov12_02262014(opponent);
+            OpponentData_StopPokepicBobTask(opponent);
             ov12_02265D74(hpBar);
             if (work->unk_32 == 1) {
                 BattleInput_Deadstriped_022698AC(battleInput, 0);
@@ -4878,21 +4878,21 @@ void Task_RecordedSelectTarget(SysTask *task, void *data) {
     OpponentSelectTargetWork *work = data;
     u8 input;
     if (BattleSystem_ReadRecordedInput(work->battleSystem, work->battlerId, &input) == TRUE) {
-        ov12_02261ED4(work->battleSystem);
+        BattleSystem_StopRecordingTooLong(work->battleSystem);
     }
     if (input == 0 || input > 4) {
-        ov12_02261EB8(work->battleSystem);
+        BattleSystem_StopRecordingDataCorrupted(work->battleSystem);
     } else {
         int target = input - 1;
         switch (work->moveRange) {
         case RANGE_SINGLE_TARGET:
             if (work->battlerId == target) {
-                ov12_02261EB8(work->battleSystem);
+                BattleSystem_StopRecordingDataCorrupted(work->battleSystem);
             }
             break;
         case RANGE_SINGLE_TARGET_USER_SIDE:
             if (BattleSystem_GetFieldSide(work->battleSystem, work->battlerId) != BattleSystem_GetFieldSide(work->battleSystem, target)) {
-                ov12_02261EB8(work->battleSystem);
+                BattleSystem_StopRecordingDataCorrupted(work->battleSystem);
             }
             break;
         case RANGE_SINGLE_TARGET_SPECIAL:
@@ -4942,7 +4942,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         break;
     case 1:
         if (!PaletteData_GetSelectedBuffersBitmask(palette)) {
-            ov12_02237B0C(work->battleSystem);
+            BattleSystem_FreeInputForSubMenu(work->battleSystem);
             work->bagMenu = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleBagMenuArgs));
             memset(work->bagMenu, 0, sizeof(BattleBagMenuArgs));
             work->bagMenu->battleSystem = work->battleSystem;
@@ -5032,7 +5032,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         }
         break;
     case 6:
-        ov12_02237BB8(work->battleSystem);
+        BattleSystem_RestoreInputAfterSubMenu(work->battleSystem);
         BattleInput_SetKeyPressed(BattleSystem_GetBattleInput(work->battleSystem), work->key);
         PaletteData_BeginPaletteFade(palette, 5, 0xC00, -8, 7, 0, 0);
         PaletteData_BeginPaletteFade(palette, 10, 0xFFFF, -8, 16, 0, 0);
@@ -5108,7 +5108,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
                 work->state = 8;
             }
             if (work->state != 8) {
-                ov12_02237ED0(work->battleSystem, 0);
+                BattleSystem_SetTrainerAIOverlayLoaded(work->battleSystem, 0);
             }
         }
         break;
@@ -5362,7 +5362,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         if (!TextPrinterCheckActive(work->printerId)) {
             work->timer--;
             if (work->timer == 0) {
-                ov12_02237ED0(work->battleSystem, 1);
+                BattleSystem_SetTrainerAIOverlayLoaded(work->battleSystem, 1);
                 work->state = 8;
             }
         }
@@ -5405,15 +5405,15 @@ void Task_RecordedSelectItem(SysTask *task, void *data) {
     } recorded;
 
     if (BattleSystem_ReadRecordedInput(work->battleSystem, work->battlerId, &recorded.value) == TRUE) {
-        ov12_02261ED4(work->battleSystem);
+        BattleSystem_StopRecordingTooLong(work->battleSystem);
     }
     recorded.input.item = recorded.value;
     if (BattleSystem_ReadRecordedInput(work->battleSystem, work->battlerId, &recorded.value) == TRUE) {
-        ov12_02261ED4(work->battleSystem);
+        BattleSystem_StopRecordingTooLong(work->battleSystem);
     }
     recorded.input.item |= recorded.value << 8;
     if (BattleSystem_ReadRecordedInput(work->battleSystem, work->battlerId, &recorded.value) == TRUE) {
-        ov12_02261ED4(work->battleSystem);
+        BattleSystem_StopRecordingTooLong(work->battleSystem);
     }
     recorded.input.pocket = recorded.value & 0xF;
     recorded.input.target = 0;
@@ -5454,7 +5454,7 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
         if (PaletteData_GetSelectedBuffersBitmask(palette)) {
             break;
         }
-        ov12_02237B0C(work->battleSystem);
+        BattleSystem_FreeInputForSubMenu(work->battleSystem);
         work->partyMenu = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattlePartyMenuArgs));
         work->partyMenu->party = SaveArray_Party_Alloc(HEAP_ID_BATTLE);
         if ((BattleSystem_GetBattleType(work->battleSystem) & (BATTLE_TYPE_LINK | BATTLE_TYPE_MULTI)) == (BATTLE_TYPE_LINK | BATTLE_TYPE_MULTI) || BattleSystem_GetBattleType(work->battleSystem) == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_MULTI | BATTLE_TYPE_AI | BATTLE_TYPE_FRONTIER)) {
@@ -5548,7 +5548,7 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
         if (!work->partyMenu->done) {
             break;
         }
-        ov12_02237BB8(work->battleSystem);
+        BattleSystem_RestoreInputAfterSubMenu(work->battleSystem);
         BattleInput_SetKeyPressed(BattleSystem_GetBattleInput(work->battleSystem), work->partyMenu->key);
         PaletteData_BeginPaletteFade(palette, 5, 0xC00, -8, 7, 0, 0);
         PaletteData_BeginPaletteFade(palette, 10, 0xFFFF, -8, 16, 0, 0);
@@ -5624,26 +5624,26 @@ void Task_RecordedShowMonList(SysTask *task, void *data) {
     OpponentShowMonListWork *work = data;
     u8 input;
     if (BattleSystem_ReadRecordedInput(work->battleSystem, work->battlerId, &input) == TRUE) {
-        ov12_02261ED4(work->battleSystem);
+        BattleSystem_StopRecordingTooLong(work->battleSystem);
     }
     if (input == 0 || input > PARTY_SIZE) {
-        ov12_02261EB8(work->battleSystem);
+        BattleSystem_StopRecordingDataCorrupted(work->battleSystem);
     } else {
         int slot = input - 1;
         Party *party = BattleSystem_GetParty(work->battleSystem, work->battlerId);
         if (slot == work->selectedMonIndex[work->battlerId] || slot == work->unk_16) {
-            ov12_02261EB8(work->battleSystem);
+            BattleSystem_StopRecordingDataCorrupted(work->battleSystem);
         } else {
             int count = input;
             if (count > Party_GetCount(party)) {
-                ov12_02261EB8(work->battleSystem);
+                BattleSystem_StopRecordingDataCorrupted(work->battleSystem);
             } else {
                 Pokemon *mon = BattleSystem_GetPartyMon(work->battleSystem, work->battlerId, count - 1);
                 if (GetMonData(mon, MON_DATA_HP, NULL) == 0) {
-                    ov12_02261EB8(work->battleSystem);
+                    BattleSystem_StopRecordingDataCorrupted(work->battleSystem);
                 }
                 if (GetMonData(mon, MON_DATA_SPECIES_OR_EGG, NULL) == SPECIES_EGG) {
-                    ov12_02261EB8(work->battleSystem);
+                    BattleSystem_StopRecordingDataCorrupted(work->battleSystem);
                 }
             }
         }
@@ -5736,7 +5736,7 @@ void Task_PlayerDrawYesNoBox(SysTask *task, void *data) {
             narc0 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
             narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
             BattleHpBar_StopActiveEffect(work->hpBar);
-            ov12_02262014(opponentData);
+            OpponentData_StopPokepicBobTask(opponentData);
             ov12_02265D74(partnerHpBar);
             BattleInput_DisableBallGauge(battleInput);
             BattleInput_ChangeMenu(narc0, narc1, battleInput, 0, 0, NULL);
@@ -5779,10 +5779,10 @@ void Task_RecordedDrawYesNoBox(SysTask *task, void *data) {
     OpponentYesNoWork *work = data;
     u8 input;
     if (BattleSystem_ReadRecordedInput(work->battleSystem, work->battlerId, &input) == TRUE) {
-        ov12_02261ED4(work->battleSystem);
+        BattleSystem_StopRecordingTooLong(work->battleSystem);
     }
     if (input == 0 || (input != 0xFF && input != 1)) {
-        ov12_02261EB8(work->battleSystem);
+        BattleSystem_StopRecordingDataCorrupted(work->battleSystem);
     }
     BattleController_ReplyCommandSelection(work->battleSystem, work->battlerId, input);
     BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
@@ -6298,7 +6298,7 @@ void Task_SelectMoveToForget(SysTask *task, void *data) {
         break;
     case 1:
         if (PaletteData_GetSelectedBuffersBitmask(palette) == 0) {
-            ov12_02237B0C(work->battleSystem);
+            BattleSystem_FreeInputForSubMenu(work->battleSystem);
             work->partyMenu = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattlePartyMenuArgs));
             work->partyMenu->party = BattleSystem_GetParty(work->battleSystem, work->battlerId);
             work->partyMenu->battleSystem = work->battleSystem;
@@ -6317,7 +6317,7 @@ void Task_SelectMoveToForget(SysTask *task, void *data) {
         break;
     case 2:
         if (work->partyMenu->done) {
-            ov12_02237BB8(work->battleSystem);
+            BattleSystem_RestoreInputAfterSubMenu(work->battleSystem);
             PaletteData_BeginPaletteFade(palette, 0xA, 0xFFFF, -8, 16, 0, 0);
             work->state++;
         }
@@ -7265,12 +7265,12 @@ void Task_FlashBrightness(SysTask *task, s32 *state) {
     }
 }
 
-void ov12_02261EB8(BattleSystem *battleSystem) {
+void BattleSystem_StopRecordingDataCorrupted(BattleSystem *battleSystem) {
     BattleSystem_PauseRecording(battleSystem, 1);
     BattleController_TryEmitExitRecording(battleSystem, BattleSystem_GetBattleContext(battleSystem));
 }
 
-void ov12_02261ED4(BattleSystem *battleSystem) {
+void BattleSystem_StopRecordingTooLong(BattleSystem *battleSystem) {
     BattleSystem_PauseRecording(battleSystem, 2);
     BattleController_TryEmitExitRecording(battleSystem, BattleSystem_GetBattleContext(battleSystem));
 }

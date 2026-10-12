@@ -27,31 +27,31 @@ static BOOL Task_SinjohGymmick_WaitAnimFinished(TaskManager *taskman);
 
 void GymmickInit_Sinjoh(FieldSystem *fieldSystem) {
     GymmickUnion *gymmickUnion = Save_Gymmick_AssertMagic_GetData(Save_GetGymmickPtr(FieldSystem_GetSaveData(fieldSystem)), GYMMICK_SINJOH);
-    fieldSystem->unk4->unk24 = Heap_Alloc(HEAP_ID_FIELD1, sizeof(SinjohGymmickLocalData));
-    MI_CpuClear8(fieldSystem->unk4->unk24, sizeof(SinjohGymmickLocalData));
-    SinjohGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    fieldSystem->mapSystems->localData = Heap_Alloc(HEAP_ID_FIELD1, sizeof(SinjohGymmickLocalData));
+    MI_CpuClear8(fieldSystem->mapSystems->localData, sizeof(SinjohGymmickLocalData));
+    SinjohGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     localData->fieldSystem = fieldSystem;
     SinjohGymmick_Load3dGraphics(localData);
     localData->sysTask = SysTask_CreateOnMainQueue(SysTask_SinjohGymmick, localData, 1);
 }
 
 void GymmickFree_Sinjoh(FieldSystem *fieldSystem) {
-    SinjohGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    SinjohGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     SysTask_Destroy(localData->sysTask);
     SinjohGymmick_Unload3dGraphics(localData);
     Heap_Free(localData);
-    fieldSystem->unk4->unk24 = NULL;
+    fieldSystem->mapSystems->localData = NULL;
 }
 
 void SinjohGymmick_FreezeAllModels(FieldSystem *fieldSystem) {
-    SinjohGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    SinjohGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     for (u8 i = 0; i < 3; ++i) {
         Field3dObject_SetActiveFlag(&localData->modelStates[i].object, FALSE);
     }
 }
 
 void SinjohGymmick_SetChosenLegend(FieldSystem *fieldSystem, u8 choice) {
-    SinjohGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    SinjohGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     if (choice > 3) {
         GF_ASSERT(FALSE);
         return;

@@ -334,7 +334,7 @@ void *FieldSysGetAttrAddr(FieldSystem *fieldSystem, enum ScriptEnvField field) {
 void Script_ReopenStartMenuOnEnd(FieldSystem *fieldSystem) {
     ScriptEnvironment *unk = TaskManager_GetEnvironment(fieldSystem->taskman);
     if (FieldSystem_MapIsNotMysteryZone(fieldSystem) == TRUE) {
-        unk->scrctx_end_cb = sub_0203BD64;
+        unk->scrctx_end_cb = StartMenu_ReopenAfterScript;
     }
 }
 

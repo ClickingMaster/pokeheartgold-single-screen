@@ -303,8 +303,8 @@ static const UnmanagedSpriteTemplate ov54_021E6EAC[9] = {
 
 static void OptionsApp_SetupGraphicsBanks(void);
 static void OptionsApp_OnVBlank(OptionsApp_Data *data);
-static BOOL ov54_021E5CE4(OptionsApp_Data *data);
-static BOOL ov54_021E5DBC(OptionsApp_Data *data);
+static BOOL OptionsApp_Setup(OptionsApp_Data *data);
+static BOOL OptionsApp_Free(OptionsApp_Data *data);
 static void OptionsApp_SetupBgConfig(OptionsApp_Data *data);
 static void OptionsApp_FreeBgConfig(OptionsApp_Data *data);
 static void OptionsApp_SetupGraphicsData(OptionsApp_Data *data);
@@ -314,11 +314,11 @@ static void OptionsApp_FreeWindows(OptionsApp_Data *data);
 static void OptionsApp_PrintTextFrameString(OptionsApp_Data *data, String *frameNumText, BOOL instantTextSpeed);
 static void OptionsApp_SetupInterfaceText(OptionsApp_Data *data);
 static void OptionsApp_LoadMenuEntriesData(OptionsApp_Data *data);
-static void ov54_021E6418(OptionsApp_Data *data, u16 menuEntryId);
+static void OptionsApp_UpdateMenuEntry(OptionsApp_Data *data, u16 menuEntryId);
 static void OptionsApp_UpdateMenuEntryCarousel(OptionsApp_Data *data, u32 menuEntryId, OptionsApp_MenuEntry *menuEntry, s32 offset);
 static void OptionsApp_HandleKeyInput(OptionsApp_Data *data, OptionsApp_MenuEntry *menuEntry);
 static void OptionsApp_HandleInput(OptionsApp_Data *data);
-static void ov54_021E69D4(OptionsApp_Data *data, u32 menuEntryId);
+static void OptionsApp_UpdateSelectionHighlight(OptionsApp_Data *data, u32 menuEntryId);
 static void ov54_021E6A64(OptionsApp_Data *data);
 static void OptionsApp_SetupSpriteRenderer(OptionsApp_Data *data);
 static void OptionsApp_FreeSpriteRenderer(OptionsApp_Data *data);
@@ -394,7 +394,7 @@ BOOL OptionsMenu_Main(OverlayManager *manager, int *state) {
     OptionsApp_Data *data = OverlayManager_GetData(manager);
     switch (data->exitState) {
     case 0:
-        if (!ov54_021E5CE4(data)) {
+        if (!OptionsApp_Setup(data)) {
             return FALSE;
         }
 
@@ -435,7 +435,7 @@ BOOL OptionsMenu_Main(OverlayManager *manager, int *state) {
         }
         break;
     case 5:
-        if (ov54_021E5DBC(data)) {
+        if (OptionsApp_Free(data)) {
             return TRUE;
         }
         return FALSE;
@@ -467,7 +467,7 @@ static void OptionsApp_OnVBlank(OptionsApp_Data *data) {
     OS_SetIrqCheckFlag(OS_IE_VBLANK);
 }
 
-static BOOL ov54_021E5CE4(OptionsApp_Data *data) {
+static BOOL OptionsApp_Setup(OptionsApp_Data *data) {
     switch (data->setupAndFreeState) {
     case 0:
         Main_SetVBlankIntrCB(NULL, NULL);
@@ -513,7 +513,7 @@ static BOOL ov54_021E5CE4(OptionsApp_Data *data) {
     return FALSE;
 }
 
-static BOOL ov54_021E5DBC(OptionsApp_Data *data) {
+static BOOL OptionsApp_Free(OptionsApp_Data *data) {
     switch (data->setupAndFreeState) {
     case 0:
         GF_DestroyVramTransferManager();
@@ -744,7 +744,7 @@ static void OptionsApp_SetupInterfaceText(OptionsApp_Data *data) {
     AddTextPrinterParameterizedWithColor(&data->windows.confirmButton, 0, tmpString, 0, 6, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 2, 0), NULL);
 
     for (i = 0; i < MENU_ENTRY_COUNT; i++) {
-        ov54_021E6418(data, i);
+        OptionsApp_UpdateMenuEntry(data, i);
     }
 
     CopyWindowToVram(&data->windows.optionsTitle);
@@ -775,7 +775,7 @@ static void OptionsApp_LoadMenuEntriesData(OptionsApp_Data *data) {
     data->menuEntries[MENU_ENTRY_6].value = 0;
 }
 
-static void ov54_021E6418(OptionsApp_Data *data, u16 menuEntryId) {
+static void OptionsApp_UpdateMenuEntry(OptionsApp_Data *data, u16 menuEntryId) {
     u32 selectedColor = MAKE_TEXT_COLOR(1, 2, 0);
     u32 notSelectedColor = MAKE_TEXT_COLOR(15, 2, 0);
     u32 color;
@@ -844,11 +844,11 @@ static void OptionsApp_HandleKeyInput(OptionsApp_Data *data, OptionsApp_MenuEntr
     if (data->currentMenuEntryId != MENU_ENTRY_6) {
         if (gSystem.newKeys & PAD_KEY_RIGHT) {
             OptionsApp_UpdateMenuEntryCarousel(data, data->currentMenuEntryId, menuEntry, 1);
-            ov54_021E6418(data, data->currentMenuEntryId);
+            OptionsApp_UpdateMenuEntry(data, data->currentMenuEntryId);
             PlaySE(SEQ_SE_DP_SELECT);
         } else if (gSystem.newKeys & PAD_KEY_LEFT) {
             OptionsApp_UpdateMenuEntryCarousel(data, data->currentMenuEntryId, menuEntry, -1);
-            ov54_021E6418(data, data->currentMenuEntryId);
+            OptionsApp_UpdateMenuEntry(data, data->currentMenuEntryId);
             PlaySE(SEQ_SE_DP_SELECT);
         }
         OptionsApp_SetActiveButtonsXPosition(data);
@@ -856,13 +856,13 @@ static void OptionsApp_HandleKeyInput(OptionsApp_Data *data, OptionsApp_MenuEntr
         if (gSystem.newKeys & PAD_KEY_LEFT) {
             if (data->menuEntries[data->currentMenuEntryId].value == 0) {
                 data->menuEntries[data->currentMenuEntryId].value = 1;
-                ov54_021E69D4(data, data->currentMenuEntryId);
+                OptionsApp_UpdateSelectionHighlight(data, data->currentMenuEntryId);
                 PlaySE(SEQ_SE_DP_SELECT);
             }
         } else if (gSystem.newKeys & PAD_KEY_RIGHT) {
             if (data->menuEntries[data->currentMenuEntryId].value == 1) {
                 data->menuEntries[data->currentMenuEntryId].value = 0;
-                ov54_021E69D4(data, data->currentMenuEntryId);
+                OptionsApp_UpdateSelectionHighlight(data, data->currentMenuEntryId);
                 PlaySE(SEQ_SE_DP_SELECT);
             }
         }
@@ -870,11 +870,11 @@ static void OptionsApp_HandleKeyInput(OptionsApp_Data *data, OptionsApp_MenuEntr
 
     if (gSystem.newKeys & PAD_KEY_UP) {
         data->currentMenuEntryId = (data->currentMenuEntryId + (MENU_ENTRY_COUNT - 1)) % MENU_ENTRY_COUNT;
-        ov54_021E69D4(data, data->currentMenuEntryId);
+        OptionsApp_UpdateSelectionHighlight(data, data->currentMenuEntryId);
         PlaySE(SEQ_SE_DP_SELECT);
     } else if (gSystem.newKeys & PAD_KEY_DOWN) {
         data->currentMenuEntryId = (data->currentMenuEntryId + 1) % MENU_ENTRY_COUNT;
-        ov54_021E69D4(data, data->currentMenuEntryId);
+        OptionsApp_UpdateSelectionHighlight(data, data->currentMenuEntryId);
         PlaySE(SEQ_SE_DP_SELECT);
     } else if ((gSystem.newKeys & PAD_BUTTON_A) && data->currentMenuEntryId == MENU_ENTRY_6) {
         if (data->menuEntries[data->currentMenuEntryId].value == 1) {
@@ -916,7 +916,7 @@ static void OptionsApp_HandleInput(OptionsApp_Data *data) {
             data->menuInputState = 1;
             MenuInputStateMgr_SetState(data->menuInputPtr, MENU_INPUT_STATE_TOUCH);
             data->menuEntries[data->currentMenuEntryId].value = 1;
-            ov54_021E69D4(data, data->currentMenuEntryId);
+            OptionsApp_UpdateSelectionHighlight(data, data->currentMenuEntryId);
             Sprite_SetAnimCtrlSeq(data->sprites[8], 3);
             break;
 
@@ -929,7 +929,7 @@ static void OptionsApp_HandleInput(OptionsApp_Data *data) {
             data->menuInputState = 1;
             MenuInputStateMgr_SetState(data->menuInputPtr, MENU_INPUT_STATE_TOUCH);
             data->menuEntries[data->currentMenuEntryId].value = 0;
-            ov54_021E69D4(data, data->currentMenuEntryId);
+            OptionsApp_UpdateSelectionHighlight(data, data->currentMenuEntryId);
             Sprite_SetAnimCtrlSeq(data->sprites[7], 3);
             break;
 
@@ -945,8 +945,8 @@ static void OptionsApp_HandleInput(OptionsApp_Data *data) {
             } else {
                 entry->value = value;
             }
-            ov54_021E6418(data, data->currentMenuEntryId);
-            ov54_021E69D4(data, data->currentMenuEntryId);
+            OptionsApp_UpdateMenuEntry(data, data->currentMenuEntryId);
+            OptionsApp_UpdateSelectionHighlight(data, data->currentMenuEntryId);
             OptionsApp_SetActiveButtonsXPosition(data);
             ov54_021E6A64(data);
             data->menuInputState = 1;
@@ -959,7 +959,7 @@ static void OptionsApp_HandleInput(OptionsApp_Data *data) {
     }
 }
 
-static void ov54_021E69D4(OptionsApp_Data *data, u32 menuEntryId) {
+static void OptionsApp_UpdateSelectionHighlight(OptionsApp_Data *data, u32 menuEntryId) {
     if (menuEntryId == MENU_ENTRY_6) {
         ToggleBgLayer(GF_BG_LYR_MAIN_0, GF_PLANE_TOGGLE_OFF);
         if (data->menuEntries[menuEntryId].value == 0) {

@@ -92,7 +92,7 @@ void ECMenu_BuildCategoryLists(ECMenu *menu) {
 u32 ECMenuBuild_Pokemon(ECMenu *menu, const u16 *words, u32 count, u16 *dest) {
     u32 n = 0;
     u32 i;
-    Pokedex *pokedex = sub_02090D7C(menu->args);
+    Pokedex *pokedex = EasyChatArgs_GetPokedex(menu->args);
 
     for (i = 0; i < count; i++) {
         if (Pokedex_CheckMonSeenFlag(pokedex, words[i])) {
@@ -109,7 +109,7 @@ u32 ECMenuBuild_Pokemon(ECMenu *menu, const u16 *words, u32 count, u16 *dest) {
 u32 ECMenuBuild_Move(ECMenu *menu, const u16 *words, u32 count, u16 *dest) {
     u32 i;
 
-    if (sub_02090D84(menu->args)) {
+    if (EasyChatArgs_GetGameCleared(menu->args)) {
         for (i = 0; i < count; i++) {
             u32 word = words[i];
             menu->knownWords[word >> 3] |= 1 << (word & 7);
@@ -124,7 +124,7 @@ u32 ECMenuBuild_Move(ECMenu *menu, const u16 *words, u32 count, u16 *dest) {
 u32 ECMenuBuild_TrendySayings(ECMenu *menu, const u16 *words, u32 count, u16 *dest) {
     u32 i;
     u32 n;
-    SaveEasyChat *saveEasyChat = sub_02090D80(menu->args);
+    SaveEasyChat *saveEasyChat = EasyChatArgs_GetEasyChat(menu->args);
     u32 base = GetECWordIndexByPair(0x122, 0); // NARC_msg_msg_0290_bin
 
     i = 0;
@@ -150,7 +150,7 @@ u32 ECMenuBuild_Greetings(ECMenu *menu, const u16 *words, u32 count, u16 *dest) 
         SaveEasyChat *saveEasyChat;
     } locals;
 
-    locals.saveEasyChat = sub_02090D80(menu->args);
+    locals.saveEasyChat = EasyChatArgs_GetEasyChat(menu->args);
     u16 base = GetECWordIndexByPair(0x11F, 0); // NARC_msg_msg_0289_bin
     locals.last = (u16)(base + 5);
 

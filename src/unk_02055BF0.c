@@ -57,13 +57,13 @@ BOOL RoutineFieldFade(TaskManager *man) {
     FieldFadeEnvironment *fenv = TaskManager_GetEnvironment(man);
     switch (fenv->state) {
     case 0:
-        HBlankSystem_Stop(fieldSystem->unk4->hBlankSystem);
+        HBlankSystem_Stop(fieldSystem->mapSystems->hBlankSystem);
         BeginNormalPaletteFade(fenv->fadeMode, fenv->typeTop, fenv->typeBottom, fenv->colour, fenv->duration, fenv->framesPer, fenv->heapID);
         fenv->state++;
         break;
     case 1:
         if (IsPaletteFadeFinished()) {
-            HBlankSystem_Start(fieldSystem->unk4->hBlankSystem);
+            HBlankSystem_Start(fieldSystem->mapSystems->hBlankSystem);
             Heap_Free(fenv);
             return TRUE;
         }
@@ -165,7 +165,7 @@ BOOL sub_02055DBC(TaskManager *man) {
         FieldBGM_TryFadeIn(fieldSystem, env->location.mapId);
         TaskManager_Call(man, sMapExitRoutines[env->transitionNo], env);
         if (FollowMon_IsActive(fieldSystem) && FollowMon_CheckVisibleFlag(fieldSystem) && !FollowMon_GetPermission(fieldSystem)) {
-            ov01_022057D0(fieldSystem);
+            FollowMon_SetNoBallEffect(fieldSystem);
         }
         Save_FollowMon_SetMapID(fieldSystem->location->mapId, Save_FollowMon_Get(fieldSystem->saveData));
         env->destinationMapID = fieldSystem->location->mapId;
@@ -212,7 +212,7 @@ BOOL sub_02055DBC(TaskManager *man) {
             TaskManager_Call(man, sMapEnterRoutines[env->transitionNo], env);
             LocalMapObject *followerMon = FollowMon_GetMapObject(fieldSystem);
             if (FollowMon_IsActive(fieldSystem) && !FollowMon_GetPermission(fieldSystem)) {
-                sub_02069E84(followerMon, 1);
+                FollowMon_SetReleaseBallPending(followerMon, 1);
                 FollowMon_MoveToPlayer(fieldSystem, (u8)PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             }
             env->state++;

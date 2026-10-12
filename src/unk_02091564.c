@@ -2,7 +2,7 @@
 
 #include "main.h"
 #include "oaks_speech.h"
-#include "scrcmd_20.h"
+#include "scrcmd_battle_hall.h"
 #include "scrcmd_battle_arcade.h"
 #include "scrcmd_battle_castle.h"
 #include "communication_command.h"
@@ -125,9 +125,9 @@ static const UnkStruct_02091564 sUnkTable_02106078[] = {
     { sub_02091570, CommCmd_GetSize0,         NULL         },
     { sub_02091570, sub_02091564,         NULL         },
     { sub_02091570, sub_02091568,         NULL         },
-    { sub_0204F85C, CommCmd_GetSizeVariable,         NULL         },
-    { sub_0204FE58, CommCmd_GetSizeVariable,         NULL         },
-    { sub_02050398, CommCmd_GetSizeVariable,         NULL         }
+    { BattleHall_RecvPartnerSpecies, CommCmd_GetSizeVariable,         NULL         },
+    { BattleCastle_RecvPartnerTeam, CommCmd_GetSizeVariable,         NULL         },
+    { BattleArcade_RecvPartnerTeam, CommCmd_GetSizeVariable,         NULL         }
 };
 
 u32 sub_02091564() {

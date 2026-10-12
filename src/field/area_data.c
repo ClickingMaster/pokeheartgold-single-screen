@@ -9,7 +9,7 @@
 #include "field/build_model_shapes.h"
 #include "field/map_prop_animation.h"
 #include "field/overlay_01_021FB878.h"
-#include "field/overlay_01_02204004.h"
+#include "field/map_prop_render.h"
 
 #include "assert.h"
 #include "filesystem.h"
@@ -167,7 +167,7 @@ u32 AreaDataManager_GetAreaLightArchiveID(AreaDataManager *areaDataManager) {
 
 // force_active only sets a section flag; it is kept so the objects stay identical to the matched ones
 #pragma force_active on
-void AreaDataManager_Load(AreaDataManager *areaDataManager, Field3dRenderObjManager *renderObjManager, MapPropAnimationManager *mapPropAnimationManager, FieldSystemUnkSubCC *unkCC, FieldSystemUnkSub104 *unk104) {
+void AreaDataManager_Load(AreaDataManager *areaDataManager, Field3dRenderObjManager *renderObjManager, MapPropAnimationManager *mapPropAnimationManager, AreaMapAnimation *unkCC, TimeOfDayPropAnimManager *unk104) {
     MapPropAnimListFile animListFile;
     char path[256];
     AreaDataLoadContext *ctx = areaDataManager->loadCtx;
@@ -199,7 +199,7 @@ void AreaDataManager_Load(AreaDataManager *areaDataManager, Field3dRenderObjMana
         AreaDataManager_TrimTextureFile(areaDataManager->mapPropTexFile, areaDataManager->mapPropTex);
     }
     if (areaDataManager->header.mapPropAnimFileId != 0xFFFF) {
-        ov01_0220463C(unkCC, areaDataManager->header.mapPropAnimFileId);
+        AreaMapAnimation_Load(unkCC, areaDataManager->header.mapPropAnimFileId);
     }
     for (i = 0; i < AREA_DATA_MAX_MAP_PROPS; i++) {
         areaDataManager->mapPropModels[i] = NULL;
@@ -219,9 +219,9 @@ void AreaDataManager_Load(AreaDataManager *areaDataManager, Field3dRenderObjMana
             GF_AssertFail();
         }
         if (!animListFile.filler_3) {
-            renderObj = (NNSG3dRenderObj *)ov01_022040A4(renderObjManager, id);
+            renderObj = (NNSG3dRenderObj *)Field3dObjectList_AddShared(renderObjManager, id);
             if (id < animListFileCount) {
-                ov01_021E8F3C(id, NNS_G3dGetMdlByIdx(NNS_G3dGetMdlSet(areaDataManager->mapPropModels[id]), 0), renderObj, areaDataManager->mapPropTex, &animListFile, mapPropAnimationManager, unk104);
+                MapPropAnimationManager_LoadPropAnimations(id, NNS_G3dGetMdlByIdx(NNS_G3dGetMdlSet(areaDataManager->mapPropModels[id]), 0), renderObj, areaDataManager->mapPropTex, &animListFile, mapPropAnimationManager, unk104);
             }
         }
     }
@@ -229,7 +229,7 @@ void AreaDataManager_Load(AreaDataManager *areaDataManager, Field3dRenderObjMana
         NNSG3dResTex *tex;
 
         areaDataManager->mapPropModels[0] = NARC_AllocAndReadWholeMember(ctx->mapPropModelNarc, 0, HEAP_ID_FIELD1);
-        ov01_022040A4(renderObjManager, 0);
+        Field3dObjectList_AddShared(renderObjManager, 0);
         tex = NNS_G3dGetTex(areaDataManager->mapPropModels[0]);
         if (tex) {
             if (!GF3dRender_AllocAndLoadTexResources(tex)) {

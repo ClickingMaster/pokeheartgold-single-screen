@@ -7,8 +7,8 @@
 
 	.text
 	.public sSinglesBattlerTypes
-	.public ov12_02237D00
-	.public ov12_02237ED0
+	.public BattleSystem_ReinitMainBgLayers
+	.public BattleSystem_SetTrainerAIOverlayLoaded
 	.public Battle_BattleInit
 	.public Battle_BattleMain
 	.public Battle_BattleExit

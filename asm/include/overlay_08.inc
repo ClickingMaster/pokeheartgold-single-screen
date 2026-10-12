@@ -185,13 +185,13 @@
 .public BattleCursor_FreeResources
 .public BattleCursor_New
 .public BattleCursor_Delete
-.public ov12_0226BAFC
+.public BattleCursor_SetRect
 .public BattleCursor_Disable
 .public BattleFinger_LoadResources
 .public BattleFinger_FreeResources
 .public BattleFinger_New
 .public BattleFinger_Delete
-.public ov12_0226BD2C
+.public BattleFinger_Enable
 .public BattleFinger_Disable
-.public ov12_0226BD4C
-.public ov12_0226BD50
+.public BattleFinger_SetTouchDelay
+.public BattleFinger_HasTouched

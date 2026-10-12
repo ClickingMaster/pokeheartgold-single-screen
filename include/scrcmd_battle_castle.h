@@ -3,15 +3,15 @@
 
 #include "global.h"
 
-typedef struct UnkStruct_0204FB20 {
+typedef struct BattleCastleTeamCheck {
     u8 state;
-    u8 unk01;
+    u8 numReceived;
     u8 filler[2];
     u16 playerTeam[2];
     u16 partnerTeam[2];
     u16 *result;
-} UnkStruct_0204FB20;
+} BattleCastleTeamCheck;
 
-void sub_0204FE58(u32, u32, UnkStruct_0204FB20 *, UnkStruct_0204FB20 *);
+void BattleCastle_RecvPartnerTeam(u32, u32, BattleCastleTeamCheck *, BattleCastleTeamCheck *);
 
 #endif // POKEHEARTGOLD_SCRCMD_BATTLE_CASTLE_H

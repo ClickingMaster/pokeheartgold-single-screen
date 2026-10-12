@@ -103,14 +103,14 @@ typedef struct SepiaBillboardTransfer {
     u16 palette[16];
 } SepiaBillboardTransfer;
 
-typedef struct UnkStruct_ov01_02205B14 {
+typedef struct FollowMonHopIntoBall {
     u8 state;
     u8 step;
     u8 timer;
     u8 movement;
     u8 unk04[64];
     BOOL toLeft;
-} UnkStruct_ov01_02205B14;
+} FollowMonHopIntoBall;
 
 typedef struct FollowMonRecall {
     int timer;
@@ -135,13 +135,13 @@ extern const HopOffsets ov01_022096F0;
 extern const VecFx32 sFollowMonRecallScale;
 extern const VecFx32 ov01_02209704;
 
-const HopTable ov01_022096E0 = { { 1, 2, 2, 3, 3, 2, 2, 0 }, { 14, 12 } };
+const HopTable sFollowMonHopIntoBallTable = { { 1, 2, 2, 3, 3, 2, 2, 0 }, { 14, 12 } };
 
-void ov01_0220596C(SysTask *task, void *data);
-BOOL ov01_02205B14(TaskManager *taskMan);
-u32 ov01_02205CF0(FieldSystem *fieldSystem, UnkStruct_ov01_02205B14 *env);
+void SepiaBillboardTransfer_FreeWhenDone(SysTask *task, void *data);
+BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan);
+u32 FollowMonHopIntoBall_GetSide(FieldSystem *fieldSystem, FollowMonHopIntoBall *env);
 BOOL Task_FollowMonRecall(TaskManager *taskMan);
-BOOL ov01_02205F00(TaskManager *taskMan);
+BOOL Task_FollowMonHideForFieldMove(TaskManager *taskMan);
 BOOL Task_FollowMonFlash(TaskManager *taskMan);
 
 BOOL ScrCmd_808(ScriptContext *ctx) {
@@ -184,7 +184,7 @@ u32 FollowMon_GetFasterMovement(u32 direction, u32 movement) {
     return 0;
 }
 
-fx32 ov01_022054E0(LocalMapObject *object) {
+fx32 FollowMon_GetHopHeight(LocalMapObject *object) {
     HopHeightTable table = ov01_02209750;
     LocalMapObject *mapObject = object;
     u8 row = ov01_02205584(mapObject);
@@ -293,7 +293,7 @@ void MapObject_GetPreviousCoordsBehind(LocalMapObject *object, int *x, int *z) {
 
 // The metatile behavior of a tile next to the object: 0/1 the tile north/south of it, 2/3 east/west of it,
 // 4/5 south-east/south-west of it.
-u8 ov01_022056C4(LocalMapObject *object, u32 direction) {
+u8 MapObject_GetAdjacentTileBehavior(LocalMapObject *object, u32 direction) {
     FieldSystem *fieldSystem = MapObject_GetFieldSystem(object);
     int x = MapObject_GetXCoord(object);
     int z = MapObject_GetZCoord(object);
@@ -361,7 +361,7 @@ BOOL FollowMon_CheckVisibleFlag(FieldSystem *fieldSystem) {
     return MapObject_CheckVisible(FollowMon_GetMapObject(fieldSystem));
 }
 
-void ov01_022057D0(FieldSystem *fieldSystem) {
+void FollowMon_SetNoBallEffect(FieldSystem *fieldSystem) {
     FollowPlayerMovement_DisableBallEffect(FollowMon_GetMapObject(fieldSystem));
 }
 
@@ -377,7 +377,7 @@ void ov01_022057DC(MapObjectManager *manager) {
 }
 #pragma force_active reset
 
-void ov01_02205808(BOOL alternate, LocalMapObject *object, void *billboard) {
+void FollowMonBillboard_SetResource(BOOL alternate, LocalMapObject *object, void *billboard) {
     u8 record[0x28];
     MapObjectManager *manager = MapObject_GetManager(object);
     u32 spriteId = MapObject_GetSpriteID(object);
@@ -387,14 +387,14 @@ void ov01_02205808(BOOL alternate, LocalMapObject *object, void *billboard) {
         if (id != obj_partner_poke && id != obj_daycare_poke_1 && id != obj_daycare_poke_2) {
             return;
         }
-        ov01_02205870(alternate, object, billboard, record);
+        FollowMonBillboard_InitSequence(alternate, object, billboard, record);
         BillboardObject_SetResource(billboard, record);
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(MapObject_GetFacingDirection(object)));
         BillboardObject_SetSequenceFrame(billboard, 0);
     }
 }
 
-void ov01_02205870(BOOL alternate, LocalMapObject *object, void *billboard, void *record) {
+void FollowMonBillboard_InitSequence(BOOL alternate, LocalMapObject *object, void *billboard, void *record) {
     MapObjectRenderData *renderData = MapObjectManager_GetRender(MapObject_GetManager(object));
     void *sequence = ResourceBank_Get(renderData->sequenceBank, alternate ? BILLBOARD_SEQUENCE_FOLLOW_MON_ALT : BILLBOARD_SEQUENCE_FOLLOW_MON);
     BillboardGfxSequence_Init(sequence, (u8 *)record + 0xC);
@@ -419,12 +419,12 @@ void MapObject_SetBillboardSepia(void *unused, LocalMapObject *object, void *bil
     GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_PLTT, (u16)BillboardObject_GetPlttKey(billboard) * 8, transfer->palette, sizeof(transfer->palette));
     texKey = BillboardObject_GetTexKey(billboard);
     GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_VRAM, (u16)BillboardObject_GetTexKey(billboard) * 8, transfer->texture, ((texKey & 0x7FFF0000) >> 16) * 16);
-    SysTask_CreateOnVWaitQueue(ov01_0220596C, transfer, 0);
+    SysTask_CreateOnVWaitQueue(SepiaBillboardTransfer_FreeWhenDone, transfer, 0);
 }
 #pragma force_active reset
 
 // Frees the sepia transfer once the VRAM transfers are done.
-void ov01_0220596C(SysTask *task, void *data) {
+void SepiaBillboardTransfer_FreeWhenDone(SysTask *task, void *data) {
     SepiaBillboardTransfer *transfer = data;
     if (GF_GetNumPendingVramTransferTasks() == 0) {
         SysTask_Destroy(task);
@@ -515,19 +515,19 @@ BOOL Task_WaitFollowMonMovement(TaskManager *taskMan) {
     return FALSE;
 }
 
-void ov01_02205AEC(FieldSystem *fieldSystem) {
-    UnkStruct_ov01_02205B14 *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(UnkStruct_ov01_02205B14));
+void FollowMon_StartHopIntoBall(FieldSystem *fieldSystem) {
+    FollowMonHopIntoBall *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FollowMonHopIntoBall));
     env->state = 0;
     env->step = 0;
     env->timer = 0;
     env->movement = 0;
-    TaskManager_Call(fieldSystem->taskman, ov01_02205B14, env);
+    TaskManager_Call(fieldSystem->taskman, Task_FollowMonHopIntoBall, env);
 }
 
 #pragma force_active on
-BOOL ov01_02205B14(TaskManager *taskMan) {
+BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
-    UnkStruct_ov01_02205B14 *env = TaskManager_GetEnvironment(taskMan);
+    FollowMonHopIntoBall *env = TaskManager_GetEnvironment(taskMan);
     LocalMapObject *mapObject;
     HopMovements movements;
     HopOffsets zOffsets, yOffsets;
@@ -547,11 +547,11 @@ BOOL ov01_02205B14(TaskManager *taskMan) {
         env->state++;
     case 1:
         if (MapObject_IsMovementPaused(FollowMon_GetMapObject(fieldSystem))) {
-            env->state = ov01_02205CF0(fieldSystem, env);
+            env->state = FollowMonHopIntoBall_GetSide(fieldSystem, env);
         }
         break;
     case 2: {
-        movements = ov01_022096E0.movements;
+        movements = sFollowMonHopIntoBallTable.movements;
         mapObject = FollowMon_GetMapObject(fieldSystem);
         if (!MapObject_IsMovementPaused(mapObject)) {
             break;
@@ -572,7 +572,7 @@ BOOL ov01_02205B14(TaskManager *taskMan) {
         break;
     case 4: {
         zOffsets = ov01_022096F0;
-        yOffsets = ov01_022096E0.yOffsets;
+        yOffsets = sFollowMonHopIntoBallTable.yOffsets;
         mapObject = FollowMon_GetMapObject(fieldSystem);
         delta = FX32_ONE * 2;
         if (!env->toLeft) {
@@ -601,7 +601,7 @@ BOOL ov01_02205B14(TaskManager *taskMan) {
         FollowMon_MoveToPlayer(fieldSystem, DIR_NORTH);
         scale = ov01_02209704;
         BillboardObject_SetScale(MapObjectManager_GetFollowMonBillboard(fieldSystem->mapObjectManager), &scale);
-        sub_02069E84(fieldSystem->followMon.mapObject, 1);
+        FollowMon_SetReleaseBallPending(fieldSystem->followMon.mapObject, 1);
         env->state++;
         break;
     }
@@ -614,7 +614,7 @@ BOOL ov01_02205B14(TaskManager *taskMan) {
 #pragma force_active reset
 
 // Which side of the player the following Pokemon is on: below it (state 2), or left/right of it (state 3).
-u32 ov01_02205CF0(FieldSystem *fieldSystem, UnkStruct_ov01_02205B14 *env) {
+u32 FollowMonHopIntoBall_GetSide(FieldSystem *fieldSystem, FollowMonHopIntoBall *env) {
     int playerX = MapObject_GetXCoord(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
     int playerZ = MapObject_GetZCoord(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
     int x = MapObject_GetXCoord(FollowMon_GetMapObject(fieldSystem));
@@ -642,7 +642,7 @@ BOOL FollowMon_StartRecall(FieldSystem *fieldSystem) {
         return FALSE;
     }
     if (FollowMon_CheckVisibleFlag(fieldSystem)) {
-        sub_0206A054(fieldSystem);
+        FollowMon_Hide(fieldSystem);
         FollowMon_MoveToPlayer(fieldSystem, DIR_NORTH);
         return FALSE;
     }
@@ -690,7 +690,7 @@ BOOL Task_FollowMonRecall(TaskManager *taskMan) {
             plttKey = BillboardObject_GetPlttKey(billboard);
             plttAddr = BillboardObject_GetPlttKey(billboard);
             GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_PLTT, (u16)plttAddr << 3, env->palette, ((plttKey & 0xFFFF0000) >> 16) << 3);
-            sub_0206A054(fieldSystem);
+            FollowMon_Hide(fieldSystem);
             sub_02069E28(FollowMon_GetMapObject(fieldSystem), 0);
             (*state)++;
         }
@@ -703,14 +703,14 @@ BOOL Task_FollowMonRecall(TaskManager *taskMan) {
 }
 #pragma force_active reset
 
-void ov01_02205EE0(TaskManager *taskMan) {
+void FollowMon_StartHideForFieldMove(TaskManager *taskMan) {
     int *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(int));
     *env = 0;
-    TaskManager_Call(taskMan, ov01_02205F00, env);
+    TaskManager_Call(taskMan, Task_FollowMonHideForFieldMove, env);
 }
 
 #pragma force_active on
-BOOL ov01_02205F00(TaskManager *taskMan) {
+BOOL Task_FollowMonHideForFieldMove(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
     int *timer = TaskManager_GetEnvironment(taskMan);
     u32 *state = TaskManager_GetStatePtr(taskMan);
@@ -739,7 +739,7 @@ BOOL ov01_02205F00(TaskManager *taskMan) {
         break;
     case 4:
         if (MapObject_AreBitsSetForMovementScriptInit(fieldSystem->followMon.mapObject) == TRUE) {
-            sub_0206A040(fieldSystem->followMon.mapObject, FALSE);
+            FollowMon_SetVisibleFlag(fieldSystem->followMon.mapObject, FALSE);
             MapObject_SetHeldMovement(fieldSystem->followMon.mapObject, GetMovementForDirection(MapObject_GetFacingDirection(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)), 52));
             ++*state;
         }
@@ -747,7 +747,7 @@ BOOL ov01_02205F00(TaskManager *taskMan) {
     case 5:
         if (MapObject_AreBitsSetForMovementScriptInit(fieldSystem->followMon.mapObject) == TRUE) {
             FollowMonBall_Spawn(fieldSystem->followMon.mapObject, 2);
-            sub_0206A054(fieldSystem);
+            FollowMon_Hide(fieldSystem);
             ++*state;
         }
         break;

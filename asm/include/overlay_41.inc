@@ -201,13 +201,13 @@
 .public FashionEntry_Clear
 .public FashionEntry_SetMon
 .public FashionEntry_PlaceItem
-.public sub_0202BD60
+.public FashionEntry_SetBackdrop
 .public FashionEntry_SetMonSecondText
 .public FashionEntry_IsItemPlaced
 .public FashionEntry_GetMon
 .public FashionEntry_GetItem
 .public FashionEntry_GetMonSecondText
-.public sub_0202BE80
+.public FashionEntry_GetBackdrop
 .public FashionEntry_GetMailMessageWord
 .public FashionMon_GetZ
 .public FashionMon_GetX

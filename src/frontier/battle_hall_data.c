@@ -47,12 +47,12 @@ void HallChallenge_SetSaved(void *challenge, int value);
 u32 HallTypeRanks_Get(u8 cell, u8 *ranks);
 void HallTypeRanks_Set(u8 cell, u8 *ranks, u8 rank);
 void HallTypeRanks_Clear(u8 *ranks);
-u32 sub_0205C0A0(u32 type, u32 cell);
-u32 sub_0205C0CC(u8 type);
-int sub_0205C0F4(int type);
-int sub_0205C11C(int type);
-int sub_0205C144(int type);
-u32 sub_0205C268(u32 stat);
+u32 BattleHall_GetTypeRankStat(u32 type, u32 cell);
+u32 BattleHall_GetWinStreakStat(u8 type);
+int BattleHall_GetBestStreakStat(int type);
+int BattleHall_GetSpeciesStat(int type);
+int BattleHall_GetSpeciesRecordsType(int type);
+u32 FrontierStat_GetFriendIndex(u32 stat);
 void *FrontierTrainer_Load(BattleHallTrainerRecord *record, u32 trainerId, enum HeapID heapID, u32 narcId);
 void FrontierTrainer_GetClassSprite(u8 trainerClass);
 void ov80_0222A840(void *saveData);
@@ -105,7 +105,7 @@ BattleHallData *BattleHallData_Alloc(SaveData *saveData, BOOL resume, u8 type, u
             hasStreak = HallFlags_GetField(flags, HALL_FLAGS_HAS_STREAK, sBattleHallData->type, 0, 0);
         }
         if (hasStreak == TRUE) {
-            sBattleHallData->winStreak = FrontierSave_GetStat(Save_Frontier_GetStatic(sBattleHallData->saveData), sub_0205C0CC(sBattleHallData->type), sub_0205C268(sub_0205C0CC(sBattleHallData->type)));
+            sBattleHallData->winStreak = FrontierSave_GetStat(Save_Frontier_GetStatic(sBattleHallData->saveData), BattleHall_GetWinStreakStat(sBattleHallData->type), FrontierStat_GetFriendIndex(BattleHall_GetWinStreakStat(sBattleHallData->type)));
         } else {
             sBattleHallData->winStreak = 0;
             for (i = 0; i < HALL_CELL_COUNT; i++) {
@@ -122,8 +122,8 @@ BattleHallData *BattleHallData_Alloc(SaveData *saveData, BOOL resume, u8 type, u
         data5 = sBattleHallData;
         data5->battleNo = HallChallenge_GetField(challenge, HALL_CHALLENGE_BATTLE_NO, 0, 0, 0);
         frontierSave = Save_Frontier_GetStatic(sBattleHallData->saveData);
-        stat = sub_0205C0CC(sBattleHallData->type);
-        sBattleHallData->winStreak = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C0CC(data5->type)));
+        stat = BattleHall_GetWinStreakStat(sBattleHallData->type);
+        sBattleHallData->winStreak = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleHall_GetWinStreakStat(data5->type)));
         for (i = 0; i < partySize; i++) {
             sBattleHallData->partySlots[i] = HallChallenge_GetField(challenge, HALL_CHALLENGE_PARTY_SLOTS, i, 0, 0);
         }
@@ -233,10 +233,10 @@ void BattleHallData_UpdateSpeciesRecord(BattleHallData *data, u16 *result) {
     int substat;
 
     if (type != 3) {
-        stat1 = sub_0205C0F4(type);
-        stat2 = sub_0205C11C(data->type);
-        substat = sub_0205C268(sub_0205C0F4(data->type));
-        *result = FrontierSpeciesRecords_UpdateFromStat(data->saveData, stat1, stat2, substat, sub_0205C144(type), HEAP_ID_FIELD2, &unused1, &unused2);
+        stat1 = BattleHall_GetBestStreakStat(type);
+        stat2 = BattleHall_GetSpeciesStat(data->type);
+        substat = FrontierStat_GetFriendIndex(BattleHall_GetBestStreakStat(data->type));
+        *result = FrontierSpeciesRecords_UpdateFromStat(data->saveData, stat1, stat2, substat, BattleHall_GetSpeciesRecordsType(type), HEAP_ID_FIELD2, &unused1, &unused2);
     } else {
         *result = 0;
     }
@@ -264,29 +264,29 @@ void BattleHallData_Save(BattleHallData *data, int mode) {
     HallChallenge_SetSaved(data->challenge, 1);
     mon = Party_GetMonByIndex(SaveArray_Party_Get(data->saveData), data->partySlots[0]);
     species = (u16)GetMonData(mon, MON_DATA_SPECIES, NULL);
-    stat = sub_0205C11C(data->type);
-    savedSpecies = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C11C(data->type)));
+    stat = BattleHall_GetSpeciesStat(data->type);
+    savedSpecies = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleHall_GetSpeciesStat(data->type)));
     temp.byte = data->battleNo;
     HallChallenge_SetField(data->challenge, HALL_CHALLENGE_BATTLE_NO, 0, 0, &temp.byte);
-    stat = sub_0205C0CC(data->type);
-    FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C0CC(data->type)), data->winStreak);
+    stat = BattleHall_GetWinStreakStat(data->type);
+    FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleHall_GetWinStreakStat(data->type)), data->winStreak);
     if (mode != 2) {
         type = data->type;
         if (type != 3) {
-            stat = sub_0205C0F4(type);
-            FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C0F4(type)), data->winStreak);
+            stat = BattleHall_GetBestStreakStat(type);
+            FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleHall_GetBestStreakStat(type)), data->winStreak);
         } else if (savedSpecies != species) {
             // the link streak record only grows with the same Pokemon
-            stat = sub_0205C0F4(type);
-            FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C0F4(type)), data->winStreak);
+            stat = BattleHall_GetBestStreakStat(type);
+            FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleHall_GetBestStreakStat(type)), data->winStreak);
         } else {
-            stat = sub_0205C0F4(type);
-            FrontierSave_RaiseStat(frontierSave, stat, sub_0205C268(sub_0205C0F4(type)), data->winStreak);
+            stat = BattleHall_GetBestStreakStat(type);
+            FrontierSave_RaiseStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleHall_GetBestStreakStat(type)), data->winStreak);
         }
         temp.byte = data->hasStreak;
         HallFlags_SetField(flags, HALL_FLAGS_HAS_STREAK, data->type, 0, &temp.byte);
         if (data->type == 3) {
-            FrontierSave_SetStat(frontierSave, 106, sub_0205C268(106), data->hasStreak);
+            FrontierSave_SetStat(frontierSave, 106, FrontierStat_GetFriendIndex(106), data->hasStreak);
         }
     }
     for (i = 0; i < HALL_TRAINER_COUNT; i++) {
@@ -305,9 +305,9 @@ void BattleHallData_Save(BattleHallData *data, int mode) {
         temp.value = data->setIds[i];
         HallChallenge_SetField(data->challenge, HALL_CHALLENGE_SET_IDS, (u8)i, 0, &temp.value);
     }
-    stat = sub_0205C11C(data->type);
+    stat = BattleHall_GetSpeciesStat(data->type);
     {
-        int substat = sub_0205C268(sub_0205C11C(data->type));
+        int substat = FrontierStat_GetFriendIndex(BattleHall_GetSpeciesStat(data->type));
         FrontierSave_SetStat(frontierSave, stat, substat, (u16)GetMonData(mon, MON_DATA_SPECIES, NULL));
     }
 }
@@ -404,8 +404,8 @@ static inline u16 BattleHall_ToU16(u32 value) {
 // The ranks of two cells share a byte of the frontier stats: low nibble for the even cell, high nibble for the odd.
 u16 BattleHall_GetSavedTypeRank(SaveData *saveData, int type, int cell, u16 *low, u16 *high) {
     FrontierSave *frontierSave = Save_Frontier_GetStatic(saveData);
-    int stat = sub_0205C0A0(type, cell);
-    u16 value = BattleHall_ToU16((u8)FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C0A0(type, cell))));
+    int stat = BattleHall_GetTypeRankStat(type, cell);
+    u16 value = BattleHall_ToU16((u8)FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleHall_GetTypeRankStat(type, cell))));
     *low = value & 0xF;
     *high = value >> 4;
     if (cell % 2 == 0) {
@@ -433,8 +433,8 @@ void BattleHall_SetSavedTypeRank(SaveData *saveData, u8 type, s32 cell, u8 rank)
     }
     packed |= (u8)(rank << (shift * 4));
     frontierSave = Save_Frontier_GetStatic(saveData);
-    stat = sub_0205C0A0(type, cell);
-    FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C0A0(type, cell)), packed);
+    stat = BattleHall_GetTypeRankStat(type, cell);
+    FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleHall_GetTypeRankStat(type, cell)), packed);
 }
 
 void BattleHallData_ResetMaxedRanks(BattleHallData *data) {

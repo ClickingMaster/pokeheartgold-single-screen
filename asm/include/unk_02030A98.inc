@@ -9,8 +9,8 @@
 .public GF_AssertFail
 .public String_New
 .public CopyU16ArrayToStringN
-.public sub_02027144
-.public sub_02027158
+.public LoadFrontierSpeciesRecords
+.public SaveFrontierSpeciesRecords
 .public SaveArray_Get
 .public SaveGameNormal
 .public Save_CheckExtraChunksExist

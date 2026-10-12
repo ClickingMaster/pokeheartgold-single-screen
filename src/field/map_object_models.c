@@ -95,7 +95,7 @@ void FollowMonBillboard_Update(LocalMapObject *object, Sprite *billboard, void *
         if (addFacingOffset) {
             FollowMonBillboard_AddFacingOffset(object, direction, &offset);
         }
-        offset.y += ov01_022054E0(object);
+        offset.y += FollowMon_GetHopHeight(object);
     }
     if (direction != billboardWork->direction) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(direction));
@@ -228,7 +228,7 @@ BOOL FollowMonBillboard_IsBobFrame(u8 direction, LocalMapObject *object, Sprite 
 
 void FollowMonBillboard_LoadSequence(BOOL alternate, LocalMapObject *object) {
     FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
-    ov01_02205808(alternate, object, work->billboard);
+    FollowMonBillboard_SetResource(alternate, object, work->billboard);
 }
 
 void FollowMonBillboard_ResetPalette(LocalMapObject *object) {

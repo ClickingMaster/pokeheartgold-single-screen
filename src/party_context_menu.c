@@ -25,14 +25,14 @@ static BOOL TextPrinterCB_PartyMenuWin34Msg(TextPrinterTemplate *template, u16 g
 static void PartyMenu_PrintEvoStoneCompatString(PartyMenu *partyMenu, u8 partySlot, u8 compatibilityParam);
 static void PartyMenu_PrintTMHMCompatString(PartyMenu *partyMenu, u8 partySlot, u8 compatibilityParam);
 static void PartyMenu_PrintSuperContestCompatString(PartyMenu *partyMenu, u8 partySlot, u8 isCompatible);
-static void sub_0207DD7C(PartyMenu *partyMenu, u8 partySlot, u8 a2);
+static void PartyMenu_PrintEntryStatusString(PartyMenu *partyMenu, u8 partySlot, u8 a2);
 static void PartyMenu_ShowContextMenu(PartyMenu *partyMenu, int numItems, int state);
 static void PartyMenu_HideContextMenu(PartyMenu *partyMenu, int numItems, int state);
 static u32 getButtonColorDepressed(int selection);
 static u32 getButtonColorRaised(int selection);
 static void PartyMenu_PrintContextMenuItemText(PartyMenu *partyMenu, PartyMenuContextMenu *contextMenu, int numItems, int selection, int state, BOOL a5);
-static void sub_0207E358(PartyMenu *partyMenu, PartyMenuContextMenu *contextMenu, int numItems, int selection, int state);
-static void sub_0207E3A8(PartyMenu *partyMenu, int numItems, int selection, int state, int frameType);
+static void PartyMenu_PrintContextMenuItemsText(PartyMenu *partyMenu, PartyMenuContextMenu *contextMenu, int numItems, int selection, int state);
+static void PartyMenu_DrawContextMenuButtonFrame(PartyMenu *partyMenu, int numItems, int selection, int state, int frameType);
 static BOOL hitboxHasSelectionMapping(int state, int numItems, int selection);
 static int hitboxToSelection(int state, int numItems, int selection);
 static BOOL contextMenuButtonIsActive(int state, int numItems, int selection);
@@ -351,7 +351,7 @@ BOOL PartyMenu_AnimateContextMenuButtonPress(PartyMenu *partyMenu) {
     switch (animData->buttonAnimState) {
     case 0:
         if (animData->template != NULL) {
-            sub_0207E3A8(partyMenu, animData->numItems, animData->selection, animData->state, 2);
+            PartyMenu_DrawContextMenuButtonFrame(partyMenu, animData->numItems, animData->selection, animData->state, 2);
             PartyMenu_PrintContextMenuItemText(partyMenu, animData->template, animData->numItems, animData->selection, animData->state, FALSE);
             BgCommitTilemapBufferToVram(partyMenu->bgConfig, GF_BG_LYR_MAIN_0);
         } else {
@@ -364,7 +364,7 @@ BOOL PartyMenu_AnimateContextMenuButtonPress(PartyMenu *partyMenu) {
         ++animData->autoAnimTimer;
         if (animData->autoAnimTimer == 2) {
             if (animData->template != NULL) {
-                sub_0207E3A8(partyMenu, animData->numItems, animData->selection, animData->state, 1);
+                PartyMenu_DrawContextMenuButtonFrame(partyMenu, animData->numItems, animData->selection, animData->state, 1);
                 PartyMenu_PrintContextMenuItemText(partyMenu, animData->template, animData->numItems, animData->selection, animData->state, TRUE);
                 BgCommitTilemapBufferToVram(partyMenu->bgConfig, GF_BG_LYR_MAIN_0);
             } else {
@@ -494,11 +494,11 @@ void PartyMenu_OpenContextMenu(PartyMenu *partyMenu, u8 *items, u8 numItems) {
     } else {
         contextMenu.scrollEnabled = 0;
     }
-    sub_0207E54C(partyMenu, contextMenu.numItems, 0, 0);
+    PartyMenu_DrawContextMenuButtonFrames(partyMenu, contextMenu.numItems, 0, 0);
     partyMenu->contextMenuCursor = PartyMenu_CreateContextMenuCursor(partyMenu, &contextMenu, 0, HEAP_ID_PARTY_MENU, 0);
 }
 
-void sub_0207D1C8(PartyMenu *partyMenu) {
+void PartyMenu_BufferDoWhatWithMonMessage(PartyMenu *partyMenu) {
     if (partyMenu->args->context == PARTY_MENU_CONTEXT_ATTACH_CAPSULE) {
         ReadMsgDataIntoString(partyMenu->msgData, msg_0300_00043, partyMenu->formattedStrBuf);
     } else if (partyMenu->args->context == PARTY_MENU_CONTEXT_SPIN_TRADE && partyMenu->monsDrawState[partyMenu->partyMonIndex].isEgg == TRUE) {
@@ -603,7 +603,7 @@ void PartyMenu_DrawMonHpBarOnWindow(PartyMenu *partyMenu, u8 partySlot) {
     ScheduleWindowCopyToVram(window);
 }
 
-void sub_0207D5DC(PartyMenu *partyMenu, u8 partySlot) {
+void PartyMenu_DrawPartyMonsList_Default(PartyMenu *partyMenu, u8 partySlot) {
     FillWindowPixelBuffer(&partyMenu->windows[partySlot * PARTY_MENU_WINDOWS_PER_MON + PARTY_MENU_WINDOW_ID_MON1_NICKNAME], 0);
     FillWindowPixelBuffer(&partyMenu->windows[partySlot * PARTY_MENU_WINDOWS_PER_MON + PARTY_MENU_WINDOW_ID_MON1_LEVEL], 0);
     FillWindowPixelBuffer(&partyMenu->windows[partySlot * PARTY_MENU_WINDOWS_PER_MON + PARTY_MENU_WINDOW_ID_MON1_HPTEXT], 0);
@@ -637,7 +637,7 @@ void PartyMenu_CommitPartyMonPanelWindowsToVram_NotInVBlank(PartyMenu *partyMenu
     ClearWindowTilemapAndScheduleTransfer(&partyMenu->windows[partySlot * PARTY_MENU_WINDOWS_PER_MON + PARTY_MENU_WINDOW_ID_MON1_HPBAR]);
 }
 
-void sub_0207D710(PartyMenu *partyMenu, u8 partySlot) {
+void PartyMenu_DrawPartyMonsList_UseEvoStone(PartyMenu *partyMenu, u8 partySlot) {
     FillWindowPixelBuffer(&partyMenu->windows[partySlot * PARTY_MENU_WINDOWS_PER_MON + PARTY_MENU_WINDOW_ID_MON1_NICKNAME], 0);
     FillWindowPixelBuffer(&partyMenu->windows[partySlot * PARTY_MENU_WINDOWS_PER_MON + PARTY_MENU_WINDOW_ID_MON1_LEVEL], 0);
     PartyMenu_PrintMonNicknameOnWindow(partyMenu, partySlot);
@@ -692,39 +692,39 @@ void PartyMenu_DrawPartyMonsList_FrontierFacilityEntry(PartyMenu *partyMenu, u8 
     }
 }
 
-void sub_0207D8EC(PartyMenu *partyMenu, u8 partySlot) {
+void PartyMenu_PrintFrontierEntryStatus(PartyMenu *partyMenu, u8 partySlot) {
     for (u8 i = 0; i < partyMenu->args->maxMonsToSelect; ++i) {
         if (partyMenu->args->selectedOrder[i] == partySlot + 1) {
-            sub_0207DD7C(partyMenu, partySlot, i);
+            PartyMenu_PrintEntryStatusString(partyMenu, partySlot, i);
             return;
         }
     }
 
     if (partyMenu->args->context == PARTY_MENU_CONTEXT_BATTLE_HALL) {
-        if (sub_0207B418(partyMenu, partySlot) == 0) {
-            sub_0207DD7C(partyMenu, partySlot, 8);
+        if (PartyMenu_GetBattleHallEntryStatus(partyMenu, partySlot) == 0) {
+            PartyMenu_PrintEntryStatusString(partyMenu, partySlot, 8);
             return;
         }
     } else if (partyMenu->args->context == PARTY_MENU_CONTEXT_23) {
-        if (sub_0207B4A0(partyMenu, partySlot) == 0) {
-            sub_0207DD7C(partyMenu, partySlot, 8);
+        if (PartyMenu_GetArcadeCastleEntryStatus(partyMenu, partySlot) == 0) {
+            PartyMenu_PrintEntryStatusString(partyMenu, partySlot, 8);
             return;
         }
     } else {
-        if (sub_0207B364(partyMenu, partySlot) == 0) {
-            sub_0207DD7C(partyMenu, partySlot, 8);
+        if (PartyMenu_GetLinkBattleEntryStatus(partyMenu, partySlot) == 0) {
+            PartyMenu_PrintEntryStatusString(partyMenu, partySlot, 8);
             return;
         }
     }
 
-    sub_0207DD7C(partyMenu, partySlot, 7);
+    PartyMenu_PrintEntryStatusString(partyMenu, partySlot, 7);
 }
 
 static u32 getStringCenterXPos(FontID fontId, String *string, u32 windowWidth) {
     return (windowWidth - FontID_String_GetWidth(fontId, string, 0)) / 2;
 }
 
-void sub_0207D998(PartyMenu *partyMenu, u8 flag) {
+void PartyMenu_PrintConfirmCancelButtonText(PartyMenu *partyMenu, u8 flag) {
     FillWindowPixelBuffer(&partyMenu->windows[PARTY_MENU_WINDOW_ID_30], 0);
     FillWindowPixelBuffer(&partyMenu->windows[PARTY_MENU_WINDOW_ID_31], 0);
     if (flag & 1) {
@@ -874,7 +874,7 @@ static void PartyMenu_PrintSuperContestCompatString(PartyMenu *partyMenu, u8 par
     ScheduleWindowCopyToVram(window);
 }
 
-static void sub_0207DD7C(PartyMenu *partyMenu, u8 partySlot, u8 a2) {
+static void PartyMenu_PrintEntryStatusString(PartyMenu *partyMenu, u8 partySlot, u8 a2) {
     Window *window = &partyMenu->windows[partySlot * PARTY_MENU_WINDOWS_PER_MON + PARTY_MENU_WINDOW_ID_MON1_COMPAT];
     String *string;
 
@@ -929,7 +929,7 @@ void PartyMenu_LevelUpPrintStatsChange(PartyMenu *partyMenu) {
     ScheduleWindowCopyToVram(&partyMenu->levelUpStatsWindow[0]);
 }
 
-void sub_0207DF98(PartyMenu *partyMenu) {
+void PartyMenu_LevelUpPrintNewStats(PartyMenu *partyMenu) {
     String *spC;
     u32 i;
 
@@ -944,12 +944,12 @@ void sub_0207DF98(PartyMenu *partyMenu) {
     ScheduleWindowCopyToVram(&partyMenu->levelUpStatsWindow[0]);
 }
 
-void sub_0207E04C(PartyMenu *partyMenu) {
+void PartyMenu_LevelUpCloseStatsWindow(PartyMenu *partyMenu) {
     EraseFrameAndWindow1(&partyMenu->levelUpStatsWindow[0], FALSE);
     RemoveWindow(&partyMenu->levelUpStatsWindow[0]);
 }
 
-void sub_0207E068(PartyMenu *partyMenu) {
+void PartyMenu_PrintTopScreenMonNameAndItem(PartyMenu *partyMenu) {
     Pokemon *mon;
     String *msg;
 
@@ -1041,7 +1041,7 @@ static void PartyMenu_PrintContextMenuItemText(PartyMenu *partyMenu, PartyMenuCo
     ScheduleWindowCopyToVram(&partyMenu->contextMenuButtonWindows[windowId]);
 }
 
-static void sub_0207E358(PartyMenu *partyMenu, PartyMenuContextMenu *contextMenu, int numItems, int selection, int state) {
+static void PartyMenu_PrintContextMenuItemsText(PartyMenu *partyMenu, PartyMenuContextMenu *contextMenu, int numItems, int selection, int state) {
     GF_ASSERT(numItems <= 8);
     for (int i = 0; i < numItems; ++i) {
         if (selection == i) {
@@ -1052,7 +1052,7 @@ static void sub_0207E358(PartyMenu *partyMenu, PartyMenuContextMenu *contextMenu
     }
 }
 
-static void sub_0207E3A8(PartyMenu *partyMenu, int numItems, int selection, int state, int frameType) {
+static void PartyMenu_DrawContextMenuButtonFrame(PartyMenu *partyMenu, int numItems, int selection, int state, int frameType) {
     u16 i;
     u16 tiles[8];
     const u8 *rect = sButtonRects[sButtonWindowIDs[numItems - 1][state][selection]];
@@ -1079,12 +1079,12 @@ static void sub_0207E3A8(PartyMenu *partyMenu, int numItems, int selection, int 
     FillBgTilemapRect(partyMenu->bgConfig, GF_BG_LYR_MAIN_0, tiles[7], rect[0] + 1, rect[1] + rect[3] - 1, rect[2] - 2, 1, TILEMAP_FILL_OVWT_PAL);
 }
 
-void sub_0207E54C(PartyMenu *partyMenu, int numItems, int selection, int state) {
+void PartyMenu_DrawContextMenuButtonFrames(PartyMenu *partyMenu, int numItems, int selection, int state) {
     for (int i = 0; i < numItems; ++i) {
         if (selection == i) {
-            sub_0207E3A8(partyMenu, numItems, i, state, 1);
+            PartyMenu_DrawContextMenuButtonFrame(partyMenu, numItems, i, state, 1);
         } else {
-            sub_0207E3A8(partyMenu, numItems, i, state, 0);
+            PartyMenu_DrawContextMenuButtonFrame(partyMenu, numItems, i, state, 0);
         }
     }
 }
@@ -1097,7 +1097,7 @@ PartyMenuContextMenuCursor *PartyMenu_CreateContextMenuCursor(PartyMenu *partyMe
     ret->selection = selection;
     ret->state = state;
     PartyMenu_ShowContextMenu(partyMenu, ret->menu.numItems, ret->state);
-    sub_0207E358(partyMenu, &ret->menu, ret->menu.numItems, ret->prevSelection, ret->state);
+    PartyMenu_PrintContextMenuItemsText(partyMenu, &ret->menu, ret->menu.numItems, ret->prevSelection, ret->state);
     PartyMenu_SetBlendBrightness_ForYesNo();
     Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_9], FALSE);
     if (partyMenu->args->context == PARTY_MENU_CONTEXT_UNION_ROOM_BATTLE_SELECT || partyMenu->args->context == PARTY_MENU_CONTEXT_17 || partyMenu->args->context == PARTY_MENU_CONTEXT_BATTLE_HALL || partyMenu->args->context == PARTY_MENU_CONTEXT_23) {
@@ -1186,7 +1186,7 @@ u32 PartyMenu_HandleInput_ContextMenu(PartyMenu *partyMenu, PartyMenuContextMenu
             } else {
                 PlaySE(SEQ_SE_DP_SELECT);
             }
-            sub_0207E3A8(partyMenu, cursor->numItems, cursor->selection, cursor->state, 0);
+            PartyMenu_DrawContextMenuButtonFrame(partyMenu, cursor->numItems, cursor->selection, cursor->state, 0);
             PartyMenu_PrintContextMenuItemText(partyMenu, &cursor->menu, cursor->numItems, cursor->selection, cursor->state, FALSE);
             cursor->selection = hitboxToSelection(cursor->state, cursor->numItems, hitbox);
             PartyMenu_StartContextMenuButtonPressAnim_FromCursorObj(partyMenu, cursor, cursor->menu.items[cursor->selection].value);
@@ -1215,7 +1215,7 @@ u32 PartyMenu_HandleInput_ContextMenu(PartyMenu *partyMenu, PartyMenuContextMenu
             return LIST_NOTHING_CHOSEN;
         } else if (gSystem.newKeys & PAD_BUTTON_B) {
             PlaySE(SEQ_SE_GS_GEARCANCEL);
-            sub_0207E3A8(partyMenu, cursor->numItems, cursor->selection, cursor->state, 0);
+            PartyMenu_DrawContextMenuButtonFrame(partyMenu, cursor->numItems, cursor->selection, cursor->state, 0);
             PartyMenu_PrintContextMenuItemText(partyMenu, &cursor->menu, cursor->numItems, cursor->selection, cursor->state, FALSE);
             cursor->selection = hitboxToSelection(cursor->state, cursor->numItems, 7);
             PartyMenu_StartContextMenuButtonPressAnim_FromCursorObj(partyMenu, cursor, LIST_CANCEL);
@@ -1225,8 +1225,8 @@ u32 PartyMenu_HandleInput_ContextMenu(PartyMenu *partyMenu, PartyMenuContextMenu
 
     if (dpadInputValid) {
         PlaySE(SEQ_SE_DP_SELECT);
-        sub_0207E54C(partyMenu, cursor->numItems, cursor->selection, cursor->state);
-        sub_0207E358(partyMenu, &cursor->menu, cursor->numItems, cursor->selection, cursor->state);
+        PartyMenu_DrawContextMenuButtonFrames(partyMenu, cursor->numItems, cursor->selection, cursor->state);
+        PartyMenu_PrintContextMenuItemsText(partyMenu, &cursor->menu, cursor->numItems, cursor->selection, cursor->state);
     }
 
     return LIST_NOTHING_CHOSEN;
@@ -1248,14 +1248,14 @@ u32 PartyMenu_HandleSubcontextMenuInput_TopLevel(PartyMenu *partyMenu, PartyMenu
     if (hitbox != -1) {
         if (hitbox == 4) {
             PlaySE(SEQ_SE_GS_GEARCANCEL);
-            sub_0207E3A8(partyMenu, cursor->numItems, cursor->selection, cursor->state, 0);
+            PartyMenu_DrawContextMenuButtonFrame(partyMenu, cursor->numItems, cursor->selection, cursor->state, 0);
             PartyMenu_PrintContextMenuItemText(partyMenu, &cursor->menu, cursor->numItems, cursor->selection, cursor->state, FALSE);
             cursor->selection = cursor->numItems - 1;
             PartyMenu_StartContextMenuButtonPressAnim_FromCursorObj(partyMenu, cursor, LIST_CANCEL);
             return LIST_NOTHING_CHOSEN;
         } else if (contextMenuButtonIsActive(cursor->state, cursor->numItems, hitbox) == TRUE) {
             PlaySE(SEQ_SE_DP_SELECT);
-            sub_0207E3A8(partyMenu, cursor->numItems, cursor->selection, cursor->state, 0);
+            PartyMenu_DrawContextMenuButtonFrame(partyMenu, cursor->numItems, cursor->selection, cursor->state, 0);
             PartyMenu_PrintContextMenuItemText(partyMenu, &cursor->menu, cursor->numItems, cursor->selection, cursor->state, FALSE);
             cursor->selection = hitbox;
             PartyMenu_StartContextMenuButtonPressAnim_FromCursorObj(partyMenu, cursor, cursor->menu.items[cursor->selection].value);
@@ -1276,13 +1276,13 @@ u32 PartyMenu_HandleSubcontextMenuInput_TopLevel(PartyMenu *partyMenu, PartyMenu
             } else {
                 PlaySE(SEQ_SE_DP_SELECT);
             }
-            sub_0207E3A8(partyMenu, cursor->numItems, cursor->selection, cursor->state, 0);
+            PartyMenu_DrawContextMenuButtonFrame(partyMenu, cursor->numItems, cursor->selection, cursor->state, 0);
             PartyMenu_PrintContextMenuItemText(partyMenu, &cursor->menu, cursor->numItems, cursor->selection, cursor->state, FALSE);
             PartyMenu_StartContextMenuButtonPressAnim_FromCursorObj(partyMenu, cursor, cursor->menu.items[cursor->selection].value);
             return LIST_NOTHING_CHOSEN;
         } else if (gSystem.newKeys & PAD_BUTTON_B) {
             PlaySE(SEQ_SE_GS_GEARCANCEL);
-            sub_0207E3A8(partyMenu, cursor->numItems, cursor->selection, cursor->state, 0);
+            PartyMenu_DrawContextMenuButtonFrame(partyMenu, cursor->numItems, cursor->selection, cursor->state, 0);
             PartyMenu_PrintContextMenuItemText(partyMenu, &cursor->menu, cursor->numItems, cursor->selection, cursor->state, FALSE);
             cursor->selection = cursor->numItems - 1;
             PartyMenu_StartContextMenuButtonPressAnim_FromCursorObj(partyMenu, cursor, LIST_CANCEL);
@@ -1292,8 +1292,8 @@ u32 PartyMenu_HandleSubcontextMenuInput_TopLevel(PartyMenu *partyMenu, PartyMenu
 
     if (dpadInputValid) {
         PlaySE(SEQ_SE_DP_SELECT);
-        sub_0207E54C(partyMenu, cursor->numItems, cursor->selection, cursor->state);
-        sub_0207E358(partyMenu, &cursor->menu, cursor->numItems, cursor->selection, cursor->state);
+        PartyMenu_DrawContextMenuButtonFrames(partyMenu, cursor->numItems, cursor->selection, cursor->state);
+        PartyMenu_PrintContextMenuItemsText(partyMenu, &cursor->menu, cursor->numItems, cursor->selection, cursor->state);
     }
 
     return LIST_NOTHING_CHOSEN;

@@ -1075,7 +1075,7 @@ int MailboxApp_FinishGiveMail(MailboxApp *app) {
     u32 partySlot = args->partySlot;
 
     if (partySlot <= 5) {
-        sub_02091004(app->mailbox->msgs, app->selectedMail, Party_GetMonByIndex(SaveArray_Party_Get(app->args->saveData), partySlot), HEAP_ID_156);
+        Mailbox_MoveMessageToMon(app->mailbox->msgs, app->selectedMail, Party_GetMonByIndex(SaveArray_Party_Get(app->args->saveData), partySlot), HEAP_ID_156);
     }
     Heap_Free(app->subAppArgs);
     return 8;
@@ -1096,7 +1096,7 @@ int MailboxApp_FinishPartyMenu(MailboxApp *app) {
 }
 
 int MailboxApp_StartUseMail(MailboxApp *app) {
-    UseMailArgs *args = sub_02090E68(app->args->saveData, 2, app->partySlot, ItemToMailId(app->itemId), HEAP_ID_156);
+    UseMailArgs *args = UseMailArgs_NewCompose(app->args->saveData, 2, app->partySlot, ItemToMailId(app->itemId), HEAP_ID_156);
 
     args->menuInputStatePtr = app->args->menuInputStatePtr;
     app->subAppArgs = args;
@@ -1105,13 +1105,13 @@ int MailboxApp_StartUseMail(MailboxApp *app) {
 }
 
 int MailboxApp_FinishUseMail(MailboxApp *app) {
-    app->useMailResult = sub_02090F6C(app->subAppArgs);
+    app->useMailResult = UseMailArgs_WasMailWritten(app->subAppArgs);
     if (app->useMailResult == 1) {
         Pokemon *mon = Party_GetMonByIndex(SaveArray_Party_Get(app->args->saveData), app->partySlot);
-        sub_02090F70(app->subAppArgs, mon);
+        UseMailArgs_GiveMailToMon(app->subAppArgs, mon);
         Bag_TakeItem(Save_Bag_Get(app->args->saveData), app->itemId, 1, HEAP_ID_156);
     }
-    sub_02090F90(app->subAppArgs);
+    UseMailArgs_Free(app->subAppArgs);
     return 0;
 }
 
@@ -1297,7 +1297,7 @@ void MailboxApp_ShowMailMonIcons(MailboxApp *app) {
     u32 iconId;
 
     for (i = 0, offset = 0; i < 3; i++, offset += 4) {
-        icon.raw = sub_0202B404(mail, (u8)i, 2, sub_0202B4E4(mail));
+        icon.raw = Mail_GetMonIconData(mail, (u8)i, 2, Mail_GetFormFlags(mail));
         if (icon.raw == 0xFFFF || (iconId = icon.species) == 7) {
             MailboxAppData_SetSpriteDrawFlag(app->data, i + 4, FALSE);
         } else {

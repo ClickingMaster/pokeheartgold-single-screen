@@ -11,7 +11,7 @@
 #include "heap.h"
 #include "party.h"
 #include "player_avatar.h"
-#include "scrcmd_20.h"
+#include "scrcmd_battle_hall.h"
 #include "scrcmd_9.h"
 #include "frontier_field_system.h"
 #include "unk_02035900.h"
@@ -197,19 +197,19 @@ BOOL FrtCmd_LinkLobbyAction(FrontierScriptContext *ctx) {
         }
         break;
     case 3:
-        *result = FrontierSave_GetStat(Save_Frontier_GetStatic(launchArgs->saveData), 0x6A, sub_0205C268(0x6A));
+        *result = FrontierSave_GetStat(Save_Frontier_GetStatic(launchArgs->saveData), 0x6A, FrontierStat_GetFriendIndex(0x6A));
         break;
     case 4: {
         FrontierSave *frontierSave = Save_Frontier_GetStatic(launchArgs->saveData);
-        u32 stat = sub_0205C11C(3);
-        *result = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C11C(3)));
+        u32 stat = BattleHall_GetSpeciesStat(3);
+        *result = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleHall_GetSpeciesStat(3)));
         break;
     }
     case 5:
         *result = lobby->species[arg];
         break;
     case 6:
-        sub_0204F878(launchArgs->saveData, Save_Frontier_GetHallFlags(launchArgs->saveData), 3);
+        BattleHall_ResetStreak(launchArgs->saveData, Save_Frontier_GetHallFlags(launchArgs->saveData), 3);
         break;
     case 7:
         lobby->facility = arg;
@@ -228,36 +228,36 @@ BOOL FrtCmd_LinkLobbyAction(FrontierScriptContext *ctx) {
         u16 streak;
         *result = 1;
         stat = ov80_022385D8(lobby->facility);
-        streak = FrontierSave_GetStat(Save_Frontier_GetStatic(lobby->saveData), stat, sub_0205C268(stat));
+        streak = FrontierSave_GetStat(Save_Frontier_GetStatic(lobby->saveData), stat, FrontierStat_GetFriendIndex(stat));
         if (streak != lobby->partnerStreak) {
-            FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), stat, sub_0205C268(stat), 0);
+            FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), stat, FrontierStat_GetFriendIndex(stat), 0);
             stat = ov80_02238610(lobby->facility);
-            FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), stat, sub_0205C268(stat), 0);
+            FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), stat, FrontierStat_GetFriendIndex(stat), 0);
             *result = 0;
         }
         break;
     }
     case 12: {
         u32 stat = ov80_02238610(lobby->facility);
-        *result = FrontierSave_GetStat(Save_Frontier_GetStatic(lobby->saveData), stat, sub_0205C268(stat));
+        *result = FrontierSave_GetStat(Save_Frontier_GetStatic(lobby->saveData), stat, FrontierStat_GetFriendIndex(stat));
         if (*result == 0) {
             stat = ov80_022385D8(lobby->facility);
-            FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), stat, sub_0205C268(stat), 0);
+            FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), stat, FrontierStat_GetFriendIndex(stat), 0);
             if (lobby->facility == 1) {
                 FrontierData_TowerRoundAction(Save_FrontierData_Get(lobby->saveData), 6, 2);
             }
             if (lobby->facility == 4) {
-                FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), 0x88, sub_0205C268(0x88), 0);
-                FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), 0x89, sub_0205C268(0x89), 0);
+                FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), 0x88, FrontierStat_GetFriendIndex(0x88), 0);
+                FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), 0x89, FrontierStat_GetFriendIndex(0x89), 0);
             }
             if (lobby->facility == 2) {
-                FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), sub_0205C048(0, 3), sub_0205C268(sub_0205C048(0, 3)), 0);
+                FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), BattleFactory_GetTradeCountStat(0, 3), FrontierStat_GetFriendIndex(BattleFactory_GetTradeCountStat(0, 3)), 0);
             }
             if (lobby->facility == 3) {
-                FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), sub_0205C048(1, 3), sub_0205C268(sub_0205C048(1, 3)), 0);
+                FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), BattleFactory_GetTradeCountStat(1, 3), FrontierStat_GetFriendIndex(BattleFactory_GetTradeCountStat(1, 3)), 0);
             }
         } else {
-            FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), stat, sub_0205C268(stat), 0);
+            FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), stat, FrontierStat_GetFriendIndex(stat), 0);
         }
         break;
     }

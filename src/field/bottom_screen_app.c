@@ -160,7 +160,7 @@ static const BottomScreenAppTemplate sBottomScreenApps[] = {
 };
 
 void ov01_021F6830(FieldSystem *fieldSystem, int a1, int a2) {
-    void *state = (void *)fieldSystem->unk4->unk14;
+    void *state = (void *)fieldSystem->mapSystems->unk14;
     if (state != NULL) {
         ov35_02259D80(state, a1, a2);
     }

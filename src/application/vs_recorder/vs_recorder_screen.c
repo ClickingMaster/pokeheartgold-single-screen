@@ -363,8 +363,8 @@ BOOL ov40_022306F0(VsRecorderWork *work) {
     u32 b;
     u8 c;
     SAVE_MISC_DATA *misc = Save_Misc_Get(work->saveData);
-    sub_0202AC38(misc, work->selection + 2, &a, &b, &c);
-    sub_0202AC60(misc, work->selection + 2, -1, -1, c);
+    SaveMisc_GetExtraChunkKeys(misc, work->selection + 2, &a, &b, &c);
+    SaveMisc_SetExtraChunkKeys(misc, work->selection + 2, -1, -1, c);
     return TRUE;
 }
 

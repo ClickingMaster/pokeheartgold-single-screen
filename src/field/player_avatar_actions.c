@@ -557,7 +557,7 @@ BOOL Task_Surf(TaskManager *taskManager) {
     }
     case 4:
         if (!IsCryFinished()) {
-            ov01_02205EE0(taskManager);
+            FollowMon_StartHideForFieldMove(taskManager);
             work->state = 6;
         }
         break;
@@ -663,7 +663,7 @@ BOOL Task_StopSurfing(TaskManager *taskManager) {
             FieldSystem_ProcessSoundplate(work->fieldSystem, FALSE);
             if (FollowMon_IsActive(work->fieldSystem)) {
                 FollowMon_MoveToPlayer(work->fieldSystem, (u8)work->direction);
-                sub_02069DC8(FollowMon_GetMapObject(work->fieldSystem), TRUE);
+                FollowMon_HideUntilStep(FollowMon_GetMapObject(work->fieldSystem), TRUE);
                 FollowMon_SetFacingDirection(work->fieldSystem, 1);
                 MapObject_ChangeMovement(FollowMon_GetMapObject(work->fieldSystem), 0x30);
             }
@@ -774,7 +774,7 @@ BOOL Task_RockClimb(TaskManager *taskManager) {
     } while (result == 2);
     if (result == 1) {
         FollowMon_MoveToPlayer(work->fieldSystem, (u8)work->direction);
-        sub_02069DC8(FollowMon_GetMapObject(work->fieldSystem), TRUE);
+        FollowMon_HideUntilStep(FollowMon_GetMapObject(work->fieldSystem), TRUE);
         FollowMon_SetFacingDirection(work->fieldSystem, 1);
         FieldMoveTask_FreeWork(work);
     }
@@ -823,7 +823,7 @@ int RockClimb_WaitFollowMonCry(RockClimbWork *work, TaskManager *taskManager) {
     if (IsCryFinished()) {
         return 0;
     }
-    ov01_02205EE0(taskManager);
+    FollowMon_StartHideForFieldMove(taskManager);
     work->state++;
     return 0;
 }

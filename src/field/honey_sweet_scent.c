@@ -130,7 +130,7 @@ const Field3dObjectTaskTemplate gHoneySweetScentFadeOutTemplate = {
 };
 
 Field3dObjectTask *HoneySweetScent_StartFadeIn(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->unk4->field3dObjectTaskManager, &gHoneySweetScentFadeInTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gHoneySweetScentFadeInTemplate);
 }
 
 void HoneySweetScent_DeleteFade(Field3dObjectTask *task) {
@@ -143,7 +143,7 @@ int HoneySweetScent_IsFadeDone(Field3dObjectTask *task) {
 }
 
 Field3dObjectTask *HoneySweetScent_StartFadeOut(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->unk4->field3dObjectTaskManager, &gHoneySweetScentFadeOutTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gHoneySweetScentFadeOutTemplate);
 }
 
 void HoneySweetScent_LoadBg2Tint(BgConfig *bgConfig) {
@@ -213,7 +213,7 @@ int HoneySweetScent_UseWhiteFlash(FieldSystem *fieldSystem) {
 
 BOOL HoneySweetScent_IsWeatherSuitable(FieldSystem *fieldSystem) {
     int i;
-    u32 value = WeatherManager_GetWeather(fieldSystem->unk4->weatherManager);
+    u32 value = WeatherManager_GetWeather(fieldSystem->mapSystems->weatherManager);
     for (i = 0; i < 3; i++) {
         if (value == gHoneySweetScentBlockingWeather[i]) {
             return FALSE;

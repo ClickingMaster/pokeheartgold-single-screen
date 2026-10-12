@@ -6,7 +6,7 @@
 #include "sprite_system.h"
 
 static void BattleFinger_Update(SysTask *task, void *data);
-static void ov12_0226BEB8(BattleFinger *finger);
+static void BattleFinger_ResetAnimation(BattleFinger *finger);
 
 void BattleFinger_LoadResources(SpriteSystem *renderer, SpriteManager *gfxHandler, enum HeapID heapID, PaletteData *plttData, u32 character, u32 pal, u32 cell, u32 animation) {
     NARC *narc = NARC_New(NARC_a_1_6_4, heapID);
@@ -24,7 +24,7 @@ void BattleFinger_FreeResources(SpriteManager *gfxHandler, u32 character, u32 pa
     SpriteManager_UnloadAnimObjById(gfxHandler, animation);
 }
 
-static const ManagedSpriteTemplate ov12_0226EBD4 = {
+static const ManagedSpriteTemplate sBattleFingerSpriteTemplate = {
     .x = 0,
     .y = 0,
     .z = 0,
@@ -39,7 +39,7 @@ static const ManagedSpriteTemplate ov12_0226EBD4 = {
 
 BattleFinger *BattleFinger_New(SpriteSystem *renderer, SpriteManager *gfxHandler, enum HeapID heapID, u32 character, u32 pal, u32 cell, u32 animation, u32 spritePriority, u32 bgPriority) {
     BattleFinger *finger;
-    ManagedSpriteTemplate unkStruct = ov12_0226EBD4;
+    ManagedSpriteTemplate unkStruct = sBattleFingerSpriteTemplate;
 
     unkStruct.resIdList[0] = character;
     unkStruct.resIdList[1] = pal;
@@ -51,10 +51,10 @@ BattleFinger *BattleFinger_New(SpriteSystem *renderer, SpriteManager *gfxHandler
     finger = Heap_Alloc(heapID, sizeof(BattleFinger));
     MI_CpuFill8(finger, 0, sizeof(BattleFinger));
 
-    finger->unk0 = SpriteSystem_NewSprite(renderer, gfxHandler, &unkStruct);
-    ManagedSprite_SetDrawFlag(finger->unk0, 0);
+    finger->sprite = SpriteSystem_NewSprite(renderer, gfxHandler, &unkStruct);
+    ManagedSprite_SetDrawFlag(finger->sprite, 0);
 
-    finger->unk14 = 0xC0000;
+    finger->yOffset = 0xC0000;
     finger->task = SysTask_CreateOnMainQueue(BattleFinger_Update, finger, 0x3e7);
 
     return finger;
@@ -62,34 +62,34 @@ BattleFinger *BattleFinger_New(SpriteSystem *renderer, SpriteManager *gfxHandler
 
 // BattleFinger_Delete
 void BattleFinger_Delete(BattleFinger *finger) {
-    Sprite_DeleteAndFreeResources(finger->unk0);
+    Sprite_DeleteAndFreeResources(finger->sprite);
     SysTask_Destroy(finger->task);
     Heap_Free(finger);
 }
 
-void ov12_0226BCFC(BattleFinger *finger, int x, int y, fx32 a3) {
-    ov12_0226BEB8(finger);
+void BattleFinger_EnableWithOffset(BattleFinger *finger, int x, int y, fx32 a3) {
+    BattleFinger_ResetAnimation(finger);
     finger->x = x;
     finger->y = y;
-    finger->unk14 = a3;
-    ManagedSprite_SetPositionXYWithSubscreenOffset(finger->unk0, x, y, a3);
-    ManagedSprite_SetDrawFlag(finger->unk0, TRUE);
+    finger->yOffset = a3;
+    ManagedSprite_SetPositionXYWithSubscreenOffset(finger->sprite, x, y, a3);
+    ManagedSprite_SetDrawFlag(finger->sprite, TRUE);
 }
 
-void ov12_0226BD2C(BattleFinger *finger, int x, int y) {
-    ov12_0226BCFC(finger, x, y, (fx32)0xC0000);
+void BattleFinger_Enable(BattleFinger *finger, int x, int y) {
+    BattleFinger_EnableWithOffset(finger, x, y, (fx32)0xC0000);
 }
 
 void BattleFinger_Disable(BattleFinger *finger) {
-    ManagedSprite_SetDrawFlag(finger->unk0, FALSE);
-    ov12_0226BEB8(finger);
+    ManagedSprite_SetDrawFlag(finger->sprite, FALSE);
+    BattleFinger_ResetAnimation(finger);
 }
 
-void ov12_0226BD4C(BattleFinger *finger, int delay) {
+void BattleFinger_SetTouchDelay(BattleFinger *finger, int delay) {
     finger->delay = delay;
 }
 
-BOOL ov12_0226BD50(BattleFinger *finger) {
+BOOL BattleFinger_HasTouched(BattleFinger *finger) {
     return finger->touchOccurrence;
 }
 
@@ -107,7 +107,7 @@ static void BattleFinger_Update(SysTask *task, void *data) {
         }
     }
 
-    if (!ManagedSprite_GetDrawFlag(finger->unk0)) {
+    if (!ManagedSprite_GetDrawFlag(finger->sprite)) {
         return;
     }
 
@@ -124,7 +124,7 @@ static void BattleFinger_Update(SysTask *task, void *data) {
 
         if (!finger->touchAnimationFlag) {
             yOffset = FX_Mul(GF_SinDegNoWrap(finger->angle / 100), 14 << FX32_SHIFT) / FX32_ONE;
-            ManagedSprite_SetPositionXYWithSubscreenOffset(finger->unk0, finger->x, finger->y - yOffset, finger->unk14);
+            ManagedSprite_SetPositionXYWithSubscreenOffset(finger->sprite, finger->x, finger->y - yOffset, finger->yOffset);
         }
     }
 
@@ -138,14 +138,14 @@ static void BattleFinger_Update(SysTask *task, void *data) {
             }
             break;
         case 1:
-            ManagedSprite_SetPositionXYWithSubscreenOffset(finger->unk0, finger->x, finger->y + 8, finger->unk14);
+            ManagedSprite_SetPositionXYWithSubscreenOffset(finger->sprite, finger->x, finger->y + 8, finger->yOffset);
             finger->touchOccurrence = TRUE;
             finger->touchAnimationState++;
             break;
         case 2:
             finger->touchAnimationDelay++;
             if (finger->touchAnimationDelay > 2) {
-                ManagedSprite_SetPositionXYWithSubscreenOffset(finger->unk0, finger->x, finger->y + 2, finger->unk14);
+                ManagedSprite_SetPositionXYWithSubscreenOffset(finger->sprite, finger->x, finger->y + 2, finger->yOffset);
                 finger->touchAnimationDelay = 0;
                 finger->touchAnimationState++;
             }
@@ -163,10 +163,10 @@ static void BattleFinger_Update(SysTask *task, void *data) {
         }
     }
 
-    ManagedSprite_TickFrame(finger->unk0);
+    ManagedSprite_TickFrame(finger->sprite);
 }
 
-static void ov12_0226BEB8(BattleFinger *finger) {
+static void BattleFinger_ResetAnimation(BattleFinger *finger) {
     finger->angle = 0;
     finger->touchAnimationFlag = FALSE;
     finger->touchAnimationState = 0;

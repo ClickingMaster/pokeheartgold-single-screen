@@ -153,7 +153,7 @@ BOOL ScrCmd_648(ScriptContext *ctx) {
         data = LoadZukanSpeciesList(HEAP_ID_FIELD3, sSpeciesListZukanFiles[fileIndex], &out_2);
 
         for (i = 0; i < out_2; i++) {
-            unkPtr_2 = FrontierSpeciesRecords_Get(fieldSystem->saveData, unkG, sub_0205C144(unkA), data[i]);
+            unkPtr_2 = FrontierSpeciesRecords_Get(fieldSystem->saveData, unkG, BattleHall_GetSpeciesRecordsType(unkA), data[i]);
             if (unkPtr_2 != 0) {
                 SpeciesListMenu_AddItem(unkPtr, data[i], 0xff, data[i]);
             }

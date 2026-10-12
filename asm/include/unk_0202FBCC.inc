@@ -10,8 +10,8 @@
 .public _MonEncryptSegment
 .public _MonDecryptSegment
 .public GF_AssertFail
-.public sub_0202711C
-.public sub_02027134
+.public LoadBattleRecord
+.public SaveBattleRecord
 .public Save_CheckExtraChunksExist
 .public Save_PrepareForAsyncWrite
 .public Save_WriteFileAsync

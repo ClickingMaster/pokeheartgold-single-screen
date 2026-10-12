@@ -112,7 +112,7 @@ static void PartyMonContextMenuAction_Item(PartyMenu *partyMenu, int *pState) {
     template.unk_0B_0 = 0;
     template.unk_0B_4 = 0;
     template.scrollEnabled = FALSE;
-    sub_0207E54C(partyMenu, template.numItems, 0, 1);
+    PartyMenu_DrawContextMenuButtonFrames(partyMenu, template.numItems, 0, 1);
     partyMenu->contextMenuCursor = PartyMenu_CreateContextMenuCursor(partyMenu, &template, 0, HEAP_ID_PARTY_MENU, 1);
     *pState = PARTY_MENU_STATE_HANDLE_SUBCONTEXT_MENU_INPUT;
 }
@@ -214,7 +214,7 @@ static void PartyMonContextMenuAction_Mail(PartyMenu *partyMenu, int *pState) {
     template.unk_0B_0 = 0;
     template.unk_0B_4 = 0;
     template.scrollEnabled = FALSE;
-    sub_0207E54C(partyMenu, template.numItems, 0, 1);
+    PartyMenu_DrawContextMenuButtonFrames(partyMenu, template.numItems, 0, 1);
     partyMenu->contextMenuCursor = PartyMenu_CreateContextMenuCursor(partyMenu, &template, 0, HEAP_ID_PARTY_MENU, 1);
     *pState = PARTY_MENU_STATE_HANDLE_SUBCONTEXT_MENU_INPUT;
 }
@@ -332,9 +332,9 @@ static void PartyMonContextMenuAction_Switch(PartyMenu *partyMenu, int *pState) 
     s16 x, y;
     Sprite_GetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], &x, &y);
     Sprite_SetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], x, y);
-    Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], sub_0207B5EC(partyMenu->args->unk_25, partyMenu->softboiledDonorSlot) + 2);
+    Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->unk_25, partyMenu->softboiledDonorSlot) + 2);
     Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], TRUE);
-    sub_0207A7F4(partyMenu, partyMenu->softboiledDonorSlot);
+    PartyMenu_UpdateMonPanelPalette(partyMenu, partyMenu->softboiledDonorSlot);
     ClearFrameAndWindow2(&partyMenu->windows[PARTY_MENU_WINDOW_ID_33], TRUE);
     PartyMenu_DeleteContextMenuAndList(partyMenu);
     PartyMenu_DisableMainScreenBlend_AfterYesNo();
@@ -342,18 +342,18 @@ static void PartyMonContextMenuAction_Switch(PartyMenu *partyMenu, int *pState) 
     *pState = PARTY_MENU_STATE_SELECT_SWITCH_MON;
 }
 
-void sub_0207FBC8(PartyMenu *partyMenu) {
+void PartyMenu_CancelSwitchMon(PartyMenu *partyMenu) {
     partyMenu->secondCursorActive = 0;
     Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], FALSE);
     if (partyMenu->partyMonIndex < PARTY_SIZE) {
-        sub_0207A7F4(partyMenu, partyMenu->partyMonIndex);
+        PartyMenu_UpdateMonPanelPalette(partyMenu, partyMenu->partyMonIndex);
     }
     PartyMenu_SetTopScreenSelectionPanelVisibility(partyMenu, FALSE);
-    sub_0207A7F4(partyMenu, partyMenu->softboiledDonorSlot);
+    PartyMenu_UpdateMonPanelPalette(partyMenu, partyMenu->softboiledDonorSlot);
     PartyMenu_PrintMessageOnWindow32(partyMenu, msg_0300_00029, TRUE);
 }
 
-void sub_0207FC1C(PartyMenu *partyMenu) {
+void PartyMenu_BeginSwapMons(PartyMenu *partyMenu) {
     u16 *bg2Tilemap;
     u16 *bg1Tilemap;
     s8 spC;
@@ -395,7 +395,7 @@ void sub_0207FC1C(PartyMenu *partyMenu) {
     Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], FALSE);
 }
 
-BOOL sub_0207FD6C(PartyMenu *partyMenu) {
+BOOL PartyMenu_AnimateSwapMons(PartyMenu *partyMenu) {
     PartyMenuSwapMonsData *swapMonsData = &partyMenu->swapMonsData;
 
     switch (swapMonsData->state) {
@@ -438,8 +438,8 @@ BOOL sub_0207FD6C(PartyMenu *partyMenu) {
         Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], TRUE);
         swapMonsData->active = 0;
         partyMenu->secondCursorActive = 0;
-        sub_0207A7F4(partyMenu, partyMenu->partyMonIndex);
-        sub_0207A7F4(partyMenu, partyMenu->softboiledDonorSlot);
+        PartyMenu_UpdateMonPanelPalette(partyMenu, partyMenu->partyMonIndex);
+        PartyMenu_UpdateMonPanelPalette(partyMenu, partyMenu->softboiledDonorSlot);
         PartyMenu_PrintMessageOnWindow32(partyMenu, msg_0300_00029, FALSE);
         return TRUE;
     }
@@ -525,8 +525,8 @@ static void PartyMenu_SwapMonsData(PartyMenu *partyMenu) {
     partyMenu->monsDrawState[swapMonsData->slots[0]].unk_15 = partyMenu->monsDrawState[swapMonsData->slots[1]].unk_15;
     partyMenu->monsDrawState[swapMonsData->slots[1]].unk_15 = pos;
 
-    sub_0207D5DC(partyMenu, swapMonsData->slots[0]);
-    sub_0207D5DC(partyMenu, swapMonsData->slots[1]);
+    PartyMenu_DrawPartyMonsList_Default(partyMenu, swapMonsData->slots[0]);
+    PartyMenu_DrawPartyMonsList_Default(partyMenu, swapMonsData->slots[1]);
     PartyMenu_CommitPartyMonPanelWindowsToVram_NotInVBlank(partyMenu, swapMonsData->slots[0]);
     PartyMenu_CommitPartyMonPanelWindowsToVram_NotInVBlank(partyMenu, swapMonsData->slots[1]);
     PartyMenu_RedrawMonHpBarAfterSwap(partyMenu, 0);
@@ -542,7 +542,7 @@ static void PartyMenu_SwapMonsData(PartyMenu *partyMenu) {
 static void PartyMenu_RedrawMonHpBarAfterSwap(PartyMenu *partyMenu, u8 slot) {
     PartyMenuSwapMonsData *swapMonsData = &partyMenu->swapMonsData;
     u16 *bg2Tilemap = swapMonsData->bg2Tilemaps[slot];
-    const u16 *src = sub_0207A16C(partyMenu);
+    const u16 *src = PartyMenu_GetHpBarFrameTiles(partyMenu);
     u16 color;
     u16 i;
 
@@ -567,11 +567,11 @@ static void PartyMonContextMenuAction_Enter(PartyMenu *partyMenu, int *pState) {
     for (u8 i = 0; i < partyMenu->args->maxMonsToSelect; ++i) {
         if (partyMenu->args->selectedOrder[i] == 0) {
             partyMenu->args->selectedOrder[i] = partyMenu->partyMonIndex + 1;
-            sub_0207D8EC(partyMenu, partyMenu->partyMonIndex);
+            PartyMenu_PrintFrontierEntryStatus(partyMenu, partyMenu->partyMonIndex);
             PartyMenu_PrintMessageOnWindow32(partyMenu, msg_0300_00035, TRUE);
             thunk_Sprite_SetPaletteOverride(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], 0);
             if (i == partyMenu->args->maxMonsToSelect - 1) {
-                sub_0207AB84(partyMenu, 6);
+                PartyMenu_SetCursorSlot(partyMenu, 6);
             }
             *pState = PARTY_MENU_STATE_1;
             return;
@@ -621,7 +621,7 @@ static void PartyMonContextMenuAction_NoEntry(PartyMenu *partyMenu, int *pState)
     }
     for (u8 i = 0; i < PARTY_SIZE; ++i) {
         if (partyMenu->monsDrawState[i].active) {
-            sub_0207D8EC(partyMenu, i);
+            PartyMenu_PrintFrontierEntryStatus(partyMenu, i);
         }
     }
     ClearFrameAndWindow2(&partyMenu->windows[PARTY_MENU_WINDOW_ID_33], TRUE);
@@ -816,15 +816,15 @@ static int PartyMonContextMenuAction_TransferHP(PartyMenu *partyMenu) {
     s16 x, y;
     Sprite_GetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], &x, &y);
     Sprite_SetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], x, y);
-    Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], sub_0207B5EC(partyMenu->args->unk_25, partyMenu->softboiledDonorSlot) + 2);
+    Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->unk_25, partyMenu->softboiledDonorSlot) + 2);
     Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], TRUE);
-    sub_0207A7F4(partyMenu, partyMenu->softboiledDonorSlot);
+    PartyMenu_UpdateMonPanelPalette(partyMenu, partyMenu->softboiledDonorSlot);
     PartyMenu_PrintMessageOnWindow32(partyMenu, msg_0300_00037, TRUE);
     partyMenu->levelUpStatsTmp[1] = 0;
     return PARTY_MENU_STATE_SOFTBOILED;
 }
 
-int sub_02080B74(PartyMenu *partyMenu) {
+int PartyMenu_Subtask_ReturnToSelectMon(PartyMenu *partyMenu) {
     ClearFrameAndWindow2(&partyMenu->windows[PARTY_MENU_WINDOW_ID_34], TRUE);
     PartyMenu_PrintMessageOnWindow32(partyMenu, msg_0300_00029, TRUE);
     PartyMenu_SetTopScreenSelectionPanelVisibility(partyMenu, FALSE);

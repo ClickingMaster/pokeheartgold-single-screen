@@ -190,12 +190,12 @@
 .public BattleAnimSystem_New
 .public BattleAnimSystem_Delete
 .public Battle_Run
-.public ov12_02237B0C
-.public ov12_02237B6C
-.public ov12_02237BB8
-.public ov12_02237CC4
-.public ov12_02237D00
-.public ov12_02237ED0
+.public BattleSystem_FreeInputForSubMenu
+.public BattleSystem_FreeGraphics
+.public BattleSystem_RestoreInputAfterSubMenu
+.public BattleSystem_FreeMainBgLayers
+.public BattleSystem_ReinitMainBgLayers
+.public BattleSystem_SetTrainerAIOverlayLoaded
 .public Battle_StaticInit
 .public BattleSystem_GetBattleType
 .public BattleSystem_GetBattleContext
@@ -233,7 +233,7 @@
 .public BattleContext_Get
 .public BattleContext_Set
 .public OpponentData_New
-.public ov12_02258DB0
+.public OpponentData_CreateBallData
 .public OpponentData_RunCommand
 .public OpponentData_Free
 .public OpponentData_SetInputTasks

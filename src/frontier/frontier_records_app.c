@@ -156,10 +156,10 @@ extern const u8 ov86_021E81DC[NUM_LETTERS];
 extern const FrontierRecordsWindowSet ov86_021E8230[];
 
 // Not declared by the owners' headers yet
-u32 sub_0205C01C(u8 a0, u8 a1);
-u32 sub_0205C074(u8 a0, u8 a1);
-u32 sub_0205C1C8(u8 a0);
-u32 sub_0205C240(u8 a0);
+u32 BattleFactory_GetBestStreakStat(u8 a0, u8 a1);
+u32 BattleFactory_GetBestTradeCountStat(u8 a0, u8 a1);
+u32 BattleCastle_GetBestStreakStat(u8 a0);
+u32 BattleCastle_GetBestStreakPointsStat(u8 a0);
 u32 FactoryFlags_GetField(int a0, u32 a1, u8 a2, u32 a3);
 
 // text.h is not included: it declares fontId as u8 (FontID), but this module passes it unnarrowed
@@ -610,17 +610,17 @@ void FrontierRecordsApp_PrintFactoryLevel50Records(FrontierRecordsApp *app) {
     FrontierRecordsApp_PrintMessage(app, 1, msg_0019_00046, 0, 0, 0, COLOR_TEXT, 0);
     FrontierRecordsApp_PrintMessage(app, 1, msg_0019_00048, 224, 0, 0, COLOR_TEXT, 1);
     FrontierRecordsApp_PrintMessage(app, 2, FrontierRecordsApp_GetFactoryStreakLabel(app, 0), 0, 0, 0, COLOR_TEXT, 0);
-    msgOrValue = FrontierSave_GetStat(app->frontierSave, sub_0205BFF0(0, app->mode), 0xFF);
+    msgOrValue = FrontierSave_GetStat(app->frontierSave, BattleFactory_GetWinStreakStat(0, app->mode), 0xFF);
     FrontierRecordsApp_BufferNumber(app, 0, msgOrValue);
     FrontierRecordsApp_PrintFormattedMessage(app, 2, msg_0019_00050, 112, 0, 0, COLOR_TEXT, 2);
-    msgOrValue = FrontierSave_GetStat(app->frontierSave, sub_0205C048(0, app->mode), 0xFF);
+    msgOrValue = FrontierSave_GetStat(app->frontierSave, BattleFactory_GetTradeCountStat(0, app->mode), 0xFF);
     FrontierRecordsApp_BufferNumber(app, 0, msgOrValue);
     FrontierRecordsApp_PrintFormattedMessage(app, 2, msg_0019_00052, 224, 0, 0, COLOR_TEXT, 1);
     FrontierRecordsApp_PrintMessage(app, 3, msg_0019_00043, 0, 0, 0, COLOR_TEXT, 0);
-    msgOrValue = FrontierSave_GetStat(app->frontierSave, sub_0205C01C(0, app->mode), 0xFF);
+    msgOrValue = FrontierSave_GetStat(app->frontierSave, BattleFactory_GetBestStreakStat(0, app->mode), 0xFF);
     FrontierRecordsApp_BufferNumber(app, 0, msgOrValue);
     FrontierRecordsApp_PrintFormattedMessage(app, 3, msg_0019_00050, 112, 0, 0, COLOR_TEXT, 2);
-    msgOrValue = FrontierSave_GetStat(app->frontierSave, sub_0205C074(0, app->mode), 0xFF);
+    msgOrValue = FrontierSave_GetStat(app->frontierSave, BattleFactory_GetBestTradeCountStat(0, app->mode), 0xFF);
     FrontierRecordsApp_BufferNumber(app, 0, msgOrValue);
     FrontierRecordsApp_PrintFormattedMessage(app, 3, msg_0019_00052, 224, 0, 0, COLOR_TEXT, 1);
     ScheduleWindowCopyToVram(&app->windows[0]);
@@ -638,17 +638,17 @@ void FrontierRecordsApp_PrintFactoryOpenLevelRecords(FrontierRecordsApp *app) {
     FrontierRecordsApp_PrintMessage(app, 4, msg_0019_00047, 0, 0, 0, COLOR_TEXT, 0);
     FrontierRecordsApp_PrintMessage(app, 4, msg_0019_00048, 224, 0, 0, COLOR_TEXT, 1);
     FrontierRecordsApp_PrintMessage(app, 5, FrontierRecordsApp_GetFactoryStreakLabel(app, 1), 0, 0, 0, COLOR_TEXT, 0);
-    value = FrontierSave_GetStat(app->frontierSave, sub_0205BFF0(1, app->mode), 0xFF);
+    value = FrontierSave_GetStat(app->frontierSave, BattleFactory_GetWinStreakStat(1, app->mode), 0xFF);
     FrontierRecordsApp_BufferNumber(app, 0, value);
     FrontierRecordsApp_PrintFormattedMessage(app, 5, msg_0019_00050, 112, 0, 0, COLOR_TEXT, 2);
-    value = FrontierSave_GetStat(app->frontierSave, sub_0205C048(1, app->mode), 0xFF);
+    value = FrontierSave_GetStat(app->frontierSave, BattleFactory_GetTradeCountStat(1, app->mode), 0xFF);
     FrontierRecordsApp_BufferNumber(app, 0, value);
     FrontierRecordsApp_PrintFormattedMessage(app, 5, msg_0019_00052, 224, 0, 0, COLOR_TEXT, 1);
     FrontierRecordsApp_PrintMessage(app, 6, msg_0019_00043, 0, 0, 0, COLOR_TEXT, 0);
-    value = FrontierSave_GetStat(app->frontierSave, sub_0205C01C(1, app->mode), 0xFF);
+    value = FrontierSave_GetStat(app->frontierSave, BattleFactory_GetBestStreakStat(1, app->mode), 0xFF);
     FrontierRecordsApp_BufferNumber(app, 0, value);
     FrontierRecordsApp_PrintFormattedMessage(app, 6, msg_0019_00050, 112, 0, 0, COLOR_TEXT, 2);
-    value = FrontierSave_GetStat(app->frontierSave, sub_0205C074(1, app->mode), 0xFF);
+    value = FrontierSave_GetStat(app->frontierSave, BattleFactory_GetBestTradeCountStat(1, app->mode), 0xFF);
     FrontierRecordsApp_BufferNumber(app, 0, value);
     FrontierRecordsApp_PrintFormattedMessage(app, 6, msg_0019_00052, 224, 0, 0, COLOR_TEXT, 1);
     ScheduleWindowCopyToVram(&app->windows[4]);
@@ -669,7 +669,7 @@ u32 FrontierRecordsApp_GetFactoryStreakLabel(FrontierRecordsApp *app, u32 level)
     u8 mode = app->mode;
     if (mode == 3) {
         FrontierSave *frontierSave = Save_Frontier_GetStatic(app->saveData);
-        result = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(stat));
+        result = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(stat));
     } else {
         int factory = Save_Frontier_GetFactoryFlags(app->saveData);
         result = FactoryFlags_GetField(factory, 10, (u8)(mode + level * 4), 0);
@@ -701,12 +701,12 @@ void FrontierRecordsApp_PrintHallRecords(FrontierRecordsApp *app) {
     FrontierRecordsApp_PrintFormattedMessage(app, 1, msg_0019_00051, 0, 0, 0, COLOR_TEXT, 0);
     FrontierRecordsApp_PrintMessage(app, 2, msg_0019_00029, 0, 0, 0, COLOR_TEXT, 0);
     frontierSave = Save_Frontier_GetStatic(app->saveData);
-    stat = sub_0205C11C(app->mode);
-    value = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C11C(app->mode)));
+    stat = BattleHall_GetSpeciesStat(app->mode);
+    value = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleHall_GetSpeciesStat(app->mode)));
     if (app->species != value) {
         value = 0;
     } else {
-        value = FrontierSave_GetStat(app->frontierSave, sub_0205C0CC(app->mode), 0xFF);
+        value = FrontierSave_GetStat(app->frontierSave, BattleHall_GetWinStreakStat(app->mode), 0xFF);
     }
     FrontierRecordsApp_BufferNumber(app, 0, value);
     FrontierRecordsApp_PrintFormattedMessage(app, 2, msg_0019_00050, 112, 0, 0, COLOR_TEXT, 2);
@@ -715,7 +715,7 @@ void FrontierRecordsApp_PrintHallRecords(FrontierRecordsApp *app) {
     if (flag != 1) {
         value = 0;
     } else {
-        value = FrontierSpeciesRecords_Get(app->saveData, records, sub_0205C144(app->mode), app->species);
+        value = FrontierSpeciesRecords_Get(app->saveData, records, BattleHall_GetSpeciesRecordsType(app->mode), app->species);
     }
     if (records != NULL) {
         Heap_Free(records);
@@ -755,18 +755,18 @@ void FrontierRecordsApp_PrintCastleRecords(FrontierRecordsApp *app) {
     FrontierRecordsApp_PrintMessage(app, 0, msg, 224, 0, 0, COLOR_HEADER, 1);
     FrontierRecordsApp_PrintMessage(app, 1, msg_0019_00049, 112, 0, 0, COLOR_TEXT, 1);
     FrontierRecordsApp_PrintMessage(app, 2, FrontierRecordsApp_GetCastleStreakLabel(app), 0, 0, 0, COLOR_TEXT, 0);
-    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(app->frontierSave, sub_0205C1A0(app->mode), 0xFF));
+    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(app->frontierSave, BattleCastle_GetWinStreakStat(app->mode), 0xFF));
     FrontierRecordsApp_PrintFormattedMessage(app, 2, msg_0019_00054, 112, 0, 0, COLOR_TEXT, 2);
     frontierSave = Save_Frontier_GetStatic(app->saveData);
-    stat = sub_0205C1F0(app->mode);
-    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C1F0(app->mode))));
+    stat = BattleCastle_GetPointsStat(app->mode);
+    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->mode))));
     FrontierRecordsApp_PrintFormattedMessage(app, 2, msg_0019_00053, 224, 0, 0, COLOR_TEXT, 1);
     FrontierRecordsApp_PrintMessage(app, 3, msg_0019_00043, 0, 0, 0, COLOR_TEXT, 0);
-    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(app->frontierSave, sub_0205C1C8(app->mode), 0xFF));
+    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(app->frontierSave, BattleCastle_GetBestStreakStat(app->mode), 0xFF));
     FrontierRecordsApp_PrintFormattedMessage(app, 3, msg_0019_00054, 112, 0, 0, COLOR_TEXT, 2);
     frontierSave = Save_Frontier_GetStatic(app->saveData);
-    stat = sub_0205C240(app->mode);
-    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C240(app->mode))));
+    stat = BattleCastle_GetBestStreakPointsStat(app->mode);
+    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetBestStreakPointsStat(app->mode))));
     FrontierRecordsApp_PrintFormattedMessage(app, 3, msg_0019_00053, 224, 0, 0, COLOR_TEXT, 1);
     ScheduleWindowCopyToVram(&app->windows[0]);
     ScheduleWindowCopyToVram(&app->windows[1]);
@@ -780,7 +780,7 @@ u32 FrontierRecordsApp_GetCastleStreakLabel(FrontierRecordsApp *app) {
 
     if (mode == 3) {
         FrontierSave *frontierSave = Save_Frontier_GetStatic(app->saveData);
-        result = FrontierSave_GetStat(frontierSave, 0x6C, sub_0205C268(0x6C));
+        result = FrontierSave_GetStat(frontierSave, 0x6C, FrontierStat_GetFriendIndex(0x6C));
     } else {
         result = CastleFlags_GetField(Save_Frontier_GetCastleFlags(app->saveData), 9, mode, 0, 0);
     }
@@ -803,10 +803,10 @@ void FrontierRecordsApp_PrintArcadeRecords(FrontierRecordsApp *app) {
     }
     FrontierRecordsApp_PrintMessage(app, 0, msg, 224, 0, 0, COLOR_HEADER, 1);
     FrontierRecordsApp_PrintMessage(app, 1, FrontierRecordsApp_GetArcadeStreakLabel(app), 0, 0, 0, COLOR_TEXT, 0);
-    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(app->frontierSave, sub_0205C2C0(app->mode), 0xFF));
+    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(app->frontierSave, BattleArcade_GetWinStreakStat(app->mode), 0xFF));
     FrontierRecordsApp_PrintFormattedMessage(app, 1, msg_0019_00055, 112, 0, 0, COLOR_TEXT, 2);
     FrontierRecordsApp_PrintMessage(app, 2, msg_0019_00043, 0, 0, 0, COLOR_TEXT, 0);
-    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(app->frontierSave, sub_0205C2E8(app->mode), 0xFF));
+    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(app->frontierSave, BattleArcade_GetBestStreakStat(app->mode), 0xFF));
     FrontierRecordsApp_PrintFormattedMessage(app, 2, msg_0019_00055, 112, 0, 0, COLOR_TEXT, 2);
     ScheduleWindowCopyToVram(&app->windows[0]);
     ScheduleWindowCopyToVram(&app->windows[1]);
@@ -819,7 +819,7 @@ u32 FrontierRecordsApp_GetArcadeStreakLabel(FrontierRecordsApp *app) {
 
     if (mode == 3) {
         FrontierSave *frontierSave = Save_Frontier_GetStatic(app->saveData);
-        result = FrontierSave_GetStat(frontierSave, 0x6E, sub_0205C268(0x6E));
+        result = FrontierSave_GetStat(frontierSave, 0x6E, FrontierStat_GetFriendIndex(0x6E));
     } else {
         result = ArcadeFlags_GetField(Save_Frontier_GetArcadeFlags(app->saveData), 8, mode, 0, 0);
     }
@@ -836,10 +836,10 @@ void FrontierRecordsApp_PrintTowerRecords(FrontierRecordsApp *app) {
     msg = app->mode == 0 ? msg_0019_00026 : msg_0019_00027;
     FrontierRecordsApp_PrintMessage(app, 0, msg, 224, 0, 0, COLOR_HEADER, 1);
     FrontierRecordsApp_PrintMessage(app, 2, FrontierRecordsApp_GetTowerStreakLabel(app, app->mode), 0, 0, 0, COLOR_TEXT, 0);
-    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(app->frontierSave, sub_0205C310(app->mode), 0xFF));
+    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(app->frontierSave, BattleTower_GetWinStreakStat(app->mode), 0xFF));
     FrontierRecordsApp_PrintFormattedMessage(app, 2, msg_0019_00050, 112, 0, 0, COLOR_TEXT, 2);
     FrontierRecordsApp_PrintMessage(app, 3, msg_0019_00043, 0, 0, 0, COLOR_TEXT, 0);
-    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(app->frontierSave, sub_0205C350(app->mode), 0xFF));
+    FrontierRecordsApp_BufferNumber(app, 0, FrontierSave_GetStat(app->frontierSave, BattleTower_GetBestStreakStat(app->mode), 0xFF));
     FrontierRecordsApp_PrintFormattedMessage(app, 3, msg_0019_00050, 112, 0, 0, COLOR_TEXT, 2);
     ScheduleWindowCopyToVram(&app->windows[0]);
     ScheduleWindowCopyToVram(&app->windows[2]);
@@ -864,14 +864,14 @@ void FrontierRecordsApp_PrintTowerMultiRecords(FrontierRecordsApp *app) {
     FrontierRecordsApp_PrintMessage(app, 0, msg_0019_00028, 224, 0, 0, COLOR_HEADER, 1);
     FrontierRecordsApp_PrintMessage(app, 1, msg_0019_00044, 0, 0, 0, COLOR_TEXT, 0);
     FrontierRecordsApp_PrintMessage(app, 4, FrontierRecordsApp_GetTowerStreakLabel(app, app->mode), 0, 0, 0, COLOR_TEXT, 0);
-    FrontierRecordsApp_PrintTowerStreak(app, 4, sub_0205C310(app->mode));
+    FrontierRecordsApp_PrintTowerStreak(app, 4, BattleTower_GetWinStreakStat(app->mode));
     FrontierRecordsApp_PrintMessage(app, 5, msg_0019_00043, 0, 0, 0, COLOR_TEXT, 0);
-    FrontierRecordsApp_PrintTowerStreak(app, 5, sub_0205C350(app->mode));
+    FrontierRecordsApp_PrintTowerStreak(app, 5, BattleTower_GetBestStreakStat(app->mode));
     FrontierRecordsApp_PrintMessage(app, 6, msg_0019_00045, 0, 0, 0, COLOR_TEXT, 0);
     FrontierRecordsApp_PrintMessage(app, 7, FrontierRecordsApp_GetTowerStreakLabel(app, 3), 0, 0, 0, COLOR_TEXT, 0);
-    FrontierRecordsApp_PrintTowerStreak(app, 7, sub_0205C310(3));
+    FrontierRecordsApp_PrintTowerStreak(app, 7, BattleTower_GetWinStreakStat(3));
     FrontierRecordsApp_PrintMessage(app, 8, msg_0019_00043, 0, 0, 0, COLOR_TEXT, 0);
-    FrontierRecordsApp_PrintTowerStreak(app, 8, sub_0205C350(3));
+    FrontierRecordsApp_PrintTowerStreak(app, 8, BattleTower_GetBestStreakStat(3));
     ScheduleWindowCopyToVram(&app->windows[0]);
     ScheduleWindowCopyToVram(&app->windows[1]);
     ScheduleWindowCopyToVram(&app->windows[4]);
@@ -1132,7 +1132,7 @@ void FrontierRecordsApp_InitSpeciesGroups(FrontierRecordsApp *app) {
             u16 i;
             app->groups[letter].species = Heap_Alloc(HEAP_ID_121, count * 2);
             for (i = 0; i < count; i++) {
-                if (FrontierSpeciesRecords_Get(app->saveData, records, sub_0205C144(app->mode), species[i])) {
+                if (FrontierSpeciesRecords_Get(app->saveData, records, BattleHall_GetSpeciesRecordsType(app->mode), species[i])) {
                     app->groups[letter].species[app->groups[letter].count] = species[i];
                     app->groups[letter].count++;
                 }

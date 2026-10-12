@@ -637,7 +637,7 @@ int BattleBagMenu_RunTutorial(BattleBagMenu *menu) {
     }
     switch (menu->tutorialState) {
     case 0:
-        if (ov12_0226BD50(menu->finger) == TRUE) {
+        if (BattleFinger_HasTouched(menu->finger) == TRUE) {
             PlaySE(SEQ_SE_DP_DECIDE);
             menu->pocket = 2;
             menu->nextState = 12;
@@ -653,7 +653,7 @@ int BattleBagMenu_RunTutorial(BattleBagMenu *menu) {
         menu->tutorialState++;
         break;
     case 2:
-        if (ov12_0226BD50(menu->finger) == TRUE) {
+        if (BattleFinger_HasTouched(menu->finger) == TRUE) {
             PlaySE(SEQ_SE_DP_DECIDE);
             menu->context->pocketPositions[menu->pocket] = 0;
             menu->nextState = 12;
@@ -669,7 +669,7 @@ int BattleBagMenu_RunTutorial(BattleBagMenu *menu) {
         menu->tutorialState++;
         break;
     case 4:
-        if (ov12_0226BD50(menu->finger) == TRUE) {
+        if (BattleFinger_HasTouched(menu->finger) == TRUE) {
             PlaySE(SEQ_SE_DP_DECIDE);
             menu->context->selectedItem = BattleBagMenu_GetItemOnPage(menu, menu->context->pocketPositions[menu->pocket]);
             menu->context->selectedPocket = menu->pocket;
@@ -1323,8 +1323,8 @@ void BattleBagMenu_FreeFinger(BattleBagMenu *menu) {
 
 void BattleBagMenu_UpdateTutorialFinger(BattleBagMenu *menu, int page) {
     if (menu->context->isTutorial == 1) {
-        ov12_0226BD2C(menu->finger, sBattleBagTutorialFingerPos[page][0], sBattleBagTutorialFingerPosY[page][0]);
-        ov12_0226BD4C(menu->finger, 60);
+        BattleFinger_Enable(menu->finger, sBattleBagTutorialFingerPos[page][0], sBattleBagTutorialFingerPosY[page][0]);
+        BattleFinger_SetTouchDelay(menu->finger, 60);
     } else {
         BattleFinger_Disable(menu->finger);
     }

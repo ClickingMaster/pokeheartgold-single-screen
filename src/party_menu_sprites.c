@@ -9,8 +9,8 @@
 #include "unk_0208805C.h"
 #include "vram_transfer_manager.h"
 
-static void sub_0207F0FC(Sprite *sprite, u8 seqNo);
-static int sub_0207F11C(PartyMenuMonsDrawState *monDraw);
+static void PartyMenu_SetIconAnimSeqIfChanged(Sprite *sprite, u8 seqNo);
+static int PartyMenu_GetMonIconAnimSeq(PartyMenuMonsDrawState *monDraw);
 
 static const UnmanagedSpriteTemplate sSpriteTemplates[24] = {
     {
@@ -351,7 +351,7 @@ static const UnmanagedSpriteTemplate sSpriteTemplates[24] = {
      },
 };
 
-void sub_0207EB24(PartyMenu *partyMenu) {
+void PartyMenu_InitSpriteSystem(PartyMenu *partyMenu) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GF_CreateVramTransferManager(32, HEAP_ID_PARTY_MENU);
@@ -391,7 +391,7 @@ void sub_0207EB24(PartyMenu *partyMenu) {
     SpriteSystem_LoadResourceDataFromFileIdList(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, &_021018B4);
 }
 
-void sub_0207EBE4(PartyMenu *partyMenu, u8 partySlot, u16 x, u16 y, NARC *narc) {
+void PartyMenu_CreateMonIconSprites(PartyMenu *partyMenu, u8 partySlot, u16 x, u16 y, NARC *narc) {
     Pokemon *mon = Party_GetMonByIndex(partyMenu->args->party, partySlot);
     UnmanagedSpriteTemplate sp1C;
     int isEgg;
@@ -423,7 +423,7 @@ void sub_0207EBE4(PartyMenu *partyMenu, u8 partySlot, u16 x, u16 y, NARC *narc) 
     partyMenu->monsDrawState[partySlot].mainScreenIconSprite = SpriteSystem_CreateSpriteFromResourceHeader(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, &sp1C);
 }
 
-void sub_0207ECE0(PartyMenu *partyMenu, u8 partySlot) {
+void PartyMenu_ReloadMonIconGraphics(PartyMenu *partyMenu, u8 partySlot) {
     Pokemon *mon;
     NARC *narc;
     int species;
@@ -452,7 +452,7 @@ void sub_0207ECE0(PartyMenu *partyMenu, u8 partySlot) {
     NARC_Delete(narc);
 }
 
-void sub_0207EDD4(PartyMenu *partyMenu) {
+void PartyMenu_CreateSprites(PartyMenu *partyMenu) {
     partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR] = SpriteSystem_CreateSpriteFromResourceHeader(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, &sSpriteTemplates[0]);
     partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR] = SpriteSystem_CreateSpriteFromResourceHeader(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, &sSpriteTemplates[1]);
     partyMenu->sprites[PARTY_MENU_SPRITE_ID_8] = SpriteSystem_CreateSpriteFromResourceHeader(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, &sSpriteTemplates[2]);
@@ -476,7 +476,7 @@ void sub_0207EDD4(PartyMenu *partyMenu) {
     Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_28], FALSE);
 }
 
-void sub_0207EF5C(PartyMenu *partyMenu, u8 partySlot, u16 x, u16 y) {
+void PartyMenu_CreateBallSprite(PartyMenu *partyMenu, u8 partySlot, u16 x, u16 y) {
     UnmanagedSpriteTemplate sp0;
 
     sp0.resourceSet = 0;
@@ -551,14 +551,14 @@ void PartyMenu_DrawMonCapsuleIcon(PartyMenu *partyMenu, u8 partySlot) {
     }
 }
 
-static void sub_0207F0FC(Sprite *sprite, u8 seqNo) {
+static void PartyMenu_SetIconAnimSeqIfChanged(Sprite *sprite, u8 seqNo) {
     if (seqNo != Sprite_GetAnimationNumber(sprite)) {
         Sprite_SetAnimationFrame(sprite, 0);
         Sprite_SetAnimCtrlSeq(sprite, seqNo);
     }
 }
 
-static int sub_0207F11C(PartyMenuMonsDrawState *monDraw) {
+static int PartyMenu_GetMonIconAnimSeq(PartyMenuMonsDrawState *monDraw) {
     if (monDraw->hp == 0) {
         return 0;
     }
@@ -580,7 +580,7 @@ static int sub_0207F11C(PartyMenuMonsDrawState *monDraw) {
     }
 }
 
-void sub_0207F178(PartyMenu *partyMenu) {
+void PartyMenu_UpdateMonIconAnims(PartyMenu *partyMenu) {
     PartyMenuMonsDrawState *monDraw;
     u16 i;
 
@@ -591,9 +591,9 @@ void sub_0207F178(PartyMenu *partyMenu) {
             if (partyMenu->swapMonsData.active == 1 && (partyMenu->swapMonsData.slots[0] == i || partyMenu->swapMonsData.slots[1] == i)) {
                 animSeqNo = 0;
             } else {
-                animSeqNo = sub_0207F11C(monDraw);
+                animSeqNo = PartyMenu_GetMonIconAnimSeq(monDraw);
             }
-            sub_0207F0FC(monDraw->iconSprite, animSeqNo);
+            PartyMenu_SetIconAnimSeqIfChanged(monDraw->iconSprite, animSeqNo);
             Sprite_UpdateAnim(monDraw->iconSprite, FX32_ONE);
             if (partyMenu->partyMonIndex == i && animSeqNo != 0 && animSeqNo != 5) {
                 if (Sprite_GetAnimationFrame(monDraw->iconSprite) == 0) {
@@ -608,10 +608,10 @@ void sub_0207F178(PartyMenu *partyMenu) {
     }
 }
 
-void sub_0207F240(PartyMenu *partyMenu, u8 partySlot, int selected) {
+void PartyMenu_ShowCursorAtSlot(PartyMenu *partyMenu, u8 partySlot, int selected) {
     u8 sp1, sp0;
     DpadMenuBox_GetPosition(&partyMenu->dpadMenuBox[partySlot], &sp1, &sp0);
-    Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], sub_0207B5EC(partyMenu->args->unk_25, partySlot));
+    Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->unk_25, partySlot));
     Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], TRUE);
     Sprite_SetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], sp1, sp0);
     thunk_Sprite_SetPaletteOverride(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], selected);

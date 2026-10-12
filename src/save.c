@@ -48,8 +48,8 @@ static void Save_InitDynamicRegion_Internal(u8 *dynamic_region, struct SaveArray
 static void CreateChunkFooter(SaveData *saveData, void *data, int idx, u32 size);
 static BOOL ValidateChunk(SaveData *saveData, void *data, int idx, u32 size);
 static u32 SaveArray_GetFooterSaveNo(void *data, u32 size);
-static void sub_020286B4(SaveData *saveData, int a1, u32 *a2, u32 *a3, u8 *a4);
-static void sub_020286D4(SaveData *saveData, int a1, u32 a2, u32 a3, u8 a4);
+static void Save_GetExtraChunkKeys(SaveData *saveData, int a1, u32 *a2, u32 *a3, u8 *a4);
+static void Save_SetExtraChunkKeys(SaveData *saveData, int a1, u32 a2, u32 a3, u8 a4);
 static BOOL SaveDetectFlash(void);
 static s32 FlashWriteChunk(u32 offset, void *data, u32 size);
 static BOOL FlashLoadChunk(u32 offset, void *data, u32 size);
@@ -538,9 +538,9 @@ static void Save_CheckFrontierData(SaveData *saveData, int *err1, int *err2) {
     *err1 = 1;
     *err2 = 1;
     if (Save_CheckExtraChunksExist(saveData)) {
-        sub_0202AC38(misc, 1, &sp0C, &sp08, &sp04);
+        SaveMisc_GetExtraChunkKeys(misc, 1, &sp0C, &sp08, &sp04);
         if (sp0C != -1 || sp08 != -1) {
-            Heap_Free(sub_020284A4(saveData, HEAP_ID_3, 1, &sp14, &sp10));
+            Heap_Free(ReadExtraSaveChunkKeyed(saveData, HEAP_ID_3, 1, &sp14, &sp10));
             if (sp14 == 2) {
                 *err1 = 3;
             } else if (sp14 == 1 && sp10 == 1) {
@@ -548,9 +548,9 @@ static void Save_CheckFrontierData(SaveData *saveData, int *err1, int *err2) {
             }
         }
         for (i = 2; i <= 5; i++) {
-            sub_0202AC38(misc, i, &sp0C, &sp08, &sp04);
+            SaveMisc_GetExtraChunkKeys(misc, i, &sp0C, &sp08, &sp04);
             if (sp0C != -1 || sp08 != -1) {
-                Heap_Free(sub_020284A4(saveData, HEAP_ID_3, i, &sp14, &sp10));
+                Heap_Free(ReadExtraSaveChunkKeyed(saveData, HEAP_ID_3, i, &sp14, &sp10));
                 if (sp14 == 2) {
                     *err2 = 3;
                 } else if (sp14 == 1 && sp10 == 1 && *err2 != 3) {
@@ -910,7 +910,7 @@ int WriteExtraSaveChunk(SaveData *saveData, int idx, void *data) {
     return 3;
 }
 
-int sub_02028230(SaveData *saveData, int idx, void *data) {
+int WriteExtraSaveChunkKeyed(SaveData *saveData, int idx, void *data) {
     const struct ExtraSaveChunkHeader *hdr;
     u32 size;
     int ret;
@@ -924,11 +924,11 @@ int sub_02028230(SaveData *saveData, int idx, void *data) {
     hdr = &gExtraSaveChunkHeaders[idx];
     GF_ASSERT(hdr->id == idx);
     size = hdr->sizeFunc() + sizeof(struct SaveArrayFooter);
-    sub_020286B4(saveData, idx, &sp14, &sp10, &sp0C);
+    Save_GetExtraChunkKeys(saveData, idx, &sp14, &sp10, &sp0C);
     do {
         r6 = PRandom(sp14);
     } while (r6 == -1);
-    sub_020286D4(saveData, idx, r6, sp14, sp0C ^ 1);
+    Save_SetExtraChunkKeys(saveData, idx, r6, sp14, sp0C ^ 1);
     *(u32 *)data = r6;
     if (sp0C == 1) {
         CreateChunkFooter(saveData, data, idx, hdr->sizeFunc());
@@ -1001,7 +1001,7 @@ void *ReadExtraSaveChunk(SaveData *saveData, enum HeapID heapID, int idx, int *r
     return ret;
 }
 
-void *sub_020284A4(SaveData *saveData, enum HeapID heapID, int idx, int *ret_p, int *ret2_p) {
+void *ReadExtraSaveChunkKeyed(SaveData *saveData, enum HeapID heapID, int idx, int *ret_p, int *ret2_p) {
     const struct ExtraSaveChunkHeader *hdr;
     u32 sp2C;
     u32 sp28;
@@ -1022,7 +1022,7 @@ void *sub_020284A4(SaveData *saveData, enum HeapID heapID, int idx, int *ret_p, 
     GF_ASSERT(hdr->id == idx);
     size = hdr->sizeFunc() + sizeof(struct SaveArrayFooter);
     ret = Heap_Alloc(heapID, size);
-    sub_020286B4(saveData, idx, &sp24, &sp20, &sp1C);
+    Save_GetExtraChunkKeys(saveData, idx, &sp24, &sp20, &sp1C);
     FlashLoadChunk(hdr->sector * SAVE_SECTOR_SIZE, ret, size);
     valid1 = ValidateChunk(saveData, ret, idx, hdr->sizeFunc());
     MI_CpuCopy8(ret, &sp2C, sizeof(u32));
@@ -1033,7 +1033,7 @@ void *sub_020284A4(SaveData *saveData, enum HeapID heapID, int idx, int *ret_p, 
     *ret2_p = 0;
     if (valid1 == TRUE && valid2 == FALSE && sp24 == sp2C) {
         if (sp1C == 1) {
-            sub_020286D4(saveData, idx, sp20, sp20, 0);
+            Save_SetExtraChunkKeys(saveData, idx, sp20, sp20, 0);
             *ret2_p = 1;
         }
         FlashLoadChunk(hdr->sector * SAVE_SECTOR_SIZE, ret, size);
@@ -1041,7 +1041,7 @@ void *sub_020284A4(SaveData *saveData, enum HeapID heapID, int idx, int *ret_p, 
     }
     if (valid1 == FALSE && valid2 == TRUE && sp24 == sp28) {
         if (sp1C == 0) {
-            sub_020286D4(saveData, idx, sp20, sp20, 1);
+            Save_SetExtraChunkKeys(saveData, idx, sp20, sp20, 1);
             *ret2_p = 1;
         }
         FlashLoadChunk((hdr->sector + 64) * SAVE_SECTOR_SIZE, ret, size);
@@ -1053,7 +1053,7 @@ void *sub_020284A4(SaveData *saveData, enum HeapID heapID, int idx, int *ret_p, 
                 FlashLoadChunk(hdr->sector * SAVE_SECTOR_SIZE, ret, size);
                 return ret;
             } else if (sp20 == sp28) {
-                sub_020286D4(saveData, idx, sp20, sp20, sp1C ^ 1);
+                Save_SetExtraChunkKeys(saveData, idx, sp20, sp20, sp1C ^ 1);
                 *ret2_p = 1;
                 FlashLoadChunk((hdr->sector + 64) * SAVE_SECTOR_SIZE, ret, size);
                 return ret;
@@ -1063,7 +1063,7 @@ void *sub_020284A4(SaveData *saveData, enum HeapID heapID, int idx, int *ret_p, 
                 FlashLoadChunk((hdr->sector + 64) * SAVE_SECTOR_SIZE, ret, size);
                 return ret;
             } else if (sp20 == sp2C) {
-                sub_020286D4(saveData, idx, sp20, sp20, sp1C ^ 1);
+                Save_SetExtraChunkKeys(saveData, idx, sp20, sp20, sp1C ^ 1);
                 *ret2_p = 1;
                 FlashLoadChunk(hdr->sector * SAVE_SECTOR_SIZE, ret, size);
                 return ret;
@@ -1071,16 +1071,16 @@ void *sub_020284A4(SaveData *saveData, enum HeapID heapID, int idx, int *ret_p, 
         }
     }
     *ret_p = 2;
-    sub_0202AC60(misc, hdr->id, -1, -1, 0);
+    SaveMisc_SetExtraChunkKeys(misc, hdr->id, -1, -1, 0);
     return ret;
 }
 
-static void sub_020286B4(SaveData *saveData, int a1, u32 *a2, u32 *a3, u8 *a4) {
-    sub_0202AC38(Save_Misc_Get(saveData), a1, a2, a3, a4);
+static void Save_GetExtraChunkKeys(SaveData *saveData, int a1, u32 *a2, u32 *a3, u8 *a4) {
+    SaveMisc_GetExtraChunkKeys(Save_Misc_Get(saveData), a1, a2, a3, a4);
 }
 
-static void sub_020286D4(SaveData *saveData, int a1, u32 a2, u32 a3, u8 a4) {
-    sub_0202AC60(Save_Misc_Get(saveData), a1, a2, a3, a4);
+static void Save_SetExtraChunkKeys(SaveData *saveData, int a1, u32 a2, u32 a3, u8 a4) {
+    SaveMisc_SetExtraChunkKeys(Save_Misc_Get(saveData), a1, a2, a3, a4);
 }
 
 static BOOL SaveDetectFlash(void) {

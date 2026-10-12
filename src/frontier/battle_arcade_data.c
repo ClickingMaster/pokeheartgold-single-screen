@@ -185,8 +185,8 @@ u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u1
         if (flag == 1) {
             ctx[0] = gBattleArcadeData;
             frontier = Save_Frontier_GetStatic(ctx[0]->saveData);
-            index = sub_0205C2C0(gBattleArcadeData->type);
-            ctx[0]->winStreak = FrontierSave_GetStat(frontier, index, sub_0205C268(sub_0205C2C0(ctx[0]->type)));
+            index = BattleArcade_GetWinStreakStat(gBattleArcadeData->type);
+            ctx[0]->winStreak = FrontierSave_GetStat(frontier, index, FrontierStat_GetFriendIndex(BattleArcade_GetWinStreakStat(ctx[0]->type)));
         } else {
             gBattleArcadeData->winStreak = 0;
         }
@@ -205,8 +205,8 @@ u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u1
         ctx[0]->randomFlag = ArcadeChallenge_GetField(record, 1, 0, 0, 0);
         saved = (ArcadeContext *)gBattleArcadeData; // the redundant cast is needed to match
         frontier = Save_Frontier_GetStatic(saved->saveData);
-        index = sub_0205C2C0(gBattleArcadeData->type);
-        saved->winStreak = FrontierSave_GetStat(frontier, index, sub_0205C268(sub_0205C2C0(ctx[0]->type)));
+        index = BattleArcade_GetWinStreakStat(gBattleArcadeData->type);
+        saved->winStreak = FrontierSave_GetStat(frontier, index, FrontierStat_GetFriendIndex(BattleArcade_GetWinStreakStat(ctx[0]->type)));
         saved->round = saved->winStreak / 7;
         for (i = 0; i < 3; i++) {
             ctx[0] = gBattleArcadeData;
@@ -363,20 +363,20 @@ void BattleArcadeData_SaveRecord(ArcadeContext *ctx, u32 mode) {
     ArcadeChallenge_SetField((void *)ctx->challenge, 1, 0, 0, &value.byte);
 
     frontier = Save_Frontier_GetStatic(ctx->saveData);
-    index = sub_0205C2C0(ctx->type);
-    key = sub_0205C268(sub_0205C2C0(ctx->type));
+    index = BattleArcade_GetWinStreakStat(ctx->type);
+    key = FrontierStat_GetFriendIndex(BattleArcade_GetWinStreakStat(ctx->type));
     FrontierSave_SetStat(frontier, index, key, ctx->winStreak);
 
     if (mode != 2) {
         frontier = Save_Frontier_GetStatic(ctx->saveData);
-        index = sub_0205C2E8(ctx->type);
-        key = sub_0205C268(sub_0205C2E8(ctx->type));
+        index = BattleArcade_GetBestStreakStat(ctx->type);
+        key = FrontierStat_GetFriendIndex(BattleArcade_GetBestStreakStat(ctx->type));
         FrontierSave_RaiseStat(frontier, index, key, ctx->winStreak);
         value.byte = ctx->unk2F;
         ArcadeFlags_SetField(typeRecord, 8, ctx->type, 0, &value.byte);
         if (ctx->type == 3) {
             frontier = Save_Frontier_GetStatic(ctx->saveData);
-            key = sub_0205C268(110);
+            key = FrontierStat_GetFriendIndex(110);
             FrontierSave_SetStat(frontier, 110, key, ctx->unk2F);
         }
     }

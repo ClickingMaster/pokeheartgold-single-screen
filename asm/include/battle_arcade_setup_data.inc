@@ -9,7 +9,7 @@
 .public Comm_GetLocalNetId
 .public BattleSetup_New
 .public BattleSetup_AddMonToParty
-.public sub_02051D18
+.public BattleSetup_InitFromSaveData
 .public BattleSetup_SetAllySideBattlersToPlayer
 .public AllocMonZeroed
 .public SetMonData

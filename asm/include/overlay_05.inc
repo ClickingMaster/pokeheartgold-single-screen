@@ -154,7 +154,7 @@
 .public ItemIdIsMail
 .public Bag_HasItem
 .public Save_Bag_Get
-.public sub_0207CAAC
+.public PartyMenu_LoadPanelTilemaps
 .public CalculateHpBarPixelsLength
 .public CalculateHpBarColor
 .public BeginAppScreenFade

@@ -86,7 +86,7 @@ BOOL sub_02096A34(u8 *data) {
     *(u16 *)(data + 8) = data[0xA0];
     stat = ov80_022385D8(data[0xA0]);
     frontier = Save_Frontier_GetStatic(*(SaveData **)data);
-    *(u16 *)(data + 0xA) = FrontierSave_GetStat(frontier, stat, sub_0205C268(stat));
+    *(u16 *)(data + 0xA) = FrontierSave_GetStat(frontier, stat, FrontierStat_GetFriendIndex(stat));
     if (Comm_SendCommand(0x39, data + 8, 0x28) == 1) {
         return TRUE;
     }

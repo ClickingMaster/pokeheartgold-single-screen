@@ -64,14 +64,14 @@ static void BattleInput_SetMoveDisplayObjectTextFont(BattleInput *battleInput, S
 static void BattleInput_CreateMoveTypeIcons(BattleInput *battleInput);
 static void BattleInput_DeleteAndFreeTypeIconGraphics(BattleInput *battleInput);
 static void BattleInput_DeleteAndFreeCategoryIconGraphics(BattleInput *battleInput);
-static void ov12_02268C30(BattleInput *battleInput, int moveType, int movePos);
+static void BattleInput_LoadMoveTypePalette(BattleInput *battleInput, int moveType, int movePos);
 static void ov12_02268C4C(BattleInput *battleInput, int movePos);
 static void ov12_02268CA0(BattleInput *battleInput, int param1);
-static void ov12_02268D5C(void);
+static void BattleInput_ShowOnlySubBgLayer2(void);
 static void ov12_02268D88(BattleInput *battleInput, int param1, int param2);
 static void BattleInput_FreePersistentResources(BattleInput *battleInput);
 static void BattleInput_GetMonsHitArray(BattleInput *battleInput, u8 *monsHit, int checkMonExists);
-static void ov12_02268E2C(BattleInput *battleInput, int param1, u8 *monsHit, int checkExists);
+static void BattleInput_GetMonsHitBySelectedTarget(BattleInput *battleInput, int param1, u8 *monsHit, int checkExists);
 static void BattleInput_StartFeedbackTask(SysTaskFunc task, BattleInput *battleInput);
 static void BattleInput_DestroyFeedbackTask(BattleInput *battleInput);
 static void BattleInput_Deadstriped_02268EDC(BattleInput *battleInput, int touchInput);
@@ -84,8 +84,8 @@ static int GetPPTextColor(int pp, int maxPp);
 static void Task_BattleMenuSlideIn(SysTask *task, void *data);
 static void VBlankTask_BattleMenuSlideIn(SysTask *task, void *data);
 static void HBlankCB_BattleMenuSlideIn(void *data);
-static void ov12_02269830(SysTask *task, void *data);
-static void ov12_0226989C(SysTask *task, void *data);
+static void Task_ApplyMenuBgLayerSettings(SysTask *task, void *data);
+static void Task_ShowOnlySubBgLayer2(SysTask *task, void *data);
 static void Task_FadeInBattleMenuBackground(SysTask *task, void *data);
 static void Task_BattleMenuMessageWaitForTouchResponse(SysTask *task, void *data);
 static int BattleInput_CheckCursorInput(BattleInput *battleInput);
@@ -1494,7 +1494,7 @@ void BattleInput_ChangeMenu(NARC *narc0, NARC *narc1, BattleInput *battleInput, 
         menuTemplate->funcCreateMenuObjects(battleInput, menuId, a4);
     }
 
-    SysTask_CreateOnVWaitQueue(ov12_02269830, battleInput, 10);
+    SysTask_CreateOnVWaitQueue(Task_ApplyMenuBgLayerSettings, battleInput, 10);
 }
 
 void BattleInput_LoadBallGaugeResources(NARC *narc, BattleInput *battleInput) {
@@ -2076,7 +2076,7 @@ static void BattleInput_CreateFightMenuObjects(BattleInput *battleInput, int par
     for (i = 0; i < MAX_MON_MOVES; i++) {
         if (fightMenu->moveNo[i] != MOVE_NONE) {
             moveType = GetMoveAttr(fightMenu->moveNo[i], MOVEATTR_TYPE);
-            ov12_02268C30(battleInput, moveType, i);
+            BattleInput_LoadMoveTypePalette(battleInput, moveType, i);
         } else {
             ov12_02268C4C(battleInput, i);
             break;
@@ -2807,7 +2807,7 @@ static void ov12_022686BC(BattleInput *battleInput) {
     BattleInput_GetMonsHitArray(battleInput, moveRange, 0);
 
     if (moveRange[0] == 1) {
-        ov12_02268E2C(battleInput, 1, hitsMultiple, 0);
+        BattleInput_GetMonsHitBySelectedTarget(battleInput, 1, hitsMultiple, 0);
 
         if (hitsMultiple[2] == 1) {
             for (i = 12; i <= 16; i++) {
@@ -2831,7 +2831,7 @@ static void ov12_022686BC(BattleInput *battleInput) {
     }
 
     if (moveRange[1] == 1) {
-        ov12_02268E2C(battleInput, 2, hitsMultiple, 0);
+        BattleInput_GetMonsHitBySelectedTarget(battleInput, 2, hitsMultiple, 0);
 
         if (hitsMultiple[2] == 1) {
             for (i = 10; i <= 10; i++) {
@@ -3024,7 +3024,7 @@ static void BattleInput_DeleteAndFreeCategoryIconGraphics(BattleInput *battleInp
     }
 }
 
-static void ov12_02268C30(BattleInput *battleInput, int moveType, int movePos) {
+static void BattleInput_LoadMoveTypePalette(BattleInput *battleInput, int moveType, int movePos) {
     ov06_0221BA1C(BattleSystem_GetPaletteData(battleInput->battleSystem), moveType, HEAP_ID_BATTLE, PLTTBUF_SUB_BG, 8 + movePos);
 }
 
@@ -3055,7 +3055,7 @@ static void ov12_02268CA0(BattleInput *battleInput, int textObjId) {
     ScheduleBgTilemapBufferTransfer(bgConfig, 5);
 }
 
-static void ov12_02268D5C(void) {
+static void BattleInput_ShowOnlySubBgLayer2(void) {
     for (int i = 0; i < 4; i++) {
         if (GF_BG_LYR_SUB_0 + i != GF_BG_LYR_SUB_2) {
             ToggleBgLayer(GF_BG_LYR_SUB_0 + i, GF_PLANE_TOGGLE_OFF);
@@ -3071,7 +3071,7 @@ static void ov12_02268D88(BattleInput *battleInput, int param1, int param2) {
     }
 
     if (param2 == 1) {
-        SysTask_CreateOnVWaitQueue(ov12_0226989C, battleInput, 10);
+        SysTask_CreateOnVWaitQueue(Task_ShowOnlySubBgLayer2, battleInput, 10);
     }
 }
 
@@ -3104,7 +3104,7 @@ static void BattleInput_GetMonsHitArray(BattleInput *battleInput, u8 *monsHit, i
     }
 }
 
-static void ov12_02268E2C(BattleInput *battleInput, int param1, u8 *monsHit, int checkExists) {
+static void BattleInput_GetMonsHitBySelectedTarget(BattleInput *battleInput, int param1, u8 *monsHit, int checkExists) {
     BattleInputTargetMenu *menu;
     int i;
 
@@ -3362,7 +3362,7 @@ static void Task_TargetMenuButtonFeedback(SysTask *task, void *data) {
 
     switch (battleInput->feedback.state) {
     case 0:
-        ov12_02268E2C(battleInput, battleInput->feedback.monSelect.ret, v4, 1);
+        BattleInput_GetMonsHitBySelectedTarget(battleInput, battleInput->feedback.monSelect.ret, v4, 1);
 
         for (i = 0; i < 4; i++) {
             if (v4[i] == 1) {
@@ -3391,7 +3391,7 @@ static void Task_TargetMenuButtonFeedback(SysTask *task, void *data) {
         battleInput->feedback.delay = 0;
         battleInput->feedback.state++;
     case 2:
-        ov12_02268E2C(battleInput, battleInput->feedback.monSelect.ret, v4, 1);
+        BattleInput_GetMonsHitBySelectedTarget(battleInput, battleInput->feedback.monSelect.ret, v4, 1);
 
         for (i = 0; i < 4; i++) {
             if (v4[i] == 1) {
@@ -3603,7 +3603,7 @@ static void HBlankCB_BattleMenuSlideIn(void *data) {
     }
 }
 
-static void ov12_02269830(SysTask *task, void *data) {
+static void Task_ApplyMenuBgLayerSettings(SysTask *task, void *data) {
     BattleInput *battleInput = data;
     const BattleMenuTemplate *menu;
     int i;
@@ -3625,8 +3625,8 @@ static void ov12_02269830(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-static void ov12_0226989C(SysTask *task, void *data) {
-    ov12_02268D5C();
+static void Task_ShowOnlySubBgLayer2(SysTask *task, void *data) {
+    BattleInput_ShowOnlySubBgLayer2();
     SysTask_Destroy(task);
 }
 
@@ -3758,7 +3758,7 @@ static int BattleInput_CursorMove_MainMenu(BattleInput *battleInput, int shouldI
         cursor->menuX = cursorPos->commandX;
         cursor->menuY = cursorPos->commandY;
         input = sCursorArrayMainMenu[cursor->menuY][cursor->menuX];
-        ov12_0226BB1C(battleInput->cursor, menu->touchscreenRect[input].rect.left + 8, menu->touchscreenRect[input].rect.right - 8, menu->touchscreenRect[input].rect.top + 8, menu->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
+        BattleCursor_SetRectWithOffset(battleInput->cursor, menu->touchscreenRect[input].rect.left + 8, menu->touchscreenRect[input].rect.right - 8, menu->touchscreenRect[input].rect.top + 8, menu->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
         return TOUCH_MENU_NO_INPUT;
     }
 
@@ -3798,7 +3798,7 @@ static int BattleInput_CursorMove_MainMenu(BattleInput *battleInput, int shouldI
     case PAD_KEY_LEFT:
     case PAD_KEY_RIGHT:
         input = sCursorArrayMainMenu[cursor->menuY][cursor->menuX];
-        ov12_0226BB1C(battleInput->cursor, menu->touchscreenRect[input].rect.left + 8, menu->touchscreenRect[input].rect.right - 8, menu->touchscreenRect[input].rect.top + 8, menu->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
+        BattleCursor_SetRectWithOffset(battleInput->cursor, menu->touchscreenRect[input].rect.left + 8, menu->touchscreenRect[input].rect.right - 8, menu->touchscreenRect[input].rect.top + 8, menu->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
         break;
     case PAD_BUTTON_A:
         return sCursorArrayMainMenu[cursor->menuY][cursor->menuX];
@@ -3858,7 +3858,7 @@ static int BattleInput_CursorMove_PalParkMenu(BattleInput *battleInput, int shou
         cursor->menuX = 0;
         cursor->menuY = 0;
         input = sCursorArrayPalParkMenu[cursor->menuY][cursor->menuX];
-        ov12_0226BB1C(battleInput->cursor, menu->touchscreenRect[input].rect.left + 8, menu->touchscreenRect[input].rect.right - 8, menu->touchscreenRect[input].rect.top + 8, menu->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
+        BattleCursor_SetRectWithOffset(battleInput->cursor, menu->touchscreenRect[input].rect.left + 8, menu->touchscreenRect[input].rect.right - 8, menu->touchscreenRect[input].rect.top + 8, menu->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
         return TOUCH_MENU_NO_INPUT;
     }
 
@@ -3870,7 +3870,7 @@ static int BattleInput_CursorMove_PalParkMenu(BattleInput *battleInput, int shou
     case PAD_KEY_LEFT:
     case PAD_KEY_RIGHT:
         input = sCursorArrayPalParkMenu[cursor->menuY][cursor->menuX];
-        ov12_0226BB1C(battleInput->cursor, menu->touchscreenRect[input].rect.left + 8, menu->touchscreenRect[input].rect.right - 8, menu->touchscreenRect[input].rect.top + 8, menu->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
+        BattleCursor_SetRectWithOffset(battleInput->cursor, menu->touchscreenRect[input].rect.left + 8, menu->touchscreenRect[input].rect.right - 8, menu->touchscreenRect[input].rect.top + 8, menu->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
         break;
     case PAD_BUTTON_A:
         return sCursorArrayPalParkMenu[cursor->menuY][cursor->menuX];
@@ -3908,7 +3908,7 @@ static int BattleInput_CursorMove_FightMenu(BattleInput *battleInput, int param1
             input = sCursorArrayFightMenu[cursor->menuY][cursor->menuX];
         }
 
-        ov12_0226BB1C(battleInput->cursor, menuTemplate->touchscreenRect[input].rect.left + 8, menuTemplate->touchscreenRect[input].rect.right - 8, menuTemplate->touchscreenRect[input].rect.top + 8, menuTemplate->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
+        BattleCursor_SetRectWithOffset(battleInput->cursor, menuTemplate->touchscreenRect[input].rect.left + 8, menuTemplate->touchscreenRect[input].rect.right - 8, menuTemplate->touchscreenRect[input].rect.top + 8, menuTemplate->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
         return TOUCH_MENU_NO_INPUT;
     }
 
@@ -3921,7 +3921,7 @@ static int BattleInput_CursorMove_FightMenu(BattleInput *battleInput, int param1
     case PAD_KEY_LEFT:
     case PAD_KEY_RIGHT:
         input = sCursorArrayFightMenu[cursor->menuY][cursor->menuX];
-        ov12_0226BB1C(battleInput->cursor, menuTemplate->touchscreenRect[input].rect.left + 8, menuTemplate->touchscreenRect[input].rect.right - 8, menuTemplate->touchscreenRect[input].rect.top + 8, menuTemplate->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
+        BattleCursor_SetRectWithOffset(battleInput->cursor, menuTemplate->touchscreenRect[input].rect.left + 8, menuTemplate->touchscreenRect[input].rect.right - 8, menuTemplate->touchscreenRect[input].rect.top + 8, menuTemplate->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
         break;
     case PAD_BUTTON_A:
         return sCursorArrayFightMenu[cursor->menuY][cursor->menuX];
@@ -4143,21 +4143,21 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param
             }
 
             input = sTargetMenuButtonInputArray[cursor->menuY][cursor->menuX];
-            ov12_0226BB1C(battleInput->cursor, menuTemplate->touchscreenRect[input].rect.left + 8, menuTemplate->touchscreenRect[input].rect.right - 8, menuTemplate->touchscreenRect[input].rect.top + 8, menuTemplate->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
+            BattleCursor_SetRectWithOffset(battleInput->cursor, menuTemplate->touchscreenRect[input].rect.left + 8, menuTemplate->touchscreenRect[input].rect.right - 8, menuTemplate->touchscreenRect[input].rect.top + 8, menuTemplate->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
         } else {
             cursor->menuX = 0;
             cursor->menuY = 0;
 
             if (((cursorRightBottom == -1) && (cursorLeftBottom == -1)) || (v17 == -1)) {
-                ov12_0226BB1C(battleInput->cursor, cursorLeft, cursorRight, cursorTop, cursorBottom, FX32_CONST(272));
+                BattleCursor_SetRectWithOffset(battleInput->cursor, cursorLeft, cursorRight, cursorTop, cursorBottom, FX32_CONST(272));
             } else if ((cursorRightBottom != -1) && (cursorLeftBottom == -1)) {
-                ov12_0226BA4C(battleInput->cursor, cursorLeft, cursorTop, cursorRight, cursorTop, cursorLeft, cursorRightBottom, cursorRight, cursorBottom, FX32_CONST(272));
+                BattleCursor_SetCornersWithOffset(battleInput->cursor, cursorLeft, cursorTop, cursorRight, cursorTop, cursorLeft, cursorRightBottom, cursorRight, cursorBottom, FX32_CONST(272));
             } else {
-                ov12_0226BA4C(battleInput->cursor, cursorLeft, cursorTop, cursorRight, cursorTop, cursorLeft, cursorBottom, cursorRight, cursorLeftBottom, FX32_CONST(272));
+                BattleCursor_SetCornersWithOffset(battleInput->cursor, cursorLeft, cursorTop, cursorRight, cursorTop, cursorLeft, cursorBottom, cursorRight, cursorLeftBottom, FX32_CONST(272));
             }
 
             if (v17 != -1) {
-                ov12_0226BB40(battleInput->cursor, v17, v18, anim, FX32_CONST(272));
+                BattleCursor_ShowExtraSpriteWithOffset(battleInput->cursor, v17, v18, anim, FX32_CONST(272));
             }
         }
 
@@ -4177,25 +4177,25 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param
     case PAD_KEY_RIGHT:
         if (multiTarget == FALSE) {
             input = sTargetMenuButtonInputArray[cursor->menuY][cursor->menuX];
-            ov12_0226BB1C(battleInput->cursor, menuTemplate->touchscreenRect[input].rect.left + 8, menuTemplate->touchscreenRect[input].rect.right - 8, menuTemplate->touchscreenRect[input].rect.top + 8, menuTemplate->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
+            BattleCursor_SetRectWithOffset(battleInput->cursor, menuTemplate->touchscreenRect[input].rect.left + 8, menuTemplate->touchscreenRect[input].rect.right - 8, menuTemplate->touchscreenRect[input].rect.top + 8, menuTemplate->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
         } else {
             if (cursor->menuY == 0) {
                 if (((cursorLeftBottom == -1) && (cursorRightBottom == -1)) || (v17 == -1)) {
-                    ov12_0226BB1C(battleInput->cursor, cursorLeft, cursorRight, cursorTop, cursorBottom, FX32_CONST(272));
+                    BattleCursor_SetRectWithOffset(battleInput->cursor, cursorLeft, cursorRight, cursorTop, cursorBottom, FX32_CONST(272));
                 } else if ((cursorRightBottom != -1) && (cursorLeftBottom == -1)) {
-                    ov12_0226BA4C(battleInput->cursor, cursorLeft, cursorTop, cursorRight, cursorTop, cursorLeft, cursorRightBottom, cursorRight, cursorBottom, FX32_CONST(272));
+                    BattleCursor_SetCornersWithOffset(battleInput->cursor, cursorLeft, cursorTop, cursorRight, cursorTop, cursorLeft, cursorRightBottom, cursorRight, cursorBottom, FX32_CONST(272));
                 } else {
-                    ov12_0226BA4C(battleInput->cursor, cursorLeft, cursorTop, cursorRight, cursorTop, cursorLeft, cursorBottom, cursorRight, cursorLeftBottom, FX32_CONST(272));
+                    BattleCursor_SetCornersWithOffset(battleInput->cursor, cursorLeft, cursorTop, cursorRight, cursorTop, cursorLeft, cursorBottom, cursorRight, cursorLeftBottom, FX32_CONST(272));
                 }
 
                 if (v17 != -1) {
-                    ov12_0226BB40(battleInput->cursor, v17, v18, anim, FX32_CONST(272));
+                    BattleCursor_ShowExtraSpriteWithOffset(battleInput->cursor, v17, v18, anim, FX32_CONST(272));
                 } else {
-                    ov12_0226BB84(battleInput->cursor);
+                    BattleCursor_HideExtraSprite(battleInput->cursor);
                 }
             } else {
-                ov12_0226BB1C(battleInput->cursor, menuTemplate->touchscreenRect[4].rect.left + 8, menuTemplate->touchscreenRect[4].rect.right - 8, menuTemplate->touchscreenRect[4].rect.top + 8, menuTemplate->touchscreenRect[4].rect.bottom - 8, FX32_CONST(272));
-                ov12_0226BB84(battleInput->cursor);
+                BattleCursor_SetRectWithOffset(battleInput->cursor, menuTemplate->touchscreenRect[4].rect.left + 8, menuTemplate->touchscreenRect[4].rect.right - 8, menuTemplate->touchscreenRect[4].rect.top + 8, menuTemplate->touchscreenRect[4].rect.bottom - 8, FX32_CONST(272));
+                BattleCursor_HideExtraSprite(battleInput->cursor);
             }
         }
         break;
@@ -4261,7 +4261,7 @@ static int BattleInput_CursorMove_TwoOptionsMenu(BattleInput *battleInput, int p
 
     if (param1 == 1) {
         input = sTwoOptionsMenuCursorInput[cursor->menuY][cursor->menuX];
-        ov12_0226BB1C(battleInput->cursor, menuTemplate->touchscreenRect[input].rect.left + 8, menuTemplate->touchscreenRect[input].rect.right - 8, menuTemplate->touchscreenRect[input].rect.top + 8, menuTemplate->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
+        BattleCursor_SetRectWithOffset(battleInput->cursor, menuTemplate->touchscreenRect[input].rect.left + 8, menuTemplate->touchscreenRect[input].rect.right - 8, menuTemplate->touchscreenRect[input].rect.top + 8, menuTemplate->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
         return TOUCH_MENU_NO_INPUT;
     }
 
@@ -4273,7 +4273,7 @@ static int BattleInput_CursorMove_TwoOptionsMenu(BattleInput *battleInput, int p
     case PAD_KEY_LEFT:
     case PAD_KEY_RIGHT:
         input = sTwoOptionsMenuCursorInput[cursor->menuY][cursor->menuX];
-        ov12_0226BB1C(battleInput->cursor, menuTemplate->touchscreenRect[input].rect.left + 8, menuTemplate->touchscreenRect[input].rect.right - 8, menuTemplate->touchscreenRect[input].rect.top + 8, menuTemplate->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
+        BattleCursor_SetRectWithOffset(battleInput->cursor, menuTemplate->touchscreenRect[input].rect.left + 8, menuTemplate->touchscreenRect[input].rect.right - 8, menuTemplate->touchscreenRect[input].rect.top + 8, menuTemplate->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
         break;
     case PAD_BUTTON_A:
         input = sTwoOptionsMenuCursorInput[cursor->menuY][cursor->menuX];
@@ -4443,12 +4443,12 @@ static int BattleInput_CatchingTutorialMain(BattleInput *battleInput) {
 static int BattleInput_CatchingTutorialCB_Fight(BattleInput *battleInput) {
     switch (battleInput->tutorial.substate) {
     case 0:
-        ov12_0226BCFC(battleInput->tutorial.finger, 128, 59, FX32_CONST(272));
-        ov12_0226BD4C(battleInput->tutorial.finger, 60);
+        BattleFinger_EnableWithOffset(battleInput->tutorial.finger, 128, 59, FX32_CONST(272));
+        BattleFinger_SetTouchDelay(battleInput->tutorial.finger, 60);
         battleInput->tutorial.substate++;
         break;
     default:
-        if (ov12_0226BD50(battleInput->tutorial.finger) == TRUE) {
+        if (BattleFinger_HasTouched(battleInput->tutorial.finger) == TRUE) {
             battleInput->tutorial.substate++;
             return CURSOR_INPUT_FIGHT;
         }
@@ -4462,12 +4462,12 @@ static int BattleInput_CatchingTutorialCB_Fight(BattleInput *battleInput) {
 static int BattleInput_CatchingTutorialCB_Move(BattleInput *battleInput) {
     switch (battleInput->tutorial.substate) {
     case 0:
-        ov12_0226BCFC(battleInput->tutorial.finger, 64, 21, FX32_CONST(272));
-        ov12_0226BD4C(battleInput->tutorial.finger, 60);
+        BattleFinger_EnableWithOffset(battleInput->tutorial.finger, 64, 21, FX32_CONST(272));
+        BattleFinger_SetTouchDelay(battleInput->tutorial.finger, 60);
         battleInput->tutorial.substate++;
         break;
     default:
-        if (ov12_0226BD50(battleInput->tutorial.finger) == TRUE) {
+        if (BattleFinger_HasTouched(battleInput->tutorial.finger) == TRUE) {
             battleInput->tutorial.substate++;
             return CURSOR_INPUT_MOVE_1;
         }
@@ -4488,12 +4488,12 @@ static int BattleInput_CatchingTutorialCB_Bag(BattleInput *battleInput) {
         }
         break;
     case 1:
-        ov12_0226BCFC(battleInput->tutorial.finger, 40, 170 - 25, FX32_CONST(272));
-        ov12_0226BD4C(battleInput->tutorial.finger, 60);
+        BattleFinger_EnableWithOffset(battleInput->tutorial.finger, 40, 170 - 25, FX32_CONST(272));
+        BattleFinger_SetTouchDelay(battleInput->tutorial.finger, 60);
         battleInput->tutorial.substate++;
         break;
     default:
-        if (ov12_0226BD50(battleInput->tutorial.finger) == 1) {
+        if (BattleFinger_HasTouched(battleInput->tutorial.finger) == 1) {
             battleInput->tutorial.substate++;
             return CURSOR_INPUT_BAG;
         }

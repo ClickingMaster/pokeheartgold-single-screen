@@ -1,5 +1,5 @@
 
-#include "battle/battle_02265E28.h"
+#include "battle/battle_terrain.h"
 
 #include "global.h"
 

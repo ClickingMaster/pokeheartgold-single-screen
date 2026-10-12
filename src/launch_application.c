@@ -191,12 +191,12 @@ void Bag_LaunchApp(FieldSystem *fieldSystem, BagView *args) {
 
 BagView *Bag_LaunchApp_AllPockets(FieldSystem *fieldSystem, ItemCheckUseData *taskman) {
     BagView *bagView = Bag_CreateView(Save_Bag_Get(fieldSystem->saveData), sAllPockets, HEAP_ID_FIELD2);
-    sub_0207789C(bagView, fieldSystem->saveData, 0, fieldSystem->bagCursor, &fieldSystem->menuInputState);
-    sub_020778E8(bagView, fieldSystem->mapLoadType);
+    BagView_Init(bagView, fieldSystem->saveData, 0, fieldSystem->bagCursor, &fieldSystem->menuInputState);
+    BagView_SetMapLoadType(bagView, fieldSystem->mapLoadType);
     if (PlayerAvatar_GetState(fieldSystem->playerAvatar) == PLAYER_STATE_CYCLING) {
-        sub_020778C8(bagView);
+        BagView_SetIsCycling(bagView);
     }
-    sub_020778DC(bagView, taskman);
+    BagView_SetItemCheckUseData(bagView, taskman);
     Bag_LaunchApp(fieldSystem, bagView);
     return bagView;
 }
@@ -219,14 +219,14 @@ BagView *Bag_LaunchApp_WithPocket(FieldSystem *fieldSystem, u8 pocketType) {
     }
 
     BagView *bagView = Bag_CreateView(bag, sPockets, HEAP_ID_FIELD3);
-    sub_0207789C(bagView, fieldSystem->saveData, 3, fieldSystem->bagCursor, &fieldSystem->menuInputState);
+    BagView_Init(bagView, fieldSystem->saveData, 3, fieldSystem->bagCursor, &fieldSystem->menuInputState);
     Bag_LaunchApp(fieldSystem, bagView);
     return bagView;
 }
 
 int BagView_SelectResult(BagView *bagView) {
     int result = BagView_GetItemId(bagView);
-    GF_ASSERT(result == 0 || sub_0207790C(bagView) != 5);
+    GF_ASSERT(result == 0 || BagView_GetSelectedAction(bagView) != 5);
     return result;
 }
 
@@ -426,16 +426,16 @@ static BOOL Task_EasyChat(TaskManager *taskman) {
         }
         break;
     case EASY_CHAT_TASK_STATE_FINISH:
-        if (sub_02090D48(data->easyChat) || !sub_02090D4C(data->easyChat)) {
+        if (EasyChatArgs_IsCancelled(data->easyChat) || !EasyChatArgs_IsChanged(data->easyChat)) {
             data->unk0->unk0 = 0;
         } else {
             data->unk0->unk0 = 1;
             switch (data->unk10) {
             default:
-                *data->unk4 = sub_02090D50(data->easyChat);
+                *data->unk4 = EasyChatArgs_GetWord(data->easyChat);
                 break;
             case 1:
-                sub_02090D54(data->easyChat, &msgBankMsgNo);
+                EasyChatArgs_GetWords(data->easyChat, &msgBankMsgNo);
                 *data->unk4 = msgBankMsgNo.msgBank;
                 *data->unk8 = msgBankMsgNo.msgNo;
                 break;
@@ -443,7 +443,7 @@ static BOOL Task_EasyChat(TaskManager *taskman) {
             case 3:
             case 4:
             case 5:
-                sub_02090D60(data->easyChat, &mailMessage);
+                EasyChatArgs_GetMailMessage(data->easyChat, &mailMessage);
                 Save_Frontier_SetTowerMessage(fieldSystem->saveData, data->unk10 - 2, &mailMessage);
                 *data->unk4 = MailMsg_GetFieldI(&mailMessage, 0);
                 break;
@@ -469,12 +469,12 @@ void CallTask_EasyChat(TaskManager *taskman, int a1, UnkStruct_0203E8C8 *a2, u16
     default:
         args = EasyChat_CreateArgs(0, 0, fieldSystem->saveData, &fieldSystem->menuInputState, HEAP_ID_FIELD3);
         data->easyChat = args;
-        sub_02090D14(args, *a3);
+        EasyChatArgs_SetWord(args, *a3);
         break;
     case 1:
         args = EasyChat_CreateArgs(1, 0, fieldSystem->saveData, &fieldSystem->menuInputState, HEAP_ID_FIELD3);
         data->easyChat = args;
-        sub_02090D18(args, *a3, *a4);
+        EasyChatArgs_SetWords(args, *a3, *a4);
         break;
     case 2:
     case 3:
@@ -484,8 +484,8 @@ void CallTask_EasyChat(TaskManager *taskman, int a1, UnkStruct_0203E8C8 *a2, u16
         data->easyChat = args;
         sub_02090D40(args);
         MailMessage *mailMessage = Save_Frontier_GetTowerMessage(fieldSystem->saveData, (u8)(a1 - 2));
-        sub_02090D20(data->easyChat, mailMessage);
-        sub_02090D34(data->easyChat);
+        EasyChatArgs_SetMailMessage(data->easyChat, mailMessage);
+        EasyChatArgs_SetCancelled(data->easyChat);
     }
     TaskManager_Call(taskman, Task_EasyChat, data);
 }
@@ -756,7 +756,7 @@ static void UseMail_LaunchApp_Impl(FieldSystem *fieldSystem, UseMailArgs *args) 
 }
 
 UseMailArgs *UseMail_LaunchApp_Compose(FieldSystem *fieldSystem, u16 a1, u8 partyIdx, u8 mailType, enum HeapID heapID) {
-    UseMailArgs *args = sub_02090E68(FieldSystem_GetSaveData(fieldSystem), a1, partyIdx, mailType, HEAP_ID_FIELD2);
+    UseMailArgs *args = UseMailArgs_NewCompose(FieldSystem_GetSaveData(fieldSystem), a1, partyIdx, mailType, HEAP_ID_FIELD2);
     UseMail_LaunchApp_Impl(fieldSystem, args);
     return args;
 }
@@ -765,16 +765,16 @@ UseMailArgs *UseMail_CreateArgs(FieldSystem *fieldSystem, int n, u8 mailId, enum
     UseMailArgs *args;
 
     if (n == 3) {
-        args = sub_02090F38(FieldSystem_GetSaveData(fieldSystem), mailId, heapID);
+        args = UseMailArgs_NewPreview(FieldSystem_GetSaveData(fieldSystem), mailId, heapID);
     } else {
-        args = sub_02090EC0(FieldSystem_GetSaveData(fieldSystem), n, mailId, heapID);
+        args = UseMailArgs_NewFromMailbox(FieldSystem_GetSaveData(fieldSystem), n, mailId, heapID);
     }
     UseMail_LaunchApp_Impl(fieldSystem, args);
     return args;
 }
 
 UseMailArgs *UseMail_LaunchApp_ReadMonMail(FieldSystem *fieldSystem, Pokemon *mon, enum HeapID heapID) {
-    UseMailArgs *args = sub_02090F00(FieldSystem_GetSaveData(fieldSystem), mon, heapID);
+    UseMailArgs *args = UseMailArgs_NewFromMon(FieldSystem_GetSaveData(fieldSystem), mon, heapID);
     UseMail_LaunchApp_Impl(fieldSystem, args);
     return args;
 }

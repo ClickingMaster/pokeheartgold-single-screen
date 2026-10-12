@@ -762,7 +762,7 @@ u32 PCBox_EndSummaryApp(PCBoxWork *work) {
 
 u32 PCBox_StartBagApp(PCBoxWork *work) {
     work->subAppArgs = Bag_CreateView(Save_Bag_Get(work->args->saveData), ov14_021F7D14, HEAP_ID_9);
-    sub_0207789C(work->subAppArgs, work->args->saveData, 1, NULL, work->args->menuInputStatePtr);
+    BagView_Init(work->subAppArgs, work->args->saveData, 1, NULL, work->args->menuInputStatePtr);
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_15), OVY_LOAD_ASYNC);
     work->subApp = OverlayManager_New(&gOverlayTemplate_Bag, work->subAppArgs, HEAP_ID_9);
     return 0;

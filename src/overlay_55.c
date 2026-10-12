@@ -123,15 +123,15 @@ BOOL ov55_UnkApp_Main(OverlayManager *manager, int *state) {
         } else {
             MailMsg_Init_WithBank(&overlayData->unk14, MAILMSG_BANK_0293_GMM);
         }
-        sub_02090D20(overlayData->unk8, &overlayData->unk14);
+        EasyChatArgs_SetMailMessage(overlayData->unk8, &overlayData->unk14);
         overlayData->unkC = OverlayManager_New(&ov55_021E5C04, overlayData->unk8, overlayData->heapID);
         *state = 4;
         break;
 
     case 4:
         if (ov55_021E5900(&overlayData->unkC)) {
-            if (sub_02090D48(overlayData->unk8) == 0) {
-                sub_02090D60(overlayData->unk8, &overlayData->unk10->mailMessages[overlayData->unk10->mailMessageIdx]);
+            if (EasyChatArgs_IsCancelled(overlayData->unk8) == 0) {
+                EasyChatArgs_GetMailMessage(overlayData->unk8, &overlayData->unk10->mailMessages[overlayData->unk10->mailMessageIdx]);
             }
             EasyChat_FreeArgs(overlayData->unk8);
             *state = 0;
@@ -164,7 +164,7 @@ static UnkStruct_ov55_021E5B08 *ov55_021E5B08(Mail *mail, enum HeapID heapID) {
     ret->mailVersion = Mail_GetVersion(mail);
 
     for (u16 i = 0; i < 3; i++) {
-        ret->unk18[i] = sub_0202B404(mail, (u8)i, 2, sub_0202B4E4(mail));
+        ret->unk18[i] = Mail_GetMonIconData(mail, (u8)i, 2, Mail_GetFormFlags(mail));
     }
 
     for (u16 i = 0; i < 3; i++) {

@@ -183,9 +183,9 @@
 .public LinkSync_ClearPackets
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
-.public sub_0205C174
-.public sub_0205C1F0
-.public sub_0205C268
+.public BattleCastle_GetRankStat
+.public BattleCastle_GetPointsStat
+.public FrontierStat_GetFriendIndex
 .public AcquireMonLock
 .public ReleaseMonLock
 .public CalcMonLevelAndStats

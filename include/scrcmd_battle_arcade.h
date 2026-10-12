@@ -1,17 +1,17 @@
-#ifndef POKEHEARTGOLD_SCRCMD_BATTLE_HALL_H
-#define POKEHEARTGOLD_SCRCMD_BATTLE_HALL_H
+#ifndef POKEHEARTGOLD_SCRCMD_BATTLE_ARCADE_H
+#define POKEHEARTGOLD_SCRCMD_BATTLE_ARCADE_H
 
 #include "global.h"
 
-typedef struct UnkStruct_02050060 {
+typedef struct BattleArcadeTeamCheck {
     u8 state;
-    u8 unk01;
+    u8 numReceived;
     u8 filler[2];
     u16 playerTeam[2];
     u16 partnerTeam[2];
     u16 *result;
-} UnkStruct_02050060;
+} BattleArcadeTeamCheck;
 
-void sub_02050398(u32, u32, UnkStruct_02050060 *, UnkStruct_02050060 *);
+void BattleArcade_RecvPartnerTeam(u32, u32, BattleArcadeTeamCheck *, BattleArcadeTeamCheck *);
 
-#endif // POKEHEARTGOLD_SCRCMD_BATTLE_HALL_H
+#endif // POKEHEARTGOLD_SCRCMD_BATTLE_ARCADE_H

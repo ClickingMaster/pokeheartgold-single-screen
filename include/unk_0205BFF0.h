@@ -3,13 +3,13 @@
 
 #include "global.h"
 
-int sub_0205BFF0(u8, u8);
-int sub_0205C048(u8, u8);
-u32 sub_0205C0CC(u8);
-int sub_0205C11C(u8);
-u32 sub_0205C144(u8 a0);
-u32 sub_0205C174(u8, u8);
-u32 sub_0205C1A0(u8);
-u32 sub_0205C1F0(u8);
+int BattleFactory_GetWinStreakStat(u8, u8);
+int BattleFactory_GetTradeCountStat(u8, u8);
+u32 BattleHall_GetWinStreakStat(u8);
+int BattleHall_GetSpeciesStat(u8);
+u32 BattleHall_GetSpeciesRecordsType(u8 a0);
+u32 BattleCastle_GetRankStat(u8, u8);
+u32 BattleCastle_GetWinStreakStat(u8);
+u32 BattleCastle_GetPointsStat(u8);
 
 #endif // POKEHEARTGOLD_UNK_0205BFF0_H

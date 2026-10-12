@@ -88,7 +88,7 @@ ov12_0226BC40: ; 0x0226BC40
 ov12_0226BC68: ; 0x0226BC68
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x38
-	ldr r5, _0226BCD8 ; =ov12_0226EBD4
+	ldr r5, _0226BCD8 ; =sBattleFingerSpriteTemplate
 	add r6, r3, #0
 	add r7, r0, #0
 	str r1, [sp]
@@ -138,7 +138,7 @@ _0226BC78:
 	add sp, #0x38
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_0226BCD8: .word ov12_0226EBD4
+_0226BCD8: .word sBattleFingerSpriteTemplate
 _0226BCDC: .word ov12_0226BD54
 _0226BCE0: .word 0x000003E7
 	thumb_func_end ov12_0226BC68
@@ -156,14 +156,14 @@ ov12_0226BCE4: ; 0x0226BCE4
 	pop {r4, pc}
 	thumb_func_end ov12_0226BCE4
 
-	thumb_func_start ov12_0226BCFC
-ov12_0226BCFC: ; 0x0226BCFC
+	thumb_func_start BattleFinger_EnableWithOffset
+BattleFinger_EnableWithOffset: ; 0x0226BCFC
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r7, r1, #0
 	add r4, r2, #0
 	add r6, r3, #0
-	bl ov12_0226BEB8
+	bl BattleFinger_ResetAnimation
 	str r7, [r5, #8]
 	str r4, [r5, #0xc]
 	str r6, [r5, #0x14]
@@ -179,16 +179,16 @@ ov12_0226BCFC: ; 0x0226BCFC
 	bl ManagedSprite_SetDrawFlag
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov12_0226BCFC
+	thumb_func_end BattleFinger_EnableWithOffset
 
-	thumb_func_start ov12_0226BD2C
-ov12_0226BD2C: ; 0x0226BD2C
+	thumb_func_start BattleFinger_Enable
+BattleFinger_Enable: ; 0x0226BD2C
 	push {r3, lr}
 	mov r3, #3
 	lsl r3, r3, #0x12
-	bl ov12_0226BCFC
+	bl BattleFinger_EnableWithOffset
 	pop {r3, pc}
-	thumb_func_end ov12_0226BD2C
+	thumb_func_end BattleFinger_Enable
 
 	thumb_func_start ov12_0226BD38
 ov12_0226BD38: ; 0x0226BD38
@@ -198,21 +198,21 @@ ov12_0226BD38: ; 0x0226BD38
 	mov r1, #0
 	bl ManagedSprite_SetDrawFlag
 	add r0, r4, #0
-	bl ov12_0226BEB8
+	bl BattleFinger_ResetAnimation
 	pop {r4, pc}
 	thumb_func_end ov12_0226BD38
 
-	thumb_func_start ov12_0226BD4C
-ov12_0226BD4C: ; 0x0226BD4C
+	thumb_func_start BattleFinger_SetTouchDelay
+BattleFinger_SetTouchDelay: ; 0x0226BD4C
 	strh r1, [r0, #0x18]
 	bx lr
-	thumb_func_end ov12_0226BD4C
+	thumb_func_end BattleFinger_SetTouchDelay
 
-	thumb_func_start ov12_0226BD50
-ov12_0226BD50: ; 0x0226BD50
+	thumb_func_start BattleFinger_HasTouched
+BattleFinger_HasTouched: ; 0x0226BD50
 	ldrb r0, [r0, #0x1b]
 	bx lr
-	thumb_func_end ov12_0226BD50
+	thumb_func_end BattleFinger_HasTouched
 
 	thumb_func_start ov12_0226BD54
 ov12_0226BD54: ; 0x0226BD54
@@ -398,19 +398,19 @@ _0226BEB0:
 _0226BEB4: .word 0x00004650
 	thumb_func_end ov12_0226BD54
 
-	thumb_func_start ov12_0226BEB8
-ov12_0226BEB8: ; 0x0226BEB8
+	thumb_func_start BattleFinger_ResetAnimation
+BattleFinger_ResetAnimation: ; 0x0226BEB8
 	mov r1, #0
 	str r1, [r0, #0x10]
 	strb r1, [r0, #0x1c]
 	strb r1, [r0, #0x1d]
 	strb r1, [r0, #0x1e]
 	bx lr
-	thumb_func_end ov12_0226BEB8
+	thumb_func_end BattleFinger_ResetAnimation
 
 .rodata
 
-ov12_0226EBD4: ; 0x0226EBD4
+sBattleFingerSpriteTemplate: ; 0x0226EBD4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF

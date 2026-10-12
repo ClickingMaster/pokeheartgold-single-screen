@@ -168,14 +168,14 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-void ov12_02237B0C(BattleSystem *battleSystem) {
+void BattleSystem_FreeInputForSubMenu(BattleSystem *battleSystem) {
     BattleInput_Free(battleSystem->battleInput);
     BgConfig_CleanupBattleMenuBackgrounds(battleSystem->bgConfig);
     battleSystem->unk240E_F = 1;
     FontID_Release(4);
     ov12_0223BBF0(battleSystem, 3);
 
-    if (battleSystem->unk2445 == 0) {
+    if (battleSystem->trainerAIOverlayLoaded == 0) {
         UnloadOverlayByID(FS_OVERLAY_ID(OVY_7));
     } else {
         UnloadOverlayByID(FS_OVERLAY_ID(OVY_10));
@@ -183,7 +183,7 @@ void ov12_02237B0C(BattleSystem *battleSystem) {
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_8), OVY_LOAD_ASYNC);
 }
 
-void ov12_02237B6C(BattleSystem *battleSystem) {
+void BattleSystem_FreeGraphics(BattleSystem *battleSystem) {
     Main_SetVBlankIntrCB(NULL, NULL);
     BattleInput_Free(battleSystem->battleInput);
     RemoveWindow(battleSystem->window);
@@ -195,10 +195,10 @@ void ov12_02237B6C(BattleSystem *battleSystem) {
     FontID_Release(4);
 }
 
-void ov12_02237BB8(BattleSystem *battleSystem) {
+void BattleSystem_RestoreInputAfterSubMenu(BattleSystem *battleSystem) {
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_8));
 
-    if (battleSystem->unk2445 == 0) {
+    if (battleSystem->trainerAIOverlayLoaded == 0) {
         HandleLoadOverlay(FS_OVERLAY_ID(OVY_7), OVY_LOAD_ASYNC);
     } else {
         HandleLoadOverlay(FS_OVERLAY_ID(OVY_10), OVY_LOAD_ASYNC);
@@ -234,7 +234,7 @@ void ov12_02237BB8(BattleSystem *battleSystem) {
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(battleSystem->spriteRenderer), 0, FX32_CONST(272));
 }
 
-void ov12_02237CC4(BattleSystem *battleSystem) {
+void BattleSystem_FreeMainBgLayers(BattleSystem *battleSystem) {
     RemoveWindow(battleSystem->window);
 
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
@@ -263,7 +263,7 @@ BOOL Battle_BattleMain(OverlayManager *man);
 void Battle_InitBackgrounds(BattleSystem *battleSystem, BgConfig *bgConfig);
 void ov12_022389B8(BattleSystem *battleSystem);
 
-void ov12_02237D00(BattleSystem *battleSystem) {
+void BattleSystem_ReinitMainBgLayers(BattleSystem *battleSystem) {
     u32 frame;
     BattleBgTemplateSet templates;
 
@@ -310,12 +310,12 @@ void ov12_02237D00(BattleSystem *battleSystem) {
     BattleSystem_SetupTextFlags(battleSystem);
 }
 
-void ov12_02237ED0(BattleSystem *battleSystem, int a1) {
-    if (battleSystem->unk2445 == a1) {
+void BattleSystem_SetTrainerAIOverlayLoaded(BattleSystem *battleSystem, int a1) {
+    if (battleSystem->trainerAIOverlayLoaded == a1) {
         GF_AssertFail();
     }
 
-    battleSystem->unk2445 = a1;
+    battleSystem->trainerAIOverlayLoaded = a1;
 
     if (a1 == 0) {
         UnloadOverlayByID(FS_OVERLAY_ID(OVY_10));

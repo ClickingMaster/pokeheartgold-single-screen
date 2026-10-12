@@ -109,7 +109,7 @@ static BOOL Encounter_GetResult(Encounter *encounter, FieldSystem *fieldSystem) 
 
 static void sub_02050724(BattleSetup *setup, FieldSystem *fieldSystem) {
     if (!(setup->battleType & BATTLE_TYPE_DEBUG)) {
-        sub_0205239C(setup, fieldSystem);
+        BattleSetup_CopyResultsToSaveData(setup, fieldSystem);
     }
 }
 
@@ -210,7 +210,7 @@ static BOOL Task_020508B8(TaskManager *taskManager) {
         break;
     case 3:
         RecordLinkBattleResult(encounter->setup->winFlag, fieldSystem);
-        sub_02052444(encounter->setup, fieldSystem);
+        BattleSetup_CopyPokedexToSaveData(encounter->setup, fieldSystem);
         GameStats_AddScore(Save_GameStats_Get(fieldSystem->saveData), SCORE_EVENT_LINK_BATTLE);
         Encounter_GetResult(encounter, fieldSystem);
         CallTask_RestoreOverworld(taskManager);
@@ -238,7 +238,7 @@ static BOOL Task_02050960(TaskManager *taskManager) {
         break;
     case 1:
         RecordLinkBattleResult(encounter->setup->winFlag, fieldSystem);
-        sub_02052444(encounter->setup, fieldSystem);
+        BattleSetup_CopyPokedexToSaveData(encounter->setup, fieldSystem);
         GameStats_AddScore(Save_GameStats_Get(fieldSystem->saveData), SCORE_EVENT_LINK_BATTLE);
         Encounter_GetResult(encounter, fieldSystem);
         (*state)++;
@@ -270,7 +270,7 @@ static BOOL Task_020509F0(TaskManager *taskManager) {
         (*state)++;
         break;
     case 3:
-        sub_02052444(encounter->setup, fieldSystem);
+        BattleSetup_CopyPokedexToSaveData(encounter->setup, fieldSystem);
         if (fieldSystem->frontierFsys != NULL) {
             sub_02067484(fieldSystem, &encounter->setup->unk138);
         }
@@ -742,7 +742,7 @@ void CallTask_020508B8(TaskManager *taskManager, void *param1, u32 battleType) {
 
     setup = BattleSetup_New(HEAP_ID_FIELD2, battleType);
 
-    sub_020522F0(setup, fieldSystem, param1);
+    BattleSetup_InitForLinkBattle(setup, fieldSystem, param1);
 
     encounter = Encounter_New(setup, BattleSetup_GetWildTransitionEffect(setup), BattleSetup_GetWildBattleMusic(setup), NULL);
     TaskManager_Call(taskManager, Task_020508B8, encounter);
@@ -827,7 +827,7 @@ void FieldSystem_StartCommClubLinkBattle(FieldSystem *fieldSystem, void *param1,
     BattleSetup *setup = BattleSetup_New(HEAP_ID_FIELD2, battleType);
     u32 var;
 
-    sub_020522F0(setup, fieldSystem, param1);
+    BattleSetup_InitForLinkBattle(setup, fieldSystem, param1);
     BattleRecord_Create(fieldSystem->saveData, HEAP_ID_FIELD2, &var);
 
     setup->unk1B2 = Encounter_GetLinkBattleMode(fieldSystem->linkBattleRuleset, battleType);
@@ -842,7 +842,7 @@ void FieldSystem_StartCommClubLinkBattleWithParty(FieldSystem *fieldSystem, Part
     BattleSetup *setup = BattleSetup_New(HEAP_ID_FIELD2, battleType);
     u32 var;
 
-    sub_020520B0(setup, fieldSystem, party, NULL);
+    BattleSetup_InitForLinkBattleWithParty(setup, fieldSystem, party, NULL);
     BattleRecord_Create(fieldSystem->saveData, HEAP_ID_FIELD2, &var);
 
     setup->unk1B2 = Encounter_GetLinkBattleMode(fieldSystem->linkBattleRuleset, battleType);

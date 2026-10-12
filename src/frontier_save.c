@@ -150,11 +150,11 @@ void FrontierSpeciesRecords_Init(struct FrontierSpeciesRecords *data) {
 }
 
 u32 *FrontierSpeciesRecords_Load(SaveData *save, u32 heapId, u32 *out) {
-    return (u32 *)sub_02027144(save, (enum HeapID)heapId, (int *)out);
+    return (u32 *)LoadFrontierSpeciesRecords(save, (enum HeapID)heapId, (int *)out);
 }
 
 int FrontierSpeciesRecords_Save(SaveData *save, struct FrontierSpeciesRecords *data) {
-    int result = sub_02027158(save, data);
+    int result = SaveFrontierSpeciesRecords(save, data);
     return SaveGameNormal(save) | result;
 }
 typedef struct FrontierSpeciesRecords ExtraFrontier;

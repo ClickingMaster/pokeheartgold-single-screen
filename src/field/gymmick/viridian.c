@@ -30,15 +30,15 @@ static BOOL ViridianGymmick_PlayTileAnimAndCheck(ViridianGymmickAnimState *animS
 
 void GymmickInit_Viridian(FieldSystem *fieldSystem) {
     GymmickUnion *gymmickUnion = Save_Gymmick_AssertMagic_GetData(Save_GetGymmickPtr(FieldSystem_GetSaveData(fieldSystem)), GYMMICK_VIRIDIAN);
-    fieldSystem->unk4->unk24 = Heap_Alloc(HEAP_ID_FIELD1, sizeof(ViridianGymmickLocalData));
-    MI_CpuClear8(fieldSystem->unk4->unk24, sizeof(ViridianGymmickLocalData));
-    ViridianGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    fieldSystem->mapSystems->localData = Heap_Alloc(HEAP_ID_FIELD1, sizeof(ViridianGymmickLocalData));
+    MI_CpuClear8(fieldSystem->mapSystems->localData, sizeof(ViridianGymmickLocalData));
+    ViridianGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     ViridianGymmick_Load3dGraphics(localData, HEAP_ID_FIELD1);
 }
 
 void GymmickFree_Viridian(FieldSystem *fieldSystem) {
     u8 i;
-    ViridianGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    ViridianGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     ViridianGymmick_Unload3dGraphics(localData);
     for (i = 0; i < 3; ++i) {
         if (localData->animMgrs[i].active) {
@@ -46,11 +46,11 @@ void GymmickFree_Viridian(FieldSystem *fieldSystem) {
         }
     }
     Heap_Free(localData);
-    fieldSystem->unk4->unk24 = NULL;
+    fieldSystem->mapSystems->localData = NULL;
 }
 
 void ViridianGymmick_HandleTileAction(FieldSystem *fieldSystem, u8 tile) {
-    ViridianGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    ViridianGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     if (!localData->animMgrs[localData->animMgrIdx].active) {
         ViridianGymmick_StartTileAnimTask(&localData->animMgrs[localData->animMgrIdx], fieldSystem, tile);
         localData->animMgrIdx = (localData->animMgrIdx + 1) % 3;

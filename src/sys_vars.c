@@ -105,46 +105,46 @@ u16 Save_VarsFlags_GetUnownReportLevel(SaveVarsFlags *state) {
     return GetScriptVar(state, VAR_UNOWN_REPORT_LEVEL);
 }
 
-u16 sub_02066B80(s32 a0) {
+u16 Save_VarsFlags_GetEventKeyMagic(s32 a0) {
     GF_ASSERT(a0 >= 0 && (u32)a0 < NELEMS(_020FE4A4));
     return _020FE4A4[a0];
 }
 
-void sub_02066B9C(SaveVarsFlags *state, u32 a1) {
-    SetScriptVar(state, VAR_UNK_4043 + a1, sub_02066B80(a1));
+void Save_VarsFlags_SetEventKey(SaveVarsFlags *state, u32 a1) {
+    SetScriptVar(state, VAR_UNK_4043 + a1, Save_VarsFlags_GetEventKeyMagic(a1));
 }
 
-BOOL sub_02066BC0(SaveVarsFlags *state, u32 a1) {
+BOOL Save_VarsFlags_CheckEventKey(SaveVarsFlags *state, u32 a1) {
     u16 var1 = GetScriptVar(state, VAR_UNK_4043 + a1);
-    u16 var2 = sub_02066B80(a1);
+    u16 var2 = Save_VarsFlags_GetEventKeyMagic(a1);
     return var1 == var2;
 }
 
-void sub_02066BE8(SaveVarsFlags *state, u32 a1, u16 value) {
+void Save_VarsFlags_SetRoamerStatus(SaveVarsFlags *state, u32 a1, u16 value) {
     if (a1 < NELEMS(_020FE4A8)) {
         SetScriptVar(state, VAR_ROAMER_RAIKOU_STATUS + a1, value);
     }
 }
 
-u32 sub_02066C00(s32 a0) {
+u32 Save_VarsFlags_GetMapEventKeyMagic(s32 a0) {
     GF_ASSERT(a0 >= 0 && a0 < (s32)NELEMS(_020FE4A8));
     return _020FE4A8[a0];
 }
 
-void sub_02066C1C(SaveVarsFlags *state, s32 a1) {
+void Save_VarsFlags_SetMapEventKey(SaveVarsFlags *state, s32 a1) {
     GF_ASSERT(a1 >= 0 && a1 < (s32)NELEMS(_020FE4A8));
-    SetScriptVar(state, VAR_UNK_4036 + a1, sub_02066C00(a1));
+    SetScriptVar(state, VAR_UNK_4036 + a1, Save_VarsFlags_GetMapEventKeyMagic(a1));
 }
 
-void sub_02066C4C(SaveVarsFlags *state, s32 a1) {
+void Save_VarsFlags_ClearMapEventKey(SaveVarsFlags *state, s32 a1) {
     GF_ASSERT(a1 >= 0 && a1 < (s32)NELEMS(_020FE4A8));
     SetScriptVar(state, VAR_UNK_4036 + a1, 0);
 }
 
-BOOL sub_02066C74(SaveVarsFlags *state, s32 a1) {
+BOOL Save_VarsFlags_CheckMapEventKey(SaveVarsFlags *state, s32 a1) {
     GF_ASSERT(a1 >= 0 && a1 < (s32)NELEMS(_020FE4A8));
     u16 var1 = GetScriptVar(state, VAR_UNK_4036 + a1);
-    u32 var2 = sub_02066C00(a1);
+    u32 var2 = Save_VarsFlags_GetMapEventKeyMagic(a1);
     return var1 == var2;
 }
 
@@ -188,14 +188,14 @@ void Save_VarsFlags_SetVar4041(SaveVarsFlags *state, u16 value) {
     SetScriptVar(state, VAR_UNK_4041, value);
 }
 
-void sub_02066D60(SaveData *saveData) {
+void Save_VarsFlags_RandomizeVar4041(SaveData *saveData) {
     SaveVarsFlags *state = Save_VarsFlags_Get(saveData);
     u32 rand = LCRandom() % 98;
 
     Save_VarsFlags_SetVar4041(state, rand + 2);
 }
 
-void sub_02066D80(SaveVarsFlags *state) {
+void Save_VarsFlags_IncrementVar4042(SaveVarsFlags *state) {
     u16 var = GetScriptVar(state, VAR_UNK_4042);
     u16 unk_value = 10000;
     if (var < 10000) {

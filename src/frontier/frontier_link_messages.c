@@ -412,8 +412,8 @@ BOOL ov80_0222B5C8(BattleCastleData *work) {
     work->linkBuffer[1] = work->winStreak;
     work->linkBuffer[2] = work->round;
     frontierSave = Save_Frontier_GetStatic(work->saveData);
-    stat = sub_0205C1F0(work->type);
-    substat = sub_0205C268(sub_0205C1F0(work->type));
+    stat = BattleCastle_GetPointsStat(work->type);
+    substat = FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(work->type));
     work->linkBuffer[11] = FrontierSave_GetStat(frontierSave, stat, substat);
     return Comm_SendCommand(0x2A, work->linkBuffer, 0x28) == TRUE;
 }

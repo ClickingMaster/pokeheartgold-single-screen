@@ -34,14 +34,14 @@ static void PlayerAvatar_SetPlayerSaveData(PlayerAvatar *avatar, PlayerSaveData 
 static void PlayerSaveData_SetState(PlayerSaveData *playerSaveData, s32 state);
 static void PlayerAvatar_SetPlayerSaveDataState(PlayerAvatar *avatar, s32 state);
 
-u32 sub_0205C268(u32 param0) {
+u32 FrontierStat_GetFriendIndex(u32 param0) {
     if (param0 < 100) {
         return 255;
     }
     return WifiConnection_GetTargetFriendIndex();
 }
 
-u8 sub_0205C278(void) {
+u8 Comm_GetPartnerGameVersion(void) {
     PlayerProfile *profile = CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1);
     GF_ASSERT(profile != NULL);
     return PlayerProfile_GetVersion(profile);
@@ -51,13 +51,13 @@ u8 sub_0205C298(SaveData *saveData) {
     if (PlayerProfile_GetVersion(Save_PlayerData_GetProfile(saveData)) == 0) {
         return 1;
     }
-    if (sub_0205C278() == 0) {
+    if (Comm_GetPartnerGameVersion() == 0) {
         return 1;
     }
     return 0;
 }
 
-u8 sub_0205C2C0(u32 param0) {
+u8 BattleArcade_GetWinStreakStat(u32 param0) {
     switch (param0) {
     case 0:
         return 95;
@@ -70,7 +70,7 @@ u8 sub_0205C2C0(u32 param0) {
     }
 }
 
-u8 sub_0205C2E8(u32 param0) {
+u8 BattleArcade_GetBestStreakStat(u32 param0) {
     switch (param0) {
     case 0:
         return 94;
@@ -83,7 +83,7 @@ u8 sub_0205C2E8(u32 param0) {
     }
 }
 
-u8 sub_0205C310(u32 param0) {
+u8 BattleTower_GetWinStreakStat(u32 param0) {
     u8 ret;
     switch (param0) {
     case 0:
@@ -112,7 +112,7 @@ u8 sub_0205C310(u32 param0) {
     return ret;
 }
 
-u8 sub_0205C350(u32 param0) {
+u8 BattleTower_GetBestStreakStat(u32 param0) {
     u8 ret;
     switch (param0) {
     case 0:

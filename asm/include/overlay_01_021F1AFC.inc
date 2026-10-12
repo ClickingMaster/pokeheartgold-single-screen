@@ -88,7 +88,7 @@
 .public GetMovementForDirection
 .public CheckFlag99A
 .public FollowMon_GetMapObject
-.public sub_02069DC8
+.public FollowMon_HideUntilStep
 .public FollowMon_IsActive
 .public FieldSystem_UnkSub108_AddMonMood
 .public GetMonData
@@ -117,7 +117,7 @@
 .public RockClimbEffect_SetFollow
 .public FollowMon_MoveToPlayer
 .public FollowMon_StartRecall
-.public ov01_02205EE0
+.public FollowMon_StartHideForFieldMove
 .public FollowMon_SetFacingDirection
 .public FollowMon_IsNextToPlayer
 .public FieldSystem_GetLeadMonIndex

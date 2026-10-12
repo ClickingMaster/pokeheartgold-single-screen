@@ -143,9 +143,9 @@
 .public ov10_0221BE20
 .public ov10_0221BEF4
 .public ov10_022205BC
-.public ov12_02237B0C
-.public ov12_02237BB8
-.public ov12_02237ED0
+.public BattleSystem_FreeInputForSubMenu
+.public BattleSystem_RestoreInputAfterSubMenu
+.public BattleSystem_SetTrainerAIOverlayLoaded
 .public BattleSystem_GetBgConfig
 .public BattleSystem_GetWindow
 .public BattleSystem_GetBattleType
@@ -241,7 +241,7 @@
 .public TrainerAI_PostKOSwitchIn
 .public TrainerAI_GetMoveType
 .public OpponentData_New
-.public ov12_02258DB0
+.public OpponentData_CreateBallData
 .public OpponentData_RunCommand
 .public OpponentData_Free
 .public OpponentData_SetInputTasks
@@ -251,8 +251,8 @@
 .public OpponentData_GetHpBar
 .public OpponentData_GetCursorPosition
 .public OpponentData_SetSpriteDrawFlag
-.public ov12_02261FD4
-.public ov12_02262014
+.public OpponentData_StartPokepicBobTask
+.public OpponentData_StopPokepicBobTask
 .public BattleController_ReplyCommandSelection
 .public BattleController_ReplyMoveSelection
 .public BattleController_ReplyTargetSelection

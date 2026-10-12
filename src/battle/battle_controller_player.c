@@ -235,7 +235,7 @@ static void BattleControllerPlayer_SelectionScreenInit(BattleSystem *battleSyste
     }
 
     ov12_0223BB64(battleSystem, 0);
-    ov12_02237ED0(battleSystem, 1);
+    BattleSystem_SetTrainerAIOverlayLoaded(battleSystem, 1);
 
     ctx->command = CONTROLLER_COMMAND_SELECTION_SCREEN_INPUT;
 }
@@ -620,7 +620,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
 
     if (var == battlersMax) {
         ov12_0224E414(battleSystem, ctx);
-        ov12_02237ED0(battleSystem, 0);
+        BattleSystem_SetTrainerAIOverlayLoaded(battleSystem, 0);
 
         ctx->command = CONTROLLER_COMMAND_CALC_EXECUTION_ORDER;
 

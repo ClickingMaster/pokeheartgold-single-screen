@@ -77,6 +77,6 @@
 .public Bdhc_SetUnloaded
 .public AreaDataManager_GetMapTexture
 .public ov01_021FBA00
-.public ov01_02204678
-.public ov01_02204688
-.public ov01_02204698
+.public AreaMapAnimation_AddToRenderObj
+.public AreaMapAnimation_RemoveFromRenderObj
+.public AreaMapAnimation_IsLoaded

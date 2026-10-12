@@ -173,7 +173,7 @@ void VsRecorder_FreeResources(VsRecorderWork *work) {
     PaletteData_FreeBuffers(work->plttData, PLTTBUF_SUB_OBJ);
     PaletteData_Free(work->plttData);
     if (work->mode == 0) {
-        sub_0202AC1C(Save_Misc_Get(work->saveData), work->colorScheme);
+        SaveMisc_SetVsRecorderColorScheme(Save_Misc_Get(work->saveData), work->colorScheme);
     }
     NARC_Delete(work->narc);
     SysTask_Destroy(work->task);

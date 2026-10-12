@@ -158,9 +158,9 @@ void GymmickInit_Blackthorn(FieldSystem *fieldSystem) {
     int modelIDs[3] = { 120, 121, 120 };
 
     GymmickUnion *gymmickUnion = Save_Gymmick_AssertMagic_GetData(Save_GetGymmickPtr(FieldSystem_GetSaveData(fieldSystem)), GYMMICK_BLACKTHORN);
-    fieldSystem->unk4->unk24 = Heap_Alloc(HEAP_ID_FIELD1, sizeof(BlackthornGymmickLocalData));
-    MI_CpuClear8(fieldSystem->unk4->unk24, sizeof(BlackthornGymmickLocalData));
-    BlackthornGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    fieldSystem->mapSystems->localData = Heap_Alloc(HEAP_ID_FIELD1, sizeof(BlackthornGymmickLocalData));
+    MI_CpuClear8(fieldSystem->mapSystems->localData, sizeof(BlackthornGymmickLocalData));
+    BlackthornGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     localData->fieldSystem = fieldSystem;
     for (int i = 0; i < 3; ++i) {
         VecFx32 positionVec = { 0, 48 * FX32_ONE, 0 };
@@ -174,15 +174,15 @@ void GymmickInit_Blackthorn(FieldSystem *fieldSystem) {
 }
 
 void GymmickFree_Blackthorn(FieldSystem *fieldSystem) {
-    Heap_Free(fieldSystem->unk4->unk24);
-    fieldSystem->unk4->unk24 = NULL;
+    Heap_Free(fieldSystem->mapSystems->localData);
+    fieldSystem->mapSystems->localData = NULL;
 }
 
 BOOL BlackthornGymmick_TryStartPlatformAction(FieldSystem *fieldSystem) {
     if (Save_Gymmick_GetType(Save_GetGymmickPtr(FieldSystem_GetSaveData(fieldSystem))) != GYMMICK_BLACKTHORN) {
         return FALSE;
     }
-    BlackthornGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    BlackthornGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     if (localData == NULL) {
         return FALSE;
     }
@@ -190,7 +190,7 @@ BOOL BlackthornGymmick_TryStartPlatformAction(FieldSystem *fieldSystem) {
 }
 
 BOOL GymmickCheckCollision_Blackthorn(FieldSystem *fieldSystem, u32 tileX, u32 tileZ, u32 height, BOOL *isColliding) {
-    BlackthornGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    BlackthornGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     for (int i = 0; i < 3; ++i) {
         BlackthornGymmickPlatformData *platform = &localData->platforms[i];
         for (int j = 0; j < 18; ++j) {
@@ -589,7 +589,7 @@ static u16 BlackthornGymmick_GetMaxRotationExtent(FieldSystem *fieldSystem, cons
 static BOOL Task_BlackthornGymmick_MovePlatform(TaskManager *taskman) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
     BlackthornGymMovePlatformTaskData *taskData = TaskManager_GetEnvironment(taskman);
-    BlackthornGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    BlackthornGymmickLocalData *localData = fieldSystem->mapSystems->localData;
 
     switch (taskData->state) {
     case STATE_MOVE_INIT:
@@ -621,7 +621,7 @@ static BOOL Task_BlackthornGymmick_MovePlatform(TaskManager *taskman) {
 static BOOL Task_BlackthornGymmick_RotatePlatform(TaskManager *taskman) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
     BlackthornGymMovePlatformTaskData *taskData = TaskManager_GetEnvironment(taskman);
-    BlackthornGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    BlackthornGymmickLocalData *localData = fieldSystem->mapSystems->localData;
 
     switch (taskData->state) {
     case STATE_ROTATE_INIT: {
@@ -735,7 +735,7 @@ static u16 BlackthornGymmick_GetMaximumRotationAngle(FieldSystem *fieldSystem, B
 static void SysTask_BlackthornGymmick_MovePlatform(SysTask *task, void *data) {
     BlackthornGymMovePlatformTaskData *taskData = data;
     FieldSystem *fieldSystem = taskData->fieldSystem;
-    BlackthornGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    BlackthornGymmickLocalData *localData = fieldSystem->mapSystems->localData;
 
     switch (taskData->state) {
     case STATE_MOVE_CHECK:

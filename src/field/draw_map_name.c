@@ -198,5 +198,5 @@ void FieldSystem_DrawMapNameAnimation(FieldSystem *fieldSystem) {
         areaIcon--;
     }
 
-    FieldDrawMapName_Start(fieldSystem->unk4->drawMapNameInfo, mapsec, areaIcon);
+    FieldDrawMapName_Start(fieldSystem->mapSystems->drawMapNameInfo, mapsec, areaIcon);
 }

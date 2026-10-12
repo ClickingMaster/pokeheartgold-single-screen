@@ -1,4 +1,4 @@
-#include "scrcmd_20.h"
+#include "scrcmd_battle_hall.h"
 
 #include "global.h"
 
@@ -37,13 +37,13 @@ typedef enum BattleHallChallengeType {
     BATTLE_HALL_CHALLENGE_TYPE_MULTI,
 } BattleHallChallengeType;
 
-typedef struct UnkStruct_0204F284 {
+typedef struct BattleHallSelectMonsEnv {
     u32 state;
     u8 challengeType;
     u8 partySlot;
     u8 selectedMons[2];
-    void **unk08;
-} UnkStruct_0204F284;
+    void **appArgs;
+} BattleHallSelectMonsEnv;
 
 typedef struct WinStreakBP {
     u32 winStreakTarget;
@@ -101,16 +101,16 @@ static const WinStreakBP battleHallWinStreakBP[] = {
 };
 
 static BOOL BattleHall_DoesPartyContainEligibleMons(s32, SaveData *);
-static void sub_0204F1E4(TaskManager *, u16, u16 *);
-static BOOL sub_0204F228(TaskManager *);
-static void sub_0204F284(TaskManager *, void *, BattleHallChallengeType);
-static BOOL sub_0204F2B8(TaskManager *);
-static u32 sub_0204F320(UnkStruct_0204F284 *, FieldSystem *, enum HeapID);
-static u32 sub_0204F3F8(UnkStruct_0204F284 *, FieldSystem *);
-static u32 sub_0204F448(UnkStruct_0204F284 *, FieldSystem *, enum HeapID);
-static u32 sub_0204F4D8(UnkStruct_0204F284 *, FieldSystem *);
+static void BattleHall_StartSpeciesCheck(TaskManager *, u16, u16 *);
+static BOOL Task_BattleHallSpeciesCheck(TaskManager *);
+static void BattleHall_StartSelectMons(TaskManager *, void *, BattleHallChallengeType);
+static BOOL Task_BattleHallSelectMons(TaskManager *);
+static u32 BattleHallSelectMons_OpenPartyMenu(BattleHallSelectMonsEnv *, FieldSystem *, enum HeapID);
+static u32 BattleHallSelectMons_WaitPartyMenu(BattleHallSelectMonsEnv *, FieldSystem *);
+static u32 BattleHallSelectMons_OpenSummary(BattleHallSelectMonsEnv *, FieldSystem *, enum HeapID);
+static u32 BattleHallSelectMons_WaitSummary(BattleHallSelectMonsEnv *, FieldSystem *);
 
-const u8 unk_020FC224[] = {
+const u8 sBattleHallSummaryPages[] = {
     0,
     1,
     2,
@@ -144,10 +144,10 @@ BOOL ScrCmd_628(ScriptContext *ctx) {
         } else {
             r7 = 0x68;
         }
-        FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), r7, sub_0205C268(r7), 0);
+        FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), r7, FrontierStat_GetFriendIndex(r7), 0);
     }
-    FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), sub_0205BFF0(r5, r4), sub_0205C268(sub_0205BFF0(r5, r4)), 0);
-    FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), sub_0205C048(r5, r4), sub_0205C268(sub_0205C048(r5, r4)), 0);
+    FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleFactory_GetWinStreakStat(r5, r4), FrontierStat_GetFriendIndex(BattleFactory_GetWinStreakStat(r5, r4)), 0);
+    FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleFactory_GetTradeCountStat(r5, r4), FrontierStat_GetFriendIndex(BattleFactory_GetTradeCountStat(r5, r4)), 0);
     return FALSE;
 }
 
@@ -164,16 +164,16 @@ BOOL ScrCmd_633(ScriptContext *ctx) {
         break;
     case 1:
         if (r5 == 3) {
-            *resultPtr = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), 0x6a, sub_0205C268(0x6a));
+            *resultPtr = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), 0x6a, FrontierStat_GetFriendIndex(0x6a));
         } else {
             *resultPtr = HallFlags_GetField(sp04, 5, r5, 0, 0);
         }
         break;
     case 2:
-        *resultPtr = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), sub_0205C11C(r5), sub_0205C268(sub_0205C11C(r5)));
+        *resultPtr = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleHall_GetSpeciesStat(r5), FrontierStat_GetFriendIndex(BattleHall_GetSpeciesStat(r5)));
         break;
     case 3:
-        sub_0204F878(ctx->fieldSystem->saveData, sp04, r5);
+        BattleHall_ResetStreak(ctx->fieldSystem->saveData, sp04, r5);
         break;
     case 4: {
         BattleHallChallengeType challengeType;
@@ -184,7 +184,7 @@ BOOL ScrCmd_633(ScriptContext *ctx) {
         } else {
             challengeType = BATTLE_HALL_CHALLENGE_TYPE_MULTI;
         }
-        sub_0204F284(ctx->taskman, r1, challengeType);
+        BattleHall_StartSelectMons(ctx->taskman, r1, challengeType);
         return TRUE;
     }
     default:
@@ -238,7 +238,7 @@ static BOOL BattleHall_DoesPartyContainEligibleMons(s32 numRequiredMons, SaveDat
 BOOL ScrCmd_636(ScriptContext *ctx) {
     u16 r4 = ScriptGetVar(ctx);
     u32 r1 = Save_Frontier_GetHallFlags(ctx->fieldSystem->saveData);
-    sub_0204F878(ctx->fieldSystem->saveData, r1, r4);
+    BattleHall_ResetStreak(ctx->fieldSystem->saveData, r1, r4);
     return FALSE;
 }
 
@@ -246,29 +246,29 @@ BOOL ScrCmd_636(ScriptContext *ctx) {
 BOOL ScrCmd_634(ScriptContext *ctx) {
     u16 playerSpecies = ScriptGetVar(ctx);
     u16 *resultPtr = ScriptGetVarPointer(ctx);
-    sub_0204F1E4(ctx->taskman, playerSpecies, resultPtr);
+    BattleHall_StartSpeciesCheck(ctx->taskman, playerSpecies, resultPtr);
     return TRUE;
 }
 
-static void sub_0204F1E4(TaskManager *taskManager, u16 playerSpecies, u16 *resultPtr) {
-    UnkStruct_0204F1E4 *r4 = Heap_Alloc(HEAP_ID_FIELD2, sizeof(UnkStruct_0204F1E4));
-    memset(r4, 0, sizeof(UnkStruct_0204F1E4));
+static void BattleHall_StartSpeciesCheck(TaskManager *taskManager, u16 playerSpecies, u16 *resultPtr) {
+    BattleHallSpeciesCheck *r4 = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BattleHallSpeciesCheck));
+    memset(r4, 0, sizeof(BattleHallSpeciesCheck));
     r4->playerTeam = playerSpecies;
     r4->result = resultPtr;
     sub_02091574((FieldSystem *)r4);
-    TaskManager_Call(taskManager, sub_0204F228, r4);
+    TaskManager_Call(taskManager, Task_BattleHallSpeciesCheck, r4);
 }
 
-static BOOL sub_0204F228(TaskManager *taskManager) {
-    UnkStruct_0204F1E4 *r4 = TaskManager_GetEnvironment(taskManager);
+static BOOL Task_BattleHallSpeciesCheck(TaskManager *taskManager) {
+    BattleHallSpeciesCheck *r4 = TaskManager_GetEnvironment(taskManager);
     switch (r4->state) {
     case 0:
-        if (Comm_SendCommand(0x84, r4, sizeof(UnkStruct_0204F1E4)) == 1) {
+        if (Comm_SendCommand(0x84, r4, sizeof(BattleHallSpeciesCheck)) == 1) {
             r4->state++;
         }
         break;
     case 1:
-        if (r4->unk01 >= 2) {
+        if (r4->numReceived >= 2) {
             if (r4->playerTeam == r4->partnerTeam) {
                 *(r4->result) = FALSE;
             } else {
@@ -284,30 +284,30 @@ static BOOL sub_0204F228(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void sub_0204F284(TaskManager *taskManager, void *a1, BattleHallChallengeType challengeType) {
+static void BattleHall_StartSelectMons(TaskManager *taskManager, void *a1, BattleHallChallengeType challengeType) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    UnkStruct_0204F284 *r4 = Heap_Alloc(HEAP_ID_FIELD2, sizeof(UnkStruct_0204F284));
-    MI_CpuFill8(r4, 0, sizeof(UnkStruct_0204F284));
+    BattleHallSelectMonsEnv *r4 = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BattleHallSelectMonsEnv));
+    MI_CpuFill8(r4, 0, sizeof(BattleHallSelectMonsEnv));
     r4->challengeType = challengeType;
-    r4->unk08 = a1;
-    TaskManager_Call(fieldSystem->taskman, sub_0204F2B8, r4);
+    r4->appArgs = a1;
+    TaskManager_Call(fieldSystem->taskman, Task_BattleHallSelectMons, r4);
 }
 
-static BOOL sub_0204F2B8(TaskManager *taskManager) {
+static BOOL Task_BattleHallSelectMons(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    UnkStruct_0204F284 *r4 = TaskManager_GetEnvironment(taskManager);
+    BattleHallSelectMonsEnv *r4 = TaskManager_GetEnvironment(taskManager);
     switch (r4->state) {
     case 0:
-        r4->state = sub_0204F320(r4, fieldSystem, HEAP_ID_FIELD2);
+        r4->state = BattleHallSelectMons_OpenPartyMenu(r4, fieldSystem, HEAP_ID_FIELD2);
         break;
     case 1:
-        r4->state = sub_0204F3F8(r4, fieldSystem);
+        r4->state = BattleHallSelectMons_WaitPartyMenu(r4, fieldSystem);
         break;
     case 2:
-        r4->state = sub_0204F448(r4, fieldSystem, HEAP_ID_FIELD2);
+        r4->state = BattleHallSelectMons_OpenSummary(r4, fieldSystem, HEAP_ID_FIELD2);
         break;
     case 3:
-        r4->state = sub_0204F4D8(r4, fieldSystem);
+        r4->state = BattleHallSelectMons_WaitSummary(r4, fieldSystem);
         break;
     case 4:
         Heap_Free(r4);
@@ -316,7 +316,7 @@ static BOOL sub_0204F2B8(TaskManager *taskManager) {
     return FALSE;
 }
 
-static u32 sub_0204F320(UnkStruct_0204F284 *a0, FieldSystem *fieldSystem, enum HeapID unused) {
+static u32 BattleHallSelectMons_OpenPartyMenu(BattleHallSelectMonsEnv *a0, FieldSystem *fieldSystem, enum HeapID unused) {
     PartyMenuArgs *partyMenuArgs = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PartyMenuArgs));
     MIi_CpuClearFast(0, (u32 *)partyMenuArgs, sizeof(PartyMenuArgs));
     partyMenuArgs->party = SaveArray_Party_Get(fieldSystem->saveData);
@@ -339,15 +339,15 @@ static u32 sub_0204F320(UnkStruct_0204F284 *a0, FieldSystem *fieldSystem, enum H
         partyMenuArgs->maxMonsToSelect = 2;
     }
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PartyMenu, partyMenuArgs);
-    *(a0->unk08) = partyMenuArgs;
+    *(a0->appArgs) = partyMenuArgs;
     return 1;
 }
 
-static u32 sub_0204F3F8(UnkStruct_0204F284 *a0, FieldSystem *fieldSystem) {
+static u32 BattleHallSelectMons_WaitPartyMenu(BattleHallSelectMonsEnv *a0, FieldSystem *fieldSystem) {
     if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
         return 1;
     }
-    PartyMenuArgs *partyMenu = *(a0->unk08);
+    PartyMenuArgs *partyMenu = *(a0->appArgs);
     switch (partyMenu->partySlot) {
     case 7:
         return 4;
@@ -357,12 +357,12 @@ static u32 sub_0204F3F8(UnkStruct_0204F284 *a0, FieldSystem *fieldSystem) {
         MI_CpuCopy8(partyMenu->selectedOrder, a0->selectedMons, 2);
         a0->partySlot = partyMenu->partySlot;
         Heap_Free(partyMenu);
-        *(a0->unk08) = NULL;
+        *(a0->appArgs) = NULL;
         return 2;
     }
 }
 
-static u32 sub_0204F448(UnkStruct_0204F284 *a0, FieldSystem *fieldSystem, enum HeapID heapID) {
+static u32 BattleHallSelectMons_OpenSummary(BattleHallSelectMonsEnv *a0, FieldSystem *fieldSystem, enum HeapID heapID) {
     SaveData *saveData = fieldSystem->saveData;
     PokemonSummaryArgs *args = Heap_AllocAtEnd(heapID, sizeof(PokemonSummaryArgs));
     MI_CpuFill8(args, 0, sizeof(PokemonSummaryArgs));
@@ -377,21 +377,21 @@ static u32 sub_0204F448(UnkStruct_0204F284 *a0, FieldSystem *fieldSystem, enum H
     args->unk12 = 0;
     args->ribbons = Save_SpecialRibbons_Get(saveData);
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);
-    PokemonSummary_SetPages(args, unk_020FC224);
+    PokemonSummary_SetPages(args, sBattleHallSummaryPages);
     PokemonSummaryArgs_SetPlayer(args, Save_PlayerData_GetProfile(saveData));
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, args);
-    *(a0->unk08) = args;
+    *(a0->appArgs) = args;
     return 3;
 }
 
-static u32 sub_0204F4D8(UnkStruct_0204F284 *a0, FieldSystem *fieldSystem) {
+static u32 BattleHallSelectMons_WaitSummary(BattleHallSelectMonsEnv *a0, FieldSystem *fieldSystem) {
     if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
         return 3;
     }
-    PokemonSummaryArgs *pokemonSummaryArgs = *(a0->unk08);
+    PokemonSummaryArgs *pokemonSummaryArgs = *(a0->appArgs);
     a0->partySlot = pokemonSummaryArgs->partySlot;
     Heap_Free(pokemonSummaryArgs);
-    *(a0->unk08) = NULL;
+    *(a0->appArgs) = NULL;
     return 0;
 }
 
@@ -519,8 +519,8 @@ BOOL ScrCmd_BattleHallGetTotalStreak(ScriptContext *ctx) {
 // Unused
 BOOL ScrCmd_697(ScriptContext *ctx) {
     u16 *result = ScriptGetVarPointer(ctx);
-    FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), sub_0205C11C(0), 0xff);
-    u32 unk0 = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), sub_0205C0CC(0), 0xff);
+    FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleHall_GetSpeciesStat(0), 0xff);
+    u32 unk0 = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleHall_GetWinStreakStat(0), 0xff);
     *result = 0;
     if (unk0 == 50) {
         *result = 1;
@@ -528,19 +528,19 @@ BOOL ScrCmd_697(ScriptContext *ctx) {
     return FALSE;
 }
 
-void sub_0204F85C(u32 a0, u32 unused, UnkStruct_0204F1E4 *a2, UnkStruct_0204F1E4 *a3) {
-    a3->unk01++;
+void BattleHall_RecvPartnerSpecies(u32 a0, u32 unused, BattleHallSpeciesCheck *a2, BattleHallSpeciesCheck *a3) {
+    a3->numReceived++;
     if (Comm_GetLocalNetId() != a0) {
         a3->partnerTeam = a2->playerTeam;
     }
 }
 
-void sub_0204F878(SaveData *saveData, u32 a1, u8 a2) {
+void BattleHall_ResetStreak(SaveData *saveData, u32 a1, u8 a2) {
     u8 unk0;
     unk0 = 0;
     HallFlags_SetField(a1, 5, a2, 0, &unk0);
     if (a2 == 3) {
-        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 0x6a, sub_0205C268(0x6a), 0);
+        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 0x6a, FrontierStat_GetFriendIndex(0x6a), 0);
     }
-    FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), sub_0205C0CC(a2), sub_0205C268(sub_0205C0CC(a2)), 0);
+    FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), BattleHall_GetWinStreakStat(a2), FrontierStat_GetFriendIndex(BattleHall_GetWinStreakStat(a2)), 0);
 }

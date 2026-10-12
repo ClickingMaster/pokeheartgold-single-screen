@@ -41,7 +41,7 @@
 .public NNS_GfdDefaultFuncFreeTexVram
 .public NNS_GfdDefaultFuncFreePlttVram
 .public MapPropAnimationManager_GetAnimListNARCFileCount
-.public ov01_021E8F3C
+.public MapPropAnimationManager_LoadPropAnimations
 .public BuildModelShapes_New
 .public BuildModelShapes_Load
 .public BuildModelShapes_Free
@@ -76,5 +76,5 @@
 .public Field3dObject_SetPosEx
 .public Field3dObject_SetPos
 .public Field3dObject_SetXRotation
-.public ov01_022040A4
-.public ov01_0220463C
+.public Field3dObjectList_AddShared
+.public AreaMapAnimation_Load

@@ -15,11 +15,11 @@
 .public Comm_GetLocalNetId
 .public BattleSetup_New
 .public BattleSetup_AddMonToParty
-.public sub_02051D18
+.public BattleSetup_InitFromSaveData
 .public BattleSetup_SetAllySideBattlersToPlayer
-.public sub_0205C1F0
-.public sub_0205C218
-.public sub_0205C268
+.public BattleCastle_GetPointsStat
+.public BattleCastle_GetSpentPointsStat
+.public FrontierStat_GetFriendIndex
 .public AllocMonZeroed
 .public GetMonData
 .public SetMonData

@@ -49,7 +49,7 @@ void BattleDpadCursor_SetBattleCursor(BattleDpadCursor *cursor, BattleCursor *ba
 void BattleDpadCursor_SetPosition(BattleDpadCursor *cursor, u8 position) {
     cursor->position = position;
     if (cursor->active == TRUE) {
-        ov12_0226BAFC(cursor->battleCursor,
+        BattleCursor_SetRect(cursor->battleCursor,
             cursor->boxes[cursor->position].left,
             cursor->boxes[cursor->position].width,
             cursor->boxes[cursor->position].top,
@@ -68,7 +68,7 @@ void BattleDpadCursor_SetBoxes(BattleDpadCursor *cursor, const DpadMenuBox *boxe
     cursor->enabledMask = 0xFFFFFFFF;
     if (cursor->active == TRUE) {
         boxes = cursor->boxes;
-        ov12_0226BAFC(cursor->battleCursor, boxes->left, boxes->width, boxes->top, boxes->height);
+        BattleCursor_SetRect(cursor->battleCursor, boxes->left, boxes->width, boxes->top, boxes->height);
     }
 }
 
@@ -84,7 +84,7 @@ BOOL BattleDpadCursor_TryActivate(BattleDpadCursor *cursor) {
     }
     if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_KEY_RIGHT | PAD_KEY_LEFT | PAD_KEY_UP | PAD_KEY_DOWN)) {
         cursor->active = TRUE;
-        ov12_0226BAFC(cursor->battleCursor,
+        BattleCursor_SetRect(cursor->battleCursor,
             cursor->boxes[cursor->position].left,
             cursor->boxes[cursor->position].width,
             cursor->boxes[cursor->position].top,

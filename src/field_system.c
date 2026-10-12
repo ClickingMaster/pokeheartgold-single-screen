@@ -182,7 +182,7 @@ static void ppOverlayManager_RunFrame_DeleteIfFinished(OverlayManager **man) {
 static BOOL FieldSystem_Main(FieldSystem *fieldSystem) {
     FieldSystem_Control(fieldSystem);
     if (FieldSystem_RunTaskFrame(fieldSystem) == TRUE) {
-        if (fieldSystem->unk4) {
+        if (fieldSystem->mapSystems) {
             ov01_021F6830(fieldSystem, 0, 0);
         }
     }
@@ -241,14 +241,14 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
     case 4:
         if (movementAllowed) {
             if (FieldInput_Process_BattleTower(&fieldInput, fieldSystem) == TRUE) {
-                FieldDrawMapName_Reset(fieldSystem->unk4->drawMapNameInfo);
+                FieldDrawMapName_Reset(fieldSystem->mapSystems->drawMapNameInfo);
                 FieldSystem_SetAndExecuteSignpostWindowCommand(fieldSystem, MAPSIGNCOMMAND_HIDE);
                 Field_PlayerAvatar_TryLeavePoketchPose(fieldSystem->playerAvatar);
                 ov01_021F6830(fieldSystem, 0, 1);
                 break;
             }
             if (gSystem.newKeys & PAD_BUTTON_A) {
-                FieldDrawMapName_Reset(fieldSystem->unk4->drawMapNameInfo);
+                FieldDrawMapName_Reset(fieldSystem->mapSystems->drawMapNameInfo);
             }
             movementAllowed = 0;
             if (sub_0203E324()) {
@@ -261,7 +261,7 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
         if (movementAllowed) {
             u32 newEvent = FieldInput_Process(&fieldInput, fieldSystem);
             if (newEvent) {
-                FieldDrawMapName_Reset(fieldSystem->unk4->drawMapNameInfo);
+                FieldDrawMapName_Reset(fieldSystem->mapSystems->drawMapNameInfo);
                 FieldSystem_SetAndExecuteSignpostWindowCommand(fieldSystem, MAPSIGNCOMMAND_HIDE);
                 PlayerAvatar_ResetMovement(fieldSystem->playerAvatar);
                 Field_PlayerAvatar_TryLeavePoketchPose(fieldSystem->playerAvatar);
@@ -271,7 +271,7 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
                 }
             } else {
                 if (gSystem.newKeys & PAD_BUTTON_A) {
-                    FieldDrawMapName_Reset(fieldSystem->unk4->drawMapNameInfo);
+                    FieldDrawMapName_Reset(fieldSystem->mapSystems->drawMapNameInfo);
                 }
                 u32 flag = 0;
                 if (sub_0203E324()) {
@@ -295,10 +295,10 @@ void FieldSystem_ResumeProcesses() {
 }
 
 int sub_0203E324() {
-    if (sFieldSysPtr->unk4 == NULL) {
+    if (sFieldSysPtr->mapSystems == NULL) {
         return 0;
     }
-    return sFieldSysPtr->unk4->unk14;
+    return sFieldSysPtr->mapSystems->unk14;
 }
 
 void FieldSystem_SetSavedBottomScreenAppId(FieldSystem *fieldSystem, int a1) {

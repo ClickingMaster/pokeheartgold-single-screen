@@ -59,13 +59,13 @@ static BOOL MomSavings_ProcessNormalGifts(PhoneCallPersistentState *savings, u32
     const MomGiftNormalEntry *entry = sGiftNormalTable;
 
     for (int i = 0; i < NUM_NORMAL_GIFTS; i++, entry++) {
-        if (sub_0202F1B4(savings, (u8)i)) {
+        if (PhoneCallPersistentState_MomGift_IsNormalGiftGiven(savings, (u8)i)) {
             continue;
         }
         if (balance < entry->threshold) {
             break;
         }
-        sub_0202F198(savings, (u8)i);
+        PhoneCallPersistentState_MomGift_SetNormalGiftGiven(savings, (u8)i);
         PhoneCallPersistentState_MomGiftQueue_Put(savings, entry->itemId, 1);
         balance = PhoneCallPersistentState_MomSavings_BalanceAction(savings, MOMS_BALANCE_SUB, entry->cost);
         count++;

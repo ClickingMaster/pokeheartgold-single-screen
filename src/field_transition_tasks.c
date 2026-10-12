@@ -178,7 +178,7 @@ BOOL FieldTransition_EnterRising(TaskManager *taskMan) {
             if (FollowMon_IsActive(fieldSystem)) {
                 FollowMon_MoveToPlayer(fieldSystem, 0);
                 MapObject_ChangeMovement(FollowMon_GetMapObject(fieldSystem), 0x30);
-                sub_02069DC8(FollowMon_GetMapObject(fieldSystem), TRUE);
+                FollowMon_HideUntilStep(FollowMon_GetMapObject(fieldSystem), TRUE);
             }
             env->transitionState++;
         }
@@ -233,7 +233,7 @@ BOOL FieldTransition_EnterSinking(TaskManager *taskMan) {
             if (FollowMon_IsActive(fieldSystem)) {
                 FollowMon_MoveToPlayer(fieldSystem, 1);
                 MapObject_ChangeMovement(FollowMon_GetMapObject(fieldSystem), 0x30);
-                sub_02069DC8(FollowMon_GetMapObject(fieldSystem), TRUE);
+                FollowMon_HideUntilStep(FollowMon_GetMapObject(fieldSystem), TRUE);
             }
             env->transitionState++;
         }

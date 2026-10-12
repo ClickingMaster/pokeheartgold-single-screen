@@ -45,8 +45,8 @@ extern const u16 ov80_0223D4DA[];
 void *FrontierTrainer_Load(BattleCastleTrainerRecord *record, int trainerId, enum HeapID heapID, int narcId);
 void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, BattleCastleTrainerRecord *record, int count, int battler, enum HeapID heapID);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-int sub_0205C1F0(int type);
-int sub_0205C218(int type);
+int BattleCastle_GetPointsStat(int type);
+int BattleCastle_GetSpentPointsStat(int type);
 void FrontierSave_SubStat(FrontierSave *frontierSave, int stat, int substat, int amount);
 void FrontierSave_AddStat(FrontierSave *frontierSave, int stat, int substat, int amount);
 
@@ -146,7 +146,7 @@ BattleSetup *BattleCastle_NewBattleSetup(BattleCastleData *data, FrontierLaunchA
 
     HealParty(data->opponentParty);
     setup = BattleSetup_New(HEAP_ID_FIELD2, BattleCastle_GetBattleType(data->type));
-    sub_02051D18(setup, NULL, args->saveData, args->mapId, args->bagCursor, args->unk1C);
+    BattleSetup_InitFromSaveData(setup, NULL, args->saveData, args->mapId, args->bagCursor, args->unk1C);
     setup->battleBg = BATTLE_BG_BATTLE_CASTLE;
     setup->terrain = TERRAIN_BATTLE_CASTLE;
     Party_InitWithMaxSize(setup->party[BATTLER_PLAYER], playerCount);
@@ -350,18 +350,18 @@ int BattleCastle_ClampRound(int round) {
 }
 
 void BattleCastle_SpendPoints(FrontierSave *frontierSave, int type, int amount) {
-    int stat = sub_0205C1F0(type);
+    int stat = BattleCastle_GetPointsStat(type);
     int used;
 
-    FrontierSave_SubStat(frontierSave, stat, sub_0205C268(sub_0205C1F0(type)), amount);
-    stat = sub_0205C218(type);
-    used = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(sub_0205C218(type)));
+    FrontierSave_SubStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(type)), amount);
+    stat = BattleCastle_GetSpentPointsStat(type);
+    used = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetSpentPointsStat(type)));
     used += amount;
     if (used > 9999) {
-        stat = sub_0205C218(type);
-        FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C218(type)), 9999);
+        stat = BattleCastle_GetSpentPointsStat(type);
+        FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetSpentPointsStat(type)), 9999);
     } else {
-        stat = sub_0205C218(type);
-        FrontierSave_AddStat(frontierSave, stat, sub_0205C268(sub_0205C218(type)), amount);
+        stat = BattleCastle_GetSpentPointsStat(type);
+        FrontierSave_AddStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetSpentPointsStat(type)), amount);
     }
 }

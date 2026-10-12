@@ -1035,10 +1035,10 @@ void ov02_BattleExit_HandleRoamerAction(FieldSystem *fieldSystem, BattleSetup *s
         u32 winFlag = setup->winFlag;
         if (winFlag == BATTLE_OUTCOME_WIN && hp == 0) {
             RoamerMon_Init(&roamer);
-            sub_02066BE8(Save_VarsFlags_Get(fieldSystem->saveData), roamerIdx, 2);
+            Save_VarsFlags_SetRoamerStatus(Save_VarsFlags_Get(fieldSystem->saveData), roamerIdx, 2);
         } else if (winFlag == BATTLE_OUTCOME_MON_CAUGHT) {
             RoamerMon_Init(&roamer);
-            sub_02066BE8(Save_VarsFlags_Get(fieldSystem->saveData), roamerIdx, 1);
+            Save_VarsFlags_SetRoamerStatus(Save_VarsFlags_Get(fieldSystem->saveData), roamerIdx, 1);
         } else {
             SetRoamerData(roamer, ROAMER_DATA_HP, hp);
             SetRoamerData(roamer, ROAMER_DATA_STATUS, status);

@@ -1,6 +1,6 @@
-#include "player_avatar_anim_indices_internal.h"
+#include "frontier_stat_ids.h"
 
-u32 sub_0205BFF0(u32 param0, u32 param1) {
+u32 BattleFactory_GetWinStreakStat(u32 param0, u32 param1) {
     u32 base;
 
     switch (param1) {
@@ -21,7 +21,7 @@ u32 sub_0205BFF0(u32 param0, u32 param1) {
     return base + param0 * 4;
 }
 
-u32 sub_0205C01C(u32 param0, u32 param1) {
+u32 BattleFactory_GetBestStreakStat(u32 param0, u32 param1) {
     u32 base;
 
     switch (param1) {
@@ -42,7 +42,7 @@ u32 sub_0205C01C(u32 param0, u32 param1) {
     return base + param0 * 4;
 }
 
-u32 sub_0205C048(u32 param0, u32 param1) {
+u32 BattleFactory_GetTradeCountStat(u32 param0, u32 param1) {
     u32 base;
 
     switch (param1) {
@@ -63,7 +63,7 @@ u32 sub_0205C048(u32 param0, u32 param1) {
     return base + param0 * 4;
 }
 
-u32 sub_0205C074(u32 param0, u32 param1) {
+u32 BattleFactory_GetBestTradeCountStat(u32 param0, u32 param1) {
     u32 base;
 
     switch (param1) {
@@ -84,7 +84,7 @@ u32 sub_0205C074(u32 param0, u32 param1) {
     return base + param0 * 4;
 }
 
-u32 sub_0205C0A0(u32 param0, u32 param1) {
+u32 BattleHall_GetTypeRankStat(u32 param0, u32 param1) {
     u32 base;
 
     switch (param0) {
@@ -105,7 +105,7 @@ u32 sub_0205C0A0(u32 param0, u32 param1) {
     return base + param1 / 2;
 }
 
-u32 sub_0205C0CC(u32 param0) {
+u32 BattleHall_GetWinStreakStat(u32 param0) {
     u32 ret;
 
     switch (param0) {
@@ -126,7 +126,7 @@ u32 sub_0205C0CC(u32 param0) {
     return ret;
 }
 
-u32 sub_0205C0F4(u32 param0) {
+u32 BattleHall_GetBestStreakStat(u32 param0) {
     u32 ret;
 
     switch (param0) {
@@ -147,7 +147,7 @@ u32 sub_0205C0F4(u32 param0) {
     return ret;
 }
 
-u32 sub_0205C11C(u32 param0) {
+u32 BattleHall_GetSpeciesStat(u32 param0) {
     u32 ret;
 
     switch (param0) {
@@ -168,7 +168,7 @@ u32 sub_0205C11C(u32 param0) {
     return ret;
 }
 
-u32 sub_0205C144(u32 param0) {
+u32 BattleHall_GetSpeciesRecordsType(u32 param0) {
     u32 ret;
 
     switch (param0) {
@@ -190,7 +190,7 @@ u32 sub_0205C144(u32 param0) {
     return ret;
 }
 
-u32 sub_0205C174(u32 param0, u32 param1) {
+u32 BattleCastle_GetRankStat(u32 param0, u32 param1) {
     u32 base;
 
     switch (param0) {
@@ -211,7 +211,7 @@ u32 sub_0205C174(u32 param0, u32 param1) {
     return base + param1;
 }
 
-u32 sub_0205C1A0(u32 param0) {
+u32 BattleCastle_GetWinStreakStat(u32 param0) {
     u32 ret;
 
     switch (param0) {
@@ -232,7 +232,7 @@ u32 sub_0205C1A0(u32 param0) {
     return ret;
 }
 
-u32 sub_0205C1C8(u32 param0) {
+u32 BattleCastle_GetBestStreakStat(u32 param0) {
     u32 ret;
 
     switch (param0) {
@@ -253,7 +253,7 @@ u32 sub_0205C1C8(u32 param0) {
     return ret;
 }
 
-u32 sub_0205C1F0(u32 param0) {
+u32 BattleCastle_GetPointsStat(u32 param0) {
     u32 ret;
 
     switch (param0) {
@@ -274,7 +274,7 @@ u32 sub_0205C1F0(u32 param0) {
     return ret;
 }
 
-u32 sub_0205C218(u32 param0) {
+u32 BattleCastle_GetSpentPointsStat(u32 param0) {
     u32 ret;
 
     switch (param0) {
@@ -295,7 +295,7 @@ u32 sub_0205C218(u32 param0) {
     return ret;
 }
 
-u32 sub_0205C240(u32 param0) {
+u32 BattleCastle_GetBestStreakPointsStat(u32 param0) {
     u32 ret;
 
     switch (param0) {

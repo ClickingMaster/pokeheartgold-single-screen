@@ -345,7 +345,7 @@ static void MGGive_Item(FieldSystem *fieldSys, MysteryGiftData *unused) {
     Bag *bag = Save_Bag_Get(fieldSys->saveData);
     u16 item = FieldSystem_GetDataOfNextMG(fieldSys)->item;
     if (item == ITEM_ENIGMA_STONE) {
-        sub_02066B9C(Save_VarsFlags_Get(fieldSys->saveData), 0);
+        Save_VarsFlags_SetEventKey(Save_VarsFlags_Get(fieldSys->saveData), 0);
     }
     Bag_AddItem(bag, item, 1, HEAP_ID_FIELD3);
 }

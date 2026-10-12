@@ -1,6 +1,6 @@
 #include "global.h"
 
-// Field hook object reached through FieldSystem->unk4->unk14 (field_system.c, field/bottom_screen_app.c).
+// Field hook object reached through FieldSystem->mapSystems->unk14 (field_system.c, field/bottom_screen_app.c).
 // Its creator is not known, so the names stay as they are.
 
 typedef void (*Ov35Callback)(void *arg);

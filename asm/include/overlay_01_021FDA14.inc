@@ -52,4 +52,4 @@
 .public Reflection_SpawnForBillboard
 .public Reflection_SpawnForFollower
 .public MapObject_IsShinyPokemon
-.public ov01_02205870
+.public FollowMonBillboard_InitSequence

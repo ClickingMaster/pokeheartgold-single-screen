@@ -101,6 +101,6 @@
 .public MapObjectModel_CreateEffect
 .public MapObject_IsShinyPokemon
 .public MapObject_HasFollowMonSprite
-.public ov01_02205808
+.public FollowMonBillboard_SetResource
 .public MapObject_SetBillboardSepia
 .public ov01_022073D8

@@ -76,7 +76,7 @@ int VsRecorderMenu_InitCommon(OverlayManager *manager, int *state, BOOL fromTerm
         sub_02055198(NULL, 0x482);
     }
     if (fromTerminal == FALSE) {
-        sub_0202AC0C(Save_Misc_Get(recorder->saveData), &recorder->colorScheme);
+        SaveMisc_GetVsRecorderColorScheme(Save_Misc_Get(recorder->saveData), &recorder->colorScheme);
         if (recorder->colorScheme >= 7) {
             recorder->colorScheme = 0;
         }

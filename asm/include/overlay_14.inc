@@ -261,7 +261,7 @@
 .public TypeIcon_GetCharFile
 .public TypeIcon_GetPalette
 .public TypeIcon_GetNarc
-.public sub_0207789C
+.public BagView_Init
 .public BagView_GetItemId
 .public GetItemIndexMapping
 .public GetItemNameIntoString

@@ -8,12 +8,12 @@
 // This file handles the finger that comes up during the catching tutorial
 
 typedef struct BattleFinger {
-    void *unk0;
+    void *sprite;
     SysTask *task;
     int x;
     int y;
     int angle;
-    fx32 unk14;
+    fx32 yOffset;
     s16 delay;
     u8 touchRequest;
     u8 touchOccurrence;
@@ -26,10 +26,10 @@ void BattleFinger_LoadResources(SpriteSystem *renderer, SpriteManager *gfxHandle
 void BattleFinger_FreeResources(SpriteManager *gfxHandler, u32 character, u32 pal, u32 cell, u32 animation);
 BattleFinger *BattleFinger_New(SpriteSystem *renderer, SpriteManager *gfxHandler, enum HeapID heapID, u32 character, u32 pal, u32 cell, u32 animation, u32 spritePriority, u32 bgPriority);
 void BattleFinger_Delete(BattleFinger *finger);
-void ov12_0226BCFC(BattleFinger *finger, int x, int y, fx32 a3);
-void ov12_0226BD2C(BattleFinger *finger, int x, int y);
+void BattleFinger_EnableWithOffset(BattleFinger *finger, int x, int y, fx32 a3);
+void BattleFinger_Enable(BattleFinger *finger, int x, int y);
 void BattleFinger_Disable(BattleFinger *finger);
-void ov12_0226BD4C(BattleFinger *finger, int delay);
-BOOL ov12_0226BD50(BattleFinger *finger);
+void BattleFinger_SetTouchDelay(BattleFinger *finger, int delay);
+BOOL BattleFinger_HasTouched(BattleFinger *finger);
 
 #endif

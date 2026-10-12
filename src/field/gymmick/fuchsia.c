@@ -535,9 +535,9 @@ static const FuchsiaGymmickWallData sWallData[] = {
 
 void GymmickInit_Fuchsia(FieldSystem *fieldSystem) {
     GymmickUnion *gymmickUnion = Save_Gymmick_AssertMagic_GetData(Save_GetGymmickPtr(FieldSystem_GetSaveData(fieldSystem)), GYMMICK_FUCHSIA);
-    fieldSystem->unk4->unk24 = Heap_Alloc(HEAP_ID_FIELD1, sizeof(FuchsiaGymmickLocalData));
-    MI_CpuClear8(fieldSystem->unk4->unk24, sizeof(FuchsiaGymmickLocalData));
-    FuchsiaGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    fieldSystem->mapSystems->localData = Heap_Alloc(HEAP_ID_FIELD1, sizeof(FuchsiaGymmickLocalData));
+    MI_CpuClear8(fieldSystem->mapSystems->localData, sizeof(FuchsiaGymmickLocalData));
+    FuchsiaGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     FuchsiaGymmick_Load3DGraphics(localData, HEAP_ID_FIELD1);
     for (int i = 0; i < 3; ++i) {
         localData->wallAnimTasks[i].wallId = -1;
@@ -546,7 +546,7 @@ void GymmickInit_Fuchsia(FieldSystem *fieldSystem) {
 
 void GymmickFree_Fuchsia(FieldSystem *fieldSystem) {
     u8 i; // declaration here is required to match
-    FuchsiaGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    FuchsiaGymmickLocalData *localData = fieldSystem->mapSystems->localData;
 
     FuchsiaGymmick_Unload3DGraphics(localData);
     for (i = 0; i < 3; ++i) {
@@ -555,11 +555,11 @@ void GymmickFree_Fuchsia(FieldSystem *fieldSystem) {
         }
     }
     Heap_Free(localData);
-    fieldSystem->unk4->unk24 = NULL;
+    fieldSystem->mapSystems->localData = NULL;
 }
 
 void FuchsiaGymmick_CheckCollision(FieldSystem *fieldSystem, int x, int z) {
-    FuchsiaGymmickLocalData *localData = fieldSystem->unk4->unk24;
+    FuchsiaGymmickLocalData *localData = fieldSystem->mapSystems->localData;
 
     s16 wallId = FuchsiaGymmick_GetWallIdAt(x, z);
     if (wallId < 0) {

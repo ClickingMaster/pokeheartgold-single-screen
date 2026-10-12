@@ -100,10 +100,10 @@ u16 ov03_02256A2C(FieldSystem *fieldSystem, MessageFormat *msgFmt, u32 a2);
 u32 ov03_02256B40(int);
 
 BOOL Task_Mart(TaskManager *taskManager);
-int ov03_02257814(MartData *data, u32 unkAmount);
-int ov03_02257978(MartData *data, int itemID);
-u32 ov03_02258120(MartData *data, u16 itemID);
-void ov03_022581BC(MartData *data);
+int MartData_CheckCannotBuy(MartData *data, u32 unkAmount);
+int MartData_GetOwnedQuantity(MartData *data, int itemID);
+u32 MartData_GetItemPrice(MartData *data, u16 itemID);
+void MartData_CreateSprites(MartData *data);
 void ov03_02258910(FieldSystem *fieldSystem);
 void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData data);
 

@@ -73,7 +73,7 @@ struct BattleSetup {                     // declared in trainer_data.h
     int unk1C4;
     Pokemon *bugContestMon; // 1c8
     u8 unk1CC[BATTLER_MAX];
-    BOOL unk_1D0;
+    BOOL isFishing;
 };
 
 BattleSetup *BattleSetup_New(enum HeapID heapID, u32 battleFlags);
@@ -83,17 +83,17 @@ BattleSetup *BattleSetup_New_PalPark(enum HeapID heapID, int balls);
 BattleSetup *BattleSetup_New_Tutorial(enum HeapID heapID, FieldSystem *fieldSystem);
 void BattleSetup_Delete(BattleSetup *setup);
 void BattleSetup_AddMonToParty(BattleSetup *setup, Pokemon *mon, int battler);
-void sub_02051D18(BattleSetup *setup, FieldSystem *fieldSystem, SaveData *savedata, u32 mapno, BagCursor *bagCursor, void *arg5);
+void BattleSetup_InitFromSaveData(BattleSetup *setup, FieldSystem *fieldSystem, SaveData *savedata, u32 mapno, BagCursor *bagCursor, void *arg5);
 void BattleSetup_InitFromFieldSystem(BattleSetup *setup,
     FieldSystem *fieldSystem);
 void BattleSetup_InitForFixedLevelFacility(BattleSetup *setup,
     FieldSystem *fieldSystem,
     int level);
-void sub_020520B0(BattleSetup *setup, FieldSystem *fieldSystem, Party *party, u8 *partySlots);
-void sub_020522F0(BattleSetup *setup, FieldSystem *fieldSystem, void *partySlots);
-void sub_0205239C(BattleSetup *setup, FieldSystem *fieldSystem);
-void sub_02052444(BattleSetup *setup, FieldSystem *fieldSystem);
-void sub_02052544(BattleSetup *setup);
+void BattleSetup_InitForLinkBattleWithParty(BattleSetup *setup, FieldSystem *fieldSystem, Party *party, u8 *partySlots);
+void BattleSetup_InitForLinkBattle(BattleSetup *setup, FieldSystem *fieldSystem, void *partySlots);
+void BattleSetup_CopyResultsToSaveData(BattleSetup *setup, FieldSystem *fieldSystem);
+void BattleSetup_CopyPokedexToSaveData(BattleSetup *setup, FieldSystem *fieldSystem);
+void BattleSetup_SetFishing(BattleSetup *setup);
 BOOL IsBattleResultWin(u32 a0);
 BOOL IsBattleResultStaticWildWin(u32 a0);
 BOOL IsBattleResultLatiCaught(u32 a0);

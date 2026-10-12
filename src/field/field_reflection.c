@@ -478,7 +478,7 @@ void FollowerReflectionEffect_CreateBillboard(FieldEffect *effect, ReflectionEff
         }
         record.resource = resource;
         if (MapObject_IsShinyPokemon(work->args.mapObject)) {
-            ov01_02205870(TRUE, work->args.mapObject, work->billboard, &record);
+            FollowMonBillboard_InitSequence(TRUE, work->args.mapObject, work->billboard, &record);
         }
         FieldEffect_GetPosition(effect, &position);
         work->billboard = FieldEffectManager_CreateBillboard(work->args.manager, (struct FieldEffectRecord *)&record, &position);
