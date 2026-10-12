@@ -2767,10 +2767,10 @@ void BattlePartyMenu_LoadStatusIconResources(BattlePartyMenu *menu) {
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(menu->context->battleSystem);
     NARC *narc = NARC_New(NARC_a_0_3_9, menu->context->heapID);
 
-    SpriteSystem_LoadPaletteBufferFromOpenNarc(menu->paletteData, PLTTBUF_SUB_OBJ, spriteSystem, menu->spriteManager, narc, sub_0208AD58(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 0xB008);
-    SpriteSystem_LoadCellResObjFromOpenNarc(spriteSystem, menu->spriteManager, narc, sub_0208AD5C(), FALSE, 0xB008);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, menu->spriteManager, narc, sub_0208AD60(), FALSE, 0xB008);
-    SpriteSystem_LoadCharResObjFromOpenNarc(spriteSystem, menu->spriteManager, narc, sub_0208AD54(), FALSE, NNS_G2D_VRAM_TYPE_2DSUB, 0xB00D);
+    SpriteSystem_LoadPaletteBufferFromOpenNarc(menu->paletteData, PLTTBUF_SUB_OBJ, spriteSystem, menu->spriteManager, narc, StatusIcon_GetPlttNaix(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 0xB008);
+    SpriteSystem_LoadCellResObjFromOpenNarc(spriteSystem, menu->spriteManager, narc, StatusIcon_GetCellNaix(), FALSE, 0xB008);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, menu->spriteManager, narc, StatusIcon_GetAnimNaix(), FALSE, 0xB008);
+    SpriteSystem_LoadCharResObjFromOpenNarc(spriteSystem, menu->spriteManager, narc, StatusIcon_GetCharNaix(), FALSE, NNS_G2D_VRAM_TYPE_2DSUB, 0xB00D);
     NARC_Delete(narc);
 }
 

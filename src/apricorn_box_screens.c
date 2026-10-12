@@ -45,7 +45,7 @@ BOOL ApricornBox_QueueApricorn(SaveApricornBox *box, int apricorn, u32 value);
 u32 ApricornBox_GetMixState(SaveApricornBox *apricornBox);
 int sub_02031FE8(void *data);
 int ApricornBox_UseJuiceServing(SaveApricornBox *box);
-void ov58_022379C0(UnkStruct_02031CEC *record, Party *party, int slot);
+void ApricornBox_FeedAprijuice(UnkStruct_02031CEC *record, Party *party, int slot);
 void ParticleSystem_DeleteAllEmitters(SPLEmitter *emitter);
 
 // Output of ApricornJuice_RankFlavors: the juice made from the blended apricorns.
@@ -756,7 +756,7 @@ int ApricornBoxScreen_JuiceMenuState(ApricornBoxScreen *screen) {
             return 15;
         }
         screen->app->unk_18 = 3;
-        screen->app->unk_1C = 0;
+        screen->app->partySlot = 0;
         screen->app->unk_1A[0] = screen->lastRowLeft;
         screen->app->unk_1A[1] = screen->lastRowRight;
         return 1;
@@ -2496,7 +2496,7 @@ void AprijuiceScreen_InitFromArgs(AprijuiceScreen *screen) {
         // a byte cursor over the entries, as in the original
         entry = (u8 *)screen;
         do {
-            if (screen->app->unk_1C == ((AprijuiceScreen *)entry)->mons[0].slot) {
+            if (screen->app->partySlot == ((AprijuiceScreen *)entry)->mons[0].slot) {
                 screen->selectedMon = i;
                 return;
             }
@@ -2511,7 +2511,7 @@ void AprijuiceScreen_WriteResult(AprijuiceScreen *screen) {
     AprijuiceScreen_FreeParty(screen);
     MenuInputStateMgr_SetState(screen->app->args->menuInputStatePtr, screen->menuInputState);
     entry = &screen->mons[screen->selectedMon];
-    screen->app->unk_1C = entry->slot;
+    screen->app->partySlot = entry->slot;
     screen->app->unk_18 = screen->juiceUsed != 0 ? 1 : 3;
     if (screen->app->args->unk8 != NULL) {
         *screen->app->args->unk8 = screen->juiceUsed;
@@ -3203,7 +3203,7 @@ void AprijuiceMon_Free(AprijuiceMon *entry) {
 void AprijuiceScreen_UseJuice(AprijuiceScreen *screen) {
     int i;
     AprijuiceMon *entry = &screen->mons[screen->selectedMon];
-    ov58_022379C0(&screen->juiceRecord, screen->party, entry->slot);
+    ApricornBox_FeedAprijuice(&screen->juiceRecord, screen->party, entry->slot);
     if (screen->app->unk_14 == 8) {
         ApricornBox_UseJuiceServing(screen->apricornBox);
     }

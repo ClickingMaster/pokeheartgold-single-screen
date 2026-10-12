@@ -11,36 +11,36 @@ BOOL AprijuiceScreen_Init(OverlayManager *man, int *state);
 BOOL AprijuiceScreen_Main(OverlayManager *man, int *state);
 BOOL AprijuiceScreen_Exit(OverlayManager *man, int *state);
 
-BOOL ov58_022378C0(OverlayManager **pMan);
+BOOL ApricornBox_RunChildApp(OverlayManager **pMan);
 BOOL ApricornBox_Init(OverlayManager *man, int *state);
 BOOL ApricornBox_Main(OverlayManager *man, int *state);
 BOOL ApricornBox_Exit(OverlayManager *man, int *state);
-void ov58_022379C0(UnkStruct_02031CEC *record, Party *party, int slot);
-void ov58_02237B40(ApricornBoxApp *app);
-void ov58_02237B94(ApricornBoxApp *app);
-int ov58_02237B98(ApricornBoxApp *app);
-int ov58_02237BB0(ApricornBoxApp *app);
-int ov58_02237BD4(ApricornBoxApp *app);
-int ov58_02237C4C(ApricornBoxApp *app);
-int ov58_02237C88(ApricornBoxApp *app);
-int ov58_02237CA0(ApricornBoxApp *app);
-void ov58_02237CCC(void);
+void ApricornBox_FeedAprijuice(UnkStruct_02031CEC *record, Party *party, int slot);
+void ApricornBox_InitFromArgs(ApricornBoxApp *app);
+void ApricornBox_Cleanup(ApricornBoxApp *app);
+int ApricornBox_State_OpenBoxScreen(ApricornBoxApp *app);
+int ApricornBox_State_RunBoxScreen(ApricornBoxApp *app);
+int ApricornBox_State_OpenPartyMenu(ApricornBoxApp *app);
+int ApricornBox_State_RunPartyMenu(ApricornBoxApp *app);
+int ApricornBox_State_OpenAprijuiceScreen(ApricornBoxApp *app);
+int ApricornBox_State_RunAprijuiceScreen(ApricornBoxApp *app);
+void ApricornBox_ResetDisplay(void);
 
-static const OverlayManagerTemplate _02237D1C = {
+static const OverlayManagerTemplate sApricornBoxScreenTemplate = {
     ApricornBoxScreen_Init,
     ApricornBoxScreen_Main,
     ApricornBoxScreen_Exit,
     FS_OVERLAY_ID(OVY_59),
 };
 
-static const OverlayManagerTemplate ov58_02237D2C = {
+static const OverlayManagerTemplate sAprijuiceScreenTemplate = {
     AprijuiceScreen_Init,
     AprijuiceScreen_Main,
     AprijuiceScreen_Exit,
     FS_OVERLAY_ID(OVY_59),
 };
 
-BOOL ov58_022378C0(OverlayManager **pMan) {
+BOOL ApricornBox_RunChildApp(OverlayManager **pMan) {
     if (*pMan != NULL && OverlayManager_Run(*pMan)) {
         OverlayManager_Delete(*pMan);
         *pMan = NULL;
@@ -52,13 +52,13 @@ BOOL ov58_022378C0(OverlayManager **pMan) {
 BOOL ApricornBox_Init(OverlayManager *man, int *state) {
     ApricornBoxApp *app;
 
-    ov58_02237CCC();
+    ApricornBox_ResetDisplay();
     Heap_Create(HEAP_ID_3, HEAP_ID_133, 0x2000);
     app = OverlayManager_CreateAndGetData(man, sizeof(ApricornBoxApp), HEAP_ID_133);
     MI_CpuFill8(app, 0, sizeof(ApricornBoxApp));
     app->heapId = HEAP_ID_133;
     app->args = OverlayManager_GetArgs(man);
-    ov58_02237B40(app);
+    ApricornBox_InitFromArgs(app);
     return TRUE;
 }
 
@@ -74,22 +74,22 @@ BOOL ApricornBox_Main(OverlayManager *man, int *state) {
         }
         break;
     case 1:
-        *state = ov58_02237B98(app);
+        *state = ApricornBox_State_OpenBoxScreen(app);
         break;
     case 2:
-        *state = ov58_02237BB0(app);
+        *state = ApricornBox_State_RunBoxScreen(app);
         break;
     case 3:
-        *state = ov58_02237BD4(app);
+        *state = ApricornBox_State_OpenPartyMenu(app);
         break;
     case 4:
-        *state = ov58_02237C4C(app);
+        *state = ApricornBox_State_RunPartyMenu(app);
         break;
     case 5:
-        *state = ov58_02237C88(app);
+        *state = ApricornBox_State_OpenAprijuiceScreen(app);
         break;
     case 6:
-        *state = ov58_02237CA0(app);
+        *state = ApricornBox_State_RunAprijuiceScreen(app);
         break;
     case 7:
         return TRUE;
@@ -100,14 +100,14 @@ BOOL ApricornBox_Main(OverlayManager *man, int *state) {
 BOOL ApricornBox_Exit(OverlayManager *man, int *state) {
     ApricornBoxApp *app = OverlayManager_GetData(man);
 
-    ov58_02237CCC();
-    ov58_02237B94(app);
+    ApricornBox_ResetDisplay();
+    ApricornBox_Cleanup(app);
     OverlayManager_FreeData(man);
     Heap_Destroy(HEAP_ID_133);
     return TRUE;
 }
 
-void ov58_022379C0(UnkStruct_02031CEC *record, Party *party, int slot) {
+void ApricornBox_FeedAprijuice(UnkStruct_02031CEC *record, Party *party, int slot) {
     s8 newMods[5];
     PartyExtraSub modifiers;
     ApricornJuiceData juice;
@@ -163,7 +163,7 @@ void ov58_022379C0(UnkStruct_02031CEC *record, Party *party, int slot) {
     ApplyMonMoodModifier(Party_GetMonByIndex(party, slot), 7);
 }
 
-void ov58_02237B40(ApricornBoxApp *app) {
+void ApricornBox_InitFromArgs(ApricornBoxApp *app) {
     if (app->args->unk8 != NULL) {
         *app->args->unk8 = 0;
     }
@@ -187,51 +187,51 @@ void ov58_02237B40(ApricornBoxApp *app) {
     app->unk_14 = 8;
 }
 
-void ov58_02237B94(ApricornBoxApp *app) {
+void ApricornBox_Cleanup(ApricornBoxApp *app) {
 }
 
-int ov58_02237B98(ApricornBoxApp *app) {
-    app->child = OverlayManager_New(&_02237D1C, app, app->heapId);
+int ApricornBox_State_OpenBoxScreen(ApricornBoxApp *app) {
+    app->child = OverlayManager_New(&sApricornBoxScreenTemplate, app, app->heapId);
     return 2;
 }
 
-int ov58_02237BB0(ApricornBoxApp *app) {
-    if (!ov58_022378C0(&app->child)) {
+int ApricornBox_State_RunBoxScreen(ApricornBoxApp *app) {
+    if (!ApricornBox_RunChildApp(&app->child)) {
         return 2;
     }
     if (app->unk_18 == 3) {
-        app->unk_1C = 0;
+        app->partySlot = 0;
         return 3;
     }
     return 7;
 }
 
-int ov58_02237BD4(ApricornBoxApp *app) {
+int ApricornBox_State_OpenPartyMenu(ApricornBoxApp *app) {
     PartyMenuArgs *args = Heap_Alloc(app->heapId, sizeof(PartyMenuArgs));
 
     MI_CpuFill8(args, 0, sizeof(PartyMenuArgs));
     args->party = SaveArray_Party_Get(app->args->saveData);
     args->bag = Save_Bag_Get(app->args->saveData);
-    args->unk_25 = 0;
+    args->panelLayout = 0;
     args->context = PARTY_MENU_CONTEXT_20;
     args->options = Save_PlayerData_GetOptionsAddr(app->args->saveData);
     args->mailbox = Save_Mailbox_Get(app->args->saveData);
     args->fieldSystem = NULL;
     args->menuInputStatePtr = app->args->menuInputStatePtr;
-    args->partySlot = app->unk_1C;
+    args->partySlot = app->partySlot;
     app->child = OverlayManager_New(&gOverlayTemplate_PartyMenu, args, app->heapId);
     app->partyMenuArgs = args;
     return 4;
 }
 
-int ov58_02237C4C(ApricornBoxApp *app) {
+int ApricornBox_State_RunPartyMenu(ApricornBoxApp *app) {
     u8 slot;
 
-    if (!ov58_022378C0(&app->child)) {
+    if (!ApricornBox_RunChildApp(&app->child)) {
         return 4;
     }
     slot = app->partyMenuArgs->partySlot;
-    app->unk_1C = slot;
+    app->partySlot = slot;
     Heap_Free(app->partyMenuArgs);
     app->partyMenuArgs = NULL;
     if (slot == 7) {
@@ -243,13 +243,13 @@ int ov58_02237C4C(ApricornBoxApp *app) {
     return 5;
 }
 
-int ov58_02237C88(ApricornBoxApp *app) {
-    app->child = OverlayManager_New(&ov58_02237D2C, app, app->heapId);
+int ApricornBox_State_OpenAprijuiceScreen(ApricornBoxApp *app) {
+    app->child = OverlayManager_New(&sAprijuiceScreenTemplate, app, app->heapId);
     return 6;
 }
 
-int ov58_02237CA0(ApricornBoxApp *app) {
-    if (!ov58_022378C0(&app->child)) {
+int ApricornBox_State_RunAprijuiceScreen(ApricornBoxApp *app) {
+    if (!ApricornBox_RunChildApp(&app->child)) {
         return 6;
     }
     if (app->unk_18 == 3) {
@@ -261,7 +261,7 @@ int ov58_02237CA0(ApricornBoxApp *app) {
     return 1;
 }
 
-void ov58_02237CCC(void) {
+void ApricornBox_ResetDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();

@@ -298,7 +298,7 @@ void PokemonSummary_PrintPage(PokemonSummary *summary) {
         PokemonSummary_PrintMoves(summary);
         break;
     case 2:
-        sub_0208D520(summary);
+        PokemonSummary_PrintPokeathlonStatLabels(summary);
         PokemonSummary_PrintRibbonCount(summary);
         break;
     case 3:
@@ -519,7 +519,7 @@ void PokemonSummary_PrintMoves(PokemonSummary *summary) {
 
 #pragma force_active on
 
-void sub_0208D520(PokemonSummary *summary) {
+void PokemonSummary_PrintPokeathlonStatLabels(PokemonSummary *summary) {
     ScheduleWindowCopyToVram(&summary->windows[5]);
     if (summary->args->isFlag982Set) {
         FillWindowPixelBuffer(&summary->pageWindows[3], 0);
@@ -691,7 +691,7 @@ void PokemonSummary_PrintSwappedMoves(PokemonSummary *summary) {
     ScheduleWindowCopyToVram(&summary->pageWindows[8 + summary->swapMoveSlot]);
 }
 
-void sub_0208DBF0(PokemonSummary *summary) {
+void PokemonSummary_PrintCantForgetHMMessage(PokemonSummary *summary) {
     Window *window;
     if (summary->page == 1) {
         ClearWindowTilemapAndScheduleTransfer(&summary->pageWindows[13]);
@@ -707,7 +707,7 @@ void sub_0208DBF0(PokemonSummary *summary) {
     ScheduleWindowCopyToVram(window);
 }
 
-void sub_0208DC68(PokemonSummary *summary, int show) {
+void PokemonSummary_ShowForgetLabel(PokemonSummary *summary, int show) {
     if (show == TRUE) {
         FillWindowPixelBuffer(&summary->pageWindows[16], 0);
         ReadMsgDataIntoString(summary->msgData, 193, summary->buffer);
@@ -724,7 +724,7 @@ void sub_0208DC68(PokemonSummary *summary, int show) {
     }
 }
 
-void sub_0208DD20(PokemonSummary *summary, int show) {
+void PokemonSummary_ShowSwitchLabel(PokemonSummary *summary, int show) {
     if (show == TRUE) {
         FillWindowPixelBuffer(&summary->pageWindows[17], 0);
         ReadMsgDataIntoString(summary->msgData, 194, summary->buffer);

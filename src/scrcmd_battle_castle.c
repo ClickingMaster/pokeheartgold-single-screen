@@ -208,7 +208,7 @@ static u32 BattleCastleSelectMons_OpenPartyMenu(FrontierSelectMonsEnv *a0, Field
     partyMenu->bag = Save_Bag_Get(fieldSystem->saveData);
     partyMenu->mailbox = Save_Mailbox_Get(fieldSystem->saveData);
     partyMenu->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    partyMenu->unk_25 = 0;
+    partyMenu->panelLayout = 0;
     partyMenu->context = PARTY_MENU_CONTEXT_23;
     partyMenu->fieldSystem = fieldSystem;
     partyMenu->partySlot = a0->partySlot;

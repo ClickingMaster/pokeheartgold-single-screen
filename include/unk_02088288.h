@@ -38,10 +38,10 @@ u32 sub_02088288(SaveData *);
 BOOL PokemonSummary_IsPokeathlonUnlocked(SaveData *);
 void PokemonSummary_SetPages(PokemonSummaryArgs *, const u8 *);
 void PokemonSummaryArgs_SetPlayer(PokemonSummaryArgs *, PlayerProfile *);
-int sub_0208AD54(void);
-int sub_0208AD58(void);
-int sub_0208AD5C(void);
-int sub_0208AD60(void);
+int StatusIcon_GetCharNaix(void);
+int StatusIcon_GetPlttNaix(void);
+int StatusIcon_GetCellNaix(void);
+int StatusIcon_GetAnimNaix(void);
 u32 Pokemon_GetStatusIconId(Pokemon *pokemon);
 
 #endif // POKEHEARTGOLD_UNK_02088288_H

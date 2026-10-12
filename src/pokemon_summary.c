@@ -133,10 +133,10 @@ BOOL PokemonSummary_Main(OverlayManager *manager, int *state) {
         *state = PokemonSummary_HandleInput(summary);
         break;
     case 3:
-        *state = sub_02088D18(summary);
+        *state = PokemonSummary_WaitSlideInMoveInfo(summary);
         break;
     case 4:
-        *state = sub_02088D34(summary);
+        *state = PokemonSummary_WaitSlideOutMoveInfo(summary);
         break;
     case 5:
         *state = PokemonSummary_HandleMoveSelectInput(summary);
@@ -454,15 +454,15 @@ int PokemonSummary_HandleInput(PokemonSummary *summary) {
     return PokemonSummary_HandleTouchInput(summary);
 }
 
-int sub_02088D18(PokemonSummary *summary) {
+int PokemonSummary_WaitSlideInMoveInfo(PokemonSummary *summary) {
     if (PokemonSummary_SlideInMoveInfo(summary) == TRUE) {
-        sub_0208AFA0(summary, 1);
+        PokemonSummary_DrawSwitchButton(summary, 1);
         return 5;
     }
     return 3;
 }
 
-int sub_02088D34(PokemonSummary *summary) {
+int PokemonSummary_WaitSlideOutMoveInfo(PokemonSummary *summary) {
     if (PokemonSummary_SlideOutMoveInfo(summary) == TRUE) {
         return 2;
     }

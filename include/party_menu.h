@@ -287,7 +287,7 @@ typedef struct PartyMenuArgs {
     FieldSystem *fieldSystem;
     MenuInputStateMgr *menuInputStatePtr;
     u8 context;
-    u8 unk_25;
+    u8 panelLayout;
     u8 partySlot;
     u8 selectedAction;
     u16 itemId;
@@ -344,8 +344,8 @@ typedef struct PartyMenuMonsDrawState {
     u8 isEgg;                     // 838
     u8 form;                      // 839
     u16 capsule;                  // 83A
-    s8 unk_14;                    // 83C
-    s8 unk_15;                    // 83D
+    s8 panelX;                    // 83C
+    s8 panelY;                    // 83D
     s16 iconX;                    // 83E
     s16 iconY;                    // 840
     s16 statusIconX;              // 842
@@ -374,9 +374,9 @@ struct PartyMenu {
     Window windows[PARTY_MENU_WINDOW_ID_MAX];
     Window levelUpStatsWindow[1];       // 0x284
     Window contextMenuButtonWindows[8]; // 0x294
-    u16 unk_314[6 * 0x10];
-    u16 unk_3D4[6 * 0x10];
-    u16 unk_494[6 * 0x10];
+    u16 leadPanelTilemap[6 * 0x10];
+    u16 panelTilemap[6 * 0x10];
+    u16 emptyPanelTilemap[6 * 0x10];
     u16 hpBarPalettes[0x80];
     PartyMenuArgs *args; // 0x654
     SpriteSystem *spriteRenderer;
@@ -406,7 +406,7 @@ struct PartyMenu {
     u8 cancelDisabled : 1;
     u8 textPrinterId;
     u8 partyMonIndex; // 0xc65
-    u8 unk_C66;
+    u8 initialPartyMonIndex;
     u8 levelUpLearnMovesLoopState;
     u16 levelUpStatsTmp[6];
     PokedexData *pokedex; // 0xc74

@@ -48,9 +48,9 @@
 .public PokemonSummary_PrintMoveToLearn
 .public sub_0208DB58
 .public PokemonSummary_PrintSwappedMoves
-.public sub_0208DBF0
-.public sub_0208DC68
-.public sub_0208DD20
+.public PokemonSummary_PrintCantForgetHMMessage
+.public PokemonSummary_ShowForgetLabel
+.public PokemonSummary_ShowSwitchLabel
 .public sub_0208DDA0
 .public GetRibbonAttr
 .public GetRibbonDescGmm

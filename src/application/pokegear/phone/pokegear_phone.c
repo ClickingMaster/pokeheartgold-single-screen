@@ -189,7 +189,7 @@ int PokegearPhone_MainTask_HandleMoveContactsInput(PokegearPhoneAppData *phoneAp
 }
 
 int PokegearPhone_MainTask_DimScreenBeforeCall(PokegearPhoneAppData *phoneApp) {
-    ov101_021EFFBC(phoneApp);
+    PokegearPhone_DimTouchscreenForCall(phoneApp);
     return PHONE_MAIN_STATE_SETUP_CALL;
 }
 
@@ -209,7 +209,7 @@ int PokegearPhone_MainTask_DoPhoneCall(PokegearPhoneAppData *phoneApp) {
 
 // unused?
 int PokegearPhone_MainTask_DebugHangupEffect(PokegearPhoneAppData *phoneApp) {
-    if (!ov101_021F00BC(phoneApp)) {
+    if (!PokegearPhone_PrintHangUpClicks(phoneApp)) {
         return PHONE_MAIN_STATE_UNUSED_DEBUG_MAYBE;
     }
     FillWindowPixelBuffer(&phoneApp->windows[0], 0);
@@ -222,7 +222,7 @@ int PokegearPhone_MainTask_DebugHangupEffect(PokegearPhoneAppData *phoneApp) {
 }
 
 int PokegearPhone_MainTask_FadeInFromGearOpen(PokegearPhoneAppData *phoneApp) {
-    if (ov101_021EFF14(phoneApp)) {
+    if (PokegearPhone_FadeIn(phoneApp)) {
         phoneApp->subtaskState = 0;
         if (phoneApp->isIncomingCall) {
             return PHONE_MAIN_STATE_SETUP_CALL;

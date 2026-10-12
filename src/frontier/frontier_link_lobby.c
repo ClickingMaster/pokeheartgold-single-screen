@@ -99,7 +99,7 @@ void FrontierLinkLobby_LaunchPartyMenu(void *frontierWork, FrontierLinkLobby *lo
     lobby->partyMenuArgs->bag = Save_Bag_Get(lobby->saveData);
     lobby->partyMenuArgs->mailbox = Save_Mailbox_Get(lobby->saveData);
     lobby->partyMenuArgs->options = Save_PlayerData_GetOptionsAddr(lobby->saveData);
-    lobby->partyMenuArgs->unk_25 = 0;
+    lobby->partyMenuArgs->panelLayout = 0;
     if (lobby->facility == 1) {
         lobby->partyMenuArgs->context = PARTY_MENU_CONTEXT_17;
     } else if (lobby->facility == 5) {

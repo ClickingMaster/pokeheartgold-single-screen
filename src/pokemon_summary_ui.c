@@ -105,7 +105,7 @@ void PokemonSummary_LoadPageBgs(PokemonSummary *summary) {
         ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, 128);
         ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_Y, 0);
         if (summary->args->moveToLearn == MOVE_NONE) {
-            sub_0208AF70(summary);
+            PokemonSummary_ClearForgetButton(summary);
         }
     } else if (summary->mon.isEgg) {
         PokemonSummary_LoadBgScreen(summary, summary->bgConfig, gPokemonSummaryPageScreens[summary->page][2], GF_BG_LYR_SUB_2);
@@ -215,7 +215,7 @@ void PokemonSummary_ShowMon(PokemonSummary *summary, u8 slot) {
     PokemonSummary_UpdateMarkingSprites(summary);
     PokemonSummary_PrintPage(summary);
     PokemonSummary_UpdatePartySlotSprite(summary);
-    sub_0208BFD0(summary);
+    PokemonSummary_AlternateBoxMonIcon(summary);
 }
 
 void PokemonSummary_ChangeMon(PokemonSummary *summary, int direction) {
@@ -717,19 +717,19 @@ void PokemonSummaryArgs_SetPlayer(PokemonSummaryArgs *args, PlayerProfile *profi
     args->unk10 = PlayerProfile_GetTrainerGender(profile);
 }
 
-int sub_0208AD54(void) {
+int StatusIcon_GetCharNaix(void) {
     return 64;
 }
 
-int sub_0208AD58(void) {
+int StatusIcon_GetPlttNaix(void) {
     return 65;
 }
 
-int sub_0208AD5C(void) {
+int StatusIcon_GetCellNaix(void) {
     return 63;
 }
 
-int sub_0208AD60(void) {
+int StatusIcon_GetAnimNaix(void) {
     return 62;
 }
 
@@ -836,7 +836,7 @@ int PokemonSummary_GetRibbonTouch(PokemonSummary *summary) {
 int PokemonSummary_ShowForgetConfirm(PokemonSummary *summary) {
     Sprite_SetAnimCtrlSeq(summary->sprites[9], 1);
     Sprite_SetDrawFlag(summary->sprites[10], TRUE);
-    sub_0208BCB4(summary);
+    PokemonSummary_ResetSwapCursorSprite(summary);
     PokemonSummary_DrawForgetConfirm(summary, 1);
     return 9;
 }
@@ -845,34 +845,34 @@ void PokemonSummary_DrawForgetConfirm(PokemonSummary *summary, int show) {
     if (show == 1) {
         BgCellManager_DrawCellAt(summary->cellManager, 0, 0, 18);
         Sprite_SetDrawFlag(summary->sprites[17], FALSE);
-        sub_0208DC68(summary, 1);
+        PokemonSummary_ShowForgetLabel(summary, 1);
         return;
     }
     if (summary->args->moveToLearn != MOVE_NONE) {
         BgCellManager_DrawCellAt(summary->cellManager, 1, 0, 18);
         Sprite_SetDrawFlag(summary->sprites[17], TRUE);
     } else {
-        sub_0208AF70(summary);
+        PokemonSummary_ClearForgetButton(summary);
     }
-    sub_0208DC68(summary, 0);
+    PokemonSummary_ShowForgetLabel(summary, 0);
 }
 
-void sub_0208AF70(PokemonSummary *summary) {
+void PokemonSummary_ClearForgetButton(PokemonSummary *summary) {
     FillBgTilemapRect(summary->bgConfig, GF_BG_LYR_SUB_2, 0x3006, 0, 18, 17, 6, 17);
     ScheduleBgTilemapBufferTransfer(summary->bgConfig, GF_BG_LYR_SUB_2);
 }
 
-void sub_0208AFA0(PokemonSummary *summary, int value) {
+void PokemonSummary_DrawSwitchButton(PokemonSummary *summary, int value) {
     if (summary->args->unk12 == 1) {
         return;
     }
     if (value == 1) {
         BgCellManager_DrawCellAt(summary->cellManager, 2, 1, 16);
-        sub_0208DD20(summary, 1);
+        PokemonSummary_ShowSwitchLabel(summary, 1);
         return;
     }
     BgCellManager_DrawCellAt(summary->cellManager, 3, 1, 16);
-    sub_0208DD20(summary, 0);
+    PokemonSummary_ShowSwitchLabel(summary, 0);
 }
 
 #pragma force_active on

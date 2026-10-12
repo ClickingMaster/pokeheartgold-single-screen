@@ -53,14 +53,14 @@ typedef struct TouchSaveAppData {
     enum TouchSaveApp_State state;
     enum TouchSaveApp_State stateAfterTextPrint;
     int waitFrames;
-    void *unk18;
+    void *lastTouchMenuInput;
     FieldSystem *fieldSystem;
     u8 unk20[0x10];
     u32 unk30;
     u8 unk34[4];
     MsgData *msgData;
     MessageFormat *messageFormat;
-    struct SaveStatsPrinter *unk40;
+    struct SaveStatsPrinter *saveStatsPrinter;
     Options *options;
     YesNoPrompt *yesNoPrompt;
     Window window;
@@ -70,12 +70,12 @@ typedef struct TouchSaveAppData {
     SysTask *savingMovementTask;
 } TouchSaveAppData; // size: 0x6C
 
-static void ov30_0225D700(SysTask *task, TouchSaveAppData *data);
+static void TouchSaveApp_Task(SysTask *task, TouchSaveAppData *data);
 static void TouchSaveApp_SetupGraphics(TouchSaveAppData *data);
 static void TouchSaveApp_DestroyWindow(TouchSaveAppData *data);
 static void TouchSaveApp_SetupText(TouchSaveAppData *data, u8 unused);
 static void TouchSaveApp_DestroyText(TouchSaveAppData *data);
-static void ov30_0225D880(TouchSaveAppData *data);
+static void TouchSaveApp_CreateYesNoPrompt(TouchSaveAppData *data);
 static void TouchSaveApp_SetupWaitForTextPrinter(TouchSaveAppData *data, enum TouchSaveApp_State nextState);
 static BOOL TouchSaveApp_DisplaySaveInformation(TouchSaveAppData *data);
 static BOOL TouchSaveApp_AskForSave(TouchSaveAppData *data);
@@ -95,11 +95,11 @@ static BOOL TouchSaveApp_SaveSucceeded(TouchSaveAppData *data);
 static BOOL TouchSaveApp_CloseApp(TouchSaveAppData *data);
 static BOOL TouchSaveApp_ShouldPrintAlternateSavingMessage(TouchSaveAppData *data);
 static void TouchSaveApp_SetMenuInputState(MenuInputStateMgr *stateMgr, MenuInputState state);
-static void ov30_0225DC08(void);
-static void ov30_0225DC18(void);
-static void ov30_0225DC28(void);
+static void TouchSaveApp_OnEmulatorDetected(void);
+static void TouchSaveApp_OnDummyDetected(void);
+static void TouchSaveApp_OnFlashcartCheckFailed(void);
 
-static const BgTemplate ov30_0225DC64 = {
+static const BgTemplate sTouchSaveBgTemplate_Sub2 = {
     .x = 0,
     .y = 0,
     .bufferSize = 0x800,
@@ -115,7 +115,7 @@ static const BgTemplate ov30_0225DC64 = {
     .mosaic = FALSE,
 };
 
-static const BgTemplate ov30_0225DC48 = {
+static const BgTemplate sTouchSaveBgTemplate_Sub1 = {
     .x = 0,
     .y = 0,
     .bufferSize = 0x800,
@@ -131,7 +131,7 @@ static const BgTemplate ov30_0225DC48 = {
     .mosaic = FALSE,
 };
 
-static const BgTemplate ov30_0225DC2C = {
+static const BgTemplate sTouchSaveBgTemplate_Sub0 = {
     .x = 0,
     .y = 0,
     .bufferSize = 0x800,
@@ -167,7 +167,7 @@ static TouchSaveAppStateFunc sTouchSaveAppStateFuncs[TOUCHSAVEAPP_STATE_COUNT] =
     TouchSaveApp_CloseApp,
 };
 
-SysTask *ov30_0225D520(BgConfig *bgConfig, void *a1, FieldSystem *fieldSystem, void *a3) {
+SysTask *TouchSaveApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSystem, void *a3) {
     Heap_Create(HEAP_ID_3, HEAP_ID_8, 0x18000);
 
     GXS_SetGraphicsMode(GX_BGMODE_0);
@@ -175,9 +175,9 @@ SysTask *ov30_0225D520(BgConfig *bgConfig, void *a1, FieldSystem *fieldSystem, v
     GX_SetBankForSubOBJ(GX_VRAM_SUB_OBJ_16_I);
     GXS_SetOBJVRamModeChar(GX_OBJVRAMMODE_CHAR_1D_32K);
 
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &ov30_0225DC2C, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &ov30_0225DC48, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &ov30_0225DC64, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sTouchSaveBgTemplate_Sub0, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sTouchSaveBgTemplate_Sub1, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sTouchSaveBgTemplate_Sub2, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 0x20, 0, HEAP_ID_FIELD1);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
@@ -188,12 +188,12 @@ SysTask *ov30_0225D520(BgConfig *bgConfig, void *a1, FieldSystem *fieldSystem, v
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
 
-    SysTask *task = CreateSysTaskAndEnvironment((SysTaskFunc)ov30_0225D700, sizeof(TouchSaveAppData), 10, HEAP_ID_8);
+    SysTask *task = CreateSysTaskAndEnvironment((SysTaskFunc)TouchSaveApp_Task, sizeof(TouchSaveAppData), 10, HEAP_ID_8);
     TouchSaveAppData *data = SysTask_GetData(task);
     data->task = task;
     data->unk0 = 0;
     data->bgConfig = bgConfig;
-    data->unk18 = a1;
+    data->lastTouchMenuInput = a1;
     data->fieldSystem = fieldSystem;
     data->unk30 = 0;
     data->options = Save_PlayerData_GetOptionsAddr(data->fieldSystem->saveData);
@@ -212,21 +212,21 @@ SysTask *ov30_0225D520(BgConfig *bgConfig, void *a1, FieldSystem *fieldSystem, v
     return task;
 }
 
-void ov30_0225D64C(BgConfig *bgConfig, SysTask *task) {
+void TouchSaveApp_Exit(BgConfig *bgConfig, SysTask *task) {
     TouchSaveAppData *data = SysTask_GetData(task);
 
     FS_LoadOverlay(MI_PROCESSOR_ARM9, FS_OVERLAY_ID(ds_protect));
 
-    if (!DSProt_DetectNotFlashcart(ov30_0225DC28)) {
+    if (!DSProt_DetectNotFlashcart(TouchSaveApp_OnFlashcartCheckFailed)) {
         Heap_AllocAtEnd(HEAP_ID_3, 1000);
     }
 
-    Field_SaveStatsPrinter_RemoveTouchSave(data->unk40);
-    Field_SaveStatsPrinter_DeleteTouchSave(data->unk40);
+    Field_SaveStatsPrinter_RemoveTouchSave(data->saveStatsPrinter);
+    Field_SaveStatsPrinter_DeleteTouchSave(data->saveStatsPrinter);
 
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
 
-    if (DSProt_DetectEmulator(ov30_0225DC08)) {
+    if (DSProt_DetectEmulator(TouchSaveApp_OnEmulatorDetected)) {
         Heap_AllocAtEnd(HEAP_ID_3, 1000);
     }
 
@@ -241,22 +241,22 @@ void ov30_0225D64C(BgConfig *bgConfig, SysTask *task) {
 
     Heap_Destroy(HEAP_ID_8);
 
-    if (DSProt_DetectDummy(ov30_0225DC18)) {
+    if (DSProt_DetectDummy(TouchSaveApp_OnDummyDetected)) {
         Heap_AllocAtEnd(HEAP_ID_3, 1000);
     }
 
     FS_UnloadOverlay(MI_PROCESSOR_ARM9, FS_OVERLAY_ID(ds_protect));
 }
 
-BOOL ov30_0225D6FC(void *a0) {
+BOOL TouchSaveApp_IsExitDone(void *a0) {
     return TRUE;
 }
 
-static void ov30_0225D700(SysTask *task, TouchSaveAppData *data) {
+static void TouchSaveApp_Task(SysTask *task, TouchSaveAppData *data) {
     if (!FieldSystem_TaskIsRunning(data->fieldSystem)) {
         if (data->fieldSystem->unkD2_0 == 2) {
             data->fieldSystem->unkD2_0 = 3;
-            Field_SaveStatsPrinter_RemoveTouchSave(data->unk40);
+            Field_SaveStatsPrinter_RemoveTouchSave(data->saveStatsPrinter);
         }
 
         G2S_BlendNone();
@@ -297,7 +297,7 @@ static void TouchSaveApp_DestroyText(TouchSaveAppData *data) {
     MessageFormat_Delete(data->messageFormat);
 }
 
-static void ov30_0225D880(TouchSaveAppData *data) {
+static void TouchSaveApp_CreateYesNoPrompt(TouchSaveAppData *data) {
     YesNoPromptTemplate template;
     MI_CpuFill8(&template, 0, sizeof(YesNoPromptTemplate));
     template.bgConfig = data->bgConfig;
@@ -324,7 +324,7 @@ static void TouchSaveApp_SetupWaitForTextPrinter(TouchSaveAppData *data, enum To
 
 static BOOL TouchSaveApp_DisplaySaveInformation(TouchSaveAppData *data) {
     struct SaveStatsPrinter *unk = Field_SaveStatsPrinter_NewTouchSave(data->fieldSystem, HEAP_ID_FIELD1, 5);
-    data->unk40 = unk;
+    data->saveStatsPrinter = unk;
     Field_SaveStatsPrinter_PrintTouchSave(unk);
 
     data->state = TOUCHSAVEAPP_STATE_ASK_TO_SAVE;
@@ -354,7 +354,7 @@ static BOOL TouchSaveApp_WaitForTextPrinter(TouchSaveAppData *data) {
 }
 
 static BOOL TouchSaveApp_GetSaveConfirmation(TouchSaveAppData *data) {
-    ov30_0225D880(data);
+    TouchSaveApp_CreateYesNoPrompt(data);
 
     data->state = TOUCHSAVEAPP_STATE_HANDLE_SAVE_CONFIRMATION;
     return FALSE;
@@ -392,7 +392,7 @@ static BOOL TouchSaveApp_PrintOverwriteMessage(TouchSaveAppData *data) {
 }
 
 static BOOL TouchSaveApp_GetOverwriteConfirmation(TouchSaveAppData *data) {
-    ov30_0225D880(data);
+    TouchSaveApp_CreateYesNoPrompt(data);
 
     data->state = TOUCHSAVEAPP_STATE_HANDLE_OVERWRITE_CONFIRMATION;
     return FALSE;
@@ -501,13 +501,13 @@ static void TouchSaveApp_SetMenuInputState(MenuInputStateMgr *stateMgr, MenuInpu
     MenuInputStateMgr_SetState(stateMgr, state);
 }
 
-static void ov30_0225DC08(void) {
+static void TouchSaveApp_OnEmulatorDetected(void) {
     Heap_AllocAtEnd(HEAP_ID_3, 1000);
 }
 
-static void ov30_0225DC18(void) {
+static void TouchSaveApp_OnDummyDetected(void) {
     Heap_AllocAtEnd(HEAP_ID_3, 1000);
 }
 
-static void ov30_0225DC28(void) {
+static void TouchSaveApp_OnFlashcartCheckFailed(void) {
 }

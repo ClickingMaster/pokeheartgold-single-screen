@@ -323,7 +323,7 @@ static u32 BattleHallSelectMons_OpenPartyMenu(BattleHallSelectMonsEnv *a0, Field
     partyMenuArgs->bag = Save_Bag_Get(fieldSystem->saveData);
     partyMenuArgs->mailbox = Save_Mailbox_Get(fieldSystem->saveData);
     partyMenuArgs->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    partyMenuArgs->unk_25 = 0;
+    partyMenuArgs->panelLayout = 0;
     partyMenuArgs->context = PARTY_MENU_CONTEXT_BATTLE_HALL;
     partyMenuArgs->fieldSystem = fieldSystem;
     partyMenuArgs->partySlot = a0->partySlot;

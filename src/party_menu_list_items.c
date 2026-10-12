@@ -332,7 +332,7 @@ static void PartyMonContextMenuAction_Switch(PartyMenu *partyMenu, int *pState) 
     s16 x, y;
     Sprite_GetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], &x, &y);
     Sprite_SetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], x, y);
-    Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->unk_25, partyMenu->softboiledDonorSlot) + 2);
+    Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->panelLayout, partyMenu->softboiledDonorSlot) + 2);
     Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], TRUE);
     PartyMenu_UpdateMonPanelPalette(partyMenu, partyMenu->softboiledDonorSlot);
     ClearFrameAndWindow2(&partyMenu->windows[PARTY_MENU_WINDOW_ID_33], TRUE);
@@ -380,10 +380,10 @@ void PartyMenu_BeginSwapMons(PartyMenu *partyMenu) {
     bg2Tilemap = GetBgTilemapBuffer(partyMenu->bgConfig, GF_BG_LYR_MAIN_2);
     bg1Tilemap = GetBgTilemapBuffer(partyMenu->bgConfig, GF_BG_LYR_MAIN_1);
 
-    spC = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[0]].unk_15;
-    sp8 = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[0]].unk_14;
-    sp4 = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[1]].unk_15;
-    sp0 = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[1]].unk_14;
+    spC = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[0]].panelY;
+    sp8 = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[0]].panelX;
+    sp4 = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[1]].panelY;
+    sp0 = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[1]].panelX;
 
     for (i = 0; i < PARTY_SIZE; ++i) {
         memcpy(&partyMenu->swapMonsData.bg2Tilemaps[0][i * 16], &bg2Tilemap[sp8 + (spC + i) * 32], 0x20);
@@ -449,8 +449,8 @@ BOOL PartyMenu_AnimateSwapMons(PartyMenu *partyMenu) {
 
 static void PartyMenu_SwapMonsPanelsStep(PartyMenu *partyMenu, u8 slot) {
     PartyMenuSwapMonsData *swapMonsData = &partyMenu->swapMonsData;
-    s8 x = partyMenu->monsDrawState[swapMonsData->slots[slot]].unk_14;
-    s8 y = partyMenu->monsDrawState[swapMonsData->slots[slot]].unk_15;
+    s8 x = partyMenu->monsDrawState[swapMonsData->slots[slot]].panelX;
+    s8 y = partyMenu->monsDrawState[swapMonsData->slots[slot]].panelY;
 
     FillBgTilemapRect(partyMenu->bgConfig, GF_BG_LYR_MAIN_2, 0, x, y, 16, 6, TILEMAP_FILL_KEEP_PAL);
     FillBgTilemapRect(partyMenu->bgConfig, GF_BG_LYR_MAIN_1, 0, x, y, 16, 6, TILEMAP_FILL_KEEP_PAL);
@@ -518,12 +518,12 @@ static void PartyMenu_SwapMonsData(PartyMenu *partyMenu) {
     partyMenu->monsDrawState[swapMonsData->slots[0]].heldItemY = partyMenu->monsDrawState[swapMonsData->slots[1]].heldItemY;
     partyMenu->monsDrawState[swapMonsData->slots[1]].heldItemY = pos;
 
-    pos = partyMenu->monsDrawState[swapMonsData->slots[0]].unk_14;
-    partyMenu->monsDrawState[swapMonsData->slots[0]].unk_14 = partyMenu->monsDrawState[swapMonsData->slots[1]].unk_14;
-    partyMenu->monsDrawState[swapMonsData->slots[1]].unk_14 = pos;
-    pos = partyMenu->monsDrawState[swapMonsData->slots[0]].unk_15;
-    partyMenu->monsDrawState[swapMonsData->slots[0]].unk_15 = partyMenu->monsDrawState[swapMonsData->slots[1]].unk_15;
-    partyMenu->monsDrawState[swapMonsData->slots[1]].unk_15 = pos;
+    pos = partyMenu->monsDrawState[swapMonsData->slots[0]].panelX;
+    partyMenu->monsDrawState[swapMonsData->slots[0]].panelX = partyMenu->monsDrawState[swapMonsData->slots[1]].panelX;
+    partyMenu->monsDrawState[swapMonsData->slots[1]].panelX = pos;
+    pos = partyMenu->monsDrawState[swapMonsData->slots[0]].panelY;
+    partyMenu->monsDrawState[swapMonsData->slots[0]].panelY = partyMenu->monsDrawState[swapMonsData->slots[1]].panelY;
+    partyMenu->monsDrawState[swapMonsData->slots[1]].panelY = pos;
 
     PartyMenu_DrawPartyMonsList_Default(partyMenu, swapMonsData->slots[0]);
     PartyMenu_DrawPartyMonsList_Default(partyMenu, swapMonsData->slots[1]);
@@ -816,7 +816,7 @@ static int PartyMonContextMenuAction_TransferHP(PartyMenu *partyMenu) {
     s16 x, y;
     Sprite_GetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], &x, &y);
     Sprite_SetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], x, y);
-    Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->unk_25, partyMenu->softboiledDonorSlot) + 2);
+    Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->panelLayout, partyMenu->softboiledDonorSlot) + 2);
     Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], TRUE);
     PartyMenu_UpdateMonPanelPalette(partyMenu, partyMenu->softboiledDonorSlot);
     PartyMenu_PrintMessageOnWindow32(partyMenu, msg_0300_00037, TRUE);

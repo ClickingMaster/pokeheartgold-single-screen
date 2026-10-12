@@ -234,7 +234,7 @@ static void ItemMenuUseFunc_HealingItem(struct ItemMenuUseData *data, const stru
     usedat->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     usedat->unk_10 = sub_020270C4(fieldSystem->saveData);
     usedat->fieldMoveCheckData = &env->fieldMoveCheckData;
-    usedat->unk_25 = 0;
+    usedat->panelLayout = 0;
     usedat->context = PARTY_MENU_CONTEXT_USE_ITEM;
     usedat->fieldSystem = fieldSystem;
     usedat->itemId = data->itemId;
@@ -356,7 +356,7 @@ static void ItemMenuUseFunc_TMHM(struct ItemMenuUseData *data, const struct Item
     usedat->mailbox = Save_Mailbox_Get(fieldSystem->saveData);
     usedat->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     usedat->fieldMoveCheckData = &env->fieldMoveCheckData;
-    usedat->unk_25 = 0;
+    usedat->panelLayout = 0;
     usedat->context = PARTY_MENU_CONTEXT_TM_HM;
     usedat->fieldSystem = fieldSystem;
     usedat->itemId = data->itemId;
@@ -547,7 +547,7 @@ static void ItemMenuUseFunc_EvoStone(struct ItemMenuUseData *data, const struct 
     usedat->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     usedat->unk_10 = sub_020270C4(fieldSystem->saveData);
     usedat->fieldMoveCheckData = &env->fieldMoveCheckData;
-    usedat->unk_25 = 0;
+    usedat->panelLayout = 0;
     usedat->context = PARTY_MENU_CONTEXT_EVO_STONE;
     usedat->itemId = data->itemId;
     usedat->partySlot = data->partySlot;

@@ -205,7 +205,7 @@
 .public NNS_GfdDefaultFuncAllocTexVram
 .public NNS_GfdDefaultFuncAllocPlttVram
 .public gSystem
-.public ov58_022379C0
+.public ApricornBox_FeedAprijuice
 .public ApricornBoxScreen_Init
 .public ApricornBoxScreen_Main
 .public ApricornBoxScreen_Exit

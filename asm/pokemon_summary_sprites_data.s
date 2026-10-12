@@ -41,15 +41,15 @@
 	.public PokemonSummary_SetMoveCategorySprite
 	.public PokemonSummary_UpdateMoveCursorSprite
 	.public PokemonSummary_ShowSwapCursorSprite
-	.public sub_0208BCB4
+	.public PokemonSummary_ResetSwapCursorSprite
 	.public PokemonSummary_InitSheenSparkles
 	.public PokemonSummary_UpdateMarkingSprites
 	.public sub_0208BDC8
 	.public PokemonSummary_LoadMonIcon
 	.public PokemonSummary_LoadShownMonIcon
 	.public PokemonSummary_LoadPartyIcons
-	.public sub_0208BF9C
-	.public sub_0208BFD0
+	.public PokemonSummary_SetBoxMonIconPos
+	.public PokemonSummary_AlternateBoxMonIcon
 	.public PokemonSummary_ShowMonIconSprite
 	.public PokemonSummary_GetConditionPoint
 	.public PokemonSummary_ShowConditionSprites

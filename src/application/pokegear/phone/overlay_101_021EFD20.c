@@ -6,25 +6,25 @@
 #include "screen_fade.h"
 #include "sound_playback.h"
 
-const TouchscreenHitbox ov101_021F8400 = {
+const TouchscreenHitbox gPhoneCallFastForwardHitbox = {
     .rect = { 0x88, 0xb8, 0x08, 0xf8 }
 };
 
 BOOL PokegearPhone_SetUp(PokegearPhoneAppData *phoneApp) {
     switch (phoneApp->subsubtaskState) {
     case 0:
-        ov101_021F017C(phoneApp);
-        ov101_021F0284(phoneApp);
-        ov101_021F0578(phoneApp);
-        ov101_021F05EC(phoneApp);
-        ov101_021F072C(phoneApp);
-        ov101_021F0388(phoneApp);
+        PokegearPhone_InitBgLayers(phoneApp);
+        PokegearPhone_LoadBgGraphics(phoneApp);
+        PokegearPhone_AddWindows(phoneApp);
+        PokegearPhone_InitText(phoneApp);
+        PokegearPhone_CreateSpriteManager(phoneApp);
+        PokegearPhone_LoadPalettes(phoneApp);
         break;
     case 1:
-        ov101_021F075C(phoneApp);
+        PokegearPhone_CreateSprites(phoneApp);
         PokegearPhone_InitContextMenus(phoneApp);
-        ov101_021F0694(phoneApp);
-        ov101_021F0900(phoneApp);
+        PokegearPhone_CreateCallContext(phoneApp);
+        PokegearPhone_InitContactListAndCursor(phoneApp);
         phoneApp->subsubtaskState = 0;
         return TRUE;
     }
@@ -34,13 +34,13 @@ BOOL PokegearPhone_SetUp(PokegearPhoneAppData *phoneApp) {
 
 BOOL PokegearPhone_TearDown(PokegearPhoneAppData *phoneApp) {
     PokegearPhone_DeleteContextMenus(phoneApp);
-    ov101_021F0720(phoneApp);
-    ov101_021F0864(phoneApp);
-    ov101_021F0748(phoneApp);
-    ov101_021F0658(phoneApp);
-    ov101_021F05CC(phoneApp);
-    ov101_021F0370(phoneApp);
-    ov101_021F0260(phoneApp);
+    PokegearPhone_DestroyCallContext(phoneApp);
+    PokegearPhone_DeleteSprites(phoneApp);
+    PokegearPhone_DestroySpriteManager(phoneApp);
+    PokegearPhone_FreeText(phoneApp);
+    PokegearPhone_RemoveWindows(phoneApp);
+    PokegearPhone_FreeBgGraphics(phoneApp);
+    PokegearPhone_ResetBgLayers(phoneApp);
     return TRUE;
 }
 
@@ -85,7 +85,7 @@ int PokegearPhone_HandleSortMenuInput(PokegearPhoneAppData *phoneApp) {
         PokegearPhone_PrintContextMenuTooltip(phoneApp, 1, TRUE);
         PhoneContactListUI_SetMovingContactsState(&phoneApp->contactListUI, 1);
         PhoneContactListUI_SetCursorSpritePos(&phoneApp->contactListUI, 0xFF, 0);
-        phoneApp->pokegear->reselectAppCB = ov101_021F0978;
+        phoneApp->pokegear->reselectAppCB = PokegearPhone_OnReselectApp_MovingContacts;
         return PHONE_MAIN_STATE_MOVING_CONTACTS;
     case 4: // Quit
     default:
@@ -112,7 +112,7 @@ int PokegearPhone_HandleMoveContactsInput(PokegearPhoneAppData *phoneApp) {
     return PHONE_MAIN_STATE_MOVING_CONTACTS;
 }
 
-BOOL ov101_021EFF14(PokegearPhoneAppData *phoneApp) {
+BOOL PokegearPhone_FadeIn(PokegearPhoneAppData *phoneApp) {
     switch (phoneApp->subsubtaskState) {
     case 0:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, phoneApp->heapID);
@@ -138,7 +138,7 @@ BOOL ov101_021EFF14(PokegearPhoneAppData *phoneApp) {
     return FALSE;
 }
 
-BOOL ov101_021EFFBC(PokegearPhoneAppData *phoneApp) {
+BOOL PokegearPhone_DimTouchscreenForCall(PokegearPhoneAppData *phoneApp) {
     PokegearPhone_SetTouchscreenDimState(phoneApp, TRUE);
     return TRUE;
 }
@@ -157,7 +157,7 @@ BOOL PokegearPhone_SetUpCallData(PokegearPhoneAppData *phoneApp) {
         PhoneCall_GetCallScriptId(phoneApp->callContext);
     }
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
-    TextFlags_SetFastForwardTouchButtonHitbox(&ov101_021F8400);
+    TextFlags_SetFastForwardTouchButtonHitbox(&gPhoneCallFastForwardHitbox);
     return okay;
 }
 
@@ -173,13 +173,13 @@ BOOL PhoneCall_Exit(PokegearPhoneAppData *phoneApp) {
     return TRUE;
 }
 
-void ov101_021F0080(PokegearPhoneAppData *phoneApp) {
+void PokegearPhone_PrintNextHangUpClick(PokegearPhoneAppData *phoneApp) {
     ReadMsgDataIntoString(phoneApp->msgData, phoneApp->subsubtaskState + 33, phoneApp->msgReadBuf);
     AddTextPrinterParameterizedWithColor(&phoneApp->windows[0], 0, phoneApp->msgReadBuf, 0, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     PlaySE(SEQ_SE_DP_BOX03);
 }
 
-BOOL ov101_021F00BC(PokegearPhoneAppData *phoneApp) {
+BOOL PokegearPhone_PrintHangUpClicks(PokegearPhoneAppData *phoneApp) {
     switch (phoneApp->subsubtaskState) {
     case 0:
         ReadMsgDataIntoString(phoneApp->msgData, phoneApp->subsubtaskState + msg_0271_00033, phoneApp->msgReadBuf);
@@ -190,14 +190,14 @@ BOOL ov101_021F00BC(PokegearPhoneAppData *phoneApp) {
         if (IsSEPlaying(SEQ_SE_DP_SELECT)) {
             return FALSE;
         }
-        ov101_021F0080(phoneApp);
+        PokegearPhone_PrintNextHangUpClick(phoneApp);
         break;
     case 2:
     case 3:
         if (IsSEPlaying(SEQ_SE_DP_BOX03)) {
             return FALSE;
         }
-        ov101_021F0080(phoneApp);
+        PokegearPhone_PrintNextHangUpClick(phoneApp);
         break;
     default:
         if (IsSEPlaying(SEQ_SE_DP_BOX03)) {

@@ -87,7 +87,7 @@ void Colosseum_OpenPartyMenu(ColosseumEntry *entry, enum HeapID heapId) {
     args->party = SaveArray_Party_Get(entry->fieldSystem->saveData);
     args->bag = Save_Bag_Get(entry->fieldSystem->saveData);
     args->menuInputStatePtr = &entry->fieldSystem->menuInputState;
-    args->unk_25 = 0;
+    args->panelLayout = 0;
     args->context = 2;
     if (entry->fieldSystem->linkBattleRuleset != NULL) {
         args->minMonsToSelect = LinkBattleRuleset_GetRuleValue(entry->fieldSystem->linkBattleRuleset, LINKBATTLERULE_PARTY_COUNT);

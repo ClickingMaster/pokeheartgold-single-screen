@@ -1015,7 +1015,7 @@ static void StartMenu_InitPartyMenuArgs(PartyMenuArgs *partyMenuArgs, FieldSyste
     partyMenuArgs->mailbox = Save_Mailbox_Get(fieldSystem->saveData);
     partyMenuArgs->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     partyMenuArgs->fieldMoveCheckData = &startMenu->fieldMoveCheckData;
-    partyMenuArgs->unk_25 = 0;
+    partyMenuArgs->panelLayout = 0;
     partyMenuArgs->fieldSystem = fieldSystem;
     partyMenuArgs->menuInputStatePtr = &fieldSystem->menuInputState;
 }

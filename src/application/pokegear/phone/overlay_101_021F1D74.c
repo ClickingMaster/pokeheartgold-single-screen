@@ -218,7 +218,7 @@ void PhoneCall_InitMsgDataAndBufferNames(PokegearPhoneCallContext *ctx) {
 }
 
 void PhoneCall_AnimateFastForwardButtonOnTouch(PokegearPhoneCallContext *ctx) {
-    if (TouchscreenHitbox_TouchNewIsIn(&ov101_021F8400)) {
+    if (TouchscreenHitbox_TouchNewIsIn(&gPhoneCallFastForwardHitbox)) {
         Sprite_SetAnimActiveFlag(ctx->sprite, TRUE);
         Sprite_ResetAnimCtrlState(ctx->sprite);
     }
@@ -288,7 +288,7 @@ void PhoneCall_TouchscreenListMenu_Create(PokegearPhoneCallContext *ctx, u8 menu
     PokegearPhone_PrintContextMenuTooltip(ctx->phoneApp, 2, TRUE);
     ctx->touchscreenListMenu = PokegearPhoneApp_TouchscreenListMenu_Create(ctx->phoneApp, 0, menuID);
     Sprite_SetDrawFlag(ctx->sprite, FALSE);
-    ov101_021F2384(ctx, 1);
+    PhoneCall_SetBgPalettesUndimmed(ctx, 1);
 }
 
 int PhoneCall_TouchscreenListMenu_HandleInput(PokegearPhoneCallContext *ctx) {
@@ -300,14 +300,14 @@ void PhoneCall_TouchscreenListMenu_Destroy(PokegearPhoneCallContext *ctx) {
     TouchscreenListMenu_Destroy(ctx->touchscreenListMenu);
     PokegearPhone_PrintContextMenuTooltip(ctx->phoneApp, 0, FALSE);
     Sprite_SetDrawFlag(ctx->sprite, TRUE);
-    ov101_021F2384(ctx, 0);
+    PhoneCall_SetBgPalettesUndimmed(ctx, 0);
 }
 
 const PhoneCallScriptDef *PhoneCall_GetScriptDefPtrByID(int scriptID) {
     return &gPhoneCallScriptDef[scriptID];
 }
 
-void ov101_021F2384(PokegearPhoneCallContext *ctx, BOOL undim) {
+void PhoneCall_SetBgPalettesUndimmed(PokegearPhoneCallContext *ctx, BOOL undim) {
     if (undim) {
         PaletteData_BlendPalette(ctx->plttData, PLTTBUF_MAIN_BG, 0x10, 0x10, 0, RGB_BLACK);
         PaletteData_BlendPalette(ctx->plttData, PLTTBUF_MAIN_BG, 0xA0, 0x10, 0, RGB_BLACK);
@@ -328,7 +328,7 @@ BOOL PhoneCall_WaitButtonBeforeHangup(PokegearPhoneCallContext *ctx) {
         return TRUE;
     }
 
-    if (TouchscreenHitbox_TouchNewIsIn(&ov101_021F8400)) {
+    if (TouchscreenHitbox_TouchNewIsIn(&gPhoneCallFastForwardHitbox)) {
         PlaySE(SEQ_SE_DP_SELECT);
         ctx->state.menuInputState = MENU_INPUT_STATE_TOUCH;
         return TRUE;

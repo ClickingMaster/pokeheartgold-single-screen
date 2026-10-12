@@ -51,9 +51,9 @@ typedef struct TouchscreenChoiceMenuView {
 void *TouchscreenMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args);
 void TouchscreenMenu_Destroy(BgConfig *bgConfig, void *app);
 BOOL ov27_0225A2C8(BgConfig *bgConfig);
-void *ov30_0225D520(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args);
-void ov30_0225D64C(BgConfig *bgConfig, void *app);
-BOOL ov30_0225D6FC(BgConfig *bgConfig);
+void *TouchSaveApp_Init(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args);
+void TouchSaveApp_Exit(BgConfig *bgConfig, void *app);
+BOOL TouchSaveApp_IsExitDone(BgConfig *bgConfig);
 void *TouchMartApp_Init(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args);
 void TouchMartApp_Exit(BgConfig *bgConfig, void *app);
 BOOL TouchMartApp_IsExitDone(BgConfig *bgConfig);
@@ -149,7 +149,7 @@ static const u16 sSpriteIdsWithoutTalkAction[] = {
 
 static const BottomScreenAppTemplate sBottomScreenApps[] = {
     [BOTTOM_SCREEN_APP_TOUCHSCREEN_MENU] = { TouchscreenMenu_Create, TouchscreenMenu_Destroy, ov27_0225A2C8, (u32)-1 },
-    [BOTTOM_SCREEN_APP_TOUCH_SAVE] = { ov30_0225D520, ov30_0225D64C, ov30_0225D6FC, FS_OVERLAY_ID(touch_save_app) },
+    [BOTTOM_SCREEN_APP_TOUCH_SAVE] = { TouchSaveApp_Init, TouchSaveApp_Exit, TouchSaveApp_IsExitDone, FS_OVERLAY_ID(touch_save_app) },
     [BOTTOM_SCREEN_APP_TOUCH_MART] = { TouchMartApp_Init, TouchMartApp_Exit, TouchMartApp_IsExitDone, FS_OVERLAY_ID(OVY_31) },
     [BOTTOM_SCREEN_APP_CHOICE_MENU] = { TouchscreenChoiceMenu_Create, TouchscreenChoiceMenu_Destroy, ov27_0225C418, (u32)-1 },
     [BOTTOM_SCREEN_APP_DOWSING_MCHN] = { DowsingMchn_Init, DowsingMchn_Exit, DowsingMchn_IsExitDone, FS_OVERLAY_ID(OVY_28) },
@@ -168,15 +168,15 @@ void ov01_021F6830(FieldSystem *fieldSystem, int a1, int a2) {
 
 void BottomScreen_TouchSave_Init(FieldSystem *fieldSystem) {
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_27), OVY_LOAD_ASYNC);
-    fieldSystem->touchSaveTask = ov30_0225D520(fieldSystem->bgConfig, &fieldSystem->lastTouchMenuInput, fieldSystem, NULL);
+    fieldSystem->touchSaveTask = TouchSaveApp_Init(fieldSystem->bgConfig, &fieldSystem->lastTouchMenuInput, fieldSystem, NULL);
 }
 
 void BottomScreen_TouchSave_End(FieldSystem *fieldSystem) {
-    ov30_0225D64C(fieldSystem->bgConfig, fieldSystem->touchSaveTask);
+    TouchSaveApp_Exit(fieldSystem->bgConfig, fieldSystem->touchSaveTask);
 }
 
 BOOL BottomScreen_TouchSave_IsDone(FieldSystem *fieldSystem) {
-    if (ov30_0225D6FC(fieldSystem->bgConfig)) {
+    if (TouchSaveApp_IsExitDone(fieldSystem->bgConfig)) {
         UnloadOverlayByID(FS_OVERLAY_ID(OVY_27));
         return TRUE;
     }

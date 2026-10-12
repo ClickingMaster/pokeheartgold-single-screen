@@ -119,7 +119,7 @@ void BagApp_PrintItemSelectedMessage(BagApp *app, const u8 *actions, int count) 
     BagViewPocket *pocket;
     String *template, *string;
 
-    if (app->bagView->pockets[app->bagView->unk64].pocketId == POCKET_TMHMS) {
+    if (app->bagView->pockets[app->bagView->pocketIndex].pocketId == POCKET_TMHMS) {
         FillWindowPixelBuffer(&app->windows[1], 0);
         BagApp_PrintTMHMMoveInfo(app, app->bagView->itemId);
         ScheduleWindowCopyToVram(&app->windows[0]);
@@ -128,8 +128,8 @@ void BagApp_PrintItemSelectedMessage(BagApp *app, const u8 *actions, int count) 
     }
     DrawFrameAndWindow2(&app->windows[2], TRUE, 0x3E2, 12);
     FillWindowPixelBuffer(&app->windows[2], 15);
-    pocket = &app->bagView->pockets[app->bagView->unk64];
-    if (app->bagView->unk65 == 6 && BagApp_IsBerryOrMulch(pocket->pocketId, app->bagView->itemId) == FALSE) {
+    pocket = &app->bagView->pockets[app->bagView->pocketIndex];
+    if (app->bagView->mode == 6 && BagApp_IsBerryOrMulch(pocket->pocketId, app->bagView->itemId) == FALSE) {
         template = NewString_ReadMsgData(app->msgData, 106);
     } else {
         template = NewString_ReadMsgData(app->msgData, 43);
@@ -223,7 +223,7 @@ void BagApp_PrintQuantityDigits(BagApp *app, u32 numDigits) {
 void BagApp_PrintTrashConfirmMessage(BagApp *app) {
     String *template = NewString_ReadMsgData(app->msgData, 55);
     BagView *bagView = app->bagView;
-    BagViewPocket *pocket = &bagView->pockets[bagView->unk64];
+    BagViewPocket *pocket = &bagView->pockets[bagView->pocketIndex];
     if (app->quantity > 1) {
         BagApp_BufferSlotItemNamePlural(app, pocket->scroll + app->cursorButton - 8, 0);
     } else {
@@ -386,7 +386,7 @@ void BagApp_DrawItemList(BagApp *app, int scroll, int unused, BOOL dim) {
     int limit;
     u8 first, last;
 
-    pocket = &app->bagView->pockets[app->bagView->unk64];
+    pocket = &app->bagView->pockets[app->bagView->pocketIndex];
     limit = pocket->itemCount - pocket->scroll;
     if (limit > 6) {
         limit = 6;
@@ -405,8 +405,8 @@ void BagApp_DrawItemList(BagApp *app, int scroll, int unused, BOOL dim) {
         ClearWindowTilemapAndScheduleTransfer(&app->dynWindows[last + i]);
     }
     count = 0;
-    k = BagApp_GetNthItemSlotIndex(pocket, app->bagView->unk64, scroll);
-    for (; k < sListPocketCapacities[app->bagView->unk64]; k++) {
+    k = BagApp_GetNthItemSlotIndex(pocket, app->bagView->pocketIndex, scroll);
+    for (; k < sListPocketCapacities[app->bagView->pocketIndex]; k++) {
         if (pocket->slots[k].id != ITEM_NONE && pocket->slots[k].quantity != 0) {
             if (dim == FALSE) {
                 BagApp_PrintItemListEntry(app, &app->dynWindows[first + count], app->itemNames[k], pocket, k);
@@ -430,7 +430,7 @@ void BagApp_DrawItemList(BagApp *app, int scroll, int unused, BOOL dim) {
 void BagApp_DrawSelectedItemEntry(BagApp *app, s32 scroll, s32 slot) {
     u32 index = slot;
     BagView *bagView = app->bagView;
-    BagViewPocket *pocket = &bagView->pockets[bagView->unk64];
+    BagViewPocket *pocket = &bagView->pockets[bagView->pocketIndex];
 
     index += scroll;
 
@@ -724,7 +724,7 @@ void BagApp_SetMoveCursorPosition(BagApp *app, int slot) {
         ManagedSprite_SetAnim(app->sprites[20], sMoveCursorPositionsAnim[slot * 4]);
     } else {
         BagView *bagView = app->bagView;
-        BagViewPocket *pocket = &bagView->pockets[bagView->unk64];
+        BagViewPocket *pocket = &bagView->pockets[bagView->pocketIndex];
         int index = pocket->scroll + slot;
         if (index == app->moveSource) {
             ManagedSprite_SetAnim(app->sprites[20], 10);
@@ -789,7 +789,7 @@ void BagApp_ShowMoveSlotSprites(BagApp *app, int count, int movingSlot, BOOL hid
 
 void BagApp_UpdatePageArrows(BagApp *app) {
     BagView *bagView = app->bagView;
-    if (bagView->pockets[bagView->unk64].itemCount <= 6) {
+    if (bagView->pockets[bagView->pocketIndex].itemCount <= 6) {
         ManagedSprite_SetDrawFlag(app->sprites[17], FALSE);
         ManagedSprite_SetDrawFlag(app->sprites[18], FALSE);
     } else {

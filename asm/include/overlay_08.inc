@@ -152,10 +152,10 @@
 .public sub_0207CAA8
 .public CalculateHpBarPixelsLength
 .public CalculateHpBarColor
-.public sub_0208AD54
-.public sub_0208AD58
-.public sub_0208AD5C
-.public sub_0208AD60
+.public StatusIcon_GetCharNaix
+.public StatusIcon_GetPlttNaix
+.public StatusIcon_GetCellNaix
+.public StatusIcon_GetAnimNaix
 .public Pokemon_GetStatusIconId
 .public NNS_G2dGetUnpackedScreenData
 .public memcpy

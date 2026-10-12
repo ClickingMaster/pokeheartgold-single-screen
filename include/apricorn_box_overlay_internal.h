@@ -34,7 +34,7 @@ typedef struct ApricornBoxApp {
     /* 0x18 */ u8 unk_18;
     /* 0x19 */ u8 unk_19;
     /* 0x1A */ u8 unk_1A[2];
-    /* 0x1C */ u8 unk_1C;
+    /* 0x1C */ u8 partySlot;
 } ApricornBoxApp;
 
 // No tracked definition: output block of ApricornJuice_RankFlavors.

@@ -17,7 +17,7 @@
 #include "yes_no_prompt.h"
 
 // Work of the Bag application (overlay 15): the touch-screen bag with the 3D bag model on the top screen.
-// Launched with a BagView (BagView.unk64: shown pocket, unk65: launch mode, unk68: exit action).
+// Launched with a BagView (BagView.pocketIndex: shown pocket, mode: launch mode, selectedAction: exit action).
 
 // The pocket-switch screen (touch and hold a pocket tab, then slide)
 typedef struct BagAppPocketSwitch {

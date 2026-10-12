@@ -242,7 +242,7 @@ static PartyMenuArgs *PartyMenu_CreateArgs(enum HeapID heapID, FieldSystem *fiel
     partyMenu->bag = Save_Bag_Get(fieldSystem->saveData);
     partyMenu->mailbox = Save_Mailbox_Get(fieldSystem->saveData);
     partyMenu->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    partyMenu->unk_25 = a2;
+    partyMenu->panelLayout = a2;
     partyMenu->context = context;
     partyMenu->fieldSystem = fieldSystem;
     partyMenu->menuInputStatePtr = &fieldSystem->menuInputState;
@@ -1306,7 +1306,7 @@ PartyMenuArgs *PartyMenu_LaunchApp_Gracidea(FieldSystem *fieldSystem, enum HeapI
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     args->unk_10 = sub_020270C4(fieldSystem->saveData);
     args->fieldMoveCheckData = NULL;
-    args->unk_25 = 0;
+    args->panelLayout = 0;
     args->context = PARTY_MENU_CONTEXT_USE_ITEM;
     args->itemId = itemId;
     args->partySlot = 0;

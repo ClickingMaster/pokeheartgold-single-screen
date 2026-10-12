@@ -63,7 +63,7 @@ int PokemonSummary_HandleMoveSelectInput(PokemonSummary *summary) {
     }
     if (keys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
-        sub_0208AFA0(summary, 0);
+        PokemonSummary_DrawSwitchButton(summary, 0);
         return PokemonSummary_FlashCancelButton(summary, 4);
     }
     index = PokemonSummary_GetMoveSelectTouch(summary);
@@ -74,7 +74,7 @@ int PokemonSummary_HandleMoveSelectInput(PokemonSummary *summary) {
         }
     } else if (index == 5) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
-        sub_0208AFA0(summary, 0);
+        PokemonSummary_DrawSwitchButton(summary, 0);
         return PokemonSummary_FlashCancelButton(summary, 4);
     } else if (index != -1 && summary->mon.moves[index] != MOVE_NONE) {
         summary->moveSlot = index;
@@ -87,7 +87,7 @@ int PokemonSummary_HandleMoveSelectInput(PokemonSummary *summary) {
 
 // State 7: show the swap cursor on the picked move.
 int PokemonSummary_StartMoveSwap(PokemonSummary *summary) {
-    sub_0208AFA0(summary, 0);
+    PokemonSummary_DrawSwitchButton(summary, 0);
     PokemonSummary_ShowSwapCursorSprite(summary);
     summary->swapMoveSlot = summary->moveSlot;
     return 6;
@@ -112,7 +112,7 @@ int PokemonSummary_HandleMoveSwapInput(PokemonSummary *summary) {
         return 6;
     }
     if (gSystem.newKeys & PAD_BUTTON_A) {
-        sub_0208AFA0(summary, 1);
+        PokemonSummary_DrawSwitchButton(summary, 1);
         Sprite_SetDrawFlag(summary->sprites[10], FALSE);
         if (summary->moveSlot != summary->swapMoveSlot) {
             PlaySE(SEQ_SE_DP_DECIDE);
@@ -127,19 +127,19 @@ int PokemonSummary_HandleMoveSwapInput(PokemonSummary *summary) {
     }
     if (gSystem.newKeys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
-        sub_0208AFA0(summary, 1);
+        PokemonSummary_DrawSwitchButton(summary, 1);
         Sprite_SetDrawFlag(summary->sprites[10], FALSE);
         return PokemonSummary_FlashCancelButton(summary, 5);
     }
     index = PokemonSummary_GetMoveSwapTouch(summary);
     if (index == 4) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
-        sub_0208AFA0(summary, 1);
+        PokemonSummary_DrawSwitchButton(summary, 1);
         Sprite_SetDrawFlag(summary->sprites[10], FALSE);
         return PokemonSummary_FlashCancelButton(summary, 5);
     }
     if (index != -1 && summary->mon.moves[index] != MOVE_NONE) {
-        sub_0208AFA0(summary, 1);
+        PokemonSummary_DrawSwitchButton(summary, 1);
         Sprite_SetDrawFlag(summary->sprites[10], FALSE);
         if (index != summary->swapMoveSlot) {
             summary->moveSlot = index;
@@ -187,7 +187,7 @@ int PokemonSummary_HandleForgetMoveInput(PokemonSummary *summary) {
         }
         if (MoveIsHM(summary->mon.moves[index]) == TRUE && summary->args->moveToLearn != MOVE_NONE) {
             thunk_Sprite_SetDrawFlag(summary->sprites[18], FALSE);
-            sub_0208DBF0(summary);
+            PokemonSummary_PrintCantForgetHMMessage(summary);
             return 8;
         }
         return PokemonSummary_ShowForgetConfirm(summary);
@@ -222,7 +222,7 @@ int PokemonSummary_HandleForgetMoveInput(PokemonSummary *summary) {
             summary->moveSlot = index;
             thunk_Sprite_SetDrawFlag(summary->sprites[18], FALSE);
             PokemonSummary_UpdateMoveCursorSprite(summary);
-            sub_0208DBF0(summary);
+            PokemonSummary_PrintCantForgetHMMessage(summary);
             return 8;
         }
         if (summary->mon.moves[index] != MOVE_NONE) {
@@ -680,8 +680,8 @@ void PokemonSummary_ShowFirstPage(PokemonSummary *summary) {
         return;
     }
     PokemonSummary_UpdatePartySlotSprite(summary);
-    sub_0208BF9C(summary);
-    sub_0208BFD0(summary);
+    PokemonSummary_SetBoxMonIconPos(summary);
+    PokemonSummary_AlternateBoxMonIcon(summary);
 }
 
 // Which pages can be shown (args->unk15, one bit per page): pages lists them, ended by 4.

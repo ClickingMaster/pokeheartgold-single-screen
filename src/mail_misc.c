@@ -16,14 +16,14 @@
 
 EasyChatArgs *EasyChat_CreateArgs(u8 args, u8 a1, SaveData *saveData, MenuInputStateMgr *menuInputStateMgr, enum HeapID heapID) {
     EasyChatArgs *ptr = Heap_Alloc(heapID, sizeof(EasyChatArgs));
-    ptr->unk0 = args;
+    ptr->type = args;
     ptr->unk1 = a1;
     ptr->pokedex = Save_Pokedex_Get(saveData);
     ptr->easyChat = Save_EasyChat_Get(saveData);
     ptr->gameCleared = CheckGameClearFlag(Save_VarsFlags_Get(saveData));
     ptr->unk5 = 0;
-    ptr->unk2 = 1;
-    ptr->unk3 = 0;
+    ptr->cancelled = 1;
+    ptr->changed = 0;
     ptr->frame = Options_GetFrame(Save_PlayerData_GetOptionsAddr(saveData));
     ptr->menuInputPtr = menuInputStateMgr;
 
@@ -31,7 +31,7 @@ EasyChatArgs *EasyChat_CreateArgs(u8 args, u8 a1, SaveData *saveData, MenuInputS
         MailMsg_Init_WithBank(&ptr->mailMessage, MAILMSG_BANK_0293_GMM);
     } else {
         for (int i = 0; i < 2; i++) {
-            ptr->unk1C[i] = -1;
+            ptr->words[i] = -1;
         }
     }
     return ptr;
@@ -42,12 +42,12 @@ void EasyChat_FreeArgs(EasyChatArgs *args) {
 }
 
 void EasyChatArgs_SetWord(EasyChatArgs *args, u16 a1) {
-    args->unk1C[0] = a1;
+    args->words[0] = a1;
 }
 
 void EasyChatArgs_SetWords(EasyChatArgs *args, u16 a1, u16 a2) {
-    args->unk1C[0] = a1;
-    args->unk1C[1] = a2;
+    args->words[0] = a1;
+    args->words[1] = a2;
 }
 
 void EasyChatArgs_SetMailMessage(EasyChatArgs *args, MailMessage *mailMessage) {
@@ -55,8 +55,8 @@ void EasyChatArgs_SetMailMessage(EasyChatArgs *args, MailMessage *mailMessage) {
 }
 
 void EasyChatArgs_SetCancelled(EasyChatArgs *args) {
-    args->unk2 = 1;
-    args->unk3 = 0;
+    args->cancelled = 1;
+    args->changed = 0;
 }
 
 void sub_02090D40(EasyChatArgs *args) {
@@ -64,20 +64,20 @@ void sub_02090D40(EasyChatArgs *args) {
 }
 
 BOOL EasyChatArgs_IsCancelled(EasyChatArgs *args) {
-    return args->unk2;
+    return args->cancelled;
 }
 
 BOOL EasyChatArgs_IsChanged(EasyChatArgs *args) {
-    return args->unk3;
+    return args->changed;
 }
 
 u16 EasyChatArgs_GetWord(EasyChatArgs *args) {
-    return args->unk1C[0];
+    return args->words[0];
 }
 
 void EasyChatArgs_GetWords(EasyChatArgs *args, MsgBankMsgNo *msgBankMsgNo) {
-    msgBankMsgNo->msgBank = args->unk1C[0];
-    msgBankMsgNo->msgNo = args->unk1C[1];
+    msgBankMsgNo->msgBank = args->words[0];
+    msgBankMsgNo->msgNo = args->words[1];
 }
 
 void EasyChatArgs_GetMailMessage(EasyChatArgs *args, MailMessage *mailMessage) {
@@ -85,7 +85,7 @@ void EasyChatArgs_GetMailMessage(EasyChatArgs *args, MailMessage *mailMessage) {
 }
 
 u8 EasyChatArgs_GetType(EasyChatArgs *args) {
-    return args->unk0;
+    return args->type;
 }
 
 u8 sub_02090D74(EasyChatArgs *args) {
@@ -113,13 +113,13 @@ u8 sub_02090D88(EasyChatArgs *args) {
 }
 
 void EasyChatArgs_CopyMessage(EasyChatArgs *args, MailMessage *msg1, MailMessage *msg2) {
-    switch (args->unk0) {
+    switch (args->type) {
     case 0:
-        msg1->msg_bank = args->unk1C[0];
+        msg1->msg_bank = args->words[0];
         return;
     case 1:
-        msg1->msg_bank = args->unk1C[0];
-        msg1->msg_no = args->unk1C[1];
+        msg1->msg_bank = args->words[0];
+        msg1->msg_no = args->words[1];
         return;
     case 2:
         *msg2 = args->mailMessage;
@@ -128,11 +128,11 @@ void EasyChatArgs_CopyMessage(EasyChatArgs *args, MailMessage *msg1, MailMessage
 }
 
 BOOL EasyChatArgs_MessageEquals(EasyChatArgs *args, MailMessage *msg1, MailMessage *msg2) {
-    switch (args->unk0) {
+    switch (args->type) {
     case 0:
-        return msg1->msg_bank == args->unk1C[0];
+        return msg1->msg_bank == args->words[0];
     case 1:
-        return msg1->msg_bank == args->unk1C[0] && msg1->msg_no == args->unk1C[1];
+        return msg1->msg_bank == args->words[0] && msg1->msg_no == args->words[1];
     case 2:
     default:
         return MailMsg_Compare(&args->mailMessage, msg2);
@@ -140,12 +140,12 @@ BOOL EasyChatArgs_MessageEquals(EasyChatArgs *args, MailMessage *msg1, MailMessa
 }
 
 void EasyChatArgs_SetResult(EasyChatArgs *args, MailMessage *msg1, MailMessage *msg2) {
-    args->unk3 = !EasyChatArgs_MessageEquals(args, msg1, msg2);
-    args->unk2 = 0;
+    args->changed = !EasyChatArgs_MessageEquals(args, msg1, msg2);
+    args->cancelled = 0;
 
     u16 *src = (u16 *)&msg1->msg_bank;
     for (int i = 0; i < 2; i++) {
-        args->unk1C[i] = src[i];
+        args->words[i] = src[i];
     }
 
     args->mailMessage = *msg2;

@@ -36,7 +36,7 @@ u32 BagView_sizeof(void) {
 }
 
 void BagView_SetMode(BagView *bagView, u8 a1) {
-    bagView->unk65 = a1;
+    bagView->mode = a1;
 }
 
 void BagView_Init(BagView *bagView, SaveData *save, u8 a2, BagCursor *cursor, MenuInputStateMgr *menuInputStateMgr) {
@@ -58,7 +58,7 @@ void BagView_SetItem(BagView *bagView, ItemSlot *slots, u8 pocketId, u8 position
 }
 
 void BagView_SetIsCycling(BagView *bagView) {
-    bagView->unk76_0 = TRUE;
+    bagView->isCycling = TRUE;
 }
 
 void BagView_SetItemCheckUseData(BagView *bagView, ItemCheckUseData *checkUseData) {
@@ -66,11 +66,11 @@ void BagView_SetItemCheckUseData(BagView *bagView, ItemCheckUseData *checkUseDat
 }
 
 void BagView_SetPartySlot(BagView *bagView, u8 a1) {
-    bagView->unk74 = a1;
+    bagView->partySlot = a1;
 }
 
 void BagView_SetMapLoadType(BagView *bagView, u16 a1) {
-    bagView->unk76_1 = a1;
+    bagView->mapLoadType = a1;
 }
 
 u16 BagView_GetItemId(BagView *bagView) {
@@ -78,15 +78,15 @@ u16 BagView_GetItemId(BagView *bagView) {
 }
 
 u16 BagView_GetSelectedAction(BagView *bagView) {
-    return bagView->unk68;
+    return bagView->selectedAction;
 }
 
 u8 BagView_GetPartySlot(BagView *bagView) {
-    return bagView->unk74;
+    return bagView->partySlot;
 }
 
 u8 BagView_GetSellCount(BagView *bagView) {
-    return bagView->unk75;
+    return bagView->sellCount;
 }
 
 static u16 GetCoinCount(SaveData *saveData) {

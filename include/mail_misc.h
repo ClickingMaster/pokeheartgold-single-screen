@@ -16,10 +16,10 @@ typedef struct MsgBankMsgNo {
 } MsgBankMsgNo;
 
 typedef struct {
-    u8 unk0;
+    u8 type;
     u8 unk1;
-    u8 unk2;
-    u8 unk3;
+    u8 cancelled;
+    u8 changed;
     u8 gameCleared; // TODO: bool8
     u8 unk5;
     u8 unk6[0x2];
@@ -27,7 +27,7 @@ typedef struct {
     Pokedex *pokedex;
     SaveEasyChat *easyChat;
     MailMessage mailMessage;
-    u16 unk1C[0x4];
+    u16 words[0x4];
     MenuInputStateMgr *menuInputPtr;
 } EasyChatArgs;
 

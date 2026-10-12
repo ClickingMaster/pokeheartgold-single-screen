@@ -74,17 +74,17 @@ typedef struct ItemCheckUseData {
 typedef struct BagView {
     SaveData *saveData;       // Persistent game state
     BagViewPocket pockets[8]; // Pocket information
-    u8 unk64;
-    u8 unk65;
+    u8 pocketIndex;
+    u8 mode;
     u16 itemId;
-    u16 unk68;
+    u16 selectedAction;
     u8 padding[2];
     BagCursor *cursor; // State of last selection
     ItemCheckUseData *checkUseData;
-    u8 unk74;
-    u8 unk75;
-    u16 unk76_0 : 1;
-    u16 unk76_1 : 15;
+    u8 partySlot;
+    u8 sellCount;
+    u16 isCycling : 1;
+    u16 mapLoadType : 15;
     MenuInputStateMgr *menuInputStateMgr;
 } BagView; // size: 0x7C
 

@@ -434,7 +434,7 @@ void PokemonSummary_ShowSwapCursorSprite(PokemonSummary *summary) {
     Sprite_SetDrawFlag(summary->sprites[10], TRUE);
 }
 
-void sub_0208BCB4(PokemonSummary *summary) {
+void PokemonSummary_ResetSwapCursorSprite(PokemonSummary *summary) {
     Sprite_SetPositionXY(summary->sprites[10], 68, 168);
     Sprite_SetAnimCtrlSeq(summary->sprites[10], 0);
 }
@@ -558,7 +558,7 @@ void PokemonSummary_LoadPartyIcons(PokemonSummary *summary) {
     }
 }
 
-void sub_0208BF9C(PokemonSummary *summary) {
+void PokemonSummary_SetBoxMonIconPos(PokemonSummary *summary) {
     PokemonSummaryArgs *args = summary->args;
     if (args->unk11 == 2) {
         Sprite_SetPositionXY(summary->sprites[73], 215, 80);
@@ -567,7 +567,7 @@ void sub_0208BF9C(PokemonSummary *summary) {
 }
 
 // A box Pokemon's icon alternates between sprites 73 and 74.
-void sub_0208BFD0(PokemonSummary *summary) {
+void PokemonSummary_AlternateBoxMonIcon(PokemonSummary *summary) {
     void *mon;
     if (summary->args->unk11 != 2) {
         return;

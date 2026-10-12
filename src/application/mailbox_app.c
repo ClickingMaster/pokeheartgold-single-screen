@@ -1056,7 +1056,7 @@ void MailboxApp_CreatePartyMenuArgs(MailboxApp *app, u8 context, u16 itemId, u8 
     args->bag = Save_Bag_Get(app->args->saveData);
     args->options = app->options;
     args->mailbox = app->mailbox;
-    args->unk_25 = 0;
+    args->panelLayout = 0;
     args->context = context;
     args->itemId = itemId;
     args->fieldSystem = app->args->fieldSystem;

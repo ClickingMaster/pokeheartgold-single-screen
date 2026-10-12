@@ -611,7 +611,7 @@ void PartyMenu_UpdateMonIconAnims(PartyMenu *partyMenu) {
 void PartyMenu_ShowCursorAtSlot(PartyMenu *partyMenu, u8 partySlot, int selected) {
     u8 sp1, sp0;
     DpadMenuBox_GetPosition(&partyMenu->dpadMenuBox[partySlot], &sp1, &sp0);
-    Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->unk_25, partySlot));
+    Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->panelLayout, partySlot));
     Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], TRUE);
     Sprite_SetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], sp1, sp0);
     thunk_Sprite_SetPaletteOverride(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], selected);

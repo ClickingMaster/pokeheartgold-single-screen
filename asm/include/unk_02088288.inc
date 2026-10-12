@@ -126,10 +126,10 @@
 .public PokemonSummary_GetShownMon
 .public PokemonSummary_GetRibbonAt
 .public PokemonSummaryArgs_SetPlayer
-.public sub_0208AD54
-.public sub_0208AD58
-.public sub_0208AD5C
-.public sub_0208AD60
+.public StatusIcon_GetCharNaix
+.public StatusIcon_GetPlttNaix
+.public StatusIcon_GetCellNaix
+.public StatusIcon_GetAnimNaix
 .public Pokemon_GetStatusIconId
 .public PokemonSummary_InitSpriteSystem
 .public PokemonSummary_FreeSpriteSystem
@@ -147,14 +147,14 @@
 .public PokemonSummary_SetMoveCategorySprite
 .public PokemonSummary_UpdateMoveCursorSprite
 .public PokemonSummary_ShowSwapCursorSprite
-.public sub_0208BCB4
+.public PokemonSummary_ResetSwapCursorSprite
 .public PokemonSummary_InitSheenSparkles
 .public PokemonSummary_UpdateMarkingSprites
 .public sub_0208BDC8
 .public PokemonSummary_LoadShownMonIcon
 .public PokemonSummary_LoadPartyIcons
-.public sub_0208BF9C
-.public sub_0208BFD0
+.public PokemonSummary_SetBoxMonIconPos
+.public PokemonSummary_AlternateBoxMonIcon
 .public PokemonSummary_ShowMonIconSprite
 .public PokemonSummary_ShowConditionSprites
 .public PokemonSummary_HideConditionSprites
@@ -176,9 +176,9 @@
 .public PokemonSummary_PrintMoveToLearn
 .public sub_0208DB58
 .public PokemonSummary_PrintSwappedMoves
-.public sub_0208DBF0
-.public sub_0208DC68
-.public sub_0208DD20
+.public PokemonSummary_PrintCantForgetHMMessage
+.public PokemonSummary_ShowForgetLabel
+.public PokemonSummary_ShowSwitchLabel
 .public sub_0208DDA0
 .public PokemonSummary_Init3D
 .public PokemonSummary_DrawPokepic
@@ -215,8 +215,8 @@
 	.public PokemonSummary_FreeBgCells
 	.public PokemonSummary_WaitFadeIn
 	.public PokemonSummary_HandleInput
-	.public sub_02088D18
-	.public sub_02088D34
+	.public PokemonSummary_WaitSlideInMoveInfo
+	.public PokemonSummary_WaitSlideOutMoveInfo
 	.public PokemonSummary_HandleMoveSelectInput
 	.public PokemonSummary_StartMoveSwap
 	.public PokemonSummary_HandleMoveSwapInput
@@ -277,8 +277,8 @@
 	.public PokemonSummary_GetRibbonTouch
 	.public PokemonSummary_ShowForgetConfirm
 	.public PokemonSummary_DrawForgetConfirm
-	.public sub_0208AF70
-	.public sub_0208AFA0
+	.public PokemonSummary_ClearForgetButton
+	.public PokemonSummary_DrawSwitchButton
 	.public PokemonSummary_StartButtonFlash
 	.public PokemonSummary_FlashCancelButton
 	.public PokemonSummary_FlashConfirmButton

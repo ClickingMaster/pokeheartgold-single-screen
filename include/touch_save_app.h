@@ -3,8 +3,8 @@
 
 #include "task.h"
 
-SysTask *ov30_0225D520(BgConfig *bgConfig, void *a1, FieldSystem *fieldSystem, void *a3);
-void ov30_0225D64C(BgConfig *bgConfig, SysTask *task);
-BOOL ov30_0225D6FC(void *a0);
+SysTask *TouchSaveApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSystem, void *a3);
+void TouchSaveApp_Exit(BgConfig *bgConfig, SysTask *task);
+BOOL TouchSaveApp_IsExitDone(void *a0);
 
 #endif

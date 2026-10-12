@@ -941,7 +941,7 @@ static void PartyMenu_LoadBgGraphics(PartyMenu *partyMenu, NARC *narc) {
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, NARC_plist_gra_plist_gra_00000024_NCGR, partyMenu->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, HEAP_ID_PARTY_MENU);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, NARC_plist_gra_plist_gra_00000025_NSCR, partyMenu->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, HEAP_ID_PARTY_MENU);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, NARC_plist_gra_plist_gra_00000013_NCLR, GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0, 0x40, HEAP_ID_PARTY_MENU);
-    PartyMenu_LoadPanelTilemaps(HEAP_ID_PARTY_MENU, partyMenu->unk_314, partyMenu->unk_3D4, partyMenu->unk_494);
+    PartyMenu_LoadPanelTilemaps(HEAP_ID_PARTY_MENU, partyMenu->leadPanelTilemap, partyMenu->panelTilemap, partyMenu->emptyPanelTilemap);
     BG_SetMaskColor(GF_BG_LYR_MAIN_0, RGB_BLACK);
     BG_SetMaskColor(GF_BG_LYR_SUB_0, RGB_BLACK);
 }
@@ -970,7 +970,7 @@ static PartyMenu *PartyMenu_CreateData(OverlayManager *manager) {
     }
     ret->topScreenPanelShow = FALSE;
     ret->partyMonIndex = ret->args->partySlot;
-    ret->unk_C66 = ret->partyMonIndex;
+    ret->initialPartyMonIndex = ret->partyMonIndex;
     return ret;
 }
 
@@ -987,7 +987,7 @@ static void PartyMenu_InitCancelDisabled(PartyMenu *partyMenu) {
 
 static void PartyMenu_InitDpadLayoutAndButtons(PartyMenu *partyMenu) {
     u8 r4 = 3;
-    if (partyMenu->args->unk_25 == 2) {
+    if (partyMenu->args->panelLayout == 2) {
         partyMenu->dpadMenuBox = _0210144C;
     } else if (partyMenu->args->context == PARTY_MENU_CONTEXT_UNION_ROOM_BATTLE_SELECT || partyMenu->args->context == PARTY_MENU_CONTEXT_17 || partyMenu->args->context == PARTY_MENU_CONTEXT_BATTLE_HALL || partyMenu->args->context == PARTY_MENU_CONTEXT_23) {
         partyMenu->dpadMenuBox = _0210148C;
@@ -1113,18 +1113,18 @@ static u32 Pokemon_CountRibbonsByCategory(Pokemon *mon, u8 contestStat) {
 }
 
 u16 *PartyMenu_GetHpBarFrameTiles(PartyMenu *partyMenu) {
-    return &partyMenu->unk_3D4[0x36];
+    return &partyMenu->panelTilemap[0x36];
 }
 
 static void PartyMenu_DrawMonPanel(PartyMenu *partyMenu, u8 partySlot, u8 x, u8 y, u8 a4) {
     void *src;
-    if (partySlot == 0 || (partyMenu->args->unk_25 != 0 && partySlot == 1)) {
-        src = partyMenu->unk_314;
+    if (partySlot == 0 || (partyMenu->args->panelLayout != 0 && partySlot == 1)) {
+        src = partyMenu->leadPanelTilemap;
     } else {
-        src = partyMenu->unk_3D4;
+        src = partyMenu->panelTilemap;
     }
-    partyMenu->monsDrawState[partySlot].unk_14 = x;
-    partyMenu->monsDrawState[partySlot].unk_15 = y;
+    partyMenu->monsDrawState[partySlot].panelX = x;
+    partyMenu->monsDrawState[partySlot].panelY = y;
     CopyToBgTilemapRect(partyMenu->bgConfig, GF_BG_LYR_MAIN_2, x, y, 16, 6, src, 0, 0, 16, 6);
     if (!a4) {
         FillBgTilemapRect(partyMenu->bgConfig, GF_BG_LYR_MAIN_2, 0x4B, x + 6, y + 3, 9, 1, TILEMAP_FILL_KEEP_PAL);
@@ -1134,7 +1134,7 @@ static void PartyMenu_DrawMonPanel(PartyMenu *partyMenu, u8 partySlot, u8 x, u8 
 }
 
 static void PartyMenu_DrawPanelsAndPush(PartyMenu *partyMenu) {
-    const UnkStruct_0207A22C *r1 = partyMenu->args->unk_25 == 2 ? _0210150C[1] : _0210150C[0];
+    const UnkStruct_0207A22C *r1 = partyMenu->args->panelLayout == 2 ? _0210150C[1] : _0210150C[0];
     if (partyMenu->args->context == PARTY_MENU_CONTEXT_EVO_STONE) {
         PartyMenu_DrawPanels_UseEvoStone(partyMenu, r1);
     } else if (partyMenu->args->context == PARTY_MENU_CONTEXT_TM_HM) {
@@ -1256,7 +1256,7 @@ static void PartyMenu_DrawPanels_FrontierFacilityEntry(PartyMenu *partyMenu, con
 }
 
 static void PartyMenu_DrawEmptyMonPanel(PartyMenu *partyMenu, u8 partySlot, s16 x, s16 y) {
-    CopyToBgTilemapRect(partyMenu->bgConfig, GF_BG_LYR_MAIN_2, x, y, 16, 6, partyMenu->unk_494, 0, 0, 16, 6);
+    CopyToBgTilemapRect(partyMenu->bgConfig, GF_BG_LYR_MAIN_2, x, y, 16, 6, partyMenu->emptyPanelTilemap, 0, 0, 16, 6);
     BgTilemapRectChangePalette(partyMenu->bgConfig, GF_BG_LYR_MAIN_2, x, y, 16, 6, 1);
     PartyMenu_DrawMonStatusIcon(partyMenu, partySlot, PARTY_MON_STATUS_ICON_OK);
     PartyMenu_DrawMonHeldItemIcon(partyMenu, partySlot, ITEM_NONE);
@@ -1284,14 +1284,14 @@ void PartyMenu_UpdateMonPanelPalette(PartyMenu *partyMenu, u8 partySlot) {
 }
 
 static BOOL sub_0207A880(PartyMenu *partyMenu, u8 partySlot) {
-    return partyMenu->args->unk_25 == 2 && (partySlot & 1);
+    return partyMenu->args->panelLayout == 2 && (partySlot & 1);
 }
 
 static void PartyMenu_InitCursorSprite(PartyMenu *partyMenu) {
     u8 x;
     u8 y;
     DpadMenuBox_GetNeighborInDirection(partyMenu->dpadMenuBox, &x, &y, NULL, NULL, partyMenu->partyMonIndex, 4);
-    Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->unk_25, partyMenu->partyMonIndex));
+    Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->panelLayout, partyMenu->partyMonIndex));
     Sprite_SetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], x, y);
 }
 
@@ -1314,7 +1314,7 @@ static void PartyMenu_MoveCursorSpriteTo(PartyMenu *partyMenu, int selection, in
     if (selection == PARTY_MON_SELECTION_CANCEL || selection == PARTY_MON_SELECTION_CONFIRM) {
         Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], FALSE);
     } else {
-        Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->unk_25, selection));
+        Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->panelLayout, selection));
         Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], TRUE);
         Sprite_SetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], x, y);
     }
@@ -1356,15 +1356,15 @@ static BOOL PartyMenu_HandleDpadInput(PartyMenu *partyMenu) {
     newSelection = partyMenu->partyMonIndex;
     if (newSelection == PARTY_MON_SELECTION_CANCEL) {
         if (direction == DIR_NORTH) {
-            newSelection = PartyMenu_GetNewSelectionFromTable(partyMenu, &x, &y, _021012CC[(partyMenu->unk_C66 & 1) + 2]);
+            newSelection = PartyMenu_GetNewSelectionFromTable(partyMenu, &x, &y, _021012CC[(partyMenu->initialPartyMonIndex & 1) + 2]);
         } else {
             newSelection = PartyMenu_GetSelectionInDirection(partyMenu, &x, &y, direction);
         }
     } else if (newSelection == PARTY_MON_SELECTION_CONFIRM) {
         if (partyMenu->args->context != PARTY_MENU_CONTEXT_UNION_ROOM_BATTLE_SELECT && partyMenu->args->context != PARTY_MENU_CONTEXT_17 && partyMenu->args->context != PARTY_MENU_CONTEXT_23 && partyMenu->args->context != PARTY_MENU_CONTEXT_BATTLE_HALL && direction == DIR_NORTH) {
-            newSelection = PartyMenu_GetNewSelectionFromTable(partyMenu, &x, &y, _021012CC[(partyMenu->unk_C66 & 1) + 2]);
+            newSelection = PartyMenu_GetNewSelectionFromTable(partyMenu, &x, &y, _021012CC[(partyMenu->initialPartyMonIndex & 1) + 2]);
         } else if (direction == DIR_SOUTH) {
-            newSelection = PartyMenu_GetNewSelectionFromTable(partyMenu, &x, &y, _021012CC[partyMenu->unk_C66 & 1]);
+            newSelection = PartyMenu_GetNewSelectionFromTable(partyMenu, &x, &y, _021012CC[partyMenu->initialPartyMonIndex & 1]);
         } else {
             newSelection = PartyMenu_GetSelectionInDirection(partyMenu, &x, &y, direction);
         }
@@ -1415,7 +1415,7 @@ void PartyMenu_SetCursorSlot(PartyMenu *partyMenu, u8 partySlot) {
     } else {
         u8 x, y;
         DpadMenuBox_GetNeighborInDirection(partyMenu->dpadMenuBox, &x, &y, NULL, NULL, partyMenu->partyMonIndex, DIR_MAX);
-        Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->unk_25, partySlot));
+        Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->panelLayout, partySlot));
         Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], TRUE);
         Sprite_SetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], x, y);
     }
@@ -1488,7 +1488,7 @@ static int PartyMenu_GetTouchButtonInput(PartyMenu *partyMenu) {
     if (partyMenu->args->context == PARTY_MENU_CONTEXT_UNION_ROOM_BATTLE_SELECT || partyMenu->args->context == PARTY_MENU_CONTEXT_17 || partyMenu->args->context == PARTY_MENU_CONTEXT_BATTLE_HALL || partyMenu->args->context == PARTY_MENU_CONTEXT_23) {
         return TouchscreenHitbox_FindRectAtTouchNew(_02110104);
     } else {
-        if (partyMenu->args->unk_25 == 2) {
+        if (partyMenu->args->panelLayout == 2) {
             idx = 1;
         }
         return TouchscreenHitbox_FindRectAtTouchNew(_02110128[idx]);

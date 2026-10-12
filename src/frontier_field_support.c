@@ -101,7 +101,7 @@ u32 FrontierPartySelect_LaunchPartyMenu(FrontierPartySelectEnv *env, FieldSystem
     args->options = Save_PlayerData_GetOptionsAddr(saveData);
     args->party = SaveArray_Party_Get(saveData);
     args->bag = Save_Bag_Get(saveData);
-    args->unk_25 = 0;
+    args->panelLayout = 0;
     args->context = env->context;
     args->minMonsToSelect = env->minMons;
     args->maxMonsToSelect = env->maxMons;
