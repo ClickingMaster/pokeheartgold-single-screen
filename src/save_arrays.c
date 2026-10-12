@@ -45,7 +45,7 @@
 
 DECL_CHUNK(Save_FashionData)
 DECL_CHUNK(Save_Frontier)
-DECL_CHUNK_EX(sub_0202DB40, sub_0202DB44)
+DECL_CHUNK_EX(Save_Gts_sizeof, Save_Gts_Init)
 DECL_CHUNK_EX(sub_0202E41C, sub_0202E424)
 DECL_CHUNK_EX(Save_FriendRoster_sizeof, Save_FriendRoster_Init)
 DECL_CHUNK_EX(PokeathlonSave_FriendshipRecords_sizeof, PokeathlonSave_FriendshipRecords_Init)
@@ -188,10 +188,10 @@ const struct SaveChunkHeader gSaveChunkHeaders[] = {
      (SAVEINITFN)Save_Roamers_Init,
      },
     {
-     SAVE_UNK_22,
+     SAVE_GTS,
      0,
-     (SAVESIZEFN)sub_0202DB40,
-     (SAVEINITFN)sub_0202DB44,
+     (SAVESIZEFN)Save_Gts_sizeof,
+     (SAVEINITFN)Save_Gts_Init,
      },
     {
      SAVE_UNK_23,

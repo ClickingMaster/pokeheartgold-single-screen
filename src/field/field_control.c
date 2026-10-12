@@ -340,7 +340,7 @@ BOOL FieldInput_Process_Colosseum(FieldInput *input, FieldSystem *fieldSystem) {
         return TRUE;
     }
 
-    if (sub_02037958() || sub_02057F18(Comm_GetLocalNetId()) || !sub_02058740()) {
+    if (sub_02037958() || CommPlayerManager_GetMoveTimer(Comm_GetLocalNetId()) || !sub_02058740()) {
         return FALSE;
     }
 

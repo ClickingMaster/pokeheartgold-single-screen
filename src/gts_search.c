@@ -98,8 +98,8 @@ extern const GtsSearchCursorColumn sGtsSearchCursorAnims[];
 extern int ov70_0224590C[];
 
 // Not declared in a public header.
-u32 sub_0202DB80(void *gtsSave);
-u32 sub_0202DB90(void *gtsSave);
+u32 GtsSave_GetDepositDate(void *gtsSave);
+u32 GtsSave_GetTradeDate(void *gtsSave);
 void ov00_021ECB94(RTCDate *date, RTCTime *time);
 void sub_020399EC(void);
 
@@ -496,9 +496,9 @@ BOOL GtsSearch_IsDateRecent(GtsApp *app, int which) {
     s32 days;
 
     if (which == 1) {
-        packed = sub_0202DB90((void *)app->args->unk0);
+        packed = GtsSave_GetTradeDate((void *)app->args->unk0);
     } else {
-        packed = sub_0202DB80((void *)app->args->unk0);
+        packed = GtsSave_GetDepositDate((void *)app->args->unk0);
     }
     saved.year = (packed >> 24) & 0xFF;
     saved.month = (packed >> 16) & 0xFF;

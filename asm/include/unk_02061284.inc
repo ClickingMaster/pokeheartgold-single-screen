@@ -100,8 +100,8 @@
 
 	.public sub_02061284
 	.public sub_020613D0
-	.public sub_020614F4
-	.public sub_020615F0
+	.public MapObject_GetMovementBounds
+	.public MapObject_IsWithinMovementBounds
 	.public sub_02061648
 	.public sub_020616C0
 	.public sub_02061720
@@ -118,11 +118,11 @@
 	.public sub_02061AEC
 	.public sub_02061C40
 	.public sub_02061D50
-	.public sub_02061E00
-	.public sub_02061E20
-	.public sub_02061E44
-	.public sub_02061E6C
-	.public sub_02061E90
+	.public DirectionList_Count
+	.public DirectionList_GetRandom
+	.public GetRandomDirectionFromTable
+	.public GetDirectionTable
+	.public MapObject_GetDirectionToNearbyPlayer
 	.public sub_02061F5C
 	.public sub_02062050
 	.public sub_02062064

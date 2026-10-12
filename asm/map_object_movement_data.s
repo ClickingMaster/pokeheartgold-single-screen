@@ -38,8 +38,8 @@
 
 	.text
 	.public sub_020613F8
-	.public sub_020614F4
-	.public sub_020615F0
+	.public MapObject_GetMovementBounds
+	.public MapObject_IsWithinMovementBounds
 	.rodata
 
 	.public _020FD4EC

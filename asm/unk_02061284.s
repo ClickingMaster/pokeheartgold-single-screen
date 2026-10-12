@@ -34,8 +34,8 @@
 	.public _0206163C
 	.public _02061642
 	.public sub_020613F8
-	.public sub_020614F4
-	.public sub_020615F0
+	.public MapObject_GetMovementBounds
+	.public MapObject_IsWithinMovementBounds
 	.include "unk_02061284.inc"
 	.include "global.inc"
 
@@ -88,7 +88,7 @@ _0206144A:
 	mov r1, #0
 	ldr r0, _020614F0 ; =_020FD7B8
 	mvn r1, r1
-	bl sub_02061E20
+	bl DirectionList_GetRandom
 	strh r0, [r4, #2]
 	mov r0, #0
 	ldrsh r0, [r4, r0]
@@ -110,7 +110,7 @@ _0206147E:
 	mov r1, #0
 	ldr r0, [r4, #0xc]
 	mvn r1, r1
-	bl sub_02061E44
+	bl GetRandomDirectionFromTable
 	add r6, r0, #0
 	add r0, r5, #0
 	add r1, r6, #0
@@ -120,7 +120,7 @@ _0206147E:
 	bne _020614AA
 	add r0, r5, #0
 	add r1, r6, #0
-	bl sub_020615F0
+	bl MapObject_IsWithinMovementBounds
 	cmp r0, #0
 	bne _020614AA
 	mov r0, #0
@@ -162,8 +162,8 @@ _020614EE:
 	.balign 4, 0
 _020614F0: .word _020FD7B8
 	thumb_func_end sub_020613F8
-	thumb_func_start sub_020614F4
-sub_020614F4: ; 0x020614F4
+	thumb_func_start MapObject_GetMovementBounds
+MapObject_GetMovementBounds: ; 0x020614F4
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
 	str r0, [sp]
@@ -294,15 +294,15 @@ _020615E8:
 	bl GF_AssertFail
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end sub_020614F4
-	thumb_func_start sub_020615F0
-sub_020615F0: ; 0x020615F0
+	thumb_func_end MapObject_GetMovementBounds
+	thumb_func_start MapObject_IsWithinMovementBounds
+MapObject_IsWithinMovementBounds: ; 0x020615F0
 	push {r4, r5, r6, lr}
 	sub sp, #0x10
 	add r6, r1, #0
 	add r5, r0, #0
 	add r1, sp, #0
-	bl sub_020614F4
+	bl MapObject_GetMovementBounds
 	add r0, r5, #0
 	bl MapObject_GetXCoord
 	add r4, r0, #0
@@ -340,7 +340,7 @@ _02061642:
 	mov r0, #1
 	add sp, #0x10
 	pop {r4, r5, r6, pc}
-	thumb_func_end sub_020615F0
+	thumb_func_end MapObject_IsWithinMovementBounds
 
 	.rodata
 

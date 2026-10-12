@@ -26,31 +26,31 @@
 .public sub_0203E2F4
 .public sub_0203E30C
 .public sub_020548C0
-.public sub_02056D7C
-.public sub_02056E38
+.public CommPlayerManager_Init
+.public CommPlayerManager_RemoveAllAvatars
 .public sub_02056E60
-.public sub_02056EA0
-.public sub_02056EE0
-.public sub_0205701C
-.public sub_02057180
+.public CommPlayerManager_Delete
+.public CommPlayerManager_IsInitialized
+.public CommPlayerManager_SendLocalPosition
+.public CommPlayerManager_sizeof
 .public sub_020573AC
 .public sub_020573F0
-.public sub_020576C0
-.public sub_0205776C
-.public sub_02057798
-.public sub_0205779C
-.public sub_02057A08
-.public sub_02057A0C
-.public sub_02057A34
-.public sub_02057A88
-.public sub_02057ADC
-.public sub_02057B14
+.public CommPlayerManager_ReceivePosition
+.public CommPlayerManager_ReceiveRemovePlayer
+.public CommPlayerManager_GetPositionSize
+.public CommPlayerManager_ReceiveHostPosition
+.public CommPlayerManager_GetHostPositionSize
+.public CommPlayerManager_IsLocalPlayerConnected
+.public CommPlayerManager_GetPlayerX
+.public CommPlayerManager_GetPlayerZ
+.public CommPlayerManager_GetPlayerFrontX
+.public CommPlayerManager_GetPlayerFrontZ
 .public sub_02057C94
 .public sub_02057D50
 .public sub_02057E08
 .public sub_02057E50
-.public sub_02057F18
-.public sub_02057F28
+.public CommPlayerManager_GetMoveTimer
+.public CommPlayerManager_SetLocalFacing
 .public sub_02057F58
 .public sub_02057F70
 .public sub_02057F80
@@ -84,35 +84,35 @@
 .public abs
 .public gSystem
 
-	.public sub_02056EF4
-	.public sub_02056FD0
-	.public sub_0205704C
+	.public CommPlayerManager_InitLocalPlayer
+	.public CommPlayerManager_SendPosition
+	.public CommPlayerManager_SendHostPosition
 	.public sub_020570C8
-	.public sub_0205712C
-	.public sub_02057184
-	.public sub_0205724C
+	.public CommPlayerManager_SendChangedHostPositions
+	.public CommPlayerManager_CreateAvatar
+	.public CommPlayerManager_RemovePlayer
 	.public sub_020572AC
-	.public sub_020572DC
-	.public sub_02057314
+	.public CommPlayerManager_Task
+	.public CommPlayerManager_UpdateAvatars
 	.public sub_02057358
 	.public sub_02057384
-	.public sub_02057454
-	.public sub_02057480
-	.public sub_020574C4
-	.public sub_02057524
-	.public sub_02057550
-	.public sub_02057818
-	.public sub_02057B4C
-	.public sub_02057B9C
-	.public sub_02057BEC
-	.public sub_02057C24
+	.public CommPlayerManager_KeysToDirection
+	.public CommPlayerManager_IsObjectEventAt
+	.public CommPlayerManager_IsPositionBlocked
+	.public CommPlayerManager_GetMoveDelay
+	.public CommPlayerManager_MoveHostPlayers
+	.public CommPlayerManager_MoveAvatar
+	.public CommPlayerManager_GetHostX
+	.public CommPlayerManager_GetHostZ
+	.public CommPlayerManager_GetHostFrontX
+	.public CommPlayerManager_GetHostFrontZ
 	.public sub_02057C5C
 	.public sub_02057D74
-	.public sub_02057EEC
-	.public sub_02058024
+	.public CommPlayerManager_GetOppositeDirection
+	.public CommPlayerManager_SetLocalMoveDelay
 	.public _020FC7A0
 	.public _020FC7A8
 	.public _0210FAB4
 	.public _0210FABC
 	.public _0210FAC4
-	.public _021D41C4
+	.public gCommPlayerManager

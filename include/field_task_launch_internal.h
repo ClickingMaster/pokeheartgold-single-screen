@@ -11,11 +11,11 @@ typedef struct TrainerCardTaskEnv {
     u8 pad2C[0x67C];
 } TrainerCardTaskEnv;
 u32 Comm_GetLocalNetId(void);
-int sub_02057ADC(void);
-int sub_02057B14(int player);
+int CommPlayerManager_GetPlayerFrontX(void);
+int CommPlayerManager_GetPlayerFrontZ(int player);
 int Comm_CountConnected(void);
-int sub_02057A34(int player);
-int sub_02057A88(int player);
+int CommPlayerManager_GetPlayerX(int player);
+int CommPlayerManager_GetPlayerZ(int player);
 void sub_0203E2F4(void);
 void sub_02059D44(FieldSystem *fieldSystem);
 BOOL sub_02059B64(TaskManager *taskManager);

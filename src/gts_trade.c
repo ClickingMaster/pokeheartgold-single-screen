@@ -14,8 +14,8 @@
 extern const OverlayManagerTemplate sGtsTradeSequenceTemplate;
 
 // Defined in save_block_22.c (copies the deposited Pokemon out of the GTS save data, GtsArgs.unk0, which
-// sub_0202DB34 returns as an int); not declared in a header.
-void sub_0202DB64(void *gtsSave, void *dest);
+// Save_Gts_Get returns as an int); not declared in a header.
+void GtsSave_GetStoredMon(void *gtsSave, void *dest);
 
 int GtsTrade_Init(GtsApp *app, int state);
 int GtsTrade_Main(GtsApp *app, int state);
@@ -48,7 +48,7 @@ int GtsTrade_Init(GtsApp *app, int state) {
         break;
     case 10:
         app->tradeAnim.trade_boxmon = Mon_GetBoxMon(&app->record.mon);
-        sub_0202DB64((void *)app->args->unk0, app->depositedMon);
+        GtsSave_GetStoredMon((void *)app->args->unk0, app->depositedMon);
         app->tradeAnim.my_boxmon = Mon_GetBoxMon(app->depositedMon);
         app->partnerProfile = GtsTrade_CreatePartnerProfile(&app->record);
         app->tradeAnim.trade_profile = app->partnerProfile;
@@ -56,7 +56,7 @@ int GtsTrade_Init(GtsApp *app, int state) {
         app->tradeAnim.is_ingame = 1;
         break;
     case 9:
-        sub_0202DB64((void *)app->args->unk0, app->depositedMon);
+        GtsSave_GetStoredMon((void *)app->args->unk0, app->depositedMon);
         app->tradeAnim.my_boxmon = Mon_GetBoxMon(app->depositedMon);
         app->tradeAnim.trade_boxmon = Mon_GetBoxMon(&app->searchResults[app->selectedResult].mon);
         app->partnerProfile = GtsTrade_CreatePartnerProfile(&app->searchResults[app->selectedResult]);
@@ -105,7 +105,7 @@ int GtsTrade_Main(GtsApp *app, int state) {
         } else if (kind == 8 || kind == 10) {
             mon = GtsTrade_GetReceivedMon(app, kind);
             deposited = AllocMonZeroed(HEAP_ID_61);
-            sub_0202DB64((void *)app->args->unk0, deposited);
+            GtsSave_GetStoredMon((void *)app->args->unk0, deposited);
             receivedSpecies = GetMonData(mon, MON_DATA_SPECIES, NULL);
             if (receivedSpecies != GetMonData(deposited, MON_DATA_SPECIES, NULL)) {
                 goto checkEvolution;

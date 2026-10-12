@@ -25,7 +25,7 @@
 #define SAVE_UNK_19                        19
 #define SAVE_SPECIAL_RIBBONS               20
 #define SAVE_ROAMER                        21
-#define SAVE_UNK_22                        22
+#define SAVE_GTS                        22
 #define SAVE_UNK_23                        23
 #define SAVE_RANKINGS                      24
 #define SAVE_UNK_25                        25

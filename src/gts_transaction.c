@@ -90,15 +90,15 @@ extern const BgTemplate sGtsTransactionBg2Template;
 extern const BgTemplate sGtsTransactionSubBg0Template;
 extern const BgTemplate sGtsTransactionSubBg1Template;
 
-// Defined in save_block_22.c (the GTS save data, GtsArgs.unk0, which sub_0202DB34 returns as an int: the deposited
+// Defined in save_block_22.c (the GTS save data, GtsArgs.unk0, which Save_Gts_Get returns as an int: the deposited
 // Pokemon, whether one is deposited, the dates of the last trades); not declared in a header.
-u16 sub_0202DB54(void *gtsSave);
-void sub_0202DB5C(void *gtsSave, u16 value);
-void sub_0202DB64(void *gtsSave, void *dest);
-void sub_0202DB70(void *gtsSave, void *src);
-void sub_0202DB88(void *gtsSave, u32 value);
-void sub_0202DB98(void *gtsSave, u32 value);
-u16 sub_0202DBA0(void *gtsSave);
+u16 GtsSave_HasStoredMon(void *gtsSave);
+void GtsSave_SetHasStoredMon(void *gtsSave, u16 value);
+void GtsSave_GetStoredMon(void *gtsSave, void *dest);
+void GtsSave_SetStoredMon(void *gtsSave, void *src);
+void GtsSave_SetDepositDate(void *gtsSave, u32 value);
+void GtsSave_SetTradeDate(void *gtsSave, u32 value);
+u16 GtsSave_GetStoredMonBox(void *gtsSave);
 // Not declared in a public header.
 void WirelessStatusIcon_SetLevel(s32 level);
 void sub_020399EC(void);
@@ -424,7 +424,7 @@ int GtsTransaction_WaitGet(GtsApp *app) {
             if (traded != 0) {
                 app->state = GTS_TRANSACTION_STATE_SEND_RESULT;
             } else {
-                GtsTransaction_ReceiveMon(app, &app->record.mon, sub_0202DBA0((void *)app->args->unk0), traded);
+                GtsTransaction_ReceiveMon(app, &app->record.mon, GtsSave_GetStoredMonBox((void *)app->args->unk0), traded);
                 app->state = GTS_TRANSACTION_STATE_START_SAVE;
             }
             break;
@@ -636,14 +636,14 @@ int GtsTransaction_WaitResult(GtsApp *app) {
         case -3: {
             Pokemon *mon;
             app->hasDepositedMon = FALSE;
-            if (sub_0202DB54((void *)app->args->unk0)) {
+            if (GtsSave_HasStoredMon((void *)app->args->unk0)) {
                 mon = AllocMonZeroed(HEAP_ID_61);
-                sub_0202DB64((void *)app->args->unk0, mon);
+                GtsSave_GetStoredMon((void *)app->args->unk0, mon);
                 BufferBoxMonNickname(app->msgFormat, 0, Mon_GetBoxMon(mon));
                 app->afterSaveMsgId = 2; // {nickname} was not traded.
                 app->state = GTS_TRANSACTION_STATE_START_SAVE_WITH_MESSAGE;
-                GtsTransaction_ReceiveMon(app, mon, sub_0202DBA0((void *)app->args->unk0), 0);
-                sub_0202DB5C((void *)app->args->unk0, 0);
+                GtsTransaction_ReceiveMon(app, mon, GtsSave_GetStoredMonBox((void *)app->args->unk0), 0);
+                GtsSave_SetHasStoredMon((void *)app->args->unk0, 0);
                 Heap_Free(mon);
             } else {
                 GtsTransaction_ReturnToCaller(app);
@@ -653,13 +653,13 @@ int GtsTransaction_WaitResult(GtsApp *app) {
         case -4: {
             Pokemon *mon;
             app->hasDepositedMon = FALSE;
-            if (sub_0202DB54((void *)app->args->unk0)) {
+            if (GtsSave_HasStoredMon((void *)app->args->unk0)) {
                 mon = AllocMonZeroed(HEAP_ID_61);
-                sub_0202DB64((void *)app->args->unk0, mon);
+                GtsSave_GetStoredMon((void *)app->args->unk0, mon);
                 BufferBoxMonNickname(app->msgFormat, 0, Mon_GetBoxMon(mon));
                 app->afterSaveMsgId = 3; // {nickname} appears to have fled...
                 app->state = GTS_TRANSACTION_STATE_START_SAVE_WITH_MESSAGE;
-                sub_0202DB5C((void *)app->args->unk0, 0);
+                GtsSave_SetHasStoredMon((void *)app->args->unk0, 0);
                 Heap_Free(mon);
             }
             break;
@@ -770,10 +770,10 @@ void GtsTransaction_RecordTradeStats(GtsApp *app, Pokemon *mon) {
 }
 
 int GtsTransaction_ReceiveTradedMon(GtsApp *app) {
-    GtsTransaction_ReceiveMon(app, &app->record.mon, sub_0202DBA0((void *)app->args->unk0), app->record.unk_121);
+    GtsTransaction_ReceiveMon(app, &app->record.mon, GtsSave_GetStoredMonBox((void *)app->args->unk0), app->record.unk_121);
     GtsTransaction_AddPartnerToWifiHistory(app->args->wifiHistory, &app->record);
     GtsTransaction_RecordTradeStats(app, &app->record.mon);
-    sub_0202DB5C((void *)app->args->unk0, 0);
+    GtsSave_SetHasStoredMon((void *)app->args->unk0, 0);
     app->state = GTS_TRANSACTION_STATE_START_SAVE;
     GtsTransaction_SetSaveStates(app, GTS_TRANSACTION_STATE_SEND_DELETE, GTS_TRANSACTION_STATE_RECEIVE_DONE);
     return 3;
@@ -1033,20 +1033,20 @@ void GtsTransaction_StoreSelectedMon(GtsApp *app, BOOL setDeposited) {
     if (app->selectedBox != GTS_BOX_PARTY) {
         mon = AllocMonZeroed(HEAP_ID_61);
         CopyBoxPokemonToPokemon(PCStorage_GetMonByIndexPair(app->args->pcStorage, app->selectedBox, app->selectedSlot), mon);
-        ((void (*)(void *, void *, int))sub_0202DB70)((void *)app->args->unk0, mon, app->selectedBox); // passes the box too
+        ((void (*)(void *, void *, int))GtsSave_SetStoredMon)((void *)app->args->unk0, mon, app->selectedBox); // passes the box too
         PCStorage_DeleteBoxMonByIndexPair(app->args->pcStorage, app->selectedBox, app->selectedSlot);
         Heap_Free(mon);
     } else {
         mon = Party_GetMonByIndex(app->args->party, app->selectedSlot);
         Pokemon_RemoveCapsule(mon);
-        ((void (*)(void *, void *, int))sub_0202DB70)((void *)app->args->unk0, mon, app->selectedBox); // passes the box too
+        ((void (*)(void *, void *, int))GtsSave_SetStoredMon)((void *)app->args->unk0, mon, app->selectedBox); // passes the box too
         Party_RemoveMon(app->args->party, app->selectedSlot);
         if (!Party_HasMon(app->args->party, SPECIES_CHATOT)) {
             Chatot_Invalidate(Save_Chatot_Get(app->args->saveData));
         }
     }
     if (setDeposited) {
-        sub_0202DB5C((void *)app->args->unk0, 1);
+        GtsSave_SetHasStoredMon((void *)app->args->unk0, 1);
     }
 }
 
@@ -1090,7 +1090,7 @@ void GtsTransaction_ReceiveMon(GtsApp *app, Pokemon *mon, int box, int traded) {
         app->offeredBox = box;
         app->offeredSlot = slot;
     }
-    sub_0202DB5C((void *)app->args->unk0, 0);
+    GtsSave_SetHasStoredMon((void *)app->args->unk0, 0);
 }
 
 // The Pokemon got by an exchange; the box argument is not used.
@@ -1141,9 +1141,9 @@ void GtsTransaction_SaveTradeDate(void *gtsSave, int exchange) {
     ov00_021ECB94(&date, &time);
     packed = (date.year << 24) | ((date.month << 24) >> 8) | ((date.day << 24) >> 16) | date.week;
     if (exchange == TRUE) {
-        sub_0202DB98(gtsSave, packed);
+        GtsSave_SetTradeDate(gtsSave, packed);
     } else {
-        sub_0202DB88(gtsSave, packed);
+        GtsSave_SetDepositDate(gtsSave, packed);
     }
 }
 
@@ -1169,7 +1169,7 @@ void GtsTransaction_SetSaveStates(GtsApp *app, u16 midState, u16 doneState) {
 
 // The save holds no deposited Pokemon although hasDepositedMon is set.
 BOOL GtsTransaction_IsDepositMissingFromSave(GtsApp *app) {
-    if (!sub_0202DB54((void *)app->args->unk0) && app->hasDepositedMon != FALSE) {
+    if (!GtsSave_HasStoredMon((void *)app->args->unk0) && app->hasDepositedMon != FALSE) {
         return TRUE;
     }
     return FALSE;

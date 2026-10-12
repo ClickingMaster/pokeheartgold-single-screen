@@ -86,10 +86,10 @@
 .public TaskManager_GetFieldSystem
 .public TaskManager_GetEnvironment
 .public sub_02056E60
-.public sub_02057A34
-.public sub_02057A88
-.public sub_02057ADC
-.public sub_02057B14
+.public CommPlayerManager_GetPlayerX
+.public CommPlayerManager_GetPlayerZ
+.public CommPlayerManager_GetPlayerFrontX
+.public CommPlayerManager_GetPlayerFrontZ
 .public sub_02057E08
 .public sub_02057F70
 .public CommClubLink_GetCard

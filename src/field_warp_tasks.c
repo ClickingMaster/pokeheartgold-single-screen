@@ -30,7 +30,7 @@
 #include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "unk_02055418.h"
-#include "unk_02056D7C.h"
+#include "comm_player_manager.h"
 #include "unk_02058AEC.h"
 #include "union_room_objects.h"
 #include "unk_0206793C.h"
@@ -294,7 +294,7 @@ static void sub_02053210(FieldSystem *fieldSystem) {
     if (fieldSystem->unkAC) {
         PlayerAvatar_DeleteFromMap(fieldSystem->playerAvatar);
     } else {
-        sub_02056E38();
+        CommPlayerManager_RemoveAllAvatars();
         PlayerAvatar_FreeToHeap(fieldSystem->playerAvatar);
         MapObjectManager_RemoveAllActiveObjects(fieldSystem->mapObjectManager);
         MapObjectManager_Delete(fieldSystem->mapObjectManager);

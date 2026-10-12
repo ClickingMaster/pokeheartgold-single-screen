@@ -72,7 +72,7 @@
 #include "friend_roster.h"
 #include "friend_group_access.h"
 #include "frontier_data_access.h"
-#include "unk_0202DB34.h"
+#include "save_gts.h"
 #include "unk_02037C94.h"
 #include "field_overworld_transition.h"
 #include "unk_020552A4.h"
@@ -1173,7 +1173,7 @@ void sub_0203F844(FieldSystem *fieldSystem, u16 a1) {
     OverlayManagerTemplate template = _020FA264;
 
     GtsArgs *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(GtsArgs));
-    args->unk0 = sub_0202DB34(fieldSystem->saveData);
+    args->unk0 = Save_Gts_Get(fieldSystem->saveData);
     args->sysInfo = Save_SysInfo_Get(fieldSystem->saveData);
     args->party = (Party *)SaveArray_Get(fieldSystem->saveData, SAVE_PARTY);
     args->pcStorage = SaveArray_PCStorage_Get(fieldSystem->saveData);

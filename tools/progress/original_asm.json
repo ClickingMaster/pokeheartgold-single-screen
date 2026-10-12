@@ -718,7 +718,7 @@
   {
    "function": "__TransferControl(ThrowContext*, ExceptionInfo*, char*)",
    "cpu": "ARM9",
-   "source": "src/op90_op90_to91_w41419_ExitProcess_prefix_residual_1_r01.cpp",
+   "source": "lib/MSL_C/src/msl_transfer_control.cpp",
    "kind": "asm",
    "reason": "MSL C++ exception-runtime routine: explicit sp manipulation (mov/ldr/sub sp,reg) to transfer control to a handler frame"
   },
@@ -844,42 +844,42 @@
   {
    "function": "_dadd",
    "cpu": "ARM9",
-   "source": "src/op90_to90_w41415_fp_init4_prefix_r01.c",
+   "source": "lib/MSL_C/src/msl_fp_runtime.c",
    "kind": "asm",
    "reason": "floating-point and long-long runtime library assembled as one module with 84 entry points: ARM9 pop {..,lr}; bx lr epilogues, rrx, clz, mrs/msr flag results, computed add pc into unrolled division, entries that fall through into the next routine, 64 non-pool data words; the remaining entries rely on cmn and subs-fused branches that MWCC never emits"
   },
   {
    "function": "sys_exit",
    "cpu": "ARM9",
-   "source": "src/op90_to90_w41415_fp_init4_suffix_r01.c",
+   "source": "lib/MSL_C/src/msl_semihosting.c",
    "kind": "asm",
    "reason": "mov pc,lr return; svc/swi"
   },
   {
    "function": "sys_readc",
    "cpu": "ARM9",
-   "source": "src/op90_to90_w41415_fp_init4_suffix_r01.c",
+   "source": "lib/MSL_C/src/msl_semihosting.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "sys_writec",
    "cpu": "ARM9",
-   "source": "src/op90_to90_w41415_fp_init4_suffix_r01.c",
+   "source": "lib/MSL_C/src/msl_semihosting.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "__rethrow",
    "cpu": "ARM9",
-   "source": "src/op90_to91_w41419_ExitProcess_prefix_r01.c",
+   "source": "lib/MSL_C/src/msl_throw.c",
    "kind": "asm",
    "reason": "same register-capture frame as __throw"
   },
   {
    "function": "__throw",
    "cpu": "ARM9",
-   "source": "src/op90_to91_w41419_ExitProcess_prefix_r01.c",
+   "source": "lib/MSL_C/src/msl_throw.c",
    "kind": "asm",
    "reason": "mov ip,sp + manual str of r4-fp/sp/lr into a frame and b to handler: reads callee-saved regs as data, non-MWCC prologue, never returns"
   },

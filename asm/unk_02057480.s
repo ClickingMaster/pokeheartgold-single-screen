@@ -2,17 +2,17 @@
 	.include "unk_02056D7C.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02057480
-sub_02057480: ; 0x02057480
+	thumb_func_start CommPlayerManager_IsObjectEventAt
+CommPlayerManager_IsObjectEventAt: ; 0x02057480
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
-	ldr r0, _020574C0 ; =_021D41C4
+	ldr r0, _020574C0 ; =gCommPlayerManager
 	add r6, r1, #0
 	ldr r0, [r0]
 	ldr r0, [r0, #0x30]
 	bl Field_GetNumObjectEvents
 	add r4, r0, #0
-	ldr r0, _020574C0 ; =_021D41C4
+	ldr r0, _020574C0 ; =gCommPlayerManager
 	ldr r0, [r0]
 	ldr r0, [r0, #0x30]
 	bl Field_GetObjectEvents
@@ -37,5 +37,5 @@ _020574BA:
 	mov r0, #0
 	pop {r4, r5, r6, pc}
 	nop
-_020574C0: .word _021D41C4
-	thumb_func_end sub_02057480
+_020574C0: .word gCommPlayerManager
+	thumb_func_end CommPlayerManager_IsObjectEventAt

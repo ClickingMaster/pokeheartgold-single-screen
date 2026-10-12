@@ -20,7 +20,7 @@
 #include "poke_overlay.h"
 #include "system.h"
 #include "unk_02035900.h"
-#include "unk_02056D7C.h"
+#include "comm_player_manager.h"
 #include "unk_0205CB48.h"
 #include "unk_02092BB8.h"
 #include "unk_02092BE8.h"
@@ -223,7 +223,7 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
     switch (loadType) {
     case 3:
         if (movementAllowed) {
-            if (sub_02057A0C()) {
+            if (CommPlayerManager_IsLocalPlayerConnected()) {
                 if (FieldInput_Process_Colosseum(&fieldInput, fieldSystem) == TRUE) {
                     movementAllowed = FALSE;
                 }

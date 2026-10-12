@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "72a4d3617ec975ae568be40f6e245b5f5fc1c41d",
+  "commit": "01e50f214cfbdc4e857a6a11f95fd44da05e310f",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "8e3e076d013d3dc211d0807449caeb88cc8ae2ad15e92eb1efe28fca5f8c6200",
+    "ARM9": "a0e16ed03506a343a83cb767c2909bb7d57937f990fcdba12fe42df027576c54",
     "ARM7": "9c5e95fc87a7ed277b340afcbcf5ab95f37fa6b9d0ec613dccd875e86c2e707b"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -18177,6 +18177,22 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "comm_player_manager.o",
+      "bytes": 188,
+      "status": "c",
+      "source": "src/comm_player_manager.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "comm_player_sync.o",
+      "bytes": 4596,
+      "status": "c",
+      "source": "src/comm_player_sync.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "communication_blob_access_1.o",
       "bytes": 166,
       "status": "c",
@@ -18257,114 +18273,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "communication_player_movement.o",
-      "bytes": 188,
-      "status": "c",
-      "source": "src/communication_player_movement.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "communication_player_movement_10.o",
-      "bytes": 36,
-      "status": "c",
-      "source": "src/communication_player_movement_10.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "communication_player_movement_11.o",
-      "bytes": 180,
-      "status": "c",
-      "source": "src/communication_player_movement_11.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "communication_player_movement_12.o",
-      "bytes": 16,
-      "status": "c",
-      "source": "src/communication_player_movement_12.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "communication_player_movement_2.o",
-      "bytes": 124,
-      "status": "c",
-      "source": "src/communication_player_movement_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "communication_player_movement_3.o",
-      "bytes": 100,
-      "status": "c",
-      "source": "src/communication_player_movement_3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "communication_player_movement_4.o",
-      "bytes": 4,
-      "status": "c",
-      "source": "src/communication_player_movement_4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "communication_player_movement_5.o",
-      "bytes": 466,
-      "status": "c",
-      "source": "src/communication_player_movement_5.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "communication_player_movement_6.o",
-      "bytes": 140,
-      "status": "c",
-      "source": "src/communication_player_movement_6.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "communication_player_movement_7.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "src/communication_player_movement_7.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "communication_player_movement_8.o",
-      "bytes": 44,
-      "status": "c",
-      "source": "src/communication_player_movement_8.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "communication_player_movement_9.o",
-      "bytes": 328,
-      "status": "c",
-      "source": "src/communication_player_movement_9.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "communication_player_state.o",
       "bytes": 1972,
       "status": "c",
       "source": "src/communication_player_state.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "communication_position_sync.o",
-      "bytes": 376,
-      "status": "c",
-      "source": "src/communication_position_sync.c"
     },
     {
       "cpu": "ARM9",
@@ -20870,14 +20782,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "link_lobby_match_r50.o",
-      "bytes": 188,
-      "status": "c",
-      "source": "src/link_lobby_match_r50.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "link_ruleset_data.o",
       "bytes": 192,
       "status": "c",
@@ -21078,14 +20982,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "map_object_direction_choice.o",
-      "bytes": 242,
-      "status": "c",
-      "source": "src/map_object_direction_choice.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "map_object_follow.o",
       "bytes": 42,
       "status": "c",
@@ -21175,73 +21071,9 @@
       "cpu": "ARM9",
       "module": "main",
       "object": "map_object_movement.o",
-      "bytes": 362,
+      "bytes": 3636,
       "status": "c",
       "source": "src/map_object_movement.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "map_object_movement_2.o",
-      "bytes": 180,
-      "status": "c",
-      "source": "src/map_object_movement_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "map_object_movement_3.o",
-      "bytes": 136,
-      "status": "c",
-      "source": "src/map_object_movement_3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "map_object_movement_4.o",
-      "bytes": 128,
-      "status": "c",
-      "source": "src/map_object_movement_4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "map_object_movement_5.o",
-      "bytes": 126,
-      "status": "c",
-      "source": "src/map_object_movement_5.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "map_object_movement_6.o",
-      "bytes": 354,
-      "status": "c",
-      "source": "src/map_object_movement_6.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "map_object_movement_7.o",
-      "bytes": 264,
-      "status": "c",
-      "source": "src/map_object_movement_7.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "map_object_movement_8.o",
-      "bytes": 44,
-      "status": "c",
-      "source": "src/map_object_movement_8.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "map_object_movement_9.o",
-      "bytes": 16,
-      "status": "c",
-      "source": "src/map_object_movement_9.c"
     },
     {
       "cpu": "ARM9",
@@ -21338,22 +21170,6 @@
       "bytes": 64,
       "status": "c",
       "source": "src/map_object_movement_commands_9.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "map_object_movement_lookup.o",
-      "bytes": 36,
-      "status": "c",
-      "source": "src/map_object_movement_lookup.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "map_object_movement_script_1.o",
-      "bytes": 592,
-      "status": "c",
-      "source": "src/map_object_movement_script_1.c"
     },
     {
       "cpu": "ARM9",
@@ -21834,6 +21650,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "msl_exit_process.o",
+      "bytes": 12,
+      "status": "c",
+      "source": "lib/MSL_C/src/msl_exit_process.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "msl_file_io.o",
       "bytes": 348,
       "status": "c",
@@ -21950,6 +21774,33 @@
       "bytes": 900,
       "status": "c",
       "source": "lib/MSL_C/src/msl_fp_ansi_two_exp.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "msl_fp_init.o",
+      "bytes": 4,
+      "status": "c",
+      "source": "lib/MSL_C/src/msl_fp_init.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "msl_fp_runtime.o",
+      "bytes": 11352,
+      "status": "original_asm",
+      "source": "lib/MSL_C/src/msl_fp_runtime.c",
+      "functions": [
+        "_dadd"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "msl_handle_unexpected.o",
+      "bytes": 96,
+      "status": "cpp",
+      "source": "lib/MSL_C/src/msl_handle_unexpected.cpp"
     },
     {
       "cpu": "ARM9",
@@ -22098,6 +21949,19 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "msl_semihosting.o",
+      "bytes": 56,
+      "status": "original_asm",
+      "source": "lib/MSL_C/src/msl_semihosting.c",
+      "functions": [
+        "sys_exit",
+        "sys_readc",
+        "sys_writec"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "msl_shared_ptr_create.o",
       "bytes": 212,
       "status": "c",
@@ -22110,6 +21974,14 @@
       "bytes": 176,
       "status": "c",
       "source": "lib/MSL_C/src/msl_shared_ptr_destroy.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "msl_shared_ptr_release.o",
+      "bytes": 48,
+      "status": "cpp",
+      "source": "lib/MSL_C/src/msl_shared_ptr_release.cpp"
     },
     {
       "cpu": "ARM9",
@@ -22258,10 +22130,57 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "msl_throw.o",
+      "bytes": 148,
+      "status": "original_asm",
+      "source": "lib/MSL_C/src/msl_throw.c",
+      "functions": [
+        "__rethrow",
+        "__throw"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "msl_transfer_control.o",
+      "bytes": 48,
+      "status": "original_asm",
+      "source": "lib/MSL_C/src/msl_transfer_control.cpp",
+      "functions": [
+        "__TransferControl(ThrowContext*, ExceptionInfo*, char*)"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "msl_type_info.o",
       "bytes": 168,
       "status": "c",
       "source": "lib/MSL_C/src/msl_type_info.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "msl_unexpected.o",
+      "bytes": 168,
+      "status": "cpp",
+      "source": "lib/MSL_C/src/msl_unexpected.cpp"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "msl_unwind_stack.o",
+      "bytes": 2224,
+      "status": "cpp",
+      "source": "lib/MSL_C/src/msl_unwind_stack.cpp"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "msl_vector_length_error.o",
+      "bytes": 144,
+      "status": "cpp",
+      "source": "lib/MSL_C/src/msl_vector_length_error.cpp"
     },
     {
       "cpu": "ARM9",
@@ -22413,29 +22332,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "op90_op90_to91_w41419_ExitProcess_prefix_residual_1_r01.o",
-      "bytes": 48,
-      "status": "original_asm",
-      "source": "src/op90_op90_to91_w41419_ExitProcess_prefix_residual_1_r01.cpp",
-      "functions": [
-        "__TransferControl(ThrowContext*, ExceptionInfo*, char*)"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "op90_op90_unk_02032B84_residual_1_r01.o",
       "bytes": 216,
       "status": "c",
       "source": "src/op90_op90_unk_02032B84_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_op90_unk_0205779C_residual_1_r01.o",
-      "bytes": 496,
-      "status": "c",
-      "source": "src/op90_op90_unk_0205779C_residual_1_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -22553,42 +22453,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "op90_to90_w41415_fp_init4_prefix_r01.o",
-      "bytes": 11352,
-      "status": "original_asm",
-      "source": "src/op90_to90_w41415_fp_init4_prefix_r01.c",
-      "functions": [
-        "_dadd"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to90_w41415_fp_init4_suffix_r01.o",
-      "bytes": 56,
-      "status": "original_asm",
-      "source": "src/op90_to90_w41415_fp_init4_suffix_r01.c",
-      "functions": [
-        "sys_exit",
-        "sys_readc",
-        "sys_writec"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to91_w41419_ExitProcess_prefix_r01.o",
-      "bytes": 148,
-      "status": "original_asm",
-      "source": "src/op90_to91_w41419_ExitProcess_prefix_r01.c",
-      "functions": [
-        "__rethrow",
-        "__throw"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "op90_unk_02012204_r01.o",
       "bytes": 88,
       "status": "c",
@@ -22617,38 +22481,6 @@
       "bytes": 200,
       "status": "c",
       "source": "src/op90_unk_02032B84_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_unk_02057184_r01.o",
-      "bytes": 200,
-      "status": "c",
-      "source": "src/op90_unk_02057184_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_unk_0205779C_r01.o",
-      "bytes": 124,
-      "status": "c",
-      "source": "src/op90_unk_0205779C_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_unk_02061E90_residual_r01.o",
-      "bytes": 204,
-      "status": "c",
-      "source": "src/op90_unk_02061E90_residual_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_unk_0206207C_r01.o",
-      "bytes": 124,
-      "status": "c",
-      "source": "src/op90_unk_0206207C_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -23796,30 +23628,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "r40_unk_0205704C_run1.o",
-      "bytes": 122,
-      "status": "c",
-      "source": "src/r40_unk_0205704C_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "r40_unk_02057184_run1.o",
-      "bytes": 96,
-      "status": "c",
-      "source": "src/r40_unk_02057184_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "r40_unk_02057480_run1.o",
-      "bytes": 68,
-      "status": "c",
-      "source": "src/r40_unk_02057480_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "r40_unk_0205975C_run1.o",
       "bytes": 58,
       "status": "c",
@@ -23960,38 +23768,6 @@
       "bytes": 98,
       "status": "c",
       "source": "src/r40_unk_0205DDD4_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "r40_unk_020616FC_run1.o",
-      "bytes": 36,
-      "status": "c",
-      "source": "src/r40_unk_020616FC_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "r40_unk_020617AC_run1.o",
-      "bytes": 152,
-      "status": "c",
-      "source": "src/r40_unk_020617AC_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "r40_unk_020618C8_run1.o",
-      "bytes": 180,
-      "status": "c",
-      "source": "src/r40_unk_020618C8_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "r40_unk_020619FC_run1.o",
-      "bytes": 190,
-      "status": "c",
-      "source": "src/r40_unk_020619FC_run1.c"
     },
     {
       "cpu": "ARM9",
@@ -24220,22 +23996,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "remote_player_coords_1.o",
-      "bytes": 280,
-      "status": "c",
-      "source": "src/remote_player_coords_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "remote_player_positions_1.o",
-      "bytes": 220,
-      "status": "c",
-      "source": "src/remote_player_positions_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "render_animation.o",
       "bytes": 586,
       "status": "c",
@@ -24383,14 +24143,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "save_block_22.o",
-      "bytes": 102,
-      "status": "c",
-      "source": "src/save_block_22.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "save_block_23.o",
       "bytes": 148,
       "status": "c",
@@ -24427,6 +24179,14 @@
       "bytes": 90,
       "status": "c",
       "source": "src/save_follow_mon.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "save_gts.o",
+      "bytes": 102,
+      "status": "c",
+      "source": "src/save_gts.c"
     },
     {
       "cpu": "ARM9",
@@ -25583,22 +25343,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to50_comm_player_force_position.o",
-      "bytes": 128,
-      "status": "c",
-      "source": "src/to50_comm_player_force_position.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to50_comm_player_position_flush.o",
-      "bytes": 84,
-      "status": "c",
-      "source": "src/to50_comm_player_position_flush.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to50_field_call_forwarder.o",
       "bytes": 22,
       "status": "c",
@@ -25651,22 +25395,6 @@
       "bytes": 276,
       "status": "c",
       "source": "src/to50_palette_fade_12090.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to50_remote_player_manager_init.o",
-      "bytes": 188,
-      "status": "c",
-      "source": "src/to50_remote_player_manager_init.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to50_unk_02061C40.o",
-      "bytes": 270,
-      "status": "c",
-      "source": "src/to50_unk_02061C40.c"
     },
     {
       "cpu": "ARM9",
@@ -25759,14 +25487,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3_r01.o",
-      "bytes": 144,
-      "status": "cpp",
-      "source": "src/to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3_r01.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to70_unk_02010AB0_extra78_run01.o",
       "bytes": 66,
       "status": "c",
@@ -25787,14 +25507,6 @@
       "bytes": 148,
       "status": "c",
       "source": "src/to70_unk_020332C0_extra712_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_unk_02057550_extra37_run01.o",
-      "bytes": 172,
-      "status": "c",
-      "source": "src/to70_unk_02057550_extra37_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -25971,14 +25683,6 @@
       "bytes": 556,
       "status": "c",
       "source": "src/to80_extra1363_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1364_run01.o",
-      "bytes": 368,
-      "status": "c",
-      "source": "src/to80_extra1364_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -26239,30 +25943,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to90_msl_interval_demo_residual_11_r01.o",
-      "bytes": 2224,
-      "status": "cpp",
-      "source": "src/to90_msl_interval_demo_residual_11_r01.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_residual_14_r01.o",
-      "bytes": 168,
-      "status": "cpp",
-      "source": "src/to90_msl_interval_demo_residual_14_r01.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_residual_16_r01.o",
-      "bytes": 96,
-      "status": "cpp",
-      "source": "src/to90_msl_interval_demo_residual_16_r01.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to90_os_alarm_prefix.o",
       "bytes": 780,
       "status": "c",
@@ -26319,14 +25999,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to90_w41415_fp_init4_run01.o",
-      "bytes": 4,
-      "status": "c",
-      "source": "src/to90_w41415_fp_init4_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to91_field_follow_movement.o",
       "bytes": 334,
       "status": "c",
@@ -26355,14 +26027,6 @@
       "bytes": 64,
       "status": "cpp",
       "source": "src/to91_msl_shared_ptr_char_d1.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to91_msl_shared_ptr_release.o",
-      "bytes": 48,
-      "status": "cpp",
-      "source": "src/to91_msl_shared_ptr_release.cpp"
     },
     {
       "cpu": "ARM9",
@@ -26417,14 +26081,6 @@
         "OS_UnLockCard",
         "OS_UnLockCartridge"
       ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to91_w41419_ExitProcess_run01.o",
-      "bytes": 12,
-      "status": "c",
-      "source": "src/to91_w41419_ExitProcess_run01.c"
     },
     {
       "cpu": "ARM9",

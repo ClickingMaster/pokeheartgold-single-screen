@@ -200,7 +200,7 @@ Static main
     Object asm/frontier_data_rodata.o
     Object src/save_special_ribbons.o
     Object src/roamer.o
-    Object src/save_block_22.o
+    Object src/save_gts.o
     Object src/mystery_gift.o
     Object src/hall_of_fame.o
     Object src/save_block_23.o
@@ -352,34 +352,9 @@ Static main
     Object asm/unk_02055BF0_data.o
     Object src/unk_02055BF0.o
     Object src/field_transition_tasks.o
-    Object src/to50_remote_player_manager_init.o
-    Object asm/to50_remote_player_manager_data.o
-    Object src/communication_player_movement.o
-    Object src/remote_player_positions_1.o
-    Object src/communication_player_movement_2.o
-    Object src/r40_unk_0205704C_run1.o
-    Object src/communication_player_movement_3.o
-    Object src/to50_comm_player_position_flush.o
-    Object src/communication_player_movement_4.o
-    Object src/op90_unk_02057184_r01.o
-    Object src/r40_unk_02057184_run1.o
-    Object src/communication_player_movement_5.o
-    Object src/r40_unk_02057480_run1.o
-    Object src/communication_player_movement_6.o
-    Object src/to80_extra1364_run01.o
-    Object src/to70_unk_02057550_extra37_run01.o
-    Object src/communication_player_movement_7.o
-    Object src/op90_unk_0205779C_r01.o
-    Object src/op90_op90_unk_0205779C_residual_1_r01.o
-    Object src/communication_player_movement_8.o
-    Object src/remote_player_coords_1.o
-    Object src/communication_player_movement_9.o
-    Object src/link_lobby_match_r50.o
-    Object src/communication_player_movement_10.o
-    Object src/communication_position_sync.o
-    Object src/communication_player_movement_11.o
-    Object src/to50_comm_player_force_position.o
-    Object src/communication_player_movement_12.o
+    Object src/comm_player_manager.o
+    Object asm/comm_player_manager_data.o
+    Object src/comm_player_sync.o
     Object src/communication_club_link.o
     Object src/field_object_manager_1.o
     Object src/field_application_tasks.o
@@ -467,26 +442,8 @@ Static main
     Object asm/unk_data_020FCBD8.o
     Object src/map_object_update.o
     Object src/map_object_movement_utilities.o
+    Object asm/map_object_movement_data.o
     Object src/map_object_movement.o
-    Object src/map_object_movement_script_1.o
-    Object asm/unk_02061284_residual_1.o
-    Object src/map_object_movement_2.o
-    Object src/r40_unk_020616FC_run1.o
-    Object src/map_object_movement_3.o
-    Object src/r40_unk_020617AC_run1.o
-    Object src/map_object_movement_4.o
-    Object src/r40_unk_020618C8_run1.o
-    Object src/map_object_movement_5.o
-    Object src/r40_unk_020619FC_run1.o
-    Object src/map_object_movement_6.o
-    Object src/to50_unk_02061C40.o
-    Object src/map_object_movement_7.o
-    Object src/map_object_movement_lookup.o
-    Object src/op90_unk_02061E90_residual_r01.o
-    Object src/map_object_direction_choice.o
-    Object src/map_object_movement_8.o
-    Object src/op90_unk_0206207C_r01.o
-    Object src/map_object_movement_9.o
     Object asm/unk_data_020FD978.o
     Object src/map_object_movement_commands.o
     Object src/unk_02062108_decomp_1.o
@@ -1333,22 +1290,22 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/MSL_C/src/msl_shared_ptr_create.o
     Object src/to91_msl_shared_ptr_char_d1.o
     Object lib/MSL_C/src/msl_shared_ptr_destroy.o
-    Object src/to91_msl_shared_ptr_release.o
+    Object lib/MSL_C/src/msl_shared_ptr_release.o
     Object lib/MSL_C/src/msl_shared_ptr_release_weak.o
-    Object src/to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3_r01.o
+    Object lib/MSL_C/src/msl_vector_length_error.o
     Object lib/asm/to90_msl_interval_demo_anchor.o
-    Object src/op90_to90_w41415_fp_init4_prefix_r01.o
-    Object src/to90_w41415_fp_init4_run01.o
+    Object lib/MSL_C/src/msl_fp_runtime.o
+    Object lib/MSL_C/src/msl_fp_init.o
     Object lib/asm/op90_to90_w41415_fp_init4_suffix_anchor.o
-    Object src/op90_to90_w41415_fp_init4_suffix_r01.o
+    Object lib/MSL_C/src/msl_semihosting.o
     Object lib/MSL_C/src/msl_console_io.o
     Object lib/MSL_C/src/msl_exception_table.o
-    Object src/to90_msl_interval_demo_residual_11_r01.o
+    Object lib/MSL_C/src/msl_unwind_stack.o
     Object lib/asm/to90_msl_interval_demo_eh_mid.o
     Object lib/MSL_C/src/msl_exception_lookup.o
-    Object src/to90_msl_interval_demo_residual_14_r01.o
+    Object lib/MSL_C/src/msl_unexpected.o
     Object lib/MSL_C/src/msl_bad_exception_dtor.o
-    Object src/to90_msl_interval_demo_residual_16_r01.o
+    Object lib/MSL_C/src/msl_handle_unexpected.o
     Object lib/asm/to90_msl_interval_demo_eh_tail.o
     Object lib/MSL_C/src/msl_exception_throw.o
     Object lib/MSL_C/src/msl_std_exception_classes.o
@@ -1361,9 +1318,9 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/MSL_C/src/msl_exception_handlers.o
     Object lib/MSL_C/src/msl_exception_frames.o
     Object lib/asm/op90_to91_w41419_ExitProcess_prefix_anchor.o
-    Object src/op90_op90_to91_w41419_ExitProcess_prefix_residual_1_r01.o
-    Object src/op90_to91_w41419_ExitProcess_prefix_r01.o
-    Object src/to91_w41419_ExitProcess_run01.o
+    Object lib/MSL_C/src/msl_transfer_control.o
+    Object lib/MSL_C/src/msl_throw.o
+    Object lib/MSL_C/src/msl_exit_process.o
 }
 
 Autoload ITCM

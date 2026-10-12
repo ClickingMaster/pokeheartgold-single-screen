@@ -56,7 +56,7 @@
 #include "unk_0200A090.h"
 #include "unk_02035900.h"
 #include "field_interaction.h"
-#include "unk_02056D7C.h"
+#include "comm_player_manager.h"
 #include "communication_club_link.h"
 #include "frontier_field_support.h"
 #include "unk_0206D494.h"
@@ -183,7 +183,7 @@ BOOL ov01_021F6BD0(int scriptId);
 // Defined in link_lobby_2.c / link_lobby_4.c and communication_player_movement.c; no header declares them.
 BOOL sub_02058258(void);
 BOOL sub_02058AA0(void);
-BOOL sub_02056EE0(void);
+BOOL CommPlayerManager_IsInitialized(void);
 
 extern const u32 sTouchscreenMenuTextColors[];
 extern const TouchscreenHitbox sTouchscreenMenuButtonHitboxes[];
@@ -1090,7 +1090,7 @@ BOOL TouchscreenMenu_HandleTouchInput(TouchscreenMenuData *data) {
     }
     if (data->layout == TOUCHSCREEN_MENU_LAYOUT_5) {
         u32 netId = Comm_GetLocalNetId();
-        if (!sub_02058740() || !sub_02058258() || !sub_02056EE0() || !sub_02057A0C() || sub_02057F18(netId) || sub_02037958()) {
+        if (!sub_02058740() || !sub_02058258() || !CommPlayerManager_IsInitialized() || !CommPlayerManager_IsLocalPlayerConnected() || CommPlayerManager_GetMoveTimer(netId) || sub_02037958()) {
             return TRUE;
         }
     }

@@ -2,8 +2,8 @@
 	.include "unk_02056D7C.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0205704C
-sub_0205704C: ; 0x0205704C
+	thumb_func_start CommPlayerManager_SendHostPosition
+CommPlayerManager_SendHostPosition: ; 0x0205704C
 	push {r3, r4, r5, lr}
 	sub sp, #8
 	ldrh r2, [r1]
@@ -68,4 +68,4 @@ _02057094:
 	add sp, #8
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end sub_0205704C
+	thumb_func_end CommPlayerManager_SendHostPosition

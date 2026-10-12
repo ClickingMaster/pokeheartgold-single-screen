@@ -6,7 +6,7 @@
 #include "scrcmd_battle_arcade.h"
 #include "scrcmd_battle_castle.h"
 #include "unk_02033AE0.h"
-#include "unk_02056D7C.h"
+#include "comm_player_manager.h"
 #include "communication_club_link.h"
 #include "unk_02058AEC.h"
 #include "unk_0205A44C.h"
@@ -15,8 +15,8 @@ FS_EXTERN_OVERLAY(OVY_53);
 const OverlayManagerTemplate gApplication_OakSpeech = { OakSpeech_Init, OakSpeech_Main, OakSpeech_Exit, FS_OVERLAY_ID(OVY_53) };
 
 static const UnkStruct_02091564 sUnkTable_02106078[] = {
-    { sub_020576C0, sub_02057798,         NULL         },
-    { sub_0205779C, sub_02057A08,         NULL         },
+    { CommPlayerManager_ReceivePosition, CommPlayerManager_GetPositionSize,         NULL         },
+    { CommPlayerManager_ReceiveHostPosition, CommPlayerManager_GetHostPositionSize,         NULL         },
     { sub_02091570, sub_020342C4,         NULL         },
     { sub_02091570, sub_020342C4,         NULL         },
     { sub_02091570, sub_020342C4,         NULL         },
@@ -45,7 +45,7 @@ static const UnkStruct_02091564 sUnkTable_02106078[] = {
     { sub_02091570, sub_020342C4,         NULL         },
     { sub_02091570, sub_020342C4,         NULL         },
     { sub_02091570, sub_020342C4,         NULL         },
-    { sub_0205776C, sub_020342C4,         NULL         },
+    { CommPlayerManager_ReceiveRemovePlayer, sub_020342C4,         NULL         },
     { sub_02091570, sub_020342C4,         NULL         },
     { sub_02091570, sub_020342C4,         NULL         },
     { sub_02091570, sub_020342C4,         NULL         },

@@ -101,9 +101,9 @@
 .public Save_VarsFlags_Get
 .public FieldSystem_TaskIsRunning
 .public FieldSystem_GetParkBallCount
-.public sub_02056EE0
-.public sub_02057A0C
-.public sub_02057F18
+.public CommPlayerManager_IsInitialized
+.public CommPlayerManager_IsLocalPlayerConnected
+.public CommPlayerManager_GetMoveTimer
 .public sub_02058258
 .public sub_02058740
 .public sub_02058AA0

@@ -82,7 +82,7 @@
 #include "unk_020552A4.h"
 #include "unk_02055418.h"
 #include "field_transition_tasks.h"
-#include "unk_02056D7C.h"
+#include "comm_player_manager.h"
 #include "communication_club_link.h"
 #include "unk_02058AEC.h"
 #include "unk_0205A44C.h"
@@ -2963,7 +2963,7 @@ BOOL ScrCmd_284(ScriptContext *ctx) {
 
 BOOL ScrCmd_285(ScriptContext *ctx) {
     u16 val = ScriptReadHalfword(ctx);
-    sub_02057F28(val);
+    CommPlayerManager_SetLocalFacing(val);
     return FALSE;
 }
 

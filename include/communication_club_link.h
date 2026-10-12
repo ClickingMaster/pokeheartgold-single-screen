@@ -4,7 +4,7 @@
 #include "field_system.h"
 #include "script.h"
 
-u8 sub_02057F18(BOOL arg0);
+u8 CommPlayerManager_GetMoveTimer(BOOL arg0);
 void sub_020580E4(FieldSystem *fieldSystem, s32 arg1, s32 arg2);
 void sub_02058124(FieldSystem *fieldSystem, u8, u32);
 void sub_02058164(u16 arg0);

@@ -179,8 +179,8 @@ void sub_02058388(void) {
 
 void sub_0205838C(void) {
     if (LinkSync_IsSynced(98)) {
-        void *data = Heap_Alloc((enum HeapID)15, sub_02057180());
-        sub_02056D7C(data, gCommClubLink->fieldSystem, 0);
+        void *data = Heap_Alloc((enum HeapID)15, CommPlayerManager_sizeof());
+        CommPlayerManager_Init(data, gCommClubLink->fieldSystem, 0);
         sub_02057F80();
         sub_02037504();
         LinkSync_StartSync(92);
@@ -204,7 +204,7 @@ void sub_020583EC(void) {
         ResetVisibleHardwareWindows((PMLCDTarget)0);
         ResetVisibleHardwareWindows((PMLCDTarget)1);
         sub_02056E60();
-        sub_0205701C(0);
+        CommPlayerManager_SendLocalPosition(0);
         CommClubLink_SetState(sub_02058478, 1);
     }
 }
@@ -238,8 +238,8 @@ void sub_02058478(void) {
 
 void sub_020584BC(void) {
     if (LinkSync_IsSynced(98)) {
-        void *data = Heap_Alloc((enum HeapID)15, sub_02057180());
-        sub_02056D7C(data, gCommClubLink->fieldSystem, 0);
+        void *data = Heap_Alloc((enum HeapID)15, CommPlayerManager_sizeof());
+        CommPlayerManager_Init(data, gCommClubLink->fieldSystem, 0);
         sub_02057F80();
         LinkSync_StartSync(92);
         CommClubLink_SetState(sub_02058518, 0);
@@ -260,7 +260,7 @@ void sub_02058518(void) {
     if (LinkSync_IsSynced(92)) {
         u8 flag;
         sub_02056E60();
-        sub_0205701C(0);
+        CommPlayerManager_SendLocalPosition(0);
         flag = 1;
         sub_020376E0(94, &flag);
         BeginNormalPaletteFade((enum FadeMode)0, (enum FadeType)1, (enum FadeType)1, 0, 6, 1, (enum HeapID)4);
@@ -320,7 +320,7 @@ void sub_02058690(void) {
 }
 
 void sub_020586A0(void) {
-    if (sub_02037958() == 0 && sub_02057F18(Comm_GetLocalNetId()) == 0) {
+    if (sub_02037958() == 0 && CommPlayerManager_GetMoveTimer(Comm_GetLocalNetId()) == 0) {
         if (gCommClubLink->timer) {
             gCommClubLink->timer--;
             return;
@@ -417,7 +417,7 @@ void sub_02058870(void) {
         gCommClubLink->timer--;
         return;
     }
-    sub_02056EA0(0);
+    CommPlayerManager_Delete(0);
     LinkSync_StartSync(3);
     CommClubLink_SetState(sub_02058854, 0);
 }
@@ -506,13 +506,13 @@ void sub_020589F4(void) {
 void sub_02058A38(void) {
     if (LinkSync_IsSynced(91)) {
         sub_020398D4(0, 0);
-        sub_02056EA0(1);
+        CommPlayerManager_Delete(1);
         CommClubLink_SetState(sub_02058A78, 5);
     }
 }
 
 void sub_02058A60(void) {
-    sub_02056EA0(1);
+    CommPlayerManager_Delete(1);
     CommClubLink_SetState(sub_02058A78, 5);
 }
 
