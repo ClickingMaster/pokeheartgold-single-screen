@@ -378,7 +378,7 @@ BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
 #pragma force_active reset
 
 // back from playback of a video that was not saved yet: save it into its slot and reload the slots
-BOOL ov40_02232A48(VsRecorderWork *work) {
+BOOL VsRecorder_SavedVideoSave(VsRecorderWork *work) {
     switch (work->step) {
     case 0:
         VsRecorder_ShowTopMessage(work, 0x12B);
@@ -630,7 +630,7 @@ void VsRecorder_PrintProfileButton(VsRecorderWork *work, u32 msgId) {
 void VsRecorder_CreateExitButton(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
     ov40_0222D6EC(work, NNS_G2D_VRAM_TYPE_2DSUB);
-    savedVideo->exitButton.sprite = ov40_0222D800(work, NNS_G2D_VRAM_TYPE_2DSUB);
+    savedVideo->exitButton.sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_CreateTextSprite(&savedVideo->exitButton, (VsRecorderGfx *)&work->narc, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_SetTextSpriteMsg(&savedVideo->exitButton, (VsRecorderGfx *)&work->narc, 3); // EXIT
     ManagedSprite_SetAnim(savedVideo->exitButton.sprite, 0);

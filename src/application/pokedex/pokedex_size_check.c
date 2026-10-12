@@ -128,14 +128,14 @@ void PokedexApp_DrawSizeCheckMonPic(PokedexAppData *pokedexApp) {
     u16 species;
 
     PokedexApp_GetSeenFormAndGender(pokedexApp, 0, &form, &gender);
-    measures = &pokedexApp->unk_18CC;
+    measures = &pokedexApp->sizeCheckData;
     PokedexApp_LoadMonPicToBg(pokedexApp, pokedexApp->curSpecies, form, gender, 2);
     species = pokedexApp->curSpecies;
     PokedexApp_SetMonPicBgAffine(pokedexApp, measures->mon_ypos[species], measures->mon_scale[species]);
 }
 
 void PokedexApp_ScaleSizeCheckTrainer(PokedexAppData *pokedexApp) {
-    PokedexAppData_UnkSub18CC *measures = &pokedexApp->unk_18CC;
+    PokedexAppData_UnkSub18CC *measures = &pokedexApp->sizeCheckData;
     float scale = (float)FX_Div(1 << 20, measures->player_scale[pokedexApp->curSpecies] << 12) / 4096.0f;
     s16 x;
     s16 y;

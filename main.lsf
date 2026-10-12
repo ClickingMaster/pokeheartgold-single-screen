@@ -962,7 +962,7 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/NitroSDK/src/mi/mi_compress_search.o
     Object lib/NitroSDK/src/mi/mi_init.o
     Object lib/NitroSDK/src/snd/snd_interface.o
-    Object lib/asm/to65_nitro_unified_anchor.o
+    Object lib/asm/nitro_sdk_data.o
     Object lib/asm/to65_to65_nitro_unified_residual_01_extra17_anchor.o
     Object src/to65_to65_nitro_unified_residual_01_extra17_run01.o
     Object lib/asm/to65_to65_nitro_unified_residual_03_extra18_anchor.o
@@ -1529,8 +1529,7 @@ Overlay field
     Object src/field_effect_registry_1.o
     Object asm/overlay_01_data_02208BFC.o
     Object src/field_fishing.o
-    Object src/field_camera_dispatch_1.o
-    Object asm/overlay_01_021FCD2C_residual_1.o
+    Object src/field/field_camera_zoom.o
     Object src/field_sweet_scent_task.o
     Object src/field/map_object_model_list.o
     Object src/field/field_shadow.o
@@ -1711,31 +1710,7 @@ Overlay OVY_2
     Object src/op90_overlay_02_02248728_to42_gap_r01.o
     Object src/op90_overlay_02_02248728_to42_gap_r02.o
     Object src/overlay02_safari_object_behavior_to42.o
-    Object src/overlay02_248728_partial_53.o
-    Object src/to70_overlay_02_02248728_residual_54_to42_prefix_extra557_run01.o
-    Object src/overlay02_follow_mon_r54_run1.o
-    Object src/op90_overlay_02_02248728_residual_54_to42_gap_r01.o
-    Object src/overlay02_follow_mon_r54_run2.o
-    Object src/overlay02_248728_partial_54.o
-    Object src/overlay02_follow_mon_direction.o
-    Object src/overlay02_248728_partial_55.o
-    Object src/overlay02_follow_mon_attributes.o
-    Object src/overlay02_248728_partial_56.o
-    Object src/overlay02_follow_mon_steps_init.o
-    Object src/overlay02_248728_partial_57.o
-    Object src/to80_extra1688_run01.o
-    Object src/overlay02_248728_partial_58.o
-    Object src/overlay02_follow_mon_interaction_gate.o
-    Object src/to70_overlay_02_02248728_residual_59_middle_extra752_run01.o
-    Object src/overlay02_follow_mon_dialog_open.o
-    Object src/overlay02_248728_partial_59.o
-    Object src/overlay02_follow_mon_interaction_r60_run1.o
-    Object src/to70_overlay_02_02248728_residual_60_unmatched1_extra1192_run01.o
-    Object src/overlay02_follow_mon_interaction_r60_run2.o
-    Object src/op90_overlay_02_02248728_residual_60_unmatched2_r01.o
-    Object src/overlay02_follow_mon_interaction_r60_run3.o
-    Object src/overlay02_248728_partial_60.o
-    Object src/overlay02_camera_scale_task.o
+    Object src/field/follow_mon_interaction.o
     Object asm/overlay_02_02248728_residual_61_data.o
     Object src/field/legend_cutscene_camera.o
     Object src/field/overlay_2_gear_phone.o
@@ -1841,7 +1816,7 @@ Overlay OVY_13
 {
     After OVY_0
     Object src/overlay_13_thumb_1.o
-    Object lib/NitroSDK/asm/to70_mb_extra10_anchor.o
+    Object lib/NitroSDK/asm/mb_data.o
     Object lib/NitroSDK/src/mb/mb_parent_comm.o
     Object lib/NitroSDK/src/mb/mb_parent_recv_child.o
     Object lib/NitroSDK/src/mb/mb_parent_data.o
@@ -1892,29 +1867,29 @@ Overlay OVY_13
     Object src/wifi_setup_md5.o
     Object src/wifi_setup_api.o
     Object asm/to53_overlay13_r24_data.o
-    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor.o
+    Object lib/NitroDWC/asm/wifi_setup_dwc_data.o
     Object src/wifi_setup_busy_icon.o
-    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own1.o
+    Object lib/NitroDWC/asm/wifi_setup_ui_parts_bss.o
     Object src/wifi_setup_ui_parts.o
     Object src/wifi_setup_keyboard_slide_in.o
     Object src/wifi_setup_keyboard_input.o
     Object src/wifi_setup_keyboard_layout.o
-    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own5.o
+    Object lib/NitroDWC/asm/wifi_setup_keyboard_rodata.o
     Object src/wifi_setup_keyboard_view.o
     Object src/wifi_setup_keypad.o
     Object src/wifi_setup_keypad_layout.o
-    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own6.o
+    Object lib/NitroDWC/asm/wifi_setup_keypad_rodata.o
     Object src/wifi_setup_keypad_view.o
-    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own2.o
+    Object lib/NitroDWC/asm/wifi_setup_app_bss.o
     Object src/wifi_setup_app.o
-    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own2_own1.o
+    Object lib/NitroDWC/asm/wifi_setup_screens_bss.o
     Object src/wifi_setup_screens.o
     Object src/op90_to61_overlay_13_arm_2_residual_5_residual_7_r01.o
-    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own7.o
+    Object lib/NitroDWC/asm/wifi_setup_address_entry_rodata.o
     Object src/wifi_setup_address_entry.o
     Object src/wifi_setup_error_screen.o
     Object src/wifi_setup_settings.o
-    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own7_own1.o
+    Object lib/NitroDWC/asm/wifi_setup_screens_rodata.o
     Object src/wifi_setup_auto_setup.o
     Object src/wifi_setup_connection_menu.o
     Object src/wifi_setup_usb_connector_screen.o
@@ -1923,11 +1898,11 @@ Overlay OVY_13
     Object src/wifi_setup_scroll_bar_state.o
     Object src/wifi_setup_scroll_bar.o
     Object src/wifi_setup_ap_scan_state.o
-    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own3.o
+    Object lib/NitroDWC/asm/wifi_setup_access_points_bss.o
     Object src/wifi_setup_access_points.o
-    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own4.o
+    Object lib/NitroDWC/asm/wifi_setup_ui_system_bss.o
     Object src/wifi_setup_local_wireless.o
-    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own8.o
+    Object lib/NitroDWC/asm/wifi_setup_share_data.o
     Object src/wifi_setup_share.o
     Object src/wifi_setup_ui_system.o
 }
@@ -2093,11 +2068,11 @@ Overlay OVY_38
     Object src/game_stats_request.o
     Object src/game_stats_request_state.o
     Object asm/overlay_38_thumb_data.o
-    Object lib/NitroDWC/asm/to60_overlay_38_arm_anchor.o
+    Object lib/NitroDWC/asm/http_data.o
     Object lib/NitroDWC/src/http_connection.o
     Object lib/NitroDWC/src/http_request.o
     Object lib/NitroDWC/src/http_engine_init.o
-    Object lib/NitroDWC/asm/to60_overlay_38_arm_anchor_own1.o
+    Object lib/NitroDWC/asm/http_socket_bss.o
     Object lib/NitroDWC/src/http_engine_request.o
     Object lib/NitroDWC/src/http_socket_queue.o
     Object lib/NitroDWC/src/http_socket_request.o
@@ -2132,15 +2107,7 @@ Overlay OVY_40
     Object src/application/vs_recorder/vs_recorder_box_data.o
     Object src/application/vs_recorder/vs_recorder_box_list_title.o
     Object src/application/vs_recorder/vs_recorder_box_list.o
-    Object src/overlay_40_sol_partial_31.o
-    Object src/overlay40_pc_box_theme_run1.o
-    Object src/to80_extra1695_run01.o
-    Object src/overlay40_pc_box_theme_run2.o
-    Object src/to70_overlay_40_residual_32_residual_2_extra1204_run01.o
-    Object src/r40_overlay_40_residual_32_residual_2_run1.o
-    Object src/overlay40_pc_box_theme_run3.o
-    Object src/overlay_40_sol_partial_32.o
-    Object src/to70_ov40_r33_a01_extra535_run01.o
+    Object src/application/vs_recorder/vs_recorder_rankings.o
     Object src/application/vs_recorder/vs_recorder_video_list.o
     Object src/application/vs_recorder/vs_recorder_net.o
     Object src/overlay40_pc_state_handlers_head_35_run1.o
@@ -2574,56 +2541,7 @@ Overlay OVY_49
     Object src/overlay_49_sol_partial_66.o
     Object src/to47_overlay49_transition_r66.o
     Object src/overlay_49_sol_partial_67.o
-    Object src/overlay49_interpolation_pool.o
-    Object src/overlay_49_sol_partial_68.o
-    Object src/to47_overlay49_oscillator_r68.o
-    Object src/overlay_49_sol_partial_69.o
-    Object src/overlay49_state_helpers_1.o
-    Object src/overlay49_model_resource_init_r69.o
-    Object src/overlay49_state_helpers_2.o
-    Object src/op90_overlay_49_residual_69_residual_2_r01.o
-    Object src/overlay49_state_helpers_3.o
-    Object src/overlay_49_sol_partial_70.o
-    Object src/overlay49_animation_playback_r70_run1.o
-    Object src/op90_overlay_49_residual_70_unmatched_1_r01.o
-    Object src/overlay49_animation_playback_r70_run2.o
-    Object src/to70_overlay_49_residual_70_unmatched_2_extra973_run01.o
-    Object src/overlay49_animation_playback_r70_run3.o
-    Object src/overlay_49_sol_partial_71.o
-    Object src/to45_overlay49_r71_exact.o
-    Object src/overlay_49_sol_partial_72.o
-    Object src/overlay49_animation_helpers_1.o
-    Object src/overlay_49_sol_partial_73.o
-    Object src/to45_overlay49_r73_run1.o
-    Object src/to90_extra2490_run01.o
-    Object src/to45_overlay49_r73_run2.o
-    Object src/to80_extra1534_run01.o
-    Object src/to45_overlay49_r73_run3.o
-    Object src/to90_extra2027_run01.o
-    Object src/to45_overlay49_r73_run4.o
-    Object src/to41_overlay_49_residual_73_run1.o
-    Object src/to42_overlay49_r73a_run1.o
-    Object src/op90_overlay_49_r73a_gap1_to42_r01.o
-    Object src/to42_overlay49_r73a_run2.o
-    Object src/op90_overlay_49_r73a_gap2_to42_r01.o
-    Object src/to42_overlay49_r73a_run3.o
-    Object src/to53_overlay49_r73a_gap3.o
-    Object src/to42_overlay49_r73a_run4.o
-    Object src/to70_overlay_49_r73a_gap4_to42_extra805_run01.o
-    Object src/to41_overlay_49_residual_73_run2.o
-    Object src/op90_overlay_49_residual_73_to41_residual_3_r01.o
-    Object src/to41_overlay_49_residual_73_run3.o
-    Object src/to42_overlay49_r73b_run1.o
-    Object src/op90_to90_extra2214_residual_1_r01.o
-    Object src/to90_extra2214_run01.o
-    Object src/to42_overlay49_r73b_run2.o
-    Object src/op90_overlay_49_r73b_gap2_to42_r01.o
-    Object src/op90_overlay_49_r73b_gap2_to42_r02.o
-    Object src/to42_overlay49_r73b_run3.o
-    Object src/op90_overlay_49_r73b_gap3_to42_r01.o
-    Object src/to42_overlay49_r73b_run4.o
-    Object src/to91_w41477_interp_run01.o
-    Object src/to42_overlay49_r73b_run5.o
+    Object src/wifi_plaza_instrument.o
     Object src/wifi_plaza_event.o
     Object asm/to90_extra2491_anchor.o
     Object src/ov49_022695c4.o
@@ -3042,30 +2960,8 @@ Overlay OVY_96
     Object src/op90_overlay_96_residual_70_tail_r01.o
     Object src/pokeathlon/pokeathlon_hurdle_dash_race.o
     Object src/pokeathlon/pokeathlon_relay_run.o
-    Object src/op90_overlay_96_residual_79_r01.o
-    Object src/overlay96_pokeathlon_course_motion_r79.o
-    Object src/to41_overlay_96_residual_79_run1.o
-    Object src/op90_op90_to80_extra1587_residual_1_residual_1_r01.o
-    Object src/op90_to80_extra1587_residual_1_r01.o
-    Object src/op90_to80_extra1587_residual_1_r02.o
-    Object src/to80_extra1587_run01.o
-    Object src/op90_to80_extra1587_residual_2_r01.o
-    Object src/to41_overlay_96_residual_79_run2.o
-    Object src/op90_overlay_96_residual_79_to41_residual_3_r01.o
-    Object src/to41_overlay_96_residual_79_run3.o
-    Object src/op90_overlay_96_residual_79_to41_residual_4_r01.o
-    Object src/to41_overlay_96_residual_79_run4.o
-    Object src/to70_overlay_96_residual_79_to41_residual_5_extra326_run01.o
-    Object src/to41_overlay_96_residual_79_run5.o
-    Object src/to80_extra1588_run01.o
-    Object src/op90_to80_extra1588_residual_1_r01.o
-    Object src/to41_overlay_96_residual_79_run6.o
-    Object src/to90_extra2268_run01.o
-    Object src/to55_overlay96_score_tiles.o
-    Object src/to80_extra1710_run01.o
-    Object src/overlay96_pokeathlon_medal_ui.o
-    Object src/overlay96_exact_bank_79.o
-    Object src/r40_overlay_96_residual_80_run1.o
+    Object src/pokeathlon/pokeathlon_relay_run_track.o
+    Object src/pokeathlon/pokeathlon_relay_run_hud.o
     Object src/op90_overlay_96_residual_80_r01.o
     Object asm/to70_overlay_96_residual_125_extra662_anchor_own3.o
     Object src/r40_overlay_96_residual_80_run2.o

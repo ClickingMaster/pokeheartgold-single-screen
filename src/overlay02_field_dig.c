@@ -35,10 +35,10 @@ extern u32 *TaskManager_GetStatePtr(TaskManager *taskManager);
 extern void TaskManager_Call(TaskManager *taskManager, void *task, void *env);
 extern void Heap_Free(void *ptr);
 extern void BeginNormalPaletteFade(u32, u32, u32, u32, u32, u32, u32);
-extern void *ov01_021FCD2C(FieldSystem *fieldSystem, u32 value);
-extern void ov01_021FCD8C(void *task, u32, s32, u32);
-extern BOOL ov01_021FCD6C(void *task);
-extern void ov01_021FCD78(void *task);
+extern void *FieldCameraZoom_Start(FieldSystem *fieldSystem, u32 value);
+extern void FieldCameraZoom_Set(void *task, u32, s32, u32);
+extern BOOL FieldCameraZoom_IsDone(void *task);
+extern void FieldCameraZoom_End(void *task);
 extern EventObjectMovementMan *EventObjectMovementMan_Create(LocalMapObject *mapObject, const void *movement);
 extern BOOL EventObjectMovementMan_IsFinish(EventObjectMovementMan *movement);
 extern void EventObjectMovementMan_Delete(EventObjectMovementMan *movement);
@@ -49,7 +49,7 @@ extern BOOL FollowMon_IsNextToPlayer(FieldSystem *fieldSystem);
 extern u32 FieldSystem_GetLeadMonIndex(FieldSystem *fieldSystem);
 extern u32 PlayerAvatar_GetGender(PlayerAvatar *avatar);
 extern void *ov02_02249458(FieldSystem *, u32, Pokemon *, u32);
-extern BOOL ov02_02250780(FieldSystem *, u32);
+extern BOOL FieldSystem_FirstAliveMonHasType(FieldSystem *, u32);
 extern void ov02_022507B4(FieldSystem *, u32);
 extern void FieldSystem_UnkSub108_AddMonMood(void *, u32);
 extern u32 GetMonData(Pokemon *, u32, void *);
@@ -92,9 +92,9 @@ int ov02_0224C234(TaskManager *taskManager, FieldSystem *fieldSystem, FieldMoveT
     } else {
         BeginNormalPaletteFade(0, 1, 1, 0x7FFF, 6, 1, 4);
     }
-    task = ov01_021FCD2C(fieldSystem, 4);
+    task = FieldCameraZoom_Start(fieldSystem, 4);
     env->task = task;
-    ov01_021FCD8C(task, 1, (s32)0xFFF6A000, 1);
+    FieldCameraZoom_Set(task, 1, (s32)0xFFF6A000, 1);
     env->movement = EventObjectMovementMan_Create(env->mapObject, &ov02_02253794);
     env->state++;
     return 0;
@@ -108,7 +108,7 @@ int ov02_0224C2A8(TaskManager *taskManager, FieldSystem *fieldSystem, FieldMoveT
     if (!IsPaletteFadeFinished()) {
         return 0;
     }
-    ov01_021FCD8C(env->task, 2, 0, 0x3C);
+    FieldCameraZoom_Set(env->task, 2, 0, 0x3C);
     env->state++;
     return 1;
 }
@@ -131,10 +131,10 @@ int ov02_0224C338(TaskManager *taskManager, FieldSystem *fieldSystem, FieldMoveT
     if (!EventObjectMovementMan_IsFinish(env->movement)) {
         return 0;
     }
-    if (!ov01_021FCD6C(env->task)) {
+    if (!FieldCameraZoom_IsDone(env->task)) {
         return 0;
     }
-    ov01_021FCD78(env->task);
+    FieldCameraZoom_End(env->task);
     EventObjectMovementMan_Delete(env->movement);
     return 2;
 }
@@ -169,7 +169,7 @@ BOOL Task_FieldDig(TaskManager *taskManager) {
     case 1:
         (*state)++;
         if (env->useMon) {
-            if (ov02_02250780(fieldSystem, 4)) {
+            if (FieldSystem_FirstAliveMonHasType(fieldSystem, 4)) {
                 result = 2;
                 FieldSystem_UnkSub108_AddMonMood(fieldSystem->unk108, 1);
             } else {

@@ -353,7 +353,7 @@ int VsRecorder_GetCenteredTextX(Window *window, String *str) {
 
 #pragma force_active reset
 
-void ov40_022306E0(VsRecorderWork *work) {
+void VsRecorder_ResetRecordSave(VsRecorderWork *work) {
     work->unk_0834 = 0;
     work->unk_0836 = 0;
 }
@@ -468,7 +468,7 @@ void VsRecorder_SetVBlankPaused(VsRecorderWork *work, u32 paused) {
 #pragma force_active on
 
 void VsRecorder_CreateLabeledSprite(VsRecorderWork *work, VsRecorderTextSprite *textSprite, NNS_G2D_VRAM_TYPE vram, int msgId, s16 x, s16 y, s16 textX, s16 textY, int anim, BOOL draw) {
-    textSprite->sprite = ov40_0222D800(work, vram);
+    textSprite->sprite = VsRecorder_NewButtonSprite(work, vram);
     VsRecorder_CreateTextSprite(textSprite, (VsRecorderGfx *)&work->narc, vram);
     VsRecorder_SetTextSpriteMsg(textSprite, (VsRecorderGfx *)&work->narc, msgId);
     ManagedSprite_SetPositionXY(textSprite->sprite, x, y);

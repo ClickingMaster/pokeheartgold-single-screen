@@ -141,8 +141,8 @@ void PokedexApp_DrawCountNumberAndCopy(PokedexAppData *pokedexApp, u32 windowId,
 
 // The counts are drawn into the hidden one of two window pairs (unk_185D), then the pairs swap.
 void PokedexApp_DrawSeenAndCaughtCounts(PokedexAppData *pokedexApp) {
-    PokedexApp_DrawCountNumberAndCopy(pokedexApp, pokedexApp->unk_185D + 2, pokedexApp->unk_0878.unk_7B4);
-    PokedexApp_DrawCountNumberAndCopy(pokedexApp, pokedexApp->unk_185D + 4, pokedexApp->unk_0878.unk_7B6);
+    PokedexApp_DrawCountNumberAndCopy(pokedexApp, pokedexApp->unk_185D + 2, pokedexApp->searchResults.unk_7B4);
+    PokedexApp_DrawCountNumberAndCopy(pokedexApp, pokedexApp->unk_185D + 4, pokedexApp->searchResults.unk_7B6);
     pokedexApp->unk_185D ^= 1;
 }
 
@@ -192,7 +192,7 @@ void PokedexApp_DrawInfoLabel(PokedexAppData *pokedexApp, u32 windowId) {
 void PokedexApp_DrawDexNumber(PokedexAppData *pokedexApp, u32 species, u32 windowId) {
     FillWindowPixelBuffer(&pokedexApp->windows[windowId], 0);
     if (species != SPECIES_NONE) {
-        u32 dexNo = Pokedex_ConvertToCurrentDexNo(pokedexApp->unk_1858, species);
+        u32 dexNo = Pokedex_ConvertToCurrentDexNo(pokedexApp->dexMode, species);
         BufferIntegerAsString(pokedexApp->msgFormat, 0, dexNo, 3, PRINTING_MODE_LEADING_ZEROS, TRUE);
         PokedexApp_PrintFormattedMessage(pokedexApp, pokedexApp->msgData, windowId, 9, 1, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 0);
         ScheduleWindowCopyToVram(&pokedexApp->windows[windowId]);
@@ -218,7 +218,7 @@ void PokedexApp_DrawCategory(PokedexAppData *pokedexApp, u32 species, u32 entry,
     FillWindowPixelBuffer(&pokedexApp->windows[windowId], 0);
     if (species != SPECIES_NONE) {
         String *string;
-        if (pokedexApp->unk_1030[entry].unk_2 == 2) {
+        if (pokedexApp->listEntries[entry].unk_2 == 2) {
             string = PokedexApp_GetCategoryString(species, 2, HEAP_ID_POKEDEX_APP);
         } else {
             string = PokedexApp_GetCategoryString(SPECIES_NONE, 2, HEAP_ID_POKEDEX_APP);
@@ -260,7 +260,7 @@ void PokedexApp_DrawListEntryDetails(PokedexAppData *pokedexApp, u32 species, u3
 }
 
 void PokedexApp_DrawFlavorText(PokedexAppData *pokedexApp, u32 species, u32 entry, u32 windowId) {
-    if (pokedexApp->unk_1030[entry].unk_2 == 2) {
+    if (pokedexApp->listEntries[entry].unk_2 == 2) {
         String *string;
         u32 x;
 
@@ -306,7 +306,7 @@ void PokedexApp_PrintHeight(PokedexAppData *pokedexApp, u32 species, u32 state, 
 
 void PokedexApp_DrawHeight(PokedexAppData *pokedexApp, u32 species, u32 entry, u32 windowId) {
     FillWindowPixelBuffer(&pokedexApp->windows[windowId], 0);
-    PokedexApp_PrintHeight(pokedexApp, species, pokedexApp->unk_1030[entry].unk_2, windowId, 4, 0, MAKE_TEXT_COLOR(2, 1, 0), 0);
+    PokedexApp_PrintHeight(pokedexApp, species, pokedexApp->listEntries[entry].unk_2, windowId, 4, 0, MAKE_TEXT_COLOR(2, 1, 0), 0);
     ScheduleWindowCopyToVram(&pokedexApp->windows[windowId]);
 }
 
@@ -326,7 +326,7 @@ void PokedexApp_PrintWeight(PokedexAppData *pokedexApp, u32 species, u32 state, 
 
 void PokedexApp_DrawWeight(PokedexAppData *pokedexApp, u32 species, u32 entry, u32 windowId) {
     FillWindowPixelBuffer(&pokedexApp->windows[windowId], 0);
-    PokedexApp_PrintWeight(pokedexApp, species, pokedexApp->unk_1030[entry].unk_2, windowId, 4, 0, MAKE_TEXT_COLOR(2, 1, 0), 0);
+    PokedexApp_PrintWeight(pokedexApp, species, pokedexApp->listEntries[entry].unk_2, windowId, 4, 0, MAKE_TEXT_COLOR(2, 1, 0), 0);
     ScheduleWindowCopyToVram(&pokedexApp->windows[windowId]);
 }
 
@@ -352,7 +352,7 @@ void PokedexApp_DrawForeignDexNumber(PokedexAppData *pokedexApp, u32 species, u3
         charset = 1;
         break;
     }
-    BufferIntegerAsString(pokedexApp->msgFormat, 0, Pokedex_ConvertToCurrentDexNo(pokedexApp->unk_1858, species), 3, PRINTING_MODE_LEADING_ZEROS, charset);
+    BufferIntegerAsString(pokedexApp->msgFormat, 0, Pokedex_ConvertToCurrentDexNo(pokedexApp->dexMode, species), 3, PRINTING_MODE_LEADING_ZEROS, charset);
     PokedexApp_PrintFormattedMessage(pokedexApp, pokedexApp->msgData, windowId, 9, 0, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 0);
     ScheduleWindowCopyToVram(&pokedexApp->windows[windowId]);
 }
@@ -371,7 +371,7 @@ void PokedexApp_DrawForeignCategory(PokedexAppData *pokedexApp, u32 species, u32
     String *string;
 
     FillWindowPixelBuffer(&pokedexApp->windows[windowId], 0);
-    if (pokedexApp->unk_1030[entry].unk_2 == 2) {
+    if (pokedexApp->listEntries[entry].unk_2 == 2) {
         string = PokedexApp_GetCategoryString(species, pokedexApp->language, HEAP_ID_POKEDEX_APP);
     } else {
         string = PokedexApp_GetCategoryString(SPECIES_NONE, pokedexApp->language, HEAP_ID_POKEDEX_APP);
@@ -416,11 +416,11 @@ void PokedexApp_SetupSearchWindows(PokedexAppData *pokedexApp) {
 }
 
 void ov18_021EEE84(PokedexAppData *pokedexApp) {
-    BgCellManager_PutWindowTiles(pokedexApp->unk_0008, 6, &pokedexApp->windows[17]);
-    BgCellManager_PutWindowTiles(pokedexApp->unk_0008, 6, &pokedexApp->windows[18]);
-    BgCellManager_PutWindowTiles(pokedexApp->unk_0008, 6, &pokedexApp->windows[19]);
-    BgCellManager_PutWindowTiles(pokedexApp->unk_0008, 7, &pokedexApp->windows[17]);
-    BgCellManager_PutWindowTiles(pokedexApp->unk_0008, 7, &pokedexApp->windows[19]);
+    BgCellManager_PutWindowTiles(pokedexApp->bgCellManager, 6, &pokedexApp->windows[17]);
+    BgCellManager_PutWindowTiles(pokedexApp->bgCellManager, 6, &pokedexApp->windows[18]);
+    BgCellManager_PutWindowTiles(pokedexApp->bgCellManager, 6, &pokedexApp->windows[19]);
+    BgCellManager_PutWindowTiles(pokedexApp->bgCellManager, 7, &pokedexApp->windows[17]);
+    BgCellManager_PutWindowTiles(pokedexApp->bgCellManager, 7, &pokedexApp->windows[19]);
 }
 
 #pragma force_active on
@@ -438,7 +438,7 @@ void PokedexApp_DrawSearchMessage(PokedexAppData *pokedexApp, u32 page) {
         break;
     case 1:
         PokedexApp_PrintMessage(window, pokedexApp->msgData, 14, 112, 6, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
-        BufferIntegerAsString(pokedexApp->msgFormat, 0, pokedexApp->unk_0878.unk_7B4, 3, PRINTING_MODE_LEADING_ZEROS, TRUE);
+        BufferIntegerAsString(pokedexApp->msgFormat, 0, pokedexApp->searchResults.unk_7B4, 3, PRINTING_MODE_LEADING_ZEROS, TRUE);
         PokedexApp_PrintFormattedMessage(pokedexApp, pokedexApp->msgData, 0, 15, 112, 22, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
         break;
     case 2:
@@ -585,10 +585,10 @@ void PokedexApp_DrawSearchCriteria(PokedexAppData *pokedexApp) {
     PokedexApp_DrawSearchNameValue(pokedexApp, 28);
     PokedexApp_DrawSearchTypeValue(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE1], 29, 29);
     PokedexApp_DrawSearchTypeValue(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2], 30, 29);
-    PokedexApp_DrawHeightValue(pokedexApp, pokedexApp->unk_1850[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN]].unk_0, 31);
-    PokedexApp_DrawHeightValue(pokedexApp, pokedexApp->unk_1850[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX]].unk_0, 32);
-    PokedexApp_DrawWeightValue(pokedexApp, pokedexApp->unk_1850[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN]].unk_2, 33);
-    PokedexApp_DrawWeightValue(pokedexApp, pokedexApp->unk_1850[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX]].unk_2, 34);
+    PokedexApp_DrawHeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN]].unk_0, 31);
+    PokedexApp_DrawHeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX]].unk_0, 32);
+    PokedexApp_DrawWeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN]].unk_2, 33);
+    PokedexApp_DrawWeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX]].unk_2, 34);
     PokedexApp_DrawSearchAreaValue(pokedexApp, 35);
     i = 27;
     window = &pokedexApp->windows[27];
@@ -700,8 +700,8 @@ void PokedexApp_DrawSearchHeightPage(PokedexAppData *pokedexApp) {
     PokedexApp_PrintMessage(&pokedexApp->windows[68], pokedexApp->msgData, 29, 20, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
     PokedexApp_DrawSearchButton(pokedexApp, 17, 39);
     PokedexApp_DrawSearchButton(pokedexApp, 19, 40);
-    PokedexApp_DrawHeightValue(pokedexApp, pokedexApp->unk_1850[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN]].unk_0, 69);
-    PokedexApp_DrawHeightValue(pokedexApp, pokedexApp->unk_1850[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX]].unk_0, 70);
+    PokedexApp_DrawHeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN]].unk_0, 69);
+    PokedexApp_DrawHeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX]].unk_0, 70);
     i = 68;
     window = &pokedexApp->windows[68];
     for (; i <= 70; i++) {
@@ -719,8 +719,8 @@ void PokedexApp_DrawSearchWeightPage(PokedexAppData *pokedexApp) {
     PokedexApp_PrintMessage(&pokedexApp->windows[71], pokedexApp->msgData, 30, 24, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
     PokedexApp_DrawSearchButton(pokedexApp, 17, 39);
     PokedexApp_DrawSearchButton(pokedexApp, 19, 40);
-    PokedexApp_DrawWeightValue(pokedexApp, pokedexApp->unk_1850[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN]].unk_2, 72);
-    PokedexApp_DrawWeightValue(pokedexApp, pokedexApp->unk_1850[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX]].unk_2, 73);
+    PokedexApp_DrawWeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN]].unk_2, 72);
+    PokedexApp_DrawWeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX]].unk_2, 73);
     i = 71;
     window = &pokedexApp->windows[71];
     for (; i <= 73; i++) {
@@ -742,7 +742,7 @@ void PokedexApp_DrawSearchAreaPage(PokedexAppData *pokedexApp) {
     FillWindowPixelBuffer(&pokedexApp->windows[79], 0);
     PokedexApp_PrintMessage(&pokedexApp->windows[74], pokedexApp->msgData, 31, 24, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
     PokedexApp_PrintMessage(&pokedexApp->windows[76], pokedexApp->msgData, 65, 28, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 2);
-    if (pokedexApp->unk_1860 == 1) {
+    if (pokedexApp->nationalDex == 1) {
         PokedexApp_PrintMessage(&pokedexApp->windows[77], pokedexApp->msgData, 66, 28, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 2);
     }
     PokedexApp_PrintMessage(&pokedexApp->windows[78], pokedexApp->msgData, 67, 28, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 2);
@@ -861,10 +861,10 @@ void PokedexApp_DrawSearchCriteriaSummary(PokedexAppData *pokedexApp) {
     PokedexApp_DrawSearchNameValue(pokedexApp, 9);
     PokedexApp_DrawSearchTypeValue(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE1], 10, 29);
     PokedexApp_DrawSearchTypeValue(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2], 11, 29);
-    PokedexApp_DrawHeightValue(pokedexApp, pokedexApp->unk_1850[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN]].unk_0, 12);
-    PokedexApp_DrawHeightValue(pokedexApp, pokedexApp->unk_1850[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX]].unk_0, 13);
-    PokedexApp_DrawWeightValue(pokedexApp, pokedexApp->unk_1850[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN]].unk_2, 14);
-    PokedexApp_DrawWeightValue(pokedexApp, pokedexApp->unk_1850[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX]].unk_2, 15);
+    PokedexApp_DrawHeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN]].unk_0, 12);
+    PokedexApp_DrawHeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX]].unk_0, 13);
+    PokedexApp_DrawWeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN]].unk_2, 14);
+    PokedexApp_DrawWeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX]].unk_2, 15);
     PokedexApp_DrawSearchAreaValue(pokedexApp, 16);
     i = 1;
     window = &pokedexApp->windows[1];
@@ -878,11 +878,11 @@ void PokedexApp_DrawSearchCriteriaSummary(PokedexAppData *pokedexApp) {
 
 // The search results screen's counts (labels 95-96, counts 97-100 alternating as on the list screen).
 void PokedexApp_DrawSearchResultCounts(PokedexAppData *pokedexApp) {
-    BgCellManager_GetCellTilemap(pokedexApp->unk_0008, 15);
+    BgCellManager_GetCellTilemap(pokedexApp->bgCellManager, 15);
     PokedexApp_DrawCountLabel(pokedexApp, 95, 0);
     PokedexApp_DrawCountLabel(pokedexApp, 96, 1);
-    PokedexApp_DrawCountNumber(pokedexApp, pokedexApp->unk_185D + 97, pokedexApp->unk_0878.unk_7B4);
-    PokedexApp_DrawCountNumber(pokedexApp, pokedexApp->unk_185D + 99, pokedexApp->unk_0878.unk_7B6);
+    PokedexApp_DrawCountNumber(pokedexApp, pokedexApp->unk_185D + 97, pokedexApp->searchResults.unk_7B4);
+    PokedexApp_DrawCountNumber(pokedexApp, pokedexApp->unk_185D + 99, pokedexApp->searchResults.unk_7B6);
     PokedexApp_PutWindowTilemap(pokedexApp, 95);
     PokedexApp_PutWindowTilemap(pokedexApp, 96);
     PokedexApp_PutWindowTilemap(pokedexApp, pokedexApp->unk_185D + 97);
@@ -900,7 +900,7 @@ void PokedexApp_PutWindowTilemap(PokedexAppData *pokedexApp, u32 windowId) {
     u8 x, y, width, height;
     u32 i, j;
 
-    tilemap = BgCellManager_GetCellTilemap(pokedexApp->unk_0008, 15);
+    tilemap = BgCellManager_GetCellTilemap(pokedexApp->bgCellManager, 15);
     windows = pokedexApp->windows;
     baseTile = GetWindowBaseTile(&windows[windowId]);
     x = GetWindowX(&windows[windowId]);
@@ -945,7 +945,7 @@ void PokedexApp_InitAreaListCells(PokedexAppData *pokedexApp) {
     u32 i;
 
     for (i = 0; i < 6; i++) {
-        BgCellManager_InitCell(pokedexApp->unk_0008, i + 17, 2, 18, 2);
+        BgCellManager_InitCell(pokedexApp->bgCellManager, i + 17, 2, 18, 2);
     }
 }
 
@@ -957,7 +957,7 @@ void ov18_021F018C(PokedexAppData *pokedexApp) {
     u16 j;
 
     for (i = 0; i < 6; i++) {
-        tilemap = BgCellManager_GetCellTilemap(pokedexApp->unk_0008, i + 17);
+        tilemap = BgCellManager_GetCellTilemap(pokedexApp->bgCellManager, i + 17);
         baseTile = sAreaWindowTemplates[i + 8].baseTile;
         for (j = 0; j < 36; j++) {
             tilemap[j] = (baseTile + j) | 0x1000;
@@ -972,7 +972,7 @@ void ov18_021F01D4(PokedexAppData *pokedexApp) {
     u16 j;
 
     for (i = 0; i < 6; i++) {
-        tilemap = BgCellManager_GetCellTilemap(pokedexApp->unk_0008, i + 17);
+        tilemap = BgCellManager_GetCellTilemap(pokedexApp->bgCellManager, i + 17);
         baseTile = sFormsWindowTemplates[i + 10].baseTile;
         for (j = 0; j < 36; j++) {
             tilemap[j] = (baseTile + j) | 0x1000;
@@ -998,7 +998,7 @@ void PokedexApp_SetupAreaWindows(PokedexAppData *pokedexApp) {
     ScheduleWindowCopyToVram(&pokedexApp->windows[0]);
     ScheduleWindowCopyToVram(&pokedexApp->windows[2]);
     ScheduleWindowCopyToVram(&pokedexApp->windows[4]);
-    if (pokedexApp->unk_1860 == 1) {
+    if (pokedexApp->nationalDex == 1) {
         FillWindowPixelBuffer(&pokedexApp->windows[5], 0);
         FillWindowPixelBuffer(&pokedexApp->windows[7], 0);
         PokedexApp_PrintMessage(&pokedexApp->windows[5], pokedexApp->msgData, 65, 28, 0, 4, MAKE_TEXT_COLOR(15, 12, 0), 2);
@@ -1035,13 +1035,13 @@ void PokedexApp_FreeAreaWindows(PokedexAppData *pokedexApp) {
 
 void PokedexApp_DrawTimeOfDayLabel(PokedexAppData *pokedexApp) {
     FillWindowPixelBuffer(&pokedexApp->windows[1], 0);
-    PokedexApp_PrintMessage(&pokedexApp->windows[1], pokedexApp->msgData, pokedexApp->unk_18C9 + 129, 28, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
+    PokedexApp_PrintMessage(&pokedexApp->windows[1], pokedexApp->msgData, pokedexApp->areaTimeOfDay + 129, 28, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
     ScheduleWindowCopyToVram(&pokedexApp->windows[1]);
 }
 
 #pragma force_active on
 
-// The area list: six rows (windows 8-13 on cells 17-22) around the selected area unk_18CA.
+// The area list: six rows (windows 8-13 on cells 17-22) around the selected area areaListPos.
 void PokedexApp_DrawAreaList(PokedexAppData *pokedexApp) {
     u32 i = 0;
     u8 *windows = (u8 *)pokedexApp;
@@ -1052,14 +1052,14 @@ void PokedexApp_DrawAreaList(PokedexAppData *pokedexApp) {
         int index, x, y;
 
         FillWindowPixelBuffer((Window *)(windows + offset), 0);
-        index = pokedexApp->unk_18CA + i - 2;
-        if (index >= 0 && index < pokedexApp->unk_18DC.unk_20.nMaps) {
+        index = pokedexApp->areaListPos + i - 2;
+        if (index >= 0 && index < pokedexApp->areaList.unk_20.nMaps) {
             PokedexApp_PrintFormattedMessage(pokedexApp, pokedexApp->msgData, i + 8, PokedexApp_GetAreaListEntryMsg(pokedexApp, index), 72, 0, 4, MAKE_TEXT_COLOR(15, 12, 0), 2);
         }
         CopyWindowPixelsToVram_TextMode((Window *)(windows + offset));
         x = GetWindowX((Window *)(windows + offset));
         y = GetWindowY((Window *)(windows + offset));
-        BgCellManager_DrawCellAt(pokedexApp->unk_0008, i + 17, (s8)x, (s8)y);
+        BgCellManager_DrawCellAt(pokedexApp->bgCellManager, i + 17, (s8)x, (s8)y);
     }
 }
 
@@ -1067,10 +1067,10 @@ void PokedexApp_DrawAreaList(PokedexAppData *pokedexApp) {
 
 // The message for area list entry index: the map's location name, or "Johto" / "Kanto" for the region entry (-2).
 u32 PokedexApp_GetAreaListEntryMsg(PokedexAppData *pokedexApp, int index) {
-    int map = pokedexApp->unk_18DC.unk_20.maps[index];
+    int map = pokedexApp->areaList.unk_20.maps[index];
 
     if (map == -2) {
-        return pokedexApp->unk_18C8 == 0 ? 134 : 135;
+        return pokedexApp->areaRegion == 0 ? 134 : 135;
     }
     BufferLandmarkName(pokedexApp->msgFormat, 0, MapHeader_GetMapSec(PokedexApp_GetAreaMapId(pokedexApp, index)));
     return 133;
@@ -1084,7 +1084,7 @@ void PokedexApp_ScrollAreaList(PokedexAppData *pokedexApp, int direction) {
     PokedexAppData *app = pokedexApp;
 
     do {
-        BgCellManager_GetCellPosition(app->unk_0008, i + 17, &x, &y);
+        BgCellManager_GetCellPosition(app->bgCellManager, i + 17, &x, &y);
         if (y == 2 || y == 20) {
             break;
         }
@@ -1093,15 +1093,15 @@ void PokedexApp_ScrollAreaList(PokedexAppData *pokedexApp, int direction) {
     FillWindowPixelBuffer(&app->windows[i + 8], 0);
     if (direction < 0) {
         int next;
-        BgCellManager_DrawCellAt(app->unk_0008, i + 17, 10, 20);
-        next = app->unk_18CA + 2;
-        if (next < app->unk_18DC.unk_20.nMaps) {
+        BgCellManager_DrawCellAt(app->bgCellManager, i + 17, 10, 20);
+        next = app->areaListPos + 2;
+        if (next < app->areaList.unk_20.nMaps) {
             PokedexApp_PrintFormattedMessage(app, app->msgData, i + 8, PokedexApp_GetAreaListEntryMsg(app, next), 72, 0, 4, MAKE_TEXT_COLOR(15, 12, 0), 2);
         }
     } else {
         int previous;
-        BgCellManager_DrawCellAt(app->unk_0008, i + 17, 10, 2);
-        previous = app->unk_18CA;
+        BgCellManager_DrawCellAt(app->bgCellManager, i + 17, 10, 2);
+        previous = app->areaListPos;
         previous -= 2;
         if (previous >= 0) {
             PokedexApp_PrintFormattedMessage(app, app->msgData, i + 8, PokedexApp_GetAreaListEntryMsg(app, previous), 72, 0, 4, MAKE_TEXT_COLOR(15, 12, 0), 2);
@@ -1216,19 +1216,19 @@ void PokedexApp_DrawFormsWindows(PokedexAppData *pokedexApp) {
     PokedexApp_DrawSelectedFormName(pokedexApp);
 }
 
-// The form list: six rows (windows 10-15 on cells 17-22) around the selected form unk_18C5.
+// The form list: six rows (windows 10-15 on cells 17-22) around the selected form selectedForm.
 void PokedexApp_DrawFormList(PokedexAppData *pokedexApp) {
     u32 i;
     int index;
 
     for (i = 0; i < 6; i++) {
         FillWindowPixelBuffer(&pokedexApp->windows[i + 10], 0);
-        index = pokedexApp->unk_18C5 + i - 2;
+        index = pokedexApp->selectedForm + i - 2;
         if (index >= 0 && index < pokedexApp->numSeenForms) {
             PokedexApp_PrintFormattedMessage(pokedexApp, pokedexApp->msgData, i + 10, PokedexApp_GetFormNameMsg(pokedexApp, index), 0, 0, 4, MAKE_TEXT_COLOR(15, 12, 0), 0);
         }
         CopyWindowPixelsToVram_TextMode(&pokedexApp->windows[i + 10]);
-        BgCellManager_DrawCellAt(pokedexApp->unk_0008, i + 17, (s8)GetWindowX(&pokedexApp->windows[i + 10]), (s8)GetWindowY(&pokedexApp->windows[i + 10]));
+        BgCellManager_DrawCellAt(pokedexApp->bgCellManager, i + 17, (s8)GetWindowX(&pokedexApp->windows[i + 10]), (s8)GetWindowY(&pokedexApp->windows[i + 10]));
     }
 }
 
@@ -1287,21 +1287,21 @@ void PokedexApp_ScrollFormList(PokedexAppData *pokedexApp, int direction) {
     s8 y;
 
     for (i = 0; i < 6; i++) {
-        BgCellManager_GetCellPosition(pokedexApp->unk_0008, i + 17, &x, &y);
+        BgCellManager_GetCellPosition(pokedexApp->bgCellManager, i + 17, &x, &y);
         if (y == -2 || y == 16) {
             break;
         }
     }
     FillWindowPixelBuffer(&pokedexApp->windows[i + 10], 0);
     if (direction < 0) {
-        BgCellManager_DrawCellAt(pokedexApp->unk_0008, i + 17, 8, 16);
-        if (pokedexApp->unk_18C5 + 2 < pokedexApp->numSeenForms) {
-            PokedexApp_PrintFormattedMessage(pokedexApp, pokedexApp->msgData, i + 10, PokedexApp_GetFormNameMsg(pokedexApp, pokedexApp->unk_18C5 + 2), 0, 0, 4, MAKE_TEXT_COLOR(15, 12, 0), 0);
+        BgCellManager_DrawCellAt(pokedexApp->bgCellManager, i + 17, 8, 16);
+        if (pokedexApp->selectedForm + 2 < pokedexApp->numSeenForms) {
+            PokedexApp_PrintFormattedMessage(pokedexApp, pokedexApp->msgData, i + 10, PokedexApp_GetFormNameMsg(pokedexApp, pokedexApp->selectedForm + 2), 0, 0, 4, MAKE_TEXT_COLOR(15, 12, 0), 0);
         }
     } else {
-        BgCellManager_DrawCellAt(pokedexApp->unk_0008, i + 17, 8, -2);
-        if (pokedexApp->unk_18C5 - 2 >= 0) {
-            PokedexApp_PrintFormattedMessage(pokedexApp, pokedexApp->msgData, i + 10, PokedexApp_GetFormNameMsg(pokedexApp, pokedexApp->unk_18C5 - 2), 0, 0, 4, MAKE_TEXT_COLOR(15, 12, 0), 0);
+        BgCellManager_DrawCellAt(pokedexApp->bgCellManager, i + 17, 8, -2);
+        if (pokedexApp->selectedForm - 2 >= 0) {
+            PokedexApp_PrintFormattedMessage(pokedexApp, pokedexApp->msgData, i + 10, PokedexApp_GetFormNameMsg(pokedexApp, pokedexApp->selectedForm - 2), 0, 0, 4, MAKE_TEXT_COLOR(15, 12, 0), 0);
         }
     }
     CopyWindowPixelsToVram_TextMode(&pokedexApp->windows[i + 10]);
@@ -1328,7 +1328,7 @@ void PokedexApp_DrawFormsTitle(PokedexAppData *pokedexApp) {
 
 void PokedexApp_DrawSelectedFormName(PokedexAppData *pokedexApp) {
     FillWindowPixelBuffer(&pokedexApp->windows[2], 0);
-    PokedexApp_PrintFormattedMessage(pokedexApp, pokedexApp->msgData, 2, PokedexApp_GetFormNameMsg(pokedexApp, pokedexApp->unk_18C5), 60, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
+    PokedexApp_PrintFormattedMessage(pokedexApp, pokedexApp->msgData, 2, PokedexApp_GetFormNameMsg(pokedexApp, pokedexApp->selectedForm), 60, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
     ScheduleWindowCopyToVram(&pokedexApp->windows[2]);
 }
 
@@ -1367,8 +1367,8 @@ void PokedexApp_DrawFormCompareWindows(PokedexAppData *pokedexApp) {
     ScheduleWindowCopyToVram(&pokedexApp->windows[5]);
     ScheduleWindowCopyToVram(&pokedexApp->windows[8]);
     ScheduleWindowCopyToVram(&pokedexApp->windows[9]);
-    PokedexApp_DrawCenteredFormName(pokedexApp, 6, pokedexApp->unk_18C5);
-    PokedexApp_DrawCenteredFormName(pokedexApp, 7, pokedexApp->unk_18C6);
+    PokedexApp_DrawCenteredFormName(pokedexApp, 6, pokedexApp->selectedForm);
+    PokedexApp_DrawCenteredFormName(pokedexApp, 7, pokedexApp->compareForm);
 }
 
 void PokedexApp_ClearFormCompareWindows(PokedexAppData *pokedexApp) {

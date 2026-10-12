@@ -2977,39 +2977,39 @@
 	.public ov49_0226529C
 	.public ov49_022652D0
 	.public ov49_022652E0
-	.public ov49_022652E8
-	.public ov49_0226535C
-	.public ov49_02265378
-	.public ov49_02265398
-	.public ov49_022653C0
-	.public ov49_022653F0
-	.public ov49_0226540C
-	.public ov49_02265434
-	.public ov49_022655E0
-	.public ov49_022655F4
-	.public ov49_02265628
-	.public ov49_02265660
-	.public ov49_02265668
-	.public ov49_02265698
-	.public ov49_0226571C
-	.public ov49_02265738
-	.public ov49_02265760
-	.public ov49_022657B4
-	.public ov49_02265858
-	.public ov49_02265890
-	.public ov49_022658E4
-	.public ov49_02265920
-	.public ov49_02265948
-	.public ov49_02265958
-	.public ov49_02265968
-	.public ov49_02265980
-	.public ov49_022659D0
-	.public ov49_02265B14
-	.public ov49_02265B28
-	.public ov49_02265B3C
-	.public ov49_02265B94
-	.public ov49_02265BE8
-	.public ov49_02265C40
+	.public WiFiPlazaInstrument_Create
+	.public WiFiPlazaInstrument_Delete
+	.public WiFiPlazaInstrument_Update
+	.public WiFiPlazaInstrument_Draw
+	.public WiFiPlazaInstrument_Start
+	.public WiFiPlazaInstrument_IsFinished
+	.public WiFiPlazaInstrumentTween_Init
+	.public WiFiPlazaInstrumentTween_Update
+	.public WiFiPlazaInstrumentTween_GetPosition
+	.public WiFiPlazaInstrumentWave_Init
+	.public WiFiPlazaInstrumentWave_Update
+	.public WiFiPlazaInstrumentWave_GetValue
+	.public WiFiPlazaInstrument_PlaySE
+	.public WiFiPlazaInstrument_LoadModels
+	.public WiFiPlazaInstrument_FreeModels
+	.public WiFiPlazaInstrument_LoadTextures
+	.public WiFiPlazaInstrument_FreeTextures
+	.public WiFiPlazaInstrument_LoadAnimations
+	.public WiFiPlazaInstrument_FreeAnimations
+	.public WiFiPlazaInstrument_StartEffect
+	.public WiFiPlazaInstrument_UpdateEffect
+	.public WiFiPlazaInstrument_DrawEffect
+	.public WiFiPlazaInstrument_ClearEffect
+	.public WiFiPlazaInstrument_IsEffectActive
+	.public WiFiPlazaInstrument_HasModel
+	.public WiFiPlazaInstrument_SetModel
+	.public WiFiPlazaInstrument_DrawModel
+	.public WiFiPlazaInstrument_LoopAnim
+	.public WiFiPlazaInstrument_PlayAnim
+	.public WiFiPlazaInstrument_LoopAnimBy
+	.public WiFiPlazaInstrument_PlayAnimBy
+	.public WiFiPlazaInstrument_SetAnimFrame
+	.public WiFiPlazaInstrument_GetAnimFrame
 	.public ov49_02265C68
 	.public ov49_02265C74
 	.public ov49_02265C80
@@ -3045,7 +3045,7 @@
 	.public ov49_022669B0
 	.public ov49_02266A88
 	.public ov49_02266AB0
-	.public ov49_02266AF0
+	.public WiFiPlazaInstrument_DrawEffectModels
 	.public ov49_02266B28
 	.public ov49_02266C6C
 	.public ov49_02266D04
@@ -3070,11 +3070,11 @@
 	.public ov49_02267C8C
 	.public ov49_02267D00
 	.public ov49_02267D34
-	.public ov49_02267D98
-	.public ov49_02267E18
-	.public ov49_02267EBC
-	.public ov49_02267EF8
-	.public ov49_02267F40
+	.public WiFiPlazaInstrument_InitBursts
+	.public WiFiPlazaInstrument_UpdateBursts
+	.public WiFiPlazaInstrumentBurst_Init
+	.public WiFiPlazaInstrumentBurst_Start
+	.public WiFiPlazaInstrumentBurst_Update
 	.public ov49_02267F94
 	.public ov49_022680B4
 	.public ov49_0226813C
@@ -3211,19 +3211,19 @@
 	.public ov49_0226A46C
 	.public ov49_0226A474
 	.public ov49_0226A47C
-	.public ov49_0226A484
+	.public sWiFiPlazaInstrumentBurstUpdateFuncs
 	.public ov49_0226A49C
 	.public ov49_0226A4B4
 	.public ov49_0226A4C0
-	.public ov49_0226A4CC
+	.public sWiFiPlazaInstrumentBurstStartFuncs
 	.public ov49_0226A4D8
 	.public ov49_0226A508
-	.public ov49_0226A538
-	.public ov49_0226A5A4
-	.public ov49_0226A610
+	.public sWiFiPlazaInstrumentUpdateFuncs
+	.public sWiFiPlazaInstrumentInitFuncs
+	.public sWiFiPlazaInstrumentStartSEs
 	.public ov49_0226A678
 	.public ov49_0226A67C
-	.public ov49_0226A70C
+	.public sWiFiPlazaInstrumentModelDescs
 	.public ov49_0226A730
 	.public ov49_0226A734
 	.public ov49_0226A738
@@ -3396,10 +3396,10 @@
 	.public ov49_0226526C
 	.public ov49_022652D0
 	.public ov49_022652E0
-	.public ov49_022655E0
-	.public ov49_02265660
-	.public ov49_02265958
-	.public ov49_02265968
+	.public WiFiPlazaInstrumentTween_GetPosition
+	.public WiFiPlazaInstrumentWave_GetValue
+	.public WiFiPlazaInstrument_IsEffectActive
+	.public WiFiPlazaInstrument_HasModel
 	.public ov49_02265C68
 	.public ov49_02265C74
 	.public ov49_02265C80
@@ -3441,10 +3441,10 @@ _022663A8:
 	ldr r0, [sp, #8]
 	add r1, r7, #0
 	lsl r6, r3, #2
-	ldr r3, _022663E0 ; =ov49_0226A70C
+	ldr r3, _022663E0 ; =sWiFiPlazaInstrumentModelDescs
 	add r2, r4, #0
 	add r3, r3, r6
-	bl ov49_02265980
+	bl WiFiPlazaInstrument_SetModel
 	add r4, r4, #1
 	add r5, r5, #1
 	cmp r4, #0x10
@@ -3457,12 +3457,12 @@ _022663A8:
 	mov r2, #2
 	mov r3, #0x21
 	str r7, [sp, #4]
-	bl ov49_02267D98
+	bl WiFiPlazaInstrument_InitBursts
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	nop
 _022663DC: .word ov49_0226A7A8
-_022663E0: .word ov49_0226A70C
+_022663E0: .word sWiFiPlazaInstrumentModelDescs
 _022663E4: .word 0x00000954
 _022663E8: .word ov49_0226A454
 	thumb_func_end ov49_0226639C
@@ -3481,10 +3481,10 @@ _022663F8:
 	ldr r0, [sp, #8]
 	add r1, r7, #0
 	lsl r6, r3, #2
-	ldr r3, _02266430 ; =ov49_0226A70C
+	ldr r3, _02266430 ; =sWiFiPlazaInstrumentModelDescs
 	add r2, r4, #0
 	add r3, r3, r6
-	bl ov49_02265980
+	bl WiFiPlazaInstrument_SetModel
 	add r4, r4, #1
 	add r5, r5, #1
 	cmp r4, #0x10
@@ -3497,12 +3497,12 @@ _022663F8:
 	mov r2, #2
 	mov r3, #0x21
 	str r7, [sp, #4]
-	bl ov49_02267D98
+	bl WiFiPlazaInstrument_InitBursts
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	nop
 _0226642C: .word ov49_0226A7B8
-_02266430: .word ov49_0226A70C
+_02266430: .word sWiFiPlazaInstrumentModelDescs
 _02266434: .word 0x00000954
 _02266438: .word ov49_0226A46C
 	thumb_func_end ov49_022663EC
@@ -3521,10 +3521,10 @@ _02266448:
 	ldr r0, [sp, #8]
 	add r1, r7, #0
 	lsl r6, r3, #2
-	ldr r3, _02266480 ; =ov49_0226A70C
+	ldr r3, _02266480 ; =sWiFiPlazaInstrumentModelDescs
 	add r2, r4, #0
 	add r3, r3, r6
-	bl ov49_02265980
+	bl WiFiPlazaInstrument_SetModel
 	add r4, r4, #1
 	add r5, r5, #1
 	cmp r4, #0x10
@@ -3537,12 +3537,12 @@ _02266448:
 	mov r2, #3
 	mov r3, #0x21
 	str r7, [sp, #4]
-	bl ov49_02267D98
+	bl WiFiPlazaInstrument_InitBursts
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	nop
 _0226647C: .word ov49_0226A7C8
-_02266480: .word ov49_0226A70C
+_02266480: .word sWiFiPlazaInstrumentModelDescs
 _02266484: .word 0x00000954
 _02266488: .word ov49_0226A4B4
 	thumb_func_end ov49_0226643C
@@ -3561,10 +3561,10 @@ _02266498:
 	ldr r0, [sp, #8]
 	add r1, r7, #0
 	lsl r6, r3, #2
-	ldr r3, _022664D0 ; =ov49_0226A70C
+	ldr r3, _022664D0 ; =sWiFiPlazaInstrumentModelDescs
 	add r2, r4, #0
 	add r3, r3, r6
-	bl ov49_02265980
+	bl WiFiPlazaInstrument_SetModel
 	add r4, r4, #1
 	add r5, r5, #1
 	cmp r4, #0x10
@@ -3577,12 +3577,12 @@ _02266498:
 	mov r2, #2
 	mov r3, #0x21
 	str r7, [sp, #4]
-	bl ov49_02267D98
+	bl WiFiPlazaInstrument_InitBursts
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	nop
 _022664CC: .word ov49_0226A7A8
-_022664D0: .word ov49_0226A70C
+_022664D0: .word sWiFiPlazaInstrumentModelDescs
 _022664D4: .word 0x00000954
 _022664D8: .word ov49_0226A464
 	thumb_func_end ov49_0226648C
@@ -3601,10 +3601,10 @@ _022664E8:
 	ldr r0, [sp, #8]
 	add r1, r7, #0
 	lsl r6, r3, #2
-	ldr r3, _02266520 ; =ov49_0226A70C
+	ldr r3, _02266520 ; =sWiFiPlazaInstrumentModelDescs
 	add r2, r4, #0
 	add r3, r3, r6
-	bl ov49_02265980
+	bl WiFiPlazaInstrument_SetModel
 	add r4, r4, #1
 	add r5, r5, #1
 	cmp r4, #0x10
@@ -3617,12 +3617,12 @@ _022664E8:
 	mov r2, #3
 	mov r3, #0x29
 	str r7, [sp, #4]
-	bl ov49_02267D98
+	bl WiFiPlazaInstrument_InitBursts
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	nop
 _0226651C: .word ov49_0226A7B8
-_02266520: .word ov49_0226A70C
+_02266520: .word sWiFiPlazaInstrumentModelDescs
 _02266524: .word 0x00000954
 _02266528: .word ov49_0226A49C
 	thumb_func_end ov49_022664DC
@@ -3641,10 +3641,10 @@ _02266538:
 	ldr r0, [sp, #8]
 	add r1, r7, #0
 	lsl r6, r3, #2
-	ldr r3, _02266570 ; =ov49_0226A70C
+	ldr r3, _02266570 ; =sWiFiPlazaInstrumentModelDescs
 	add r2, r4, #0
 	add r3, r3, r6
-	bl ov49_02265980
+	bl WiFiPlazaInstrument_SetModel
 	add r4, r4, #1
 	add r5, r5, #1
 	cmp r4, #0x10
@@ -3657,12 +3657,12 @@ _02266538:
 	mov r2, #3
 	mov r3, #0x21
 	str r7, [sp, #4]
-	bl ov49_02267D98
+	bl WiFiPlazaInstrument_InitBursts
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	nop
 _0226656C: .word ov49_0226A7C8
-_02266570: .word ov49_0226A70C
+_02266570: .word sWiFiPlazaInstrumentModelDescs
 _02266574: .word 0x00000954
 _02266578: .word ov49_0226A4C0
 	thumb_func_end ov49_0226652C
@@ -3681,10 +3681,10 @@ _02266588:
 	ldr r0, [sp, #8]
 	add r1, r7, #0
 	lsl r6, r3, #2
-	ldr r3, _022665C4 ; =ov49_0226A70C
+	ldr r3, _022665C4 ; =sWiFiPlazaInstrumentModelDescs
 	add r2, r4, #0
 	add r3, r3, r6
-	bl ov49_02265980
+	bl WiFiPlazaInstrument_SetModel
 	add r4, r4, #1
 	add r5, r5, #1
 	cmp r4, #0x10
@@ -3696,7 +3696,7 @@ _02266588:
 	add r0, r7, r0
 	mov r3, #0x21
 	str r7, [sp, #4]
-	bl ov49_02267D98
+	bl WiFiPlazaInstrument_InitBursts
 	ldr r0, [sp, #8]
 	add r1, r7, #0
 	bl ov49_02267C8C
@@ -3704,7 +3704,7 @@ _02266588:
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
 _022665C0: .word ov49_0226A7A8
-_022665C4: .word ov49_0226A70C
+_022665C4: .word sWiFiPlazaInstrumentModelDescs
 _022665C8: .word 0x00000954
 _022665CC: .word ov49_0226A47C
 	thumb_func_end ov49_0226657C
@@ -3723,10 +3723,10 @@ _022665DC:
 	ldr r0, [sp, #8]
 	add r1, r7, #0
 	lsl r6, r3, #2
-	ldr r3, _02266618 ; =ov49_0226A70C
+	ldr r3, _02266618 ; =sWiFiPlazaInstrumentModelDescs
 	add r2, r4, #0
 	add r3, r3, r6
-	bl ov49_02265980
+	bl WiFiPlazaInstrument_SetModel
 	add r4, r4, #1
 	add r5, r5, #1
 	cmp r4, #0x10
@@ -3738,7 +3738,7 @@ _022665DC:
 	add r0, r7, r0
 	mov r3, #0x21
 	str r7, [sp, #4]
-	bl ov49_02267D98
+	bl WiFiPlazaInstrument_InitBursts
 	ldr r0, [sp, #8]
 	add r1, r7, #0
 	bl ov49_02267C8C
@@ -3746,7 +3746,7 @@ _022665DC:
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02266614: .word ov49_0226A7B8
-_02266618: .word ov49_0226A70C
+_02266618: .word sWiFiPlazaInstrumentModelDescs
 _0226661C: .word 0x00000954
 _02266620: .word ov49_0226A45C
 	thumb_func_end ov49_022665D0
@@ -3765,10 +3765,10 @@ _02266630:
 	ldr r0, [sp, #8]
 	add r1, r7, #0
 	lsl r6, r3, #2
-	ldr r3, _0226666C ; =ov49_0226A70C
+	ldr r3, _0226666C ; =sWiFiPlazaInstrumentModelDescs
 	add r2, r4, #0
 	add r3, r3, r6
-	bl ov49_02265980
+	bl WiFiPlazaInstrument_SetModel
 	add r4, r4, #1
 	add r5, r5, #1
 	cmp r4, #0x10
@@ -3780,7 +3780,7 @@ _02266630:
 	add r0, r7, r0
 	mov r3, #0x21
 	str r7, [sp, #4]
-	bl ov49_02267D98
+	bl WiFiPlazaInstrument_InitBursts
 	ldr r0, [sp, #8]
 	add r1, r7, #0
 	bl ov49_02267C8C
@@ -3788,7 +3788,7 @@ _02266630:
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02266668: .word ov49_0226A7C8
-_0226666C: .word ov49_0226A70C
+_0226666C: .word sWiFiPlazaInstrumentModelDescs
 _02266670: .word 0x00000954
 _02266674: .word ov49_0226A474
 	thumb_func_end ov49_02266624
@@ -3859,7 +3859,7 @@ _022666E2:
 	add r1, r5, #0
 	add r2, r4, #0
 	mov r3, #0
-	bl ov49_02265B28
+	bl WiFiPlazaInstrument_PlayAnim
 	str r0, [sp, #8]
 	cmp r0, #0
 	beq _02266716
@@ -3872,7 +3872,7 @@ _022666E2:
 	add r1, r5, #0
 	add r2, r4, #0
 	mov r3, #0
-	bl ov49_02265BE8
+	bl WiFiPlazaInstrument_SetAnimFrame
 _02266716:
 	ldr r0, _02266744 ; =0x00000954
 	add r4, r4, #1

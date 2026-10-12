@@ -9,7 +9,7 @@
 .public Camera_GetDistance
 .public memset
 .public _s32_div_f
-.public ov01_021FCD2C
-.public ov01_021FCD6C
-.public ov01_021FCD78
-.public ov01_021FCD8C
+.public FieldCameraZoom_Start
+.public FieldCameraZoom_IsDone
+.public FieldCameraZoom_End
+.public FieldCameraZoom_Set

@@ -279,7 +279,7 @@ void VsRecorder_OnBoxDataBoxTouch(u32 index, u32 event, void *arg) {
 void VsRecorder_CreateBoxDataButtons(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
 
-    ov40_0222D73C(work, NNS_G2D_VRAM_TYPE_2DSUB);
+    VsRecorder_LoadButtonGfx(work, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_CreateLabeledSprite(work, &boxData->exitButton, NNS_G2D_VRAM_TYPE_2DSUB, 3, 32, 232, 36, -8, 0, TRUE);   // EXIT
     VsRecorder_CreateLabeledSprite(work, &boxData->sendButton, NNS_G2D_VRAM_TYPE_2DSUB, 53, 128, 232, 36, -8, 1, TRUE); // SEND
 }
@@ -289,7 +289,7 @@ void VsRecorder_FreeBoxDataButtons(VsRecorderWork *work) {
 
     VsRecorder_FreeLabeledSprite(&boxData->exitButton);
     VsRecorder_FreeLabeledSprite(&boxData->sendButton);
-    ov40_0222D7DC(work);
+    VsRecorder_FreeButtonGfx(work);
 }
 
 void VsRecorder_SelectFirstBoxMon(VsRecorderBoxData *boxData) {
@@ -535,7 +535,7 @@ BOOL VsRecorder_BoxDataSendUpload(VsRecorderWork *work) {
         } else {
             StopSE(SEQ_SE_PL_BREC80, 0);
             VsRecorder_AddGameStatsScore(work, 37);
-            ov40_0222DD8C(work, 1);
+            VsRecorder_SetBoxUploaded(work, 1);
             PlaySE(SEQ_SE_PL_BREC12);
             work->step++;
         }

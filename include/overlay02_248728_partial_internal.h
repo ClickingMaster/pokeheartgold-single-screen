@@ -93,6 +93,6 @@ extern void ov02_0224AB58(void *);
 extern void ov02_0224AC38(void *);
 extern void Sprite_SetAnimCtrlSeq(void *, u32);
 extern void PlaySE(u32);
-extern void ov01_021FCD78(void *);
+extern void FieldCameraZoom_End(void *);
 extern void ov02_02248DBC(void *);
 #endif

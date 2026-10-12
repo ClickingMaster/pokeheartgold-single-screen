@@ -2977,39 +2977,39 @@
 	.public ov49_0226529C
 	.public ov49_022652D0
 	.public ov49_022652E0
-	.public ov49_022652E8
-	.public ov49_0226535C
-	.public ov49_02265378
-	.public ov49_02265398
-	.public ov49_022653C0
-	.public ov49_022653F0
-	.public ov49_0226540C
-	.public ov49_02265434
-	.public ov49_022655E0
-	.public ov49_022655F4
-	.public ov49_02265628
-	.public ov49_02265660
-	.public ov49_02265668
-	.public ov49_02265698
-	.public ov49_0226571C
-	.public ov49_02265738
-	.public ov49_02265760
-	.public ov49_022657B4
-	.public ov49_02265858
-	.public ov49_02265890
-	.public ov49_022658E4
-	.public ov49_02265920
-	.public ov49_02265948
-	.public ov49_02265958
-	.public ov49_02265968
-	.public ov49_02265980
-	.public ov49_022659D0
-	.public ov49_02265B14
-	.public ov49_02265B28
-	.public ov49_02265B3C
-	.public ov49_02265B94
-	.public ov49_02265BE8
-	.public ov49_02265C40
+	.public WiFiPlazaInstrument_Create
+	.public WiFiPlazaInstrument_Delete
+	.public WiFiPlazaInstrument_Update
+	.public WiFiPlazaInstrument_Draw
+	.public WiFiPlazaInstrument_Start
+	.public WiFiPlazaInstrument_IsFinished
+	.public WiFiPlazaInstrumentTween_Init
+	.public WiFiPlazaInstrumentTween_Update
+	.public WiFiPlazaInstrumentTween_GetPosition
+	.public WiFiPlazaInstrumentWave_Init
+	.public WiFiPlazaInstrumentWave_Update
+	.public WiFiPlazaInstrumentWave_GetValue
+	.public WiFiPlazaInstrument_PlaySE
+	.public WiFiPlazaInstrument_LoadModels
+	.public WiFiPlazaInstrument_FreeModels
+	.public WiFiPlazaInstrument_LoadTextures
+	.public WiFiPlazaInstrument_FreeTextures
+	.public WiFiPlazaInstrument_LoadAnimations
+	.public WiFiPlazaInstrument_FreeAnimations
+	.public WiFiPlazaInstrument_StartEffect
+	.public WiFiPlazaInstrument_UpdateEffect
+	.public WiFiPlazaInstrument_DrawEffect
+	.public WiFiPlazaInstrument_ClearEffect
+	.public WiFiPlazaInstrument_IsEffectActive
+	.public WiFiPlazaInstrument_HasModel
+	.public WiFiPlazaInstrument_SetModel
+	.public WiFiPlazaInstrument_DrawModel
+	.public WiFiPlazaInstrument_LoopAnim
+	.public WiFiPlazaInstrument_PlayAnim
+	.public WiFiPlazaInstrument_LoopAnimBy
+	.public WiFiPlazaInstrument_PlayAnimBy
+	.public WiFiPlazaInstrument_SetAnimFrame
+	.public WiFiPlazaInstrument_GetAnimFrame
 	.public ov49_02265C68
 	.public ov49_02265C74
 	.public ov49_02265C80
@@ -3045,7 +3045,7 @@
 	.public ov49_022669B0
 	.public ov49_02266A88
 	.public ov49_02266AB0
-	.public ov49_02266AF0
+	.public WiFiPlazaInstrument_DrawEffectModels
 	.public ov49_02266B28
 	.public ov49_02266C6C
 	.public ov49_02266D04
@@ -3070,11 +3070,11 @@
 	.public ov49_02267C8C
 	.public ov49_02267D00
 	.public ov49_02267D34
-	.public ov49_02267D98
-	.public ov49_02267E18
-	.public ov49_02267EBC
-	.public ov49_02267EF8
-	.public ov49_02267F40
+	.public WiFiPlazaInstrument_InitBursts
+	.public WiFiPlazaInstrument_UpdateBursts
+	.public WiFiPlazaInstrumentBurst_Init
+	.public WiFiPlazaInstrumentBurst_Start
+	.public WiFiPlazaInstrumentBurst_Update
 	.public ov49_02267F94
 	.public ov49_022680B4
 	.public ov49_0226813C
@@ -3211,19 +3211,19 @@
 	.public ov49_0226A46C
 	.public ov49_0226A474
 	.public ov49_0226A47C
-	.public ov49_0226A484
+	.public sWiFiPlazaInstrumentBurstUpdateFuncs
 	.public ov49_0226A49C
 	.public ov49_0226A4B4
 	.public ov49_0226A4C0
-	.public ov49_0226A4CC
+	.public sWiFiPlazaInstrumentBurstStartFuncs
 	.public ov49_0226A4D8
 	.public ov49_0226A508
-	.public ov49_0226A538
-	.public ov49_0226A5A4
-	.public ov49_0226A610
+	.public sWiFiPlazaInstrumentUpdateFuncs
+	.public sWiFiPlazaInstrumentInitFuncs
+	.public sWiFiPlazaInstrumentStartSEs
 	.public ov49_0226A678
 	.public ov49_0226A67C
-	.public ov49_0226A70C
+	.public sWiFiPlazaInstrumentModelDescs
 	.public ov49_0226A730
 	.public ov49_0226A734
 	.public ov49_0226A738
@@ -3396,10 +3396,10 @@
 	.public ov49_0226526C
 	.public ov49_022652D0
 	.public ov49_022652E0
-	.public ov49_022655E0
-	.public ov49_02265660
-	.public ov49_02265958
-	.public ov49_02265968
+	.public WiFiPlazaInstrumentTween_GetPosition
+	.public WiFiPlazaInstrumentWave_GetValue
+	.public WiFiPlazaInstrument_IsEffectActive
+	.public WiFiPlazaInstrument_HasModel
 	.public ov49_02265C68
 	.public ov49_02265C74
 	.public ov49_02265C80

@@ -1511,45 +1511,45 @@
 	.public ov02_0224EB48
 	.public ov02_0224EE4C
 	.public ov02_0224EF6C
-	.public ov02_0224EF94
-	.public ov02_0224F058
-	.public ov02_0224F108
-	.public ov02_0224F324
-	.public ov02_0224F4BC
-	.public ov02_0224F580
-	.public ov02_0224F5D0
-	.public ov02_0224F5FC
-	.public ov02_0224F644
-	.public ov02_0224F64C
-	.public ov02_0224F698
-	.public ov02_0224F6AC
-	.public ov02_0224F728
-	.public ov02_0224F76C
-	.public ov02_0224F79C
-	.public ov02_0224F820
-	.public ov02_0224F864
-	.public ov02_0224F880
-	.public ov02_0224F8F4
-	.public ov02_0224F8FC
-	.public ov02_0224FB44
-	.public ov02_0224FB54
-	.public ov02_0224FC08
-	.public ov02_0224FC74
-	.public ov02_0224FCE0
-	.public ov02_0224FD9C
-	.public ov02_0224FDF8
-	.public ov02_0224FE40
-	.public ov02_0224FE70
-	.public ov02_0224FF04
-	.public ov02_0224FF5C
-	.public ov02_0224FFD8
-	.public ov02_02250004
-	.public ov02_02250504
-	.public ov02_02250594
-	.public ov02_02250628
-	.public ov02_022506D4
-	.public ov02_02250738
-	.public ov02_02250780
+	.public FollowMon_SelectInteraction
+	.public FollowMon_GetSituation
+	.public FollowMonRule_Matches
+	.public FollowMonSituation_SetMonCondition
+	.public FollowMonSituation_SetNearbyObjects
+	.public FollowMonSituation_SetHiddenItems
+	.public FollowMonSituation_SetWeather
+	.public FollowMonSituation_SetTerrain
+	.public FollowMonSituation_SetMapId
+	.public FollowMonSituation_SetTimeOfDay
+	.public FollowMonSituation_SetMood
+	.public FollowMonSituation_SetBestPokeathlonStat
+	.public FollowMonSituation_SetFacing
+	.public FollowMonSituation_SetSpeciesAttr
+	.public FollowMonSituation_ConvertType
+	.public FollowMonSituation_ConvertItemPocket
+	.public FollowMonInteraction_New
+	.public FollowMonInteraction_LoadScript
+	.public FollowMonInteraction_Delete
+	.public FollowMonInteraction_Run
+	.public FollowMonInteraction_StepHasMovement
+	.public FollowMonInteraction_TryShowEmote
+	.public FollowMonInteraction_PrintGiftMessage
+	.public FollowMonInteraction_StepHasWait
+	.public FollowMon_ExpandGiftMessage
+	.public FollowMonMovement_ApplyOffset
+	.public FollowMonMovement_PlaySound
+	.public FollowMonMovement_ApplyFacing
+	.public FollowMon_TryShakeGrass
+	.public FollowMon_GetCoordsInDirection
+	.public FollowMonMovement_Step
+	.public FollowMonMovement_HasNextStep
+	.public FollowMonInteraction_RunMovement
+	.public FollowMon_ApplyInteractionEffects
+	.public FollowMonRule_CheckFriendship
+	.public FollowMonRule_CheckMood
+	.public FollowMonRule_CheckSpeciesAttr
+	.public FollowMonRule_CheckShinyLeaf
+	.public FieldSystem_FirstAliveMonHasType
 	.public ov02_022507B4
 	.public ov02_022507E8
 	.public ov02_022508B4
@@ -1624,10 +1624,10 @@
 	.public ov02_02253A1C
 	.public ov02_02253A34
 	.public ov02_02253A4C
-	.public ov02_02253A54
-	.public ov02_02253A5C
+	.public sShinyLeafMasks
+	.public sShinyLeafMonDataIds
 	.public ov02_02253A70
-	.public ov02_02253AC0
+	.public sNatureGroups
 	.public ov02_02253B24
 	.public ov02_02253B30
 	.public ov02_02253D90
@@ -1752,12 +1752,12 @@
 	.public ov02_0224E340
 	.public ov02_0224E4CC
 	.public ov02_0224E4DC
-	.public ov02_0224F644
-	.public ov02_0224F698
-	.public ov02_0224F864
-	.public ov02_0224F8F4
-	.public ov02_0224FB44
-	.public ov02_0224FC74
+	.public FollowMonSituation_SetMapId
+	.public FollowMonSituation_SetMood
+	.public FollowMonInteraction_New
+	.public FollowMonInteraction_Delete
+	.public FollowMonInteraction_StepHasMovement
+	.public FollowMonInteraction_StepHasWait
 	.public ov02_022508B4
 
 	thumb_func_start ov02_02249B60

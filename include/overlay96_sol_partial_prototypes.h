@@ -132,7 +132,7 @@ int PokeathlonEventIntro_Main(void *course);
 int PokeathlonCirclePush_Main(void *course);
 u8 PokeathlonCirclePushStack_Pop(u8 *p);
 int PokeathlonRelayRun_IsTouchingSwapButton(int unused, u32 x, u32 y);
-u8 ov96_02200BC8(u8 *p, int i);
+u8 PokeathlonRelayRunHud_GetBenchMember(u8 *p, int i);
 void ov96_02203CD4(u8 *p);
 void PokeathlonGoalRoll_SetTouchTarget(int x, int y, int *out);
 BOOL PokeathlonRingDrop_IsAttackState(int v);

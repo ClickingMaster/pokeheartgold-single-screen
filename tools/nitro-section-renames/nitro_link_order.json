@@ -1,7 +1,7 @@
 {
   "objects": [
     "lib/NitroSDK/src/snd/snd_interface.o",
-    "lib/asm/to65_nitro_unified_anchor.o",
+    "lib/asm/nitro_sdk_data.o",
     "lib/asm/to65_to65_nitro_unified_residual_01_extra17_anchor.o",
     "src/to65_to65_nitro_unified_residual_01_extra17_run01.o",
     "lib/asm/to65_to65_nitro_unified_residual_03_extra18_anchor.o",
@@ -558,11 +558,11 @@
     ],
     "rodata": [
       {
-        "path": "lib/asm/to65_nitro_unified_anchor.o",
+        "path": "lib/asm/nitro_sdk_data.o",
         "selector": ".rodata.unified_00"
       },
       {
-        "path": "lib/asm/to65_nitro_unified_anchor.o",
+        "path": "lib/asm/nitro_sdk_data.o",
         "selector": ".rodata.alias_d750"
       },
       {
@@ -570,7 +570,7 @@
         "selector": ".rodata.snd_decibel"
       },
       {
-        "path": "lib/asm/to65_nitro_unified_anchor.o",
+        "path": "lib/asm/nitro_sdk_data.o",
         "selector": ".rodata.unified_01"
       },
       {
@@ -586,7 +586,7 @@
         "selector": ".rodata"
       },
       {
-        "path": "lib/asm/to65_nitro_unified_anchor.o",
+        "path": "lib/asm/nitro_sdk_data.o",
         "selector": ".rodata.unified_02"
       },
       {
@@ -598,7 +598,7 @@
         "selector": ".rodata"
       },
       {
-        "path": "lib/asm/to65_nitro_unified_anchor.o",
+        "path": "lib/asm/nitro_sdk_data.o",
         "selector": ".rodata.unified_03"
       }
     ],
@@ -616,7 +616,7 @@
         "selector": ".data"
       },
       {
-        "path": "lib/asm/to65_nitro_unified_anchor.o",
+        "path": "lib/asm/nitro_sdk_data.o",
         "selector": ".data.unified_00"
       },
       {
@@ -628,7 +628,7 @@
         "selector": ".data"
       },
       {
-        "path": "lib/asm/to65_nitro_unified_anchor.o",
+        "path": "lib/asm/nitro_sdk_data.o",
         "selector": ".data.unified_01"
       }
     ],
@@ -638,7 +638,7 @@
         "selector": ".bss.snd_main"
       },
       {
-        "path": "lib/asm/to65_nitro_unified_anchor.o",
+        "path": "lib/asm/nitro_sdk_data.o",
         "selector": ".bss.unified_00"
       },
       {
@@ -670,7 +670,7 @@
         "selector": ".bss"
       },
       {
-        "path": "lib/asm/to65_nitro_unified_anchor.o",
+        "path": "lib/asm/nitro_sdk_data.o",
         "selector": ".bss.unified_02"
       },
       {
@@ -686,7 +686,7 @@
         "selector": ".bss"
       },
       {
-        "path": "lib/asm/to65_nitro_unified_anchor.o",
+        "path": "lib/asm/nitro_sdk_data.o",
         "selector": ".bss.unified_03"
       },
       {
@@ -694,11 +694,11 @@
         "selector": ".bss"
       },
       {
-        "path": "lib/asm/to65_nitro_unified_anchor.o",
+        "path": "lib/asm/nitro_sdk_data.o",
         "selector": ".bss.unified_04"
       },
       {
-        "path": "lib/asm/to65_nitro_unified_anchor.o",
+        "path": "lib/asm/nitro_sdk_data.o",
         "selector": ".bss.alias_4d60"
       },
       {
@@ -710,7 +710,7 @@
         "selector": ".bss"
       },
       {
-        "path": "lib/asm/to65_nitro_unified_anchor.o",
+        "path": "lib/asm/nitro_sdk_data.o",
         "selector": ".bss.unified_05"
       }
     ]

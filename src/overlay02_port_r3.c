@@ -13,7 +13,7 @@ WIP_LOCAL void ov02_02248DBC(void *a0) {
         FieldEffect_Destroy(v6c);
     }
     if (*(SysTask **)((u8 *)d + 0x70) != NULL) {
-        ov01_021FCD78(*(SysTask **)((u8 *)d + 0x70));
+        FieldCameraZoom_End(*(SysTask **)((u8 *)d + 0x70));
     }
     FieldEffect_Destroy((int)a0);
 }

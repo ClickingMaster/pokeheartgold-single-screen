@@ -60,31 +60,31 @@ extern const DpadMenuBox sSearchFormDpadBoxes[];
 extern const GridCallbacks sSearchFormGridCallbacks;
 extern const u8 sSearchFormCursorAnims[];
 
-// Entry screen tabs and list buttons (touch), A / B / Start (keys). In the national dex (unk_1860) left and
+// Entry screen tabs and list buttons (touch), A / B / Start (keys). In the national dex (nationalDex) left and
 // right switch between the Johto and national lists.
 int PokedexApp_HandleListMenuInput(PokedexAppData *pokedexApp) {
-    pokedexApp->unk_0864 = 0;
+    pokedexApp->keyInput = 0;
     if (System_GetTouchNew() == TRUE) {
         int hit = TouchscreenHitbox_FindRectAtTouchNew(ov18_021FB72C);
         if (hit == -1) {
             return -1;
         }
         int input = ov18_021FB6F0[hit];
-        if (input == 6 && pokedexApp->unk_1860 == 0) {
+        if (input == 6 && pokedexApp->nationalDex == 0) {
             return 5;
         }
         return input;
     } else {
-        pokedexApp->unk_0864 = 1;
-        if (pokedexApp->unk_1860 == 1) {
+        pokedexApp->keyInput = 1;
+        if (pokedexApp->nationalDex == 1) {
             if (gSystem.newKeys & PAD_KEY_LEFT) {
-                if (pokedexApp->unk_1858 == 0) {
+                if (pokedexApp->dexMode == 0) {
                     return 3;
                 }
                 return -1;
             }
             if (gSystem.newKeys & PAD_KEY_RIGHT) {
-                if (pokedexApp->unk_1858 == 1) {
+                if (pokedexApp->dexMode == 1) {
                     return 4;
                 }
                 return -1;
@@ -109,7 +109,7 @@ int PokedexApp_HandleListInput(PokedexAppData *pokedexApp, int mode) {
     u32 y;
     u32 input;
 
-    pokedexApp->unk_0864 = 0;
+    pokedexApp->keyInput = 0;
     if (System_GetTouchNewCoords(&x, &y) == TRUE) {
         int hit = TouchscreenHitbox_FindRectAtTouchNew(ov18_021FB8A4);
         if (hit == -1) {
@@ -135,7 +135,7 @@ int PokedexApp_HandleListInput(PokedexAppData *pokedexApp, int mode) {
         }
         return input;
     }
-    pokedexApp->unk_0864 = 1;
+    pokedexApp->keyInput = 1;
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
         if (pokedexApp->listCursor < 5) {
             return 10;
@@ -207,10 +207,10 @@ int PokedexApp_HandleListInput(PokedexAppData *pokedexApp, int mode) {
     return -1;
 }
 
-// The search pages: each has a grid input handler (unk_1864) whose callbacks move the cursor sprite 0.
+// The search pages: each has a grid input handler (gridInput) whose callbacks move the cursor sprite 0.
 
 void PokedexApp_CreateSearchMenuGrid(PokedexAppData *pokedexApp, int initialPos) {
-    pokedexApp->unk_1864 = GridInputHandler_Create(sSearchMenuHitboxes, sSearchMenuDpadBoxes, &sSearchMenuGridCallbacks, pokedexApp, TRUE, initialPos, HEAP_ID_POKEDEX_APP);
+    pokedexApp->gridInput = GridInputHandler_Create(sSearchMenuHitboxes, sSearchMenuDpadBoxes, &sSearchMenuGridCallbacks, pokedexApp, TRUE, initialPos, HEAP_ID_POKEDEX_APP);
     PokedexApp_SetSpriteVisible(pokedexApp, 0, TRUE);
     PokedexApp_UpdateSearchMenuCursor(pokedexApp, initialPos);
 }
@@ -222,7 +222,7 @@ u32 PokedexApp_HandleSearchMenuInput(PokedexAppData *pokedexApp) {
     if (gSystem.newKeys & PAD_BUTTON_START) {
         return PAD_BUTTON_START;
     }
-    return GridInputHandler_HandleInput_AllowHold(pokedexApp->unk_1864);
+    return GridInputHandler_HandleInput_AllowHold(pokedexApp->gridInput);
 }
 
 #pragma force_active reset
@@ -231,7 +231,7 @@ void PokedexApp_UpdateSearchMenuCursor(PokedexAppData *pokedexApp, int target) {
     u8 x;
     u8 y;
 
-    DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(pokedexApp->unk_1864, target), &x, &y);
+    DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(pokedexApp->gridInput, target), &x, &y);
     ManagedSprite_SetPositionXY(pokedexApp->sprites[0], x, y);
     PokedexApp_SetSpriteAnim(pokedexApp, 0, sSearchMenuCursorAnims[target]);
 }
@@ -249,7 +249,7 @@ void PokedexApp_OnSearchMenuGridTouch(PokedexAppData *pokedexApp, int target, in
 #pragma force_active on
 
 void PokedexApp_CreateSearchOrderGrid(PokedexAppData *pokedexApp) {
-    pokedexApp->unk_1864 = GridInputHandler_Create(sSearchOrderHitboxes, sSearchOrderDpadBoxes, &sSearchOrderGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
+    pokedexApp->gridInput = GridInputHandler_Create(sSearchOrderHitboxes, sSearchOrderDpadBoxes, &sSearchOrderGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
     PokedexApp_SetSpriteVisible(pokedexApp, 0, TRUE);
     PokedexApp_UpdateSearchOrderCursor(pokedexApp, 0);
 }
@@ -259,7 +259,7 @@ u32 PokedexApp_HandleSearchOrderInput(PokedexAppData *pokedexApp) {
     if (gSystem.newKeys & PAD_BUTTON_START) {
         return 6;
     }
-    return GridInputHandler_HandleInput_AllowHold(pokedexApp->unk_1864);
+    return GridInputHandler_HandleInput_AllowHold(pokedexApp->gridInput);
 }
 
 void PokedexApp_UpdateSearchOrderCursor(PokedexAppData *pokedexApp, int target) {
@@ -267,7 +267,7 @@ void PokedexApp_UpdateSearchOrderCursor(PokedexAppData *pokedexApp, int target) 
         u8 y, x;
     } pos;
 
-    DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(pokedexApp->unk_1864, target), &pos.x, &pos.y);
+    DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(pokedexApp->gridInput, target), &pos.x, &pos.y);
     ManagedSprite_SetPositionXY(pokedexApp->sprites[0], pos.x, pos.y);
     PokedexApp_SetSpriteAnim(pokedexApp, 0, sSearchOrderCursorAnims[target]);
 }
@@ -285,7 +285,7 @@ void PokedexApp_OnSearchOrderGridTouch(PokedexAppData *pokedexApp, int target, i
 }
 
 void PokedexApp_CreateSearchNameGrid(PokedexAppData *pokedexApp) {
-    pokedexApp->unk_1864 = GridInputHandler_Create(sSearchNameHitboxes, sSearchNameDpadBoxes, &sSearchNameGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
+    pokedexApp->gridInput = GridInputHandler_Create(sSearchNameHitboxes, sSearchNameDpadBoxes, &sSearchNameGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
     PokedexApp_SetSpriteVisible(pokedexApp, 0, TRUE);
     PokedexApp_UpdateSearchNameCursor(pokedexApp, 0);
 }
@@ -295,13 +295,13 @@ u32 PokedexApp_HandleSearchNameInput(PokedexAppData *pokedexApp) {
     if (gSystem.newKeys & PAD_BUTTON_START) {
         return 27;
     }
-    return GridInputHandler_HandleInput_AllowHold(pokedexApp->unk_1864);
+    return GridInputHandler_HandleInput_AllowHold(pokedexApp->gridInput);
 }
 
 // 27 letter buttons, then OK / cancel
 void PokedexApp_UpdateSearchNameCursor(PokedexAppData *pokedexApp, int target) {
     u8 pos[2];
-    const DpadMenuBox *box = GridInputHandler_GetDpadBox(pokedexApp->unk_1864, target);
+    const DpadMenuBox *box = GridInputHandler_GetDpadBox(pokedexApp->gridInput, target);
 
     DpadMenuBox_GetPosition(box, &pos[1], &pos[0]);
     ManagedSprite_SetPositionXY(pokedexApp->sprites[0], pos[1], pos[0]);
@@ -325,7 +325,7 @@ void PokedexApp_OnSearchNameGridMove(PokedexAppData *pokedexApp, int target, int
             for (i = 0; i <= 26; i++) {
                 if (left == sSearchNameDpadBoxes[i].left) {
                     target = i;
-                    ((GridSetInputsU8Func)GridInputHandler_SetNextLastUnk0FInputs)(pokedexApp->unk_1864, target, input, input);
+                    ((GridSetInputsU8Func)GridInputHandler_SetNextLastUnk0FInputs)(pokedexApp->gridInput, target, input, input);
                     break;
                 }
             }
@@ -334,7 +334,7 @@ void PokedexApp_OnSearchNameGridMove(PokedexAppData *pokedexApp, int target, int
             for (i = 26; i >= 0; i--) {
                 if (left == sSearchNameDpadBoxes[i].left) {
                     target = i;
-                    ((GridSetInputsU8Func)GridInputHandler_SetNextLastUnk0FInputs)(pokedexApp->unk_1864, target, input, input);
+                    ((GridSetInputsU8Func)GridInputHandler_SetNextLastUnk0FInputs)(pokedexApp->gridInput, target, input, input);
                     break;
                 }
             }
@@ -352,7 +352,7 @@ void PokedexApp_OnSearchNameGridTouch(PokedexAppData *pokedexApp, int target, in
 }
 
 void PokedexApp_CreateSearchTypeGrid(PokedexAppData *pokedexApp) {
-    pokedexApp->unk_1864 = GridInputHandler_Create(sSearchTypeHitboxes, sSearchTypeDpadBoxes, &sSearchTypeGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
+    pokedexApp->gridInput = GridInputHandler_Create(sSearchTypeHitboxes, sSearchTypeDpadBoxes, &sSearchTypeGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
     PokedexApp_SetSpriteVisible(pokedexApp, 0, TRUE);
     PokedexApp_UpdateSearchTypeCursor(pokedexApp, 0);
 }
@@ -362,12 +362,12 @@ u32 PokedexApp_HandleSearchTypeInput(PokedexAppData *pokedexApp) {
     if (gSystem.newKeys & PAD_BUTTON_START) {
         return 18;
     }
-    return GridInputHandler_HandleInput_AllowHold(pokedexApp->unk_1864);
+    return GridInputHandler_HandleInput_AllowHold(pokedexApp->gridInput);
 }
 
 void PokedexApp_UpdateSearchTypeCursor(PokedexAppData *pokedexApp, int target) {
     u8 position[2];
-    const DpadMenuBox *box = GridInputHandler_GetDpadBox(pokedexApp->unk_1864, target);
+    const DpadMenuBox *box = GridInputHandler_GetDpadBox(pokedexApp->gridInput, target);
 
     DpadMenuBox_GetPosition(box, &position[1], &position[0]);
     ManagedSprite_SetPositionXY(pokedexApp->sprites[0], position[1], position[0]);
@@ -381,19 +381,19 @@ void PokedexApp_OnSearchTypeGridMove(PokedexAppData *pokedexApp, int target, int
             s32 previous = pokedexApp->prevGridInput;
             if (previous >= 16 && previous <= 17) {
                 target = previous % 4;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)target, (u8)input, 18);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 18);
             } else if (previous >= 0 && previous <= 1) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)previous, (u8)input, 18);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)previous, (u8)input, 18);
             }
         } else if (target == 16) {
             s32 previous = pokedexApp->prevGridInput;
             if (previous >= 0 && previous <= 1) {
                 target = previous + 16;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)target, (u8)input, 18);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 18);
             } else if (previous >= 16 && previous <= 17) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)previous, (u8)input, 18);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)previous, (u8)input, 18);
             }
         }
     } else if (input == 19) {
@@ -401,19 +401,19 @@ void PokedexApp_OnSearchTypeGridMove(PokedexAppData *pokedexApp, int target, int
             s32 previous = pokedexApp->prevGridInput;
             if (previous >= 14 && previous <= 15) {
                 target = previous % 4;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)target, (u8)input, 19);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 19);
             } else if (previous >= 2 && previous <= 3) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)previous, (u8)input, 19);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)previous, (u8)input, 19);
             }
         } else if (target == 15) {
             s32 previous = pokedexApp->prevGridInput;
             if (previous >= 2 && previous <= 3) {
                 target = previous + 12;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)target, (u8)input, 19);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 19);
             } else if (previous >= 14 && previous <= 15) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)previous, (u8)input, 19);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)previous, (u8)input, 19);
             }
         }
     }
@@ -431,7 +431,7 @@ void PokedexApp_OnSearchTypeGridTouch(PokedexAppData *pokedexApp, int target, in
 #pragma force_active on
 
 void PokedexApp_CreateSearchHeightGrid(PokedexAppData *pokedexApp) {
-    pokedexApp->unk_1864 = GridInputHandler_Create(sSearchHeightHitboxes, sSearchHeightDpadBoxes, &sSearchHeightGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
+    pokedexApp->gridInput = GridInputHandler_Create(sSearchHeightHitboxes, sSearchHeightDpadBoxes, &sSearchHeightGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
     PokedexApp_SetSpriteVisible(pokedexApp, 0, TRUE);
     PokedexApp_UpdateSearchHeightCursor(pokedexApp, 0);
 }
@@ -440,7 +440,7 @@ void PokedexApp_CreateSearchHeightGrid(PokedexAppData *pokedexApp) {
 
 // Two slider handles (targets 0 and 1): left / right move the selected one; dragging a handle selects it.
 u32 PokedexApp_HandleSearchHeightInput(PokedexAppData *pokedexApp) {
-    int next = GridInputHandler_GetNextInput(pokedexApp->unk_1864);
+    int next = GridInputHandler_GetNextInput(pokedexApp->gridInput);
     unsigned hit, index;
 
     MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_BUTTONS);
@@ -467,11 +467,11 @@ u32 PokedexApp_HandleSearchHeightInput(PokedexAppData *pokedexApp) {
     if (hit != (unsigned)-1) {
         MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_TOUCH);
         index = hit >> 1;
-        GridInputHandler_SetNextInput(pokedexApp->unk_1864, (u8)index);
+        GridInputHandler_SetNextInput(pokedexApp->gridInput, (u8)index);
         PokedexApp_UpdateSearchHeightCursor(pokedexApp, index);
         return hit + 4;
     }
-    return GridInputHandler_HandleInput_AllowHold(pokedexApp->unk_1864);
+    return GridInputHandler_HandleInput_AllowHold(pokedexApp->gridInput);
 }
 
 #pragma opt_common_subs reset
@@ -480,7 +480,7 @@ u32 PokedexApp_HandleSearchHeightInput(PokedexAppData *pokedexApp) {
 void PokedexApp_UpdateSearchHeightCursor(PokedexAppData *pokedexApp, int target) {
     u8 x, y;
 
-    DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(pokedexApp->unk_1864, target), &x, &y);
+    DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(pokedexApp->gridInput, target), &x, &y);
     if (target == 0) {
         x = PokedexApp_SliderValueToX(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX]);
     } else if (target == 1) {
@@ -505,7 +505,7 @@ void PokedexApp_OnSearchHeightGridTouch(PokedexAppData *pokedexApp, int target, 
 #pragma force_active on
 
 void PokedexApp_CreateSearchWeightGrid(PokedexAppData *pokedexApp) {
-    pokedexApp->unk_1864 = GridInputHandler_Create(sSearchWeightHitboxes, sSearchWeightDpadBoxes, &sSearchWeightGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
+    pokedexApp->gridInput = GridInputHandler_Create(sSearchWeightHitboxes, sSearchWeightDpadBoxes, &sSearchWeightGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
     PokedexApp_SetSpriteVisible(pokedexApp, 0, TRUE);
     PokedexApp_UpdateSearchWeightCursor(pokedexApp, 0);
 }
@@ -514,7 +514,7 @@ void PokedexApp_CreateSearchWeightGrid(PokedexAppData *pokedexApp) {
 
 // Two slider handles (targets 0 and 1): left / right move the selected one; dragging a handle selects it.
 u32 PokedexApp_HandleSearchWeightInput(PokedexAppData *pokedexApp) {
-    int next = GridInputHandler_GetNextInput(pokedexApp->unk_1864);
+    int next = GridInputHandler_GetNextInput(pokedexApp->gridInput);
     unsigned hit, index;
 
     MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_BUTTONS);
@@ -541,11 +541,11 @@ u32 PokedexApp_HandleSearchWeightInput(PokedexAppData *pokedexApp) {
     if (hit != (unsigned)-1) {
         MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_TOUCH);
         index = hit >> 1;
-        GridInputHandler_SetNextInput(pokedexApp->unk_1864, (u8)index);
+        GridInputHandler_SetNextInput(pokedexApp->gridInput, (u8)index);
         PokedexApp_UpdateSearchWeightCursor(pokedexApp, index);
         return hit + 4;
     }
-    return GridInputHandler_HandleInput_AllowHold(pokedexApp->unk_1864);
+    return GridInputHandler_HandleInput_AllowHold(pokedexApp->gridInput);
 }
 
 #pragma opt_common_subs reset
@@ -554,7 +554,7 @@ u32 PokedexApp_HandleSearchWeightInput(PokedexAppData *pokedexApp) {
 void PokedexApp_UpdateSearchWeightCursor(PokedexAppData *pokedexApp, int target) {
     u8 x, y;
 
-    DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(pokedexApp->unk_1864, target), &x, &y);
+    DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(pokedexApp->gridInput, target), &x, &y);
     if (target == 0) {
         x = PokedexApp_SliderValueToX(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX]);
     } else if (target == 1) {
@@ -584,7 +584,7 @@ u32 PokedexApp_GetTouchHeldX(u32 *x) {
 }
 
 void PokedexApp_CreateSearchAreaGrid(PokedexAppData *pokedexApp) {
-    pokedexApp->unk_1864 = GridInputHandler_Create(sSearchAreaHitboxes, sSearchAreaDpadBoxes, &sSearchAreaGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
+    pokedexApp->gridInput = GridInputHandler_Create(sSearchAreaHitboxes, sSearchAreaDpadBoxes, &sSearchAreaGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
     PokedexApp_SetSpriteVisible(pokedexApp, 0, TRUE);
     PokedexApp_UpdateSearchAreaCursor(pokedexApp, 0);
 }
@@ -594,12 +594,12 @@ u32 PokedexApp_HandleSearchAreaInput(PokedexAppData *pokedexApp) {
     if (gSystem.newKeys & PAD_BUTTON_START) {
         return 4;
     }
-    return GridInputHandler_HandleInput_AllowHold(pokedexApp->unk_1864);
+    return GridInputHandler_HandleInput_AllowHold(pokedexApp->gridInput);
 }
 
 void PokedexApp_UpdateSearchAreaCursor(PokedexAppData *pokedexApp, int target) {
     u8 x, y;
-    const DpadMenuBox *box = GridInputHandler_GetDpadBox(pokedexApp->unk_1864, target);
+    const DpadMenuBox *box = GridInputHandler_GetDpadBox(pokedexApp->gridInput, target);
 
     DpadMenuBox_GetPosition(box, &x, &y);
     ManagedSprite_SetPositionXY(pokedexApp->sprites[0], x, y);
@@ -619,7 +619,7 @@ void PokedexApp_OnSearchAreaGridTouch(PokedexAppData *pokedexApp, int target, in
 }
 
 void PokedexApp_CreateSearchFormGrid(PokedexAppData *pokedexApp) {
-    pokedexApp->unk_1864 = GridInputHandler_Create(sSearchFormHitboxes, sSearchFormDpadBoxes, &sSearchFormGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
+    pokedexApp->gridInput = GridInputHandler_Create(sSearchFormHitboxes, sSearchFormDpadBoxes, &sSearchFormGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
     PokedexApp_SetSpriteVisible(pokedexApp, 0, TRUE);
     PokedexApp_UpdateSearchFormCursor(pokedexApp, 0);
 }
@@ -629,12 +629,12 @@ u32 PokedexApp_HandleSearchFormInput(PokedexAppData *pokedexApp) {
     if (gSystem.newKeys & PAD_BUTTON_START) {
         return 15;
     }
-    return GridInputHandler_HandleInput_AllowHold(pokedexApp->unk_1864);
+    return GridInputHandler_HandleInput_AllowHold(pokedexApp->gridInput);
 }
 
 void PokedexApp_UpdateSearchFormCursor(PokedexAppData *pokedexApp, int target) {
     u8 pos[2];
-    const DpadMenuBox *box = GridInputHandler_GetDpadBox(pokedexApp->unk_1864, target);
+    const DpadMenuBox *box = GridInputHandler_GetDpadBox(pokedexApp->gridInput, target);
 
     DpadMenuBox_GetPosition(box, &pos[1], &pos[0]);
     ManagedSprite_SetPositionXY(pokedexApp->sprites[0], pos[1], pos[0]);
@@ -650,19 +650,19 @@ void PokedexApp_OnSearchFormGridMove(PokedexAppData *pokedexApp, int target, int
             previous = pokedexApp->prevGridInput;
             if (previous >= 0 && previous <= 2) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)target, (u8)input, 15);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 15);
             } else if (previous >= 10 && previous <= 12) {
                 target = previous % 5;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)target, (u8)input, 15);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 15);
             }
         } else if (target == 10) {
             previous = pokedexApp->prevGridInput;
             if (previous >= 0 && previous <= 2) {
                 target = previous + 10;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)target, (u8)input, 15);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 15);
             } else if (previous >= 10 && previous <= 12) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)target, (u8)input, 15);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 15);
             }
         }
     } else if (input == 16) {
@@ -670,19 +670,19 @@ void PokedexApp_OnSearchFormGridMove(PokedexAppData *pokedexApp, int target, int
             previous = pokedexApp->prevGridInput;
             if (previous >= 3 && previous <= 4) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)target, (u8)input, 16);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 16);
             } else if (previous >= 13 && previous <= 14) {
                 target = previous % 5;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)target, (u8)input, 16);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 16);
             }
         } else if (target == 14) {
             previous = pokedexApp->prevGridInput;
             if (previous >= 3 && previous <= 4) {
                 target = previous + 10;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)target, (u8)input, 16);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 16);
             } else if (previous >= 13 && previous <= 14) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->unk_1864, (u8)target, (u8)input, 16);
+                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 16);
             }
         }
     }
@@ -799,9 +799,9 @@ u32 PokedexApp_HandleSearchResultListInput(PokedexAppData *pokedexApp, int mode)
 }
 
 void PokedexApp_FreeGridInput(PokedexAppData *pokedexApp) {
-    if (pokedexApp->unk_1864 != NULL) {
-        GridInputHandler_Free(pokedexApp->unk_1864);
-        pokedexApp->unk_1864 = NULL;
+    if (pokedexApp->gridInput != NULL) {
+        GridInputHandler_Free(pokedexApp->gridInput);
+        pokedexApp->gridInput = NULL;
     }
 }
 
@@ -855,21 +855,21 @@ u32 PokedexApp_HandleAreaInput(PokedexAppData *pokedexApp, u32 *touched) {
         return 7;
     }
     if (gSystem.newKeys & PAD_BUTTON_A) {
-        if (pokedexApp->unk_18C9 == 0) {
+        if (pokedexApp->areaTimeOfDay == 0) {
             return 14;
         }
-        if (pokedexApp->unk_18C9 == 1) {
+        if (pokedexApp->areaTimeOfDay == 1) {
             return 15;
         }
         return 13;
     }
     if (gSystem.newKeys & PAD_BUTTON_SELECT) {
-        if (pokedexApp->unk_18C8 == 0) {
+        if (pokedexApp->areaRegion == 0) {
             return 12;
         }
         return 11;
     }
-    if (pokedexApp->unk_18C8 == 0) {
+    if (pokedexApp->areaRegion == 0) {
         if (gSystem.newKeys & PAD_BUTTON_R) {
             return 12;
         }
@@ -956,13 +956,13 @@ u32 PokedexApp_HandleFormCompareInput(PokedexAppData *pokedexApp, u32 *touched) 
     }
     *touched = 0;
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
-        if (pokedexApp->unk_18C7_0 == 0) {
+        if (pokedexApp->compareSide == 0) {
             return 0;
         }
         return 2;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
-        if (pokedexApp->unk_18C7_0 == 0) {
+        if (pokedexApp->compareSide == 0) {
             return 1;
         }
         return 3;

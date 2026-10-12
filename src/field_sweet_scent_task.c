@@ -55,7 +55,7 @@ BOOL Task_UseSweetScentInField(TaskManager *taskManager) {
         break;
     case 4: {
         u8 kind;
-        if (ov02_02250780(fieldSystem, 12)) {
+        if (FieldSystem_FirstAliveMonHasType(fieldSystem, 12)) {
             kind = 2;
             FieldSystem_UnkSub108_AddMonMood(fieldSystem->unk108, 1);
         } else {

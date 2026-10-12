@@ -1091,8 +1091,8 @@ void VsRecorder_SetDressUpSendButtonHidden(VsRecorderWork *work, BOOL hidden) {
 void VsRecorder_CreateDressUpButtons(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
     ov40_0222D6EC(work, NNS_G2D_VRAM_TYPE_2DSUB);
-    dressUp->exitButton.sprite = ov40_0222D800(work, NNS_G2D_VRAM_TYPE_2DSUB);
-    dressUp->sendButton.sprite = ov40_0222D800(work, NNS_G2D_VRAM_TYPE_2DSUB);
+    dressUp->exitButton.sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
+    dressUp->sendButton.sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_CreateTextSprite(&dressUp->exitButton, (VsRecorderGfx *)&work->narc, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_CreateTextSprite(&dressUp->sendButton, (VsRecorderGfx *)&work->narc, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_SetTextSpriteMsg(&dressUp->exitButton, (VsRecorderGfx *)&work->narc, 3);  // EXIT
@@ -1116,7 +1116,7 @@ void VsRecorder_FreeDressUpButtons(VsRecorderWork *work) {
     VsRecorder_FreeTextSprite(&dressUp->sendButton);
     Sprite_DeleteAndFreeResources(dressUp->exitButton.sprite);
     Sprite_DeleteAndFreeResources(dressUp->sendButton.sprite);
-    ov40_0222D7DC(work);
+    VsRecorder_FreeButtonGfx(work);
 }
 
 // caption under the player's own photo: the Pokemon's name and the photo's phrase

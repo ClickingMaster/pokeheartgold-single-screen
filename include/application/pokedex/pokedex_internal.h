@@ -278,7 +278,7 @@ typedef struct PokedexAppData_UnkSub1850 {
 struct PokedexAppData {
     PokedexArgs *args;                              // 0x0000
     BgConfig *bgConfig;                             // 0x0004
-    BgCellManager *unk_0008;                        // 0x0008
+    BgCellManager *bgCellManager;                   // 0x0008
     Window windows[101];                            // 0x000C
     MsgData *msgData;                               // 0x065C
     MessageFormat *msgFormat;                       // 0x0660
@@ -289,52 +289,52 @@ struct PokedexAppData {
     PaletteData *paletteData;                       // 0x0850
     NARC *gfxNarc;                                  // 0x0854
     NARC *iconNarc;                                 // 0x0858
-    int unk_085C;                                   // 0x085C
-    int unk_0860;                                   // 0x0860
-    u32 unk_0864;                                   // 0x0864
-    PokedexAppData_UnkSub0868 unk_0868;             // 0x0868
-    PokedexAppData_UnkSub0878 unk_0878;             // 0x0878
-    PokedexAppData_UnkSub1030 unk_1030[518];        // 0x1030
+    int nextSeq;                                    // 0x085C
+    int fadeNextSeq;                                // 0x0860
+    u32 keyInput;                                   // 0x0864
+    PokedexAppData_UnkSub0868 seqState;             // 0x0868
+    PokedexAppData_UnkSub0878 searchResults;        // 0x0878
+    PokedexAppData_UnkSub1030 listEntries[518];     // 0x1030
     void *heights;                                  // 0x1848
     void *weights;                                  // 0x184C
-    PokedexAppData_UnkSub1850 *unk_1850;            // 0x1850
-    u8 *unk_1854;                                   // 0x1854
-    u8 unk_1858;                                    // 0x1858
+    PokedexAppData_UnkSub1850 *sliderValues;        // 0x1850
+    u8 *speciesAreaMasks;                           // 0x1854
+    u8 dexMode;                                     // 0x1858
     u8 listPage;                                    // 0x1859 list / search result page
     u8 listCursor;                                  // 0x185A cursor on the page (5 per row)
-    u8 unk_185B;                                    // 0x185B
+    u8 entryTab;                                    // 0x185B
     u8 language;                                    // 0x185C language of the shown entry
     u8 unk_185D;                                    // 0x185D
     u8 iconPage;                                    // 0x185E which of the two icon grid sprite sets is shown
     u8 monPicSwap : 4;                              // 0x185F which of the two picture sprites is shown
     u8 typeIconSwap : 4;                            // 0x185F which type icon pair is shown
-    int unk_1860;                                   // 0x1860
-    GridInputHandler *unk_1864;                     // 0x1864
+    int nationalDex;                                // 0x1860
+    GridInputHandler *gridInput;                    // 0x1864
     u32 dexSearchCriteria[DEX_SEARCH_CRITERIA_NUM]; // 0x1868
     u32 dexSearchCriteriaBak[2];                    // 0x1890
-    int unk_1898;                                   // 0x1898
+    int subBgPriorityRequest;                       // 0x1898
     int prevGridInput;                              // 0x189C search grids: input before the OK / cancel buttons
-    u8 unk_18A0;                                    // 0x18A0
+    u8 entryFromSearch;                             // 0x18A0
     u8 unk_18A1;                                    // 0x18A1
     u16 curSpecies;                                 // 0x18A2
     u8 seenForms[0x20];                             // 0x18A4
     s8 numSeenForms;                                // 0x18C4
-    s8 unk_18C5;                                    // 0x18C5
-    s8 unk_18C6;                                    // 0x18C6
-    u8 unk_18C7_0 : 5;                              // 0x18C7
+    s8 selectedForm;                                // 0x18C5
+    s8 compareForm;                                 // 0x18C6
+    u8 compareSide : 5;                             // 0x18C7
     u8 formPicSwapA : 1;                            // 0x18C7 which sprite pair shows the (left) form picture
     u8 formPicSwapB : 1;                            // 0x18C7 same for the compare screen's right picture
     u8 unk_18C7_7 : 1;                              // 0x18C7
-    s8 unk_18C8;                                    // 0x18C8
-    s8 unk_18C9;                                    // 0x18C9
-    s8 unk_18CA;                                    // 0x18CA
-    u8 unk_18CB_0 : 6;                              // 0x18CB
-    u8 unk_18CB_6 : 1;                              // 0x18CB
-    u8 unk_18CB_7 : 1;                              // 0x18CB
-    PokedexAppData_UnkSub18CC unk_18CC;             // 0x18CC
-    PokedexAppData_UnkSub18DC unk_18DC;             // 0x18DC
-    PokedexAppData_UnkSub1908 *unk_1908;            // 0x1908
-    PokedexAppData_UnkSub190C *unk_190C;            // 0x190C
+    s8 areaRegion;                                  // 0x18C8
+    s8 areaTimeOfDay;                               // 0x18C9
+    s8 areaListPos;                                 // 0x18CA
+    u8 areaBlinkAlpha : 6;                          // 0x18CB
+    u8 areaBlinkPhase : 1;                          // 0x18CB
+    u8 areaBlinkFadingOut : 1;                      // 0x18CB
+    PokedexAppData_UnkSub18CC sizeCheckData;        // 0x18CC
+    PokedexAppData_UnkSub18DC areaList;             // 0x18DC
+    PokedexAppData_UnkSub1908 *dungeonAreaTable;    // 0x1908
+    PokedexAppData_UnkSub190C *overworldAreaTable;  // 0x190C
 }; // size: 0x1910
 
 void PokedexApp_VBlankCallback(void *cb_arg);

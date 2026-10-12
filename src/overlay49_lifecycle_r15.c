@@ -39,7 +39,7 @@ typedef struct Ov49Work15 {
 
 extern void ov45_02230700(void *, u8);
 extern void WiFiPlazaEvent_Delete(void *);
-extern void ov49_0226535C(void *);
+extern void WiFiPlazaInstrument_Delete(void *);
 extern void ov49_0225EEF8(void *);
 extern void ov49_0225B4E4(void *, void *, void *);
 extern void ov49_0225B35C(void *);
@@ -82,7 +82,7 @@ extern void ov49_0225B9AC(void *, void *, void *, u32, void *);
 extern void *ov49_0225EEAC(void *, u32);
 extern void ov49_0225F1A8(void *);
 extern void ov49_0225F1F0(void *);
-extern void *ov49_022652E8(void *, void *, void *, void *, u32, u32);
+extern void *WiFiPlazaInstrument_Create(void *, void *, void *, void *, u32, u32);
 extern void *WiFiPlazaEvent_Create(u32, void *);
 extern void ov49_0225A5C8(void *);
 extern void BeginNormalPaletteFade(u32, u32, u32, u32, u32, u32, u32);
@@ -158,7 +158,7 @@ BOOL ov49_02259AA4(OverlayManager *manager, int *unused) {
     *(void **)((u8 *)work + 0x3F0) = ov49_0225EEAC(work, 0x77);
     ov49_0225F1A8(work);
     ov49_0225F1F0(work);
-    *(void **)((u8 *)work + 0x3D4) = ov49_022652E8(work->owner, *(void **)((u8 *)work + 0x3E8), *(void **)((u8 *)work + 0x3EC), *(void **)((u8 *)work + 0x3E0), 0x77, 0x78);
+    *(void **)((u8 *)work + 0x3D4) = WiFiPlazaInstrument_Create(work->owner, *(void **)((u8 *)work + 0x3E8), *(void **)((u8 *)work + 0x3EC), *(void **)((u8 *)work + 0x3E0), 0x77, 0x78);
     *(void **)((u8 *)work + 0x3DC) = WiFiPlazaEvent_Create(0x77, work);
     Main_SetVBlankIntrCB(ov49_0225A5C8, work);
     HBlankInterruptDisable();
@@ -270,7 +270,7 @@ BOOL ov49_02259EF8(OverlayManager *manager) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     WiFiPlazaEvent_Delete(*(void **)((u8 *)work + 0x3DC));
-    ov49_0226535C(*(void **)((u8 *)work + 0x3D4));
+    WiFiPlazaInstrument_Delete(*(void **)((u8 *)work + 0x3D4));
     ov49_0225EEF8(*(void **)((u8 *)work + 0x3F0));
     ov49_0225B4E4((u8 *)work + 0x184, (u8 *)work + 0x318, (u8 *)work + 0x3C);
     ov49_0225B35C((u8 *)work + 0x2DC);

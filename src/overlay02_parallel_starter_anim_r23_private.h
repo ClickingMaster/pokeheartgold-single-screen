@@ -16,8 +16,8 @@ extern const VecFx32 ov02_02253378;
 
 void *FieldEffect_GetState(void *);
 void *ov02_0224B298(void *, void *);
-void *ov01_021FCD2C(void *, int);
-void ov01_021FCD8C(void *, int, fx32, int);
+void *FieldCameraZoom_Start(void *, int);
+void FieldCameraZoom_Set(void *, int, fx32, int);
 void ov02_0224B2C0(void *);
 void ov02_0224B2CC(void *);
 void ov02_0224B6B0(void *, int);

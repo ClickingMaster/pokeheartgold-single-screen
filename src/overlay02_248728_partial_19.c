@@ -18,8 +18,8 @@ void ov02_0224D690(void *);
 void ov02_0224D9B8(void *);
 void ov02_0224DC8C(void *);
 void ov02_0224DE08(void *);
-void ov02_0224F644(void *, void *);
-void ov02_0224F8F4(void *);
+void FollowMonSituation_SetMapId(void *, void *);
+void FollowMonInteraction_Delete(void *);
 u8 ov02_02248D8C(void *);
 void ov02_02248DE4(void *, void *);
 void *ov02_022493F0(void);
@@ -51,7 +51,7 @@ void ov02_0224D648(u32, u32, void *);
 void ov02_0224DB8C(u32, u32, void *);
 int ov02_0224E4CC(void *, u32);
 int ov02_0224E4DC(void *, u32);
-int ov02_0224FB44(void *, u16 *);
+int FollowMonInteraction_StepHasMovement(void *, u16 *);
 void FieldSystem_FollowMonInteract(void *);
 void ov02_02248C98(void *, void *);
 void ov02_02249444(void *, u32);
@@ -78,7 +78,7 @@ void ov02_0224DDE0(void *);
 void ov02_0224DDF4(void *);
 int ov02_0224E308(u32);
 int ov02_0224EF6C(void *, u32, u32);
-void ov02_0224F698(void *, void *);
+void FollowMonSituation_SetMood(void *, void *);
 int ov02_02249CD8(void *);
 void ov02_0224A450(void *);
 int ov02_0224D2F8(void *);
@@ -98,12 +98,12 @@ void ov02_0224DDC8(u32, u32, void *);
 void ov02_0224E008(void *);
 void ov02_0224E0BC(void *, void *, void *);
 void *ov02_0224E0D4(void *, void *);
-int ov02_0224FC74(void *, void *);
+int FollowMonInteraction_StepHasWait(void *, void *);
 void ov02_02249D40(void *);
 void ov02_0224B768(void *);
 void ov02_0224D0AC(void *, void *);
 int ov02_0224E340(void *);
-void *ov02_0224F864(u32);
+void *FollowMonInteraction_New(u32);
 int ov02_02249754(void *);
 int ov02_02249838(void *);
 int ov02_02249AF0(void *);
@@ -143,7 +143,7 @@ void ov02_0224AB9C(void *p) {
         FieldEffect_Destroy(PTR(q, 0x60));
     }
     if (PTR(q, 0x64)) {
-        ov01_021FCD78(PTR(q, 0x64));
+        FieldCameraZoom_End(PTR(q, 0x64));
     }
     FieldEffect_Destroy(PTR(p, 0x1ec));
 }

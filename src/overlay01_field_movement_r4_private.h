@@ -177,7 +177,7 @@ void FieldBGM_TryFadeOut(FieldSystem *fieldSystem, u16 seqNo, int mode);
 u16 SndRadio_GetSeqNo(void);
 void FieldSystem_ProcessSoundplate(FieldSystem *fieldSystem, int a1);
 void FieldBGM_SetOverride(FieldSystem *fieldSystem, u16 seqNo);
-BOOL ov02_02250780(FieldSystem *fieldSystem, int a1);
+BOOL FieldSystem_FirstAliveMonHasType(FieldSystem *fieldSystem, int a1);
 void ov02_022507B4(FieldSystem *fieldSystem, int a1);
 void FieldSystem_UnkSub108_AddMonMood(void *unk108, int amount);
 void RockClimbEffect_SetFollow(u32 a0, int a1);

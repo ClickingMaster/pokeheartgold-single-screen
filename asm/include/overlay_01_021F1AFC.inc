@@ -130,5 +130,5 @@
 .public ov02_0224D690
 .public ov02_0224D9A4
 .public ov02_0224D9B8
-.public ov02_02250780
+.public FieldSystem_FirstAliveMonHasType
 .public ov02_022507B4

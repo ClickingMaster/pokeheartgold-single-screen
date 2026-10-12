@@ -37,7 +37,7 @@ void VsRecorder_FreeExitButton(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
     VsRecorder_FreeTextSprite(&savedVideo->exitButton);
     Sprite_DeleteAndFreeResources(savedVideo->exitButton.sprite);
-    ov40_0222D7DC(work);
+    VsRecorder_FreeButtonGfx(work);
 }
 
 void VsRecorder_PlaceFrontierExitButton(VsRecorderWork *work, BOOL left) {
@@ -63,13 +63,13 @@ void VsRecorder_LoadFrontierButtonGfx(VsRecorderWork *work, u32 vram) {
 void VsRecorder_CreateFrontierButtons(VsRecorderWork *work) {
     VsRecorderFrontierRecord *record = work->screenWork;
     VsRecorder_LoadFrontierButtonGfx(work, NNS_G2D_VRAM_TYPE_2DSUB);
-    record->exitButton.sprite = ov40_0222D800(work, NNS_G2D_VRAM_TYPE_2DSUB);
+    record->exitButton.sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_CreateTextSprite(&record->exitButton, (VsRecorderGfx *)&work->narc, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_SetTextSpriteMsg(&record->exitButton, (VsRecorderGfx *)&work->narc, 3); // EXIT
     ManagedSprite_SetPositionXY(record->exitButton.sprite, 128, 232);
     TextOBJ_SetPosition(record->exitButton.text, 36, -8);
     TextOBJ_SetSpritesDrawFlag(record->exitButton.text, TRUE);
-    record->unk_98 = ov40_0222D800(work, NNS_G2D_VRAM_TYPE_2DSUB);
+    record->unk_98 = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
     ManagedSprite_SetPositionXY(record->unk_98, 220, 224);
     ManagedSprite_SetAnim(record->unk_98, 2);
     ManagedSprite_SetDrawFlag(record->unk_98, FALSE);
@@ -81,7 +81,7 @@ void VsRecorder_FreeFrontierButtons(VsRecorderWork *work) {
     VsRecorder_FreeTextSprite(&record->exitButton);
     Sprite_DeleteAndFreeResources(record->exitButton.sprite);
     Sprite_DeleteAndFreeResources(record->unk_98);
-    ov40_0222D7DC(work);
+    VsRecorder_FreeButtonGfx(work);
 }
 
 #pragma force_active on

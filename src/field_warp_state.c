@@ -126,7 +126,7 @@ BOOL FieldTask_Fly(void *task) {
             break;
         }
         if (FollowMon_IsVisible(fs)) {
-            if (ov02_02250780(fs, 2)) {
+            if (FieldSystem_FirstAliveMonHasType(fs, 2)) {
                 kind = 2;
                 FieldSystem_UnkSub108_AddMonMood(*(void **)(fs + 0x108), 1);
             } else {

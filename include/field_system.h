@@ -121,56 +121,87 @@ typedef struct FieldSystemUnkSub108 {
     Pokemon *mon;
 } FieldSystemUnkSub108;
 
-typedef struct FieldSystemUnkSub120_Sub7E4 {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u8 unk6;
-    u8 unk7;
-} FieldSystemUnkSub120_Sub7E4;
+// One entry of the following Pokemon's interaction tables: the conditions under which the interaction script
+// is picked. Zero means "any" for every condition.
+typedef struct FollowMonRule {
+    u8 hp;             // hp bucket (FollowMonSituation.hpBucket)
+    u8 mood : 4;       // mood range, see FollowMonRule_CheckMood
+    u8 friendship : 4; // friendship range, see FollowMonRule_CheckFriendship
+    u8 natureGroup : 3;
+    u8 gender : 2;
+    u8 status : 3;   // 7: any of poison, burn, freeze, paralysis or sleep
+    u8 heldItem : 5; // held item pocket; 9: any held item
+    u8 unused_3 : 3;
+    u8 type : 5; // either of the Pokemon's types
+    u8 pokeathlonStat : 3;
+    u8 encounterTile;
+    u8 speciesAttr; // see FollowMonRule_CheckSpeciesAttr
+    u8 shinyLeaf;   // see FollowMonRule_CheckShinyLeaf
+    u16 weather : 3;
+    u16 unused_8 : 10;
+    u16 facing : 3;
+    u16 nearbyObjects : 3; // 5: five or more
+    u16 timeOfDay : 3;
+    u16 script : 10; // interaction script picked when every condition holds
+    u16 mapId;       // map id + 1
+    u16 metatileBehavior;
+    u8 unused_10 : 1;
+    u8 level : 2;
+    u8 nearbyRock : 2;
+    u8 hiddenItems : 3; // 4: four or more
+    u8 chance;          // percent
+    u16 flag;           // flag that must be set
+} FollowMonRule;
 
-typedef struct FieldSystemUnkSub120_Sub818 {
-    u8 unk0;
-    u8 unk1;
-    s8 unk2;
+// One step of an interaction script.
+typedef struct FollowMonInteractionStep {
+    u16 movement; // movement script + 1
+    u16 message;  // message + 1
+    u16 sound;    // sound effect, or a cry above SEQ_SE_END
+    u8 emote;     // emote bubble + 1
+    u8 wait;      // frames to wait after the step
+} FollowMonInteractionStep;
+
+// One step of an interaction movement script.
+typedef struct FollowMonMovementStep {
+    u8 facing; // direction + 1; 0xFF ends the script
+    u8 duration;
+    s8 dx;
     s8 unk3;
-    s8 unk4;
-    u8 unk5;
+    s8 dz;
+    u8 playSound;
     u8 unk6;
     u8 unk7;
-} FieldSystemUnkSub120_Sub818;
+} FollowMonMovementStep;
 
-typedef struct FieldSystemUnkSub120 {
+typedef struct FollowMonInteraction {
     Window window;
     String *string;
-    NarcId narcId;
-    u8 unk18[596];
-    NarcId unk26C;
-    u8 unk270[1396];
-    FieldSystemUnkSub120_Sub7E4 unk7E4[5];
-    u32 unk80C;
-    u16 unk810;
-    u16 unk812;
-    s8 unk814;
-    s8 unk815;
-    u8 unk816;
-    u8 unk817;
-    FieldSystemUnkSub120_Sub818 unk818[10];
-    u8 unk868;
-    u8 unk869;
-    u8 unk86A;
-    u8 unk86B;
-    u8 unk86C_3 : 4;
-    u8 unk86C_4 : 4;
-    u8 unk86D;
-    u16 unk86E;
-    VecFx32 unk870;
-    u8 unk87C;
-    u8 unk87D;
-    u16 unk87E;
-    u16 unk880;
-    u16 unk882;
-} FieldSystemUnkSub120;
+    FollowMonRule rules[100]; // 0-29 for the current map section, 30-99 everywhere
+    FollowMonInteractionStep steps[5];
+    u32 askQuestion;
+    u16 yesScript;
+    u16 noScript;
+    s8 friendshipChange;
+    s8 moodChange;
+    u8 accessory; // accessory + 1 to give
+    u8 shinyLeaf; // shiny leaf to give
+    FollowMonMovementStep movements[10];
+    u8 movementState;
+    u8 state;
+    u8 movementFrame;
+    u8 movementIndex;
+    u8 stepIndex : 4;
+    u8 stepCount : 4;
+    u8 waitFrames;
+    u16 printerId;
+    VecFx32 savedPosition;
+    u8 savedFacing;
+    u8 form;
+    u16 species;
+    u16 answer; // yes/no answer
+    u16 metatileBehavior;
+} FollowMonInteraction;
 
 struct FieldSystem {
     FieldProcessManager *processManager;
@@ -243,7 +274,7 @@ struct FieldSystem {
     GearPhoneRingManager *phoneRingManager;
     BugContest *bugContest;
     fx32 unk11C;
-    FieldSystemUnkSub120 *unk120;
+    FollowMonInteraction *followMonInteraction;
     u32 judgeStatPosition;
 }; // size: 0x128
 

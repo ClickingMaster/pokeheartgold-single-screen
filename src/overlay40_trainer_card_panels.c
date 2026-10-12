@@ -100,7 +100,7 @@ void ov40_02241054(void *p) {
     pb = b.v;
     src = (u8 *)src + 0x14;
     for (; i < 4; i++) {
-        WORD(w, 0x14) = (u32)ov40_0222D800(p, 2);
+        WORD(w, 0x14) = (u32)VsRecorder_NewButtonSprite(p, 2);
         VsRecorder_CreateTextSprite(obj, src, 2);
         VsRecorder_SetTextSpriteMsg(obj, src, *pa);
         if (i != 3) {
@@ -129,7 +129,7 @@ void ov40_02241114(void *p) {
         q = (u8 *)q + 0x1C;
         w = (u8 *)w + 0x1C;
     }
-    ov40_0222D7DC(p);
+    VsRecorder_FreeButtonGfx(p);
 }
 
 int ov40_02241144(void *p) {

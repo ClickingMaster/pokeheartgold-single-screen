@@ -467,8 +467,8 @@ void ov40_02241F74(void *p, int a) {
 void ov40_02241FD0(void *p) {
     void *w = PTR(p, 0x860);
     ov40_0222D6EC(p, 1);
-    PTR(w, 0x14) = ov40_0222D800(p, 1);
-    PTR(w, 0x30) = ov40_0222D800(p, 1);
+    PTR(w, 0x14) = VsRecorder_NewButtonSprite(p, 1);
+    PTR(w, 0x30) = VsRecorder_NewButtonSprite(p, 1);
     VsRecorder_CreateTextSprite((u8 *)w + 0x10, (u8 *)p + 0x14, 1);
     VsRecorder_CreateTextSprite((u8 *)w + 0x2C, (u8 *)p + 0x14, 1);
     VsRecorder_SetTextSpriteMsg((u8 *)w + 0x10, (u8 *)p + 0x14, 3);
@@ -490,7 +490,7 @@ void ov40_02242084(void *p) {
     VsRecorder_FreeTextSprite((u8 *)w + 0x2C);
     Sprite_DeleteAndFreeResources(PTR(w, 0x14));
     Sprite_DeleteAndFreeResources(PTR(w, 0x30));
-    ov40_0222D7DC(p);
+    VsRecorder_FreeButtonGfx(p);
 }
 
 void ov40_022420B4(void *p, int a) {
@@ -511,8 +511,8 @@ void ov40_022420B4(void *p, int a) {
 void ov40_02242110(void *p) {
     void *w = PTR(p, 0x860);
     ov40_0222D6EC(p, 2);
-    PTR(w, 0x14) = ov40_0222D800(p, 2);
-    PTR(w, 0x30) = ov40_0222D800(p, 2);
+    PTR(w, 0x14) = VsRecorder_NewButtonSprite(p, 2);
+    PTR(w, 0x30) = VsRecorder_NewButtonSprite(p, 2);
     VsRecorder_CreateTextSprite((u8 *)w + 0x10, (u8 *)p + 0x14, 2);
     VsRecorder_CreateTextSprite((u8 *)w + 0x2C, (u8 *)p + 0x14, 2);
     if (WORD(p, 0x86C) == 0xD2) {
@@ -541,7 +541,7 @@ void ov40_022421FC(void *p) {
     VsRecorder_FreeTextSprite((u8 *)w + 0x2C);
     Sprite_DeleteAndFreeResources(PTR(w, 0x14));
     Sprite_DeleteAndFreeResources(PTR(w, 0x30));
-    ov40_0222D7DC(p);
+    VsRecorder_FreeButtonGfx(p);
 }
 
 BOOL ov40_0224222C(void *p) {
@@ -720,14 +720,14 @@ int ov40_022425E8(void *p) {
         if (VsRecorder_StepBlend((int *)w, (int *)w + 1, 1, 2)) {
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
             ov40_02240F24(p, 0x116, 0);
-            ov40_022306E0(p);
+            VsRecorder_ResetRecordSave(p);
             WORD(p, 8)
             ++;
         }
         BLEND(p, w, 3, 0xC);
         break;
     case 2:
-        if (ov40_0222FC14(p, WORD(w, 0x1C8), BYTE(w, 0x79C))) {
+        if (VsRecorder_StepRecordSave(p, WORD(w, 0x1C8), BYTE(w, 0x79C))) {
             BYTE(w, 0x79C) = 0;
             WORD(p, 8)
             ++;

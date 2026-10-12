@@ -376,6 +376,72 @@ typedef struct VsRecorderBoxData {
     int cursorY;
 } VsRecorderBoxData; // size 0x2F70
 
+// one ranking of this week: the record and the current order of its teams (no scores yet)
+typedef struct VsRecorderRankingStandings {
+    u8 recordId; // msg_0026 message + 1
+    u8 unk_01[3];
+    u8 trainerTypes[16];
+    u8 birthMonths[12];
+    u16 species[20];
+} VsRecorderRankingStandings; // size 0x48
+
+// last week's result of a ranking: the teams in rank order with their scores
+typedef struct VsRecorderRankingResults {
+    u8 recordId; // msg_0026 message + 1
+    u8 unk_01[3];
+    u8 trainerTypes[16];
+    u64 trainerTypeScores[16];
+    u8 birthMonths[12];
+    u64 birthMonthScores[12];
+    u16 species[20];
+    u64 speciesScores[20];
+} VsRecorderRankingResults; // size 0x1C8
+
+// the player's value of a ranked record, sent with the rankings request (GlobalTerminalNetPair layout)
+typedef struct VsRecorderRankingScore {
+    u8 recordId;
+    u32 value;
+} VsRecorderRankingScore;
+
+// team kinds of a ranking (VsRecorderRankings.team)
+#define VS_RECORDER_RANKING_TEAM_TRAINER_TYPE 0
+#define VS_RECORDER_RANKING_TEAM_BIRTH_MONTH  1
+#define VS_RECORDER_RANKING_TEAM_SPECIES      2
+
+// VsRecorderWork.screenWork of the rankings screens (this week's rankings / last week's results)
+typedef struct VsRecorderRankings {
+    int eva; // top screen blend
+    int evb;
+    int fade;
+    int ranking;      // shown ranking, SWITCH RANKINGS
+    int rankingCount; // 3, 2 before flypoint flag 27 is set
+    int team;         // VS_RECORDER_RANKING_TEAM_*, SWITCH TEAMS
+    int teamKindCount;
+    BOOL lastWeek;     // VsRecorderWork.selection
+    int teamCount;     // entries of the shown team kind (16 / 12 / 20)
+    Window windows[2]; // ranking title, team kind and the player's own team
+    u8 unk_044[0x40];
+    Window buttonLabels[2];          // SWITCH RANKINGS, SWITCH TEAMS
+    VsRecorderTextSprite sendButton; // hidden
+    VsRecorderTextSprite exitButton;
+    TouchHitboxController *hitboxController;
+    VsRecorderRankingResults resultsBuf[3];     // 0x0E0, copy of the response (onResponse[5])
+    VsRecorderRankingStandings standingsBuf[3]; // 0x638
+    u8 recordIdsBuf[4];                         // 0x710, copy of the response (onResponse[4])
+    VsRecorderRankingResults *results;          // 0x714, the response or resultsBuf
+    VsRecorderRankingStandings *standings;      // 0x718, the response or standingsBuf
+    u8 *recordIds;                              // 0x71C, records of this week's rankings
+    u8 unk_720[8];
+    u16 playHours; // 0x728
+    u8 playMinutes;
+    u8 playSeconds;
+    VsRecorderRankingScore scores[3]; // 0x72C, request
+    MsgData *msgData;                 // 0x744, VsRecorderWork.msgData
+    String *valueTemplate;            // 0x748, last week: score format of the ranking's record
+    VsRecorderListEntry entries[3][20];
+    VsRecorderListConfig listConfig; // 0xB0C
+} VsRecorderRankings;                // size 0xB38
+
 struct VsRecorderWork {
     u32 mode;                                // 0x0000, 0 VS Recorder item, 1-6 Global Terminal
     u32 subState;                            // 0x0004, index into the screen's function table
@@ -430,7 +496,7 @@ struct VsRecorderWork {
     void *unk_0864;                          // 0x0864
     void *result;                            // 0x0868, Pair87 of the launcher
     u32 selection;                           // 0x086C
-    u32 unk_0870;                            // 0x0870
+    u32 boxUploaded;                         // 0x0870, a box was sent (only one per visit)
     u32 battleResult;                        // 0x0874
     u32 unk_0878;                            // 0x0878
     void *savedVideos[4];                    // 0x087C
@@ -501,10 +567,10 @@ void VsRecorder_CreateTextSprite(VsRecorderTextSprite *textSprite, VsRecorderGfx
 void VsRecorder_SetTextSpriteMsg(VsRecorderTextSprite *textSprite, VsRecorderGfx *gfx, int msgId);
 void VsRecorder_FreeTextSprite(VsRecorderTextSprite *textSprite);
 void ov40_0222D6EC(VsRecorderWork *work, int vram);
-void ov40_0222D73C(VsRecorderWork *work, int vram);
+void VsRecorder_LoadButtonGfx(VsRecorderWork *work, int vram);
 void ov40_0222D78C(VsRecorderWork *work, int vram);
-void ov40_0222D7DC(VsRecorderWork *work);
-ManagedSprite *ov40_0222D800(VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram);
+void VsRecorder_FreeButtonGfx(VsRecorderWork *work);
+ManagedSprite *VsRecorder_NewButtonSprite(VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram);
 void VsRecorder_FreeMenuRows(VsRecorderWork *work);
 void VsRecorder_RebuildMenuRowsParent(VsRecorderWork *work);
 void VsRecorder_RebuildMenuRows(VsRecorderWork *work);
@@ -521,8 +587,8 @@ u32 VsRecorder_GetSchemeFileId(VsRecorderWork *work, u32 kind);
 void VsRecorder_ReloadSchemePalettes(VsRecorderWork *work, u32 unused);
 void VsRecorder_ClearPaletteBlend(VsRecorderWork *work);
 u16 *ov40_0222DD68(enum HeapID heapID, int unused, int *count);
-void ov40_0222DD8C(VsRecorderWork *work, u32 value);
-u32 ov40_0222DD94(VsRecorderWork *work);
+void VsRecorder_SetBoxUploaded(VsRecorderWork *work, u32 uploaded);
+u32 VsRecorder_IsBoxUploaded(VsRecorderWork *work);
 
 // vs_recorder_windows.c
 void VsRecorder_ShowNotice(VsRecorderWork *work, int msgId);
@@ -582,9 +648,9 @@ SysTask *VsRecorder_StartFlipScreens(VsRecorderWork *work, int flipped);
 u32 VsRecorder_IsFlipScreensDone(VsRecorderWork *work);
 void VsRecorder_VBlankTask(SysTask *task, void *data);
 void VsRecorder_StartVBlankTask(VsRecorderWork *work);
-BOOL ov40_0222FC14(VsRecorderWork *work, u32 a1, u32 a2);
+BOOL VsRecorder_StepRecordSave(VsRecorderWork *work, u32 a1, u32 a2); // TRUE when done
 void VsRecorder_SetBattleResult(VsRecorderWork *work, u32 result);
-void ov40_0222FC4C(VsRecorderWork *work, int *state);
+void VsRecorder_OnVideoListReceived(VsRecorderWork *work, int *state);
 void VsRecorder_LoadSavedVideos(VsRecorderWork *work);
 void VsRecorder_FreeSavedVideos(VsRecorderWork *work);
 void VsRecorder_LoadMonIconGfx(VsRecorderWork *work);
@@ -606,7 +672,7 @@ void VsRecorder_CreateVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work)
 void VsRecorder_FreeVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work);
 void VsRecorder_SetVideoPartyIconsDrawFlag(VsRecorderVideoInfo *info, BOOL draw);
 int VsRecorder_GetCenteredTextX(Window *window, String *str);
-void ov40_022306E0(VsRecorderWork *work);
+void VsRecorder_ResetRecordSave(VsRecorderWork *work);
 BOOL ov40_022306F0(VsRecorderWork *work);
 void VsRecorder_ResetBgPriorities(void);
 void VsRecorder_PlaceOrbitCursor(VsRecorderWork *work, struct OrbitCursor *cursor, s16 x, s16 y);
@@ -657,7 +723,7 @@ BOOL VsRecorder_SavedVideoToggleProfile(VsRecorderWork *work);
 void VsRecorder_ShowYesNoWindows(VsRecorderWork *work);
 void VsRecorder_HideYesNoWindows(VsRecorderWork *work);
 BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work);
-BOOL ov40_02232A48(VsRecorderWork *work);
+BOOL VsRecorder_SavedVideoSave(VsRecorderWork *work);
 BOOL VsRecorder_SavedVideoPlay(VsRecorderWork *work);
 BOOL VsRecorder_SavedVideoExit(VsRecorderWork *work);
 BOOL VsRecorder_SavedVideoResume(VsRecorderWork *work);
@@ -793,6 +859,32 @@ BOOL VsRecorder_BoxDataViewCloseBox(VsRecorderWork *work);
 BOOL VsRecorder_BoxListShowProfile(VsRecorderWork *work);
 BOOL VsRecorder_BoxListHideProfile(VsRecorderWork *work);
 BOOL VsRecorder_BoxDataViewExit(VsRecorderWork *work);
+
+// vs_recorder_rankings.c
+void VsRecorder_OnBoxUploaded(void *arg, GlobalTerminalNetError *error);
+void VsRecorder_OnBoxListReceived(void *arg, GlobalTerminalNetError *error);
+void VsRecorder_InitRankingsList(VsRecorderWork *work);
+void VsRecorder_FillRankingEntries(VsRecorderWork *work);
+void VsRecorder_CreateRankingsButtonLabels(VsRecorderWork *work);
+void VsRecorder_RemoveRankingsButtonLabels(VsRecorderWork *work);
+void VsRecorder_CreateRankingsWindows(VsRecorderWork *work);
+void VsRecorder_RemoveRankingsWindows(VsRecorderWork *work);
+u32 VsRecorder_GetRankedRecordValue(VsRecorderWork *work, int record);
+void VsRecorder_PrintRankingsInfo(VsRecorderWork *work);
+void VsRecorder_SetRankingsSendButtonHidden(VsRecorderWork *work, BOOL hidden);
+void VsRecorder_CreateRankingsButtons(VsRecorderWork *work);
+void VsRecorder_FreeRankingsButtons(VsRecorderWork *work);
+void VsRecorder_UpdateRankingTeamCount(VsRecorderRankings *rankings);
+void VsRecorder_OnRankingsTouch(u32 index, u32 event, void *arg);
+BOOL VsRecorder_RankingsInit(VsRecorderWork *work);
+BOOL VsRecorder_RankingsEnter(VsRecorderWork *work);
+BOOL VsRecorder_RankingsDownload(VsRecorderWork *work);
+BOOL VsRecorder_RankingsShow(VsRecorderWork *work);
+BOOL VsRecorder_RankingsMain(VsRecorderWork *work);
+BOOL VsRecorder_RankingsCloseList(VsRecorderWork *work);
+BOOL VsRecorder_RankingsExit(VsRecorderWork *work);
+BOOL VsRecorder_RankingsInvalid(VsRecorderWork *work);
+BOOL VsRecorder_RankingsSwitch(VsRecorderWork *work);
 
 // other OVY_40 modules (still address-named)
 BOOL VsRecorder_IsNetIdle(VsRecorderWork *work);

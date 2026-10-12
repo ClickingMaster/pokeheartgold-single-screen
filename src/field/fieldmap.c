@@ -192,7 +192,7 @@ BOOL FieldMap_Init(OverlayManager *man, int *state) {
             SysTask_CreateOnMainQueue(Task_AntipiracyRandom, NULL, 789);
         }
 
-        fieldSystem->unk120 = ov02_0224F864(HEAP_ID_FIELD1);
+        fieldSystem->followMonInteraction = FollowMonInteraction_New(HEAP_ID_FIELD1);
         break;
     case FIELD_MAP_INIT_STATE_LOAD:
         InitGraphicsAndManagers(fieldSystem);
@@ -332,7 +332,7 @@ BOOL FieldMap_Exit(OverlayManager *man, int *state) {
             Fog_Free(&fieldSystem->fog);
             ModelAttributes_Free(&fieldSystem->modelAttributes);
             Thunk_OamManager_Free();
-            ov02_0224F8F4(fieldSystem->unk120);
+            FollowMonInteraction_Delete(fieldSystem->followMonInteraction);
             ov01_021E6138(fieldSystem->bgConfig);
             FieldSystem_EndBottomScreen(fieldSystem);
             (*state)++;

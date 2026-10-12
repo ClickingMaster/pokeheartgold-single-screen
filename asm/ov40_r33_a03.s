@@ -30,14 +30,14 @@
 	.public VsRecorder_ClearListWindow
 	.public VsRecorder_StartFlipScreens
 	.public VsRecorder_IsFlipScreensDone
-	.public ov40_0222FC14
+	.public VsRecorder_StepRecordSave
 	.public VsRecorder_LoadSavedVideos
 	.public VsRecorder_FreeSavedVideos
 	.public ov40_02230410
 	.public VsRecorder_CreateVideoInfo
 	.public VsRecorder_FreeVideoInfo
 	.public VsRecorder_SetVideoPartyIconsDrawFlag
-	.public ov40_022306E0
+	.public VsRecorder_ResetRecordSave
 	.public VsRecorder_PlaceOrbitCursor
 	.public VsRecorder_LoadScreen
 	.public VsRecorder_SetVBlankPaused
@@ -207,7 +207,7 @@ _0223A964:
 	mov r2, #0
 	bl VsRecorder_PrintVideoListMessage
 	add r0, r4, #0
-	bl ov40_022306E0
+	bl VsRecorder_ResetRecordSave
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -232,7 +232,7 @@ _0223A9B6:
 	add r3, r4, r2
 	ldr r2, _0223AC10 ; =0x0000413C
 	ldrb r2, [r3, r2]
-	bl ov40_0222FC14
+	bl VsRecorder_StepRecordSave
 	cmp r0, #0
 	beq _0223AA9C
 	ldr r0, [r4, #8]

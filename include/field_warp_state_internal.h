@@ -64,7 +64,7 @@ extern void *SaveArray_Party_Get();
 extern int GetIdxOfFirstAliveMonInParty_CrashIfNone();
 extern void FollowMon_StartRecall();
 extern int FollowMon_IsVisible();
-extern int ov02_02250780();
+extern int FieldSystem_FirstAliveMonHasType();
 extern void FieldSystem_UnkSub108_AddMonMood();
 extern void ov02_022507B4();
 extern int GetMonData();

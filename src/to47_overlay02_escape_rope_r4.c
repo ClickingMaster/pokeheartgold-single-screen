@@ -36,10 +36,10 @@ BOOL Task_FieldEscapeRope(TaskManager *taskManager)
 
 int ov02_0224C05C(TaskManager *unused, FieldSystem *fieldSystem, FieldMoveTaskEnvironment *env)
 {
-    void *effect = ov01_021FCD2C(fieldSystem, 4);
+    void *effect = FieldCameraZoom_Start(fieldSystem, 4);
 
     env->effect = effect;
-    ov01_021FCD8C(effect, 1, (s32)0xFFF6A000, 15);
+    FieldCameraZoom_Set(effect, 1, (s32)0xFFF6A000, 15);
     env->playerMovement = EventObjectMovementMan_Create(env->playerObject, ov02_02253820);
     if (env->hasFollower != 0) {
         env->followerMovement = EventObjectMovementMan_Create(fieldSystem->followerMapObject, ov02_02253820);
@@ -90,7 +90,7 @@ int ov02_0224C14C(TaskManager *unused, FieldSystem *fieldSystem, FieldMoveTaskEn
     if (env->hasFollower != 0) {
         EventObjectMovementMan_Delete(env->followerMovement);
     }
-    ov01_021FCD78(env->effect);
+    FieldCameraZoom_End(env->effect);
     env->state++;
     return 1;
 }

@@ -7,7 +7,7 @@
 	.public TextOBJ_SetSpritesDrawFlag
 	.public VsRecorder_CreateTextSprite
 	.public VsRecorder_SetTextSpriteMsg
-	.public ov40_0222D800
+	.public VsRecorder_NewButtonSprite
 	.public VsRecorder_PlaceFrontierExitButton
 	.public VsRecorder_LoadFrontierButtonGfx
 	.public VsRecorder_CreateFrontierButtons
@@ -25,7 +25,7 @@ VsRecorder_CreateFrontierButtons: ; 0x0223316C
 	bl VsRecorder_LoadFrontierButtonGfx
 	add r0, r5, #0
 	mov r1, #2
-	bl ov40_0222D800
+	bl VsRecorder_NewButtonSprite
 	add r1, r4, #0
 	add r1, #0xbc
 	str r0, [r1]
@@ -61,7 +61,7 @@ VsRecorder_CreateFrontierButtons: ; 0x0223316C
 	bl TextOBJ_SetSpritesDrawFlag
 	add r0, r5, #0
 	mov r1, #2
-	bl ov40_0222D800
+	bl VsRecorder_NewButtonSprite
 	add r1, r4, #0
 	add r1, #0x98
 	str r0, [r1]

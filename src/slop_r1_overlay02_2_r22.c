@@ -186,8 +186,8 @@ typedef BOOL (*ov02_StateMachineFunc)(void *sm);
 typedef int (*ov02_FieldTaskFunc)(TaskManager *taskManager, FieldSystem *fieldSystem, void *env);
 extern BOOL Task_WaitFollowMonMovement(TaskManager *taskMan);                                                             // field/field_follow_mon.h, not included
 extern void FieldEffectPool_DrawAll(void *a0);                                                                          // unk_020689C8.h
-extern void ov01_021FCD78(SysTask *task);                                                                    // no header included here
-extern BOOL ov01_021FCD6C(SysTask *task);                                                                    // no header included here
+extern void FieldCameraZoom_End(SysTask *task);                                                                    // no header included here
+extern BOOL FieldCameraZoom_IsDone(SysTask *task);                                                                    // no header included here
 extern void ov01_021F8F68(LocalMapObject *object, int a1);                                                   // no header included here
 extern void ov01_021F8F08(LocalMapObject *object, int a1);                                                   // no header included here
 extern void *Save_VarsFlags_Get(SaveData *saveData);                                                         // save_vars_flags.h, not included
@@ -209,14 +209,14 @@ extern int ov01_021F6B00(FieldSystem *fieldSystem);                             
 extern BOOL ov01_021F6B10(FieldSystem *fieldSystem);                                                                        // overlay_01.h, not included
 extern void ov01_021F6ABC(FieldSystem *fieldSystem, int a1, int a2, void *a3);                                              // overlay_01.h, not included
 extern int ov01_021F6AEC(FieldSystem *fieldSystem);                                                                         // overlay_01.h, not included
-WIP_LOCAL int ov02_0224EF94(FieldSystem *fieldSystem);                                                                      // still in asm
-WIP_LOCAL int ov02_0224F8FC(FieldSystem *fieldSystem, void *a1);                                                            // still in asm
+WIP_LOCAL int FollowMon_SelectInteraction(FieldSystem *fieldSystem);                                                                      // still in asm
+WIP_LOCAL int FollowMonInteraction_Run(FieldSystem *fieldSystem, void *a1);                                                            // still in asm
 extern void sub_02066BE8(void *state, u32 a1, u16 value);                                                                   // sys_vars.h, not included
 extern void Field3dModel_LoadFromData(Field3dModel *model, void *narcData);                                                             // no header included here
 extern void Field3dModel_UnloadKeepData(Field3dModel *model);                                                                             // no header included here
 extern void Field3dModelAnimation_LoadFromData(Field3DModelAnimation *anim, Field3dModel *model, void *anmResource, NNSFndAllocator *allocator); // no header included here
-extern void *ov01_021FCD2C(FieldSystem *fieldSystem, int a1);                                                               // no header included here
-extern void ov01_021FCD8C(void *a0, int a1, fx32 a2, int a3);                                                               // no header included here
+extern void *FieldCameraZoom_Start(FieldSystem *fieldSystem, int a1);                                                               // no header included here
+extern void FieldCameraZoom_Set(void *a0, int a1, fx32 a2, int a3);                                                               // no header included here
 extern void *Save_SafariZone_Get(SaveData *saveData);                                                                       // safari_zone.h, not included
 extern void *SafariZone_GetAreaSet(void *safari_zone, int area_set_no);                                                     // safari_zone.h, not included
 extern int ov02_0224EE4C(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);                              // still in asm
@@ -234,7 +234,7 @@ extern BOOL Save_VarsFlags_CheckFlagInArray(void *varsFlags, u16 flagId); // sav
 WIP_LOCAL void ov02_0224AAD4(void *a0, void *a1);
 WIP_LOCAL void ov02_0224D5B4(void *a0, void *a1, void *a2);
 WIP_LOCAL int ov02_0224DB9C(void *a0, void *a1, void *a2);
-WIP_LOCAL int ov02_0224F108(void *a0, void *a1, void *a2);
+WIP_LOCAL int FollowMonRule_Matches(void *a0, void *a1, void *a2);
 WIP_LOCAL int ov02_0224E828(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);
 WIP_LOCAL int ov02_0224EB48(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);
 
@@ -356,13 +356,13 @@ WIP_LOCAL BOOL ov02_0224953C(void *work);
 WIP_LOCAL int ov02_0224997C(void *work);
 WIP_LOCAL int ov02_0224939C(void *work);
 WIP_LOCAL int ov02_02249774(void *work);
-WIP_LOCAL void ov02_0224FDF8(void *arg0, u16 arg1, int arg2, int arg3);
+WIP_LOCAL void FollowMonMovement_PlaySound(void *arg0, u16 arg1, int arg2, int arg3);
 WIP_LOCAL int ov02_0224C05C(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL int ov02_0224C87C(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL void ov02_0224E020(SysTask *task, void *data);
 WIP_LOCAL BOOL ov02_0224E640(SaveData *saveData);
 WIP_LOCAL void ov02_0224DE10(Field3dObject *obj, VecFx32 *arg1, fx32 arg2, fx32 arg3);
-WIP_LOCAL void ov02_0224F580(FieldSystem *fieldSystem, void *out);
+WIP_LOCAL void FollowMonSituation_SetHiddenItems(FieldSystem *fieldSystem, void *out);
 WIP_LOCAL Sprite *ov02_02248CAC(void *mgr);
 WIP_LOCAL void ov02_0224A66C(void *work);
 WIP_LOCAL void ov02_0224A674(void *work);
@@ -374,7 +374,7 @@ WIP_LOCAL BOOL ov02_0224B0E0(void *work);
 WIP_LOCAL void ov02_0224DEA8(Field3dObject *obj, Field3dModel *model, NNSFndAllocator *allocator, void **anmResources);
 WIP_LOCAL BOOL ov02_0224B43C(SysTask *task);
 WIP_LOCAL BOOL ov02_0224E308(int a0);
-WIP_LOCAL BOOL ov02_0224FB44(void *a0, u16 *a1);
+WIP_LOCAL BOOL FollowMonInteraction_StepHasMovement(void *a0, u16 *a1);
 WIP_LOCAL Sprite *ov02_02248C10(void *mgr, VecFx32 *pos, int charId, int plttId, int cellId, int cellAnmId, int priority, int drawPriority);
 WIP_LOCAL Sprite *ov02_02248D18(void *mgr, int a1);
 WIP_LOCAL int ov02_0224C338(void *a0, void *a1, void *work);
@@ -406,7 +406,7 @@ WIP_LOCAL int ov02_0224C8D0(TaskManager *taskManager, FieldSystem *fieldSystem, 
 WIP_LOCAL int ov02_0224C234(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL int ov02_02249C74(void *work);
 WIP_LOCAL int ov02_02249A5C(void *work);
-WIP_LOCAL void ov02_0224FD9C(void *arg0, LocalMapObject *mapObject);
+WIP_LOCAL void FollowMonMovement_ApplyOffset(void *arg0, LocalMapObject *mapObject);
 WIP_LOCAL void ov02_022494C4(FieldSystem *fieldSystem, void *a1, void *a2, void *a3);
 WIP_LOCAL int ov02_022499EC(void *work);
 WIP_LOCAL int ov02_022495E8(void *work);
@@ -414,11 +414,11 @@ WIP_LOCAL int ov02_022497C0(void *work);
 WIP_LOCAL int ov02_0224E26C(int a0);
 WIP_LOCAL int ov02_0224E2A0(int a0);
 WIP_LOCAL int ov02_0224E2D4(int a0);
-WIP_LOCAL void ov02_0224FF04(LocalMapObject *mapObject, int dir, u32 *outX, u32 *outZ);
-WIP_LOCAL int ov02_0224FF5C(void *a0, LocalMapObject *a1);
-WIP_LOCAL void ov02_0224F728(FieldSystem *fieldSystem, void *arg1);
-WIP_LOCAL int ov02_0224F820(int a0);
-WIP_LOCAL void ov02_0224F64C(FieldSystem *fieldSystem, void *arg1);
+WIP_LOCAL void FollowMon_GetCoordsInDirection(LocalMapObject *mapObject, int dir, u32 *outX, u32 *outZ);
+WIP_LOCAL int FollowMonMovement_Step(void *a0, LocalMapObject *a1);
+WIP_LOCAL void FollowMonSituation_SetFacing(FieldSystem *fieldSystem, void *arg1);
+WIP_LOCAL int FollowMonSituation_ConvertItemPocket(int a0);
+WIP_LOCAL void FollowMonSituation_SetTimeOfDay(FieldSystem *fieldSystem, void *arg1);
 WIP_LOCAL void ov02_0224A288(void *work);
 WIP_LOCAL int ov02_0224B664(void *work);
 WIP_LOCAL int ov02_02249658(void *work);
@@ -427,15 +427,15 @@ WIP_LOCAL int ov02_0224C93C(TaskManager *taskManager, FieldSystem *fieldSystem, 
 WIP_LOCAL int ov02_0224C9B8(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL int ov02_0224C0B0(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL void ov02_0224E074(FieldSystem *fieldSystem, u16 *p_ret, int type, enum HeapID heapID);
-WIP_LOCAL BOOL ov02_022506D4(u32 a0, u32 a1);
-WIP_LOCAL BOOL ov02_02250738(u32 a0, u32 a1);
-WIP_LOCAL void ov02_02250504(void *work);
+WIP_LOCAL BOOL FollowMonRule_CheckSpeciesAttr(u32 a0, u32 a1);
+WIP_LOCAL BOOL FollowMonRule_CheckShinyLeaf(u32 a0, u32 a1);
+WIP_LOCAL void FollowMon_ApplyInteractionEffects(void *work);
 WIP_LOCAL int ov02_022498BC(void *work);
 WIP_LOCAL void ov02_0224A080(void *work, NARC *narc);
 WIP_LOCAL void ov02_02249F6C(void *work);
 WIP_LOCAL void ov02_0224A028(void *work);
 WIP_LOCAL void ov02_02249FD4(void *work);
-WIP_LOCAL BOOL ov02_0224FFD8(void *p);
+WIP_LOCAL BOOL FollowMonMovement_HasNextStep(void *p);
 WIP_LOCAL BOOL ov02_02249088(void *mgr);
 WIP_LOCAL BOOL ov02_02248D98(void *a0, void *obj);
 WIP_LOCAL void ov02_0224A834(void *mgr, void *src);
@@ -463,9 +463,9 @@ WIP_LOCAL int ov02_0224B158(void *work);
 WIP_LOCAL int ov02_0224AF70(void *work);
 WIP_LOCAL int ov02_0224ACE0(void *work);
 WIP_LOCAL int ov02_02249BD8(void *work);
-WIP_LOCAL int ov02_02250594(int a0, int a1);
-WIP_LOCAL int ov02_02250628(int a0, int a1);
-WIP_LOCAL int ov02_02250004(FieldSystem *fieldSystem, void *a1, int a2);
+WIP_LOCAL int FollowMonRule_CheckFriendship(int a0, int a1);
+WIP_LOCAL int FollowMonRule_CheckMood(int a0, int a1);
+WIP_LOCAL int FollowMonInteraction_RunMovement(FieldSystem *fieldSystem, void *a1, int a2);
 WIP_LOCAL void ov02_0224D310(void *a0, void *a1, void *data);
 WIP_LOCAL int ov02_0224C840(TaskManager *taskManager, void *a1, void *a2);
 WIP_LOCAL void ov02_0224D820(void *data);
@@ -488,14 +488,14 @@ WIP_LOCAL void ov02_0224B2CC(void *work);
 WIP_LOCAL int ov02_0224B5F0(void *work);
 WIP_LOCAL void ov02_0224D1E4(void *a0, void *a1, void *data);
 WIP_LOCAL int ov02_0224E224(void *a, void *b);
-WIP_LOCAL void ov02_0224F5FC(FieldSystem *fieldSystem, void *work);
-WIP_LOCAL void ov02_0224F058(FieldSystem *fieldSystem, void *work);
-WIP_LOCAL void ov02_0224F324(Pokemon *mon, void *work);
-WIP_LOCAL void ov02_0224F4BC(FieldSystem *fieldSystem, void *work);
-WIP_LOCAL void ov02_0224F6AC(FieldSystem *fieldSystem, int species, int form, void *work);
+WIP_LOCAL void FollowMonSituation_SetTerrain(FieldSystem *fieldSystem, void *work);
+WIP_LOCAL void FollowMon_GetSituation(FieldSystem *fieldSystem, void *work);
+WIP_LOCAL void FollowMonSituation_SetMonCondition(Pokemon *mon, void *work);
+WIP_LOCAL void FollowMonSituation_SetNearbyObjects(FieldSystem *fieldSystem, void *work);
+WIP_LOCAL void FollowMonSituation_SetBestPokeathlonStat(FieldSystem *fieldSystem, int species, int form, void *work);
 WIP_LOCAL void ov02_02248E20(void *a0);
 WIP_LOCAL void ov02_0224B784(void *work);
-WIP_LOCAL BOOL ov02_0224FB54(FieldSystem *fieldSystem, void *a1, void *arg2);
+WIP_LOCAL BOOL FollowMonInteraction_TryShowEmote(FieldSystem *fieldSystem, void *a1, void *arg2);
 WIP_LOCAL void ov02_0224B364(void *a0, void *work);
 WIP_LOCAL int ov02_0224C2EC(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL void ov02_0224D22C(void *a0, void *a1, void *data);
@@ -512,10 +512,10 @@ WIP_LOCAL void ov02_0224D700(void *obj);
 WIP_LOCAL void ov02_0224D914(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
 WIP_LOCAL BOOL ov02_0224ABCC(void *a0, void *a1);
 WIP_LOCAL void *ov02_0224A468(void *a, VecFx32 *b, int c, int d); // still in asm
-WIP_LOCAL BOOL ov02_02250780(FieldSystem *fieldSystem, u8 a1);
+WIP_LOCAL BOOL FieldSystem_FirstAliveMonHasType(FieldSystem *fieldSystem, u8 a1);
 WIP_LOCAL void ov02_02249E90(SysTask *task, void *work);
-WIP_LOCAL void ov02_0224FE40(void *a0, u8 *a1, LocalMapObject *obj);
-WIP_LOCAL void ov02_0224FE70(void *a0, LocalMapObject *obj, u8 dir);
+WIP_LOCAL void FollowMonMovement_ApplyFacing(void *a0, u8 *a1, LocalMapObject *obj);
+WIP_LOCAL void FollowMon_TryShakeGrass(void *a0, LocalMapObject *obj, u8 dir);
 WIP_LOCAL BOOL ov02_0224D178(void *obj);
 WIP_LOCAL void ov02_022507B4(FieldSystem *fieldSystem, u8 a1);
 WIP_LOCAL BOOL ov02_022507E8(TaskManager *taskManager); // still in asm
@@ -655,7 +655,7 @@ WIP_LOCAL void ov02_0224B87C(void *a0, void *a1);
 WIP_LOCAL BOOL ov02_0224E4CC(u8 tile, int flag);
 WIP_LOCAL BOOL ov02_0224E4DC(u8 tile, int flag);
 WIP_LOCAL BOOL ov02_0224EF6C(u8 tile, int flag, int sel);
-WIP_LOCAL void ov02_0224F644(void *a, void *b);
+WIP_LOCAL void FollowMonSituation_SetMapId(void *a, void *b);
 WIP_LOCAL BOOL Task_FollowMonInteract(TaskManager *taskman); // big fn, defined later
 WIP_LOCAL void ov02_0224A32C(void *mgr);
 WIP_LOCAL void ov02_02249548(void *work);
@@ -665,7 +665,7 @@ WIP_LOCAL BOOL ov02_0224D2F8(Field3dObjectTask *task);
 WIP_LOCAL BOOL ov02_0224D424(Field3dObjectTask *task);
 WIP_LOCAL BOOL ov02_0224DC94(Field3dObjectTask *task);
 WIP_LOCAL void ov02_0224D580(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void ov02_0224F698(FieldSystem *fieldSystem, void *out);
+WIP_LOCAL void FollowMonSituation_SetMood(FieldSystem *fieldSystem, void *out);
 WIP_LOCAL int ov02_02249CD8(int *work);
 WIP_LOCAL void ov02_0224A450(Sprite *sprite);
 WIP_LOCAL BOOL ov02_0224B350(void *a0, void *out);
@@ -680,7 +680,7 @@ WIP_LOCAL void ov02_0224D98C(Field3dObjectTask *task, FieldSystem *fieldSystem, 
 WIP_LOCAL void ov02_0224DDC8(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
 WIP_LOCAL void *ov02_0224B690(enum HeapID heapID, u32 size);
 WIP_LOCAL void *ov02_0224C660(enum HeapID heapID, u32 size);
-WIP_LOCAL void *ov02_0224F864(enum HeapID heapID);
+WIP_LOCAL void *FollowMonInteraction_New(enum HeapID heapID);
 WIP_LOCAL void ov02_0224A67C(void *work);
 WIP_LOCAL int ov02_02249968(void *work);
 WIP_LOCAL int ov02_02249AC4(void *work);
@@ -690,9 +690,9 @@ WIP_LOCAL void ov02_0224B3FC(void *a0, int *a1);
 WIP_LOCAL BOOL ov02_0224B6D0(void *a0, void *out);
 WIP_LOCAL int ov02_0224B494(void *work);
 WIP_LOCAL void ov02_0224D658(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL BOOL ov02_0224FC74(void *a0, void *a1);
-WIP_LOCAL void ov02_0224FC08(void *work, void *window, int arg2);
-WIP_LOCAL void ov02_0224FCE0(void *work, String *dest, enum HeapID heapID, int flags, u8 a5);
+WIP_LOCAL BOOL FollowMonInteraction_StepHasWait(void *a0, void *a1);
+WIP_LOCAL void FollowMonInteraction_PrintGiftMessage(void *work, void *window, int arg2);
+WIP_LOCAL void FollowMon_ExpandGiftMessage(void *work, String *dest, enum HeapID heapID, int flags, u8 a5);
 WIP_LOCAL void ov02_0224A6D0(void *work);
 WIP_LOCAL void ov02_0224A8D4(void *work);
 WIP_LOCAL void ov02_02249FD4(void *work);
@@ -729,10 +729,10 @@ WIP_LOCAL void ov02_0224AB9C(void *work);
 WIP_LOCAL int ov02_0224B638(void *work);
 WIP_LOCAL void ov02_02248DBC(void *a0);
 WIP_LOCAL int ov02_02249B10(void *work);
-WIP_LOCAL void ov02_0224F5D0(FieldSystem *fieldSystem, void *out);
-WIP_LOCAL void ov02_0224F76C(int a0, void *out);
-WIP_LOCAL int ov02_0224F79C(int a0);
-WIP_LOCAL void ov02_0224F880(void *a0, int a1);
+WIP_LOCAL void FollowMonSituation_SetWeather(FieldSystem *fieldSystem, void *out);
+WIP_LOCAL void FollowMonSituation_SetSpeciesAttr(int a0, void *out);
+WIP_LOCAL int FollowMonSituation_ConvertType(int a0);
+WIP_LOCAL void FollowMonInteraction_LoadScript(void *a0, int a1);
 WIP_LOCAL BOOL PlayerStepEvent_RepelCounterDecrement(SaveData *saveData, FieldSystem *fieldSystem);
 WIP_LOCAL void ov02_0224AC38(void *work); // still in asm
 WIP_LOCAL SpriteResource *ov02_0224A868(void *mgr, NARC *narc);
@@ -813,7 +813,7 @@ WIP_LOCAL Field3dObjectTask *ov02_0224DC64(FieldSystem *fieldSystem);
 WIP_LOCAL Field3dObjectTask *ov02_0224DC78(FieldSystem *fieldSystem);
 WIP_LOCAL Field3dObjectTask *ov02_0224DDE0(FieldSystem *fieldSystem);
 WIP_LOCAL Field3dObjectTask *ov02_0224DDF4(FieldSystem *fieldSystem);
-WIP_LOCAL void ov02_0224F8F4(void *ptr);
+WIP_LOCAL void FollowMonInteraction_Delete(void *ptr);
 
 // Forward decl — defined later in the file's asm; referenced by destroy dispatchers.
 WIP_LOCAL void ov02_0224D144(void *obj, void *fieldSystem);

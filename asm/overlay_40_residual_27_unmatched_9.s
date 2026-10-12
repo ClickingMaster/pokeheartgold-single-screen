@@ -7,7 +7,7 @@
 	.public VsRecorder_CreateTextSprite
 	.public VsRecorder_SetTextSpriteMsg
 	.public ov40_0222D6EC
-	.public ov40_0222D800
+	.public VsRecorder_NewButtonSprite
 	.public VsRecorder_CreateExitButton
 	.public TextOBJ_SetPosition
 	.text
@@ -23,7 +23,7 @@ VsRecorder_CreateExitButton: ; 0x02233044
 	bl ov40_0222D6EC
 	add r0, r5, #0
 	mov r1, #2
-	bl ov40_0222D800
+	bl VsRecorder_NewButtonSprite
 	mov r1, #0x57
 	lsl r1, r1, #2
 	str r0, [r4, r1]

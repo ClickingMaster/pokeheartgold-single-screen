@@ -25,7 +25,7 @@ void ov49_0225A98C(void *work) {
         }
         ov49_0225B518(P_AT(work, 0x184), work, value, 0x77);
     }
-    ov49_02265378(PTR_AT(work, 0x3D4));
+    WiFiPlazaInstrument_Update(PTR_AT(work, 0x3D4));
 }
 
 void ov49_0225AA2C(void *work) {
@@ -33,7 +33,7 @@ void ov49_0225AA2C(void *work) {
     WiFiPlazaCamera_Update(PTR_AT(work, 0x3EC));
     WiFiPlazaModels_Draw(PTR_AT(work, 0x3E4));
     ov49_02258BD4(PTR_AT(work, 0x3E0));
-    ov49_02265398(PTR_AT(work, 0x3D4));
+    WiFiPlazaInstrument_Draw(PTR_AT(work, 0x3D4));
     RequestSwap3DBuffers(0, 0);
     ov49_0225A7C0(P_AT(work, 0x3C));
 }

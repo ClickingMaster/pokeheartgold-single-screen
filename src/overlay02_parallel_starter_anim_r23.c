@@ -34,8 +34,8 @@ void ov02_0224ADF0(void *arg0) {
     Sprite_SetDrawFlag(PTR_AT(work, 0x58), TRUE);
     PTR_AT(work, 0x60) = ov02_0224B298(PTR_AT(arg0, 0x1e0), PTR_AT(arg0, 0x1e4));
     S32_AT(arg0, 0x1c) = 1;
-    PTR_AT(work, 0x64) = ov01_021FCD2C(PTR_AT(arg0, 0x60), 4);
-    ov01_021FCD8C(PTR_AT(work, 0x64), 1, (fx32)0xfff88000, 0xc);
+    PTR_AT(work, 0x64) = FieldCameraZoom_Start(PTR_AT(arg0, 0x60), 4);
+    FieldCameraZoom_Set(PTR_AT(work, 0x64), 1, (fx32)0xfff88000, 0xc);
     {
         int *values = (int *)&matrix;
         values[0] = 0;
@@ -123,7 +123,7 @@ int ov02_0224B0E0(void *work) {
     y = Sprite_GetMatrixPtr(sprite)->y;
     S32_AT(work, 0x54) = y - Sprite_GetMatrixPtr(PTR_AT(work, 0x58))->y;
     ov02_0224B2C0(PTR_AT(work, 0x60));
-    ov01_021FCD8C(PTR_AT(work, 0x64), 2, 0, 0xc);
+    FieldCameraZoom_Set(PTR_AT(work, 0x64), 2, 0, 0xc);
     S32_AT(work, 0x50) = 0x100;
     S32_AT(work, 0x40) = 0x80000;
     S32_AT(work, 0x48) = 0;

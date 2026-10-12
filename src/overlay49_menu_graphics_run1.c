@@ -6,7 +6,7 @@ void ov49_0225A56C(void *work, u32 index) {
         GF_AssertFail();
     }
     value = ov45_0222AAC8(WiFiPlazaWork_GetPlayer(PTR_AT(work, 0x34), index));
-    ov49_022653C0(PTR_AT(work, 0x3D4), index, value);
+    WiFiPlazaInstrument_Start(PTR_AT(work, 0x3D4), index, value);
     if (index == ov45_0222A53C(PTR_AT(work, 0x34))) {
         ov45_0222AD70(PTR_AT(work, 0x34), value);
     }
@@ -16,7 +16,7 @@ void ov49_0225A5AC(void *work, u32 index) {
     if (index >= 20) {
         GF_AssertFail();
     }
-    ov49_022653F0(PTR_AT(work, 0x3D4), index);
+    WiFiPlazaInstrument_IsFinished(PTR_AT(work, 0x3D4), index);
 }
 
 void ov49_0225A5C8(void *work) {

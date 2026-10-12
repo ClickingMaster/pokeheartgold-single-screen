@@ -3355,10 +3355,10 @@
 	.public VsRecorder_SetTextSpriteMsg
 	.public VsRecorder_FreeTextSprite
 	.public ov40_0222D6EC
-	.public ov40_0222D73C
+	.public VsRecorder_LoadButtonGfx
 	.public ov40_0222D78C
-	.public ov40_0222D7DC
-	.public ov40_0222D800
+	.public VsRecorder_FreeButtonGfx
+	.public VsRecorder_NewButtonSprite
 	.public VsRecorder_FreeMenuRows
 	.public VsRecorder_RebuildMenuRowsParent
 	.public VsRecorder_RebuildMenuRows
@@ -3375,8 +3375,8 @@
 	.public VsRecorder_ReloadSchemePalettes
 	.public VsRecorder_ClearPaletteBlend
 	.public ov40_0222DD68
-	.public ov40_0222DD8C
-	.public ov40_0222DD94
+	.public VsRecorder_SetBoxUploaded
+	.public VsRecorder_IsBoxUploaded
 	.public VsRecorder_ShowNotice
 	.public VsRecorder_HideNotice
 	.public VsRecorder_RemoveTopMessage
@@ -3430,9 +3430,9 @@
 	.public VsRecorder_IsFlipScreensDone
 	.public VsRecorder_VBlankTask
 	.public VsRecorder_StartVBlankTask
-	.public ov40_0222FC14
+	.public VsRecorder_StepRecordSave
 	.public VsRecorder_SetBattleResult
-	.public ov40_0222FC4C
+	.public VsRecorder_OnVideoListReceived
 	.public VsRecorder_LoadSavedVideos
 	.public VsRecorder_FreeSavedVideos
 	.public VsRecorder_LoadMonIconGfx
@@ -3452,7 +3452,7 @@
 	.public VsRecorder_FreeVideoInfo
 	.public VsRecorder_SetVideoPartyIconsDrawFlag
 	.public VsRecorder_GetCenteredTextX
-	.public ov40_022306E0
+	.public VsRecorder_ResetRecordSave
 	.public ov40_022306F0
 	.public VsRecorder_ResetBgPriorities
 	.public VsRecorder_PlaceOrbitCursor
@@ -3497,7 +3497,7 @@
 	.public VsRecorder_ShowYesNoWindows
 	.public VsRecorder_HideYesNoWindows
 	.public VsRecorder_SavedVideoSavePrompt
-	.public ov40_02232A48
+	.public VsRecorder_SavedVideoSave
 	.public VsRecorder_SavedVideoPlay
 	.public VsRecorder_SavedVideoExit
 	.public VsRecorder_SavedVideoResume
@@ -3623,30 +3623,30 @@
 	.public VsRecorder_BoxListShowProfile
 	.public VsRecorder_BoxListHideProfile
 	.public VsRecorder_BoxDataViewExit
-	.public ov40_02238EB8
-	.public ov40_02238EBC
-	.public ov40_02238F00
-	.public ov40_02238FF4
-	.public ov40_02239340
-	.public ov40_022393F4
-	.public ov40_02239418
-	.public ov40_02239514
-	.public ov40_02239538
-	.public ov40_02239574
-	.public ov40_022397BC
-	.public ov40_02239838
-	.public ov40_022398F8
-	.public ov40_0223992C
-	.public ov40_02239954
-	.public ov40_022399B8
-	.public ov40_02239A58
-	.public ov40_02239B58
-	.public ov40_02239EFC
-	.public ov40_0223A034
-	.public ov40_0223A080
-	.public ov40_0223A158
-	.public ov40_0223A274
-	.public ov40_0223A280
+	.public VsRecorder_OnBoxUploaded
+	.public VsRecorder_OnBoxListReceived
+	.public VsRecorder_InitRankingsList
+	.public VsRecorder_FillRankingEntries
+	.public VsRecorder_CreateRankingsButtonLabels
+	.public VsRecorder_RemoveRankingsButtonLabels
+	.public VsRecorder_CreateRankingsWindows
+	.public VsRecorder_RemoveRankingsWindows
+	.public VsRecorder_GetRankedRecordValue
+	.public VsRecorder_PrintRankingsInfo
+	.public VsRecorder_SetRankingsSendButtonHidden
+	.public VsRecorder_CreateRankingsButtons
+	.public VsRecorder_FreeRankingsButtons
+	.public VsRecorder_UpdateRankingTeamCount
+	.public VsRecorder_OnRankingsTouch
+	.public VsRecorder_RankingsInit
+	.public VsRecorder_RankingsEnter
+	.public VsRecorder_RankingsDownload
+	.public VsRecorder_RankingsShow
+	.public VsRecorder_RankingsMain
+	.public VsRecorder_RankingsCloseList
+	.public VsRecorder_RankingsExit
+	.public VsRecorder_RankingsInvalid
+	.public VsRecorder_RankingsSwitch
 	.public VsRecorder_OnRankingsHeaderReceived
 	.public VsRecorder_OnRankingsReceived
 	.public VsRecorder_PlaceVideoListIcons
@@ -4006,8 +4006,8 @@
 	.public VsRecorder_FreeMenuRows
 	.public VsRecorder_ResetFade
 	.public VsRecorder_NewMessageFormat
-	.public ov40_0222DD8C
-	.public ov40_0222DD94
+	.public VsRecorder_SetBoxUploaded
+	.public VsRecorder_IsBoxUploaded
 	.public VsRecorder_SetProfileMonIconDrawFlag
 	.public VsRecorder_SetProfileAvatarDrawFlag
 	.public VsRecorder_CreateProfile
@@ -4029,7 +4029,7 @@
 	.public ov40_02230410
 	.public VsRecorder_CreateVideoInfo
 	.public VsRecorder_SetVideoPartyIconsDrawFlag
-	.public ov40_022306E0
+	.public VsRecorder_ResetRecordSave
 	.public VsRecorder_OnTouchConfirm
 	.public VsRecorder_IsVBlankPaused
 	.public VsRecorder_SetVBlankPaused
@@ -4038,8 +4038,8 @@
 	.public VsRecorder_BoxFormHasMon
 	.public VsRecorder_HasAllBits
 	.public VsRecorder_FreeBoxMonPic
-	.public ov40_02238EB8
-	.public ov40_0223A274
+	.public VsRecorder_OnBoxUploaded
+	.public VsRecorder_RankingsInvalid
 	.public VsRecorder_GetNet
 	.public VsRecorder_IsNetIdle
 	.public VsRecorder_UpdateNet
@@ -4199,7 +4199,7 @@ ov40_02245140: ; 0x02245140
 	.word VsRecorder_SavedVideoMain
 	.word VsRecorder_SavedVideoToggleProfile
 	.word VsRecorder_SavedVideoSavePrompt
-	.word ov40_02232A48
+	.word VsRecorder_SavedVideoSave
 	.word VsRecorder_SavedVideoPlay
 	.word VsRecorder_SavedVideoExit
 	.word VsRecorder_SavedVideoResume
@@ -4380,15 +4380,15 @@ ov40_02245444: ; 0x02245444
 	.byte 0x00, 0x01, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 ov40_02245470: ; 0x02245470
-	.word ov40_022399B8
-	.word ov40_02239A58
-	.word ov40_02239B58
-	.word ov40_0223A274
-	.word ov40_0223A280
-	.word ov40_02239EFC
-	.word ov40_0223A034
-	.word ov40_0223A080
-	.word ov40_0223A158
+	.word VsRecorder_RankingsInit
+	.word VsRecorder_RankingsEnter
+	.word VsRecorder_RankingsDownload
+	.word VsRecorder_RankingsInvalid
+	.word VsRecorder_RankingsSwitch
+	.word VsRecorder_RankingsShow
+	.word VsRecorder_RankingsMain
+	.word VsRecorder_RankingsCloseList
+	.word VsRecorder_RankingsExit
 
 sVsRecorderVideoListOpenHitbox: ; 0x02245494
 	.byte 0x20, 0x60, 0x50, 0xB0

@@ -390,7 +390,7 @@
 	.public PokeathlonRelayRun_Draw
 	.public PokeathlonRelayRun_IsTouchingSwapButton
 	.public PokeathlonRelayRunTeam_UpdateStun
-	.public ov96_02200BC8
+	.public PokeathlonRelayRunHud_GetBenchMember
 	.public ov96_02200E78
 	.public ov96_02200EEC
 	.public ov96_02203BC0

@@ -1,9 +1,9 @@
 #include "overlay02_field_transition_r36_private.h"
 
 int ov02_0224C698(void *unused, R36FieldSystem *fieldSystem, R36Work *work) {
-    void *effect = ov01_021FCD2C(fieldSystem, 4);
+    void *effect = FieldCameraZoom_Start(fieldSystem, 4);
     work->effect = effect;
-    ov01_021FCD8C(effect, 1, 0xFFF6A000, 15);
+    FieldCameraZoom_Set(effect, 1, 0xFFF6A000, 15);
     work->followerMovement = EventObjectMovementMan_Create(fieldSystem->mapObjectManager, ov02_02253770);
     work->state++;
     PlaySE(SEQ_SE_DP_TELE);
@@ -22,9 +22,9 @@ int ov02_0224C6DC(void *unused, R36FieldSystem *fieldSystem, R36Work *work) {
 }
 
 int ov02_0224C71C(void *unused, R36FieldSystem *fieldSystem, R36Work *work) {
-    void *effect = ov01_021FCD2C(fieldSystem, 4);
+    void *effect = FieldCameraZoom_Start(fieldSystem, 4);
     work->effect = effect;
-    ov01_021FCD8C(effect, 1, 0xFFF6A000, 15);
+    FieldCameraZoom_Set(effect, 1, 0xFFF6A000, 15);
     work->playerMovement = EventObjectMovementMan_Create(work->playerObject, ov02_02253820);
     work->state++;
     PlaySE(SEQ_SE_DP_TELE);
@@ -66,7 +66,7 @@ int ov02_0224C7D4(void *unused, R36FieldSystem *fieldSystem, R36Work *work) {
     if (work->hasFollower != 0) {
         EventObjectMovementMan_Delete(work->followerMovement);
     }
-    ov01_021FCD78(work->effect);
+    FieldCameraZoom_End(work->effect);
     work->state++;
     return 1;
 }
@@ -82,9 +82,9 @@ int ov02_0224C840(void *taskManager, R36FieldSystem *fieldSystem, R36Work *work)
 }
 
 int ov02_0224C87C(void *unused, R36FieldSystem *fieldSystem, R36Work *work) {
-    void *effect = ov01_021FCD2C(fieldSystem, 4);
+    void *effect = FieldCameraZoom_Start(fieldSystem, 4);
     work->effect = effect;
-    ov01_021FCD8C(effect, 1, 0xFFF6A000, 15);
+    FieldCameraZoom_Set(effect, 1, 0xFFF6A000, 15);
     work->playerMovement = EventObjectMovementMan_Create(work->playerObject, ov02_022537DC);
     if (work->hasFollower != 0) {
         work->followerMovement = EventObjectMovementMan_Create(fieldSystem->mapObjectManager, ov02_022537DC);
@@ -154,7 +154,7 @@ int ov02_0224C9B8(void *unused, R36FieldSystem *fieldSystem, R36Work *work) {
     if (work->hasFollower != 0) {
         EventObjectMovementMan_Delete(work->followerMovement);
     }
-    ov01_021FCD78(work->effect);
+    FieldCameraZoom_End(work->effect);
     work->state++;
     return 1;
 }

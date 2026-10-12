@@ -9,8 +9,8 @@
 // server response handlers of the screens, one per request in command order (still address-named)
 void VsRecorder_OnDressUpUploaded(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_OnDressUpListReceived(void *arg, GlobalTerminalNetError *error);
-void ov40_02238EB8(void *arg, GlobalTerminalNetError *error);
-void ov40_02238EBC(void *arg, GlobalTerminalNetError *error);
+void VsRecorder_OnBoxUploaded(void *arg, GlobalTerminalNetError *error);
+void VsRecorder_OnBoxListReceived(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_OnRankingsHeaderReceived(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_OnRankingsReceived(void *arg, GlobalTerminalNetError *error);
 void ov40_02242DF0(void *arg, GlobalTerminalNetError *error);
@@ -38,12 +38,12 @@ void VsRecorder_InitNet(VsRecorderWork *work) {
     args.callbacks.arg = work;
     args.callbacks.onResponse[0] = VsRecorder_OnDressUpUploaded;
     args.callbacks.onResponse[1] = VsRecorder_OnDressUpListReceived;
-    args.callbacks.onResponse[2] = ov40_02238EB8;
-    args.callbacks.onResponse[3] = ov40_02238EBC;
+    args.callbacks.onResponse[2] = VsRecorder_OnBoxUploaded;
+    args.callbacks.onResponse[3] = VsRecorder_OnBoxListReceived;
     args.callbacks.onResponse[4] = VsRecorder_OnRankingsHeaderReceived;
     args.callbacks.onResponse[5] = VsRecorder_OnRankingsReceived;
     args.callbacks.onResponse[6] = ov40_02242DF0;
-    args.callbacks.onResponse[7] = (GlobalTerminalNetResponseFunc)ov40_0222FC4C;
+    args.callbacks.onResponse[7] = (GlobalTerminalNetResponseFunc)VsRecorder_OnVideoListReceived;
     args.callbacks.onResponse[8] = ov40_02242E14;
     args.callbacks.onResponse[9] = ov40_02242E48;
     args.messageFunc = NULL;

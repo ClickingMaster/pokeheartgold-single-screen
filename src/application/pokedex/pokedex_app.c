@@ -19,17 +19,17 @@ BOOL Pokedex_Init(OverlayManager *man, int *state) {
     appData = OverlayManager_CreateAndGetData(man, sizeof(PokedexAppData), HEAP_ID_POKEDEX_APP);
     MI_CpuClear8(appData, sizeof(PokedexAppData));
     appData->args = OverlayManager_GetArgs(man);
-    appData->unk_085C = 5;
-    appData->unk_1858 = UnkStruct_02092BB8_GetUnk2(appData->args->unk_08);
+    appData->nextSeq = 5;
+    appData->dexMode = UnkStruct_02092BB8_GetUnk2(appData->args->unk_08);
     if (Pokedex_GetNatDexFlag(appData->args->pokedex)) {
-        appData->unk_1860 = TRUE;
-        if (appData->unk_1858 == 2) {
-            appData->unk_1858 = 1;
+        appData->nationalDex = TRUE;
+        if (appData->dexMode == 2) {
+            appData->dexMode = 1;
         }
     } else {
-        appData->unk_1860 = FALSE;
-        if (appData->unk_1858 == 2) {
-            appData->unk_1858 = 0;
+        appData->nationalDex = FALSE;
+        if (appData->dexMode == 2) {
+            appData->dexMode = 0;
         }
     }
     if (Pokedex_CheckMonCaughtFlag(appData->args->pokedex, SPECIES_GIRATINA) == TRUE) {
@@ -59,7 +59,7 @@ BOOL Pokedex_Exit(OverlayManager *man, int *state) {
     if (DSProt_DetectEmulator(Pokedex_OnEmulatorDetected)) {
         Heap_AllocAtEnd(HEAP_ID_3, 1000);
     }
-    UnkStruct_02092BB8_Set(appData->args->unk_08, PokedexApp_GetCursorSpecies(appData), appData->unk_1858);
+    UnkStruct_02092BB8_Set(appData->args->unk_08, PokedexApp_GetCursorSpecies(appData), appData->dexMode);
     if (DSProt_DetectFlashcart(Pokedex_OnFlashcartDetected)) {
         Heap_AllocAtEnd(HEAP_ID_3, 1000);
     }

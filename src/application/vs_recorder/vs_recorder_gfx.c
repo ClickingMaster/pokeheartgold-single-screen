@@ -177,7 +177,7 @@ void ov40_0222D6EC(VsRecorderWork *work, int vram) {
     SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, narc, 0x1B, FALSE, 11924);
 }
 
-void ov40_0222D73C(VsRecorderWork *work, int vram) {
+void VsRecorder_LoadButtonGfx(VsRecorderWork *work, int vram) {
     NARC *narc = work->narc;
     SpriteSystem *spriteSystem = work->spriteSystem;
     SpriteManager *spriteManager = work->spriteManager;
@@ -197,13 +197,13 @@ void ov40_0222D78C(VsRecorderWork *work, int vram) {
     SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, narc, 0x1F, FALSE, 11924);
 }
 
-void ov40_0222D7DC(VsRecorderWork *work) {
+void VsRecorder_FreeButtonGfx(VsRecorderWork *work) {
     SpriteManager_UnloadCharObjById(work->spriteManager, 11924);
     SpriteManager_UnloadCellObjById(work->spriteManager, 11924);
     SpriteManager_UnloadAnimObjById(work->spriteManager, 11924);
 }
 
-ManagedSprite *ov40_0222D800(VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram) {
+ManagedSprite *VsRecorder_NewButtonSprite(VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram) {
     ManagedSpriteTemplate template;
     ManagedSprite *sprite;
 
@@ -437,10 +437,10 @@ u16 *ov40_0222DD68(enum HeapID heapID, int unused, int *count) {
 
 #pragma force_active reset
 
-void ov40_0222DD8C(VsRecorderWork *work, u32 value) {
-    work->unk_0870 = value;
+void VsRecorder_SetBoxUploaded(VsRecorderWork *work, u32 value) {
+    work->boxUploaded = value;
 }
 
-u32 ov40_0222DD94(VsRecorderWork *work) {
-    return work->unk_0870;
+u32 VsRecorder_IsBoxUploaded(VsRecorderWork *work) {
+    return work->boxUploaded;
 }

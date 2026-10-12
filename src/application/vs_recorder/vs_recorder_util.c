@@ -306,7 +306,7 @@ void VsRecorder_StartVBlankTask(VsRecorderWork *work) {
     work->task = SysTask_CreateOnVBlankQueue(VsRecorder_VBlankTask, work, 5);
 }
 
-BOOL ov40_0222FC14(VsRecorderWork *work, u32 a1, u32 a2) {
+BOOL VsRecorder_StepRecordSave(VsRecorderWork *work, u32 a1, u32 a2) {
     u32 result = VsRecorder_WriteRecordAsync(work->saveData, a1, a2, &work->unk_0834, &work->unk_0836);
     return result > 1;
 }
@@ -319,7 +319,7 @@ void VsRecorder_SetBattleResult(VsRecorderWork *work, u32 result) {
 #pragma opt_strength_reduction off
 
 // server result callback: copy the received video list
-void ov40_0222FC4C(VsRecorderWork *work, int *state) {
+void VsRecorder_OnVideoListReceived(VsRecorderWork *work, int *state) {
     VsRecorderNetData *net = &work->net;
     if (*state != 1) {
         int result = GlobalTerminalNet_GetVideoList(VsRecorder_GetNet(work), net->videoList.headers, 30);

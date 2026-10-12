@@ -3,13 +3,13 @@
 #include "math_util.h"
 #include "sprite.h"
 
-extern void ov01_021FCD8C(void *, int, fx32, int);
-extern BOOL ov01_021FCD6C(void *);
+extern void FieldCameraZoom_Set(void *, int, fx32, int);
+extern BOOL FieldCameraZoom_IsDone(void *);
 extern void ov02_0224B314(void *);
 extern void ov02_02249444(void *, BOOL);
 extern void *FieldEffect_GetState(void *);
 extern void *ov02_0224B298(void *, void *);
-extern void *ov01_021FCD2C(void *, int);
+extern void *FieldCameraZoom_Start(void *, int);
 extern void ov02_022493FC(void);
 
 extern const VecFx32 ov02_0225339C;
@@ -59,8 +59,8 @@ void ov02_02248E20(void *arg0) {
     Sprite_SetDrawPriority(*(Sprite **)((u8 *)work + 0x68), 0x84);
     Sprite_SetDrawFlag(*(Sprite **)((u8 *)work + 0x68), TRUE);
     *(void **)((u8 *)work + 0x6c) = ov02_0224B298(*(void **)((u8 *)work + 0x58), *(void **)((u8 *)work + 0x60));
-    *(void **)((u8 *)work + 0x70) = ov01_021FCD2C(*(void **)((u8 *)work + 0x5c), 4);
-    ov01_021FCD8C(*(void **)((u8 *)work + 0x70), 1, (fx32)0xfff88000, 0xc);
+    *(void **)((u8 *)work + 0x70) = FieldCameraZoom_Start(*(void **)((u8 *)work + 0x5c), 4);
+    FieldCameraZoom_Set(*(void **)((u8 *)work + 0x70), 1, (fx32)0xfff88000, 0xc);
     {
         int *values = (int *)&matrix;
         values[0] = 0;
@@ -122,7 +122,7 @@ int ov02_02248F88(void *work) {
 
 BOOL ov02_02249088(void *work) {
     ov02_0224B314(*(void **)((u8 *)work + 0x6c));
-    ov01_021FCD8C(*(void **)((u8 *)work + 0x70), 2, 0, 0xc);
+    FieldCameraZoom_Set(*(void **)((u8 *)work + 0x70), 2, 0, 0xc);
     *(u32 *)((u8 *)work + 0x50) = 0x400;
     *(u32 *)((u8 *)work + 0x40) = 0x80000;
     *(u32 *)((u8 *)work + 0x48) = 0;
@@ -248,7 +248,7 @@ int ov02_0224939C(void *work) {
     if (*(int *)((u8 *)work + 4) == 0xa) {
         Sprite_SetDrawFlag(*(Sprite **)((u8 *)work + 0x60), FALSE);
     }
-    if (*(int *)((u8 *)work + 4) > 0xf && ov01_021FCD6C(*(void **)((u8 *)work + 0x70)) == 1) {
+    if (*(int *)((u8 *)work + 4) > 0xf && FieldCameraZoom_IsDone(*(void **)((u8 *)work + 0x70)) == 1) {
         *(int *)((u8 *)work + 4) = 0;
         ((u8 *)work)[1]++;
         ((u8 *)work)[2] = 2;

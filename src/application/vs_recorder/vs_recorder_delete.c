@@ -183,7 +183,7 @@ BOOL VsRecorder_DeleteMain(VsRecorderWork *work) {
     case 3:
         if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDeleteYesHitbox)) {
             VsRecorder_OnTouchConfirm(work);
-            ov40_022306E0(work);
+            VsRecorder_ResetRecordSave(work);
             deleteWork->cancelled = FALSE;
             work->step++;
         } else if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDeleteNoHitbox)) {

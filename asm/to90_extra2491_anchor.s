@@ -3067,39 +3067,39 @@
 	.public ov49_0226529C
 	.public ov49_022652D0
 	.public ov49_022652E0
-	.public ov49_022652E8
-	.public ov49_0226535C
-	.public ov49_02265378
-	.public ov49_02265398
-	.public ov49_022653C0
-	.public ov49_022653F0
-	.public ov49_0226540C
-	.public ov49_02265434
-	.public ov49_022655E0
-	.public ov49_022655F4
-	.public ov49_02265628
-	.public ov49_02265660
-	.public ov49_02265668
-	.public ov49_02265698
-	.public ov49_0226571C
-	.public ov49_02265738
-	.public ov49_02265760
-	.public ov49_022657B4
-	.public ov49_02265858
-	.public ov49_02265890
-	.public ov49_022658E4
-	.public ov49_02265920
-	.public ov49_02265948
-	.public ov49_02265958
-	.public ov49_02265968
-	.public ov49_02265980
-	.public ov49_022659D0
-	.public ov49_02265B14
-	.public ov49_02265B28
-	.public ov49_02265B3C
-	.public ov49_02265B94
-	.public ov49_02265BE8
-	.public ov49_02265C40
+	.public WiFiPlazaInstrument_Create
+	.public WiFiPlazaInstrument_Delete
+	.public WiFiPlazaInstrument_Update
+	.public WiFiPlazaInstrument_Draw
+	.public WiFiPlazaInstrument_Start
+	.public WiFiPlazaInstrument_IsFinished
+	.public WiFiPlazaInstrumentTween_Init
+	.public WiFiPlazaInstrumentTween_Update
+	.public WiFiPlazaInstrumentTween_GetPosition
+	.public WiFiPlazaInstrumentWave_Init
+	.public WiFiPlazaInstrumentWave_Update
+	.public WiFiPlazaInstrumentWave_GetValue
+	.public WiFiPlazaInstrument_PlaySE
+	.public WiFiPlazaInstrument_LoadModels
+	.public WiFiPlazaInstrument_FreeModels
+	.public WiFiPlazaInstrument_LoadTextures
+	.public WiFiPlazaInstrument_FreeTextures
+	.public WiFiPlazaInstrument_LoadAnimations
+	.public WiFiPlazaInstrument_FreeAnimations
+	.public WiFiPlazaInstrument_StartEffect
+	.public WiFiPlazaInstrument_UpdateEffect
+	.public WiFiPlazaInstrument_DrawEffect
+	.public WiFiPlazaInstrument_ClearEffect
+	.public WiFiPlazaInstrument_IsEffectActive
+	.public WiFiPlazaInstrument_HasModel
+	.public WiFiPlazaInstrument_SetModel
+	.public WiFiPlazaInstrument_DrawModel
+	.public WiFiPlazaInstrument_LoopAnim
+	.public WiFiPlazaInstrument_PlayAnim
+	.public WiFiPlazaInstrument_LoopAnimBy
+	.public WiFiPlazaInstrument_PlayAnimBy
+	.public WiFiPlazaInstrument_SetAnimFrame
+	.public WiFiPlazaInstrument_GetAnimFrame
 	.public ov49_02265C68
 	.public ov49_02265C74
 	.public ov49_02265C80
@@ -3135,7 +3135,7 @@
 	.public ov49_022669B0
 	.public ov49_02266A88
 	.public ov49_02266AB0
-	.public ov49_02266AF0
+	.public WiFiPlazaInstrument_DrawEffectModels
 	.public ov49_02266B28
 	.public ov49_02266C6C
 	.public ov49_02266D04
@@ -3160,11 +3160,11 @@
 	.public ov49_02267C8C
 	.public ov49_02267D00
 	.public ov49_02267D34
-	.public ov49_02267D98
-	.public ov49_02267E18
-	.public ov49_02267EBC
-	.public ov49_02267EF8
-	.public ov49_02267F40
+	.public WiFiPlazaInstrument_InitBursts
+	.public WiFiPlazaInstrument_UpdateBursts
+	.public WiFiPlazaInstrumentBurst_Init
+	.public WiFiPlazaInstrumentBurst_Start
+	.public WiFiPlazaInstrumentBurst_Update
 	.public ov49_02267F94
 	.public ov49_022680B4
 	.public ov49_0226813C
@@ -3301,19 +3301,19 @@
 	.public ov49_0226A46C
 	.public ov49_0226A474
 	.public ov49_0226A47C
-	.public ov49_0226A484
+	.public sWiFiPlazaInstrumentBurstUpdateFuncs
 	.public ov49_0226A49C
 	.public ov49_0226A4B4
 	.public ov49_0226A4C0
-	.public ov49_0226A4CC
+	.public sWiFiPlazaInstrumentBurstStartFuncs
 	.public ov49_0226A4D8
 	.public ov49_0226A508
-	.public ov49_0226A538
-	.public ov49_0226A5A4
-	.public ov49_0226A610
+	.public sWiFiPlazaInstrumentUpdateFuncs
+	.public sWiFiPlazaInstrumentInitFuncs
+	.public sWiFiPlazaInstrumentStartSEs
 	.public ov49_0226A678
 	.public ov49_0226A67C
-	.public ov49_0226A70C
+	.public sWiFiPlazaInstrumentModelDescs
 	.public ov49_0226A730
 	.public ov49_0226A734
 	.public ov49_0226A738
@@ -3482,10 +3482,10 @@
 	.public ov49_0226526C
 	.public ov49_022652D0
 	.public ov49_022652E0
-	.public ov49_022655E0
-	.public ov49_02265660
-	.public ov49_02265958
-	.public ov49_02265968
+	.public WiFiPlazaInstrumentTween_GetPosition
+	.public WiFiPlazaInstrumentWave_GetValue
+	.public WiFiPlazaInstrument_IsEffectActive
+	.public WiFiPlazaInstrument_HasModel
 	.public ov49_02265C68
 	.public ov49_02265C74
 	.public ov49_02265C80
@@ -3995,7 +3995,7 @@ ov49_0226A47C: ; 0x0226A47C
 	.byte 0x00, 0x00, 0x00, 0x02
 	.byte 0x18, 0x00, 0x01, 0x02
 
-ov49_0226A484: ; 0x0226A484
+sWiFiPlazaInstrumentBurstUpdateFuncs: ; 0x0226A484
 	.word ov49_022680B4
 	.word ov49_02268230
 	.word ov49_02268334
@@ -4012,7 +4012,7 @@ ov49_0226A4B4: ; 0x0226A4B4
 ov49_0226A4C0: ; 0x0226A4C0
 	.byte 0x00, 0x00, 0x00, 0x04, 0x10, 0x00, 0x02, 0x04, 0x23, 0x00, 0x00, 0x04
 
-ov49_0226A4CC: ; 0x0226A4CC
+sWiFiPlazaInstrumentBurstStartFuncs: ; 0x0226A4CC
 	.word ov49_02267F94
 	.word ov49_0226813C
 	.word ov49_022682D4
@@ -4029,7 +4029,7 @@ ov49_0226A508: ; 0x0226A508
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xFF, 0xFF, 0x00, 0x80, 0xFF, 0xFF, 0x00, 0x80, 0xFF, 0xFF
 	.byte 0x00, 0x80, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00
 
-ov49_0226A538: ; 0x0226A538
+sWiFiPlazaInstrumentUpdateFuncs: ; 0x0226A538
 	.word ov49_02266A88
 	.word ov49_02266A88
 	.word ov49_02266A88
@@ -4058,7 +4058,7 @@ ov49_0226A538: ; 0x0226A538
 	.word ov49_02266978
 	.word ov49_02266978
 
-ov49_0226A5A4: ; 0x0226A5A4
+sWiFiPlazaInstrumentInitFuncs: ; 0x0226A5A4
 	.word ov49_0226639C
 	.word ov49_022663EC
 	.word ov49_0226643C
@@ -4087,7 +4087,7 @@ ov49_0226A5A4: ; 0x0226A5A4
 	.word ov49_02266360
 	.word ov49_0226636C
 
-ov49_0226A610: ; 0x0226A610
+sWiFiPlazaInstrumentStartSEs: ; 0x0226A610
 	.byte 0x9C, 0x05, 0x00, 0x00, 0x9D, 0x05, 0x00, 0x00, 0x9E, 0x05, 0x00, 0x00, 0xA2, 0x05, 0x00, 0x00
 	.byte 0xA3, 0x05, 0x00, 0x00, 0xA4, 0x05, 0x00, 0x00, 0x9F, 0x05, 0x00, 0x00, 0xA0, 0x05, 0x00, 0x00
 	.byte 0xA1, 0x05, 0x00, 0x00, 0xAA, 0x05, 0x00, 0x00, 0xAB, 0x05, 0x00, 0x00, 0xAC, 0x05, 0x00, 0x00
@@ -4111,7 +4111,7 @@ ov49_0226A67C: ; 0x0226A67C
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x02, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x02, 0x00, 0x01, 0x00
 
-ov49_0226A70C: ; 0x0226A70C
+sWiFiPlazaInstrumentModelDescs: ; 0x0226A70C
 	.byte 0x00, 0x00, 0x00, 0x11
 	.byte 0x00, 0x01, 0x00, 0x11, 0x00, 0x02, 0x00, 0x11, 0x01, 0x03, 0x01, 0x02, 0x01, 0x04, 0x01, 0x02
 	.byte 0x01, 0x05, 0x01, 0x02, 0x01, 0x06, 0x03, 0x11, 0x01, 0x07, 0x03, 0x11, 0x01, 0x08, 0x03, 0x11

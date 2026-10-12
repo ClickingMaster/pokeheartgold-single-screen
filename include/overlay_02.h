@@ -70,9 +70,9 @@ void ov02_0224CDB0(FieldSystem *fieldSystem, u8 a1);
 void ov02_0224E074(FieldSystem *fieldSystem, u16 *p_ret, int a2, enum HeapID heapID);
 void ov02_0224E0BC(LocalMapObject *obj1, LocalMapObject *obj2, TaskManager *taskManager);
 void FieldSystem_FollowMonInteract(FieldSystem *fieldSystem);
-BOOL ov02_02250780(FieldSystem *fieldSystem, u8 a1);
-void ov02_022507B4(FieldSystem *fieldSystem, u8 a1);
-void ov02_022508B4(FieldSystem *fieldSystem);
+BOOL FieldSystem_FirstAliveMonHasType(FieldSystem *fieldSystem, u8 type);
+void ov02_022507B4(FieldSystem *fieldSystem, u8 count);
+BOOL ov02_022508B4(FieldSystem *fieldSystem);
 void ov02_022523B4(TaskManager *taskManager);
 
 void ov02_BattleExit_HandleRoamerAction(FieldSystem *fieldSystem, BattleSetup *setup);

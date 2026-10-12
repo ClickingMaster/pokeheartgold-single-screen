@@ -59,7 +59,7 @@ void PokedexApp_CreateFormsSprites(PokedexAppData *pokedexApp) {
     PokedexApp_DrawFormListIcons(pokedexApp);
     PokedexApp_SetScrollbarSizeAnim(pokedexApp, 5, pokedexApp->numSeenForms, ov18_021FA348, 9);
     PokedexApp_SyncFormScrollbar(pokedexApp);
-    PokedexApp_UpdateScrollArrows(pokedexApp, pokedexApp->unk_18C5, pokedexApp->numSeenForms, 6);
+    PokedexApp_UpdateScrollArrows(pokedexApp, pokedexApp->selectedForm, pokedexApp->numSeenForms, 6);
 }
 
 #pragma force_active reset
@@ -128,7 +128,7 @@ void PokedexApp_DrawFormListIcons(PokedexAppData *pokedexApp) {
     u32 entry;
 
     do {
-        entry = pokedexApp->unk_18C5 + i - 2;
+        entry = pokedexApp->selectedForm + i - 2;
         if (entry >= (u32)pokedexApp->numSeenForms) {
             PokedexApp_SetSpriteVisible(pokedexApp, i + 14, FALSE);
         } else {
@@ -157,23 +157,23 @@ void PokedexApp_ScrollFormListIcons(PokedexAppData *pokedexApp, int direction) {
     } while ((u32)i < 6);
     if (direction < 0) {
         PokedexApp_SetSpritePos(pokedexApp, i + 14, 0x30, 134, 0);
-        if (pokedexApp->unk_18C5 + 2 >= pokedexApp->numSeenForms) {
+        if (pokedexApp->selectedForm + 2 >= pokedexApp->numSeenForms) {
             i += 14;
             PokedexApp_SetSpriteVisible(pokedexApp, i, FALSE);
         } else {
             PokedexApp_SetSpriteVisible(pokedexApp, i + 14, TRUE);
             i += 14;
-            PokedexApp_SetFormListIcon(pokedexApp, i, pokedexApp->unk_18C5 + 2);
+            PokedexApp_SetFormListIcon(pokedexApp, i, pokedexApp->selectedForm + 2);
         }
     } else {
         PokedexApp_SetSpritePos(pokedexApp, i + 14, 0x30, -10, 0);
-        if (pokedexApp->unk_18C5 - 2 < 0) {
+        if (pokedexApp->selectedForm - 2 < 0) {
             i += 14;
             PokedexApp_SetSpriteVisible(pokedexApp, i, FALSE);
         } else {
             PokedexApp_SetSpriteVisible(pokedexApp, i + 14, TRUE);
             i += 14;
-            PokedexApp_SetFormListIcon(pokedexApp, i, pokedexApp->unk_18C5 - 2);
+            PokedexApp_SetFormListIcon(pokedexApp, i, pokedexApp->selectedForm - 2);
         }
     }
 }
@@ -295,8 +295,8 @@ BOOL PokedexApp_DragFormScrollbar(PokedexAppData *pokedexApp, u32 x, u32 y) {
     upper = index;
     for (; index <= segments; index++) {
         if (position >= lower && position < upper + width) {
-            if (pokedexApp->unk_18C5 != index) {
-                pokedexApp->unk_18C5 = index;
+            if (pokedexApp->selectedForm != index) {
+                pokedexApp->selectedForm = index;
                 return TRUE;
             }
             break;
@@ -324,7 +324,7 @@ BOOL PokedexApp_DragAreaScrollbar(PokedexAppData *pokedexApp, u32 x, u32 y) {
     min = PokedexApp_GetScrollbarMinY(pokedexApp, 5, ov18_021FA304, 96, 86);
     max = PokedexApp_GetScrollbarMaxY(pokedexApp, 5, ov18_021FA304, 96, 86);
     max -= min;
-    segments = pokedexApp->unk_18DC.unk_20.nMaps - 1;
+    segments = pokedexApp->areaList.unk_20.nMaps - 1;
     width = (max << 8) / segments;
     position = (y - min) << 8;
     index = 0;
@@ -332,8 +332,8 @@ BOOL PokedexApp_DragAreaScrollbar(PokedexAppData *pokedexApp, u32 x, u32 y) {
     upper = index;
     for (; index <= segments; index++) {
         if (position >= lower && position < upper + width) {
-            if (pokedexApp->unk_18CA != index) {
-                pokedexApp->unk_18CA = index;
+            if (pokedexApp->areaListPos != index) {
+                pokedexApp->areaListPos = index;
                 return TRUE;
             }
             break;
@@ -373,7 +373,7 @@ u32 PokedexApp_GetAreaScrollbarY(PokedexAppData *pokedexApp, int index) {
 
     min = PokedexApp_GetScrollbarMinY(pokedexApp, 5, ov18_021FA304, 0x60, 0x56);
     y = PokedexApp_GetScrollbarMaxY(pokedexApp, 5, ov18_021FA304, 0x60, 0x56);
-    last = pokedexApp->unk_18DC.unk_20.nMaps - 1;
+    last = pokedexApp->areaList.unk_20.nMaps - 1;
     if (index != last) {
         step = ((y - min) << 8) / last;
         offset = step * index;
@@ -409,7 +409,7 @@ void PokedexApp_SyncFormScrollbar(PokedexAppData *pokedexApp) {
     s16 y;
 
     ManagedSprite_GetPositionXY(pokedexApp->sprites[5], &x, &y);
-    ManagedSprite_SetPositionXY(pokedexApp->sprites[5], x, PokedexApp_GetFormScrollbarY(pokedexApp, pokedexApp->unk_18C5));
+    ManagedSprite_SetPositionXY(pokedexApp->sprites[5], x, PokedexApp_GetFormScrollbarY(pokedexApp, pokedexApp->selectedForm));
 }
 
 void PokedexApp_SyncAreaScrollbar(PokedexAppData *pokedexApp) {
@@ -417,14 +417,14 @@ void PokedexApp_SyncAreaScrollbar(PokedexAppData *pokedexApp) {
     s16 y;
 
     ManagedSprite_GetPositionXY(pokedexApp->sprites[5], &x, &y);
-    ManagedSprite_SetPositionXY(pokedexApp->sprites[5], x, PokedexApp_GetAreaScrollbarY(pokedexApp, pokedexApp->unk_18CA));
+    ManagedSprite_SetPositionXY(pokedexApp->sprites[5], x, PokedexApp_GetAreaScrollbarY(pokedexApp, pokedexApp->areaListPos));
 }
 
 void PokedexApp_ShowFormListSprites(PokedexAppData *pokedexApp) {
-    PokedexApp_ShowFormMonPics(pokedexApp, pokedexApp->unk_18C5, 1);
+    PokedexApp_ShowFormMonPics(pokedexApp, pokedexApp->selectedForm, 1);
     PokedexApp_DrawFormListIcons(pokedexApp);
     PokedexApp_SyncFormScrollbar(pokedexApp);
-    PokedexApp_UpdateScrollArrows(pokedexApp, pokedexApp->unk_18C5, pokedexApp->numSeenForms, 6);
+    PokedexApp_UpdateScrollArrows(pokedexApp, pokedexApp->selectedForm, pokedexApp->numSeenForms, 6);
     PokedexApp_SetSpriteVisible(pokedexApp, 5, TRUE);
     PokedexApp_SetSpriteVisible(pokedexApp, 6, TRUE);
     PokedexApp_SetSpriteVisible(pokedexApp, 7, TRUE);
@@ -448,7 +448,7 @@ void PokedexApp_HideFormListSprites(PokedexAppData *pokedexApp) {
     PokedexApp_SetSpriteVisible(pokedexApp, 4, FALSE);
 }
 
-// Compare screen: the forms unk_18C5 and unk_18C6 side by side.
+// Compare screen: the forms selectedForm and compareForm side by side.
 void PokedexApp_ShowFormCompareSprites(PokedexAppData *pokedexApp) {
     if (pokedexApp->numSeenForms >= 3) {
         PokedexApp_SetSpriteVisible(pokedexApp, 9, TRUE);
@@ -457,12 +457,12 @@ void PokedexApp_ShowFormCompareSprites(PokedexAppData *pokedexApp) {
         PokedexApp_SetSpriteVisible(pokedexApp, 12, TRUE);
         PokedexApp_SetSpriteVisible(pokedexApp, 13, TRUE);
     }
-    PokedexApp_SetCompareFormIcon(pokedexApp, 14, pokedexApp->unk_18C5);
-    PokedexApp_SetCompareFormIcon(pokedexApp, 15, pokedexApp->unk_18C6);
+    PokedexApp_SetCompareFormIcon(pokedexApp, 14, pokedexApp->selectedForm);
+    PokedexApp_SetCompareFormIcon(pokedexApp, 15, pokedexApp->compareForm);
     PokedexApp_SetSpritePos(pokedexApp, 14, 0x40, 0x50, 0);
     PokedexApp_SetSpritePos(pokedexApp, 15, 0xC0, 0x50, 0);
-    PokedexApp_ShowFormCompareMonPic(pokedexApp, 1, pokedexApp->unk_18C5, 1);
-    PokedexApp_ShowFormCompareMonPic(pokedexApp, 2, pokedexApp->unk_18C6, 1);
+    PokedexApp_ShowFormCompareMonPic(pokedexApp, 1, pokedexApp->selectedForm, 1);
+    PokedexApp_ShowFormCompareMonPic(pokedexApp, 2, pokedexApp->compareForm, 1);
     PokedexApp_UpdateFormCompareSelector(pokedexApp);
     PokedexApp_SetSpriteVisible(pokedexApp, 14, TRUE);
     PokedexApp_SetSpriteVisible(pokedexApp, 15, TRUE);
@@ -542,7 +542,7 @@ void ov18_021F6984(PokedexAppData *pokedexApp, int side, int index) {
 }
 
 void PokedexApp_UpdateFormCompareSelector(PokedexAppData *pokedexApp) {
-    if (pokedexApp->unk_18C7_0 == 0) {
+    if (pokedexApp->compareSide == 0) {
         PokedexApp_SetSpritePos(pokedexApp, 13, 0x40, 0x58, 0);
     } else {
         PokedexApp_SetSpritePos(pokedexApp, 13, 0xC0, 0x58, 0);

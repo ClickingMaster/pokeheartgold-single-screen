@@ -4913,7 +4913,7 @@ BOOL ScrCmd_732(ScriptContext *ctx) {
 BOOL ScrCmd_733(ScriptContext *ctx) {
     u8 r6 = ScriptReadByte(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    if (ov02_02250780(ctx->fieldSystem, r6)) {
+    if (FieldSystem_FirstAliveMonHasType(ctx->fieldSystem, r6)) {
         *p_ret = TRUE;
     } else {
         *p_ret = FALSE;

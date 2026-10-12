@@ -9,26 +9,26 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_021FCD2C
-	.public ov01_021FCD6C
-	.public ov01_021FCD78
-	.public ov01_021FCD8C
-	.public ov01_021FCDA8
-	.public ov01_021FCDBC
-	.public ov01_021FCDC4
-	.public ov01_021FCDFC
-	.public ov01_021FCE34
-	.public ov01_021FCE44
-	.public ov01_021FCE5C
-	.public ov01_021FCE74
+	.public FieldCameraZoom_Start
+	.public FieldCameraZoom_IsDone
+	.public FieldCameraZoom_End
+	.public FieldCameraZoom_Set
+	.public Task_FieldCameraZoom
+	.public FieldCameraZoom_Idle
+	.public FieldCameraZoom_ZoomBy
+	.public FieldCameraZoom_ZoomBack
+	.public FieldCameraZoom_ApplyDistance
+	.public FieldCameraZoom_InitZoomBy
+	.public FieldCameraZoom_InitZoomBack
+	.public FieldCameraZoom_Step
 	.public ov01_02208E0C
 	.include "overlay_01_021FCD2C.inc"
 	.include "global.inc"
 
 	.text
 
-	thumb_func_start ov01_021FCD2C
-ov01_021FCD2C: ; 0x021FCD2C
+	thumb_func_start FieldCameraZoom_Start
+FieldCameraZoom_Start: ; 0x021FCD2C
 	push {r4, r5, r6, lr}
 	add r6, r1, #0
 	add r5, r0, #0
@@ -48,27 +48,27 @@ ov01_021FCD2C: ; 0x021FCD2C
 	bl Camera_GetDistance
 	str r0, [r4, #0x10]
 	str r0, [r4, #0x20]
-	ldr r0, _021FCD64 ; =ov01_021FCDA8
+	ldr r0, _021FCD64 ; =Task_FieldCameraZoom
 	ldr r2, _021FCD68 ; =0x0000FFFF
 	add r1, r4, #0
 	bl SysTask_CreateOnMainQueue
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-_021FCD64: .word ov01_021FCDA8
+_021FCD64: .word Task_FieldCameraZoom
 _021FCD68: .word 0x0000FFFF
-	thumb_func_end ov01_021FCD2C
+	thumb_func_end FieldCameraZoom_Start
 
-	thumb_func_start ov01_021FCD6C
-ov01_021FCD6C: ; 0x021FCD6C
+	thumb_func_start FieldCameraZoom_IsDone
+FieldCameraZoom_IsDone: ; 0x021FCD6C
 	push {r3, lr}
 	bl SysTask_GetData
 	ldr r0, [r0, #8]
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FCD6C
+	thumb_func_end FieldCameraZoom_IsDone
 
-	thumb_func_start ov01_021FCD78
-ov01_021FCD78: ; 0x021FCD78
+	thumb_func_start FieldCameraZoom_End
+FieldCameraZoom_End: ; 0x021FCD78
 	push {r4, lr}
 	add r4, r0, #0
 	bl SysTask_GetData
@@ -76,10 +76,10 @@ ov01_021FCD78: ; 0x021FCD78
 	add r0, r4, #0
 	bl SysTask_Destroy
 	pop {r4, pc}
-	thumb_func_end ov01_021FCD78
+	thumb_func_end FieldCameraZoom_End
 
-	thumb_func_start ov01_021FCD8C
-ov01_021FCD8C: ; 0x021FCD8C
+	thumb_func_start FieldCameraZoom_Set
+FieldCameraZoom_Set: ; 0x021FCD8C
 	push {r4, r5, r6, lr}
 	add r5, r1, #0
 	add r4, r2, #0
@@ -93,10 +93,10 @@ ov01_021FCD8C: ; 0x021FCD8C
 	str r6, [r0, #0x1c]
 	str r1, [r0, #0x24]
 	pop {r4, r5, r6, pc}
-	thumb_func_end ov01_021FCD8C
+	thumb_func_end FieldCameraZoom_Set
 
-	thumb_func_start ov01_021FCDA8
-ov01_021FCDA8: ; 0x021FCDA8
+	thumb_func_start Task_FieldCameraZoom
+Task_FieldCameraZoom: ; 0x021FCDA8
 	push {r3, lr}
 	add r0, r1, #0
 	ldr r1, [r1, #0xc]
@@ -107,18 +107,18 @@ ov01_021FCDA8: ; 0x021FCDA8
 	pop {r3, pc}
 	.balign 4, 0
 _021FCDB8: .word ov01_02208E0C
-	thumb_func_end ov01_021FCDA8
+	thumb_func_end Task_FieldCameraZoom
 
-	thumb_func_start ov01_021FCDBC
-ov01_021FCDBC: ; 0x021FCDBC
+	thumb_func_start FieldCameraZoom_Idle
+FieldCameraZoom_Idle: ; 0x021FCDBC
 	mov r1, #1
 	str r1, [r0, #8]
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov01_021FCDBC
+	thumb_func_end FieldCameraZoom_Idle
 
-	thumb_func_start ov01_021FCDC4
-ov01_021FCDC4: ; 0x021FCDC4
+	thumb_func_start FieldCameraZoom_ZoomBy
+FieldCameraZoom_ZoomBy: ; 0x021FCDC4
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r1, [r4, #4]
@@ -128,13 +128,13 @@ ov01_021FCDC4: ; 0x021FCDC4
 	beq _021FCDDE
 	pop {r4, pc}
 _021FCDD4:
-	bl ov01_021FCE44
+	bl FieldCameraZoom_InitZoomBy
 	ldr r0, [r4, #4]
 	add r0, r0, #1
 	str r0, [r4, #4]
 _021FCDDE:
 	add r0, r4, #0
-	bl ov01_021FCE74
+	bl FieldCameraZoom_Step
 	cmp r0, #1
 	bne _021FCDF2
 	ldr r0, [r4, #4]
@@ -144,13 +144,13 @@ _021FCDDE:
 	str r0, [r4, #8]
 _021FCDF2:
 	add r0, r4, #0
-	bl ov01_021FCE34
+	bl FieldCameraZoom_ApplyDistance
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FCDC4
+	thumb_func_end FieldCameraZoom_ZoomBy
 
-	thumb_func_start ov01_021FCDFC
-ov01_021FCDFC: ; 0x021FCDFC
+	thumb_func_start FieldCameraZoom_ZoomBack
+FieldCameraZoom_ZoomBack: ; 0x021FCDFC
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r1, [r4, #4]
@@ -160,13 +160,13 @@ ov01_021FCDFC: ; 0x021FCDFC
 	beq _021FCE16
 	pop {r4, pc}
 _021FCE0C:
-	bl ov01_021FCE5C
+	bl FieldCameraZoom_InitZoomBack
 	ldr r0, [r4, #4]
 	add r0, r0, #1
 	str r0, [r4, #4]
 _021FCE16:
 	add r0, r4, #0
-	bl ov01_021FCE74
+	bl FieldCameraZoom_Step
 	cmp r0, #1
 	bne _021FCE2A
 	ldr r0, [r4, #4]
@@ -176,13 +176,13 @@ _021FCE16:
 	str r0, [r4, #8]
 _021FCE2A:
 	add r0, r4, #0
-	bl ov01_021FCE34
+	bl FieldCameraZoom_ApplyDistance
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FCDFC
+	thumb_func_end FieldCameraZoom_ZoomBack
 
-	thumb_func_start ov01_021FCE34
-ov01_021FCE34: ; 0x021FCE34
+	thumb_func_start FieldCameraZoom_ApplyDistance
+FieldCameraZoom_ApplyDistance: ; 0x021FCE34
 	ldr r3, _021FCE40 ; =Camera_SetDistance
 	add r1, r0, #0
 	ldr r0, [r1, #0x20]
@@ -190,10 +190,10 @@ ov01_021FCE34: ; 0x021FCE34
 	bx r3
 	nop
 _021FCE40: .word Camera_SetDistance
-	thumb_func_end ov01_021FCE34
+	thumb_func_end FieldCameraZoom_ApplyDistance
 
-	thumb_func_start ov01_021FCE44
-ov01_021FCE44: ; 0x021FCE44
+	thumb_func_start FieldCameraZoom_InitZoomBy
+FieldCameraZoom_InitZoomBy: ; 0x021FCE44
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #0x14]
@@ -205,10 +205,10 @@ ov01_021FCE44: ; 0x021FCE44
 	add r0, r1, r0
 	str r0, [r4, #0x18]
 	pop {r4, pc}
-	thumb_func_end ov01_021FCE44
+	thumb_func_end FieldCameraZoom_InitZoomBy
 
-	thumb_func_start ov01_021FCE5C
-ov01_021FCE5C: ; 0x021FCE5C
+	thumb_func_start FieldCameraZoom_InitZoomBack
+FieldCameraZoom_InitZoomBack: ; 0x021FCE5C
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r1, [r4, #0x10]
@@ -220,10 +220,10 @@ ov01_021FCE5C: ; 0x021FCE5C
 	ldr r0, [r4, #0x10]
 	str r0, [r4, #0x18]
 	pop {r4, pc}
-	thumb_func_end ov01_021FCE5C
+	thumb_func_end FieldCameraZoom_InitZoomBack
 
-	thumb_func_start ov01_021FCE74
-ov01_021FCE74: ; 0x021FCE74
+	thumb_func_start FieldCameraZoom_Step
+FieldCameraZoom_Step: ; 0x021FCE74
 	ldr r2, [r0, #0x20]
 	ldr r1, [r0, #0x28]
 	add r1, r2, r1
@@ -243,12 +243,12 @@ _021FCE92:
 	mov r0, #0
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov01_021FCE74
+	thumb_func_end FieldCameraZoom_Step
 
 	.rodata
 
 ov01_02208E0C: ; 0x02208E0C
-	.word ov01_021FCDBC
-	.word ov01_021FCDC4
-	.word ov01_021FCDFC
+	.word FieldCameraZoom_Idle
+	.word FieldCameraZoom_ZoomBy
+	.word FieldCameraZoom_ZoomBack
 	.word 0x00000000

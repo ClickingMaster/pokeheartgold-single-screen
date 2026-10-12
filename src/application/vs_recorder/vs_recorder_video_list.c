@@ -131,8 +131,8 @@ void VsRecorder_CreateVideoListButtons(VsRecorderWork *work) {
     VsRecorderVideoListScreen *listWork = work->screenWork;
 
     ov40_0222D6EC(work, NNS_G2D_VRAM_TYPE_2DSUB);
-    listWork->buttons[0].sprite = ov40_0222D800(work, NNS_G2D_VRAM_TYPE_2DSUB);
-    listWork->buttons[1].sprite = ov40_0222D800(work, NNS_G2D_VRAM_TYPE_2DSUB);
+    listWork->buttons[0].sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
+    listWork->buttons[1].sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_CreateTextSprite(&listWork->buttons[0], (VsRecorderGfx *)&work->narc, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_CreateTextSprite(&listWork->buttons[1], (VsRecorderGfx *)&work->narc, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_SetTextSpriteMsg(&listWork->buttons[0], (VsRecorderGfx *)&work->narc, 3);
@@ -334,7 +334,7 @@ BOOL VsRecorder_VideoListSave(VsRecorderWork *work) {
         if (VsRecorder_StepBlend(&listWork->eva, &listWork->evb, 1, 2)) {
             BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
             VsRecorder_PrintVideoListMessage(work, 0x116, 0);
-            ov40_022306E0(work);
+            VsRecorder_ResetRecordSave(work);
             work->step++;
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, (u8)listWork->fade, (u16)work->blendColor);
@@ -342,7 +342,7 @@ BOOL VsRecorder_VideoListSave(VsRecorderWork *work) {
     case 2: {
         u32 cursor = work->listWindow.cursor;
 
-        if (ov40_0222FC14(work, listWork->slot, work->net.videoList.flags[cursor])) {
+        if (VsRecorder_StepRecordSave(work, listWork->slot, work->net.videoList.flags[cursor])) {
             work->step++;
         }
         break;
@@ -714,7 +714,7 @@ void VsRecorder_CreateSlotButtons(VsRecorderWork *work) {
     anim = anims.values;
     vars.gfx = (VsRecorderGfx *)&work->narc;
     for (; i < 4; i++) {
-        ((VsRecorderVideoListScreen *)listWork)->buttons[0].sprite = ov40_0222D800(work, NNS_G2D_VRAM_TYPE_2DSUB);
+        ((VsRecorderVideoListScreen *)listWork)->buttons[0].sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
         VsRecorder_CreateTextSprite(button, vars.gfx, NNS_G2D_VRAM_TYPE_2DSUB);
         VsRecorder_SetTextSpriteMsg(button, vars.gfx, *vars.msgId);
         if (i != 3) {
@@ -747,7 +747,7 @@ void VsRecorder_FreeSlotButtons(VsRecorderWork *work) {
         VsRecorder_FreeTextSprite(button);
         Sprite_DeleteAndFreeResources(listWork->buttons[0].sprite);
     }
-    ov40_0222D7DC(work);
+    VsRecorder_FreeButtonGfx(work);
 }
 
 void VsRecorder_FreeVideoListButtons(VsRecorderWork *work) {
@@ -757,7 +757,7 @@ void VsRecorder_FreeVideoListButtons(VsRecorderWork *work) {
     VsRecorder_FreeTextSprite(&listWork->buttons[1]);
     Sprite_DeleteAndFreeResources(listWork->buttons[0].sprite);
     Sprite_DeleteAndFreeResources(listWork->buttons[1].sprite);
-    ov40_0222D7DC(work);
+    VsRecorder_FreeButtonGfx(work);
 }
 
 // backOnly: hide the second button and move the first one right
@@ -1978,5 +1978,5 @@ void VsRecorder_FreeDetailsButtons(VsRecorderWork *work) {
     VsRecorder_FreeTextSprite(&listWork->buttons[1]);
     Sprite_DeleteAndFreeResources(listWork->buttons[0].sprite);
     Sprite_DeleteAndFreeResources(listWork->buttons[1].sprite);
-    ov40_0222D7DC(work);
+    VsRecorder_FreeButtonGfx(work);
 }

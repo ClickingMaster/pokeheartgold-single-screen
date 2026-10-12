@@ -435,10 +435,10 @@
 .public Field3dObject_SetPosEx
 .public Field3dObject_SetPos
 .public Field3dObject_SetXRotation
-.public ov01_021FCD2C
-.public ov01_021FCD6C
-.public ov01_021FCD78
-.public ov01_021FCD8C
+.public FieldCameraZoom_Start
+.public FieldCameraZoom_IsDone
+.public FieldCameraZoom_End
+.public FieldCameraZoom_Set
 .public TallGrass_SpawnAt
 .public VeryTallGrass_SpawnAt
 .public FieldSystem_ShowEmoteBubble
@@ -504,9 +504,9 @@
 .public ov02_0224E698
 .public ov02_0224E754
 .public FieldSystem_FollowMonInteract
-.public ov02_0224F864
-.public ov02_0224F8F4
-.public ov02_02250780
+.public FollowMonInteraction_New
+.public FollowMonInteraction_Delete
+.public FieldSystem_FirstAliveMonHasType
 .public ov02_022507B4
 .public ov02_022508B4
 .public ov02_02250A60
