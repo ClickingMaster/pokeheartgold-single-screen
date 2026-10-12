@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 0fdda07f1 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 3d10c1fd0 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -5212,105 +5212,48 @@ src/field/legend_cutscene_camera.c</title></rect>
 <rect x="1075.987" y="404.709" width="35.997" height="21.576" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / field_move_effects.o
 4,854 bytes · C-only source
 src/field/field_move_effects.c</title></rect>
-<rect x="1111.984" y="358.802" width="31.184" height="19.580" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / script_field_effects.o
+<rect x="1111.984" y="358.802" width="24.213" height="31.284" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / field_move_cut_in.o
+4,734 bytes · C-only source
+src/field/field_move_cut_in.c</title></rect>
+<rect x="1136.197" y="358.802" width="19.518" height="31.284" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / script_field_effects.o
 3,816 bytes · C-only source
 src/field/script_field_effects.c</title></rect>
-<rect x="1111.984" y="378.382" width="31.184" height="16.337" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / safari_zone_placement.o
+<rect x="1155.715" y="358.802" width="16.285" height="31.284" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / safari_zone_placement.o
 3,184 bytes · C-only source
 src/field/safari_zone_placement.c</title></rect>
-<rect x="1143.168" y="358.802" width="28.832" height="14.851" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / field_move_warp_tasks.o
+<rect x="1111.984" y="390.085" width="28.607" height="14.968" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / field_move_warp_tasks.o
 2,676 bytes · C-only source
 src/field/field_move_warp_tasks.c</title></rect>
-<rect x="1143.168" y="373.653" width="14.811" height="21.066" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / fly_landing_effect.o
+<rect x="1111.984" y="405.053" width="14.695" height="21.232" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / fly_landing_effect.o
 1,950 bytes · C-only source
 src/field/fly_landing_effect.c</title></rect>
-<rect x="1157.979" y="373.653" width="14.021" height="21.066" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / event_cutscene_sinjoh.o
+<rect x="1126.679" y="405.053" width="13.911" height="21.232" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / event_cutscene_sinjoh.o
 1,846 bytes · C-only source
 src/field/event_cutscene_sinjoh.c</title></rect>
-<rect x="1111.984" y="394.719" width="15.690" height="14.298" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / sprite_gfx_manager.o
+<rect x="1140.591" y="390.085" width="11.498" height="19.511" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / sprite_gfx_manager.o
 1,402 bytes · C-only source
 src/field/sprite_gfx_manager.c</title></rect>
-<rect x="1127.674" y="394.719" width="13.608" height="14.298" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / event_cutscene_celebi.o
+<rect x="1152.088" y="390.085" width="9.972" height="19.511" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / event_cutscene_celebi.o
 1,216 bytes · C-only source
 src/field/event_cutscene_celebi.c</title></rect>
-<rect x="1111.984" y="409.016" width="11.230" height="17.269" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay_2_gear_phone.o
+<rect x="1162.061" y="390.085" width="9.939" height="19.511" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay_2_gear_phone.o
 1,212 bytes · C-only source
 src/field/overlay_2_gear_phone.c</title></rect>
-<rect x="1123.214" y="409.016" width="10.155" height="17.269" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / map_prop_anims.o
+<rect x="1140.591" y="409.596" width="10.508" height="16.689" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / map_prop_anims.o
 1,096 bytes · C-only source
 src/field/map_prop_anims.c</title></rect>
-<rect x="1133.370" y="409.016" width="7.913" height="17.269" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / primo_password.o
+<rect x="1151.099" y="409.596" width="8.188" height="16.689" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / primo_password.o
 854 bytes · C-only source
 src/field/primo_password.c</title></rect>
-<rect x="1141.282" y="394.719" width="9.000" height="15.148" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_anim_steps_r9_run1.o
-852 bytes · C-only source
-src/overlay02_anim_steps_r9_run1.c</title></rect>
-<rect x="1150.282" y="394.719" width="8.366" height="15.148" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_starter_resource_tasks_r12.o
-792 bytes · C-only source
-src/overlay02_starter_resource_tasks_r12.c</title></rect>
-<rect x="1158.648" y="394.719" width="13.352" height="8.173" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_port_r13.o
-682 bytes · C-only source
-src/overlay02_port_r13.c</title></rect>
-<rect x="1158.648" y="402.892" width="13.352" height="6.975" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / map_object_swap_positions.o
+<rect x="1159.287" y="409.596" width="12.713" height="7.325" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / map_object_swap_positions.o
 582 bytes · C-only source
 src/field/map_object_swap_positions.c</title></rect>
-<rect x="1141.282" y="409.866" width="8.517" height="9.619" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / event_cutscene_shaymin.o
+<rect x="1159.287" y="416.921" width="8.749" height="9.364" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / event_cutscene_shaymin.o
 512 bytes · C-only source
 src/field/event_cutscene_shaymin.c</title></rect>
-<rect x="1149.800" y="409.866" width="7.719" height="9.619" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_port_r15.o
-464 bytes · C-only source
-src/overlay02_port_r15.c</title></rect>
-<rect x="1141.282" y="419.485" width="8.706" height="6.800" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / to46_overlay02_anim_steps_r11.o
-370 bytes · C-only source
-src/to46_overlay02_anim_steps_r11.c</title></rect>
-<rect x="1149.989" y="419.485" width="7.530" height="6.800" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_port_r10.o
-320 bytes · C-only source
-src/overlay02_port_r10.c</title></rect>
-<rect x="1157.518" y="409.866" width="5.406" height="8.110" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_port_r14_combined.o
-274 bytes · C-only source
-src/overlay02_port_r14_combined.c</title></rect>
-<rect x="1162.924" y="409.866" width="4.577" height="8.110" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay_02_02251E74.o
+<rect x="1168.036" y="416.921" width="3.964" height="9.364" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay_02_02251E74.o
 232 bytes · C-only source
 src/overlay_02_02251E74.c</title></rect>
-<rect x="1167.502" y="409.866" width="4.498" height="8.110" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_port_r6.o
-228 bytes · C-only source
-src/overlay02_port_r6.c</title></rect>
-<rect x="1157.518" y="417.976" width="6.509" height="4.621" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_248728_partial_15.o
-188 bytes · C-only source
-src/overlay02_248728_partial_15.c</title></rect>
-<rect x="1157.518" y="422.598" width="6.509" height="3.687" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_248728_partial_10.o
-150 bytes · C-only source
-src/overlay02_248728_partial_10.c</title></rect>
-<rect x="1164.027" y="417.976" width="5.288" height="3.934" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_248728_partial_11.o
-130 bytes · C-only source
-src/overlay02_248728_partial_11.c</title></rect>
-<rect x="1169.315" y="417.976" width="2.685" height="3.934" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_248728_partial_9.o
-66 bytes · C-only source
-src/overlay02_248728_partial_9.c</title></rect>
-<rect x="1164.027" y="421.910" width="3.657" height="2.275" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_port_r8.o
-52 bytes · C-only source
-src/overlay02_port_r8.c</title></rect>
-<rect x="1164.027" y="424.185" width="3.657" height="2.100" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_248728_partial_8.o
-48 bytes · C-only source
-src/overlay02_248728_partial_8.c</title></rect>
-<rect x="1167.685" y="421.910" width="2.227" height="2.299" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_port_r7.o
-32 bytes · C-only source
-src/overlay02_port_r7.c</title></rect>
-<rect x="1169.912" y="421.910" width="2.088" height="2.299" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_248728_partial_6.o
-30 bytes · C-only source
-src/overlay02_248728_partial_6.c</title></rect>
-<rect x="1167.685" y="424.209" width="1.695" height="2.076" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_248728_partial_14.o
-22 bytes · C-only source
-src/overlay02_248728_partial_14.c</title></rect>
-<rect x="1169.380" y="424.209" width="1.079" height="2.076" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_248728_partial_13.o
-14 bytes · C-only source
-src/overlay02_248728_partial_13.c</title></rect>
-<rect x="1170.459" y="424.209" width="1.541" height="1.246" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_248728_partial_12.o
-12 bytes · C-only source
-src/overlay02_248728_partial_12.c</title></rect>
-<rect x="1170.459" y="425.454" width="1.541" height="0.831" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / overlay02_248728_partial_7.o
-8 bytes · C-only source
-src/overlay02_248728_partial_7.c</title></rect>
 <rect x="1042.480" y="358.802" width="129.520" height="67.483" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="615.491" y="426.285" width="94.996" height="53.000" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_44 / overlay_44_0222CDAC.o
 31,466 bytes · C-only source

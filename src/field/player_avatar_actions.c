@@ -40,7 +40,7 @@
 #include "sys_task_api.h"
 #include "task.h"
 
-// The Pokemon shown using a field move: either the cut-in animation of the party Pokemon (ov02_02249458), or the
+// The Pokemon shown using a field move: either the cut-in animation of the party Pokemon (FieldMoveCutIn_Start), or the
 // following Pokemon, which is recalled first.
 typedef struct FieldMoveAnim {
     BOOL useCutIn; // 0x00
@@ -1297,12 +1297,12 @@ void FieldMoveAnim_Init(FieldSystem *fieldSystem, Pokemon *mon, FieldMoveAnim *a
 }
 
 void FieldMoveAnim_Start(FieldSystem *fieldSystem, FieldMoveAnim *anim) {
-    anim->cutIn = ov02_02249458(fieldSystem, 0, anim->mon, anim->gender);
+    anim->cutIn = FieldMoveCutIn_Start(fieldSystem, 0, anim->mon, anim->gender);
 }
 
 BOOL FieldMoveAnim_CheckFinished(FieldMoveAnim *anim) {
-    if (ov02_0224953C(anim->cutIn) == TRUE) {
-        ov02_02249548(anim->cutIn);
+    if (FieldMoveCutIn_IsFinished(anim->cutIn) == TRUE) {
+        FieldMoveCutIn_Delete(anim->cutIn);
         return TRUE;
     }
     return FALSE;

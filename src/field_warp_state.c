@@ -160,18 +160,18 @@ BOOL FieldTask_Fly(void *task) {
         if (EventObjectMovementMan_IsFinish(env->movement)) {
             EventObjectMovementMan_Delete(env->movement);
             if (env->flag == 0) {
-                env->effect = ov02_02249458(env->fieldSystem, 1, env->mon, PlayerAvatar_GetGender(*(void **)((u8 *)env->fieldSystem + 0x40)));
+                env->effect = FieldMoveCutIn_Start(env->fieldSystem, 1, env->mon, PlayerAvatar_GetGender(*(void **)((u8 *)env->fieldSystem + 0x40)));
             } else {
-                env->effect = ov02_02249458(env->fieldSystem, 2, env->mon, PlayerAvatar_GetGender(*(void **)((u8 *)env->fieldSystem + 0x40)));
+                env->effect = FieldMoveCutIn_Start(env->fieldSystem, 2, env->mon, PlayerAvatar_GetGender(*(void **)((u8 *)env->fieldSystem + 0x40)));
             }
             env->state++;
         }
         break;
     case 6:
-        if (ov02_0224953C(env->effect)) {
+        if (FieldMoveCutIn_IsFinished(env->effect)) {
             void *local;
             u16 map;
-            ov02_02249548(env->effect);
+            FieldMoveCutIn_Delete(env->effect);
             local = Save_LocalFieldData_Get(*(void **)(fs + 0xC));
             map = GetSpawnIdForFlyMap(env->mapNo);
             if (map == 0) {

@@ -2309,15 +2309,15 @@ BOOL ScrCmd_183(ScriptContext *ctx) {
     u16 partyIdx = ScriptGetVar(ctx);
     Pokemon *mon = Party_GetMonByIndex(SaveArray_Party_Get(ctx->fieldSystem->saveData), partyIdx);
     u32 playerGender = PlayerAvatar_GetGender(ctx->fieldSystem->playerAvatar);
-    *p_work = ov02_02249458(ctx->fieldSystem, 0, mon, playerGender);
+    *p_work = FieldMoveCutIn_Start(ctx->fieldSystem, 0, mon, playerGender);
     SetupNativeScript(ctx, sub_0204378C);
     return TRUE;
 }
 
 BOOL sub_0204378C(ScriptContext *ctx) {
     void **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
-    if (ov02_0224953C(*p_work) == TRUE) {
-        ov02_02249548(*p_work);
+    if (FieldMoveCutIn_IsFinished(*p_work) == TRUE) {
+        FieldMoveCutIn_Delete(*p_work);
         return TRUE;
     } else {
         return FALSE;

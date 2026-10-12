@@ -1241,77 +1241,77 @@
 	.public FieldMove_FadeInFromWhite
 	.public FieldMove_FadeOutToWhite
 	.public FieldMove_SetPlayerVisible
-	.public ov02_02249458
-	.public ov02_022494C4
-	.public ov02_0224953C
-	.public ov02_02249548
-	.public ov02_0224955C
-	.public ov02_0224957C
-	.public ov02_02249584
-	.public ov02_022495B8
-	.public ov02_022495D0
-	.public ov02_022495E8
-	.public ov02_02249658
-	.public ov02_02249690
-	.public ov02_022496D0
-	.public ov02_02249754
-	.public ov02_02249774
-	.public ov02_022497C0
-	.public ov02_02249838
-	.public ov02_02249858
-	.public ov02_022498BC
-	.public ov02_02249940
-	.public ov02_02249954
-	.public ov02_02249968
-	.public ov02_0224997C
-	.public ov02_02249984
-	.public ov02_022499B8
-	.public ov02_022499EC
-	.public ov02_02249A5C
-	.public ov02_02249AC4
-	.public ov02_02249AD8
-	.public ov02_02249AF0
-	.public ov02_02249B10
-	.public ov02_02249B38
-	.public ov02_02249B60
-	.public ov02_02249B80
-	.public ov02_02249BA8
-	.public ov02_02249BD8
-	.public ov02_02249C74
-	.public ov02_02249CD8
-	.public ov02_02249CF0
-	.public ov02_02249D18
-	.public ov02_02249D40
-	.public ov02_02249D5C
-	.public ov02_02249DD8
-	.public ov02_02249E58
-	.public ov02_02249E90
-	.public ov02_02249EC0
-	.public ov02_02249F6C
-	.public ov02_02249FD4
-	.public ov02_0224A028
-	.public ov02_0224A074
-	.public ov02_0224A080
-	.public ov02_0224A288
-	.public ov02_0224A32C
-	.public ov02_0224A33C
-	.public ov02_0224A3F0
-	.public ov02_0224A418
-	.public ov02_0224A450
-	.public ov02_0224A468
-	.public ov02_0224A4D0
-	.public ov02_0224A570
-	.public ov02_0224A598
-	.public ov02_0224A5D0
-	.public ov02_0224A63C
-	.public ov02_0224A648
-	.public ov02_0224A66C
-	.public ov02_0224A674
-	.public ov02_0224A67C
-	.public ov02_0224A690
-	.public ov02_0224A69C
-	.public ov02_0224A6A8
-	.public ov02_0224A6D0
+	.public FieldMoveCutIn_Start
+	.public FieldMoveCutIn_StartFlyWithObject
+	.public FieldMoveCutIn_IsFinished
+	.public FieldMoveCutIn_Delete
+	.public FieldMoveCutIn_New
+	.public FieldMoveCutIn_Free
+	.public Task_FieldMoveCutIn
+	.public FieldMoveCutIn_StepLoadBannerGraphics
+	.public FieldMoveCutIn_StepLoadSpriteGraphics
+	.public FieldMoveCutIn_StepCreateSprites
+	.public FieldMoveCutIn_StepInitWindow
+	.public FieldMoveCutIn_StepWidenWindow
+	.public FieldMoveCutIn_StepOpenWindow
+	.public FieldMoveCutIn_StepWaitBeforeMon
+	.public FieldMoveCutIn_StepMonSlideIn
+	.public FieldMoveCutIn_StepMonSlowDown
+	.public FieldMoveCutIn_StepWaitBeforeMonExit
+	.public FieldMoveCutIn_StepMonSlideOut
+	.public FieldMoveCutIn_StepCloseWindow
+	.public FieldMoveCutIn_StepFreeBannerGraphics
+	.public FieldMoveCutIn_StepFreeSpriteGraphics
+	.public FieldMoveCutIn_StepEndWindow
+	.public FieldMoveCutIn_StepFinish
+	.public Task_FieldMoveCutInFly
+	.public Task_FieldMoveCutInFlyWithObject
+	.public FieldMoveCutIn_StepCreateFlySprites
+	.public FieldMoveCutIn_StepCreateFlyTrainerSprite
+	.public FieldMoveCutIn_StepFreeMonGraphics
+	.public FieldMoveCutIn_StepLoadFlyGraphics
+	.public FieldMoveCutIn_StepWaitFlyGraphics
+	.public FieldMoveCutIn_StepStartFly
+	.public FieldMoveCutIn_StepWaitTakeOff
+	.public FieldMoveCutIn_StepWaitBeforeFlyAway
+	.public FieldMoveCutIn_StepWaitBeforeFlyAwayWithObject
+	.public FieldMoveCutIn_StepWaitFlyAway
+	.public FieldMoveCutIn_StepCloseFlyWindow
+	.public FieldMoveCutIn_StepWaitFlyEnd
+	.public FieldMoveCutIn_StepWaitPaletteFade
+	.public FieldMoveCutIn_StartSpriteTransfer
+	.public FieldMoveCutIn_StartFlySpriteTransfer
+	.public FieldMoveCutIn_EndSpriteTransfer
+	.public Task_FieldMoveCutIn_TransferSprites
+	.public Task_FieldMoveCutIn_ReleaseSpriteData
+	.public Task_FieldMoveCutIn_TransferFlySprites
+	.public Task_FieldMoveCutIn_ReleaseFlySpriteData
+	.public FieldMoveCutIn_InitBannerGraphics
+	.public FieldMoveCutIn_InitSpriteGraphics
+	.public FieldMoveCutIn_FreeBannerGraphics
+	.public FieldMoveCutIn_FreeSpriteGraphics
+	.public FieldMoveCutIn_OpenNarc
+	.public FieldMoveCutIn_LoadSpriteResources
+	.public FieldMoveCutIn_FreeSpriteResources
+	.public FieldMoveCutIn_DrawSprites
+	.public FieldMoveCutIn_CreateSprite
+	.public FieldMoveCutIn_CreateEffectSprite
+	.public FieldMoveCutIn_CreateTrainerSprite
+	.public CutInSprite_StartAnimation
+	.public FieldMoveCutIn_CreateFlyerSprite
+	.public FieldMoveCutIn_LoadFlyResources
+	.public CutInBanner_LoadPalette
+	.public CutInBanner_LoadChar
+	.public CutInBanner_LoadScreen
+	.public CutInBanner_Clear
+	.public FieldMoveCutIn_StartWindow
+	.public FieldMoveCutIn_EnableWindow
+	.public FieldMoveCutIn_DisableWindow
+	.public FieldMoveCutIn_SetWindowPlanes
+	.public FieldMoveCutIn_SetWindowOutsidePlanes
+	.public FieldMoveCutIn_SetWindowRect
+	.public FieldMoveCutIn_CreateWindowTask
+	.public FieldMoveCutIn_DestroyWindowTask
 	.public Task_FieldMoveCutIn_UpdateWindow
 	.public FieldMoveCutIn_GetMonPicIds
 	.public FieldMoveCutIn_LoadMonChar
@@ -1555,20 +1555,20 @@
 	.public ov02_022508B4
 	.public ov02_022508D8
 	.public sFlyLandingIdleSteps
-	.public ov02_022532FC
+	.public sCutInTrainerPlttFiles
 	.public ov02_02253300
-	.public ov02_02253304
-	.public ov02_0225330A
-	.public ov02_02253310
+	.public sCutInTrainerCharFiles
+	.public sCutInTrainerAnimFiles
+	.public sCutInTrainerCellFiles
 	.public sFlyLandingPhases
 	.public ov02_02253330
-	.public ov02_02253348
+	.public sCutInFlyWithObjectTrainerPos
 	.public ov02_02253354
 	.public sFlyLandingFlyerScale
 	.public ov02_0225336C
 	.public ov02_02253378
-	.public ov02_02253384
-	.public ov02_02253390
+	.public sCutInMonPos
+	.public sCutInFlyerScale
 	.public sFlyLandingSwoopCenter
 	.public sFlyLandingTrainerScale
 	.public sFlyLandingFlyAwayScale
@@ -1577,9 +1577,9 @@
 	.public sFlyLandingFlyAwayCenter
 	.public ov02_022533E4
 	.public ov02_022533F0
-	.public ov02_022533FC
-	.public ov02_02253408
-	.public ov02_02253414
+	.public sCutInFlyTrainerPos
+	.public sCutInTrainerPos
+	.public sCutInFlyMonPos
 	.public ov02_02253420
 	.public ov02_02253430
 	.public ov02_02253440
@@ -1590,24 +1590,24 @@
 	.public ov02_022534A4
 	.public ov02_022534B8
 	.public sFlyLandingSteps
-	.public ov02_022534F0
+	.public sFieldMoveCutInFlyWithObjectSteps
 	.public ov02_02253520
-	.public ov02_02253550
-	.public ov02_02253588
+	.public sFieldMoveCutInSteps
+	.public sFieldMoveCutInFlySteps
 	.public ov02_022535E4
 	.public ov02_022536E8
-	.public ov02_022536F0
-	.public ov02_02253700
-	.public ov02_02253710
-	.public ov02_02253724
-	.public ov02_0225373C
-	.public ov02_02253754
-	.public ov02_02253770
-	.public ov02_02253794
-	.public ov02_022537B8
-	.public ov02_022537DC
-	.public ov02_02253820
-	.public ov02_02253884
+	.public sFieldMoveArrivalSteps
+	.public sEscapeRopeSteps
+	.public sDigWithFollowMonSteps
+	.public sTeleportSteps
+	.public sTeleportWithFollowMonSteps
+	.public sDigSteps
+	.public sTeleportFollowMonSpinMovement
+	.public sEscapeRopeSpinMovement
+	.public sDigHoleMovement
+	.public sDigSinkMovement
+	.public sEscapeRopeSpinStartMovement
+	.public sArrivalSpinMovement
 	.public sRideEffectFileIds
 	.public sRockSmashEffectAtPlayerTemplate
 	.public sWhirlpoolEffectTemplate
@@ -1652,36 +1652,36 @@
 	.public FieldMove_FadeInFromWhite
 	.public FieldMove_FadeOutToWhite
 	.public FieldMove_SetPlayerVisible
-	.public ov02_0224953C
-	.public ov02_02249548
-	.public ov02_0224957C
-	.public ov02_022495B8
-	.public ov02_022495D0
-	.public ov02_02249940
-	.public ov02_02249954
-	.public ov02_02249968
-	.public ov02_0224997C
-	.public ov02_02249AC4
-	.public ov02_02249AD8
-	.public ov02_02249AF0
-	.public ov02_02249B10
-	.public ov02_02249B38
-	.public ov02_02249CD8
-	.public ov02_02249CF0
-	.public ov02_02249D18
-	.public ov02_02249D40
-	.public ov02_0224A074
-	.public ov02_0224A32C
-	.public ov02_0224A450
-	.public ov02_0224A63C
-	.public ov02_0224A648
-	.public ov02_0224A66C
-	.public ov02_0224A674
-	.public ov02_0224A67C
-	.public ov02_0224A690
-	.public ov02_0224A69C
-	.public ov02_0224A6A8
-	.public ov02_0224A6D0
+	.public FieldMoveCutIn_IsFinished
+	.public FieldMoveCutIn_Delete
+	.public FieldMoveCutIn_Free
+	.public FieldMoveCutIn_StepLoadBannerGraphics
+	.public FieldMoveCutIn_StepLoadSpriteGraphics
+	.public FieldMoveCutIn_StepFreeBannerGraphics
+	.public FieldMoveCutIn_StepFreeSpriteGraphics
+	.public FieldMoveCutIn_StepEndWindow
+	.public FieldMoveCutIn_StepFinish
+	.public FieldMoveCutIn_StepFreeMonGraphics
+	.public FieldMoveCutIn_StepLoadFlyGraphics
+	.public FieldMoveCutIn_StepWaitFlyGraphics
+	.public FieldMoveCutIn_StepStartFly
+	.public FieldMoveCutIn_StepWaitTakeOff
+	.public FieldMoveCutIn_StepWaitPaletteFade
+	.public FieldMoveCutIn_StartSpriteTransfer
+	.public FieldMoveCutIn_StartFlySpriteTransfer
+	.public FieldMoveCutIn_EndSpriteTransfer
+	.public FieldMoveCutIn_OpenNarc
+	.public FieldMoveCutIn_DrawSprites
+	.public CutInSprite_StartAnimation
+	.public CutInBanner_Clear
+	.public FieldMoveCutIn_StartWindow
+	.public FieldMoveCutIn_EnableWindow
+	.public FieldMoveCutIn_DisableWindow
+	.public FieldMoveCutIn_SetWindowPlanes
+	.public FieldMoveCutIn_SetWindowOutsidePlanes
+	.public FieldMoveCutIn_SetWindowRect
+	.public FieldMoveCutIn_CreateWindowTask
+	.public FieldMoveCutIn_DestroyWindowTask
 	.public FieldMoveCutIn_LoadMonPltt
 	.public CutInScrollSprite_Destroy
 	.public CutInScrollSprite_Draw
@@ -1760,8 +1760,8 @@
 	.public FollowMonInteraction_StepHasWait
 	.public ov02_022508B4
 
-	thumb_func_start ov02_02249B60
-ov02_02249B60: ; 0x02249B60
+	thumb_func_start FieldMoveCutIn_StepWaitBeforeFlyAway
+FieldMoveCutIn_StepWaitBeforeFlyAway: ; 0x02249B60
 	push {r3, lr}
 	ldr r1, [r0, #8]
 	add r1, r1, #1
@@ -1778,11 +1778,11 @@ _02249B7A:
 	mov r0, #1
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end ov02_02249B60
+	thumb_func_end FieldMoveCutIn_StepWaitBeforeFlyAway
 
 
-	thumb_func_start ov02_02249B80
-ov02_02249B80: ; 0x02249B80
+	thumb_func_start FieldMoveCutIn_StepWaitBeforeFlyAwayWithObject
+FieldMoveCutIn_StepWaitBeforeFlyAwayWithObject: ; 0x02249B80
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r1, [r4, #8]
@@ -1802,11 +1802,11 @@ _02249BA2:
 	mov r0, #1
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov02_02249B80
+	thumb_func_end FieldMoveCutIn_StepWaitBeforeFlyAwayWithObject
 
 
-	thumb_func_start ov02_02249BA8
-ov02_02249BA8: ; 0x02249BA8
+	thumb_func_start FieldMoveCutIn_StepWaitFlyAway
+FieldMoveCutIn_StepWaitFlyAway: ; 0x02249BA8
 	push {r4, lr}
 	add r4, r0, #0
 	bl FieldMoveCutIn_GetFlyerStatus
@@ -1829,11 +1829,11 @@ _02249BB8:
 	pop {r4, pc}
 	nop
 _02249BD4: .word SEQ_SE_DP_FW019
-	thumb_func_end ov02_02249BA8
+	thumb_func_end FieldMoveCutIn_StepWaitFlyAway
 
 
-	thumb_func_start ov02_02249BD8
-ov02_02249BD8: ; 0x02249BD8
+	thumb_func_start FieldMoveCutIn_StepCloseFlyWindow
+FieldMoveCutIn_StepCloseFlyWindow: ; 0x02249BD8
 	push {r3, r4, lr}
 	sub sp, #4
 	add r4, r0, #0
@@ -1878,7 +1878,7 @@ _02249C1E:
 	ldr r2, [r4, #0x4c]
 	ldr r3, [r4, #0x48]
 	add r0, r4, #0
-	bl ov02_0224A69C
+	bl FieldMoveCutIn_SetWindowRect
 	mov r0, #1
 	str r0, [r4, #0x2c]
 	ldr r0, [r4, #0x18]
@@ -1914,11 +1914,11 @@ _02249C6C:
 	add sp, #4
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov02_02249BD8
+	thumb_func_end FieldMoveCutIn_StepCloseFlyWindow
 
 
-	thumb_func_start ov02_02249C74
-ov02_02249C74: ; 0x02249C74
+	thumb_func_start FieldMoveCutIn_StepWaitFlyEnd
+FieldMoveCutIn_StepWaitFlyEnd: ; 0x02249C74
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r1, [r4, #0x20]
@@ -1967,4 +1967,4 @@ _02249CC8:
 	str r0, [r4]
 	mov r0, #0
 	pop {r4, pc}
-	thumb_func_end ov02_02249C74
+	thumb_func_end FieldMoveCutIn_StepWaitFlyEnd

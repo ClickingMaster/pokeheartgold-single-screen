@@ -465,9 +465,9 @@
 .public FieldSystem_PerformHeadbuttEncounterCheck
 .public FieldSystem_GenerateSingleWildPokemon
 .public FieldSystem_CanGenerateStepEncounter
-.public ov02_02249458
-.public ov02_0224953C
-.public ov02_02249548
+.public FieldMoveCutIn_Start
+.public FieldMoveCutIn_IsFinished
+.public FieldMoveCutIn_Delete
 .public FlyLanding_Start
 .public FlyLanding_IsDone
 .public FlyLanding_Delete
@@ -539,5 +539,5 @@
 .public ov02_02253188
 .public ov02_022531B4
 .public BugContest_GetEncounterSlot
-.public ov02_022494C4
+.public FieldMoveCutIn_StartFlyWithObject
 .public FieldSystem_GetSafariAreaIndex

@@ -83,9 +83,9 @@ typedef struct FieldMoveCutIn {
 } FieldMoveCutIn;
 
 // The first half of the cut-in (state machines, banner, sprite resources).
-Sprite *ov02_0224A33C(FieldMoveCutIn *cutIn, VecFx32 *pos, int charId, int plttId, int cellId, int animId, int priority, int drawPriority);
-Sprite *ov02_0224A3F0(FieldMoveCutIn *cutIn, VecFx32 *pos, int drawPriority, int animSeq);
-Sprite *ov02_0224A468(FieldMoveCutIn *cutIn, VecFx32 *pos, int drawPriority, int unused);
+Sprite *FieldMoveCutIn_CreateSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, int charId, int plttId, int cellId, int animId, int priority, int drawPriority);
+Sprite *FieldMoveCutIn_CreateEffectSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, int drawPriority, int animSeq);
+Sprite *FieldMoveCutIn_CreateFlyerSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, int drawPriority, int unused);
 
 // field_move_cut_in_effects.c
 void Task_FieldMoveCutIn_UpdateWindow(SysTask *task, void *data);

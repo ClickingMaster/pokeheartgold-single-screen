@@ -307,7 +307,7 @@ void FieldMoveCutIn_FreeMonResources(FieldMoveCutIn *cutIn) {
 }
 
 Sprite *FieldMoveCutIn_CreateMonSprite(FieldMoveCutIn *cutIn, VecFx32 *pos) {
-    return ov02_0224A33C(cutIn, pos, 3, 3, 3, -1, 0, 0x81);
+    return FieldMoveCutIn_CreateSprite(cutIn, pos, 3, 3, 3, -1, 0, 0x81);
 }
 
 void FieldMoveCutIn_CreateScrollSprites(FieldMoveCutIn *cutIn, int mode) {
@@ -350,7 +350,7 @@ BOOL CutInScrollSprite_Init(FieldEffect *effect, CutInScrollSprite *work) {
     work->args = *args;
     work->animSeq = FieldEffect_GetParam(effect);
     FieldEffect_GetPosition(effect, &position);
-    work->sprite = ov02_0224A3F0(work->args.cutIn, &position, work->args.drawPriority, work->animSeq);
+    work->sprite = FieldMoveCutIn_CreateEffectSprite(work->args.cutIn, &position, work->args.drawPriority, work->animSeq);
     Sprite_SetDrawFlag(work->sprite, FALSE);
     return TRUE;
 }
@@ -413,7 +413,7 @@ BOOL CutInFlyer_Init(FieldEffect *effect, CutInFlyer *flyer) {
     VecFx32 pos;
     flyer->cutIn = *(FieldMoveCutIn **)FieldEffect_GetUserData(effect);
     FieldEffect_GetPosition(effect, &pos);
-    flyer->sprite = ov02_0224A468(flyer->cutIn, &pos, 0, 0);
+    flyer->sprite = FieldMoveCutIn_CreateFlyerSprite(flyer->cutIn, &pos, 0, 0);
     return TRUE;
 }
 

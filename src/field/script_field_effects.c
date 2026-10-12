@@ -143,7 +143,7 @@ extern const u16 *ov02_02253D80[];
 extern const u16 *ov02_02253D84[];
 
 // Defined with overlay 2's field move cut-in tasks, which have no header yet.
-SysTask *ov02_022494C4(FieldSystem *fieldSystem, Pokemon *mon, LocalMapObject *obj1, LocalMapObject *obj2);
+SysTask *FieldMoveCutIn_StartFlyWithObject(FieldSystem *fieldSystem, Pokemon *mon, LocalMapObject *obj1, LocalMapObject *obj2);
 
 Ov02_02245B80Env *ov02_02245B9C(FieldSystem *fieldSystem);
 BOOL ov02_02245BC8(TaskManager *taskManager);
@@ -776,12 +776,12 @@ BOOL Task_LanceFliesAway(TaskManager *taskManager) {
     LanceFliesAwayEnv *env = TaskManager_GetEnvironment(taskManager);
     switch (env->state) {
     case 0:
-        env->flyTask = ov02_022494C4(env->fieldSystem, env->dragonite, env->lance, env->dragoniteObject);
+        env->flyTask = FieldMoveCutIn_StartFlyWithObject(env->fieldSystem, env->dragonite, env->lance, env->dragoniteObject);
         env->state++;
         break;
     case 1:
-        if (ov02_0224953C(env->flyTask)) {
-            ov02_02249548(env->flyTask);
+        if (FieldMoveCutIn_IsFinished(env->flyTask)) {
+            FieldMoveCutIn_Delete(env->flyTask);
             Heap_Free(env->dragonite);
             Heap_Free(env);
             return TRUE;

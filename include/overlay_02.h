@@ -55,9 +55,9 @@ Field3dObjectTask *RockDebris_CreateWithFollower(FieldSystem *fieldSystem);
 void RockDebris_Delete(Field3dObjectTask *task);
 
 // TODO: define the struct, figure out what a1 is
-void *ov02_02249458(FieldSystem *fieldSystem, int a1, Pokemon *mon, int gender);
-BOOL ov02_0224953C(void *work);
-void ov02_02249548(void *work);
+void *FieldMoveCutIn_Start(FieldSystem *fieldSystem, int a1, Pokemon *mon, int gender);
+BOOL FieldMoveCutIn_IsFinished(void *work);
+void FieldMoveCutIn_Delete(void *work);
 
 void ov02_02245B80(TaskManager *taskManager);
 void ShowTrapEffect(TaskManager *taskManager, u8 kind);

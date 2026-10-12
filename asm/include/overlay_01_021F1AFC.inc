@@ -121,9 +121,9 @@
 .public FollowMon_SetFacingDirection
 .public FollowMon_IsNextToPlayer
 .public FieldSystem_GetLeadMonIndex
-.public ov02_02249458
-.public ov02_0224953C
-.public ov02_02249548
+.public FieldMoveCutIn_Start
+.public FieldMoveCutIn_IsFinished
+.public FieldMoveCutIn_Delete
 .public WaterfallEffect_Create
 .public WaterfallEffect_Delete
 .public WhirlpoolEffect_Create

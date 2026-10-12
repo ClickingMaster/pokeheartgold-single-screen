@@ -30,8 +30,8 @@
 .public Task_UseSweetScentInField
 .public Task_WaitFollowMonMovement
 .public FieldSystem_GetLeadMonIndex
-.public ov02_02249458
-.public ov02_0224953C
-.public ov02_02249548
+.public FieldMoveCutIn_Start
+.public FieldMoveCutIn_IsFinished
+.public FieldMoveCutIn_Delete
 .public FieldSystem_FirstAliveMonHasType
 .public ov02_022507B4

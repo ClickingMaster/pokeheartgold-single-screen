@@ -1173,26 +1173,7 @@ Overlay OVY_2
     Object src/field/encounter_check.o
     Object src/field/sprite_gfx_manager.o
     Object src/field/fly_landing_effect.o
-    Object src/overlay02_port_r6.o
-    Object src/overlay02_248728_partial_6.o
-    Object src/overlay02_port_r7.o
-    Object src/overlay02_248728_partial_7.o
-    Object src/overlay02_port_r8.o
-    Object src/overlay02_248728_partial_8.o
-    Object src/overlay02_anim_steps_r9_run1.o
-    Object src/overlay02_248728_partial_9.o
-    Object src/overlay02_port_r10.o
-    Object src/overlay02_248728_partial_10.o
-    Object src/to46_overlay02_anim_steps_r11.o
-    Object src/overlay02_248728_partial_11.o
-    Object src/overlay02_starter_resource_tasks_r12.o
-    Object src/overlay02_248728_partial_12.o
-    Object src/overlay02_port_r13.o
-    Object src/overlay02_248728_partial_13.o
-    Object src/overlay02_port_r14_combined.o
-    Object src/overlay02_248728_partial_14.o
-    Object src/overlay02_port_r15.o
-    Object src/overlay02_248728_partial_15.o
+    Object src/field/field_move_cut_in.o
     Object src/field/field_move_cut_in_effects.o
     Object src/field/map_prop_anims.o
     Object src/field/field_move_warp_tasks.o

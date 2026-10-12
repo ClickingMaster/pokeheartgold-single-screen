@@ -76,12 +76,12 @@ BOOL Task_UseSweetScentInField(TaskManager *taskManager) {
         break;
     }
     case 2:
-        work->effect = ov02_02249458(fieldSystem, 0, env->mon, PlayerAvatar_GetGender(fieldSystem->playerAvatar));
+        work->effect = FieldMoveCutIn_Start(fieldSystem, 0, env->mon, PlayerAvatar_GetGender(fieldSystem->playerAvatar));
         ++*state;
         break;
     case 3:
-        if (ov02_0224953C(work->effect)) {
-            ov02_02249548(work->effect);
+        if (FieldMoveCutIn_IsFinished(work->effect)) {
+            FieldMoveCutIn_Delete(work->effect);
             *state = 6;
         }
         break;

@@ -19,7 +19,7 @@ enum FlyLandingStatus {
 
 // Effect user data, copied into the state by FlyLandingEffect_Init.
 typedef struct FlyLandingEffectArgs {
-    struct FieldEffectPool *pool;
+    void *effectPool; // the FieldEffectPool the effect runs in
     FieldSystem *fieldSystem;
     Sprite *trainerSprite;
     SpriteGfxManager *gfxManager;
@@ -44,13 +44,13 @@ typedef struct FlyLandingEffect {
     u8 unused_54[4];
     FlyLandingEffectArgs args;
     Sprite *flyerSprite;
-    FieldEffect *trainerEffect;
+    FieldEffect *trainerJumpEffect;
     SysTask *cameraZoom;
 } FlyLandingEffect;
 
 Sprite *FlyLanding_CreateFlyerSprite(SpriteGfxManager *gfxManager);
 Sprite *FlyLanding_CreateTrainerSprite(SpriteGfxManager *gfxManager, int gender);
-FieldEffect *FlyLandingEffect_Create(FieldSystem *fieldSystem, struct FieldEffectPool *pool, SpriteGfxManager *gfxManager, Sprite *trainerSprite);
+FieldEffect *FlyLandingEffect_Create(FieldSystem *fieldSystem, void *effectPool, SpriteGfxManager *gfxManager, Sprite *trainerSprite);
 u8 FlyLandingEffect_GetStatus(FieldEffect *effect);
 void FlyLandingEffect_Delete(FieldEffect *effect);
 void FlyLandingEffect_Start(FieldEffect *effect);

@@ -17,10 +17,10 @@
 typedef BOOL (*FlyLandingStepFunc)(FlyLandingEffect *effect);
 
 // Defined in field_effects.c, which has no public prototypes for its pool.
-FieldEffect *FieldEffectPool_AddBasicEffect(struct FieldEffectPool *pool, const FieldEffectBasicTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
+FieldEffect *FieldEffectPool_AddBasicEffect(void *pool, const FieldEffectBasicTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
 
-// Defined with overlay 2's fly arrival task: a field effect that keeps an object on the trainer sprite.
-FieldEffect *FieldMoveCutIn_CreateTrainerJumpEffect(struct FieldEffectPool *pool, Sprite *trainerSprite);
+// Defined with overlay 2's Fly cut-in: the trainer sprite's jump effect.
+FieldEffect *FieldMoveCutIn_CreateTrainerJumpEffect(void *effectPool, Sprite *trainerSprite);
 void TrainerJumpEffect_StartHop(FieldEffect *effect);
 
 // Callbacks of sFlyLandingEffectTemplate and steps of sFlyLandingPhases (overlay 2's data block).
@@ -76,15 +76,15 @@ Sprite *FlyLanding_CreateTrainerSprite(SpriteGfxManager *gfxManager, int gender)
     return sprite;
 }
 
-FieldEffect *FlyLandingEffect_Create(FieldSystem *fieldSystem, struct FieldEffectPool *pool, SpriteGfxManager *gfxManager, Sprite *trainerSprite) {
+FieldEffect *FlyLandingEffect_Create(FieldSystem *fieldSystem, void *effectPool, SpriteGfxManager *gfxManager, Sprite *trainerSprite) {
     VecFx32 pos = { 0, 0, 0 };
     FlyLandingEffectArgs args;
 
-    args.pool = pool;
+    args.effectPool = effectPool;
     args.fieldSystem = fieldSystem;
     args.gfxManager = gfxManager;
     args.trainerSprite = trainerSprite;
-    return FieldEffectPool_AddBasicEffect(pool, &sFlyLandingEffectTemplate, &pos, 0, &args, 0x82);
+    return FieldEffectPool_AddBasicEffect(effectPool, &sFlyLandingEffectTemplate, &pos, 0, &args, 0x82);
 }
 
 u8 FlyLandingEffect_GetStatus(FieldEffect *effect) {
@@ -100,8 +100,8 @@ BOOL FlyLandingEffect_Init(FieldEffect *effect, FlyLandingEffect *landing) {
 
 void FlyLandingEffect_Delete(FieldEffect *effect) {
     FlyLandingEffect *landing = FieldEffect_GetState(effect);
-    if (landing->trainerEffect != NULL) {
-        FieldEffect_Destroy((int)landing->trainerEffect);
+    if (landing->trainerJumpEffect != NULL) {
+        FieldEffect_Destroy((int)landing->trainerJumpEffect);
     }
     if (landing->cameraZoom != NULL) {
         FieldCameraZoom_End(landing->cameraZoom);
@@ -156,7 +156,7 @@ void FlyLandingEffect_Start(FieldEffect *effect) {
     Sprite_SetAffineZRotation(landing->flyerSprite, GF_DegreeToSinCosIdx((u16)(landing->rotation / FX32_ONE)));
     Sprite_SetDrawPriority(landing->flyerSprite, 0x84);
     Sprite_SetDrawFlag(landing->flyerSprite, TRUE);
-    landing->trainerEffect = FieldMoveCutIn_CreateTrainerJumpEffect(landing->args.pool, landing->args.trainerSprite);
+    landing->trainerJumpEffect = FieldMoveCutIn_CreateTrainerJumpEffect(landing->args.effectPool, landing->args.trainerSprite);
     landing->cameraZoom = FieldCameraZoom_Start(landing->args.fieldSystem, HEAP_ID_FIELD1);
     FieldCameraZoom_Set(landing->cameraZoom, 1, FX32_CONST(-120), 12);
     {
@@ -221,7 +221,7 @@ BOOL FlyLandingEffect_SwoopIn(FlyLandingEffect *landing) {
 }
 
 BOOL FlyLandingEffect_StartClimb(FlyLandingEffect *landing) {
-    TrainerJumpEffect_StartHop(landing->trainerEffect);
+    TrainerJumpEffect_StartHop(landing->trainerJumpEffect);
     FieldCameraZoom_Set(landing->cameraZoom, 2, 0, 12);
     landing->scaleSpeed = 0x400;
     landing->angle = FX32_CONST(128);
