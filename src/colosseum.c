@@ -24,7 +24,7 @@
 #include "text.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 
 // Communication core and communication player manager functions, declared with the types their call sites were
 // matched against.

@@ -76,8 +76,8 @@
 .public MapObject_ForceSetHeldMovement
 .public MapObject_IsMovementPaused
 .public MapObject_ClearHeldMovementIfActive
-.public sub_0206234C
-.public sub_02062428
+.public GetMovementForDirection
+.public MapObject_RunForcedMovement
 .public MapObjectMovementCmd108_Step1
 .public MapObjectMovementCmd105_Step0
 .public MapObjectMovementCmd105_Step2
@@ -145,7 +145,7 @@
 .public EmoteMark_Spawn
 .public ov01_02207274
 
-	.public sub_020632B0
+	.public MapObject_StartJumpByOffsetMovement
 	.public sub_02063A40
 	.public sub_02063A5C
 	.public sub_02063A78

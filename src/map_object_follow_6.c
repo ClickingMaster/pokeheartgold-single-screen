@@ -20,7 +20,7 @@ BOOL sub_02066064(LocalMapObject *object, FollowState *state) {
 }
 
 BOOL sub_020660A0(LocalMapObject *object, FollowState *state) {
-    if (!sub_02062428(object)) {
+    if (!MapObject_RunForcedMovement(object)) {
         return FALSE;
     }
     MapObject_ClearSingleMovement(object);

@@ -45,7 +45,7 @@ void sub_0205D4B4(PlayerAvatar *avatar, MapObject *object, int direction, int un
         MapObject_SetNextFacingDirection(object, direction);
     }
 
-    movement = sub_0206234C(direction, movement);
+    movement = GetMovementForDirection(direction, movement);
     sub_0205DA1C(avatar, object, movement);
     if (!turn) {
         void *fieldSystem = MapObject_GetFieldSystem(object);

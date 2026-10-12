@@ -39,7 +39,7 @@ int ov01_021F2E38(struct WaterfallWork *work, TaskManager *taskManager) {
 
 int ov01_021F2E6C(struct WaterfallWork *work, TaskManager *taskManager) {
     if (MapObject_AreBitsSetForMovementScriptInit(work->obj) == TRUE) {
-        MapObject_SetHeldMovement(work->obj, sub_0206234C(work->direction, 4));
+        MapObject_SetHeldMovement(work->obj, GetMovementForDirection(work->direction, 4));
         work->state++;
     }
     return 0;

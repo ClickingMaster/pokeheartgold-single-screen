@@ -78,7 +78,7 @@ MapObjectMovementCmd101_Step1: ; 0x020631F0
 	add r5, r0, #0
 	bl sub_0205F3E4
 	add r4, r0, #0
-	ldr r0, _02063250 ; =_0210FACC
+	ldr r0, _02063250 ; =gJumpHeightTables
 	add r1, sp, #0
 	ldr r2, [r0]
 	mov r0, #0
@@ -116,6 +116,6 @@ _02063228:
 	add sp, #0xc
 	pop {r4, r5, pc}
 	nop
-_02063250: .word _0210FACC
+_02063250: .word gJumpHeightTables
 _02063254: .word 0x00020028
 	thumb_func_end MapObjectMovementCmd101_Step1

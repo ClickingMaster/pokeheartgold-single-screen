@@ -9,7 +9,7 @@
 #include "metatile_behavior.h"
 #include "player_avatar.h"
 #include "sound_playback.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 
 typedef struct FootstepEntry {
     u16 sequence;
@@ -17,7 +17,7 @@ typedef struct FootstepEntry {
 } FootstepEntry;
 
 u16 sub_0205F504(LocalMapObject *);
-int sub_02062390(int);
+int GetMovementDirection(int);
 int MapObject_GetMetatileBehaviorInDirection(LocalMapObject *, int);
 int sub_02060FE0(LocalMapObject *, int);
 BOOL sub_0205DE64(int);

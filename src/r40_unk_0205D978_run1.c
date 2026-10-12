@@ -7,13 +7,13 @@ void sub_0205D978(PlayerAvatar *avatar, MapObject *mapObject) {
     u32 collision = sub_0205DA34(avatar, mapObject, direction);
 
     if (collision & 4) {
-        movement = sub_0206234C(direction, 0x38);
+        movement = GetMovementForDirection(direction, 0x38);
     } else if (collision & 0x40) {
-        movement = sub_0206234C(direction, 0);
+        movement = GetMovementForDirection(direction, 0);
         PlayerAvatar_ClearUnk24ClearFlag2(avatar);
     } else if (collision != 0) {
         canMove = FALSE;
-        movement = sub_0206234C(direction, 0x1C);
+        movement = GetMovementForDirection(direction, 0x1C);
         if (!(collision & 8)) {
             PlaySE(SEQ_SE_DP_WALL_HIT);
         }

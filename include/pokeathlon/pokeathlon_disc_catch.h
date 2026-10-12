@@ -70,7 +70,7 @@ typedef struct PokeathlonDiscCatchMon {
 } PokeathlonDiscCatchMon; // size: 0x48
 
 typedef struct PokeathlonDiscCatchResult {
-    u32 unk0 : 2;
+    u32 participant : 2; // its index
     u32 score : 16;
     u32 unk0_18 : 14;
 } PokeathlonDiscCatchResult;

@@ -34,7 +34,7 @@
 #include "sound_playback.h"
 #include "unk_02054648.h"
 #include "map_object_movement_utilities.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 
 typedef struct UnkStruct_0206D494 {
     LocalMapObject *unk00;

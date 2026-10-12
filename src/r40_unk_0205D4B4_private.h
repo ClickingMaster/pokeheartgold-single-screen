@@ -21,7 +21,7 @@ int sub_0205F504(MapObject *);
 int sub_0205D44C(MapObject *, u8, int);
 void sub_0205E048(PlayerAvatar *);
 void PlayerAvatar_SetFlag6(PlayerAvatar *);
-int sub_0206234C(int, int);
+int GetMovementForDirection(int, int);
 void sub_0205DA1C(PlayerAvatar *, MapObject *, int);
 int MapObject_GetPreviousXCoord(MapObject *);
 int MapObject_GetPreviousZCoord(MapObject *);

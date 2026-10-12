@@ -71,7 +71,7 @@ _02061420:
 	add r0, r5, #0
 	bl MapObject_GetFacingDirection
 	mov r1, #0
-	bl sub_0206234C
+	bl GetMovementForDirection
 	add r1, r0, #0
 	add r0, r5, #0
 	bl MapObject_ForceSetHeldMovement
@@ -82,7 +82,7 @@ _02061420:
 	pop {r4, r5, r6, pc}
 _0206144A:
 	add r0, r5, #0
-	bl sub_02062428
+	bl MapObject_RunForcedMovement
 	cmp r0, #0
 	beq _020614EE
 	mov r1, #0
@@ -138,7 +138,7 @@ _020614AA:
 _020614BC:
 	ldr r1, [r4, #8]
 	add r0, r6, #0
-	bl sub_0206234C
+	bl GetMovementForDirection
 	add r1, r0, #0
 	add r0, r5, #0
 	bl MapObject_ForceSetHeldMovement
@@ -150,7 +150,7 @@ _020614BC:
 	strh r0, [r4]
 _020614DA:
 	add r0, r5, #0
-	bl sub_02062428
+	bl MapObject_RunForcedMovement
 	cmp r0, #0
 	beq _020614EE
 	add r0, r5, #0

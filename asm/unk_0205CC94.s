@@ -27,7 +27,7 @@ sub_0205CC94: ; 0x0205CC94
 	lsr r5, r0, #0x18
 	add r0, r4, #0
 	bl MapObject_GetMovementCommand
-	bl sub_02062390
+	bl GetMovementDirection
 	add r1, r0, #0
 	mov r0, #0
 	mvn r0, r0
@@ -115,7 +115,7 @@ sub_0205CD70: ; 0x0205CD70
 	add r6, r0, #0
 	add r5, r1, #0
 	bl MapObject_GetMovementCommand
-	bl sub_02062390
+	bl GetMovementDirection
 	str r0, [sp]
 	add r0, r6, #0
 	bl sub_0205F504

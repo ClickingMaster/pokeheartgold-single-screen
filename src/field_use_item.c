@@ -37,7 +37,7 @@
 #include "text.h"
 #include "field_interaction.h"
 #include "unk_02054648.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 #include "frontier_field_support.h"
 
 struct ItemUseFuncDat {

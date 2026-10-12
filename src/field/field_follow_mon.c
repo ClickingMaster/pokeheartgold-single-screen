@@ -25,7 +25,7 @@
 #include "sys_task_api.h"
 #include "task.h"
 #include "unk_02054648.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 #include "vram_transfer_manager.h"
 
 // Overlay 01 helpers for the following Pokemon (map object obj_partner_poke, and the Day-Care Pokemon that use
@@ -47,7 +47,7 @@ u8 sub_0206599C(LocalMapObject *object);
 u32 sub_020659A8(LocalMapObject *object);
 void sub_020659B8(LocalMapObject *object);
 // unk_02062108.c: the movement for a direction (movement + direction).
-u32 sub_0206234C(u32 direction, u32 movement);
+u32 GetMovementForDirection(u32 direction, u32 movement);
 // field object models (still in asm or crammed).
 void *ov01_021FC5A4(void *bank, u32 id);
 BOOL ov01_021F9744(MapObjectManager *manager, u32 spriteId, void *record);
@@ -741,7 +741,7 @@ BOOL ov01_02205F00(TaskManager *taskMan) {
     case 4:
         if (MapObject_AreBitsSetForMovementScriptInit(fieldSystem->followMon.mapObject) == TRUE) {
             sub_0206A040(fieldSystem->followMon.mapObject, FALSE);
-            MapObject_SetHeldMovement(fieldSystem->followMon.mapObject, sub_0206234C(MapObject_GetFacingDirection(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)), 52));
+            MapObject_SetHeldMovement(fieldSystem->followMon.mapObject, GetMovementForDirection(MapObject_GetFacingDirection(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)), 52));
             ++*state;
         }
         break;

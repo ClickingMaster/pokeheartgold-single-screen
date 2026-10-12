@@ -212,12 +212,12 @@
 	.public PokeathlonDiscCatch_GetTeamScore
 	.public PokeathlonDiscCatch_Square
 	.public PokeathlonDiscCatch_SlowDown
-	.public ov96_0220F3B4
-	.public ov96_0220FF64
-	.public ov96_0221022C
-	.public ov96_0221031C
-	.public ov96_022104C4
-	.public ov96_02210850
+	.public PokeathlonDiscCatchStats_GetJumpDuration
+	.public PokeathlonDiscCatchDiscs_Init
+	.public PokeathlonDiscCatch_AddScoreWindow
+	.public PokeathlonDiscCatchScoreboard_Pause
+	.public PokeathlonDiscCatchScoreboard_GetOwnScore
+	.public PokeathlonDiscCatchCpu_Delete
 	.public PokeathlonGoalRoll_Draw
 	.public PokeathlonGoalRoll_SetTouchTarget
 	.public PokeathlonGoalRollDisplay_GetScore

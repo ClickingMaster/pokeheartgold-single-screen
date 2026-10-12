@@ -14,8 +14,8 @@
 
 	.data
 
-	.public _0210FACC
-_0210FACC:
+	.public gJumpHeightTables
+gJumpHeightTables:
 	.word _020FDA84
 	.word _020FDAC4
 	.word _020FDB04
@@ -200,8 +200,8 @@ MovementScriptMachineSub_Done: ; 0x02062348
 	mov r0, #0
 	bx lr
 	thumb_func_end MovementScriptMachineSub_Done
-	thumb_func_start sub_0206234C
-sub_0206234C: ; 0x0206234C
+	thumb_func_start GetMovementForDirection
+GetMovementForDirection: ; 0x0206234C
 	push {r3, r4, r5, r6, r7, lr}
 	add r7, r0, #0
 	add r4, r1, #0
@@ -239,9 +239,9 @@ _02062384:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _0206238C: .word _020FD198
-	thumb_func_end sub_0206234C
-	thumb_func_start sub_02062390
-sub_02062390: ; 0x02062390
+	thumb_func_end GetMovementForDirection
+	thumb_func_start GetMovementDirection
+GetMovementDirection: ; 0x02062390
 	push {r4, r5}
 	ldr r4, _020623C4 ; =_020FD198
 	ldr r5, [r4]
@@ -273,7 +273,7 @@ _020623BA:
 	bx lr
 	nop
 _020623C4: .word _020FD198
-	thumb_func_end sub_02062390
+	thumb_func_end GetMovementDirection
 	thumb_func_start sub_020623C8
 sub_020623C8: ; 0x020623C8
 	sub r0, #0x38
@@ -309,8 +309,8 @@ _020623F2:
 	.balign 4, 0
 _020623FC: .word _020FDA28
 	thumb_func_end sub_020623D8
-	thumb_func_start sub_02062400
-sub_02062400: ; 0x02062400
+	thumb_func_start MapObject_ExecuteMovementCommand
+MapObject_ExecuteMovementCommand: ; 0x02062400
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 _02062404:
@@ -330,12 +330,12 @@ _02062404:
 _02062424:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end sub_02062400
-	thumb_func_start sub_02062428
-sub_02062428: ; 0x02062428
+	thumb_func_end MapObject_ExecuteMovementCommand
+	thumb_func_start MapObject_RunForcedMovement
+MapObject_RunForcedMovement: ; 0x02062428
 	push {r4, lr}
 	add r4, r0, #0
-	bl sub_02062400
+	bl MapObject_ExecuteMovementCommand
 	add r0, r4, #0
 	mov r1, #0x20
 	bl MapObject_TestFlagsBits
@@ -355,7 +355,7 @@ _02062440:
 	bl MapObject_SetMovementStep
 	mov r0, #1
 	pop {r4, pc}
-	thumb_func_end sub_02062428
+	thumb_func_end MapObject_RunForcedMovement
 	thumb_func_start MapObject_RunMovementCommand
 MapObject_RunMovementCommand: ; 0x0206245C
 	push {r3, lr}
@@ -377,8 +377,8 @@ MapObjectMovementCmd098_Step2: ; 0x02062470
 	mov r0, #0
 	pop {r3, pc}
 	thumb_func_end MapObjectMovementCmd098_Step2
-	thumb_func_start sub_0206247C
-sub_0206247C: ; 0x0206247C
+	thumb_func_start MapObject_StartFaceMovement
+MapObject_StartFaceMovement: ; 0x0206247C
 	push {r4, lr}
 	add r4, r0, #0
 	bl MapObject_SetFacingDirection
@@ -391,7 +391,7 @@ sub_0206247C: ; 0x0206247C
 	bl MapObject_IncrementMovementStep
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end sub_0206247C
+	thumb_func_end MapObject_StartFaceMovement
 
 	.rodata
 

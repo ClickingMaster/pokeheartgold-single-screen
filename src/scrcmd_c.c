@@ -90,7 +90,7 @@
 #include "unk_0205B3DC.h"
 #include "unk_0205BB1C.h"
 #include "map_object_movement_utilities.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 #include "unk_020658D4.h"
 #include "unk_02067A80.h"
 #include "trainer_card_data.h"

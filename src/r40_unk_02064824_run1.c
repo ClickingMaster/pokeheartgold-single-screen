@@ -10,7 +10,7 @@ BOOL sub_02064824(TrainerApproachWork *work) {
     if (direction != PlayerAvatar_GetFacingDirection(work->player) && (work->unk18 == 0 || work->unk14 == 2)) {
         if (MapObject_AreBitsSetForMovementScriptInit(obj) == TRUE) {
             MapObject_ClearFlagsBits(obj, (MapObjectFlagBits)0x80);
-            MapObject_SetHeldMovement(obj, sub_0206234C(direction, 0));
+            MapObject_SetHeldMovement(obj, GetMovementForDirection(direction, 0));
             work->state = 15;
         }
     } else {

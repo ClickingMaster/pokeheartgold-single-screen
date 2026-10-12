@@ -10,9 +10,9 @@
 #include "unk_0205CB48.h"
 
 // Defined elsewhere without a header yet.
-u32 sub_0206234C(s32 direction, u32 movement);
+u32 GetMovementForDirection(s32 direction, u32 movement);
 void MapObject_ForceSetHeldMovement(LocalMapObject *object, u32 movement);
-BOOL sub_02062428(LocalMapObject *object);
+BOOL MapObject_RunForcedMovement(LocalMapObject *object);
 
 extern MovementStateFunc _020FD4EC[];
 extern MovementStateFunc _020FD548[];
@@ -127,12 +127,12 @@ void sub_020613F8(LocalMapObject *object) {
     case 0:
         MapObject_ClearSingleMovement(object);
         MapObject_ClearEndMovement(object);
-        direction = sub_0206234C(MapObject_GetFacingDirection(object), 0);
+        direction = GetMovementForDirection(MapObject_GetFacingDirection(object), 0);
         MapObject_ForceSetHeldMovement(object, direction);
         state->state++;
         break;
     case 1:
-        if (!sub_02062428(object)) {
+        if (!MapObject_RunForcedMovement(object)) {
             break;
         }
         state->delay = DirectionList_GetRandom(_020FD7B8, -1);
@@ -154,11 +154,11 @@ void sub_020613F8(LocalMapObject *object) {
             state->state = 0;
             break;
         }
-        MapObject_ForceSetHeldMovement(object, sub_0206234C(direction, state->heldMovement));
+        MapObject_ForceSetHeldMovement(object, GetMovementForDirection(direction, state->heldMovement));
         MapObject_SetSingleMovement(object);
         state->state++;
     case 4:
-        if (sub_02062428(object)) {
+        if (MapObject_RunForcedMovement(object)) {
             MapObject_ClearSingleMovement(object);
             state->state = 0;
         }
@@ -306,13 +306,13 @@ BOOL sub_02061720(LocalMapObject *object, u8 *state) {
     if (direction == -1) {
         direction = MapObject_GetFacingDirection(object);
     }
-    MapObject_ForceSetHeldMovement(object, sub_0206234C(direction, 0));
+    MapObject_ForceSetHeldMovement(object, GetMovementForDirection(direction, 0));
     state[2] = 1;
     return TRUE;
 }
 
 BOOL sub_02061754(LocalMapObject *object, u8 *state) {
-    if (!sub_02062428(object)) {
+    if (!MapObject_RunForcedMovement(object)) {
         return FALSE;
     }
     *(u32 *)(state + 4) = 0;
@@ -376,12 +376,12 @@ void sub_02061850(LocalMapObject *object) {
 
 void sub_02061874(LocalMapObject *object, u8 *state) {
     u32 facing = MapObject_GetFacingDirection(object);
-    MapObject_ForceSetHeldMovement(object, sub_0206234C(facing, 0));
+    MapObject_ForceSetHeldMovement(object, GetMovementForDirection(facing, 0));
     state[2] = 1;
 }
 
 BOOL sub_02061894(LocalMapObject *object, u8 *state) {
-    if (!sub_02062428(object)) {
+    if (!MapObject_RunForcedMovement(object)) {
         return FALSE;
     }
     *(u32 *)(state + 4) = 0;
@@ -497,7 +497,7 @@ int sub_020619FC(void *mapObject, Unk020619FCState *state) {
     if (result != 0) {
         kind = 0x20;
     }
-    result = sub_0206234C(direction, kind);
+    result = GetMovementForDirection(direction, kind);
     MapObject_ForceSetHeldMovement(mapObject, result);
     if (sub_02062050(mapObject) == 1) {
         sub_0206207C(mapObject, state->data);
@@ -508,7 +508,7 @@ int sub_020619FC(void *mapObject, Unk020619FCState *state) {
 }
 
 BOOL sub_02061ABC(LocalMapObject *object, u8 *state) {
-    if (sub_02062428(object) == TRUE) {
+    if (MapObject_RunForcedMovement(object) == TRUE) {
         MapObject_ClearSingleMovement(object);
         if (sub_02062050(object) == TRUE) {
             sub_020620F8(object, state + 4);
@@ -643,7 +643,7 @@ BOOL sub_02061C40(LocalMapObject *object, MovementPathState *state) {
     if (collision != 0) {
         movementKind = 32;
     }
-    MapObject_ForceSetHeldMovement(object, sub_0206234C(direction, movementKind));
+    MapObject_ForceSetHeldMovement(object, GetMovementForDirection(direction, movementKind));
     if (sub_02062050(object) == TRUE) {
         sub_0206207C(object, state->saved);
     }
@@ -653,7 +653,7 @@ BOOL sub_02061C40(LocalMapObject *object, MovementPathState *state) {
 }
 
 BOOL sub_02061D50(LocalMapObject *object, u8 *state) {
-    if (sub_02062428(object) == TRUE) {
+    if (MapObject_RunForcedMovement(object) == TRUE) {
         MapObject_ClearSingleMovement(object);
         if (sub_02062050(object) == TRUE) {
             sub_020620F8(object, state + 8);

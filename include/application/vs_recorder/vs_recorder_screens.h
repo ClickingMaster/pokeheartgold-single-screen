@@ -18,8 +18,28 @@ void BattleRecord_GetBattlerAndPartyCount(int type, int *count, int *partySize);
 int BattleRecord_WriteSlot(SaveData *save, BattleRecord *record, int index, u16 *state);
 void BattleRecord_Encrypt(void *data, u32 size, u32 seed);
 
+// VsRecorderWork.screenWork of the delete screen
+typedef struct VsRecorderDeleteVideo {
+    int eva; // top screen blend
+    int evb;
+    int fade;
+    BOOL cancelled;
+    Window yesNoWindows[2];
+} VsRecorderDeleteVideo; // size 0x30
+
 // vs_recorder_net.c (the Global Terminal client is embedded at VsRecorderWork.unk_0068)
 BOOL VsRecorder_IsNetIdle(VsRecorderWork *work);
+
+// vs_recorder_delete.c
+void VsRecorder_ShowDeleteWindow(VsRecorderWork *work, BOOL alternate);
+void VsRecorder_HideDeleteWindow(VsRecorderWork *work);
+void VsRecorder_PrintDeleteMessage(VsRecorderWork *work, int msgId, int slot);
+void VsRecorder_ShowDeleteYesNo(VsRecorderWork *work);
+void VsRecorder_HideDeleteYesNo(VsRecorderWork *work);
+BOOL VsRecorder_DeleteInit(VsRecorderWork *work);
+BOOL VsRecorder_DeleteEnter(VsRecorderWork *work);
+BOOL VsRecorder_DeleteMain(VsRecorderWork *work);
+BOOL VsRecorder_DeleteExit(VsRecorderWork *work);
 
 // vs_recorder_battle_names.c
 void VsRecorder_SanitizeBattleSetupNames(BattleRecord *record, BattleSetup *setup, enum HeapID heapID);

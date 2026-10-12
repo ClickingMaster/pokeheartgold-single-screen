@@ -12,7 +12,7 @@
 #include "sound_playback.h"
 #include "unk_02055418.h"
 #include "unk_0205CB48.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 
 #define TREE_WIGGLE_FRAMES 16
 #define TREE_EXPEL_FRAMES  8

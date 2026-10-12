@@ -7,7 +7,7 @@ typedef struct PlayerAvatar PlayerAvatar;
 typedef struct LocalMapObject LocalMapObject;
 
 u32 sub_0205DA34(PlayerAvatar *, LocalMapObject *, int);
-int sub_0206234C(int, int);
+int GetMovementForDirection(int, int);
 BOOL sub_0205D684(PlayerAvatar *);
 void sub_0205E048(PlayerAvatar *);
 void PlayerAvatar_SetFlag6(PlayerAvatar *);

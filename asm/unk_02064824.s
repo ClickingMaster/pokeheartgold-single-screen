@@ -55,7 +55,7 @@ _02064870:
 	bl MapObject_ClearFlagsBits
 	add r0, r6, #0
 	mov r1, #0
-	bl sub_0206234C
+	bl GetMovementForDirection
 	add r1, r0, #0
 	add r0, r4, #0
 	bl MapObject_SetHeldMovement

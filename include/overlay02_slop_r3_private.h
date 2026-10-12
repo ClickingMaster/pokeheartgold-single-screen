@@ -68,7 +68,7 @@
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
 #include "unk_02013FDC.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 
 // Headers are in; drop the shadowing so the externs below bind the real symbols with
 // this TU's matching-time signatures.

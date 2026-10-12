@@ -33,7 +33,7 @@ sub_0205D978: ; 0x0205D978
 	beq _0205D9AC
 	add r0, r6, #0
 	mov r1, #0x38
-	bl sub_0206234C
+	bl GetMovementForDirection
 	str r0, [sp, #4]
 	b _0205D9FE
 _0205D9AC:
@@ -42,7 +42,7 @@ _0205D9AC:
 	beq _0205D9C4
 	add r0, r6, #0
 	mov r1, #0
-	bl sub_0206234C
+	bl GetMovementForDirection
 	str r0, [sp, #4]
 	add r0, r5, #0
 	bl PlayerAvatar_ClearUnk24ClearFlag2
@@ -54,7 +54,7 @@ _0205D9C4:
 	str r0, [sp]
 	add r0, r6, #0
 	mov r1, #0x1c
-	bl sub_0206234C
+	bl GetMovementForDirection
 	str r0, [sp, #4]
 	mov r0, #8
 	tst r0, r4

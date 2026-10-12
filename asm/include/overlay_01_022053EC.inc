@@ -59,7 +59,7 @@
 .public MapObject_AreBitsSetForMovementScriptInit
 .public MapObject_SetHeldMovement
 .public MapObject_IsMovementPaused
-.public sub_0206234C
+.public GetMovementForDirection
 .public sub_0206599C
 .public sub_020659A8
 .public sub_020659B8

@@ -12,7 +12,7 @@
 	.include "unk_020632B0.inc"
 	.include "global.inc"
 
-	.public sub_020632B0
+	.public MapObject_StartJumpByOffsetMovement
 	.public MapObjectMovementCmd108_Step1
 	.public _020632FC
 	.public _0206330A

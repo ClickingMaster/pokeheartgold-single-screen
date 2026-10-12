@@ -12,8 +12,8 @@
 	.include "unk_02062108.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02062F48
-sub_02062F48: ; 0x02062F48
+	thumb_func_start MapObject_StartEmoteMovement
+MapObject_StartEmoteMovement: ; 0x02062F48
 	push {r4, r5, r6, lr}
 	add r6, r1, #0
 	mov r1, #8
@@ -29,7 +29,7 @@ sub_02062F48: ; 0x02062F48
 	add r0, r5, #0
 	bl MapObject_IncrementMovementStep
 	pop {r4, r5, r6, pc}
-	thumb_func_end sub_02062F48
+	thumb_func_end MapObject_StartEmoteMovement
 	thumb_func_start MapObjectMovementCmd075_Step1
 MapObjectMovementCmd075_Step1: ; 0x02062F6C
 	push {r3, r4, r5, lr}
@@ -54,7 +54,7 @@ _02062F90:
 MapObjectMovementCmd075_Step0: ; 0x02062F94
 	push {r3, lr}
 	mov r1, #0
-	bl sub_02062F48
+	bl MapObject_StartEmoteMovement
 	mov r0, #0
 	pop {r3, pc}
 	thumb_func_end MapObjectMovementCmd075_Step0
@@ -62,12 +62,12 @@ MapObjectMovementCmd075_Step0: ; 0x02062F94
 MapObjectMovementCmd103_Step0: ; 0x02062FA0
 	push {r3, lr}
 	mov r1, #1
-	bl sub_02062F48
+	bl MapObject_StartEmoteMovement
 	mov r0, #0
 	pop {r3, pc}
 	thumb_func_end MapObjectMovementCmd103_Step0
-	thumb_func_start sub_02062FAC
-sub_02062FAC: ; 0x02062FAC
+	thumb_func_start MapObject_StartVariableSpeedWalk
+MapObject_StartVariableSpeedWalk: ; 0x02062FAC
 	push {r3, r4, r5, r6, r7, lr}
 	add r4, r1, #0
 	mov r1, #8
@@ -94,9 +94,9 @@ sub_02062FAC: ; 0x02062FAC
 	bl MapObject_IncrementMovementStep
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end sub_02062FAC
-	thumb_func_start sub_02062FEC
-sub_02062FEC: ; 0x02062FEC
+	thumb_func_end MapObject_StartVariableSpeedWalk
+	thumb_func_start MapObject_UpdateVariableSpeedWalk
+MapObject_UpdateVariableSpeedWalk: ; 0x02062FEC
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	add r6, r1, #0
@@ -138,4 +138,4 @@ _02063026:
 	bl MapObject_IncrementMovementStep
 	mov r0, #1
 	pop {r4, r5, r6, pc}
-	thumb_func_end sub_02062FEC
+	thumb_func_end MapObject_UpdateVariableSpeedWalk

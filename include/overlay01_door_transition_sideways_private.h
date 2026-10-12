@@ -15,7 +15,7 @@
 #include "map_object.h"
 #include "player_avatar.h"
 #include "screen_fade.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 
 typedef struct DoorTransitionWork2 {
     int state;

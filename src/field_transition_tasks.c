@@ -18,7 +18,7 @@
 #include "task.h"
 #include "unk_02054648.h"
 #include "unk_02055BF0.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 
 // Map enter routines (sMapEnterRoutines) and the player/camera placement run before them (_020FC76C), indexed by
 // FieldTransitionEnvironment.transitionNo, plus the Wi-Fi Plaza launch task (ScrCmd_663).

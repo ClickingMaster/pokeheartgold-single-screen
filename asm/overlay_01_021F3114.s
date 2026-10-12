@@ -161,7 +161,7 @@ _021F3206:
 _021F3212:
 	ldr r0, [r4]
 	mov r1, #0xc
-	bl sub_0206234C
+	bl GetMovementForDirection
 	add r1, r0, #0
 	ldr r0, [r4, #0x10]
 	bl sub_0205DFD4

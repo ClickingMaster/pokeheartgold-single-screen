@@ -13,7 +13,7 @@ int sub_0205D658(PlayerAvatar *avatar, int value) {
         movement = 0x14;
         break;
     }
-    return sub_0206234C(value, movement);
+    return GetMovementForDirection(value, movement);
 }
 
 BOOL sub_0205D684(PlayerAvatar *avatar) {

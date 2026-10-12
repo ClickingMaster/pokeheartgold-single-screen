@@ -45,7 +45,7 @@ BOOL sub_020646DC(TrainerApproachWork *work) {
     if (work->movement == -1) {
         GF_AssertFail();
     }
-    MapObject_SetHeldMovement(work->trainer, sub_0206234C(work->movement, 0));
+    MapObject_SetHeldMovement(work->trainer, GetMovementForDirection(work->movement, 0));
     work->state = 4;
     return FALSE;
 }
@@ -104,7 +104,7 @@ BOOL sub_020647A8(TrainerApproachWork *work) {
 
 BOOL sub_020647C0(TrainerApproachWork *work) {
     if (MapObject_AreBitsSetForMovementScriptInit(work->trainer) == TRUE) {
-        MapObject_SetHeldMovement(work->trainer, sub_0206234C(work->movement, 12));
+        MapObject_SetHeldMovement(work->trainer, GetMovementForDirection(work->movement, 12));
         work->state = 12;
     }
     return FALSE;

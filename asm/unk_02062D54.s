@@ -12,8 +12,8 @@
 	.include "unk_02062108.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02062D54
-sub_02062D54: ; 0x02062D54
+	thumb_func_start MapObject_StartDelayMovement
+MapObject_StartDelayMovement: ; 0x02062D54
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -24,7 +24,7 @@ sub_02062D54: ; 0x02062D54
 	bl MapObject_IncrementMovementStep
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end sub_02062D54
+	thumb_func_end MapObject_StartDelayMovement
 	thumb_func_start MapObjectMovementCmd064_Step1
 MapObjectMovementCmd064_Step1: ; 0x02062D6C
 	push {r4, lr}

@@ -5,7 +5,7 @@ void sub_0205D83C(PlayerAvatar *avatar, LocalMapObject *mapObject, int direction
     int movement;
 
     if (result & 4) {
-        movement = sub_0206234C(direction, 0x38);
+        movement = GetMovementForDirection(direction, 0x38);
         sub_0205D684(avatar);
         sub_0205E048(avatar);
         PlayerAvatar_SetFlag6(avatar);
@@ -15,7 +15,7 @@ void sub_0205D83C(PlayerAvatar *avatar, LocalMapObject *mapObject, int direction
             PlayerAvatar_SetFlag6(avatar);
             PlayerAvatar_SetForcedMovement(avatar, TRUE);
         } else {
-            movement = sub_0206234C(direction, 0x1C);
+            movement = GetMovementForDirection(direction, 0x1C);
             if (!(result & 8)) {
                 PlaySE(0x600);
             }
@@ -24,12 +24,12 @@ void sub_0205D83C(PlayerAvatar *avatar, LocalMapObject *mapObject, int direction
         }
     } else if (result & 0x40) {
         int facing = MapObject_GetNextFacingDirection(mapObject);
-        movement = sub_0206234C(facing, 0);
+        movement = GetMovementForDirection(facing, 0);
         MapObject_SetNextFacingDirection(mapObject, facing);
         PlayerAvatar_ClearUnk24ClearFlag2(avatar);
         PlayerAvatar_SetUnk28Unk2C(avatar, -1, -1);
     } else if (result != 0) {
-        movement = sub_0206234C(direction, 0x1C);
+        movement = GetMovementForDirection(direction, 0x1C);
         if (!(result & 8)) {
             PlaySE(0x600);
         }

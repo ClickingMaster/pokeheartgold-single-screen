@@ -3858,15 +3858,15 @@
 	.public ov40_02244060
 	.public ov40_022440A0
 	.public ov40_022441F8
-	.public ov40_0224428C
-	.public ov40_022442CC
-	.public ov40_022442F0
-	.public ov40_022443B4
-	.public ov40_02244494
-	.public ov40_022444C0
-	.public ov40_02244514
-	.public ov40_0224462C
-	.public ov40_0224483C
+	.public VsRecorder_ShowDeleteWindow
+	.public VsRecorder_HideDeleteWindow
+	.public VsRecorder_PrintDeleteMessage
+	.public VsRecorder_ShowDeleteYesNo
+	.public VsRecorder_HideDeleteYesNo
+	.public VsRecorder_DeleteInit
+	.public VsRecorder_DeleteEnter
+	.public VsRecorder_DeleteMain
+	.public VsRecorder_DeleteExit
 	.public VsRecorder_SanitizeBattleSetupNames
 	.public VsRecorder_LoadPlaceholderTrainerName
 	.public VsRecorder_WriteRecordAsync
@@ -3994,8 +3994,8 @@
 	.public ov40_02245C18
 	.public ov40_02245C28
 	.public ov40_02245C40
-	.public ov40_02245CA0
-	.public ov40_02245CA4
+	.public sVsRecorderDeleteYesHitbox
+	.public sVsRecorderDeleteNoHitbox
 	.public ov40_02245CA8
 	.public ov40_02245CD4
 	.public ov40_02245CE8

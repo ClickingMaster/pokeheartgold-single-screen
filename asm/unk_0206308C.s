@@ -16,7 +16,7 @@
 MapObjectMovementCmd076_Step1: ; 0x0206308C
 	push {r3, lr}
 	ldr r1, _020630A0 ; =_020FDA50
-	bl sub_02062FEC
+	bl MapObject_UpdateVariableSpeedWalk
 	cmp r0, #1
 	bne _0206309C
 	mov r0, #1

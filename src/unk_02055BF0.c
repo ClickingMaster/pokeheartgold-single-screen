@@ -28,7 +28,7 @@
 #include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "field_transition_tasks.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 
 typedef void (*FieldSystemFunc)(FieldSystem *);
 

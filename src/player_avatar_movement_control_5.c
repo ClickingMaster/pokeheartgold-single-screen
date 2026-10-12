@@ -62,7 +62,7 @@ void sub_0205D2D0(PlayerAvatar *avatar, int direction) {
         movement = 0x14;
         break;
     }
-    command = sub_0206234C(direction, movement);
+    command = GetMovementForDirection(direction, movement);
     sub_0205DA1C(avatar, mapObject, command);
     fieldSystem = MapObject_GetFieldSystem(mapObject);
     if (FollowMon_IsActive(fieldSystem)) {

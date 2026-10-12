@@ -20,7 +20,7 @@
 .public MapObject_SetFlagsBits
 .public MapObject_ClearFlagsBits
 .public sub_0205F504
-.public sub_0206234C
+.public GetMovementForDirection
 .public memset
 .public ov01_021F3114
 .public ViridianGymmick_HandleTileAction

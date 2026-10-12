@@ -15,7 +15,7 @@ BOOL sub_02065BE8(LocalMapObject *object, FollowState *state) {
 }
 
 BOOL sub_02065C2C(LocalMapObject *object, FollowState *state) {
-    if (sub_02062428(object) == TRUE) {
+    if (MapObject_RunForcedMovement(object) == TRUE) {
         MapObject_ClearSingleMovement(object);
         state->state = 0;
     }
@@ -23,7 +23,7 @@ BOOL sub_02065C2C(LocalMapObject *object, FollowState *state) {
 }
 
 BOOL sub_02065C48(LocalMapObject *object, FollowState *state) {
-    if (sub_02062428(object) == TRUE) {
+    if (MapObject_RunForcedMovement(object) == TRUE) {
         *((u8 *)state + 2) += 1;
         if (*((u8 *)state + 2) >= 2) {
             MapObject_ClearSingleMovement(object);

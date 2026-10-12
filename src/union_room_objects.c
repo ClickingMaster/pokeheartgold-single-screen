@@ -16,7 +16,7 @@
 #include "sound_playback.h"
 #include "sys_task_api.h"
 #include "task.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 #include "unk_0206793C.h"
 
 // The 10 players' records of the union room link state (src/field_application_tasks_10.c).

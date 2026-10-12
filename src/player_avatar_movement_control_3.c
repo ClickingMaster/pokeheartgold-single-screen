@@ -9,7 +9,7 @@ void sub_0205CFBC(PlayerAvatar *avatar, int direction) {
     sub_0205F328(mapObject, 0);
     MapObject_SetPreviousCoordsToCurrent(mapObject);
     MapObject_ClearHeldMovement(mapObject);
-    MapObject_SetHeldMovement(mapObject, sub_0206234C(direction, 0));
+    MapObject_SetHeldMovement(mapObject, GetMovementForDirection(direction, 0));
 }
 
 BOOL sub_0205D004(PlayerAvatar *avatar, int value) {

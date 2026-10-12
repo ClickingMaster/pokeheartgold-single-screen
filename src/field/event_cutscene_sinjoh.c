@@ -11,7 +11,7 @@
 #include "script_manager.h"
 #include "script_pokemon_util.h"
 #include "task.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 #include "field_effects.h"
 
 typedef struct SinjohCutsceneData {

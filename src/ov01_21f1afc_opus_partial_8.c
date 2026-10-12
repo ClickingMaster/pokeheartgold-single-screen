@@ -16,7 +16,7 @@ extern void (*const sPlayerAvatarBitUpdateFuncs[15])(PlayerAvatar *);
 
 int ov01_021F27C0(struct RockClimbWork *work, TaskManager *taskManager) {
     if (MapObject_AreBitsSetForMovementScriptInit(work->obj) == TRUE) {
-        MapObject_SetHeldMovement(work->obj, sub_0206234C(work->direction, 0x34));
+        MapObject_SetHeldMovement(work->obj, GetMovementForDirection(work->direction, 0x34));
         work->state++;
     }
     return 0;
@@ -32,7 +32,7 @@ int ov01_021F27E8(struct RockClimbWork *work, TaskManager *taskManager) {
 
 int ov01_021F2808(struct RockClimbWork *work, TaskManager *taskManager) {
     if (MapObject_AreBitsSetForMovementScriptInit(work->obj) == TRUE) {
-        MapObject_SetHeldMovement(work->obj, sub_0206234C(work->direction, 0x10));
+        MapObject_SetHeldMovement(work->obj, GetMovementForDirection(work->direction, 0x10));
         work->state++;
     }
     return 0;

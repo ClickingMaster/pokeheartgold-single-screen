@@ -10,7 +10,7 @@
 #include "unk_0200FA24.h"
 #include "overlay_01.h"
 #include "heap.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 #include "field_metatile_query_internal.h"
 
 typedef struct DoorSEData {

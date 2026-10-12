@@ -11,7 +11,7 @@ void sub_0205CC94(PlayerAvatar *avatar) {
     }
     object = PlayerAvatar_GetMapObject(avatar);
     behavior = sub_0205F504(object);
-    movement = sub_02062390(MapObject_GetMovementCommand(object));
+    movement = GetMovementDirection(MapObject_GetMovementCommand(object));
     if (movement == -1) {
         previous = behavior;
     } else {
@@ -43,7 +43,7 @@ void sub_0205CC94(PlayerAvatar *avatar) {
 }
 
 void sub_0205CD70(LocalMapObject *object, PlayerAvatar *avatar) {
-    int movement = sub_02062390(MapObject_GetMovementCommand(object));
+    int movement = GetMovementDirection(MapObject_GetMovementCommand(object));
     u8 behavior = sub_0205F504(object);
     u8 soundBehavior = sub_0205F504(object);
     u16 sequence;

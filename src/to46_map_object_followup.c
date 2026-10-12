@@ -14,7 +14,7 @@ BOOL sub_02065F44(LocalMapObject *object) {
             GF_AssertFail();
             return FALSE;
         }
-        MapObject_ForceSetHeldMovement(object, sub_0206234C(direction, movement));
+        MapObject_ForceSetHeldMovement(object, GetMovementForDirection(direction, movement));
         return TRUE;
     }
     return FALSE;

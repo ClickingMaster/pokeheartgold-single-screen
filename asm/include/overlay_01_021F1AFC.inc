@@ -85,7 +85,7 @@
 .public MapObject_SetHeldMovement
 .public MapObject_IsMovementPaused
 .public MapObject_ClearHeldMovementIfActive
-.public sub_0206234C
+.public GetMovementForDirection
 .public CheckFlag99A
 .public FollowMon_GetMapObject
 .public sub_02069DC8

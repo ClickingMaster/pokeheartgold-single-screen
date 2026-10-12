@@ -21,7 +21,7 @@ void StopSE(int, int);
 void *FieldSystem_CreateTask(void *, BOOL (*)(void *), void *);
 void *TaskManager_GetEnvironment(void *);
 BOOL sub_0205DFC8(void *);
-int sub_0206234C(int, int);
+int GetMovementForDirection(int, int);
 void sub_0205DFD4(void *, int);
 void PlayerAvatar_SetFacingDirection(void *, int);
 void MapObject_SetFlagsBits(void *, u32);

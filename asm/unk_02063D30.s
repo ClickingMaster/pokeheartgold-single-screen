@@ -93,7 +93,7 @@ _02063DB2:
 	add r0, r2, r3
 	ldr r0, [r1, r0]
 	mov r1, #0
-	bl sub_0206234C
+	bl GetMovementForDirection
 	add r1, r0, #0
 	add r0, r7, #0
 	bl MapObject_ForceSetHeldMovement
@@ -102,7 +102,7 @@ _02063DB2:
 	strb r0, [r4, #1]
 _02063DD8:
 	add r0, r7, #0
-	bl sub_02062428
+	bl MapObject_RunForcedMovement
 	cmp r0, #0
 	bne _02063DE8
 	add sp, #0x20

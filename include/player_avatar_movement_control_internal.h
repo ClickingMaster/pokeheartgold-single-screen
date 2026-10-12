@@ -31,7 +31,7 @@ extern int PlayerAvatar_GetPlayerMoveState(PlayerAvatar *);
 extern void PlayerAvatar_SetFlag1(PlayerAvatar *, BOOL);
 extern int PlayerAvatar_GetUnk24(PlayerAvatar *);
 extern void PlayerAvatar_SetUnk24(PlayerAvatar *, int);
-extern int sub_0206234C(int, int);
+extern int GetMovementForDirection(int, int);
 extern int PlayerAvatar_Unk24AddWithCeiling(PlayerAvatar *, int, int);
 extern BOOL PlayerAvatar_CheckFlag2(PlayerAvatar *);
 extern void PlayerAvatar_SetFlag2(PlayerAvatar *, BOOL);

@@ -24,7 +24,7 @@ BOOL sub_0205D0A8(PlayerAvatar *avatar, int unused) {
             return FALSE;
         }
         MapObject_SetFlagsBits(mapObject, 0x180);
-        sub_0205DA1C(avatar, mapObject, sub_0206234C(direction, 8));
+        sub_0205DA1C(avatar, mapObject, GetMovementForDirection(direction, 8));
         PlayerAvatar_SetFlag1(avatar, TRUE);
         PlayerAvatar_SetForcedMovement(avatar, TRUE);
         PlayerAvatar_SetUnk28Unk2C(avatar, -1, -1);
@@ -39,12 +39,12 @@ BOOL sub_0205D0A8(PlayerAvatar *avatar, int unused) {
 BOOL sub_0205D190(PlayerAvatar *avatar) {
     MapObject *mapObject = PlayerAvatar_GetMapObject(avatar);
     if (sub_0205DA34(avatar, mapObject, 1) == 0) {
-        sub_0205DA1C(avatar, mapObject, sub_0206234C(1, 0x14));
+        sub_0205DA1C(avatar, mapObject, GetMovementForDirection(1, 0x14));
         PlayerAvatar_SetMoveState(avatar, 1);
         PlayerAvatar_SetUnk24(avatar, 3);
         return TRUE;
     }
-    sub_0205DA1C(avatar, mapObject, sub_0206234C(1, 1));
+    sub_0205DA1C(avatar, mapObject, GetMovementForDirection(1, 1));
     PlayerAvatar_ClearUnk24ClearFlag2(avatar);
     PlayerAvatar_SetMoveState(avatar, 0);
     PlayerAvatar_SetFlag2(avatar, FALSE);

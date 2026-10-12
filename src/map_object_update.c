@@ -10,7 +10,7 @@
 #include "unk_02054648.h"
 
 // Defined elsewhere without a header yet.
-void sub_02062400(LocalMapObject *object);
+void MapObject_ExecuteMovementCommand(LocalMapObject *object);
 void sub_02063A14(LocalMapObject *object);
 BOOL sub_02063A1C(LocalMapObject *object);
 const MapObjectEffectFlags *ov01_021F9318(LocalMapObject *object);
@@ -42,7 +42,7 @@ void sub_0205FD30(LocalMapObject *object) {
         sub_0205FE24(object);
         sub_0205FE48(object);
         if (MapObject_GetFlagsBitsMask(object, MAPOBJECTFLAG_UNK4)) {
-            sub_02062400(object);
+            MapObject_ExecuteMovementCommand(object);
         } else if (!MapObject_CheckMovementPaused(object) && sub_0205FD98(object) == 1 && !sub_02063A1C(object)) {
             sub_0205F430(object);
         }

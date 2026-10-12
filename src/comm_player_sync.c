@@ -33,7 +33,7 @@ u32 sub_0205DF0C(PlayerAvatar *avatar, int keys, int heldKeys, u32 speed, int fl
 BOOL sub_0205DFC8(PlayerAvatar *avatar);
 BOOL sub_0205DE38(PlayerAvatar *avatar);
 void sub_0205DFD4(PlayerAvatar *avatar, int movement);
-int sub_0206234C(int direction, int movement);
+int GetMovementForDirection(int direction, int movement);
 
 void CommPlayerManager_RemoveAllAvatars(void) {
     int i;
@@ -576,7 +576,7 @@ void CommPlayerManager_MoveAvatar(int netId) {
                     break;
                 }
             } else if (!dirKeys && position->facing != direction) {
-                movement = sub_0206234C(position->facing, 36);
+                movement = GetMovementForDirection(position->facing, 36);
             } else {
                 movement = sub_0205DF0C(avatar, keys, keys, moveSpeed, 1, 0);
             }
@@ -819,10 +819,10 @@ void sub_02057E08(void) {
 
     if (CommPlayerManager_GetPlayerX(netId) > 8) {
         CommPlayerManager_SetLocalFacing(2);
-        movement = sub_0206234C(2, 0x24);
+        movement = GetMovementForDirection(2, 0x24);
     } else {
         CommPlayerManager_SetLocalFacing(3);
-        movement = sub_0206234C(3, 0x24);
+        movement = GetMovementForDirection(3, 0x24);
     }
     sub_0205DFD4(gCommPlayerManager->avatars[netId], movement);
     CommPlayerManager_SetLocalMoveDelay();

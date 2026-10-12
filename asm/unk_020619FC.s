@@ -68,7 +68,7 @@ _02061A84:
 	mov r1, #0x20
 _02061A8C:
 	add r0, r4, #0
-	bl sub_0206234C
+	bl GetMovementForDirection
 	add r1, r0, #0
 	add r0, r5, #0
 	bl MapObject_ForceSetHeldMovement

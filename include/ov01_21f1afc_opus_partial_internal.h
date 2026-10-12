@@ -89,7 +89,7 @@ void FieldEffectManager_DestroyEffect(int a0);
 u32 SurfMountEffect_Create(LocalMapObject *obj, u32 x, u32 y, u32 dir, u32 a4);
 int sub_0205DEC0(PlayerAvatar *avatar, int direction);
 BOOL sub_0205DE38(PlayerAvatar *avatar);
-u32 sub_0206234C(int direction, int a1);
+u32 GetMovementForDirection(int direction, int a1);
 u32 MapObject_CheckCollisionInDirection(LocalMapObject *object, int direction);
 int FieldSystem_GetLeadMonIndex(FieldSystem *fieldSystem);
 

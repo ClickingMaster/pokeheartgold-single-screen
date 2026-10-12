@@ -112,7 +112,7 @@
 .public GetDirectionTowards
 .public sub_0206121C
 .public sub_02061248
-.public sub_02062400
+.public MapObject_ExecuteMovementCommand
 .public sub_02063A14
 .public sub_02063A1C
 .public ov01_021F9318

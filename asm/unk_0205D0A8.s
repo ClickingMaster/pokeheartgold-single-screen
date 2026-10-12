@@ -80,7 +80,7 @@ _0205D136:
 	bl MapObject_SetFlagsBits
 	add r0, r6, #0
 	mov r1, #8
-	bl sub_0206234C
+	bl GetMovementForDirection
 	add r2, r0, #0
 	add r0, r5, #0
 	add r1, r4, #0
@@ -127,7 +127,7 @@ sub_0205D190: ; 0x0205D190
 	bne _0205D1CE
 	mov r0, #1
 	mov r1, #0x14
-	bl sub_0206234C
+	bl GetMovementForDirection
 	add r2, r0, #0
 	add r0, r5, #0
 	add r1, r4, #0
@@ -143,7 +143,7 @@ sub_0205D190: ; 0x0205D190
 _0205D1CE:
 	mov r0, #1
 	add r1, r0, #0
-	bl sub_0206234C
+	bl GetMovementForDirection
 	add r2, r0, #0
 	add r0, r5, #0
 	add r1, r4, #0

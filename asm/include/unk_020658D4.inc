@@ -47,10 +47,10 @@
 .public GetDeltaYByFacingDirection
 .public GetDirectionTowards
 .public MapObject_ForceSetHeldMovement
-.public sub_0206234C
+.public GetMovementForDirection
 .public sub_020623C8
 .public sub_020623D8
-.public sub_02062428
+.public MapObject_RunForcedMovement
 .public sub_02064518
 .public sub_020658D4
 .public sub_02065900

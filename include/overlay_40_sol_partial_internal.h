@@ -144,7 +144,7 @@ void ov40_02237C74(void *p);
 void ov40_02237D6C(void *p);
 void ov40_0223E848(void *p);
 void ov40_0223CE38(void *p);
-void ov40_02244494(void *p);
+void VsRecorder_HideDeleteYesNo(void *p);
 void VsRecorder_SetVideoPartyIconsDrawFlag(void *p, BOOL draw);
 void VsRecorder_SetListArrowsY(void *p, int y1, int y2);
 

@@ -94,8 +94,8 @@
 .public sub_02061DE0
 .public sub_02061DF0
 .public MapObject_ForceSetHeldMovement
-.public sub_0206234C
-.public sub_02062428
+.public GetMovementForDirection
+.public MapObject_RunForcedMovement
 .public _s32_div_f
 
 	.public sub_02061284

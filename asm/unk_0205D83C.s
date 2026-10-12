@@ -25,7 +25,7 @@ sub_0205D83C: ; 0x0205D83C
 	beq _0205D86E
 	add r0, r6, #0
 	mov r1, #0x38
-	bl sub_0206234C
+	bl GetMovementForDirection
 	str r0, [sp]
 	add r0, r5, #0
 	bl sub_0205D684
@@ -55,7 +55,7 @@ _0205D86E:
 _0205D898:
 	add r0, r6, #0
 	mov r1, #0x1c
-	bl sub_0206234C
+	bl GetMovementForDirection
 	str r0, [sp]
 	mov r0, #8
 	tst r0, r4
@@ -78,7 +78,7 @@ _0205D8C0:
 	bl MapObject_GetNextFacingDirection
 	add r4, r0, #0
 	mov r1, #0
-	bl sub_0206234C
+	bl GetMovementForDirection
 	str r0, [sp]
 	add r0, r7, #0
 	add r1, r4, #0
@@ -96,7 +96,7 @@ _0205D8F2:
 	beq _0205D91E
 	add r0, r6, #0
 	mov r1, #0x1c
-	bl sub_0206234C
+	bl GetMovementForDirection
 	str r0, [sp]
 	mov r0, #8
 	tst r0, r4

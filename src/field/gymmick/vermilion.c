@@ -3,7 +3,7 @@
 #include "field_system.h"
 #include "overlay_04.h"
 #include "sound_playback.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 
 typedef struct VermilionGymmickLocalData {
     FieldSystem *fieldSystem;

@@ -12,11 +12,11 @@ BOOL sub_02063B9C(LMO *obj) {
     }
     case 1: {
         TwoByTwoValues moveTable = _020FE0D4;
-        MapObject_ForceSetHeldMovement(obj, sub_0206234C(moveTable.values[state->unk5][state->unk6], 0));
+        MapObject_ForceSetHeldMovement(obj, GetMovementForDirection(moveTable.values[state->unk5][state->unk6], 0));
         state->unk1++;
     }
     case 2:
-        if (sub_02062428(obj) == 0) {
+        if (MapObject_RunForcedMovement(obj) == 0) {
             return TRUE;
         }
         state->unk1++;

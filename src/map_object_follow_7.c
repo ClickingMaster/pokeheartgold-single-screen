@@ -35,7 +35,7 @@ BOOL sub_0206623C(LocalMapObject *object, FollowState *state) {
     x += GetDeltaXByFacingDirection(direction);
     z += GetDeltaYByFacingDirection(direction);
     if (x != ox || z != oz) {
-        MapObject_ForceSetHeldMovement(object, sub_0206234C(direction, 12));
+        MapObject_ForceSetHeldMovement(object, GetMovementForDirection(direction, 12));
         return TRUE;
     }
     return FALSE;

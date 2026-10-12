@@ -12,7 +12,7 @@
 #include "sys_task_api.h"
 #include "task.h"
 #include "sound_playback.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 #include "unk_0206793C.h"
 #include "field_effects.h"
 

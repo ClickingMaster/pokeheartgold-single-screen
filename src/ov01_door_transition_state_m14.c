@@ -13,7 +13,7 @@
 #include "overlay_01_021E90C0.h"
 #include "field/field_follow_mon.h"
 #include "player_avatar.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 
 typedef struct DoorTransitionWork {
     int state;

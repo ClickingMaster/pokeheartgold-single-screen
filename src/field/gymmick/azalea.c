@@ -9,7 +9,7 @@
 #include "task.h"
 #include "sound_playback.h"
 #include "map_object_movement_utilities.h"
-#include "unk_02062108.h"
+#include "map_object_movement_commands.h"
 
 typedef struct AzaleaGymmickSpinarakRouteNode {
     u16 x;

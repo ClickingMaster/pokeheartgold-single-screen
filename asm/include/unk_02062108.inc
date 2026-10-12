@@ -38,12 +38,12 @@
 .public EventObjectMovementMan_Create
 .public EventObjectMovementMan_IsFinish
 .public EventObjectMovementMan_Delete
-.public sub_0206234C
-.public sub_02062390
+.public GetMovementForDirection
+.public GetMovementDirection
 .public sub_020623C8
 .public sub_020623D8
-.public sub_02062400
-.public sub_02062428
+.public MapObject_ExecuteMovementCommand
+.public MapObject_RunForcedMovement
 .public MapObjectMovementCmd098_Step2
 .public MapObjectMovementCmd000_Step0
 .public MapObjectMovementCmd001_Step0
@@ -180,14 +180,14 @@
 	.public MovementScriptMachineSub_LoopCheck
 	.public MovementScriptMachineSub_Done
 	.public MapObject_RunMovementCommand
-	.public sub_0206247C
-	.public sub_020624CC
-	.public sub_020627B0
-	.public sub_02062958
-	.public sub_02062D54
-	.public sub_02062F48
-	.public sub_02062FAC
-	.public sub_02062FEC
+	.public MapObject_StartFaceMovement
+	.public MapObject_StartWalkMovement
+	.public MapObject_StartWalkInPlaceMovement
+	.public MapObject_StartJumpMovement
+	.public MapObject_StartDelayMovement
+	.public MapObject_StartEmoteMovement
+	.public MapObject_StartVariableSpeedWalk
+	.public MapObject_UpdateVariableSpeedWalk
 	.public _020FDA1C
 	.public _020FDA28
 	.public _020FDA50
@@ -195,5 +195,5 @@
 	.public _020FDA84
 	.public _020FDAC4
 	.public _020FDB04
-	.public _0210FACC
+	.public gJumpHeightTables
 	.public sMovementScriptMachineStateFuncs

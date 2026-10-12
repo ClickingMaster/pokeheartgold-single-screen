@@ -25,10 +25,10 @@ search_check:
         state->unk6 = (i + 1) % 4;
         state->unk1++;
     case 1:
-        MapObject_ForceSetHeldMovement(obj, sub_0206234C(sp0.values[state->unk5][state->unk6], 0));
+        MapObject_ForceSetHeldMovement(obj, GetMovementForDirection(sp0.values[state->unk5][state->unk6], 0));
         state->unk1++;
     case 2:
-        if (sub_02062428(obj) == 0) {
+        if (MapObject_RunForcedMovement(obj) == 0) {
             return TRUE;
         }
         state->unk1++;

@@ -143,7 +143,7 @@ _0205D5C6:
 _0205D5CE:
 	ldr r1, [sp]
 	add r0, r7, #0
-	bl sub_0206234C
+	bl GetMovementForDirection
 	add r7, r0, #0
 	add r0, r6, #0
 	add r1, r5, #0

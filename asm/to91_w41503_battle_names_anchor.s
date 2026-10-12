@@ -3847,15 +3847,15 @@
 	.public ov40_02244060
 	.public ov40_022440A0
 	.public ov40_022441F8
-	.public ov40_0224428C
-	.public ov40_022442CC
-	.public ov40_022442F0
-	.public ov40_022443B4
-	.public ov40_02244494
-	.public ov40_022444C0
-	.public ov40_02244514
-	.public ov40_0224462C
-	.public ov40_0224483C
+	.public VsRecorder_ShowDeleteWindow
+	.public VsRecorder_HideDeleteWindow
+	.public VsRecorder_PrintDeleteMessage
+	.public VsRecorder_ShowDeleteYesNo
+	.public VsRecorder_HideDeleteYesNo
+	.public VsRecorder_DeleteInit
+	.public VsRecorder_DeleteEnter
+	.public VsRecorder_DeleteMain
+	.public VsRecorder_DeleteExit
 	.public VsRecorder_LoadPlaceholderTrainerName
 	.public VsRecorder_WriteRecordAsync
 	.public VsRecorder_EncryptRecord
@@ -3982,8 +3982,8 @@
 	.public ov40_02245C18
 	.public ov40_02245C28
 	.public ov40_02245C40
-	.public ov40_02245CA0
-	.public ov40_02245CA4
+	.public sVsRecorderDeleteYesHitbox
+	.public sVsRecorderDeleteNoHitbox
 	.public ov40_02245CA8
 	.public ov40_02245CD4
 	.public ov40_02245CE8
@@ -4050,8 +4050,8 @@
 	.public ov40_0224320C
 	.public ov40_0224326C
 	.public ov40_022439B8
-	.public ov40_02244514
-	.public ov40_0224483C
+	.public VsRecorder_DeleteEnter
+	.public VsRecorder_DeleteExit
 
 
 
@@ -4710,17 +4710,17 @@ ov40_02245C40: ; 0x02245C40
 	.byte 0xB0, 0x00, 0x80, 0x00, 0x14, 0x00, 0x14, 0x00, 0xE0, 0x00, 0x80, 0x00, 0x14, 0x00, 0x14, 0x00
 	.byte 0x4C, 0x00, 0xB0, 0x00, 0x3C, 0x00, 0x0C, 0x00, 0xC0, 0x00, 0xB0, 0x00, 0x3C, 0x00, 0x0C, 0x00
 
-ov40_02245CA0: ; 0x02245CA0
+sVsRecorderDeleteYesHitbox: ; 0x02245CA0
 	.byte 0x28, 0x48, 0x20, 0x78
 
-ov40_02245CA4: ; 0x02245CA4
+sVsRecorderDeleteNoHitbox: ; 0x02245CA4
 	.byte 0x28, 0x48, 0x90, 0xE8
 
 ov40_02245CA8: ; 0x02245CA8
-	.word ov40_022444C0
-	.word ov40_02244514
-	.word ov40_0224462C
-	.word ov40_0224483C
+	.word VsRecorder_DeleteInit
+	.word VsRecorder_DeleteEnter
+	.word VsRecorder_DeleteMain
+	.word VsRecorder_DeleteExit
 
 	.data
 

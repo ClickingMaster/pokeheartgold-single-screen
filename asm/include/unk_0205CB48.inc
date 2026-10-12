@@ -111,8 +111,8 @@
 .public MapObject_SetHeldMovement
 .public MapObject_IsMovementPaused
 .public MapObject_ClearHeldMovement
-.public sub_0206234C
-.public sub_02062390
+.public GetMovementForDirection
+.public GetMovementDirection
 .public FieldSystem_IsSaveGymmickTypeEqualTo
 .public FollowMon_IsActive
 .public sub_0206D494
