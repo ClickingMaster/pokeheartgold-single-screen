@@ -4,6 +4,7 @@
 
 #include "global.h"
 
+#include "comm_state.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
@@ -21,20 +22,11 @@
 #include "text.h"
 #include "unk_0200FA24.h"
 #include "unk_02026E30.h"
-#include "unk_02037C94.h"
 #include "wifi_plaza_event.h"
 #include "wireless_status_icon.h"
 
 // unk_02037C94.c (no header declares it)
 BOOL sub_020397FC(void);
-
-// Player states (OVY_49, until their own header exists)
-struct WiFiPlazaPlayerStateManager *WiFiPlazaPlayerState_CreateManager(WiFiPlazaRoomWork *room, enum HeapID heapID);
-void WiFiPlazaPlayerState_DeleteManager(struct WiFiPlazaPlayerStateManager *playerStates);
-void WiFiPlazaPlayerState_Update(struct WiFiPlazaPlayerStateManager *playerStates);
-void WiFiPlazaPlayerState_LateUpdate(struct WiFiPlazaPlayerStateManager *playerStates);
-void WiFiPlazaPlayerState_InitOwn(WiFiPlazaRoomWork *room);
-void WiFiPlazaPlayerState_InitOthers(WiFiPlazaRoomWork *room);
 
 // rodata of this overlay (asm/to90_extra2491_anchor.s)
 extern const u8 sWiFiPlazaListArrowY[2];
@@ -258,7 +250,7 @@ WiFiPlazaCamera *WiFiPlazaRoom_GetCamera(WiFiPlazaRoomWork *room) {
     return room->camera;
 }
 
-void *WiFiPlazaRoom_GetPlayerStates(WiFiPlazaRoomWork *room) {
+WiFiPlazaPlayerStateManager *WiFiPlazaRoom_GetPlayerStates(WiFiPlazaRoomWork *room) {
     return room->playerStates;
 }
 
@@ -282,40 +274,40 @@ void WiFiPlazaRoom_SetResult(WiFiPlazaRoomWork *room, u8 result) {
     room->result = result;
 }
 
-void ov49_0225A03C(WiFiPlazaRoomWork *room, u8 value) {
-    room->unk_05 = value;
+void WiFiPlazaRoom_SetActionTile(WiFiPlazaRoomWork *room, u8 value) {
+    room->actionTile = value;
 }
 
-u8 ov49_0225A040(WiFiPlazaRoomWork *room) {
-    return room->unk_05;
+u8 WiFiPlazaRoom_GetActionTile(WiFiPlazaRoomWork *room) {
+    return room->actionTile;
 }
 
 void WiFiPlazaRoom_IgnorePlazaClosing(WiFiPlazaRoomWork *room) {
     room->ignorePlazaClosing = TRUE;
 }
 
-void ov49_0225A04C(WiFiPlazaRoomWork *room, u8 index, u8 value) {
+void WiFiPlazaRoom_SetPlayerBusy(WiFiPlazaRoomWork *room, u8 index, u8 value) {
     if (index >= 20) {
         GF_AssertFail();
     }
-    room->unk_0C[index] = value;
+    room->playerBusy[index] = value;
 }
 
-u8 ov49_0225A064(WiFiPlazaRoomWork *room, u32 index) {
-    return room->unk_0C[index];
+u8 WiFiPlazaRoom_IsPlayerBusy(WiFiPlazaRoomWork *room, u32 index) {
+    return room->playerBusy[index];
 }
 
 #pragma force_active on
 
-void ov49_0225A06C(WiFiPlazaRoomWork *room, u8 index, u8 value) {
+void WiFiPlazaRoom_SetCardBlocked(WiFiPlazaRoomWork *room, u8 index, u8 value) {
     GF_ASSERT(index < 20);
-    room->unk_20[index] = value;
+    room->cardBlocked[index] = value;
 }
 
 #pragma force_active reset
 
-u8 ov49_0225A084(WiFiPlazaRoomWork *room, u32 index) {
-    return room->unk_20[index];
+u8 WiFiPlazaRoom_IsCardBlocked(WiFiPlazaRoomWork *room, u32 index) {
+    return room->cardBlocked[index];
 }
 
 void WiFiPlazaRoom_PrintMessage(WiFiPlazaRoomWork *room, String *message) {
@@ -1133,7 +1125,7 @@ void WiFiPlazaErrorWindow_Print(Window *window, String *string) {
 }
 
 void WiFiPlazaErrorWindow_PrintCommError(Window *window, WiFiPlazaRoomMsg *msg) {
-    u32 *error = sub_020392D8();
+    u32 *error = CommState_GetWifiError();
     u32 msgId = ov45_0222D7CC(error[0], error[1]);
     WiFiPlazaRoomMsg_BufferInt(msg, error[0], 5, 0, 2);
     WiFiPlazaErrorWindow_Print(window, WiFiPlazaRoomMsg_GetString(msg, 2, msgId));

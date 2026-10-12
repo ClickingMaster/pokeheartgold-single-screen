@@ -13,9 +13,9 @@
 .public sub_02034084
 .public sub_02034098
 .public Comm_CountConnected
-.public sub_02038F74
-.public sub_0203993C
-.public sub_02039AD8
+.public CommState_SetWifiError
+.public CommState_GetLinkMode
+.public CommState_SetError
 .public DWC_IsBuddyFriendData
 .public DWC_GetFriendDataType
 .public DWC_CheckHasProfile

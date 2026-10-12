@@ -31,7 +31,7 @@ _02059F88:
 	bl CommPlayerInfo_SendLocal
 	mov r0, #1
 	add r1, r0, #0
-	bl sub_020398D4
+	bl CommState_SetErrorWatch
 	mov r0, #0xb
 	bl sub_0205A904
 	ldr r1, _02059FF0 ; =sub_02059FF8
@@ -39,7 +39,7 @@ _02059F88:
 	mov r2, #0
 	bl UnionRoom_SetState
 _02059FC8:
-	bl sub_02037FCC
+	bl CommState_IsAlternateLinked
 	cmp r0, #0
 	bne _02059FEA
 	bl sub_02037FF0
@@ -62,7 +62,7 @@ _02059FF4: .word sub_02059F30
 sub_02059FF8: ; 0x02059FF8
 	push {r4, lr}
 	add r4, r0, #0
-	bl sub_02039918
+	bl CommState_ReportsErrors
 	cmp r0, #0
 	beq _0205A00C
 	bl sub_020376F8

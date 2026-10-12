@@ -3,19 +3,13 @@
 #include "global.h"
 
 #include "application/view_photo.h"
+#include "field/bottom_screen_app.h"
 
 #include "assert.h"
 #include "poke_overlay.h"
 
 FS_EXTERN_OVERLAY(OVY_19);
 
-// defined in the field app dispatcher (overlay 01 0x021F6830), not declared by a header yet
-void ov01_021F6840(FieldSystem *fieldSystem);
-void ov01_021F6864(FieldSystem *fieldSystem);
-BOOL ov01_021F6874(FieldSystem *fieldSystem);
-void ov01_021F6894(FieldSystem *fieldSystem);
-void ov01_021F68B8(FieldSystem *fieldSystem);
-BOOL ov01_021F68C0(FieldSystem *fieldSystem);
 // defined in field_interaction.c (empty), not declared by a header yet
 void sub_0203DB6C(FieldSystem *fieldSystem);
 void sub_0203DB70(FieldSystem *fieldSystem);
@@ -62,12 +56,12 @@ BOOL BottomScreen_Blank_IsDone(FieldSystem *fieldSystem) {
 
 void BottomScreen_ViewPhoto_Init(FieldSystem *fieldSystem) {
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_19), OVY_LOAD_ASYNC);
-    fieldSystem->unk_D8 = FieldSystem_CreateViewPhotoTask(fieldSystem); // the bottom screen app task
+    fieldSystem->bottomScreenTask = FieldSystem_CreateViewPhotoTask(fieldSystem); // the bottom screen app task
 }
 
 void BottomScreen_ViewPhoto_End(FieldSystem *fieldSystem) {
     FieldSystem_DestroyViewPhotoTask(fieldSystem);
-    fieldSystem->unk_D8 = NULL;
+    fieldSystem->bottomScreenTask = NULL;
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_19));
 }
 
@@ -76,10 +70,10 @@ BOOL BottomScreen_ViewPhoto_IsDone(FieldSystem *fieldSystem) {
 }
 
 static const BottomScreenOps sBottomScreenOps[] = {
-    { ov01_021F6894,           NULL, ov01_021F68B8,          ov01_021F68C0                 },
+    { BottomScreen_Apps_Init,           NULL, BottomScreen_Apps_End,          BottomScreen_Apps_IsDone                 },
     { BottomScreen_Blank_Init, NULL, BottomScreen_Blank_End, BottomScreen_Blank_IsDone     },
-    { ov01_021F6894,           NULL, ov01_021F68B8,          ov01_021F68C0                 },
-    { ov01_021F6840,           NULL, ov01_021F6864,          ov01_021F6874                 },
+    { BottomScreen_Apps_Init,           NULL, BottomScreen_Apps_End,          BottomScreen_Apps_IsDone                 },
+    { BottomScreen_TouchSave_Init,           NULL, BottomScreen_TouchSave_End,          BottomScreen_TouchSave_IsDone                 },
     { sub_0203DB6C,            NULL, sub_0203DB70,           sub_0203DB74                  },
     { BottomScreen_ViewPhoto_Init, NULL, BottomScreen_ViewPhoto_End, BottomScreen_ViewPhoto_IsDone },
 };

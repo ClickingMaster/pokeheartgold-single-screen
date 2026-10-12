@@ -76,7 +76,7 @@ _0203522C:
 	bl Wireless_GetState
 	cmp r0, #1
 	bne _02035282
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	ldr r2, _02035288 ; =gCommWireless
 	mov r1, #0xc0
 	add r4, r5, #0
@@ -161,7 +161,7 @@ _020352D4: .word 0x00000D74
 	thumb_func_start CommWireless_BuildBeacon
 CommWireless_BuildBeacon: ; 0x020352D8
 	push {r3, r4, r5, lr}
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	add r5, r0, #0
 	bl CommWireless_GetProfile
 	add r4, r0, #0
@@ -199,7 +199,7 @@ _0203530A:
 	add r0, r4, #0
 	bl PlayerProfile_GetTrainerID
 	str r0, [r5]
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	strb r0, [r5, #4]
 	bl sub_02039954
 	strb r0, [r5, #5]
@@ -222,7 +222,7 @@ _02035360:
 	ldr r4, [r2, r1]
 	bl PlayerProfile_GetTrainerID
 	str r0, [r4]
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	strb r0, [r4, #4]
 	bl sub_02039954
 	strb r0, [r4, #5]

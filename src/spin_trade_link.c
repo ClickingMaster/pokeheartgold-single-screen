@@ -7,7 +7,7 @@
 #include "wireless_manager.h"
 #include "communication_command.h"
 #include "unk_02035900.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "unk_0205A44C.h"
 
 typedef struct SpinTradeLinkPacket {
@@ -33,7 +33,7 @@ typedef struct SpinTradeJoinRequest {
 } SpinTradeJoinRequest;
 
 u32 MATH_CountPopulation(u32 value);
-void sub_02038C1C(int count);
+void CommState_SetMaxEntries(int count);
 void UnionRoomObjects_ResetSlots(void *ptr);
 void ov85_021E9C84(void *ptr, int event, int value);
 void ov85_021E9D9C(void *ptr, int event, int value);
@@ -101,7 +101,7 @@ void SpinTradeLink_RegisterCommands(SpinTradeLink *menu) {
 
 void SpinTradeLink_Close(void *ptr) {
     SpinTradeLink *menu = ptr;
-    sub_02038C1C(2);
+    CommState_SetMaxEntries(2);
     sub_02037FF0();
     UnionRoomObjects_ResetSlots(menu->parent->input.communication);
     sub_0205A904(0);
@@ -176,7 +176,7 @@ void SpinTradeLink_HandleJoinRequest(int sender, int unused, void *data, SpinTra
             } else {
                 menu->participantMask |= 1 << sender;
                 packet.accepted = 1;
-                sub_02038C1C(Comm_CountConnected());
+                CommState_SetMaxEntries(Comm_CountConnected());
             }
             break;
         case 1:

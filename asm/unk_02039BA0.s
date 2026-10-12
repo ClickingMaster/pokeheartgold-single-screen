@@ -19,13 +19,13 @@ sub_02039BA0: ; 0x02039BA0
 	bl sub_02035ED8
 	cmp r0, #0
 	beq _02039C04
-	ldr r0, _02039C08 ; =_021D4150
+	ldr r0, _02039C08 ; =gCommState
 	ldr r0, [r0]
 	add r0, #0x4e
 	ldrb r0, [r0]
 	bl sub_02033FC4
 	add r3, r0, #0
-	ldr r0, _02039C08 ; =_021D4150
+	ldr r0, _02039C08 ; =gCommState
 	mov r2, #0x16
 	ldr r0, [r0]
 	mov r1, #0x30
@@ -33,7 +33,7 @@ sub_02039BA0: ; 0x02039BA0
 	lsl r2, r2, #0xe
 	add r3, r3, #1
 	bl WifiConnection_Init
-	ldr r0, _02039C0C ; =sub_020399DC
+	ldr r0, _02039C0C ; =CommState_ShowErrorAndHalt
 	bl WifiConnection_SetErrorCallback
 	bl sub_02035FD8
 	mov r0, #0
@@ -43,18 +43,18 @@ sub_02039BA0: ; 0x02039BA0
 	mov r1, #0xe1
 	ldr r0, _02039C10 ; =sub_0203960C
 	lsl r1, r1, #4
-	bl sub_020381C0
+	bl CommState_SetState
 _02039C04:
 	pop {r3, pc}
 	nop
-_02039C08: .word _021D4150
-_02039C0C: .word sub_020399DC
+_02039C08: .word gCommState
+_02039C0C: .word CommState_ShowErrorAndHalt
 _02039C10: .word sub_0203960C
 	thumb_func_end sub_02039BA0
 	thumb_func_start sub_02039C14
 sub_02039C14: ; 0x02039C14
 	push {r3, lr}
-	ldr r0, _02039C54 ; =_021D4150
+	ldr r0, _02039C54 ; =gCommState
 	ldr r2, [r0]
 	ldr r1, [r2, #0x44]
 	sub r1, r1, #1
@@ -65,7 +65,7 @@ sub_02039C14: ; 0x02039C14
 	bgt _02039C32
 	ldr r0, _02039C58 ; =sub_02038E90
 	mov r1, #0
-	bl sub_020381C0
+	bl CommState_SetState
 	pop {r3, pc}
 _02039C32:
 	mov r0, #1
@@ -78,11 +78,11 @@ _02039C32:
 	beq _02039C50
 	ldr r0, _02039C5C ; =sub_02039C60
 	mov r1, #0
-	bl sub_020381C0
+	bl CommState_SetState
 _02039C50:
 	pop {r3, pc}
 	nop
-_02039C54: .word _021D4150
+_02039C54: .word gCommState
 _02039C58: .word sub_02038E90
 _02039C5C: .word sub_02039C60
 	thumb_func_end sub_02039C14
@@ -104,7 +104,7 @@ sub_02039C6C: ; 0x02039C6C
 	bge _02039C84
 	ldr r0, _02039CF4 ; =sub_02038EB4
 	mov r1, #0
-	bl sub_020381C0
+	bl CommState_SetState
 	mov r4, #0
 	b _02039CC8
 _02039C84:
@@ -112,7 +112,7 @@ _02039C84:
 	bge _02039C94
 	ldr r0, _02039CF8 ; =sub_02038E90
 	mov r1, #0
-	bl sub_020381C0
+	bl CommState_SetState
 	mov r4, #0
 	b _02039CC8
 _02039C94:
@@ -120,13 +120,13 @@ _02039C94:
 	bne _02039CA4
 	ldr r0, _02039CFC ; =sub_02039E7C
 	mov r1, #0
-	bl sub_020381C0
+	bl CommState_SetState
 	mov r4, #0
 	b _02039CC8
 _02039CA4:
 	cmp r0, #0x18
 	bne _02039CC8
-	ldr r0, _02039D00 ; =_021D4150
+	ldr r0, _02039D00 ; =gCommState
 	mov r4, #0
 	ldr r0, [r0]
 	add r0, #0x53
@@ -135,21 +135,21 @@ _02039CA4:
 	beq _02039CC0
 	ldr r0, _02039CF8 ; =sub_02038E90
 	add r1, r4, #0
-	bl sub_020381C0
+	bl CommState_SetState
 	b _02039CC8
 _02039CC0:
 	ldr r0, _02039D04 ; =sub_02038EB0
 	add r1, r4, #0
-	bl sub_020381C0
+	bl CommState_SetState
 _02039CC8:
-	ldr r0, _02039D00 ; =_021D4150
+	ldr r0, _02039D00 ; =gCommState
 	ldr r0, [r0]
 	add r0, #0x53
 	ldrb r0, [r0]
 	cmp r0, #0
 	beq _02039CEE
 	bl Comm_CountConnected
-	ldr r1, _02039D00 ; =_021D4150
+	ldr r1, _02039D00 ; =gCommState
 	ldr r1, [r1]
 	add r1, #0x4b
 	ldrb r1, [r1]
@@ -157,7 +157,7 @@ _02039CC8:
 	beq _02039CEE
 	ldr r0, _02039CF8 ; =sub_02038E90
 	mov r1, #0
-	bl sub_020381C0
+	bl CommState_SetState
 	mov r4, #0
 _02039CEE:
 	add r0, r4, #0
@@ -166,7 +166,7 @@ _02039CEE:
 _02039CF4: .word sub_02038EB4
 _02039CF8: .word sub_02038E90
 _02039CFC: .word sub_02039E7C
-_02039D00: .word _021D4150
+_02039D00: .word gCommState
 _02039D04: .word sub_02038EB0
 	thumb_func_end sub_02039C6C
 	thumb_func_start sub_02039D08
@@ -191,7 +191,7 @@ _02039D20: ; jump table
 _02039D2A:
 	ldr r0, _02039D38 ; =sub_02039DC0
 	mov r1, #0
-	bl sub_020381C0
+	bl CommState_SetState
 	mov r4, #0
 _02039D34:
 	add r0, r4, #0

@@ -23,8 +23,8 @@ CommClubLink_StartCardExchange: ; 0x02058190
 	bl sub_0200FC60
 	mov r0, #1
 	add r1, r0, #0
-	bl sub_020398D4
-	bl sub_02037D78
+	bl CommState_SetErrorWatch
+	bl CommState_Exists
 	cmp r0, #0
 	beq _02058248
 	ldr r0, _0205824C ; =gCommClubLink

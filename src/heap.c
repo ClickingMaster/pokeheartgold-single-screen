@@ -4,7 +4,7 @@
 
 #include "error_handling.h"
 #include "error_message_reset.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 
 typedef struct HeapInfo {
     NNSFndHeapHandle *heapHandles;
@@ -196,7 +196,7 @@ static void *AllocFromHeapInternal(NNSFndHeapHandle heap, u32 size, s32 alignmen
 }
 
 static void AllocFail(void) {
-    if (sub_02037D78()) {
+    if (CommState_Exists()) {
         PrintErrorMessageAndReset();
     }
 }

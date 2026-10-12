@@ -21,7 +21,7 @@
 #include "trainer_memo.h"
 #include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "unk_0208805C.h"
 
 // Frontier trainer and Pokemon generation helpers shared by the facilities: trainers (narc 204) list the ids of their

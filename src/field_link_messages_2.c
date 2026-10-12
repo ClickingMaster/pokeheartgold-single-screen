@@ -46,8 +46,8 @@ int sub_0205A750(struct UnkStruct_02059E1C *p, int objId, int a2, struct Message
     }
     profile = CommWireless_GetParentProfile(objId - 1);
     if (profile == NULL) {
-        sub_020398D4(1, 1);
-        sub_02039AD8(1);
+        CommState_SetErrorWatch(1, 1);
+        CommState_SetError(1);
         return 0;
     }
     gender = PlayerProfile_GetTrainerGender(profile);

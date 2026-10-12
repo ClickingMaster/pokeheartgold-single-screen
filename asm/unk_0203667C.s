@@ -5,12 +5,12 @@
 	thumb_func_start sub_0203667C
 sub_0203667C: ; 0x0203667C
 	push {r3, r4, r5, r6, r7, lr}
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
 	bl sub_02033FC4
 	add r6, r0, #1
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	bl sub_02034044
 	cmp r0, #0
 	beq _02036738

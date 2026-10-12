@@ -97,9 +97,9 @@ typedef struct DowsingMchnSpriteParams {
     volatile u8 animSeq;
 } DowsingMchnSpriteParams;
 
-// Defined in field_overlay_app_dispatch.c, which has no public header.
-BOOL ov01_021F6BB0(int spriteId);
-BOOL ov01_021F6BD0(int scriptId);
+// Defined in field/bottom_screen_app.c; its header does not declare these.
+BOOL IsSpriteIdWithoutTalkAction(int spriteId);
+BOOL IsScriptIdWithoutTalkAction(int scriptId);
 
 extern const TouchscreenHitbox sDowsingMchnActionButtonHitbox;
 extern const TouchscreenHitbox sDowsingMchnExitButtonHitbox;
@@ -198,7 +198,7 @@ SysTask *DowsingMchn_Init(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSyst
     dowsing->actionType = ov01_021E7F54(dowsing->fieldSystem);
     if (dowsing->actionType == 1) {
         FieldSystem_GetFacingObject(dowsing->fieldSystem, &facingObj);
-        if (ov01_021F6BD0(MapObject_GetScriptID(facingObj)) == TRUE || ov01_021F6BB0(MapObject_GetSpriteID(facingObj)) == TRUE) {
+        if (IsScriptIdWithoutTalkAction(MapObject_GetScriptID(facingObj)) == TRUE || IsSpriteIdWithoutTalkAction(MapObject_GetSpriteID(facingObj)) == TRUE) {
             dowsing->actionType = 0;
         }
     }
@@ -878,7 +878,7 @@ void DowsingMchn_UpdateActionLabel(DowsingMchn *dowsing) {
         if (actionType == 1) {
             LocalMapObject *facingObj;
             FieldSystem_GetFacingObject(dowsing->fieldSystem, &facingObj);
-            if (ov01_021F6BD0(MapObject_GetScriptID(facingObj)) == TRUE || ov01_021F6BB0(MapObject_GetSpriteID(facingObj)) == TRUE) {
+            if (IsScriptIdWithoutTalkAction(MapObject_GetScriptID(facingObj)) == TRUE || IsSpriteIdWithoutTalkAction(MapObject_GetSpriteID(facingObj)) == TRUE) {
                 actionType = 0;
             }
         }

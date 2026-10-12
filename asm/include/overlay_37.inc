@@ -116,8 +116,8 @@
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
 .public sub_02037FF0
-.public sub_02038C1C
-.public sub_020398D4
+.public CommState_SetMaxEntries
+.public CommState_SetErrorWatch
 .public WirelessStatusIcon_Create
 .public sub_0205A904
 .public UnionRoomObjects_ResetSlots

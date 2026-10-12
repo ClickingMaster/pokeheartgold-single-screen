@@ -25,7 +25,7 @@ _02032EB4:
 	add r1, #1
 	mov r2, #3
 	bl MI_CpuCopy8
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	add r1, sp, #4
 	strb r0, [r1]
 	mov r0, #0
@@ -78,7 +78,7 @@ _02032F28:
 _02032F34:
 	cmp r0, #1
 	bne _02032F50
-	bl sub_02039918
+	bl CommState_ReportsErrors
 	cmp r0, #0
 	beq _02032F48
 	mov r0, #9

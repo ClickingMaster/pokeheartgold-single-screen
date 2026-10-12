@@ -7,7 +7,7 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "unk_02035900.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 
 typedef struct WirelessStatusIconOam {
     u32 attr01;
@@ -340,7 +340,7 @@ void WirelessStatusIcon_Refresh(void) {
 void WirelessStatusIcon_Create(void) {
     int isWifi = 0;
 
-    if (sub_02039998() != 0) {
+    if (CommState_IsWifi() != 0) {
         isWifi = 1;
     }
     WirelessStatusIcon_CreateAt(0xF0, 0, isWifi, 1, 0x1C0);
@@ -349,7 +349,7 @@ void WirelessStatusIcon_Create(void) {
 void WirelessStatusIcon_CreateOnScreen(int screen) {
     int isWifi = 0;
 
-    if (sub_02039998() != 0) {
+    if (CommState_IsWifi() != 0) {
         isWifi = 1;
     }
     WirelessStatusIcon_CreateAt(0xF0, 0, isWifi, screen, 0x1E0);
@@ -385,20 +385,20 @@ void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapId) {
 
 void WirelessStatusIcon_CreateIfConnected(void) {
     if (sub_02037474()) {
-        if (Comm_CountConnected() > 1 || sub_02039998() != 0) {
+        if (Comm_CountConnected() > 1 || CommState_IsWifi() != 0) {
             WirelessStatusIcon_Create();
         }
-    } else if (sub_02039998() != 0) {
+    } else if (CommState_IsWifi() != 0) {
         WirelessStatusIcon_Create();
     }
 }
 
 void WirelessStatusIcon_CreateOnScreenIfConnected(int screen) {
     if (sub_02037474()) {
-        if (Comm_CountConnected() > 1 || sub_02039998() != 0) {
+        if (Comm_CountConnected() > 1 || CommState_IsWifi() != 0) {
             WirelessStatusIcon_CreateOnScreen(screen);
         }
-    } else if (sub_02039998() != 0) {
+    } else if (CommState_IsWifi() != 0) {
         WirelessStatusIcon_CreateOnScreen(screen);
     }
 }

@@ -7,7 +7,7 @@
 #include "save_special_ribbons.h"
 #include "communication_command.h"
 #include "unk_02035900.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 typedef struct TradePacket {
     u32 data[0xFB];
 } TradePacket;

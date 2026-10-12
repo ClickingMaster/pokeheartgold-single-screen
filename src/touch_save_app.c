@@ -263,7 +263,7 @@ static void ov30_0225D700(SysTask *task, TouchSaveAppData *data) {
     } else {
         if (data->fieldSystem->unkD2_0 == 2 && sTouchSaveAppStateFuncs[data->state](data) == TRUE) {
             data->fieldSystem->unkD2_0 = 3;
-            ov01_021F6A9C(data->fieldSystem, 0, 0);
+            FieldSystem_SwitchBottomScreenApp(data->fieldSystem, 0, 0);
         }
     }
 }

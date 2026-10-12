@@ -89,8 +89,8 @@ extern void CommWireless_Terminate(void);
 extern void WirelessStatusIcon_SetLevel(int a0);
 extern void sub_02038D28(SaveData *saveData);
 extern void sub_02038D64(void);
-extern u32 sub_02038D80(void);
-extern void sub_020398D4(s8 a0, s8 a1);
+extern u32 CommState_GetSeenGames(void);
+extern void CommState_SetErrorWatch(s8 a0, s8 a1);
 
 extern MysteryGiftLinkState ov74_0223D0A8;
 
@@ -1884,7 +1884,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         if (result && Comm_IsNetIdConnected((u16)result)) {
             if (LinkSync_IsSynced(171) == TRUE) {
                 MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
-                sub_020398D4(1, 1);
+                CommState_SetErrorWatch(1, 1);
                 MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00007);
                 MysteryGiftApp_SetSpriteAnim(data, 1);
                 MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
@@ -1922,7 +1922,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
     case 11:
         card = MysteryGiftApp_GetReceivedCard(manager);
         MainMenuUtil_ShowCardSubScreen(data->bgConfig, card);
-        sub_020398D4(0, 0);
+        CommState_SetErrorWatch(0, 0);
         MysteryGiftApp_SaveReceivedGift(manager);
         *state = 12;
         break;
@@ -2175,7 +2175,7 @@ void ov74_0222CE10(MysteryGiftAppData *data) {
     case 29:
         break;
     case 30:
-        if (sub_02038D80() & 1) {
+        if (CommState_GetSeenGames() & 1) {
             data->unk_05D0 = 1;
         }
         data->unk_05CC--;

@@ -8,7 +8,7 @@
 #include "sound_system.h"
 #include "system.h"
 #include "comm_wireless.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "network_overlay_loader.h"
 
 typedef struct GlobalTerminalAppArgs {

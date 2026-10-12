@@ -45,7 +45,7 @@
 #include "friend_roster.h"
 #include "unk_0203170C.h"
 #include "comm_wireless.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "network_overlay_loader.h"
 #include "vram_transfer_manager.h"

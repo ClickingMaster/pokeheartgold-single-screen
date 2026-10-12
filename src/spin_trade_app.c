@@ -41,7 +41,7 @@
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "render_model.h"
 #include "render_animation.h"
@@ -430,7 +430,7 @@ void sub_0201A728(int a0);
 void sub_0201A738(int a0);
 int GetUserFrameGfx2PaletteMember(int frame);
 BOOL sub_02036FD8(int command, void *data, int size);
-void sub_02038C1C(int count);
+void CommState_SetMaxEntries(int count);
 void sub_02039EAC(s32 *state);
 BOOL sub_02039EB4(SaveData *saveData, int a1, s32 *state);
 int GF_TouchpadUpdate(SpinTradeTouchSamples *out, int mode, u32 threshold);
@@ -638,7 +638,7 @@ BOOL SpinTradeApp_Init(OverlayManager *man, int *state) {
     int i, slot, myNetId;
     SpinTradeMachine *machine;
 
-    sub_020398D4(1, 1);
+    CommState_SetErrorWatch(1, 1);
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     sub_0201A728(2);
@@ -1403,8 +1403,8 @@ BOOL SpinTrade_State_StartExitSync(SpinTradeApp *app) {
 BOOL SpinTrade_State_WaitExitSync(SpinTradeApp *app) {
     if (app->unk_018 == 0) {
         if (LinkSync_IsSynced(SPIN_TRADE_LINK_SYNC_NO)) {
-            sub_020398D4(0, 0);
-            sub_02038C1C(1);
+            CommState_SetErrorWatch(0, 0);
+            CommState_SetMaxEntries(1);
             sub_02037FF0();
             app->state = SPIN_TRADE_STATE_WAIT_DISCONNECT;
         }
@@ -1413,8 +1413,8 @@ BOOL SpinTrade_State_WaitExitSync(SpinTradeApp *app) {
         if (app->timer >= 120) {
             app->timer = 0;
             if (app->menu->unk_3C == 0) {
-                sub_020398D4(0, 0);
-                sub_02038C1C(1);
+                CommState_SetErrorWatch(0, 0);
+                CommState_SetMaxEntries(1);
                 sub_02037FF0();
             }
             app->state = SPIN_TRADE_STATE_WAIT_DISCONNECT;

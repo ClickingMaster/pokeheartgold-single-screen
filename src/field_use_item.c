@@ -665,12 +665,12 @@ static BOOL Task_ActivateDowsingMchnUI(TaskManager *taskManager) {
 
     switch (*state_p) {
     case 0:
-        ov01_021F6A9C(fieldSystem, 4, NULL);
+        FieldSystem_SwitchBottomScreenApp(fieldSystem, 4, NULL);
         fieldSystem->unkD2_7 = TRUE;
         (*state_p)++;
         break;
     case 1:
-        if (ov01_021F6B10(fieldSystem) == TRUE) {
+        if (FieldSystem_GetBottomScreenAppState(fieldSystem) == TRUE) {
             MapObjectManager_UnpauseAllMovement(fieldSystem->mapObjectManager);
             return TRUE;
         }
@@ -772,7 +772,7 @@ int UseRegisteredItemButtonInField(FieldSystem *fieldSystem, u16 slot) {
     if (Save_VarsFlags_CheckBugContestFlag(Save_VarsFlags_Get(fieldSystem->saveData)) == TRUE) {
         return 0;
     }
-    if (ov01_021F6B10(fieldSystem) != TRUE) {
+    if (FieldSystem_GetBottomScreenAppState(fieldSystem) != TRUE) {
         return 0;
     }
     if (slot == 1) {
@@ -780,7 +780,7 @@ int UseRegisteredItemButtonInField(FieldSystem *fieldSystem, u16 slot) {
     } else {
         itemId = Bag_GetRegisteredItem2(Save_Bag_Get(fieldSystem->saveData));
     }
-    if (itemId == ITEM_DOWSING_MCHN && ov01_021F6B00(fieldSystem) == 4) {
+    if (itemId == ITEM_DOWSING_MCHN && FieldSystem_GetBottomScreenAppId(fieldSystem) == 4) {
         return 0;
     }
     funcType = GetItemAttr(itemId, ITEMATTR_FIELDUSEFUNC, HEAP_ID_FIELD2);

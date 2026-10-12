@@ -8,7 +8,7 @@
 #include "wireless_manager.h"
 #include "communication_command.h"
 #include "unk_02035900.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 typedef struct RecordMixingLinkWork {
     u8 pad0[0x384];
     u32 flag;
@@ -31,7 +31,7 @@ void ov73_021E705C(RecordMixingLinkWork *, int, int);
 void ov73_021E7120(RecordMixingLinkWork *, int, int);
 int ov73_021E7488(void);
 u32 MATH_CountPopulation(u32);
-void sub_02038C1C(int);
+void CommState_SetMaxEntries(int);
 BOOL sub_02036FD8(int, void *, int);
 void RecordMixingLink_RegisterCommands(RecordMixingLinkWork *room);
 void sub_0208FB78(int sender, int unused, void *data, RecordMixingLinkWork *room);

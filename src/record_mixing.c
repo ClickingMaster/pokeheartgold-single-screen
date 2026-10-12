@@ -37,7 +37,7 @@
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "unk_0205A44C.h"
 #include "unk_0205B3DC.h"
@@ -154,7 +154,7 @@ typedef struct RecordMixingApp {
 
 // No public header declares these.
 void sub_0203893C(void);
-void sub_02038C1C(int count); // defined with an s8 parameter; the callers pass an int untruncated
+void CommState_SetMaxEntries(int count); // defined with an s8 parameter; the callers pass an int untruncated
 void sub_02039EAC(s32 *arg0);
 s32 sub_02039EB4(SaveData *saveData, s32 arg1, u32 *arg2);
 void UnionRoomObjects_ResetSlots(struct UnionRoomObjects *manager);
@@ -297,7 +297,7 @@ BOOL RecordMixing_Init(OverlayManager *man, int *state) {
         reg_GX_POWCNT &= ~REG_GX_POWCNT_DSEL_MASK;
         RecordMixingLink_RegisterCommands(app);
         sub_0203893C();
-        sub_02038C1C(3);
+        CommState_SetMaxEntries(3);
         if (!Comm_GetLocalNetId()) {
             sub_0205A904(2);
         }
@@ -381,7 +381,7 @@ BOOL RecordMixing_Exit(OverlayManager *man, int *state) {
     RecordMixing_RemoveWindows(app);
     RecordMixing_FreeButtonScreen(app);
     RecordMixing_FreeBgs(app->bgConfig);
-    sub_02038C1C(2);
+    CommState_SetMaxEntries(2);
     sub_02037FF0();
     UnionRoomObjects_ResetSlots(app->args->unk4);
     GF_TouchpadStopSampling();
@@ -637,7 +637,7 @@ void RecordMixing_RemoveWindows(RecordMixingApp *app) {
 }
 
 int ov73_021E6444(RecordMixingApp *app, int state) {
-    sub_020398D4(0, 1);
+    CommState_SetErrorWatch(0, 1);
     if (Comm_GetLocalNetId() == 0) {
         if (Comm_CountConnected() >= 2) {
             RecordMixing_PrintMessage(app, 2, FALSE);
@@ -1124,7 +1124,7 @@ int ov73_021E6E6C(RecordMixingApp *app, int state) {
 
 int ov73_021E6E8C(RecordMixingApp *app, int state) {
     if (LinkSync_IsSynced(201) != FALSE) {
-        sub_020398D4(0, 0);
+        CommState_SetErrorWatch(0, 0);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)16, (enum FadeType)16, RGB_BLACK, 16, 1, HEAP_ID_50);
         state = 3;
     }
@@ -1549,13 +1549,13 @@ int RecordMixing_GetTextSpeed(RecordMixingApp *app) {
 void ov73_021E781C(RecordMixingApp *app, int index) {
     if (Comm_GetLocalNetId() == 0) {
         if (index == -1) {
-            sub_02038C1C(1);
+            CommState_SetMaxEntries(1);
         } else {
             int count = Comm_CountConnected() + index;
             if (count > RECORD_MIXING_MAX_MEMBERS) {
                 count = RECORD_MIXING_MAX_MEMBERS;
             }
-            sub_02038C1C(count);
+            CommState_SetMaxEntries(count);
         }
         if (index == -1) {
             app->unk_4A29 = 2;

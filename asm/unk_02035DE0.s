@@ -23,7 +23,7 @@ Comm_ResetNetIdBuffers: ; 0x02035DE0
 	add r0, r2, r0
 	sub r3, #0x2a
 	str r1, [r0, r3]
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
 	bl sub_02033FC4

@@ -18,7 +18,7 @@ extern const u16 sWiFiPlazaTalkMsgPairsHighlighted[];
 
 #pragma force_active on
 
-BOOL WiFiPlazaTalk_Start(void *state, WiFiPlazaRoomWork *room, u32 playerIndex) {
+BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 playerIndex) {
     int length;
     String *text;
     int option;
@@ -30,7 +30,7 @@ BOOL WiFiPlazaTalk_Start(void *state, WiFiPlazaRoomWork *room, u32 playerIndex) 
     void *partnerObj;
     void *ownObj;
     void *objManager;
-    void *stateManager;
+    WiFiPlazaPlayerStateManager *stateManager;
     int partnerStatus;
     u32 partnerAnswer;
     WiFiPlazaPlayer *me;
@@ -512,7 +512,7 @@ BOOL WiFiPlazaTalk_Start(void *state, WiFiPlazaRoomWork *room, u32 playerIndex) 
 
 #pragma force_active on
 
-BOOL WiFiPlazaTalk_Answer(void *state, WiFiPlazaRoomWork *room) {
+BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
     WiFiPlazaTalk *talk = WiFiPlazaPlayerState_GetWork(state);
     u32 partnerStatus = ov45_0222B034(lobby);
@@ -890,7 +890,7 @@ typedef struct WiFiPlazaInfoCounter {
     WiFiPlazaTalkMenu menu;
 } WiFiPlazaInfoCounter;
 
-BOOL WiFiPlazaTalk_InfoCounter(void *state, WiFiPlazaRoomWork *room) {
+BOOL WiFiPlazaTalk_InfoCounter(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
     WiFiPlazaInfoCounter *counter = WiFiPlazaPlayerState_GetWork(state);
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
     u32 selected;
@@ -1123,7 +1123,7 @@ cancelEvents:
     return FALSE;
 }
 
-BOOL WiFiPlazaTalk_Reception(void *state, WiFiPlazaRoomWork *room) {
+BOOL WiFiPlazaTalk_Reception(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
     WiFiPlazaWork *lobby;
     String *message;
 
@@ -1301,13 +1301,13 @@ BOOL WiFiPlazaTalk_Init(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, s32 partner) 
 void WiFiPlazaTalk_Free(WiFiPlazaTalk *talk) {
 }
 
-void WiFiPlazaTalk_SetNextStep(WiFiPlazaTalk *talk, u8 frames, u8 nextStep, void *state, u8 waitStep) {
+void WiFiPlazaTalk_SetNextStep(WiFiPlazaTalk *talk, u8 frames, u8 nextStep, WiFiPlazaPlayerState *state, u8 waitStep) {
     talk->timer = frames;
     talk->nextStep = nextStep;
     WiFiPlazaPlayerState_SetStep(state, waitStep);
 }
 
-void WiFiPlazaTalk_WaitTimer(WiFiPlazaTalk *talk, void *state) {
+void WiFiPlazaTalk_WaitTimer(WiFiPlazaTalk *talk, WiFiPlazaPlayerState *state) {
     if (talk->timer != 0) {
         talk->timer--;
     } else {
@@ -1315,7 +1315,7 @@ void WiFiPlazaTalk_WaitTimer(WiFiPlazaTalk *talk, void *state) {
     }
 }
 
-void WiFiPlazaTalk_WaitMessage(WiFiPlazaTalk *talk, void *state, WiFiPlazaRoomWork *room) {
+void WiFiPlazaTalk_WaitMessage(WiFiPlazaTalk *talk, WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
     if (WiFiPlazaRoom_IsMessageFinished(room)) {
         WiFiPlazaPlayerState_SetStep(state, talk->nextStep);
     }

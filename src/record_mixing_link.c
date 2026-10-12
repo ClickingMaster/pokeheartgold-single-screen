@@ -20,7 +20,7 @@ void sub_0208FB98(int sender, int unused, void *data, RecordMixingLinkWork *room
     RecordMixingLink_SendRecords(room, Comm_GetLocalNetId());
     RecordMixing_StartFlash(room);
     ov73_021E705C(room, 25, (u8)sender);
-    sub_020398D4(1, 1);
+    CommState_SetErrorWatch(1, 1);
     PlaySE(0x657);
 }
 
@@ -45,7 +45,7 @@ void RecordMixingLink_HandleJoinRequest(int sender, int unused, void *data, Reco
             } else {
                 room->participantMask |= 1 << sender;
                 packet.accepted = 1;
-                sub_02038C1C(Comm_CountConnected());
+                CommState_SetMaxEntries(Comm_CountConnected());
             }
             break;
         case 1:

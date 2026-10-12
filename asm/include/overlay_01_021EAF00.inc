@@ -10,11 +10,11 @@
 .public FieldSystem_IsBottomScreenRunningDummy
 .public FieldSystem_EndBottomScreen
 .public FieldSystem_IsBottomScreenDone
-.public ov01_021F6840
-.public ov01_021F6864
-.public ov01_021F6874
-.public ov01_021F6894
-.public ov01_021F68B8
-.public ov01_021F68C0
+.public BottomScreen_TouchSave_Init
+.public BottomScreen_TouchSave_End
+.public BottomScreen_TouchSave_IsDone
+.public BottomScreen_Apps_Init
+.public BottomScreen_Apps_End
+.public BottomScreen_Apps_IsDone
 .public FieldSystem_CreateViewPhotoTask
 .public FieldSystem_DestroyViewPhotoTask

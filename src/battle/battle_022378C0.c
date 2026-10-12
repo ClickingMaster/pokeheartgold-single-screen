@@ -13,7 +13,7 @@
 #include "system.h"
 #include "unk_02026E84.h"
 #include "link_synchronization.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "evolution_scene.h"
 #include "vram_transfer_manager.h"
 
@@ -57,7 +57,7 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
     case BSTATE_LINK_INIT:
         Battle_LinkInit(man, setup);
         sub_02039F68(setup->wifiHistory);
-        if (!sub_02039998()) {
+        if (!CommState_IsWifi()) {
             GameStats_Inc(setup->gameStats, GAME_STAT_LOCAL_LINK_BATTLES);
             if (setup->battleType != 0x8F) {
                 sub_02005BEC(1);

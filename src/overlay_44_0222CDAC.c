@@ -40,7 +40,7 @@
 #include "comm_wireless.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "unk_02078834.h"
 #include "network_overlay_loader.h"
@@ -847,7 +847,7 @@ s32 ov44_0222A4B4(OverlayManager *overlayMananger, s32 *arg1) {
     switch (*arg1) {
     case 0:
         UnkStruct_ov44_0222A758_args *overlayArgs = OverlayManager_GetArgs(overlayMananger);
-        if (sub_02039998() != 0) {
+        if (CommState_IsWifi() != 0) {
             switch (overlayArgs->unk4) {
             case 1:
             case 2:
@@ -886,7 +886,7 @@ s32 ov44_0222A4B4(OverlayManager *overlayMananger, s32 *arg1) {
         ov44_0222ADF8(data);
         ov44_0222A1FC(data);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_53);
-        if (sub_02039998() != 0) {
+        if (CommState_IsWifi() != 0) {
             WirelessStatusIcon_Create();
         } else {
             LoadDwcOverlay();
@@ -1397,7 +1397,7 @@ void ov44_0222B164(UnkStruct_ov44_022319EC *arg0) {
 }
 
 s32 ov44_0222B228(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
-    if (sub_02039998() != 0) {
+    if (CommState_IsWifi() != 0) {
         ov44_0222F780(arg0, WifiConnection_GetTargetFriendIndex());
         arg0->unk4 = sub_020398C8();
         u32 temp_r0 = ov44_02229F00(arg0, &arg0->unk4->unk0);
@@ -1412,7 +1412,7 @@ s32 ov44_0222B228(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             arg0->unk348 = 65;
         } else {
             ov44_0222F510(arg0, 77, 0);
-            sub_020398D4(1, 1);
+            CommState_SetErrorWatch(1, 1);
             LinkSync_StartSync(16);
             arg0->unk348 = 61;
         }
@@ -1651,7 +1651,7 @@ s32 ov44_0222B8E0(UnkStruct_ov44_022319EC *arg0) {
 }
 
 void ov44_0222B9A0(UnkStruct_ov44_022319EC *arg0) {
-    u32 *temp_r0 = sub_020392D8();
+    u32 *temp_r0 = CommState_GetWifiError();
     s32 temp_r6 = temp_r0[0];
     s32 var_r5 = WifiConnection_ClassifyErrorCode(temp_r6, temp_r0[1]);
     s32 var_r7;
@@ -2071,7 +2071,7 @@ s32 ov44_0222C35C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     GfGfx_SwapDisplay();
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_53);
     arg0->unk348 = 19;
-    sub_020398D4(0, 0);
+    CommState_SetErrorWatch(0, 0);
     return arg1;
 }
 
@@ -2802,7 +2802,7 @@ s32 ov44_0222D824(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         arg0->unk348 = 19;
     }
     if (sub_020392A0() != 0) {
-        sub_020398D4(0, 1);
+        CommState_SetErrorWatch(0, 1);
         sub_020378E4(0);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_53);
         arg0->unk384 = 0;
@@ -3274,7 +3274,7 @@ s32 ov44_0222E45C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         } else if (Comm_IsNetIdConnected(0) == 1) {
             ov44_0222F7BC(arg0);
             CommPlayerInfo_Init(arg0->saveData, 0);
-            sub_020398D4(0, 1);
+            CommState_SetErrorWatch(0, 1);
             ov44_0222A1B4(temp_r6);
             arg0->unk34C = ov44_02229F74(temp_r6);
             sub_020378E4(0);
@@ -3463,7 +3463,7 @@ s32 ov44_0222E948(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 s32 ov44_0222E9C4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if ((ov44_0222E7C4(arg0) == 0) && (LinkSync_IsSynced(15) != 0)) {
         CommPlayerInfo_SendLocal();
-        sub_020398D4(1, 1);
+        CommState_SetErrorWatch(1, 1);
         LinkSync_StartSync(18);
         arg0->unk348 = 53;
     }
@@ -3631,7 +3631,7 @@ s32 ov44_0222EDB8(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         arg0->unk35C = 0;
         sub_02039330();
     }
-    if (sub_02037D78() == 0) {
+    if (CommState_Exists() == 0) {
         FriendRoster_Compact(arg0->unk0);
         ov44_0222F510(arg0, 27, 1);
         arg0->unk348 = 60;
@@ -3657,7 +3657,7 @@ s32 ov44_0222EE54(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (LinkSync_IsSynced(16) == 0) {
         return arg1;
     }
-    sub_020398D4(0, 1);
+    CommState_SetErrorWatch(0, 1);
     if (TextPrinterCheckActive(arg0->unk180) == 0) {
         if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 473, 11, HEAP_ID_53);
@@ -3890,7 +3890,7 @@ s32 ov44_0222F194(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 }
 
 s32 ov44_0222F4E0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
-    if (sub_02037D78() == 0) {
+    if (CommState_Exists() == 0) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_53);
         arg1 = 2;
     }

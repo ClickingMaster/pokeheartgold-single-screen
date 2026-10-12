@@ -83,9 +83,9 @@
 .public sub_020367A8
 .public sub_02036904
 .public sub_02037474
-.public sub_0203993C
+.public CommState_GetLinkMode
 .public sub_02039954
-.public sub_020399DC
+.public CommState_ShowErrorAndHalt
 .public WVR_StartUpAsync
 .public WVR_TerminateAsync
 .public DC_FlushRange

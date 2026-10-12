@@ -542,7 +542,7 @@ void WiFiPlazaEvent_StopLoopSE(UnkStruct_ov49_02268A0C *effect) {
 
 // Player state handler: talking to the special object (map tag 97), which turns to the player; message bank 1
 // with a yes/no menu.
-BOOL ov49_02268DCC(void *state, WiFiPlazaRoomWork *room) {
+BOOL ov49_02268DCC(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
     u32 *nextStep = WiFiPlazaPlayerState_GetWork(state);
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
     WiFiPlazaObjManager *objManager = WiFiPlazaRoom_GetObjManager(room);
@@ -655,7 +655,7 @@ UnkStruct_ov49_02268FAC *ov49_02268FAC(WiFiPlazaRoomWork *room, enum HeapID heap
         WiFiPlazaModels_SetMoverX(work->models, i, work->baseX);
         if (ov45_0222AD80(work->lobby, i) == 1) {
             ov49_02269178(work, i);
-            ov49_022695C4(work, i);
+            WiFiPlazaEvent_UpdateMoverMarkers(work, i);
         }
     }
     return work;
@@ -684,7 +684,7 @@ void ov49_02269098(UnkStruct_ov49_02268FAC *work) {
         if (ov45_0222AD80(work->lobby, i) == 1) {
             WiFiPlazaModels_SetMoverVisible(work->models, i, 1);
             ov49_02269178(work, i);
-            ov49_022695C4(work, i);
+            WiFiPlazaEvent_UpdateMoverMarkers(work, i);
             if (present) {
                 if (selected == i) {
                     isOwnIndex = TRUE;

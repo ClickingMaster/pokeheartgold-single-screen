@@ -21,7 +21,7 @@
 #include "system.h"
 #include "text.h"
 #include "unk_02035900.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 
 static const GraphicsBanks sErrorMessageBanksConfig = {
     .bg = GX_VRAM_BG_256_AB,

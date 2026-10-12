@@ -48,7 +48,7 @@ void CommClubLink_Free(void) {
 
 void sub_020580E4(FieldSystem *fieldSystem, s32 arg1, s32 arg2) {
     if (sub_02037474() == 0) {
-        sub_02037D8C(FieldSystem_GetSaveData(fieldSystem), arg1, arg2, fieldSystem->linkBattleRuleset, 0);
+        CommState_StartParentSession(FieldSystem_GetSaveData(fieldSystem), arg1, arg2, fieldSystem->linkBattleRuleset, 0);
         CommClubLink_Init(fieldSystem);
         CommClubLink_SetState(sub_02058304, 0);
     }
@@ -56,7 +56,7 @@ void sub_020580E4(FieldSystem *fieldSystem, s32 arg1, s32 arg2) {
 
 void sub_02058124(FieldSystem *fieldSystem, u8 arg1, u32 arg2) {
     if (sub_02037474() == 0) {
-        sub_02037DD4(FieldSystem_GetSaveData(fieldSystem), arg1, arg2, fieldSystem->linkBattleRuleset, 0);
+        CommState_StartChildSession(FieldSystem_GetSaveData(fieldSystem), arg1, arg2, fieldSystem->linkBattleRuleset, 0);
         CommClubLink_Init(fieldSystem);
         CommClubLink_SetState(sub_0205832C, 0);
     }
@@ -79,8 +79,8 @@ void CommClubLink_StartCardExchange(FieldSystem *fieldSystem) {
 
     sub_0200FC60(0, 0);
     sub_0200FC60(1, 0);
-    sub_020398D4(1, 1);
-    if (sub_02037D78()) {
+    CommState_SetErrorWatch(1, 1);
+    if (CommState_Exists()) {
         if (gCommClubLink == NULL) {
             CommClubLink_Init(fieldSystem);
             gCommClubLink->host = 1;
@@ -113,7 +113,7 @@ BOOL sub_02058258(void) {
 
 void sub_02058284(void) {
     if (gCommClubLink) {
-        sub_020398D4(0, 0);
+        CommState_SetErrorWatch(0, 0);
         CommClubLink_SetState(sub_02058A60, 5);
     }
 }
@@ -163,12 +163,12 @@ void sub_02058348(void) {
 }
 
 void sub_0205834C(void) {
-    sub_02037E1C(gCommClubLink->mode);
+    CommState_ConnectToSlot(gCommClubLink->mode);
     CommClubLink_SetState(sub_0205836C, 0);
 }
 
 void sub_0205836C(void) {
-    if (sub_02037EC8()) {
+    if (CommState_IsLinked()) {
         CommPlayerInfo_SendLocal();
         CommClubLink_SetState(sub_02058388, 0);
     }
@@ -362,7 +362,7 @@ void sub_0205876C(void) {
         return;
     }
     battleType = 5;
-    switch (sub_0203993C()) {
+    switch (CommState_GetLinkMode()) {
     case 4:
     case 5:
         battleType = 15;
@@ -423,7 +423,7 @@ void sub_02058870(void) {
 }
 
 void sub_020588A0(void) {
-    sub_02037E38();
+    CommState_RestartScan();
     CommClubLink_SetState(sub_020588B4, 2);
 }
 
@@ -505,7 +505,7 @@ void sub_020589F4(void) {
 
 void sub_02058A38(void) {
     if (LinkSync_IsSynced(91)) {
-        sub_020398D4(0, 0);
+        CommState_SetErrorWatch(0, 0);
         CommPlayerManager_Delete(1);
         CommClubLink_SetState(sub_02058A78, 5);
     }
@@ -521,7 +521,7 @@ void sub_02058A78(void) {
         gCommClubLink->timer--;
         return;
     }
-    sub_02037E9C();
+    CommState_RequestShutdown();
     CommClubLink_SetState(CommClubLink_Free, 0);
 }
 

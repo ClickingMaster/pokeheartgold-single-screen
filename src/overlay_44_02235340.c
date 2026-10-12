@@ -26,7 +26,7 @@
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "unk_020971F8.h"
 #include "vram_transfer_manager.h"
@@ -195,7 +195,7 @@ FS_EXTERN_OVERLAY(OVY_42);
 void ov44_02232EA8(OverlayManager *overlayMananger) {
     UnkStruct_ov44_args *temp_r5 = OverlayManager_GetArgs(overlayMananger);
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_42), OVY_LOAD_ASYNC);
-    GF_ASSERT(sub_02039998() == 1);
+    GF_ASSERT(CommState_IsWifi() == 1);
     Heap_Create(HEAP_ID_3, HEAP_ID_103, 0x18000);
     Heap_Create(HEAP_ID_3, HEAP_ID_104, 0xA000);
     UnkStruct_ov44_02235340 *temp_r0 = OverlayManager_CreateAndGetData(overlayMananger, sizeof(UnkStruct_ov44_02235340), HEAP_ID_103);
@@ -1100,7 +1100,7 @@ s32 ov44_02234474(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
         ov44_02233F3C(arg0);
     }
     ov00_021E7220(0);
-    sub_020398D4(0, 1);
+    CommState_SetErrorWatch(0, 1);
     ov44_022340EC(arg0, Comm_GetLocalNetId(), heapID);
     arg0->unk5 = 1;
     return 0;
@@ -1335,7 +1335,7 @@ s32 ov44_02234858(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 s32 ov44_022348A8(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    sub_020398D4(1, 1);
+    CommState_SetErrorWatch(1, 1);
     LinkSync_StartSync(18);
     arg0->unk5 = 18;
     return 0;
@@ -1447,7 +1447,7 @@ s32 ov44_02234A68(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     sub_02039358();
     ov44_02233FE8(arg0);
     sub_02039B58();
-    sub_020398D4(0, 1);
+    CommState_SetErrorWatch(0, 1);
     return 1;
 }
 
@@ -1485,7 +1485,7 @@ s32 ov44_02234B18(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     sub_02039B58();
     ov44_02233FE8(arg0);
     arg0->unk7 = 0;
-    sub_020398D4(0, 1);
+    CommState_SetErrorWatch(0, 1);
     return 1;
 }
 
@@ -1530,7 +1530,7 @@ s32 ov44_02234BB4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 
 s32 ov44_02234BF0(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
     CommPlayerInfo_SendLocal();
-    sub_020398D4(0, 1);
+    CommState_SetErrorWatch(0, 1);
     ov44_02234440(arg0);
     arg0->unk5 = 1;
     return 0;
@@ -1618,7 +1618,7 @@ s32 ov44_02234D88(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
         return 0;
     }
     arg0->unk7 = 0;
-    sub_020398D4(0, 1);
+    CommState_SetErrorWatch(0, 1);
     return 1;
 }
 
@@ -1718,7 +1718,7 @@ s32 ov44_02234EF4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 s32 ov44_02234F44(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    sub_020398D4(1, 1);
+    CommState_SetErrorWatch(1, 1);
     LinkSync_StartSync(18);
     arg0->unk5 = 14;
     return 0;
@@ -1758,7 +1758,7 @@ s32 ov44_02234FDC(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     sub_02039358();
     sub_02039B58();
     arg0->unk7 = 0;
-    sub_020398D4(0, 1);
+    CommState_SetErrorWatch(0, 1);
     return 1;
 }
 
@@ -1939,6 +1939,6 @@ s32 ov44_02235340(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     sub_02039358();
     sub_02039B58();
     arg0->unk7 = 0;
-    sub_020398D4(0, 1);
+    CommState_SetErrorWatch(0, 1);
     return 1;
 }

@@ -252,7 +252,7 @@ BOOL ScrCmd_MoveTutorChooseMove(ScriptContext *ctx) {
     s32 numLearnableMoves;
     BOOL showNextButton;
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    struct UnkStruct_ov01_021EDC28 **unk = ov01_021F6B20(fieldSystem);
+    struct UnkStruct_ov01_021EDC28 **unk = FieldSystem_GetTouchscreenChoiceMenuList(fieldSystem);
     u16 resultVarId;
     MsgData *messageData;
     u16 showAsTwoColumns;
@@ -301,7 +301,7 @@ BOOL ScrCmd_MoveTutorChooseMove(ScriptContext *ctx) {
         MoveTutorMenu_SetListItem(*unk, 2, 0xff, 0xfffd);
     }
     MoveTutorMenu_SetListItem(*unk, 3, 0xff, 0xfffe);
-    ov01_021F6ABC(fieldSystem, 3, 7, GetVarPointer(fieldSystem, ctx->data[0]));
+    FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, 3, 7, GetVarPointer(fieldSystem, ctx->data[0]));
     SetupNativeScript(ctx, ov01_0220305C);
     u16 *unused = GetVarPointer(fieldSystem, ctx->data[0]); // yes, this is needed here to match
     return TRUE;
@@ -309,7 +309,7 @@ BOOL ScrCmd_MoveTutorChooseMove(ScriptContext *ctx) {
 
 static BOOL ov01_0220305C(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    struct UnkStruct_ov01_021EDC28 **unk = ov01_021F6B20(fieldSystem);
+    struct UnkStruct_ov01_021EDC28 **unk = FieldSystem_GetTouchscreenChoiceMenuList(fieldSystem);
     u16 *result = GetVarPointer(fieldSystem, ctx->data[0]);
     if (*result == 0xeeee) {
         return FALSE;

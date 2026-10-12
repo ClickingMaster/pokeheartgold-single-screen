@@ -25,10 +25,10 @@ s32 WiFiPlazaMap_GetCollision(WiFiPlazaMap *map, u16 x, u16 y);
 u32 WiFiPlazaMap_GetTileTag(WiFiPlazaMap *map, u16 x, u16 y);
 u32 WiFiPlazaMap_GetTileAttr(WiFiPlazaMap *map, u16 x, u16 y);
 BOOL WiFiPlazaMap_FindTileTag(WiFiPlazaMap *map, int tag, u16 *outX, u16 *outY, u32 ordinal);
-BOOL ov49_02258A30(u8 attr);
-BOOL ov49_02258A50(u8 attr);
-BOOL ov49_02258A70(u8 attr);
-BOOL ov49_02258A90(u8 attr);
+BOOL WiFiPlazaMap_IsStandActionTile(u8 attr);
+BOOL WiFiPlazaMap_IsWalkUpActionTile(u8 attr);
+BOOL WiFiPlazaMap_IsCheckActionTile(u8 attr);
+BOOL WiFiPlazaMap_IsPropTile(u8 attr);
 UnkStruct_ov42_02227F68 *WiFiPlazaMap_GetGrid(WiFiPlazaMap *map);
 
 #endif // POKEHEARTGOLD_WIFI_PLAZA_MAP_H

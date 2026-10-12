@@ -24,7 +24,7 @@
 #include "text.h"
 #include "union_room_internal.h"
 #include "unk_02035900.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "map_object_movement_commands.h"
 
 // Communication core and communication player manager functions, declared with the types their call sites were
@@ -575,7 +575,7 @@ void Colosseum_StartEntry(FieldSystem *fieldSystem, ColosseumEntryCallback callb
     InitWindow(&entry->monListWindow);
     InitWindow(&entry->choiceWindow);
     entry->cursor = ListMenuCursorNew(HEAP_ID_FIELD2);
-    entry->linkMode = sub_0203993C();
+    entry->linkMode = CommState_GetLinkMode();
     entry->sentMons = NULL;
     entry->receivedMons = NULL;
     entry->party = NULL;

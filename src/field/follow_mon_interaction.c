@@ -1087,30 +1087,30 @@ BOOL Task_FollowMonInteract(TaskManager *taskManager) {
     case 2:
         switch (fieldSystem->followMonInteraction->state) {
         case 10:
-            ov01_021F6A9C(fieldSystem, 3, 0);
+            FieldSystem_SwitchBottomScreenApp(fieldSystem, 3, 0);
             fieldSystem->followMonInteraction->state = 11;
             break;
         case 11: {
-            int a = ov01_021F6B00(fieldSystem);
-            int b = ov01_021F6B10(fieldSystem);
+            int a = FieldSystem_GetBottomScreenAppId(fieldSystem);
+            int b = FieldSystem_GetBottomScreenAppState(fieldSystem);
             if (a == 3 && b == 1) {
-                ov01_021F6ABC(fieldSystem, 3, 3, &fieldSystem->followMonInteraction->answer);
+                FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, 3, 3, &fieldSystem->followMonInteraction->answer);
                 fieldSystem->followMonInteraction->state = 12;
             }
             break;
         }
         case 12: {
-            int a = ov01_021F6B00(fieldSystem);
-            int b = ov01_021F6AEC(fieldSystem);
+            int a = FieldSystem_GetBottomScreenAppId(fieldSystem);
+            int b = FieldSystem_GetTouchscreenChoiceMenuState(fieldSystem);
             if (a == 3 && b == 6) {
-                ov01_021F6A9C(fieldSystem, 0, 0);
+                FieldSystem_SwitchBottomScreenApp(fieldSystem, 0, 0);
                 fieldSystem->followMonInteraction->state = 13;
             }
             break;
         }
         case 13: {
-            int a = ov01_021F6B00(fieldSystem);
-            int b = ov01_021F6B10(fieldSystem);
+            int a = FieldSystem_GetBottomScreenAppId(fieldSystem);
+            int b = FieldSystem_GetBottomScreenAppState(fieldSystem);
             if (a == 0 && b == 1) {
                 switch (fieldSystem->followMonInteraction->answer) {
                 case 0:

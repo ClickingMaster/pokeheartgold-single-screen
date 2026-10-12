@@ -50,18 +50,18 @@ typedef struct WiFiPlazaTalk {
     u32 answered;             // 0x4C
 } WiFiPlazaTalk;
 
-BOOL WiFiPlazaTalk_Start(void *state, WiFiPlazaRoomWork *room, u32 arg);
-BOOL WiFiPlazaTalk_Answer(void *state, WiFiPlazaRoomWork *room);
-BOOL WiFiPlazaTalk_InfoCounter(void *state, WiFiPlazaRoomWork *room);
-BOOL WiFiPlazaTalk_Reception(void *state, WiFiPlazaRoomWork *room);
+BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 arg);
+BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room);
+BOOL WiFiPlazaTalk_InfoCounter(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room);
+BOOL WiFiPlazaTalk_Reception(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room);
 int WiFiPlazaTalk_GetTimeOfDay(WiFiPlazaPlayer *player);
 String *WiFiPlazaTalk_GetMsg(WiFiPlazaRoomWork *room, u32 playerIndex, u32 msgId);
 String *WiFiPlazaTalk_GetReunionMsg(WiFiPlazaRoomWork *room, u32 speaker, u32 listener);
 BOOL WiFiPlazaTalk_Init(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, s32 partner);
 void WiFiPlazaTalk_Free(WiFiPlazaTalk *talk);
-void WiFiPlazaTalk_SetNextStep(WiFiPlazaTalk *talk, u8 frames, u8 nextStep, void *state, u8 waitStep);
-void WiFiPlazaTalk_WaitTimer(WiFiPlazaTalk *talk, void *state);
-void WiFiPlazaTalk_WaitMessage(WiFiPlazaTalk *talk, void *state, WiFiPlazaRoomWork *room);
+void WiFiPlazaTalk_SetNextStep(WiFiPlazaTalk *talk, u8 frames, u8 nextStep, WiFiPlazaPlayerState *state, u8 waitStep);
+void WiFiPlazaTalk_WaitTimer(WiFiPlazaTalk *talk, WiFiPlazaPlayerState *state);
+void WiFiPlazaTalk_WaitMessage(WiFiPlazaTalk *talk, WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room);
 void WiFiPlazaTalk_PrintGreeting(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room, u32 timeOfDay, WiFiPlazaPlayer *speaker, WiFiPlazaPlayer *listener);
 void WiFiPlazaTalk_BufferGreeting(WiFiPlazaRoomWork *room, u32 slot, u32 timeOfDay, WiFiPlazaPlayer *player);
 BOOL WiFiPlazaTalk_PrintTimeRemark(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room);

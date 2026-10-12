@@ -37,10 +37,10 @@ BOOL Task_HoneyOrSweetScent(TaskManager *taskManager);
 BOOL Task_OverworldFish(TaskManager *taskManager);
 struct FishingRodWork *CreateFishingRodTaskEnv(FieldSystem *fieldSystem, enum HeapID heapID, int rod);
 void FieldSystem_TryStorePlayerLocation(FieldSystem *fieldSystem);
-void ov01_021F6A9C(FieldSystem *fieldSystem, int a1, void *a2);
-int ov01_021F6B00(FieldSystem *fieldSystem);
-int ov01_021F6AEC(FieldSystem *fieldSystem);
-BOOL ov01_021F6B10(FieldSystem *fieldSystem);
+void FieldSystem_SwitchBottomScreenApp(FieldSystem *fieldSystem, int a1, void *a2);
+int FieldSystem_GetBottomScreenAppId(FieldSystem *fieldSystem);
+int FieldSystem_GetTouchscreenChoiceMenuState(FieldSystem *fieldSystem);
+BOOL FieldSystem_GetBottomScreenAppState(FieldSystem *fieldSystem);
 UnkStruct_0206793C *FollowMonBall_Spawn(LocalMapObject *obj, int a1);
 void FollowMon_MoveToPlayer(FieldSystem *fieldSystem, u8 a1);
 void FollowMon_SpawnReleaseBall(LocalMapObject *object);
@@ -54,7 +54,7 @@ BOOL ov01_021EF348(ScriptContext *ctx);
 void ov01_021EF4C4(struct UnkStruct_Ov01_021EF4C4 *, ScriptContext *ctx);
 void ov01_021EF4DC(ScriptContext *ctx, MsgData *msg_data, u16 msg_no, u8 can_ab_speed_up, struct UnkStruct_Ov01_021EF4C4 *);
 struct UnkStruct_ov01_021EDC28 *ov01_021EDF78(FieldSystem *fieldSystem, u8 x, u8 y, u8 initCursorPos, u8 cancellable, u16 *ret_p, MessageFormat *msgFmt, Window *window, MsgData *msgData);
-struct UnkStruct_ov01_021EDC28 **ov01_021F6B20(FieldSystem *fieldSystem);
+struct UnkStruct_ov01_021EDC28 **FieldSystem_GetTouchscreenChoiceMenuList(FieldSystem *fieldSystem);
 void ov01_021EDC7C(struct UnkStruct_ov01_021EDC28 *menu, u32 msgId, u32 value);
 void ov01_021EDC84(struct UnkStruct_ov01_021EDC28 *menu);
 void ov01_021EDF00(struct UnkStruct_ov01_021EDC28 *menu);
@@ -72,7 +72,7 @@ u8 FollowMonObject_IsLarge(LocalMapObject *object);
 void MapObject_GetCoordsBehind(LocalMapObject *object, int *p_x, int *p_y);
 void TallGrass_SpawnAt(LocalMapObject *object, int a1, int x, int y, int a4);
 void VeryTallGrass_SpawnAt(LocalMapObject *object, int a1, int x, int y, int a4);
-void ov01_021F729C(FieldSystem *fieldSystem);
+void FieldSystem_StartPalPadRegistration(FieldSystem *fieldSystem);
 void CallFieldTask_RockClimb(TaskManager *taskManager, int playerDirection, int partySlot);
 void CallFieldTask_Surf(TaskManager *taskManager, int playerDirection, int partySlot);
 void CallFieldTask_Waterfall(TaskManager *taskManager, int playerDirection, int partySlot);
@@ -97,11 +97,11 @@ void Field_SaveStatsPrinter_Delete(struct SaveStatsPrinter *printer);
 void FieldSystem_ShowEmoteBubble(FieldSystem *fieldSystem, LocalMapObject *partnerPokeObj, int a2);
 void ov01_02205AEC(FieldSystem *fieldSystem);
 void MapObject_SetPositionNextTo(LocalMapObject *playerObj, LocalMapObject *tsurePokeObj, int a2, int a3);
-void ov01_021F6ABC(FieldSystem *fieldSystem, int a1, int a2, void *a3);
+void FieldSystem_SetTouchscreenChoiceMenuState(FieldSystem *fieldSystem, int a1, int a2, void *a3);
 
 typedef BOOL (*UnkCallback_021F6B34)(struct UnkStruct_ov01_021EDC28 *menu, int idx);
 
-void ov01_021F6B34(FieldSystem *fieldSystem, UnkCallback_021F6B34 cb, struct UnkStruct_ov01_021EDC28 *menu);
+void FieldSystem_SetTouchscreenChoiceMenuCallback(FieldSystem *fieldSystem, UnkCallback_021F6B34 cb, struct UnkStruct_ov01_021EDC28 *menu);
 void ov01_021EEF9C(struct UnkStruct_ov01_021EDC28 *menu, int idx);
 
 struct UnkStruct_020FACDC {

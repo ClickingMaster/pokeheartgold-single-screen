@@ -2469,7 +2469,7 @@
 	.public _022695F8
 	.public _02269612
 	.public _0226961A
-	.public _02269624
+	.public sWiFiPlazaWalkUpActionTiles
 	.public WiFiPlazaMap_PosToVecFx32
 	.public WiFiPlazaMap_VecFx32ToPos
 	.public WiFiPlazaMap_LoadModelFile
@@ -2481,10 +2481,10 @@
 	.public WiFiPlazaMap_GetTileTag
 	.public WiFiPlazaMap_GetTileAttr
 	.public WiFiPlazaMap_FindTileTag
-	.public ov49_02258A30
-	.public ov49_02258A50
-	.public ov49_02258A70
-	.public ov49_02258A90
+	.public WiFiPlazaMap_IsStandActionTile
+	.public WiFiPlazaMap_IsWalkUpActionTile
+	.public WiFiPlazaMap_IsCheckActionTile
+	.public WiFiPlazaMap_IsPropTile
 	.public WiFiPlazaMap_GetGrid
 	.public WiFiPlazaObj_CreateManager
 	.public WiFiPlazaObj_DeleteManager
@@ -2504,7 +2504,7 @@
 	.public WiFiPlazaObj_GetSpecial
 	.public WiFiPlazaObj_SetGridPos
 	.public WiFiPlazaObj_SetGridPosAndDir
-	.public ov49_02258E34
+	.public WiFiPlazaObj_GetGridPos
 	.public WiFiPlazaObj_GetParam
 	.public WiFiPlazaObj_QueueCommand
 	.public ov49_02258EAC
@@ -2566,13 +2566,13 @@
 	.public WiFiPlazaRoom_IsFading
 	.public WiFiPlazaRoom_SetFinished
 	.public WiFiPlazaRoom_SetResult
-	.public ov49_0225A03C
-	.public ov49_0225A040
+	.public WiFiPlazaRoom_SetActionTile
+	.public WiFiPlazaRoom_GetActionTile
 	.public WiFiPlazaRoom_IgnorePlazaClosing
-	.public ov49_0225A04C
-	.public ov49_0225A064
-	.public ov49_0225A06C
-	.public ov49_0225A084
+	.public WiFiPlazaRoom_SetPlayerBusy
+	.public WiFiPlazaRoom_IsPlayerBusy
+	.public WiFiPlazaRoom_SetCardBlocked
+	.public WiFiPlazaRoom_IsCardBlocked
 	.public WiFiPlazaRoom_PrintMessage
 	.public WiFiPlazaRoom_PrintMessageInstant
 	.public WiFiPlazaRoom_IsMessageFinished
@@ -3134,10 +3134,10 @@
 	.public ov49_02269474
 	.public ov49_02269494
 	.public ov49_022694B4
-	.public ov49_022695C4
-	.public ov49_02269628
-	.public ov49_0226962C
-	.public ov49_02269634
+	.public WiFiPlazaEvent_UpdateMoverMarkers
+	.public sWiFiPlazaPropTiles
+	.public sWiFiPlazaCheckActionTiles
+	.public sWiFiPlazaStandActionTiles
 	.public ov49_02269654
 	.public ov49_02269658
 	.public ov49_0226965C
@@ -3306,12 +3306,12 @@
 	.public WiFiPlazaRoom_IsFading
 	.public WiFiPlazaRoom_SetFinished
 	.public WiFiPlazaRoom_SetResult
-	.public ov49_0225A03C
-	.public ov49_0225A040
+	.public WiFiPlazaRoom_SetActionTile
+	.public WiFiPlazaRoom_GetActionTile
 	.public WiFiPlazaRoom_IgnorePlazaClosing
-	.public ov49_0225A04C
-	.public ov49_0225A064
-	.public ov49_0225A084
+	.public WiFiPlazaRoom_SetPlayerBusy
+	.public WiFiPlazaRoom_IsPlayerBusy
+	.public WiFiPlazaRoom_IsCardBlocked
 	.public WiFiPlazaRoom_StartInfoPanel
 	.public WiFiPlazaRoom_TakePanelButtonPress
 	.public WiFiPlazaMsgWindow_HideWaitingIcon
@@ -3498,7 +3498,7 @@ WiFiPlazaErrorWindow_PrintCommError: ; 0x0225B284
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r0, #0
 	add r5, r1, #0
-	bl sub_020392D8
+	bl CommState_GetWifiError
 	add r4, r0, #0
 	ldr r0, [r4]
 	ldr r1, [r4, #4]

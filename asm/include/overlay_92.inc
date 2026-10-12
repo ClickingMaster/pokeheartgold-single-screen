@@ -152,7 +152,7 @@
 .public Comm_GetLocalNetId
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
-.public sub_020398D4
+.public CommState_SetErrorWatch
 .public WirelessStatusIcon_LoadPaletteFile
 .public WirelessStatusIcon_Create
 .public NNS_G2dGetUnpackedPaletteData

@@ -134,9 +134,9 @@
 .public sub_02037930
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
-.public sub_02039998
+.public CommState_IsWifi
 .public sub_020399FC
-.public sub_02039AD8
+.public CommState_SetError
 .public sub_02039F68
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy

@@ -3,7 +3,7 @@
 #include "global.h"
 
 #include "location_gmm_dat.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wifi_connection.h"
 #include "wifi_plaza_internal.h"
 

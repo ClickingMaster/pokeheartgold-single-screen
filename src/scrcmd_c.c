@@ -76,7 +76,7 @@
 #include "comm_wireless.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "unk_02054648.h"
 #include "field_overworld_transition.h"
@@ -1835,7 +1835,7 @@ static FashionAppData *sub_02042A60(enum HeapID heapID, FieldSystem *fieldSystem
 }
 
 BOOL ScrCmd_151(ScriptContext *ctx) {
-    ov01_021F729C(ctx->fieldSystem);
+    FieldSystem_StartPalPadRegistration(ctx->fieldSystem);
     return TRUE;
 }
 
@@ -2944,7 +2944,7 @@ BOOL ScrCmd_283(ScriptContext *ctx) {
 }
 
 BOOL sub_02044658(ScriptContext *ctx) {
-    if (sub_02037D78() != TRUE && CommWireless_Exists() != TRUE) {
+    if (CommState_Exists() != TRUE && CommWireless_Exists() != TRUE) {
         return TRUE;
     } else {
         return FALSE;
@@ -3591,7 +3591,7 @@ BOOL ScrCmd_PrimoPasswordCheck1(ScriptContext *ctx) {
     u16 b = ScriptGetVar(ctx);
     u16 c = ScriptGetVar(ctx);
     u16 d = ScriptGetVar(ctx);
-    int wallpaper = ov02_0224CD38(profile, a, b, c, d, HEAP_ID_FIELD1);
+    int wallpaper = PrimoPassword_CheckWallpaper(profile, a, b, c, d, HEAP_ID_FIELD1);
     if (wallpaper == -1 || wallpaper > 7) {
         *p_ret = 0xFF;
         return FALSE;
@@ -3613,7 +3613,7 @@ BOOL ScrCmd_PrimoPasswordCheck2(ScriptContext *ctx) {
     u16 b = ScriptGetVar(ctx);
     u16 c = ScriptGetVar(ctx);
     u16 d = ScriptGetVar(ctx);
-    int result = ov02_0224CD74(profile, a, b, c, d, HEAP_ID_FIELD1);
+    int result = PrimoPassword_Check2(profile, a, b, c, d, HEAP_ID_FIELD1);
     if (result == -1) {
         *p_ret = 0xFF;
         return FALSE;
@@ -4931,10 +4931,10 @@ BOOL sub_020476E8(ScriptContext *ctx);
 
 BOOL ScrCmd_TouchscreenMenuHide(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    if (ov01_021F6B00(fieldSystem) == 3) {
+    if (FieldSystem_GetBottomScreenAppId(fieldSystem) == 3) {
         return FALSE;
     }
-    ov01_021F6A9C(fieldSystem, 3, 0);
+    FieldSystem_SwitchBottomScreenApp(fieldSystem, 3, 0);
     SetupNativeScript(ctx, sub_020476E8);
     fieldSystem->unk1C = 3;
     return TRUE;
@@ -4943,8 +4943,8 @@ BOOL ScrCmd_TouchscreenMenuHide(ScriptContext *ctx) {
 BOOL sub_020476E8(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 *p_ret = GetVarPointer(fieldSystem, ctx->data[0]);
-    int r5 = ov01_021F6B00(fieldSystem);
-    int r0 = ov01_021F6B10(fieldSystem);
+    int r5 = FieldSystem_GetBottomScreenAppId(fieldSystem);
+    int r0 = FieldSystem_GetBottomScreenAppState(fieldSystem);
     if (r5 == 3 && r0 == 1) {
         return TRUE;
     } else {
@@ -4956,7 +4956,7 @@ BOOL sub_02047744(ScriptContext *ctx);
 
 BOOL ScrCmd_TouchscreenMenuShow(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    ov01_021F6A9C(fieldSystem, 0, 0);
+    FieldSystem_SwitchBottomScreenApp(fieldSystem, 0, 0);
     SetupNativeScript(ctx, sub_02047744);
     fieldSystem->unk1C = 0;
     return TRUE;
@@ -4965,8 +4965,8 @@ BOOL ScrCmd_TouchscreenMenuShow(ScriptContext *ctx) {
 BOOL sub_02047744(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 *p_ret = GetVarPointer(fieldSystem, ctx->data[0]);
-    int r5 = ov01_021F6B00(fieldSystem);
-    int r0 = ov01_021F6B10(fieldSystem);
+    int r5 = FieldSystem_GetBottomScreenAppId(fieldSystem);
+    int r0 = FieldSystem_GetBottomScreenAppState(fieldSystem);
     if (r5 == 0 && r0 == 1) {
         return TRUE;
     } else {
@@ -4987,7 +4987,7 @@ BOOL ScrCmd_GetMenuChoice(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 var_ret = ScriptReadHalfword(ctx);
     ctx->data[0] = var_ret;
-    ov01_021F6ABC(fieldSystem, 3, 3, &ctx->data[1]);
+    FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, 3, 3, &ctx->data[1]);
     SetupNativeScript(ctx, sub_020477C0);
     return TRUE;
 }
@@ -4995,8 +4995,8 @@ BOOL ScrCmd_GetMenuChoice(ScriptContext *ctx) {
 BOOL sub_020477C0(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 *p_ret = GetVarPointer(fieldSystem, ctx->data[0]);
-    int r7 = ov01_021F6B00(fieldSystem);
-    int r0 = ov01_021F6AEC(fieldSystem);
+    int r7 = FieldSystem_GetBottomScreenAppId(fieldSystem);
+    int r0 = FieldSystem_GetTouchscreenChoiceMenuState(fieldSystem);
     if (r7 == 3 && r0 == 6) {
         *p_ret = ctx->data[1];
         return TRUE;
@@ -5006,17 +5006,17 @@ BOOL sub_020477C0(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_MenuInitStdGmm(ScriptContext *ctx) {
-    sub_02041770(ctx, ov01_021F6B20(ctx->fieldSystem), NULL);
+    sub_02041770(ctx, FieldSystem_GetTouchscreenChoiceMenuList(ctx->fieldSystem), NULL);
     return TRUE;
 }
 
 BOOL ScrCmd_MenuInit(ScriptContext *ctx) {
-    sub_02041770(ctx, ov01_021F6B20(ctx->fieldSystem), ctx->msgdata);
+    sub_02041770(ctx, FieldSystem_GetTouchscreenChoiceMenuList(ctx->fieldSystem), ctx->msgdata);
     return TRUE;
 }
 
 BOOL ScrCmd_MenuItemAdd(ScriptContext *ctx) {
-    struct UnkStruct_ov01_021EDC28 **p_menu = ov01_021F6B20(ctx->fieldSystem);
+    struct UnkStruct_ov01_021EDC28 **p_menu = FieldSystem_GetTouchscreenChoiceMenuList(ctx->fieldSystem);
     u16 msgId = ScriptGetVar(ctx);
     u16 where = ScriptGetVar(ctx);
     u16 value = ScriptGetVar(ctx);
@@ -5029,17 +5029,17 @@ BOOL sub_02047908(struct UnkStruct_ov01_021EDC28 *menu, int idx);
 
 BOOL ScrCmd_MenuExec(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    struct UnkStruct_ov01_021EDC28 **p_menu = ov01_021F6B20(fieldSystem);
+    struct UnkStruct_ov01_021EDC28 **p_menu = FieldSystem_GetTouchscreenChoiceMenuList(fieldSystem);
     u16 *p_ret = GetVarPointer(fieldSystem, ctx->data[0]);
-    ov01_021F6ABC(fieldSystem, 3, 7, p_ret);
-    ov01_021F6B34(fieldSystem, sub_02047908, *p_menu);
+    FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, 3, 7, p_ret);
+    FieldSystem_SetTouchscreenChoiceMenuCallback(fieldSystem, sub_02047908, *p_menu);
     SetupNativeScript(ctx, sub_020478D0);
     return TRUE;
 }
 
 BOOL sub_020478D0(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    struct UnkStruct_ov01_021EDC28 **p_menu = ov01_021F6B20(fieldSystem);
+    struct UnkStruct_ov01_021EDC28 **p_menu = FieldSystem_GetTouchscreenChoiceMenuList(fieldSystem);
     u16 *p_ret = GetVarPointer(fieldSystem, ctx->data[0]);
     if (*p_ret == 0xEEEE) {
         return FALSE;
@@ -5088,7 +5088,7 @@ BOOL ScrCmd_BankTransaction(ScriptContext *ctx) {
     work->mode = mode;
     work->sub->max = GetMaxBankTransactionAmount(ctx->fieldSystem, mode);
     work->sub->selected = -1;
-    ov01_021F6A9C(ctx->fieldSystem, 5, work->sub);
+    FieldSystem_SwitchBottomScreenApp(ctx->fieldSystem, 5, work->sub);
     ctx->data[0] = var_ret;
     SetupNativeScript(ctx, sub_020479D4);
     return TRUE;

@@ -5,7 +5,7 @@
 .public Save_PlayerData_GetOptionsAddr
 .public Options_GetFrame
 .public Save_GameStats_Get
-.public sub_020398D4
+.public CommState_SetErrorWatch
 .public FieldSystem_LaunchApplication
 .public PokemonSummary_LearnForget_LaunchApp
 .public PartyMenu_LaunchApp_Unk5

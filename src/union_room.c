@@ -7,7 +7,7 @@
 #include "union_room_internal.h"
 #include "comm_wireless.h"
 #include "unk_02035900.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "unk_02091564.h"
 
 // Communication core and Union Room message functions, declared with the types their call sites were matched
@@ -19,17 +19,17 @@ UnionRoomRecord *CommWireless_GetParentInfo(int netId);
 BOOL CommWireless_GetParentProfile(int netId);
 u8 *CommWireless_GetRuleset(void);
 void sub_02037F18(void);
-BOOL sub_02037FCC(void);
-BOOL sub_02037F94(void);
-void sub_02037F64(int netId);
+BOOL CommState_IsAlternateLinked(void);
+BOOL CommState_GetJoinResult(void);
+void CommState_JoinParent(int netId);
 BOOL sub_02038070(void);
 void sub_02038094(void);
 void sub_02038918(int netId);
 void sub_0203894C(int netId);
 void sub_0203898C(int netId);
-void sub_02038C1C(int mode);
+void CommState_SetMaxEntries(int mode);
 BOOL sub_020376F8(void);
-BOOL sub_02039918(void);
+BOOL CommState_ReportsErrors(void);
 void DrawingSessionLink_RegisterCommands(int a0);
 void CommRandom_Init(void *random);
 SaveData *FieldSystem_GetSaveData(FieldSystem *fieldSystem);
@@ -54,7 +54,7 @@ struct UnkStruct_02059E1C *UnionRoom_Start(FieldSystem *fieldSystem) {
         unionRoom = fieldSystem->unk80;
     }
     sub_02091574(fieldSystem);
-    sub_02038C1C(2);
+    CommState_SetMaxEntries(2);
     UnionRoom_SetState(unionRoom, sub_02059E88, 40);
     return unionRoom;
 }
@@ -98,7 +98,7 @@ void sub_02059E88(struct UnkStruct_02059E1C *unionRoom) {
 }
 
 void sub_02059EBC(struct UnkStruct_02059E1C *unionRoom) {
-    if (sub_02037FCC()) {
+    if (CommState_IsAlternateLinked()) {
         _021D41CC.waitFrames = 0;
         UnionRoom_SetState(unionRoom, sub_02059F78, 0);
         return;
@@ -111,7 +111,7 @@ void sub_02059EBC(struct UnkStruct_02059E1C *unionRoom) {
             } else if (unionRoom->unk30 == 6) {
                 sub_0203898C(unionRoom->partnerNetId);
             } else {
-                sub_02037F64(unionRoom->partnerNetId);
+                CommState_JoinParent(unionRoom->partnerNetId);
             }
         } else if (unionRoom->unk20 == 2) {
             DrawingSessionLink_RegisterCommands(0);
@@ -151,12 +151,12 @@ void sub_02059F78(struct UnkStruct_02059E1C *unionRoom) {
     profile = CommWireless_GetRuleset();
     if (sub_020376F8() != 0 && UnionRoom_AnyOtherPlayerPresent() == TRUE && profile[0x1C] != 4) {
         CommPlayerInfo_SendLocal();
-        sub_020398D4(1, 1);
+        CommState_SetErrorWatch(1, 1);
         sub_0205A904(11);
         UnionRoom_SetState(unionRoom, sub_02059FF8, 0);
     }
 
-    if (sub_02037FCC() == 0) {
+    if (CommState_IsAlternateLinked() == 0) {
         sub_02037FF0();
         sub_0205ABBC(unionRoom);
         sub_0205A904(0);
@@ -165,7 +165,7 @@ void sub_02059F78(struct UnkStruct_02059E1C *unionRoom) {
 }
 
 void sub_02059FF8(struct UnkStruct_02059E1C *unionRoom) {
-    if (sub_02039918() != 0) {
+    if (CommState_ReportsErrors() != 0) {
         if (sub_020376F8() == 0) {
             return;
         }
@@ -221,7 +221,7 @@ void sub_0205A0A0(struct UnkStruct_02059E1C *unionRoom) {
 }
 
 void sub_0205A0B4(struct UnkStruct_02059E1C *unionRoom) {
-    if (sub_02037F94() == TRUE) {
+    if (CommState_GetJoinResult() == TRUE) {
         CommPlayerInfo_SendLocal();
         UnionRoom_SetState(unionRoom, sub_0205A144, 3);
         return;
@@ -231,7 +231,7 @@ void sub_0205A0B4(struct UnkStruct_02059E1C *unionRoom) {
         unionRoom->unk1C = 3;
         UnionRoom_SetState(unionRoom, sub_02059F78, 0);
     }
-    if (sub_02037F94() != 0) {
+    if (CommState_GetJoinResult() != 0) {
         UnionRoom_SetState(unionRoom, sub_0205A114, 2);
         unionRoom->unk24 = 0;
         unionRoom->unk1C = 2;
@@ -250,15 +250,15 @@ void sub_0205A114(struct UnkStruct_02059E1C *unionRoom) {
 }
 
 void sub_0205A144(struct UnkStruct_02059E1C *unionRoom) {
-    if (sub_02037F94() == TRUE) {
+    if (CommState_GetJoinResult() == TRUE) {
         if (CommPlayerInfo_GetProfile(Comm_GetLocalNetId()) != NULL) {
             unionRoom->unk20 = 0;
             unionRoom->unk1C = 1;
             unionRoom->unk44 = 0;
-            sub_020398D4(1, 1);
+            CommState_SetErrorWatch(1, 1);
             UnionRoom_SetState(unionRoom, sub_0205A1AC, 3);
         }
-    } else if (sub_02037F94() == 0) {
+    } else if (CommState_GetJoinResult() == 0) {
         sub_02037FF0();
         sub_0205ABBC(unionRoom);
         UnionRoom_SetState(unionRoom, sub_02059F30, 2);
@@ -270,7 +270,7 @@ void sub_0205A144(struct UnkStruct_02059E1C *unionRoom) {
 }
 
 void sub_0205A1AC(struct UnkStruct_02059E1C *unionRoom) {
-    if (sub_02037F94() == 0) {
+    if (CommState_GetJoinResult() == 0) {
         sub_02037FF0();
         sub_0205ABBC(unionRoom);
         UnionRoom_SetState(unionRoom, sub_02059F30, 2);
@@ -414,17 +414,17 @@ int sub_0205A35C(struct UnkStruct_02059E1C *unionRoom) {
         return 7;
     }
     if (Comm_GetLocalNetId() == 0) {
-        if (sub_02037FCC() == TRUE) {
+        if (CommState_IsAlternateLinked() == TRUE) {
             return unionRoom->unk40;
         }
-    } else if (sub_02037F94() == TRUE) {
+    } else if (CommState_GetJoinResult() == TRUE) {
         return unionRoom->unk40;
     }
     return 7;
 }
 
 int sub_0205A39C(struct UnkStruct_02059E1C *unionRoom) {
-    if (sub_02037FCC() == TRUE) {
+    if (CommState_IsAlternateLinked() == TRUE) {
         return unionRoom->unk30;
     }
     return 7;

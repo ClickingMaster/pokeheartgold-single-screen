@@ -10,7 +10,7 @@ Wireless_StartParent: ; 0x02033668
 	add r6, r1, #0
 	add r7, r2, #0
 	add r4, r3, #0
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	bl sub_020340C4
 	cmp r0, #0
 	beq _0203368C
@@ -117,7 +117,7 @@ Wireless_StartChild: ; 0x0203373C
 	sub sp, #4
 	add r5, r0, #0
 	add r4, r1, #0
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	bl sub_020340C4
 	cmp r0, #0
 	beq _0203375E

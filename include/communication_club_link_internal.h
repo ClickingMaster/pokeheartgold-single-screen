@@ -8,7 +8,7 @@
 #include "sys_task.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 typedef void (*CommClubLinkState)(void);
 typedef struct CommClubLink {
     void *cards[4];
@@ -26,8 +26,8 @@ void CommPlayerInfo_SendLocal(void);
 void ov03_02255C54(void);
 void ov03_02255BEC(void);
 BOOL CommWireless_IsStartedUp(void);
-void sub_02037E1C(u8);
-BOOL sub_02037EC8(void);
+void CommState_ConnectToSlot(u8);
+BOOL CommState_IsLinked(void);
 u32 CommPlayerManager_sizeof(void);
 void CommPlayerManager_Init(void *, FieldSystem *, int);
 void sub_02057F80(void);
@@ -44,9 +44,9 @@ BOOL sub_02036010(void);
 void sub_02035FD8(void);
 void sub_02035FE4(void);
 void CommPlayerManager_Delete(int);
-void sub_02037E38(void);
+void CommState_RestartScan(void);
 BOOL CommWireless_IsIdle(void);
-void sub_02037E9C(void);
+void CommState_RequestShutdown(void);
 BOOL sub_02036FD8(int, void *, int);
 void CommClubLink_Free(void);
 void sub_020583EC(void);
@@ -57,8 +57,8 @@ void sub_0205876C(void);
 #include "screen_fade.h"
 #include "unk_02091564.h"
 void CommRandom_Init(void *);
-void sub_02037D8C(SaveData *, s32, s32, LinkBattleRuleset *, int);
-void sub_02037DD4(SaveData *, u8, u32, LinkBattleRuleset *, int);
+void CommState_StartParentSession(SaveData *, s32, s32, LinkBattleRuleset *, int);
+void CommState_StartChildSession(SaveData *, u8, u32, LinkBattleRuleset *, int);
 void sub_02039980(void *);
 void sub_02058034(void);
 void CommClubLink_Init(FieldSystem *fieldSystem);

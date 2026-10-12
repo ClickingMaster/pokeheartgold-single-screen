@@ -156,9 +156,9 @@ BottomScreen_ViewPhoto_IsDone: ; 0x021EAFD0
 	.rodata
 
 ov01_022066DC: ; 0x022066DC
-	.word ov01_021F6894, 0x00000000, ov01_021F68B8, ov01_021F68C0
+	.word BottomScreen_Apps_Init, 0x00000000, BottomScreen_Apps_End, BottomScreen_Apps_IsDone
 	.word BottomScreen_Blank_Init, 0x00000000, BottomScreen_Blank_End, BottomScreen_Blank_IsDone
-	.word ov01_021F6894, 0x00000000, ov01_021F68B8, ov01_021F68C0
-	.word ov01_021F6840, 0x00000000, ov01_021F6864, ov01_021F6874
+	.word BottomScreen_Apps_Init, 0x00000000, BottomScreen_Apps_End, BottomScreen_Apps_IsDone
+	.word BottomScreen_TouchSave_Init, 0x00000000, BottomScreen_TouchSave_End, BottomScreen_TouchSave_IsDone
 	.word sub_0203DB6C, 0x00000000, sub_0203DB70, sub_0203DB74
 	.word BottomScreen_ViewPhoto_Init, 0x00000000, BottomScreen_ViewPhoto_End, BottomScreen_ViewPhoto_IsDone

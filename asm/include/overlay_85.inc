@@ -186,8 +186,8 @@
 .public LinkSync_IsSynced
 .public sub_02037FF0
 .public sub_0203897C
-.public sub_02038C1C
-.public sub_020398D4
+.public CommState_SetMaxEntries
+.public CommState_SetErrorWatch
 .public sub_02039EAC
 .public sub_02039EB4
 .public WirelessStatusIcon_LoadPaletteFile

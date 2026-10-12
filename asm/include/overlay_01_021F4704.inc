@@ -22,7 +22,7 @@
 .public sub_0202F620
 .public SafariZone_GetAreaSet
 .public SafariZone_GetLinkLeaderGender
-.public sub_02039AD8
+.public CommState_SetError
 .public MapMatrix_GetWidth
 .public MapMatrix_GetHeight
 .public MapMatrix_GetMatrixId

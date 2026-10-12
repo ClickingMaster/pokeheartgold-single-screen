@@ -30,7 +30,7 @@
 #include "screen_fade.h"
 #include "sys_vars.h"
 #include "text.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wireless_status_icon.h"
 
 // Talking to the GTS server (screen 7), entered with nextScreenArg: 7 deposit the selected Pokemon (post.asp,
@@ -390,7 +390,7 @@ int GtsTransaction_WaitPostFinish(GtsApp *app) {
         case -3:
         case -2:
         case -1:
-            sub_02039AD8(4);
+            CommState_SetError(4);
             break;
         case -13:
             sub_020399EC();
@@ -476,13 +476,13 @@ int GtsTransaction_WaitReturn(GtsApp *app) {
         case -5:
         case -4:
         case -3:
-            sub_02039AD8(3);
+            CommState_SetError(3);
             break;
         case -15:
         case -14:
         case -12:
         case -2:
-            sub_02039AD8(4);
+            CommState_SetError(4);
             break;
         case -13:
             sub_020399EC();
@@ -571,13 +571,13 @@ int GtsTransaction_WaitExchangeFinish(GtsApp *app) {
             app->state = GTS_TRANSACTION_STATE_SAVE_REST;
             break;
         case -5:
-            sub_02039AD8(3);
+            CommState_SetError(3);
             break;
         case -15:
         case -14:
         case -12:
         case -2:
-            sub_02039AD8(4);
+            CommState_SetError(4);
             break;
         case -13:
             sub_020399EC();
@@ -795,7 +795,7 @@ int GtsTransaction_WaitDelete(GtsApp *app) {
             app->state = GTS_TRANSACTION_STATE_SAVE_REST;
             break;
         case -3:
-            sub_02039AD8(3);
+            CommState_SetError(3);
             break;
         case -12:
         case -4:
@@ -804,7 +804,7 @@ int GtsTransaction_WaitDelete(GtsApp *app) {
         case -15:
         case -14:
         case -2:
-            sub_02039AD8(4);
+            CommState_SetError(4);
             break;
         case -13:
             sub_020399EC();
@@ -874,13 +874,13 @@ int GtsTransaction_WaitUnsavedReturn(GtsApp *app) {
             GtsTransaction_ReturnToCaller(app);
             // fallthrough
         case -5:
-            sub_02039AD8(3);
+            CommState_SetError(3);
             break;
         case -15:
         case -14:
         case -12:
         case -2:
-            sub_02039AD8(4);
+            CommState_SetError(4);
             break;
         case -13:
             sub_020399EC();

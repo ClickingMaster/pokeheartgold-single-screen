@@ -73,7 +73,7 @@ _02035490:
 	cmp r0, #0x19
 	bne _0203549E
 	mov r0, #0
-	bl sub_020399DC
+	bl CommState_ShowErrorAndHalt
 _0203549E:
 	cmp r5, #9
 	bls _020354A4
@@ -180,12 +180,12 @@ _02035548:
 	strh r0, [r1]
 _02035562:
 	bl CommWireless_BuildBeacon
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
 	bl sub_02033FC4
 	add r4, r0, #0
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
 	bl CommWireless_GetBeaconPeriod

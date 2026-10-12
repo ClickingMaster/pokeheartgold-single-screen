@@ -1359,7 +1359,7 @@ _0222C728:
 	bl MysteryGiftApp_SetWaitingIconVisible
 	mov r0, #1
 	add r1, r0, #0
-	bl sub_020398D4
+	bl CommState_SetErrorWatch
 	add r1, r4, #0
 	add r0, r6, #0
 	add r1, #0x18
@@ -1468,7 +1468,7 @@ _0222C836:
 	bl MainMenuUtil_ShowCardSubScreen
 	mov r0, #0
 	add r1, r0, #0
-	bl sub_020398D4
+	bl CommState_SetErrorWatch
 	add r0, r6, #0
 	bl MysteryGiftApp_SaveReceivedGift
 	mov r0, #0xc

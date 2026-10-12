@@ -78,8 +78,8 @@ PlayerProfile *CommWireless_GetParentProfile(int objId);
 void *TrainerCardData_New(int a0);
 u8 GetUnionRoomAvatarAttrBySprite(int gender, u32 avatar, int a2);
 void TrainerCardData_Build(int a0, int a1, int a2, u8 a3, u32 a4, void *a5);
-void sub_020398D4(int a0, int a1);
-void sub_02039AD8(int a0);
+void CommState_SetErrorWatch(int a0, int a1);
+void CommState_SetError(int a0);
 
 void sub_0205A44C(int a0, int a1, u8 *a2, struct FieldSysPriv *fsys);
 void sub_0205A46C(int a0, int a1, u8 *a2, struct FieldSysPriv *fsys);

@@ -8,7 +8,7 @@
 #include "player_data.h"
 #include "spin_trade_link.h"
 #include "task.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 
 typedef struct SpinTradeFlow {
     u32 state;
@@ -94,7 +94,7 @@ BOOL SpinTradeFlow_WaitGroupApp(SpinTradeFlow *work) {
         if (SpinTradeArgs_GetResult(work->subwork) == 0) {
             work->state = 5;
         } else {
-            sub_020398D4(1, 1);
+            CommState_SetErrorWatch(1, 1);
             work->partyMenu = PartyMenu_LaunchApp_Unk5(work->fieldSystem, work->selection);
             work->subwork->unk0[0] = 1;
             work->state = 2;

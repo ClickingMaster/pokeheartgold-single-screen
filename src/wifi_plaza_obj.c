@@ -226,7 +226,7 @@ void WiFiPlazaObj_SetGridPosAndDir(WiFiPlazaObj *obj, UnkStruct_ov44_02232914 po
 
 #pragma force_active on
 
-UnkStruct_ov44_02232914 ov49_02258E34(WiFiPlazaObj *obj) {
+UnkStruct_ov44_02232914 WiFiPlazaObj_GetGridPos(WiFiPlazaObj *obj) {
     GF_ASSERT(obj->gridObj != NULL);
     return ov42_022282F4(obj->gridObj);
 }

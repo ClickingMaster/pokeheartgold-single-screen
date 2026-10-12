@@ -160,13 +160,13 @@ SysTask *FieldSystem_CreateViewPhotoTask(FieldSystem *fieldSystem) {
 }
 
 void FieldSystem_DestroyViewPhotoTask(FieldSystem *fieldSystem) {
-    ViewPhotoSysTaskData *viewPhoto = (ViewPhotoSysTaskData *)SysTask_GetData(fieldSystem->unk_D8);
+    ViewPhotoSysTaskData *viewPhoto = (ViewPhotoSysTaskData *)SysTask_GetData(fieldSystem->bottomScreenTask);
 
     MenuInputStateMgr_SetState(&fieldSystem->menuInputState, viewPhoto->menuInputState);
     ViewPhotoSysTask_Teardown(viewPhoto);
     Heap_Free(viewPhoto);
-    SysTask_Destroy(fieldSystem->unk_D8);
-    fieldSystem->unk_D8 = NULL;
+    SysTask_Destroy(fieldSystem->bottomScreenTask);
+    fieldSystem->bottomScreenTask = NULL;
 }
 
 static void SysTask_ViewPhoto(SysTask *task, void *taskData) {

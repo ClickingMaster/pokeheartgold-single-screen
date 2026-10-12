@@ -93,18 +93,18 @@
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
 .public sub_02037C94
-.public sub_02037D78
-.public sub_02037D8C
-.public sub_02037DD4
-.public sub_02037E1C
-.public sub_02037E38
-.public sub_02037E9C
-.public sub_02037EC0
-.public sub_02037EC8
+.public CommState_Exists
+.public CommState_StartParentSession
+.public CommState_StartChildSession
+.public CommState_ConnectToSlot
+.public CommState_RestartScan
+.public CommState_RequestShutdown
+.public CommState_SetEntry
+.public CommState_IsLinked
 .public sub_02037F18
-.public sub_02037F64
-.public sub_02037F94
-.public sub_02037FCC
+.public CommState_JoinParent
+.public CommState_GetJoinResult
+.public CommState_IsAlternateLinked
 .public sub_02037FF0
 .public sub_02038070
 .public sub_02038094
@@ -114,29 +114,29 @@
 .public sub_02038104
 .public sub_02038114
 .public sub_02038148
-.public sub_0203817C
+.public CommState_Main
 .public sub_020388E0
 .public sub_02038918
 .public sub_0203893C
 .public sub_0203894C
 .public sub_0203897C
 .public sub_0203898C
-.public sub_02038B3C
-.public sub_02038B9C
+.public CommState_RecvJoinRequest
+.public CommState_RecvJoinReply
 .public sub_02038C18
-.public sub_02038C1C
+.public CommState_SetMaxEntries
 .public sub_02038D28
 .public sub_02038D64
-.public sub_02038D80
+.public CommState_GetSeenGames
 .public sub_02038D90
-.public sub_02038F74
+.public CommState_SetWifiError
 .public sub_02039080
 .public sub_020390C4
 .public sub_02039220
 .public sub_02039264
 .public sub_02039274
 .public sub_020392A0
-.public sub_020392D8
+.public CommState_GetWifiError
 .public sub_02039330
 .public sub_02039358
 .public sub_02039378
@@ -157,20 +157,20 @@
 .public sub_0203986C
 .public sub_0203988C
 .public sub_020398C8
-.public sub_020398D4
-.public sub_02039918
-.public sub_0203993C
+.public CommState_SetErrorWatch
+.public CommState_ReportsErrors
+.public CommState_GetLinkMode
 .public sub_02039954
 .public sub_0203996C
 .public sub_02039980
-.public sub_02039998
-.public sub_020399B8
-.public sub_020399DC
+.public CommState_IsWifi
+.public CommState_GetErrorScreen
+.public CommState_ShowErrorAndHalt
 .public sub_020399EC
 .public sub_020399FC
-.public sub_02039A00
+.public CommState_CheckLinkError
 .public sub_02039AA4
-.public sub_02039AD8
+.public CommState_SetError
 .public sub_02039AF8
 .public sub_02039B18
 .public sub_02039B38
@@ -243,51 +243,51 @@
 .public ov45_0222F464
 .public ov45_0222F70C
 
-	.public sub_02037C98
-	.public sub_02037D2C
-	.public sub_02037E4C
-	.public sub_020381C0
-	.public sub_020381D0
-	.public sub_020381FC
-	.public sub_02038218
-	.public sub_02038260
-	.public sub_0203827C
-	.public sub_02038294
-	.public sub_020382DC
-	.public sub_020382E4
-	.public sub_0203830C
-	.public sub_02038344
-	.public sub_02038358
-	.public sub_02038398
-	.public sub_020383B0
-	.public sub_020383C4
-	.public sub_02038404
-	.public sub_02038408
+	.public CommState_Init
+	.public CommState_Free
+	.public CommState_ShutdownWait
+	.public CommState_SetState
+	.public CommState_EndWireless
+	.public CommState_StopWireless
+	.public CommState_ParentStart
+	.public CommState_WaitLinked
+	.public CommState_ParentLinked
+	.public CommState_ChildStartScan
+	.public CommState_ChildScanning
+	.public CommState_ChildConnecting
+	.public CommState_ChildWaitLinked
+	.public CommState_ChildRescanStop
+	.public CommState_ChildRescan
+	.public CommState_ChildLinked
+	.public CommState_RestartScanStop
+	.public CommState_RestartScanStart
+	.public CommState_Idle
+	.public CommState_FreeWhenDone
 	.public sub_02038418
 	.public sub_02038460
-	.public sub_0203847C
-	.public sub_020384B4
-	.public sub_02038508
-	.public sub_02038538
-	.public sub_02038550
-	.public sub_020385B8
-	.public sub_02038610
-	.public sub_02038668
-	.public sub_02038680
-	.public sub_020386AC
-	.public sub_02038710
-	.public sub_0203876C
-	.public sub_020387E8
-	.public sub_02038800
-	.public sub_02038804
-	.public sub_02038854
+	.public CommState_ShutdownWaitStopped
+	.public CommState_AlternateInit
+	.public CommState_AlternateScan
+	.public CommState_AlternateWaitStopped
+	.public CommState_AlternateStartParent
+	.public CommState_AlternateParentWait
+	.public CommState_AlternateStartScan
+	.public CommState_JoinWaitStopped
+	.public CommState_JoinStartScan
+	.public CommState_JoinConnect
+	.public CommState_JoinWaitLinked
+	.public CommState_JoinWaitReply
+	.public CommState_Joined
+	.public CommState_JoinFailed
+	.public CommState_JoinRetry
+	.public CommState_AlternateLinked
 	.public sub_020388A8
 	.public sub_020389BC
 	.public sub_020389D4
 	.public sub_02038A10
 	.public sub_02038A94
 	.public sub_02038C34
-	.public sub_02038C3C
+	.public CommState_OnBeacon
 	.public sub_02038CC4
 	.public sub_02038CE8
 	.public sub_02038E00
@@ -305,7 +305,7 @@
 	.public sub_020395B0
 	.public sub_0203960C
 	.public sub_02039694
-	.public sub_020399A4
+	.public CommState_SetErrorScreen
 	.public sub_02039BA0
 	.public sub_02039C14
 	.public sub_02039C60
@@ -320,8 +320,8 @@
 	.public sub_02039DE4
 	.public sub_02039E30
 	.public sub_02039E7C
-	.public _020F6A90
-	.public _0210F904
-	.public _0210F90C
-	.public _0210F914
-	.public _021D4150
+	.public gCommLinkedStates
+	.public sJoinAccepted
+	.public sJoinRequest
+	.public sJoinRefused
+	.public gCommState

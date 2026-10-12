@@ -38,7 +38,7 @@
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
 #include "comm_wireless.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "network_overlay_loader.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"

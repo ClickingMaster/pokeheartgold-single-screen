@@ -33,9 +33,9 @@
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
 
-// Field bottom-screen app 3 (ScrCmd_TouchscreenMenuHide, AppEntry 3 of field_overlay_app_dispatch.c):
+// Field bottom-screen app 3 (ScrCmd_TouchscreenMenuHide, sBottomScreenApps[3] of field/bottom_screen_app.c):
 // the touch YES/NO buttons of ScrCmd_GetMenuChoice and the touch multichoice list of ScrCmd_MenuExec
-// (up to 28 rows of the field MoveTutorMenu). ov01_021F6ABC sets the state (3 YES/NO, 7 list) and the
+// (up to 28 rows of the field MoveTutorMenu). FieldSystem_SetTouchscreenChoiceMenuState sets the state (3 YES/NO, 7 list) and the
 // result pointer; scripts wait for state 6 or for *result != 0xEEEE.
 
 #define TOUCHSCREEN_CHOICE_MENU_MAX_ITEMS 28
@@ -218,7 +218,7 @@ BOOL ov27_0225C418(void *unused) {
     return TRUE;
 }
 
-// ov01_021F6B34 (ScrCmd_MenuExec): called with the list index on every selection change.
+// FieldSystem_SetTouchscreenChoiceMenuCallback (ScrCmd_MenuExec): called with the list index on every selection change.
 void TouchscreenChoiceMenu_SetCallback(SysTask *task, void (*callback)(void *arg, int selection), void *arg) {
     TouchscreenChoiceMenuData *data = SysTask_GetData(task);
     data->selectionCallback = callback;
@@ -235,7 +235,7 @@ void TouchscreenChoiceMenu_Task(SysTask *task, void *taskData) {
         G2S_BlendNone();
     } else if (sTouchscreenChoiceMenuStateFuncs[data->state](data) == TRUE) {
         data->fieldSystem->unkD2_0 = 0;
-        ov01_021F6A9C(data->fieldSystem, 0, NULL); // back to the start menu (app 0)
+        FieldSystem_SwitchBottomScreenApp(data->fieldSystem, 0, NULL); // back to the start menu (app 0)
     }
     SpriteList_RenderAndAnimateSprites(data->spriteList);
 }

@@ -34,12 +34,12 @@ _0203693A:
 	bl Comm_GetTransferMode
 	cmp r0, #1
 	bne _02036992
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
 	bl sub_0203772C
 	add r6, r0, #0
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
 	bl sub_02033FC4
@@ -126,12 +126,12 @@ _020369FA:
 	bl Comm_GetTransferMode
 	cmp r0, #1
 	bne _02036A88
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
 	bl sub_0203772C
 	add r6, r0, #0
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
 	bl sub_02033FC4

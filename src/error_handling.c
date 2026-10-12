@@ -3,10 +3,10 @@
 #include "global.h"
 
 #include "error_message_reset.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 
 void GF_AssertFail(void) {
-    if (!sub_02037D78()) {
+    if (!CommState_Exists()) {
         return;
     }
 

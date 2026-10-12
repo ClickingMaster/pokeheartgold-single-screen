@@ -9,7 +9,7 @@
 .public CommWireless_IsOn
 .public Comm_CountConnected
 .public sub_02037474
-.public sub_02039998
+.public CommState_IsWifi
 .public WirelessStatusIcon_LoadPaletteFile
 .public WirelessStatusIcon_Refresh
 .public WirelessStatusIcon_Create

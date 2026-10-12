@@ -6,7 +6,7 @@
 sub_02059EBC: ; 0x02059EBC
 	push {r4, lr}
 	add r4, r0, #0
-	bl sub_02037FCC
+	bl CommState_IsAlternateLinked
 	cmp r0, #0
 	beq _02059ED8
 	ldr r0, _02059F24 ; =_021D41CC
@@ -38,7 +38,7 @@ _02059EF6:
 	bl sub_0203898C
 	b _02059F18
 _02059F02:
-	bl sub_02037F64
+	bl CommState_JoinParent
 	b _02059F18
 _02059F08:
 	cmp r0, #2

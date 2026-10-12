@@ -217,11 +217,11 @@ extern int FashionCase_CanGiveAccessory(void *fashionCase, int a1, int a2);     
 extern void FashionCase_GiveFashionItem(void *fashionCase, int id, int quantity);                                           // fashion_case.h, not included
 extern void SetFlag99C(void *state);                                                                                        // sys_flags.h, not included
 extern BOOL DialogBox_IsPrintFinished(u8 printerId);                                                                        // text_0205B4EC.h, not included
-extern void ov01_021F6A9C(FieldSystem *fieldSystem, int a1, void *a2);                                                      // overlay_01.h, not included
-extern int ov01_021F6B00(FieldSystem *fieldSystem);                                                                         // overlay_01.h, not included
-extern BOOL ov01_021F6B10(FieldSystem *fieldSystem);                                                                        // overlay_01.h, not included
-extern void ov01_021F6ABC(FieldSystem *fieldSystem, int a1, int a2, void *a3);                                              // overlay_01.h, not included
-extern int ov01_021F6AEC(FieldSystem *fieldSystem);                                                                         // overlay_01.h, not included
+extern void FieldSystem_SwitchBottomScreenApp(FieldSystem *fieldSystem, int a1, void *a2);                                                      // overlay_01.h, not included
+extern int FieldSystem_GetBottomScreenAppId(FieldSystem *fieldSystem);                                                                         // overlay_01.h, not included
+extern BOOL FieldSystem_GetBottomScreenAppState(FieldSystem *fieldSystem);                                                                        // overlay_01.h, not included
+extern void FieldSystem_SetTouchscreenChoiceMenuState(FieldSystem *fieldSystem, int a1, int a2, void *a3);                                              // overlay_01.h, not included
+extern int FieldSystem_GetTouchscreenChoiceMenuState(FieldSystem *fieldSystem);                                                                         // overlay_01.h, not included
 WIP_LOCAL int FollowMon_SelectInteraction(FieldSystem *fieldSystem);                                                                      // still in asm
 WIP_LOCAL int FollowMonInteraction_Run(FieldSystem *fieldSystem, void *a1);                                                            // still in asm
 extern void sub_02066BE8(void *state, u32 a1, u16 value);                                                                   // sys_vars.h, not included
@@ -487,9 +487,9 @@ WIP_LOCAL void ov02_0224DF1C(void *data);
 WIP_LOCAL BOOL ov02_0224BE24(TaskManager *taskManager);
 WIP_LOCAL BOOL ov02_0224CE28(TaskManager *taskManager);
 WIP_LOCAL BOOL PokecenterAnimRun(TaskManager *taskManager);
-WIP_LOCAL int ov02_0224CAB8(WallpaperPasswordBank *bank, u16 trainerId, u16 a, u16 b, u16 c, u16 d);
-WIP_LOCAL int ov02_0224CBF8(WallpaperPasswordBank *bank, u16 trainerId, u16 a, u16 b, u16 c, u16 d);
-WIP_LOCAL void ov02_0224CA58(u8 *arr, int n, u8 val);
+WIP_LOCAL int PrimoPassword_DecodeWallpaper(WallpaperPasswordBank *bank, u16 trainerId, u16 a, u16 b, u16 c, u16 d);
+WIP_LOCAL int PrimoPassword_DecodeCheck2(WallpaperPasswordBank *bank, u16 trainerId, u16 a, u16 b, u16 c, u16 d);
+WIP_LOCAL void PrimoPassword_RotateBitsRight(u8 *arr, int n, u8 val);
 WIP_LOCAL int ov02_0224C6DC(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL int ov02_0224C2A8(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL int ov02_0224C698(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);

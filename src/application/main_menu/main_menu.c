@@ -116,7 +116,7 @@ extern void sub_02005AF8(u32 a0);
 extern void SystemCard_RebootIntoFile(const char *path);
 extern void sub_02038D28(SaveData *saveData);
 extern void sub_02038D64(void);
-extern u32 sub_02038D80(void);
+extern u32 CommState_GetSeenGames(void);
 
 extern BOOL CTRDG_IsExisting();
 
@@ -543,7 +543,7 @@ static void ov74_022276AC(MainMenuAppData *data) {
             break;
         }
 
-        u32 unk = sub_02038D80();
+        u32 unk = CommState_GetSeenGames();
         u32 unk2 = ~data->unk40 & unk;
         if (unk2 != 0 && data->unk144 == 15 && data->unk148 == 0 && data->unk40 != unk2) {
             data->unk48 = TRUE;

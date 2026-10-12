@@ -103,10 +103,10 @@
 .public LinkSync_Init
 .public LinkSync_Free
 .public LinkSync_Update
-.public sub_0203817C
-.public sub_020398D4
-.public sub_0203993C
-.public sub_02039A00
+.public CommState_Main
+.public CommState_SetErrorWatch
+.public CommState_GetLinkMode
+.public CommState_CheckLinkError
 .public MI_CpuFill8
 .public MI_CpuCopy8
 .public _ll_mul

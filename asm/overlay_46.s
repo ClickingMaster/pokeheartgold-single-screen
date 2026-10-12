@@ -465,7 +465,7 @@ _02258AB2:
 	bl sub_020393C8
 	cmp r0, #0
 	beq _02258ACE
-	bl sub_020392D8
+	bl CommState_GetWifiError
 	add r7, r0, #0
 	ldr r0, [r7]
 	ldr r1, [r7, #4]
@@ -515,7 +515,7 @@ _02258B22:
 	bl sub_020393C8
 	cmp r0, #0
 	beq _02258B46
-	bl sub_020392D8
+	bl CommState_GetWifiError
 	add r1, r0, #0
 	ldmia r1!, {r0, r1}
 	bl ov45_0222D7FC
@@ -574,7 +574,7 @@ _02258B94:
 	str r0, [r4]
 	b _02258C28
 _02258BA6:
-	bl sub_02037D78
+	bl CommState_Exists
 	cmp r0, #0
 	bne _02258C28
 	mov r0, #4
@@ -596,7 +596,7 @@ _02258BB4:
 	str r0, [r4]
 	b _02258C28
 _02258BD8:
-	bl sub_02037D78
+	bl CommState_Exists
 	cmp r0, #0
 	bne _02258C28
 	add r0, r5, #0
@@ -918,7 +918,7 @@ _02258E74:
 	str r0, [r4]
 	b _02258EF2
 _02258E7E:
-	bl sub_02037D78
+	bl CommState_Exists
 	cmp r0, #0
 	bne _02258EF2
 	add r5, #0x70

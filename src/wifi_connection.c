@@ -27,9 +27,9 @@ extern void *Save_Frontier_GetStatic(void *);
 extern int sub_02034084(void);
 extern int sub_02034098(void);
 extern int Comm_CountConnected(void);
-extern void sub_02038F74(int, u32, int);
-extern int sub_0203993C(void);
-extern void sub_02039AD8(int);
+extern void CommState_SetWifiError(int, u32, int);
+extern int CommState_GetLinkMode(void);
+extern void CommState_SetError(int);
 extern int DWC_CheckHasProfile(void *);
 extern int DWC_CheckValidConsole(void *);
 extern int DWC_CheckDirtyFlag(void *);
@@ -285,7 +285,7 @@ int WifiConnection_Update(int success) {
         }
         break;
     case WIFI_CONNECTION_STATE_CONNECTED:
-        sub_0203993C();
+        CommState_GetLinkMode();
         if (!sub_02034084()) {
             WifiConnection_StartVoiceChat(gWifiConnection->heapId);
         }
@@ -401,7 +401,7 @@ void WifiConnection_LoginCallback(int result, int unused, int arg) {
     }
     if (result == 0) {
         if (ov00_021EDE74(0, ov00_021E6274, gWifiConnection->userData, ov00_021E6298, arg, ov00_021E629C, arg) == 0) {
-            sub_02039AD8(1);
+            CommState_SetError(1);
             return;
         }
         ov00_021EFF04(ov00_021E62D4, 0);
@@ -510,7 +510,7 @@ void WifiConnection_SendDoneCallback(u32 result, s32 aid) {
 }
 
 void ov00_021E644C(u32 header) {
-    sub_0203993C();
+    CommState_GetLinkMode();
     if (sub_02034084() == 0) {
         if (header & 0x100) {
             gWifiConnection->unk_10D0 = 1;
@@ -580,7 +580,7 @@ void *WifiConnection_Alloc(int unused, u32 size, int alignment) {
         result = NNS_FndAllocFromExpHeapEx(gWifiConnection->extraHeap, size, alignment);
     }
     if (result == NULL) {
-        sub_02039AD8(1);
+        CommState_SetError(1);
         OS_RestoreInterrupts(intr);
         return NULL;
     }
@@ -593,7 +593,7 @@ void WifiConnection_Free(int unused, void *ptr, u32 size) {
         OSIntrMode intr = OS_DisableInterrupts();
         if (NNS_FndGetGroupIDForMBlockExpHeap(ptr) == 0x10) {
             if (gWifiConnection->extraHeapMemory == NULL) {
-                sub_02039AD8(1);
+                CommState_SetError(1);
                 return;
             }
             NNS_FndFreeToExpHeap(gWifiConnection->extraHeap, ptr);
@@ -646,7 +646,7 @@ int WifiConnection_CheckError(void) {
                 case 0:
                 case 1:
                 case 2:
-                    if (sub_0203993C() != 33) {
+                    if (CommState_GetLinkMode() != 33) {
                         ov00_021EC8D8();
                     }
                     break;
@@ -671,7 +671,7 @@ int WifiConnection_CheckError(void) {
         result = 26;
     }
     if (status) {
-        sub_02038F74(error, type, status);
+        CommState_SetWifiError(error, type, status);
     }
     return result;
 }
@@ -783,7 +783,7 @@ void WifiConnection_StartVoiceChat(int heapId) {
     int online;
     int codec;
 
-    sub_0203993C();
+    CommState_GetLinkMode();
     online = sub_02034084();
     if (online) {
         count = Comm_CountConnected() - 1;
@@ -1074,7 +1074,7 @@ void ov00_021E6ED8(int result, int cancelled, int cancelledByMe, int unused, int
         if (cancelled == 0) {
             u32 mask;
             u32 current;
-            sub_0203993C();
+            CommState_GetLinkMode();
             if (sub_02034098() && aid == -1) {
                 reject = 1;
             }
@@ -1214,7 +1214,7 @@ void WifiConnection_SetExtraHeapEnabled(BOOL enable, int heapId) {
         connection = gWifiConnection;
         if (connection->extraHeapMemory) {
             if (connection->extraHeapFreeSize != NNS_FndGetTotalFreeSizeForExpHeap(connection->extraHeap)) {
-                sub_02039AD8(1);
+                CommState_SetError(1);
                 return;
             }
             NNS_FndDestroyExpHeap(connection->extraHeap);

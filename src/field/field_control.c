@@ -36,7 +36,7 @@
 #include "overlay_01.h"
 #include "overlay_01_021F1AFC.h"
 #include "field/spin_slide.h"
-#include "overlay_01_021F6830.h"
+#include "field/bottom_screen_app.h"
 #include "field_poison_effect.h"
 #include "overlay_04.h"
 #include "player_avatar.h"
@@ -52,7 +52,7 @@
 #include "wireless_manager.h"
 #include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "field_interaction.h"
 #include "unk_02054648.h"
 #include "headbutt_tree.h"
@@ -111,11 +111,11 @@ static void FieldInput_Clear(FieldInput *fieldInput) {
 }
 
 static BOOL ov01_021E690C(FieldSystem *fieldSystem) {
-    return ov01_021F6B10(fieldSystem) == TRUE;
+    return FieldSystem_GetBottomScreenAppState(fieldSystem) == TRUE;
 }
 
 static void ov01_021F6B64_thunk(FieldSystem *fieldSystem, int arg1) {
-    ov01_021F6B64(fieldSystem, arg1);
+    FieldSystem_RequestTouchscreenMenuRegisteredItemAnim(fieldSystem, arg1);
 }
 
 void FieldInput_Update(FieldInput *fieldInput, FieldSystem *fieldSystem, u16 newKeys, u16 heldKeys) {
@@ -149,7 +149,7 @@ void FieldInput_Update(FieldInput *fieldInput, FieldSystem *fieldSystem, u16 new
             fieldInput->unk0_9 = TRUE;
             fieldSystem->lastTouchMenuInput = 0;
         } else if (newKeys & PAD_BUTTON_X || fieldSystem->lastTouchMenuInput) {
-            if (ov01_021F6B00(fieldSystem) == 4) {
+            if (FieldSystem_GetBottomScreenAppId(fieldSystem) == 4) {
                 MenuInputStateMgr_SetState(&fieldSystem->menuInputState, MENU_INPUT_STATE_BUTTONS);
                 fieldInput->unk0_9 = TRUE;
                 fieldInput->menu = TRUE;
@@ -312,7 +312,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
     }
 
     if (fieldInput->unk0_9) {
-        ov01_021F6A9C(fieldSystem, 0, 0);
+        FieldSystem_SwitchBottomScreenApp(fieldSystem, 0, 0);
         return 2;
     }
 

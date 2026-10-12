@@ -37,7 +37,7 @@
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "unk_0205A44C.h"
 #include "unk_0205B3DC.h"
@@ -173,7 +173,7 @@ extern int (*const ov85_021EA9E0[])(SpinTradeGroupApp *app, int state);
 // Not declared by the owners' headers
 u32 Wireless_GetConnectedBitmap(void);
 void sub_0203897C(void);
-void sub_02038C1C(int count);
+void CommState_SetMaxEntries(int count);
 void sub_02039EAC(s32 *state);
 BOOL sub_02039EB4(SaveData *saveData, int a1, s32 *state);
 void SpinTradeLink_RegisterCommands(SpinTradeGroupMenu *menu);
@@ -289,7 +289,7 @@ BOOL SpinTradeGroupApp_Init(OverlayManager *manager, int *state) {
         Sound_SetSceneAndPlayBGM(52, 0, 0);
         SpinTradeLink_RegisterCommands(args->menu);
         sub_0203897C();
-        sub_02038C1C(3);
+        CommState_SetMaxEntries(3);
         if (!Comm_GetLocalNetId()) {
             sub_0205A904(13);
         }
@@ -588,7 +588,7 @@ void SpinTradeGroup_RemoveWindows(SpinTradeGroupApp *app) {
 }
 
 int SpinTradeGroup_State_ShowPrompt(SpinTradeGroupApp *app, int state) {
-    sub_020398D4(0, 1);
+    CommState_SetErrorWatch(0, 1);
     if (!Comm_GetLocalNetId()) {
         if ((int)Comm_CountConnected() >= 2) {
             SpinTradeGroup_PrintMessage(app, 2, 0);
@@ -962,7 +962,7 @@ int SpinTradeGroup_State_StartExitSync(SpinTradeGroupApp *app, int state) {
 
 int SpinTradeGroup_State_WaitExitSync(SpinTradeGroupApp *app, int state) {
     if (LinkSync_IsSynced(0xCA)) {
-        sub_020398D4(0, 0);
+        CommState_SetErrorWatch(0, 0);
         BeginNormalPaletteFade(0, 0x10, 0x10, 0, 0x10, 1, HEAP_ID_102);
         state = 3;
     }
@@ -1357,13 +1357,13 @@ int SpinTradeGroup_GetTextSpeed(SpinTradeGroupApp *app) {
 void SpinTradeGroup_SetMaxConnections(SpinTradeGroupApp *app, int a1) {
     if (Comm_GetLocalNetId() == 0) {
         if (a1 == -1) {
-            sub_02038C1C(1);
+            CommState_SetMaxEntries(1);
         } else {
             int v = a1 + Comm_CountConnected();
             if (v > 5) {
                 v = 5;
             }
-            sub_02038C1C(v);
+            CommState_SetMaxEntries(v);
         }
         if (a1 == -1) {
             app->unk_4A51 = 2;

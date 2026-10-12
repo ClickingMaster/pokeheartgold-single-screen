@@ -33,7 +33,7 @@
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "unk_0205A44C.h"
 #include "vram_transfer_manager.h"
@@ -49,7 +49,7 @@ typedef struct DrawingSessionButtonSprite {
 extern BOOL sub_02037108(int command, const void *data, int size);
 extern int sub_0203783C(void);
 extern int sub_02037854(void);
-extern void sub_02038C1C(int count);
+extern void CommState_SetMaxEntries(int count);
 extern void CommWireless_SetDetectDrops(BOOL value);
 extern void UnionRoomObjects_ResetSlots(struct UnionRoomObjects *unionRoom);
 extern void DrawingSessionLink_RegisterCommands(DrawingSessionWork *work); // wireless_room_packets.c: registers the command table
@@ -168,9 +168,9 @@ BOOL DrawingSession_Init(OverlayManager *man, int *state) {
         Sound_SetSceneAndPlayBGM(0x34, 0, 0);
         GX_SetDispSelect(GX_DISP_SELECT_SUB_MAIN);
         DrawingSessionLink_RegisterCommands(work);
-        sub_020398D4(0, 1);
+        CommState_SetErrorWatch(0, 1);
         if (Comm_GetLocalNetId() == 0) {
-            sub_02038C1C(3);
+            CommState_SetMaxEntries(3);
         }
         WirelessStatusIcon_Create();
         if (Comm_GetLocalNetId() == 0) {
@@ -268,7 +268,7 @@ BOOL DrawingSession_Exit(OverlayManager *man, int *state) {
         (*state)++;
         break;
     case 1:
-        sub_02038C1C(1);
+        CommState_SetMaxEntries(1);
         sub_02037FF0();
         UnionRoomObjects_ResetSlots(args->unk0);
         GX_SetDispSelect(GX_DISP_SELECT_MAIN_SUB);
@@ -286,13 +286,13 @@ BOOL DrawingSession_Exit(OverlayManager *man, int *state) {
         }
         break;
     case 3:
-        sub_02038C1C(2);
+        CommState_SetMaxEntries(2);
         DrawingSession_FreeWork(work);
         Heap_Free(work->args);
         OverlayManager_FreeData(man);
         Main_SetVBlankIntrCB(NULL, NULL);
         Heap_Destroy(HEAP_ID_39);
-        sub_02038C1C(2);
+        CommState_SetMaxEntries(2);
         return TRUE;
     }
     return FALSE;
@@ -586,7 +586,7 @@ void DrawingSession_HandleTouch(DrawingSessionWork *work) {
                         PlaySE(SEQ_SE_DP_CUSTOM06);
                         break;
                     }
-                    sub_02038C1C(Comm_CountConnected());
+                    CommState_SetMaxEntries(Comm_CountConnected());
                     work->unk_93F4 = 2;
                     DrawingSession_PrintMessage(work, msg_0252_00001, 1);
                     DrawingSession_SetNextSubState(work, 5);
@@ -782,7 +782,7 @@ int DrawingSession_StateHandleQuitPrompt(DrawingSessionWork *work, int state) {
         DrawingSession_HideYesNo(work);
         CopyWindowToVram(&work->canvasWindow);
         if (Comm_GetLocalNetId() == 0) {
-            sub_02038C1C(Comm_CountConnected() + 1);
+            CommState_SetMaxEntries(Comm_CountConnected() + 1);
             work->unk_93F4 = 1;
         }
         break;
@@ -899,7 +899,7 @@ int DrawingSession_StateHandleDisbandPrompt(DrawingSessionWork *work, int state)
         ClearFrameAndWindow2(&work->messageWindow, TRUE);
         DrawingSession_HideYesNo(work);
         if (Comm_GetLocalNetId() == 0) {
-            sub_02038C1C(Comm_CountConnected() + 1);
+            CommState_SetMaxEntries(Comm_CountConnected() + 1);
             work->unk_93F4 = 1;
         }
         break;
@@ -1384,7 +1384,7 @@ void ov37_021E76D0(DrawingSessionWork *work, int extra) {
         if (count > DRAWING_SESSION_MAX_MEMBERS) {
             count = DRAWING_SESSION_MAX_MEMBERS;
         }
-        sub_02038C1C(count);
+        CommState_SetMaxEntries(count);
     }
 }
 
@@ -1412,7 +1412,7 @@ int ov37_021E76F0(DrawingSessionWork *work) {
                 work->unk_9400 = 1;
             }
             work->nextSubState = 19;
-            sub_02038C1C(1);
+            CommState_SetMaxEntries(1);
             if (work->yesNoActive) {
                 DrawingSession_HideYesNo(work);
                 Sprite_SetAnimCtrlSeq(work->buttons[8], 21);

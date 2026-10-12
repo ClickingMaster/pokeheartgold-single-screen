@@ -308,12 +308,12 @@ _0225A5E6:
 	bl FieldSystem_GetFacingObject
 	ldr r0, [sp]
 	bl MapObject_GetScriptID
-	bl ov01_021F6BD0
+	bl IsScriptIdWithoutTalkAction
 	cmp r0, #0
 	bne _0225A616
 	ldr r0, [sp]
 	bl MapObject_GetSpriteID
-	bl ov01_021F6BB0
+	bl IsSpriteIdWithoutTalkAction
 	cmp r0, #0
 	beq _0225A618
 _0225A616:

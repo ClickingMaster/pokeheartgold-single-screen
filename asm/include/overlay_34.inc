@@ -85,7 +85,7 @@
 .public _fsub
 .public _s32_div_f
 .public gSystem
-.public ov01_021F6A9C
-.public ov01_021F6B10
+.public FieldSystem_SwitchBottomScreenApp
+.public FieldSystem_GetBottomScreenAppState
 .public UnionChatLog_Init
 .public UnionChatLog_Exit

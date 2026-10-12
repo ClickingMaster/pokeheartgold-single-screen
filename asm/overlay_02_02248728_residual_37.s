@@ -1408,11 +1408,11 @@
 	.public ov02_0224C93C
 	.public ov02_0224C9B8
 	.public ov02_0224CA38
-	.public ov02_0224CA58
-	.public ov02_0224CAB8
-	.public ov02_0224CBF8
-	.public ov02_0224CD38
-	.public ov02_0224CD74
+	.public PrimoPassword_RotateBitsRight
+	.public PrimoPassword_DecodeWallpaper
+	.public PrimoPassword_DecodeCheck2
+	.public PrimoPassword_CheckWallpaper
+	.public PrimoPassword_Check2
 	.public ov02_0224CDB0
 	.public ov02_0224CE28
 	.public ov02_0224CFD8
@@ -1760,8 +1760,8 @@
 	.public FollowMonInteraction_StepHasWait
 	.public ov02_022508B4
 
-	thumb_func_start ov02_0224CA58
-ov02_0224CA58: ; 0x0224CA58
+	thumb_func_start PrimoPassword_RotateBitsRight
+PrimoPassword_RotateBitsRight: ; 0x0224CA58
 	push {r4, r5, r6, r7}
 	add r3, r0, #0
 	add r0, r2, #0
@@ -1814,11 +1814,11 @@ _0224CA9A:
 _0224CAB4:
 	pop {r4, r5, r6, r7}
 	bx lr
-	thumb_func_end ov02_0224CA58
+	thumb_func_end PrimoPassword_RotateBitsRight
 
 
-	thumb_func_start ov02_0224CAB8
-ov02_0224CAB8: ; 0x0224CAB8
+	thumb_func_start PrimoPassword_DecodeWallpaper
+PrimoPassword_DecodeWallpaper: ; 0x0224CAB8
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	add r5, r0, #0
@@ -1911,7 +1911,7 @@ _0224CB5A:
 	add r0, sp, #4
 	mov r1, #4
 	mov r2, #5
-	bl ov02_0224CA58
+	bl PrimoPassword_RotateBitsRight
 	mov r2, #0
 	add r1, sp, #4
 	add r4, sp, #4
@@ -1936,7 +1936,7 @@ _0224CB76:
 	lsl r2, r2, #0x18
 	mov r1, #3
 	lsr r2, r2, #0x18
-	bl ov02_0224CA58
+	bl PrimoPassword_RotateBitsRight
 	add r1, sp, #4
 	ldrb r5, [r1]
 	mov r0, #0xf
@@ -1983,11 +1983,11 @@ _0224CBEE:
 	add sp, #0x10
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov02_0224CAB8
+	thumb_func_end PrimoPassword_DecodeWallpaper
 
 
-	thumb_func_start ov02_0224CBF8
-ov02_0224CBF8: ; 0x0224CBF8
+	thumb_func_start PrimoPassword_DecodeCheck2
+PrimoPassword_DecodeCheck2: ; 0x0224CBF8
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	add r5, r0, #0
@@ -2080,7 +2080,7 @@ _0224CC9A:
 	add r0, sp, #4
 	mov r1, #4
 	mov r2, #5
-	bl ov02_0224CA58
+	bl PrimoPassword_RotateBitsRight
 	mov r2, #0
 	add r1, sp, #4
 	add r4, sp, #4
@@ -2105,7 +2105,7 @@ _0224CCB6:
 	lsl r2, r2, #0x18
 	mov r1, #3
 	lsr r2, r2, #0x18
-	bl ov02_0224CA58
+	bl PrimoPassword_RotateBitsRight
 	add r1, sp, #4
 	ldrb r4, [r1]
 	mov r0, #0xf
@@ -2154,11 +2154,11 @@ _0224CD30:
 _0224CD34:
 	add sp, #0x10
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov02_0224CBF8
+	thumb_func_end PrimoPassword_DecodeCheck2
 
 
-	thumb_func_start ov02_0224CD38
-ov02_0224CD38: ; 0x0224CD38
+	thumb_func_start PrimoPassword_CheckWallpaper
+PrimoPassword_CheckWallpaper: ; 0x0224CD38
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r6, r0, #0
@@ -2178,18 +2178,18 @@ ov02_0224CD38: ; 0x0224CD38
 	str r0, [sp, #4]
 	ldr r3, [sp, #8]
 	add r0, r4, #0
-	bl ov02_0224CAB8
+	bl PrimoPassword_DecodeWallpaper
 	add r5, r0, #0
 	add r0, r4, #0
 	bl WallpaperPasswordBank_Delete
 	add r0, r5, #0
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
-	thumb_func_end ov02_0224CD38
+	thumb_func_end PrimoPassword_CheckWallpaper
 
 
-	thumb_func_start ov02_0224CD74
-ov02_0224CD74: ; 0x0224CD74
+	thumb_func_start PrimoPassword_Check2
+PrimoPassword_Check2: ; 0x0224CD74
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r6, r0, #0
@@ -2209,14 +2209,14 @@ ov02_0224CD74: ; 0x0224CD74
 	str r0, [sp, #4]
 	ldr r3, [sp, #8]
 	add r0, r4, #0
-	bl ov02_0224CBF8
+	bl PrimoPassword_DecodeCheck2
 	add r5, r0, #0
 	add r0, r4, #0
 	bl WallpaperPasswordBank_Delete
 	add r0, r5, #0
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
-	thumb_func_end ov02_0224CD74
+	thumb_func_end PrimoPassword_Check2
 
 
 	thumb_func_start ov02_0224CDB0

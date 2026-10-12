@@ -27,7 +27,7 @@
 #include "touchpad.h"
 #include "unk_02026E30.h"
 #include "unk_02035900.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 #include "wifi_connection.h"
@@ -207,7 +207,7 @@ BOOL WobbuffetPopApp_Main(OverlayManager *man, int *state) {
         }
         break;
     case 6:
-        sub_020398D4(0, 1);
+        CommState_SetErrorWatch(0, 1);
         LinkSync_StartSync(222);
         (*state)++;
         break;

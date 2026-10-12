@@ -34,8 +34,8 @@
 .public Comm_SendCommand
 .public Comm_GetLocalNetId
 .public sub_020388E0
-.public sub_020398D4
-.public sub_02039AD8
+.public CommState_SetErrorWatch
+.public CommState_SetError
 .public sub_0205A44C
 .public sub_0205A46C
 .public sub_0205A478

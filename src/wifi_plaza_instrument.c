@@ -1066,7 +1066,7 @@ void ov49_02266B28(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     if (effect->obj == WiFiPlazaObj_GetOwnPlayer(manager->objManager)) {
         WiFiPlazaCamera_ClearFollowObject(manager->camera);
     }
-    packed = ((u32(*)(WiFiPlazaObj *))ov49_02258E34)(effect->obj);
+    packed = ((u32(*)(WiFiPlazaObj *))WiFiPlazaObj_GetGridPos)(effect->obj);
     original.x = (s16)packed;
     original.y = (s16)(packed >> 16);
     copy = original;
@@ -1179,7 +1179,7 @@ BOOL ov49_02266D7C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
         }
         if (direction != 4) {
             WiFiPlazaObj_SetDirection(effect->obj, direction);
-            packed = ((u32(*)(WiFiPlazaObj *))ov49_02258E34)(effect->obj);
+            packed = ((u32(*)(WiFiPlazaObj *))WiFiPlazaObj_GetGridPos)(effect->obj);
             position.unk0 = (s16)packed;
             position.unk2 = (s16)(packed >> 16);
             WiFiPlazaObj_SetGridPosAndDir(effect->obj, position, direction);

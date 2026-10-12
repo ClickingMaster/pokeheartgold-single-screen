@@ -2975,11 +2975,11 @@ _0224070E:
 	bl GtsTransaction_ReturnToCaller
 _02240714:
 	mov r0, #3
-	bl sub_02039AD8
+	bl CommState_SetError
 	b _02240740
 _0224071C:
 	mov r0, #4
-	bl sub_02039AD8
+	bl CommState_SetError
 	b _02240740
 _02240724:
 	bl sub_020399EC

@@ -261,8 +261,8 @@ struct FieldSystem {
     u8 textbox_open : 1;
     u8 unkD2_7 : 1;
     u8 unkD3;
-    u8 filler_D4[0x4];
-    SysTask *unk_D8;
+    SysTask *touchSaveTask;    // bottom screen type 4 (bottom_screen_app.c)
+    SysTask *bottomScreenTask; // the bottom-screen app manager, or the view photo task
     FieldViewPhoto *viewPhotoTask;
     int lastStartMenuAction;
     FollowMon followMon; // E4

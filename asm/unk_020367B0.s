@@ -48,12 +48,12 @@ _020367F6:
 	bl Comm_GetTransferMode
 	cmp r0, #1
 	bne _020368B4
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
 	bl sub_0203772C
 	add r6, r0, #0
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
 	bl sub_02033FC4

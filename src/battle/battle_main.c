@@ -52,7 +52,7 @@
 #include "unk_02026E84.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "unk_0208805C.h"
 #include "vram_transfer_manager.h"
@@ -366,7 +366,7 @@ void Battle_BattleExit(OverlayManager *man) {
     Heap_Free(battleSystem);
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_6));
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_7));
-    if (!sub_02039998()) {
+    if (!CommState_IsWifi()) {
         UnloadOverlayByID(FS_OVERLAY_ID(OVY_18));
     }
 }
@@ -989,7 +989,7 @@ void VBlankTask_ScrollBattleBackground(SysTask *task, void *data) {
 }
 
 void Battle_StaticInit(void) {
-    if (!sub_02039998()) {
+    if (!CommState_IsWifi()) {
         HandleLoadOverlay(FS_OVERLAY_ID(OVY_18), OVY_LOAD_ASYNC);
     }
 }
@@ -1086,7 +1086,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
         } else {
             work->timer++;
             if (work->timer > 0x708) {
-                sub_02039AD8(1);
+                CommState_SetError(1);
             }
         }
         break;
@@ -1263,7 +1263,7 @@ common:
         } else {
             work->timer++;
             if (work->timer > 0x708) {
-                sub_02039AD8(1);
+                CommState_SetError(1);
             }
         }
         break;
@@ -1444,14 +1444,14 @@ BOOL Battle_EndInit(OverlayManager *man) {
     args->setup = setup;
     switch (setup->winFlag) {
     case 1:
-        if (!sub_02039998()) {
+        if (!CommState_IsWifi()) {
             GameStats_Inc(setup->gameStats, 22);
         } else {
             GameStats_Inc(setup->gameStats, 27);
         }
         break;
     case 2:
-        if (!sub_02039998()) {
+        if (!CommState_IsWifi()) {
             GameStats_Inc(setup->gameStats, 23);
         } else {
             GameStats_Inc(setup->gameStats, 28);
@@ -1459,7 +1459,7 @@ BOOL Battle_EndInit(OverlayManager *man) {
         break;
     case 3:
     case 5:
-        if (!sub_02039998()) {
+        if (!CommState_IsWifi()) {
             GameStats_Inc(setup->gameStats, 24);
         } else {
             GameStats_Inc(setup->gameStats, 29);
@@ -1602,7 +1602,7 @@ void ov12_0223A664(BattleSystem *battleSystem, BattleSetup *setup) {
 
 void ov12_0223A7A0(void) {
     WirelessStatusIcon_Create();
-    if (sub_02039998()) {
+    if (CommState_IsWifi()) {
         WirelessStatusIcon_SetLevel(3 - ov00_021EC9D4());
     } else if (CommWireless_Exists()) {
         WirelessStatusIcon_SetLevel(3 - WM_GetLinkLevel());

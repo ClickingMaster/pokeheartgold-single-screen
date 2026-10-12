@@ -72,9 +72,9 @@
 .public Options_GetFrame
 .public Save_GameStats_Get
 .public GameStats_AddScore
-.public sub_02037D78
+.public CommState_Exists
 .public sub_02039274
-.public sub_020392D8
+.public CommState_GetWifiError
 .public sub_020393C8
 .public sub_0203976C
 .public sub_020397C8

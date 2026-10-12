@@ -35,9 +35,9 @@
 .public Wireless_IsEntryLocked
 .public Wireless_SetEntryClosed
 .public sub_020340C4
-.public sub_02039918
-.public sub_0203993C
-.public sub_02039AD8
+.public CommState_ReportsErrors
+.public CommState_GetLinkMode
+.public CommState_SetError
 .public WVR_TerminateAsync
 .public DC_InvalidateRange
 .public DC_FlushRange

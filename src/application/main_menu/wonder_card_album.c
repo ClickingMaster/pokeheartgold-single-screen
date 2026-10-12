@@ -105,8 +105,8 @@ extern void WirelessStatusIcon_Create(void);
 extern void CommWireless_SetCustomBeacon(void *a0);
 extern void LinkSync_StartSync(u8 a0);
 extern int LinkSync_IsSynced(u8 a0);
-extern BOOL sub_02037D78(void);
-extern void sub_020398D4(u32 a0, u32 a1);
+extern BOOL CommState_Exists(void);
+extern void CommState_SetErrorWatch(u32 a0, u32 a1);
 extern PlayerProfile *CommPlayerInfo_GetProfile(int netId);
 
 extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_MysteryGift;
@@ -964,7 +964,7 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
         WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_IN, 4, state);
         break;
     case 23:
-        if (!sub_02037D78()) {
+        if (!CommState_Exists()) {
             *state = album->nextState;
         }
         break;
@@ -980,13 +980,13 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
     case 24:
         if (MainMenuUtil_GetSaveState() == 4) {
             LinkSync_StartSync(147);
-            sub_020398D4(1, 1);
+            CommState_SetErrorWatch(1, 1);
             *state = 25;
         }
         break;
     case 25:
         if (WonderCardAlbum_CountReceivers() == 0 || LinkSync_IsSynced(147) == TRUE) {
-            sub_020398D4(0, 0);
+            CommState_SetErrorWatch(0, 0);
             MainMenuUtil_ResumeSave();
             WonderCardAlbum_PrintTextBox(album, &album->messageWindow, 18, 640);
             WaitingIcon_Delete(album->waitingIcon);

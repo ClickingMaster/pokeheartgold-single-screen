@@ -99,7 +99,7 @@ WiFiPlazaObj *WiFiPlazaObj_GetOwnPlayer(WiFiPlazaObjManager *manager);
 WiFiPlazaObj *WiFiPlazaObj_GetSpecial(WiFiPlazaObjManager *manager);
 void WiFiPlazaObj_SetGridPos(WiFiPlazaObj *obj, UnkStruct_ov44_02232914 pos);
 void WiFiPlazaObj_SetGridPosAndDir(WiFiPlazaObj *obj, UnkStruct_ov44_02232914 pos, s32 direction);
-UnkStruct_ov44_02232914 ov49_02258E34(WiFiPlazaObj *obj);
+UnkStruct_ov44_02232914 WiFiPlazaObj_GetGridPos(WiFiPlazaObj *obj);
 s32 WiFiPlazaObj_GetParam(WiFiPlazaObj *obj, s32 param);
 void WiFiPlazaObj_QueueCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, s32 command, s32 direction);
 void ov49_02258EAC(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, u16 value, u8 kind);

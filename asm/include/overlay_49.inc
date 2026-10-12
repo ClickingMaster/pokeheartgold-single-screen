@@ -223,13 +223,13 @@
 .public LinkSync_GetPacket
 .public sub_020390C4
 .public sub_020392A0
-.public sub_020392D8
+.public CommState_GetWifiError
 .public sub_020393C8
 .public sub_020397FC
 .public sub_0203981C
 .public sub_0203986C
 .public sub_0203988C
-.public sub_020398D4
+.public CommState_SetErrorWatch
 .public sub_02039B38
 .public WirelessStatusIcon_Create
 .public sub_02070D84

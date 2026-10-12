@@ -94,7 +94,7 @@ void UnionChatLog_PrintMenuButton(UnionChatLogData *data) {
 }
 
 void UnionChatLog_Update(UnionChatLogData *data, BgConfig *bgConfig) {
-    if ((gSystem.newKeys & PAD_BUTTON_X) && ov01_021F6B10(data->fieldSystem) == TRUE) {
+    if ((gSystem.newKeys & PAD_BUTTON_X) && FieldSystem_GetBottomScreenAppState(data->fieldSystem) == TRUE) {
         data->state = UNION_CHAT_LOG_STATE_CLOSE;
     }
     UnionChatLog_UpdateTouchRepeat(data);
@@ -123,7 +123,7 @@ void UnionChatLog_Task(SysTask *task, void *taskData) {
         SpriteList_RenderAndAnimateSprites(data->spriteList);
         break;
     case UNION_CHAT_LOG_STATE_CLOSE:
-        ov01_021F6A9C(fieldSystem, 0, NULL);
+        FieldSystem_SwitchBottomScreenApp(fieldSystem, 0, NULL);
         data->state = UNION_CHAT_LOG_STATE_CLOSING;
         break;
     case UNION_CHAT_LOG_STATE_CLOSING:
@@ -449,7 +449,7 @@ int UnionChatLog_HandleTouchButtons(UnionChatLogData *data) {
             data->touchedButton = hit - 2;
             break;
         case 6:
-            if (gSystem.touchNew && ov01_021F6B10(data->fieldSystem) == TRUE) {
+            if (gSystem.touchNew && FieldSystem_GetBottomScreenAppState(data->fieldSystem) == TRUE) {
                 PlaySE(SEQ_SE_DP_WIN_OPEN);
                 data->state = UNION_CHAT_LOG_STATE_CLOSE;
             }

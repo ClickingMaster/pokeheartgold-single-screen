@@ -38,7 +38,7 @@
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 #include "wifi_connection.h"
@@ -780,7 +780,7 @@ BOOL MimeJrTop_Exit(OverlayManager *man, int *state) {
         result = MimeJrTop_HandleConnectionLost(OverlayManager_GetData(man));
         OverlayManager_FreeData(man);
         Heap_Destroy(HEAP_ID_113);
-        sub_020398D4(0, 1);
+        CommState_SetErrorWatch(0, 1);
         if (result != 0) {
             return TRUE;
         }

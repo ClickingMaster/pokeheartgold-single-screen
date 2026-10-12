@@ -44,7 +44,7 @@
 #include "overlay_01.h"
 #include "overlay_01_021EA824.h"
 #include "field/field_effect_manager.h"
-#include "overlay_01_021F6830.h"
+#include "field/bottom_screen_app.h"
 #include "overlay_01_021F8D80.h"
 #include "overlay_01_021F944C.h"
 #include "field_poison_effect.h"

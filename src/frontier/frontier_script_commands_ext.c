@@ -41,7 +41,7 @@
 #include "system.h"
 #include "comm_wireless.h"
 #include "unk_02035900.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "communication_club_link.h"
 #include "use_item_on_mon.h"
 #include "wifi_connection.h"
@@ -725,7 +725,7 @@ BOOL FrtCmd_055(FrontierScriptContext *ctx) {
 }
 
 BOOL ov80_0222D244(void) {
-    if (sub_02037D78() != TRUE && CommWireless_Exists() != TRUE) {
+    if (CommState_Exists() != TRUE && CommWireless_Exists() != TRUE) {
         return TRUE;
     }
     return FALSE;

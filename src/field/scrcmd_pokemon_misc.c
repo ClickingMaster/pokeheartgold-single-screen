@@ -42,7 +42,7 @@
 #include "billboard_lists.h"
 #include "frontier_save_access.h"
 #include "unk_02031B0C.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "unk_0205BFF0.h"
 #include "unk_0206D494.h"
 #include "gear_phone_ring_manager.h"

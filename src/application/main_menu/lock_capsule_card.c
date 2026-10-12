@@ -86,7 +86,7 @@ extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, Strin
 
 // Other modules (not in a header yet).
 extern void RTC_ConvertDayToDate(RTCDate *date, s32 day);
-extern BOOL sub_02037D78(void);
+extern BOOL CommState_Exists(void);
 extern void OS_ResetSystem(u32 parameter);
 
 extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_MysteryGift;
@@ -644,7 +644,7 @@ BOOL LockCapsuleCard_Main(OverlayManager *manager, int *state) {
         LockCapsuleCard_StartFade(view, FADE_TYPE_BRIGHTNESS_IN, 4, state);
         break;
     case 23:
-        if (!sub_02037D78()) {
+        if (!CommState_Exists()) {
             *state = view->nextState;
         }
         break;

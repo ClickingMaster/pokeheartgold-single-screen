@@ -89,8 +89,8 @@
 .public _u32_div_f
 .public gSystem
 .public ov01_021E7F54
-.public ov01_021F6BB0
-.public ov01_021F6BD0
+.public IsSpriteIdWithoutTalkAction
+.public IsScriptIdWithoutTalkAction
 .public DowsingMchn_Init
 .public DowsingMchn_Exit
 .public DowsingMchn_IsExitDone

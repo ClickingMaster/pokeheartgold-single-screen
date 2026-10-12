@@ -19,7 +19,7 @@
 #include "system.h"
 #include "communication_command.h"
 #include "unk_02035900.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "unk_02054648.h"
 #include "unk_02055418.h"
 #include "unk_0205B3DC.h"
@@ -349,7 +349,7 @@ void sub_020520B0(BattleSetup *setup, FieldSystem *fieldSystem, Party *party, u8
         Party_InitWithMaxSize(setup->party[BATTLER_PLAYER], cnt);
         for (i = 0; i < cnt; ++i) {
             CopyPokemonToPokemon(Party_GetMonByIndex(party, partySlots_cpy[i] - 1), pokemon);
-            if (GetMonData(pokemon, MON_DATA_LEVEL, NULL) > 50 && (sub_0203993C() == 37 || sub_0203993C() == 38)) {
+            if (GetMonData(pokemon, MON_DATA_LEVEL, NULL) > 50 && (CommState_GetLinkMode() == 37 || CommState_GetLinkMode() == 38)) {
                 u32 exp = GetMonExpBySpeciesAndLevel(GetMonData(pokemon, MON_DATA_SPECIES, NULL), 50);
                 SetMonData(pokemon, MON_DATA_EXPERIENCE, &exp);
                 CalcMonLevelAndStats(pokemon);
@@ -376,7 +376,7 @@ void sub_020520B0(BattleSetup *setup, FieldSystem *fieldSystem, Party *party, u8
     setup->palPad = Save_PalPad_Get(fieldSystem->saveData);
     setup->saveData = fieldSystem->saveData;
 
-    if (sub_0203401C(sub_0203993C())) {
+    if (sub_0203401C(CommState_GetLinkMode())) {
         int avatar = PlayerProfile_GetAvatar(profile);
         int gender = PlayerProfile_GetTrainerGender(profile);
         setup->trainer[BATTLER_PLAYER].data.trainerClass = GetUnionRoomAvatarAttrBySprite(gender, avatar, 1);

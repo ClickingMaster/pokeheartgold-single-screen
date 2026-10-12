@@ -40,8 +40,8 @@ typedef struct UnionRoomPlayerRecord {
 
 FieldSystem *UnionRoom_GetFieldSystem(struct UnkStruct_02059E1C *unionRoom);
 UnionRoomPlayerRecord *UnionRoom_GetRecord(struct UnkStruct_02059E1C *unionRoom, int index);
-s32 sub_02037F94(void);
-s32 sub_02037FCC(void);
+s32 CommState_GetJoinResult(void);
+s32 CommState_IsAlternateLinked(void);
 UnkStruct_0206793C *ov01_021FD8E8(LocalMapObject *object, int index);
 UnkStruct_0206793C *UnionChatMarker_Spawn(LocalMapObject *object);
 
@@ -390,7 +390,7 @@ void UnionRoomObjects_RestoreAfterScript(MapObjectManager *mapObjectManager, Uni
     object = MapObjectManager_GetFirstActiveObjectByID(mapObjectManager, 0);
     GF_ASSERT(object != NULL);
     if (MapObject_AreBitsSetForMovementScriptInit(object) == TRUE) {
-        if (sub_02037FCC() != FALSE || sub_02037F94() != FALSE) {
+        if (CommState_IsAlternateLinked() != FALSE || CommState_GetJoinResult() != FALSE) {
             for (i = 0; i < 10; i++) {
                 UnionRoomSlot *slot = &objects->slots[i];
                 if (slot->state == 1) {

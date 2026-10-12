@@ -175,7 +175,7 @@
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
 .public sub_020399FC
-.public sub_02039AD8
+.public CommState_SetError
 .public sub_02039EAC
 .public sub_02039EB4
 .public sub_02039F68

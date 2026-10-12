@@ -178,10 +178,10 @@
 .public LinkSync_IsSynced
 .public sub_02037FF0
 .public sub_0203893C
-.public sub_02038C1C
+.public CommState_SetMaxEntries
 .public sub_02039418
 .public sub_0203946C
-.public sub_020398D4
+.public CommState_SetErrorWatch
 .public sub_020399EC
 .public sub_02039EAC
 .public sub_02039EB4

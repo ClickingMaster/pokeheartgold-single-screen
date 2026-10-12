@@ -90,7 +90,7 @@ void ov49_02268CEC(UnkStruct_ov49_02268A0C *effect);
 void WiFiPlazaEvent_GetModelList(u32 kind, WiFiPlazaEventModelList *list);
 void WiFiPlazaEvent_StartLoopSE(UnkStruct_ov49_02268A0C *effect);
 void WiFiPlazaEvent_StopLoopSE(UnkStruct_ov49_02268A0C *effect);
-BOOL ov49_02268DCC(void *state, WiFiPlazaRoomWork *room);
+BOOL ov49_02268DCC(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room);
 UnkStruct_ov49_02268FAC *ov49_02268FAC(WiFiPlazaRoomWork *room, enum HeapID heapID);
 void ov49_02269090(UnkStruct_ov49_02268FAC *work);
 void ov49_02269098(UnkStruct_ov49_02268FAC *work);
@@ -104,6 +104,6 @@ BOOL ov49_02269430(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int in
 void ov49_02269474(WiFiPlazaEventWobble *wobble);
 void ov49_02269494(WiFiPlazaEventWobble *wobble);
 BOOL ov49_022694B4(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
-void ov49_022695C4(UnkStruct_ov49_02268FAC *work, int index);
+void WiFiPlazaEvent_UpdateMoverMarkers(UnkStruct_ov49_02268FAC *work, int index);
 
 #endif // POKEHEARTGOLD_WIFI_PLAZA_EVENT_H

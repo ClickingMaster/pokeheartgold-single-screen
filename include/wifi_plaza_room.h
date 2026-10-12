@@ -32,8 +32,8 @@
 // The top screen shows the room, the touch screen an info panel (own trainer card, the card of a
 // player the own avatar talks to, or the Tap Toy of the own player).
 
-typedef struct WiFiPlazaWork WiFiPlazaWork; // OVY_45 lobby state (include/wifi_plaza_internal.h)
-struct WiFiPlazaPlayer;                     // OVY_45 player record (include/wifi_plaza_internal.h)
+typedef struct WiFiPlazaWork WiFiPlazaWork;     // OVY_45 lobby state (include/wifi_plaza_internal.h)
+typedef struct WiFiPlazaPlayer WiFiPlazaPlayer; // OVY_45 player record (include/wifi_plaza_internal.h)
 typedef struct WiFiPlazaRoomWork WiFiPlazaRoomWork;
 
 // Launch arguments (same layout as the OVY_45 app-0 arguments).
@@ -145,12 +145,12 @@ struct WiFiPlazaRoomWork {
     u8 fading;         // 0x003
     u8 mode : 4;       // 0x004
     u8 error : 4;
-    u8 unk_05;                                        // 0x005
+    u8 actionTile;                                    // 0x005
     u8 plazaClosing;                                  // 0x006
     u8 ignorePlazaClosing;                            // 0x007
     s32 closingTimer;                                 // 0x008
-    u8 unk_0C[20];                                    // 0x00C per player
-    u8 unk_20[20];                                    // 0x020 per player
+    u8 playerBusy[20];                                // 0x00C per player
+    u8 cardBlocked[20];                               // 0x020 per player
     WiFiPlazaWork *lobby;                             // 0x034
     u16 *startParams;                                 // 0x038 WiFiPlazaRoomArgs.startParams
     WiFiPlazaRoomGraphics graphics;                   // 0x03C
@@ -183,19 +183,19 @@ WiFiPlazaObjManager *WiFiPlazaRoom_GetObjManager(WiFiPlazaRoomWork *room);
 WiFiPlazaModels *WiFiPlazaRoom_GetModels(WiFiPlazaRoomWork *room);
 WiFiPlazaMap *WiFiPlazaRoom_GetMap(WiFiPlazaRoomWork *room);
 WiFiPlazaCamera *WiFiPlazaRoom_GetCamera(WiFiPlazaRoomWork *room);
-void *WiFiPlazaRoom_GetPlayerStates(WiFiPlazaRoomWork *room); // WiFiPlazaPlayerStateManager
+struct WiFiPlazaPlayerStateManager *WiFiPlazaRoom_GetPlayerStates(WiFiPlazaRoomWork *room);
 void WiFiPlazaRoom_SetMode(WiFiPlazaRoomWork *room, u32 mode);
 u8 WiFiPlazaRoom_GetOwnPlayerIndex(WiFiPlazaRoomWork *room);
 u8 WiFiPlazaRoom_IsFading(WiFiPlazaRoomWork *room);
 void WiFiPlazaRoom_SetFinished(WiFiPlazaRoomWork *room, u8 finished);
 void WiFiPlazaRoom_SetResult(WiFiPlazaRoomWork *room, u8 result);
-void ov49_0225A03C(WiFiPlazaRoomWork *room, u8 value);
-u8 ov49_0225A040(WiFiPlazaRoomWork *room);
+void WiFiPlazaRoom_SetActionTile(WiFiPlazaRoomWork *room, u8 value);
+u8 WiFiPlazaRoom_GetActionTile(WiFiPlazaRoomWork *room);
 void WiFiPlazaRoom_IgnorePlazaClosing(WiFiPlazaRoomWork *room);
-void ov49_0225A04C(WiFiPlazaRoomWork *room, u8 index, u8 value);
-u8 ov49_0225A064(WiFiPlazaRoomWork *room, u32 index);
-void ov49_0225A06C(WiFiPlazaRoomWork *room, u8 index, u8 value);
-u8 ov49_0225A084(WiFiPlazaRoomWork *room, u32 index);
+void WiFiPlazaRoom_SetPlayerBusy(WiFiPlazaRoomWork *room, u8 index, u8 value);
+u8 WiFiPlazaRoom_IsPlayerBusy(WiFiPlazaRoomWork *room, u32 index);
+void WiFiPlazaRoom_SetCardBlocked(WiFiPlazaRoomWork *room, u8 index, u8 value);
+u8 WiFiPlazaRoom_IsCardBlocked(WiFiPlazaRoomWork *room, u32 index);
 
 void WiFiPlazaRoom_PrintMessage(WiFiPlazaRoomWork *room, String *message);
 void WiFiPlazaRoom_PrintMessageInstant(WiFiPlazaRoomWork *room, String *message);
@@ -454,21 +454,7 @@ BOOL ov45_0222F274(int index);
 BOOL ov45_0222F294(int index);
 u32 ov45_0222F314(int index);
 
-// Other OVY_49 modules: the object manager and the scenery models are typed in their headers (included above),
-// the player state handlers in include/wifi_plaza_player_state.h once it exists.
-// object manager (avatars)
-// scenery models
-// player state handlers
-#ifndef POKEHEARTGOLD_WIFI_PLAZA_PLAYER_STATE_H // typed in wifi_plaza_player_state.h
-void *WiFiPlazaPlayerState_AllocWork(void *state, u32 size);
-void WiFiPlazaPlayerState_FreeWork(void *state);
-void *WiFiPlazaPlayerState_GetWork(void *state);
-u32 WiFiPlazaPlayerState_GetStep(void *state);
-void WiFiPlazaPlayerState_SetStep(void *state, u32 step);
-#endif
-
-// Declarations other OVY_49 modules added (carried over by G3-49/pkg6).
-typedef struct WiFiPlazaPlayer WiFiPlazaPlayer; // OVY_45 lobby player
+// Lobby (OVY_45) calls of the player state handlers, the Plaza Games registration and the conversations.
 BOOL ov45_0222A208(WiFiPlazaWork *lobby);
 BOOL ov45_0222A230(WiFiPlazaWork *lobby, int index);
 BOOL ov45_0222A25C(WiFiPlazaWork *lobby, int index);
@@ -543,10 +529,8 @@ int ov45_0222F2D4(int slot);
 s16 ov45_0222F3E8(int slot);
 int ov45_0222F430(void);
 u8 ov45_0222F464(void);
-#ifndef POKEHEARTGOLD_WIFI_PLAZA_PLAYER_STATE_H
-void *WiFiPlazaPlayerState_GetArg(void *state);  // handler argument
-void WiFiPlazaPlayerState_NextStep(void *state); // next step
-void WiFiPlazaPlayerState_SetActive(void *manager, u32 playerIndex, u8 value);
-#endif
+
+// Typed player state handlers (that header includes this one first)
+#include "wifi_plaza_player_state.h"
 
 #endif // POKEHEARTGOLD_WIFI_PLAZA_ROOM_H

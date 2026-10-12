@@ -403,11 +403,11 @@
 .public MapPropManager_LoadOne
 .public FieldMotionBlur_Start
 .public FieldMotionBlur_Stop
-.public ov01_021F6A9C
-.public ov01_021F6ABC
-.public ov01_021F6AEC
-.public ov01_021F6B00
-.public ov01_021F6B10
+.public FieldSystem_SwitchBottomScreenApp
+.public FieldSystem_SetTouchscreenChoiceMenuState
+.public FieldSystem_GetTouchscreenChoiceMenuState
+.public FieldSystem_GetBottomScreenAppId
+.public FieldSystem_GetBottomScreenAppState
 .public ov01_021F771C
 .public ov01_021F8F08
 .public ov01_021F8F68
@@ -486,8 +486,8 @@
 .public Task_FieldDig
 .public FieldMoveTask_CreateTeleportEnvironment
 .public Task_FieldTeleport
-.public ov02_0224CD38
-.public ov02_0224CD74
+.public PrimoPassword_CheckWallpaper
+.public PrimoPassword_Check2
 .public ov02_0224CDB0
 .public ov02_0224D598
 .public ov02_0224D5AC

@@ -1,4 +1,0 @@
-#ifndef TO40_OVERLAY49_RESIDUAL77_PRIVATE_H
-#define TO40_OVERLAY49_RESIDUAL77_PRIVATE_H
-#include "global.h"
-#endif

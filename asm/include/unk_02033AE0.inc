@@ -53,8 +53,8 @@
 .public LinkSync_GetValueSize
 .public LinkSync_RecvPacket
 .public sub_02037C94
-.public sub_02038B3C
-.public sub_02038B9C
+.public CommState_RecvJoinRequest
+.public CommState_RecvJoinReply
 .public sub_02038C18
 .public sub_02039220
 .public MI_CpuFill8

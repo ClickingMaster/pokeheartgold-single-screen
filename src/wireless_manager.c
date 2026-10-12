@@ -179,9 +179,9 @@ u16 WM_GetAllowedChannel(void);
 u16 WM_GetDispersionScanPeriod(void);
 void *WMi_GetStatusAddress(void);
 
-int sub_0203993C(void);
-int sub_02039918(void);
-void sub_02039AD8(int);
+int CommState_GetLinkMode(void);
+int CommState_ReportsErrors(void);
+void CommState_SetError(int);
 BOOL sub_020340C4(int);
 
 void Wireless_SetState(int state);
@@ -315,7 +315,7 @@ BOOL Wireless_StartParentRun(void) {
 #pragma force_active on
 
 // A child connecting is refused when entry is locked or closed, the parent is full, or its connect data
-// (sub_0203993C(), gWirelessConnectTag) differ from ours.
+// (CommState_GetLinkMode(), gWirelessConnectTag) differ from ours.
 void Wireless_OnParentEvent(void *arg) {
     WirelessParentEvent *event = arg;
     u16 mask = 1 << event->aid;
@@ -329,7 +329,7 @@ void Wireless_OnParentEvent(void *arg) {
         gWirelessManager.work->beaconCount++;
         break;
     case 7:
-        if (gWirelessManager.work->entryClosed == 1 || gWirelessManager.work->entryLocked == 1 || Wireless_CountConnected() >= gWirelessManager.work->maxEntries || event->connectData[0] != sub_0203993C() || memcmp(gWirelessConnectTag, &event->connectData[1], 3) != 0) {
+        if (gWirelessManager.work->entryClosed == 1 || gWirelessManager.work->entryLocked == 1 || Wireless_CountConnected() >= gWirelessManager.work->maxEntries || event->connectData[0] != CommState_GetLinkMode() || memcmp(gWirelessConnectTag, &event->connectData[1], 3) != 0) {
             int result = WM_Disconnect(NULL, event->aid);
             if (result != WM_OK) {
                 Wireless_SetError(result);
@@ -495,12 +495,12 @@ BOOL Wireless_ScanNextChannel(void) {
     u16 channels = WM_GetAllowedChannel();
     if (channels == 0x8000) {
         Wireless_SetError(3);
-        sub_02039AD8(1);
+        CommState_SetError(1);
         return FALSE;
     }
     if (channels == 0) {
         Wireless_SetError(22);
-        sub_02039AD8(1);
+        CommState_SetError(1);
         return FALSE;
     }
     if (gWirelessManager.work->scanChannel == 0) {
@@ -637,7 +637,7 @@ void Wireless_OnScanEnded(void *arg) {
     }
 }
 
-// Connects to the parent in parentInfo; the connect data are sub_0203993C() and gWirelessConnectTag.
+// Connects to the parent in parentInfo; the connect data are CommState_GetLinkMode() and gWirelessConnectTag.
 BOOL Wireless_StartConnect(void) {
     u8 data[0x20];
     int result;
@@ -646,7 +646,7 @@ BOOL Wireless_StartConnect(void) {
     }
     Wireless_SetState(WIRELESS_STATE_BUSY);
     MI_CpuCopy8(gWirelessConnectTag, data + 1, 3);
-    data[0] = sub_0203993C();
+    data[0] = CommState_GetLinkMode();
     result = WM_StartConnectEx(Wireless_OnConnectEvent, gWirelessManager.work->parentInfo, data, 1, 0);
     if (result != WM_OK) {
         Wireless_SetError(result);
@@ -669,7 +669,7 @@ void Wireless_OnConnectEvent(void *arg) {
             return;
         }
         if (event->errcode == 1) {
-            if (sub_02039918()) {
+            if (CommState_ReportsErrors()) {
                 Wireless_SetState(WIRELESS_STATE_ERROR);
                 return;
             }
@@ -928,7 +928,7 @@ BOOL Wireless_StartMeasureChannels(void) {
     if (ret == 0x18) {
         Wireless_SetError(0x18);
         Wireless_SetState(WIRELESS_STATE_ERROR);
-        sub_02039AD8(1);
+        CommState_SetError(1);
         return FALSE;
     }
     if (ret != WM_OK) {
@@ -947,13 +947,13 @@ u16 Wireless_MeasureFromChannel(u16 channel) {
     if (allowed == 0x8000) {
         Wireless_SetError(3);
         Wireless_SetState(WIRELESS_STATE_ERROR);
-        sub_02039AD8(1);
+        CommState_SetError(1);
         return 3;
     }
     if (allowed == 0) {
         Wireless_SetError(0x16);
         Wireless_SetState(WIRELESS_STATE_ERROR);
-        sub_02039AD8(1);
+        CommState_SetError(1);
         return 0x18;
     }
     while (!((1 << (channel - 1)) & allowed)) {
@@ -974,7 +974,7 @@ void Wireless_OnChannelMeasured(void *arg) {
     if (event->errcode != 0) {
         Wireless_SetError(event->errcode);
         Wireless_SetState(WIRELESS_STATE_ERROR);
-        sub_02039AD8(1);
+        CommState_SetError(1);
         return;
     }
     channel = event->channel;
@@ -1100,14 +1100,14 @@ void Wireless_OnInitialized(void *arg) {
     if (((WirelessEvent *)arg)->errcode != 0) {
         Wireless_SetError(((WirelessEvent *)arg)->errcode);
         Wireless_SetState(WIRELESS_STATE_FATAL);
-        sub_02039AD8(5);
+        CommState_SetError(5);
         return;
     }
     result = WM_SetIndCallback(Wireless_OnIndication);
     if (result != 0) {
         Wireless_SetError(result);
         Wireless_SetState(WIRELESS_STATE_FATAL);
-        sub_02039AD8(5);
+        CommState_SetError(5);
         return;
     }
     Wireless_SetState(WIRELESS_STATE_IDLE);
@@ -1119,7 +1119,7 @@ void Wireless_OnLifeTimeSet(void) {
 // Starts a parent (mode 0, 2 or 4).
 BOOL Wireless_StartParent(int mode, u16 tgid, u16 channel, u16 maxEntry, u16 beaconPeriod, u32 entryFlag) {
     int value;
-    if (sub_020340C4(sub_0203993C())) {
+    if (sub_020340C4(CommState_GetLinkMode())) {
         WM_SetLifeTime(Wireless_OnLifeTimeSet, 0xFFFF, 100, 5, 100);
     }
     gWirelessManager.work->receiveBufferSize = 0x1C0;
@@ -1160,7 +1160,7 @@ BOOL Wireless_StartParent(int mode, u16 tgid, u16 channel, u16 maxEntry, u16 bea
 
 // Connects as a child (mode 1, 3 or 5) to the parent described by parentInfo (0xC0 bytes).
 BOOL Wireless_StartChild(int mode, const void *parentInfo) {
-    if (sub_020340C4(sub_0203993C())) {
+    if (sub_020340C4(CommState_GetLinkMode())) {
         WM_SetLifeTime(Wireless_OnLifeTimeSet, 0xFFFF, 100, 5, 100);
     }
     gWirelessManager.work->receiveBufferSize = 0x200;

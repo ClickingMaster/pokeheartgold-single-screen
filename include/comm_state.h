@@ -1,30 +1,30 @@
-#ifndef POKEHEARTGOLD_UNK_02037C94_H
-#define POKEHEARTGOLD_UNK_02037C94_H
+#ifndef POKEHEARTGOLD_COMM_STATE_H
+#define POKEHEARTGOLD_COMM_STATE_H
 
 #include "overlay_44_02232E9C.h"
 #include "save.h"
 #include "save_wifi_history.h"
 #include "friend_roster.h"
 
-BOOL sub_02037D78(void);
-void sub_02037EC0(u32 arg0);
+BOOL CommState_Exists(void);
+void CommState_SetEntry(u32 arg0);
 void sub_02037FF0(void);
 void sub_020380B0(void);
 void sub_020380CC(void);
-u32 *sub_020392D8(void);
+u32 *CommState_GetWifiError(void);
 BOOL sub_020393C8(void);
-u8 sub_0203993C(void);
+u8 CommState_GetLinkMode(void);
 u8 sub_02039954(void);
-int sub_02039998(void);
+int CommState_IsWifi(void);
 int sub_02039FFC(int a0);
 BOOL sub_02039AA4(void);
-u8 sub_020399B8(void);
+u8 CommState_GetErrorScreen(void);
 BOOL sub_02038D90(void);
 BOOL sub_0203A05C(SaveData *saveData);
 void sub_02039F68(SaveWiFiHistory *);
-BOOL sub_02039AD8(int);
+BOOL CommState_SetError(int);
 void *sub_0203A040(FriendRoster *a0);
-void sub_020398D4(s8 a0, s8 a1);
+void CommState_SetErrorWatch(s8 a0, s8 a1);
 void sub_02039B58(void);
 void sub_02039358(void);
 BOOL sub_020390C4(void);
@@ -46,4 +46,4 @@ int sub_02039FD8(enum HeapID heapID);
 void sub_02039E9C(void);
 void sub_02039FB8(SaveWiFiHistory *history, s32 country, s32 region, u8 language);
 
-#endif // POKEHEARTGOLD_UNK_02037C94_H
+#endif // POKEHEARTGOLD_COMM_STATE_H

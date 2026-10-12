@@ -16,7 +16,7 @@
 #include "comm_wireless.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "communication_club_link.h"
 
 typedef struct CommClubManager CommClubManager;
@@ -391,14 +391,14 @@ static void ov03_02254420() {
         sCommClubManager->unkA0 = 2;
         sCommClubManager->unkA2 = 0xFFFF;
         sCommClubManager->unkA1 = 0;
-        ov01_021F6A9C(sCommClubManager->fieldSystem, 7, &sCommClubManager->unk9C);
+        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->unk9C);
         ov03_02254B4C(&ov03_02254500);
     }
 }
 
 static void ov03_02254500(void *arg0, CommClubManager *commClubManager) {
     ov03_022543AC(commClubManager);
-    if (ov01_021F6B10(commClubManager->fieldSystem) == TRUE) {
+    if (FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem) == TRUE) {
         if (sub_02037700()) {
             sCommClubManager->retCode = 3;
             ov03_02254B44();
@@ -541,9 +541,9 @@ static void ov03_022548E0(void *arg0, CommClubManager *unk_ovo3) {
             sCommClubManager->unkA0 = 1;
             sCommClubManager->unkA2 = 0xFFFF;
             sCommClubManager->unkA1 = 0;
-            ov01_021F6A9C(sCommClubManager->fieldSystem, 7, &sCommClubManager->unk9C);
+            FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->unk9C);
             unk_ovo3->unkA8 = 1;
-        } else if (ov01_021F6B10(unk_ovo3->fieldSystem) == TRUE) {
+        } else if (FieldSystem_GetBottomScreenAppState(unk_ovo3->fieldSystem) == TRUE) {
             if (ov03_022547D8(arg0, unk_ovo3)) {
                 unk_ovo3->unkA1 = 2;
             } else if (PAD_BUTTON_B & gSystem.newKeys || unk_ovo3->unkA2 == 0) {
@@ -578,7 +578,7 @@ static void ov03_022549D8(void *arg0, CommClubManager *commClubManager) {
     if (ov03_02255CD0(commClubManager)) {
         if (ov03_022547D8(arg0, commClubManager)) {
             ov03_02255CE4(commClubManager);
-        } else if (ov01_021F6AEC(commClubManager->fieldSystem) == 6) {
+        } else if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == 6) {
             if (commClubManager->unkA4 == 0) {
                 ov03_0225574C(arg0, commClubManager);
                 ov03_02253E20(6, FALSE);
@@ -801,12 +801,12 @@ static void ov03_02254D78(s32 arg0_unused, CommClubManager *commClubManager) {
         }
         sCommClubManager->unkA2 = 0xFFFF;
         sCommClubManager->unkA1 = 0;
-        ov01_021F6A9C(sCommClubManager->fieldSystem, 7, &sCommClubManager->unk9C);
+        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->unk9C);
     }
 }
 
 static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
-    if (ov01_021F6B10(commClubManager->fieldSystem) != 1) {
+    if (FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem) != 1) {
         return;
     }
 
@@ -957,7 +957,7 @@ static void ov03_02255078(void *arg0, CommClubManager *commClubManager) {
         CommPlayerInfo_ClearPlayer(commClubManager->unk95);
         ov03_02253E20(0, FALSE);
         ov03_02254B4C(&ov03_022552C8);
-    } else if (ov01_021F6AEC(commClubManager->fieldSystem) == 6) {
+    } else if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == 6) {
         if (commClubManager->unkA4 == 0) {
             if ((commClubManager->commType == COMM_TYPE_SINGLE_BATTLE || commClubManager->commType == COMM_TYPE_DOUBLE_BATTLE || commClubManager->commType == COMM_TYPE_FLAT_BATTLE_1 || commClubManager->commType == COMM_TYPE_FLAT_BATTLE_2) && CommPlayerInfo_RulesetsMatch() == 0) {
                 ov03_02253E20(116, FALSE);
@@ -1028,7 +1028,7 @@ static void ov03_0225530C(void *arg0_unused, CommClubManager *commClubManager) {
         }
         sCommClubManager->unkA2 = 0xFFFF;
         sCommClubManager->unkA1 = 0;
-        ov01_021F6A9C(sCommClubManager->fieldSystem, 7, &sCommClubManager->unk9C);
+        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->unk9C);
     }
 }
 
@@ -1083,7 +1083,7 @@ static void ov03_02255388(void *arg0_unused, CommClubManager *commClubManager) {
 
 static void ov03_022553C8(void *arg0_unused, CommClubManager *commClubManager) {
     ov03_02254C9C(commClubManager);
-    sub_02037EC0(0);
+    CommState_SetEntry(0);
     ListMenu_ProcessInput(commClubManager->listMenu);
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
         ov03_02255C84(commClubManager);
@@ -1106,7 +1106,7 @@ static void ov03_02255404(void *arg0, CommClubManager *commClubManager) {
             ov03_02255CE4(commClubManager);
             ov03_02254B4C(&ov03_022554E0);
         } else {
-            if (ov01_021F6AEC(commClubManager->fieldSystem) == 6) {
+            if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == 6) {
                 if (commClubManager->unkA4 == 0) {
                     if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_POKEATHLON) {
                         for (int i = 1; i < Comm_CountConnected(); i++) {
@@ -1119,7 +1119,7 @@ static void ov03_02255404(void *arg0, CommClubManager *commClubManager) {
                     LinkSync_StartSync(10);
                     ov03_02254B4C(&ov03_022556BC);
                 } else if (commClubManager->unkA4 == 1) {
-                    sub_02037EC0(1);
+                    CommState_SetEntry(1);
                     ov03_02254B44();
                     ov03_0225574C(arg0, commClubManager);
                     sCommClubManager->retCode = 1;
@@ -1270,7 +1270,7 @@ static void ov03_0225562C(void *arg0, CommClubManager *commClubManager) {
             ov03_02255CE4(commClubManager);
             ov03_02254BEC();
             ov03_02254B4C(&ov03_0225530C);
-        } else if (ov01_021F6AEC(commClubManager->fieldSystem) == 6) {
+        } else if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == 6) {
             if (commClubManager->unkA4 == 0) {
                 ov03_02254B44();
                 ov03_0225574C(arg0, commClubManager);
@@ -1478,9 +1478,9 @@ static void ov03_02255B04(SysTask *task, void *commClubManager) {
 }
 
 static void ov03_02255B44(CommClubManager *commClubManager_unused) {
-    sub_02037EC0(0);
+    CommState_SetEntry(0);
     sCommClubManager->retCode = 2;
-    sub_020398D4(1, 1);
+    CommState_SetErrorWatch(1, 1);
     CommPlayerInfo_SendLocal();
     CommWireless_SetLostWhenAlone(1);
 }
@@ -1548,25 +1548,25 @@ static BOOL ov03_02255C80() {
 }
 
 static void ov03_02255C84(CommClubManager *commClubManager) {
-    ov01_021F6A9C(commClubManager->fieldSystem, 3, NULL);
+    FieldSystem_SwitchBottomScreenApp(commClubManager->fieldSystem, 3, NULL);
     commClubManager->unkA8 = 0;
     commClubManager->unkA4 = 0;
 }
 
 static BOOL ov03_02255CA0(CommClubManager *commClubManager) {
-    int unkInt = ov01_021F6B00(commClubManager->fieldSystem);
-    BOOL unkBool = ov01_021F6B10(commClubManager->fieldSystem);
+    int unkInt = FieldSystem_GetBottomScreenAppId(commClubManager->fieldSystem);
+    BOOL unkBool = FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem);
     if (unkInt == 3 && unkBool == TRUE) {
-        ov01_021F6ABC(commClubManager->fieldSystem, 3, 3, &commClubManager->unkA4);
+        FieldSystem_SetTouchscreenChoiceMenuState(commClubManager->fieldSystem, 3, 3, &commClubManager->unkA4);
         return TRUE;
     }
     return FALSE;
 }
 
 static BOOL ov03_02255CD0(CommClubManager *commClubManager) {
-    return ov01_021F6AEC(commClubManager->fieldSystem) >= 4;
+    return FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) >= 4;
 }
 
 static void ov03_02255CE4(CommClubManager *commClubManager) {
-    ov01_021F6ABC(commClubManager->fieldSystem, 3, 11, &commClubManager->unkA4);
+    FieldSystem_SetTouchscreenChoiceMenuState(commClubManager->fieldSystem, 3, 11, &commClubManager->unkA4);
 }

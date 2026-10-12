@@ -42,7 +42,7 @@
 .public Bag_HasItem
 .public Save_Bag_Get
 .public MI_CpuFill8
-.public ov01_021F6A9C
-.public ov01_021F6C28
-.public ov01_021F6CA0
-.public ov01_021F729C
+.public FieldSystem_SwitchBottomScreenApp
+.public PalPadRegistration_IsFriendRosterAppRunning
+.public PalPadRegistration_RunTouchYesNo
+.public FieldSystem_StartPalPadRegistration

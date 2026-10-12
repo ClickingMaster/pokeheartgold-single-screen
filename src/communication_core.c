@@ -11,11 +11,11 @@
 extern void *SysTask_CreateOnVBlankQueue(void *func, void *data, int priority);
 extern void SysTask_Destroy(void *task);
 extern void LinkSync_Free(void);
-extern int sub_0203993C(void);
-extern void sub_020398D4(int, int);
-extern void sub_02039A00(int);
+extern int CommState_GetLinkMode(void);
+extern void CommState_SetErrorWatch(int, int);
+extern void CommState_CheckLinkError(int);
 extern void LinkSync_Update(void);
-extern void sub_0203817C(void);
+extern void CommState_Main(void);
 extern u16 Wireless_GetConnectedBitmap(void);
 extern int Wireless_GetState(void);
 extern BOOL Wireless_SendData(void *data, u16 size, int, void (*callback)(void *));
@@ -88,7 +88,7 @@ int Comm_InitWork(int create, int packetSize) {
 
     gCommCore.updateLock = 0;
     if (create != 0) {
-        count = sub_02033FC4((u16)sub_0203993C()) + 1;
+        count = sub_02033FC4((u16)CommState_GetLinkMode()) + 1;
         if (gCommCore.work != NULL) {
             return 1;
         }
@@ -98,7 +98,7 @@ int Comm_InitWork(int create, int packetSize) {
         gCommCore.work = (u8 *)(32 - ((u32)gCommCore.allocation & 31)) + (u32)gCommCore.allocation;
         MI_CpuFill8(gCommCore.work, 0, 0x6c0);
 
-        if (sub_02034044(sub_0203993C())) {
+        if (sub_02034044(CommState_GetLinkMode())) {
             *(u32 *)(gCommCore.work + 0x690) = packetSize * 2 + 0x40;
         } else {
             *(u32 *)(gCommCore.work + 0x690) = packetSize + 0x40;
@@ -112,7 +112,7 @@ int Comm_InitWork(int create, int packetSize) {
         *(void **)(gCommCore.work + 0x48c) = Heap_Alloc(HEAP_ID_15, *(u32 *)(gCommCore.work + 0x68c));
         *(void **)(gCommCore.work + 0x488) = Heap_Alloc(HEAP_ID_15, *(u32 *)(gCommCore.work + 0x68c));
 
-        if (sub_0203993C() == 10) {
+        if (CommState_GetLinkMode() == 10) {
             PacketPool_Init(gCommCore.work + 0x580, 100, gCommCore.work + 0x498);
             PacketPool_Init(gCommCore.work + 0x5a0, 800, gCommCore.work + 0x510);
         } else {
@@ -164,7 +164,7 @@ static inline void ResetPacketCursors(void) {
 }
 
 void Comm_ResetBuffers(void) {
-    int count = sub_02033FC4((u16)sub_0203993C()) + 1;
+    int count = sub_02033FC4((u16)CommState_GetLinkMode()) + 1;
     int length;
     int i;
 
@@ -232,7 +232,7 @@ void Comm_ResetNetIdBuffers(int slot) {
     (gCommCore.work + slot)[0x696] = 0;
     (gCommCore.work + slot)[0x69E] = 1;
     *(int *)(gCommCore.work + slot * 4 + 0x66C) = 0;
-    count = sub_02033FC4((u16)sub_0203993C());
+    count = sub_02033FC4((u16)CommState_GetLinkMode());
     work = gCommCore.work;
     work = (u8 *)work; // needed to match
     chunkSize = *(int *)(work + 0x68C) / (count + 1);
@@ -262,7 +262,7 @@ void sub_02035ED0(int slot) {
 
 int sub_02035ED8(int a, int b, int c, int d) {
     int result = 1;
-    if (!sub_02034044(sub_0203993C())) {
+    if (!sub_02034044(CommState_GetLinkMode())) {
         result = CommWireless_StartParent(a, b, d);
         Wireless_SetChildJoinedCallback(sub_02035ED0);
     }
@@ -272,7 +272,7 @@ int sub_02035ED8(int a, int b, int c, int d) {
 
 int sub_02035F14(int a, int b, int c) {
     int result = 1;
-    if (!sub_02034044(sub_0203993C())) {
+    if (!sub_02034044(CommState_GetLinkMode())) {
         result = CommWireless_StartScan(a, b);
     }
     Comm_InitWork(a, c);
@@ -343,7 +343,7 @@ BOOL sub_02036010(void) {
 void sub_02036024(void) {
     int destroy = 0;
     if (gCommCore.work != NULL) {
-        if (sub_02034044(sub_0203993C())) {
+        if (sub_02034044(CommState_GetLinkMode())) {
             WifiConnection_Shutdown();
             destroy = 1;
         } else if (CommWireless_RequestStopAndFree()) {
@@ -397,7 +397,7 @@ void sub_0203611C(void) {
 BOOL Comm_Update(void) {
     u8 *work;
 
-    sub_0203817C();
+    CommState_Main();
     work = gCommCore.work;
     if (work != NULL) {
         if (work[0x6B9] == 0) {
@@ -414,7 +414,7 @@ BOOL Comm_Update(void) {
                 Comm_ReceiveFromParent();
             }
             if (Comm_GetLocalNetId() == 0 && Comm_IsNetIdConnected(0) != 0) {
-                if (sub_02034084(sub_0203993C()) == 0) {
+                if (sub_02034084(CommState_GetLinkMode()) == 0) {
                     sub_0203667C();
                 }
             }
@@ -431,7 +431,7 @@ BOOL Comm_Update(void) {
     } else {
         CommWireless_Main(0);
     }
-    sub_02039A00(0);
+    CommState_CheckLinkError(0);
     LinkSync_Update();
     return TRUE;
 }
@@ -471,7 +471,7 @@ void sub_02036298(void) {
     int i;
     int count;
 
-    if (sub_02034084(sub_0203993C())) {
+    if (sub_02034084(CommState_GetLinkMode())) {
         if (gCommCore.work[0x6B6]) {
             if (*(int *)(gCommCore.work + 0x664)) {
                 if (!sub_02036630()) {
@@ -491,7 +491,7 @@ void sub_02036298(void) {
                 return;
             }
             if (WifiConnection_SendToAll(gCommCore.work, 38)) {
-                count = sub_02033FC4((u16)sub_0203993C()) + 1;
+                count = sub_02033FC4((u16)CommState_GetLinkMode()) + 1;
                 for (i = 0; i < count; i++) {
                     if (Comm_IsNetIdConnected((u16)i)) {
                         (*(int *)(gCommCore.work + i * 4 + 0x66C))++;
@@ -500,7 +500,7 @@ void sub_02036298(void) {
                 gCommSendStages.stage[1] = 4;
             }
         }
-    } else if (sub_02034044(sub_0203993C())) {
+    } else if (sub_02034044(CommState_GetLinkMode())) {
         if (!gCommCore.work[0x6B6]) {
             return;
         }
@@ -550,8 +550,8 @@ BOOL Comm_FillParentFrameFromChildren(int slot) {
     int rowOffset;
     int slotOffset;
     bad = 0;
-    stride = sub_0203772C((u16)sub_0203993C());
-    count = sub_02033FC4((u16)sub_0203993C()) + 1;
+    stride = sub_0203772C((u16)CommState_GetLinkMode());
+    count = sub_02033FC4((u16)CommState_GetLinkMode()) + 1;
     i = bad;
     if (count > 0) {
         entryOffset = i;
@@ -596,11 +596,11 @@ void Comm_SendParentFrame(void) {
     if (gCommCore.work == NULL) {
         return;
     }
-    if (sub_02034044(sub_0203993C())) {
+    if (sub_02034044(CommState_GetLinkMode())) {
         return;
     }
-    sub_0203772C(sub_0203993C());
-    count = sub_02033FC4(sub_0203993C()) + 1;
+    sub_0203772C(CommState_GetLinkMode());
+    count = sub_02033FC4(CommState_GetLinkMode()) + 1;
     if (gCommSendStages.stage[0] != 2 && gCommSendStages.stage[0] != 0) {
         return;
     }
@@ -634,7 +634,7 @@ void Comm_SendParentFrame(void) {
 #pragma force_active off
 
 BOOL sub_02036630(void) {
-    int count = sub_02033FC4((u16)sub_0203993C()) + 1;
+    int count = sub_02033FC4((u16)CommState_GetLinkMode()) + 1;
     int i;
     for (i = 1; i < count; i++) {
         if (Comm_IsNetIdConnected((u16)i) && *(int *)(gCommCore.work + 0x66C + i * 4) > 3) {
@@ -645,10 +645,10 @@ BOOL sub_02036630(void) {
 }
 
 void sub_0203667C(void) {
-    int count = sub_02033FC4((u16)sub_0203993C()) + 1;
+    int count = sub_02033FC4((u16)CommState_GetLinkMode()) + 1;
     int i;
 
-    if (sub_02034044(sub_0203993C())) {
+    if (sub_02034044(CommState_GetLinkMode())) {
         if (!Comm_IsNetIdConnected(0)) {
             return;
         }
@@ -724,8 +724,8 @@ void Comm_OnParentFrameReceived(int netId, const u8 *data, int size) {
     }
     work[0x6B2] = 0;
     if (Comm_GetTransferMode() == 1) {
-        stride = sub_0203772C((u16)sub_0203993C());
-        count = sub_02033FC4((u16)sub_0203993C()) + 1;
+        stride = sub_0203772C((u16)CommState_GetLinkMode());
+        count = sub_02033FC4((u16)CommState_GetLinkMode()) + 1;
         i = 0;
         if (count <= 0) {
             return;
@@ -787,8 +787,8 @@ void Comm_OnChildFrameReceived(int slot, const u8 *data, int size) {
     }
     received[slot] = 0;
     if (Comm_GetTransferMode() == 1) {
-        remaining = sub_0203772C((u16)sub_0203993C());
-        sub_02033FC4((u16)sub_0203993C());
+        remaining = sub_0203772C((u16)CommState_GetLinkMode());
+        sub_02033FC4((u16)CommState_GetLinkMode());
         if ((data[0] & 2) == 0) {
             ByteRing_Write(gCommCore.work + 0x4B0 + slot * 12, data, remaining, 0x5A5);
         }
@@ -819,8 +819,8 @@ void sub_020369CC(int slot, const u8 *data) {
     if (Comm_GetTransferMode() != 1) {
         return;
     }
-    remaining = sub_0203772C((u16)sub_0203993C());
-    sub_02033FC4((u16)sub_0203993C());
+    remaining = sub_0203772C((u16)CommState_GetLinkMode());
+    sub_02033FC4((u16)CommState_GetLinkMode());
     if (data[0] == 0xFF) {
         *(u16 *)(gCommCore.work + 0x694) &= ~(1 << slot);
     } else {
@@ -865,11 +865,11 @@ void Comm_SendChildFrame(void) {
     if (gCommCore.work == NULL) {
         return;
     }
-    if (sub_02034044(sub_0203993C())) {
+    if (sub_02034044(CommState_GetLinkMode())) {
         return;
     }
-    frameSize = sub_0203772C((u16)sub_0203993C());
-    sub_02033FC4((u16)sub_0203993C());
+    frameSize = sub_0203772C((u16)CommState_GetLinkMode());
+    sub_02033FC4((u16)CommState_GetLinkMode());
     if (Wireless_GetState() != 4) {
         return;
     }
@@ -1018,9 +1018,9 @@ int sub_02036DA0(u8 *data) {
 
 int Comm_BuildChildFrame(u8 *data) {
     ReceiveBuffer receive;
-    int count = sub_0203772C((u16)sub_0203993C());
+    int count = sub_0203772C((u16)CommState_GetLinkMode());
 
-    sub_02033FC4((u16)sub_0203993C());
+    sub_02033FC4((u16)CommState_GetLinkMode());
     if (gCommCore.work[0x6B4] == 0) {
         *data = 0;
     } else {
@@ -1091,7 +1091,7 @@ int sub_02036FD8(int command, void *data, int size) {
     if (PacketPool_Enqueue(gCommCore.work + 0x580, command, data, size, 1, 0)) {
         return 1;
     }
-    if (sub_0203993C() == 10) {
+    if (CommState_GetLinkMode() == 10) {
         sub_02037974();
     }
     return 0;
@@ -1104,7 +1104,7 @@ int Comm_SendCommand(int command, void *data, int size) {
     if (PacketPool_Enqueue(gCommCore.work + 0x580, command, data, size, 1, 1)) {
         return 1;
     }
-    if (sub_0203993C() == 10) {
+    if (CommState_GetLinkMode() == 10) {
         sub_02037974();
     }
     return 0;
@@ -1124,7 +1124,7 @@ int sub_02037088(int command, void *data, int size) {
     if (PacketPool_Enqueue(gCommCore.work + 0x5A0, command, data, size, 1, 0)) {
         return 1;
     }
-    if (sub_0203993C() == 10) {
+    if (CommState_GetLinkMode() == 10) {
         sub_02037974();
     }
     return 0;
@@ -1144,7 +1144,7 @@ int sub_02037108(void *command, void *data, int size) {
     if (PacketPool_Enqueue(gCommCore.work + 0x5A0, (int)command, data, size, 1, 1)) {
         return 1;
     }
-    if (sub_0203993C() == 10) {
+    if (CommState_GetLinkMode() == 10) {
         sub_02037974();
     }
     return 0;
@@ -1246,7 +1246,7 @@ void Comm_ReceiveFromChildren(void) {
     if (gCommCore.work == NULL || gCommCore.work[0x6BA] != 0) {
         return;
     }
-    count = sub_02033FC4((u16)sub_0203993C()) + 1;
+    count = sub_02033FC4((u16)CommState_GetLinkMode()) + 1;
     i = 0;
     if (count > 0) {
         offset = i;
@@ -1268,7 +1268,7 @@ int Comm_IsNetIdConnected(int slot) {
     if (gCommCore.work == NULL) {
         return 0;
     }
-    if (sub_02034044(sub_0203993C())) {
+    if (sub_02034044(CommState_GetLinkMode())) {
         if (gCommCore.work[0x6B6] != 0) {
             u16 mask = ov00_021EE4FC();
             if ((mask & (1 << slot)) != 0) {
@@ -1308,7 +1308,7 @@ int Comm_CountConnected(void) {
 }
 
 int sub_02037474(void) {
-    if (gCommCore.work != NULL && sub_02034044(sub_0203993C())) {
+    if (gCommCore.work != NULL && sub_02034044(CommState_GetLinkMode())) {
         return 1;
     }
     return CommWireless_Exists();
@@ -1408,7 +1408,7 @@ void sub_02037668(int netId, int size, const u8 *data) {
 
 int Comm_GetLocalNetId(void) {
     if (gCommCore.work != NULL) {
-        if (sub_02034044(sub_0203993C())) {
+        if (sub_02034044(CommState_GetLinkMode())) {
             int id = WifiConnection_GetAid();
             if (id != -1) {
                 return (u16)id;
@@ -1438,7 +1438,7 @@ int sub_020376F8(void) {
 
 int sub_02037700(void) {
     if (gCommCore.work != NULL && gCommCore.work[0x6B8] != 0) {
-        sub_020398D4(1, 1);
+        CommState_SetErrorWatch(1, 1);
         return 1;
     }
     return CommWireless_IsLinkLost();
@@ -1522,7 +1522,7 @@ int sub_020378AC(int slot) {
 }
 
 int sub_020378CC(void) {
-    if (sub_02034044(sub_0203993C())) {
+    if (sub_02034044(CommState_GetLinkMode())) {
         return ov00_021E7080();
     }
     return 0;
@@ -1530,7 +1530,7 @@ int sub_020378CC(void) {
 
 void sub_020378E4(int value) {
     int i;
-    if (sub_02034044(sub_0203993C()) && *(int *)(gCommCore.work + 0x664) != value) {
+    if (sub_02034044(CommState_GetLinkMode()) && *(int *)(gCommCore.work + 0x664) != value) {
         *(int *)(gCommCore.work + 0x664) = value;
         if (value != 0) {
             *(int *)(gCommCore.work + 0x668) = 0;
@@ -1543,7 +1543,7 @@ void sub_020378E4(int value) {
 
 void sub_02037930(int value) {
     sub_020378E4(value);
-    if (sub_02034044(sub_0203993C())) {
+    if (sub_02034044(CommState_GetLinkMode())) {
         if (value != 0) {
             ov00_021E70CC(0);
         } else {

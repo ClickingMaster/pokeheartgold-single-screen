@@ -1,7 +1,7 @@
 #include <nitro/fs/overlay.h>
 #pragma once
 .public sub_0203401C
-.public sub_0203993C
+.public CommState_GetLinkMode
 .public sub_020548EC
 .public GetMetatileBehavior
 .public sub_02054940

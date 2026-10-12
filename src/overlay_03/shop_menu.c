@@ -301,7 +301,7 @@ BOOL Task_Mart(TaskManager *taskManager) {
         break;
     case TASK_MART_1:
         MartData_InitCamera(fieldSystem, data);
-        ov01_021F6A9C(fieldSystem, 2, data);
+        FieldSystem_SwitchBottomScreenApp(fieldSystem, 2, data);
         data->state = TASK_MART_2;
         break;
     case TASK_MART_2:
@@ -488,7 +488,7 @@ static void MartData_RestoreBgPriorities(MartData *data) {
 }
 
 static u8 ov03_02257334(FieldSystem *fieldSystem, MartData *data) {
-    if (ov01_021F6B10(fieldSystem) != TRUE) {
+    if (FieldSystem_GetBottomScreenAppState(fieldSystem) != TRUE) {
         return TASK_MART_2;
     }
     data->unk281 = 0;
@@ -1046,11 +1046,11 @@ u32 ov03_02258120(MartData *data, u16 itemID) {
 }
 
 static void ov03_02258164(FieldSystem *fieldSystem, MartData *data_unused) {
-    ov01_021F6A9C(fieldSystem, fieldSystem->unk1C, NULL);
+    FieldSystem_SwitchBottomScreenApp(fieldSystem, fieldSystem->unk1C, NULL);
 }
 
 static u8 ov03_02258170(FieldSystem *fieldSystem, MartData *data) {
-    if (ov01_021F6B10(fieldSystem) == FALSE && ov01_021F6B00(fieldSystem) != 1) {
+    if (FieldSystem_GetBottomScreenAppState(fieldSystem) == FALSE && FieldSystem_GetBottomScreenAppId(fieldSystem) != 1) {
         return TASK_MART_18;
     }
     data->unk281 = 0;

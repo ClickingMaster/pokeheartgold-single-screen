@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "9f42e1767f7e7ebc7202548a025db3d0974f1ec5",
+  "commit": "dd289a6e40a095517f85cf69ef5f095d28aea90f",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "2800e175eaa190e1a1a305ade7848af52b59938af861d29f8713b6416017a29a",
+    "ARM9": "61ef1b5ed60a715d8c7d6be279ea75e3504da8e23f12d4616bac1ea1eca52b3a",
     "ARM7": "b2662a5cfe0fe61203405adb1b3cd633b24d0b1b806a72ddbdec71c77f845bb3"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -2268,14 +2268,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_2",
-      "object": "overlay02_primo_password.o",
-      "bytes": 120,
-      "status": "c",
-      "source": "src/overlay02_primo_password.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_2",
       "object": "overlay02_roamer_pokecenter_r14_run1.o",
       "bytes": 764,
       "status": "c",
@@ -2296,14 +2288,6 @@
       "bytes": 308,
       "status": "c",
       "source": "src/overlay02_slop_r14_tail.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_2",
-      "object": "overlay02_slop_r37_passwords.o",
-      "bytes": 638,
-      "status": "c",
-      "source": "src/overlay02_slop_r37_passwords.c"
     },
     {
       "cpu": "ARM9",
@@ -2424,6 +2408,14 @@
       "bytes": 1212,
       "status": "c",
       "source": "src/field/overlay_2_gear_phone.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_2",
+      "object": "primo_password.o",
+      "bytes": 854,
+      "status": "c",
+      "source": "src/field/primo_password.c"
     },
     {
       "cpu": "ARM9",
@@ -2560,14 +2552,6 @@
       "bytes": 370,
       "status": "c",
       "source": "src/to46_overlay02_anim_steps_r11.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_2",
-      "object": "to46_overlay02_primo_bit_rotate.o",
-      "bytes": 96,
-      "status": "c",
-      "source": "src/to46_overlay02_primo_bit_rotate.c"
     },
     {
       "cpu": "ARM9",
@@ -5020,14 +5004,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_49",
-      "object": "ov49_022695c4.o",
-      "bytes": 96,
-      "status": "c",
-      "source": "src/ov49_022695c4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_49",
       "object": "wifi_plaza_camera.o",
       "bytes": 204,
       "status": "c",
@@ -5080,6 +5056,14 @@
       "bytes": 8736,
       "status": "c",
       "source": "src/wifi_plaza_models.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_49",
+      "object": "wifi_plaza_mover_markers.o",
+      "bytes": 96,
+      "status": "c",
+      "source": "src/wifi_plaza_mover_markers.c"
     },
     {
       "cpu": "ARM9",
@@ -7021,6 +7005,14 @@
     {
       "cpu": "ARM9",
       "module": "field",
+      "object": "bottom_screen_app.o",
+      "bytes": 1210,
+      "status": "c",
+      "source": "src/field/bottom_screen_app.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "field",
       "object": "build_model_shapes.o",
       "bytes": 250,
       "status": "c",
@@ -7177,14 +7169,6 @@
       "bytes": 902,
       "status": "c",
       "source": "src/field/field_footprints.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_friendship_exchange.o",
-      "bytes": 1488,
-      "status": "c",
-      "source": "src/field_friendship_exchange.c"
     },
     {
       "cpu": "ARM9",
@@ -7433,14 +7417,6 @@
       "bytes": 1694,
       "status": "c",
       "source": "src/field_object_models.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_overlay_app_dispatch.o",
-      "bytes": 1210,
-      "status": "c",
-      "source": "src/field_overlay_app_dispatch.c"
     },
     {
       "cpu": "ARM9",
@@ -8161,6 +8137,14 @@
       "bytes": 2068,
       "status": "c",
       "source": "src/field/overlay_01_02204004.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "field",
+      "object": "pal_pad_registration.o",
+      "bytes": 1488,
+      "status": "c",
+      "source": "src/field/pal_pad_registration.c"
     },
     {
       "cpu": "ARM9",
@@ -9453,6 +9437,14 @@
       "bytes": 4596,
       "status": "c",
       "source": "src/comm_player_sync.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "comm_state.o",
+      "bytes": 9978,
+      "status": "c",
+      "source": "src/comm_state.c"
     },
     {
       "cpu": "ARM9",
@@ -12917,14 +12909,6 @@
       "bytes": 10204,
       "status": "c",
       "source": "src/naming_screen.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "network_communication_state_full.o",
-      "bytes": 9978,
-      "status": "c",
-      "source": "src/network_communication_state_full.c"
     },
     {
       "cpu": "ARM9",

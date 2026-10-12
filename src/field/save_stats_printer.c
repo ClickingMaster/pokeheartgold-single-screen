@@ -13,7 +13,7 @@
 #include "message_format.h"
 #include "msgdata.h"
 #include "overlay_01.h"
-#include "overlay_01_021F6830.h"
+#include "field/bottom_screen_app.h"
 #include "player_avatar.h"
 #include "player_data.h"
 #include "pm_string.h"

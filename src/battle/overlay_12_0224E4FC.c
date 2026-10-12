@@ -25,7 +25,7 @@
 #include "item.h"
 #include "party.h"
 #include "pokemon.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "unk_0208805C.h"
 
 static const u8 sStatChangeTable[][2];
@@ -262,7 +262,7 @@ BOOL Link_QueueNotEmpty(BattleContext *ctx) {
 void Link_CheckTimeout(BattleContext *ctx) {
     ctx->queueTimeout++;
     if (ctx->queueTimeout > 1800) {
-        sub_02039AD8(1);
+        CommState_SetError(1);
     }
 }
 

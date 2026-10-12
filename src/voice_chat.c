@@ -31,7 +31,7 @@ extern int VCT_HandleData(u8 aid, void *data, void *size, void *work);
 extern void VCT_SetCodec(int codec);
 extern void VCT_Cleanup(void);
 extern void VCT_GetVADInfo(void *info);
-extern void sub_0203993C(void);
+extern void CommState_GetLinkMode(void);
 extern int sub_02034084(void);
 extern int ov00_021EE490(void);
 
@@ -306,7 +306,7 @@ void VoiceChat_Init(int heapId, int codec, int count) {
     NNS_SndStrmSetup(gVoiceChat.work->stream, 1, gVoiceChat.work->streamBuffer, 0x880, 65, 2, (void (*)(void))VoiceChat_StreamCallback, gVoiceChat.work);
     gVoiceChat.work->callState = VOICE_CHAT_CALL_IDLE;
     gVoiceChat.work->session = NULL;
-    sub_0203993C();
+    CommState_GetLinkMode();
     if (!sub_02034084()) {
         config.mode = VOICE_CHAT_MODE_PHONE;
     } else {

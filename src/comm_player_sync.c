@@ -28,7 +28,7 @@ int sub_020374AC(int netId);
 u16 sub_020374C0(int netId);
 void sub_020376E0(int command, void *data);
 void sub_02037894(int netId, int index);
-u8 sub_0203993C(void);
+u8 CommState_GetLinkMode(void);
 u32 sub_0205DF0C(PlayerAvatar *avatar, int keys, int heldKeys, u32 speed, int flag, int collision);
 BOOL sub_0205DFC8(PlayerAvatar *avatar);
 BOOL sub_0205DE38(PlayerAvatar *avatar);
@@ -751,7 +751,7 @@ BOOL sub_02057C94(void) {
             dst++;
         } while (--copyCount != 0);
     }
-    n = sub_0203774C(sub_0203993C());
+    n = sub_0203774C(CommState_GetLinkMode());
     count = 0;
     result = FALSE;
     coords = n == 2 ? coords2 : coords4;
@@ -789,7 +789,7 @@ void sub_02057D74(void) {
     const u16 *table;
     u8 i;
 
-    count = sub_0203774C(sub_0203993C());
+    count = sub_0203774C(CommState_GetLinkMode());
     table = count == 2 ? _0210FAB4 : _0210FABC;
     i = 0;
     while (i < count) {
@@ -833,7 +833,7 @@ BOOL sub_02057E50(void) {
     int i;
     CommPlayerPosition *position;
 
-    count = sub_0203774C(sub_0203993C());
+    count = sub_0203774C(CommState_GetLinkMode());
     for (i = 0; i < count; i++) {
         if (gCommPlayerManager->active[i] == 0 || gCommPlayerManager->positionChanged[i] == 1) {
             return FALSE;

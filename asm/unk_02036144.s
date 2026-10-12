@@ -5,7 +5,7 @@
 	thumb_func_start Comm_Update
 Comm_Update: ; 0x02036144
 	push {r4, lr}
-	bl sub_0203817C
+	bl CommState_Main
 	ldr r3, _02036214 ; =gCommCore
 	ldr r0, [r3, #8]
 	cmp r0, #0
@@ -54,7 +54,7 @@ _020361A4:
 	bl Comm_IsNetIdConnected
 	cmp r0, #0
 	beq _020361C6
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	bl sub_02034084
 	cmp r0, #0
 	bne _020361C6
@@ -90,7 +90,7 @@ _020361FE:
 	bl CommWireless_Main
 _02036204:
 	mov r0, #0
-	bl sub_02039A00
+	bl CommState_CheckLinkError
 	bl LinkSync_Update
 	mov r0, #1
 	pop {r4, pc}

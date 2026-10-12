@@ -236,7 +236,7 @@ Static main
     Object src/communication_core.o
     Object src/link_synchronization.o
     Object asm/link_synchronization_data.o
-    Object src/network_communication_state_full.o
+    Object src/comm_state.o
     Object asm/wireless_status_icon_data.o
     Object src/wireless_status_icon.o
     Object src/communication_error.o
@@ -845,52 +845,29 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/NitroSDK/src/mi/mi_init.o
     Object lib/NitroSDK/src/snd/snd_interface.o
     Object lib/asm/nitro_sdk_data.o
-    Object lib/asm/to65_to65_nitro_unified_residual_01_extra17_anchor.o
     Object src/to65_to65_nitro_unified_residual_01_extra17_run01.o
-    Object lib/asm/to65_to65_nitro_unified_residual_03_extra18_anchor.o
     Object src/to65_to65_nitro_unified_residual_03_extra18_run01.o
-    Object lib/asm/to65_to65_nitro_unified_residual_05_extra19_anchor.o
     Object src/to65_to65_nitro_unified_residual_05_extra19_run01.o
-    Object lib/asm/to65_nitro_unified_residual_07.o
-    Object lib/asm/to90_extra2122_anchor.o
     Object src/to90_extra2122_run01.o
-    Object lib/asm/to90_extra2123_anchor.o
     Object src/to90_extra2123_run01.o
-    Object lib/asm/op90_to90_extra2123_residual_1_anchor.o
-    Object lib/asm/op90_op90_to90_extra2123_residual_1_residual_1_anchor.o
     Object src/op90_op90_to90_extra2123_residual_1_residual_1_r01.o
     Object src/op90_to90_extra2123_residual_1_r01.o
-    Object lib/asm/to90_extra2124_anchor.o
     Object src/to90_extra2124_run01.o
-    Object lib/asm/to90_extra2125_anchor.o
     Object src/to90_extra2125_run01.o
-    Object lib/asm/to90_extra2126_anchor.o
     Object src/to90_extra2126_run01.o
-    Object lib/asm/to90_extra2545_anchor.o
-    Object lib/asm/to80_extra2570_anchor.o
     Object lib/NitroSDK/src/dgt_hash.o
-    Object lib/asm/op90_to90_extra2545_residual_2_anchor.o
     Object src/op90_to90_extra2545_residual_2_r01.o
-    Object lib/asm/to65_to65_nitro_unified_residual_23_extra21_anchor.o
-    Object lib/asm/to90_extra2130_anchor.o
     Object lib/NitroSDK/src/tp.o
     Object lib/NitroSDK/src/mic.o
     Object lib/NitroSDK/src/pm.o
     Object lib/NitroSDK/src/rtc/rtc_api.o
-    Object lib/asm/op90_to65_nitro_unified_residual_26_anchor.o
     Object src/op90_to65_nitro_unified_residual_26_r01.o
-    Object lib/asm/to90_extra2127_anchor.o
     Object src/to90_extra2127_run01.o
-    Object lib/asm/op90_to90_extra2127_residual_1_anchor.o
     Object src/op90_to90_extra2127_residual_1_r01.o
     Object src/to90_extra2127_run02.o
-    Object lib/asm/to90_extra2128_anchor.o
-    Object lib/asm/op90_to90_extra2128_residual_1_anchor.o
     Object src/op90_to90_extra2128_residual_1_r01.o
     Object src/to90_extra2128_run01.o
-    Object lib/asm/to65_to65_nitro_unified_residual_36_extra22_anchor.o
     Object src/to65_to65_nitro_unified_residual_36_extra22_run01.o
-    Object lib/asm/to65_to65_nitro_unified_residual_38_extra23_anchor.o
     Object lib/NitroSDK/src/card/card_spi_wait_cycles.o
     Object lib/NitroSDK/src/card/card_spi_wait_init.o
     Object lib/NitroSDK/src/card/card_spi_wait.o
@@ -898,24 +875,16 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/NitroSDK/src/wm_requests.o
     Object lib/NitroSDK/src/wm_data_sharing.o
     Object lib/NitroSDK/src/wm_settings.o
-    Object lib/asm/to65_to65_nitro_unified_residual_40_extra24_anchor.o
     Object lib/NitroSDK/src/ctrdg/ctrdg_init.o
     Object lib/NitroSDK/src/ctrdg/ctrdg_module_info.o
-    Object lib/asm/to65_to65_nitro_unified_residual_42_extra25_anchor.o
     Object lib/NitroSDK/src/ctrdg/ctrdg_flash_common.o
-    Object lib/asm/to65_to65_nitro_unified_residual_44_extra26_anchor.o
-    Object lib/asm/op90_to65_to65_nitro_unified_residual_44_extra26_residual_1_anchor.o
     Object lib/NitroSDK/src/ctrdg/ctrdg_flash_le39fw512.o
     Object lib/NitroSDK/src/ctrdg/ctrdg_flash_mx29l010.o
     Object lib/NitroSDK/src/ctrdg/ctrdg_flash_mn63f805mnp.o
     Object lib/NitroSDK/src/ctrdg/ctrdg_task.o
-    Object lib/asm/to65_to65_nitro_unified_residual_46_extra27_anchor.o
-    Object lib/asm/to90_extra2154_anchor.o
-    Object lib/asm/op90_to90_extra2154_residual_1_anchor.o
     Object lib/NitroSDK/src/math/math_qsort.o
     Object lib/NitroSDK/src/std_string.o
     Object lib/NitroSDK/src/std_sprintf_writer.o
-    Object lib/asm/op90_to90_extra2155_residual_1_anchor.o
     Object lib/NitroSDK/src/std_sprintf.o
     Object lib/NitroSDK/src/snd/SND_main.o
     Object lib/NitroSDK/src/snd/SND_command.o
@@ -1312,8 +1281,8 @@ Overlay field
     Object src/ov01_21f4704_opus_partial_15.o
     Object asm/to70_overlay_01_021F4704_residual_15_extra743_anchor.o
     Object src/to70_overlay_01_021F4704_residual_15_extra743_run01.o
-    Object src/field_overlay_app_dispatch.o
-    Object src/field_friendship_exchange.o
+    Object src/field/bottom_screen_app.o
+    Object src/field/pal_pad_registration.o
     Object asm/overlay_01_sprite_data.o
     Object src/field/map_object_billboard_motion.o
     Object asm/overlay_01_021F72DC_residual_16.o
@@ -1499,9 +1468,7 @@ Overlay OVY_2
     Object src/overlay02_248728_partial_35.o
     Object src/overlay02_field_transition_r36.o
     Object src/overlay02_248728_partial_36.o
-    Object src/to46_overlay02_primo_bit_rotate.o
-    Object src/overlay02_slop_r37_passwords.o
-    Object src/overlay02_primo_password.o
+    Object src/field/primo_password.o
     Object src/overlay02_slop_r37_props.o
     Object src/overlay02_248728_partial_37.o
     Object src/overlay02_slop_r38_models.o
@@ -2215,7 +2182,7 @@ Overlay OVY_49
     Object src/wifi_plaza_instrument.o
     Object src/wifi_plaza_event.o
     Object asm/to90_extra2491_anchor.o
-    Object src/ov49_022695c4.o
+    Object src/wifi_plaza_mover_markers.o
 }
 Overlay trainer_card
 {

@@ -63,7 +63,7 @@
 #include "gear_phone_ring_manager.h"
 
 // Field bottom-screen app 0, the touchscreen start menu (ScrCmd_TouchscreenMenuShow, AppEntry 0 of
-// field_overlay_app_dispatch.c): the start-menu icons (msg 196), the running shoes and action buttons,
+// field/bottom_screen_app.c): the start-menu icons (msg 196), the running shoes and action buttons,
 // the two registered-item buttons, the Safari / Park / Sport ball counters and the Pokegear caller name.
 // Touching an icon writes *lastTouchMenuInput (1 = MENU, menu index + 2), which start_menu.c and
 // field_control.c consume.
@@ -176,9 +176,9 @@ typedef struct TouchscreenMenuBgFile {
     u32 otherColumns[2];
 } TouchscreenMenuBgFile;
 
-// Defined in field_overlay_app_dispatch.c, which has no public header.
-BOOL ov01_021F6BB0(int spriteId);
-BOOL ov01_021F6BD0(int scriptId);
+// Defined in field/bottom_screen_app.c; its header does not declare these.
+BOOL IsSpriteIdWithoutTalkAction(int spriteId);
+BOOL IsScriptIdWithoutTalkAction(int scriptId);
 
 // Defined in link_lobby_2.c / link_lobby_4.c and communication_player_movement.c; no header declares them.
 BOOL sub_02058258(void);
@@ -376,14 +376,14 @@ BOOL ov27_0225A2C8(void *unused) {
     return TRUE;
 }
 
-// ov01_021F6B50: a start-menu action was launched; the task plays the selected icon's anim.
+// FieldSystem_RequestTouchscreenMenuSelectedIconAnim: a start-menu action was launched; the task plays the selected icon's anim.
 void TouchscreenMenu_RequestSelectedIconAnim(SysTask *task) {
     TouchscreenMenuData *data = SysTask_GetData(task);
     GF_ASSERT(data != NULL);
     data->selectedIconAnim = TRUE;
 }
 
-// ov01_021F6B64: registered item 1 or 2 was used from the field.
+// FieldSystem_RequestTouchscreenMenuRegisteredItemAnim: registered item 1 or 2 was used from the field.
 void TouchscreenMenu_RequestRegisteredItemAnim(SysTask *task, int item) {
     TouchscreenMenuData *data = SysTask_GetData(task);
     GF_ASSERT(data != NULL);
@@ -525,7 +525,7 @@ int TouchscreenMenu_GetActionType(TouchscreenMenuData *data) {
     actionType = ov01_021E7F54(fieldSystem);
     if (actionType == 1) {
         FieldSystem_GetFacingObject(fieldSystem, &facingObj);
-        if (ov01_021F6BD0(MapObject_GetScriptID(facingObj)) || ov01_021F6BB0(MapObject_GetSpriteID(facingObj))) {
+        if (IsScriptIdWithoutTalkAction(MapObject_GetScriptID(facingObj)) || IsSpriteIdWithoutTalkAction(MapObject_GetSpriteID(facingObj))) {
             actionType = 0;
         }
     }

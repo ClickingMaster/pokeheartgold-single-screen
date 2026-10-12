@@ -11,7 +11,7 @@
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
 .public sub_02037FF0
-.public sub_02038C1C
+.public CommState_SetMaxEntries
 .public sub_0205A904
 .public UnionRoomObjects_ResetSlots
 .public sub_02091570

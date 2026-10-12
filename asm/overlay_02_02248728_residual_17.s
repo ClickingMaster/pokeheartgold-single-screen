@@ -1408,11 +1408,11 @@
 	.public ov02_0224C93C
 	.public ov02_0224C9B8
 	.public ov02_0224CA38
-	.public ov02_0224CA58
-	.public ov02_0224CAB8
-	.public ov02_0224CBF8
-	.public ov02_0224CD38
-	.public ov02_0224CD74
+	.public PrimoPassword_RotateBitsRight
+	.public PrimoPassword_DecodeWallpaper
+	.public PrimoPassword_DecodeCheck2
+	.public PrimoPassword_CheckWallpaper
+	.public PrimoPassword_Check2
 	.public ov02_0224CDB0
 	.public ov02_0224CE28
 	.public ov02_0224CFD8

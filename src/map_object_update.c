@@ -6,7 +6,7 @@
 #include "metatile_behavior.h"
 #include "overlay_01.h"
 #include "communication_command.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "unk_02054648.h"
 
 // Defined elsewhere without a header yet.
@@ -652,7 +652,7 @@ u32 MapObject_CheckCollision(LocalMapObject *object, VecFx32 *position, int x, i
     if (MapObject_IsMoveBlockedByBehavior(object, x, z, direction) == TRUE) {
         result |= 2;
     }
-    if (sub_0203401C(sub_0203993C())) {
+    if (sub_0203401C(CommState_GetLinkMode())) {
         if (sub_02060BFC(object, x, y, z) == TRUE) {
             result |= 4;
         }

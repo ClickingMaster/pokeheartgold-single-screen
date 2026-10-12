@@ -30,7 +30,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
@@ -233,7 +233,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
         u32 errorCode;
         int msgId;
         if (sub_020393C8()) {
-            u32 *error = sub_020392D8();
+            u32 *error = CommState_GetWifiError();
             msgId = ov45_0222D7CC(error[0], error[1]);
             errorCode = error[0];
         } else {
@@ -252,7 +252,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
     case 10:
         if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) || System_GetTouchNew() == TRUE) {
             if (sub_020393C8()) {
-                u32 *error = sub_020392D8();
+                u32 *error = CommState_GetWifiError();
                 if (ov45_0222D7FC(error[0], error[1]) == FALSE) {
                     *state = 11;
                 } else {
@@ -282,7 +282,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
         break;
     }
     case 13:
-        if (!sub_02037D78()) {
+        if (!CommState_Exists()) {
             *state = 4;
         }
         break;
@@ -294,7 +294,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
         (*state)++;
         break;
     case 15:
-        if (!sub_02037D78()) {
+        if (!CommState_Exists()) {
             WiFiPlazaConnect_ClearMessageBox(&work->msgBox);
             WiFiPlazaConnect_ClearMessageBox(&work->statusBox);
             *state = 7;
@@ -402,7 +402,7 @@ BOOL WiFiPlazaConnect_DisconnectMain(OverlayManager *man, int *state) {
         *state = 6;
         break;
     case 6:
-        if (!sub_02037D78()) {
+        if (!CommState_Exists()) {
             // the status box is not set up on this screen (frame type 0): this does nothing
             WiFiPlazaConnect_StopWaitingIcon(&work->statusBox);
             ov45_0222B270(args->lobby);

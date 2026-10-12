@@ -215,7 +215,7 @@
 .public sub_02039418
 .public sub_0203946C
 .public sub_020399EC
-.public sub_02039AD8
+.public CommState_SetError
 .public sub_02039FB8
 .public sub_02039FD8
 .public WirelessStatusIcon_Create

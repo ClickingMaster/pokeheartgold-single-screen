@@ -73,7 +73,7 @@
 #include "friend_group_access.h"
 #include "frontier_data_access.h"
 #include "save_gts.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "unk_02055418.h"
@@ -904,7 +904,7 @@ static BOOL Task_WirelessTrade(TaskManager *taskman) {
     WirelessTradeData *data = TaskManager_GetEnvironment(taskman);
     switch (data->state) {
     case WIRELESS_TRADE_STATE_0:
-        if (!sub_02039998()) {
+        if (!CommState_IsWifi()) {
             CallTask_LeaveOverworld(taskman);
         }
         data->state++;
@@ -945,7 +945,7 @@ static BOOL Task_WirelessTrade(TaskManager *taskman) {
             data->tradeSequence.bgType = TS_BG_NIGHT;
             break;
         }
-        if (sub_02039998()) {
+        if (CommState_IsWifi()) {
             data->tradeSequence.bgType = TS_BG_UNK_3;
         }
         CallApplicationAsTask(taskman, &sOverlayTemplate_TradeSequence, &data->tradeSequence);
@@ -977,7 +977,7 @@ static BOOL Task_WirelessTrade(TaskManager *taskman) {
         data->state = 2;
         GameStats *gameStats = Save_GameStats_Get(fieldSystem->saveData);
         GameStats_AddScore(gameStats, SCORE_EVENT_LINK_TRADE);
-        if (sub_02039998()) {
+        if (CommState_IsWifi()) {
             GameStats_Inc(gameStats, GAME_STAT_UNK114);
         }
         break;

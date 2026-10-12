@@ -12,10 +12,10 @@
 #include "overlay_42.h"
 
 // Tile attribute sets tested by the player movement handlers (rodata of this overlay)
-extern const u8 _02269624[];
-extern const u8 ov49_02269628[];
-extern const u8 ov49_0226962C[];
-extern const u8 ov49_02269634[];
+extern const u8 sWiFiPlazaWalkUpActionTiles[];
+extern const u8 sWiFiPlazaPropTiles[];
+extern const u8 sWiFiPlazaCheckActionTiles[];
+extern const u8 sWiFiPlazaStandActionTiles[];
 
 void WiFiPlazaMap_PosToVecFx32(const s16 *pos, s32 *vec) {
     vec[0] = pos[0] << 12;
@@ -138,44 +138,44 @@ BOOL WiFiPlazaMap_FindTileTag(WiFiPlazaMap *map, int tag, u16 *outX, u16 *outY, 
     return FALSE;
 }
 
-BOOL ov49_02258A30(u8 attr) {
+BOOL WiFiPlazaMap_IsStandActionTile(u8 attr) {
     u32 i;
 
     for (i = 0; i < 32; i++) {
-        if (attr == ov49_02269634[i]) {
+        if (attr == sWiFiPlazaStandActionTiles[i]) {
             return TRUE;
         }
     }
     return FALSE;
 }
 
-BOOL ov49_02258A50(u8 attr) {
+BOOL WiFiPlazaMap_IsWalkUpActionTile(u8 attr) {
     u32 i;
 
     for (i = 0; i < 3; i++) {
-        if (attr == _02269624[i]) {
+        if (attr == sWiFiPlazaWalkUpActionTiles[i]) {
             return TRUE;
         }
     }
     return FALSE;
 }
 
-BOOL ov49_02258A70(u8 attr) {
+BOOL WiFiPlazaMap_IsCheckActionTile(u8 attr) {
     u32 i;
 
     for (i = 0; i < 7; i++) {
-        if (attr == ov49_0226962C[i]) {
+        if (attr == sWiFiPlazaCheckActionTiles[i]) {
             return TRUE;
         }
     }
     return FALSE;
 }
 
-BOOL ov49_02258A90(u8 attr) {
+BOOL WiFiPlazaMap_IsPropTile(u8 attr) {
     u32 i;
 
     for (i = 0; i < 4; i++) {
-        if (attr == ov49_02269628[i]) {
+        if (attr == sWiFiPlazaPropTiles[i]) {
             return TRUE;
         }
     }

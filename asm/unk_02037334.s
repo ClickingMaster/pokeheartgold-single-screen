@@ -13,7 +13,7 @@ Comm_ReceiveFromChildren: ; 0x02037334
 	ldrb r0, [r1, r0]
 	cmp r0, #0
 	bne _020373A0
-	bl sub_0203993C
+	bl CommState_GetLinkMode
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
 	bl sub_02033FC4

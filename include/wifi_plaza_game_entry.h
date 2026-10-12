@@ -64,14 +64,14 @@ typedef struct WiFiPlazaGameEntry {
     WiFiPlazaGameStatus status;    // 0x3C
 } WiFiPlazaGameEntry;
 
-BOOL WiFiPlazaGameEntry_Register(void *state, WiFiPlazaRoomWork *room, int playerIndex);
-BOOL WiFiPlazaGameEntry_EndLink(void *state, WiFiPlazaRoomWork *room);
-BOOL WiFiPlazaGameEntry_ReadSign(void *state, WiFiPlazaRoomWork *room);
-void WiFiPlazaGameEntry_PrintMessage(WiFiPlazaGameEntry *entry, void *state, WiFiPlazaRoomWork *room, u32 msgId, u32 nextStep);
-void WiFiPlazaGameEntry_StartSync(WiFiPlazaGameEntry *entry, void *state, u8 nextStep, u8 syncId);
+BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, int playerIndex);
+BOOL WiFiPlazaGameEntry_EndLink(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room);
+BOOL WiFiPlazaGameEntry_ReadSign(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room);
+void WiFiPlazaGameEntry_PrintMessage(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 msgId, u32 nextStep);
+void WiFiPlazaGameEntry_StartSync(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerState *state, u8 nextStep, u8 syncId);
 void WiFiPlazaGameEntry_InitMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, u32 count, u32 firstMsg);
 void WiFiPlazaGameEntry_FreeMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room);
-BOOL WiFiPlazaGameEntry_UpdateWaiting(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, WiFiPlazaGameEntryParam *param, void *state, int playerIndex);
+BOOL WiFiPlazaGameEntry_UpdateWaiting(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, WiFiPlazaGameEntryParam *param, WiFiPlazaPlayerState *state, int playerIndex);
 void WiFiPlazaGameStatus_Open(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 game, u32 showSeconds, s32 frames);
 void WiFiPlazaGameStatus_Close(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room);
 void WiFiPlazaGameStatus_SetFrames(WiFiPlazaGameStatus *status, s32 frames);

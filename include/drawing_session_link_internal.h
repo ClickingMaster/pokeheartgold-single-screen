@@ -32,9 +32,9 @@ int Comm_CountConnected(void);
 int Wireless_GetConnectedBitmap(void);
 int DrawingSession_GetMemberCount(void);
 int MATH_CountPopulation(u32);
-void sub_02038C1C(int);
+void CommState_SetMaxEntries(int);
 void GF_AssertFail(void);
-void sub_020398D4(int, int);
+void CommState_SetErrorWatch(int, int);
 void sub_02037088(int, const void *, int);
 
 void *DrawingSessionLink_RegisterCommands(void *);

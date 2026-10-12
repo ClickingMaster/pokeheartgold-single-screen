@@ -8,8 +8,8 @@
 .public Comm_SendCommand
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
-.public sub_02038C1C
-.public sub_020398D4
+.public CommState_SetMaxEntries
+.public CommState_SetErrorWatch
 .public RecordMixingLink_RegisterCommands
 .public sub_02091570
 .public sub_02091590

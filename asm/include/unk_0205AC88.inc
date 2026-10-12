@@ -15,8 +15,8 @@
 .public PlayerProfile_GetTrainerID
 .public PlayerProfile_GetAvatar
 .public PalPad_PlayerIdIsFriendOrMutual
-.public sub_02037F94
-.public sub_02037FCC
+.public CommState_GetJoinResult
+.public CommState_IsAlternateLinked
 .public FieldSystem_TaskIsRunning
 .public UnionRoom_GetFieldSystem
 .public UnionRoom_GetRecord

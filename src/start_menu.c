@@ -23,7 +23,7 @@
 #include "map_object.h"
 #include "menu_input_state.h"
 #include "overlay_01.h"
-#include "overlay_01_021F6830.h"
+#include "field/bottom_screen_app.h"
 #include "pokedex.h"
 #include "pokedex_util.h"
 #include "save_local_field_data.h"
@@ -36,7 +36,7 @@
 #include "system.h"
 #include "sound_playback.h"
 #include "comm_wireless.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "unk_0205A44C.h"
 #include "union_room_objects.h"
 #include "player_avatar_movement.h"
@@ -337,8 +337,8 @@ static BOOL Task_StartMenu(TaskManager *taskManager) {
     switch (startMenu->state) {
     case START_MENU_STATE_INIT:
         MapObjectManager_PauseAllMovement(fieldSystem->mapObjectManager);
-        if (ov01_021F6B00(fieldSystem)) {
-            ov01_021F6A9C(fieldSystem, 0, NULL);
+        if (FieldSystem_GetBottomScreenAppId(fieldSystem)) {
+            FieldSystem_SwitchBottomScreenApp(fieldSystem, 0, NULL);
             startMenu->state = START_MENU_STATE_2;
             break;
         }
@@ -351,10 +351,10 @@ static BOOL Task_StartMenu(TaskManager *taskManager) {
         startMenu->state = START_MENU_STATE_HANDLE_INPUT;
         break;
     case START_MENU_STATE_2:
-        if (ov01_021F6B10(fieldSystem) == 6) {
+        if (FieldSystem_GetBottomScreenAppState(fieldSystem) == 6) {
             Task_StartMenu_DrawCursor(taskManager);
             fieldSystem->unkD2_0 = 1;
-        } else if (ov01_021F6B10(fieldSystem) == 1) {
+        } else if (FieldSystem_GetBottomScreenAppState(fieldSystem) == 1) {
             ItemCheckUseData_Init(fieldSystem, &startMenu->itemCheckUseData);
             FieldMove_InitCheckData(fieldSystem, &startMenu->fieldMoveCheckData);
             startMenu->state = START_MENU_STATE_HANDLE_INPUT;
@@ -565,7 +565,7 @@ static BOOL Task_StartMenu_HandleInput(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
-    if (!ov01_021F6B00(fieldSystem) && ov01_021F6B10(fieldSystem) == TRUE) {
+    if (!FieldSystem_GetBottomScreenAppId(fieldSystem) && FieldSystem_GetBottomScreenAppState(fieldSystem) == TRUE) {
         if (gSystem.newKeys & PAD_BUTTON_A) {
             if (!StartMenu_HandleKeyInput(taskManager, fieldSystem, startMenu)) {
                 return FALSE;
@@ -599,7 +599,7 @@ static BOOL StartMenu_HandleKeyInput(TaskManager *taskManager, FieldSystem *fiel
             if (FieldSystem_StartMenuActionIsAvailable(fieldSystem, (StartMenuAction)startMenu->selectionToAction[startMenu->selectedIndex])) {
                 TaskFunc func = sStartMenuActions[startMenu->selectionToAction[startMenu->selectedIndex]].func;
                 sub_0203DF64(fieldSystem, 0);
-                ov01_021F6B50(fieldSystem);
+                FieldSystem_RequestTouchscreenMenuSelectedIconAnim(fieldSystem);
                 fieldSystem->lastTouchMenuInput = 0;
                 fieldSystem->lastStartMenuAction = startMenu->selectionToAction[startMenu->selectedIndex];
                 return func(taskManager);
@@ -641,7 +641,7 @@ static BOOL StartMenu_HandleTouchInput(TaskManager *taskManager, FieldSystem *fi
                     TaskFunc func = sStartMenuActions[startMenu->selectionToAction[startMenu->selectedIndex]].func;
                     fieldSystem->lastTouchMenuInput = 0;
                     sub_0203DF64(fieldSystem, 1);
-                    ov01_021F6B50(fieldSystem);
+                    FieldSystem_RequestTouchscreenMenuSelectedIconAnim(fieldSystem);
                     fieldSystem->lastStartMenuAction = startMenu->selectionToAction[startMenu->selectedIndex];
                     return func(taskManager);
                 } else {
@@ -1127,7 +1127,7 @@ static BOOL Task_StartMenu_HandleSelection_Save(TaskManager *taskManager) {
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
 
-    ov01_021F6A9C(fieldSystem, 1, NULL);
+    FieldSystem_SwitchBottomScreenApp(fieldSystem, 1, NULL);
     startMenu->state = START_MENU_STATE_SAVE;
     return TRUE;
 }
@@ -1136,7 +1136,7 @@ static void sub_0203D264(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
-    if (ov01_021F6B00(fieldSystem) == TRUE) {
+    if (FieldSystem_GetBottomScreenAppId(fieldSystem) == TRUE) {
         startMenu->state = START_MENU_STATE_7;
     }
 }
@@ -1145,7 +1145,7 @@ static void sub_0203D288(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
-    if (!ov01_021F6B00(fieldSystem) && ov01_021F6B10(fieldSystem) == TRUE) {
+    if (!FieldSystem_GetBottomScreenAppId(fieldSystem) && FieldSystem_GetBottomScreenAppState(fieldSystem) == TRUE) {
         if (fieldSystem->lastTouchMenuInput == 1) {
             fieldSystem->lastTouchMenuInput = 0;
             startMenu->state = START_MENU_STATE_CLOSE;
@@ -1159,7 +1159,7 @@ static BOOL sub_0203D2CC(TaskManager *taskManager) {
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
 
-    ov01_021F6A9C(fieldSystem, 8, NULL);
+    FieldSystem_SwitchBottomScreenApp(fieldSystem, 8, NULL);
     startMenu->state = START_MENU_STATE_19;
     return TRUE;
 }

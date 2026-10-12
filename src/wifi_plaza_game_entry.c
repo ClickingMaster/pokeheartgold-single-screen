@@ -4,13 +4,13 @@
 
 #include "constants/sndseq.h"
 
+#include "comm_state.h"
 #include "communication_player_state.h"
 #include "font.h"
 #include "link_synchronization.h"
 #include "sound_playback.h"
 #include "system.h"
 #include "unk_02035900.h"
-#include "unk_02037C94.h"
 
 // Communication calls without a public declaration
 void CommPlayerInfo_SetProfile(void *profile);
@@ -23,7 +23,7 @@ void sub_02039B38(void);
 extern const u8 sWiFiPlazaGameStatusHeights[2];
 extern const ListMenuTemplate sWiFiPlazaGameEntryMenuTemplate;
 
-BOOL WiFiPlazaGameEntry_Register(void *state, WiFiPlazaRoomWork *room, int playerIndex) {
+BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, int playerIndex) {
     u8 memberIds[4];
     WiFiPlazaWork *lobby;
     s32 connection;
@@ -33,7 +33,7 @@ BOOL WiFiPlazaGameEntry_Register(void *state, WiFiPlazaRoomWork *room, int playe
     s32 hostId;
     s32 failed;
     int savedPlayerIndex;
-    void *savedState;
+    WiFiPlazaPlayerState *savedState;
     u16 *packet;
     s32 netId;
     s32 timeout;
@@ -421,7 +421,7 @@ next:
         }
         break;
     case 15: // start the game
-        sub_020398D4(0, 1);
+        CommState_SetErrorWatch(0, 1);
         if (ov45_0222F464() == 1) {
             ov45_0222A498(lobby, memberIds);
             ov45_0222AC14(lobby, param->game, ov45_0222F314(param->slot), memberIds[0], memberIds[1], memberIds[2], memberIds[3], 1);
@@ -546,10 +546,10 @@ next:
     return FALSE;
 }
 
-BOOL WiFiPlazaGameEntry_EndLink(void *state, WiFiPlazaRoomWork *room) {
+BOOL WiFiPlazaGameEntry_EndLink(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
     switch (WiFiPlazaPlayerState_GetStep(state)) {
     case 0:
-        sub_020398D4(0, 0);
+        CommState_SetErrorWatch(0, 0);
         if (sub_020392A0() == FALSE) {
             CommPlayerInfo_Free();
             sub_0203986C();
@@ -566,7 +566,7 @@ BOOL WiFiPlazaGameEntry_EndLink(void *state, WiFiPlazaRoomWork *room) {
     return FALSE;
 }
 
-BOOL WiFiPlazaGameEntry_ReadSign(void *state, WiFiPlazaRoomWork *room) {
+BOOL WiFiPlazaGameEntry_ReadSign(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
     WiFiPlazaGameStatus *status = WiFiPlazaPlayerState_GetWork(state);
     u32 game;
     u32 msgId;
@@ -576,7 +576,7 @@ BOOL WiFiPlazaGameEntry_ReadSign(void *state, WiFiPlazaRoomWork *room) {
     switch (WiFiPlazaPlayerState_GetStep(state)) {
     case 0:
         newStatus = WiFiPlazaPlayerState_AllocWork(state, sizeof(WiFiPlazaGameStatus));
-        switch (ov49_0225A040(room)) {
+        switch (WiFiPlazaRoom_GetActionTile(room)) {
         case 0x27:
             msgId = 0x2A;
             game = 0;
@@ -614,13 +614,13 @@ BOOL WiFiPlazaGameEntry_ReadSign(void *state, WiFiPlazaRoomWork *room) {
     return FALSE;
 }
 
-void WiFiPlazaGameEntry_PrintMessage(WiFiPlazaGameEntry *entry, void *state, WiFiPlazaRoomWork *room, u32 msgId, u32 nextStep) {
+void WiFiPlazaGameEntry_PrintMessage(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 msgId, u32 nextStep) {
     WiFiPlazaRoom_PrintMessage(room, WiFiPlazaRoom_GetMsgString(room, 0, msgId));
     entry->nextStep = nextStep;
     WiFiPlazaPlayerState_SetStep(state, 25);
 }
 
-void WiFiPlazaGameEntry_StartSync(WiFiPlazaGameEntry *entry, void *state, u8 nextStep, u8 syncId) {
+void WiFiPlazaGameEntry_StartSync(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerState *state, u8 nextStep, u8 syncId) {
     entry->nextStep = nextStep;
     entry->syncId = syncId;
     entry->syncDelay = 0;
@@ -648,7 +648,7 @@ void WiFiPlazaGameEntry_FreeMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *r
     WiFiPlazaRoom_DeleteListItems(room);
 }
 
-BOOL WiFiPlazaGameEntry_UpdateWaiting(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, WiFiPlazaGameEntryParam *param, void *state, int playerIndex) {
+BOOL WiFiPlazaGameEntry_UpdateWaiting(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, WiFiPlazaGameEntryParam *param, WiFiPlazaPlayerState *state, int playerIndex) {
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
     s32 connection = sub_0203988C();
     u32 members = ov45_0222F314(param->slot);

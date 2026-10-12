@@ -16,7 +16,7 @@
 // The game info sent in the beacons (0x5C bytes; at offset 0x50 of a scanned parent's description).
 typedef struct CommBeacon {
     u32 trainerId;
-    u8 kind;        // 0x04: link kind (sub_0203993C)
+    u8 kind;        // 0x04: link kind (CommState_GetLinkMode)
     u8 id;          // 0x05: sub_02039954
     u8 memberCount; // 0x06: connected players
     u8 unk_07;
@@ -100,9 +100,9 @@ u16 WM_GetNextTgid(void);
 u16 WM_GetDispersionBeaconPeriod(void);
 int CommPlayerInfo_DropDisconnected(void);
 
-int sub_0203993C(void);
+int CommState_GetLinkMode(void);
 int sub_02039954(void);
-void sub_020399DC(u32);
+void CommState_ShowErrorAndHalt(u32);
 BOOL sub_02037474(void);
 BOOL sub_0203401C(int value);
 int sub_02033FC4(u16);
@@ -251,7 +251,7 @@ void CommWireless_OnParentFound(void *parentInfo) {
     int kind;
     int id;
 
-    kind = sub_0203993C();
+    kind = CommState_GetLinkMode();
     id = sub_02039954();
     beacon = data + 0x50;
 
@@ -554,7 +554,7 @@ BOOL CommWireless_ConnectToParent(int slot) {
         return FALSE;
     }
     if (Wireless_GetState() == 1) {
-        int kind = sub_0203993C();
+        int kind = CommState_GetLinkMode();
         u32 offset = slot * sizeof(CommParentInfo);
         gCommWireless.work->currentChannel = *(u16 *)((u8 *)gCommWireless.work + offset + offsetof(CommWirelessWork, parents[0].channel));
         if (sub_0203401C(kind)) {
@@ -586,7 +586,7 @@ void CommWireless_UpdateParents(void) {
 }
 
 void CommWireless_BuildBeacon(void) {
-    int kind = sub_0203993C();
+    int kind = CommState_GetLinkMode();
     PlayerProfile *profile = CommWireless_GetProfile();
 
     if (kind != 15) {
@@ -600,7 +600,7 @@ void CommWireless_BuildBeacon(void) {
         MI_CpuCopy8(profile, beacon + 0x10, PlayerProfile_sizeof());
         MI_CpuCopy8(gCommWireless.work->ruleset, beacon + 0x30, LinkBattleRuleset_sizeof());
         *(u32 *)beacon = PlayerProfile_GetTrainerID(profile);
-        beacon[4] = sub_0203993C();
+        beacon[4] = CommState_GetLinkMode();
         beacon[5] = sub_02039954();
         MI_CpuCopy8(&gCommWireless.work->mail, beacon + 8, 8);
         beacon += 0x54;
@@ -608,7 +608,7 @@ void CommWireless_BuildBeacon(void) {
     } else {
         u8 *beacon = (u8 *)gCommWireless.work->beacon;
         *(u32 *)beacon = PlayerProfile_GetTrainerID(profile);
-        beacon[4] = sub_0203993C();
+        beacon[4] = CommState_GetLinkMode();
         beacon[5] = sub_02039954();
         MI_CpuCopy8(gCommWireless.work->customBeacon, beacon + 8, 0x54);
     }
@@ -648,7 +648,7 @@ void CommWireless_Update(int count, CommWirelessWork *unused) {
         }
     }
     if (Wireless_GetError() == 0x19) {
-        sub_020399DC(0);
+        CommState_ShowErrorAndHalt(0);
     }
     switch (state) {
     case 0:
@@ -697,8 +697,8 @@ void CommWireless_Update(int count, CommWirelessWork *unused) {
             gCommWireless.tgid = WM_GetNextTgid();
         }
         CommWireless_BuildBeacon();
-        maxEntry = sub_02033FC4((u16)sub_0203993C());
-        beaconPeriod = CommWireless_GetBeaconPeriod((u16)sub_0203993C());
+        maxEntry = sub_02033FC4((u16)CommState_GetLinkMode());
+        beaconPeriod = CommWireless_GetBeaconPeriod((u16)CommState_GetLinkMode());
         Wireless_StartParent(0, gCommWireless.tgid, saved, maxEntry, beaconPeriod, gCommWireless.work->entryFlag);
         gCommWireless.work->currentChannel = saved;
         break;

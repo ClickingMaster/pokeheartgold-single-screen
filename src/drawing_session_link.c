@@ -70,7 +70,7 @@ void DrawingSessionLink_HandleJoinRequest(int id, void *unused, const FourBytes 
             } else {
                 U32(work, 0x93b4) |= 1 << id;
                 local.data[3] = 1;
-                sub_02038C1C(Comm_CountConnected());
+                CommState_SetMaxEntries(Comm_CountConnected());
             }
             break;
         case 1:
@@ -137,7 +137,7 @@ void sub_0208FAA8(int value, void *b, void *c, DrawingSessionLinkWork *work) {
             U32(work, 0x93fc) = 1;
         }
     }
-    sub_020398D4(0, 1);
+    CommState_SetErrorWatch(0, 1);
 }
 
 void sub_0208FAEC(void *a, void *b, void *c, DrawingSessionLinkWork *work) {

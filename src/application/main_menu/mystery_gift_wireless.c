@@ -38,9 +38,9 @@ extern u16 Comm_GetLocalNetId(void);
 extern int Comm_IsNetIdConnected(u16 a0);
 extern BOOL sub_02037474(void);
 extern void CommRandom_Init(void *a0);
-extern void sub_02037E1C(int a0);
-extern int sub_02037EC8(void);
-extern void sub_02037E9C(void);
+extern void CommState_ConnectToSlot(int a0);
+extern int CommState_IsLinked(void);
+extern void CommState_RequestShutdown(void);
 extern int sub_02037088(int a0, void *a1, void *a2);
 extern void sub_02038114(void *a0, void *a1);
 extern void sub_02038148(void *a0, int a1);
@@ -100,12 +100,12 @@ void ov74_02229C5C(void) {
 }
 
 void ov74_02229C60(void) {
-    sub_02037E1C(sMysteryGiftCommWork->channel);
+    CommState_ConnectToSlot(sMysteryGiftCommWork->channel);
     MysteryGiftComm_SetState(ov74_02229C80, 0);
 }
 
 void ov74_02229C80(void) {
-    if (sub_02037EC8()) {
+    if (CommState_IsLinked()) {
         sMysteryGiftCommWork->received = FALSE;
         CommPlayerInfo_SendLocal();
         LinkSync_StartSync(0xAB);
@@ -200,7 +200,7 @@ void ov74_02229DE0(int i) {
 void MysteryGiftComm_Free(void) {
     Heap_FreeExplicit(HEAP_ID_15, sMysteryGiftCommWork);
     sMysteryGiftCommWork = NULL;
-    sub_02037E9C();
+    CommState_RequestShutdown();
 }
 
 void MysteryGiftComm_RegisterCommands(void *owner) {

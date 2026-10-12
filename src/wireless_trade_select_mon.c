@@ -63,7 +63,7 @@
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "unk_02088288.h"
 #include "update_dex_received.h"
@@ -2417,7 +2417,7 @@ void WirelessTradeSelectMon_UpdateTimeout(WirelessTradeSelectMon *work) {
     if (work->timeoutActive != FALSE) {
         work->timeoutCounter++;
         if (work->timeoutCounter > 1800) {
-            sub_02039AD8(4);
+            CommState_SetError(4);
         }
     }
 }

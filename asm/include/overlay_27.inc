@@ -151,9 +151,9 @@
 .public ov01_021EEF58
 .public ov01_021EEF60
 .public ov01_021EF00C
-.public ov01_021F6A9C
-.public ov01_021F6BB0
-.public ov01_021F6BD0
+.public FieldSystem_SwitchBottomScreenApp
+.public IsSpriteIdWithoutTalkAction
+.public IsScriptIdWithoutTalkAction
 .public GetPhoneBookEntryName
 .public TouchscreenMenu_Create
 .public TouchscreenMenu_Destroy

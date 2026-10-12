@@ -143,7 +143,7 @@
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
 .public LinkSync_ClearPackets
-.public sub_02037D78
+.public CommState_Exists
 .public Save_VarsFlags_Get
 .public Save_VarsFlags_GetVarAddr
 .public sub_02058284

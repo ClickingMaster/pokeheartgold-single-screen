@@ -16,7 +16,7 @@
 #include "screen_fade.h"
 #include "system.h"
 #include "text.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 
 static const GraphicsBanks sCommunicationErrorGraphicsBanks = {
     .bg = GX_VRAM_BG_256_AB,
@@ -72,12 +72,12 @@ static void VBlankIntr(void) {
 }
 
 static BOOL sub_0203A9FC(u32 *error_code_ptr) {
-    if (!sub_020393C8() || !sub_02037D78()) {
+    if (!sub_020393C8() || !CommState_Exists()) {
         return FALSE;
     }
 
     // TODO: this is probably a struct.
-    u32 *unk = sub_020392D8();
+    u32 *unk = CommState_GetWifiError();
     s32 unk2 = WifiConnection_ClassifyErrorCode(unk[0], unk[1]);
 
     *error_code_ptr = unk[0];

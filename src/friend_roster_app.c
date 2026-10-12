@@ -30,7 +30,7 @@
 #include "friend_roster.h"
 
 // Field bottom-screen app 6: when the Friend Roster is full, the player picks the entry to delete
-// (field_friendship_exchange.c). *result: -1 while running, -2 = QUIT, otherwise the roster index.
+// (field/pal_pad_registration.c). *result: -1 while running, -2 = QUIT, otherwise the roster index.
 
 #define FRIEND_ROSTER_APP_NUM_WINDOWS    18
 #define FRIEND_ROSTER_APP_NUM_SPRITES    4

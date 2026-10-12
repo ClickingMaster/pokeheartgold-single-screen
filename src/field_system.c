@@ -13,7 +13,7 @@
 #include "map_events.h"
 #include "math_util.h"
 #include "overlay_01_021F1AFC.h"
-#include "overlay_01_021F6830.h"
+#include "field/bottom_screen_app.h"
 #include "overlay_124.h"
 #include "overlay_35.h"
 #include "overlay_manager.h"

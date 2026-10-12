@@ -18,7 +18,7 @@
 #include "touchpad.h"
 #include "unk_02026E30.h"
 #include "unk_02035900.h"
-#include "unk_02037C94.h"
+#include "comm_state.h"
 #include "wfc_user_info_warning.h"
 
 FS_EXTERN_OVERLAY(intro_title);
@@ -183,7 +183,7 @@ static void sub_02000F40(u32 param) {
 }
 
 static void sub_02000F60(void) {
-    int r1 = sub_020399B8();
+    int r1 = CommState_GetErrorScreen();
     switch (r1) {
     case 5:
         sub_02000FD8(0, r1);
@@ -219,20 +219,20 @@ static void sub_02000FD8(u32 a0, int a1) {
     int r5;
 
     r4 = 0;
-    sp4 = sub_0203993C();
-    r7 = sub_02039998();
+    sp4 = CommState_GetLinkMode();
+    r7 = CommState_IsWifi();
     gSystem.touchpadReadAuto = FALSE;
     if (a1 == 3) {
         r5 = 3;
     } else {
         if (a0 == 0) {
-            if (sub_02039998() == TRUE) {
+            if (CommState_IsWifi() == TRUE) {
                 r5 = 6;
             } else {
                 r5 = 2;
             }
         } else {
-            if (sub_02039998() == TRUE) {
+            if (CommState_IsWifi() == TRUE) {
                 r5 = 5;
             } else {
                 r5 = 0;
