@@ -41,7 +41,7 @@ typedef struct VsRecorderRankingTeamCounts {
 } VsRecorderRankingTeamCounts;
 
 // launcher (vs_recorder_app_2.c): flypoint flag 27 is set
-BOOL sub_02087E1C(VsRecorderWork *work);
+BOOL VsRecorderApp_HasVisitedBattleFrontier(VsRecorderWork *work);
 
 extern const VsRecorderRankingTeamCounts ov40_022453A0;    // teams per kind: 16 trainer types, 12 months, 20 species
 extern const TouchscreenHitbox ov40_022453AC[];            // SWITCH RANKINGS, SWITCH TEAMS, exit
@@ -416,7 +416,7 @@ BOOL VsRecorder_RankingsInit(VsRecorderWork *work) {
     work->screenWork = rankings;
     rankings->lastWeek = work->selection;
     rankings->rankingCount = 3;
-    if (!sub_02087E1C(work)) {
+    if (!VsRecorderApp_HasVisitedBattleFrontier(work)) {
         rankings->rankingCount = rankings->rankingCount - 1;
     }
     rankings->teamKindCount = 3;

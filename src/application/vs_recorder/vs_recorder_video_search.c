@@ -114,7 +114,7 @@ extern const u16 sVsRecorderSearchSpeciesGroupStarts[];
 
 #define SEARCH_ANY_SPECIES  0xFFFF
 #define SEARCH_ANY          0xFF
-#define SEARCH_ANY_FACILITY 0xFE // sent instead of SEARCH_ANY when sub_02087E1C is FALSE
+#define SEARCH_ANY_FACILITY 0xFE // sent instead of SEARCH_ANY when VsRecorderApp_HasVisitedBattleFrontier is FALSE
 
 void VsRecorder_PlaceSearchResultIcons(VsRecorderWork *work) {
     VsRecorderIconPositions positions = sVsRecorderSearchResultIconPositions;
@@ -727,7 +727,7 @@ BOOL VsRecorder_VideoSearchSelectFacility(VsRecorderWork *work) {
             VsRecorder_SetVBlankPaused(work, TRUE);
             VsRecorder_CreateTouchScrollSprites(&work->touchScroll, work);
             VsRecorder_ClearListWindow(&work->listWindow);
-            if (sub_02087E1C(work) == TRUE) {
+            if (VsRecorderApp_HasVisitedBattleFrontier(work) == TRUE) {
                 VsRecorder_InitMessageList(&work->listWindow, work, (VsRecorderListConfig *)&sVsRecorderSearchFacilityListConfigLong);
             } else {
                 VsRecorder_InitMessageList(&work->listWindow, work, (VsRecorderListConfig *)&sVsRecorderSearchFacilityListConfig);
@@ -1166,7 +1166,7 @@ BOOL VsRecorder_VideoSearchRequest(VsRecorderWork *work) {
         u32 facility = search->facility;
 
         if (facility == SEARCH_ANY) {
-            if (sub_02087E1C(work) == TRUE) {
+            if (VsRecorderApp_HasVisitedBattleFrontier(work) == TRUE) {
                 facility = SEARCH_ANY;
             } else {
                 facility = SEARCH_ANY_FACILITY;

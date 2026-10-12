@@ -41,7 +41,7 @@ VsRecorderApp_GetStartMenu: ; 0x02087FF8
 	add r5, r0, #0
 	add r4, r1, #0
 	bne _0208800C
-	bl sub_02087E1C
+	bl VsRecorderApp_HasVisitedBattleFrontier
 	cmp r0, #0
 	bne _0208800C
 	ldr r0, _02088028 ; =_0210357C
@@ -50,7 +50,7 @@ _0208800C:
 	cmp r4, #3
 	bne _0208801E
 	add r0, r5, #0
-	bl sub_02087E1C
+	bl VsRecorderApp_HasVisitedBattleFrontier
 	cmp r0, #0
 	bne _0208801E
 	ldr r0, _0208802C ; =_02102DC0

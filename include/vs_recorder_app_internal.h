@@ -69,7 +69,7 @@ BOOL VsRecorderApp_Main(OverlayManager *manager, int *state);
 BOOL VsRecorderApp_Exit(OverlayManager *manager, int *state);
 BOOL VsRecorderApp_RunMenu(VsRecorderApp *work, enum HeapID heapId);
 BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId);
-BOOL sub_02087E1C(void *work);
+BOOL VsRecorderApp_HasVisitedBattleFrontier(void *work);
 BOOL VsRecorderApp_IsFrontierBrainClass(u32 trainerClass);
 int VsRecorderMenu_InitCommon(OverlayManager *manager, int *state, BOOL fromTerminal);
 int VsRecorderMenu_Init(OverlayManager *manager, int *state);

@@ -35,7 +35,7 @@
 .public VsRecorderApp_GetRecorderWork
 .public VsRecorderApp_SetResult
 .public VsRecorderApp_GetTemplate
-.public sub_02087E1C
+.public VsRecorderApp_HasVisitedBattleFrontier
 .public VsRecorderApp_GetStartMenu
 .public LoadOVY38
 .public UnloadOVY38

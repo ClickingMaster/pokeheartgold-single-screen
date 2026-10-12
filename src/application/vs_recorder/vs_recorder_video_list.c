@@ -911,7 +911,7 @@ BOOL VsRecorder_VideoListDownloadList(VsRecorderWork *work) {
             }
         } else if (work->selection == 200) {
             listWork->listType = VS_RECORDER_VIDEO_LIST_SEARCH;
-            if (sub_02087E1C(work) == TRUE) {
+            if (VsRecorderApp_HasVisitedBattleFrontier(work) == TRUE) {
                 if (ov39_02227648(VsRecorder_GetNet(work)) == TRUE) {
                     work->step++;
                 }

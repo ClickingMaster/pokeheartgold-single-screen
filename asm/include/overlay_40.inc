@@ -275,7 +275,7 @@
 .public sub_02087A30
 .public sub_02087A54
 .public VsRecorderApp_SetResult
-.public sub_02087E1C
+.public VsRecorderApp_HasVisitedBattleFrontier
 .public VsRecorderApp_CountMenuChoices
 .public NNS_G2dGetUnpackedPaletteData
 .public NNS_G2dSetupSoftwareSpriteCamera

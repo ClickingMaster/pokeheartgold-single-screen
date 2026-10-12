@@ -4,13 +4,11 @@
 #include "global.h"
 
 #include "heap.h"
+#include "screen_fade_effects.h"
 #include "sys_task_api.h"
 
 // Clock wipe: a screen fade that sweeps a hardware window around a centre point, one angle step per few frames.
-// The window's horizontal span is rebuilt for every scanline into the back half of a scanline buffer that the
-// palette fade module copies in during VBlank and feeds to the window registers per HBlank.
-
-typedef struct WindowRegisterQueue WindowRegisterQueue;
+// The window's span is rebuilt for every scanline into a WipeScanlineBuffer (screen_fade_effects.h).
 
 typedef struct ClockWipeConfig {
     s16 centerX;
@@ -21,25 +19,6 @@ typedef struct ClockWipeConfig {
     u8 outsideMask;
     u8 queued; // 0: write the window registers at once, otherwise queue them for VBlank
 } ClockWipeConfig;
-
-// Fields of the palette fade module's per-screen state used here
-typedef struct ClockWipeFade {
-    u32 unk00;
-    int steps;
-    int framesPerStep;
-    int state;
-    int screen;
-    struct ClockWipe *wipe;
-    WindowRegisterQueue *regQueue;
-    void *blankPair;
-    enum HeapID heapId;
-} ClockWipeFade; // size: 0x24
-
-typedef struct ScreenWipeScanlines {
-    void *buffer;
-    int count;
-    int screen;
-} ScreenWipeScanlines; // the palette fade module's scanline buffer
 
 typedef struct ClockWipe {
     ScreenWipeScanlines scanlines;
@@ -97,8 +76,8 @@ struct WindowRegisterQueue {
     WindowRectArgs rect[2][2]; // [screen][window]
 }; // size: 0xC0
 
-void ClockWipe_Begin(ClockWipeFade *fade, const ClockWipeConfig *config);
-BOOL ClockWipe_Update(ClockWipeFade *fade);
+void ClockWipe_Begin(ScreenFade *fade, const ClockWipeConfig *config);
+BOOL ClockWipe_Update(ScreenFade *fade);
 void ClockWipe_Init(ClockWipe *wipe, const ClockWipeConfig *config, int steps, int framesPerStep, int screen, WindowRegisterQueue *regQueue, void *blankPair, enum HeapID heapId);
 BOOL ClockWipe_Step(ClockWipe *wipe);
 void ClockWipe_GetScanlineSpan(int unused, int centerX, int centerY, int y, int startAngle, int endAngle, int *left, int *right);

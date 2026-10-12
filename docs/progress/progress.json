@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "667040ca36784661360ba147f6e1ce8635dce2a9",
+  "commit": "c6461ccfa56a8e604e6c2ca9f9032bbc39c2329d",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "fb0779cf2bcb3da9423bce69ea0229a9929371d871064990bc5b4c11e2e34c78",
+    "ARM9": "6776ad1cef3eed66a56459fb4bc825fa6ca1453dcd7d20f08f817f79c6153323",
     "ARM7": "b2662a5cfe0fe61203405adb1b3cd633b24d0b1b806a72ddbdec71c77f845bb3"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -7209,14 +7209,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "brightness_transition.o",
-      "bytes": 1046,
-      "status": "c",
-      "source": "src/brightness_transition.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "camera.o",
       "bytes": 2326,
       "status": "c",
@@ -7940,22 +7932,6 @@
       "bytes": 7614,
       "status": "c",
       "source": "src/evolution_scene.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "fade_func_01_1.o",
-      "bytes": 30,
-      "status": "c",
-      "source": "src/fade_func_01_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "fade_func_02.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "src/fade_func_02.c"
     },
     {
       "cpu": "ARM9",
@@ -11250,54 +11226,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "palette_fade_effects.o",
-      "bytes": 28,
-      "status": "c",
-      "source": "src/palette_fade_effects.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "palette_fade_effects_2.o",
-      "bytes": 2132,
-      "status": "c",
-      "source": "src/palette_fade_effects_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "palette_fade_effects_3.o",
-      "bytes": 88,
-      "status": "c",
-      "source": "src/palette_fade_effects_3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "palette_fade_effects_4.o",
-      "bytes": 108,
-      "status": "c",
-      "source": "src/palette_fade_effects_4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "palette_fade_effects_5.o",
-      "bytes": 22,
-      "status": "c",
-      "source": "src/palette_fade_effects_5.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "palette_fade_effects_6.o",
-      "bytes": 106,
-      "status": "c",
-      "source": "src/palette_fade_effects_6.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "palette_fade_reset.o",
       "bytes": 440,
       "status": "c",
@@ -11622,22 +11550,6 @@
       "bytes": 72,
       "status": "c",
       "source": "src/r40_unk_020100C4_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "r40_unk_020109D8_run1.o",
-      "bytes": 122,
-      "status": "c",
-      "source": "src/r40_unk_020109D8_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "r40_unk_02011080_run1.o",
-      "bytes": 66,
-      "status": "c",
-      "source": "src/r40_unk_02011080_run1.c"
     },
     {
       "cpu": "ARM9",
@@ -12153,6 +12065,14 @@
       "bytes": 2724,
       "status": "c",
       "source": "src/scrcmd_strbuf.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "screen_fade_effects.o",
+      "bytes": 5422,
+      "status": "c",
+      "source": "src/screen_fade_effects.c"
     },
     {
       "cpu": "ARM9",
@@ -12853,14 +12773,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "text_render_helpers_1.o",
-      "bytes": 306,
-      "status": "c",
-      "source": "src/text_render_helpers_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "texture_animation.o",
       "bytes": 882,
       "status": "c",
@@ -13025,14 +12937,6 @@
       "bytes": 3110,
       "status": "c",
       "source": "src/unk_0200A090.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "unk_02011130.o",
-      "bytes": 1308,
-      "status": "c",
-      "source": "src/unk_02011130.c"
     },
     {
       "cpu": "ARM9",

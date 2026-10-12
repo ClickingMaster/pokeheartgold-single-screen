@@ -54,20 +54,7 @@ Static main
     Object src/hblank_fade_pair_1.o
     Object src/screen_fade_update_2.o
     Object src/r40_unk_020100C4_run1.o
-    Object src/palette_fade_effects.o
-    Object src/fade_func_01_1.o
-    Object src/fade_func_02.o
-    Object asm/unk_0201010C.o
-    Object src/palette_fade_effects_2.o
-    Object src/r40_unk_020109D8_run1.o
-    Object src/palette_fade_effects_3.o
-    Object src/brightness_transition.o
-    Object src/palette_fade_effects_4.o
-    Object src/text_render_helpers_1.o
-    Object src/palette_fade_effects_5.o
-    Object src/r40_unk_02011080_run1.o
-    Object src/palette_fade_effects_6.o
-    Object src/unk_02011130.o
+    Object src/screen_fade_effects.o
     Object src/screen_wipe_effects.o
     Object src/screen_window_wipe.o
     Object src/font_sprite.o
@@ -1997,7 +1984,7 @@ Object src/application/main_menu/mystery_gift_wireless.o
     Object lib/src/nitrocrypto_bn_free.o
     Object lib/src/nitrocrypto_bn_num_bits.o
     Object lib/src/nitrocrypto_alloc.o
-    Object asm/nitrocrypto_residual08.o
+    Object asm/nitrocrypto_bss.o
 }
 Overlay OVY_75
 {

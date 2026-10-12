@@ -3,39 +3,26 @@
 #include <nitro/fx/fx_trig.h>
 #include <nitro/gx/g2.h>
 
-// Palette fade module (not merged yet): declared with the types its callers here were matched against
-extern void ScanlineBufferController_Init(ScreenWipeScanlines *scanlines, u8 window, int screen, enum HeapID heapId);
-extern void sub_02010EC8(ScreenWipeScanlines *scanlines);
-extern s16 *sub_02010EE0(ScreenWipeScanlines *scanlines, int index);
-extern void sub_02010F00(SysTask *task, void *scanlines);
-extern void sub_02010F34(int queued, WindowRegisterQueue *regQueue, int screen);
-extern void sub_02010F84(WindowRegisterQueue *regQueue, u8 insideMask, u8 outsideMask, u8 window, int screen, int left, int top, int right, int bottom, int queued);
-extern void sub_02010FEC(WindowRegisterQueue *regQueue, int window, int screen, int queued);
-extern void sub_02011068(WindowRegisterQueue *regQueue, int a1, int screen, int queued);
-extern void ScanlineWindow_HBlankCallback(void);
-extern void sub_0200FF88(void *blankPair, ClockWipe *wipe, void (*callback)(void), int screen, enum HeapID heapId);
-extern void sub_0200FFB4(void *blankPair, int screen, enum HeapID heapId);
-
-void ClockWipe_Begin(ClockWipeFade *fade, const ClockWipeConfig *config) {
-    fade->wipe = Heap_Alloc(fade->heapId, sizeof(ClockWipe));
-    ClockWipe_Init(fade->wipe, config, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue, fade->blankPair, fade->heapId);
+void ClockWipe_Begin(ScreenFade *fade, const ClockWipeConfig *config) {
+    fade->effect = Heap_Alloc(fade->heapId, sizeof(ClockWipe));
+    ClockWipe_Init(fade->effect, config, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue, fade->blankPair, fade->heapId);
     fade->state++;
 }
 
-BOOL ClockWipe_Update(ClockWipeFade *fade) {
+BOOL ClockWipe_Update(ScreenFade *fade) {
     BOOL done = FALSE;
-    ClockWipe *wipe = fade->wipe;
+    ClockWipe *wipe = fade->effect;
     switch (fade->state) {
     case 1:
         if (ClockWipe_Step(wipe) == TRUE) {
-            sub_02010F34(wipe->queued, wipe->regQueue, fade->screen);
+            ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
     case 2:
-        sub_02010EC8(&wipe->scanlines);
-        Heap_Free(fade->wipe);
-        fade->wipe = NULL;
+        ScreenWipeScanlines_Free(&wipe->scanlines);
+        Heap_Free(fade->effect);
+        fade->effect = NULL;
         fade->state++;
         done = TRUE;
         break;
@@ -50,9 +37,9 @@ BOOL ClockWipe_Update(ClockWipeFade *fade) {
 }
 
 void ClockWipe_Init(ClockWipe *wipe, const ClockWipeConfig *config, int steps, int framesPerStep, int screen, WindowRegisterQueue *regQueue, void *blankPair, enum HeapID heapId) {
-    s16 *buffer;
+    WipeScanlineBuffer *buffer;
 
-    ScanlineBufferController_Init(&wipe->scanlines, config->window, screen, heapId);
+    ScreenWipeScanlines_Init(&wipe->scanlines, config->window, screen, heapId);
     wipe->unused14 = 0x7FFF80;
     wipe->centerX = config->centerX;
     wipe->centerY = config->centerY;
@@ -70,16 +57,16 @@ void ClockWipe_Init(ClockWipe *wipe, const ClockWipeConfig *config, int steps, i
     wipe->screen = screen;
     wipe->maskSwapPending = TRUE;
     ClockWipe_BuildScanlines(wipe);
-    SysTask_CreateOnVWaitQueue(sub_02010F00, wipe, 0x3FF);
-    buffer = sub_02010EE0(&wipe->scanlines, 0);
+    SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
+    buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
     // first scanline's span
-    sub_02010F84(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer[0x180], 0, buffer[0x240], 192, wipe->queued);
+    ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer->nextLeft[0], 0, buffer->nextRight[0], 192, wipe->queued);
     if (config->window == 0) {
-        sub_02011068(regQueue, 1, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, 1, screen, wipe->queued);
     } else {
-        sub_02011068(regQueue, 2, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, 2, screen, wipe->queued);
     }
-    sub_0200FF88(wipe->blankPair, wipe, ScanlineWindow_HBlankCallback, screen, heapId);
+    sub_0200FF88(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
 BOOL ClockWipe_Step(ClockWipe *wipe) {
@@ -96,11 +83,11 @@ BOOL ClockWipe_Step(ClockWipe *wipe) {
                 wipe->angle += 0xFFFF;
             }
             if (wipe->angle >= 0x7FFF && wipe->angle < wipe->startAngle && wipe->maskSwapPending == TRUE) {
-                sub_02010FEC(wipe->regQueue, wipe->window, wipe->screen, wipe->queued);
+                ScreenFade_SwapWindowMasks(wipe->regQueue, wipe->window, wipe->screen, wipe->queued);
                 wipe->maskSwapPending = FALSE;
             }
             ClockWipe_BuildScanlines(wipe);
-            SysTask_CreateOnVWaitQueue(sub_02010F00, wipe, 0x3FF);
+            SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
         } else {
             sub_0200FFB4(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
             return TRUE;
@@ -199,18 +186,17 @@ void ClockWipe_GetScanlineSpan(int unused, int centerX, int centerY, int y, int 
     }
 }
 
-// Writes the spans of all 192 scanlines to the back half of the scanline buffer (lefts at 0x300, rights at 0x480)
+// Writes the spans of all 192 scanlines for the next frame
 void ClockWipe_BuildScanlines(ClockWipe *wipe) {
-    s16 *dst = sub_02010EE0(&wipe->scanlines, 0);
+    WipeScanlineBuffer *buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
     s32 i;
     s32 left;
     s32 right;
 
     for (i = 0; i < 192; i++) {
         ClockWipe_GetScanlineSpan(wipe->unused14, wipe->centerX, wipe->centerY, i, wipe->startAngle, wipe->angle, &left, &right);
-        dst[0x180] = left;
-        dst[0x240] = right;
-        dst++;
+        buffer->nextLeft[i] = left;
+        buffer->nextRight[i] = right;
     }
 }
 

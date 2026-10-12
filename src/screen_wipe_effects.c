@@ -7,28 +7,28 @@
 
 u32 FX_Sqrt(u32 value);
 
-void RectWipe_Begin(ScreenWipeFade *fade, const RectWipeConfig *config) {
+void RectWipe_Begin(ScreenFade *fade, const RectWipeConfig *config) {
     RectWipe *wipe;
 
     fade->effect = Heap_Alloc(fade->heapId, sizeof(RectWipe));
     wipe = fade->effect;
     RectWipe_Init(wipe, config, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue);
     if (config->window == 0) {
-        sub_02011068(fade->regQueue, 1, wipe->screen, wipe->queued);
+        ScreenFade_SetWindowVisible(fade->regQueue, 1, wipe->screen, wipe->queued);
     } else {
-        sub_02011068(fade->regQueue, 2, wipe->screen, wipe->queued);
+        ScreenFade_SetWindowVisible(fade->regQueue, 2, wipe->screen, wipe->queued);
     }
     fade->state++;
 }
 
-BOOL RectWipe_Update(ScreenWipeFade *fade) {
+BOOL RectWipe_Update(ScreenFade *fade) {
     BOOL done = FALSE;
     RectWipe *wipe = fade->effect;
 
     switch (fade->state) {
     case 1:
         if (RectWipe_Step(wipe) == TRUE) {
-            sub_02010F34(wipe->queued, fade->regQueue, fade->screen);
+            ScreenFade_SetEndWindows(wipe->queued, fade->regQueue, fade->screen);
             fade->state++;
         }
         break;
@@ -45,18 +45,18 @@ BOOL RectWipe_Update(ScreenWipeFade *fade) {
     return done;
 }
 
-void DoubleRectWipe_Begin(ScreenWipeFade *fade, const RectWipeConfig *config0, const RectWipeConfig *config1) {
+void DoubleRectWipe_Begin(ScreenFade *fade, const RectWipeConfig *config0, const RectWipeConfig *config1) {
     RectWipe *wipes;
 
     fade->effect = Heap_Alloc(fade->heapId, sizeof(RectWipe) * 2);
     wipes = fade->effect;
     RectWipe_Init(&wipes[0], config0, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue);
     RectWipe_Init(&wipes[1], config1, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue);
-    sub_02011068(fade->regQueue, 3, fade->screen, wipes[0].queued);
+    ScreenFade_SetWindowVisible(fade->regQueue, 3, fade->screen, wipes[0].queued);
     fade->state++;
 }
 
-BOOL DoubleRectWipe_Update(ScreenWipeFade *fade) {
+BOOL DoubleRectWipe_Update(ScreenFade *fade) {
     BOOL done = FALSE;
     RectWipe *wipes = fade->effect;
 
@@ -65,7 +65,7 @@ BOOL DoubleRectWipe_Update(ScreenWipeFade *fade) {
         int finished = RectWipe_Step(&wipes[0]);
         finished += RectWipe_Step(&wipes[1]);
         if (finished == 2) {
-            sub_02010F34(wipes[0].queued, fade->regQueue, fade->screen);
+            ScreenFade_SetEndWindows(wipes[0].queued, fade->regQueue, fade->screen);
             fade->state++;
         }
         break;
@@ -84,7 +84,7 @@ BOOL DoubleRectWipe_Update(ScreenWipeFade *fade) {
 }
 
 void RectWipe_Init(RectWipe *wipe, const RectWipeConfig *config, int steps, int framesPerStep, int screen, WindowRegisterQueue *regQueue) {
-    sub_02010AB0(wipe->rect, wipe->end, wipe->delta, config->start, config->end, steps);
+    ScreenFade_InitRectLerp(wipe->rect, wipe->end, wipe->delta, config->start, config->end, steps);
     wipe->screen = screen;
     wipe->window = config->window;
     wipe->stepsLeft = steps;
@@ -92,7 +92,7 @@ void RectWipe_Init(RectWipe *wipe, const RectWipeConfig *config, int steps, int 
     wipe->frameCounter = 0;
     wipe->regQueue = regQueue;
     wipe->queued = config->queued;
-    sub_02010F84(regQueue, config->insideMask, config->outsideMask, config->window, screen, config->start[0], config->start[1], config->start[2], config->start[3], wipe->queued);
+    ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, config->window, screen, config->start[0], config->start[1], config->start[2], config->start[3], wipe->queued);
 }
 
 BOOL RectWipe_Step(RectWipe *wipe) {
@@ -103,7 +103,7 @@ BOOL RectWipe_Step(RectWipe *wipe) {
         stepsLeft = wipe->stepsLeft - 1;
         if (stepsLeft > 0) {
             wipe->stepsLeft = stepsLeft;
-            sub_02010A8C(wipe->rect, wipe->delta);
+            ScreenFade_AddRect(wipe->rect, wipe->delta);
         } else {
             ScreenWindow_QueueSetRect(wipe->regQueue, wipe->end[0], wipe->end[1], wipe->end[2], wipe->end[3], wipe->window, wipe->screen);
             return TRUE;
@@ -113,25 +113,25 @@ BOOL RectWipe_Step(RectWipe *wipe) {
     return FALSE;
 }
 
-void CircleWipe_Begin(ScreenWipeFade *fade, const CircleWipeConfig *config) {
+void CircleWipe_Begin(ScreenFade *fade, const CircleWipeConfig *config) {
     fade->effect = Heap_Alloc(fade->heapId, sizeof(CircleWipe));
     CircleWipe_Init(fade->effect, config, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue, fade->blankPair, fade->heapId);
     fade->state++;
 }
 
-BOOL CircleWipe_Update(ScreenWipeFade *fade) {
+BOOL CircleWipe_Update(ScreenFade *fade) {
     BOOL done = FALSE;
     CircleWipe *wipe = fade->effect;
 
     switch (fade->state) {
     case 1:
         if (CircleWipe_Step(wipe) == TRUE) {
-            sub_02010F34(wipe->queued, wipe->regQueue, fade->screen);
+            ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
     case 2:
-        sub_02010EC8(&wipe->scanlines);
+        ScreenWipeScanlines_Free(&wipe->scanlines);
         Heap_Free(fade->effect);
         fade->effect = NULL;
         fade->state++;
@@ -150,8 +150,8 @@ void CircleWipe_Init(CircleWipe *wipe, const CircleWipeConfig *config, int steps
     WipeScanlineBuffer *buffer;
     int radiusStep;
 
-    radiusStep = sub_02010A6C(config->startRadius, config->endRadius, steps);
-    ScanlineBufferController_Init(&wipe->scanlines, config->window, screen, heapId);
+    radiusStep = ScreenFade_StepDelta(config->startRadius, config->endRadius, steps);
+    ScreenWipeScanlines_Init(&wipe->scanlines, config->window, screen, heapId);
     wipe->radius = config->startRadius << 7;
     wipe->centerX = config->centerX;
     wipe->centerY = config->centerY;
@@ -164,15 +164,15 @@ void CircleWipe_Init(CircleWipe *wipe, const CircleWipeConfig *config, int steps
     wipe->heapId = heapId;
     wipe->queued = config->queued;
     CircleWipe_BuildScanlines(wipe);
-    SysTask_CreateOnVWaitQueue(sub_02010F00, wipe, 0x3FF);
-    buffer = sub_02010EE0(&wipe->scanlines, 0);
-    sub_02010F84(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer->nextLeft[0], 0, buffer->nextRight[0], 192, wipe->queued);
+    SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
+    buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
+    ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer->nextLeft[0], 0, buffer->nextRight[0], 192, wipe->queued);
     if (config->window == 0) {
-        sub_02011068(regQueue, 1, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, 1, screen, wipe->queued);
     } else {
-        sub_02011068(regQueue, 2, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, 2, screen, wipe->queued);
     }
-    sub_0200FF88(wipe->blankPair, wipe, ScanlineWindow_HBlankCallback, screen, heapId);
+    sub_0200FF88(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
 BOOL CircleWipe_Step(CircleWipe *wipe) {
@@ -184,7 +184,7 @@ BOOL CircleWipe_Step(CircleWipe *wipe) {
             wipe->stepsLeft = stepsLeft;
             wipe->radius += wipe->radiusStep;
             CircleWipe_BuildScanlines(wipe);
-            SysTask_CreateOnVWaitQueue(sub_02010F00, wipe, 0x3FF);
+            SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
         } else {
             sub_0200FFB4(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
             return TRUE;
@@ -224,7 +224,7 @@ void CircleWipe_GetScanlineSpan(int radius, int centerX, int centerY, int y, int
 }
 
 void CircleWipe_BuildScanlines(CircleWipe *wipe) {
-    WipeScanlineBuffer *buffer = sub_02010EE0(&wipe->scanlines, 0);
+    WipeScanlineBuffer *buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
     int y;
 
     for (y = 0; y < 192; y++) {
@@ -245,25 +245,25 @@ void CircleWipe_BuildScanlines(CircleWipe *wipe) {
     }
 }
 
-void WedgeWipe_Begin(ScreenWipeFade *fade, const AngleWipeConfig *config) {
+void WedgeWipe_Begin(ScreenFade *fade, const AngleWipeConfig *config) {
     fade->effect = Heap_Alloc(fade->heapId, sizeof(WedgeWipe));
     WedgeWipe_Init(fade->effect, config, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue, fade->blankPair, fade->heapId);
     fade->state++;
 }
 
-BOOL WedgeWipe_Update(ScreenWipeFade *fade) {
+BOOL WedgeWipe_Update(ScreenFade *fade) {
     BOOL done = FALSE;
     WedgeWipe *wipe = fade->effect;
 
     switch (fade->state) {
     case 1:
         if (WedgeWipe_Step(wipe) == TRUE) {
-            sub_02010F34(wipe->queued, wipe->regQueue, fade->screen);
+            ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
     case 2:
-        sub_02010EC8(&wipe->scanlines);
+        ScreenWipeScanlines_Free(&wipe->scanlines);
         Heap_Free(fade->effect);
         fade->effect = NULL;
         fade->state++;
@@ -281,8 +281,8 @@ BOOL WedgeWipe_Update(ScreenWipeFade *fade) {
 void WedgeWipe_Init(WedgeWipe *wipe, const AngleWipeConfig *config, int steps, int framesPerStep, int screen, WindowRegisterQueue *regQueue, void *blankPair, enum HeapID heapId) {
     WipeScanlineBuffer *buffer;
 
-    wipe->angleStep = sub_02010A6C(config->startAngle, config->endAngle, steps);
-    ScanlineBufferController_Init(&wipe->scanlines, config->window, screen, heapId);
+    wipe->angleStep = ScreenFade_StepDelta(config->startAngle, config->endAngle, steps);
+    ScreenWipeScanlines_Init(&wipe->scanlines, config->window, screen, heapId);
     wipe->angle = config->startAngle << 7;
     wipe->stepsLeft = steps;
     wipe->framesPerStep = framesPerStep;
@@ -292,15 +292,15 @@ void WedgeWipe_Init(WedgeWipe *wipe, const AngleWipeConfig *config, int steps, i
     wipe->heapId = heapId;
     wipe->queued = config->queued;
     WedgeWipe_BuildScanlines(wipe);
-    SysTask_CreateOnVWaitQueue(sub_02010F00, wipe, 0x3FF);
-    buffer = sub_02010EE0(&wipe->scanlines, 0);
-    sub_02010F84(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer->nextLeft[0], 0, buffer->nextRight[0], 192, wipe->queued);
+    SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
+    buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
+    ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer->nextLeft[0], 0, buffer->nextRight[0], 192, wipe->queued);
     if (config->window == 0) {
-        sub_02011068(regQueue, 1, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, 1, screen, wipe->queued);
     } else {
-        sub_02011068(regQueue, 2, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, 2, screen, wipe->queued);
     }
-    sub_0200FF88(wipe->blankPair, wipe, ScanlineWindow_HBlankCallback, screen, heapId);
+    sub_0200FF88(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
 BOOL WedgeWipe_Step(WedgeWipe *wipe) {
@@ -312,7 +312,7 @@ BOOL WedgeWipe_Step(WedgeWipe *wipe) {
             wipe->stepsLeft = stepsLeft;
             wipe->angle += wipe->angleStep;
             WedgeWipe_BuildScanlines(wipe);
-            SysTask_CreateOnVWaitQueue(sub_02010F00, wipe, 0x3FF);
+            SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
         } else {
             sub_0200FFB4(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
             return TRUE;
@@ -326,36 +326,36 @@ BOOL WedgeWipe_Step(WedgeWipe *wipe) {
 void WedgeWipe_BuildScanlines(WedgeWipe *wipe) {
     s32 halfWidths[192];
     int y;
-    WipeScanlineBuffer *buffer = sub_02010EE0(&wipe->scanlines, 0);
+    WipeScanlineBuffer *buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
 
-    sub_02010A00(wipe->angle / 128, halfWidths, 192, 0);
+    ScreenFade_FillMulTan(wipe->angle / 128, halfWidths, 192, 0);
     for (y = 0; y < 192; y++) {
-        buffer->nextLeft[y] = sub_02010A7C(128, -halfWidths[y]);
-        buffer->nextRight[y] = sub_02010A7C(128, halfWidths[y]);
+        buffer->nextLeft[y] = ScreenFade_AddClamped(128, -halfWidths[y]);
+        buffer->nextRight[y] = ScreenFade_AddClamped(128, halfWidths[y]);
     }
 }
 
 #pragma force_active off
 
-void SlopeWipe_Begin(ScreenWipeFade *fade, const AngleWipeConfig *config) {
+void SlopeWipe_Begin(ScreenFade *fade, const AngleWipeConfig *config) {
     fade->effect = Heap_Alloc(fade->heapId, sizeof(SlopeWipe));
     SlopeWipe_Init(fade->effect, config, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue, fade->blankPair, fade->heapId);
     fade->state++;
 }
 
-BOOL SlopeWipe_Update(ScreenWipeFade *fade) {
+BOOL SlopeWipe_Update(ScreenFade *fade) {
     BOOL done = FALSE;
     SlopeWipe *wipe = fade->effect;
 
     switch (fade->state) {
     case 1:
         if (SlopeWipe_Step(wipe) == TRUE) {
-            sub_02010F34(wipe->queued, wipe->regQueue, fade->screen);
+            ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
     case 2:
-        sub_02010EC8(&wipe->scanlines);
+        ScreenWipeScanlines_Free(&wipe->scanlines);
         Heap_Free(fade->effect);
         fade->effect = NULL;
         fade->state++;
@@ -372,7 +372,7 @@ void SlopeWipe_Init(SlopeWipe *wipe, const AngleWipeConfig *config, int steps, i
     WipeScanlineBuffer *buffer;
     s32 angleStep = (config->endAngle - config->startAngle) / steps;
 
-    ScanlineBufferController_Init(&wipe->scanlines, config->window, screen, heapId);
+    ScreenWipeScanlines_Init(&wipe->scanlines, config->window, screen, heapId);
     wipe->amplitude = FX32_CONST(128);
     wipe->angle = config->startAngle;
     wipe->angleStep = angleStep;
@@ -384,15 +384,15 @@ void SlopeWipe_Init(SlopeWipe *wipe, const AngleWipeConfig *config, int steps, i
     wipe->heapId = heapId;
     wipe->queued = config->queued;
     SlopeWipe_BuildScanlines(wipe);
-    SysTask_CreateOnVWaitQueue(sub_02010F00, wipe, 0x3FF);
-    buffer = sub_02010EE0(&wipe->scanlines, 0);
-    sub_02010F84(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer->nextLeft[96], 0, buffer->nextRight[96], 192, wipe->queued);
+    SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
+    buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
+    ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer->nextLeft[96], 0, buffer->nextRight[96], 192, wipe->queued);
     if (config->window == 0) {
-        sub_02011068(regQueue, 1, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, 1, screen, wipe->queued);
     } else {
-        sub_02011068(regQueue, 2, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, 2, screen, wipe->queued);
     }
-    sub_0200FF88(wipe->blankPair, wipe, ScanlineWindow_HBlankCallback, screen, heapId);
+    sub_0200FF88(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
 BOOL SlopeWipe_Step(SlopeWipe *wipe) {
@@ -404,7 +404,7 @@ BOOL SlopeWipe_Step(SlopeWipe *wipe) {
             wipe->stepsLeft = stepsLeft;
             wipe->angle += wipe->angleStep;
             SlopeWipe_BuildScanlines(wipe);
-            SysTask_CreateOnVWaitQueue(sub_02010F00, wipe, 0x3FF);
+            SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
         } else {
             sub_0200FFB4(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
             return TRUE;
@@ -421,19 +421,19 @@ void SlopeWipe_BuildScanlines(SlopeWipe *wipe) {
     int count;
     WipeScanlineBuffer *buffer;
 
-    buffer = sub_02010EE0(&wipe->scanlines, 0);
+    buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
     {
         s32 sine = FX_SinCosTable_[(wipe->angle >> 4) * 2];
         s64 product = (s64)sine * wipe->amplitude;
         halfWidth = ((s32)((product + 0x800) >> FX32_SHIFT)) >> FX32_SHIFT;
     }
     int angle = 65535 * (180 - ((halfWidth * 2 / 21) + 1) * 2) / 360 / 2;
-    count = sub_02010A54(angle, 256) >> FX32_SHIFT;
+    count = ScreenFade_HalfDivTan(angle, 256) >> FX32_SHIFT;
     int y;
     if (count >= 192) {
         GF_AssertFail();
     }
-    sub_02010A00(angle, slope, count, 0);
+    ScreenFade_FillMulTan(angle, slope, count, 0);
     for (y = 0; y < 96; y++) {
         int pos = count - (y + 1);
         int width = halfWidth;
@@ -442,8 +442,8 @@ void SlopeWipe_BuildScanlines(SlopeWipe *wipe) {
         if (pos > 0 && slope[pos] > halfWidth) {
             width = slope[pos];
         }
-        left = sub_02010A7C(128, -width);
-        right = sub_02010A7C(128, width);
+        left = ScreenFade_AddClamped(128, -width);
+        right = ScreenFade_AddClamped(128, width);
         buffer->nextLeft[y] = left;
         buffer->nextRight[y] = right;
         buffer->nextLeft[191 - y] = left;
@@ -453,26 +453,26 @@ void SlopeWipe_BuildScanlines(SlopeWipe *wipe) {
 
 #pragma force_active off
 
-void MultiRectWipe_Begin(ScreenWipeFade *fade, const MultiRectWipeConfig *config) {
+void MultiRectWipe_Begin(ScreenFade *fade, const MultiRectWipeConfig *config) {
     fade->effect = Heap_Alloc(fade->heapId, sizeof(MultiRectWipe));
     MultiRectWipe_Init(fade->effect, config, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue, fade->blankPair, fade->heapId);
     fade->state++;
 }
 
-BOOL MultiRectWipe_Update(ScreenWipeFade *fade) {
+BOOL MultiRectWipe_Update(ScreenFade *fade) {
     BOOL done = FALSE;
     MultiRectWipe *wipe = fade->effect;
 
     switch (fade->state) {
     case 1:
         if (MultiRectWipe_Step(wipe) == TRUE) {
-            sub_02010F34(wipe->queued, wipe->regQueue, fade->screen);
+            ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
     case 2:
         MultiRectWipe_FreeRects(wipe);
-        sub_02010EC8(&wipe->scanlines);
+        ScreenWipeScanlines_Free(&wipe->scanlines);
         Heap_Free(fade->effect);
         fade->effect = NULL;
         fade->state++;
@@ -497,9 +497,9 @@ void MultiRectWipe_Init(MultiRectWipe *wipe, const MultiRectWipeConfig *config, 
     }
     wipe->count = config->count;
     for (i = 0; i < config->count; i++) {
-        sub_02010AB0(wipe->rects[i].rect, wipe->rects[i].end, wipe->rects[i].delta, config->starts[i], config->ends[i], steps);
+        ScreenFade_InitRectLerp(wipe->rects[i].rect, wipe->rects[i].end, wipe->rects[i].delta, config->starts[i], config->ends[i], steps);
     }
-    ScanlineBufferController_Init(&wipe->scanlines, config->window, screen, heapId);
+    ScreenWipeScanlines_Init(&wipe->scanlines, config->window, screen, heapId);
     wipe->stepsLeft = steps;
     wipe->framesPerStep = framesPerStep;
     wipe->frameCounter = 0;
@@ -508,15 +508,15 @@ void MultiRectWipe_Init(MultiRectWipe *wipe, const MultiRectWipeConfig *config, 
     wipe->heapId = heapId;
     wipe->queued = config->queued;
     MultiRectWipe_BuildScanlines(wipe);
-    SysTask_CreateOnVWaitQueue(sub_02010F00, wipe, 0x3FF);
-    buffer = sub_02010EE0(&wipe->scanlines, 0);
-    sub_02010F84(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer->nextLeft[0], 0, buffer->nextRight[0], 192, wipe->queued);
+    SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
+    buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
+    ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer->nextLeft[0], 0, buffer->nextRight[0], 192, wipe->queued);
     if (config->window == 0) {
-        sub_02011068(wipe->regQueue, 1, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(wipe->regQueue, 1, screen, wipe->queued);
     } else {
-        sub_02011068(wipe->regQueue, 2, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(wipe->regQueue, 2, screen, wipe->queued);
     }
-    sub_0200FF88(wipe->blankPair, wipe, ScanlineWindow_HBlankCallback, screen, heapId);
+    sub_0200FF88(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
 BOOL MultiRectWipe_Step(MultiRectWipe *wipe) {
@@ -528,7 +528,7 @@ BOOL MultiRectWipe_Step(MultiRectWipe *wipe) {
             wipe->stepsLeft = stepsLeft;
             MultiRectWipe_Advance(wipe);
             MultiRectWipe_BuildScanlines(wipe);
-            SysTask_CreateOnVWaitQueue(sub_02010F00, wipe, 0x3FF);
+            SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
         } else {
             sub_0200FFB4(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
             return TRUE;
@@ -546,7 +546,7 @@ void MultiRectWipe_BuildScanlines(MultiRectWipe *wipe) {
     s32 i;
 
     // clears nextLeft and nextRight
-    memset(sub_02010EE0(&wipe->scanlines, 0)->nextLeft, 0, sizeof(s16) * 192 * 2);
+    memset(ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0)->nextLeft, 0, sizeof(s16) * 192 * 2);
     for (i = wipe->count - 1; i >= 0; i--) {
         MultiRectWipe_DrawRect(wipe, &wipe->rects[i]);
     }
@@ -555,7 +555,7 @@ void MultiRectWipe_BuildScanlines(MultiRectWipe *wipe) {
 #pragma force_active on
 
 void MultiRectWipe_DrawRect(MultiRectWipe *wipe, RectLerp *rect) {
-    WipeScanlineBuffer *buffer = sub_02010EE0(&wipe->scanlines, 0);
+    WipeScanlineBuffer *buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
     s32 y;
     s32 left = rect->rect[0] / 128, right = rect->rect[2] / 128, top = rect->rect[1] / 128, bottom = rect->rect[3] / 128;
 
@@ -571,31 +571,31 @@ void MultiRectWipe_Advance(MultiRectWipe *wipe) {
     int i;
 
     for (i = 0; i < wipe->count; i++) {
-        sub_02010A8C(wipe->rects[i].rect, wipe->rects[i].delta);
+        ScreenFade_AddRect(wipe->rects[i].rect, wipe->rects[i].delta);
     }
 }
 
-void SectorWipe_Begin(ScreenWipeFade *fade, const SectorWipeConfig *config) {
+void SectorWipe_Begin(ScreenFade *fade, const SectorWipeConfig *config) {
     fade->effect = Heap_Alloc(fade->heapId, sizeof(SectorWipe));
     memset(fade->effect, 0, sizeof(SectorWipe));
     SectorWipe_Init(fade->effect, config, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue, fade->blankPair, fade->heapId);
     fade->state++;
 }
 
-BOOL SectorWipe_Update(ScreenWipeFade *fade) {
+BOOL SectorWipe_Update(ScreenFade *fade) {
     SectorWipe *wipe = fade->effect;
     BOOL done = FALSE;
 
     switch (fade->state) {
     case 1:
         if (SectorWipe_Step(wipe) == TRUE) {
-            sub_02010F34(wipe->queued, wipe->regQueue, fade->screen);
+            ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
     case 2:
         SectorWipe_Finish(wipe);
-        sub_02010EC8(&wipe->scanlines);
+        ScreenWipeScanlines_Free(&wipe->scanlines);
         Heap_Free(fade->effect);
         fade->effect = NULL;
         fade->state++;
@@ -618,7 +618,7 @@ void SectorWipe_Init(SectorWipe *wipe, const SectorWipeConfig *config, int steps
     wipe->phase.value = 0;
     wipe->phase.start = config->startPhase;
     wipe->phase.delta = config->endPhase - config->startPhase;
-    ScanlineBufferController_Init(&wipe->scanlines, 2, screen, heapId);
+    ScreenWipeScanlines_Init(&wipe->scanlines, 2, screen, heapId);
     wipe->steps = steps;
     wipe->step = 0;
     wipe->framesPerStep = framesPerStep;
@@ -629,14 +629,14 @@ void SectorWipe_Init(SectorWipe *wipe, const SectorWipeConfig *config, int steps
     wipe->queued = config->queued;
     SectorWipe_Interpolate(&wipe->phase, wipe->step, wipe->steps);
     SectorWipe_BuildScanlines(wipe);
-    SysTask_CreateOnVWaitQueue(sub_02010F00, wipe, 0x3FF);
+    SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
 
-    buffer0 = sub_02010EE0(&wipe->scanlines, 0);
-    buffer1 = sub_02010EE0(&wipe->scanlines, 1);
-    sub_02010F84(regQueue, config->insideMask, config->outsideMask, 0, screen, buffer0->nextLeft[0], 0, buffer0->nextRight[0], 192, wipe->queued);
-    sub_02010F84(regQueue, config->insideMask, config->outsideMask, 1, screen, buffer1->nextLeft[0], 0, buffer1->nextRight[0], 192, wipe->queued);
-    sub_02011068(regQueue, 3, screen, wipe->queued);
-    sub_0200FF88(wipe->blankPair, wipe, ScanlineWindow_HBlankCallback, screen, heapId);
+    buffer0 = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
+    buffer1 = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 1);
+    ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, 0, screen, buffer0->nextLeft[0], 0, buffer0->nextRight[0], 192, wipe->queued);
+    ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, 1, screen, buffer1->nextLeft[0], 0, buffer1->nextRight[0], 192, wipe->queued);
+    ScreenFade_SetWindowVisible(regQueue, 3, screen, wipe->queued);
+    sub_0200FF88(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
 BOOL SectorWipe_Step(SectorWipe *wipe) {
@@ -650,7 +650,7 @@ BOOL SectorWipe_Step(SectorWipe *wipe) {
             wipe->step = next;
             SectorWipe_Interpolate(&wipe->phase, wipe->step, wipe->steps);
             SectorWipe_BuildScanlines(wipe);
-            SysTask_CreateOnVWaitQueue(sub_02010F00, wipe, 0x3FF);
+            SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
         } else {
             sub_0200FFB4(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
             return TRUE;
@@ -666,15 +666,15 @@ void SectorWipe_Finish(SectorWipe *wipe) {
 
 void SectorWipe_BuildScanlines(SectorWipe *wipe) {
     u32 phase = (u16)(wipe->phase.value % 0x3FFF);
-    WipeScanlineBuffer *buffer0 = sub_02010EE0(&wipe->scanlines, 0);
-    WipeScanlineBuffer *buffer1 = sub_02010EE0(&wipe->scanlines, 1);
+    WipeScanlineBuffer *buffer0 = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
+    WipeScanlineBuffer *buffer1 = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 1);
     int y, x;
     u32 inv;
 
     // upper half: window 1 right of the centre line, window 0 mirrored below
     for (y = 0; y < 96; y++) {
         if (wipe->phase.value < 0x3FFF) {
-            x = sub_020109D8(phase, 96 - y);
+            x = ScreenFade_MulTan(phase, 96 - y);
             if (x > 127) {
                 x = 127;
             }
@@ -698,7 +698,7 @@ void SectorWipe_BuildScanlines(SectorWipe *wipe) {
             buffer1->nextLeft[y] = 128;
             buffer1->nextRight[y] = 128;
         } else {
-            x = sub_020109D8(inv, y - 96);
+            x = ScreenFade_MulTan(inv, y - 96);
             if (x > 127) {
                 x = 127;
             }
@@ -717,27 +717,27 @@ void SectorWipe_Interpolate(WipeInterpolation *interp, int numerator, int denomi
     interp->value = value + interp->start;
 }
 
-void MirroredSectorWipe_Begin(ScreenWipeFade *fade, const SectorWipeConfig *config) {
+void MirroredSectorWipe_Begin(ScreenFade *fade, const SectorWipeConfig *config) {
     fade->effect = Heap_Alloc(fade->heapId, sizeof(SectorWipe));
     memset(fade->effect, 0, sizeof(SectorWipe));
     MirroredSectorWipe_Init(fade->effect, config, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue, fade->blankPair, fade->heapId);
     fade->state++;
 }
 
-BOOL MirroredSectorWipe_Update(ScreenWipeFade *fade) {
+BOOL MirroredSectorWipe_Update(ScreenFade *fade) {
     SectorWipe *wipe = fade->effect;
     BOOL done = FALSE;
 
     switch (fade->state) {
     case 1:
         if (MirroredSectorWipe_Step(wipe) == TRUE) {
-            sub_02010F34(wipe->queued, wipe->regQueue, fade->screen);
+            ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
     case 2:
         MirroredSectorWipe_Finish(wipe);
-        sub_02010EC8(&wipe->scanlines);
+        ScreenWipeScanlines_Free(&wipe->scanlines);
         Heap_Free(fade->effect);
         fade->effect = NULL;
         fade->state++;
@@ -757,7 +757,7 @@ void MirroredSectorWipe_Init(SectorWipe *wipe, const SectorWipeConfig *config, i
     wipe->phase.value = config->startPhase;
     wipe->phase.start = config->startPhase;
     wipe->phase.delta = config->endPhase - config->startPhase;
-    ScanlineBufferController_Init(&wipe->scanlines, 2, screen, heapId);
+    ScreenWipeScanlines_Init(&wipe->scanlines, 2, screen, heapId);
     wipe->steps = steps;
     wipe->step = 0;
     wipe->framesPerStep = framesPerStep;
@@ -767,13 +767,13 @@ void MirroredSectorWipe_Init(SectorWipe *wipe, const SectorWipeConfig *config, i
     wipe->heapId = heapId;
     wipe->queued = config->queued;
     MirroredSectorWipe_BuildScanlines(wipe);
-    SysTask_CreateOnVWaitQueue(sub_02010F00, wipe, 0x3FF);
-    sub_02010EE0(&wipe->scanlines, 0);
-    sub_02010EE0(&wipe->scanlines, 1);
-    sub_02010F84(regQueue, config->insideMask, config->outsideMask, 0, screen, 0, 0, 255, 192, wipe->queued);
-    sub_02010F84(regQueue, config->insideMask, config->outsideMask, 1, screen, 0, 0, 255, 192, wipe->queued);
-    sub_02011068(regQueue, 3, screen, wipe->queued);
-    sub_0200FF88(wipe->blankPair, wipe, ScanlineWindow_HBlankCallback, screen, heapId);
+    SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
+    ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
+    ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 1);
+    ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, 0, screen, 0, 0, 255, 192, wipe->queued);
+    ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, 1, screen, 0, 0, 255, 192, wipe->queued);
+    ScreenFade_SetWindowVisible(regQueue, 3, screen, wipe->queued);
+    sub_0200FF88(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
 BOOL MirroredSectorWipe_Step(SectorWipe *wipe) {
@@ -785,7 +785,7 @@ BOOL MirroredSectorWipe_Step(SectorWipe *wipe) {
             wipe->step = next;
             MirroredSectorWipe_Interpolate(&wipe->phase, wipe->step, wipe->steps);
             MirroredSectorWipe_BuildScanlines(wipe);
-            SysTask_CreateOnVWaitQueue(sub_02010F00, wipe, 0x3FF);
+            SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
         } else {
             sub_0200FFB4(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
             return TRUE;
@@ -806,14 +806,14 @@ void MirroredSectorWipe_BuildScanlines(SectorWipe *wipe) {
     u32 inv;
     u32 phase = (u16)wipe->phase.value;
 
-    buffer0 = sub_02010EE0(&wipe->scanlines, 0);
-    buffer1 = sub_02010EE0(&wipe->scanlines, 1);
+    buffer0 = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
+    buffer1 = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 1);
     inv = 0x3FFF - phase;
     // both halves mirrored around the centre scanline
     for (y = 0; y < 96; y++) {
         u32 distance = 96 - y;
-        int x0 = sub_020109D8(phase, distance);
-        int x1 = sub_020109D8(inv, distance);
+        int x0 = ScreenFade_MulTan(phase, distance);
+        int x1 = ScreenFade_MulTan(inv, distance);
         s16 left0, right0, left1, right1;
         if (x0 > 127) {
             x0 = 127;
@@ -844,21 +844,21 @@ void MirroredSectorWipe_Interpolate(WipeInterpolation *interp, int numerator, in
     interp->value = value;
 }
 
-void LineShutterWipe_Begin(ScreenWipeFade *fade, const LineShutterConfig *config) {
+void LineShutterWipe_Begin(ScreenFade *fade, const LineShutterConfig *config) {
     fade->effect = Heap_Alloc(fade->heapId, sizeof(LineShutterWipe));
     memset(fade->effect, 0, sizeof(LineShutterWipe));
     LineShutterWipe_Init(fade->effect, config, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue, fade->blankPair, fade->heapId);
     fade->state++;
 }
 
-BOOL LineShutterWipe_Update(ScreenWipeFade *fade) {
+BOOL LineShutterWipe_Update(ScreenFade *fade) {
     BOOL done = FALSE;
     LineShutterWipe *wipe = fade->effect;
 
     switch (fade->state) {
     case 1:
         if (LineShutterWipe_Step(wipe) == TRUE) {
-            sub_02010F34(wipe->queued, wipe->regQueue, fade->screen);
+            ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
@@ -880,7 +880,7 @@ BOOL LineShutterWipe_Update(ScreenWipeFade *fade) {
 }
 
 void LineShutterWipe_Init(LineShutterWipe *wipe, const LineShutterConfig *config, int steps, int framesPerStep, int screen, WindowRegisterQueue *regQueue, void *blankPair, enum HeapID heapId) {
-    sub_02011080(&wipe->mask, screen, 1, 0, 0);
+    LineMask_Init(&wipe->mask, screen, 1, 0, 0);
     if (config->queued == 0) {
         memset(wipe->mask.windows[0].lines, 1, 192);
         memset(wipe->mask.windows[0].latched, 1, 192);
@@ -898,13 +898,13 @@ void LineShutterWipe_Init(LineShutterWipe *wipe, const LineShutterConfig *config
     wipe->frameCounter = 0;
     wipe->regQueue = regQueue;
     wipe->blankPair = blankPair;
-    sub_020110DC(blankPair, (u8 *)wipe, heapId);
+    LineMask_StartHBlank(blankPair, &wipe->mask, heapId);
     if (config->queued == 1) {
-        sub_02010F84(regQueue, 0x20, 0x3F, 0, screen, 0, 0, 0, 0, config->queued);
+        ScreenFade_SetWindow(regQueue, 0x20, 0x3F, 0, screen, 0, 0, 0, 0, config->queued);
     } else {
-        sub_02010F84(regQueue, 0x3F, 0x20, 0, screen, 0, 0, 0, 0, config->queued);
+        ScreenFade_SetWindow(regQueue, 0x3F, 0x20, 0, screen, 0, 0, 0, 0, config->queued);
     }
-    sub_02011068(regQueue, 1, screen, wipe->queued);
+    ScreenFade_SetWindowVisible(regQueue, 1, screen, wipe->queued);
 }
 
 BOOL LineShutterWipe_Step(LineShutterWipe *wipe) {
@@ -914,9 +914,9 @@ BOOL LineShutterWipe_Step(LineShutterWipe *wipe) {
         if (wipe->step + 1 <= wipe->steps) {
             wipe->step++;
             LineShutterWipe_BuildLines(wipe);
-            sub_020110C4(wipe);
+            LineMask_StartCommitTask(&wipe->mask);
         } else {
-            sub_020110F4(wipe->blankPair, (u8 *)wipe, wipe->heapId);
+            LineMask_StopHBlank(wipe->blankPair, &wipe->mask, wipe->heapId);
             return TRUE;
         }
     }
@@ -964,7 +964,7 @@ void LineShutterWipe_FillRange(const LineShutterRange *range, u8 *lines, int ste
     }
 }
 
-void RectShutterWipe_Begin(ScreenWipeFade *fade, const RectShutterWipeConfig *config) {
+void RectShutterWipe_Begin(ScreenFade *fade, const RectShutterWipeConfig *config) {
     RectShutterWipe *wipe;
 
     fade->effect = Heap_Alloc(fade->heapId, sizeof(RectShutterWipe));
@@ -981,7 +981,7 @@ void RectShutterWipe_Begin(ScreenWipeFade *fade, const RectShutterWipeConfig *co
     fade->state++;
 }
 
-BOOL RectShutterWipe_Update(ScreenWipeFade *fade) {
+BOOL RectShutterWipe_Update(ScreenFade *fade) {
     BOOL done = FALSE;
     RectShutterWipe *wipe = fade->effect;
     BOOL finished;
@@ -995,7 +995,7 @@ BOOL RectShutterWipe_Update(ScreenWipeFade *fade) {
         }
 
         if (finished == TRUE) {
-            sub_02010F34(fade->unk28, fade->regQueue, fade->screen);
+            ScreenFade_SetEndWindows(fade->fadeOut, fade->regQueue, fade->screen);
             fade->state++;
         }
         break;
@@ -1026,15 +1026,15 @@ void RectShutterWipe_InitRectFirst(RectShutterWipe *wipe, const RectShutterWipeC
     RectWipe_Init(&wipe->rect, &config->rect, rectSteps, framesPerStep, screen, regQueue);
 
     if (config->rect.window == 0) {
-        sub_02011068(regQueue, 1, screen, config->rect.queued);
+        ScreenFade_SetWindowVisible(regQueue, 1, screen, config->rect.queued);
     } else {
-        sub_02011068(regQueue, 2, screen, config->rect.queued);
+        ScreenFade_SetWindowVisible(regQueue, 2, screen, config->rect.queued);
     }
 
     wipe->phase = 0;
 }
 
-BOOL RectShutterWipe_StepRectFirst(RectShutterWipe *wipe, ScreenWipeFade *fade) {
+BOOL RectShutterWipe_StepRectFirst(RectShutterWipe *wipe, ScreenFade *fade) {
     BOOL done = FALSE;
 
     switch (wipe->phase) {
@@ -1072,7 +1072,7 @@ void RectShutterWipe_InitShutterFirst(RectShutterWipe *wipe, const RectShutterWi
     wipe->phase = 0;
 }
 
-BOOL RectShutterWipe_StepShutterFirst(RectShutterWipe *wipe, ScreenWipeFade *fade) {
+BOOL RectShutterWipe_StepShutterFirst(RectShutterWipe *wipe, ScreenFade *fade) {
     BOOL done = FALSE;
 
     switch (wipe->phase) {
@@ -1082,9 +1082,9 @@ BOOL RectShutterWipe_StepShutterFirst(RectShutterWipe *wipe, ScreenWipeFade *fad
             RectWipe_Init(&wipe->rect, &wipe->config->rect, wipe->laterSteps, fade->framesPerStep, fade->screen, fade->regQueue);
 
             if (wipe->config->rect.window == 0) {
-                sub_02011068(fade->regQueue, 1, fade->screen, wipe->config->rect.queued);
+                ScreenFade_SetWindowVisible(fade->regQueue, 1, fade->screen, wipe->config->rect.queued);
             } else {
-                sub_02011068(fade->regQueue, 2, fade->screen, wipe->config->rect.queued);
+                ScreenFade_SetWindowVisible(fade->regQueue, 2, fade->screen, wipe->config->rect.queued);
             }
         }
         break;
