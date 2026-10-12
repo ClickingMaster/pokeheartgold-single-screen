@@ -30,7 +30,7 @@
 #include "player_avatar_movement.h"
 #include "unk_0206D494.h"
 #include "safari_zone_encounters.h"
-#include "unk_02097F6C.h"
+#include "swarm.h"
 #include "wild_encounter.h"
 
 #define ENCOUNTER_TYPE_LAND       0
@@ -165,7 +165,7 @@ static void EncSlotArray_Update_HoennSinnohSounds(FieldSystem *fieldSystem, cons
 
 static void EncSlots_Update_LandSwarm(FieldSystem *fieldSystem, const EncounterData *encData, EncounterSlot *encSlotA, EncounterSlot *encSlotB) {
     RoamerSaveData *roamerSave = Save_Roamers_Get(fieldSystem->saveData);
-    if (RoamerSave_OutbreakActive(roamerSave) && sub_02097F6C(Roamers_GetRand(roamerSave, 2), fieldSystem->location->mapId, 0)) {
+    if (RoamerSave_OutbreakActive(roamerSave) && IsSwarmEncounterFromRand(Roamers_GetRand(roamerSave, 2), fieldSystem->location->mapId, 0)) {
         encSlotA->species = encData->landSwarm;
         encSlotB->species = encData->landSwarm;
     }
@@ -173,14 +173,14 @@ static void EncSlots_Update_LandSwarm(FieldSystem *fieldSystem, const EncounterD
 
 static void EncSlots_Update_SurfingSwarm(FieldSystem *fieldSystem, const EncounterData *encData, EncounterSlot *encSlot) {
     RoamerSaveData *roamerSave = Save_Roamers_Get(fieldSystem->saveData);
-    if (RoamerSave_OutbreakActive(roamerSave) && sub_02097F6C(Roamers_GetRand(roamerSave, 2), fieldSystem->location->mapId, 1)) {
+    if (RoamerSave_OutbreakActive(roamerSave) && IsSwarmEncounterFromRand(Roamers_GetRand(roamerSave, 2), fieldSystem->location->mapId, 1)) {
         encSlot->species = encData->surfSwarm;
     }
 }
 
 static void EncSlots_Update_FishingSwarm(FieldSystem *fieldSystem, u8 rodType, const EncounterData *encData, EncounterSlot *encSlots) {
     RoamerSaveData *roamerSave = Save_Roamers_Get(fieldSystem->saveData);
-    if (RoamerSave_OutbreakActive(roamerSave) && sub_02097F6C(Roamers_GetRand(roamerSave, 2), fieldSystem->location->mapId, 2)) {
+    if (RoamerSave_OutbreakActive(roamerSave) && IsSwarmEncounterFromRand(Roamers_GetRand(roamerSave, 2), fieldSystem->location->mapId, 2)) {
         int sOldRodSlotIdxs[1] = { 2 };
         int sGoodRodSlotIdxs[3] = { 0, 2, 3 };
         int sSuperRodSlotIdxs[5] = { 0, 1, 2, 3, 4 };

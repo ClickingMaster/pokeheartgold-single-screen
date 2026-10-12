@@ -22,7 +22,7 @@
 #include "touchpad.h"
 #include "unk_02009D48.h"
 #include "unk_0200FA24.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 #include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 

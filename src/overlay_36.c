@@ -29,9 +29,9 @@
 #include "sav_system_info.h"
 #include "sys_flags.h"
 #include "sys_vars.h"
-#include "unk_02018380.h"
+#include "igt_counter.h"
 #include "friend_group_access.h"
-#include "unk_0205B3DC.h"
+#include "union_room_avatar.h"
 #include "frontier_field_support.h"
 #include "unk_02091564.h"
 
@@ -127,7 +127,7 @@ BOOL ov36_App_InitGameState_AfterOakSpeech_AppExec(OverlayManager *man, int *sta
     struct UnkStruct_02111868_sub *unk_work = OverlayManager_GetArgs(man);
     SaveData *saveData = unk_work->saveData;
     InitGameStateAfterOakSpeech_Internal(HEAPID_OV36, saveData, TRUE);
-    sub_0201838C(Save_PlayerData_GetIGTAddr(saveData));
+    IGTCounter_Start(Save_PlayerData_GetIGTAddr(saveData));
 
     return TRUE;
 }
@@ -164,7 +164,7 @@ BOOL ov36_App_MainMenu_SelectOption_Continue_AppExec(OverlayManager *man, int *s
         Party_ResetAllShayminToLandForm(SaveArray_Party_Get(saveData));
     }
 
-    sub_0201838C(Save_PlayerData_GetIGTAddr(saveData));
+    IGTCounter_Start(Save_PlayerData_GetIGTAddr(saveData));
 
     return TRUE;
 }

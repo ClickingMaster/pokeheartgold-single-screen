@@ -28,7 +28,7 @@
 #include "sound_playback.h"
 #include "unk_02009D48.h"
 #include "unk_02013FDC.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 #include "legendary_cinematic_manager.h"
 
 #define LEGENDARY_CINEMATIC_MAX_MODELS  8

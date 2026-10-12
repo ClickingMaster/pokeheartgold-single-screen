@@ -44,7 +44,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "type_icon_resources.h"
-#include "unk_0200CE7C.h"
+#include "message_printer_number.h"
 #include "unk_0208805C.h"
 #include "unk_02088288.h"
 

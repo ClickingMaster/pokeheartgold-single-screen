@@ -40,7 +40,7 @@
 #include "string_util.h"
 #include "system.h"
 #include "oam_manager.h"
-#include "unk_0200CE7C.h"
+#include "message_printer_number.h"
 #include "unk_0200FA24.h"
 #include "unk_02013FDC.h"
 #include "frontier_save_access.h"

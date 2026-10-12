@@ -13,8 +13,8 @@
 #include "pokedex_util.h"
 #include "sprite_system.h"
 #include "sound_playback.h"
-#include "unk_02091278.h"
-#include "unk_020912AC.h"
+#include "pokedex_language.h"
+#include "pokedex_language_order.h"
 
 static void PokedexApp_SetListBgPriorities(void);
 static void PokedexApp_SetSearchBgPriorities(void);
@@ -1150,7 +1150,7 @@ void PokedexApp_CycleListEntryLanguage(PokedexAppData *pokedexApp, u16 species, 
     s16 r7 = LanguageToDexFlag(pokedexApp->language);
     for (u32 i = 0; i < 6; ++i) {
         r7 = sub_020912D0(r7, a2);
-        s16 r4 = sub_02091294(r7);
+        s16 r4 = DexFlagToLanguage(r7);
         if (r4 == pokedexApp->language) {
             return;
         }
@@ -1575,7 +1575,7 @@ void PokedexApp_CycleSearchEntryLanguage(PokedexAppData *pokedexApp, u16 species
         } else if (dexLangFlag >= 6) {
             dexLangFlag = 0;
         }
-        s16 language = sub_02091294(dexLangFlag);
+        s16 language = DexFlagToLanguage(dexLangFlag);
         if (language == pokedexApp->language) {
             break;
         }

@@ -1413,84 +1413,84 @@
 	.public PrimoPassword_DecodeCheck2
 	.public PrimoPassword_CheckWallpaper
 	.public PrimoPassword_Check2
-	.public ov02_0224CDB0
-	.public ov02_0224CE28
-	.public ov02_0224CFD8
-	.public ov02_0224D044
-	.public ov02_0224D0AC
-	.public ov02_0224D0C8
-	.public ov02_0224D144
-	.public ov02_0224D178
-	.public ov02_0224D1AC
-	.public ov02_0224D1DC
-	.public ov02_0224D1E4
-	.public ov02_0224D22C
-	.public ov02_0224D278
-	.public ov02_0224D288
-	.public ov02_0224D2BC
-	.public ov02_0224D2C8
-	.public ov02_0224D2DC
-	.public ov02_0224D2F0
-	.public ov02_0224D2F8
-	.public ov02_0224D310
-	.public ov02_0224D358
-	.public ov02_0224D3A4
-	.public ov02_0224D3B4
-	.public ov02_0224D3E8
-	.public ov02_0224D3F4
-	.public ov02_0224D408
-	.public ov02_0224D41C
-	.public ov02_0224D424
-	.public ov02_0224D43C
-	.public ov02_0224D468
-	.public ov02_0224D488
-	.public ov02_0224D580
-	.public ov02_0224D598
-	.public ov02_0224D5AC
-	.public ov02_0224D5B4
-	.public ov02_0224D648
-	.public ov02_0224D658
-	.public ov02_0224D670
-	.public ov02_0224D67C
-	.public ov02_0224D690
-	.public ov02_0224D698
-	.public ov02_0224D700
-	.public ov02_0224D73C
-	.public ov02_0224D788
-	.public ov02_0224D7B0
-	.public ov02_0224D820
-	.public ov02_0224D868
-	.public ov02_0224D880
-	.public ov02_0224D914
-	.public ov02_0224D950
-	.public ov02_0224D98C
-	.public ov02_0224D9A4
-	.public ov02_0224D9B8
-	.public ov02_0224D9C0
-	.public ov02_0224DAA4
-	.public ov02_0224DB8C
-	.public ov02_0224DB9C
-	.public ov02_0224DC58
-	.public ov02_0224DC64
-	.public ov02_0224DC78
-	.public ov02_0224DC8C
-	.public ov02_0224DC94
-	.public ov02_0224DCB0
-	.public ov02_0224DD38
-	.public ov02_0224DD4C
-	.public ov02_0224DD8C
-	.public ov02_0224DDC8
-	.public ov02_0224DDE0
-	.public ov02_0224DDF4
-	.public ov02_0224DE08
-	.public ov02_0224DE10
-	.public ov02_0224DE6C
-	.public ov02_0224DEA8
-	.public ov02_0224DEF4
-	.public ov02_0224DF1C
-	.public ov02_0224E008
-	.public ov02_0224E020
-	.public ov02_0224E074
+	.public HallOfFame_StartBallAnim
+	.public Task_HallOfFameBallAnim
+	.public Field3dObject_SetPosInFrontOfMapObject
+	.public Field3dObject_SetPosInFrontOfPlayer
+	.public Field3dObject_SetPosAtPlayer
+	.public FieldMoveEffectModel_Load
+	.public FieldMoveEffectModel_Unload
+	.public FieldMoveEffectModel_AnimateOnce
+	.public FieldMoveEffectModel_AnimateLoop
+	.public FieldMoveEffectModel_Draw
+	.public CutEffect_InitAtPlayer
+	.public CutEffect_InitAtFollower
+	.public CutEffect_Destroy
+	.public CutEffect_Update
+	.public CutEffect_Render
+	.public CutEffect_CreateAtPlayer
+	.public CutEffect_CreateAtFollower
+	.public CutEffect_Delete
+	.public CutEffect_IsFinished
+	.public RockSmashEffect_InitAtPlayer
+	.public RockSmashEffect_InitAtFollower
+	.public RockSmashEffect_Destroy
+	.public RockSmashEffect_Update
+	.public RockSmashEffect_Render
+	.public RockSmashEffect_CreateAtPlayer
+	.public RockSmashEffect_CreateAtFollower
+	.public RockSmashEffect_Delete
+	.public RockSmashEffect_IsFinished
+	.public WaterfallEffect_Init
+	.public WaterfallEffect_Destroy
+	.public WaterfallEffect_Update
+	.public WaterfallEffect_Render
+	.public WaterfallEffect_Create
+	.public WaterfallEffect_Delete
+	.public WhirlpoolEffect_Init
+	.public WhirlpoolEffect_Destroy
+	.public WhirlpoolEffect_Update
+	.public WhirlpoolEffect_Render
+	.public WhirlpoolEffect_Create
+	.public WhirlpoolEffect_Delete
+	.public RockClimbDebris_SpawnPiece
+	.public RockClimbDebris_UpdatePiece
+	.public RockClimbDebris_InitPiece
+	.public RockClimbDebris_FreePiece
+	.public RockClimbDebris_UpdateOffsets
+	.public RockClimbDebris_Spawn
+	.public RockClimbDebris_UpdatePieces
+	.public RockClimbDebris_Init
+	.public RockClimbDebris_Destroy
+	.public RockClimbDebris_Update
+	.public RockClimbDebris_Render
+	.public RockClimbDebris_Create
+	.public RockClimbDebris_Delete
+	.public HeadbuttEffect_InitAtPlayer
+	.public HeadbuttEffect_InitAtFollower
+	.public HeadbuttEffect_Destroy
+	.public HeadbuttEffect_Update
+	.public HeadbuttEffect_Render
+	.public HeadbuttEffect_CreateAtPlayer
+	.public HeadbuttEffect_CreateAtFollower
+	.public HeadbuttEffect_Delete
+	.public HeadbuttEffect_IsFinished
+	.public RockDebris_Init
+	.public RockDebris_InitWithFollower
+	.public RockDebris_Destroy
+	.public RockDebris_Update
+	.public RockDebris_Render
+	.public RockDebris_Create
+	.public RockDebris_CreateWithFollower
+	.public RockDebris_Delete
+	.public RockDebris_SpawnPiece
+	.public RockDebris_UpdatePiece
+	.public RockDebris_InitPiece
+	.public RockDebris_FreePiece
+	.public RockDebris_Spawn
+	.public RockDebris_UpdatePieces
+	.public Task_ScriptFieldMoveEffect
+	.public ScriptFieldMoveEffect_Start
 	.public MapObjects_SwapPositions
 	.public SwapPositions_CreateTaskEnv
 	.public Task_SwapMapObjectPositions
@@ -1608,21 +1608,21 @@
 	.public ov02_022537DC
 	.public ov02_02253820
 	.public ov02_02253884
-	.public ov02_022538EC
-	.public ov02_022538FC
-	.public ov02_02253914
-	.public ov02_0225392C
-	.public ov02_02253944
-	.public ov02_0225395C
-	.public ov02_02253974
-	.public ov02_0225398C
-	.public ov02_022539A4
-	.public ov02_022539BC
-	.public ov02_022539D4
-	.public ov02_022539EC
-	.public ov02_02253A04
-	.public ov02_02253A1C
-	.public ov02_02253A34
+	.public sRideEffectFileIds
+	.public sRockSmashEffectAtPlayerTemplate
+	.public sWhirlpoolEffectTemplate
+	.public sHeadbuttEffectAtFollowerTemplate
+	.public sWaterfallEffectTemplate
+	.public sRockClimbDebrisTemplate
+	.public sCutEffectAtPlayerTemplate
+	.public sRockSmashEffectAtFollowerTemplate
+	.public sHeadbuttEffectAtPlayerTemplate
+	.public sCutEffectAtFollowerTemplate
+	.public sRockDebrisTemplate
+	.public sRockDebrisWithFollowerTemplate
+	.public sScriptFieldMoveEffectDeleteFuncs
+	.public sScriptFieldMoveEffectCreateFuncs
+	.public sScriptFieldMoveEffectIsFinishedFuncs
 	.public ov02_02253A4C
 	.public sShinyLeafMasks
 	.public sShinyLeafMonDataIds
@@ -1633,7 +1633,7 @@
 	.public ov02_02253D90
 	.public ov02_02253D94
 	.public ov02_02253D98
-	.public ov02_02253DD8
+	.public sHallOfFameBallOffsets
 	.public ov02_02253DDC
 	.public ov02_02253DE0
 	.public ov02_BattleExit_HandleRoamerAction
@@ -1712,39 +1712,39 @@
 	.public FieldMoveTaskEnvironment_New
 	.public FieldTeleport_FollowMonFlash
 	.public FieldDig_Warp
-	.public ov02_0224D0AC
-	.public ov02_0224D1DC
-	.public ov02_0224D278
-	.public ov02_0224D2BC
-	.public ov02_0224D2C8
-	.public ov02_0224D2DC
-	.public ov02_0224D2F0
-	.public ov02_0224D2F8
-	.public ov02_0224D3A4
-	.public ov02_0224D3E8
-	.public ov02_0224D3F4
-	.public ov02_0224D408
-	.public ov02_0224D41C
-	.public ov02_0224D424
-	.public ov02_0224D598
-	.public ov02_0224D5AC
-	.public ov02_0224D648
-	.public ov02_0224D658
-	.public ov02_0224D670
-	.public ov02_0224D67C
-	.public ov02_0224D690
-	.public ov02_0224D9A4
-	.public ov02_0224D9B8
-	.public ov02_0224DB8C
-	.public ov02_0224DC58
-	.public ov02_0224DC64
-	.public ov02_0224DC78
-	.public ov02_0224DC8C
-	.public ov02_0224DC94
-	.public ov02_0224DD38
-	.public ov02_0224DDE0
-	.public ov02_0224DDF4
-	.public ov02_0224DE08
+	.public Field3dObject_SetPosAtPlayer
+	.public FieldMoveEffectModel_Draw
+	.public CutEffect_Destroy
+	.public CutEffect_Render
+	.public CutEffect_CreateAtPlayer
+	.public CutEffect_CreateAtFollower
+	.public CutEffect_Delete
+	.public CutEffect_IsFinished
+	.public RockSmashEffect_Destroy
+	.public RockSmashEffect_Render
+	.public RockSmashEffect_CreateAtPlayer
+	.public RockSmashEffect_CreateAtFollower
+	.public RockSmashEffect_Delete
+	.public RockSmashEffect_IsFinished
+	.public WaterfallEffect_Create
+	.public WaterfallEffect_Delete
+	.public WhirlpoolEffect_Destroy
+	.public WhirlpoolEffect_Update
+	.public WhirlpoolEffect_Render
+	.public WhirlpoolEffect_Create
+	.public WhirlpoolEffect_Delete
+	.public RockClimbDebris_Create
+	.public RockClimbDebris_Delete
+	.public HeadbuttEffect_Destroy
+	.public HeadbuttEffect_Render
+	.public HeadbuttEffect_CreateAtPlayer
+	.public HeadbuttEffect_CreateAtFollower
+	.public HeadbuttEffect_Delete
+	.public HeadbuttEffect_IsFinished
+	.public RockDebris_InitWithFollower
+	.public RockDebris_Create
+	.public RockDebris_CreateWithFollower
+	.public RockDebris_Delete
 	.public MapObjects_SwapPositions
 	.public SwapPositions_CreateTaskEnv
 	.public MapId_IsSafariZone

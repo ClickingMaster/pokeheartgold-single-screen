@@ -247,7 +247,7 @@
 .public Pokedex_ConvertToCurrentDexNo
 .public sub_020880CC
 .public LanguageToDexFlag
-.public sub_02091294
+.public DexFlagToLanguage
 .public sub_020912AC
 .public sub_020912D0
 .public SetDexBanksByGiratinaForm

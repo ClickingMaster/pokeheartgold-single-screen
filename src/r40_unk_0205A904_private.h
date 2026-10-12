@@ -5,7 +5,7 @@
 #include "mail_message.h"
 #include "message_format.h"
 #include "player_data.h"
-#include "unk_0205B3DC.h"
+#include "union_room_avatar.h"
 struct UnkSub_0205A904 {
     u32 id[4];
     u8 a[4];

@@ -18,7 +18,7 @@
 #include "sprite.h"
 #include "text.h"
 #include "unk_0200FA24.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 
 // Battle intros of the gym leaders and the rival (effects 12-28): the leader's picture slides
 // in over a scrolling band with the leader's name. Elite Four and champion (effects 29-33):

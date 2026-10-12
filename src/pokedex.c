@@ -6,7 +6,7 @@
 #include "constants/species.h"
 
 #include "pokemon.h"
-#include "unk_02091278.h"
+#include "pokedex_language.h"
 
 #define POKEDEX_MAGIC (0xBEEFCAFE)
 #define ASSERT_POKEDEX(pokedex)                       \

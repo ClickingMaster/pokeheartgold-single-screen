@@ -6,7 +6,7 @@
 #include "player_data.h"
 #include "save_wifi_history.h"
 #include "frontier_data_access.h"
-#include "unk_0205B3DC.h"
+#include "union_room_avatar.h"
 
 void sub_02069528(SaveData *saveData, s32 a1, UnkStruct_02069528 *a2) {
     PlayerProfile *playerProfile = Save_PlayerData_GetProfile(saveData);

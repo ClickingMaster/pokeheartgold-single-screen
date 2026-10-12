@@ -14,7 +14,7 @@
 #include "sound_radio.h"
 #include "sys_flags.h"
 #include "sound_playback.h"
-#include "unk_02097F6C.h"
+#include "swarm.h"
 
 typedef struct PokemonTalkData {
     enum HeapID heapID;

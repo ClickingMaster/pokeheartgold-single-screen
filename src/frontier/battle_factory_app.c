@@ -40,7 +40,7 @@
 #include "unk_0200FA24.h"
 #include "bg_cell_manager.h"
 #include "grid_input_handler.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"

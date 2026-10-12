@@ -14,9 +14,9 @@
 #include "sys_task.h"
 #include "system.h"
 #include "timer_3.h"
-#include "unk_02018380.h"
+#include "igt_counter.h"
 #include "touchpad.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 #include "unk_02035900.h"
 #include "comm_state.h"
 #include "wfc_user_info_warning.h"
@@ -89,7 +89,7 @@ void NitroMain(void) {
     gSystem.frameCounter = 0;
     InitializeMainRNG();
     ScreenBrightnessData_InitAll();
-    sub_02018380();
+    IGTCounter_Init();
     _02111864 = 0;
     OS_InitTick();
     while (1) {
@@ -114,7 +114,7 @@ void NitroMain(void) {
             }
         }
         GF_RTC_UpdateOnFrame();
-        sub_020183B0();
+        IGTCounter_Update();
         Handle3DBufferSwapRequest();
         SysTaskQueue_RunTasks(gSystem.printTaskQueue);
         OS_WaitIrq(TRUE, OS_IE_VBLANK);

@@ -3,7 +3,7 @@
 #include "gf_3d_vramman.h"
 #include "gf_gfx_planes.h"
 #include "particle_system.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 
 typedef struct ParticleScene {
     enum HeapID heapID;

@@ -53,7 +53,7 @@ void OffsetPositionInDirection(int direction, VecFx32 *position, int distance);
 void FuchsiaGymmick_CheckCollision(FieldSystem *fieldSystem, int x, int z);
 void sub_02005BA8(u16 sequence);
 int MapObject_GetMetatileBehaviorInDirection(LocalMapObject *object, int direction);
-void ov01_021F2EDC(PlayerAvatar *avatar);
+void Field_PlayerAvatar_TryEnterPoketchPose(PlayerAvatar *avatar);
 
 // PlayerAvatar_IsBikeBlockedInDirection passes the behavior as a full word (matched against int parameters).
 #define MetatileBehavior_IsVeryTallGrass_Int(behavior) ((BOOL(*)(u32))MetatileBehavior_IsVeryTallGrass)(behavior)
@@ -127,14 +127,14 @@ void PlayerAvatar_MoveControl(PlayerAvatar *avatar, MapLoadManager *mapLoadManag
         PlayerAvatar_StoreHeldDirections(avatar, direction, keys, heldKeys);
         Field_PlayerAvatar_ApplyTransitionFlags(avatar);
         if (PlayerAvatar_TryForcedMovement(avatar, direction) == TRUE) {
-            ov01_021F2F24(avatar);
+            Field_PlayerAvatar_TryLeavePoketchPose(avatar);
             return;
         }
         if (PlayerAvatar_GetState(avatar) == PLAYER_STATE_WALKING) {
             if (PlayerAvatar_UpdateFootStepKind(avatar, direction)) {
-                ov01_021F2F24(avatar);
+                Field_PlayerAvatar_TryLeavePoketchPose(avatar);
             } else if (allowTurn == TRUE) {
-                ov01_021F2EDC(avatar);
+                Field_PlayerAvatar_TryEnterPoketchPose(avatar);
             }
         }
         PlayerAvatar_MoveByState(avatar, manager, direction, keys, heldKeys);

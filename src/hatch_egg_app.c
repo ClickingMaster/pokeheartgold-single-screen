@@ -37,7 +37,7 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "particle_system.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 #include "unk_02087E70.h"
 #include "vram_transfer_manager.h"
 

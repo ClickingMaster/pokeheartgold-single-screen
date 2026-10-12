@@ -9,7 +9,7 @@
 #include "trade_sequence_internal.h"
 #include "trade_sequence_models.h"
 #include "unk_0200FA24.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 
 // Scene 5 of the trade animation (trades and receiving): the ball model, spinning, comes down onto the top screen
 // while the backgrounds scroll into place, fades out over reversed pulses, then the background zooms out and the

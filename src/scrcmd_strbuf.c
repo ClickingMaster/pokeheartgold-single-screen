@@ -11,7 +11,7 @@
 #include "save_vars_flags.h"
 #include "scrcmd.h"
 #include "sys_vars.h"
-#include "unk_0205B3DC.h"
+#include "union_room_avatar.h"
 #include "unk_0205BB1C.h"
 #include "map_landmark_name.h"
 

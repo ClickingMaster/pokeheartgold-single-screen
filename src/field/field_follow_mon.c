@@ -6,6 +6,7 @@
 
 #include "field/field_effect_helpers.h"
 #include "field/field_follow_mon.h"
+#include "field/resource_bank.h"
 
 #include "field_system.h"
 #include "follow_mon.h"
@@ -49,7 +50,6 @@ void sub_020659B8(LocalMapObject *object);
 // unk_02062108.c: the movement for a direction (movement + direction).
 u32 GetMovementForDirection(u32 direction, u32 movement);
 // field object models (still in asm or crammed).
-void *ov01_021FC5A4(void *bank, u32 id);
 BOOL ov01_021F9744(MapObjectManager *manager, u32 spriteId, void *record);
 u32 ov01_021FA44C(u32 direction);
 void ov01_021F9048(LocalMapObject *object);
@@ -68,7 +68,7 @@ void *Texture_GetImageData(NNSG3dResTex *texture, u32 index);
 // The render data of the map object manager (sub_0205F1A0); only the billboard sequence bank is used here.
 typedef struct MapObjectRenderData {
     u8 unk00[0xFC];
-    void *sequenceBank;
+    ResourceBank *sequenceBank;
 } MapObjectRenderData;
 
 // A billboard sequence from the sequence bank: count frames, then count u8s, then count u8 flags.
@@ -368,7 +368,7 @@ void ov01_022057D0(FieldSystem *fieldSystem) {
 
 #pragma force_active on
 void ov01_022057DC(MapObjectManager *manager) {
-    BillboardSequenceData *sequence = ov01_021FC5A4(((MapObjectRenderData *)sub_0205F1A0(manager))->sequenceBank, BILLBOARD_SEQUENCE_FOLLOW_MON_ALT);
+    BillboardSequenceData *sequence = ResourceBank_Get(((MapObjectRenderData *)sub_0205F1A0(manager))->sequenceBank, BILLBOARD_SEQUENCE_FOLLOW_MON_ALT);
     int count = sequence->count, i;
     u8 *flags = (u8 *)(sequence->frames + count);
     flags += count;
@@ -397,7 +397,7 @@ void ov01_02205808(BOOL alternate, LocalMapObject *object, void *billboard) {
 
 void ov01_02205870(BOOL alternate, LocalMapObject *object, void *billboard, void *record) {
     MapObjectRenderData *renderData = sub_0205F1A0(MapObject_GetManager(object));
-    void *sequence = ov01_021FC5A4(renderData->sequenceBank, alternate ? BILLBOARD_SEQUENCE_FOLLOW_MON_ALT : BILLBOARD_SEQUENCE_FOLLOW_MON);
+    void *sequence = ResourceBank_Get(renderData->sequenceBank, alternate ? BILLBOARD_SEQUENCE_FOLLOW_MON_ALT : BILLBOARD_SEQUENCE_FOLLOW_MON);
     BillboardGfxSequence_Init(sequence, (u8 *)record + 0xC);
 }
 

@@ -43,7 +43,7 @@
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
 #include "oam_manager.h"
-#include "unk_0200CE7C.h"
+#include "message_printer_number.h"
 #include "unk_0200FA24.h"
 #include "grid_input_handler.h"
 #include "frontier_save_access.h"

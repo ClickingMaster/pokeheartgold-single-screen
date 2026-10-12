@@ -117,7 +117,7 @@ BOOL sub_02078834(void *taskManager) {
         return TRUE;
     case 12:
         sub_020378E4(0);
-        data->launchedArgs = sub_020968B0(fieldSystem, 0);
+        data->launchedArgs = Frontier_LaunchApp(fieldSystem, 0);
         data->state++;
         break;
     case 13:

@@ -22,7 +22,7 @@
 #include "comm_state.h"
 #include "unk_02054648.h"
 #include "unk_02055418.h"
-#include "unk_0205B3DC.h"
+#include "union_room_avatar.h"
 #include "unk_0205BB1C.h"
 #include "field_warp_state.h"
 #include "unk_0206D494.h"

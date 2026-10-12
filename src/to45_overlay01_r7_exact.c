@@ -49,12 +49,12 @@ void ov01_021FA108(void *manager, u32 gfxId, void *mapObject) {
     u32 idA = ov01_021FA28C(gfxId);
     u32 idB;
     if (ov01_021F9EEC(render, idA) == TRUE && !ov01_021FA01C(manager, idA, mapObject)) {
-        ov01_021FC588(*(void **)((u8 *)render + 0xf8), idA);
+        ResourceBank_Free(*(void **)((u8 *)render + 0xf8), idA);
         ov01_021F9BAC(render, idA);
     }
     idB = ov01_021FA2A0(gfxId);
     if (ov01_021F9F14(render, idB) == TRUE && !ov01_021FA094(manager, idB, mapObject)) {
-        ov01_021FC588(*(void **)((u8 *)render + 0xfc), idB);
+        ResourceBank_Free(*(void **)((u8 *)render + 0xfc), idB);
         ov01_021F9CD0(render, idB);
     }
     if (ov01_021F9EC4(render, gfxId) == TRUE && !ov01_021F9FCC(manager, gfxId, mapObject)) {

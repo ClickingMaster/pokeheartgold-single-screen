@@ -18,8 +18,8 @@
 #include "sprite_system.h"
 #include "unk_02009D48.h"
 #include "unk_02013FDC.h"
-#include "unk_02091278.h"
-#include "unk_020912AC.h"
+#include "pokedex_language.h"
+#include "pokedex_language_order.h"
 
 extern const OamManagerParam sPokedexOamManagerParam;
 extern const OamCharTransferParam sPokedexOamCharTransferParam;
@@ -722,7 +722,7 @@ void PokedexApp_UpdateLanguageIcons(PokedexAppData *pokedexApp, u16 species, int
         shown = 0;
         for (index = (s16)(first + 5); (u32)index >= (u32)first; index--) {
             u32 which = index - first;
-            int language = sub_02091294(sub_020912AC(which));
+            int language = DexFlagToLanguage(sub_020912AC(which));
             if (PokedexApp_HasCaughtInLanguage(pokedexApp, species, (u16)language) == TRUE || language == GAME_LANGUAGE) {
                 int current = LanguageToDexFlag(pokedexApp->language);
                 int flag = sub_020912AC(which);

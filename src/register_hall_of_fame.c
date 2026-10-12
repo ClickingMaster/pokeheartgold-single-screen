@@ -32,7 +32,7 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "unk_02013FDC.h"
-#include "unk_02026E84.h"
+#include "palette_vram_addr.h"
 #include "unk_0206D494.h"
 
 typedef enum RegisterHallOfFameScene {

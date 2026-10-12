@@ -29,7 +29,7 @@
 #include "oam_manager.h"
 #include "unk_02013FDC.h"
 #include "geometry_math.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 
 enum ChooseStarterInput {
     CHOOSE_STARTER_INPUT_NONE = 0,

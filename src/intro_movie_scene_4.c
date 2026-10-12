@@ -12,7 +12,7 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "oam_manager.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 
 enum IntroScene4State {
     INTRO_SCENE4_FADE_IN,

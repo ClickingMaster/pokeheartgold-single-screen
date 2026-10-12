@@ -50,7 +50,7 @@ _0205CB66:
 	cmp r0, #1
 	bne _0205CB9A
 	add r0, r5, #0
-	bl ov01_021F2F24
+	bl Field_PlayerAvatar_TryLeavePoketchPose
 	pop {r3, r4, r5, r6, r7, pc}
 _0205CB9A:
 	add r0, r5, #0
@@ -63,14 +63,14 @@ _0205CB9A:
 	cmp r0, #0
 	beq _0205CBB8
 	add r0, r5, #0
-	bl ov01_021F2F24
+	bl Field_PlayerAvatar_TryLeavePoketchPose
 	b _0205CBC4
 _0205CBB8:
 	ldr r0, [sp, #0x1c]
 	cmp r0, #1
 	bne _0205CBC4
 	add r0, r5, #0
-	bl ov01_021F2EDC
+	bl Field_PlayerAvatar_TryEnterPoketchPose
 _0205CBC4:
 	add r0, sp, #8
 	ldrh r0, [r0, #0x10]

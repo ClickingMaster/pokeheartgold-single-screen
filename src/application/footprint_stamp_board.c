@@ -13,7 +13,7 @@
 #include "sound_playback.h"
 #include "text.h"
 #include "unk_0200FA24.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 
 // Declared only in other modules' private headers (src/model_animation.c, ov45, screen fade).
 void ModelResource_LoadFromNarc(FootprintStampModel *model, NARC *narc, int fileId, enum HeapID heapId);

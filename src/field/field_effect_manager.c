@@ -16,11 +16,6 @@ void Billboard_Delete(void *billboards);
 void *BillboardObject_Create(const FieldEffectBillboardTemplate *template);
 NNSG3dResMdl *BillboardObject_GetModel(void *object);
 void BillboardGfxSequence_Init(void *data, FieldEffectGfxSequence *sequence);
-void *ov01_021FC4C4(enum HeapID parentHeapID, int heapID, int heapSize, int capacity);
-void ov01_021FC520(void *heapManager);
-void *ov01_021FC5A4(void *heapManager, int id);
-void ov01_021FC588(void *heapManager, int id);
-void ov01_021FC5CC(void *heapManager, int id, NARC *narc, int fileId, BOOL atEnd);
 void ov01_021EA3B0(NNSG3dResMdl *mdl);
 void NNS_G3dMdlSetMdlFogEnableFlagAll(NNSG3dResMdl *mdl, int flag);
 void RenderModel_LoadFromNarc(void *model, int index, NARC *narc, int fileId, enum HeapID heapID, BOOL atEnd);
@@ -265,8 +260,8 @@ void FieldEffectManager_CreateGfx(FieldEffectManager *manager, enum HeapID heapI
     gfx->resourceCount = resourceCount;
     gfx->sequenceCount = sequenceCount;
     gfx->resCount = resCount;
-    gfx->resourceBank = ov01_021FC4C4(heapID, 0x44, resourceHeapSize, resourceCount);
-    gfx->sequenceBank = ov01_021FC4C4(heapID, 0x45, sequenceHeapSize, sequenceCount);
+    gfx->resourceBank = ResourceBank_Create(heapID, (enum HeapID)0x44, resourceHeapSize, resourceCount);
+    gfx->sequenceBank = ResourceBank_Create(heapID, (enum HeapID)0x45, sequenceHeapSize, sequenceCount);
     gfx->resMan = GF3dGfxRawResMan_Create(resCount, heapID);
     FieldEffectGfx_InitRecords(manager, gfx, recordCount);
     template.count = recordCount;
@@ -279,8 +274,8 @@ void FieldEffectManager_FreeGfx(FieldEffectManager *manager) {
     if (gfx != NULL) {
         Billboard_Delete(gfx->billboards);
         FieldEffectGfx_FreeRecords(gfx);
-        ov01_021FC520(gfx->resourceBank);
-        ov01_021FC520(gfx->sequenceBank);
+        ResourceBank_Destroy(gfx->resourceBank);
+        ResourceBank_Destroy(gfx->sequenceBank);
         GF3dGfxRawResMan_Destroy(gfx->resMan);
         FieldEffectManager_HeapFree(gfx);
         manager->gfx = NULL;
@@ -317,11 +312,11 @@ FieldEffectRecord *FieldEffectManager_AddRecord(FieldEffectManager *manager, u32
     FieldEffectGfxSequence sequence;
     int seqId = sequenceId;
     FieldEffectGfx *gfx = FieldEffectManager_GetGfx(manager);
-    void *data = ov01_021FC5A4(gfx->resourceBank, resourceId);
+    void *data = ResourceBank_Get(gfx->resourceBank, resourceId);
     GF_3DGfxRawResObj *texObj;
     NNSG3dResTex *tex;
     FieldEffectRecord *record;
-    BillboardGfxSequence_Init(ov01_021FC5A4(gfx->sequenceBank, seqId), &sequence);
+    BillboardGfxSequence_Init(ResourceBank_Get(gfx->sequenceBank, seqId), &sequence);
     texObj = GF3dGfxRawResMan_GetObjById(gfx->resMan, resId);
     GF_ASSERT(texObj);
     tex = GF3dGfxRawResObj_GetTex(texObj);
@@ -429,23 +424,23 @@ void FieldEffectManager_ReleaseRecord(FieldEffectManager *manager, u32 id) {
 }
 
 void FieldEffectManager_LoadBillboardResource(FieldEffectManager *manager, int id, int fileId) {
-    ov01_021FC5CC(manager->gfx->resourceBank, id, manager->narc, fileId, FALSE);
+    ResourceBank_LoadFromNarc(manager->gfx->resourceBank, id, manager->narc, fileId, FALSE);
 }
 
 void *FieldEffectManager_GetBillboardResource(FieldEffectManager *manager, int id) {
-    return ov01_021FC5A4(manager->gfx->resourceBank, id);
+    return ResourceBank_Get(manager->gfx->resourceBank, id);
 }
 
 void FieldEffectManager_FreeBillboardResource(FieldEffectManager *manager, int id) {
-    ov01_021FC588(manager->gfx->resourceBank, id);
+    ResourceBank_Free(manager->gfx->resourceBank, id);
 }
 
 void FieldEffectManager_LoadBillboardSequence(FieldEffectManager *manager, int id, int fileId) {
-    ov01_021FC5CC(manager->gfx->sequenceBank, id, manager->narc, fileId, FALSE);
+    ResourceBank_LoadFromNarc(manager->gfx->sequenceBank, id, manager->narc, fileId, FALSE);
 }
 
 void FieldEffectManager_FreeBillboardSequence(FieldEffectManager *manager, int id) {
-    ov01_021FC588(manager->gfx->sequenceBank, id);
+    ResourceBank_Free(manager->gfx->sequenceBank, id);
 }
 
 void FieldEffectManager_LoadTexResource(FieldEffectManager *manager, int id, u32 fileId, BOOL copyWithoutTex) {

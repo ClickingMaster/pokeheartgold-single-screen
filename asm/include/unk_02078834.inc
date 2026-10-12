@@ -23,7 +23,7 @@
 .public sub_02078B78
 .public sub_02078D24
 .public LoadOVY13
-.public sub_020968B0
+.public Frontier_LaunchApp
 .public OS_ResetSystem
 .public MI_CpuFill8
 .public memset

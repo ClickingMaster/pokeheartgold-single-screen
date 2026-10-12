@@ -20,7 +20,7 @@
 #include "sprite.h"
 #include "string_util.h"
 #include "text.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 
 // pkg13's fields of PokeathlonLampJump that this part names (pokeathlon_lamp_jump.h): same layout as before.
 typedef char PokeathlonLampJumpSizeCheck[sizeof(PokeathlonLampJump) == 0x1004 ? 1 : -1];

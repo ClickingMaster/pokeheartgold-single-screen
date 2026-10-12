@@ -25,7 +25,7 @@
 #include "sprite_system.h"
 #include "sys_task_api.h"
 #include "trainer_data.h"
-#include "unk_0200CE7C.h"
+#include "message_printer_number.h"
 #include "font_sprite.h"
 
 typedef struct BattleMessage {

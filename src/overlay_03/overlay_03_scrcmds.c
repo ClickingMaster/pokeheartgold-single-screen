@@ -13,7 +13,7 @@
 #include "scrcmd.h"
 #include "map_object_movement_utilities.h"
 #include "safari_zone_encounters.h"
-#include "unk_02097720.h"
+#include "safari_decoration_task.h"
 
 BOOL ScrCmd_716(ScriptContext *ctx) {
     SafariAreaCustomizerArgs **safariAreaArgs = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
@@ -23,7 +23,7 @@ BOOL ScrCmd_716(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_717(ScriptContext *ctx) {
-    sub_02097720(ctx->taskman, GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)));
+    CallTask_SafariDecoration(ctx->taskman, GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)));
     return TRUE;
 }
 

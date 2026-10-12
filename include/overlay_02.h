@@ -50,9 +50,9 @@ BOOL Task_FieldTeleport(TaskManager *taskManager);
 BOOL Task_FieldDig(TaskManager *taskManager);
 BOOL Task_FieldMoveArrival(TaskManager *taskManager);
 FieldMoveTaskEnvironment *FieldMoveTask_CreateArrivalEnvironment(FieldSystem *fieldSystem, enum HeapID heapID, int kind);
-Field3dObjectTask *ov02_0224DDE0(FieldSystem *fieldSystem);
-Field3dObjectTask *ov02_0224DDF4(FieldSystem *fieldSystem);
-void ov02_0224DE08(Field3dObjectTask *task);
+Field3dObjectTask *RockDebris_Create(FieldSystem *fieldSystem);
+Field3dObjectTask *RockDebris_CreateWithFollower(FieldSystem *fieldSystem);
+void RockDebris_Delete(Field3dObjectTask *task);
 
 // TODO: define the struct, figure out what a1 is
 void *ov02_02249458(FieldSystem *fieldSystem, int a1, Pokemon *mon, int gender);
@@ -70,8 +70,8 @@ int PrimoPassword_Check2(PlayerProfile *profile, u16 word1, u16 word2, u16 word3
 void ov02_0224BF58(FieldSystem *fieldSystem, u8 a1);
 void ov02_0224BFC0(FieldSystem *fieldSystem, u8 a1);
 void ov02_0224BFCC(FieldSystem *fieldSystem, u8 a1);
-void ov02_0224CDB0(FieldSystem *fieldSystem, u8 a1);
-void ov02_0224E074(FieldSystem *fieldSystem, u16 *p_ret, int a2, enum HeapID heapID);
+void HallOfFame_StartBallAnim(FieldSystem *fieldSystem, u8 numBalls);
+void ScriptFieldMoveEffect_Start(FieldSystem *fieldSystem, u16 *done, int kind, enum HeapID heapID);
 void MapObjects_SwapPositions(LocalMapObject *object1, LocalMapObject *object2, TaskManager *taskManager);
 void FieldSystem_FollowMonInteract(FieldSystem *fieldSystem);
 BOOL FieldSystem_FirstAliveMonHasType(FieldSystem *fieldSystem, u8 type);

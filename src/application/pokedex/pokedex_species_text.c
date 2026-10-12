@@ -4,7 +4,7 @@
 #include "msgdata/msg.naix"
 
 #include "msgdata.h"
-#include "unk_02091278.h"
+#include "pokedex_language.h"
 
 // Callers see these through pokedex_text_util.h with a 32-bit species (as their calls were compiled).
 String *PokedexApp_GetSpeciesNameString(u16 species, int language, enum HeapID heapId);

@@ -18,7 +18,7 @@
 #include "trade_sequence_internal.h"
 #include "trade_sequence_models.h"
 #include "unk_0200FA24.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 
 // Scene 1 of the trade animation: the Poke Ball model fades in over a zooming background and circles up off the top
 // screen; the screens swap and it rises through the bottom screen while the background scrolls and light streaks

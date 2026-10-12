@@ -233,7 +233,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
         playerEvent |= PLAYER_EVENT_USED_WATERFALL;
     }
 
-    if (ov01_021F1D94(fieldSystem, fieldSystem->playerAvatar, direction, playerEvent) == TRUE) {
+    if (Field_PlayerAvatar_TryFieldMoveStep(fieldSystem, fieldSystem->playerAvatar, direction, playerEvent) == TRUE) {
         return 1;
     }
 

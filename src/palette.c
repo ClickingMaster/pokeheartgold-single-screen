@@ -4,7 +4,7 @@
 
 #include "gf_gfx_loader.h"
 #include "sys_task_api.h"
-#include "unk_02026E84.h"
+#include "palette_vram_addr.h"
 
 static u8 IsPaletteSelected(u16 toSelect, u16 bufferID);
 static void PaletteData_SetTransparentBit(PaletteData *data, u16 bufferID);

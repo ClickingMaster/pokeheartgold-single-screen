@@ -21,7 +21,7 @@
 #include "system.h"
 #include "text.h"
 #include "unk_0200FA24.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 #include "wifi_plaza_event.h"
 #include "wireless_status_icon.h"
 

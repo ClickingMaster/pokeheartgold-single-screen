@@ -40,7 +40,7 @@
 #include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "unk_0205A44C.h"
-#include "unk_0205B3DC.h"
+#include "union_room_avatar.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 

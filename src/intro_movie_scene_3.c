@@ -11,7 +11,7 @@
 #include "sprite_transfer.h"
 #include "system.h"
 #include "oam_manager.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 
 enum IntroScene3State {
     INTRO_SCENE3_LOAD_NEWBARK,

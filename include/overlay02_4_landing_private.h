@@ -242,12 +242,12 @@ extern void _fflt(void);                      // soft-float runtime
 extern void _ffix(void);                      // soft-float runtime
 extern void Field3dObject_SetXRotation(void); // not in any included header (asm-only ref)
 extern void sub_020548C0(void);               // not in any included header (asm-only ref)
-WIP_LOCAL void ov02_0224D488(void *a0, void *a1, void *a2);
+WIP_LOCAL void WaterfallEffect_Update(void *a0, void *a1, void *a2);
 extern u16 GF_DegreeToSinCosIdxNoWrap(u16 deg);                           // math_util.h, not included
 extern BOOL Save_VarsFlags_CheckFlagInArray(void *varsFlags, u16 flagId); // save_vars_flags.h, not included
 WIP_LOCAL void ov02_0224AAD4(void *a0, void *a1);
-WIP_LOCAL void ov02_0224D5B4(void *a0, void *a1, void *a2);
-WIP_LOCAL int ov02_0224DB9C(void *a0, void *a1, void *a2);
+WIP_LOCAL void WhirlpoolEffect_Init(void *a0, void *a1, void *a2);
+WIP_LOCAL int HeadbuttEffect_Update(void *a0, void *a1, void *a2);
 WIP_LOCAL int FollowMonRule_Matches(void *a0, void *a1, void *a2);
 WIP_LOCAL int SafariZone_FindSpotFor1x2Object(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);
 WIP_LOCAL int SafariZone_FindSpotFor2x1Object(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);
@@ -322,11 +322,11 @@ extern u8 SafariZone_GetObjectUnlockLevel(void *safariZone);                    
 extern void *Field_GetBgEvents(FieldSystem *fieldSystem);                                         // map_events.h, not included (BgEvent opaque)
 extern u32 Field_GetNumBgEvents(FieldSystem *fieldSystem);                                        // map_events.h, not included
 
-// ov02_0224E020 dispatch tables (rodata, still in asm; defined later). Indexed by
+// Task_ScriptFieldMoveEffect dispatch tables (rodata, still in asm; defined later). Indexed by
 // data[0xc]: A34 update funcs return int (1 => advance state); A04 delete funcs
 // (result ignored). Declared int(*)(void*) to match the blx call sites.
 typedef int (*ov02_AnimDispatchFunc)(void *data);
-// ov02_0224E074 create-dispatch table (rodata, defined later): each entry builds a
+// ScriptFieldMoveEffect_Start create-dispatch table (rodata, defined later): each entry builds a
 // Field3dObjectTask from the fieldSystem. Indexed by the anim type.
 typedef Field3dObjectTask *(*ov02_CreateDispatchFunc)(FieldSystem *fieldSystem);
 extern BOOL sub_02054C20(FieldSystem *fieldSystem, int targetType, int *outObj, void **outHandle); // unk_02054648.h, not included
@@ -370,9 +370,9 @@ WIP_LOCAL int ov02_02249774(void *work);
 WIP_LOCAL void FollowMonMovement_PlaySound(void *arg0, u16 arg1, int arg2, int arg3);
 WIP_LOCAL int FieldEscapeRope_SpinStart(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL int FieldDig_SinkStart(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
-WIP_LOCAL void ov02_0224E020(SysTask *task, void *data);
+WIP_LOCAL void Task_ScriptFieldMoveEffect(SysTask *task, void *data);
 WIP_LOCAL BOOL ov02_0224E640(SaveData *saveData);
-WIP_LOCAL void ov02_0224DE10(Field3dObject *obj, VecFx32 *arg1, fx32 arg2, fx32 arg3);
+WIP_LOCAL void RockDebris_SpawnPiece(Field3dObject *obj, VecFx32 *arg1, fx32 arg2, fx32 arg3);
 WIP_LOCAL void FollowMonSituation_SetHiddenItems(FieldSystem *fieldSystem, void *out);
 WIP_LOCAL Sprite *ov02_02248CAC(void *mgr);
 WIP_LOCAL void ov02_0224A66C(void *work);
@@ -382,7 +382,7 @@ WIP_LOCAL void ov02_0224AAC8(void *a0, void *work);
 WIP_LOCAL void ov02_0224ABF8(void *a0, void *work);
 WIP_LOCAL void ov02_0224B2C0(void *work);
 WIP_LOCAL BOOL ov02_0224B0E0(void *work);
-WIP_LOCAL void ov02_0224DEA8(Field3dObject *obj, Field3dModel *model, NNSFndAllocator *allocator, void **anmResources);
+WIP_LOCAL void RockDebris_InitPiece(Field3dObject *obj, Field3dModel *model, NNSFndAllocator *allocator, void **anmResources);
 WIP_LOCAL BOOL ov02_0224B43C(SysTask *task);
 WIP_LOCAL BOOL MapId_IsSafariZone(int a0);
 WIP_LOCAL BOOL FollowMonInteraction_StepHasMovement(void *a0, u16 *a1);
@@ -402,13 +402,13 @@ WIP_LOCAL void ov02_0224B784(void *work); // still in asm
 WIP_LOCAL int ov02_0224B964(void *work);
 WIP_LOCAL int FieldTeleport_SpinStart(void *a0, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL void ov02_RepelActiveRoamersFromMapNo(RoamerSaveData *roamerSave, u32 mapNo);
-WIP_LOCAL void ov02_0224DD4C(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void RockDebris_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
 WIP_LOCAL void ov02_0224A598(BgConfig *bgConfig, NARC *narc, u32 fileId, NNSG2dCharacterData **a3);
 WIP_LOCAL void ov02_0224B314(void *mgr);
 WIP_LOCAL void FollowMon_PlaceholdersSet(void *work, void *messageFormat);
 WIP_LOCAL void FollowMon_ExpandInteractionMessage(void *work, void *dest, enum HeapID heapID, int strno);
 WIP_LOCAL int FieldEscapeRope_WaitFadeOut(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
-WIP_LOCAL void ov02_0224D698(Field3dObject *obj, PlayerAvatar *playerAvatar, fx32 arg2, fx32 arg3);
+WIP_LOCAL void RockClimbDebris_SpawnPiece(Field3dObject *obj, PlayerAvatar *playerAvatar, fx32 arg2, fx32 arg3);
 WIP_LOCAL int FieldTeleport_WaitFadeOut(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL BOOL FollowMon_TryPrintInteractionMessage(void *work, void *window, void *arg2);
 WIP_LOCAL void *ov02_02249458(FieldSystem *fieldSystem, int a1, Pokemon *a2, int a3);
@@ -437,7 +437,7 @@ WIP_LOCAL int FieldTeleport_SpinAndFadeOut(TaskManager *taskManager, FieldSystem
 WIP_LOCAL int FieldDig_SpinAndFadeOut(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL int FieldDig_WaitFadeOut(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
 WIP_LOCAL int FieldEscapeRope_SpinAndFadeOut(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
-WIP_LOCAL void ov02_0224E074(FieldSystem *fieldSystem, u16 *p_ret, int type, enum HeapID heapID);
+WIP_LOCAL void ScriptFieldMoveEffect_Start(FieldSystem *fieldSystem, u16 *p_ret, int type, enum HeapID heapID);
 WIP_LOCAL BOOL FollowMonRule_CheckSpeciesAttr(u32 a0, u32 a1);
 WIP_LOCAL BOOL FollowMonRule_CheckShinyLeaf(u32 a0, u32 a1);
 WIP_LOCAL void FollowMon_ApplyInteractionEffects(void *work);
@@ -451,8 +451,8 @@ WIP_LOCAL BOOL ov02_02249088(void *mgr);
 WIP_LOCAL BOOL ov02_02248D98(void *a0, void *obj);
 WIP_LOCAL void ov02_0224A834(void *mgr, void *src);
 WIP_LOCAL Sprite *ov02_0224A418(void *mgr, VecFx32 *pos);
-WIP_LOCAL void ov02_0224D288(Field3dObjectTask *task, FieldSystem *fieldSystem, Field3dObject *obj);
-WIP_LOCAL void ov02_0224D3B4(Field3dObjectTask *task, FieldSystem *fieldSystem, Field3dObject *obj);
+WIP_LOCAL void CutEffect_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, Field3dObject *obj);
+WIP_LOCAL void RockSmashEffect_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, Field3dObject *obj);
 WIP_LOCAL BOOL ov02_0224B7CC(void *a0, void **out);
 WIP_LOCAL Roamer *ov02_0224BAA8(RoamerSaveData *roamerSave, int a1);
 WIP_LOCAL void ov02_0224B72C(void *work);
@@ -461,9 +461,9 @@ WIP_LOCAL void *ov02_0224B298(void *mgr, void *arg1);
 WIP_LOCAL void ov02_02248E20(void *arg0);
 WIP_LOCAL void *ov02_02248D58(void *arg0, void *arg1, void *arg2, void *arg3);
 WIP_LOCAL void ov02_0224AA44(void *arg0, VecFx32 *pos, VecFx32 *vec, void *arg3, u32 arg4, void *arg5);
-WIP_LOCAL void ov02_0224DE6C(void *obj);
-WIP_LOCAL void ov02_0224D950(void *a0, void *a1, void *data);
-WIP_LOCAL void ov02_0224DD8C(void *a0, void *a1, void *data);
+WIP_LOCAL void RockDebris_UpdatePiece(void *obj);
+WIP_LOCAL void RockClimbDebris_Update(void *a0, void *a1, void *data);
+WIP_LOCAL void RockDebris_Update(void *a0, void *a1, void *data);
 WIP_LOCAL int ov02_02249690(void *work);
 WIP_LOCAL int ov02_022496D0(void *work);
 WIP_LOCAL int ov02_022491CC(void *work);
@@ -477,15 +477,15 @@ WIP_LOCAL int ov02_02249BD8(void *work);
 WIP_LOCAL int FollowMonRule_CheckFriendship(int a0, int a1);
 WIP_LOCAL int FollowMonRule_CheckMood(int a0, int a1);
 WIP_LOCAL int FollowMonInteraction_RunMovement(FieldSystem *fieldSystem, void *a1, int a2);
-WIP_LOCAL void ov02_0224D310(void *a0, void *a1, void *data);
+WIP_LOCAL void RockSmashEffect_InitAtPlayer(void *a0, void *a1, void *data);
 WIP_LOCAL int FieldTeleport_Warp(TaskManager *taskManager, void *a1, void *a2);
-WIP_LOCAL void ov02_0224D820(void *data);
-WIP_LOCAL void ov02_0224D7B0(void *data);
-WIP_LOCAL void ov02_0224D73C(Field3dObject *obj, Field3dModel *model, NNSFndAllocator *allocator, void **anmResources);
-WIP_LOCAL void ov02_0224D880(void *a0, FieldSystem *fieldSystem, void *work);
-WIP_LOCAL void ov02_0224DF1C(void *data);
+WIP_LOCAL void RockClimbDebris_Spawn(void *data);
+WIP_LOCAL void RockClimbDebris_UpdateOffsets(void *data);
+WIP_LOCAL void RockClimbDebris_InitPiece(Field3dObject *obj, Field3dModel *model, NNSFndAllocator *allocator, void **anmResources);
+WIP_LOCAL void RockClimbDebris_Init(void *a0, FieldSystem *fieldSystem, void *work);
+WIP_LOCAL void RockDebris_Spawn(void *data);
 WIP_LOCAL BOOL ov02_0224BE24(TaskManager *taskManager);
-WIP_LOCAL BOOL ov02_0224CE28(TaskManager *taskManager);
+WIP_LOCAL BOOL Task_HallOfFameBallAnim(TaskManager *taskManager);
 WIP_LOCAL BOOL PokecenterAnimRun(TaskManager *taskManager);
 WIP_LOCAL int PrimoPassword_DecodeWallpaper(WallpaperPasswordBank *bank, u16 trainerId, u16 a, u16 b, u16 c, u16 d);
 WIP_LOCAL int PrimoPassword_DecodeCheck2(WallpaperPasswordBank *bank, u16 trainerId, u16 a, u16 b, u16 c, u16 d);
@@ -497,7 +497,7 @@ WIP_LOCAL void *ov02_0224A7B8(Pokemon *mon, void *arg1, enum HeapID heapID);
 WIP_LOCAL BOOL ov02_0224AA80(void *a0, void *work);
 WIP_LOCAL void ov02_0224B2CC(void *work);
 WIP_LOCAL int ov02_0224B5F0(void *work);
-WIP_LOCAL void ov02_0224D1E4(void *a0, void *a1, void *data);
+WIP_LOCAL void CutEffect_InitAtPlayer(void *a0, void *a1, void *data);
 WIP_LOCAL int SwapPositions_GetStepTowards(void *a, void *b);
 WIP_LOCAL void FollowMonSituation_SetTerrain(FieldSystem *fieldSystem, void *work);
 WIP_LOCAL void FollowMon_GetSituation(FieldSystem *fieldSystem, void *work);
@@ -509,25 +509,25 @@ WIP_LOCAL void ov02_0224B784(void *work);
 WIP_LOCAL BOOL FollowMonInteraction_TryShowEmote(FieldSystem *fieldSystem, void *a1, void *arg2);
 WIP_LOCAL void ov02_0224B364(void *a0, void *work);
 WIP_LOCAL int FieldMoveArrival_Spin(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
-WIP_LOCAL void ov02_0224D22C(void *a0, void *a1, void *data);
-WIP_LOCAL void ov02_0224DAA4(void *a0, void *a1, void *data);
-WIP_LOCAL void ov02_0224D9C0(void *a0, void *a1, void *data);
+WIP_LOCAL void CutEffect_InitAtFollower(void *a0, void *a1, void *data);
+WIP_LOCAL void HeadbuttEffect_InitAtFollower(void *a0, void *a1, void *data);
+WIP_LOCAL void HeadbuttEffect_InitAtPlayer(void *a0, void *a1, void *data);
 WIP_LOCAL void ov02_0224B3B0(void *a0, void *work);
-WIP_LOCAL void ov02_0224D358(void *a0, void *a1, void *data);
-WIP_LOCAL void ov02_0224CFD8(void *a0, int a1, void *data);
+WIP_LOCAL void RockSmashEffect_InitAtFollower(void *a0, void *a1, void *data);
+WIP_LOCAL void Field3dObject_SetPosInFrontOfMapObject(void *a0, int a1, void *data);
 WIP_LOCAL void ov02_0224A88C(void *mgr, void *dst);
 WIP_LOCAL void ov02_0224B6E4(void *a0, void *work);
-WIP_LOCAL void ov02_0224D0C8(void *data, int a1, int a2, int a3, void *a4);
-WIP_LOCAL void ov02_0224D044(void *a0, void *data);
-WIP_LOCAL void ov02_0224D700(void *obj);
-WIP_LOCAL void ov02_0224D914(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void FieldMoveEffectModel_Load(void *data, int a1, int a2, int a3, void *a4);
+WIP_LOCAL void Field3dObject_SetPosInFrontOfPlayer(void *a0, void *data);
+WIP_LOCAL void RockClimbDebris_UpdatePiece(void *obj);
+WIP_LOCAL void RockClimbDebris_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
 WIP_LOCAL BOOL ov02_0224ABCC(void *a0, void *a1);
 WIP_LOCAL void *ov02_0224A468(void *a, VecFx32 *b, int c, int d); // still in asm
 WIP_LOCAL BOOL FieldSystem_FirstAliveMonHasType(FieldSystem *fieldSystem, u8 a1);
 WIP_LOCAL void ov02_02249E90(SysTask *task, void *work);
 WIP_LOCAL void FollowMonMovement_ApplyFacing(void *a0, u8 *a1, LocalMapObject *obj);
 WIP_LOCAL void FollowMon_TryShakeGrass(void *a0, LocalMapObject *obj, u8 dir);
-WIP_LOCAL BOOL ov02_0224D178(void *obj);
+WIP_LOCAL BOOL FieldMoveEffectModel_AnimateOnce(void *obj);
 WIP_LOCAL void ov02_022507B4(FieldSystem *fieldSystem, u8 a1);
 WIP_LOCAL BOOL ov02_022507E8(TaskManager *taskManager); // still in asm
 WIP_LOCAL BOOL ov02_022489F0(void *mgr, int a1);
@@ -578,37 +578,37 @@ WIP_LOCAL int FieldMove_ShowCutIn(void *a0, FieldSystem *fieldSystem, void *work
 WIP_LOCAL int FieldMove_WaitCutIn(void *a0, void *a1, void *work);
 WIP_LOCAL int FieldTeleport_FollowMonFlash(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
 WIP_LOCAL int FieldDig_Warp(TaskManager *taskManager, void *a1, void *a2);
-WIP_LOCAL void ov02_0224D278(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void ov02_0224D2BC(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL Field3dObjectTask *ov02_0224D2C8(FieldSystem *fieldSystem);
-WIP_LOCAL Field3dObjectTask *ov02_0224D2DC(FieldSystem *fieldSystem);
-WIP_LOCAL void ov02_0224D2F0(Field3dObjectTask *task);
-WIP_LOCAL BOOL ov02_0224D2F8(Field3dObjectTask *task);
-WIP_LOCAL void ov02_0224D3A4(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void ov02_0224D3E8(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL Field3dObjectTask *ov02_0224D3F4(FieldSystem *fieldSystem);
-WIP_LOCAL Field3dObjectTask *ov02_0224D408(FieldSystem *fieldSystem);
-WIP_LOCAL void ov02_0224D41C(Field3dObjectTask *task);
-WIP_LOCAL BOOL ov02_0224D424(Field3dObjectTask *task);
-WIP_LOCAL void ov02_0224D43C(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void ov02_0224D468(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void ov02_0224D580(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void ov02_0224D648(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void ov02_0224D658(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void ov02_0224D670(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void ov02_0224D98C(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void ov02_0224DB8C(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void ov02_0224DC58(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL Field3dObjectTask *ov02_0224DC64(FieldSystem *fieldSystem);
-WIP_LOCAL Field3dObjectTask *ov02_0224DC78(FieldSystem *fieldSystem);
-WIP_LOCAL void ov02_0224DC8C(Field3dObjectTask *task);
-WIP_LOCAL BOOL ov02_0224DC94(Field3dObjectTask *task);
-WIP_LOCAL void ov02_0224DCB0(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void ov02_0224DD38(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-WIP_LOCAL void ov02_0224DDC8(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void CutEffect_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void CutEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL Field3dObjectTask *CutEffect_CreateAtPlayer(FieldSystem *fieldSystem);
+WIP_LOCAL Field3dObjectTask *CutEffect_CreateAtFollower(FieldSystem *fieldSystem);
+WIP_LOCAL void CutEffect_Delete(Field3dObjectTask *task);
+WIP_LOCAL BOOL CutEffect_IsFinished(Field3dObjectTask *task);
+WIP_LOCAL void RockSmashEffect_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void RockSmashEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL Field3dObjectTask *RockSmashEffect_CreateAtPlayer(FieldSystem *fieldSystem);
+WIP_LOCAL Field3dObjectTask *RockSmashEffect_CreateAtFollower(FieldSystem *fieldSystem);
+WIP_LOCAL void RockSmashEffect_Delete(Field3dObjectTask *task);
+WIP_LOCAL BOOL RockSmashEffect_IsFinished(Field3dObjectTask *task);
+WIP_LOCAL void WaterfallEffect_Init(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void WaterfallEffect_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void WaterfallEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void WhirlpoolEffect_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void WhirlpoolEffect_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void WhirlpoolEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void RockClimbDebris_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void HeadbuttEffect_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void HeadbuttEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL Field3dObjectTask *HeadbuttEffect_CreateAtPlayer(FieldSystem *fieldSystem);
+WIP_LOCAL Field3dObjectTask *HeadbuttEffect_CreateAtFollower(FieldSystem *fieldSystem);
+WIP_LOCAL void HeadbuttEffect_Delete(Field3dObjectTask *task);
+WIP_LOCAL BOOL HeadbuttEffect_IsFinished(Field3dObjectTask *task);
+WIP_LOCAL void RockDebris_Init(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void RockDebris_InitWithFollower(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+WIP_LOCAL void RockDebris_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
 
-void ov02_0224DEF4(void *obj, NNSFndAllocator *allocator);
-void ov02_0224E008(void *data);
+void RockDebris_FreePiece(void *obj, NNSFndAllocator *allocator);
+void RockDebris_UpdatePieces(void *data);
 void FollowMonSituation_SetSpeciesAttr(int index, void *out);
 int FollowMonSituation_ConvertType(int index);
 void FollowMonInteraction_LoadScript(void *work, int member);

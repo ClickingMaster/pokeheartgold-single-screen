@@ -88,7 +88,7 @@
 #include "unk_02058AEC.h"
 #include "unk_0205A44C.h"
 #include "union_room_objects.h"
-#include "unk_0205B3DC.h"
+#include "union_room_avatar.h"
 #include "unk_0205BB1C.h"
 #include "map_object_movement_utilities.h"
 #include "map_object_movement_commands.h"
@@ -109,7 +109,7 @@
 #include "unk_020979A8.h"
 #include "unk_02097BE0.h"
 #include "view_rankings_task.h"
-#include "unk_02097F6C.h"
+#include "swarm.h"
 #include "use_item_on_mon.h"
 
 FS_EXTERN_OVERLAY(OVY_26);
@@ -3680,7 +3680,7 @@ BOOL ScrCmd_PlayerMovementSavingClear(ScriptContext *ctx) {
 
 BOOL ScrCmd_HallOfFameAnim(ScriptContext *ctx) {
     u16 kind = ScriptGetVar(ctx);
-    ov02_0224CDB0(ctx->fieldSystem, kind);
+    HallOfFame_StartBallAnim(ctx->fieldSystem, kind);
     return TRUE;
 }
 
@@ -3997,22 +3997,22 @@ BOOL ScrCmd_560(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     switch (my_case) {
     case 0:
-        ov02_0224E074(fieldSystem, p_ret, 0, HEAP_ID_FIELD3);
+        ScriptFieldMoveEffect_Start(fieldSystem, p_ret, 0, HEAP_ID_FIELD3);
         break;
     case 1:
-        ov02_0224E074(fieldSystem, p_ret, 1, HEAP_ID_FIELD3);
+        ScriptFieldMoveEffect_Start(fieldSystem, p_ret, 1, HEAP_ID_FIELD3);
         break;
     case 2:
-        ov02_0224E074(fieldSystem, p_ret, 2, HEAP_ID_FIELD3);
+        ScriptFieldMoveEffect_Start(fieldSystem, p_ret, 2, HEAP_ID_FIELD3);
         break;
     case 3:
-        ov02_0224E074(fieldSystem, p_ret, 3, HEAP_ID_FIELD3);
+        ScriptFieldMoveEffect_Start(fieldSystem, p_ret, 3, HEAP_ID_FIELD3);
         break;
     case 4:
-        ov02_0224E074(fieldSystem, p_ret, 4, HEAP_ID_FIELD3);
+        ScriptFieldMoveEffect_Start(fieldSystem, p_ret, 4, HEAP_ID_FIELD3);
         break;
     case 5:
-        ov02_0224E074(fieldSystem, p_ret, 5, HEAP_ID_FIELD3);
+        ScriptFieldMoveEffect_Start(fieldSystem, p_ret, 5, HEAP_ID_FIELD3);
         break;
     default:
         GF_ASSERT(FALSE);

@@ -12,7 +12,7 @@
 #include "sys_task.h"
 #include "systask_environment.h"
 #include "touchscreen.h"
-#include "unk_0205B3DC.h"
+#include "union_room_avatar.h"
 #include "unk_02088288.h"
 
 // The avatars on the sub screen: the player walking in and out of the GTS, the trainers a search found (in the

@@ -22,7 +22,7 @@
 #include "touchscreen.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 
 // Graphics core of the Dress-Up editor and the Accessory Portrait renderer: slot objects (3D textured quads of
 // the graphics manager), Pokepic manager, 2D sprite system, BGs and the accessory/backdrop textures.

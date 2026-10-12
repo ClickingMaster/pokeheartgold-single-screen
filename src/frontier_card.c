@@ -11,7 +11,7 @@
 #include "save_misc_data.h"
 #include "save_wifi_history.h"
 #include "string_util.h"
-#include "unk_0205B3DC.h"
+#include "union_room_avatar.h"
 
 // Player profile card built from the save (name, trainer ID, favorite Pokemon, greeting, country/region, CRC). The
 // getters return safe defaults for out-of-range fields, i.e. for cards received from other players.

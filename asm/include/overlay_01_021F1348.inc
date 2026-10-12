@@ -78,9 +78,9 @@
 .public FieldEffectManager_InitRenderAnimation
 .public FieldEffectManager_LoadModel
 .public FieldEffectManager_GetTexture
-.public ov01_021FC4C4
-.public ov01_021FC520
-.public ov01_021FC588
-.public ov01_021FC5A4
-.public ov01_021FC5CC
+.public ResourceBank_Create
+.public ResourceBank_Destroy
+.public ResourceBank_Free
+.public ResourceBank_Get
+.public ResourceBank_LoadFromNarc
 .public gFieldEffectRenderers

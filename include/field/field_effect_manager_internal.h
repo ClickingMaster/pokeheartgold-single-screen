@@ -10,6 +10,7 @@
 #include "sys_task_api.h"
 
 #include "field/field_effect_manager.h"
+#include "field/resource_bank.h"
 
 // Layouts of the field effect manager and its private helpers, for its own two translation units.
 
@@ -45,8 +46,8 @@ typedef struct FieldEffectGfx {
     u16 sequenceCount;
     u16 resCount;
     void *billboards;
-    void *resourceBank; // ov01_021FC4C4 banks, keyed by id
-    void *sequenceBank;
+    ResourceBank *resourceBank;
+    ResourceBank *sequenceBank;
     GF_3DGfxRawResMan *resMan;
     FieldEffectRecordSlot *slots;
     FieldEffectRecord *records;

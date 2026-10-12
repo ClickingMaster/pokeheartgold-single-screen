@@ -83,7 +83,7 @@
 .public GetMoveModelNoBySpriteId
 .public ov01_021F9744
 .public ov01_021FA44C
-.public ov01_021FC5A4
+.public ResourceBank_Get
 .public FollowMonBall_Spawn
 .public FollowMon_MarkForRecreate
 .public FollowMon_GetFasterMovement

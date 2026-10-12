@@ -28,7 +28,7 @@ extern void *MapObjectManager_GetObjects2(void *);
 extern BOOL MapObject_CheckActive(void *);
 extern u32 MapObject_GetSpriteID(void *);
 extern void MapObjectArray_NextObject(void **);
-extern void *ov01_021FC4C4(u32, u32, u32, u32);
+extern void *ResourceBank_Create(u32, u32, u32, u32);
 extern void *GF3dGfxRawResMan_Create(u32, u32);
 extern void ov01_021F9B00(FieldObjSys *);
 extern void ov01_021F9C24(FieldObjSys *);

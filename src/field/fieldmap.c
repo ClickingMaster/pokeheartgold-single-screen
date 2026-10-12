@@ -60,7 +60,7 @@
 #include "terrain_attributes.h"
 #include "oam_manager.h"
 #include "billboard_lists.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 #include "unk_02055418.h"
 #include "comm_player_manager.h"
 #include "gymmick_collision.h"

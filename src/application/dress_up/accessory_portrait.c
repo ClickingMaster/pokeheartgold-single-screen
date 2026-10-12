@@ -29,7 +29,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 
 // Accessory Portrait: the renderer of a saved dress-up design (also used by the VS Recorder) and the app that shows
 // one design with its caption until a key or the touch screen is pressed.

@@ -11,7 +11,7 @@
 #include "system.h"
 #include "text.h"
 #include "sound_playback.h"
-#include "unk_0200CE7C.h"
+#include "message_printer_number.h"
 #include "unk_0208805C.h"
 
 static void PartyMenu_StartContextMenuButtonPressAnim_FromCursorObj(PartyMenu *partyMenu, PartyMenuContextMenuCursor *cursor, int followUpState);

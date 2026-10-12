@@ -30,7 +30,7 @@
 #include "text.h"
 #include "touch_hitbox_controller.h"
 #include "touchscreen.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 #include "vram_transfer_manager.h"
 
 // VS Recorder dress-up photo screens: send the player's own photo (VS_RECORDER_SCREEN_DRESS_UP_SEND) and view photos

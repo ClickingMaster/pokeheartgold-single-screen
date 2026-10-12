@@ -117,8 +117,8 @@
 .public FollowMon_IsActive
 .public sub_0206D494
 .public Field_PlayerAvatar_ApplyTransitionFlags
-.public ov01_021F2EDC
-.public ov01_021F2F24
+.public Field_PlayerAvatar_TryEnterPoketchPose
+.public Field_PlayerAvatar_TryLeavePoketchPose
 .public FollowMon_QueuePlayerStep
 .public FuchsiaGymmick_CheckCollision
 

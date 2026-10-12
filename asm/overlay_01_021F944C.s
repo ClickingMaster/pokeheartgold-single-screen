@@ -320,7 +320,7 @@ ov01_021F9808: ; 0x021F9808
 	mov r1, #0x3f
 	lsl r2, r4, #0xc
 	add r3, r4, #0
-	bl ov01_021FC4C4
+	bl ResourceBank_Create
 	add r1, r5, #0
 	add r1, #0xf8
 	str r0, [r1]
@@ -336,7 +336,7 @@ ov01_021F9808: ; 0x021F9808
 	mov r1, #0x40
 	lsl r2, r7, #7
 	add r3, r7, #0
-	bl ov01_021FC4C4
+	bl ResourceBank_Create
 	add r1, r5, #0
 	add r1, #0xfc
 	str r0, [r1]

@@ -9,26 +9,26 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_021FC4C4
-	.public ov01_021FC520
-	.public ov01_021FC554
-	.public ov01_021FC588
-	.public ov01_021FC5A4
-	.public ov01_021FC5B8
-	.public ov01_021FC5CC
-	.public ov01_021FC5FC
-	.public ov01_021FC61C
-	.public ov01_021FC624
-	.public ov01_021FC644
-	.public ov01_021FC65C
-	.public ov01_021FC664
+	.public ResourceBank_Create
+	.public ResourceBank_Destroy
+	.public ResourceBank_Alloc
+	.public ResourceBank_Free
+	.public ResourceBank_Get
+	.public ResourceBank_Contains
+	.public ResourceBank_LoadFromNarc
+	.public ResourceBank_AllocBlock
+	.public ResourceBank_FreeBlock
+	.public ResourceBank_FindEntry
+	.public ResourceBank_FindFreeEntry
+	.public ResourceBankEntry_Set
+	.public ResourceBankEntry_Clear
 	.include "overlay_01_021FC4C4.inc"
 	.include "global.inc"
 
 	.text
 
-	thumb_func_start ov01_021FC4C4
-ov01_021FC4C4: ; 0x021FC4C4
+	thumb_func_start ResourceBank_Create
+ResourceBank_Create: ; 0x021FC4C4
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r5, r2, #0
@@ -72,10 +72,10 @@ _021FC4F8:
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FC4C4
+	thumb_func_end ResourceBank_Create
 
-	thumb_func_start ov01_021FC520
-ov01_021FC520: ; 0x021FC520
+	thumb_func_start ResourceBank_Destroy
+ResourceBank_Destroy: ; 0x021FC520
 	push {r4, r5, r6, lr}
 	add r6, r0, #0
 	ldr r4, [r6, #8]
@@ -88,7 +88,7 @@ _021FC52C:
 	beq _021FC53A
 	ldr r1, [r5, #4]
 	add r0, r6, #0
-	bl ov01_021FC588
+	bl ResourceBank_Free
 _021FC53A:
 	sub r4, r4, #1
 	add r5, #8
@@ -102,16 +102,16 @@ _021FC542:
 	bl Heap_Destroy
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FC520
+	thumb_func_end ResourceBank_Destroy
 
-	thumb_func_start ov01_021FC554
-ov01_021FC554: ; 0x021FC554
+	thumb_func_start ResourceBank_Alloc
+ResourceBank_Alloc: ; 0x021FC554
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r4, r1, #0
 	add r6, r2, #0
 	add r7, r3, #0
-	bl ov01_021FC644
+	bl ResourceBank_FindFreeEntry
 	str r0, [sp]
 	cmp r0, #0
 	bne _021FC56C
@@ -120,36 +120,36 @@ _021FC56C:
 	add r0, r5, #0
 	add r1, r6, #0
 	add r2, r7, #0
-	bl ov01_021FC5FC
+	bl ResourceBank_AllocBlock
 	add r5, r0, #0
 	ldr r0, [sp]
 	add r1, r4, #0
 	add r2, r5, #0
-	bl ov01_021FC65C
+	bl ResourceBankEntry_Set
 	add r0, r5, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FC554
+	thumb_func_end ResourceBank_Alloc
 
-	thumb_func_start ov01_021FC588
-ov01_021FC588: ; 0x021FC588
+	thumb_func_start ResourceBank_Free
+ResourceBank_Free: ; 0x021FC588
 	push {r4, lr}
-	bl ov01_021FC624
+	bl ResourceBank_FindEntry
 	add r4, r0, #0
 	bne _021FC596
 	bl GF_AssertFail
 _021FC596:
 	ldr r0, [r4]
-	bl ov01_021FC61C
+	bl ResourceBank_FreeBlock
 	add r0, r4, #0
-	bl ov01_021FC664
+	bl ResourceBankEntry_Clear
 	pop {r4, pc}
-	thumb_func_end ov01_021FC588
+	thumb_func_end ResourceBank_Free
 
-	thumb_func_start ov01_021FC5A4
-ov01_021FC5A4: ; 0x021FC5A4
+	thumb_func_start ResourceBank_Get
+ResourceBank_Get: ; 0x021FC5A4
 	push {r4, lr}
-	bl ov01_021FC624
+	bl ResourceBank_FindEntry
 	add r4, r0, #0
 	bne _021FC5B2
 	bl GF_AssertFail
@@ -157,12 +157,12 @@ _021FC5B2:
 	ldr r0, [r4]
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FC5A4
+	thumb_func_end ResourceBank_Get
 
-	thumb_func_start ov01_021FC5B8
-ov01_021FC5B8: ; 0x021FC5B8
+	thumb_func_start ResourceBank_Contains
+ResourceBank_Contains: ; 0x021FC5B8
 	push {r3, lr}
-	bl ov01_021FC624
+	bl ResourceBank_FindEntry
 	cmp r0, #0
 	beq _021FC5C6
 	mov r0, #1
@@ -171,10 +171,10 @@ _021FC5C6:
 	mov r0, #0
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FC5B8
+	thumb_func_end ResourceBank_Contains
 
-	thumb_func_start ov01_021FC5CC
-ov01_021FC5CC: ; 0x021FC5CC
+	thumb_func_start ResourceBank_LoadFromNarc
+ResourceBank_LoadFromNarc: ; 0x021FC5CC
 	push {r3, r4, r5, r6, r7, lr}
 	add r4, r2, #0
 	add r5, r0, #0
@@ -187,7 +187,7 @@ ov01_021FC5CC: ; 0x021FC5CC
 	ldr r3, [sp, #0x18]
 	add r0, r5, #0
 	add r1, r6, #0
-	bl ov01_021FC554
+	bl ResourceBank_Alloc
 	add r5, r0, #0
 	add r0, r4, #0
 	add r1, r7, #0
@@ -196,10 +196,10 @@ ov01_021FC5CC: ; 0x021FC5CC
 	add r0, r5, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FC5CC
+	thumb_func_end ResourceBank_LoadFromNarc
 
-	thumb_func_start ov01_021FC5FC
-ov01_021FC5FC: ; 0x021FC5FC
+	thumb_func_start ResourceBank_AllocBlock
+ResourceBank_AllocBlock: ; 0x021FC5FC
 	push {r4, lr}
 	cmp r2, #0
 	ldr r0, [r0, #4]
@@ -216,18 +216,18 @@ _021FC60E:
 _021FC618:
 	add r0, r4, #0
 	pop {r4, pc}
-	thumb_func_end ov01_021FC5FC
+	thumb_func_end ResourceBank_AllocBlock
 
-	thumb_func_start ov01_021FC61C
-ov01_021FC61C: ; 0x021FC61C
+	thumb_func_start ResourceBank_FreeBlock
+ResourceBank_FreeBlock: ; 0x021FC61C
 	ldr r3, _021FC620 ; =Heap_Free
 	bx r3
 	.balign 4, 0
 _021FC620: .word Heap_Free
-	thumb_func_end ov01_021FC61C
+	thumb_func_end ResourceBank_FreeBlock
 
-	thumb_func_start ov01_021FC624
-ov01_021FC624: ; 0x021FC624
+	thumb_func_start ResourceBank_FindEntry
+ResourceBank_FindEntry: ; 0x021FC624
 	ldr r3, [r0, #8]
 	ldr r0, [r0, #0x14]
 	cmp r3, #0
@@ -248,10 +248,10 @@ _021FC63E:
 _021FC640:
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov01_021FC624
+	thumb_func_end ResourceBank_FindEntry
 
-	thumb_func_start ov01_021FC644
-ov01_021FC644: ; 0x021FC644
+	thumb_func_start ResourceBank_FindFreeEntry
+ResourceBank_FindFreeEntry: ; 0x021FC644
 	ldr r2, [r0, #8]
 	ldr r0, [r0, #0x14]
 	cmp r2, #0
@@ -267,20 +267,20 @@ _021FC658:
 	mov r0, #0
 _021FC65A:
 	bx lr
-	thumb_func_end ov01_021FC644
+	thumb_func_end ResourceBank_FindFreeEntry
 
-	thumb_func_start ov01_021FC65C
-ov01_021FC65C: ; 0x021FC65C
+	thumb_func_start ResourceBankEntry_Set
+ResourceBankEntry_Set: ; 0x021FC65C
 	str r2, [r0]
 	str r1, [r0, #4]
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov01_021FC65C
+	thumb_func_end ResourceBankEntry_Set
 
-	thumb_func_start ov01_021FC664
-ov01_021FC664: ; 0x021FC664
+	thumb_func_start ResourceBankEntry_Clear
+ResourceBankEntry_Clear: ; 0x021FC664
 	mov r1, #0
 	str r1, [r0]
 	str r1, [r0, #4]
 	bx lr
-	thumb_func_end ov01_021FC664
+	thumb_func_end ResourceBankEntry_Clear

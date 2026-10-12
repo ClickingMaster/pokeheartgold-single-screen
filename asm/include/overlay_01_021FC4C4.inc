@@ -9,9 +9,9 @@
 .public Heap_Free
 .public GF_AssertFail
 .public memset
-.public ov01_021FC4C4
-.public ov01_021FC520
-.public ov01_021FC588
-.public ov01_021FC5A4
-.public ov01_021FC5B8
-.public ov01_021FC5CC
+.public ResourceBank_Create
+.public ResourceBank_Destroy
+.public ResourceBank_Free
+.public ResourceBank_Get
+.public ResourceBank_Contains
+.public ResourceBank_LoadFromNarc

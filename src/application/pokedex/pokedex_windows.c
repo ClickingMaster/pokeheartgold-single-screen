@@ -18,7 +18,7 @@
 #include "pokedex.h"
 #include "pokedex_util.h"
 #include "text.h"
-#include "unk_02091278.h"
+#include "pokedex_language.h"
 
 extern const WindowTemplate sListWindowTemplates[];
 extern const WindowTemplate sSearchWindowTemplates[];

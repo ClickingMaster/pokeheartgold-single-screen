@@ -17,7 +17,7 @@
 #include "touchscreen.h"
 #include "unk_02013FDC.h"
 #include "frontier_save_access.h"
-#include "unk_0205B3DC.h"
+#include "union_room_avatar.h"
 
 // input given to PalPadDetails_HandleAction
 enum PalPadDetailsInput {

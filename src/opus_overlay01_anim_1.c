@@ -101,11 +101,11 @@ BOOL ov01_021F97BC(void *mgr, void *self, u32 spriteId) {
 }
 
 void ov01_021F9808(FieldObjSys *sys, u32 a1, u32 a2, u32 a3, u32 a4, u32 a5, u32 a6) {
-    sys->unkF8 = ov01_021FC4C4(4, 0x3F, a1 << 12, a1);
+    sys->unkF8 = ResourceBank_Create(4, 0x3F, a1 << 12, a1);
     ov01_021F9B00(sys);
     ov01_021FA208(sys, a2);
     ov01_021FA210(sys, a1 - a2);
-    sys->unkFC = ov01_021FC4C4(4, 0x40, a3 << 7, a3);
+    sys->unkFC = ResourceBank_Create(4, 0x40, a3 << 7, a3);
     ov01_021F9C24(sys);
     ov01_021FA218(sys, a4);
     ov01_021FA220(sys, a3 - a4);

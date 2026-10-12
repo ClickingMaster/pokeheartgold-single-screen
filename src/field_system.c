@@ -243,7 +243,7 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
             if (FieldInput_Process_BattleTower(&fieldInput, fieldSystem) == TRUE) {
                 FieldDrawMapName_Reset(fieldSystem->unk4->drawMapNameInfo);
                 FieldSystem_SetAndExecuteSignpostWindowCommand(fieldSystem, MAPSIGNCOMMAND_HIDE);
-                ov01_021F2F24(fieldSystem->playerAvatar);
+                Field_PlayerAvatar_TryLeavePoketchPose(fieldSystem->playerAvatar);
                 ov01_021F6830(fieldSystem, 0, 1);
                 break;
             }
@@ -264,7 +264,7 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
                 FieldDrawMapName_Reset(fieldSystem->unk4->drawMapNameInfo);
                 FieldSystem_SetAndExecuteSignpostWindowCommand(fieldSystem, MAPSIGNCOMMAND_HIDE);
                 PlayerAvatar_ResetMovement(fieldSystem->playerAvatar);
-                ov01_021F2F24(fieldSystem->playerAvatar);
+                Field_PlayerAvatar_TryLeavePoketchPose(fieldSystem->playerAvatar);
                 ov01_021F6830(fieldSystem, 0, 1);
                 if (newEvent != 2) {
                     GearPhoneRingManager_ResetIfActive(fieldSystem->phoneRingManager);

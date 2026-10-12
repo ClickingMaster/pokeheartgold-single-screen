@@ -25,7 +25,7 @@
 #include "trade_sequence_internal.h"
 #include "trade_sequence_models.h"
 #include "unk_0200FA24.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 #include "wireless_status_icon.h"
 
 // Scene 0 of the trade animation: the sent Pokemon's picture and the "will be sent to" / "Bye-bye" messages, then

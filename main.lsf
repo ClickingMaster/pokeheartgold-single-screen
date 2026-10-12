@@ -40,7 +40,7 @@ Static main
     Object src/msgdata.o
     Object src/message_format.o
     Object src/message_printer.o
-    Object src/unk_0200CE7C.o
+    Object src/message_printer_number.o
     Object src/sprite_system.o
     Object src/sys_task_api.o
     Object asm/render_window_data.o
@@ -124,7 +124,7 @@ Static main
     Object asm/map_section_data.o
     Object src/map_section.o
     Object src/model_animation.o
-    Object src/unk_02018380.o
+    Object src/igt_counter.o
     Object src/menu_input_state.o
     Object src/touchscreen_list_menu.o
     Object src/camera_translation.o
@@ -158,15 +158,15 @@ Static main
     Object src/touchscreen.o
     Object src/timer3.o
     Object src/error_handling.o
-    Object src/unk_02025534.o
+    Object src/gf_3d_loader.o
     Object src/gf_g2d_renderer.o
     Object src/g2d_cell_culling.o
     Object src/font_data.o
     Object src/pm_string.o
     Object src/touch_hitbox_controller.o
     Object src/billboard_gfx_sequence.o
-    Object src/unk_02026E30.o
-    Object src/unk_02026E84.o
+    Object src/swap_3d_buffers.o
+    Object src/palette_vram_addr.o
     Object src/gf_3d_vramman.o
     Object asm/system_card_data.o
     Object src/system_card.o
@@ -327,7 +327,7 @@ Static main
     Object src/field_link_avatar_alloc.o
     Object src/field_link_messages_5.o
     Object src/union_room_objects.o
-    Object src/unk_0205B3DC.o
+    Object src/union_room_avatar.o
     Object src/dialog_box.o
     Object src/metatile_behavior.o
     Object asm/unk_0205BB1C.o
@@ -437,8 +437,8 @@ Static main
     Object src/mail_misc.o
     Object src/unk_02091054.o
     Object src/hatch_egg_task.o
-    Object src/unk_02091278.o
-    Object src/unk_020912AC.o
+    Object src/pokedex_language.o
+    Object src/pokedex_language_order.o
     Object src/dex_mon_measures.o
     Object src/unk_02091564.o
     Object src/network_overlay_loader.o
@@ -468,7 +468,7 @@ Static main
     Object src/sin_vcount.o
     Object src/frontier_runtime.o
     Object asm/frontier_template.o
-	Object src/unk_020968B0.o
+	Object src/frontier_launch.o
     Object src/battle_frontier_communication.o
     Object asm/unk_02096910.o
     Object src/spin_trade_link.o
@@ -477,7 +477,7 @@ Static main
     Object asm/spin_trade_flow_data.o
     Object src/unk_020971F8.o
     Object src/safari_zone_encounters.o
-    Object src/unk_02097720.o
+    Object src/safari_decoration_task.o
     Object src/field_effect_launch_1.o
     Object src/area_light_tasks_1.o
     Object src/legendary_cinematic_manager.o
@@ -485,7 +485,7 @@ Static main
     Object src/field_cinematic_tasks_1.o
     Object src/view_rankings_task.o
     Object src/pokemon_mood.o
-    Object src/unk_02097F6C.o
+    Object src/swarm.o
 
     ### Vendor libraries ###
     Object asm/middleware.o
@@ -1117,33 +1117,7 @@ Overlay field
     Object src/field/field_effect_manager.o
     Object asm/to80_extra1765_anchor.o
     Object src/field/field_effect_manager_texture.o
-    Object src/ov01_21f1afc_opus_partial_1.o
-    Object src/op90_overlay_01_021F1AFC_r01.o
-    Object src/ov01_21f1afc_opus_partial_2.o
-    Object src/to70_to70_overlay_01_021F1AFC_residual_2_extra257_residual_1_extra1257_run01.o
-    Object src/to70_overlay_01_021F1AFC_residual_2_extra257_run01.o
-    Object src/ov01_21f1afc_opus_partial_3.o
-    Object src/to70_overlay_01_021F1AFC_residual_3_extra920_run01.o
-    Object src/ov01_21f1afc_opus_partial_4.o
-    Object src/to70_overlay_01_021F1AFC_residual_4_extra133_run01.o
-    Object src/overlay01_field_movement_r4.o
-    Object src/ov01_21f1afc_opus_partial_5.o
-    Object src/to70_overlay_01_021F1AFC_residual_5_extra739_run01.o
-    Object src/ov01_21f1afc_opus_partial_6.o
-    Object src/to70_overlay_01_021F1AFC_residual_6_extra740_run01.o
-    Object src/ov01_21f1afc_opus_partial_7.o
-    Object src/to70_overlay_01_021F1AFC_residual_7_extra741_run01.o
-    Object src/ov01_21f1afc_opus_partial_8.o
-    Object src/to70_overlay_01_021F1AFC_residual_8_extra742_run01.o
-    Object src/ov01_21f1afc_opus_partial_9.o
-    Object src/to70_overlay_01_021F1AFC_residual_9_extra921_run01.o
-    Object src/ov01_21f1afc_opus_partial_10.o
-    Object src/to52_r5_overlay01_waterfall_r10.o
-    Object src/ov01_21f1afc_opus_partial_11.o
-    Object src/to45_overlay01_whirlpool_motion_r11.o
-    Object src/ov01_21f1afc_opus_partial_12.o
-    Object src/to80_extra1500_run01.o
-    Object src/ov01_21f1afc_opus_partial_13.o
+    Object src/field/player_avatar_actions.o
     Object asm/overlay_01_021F1AFC_residual_13.o
     Object src/field/spin_slide.o
     Object src/field/warp_spin.o
@@ -1240,7 +1214,7 @@ Overlay field
     Object src/field/area_data.o
     Object asm/overlay_01_021FB878_residual_3.o
     Object src/field/honey_sweet_scent.o
-    Object src/field_effect_registry_1.o
+    Object src/field/resource_bank.o
     Object asm/overlay_01_data_02208BFC.o
     Object src/field_fishing.o
     Object src/field/field_camera_zoom.o
@@ -1369,40 +1343,7 @@ Overlay OVY_2
     Object src/overlay02_248728_partial_32.o
     Object src/field/field_move_warp_tasks.o
     Object src/field/primo_password.o
-    Object src/overlay02_slop_r37_props.o
-    Object src/overlay02_248728_partial_37.o
-    Object src/overlay02_slop_r38_models.o
-    Object src/overlay02_248728_partial_38.o
-    Object src/overlay02_slop_r39_effects.o
-    Object src/overlay02_248728_partial_39.o
-    Object src/overlay02_slop_r40_state.o
-    Object src/overlay02_248728_partial_40.o
-    Object src/overlay02_slop_r41_effects.o
-    Object src/overlay02_248728_partial_41.o
-    Object src/overlay02_slop_r42_state.o
-    Object src/overlay02_248728_partial_42.o
-    Object src/overlay02_slop_r43_prefix.o
-    Object src/op90_overlay_02_02248728_residual_43_slop_middle_r01.o
-    Object src/overlay02_slop_r43_tail.o
-    Object src/overlay02_248728_partial_43.o
-    Object src/to70_overlay_02_02248728_residual_44_extra555_run01.o
-    Object src/overlay02_248728_partial_44.o
-    Object src/overlay02_field_effect_slots_r45.o
-    Object src/overlay02_traversal_helpers_1.o
-    Object src/overlay02_slop_r45_effects.o
-    Object src/overlay02_traversal_helpers_2.o
-    Object src/overlay02_248728_partial_45.o
-    Object src/overlay02_camera_impact_init.o
-    Object src/overlay02_248728_partial_46.o
-    Object src/to70_overlay_02_02248728_residual_47_extra556_run01.o
-    Object src/overlay02_248728_partial_47.o
-    Object src/overlay02_effect_model_init.o
-    Object src/overlay02_248728_partial_48.o
-    Object src/overlay02_effect_model_tasks.o
-    Object src/overlay02_248728_partial_49.o
-    Object src/overlay02_effect_slots_r50_run1.o
-    Object src/overlay02_effect_spawn_update.o
-    Object src/overlay02_effect_tasks_r50_run2.o
+    Object src/field/field_move_effects.o
     Object src/field/map_object_swap_positions.o
     Object src/field/safari_zone_placement.o
     Object src/field/follow_mon_interaction.o

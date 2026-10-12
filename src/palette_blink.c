@@ -6,7 +6,7 @@
 #include "palette.h"
 #include "sys_task.h"
 #include "systask_environment.h"
-#include "unk_02026E84.h"
+#include "palette_vram_addr.h"
 
 typedef void (*PaletteBlinkApplyFunc)(PaletteBlink *blink, const u16 *colors);
 

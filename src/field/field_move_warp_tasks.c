@@ -560,9 +560,9 @@ int FieldDig_DigHole(TaskManager *taskManager, FieldSystem *fieldSystem, FieldMo
     }
     if (PlayerAvatar_GetState(fieldSystem->playerAvatar) != PLAYER_STATE_SURFING) {
         if (env->withFollowMon) {
-            env->digEffect = ov02_0224DDF4(env->fieldSystem);
+            env->digEffect = RockDebris_CreateWithFollower(env->fieldSystem);
         } else {
-            env->digEffect = ov02_0224DDE0(env->fieldSystem);
+            env->digEffect = RockDebris_Create(env->fieldSystem);
         }
     }
     env->state++;
@@ -602,7 +602,7 @@ int FieldDig_WaitFadeOut(TaskManager *taskManager, FieldSystem *fieldSystem, Fie
     }
     EventObjectMovementMan_Delete(env->playerMovement);
     if (PlayerAvatar_GetState(fieldSystem->playerAvatar) != PLAYER_STATE_SURFING) {
-        ov02_0224DE08(env->digEffect);
+        RockDebris_Delete(env->digEffect);
         env->digEffect = NULL;
     }
     if (env->withFollowMon) {

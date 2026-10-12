@@ -18,7 +18,7 @@ int ov01_021F9EC4(void *, u32);
 BOOL ov01_021FA01C(void *, u32, void *);
 BOOL ov01_021FA094(void *, u32, void *);
 BOOL ov01_021F9FCC(void *, u32, void *);
-void ov01_021FC588(void *, u32);
+void ResourceBank_Free(void *, u32);
 void ov01_021F9BAC(void *, u32);
 void ov01_021F9CD0(void *, u32);
 void *ov01_021FA1F4(void *);

@@ -1,8 +1,8 @@
 #include "field_map_object_render_internal.h"
 
 void ov01_021F9890(void *p) {
-    ov01_021FC520(*(void **)((u8 *)p + 0xf8));
-    ov01_021FC520(*(void **)((u8 *)p + 0xfc));
+    ResourceBank_Destroy(*(void **)((u8 *)p + 0xf8));
+    ResourceBank_Destroy(*(void **)((u8 *)p + 0xfc));
     GF3dGfxRawResMan_Destroy(ov01_021FA1F4(p));
 }
 

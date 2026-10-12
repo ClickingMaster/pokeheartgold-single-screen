@@ -25,7 +25,7 @@ void CallTask_WirelessTrade(void *);
 void LoadOVY13(void);
 void ov13_0221BA00(int);
 void sub_020378E4(int);
-void *sub_020968B0(void *, int);
+void *Frontier_LaunchApp(void *, int);
 void FieldSystem_LaunchApplication(void *, const void *, void *);
 void HandleLoadOverlay(int, int);
 void UnloadOverlayByID(int);

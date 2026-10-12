@@ -264,7 +264,7 @@ _020789FE:
 	bl sub_020378E4
 	add r0, r5, #0
 	mov r1, #0
-	bl sub_020968B0
+	bl Frontier_LaunchApp
 	str r0, [r4, #0x10]
 	ldr r0, [r4, #4]
 	add r0, r0, #1

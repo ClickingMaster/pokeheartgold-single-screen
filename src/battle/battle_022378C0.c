@@ -11,7 +11,7 @@
 #include "render_text.h"
 #include "sound_system.h"
 #include "system.h"
-#include "unk_02026E84.h"
+#include "palette_vram_addr.h"
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "evolution_scene.h"

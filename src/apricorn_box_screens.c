@@ -34,7 +34,7 @@
 #include "touchpad.h"
 #include "touchscreen.h"
 #include "touchscreen_list_menu.h"
-#include "unk_02026E30.h"
+#include "swap_3d_buffers.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
