@@ -216,7 +216,7 @@ typedef struct PokeathlonRelayRun {
     void *monResources;                                        // 0x3C4: PokeathlonCourseSpriteResources
     void *monObjects;                                          // 0x3C8: PokeathlonCourseMonObjects
     void *bumpMarks[4];                                        // 0x3CC
-    void *cpu;                                                 // 0x3DC: the teams without a player
+    struct PokeathlonRelayRunCpu *cpu;                         // 0x3DC: the teams without a player
     struct PokeathlonRelayRunHud *hud;                         // 0x3E0: the touch screen
     s32 layoutToSend[RELAY_RUN_OBSTACLES];                     // 0x3E4: host: kind | y << 8 | x << 16
     s32 layout[RELAY_RUN_OBSTACLES];                           // 0x45C: received
@@ -361,11 +361,11 @@ void PokeathlonRelayRunHud_PrintLaps(PokeathlonRelayRunHud *hud);
 
 // Defined further on in the event (still under their address names).
 void ov96_02200C8C(void *spritePool, PokeathlonRelayRunHud *hud);
-void ov96_02200DF8(PokeathlonRelayRunHud *hud);
-void *ov96_02200E3C(enum HeapID heapId, int count, int mode);
-void ov96_02200E78(void *cpu, u8 team, PokeathlonRelayRunTeam *teamState);
-void ov96_02200E80(void *cpu, s32 *layout);
-void ov96_02200EEC(void *cpu);
-void ov96_02200EF4(PokeathlonCourseData *course, void *cpu, u16 timer);
+void PokeathlonRelayRunHud_InitWindows(PokeathlonRelayRunHud *hud);
+struct PokeathlonRelayRunCpu *PokeathlonRelayRunCpu_New(enum HeapID heapId, int cpuCount, int mode);
+void PokeathlonRelayRunCpu_SetTeam(struct PokeathlonRelayRunCpu *cpu, u8 index, PokeathlonRelayRunTeam *team);
+void PokeathlonRelayRunCpu_SetObstacles(struct PokeathlonRelayRunCpu *cpu, s32 *layout);
+void PokeathlonRelayRunCpu_Delete(struct PokeathlonRelayRunCpu *cpu);
+u8 PokeathlonRelayRunCpu_Update(PokeathlonCourseData *course, struct PokeathlonRelayRunCpu *cpu, s32 timer);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_RELAY_RUN_H

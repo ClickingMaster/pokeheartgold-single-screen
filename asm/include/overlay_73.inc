@@ -166,7 +166,7 @@
 .public Save_GetPlayerMixingRankingEntry
 .public Save_UpdateRankingsFromMixing
 .public sub_0203189C
-.public sub_02033250
+.public Wireless_GetConnectedBitmap
 .public CommPlayerInfo_GetProfile
 .public sub_02034D8C
 .public sub_02034DB8

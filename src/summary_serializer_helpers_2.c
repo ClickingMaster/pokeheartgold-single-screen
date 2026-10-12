@@ -25,19 +25,19 @@ void sub_02089CB4(void *v) {
         break;
     }
     sub_0208B448(v);
-    sub_0208B5A8(v);
-    sub_0208C2A0(v);
-    sub_0208BD38(v);
-    sub_0208BCD4(v);
+    PokemonSummary_UpdateTypeSprites(v);
+    PokemonSummary_ShowRibbonSprites(v);
+    PokemonSummary_UpdateMarkingSprites(v);
+    PokemonSummary_InitSheenSparkles(v);
     PokemonSummary_AddPageWindows(v);
     PokemonSummary_PrintPage(v);
     sub_02089F98(v);
-    sub_0208B9C8(v);
+    PokemonSummary_UpdateShinyLeafSprites(v);
     if (*((u8 *)*(void **)(w + 0x22c) + 0x12) == 2) {
         sub_0208A8F4(v);
         return;
     }
-    sub_0208B400(v);
+    PokemonSummary_UpdatePartySlotSprite(v);
     sub_0208BF9C(v);
     sub_0208BFD0(v);
 }

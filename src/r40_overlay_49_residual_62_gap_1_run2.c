@@ -14,22 +14,22 @@ BOOL ov49_022649F4(void *state, void *ctx) {
     void *object;
     void *message;
 
-    ov49_0225EF84(state);
+    WiFiPlazaPlayerState_GetWork(state);
     object = WiFiPlazaRoom_GetLobby(ctx);
-    switch (ov49_0225EF88(state)) {
+    switch (WiFiPlazaPlayerState_GetStep(state)) {
     case 0:
         PlaySE(0x5DC);
         if (ov45_0222A330(object) == 0) {
             if (ov45_0222A374(object) == 1) {
                 message = WiFiPlazaRoom_GetMsgString(ctx, 1, 0x4E);
                 WiFiPlazaRoom_PrintMessage(ctx, message);
-                ov49_0225EF8C(state, 1);
+                WiFiPlazaPlayerState_SetStep(state, 1);
                 goto done;
             }
         } else {
             message = WiFiPlazaRoom_GetMsgString(ctx, 1, 3);
             WiFiPlazaRoom_PrintMessage(ctx, message);
-            ov49_0225EF8C(state, 1);
+            WiFiPlazaPlayerState_SetStep(state, 1);
             goto done;
         }
         switch (ov45_0222B134(object)) {
@@ -68,11 +68,11 @@ BOOL ov49_022649F4(void *state, void *ctx) {
             break;
         }
         WiFiPlazaRoom_PrintMessage(ctx, message);
-        ov49_0225EF8C(state, 1);
+        WiFiPlazaPlayerState_SetStep(state, 1);
         break;
     case 1:
         if (WiFiPlazaRoom_IsMessageFinished(ctx)) {
-            ov49_0225EF8C(state, 2);
+            WiFiPlazaPlayerState_SetStep(state, 2);
         }
         break;
     case 2:

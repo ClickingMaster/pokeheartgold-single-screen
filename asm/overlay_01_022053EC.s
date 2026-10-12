@@ -85,7 +85,7 @@ _022054EC:
 	pop {r3, r4, r5, pc}
 _02205504:
 	add r0, r4, #0
-	bl sub_020659A8
+	bl FollowPlayerMovement_GetHopSpeed
 	lsl r0, r0, #0x18
 	lsr r5, r0, #0x18
 	bne _02205516
@@ -94,7 +94,7 @@ _02205504:
 	pop {r3, r4, r5, pc}
 _02205516:
 	add r0, r4, #0
-	bl sub_0206599C
+	bl FollowPlayerMovement_GetHopFrame
 	add r4, r0, #0
 	cmp r4, #0x10
 	blt _02205526

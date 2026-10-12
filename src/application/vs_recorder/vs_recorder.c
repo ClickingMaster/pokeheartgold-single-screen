@@ -69,7 +69,7 @@ extern VsRecorderScreenFunc ov40_0224533C[];
 extern VsRecorderScreenFunc ov40_02245368[];
 extern VsRecorderScreenFunc ov40_02245470[];
 extern VsRecorderScreenFunc sVsRecorderVideoListSubStates[];
-extern VsRecorderScreenFunc ov40_02245B98[];
+extern VsRecorderScreenFunc sVsRecorderVideoSearchSubStates[];
 extern VsRecorderScreenFunc ov40_02245B44[];
 extern VsRecorderScreenFunc ov40_02245B30[];
 extern VsRecorderScreenFunc ov40_02245CA8[];
@@ -351,7 +351,7 @@ BOOL VsRecorder_Main(VsRecorderWork *work, int *screen) {
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_SEARCH:
-        done = ov40_02245B98[work->subState](work);
+        done = sVsRecorderVideoSearchSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_SEARCH_NUMBER:

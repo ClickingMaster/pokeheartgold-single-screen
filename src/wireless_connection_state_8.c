@@ -58,11 +58,11 @@ void *sub_02035878(void) {
 
 void sub_0203588C(void) {
     sub_020352D8();
-    sub_020339B4(*(void **)(_021D4134.work + 0xD88), 0x5C, *(void **)(_021D4134.work + 0xD80), _021D4134.localId);
+    Wireless_UpdateGameInfo(*(void **)(_021D4134.work + 0xD88), 0x5C, *(void **)(_021D4134.work + 0xD80), _021D4134.localId);
 }
 
 void sub_020358B0(void) {
-    sub_02033A44();
+    Wireless_HasSentBeacons();
 }
 
 void sub_020358B8(const void *src) {

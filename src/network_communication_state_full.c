@@ -9,7 +9,7 @@
 /* overlay 45 prototypes in private header */
 #include "system.h"
 #include "sound_playback.h"
-#include "unk_02032844.h"
+#include "wireless_manager.h"
 #include "communication_command.h"
 #include "communication_player_state.h"
 #include "unk_02034B0C.h"
@@ -164,7 +164,7 @@ void sub_02037E9C(void) {
 }
 
 void sub_02037EC0(u32 arg0) {
-    sub_02033A0C(arg0);
+    Wireless_SetEntry(arg0);
 }
 
 s32 sub_02037EC8(void) {
@@ -197,7 +197,7 @@ void sub_02037F18(SaveData *saveData) {
 void sub_02037F64(s8 arg0) {
     _021D4150->unk4D = arg0;
     _021D4150->unk48 = 3;
-    sub_02033AA4(1);
+    Wireless_SetEntryLocked(1);
     WirelessStatusIcon_Create();
     sub_020381C0(sub_02038668, 0);
 }
@@ -227,16 +227,16 @@ s32 sub_02037FCC(void) {
 }
 
 void sub_02037FF0(void) {
-    sub_02033AA4(0);
+    Wireless_SetEntryLocked(0);
     if ((_021D4150->unk53 != 1) || (_021D4150->unk54 != 1) || (_021D4150->unk4E == 9)) {
         sub_020398D4(0, 0);
     }
     WirelessStatusIcon_Destroy();
     _021D4150->unk4E = 9;
     _021D4150->unk57 = 0;
-    sub_02033908(_021D4150->unk4A);
+    Wireless_SetMaxEntries(_021D4150->unk4A);
     if (!Comm_GetLocalNetId()) {
-        sub_02033ACC(1);
+        Wireless_SetEntryClosed(1);
         sub_020381C0(sub_02038418, 15);
     } else {
         sub_020381C0(sub_02038460, 5);
@@ -261,14 +261,14 @@ void sub_02038094(void) {
 void sub_020380B0(void) {
     if (_021D4150) {
         _021D4150->unk57 = 1;
-        sub_02033AA4(1);
+        Wireless_SetEntryLocked(1);
     }
 }
 
 void sub_020380CC(void) {
     if (_021D4150) {
         _021D4150->unk57 = 1;
-        sub_02033AA4(1);
+        Wireless_SetEntryLocked(1);
         sub_020381C0(sub_020388A8, 0);
     }
 }
@@ -435,7 +435,7 @@ void sub_02038408(void) {
 
 void sub_02038418(void) {
     if (Comm_CountConnected() <= 1) {
-        sub_02033ACC(0);
+        Wireless_SetEntryClosed(0);
         sub_0203624C();
         sub_020381C0(sub_02038538, 0);
     }
@@ -443,7 +443,7 @@ void sub_02038418(void) {
         _021D4150->unk44--;
         return;
     }
-    sub_02033ACC(0);
+    Wireless_SetEntryClosed(0);
     sub_0203624C();
     sub_020381C0(sub_02038538, 0);
 }
@@ -468,7 +468,7 @@ void sub_0203847C(void) {
 void sub_020384B4(void) {
     if (sub_02034DB8()) {
         sub_02034B0C(_021D4150->unk2C, 1);
-        sub_02033908(_021D4150->unk4A);
+        Wireless_SetMaxEntries(_021D4150->unk4A);
         CommPlayerInfo_Init(_021D4150->unk28, 0);
         if (sub_02035F14(1, 1, 512)) {
             sub_02035FD8();
@@ -814,7 +814,7 @@ s32 sub_02038C18(void) {
 void sub_02038C1C(s8 arg0) {
     if (_021D4150) {
         _021D4150->unk4A = arg0;
-        sub_02033908(arg0);
+        Wireless_SetMaxEntries(arg0);
     }
 }
 
@@ -852,7 +852,7 @@ void sub_02038CE8(void) {
     if (sub_02034DB8()) {
         sub_02034B0C(_021D4150->unk2C, 0);
         CommPlayerInfo_Init(_021D4150->unk28, 0);
-        sub_02033A7C(sub_02038C3C);
+        Wireless_SetBeaconCallback(sub_02038C3C);
         sub_020381C0(sub_02038CC4, 0);
     }
 }
@@ -1503,7 +1503,7 @@ BOOL sub_02039AA4(void) {
     if (!sub_02034BE4()) {
         return TRUE;
     }
-    if (sub_02033974()) {
+    if (Wireless_HasFatalError()) {
         return TRUE;
     }
     return FALSE;

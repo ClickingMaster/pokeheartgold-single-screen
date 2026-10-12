@@ -7,11 +7,11 @@ void sub_02089D68(SummaryState89 *state, int selection) {
     PokemonSummary_RemovePageWindows(state);
     state->data[0x7B8] = selection;
     sub_0208B448(state);
-    sub_0208B5A8(state);
-    sub_0208B89C(state);
-    sub_0208B9C8(state);
-    sub_0208C2A0(state);
-    sub_0208BCD4(state);
+    PokemonSummary_UpdateTypeSprites(state);
+    PokemonSummary_UpdatePokeathlonStars(state);
+    PokemonSummary_UpdateShinyLeafSprites(state);
+    PokemonSummary_ShowRibbonSprites(state);
+    PokemonSummary_InitSheenSparkles(state);
     PokemonSummary_AddPageWindows(state);
     FillBgTilemapRect(state->bgConfig, 1, 0, 0, 3, 0x12, 0x14, 0);
     BgCommitTilemapBufferToVram(state->bgConfig, 1);

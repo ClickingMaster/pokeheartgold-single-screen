@@ -7,7 +7,7 @@ extern void PlayerProfile_Copy(const void *src, void *dst);
 extern u32 PlayerProfile_sizeof(void);
 extern u32 PlayerProfile_GetTrainerID(const void *profile);
 extern int sub_02039954(void);
-extern int sub_02033AB8(void);
+extern int Wireless_IsEntryLocked(void);
 
 typedef struct Unk020351Entry {
     u8 padding[0xAA];

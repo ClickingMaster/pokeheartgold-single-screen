@@ -42,7 +42,7 @@ MapObjectMovementCmd101_Step0: ; 0x0206319C
 	mov r1, #4
 	bl sub_0205F3C0
 	add r0, r4, #0
-	bl sub_0206642C
+	bl HiddenObjectMovement_GetCoverEffect
 	cmp r0, #0
 	beq _020631B6
 	bl FieldEffect_Destroy
@@ -109,7 +109,7 @@ _02063228:
 	add r0, r5, #0
 	bl MapObject_SetFlagsBits
 	add r0, r5, #0
-	bl sub_02066438
+	bl HiddenObjectMovement_SetRevealed
 	add r0, r5, #0
 	bl MapObject_IncrementMovementStep
 	mov r0, #1

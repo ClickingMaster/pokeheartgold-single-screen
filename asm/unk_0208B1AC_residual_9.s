@@ -12,56 +12,56 @@
 	.public gNatureStatMods
 
 	.text
-	.public _02103A2C
-	.public _02103A3C
-	.public _02103A50
-	.public _02103A70
-	.public _02104C68
-	.public _021105B0
-	.public sub_0208B1AC
-	.public sub_0208B258
-	.public sub_0208B278
-	.public sub_0208B2C0
-	.public sub_0208B400
+	.public gPokemonSummarySpriteResdatIds
+	.public gPokemonSummaryOamTransferParam
+	.public gPokemonSummaryOamManagerParam
+	.public gPokemonSummarySpriteTemplates
+	.public gPokemonSummaryBallPalettes
+	.public gPokemonSummaryPartySlotPositions
+	.public PokemonSummary_InitSpriteSystem
+	.public PokemonSummary_FreeSpriteSystem
+	.public PokemonSummary_UpdateSpriteAnims
+	.public PokemonSummary_CreateSprites
+	.public PokemonSummary_UpdatePartySlotSprite
 	.public sub_0208B448
-	.public sub_0208B48C
-	.public sub_0208B4EC
-	.public sub_0208B55C
-	.public sub_0208B5A8
-	.public sub_0208B714
-	.public sub_0208B74C
-	.public sub_0208B780
-	.public sub_0208B85C
-	.public sub_0208B89C
-	.public sub_0208B9C8
-	.public sub_0208BA60
-	.public sub_0208BA88
-	.public sub_0208BAD8
-	.public sub_0208BB24
-	.public sub_0208BB8C
-	.public sub_0208BBDC
-	.public sub_0208BC78
+	.public PokemonSummary_LoadBallSprite
+	.public PokemonSummary_UpdateStatusSprite
+	.public PokemonSummary_LoadTypeAndIconSprites
+	.public PokemonSummary_UpdateTypeSprites
+	.public PokemonSummary_HidePokeathlonStars
+	.public PokemonSummary_InitShinyLeafSprites
+	.public PokemonSummary_SetPokeathlonStatStars
+	.public PokemonSummary_GetPokeathlonStarStates
+	.public PokemonSummary_UpdatePokeathlonStars
+	.public PokemonSummary_UpdateShinyLeafSprites
+	.public PokemonSummary_SetMonTypeSprites
+	.public PokemonSummary_SetTypeSprite
+	.public PokemonSummary_FindMoveTypeSprite
+	.public PokemonSummary_SwapMoveTypeSprites
+	.public PokemonSummary_SetMoveCategorySprite
+	.public PokemonSummary_UpdateMoveCursorSprite
+	.public PokemonSummary_ShowSwapCursorSprite
 	.public sub_0208BCB4
-	.public sub_0208BCD4
-	.public sub_0208BD38
+	.public PokemonSummary_InitSheenSparkles
+	.public PokemonSummary_UpdateMarkingSprites
 	.public sub_0208BDC8
-	.public sub_0208BE00
-	.public sub_0208BE70
-	.public sub_0208BECC
+	.public PokemonSummary_LoadMonIcon
+	.public PokemonSummary_LoadShownMonIcon
+	.public PokemonSummary_LoadPartyIcons
 	.public sub_0208BF9C
 	.public sub_0208BFD0
-	.public sub_0208C068
-	.public sub_0208C0A4
-	.public sub_0208C0E8
-	.public sub_0208C208
-	.public sub_0208C250
-	.public sub_0208C2A0
-	.public sub_0208C320
-	.public sub_0208C380
+	.public PokemonSummary_ShowMonIconSprite
+	.public PokemonSummary_GetConditionPoint
+	.public PokemonSummary_ShowConditionSprites
+	.public PokemonSummary_HideConditionSprites
+	.public PokemonSummary_SetRibbonSprite
+	.public PokemonSummary_ShowRibbonSprites
+	.public PokemonSummary_UpdateRibbonSprites
+	.public PokemonSummary_UpdateRibbonCursorSprite
 	.public sub_0208C3C0
 
-	thumb_func_start sub_0208BECC
-sub_0208BECC: ; 0x0208BECC
+	thumb_func_start PokemonSummary_LoadPartyIcons
+PokemonSummary_LoadPartyIcons: ; 0x0208BECC
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r0, #0
 	bl sub_0208A520
@@ -142,7 +142,7 @@ _0208BF64:
 	add r0, r6, #0
 	add r1, r7, #0
 	add r2, #0x49
-	bl sub_0208BE00
+	bl PokemonSummary_LoadMonIcon
 	ldr r0, [sp]
 	add r4, r4, #1
 	add r5, r5, #4
@@ -167,4 +167,4 @@ _0208BF96:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _0208BF98: .word 0x00000528
-	thumb_func_end sub_0208BECC
+	thumb_func_end PokemonSummary_LoadPartyIcons

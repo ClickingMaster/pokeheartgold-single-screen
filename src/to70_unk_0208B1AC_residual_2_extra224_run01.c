@@ -1,9 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-typedef struct Data{u8 pad[0x11];u8 mode;u8 pad12[2];u8 selected;}Data;typedef struct W{u8 pad[0x22c];Data*data;u8 pad230[0x1f8];void*icon;}W;
-extern const u8 _021105B0[];extern void Sprite_SetPositionXY(void*,int,int),Sprite_SetAnimCtrlSeq(void*,int),Sprite_SetDrawFlag(void*,int);void sub_0208B400(W*);
-typedef struct SpriteTemplate{u32 words[10];}SpriteTemplate;typedef struct Big{u8 pad[0x3fc];void*system,*resources,*sprites[115];}Big;extern const SpriteTemplate _02103A70[115];extern void*SpriteSystem_CreateSpriteFromResourceHeader(void*,void*,const SpriteTemplate*);extern void sub_0208B55C(Big*),sub_0208B714(Big*),sub_0208B74C(Big*);void sub_0208B2C0(Big*);
-void sub_0208B2C0(Big*w){for(u16 i=0;i<115;i++)w->sprites[i]=SpriteSystem_CreateSpriteFromResourceHeader(w->system,w->resources,&_02103A70[i]);sub_0208B55C(w);
-Sprite_SetDrawFlag(w->sprites[10],0);Sprite_SetDrawFlag(w->sprites[41],0);Sprite_SetDrawFlag(w->sprites[42],0);Sprite_SetDrawFlag(w->sprites[43],0);Sprite_SetDrawFlag(w->sprites[44],0);Sprite_SetDrawFlag(w->sprites[45],0);Sprite_SetDrawFlag(w->sprites[46],0);Sprite_SetDrawFlag(w->sprites[47],0);Sprite_SetDrawFlag(w->sprites[48],0);Sprite_SetDrawFlag(w->sprites[49],0);Sprite_SetDrawFlag(w->sprites[50],0);Sprite_SetDrawFlag(w->sprites[51],0);Sprite_SetDrawFlag(w->sprites[67],0);Sprite_SetDrawFlag(w->sprites[68],0);Sprite_SetDrawFlag(w->sprites[69],0);Sprite_SetDrawFlag(w->sprites[70],0);Sprite_SetDrawFlag(w->sprites[71],0);sub_0208B714(w);sub_0208B74C(w);Sprite_SetDrawFlag(w->sprites[72],0);}
-void sub_0208B400(W*w){if(w->data->mode!=2){Sprite_SetPositionXY(w->icon,_021105B0[2*w->data->selected],(_021105B0+1)[2*w->data->selected]);Sprite_SetAnimCtrlSeq(w->icon,2);}else Sprite_SetDrawFlag(w->icon,0);}

@@ -57,13 +57,13 @@ s32 WiFiPlazaRoom_GetYesNoResult(s32);                             /* extern */
 M2C_UNK WiFiPlazaRoom_CloseYesNoMenu(s32);                         /* extern */
 s32 WiFiPlazaRoom_GetMsgString(s32, s32, s32);                   /* extern */
 M2C_UNK ov49_0225A37C(s32, u8, s32);                /* extern */
-void *ov49_0225EF3C();                              /* extern */
-M2C_UNK ov49_0225EF40(s32, s32);                    /* extern */
-M2C_UNK ov49_0225EF68(s32);                         /* extern */
-void *ov49_0225EF84(s32);                           /* extern */
-u32 ov49_0225EF88(s32);                             /* extern */
-M2C_UNK ov49_0225EF8C(s32, u8);                     /* extern */
-M2C_UNK ov49_0225EF90(s32);                         /* extern */
+void *WiFiPlazaPlayerState_GetArg();                              /* extern */
+M2C_UNK WiFiPlazaPlayerState_AllocWork(s32, s32);                    /* extern */
+M2C_UNK WiFiPlazaPlayerState_FreeWork(s32);                         /* extern */
+void *WiFiPlazaPlayerState_GetWork(s32);                           /* extern */
+u32 WiFiPlazaPlayerState_GetStep(s32);                             /* extern */
+M2C_UNK WiFiPlazaPlayerState_SetStep(s32, u8);                     /* extern */
+M2C_UNK WiFiPlazaPlayerState_NextStep(s32);                         /* extern */
 M2C_UNK ov49_02262BF8(void *, s32, s32, s32, s32);  /* extern */
 M2C_UNK ov49_02262C20(void *, s32, s32, s32);       /* extern */
 M2C_UNK ov49_02262C38(void *, s32, s32, s32);       /* extern */
@@ -135,10 +135,10 @@ s32 ov49_02262028(s32 arg0, s32 arg1, s32 arg2) {
 
     sp10 = arg0;
     sp14 = arg2;
-    temp_r6 = ov49_0225EF3C();
-    temp_r4 = ov49_0225EF84(arg0);
+    temp_r6 = WiFiPlazaPlayerState_GetArg();
+    temp_r4 = WiFiPlazaPlayerState_GetWork(arg0);
     sp30 = WiFiPlazaRoom_GetLobby(arg1);
-    temp_r0 = ov49_0225EF88(arg0);
+    temp_r0 = WiFiPlazaPlayerState_GetStep(arg0);
     switch (temp_r0) {                              /* switch 1 */
     case 9:                                         /* switch 1 */
     case 10:                                        /* switch 1 */
@@ -150,24 +150,24 @@ s32 ov49_02262028(s32 arg0, s32 arg1, s32 arg2) {
     case 27:                                        /* switch 1 */
         if ((u32) M2C_FIELD(temp_r4, u16 *, 8) > ov45_0222F314(M2C_FIELD(temp_r6, u8 *, 1))) {
             M2C_FIELD(temp_r6, s8 *, 0) = 4;
-            ov49_0225EF8C(sp10, 0x17U);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
         } else if ((s32) M2C_FIELD(temp_r4, u16 *, 8) > Comm_CountConnected()) {
             M2C_FIELD(temp_r6, s8 *, 0) = 4;
-            ov49_0225EF8C(sp10, 0x17U);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
         } else if (sub_0203988C() == 0) {
             M2C_FIELD(temp_r6, s8 *, 0) = 4;
-            ov49_0225EF8C(sp10, 0x17U);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
         } else {
         case 8:                                     /* switch 1 */
             if ((ov45_0222F464() == 1) && (ov45_0222F314(M2C_FIELD(temp_r6, u8 *, 1)) <= 1U)) {
                 M2C_FIELD(temp_r6, s8 *, 0) = 4;
-                ov49_0225EF8C(sp10, 0x17U);
+                WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
             } else {
                 temp_r0_2 = M2C_FIELD(temp_r4, s32 *, 0x10) - 1;
                 M2C_FIELD(temp_r4, s32 *, 0x10) = temp_r0_2;
                 if (temp_r0_2 < 0) {
                     M2C_FIELD(temp_r6, s8 *, 0) = 4;
-                    ov49_0225EF8C(sp10, 0x17U);
+                    WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
                 } else {
                 case 7:                             /* switch 1 */
                 case 17:                            /* switch 1 */
@@ -186,7 +186,7 @@ s32 ov49_02262028(s32 arg0, s32 arg1, s32 arg2) {
                     case 4:                         /* switch 2 */
                     case 5:                         /* switch 2 */
                         M2C_FIELD(temp_r6, s8 *, 0) = 4;
-                        ov49_0225EF8C(sp10, 0x17U);
+                        WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
                         break;
                     }
                 }
@@ -194,23 +194,23 @@ s32 ov49_02262028(s32 arg0, s32 arg1, s32 arg2) {
         }
         break;
     }
-    temp_r0_4 = ov49_0225EF88(sp10);
+    temp_r0_4 = WiFiPlazaPlayerState_GetStep(sp10);
     switch (temp_r0_4) {                            /* switch 3 */
     case 0:                                         /* switch 3 */
-        ov49_0225EF40(sp10, 0x44);
-        ov49_0225EF90(sp10);
+        WiFiPlazaPlayerState_AllocWork(sp10, 0x44);
+        WiFiPlazaPlayerState_NextStep(sp10);
     default:                                        /* switch 3 */
         break;
     case 1:                                         /* switch 3 */
         if (ov45_0222A414(sp30) != 0) {
             M2C_FIELD(temp_r6, s8 *, 0) = 7;
-            ov49_0225EF8C(sp10, 0x1CU);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x1CU);
         } else if (ov45_0222A394(sp30) != 0) {
             M2C_FIELD(temp_r6, s8 *, 0) = 2;
-            ov49_0225EF8C(sp10, 0x1CU);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x1CU);
         } else {
             PlaySE(0x5DD);
-            ov49_0225EF90(sp10);
+            WiFiPlazaPlayerState_NextStep(sp10);
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
@@ -222,7 +222,7 @@ s32 ov49_02262028(s32 arg0, s32 arg1, s32 arg2) {
     case 3:                                         /* switch 3 */
         ov49_02262C38(temp_r4, arg1, 3, 1);
         ov49_0225A174(arg1, temp_r4 + 0x18, 0, 0);
-        ov49_0225EF8C(sp10, 4U);
+        WiFiPlazaPlayerState_SetStep(sp10, 4U);
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 4:                                         /* switch 3 */
@@ -232,15 +232,15 @@ s32 ov49_02262028(s32 arg0, s32 arg1, s32 arg2) {
         case -2:                                    /* switch 4 */
         case 2:                                     /* switch 4 */
             M2C_FIELD(temp_r6, s8 *, 0) = 5;
-            ov49_0225EF8C(sp10, 0x1CU);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x1CU);
             var_r7 = 1;
             break;
         case 1:                                     /* switch 4 */
-            ov49_0225EF8C(sp10, 5U);
+            WiFiPlazaPlayerState_SetStep(sp10, 5U);
             var_r7 = 1;
             break;
         case 0:                                     /* switch 4 */
-            ov49_0225EF8C(sp10, 6U);
+            WiFiPlazaPlayerState_SetStep(sp10, 6U);
             var_r7 = 1;
             break;
         }
@@ -258,14 +258,14 @@ s32 ov49_02262028(s32 arg0, s32 arg1, s32 arg2) {
     case 6:                                         /* switch 3 */
         if (ov45_0222A394(sp30) != 0) {
             M2C_FIELD(temp_r6, s8 *, 0) = 2;
-            ov49_0225EF8C(sp10, 0x1CU);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x1CU);
         } else if (ov45_0222F274(M2C_FIELD(temp_r6, u8 *, 1)) == 1) {
             if ((ov45_0222F2D4(M2C_FIELD(temp_r6, u8 *, 1)) == 0) || (ov45_0222F294(M2C_FIELD(temp_r6, u8 *, 1)) == 0)) {
                 M2C_FIELD(temp_r6, s8 *, 0) = 1;
-                ov49_0225EF8C(sp10, 0x1CU);
+                WiFiPlazaPlayerState_SetStep(sp10, 0x1CU);
             } else if (ov45_0222F3E8(M2C_FIELD(temp_r6, u8 *, 1)) == 0) {
                 M2C_FIELD(temp_r6, s8 *, 0) = 7;
-                ov49_0225EF8C(sp10, 0x1CU);
+                WiFiPlazaPlayerState_SetStep(sp10, 0x1CU);
             } else {
                 goto block_46;
             }
@@ -288,7 +288,7 @@ block_46:
             }
             ov49_02262D70(temp_r4 + 0x3C, arg1, M2C_FIELD(temp_r6, u8 *, 2), 1, (s32) M2C_FIELD(temp_r4, s16 *, 0));
             ov49_02262E04(temp_r4 + 0x3C, arg1, 1);
-            ov49_0225EF8C(sp10, 7U);
+            WiFiPlazaPlayerState_SetStep(sp10, 7U);
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
@@ -306,7 +306,7 @@ block_46:
         ov49_02262DF8(temp_r4 + 0x3C, arg1, 0);
         if (sp2C == 0) {
             M2C_FIELD(temp_r6, s8 *, 0) = 4;
-            ov49_0225EF8C(sp10, 0x17U);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
         } else if (sp2C == 2) {
             M2C_FIELD(temp_r6, s8 *, 0) = 8;
             if (temp_r7 == 4) {
@@ -317,7 +317,7 @@ block_46:
             ov49_0225A0CC(arg1);
             ov49_0225A09C(arg1, WiFiPlazaRoom_GetMsgString(arg1, 0, var_r6));
             ov49_0225A0BC(arg1);
-            ov49_0225EF8C(sp10, 9U);
+            WiFiPlazaPlayerState_SetStep(sp10, 9U);
             M2C_FIELD(temp_r4, u16 *, 8) = (u16) temp_r7;
             ov49_02262DD4(temp_r4 + 0x3C, 0);
             ov49_02262DF8(temp_r4 + 0x3C, arg1, 0);
@@ -326,11 +326,11 @@ block_46:
             if (ov45_0222F464() == 0) {
                 M2C_FIELD(temp_r6, s8 *, 0) = 6;
                 ov49_0225A0CC(arg1);
-                ov49_0225EF8C(sp10, 0x17U);
+                WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
             } else {
                 M2C_FIELD(temp_r6, s8 *, 0) = 6;
                 ov49_0225A0CC(arg1);
-                ov49_0225EF8C(sp10, 0x10U);
+                WiFiPlazaPlayerState_SetStep(sp10, 0x10U);
             }
         } else if (ov45_0222F464() == 1) {
             if (M2C_FIELD(temp_r4, u8 *, 7) != temp_r7) {
@@ -341,7 +341,7 @@ block_46:
             }
             if ((M2C_FIELD(temp_r4, s16 *, 0) == 0) && (ov45_0222F314(M2C_FIELD(temp_r6, u8 *, 1)) <= 1U)) {
                 M2C_FIELD(temp_r6, s8 *, 0) = 3;
-                ov49_0225EF8C(sp10, 0x17U);
+                WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
             } else {
                 goto block_75;
             }
@@ -349,9 +349,9 @@ block_46:
 block_75:
             if ((ov45_0222F274(M2C_FIELD(temp_r6, u8 *, 1)) == 1) && (ov45_0222F294(M2C_FIELD(temp_r6, u8 *, 1)) == 0)) {
                 M2C_FIELD(temp_r6, s8 *, 0) = 0;
-                ov49_0225EF8C(sp10, 0x17U);
+                WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
             } else if (M2C_FIELD(temp_r4, s16 *, 0) == 0) {
-                ov49_0225EF8C(sp10, 8U);
+                WiFiPlazaPlayerState_SetStep(sp10, 8U);
                 ov49_0225A0CC(arg1);
                 ov49_0225A09C(arg1, WiFiPlazaRoom_GetMsgString(arg1, 0, 0x12));
                 ov49_0225A0BC(arg1);
@@ -369,21 +369,21 @@ block_75:
         case 3:
         case 4:
             M2C_FIELD(temp_r6, s8 *, 0) = 4;
-            ov49_0225EF8C(sp10, 0x17U);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
             break;
         }
         if (temp_r5 == 0) {
             M2C_FIELD(temp_r6, s8 *, 0) = 4;
-            ov49_0225EF8C(sp10, 0x17U);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
         } else if (temp_r5 == 2) {
             M2C_FIELD(temp_r6, s8 *, 0) = 8;
-            ov49_0225EF8C(sp10, 9U);
+            WiFiPlazaPlayerState_SetStep(sp10, 9U);
             M2C_FIELD(temp_r4, u16 *, 8) = (u16) temp_r7_2;
         } else if ((ov45_0222F274(M2C_FIELD(temp_r6, u8 *, 1)) != 1) || (ov45_0222F294(M2C_FIELD(temp_r6, u8 *, 1)) != 0)) {
 
         } else {
             M2C_FIELD(temp_r6, s8 *, 0) = 0;
-            ov49_0225EF8C(sp10, 0x17U);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
@@ -406,7 +406,7 @@ block_75:
         CommPlayerInfo_SendLocal();
         Comm_GetLocalNetId();
         CommPlayerInfo_Accept();
-        ov49_0225EF8C(sp10, 0xBU);
+        WiFiPlazaPlayerState_SetStep(sp10, 0xBU);
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 11:                                        /* switch 3 */
@@ -424,11 +424,11 @@ block_75:
                 M2C_FIELD(temp_r4, u16 *, 2) = 1U;
             }
             if (ov45_0222F218() == 1) {
-                ov49_0225EF8C(sp10, 0xCU);
+                WiFiPlazaPlayerState_SetStep(sp10, 0xCU);
             }
         } else if (ov45_0222F218() == 1) {
             M2C_FIELD(temp_r6, s8 *, 0) = 4;
-            ov49_0225EF8C(sp10, 0x17U);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
@@ -447,7 +447,7 @@ block_75:
         if (LinkSync_SendPacket(Comm_GetLocalNetId(), temp_r4 + 0xC) != 1) {
 
         } else {
-            ov49_0225EF8C(sp10, 0xEU);
+            WiFiPlazaPlayerState_SetStep(sp10, 0xEU);
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
@@ -470,7 +470,7 @@ loop_108:
                     if (ov45_0222EC68(*temp_r0_8) == -1) {
                         sp18 = 1;
                         M2C_FIELD(temp_r6, s8 *, 0) = 4;
-                        ov49_0225EF8C(sp10, 0x17U);
+                        WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
                     } else {
                         ov45_0222A450(sp30, *temp_r0_8, var_r4);
                         if (*temp_r0_8 == sp1C) {
@@ -497,10 +497,10 @@ block_118:
         }
         if ((sp18 == 0) && (var_r7_2 == sp28)) {
             if (sp20 == 1) {
-                ov49_0225EF8C(sp10, 0xFU);
+                WiFiPlazaPlayerState_SetStep(sp10, 0xFU);
             } else {
                 M2C_FIELD(temp_r6, s8 *, 0) = 4;
-                ov49_0225EF8C(sp10, 0x17U);
+                WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
             }
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */
@@ -517,19 +517,19 @@ block_118:
         break;
     case 16:                                        /* switch 3 */
         WiFiPlazaRoom_PrintMessage(arg1, WiFiPlazaRoom_GetMsgString(arg1, 0, 0x1A));
-        ov49_0225EF8C(sp10, 0x11U);
+        WiFiPlazaPlayerState_SetStep(sp10, 0x11U);
         ov49_02262DB8(temp_r4 + 0x3C, arg1);
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 17:                                        /* switch 3 */
         if ((ov49_02262CB4(temp_r4, arg1, temp_r6, sp10, sp14) == 0) && (WiFiPlazaRoom_IsMessageFinished(arg1) == 1)) {
-            ov49_0225EF8C(sp10, 0x12U);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x12U);
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 18:                                        /* switch 3 */
         ov49_0225A294(arg1);
-        ov49_0225EF8C(sp10, 0x13U);
+        WiFiPlazaPlayerState_SetStep(sp10, 0x13U);
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 19:                                        /* switch 3 */
@@ -537,12 +537,12 @@ block_118:
         switch (temp_r0_9) {                        /* switch 5; irregular */
         case 0:                                     /* switch 5 */
             WiFiPlazaRoom_CloseYesNoMenu(arg1);
-            ov49_0225EF8C(sp10, 0x17U);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x17U);
             ov45_0222A404(sp30);
             break;
         case 1:                                     /* switch 5 */
             WiFiPlazaRoom_CloseYesNoMenu(arg1);
-            ov49_0225EF8C(sp10, 0x14U);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x14U);
             break;
         case 2:                                     /* switch 5 */
             if (ov49_02262CB4(temp_r4, arg1, temp_r6, sp10, sp14) != 1) {
@@ -566,7 +566,7 @@ block_118:
         }
         ov49_0225A09C(arg1, var_r0_2);
         ov49_0225A0BC(arg1);
-        ov49_0225EF8C(sp10, 7U);
+        WiFiPlazaPlayerState_SetStep(sp10, 7U);
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 21:                                        /* switch 3 */
@@ -579,7 +579,7 @@ block_118:
         }
         ov49_0225A09C(arg1, WiFiPlazaRoom_GetMsgString(arg1, 0, var_r2));
         ov49_0225A0BC(arg1);
-        ov49_0225EF8C(sp10, 9U);
+        WiFiPlazaPlayerState_SetStep(sp10, 9U);
         ov49_02262D70(temp_r4 + 0x3C, arg1, M2C_FIELD(temp_r6, u8 *, 2), 1, 0);
         ov49_02262E04(temp_r4 + 0x3C, arg1, 1);
         /* Duplicate return node #164. Try simplifying control flow for better match */
@@ -590,24 +590,24 @@ block_118:
         ov49_02262D70(temp_r4 + 0x3C, arg1, M2C_FIELD(temp_r6, u8 *, 2), 1, 0);
         ov49_02262DD4(temp_r4 + 0x3C, 0);
         ov49_02262DF8(temp_r4 + 0x3C, arg1, 1);
-        ov49_0225EF8C(sp10, 8U);
+        WiFiPlazaPlayerState_SetStep(sp10, 8U);
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 23:                                        /* switch 3 */
         CommPlayerInfo_Free();
         sub_0203986C();
-        ov49_0225EF8C(sp10, 0x18U);
+        WiFiPlazaPlayerState_SetStep(sp10, 0x18U);
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 24:                                        /* switch 3 */
         if (sub_0203988C() == 0) {
-            ov49_0225EF8C(sp10, 0x1CU);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x1CU);
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 25:                                        /* switch 3 */
         if (WiFiPlazaRoom_IsMessageFinished(arg1) == 1) {
-            ov49_0225EF8C(sp10, M2C_FIELD(temp_r4, u8 *, 4));
+            WiFiPlazaPlayerState_SetStep(sp10, M2C_FIELD(temp_r4, u8 *, 4));
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
@@ -618,7 +618,7 @@ block_118:
         }
         if (M2C_FIELD(temp_r4, s8 *, 5) == 0) {
             LinkSync_StartSync(M2C_FIELD(temp_r4, u8 *, 6));
-            ov49_0225EF8C(sp10, 0x1BU);
+            WiFiPlazaPlayerState_SetStep(sp10, 0x1BU);
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
@@ -629,7 +629,7 @@ block_118:
             M2C_FIELD(temp_r4, u16 *, 0xA) = 0U;
         }
         if (LinkSync_IsSynced(M2C_FIELD(temp_r4, u8 *, 6)) != 0) {
-            ov49_0225EF8C(sp10, M2C_FIELD(temp_r4, u8 *, 4));
+            WiFiPlazaPlayerState_SetStep(sp10, M2C_FIELD(temp_r4, u8 *, 4));
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
@@ -638,7 +638,7 @@ block_118:
         ov49_02262CA8(temp_r4, arg1);
         ov49_02262DB8(temp_r4 + 0x3C, arg1);
         WiFiPlazaRoom_CloseYesNoMenu(arg1);
-        ov49_0225EF68(sp10);
+        WiFiPlazaPlayerState_FreeWork(sp10);
         return 1;
      }
     return 0;

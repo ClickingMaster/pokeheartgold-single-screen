@@ -168,17 +168,17 @@ void sub_0208A234(SummaryWork *work, u8 selection) {
     sub_02089F98(work);
     PokemonSummary_ReloadPokepic(work);
     sub_0208B448(work);
-    sub_0208BA60(work);
-    sub_0208B5A8(work);
-    sub_0208B89C(work);
-    sub_0208B9C8(work);
-    sub_0208C2A0(work);
-    sub_0208BE70(work);
-    sub_0208B48C(work);
-    sub_0208B4EC(work);
-    sub_0208BCD4(work);
-    sub_0208BD38(work);
+    PokemonSummary_SetMonTypeSprites(work);
+    PokemonSummary_UpdateTypeSprites(work);
+    PokemonSummary_UpdatePokeathlonStars(work);
+    PokemonSummary_UpdateShinyLeafSprites(work);
+    PokemonSummary_ShowRibbonSprites(work);
+    PokemonSummary_LoadShownMonIcon(work);
+    PokemonSummary_LoadBallSprite(work);
+    PokemonSummary_UpdateStatusSprite(work);
+    PokemonSummary_InitSheenSparkles(work);
+    PokemonSummary_UpdateMarkingSprites(work);
     PokemonSummary_PrintPage(work);
-    sub_0208B400(work);
+    PokemonSummary_UpdatePartySlotSprite(work);
     sub_0208BFD0(work);
 }

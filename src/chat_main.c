@@ -493,18 +493,18 @@ void ov45_02250590(ChatConnection *chat) {
 }
 
 // Lists the channels matching the filter.
-void ov45_022505A0(ChatConnection *chat, const char *filter, void *callbackAll, void *callbackEach, void *param, BOOL blocking) {
+void ov45_022505A0(ChatConnection *chat, const char *filter, void *callbackEach, void *callbackAll, void *param, BOOL blocking) {
     int id;
     ASSERT_CHAT(chat, ov45_02256A18, 1422);
     if (!chat || !chat->connected) {
         return;
     }
-    ASSERT(callbackEach || callbackAll, ov45_02256E64, ov45_02256A18, 1425);
+    ASSERT(callbackAll || callbackEach, ov45_02256E64, ov45_02256A18, 1425);
     if (!filter) {
         filter = ov45_02256C2C;
     }
     ov45_02252F74(&chat->socket, ov45_02256E94, filter);
-    id = ov45_0224A7F0(chat, callbackAll, callbackEach, param);
+    id = ov45_0224A7F0(chat, callbackEach, callbackAll, param);
     if (!blocking) {
         return;
     }

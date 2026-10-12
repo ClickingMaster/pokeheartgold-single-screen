@@ -35,7 +35,7 @@ extern void PokeathlonRelayRun_AddResultWindow(State *);
 
 extern void GfGfx_SwapDisplay(void);
 extern void *PokeathlonRelayRunHud_New(u32,void *,void *);
-extern void *ov96_02200E3C(u32,int,int);
+extern void *PokeathlonRelayRunCpu_New(u32,int,int);
 extern void *PokeathlonCourseSprites_CreateResources(u32,int,int);
 extern VecFx32 ov96_0221C5E4;
 extern void *PokeathlonCourseSpritePool_New(u32,VecFx32 *);
@@ -72,7 +72,7 @@ extern void PokeathlonCourseObject_GroundToCenter(void *,int,int,int *,int *);
 extern void PokeathlonRelayRunTeam_SetDrawPriority(Actor *,u8,int);
 extern void PokeathlonRelayRunHud_SetTimer(void *,int);
 extern void PokeathlonRelayRun_InitMember(void *,void *,u8,u8,Actor *);
-extern void ov96_02200E78(void *,u8,Actor *);
+extern void PokeathlonRelayRunCpu_SetTeam(void *,u8,Actor *);
 extern void PokeathlonRelayRun_PackPacket(State *,void *);
 extern void ov96_021E634C(void *,int,void *,void *,int,int,Point *);
 extern void PokeathlonRelayRun_LoadBgGraphics(State *);
@@ -80,7 +80,7 @@ extern void PokeathlonRelayRun_LoadBgGraphics(State *);
 
 extern void WirelessStatusIcon_CreateOnScreenIfConnected(int);
 extern u16 LCRandom(void);
-extern void ov96_02200E80(void *,void *);
+extern void PokeathlonRelayRunCpu_SetObstacles(void *,void *);
 static inline int TeamNum(int i){return i/3;}
 static inline int SlotNum(int i){return i%3;}
 static inline void *GetMember(void *course,int i){return PokeathlonCourse_GetPerformance(course,i/3,i%3);}

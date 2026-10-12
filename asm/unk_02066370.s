@@ -12,8 +12,8 @@
 	.include "unk_020658D4.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02066370
-sub_02066370: ; 0x02066370
+	thumb_func_start HiddenObjectMovement_Resume
+HiddenObjectMovement_Resume: ; 0x02066370
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r0, #0
@@ -22,11 +22,11 @@ sub_02066370: ; 0x02066370
 	mov r1, #0
 	strb r1, [r5]
 	add r0, r4, #0
-	bl sub_02066420
+	bl HiddenObjectMovement_SetCoverEffect
 	ldrb r0, [r5, #2]
 	cmp r0, #0
 	bne _020663AC
-	ldr r5, _020663B0 ; =_020FE3E8
+	ldr r5, _020663B0 ; =gHiddenObjectResumeOffset
 	add r3, sp, #0
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -44,5 +44,5 @@ _020663AC:
 	add sp, #0xc
 	pop {r4, r5, pc}
 	.balign 4, 0
-_020663B0: .word _020FE3E8
-	thumb_func_end sub_02066370
+_020663B0: .word gHiddenObjectResumeOffset
+	thumb_func_end HiddenObjectMovement_Resume

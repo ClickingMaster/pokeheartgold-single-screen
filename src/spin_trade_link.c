@@ -4,7 +4,7 @@
 
 #include "communication_player_state.h"
 #include "heap.h"
-#include "unk_02032844.h"
+#include "wireless_manager.h"
 #include "communication_command.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
@@ -171,7 +171,7 @@ void SpinTradeLink_HandleJoinRequest(int sender, int unused, void *data, SpinTra
         packet.count = menu->participantCount;
         switch (src->command) {
         case 0:
-            if (menu->participantCount != Comm_CountConnected() || menu->participantCount != SpinTradeLink_CountMemberProfiles() || menu->participantCount != MATH_CountPopulation(sub_02033250())) {
+            if (menu->participantCount != Comm_CountConnected() || menu->participantCount != SpinTradeLink_CountMemberProfiles() || menu->participantCount != MATH_CountPopulation(Wireless_GetConnectedBitmap())) {
                 packet.accepted = 0;
             } else {
                 menu->participantMask |= 1 << sender;

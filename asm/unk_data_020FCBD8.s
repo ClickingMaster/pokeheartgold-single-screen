@@ -149,9 +149,9 @@ _020FCD28:
 _020FCD38:
 	.word 0x00000034
 	.word sub_02066318
-	.word sub_0206633C
-	.word sub_02066360
-	.word sub_02066370
+	.word HiddenObjectMovement_Update
+	.word HiddenObjectMovement_Delete
+	.word HiddenObjectMovement_Resume
 
 _020FCD4C:
 	.word 0x00000003
@@ -163,15 +163,15 @@ _020FCD4C:
 _020FCD60:
 	.word 0x00000036
 	.word sub_02066330
-	.word sub_0206633C
-	.word sub_02066360
-	.word sub_02066370
+	.word HiddenObjectMovement_Update
+	.word HiddenObjectMovement_Delete
+	.word HiddenObjectMovement_Resume
 
 _020FCD74:
 	.word 0x00000003
-	.word sub_020658D4
-	.word sub_02065938
-	.word sub_02065998
+	.word FollowPlayerMovement_Init
+	.word FollowPlayerMovement_Update
+	.word FollowPlayerMovement_Delete
 	.word sub_0205FCC0
 
 _020FCD88:
@@ -184,9 +184,9 @@ _020FCD88:
 _020FCD9C:
 	.word 0x00000035
 	.word sub_02066324
-	.word sub_0206633C
-	.word sub_02066360
-	.word sub_02066370
+	.word HiddenObjectMovement_Update
+	.word HiddenObjectMovement_Delete
+	.word HiddenObjectMovement_Resume
 
 _020FCDB0:
 	.word 0x00000003
@@ -198,9 +198,9 @@ _020FCDB0:
 _020FCDC4:
 	.word 0x00000033
 	.word sub_0206630C
-	.word sub_0206633C
-	.word sub_02066360
-	.word sub_02066370
+	.word HiddenObjectMovement_Update
+	.word HiddenObjectMovement_Delete
+	.word HiddenObjectMovement_Resume
 
 _020FCDD8:
 	.word 0x00000003
@@ -211,9 +211,9 @@ _020FCDD8:
 
 _020FCDEC:
 	.word 0x00000003
-	.word sub_020658D4
-	.word sub_02065968
-	.word sub_02065998
+	.word FollowPlayerMovement_Init
+	.word FollowPlayerMovement_UpdateMirror
+	.word FollowPlayerMovement_Delete
 	.word sub_0205FCC0
 
 _020FCE00:
@@ -456,9 +456,9 @@ _020FD094:
 
 _020FD0A8:
 	.word 0x00000003
-	.word sub_020658D4
-	.word sub_02065900
-	.word sub_02065998
+	.word FollowPlayerMovement_Init
+	.word FollowPlayerMovement_UpdateFollowMon
+	.word FollowPlayerMovement_Delete
 	.word sub_0205FCC0
 
 _020FD0BC:
@@ -512,10 +512,10 @@ _020FD134:
 
 _020FD148:
 	.word 0x00000003
-	.word sub_02065FFC
-	.word sub_02066024
-	.word sub_02066054
-	.word sub_02066058
+	.word FollowPartnerMovement_Init
+	.word FollowPartnerMovement_Update
+	.word FollowPartnerMovement_Delete
+	.word FollowPartnerMovement_Resume
 
 _020FD15C:
 	.word 0x00000003

@@ -6,11 +6,11 @@
 .public Heap_Alloc
 .public Heap_Free
 .public GF_AssertFail
-.public sub_02033250
-.public sub_02033298
-.public sub_02033800
-.public sub_020338F4
-.public sub_02033A90
+.public Wireless_GetConnectedBitmap
+.public Wireless_GetState
+.public Wireless_SendData
+.public Wireless_GetAid
+.public Wireless_SetChildJoinedCallback
 .public ByteRing_Init
 .public ByteRing_Write
 .public ByteRing_Read

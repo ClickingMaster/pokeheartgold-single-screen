@@ -86,15 +86,15 @@ ChatRequest *ov45_022496AC(ChatConnection *chat, int count, const ChatRequestKey
     return NULL;
 }
 
-// Finds the request of type 12 for the nick.
-ChatRequest *ov45_0224983C(ChatConnection *chat, const char *nick) {
+// Finds the channel keys request (type 12) of the channel.
+ChatRequest *ov45_0224983C(ChatConnection *chat, const char *channel) {
     ChatRequest *request;
     ASSERT_CHAT(chat, ov45_0225609C, 0x17F);
-    ASSERT(nick, ov45_02256630, ov45_0225609C, 0x181);
-    ASSERT(*nick, ov45_02256638, ov45_0225609C, 0x182);
+    ASSERT(channel, ov45_02256630, ov45_0225609C, 0x181);
+    ASSERT(*channel, ov45_02256638, ov45_0225609C, 0x182);
     request = chat->requests;
     while (request) {
-        if (request->type == 12 && strnicmp(((ChatKeysData *)request->data)->arg.nick, nick) == 0) {
+        if (request->type == 12 && strnicmp(((ChatKeysData *)request->data)->arg.channel, channel) == 0) {
             return request;
         }
         request = request->next;
@@ -183,13 +183,13 @@ void ov45_02249A0C(ChatConnection *chat, ChatRequest *request, u32 *results) {
         if (request->callback) {
             ov45_02244D30(chat, 20, request->callback, results, request->param, request->id, NULL, 28);
         }
-        for (i = 0; i < data->strings.count; i++) {
-            ov00_021EC3D8(data->strings.strings[i]);
+        for (i = 0; i < data->whois.channelCount; i++) {
+            ov00_021EC3D8(data->whois.channels[i]);
         }
-        ov00_021EC3D8(data->strings.strings);
-        ov00_021EC3D8(data->strings.unk_04);
-        ov00_021EC3D8(data->strings.unk_08);
-        ov00_021EC3D8(data->strings.unk_00);
+        ov00_021EC3D8(data->whois.channels);
+        ov00_021EC3D8(data->whois.realName);
+        ov00_021EC3D8(data->whois.address);
+        ov00_021EC3D8(data->whois.user);
     } else if (request->type == 10) {
         if (request->callback) {
             ov45_02244D30(chat, 21, request->callback, results, request->param, request->id, NULL, 16);
@@ -213,8 +213,8 @@ void ov45_02249A0C(ChatConnection *chat, ChatRequest *request, u32 *results) {
         if (request->callback) {
             ov45_02244D30(chat, 24, request->callback, results, request->param, request->id, NULL, 16);
         }
-        for (i = 0; i < data->keys.count; i++) {
-            ov00_021EC3D8(data->keys.keys[i]);
+        for (i = 0; i < data->banList.count; i++) {
+            ov00_021EC3D8(data->banList.bans[i]);
         }
     } else if (request->type == 9) {
         if (request->callback) {
@@ -225,7 +225,7 @@ void ov45_02249A0C(ChatConnection *chat, ChatRequest *request, u32 *results) {
         if (request->callback) {
             ov45_02244D30(chat, 29, request->callback, results, request->param, request->id, NULL, 20);
         }
-        ov00_021EC3D8(data->keys.arg.nick);
+        ov00_021EC3D8(data->keys.arg.channel);
         for (i = 0; i < data->keys.count; i++) {
             ov00_021EC3D8(data->keys.keys[i]);
         }
@@ -290,7 +290,7 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
     if (request->type == 1) {
         u32 results[3];
         results[0] = 0;
-        results[1] = (u32)7;
+        results[1] = (u32)CHAT_ENTER_TIMED_OUT;
         results[2] = (u32)request->name;
         ov45_02249A0C(chat, request, results);
         return;
@@ -503,13 +503,13 @@ int ov45_0224A708(ChatConnection *chat, int type, const char *name, const char *
     return request->id;
 }
 
-int ov45_0224A7F0(ChatConnection *chat, void *callbackAll, void *callbackEach, void *param) {
+int ov45_0224A7F0(ChatConnection *chat, void *callbackEach, void *callbackAll, void *param) {
     void *data = ov00_021EC3A8(sizeof(ChatChannelListData));
     if (!data) {
         return 0;
     }
     memset(data, 0, sizeof(ChatChannelListData));
-    return ov45_0224A708(chat, 0, NULL, NULL, callbackAll, callbackEach, param, data);
+    return ov45_0224A708(chat, 0, NULL, NULL, callbackEach, callbackAll, param, data);
 }
 
 int ov45_0224A874(ChatConnection *chat, const char *channel, void *callback, void *param, const ChatChannelCallbacks *callbacks, const char *password) {

@@ -43,8 +43,8 @@ FS_EXTERN_OVERLAY(OVY_25);
 #define BILLBOARD_SEQUENCE_FOLLOW_MON_ALT 22
 
 // map_object_follow_2.c / r40_unk_020659A8_run1.c / map_object_follow_3.c (no header).
-u8 sub_0206599C(LocalMapObject *object);
-u32 sub_020659A8(LocalMapObject *object);
+u8 FollowPlayerMovement_GetHopFrame(LocalMapObject *object);
+u32 FollowPlayerMovement_GetHopSpeed(LocalMapObject *object);
 void sub_020659B8(LocalMapObject *object);
 // unk_02062108.c: the movement for a direction (movement + direction).
 u32 GetMovementForDirection(u32 direction, u32 movement);
@@ -194,11 +194,11 @@ fx32 ov01_022054E0(LocalMapObject *object) {
     if (row != 0) {
         return 0;
     }
-    column = sub_020659A8(mapObject);
+    column = FollowPlayerMovement_GetHopSpeed(mapObject);
     if (column == 0) {
         return 0;
     }
-    index = sub_0206599C(mapObject);
+    index = FollowPlayerMovement_GetHopFrame(mapObject);
     if (index >= 16) {
         GF_ASSERT(FALSE);
     }
@@ -717,7 +717,7 @@ BOOL ov01_02205F00(TaskManager *taskMan) {
     u32 *state = TaskManager_GetStatePtr(taskMan);
     switch (*state) {
     case 0:
-        sub_020659CC(fieldSystem->followMon.mapObject);
+        FollowPlayerMovement_Reset(fieldSystem->followMon.mapObject);
         sub_0205F484(fieldSystem->followMon.mapObject);
         ++*state;
         break;

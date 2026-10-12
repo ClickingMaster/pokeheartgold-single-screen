@@ -26,7 +26,7 @@ extern void ov49_0225B124(void *);
 extern void WiFiPlazaModelSet_Draw(void *);
 extern void WiFiPlazaModelSet_StartBaseAnim4(void *);
 extern void WiFiPlazaModelSet_StopBaseAnim4(void *);
-extern void ov49_0225F018(void *, u32);
+extern void WiFiPlazaPlayerState_RunAll(void *, u32);
 extern void ov49_0225A134(void *);
 extern void ov49_02262E10(void *, u32, u32, u32);
 extern void ov49_02267A84(void *, u32, u32);

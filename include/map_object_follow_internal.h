@@ -1,101 +1,120 @@
 #ifndef POKEHEARTGOLD_MAP_OBJECT_FOLLOW_INTERNAL_H
 #define POKEHEARTGOLD_MAP_OBJECT_FOLLOW_INTERNAL_H
-#include "global.h"
 
 #include "field_system.h"
 #include "map_object.h"
-#include "player_avatar.h"
 
-typedef struct FollowState {
+// Movement state of the follow-player movement types (the following Pokemon and objects that trail the player).
+typedef struct FollowPlayerMovementState {
     u8 state;
-    u8 found;
-    s16 x;
-    s16 z;
+    u8 playerKnown;
+    u8 hopCount;
+    u8 hopFrame;
+    s16 playerX;
+    s16 playerZ;
+    u16 unk8;
+    u16 noBallEffect : 1;
+    u16 hopSpeed : 2;
+} FollowPlayerMovementState;
+
+// Movement state of the follow-partner movement type (the second trainer of a pair walks behind the first).
+typedef struct FollowPartnerMovementState {
+    u8 state;
+    u8 partnerKnown;
+    s16 partnerX;
+    s16 partnerZ;
     u16 unk6;
-    LocalMapObject *other;
-} FollowState;
+    LocalMapObject *partner;
+} FollowPartnerMovementState;
 
-int sub_02065CD0(LocalMapObject *, FollowState *);
-void sub_020658D4(LocalMapObject *);
-void sub_02065998(LocalMapObject *);
-u8 sub_0206599C(LocalMapObject *);
-u32 sub_020659A8(LocalMapObject *);
-void sub_020659B8(LocalMapObject *);
-void sub_02066054(LocalMapObject *);
-void sub_02066058(LocalMapObject *);
-void sub_020661CC(LocalMapObject *, FollowState *, LocalMapObject *);
-BOOL sub_020661F0(LocalMapObject *, FollowState *);
-void sub_020662C4(LocalMapObject *, u8);
-void sub_0206630C(LocalMapObject *);
-void sub_02066318(LocalMapObject *);
-void sub_02066324(LocalMapObject *);
-void sub_02066330(LocalMapObject *);
-int sub_02066420(LocalMapObject *, int);
-int sub_0206642C(LocalMapObject *);
-void sub_02066438(LocalMapObject *);
-BOOL sub_0206623C(LocalMapObject *, FollowState *);
-u32 GetMovementForDirection(u32, u32);
-int GetDirectionTowards(int, int, int, int);
-int GetDeltaXByFacingDirection(int);
-int GetDeltaYByFacingDirection(int);
-void MapObject_ForceSetHeldMovement(LocalMapObject *, u32);
-BOOL MapObject_RunForcedMovement(LocalMapObject *);
-int ov01_021FFF5C(LocalMapObject *, int);
-BOOL sub_02066064(LocalMapObject *, FollowState *);
-BOOL sub_020660A0(LocalMapObject *, FollowState *);
-BOOL sub_020663B4(LocalMapObject *, FollowState *);
-BOOL sub_020663E4(LocalMapObject *, FollowState *);
-BOOL sub_0205F73C(LocalMapObject *);
-BOOL sub_02065BE8(LocalMapObject *, FollowState *);
-BOOL sub_02065C2C(LocalMapObject *, FollowState *);
-BOOL sub_02065D24(LocalMapObject *, FollowState *);
-void sub_02065D58(LocalMapObject *, FollowState *);
-BOOL sub_02065FBC(LocalMapObject *);
-BOOL sub_02065C48(LocalMapObject *, FollowState *);
-BOOL sub_02065C90(LocalMapObject *, FollowState *);
-u32 sub_02069ED4(LocalMapObject *);
-void sub_02065FFC(LocalMapObject *);
-void sub_02066360(LocalMapObject *);
-int sub_02066150(LocalMapObject *, FollowState *);
-void FieldEffectManager_DestroyEffect(int);
-void sub_02065CFC(LocalMapObject *, FollowState *);
-int sub_02065CD0(LocalMapObject *, FollowState *);
-void sub_02065D58(LocalMapObject *, FollowState *);
-int sub_02065D78(LocalMapObject *);
-int sub_02065DB4(LocalMapObject *);
+// Movement state of the hidden object movement types: the object sits sunk below a cover model until revealed.
+typedef struct HiddenObjectMovementState {
+    u8 state;
+    u8 coverType;
+    u8 revealed;
+    u8 unk3;
+    int coverEffect;
+} HiddenObjectMovementState;
 
-void sub_020658D4(LocalMapObject *object);
-void sub_02065998(LocalMapObject *object);
-u8 sub_0206599C(LocalMapObject *object);
-u32 sub_020659A8(LocalMapObject *object);
+typedef BOOL (*FollowPlayerStateFunc)(LocalMapObject *object, FollowPlayerMovementState *state);
+typedef BOOL (*FollowPartnerStateFunc)(LocalMapObject *object, FollowPartnerMovementState *state);
+typedef BOOL (*HiddenObjectStateFunc)(LocalMapObject *object, HiddenObjectMovementState *state);
+
+typedef struct MovementList {
+    u32 movements[4];
+} MovementList;
+
+extern const FollowPartnerStateFunc gFollowPartnerStates[2];
+extern const HiddenObjectStateFunc gHiddenObjectStates[2];
+extern const VecFx32 gHiddenObjectResumeOffset;
+extern const VecFx32 gHiddenObjectOffset;
+extern const MovementList gStepMovements;
+extern const FollowPlayerStateFunc gFollowPlayerStates[4];
+extern const FollowPlayerStateFunc gMirrorPlayerStates[4];
+extern const FollowPlayerStateFunc gFollowMonFollowPlayerStates[4];
+extern const MovementList gRunMovements;
+extern const MovementList gFastRunMovements;
+
+void FollowPlayerMovement_Init(LocalMapObject *object);
+void FollowPlayerMovement_UpdateFollowMon(LocalMapObject *object);
+void FollowPlayerMovement_Update(LocalMapObject *object);
+void FollowPlayerMovement_UpdateMirror(LocalMapObject *object);
+void FollowPlayerMovement_Delete(LocalMapObject *object);
+u8 FollowPlayerMovement_GetHopFrame(LocalMapObject *object);
+u32 FollowPlayerMovement_GetHopSpeed(LocalMapObject *object);
 void sub_020659B8(LocalMapObject *object);
-void sub_02066054(LocalMapObject *object);
-void sub_02066058(LocalMapObject *object);
-void sub_020661CC(LocalMapObject *unused, FollowState *state, LocalMapObject *other);
-BOOL sub_020661F0(LocalMapObject *object, FollowState *state);
-BOOL sub_0206623C(LocalMapObject *object, FollowState *state);
-void sub_0206630C(LocalMapObject *o);
-void sub_02066318(LocalMapObject *o);
-void sub_02066324(LocalMapObject *o);
-void sub_02066330(LocalMapObject *o);
-int sub_02066420(LocalMapObject *object, int value);
-int sub_0206642C(LocalMapObject *object);
-void sub_02066438(LocalMapObject *object);
-BOOL sub_02066064(LocalMapObject *object, FollowState *state);
-BOOL sub_020660A0(LocalMapObject *object, FollowState *state);
-BOOL sub_020663B4(LocalMapObject *object, FollowState *state);
-BOOL sub_020663E4(LocalMapObject *object, FollowState *state);
-BOOL sub_02065BE8(LocalMapObject *object, FollowState *state);
-BOOL sub_02065C2C(LocalMapObject *object, FollowState *state);
-BOOL sub_02065C48(LocalMapObject *object, FollowState *state);
-BOOL sub_02065C90(LocalMapObject *object, FollowState *state);
-void sub_02065FFC(LocalMapObject *object);
-void sub_02066360(LocalMapObject *object);
-BOOL sub_02065D24(LocalMapObject *object, FollowState *state);
-void sub_02065D58(LocalMapObject *object, FollowState *state);
-int sub_02065CD0(LocalMapObject *object, FollowState *state);
-void sub_02065CFC(LocalMapObject *object, FollowState *state);
-int sub_02065D78(LocalMapObject *object);
-int sub_02065DB4(LocalMapObject *object);
+void FollowPlayerMovement_Reset(LocalMapObject *object);
+BOOL FollowPlayerState_FollowMonStart(LocalMapObject *object, FollowPlayerMovementState *state);
+BOOL FollowPlayerState_Start(LocalMapObject *object, FollowPlayerMovementState *state);
+BOOL FollowPlayerState_MirrorStart(LocalMapObject *object, FollowPlayerMovementState *state);
+BOOL FollowPlayerState_Moving(LocalMapObject *object, FollowPlayerMovementState *state);
+BOOL FollowPlayerState_Hop(LocalMapObject *object, FollowPlayerMovementState *state);
+BOOL sub_02065C90(LocalMapObject *object, FollowPlayerMovementState *state);
+BOOL FollowPlayerMovement_CheckPlayer(LocalMapObject *object, FollowPlayerMovementState *state);
+void FollowPlayerMovement_RecordPlayer(LocalMapObject *object, FollowPlayerMovementState *state);
+BOOL FollowPlayerMovement_HasPlayerMoved(LocalMapObject *object, FollowPlayerMovementState *state);
+void FollowPlayerMovement_UpdatePlayerCoords(LocalMapObject *object, FollowPlayerMovementState *state);
+int FollowMon_GetMovement(LocalMapObject *object);
+int FollowPlayerMovement_GetPlayerMovement(LocalMapObject *object);
+BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlayerMovementState *state);
+BOOL FollowPlayerMovement_StartStep(LocalMapObject *object);
+BOOL FollowPlayerMovement_StartMirrorStep(LocalMapObject *object);
 
-#endif
+void FollowPartnerMovement_Init(LocalMapObject *object);
+void FollowPartnerMovement_Update(LocalMapObject *object);
+void FollowPartnerMovement_Delete(LocalMapObject *object);
+void FollowPartnerMovement_Resume(LocalMapObject *object);
+BOOL FollowPartnerState_Start(LocalMapObject *object, FollowPartnerMovementState *state);
+BOOL FollowPartnerState_Moving(LocalMapObject *object, FollowPartnerMovementState *state);
+LocalMapObject *MapObject_FindTrainerPartner(LocalMapObject *object);
+BOOL FollowPartnerMovement_FindPartner(LocalMapObject *object, FollowPartnerMovementState *state);
+void FollowPartnerMovement_SetPartner(LocalMapObject *object, FollowPartnerMovementState *state, LocalMapObject *partner);
+BOOL FollowPartnerMovement_HasPartnerMoved(LocalMapObject *object, FollowPartnerMovementState *state);
+BOOL FollowPartnerMovement_StartStep(LocalMapObject *object, FollowPartnerMovementState *state);
+
+void HiddenObjectMovement_Init(LocalMapObject *object, int coverType);
+void sub_0206630C(LocalMapObject *object);
+void sub_02066318(LocalMapObject *object);
+void sub_02066324(LocalMapObject *object);
+void sub_02066330(LocalMapObject *object);
+void HiddenObjectMovement_Update(LocalMapObject *object);
+void HiddenObjectMovement_Delete(LocalMapObject *object);
+void HiddenObjectMovement_Resume(LocalMapObject *object);
+BOOL HiddenObjectState_CreateCover(LocalMapObject *object, HiddenObjectMovementState *state);
+BOOL HiddenObjectState_Wait(LocalMapObject *object, HiddenObjectMovementState *state);
+int HiddenObjectMovement_SetCoverEffect(LocalMapObject *object, int effect);
+int HiddenObjectMovement_GetCoverEffect(LocalMapObject *object);
+void HiddenObjectMovement_SetRevealed(LocalMapObject *object);
+
+int GetMovementSpeed(u32 movement);
+void FollowMon_SpawnGrassEffects(LocalMapObject *object);
+
+// Overlay 1 functions without a (matching) header. The cover model's effect handle is the return value of
+// FieldEffectManager_CreateEffect, which ov01_021FFF5C's tail call leaves in r0.
+int ov01_021FFF5C(LocalMapObject *object, int coverType);
+void TallGrass_Spawn(LocalMapObject *object, int mode);
+void TallGrass_SpawnAt(LocalMapObject *object, int mode, int x, int z, int a4);
+void VeryTallGrass_Spawn(LocalMapObject *object, int mode);
+void VeryTallGrass_SpawnAt(LocalMapObject *object, int mode, int x, int z, int a4);
+
+#endif // POKEHEARTGOLD_MAP_OBJECT_FOLLOW_INTERNAL_H

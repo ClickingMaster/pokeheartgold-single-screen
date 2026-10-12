@@ -1,7 +1,7 @@
 #include "overlay49_sol_r9_60_private.h"
 
 BOOL ov49_02262AC4(void *state, void *ctx) {
-    switch (ov49_0225EF88(state)) {
+    switch (WiFiPlazaPlayerState_GetStep(state)) {
     case 0:
         sub_020398D4(0, 0);
         if (sub_020392A0() == 0) {
@@ -9,7 +9,7 @@ BOOL ov49_02262AC4(void *state, void *ctx) {
             sub_0203986C();
         }
         ov49_0225A018(ctx, 1);
-        ov49_0225EF8C(state, 1);
+        WiFiPlazaPlayerState_SetStep(state, 1);
         break;
     case 1:
         if (sub_020392A0() == 1) {
@@ -21,14 +21,14 @@ BOOL ov49_02262AC4(void *state, void *ctx) {
 }
 
 BOOL ov49_02262B14(void *state, void *ctx) {
-    void *object = ov49_0225EF84(state);
+    void *object = WiFiPlazaPlayerState_GetWork(state);
     u32 index;
     u32 value;
     void *task;
 
-    switch (ov49_0225EF88(state)) {
+    switch (WiFiPlazaPlayerState_GetStep(state)) {
     case 0:
-        task = ov49_0225EF40(state, 8);
+        task = WiFiPlazaPlayerState_AllocWork(state, 8);
         switch (ov49_0225A040(ctx)) {
         case 0x27:
             value = 0x2A;
@@ -50,7 +50,7 @@ BOOL ov49_02262B14(void *state, void *ctx) {
         ov49_0225A0FC(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, value));
         ov49_02262D70(task, ctx, index, 0, 0);
         ov49_02262E04(task, ctx, 1);
-        ov49_0225EF90(state);
+        WiFiPlazaPlayerState_NextStep(state);
         break;
     case 1:
         if ((*(u32 *)(gSystem + 0x48) & 0xF3) != 0) {
@@ -58,7 +58,7 @@ BOOL ov49_02262B14(void *state, void *ctx) {
             WiFiPlazaRoom_CloseMessage(ctx);
             object = WiFiPlazaRoom_GetObjManager(ctx);
             WiFiPlazaObj_SetHandler(object, (void*)(WiFiPlazaObj_GetOwnPlayer(object)), 1);
-            ov49_0225EF68(state);
+            WiFiPlazaPlayerState_FreeWork(state);
             return TRUE;
         }
         ov49_02262E04(object, ctx, 0);
@@ -70,7 +70,7 @@ BOOL ov49_02262B14(void *state, void *ctx) {
 void ov49_02262BF8(Ov49Residual60Work *work, void *state, void *ctx, u32 value, u32 next) {
     WiFiPlazaRoom_PrintMessage(ctx, WiFiPlazaRoom_GetMsgString(ctx, 0, value));
     work->state4 = next;
-    ov49_0225EF8C(state, 0x19);
+    WiFiPlazaPlayerState_SetStep(state, 0x19);
 }
 
 void ov49_02262C20(Ov49Residual60Work *work, void *state, u8 value, u8 index) {
@@ -78,7 +78,7 @@ void ov49_02262C20(Ov49Residual60Work *work, void *state, u8 value, u8 index) {
     work->value6 = index;
     work->timer5 = 0;
     work->counterA = 0;
-    ov49_0225EF8C(state, 0x1A);
+    WiFiPlazaPlayerState_SetStep(state, 0x1A);
 }
 
 void ov49_02262C38(Ov49Residual60Work *work, void *ctx, u32 count, u32 first) {

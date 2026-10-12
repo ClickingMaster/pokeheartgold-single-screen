@@ -24,15 +24,15 @@ sub_02089D68: ; 0x02089D68
 	add r0, r5, #0
 	bl sub_0208B448
 	add r0, r5, #0
-	bl sub_0208B5A8
+	bl PokemonSummary_UpdateTypeSprites
 	add r0, r5, #0
-	bl sub_0208B89C
+	bl PokemonSummary_UpdatePokeathlonStars
 	add r0, r5, #0
-	bl sub_0208B9C8
+	bl PokemonSummary_UpdateShinyLeafSprites
 	add r0, r5, #0
-	bl sub_0208C2A0
+	bl PokemonSummary_ShowRibbonSprites
 	add r0, r5, #0
-	bl sub_0208BCD4
+	bl PokemonSummary_InitSheenSparkles
 	add r0, r5, #0
 	bl PokemonSummary_AddPageWindows
 	mov r0, #3

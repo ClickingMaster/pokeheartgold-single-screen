@@ -16,6 +16,7 @@
 extern void __msl_assertion_failed(const char *, const char *, const char *, int);
 extern char *strchr(const char *, int);
 extern char *strtok(char *, const char *);
+extern long atol(const char *);
 extern const char ov45_02255E84[];
 extern const char ov45_02255E94[];
 extern const char ov45_02255EA4[];
@@ -32,15 +33,45 @@ extern const char ov45_02255F64[];
 extern const char ov45_02255FA4[];
 extern const char ov45_02255FB4[];
 extern const char ov45_02255FE8[];
+extern const char ov45_02255FFC[];
+extern const char ov45_02256024[];
+extern const char ov45_02256038[];
 extern const char ov45_0225604C[];
+extern const char ov45_02256060[];
+extern const char ov45_02256074[];
 extern const char ov45_02256088[];
+extern const char ov45_022560C4[];
 extern const char ov45_022560D8[];
+extern const char ov45_022560EC[];
 extern const char ov45_02256100[];
+extern const char ov45_02256114[];
 extern const char ov45_02256140[];
 extern const char ov45_02256158[];
+extern const char ov45_02256170[];
+extern const char ov45_02256188[];
+extern const char ov45_022561A0[];
+extern const char ov45_022561B8[];
 extern const char ov45_022561D0[];
+extern const char ov45_022561E8[];
+extern const char ov45_02256200[];
+extern const char ov45_02256218[];
+extern const char ov45_02256230[];
+extern const char ov45_02256248[];
+extern const char ov45_02256260[];
+extern const char ov45_0225627C[];
+extern const char ov45_02256298[];
+extern const char ov45_022562B4[];
+extern const char ov45_022562D0[];
+extern const char ov45_022562EC[];
+extern const char ov45_02256308[];
 extern const char ov45_02256324[];
 extern const char ov45_02256340[];
+extern const char ov45_0225635C[];
+extern const char ov45_02256378[];
+extern const char ov45_02256394[];
+extern const char ov45_022563B0[];
+extern const char ov45_022563D0[];
+extern const char ov45_022563F0[];
 extern const char ov45_022565C0[];
 extern const char ov45_022565D0[];
 extern const char ov45_02256690[];
@@ -69,6 +100,20 @@ extern const char ov45_02256864[];
 extern const char ov45_0225687C[];
 extern const char ov45_02256894[];
 extern const char ov45_0225689C[];
+extern const char ov45_022568A0[];
+extern const char ov45_022568B8[];
+extern const char ov45_022568C0[];
+extern const char ov45_022568C4[];
+extern const char ov45_022568DC[];
+extern const char ov45_022568EC[];
+extern const char ov45_02256904[];
+extern const char ov45_0225691C[];
+extern const char ov45_02256934[];
+extern const char ov45_02256950[];
+extern const char ov45_02256964[];
+extern const char ov45_0225697C[];
+extern const char ov45_02256990[];
+extern const char ov45_02256998[];
 
 #define ASSERT(cond, message, func, line)                           \
     if (!(cond)) {                                                  \
@@ -670,12 +715,12 @@ void ov45_0224C610(ChatConnection *chat, ChatMessage *message) {
     }
     nick = message->nick;
     channel = message->params[1];
-    if (!chat->globalCallbacks.unk_0C) {
+    if (!chat->globalCallbacks.invited) {
         return;
     }
     args.channel = channel;
     args.nick = nick;
-    ov45_02244D30(chat, 3, chat->globalCallbacks.unk_0C, (u32 *)&args, chat->globalCallbacks.param, 0, NULL, sizeof(args));
+    ov45_02244D30(chat, 3, chat->globalCallbacks.invited, (u32 *)&args, chat->globalCallbacks.param, 0, NULL, sizeof(args));
 }
 
 // 353: a part of the user list of a channel (nicks with "@" for operators and "+" for voiced users).
@@ -762,7 +807,7 @@ void ov45_0224C9D8(ChatConnection *chat, ChatMessage *message) {
 
     struct {
         BOOL success;
-        int unk_04;
+        int result; // ChatEnterResult
         char *channel;
     } enterResult;
 
@@ -806,7 +851,7 @@ void ov45_0224C9D8(ChatConnection *chat, ChatMessage *message) {
     }
     if (request->type == 1) {
         enterResult.success = TRUE;
-        enterResult.unk_04 = 0;
+        enterResult.result = CHAT_ENTER_SUCCESS;
         enterResult.channel = channel;
         if (request->callback == NULL) {
             ov45_02248558(chat, channel);
@@ -1049,4 +1094,1071 @@ char *ov45_0224D240(const char *text, int *length) {
     field[n] = 0;
     *length = n + 1;
     return field;
+}
+
+// 700: the keys of a user (answer to a key request of request type 12; the values are fields introduced by
+// backslashes). For a request about a whole channel every user is reported through the callback, and 701 ends it.
+void ov45_0224D30C(ChatConnection *chat, ChatMessage *message) {
+    char *nick;
+    ChatRequest *request;
+    char *cursor, *cookie;
+    ChatKeysData *data;
+    int count;
+    char **values;
+    int i;
+    ASSERT(message->paramCount == 4, ov45_0225680C, ov45_02256060, 2934);
+    if (message->paramCount != 4) {
+        return;
+    }
+    nick = message->params[1];
+    cookie = message->params[2];
+    cursor = message->params[3];
+    {
+        ChatRequestKey key = { 0, 0, 0 };
+        u32 results[5]; // success, nick, count, keys, values
+        int length;
+        key.type = 12;
+        key.name = cookie;
+        request = ov45_022496AC(chat, 1, &key);
+        if (!request) {
+            return;
+        }
+        data = request->data;
+        count = data->count;
+        values = ov00_021EC3A8(count * 4);
+        if (!values) {
+            return;
+        }
+        for (i = 0; i < count; i++) {
+            char *value = ov45_0224D240(cursor, &length);
+            if (value) {
+                values[i] = value;
+                cursor += length;
+            } else {
+                values[i] = ov00_021FF3D4(ov45_02256708);
+            }
+        }
+        results[0] = TRUE;
+        results[1] = (u32)nick;
+        results[2] = count;
+        results[3] = (u32)data->keys;
+        results[4] = (u32)values;
+        if (!data->arg.channel) {
+            ov45_02249A0C(chat, request, results);
+        } else {
+            ov45_02244D30(chat, 29, request->callback, results, request->param, request->id, NULL, sizeof(results));
+        }
+        for (i = 0; i < count; i++) {
+            ov00_021EC3D8(values[i]);
+        }
+        ov00_021EC3D8(values);
+    }
+}
+
+// 701: end of the keys of the users of a channel (request type 12).
+void ov45_0224D4BC(ChatConnection *chat, ChatMessage *message) {
+    ChatRequest *request;
+    ChatKeysData *data;
+    char *cookie;
+    ASSERT(message->paramCount == 4, ov45_0225680C, ov45_02256188, 3020);
+    if (message->paramCount != 4) {
+        return;
+    }
+    cookie = message->params[2];
+    ChatRequestKey key = { 0 };
+    u32 results[5]; // success, nick, count, keys, values
+    key.type = 12;
+    key.name = cookie;
+    request = ov45_022496AC(chat, 1, &key);
+    if (!request) {
+        return;
+    }
+    data = request->data;
+    results[1] = 0;
+    results[0] = TRUE;
+    results[2] = data->count;
+    results[3] = (u32)data->keys;
+    results[4] = 0;
+    ov45_02249A0C(chat, request, results);
+}
+
+// 702: the keys of a user in a channel (request type 13). The cookie "BCAST" instead reports changed broadcast
+// keys ("b_" prefix) to the channel's broadcast key callback.
+void ov45_0224D588(ChatConnection *chat, ChatMessage *message) {
+    ChatRequestKey key;
+    ChatRequest *request;
+    ChatBroadcastKeyArgs change;
+    u32 results[6]; // success, channel, nick, count, keys, values
+    char **params;
+    char *cookie;
+    char *nick;
+    int count;
+    char *channel;
+    char *cursor;
+    ChatChannelCallbacks *callbacks;
+    ChatKeysData *data;
+    char **values;
+    int i;
+    int length;
+    char *name; // also the name of a broadcast key
+    char *keyValue;
+    char *value;
+    char saved;
+    u32 size;
+    char **newKeys;
+    char **newValues;
+    ASSERT(message->paramCount == 5, ov45_022568A0, ov45_022560C4, 3068);
+    if (message->paramCount != 5) {
+        return;
+    }
+    params = message->params;
+    cookie = params[3];
+    channel = params[1];
+    nick = params[2];
+    cursor = params[4];
+    if (strcmp(cookie, ov45_022568B8) == 0) {
+        callbacks = ov45_02247E98(chat, channel);
+        if (callbacks == NULL || callbacks->broadcastKeyChanged == NULL) {
+            return;
+        }
+        memset(&change, 0, sizeof(change));
+        change.channel = channel;
+        change.nick = nick;
+        if (*cursor == 0) {
+            return;
+        }
+        do {
+            name = strstr(cursor, ov45_022568C0);
+            cursor = name;
+            while (*cursor != 0 && *cursor != '\\') {
+                cursor++;
+            }
+            if (*cursor == 0) {
+                return;
+            }
+            *cursor++ = 0;
+            value = cursor;
+            while (*cursor != 0 && *cursor != '\\') {
+                cursor++;
+            }
+            saved = *cursor;
+            *cursor = 0;
+            change.key = name;
+            change.value = value;
+            ov45_02244D30(chat, 28, callbacks->broadcastKeyChanged, (u32 *)&change, callbacks->param, 0, channel, sizeof(change));
+            *cursor = saved;
+        } while (*cursor != 0);
+        return;
+    }
+    memset(&key, 0, sizeof(key));
+    key.type = 13;
+    key.name = cookie;
+    request = ov45_022496AC(chat, 1, &key);
+    if (request == NULL) {
+        return;
+    }
+    data = request->data;
+    count = data->count;
+    values = ov00_021EC3A8(count * 4);
+    if (values == NULL) {
+        return;
+    }
+    for (i = 0; i < count; i++) {
+        values[i] = ov45_0224D240(cursor, &length);
+        if (values[i] != NULL) {
+            cursor += length;
+        }
+    }
+    if (data->broadcastKeys) {
+        // the broadcast keys follow as backslash separated name / value pairs
+        while ((name = ov45_0224D240(cursor, &length)) != NULL) {
+            cursor += length;
+            keyValue = ov45_0224D240(cursor, &length);
+            if (keyValue != NULL) {
+                size = (count + 1) * 4;
+                cursor += length;
+                newKeys = ov00_021EC3BC(data->keys, size);
+                if (newKeys != NULL) {
+                    data->keys = newKeys;
+                    newValues = ov00_021EC3BC(values, size);
+                    if (newValues != NULL) {
+                        values = newValues;
+                        data->keys[count] = name;
+                        values[count] = keyValue;
+                        count++;
+                    } else {
+                        ov00_021EC3D8(name);
+                        ov00_021EC3D8(keyValue);
+                    }
+                } else {
+                    ov00_021EC3D8(name);
+                    ov00_021EC3D8(keyValue);
+                }
+            } else {
+                ov00_021EC3D8(name);
+                break;
+            }
+        }
+        data->count = count;
+    }
+    results[0] = TRUE;
+    results[1] = (u32)channel;
+    results[2] = (u32)nick;
+    results[3] = count;
+    results[4] = (u32)data->keys;
+    results[5] = (u32)values;
+    if (!data->arg.allUsers) {
+        ov45_02249A0C(chat, request, results);
+    } else {
+        ov45_02244D30(chat, 30, request->callback, results, request->param, request->id, NULL, sizeof(results));
+    }
+    for (i = 0; i < count; i++) {
+        ov00_021EC3D8(values[i]);
+    }
+    ov00_021EC3D8(values);
+}
+
+// 703: end of the keys of the users of a channel (request type 13).
+void ov45_0224D924(ChatConnection *chat, ChatMessage *message) {
+    char *channel, *cookie;
+    ChatRequest *request;
+    ChatKeysData *data;
+    ASSERT(message->paramCount == 4, ov45_0225680C, ov45_022561E8, 3248);
+    if (message->paramCount != 4) {
+        return;
+    }
+    channel = message->params[1];
+    cookie = message->params[2];
+    ChatRequestKey key = { 0 };
+    u32 results[6]; // success, channel, nick, count, keys, values
+    key.type = 13;
+    key.name = cookie;
+    request = ov45_022496AC(chat, 1, &key);
+    if (!request) {
+        return;
+    }
+    data = request->data;
+    results[1] = (u32)channel;
+    results[2] = 0;
+    results[0] = TRUE;
+    results[3] = data->count;
+    results[4] = (u32)data->keys;
+    results[5] = 0;
+    ov45_02249A0C(chat, request, results);
+}
+
+// 704: the keys of a channel (request type 14; without requested keys, all name / value pairs of the reply are
+// returned). The cookie "BCAST" reports changed broadcast keys of the channel like 702.
+void ov45_0224D9F0(ChatConnection *chat, ChatMessage *message) {
+    ChatRequest *request;
+    char **params;
+    char *channel;
+    char *cookie, *cursor;
+    int length;
+    ChatChannelCallbacks *callbacks;
+    ChatRequestKey key;
+    ChatBroadcastKeyArgs change;
+    u32 results[6]; // success, channel, nick, count, keys, values
+    ASSERT(message->paramCount == 4, ov45_0225680C, ov45_02256200, 3297);
+    if (message->paramCount != 4) {
+        return;
+    }
+    params = message->params;
+    channel = params[1];
+    cookie = params[2];
+    cursor = params[3];
+    if (strcmp(cookie, ov45_022568B8) == 0) {
+        callbacks = ov45_02247E98(chat, channel);
+        if (!callbacks || !callbacks->broadcastKeyChanged) {
+            return;
+        }
+        memset(&change, 0, sizeof(change));
+        change.channel = channel;
+        change.nick = NULL;
+        if (!*cursor) {
+            return;
+        }
+        do {
+            char *name = strstr(cursor, ov45_022568C0);
+            char *value;
+            s8 saved;
+            cursor = name;
+            while (*cursor && *cursor != '\\') {
+                cursor++;
+            }
+            if (!*cursor) {
+                return;
+            }
+            *cursor++ = 0;
+            value = cursor;
+            while (*cursor && *cursor != '\\') {
+                cursor++;
+            }
+            saved = *cursor;
+            *cursor = 0;
+            change.key = name;
+            change.value = value;
+            ov45_02244D30(chat, 28, callbacks->broadcastKeyChanged, (u32 *)&change, callbacks->param, 0, channel, sizeof(change));
+            *cursor = saved;
+        } while (*cursor);
+        return;
+    }
+    memset(&key, 0, sizeof(key));
+    key.type = 14;
+    key.name = cookie;
+    request = ov45_022496AC(chat, 1, &key);
+    if (!request) {
+        return;
+    }
+    {
+        ChatKeysData *data = request->data;
+        int count = data->count, i;
+        char **values;
+        char *name, *value;
+        if (count) {
+            values = ov00_021EC3A8(count * 4);
+            if (!values) {
+                return;
+            }
+            for (i = 0; i < count; i++) {
+                values[i] = ov45_0224D240(cursor, &length);
+                if (values[i]) {
+                    cursor += length;
+                }
+            }
+            if (data->arg.broadcastKeys) {
+                name = ov45_0224D240(cursor, &length);
+                while (name) {
+                    char **newKeys, **newValues;
+                    u32 size;
+                    cursor += length;
+                    value = ov45_0224D240(cursor, &length);
+                    if (value) {
+                        size = (count + 1) * 4;
+                        cursor += length;
+                        newKeys = ov00_021EC3BC(data->keys, size);
+                        if (newKeys) {
+                            data->keys = newKeys;
+                            newValues = ov00_021EC3BC(values, size);
+                            if (newValues) {
+                                values = newValues;
+                                data->keys[count] = name;
+                                values[count] = value;
+                                count++;
+                            } else {
+                                ov00_021EC3D8(name);
+                                ov00_021EC3D8(value);
+                            }
+                        } else {
+                            ov00_021EC3D8(name);
+                            ov00_021EC3D8(value);
+                        }
+                    } else {
+                        ov00_021EC3D8(name);
+                        break;
+                    }
+                    name = ov45_0224D240(cursor, &length);
+                }
+                data->count = count;
+            }
+        } else {
+            char **keys = NULL;
+            values = NULL;
+            count = 0;
+            while (1) {
+                char **newKeys, **newValues;
+                u32 size;
+                name = ov45_0224D240(cursor, &length);
+                if (!name) {
+                    break;
+                }
+                cursor += length;
+                value = ov45_0224D240(cursor, &length);
+                if (!value) {
+                    ov00_021EC3D8(name);
+                    break;
+                }
+                size = (count + 1) * 4;
+                cursor += length;
+                newKeys = ov00_021EC3BC(keys, size);
+                newValues = ov00_021EC3BC(values, size);
+                if (!newKeys || !newValues) {
+                    // (the arrays are still used after this cleanup)
+                    ov00_021EC3D8(name);
+                    ov00_021EC3D8(value);
+                    while (count--) {
+                        ov00_021EC3D8(keys[count]);
+                        ov00_021EC3D8(values[count]);
+                    }
+                    if (newKeys) {
+                        ov00_021EC3D8(newKeys);
+                    } else {
+                        ov00_021EC3D8(keys);
+                    }
+                    if (newValues) {
+                        ov00_021EC3D8(newValues);
+                    } else {
+                        ov00_021EC3D8(values);
+                    }
+                }
+                newKeys[count] = name;
+                newValues[count] = value;
+                keys = newKeys;
+                values = newValues;
+                count++;
+            }
+            data->count = count;
+            data->keys = keys;
+        }
+        results[0] = TRUE;
+        results[1] = (u32)channel;
+        results[2] = 0;
+        results[3] = count;
+        results[4] = (u32)data->keys;
+        results[5] = (u32)values;
+        ov45_02249A0C(chat, request, results);
+        for (i = 0; i < count; i++) {
+            ov00_021EC3D8(values[i]);
+        }
+        ov00_021EC3D8(values);
+    }
+}
+
+// 302: the address of the own user ("USRIP" answer, nick=+user@address in the last parameter). The user address
+// callback can choose the user name from it before the registration is sent.
+void ov45_0224DE70(ChatConnection *chat, ChatMessage *message) {
+    char user[128], *address;
+    ASSERT_CHAT(chat, ov45_02256074, 3517);
+    ASSERT(message->paramCount >= 1, ov45_022568C4, ov45_02256074, 3523);
+    if (message->paramCount < 1) {
+        return;
+    }
+    address = strchr(message->params[message->paramCount - 1], '@');
+    if (address && chat->userAddressCallback) {
+        int ip = ov00_021FFA44(address + 1);
+        ((ChatUserAddressFunc)chat->userAddressCallback)(chat, ip, user, chat->connectParam);
+        strncpy(chat->user, user, sizeof(chat->user));
+        chat->user[sizeof(chat->user) - 1] = 0;
+    }
+    ov45_0224F9A0(chat);
+}
+
+// 321: start of the channel list (request type 0).
+void ov45_0224DF50(ChatConnection *chat, ChatMessage *message) {
+    ChatRequestKey key = { 0 };
+    ChatRequest *request;
+    ChatChannelListData *data;
+    key.type = 0;
+    request = ov45_022496AC(chat, 1, &key);
+    if (!request) {
+        return;
+    }
+    data = request->data;
+    ASSERT(data, ov45_022568DC, ov45_022561A0, 3567);
+    data->started = TRUE;
+}
+
+// 322: one channel of the channel list (name, number of users, topic): passed to the per channel callback and
+// collected for the list callback.
+void ov45_0224DFC4(ChatConnection *chat, ChatMessage *message) {
+    ChatRequest *request;
+    ChatChannelListData *data;
+    char *name, *topic;
+    long numUsers;
+    u32 length;
+    int index;
+    void *array;
+    ASSERT(message->paramCount == 4, ov45_0225680C, ov45_02255FFC, 3585);
+    if (message->paramCount != 4) {
+        return;
+    }
+    {
+        ChatRequestKey key = { 0, 0, 0 };
+        ChatChannelListEntryArgs args;
+        key.type = 0;
+        request = ov45_022496AC(chat, 1, &key);
+        if (request == NULL || request->callback == NULL) {
+            return;
+        }
+        data = request->data;
+        ASSERT(data, ov45_022568DC, ov45_02255FFC, 3605);
+        length = strlen(message->params[1]);
+        name = ov00_021EC3A8(length + 1);
+        if (name == NULL) {
+            return;
+        }
+        memcpy(name, message->params[1], length + 1);
+        numUsers = atol(message->params[2]);
+        length = strlen(message->params[3]);
+        topic = ov00_021EC3A8(length + 1);
+        if (topic == NULL) {
+            ov00_021EC3D8(name);
+            return;
+        }
+        memcpy(topic, message->params[3], length + 1);
+        index = data->count;
+        args.index = index;
+        args.channel = name;
+        args.topic = topic;
+        args.numUsers = numUsers;
+        args.success = TRUE;
+        ov45_02244D30(chat, 13, request->callback, (u32 *)&args, request->param, request->id, NULL, sizeof(args));
+        array = ov00_021EC3BC(data->names, (data->count + 1) * 4);
+        if (array == NULL) {
+            ov00_021EC3D8(name);
+            ov00_021EC3D8(topic);
+            return;
+        }
+        data->names = array;
+        data->names[index] = name;
+        array = ov00_021EC3BC(data->numUsers, (data->count + 1) * 4);
+        if (array == NULL) {
+            ov00_021EC3D8(name);
+            ov00_021EC3D8(topic);
+            return;
+        }
+        data->numUsers = array;
+        data->numUsers[index] = numUsers;
+        array = ov00_021EC3BC(data->topics, (data->count + 1) * 4);
+        if (array == NULL) {
+            ov00_021EC3D8(name);
+            ov00_021EC3D8(topic);
+            return;
+        }
+        data->topics = array;
+        data->topics[index] = topic;
+        data->count++;
+    }
+}
+
+// 323: end of the channel list (request type 0).
+void ov45_0224E210(ChatConnection *chat, ChatMessage *message) {
+    ChatRequestKey key = { 0 };
+    u32 results[5]; // success, count, names, topics, numUsers
+    ChatRequest *request;
+    ChatChannelListData *data;
+    key.type = 0;
+    request = ov45_022496AC(chat, 1, &key);
+    if (!request) {
+        return;
+    }
+    data = request->data;
+    results[0] = TRUE;
+    results[1] = data->count;
+    results[2] = (u32)data->names;
+    results[4] = (u32)data->numUsers;
+    results[3] = (u32)data->topics;
+    ov45_02249A0C(chat, request, results);
+}
+
+// 324: the mode of a channel (answer to a mode request, request type 5, or sent when the channel is entered).
+void ov45_0224E288(ChatConnection *chat, ChatMessage *message) {
+    char *channel;
+    ChatModeChange *changes;
+    ChatRequest *request;
+    ASSERT(message->paramCount >= 3, ov45_022568EC, ov45_022562D0, 3731);
+    if (message->paramCount < 3) {
+        return;
+    }
+    channel = message->params[1];
+    changes = ov45_0224AD24(message->params[2], (const char **)message->params + 3, message->paramCount - 3);
+    if (!changes) {
+        return;
+    }
+    ChatChannelMode mode, oldMode;
+
+    union {
+        ChatRequestKey key;
+        u32 words[3];
+    } key;
+
+    ChatChannelModeArgs result;
+
+    union {
+        ChatChannelModeChangedArgs args;
+        u32 words[2];
+    } changed;
+
+    memset(&mode, 0, sizeof(mode));
+    ov45_0224AFD8(&mode, changes);
+    if (!ov45_02248288(chat, channel, &oldMode)) {
+        ChatChannelCallbacks *callbacks;
+        ov45_02248374(chat, channel, &mode);
+        callbacks = ov45_02247E98(chat, channel);
+        if (callbacks && callbacks->modeChanged) {
+            changed.args.channel = channel;
+            changed.args.mode = &mode;
+            ov45_02244D30(chat, 10, callbacks->modeChanged, changed.words, callbacks->param, 0, channel, sizeof(changed));
+        }
+    }
+    memset(&key, 0, sizeof(key));
+    key.key.type = 5;
+    key.key.name = channel;
+    request = ov45_022496AC(chat, 1, &key.key);
+    if (request) {
+        result.success = TRUE;
+        result.channel = channel;
+        result.mode = &mode;
+        ov45_02249A0C(chat, request, (u32 *)&result);
+    }
+    ov00_021EC3D8(changes);
+}
+
+// 311: the user, address and real name of a user (WHOIS reply, request type 4), or the address for a ban by nick
+// (request type 7: sends the ban "*!*@address" to the channel).
+void ov45_0224E408(ChatConnection *chat, ChatMessage *message) {
+    ChatRequestKey keys[2];
+    ChatRequest *request;
+    char *nick;
+    ASSERT_CHAT(chat, ov45_022561B8, 3797);
+    ASSERT(message->paramCount == 6, ov45_02256904, ov45_022561B8, 3803);
+    if (message->paramCount != 6) {
+        return;
+    }
+    nick = message->params[1];
+    memset(keys, 0, sizeof(keys));
+    keys[0].type = 4;
+    keys[0].name = nick;
+    keys[1].type = 7;
+    keys[1].name = nick;
+    request = ov45_022496AC(chat, 2, keys);
+    if (!request) {
+        return;
+    }
+    if (request->type == 4) {
+        char *realName;
+        char *address;
+        ChatWhoisData *data = request->data;
+        realName = message->params[5];
+        address = message->params[3];
+        data->user = ov00_021FF3D4(message->params[2]);
+        if (!data->user) {
+            return;
+        }
+        data->realName = ov00_021FF3D4(realName);
+        if (!data->realName) {
+            return;
+        }
+        data->address = ov00_021FF3D4(address);
+        if (!data->address) {
+            return;
+        }
+    } else if (request->type == 7) {
+        ChatBanData *data = request->data;
+        ASSERT(data, ov45_022568DC, ov45_022561B8, 3869);
+        ASSERT(data->channel, ov45_0225691C, ov45_022561B8, 3870);
+        ASSERT(data->channel[0], ov45_02256934, ov45_022561B8, 3870);
+        ov45_02252F74(&chat->socket, ov45_02256950, data->channel, message->params[3]);
+        ov45_02249A0C(chat, request, NULL);
+    }
+}
+
+// 319: the channels of a user (WHOIS reply, request type 4; "@" / "+" mode prefixes are dropped).
+void ov45_0224E5EC(ChatConnection *chat, ChatMessage *message) {
+    char *nick;
+    ChatRequest *request;
+    ChatWhoisData *data;
+    char *token, *name;
+    char **array;
+    ASSERT(message->paramCount == 3, ov45_02256848, ov45_022562EC, 3892);
+    if (message->paramCount != 3) {
+        return;
+    }
+    nick = message->params[1];
+    ChatRequestKey key;
+    memset(&key, 0, sizeof(key));
+    key.type = 4;
+    key.name = nick;
+    request = ov45_022496AC(chat, 1, &key);
+    if (!request) {
+        return;
+    }
+    data = request->data;
+    token = strtok(message->params[2], ov45_02256824);
+    if (!token) {
+        return;
+    }
+    do {
+        if (*token == '-') {
+            token++;
+        }
+        if (*token == '@' || *token == '+') {
+            token++;
+        }
+        name = ov00_021FF3D4(token);
+        if (!name) {
+            return;
+        }
+        array = ov00_021EC3BC(data->channels, (data->channelCount + 1) * 4);
+        if (!array) {
+            ov00_021EC3D8(name);
+            return;
+        }
+        data->channels = array;
+        data->channels[data->channelCount] = name;
+        data->channelCount++;
+        token = strtok(NULL, ov45_02256824);
+    } while (token);
+}
+
+// 318: end of a WHOIS reply (request type 4).
+void ov45_0224E734(ChatConnection *chat, ChatMessage *message) {
+    char *nick;
+    ChatRequest *request;
+    ChatWhoisData *data;
+    ASSERT(message->paramCount == 3, ov45_02256848, ov45_02256218, 3958);
+    if (message->paramCount != 3) {
+        return;
+    }
+    nick = message->params[1];
+    ChatRequestKey key = { 0 };
+    u32 results[7]; // success, nick, user, realName, address, channelCount, channels
+    key.type = 4;
+    key.name = nick;
+    request = ov45_022496AC(chat, 1, &key);
+    if (!request) {
+        return;
+    }
+    data = request->data;
+    results[0] = data->user != NULL;
+    results[1] = (u32)nick;
+    results[2] = (u32)data->user;
+    results[3] = (u32)data->realName;
+    results[4] = (u32)data->address;
+    results[5] = data->channelCount;
+    results[6] = (u32)data->channels;
+    ov45_02249A0C(chat, request, results);
+}
+
+// 367: one ban mask of a channel's ban list (request type 8).
+void ov45_0224E81C(ChatConnection *chat, ChatMessage *message) {
+    char *channel;
+    char *ban, *copy;
+    ChatRequest *request;
+    ChatBanListData *data;
+    ChatRequestKey key;
+    int length;
+    ASSERT(message->paramCount >= 3, ov45_02256964, ov45_022560EC, 3997);
+    if (message->paramCount < 3) {
+        return;
+    }
+    channel = message->params[1];
+    ban = message->params[2];
+    memset(&key, 0, sizeof(key));
+    key.type = 8;
+    key.name = channel;
+    request = ov45_022496AC(chat, 1, &key);
+    if (request == NULL) {
+        return;
+    }
+    data = request->data;
+    ASSERT(data, ov45_022568DC, ov45_022560EC, 4015);
+    ASSERT(data->count >= 0, ov45_0225697C, ov45_022560EC, 4016);
+    copy = ov00_021EC3BC(data->bans, (data->count + 1) * 4);
+    if (copy == NULL) {
+        return;
+    }
+    data->bans = (char **)copy;
+    length = strlen(ban);
+    copy = ov00_021EC3A8(length + 1);
+    if (copy == NULL) {
+        return;
+    }
+    memcpy(copy, ban, length + 1);
+    data->bans[data->count] = copy;
+    data->count++;
+}
+
+// 368: end of a channel's ban list (request type 8).
+void ov45_0224E968(ChatConnection *chat, ChatMessage *message) {
+    char *channel;
+    ChatRequest *request;
+    ChatBanListData *data;
+    ASSERT(message->paramCount == 3, ov45_02256848, ov45_0225627C, 4047);
+    if (message->paramCount != 3) {
+        return;
+    }
+    channel = message->params[1];
+    ChatRequestKey key = { 0 };
+    u32 results[4]; // success, channel, count, bans
+    key.type = 8;
+    key.name = channel;
+    request = ov45_022496AC(chat, 1, &key);
+    if (!request) {
+        return;
+    }
+    data = request->data;
+    results[1] = (u32)channel;
+    results[0] = TRUE;
+    results[2] = data->count;
+    results[3] = (u32)data->bans;
+    ov45_02249A0C(chat, request, results);
+}
+
+// 001: the registration is done (the server may have changed the nick); calls the connected callback.
+void ov45_0224EA2C(ChatConnection *chat, ChatMessage *message) {
+    char *nick;
+    ASSERT_CHAT(chat, ov45_02256114, 4076);
+    ASSERT(message->paramCount == 2, ov45_022566F0, ov45_02256114, 4082);
+    if (message->paramCount != 2) {
+        return;
+    }
+    nick = message->params[0];
+    if (strcmp(chat->nick, nick)) {
+        strncpy(chat->nick, nick, sizeof(chat->nick));
+        chat->nick[sizeof(chat->nick) - 1] = 0;
+    }
+    chat->connecting = FALSE;
+    chat->connected = TRUE;
+    if (chat->connectedCallback) {
+        ((ChatConnectedFunc)chat->connectedCallback)(chat, TRUE, 0, chat->connectParam);
+    }
+}
+
+// 705: the keys of the connection's ciphers (decoded with the game key); then the login, the address query or
+// the registration is sent.
+void ov45_0224EAF4(ChatConnection *chat, ChatMessage *message) {
+    char *outputKey, *inputKey;
+    int outputLength, inputLength;
+    ASSERT_CHAT(chat, ov45_02256170, 4117);
+    ASSERT(message->paramCount == 3, ov45_02256848, ov45_02256170, 4123);
+    if (message->paramCount != 3) {
+        return;
+    }
+    outputKey = message->params[1];
+    inputKey = message->params[2];
+    outputLength = strlen(outputKey);
+    inputLength = strlen(inputKey);
+    ov45_0224966C((s8 *)outputKey, outputLength, (s8 *)chat->gameKey);
+    ov45_0224966C((s8 *)inputKey, inputLength, (s8 *)chat->gameKey);
+    ov45_02249554((u8 *)outputKey, outputLength, &chat->socket.outputCipher);
+    ov45_02249554((u8 *)inputKey, inputLength, &chat->socket.inputCipher);
+    chat->socket.encrypted = TRUE;
+    if (chat->loginType) {
+        ov45_0224F9B8(chat);
+    } else if (chat->userAddressCallback) {
+        ov45_02252CB4(&chat->socket, ov45_02256990);
+    } else {
+        ov45_0224F9A0(chat);
+    }
+}
+
+// 706: the result of the CD key check (request type 16).
+void ov45_0224EC14(ChatConnection *chat, ChatMessage *message) {
+    int result;
+    char *text;
+    ChatRequest *request;
+    ASSERT(message->paramCount == 3, ov45_02256848, ov45_02256024, 4174);
+    if (message->paramCount != 3) {
+        return;
+    }
+    result = atol(message->params[1]);
+    text = message->params[2];
+    ChatRequestKey key = { 0 };
+    u32 results[2]; // result, text
+    key.type = 16;
+    request = ov45_022496AC(chat, 1, &key);
+    if (!request) {
+        return;
+    }
+    results[0] = result;
+    results[1] = (u32)text;
+    ov45_02249A0C(chat, request, results);
+}
+
+// 707: the login was accepted (two numbers); then the address query or the registration is sent.
+void ov45_0224ECCC(ChatConnection *chat, ChatMessage *message) {
+    ASSERT_CHAT(chat, ov45_02256038, 4201);
+    ASSERT(message->paramCount >= 3, ov45_02256964, ov45_02256038, 4207);
+    if (message->paramCount < 3) {
+        return;
+    }
+    chat->unk_8AC[0] = atol(message->params[1]);
+    chat->unk_8AC[1] = atol(message->params[2]);
+    if (chat->userAddressCallback) {
+        ov45_02252CB4(&chat->socket, ov45_02256990);
+    } else {
+        ov45_0224F9A0(chat);
+    }
+}
+
+// 403: no such channel: fails an enter (type 1), mode (type 5) or channel keys (type 12) request.
+void ov45_0224ED80(ChatConnection *chat, ChatMessage *message) {
+    ChatRequestKey keys[2];
+    u32 enterResult[3];
+    u32 modeResult[3];
+    u32 keysResult[5];
+    ChatRequest *request;
+    char *channel;
+    ASSERT(message->paramCount == 3, ov45_02256848, ov45_022562B4, 4240);
+    if (message->paramCount != 3) {
+        return;
+    }
+    channel = message->params[1];
+    memset(&keys[0], 0, sizeof(keys[0]));
+    keys[0].type = 1;
+    keys[0].name = channel;
+    keys[1].type = 5;
+    keys[1].name = channel;
+    request = ov45_022496AC(chat, 2, keys);
+    if (request != NULL) {
+        if (request->type == 1) {
+            enterResult[0] = FALSE;
+            enterResult[1] = CHAT_ENTER_NO_SUCH_CHANNEL;
+            enterResult[2] = (u32)channel;
+            ov45_02249A0C(chat, request, enterResult);
+            return;
+        }
+        if (request->type == 5) {
+            modeResult[0] = FALSE;
+            modeResult[1] = (u32)channel;
+            modeResult[2] = 0;
+            ov45_02249A0C(chat, request, modeResult);
+            return;
+        }
+    }
+    request = ov45_0224983C(chat, channel);
+    if (request == NULL) {
+        return;
+    }
+    keysResult[0] = FALSE;
+    keysResult[1] = 0;
+    keysResult[2] = 0;
+    keysResult[3] = 0;
+    keysResult[4] = 0;
+    ov45_02249A0C(chat, request, keysResult);
+}
+
+// Fails the enter request (request type 1) of the channel in the second parameter.
+#define FAIL_ENTER(chat, message, func, line, reason)                \
+    {                                                                \
+        char *channel;                                               \
+        ChatRequest *request;                                        \
+        ASSERT(message->paramCount == 3, ov45_02256848, func, line); \
+        if (message->paramCount != 3) {                              \
+            return;                                                  \
+        }                                                            \
+        channel = message->params[1];                                \
+        ChatRequestKey key = { 0 };                                  \
+        u32 results[3]; /* success, reason, channel */               \
+        key.type = 1;                                                \
+        key.name = channel;                                          \
+        request = ov45_022496AC(chat, 1, &key);                      \
+        if (!request) {                                              \
+            return;                                                  \
+        }                                                            \
+        results[0] = FALSE;                                          \
+        results[1] = reason;                                         \
+        results[2] = (u32)channel;                                   \
+        ov45_02249A0C(chat, request, results);                       \
+    }
+
+// 405: too many channels.
+void ov45_0224EEBC(ChatConnection *chat, ChatMessage *message) {
+    FAIL_ENTER(chat, message, ov45_02256394, 4318, CHAT_ENTER_TOO_MANY_CHANNELS);
+}
+
+// 471: the channel is full.
+void ov45_0224EF70(ChatConnection *chat, ChatMessage *message) {
+    FAIL_ENTER(chat, message, ov45_02256308, 4353, CHAT_ENTER_CHANNEL_FULL);
+}
+
+// 473: the channel is invite only.
+void ov45_0224F024(ChatConnection *chat, ChatMessage *message) {
+    FAIL_ENTER(chat, message, ov45_0225635C, 4388, CHAT_ENTER_INVITE_ONLY);
+}
+
+// 474: the own user is banned from the channel.
+void ov45_0224F0D8(ChatConnection *chat, ChatMessage *message) {
+    FAIL_ENTER(chat, message, ov45_02256378, 4423, CHAT_ENTER_BANNED);
+}
+
+// 475: wrong channel key (password).
+void ov45_0224F18C(ChatConnection *chat, ChatMessage *message) {
+    FAIL_ENTER(chat, message, ov45_02256298, 4458, CHAT_ENTER_BAD_PASSWORD);
+}
+
+// 476: bad channel name.
+void ov45_0224F240(ChatConnection *chat, ChatMessage *message) {
+    FAIL_ENTER(chat, message, ov45_02256230, 4493, CHAT_ENTER_BAD_CHANNEL_NAME);
+}
+
+// 401: no such nick (ignored).
+void ov45_0224F2F4(ChatConnection *chat, ChatMessage *message) {
+}
+
+// 432: the nick is not valid (while connecting: nick error 2).
+void ov45_0224F2F8(ChatConnection *chat, ChatMessage *message) {
+    ASSERT_CHAT(chat, ov45_022563B0, 4530);
+    if (!chat->connecting) {
+        return;
+    }
+    ov45_02251B0C(chat, 2, chat->nick, 0, 0);
+}
+
+// 708: the login failed (while connecting: the connect fails with reason 2).
+void ov45_0224F35C(ChatConnection *chat, ChatMessage *message) {
+    ASSERT_CHAT(chat, ov45_02256248, 4546);
+    if (!chat->connecting) {
+        return;
+    }
+    chat->connecting = FALSE;
+    if (chat->connectedCallback) {
+        ((ChatConnectedFunc)chat->connectedCallback)(chat, FALSE, 2, chat->connectParam);
+    }
+}
+
+// 709: (while connecting: nick error 4).
+void ov45_0224F3C0(ChatConnection *chat, ChatMessage *message) {
+    ASSERT_CHAT(chat, ov45_02256260, 4571);
+    if (!chat->connecting) {
+        return;
+    }
+    ov45_02251B0C(chat, 4, ov45_02256708, 0, 0);
+}
+
+// 710: (while connecting: nick error 3).
+void ov45_0224F428(ChatConnection *chat, ChatMessage *message) {
+    ASSERT_CHAT(chat, ov45_022563D0, 4587);
+    if (!chat->connecting) {
+        return;
+    }
+    ov45_02251B0C(chat, 3, ov45_02256708, 0, 0);
+}
+
+// 711: the registered nick was refused, with a number of suggested nicks (backslash separated); while
+// connecting: nick error 5 with the suggestions.
+void ov45_0224F490(ChatConnection *chat, ChatMessage *message) {
+    int count, j;
+    char **suggestions, *text, *token;
+    int i;
+    ASSERT_CHAT(chat, ov45_022563F0, 4608);
+    ASSERT(message->paramCount == 4, ov45_0225680C, ov45_022563F0, 4614);
+    if (message->paramCount != 4) {
+        return;
+    }
+    count = atol(message->params[1]);
+    text = message->params[2];
+    if (!chat->connecting) {
+        return;
+    }
+    suggestions = ov00_021EC3A8(count * 4);
+    if (!suggestions) {
+        return;
+    }
+    token = strtok(text, ov45_02256998);
+    i = 0;
+    while (i < count && token) {
+        suggestions[i] = ov00_021FF3D4(token);
+        if (!suggestions[i]) {
+            break;
+        }
+        token = strtok(NULL, ov45_02256998);
+        i++;
+    }
+    ov45_02251B0C(chat, 5, chat->registeredNick, i, (int)suggestions);
+    for (j = 0; j < i; j++) {
+        ov00_021EC3D8(suggestions[j]);
+    }
+    ov00_021EC3D8(suggestions);
 }

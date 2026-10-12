@@ -40,7 +40,7 @@ typedef struct Ov49Work15 {
 extern void ov45_02230700(void *, u8);
 extern void WiFiPlazaEvent_Delete(void *);
 extern void WiFiPlazaInstrument_Delete(void *);
-extern void ov49_0225EEF8(void *);
+extern void WiFiPlazaPlayerState_DeleteManager(void *);
 extern void ov49_0225B4E4(void *, void *, void *);
 extern void ov49_0225B35C(void *);
 extern void ov49_0225AB14(void *);
@@ -79,9 +79,9 @@ extern void ov49_0225B450(void *, void *, void *, void *, u32);
 extern void *WiFiPlazaWork_GetMyPlayer(void *);
 extern u32 ov45_0222AADC(void *);
 extern void ov49_0225B9AC(void *, void *, void *, u32, void *);
-extern void *ov49_0225EEAC(void *, u32);
-extern void ov49_0225F1A8(void *);
-extern void ov49_0225F1F0(void *);
+extern void *WiFiPlazaPlayerState_CreateManager(void *, u32);
+extern void WiFiPlazaPlayerState_InitOwn(void *);
+extern void WiFiPlazaPlayerState_InitOthers(void *);
 extern void *WiFiPlazaInstrument_Create(void *, void *, void *, void *, u32, u32);
 extern void *WiFiPlazaEvent_Create(u32, void *);
 extern void ov49_0225A5C8(void *);
@@ -155,9 +155,9 @@ BOOL ov49_02259AA4(OverlayManager *manager, int *unused) {
     if (ov45_0222AADC(args) == 1) {
         ov49_0225B9AC((u8 *)work + 0x184, (u8 *)work + 0x3C, (u8 *)work + 0x2DC, 0x77, args);
     }
-    *(void **)((u8 *)work + 0x3F0) = ov49_0225EEAC(work, 0x77);
-    ov49_0225F1A8(work);
-    ov49_0225F1F0(work);
+    *(void **)((u8 *)work + 0x3F0) = WiFiPlazaPlayerState_CreateManager(work, 0x77);
+    WiFiPlazaPlayerState_InitOwn(work);
+    WiFiPlazaPlayerState_InitOthers(work);
     *(void **)((u8 *)work + 0x3D4) = WiFiPlazaInstrument_Create(work->owner, *(void **)((u8 *)work + 0x3E8), *(void **)((u8 *)work + 0x3EC), *(void **)((u8 *)work + 0x3E0), 0x77, 0x78);
     *(void **)((u8 *)work + 0x3DC) = WiFiPlazaEvent_Create(0x77, work);
     Main_SetVBlankIntrCB(ov49_0225A5C8, work);
@@ -271,7 +271,7 @@ BOOL ov49_02259EF8(OverlayManager *manager) {
     HBlankInterruptDisable();
     WiFiPlazaEvent_Delete(*(void **)((u8 *)work + 0x3DC));
     WiFiPlazaInstrument_Delete(*(void **)((u8 *)work + 0x3D4));
-    ov49_0225EEF8(*(void **)((u8 *)work + 0x3F0));
+    WiFiPlazaPlayerState_DeleteManager(*(void **)((u8 *)work + 0x3F0));
     ov49_0225B4E4((u8 *)work + 0x184, (u8 *)work + 0x318, (u8 *)work + 0x3C);
     ov49_0225B35C((u8 *)work + 0x2DC);
     ov49_0225AB14((u8 *)work + 0x2F8);

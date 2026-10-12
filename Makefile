@@ -312,7 +312,6 @@ $(BUILD_DIR)/src/application/vs_recorder/vs_recorder_box_list_title.o: private O
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_beacon_fixed.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_beacon_volat.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_minus_dec.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_unk_02032B84_r01.o: private OPTFLAGS := -O2
 $(BUILD_DIR)/src/wifi_setup_result.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/src/wifi_setup_md5.o: private MWCCVER := 2.0/sp2
 $(BUILD_DIR)/src/wifi_setup_ap_select.o: private MWCCVER := 2.0/sp1

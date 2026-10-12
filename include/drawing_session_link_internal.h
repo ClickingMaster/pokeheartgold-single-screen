@@ -29,7 +29,7 @@ void sub_02037108(int, const void *, int);
 void CopyWindowToVram(void *);
 void DrawingSession_HandleNetEvent(void *, int, int);
 int Comm_CountConnected(void);
-int sub_02033250(void);
+int Wireless_GetConnectedBitmap(void);
 int DrawingSession_GetMemberCount(void);
 int MATH_CountPopulation(u32);
 void sub_02038C1C(int);

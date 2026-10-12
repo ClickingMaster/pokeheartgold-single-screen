@@ -5,7 +5,7 @@
 #include "math_util.h"
 #include "sound.h"
 #include "sound_playback.h"
-#include "unk_02032844.h"
+#include "wireless_manager.h"
 #include "communication_command.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"

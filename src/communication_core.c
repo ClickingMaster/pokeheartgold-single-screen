@@ -16,11 +16,11 @@ extern void sub_020398D4(int, int);
 extern void sub_02039A00(int);
 extern void LinkSync_Update(void);
 extern void sub_0203817C(void);
-extern u16 sub_02033250(void);
-extern int sub_02033298(void);
-extern BOOL sub_02033800(void *data, u16 size, int, void (*callback)(void *));
-extern int sub_020338F4(void);
-extern void sub_02033A90(void (*callback)(int));
+extern u16 Wireless_GetConnectedBitmap(void);
+extern int Wireless_GetState(void);
+extern BOOL Wireless_SendData(void *data, u16 size, int, void (*callback)(void *));
+extern int Wireless_GetAid(void);
+extern void Wireless_SetChildJoinedCallback(void (*callback)(int));
 extern void ByteRing_Init(void *ring, void *buffer, int size);
 extern void ByteRing_Write(void *ring, const void *data, int size, int line);
 extern int ByteRing_Read(void *ring, void *dest, int size);
@@ -264,7 +264,7 @@ int sub_02035ED8(int a, int b, int c, int d) {
     int result = 1;
     if (!sub_02034044(sub_0203993C())) {
         result = sub_02034EF0(a, b, d);
-        sub_02033A90(sub_02035ED0);
+        Wireless_SetChildJoinedCallback(sub_02035ED0);
     }
     Comm_InitWork(a, c);
     return result;
@@ -526,7 +526,7 @@ void sub_02036298(void) {
         }
         gCommSendStages.stage[1] = 4;
         (*(int *)(gCommCore.work + 0x668))++;
-    } else if (sub_02033298() == 4) {
+    } else if (Wireless_GetState() == 4) {
         if (!Comm_IsNetIdConnected(Comm_GetLocalNetId())) {
             return;
         }
@@ -611,8 +611,8 @@ void Comm_SendParentFrame(void) {
             gCommCore.initialized = 1;
         }
     }
-    if (sub_02033298() == 4) {
-        if (!sub_02033800(gCommCore.work + 0x80 + gCommCore.work[0x6B0] * 0xC0, 0xC0, 14, Comm_OnParentFrameSent)) {
+    if (Wireless_GetState() == 4) {
+        if (!Wireless_SendData(gCommCore.work + 0x80 + gCommCore.work[0x6B0] * 0xC0, 0xC0, 14, Comm_OnParentFrameSent)) {
             gCommSendStages.stage[0]--;
         }
     }
@@ -626,7 +626,7 @@ void Comm_SendParentFrame(void) {
         Comm_OnParentFrameReceived(0, gCommCore.work + 0x80 + gCommCore.work[0x6B0] * 0xC0, 0xC0);
         gCommCore.work[0x6B0] = 1 - gCommCore.work[0x6B0];
     }
-    if (sub_02033298() != 4) {
+    if (Wireless_GetState() != 4) {
         gCommSendStages.stage[0]++;
     }
 }
@@ -682,7 +682,7 @@ void sub_0203667C(void) {
             }
         }
     } else {
-        if (sub_02033298() != 4 || gCommSendStages.stage[0] != 4 || !sub_02036630()) {
+        if (Wireless_GetState() != 4 || gCommSendStages.stage[0] != 4 || !sub_02036630()) {
             return;
         }
         if (Comm_GetTransferMode() == 0) {
@@ -870,7 +870,7 @@ void Comm_SendChildFrame(void) {
     }
     frameSize = sub_0203772C((u16)sub_0203993C());
     sub_02033FC4((u16)sub_0203993C());
-    if (sub_02033298() != 4) {
+    if (Wireless_GetState() != 4) {
         return;
     }
     if (!Comm_IsNetIdConnected(Comm_GetLocalNetId())) {
@@ -881,14 +881,14 @@ void Comm_SendChildFrame(void) {
         if (Comm_GetLocalNetId()) {
             gCommSendStages.stage[1]++;
             work = gCommCore.work;
-            if (!sub_02033800(work + work[0x6AF] * 64, (u16)frameSize, 14, Comm_OnChildFrameSent)) {
+            if (!Wireless_SendData(work + work[0x6AF] * 64, (u16)frameSize, 14, Comm_OnChildFrameSent)) {
                 gCommSendStages.stage[1]--;
                 return;
             }
             gCommCore.work[0x6AF] = 1 - gCommCore.work[0x6AF];
             (*(u32 *)(gCommCore.work + 0x668))++;
         } else {
-            if ((sub_02033250() & 0xFFFE) == 0) {
+            if ((Wireless_GetConnectedBitmap() & 0xFFFE) == 0) {
                 return;
             }
             gCommSendStages.stage[1]++;
@@ -1059,7 +1059,7 @@ void Comm_BuildParentFrame(u8 *data) {
     } else {
         data[1] = 1;
     }
-    value = sub_02033250();
+    value = Wireless_GetConnectedBitmap();
     data[2] = value >> 8;
     data[3] = value;
     receive.remaining = 0xBB;
@@ -1280,14 +1280,14 @@ int Comm_IsNetIdConnected(int slot) {
     if (!sub_02037474()) {
         return 0;
     }
-    if (sub_02033298() != 4) {
+    if (Wireless_GetState() != 4) {
         return 0;
     }
     if (slot == Comm_GetLocalNetId()) {
         return 1;
     }
     if (Comm_GetLocalNetId() == 0) {
-        if ((sub_02033250() & (1 << slot)) != 0) {
+        if ((Wireless_GetConnectedBitmap() & (1 << slot)) != 0) {
             return 1;
         }
     } else if ((*(u16 *)(gCommCore.work + 0x694) & (1 << slot)) != 0) {
@@ -1414,7 +1414,7 @@ int Comm_GetLocalNetId(void) {
                 return (u16)id;
             }
         } else {
-            return sub_020338F4();
+            return Wireless_GetAid();
         }
     }
     return 0;

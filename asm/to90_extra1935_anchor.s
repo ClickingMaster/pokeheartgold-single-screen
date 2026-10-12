@@ -220,8 +220,8 @@
 	.public PokeathlonRelayRun_IsTouchingSwapButton
 	.public PokeathlonRelayRunTeam_UpdateStun
 	.public PokeathlonRelayRunHud_GetBenchMember
-	.public ov96_02200E78
-	.public ov96_02200EEC
+	.public PokeathlonRelayRunCpu_SetTeam
+	.public PokeathlonRelayRunCpu_Delete
 	.public ov96_02203BC0
 	.public ov96_02203CC4
 	.public ov96_02203CD4

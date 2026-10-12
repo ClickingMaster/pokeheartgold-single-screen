@@ -24,14 +24,14 @@ BOOL sub_02035650(void) {
 
 int sub_02035664(void) {
     if (_021D4134.work != NULL) {
-        return sub_02033920(_021D4134.work);
+        return Wireless_IsIdle(_021D4134.work);
     }
     return 1;
 }
 
 int sub_0203567C(void) {
     if (_021D4134.work != NULL) {
-        return sub_02033250(_021D4134.work) & 0xFFFE;
+        return Wireless_GetConnectedBitmap(_021D4134.work) & 0xFFFE;
     }
     return 0;
 }

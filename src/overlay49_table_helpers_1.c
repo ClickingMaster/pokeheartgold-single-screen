@@ -3,16 +3,16 @@
 void ov49_02264CFC(Config49 *cfg, u8 timer, u8 action, void *object, u8 value) {
     cfg->timer6 = timer;
     cfg->action7 = action;
-    ov49_0225EF8C(object, value);
+    WiFiPlazaPlayerState_SetStep(object, value);
 }
 
 void ov49_02264D14(Config49 *cfg, void *object) {
     if (cfg->timer6 != 0) cfg->timer6--;
-    else ov49_0225EF8C(object, cfg->action7);
+    else WiFiPlazaPlayerState_SetStep(object, cfg->action7);
 }
 
 void ov49_02264D30(Config49 *cfg, void *object, void *check) {
-    if (WiFiPlazaRoom_IsMessageFinished(check)) ov49_0225EF8C(object, cfg->action7);
+    if (WiFiPlazaRoom_IsMessageFinished(check)) WiFiPlazaPlayerState_SetStep(object, cfg->action7);
 }
 
 void ov49_02264D4C(void *unused0, void *unused1, void *ctx, void *arg, void *a, void *b) {

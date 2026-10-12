@@ -92,7 +92,7 @@
 .public Party_GetMonByIndex
 .public Party_GetMonAprijuiceModifiers
 .public SaveArray_Party_Get
-.public sub_0208B85C
+.public PokemonSummary_GetPokeathlonStarStates
 .public sub_020932E0
 .public sub_02093354
 .public sub_02093440

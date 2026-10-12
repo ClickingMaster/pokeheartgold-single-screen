@@ -3702,54 +3702,54 @@
 	.public VsRecorder_IsNetIdle
 	.public VsRecorder_UpdateNet
 	.public VsRecorder_FreeNet
-	.public ov40_0223D618
-	.public ov40_0223D68C
-	.public ov40_0223D830
-	.public ov40_0223D874
-	.public ov40_0223D8D4
-	.public ov40_0223DB94
-	.public ov40_0223DBD4
-	.public ov40_0223DCF0
-	.public ov40_0223DD68
-	.public ov40_0223DDE8
-	.public ov40_0223DEB8
-	.public ov40_0223DF1C
-	.public ov40_0223E024
-	.public ov40_0223E064
-	.public ov40_0223E0A4
-	.public ov40_0223E190
-	.public ov40_0223E324
-	.public ov40_0223E33C
-	.public ov40_0223E494
-	.public ov40_0223E520
-	.public ov40_0223E6EC
-	.public ov40_0223E730
-	.public ov40_0223E848
-	.public ov40_0223E870
-	.public ov40_0223E9A4
-	.public ov40_0223EBB8
-	.public ov40_0223EC40
-	.public ov40_0223EDA8
-	.public ov40_0223EDE0
-	.public ov40_0223EFA4
-	.public ov40_0223F028
-	.public ov40_0223F16C
-	.public ov40_0223F200
-	.public ov40_0223F3E4
-	.public ov40_0223F59C
-	.public ov40_0223F6BC
-	.public ov40_0223F830
-	.public ov40_0223F848
-	.public ov40_0223F860
-	.public ov40_0223F880
-	.public ov40_0223F984
-	.public ov40_0223FCA0
-	.public ov40_0223FCB8
-	.public ov40_0223FCF8
-	.public ov40_0223FD38
-	.public ov40_0223FD50
-	.public ov40_0223FD68
-	.public ov40_0223FD80
+	.public VsRecorder_PlaceSearchResultIcons
+	.public VsRecorder_CreateSearchResultIcons
+	.public VsRecorder_SetSearchResultIconsDrawFlag
+	.public VsRecorder_FreeSearchResultIcons
+	.public VsRecorder_ScrollSearchResultIcons
+	.public VsRecorder_HasSearchConditions
+	.public VsRecorder_CreateSearchConditionWindows
+	.public VsRecorder_PrintSearchFacility
+	.public VsRecorder_PrintSearchSpecies
+	.public VsRecorder_PrintSearchLocation
+	.public VsRecorder_PrintLocationButtonLabel
+	.public VsRecorder_CreateSearchButtonWindows
+	.public VsRecorder_RemoveSearchWindows
+	.public VsRecorder_RemoveSearchButtonWindows
+	.public VsRecorder_CreateSearchResultWindows
+	.public VsRecorder_VideoSearchShowConditions
+	.public VsRecorder_VideoSearchConditionsMain
+	.public VsRecorder_VideoSearchExit
+	.public VsRecorder_VideoSearchOpenCondition
+	.public VsRecorder_VideoSearchSelectFacility
+	.public VsRecorder_VideoSearchClearSpecies
+	.public VsRecorder_CreateSearchCategoryWindows
+	.public VsRecorder_RemoveSearchCategoryWindows
+	.public VsRecorder_VideoSearchSelectCategory
+	.public VsRecorder_VideoSearchSelectSpecies
+	.public VsRecorder_SearchCategoryHasSeen
+	.public VsRecorder_BuildSearchSpeciesList
+	.public VsRecorder_FreeSearchSpeciesList
+	.public VsRecorder_VideoSearchSelectLocation
+	.public VsRecorder_VideoSearchReturnToConditions
+	.public VsRecorder_VideoSearchRequest
+	.public VsRecorder_VideoSearchLeaveConditions
+	.public VsRecorder_VideoSearchShowResults
+	.public VsRecorder_VideoSearchResultsMain
+	.public VsRecorder_VideoSearchResultsBack
+	.public VsRecorder_VideoSearchShowDetails
+	.public VsRecorder_VideoSearchDetailsMain
+	.public VsRecorder_VideoSearchToggleProfile
+	.public VsRecorder_VideoSearchPlay
+	.public VsRecorder_VideoSearchBackToResults
+	.public VsRecorder_VideoSearchShowSlots
+	.public VsRecorder_VideoSearchSlotsMain
+	.public VsRecorder_VideoSearchSlotsCancel
+	.public VsRecorder_VideoSearchReturnToDetails
+	.public VsRecorder_VideoSearchConfirmOverwrite
+	.public VsRecorder_VideoSearchOverwriteMain
+	.public VsRecorder_VideoSearchOverwriteNo
+	.public VsRecorder_VideoSearchSave
 	.public ov40_0223FD8C
 	.public ov40_0223FF8C
 	.public ov40_02240238
@@ -3950,35 +3950,35 @@
 	.public sVsRecorderVideoListIconPositions
 	.public sVsRecorderVideoListSubStates
 	.public ov40_02245648
-	.public ov40_0224564C
-	.public ov40_02245650
-	.public ov40_02245654
-	.public ov40_0224565C
+	.public sVsRecorderSearchResultOpenHitbox
+	.public sVsRecorderSearchBackHitbox
+	.public sVsRecorderSearchOverwriteHitboxes
+	.public sVsRecorderSearchButtonMsgIds
 	.public ov40_02245668
-	.public ov40_02245674
+	.public sVsRecorderSearchSaveSlotHitboxes
 	.public ov40_02245684
 	.public ov40_02245694
 	.public ov40_022456A4
-	.public ov40_022456B4
-	.public ov40_022456C4
+	.public sVsRecorderSearchDetailHitboxes
+	.public sVsRecorderSearchConditionHitboxes
 	.public ov40_022456D8
-	.public ov40_022456F0
-	.public ov40_02245708
-	.public ov40_0224572C
-	.public ov40_02245758
-	.public ov40_02245784
-	.public ov40_022457B0
-	.public ov40_022457DC
-	.public ov40_02245808
-	.public ov40_02245838
-	.public ov40_02245868
+	.public sVsRecorderSearchConditionMsgIds
+	.public sVsRecorderSpeciesGroupHitboxes
+	.public sVsRecorderSearchLocationListConfig
+	.public sVsRecorderSearchFacilityListConfig
+	.public sVsRecorderSearchFacilityListConfigLong
+	.public sVsRecorderSearchResultListConfig
+	.public sVsRecorderSearchSpeciesListConfig
+	.public sVsRecorderSearchListIconOrder
+	.public sVsRecorderSearchScrollIconOrder
+	.public sVsRecorderSearchButtonWindows
 	.public ov40_02245898
-	.public ov40_022458E8
-	.public ov40_02245948
+	.public sVsRecorderSearchConditionWindows
+	.public sVsRecorderSearchResultIconPositions
 	.public ov40_022459C0
 	.public ov40_02245B30
 	.public ov40_02245B44
-	.public ov40_02245B98
+	.public sVsRecorderVideoSearchSubStates
 	.public sVsRecorderNumberPadStates
 	.public sVsRecorderNumberPadStartX
 	.public sVsRecorderNumberPadKeys
@@ -3987,7 +3987,7 @@
 	.public ov40_02245CA8
 	.public ov40_02245CD4
 	.public ov40_02245CE8
-	.public ov40_02245E44
+	.public sVsRecorderSearchSpeciesGroupStarts
 	.public sVsRecorderDigitScalesOldGroup
 	.public sVsRecorderDigitScalesNewGroup
 	.include "overlay_40.inc"
@@ -4044,7 +4044,7 @@
 	.public VsRecorder_IsNetIdle
 	.public VsRecorder_UpdateNet
 	.public VsRecorder_FreeNet
-	.public ov40_0223FD80
+	.public VsRecorder_VideoSearchSave
 	.public ov40_0224147C
 	.public ov40_02242E48
 	.public VsRecorder_NumberPadSetState
@@ -4469,16 +4469,16 @@ sVsRecorderVideoListSubStates: ; 0x022455F4
 ov40_02245648:
 	.byte 0x18, 0x38, 0x38, 0xC8
 
-ov40_0224564C: ; 0x0224564C
+sVsRecorderSearchResultOpenHitbox: ; 0x0224564C
 	.byte 0x20, 0x60, 0x50, 0xB0
 
-ov40_02245650: ; 0x02245650
+sVsRecorderSearchBackHitbox: ; 0x02245650
 	.byte 0x98, 0xB8, 0x50, 0xB0
 
-ov40_02245654: ; 0x02245654
+sVsRecorderSearchOverwriteHitboxes: ; 0x02245654
 	.byte 0x28, 0x48, 0x20, 0x78, 0x28, 0x48, 0x90, 0xE8
 
-ov40_0224565C: ; 0x0224565C
+sVsRecorderSearchButtonMsgIds: ; 0x0224565C
 	.byte 0x30, 0x00, 0x00, 0x00
 	.byte 0x31, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00
 
@@ -4486,7 +4486,7 @@ ov40_02245668:
 	.byte 0x18, 0x38, 0x30, 0xD0, 0x38, 0x58, 0x30, 0xD0
 	.byte 0x58, 0x78, 0x30, 0xD0
 
-ov40_02245674: ; 0x02245674
+sVsRecorderSearchSaveSlotHitboxes: ; 0x02245674
 	.byte 0x19, 0x39, 0x32, 0xD2, 0x3D, 0x5D, 0x32, 0xD2, 0x61, 0x81, 0x32, 0xD2
 	.byte 0x85, 0xA5, 0x32, 0xD2
 
@@ -4502,11 +4502,11 @@ ov40_022456A4:
 	.byte 0x10, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov40_022456B4: ; 0x022456B4
+sVsRecorderSearchDetailHitboxes: ; 0x022456B4
 	.byte 0x10, 0x30, 0x40, 0xC8, 0x40, 0x70, 0x58, 0xA8, 0x98, 0xB8, 0x80, 0xE0
 	.byte 0x98, 0xB8, 0x20, 0x80
 
-ov40_022456C4: ; 0x022456C4
+sVsRecorderSearchConditionHitboxes: ; 0x022456C4
 	.byte 0x10, 0x30, 0x28, 0xD8, 0x38, 0x58, 0x28, 0xD8, 0x60, 0x80, 0x28, 0xD8
 	.byte 0x98, 0xB8, 0x20, 0x80, 0x98, 0xB8, 0x80, 0xE0
 
@@ -4514,63 +4514,63 @@ ov40_022456D8:
 	.byte 0x18, 0x28, 0x38, 0xC0, 0x28, 0x38, 0x38, 0xC0
 	.byte 0x38, 0x48, 0x38, 0xC0, 0x48, 0x58, 0x38, 0xC0, 0x58, 0x68, 0x38, 0xC0, 0x68, 0x78, 0x38, 0xC0
 
-ov40_022456F0: ; 0x022456F0
+sVsRecorderSearchConditionMsgIds: ; 0x022456F0
 	.byte 0x30, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00, 0x7D, 0x00, 0x00, 0x00
 	.byte 0x7D, 0x00, 0x00, 0x00, 0x7D, 0x00, 0x00, 0x00
 
-ov40_02245708: ; 0x02245708
+sVsRecorderSpeciesGroupHitboxes: ; 0x02245708
 	.byte 0x18, 0x30, 0x28, 0x48, 0x18, 0x30, 0x70, 0x90
 	.byte 0x18, 0x30, 0xB8, 0xD8, 0x38, 0x50, 0x28, 0x48, 0x38, 0x50, 0x70, 0x90, 0x38, 0x50, 0xB8, 0xD8
 	.byte 0x58, 0x70, 0x28, 0x48, 0x58, 0x70, 0x70, 0x90, 0x58, 0x70, 0xB8, 0xD8
 
-ov40_0224572C: ; 0x0224572C
+sVsRecorderSearchLocationListConfig: ; 0x0224572C
 	.word ov40_022456A4
 	.byte 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
 	.word ov40_02245648
 
-ov40_02245758: ; 0x02245758
+sVsRecorderSearchFacilityListConfig: ; 0x02245758
 	.word ov40_02245898
 	.byte 0x05, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00
 	.byte 0x0C, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.word ov40_02245668
 
-ov40_02245784: ; 0x02245784
+sVsRecorderSearchFacilityListConfigLong: ; 0x02245784
 	.word ov40_022459C0
 	.byte 0x17, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x07, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00
 	.byte 0x20, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.word ov40_02245668
 
-ov40_022457B0: ; 0x022457B0
+sVsRecorderSearchResultListConfig: ; 0x022457B0
 	.word ov40_022459C0
 	.byte 0x06, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x08, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00
 	.word 0
 
-ov40_022457DC: ; 0x022457DC
+sVsRecorderSearchSpeciesListConfig: ; 0x022457DC
 	.word 0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x0E, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00
 	.word ov40_022456D8
 
-ov40_02245808: ; 0x02245808
+sVsRecorderSearchListIconOrder: ; 0x02245808
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00
 
-ov40_02245838: ; 0x02245838
+sVsRecorderSearchScrollIconOrder: ; 0x02245838
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00
 
-ov40_02245868: ; 0x02245868
+sVsRecorderSearchButtonWindows: ; 0x02245868
 	.byte 0x07, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x14, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00
 	.byte 0x14, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00
@@ -4584,7 +4584,7 @@ ov40_02245898:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xAD, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov40_022458E8: ; 0x022458E8
+sVsRecorderSearchConditionWindows: ; 0x022458E8
 	.byte 0x04, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x0F, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00
 	.byte 0x0F, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00
@@ -4593,7 +4593,7 @@ ov40_022458E8: ; 0x022458E8
 	.byte 0x0F, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00
 	.byte 0x19, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 
-ov40_02245948: ; 0x02245948
+sVsRecorderSearchResultIconPositions: ; 0x02245948
 	.byte 0x68, 0x00, 0x48, 0x00, 0x80, 0x00, 0x48, 0x00
 	.byte 0x98, 0x00, 0x48, 0x00, 0xB0, 0x00, 0x48, 0x00, 0xC8, 0x00, 0x48, 0x00, 0xE0, 0x00, 0x48, 0x00
 	.byte 0x68, 0x00, 0x60, 0x00, 0x80, 0x00, 0x60, 0x00, 0x98, 0x00, 0x60, 0x00, 0xB0, 0x00, 0x60, 0x00
@@ -4658,39 +4658,39 @@ ov40_02245B44: ; 0x02245B44
 	.word ov40_02241488
 	.word ov40_0224141C
 
-ov40_02245B98: ; 0x02245B98
+sVsRecorderVideoSearchSubStates: ; 0x02245B98
 	.word ov40_02240238
 	.word ov40_02240290
-	.word ov40_0223E190
-	.word ov40_0223E324
-	.word ov40_0223E33C
-	.word ov40_0223E494
-	.word ov40_0223E520
-	.word ov40_0223E6EC
-	.word ov40_0223E870
-	.word ov40_0223E9A4
-	.word ov40_0223EDE0
-	.word ov40_0223EFA4
-	.word ov40_0223F028
-	.word ov40_0223F16C
-	.word ov40_0223F200
-	.word ov40_0223F3E4
-	.word ov40_0223F59C
-	.word ov40_0223F6BC
-	.word ov40_0223F830
-	.word ov40_0223F848
-	.word ov40_0223F860
-	.word ov40_0223F880
-	.word ov40_0223F984
-	.word ov40_0223FCA0
-	.word ov40_0223FCB8
-	.word ov40_0223FD38
-	.word ov40_0223FD50
-	.word ov40_0223FD68
-	.word ov40_0223FD80
+	.word VsRecorder_VideoSearchShowConditions
+	.word VsRecorder_VideoSearchConditionsMain
+	.word VsRecorder_VideoSearchExit
+	.word VsRecorder_VideoSearchOpenCondition
+	.word VsRecorder_VideoSearchSelectFacility
+	.word VsRecorder_VideoSearchClearSpecies
+	.word VsRecorder_VideoSearchSelectCategory
+	.word VsRecorder_VideoSearchSelectSpecies
+	.word VsRecorder_VideoSearchSelectLocation
+	.word VsRecorder_VideoSearchReturnToConditions
+	.word VsRecorder_VideoSearchRequest
+	.word VsRecorder_VideoSearchLeaveConditions
+	.word VsRecorder_VideoSearchShowResults
+	.word VsRecorder_VideoSearchResultsMain
+	.word VsRecorder_VideoSearchResultsBack
+	.word VsRecorder_VideoSearchShowDetails
+	.word VsRecorder_VideoSearchDetailsMain
+	.word VsRecorder_VideoSearchToggleProfile
+	.word VsRecorder_VideoSearchPlay
+	.word VsRecorder_VideoSearchBackToResults
+	.word VsRecorder_VideoSearchShowSlots
+	.word VsRecorder_VideoSearchSlotsMain
+	.word VsRecorder_VideoSearchSlotsCancel
+	.word VsRecorder_VideoSearchConfirmOverwrite
+	.word VsRecorder_VideoSearchOverwriteMain
+	.word VsRecorder_VideoSearchOverwriteNo
+	.word VsRecorder_VideoSearchSave
 	.word ov40_0223FD8C
 	.word ov40_0223FF8C
-	.word ov40_0223FCF8
+	.word VsRecorder_VideoSearchReturnToDetails
 
 sVsRecorderNumberPadStates: ; 0x02245C18
 	.word VsRecorder_NumberPadInit
@@ -4757,7 +4757,7 @@ ov40_02245CE8: ; 0x02245CE8
 	.byte 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00
 	.byte 0xFF, 0xFF, 0x00, 0x00
 
-ov40_02245E44: ; 0x02245E44
+sVsRecorderSearchSpeciesGroupStarts: ; 0x02245E44
 	.byte 0x00, 0x00, 0x57, 0x00, 0x88, 0x00, 0xBF, 0x00, 0xEB, 0x00, 0x2F, 0x01
 	.byte 0x68, 0x01, 0xC9, 0x01, 0xE7, 0x01, 0xED, 0x01
 

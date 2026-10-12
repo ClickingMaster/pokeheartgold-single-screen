@@ -113,7 +113,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
         relayRun->hud = PokeathlonRelayRunHud_New(relayRun->heapId, relayRun->bgConfig, course);
         int count = PokeathlonCourse_GetParticipantCount(course);
         int mode = PokeathlonCourse_GetMode(course);
-        relayRun->cpu = ov96_02200E3C(relayRun->heapId, RELAY_RUN_TEAMS - count, mode);
+        relayRun->cpu = PokeathlonRelayRunCpu_New(relayRun->heapId, RELAY_RUN_TEAMS - count, mode);
         relayRun->monResources = PokeathlonCourseSprites_CreateResources(relayRun->heapId, 0x2BF, 1);
         PokeathlonCourse_IncrementField1ED(course);
         break;
@@ -223,7 +223,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
                 PokeathlonRelayRun_InitMember(course, setup, n, j, &relayRun->teams[n]);
             }
             if (ov96_021E5F24(course) == 0) {
-                ov96_02200E78(relayRun->cpu, n, &relayRun->teams[n]);
+                PokeathlonRelayRunCpu_SetTeam(relayRun->cpu, n, &relayRun->teams[n]);
             }
             relayRun->teams[n].owner = n;
         }
@@ -243,7 +243,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
             s32 *layout = relayRun->layoutToSend;
             u8 index = LCRandom() % 10;
             ReadWholeNarcMemberByIdPair(layout, NARC_a_2_2_7, index);
-            ov96_02200E80(relayRun->cpu, layout);
+            PokeathlonRelayRunCpu_SetObstacles(relayRun->cpu, layout);
         }
         PokeathlonCourse_IncrementField1ED(course);
         break;
@@ -303,7 +303,7 @@ BOOL PokeathlonRelayRun_Exit(PokeathlonCourseData *course) {
     OamManager_Free();
     ObjCharTransfer_Destroy();
     ObjPlttTransfer_Destroy();
-    ov96_02200EEC(relayRun->cpu);
+    PokeathlonRelayRunCpu_Delete(relayRun->cpu);
     PokeathlonRelayRunHud_Free(relayRun->hud);
     FontID_Release(4);
     Main_SetVBlankIntrCB(NULL, NULL);
@@ -697,7 +697,7 @@ void PokeathlonRelayRun_UpdateHost(PokeathlonCourseData *course) {
             teamCursor->teams[0].dragEnd = teamCursor->teams[0].dragStart;
         }
     }
-    ov96_02200EF4(course, relayRun->cpu, relayRun->timer);
+    PokeathlonRelayRunCpu_Update(course, relayRun->cpu, relayRun->timer);
     PokeathlonRelayRun_MoveTeams(course);
     if (relayRun->timer == 0) {
         relayRun->finished = TRUE;

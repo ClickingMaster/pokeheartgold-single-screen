@@ -2,7 +2,7 @@
 
 void sub_0208A79C(u8 *work) {
     u32 selection;
-    sub_0208BBDC(work);
+    PokemonSummary_UpdateMoveCursorSprite(work);
     selection = *(volatile u8 *)(work + 0x7BD);
     selection = selection << 28;
     selection = selection >> 28;

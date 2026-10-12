@@ -12,9 +12,9 @@ void sub_02034B0C(int value, int mode) {
         _021D4134.work = allocation;
         MI_CpuFill8(allocation, 0, 0xD98);
 
-        allocation = Heap_Alloc(HEAP_ID_15, sub_020335B4());
+        allocation = Heap_Alloc(HEAP_ID_15, Wireless_GetWorkSize());
         *(void **)(_021D4134.work + 0xD64) = allocation;
-        MI_CpuFill8(*(void **)(_021D4134.work + 0xD64), 0, sub_020335B4());
+        MI_CpuFill8(*(void **)(_021D4134.work + 0xD64), 0, Wireless_GetWorkSize());
 
         allocation = Heap_Alloc(HEAP_ID_15, LinkBattleRuleset_sizeof());
         *(void **)(_021D4134.work + 0xD7C) = allocation;

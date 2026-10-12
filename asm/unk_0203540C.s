@@ -7,12 +7,12 @@ sub_0203540C: ; 0x0203540C
 	push {r4, r5, r6, lr}
 	sub sp, #8
 	add r4, r0, #0
-	bl sub_02033298
+	bl Wireless_GetState
 	add r5, r0, #0
 	bl CommPlayerInfo_DropDisconnected
 	add r6, r0, #0
 	bl sub_020353B8
-	bl sub_020338F4
+	bl Wireless_GetAid
 	cmp r0, #0
 	bne _0203544A
 	bl sub_0203567C
@@ -69,7 +69,7 @@ _0203547A:
 	orr r1, r3
 	strb r1, [r0, r2]
 _02035490:
-	bl sub_020332AC
+	bl Wireless_GetError
 	cmp r0, #0x19
 	bne _0203549E
 	mov r0, #0
@@ -120,7 +120,7 @@ _020354E4:
 	ldrb r0, [r1, r0]
 	cmp r0, #1
 	bne _020354F8
-	bl sub_020338D0
+	bl Wireless_End
 	cmp r0, #0
 	bne _020355A6
 _020354F8:
@@ -130,7 +130,7 @@ _020354F8:
 	ldrb r0, [r1, r0]
 	cmp r0, #2
 	bne _020355A6
-	bl sub_020338D0
+	bl Wireless_End
 	add sp, #8
 	cmp r0, #0
 	pop {r4, r5, r6, pc}
@@ -149,7 +149,7 @@ _0203550E:
 	strb r0, [r3, r1]
 	pop {r4, r5, r6, pc}
 _02035528:
-	bl sub_02033468
+	bl Wireless_SelectChannel
 	ldr r3, _020355AC ; =_021D4134
 	ldr r2, _020355C0 ; =0x00000D91
 	ldr r4, [r3, #8]
@@ -201,7 +201,7 @@ _02035562:
 	str r0, [sp, #4]
 	ldrh r1, [r1]
 	mov r0, #0
-	bl sub_02033668
+	bl Wireless_StartParent
 	ldr r0, _020355AC ; =_021D4134
 	ldr r1, [r0, #8]
 	mov r0, #0xd9

@@ -60,10 +60,10 @@
 .public MapObject_SetHeldMovement
 .public MapObject_IsMovementPaused
 .public GetMovementForDirection
-.public sub_0206599C
-.public sub_020659A8
+.public FollowPlayerMovement_GetHopFrame
+.public FollowPlayerMovement_GetHopSpeed
 .public sub_020659B8
-.public sub_020659CC
+.public FollowPlayerMovement_Reset
 .public FollowMon_InitMapObject
 .public FollowMon_GetMapObject
 .public sub_02069E28

@@ -813,17 +813,17 @@
 	.public PokeathlonRelayRunHud_PrintMonName
 	.public PokeathlonRelayRunHud_PrintLaps
 	.public ov96_02200C8C
-	.public ov96_02200D7C
-	.public ov96_02200DF8
-	.public ov96_02200E3C
-	.public ov96_02200E78
-	.public ov96_02200E80
-	.public ov96_02200EEC
-	.public ov96_02200EF4
-	.public ov96_02200F84
-	.public ov96_0220144C
-	.public ov96_0220146C
-	.public ov96_022014A4
+	.public PokeathlonRelayRunHud_GetPicVramOffsets
+	.public PokeathlonRelayRunHud_InitWindows
+	.public PokeathlonRelayRunCpu_New
+	.public PokeathlonRelayRunCpu_SetTeam
+	.public PokeathlonRelayRunCpu_SetObstacles
+	.public PokeathlonRelayRunCpu_Delete
+	.public PokeathlonRelayRunCpu_Update
+	.public PokeathlonRelayRunCpu_Think
+	.public PokeathlonRelayRunCpu_WrapX
+	.public PokeathlonRelayRunCpu_PickBestCell
+	.public PokeathlonRelayRunCpu_SortCells
 	.public ov96_02201558
 	.public ov96_02201B18
 	.public ov96_02201B34

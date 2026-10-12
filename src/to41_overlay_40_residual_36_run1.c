@@ -123,9 +123,9 @@ int ov40_0223FF8C(void *p) {
         break;
     case 1:
         ov40_022408AC(p);
-        PTR(w, 0x608) = TouchHitboxController_Create(ov40_022456B4, 4, ov40_02241E40, p, 0x6d);
-        PTR(w, 0x60c) = TouchHitboxController_Create(ov40_02245674, 4, ov40_02241ED4, p, 0x6d);
-        PTR(w, 0x610) = TouchHitboxController_Create(ov40_02245654, 2, ov40_02241F3C, p, 0x6d);
+        PTR(w, 0x608) = TouchHitboxController_Create(sVsRecorderSearchDetailHitboxes, 4, ov40_02241E40, p, 0x6d);
+        PTR(w, 0x60c) = TouchHitboxController_Create(sVsRecorderSearchSaveSlotHitboxes, 4, ov40_02241ED4, p, 0x6d);
+        PTR(w, 0x610) = TouchHitboxController_Create(sVsRecorderSearchOverwriteHitboxes, 2, ov40_02241F3C, p, 0x6d);
         WORD(p, 8)
         ++;
         break;
@@ -490,9 +490,9 @@ int ov40_0224092C(void *p) {
             SetBgPriority(7, 2);
             ov40_0224085C(p);
             ov40_02242110(p);
-            PTR(w, 0x608) = TouchHitboxController_Create(ov40_022456B4, 4, ov40_02241C10, p, 0x6d);
-            PTR(w, 0x60c) = TouchHitboxController_Create(ov40_02245674, 4, ov40_02241C70, p, 0x6d);
-            PTR(w, 0x610) = TouchHitboxController_Create(ov40_02245654, 2, ov40_02241CD8, p, 0x6d);
+            PTR(w, 0x608) = TouchHitboxController_Create(sVsRecorderSearchDetailHitboxes, 4, ov40_02241C10, p, 0x6d);
+            PTR(w, 0x60c) = TouchHitboxController_Create(sVsRecorderSearchSaveSlotHitboxes, 4, ov40_02241C70, p, 0x6d);
+            PTR(w, 0x610) = TouchHitboxController_Create(sVsRecorderSearchOverwriteHitboxes, 2, ov40_02241CD8, p, 0x6d);
             WORD(p, 8)
             ++;
         }

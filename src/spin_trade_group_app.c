@@ -171,7 +171,7 @@ extern const GraphicsBanks ov85_021EA9B8;
 extern int (*const ov85_021EA9E0[])(SpinTradeGroupApp *app, int state);
 
 // Not declared by the owners' headers
-u32 sub_02033250(void);
+u32 Wireless_GetConnectedBitmap(void);
 void sub_0203897C(void);
 void sub_02038C1C(int count);
 void sub_02039EAC(s32 *state);
@@ -314,7 +314,7 @@ BOOL SpinTradeGroupApp_Main(OverlayManager *man, int *state) {
         gSystem.simulatedInputs = 1;
     }
     if (Comm_GetLocalNetId() == 0 && app->menu->participantMask) {
-        u32 mask = sub_02033250();
+        u32 mask = Wireless_GetConnectedBitmap();
         app->menu->participantMask = mask & app->menu->participantMask;
     }
     mode = app->state;
@@ -1389,7 +1389,7 @@ int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int a1) {
     }
     switch (v) {
     case 1:
-        if ((int)Comm_CountConnected() > 1 || sub_02033250() > 1) {
+        if ((int)Comm_CountConnected() > 1 || Wireless_GetConnectedBitmap() > 1) {
             return 1;
         }
         app->subState = 0x11;

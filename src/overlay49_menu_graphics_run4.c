@@ -5,13 +5,13 @@ void ov49_0225A98C(void *work) {
     ov49_02258B44(PTR_AT(work, 0x3E0));
     flag = FLAGS_AT(work);
     if (flag == 0 && U8_AT(work, 6) == 0) {
-        ov49_0225EF24(PTR_AT(work, 0x3F0));
+        WiFiPlazaPlayerState_Update(PTR_AT(work, 0x3F0));
     }
     WiFiPlazaModels_Update(PTR_AT(work, 0x3E4));
     flag = FLAGS_AT(work);
     if (flag == 0 && U8_AT(work, 6) == 0) {
         WiFiPlazaObj_UpdateManager(PTR_AT(work, 0x3E0));
-        ov49_0225EF30(PTR_AT(work, 0x3F0));
+        WiFiPlazaPlayerState_LateUpdate(PTR_AT(work, 0x3F0));
         WiFiPlazaEvent_Update(PTR_AT(work, 0x3DC));
     }
     ov49_0225AA70(work);

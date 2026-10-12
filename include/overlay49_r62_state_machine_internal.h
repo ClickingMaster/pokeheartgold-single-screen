@@ -6,7 +6,7 @@
 #pragma require_prototypes off
 
 void *WiFiPlazaRoom_GetLobby(void *);
-void *ov49_0225EF84(void *);
+void *WiFiPlazaPlayerState_GetWork(void *);
 void *WiFiPlazaRoom_GetMsgString(void *, u32, u32);
 void *WiFiPlazaRoom_GetObjManager(void *);
 void *WiFiPlazaObj_GetOwnPlayer(void *);

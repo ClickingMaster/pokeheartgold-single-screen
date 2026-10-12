@@ -163,8 +163,8 @@
 .public MapObjectMovementCmd102_Step0
 .public MapObjectMovementCmd104_Step0
 .public MapObjectMovementCmd102_Step1
-.public sub_0206642C
-.public sub_02066438
+.public HiddenObjectMovement_GetCoverEffect
+.public HiddenObjectMovement_SetRevealed
 .public FieldEffect_Destroy
 .public _020FD198
 .public gMovementCmdTable

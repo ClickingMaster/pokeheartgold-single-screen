@@ -12,8 +12,8 @@
 	.include "unk_020658D4.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_020659A8
-sub_020659A8: ; 0x020659A8
+	thumb_func_start FollowPlayerMovement_GetHopSpeed
+FollowPlayerMovement_GetHopSpeed: ; 0x020659A8
 	push {r3, lr}
 	bl sub_0205F394
 	ldrh r0, [r0, #0xa]
@@ -21,4 +21,4 @@ sub_020659A8: ; 0x020659A8
 	lsr r0, r0, #0x1e
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end sub_020659A8
+	thumb_func_end FollowPlayerMovement_GetHopSpeed

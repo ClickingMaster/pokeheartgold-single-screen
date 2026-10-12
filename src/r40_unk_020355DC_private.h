@@ -12,7 +12,7 @@ typedef struct NetworkState355DC {
 
 extern NetworkState355DC _021D4134;
 BOOL sub_020355DC(u16 index);
-extern u16 sub_02033250(void);
-extern u32 sub_02033298(void);
+extern u16 Wireless_GetConnectedBitmap(void);
+extern u32 Wireless_GetState(void);
 
 #endif

@@ -1,8 +1,0 @@
-#ifndef SOL40_OV49_R58_PRIVATE_H
-#define SOL40_OV49_R58_PRIVATE_H
-#include "global.h"
-typedef struct{u8 p[0x44];u32 input;} Sys;extern Sys gSystem;extern const u32 ov49_02269BE0[][2],ov49_02269B78[];
-void *ov49_02259FEC(void*);void *ov49_0225A010(void*);int ov49_0225A02C(void*);void *WiFiPlazaRoom_GetLobby(void*);void ov45_0222A5E8(void*,int);void ov49_0225EF98(void*,int,const void*,int);
-void *WiFiPlazaRoom_GetObjManager(void*);void *WiFiPlazaObj_CreateOwnPlayer(void*,void*);void *ov49_0225A008(void*);void WiFiPlazaObj_GetPosition(void*,void*);void WiFiPlazaCamera_SetTargetWithOffset(void*,u32,u32,u32);void *WiFiPlazaObj_CreateOwnPlayerAt(void*,void*,void*,void*);void WiFiPlazaObj_QueueCommand(void*,void*,int,void*);void WiFiPlazaCamera_SetFollowObject(void*,void*);u32 MTRandom(void);
-void ov49_0225F1A8(void*);void ov49_0225F1F0(void*);int ov49_0225F224(int);void *ov49_0225F2FC(void*,void*);void ov49_0225F334(void*,void*,void*,void*,void*);void ov49_0225F374(void*);
-#endif

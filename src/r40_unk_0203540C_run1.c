@@ -4,10 +4,10 @@
 #define U16O(n) (*(u16 *)(W + (n)))
 
 void sub_0203540C(int value, u8 *unused) {
-    int mode = sub_02033298(value);
+    int mode = Wireless_GetState(value);
     int connected = CommPlayerInfo_DropDisconnected();
     sub_020353B8();
-    if (sub_020338F4() == 0 && sub_0203567C() == 0 && (((u32)U8O(0xD95) << 29) >> 31)) {
+    if (Wireless_GetAid() == 0 && sub_0203567C() == 0 && (((u32)U8O(0xD95) << 29) >> 31)) {
         U8O(0xD95) = (U8O(0xD95) & ~1) | 1;
     }
     if (U16O(0xD8E) == 0xFFFF) {
@@ -21,7 +21,7 @@ void sub_0203540C(int value, u8 *unused) {
             U8O(0xD95) = (U8O(0xD95) & ~1) | 1;
         }
     }
-    if (sub_020332AC() == 0x19) {
+    if (Wireless_GetError() == 0x19) {
         sub_020399DC(0);
     }
     switch (mode) {
@@ -37,12 +37,12 @@ void sub_0203540C(int value, u8 *unused) {
         break;
     case 1:
         if (U8O(0xD92) == 1) {
-            if (sub_020338D0() != 0) {
+            if (Wireless_End() != 0) {
                 break;
             }
         }
         if (U8O(0xD92) == 2) {
-            if (sub_020338D0() == 0) {
+            if (Wireless_End() == 0) {
                 return;
             }
             return;
@@ -56,7 +56,7 @@ void sub_0203540C(int value, u8 *unused) {
         }
         break;
     case 7: {
-        u16 id = sub_02033468();
+        u16 id = Wireless_SelectChannel();
         u16 saved;
         int a3;
         u32 a4;
@@ -74,7 +74,7 @@ void sub_0203540C(int value, u8 *unused) {
         sub_020352D8();
         a3 = sub_02033FC4((u16)sub_0203993C());
         a4 = sub_02035724((u16)sub_0203993C());
-        sub_02033668(0, _021D4134.localId, saved, a3, a4, ((u32)U8O(0xD95) << 26) >> 31);
+        Wireless_StartParent(0, _021D4134.localId, saved, a3, a4, ((u32)U8O(0xD95) << 26) >> 31);
         U8O(0xD90) = saved;
         break;
     }

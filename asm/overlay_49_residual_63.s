@@ -2863,50 +2863,50 @@
 	.public WiFiPlazaPropShow_UpdateBurst
 	.public WiFiPlazaPropShow_ShowBurst
 	.public WiFiPlazaProp_ApplyTagShift
-	.public ov49_0225EEAC
-	.public ov49_0225EEF8
-	.public ov49_0225EF24
-	.public ov49_0225EF30
-	.public ov49_0225EF3C
-	.public ov49_0225EF40
-	.public ov49_0225EF68
-	.public ov49_0225EF84
-	.public ov49_0225EF88
-	.public ov49_0225EF8C
-	.public ov49_0225EF90
-	.public ov49_0225EF98
-	.public ov49_0225EFC4
-	.public ov49_0225EFF0
-	.public ov49_0225F018
-	.public ov49_0225F068
-	.public ov49_0225F074
-	.public ov49_0225F098
-	.public ov49_0225F0D8
-	.public ov49_0225F10C
-	.public ov49_0225F110
-	.public ov49_0225F148
-	.public ov49_0225F170
-	.public ov49_0225F180
-	.public ov49_0225F190
-	.public ov49_0225F19C
-	.public ov49_0225F1A8
-	.public ov49_0225F1F0
-	.public ov49_0225F224
-	.public ov49_0225F260
-	.public ov49_0225F2FC
-	.public ov49_0225F334
-	.public ov49_0225F374
-	.public ov49_0225F394
-	.public ov49_0225F430
-	.public ov49_0225F438
+	.public WiFiPlazaPlayerState_CreateManager
+	.public WiFiPlazaPlayerState_DeleteManager
+	.public WiFiPlazaPlayerState_Update
+	.public WiFiPlazaPlayerState_LateUpdate
+	.public WiFiPlazaPlayerState_GetArg
+	.public WiFiPlazaPlayerState_AllocWork
+	.public WiFiPlazaPlayerState_FreeWork
+	.public WiFiPlazaPlayerState_GetWork
+	.public WiFiPlazaPlayerState_GetStep
+	.public WiFiPlazaPlayerState_SetStep
+	.public WiFiPlazaPlayerState_NextStep
+	.public WiFiPlazaPlayerState_Set
+	.public WiFiPlazaPlayerState_Push
+	.public WiFiPlazaPlayerState_SetActive
+	.public WiFiPlazaPlayerState_RunAll
+	.public WiFiPlazaPlayerState_Init
+	.public WiFiPlazaPlayerState_Clear
+	.public WiFiPlazaPlayerState_Run
+	.public WiFiPlazaPlayerState_SetFrame
+	.public WiFiPlazaPlayerState_SetActiveFlag
+	.public WiFiPlazaPlayerState_PushFrame
+	.public WiFiPlazaPlayerState_PopFrame
+	.public WiFiPlazaPlayerState_IsSavedFree
+	.public WiFiPlazaPlayerState_HasHandler
+	.public WiFiPlazaPlayerStateFrame_Init
+	.public WiFiPlazaPlayerStateFrame_Clear
+	.public WiFiPlazaPlayerState_InitOwn
+	.public WiFiPlazaPlayerState_InitOthers
+	.public WiFiPlazaPlayerState_IsDirectionHeld
+	.public WiFiPlazaPlayerState_RunTileAction
+	.public WiFiPlazaPlayerState_CreateOwnPlayer
+	.public WiFiPlazaPlayerState_CreateOwnPlayerAt
+	.public WiFiPlazaPlayerBounce_Start
+	.public WiFiPlazaPlayerBounce_Update
+	.public WiFiPlazaPlayerBounce_Stop
+	.public WiFiPlazaPlayerBounce_IsActive
 	.public ov49_0225F448
-	.public ov49_0225F518
+	.public WiFiPlazaPlayerState_OwnArrival
 	.public ov49_0225FA14
 	.public ov49_0225FB5C
 	.public ov49_0225FCA8
-	.public ov49_0225FDCC
-	.public ov49_02260230
-	.public ov49_02260254
+	.public WiFiPlazaPlayerState_OwnWalk
+	.public WiFiPlazaPlayerState_OwnWalkLate
+	.public WiFiPlazaPlayerState_OwnExit
 	.public ov49_02260428
 	.public ov49_022607C4
 	.public ov49_02260A68
@@ -2914,22 +2914,22 @@
 	.public ov49_02260CC0
 	.public ov49_02260D28
 	.public ov49_02260D90
-	.public ov49_02260E2C
-	.public ov49_022611D4
-	.public ov49_022611F4
-	.public ov49_02261234
-	.public ov49_022613AC
-	.public ov49_02261434
-	.public ov49_02261460
-	.public ov49_022614CC
-	.public ov49_02261540
-	.public ov49_0226154C
-	.public ov49_02261720
-	.public ov49_022618C0
+	.public WiFiPlazaPlayerState_OwnRideMover
+	.public WiFiPlazaPlayerRide_FollowCamera
+	.public WiFiPlazaPlayerRide_IsMoverHere
+	.public WiFiPlazaPlayerRide_JumpOn
+	.public WiFiPlazaPlayerRide_Land
+	.public WiFiPlazaPlayerRide_FollowMover
+	.public WiFiPlazaPlayerRide_FollowMoverBounce
+	.public WiFiPlazaPlayerState_InitArrivalMenu
+	.public WiFiPlazaPlayerState_FreeArrivalMenu
+	.public WiFiPlazaPlayerState_OtherWaitForPlayer
+	.public WiFiPlazaPlayerState_OtherPresent
+	.public WiFiPlazaPlayerState_OtherLeave
 	.public ov49_02261930
 	.public ov49_02261B74
 	.public ov49_02261DBC
-	.public ov49_02261FC0
+	.public WiFiPlazaPlayerState_FindFreeTaggedCell
 	.public ov49_02262028
 	.public ov49_02262AC4
 	.public ov49_02262B14
@@ -3174,15 +3174,15 @@
 	.public ov49_02269A7E
 	.public sWiFiPlazaMoverSpawns
 	.public sWiFiPlazaPropSpawns
-	.public ov49_02269B38
-	.public ov49_02269B40
-	.public ov49_02269B48
+	.public sWiFiPlazaPlayerStateOwnWalk
+	.public sWiFiPlazaPlayerStateOtherPresent
+	.public sWiFiPlazaPlayerStateOtherLeave
 	.public ov49_02269B50
 	.public ov49_02269B58
 	.public ov49_02269B60
 	.public ov49_02269B68
 	.public ov49_02269B70
-	.public ov49_02269B78
+	.public sWiFiPlazaPlayerStateOtherWait
 	.public ov49_02269B80
 	.public ov49_02269B88
 	.public ov49_02269B90
@@ -3190,13 +3190,13 @@
 	.public ov49_02269BB0
 	.public ov49_02269BC0
 	.public ov49_02269BD0
-	.public ov49_02269BE0
-	.public ov49_02269C00
+	.public sWiFiPlazaPlayerStateOwnEntries
+	.public sWiFiPlazaArrivalMenuTemplate
 	.public ov49_02269C20
 	.public ov49_02269C40
-	.public ov49_02269C60
-	.public ov49_02269C90
-	.public ov49_02269D20
+	.public sWiFiPlazaWalkUpTileActions
+	.public sWiFiPlazaCheckTileActions
+	.public sWiFiPlazaStandTileActions
 	.public ov49_02269DF8
 	.public ov49_02269DFC
 	.public ov49_02269E1C
@@ -3371,21 +3371,21 @@
 	.public WiFiPlazaPropShow_Init
 	.public WiFiPlazaPropShow_StartFade
 	.public WiFiPlazaPropShow_Trigger
-	.public ov49_0225EF24
-	.public ov49_0225EF30
-	.public ov49_0225EF3C
-	.public ov49_0225EF84
-	.public ov49_0225EF88
-	.public ov49_0225EF8C
-	.public ov49_0225EF90
-	.public ov49_0225F068
-	.public ov49_0225F10C
-	.public ov49_0225F170
-	.public ov49_0225F180
-	.public ov49_0225F19C
-	.public ov49_0225F430
-	.public ov49_0225F438
-	.public ov49_02261540
+	.public WiFiPlazaPlayerState_Update
+	.public WiFiPlazaPlayerState_LateUpdate
+	.public WiFiPlazaPlayerState_GetArg
+	.public WiFiPlazaPlayerState_GetWork
+	.public WiFiPlazaPlayerState_GetStep
+	.public WiFiPlazaPlayerState_SetStep
+	.public WiFiPlazaPlayerState_NextStep
+	.public WiFiPlazaPlayerState_Init
+	.public WiFiPlazaPlayerState_SetActiveFlag
+	.public WiFiPlazaPlayerState_IsSavedFree
+	.public WiFiPlazaPlayerState_HasHandler
+	.public WiFiPlazaPlayerStateFrame_Clear
+	.public WiFiPlazaPlayerBounce_Stop
+	.public WiFiPlazaPlayerBounce_IsActive
+	.public WiFiPlazaPlayerState_FreeArrivalMenu
 	.public ov49_02262CA8
 	.public ov49_02262DF8
 	.public ov49_02262E04
@@ -3435,12 +3435,12 @@ ov49_02264CFC: ; 0x02264CFC
 	strb r2, [r0, #7]
 	add r0, r3, #0
 	add r1, sp
-	ldr r3, _02264D10 ; =ov49_0225EF8C
+	ldr r3, _02264D10 ; =WiFiPlazaPlayerState_SetStep
 	ldrb r1, [r1, #0x10]
 	bx r3
 	.balign 4, 0
 _02264D0C: .word 0xFFFFFFF0
-_02264D10: .word ov49_0225EF8C
+_02264D10: .word WiFiPlazaPlayerState_SetStep
 	thumb_func_end ov49_02264CFC
 
 
@@ -3457,7 +3457,7 @@ ov49_02264D14: ; 0x02264D14
 _02264D24:
 	add r0, r1, #0
 	ldrb r1, [r2, #7]
-	bl ov49_0225EF8C
+	bl WiFiPlazaPlayerState_SetStep
 	pop {r3, pc}
 	.balign 4, 0
 	thumb_func_end ov49_02264D14
@@ -3474,7 +3474,7 @@ ov49_02264D30: ; 0x02264D30
 	beq _02264D48
 	ldrb r1, [r5, #7]
 	add r0, r4, #0
-	bl ov49_0225EF8C
+	bl WiFiPlazaPlayerState_SetStep
 _02264D48:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0

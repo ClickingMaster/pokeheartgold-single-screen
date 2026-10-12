@@ -13,13 +13,13 @@ sub_020355DC: ; 0x020355DC
 	mov r0, #0
 	pop {r4, pc}
 _020355EC:
-	bl sub_02033298
+	bl Wireless_GetState
 	cmp r0, #4
 	beq _020355F8
 	mov r0, #0
 	pop {r4, pc}
 _020355F8:
-	bl sub_02033250
+	bl Wireless_GetConnectedBitmap
 	mov r2, #1
 	add r1, r2, #0
 	lsl r1, r4

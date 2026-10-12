@@ -25,17 +25,17 @@ typedef struct Ov49Residual60CopyBlock {
 } Ov49Residual60CopyBlock;
 
 extern u32 ov49_02269DFC[8];
-extern u8 ov49_02269B78[];
+extern u8 sWiFiPlazaPlayerStateOtherWait[];
 extern u8 ov49_02269B58[];
-extern u8 ov49_02269B40[];
+extern u8 sWiFiPlazaPlayerStateOtherPresent[];
 extern u8 gSystem[];
 
-u32 ov49_0225EF88(void *);
-void *ov49_0225EF84(void *);
-void *ov49_0225EF40(void *, u32);
-void ov49_0225EF68(void *);
-void ov49_0225EF90(void *);
-void ov49_0225EF8C(void *, u32);
+u32 WiFiPlazaPlayerState_GetStep(void *);
+void *WiFiPlazaPlayerState_GetWork(void *);
+void *WiFiPlazaPlayerState_AllocWork(void *, u32);
+void WiFiPlazaPlayerState_FreeWork(void *);
+void WiFiPlazaPlayerState_NextStep(void *);
+void WiFiPlazaPlayerState_SetStep(void *, u32);
 void ov49_0225A018(void *, u32);
 u8 ov49_0225A040(void *);
 void ov49_0225A37C(void *, u32, u32);
@@ -61,7 +61,7 @@ void *WiFiPlazaObj_FindById(void *, u32);
 u8 WiFiPlazaObj_IsFinished(void *);
 void WiFiPlazaObj_Delete(void *);
 void *ov49_0225A010(void *);
-void ov49_0225EF98(void *, u32, const void *, u32);
+void WiFiPlazaPlayerState_Set(void *, u32, const void *, u32);
 void *WiFiPlazaRoom_GetLobby(void *);
 BOOL ov45_0222A230(void *, u32);
 BOOL ov45_0222A550(void *, u32);
@@ -75,7 +75,7 @@ BOOL ov49_02261DBC(void *, void *, void *, void *, u32, u32);
 void ov49_0225A06C(void *, u32, u32);
 void ov49_0225A04C(void *, u32, u32);
 void ov49_02259130(void *, u32);
-void ov49_0225EFC4(void *, u32, const void *, void *);
+void WiFiPlazaPlayerState_Push(void *, u32, const void *, void *);
 BOOL WiFiPlazaMap_FindTileTag(void *, void *, u16 *, u16 *, u32);
 BOOL WiFiPlazaObj_FindAt(void *, u16, u16);
 

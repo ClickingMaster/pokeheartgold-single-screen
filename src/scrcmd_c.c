@@ -92,7 +92,7 @@
 #include "unk_0205BB1C.h"
 #include "map_object_movement_utilities.h"
 #include "map_object_movement_commands.h"
-#include "unk_020658D4.h"
+#include "map_object_follow.h"
 #include "unk_02067A80.h"
 #include "trainer_card_data.h"
 #include "unk_0206B910.h"
@@ -1329,7 +1329,7 @@ static BOOL _WaitMovementPauseBeforeMsg(ScriptContext *ctx) {
     }
 
     if (_CheckMovementPauseWaitFlag(8)) {
-        unk = sub_020660C0(*p_lastInteracted);
+        unk = MapObject_FindTrainerPartner(*p_lastInteracted);
         if (MapObject_CheckSingleMovement(unk) == FALSE) {
             MapObject_PauseMovement(unk);
             _ClearMovementPauseWaitFlag(8);
@@ -1354,7 +1354,7 @@ BOOL ScrCmd_LockLastTalked(ScriptContext *ctx) {
     LocalMapObject **p_lastInteracted = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_LAST_INTERACTED);
     LocalMapObject *playerObject = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
     LocalMapObject *unk = MapObjectManager_GetFirstActiveObjectWithMovement(fieldSystem->mapObjectManager, 0x30);
-    LocalMapObject *unk2 = sub_020660C0(*p_lastInteracted);
+    LocalMapObject *unk2 = MapObject_FindTrainerPartner(*p_lastInteracted);
     MapObjectManager *mapObjectManager = fieldSystem->mapObjectManager;
 
     _ResetMovementPauseWaitFlags();
@@ -4570,7 +4570,7 @@ BOOL ScrCmd_608(ScriptContext *ctx) {
 BOOL ScrCmd_609(ScriptContext *ctx) {
     if (FollowMon_IsActive(ctx->fieldSystem)) {
         LocalMapObject *object = MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, obj_partner_poke);
-        sub_020659CC(object);
+        FollowPlayerMovement_Reset(object);
     }
     return TRUE;
 }

@@ -52,30 +52,30 @@
 .public sub_020623D8
 .public MapObject_RunForcedMovement
 .public sub_02064518
-.public sub_020658D4
-.public sub_02065900
-.public sub_02065938
-.public sub_02065968
-.public sub_02065998
-.public sub_0206599C
-.public sub_020659A8
+.public FollowPlayerMovement_Init
+.public FollowPlayerMovement_UpdateFollowMon
+.public FollowPlayerMovement_Update
+.public FollowPlayerMovement_UpdateMirror
+.public FollowPlayerMovement_Delete
+.public FollowPlayerMovement_GetHopFrame
+.public FollowPlayerMovement_GetHopSpeed
 .public sub_020659B8
-.public sub_020659CC
-.public sub_02065FFC
-.public sub_02066024
-.public sub_02066054
-.public sub_02066058
-.public sub_020660C0
+.public FollowPlayerMovement_Reset
+.public FollowPartnerMovement_Init
+.public FollowPartnerMovement_Update
+.public FollowPartnerMovement_Delete
+.public FollowPartnerMovement_Resume
+.public MapObject_FindTrainerPartner
 .public sub_0206630C
 .public sub_02066318
 .public sub_02066324
 .public sub_02066330
-.public sub_0206633C
-.public sub_02066360
-.public sub_02066370
-.public sub_02066420
-.public sub_0206642C
-.public sub_02066438
+.public HiddenObjectMovement_Update
+.public HiddenObjectMovement_Delete
+.public HiddenObjectMovement_Resume
+.public HiddenObjectMovement_SetCoverEffect
+.public HiddenObjectMovement_GetCoverEffect
+.public HiddenObjectMovement_SetRevealed
 .public sub_02069DC8
 .public sub_02069E14
 .public sub_02069E28
@@ -95,39 +95,39 @@
 .public FollowMonObject_IsLarge
 .public MapObject_GetCoordsBehind
 
-	.public sub_02065A4C
-	.public sub_02065B70
-	.public sub_02065BE8
-	.public sub_02065C2C
-	.public sub_02065C48
+	.public FollowPlayerState_FollowMonStart
+	.public FollowPlayerState_Start
+	.public FollowPlayerState_MirrorStart
+	.public FollowPlayerState_Moving
+	.public FollowPlayerState_Hop
 	.public sub_02065C90
-	.public sub_02065CD0
-	.public sub_02065CFC
-	.public sub_02065D24
-	.public sub_02065D58
-	.public sub_02065D78
-	.public sub_02065DB4
-	.public sub_02065DF4
-	.public sub_02065F44
-	.public sub_02065FBC
-	.public sub_02066064
-	.public sub_020660A0
-	.public sub_02066150
-	.public sub_020661CC
-	.public sub_020661F0
-	.public sub_0206623C
-	.public sub_020662C4
-	.public sub_020663B4
-	.public sub_020663E4
-	.public sub_02066444
-	.public sub_020664D8
-	.public _020FE3CC
-	.public _020FE3D4
-	.public _020FE3DC
-	.public _020FE3E8
-	.public _020FE3F4
-	.public _020FE404
-	.public _020FE414
-	.public _020FE424
-	.public _020FE434
-	.public _020FE444
+	.public FollowPlayerMovement_CheckPlayer
+	.public FollowPlayerMovement_RecordPlayer
+	.public FollowPlayerMovement_HasPlayerMoved
+	.public FollowPlayerMovement_UpdatePlayerCoords
+	.public FollowMon_GetMovement
+	.public FollowPlayerMovement_GetPlayerMovement
+	.public FollowPlayerMovement_StartFollowMonStep
+	.public FollowPlayerMovement_StartStep
+	.public FollowPlayerMovement_StartMirrorStep
+	.public FollowPartnerState_Start
+	.public FollowPartnerState_Moving
+	.public FollowPartnerMovement_FindPartner
+	.public FollowPartnerMovement_SetPartner
+	.public FollowPartnerMovement_HasPartnerMoved
+	.public FollowPartnerMovement_StartStep
+	.public HiddenObjectMovement_Init
+	.public HiddenObjectState_CreateCover
+	.public HiddenObjectState_Wait
+	.public GetMovementSpeed
+	.public FollowMon_SpawnGrassEffects
+	.public gHiddenObjectStates
+	.public gFollowPartnerStates
+	.public gHiddenObjectOffset
+	.public gHiddenObjectResumeOffset
+	.public gStepMovements
+	.public gFollowMonFollowPlayerStates
+	.public gFollowPlayerStates
+	.public gMirrorPlayerStates
+	.public gRunMovements
+	.public gFastRunMovements

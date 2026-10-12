@@ -2,7 +2,7 @@
 #pragma once
 .public CopyWindowToVram
 .public GF_AssertFail
-.public sub_02033250
+.public Wireless_GetConnectedBitmap
 .public Comm_RegisterCommandTable
 .public CommCmd_GetSize0
 .public CommCmd_GetSize1

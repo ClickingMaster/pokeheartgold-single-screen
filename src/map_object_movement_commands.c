@@ -85,8 +85,8 @@ typedef struct VariableSpeedWalkWork {
 } VariableSpeedWalkWork;
 
 // Defined elsewhere without a header yet.
-int sub_0206642C(LocalMapObject *object);
-void sub_02066438(LocalMapObject *object);
+int HiddenObjectMovement_GetCoverEffect(LocalMapObject *object);
+void HiddenObjectMovement_SetRevealed(LocalMapObject *object);
 void TrainerReveal_Spawn(LocalMapObject *object);
 
 extern const MovementScriptStateFunc sMovementScriptMachineStateFuncs[];
@@ -1149,7 +1149,7 @@ BOOL MapObjectMovementCmd101_Step0(LocalMapObject *object) {
     int effect;
 
     sub_0205F3C0(object, sizeof(s32));
-    effect = sub_0206642C(object);
+    effect = HiddenObjectMovement_GetCoverEffect(object);
     if (effect) {
         FieldEffect_Destroy(effect);
     }
@@ -1176,7 +1176,7 @@ BOOL MapObjectMovementCmd101_Step1(LocalMapObject *object) {
     offset.y = 0;
     MapObject_SetFacingVector(object, &offset);
     MapObject_SetFlagsBits(object, (MapObjectFlagBits)(MAPOBJECTFLAG_UNK17 | MAPOBJECTFLAG_END_MOVEMENT | MAPOBJECTFLAG_UNK5));
-    sub_02066438(object);
+    HiddenObjectMovement_SetRevealed(object);
     MapObject_IncrementMovementStep(object);
     return TRUE;
 }

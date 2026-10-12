@@ -3713,54 +3713,54 @@
 	.public VsRecorder_IsNetIdle
 	.public VsRecorder_UpdateNet
 	.public VsRecorder_FreeNet
-	.public ov40_0223D618
-	.public ov40_0223D68C
-	.public ov40_0223D830
-	.public ov40_0223D874
-	.public ov40_0223D8D4
-	.public ov40_0223DB94
-	.public ov40_0223DBD4
-	.public ov40_0223DCF0
-	.public ov40_0223DD68
-	.public ov40_0223DDE8
-	.public ov40_0223DEB8
-	.public ov40_0223DF1C
-	.public ov40_0223E024
-	.public ov40_0223E064
-	.public ov40_0223E0A4
-	.public ov40_0223E190
-	.public ov40_0223E324
-	.public ov40_0223E33C
-	.public ov40_0223E494
-	.public ov40_0223E520
-	.public ov40_0223E6EC
-	.public ov40_0223E730
-	.public ov40_0223E848
-	.public ov40_0223E870
-	.public ov40_0223E9A4
-	.public ov40_0223EBB8
-	.public ov40_0223EC40
-	.public ov40_0223EDA8
-	.public ov40_0223EDE0
-	.public ov40_0223EFA4
-	.public ov40_0223F028
-	.public ov40_0223F16C
-	.public ov40_0223F200
-	.public ov40_0223F3E4
-	.public ov40_0223F59C
-	.public ov40_0223F6BC
-	.public ov40_0223F830
-	.public ov40_0223F848
-	.public ov40_0223F860
-	.public ov40_0223F880
-	.public ov40_0223F984
-	.public ov40_0223FCA0
-	.public ov40_0223FCB8
-	.public ov40_0223FCF8
-	.public ov40_0223FD38
-	.public ov40_0223FD50
-	.public ov40_0223FD68
-	.public ov40_0223FD80
+	.public VsRecorder_PlaceSearchResultIcons
+	.public VsRecorder_CreateSearchResultIcons
+	.public VsRecorder_SetSearchResultIconsDrawFlag
+	.public VsRecorder_FreeSearchResultIcons
+	.public VsRecorder_ScrollSearchResultIcons
+	.public VsRecorder_HasSearchConditions
+	.public VsRecorder_CreateSearchConditionWindows
+	.public VsRecorder_PrintSearchFacility
+	.public VsRecorder_PrintSearchSpecies
+	.public VsRecorder_PrintSearchLocation
+	.public VsRecorder_PrintLocationButtonLabel
+	.public VsRecorder_CreateSearchButtonWindows
+	.public VsRecorder_RemoveSearchWindows
+	.public VsRecorder_RemoveSearchButtonWindows
+	.public VsRecorder_CreateSearchResultWindows
+	.public VsRecorder_VideoSearchShowConditions
+	.public VsRecorder_VideoSearchConditionsMain
+	.public VsRecorder_VideoSearchExit
+	.public VsRecorder_VideoSearchOpenCondition
+	.public VsRecorder_VideoSearchSelectFacility
+	.public VsRecorder_VideoSearchClearSpecies
+	.public VsRecorder_CreateSearchCategoryWindows
+	.public VsRecorder_RemoveSearchCategoryWindows
+	.public VsRecorder_VideoSearchSelectCategory
+	.public VsRecorder_VideoSearchSelectSpecies
+	.public VsRecorder_SearchCategoryHasSeen
+	.public VsRecorder_BuildSearchSpeciesList
+	.public VsRecorder_FreeSearchSpeciesList
+	.public VsRecorder_VideoSearchSelectLocation
+	.public VsRecorder_VideoSearchReturnToConditions
+	.public VsRecorder_VideoSearchRequest
+	.public VsRecorder_VideoSearchLeaveConditions
+	.public VsRecorder_VideoSearchShowResults
+	.public VsRecorder_VideoSearchResultsMain
+	.public VsRecorder_VideoSearchResultsBack
+	.public VsRecorder_VideoSearchShowDetails
+	.public VsRecorder_VideoSearchDetailsMain
+	.public VsRecorder_VideoSearchToggleProfile
+	.public VsRecorder_VideoSearchPlay
+	.public VsRecorder_VideoSearchBackToResults
+	.public VsRecorder_VideoSearchShowSlots
+	.public VsRecorder_VideoSearchSlotsMain
+	.public VsRecorder_VideoSearchSlotsCancel
+	.public VsRecorder_VideoSearchReturnToDetails
+	.public VsRecorder_VideoSearchConfirmOverwrite
+	.public VsRecorder_VideoSearchOverwriteMain
+	.public VsRecorder_VideoSearchOverwriteNo
+	.public VsRecorder_VideoSearchSave
 	.public ov40_0223FD8C
 	.public ov40_0223FF8C
 	.public ov40_02240238
@@ -3962,35 +3962,35 @@
 	.public sVsRecorderVideoListIconPositions
 	.public sVsRecorderVideoListSubStates
 	.public ov40_02245648
-	.public ov40_0224564C
-	.public ov40_02245650
-	.public ov40_02245654
-	.public ov40_0224565C
+	.public sVsRecorderSearchResultOpenHitbox
+	.public sVsRecorderSearchBackHitbox
+	.public sVsRecorderSearchOverwriteHitboxes
+	.public sVsRecorderSearchButtonMsgIds
 	.public ov40_02245668
-	.public ov40_02245674
+	.public sVsRecorderSearchSaveSlotHitboxes
 	.public ov40_02245684
 	.public ov40_02245694
 	.public ov40_022456A4
-	.public ov40_022456B4
-	.public ov40_022456C4
+	.public sVsRecorderSearchDetailHitboxes
+	.public sVsRecorderSearchConditionHitboxes
 	.public ov40_022456D8
-	.public ov40_022456F0
-	.public ov40_02245708
-	.public ov40_0224572C
-	.public ov40_02245758
-	.public ov40_02245784
-	.public ov40_022457B0
-	.public ov40_022457DC
-	.public ov40_02245808
-	.public ov40_02245838
-	.public ov40_02245868
+	.public sVsRecorderSearchConditionMsgIds
+	.public sVsRecorderSpeciesGroupHitboxes
+	.public sVsRecorderSearchLocationListConfig
+	.public sVsRecorderSearchFacilityListConfig
+	.public sVsRecorderSearchFacilityListConfigLong
+	.public sVsRecorderSearchResultListConfig
+	.public sVsRecorderSearchSpeciesListConfig
+	.public sVsRecorderSearchListIconOrder
+	.public sVsRecorderSearchScrollIconOrder
+	.public sVsRecorderSearchButtonWindows
 	.public ov40_02245898
-	.public ov40_022458E8
-	.public ov40_02245948
+	.public sVsRecorderSearchConditionWindows
+	.public sVsRecorderSearchResultIconPositions
 	.public ov40_022459C0
 	.public ov40_02245B30
 	.public ov40_02245B44
-	.public ov40_02245B98
+	.public sVsRecorderVideoSearchSubStates
 	.public sVsRecorderNumberPadStates
 	.public sVsRecorderNumberPadStartX
 	.public sVsRecorderNumberPadKeys
@@ -3999,7 +3999,7 @@
 	.public ov40_02245CA8
 	.public ov40_02245CD4
 	.public ov40_02245CE8
-	.public ov40_02245E44
+	.public sVsRecorderSearchSpeciesGroupStarts
 	.public sVsRecorderDigitScalesOldGroup
 	.public sVsRecorderDigitScalesNewGroup
 	.include "overlay_40.inc"
@@ -4056,7 +4056,7 @@
 	.public VsRecorder_IsNetIdle
 	.public VsRecorder_UpdateNet
 	.public VsRecorder_FreeNet
-	.public ov40_0223FD80
+	.public VsRecorder_VideoSearchSave
 	.public ov40_0224147C
 	.public ov40_02242E48
 	.public VsRecorder_NumberPadSetState

@@ -73,9 +73,9 @@ extern u32 System_GetTouchNew(void);
 extern u32 System_GetTouchHeld(void);
 extern u32 LCRandom(void);
 
-void ov96_0220144C(s32 *, s32);
-void *ov96_0220146C(void *);
-u32 ov96_022014A4(void **, void **);
+void PokeathlonRelayRunCpu_WrapX(s32 *, s32);
+void *PokeathlonRelayRunCpu_PickBestCell(void *);
+u32 PokeathlonRelayRunCpu_SortCells(void **, void **);
 u32 ov96_02201B18(void *);
 u32 ov96_02201B34(void *);
 void ov96_02201C90(void);

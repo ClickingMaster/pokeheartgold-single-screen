@@ -31,16 +31,12 @@ struct UnkStruct_Ov01_021EF4C4 {
 
 struct UnkStruct_ov01_021EDC28;
 
-typedef struct UnkStruct_field_021F4360 {
-    // TODO: Fill this in
-} UnkStruct_field_021F4360;
-
 void FieldSystem_DrawMapNameAnimation(FieldSystem *fieldSystem);
 u32 GetHoneySweetScentWorkSize(void);
 BOOL Task_HoneyOrSweetScent(TaskManager *taskManager);
 BOOL Task_OverworldFish(TaskManager *taskManager);
 struct FishingRodWork *CreateFishingRodTaskEnv(FieldSystem *fieldSystem, enum HeapID heapID, int rod);
-void ov01_021F4440(FieldSystem *fieldSystem);
+void FieldSystem_TryStorePlayerLocation(FieldSystem *fieldSystem);
 void ov01_021F6A9C(FieldSystem *fieldSystem, int a1, void *a2);
 int ov01_021F6B00(FieldSystem *fieldSystem);
 int ov01_021F6AEC(FieldSystem *fieldSystem);
@@ -128,9 +124,9 @@ Window *ov01_021EEF68(FieldSystem *fieldSystem, u16 a1);
 void ov01_021EEF88(Window *window);
 BOOL FollowMon_IsNextToPlayer(FieldSystem *fieldSystem);
 
-void ov01_021F42F8(UnkStruct_field_021F4360 *a0);
-void ov01_021F434C(UnkStruct_field_021F4360 *a0);
-UnkStruct_field_021F4360 *ov01_021F4360(FieldSystem *fieldSystem, enum HeapID heapID, u8 a2);
-void ov01_021F43D0(UnkStruct_field_021F4360 *a0);
+void Field_SaveStatsPrinter_PrintTouchSave(struct SaveStatsPrinter *printer);
+void Field_SaveStatsPrinter_RemoveTouchSave(struct SaveStatsPrinter *printer);
+struct SaveStatsPrinter *Field_SaveStatsPrinter_NewTouchSave(FieldSystem *fieldSystem, enum HeapID heapID, u8 bgId);
+void Field_SaveStatsPrinter_DeleteTouchSave(struct SaveStatsPrinter *printer);
 
 #endif // POKEHEARTGOLD_OVERLAY_01_H

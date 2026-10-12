@@ -104,7 +104,7 @@
 .public String_Delete
 .public PlayerName_FlatToString
 .public Options_GetFrame
-.public sub_02033250
+.public Wireless_GetConnectedBitmap
 .public CommPlayerInfo_GetProfile
 .public sub_020356EC
 .public Comm_SendCommand

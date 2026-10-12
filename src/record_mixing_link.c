@@ -40,7 +40,7 @@ void RecordMixingLink_HandleJoinRequest(int sender, int unused, void *data, Reco
         packet.count = room->participantCount;
         switch (src->command) {
         case 0:
-            if (room->participantCount != Comm_CountConnected() || room->participantCount != ov73_021E7488() || room->participantCount != MATH_CountPopulation(sub_02033250())) {
+            if (room->participantCount != Comm_CountConnected() || room->participantCount != ov73_021E7488() || room->participantCount != MATH_CountPopulation(Wireless_GetConnectedBitmap())) {
                 packet.accepted = 0;
             } else {
                 room->participantMask |= 1 << sender;

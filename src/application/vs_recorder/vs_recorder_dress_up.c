@@ -46,7 +46,7 @@ extern const TouchscreenHitbox ov40_022451D0;    // top bar (photo / profile)
 extern const TouchscreenHitbox ov40_022451D4;    // previous photo
 extern const TouchscreenHitbox ov40_022451D8;    // next photo
 extern const VsRecorderListConfig ov40_022451F4; // species list
-extern const TouchscreenHitbox ov40_02245708[];  // species groups (9)
+extern const TouchscreenHitbox sVsRecorderSpeciesGroupHitboxes[];  // species groups (9)
 extern const u16 ov40_02245CD4[];                // first species list index of each group
 
 BOOL VsRecorder_FrontierExit(VsRecorderWork *work) {
@@ -468,7 +468,7 @@ BOOL VsRecorder_DressUpViewSelectCategory(VsRecorderWork *work) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
-        dressUp->hitboxes = TouchHitboxController_Create(ov40_02245708, 9, VsRecorder_OnDressUpCategoryTouch, work, HEAP_ID_109);
+        dressUp->hitboxes = TouchHitboxController_Create(sVsRecorderSpeciesGroupHitboxes, 9, VsRecorder_OnDressUpCategoryTouch, work, HEAP_ID_109);
         work->step++;
         break;
     case 1:
@@ -1313,7 +1313,7 @@ void VsRecorder_CreateDressUpCategoryWindows(VsRecorderWork *work) {
     const TouchscreenHitbox *hitbox;
 
     baseTile = 1;
-    hitbox = ov40_02245708;
+    hitbox = sVsRecorderSpeciesGroupHitboxes;
     for (i = 0, window = ((VsRecorderDressUp *)work->screenWork)->windows; i < 9; i++) {
         x = hitbox->rect.left >> 3;
         y = hitbox->rect.top >> 3;

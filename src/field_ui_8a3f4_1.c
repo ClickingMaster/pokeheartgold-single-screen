@@ -91,7 +91,7 @@ BOOL sub_0208A564(u8 *work) {
         PokemonSummary_PrintMoveToLearn(work);
         sub_0208A79C(work);
         thunk_Sprite_SetDrawFlag(*(void **)(work + 0x430), 1);
-        sub_0208C068(work);
+        PokemonSummary_ShowMonIconSprite(work);
         if (work[0x240] != work[0x241]) {
             thunk_Sprite_SetDrawFlag(*(void **)(work + 0x434), 1);
         }
@@ -128,7 +128,7 @@ BOOL sub_0208A63C(u8 *work) {
         ScheduleWindowCopyToVram(work + 0x1F4);
         ScheduleWindowCopyToVram(work + 0x44);
         Sprite_SetDrawFlag(*(void **)(work + 0x428), 1);
-        sub_0208B400(work);
+        PokemonSummary_UpdatePartySlotSprite(work);
         work[0x7BE] = 0;
         return TRUE;
     }

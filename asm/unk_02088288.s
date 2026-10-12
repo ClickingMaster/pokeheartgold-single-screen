@@ -121,17 +121,17 @@ PokemonSummary_Init: ; 0x02088298
 	add r0, r4, #0
 	bl sub_020897C0
 	add r0, r4, #0
-	bl sub_0208B1AC
+	bl PokemonSummary_InitSpriteSystem
 	add r0, r4, #0
-	bl sub_0208B2C0
+	bl PokemonSummary_CreateSprites
 	add r0, r4, #0
 	bl PokemonSummary_CreatePokepic
 	add r0, r4, #0
-	bl sub_0208B48C
+	bl PokemonSummary_LoadBallSprite
 	add r0, r4, #0
-	bl sub_0208B4EC
+	bl PokemonSummary_UpdateStatusSprite
 	add r0, r4, #0
-	bl sub_0208BECC
+	bl PokemonSummary_LoadPartyIcons
 	add r0, r4, #0
 	bl PokemonSummary_AddWindows
 	add r0, r4, #0
@@ -318,7 +318,7 @@ _02088544:
 	str r0, [r4]
 _0208854A:
 	add r0, r5, #0
-	bl sub_0208B278
+	bl PokemonSummary_UpdateSpriteAnims
 	add r0, r5, #0
 	bl sub_0208C3C0
 	mov r0, #1
@@ -343,7 +343,7 @@ PokemonSummary_Exit: ; 0x0208856C
 	add r0, r4, #0
 	bl PokemonSummary_FreePokepicAndCamera
 	add r0, r4, #0
-	bl sub_0208B258
+	bl PokemonSummary_FreeSpriteSystem
 	add r0, r4, #0
 	bl PokemonSummary_RemoveWindows
 	ldr r0, [r4]

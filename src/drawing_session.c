@@ -29,7 +29,7 @@
 #include "touchscreen.h"
 #include "oam_manager.h"
 #include "touchpad.h"
-#include "unk_02032844.h"
+#include "wireless_manager.h"
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
@@ -193,7 +193,7 @@ BOOL DrawingSession_Init(OverlayManager *man, int *state) {
 BOOL DrawingSession_Main(OverlayManager *man, int *state) {
     DrawingSessionWork *work = OverlayManager_GetData(man);
     if (!Comm_GetLocalNetId() && work->unk_93B4) {
-        work->unk_93B4 &= sub_02033250();
+        work->unk_93B4 &= Wireless_GetConnectedBitmap();
     }
     work->mainState = *state;
     DrawingSession_ApplyNextSubState(work, *state);
@@ -278,7 +278,7 @@ BOOL DrawingSession_Exit(OverlayManager *man, int *state) {
         break;
     case 2:
         if (work->unk_9400 != 0) {
-            if (sub_02033250() == 1) {
+            if (Wireless_GetConnectedBitmap() == 1) {
                 (*state)++;
             }
         } else {
@@ -356,7 +356,7 @@ void DrawingSession_InitWork(DrawingSessionWork *work) {
     work->unk_93F4 = 1;
     work->yesNoActive = FALSE;
     work->unk_318 = 2;
-    work->unk_31C = sub_02033250();
+    work->unk_31C = Wireless_GetConnectedBitmap();
     work->unk_93FC = 0;
     work->unk_9400 = 0;
     work->subState = 0;
@@ -582,7 +582,7 @@ void DrawingSession_HandleTouch(DrawingSessionWork *work) {
         case 8:
             if (work->subState == 4) {
                 if (Comm_GetLocalNetId() == 0) {
-                    if (work->unk_31C != sub_02033250()) {
+                    if (work->unk_31C != Wireless_GetConnectedBitmap()) {
                         PlaySE(SEQ_SE_DP_CUSTOM06);
                         break;
                     }
@@ -1408,7 +1408,7 @@ int ov37_021E76F0(DrawingSessionWork *work) {
     switch (count) {
     case 1:
         if (work->subState <= 14) {
-            if (sub_02033250() != 1) {
+            if (Wireless_GetConnectedBitmap() != 1) {
                 work->unk_9400 = 1;
             }
             work->nextSubState = 19;
@@ -1440,7 +1440,7 @@ int ov37_021E76F0(DrawingSessionWork *work) {
     }
     if (count < work->memberCount) {
         work->unk_318 = Comm_CountConnected();
-        work->unk_31C = sub_02033250();
+        work->unk_31C = Wireless_GetConnectedBitmap();
         if (work->unk_9404 && !(work->unk_31C & work->unk_9408)) {
             ov37_021E76D0(work, 1);
             work->unk_93F4 = 1;
@@ -1452,7 +1452,7 @@ int ov37_021E76F0(DrawingSessionWork *work) {
     if (work->unk_318 < Comm_CountConnected()) {
         work->unk_93F4 = 2;
         work->unk_9404 = 1;
-        work->unk_9408 = sub_02033250() ^ work->unk_31C;
+        work->unk_9408 = Wireless_GetConnectedBitmap() ^ work->unk_31C;
         GF_ASSERT(DrawingSession_IsOneMemberBit(work->unk_9408));
     }
     return 1;

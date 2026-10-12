@@ -12,11 +12,11 @@
 	.include "unk_020658D4.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02066444
-sub_02066444: ; 0x02066444
+	thumb_func_start GetMovementSpeed
+GetMovementSpeed: ; 0x02066444
 	push {r3, r4, r5, lr}
 	sub sp, #0x30
-	ldr r5, _020664CC ; =_020FE3F4
+	ldr r5, _020664CC ; =gStepMovements
 	add r3, r0, #0
 	ldmia r5!, {r0, r1}
 	add r4, sp, #0x20
@@ -24,13 +24,13 @@ sub_02066444: ; 0x02066444
 	stmia r4!, {r0, r1}
 	ldmia r5!, {r0, r1}
 	stmia r4!, {r0, r1}
-	ldr r5, _020664D0 ; =_020FE434
+	ldr r5, _020664D0 ; =gRunMovements
 	add r4, sp, #0x10
 	ldmia r5!, {r0, r1}
 	stmia r4!, {r0, r1}
 	ldmia r5!, {r0, r1}
 	stmia r4!, {r0, r1}
-	ldr r5, _020664D4 ; =_020FE444
+	ldr r5, _020664D4 ; =gFastRunMovements
 	add r4, sp, #0
 	ldmia r5!, {r0, r1}
 	stmia r4!, {r0, r1}
@@ -88,12 +88,12 @@ _020664B8:
 	add sp, #0x30
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-_020664CC: .word _020FE3F4
-_020664D0: .word _020FE434
-_020664D4: .word _020FE444
-	thumb_func_end sub_02066444
-	thumb_func_start sub_020664D8
-sub_020664D8: ; 0x020664D8
+_020664CC: .word gStepMovements
+_020664D0: .word gRunMovements
+_020664D4: .word gFastRunMovements
+	thumb_func_end GetMovementSpeed
+	thumb_func_start FollowMon_SpawnGrassEffects
+FollowMon_SpawnGrassEffects: ; 0x020664D8
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -180,4 +180,4 @@ _02066596:
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end sub_020664D8
+	thumb_func_end FollowMon_SpawnGrassEffects

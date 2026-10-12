@@ -2,7 +2,7 @@
 #pragma once
 .public PlaySE
 .public LCRandom
-.public sub_02033250
+.public Wireless_GetConnectedBitmap
 .public Comm_RegisterCommandTable
 .public sub_02036FD8
 .public Comm_SendCommand

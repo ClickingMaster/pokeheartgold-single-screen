@@ -39,8 +39,8 @@ void sub_02034DF0(int value) {
     *(u32 *)(_021D4134.work + 0xD70) = 0;
     buffer = *(u8 **)(_021D4134.work + 0xD64);
     misalignment = (u32)buffer & 0x1F;
-    sub_02033528(buffer + (0x20 - misalignment), value);
-    sub_02033234(*(void **)(_021D4134.work + 0xD80));
+    Wireless_Init(buffer + (0x20 - misalignment), value);
+    Wireless_SetGgid(*(void **)(_021D4134.work + 0xD80));
 }
 
 void sub_02034E2C(void) {
@@ -71,14 +71,14 @@ BOOL sub_02034EF0(int unused, BOOL active, BOOL flag) {
     (void)unused;
     sub_02034E8C();
     sub_02034E64(active);
-    sub_02033A68();
+    Wireless_ClearBeaconCount();
     if (_021D4134.work[0xD93] == 0) {
-        sub_020337D0(sub_02036904, 14);
+        Wireless_SetReceiveCallback(sub_02036904, 14);
         _021D4134.work[0xD93] = 1;
     }
     bit = flag;
     _021D4134.work[0xD95] = (_021D4134.work[0xD95] & ~0x20) | ((bit & 1) << 5);
-    if (sub_02033298() == 1 && sub_020332C0() != 0) {
+    if (Wireless_GetState() == 1 && Wireless_StartMeasureChannels() != 0) {
         return TRUE;
     }
     return FALSE;
@@ -92,12 +92,12 @@ BOOL sub_02034F64(int unused, BOOL configure) {
         sub_02034E2C();
     }
     if (_021D4134.work[0xD93] == 0) {
-        sub_020337D0(sub_020367A8, 14);
+        Wireless_SetReceiveCallback(sub_020367A8, 14);
         _021D4134.work[0xD93] = 1;
     }
-    if (sub_02033298() == 1) {
+    if (Wireless_GetState() == 1) {
         data = _020F6A88;
-        if (sub_02032C1C((void (*)(void *))sub_02034C20, &data, 0) != 0) {
+        if (Wireless_StartScan((void (*)(void *))sub_02034C20, &data, 0) != 0) {
             return TRUE;
         }
     }
@@ -110,25 +110,25 @@ BOOL sub_02034FE8(void) {
     }
     switch (_021D4134.work[0xD94]) {
     case 0:
-        if (sub_02033990() != 0) {
-            sub_02032E24();
+        if (Wireless_IsScanning() != 0) {
+            Wireless_StopScan();
             _021D4134.work[0xD94] = 1;
-        } else if (sub_0203393C() == 0) {
-            sub_02033858();
+        } else if (Wireless_IsBusy() == 0) {
+            Wireless_Stop();
             _021D4134.work[0xD94] = 2;
         }
         break;
     case 1:
-        if (sub_0203393C() == 0) {
-            sub_02033858();
+        if (Wireless_IsBusy() == 0) {
+            Wireless_Stop();
             _021D4134.work[0xD94] = 2;
         }
         break;
     case 2:
-        if (sub_02033920() != 0) {
+        if (Wireless_IsIdle() != 0) {
             return TRUE;
         }
-        if (sub_02033958() != 0) {
+        if (Wireless_HasError() != 0) {
             _021D4134.work[0xD94] = 1;
         }
         break;
@@ -139,7 +139,7 @@ BOOL sub_02034FE8(void) {
 BOOL sub_0203507C(void) {
     if (_021D4134.work != NULL && _021D4134.work[0xD92] == 0) {
         _021D4134.work[0xD92] = 1;
-        sub_02033858();
+        Wireless_Stop();
         return 1;
     }
     return 0;

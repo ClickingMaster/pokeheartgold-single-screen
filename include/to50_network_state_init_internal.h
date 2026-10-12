@@ -12,7 +12,7 @@ typedef struct NetworkState {
     u8 *work;
 } NetworkState;
 extern NetworkState _021D4134;
-u32 sub_020335B4(void);
+u32 Wireless_GetWorkSize(void);
 void sub_02034DF0(int value);
 u16 WM_GetNextTgid(void);
 void sub_02034B0C(int value, int mode);

@@ -49,7 +49,7 @@ void sub_0208F918(void *a, void *b, void *c, DrawingSessionLinkWork *work) {
     MIi_CpuClearFast(0, (u32 *)&work->raw[0x43d0], 0x3840);
     if (Comm_GetLocalNetId() == 0) {
         U32(work, 0x318) = Comm_CountConnected();
-        U32(work, 0x31c) = sub_02033250();
+        U32(work, 0x31c) = Wireless_GetConnectedBitmap();
         U32(work, 0x93f4) = 1;
     }
 }
@@ -65,7 +65,7 @@ void DrawingSessionLink_HandleJoinRequest(int id, void *unused, const FourBytes 
         local.data[1] = U32(work, 0x318);
         switch (packet->data[2]) {
         case 0:
-            if (Comm_CountConnected() != U32(work, 0x318) || DrawingSession_GetMemberCount() != U32(work, 0x318) || MATH_CountPopulation(sub_02033250()) != U32(work, 0x318)) {
+            if (Comm_CountConnected() != U32(work, 0x318) || DrawingSession_GetMemberCount() != U32(work, 0x318) || MATH_CountPopulation(Wireless_GetConnectedBitmap()) != U32(work, 0x318)) {
                 local.data[3] = 0;
             } else {
                 U32(work, 0x93b4) |= 1 << id;

@@ -33,7 +33,7 @@
 #include "touchscreen.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_02032844.h"
+#include "wireless_manager.h"
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
@@ -321,7 +321,7 @@ BOOL RecordMixing_Main(OverlayManager *man, int *state) {
     RecordMixingApp *app = OverlayManager_GetData(man);
 
     if (Comm_GetLocalNetId() == 0 && app->unk_4A24 != 0) {
-        app->unk_4A24 &= sub_02033250();
+        app->unk_4A24 &= Wireless_GetConnectedBitmap();
     }
     switch (*state) {
     case 0:
@@ -1585,7 +1585,7 @@ int ov73_021E7870(RecordMixingApp *app, int arg1) {
     }
     switch (n) {
     case 1:
-        if (Comm_CountConnected() > 1 || sub_02033250() > 1) {
+        if (Comm_CountConnected() > 1 || Wireless_GetConnectedBitmap() > 1) {
             return 1;
         }
         app->state = 17;

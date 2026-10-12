@@ -49,7 +49,7 @@
 #include "sys_vars.h"
 #include "sound_playback.h"
 #include "unk_02031B0C.h"
-#include "unk_02032844.h"
+#include "wireless_manager.h"
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
@@ -381,7 +381,7 @@ static BOOL ov01_021E6ED8() { // CheckTrainerInfo?
 }
 
 BOOL FieldInput_Process_UnionRoom(FieldInput *input, FieldSystem *fieldSystem) {
-    if (sub_02033250() & 0xFE) {                     // WirelessManager_GetConnectedBitmap?
+    if (Wireless_GetConnectedBitmap() & 0xFE) {                     // WirelessManager_GetConnectedBitmap?
         if (ov01_021E6ED8() && Comm_CountConnected() > 1) { // Comm_CountConnected == CommSys_ConnectedCount?
             StartMapSceneScript(fieldSystem, 5, NULL);
             return TRUE;

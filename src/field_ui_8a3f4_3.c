@@ -5,7 +5,7 @@ void sub_0208A8F4(u8 *work) {
     PokemonSummary_PrintMoveToLearn(work);
     sub_0208A79C(work);
     thunk_Sprite_SetDrawFlag(*(void **)(work + 0x430), 1);
-    sub_0208C068(work);
+    PokemonSummary_ShowMonIconSprite(work);
     if (work[0x240] != work[0x241]) {
         thunk_Sprite_SetDrawFlag(*(void **)(work + 0x434), 1);
     }
@@ -15,16 +15,16 @@ void sub_0208A8F4(u8 *work) {
 void sub_0208A950(u8 *work) {
     PokemonSummary_PrintMoveToLearn(work);
     sub_0208A79C(work);
-    sub_0208C068(work);
+    PokemonSummary_ShowMonIconSprite(work);
     if (*(s8 *)(work + 0x7BC) == 1) {
-        sub_0208C208(work);
+        PokemonSummary_HideConditionSprites(work);
         thunk_Sprite_SetDrawFlag(*(void **)(work + 0x430), 1);
         if (work[0x240] != work[0x241]) {
             thunk_Sprite_SetDrawFlag(*(void **)(work + 0x434), 1);
         }
         ScheduleSetBgPosText(*(void **)work, 2, 3, 0);
     } else {
-        sub_0208C0E8(work);
+        PokemonSummary_ShowConditionSprites(work);
         ScheduleSetBgPosText(*(void **)work, 2, 3, 0x100);
     }
 }
@@ -67,7 +67,7 @@ BOOL sub_0208AA9C(u8 *work) {
         work[0x7C5] = 0;
         ClearWindowTilemapAndScheduleTransfer(*(u8 **)(work + 0x224) + 0x10);
         ClearWindowTilemapAndScheduleTransfer(*(u8 **)(work + 0x224) + 0x20);
-        sub_0208C2A0(work);
+        PokemonSummary_ShowRibbonSprites(work);
         work[0x7BE] = 1;
         break;
     case 1:

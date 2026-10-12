@@ -22,7 +22,7 @@ void PokeathlonCourseSpritePoolSprite_Show(void *handle, int a, int b);
 void PokeathlonCourseSpritePoolSprite_SetAnim(void *handle, int a);
 void PokeathlonCourseSpritePoolSprite_SetPosition(void *handle, VecFx32 *pos);
 void Sprite_SetMatrix(void *sprite, VecFx32 *pos);
-void ov96_02200D7C(void *ctx, Work *w);
+void PokeathlonRelayRunHud_GetPicVramOffsets(void *ctx, Work *w);
 void ov96_02200C8C(void *ctx, Work *w);
 
 // @fn ov96_02200C8C
@@ -49,5 +49,5 @@ void ov96_02200C8C(void *ctx, Work *w) {
         PokeathlonCourseSpritePoolSprite_SetPosition(w->extra[i], &pos);
         PokeathlonCourseSpritePoolSprite_Show(w->extra[i], 1, 0);
     }
-    ov96_02200D7C(ctx, w);
+    PokeathlonRelayRunHud_GetPicVramOffsets(ctx, w);
 }

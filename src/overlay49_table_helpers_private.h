@@ -11,7 +11,7 @@ typedef struct Config49 {
     u8 action7;
 } Config49;
 
-void ov49_0225EF8C(void *, u8);
+void WiFiPlazaPlayerState_SetStep(void *, u8);
 BOOL WiFiPlazaRoom_IsMessageFinished(void *);
 u32 WiFiPlazaPlayer_GetLanguage(void *);
 void *WiFiPlazaRoom_GetMsgString(void *, u32, u32);

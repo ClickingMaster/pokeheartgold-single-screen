@@ -50,7 +50,7 @@ int sub_02088D48(SummaryMoveWork *work) {
 
 int sub_02088E68(SummaryMoveWork *work) {
     sub_0208AFA0(work, 0);
-    sub_0208BC78(work);
+    PokemonSummary_ShowSwapCursorSprite(work);
     work->selectionHigh = work->selectionLow;
     return 6;
 }
@@ -78,7 +78,7 @@ int sub_02088E98(SummaryMoveWork *work) {
         if (work->selectionLow != work->selectionHigh) {
             PlaySE(0x5DD);
             sub_0208A834(work);
-            sub_0208BB24(work, work->selectionLow, work->selectionHigh);
+            PokemonSummary_SwapMoveTypeSprites(work, work->selectionLow, work->selectionHigh);
             PokemonSummary_PrintSwappedMoves(work);
             sub_0208A79C(work);
         } else {
@@ -106,7 +106,7 @@ int sub_02088E98(SummaryMoveWork *work) {
             work->selectionLow = index;
             PlaySE(0x5DD);
             sub_0208A834(work);
-            sub_0208BB24(work, work->selectionLow, work->selectionHigh);
+            PokemonSummary_SwapMoveTypeSprites(work, work->selectionLow, work->selectionHigh);
             PokemonSummary_PrintSwappedMoves(work);
             sub_0208A79C(work);
         } else {
@@ -181,7 +181,7 @@ int sub_02089028(SummaryMoveWork *work) {
             PlaySE(0x5DD);
             work->selectionLow = index;
             thunk_Sprite_SetDrawFlag(work->sprite44C, FALSE);
-            sub_0208BBDC(work);
+            PokemonSummary_UpdateMoveCursorSprite(work);
             sub_0208DBF0(work);
             return 8;
         }

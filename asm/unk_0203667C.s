@@ -93,7 +93,7 @@ _0203672E:
 	blt _02036714
 	pop {r3, r4, r5, r6, r7, pc}
 _02036738:
-	bl sub_02033298
+	bl Wireless_GetState
 	cmp r0, #4
 	bne _02036796
 	ldr r0, _020367A0 ; =gCommSendStages

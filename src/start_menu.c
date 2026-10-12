@@ -1004,7 +1004,7 @@ static BOOL Task_StartMenu_Bag(TaskManager *taskManager) {
     startMenu->exitTaskEnvironment = sub_0203E3FC(fieldSystem, &startMenu->itemCheckUseData);
     sub_020778E0(startMenu->exitTaskEnvironment, 0);
     startMenu->exitTaskFunc = Task_StartMenu_HandleReturn;
-    ov01_021F4440(fieldSystem);
+    FieldSystem_TryStorePlayerLocation(fieldSystem);
     return FALSE;
 }
 

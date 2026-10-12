@@ -26,7 +26,7 @@ void sub_02093354(u32);
 u32 sub_020932E0(u32, u32, u32);
 void sub_02093440(u32, BgConfig *, PCStorage *, Party *, u32, u32, BOOL, u32, void *, void *, void *, void *, PokeathlonBox *);
 void sub_02093594(u32);
-s8 sub_0208B85C(void *, u8, u8, u32, s8);
+s8 PokemonSummary_GetPokeathlonStarStates(void *, u8, u8, u32, s8);
 
 #define pokeathlonBoxObjCharTransferTemplate _0221FC98
 #define pokeathlonBoxGraphicsModes           ov97_0221FCA8
@@ -401,11 +401,11 @@ void ov97_0221EC14(int boxno, u8 slot, PokeathlonBox *data) {
 }
 
 void ov97_0221EDE4(PokeathlonBox_MonStats *stats1, PokeathlonBox_MonStats *stats2, PartyAprijuiceModifier *aprijuiceModifier, PokeathlonBox_UnkStruct0221EC14 *mon) {
-    mon->statChanges[0].direction = sub_0208B85C(mon->statChanges[0].stars, stats1->power, stats2->power, (u32)(stats2->stars << 0x1D) >> 0x1D, aprijuiceModifier->unk_00[0]);
-    mon->statChanges[1].direction = sub_0208B85C(mon->statChanges[1].stars, stats1->skill, stats2->skill, (u32)(stats2->stars << 0x14) >> 0x1D, aprijuiceModifier->unk_00[1]);
-    mon->statChanges[2].direction = sub_0208B85C(mon->statChanges[2].stars, stats1->speed, stats2->speed, (u32)(stats2->stars << 0x11) >> 0x1D, aprijuiceModifier->unk_00[2]);
-    mon->statChanges[3].direction = sub_0208B85C(mon->statChanges[3].stars, stats1->jump, stats2->jump, (u32)(stats2->stars << 0x17) >> 0x1D, aprijuiceModifier->unk_00[3]);
-    mon->statChanges[4].direction = sub_0208B85C(mon->statChanges[4].stars, stats1->stamina, stats2->stamina, (u32)(stats2->stars << 0x1A) >> 0x1D, aprijuiceModifier->unk_00[4]);
+    mon->statChanges[0].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[0].stars, stats1->power, stats2->power, (u32)(stats2->stars << 0x1D) >> 0x1D, aprijuiceModifier->unk_00[0]);
+    mon->statChanges[1].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[1].stars, stats1->skill, stats2->skill, (u32)(stats2->stars << 0x14) >> 0x1D, aprijuiceModifier->unk_00[1]);
+    mon->statChanges[2].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[2].stars, stats1->speed, stats2->speed, (u32)(stats2->stars << 0x11) >> 0x1D, aprijuiceModifier->unk_00[2]);
+    mon->statChanges[3].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[3].stars, stats1->jump, stats2->jump, (u32)(stats2->stars << 0x17) >> 0x1D, aprijuiceModifier->unk_00[3]);
+    mon->statChanges[4].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[4].stars, stats1->stamina, stats2->stamina, (u32)(stats2->stars << 0x1A) >> 0x1D, aprijuiceModifier->unk_00[4]);
 }
 
 PokeathlonBox_Graphics *PokeathlonBox_InitGraphics(enum HeapID heapID) {

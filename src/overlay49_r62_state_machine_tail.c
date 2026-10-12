@@ -12,43 +12,43 @@ typedef struct Ov49R62MenuWork {
     } while (0)
 
 BOOL ov49_022644E8(void *state, void *ctx) {
-    Ov49R62MenuWork *work = ov49_0225EF84(state);
+    Ov49R62MenuWork *work = WiFiPlazaPlayerState_GetWork(state);
     void *object = WiFiPlazaRoom_GetLobby(ctx);
     u32 selected;
     u32 choice;
 
-    switch (ov49_0225EF88(state)) {
+    switch (WiFiPlazaPlayerState_GetStep(state)) {
     case 0:
-        ov49_0225EF40(state, 0x28);
+        WiFiPlazaPlayerState_AllocWork(state, 0x28);
         PlaySE(0x5DC);
         if (ov45_0222A330(object) == 1) {
-            ov49_0225EF8C(state, 2);
+            WiFiPlazaPlayerState_SetStep(state, 2);
         } else if (ov45_0222A374(object) == 1) {
-            ov49_0225EF8C(state, 1);
+            WiFiPlazaPlayerState_SetStep(state, 1);
         } else {
-            ov49_0225EF8C(state, 3);
+            WiFiPlazaPlayerState_SetStep(state, 3);
         }
         break;
     case 1:
         SHOW_MESSAGE(ctx, work, 0x4E, 0x18);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 2:
         SHOW_MESSAGE(ctx, work, 3, 0x18);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 3:
         SHOW_MESSAGE(ctx, work, 0xF, 4);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 4:
         SHOW_MESSAGE(ctx, work, 0x10, 5);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 5:
         ov49_02265110(work->menu, ctx);
         ov49_0225A1A4(ctx, work->menu, 0, 0, 0x10, 1, 0xF);
-        ov49_0225EF8C(state, 6);
+        WiFiPlazaPlayerState_SetStep(state, 6);
         break;
     case 6:
         selected = FALSE;
@@ -60,37 +60,37 @@ BOOL ov49_022644E8(void *state, void *ctx) {
             }
             break;
         case 0:
-            ov49_0225EF8C(state, 7);
+            WiFiPlazaPlayerState_SetStep(state, 7);
             selected = TRUE;
             break;
         case 1:
-            ov49_0225EF8C(state, 8);
+            WiFiPlazaPlayerState_SetStep(state, 8);
             selected = TRUE;
             break;
         case 2:
-            ov49_0225EF8C(state, 0xD);
+            WiFiPlazaPlayerState_SetStep(state, 0xD);
             selected = TRUE;
             break;
         case 3:
-            ov49_0225EF8C(state, 0xE);
+            WiFiPlazaPlayerState_SetStep(state, 0xE);
             selected = TRUE;
             break;
         case 4:
-            ov49_0225EF8C(state, 0xF);
+            WiFiPlazaPlayerState_SetStep(state, 0xF);
             selected = TRUE;
             break;
         case 5:
-            ov49_0225EF8C(state, 0x15);
+            WiFiPlazaPlayerState_SetStep(state, 0x15);
             selected = TRUE;
             break;
         case 6:
-            ov49_0225EF8C(state, 0x10);
+            WiFiPlazaPlayerState_SetStep(state, 0x10);
             selected = TRUE;
             break;
 cancel_menu1:
             PlaySE(0x5DC);
         case 7:
-            ov49_0225EF8C(state, 0x16);
+            WiFiPlazaPlayerState_SetStep(state, 0x16);
             selected = TRUE;
             break;
         }
@@ -101,12 +101,12 @@ cancel_menu1:
         break;
     case 7:
         SHOW_MESSAGE(ctx, work, 0x17, 4);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 8:
         ov49_022651E8(work->menu, ctx);
         ov49_0225A174(ctx, work->menu, 0, 0);
-        ov49_0225EF8C(state, 9);
+        WiFiPlazaPlayerState_SetStep(state, 9);
         break;
     case 9:
         selected = FALSE;
@@ -118,21 +118,21 @@ cancel_menu1:
             }
             break;
         case 0:
-            ov49_0225EF8C(state, 0xA);
+            WiFiPlazaPlayerState_SetStep(state, 0xA);
             selected = TRUE;
             break;
         case 1:
-            ov49_0225EF8C(state, 0xB);
+            WiFiPlazaPlayerState_SetStep(state, 0xB);
             selected = TRUE;
             break;
         case 2:
-            ov49_0225EF8C(state, 0xC);
+            WiFiPlazaPlayerState_SetStep(state, 0xC);
             selected = TRUE;
             break;
 cancel_menu2:
             PlaySE(0x5DC);
         case 3:
-            ov49_0225EF8C(state, 4);
+            WiFiPlazaPlayerState_SetStep(state, 4);
             selected = TRUE;
             break;
         }
@@ -144,34 +144,34 @@ cancel_menu2:
     case 10:
         ov49_0225A37C(ctx, 0, 0);
         SHOW_MESSAGE(ctx, work, 0x18, 4);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 11:
         ov49_0225A37C(ctx, 1, 0);
         SHOW_MESSAGE(ctx, work, 0x19, 4);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 12:
         ov49_0225A37C(ctx, 2, 0);
         SHOW_MESSAGE(ctx, work, 0x1A, 4);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 13:
         SHOW_MESSAGE(ctx, work, 0x12, 4);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 14:
         SHOW_MESSAGE(ctx, work, 0x13, 4);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 15:
         SHOW_MESSAGE(ctx, work, 0x14, 4);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 16:
         ov49_02265170(work->menu, ctx);
         ov49_0225A174(ctx, work->menu, 0, 0);
-        ov49_0225EF8C(state, 0x11);
+        WiFiPlazaPlayerState_SetStep(state, 0x11);
         break;
     case 17:
         selected = FALSE;
@@ -183,21 +183,21 @@ cancel_menu2:
             }
             break;
         case 0:
-            ov49_0225EF8C(state, 0x12);
+            WiFiPlazaPlayerState_SetStep(state, 0x12);
             selected = TRUE;
             break;
         case 1:
-            ov49_0225EF8C(state, 0x13);
+            WiFiPlazaPlayerState_SetStep(state, 0x13);
             selected = TRUE;
             break;
         case 2:
-            ov49_0225EF8C(state, 0x14);
+            WiFiPlazaPlayerState_SetStep(state, 0x14);
             selected = TRUE;
             break;
 cancel_menu3:
             PlaySE(0x5DC);
         case 3:
-            ov49_0225EF8C(state, 4);
+            WiFiPlazaPlayerState_SetStep(state, 4);
             selected = TRUE;
             break;
         }
@@ -208,31 +208,31 @@ cancel_menu3:
         break;
     case 18:
         SHOW_MESSAGE(ctx, work, 0x1B, 4);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 19:
         SHOW_MESSAGE(ctx, work, 0x1C, 4);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 20:
         SHOW_MESSAGE(ctx, work, 0x1D, 4);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 21:
         SHOW_MESSAGE(ctx, work, 0x1E, 4);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 22:
         SHOW_MESSAGE(ctx, work, 0x16, 0x18);
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         break;
     case 23:
         if (WiFiPlazaRoom_IsMessageFinished(ctx)) {
-            ov49_0225EF8C(state, work->nextState);
+            WiFiPlazaPlayerState_SetStep(state, work->nextState);
         }
         break;
     case 24:
-        ov49_0225EF68(state);
+        WiFiPlazaPlayerState_FreeWork(state);
         WiFiPlazaRoom_CloseMessage(ctx);
         ctx = WiFiPlazaRoom_GetObjManager(ctx);
         WiFiPlazaObj_SetHandler(ctx, WiFiPlazaObj_GetOwnPlayer(ctx), 1);

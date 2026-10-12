@@ -725,7 +725,7 @@ static BOOL ItemFieldUseFunc_VSRecorder(struct ItemFieldUseData *data) {
 }
 
 static void *_VsRecorderInit(FieldSystem *fieldSystem) {
-    ov01_021F4440(fieldSystem);
+    FieldSystem_TryStorePlayerLocation(fieldSystem);
     sub_0203F570(fieldSystem, fieldSystem->saveData);
     return NULL;
 }

@@ -16,7 +16,7 @@ extern void *WiFiPlazaRoom_GetLobby(void *);
 extern s32 sub_0203988C(void);
 extern u32 ov45_0222F314(u32);
 extern u32 ov45_0222F3E8(u32);
-extern void ov49_0225EF8C(void *, u32);
+extern void WiFiPlazaPlayerState_SetStep(void *, u32);
 extern void ov45_0222AC14(void *, u32, u32, void *, u32, u32, u32, u32);
 extern void GF_AssertFail(void);
 extern void ov49_0225A204(void *, u32, u32, u32, u32);
@@ -32,12 +32,12 @@ BOOL ov49_02262CB4(Ov49Residual61State *work, void *ctx, Ov49Residual61Config *c
 
     if (connection == 0) {
         config->state = 4;
-        ov49_0225EF8C(state, 0x17);
+        WiFiPlazaPlayerState_SetStep(state, 0x17);
         return TRUE;
     }
     if (connection == 2) {
         *(u16 *)&work->data[8] = index;
-        ov49_0225EF8C(state, 0x15);
+        WiFiPlazaPlayerState_SetStep(state, 0x15);
         return TRUE;
     }
     if (work->data[7] != index) {
@@ -50,14 +50,14 @@ BOOL ov49_02262CB4(Ov49Residual61State *work, void *ctx, Ov49Residual61Config *c
     if (*(s16 *)&work->data[0] == 0) {
         if (ov45_0222F314(config->index) <= 1) {
             config->state = 3;
-            ov49_0225EF8C(state, 0x17);
+            WiFiPlazaPlayerState_SetStep(state, 0x17);
             return TRUE;
         }
-        ov49_0225EF8C(state, 0x16);
+        WiFiPlazaPlayerState_SetStep(state, 0x16);
         return TRUE;
     }
     if (*(s16 *)&work->data[0] <= 0x14A) {
-        ov49_0225EF8C(state, 0x14);
+        WiFiPlazaPlayerState_SetStep(state, 0x14);
         return TRUE;
     }
     return FALSE;

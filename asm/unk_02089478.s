@@ -176,7 +176,7 @@ _020895C8:
 	add r0, r5, #0
 	bl PokemonSummary_InitConditionChart
 	add r0, r5, #0
-	bl sub_0208BCD4
+	bl PokemonSummary_InitSheenSparkles
 	add r0, r5, #0
 	bl sub_0208BDC8
 	add sp, #8

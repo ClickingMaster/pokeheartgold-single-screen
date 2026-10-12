@@ -66,14 +66,14 @@ _02035214: .word 0x00000D44
 sub_02035218: ; 0x02035218
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
-	bl sub_02033298
+	bl Wireless_GetState
 	cmp r0, #2
 	bne _0203522C
-	bl sub_02032E24
+	bl Wireless_StopScan
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 _0203522C:
-	bl sub_02033298
+	bl Wireless_GetState
 	cmp r0, #1
 	bne _02035282
 	bl sub_0203993C
@@ -99,7 +99,7 @@ _0203522C:
 	add r1, r2, r1
 	add r1, r1, r4
 	mov r2, #0
-	bl sub_02032B84
+	bl Wireless_ScanAndConnect
 	b _0203527E
 _0203526C:
 	ldr r1, _02035288 ; =_021D4134
@@ -109,7 +109,7 @@ _0203526C:
 	lsl r1, r1, #2
 	add r1, r2, r1
 	add r1, r1, r4
-	bl sub_0203373C
+	bl Wireless_StartChild
 _0203527E:
 	mov r0, #1
 	pop {r3, r4, r5, pc}
@@ -211,7 +211,7 @@ _0203530A:
 	add r1, r5, #0
 	add r1, #8
 	bl MI_CpuCopy8
-	bl sub_02033AB8
+	bl Wireless_IsEntryLocked
 	add r5, #0x54
 	strb r0, [r5]
 	b _02035388
@@ -244,7 +244,7 @@ _02035388:
 	ldr r0, _020353AC ; =0x00000D88
 	ldr r0, [r1, r0]
 	mov r1, #0x5c
-	bl sub_02033240
+	bl Wireless_SetParentGameInfo
 	pop {r3, r4, r5, pc}
 	nop
 _020353A8: .word _021D4134

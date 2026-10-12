@@ -4,7 +4,7 @@
 #include "field/field_effect_manager.h"
 #include "player_avatar.h"
 #include "map_object_movement_utilities.h"
-#include "unk_020658D4.h"
+#include "map_object_follow.h"
 #include "field_effects.h"
 #include "render_model.h"
 #include "render_animation.h"
@@ -116,7 +116,7 @@ static BOOL ov01_021FFFFC(FieldEffect *effect, UnkOv01_021FFFCD *a1) {
 
     BOOL val = sub_0205F0A8(mapObject, a1->localMapObjectId, a1->mapId);
     if (val == TRUE) {
-        return sub_02066420(mapObject, 0);
+        return HiddenObjectMovement_SetCoverEffect(mapObject, 0);
     }
     return val;
 }

@@ -53,7 +53,7 @@ u32 sub_02089478(void *data) {
         return 0x12;
     }
     PokemonSummary_InitConditionChart(data);
-    sub_0208BCD4(data);
+    PokemonSummary_InitSheenSparkles(data);
     sub_0208BDC8(data);
     return 0x11;
 no_input:

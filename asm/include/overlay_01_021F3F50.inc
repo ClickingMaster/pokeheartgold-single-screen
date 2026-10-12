@@ -47,10 +47,10 @@
 .public Field_SaveStatsPrinter_RemoveFromScreen
 .public Field_SaveStatsPrinter_New
 .public Field_SaveStatsPrinter_Delete
-.public ov01_021F42F8
-.public ov01_021F434C
-.public ov01_021F4360
-.public ov01_021F43D0
+.public Field_SaveStatsPrinter_PrintTouchSave
+.public Field_SaveStatsPrinter_RemoveTouchSave
+.public Field_SaveStatsPrinter_NewTouchSave
+.public Field_SaveStatsPrinter_DeleteTouchSave
 .public Field_SaveGameNormal
-.public ov01_021F4440
+.public FieldSystem_TryStorePlayerLocation
 .public ov01_021F6830

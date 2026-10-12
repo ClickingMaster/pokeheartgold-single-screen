@@ -177,7 +177,7 @@
 .public Options_GetFrame
 .public GameStats_Inc
 .public GameStats_AddScore
-.public sub_02033250
+.public Wireless_GetConnectedBitmap
 .public CommPlayerInfo_GetProfile
 .public sub_02036FD8
 .public Comm_CountConnected

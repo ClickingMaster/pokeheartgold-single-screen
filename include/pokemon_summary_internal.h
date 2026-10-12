@@ -7,9 +7,13 @@
 #include "message_format.h"
 #include "message_printer.h"
 #include "msgdata.h"
+#include "sprite.h"
+#include "sprite_system.h"
 #include "unk_02088288.h"
 
-// Pokemon summary screen work (0x7D8 bytes). Only the parts the summary text code uses are typed so far.
+// Pokemon summary screen work (0x7D8 bytes). Only the parts the summary text and sprite code use are typed so far.
+
+#define POKEMON_SUMMARY_SPRITE_COUNT 115
 
 // The shown Pokemon, read once from the Pokemon or box Pokemon (sub_0208981C).
 typedef struct PokemonSummaryMon {
@@ -60,7 +64,11 @@ typedef struct PokemonSummary {
     u32 numPageWindows;                 // 0x228
     PokemonSummaryArgs *args;           // 0x22C
     PokemonSummaryMon mon;              // 0x230
-    u8 unk29C[0x79C - 0x29C];           // 0x29C
+    u8 unk29C[0x3FC - 0x29C];           // 0x29C
+    SpriteSystem *spriteSystem;         // 0x3FC
+    SpriteManager *spriteManager;       // 0x400
+    Sprite *sprites[POKEMON_SUMMARY_SPRITE_COUNT]; // 0x404: see pokemon_summary_sprites.c for what each one shows
+    u8 unk5D0[0x79C - 0x5D0];           // 0x5D0
     MessagePrinter *numberPrinter;      // 0x79C
     MsgData *msgData;                   // 0x7A0
     MsgData *ribbonMsgData;             // 0x7A4
@@ -72,12 +80,18 @@ typedef struct PokemonSummary {
     s8 page;                            // 0x7BC
     u8 moveSlot : 4;                    // 0x7BD: the two move slots being swapped
     u8 swapMoveSlot : 4;
-    u8 unk7BE[6];                       // 0x7BE
+    u8 unk7BE;                          // 0x7BE: one bit per sprite 41..45
+    u8 unk7BF;                          // 0x7BF
+    u8 sparkleState;                    // 0x7C0: sheen sparkles
+    u8 numSparkles;                     // 0x7C1
+    u8 unk7C2;                          // 0x7C2
+    u8 unk7C3;                          // 0x7C3
     u8 ribbonCursor;                    // 0x7C4
     u8 ribbonRow;                       // 0x7C5
     u8 ribbonCount;                     // 0x7C6
     u8 ribbonId;                        // 0x7C7
-    u8 unk7C8[0x7D8 - 0x7C8];           // 0x7C8
+    u8 unk7C8[0x7D4 - 0x7C8];           // 0x7C8
+    u32 boxIconSprite;                  // 0x7D4: which of sprites 73/74 shows the box Pokemon's icon next
 } PokemonSummary; // size: 0x7D8
 
 // pokemon_summary_text.c
@@ -116,5 +130,48 @@ void sub_0208DBF0(PokemonSummary *summary);
 void sub_0208DC68(PokemonSummary *summary, int show);
 void sub_0208DD20(PokemonSummary *summary, int show);
 void sub_0208DDA0(PokemonSummary *summary, int result);
+
+// pokemon_summary_sprites.c
+void PokemonSummary_InitSpriteSystem(PokemonSummary *summary);
+void PokemonSummary_FreeSpriteSystem(PokemonSummary *summary);
+void PokemonSummary_UpdateSpriteAnims(PokemonSummary *summary);
+void PokemonSummary_CreateSprites(PokemonSummary *summary);
+void PokemonSummary_UpdatePartySlotSprite(PokemonSummary *summary);
+void sub_0208B448(PokemonSummary *summary);
+void PokemonSummary_LoadBallSprite(PokemonSummary *summary);
+void PokemonSummary_UpdateStatusSprite(PokemonSummary *summary);
+void PokemonSummary_LoadTypeAndIconSprites(PokemonSummary *summary);
+void PokemonSummary_UpdateTypeSprites(PokemonSummary *summary);
+void PokemonSummary_HidePokeathlonStars(PokemonSummary *summary);
+void PokemonSummary_InitShinyLeafSprites(PokemonSummary *summary);
+void PokemonSummary_SetPokeathlonStatStars(Sprite **sprites, int firstStar, int maxStars, int baseStars, int color, int modifier, int modifierSprite);
+int PokemonSummary_GetPokeathlonStarStates(u8 *states, int maxStars, int baseStars, u8 color, int modifier);
+void PokemonSummary_UpdatePokeathlonStars(PokemonSummary *summary);
+void PokemonSummary_UpdateShinyLeafSprites(PokemonSummary *summary);
+void PokemonSummary_SetMonTypeSprites(PokemonSummary *summary);
+void PokemonSummary_SetTypeSprite(PokemonSummary *summary, u8 sprite, u8 resId, u8 type);
+void PokemonSummary_FindMoveTypeSprite(PokemonSummary *summary, u8 *slot, s16 *x, s16 *y);
+void PokemonSummary_SwapMoveTypeSprites(PokemonSummary *summary, u8 slotA, u8 slotB, int unused);
+void PokemonSummary_SetMoveCategorySprite(PokemonSummary *summary, u16 move);
+void PokemonSummary_UpdateMoveCursorSprite(PokemonSummary *summary);
+void PokemonSummary_ShowSwapCursorSprite(PokemonSummary *summary);
+void sub_0208BCB4(PokemonSummary *summary);
+void PokemonSummary_InitSheenSparkles(PokemonSummary *summary);
+void PokemonSummary_UpdateMarkingSprites(PokemonSummary *summary);
+void sub_0208BDC8(PokemonSummary *summary);
+void PokemonSummary_LoadMonIcon(PokemonSummary *summary, void *mon, int sprite);
+void PokemonSummary_LoadShownMonIcon(PokemonSummary *summary);
+void PokemonSummary_LoadPartyIcons(PokemonSummary *summary);
+void sub_0208BF9C(PokemonSummary *summary);
+void sub_0208BFD0(PokemonSummary *summary);
+void PokemonSummary_ShowMonIconSprite(PokemonSummary *summary);
+s16 PokemonSummary_GetConditionPoint(int stat, s16 tip, s16 center);
+void PokemonSummary_ShowConditionSprites(PokemonSummary *summary);
+void PokemonSummary_HideConditionSprites(PokemonSummary *summary);
+void PokemonSummary_SetRibbonSprite(PokemonSummary *summary, int ribbon, int index);
+void PokemonSummary_ShowRibbonSprites(PokemonSummary *summary);
+void PokemonSummary_UpdateRibbonSprites(PokemonSummary *summary);
+void PokemonSummary_UpdateRibbonCursorSprite(PokemonSummary *summary);
+void sub_0208C3C0(PokemonSummary *summary);
 
 #endif // POKEHEARTGOLD_POKEMON_SUMMARY_INTERNAL_H

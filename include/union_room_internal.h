@@ -11,8 +11,8 @@
 // Union Room connection manager (ARM9 static 0x02059DB0-0x0205A44C): FieldSystem.unk80 while the player is in the
 // Union Room. A SysTask polls the other players' records every frame and runs the current state function, which
 // drives the wireless connection (searching, connecting as parent or child, disconnecting). The rest of the object
-// (talk messages, 0x0205A44C+) is in field_link_messages*.c, which matched against the partial view of this
-// struct in include/field_link_messages_internal.h; the field names unkXX below are the same as there.
+// (talk messages, 0x0205A44C+) is handled by the Union Room talk code, which keeps its own view of this struct
+// with the same unkXX field names.
 
 // A player's record as polled by the Union Room task; the activity kind is what the player is doing.
 typedef struct UnionRoomActivity {

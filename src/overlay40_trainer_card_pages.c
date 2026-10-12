@@ -33,9 +33,9 @@ int ov40_02241488(void *p) {
                 SetBgPriority(5, 3);
                 SetBgPriority(6, 0);
                 SetBgPriority(7, 2);
-                PTR(w, 0x608) = TouchHitboxController_Create(ov40_022456B4, 4, ov40_02241C10, p, 0x6D);
-                PTR(w, 0x60C) = TouchHitboxController_Create(ov40_02245674, 4, ov40_02241C70, p, 0x6D);
-                PTR(w, 0x610) = TouchHitboxController_Create(ov40_02245654, 2, ov40_02241CD8, p, 0x6D);
+                PTR(w, 0x608) = TouchHitboxController_Create(sVsRecorderSearchDetailHitboxes, 4, ov40_02241C10, p, 0x6D);
+                PTR(w, 0x60C) = TouchHitboxController_Create(sVsRecorderSearchSaveSlotHitboxes, 4, ov40_02241C70, p, 0x6D);
+                PTR(w, 0x610) = TouchHitboxController_Create(sVsRecorderSearchOverwriteHitboxes, 2, ov40_02241CD8, p, 0x6D);
                 WORD(p, 8)
                 ++;
             }
@@ -344,8 +344,8 @@ void ov40_02241D10(u32 a, int b, void *p) {
                     BYTE(w, 0x4C3) = 0xFF;
                     BYTE(w, 0x4C4) = 0xFF;
                 }
-                ov40_0223DDE8(p, BYTE(w, 0x4C3), BYTE(w, 0x4C4));
-                ov40_0223DEB8(p);
+                VsRecorder_PrintSearchLocation(p, BYTE(w, 0x4C3), BYTE(w, 0x4C4));
+                VsRecorder_PrintLocationButtonLabel(p);
             }
             break;
         }
@@ -355,7 +355,7 @@ void ov40_02241D10(u32 a, int b, void *p) {
             break;
         case 4:
             VsRecorder_OnTouchConfirm(p);
-            if (ov40_0223DB94(p) == 0) {
+            if (VsRecorder_HasSearchConditions(p) == 0) {
                 PlaySE(0x57C);
                 VsRecorder_SetMessageText(p, 0x74);
             } else {
@@ -368,10 +368,10 @@ void ov40_02241D10(u32 a, int b, void *p) {
 
 void ov40_02241E14(u32 a, int b, void *p) {
     if (b == 0) {
-        if (ov40_0223EBB8(p, a) == 0) {
+        if (VsRecorder_SearchCategoryHasSeen(p, a) == 0) {
             PlaySE(0x57C);
         } else {
-            ov40_0223EC40(p, a);
+            VsRecorder_BuildSearchSpeciesList(p, a);
         }
     }
 }

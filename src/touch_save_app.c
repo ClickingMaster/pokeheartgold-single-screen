@@ -60,7 +60,7 @@ typedef struct TouchSaveAppData {
     u8 unk34[4];
     MsgData *msgData;
     MessageFormat *messageFormat;
-    UnkStruct_field_021F4360 *unk40;
+    struct SaveStatsPrinter *unk40;
     Options *options;
     YesNoPrompt *yesNoPrompt;
     Window window;
@@ -221,8 +221,8 @@ void ov30_0225D64C(BgConfig *bgConfig, SysTask *task) {
         Heap_AllocAtEnd(HEAP_ID_3, 1000);
     }
 
-    ov01_021F434C(data->unk40);
-    ov01_021F43D0(data->unk40);
+    Field_SaveStatsPrinter_RemoveTouchSave(data->unk40);
+    Field_SaveStatsPrinter_DeleteTouchSave(data->unk40);
 
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
 
@@ -256,7 +256,7 @@ static void ov30_0225D700(SysTask *task, TouchSaveAppData *data) {
     if (!FieldSystem_TaskIsRunning(data->fieldSystem)) {
         if (data->fieldSystem->unkD2_0 == 2) {
             data->fieldSystem->unkD2_0 = 3;
-            ov01_021F434C(data->unk40);
+            Field_SaveStatsPrinter_RemoveTouchSave(data->unk40);
         }
 
         G2S_BlendNone();
@@ -323,9 +323,9 @@ static void TouchSaveApp_SetupWaitForTextPrinter(TouchSaveAppData *data, enum To
 }
 
 static BOOL TouchSaveApp_DisplaySaveInformation(TouchSaveAppData *data) {
-    UnkStruct_field_021F4360 *unk = ov01_021F4360(data->fieldSystem, HEAP_ID_FIELD1, 5);
+    struct SaveStatsPrinter *unk = Field_SaveStatsPrinter_NewTouchSave(data->fieldSystem, HEAP_ID_FIELD1, 5);
     data->unk40 = unk;
-    ov01_021F42F8(unk);
+    Field_SaveStatsPrinter_PrintTouchSave(unk);
 
     data->state = TOUCHSAVEAPP_STATE_ASK_TO_SAVE;
     return FALSE;
