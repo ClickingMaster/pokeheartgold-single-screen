@@ -7,7 +7,7 @@ WIP_LOCAL BOOL ov02_0224BE24(TaskManager *taskManager) {
     switch (*(u8 *)((u8 *)env + 2)) {
     case 0: {
         int outObj;
-        NNSG3dResMdlSet *mdlSet = NNS_G3dGetMdlSet(*(NNSG3dResFileHeader **)ov01_021FB90C(0xd0, *(void **)((u8 *)fieldSystem + 0x34)));
+        NNSG3dResMdlSet *mdlSet = NNS_G3dGetMdlSet(*(NNSG3dResFileHeader **)AreaDataManager_GetMapPropModel(0xd0, *(void **)((u8 *)fieldSystem + 0x34)));
         NNSG3dResMdl *mdl = NNS_G3dGetMdlByIdx(mdlSet, 0);
         void *v5;
         void *v6;
@@ -15,7 +15,7 @@ WIP_LOCAL BOOL ov02_0224BE24(TaskManager *taskManager) {
             GF_AssertFail();
         }
         v5 = MapProp_GetRenderSurface((void *)outObj);
-        v6 = ov01_021FB9E0(*(void **)((u8 *)fieldSystem + 0x34));
+        v6 = AreaDataManager_GetMapPropTexture(*(void **)((u8 *)fieldSystem + 0x34));
         MapPropOneShotAnimationManager_LoadPropAnimations(*(void **)((u8 *)fieldSystem + 0x54), *(void **)((u8 *)fieldSystem + 0x58), 1, (void *)0xd0, v5, mdl, v6, 2, *(u8 *)env, 0);
         (*(u8 *)((u8 *)env + 2))++;
         break;

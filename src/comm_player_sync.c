@@ -32,7 +32,7 @@ u8 sub_0203993C(void);
 u32 sub_0205DF0C(PlayerAvatar *avatar, int keys, int heldKeys, u32 speed, int flag, int collision);
 BOOL sub_0205DFC8(PlayerAvatar *avatar);
 BOOL sub_0205DE38(PlayerAvatar *avatar);
-void sub_0205DFD4(PlayerAvatar *avatar, int movement);
+void PlayerAvatar_SetMovement(PlayerAvatar *avatar, int movement);
 int GetMovementForDirection(int direction, int movement);
 
 void CommPlayerManager_RemoveAllAvatars(void) {
@@ -583,7 +583,7 @@ void CommPlayerManager_MoveAvatar(int netId) {
         }
         if (sub_0205DFC8(avatar) || sub_0205DE38(avatar)) {
             if (movement != 255) {
-                sub_0205DFD4(avatar, movement);
+                PlayerAvatar_SetMovement(avatar, movement);
                 if (keys & ~PAD_BUTTON_B) {
                     if (!gCommPlayerManager->moveTimer[netId]) {
                         gCommPlayerManager->moveTimer[netId] = CommPlayerManager_GetMoveDelay(speed);
@@ -824,7 +824,7 @@ void sub_02057E08(void) {
         CommPlayerManager_SetLocalFacing(3);
         movement = GetMovementForDirection(3, 0x24);
     }
-    sub_0205DFD4(gCommPlayerManager->avatars[netId], movement);
+    PlayerAvatar_SetMovement(gCommPlayerManager->avatars[netId], movement);
     CommPlayerManager_SetLocalMoveDelay();
 }
 

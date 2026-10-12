@@ -27,7 +27,7 @@ int sub_02054954(FieldSystem *fieldSystem, VecFx32 *playerPos, int x, int z, u8 
 extern int ov01_021F6328(int idx, int stride);
 extern int ov01_021F635C(int chunkIdx, int a1, MapLoadManager *mapLoadManager);
 extern void *ov01_021F65D0(MapLoadManager *mapLoadManager, u8 idx);
-extern int ov01_021FAE50(int a0, int a1, fx32 x, fx32 z, void *a4, fx32 *outY);
+extern int Bdhc_GetHeight(int a0, int a1, fx32 x, fx32 z, void *a4, fx32 *outY);
 int sub_02054654(FieldSystem *fieldSystem, int a1, int a2, fx32 x, fx32 z, u8 *outKind);
 int sub_02054774(FieldSystem *fieldSystem, int a1, fx32 x, fx32 z, u8 *outKind);
 int sub_02054790(FieldSystem *fieldSystem, int a1, int a2, fx32 x, fx32 z, u8 *outKind);

@@ -103,7 +103,7 @@ int sub_0205DEC0(PlayerAvatar *avatar, int direction);
 BOOL sub_0205DE38(PlayerAvatar *avatar);
 u32 GetMovementForDirection(int direction, int a1);
 u32 MapObject_CheckCollisionInDirection(LocalMapObject *object, int direction);
-u32 sub_0205DA34(PlayerAvatar *playerAvatar, LocalMapObject *object, int direction);
+u32 PlayerAvatar_CheckCollision(PlayerAvatar *playerAvatar, LocalMapObject *object, int direction);
 u32 sub_0205DFEC(PlayerAvatar *playerAvatar, int direction);
 int FieldSystem_GetLeadMonIndex(FieldSystem *fieldSystem);
 

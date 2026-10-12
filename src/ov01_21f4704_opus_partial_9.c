@@ -84,8 +84,8 @@ void ov01_021F5D8C(MapLoadManager *mapLoadManager, int a1, int a2, int a3) {
     ov01_021F488C(mapLoadManager, 0);
     ov01_021F47A0(a1, a2, mapLoadManager->unkC4, mapLoadManager->unkC8, a3, sp10);
     for (i = 0; i < 4; i++) {
-        mapLoadManager->maps[i]->unk85C = ov01_021FB254();
-        ov01_021FB360(mapLoadManager->maps[i]->unk85C);
+        mapLoadManager->maps[i]->unk85C = Bdhc_New();
+        Bdhc_SetUnloaded(mapLoadManager->maps[i]->unk85C);
         ov01_021F4E88(sp10[i], i, mapLoadManager->unkB8, mapLoadManager->unkC0, mapLoadManager->unkC4, mapLoadManager->unkC8, ov01_021FBA00(mapLoadManager->unkB8), mapLoadManager);
     }
 }
@@ -109,8 +109,8 @@ void ov01_021F5EA0(MapLoadManager *mapLoadManager, int a1, int a2, int a3) {
     ov01_021F488C(mapLoadManager, 1);
     ov01_021F47A0(a1, a2, mapLoadManager->unkC4, mapLoadManager->unkC8, a3, sp10);
     for (i = 0; i < 4; i++) {
-        mapLoadManager->maps[i]->unk85C = ov01_021FB254();
-        ov01_021FB360(mapLoadManager->maps[i]->unk85C);
+        mapLoadManager->maps[i]->unk85C = Bdhc_New();
+        Bdhc_SetUnloaded(mapLoadManager->maps[i]->unk85C);
         ov01_021F4FB0(sp10[i], i, mapLoadManager->unkB8, mapLoadManager->unkC0, mapLoadManager->unkC4, mapLoadManager->unkC8, ov01_021FBA00(mapLoadManager->unkB8), mapLoadManager);
     }
 }

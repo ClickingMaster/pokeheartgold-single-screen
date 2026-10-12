@@ -12,16 +12,16 @@
 	.include "unk_0205CB48.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0205DDD4
-sub_0205DDD4: ; 0x0205DDD4
+	thumb_func_start PlayerAvatar_ChooseInputDirection
+PlayerAvatar_ChooseInputDirection: ; 0x0205DDD4
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r2, #0
 	add r6, r0, #0
 	add r0, r5, #0
-	bl sub_0205DD9C
+	bl GetHorizontalDirectionFromKeys
 	add r4, r0, #0
 	add r0, r5, #0
-	bl sub_0205DDB8
+	bl GetVerticalDirectionFromKeys
 	mov r1, #0
 	mvn r1, r1
 	add r5, r0, #0
@@ -64,4 +64,4 @@ _0205DE32:
 _0205DE34:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end sub_0205DDD4
+	thumb_func_end PlayerAvatar_ChooseInputDirection

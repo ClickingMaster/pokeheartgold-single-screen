@@ -12,13 +12,13 @@
 	.include "unk_0205CB48.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0205D83C
-sub_0205D83C: ; 0x0205D83C
+	thumb_func_start PlayerAvatar_BikeRide
+PlayerAvatar_BikeRide: ; 0x0205D83C
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r7, r1, #0
 	add r6, r2, #0
-	bl sub_0205DA34
+	bl PlayerAvatar_CheckCollision
 	add r4, r0, #0
 	mov r0, #4
 	tst r0, r4
@@ -28,9 +28,9 @@ sub_0205D83C: ; 0x0205D83C
 	bl GetMovementForDirection
 	str r0, [sp]
 	add r0, r5, #0
-	bl sub_0205D684
+	bl PlayerAvatar_AccelerateBike
 	add r0, r5, #0
-	bl sub_0205E048
+	bl PlayerAvatar_CountStep
 	add r0, r5, #0
 	bl PlayerAvatar_SetFlag6
 	b _0205D93A
@@ -44,7 +44,7 @@ _0205D86E:
 	blt _0205D898
 	add r0, r5, #0
 	add r1, r6, #0
-	bl sub_0205D658
+	bl PlayerAvatar_GetBikeMovement
 	str r0, [sp]
 	add r0, r5, #0
 	bl PlayerAvatar_SetFlag6
@@ -114,19 +114,19 @@ _0205D90E:
 _0205D91E:
 	add r0, r5, #0
 	add r1, r6, #0
-	bl sub_0205D658
+	bl PlayerAvatar_GetBikeMovement
 	str r0, [sp]
 	add r0, r5, #0
-	bl sub_0205D684
+	bl PlayerAvatar_AccelerateBike
 	add r0, r5, #0
-	bl sub_0205E048
+	bl PlayerAvatar_CountStep
 	add r0, r5, #0
 	bl PlayerAvatar_SetFlag6
 _0205D93A:
 	ldr r2, [sp]
 	add r0, r5, #0
 	add r1, r7, #0
-	bl sub_0205DA1C
+	bl PlayerAvatar_SetObjectMovement
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end sub_0205D83C
+	thumb_func_end PlayerAvatar_BikeRide

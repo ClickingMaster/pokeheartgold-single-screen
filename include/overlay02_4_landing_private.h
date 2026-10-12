@@ -30,7 +30,7 @@
 // the real linker names below.
 #define ov02_0224E698 ov02_0224E698_CurrentHeaderDecl
 #define ov02_0224E754 ov02_0224E754_CurrentHeaderDecl
-#define ov01_021FB9E0 ov01_021FB9E0_CurrentHeaderDecl
+#define AreaDataManager_GetMapPropTexture ov01_021FB9E0_CurrentHeaderDecl
 #define PlayCry       PlayCry_CurrentHeaderDecl
 
 // map_prop.h (via field_system.h) declares MapPropManager_LoadOne as void-return, but
@@ -119,7 +119,7 @@
 #undef SafariZone_GetObjectUnlockLevel
 #undef ov02_0224E698
 #undef ov02_0224E754
-#undef ov01_021FB9E0
+#undef AreaDataManager_GetMapPropTexture
 #undef PlayCry
 
 // WIP_LOCAL marks a function that is file-local in the original (-> `static` in
@@ -225,9 +225,9 @@ extern int ov01_021F6AEC(FieldSystem *fieldSystem);                             
 WIP_LOCAL int ov02_0224EF94(FieldSystem *fieldSystem);                                                                      // still in asm
 WIP_LOCAL int ov02_0224F8FC(FieldSystem *fieldSystem, void *a1);                                                            // still in asm
 extern void sub_02066BE8(void *state, u32 a1, u16 value);                                                                   // sys_vars.h, not included
-extern void ov01_021FBD38(Field3dModel *model, void *narcData);                                                             // no header included here
-extern void ov01_021FBDFC(Field3dModel *model);                                                                             // no header included here
-extern void ov01_021FBE70(Field3DModelAnimation *anim, Field3dModel *model, void *anmResource, NNSFndAllocator *allocator); // no header included here
+extern void Field3dModel_LoadFromData(Field3dModel *model, void *narcData);                                                             // no header included here
+extern void Field3dModel_UnloadKeepData(Field3dModel *model);                                                                             // no header included here
+extern void Field3dModelAnimation_LoadFromData(Field3DModelAnimation *anim, Field3dModel *model, void *anmResource, NNSFndAllocator *allocator); // no header included here
 extern void *ov01_021FCD2C(FieldSystem *fieldSystem, int a1);                                                               // no header included here
 extern void ov01_021FCD8C(void *a0, int a1, fx32 a2, int a3);                                                               // no header included here
 extern void *Save_SafariZone_Get(SaveData *saveData);                                                                       // safari_zone.h, not included
@@ -263,11 +263,11 @@ typedef struct ov02_FieldList5 {
     u32 v[5];
 } ov02_FieldList5;
 extern int sub_02054C90(void *a0, void *a1, int a2, void **a3, void **a4);                                                                                 // no header included here
-extern void *ov01_021FB9E0(void *a0);                                                                                                                      // no header included here
+extern void *AreaDataManager_GetMapPropTexture(void *a0);                                                                                                                      // no header included here
 extern void *MapProp_GetRenderSurface(void *a0);                                                                                                           // no header included here
 extern void *MapProp_GetResModel(void *a0);                                                                                                                // no header included here
 extern void MapPropOneShotAnimationManager_LoadPropAnimations(void *a0, void *a1, int a2, void *a3, void *a4, void *a5, void *a6, int a7, int a8, int a9); // no header included here
-extern void *ov01_021FB90C(int a0, void *a1);                                                                                                              // no header included here
+extern void *AreaDataManager_GetMapPropModel(int a0, void *a1);                                                                                                              // no header included here
 extern BOOL MapPropOneShotAnimationManager_IsAnimationLoopFinished(void *a0, int a1);                                                                      // no header included here
 extern void MapPropOneShotAnimationManager_UnloadAnimation(void *a0, void *a1, int a2);                                                                    // no header included here
 extern NNSG3dResMdlSet *NNS_G3dGetMdlSet(const NNSG3dResFileHeader *header);                                                                               // res_struct_accessor.h, not included (IPA)

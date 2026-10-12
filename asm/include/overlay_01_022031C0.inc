@@ -31,8 +31,8 @@
 .public FieldEffectManager_CreateEffect
 .public FieldEffectManager_DestroyEffect
 .public ov01_021F771C
-.public ov01_021FBD38
-.public ov01_021FBDFC
+.public Field3dModel_LoadFromData
+.public Field3dModel_UnloadKeepData
 .public Field3dModelAnimation_LoadFromFilesystem
 .public Field3dModelAnimation_Unload
 .public Field3dModelAnimation_FrameAdvanceAndCheck

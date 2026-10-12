@@ -48,7 +48,7 @@
 .public PlayerAvatar_CheckForcedMovement
 .public PlayerAvatar_SetFlag1
 .public sub_0205CBE4
-.public sub_0205DA34
+.public PlayerAvatar_CheckCollision
 .public sub_0205DE38
 .public sub_0205DEC0
 .public sub_0205DFEC

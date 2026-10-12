@@ -41,17 +41,17 @@
 	.public VsRecorder_PlaceOrbitCursor
 	.public VsRecorder_LoadScreen
 	.public VsRecorder_SetVBlankPaused
-	.public ov40_0223A510
-	.public ov40_0223A83C
-	.public ov40_0223A874
-	.public ov40_0223A924
-	.public ov40_0223AC24
-	.public ov40_0223ACD0
-	.public ov40_0223B44C
-	.public ov40_0223CCA0
-	.public ov40_0223CD14
-	.public ov40_0223CD58
-	.public ov40_0223CE38
+	.public VsRecorder_PrintVideoListMessage
+	.public VsRecorder_FreeVideoDetails
+	.public VsRecorder_VideoListOverwriteNo
+	.public VsRecorder_VideoListSave
+	.public VsRecorder_VideoListConfirmOverwrite
+	.public VsRecorder_VideoListReturnToDetails
+	.public VsRecorder_FreeSlotButtons
+	.public VsRecorder_RemoveDetailsButtonWindow
+	.public VsRecorder_CreateDetailsButtonWindow
+	.public VsRecorder_CreateOverwriteWindows
+	.public VsRecorder_RemoveOverwriteWindows
 	.public VsRecorder_GetNet
 	.public VsRecorder_IsNetIdle
 	.public BattleRecord_Delete
@@ -63,8 +63,8 @@
 	.public OrbitCursor_SetRadius
 	.text
 
-	thumb_func_start ov40_0223A874
-ov40_0223A874: ; 0x0223A874
+	thumb_func_start VsRecorder_VideoListOverwriteNo
+VsRecorder_VideoListOverwriteNo: ; 0x0223A874
 	push {r3, r4, r5, lr}
 	mov r1, #0x86
 	add r5, r0, #0
@@ -95,7 +95,7 @@ _0223A89E:
 	cmp r0, #0
 	beq _0223A91E
 	add r0, r5, #0
-	bl ov40_0223CE38
+	bl VsRecorder_RemoveOverwriteWindows
 	ldr r0, [r5, #0x24]
 	mov r1, #6
 	bl BgClearTilemapBufferAndCommit
@@ -121,7 +121,7 @@ _0223A8CC:
 	add r0, r5, #0
 	mov r1, #0x64
 	mov r2, #0
-	bl ov40_0223A510
+	bl VsRecorder_PrintVideoListMessage
 	mov r0, #4
 	mov r1, #1
 	bl GfGfx_EngineBTogglePlanes
@@ -148,11 +148,11 @@ _0223A91E:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov40_0223A874
+	thumb_func_end VsRecorder_VideoListOverwriteNo
 
 
-	thumb_func_start ov40_0223A924
-ov40_0223A924: ; 0x0223A924
+	thumb_func_start VsRecorder_VideoListSave
+VsRecorder_VideoListSave: ; 0x0223A924
 	push {r4, r5, r6, lr}
 	sub sp, #8
 	mov r1, #0x86
@@ -205,7 +205,7 @@ _0223A964:
 	ldr r1, _0223AC04 ; =0x00000116
 	add r0, r4, #0
 	mov r2, #0
-	bl ov40_0223A510
+	bl VsRecorder_PrintVideoListMessage
 	add r0, r4, #0
 	bl ov40_022306E0
 	ldr r0, [r4, #8]
@@ -275,7 +275,7 @@ _0223AA18:
 	add r0, r4, #0
 	lsl r1, r1, #2
 	mov r2, #0
-	bl ov40_0223A510
+	bl VsRecorder_PrintVideoListMessage
 	bl BattleRecord_GetHeader
 	mov r1, #4
 	mov r2, #0
@@ -323,7 +323,7 @@ _0223AA82:
 	str r0, [r4, #8]
 	add r0, r4, #0
 	mov r2, #0
-	bl ov40_0223A510
+	bl VsRecorder_PrintVideoListMessage
 	b _0223ABFC
 _0223AA94:
 	bl System_GetTouchNew
@@ -338,7 +338,7 @@ _0223AA9E:
 	mov r1, #1
 	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
-	bl ov40_0223B44C
+	bl VsRecorder_FreeSlotButtons
 	add r0, r4, #0
 	mov r1, #0
 	bl VsRecorder_SetVBlankPaused
@@ -378,7 +378,7 @@ _0223AAF0:
 	ldr r0, [r5, r0]
 	bl TouchHitboxController_Destroy
 	add r0, r4, #0
-	bl ov40_0223A83C
+	bl VsRecorder_FreeVideoDetails
 	add r5, #8
 	add r0, r5, #0
 	bl VsRecorder_ResetFade
@@ -488,11 +488,11 @@ _0223AC14: .word 0x0000057D
 _0223AC18: .word 0x00000577
 _0223AC1C: .word 0x00000119
 _0223AC20: .word 0x0000049C
-	thumb_func_end ov40_0223A924
+	thumb_func_end VsRecorder_VideoListSave
 
 
-	thumb_func_start ov40_0223AC24
-ov40_0223AC24: ; 0x0223AC24
+	thumb_func_start VsRecorder_VideoListConfirmOverwrite
+VsRecorder_VideoListConfirmOverwrite: ; 0x0223AC24
 	push {r3, r4, r5, lr}
 	sub sp, #0x10
 	mov r1, #0x86
@@ -532,7 +532,7 @@ _0223AC3C:
 	add r0, r5, #0
 	ldr r2, [r4, r2]
 	mov r1, #0x66
-	bl ov40_0223A510
+	bl VsRecorder_PrintVideoListMessage
 	ldr r0, [r5, #8]
 	add r0, r0, #1
 	str r0, [r5, #8]
@@ -558,7 +558,7 @@ _0223AC9A:
 	cmp r0, #0
 	beq _0223ACC6
 	add r0, r5, #0
-	bl ov40_0223CD58
+	bl VsRecorder_CreateOverwriteWindows
 	mov r0, #4
 	mov r1, #1
 	bl GfGfx_EngineBTogglePlanes
@@ -575,11 +575,11 @@ _0223ACC6:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _0223ACCC: .word 0x00002028
-	thumb_func_end ov40_0223AC24
+	thumb_func_end VsRecorder_VideoListConfirmOverwrite
 
 
-	thumb_func_start ov40_0223ACD0
-ov40_0223ACD0: ; 0x0223ACD0
+	thumb_func_start VsRecorder_VideoListReturnToDetails
+VsRecorder_VideoListReturnToDetails: ; 0x0223ACD0
 	push {r4, r5, r6, lr}
 	sub sp, #0x10
 	add r4, r0, #0
@@ -678,9 +678,9 @@ _0223AD5A:
 	bl ManagedSprite_SetAnim
 _0223AD9A:
 	add r0, r4, #0
-	bl ov40_0223CCA0
+	bl VsRecorder_RemoveDetailsButtonWindow
 	add r0, r4, #0
-	bl ov40_0223CD14
+	bl VsRecorder_CreateDetailsButtonWindow
 	mov r0, #0
 	str r0, [sp]
 	str r0, [sp, #4]
@@ -859,4 +859,4 @@ _0223AF18:
 	pop {r4, r5, r6, pc}
 	nop
 _0223AF20: .word 0x00004138
-	thumb_func_end ov40_0223ACD0
+	thumb_func_end VsRecorder_VideoListReturnToDetails

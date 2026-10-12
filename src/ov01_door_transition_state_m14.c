@@ -59,7 +59,7 @@ BOOL ov01_021E90E4(FieldSystem *fieldSystem, FieldEnvSubUnk18 *arg) {
         sub_02054A60(work->x, work->z, -1, -1, 3, 1, rect);
         work->active = 1;
         found = FALSE;
-        narc = ov01_021FB904(fieldSystem->areaDataManager);
+        narc = AreaDataManager_GetMapPropAnimListNarc(fieldSystem->areaDataManager);
         props = sub_02054D10(fieldSystem, HEAP_ID_FIELD1, 4, rect, 0);
         for (i = 0; i < 4; i++) {
             if (props[i] != 0) {
@@ -80,7 +80,7 @@ BOOL ov01_021E90E4(FieldSystem *fieldSystem, FieldEnvSubUnk18 *arg) {
         if (animationCount == 0) {
             return TRUE;
         }
-        texture = ov01_021FB9E0(fieldSystem->areaDataManager);
+        texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
         renderObj = MapProp_GetRenderSurface(prop);
         model = MapProp_GetResModel(prop);
         MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, 1, modelId0, renderObj, model, texture, animationCount, 1, FALSE);
@@ -188,7 +188,7 @@ BOOL ov01_021E9374(FieldSystem *fieldSystem, FieldEnvSubUnk18 *arg) {
         sub_02054A60(work->x, work->z, -1, 0, 3, 1, rect);
         work->active = 1;
         found = FALSE;
-        narc = ov01_021FB904(fieldSystem->areaDataManager);
+        narc = AreaDataManager_GetMapPropAnimListNarc(fieldSystem->areaDataManager);
         props = sub_02054D10(fieldSystem, HEAP_ID_FIELD1, 4, rect, 0);
         for (i = 0; i < 4; i++) {
             if (props[i] != 0) {
@@ -211,7 +211,7 @@ BOOL ov01_021E9374(FieldSystem *fieldSystem, FieldEnvSubUnk18 *arg) {
             work->state = 6;
             return FALSE;
         }
-        texture = ov01_021FB9E0(fieldSystem->areaDataManager);
+        texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
         renderObj = MapProp_GetRenderSurface(prop);
         model = MapProp_GetResModel(prop);
         MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, 1, modelId0, renderObj, model, texture, animationCount, 1, FALSE);

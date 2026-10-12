@@ -17,5 +17,5 @@
 .public _s32_div_f
 .public FieldCamera_Create
 .public FieldCamera_Delete
-.public ov01_021EACBC
-.public ov01_021EAD8C
+.public FieldCameraShift_Start
+.public FieldCameraShift_Update

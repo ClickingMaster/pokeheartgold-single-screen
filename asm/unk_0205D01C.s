@@ -12,8 +12,8 @@
 	.include "unk_0205CB48.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0205D01C
-sub_0205D01C: ; 0x0205D01C
+	thumb_func_start PlayerAvatar_GetForcedMovementKind
+PlayerAvatar_GetForcedMovementKind: ; 0x0205D01C
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r6, r1, #0
@@ -24,7 +24,7 @@ sub_0205D01C: ; 0x0205D01C
 	add r0, r5, #0
 	add r1, r7, #0
 	add r2, r6, #0
-	bl sub_0205E078
+	bl PlayerAvatar_IsOnCyclingRoadSlope
 	cmp r0, #1
 	bne _0205D040
 	mov r0, #2
@@ -38,7 +38,7 @@ _0205D040:
 	pop {r3, r4, r5, r6, r7, pc}
 _0205D04E:
 	lsl r0, r7, #0x18
-	ldr r5, _0205D074 ; =_020FCB88
+	ldr r5, _0205D074 ; =gPlayerForcedMovementBehaviors
 	lsr r6, r0, #0x18
 _0205D054:
 	ldr r1, [r5]
@@ -46,7 +46,7 @@ _0205D054:
 	blx r1
 	cmp r0, #1
 	bne _0205D066
-	ldr r0, _0205D078 ; =_020FCB88 + 4
+	ldr r0, _0205D078 ; =gPlayerForcedMovementBehaviors + 4
 	lsl r1, r4, #3
 	ldr r0, [r0, r1]
 	pop {r3, r4, r5, r6, r7, pc}
@@ -59,6 +59,6 @@ _0205D066:
 	mov r0, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-_0205D074: .word _020FCB88
-_0205D078: .word _020FCB88 + 4
-	thumb_func_end sub_0205D01C
+_0205D074: .word gPlayerForcedMovementBehaviors
+_0205D078: .word gPlayerForcedMovementBehaviors + 4
+	thumb_func_end PlayerAvatar_GetForcedMovementKind

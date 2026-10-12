@@ -70,7 +70,7 @@
 .public sub_0205DE38
 .public sub_0205DF0C
 .public sub_0205DFC8
-.public sub_0205DFD4
+.public PlayerAvatar_SetMovement
 .public MapObject_Remove
 .public MapObjectManager_GetFirstActiveObjectByID
 .public MapObject_SetID

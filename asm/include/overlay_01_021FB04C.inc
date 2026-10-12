@@ -9,10 +9,10 @@
 .public SysTask_GetData
 .public GF_AssertFail
 .public MIi_CpuClear32
-.public ov01_021FB254
-.public ov01_021FB270
-.public ov01_021FB2E8
-.public ov01_021FB2F4
-.public ov01_021FB308
-.public ov01_021FB354
-.public ov01_021FB360
+.public Bdhc_New
+.public Bdhc_Load
+.public Bdhc_Free
+.public Bdhc_Reset
+.public Bdhc_StartLoadTask
+.public Bdhc_CancelLoadTask
+.public Bdhc_SetUnloaded

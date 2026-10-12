@@ -29,7 +29,7 @@ void ov01_021F54AC(int a0, int a1, u8 map0, u8 map1, u8 direction, MapLoadManage
 void ov01_021F5568(int idx, MapLoadManager *mapLoadManager);
 void ov01_021F5568(int idx, MapLoadManager *mapLoadManager) {
     mapLoadManager->maps[idx]->unk864 = 0;
-    ov01_021FB2F4(mapLoadManager->maps[idx]->unk85C);
+    Bdhc_Reset(mapLoadManager->maps[idx]->unk85C);
     MapPropManager_Reset(mapLoadManager->maps[idx]->unk868);
     mapLoadManager->maps[idx]->unk860 = -1;
     MIi_CpuClearFast(-1, (u32 *)mapLoadManager->maps[idx], 0x800);

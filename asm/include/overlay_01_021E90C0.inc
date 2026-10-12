@@ -83,8 +83,8 @@
 .public ov01_021EAB30
 .public MapProp_GetRenderSurface
 .public MapProp_GetResModel
-.public ov01_021FB904
-.public ov01_021FB9E0
+.public AreaDataManager_GetMapPropAnimListNarc
+.public AreaDataManager_GetMapPropTexture
 .public FollowMon_MoveToPlayer
 .public FollowMon_CheckVisibleFlag
 .public FollowMon_QueuePlayerStep

@@ -12,11 +12,18 @@
 // global_terminal_net.c (not in global_terminal_net.h)
 BOOL GlobalTerminalNet_IsIdle(GlobalTerminalNet *net);
 
+// main ARM9 (no public header)
+void WirelessStatusIcon_ShowOnBothScreens(int a0, enum HeapID heapID);
+BOOL sub_02087E1C(void *work);
+
 // battle_record.c (not in battle_recording.h)
 extern BattleRecord *gBattleRecord;
 void BattleRecord_GetBattlerAndPartyCount(int type, int *count, int *partySize);
 int BattleRecord_WriteSlot(SaveData *save, BattleRecord *record, int index, u16 *state);
 void BattleRecord_Encrypt(void *data, u32 size, u32 seed);
+void *BattleRecord_GetHeader(void);
+void *BattleRecordHeader_New(enum HeapID heapID);
+void BattleRecordHeader_Free(void *header);
 
 // VsRecorderWork.screenWork of the delete screen
 typedef struct VsRecorderDeleteVideo {
@@ -26,6 +33,65 @@ typedef struct VsRecorderDeleteVideo {
     BOOL cancelled;
     Window yesNoWindows[2];
 } VsRecorderDeleteVideo; // size 0x30
+
+// rankings received from the server (onResponse[4] / [5]); the start of the rankings screens' work
+typedef struct VsRecorderRankingsDownload {
+    u8 unk_000[0xE0];
+    u8 rankings[0x558];    // 0x0E0
+    u8 ownRankings[0xD8];  // 0x638
+    u32 unk_710;           // 0x710
+    void *rankingsData;    // 0x714, the response (or rankings when offline)
+    void *ownRankingsData; // 0x718
+    void *unk_71C;         // 0x71C
+} VsRecorderRankingsDownload;
+
+// party part of a video header: the profile, then species and forms of both sides
+typedef struct VsRecorderVideoParty {
+    u8 profile[0x80];
+    u16 species[12];
+    u8 forms[12];
+} VsRecorderVideoParty;
+
+typedef struct VsRecorderVideoListIcon {
+    int resId; // also the character resource id - 100000
+    ManagedSprite *sprite;
+} VsRecorderVideoListIcon;
+
+// VsRecorderVideoListScreen.listType, from VsRecorderWork.selection
+#define VS_RECORDER_VIDEO_LIST_LATEST  0 // selection 300
+#define VS_RECORDER_VIDEO_LIST_POPULAR 1 // selection 301
+#define VS_RECORDER_VIDEO_LIST_SEARCH  2 // selection 200, the result of a video search
+
+// VsRecorderWork.screenWork of the video list screens: the list (with party icons), a video's details (video info /
+// owner's profile, play, save) and saving it to one of the three slots
+typedef struct VsRecorderVideoListScreen {
+    int eva; // 0x000, top screen blend
+    int evb;
+    int fade;
+    int listType;                             // 0x00C, VS_RECORDER_VIDEO_LIST_*
+    u32 showProfile;                          // 0x010, details: 0 video info, 1 owner's profile
+    Window windows[8];                        // 0x014, list title
+    Window buttonWindows[8];                  // 0x094, exit / details toggle label; YES, NO
+    VsRecorderTextSprite buttons[4];          // 0x114, exit and back; slot menu: slots 1-3 and cancel
+    u8 *downloadedVideo;                      // 0x184
+    TouchHitboxController *detailHitboxes;    // 0x188, toggle, play, save, back
+    TouchHitboxController *slotHitboxes;      // 0x18C, slots 1-3, cancel
+    TouchHitboxController *overwriteHitboxes; // 0x190, YES, NO
+    VsRecorderProfile profile;                // 0x194
+    VsRecorderVideoInfo info;                 // 0x220
+    u8 unk_2AC[0x2028 - 0x2AC];
+    int slot;              // 0x2028, 1-3
+    int buttonWindowCount; // 0x202C
+    int windowCount;       // 0x2030
+    int nextSubState;      // 0x2034, after the video download / the list
+    BOOL downloaded;       // 0x2038
+    u8 unk_203C[0x2054 - 0x203C];
+    VsRecorderListConfig listConfig;     // 0x2054
+    NARC *monIconNarc;                   // 0x2080
+    int iconScroll;                      // 0x2084, list scroll the icons were made for
+    int iconResId;                       // 0x2088, next mon icon resource
+    VsRecorderVideoListIcon icons[5][6]; // 0x208C, party icons of the visible rows
+} VsRecorderVideoListScreen;             // size 0x217C
 
 // one digit of the video number pad; the separators and cursors use the same layout
 typedef struct VsRecorderNumberPadDigit {
@@ -108,7 +174,7 @@ typedef struct VsRecorderVideoSearch {
     u64 videoNumber;                            // 0x4B0
 } VsRecorderVideoSearch;
 
-// vs_recorder_net.c (the Global Terminal client is embedded at VsRecorderWork.netClient)
+// vs_recorder_net.c (the Global Terminal client is embedded at VsRecorderWork.unk_0068)
 BOOL VsRecorder_IsNetIdle(VsRecorderWork *work);
 
 // vs_recorder_number_pad.c
@@ -156,6 +222,62 @@ BOOL VsRecorder_DeleteInit(VsRecorderWork *work);
 BOOL VsRecorder_DeleteEnter(VsRecorderWork *work);
 BOOL VsRecorder_DeleteMain(VsRecorderWork *work);
 BOOL VsRecorder_DeleteExit(VsRecorderWork *work);
+
+// vs_recorder_video_list.c
+void VsRecorder_OnRankingsHeaderReceived(void *arg, GlobalTerminalNetError *error);
+void VsRecorder_OnRankingsReceived(void *arg, GlobalTerminalNetError *error);
+void VsRecorder_PlaceVideoListIcons(VsRecorderWork *work);
+void VsRecorder_CreateVideoListButtons(VsRecorderWork *work);
+void VsRecorder_PrintVideoListMessage(VsRecorderWork *work, int msgId, int slot);
+BOOL VsRecorder_VideoListDownloadVideo(VsRecorderWork *work);
+void VsRecorder_FreeVideoDetails(VsRecorderWork *work);
+BOOL VsRecorder_VideoListOverwriteMain(VsRecorderWork *work);
+BOOL VsRecorder_VideoListOverwriteNo(VsRecorderWork *work);
+BOOL VsRecorder_VideoListSave(VsRecorderWork *work);
+BOOL VsRecorder_VideoListConfirmOverwrite(VsRecorderWork *work);
+BOOL VsRecorder_VideoListReturnToDetails(VsRecorderWork *work);
+BOOL VsRecorder_VideoListSlotsMain(VsRecorderWork *work);
+BOOL VsRecorder_VideoListSlotsCancel(VsRecorderWork *work);
+BOOL VsRecorder_VideoListBackToList(VsRecorderWork *work);
+void VsRecorder_SetSlotButtonName(VsRecorderTextSprite *button, VsRecorderWork *work, int slot);
+void VsRecorder_CreateSlotButtons(VsRecorderWork *work);
+void VsRecorder_FreeSlotButtons(VsRecorderWork *work);
+void VsRecorder_FreeVideoListButtons(VsRecorderWork *work);
+void VsRecorder_SetVideoListButtonsMode(VsRecorderWork *work, int backOnly);
+void VsRecorder_RemoveVideoListWindows(VsRecorderWork *work);
+void VsRecorder_RemoveVideoListButtonWindows(VsRecorderWork *work);
+BOOL VsRecorder_VideoListInit(VsRecorderWork *work);
+BOOL VsRecorder_VideoListEnter(VsRecorderWork *work);
+BOOL VsRecorder_VideoListDownloadList(VsRecorderWork *work);
+void VsRecorder_CreateVideoListWindows(VsRecorderWork *work);
+BOOL VsRecorder_VideoListShowList(VsRecorderWork *work);
+BOOL VsRecorder_VideoListSelect(VsRecorderWork *work);
+BOOL VsRecorder_VideoListExit(VsRecorderWork *work);
+BOOL VsRecorder_VideoListShowDetails(VsRecorderWork *work);
+BOOL VsRecorder_VideoListDetailsMain(VsRecorderWork *work);
+BOOL VsRecorder_VideoListToggleProfile(VsRecorderWork *work);
+BOOL VsRecorder_VideoListPlay(VsRecorderWork *work);
+BOOL VsRecorder_VideoListResume(VsRecorderWork *work);
+void VsRecorder_ShowVideoListMessage(VsRecorderWork *work, int msgId, int unused);
+BOOL VsRecorder_VideoListShowSlots(VsRecorderWork *work);
+void VsRecorder_RemoveDetailsButtonWindow(VsRecorderWork *work);
+void VsRecorder_PrintDetailsButtonLabel(VsRecorderWork *work, int msgId);
+void VsRecorder_CreateDetailsButtonWindow(VsRecorderWork *work);
+void VsRecorder_CreateOverwriteWindows(VsRecorderWork *work);
+void VsRecorder_RemoveOverwriteWindows(VsRecorderWork *work);
+void VsRecorder_OnVideoDetailsTouch(u32 index, u32 event, void *arg);
+void VsRecorder_OnSaveSlotTouch(u32 index, u32 event, void *arg);
+void VsRecorder_OnOverwriteTouch(u32 index, u32 event, void *arg);
+void VsRecorder_LoadVideoDetails(VsRecorderWork *work);
+void VsRecorder_CreateVideoListIcons(VsRecorderWork *work);
+void VsRecorder_SetVideoListIconsDrawFlag(VsRecorderWork *work, BOOL draw);
+void VsRecorder_FreeVideoListIcons(VsRecorderWork *work);
+
+// vs_recorder_video_list_scroll.c
+void VsRecorder_ScrollVideoListIcons(VsRecorderWork *work);
+
+// vs_recorder_video_list_end.c
+void VsRecorder_FreeDetailsButtons(VsRecorderWork *work);
 
 // vs_recorder_battle_names.c
 void VsRecorder_SanitizeBattleSetupNames(BattleRecord *record, BattleSetup *setup, enum HeapID heapID);

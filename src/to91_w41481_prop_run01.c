@@ -10,7 +10,7 @@
 void sub_02054A60(int,int,int,int,int,int,fx32*);
 int *sub_02054D10(FieldSystem*,u32,int,fx32*,u32);
 BOOL sub_02054AE4(FieldSystem*,int,fx32*,MapProp**);
-NNSG3dResTex *ov01_021FB9E0(AreaDataManager*);
+NNSG3dResTex *AreaDataManager_GetMapPropTexture(AreaDataManager*);
 void ov01_021E9AE8(FieldSystem *field,int x,int z,u8 token) {
  fx32 rectangle[4];
  struct {MapProp *prop;u8 metadata[24];} selected;
@@ -21,7 +21,7 @@ void ov01_021E9AE8(FieldSystem *field,int x,int z,u8 token) {
  int i;
  int *cursor;
  sub_02054A60(x,z,-1,0,3,1,rectangle);
- archive=ov01_021FB904(field->areaDataManager);
+ archive=AreaDataManager_GetMapPropAnimListNarc(field->areaDataManager);
  models=sub_02054D10(field,HEAP_ID_FIELD1,4,rectangle,0);
  found=0;
  for(i=0,cursor=models;i<4;i++,cursor++) {
@@ -39,7 +39,7 @@ void ov01_021E9AE8(FieldSystem *field,int x,int z,u8 token) {
  if(found) {
   int count=MapPropAnimationManager_GetPropAnimationCount(field->mapPropAnimationManager,id);
   if(count) {
-   NNSG3dResTex *texture=ov01_021FB9E0(field->areaDataManager);
+   NNSG3dResTex *texture=AreaDataManager_GetMapPropTexture(field->areaDataManager);
    NNSG3dRenderObj *render=MapProp_GetRenderSurface(selected.prop);
    NNSG3dResMdl *model=MapProp_GetResModel(selected.prop);
    MapPropOneShotAnimationManager_LoadPropAnimations(field->mapPropAnimationManager,field->mapPropOneShotAnimationManager,token,id,render,model,texture,count,1,FALSE);

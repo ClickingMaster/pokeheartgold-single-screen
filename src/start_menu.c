@@ -39,7 +39,7 @@
 #include "unk_02037C94.h"
 #include "unk_0205A44C.h"
 #include "union_room_objects.h"
-#include "unk_0205CB48.h"
+#include "player_avatar_movement.h"
 #include "frontier_field_support.h"
 #include "field_warp_state.h"
 #include "trainer_card_data.h"
@@ -228,7 +228,7 @@ void StartMenu_Init(FieldSystem *fieldSystem) {
     }
     startMenu->unk_350 = FALSE;
     if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
-        sub_0205CFBC(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
+        PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
     }
     FieldSystem_CreateTask(fieldSystem, Task_StartMenu, startMenu);
 }
@@ -238,7 +238,7 @@ void sub_0203BCDC(FieldSystem *fieldSystem) {
     startMenu->inhibitIconFlags = sub_0203BEE0(fieldSystem);
     startMenu->unk_350 = TRUE;
     if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
-        sub_0205CFBC(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
+        PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
     }
     FieldSystem_CreateTask(fieldSystem, Task_StartMenu, startMenu);
 }
@@ -248,7 +248,7 @@ void sub_0203BD20(FieldSystem *fieldSystem) {
     startMenu->inhibitIconFlags = sub_0203BEE8(fieldSystem);
     startMenu->unk_350 = FALSE;
     if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
-        sub_0205CFBC(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
+        PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
     }
     FieldSystem_CreateTask(fieldSystem, Task_StartMenu, startMenu);
 }

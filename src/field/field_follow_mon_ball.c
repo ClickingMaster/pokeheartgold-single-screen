@@ -27,10 +27,6 @@
 BOOL sub_0206121C(FieldSystem *fieldSystem, VecFx32 *position);
 // The following Pokemon's billboard (field map object motion, still unnamed).
 void *ov01_021F771C(MapObjectManager *manager);
-// area_data_manager_2.c / _3.c (overlay_01_021FB878.h does not declare them).
-void ov01_021FBD38(Field3dModel *model, void *data);
-void ov01_021FBDFC(Field3dModel *model);
-void Field3dObject_SetPos(Field3dObject *object, const VecFx32 *pos);
 // billboard_lists.c
 void BillboardObject_SetScale(void *billboard, VecFx32 *scale);
 NNSG3dPlttKey BillboardObject_GetPlttKey(void *billboard);
@@ -117,19 +113,19 @@ void FollowMonBall_Free(FollowMonBall *ball) {
 
 void FollowMonBall_LoadModels(FollowMonBall *ball) {
     ball->ballFile = FieldEffectManager_LoadNarcMember(ball->manager, 0x81, FALSE);
-    ov01_021FBD38(&ball->ballModel, ball->ballFile);
+    Field3dModel_LoadFromData(&ball->ballModel, ball->ballFile);
     Field3dObject_InitFromModel(&ball->ball, &ball->ballModel);
     ball->burstFile = FieldEffectManager_LoadNarcMember(ball->manager, 0x68, FALSE);
-    ov01_021FBD38(&ball->burstModel, ball->burstFile);
+    Field3dModel_LoadFromData(&ball->burstModel, ball->burstFile);
     Field3dObject_InitFromModel(&ball->burst, &ball->burstModel);
     Field3dModelAnimation_LoadFromFilesystem(&ball->burstAnimation, &ball->burstModel, NARC_a_1_0_3, 0xA4, HEAP_ID_FIELD1, &ball->allocator);
     Field3dObject_AddAnimation(&ball->burst, &ball->burstAnimation);
 }
 
 void FollowMonBall_FreeModels(FollowMonBall *ball) {
-    ov01_021FBDFC(&ball->ballModel);
+    Field3dModel_UnloadKeepData(&ball->ballModel);
     FieldEffectManager_HeapFree(ball->ballFile);
-    ov01_021FBDFC(&ball->burstModel);
+    Field3dModel_UnloadKeepData(&ball->burstModel);
     FieldEffectManager_HeapFree(ball->burstFile);
     Field3dModelAnimation_Unload(&ball->burstAnimation, &ball->allocator);
 }

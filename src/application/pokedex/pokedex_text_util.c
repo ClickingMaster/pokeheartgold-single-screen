@@ -38,7 +38,7 @@ u8 PokedexApp_GetTypeIconPalette(u32 type) {
 // The footprint as one 16x16 OBJ: the two 8x16 halves of the stored graphic swapped.
 void *PokedexApp_LoadFootprintGraphics(u32 species, enum HeapID heapId) {
     NNSG2dCharacterData *charData;
-    void *loaded = GfGfxLoader_GetCharData(ov18_021E5900(), ov18_021E5904(species), TRUE, &charData, heapId);
+    void *loaded = GfGfxLoader_GetCharData(Pokefoot_GetNarcId(), Pokefoot_GetCharFileId(species), TRUE, &charData, heapId);
     u8 *raw = charData->pRawData;
     u8 *out = Heap_AllocAtEnd(heapId, 0x80);
 

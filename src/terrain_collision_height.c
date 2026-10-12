@@ -55,7 +55,7 @@ int sub_02054654(FieldSystem *fieldSystem, int objectHeightMode, int objectHeigh
         bdhcHeightValid = FALSE;
     } else {
         void *bdhc = ov01_021F65D0(landDataMan, loadedMapIndex);
-        bdhcHeightValid = ov01_021FAE50(objectHeightMode, objectHeight, objectPosition.x, objectPosition.z, bdhc, &objectPosition.y);
+        bdhcHeightValid = Bdhc_GetHeight(objectHeightMode, objectHeight, objectPosition.x, objectPosition.z, bdhc, &objectPosition.y);
     }
 
     u8 newObjectHeightSource;

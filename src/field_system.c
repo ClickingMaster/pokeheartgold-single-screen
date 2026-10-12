@@ -21,7 +21,7 @@
 #include "system.h"
 #include "unk_02035900.h"
 #include "comm_player_manager.h"
-#include "unk_0205CB48.h"
+#include "player_avatar_movement.h"
 #include "unk_02092BB8.h"
 #include "gear_phone_ring_manager.h"
 
@@ -263,7 +263,7 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
             if (newEvent) {
                 FieldDrawMapName_Reset(fieldSystem->unk4->drawMapNameInfo);
                 FieldSystem_SetAndExecuteSignpostWindowCommand(fieldSystem, MAPSIGNCOMMAND_HIDE);
-                sub_0205CF44(fieldSystem->playerAvatar);
+                PlayerAvatar_ResetMovement(fieldSystem->playerAvatar);
                 ov01_021F2F24(fieldSystem->playerAvatar);
                 ov01_021F6830(fieldSystem, 0, 1);
                 if (newEvent != 2) {

@@ -5,6 +5,7 @@
 #include "constants/phone_contacts.h"
 #include "constants/trainers.h"
 
+#include "field/field_camera.h"
 #include "field/legend_cutscene_camera.h"
 #include "field/map_load_manager.h"
 #include "field/map_prop.h"
@@ -4576,7 +4577,7 @@ BOOL ScrCmd_609(ScriptContext *ctx) {
 
 BOOL ScrCmd_610(ScriptContext *ctx) {
     u16 r1 = ScriptReadHalfword(ctx);
-    ov01_021EACBC(ctx->fieldSystem->unk28, r1);
+    FieldCameraShift_Start(ctx->fieldSystem->unk28, r1);
     return TRUE;
 }
 

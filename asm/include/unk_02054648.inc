@@ -35,7 +35,7 @@
 .public ov01_021F65D0
 .public ov01_021F65E4
 .public ov01_021F6600
-.public ov01_021FAE50
+.public Bdhc_GetHeight
 .public DynamicTerrainHeightManager_FindPlate
 .public DynamicTerrainHeightManager_GetPlateHeight
 

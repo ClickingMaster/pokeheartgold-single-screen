@@ -12,13 +12,13 @@
 	.include "unk_0205CB48.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0205D978
-sub_0205D978: ; 0x0205D978
+	thumb_func_start PlayerAvatar_BikeCoast
+PlayerAvatar_BikeCoast: ; 0x0205D978
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
 	add r5, r0, #0
 	add r7, r1, #0
-	bl sub_0205D6B4
+	bl PlayerAvatar_DecelerateBike
 	str r0, [sp]
 	add r0, r5, #0
 	bl PlayerAvatar_GetNextFacingDirection
@@ -26,7 +26,7 @@ sub_0205D978: ; 0x0205D978
 	add r0, r5, #0
 	add r1, r7, #0
 	add r2, r6, #0
-	bl sub_0205DA34
+	bl PlayerAvatar_CheckCollision
 	add r4, r0, #0
 	mov r0, #4
 	tst r0, r4
@@ -72,7 +72,7 @@ _0205D9E4:
 _0205D9F4:
 	add r0, r5, #0
 	add r1, r6, #0
-	bl sub_0205D658
+	bl PlayerAvatar_GetBikeMovement
 	str r0, [sp, #4]
 _0205D9FE:
 	ldr r0, [sp]
@@ -85,8 +85,8 @@ _0205DA0C:
 	ldr r2, [sp, #4]
 	add r0, r5, #0
 	add r1, r7, #0
-	bl sub_0205DA1C
+	bl PlayerAvatar_SetObjectMovement
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end sub_0205D978
+	thumb_func_end PlayerAvatar_BikeCoast

@@ -19,7 +19,7 @@ BOOL ov01_021E971C(FieldSystem *fieldSystem, DoorTransitionWork2 *work, u8 direc
         }
         work->active = 2;
         if (sub_02054B74(fieldSystem, models.ids, 4, rect, &prop, &modelId)) {
-            texture = ov01_021FB9E0(fieldSystem->areaDataManager);
+            texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
             renderObj = MapProp_GetRenderSurface(prop);
             model = MapProp_GetResModel(prop);
             MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, 2, modelId, renderObj, model, texture, 1, 1, 1);
@@ -101,7 +101,7 @@ BOOL ov01_021E98F0(FieldSystem *fieldSystem, DoorTransitionWork2 *work, u8 direc
         }
         work->active = 2;
         if (sub_02054B74(fieldSystem, models.ids, 4, rect, &prop, &modelId)) {
-            texture = ov01_021FB9E0(fieldSystem->areaDataManager);
+            texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
             renderObj = MapProp_GetRenderSurface(prop);
             model = MapProp_GetResModel(prop);
             MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, 2, modelId, renderObj, model, texture, 1, 1, 0);

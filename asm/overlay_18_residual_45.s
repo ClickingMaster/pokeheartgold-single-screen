@@ -2044,22 +2044,22 @@
 	.include "overlay_18.inc"
 	.include "global.inc"
 
-	.extern ov18_021E5900
-	.extern ov18_021E5904
-	.extern ov18_021E5908
-	.extern ov18_021E590C
-	.extern ov18_021E595C
-	.extern ov18_021E59A8
-	.extern ov18_021E613C
-	.extern ov18_021E6D10
-	.extern ov18_021E7698
-	.extern ov18_021E8AB0
-	.extern ov18_021E8ACC
-	.extern ov18_021E8AE0
-	.extern ov18_021E8B0C
-	.extern ov18_021E8B18
-	.extern ov18_021E8B24
-	.extern ov18_021E8B5C
+	.extern Pokefoot_GetNarcId
+	.extern Pokefoot_GetCharFileId
+	.extern Pokefoot_GetPlttFileId
+	.extern PokedexApp_GetSpeciesNameString
+	.extern PokedexApp_GetCategoryString
+	.extern PokedexApp_GetFlavorTextString
+	.extern PokedexApp_ClearBgTilemap
+	.extern PokedexApp_HasCaughtInLanguage
+	.extern PokedexApp_GetLetterGridCell
+	.extern PokedexApp_IsDungeonArea
+	.extern PokedexApp_GetAreaEncounterFlag
+	.extern PokedexApp_GetAreaMapId
+	.extern PokedexApp_GetOverworldMapId
+	.extern PokedexApp_GetDungeonMapId
+	.extern PokedexApp_IsRoute2Area
+	.extern PokedexApp_IsRoute16Area
 
 	.text
 
@@ -2220,10 +2220,10 @@ PokedexApp_LoadFootprintGraphics: ; 0x021F9694
 	sub sp, #8
 	add r5, r0, #0
 	add r4, r1, #0
-	bl ov18_021E5900
+	bl Pokefoot_GetNarcId
 	add r6, r0, #0
 	add r0, r5, #0
-	bl ov18_021E5904
+	bl Pokefoot_GetCharFileId
 	add r1, r0, #0
 	str r4, [sp]
 	add r0, r6, #0

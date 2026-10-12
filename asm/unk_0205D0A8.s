@@ -12,8 +12,8 @@
 	.include "unk_0205CB48.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0205D0A8
-sub_0205D0A8: ; 0x0205D0A8
+	thumb_func_start ForcedMovement_Ice
+ForcedMovement_Ice: ; 0x0205D0A8
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	bl PlayerAvatar_GetMapObject
@@ -22,12 +22,12 @@ sub_0205D0A8: ; 0x0205D0A8
 	add r6, r0, #0
 	add r0, r5, #0
 	add r1, r6, #0
-	bl sub_0205D240
+	bl PlayerAvatar_GetSlopeInDirection
 	str r0, [sp]
 	add r0, r5, #0
 	add r1, r4, #0
 	add r2, r6, #0
-	bl sub_0205DA34
+	bl PlayerAvatar_CheckCollision
 	add r7, r0, #0
 	add r0, r5, #0
 	mov r1, #1
@@ -48,7 +48,7 @@ sub_0205D0A8: ; 0x0205D0A8
 	cmp r0, #0
 	bne _0205D106
 	add r0, r5, #0
-	bl sub_0205D1FC
+	bl PlayerAvatar_EndForcedMovement
 	mov r0, #0
 	pop {r3, r4, r5, r6, r7, pc}
 _0205D106:
@@ -57,18 +57,18 @@ _0205D106:
 _0205D10A:
 	ldr r1, [sp]
 	add r0, r5, #0
-	bl sub_0205D2A0
+	bl PlayerAvatar_AdjustSpeedForSlope
 	cmp r0, #0
 	bne _0205D170
 	add r0, r5, #0
-	bl sub_0205D1FC
+	bl PlayerAvatar_EndForcedMovement
 	add r0, r6, #0
 	bl GetOppositeDirection
 	add r6, r0, #0
 	add r0, r5, #0
 	add r1, r4, #0
 	add r2, r6, #0
-	bl sub_0205DA34
+	bl PlayerAvatar_CheckCollision
 	cmp r0, #0
 	beq _0205D136
 	mov r0, #0
@@ -84,7 +84,7 @@ _0205D136:
 	add r2, r0, #0
 	add r0, r5, #0
 	add r1, r4, #0
-	bl sub_0205DA1C
+	bl PlayerAvatar_SetObjectMovement
 	add r0, r5, #0
 	mov r1, #1
 	bl PlayerAvatar_SetFlag1
@@ -104,7 +104,7 @@ _0205D170:
 	bl MapObject_SetFlagsBits
 	add r0, r5, #0
 	add r1, r6, #0
-	bl sub_0205D2D0
+	bl PlayerAvatar_SlideInDirection
 _0205D182:
 	add r0, r5, #0
 	mov r1, #1
@@ -112,9 +112,9 @@ _0205D182:
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end sub_0205D0A8
-	thumb_func_start sub_0205D190
-sub_0205D190: ; 0x0205D190
+	thumb_func_end ForcedMovement_Ice
+	thumb_func_start ForcedMovement_CyclingRoadSlope
+ForcedMovement_CyclingRoadSlope: ; 0x0205D190
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	bl PlayerAvatar_GetMapObject
@@ -122,7 +122,7 @@ sub_0205D190: ; 0x0205D190
 	add r0, r5, #0
 	add r1, r4, #0
 	mov r2, #1
-	bl sub_0205DA34
+	bl PlayerAvatar_CheckCollision
 	cmp r0, #0
 	bne _0205D1CE
 	mov r0, #1
@@ -131,7 +131,7 @@ sub_0205D190: ; 0x0205D190
 	add r2, r0, #0
 	add r0, r5, #0
 	add r1, r4, #0
-	bl sub_0205DA1C
+	bl PlayerAvatar_SetObjectMovement
 	add r0, r5, #0
 	mov r1, #1
 	bl PlayerAvatar_SetMoveState
@@ -147,7 +147,7 @@ _0205D1CE:
 	add r2, r0, #0
 	add r0, r5, #0
 	add r1, r4, #0
-	bl sub_0205DA1C
+	bl PlayerAvatar_SetObjectMovement
 	add r0, r5, #0
 	bl PlayerAvatar_ClearUnk24ClearFlag2
 	add r0, r5, #0
@@ -159,4 +159,4 @@ _0205D1CE:
 	mov r0, #1
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end sub_0205D190
+	thumb_func_end ForcedMovement_CyclingRoadSlope

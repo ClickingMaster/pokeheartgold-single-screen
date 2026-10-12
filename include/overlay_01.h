@@ -102,7 +102,6 @@ void Field_SaveStatsPrinter_Delete(struct SaveStatsPrinter *printer);
 void FieldSystem_ShowEmoteBubble(FieldSystem *fieldSystem, LocalMapObject *partnerPokeObj, int a2);
 void ov01_02205AEC(FieldSystem *fieldSystem);
 void MapObject_SetPositionNextTo(LocalMapObject *playerObj, LocalMapObject *tsurePokeObj, int a2, int a3);
-void ov01_021EACBC(void *fieldSystemUnk28, u8 a1);
 void ov01_021F6ABC(FieldSystem *fieldSystem, int a1, int a2, void *a3);
 
 typedef BOOL (*UnkCallback_021F6B34)(struct UnkStruct_ov01_021EDC28 *menu, int idx);

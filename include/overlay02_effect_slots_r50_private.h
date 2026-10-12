@@ -29,7 +29,7 @@ extern void (*ov02_02253A04[])(void *);
 
 void GF_AssertFail(void);
 void PlaySE(u16 seqNo);
-void ov01_021FBE70(Field3DModelAnimation *anim, Field3dModel *model, void *animRaw, NNSFndAllocator *alloc);
+void Field3dModelAnimation_LoadFromData(Field3DModelAnimation *anim, Field3dModel *model, void *animRaw, NNSFndAllocator *alloc);
 void Field3dModelAnimation_Unload(Field3DModelAnimation *anim, NNSFndAllocator *alloc);
 void *Heap_Alloc(enum HeapID heapID, u32 size);
 void Heap_Free(void *ptr);

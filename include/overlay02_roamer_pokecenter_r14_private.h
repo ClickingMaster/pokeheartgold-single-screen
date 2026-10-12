@@ -8,8 +8,8 @@
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 void HeapExp_FndInitAllocator(void *, u32, u32);
 void *AllocAtEndAndReadWholeNarcMemberByIdPair(u32, u32, u32);
-void ov01_021FBD38(void *, void *);
-void ov01_021FBDFC(void *);
+void Field3dModel_LoadFromData(void *, void *);
+void Field3dModel_UnloadKeepData(void *);
 void FieldEffectManager_HeapFree(void *);
 void Field3dObject_InitFromModel(void *, void *);
 void Field3dModelAnimation_LoadFromFilesystem(void *, void *, u32, u32, u32, void *);
@@ -47,7 +47,7 @@ void TaskManager_Call(void *, void *, void *);
 BOOL PokecenterAnimRun(void *);
 BOOL ov02_0224BE24(void *);
 BOOL sub_02054C90(void *, int *, u32, void **, int *);
-void *ov01_021FB9E0(void *);
+void *AreaDataManager_GetMapPropTexture(void *);
 void *MapProp_GetRenderSurface(void *);
 void *MapProp_GetResModel(void *);
 void MapPropOneShotAnimationManager_LoadPropAnimations(void *, void *, u32, u32, void *, void *, void *, u32, u32, u32);

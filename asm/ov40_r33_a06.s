@@ -49,34 +49,34 @@
 	.public VsRecorder_SetVBlankPaused
 	.public VsRecorder_IsVideoSaved
 	.public VsRecorder_SanitizeName
-	.public ov40_0223A430
-	.public ov40_0223A83C
-	.public ov40_0223B374
-	.public ov40_0223B44C
-	.public ov40_0223C258
-	.public ov40_0223C3A4
-	.public ov40_0223C498
-	.public ov40_0223C710
-	.public ov40_0223C80C
-	.public ov40_0223CCA0
-	.public ov40_0223CCBC
-	.public ov40_0223CD14
-	.public ov40_0223CE64
-	.public ov40_0223CF00
-	.public ov40_0223CF70
-	.public ov40_0223CFA8
-	.public ov40_0223D504
-	.public ov40_0224549C
-	.public ov40_022454B0
-	.public ov40_022454E0
+	.public VsRecorder_CreateVideoListButtons
+	.public VsRecorder_FreeVideoDetails
+	.public VsRecorder_CreateSlotButtons
+	.public VsRecorder_FreeSlotButtons
+	.public VsRecorder_VideoListToggleProfile
+	.public VsRecorder_VideoListPlay
+	.public VsRecorder_VideoListResume
+	.public VsRecorder_ShowVideoListMessage
+	.public VsRecorder_VideoListShowSlots
+	.public VsRecorder_RemoveDetailsButtonWindow
+	.public VsRecorder_PrintDetailsButtonLabel
+	.public VsRecorder_CreateDetailsButtonWindow
+	.public VsRecorder_OnVideoDetailsTouch
+	.public VsRecorder_OnSaveSlotTouch
+	.public VsRecorder_OnOverwriteTouch
+	.public VsRecorder_LoadVideoDetails
+	.public VsRecorder_FreeDetailsButtons
+	.public sVsRecorderOverwriteHitboxes
+	.public sVsRecorderSaveSlotHitboxes
+	.public sVsRecorderVideoDetailHitboxes
 	.public BattleRecord_GetHeader
 	.public BattleRecordHeader_GetField
 	.public FrontierCard_NewNameString
 	.public sub_02087A84
 	.text
 
-	thumb_func_start ov40_0223C258
-ov40_0223C258: ; 0x0223C258
+	thumb_func_start VsRecorder_VideoListToggleProfile
+VsRecorder_VideoListToggleProfile: ; 0x0223C258
 	push {r3, r4, r5, lr}
 	mov r1, #0x86
 	add r5, r0, #0
@@ -228,18 +228,18 @@ _0223C388:
 	str r1, [r4, #0x10]
 	add r0, r5, #0
 	add r1, #0x79
-	bl ov40_0223CCBC
+	bl VsRecorder_PrintDetailsButtonLabel
 	add r0, r5, #0
 	mov r1, #7
 	bl VsRecorder_SetSubState
 _0223C3A0:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov40_0223C258
+	thumb_func_end VsRecorder_VideoListToggleProfile
 
 
-	thumb_func_start ov40_0223C3A4
-ov40_0223C3A4: ; 0x0223C3A4
+	thumb_func_start VsRecorder_VideoListPlay
+VsRecorder_VideoListPlay: ; 0x0223C3A4
 	push {r4, r5, lr}
 	sub sp, #0xc
 	mov r1, #0x86
@@ -310,11 +310,11 @@ _0223C416:
 	ldr r0, [r4, r0]
 	bl TouchHitboxController_Destroy
 	add r0, r5, #0
-	bl ov40_0223A83C
+	bl VsRecorder_FreeVideoDetails
 	add r0, r5, #0
-	bl ov40_0223CCA0
+	bl VsRecorder_RemoveDetailsButtonWindow
 	add r0, r5, #0
-	bl ov40_0223D504
+	bl VsRecorder_FreeDetailsButtons
 	add r0, r5, #0
 	mov r1, #0
 	bl VsRecorder_SetVBlankPaused
@@ -351,11 +351,11 @@ _0223C48E:
 	pop {r4, r5, pc}
 	.balign 4, 0
 _0223C494: .word 0x00000868
-	thumb_func_end ov40_0223C3A4
+	thumb_func_end VsRecorder_VideoListPlay
 
 
-	thumb_func_start ov40_0223C498
-ov40_0223C498: ; 0x0223C498
+	thumb_func_start VsRecorder_VideoListResume
+VsRecorder_VideoListResume: ; 0x0223C498
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	mov r1, #0x86
@@ -476,11 +476,11 @@ _0223C4F8:
 	str r0, [r4, #8]
 	b _0223C6E2
 _0223C592:
-	bl ov40_0223CFA8
+	bl VsRecorder_LoadVideoDetails
 	mov r0, #0x6d
 	str r0, [sp]
-	ldr r0, _0223C6F4 ; =ov40_022454E0
-	ldr r2, _0223C6F8 ; =ov40_0223CE64
+	ldr r0, _0223C6F4 ; =sVsRecorderVideoDetailHitboxes
+	ldr r2, _0223C6F8 ; =VsRecorder_OnVideoDetailsTouch
 	mov r1, #4
 	add r3, r4, #0
 	bl TouchHitboxController_Create
@@ -489,8 +489,8 @@ _0223C592:
 	str r0, [r5, r1]
 	mov r0, #0x6d
 	str r0, [sp]
-	ldr r0, _0223C6FC ; =ov40_022454B0
-	ldr r2, _0223C700 ; =ov40_0223CF00
+	ldr r0, _0223C6FC ; =sVsRecorderSaveSlotHitboxes
+	ldr r2, _0223C700 ; =VsRecorder_OnSaveSlotTouch
 	mov r1, #4
 	add r3, r4, #0
 	bl TouchHitboxController_Create
@@ -499,8 +499,8 @@ _0223C592:
 	str r0, [r5, r1]
 	mov r0, #0x6d
 	str r0, [sp]
-	ldr r0, _0223C704 ; =ov40_0224549C
-	ldr r2, _0223C708 ; =ov40_0223CF70
+	ldr r0, _0223C704 ; =sVsRecorderOverwriteHitboxes
+	ldr r2, _0223C708 ; =VsRecorder_OnOverwriteTouch
 	mov r1, #2
 	add r3, r4, #0
 	bl TouchHitboxController_Create
@@ -569,7 +569,7 @@ _0223C642:
 	mov r1, #1
 	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	add r0, r4, #0
-	bl ov40_0223CD14
+	bl VsRecorder_CreateDetailsButtonWindow
 	mov r0, #4
 	mov r1, #1
 	bl GfGfx_EngineATogglePlanes
@@ -633,18 +633,18 @@ _0223C6E2:
 _0223C6E8: .word 0x00004138
 _0223C6EC: .word 0x00002088
 _0223C6F0: .word 0x000004A4
-_0223C6F4: .word ov40_022454E0
-_0223C6F8: .word ov40_0223CE64
-_0223C6FC: .word ov40_022454B0
-_0223C700: .word ov40_0223CF00
-_0223C704: .word ov40_0224549C
-_0223C708: .word ov40_0223CF70
+_0223C6F4: .word sVsRecorderVideoDetailHitboxes
+_0223C6F8: .word VsRecorder_OnVideoDetailsTouch
+_0223C6FC: .word sVsRecorderSaveSlotHitboxes
+_0223C700: .word VsRecorder_OnSaveSlotTouch
+_0223C704: .word sVsRecorderOverwriteHitboxes
+_0223C708: .word VsRecorder_OnOverwriteTouch
 _0223C70C: .word 0x000006D8
-	thumb_func_end ov40_0223C498
+	thumb_func_end VsRecorder_VideoListResume
 
 
-	thumb_func_start ov40_0223C710
-ov40_0223C710: ; 0x0223C710
+	thumb_func_start VsRecorder_ShowVideoListMessage
+VsRecorder_ShowVideoListMessage: ; 0x0223C710
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x1c
 	add r4, r1, #0
@@ -753,11 +753,11 @@ _0223C7CE:
 	.balign 4, 0
 _0223C804: .word 0x000008A4
 _0223C808: .word 0x000F0D0C
-	thumb_func_end ov40_0223C710
+	thumb_func_end VsRecorder_ShowVideoListMessage
 
 
-	thumb_func_start ov40_0223C80C
-ov40_0223C80C: ; 0x0223C80C
+	thumb_func_start VsRecorder_VideoListShowSlots
+VsRecorder_VideoListShowSlots: ; 0x0223C80C
 	push {r4, r5, r6, lr}
 	sub sp, #0x10
 	add r4, r0, #0
@@ -817,7 +817,7 @@ _0223C874:
 	bl VsRecorder_FreeProfile
 _0223C880:
 	add r0, r4, #0
-	bl ov40_0223CCA0
+	bl VsRecorder_RemoveDetailsButtonWindow
 	add r0, r4, #0
 	mov r1, #0
 	bl VsRecorder_SetVBlankPaused
@@ -825,7 +825,7 @@ _0223C880:
 	mov r1, #1
 	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
-	bl ov40_0223D504
+	bl VsRecorder_FreeDetailsButtons
 	add r0, r4, #0
 	mov r1, #0
 	bl VsRecorder_SetVBlankPaused
@@ -855,7 +855,7 @@ _0223C8BC:
 	mov r1, #1
 	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
-	bl ov40_0223B374
+	bl VsRecorder_CreateSlotButtons
 	add r0, r4, #0
 	mov r1, #0
 	bl VsRecorder_SetVBlankPaused
@@ -929,7 +929,7 @@ _0223C964:
 	mov r1, #1
 	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
-	bl ov40_0223B44C
+	bl VsRecorder_FreeSlotButtons
 	add r0, r4, #0
 	mov r1, #0
 	bl VsRecorder_SetVBlankPaused
@@ -954,7 +954,7 @@ _0223C9B4:
 	mov r1, #1
 	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
-	bl ov40_0223A430
+	bl VsRecorder_CreateVideoListButtons
 	add r0, r4, #0
 	mov r1, #0
 	bl VsRecorder_SetVBlankPaused
@@ -988,7 +988,7 @@ _0223C9B4:
 	bl ManagedSprite_SetAnim
 _0223CA0A:
 	add r0, r4, #0
-	bl ov40_0223CD14
+	bl VsRecorder_CreateDetailsButtonWindow
 	mov r0, #0
 	str r0, [sp]
 	str r0, [sp, #4]
@@ -1187,12 +1187,12 @@ _0223CBA2:
 	mov r1, #1
 	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
-	bl ov40_0223D504
+	bl VsRecorder_FreeDetailsButtons
 	add r0, r4, #0
 	mov r1, #0
 	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
-	bl ov40_0223CCA0
+	bl VsRecorder_RemoveDetailsButtonWindow
 	mov r0, #4
 	mov r1, #0
 	bl GfGfx_EngineATogglePlanes
@@ -1219,7 +1219,7 @@ _0223CBDE:
 	mov r1, #1
 	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
-	bl ov40_0223B374
+	bl VsRecorder_CreateSlotButtons
 	add r0, r4, #0
 	mov r1, #0
 	bl VsRecorder_SetVBlankPaused
@@ -1264,7 +1264,7 @@ _0223CC4C:
 	add r0, r4, #0
 	mov r1, #0x64
 	mov r2, #0
-	bl ov40_0223C710
+	bl VsRecorder_ShowVideoListMessage
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -1290,4 +1290,4 @@ _0223CC98:
 	add sp, #0x10
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov40_0223C80C
+	thumb_func_end VsRecorder_VideoListShowSlots

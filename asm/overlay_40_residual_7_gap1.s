@@ -3658,56 +3658,56 @@
 	.public ov40_0223A158
 	.public ov40_0223A274
 	.public ov40_0223A280
-	.public ov40_0223A324
-	.public ov40_0223A360
-	.public ov40_0223A3BC
-	.public ov40_0223A430
-	.public ov40_0223A510
-	.public ov40_0223A640
-	.public ov40_0223A83C
-	.public ov40_0223A85C
-	.public ov40_0223A874
-	.public ov40_0223A924
-	.public ov40_0223AC24
-	.public ov40_0223ACD0
-	.public ov40_0223AF24
-	.public ov40_0223AF3C
-	.public ov40_0223B190
-	.public ov40_0223B29C
-	.public ov40_0223B374
-	.public ov40_0223B44C
-	.public ov40_0223B480
-	.public ov40_0223B4BC
-	.public ov40_0223B538
-	.public ov40_0223B574
-	.public ov40_0223B5B0
-	.public ov40_0223B62C
-	.public ov40_0223B75C
-	.public ov40_0223BA70
-	.public ov40_0223BB74
-	.public ov40_0223BD98
-	.public ov40_0223BF88
-	.public ov40_0223C0D8
-	.public ov40_0223C240
-	.public ov40_0223C258
-	.public ov40_0223C3A4
-	.public ov40_0223C498
-	.public ov40_0223C710
-	.public ov40_0223C80C
-	.public ov40_0223CCA0
-	.public ov40_0223CCBC
-	.public ov40_0223CD14
-	.public ov40_0223CD58
-	.public ov40_0223CE38
-	.public ov40_0223CE64
-	.public ov40_0223CF00
-	.public ov40_0223CF70
-	.public ov40_0223CFA8
-	.public ov40_0223D008
-	.public ov40_0223D1AC
-	.public ov40_0223D1F0
-	.public ov40_0223D244
-	.public ov40_0223D504
+	.public VsRecorder_OnRankingsHeaderReceived
+	.public VsRecorder_OnRankingsReceived
+	.public VsRecorder_PlaceVideoListIcons
+	.public VsRecorder_CreateVideoListButtons
+	.public VsRecorder_PrintVideoListMessage
+	.public VsRecorder_VideoListDownloadVideo
+	.public VsRecorder_FreeVideoDetails
+	.public VsRecorder_VideoListOverwriteMain
+	.public VsRecorder_VideoListOverwriteNo
+	.public VsRecorder_VideoListSave
+	.public VsRecorder_VideoListConfirmOverwrite
+	.public VsRecorder_VideoListReturnToDetails
+	.public VsRecorder_VideoListSlotsMain
+	.public VsRecorder_VideoListSlotsCancel
+	.public VsRecorder_VideoListBackToList
+	.public VsRecorder_SetSlotButtonName
+	.public VsRecorder_CreateSlotButtons
+	.public VsRecorder_FreeSlotButtons
+	.public VsRecorder_FreeVideoListButtons
+	.public VsRecorder_SetVideoListButtonsMode
+	.public VsRecorder_RemoveVideoListWindows
+	.public VsRecorder_RemoveVideoListButtonWindows
+	.public VsRecorder_VideoListInit
+	.public VsRecorder_VideoListEnter
+	.public VsRecorder_VideoListDownloadList
+	.public VsRecorder_CreateVideoListWindows
+	.public VsRecorder_VideoListShowList
+	.public VsRecorder_VideoListSelect
+	.public VsRecorder_VideoListExit
+	.public VsRecorder_VideoListShowDetails
+	.public VsRecorder_VideoListDetailsMain
+	.public VsRecorder_VideoListToggleProfile
+	.public VsRecorder_VideoListPlay
+	.public VsRecorder_VideoListResume
+	.public VsRecorder_ShowVideoListMessage
+	.public VsRecorder_VideoListShowSlots
+	.public VsRecorder_RemoveDetailsButtonWindow
+	.public VsRecorder_PrintDetailsButtonLabel
+	.public VsRecorder_CreateDetailsButtonWindow
+	.public VsRecorder_CreateOverwriteWindows
+	.public VsRecorder_RemoveOverwriteWindows
+	.public VsRecorder_OnVideoDetailsTouch
+	.public VsRecorder_OnSaveSlotTouch
+	.public VsRecorder_OnOverwriteTouch
+	.public VsRecorder_LoadVideoDetails
+	.public VsRecorder_CreateVideoListIcons
+	.public VsRecorder_SetVideoListIconsDrawFlag
+	.public VsRecorder_FreeVideoListIcons
+	.public VsRecorder_ScrollVideoListIcons
+	.public VsRecorder_FreeDetailsButtons
 	.public VsRecorder_GetNet
 	.public VsRecorder_InitNet
 	.public VsRecorder_IsNetIdle
@@ -3948,19 +3948,19 @@
 	.public ov40_02245418
 	.public ov40_02245444
 	.public ov40_02245470
-	.public ov40_02245494
-	.public ov40_02245498
-	.public ov40_0224549C
-	.public ov40_022454A4
-	.public ov40_022454B0
-	.public ov40_022454C0
-	.public ov40_022454D0
-	.public ov40_022454E0
-	.public ov40_022454F0
-	.public ov40_0224551C
-	.public ov40_0224554C
-	.public ov40_0224557C
-	.public ov40_022455F4
+	.public sVsRecorderVideoListOpenHitbox
+	.public sVsRecorderVideoListExitHitbox
+	.public sVsRecorderOverwriteHitboxes
+	.public sVsRecorderVideoListTitleMsgIds
+	.public sVsRecorderSaveSlotHitboxes
+	.public sVsRecorderSaveSlotMsgIds
+	.public sVsRecorderSaveSlotAnims
+	.public sVsRecorderVideoDetailHitboxes
+	.public sVsRecorderVideoListConfig
+	.public sVsRecorderScrollIconOrder
+	.public sVsRecorderListIconOrder
+	.public sVsRecorderVideoListIconPositions
+	.public sVsRecorderVideoListSubStates
 	.public ov40_02245648
 	.public ov40_0224564C
 	.public ov40_02245650

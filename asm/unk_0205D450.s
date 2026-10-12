@@ -12,8 +12,8 @@
 	.include "unk_0205CB48.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0205D450
-sub_0205D450: ; 0x0205D450
+	thumb_func_start PlayerAvatar_GetFootStepKind
+PlayerAvatar_GetFootStepKind: ; 0x0205D450
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	mov r1, #0
@@ -45,4 +45,4 @@ _0205D486:
 	mov r0, #1
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end sub_0205D450
+	thumb_func_end PlayerAvatar_GetFootStepKind

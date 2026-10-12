@@ -1,114 +1,65 @@
 #pragma force_active on
 #include "global.h"
 
+#include "dwc/chat_internal.h"
+#include "dwc/stats_upload_internal.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #pragma force_active on
-#include <string.h>
-#define W(p, o) (*(int *)((char *)(p) + (o)))
-#define U(p, o) (*(u32 *)((char *)(p) + (o)))
-#define P(p, o) (*(void **)((char *)(p) + (o)))
-#define B(p, o) (*(char *)((char *)(p) + (o)))
-#define A(p, o) ((void *)((char *)(p) + (o)))
-extern void __msl_assertion_failed(char *, char *, char *, int);
-extern void *ov00_021EC3BC(void *, int);
-extern void *ov00_021EC3A8(int);
-extern void ov00_021EC3D8(void *);
-extern void ov00_021EC2EC(int, void *, int);
-extern void ov00_021FA0D8(void);
-extern void ov00_021EC24C(int, int);
-extern int ov00_021EC230(void);
-extern int ov45_0225478C(int, int, int, int, int, int);
-extern int ov45_02253528(void *, char *);
-extern void ov45_02251DB4(void *, int);
-extern char ov45_02257148[];
-extern char ov45_02257154[];
-extern char ov45_02257164[];
-extern char ov45_02257184[];
-extern char ov45_022571A4[];
-extern char ov45_022571B4[];
-extern char ov45_022571C4[];
-extern char ov45_02257220[];
-extern char ov45_02257248[];
-extern char ov45_02257258[];
-extern char ov45_02257334[];
-extern char ov45_02257344[];
-extern char ov45_022573C4[];
-extern char ov45_022573E4[];
-extern char ov45_02257408[];
-extern char ov45_02257438[];
-extern char ov45_0225745C[];
-extern char ov45_0225749C[];
-extern char ov45_022574BC[];
-extern char ov45_022574E0[];
-extern char ov45_02257514[];
-extern char ov45_02257538[];
-extern char ov45_022575D8[];
-extern char ov45_022575FC[];
-extern char ov45_02257600[];
-extern char ov45_02257610[];
-extern char ov45_02257620[];
-extern char ov45_02257624[];
-extern char ov45_02257628[];
-extern char ov45_0225762C[];
-extern char ov45_0225763C[];
-extern char ov45_0225765C[];
-extern char ov45_022576A0[];
-extern char ov45_022576CC[];
-extern char ov45_022576D4[];
-extern char ov45_022576DC[];
-extern char ov45_02257704[];
-extern char ov45_02257728[];
-extern char ov45_02257750[];
-extern char ov45_02257758[];
-extern char ov45_0225775C[];
-extern char ov45_02257764[];
-extern char ov45_02257780[];
-extern char ov45_022577AC[];
-extern char ov45_022577F8[];
-extern char ov45_022587F8[];
-extern int ov45_02253968(void *);
-extern int ov45_02253374(char *s, void *p);
-extern int ov45_022533E4(char *s, void *p);
-extern u32 ov45_02253D50(u32 n);
-extern void ov45_02253D88(u32 n);
-extern int ov45_02253D9C(void);
-extern int ov45_02253DDC(char *a, char *b, u32 c, u32 d, u32 e, u32 f);
-extern void ov45_022545BC(void);
-extern void ov45_022546F8(void);
-extern int ov45_02254774(int *p);
-extern int ov45_022549E0(int a, int b, int c, int d, int e);
-extern int ov45_02254A04(int a, int b, int c, int d, int e);
-extern void *ov45_02253B5C(void *p);
-extern void ov45_02254088(void);
-extern void *ov00_021EC2A8(int, int);
-extern void ov00_021FFC18(void *, void *, int, int);
-extern void ov00_021FA0B4(int);
-extern unsigned long strtoul(const char *, char **, int);
-extern int ov45_022542F4(u8 *out, u8 *a, int na, u8 *b, int nb);
-extern void ov45_0225443C(int mode, char *s);
-extern int ov45_02253968(void *p);
-extern void ov45_0225408C(void);
-extern int ov00_021FA488(void *, int, int, void (*)(void), void (*)(void), int), ov00_021FA118(void);
-extern int ov45_022545F0(void);
 
-int ov45_02253968(void *p) {
-    char *s = P(p, 0x108), *end, *last;
-    char old;
+#include <string.h>
+
+// The message reading functions of the chat socket module (assertions name "chatSocket.c") and the key setup and
+// random number generator of the stats upload client (stats_upload.c), which share this object.
+
+extern void __msl_assertion_failed(const char *, const char *, const char *, int);
+extern const char ov45_02257164[];
+extern const char ov45_02257258[];
+extern const char ov45_02257334[];
+extern const char ov45_02257344[];
+extern const char ov45_022573C4[];
+extern const char ov45_022573E4[];
+extern const char ov45_02257408[];
+extern const char ov45_02257438[];
+extern const char ov45_0225745C[];
+extern const char ov45_0225749C[];
+extern const char ov45_022574BC[];
+extern const char ov45_022574E0[];
+extern const char ov45_02257514[];
+extern const char ov45_02257538[];
+
+// Assertion of the socket module with the message, the name of the checking function and the line.
+#define ASSERT(cond, message, func, line)                           \
+    if (!(cond)) {                                                  \
+        __msl_assertion_failed(message, ov45_02257258, func, line); \
+    }
+
+// Frees a part of the message and clears it.
+#define FREE_PART(part)      \
+    if (part) {              \
+        ov00_021EC3D8(part); \
+        part = NULL;         \
+    }
+
+// Parses the first complete line of the input buffer into socket->message and removes it from the buffer.
+BOOL ov45_02253968(ChatSocket *socket) {
+    char *line = socket->input.data, *end, *last;
+    char saved;
     int i;
-    if (!*s) {
+    if (!*line) {
         goto fail;
     }
-    while (*s == 13 || *s == 10) {
-        s++;
+    while (*line == '\r' || *line == '\n') {
+        line++;
     }
-    if (!*s) {
+    if (!*line) {
         goto fail;
     }
-    end = s;
-    last = s;
-    while (*end != 10 && *end != 13 && *end) {
-        if (*end != 32) {
+    end = line;
+    last = line;
+    while (*end != '\n' && *end != '\r' && *end) {
+        if (*end != ' ') {
             last = end;
         }
         end++;
@@ -116,164 +67,115 @@ int ov45_02253968(void *p) {
     if (!*end) {
         goto fail;
     }
-    old = last[1];
+    saved = last[1];
     last[1] = 0;
-    if (P(p, 808)) {
-        ov00_021EC3D8(P(p, 808));
-        P(p, 808) = 0;
+    FREE_PART(socket->message.text);
+    FREE_PART(socket->message.prefix);
+    FREE_PART(socket->message.nick);
+    FREE_PART(socket->message.user);
+    FREE_PART(socket->message.host);
+    FREE_PART(socket->message.command);
+    FREE_PART(socket->message.middle);
+    FREE_PART(socket->message.trailing);
+    for (i = 0; i < socket->message.paramCount; i++) {
+        FREE_PART(socket->message.params[i]);
     }
-    if (P(p, 812)) {
-        ov00_021EC3D8(P(p, 812));
-        P(p, 812) = 0;
+    FREE_PART(socket->message.params);
+    socket->message.paramCount = 0;
+    memset(&socket->message, 0, sizeof(ChatMessage));
+    if (!ov45_02253528(socket, line)) {
+        memset(&socket->message, 0, sizeof(ChatMessage));
+        return FALSE;
     }
-    if (P(p, 816)) {
-        ov00_021EC3D8(P(p, 816));
-        P(p, 816) = 0;
-    }
-    if (P(p, 820)) {
-        ov00_021EC3D8(P(p, 820));
-        P(p, 820) = 0;
-    }
-    if (P(p, 824)) {
-        ov00_021EC3D8(P(p, 824));
-        P(p, 824) = 0;
-    }
-    if (P(p, 828)) {
-        ov00_021EC3D8(P(p, 828));
-        P(p, 828) = 0;
-    }
-    if (P(p, 832)) {
-        ov00_021EC3D8(P(p, 832));
-        P(p, 832) = 0;
-    }
-    if (P(p, 836)) {
-        ov00_021EC3D8(P(p, 836));
-        P(p, 836) = 0;
-    }
-    for (i = 0; i < W(p, 0x34c); i++) {
-        if (((void **)P(p, 0x348))[i]) {
-            ov00_021EC3D8(((void **)P(p, 0x348))[i]);
-            ((void **)P(p, 0x348))[i] = 0;
-        }
-    }
-    if (P(p, 0x348)) {
-        ov00_021EC3D8(P(p, 0x348));
-        P(p, 0x348) = 0;
-    }
-    W(p, 0x34c) = 0;
-    memset(A(p, 0x328), 0, 40);
-    if (!ov45_02253528(p, s)) {
-        memset(A(p, 0x328), 0, 40);
-        return 0;
-    }
-    last[1] = old;
-    ov45_02251DB4(A(p, 0x108), end - (char *)P(p, 0x108));
-    return 1;
+    last[1] = saved;
+    ov45_02251DB4(&socket->input, end - socket->input.data);
+    return TRUE;
 fail:
-    return 0;
+    return FALSE;
 }
 
-void *ov45_02253B5C(void *p) {
-    if (!(p)) {
-        __msl_assertion_failed(ov45_02257334, ov45_02257258, ov45_02257164, 1001);
+// Returns the next line received from the server, or NULL.
+ChatMessage *ov45_02253B5C(ChatSocket *socket) {
+    ASSERT(socket, ov45_02257334, ov45_02257164, 1001);
+    ASSERT(socket->state <= 2, ov45_02257344, ov45_02257164, 1001);
+    ASSERT(&socket->input, ov45_022573C4, ov45_02257164, 1001);
+    ASSERT(socket->input.size >= 0, ov45_022573E4, ov45_02257164, 1001);
+    ASSERT(socket->input.size % 0x2000 == 0, ov45_02257408, ov45_02257164, 1001);
+    ASSERT(socket->input.length >= 0, ov45_02257438, ov45_02257164, 1001);
+    ASSERT(socket->input.length <= socket->input.size, ov45_0225745C, ov45_02257164, 1001);
+    ASSERT(&socket->output, ov45_0225749C, ov45_02257164, 1001);
+    ASSERT(socket->output.size >= 0, ov45_022574BC, ov45_02257164, 1001);
+    ASSERT(socket->output.size % 0x2000 == 0, ov45_022574E0, ov45_02257164, 1001);
+    ASSERT(socket->output.length >= 0, ov45_02257514, ov45_02257164, 1001);
+    ASSERT(socket->output.length <= socket->output.size, ov45_02257538, ov45_02257164, 1001);
+    if (!socket->input.length) {
+        return NULL;
     }
-    if (!(U(p, 4) <= 2)) {
-        __msl_assertion_failed(ov45_02257344, ov45_02257258, ov45_02257164, 1001);
+    if (ov45_02253968(socket)) {
+        return &socket->message;
     }
-    if (!(A(p, 264))) {
-        __msl_assertion_failed(ov45_022573C4, ov45_02257258, ov45_02257164, 1001);
-    }
-    if (!(W(p, 272) >= 0)) {
-        __msl_assertion_failed(ov45_022573E4, ov45_02257258, ov45_02257164, 1001);
-    }
-    if (!(W(p, 272) % 8192 == 0)) {
-        __msl_assertion_failed(ov45_02257408, ov45_02257258, ov45_02257164, 1001);
-    }
-    if (!(W(p, 268) >= 0)) {
-        __msl_assertion_failed(ov45_02257438, ov45_02257258, ov45_02257164, 1001);
-    }
-    if (!(W(p, 268) <= W(p, 272))) {
-        __msl_assertion_failed(ov45_0225745C, ov45_02257258, ov45_02257164, 1001);
-    }
-    if (!(A(p, 276))) {
-        __msl_assertion_failed(ov45_0225749C, ov45_02257258, ov45_02257164, 1001);
-    }
-    if (!(W(p, 284) >= 0)) {
-        __msl_assertion_failed(ov45_022574BC, ov45_02257258, ov45_02257164, 1001);
-    }
-    if (!(W(p, 284) % 8192 == 0)) {
-        __msl_assertion_failed(ov45_022574E0, ov45_02257258, ov45_02257164, 1001);
-    }
-    if (!(W(p, 280) >= 0)) {
-        __msl_assertion_failed(ov45_02257514, ov45_02257258, ov45_02257164, 1001);
-    }
-    if (!(W(p, 280) <= W(p, 284))) {
-        __msl_assertion_failed(ov45_02257538, ov45_02257258, ov45_02257164, 1001);
-    }
-    if (!W(p, 0x10c)) {
-        return 0;
-    }
-    if (ov45_02253968(p)) {
-        return A(p, 0x328);
-    }
-    return 0;
+    return NULL;
 }
 
-u32 ov45_02253D50(u32 n) {
-    return 4 * (n / 3 + (n % 3 != 0));
+// Length of the base64 encoding of length bytes.
+u32 ov45_02253D50(u32 length) {
+    return 4 * (length / 3 + (length % 3 != 0));
 }
 
-void ov45_02253D88(u32 n) {
-    U(ov45_022587F8, 0) = n | (n << 16);
+void ov45_02253D88(u32 seed) {
+    ov45_022587F8 = seed | (seed << 16);
 }
 
+// Next byte of the random number generator.
 int ov45_02253D9C(void) {
-    U(ov45_022587F8, 0) = (U(ov45_0225762C, 68) * U(ov45_022587F8, 0) + U(ov45_0225762C, 72)) % U(ov45_0225762C, 76);
-    return (W(ov45_022587F8, 0) >> 16) & 255;
+    ov45_022587F8 = (ov45_0225762C.multiplier * ov45_022587F8 + ov45_0225762C.increment) % ov45_0225762C.modulus;
+    return ((int)ov45_022587F8 >> 16) & 0xFF;
 }
 
-int ov45_02253DDC(char *a, char *b, u32 c, u32 d, u32 e, u32 f) {
-    int i, n;
+// Sets the game name (< 32 characters), the 20 character secret key and the random number generator constants
+// (multiplier 8n + 5, odd increment, power of two modulus) used by the uploads.
+BOOL ov45_02253DDC(char *gameName, char *secretKey, u32 multiplier, u32 increment, u32 modulus, u32 checksumKey) {
+    int i, bits;
     u32 count;
-    u8 *q;
-    W(ov45_0225762C, 12) = 0;
-    if (strlen(a) >= 32) {
-        return 0;
+    u8 *dst;
+    ov45_0225762C.keyReady = FALSE;
+    if (strlen(gameName) >= 32) {
+        return FALSE;
     }
-    if (strlen(b) != 20) {
-        return 0;
+    if (strlen(secretKey) != 20) {
+        return FALSE;
     }
-    if ((c - 5) & 7) {
-        return 0;
+    if ((multiplier - 5) & 7) {
+        return FALSE;
     }
-    if (!(d & 1)) {
-        return 0;
+    if (!(increment & 1)) {
+        return FALSE;
     }
-    n = 0;
+    bits = 0;
     for (i = 0; i < 32; i++) {
-        if (((e >> i) & 1) == 1) {
-            n++;
+        if (((modulus >> i) & 1) == 1) {
+            bits++;
         }
     }
-    if (n != 1) {
-        return 0;
+    if (bits != 1) {
+        return FALSE;
     }
-    strncpy(ov45_0225763C, a, 32);
+    strncpy(ov45_0225763C, gameName, 32);
     count = 10;
-    q = (u8 *)ov45_0225765C;
+    dst = ov45_0225765C;
     {
         do {
-            u8 x = ((u8 *)b)[0], y = ((u8 *)b)[1];
-            b += 2;
-            q[0] = x;
-            q[1] = y;
-            q += 2;
+            u8 x = ((u8 *)secretKey)[0], y = ((u8 *)secretKey)[1];
+            secretKey += 2;
+            dst[0] = x;
+            dst[1] = y;
+            dst += 2;
         } while (--count != 0);
     }
-    U(ov45_0225762C, 68) = c;
-    U(ov45_0225762C, 72) = d;
-    U(ov45_0225762C, 76) = e;
-    U(ov45_0225762C, 80) = f;
-    W(ov45_0225762C, 12) = 1;
-    return 1;
+    ov45_0225762C.multiplier = multiplier;
+    ov45_0225762C.increment = increment;
+    ov45_0225762C.modulus = modulus;
+    ov45_0225762C.checksumKey = checksumKey;
+    ov45_0225762C.keyReady = TRUE;
+    return TRUE;
 }

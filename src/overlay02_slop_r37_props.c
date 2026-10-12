@@ -29,9 +29,9 @@ WIP_LOCAL BOOL ov02_0224CE28(TaskManager *taskManager) {
 
     switch (*(u8 *)((u8 *)env + 0xf)) {
     case 0: {
-        NNSG3dResMdlSet *mdlSet = NNS_G3dGetMdlSet(*(NNSG3dResFileHeader **)ov01_021FB90C(0x6b, *(void **)((u8 *)fieldSystem + 0x34)));
+        NNSG3dResMdlSet *mdlSet = NNS_G3dGetMdlSet(*(NNSG3dResFileHeader **)AreaDataManager_GetMapPropModel(0x6b, *(void **)((u8 *)fieldSystem + 0x34)));
         NNSG3dResMdl *mdl = NNS_G3dGetMdlByIdx(mdlSet, 0);
-        void *v = ov01_021FB9E0(*(void **)((u8 *)fieldSystem + 0x34));
+        void *v = AreaDataManager_GetMapPropTexture(*(void **)((u8 *)fieldSystem + 0x34));
         MapPropOneShotAnimationManager_LoadPropAnimations(*(void **)((u8 *)fieldSystem + 0x54), *(void **)((u8 *)fieldSystem + 0x58), 0x10, (void *)0x6b, NULL, mdl, v, 1, 1, 0);
         (*(u8 *)((u8 *)env + 0xf))++;
         break;

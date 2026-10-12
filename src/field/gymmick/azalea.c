@@ -492,7 +492,7 @@ static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData) {
     case 4:
         if (localData->terminalWaitCounter++ >= 4) {
             MapProp *mapProp = MapPropManager_GetMapPropByIndex(fieldSystem->mapPropManager, localData->spiderIdx);
-            NNSG3dResTex *tex = ov01_021FB9E0(fieldSystem->areaDataManager);
+            NNSG3dResTex *tex = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
             NNSG3dRenderObj *renderObj = MapProp_GetRenderSurface(mapProp);
             NNSG3dResMdl *mdl = MapProp_GetResModel(mapProp);
             MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, 1, 118, renderObj, mdl, tex, 1, 255, FALSE);

@@ -6,7 +6,7 @@ BOOL ov01_021F232C(FieldSystem *fieldSystem, PlayerAvatar *playerAvatar, int dir
     if (collision != 1 || PlayerAvatar_GetState(playerAvatar) != 2) {
         return FALSE;
     }
-    result = sub_0205DA34(playerAvatar, PlayerAvatar_GetMapObject(playerAvatar), direction);
+    result = PlayerAvatar_CheckCollision(playerAvatar, PlayerAvatar_GetMapObject(playerAvatar), direction);
     if (result == 0x20) {
         return FALSE;
     }

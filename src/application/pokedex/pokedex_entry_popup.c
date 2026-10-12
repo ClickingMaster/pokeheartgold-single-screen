@@ -166,14 +166,14 @@ void PokedexEntryPopup_DrawWindows(PokedexEntryPopup *popup) {
     StringExpandPlaceholders(msgFormat, strbuf, string);
     PokedexApp_PrintString(&popup->windows[1], strbuf, 1, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 0);
     String_Delete(string);
-    string = ov18_021E590C(popup->species, 2, popup->heapId);
+    string = PokedexApp_GetSpeciesNameString(popup->species, 2, popup->heapId);
     PokedexApp_PrintString(&popup->windows[2], string, 0, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 0);
     String_Delete(string);
-    string = ov18_021E595C(popup->species, 2, popup->heapId);
+    string = PokedexApp_GetCategoryString(popup->species, 2, popup->heapId);
     x = GetWindowWidth(&popup->windows[3]) * 8 - 4;
     PokedexApp_PrintString(&popup->windows[3], string, x, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 1);
     String_Delete(string);
-    string = ov18_021E59A8(popup->species, 2, 0, popup->heapId);
+    string = PokedexApp_GetFlavorTextString(popup->species, 2, 0, popup->heapId);
     x = (GetWindowWidth(&popup->windows[4]) * 8 - FontID_String_GetWidthMultiline(0, string, 0)) / 2;
     PokedexApp_PrintString(&popup->windows[4], string, x, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 0);
     String_Delete(string);
@@ -270,9 +270,9 @@ void PokedexEntryPopup_UnloadTypeIconResources(PokedexEntryPopup *popup) {
 }
 
 void PokedexEntryPopup_LoadFootprintResources(PokedexEntryPopup *popup) {
-    NARC *narc = NARC_New(ov18_021E5900(), popup->heapId);
+    NARC *narc = NARC_New(Pokefoot_GetNarcId(), popup->heapId);
     PokedexEntryPopup_LoadSpriteResources(popup->sprites[3].resources, popup->resourceManagers, popup->heapId, popup->gfxNarc, 77, -1, 78, 79, 1, 0xC61B, 0xC61B, 0xC61B, 0xC61B);
-    popup->sprites[3].resources[1] = PokedexEntryPopup_LoadPaletteResource(popup->resourceManagers[1], popup->heapId, narc, ov18_021E5908(), 1, 0xC61B);
+    popup->sprites[3].resources[1] = PokedexEntryPopup_LoadPaletteResource(popup->resourceManagers[1], popup->heapId, narc, Pokefoot_GetPlttFileId(), 1, 0xC61B);
     PaletteData_LoadPaletteSlotFromHardware(popup->paletteData, PLTTBUF_MAIN_OBJ, SpriteTransfer_GetPlttOffset(popup->sprites[3].resources[1], NNS_G2D_VRAM_TYPE_2DMAIN) << 4, 0x20);
     NARC_Delete(narc);
 }

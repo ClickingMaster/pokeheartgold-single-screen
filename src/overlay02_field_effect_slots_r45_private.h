@@ -28,7 +28,7 @@ typedef struct Ov02EffectManagerR45 {
 void GF_AssertFail(void);
 void PlaySE(u16 seqNo);
 void PlayerAvatar_CopyPositionVector(void *avatar, VecFx32 *vector);
-void ov01_021FBE70(Field3DModelAnimation *anim, Field3dModel *model, void *animRaw, NNSFndAllocator *alloc);
+void Field3dModelAnimation_LoadFromData(Field3DModelAnimation *anim, Field3dModel *model, void *animRaw, NNSFndAllocator *alloc);
 
 void ov02_0224D698(Ov02EffectSlotR45 *slot, void *avatar, fx32 dx, fx32 dz);
 void ov02_0224D700(Ov02EffectSlotR45 *slot);

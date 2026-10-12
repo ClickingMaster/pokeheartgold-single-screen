@@ -15,7 +15,7 @@
 #include "field/map_load_manager.h"
 #include "field/map_prop_animation.h"
 #include "field/model_attributes.h"
-#include "field/overlay_01_021EABA8.h"
+#include "field/field_camera.h"
 #include "field/overlay_01_021EAF00.h"
 #include "field/field_texture_manager.h"
 #include "field/map_object_model_list.h"
@@ -420,7 +420,7 @@ static void ov01_021E5FC0(FieldSystem *fieldSystem, u8 flag) {
 
     AreaLightManager_UpdateActiveTemplate(fieldSystem->areaLightManager);
     ov01_022047DC(fieldSystem->unk104);
-    ov01_021EAD8C(fieldSystem->unk28);
+    FieldCameraShift_Update(fieldSystem->unk28);
     Signpost_DoCurrentCommand(fieldSystem);
 
     if (flag & (1 << 0)) {
@@ -666,7 +666,7 @@ static void InitGraphicsAndManagers(FieldSystem *fieldSystem) {
     fieldSystem->unkC8 = ov01_022041C4(HEAP_ID_FIELD1);
     fieldSystem->unkCC = ov01_0220460C(fieldSystem->unkC8);
     fieldSystem->unk104 = ov01_02204744(HEAP_ID_FIELD1);
-    fieldSystem->mapPropAnimationManager = MapPropAnimationManager_Init(ov01_021FB904(fieldSystem->areaDataManager), fieldSystem->unkC8);
+    fieldSystem->mapPropAnimationManager = MapPropAnimationManager_Init(AreaDataManager_GetMapPropAnimListNarc(fieldSystem->areaDataManager), fieldSystem->unkC8);
     fieldSystem->mapPropOneShotAnimationManager = MapPropOneShotAnimationManager_New();
 }
 

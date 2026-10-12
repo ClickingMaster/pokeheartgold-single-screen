@@ -12,14 +12,14 @@
 	.include "unk_0205CB48.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0205DA34
-sub_0205DA34: ; 0x0205DA34
+	thumb_func_start PlayerAvatar_CheckCollision
+PlayerAvatar_CheckCollision: ; 0x0205DA34
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r6, r1, #0
 	add r7, r2, #0
 	mov r4, #0
-	bl sub_0205DAA8
+	bl MapObject_GetCollisionInDirection
 	mov r1, #0xa
 	str r0, [sp]
 	tst r0, r1
@@ -29,7 +29,7 @@ sub_0205DA34: ; 0x0205DA34
 	add r0, r5, #0
 	add r1, r6, #0
 	add r2, r7, #0
-	bl sub_0205DBF4
+	bl MapObject_IsWarpInDirection
 	cmp r0, #0
 	beq _0205DA60
 	mov r0, #8
@@ -45,7 +45,7 @@ _0205DA6C:
 	add r0, r5, #0
 	add r1, r6, #0
 	add r2, r7, #0
-	bl sub_0205DB68
+	bl MapObject_IsLedgeInDirection
 	cmp r0, #0
 	beq _0205DA7E
 	mov r0, #4
@@ -54,7 +54,7 @@ _0205DA7E:
 	add r0, r5, #0
 	add r1, r6, #0
 	add r2, r7, #0
-	bl sub_0205DCA0
+	bl MapObject_IsWaterInDirection
 	cmp r0, #1
 	bne _0205DA90
 	mov r0, #0x20
@@ -63,7 +63,7 @@ _0205DA90:
 	add r0, r5, #0
 	add r1, r6, #0
 	add r2, r7, #0
-	bl sub_0205DCFC
+	bl PlayerAvatar_IsBikeBlockedInDirection
 	cmp r0, #1
 	bne _0205DAA2
 	mov r0, #1
@@ -72,9 +72,9 @@ _0205DAA2:
 	add r0, r4, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end sub_0205DA34
-	thumb_func_start sub_0205DAA8
-sub_0205DAA8: ; 0x0205DAA8
+	thumb_func_end PlayerAvatar_CheckCollision
+	thumb_func_start MapObject_GetCollisionInDirection
+MapObject_GetCollisionInDirection: ; 0x0205DAA8
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x28
 	add r5, r1, #0
@@ -164,9 +164,9 @@ _0205DB60:
 	add sp, #0x28
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end sub_0205DAA8
-	thumb_func_start sub_0205DB68
-sub_0205DB68: ; 0x0205DB68
+	thumb_func_end MapObject_GetCollisionInDirection
+	thumb_func_start MapObject_IsLedgeInDirection
+MapObject_IsLedgeInDirection: ; 0x0205DB68
 	push {r3, r4, r5, r6, r7, lr}
 	mov r0, #0
 	add r4, r2, #0
@@ -233,9 +233,9 @@ _0205DBE4:
 _0205DBF0:
 	mov r0, #0
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end sub_0205DB68
-	thumb_func_start sub_0205DBF4
-sub_0205DBF4: ; 0x0205DBF4
+	thumb_func_end MapObject_IsLedgeInDirection
+	thumb_func_start MapObject_IsWarpInDirection
+MapObject_IsWarpInDirection: ; 0x0205DBF4
 	push {r3, r4, r5, r6, r7, lr}
 	mov r0, #0
 	add r4, r2, #0
@@ -317,4 +317,4 @@ _0205DC74:
 _0205DC9C:
 	mov r0, #0
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end sub_0205DBF4
+	thumb_func_end MapObject_IsWarpInDirection

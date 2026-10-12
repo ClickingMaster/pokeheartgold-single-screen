@@ -48,7 +48,7 @@ void ov01_021F474C(MapLoadManager *mapLoadManager, int idx) {
         ov01_021F6614(mapLoadManager->slots[idx].unk0C);
     }
     if (mapLoadManager->slots[idx].unk18 != 0) {
-        ov01_021FB354(mapLoadManager->slots[idx].unk10);
+        Bdhc_CancelLoadTask(mapLoadManager->slots[idx].unk10);
     }
     mapLoadManager->slots[idx].unk28 = 1;
 }
@@ -58,7 +58,7 @@ void ov01_021F477C(MapLoadTask *task) {
         ov01_021F6614(task->unk08);
     }
     if (task->unk14 != 0) {
-        ov01_021FB354(task->unk0C);
+        Bdhc_CancelLoadTask(task->unk0C);
     }
     task->unk10 = 0;
     task->unk14 = 0;

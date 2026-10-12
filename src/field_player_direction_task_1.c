@@ -54,7 +54,7 @@ BOOL ov01_021F31CC(void *taskManager) {
         if (sub_0205DFC8(s->avatar) == 0) {
             break;
         }
-        sub_0205DFD4(s->avatar, GetMovementForDirection(s->direction, 12));
+        PlayerAvatar_SetMovement(s->avatar, GetMovementForDirection(s->direction, 12));
         PlayerAvatar_SetFacingDirection(s->avatar, s->direction);
         s->state++;
         s->countdown = 7;
@@ -91,7 +91,7 @@ BOOL ov01_021F31CC(void *taskManager) {
         } else {
             s->direction = ov01_021F31A0(s->direction);
         }
-        if (sub_0205DA34(s->avatar, mapObject, s->direction) == 0) {
+        if (PlayerAvatar_CheckCollision(s->avatar, mapObject, s->direction) == 0) {
             s->state = 1;
             break;
         }

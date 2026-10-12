@@ -7,7 +7,7 @@
 #include "map_object_movement_utilities_internal.h"
 #include "math_util.h"
 #include "player_avatar.h"
-#include "unk_0205CB48.h"
+#include "player_avatar_movement.h"
 
 // Defined elsewhere without a header yet.
 u32 GetMovementForDirection(s32 direction, u32 movement);
@@ -743,7 +743,7 @@ int MapObject_GetDirectionToNearbyPlayer(LocalMapObject *object) {
         return -1;
     }
     avatar = FieldSystem_GetPlayerAvatar(MapObject_GetFieldSystem(object));
-    if (!sub_0205DE98(avatar)) {
+    if (!PlayerAvatar_IsRunning(avatar)) {
         return -1;
     }
     i = 0;

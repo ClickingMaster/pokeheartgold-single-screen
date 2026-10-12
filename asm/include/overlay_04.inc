@@ -100,7 +100,7 @@
 .public ov01_021FA930
 .public DynamicTerrainHeightManager_SetPlate
 .public DynamicTerrainHeightManager_SetPlateHeight
-.public ov01_021FB9E0
+.public AreaDataManager_GetMapPropTexture
 .public Field3dModel_LoadFromFilesystem
 .public Field3dModel_Unload
 .public Field3dModelAnimation_LoadFromFilesystem
@@ -108,7 +108,7 @@
 .public Field3dModelAnimation_FrameAdvanceAndLoop
 .public Field3dModelAnimation_FrameAdvanceAndCheck
 .public Field3dModelAnimation_FrameSet
-.public ov01_021FBF28
+.public Field3dModelAnimation_FrameGet
 .public Field3dObject_InitFromModel
 .public Field3dObject_AddAnimation
 .public Field3dObject_Draw

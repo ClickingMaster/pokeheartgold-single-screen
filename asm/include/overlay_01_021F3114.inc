@@ -14,9 +14,9 @@
 .public MetatileBehavior_StopSliding
 .public PlayerAvatar_SetFacingDirection
 .public PlayerAvatar_GetMapObject
-.public sub_0205DA34
+.public PlayerAvatar_CheckCollision
 .public sub_0205DFC8
-.public sub_0205DFD4
+.public PlayerAvatar_SetMovement
 .public MapObject_SetFlagsBits
 .public MapObject_ClearFlagsBits
 .public sub_0205F504

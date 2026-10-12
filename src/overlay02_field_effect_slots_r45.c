@@ -41,7 +41,7 @@ void ov02_0224D73C(Ov02EffectSlotR45 *slot, Field3dModel *model, NNSFndAllocator
     memset(slot, 0, sizeof(*slot));
     Field3dObject_InitFromModel(&slot->object, model);
     for (i = 0; i < 4; i++) {
-        ov01_021FBE70(&slot->animations[i], model, animationData[i], allocator);
+        Field3dModelAnimation_LoadFromData(&slot->animations[i], model, animationData[i], allocator);
         Field3dObject_AddAnimation(&slot->object, &slot->animations[i]);
     }
     Field3dObject_SetActiveFlag(&slot->object, FALSE);

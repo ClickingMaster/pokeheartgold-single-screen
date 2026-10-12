@@ -24,7 +24,7 @@
 #include "sys_flags.h"
 #include "field_interaction.h"
 #include "unk_02054648.h"
-#include "unk_0205CB48.h"
+#include "player_avatar_movement.h"
 
 static FieldUseMoveEnvironment *FieldMove_CreateUseEnvironment(FieldMoveUseData *useData, const FieldMoveCheckData *checkData);
 static void FieldMove_DeleteUseEnvironment(FieldUseMoveEnvironment *environment);

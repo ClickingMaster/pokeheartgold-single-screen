@@ -12,30 +12,30 @@
 	.include "overlay_01_021FB878.inc"
 	.include "global.inc"
 
-	.public ov01_021FB878
+	.public AreaDataManager_TrimTextureFile
 	.public AreaDataManager_Alloc
-	.public ov01_021FB904
-	.public ov01_021FB90C
+	.public AreaDataManager_GetMapPropAnimListNarc
+	.public AreaDataManager_GetMapPropModel
 	.public AreaDataManager_GetMapPropModelFile
 	.public AreaDataManager_Free
 	.public AreaDataManager_GetMapTexture
-	.public ov01_021FB9E0
+	.public AreaDataManager_GetMapPropTexture
 	.public AreaDataManager_GetBuildModelShapes
 	.public ov01_021FBA00
 	.public AreaDataManager_GetAreaLightArchiveID
 	.public AreaDataManager_Load
 	.public Field3dModel_LoadFromFilesystem
-	.public ov01_021FBD38
-	.public ov01_021FBD8C
+	.public Field3dModel_LoadFromData
+	.public Field3dModel_LoadTexturesTask
 	.public Field3dModel_Unload
-	.public ov01_021FBDFC
+	.public Field3dModel_UnloadKeepData
 	.public Field3dModelAnimation_LoadFromFilesystem
-	.public ov01_021FBE70
+	.public Field3dModelAnimation_LoadFromData
 	.public Field3dModelAnimation_Unload
 	.public Field3dModelAnimation_FrameAdvanceAndLoop
 	.public Field3dModelAnimation_FrameAdvanceAndCheck
 	.public Field3dModelAnimation_FrameSet
-	.public ov01_021FBF28
+	.public Field3dModelAnimation_FrameGet
 	.public Field3dObject_InitFromModel
 	.public Field3dObject_AddAnimation
 	.public Field3dObject_RemoveAnimation
@@ -45,11 +45,11 @@
 	.public Field3dObject_SetPosEx
 	.public Field3dObject_SetPos
 	.public Field3dObject_SetXRotation
-	.public ov01_021FC030
-	.public ov01_02208BA0
-	.public ov01_02208BB0
-	.public ov01_02209A88
-	.public ov01_02209AB4
+	.public Field3dModelAnimation_Init
+	.public gAreaEdgeColorTableLightKind0
+	.public gAreaEdgeColorTableLightKindN
+	.public gBuildModelShapesFieldPath
+	.public gBuildModelShapesRoomPath
 	.public _021FB884
 	.public _021FB8D8
 	.public _021FB8EE
@@ -174,32 +174,32 @@
 	.public Field3dObject_SetPos
 	.public Field3dObject_SetPosEx
 	.public Field3dObject_SetXRotation
-	.public ov01_021FB878
-	.public ov01_021FB904
-	.public ov01_021FB90C
-	.public ov01_021FB9E0
+	.public AreaDataManager_TrimTextureFile
+	.public AreaDataManager_GetMapPropAnimListNarc
+	.public AreaDataManager_GetMapPropModel
+	.public AreaDataManager_GetMapPropTexture
 	.public AreaDataManager_GetBuildModelShapes
 	.public ov01_021FBA00
-	.public ov01_021FBD38
-	.public ov01_021FBD8C
-	.public ov01_021FBDFC
-	.public ov01_021FBE70
-	.public ov01_021FBF28
-	.public ov01_021FC030
+	.public Field3dModel_LoadFromData
+	.public Field3dModel_LoadTexturesTask
+	.public Field3dModel_UnloadKeepData
+	.public Field3dModelAnimation_LoadFromData
+	.public Field3dModelAnimation_FrameGet
+	.public Field3dModelAnimation_Init
 	.rodata
 
-ov01_02208BA0: ; 0x02208BA0
+gAreaEdgeColorTableLightKind0: ; 0x02208BA0
 	.byte 0x00, 0x00, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10
 
-ov01_02208BB0: ; 0x02208BB0
+gAreaEdgeColorTableLightKindN: ; 0x02208BB0
 	.byte 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10
 
 	.data
 
 	.balign 4, 0
-ov01_02209A88: ; 0x02209A88
+gBuildModelShapesFieldPath: ; 0x02209A88
 	.asciz "fielddata/build_model/bm_field_matshp.dat"
 
 	.balign 4, 0
-ov01_02209AB4: ; 0x02209AB4
+gBuildModelShapesRoomPath: ; 0x02209AB4
 	.asciz "fielddata/build_model/bm_room_matshp.dat"

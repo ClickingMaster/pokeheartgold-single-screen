@@ -116,7 +116,7 @@ typedef struct MapLoadPair {
     int unk04;
 } MapLoadPair;
 
-void ov01_021FB354(void *a0);
+void Bdhc_CancelLoadTask(void *a0);
 void MapLoadBuffers_Free(void *a0);
 int ov01_021F5BF0(MapLoadManager *mapLoadManager);
 void ov01_021F5568(int idx, MapLoadManager *mapLoadManager);
@@ -128,8 +128,8 @@ typedef void (*MapLoadFunc)(void);
 
 void ov01_021F6620(SysTask *task, void *data);
 
-void *ov01_021FB254(void);
-void ov01_021FB360(void *bufs);
+void *Bdhc_New(void);
+void Bdhc_SetUnloaded(void *bufs);
 int ov01_021FBA00(void *areaDataManager);
 
 void MapLoadBuffers_GetPrimary(u32 index, void *buffers, void **out);

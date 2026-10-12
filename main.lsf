@@ -376,41 +376,8 @@ Static main
     Object src/field_misc_util.o
     Object src/player_avatar_anim_indices.o
     Object src/player_avatar.o
-    Object src/r40_unk_0205CB48_run1.o
-    Object asm/unk_0205CB48_r40_residual_1.o
-    Object src/player_avatar_movement_control.o
-    Object src/player_avatar_movement_update.o
-    Object src/player_avatar_movement_control_2.o
-    Object src/r40_unk_0205CF60_run1.o
-    Object src/player_avatar_movement_control_3.o
-    Object src/r40_unk_0205D01C_run1.o
-    Object src/player_avatar_movement_control_4.o
-    Object src/r40_unk_0205D0A8_run1.o
-    Object src/player_avatar_movement_control_5.o
-    Object src/field_call_1.o
-    Object src/player_avatar_movement_control_6.o
-    Object src/r40_unk_0205D450_run1.o
-    Object src/player_avatar_movement_control_7.o
-    Object src/r40_unk_0205D4B4_run1.o
-    Object src/player_avatar_movement_control_8.o
-    Object src/to50_field_call_forwarder.o
-    Object src/player_avatar_movement_control_9.o
-    Object src/to50_avatar_move_dispatch.o
-    Object src/player_avatar_movement_control_10.o
-    Object src/to80_extra1907_run01.o
-    Object src/player_avatar_movement_control_11.o
-    Object src/r40_unk_0205D83C_run1.o
-    Object src/player_avatar_movement_control_12.o
-    Object src/r40_unk_0205D978_run1.o
-    Object src/player_avatar_movement_control_13.o
-    Object src/unk_0205DA34_decomp.o
-    Object src/player_avatar_movement_control_14.o
-    Object src/to50_field_movement_terrain_check.o
-    Object src/player_avatar_movement_control_15.o
-    Object src/r40_unk_0205DDD4_run1.o
-    Object src/player_avatar_movement_control_16.o
-    Object src/to90_extra2557_run01.o
-    Object src/player_avatar_movement_control_17.o
+    Object asm/player_avatar_movement_data.o
+    Object src/player_avatar_movement.o
     Object src/map_object.o
     Object asm/unk_data_020FCBD8.o
     Object src/map_object_update.o
@@ -1349,10 +1316,7 @@ Overlay field
     Object src/field/build_model_shapes.o
     Object src/overlay_01_021EA824.o
     Object src/model_attributes_helpers_1.o
-    Object src/field_camera_manager_1.o
-    Object src/to90_extra2172_run01.o
-    Object src/to90_extra2172_run02.o
-    Object src/field_camera_manager_2.o
+    Object src/field/field_camera.o
     Object asm/overlay_01_021EABA8_residual_2.o
     Object src/bottom_screen_dispatch_1.o
     Object src/field/field_texture_manager.o
@@ -1578,16 +1542,11 @@ Overlay field
     Object src/op90_to52_r2_w13_overlay01_r14_residual_r01.o
     Object src/to52_r2_w13/to52_r2_w13_overlay01_r14_exact.o
     Object src/field/map_load_buffers.o
-    Object src/field_terrain_height_math.o
-    Object src/field_resource_stream.o
+    Object src/field/bdhc.o
     Object src/field/dynamic_terrain_height.o
     Object src/field/hblank_system.o
     Object src/field/field_poison_effect.o
-    Object src/area_data_manager_1.o
-    Object src/to80_extra1686_run01.o
-    Object src/area_data_manager_2.o
-    Object src/to80_extra1502_run01.o
-    Object src/area_data_manager_3.o
+    Object src/field/area_data.o
     Object asm/overlay_01_021FB878_residual_3.o
     Object src/field_honey_sweet_scent.o
     Object src/field_effect_registry_1.o
@@ -2029,10 +1988,10 @@ Overlay OVY_18
 {
     After main
     Object src/poketool/pokefoot.o
-    Object src/application/pokedex/ov18_021E590C.o
-    Object src/application/pokedex/ov18_021E5AA0.o
-    Object src/application/pokedex/ov18_021E5C40.o
-    Object src/application/pokedex/ov18_021E8BF4.o
+    Object src/application/pokedex/pokedex_species_text.o
+    Object src/application/pokedex/pokedex_app.o
+    Object src/application/pokedex/pokedex_screen_setup.o
+    Object src/application/pokedex/pokedex_main_seq.o
     Object src/application/pokedex/pokedex_windows.o
     Object src/application/pokedex/pokedex_sprites.o
     Object src/application/pokedex/pokedex_area_sprites.o
@@ -2205,32 +2164,7 @@ Overlay OVY_40
     Object src/overlay40_pc_box_theme_run3.o
     Object src/overlay_40_sol_partial_32.o
     Object src/to70_ov40_r33_a01_extra535_run01.o
-    Object src/ov40_r33_c01.o
-    Object src/op90_ov40_r33_a02_residual_r01.o
-    Object src/overlay40_r33_a02_exact.o
-    Object src/ov40_r33_c02.o
-    Object src/overlay40_r33_a03.o
-    Object src/ov40_r33_c03.o
-    Object src/to46_ov40_r33_a04.o
-    Object src/to70_to52_r2_w10_ov40_r33_a04_residual_head_extra190_run01.o
-    Object src/to70_to70_to52_r2_w10_ov40_r33_a04_residual_head_extra190_residual_1_extra1337_run01.o
-    Object src/to52_r2_w10_ov40_r33_a04_tail.o
-    Object src/ov40_r33_c04.o
-    Object src/to41_ov40_r33_a05_run1.o
-    Object src/to70_ov40_r33_a05_extra721_run01.o
-    Object src/to41_ov40_r33_a05_run2.o
-    Object src/to70_ov40_r33_a05_to41_residual_2_extra1190_run01.o
-    Object src/to41_ov40_r33_a05_run3.o
-    Object src/ov40_r33_c05.o
-    Object src/overlay40_r33_a06.o
-    Object src/ov40_r33_c06.o
-    Object src/to70_ov40_r33_a07_extra474_run01.o
-    Object src/ov40_r33_c07.o
-    Object src/to42_ov40_r33_a08_run1.o
-    Object src/op90_to42_ov40_r33_a08_gap1_r01.o
-    Object src/to42_ov40_r33_a08_run2.o
-    Object src/op90_to42_ov40_r33_a08_gap2_r01.o
-    Object src/ov40_r33_c08.o
+    Object src/application/vs_recorder/vs_recorder_video_list.o
     Object src/application/vs_recorder/vs_recorder_net.o
     Object src/overlay40_pc_state_handlers_head_35_run1.o
     Object src/op90_overlay_40_residual_35_r01.o
@@ -2493,19 +2427,7 @@ Overlay OVY_45
     Object src/chat_channel.o
     Object src/chat_cipher.o
     Object src/chat_requests.o
-    Object src/ov45_0224b0fc.o
-    Object src/ov45_0224b310.o
-    Object src/ov45_0224b474.o
-    Object src/ov45_0224b5e0.o
-    Object src/ov45_0224b748.o
-    Object src/ov45_0224b8d0.o
-    Object src/ov45_0224bb4c.o
-    Object src/ov45_0224bc8c.o
-    Object src/ov45_0224be74.o
-    Object src/ov45_0224c388.o
-    Object src/ov45_0224c594.o
-    Object src/ov45_0224c6dc.o
-    Object src/ov45_0224c9d8.o
+    Object src/chat_handlers.o
     Object src/ov45_0224cbac.o
     Object src/ov45_0224cf0c.o
     Object src/ov45_0224d128.o
@@ -2530,14 +2452,7 @@ Overlay OVY_45
     Object src/ov45_02251a8c.o
     Object src/chat_socket.o
     Object src/ov45_02253968.o
-    Object src/ov45_02253ed8.o
-    Object src/ov45_02254088.o
-    Object src/ov45_0225408c.o
-    Object src/ov45_022542f4.o
-    Object src/ov45_0225443c.o
-    Object src/ov45_022545bc.o
-    Object src/ov45_0225478c.o
-    Object src/ov45_022549e0.o
+    Object src/stats_upload.o
 }
 Overlay OVY_46
 {

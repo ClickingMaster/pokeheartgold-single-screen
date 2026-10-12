@@ -499,10 +499,10 @@ void PokedexApp_ShowMonPic(PokedexAppData *pokedexApp, int species, int index, i
 }
 
 void PokedexApp_LoadFootprintResources(PokedexAppData *pokedexApp) {
-    NarcId narcId = ov18_021E5900();
+    NarcId narcId = Pokefoot_GetNarcId();
 
     SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 77, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC599);
-    SpriteSystem_LoadPaletteBuffer(pokedexApp->paletteData, PLTTBUF_SUB_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, narcId, ov18_021E5908(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 0xC55B);
+    SpriteSystem_LoadPaletteBuffer(pokedexApp->paletteData, PLTTBUF_SUB_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, narcId, Pokefoot_GetPlttFileId(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 0xC55B);
     SpriteSystem_LoadCellResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 78, TRUE, 0xC558);
     SpriteSystem_LoadAnimResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 79, TRUE, 0xC558);
 }
@@ -723,7 +723,7 @@ void PokedexApp_UpdateLanguageIcons(PokedexAppData *pokedexApp, u16 species, int
         for (index = (s16)(first + 5); (u32)index >= (u32)first; index--) {
             u32 which = index - first;
             int language = sub_02091294(sub_020912AC(which));
-            if (ov18_021E6D10(pokedexApp, species, (u16)language) == TRUE || language == GAME_LANGUAGE) {
+            if (PokedexApp_HasCaughtInLanguage(pokedexApp, species, (u16)language) == TRUE || language == GAME_LANGUAGE) {
                 int current = LanguageToDexFlag(pokedexApp->language);
                 int flag = sub_020912AC(which);
                 s16 x, y;

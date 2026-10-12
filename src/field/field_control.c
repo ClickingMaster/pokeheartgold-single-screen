@@ -60,7 +60,7 @@
 #include "communication_club_link.h"
 #include "unk_02058AEC.h"
 #include "unk_0205A44C.h"
-#include "unk_0205CB48.h"
+#include "player_avatar_movement.h"
 #include "map_object_behavior.h"
 #include "unk_0206D494.h"
 
@@ -187,7 +187,7 @@ void FieldInput_Update(FieldInput *fieldInput, FieldSystem *fieldSystem, u16 new
         fieldInput->transitionDir = DIR_NONE;
     }
 
-    fieldInput->playerDir = sub_0205DD94(fieldSystem->playerAvatar, newKeys, heldKeys);
+    fieldInput->playerDir = PlayerAvatar_GetInputDirection(fieldSystem->playerAvatar, newKeys, heldKeys);
 }
 
 int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
@@ -202,7 +202,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
         }
 
         if (TryGetSeenByNpcTrainers(fieldSystem, doublesEligible) == TRUE) {
-            sub_0205CF44(fieldSystem->playerAvatar);
+            PlayerAvatar_ResetMovement(fieldSystem->playerAvatar);
             MapObjectManager_PauseAllMovement(fieldSystem->mapObjectManager);
             if (FollowMon_IsActive(fieldSystem)) {
                 MapObject_UnpauseMovement(FollowMon_GetMapObject(fieldSystem));
@@ -223,7 +223,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
     }
 
     int playerEvent = PLAYER_EVENT_NONE;
-    int direction = sub_0205DD94(fieldSystem->playerAvatar, fieldInput->newKeys, fieldInput->heldKeys);
+    int direction = PlayerAvatar_GetInputDirection(fieldSystem->playerAvatar, fieldInput->newKeys, fieldInput->heldKeys);
 
     if (StrengthFlagAction(Save_VarsFlags_Get(fieldSystem->saveData), 2)) {
         playerEvent |= PLAYER_EVENT_USED_STRENGTH;
@@ -256,7 +256,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
         LocalMapObject *mapObject;
         if (FieldSystem_GetInteractableFacingObject(fieldSystem, &mapObject) == TRUE) {
             if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
-                sub_0205CFBC(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
+                PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             }
             if (MapObject_GetType(mapObject) != 9) {
                 StartMapSceneScript(fieldSystem, MapObject_GetScriptID(mapObject), mapObject);
@@ -348,7 +348,7 @@ BOOL FieldInput_Process_Colosseum(FieldInput *input, FieldSystem *fieldSystem) {
         LocalMapObject *facingObject;
         if (FieldSystem_GetInteractableFacingObject(fieldSystem, &facingObject) == TRUE && MapObject_GetMovement(facingObject) != MOVEMENT_FACE_DOWN) {
             if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
-                sub_0205CFBC(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
+                PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             }
             StartMapSceneScript(fieldSystem, MapObject_GetScriptID(facingObject), facingObject);
             return TRUE;
@@ -392,7 +392,7 @@ BOOL FieldInput_Process_UnionRoom(FieldInput *input, FieldSystem *fieldSystem) {
     LocalMapObject *mapObject;
     if (input->interact && FieldSystem_GetInteractableFacingObject(fieldSystem, &mapObject) == TRUE) {
         if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
-            sub_0205CFBC(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
+            PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
         }
         sub_020380B0(); // CommManager_PauseUnionClient?
         StartMapSceneScript(fieldSystem, MapObject_GetScriptID(mapObject), mapObject);
@@ -423,7 +423,7 @@ int FieldInput_Process_BattleTower(FieldInput *fieldInput, FieldSystem *fieldSys
         LocalMapObject *mapObject;
         if (FieldSystem_GetInteractableFacingObject(fieldSystem, &mapObject) == TRUE) {
             if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
-                sub_0205CFBC(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
+                PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             }
 
             if (MapObject_GetType(mapObject) != 9) {

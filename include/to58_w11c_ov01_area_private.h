@@ -75,7 +75,7 @@ struct AreaLightManager {
 
 /* No tracked prototypes exist for these. */
 int GetDoorSE(FieldSystem *fieldSystem, int modelId, BOOL opening);
-NARC *ov01_021FB904(AreaDataManager *areaDataManager);
+NARC *AreaDataManager_GetMapPropAnimListNarc(AreaDataManager *areaDataManager);
 void PlaySE(u16 seq);
 void ov01_021EA300(AreaLightEntry *entry, ModelAttributes *modelAttributes);
 int ov01_021EA3E0(const char *path, AreaLightEntry **entriesOut);

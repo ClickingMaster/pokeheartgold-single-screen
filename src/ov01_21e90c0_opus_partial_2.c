@@ -73,7 +73,7 @@ void ov01_021E9610(Camera *camera, u8 *state) {
 int GetDoorSE(FieldSystem *fieldSystem, int modelId, BOOL opening) {
     DoorSEData data;
 
-    NARC_ReadWholeMember(ov01_021FB904(fieldSystem->areaDataManager), modelId, &data);
+    NARC_ReadWholeMember(AreaDataManager_GetMapPropAnimListNarc(fieldSystem->areaDataManager), modelId, &data);
     if (opening) {
         switch (data.doorType) {
         case 1:

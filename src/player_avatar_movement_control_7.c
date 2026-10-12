@@ -1,6 +1,0 @@
-#include "player_avatar_movement_control_internal.h"
-
-void sub_0205D494(PlayerAvatar *avatar, MapObject *mapObject) {
-    int movement = GetMovementForDirection(MapObject_GetFacingDirection(mapObject), 0);
-    sub_0205DA1C(avatar, mapObject, movement);
-}

@@ -4,7 +4,7 @@ void ov02_0224B88C(void *p) {
     u8 *q = (u8 *)p + 0x228;
     HeapExp_FndInitAllocator(q, 4, 0x20);
     PTR(q, 0x10) = AllocAtEndAndReadWholeNarcMemberByIdPair(0x67, 0x83, 4);
-    ov01_021FBD38(q + 0x14, PTR(q, 0x10));
+    Field3dModel_LoadFromData(q + 0x14, PTR(q, 0x10));
     Field3dObject_InitFromModel(q + 0x24, q + 0x14);
     Field3dModelAnimation_LoadFromFilesystem(q + 0x9c, q + 0x14, 0x67, 0xa7, 4, q);
     Field3dModelAnimation_LoadFromFilesystem(q + 0xb0, q + 0x14, 0x67, 0xa5, 4, q);
@@ -13,7 +13,7 @@ void ov02_0224B88C(void *p) {
 }
 void ov02_0224B90C(void *p) {
     u8 *q = (u8 *)p + 0x228;
-    ov01_021FBDFC(q + 0x14);
+    Field3dModel_UnloadKeepData(q + 0x14);
     FieldEffectManager_HeapFree(PTR(q, 0x10));
     Field3dModelAnimation_Unload(q + 0x9c, q);
     Field3dModelAnimation_Unload(q + 0xb0, q);

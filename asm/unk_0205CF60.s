@@ -51,7 +51,7 @@ _0205CF90:
 _0205CFA4:
 	add r0, r4, #0
 	bl MapObject_GetMovementCommand
-	bl sub_0205DE64
+	bl IsWallBumpMovement
 	cmp r0, #1
 	bne _0205CFB6
 	mov r0, #1

@@ -9,7 +9,7 @@
 #include "field/map_prop.h"
 
 #include "field_metatile_query_internal.h"
-#include "field_resource_stream_internal.h"
+#include "field/bdhc.h"
 #include "filesystem.h"
 #include "heap.h"
 #include "sys_task.h"
@@ -131,7 +131,6 @@ typedef struct MapLoadPair {
     int unk04;
 } MapLoadPair;
 
-void ov01_021FB354(void *a0);
 void MapLoadBuffers_Free(void *a0);
 int ov01_021F5BF0(MapLoadManager *mapLoadManager);
 void ov01_021F5568(int idx, MapLoadManager *mapLoadManager);
@@ -139,7 +138,6 @@ void ov01_021F474C(MapLoadManager *mapLoadManager, int idx);
 BOOL ov01_021F5038(MapLoadManager *mapLoadManager, int a1, int a2, u8 map0, u8 map1, u8 slot, u8 direction);
 void ov01_021F54AC(int a0, int a1, u8 map0, u8 map1, u8 direction, MapLoadManager *mapLoadManager);
 BOOL ov01_021F5BBC(u8 direction, MapLoadManager *mapLoadManager, u8 *slot);
-void ov01_021FB2F4(Ov01FB04C_Buffers *bufs);
 int ov01_02204698(FieldSystemUnkSubCC *manager);
 
 void MapLoadManager_RenderLoadedMap(int idx, MapLoadManager *mapLoadManager, ModelAttributes *modelAttributes);
@@ -149,8 +147,6 @@ typedef void (*MapLoadFunc)(void);
 
 void ov01_021F6620(SysTask *task, void *data);
 
-void *ov01_021FB254(void);
-void ov01_021FB360(void *bufs);
 int ov01_021FBA00(void *areaDataManager);
 
 void MapLoadBuffers_GetPrimary(u32 index, void *buffers, void **out);

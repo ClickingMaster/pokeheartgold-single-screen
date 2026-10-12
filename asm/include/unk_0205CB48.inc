@@ -64,17 +64,17 @@
 .public PlayerAvatar_MoveControl
 .public sub_0205CBE4
 .public PlayerAvatar_UpdateMovement
-.public sub_0205CF44
+.public PlayerAvatar_ResetMovement
 .public sub_0205CF60
-.public sub_0205CFBC
-.public sub_0205DA34
-.public sub_0205DD94
+.public PlayerAvatar_StopAndFace
+.public PlayerAvatar_CheckCollision
+.public PlayerAvatar_GetInputDirection
 .public sub_0205DE38
-.public sub_0205DE98
+.public PlayerAvatar_IsRunning
 .public sub_0205DEC0
 .public sub_0205DF0C
 .public sub_0205DFC8
-.public sub_0205DFD4
+.public PlayerAvatar_SetMovement
 .public sub_0205DFEC
 .public PlayerAvatar_GetCoordsInFront
 .public MapObject_SetFlagsBits
@@ -122,56 +122,56 @@
 .public FollowMon_QueuePlayerStep
 .public FuchsiaGymmick_CheckCollision
 
-	.public sub_0205CBEC
-	.public sub_0205CC4C
+	.public PlayerAvatar_IsReadyToMove
+	.public PlayerAvatar_StoreHeldDirections
 	.public sub_0205CC74
-	.public sub_0205CC94
-	.public sub_0205CD70
-	.public sub_0205D004
-	.public sub_0205D01C
-	.public sub_0205D07C
-	.public sub_0205D09C
-	.public sub_0205D0A8
-	.public sub_0205D190
-	.public sub_0205D1FC
-	.public sub_0205D240
-	.public sub_0205D2A0
-	.public sub_0205D2D0
-	.public sub_0205D340
-	.public sub_0205D3A8
-	.public sub_0205D40C
-	.public sub_0205D428
+	.public PlayerAvatar_PlayTerrainSounds
+	.public PlayerAvatar_PlayFootstepSound
+	.public PlayerAvatar_TryForcedMovement
+	.public PlayerAvatar_GetForcedMovementKind
+	.public PlayerAvatar_RunForcedMovement
+	.public ForcedMovement_None
+	.public ForcedMovement_Ice
+	.public ForcedMovement_CyclingRoadSlope
+	.public PlayerAvatar_EndForcedMovement
+	.public PlayerAvatar_GetSlopeInDirection
+	.public PlayerAvatar_AdjustSpeedForSlope
+	.public PlayerAvatar_SlideInDirection
+	.public PlayerAvatar_MoveByState
+	.public PlayerAvatar_MoveOnFoot
+	.public PlayerAvatar_UpdateFootStepKind
+	.public FootStepKindToMoveState
 	.public sub_0205D44C
-	.public sub_0205D450
-	.public sub_0205D494
-	.public sub_0205D4B4
-	.public sub_0205D610
-	.public sub_0205D640
-	.public sub_0205D658
-	.public sub_0205D684
-	.public sub_0205D6B4
-	.public sub_0205D6E8
-	.public sub_0205D75C
-	.public sub_0205D778
-	.public sub_0205D7AC
-	.public sub_0205D818
-	.public sub_0205D83C
-	.public sub_0205D948
-	.public sub_0205D978
-	.public sub_0205DA1C
-	.public sub_0205DAA8
-	.public sub_0205DB68
-	.public sub_0205DBF4
-	.public sub_0205DCA0
-	.public sub_0205DCFC
-	.public sub_0205DD9C
-	.public sub_0205DDB8
-	.public sub_0205DDD4
-	.public sub_0205DE64
-	.public sub_0205DE88
-	.public sub_0205DFFC
-	.public sub_0205E048
-	.public sub_0205E078
-	.public _020FCB7C
-	.public _020FCB88
-	.public _020FCB98
+	.public PlayerAvatar_GetFootStepKind
+	.public PlayerAvatar_FootStand
+	.public PlayerAvatar_FootStep
+	.public PlayerAvatar_FootTurn
+	.public PlayerAvatar_MoveOnBike
+	.public PlayerAvatar_GetBikeMovement
+	.public PlayerAvatar_AccelerateBike
+	.public PlayerAvatar_DecelerateBike
+	.public PlayerAvatar_DispatchBikeStep
+	.public PlayerAvatar_UpdateBikeStepKind
+	.public BikeStepKindToMoveState
+	.public PlayerAvatar_GetBikeStepKind
+	.public PlayerAvatar_BikeStop
+	.public PlayerAvatar_BikeRide
+	.public PlayerAvatar_BikeTurn
+	.public PlayerAvatar_BikeCoast
+	.public PlayerAvatar_SetObjectMovement
+	.public MapObject_GetCollisionInDirection
+	.public MapObject_IsLedgeInDirection
+	.public MapObject_IsWarpInDirection
+	.public MapObject_IsWaterInDirection
+	.public PlayerAvatar_IsBikeBlockedInDirection
+	.public GetHorizontalDirectionFromKeys
+	.public GetVerticalDirectionFromKeys
+	.public PlayerAvatar_ChooseInputDirection
+	.public IsWallBumpMovement
+	.public IsRunButtonHeld
+	.public PlayerAvatar_GetCoordsInDirection
+	.public PlayerAvatar_CountStep
+	.public PlayerAvatar_IsOnCyclingRoadSlope
+	.public gPlayerForcedMovementFuncs
+	.public gPlayerForcedMovementBehaviors
+	.public gPlayerFootstepSounds

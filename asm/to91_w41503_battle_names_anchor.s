@@ -3647,56 +3647,56 @@
 	.public ov40_0223A158
 	.public ov40_0223A274
 	.public ov40_0223A280
-	.public ov40_0223A324
-	.public ov40_0223A360
-	.public ov40_0223A3BC
-	.public ov40_0223A430
-	.public ov40_0223A510
-	.public ov40_0223A640
-	.public ov40_0223A83C
-	.public ov40_0223A85C
-	.public ov40_0223A874
-	.public ov40_0223A924
-	.public ov40_0223AC24
-	.public ov40_0223ACD0
-	.public ov40_0223AF24
-	.public ov40_0223AF3C
-	.public ov40_0223B190
-	.public ov40_0223B29C
-	.public ov40_0223B374
-	.public ov40_0223B44C
-	.public ov40_0223B480
-	.public ov40_0223B4BC
-	.public ov40_0223B538
-	.public ov40_0223B574
-	.public ov40_0223B5B0
-	.public ov40_0223B62C
-	.public ov40_0223B75C
-	.public ov40_0223BA70
-	.public ov40_0223BB74
-	.public ov40_0223BD98
-	.public ov40_0223BF88
-	.public ov40_0223C0D8
-	.public ov40_0223C240
-	.public ov40_0223C258
-	.public ov40_0223C3A4
-	.public ov40_0223C498
-	.public ov40_0223C710
-	.public ov40_0223C80C
-	.public ov40_0223CCA0
-	.public ov40_0223CCBC
-	.public ov40_0223CD14
-	.public ov40_0223CD58
-	.public ov40_0223CE38
-	.public ov40_0223CE64
-	.public ov40_0223CF00
-	.public ov40_0223CF70
-	.public ov40_0223CFA8
-	.public ov40_0223D008
-	.public ov40_0223D1AC
-	.public ov40_0223D1F0
-	.public ov40_0223D244
-	.public ov40_0223D504
+	.public VsRecorder_OnRankingsHeaderReceived
+	.public VsRecorder_OnRankingsReceived
+	.public VsRecorder_PlaceVideoListIcons
+	.public VsRecorder_CreateVideoListButtons
+	.public VsRecorder_PrintVideoListMessage
+	.public VsRecorder_VideoListDownloadVideo
+	.public VsRecorder_FreeVideoDetails
+	.public VsRecorder_VideoListOverwriteMain
+	.public VsRecorder_VideoListOverwriteNo
+	.public VsRecorder_VideoListSave
+	.public VsRecorder_VideoListConfirmOverwrite
+	.public VsRecorder_VideoListReturnToDetails
+	.public VsRecorder_VideoListSlotsMain
+	.public VsRecorder_VideoListSlotsCancel
+	.public VsRecorder_VideoListBackToList
+	.public VsRecorder_SetSlotButtonName
+	.public VsRecorder_CreateSlotButtons
+	.public VsRecorder_FreeSlotButtons
+	.public VsRecorder_FreeVideoListButtons
+	.public VsRecorder_SetVideoListButtonsMode
+	.public VsRecorder_RemoveVideoListWindows
+	.public VsRecorder_RemoveVideoListButtonWindows
+	.public VsRecorder_VideoListInit
+	.public VsRecorder_VideoListEnter
+	.public VsRecorder_VideoListDownloadList
+	.public VsRecorder_CreateVideoListWindows
+	.public VsRecorder_VideoListShowList
+	.public VsRecorder_VideoListSelect
+	.public VsRecorder_VideoListExit
+	.public VsRecorder_VideoListShowDetails
+	.public VsRecorder_VideoListDetailsMain
+	.public VsRecorder_VideoListToggleProfile
+	.public VsRecorder_VideoListPlay
+	.public VsRecorder_VideoListResume
+	.public VsRecorder_ShowVideoListMessage
+	.public VsRecorder_VideoListShowSlots
+	.public VsRecorder_RemoveDetailsButtonWindow
+	.public VsRecorder_PrintDetailsButtonLabel
+	.public VsRecorder_CreateDetailsButtonWindow
+	.public VsRecorder_CreateOverwriteWindows
+	.public VsRecorder_RemoveOverwriteWindows
+	.public VsRecorder_OnVideoDetailsTouch
+	.public VsRecorder_OnSaveSlotTouch
+	.public VsRecorder_OnOverwriteTouch
+	.public VsRecorder_LoadVideoDetails
+	.public VsRecorder_CreateVideoListIcons
+	.public VsRecorder_SetVideoListIconsDrawFlag
+	.public VsRecorder_FreeVideoListIcons
+	.public VsRecorder_ScrollVideoListIcons
+	.public VsRecorder_FreeDetailsButtons
 	.public VsRecorder_GetNet
 	.public VsRecorder_InitNet
 	.public VsRecorder_IsNetIdle
@@ -3936,19 +3936,19 @@
 	.public ov40_02245418
 	.public ov40_02245444
 	.public ov40_02245470
-	.public ov40_02245494
-	.public ov40_02245498
-	.public ov40_0224549C
-	.public ov40_022454A4
-	.public ov40_022454B0
-	.public ov40_022454C0
-	.public ov40_022454D0
-	.public ov40_022454E0
-	.public ov40_022454F0
-	.public ov40_0224551C
-	.public ov40_0224554C
-	.public ov40_0224557C
-	.public ov40_022455F4
+	.public sVsRecorderVideoListOpenHitbox
+	.public sVsRecorderVideoListExitHitbox
+	.public sVsRecorderOverwriteHitboxes
+	.public sVsRecorderVideoListTitleMsgIds
+	.public sVsRecorderSaveSlotHitboxes
+	.public sVsRecorderSaveSlotMsgIds
+	.public sVsRecorderSaveSlotAnims
+	.public sVsRecorderVideoDetailHitboxes
+	.public sVsRecorderVideoListConfig
+	.public sVsRecorderScrollIconOrder
+	.public sVsRecorderListIconOrder
+	.public sVsRecorderVideoListIconPositions
+	.public sVsRecorderVideoListSubStates
 	.public ov40_02245648
 	.public ov40_0224564C
 	.public ov40_02245650
@@ -4390,49 +4390,49 @@ ov40_02245470: ; 0x02245470
 	.word ov40_0223A080
 	.word ov40_0223A158
 
-ov40_02245494: ; 0x02245494
+sVsRecorderVideoListOpenHitbox: ; 0x02245494
 	.byte 0x20, 0x60, 0x50, 0xB0
 
-ov40_02245498: ; 0x02245498
+sVsRecorderVideoListExitHitbox: ; 0x02245498
 	.byte 0x98, 0xB8, 0x50, 0xB0
 
-ov40_0224549C: ; 0x0224549C
+sVsRecorderOverwriteHitboxes: ; 0x0224549C
 	.byte 0x28, 0x48, 0x20, 0x78
 	.byte 0x28, 0x48, 0x90, 0xE8
 
-ov40_022454A4: ; 0x022454A4
+sVsRecorderVideoListTitleMsgIds: ; 0x022454A4
 	.byte 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x7B, 0x00, 0x00, 0x00
 
-ov40_022454B0: ; 0x022454B0
+sVsRecorderSaveSlotHitboxes: ; 0x022454B0
 	.byte 0x19, 0x39, 0x32, 0xD2, 0x3D, 0x5D, 0x32, 0xD2, 0x61, 0x81, 0x32, 0xD2, 0x85, 0xA5, 0x32, 0xD2
 
-ov40_022454C0: ; 0x022454C0
+sVsRecorderSaveSlotMsgIds: ; 0x022454C0
 	.byte 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 
-ov40_022454D0: ; 0x022454D0
+sVsRecorderSaveSlotAnims: ; 0x022454D0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-ov40_022454E0: ; 0x022454E0
+sVsRecorderVideoDetailHitboxes: ; 0x022454E0
 	.byte 0x10, 0x30, 0x40, 0xC8, 0x40, 0x70, 0x58, 0xA8, 0x98, 0xB8, 0x80, 0xE0, 0x98, 0xB8, 0x20, 0x80
 
-ov40_022454F0: ; 0x022454F0
+sVsRecorderVideoListConfig: ; 0x022454F0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x08, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov40_0224551C: ; 0x0224551C
+sVsRecorderScrollIconOrder: ; 0x0224551C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00
 
-ov40_0224554C: ; 0x0224554C
+sVsRecorderListIconOrder: ; 0x0224554C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00
 
-ov40_0224557C: ; 0x0224557C
+sVsRecorderVideoListIconPositions: ; 0x0224557C
 	.byte 0x68, 0x00, 0x48, 0x00
 	.byte 0x80, 0x00, 0x48, 0x00, 0x98, 0x00, 0x48, 0x00, 0xB0, 0x00, 0x48, 0x00, 0xC8, 0x00, 0x48, 0x00
 	.byte 0xE0, 0x00, 0x48, 0x00, 0x68, 0x00, 0x60, 0x00, 0x80, 0x00, 0x60, 0x00, 0x98, 0x00, 0x60, 0x00
@@ -4443,28 +4443,28 @@ ov40_0224557C: ; 0x0224557C
 	.byte 0x80, 0x00, 0xA8, 0x00, 0x98, 0x00, 0xA8, 0x00, 0xB0, 0x00, 0xA8, 0x00, 0xC8, 0x00, 0xA8, 0x00
 	.byte 0xE0, 0x00, 0xA8, 0x00
 
-ov40_022455F4: ; 0x022455F4
-	.word ov40_0223B5B0
-	.word ov40_0223B62C
-	.word ov40_0223B75C
-	.word ov40_0223BB74
-	.word ov40_0223BD98
-	.word ov40_0223BF88
-	.word ov40_0223C0D8
-	.word ov40_0223C240
-	.word ov40_0223C258
-	.word ov40_0223C3A4
-	.word ov40_0223B190
-	.word ov40_0223C80C
-	.word ov40_0223AF24
-	.word ov40_0223AF3C
-	.word ov40_0223AC24
-	.word ov40_0223A85C
-	.word ov40_0223A874
-	.word ov40_0223A924
-	.word ov40_0223A640
-	.word ov40_0223C498
-	.word ov40_0223ACD0
+sVsRecorderVideoListSubStates: ; 0x022455F4
+	.word VsRecorder_VideoListInit
+	.word VsRecorder_VideoListEnter
+	.word VsRecorder_VideoListDownloadList
+	.word VsRecorder_VideoListShowList
+	.word VsRecorder_VideoListSelect
+	.word VsRecorder_VideoListExit
+	.word VsRecorder_VideoListShowDetails
+	.word VsRecorder_VideoListDetailsMain
+	.word VsRecorder_VideoListToggleProfile
+	.word VsRecorder_VideoListPlay
+	.word VsRecorder_VideoListBackToList
+	.word VsRecorder_VideoListShowSlots
+	.word VsRecorder_VideoListSlotsMain
+	.word VsRecorder_VideoListSlotsCancel
+	.word VsRecorder_VideoListConfirmOverwrite
+	.word VsRecorder_VideoListOverwriteMain
+	.word VsRecorder_VideoListOverwriteNo
+	.word VsRecorder_VideoListSave
+	.word VsRecorder_VideoListDownloadVideo
+	.word VsRecorder_VideoListResume
+	.word VsRecorder_VideoListReturnToDetails
 
 ov40_02245648:
 	.byte 0x18, 0x38, 0x38, 0xC8

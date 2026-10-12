@@ -2309,7 +2309,7 @@ _0224CE50: ; jump table
 _0224CE5C:
 	ldr r1, [r6, #0x34]
 	mov r0, #0x6b
-	bl ov01_021FB90C
+	bl AreaDataManager_GetMapPropModel
 	ldr r0, [r0]
 	bl NNS_G3dGetMdlSet
 	cmp r0, #0
@@ -2336,7 +2336,7 @@ _0224CE8E:
 	mov r5, #0
 _0224CE90:
 	ldr r0, [r6, #0x34]
-	bl ov01_021FB9E0
+	bl AreaDataManager_GetMapPropTexture
 	mov r1, #0
 	str r1, [sp]
 	str r5, [sp, #4]

@@ -580,7 +580,7 @@ void ov45_0225089C(ChatConnection *chat, const char *channel, const char *messag
     args.channel = channel;
     args.message = message;
     args.type = type;
-    ov45_02244D30(chat, 4, callbacks->unk_00[0], (u32 *)&args, callbacks->param, 0, (char *)channel, sizeof(args));
+    ov45_02244D30(chat, 4, callbacks->message, (u32 *)&args, callbacks->param, 0, (char *)channel, sizeof(args));
 }
 
 // Sets the mode of a channel ("+i-p..." from the eight mode fields, then the limit).

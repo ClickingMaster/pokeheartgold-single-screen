@@ -2,10 +2,10 @@
 
 extern void *AreaDataManager_GetMapTexture(void *);
 extern void *ov01_021F676C(void *, u32, u32, void *, void *, void *, void *, void *, void *);
-extern void *ov01_021FB308(void *, u32, u32, void *, void *, void *);
+extern void *Bdhc_StartLoadTask(void *, u32, u32, void *, void *, void *);
 extern void *ov01_021F67B4(void *, u32, void *, void *, void *);
 extern void ov01_021EA3B0(void *);
-extern void ov01_021FB270(void *, u32, u32, u32);
+extern void Bdhc_Load(void *, u32, u32, u32);
 extern int ov01_02204698(void *);
 extern int sub_02054E20(void *);
 extern void ov01_02204678(void *, void *);
@@ -53,7 +53,7 @@ void ov01_021F4BE8(void *manager, void *load, void *slot, void *area, void *task
     W(task, 8) = (u32)ov01_021F676C((void *)W(manager, 0x100), arg5, W(slot, 4), (u8 *)load + 0x800, (u8 *)load + 0x854, texture, (void *)W(manager, 0xf8), (u8 *)load + 0x864, (u8 *)task + 0x10);
     if (flag) {
         W(task, 0x14)++;
-        W(task, 0xc) = (u32)ov01_021FB308((void *)W(manager, 0x100), W(slot, 8), W(load, 0x85c), (u8 *)task + 0x14, (u8 *)load + 0x858, (u8 *)task + 0x10);
+        W(task, 0xc) = (u32)Bdhc_StartLoadTask((void *)W(manager, 0x100), W(slot, 8), W(load, 0x85c), (u8 *)task + 0x14, (u8 *)load + 0x858, (u8 *)task + 0x10);
     }
 }
 
@@ -66,7 +66,7 @@ void ov01_021F4C6C(void *manager, void *load, void *slot, void *area, void *arg4
     W(load, 0x864) = 1;
     W(load, 0x860) = arg5;
     if (arg7) {
-        ov01_021FB270((void *)W(manager, 0x100), W(slot, 8), W(load, 0x85c), W(load, 0x858));
+        Bdhc_Load((void *)W(manager, 0x100), W(slot, 8), W(load, 0x85c), W(load, 0x858));
         if (W(manager, 0x108) != 0) {
             ((void (*)(void *, u32, u32))W(manager, 0x108))((void *)W(manager, 0x10c), arg5, W(load, 0x868));
         }

@@ -30,8 +30,8 @@ typedef struct DoorExitWork {
 } DoorExitWork;
 
 int GetDoorSE(FieldSystem *fieldSystem, int modelId, BOOL opening);
-NARC *ov01_021FB904(AreaDataManager *areaDataManager);
-NNSG3dResTex *ov01_021FB9E0(AreaDataManager *areaDataManager);
+NARC *AreaDataManager_GetMapPropAnimListNarc(AreaDataManager *areaDataManager);
+NNSG3dResTex *AreaDataManager_GetMapPropTexture(AreaDataManager *areaDataManager);
 void ov01_021E9610(Camera *camera, u8 *state);
 BOOL ov01_021E9C40(TaskManager *taskman);
 // @fn ov01_021E9C40
@@ -66,7 +66,7 @@ BOOL ov01_021E9C40(TaskManager *taskman) {
             work->active = 1;
             found = FALSE;
             sub_02054A60(work->x, work->z, -1, found, 3, 1, rect);
-            narc = ov01_021FB904(fieldSystem->areaDataManager);
+            narc = AreaDataManager_GetMapPropAnimListNarc(fieldSystem->areaDataManager);
             props = sub_02054D10(fieldSystem, HEAP_ID_FIELD1, 4, rect, 0);
             for (i = 0; i < 4; i++) {
                 if (props[i] != 0) {
@@ -85,7 +85,7 @@ BOOL ov01_021E9C40(TaskManager *taskman) {
                 if (count == 0) {
                     return FALSE;
                 }
-                texture = ov01_021FB9E0(fieldSystem->areaDataManager);
+                texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
                 renderObj = MapProp_GetRenderSurface(prop);
                 model = MapProp_GetResModel(prop);
                 MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, 1, modelId, renderObj, model, texture, count, 1, FALSE);

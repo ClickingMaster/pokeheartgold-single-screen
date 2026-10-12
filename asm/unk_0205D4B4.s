@@ -12,8 +12,8 @@
 	.include "unk_0205CB48.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0205D4B4
-sub_0205D4B4: ; 0x0205D4B4
+	thumb_func_start PlayerAvatar_FootStep
+PlayerAvatar_FootStep: ; 0x0205D4B4
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x14
 	mov r3, #0
@@ -21,7 +21,7 @@ sub_0205D4B4: ; 0x0205D4B4
 	add r5, r1, #0
 	add r7, r2, #0
 	str r3, [sp, #4]
-	bl sub_0205DA34
+	bl PlayerAvatar_CheckCollision
 	add r4, r0, #0
 	add r0, r6, #0
 	bl PlayerAvatar_GetState
@@ -88,7 +88,7 @@ _0205D544:
 	add r1, sp, #0x18
 	ldrh r1, [r1, #0x10]
 	add r0, r6, #0
-	bl sub_0205DE88
+	bl IsRunButtonHeld
 	cmp r0, #1
 	bne _0205D564
 	mov r4, #0x58
@@ -103,7 +103,7 @@ _0205D564:
 	bl sub_0205D44C
 	str r0, [sp]
 	add r0, r6, #0
-	bl sub_0205E048
+	bl PlayerAvatar_CountStep
 	add r0, r6, #0
 	bl PlayerAvatar_SetFlag6
 	b _0205D5CE
@@ -123,7 +123,7 @@ _0205D590:
 	bl sub_0205D44C
 	str r0, [sp]
 	add r0, r6, #0
-	bl sub_0205E048
+	bl PlayerAvatar_CountStep
 	add r0, r6, #0
 	bl PlayerAvatar_SetFlag6
 	b _0205D5CE
@@ -148,7 +148,7 @@ _0205D5CE:
 	add r0, r6, #0
 	add r1, r5, #0
 	add r2, r7, #0
-	bl sub_0205DA1C
+	bl PlayerAvatar_SetObjectMovement
 	ldr r0, [sp, #4]
 	cmp r0, #0
 	bne _0205D60C
@@ -169,4 +169,4 @@ _0205D5CE:
 _0205D60C:
 	add sp, #0x14
 	pop {r4, r5, r6, r7, pc}
-	thumb_func_end sub_0205D4B4
+	thumb_func_end PlayerAvatar_FootStep

@@ -12,8 +12,8 @@
 	.include "unk_0205CB48.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0205CC94
-sub_0205CC94: ; 0x0205CC94
+	thumb_func_start PlayerAvatar_PlayTerrainSounds
+PlayerAvatar_PlayTerrainSounds: ; 0x0205CC94
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r0, #0
 	bl PlayerAvatar_GetMoveState
@@ -71,7 +71,7 @@ _0205CD0A:
 	add r0, r6, #0
 	bl PlayerAvatar_GetState
 	ldr r0, [sp]
-	bl sub_0205DE64
+	bl IsWallBumpMovement
 	cmp r0, #0
 	bne _0205CD56
 	add r0, r5, #0
@@ -100,7 +100,7 @@ _0205CD50:
 _0205CD56:
 	add r0, r4, #0
 	add r1, r6, #0
-	bl sub_0205CD70
+	bl PlayerAvatar_PlayFootstepSound
 _0205CD5E:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
@@ -108,9 +108,9 @@ _0205CD60: .word SEQ_SE_DP_FOOT3_1
 _0205CD64: .word SEQ_SE_DP_MARSH_WALK
 _0205CD68: .word SEQ_SE_DP_KUSA
 _0205CD6C: .word SEQ_SE_GS_KUSA2
-	thumb_func_end sub_0205CC94
-	thumb_func_start sub_0205CD70
-sub_0205CD70: ; 0x0205CD70
+	thumb_func_end PlayerAvatar_PlayTerrainSounds
+	thumb_func_start PlayerAvatar_PlayFootstepSound
+PlayerAvatar_PlayFootstepSound: ; 0x0205CD70
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r0, #0
 	add r5, r1, #0
@@ -152,7 +152,7 @@ sub_0205CD70: ; 0x0205CD70
 	lsl r0, r0, #0x18
 	lsr r4, r0, #0x18
 _0205CDD2:
-	ldr r0, _0205CE5C ; =_020FCB98
+	ldr r0, _0205CE5C ; =gPlayerFootstepSounds
 	lsl r1, r4, #2
 	ldrh r1, [r0, r1]
 	ldr r0, _0205CE60 ; =SEQ_SE_GS_EDAPAKI
@@ -188,23 +188,23 @@ _0205CDFE:
 	cmp r4, #0
 	bne _0205CE2A
 	add r0, r5, #0
-	bl sub_0205DE98
+	bl PlayerAvatar_IsRunning
 	cmp r0, #1
 	bne _0205CE2A
 	mov r4, #1
 _0205CE2A:
-	ldr r0, _0205CE64 ; =_020FCB98 + 2
+	ldr r0, _0205CE64 ; =gPlayerFootstepSounds + 2
 	lsl r1, r4, #2
 	ldrh r0, [r0, r1]
 	cmp r0, #1
 	bne _0205CE40
-	ldr r0, _0205CE5C ; =_020FCB98
+	ldr r0, _0205CE5C ; =gPlayerFootstepSounds
 	ldrh r4, [r0, r1]
 	add r0, r4, #0
 	bl PlaySEWithFieldBank
 	b _0205CE4A
 _0205CE40:
-	ldr r0, _0205CE5C ; =_020FCB98
+	ldr r0, _0205CE5C ; =gPlayerFootstepSounds
 	ldrh r4, [r0, r1]
 	add r0, r4, #0
 	bl PlaySE
@@ -218,10 +218,10 @@ _0205CE52:
 _0205CE58:
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_0205CE5C: .word _020FCB98
+_0205CE5C: .word gPlayerFootstepSounds
 _0205CE60: .word SEQ_SE_GS_EDAPAKI
-_0205CE64: .word _020FCB98 + 2
-	thumb_func_end sub_0205CD70
+_0205CE64: .word gPlayerFootstepSounds + 2
+	thumb_func_end PlayerAvatar_PlayFootstepSound
 	thumb_func_start PlayerAvatar_UpdateMovement
 PlayerAvatar_UpdateMovement: ; 0x0205CE68
 	push {r3, r4, r5, r6, r7, lr}
@@ -240,7 +240,7 @@ PlayerAvatar_UpdateMovement: ; 0x0205CE68
 	mov r1, #0
 	add r0, r5, #0
 	mvn r1, r1
-	bl sub_0205D01C
+	bl PlayerAvatar_GetForcedMovementKind
 	cmp r0, #0
 	beq _0205CEA6
 	cmp r0, #2
@@ -264,7 +264,7 @@ _0205CEA6:
 _0205CEBE:
 	add r0, r7, #0
 	bl MapObject_GetMovementCommand
-	bl sub_0205DE64
+	bl IsWallBumpMovement
 	cmp r0, #1
 	beq _0205CF40
 	cmp r4, #0

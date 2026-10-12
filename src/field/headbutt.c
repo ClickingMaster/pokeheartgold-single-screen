@@ -17,7 +17,7 @@
 #include "script.h"
 #include "script_manager.h"
 #include "task.h"
-#include "unk_0205CB48.h"
+#include "player_avatar_movement.h"
 #include "map_object_movement_utilities.h"
 
 static BOOL Task_TryHeadbuttEncounter(TaskManager *taskManager);
