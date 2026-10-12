@@ -15,7 +15,7 @@
 #include "overlay_01_021F72DC.h"
 #include "overlay_01_021F8D80.h"
 #include "overlay_01_021F944C.h"
-#include "overlay_01_022053EC.h"
+#include "field/field_follow_mon.h"
 #include "photo_album.h"
 #include "screen_fade.h"
 #include "script_pokemon_util.h"
@@ -407,7 +407,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
     case FIELD_PHOTO_DO_VIEW_STATE_5: {
         LocalMapObject *mapObject = taskData->parent->mapObjects[taskData->placeObjectCounter];
         if (mapObject != NULL) {
-            if (ov01_0220553C(mapObject)) {
+            if (MapObject_IsShinyPokemon(mapObject)) {
                 ov01_021F902C(1, mapObject);
             }
             VecFx32 facingVec;
@@ -456,7 +456,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
             MapObject_SetFacingVector(taskData->parent->mapObjects[1], &facingVec);
             sub_0205F484(taskData->parent->mapObjects[1]);
             LocalMapObject *mapObject = taskData->parent->mapObjects[1];
-            if (ov01_0220553C(mapObject)) {
+            if (MapObject_IsShinyPokemon(mapObject)) {
                 ov01_021F902C(1, mapObject);
             }
         }
@@ -647,7 +647,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
         if (takePhoto->positionMonDelayCounter++ > 4) {
             LocalMapObject *mapObject = takePhoto->mapObjects[takePhoto->curMon - 1];
             if (mapObject != NULL) {
-                if (ov01_0220553C(mapObject)) {
+                if (MapObject_IsShinyPokemon(mapObject)) {
                     ov01_021F902C(1, mapObject);
                 }
                 VecFx32 facingVec;
@@ -696,7 +696,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
         if (takePhoto->positionMonDelayCounter++ > 4) {
             LocalMapObject *mapObject = takePhoto->mapObjects[1];
             if (mapObject != NULL) {
-                if (ov01_0220553C(mapObject)) {
+                if (MapObject_IsShinyPokemon(mapObject)) {
                     ov01_021F902C(1, mapObject);
                 }
                 VecFx32 facingVec;

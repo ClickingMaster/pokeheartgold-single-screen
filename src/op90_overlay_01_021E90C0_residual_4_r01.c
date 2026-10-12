@@ -142,7 +142,7 @@ BOOL ov01_021E9C40(TaskManager *taskman) {
         LocalMapObject *obj = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
         if (MapObject_IsMovementPaused(obj) == TRUE) {
             MapObject_ClearHeldMovementIfActive(obj);
-            ov01_02205790(fieldSystem, 1);
+            FollowMon_MoveToPlayer(fieldSystem, 1);
             MapPropOneShotAnimationManager_PlayAnimationWithSoundEffect(fieldSystem->mapPropOneShotAnimationManager, 1, 1, GetDoorSE(fieldSystem, MapPropOneShotAnimationManager_GetAnimationMapPropModelID(fieldSystem->mapPropOneShotAnimationManager, 1), FALSE));
             work->state++;
         }

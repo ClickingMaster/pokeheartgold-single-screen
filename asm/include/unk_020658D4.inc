@@ -91,9 +91,9 @@
 .public VeryTallGrass_SpawnAt
 .public ov01_021FFF5C
 .public FollowMonBall_Spawn
-.public ov01_0220542C
-.public ov01_022055DC
-.public ov01_02205604
+.public FollowMon_GetFasterMovement
+.public FollowMonObject_IsLarge
+.public MapObject_GetCoordsBehind
 
 	.public sub_02065A4C
 	.public sub_02065B70

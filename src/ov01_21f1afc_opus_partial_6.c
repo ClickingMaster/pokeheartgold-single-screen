@@ -22,7 +22,7 @@ int ov01_021F2694(struct RockClimbWork *work, TaskManager *taskManager) {
 
 int ov01_021F26AC(struct RockClimbWork *work, TaskManager *taskManager) {
     if (ov01_021F3068(&work->surf) == TRUE) {
-        ov01_02205D68(work->fieldSystem);
+        FollowMon_StartRecall(work->fieldSystem);
         work->state++;
     }
     return 0;

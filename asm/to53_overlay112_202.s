@@ -433,91 +433,91 @@
 	.extern PokewalkerBoxDisplay_GetMonPictureLocation
 	.extern PokewalkerBoxDisplay_LoadMonPicture
 	.extern PokewalkerBoxDisplay_TransferMonPicture
-	.extern ov112_021F0D48
-	.extern ov112_021F0DC0
-	.extern ov112_021F0DF4
-	.extern ov112_021F0E14
-	.extern ov112_021F0E60
-	.extern ov112_021F0EB4
-	.extern ov112_021F0EFC
-	.extern ov112_021F0F48
-	.extern ov112_021F0F60
-	.extern ov112_021F0F70
-	.extern ov112_021F0F90
-	.extern ov112_021F1288
-	.extern ov112_021F1324
-	.extern ov112_021F135C
-	.extern ov112_021F13BC
-	.extern ov112_021F13CC
-	.extern ov112_021F1488
-	.extern ov112_021F1504
-	.extern ov112_021F1548
-	.extern ov112_021F1584
-	.extern ov112_021F15CC
-	.extern ov112_021F15E4
-	.extern ov112_021F1624
-	.extern ov112_021F178C
-	.extern ov112_021F179C
-	.extern ov112_021F1814
-	.extern ov112_021F1838
-	.extern ov112_021F1904
-	.extern ov112_021F194C
-	.extern ov112_021F196C
-	.extern ov112_021F1A08
-	.extern ov112_021F1A40
-	.extern ov112_021F1AF4
-	.extern ov112_021F1B44
-	.extern ov112_021F1B94
-	.extern ov112_021F1CC8
-	.extern ov112_021F1D28
-	.extern ov112_021F1D58
-	.extern ov112_021F1D70
-	.extern ov112_021F1DC0
-	.extern ov112_021F1EFC
-	.extern ov112_021F1F3C
-	.extern ov112_021F1F54
-	.extern ov112_021F1F80
-	.extern ov112_021F1FD0
-	.extern ov112_021F2000
-	.extern ov112_021F2098
-	.extern ov112_021F2204
-	.extern ov112_021F22B0
-	.extern ov112_021F22D0
-	.extern ov112_021F2328
-	.extern ov112_021F2338
-	.extern ov112_021F2348
-	.extern ov112_021F235C
-	.extern ov112_021F238C
-	.extern ov112_021F24C4
-	.extern ov112_021F24D8
-	.extern ov112_021F24F8
-	.extern ov112_021F257C
-	.extern ov112_021F25FC
-	.extern ov112_021F2688
-	.extern ov112_021F26E8
-	.extern ov112_021F2768
-	.extern ov112_021F27B8
-	.extern ov112_021F27E0
-	.extern ov112_021F2810
-	.extern ov112_021F2874
-	.extern ov112_021F28DC
-	.extern ov112_021F2920
-	.extern ov112_021F2944
-	.extern ov112_021F298C
-	.extern ov112_021F2A78
-	.extern ov112_021F2B2C
-	.extern ov112_021F2B80
-	.extern ov112_021F2CC4
-	.extern ov112_021F2CD4
-	.extern ov112_021F2DE4
-	.extern ov112_021F2E70
-	.extern ov112_021F2EB0
-	.extern ov112_021F2EF4
-	.extern ov112_021F2FAC
-	.extern ov112_021F3018
-	.extern ov112_021F30BC
-	.extern ov112_021F3140
-	.extern ov112_021F31BC
+	.extern PokewalkerApp_WriteUploadBlocks
+	.extern PokewalkerEventLog_ResetDisplay
+	.extern PokewalkerEventLog_SetGxBanks
+	.extern PokewalkerEventLog_GetMonModelFileId
+	.extern PokewalkerEventLog_CheckExit
+	.extern PokewalkerEventLog_CheckPrevPage
+	.extern PokewalkerEventLog_CheckNextPage
+	.extern PokewalkerEventLog_IsMonShiny
+	.extern PokewalkerEventLog_GetCourse
+	.extern PokewalkerEventLog_CompareEntryTimes
+	.extern PokewalkerEventLog_BuildEntryList
+	.extern PokewalkerEventLog_InitText
+	.extern PokewalkerEventLog_FreeText
+	.extern PokewalkerEventLog_PrintToWindowWithFont
+	.extern PokewalkerEventLog_PrintToWindow
+	.extern PokewalkerEventLog_PrintMessage
+	.extern PokewalkerEventLog_BufferName
+	.extern PokewalkerEventLog_BufferItemName
+	.extern PokewalkerEventLog_BufferSpeciesName
+	.extern PokewalkerEventLog_BufferNickname
+	.extern PokewalkerEventLog_BufferNumber
+	.extern PokewalkerEventLog_ConvertEntryTime
+	.extern PokewalkerEventLog_PrintEntry
+	.extern PokewalkerEventLog_PrintQuit
+	.extern PokewalkerEventLog_InitBgs
+	.extern PokewalkerEventLog_FreeBgs
+	.extern PokewalkerEventLog_LoadBgGraphics
+	.extern PokewalkerEventLog_LoadSky
+	.extern PokewalkerEventLog_PlayCourseBgm
+	.extern PokewalkerEventLog_InitSpriteSystem
+	.extern PokewalkerEventLog_FreeSprites
+	.extern PokewalkerEventLog_LoadSpriteResources
+	.extern PokewalkerEventLog_CreateSprite
+	.extern PokewalkerEventLog_CreateEffectSprite
+	.extern PokewalkerEventLog_CreateSprites
+	.extern PokewalkerEventLog_SetSceneVisible
+	.extern PokewalkerEventLog_AdvanceSpriteAnim
+	.extern PokewalkerEventLog_SetCourseSprite
+	.extern PokewalkerEventLog_LoadSpriteCharData
+	.extern PokewalkerEventLog_LoadMonSpriteResources
+	.extern PokewalkerEventLog_SetMonSpriteVisible
+	.extern PokewalkerEventLog_SetMonSpriteAnim
+	.extern PokewalkerEventLog_SetMonSpritePosition
+	.extern PokewalkerEventLog_CreateMonSprites
+	.extern PokewalkerEventLog_DeleteMonSprites
+	.extern PokewalkerEventLog_CreateMonSprite
+	.extern PokewalkerEventLog_LoadMonSprite
+	.extern PokewalkerEventLog_ShowMon
+	.extern PokewalkerEventLog_ShowTrainer
+	.extern PokewalkerEventLog_ShowEffectAboveMon
+	.extern PokewalkerEventLog_ResetAnims
+	.extern PokewalkerEventLog_UpdateAnims
+	.extern PokewalkerEventLog_StartFleeAnim
+	.extern PokewalkerEventLog_ResetFleeAnim
+	.extern PokewalkerEventLog_UpdateFleeAnim
+	.extern PokewalkerEventLog_StartCatchAnim
+	.extern PokewalkerEventLog_ResetCatchAnim
+	.extern PokewalkerEventLog_UpdateCatchAnim
+	.extern PokewalkerEventLog_ShowPeerEvent
+	.extern PokewalkerEventLog_ShowDowsingItem
+	.extern PokewalkerEventLog_ShowGiftItem
+	.extern PokewalkerEventLog_ShowRadarCaught
+	.extern PokewalkerEventLog_ShowGiftMon
+	.extern PokewalkerEventLog_ShowRadarFled
+	.extern PokewalkerEventLog_ShowRadarLost
+	.extern PokewalkerEventLog_ShowMonFoundItem
+	.extern PokewalkerEventLog_ShowHappy
+	.extern PokewalkerEventLog_ShowMonJoined
+	.extern PokewalkerEventLog_ShowMonWentHome
+	.extern PokewalkerEventLog_ShowStrollStart
+	.extern PokewalkerEventLog_ShowStrollEnd
+	.extern PokewalkerEventLog_ShowSteps
+	.extern PokewalkerEventLog_ShowDistantPeer
+	.extern PokewalkerEventLog_ShowEntry
+	.extern PokewalkerEventLog_StartPageTurn
+	.extern PokewalkerEventLog_UpdatePageTurn
+	.extern PokewalkerEventLog_Setup
+	.extern PokewalkerEventLog_Teardown
+	.extern PokewalkerEventLog_VBlankCB
+	.extern PokewalkerEventLog_Init
+	.extern PokewalkerEventLog_Exit
+	.extern PokewalkerEventLog_Main
+	.extern PokewalkerEventLog_InitStrollEndRecord
+	.extern PokewalkerEventLog_SetGiftMon
+	.extern PokewalkerEventLog_HasGiftMon
 	.extern PokewalkerApp_IsEventLogInvalid
 	.extern PokewalkerApp_BuildTrainerHouseData
 	.extern PokewalkerApp_SaveTrainerHouseData
@@ -822,23 +822,23 @@
 	.public ov112_021FF1EC
 	.public ov112_021FF200
 	.public ov112_021FF21C
-	.public ov112_021FF244
+	.public sPokewalkerUploadBlocks
 	.public ov112_021FF284
-	.public ov112_021FF2CC
-	.public ov112_021FF2DC
-	.public ov112_021FF2EC
-	.public ov112_021FF2F4
-	.public ov112_021FF304
-	.public ov112_021FF318
-	.public ov112_021FF330
-	.public ov112_021FF350
-	.public ov112_021FF370
-	.public ov112_021FF398
-	.public ov112_021FF3CC
-	.public ov112_021FF400
-	.public ov112_021FF434
-	.public ov112_021FF4C0
-	.public ov112_021FF4C8
+	.public sPokewalkerUploadBlockSizes
+	.public sEventLogTouchBoxes
+	.public sEventLogInvalidName
+	.public sEventLogGraphicsModes
+	.public sEventLogOamTransferParam
+	.public sEventLogSpriteResourceCounts
+	.public sEventLogOamManagerParam
+	.public sEventLogWindowTemplates
+	.public sEventLogGraphicsBanks
+	.public sEventLogSpriteTemplate
+	.public sEventLogEffectSpriteTemplate
+	.public sEventLogMonSpriteTemplate
+	.public sEventLogBgTemplates
+	.public sEventLogBgLayers
+	.public sEventLogFleeHopHeights
 	.public sTrainerHouseDailyFlags
 	.public sSpindaSpotPixels
 	.public sTouchButtons
@@ -861,7 +861,7 @@
 	.public sStartStrollStates
 	.public sLinkSaveStates
 	.public sStrollReportStates
-	.public ov112_021FF9B8
+	.public sEventLogCourseBgm
 	.public ov112_021FFBD8
 	.public ov112_App_MainMenu_SelectOption_ConnectToPokewalker
 
@@ -4653,7 +4653,7 @@ sSelectMonGraphicsBanks: ; 0x021FF0FC
 	.byte 0x60, 0x00, 0x00, 0x00
 
 sEventLogAppTemplate: ; 0x021FF124
-	.word ov112_021F2EF4, ov112_021F3018, ov112_021F2FAC, 0xFFFFFFFF
+	.word PokewalkerEventLog_Init, PokewalkerEventLog_Main, PokewalkerEventLog_Exit, 0xFFFFFFFF
 
 sBoxDisplayBgTemplateSub1: ; 0x021FF134
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
@@ -4721,7 +4721,7 @@ ov112_021FF21C:
 	.byte 0x06, 0x23, 0x06, 0x23, 0x06, 0x23, 0x06, 0x21, 0x06, 0x21, 0x06, 0x21, 0x06, 0x21, 0x30, 0x20
 	.byte 0x18, 0x20, 0x60, 0x7F
 
-ov112_021FF244: ; 0x021FF244
+sPokewalkerUploadBlocks: ; 0x021FF244
 	.word ov112_021FF17A
 	.word ov112_021FF1A4
 	.word ov112_021FF16C
@@ -4746,62 +4746,62 @@ ov112_021FF284:
 	.byte 0x06, 0x1D, 0x06, 0x1E, 0x06, 0x1F, 0x06, 0x1C, 0x06, 0x1D, 0x06, 0x1E, 0x06, 0x1F, 0x06, 0x1C
 	.byte 0x06, 0x1D, 0x06, 0x1E, 0x06, 0x1F, 0x18, 0x1F, 0x60, 0x7F, 0x00, 0x00
 
-ov112_021FF2CC: ; 0x021FF2CC
+sPokewalkerUploadBlockSizes: ; 0x021FF2CC
 	.byte 0x08, 0x0A, 0x06, 0x08
 	.byte 0x0A, 0x14, 0x1C, 0x28, 0x0E, 0x12, 0x46, 0x08, 0x08, 0x08, 0x0A, 0x14
 
-ov112_021FF2DC: ; 0x021FF2DC
+sEventLogTouchBoxes: ; 0x021FF2DC
 	.byte 0x07, 0x08, 0x6F, 0xA0
 	.byte 0xC0, 0x10, 0x30, 0xA0, 0xC0, 0x40, 0x60, 0xA0, 0xC0, 0xB8, 0xF8, 0x00
 
-ov112_021FF2EC: ; 0x021FF2EC
+sEventLogInvalidName: ; 0x021FF2EC
 	.byte 0x0C, 0x00, 0x4B, 0x00
 	.byte 0xFF, 0xFF, 0x00, 0x00
 
-ov112_021FF2F4: ; 0x021FF2F4
+sEventLogGraphicsModes: ; 0x021FF2F4
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov112_021FF304: ; 0x021FF304
+sEventLogOamTransferParam: ; 0x021FF304
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x40, 0x00, 0x00
 	.byte 0x10, 0x00, 0x30, 0x00, 0x10, 0x00, 0x00, 0x00
 
-ov112_021FF318: ; 0x021FF318
+sEventLogSpriteResourceCounts: ; 0x021FF318
 	.byte 0x06, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov112_021FF330: ; 0x021FF330
+sEventLogOamManagerParam: ; 0x021FF330
 	.byte 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 
-ov112_021FF350: ; 0x021FF350
+sEventLogWindowTemplates: ; 0x021FF350
 	.byte 0x02, 0x02, 0x01, 0x0D, 0x02, 0x0E, 0x01, 0x00, 0x02, 0x16, 0x01, 0x08, 0x02, 0x0E, 0x1B, 0x00
 	.byte 0x02, 0x03, 0x0C, 0x1B, 0x08, 0x0E, 0x2B, 0x00, 0x02, 0x19, 0x15, 0x06, 0x02, 0x06, 0x03, 0x01
 
-ov112_021FF370: ; 0x021FF370
+sEventLogGraphicsBanks: ; 0x021FF370
 	.byte 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov112_021FF398: ; 0x021FF398
+sEventLogSpriteTemplate: ; 0x021FF398
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov112_021FF3CC: ; 0x021FF3CC
+sEventLogEffectSpriteTemplate: ; 0x021FF3CC
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov112_021FF400: ; 0x021FF400
+sEventLogMonSpriteTemplate: ; 0x021FF400
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov112_021FF434: ; 0x021FF434
+sEventLogBgTemplates: ; 0x021FF434
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -4812,10 +4812,10 @@ ov112_021FF434: ; 0x021FF434
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov112_021FF4C0: ; 0x021FF4C0
+sEventLogBgLayers: ; 0x021FF4C0
 	.byte 0x00, 0x01, 0x02, 0x04, 0x05, 0x00, 0x00, 0x00
 
-ov112_021FF4C8: ; 0x021FF4C8
+sEventLogFleeHopHeights: ; 0x021FF4C8
 	.byte 0x00, 0x08, 0x0E, 0x12, 0x14, 0x12, 0x0E, 0x08
 	.byte 0x00, 0x6F, 0x00, 0x00
 
@@ -5171,7 +5171,7 @@ sStrollReportStates: ; 0x021FF924
 	.word PokewalkerApp_StrollReport_WaitMessage
 	.word PokewalkerApp_StrollReport_End
 
-ov112_021FF9B8: ; 0x021FF9B8
+sEventLogCourseBgm: ; 0x021FF9B8
 	.byte 0x99, 0x04, 0x00, 0x00, 0x99, 0x04, 0x00, 0x00
 	.byte 0x9A, 0x04, 0x00, 0x00, 0x9A, 0x04, 0x00, 0x00, 0x9B, 0x04, 0x00, 0x00, 0x9D, 0x04, 0x00, 0x00
 	.byte 0x99, 0x04, 0x00, 0x00, 0x9C, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

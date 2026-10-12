@@ -109,7 +109,7 @@ void VsRecorder_InitResources(VsRecorderWork *work) {
     Main_SetVBlankIntrCB(VsRecorder_VBlankCB, work);
     if (work->mode != 0) {
         // Global Terminal: wireless icon and its palette in OBJ slot 7 of both screens
-        ov40_0223D544(work);
+        VsRecorder_InitNet(work);
         G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN, GX_OBJVRAMMODE_CHAR_1D_128K);
         G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
         G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DSUB, GX_OBJVRAMMODE_CHAR_1D_128K);
@@ -203,7 +203,7 @@ void VsRecorder_FreeResources(VsRecorderWork *work) {
     DestroyMsgData(work->recordMsgData);
     GF_3DVramMan_Delete(work->vramMan);
     PokepicManager_Delete(work->pokepicManager);
-    ov40_0223D600(work);
+    VsRecorder_FreeNet(work);
     Main_SetVBlankIntrCB(NULL, NULL);
     GF_DestroyVramTransferManager();
 }
@@ -378,6 +378,6 @@ BOOL VsRecorder_Main(VsRecorderWork *work, int *screen) {
     Thunk_G3X_Reset();
     PokepicManager_DrawAll(work->pokepicManager);
     RequestSwap3DBuffers(GX_SORTMODE_MANUAL, GX_BUFFERMODE_Z);
-    ov40_0223D5E8(work);
+    VsRecorder_UpdateNet(work);
     return FALSE;
 }

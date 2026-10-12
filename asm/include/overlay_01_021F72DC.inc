@@ -99,8 +99,8 @@
 .public ov01_021FA458
 .public ov01_021FA464
 .public MapObjectModel_CreateEffect
-.public ov01_0220553C
-.public ov01_02205564
+.public MapObject_IsShinyPokemon
+.public MapObject_HasFollowMonSprite
 .public ov01_02205808
-.public ov01_0220589C
+.public MapObject_SetBillboardSepia
 .public ov01_022073D8

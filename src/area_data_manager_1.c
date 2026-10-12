@@ -27,7 +27,7 @@ NNSG3dResFileHeader **AreaDataManager_GetMapPropModelFile(AreaDataManager *areaD
 void AreaDataManager_Free(AreaDataManager **areaDataManager);
 NNSG3dResTex *AreaDataManager_GetMapTexture(AreaDataManager *areaDataManager);
 NNSG3dResTex *ov01_021FB9E0(AreaDataManager *areaDataManager);
-AreaDataManager_Sub8AC *ov01_021FB9F4(AreaDataManager *areaDataManager);
+BuildModelShapes *AreaDataManager_GetBuildModelShapes(AreaDataManager *areaDataManager);
 BOOL ov01_021FBA00(AreaDataManager *areaDataManager);
 u32 AreaDataManager_GetAreaLightArchiveID(AreaDataManager *areaDataManager);
 void AreaDataManager_Load(AreaDataManager *areaDataManager, void *unkC0, MapPropAnimationManager *mapPropAnimationManager, void *unkCC, void *unk104);
@@ -97,7 +97,7 @@ void AreaDataManager_Free(AreaDataManager **areaDataManager) {
 
     NARC_Delete((*areaDataManager)->mapPropNarc);
     if ((*areaDataManager)->unk8AC != NULL) {
-        ov01_021EA7E0((*areaDataManager)->unk8AC);
+        BuildModelShapes_Free((*areaDataManager)->unk8AC);
     }
     for (i = 0; i < AREA_DATA_MAX_MAP_PROPS; i++) {
         if ((*areaDataManager)->mapPropModels[i] != NULL) {
@@ -123,7 +123,7 @@ NNSG3dResTex *ov01_021FB9E0(AreaDataManager *areaDataManager) {
     return areaDataManager->mapTex;
 }
 
-AreaDataManager_Sub8AC *ov01_021FB9F4(AreaDataManager *areaDataManager) {
+BuildModelShapes *AreaDataManager_GetBuildModelShapes(AreaDataManager *areaDataManager) {
     return areaDataManager->unk8AC;
 }
 

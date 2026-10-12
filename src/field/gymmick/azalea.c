@@ -4,7 +4,7 @@
 
 #include "field_system.h"
 #include "follow_mon.h"
-#include "overlay_01_022053EC.h"
+#include "field/field_follow_mon.h"
 #include "overlay_04.h"
 #include "task.h"
 #include "sound_playback.h"
@@ -384,7 +384,7 @@ static BOOL Task_SpinarakRide(TaskManager *taskman) {
 
     switch (rideData->state) {
     case 0:
-        TaskManager_Call(fieldSystem->taskman, ov01_02205A60, NULL);
+        TaskManager_Call(fieldSystem->taskman, Task_WaitFollowMonMovement, NULL);
         ++rideData->state;
         break;
     case 1:

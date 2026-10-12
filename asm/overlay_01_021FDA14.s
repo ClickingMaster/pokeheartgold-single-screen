@@ -999,7 +999,7 @@ _021FE1C4:
 _021FE1CA:
 	str r0, [sp]
 	ldr r0, [r4, #0x20]
-	bl ov01_0220553C
+	bl MapObject_IsShinyPokemon
 	cmp r0, #0
 	beq _021FE1E2
 	ldr r1, [r4, #0x20]

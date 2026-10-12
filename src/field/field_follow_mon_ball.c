@@ -2,6 +2,7 @@
 
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
+#include "field/field_follow_mon.h"
 #include "field/overlay_01_021FB878.h"
 
 #include "field_effects.h"
@@ -26,8 +27,6 @@
 BOOL sub_0206121C(FieldSystem *fieldSystem, VecFx32 *position);
 // The following Pokemon's billboard (field map object motion, still unnamed).
 void *ov01_021F771C(MapObjectManager *manager);
-// Whether the following Pokemon is a large one (field_effect_dispatch_2.c).
-u8 ov01_022055DC(LocalMapObject *mapObject);
 // area_data_manager_2.c / _3.c (overlay_01_021FB878.h does not declare them).
 void ov01_021FBD38(Field3dModel *model, void *data);
 void ov01_021FBDFC(Field3dModel *model);
@@ -320,7 +319,7 @@ void FollowMonBallEffect_UpdateRecallWhite(FieldEffect *effect, FollowMonBallEff
         plttKey = BillboardObject_GetPlttKey(billboard);
         plttKey2 = BillboardObject_GetPlttKey(billboard);
         GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_PLTT, (u16)plttKey2 << 3, ov01_02209B18, ((plttKey & 0xFFFF0000) >> 16) << 3);
-        if (ov01_022055DC(mapObject)) {
+        if (FollowMonObject_IsLarge(mapObject)) {
             direction = (u8)MapObject_GetFacingDirection(mapObject);
             MapObject_CopyPositionVector(mapObject, &work->position);
             FollowMonBall_GetPullCoordinate(direction, &work->position, &work->coordinate);
@@ -399,7 +398,7 @@ void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, FollowMonBallEffect *
         LocalMapObject *followMon = FollowMon_GetMapObject(work->args.fieldSystem);
         u8 direction;
         ov01_021F771C(work->args.fieldSystem->mapObjectManager);
-        if (ov01_022055DC(followMon)) {
+        if (FollowMonObject_IsLarge(followMon)) {
             direction = MapObject_GetFacingDirection(followMon);
             MapObject_CopyPositionVector(followMon, &work->position);
             FollowMonBall_GetPullCoordinate(direction, &work->position, &work->coordinate);

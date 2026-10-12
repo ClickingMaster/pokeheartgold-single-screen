@@ -91,7 +91,7 @@ int sub_0205DEC0(PlayerAvatar *avatar, int direction);
 BOOL sub_0205DE38(PlayerAvatar *avatar);
 u32 sub_0206234C(int direction, int a1);
 u32 MapObject_CheckCollisionInDirection(LocalMapObject *object, int direction);
-int ov01_022062CC(FieldSystem *fieldSystem);
+int FieldSystem_GetLeadMonIndex(FieldSystem *fieldSystem);
 
 extern void (*const sPlayerAvatarBitUpdateFuncs[15])(PlayerAvatar *);
 

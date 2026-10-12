@@ -119,7 +119,7 @@
 .public Field_PlayerAvatar_ApplyTransitionFlags
 .public ov01_021F2EDC
 .public ov01_021F2F24
-.public ov01_02205990
+.public FollowMon_QueuePlayerStep
 .public FuchsiaGymmick_CheckCollision
 
 	.public sub_0205CBEC

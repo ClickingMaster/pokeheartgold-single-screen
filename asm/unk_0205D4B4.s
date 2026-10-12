@@ -165,7 +165,7 @@ _0205D5CE:
 	add r0, r7, #0
 	add r1, r6, #0
 	add r3, r4, #0
-	bl ov01_02205990
+	bl FollowMon_QueuePlayerStep
 _0205D60C:
 	add sp, #0x14
 	pop {r4, r5, r6, r7, pc}

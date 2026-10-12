@@ -11,12 +11,12 @@
 	.include "asm/macros.inc"
 	.public ov01_022054E0
 	.public ov01_022057DC
-	.public ov01_0220589C
+	.public MapObject_SetBillboardSepia
 	.public ov01_02205B14
-	.public ov01_02205DB4
+	.public Task_FollowMonRecall
 	.public ov01_02205F00
-	.public ov01_0220610C
-	.public ov01_02206268
+	.public Task_FollowMonFlash
+	.public FollowMon_IsNextToPlayer
 	.public ov01_022096E0
 	.public ov01_022096F0
 	.public ov01_022096F8
@@ -31,37 +31,37 @@
 
 	.text
 	.public ScrCmd_808
-	.public ov01_02205424
-	.public ov01_0220542C
-	.public ov01_0220553C
-	.public ov01_02205564
+	.public FollowMon_MarkForRecreate
+	.public FollowMon_GetFasterMovement
+	.public MapObject_IsShinyPokemon
+	.public MapObject_HasFollowMonSprite
 	.public ov01_02205584
 	.public ov01_022055B0
-	.public ov01_022055DC
-	.public ov01_02205604
-	.public ov01_02205664
+	.public FollowMonObject_IsLarge
+	.public MapObject_GetCoordsBehind
+	.public MapObject_GetPreviousCoordsBehind
 	.public ov01_022056C4
-	.public ov01_02205720
-	.public ov01_02205784
-	.public ov01_02205790
-	.public ov01_022057C4
+	.public MapObject_SetPositionNextTo
+	.public FollowMon_SpawnReleaseBall
+	.public FollowMon_MoveToPlayer
+	.public FollowMon_CheckVisibleFlag
 	.public ov01_022057D0
 	.public ov01_02205808
 	.public ov01_02205870
 	.public ov01_0220596C
-	.public ov01_02205990
-	.public ov01_022059AC
-	.public ov01_02205A34
-	.public ov01_02205A60
+	.public FollowMon_QueuePlayerStep
+	.public FollowMon_RecreateForMap
+	.public FollowMon_SetHeight
+	.public Task_WaitFollowMonMovement
 	.public ov01_02205AEC
 	.public ov01_02205CF0
-	.public ov01_02205D68
+	.public FollowMon_StartRecall
 	.public ov01_02205EE0
-	.public ov01_02206028
-	.public ov01_02206088
-	.public ov01_0220609C
-	.public ov01_022060B8
-	.public ov01_022062CC
+	.public MapObject_StepTowards
+	.public SpriteId_GetModelNo
+	.public FollowMon_SetFacingDirection
+	.public FollowMon_StartFlash
+	.public FieldSystem_GetLeadMonIndex
 
 	thumb_func_start ov01_022054E0
 ov01_022054E0: ; 0x022054E0

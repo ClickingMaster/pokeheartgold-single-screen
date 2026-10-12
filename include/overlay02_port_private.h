@@ -174,8 +174,8 @@ typedef struct ov02_A9D8Entry {
 extern void *FieldEffect_GetState(void *work);
 extern void FieldEffect_Destroy(int a0);                                                // unk_020689C8.h
 extern void MapPropOneShotAnimationManager_PlayAnimation(void *a, int b, int c); // no header yet
-extern BOOL ov01_022060B8(FieldSystem *fieldSystem, u8 a1, u8 a2);
-extern BOOL ov01_02205D68(FieldSystem *fieldSystem); // no header included here
+extern BOOL FollowMon_StartFlash(FieldSystem *fieldSystem, u8 a1, u8 a2);
+extern BOOL FollowMon_StartRecall(FieldSystem *fieldSystem); // no header included here
 extern void FieldEffectPool_Delete(void *a0);                  // unk_020689C8.h
 
 // Nested state-machine dispatch: outer table indexed by sm[0] -> inner func table
@@ -185,7 +185,7 @@ typedef BOOL (*ov02_StateMachineFunc)(void *sm);
 
 // Field-move task state tables: func(taskManager, fieldSystem, env) -> 1=loop, 2=free.
 typedef int (*ov02_FieldTaskFunc)(TaskManager *taskManager, FieldSystem *fieldSystem, void *env);
-extern BOOL ov01_02205A60(TaskManager *taskMan);                                                             // overlay_01_022053EC.h, not included
+extern BOOL Task_WaitFollowMonMovement(TaskManager *taskMan);                                                             // field/field_follow_mon.h, not included
 extern void FieldEffectPool_DrawAll(void *a0);                                                                          // unk_020689C8.h
 extern void ov01_021FCD78(SysTask *task);                                                                    // no header included here
 extern BOOL ov01_021FCD6C(SysTask *task);                                                                    // no header included here
@@ -280,8 +280,8 @@ extern int GetDeltaXByFacingDirection(int direction);                           
 extern int GetDeltaYByFacingDirection(int direction);                                                                // unk_0205FD20.h, not included
 extern PlayerProfile *Save_PlayerData_GetProfile(SaveData *saveData);                                                // player_data.h, not included
 extern u32 PlayerProfile_GetTrainerGender(PlayerProfile *profile);                                                   // player_data.h, not included
-extern BOOL ov01_02206268(FieldSystem *fieldSystem);                                                                 // overlay_01.h, not included
-extern int ov01_022062CC(FieldSystem *fieldSystem);                                                                  // overlay_01.h, not included
+extern BOOL FollowMon_IsNextToPlayer(FieldSystem *fieldSystem);                                                                 // overlay_01.h, not included
+extern int FieldSystem_GetLeadMonIndex(FieldSystem *fieldSystem);                                                                  // overlay_01.h, not included
 extern void PlayCryEx(int, int, int, int, int, int);                                                                 // sound_02004A44.h, not included
 extern void GfGfx_EngineATogglePlanes(u8 planeMask, u8 enable);                                                      // gf_gfx_planes.h, not included
 extern void *GfGfxLoader_LoadFromNarc(NarcId narcId, s32 fileId, BOOL isCompressed, enum HeapID heapID, BOOL atEnd); // gf_gfx_loader.h, not included
@@ -292,7 +292,7 @@ extern u16 LCRandom(void);                                                      
 extern fx32 GF_SinDeg(u16 deg);                                                                                      // math_util.h, not included
 extern fx32 GF_CosDeg(u16 deg);                                                                                      // math_util.h, not included
 extern void ov01_021F8F74(LocalMapObject *mapObject, int a1);                                                        // no header included here
-extern BOOL ov01_022055DC(LocalMapObject *mapObject);                                                                // no header included here
+extern BOOL FollowMonObject_IsLarge(LocalMapObject *mapObject);                                                                // no header included here
 extern void TallGrass_SpawnAt(LocalMapObject *mapObject, int a1, u32 x, u32 z, int a4);                                  // no header included here
 extern void VeryTallGrass_SpawnAt(LocalMapObject *mapObject, int a1, u32 x, u32 z, int a4);                                  // no header included here
 extern BOOL MetatileBehavior_IsVeryTallGrass(u8 tile);                                                               // no header included here

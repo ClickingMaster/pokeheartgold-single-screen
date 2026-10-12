@@ -704,7 +704,7 @@ BOOL ScrCmd_CheckMonSeen(ScriptContext *ctx) {
 // Related to the trapped floor in the rocket hideout
 BOOL ScrCmd_708(ScriptContext *ctx) {
     u32 unkVar = ScriptGetVar(ctx);
-    ov02_022460AC(ctx->fieldSystem->taskman, unkVar);
+    ShowTrapEffect(ctx->fieldSystem->taskman, unkVar);
     return TRUE;
 }
 
@@ -716,7 +716,7 @@ BOOL ScrCmd_ShowLegendaryWing(ScriptContext *ctx) {
 
 // Related to Persian statues in the rocket hideout
 BOOL ScrCmd_709(ScriptContext *ctx) {
-    ov02_022462E8(ctx->fieldSystem->taskman);
+    ShowHideoutAlarm(ctx->fieldSystem->taskman);
     return TRUE;
 }
 
@@ -724,8 +724,8 @@ BOOL ScrCmd_ScreenShake(ScriptContext *ctx) {
     u32 a1 = ScriptGetVar(ctx);
     u32 a2 = ScriptGetVar(ctx);
     u32 a3 = ScriptGetVar(ctx);
-    u32 a4 = ScriptGetVar(ctx);
-    ov02_02246714(ctx->fieldSystem->taskman, a1, a2, a3, a4);
+    u16 a4 = ScriptGetVar(ctx);
+    ShakeScreen(ctx->fieldSystem->taskman, a1, a2, a3, a4);
     return TRUE;
 }
 
@@ -737,7 +737,7 @@ BOOL ScrCmd_775(ScriptContext *ctx) {
     LocalMapObject *objA = MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, objIdA);
     LocalMapObject *objB = MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, objIdB);
 
-    ov02_022469B4(ctx->fieldSystem->taskman, objA, objB);
+    LanceFliesAway(ctx->fieldSystem->taskman, objA, objB);
 
     return TRUE;
 }

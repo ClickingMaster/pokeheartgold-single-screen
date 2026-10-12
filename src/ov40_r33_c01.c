@@ -12,7 +12,7 @@ void Sprite_DeleteAndFreeResources(void *sprite);
 void ov40_0222D7DC(void *p);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);
 void VsRecorder_DeleteMonIcon(void *p, void *a1, void *a2);
-void *ov40_0223D540(void *p);
+void *VsRecorder_GetNet(void *p);
 void ov39_02227F74(void *p, void *dest);
 void GlobalTerminalNet_GetRankings(void *p, void *dest1, void *dest2);
 void MI_CpuCopy8(const void *src, void *dest, u32 size);
@@ -47,7 +47,7 @@ void ov40_0223A324(void *p, int *mode) {
     if (*mode == 1) {
         PTR(inner, 0x71c) = inner + 0x710;
     } else {
-        void *src = ov40_0223D540(p);
+        void *src = VsRecorder_GetNet(p);
         ov39_02227F74(src, inner + 0x71c);
         MI_CpuCopy8(PTR(inner, 0x71c), inner + 0x710, 4);
     }
@@ -59,7 +59,7 @@ void ov40_0223A360(void *p, int *mode) {
         PTR(inner, 0x714) = inner + 0xe0;
         PTR(inner, 0x718) = inner + 0x638;
     } else {
-        void *src = ov40_0223D540(p);
+        void *src = VsRecorder_GetNet(p);
         GlobalTerminalNet_GetRankings(src, inner + 0x714, inner + 0x718);
         MI_CpuCopy8(PTR(inner, 0x714), inner + 0xe0, 0x558);
         MI_CpuCopy8(PTR(inner, 0x718), inner + 0x638, 0xd8);

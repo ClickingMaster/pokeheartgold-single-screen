@@ -84,7 +84,7 @@ typedef struct PokewalkerPeerRecord {
     PokewalkerTrainerHouseData trainerHouseData; // 0x30
 } PokewalkerPeerRecord;                          // size=0x224
 
-// Pokemon data added to the event log (ov112_021F30BC / ov112_021F3140).
+// Pokemon data added to the event log (PokewalkerEventLog_InitStrollEndRecord / PokewalkerEventLog_SetGiftMon).
 typedef struct PokewalkerEventLogMon {
     u16 species;
     u8 form : 5;
@@ -542,9 +542,9 @@ int PokewalkerApp_Link_WaitMessage(PokewalkerApp *app);
 int PokewalkerApp_Link_WaitCursor(PokewalkerApp *app);
 int PokewalkerApp_Link_End(PokewalkerApp *app);
 void ov112_021ED7DC(PokewalkerApp *app);
-void ov112_021F30BC(PokewalkerIrRecord *record, PokewalkerEventLogParams *params);
-void ov112_021F3140(PokewalkerIrRecord *records, PokewalkerEventLogMon *mon);
-BOOL ov112_021F31BC(PokewalkerIrRecord *records);
+void PokewalkerEventLog_InitStrollEndRecord(PokewalkerIrRecord *record, PokewalkerEventLogParams *params);
+void PokewalkerEventLog_SetGiftMon(PokewalkerIrRecord *records, PokewalkerEventLogMon *mon);
+BOOL PokewalkerEventLog_HasGiftMon(PokewalkerIrRecord *records);
 void PokewalkerApp_SetMonIconGraphics(NNSG2dCharacterData *charData, int species, int form, int isEgg, int slot, ManagedSprite *sprite);
 void PokewalkerApp_BuildTrainerHouseData(SaveData *saveData, void *dst);
 

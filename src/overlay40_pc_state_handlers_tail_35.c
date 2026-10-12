@@ -764,7 +764,7 @@ int ov40_0223EFA4(void *p) {
 
 int ov40_0223F028(void *p) {
     void *inner = PTR(p, 0x860);
-    if (!ov40_0223D5CC(p)) {
+    if (!VsRecorder_IsNetIdle(p)) {
         return 0;
     }
     switch (WORD(p, 8)) {
@@ -783,7 +783,7 @@ int ov40_0223F028(void *p) {
                 v = 0xFE;
             }
         }
-        if (GlobalTerminalNet_RequestVideoSearch(ov40_0223D540(p), HALF(inner, 0x4C0), v, BYTE(inner, 0x4C3), BYTE(inner, 0x4C4)) == 1) {
+        if (GlobalTerminalNet_RequestVideoSearch(VsRecorder_GetNet(p), HALF(inner, 0x4C0), v, BYTE(inner, 0x4C3), BYTE(inner, 0x4C4)) == 1) {
             WORD(p, 8)
             ++;
         }
@@ -791,7 +791,7 @@ int ov40_0223F028(void *p) {
     }
     case 2: {
         void *q;
-        if (GlobalTerminalNet_GetError(ov40_0223D540(p), &q) == 1) {
+        if (GlobalTerminalNet_GetError(VsRecorder_GetNet(p), &q) == 1) {
             StopSE(0x57D, 0);
             VsRecorder_SetupMessageScreenMsg(p, 7, WORD(q, 0xC), WORD(q, 4));
             WORD(p, 0x4138) = 0;

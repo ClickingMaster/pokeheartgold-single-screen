@@ -334,9 +334,9 @@
 .public VsRecorder_DeleteMenuRowSprites
 .public VsRecorder_FreeMenuRowText
 .public VsRecorder_GetBlendColor
-.public ov40_02244920
-.public ov40_02244B3C
-.public ov40_02244B70
+.public VsRecorder_SanitizeBattleSetupNames
+.public VsRecorder_EncryptRecord
+.public VsRecorder_SaveRecordNumber
 .public AccessoryPortrait_Create
 .public AccessoryPortrait_Draw
 .public AccessoryPortrait_Destroy

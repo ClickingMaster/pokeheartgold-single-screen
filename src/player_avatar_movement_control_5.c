@@ -68,6 +68,6 @@ void sub_0205D2D0(PlayerAvatar *avatar, int direction) {
     if (FollowMon_IsActive(fieldSystem)) {
         int x = MapObject_GetPreviousXCoord(mapObject);
         int z = MapObject_GetPreviousZCoord(mapObject);
-        ov01_02205990(command, x, z, (u8 *)fieldSystem + 0xE4);
+        FollowMon_QueuePlayerStep(command, x, z, (u8 *)fieldSystem + 0xE4);
     }
 }

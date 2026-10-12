@@ -597,12 +597,12 @@ BOOL VsRecorder_FrontierEnter(VsRecorderWork *work);
 BOOL VsRecorder_FrontierMain(VsRecorderWork *work);
 
 // other OVY_40 modules (still address-named)
-GlobalTerminalNet *ov40_0223D540(VsRecorderWork *work);
-u32 ov40_02244AB0(SaveData *save, u32 a1, u32 a2, u16 *a3, void *a4);
-int ov40_02244BBC(SaveData *save, int index);
-void ov40_0223D544(VsRecorderWork *work);
-void ov40_0223D5E8(VsRecorderWork *work);
-void ov40_0223D600(VsRecorderWork *work);
+GlobalTerminalNet *VsRecorder_GetNet(VsRecorderWork *work);
+u32 VsRecorder_WriteRecordAsync(SaveData *save, u32 a1, u32 a2, u16 *a3, void *a4);
+int VsRecorder_WriteRecord(SaveData *save, int index);
+void VsRecorder_InitNet(VsRecorderWork *work);
+void VsRecorder_UpdateNet(VsRecorderWork *work);
+void VsRecorder_FreeNet(VsRecorderWork *work);
 
 // main ARM9 (unk_02087E70 launcher, banner object)
 void sub_02087A84(void *result, u32 first, u32 second);

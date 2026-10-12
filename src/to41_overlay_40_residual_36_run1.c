@@ -11,7 +11,7 @@ int ov40_0223FD8C(void *p) {
     void *w = PTR(p, 0x860);
     void *result;
 
-    if (!ov40_0223D5CC(p)) {
+    if (!VsRecorder_IsNetIdle(p)) {
         return 0;
     }
     switch (WORD(p, 8)) {
@@ -44,7 +44,7 @@ int ov40_0223FD8C(void *p) {
         ++;
         break;
     case 3: {
-        void *session = ov40_0223D540(p);
+        void *session = VsRecorder_GetNet(p);
         if (GlobalTerminalNet_RequestVideoDownload(session,
                 PTR(PTR(p, 0x2608 + WORD(p, 0x4d4) * 4), 0xd8),
                 PTR(PTR(p, 0x2608 + WORD(p, 0x4d4) * 4), 0xdc))
@@ -55,7 +55,7 @@ int ov40_0223FD8C(void *p) {
         break;
     }
     case 4:
-        if (GlobalTerminalNet_GetError(ov40_0223D540(p), &result) == 1) {
+        if (GlobalTerminalNet_GetError(VsRecorder_GetNet(p), &result) == 1) {
             StopSE(0x57d, 0);
             VsRecorder_HideTopMessage(p);
             VsRecorder_ShowMessageScreen(p, 8, PTR(result, 0xc), PTR(result, 4));
@@ -385,20 +385,20 @@ int ov40_022406C8(void *p) {
         ++;
         break;
     case 1:
-        if (!ov40_0223D5CC(p)) {
+        if (!VsRecorder_IsNetIdle(p)) {
             return 0;
         }
-        if (GlobalTerminalNet_RequestVideoDownload(ov40_0223D540(p), PTR(obj, 0x2cc), PTR(obj, 0x2d0)) == 1) {
+        if (GlobalTerminalNet_RequestVideoDownload(VsRecorder_GetNet(p), PTR(obj, 0x2cc), PTR(obj, 0x2d0)) == 1) {
             WORD(p, 8)
             ++;
         }
         break;
     case 2:
-        if (!ov40_0223D5CC(p)) {
+        if (!VsRecorder_IsNetIdle(p)) {
             return 0;
         }
         VsRecorder_HideNotice(p);
-        if (GlobalTerminalNet_GetError(ov40_0223D540(p), &result) == 1) {
+        if (GlobalTerminalNet_GetError(VsRecorder_GetNet(p), &result) == 1) {
             StopSE(0x57d, 0);
             *(vu16 *)0x04000050 = 0;
             VsRecorder_ShowMessageScreen(p, 8, PTR(result, 0xc), PTR(result, 4));

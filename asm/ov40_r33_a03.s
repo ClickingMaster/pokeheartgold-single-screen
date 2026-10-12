@@ -52,8 +52,8 @@
 	.public ov40_0223CD14
 	.public ov40_0223CD58
 	.public ov40_0223CE38
-	.public ov40_0223D540
-	.public ov40_0223D5CC
+	.public VsRecorder_GetNet
+	.public VsRecorder_IsNetIdle
 	.public BattleRecord_Delete
 	.public BattleRecord_Exists
 	.public BattleRecord_GetHeader
@@ -264,7 +264,7 @@ _0223A9D4:
 	bl PlaySE
 	b _0223ABFC
 _0223AA0A:
-	bl ov40_0223D5CC
+	bl VsRecorder_IsNetIdle
 	cmp r0, #0
 	bne _0223AA18
 	add sp, #8
@@ -283,7 +283,7 @@ _0223AA18:
 	add r6, r0, #0
 	add r5, r1, #0
 	add r0, r4, #0
-	bl ov40_0223D540
+	bl VsRecorder_GetNet
 	add r1, r6, #0
 	add r2, r5, #0
 	bl ov39_0222774C
@@ -294,7 +294,7 @@ _0223AA18:
 	str r0, [r4, #8]
 	b _0223ABFC
 _0223AA4E:
-	bl ov40_0223D5CC
+	bl VsRecorder_IsNetIdle
 	cmp r0, #0
 	bne _0223AA5C
 	add sp, #8
@@ -302,7 +302,7 @@ _0223AA4E:
 	pop {r4, r5, r6, pc}
 _0223AA5C:
 	add r0, r4, #0
-	bl ov40_0223D540
+	bl VsRecorder_GetNet
 	add r1, sp, #4
 	bl GlobalTerminalNet_GetError
 	cmp r0, #1

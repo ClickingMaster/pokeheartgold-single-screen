@@ -295,7 +295,7 @@ static BOOL Task_MountOrDismountBicycle(TaskManager *taskManager) {
             if (SndRadio_GetSeqNo() == 0) {
                 FieldBGM_TryFadeOut(fieldSystem, FieldBGM_GetEffective(fieldSystem, fieldSystem->location->mapId), 1);
             }
-            ov01_02205790(fieldSystem, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
+            FollowMon_MoveToPlayer(fieldSystem, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             if (FollowMon_IsActive(fieldSystem)) {
                 sub_02069E84(FollowMon_GetMapObject(fieldSystem), 1);
                 sub_02069DC8(FollowMon_GetMapObject(fieldSystem), TRUE);
@@ -308,7 +308,7 @@ static BOOL Task_MountOrDismountBicycle(TaskManager *taskManager) {
             MapObject_UnpauseMovement(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
             Field_PlayerAvatar_OrrTransitionFlags(fieldSystem->playerAvatar, 2);
             Field_PlayerAvatar_ApplyTransitionFlags(fieldSystem->playerAvatar);
-            ov01_02205D68(fieldSystem);
+            FollowMon_StartRecall(fieldSystem);
             if (FollowMon_IsActive(fieldSystem)) {
                 sub_02069E84(FollowMon_GetMapObject(fieldSystem), FALSE);
             }

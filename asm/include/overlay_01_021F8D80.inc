@@ -84,7 +84,7 @@
 .public ov01_021FA44C
 .public FieldShadow_OffsetByFacing
 .public ov01_022054E0
-.public ov01_02205564
+.public MapObject_HasFollowMonSprite
 .public ov01_022055B0
 .public ov01_02205808
 .public ov01_02206D00

@@ -3708,11 +3708,11 @@
 	.public ov40_0223D1F0
 	.public ov40_0223D244
 	.public ov40_0223D504
-	.public ov40_0223D540
-	.public ov40_0223D544
-	.public ov40_0223D5CC
-	.public ov40_0223D5E8
-	.public ov40_0223D600
+	.public VsRecorder_GetNet
+	.public VsRecorder_InitNet
+	.public VsRecorder_IsNetIdle
+	.public VsRecorder_UpdateNet
+	.public VsRecorder_FreeNet
 	.public ov40_0223D618
 	.public ov40_0223D68C
 	.public ov40_0223D830
@@ -3867,12 +3867,12 @@
 	.public ov40_02244514
 	.public ov40_0224462C
 	.public ov40_0224483C
-	.public ov40_02244920
-	.public ov40_02244A84
-	.public ov40_02244AB0
-	.public ov40_02244B3C
-	.public ov40_02244B70
-	.public ov40_02244BBC
+	.public VsRecorder_SanitizeBattleSetupNames
+	.public VsRecorder_LoadPlaceholderTrainerName
+	.public VsRecorder_WriteRecordAsync
+	.public VsRecorder_EncryptRecord
+	.public VsRecorder_SaveRecordNumber
+	.public VsRecorder_WriteRecord
 	.public ov40_02244C54
 	.public ov40_02244C68
 	.public ov40_02244C80
@@ -4052,10 +4052,10 @@
 	.public ov40_02237564
 	.public ov40_02238EB8
 	.public ov40_0223A274
-	.public ov40_0223D540
-	.public ov40_0223D5CC
-	.public ov40_0223D5E8
-	.public ov40_0223D600
+	.public VsRecorder_GetNet
+	.public VsRecorder_IsNetIdle
+	.public VsRecorder_UpdateNet
+	.public VsRecorder_FreeNet
 	.public ov40_0223FD80
 	.public ov40_0224147C
 	.public ov40_02242E48
@@ -4071,7 +4071,7 @@ ov40_0223FD8C: ; 0x0223FD8C
 	add r4, r0, #0
 	lsl r1, r1, #4
 	ldr r5, [r4, r1]
-	bl ov40_0223D5CC
+	bl VsRecorder_IsNetIdle
 	cmp r0, #0
 	bne _0223FDA6
 	add sp, #8
@@ -4182,7 +4182,7 @@ _0223FE34:
 	b _0223FF68
 _0223FE7A:
 	add r0, r4, #0
-	bl ov40_0223D540
+	bl VsRecorder_GetNet
 	ldr r1, _0223FF74 ; =0x000004D4
 	ldr r1, [r4, r1]
 	lsl r1, r1, #2
@@ -4203,7 +4203,7 @@ _0223FE7A:
 	b _0223FF68
 _0223FEA6:
 	add r0, r4, #0
-	bl ov40_0223D540
+	bl VsRecorder_GetNet
 	add r1, sp, #4
 	bl GlobalTerminalNet_GetError
 	cmp r0, #1
@@ -5248,7 +5248,7 @@ _022406F8:
 	str r0, [r4, #8]
 	b _02240834
 _02240736:
-	bl ov40_0223D5CC
+	bl VsRecorder_IsNetIdle
 	cmp r0, #0
 	bne _02240744
 	add sp, #4
@@ -5256,7 +5256,7 @@ _02240736:
 	pop {r3, r4, r5, r6, pc}
 _02240744:
 	add r0, r4, #0
-	bl ov40_0223D540
+	bl VsRecorder_GetNet
 	mov r2, #0xb3
 	lsl r2, r2, #2
 	ldr r1, [r6, r2]
@@ -5270,7 +5270,7 @@ _02240744:
 	str r0, [r4, #8]
 	b _02240834
 _02240764:
-	bl ov40_0223D5CC
+	bl VsRecorder_IsNetIdle
 	cmp r0, #0
 	bne _02240772
 	add sp, #4
@@ -5280,7 +5280,7 @@ _02240772:
 	add r0, r4, #0
 	bl VsRecorder_HideNotice
 	add r0, r4, #0
-	bl ov40_0223D540
+	bl VsRecorder_GetNet
 	add r1, sp, #0
 	bl GlobalTerminalNet_GetError
 	cmp r0, #1

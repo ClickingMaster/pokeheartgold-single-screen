@@ -113,7 +113,7 @@ void *VsRecorder_IsFlipScreensDone(void *p);
 void VsRecorder_OnTouchConfirm(void *p);
 void VsRecorder_SetVBlankPaused(void *p, int value);
 int VsRecorder_GetCenteredTextX(void *window, void *str);
-void *ov40_0223D540(void *p);
+void *VsRecorder_GetNet(void *p);
 
 extern const Ov40Blob12 ov40_022453A0;
 extern const u8 ov40_022453AC[];

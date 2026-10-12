@@ -229,7 +229,7 @@ void sub_020601BC(LocalMapObject *object, u8 behavior, u8 prevBehavior, const Ma
             return;
         }
     }
-    if (MapObject_GetID(object) != 0xFD || ov01_022055DC(object) == FALSE) {
+    if (MapObject_GetID(object) != 0xFD || FollowMonObject_IsLarge(object) == FALSE) {
         return;
     }
     facing = MapObject_GetFacingDirection(object);
@@ -237,7 +237,7 @@ void sub_020601BC(LocalMapObject *object, u8 behavior, u8 prevBehavior, const Ma
     if ((u8)(facing + 0xFE) > 1) {
         return;
     }
-    ov01_02205604(object, &x, &z);
+    MapObject_GetCoordsBehind(object, &x, &z);
     nextBehavior = GetMetatileBehavior(fieldSystem, x, z);
     if (MetatileBehavior_IsTallGrass((u8)nextBehavior) == TRUE) {
         TallGrass_SpawnAt(object, 0, x, z, 1);
@@ -263,7 +263,7 @@ void sub_02060274(LocalMapObject *object, u8 behavior, u8 prevBehavior, const Ma
             return;
         }
     }
-    if (MapObject_GetID(object) != 0xFD || ov01_022055DC(object) == FALSE) {
+    if (MapObject_GetID(object) != 0xFD || FollowMonObject_IsLarge(object) == FALSE) {
         return;
     }
     facing = MapObject_GetFacingDirection(object);
@@ -271,7 +271,7 @@ void sub_02060274(LocalMapObject *object, u8 behavior, u8 prevBehavior, const Ma
     if ((u8)(facing + 0xFE) > 1) {
         return;
     }
-    ov01_02205604(object, &x, &z);
+    MapObject_GetCoordsBehind(object, &x, &z);
     nextBehavior = GetMetatileBehavior(fieldSystem, x, z);
     if (MetatileBehavior_IsTallGrass((u8)nextBehavior) == TRUE) {
         TallGrass_SpawnAt(object, 1, x, z, 1);
@@ -481,7 +481,7 @@ void MapObject_CreateReflection(LocalMapObject *object, u8 behavior, u8 prevBeha
             selected = GetMetatileBehavior_None();
 
             if (MapObject_GetID(object) == 0xFD) {
-                if (ov01_022055DC(object) != 0) {
+                if (FollowMonObject_IsLarge(object) != 0) {
                     u8 foundBehavior;
                     u8 first;
                     u8 second;
@@ -595,7 +595,7 @@ void MapObject_UpdateReflection(LocalMapObject *object, u8 behavior, u8 prevBeha
     if (flags->reflection == 0 || MapObject_CheckFlag24(object) == FALSE) {
         return;
     }
-    if (MapObject_GetID(object) == 0xFD && ov01_022055DC(object) != 0) {
+    if (MapObject_GetID(object) == 0xFD && FollowMonObject_IsLarge(object) != 0) {
         u8 first = MapObject_GetMetatileBehaviorInDirection(object, 1);
         u8 second = MapObject_GetMetatileBehaviorInDirection(object, 3);
         u8 third = MapObject_GetMetatileBehaviorInDirection(object, 2);

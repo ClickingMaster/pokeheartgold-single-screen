@@ -28,8 +28,8 @@
 .public GetHoneySweetScentWorkSize
 .public Task_HoneyOrSweetScent
 .public Task_UseSweetScentInField
-.public ov01_02205A60
-.public ov01_022062CC
+.public Task_WaitFollowMonMovement
+.public FieldSystem_GetLeadMonIndex
 .public ov02_02249458
 .public ov02_0224953C
 .public ov02_02249548

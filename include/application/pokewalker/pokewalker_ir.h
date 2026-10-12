@@ -97,9 +97,13 @@ typedef struct PokewalkerIrRecord {
     u32 value;
     u8 unk_04[4];
     u16 unk_08;
-    u16 unk_0A; // species
-    u16 unk_0C; // species when unk_08 is 7 or 8
-    u8 unk_0E[0x68];
+    u16 unk_0A;                                  // species
+    u16 unk_0C;                                  // species when unk_08 is 7 or 8
+    u16 item;                                    // 0x0E
+    u16 peerTrainerName[PLAYER_NAME_LENGTH + 1]; // 0x10, trainer of the other Pokewalker
+    u16 nickname[POKEMON_NAME_LENGTH + 1];       // 0x20, walking Pokemon
+    u16 peerNickname[POKEMON_NAME_LENGTH + 1];   // 0x36, the other Pokemon
+    u16 routeName[21];                           // 0x4C
     u8 unk_76;
     u8 unk_77;
     u16 unk_78;
@@ -107,7 +111,13 @@ typedef struct PokewalkerIrRecord {
     u32 unk_7C;
     u32 unk_80;
     u8 eventType; // 1-29, 0 = empty entry
-    u8 unk_85[3];
+    u8 form : 5;  // 0x85, walking Pokemon
+    u8 gender : 2;
+    u8 isShiny : 1;
+    u8 peerForm : 5; // 0x86, the other Pokemon
+    u8 peerGender : 2;
+    u8 peerIsShiny : 1;
+    u8 unk_87;
 } PokewalkerIrRecord; // size=0x88
 
 // Data read from Pokewalker address 0xCE80 (0xD4C bytes).

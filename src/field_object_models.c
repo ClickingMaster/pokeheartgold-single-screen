@@ -52,7 +52,7 @@ void ov01_021F8D80(LocalMapObject *object, Sprite *sprite, UnkObjExtra *extra, u
 
     paused = ov01_021F9344(object);
     flag4 = MapObject_CheckFlag4(object);
-    r0 = ov01_02205564(object);
+    r0 = MapObject_HasFollowMonSprite(object);
     if (((u32)extra->unk17 << 29) >> 31) {
         MapObject_CopyFacingVector(object, &vec);
         vec.y = extra->unk14 << 12;

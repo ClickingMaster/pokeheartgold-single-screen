@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-void *ov40_0223D540(void *p);
+void *VsRecorder_GetNet(void *p);
 void *GlobalTerminalNet_GetDressUpList(void *p, void *dst, int value);
 void GlobalTerminalNet_CopyRequestHeader(const void *src, void *dst);
 void *FrontierCard_New(int heapId);

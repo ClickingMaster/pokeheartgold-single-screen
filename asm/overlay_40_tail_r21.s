@@ -3708,11 +3708,11 @@
 	.public ov40_0223D1F0
 	.public ov40_0223D244
 	.public ov40_0223D504
-	.public ov40_0223D540
-	.public ov40_0223D544
-	.public ov40_0223D5CC
-	.public ov40_0223D5E8
-	.public ov40_0223D600
+	.public VsRecorder_GetNet
+	.public VsRecorder_InitNet
+	.public VsRecorder_IsNetIdle
+	.public VsRecorder_UpdateNet
+	.public VsRecorder_FreeNet
 	.public ov40_0223D618
 	.public ov40_0223D68C
 	.public ov40_0223D830
@@ -3867,12 +3867,12 @@
 	.public ov40_02244514
 	.public ov40_0224462C
 	.public ov40_0224483C
-	.public ov40_02244920
-	.public ov40_02244A84
-	.public ov40_02244AB0
-	.public ov40_02244B3C
-	.public ov40_02244B70
-	.public ov40_02244BBC
+	.public VsRecorder_SanitizeBattleSetupNames
+	.public VsRecorder_LoadPlaceholderTrainerName
+	.public VsRecorder_WriteRecordAsync
+	.public VsRecorder_EncryptRecord
+	.public VsRecorder_SaveRecordNumber
+	.public VsRecorder_WriteRecord
 	.public ov40_02244C54
 	.public ov40_02244C68
 	.public ov40_02244C80
@@ -4281,7 +4281,7 @@ _0222BF0E:
 	mov r1, #0
 	bl RequestSwap3DBuffers
 	add r0, r4, #0
-	bl ov40_0223D5E8
+	bl VsRecorder_UpdateNet
 	mov r0, #0
 	pop {r4, r5, r6, pc}
 	nop

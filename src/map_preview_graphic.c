@@ -935,7 +935,7 @@ static int sub_0206A694(UnkStruct_0206A388 *unk, FieldSystem *fsys) {
         player = PlayerAvatar_GetMapObject(fsys->playerAvatar);
         if (MapObject_AreBitsSetForMovementScriptInit(player)) {
             if (FollowMon_IsActive(fsys)) {
-                ov01_02205790(fsys, 1);
+                FollowMon_MoveToPlayer(fsys, 1);
                 sub_0205FC94(FollowMon_GetMapObject(fsys), MOVEMENT_WALK_UNK_48);
                 sub_02069DC8(FollowMon_GetMapObject(fsys), TRUE);
             }

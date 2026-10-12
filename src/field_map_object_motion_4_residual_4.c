@@ -19,9 +19,9 @@ void ov01_021F7810(LocalMapObject *object) {
     }
     if (!extra->active) {
         extra->active = TRUE;
-        if (ov01_02205564(object)) {
-            ov01_0220589C((void *)TRUE, object, extra->sprite);
-        } else if (ov01_0220553C(object)) {
+        if (MapObject_HasFollowMonSprite(object)) {
+            MapObject_SetBillboardSepia((void *)TRUE, object, extra->sprite);
+        } else if (MapObject_IsShinyPokemon(object)) {
             ov01_02205808((void *)TRUE, object, sprite);
         }
     }
@@ -42,9 +42,9 @@ void ov01_021F7894(LocalMapObject *object) {
     }
     if (!extra->active) {
         extra->active = TRUE;
-        if (ov01_02205564(object)) {
-            ov01_0220589C((void *)TRUE, object, extra->sprite);
-        } else if (ov01_0220553C(object)) {
+        if (MapObject_HasFollowMonSprite(object)) {
+            MapObject_SetBillboardSepia((void *)TRUE, object, extra->sprite);
+        } else if (MapObject_IsShinyPokemon(object)) {
             ov01_02205808((void *)TRUE, object, sprite);
         }
     }
@@ -68,7 +68,7 @@ void ov01_021F7918(LocalMapObject *object) {
     }
     if (!extra->active) {
         extra->active = TRUE;
-        if (ov01_0220553C(object)) {
+        if (MapObject_IsShinyPokemon(object)) {
             ov01_02205808((void *)TRUE, object, sprite);
         }
     }

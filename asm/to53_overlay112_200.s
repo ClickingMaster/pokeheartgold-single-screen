@@ -433,91 +433,91 @@
 	.extern PokewalkerBoxDisplay_GetMonPictureLocation
 	.extern PokewalkerBoxDisplay_LoadMonPicture
 	.extern PokewalkerBoxDisplay_TransferMonPicture
-	.extern ov112_021F0D48
-	.extern ov112_021F0DC0
-	.extern ov112_021F0DF4
-	.extern ov112_021F0E14
-	.extern ov112_021F0E60
-	.extern ov112_021F0EB4
-	.extern ov112_021F0EFC
-	.extern ov112_021F0F48
-	.extern ov112_021F0F60
-	.extern ov112_021F0F70
-	.extern ov112_021F0F90
-	.extern ov112_021F1288
-	.extern ov112_021F1324
-	.extern ov112_021F135C
-	.extern ov112_021F13BC
-	.extern ov112_021F13CC
-	.extern ov112_021F1488
-	.extern ov112_021F1504
-	.extern ov112_021F1548
-	.extern ov112_021F1584
-	.extern ov112_021F15CC
-	.extern ov112_021F15E4
-	.extern ov112_021F1624
-	.extern ov112_021F178C
-	.extern ov112_021F179C
-	.extern ov112_021F1814
-	.extern ov112_021F1838
-	.extern ov112_021F1904
-	.extern ov112_021F194C
-	.extern ov112_021F196C
-	.extern ov112_021F1A08
-	.extern ov112_021F1A40
-	.extern ov112_021F1AF4
-	.extern ov112_021F1B44
-	.extern ov112_021F1B94
-	.extern ov112_021F1CC8
-	.extern ov112_021F1D28
-	.extern ov112_021F1D58
-	.extern ov112_021F1D70
-	.extern ov112_021F1DC0
-	.extern ov112_021F1EFC
-	.extern ov112_021F1F3C
-	.extern ov112_021F1F54
-	.extern ov112_021F1F80
-	.extern ov112_021F1FD0
-	.extern ov112_021F2000
-	.extern ov112_021F2098
-	.extern ov112_021F2204
-	.extern ov112_021F22B0
-	.extern ov112_021F22D0
-	.extern ov112_021F2328
-	.extern ov112_021F2338
-	.extern ov112_021F2348
-	.extern ov112_021F235C
-	.extern ov112_021F238C
-	.extern ov112_021F24C4
-	.extern ov112_021F24D8
-	.extern ov112_021F24F8
-	.extern ov112_021F257C
-	.extern ov112_021F25FC
-	.extern ov112_021F2688
-	.extern ov112_021F26E8
-	.extern ov112_021F2768
-	.extern ov112_021F27B8
-	.extern ov112_021F27E0
-	.extern ov112_021F2810
-	.extern ov112_021F2874
-	.extern ov112_021F28DC
-	.extern ov112_021F2920
-	.extern ov112_021F2944
-	.extern ov112_021F298C
-	.extern ov112_021F2A78
-	.extern ov112_021F2B2C
-	.extern ov112_021F2B80
-	.extern ov112_021F2CC4
-	.extern ov112_021F2CD4
-	.extern ov112_021F2DE4
-	.extern ov112_021F2E70
-	.extern ov112_021F2EB0
-	.extern ov112_021F2EF4
-	.extern ov112_021F2FAC
-	.extern ov112_021F3018
-	.extern ov112_021F30BC
-	.extern ov112_021F3140
-	.extern ov112_021F31BC
+	.extern PokewalkerApp_WriteUploadBlocks
+	.extern PokewalkerEventLog_ResetDisplay
+	.extern PokewalkerEventLog_SetGxBanks
+	.extern PokewalkerEventLog_GetMonModelFileId
+	.extern PokewalkerEventLog_CheckExit
+	.extern PokewalkerEventLog_CheckPrevPage
+	.extern PokewalkerEventLog_CheckNextPage
+	.extern PokewalkerEventLog_IsMonShiny
+	.extern PokewalkerEventLog_GetCourse
+	.extern PokewalkerEventLog_CompareEntryTimes
+	.extern PokewalkerEventLog_BuildEntryList
+	.extern PokewalkerEventLog_InitText
+	.extern PokewalkerEventLog_FreeText
+	.extern PokewalkerEventLog_PrintToWindowWithFont
+	.extern PokewalkerEventLog_PrintToWindow
+	.extern PokewalkerEventLog_PrintMessage
+	.extern PokewalkerEventLog_BufferName
+	.extern PokewalkerEventLog_BufferItemName
+	.extern PokewalkerEventLog_BufferSpeciesName
+	.extern PokewalkerEventLog_BufferNickname
+	.extern PokewalkerEventLog_BufferNumber
+	.extern PokewalkerEventLog_ConvertEntryTime
+	.extern PokewalkerEventLog_PrintEntry
+	.extern PokewalkerEventLog_PrintQuit
+	.extern PokewalkerEventLog_InitBgs
+	.extern PokewalkerEventLog_FreeBgs
+	.extern PokewalkerEventLog_LoadBgGraphics
+	.extern PokewalkerEventLog_LoadSky
+	.extern PokewalkerEventLog_PlayCourseBgm
+	.extern PokewalkerEventLog_InitSpriteSystem
+	.extern PokewalkerEventLog_FreeSprites
+	.extern PokewalkerEventLog_LoadSpriteResources
+	.extern PokewalkerEventLog_CreateSprite
+	.extern PokewalkerEventLog_CreateEffectSprite
+	.extern PokewalkerEventLog_CreateSprites
+	.extern PokewalkerEventLog_SetSceneVisible
+	.extern PokewalkerEventLog_AdvanceSpriteAnim
+	.extern PokewalkerEventLog_SetCourseSprite
+	.extern PokewalkerEventLog_LoadSpriteCharData
+	.extern PokewalkerEventLog_LoadMonSpriteResources
+	.extern PokewalkerEventLog_SetMonSpriteVisible
+	.extern PokewalkerEventLog_SetMonSpriteAnim
+	.extern PokewalkerEventLog_SetMonSpritePosition
+	.extern PokewalkerEventLog_CreateMonSprites
+	.extern PokewalkerEventLog_DeleteMonSprites
+	.extern PokewalkerEventLog_CreateMonSprite
+	.extern PokewalkerEventLog_LoadMonSprite
+	.extern PokewalkerEventLog_ShowMon
+	.extern PokewalkerEventLog_ShowTrainer
+	.extern PokewalkerEventLog_ShowEffectAboveMon
+	.extern PokewalkerEventLog_ResetAnims
+	.extern PokewalkerEventLog_UpdateAnims
+	.extern PokewalkerEventLog_StartFleeAnim
+	.extern PokewalkerEventLog_ResetFleeAnim
+	.extern PokewalkerEventLog_UpdateFleeAnim
+	.extern PokewalkerEventLog_StartCatchAnim
+	.extern PokewalkerEventLog_ResetCatchAnim
+	.extern PokewalkerEventLog_UpdateCatchAnim
+	.extern PokewalkerEventLog_ShowPeerEvent
+	.extern PokewalkerEventLog_ShowDowsingItem
+	.extern PokewalkerEventLog_ShowGiftItem
+	.extern PokewalkerEventLog_ShowRadarCaught
+	.extern PokewalkerEventLog_ShowGiftMon
+	.extern PokewalkerEventLog_ShowRadarFled
+	.extern PokewalkerEventLog_ShowRadarLost
+	.extern PokewalkerEventLog_ShowMonFoundItem
+	.extern PokewalkerEventLog_ShowHappy
+	.extern PokewalkerEventLog_ShowMonJoined
+	.extern PokewalkerEventLog_ShowMonWentHome
+	.extern PokewalkerEventLog_ShowStrollStart
+	.extern PokewalkerEventLog_ShowStrollEnd
+	.extern PokewalkerEventLog_ShowSteps
+	.extern PokewalkerEventLog_ShowDistantPeer
+	.extern PokewalkerEventLog_ShowEntry
+	.extern PokewalkerEventLog_StartPageTurn
+	.extern PokewalkerEventLog_UpdatePageTurn
+	.extern PokewalkerEventLog_Setup
+	.extern PokewalkerEventLog_Teardown
+	.extern PokewalkerEventLog_VBlankCB
+	.extern PokewalkerEventLog_Init
+	.extern PokewalkerEventLog_Exit
+	.extern PokewalkerEventLog_Main
+	.extern PokewalkerEventLog_InitStrollEndRecord
+	.extern PokewalkerEventLog_SetGiftMon
+	.extern PokewalkerEventLog_HasGiftMon
 	.extern PokewalkerApp_GetTrainerHouseDailyFlags
 	.extern PokewalkerApp_SetTrainerHouseDailyFlags
 	.extern ov112_021F3664
@@ -815,23 +815,23 @@
 	.extern ov112_021FF1EC
 	.extern ov112_021FF200
 	.extern ov112_021FF21C
-	.extern ov112_021FF244
+	.extern sPokewalkerUploadBlocks
 	.extern ov112_021FF284
-	.extern ov112_021FF2CC
-	.extern ov112_021FF2DC
-	.extern ov112_021FF2EC
-	.extern ov112_021FF2F4
-	.extern ov112_021FF304
-	.extern ov112_021FF318
-	.extern ov112_021FF330
-	.extern ov112_021FF350
-	.extern ov112_021FF370
-	.extern ov112_021FF398
-	.extern ov112_021FF3CC
-	.extern ov112_021FF400
-	.extern ov112_021FF434
-	.extern ov112_021FF4C0
-	.extern ov112_021FF4C8
+	.extern sPokewalkerUploadBlockSizes
+	.extern sEventLogTouchBoxes
+	.extern sEventLogInvalidName
+	.extern sEventLogGraphicsModes
+	.extern sEventLogOamTransferParam
+	.extern sEventLogSpriteResourceCounts
+	.extern sEventLogOamManagerParam
+	.extern sEventLogWindowTemplates
+	.extern sEventLogGraphicsBanks
+	.extern sEventLogSpriteTemplate
+	.extern sEventLogEffectSpriteTemplate
+	.extern sEventLogMonSpriteTemplate
+	.extern sEventLogBgTemplates
+	.extern sEventLogBgLayers
+	.extern sEventLogFleeHopHeights
 	.extern sTrainerHouseDailyFlags
 	.extern _021FF500
 	.extern sSpindaSpotPixels
@@ -855,7 +855,7 @@
 	.extern sStartStrollStates
 	.extern sLinkSaveStates
 	.extern sStrollReportStates
-	.extern ov112_021FF9B8
+	.extern sEventLogCourseBgm
 	.extern _021FF9E0
 	.extern ov112_021FFA18
 	.extern ov112_021FFA20

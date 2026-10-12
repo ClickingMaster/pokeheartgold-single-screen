@@ -3708,11 +3708,11 @@
 	.public ov40_0223D1F0
 	.public ov40_0223D244
 	.public ov40_0223D504
-	.public ov40_0223D540
-	.public ov40_0223D544
-	.public ov40_0223D5CC
-	.public ov40_0223D5E8
-	.public ov40_0223D600
+	.public VsRecorder_GetNet
+	.public VsRecorder_InitNet
+	.public VsRecorder_IsNetIdle
+	.public VsRecorder_UpdateNet
+	.public VsRecorder_FreeNet
 	.public ov40_0223D618
 	.public ov40_0223D68C
 	.public ov40_0223D830
@@ -3867,12 +3867,12 @@
 	.public ov40_02244514
 	.public ov40_0224462C
 	.public ov40_0224483C
-	.public ov40_02244920
-	.public ov40_02244A84
-	.public ov40_02244AB0
-	.public ov40_02244B3C
-	.public ov40_02244B70
-	.public ov40_02244BBC
+	.public VsRecorder_SanitizeBattleSetupNames
+	.public VsRecorder_LoadPlaceholderTrainerName
+	.public VsRecorder_WriteRecordAsync
+	.public VsRecorder_EncryptRecord
+	.public VsRecorder_SaveRecordNumber
+	.public VsRecorder_WriteRecord
 	.public ov40_02244C54
 	.public ov40_02244C68
 	.public ov40_02244C80
@@ -4052,10 +4052,10 @@
 	.public ov40_02237564
 	.public ov40_02238EB8
 	.public ov40_0223A274
-	.public ov40_0223D540
-	.public ov40_0223D5CC
-	.public ov40_0223D5E8
-	.public ov40_0223D600
+	.public VsRecorder_GetNet
+	.public VsRecorder_IsNetIdle
+	.public VsRecorder_UpdateNet
+	.public VsRecorder_FreeNet
 	.public ov40_0223FD80
 	.public ov40_0224147C
 	.public ov40_02242E48
@@ -4072,7 +4072,7 @@ ov40_0223615C: ; 0x0223615C
 	ldr r4, [r0, r2]
 	cmp r1, #1
 	beq _02236180
-	bl ov40_0223D540
+	bl VsRecorder_GetNet
 	mov r1, #0x8f
 	lsl r1, r1, #2
 	add r1, r4, r1

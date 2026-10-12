@@ -20,7 +20,7 @@
 	.public AreaDataManager_Free
 	.public AreaDataManager_GetMapTexture
 	.public ov01_021FB9E0
-	.public ov01_021FB9F4
+	.public AreaDataManager_GetBuildModelShapes
 	.public ov01_021FBA00
 	.public AreaDataManager_GetAreaLightArchiveID
 	.public AreaDataManager_Load
@@ -178,7 +178,7 @@
 	.public ov01_021FB904
 	.public ov01_021FB90C
 	.public ov01_021FB9E0
-	.public ov01_021FB9F4
+	.public AreaDataManager_GetBuildModelShapes
 	.public ov01_021FBA00
 	.public ov01_021FBD38
 	.public ov01_021FBD8C

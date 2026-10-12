@@ -47,7 +47,7 @@ extern void BattleRecord_Delete(void);
 extern void *BattleRecord_Get(void);
 extern void BattleRecord_Load(void *saveData, enum HeapID heapId, BOOL *result, BattleSetup *setup, u32 value);
 extern void BattleRecord_RestoreSetup(BattleSetup *setup, void *saveData);
-extern void ov40_02244920(void *data, BattleSetup *setup, enum HeapID heapId);
+extern void VsRecorder_SanitizeBattleSetupNames(void *data, BattleSetup *setup, enum HeapID heapId);
 extern void sub_02005B68(BOOL enabled);
 extern void *sub_02087FF8(void *large, u32 value);
 
@@ -94,7 +94,7 @@ BOOL sub_02087C38(Unk87Work *work, enum HeapID heapId) {
         *(GameStats **)((u8 *)work->setup + 0x144) = Save_GameStats_Get(work->saveData);
         overlayId = OVERLAY_40_ID;
         if (HandleLoadOverlay(overlayId, OVY_LOAD_ASYNC) == TRUE) {
-            ov40_02244920(BattleRecord_Get(), work->setup, heapId);
+            VsRecorder_SanitizeBattleSetupNames(BattleRecord_Get(), work->setup, heapId);
             UnloadOverlayByID(overlayId);
         }
         *(u32 *)(work->large + 0x874) = 1;

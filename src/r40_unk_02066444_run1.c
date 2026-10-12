@@ -37,10 +37,10 @@ void sub_020664D8(LocalMapObject *object) {
         VeryTallGrass_Spawn(object, 0);
     }
 
-    if (ov01_022055DC(object) != 0) {
+    if (FollowMonObject_IsLarge(object) != 0) {
         u8 direction = MapObject_GetFacingDirection(object);
         if ((u8)(direction + 0xFE) <= 1) {
-            ov01_02205604(object, &x, &z);
+            MapObject_GetCoordsBehind(object, &x, &z);
             behavior = GetMetatileBehavior(fieldSystem, x, z);
             if (MetatileBehavior_IsTallGrass(behavior) == TRUE) {
                 TallGrass_SpawnAt(object, 1, x, z, 1);

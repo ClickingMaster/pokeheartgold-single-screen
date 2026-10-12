@@ -1418,7 +1418,7 @@ Overlay field
     Object src/op90_overlay_01_021E90C0_residual_7_r01.o
     Object src/ov01_21e90c0_opus_partial_8.o
     Object asm/overlay_01_021E90C0_residual_8.o
-    Object src/field_binary_records.o
+    Object src/field/build_model_shapes.o
     Object src/overlay_01_021EA824.o
     Object src/model_attributes_helpers_1.o
     Object src/field_camera_manager_1.o
@@ -1712,38 +1712,13 @@ Overlay field
     Object src/field/headbutt.o
     Object src/field/field_shaymin_form_change.o
     Object asm/overlay_01_022051EC_residual_1.o
-    Object src/field_effect_dispatch_1.o
-    Object src/overlay_01_022053EC.o
-    Object src/field_effect_dispatch_2.o
-    Object src/to80_extra1503_run01.o
-    Object src/field_effect_dispatch_3.o
-    Object src/to70_overlay_01_022053EC_residual_3_extra554_run01.o
-    Object src/field_effect_dispatch_4.o
-    Object src/op90_overlay_01_022053EC_residual_4_r01.o
-    Object src/field_effect_dispatch_5.o
-    Object src/to90_extra1985_run01.o
-    Object src/field_effect_dispatch_6.o
-    Object src/to90_extra2356_run01.o
-    Object src/field_effect_dispatch_7.o
-    Object src/to70_to70_overlay_01_022053EC_residual_7_extra168_residual_1_extra1260_run01.o
-    Object src/to70_overlay_01_022053EC_residual_7_extra168_run01.o
-    Object src/field_effect_dispatch_8.o
+    Object src/field/field_follow_mon.o
     Object asm/overlay_01_022053EC_residual_8.o
 }
 Overlay OVY_2
 {
     After field
-    Object src/overlay02_legendary_helpers_1.o
-    Object src/to90_extra2474_run01.o
-    Object src/overlay02_legendary_helpers_2.o
-    Object src/to45_overlay02_legendary_anims_r2.o
-    Object src/overlay02_legendary_helpers_3.o
-    Object src/to70_overlay_02_02245B80_residual_3_extra367_run01.o
-    Object src/overlay02_legendary_helpers_4.o
-    Object src/to70_overlay_02_02245B80_residual_4_extra449_run01.o
-    Object src/overlay02_legendary_helpers_5.o
-    Object src/to70_overlay_02_02245B80_residual_5_extra397_run01.o
-    Object src/overlay02_legendary_helpers_6.o
+    Object src/field/script_field_effects.o
     Object asm/overlay_02_02245B80_residual_6.o
     Object src/field/encounter_check.o
     Object src/to90_w41405_run01.o
@@ -2646,9 +2621,7 @@ Overlay OVY_40
     Object src/to42_ov40_r33_a08_run2.o
     Object src/op90_to42_ov40_r33_a08_gap2_r01.o
     Object src/ov40_r33_c08.o
-    Object src/overlay_40_sol_partial_33.o
-    Object src/to70_overlay_40_residual_34_extra586_run01.o
-    Object src/overlay_40_sol_partial_34.o
+    Object src/application/vs_recorder/vs_recorder_net.o
     Object src/overlay40_pc_state_handlers_head_35_run1.o
     Object src/op90_overlay_40_residual_35_r01.o
     Object src/overlay40_pc_state_handlers_head_35_run2.o
@@ -2699,9 +2672,9 @@ Overlay OVY_40
     Object src/r40_overlay_40_residual_41_unmatched_5_run1.o
     Object src/to90_extra2018_run01.o
     Object src/r40_overlay_40_residual_41_unmatched_5_run2.o
-    Object src/to91_w41503_battle_names.o
+    Object src/application/vs_recorder/vs_recorder_battle_names.o
     Object asm/to91_w41503_battle_names_anchor.o
-    Object src/overlay40_pc_box_wallpaper_run6.o
+    Object src/application/vs_recorder/vs_recorder_record.o
 }
 Overlay OVY_41
 {
@@ -2990,22 +2963,7 @@ Overlay OVY_45
     Object src/ov45_0224ed80.o
     Object src/ov45_0224eebc.o
     Object src/ov45_0224f490.o
-    Object src/ov45_0224f5bc.o
-    Object src/ov45_0224f660.o
-    Object src/ov45_0224f770.o
-    Object src/ov45_0224f860.o
-    Object src/ov45_0224fabc.o
-    Object src/ov45_022502d0.o
-    Object src/ov45_0225089c.o
-    Object src/ov45_02250a80.o
-    Object src/ov45_02250c80.o
-    Object src/ov45_02250e6c.o
-    Object src/ov45_022510d4.o
-    Object src/ov45_02251350.o
-    Object src/ov45_022514f4.o
-    Object src/ov45_02251554.o
-    Object src/ov45_02251650.o
-    Object src/ov45_022518f0.o
+    Object src/chat_main.o
     Object src/ov45_02251a8c.o
     Object src/ov45_02251f6c.o
     Object src/ov45_022522b4.o
@@ -4120,57 +4078,7 @@ Object src/application/pokewalker/pokewalker_link.o
 Object src/application/pokewalker/pokewalker_link_results.o
 Object src/application/pokewalker/pokewalker_stroll.o
 Object src/application/pokewalker/pokewalker_app_modes.o
-Object src/to56_w22_overlay112_before.o
-Object src/op90_to56_w22_overlay112_middle_r01.o
-Object src/to56_w22_overlay112_after.o
-Object src/to53_overlay112_165.o
-Object src/to80_extra1605_run01.o
-    Object src/to58_ov112_166.o
-Object src/to53_overlay112_167.o
-Object src/op90_to53_overlay112_168_r01.o
-Object src/to53_overlay112_169.o
-Object src/to55_ov112_r170_run01.o
-Object src/op90_to55_ov112_r170_residual_r01.o
-Object src/to55_ov112_r170_run02.o
-Object src/to53_overlay112_171.o
-Object src/to80_extra1899_run01.o
-Object src/to53_overlay112_173.o
-Object src/to58_w16b_ov112_174_full.o
-Object src/to53_overlay112_175.o
-Object src/to70_to53_overlay112_176_extra689_run01.o
-Object src/to53_overlay112_177.o
-Object src/to57_overlay112_178.o
-Object src/to53_overlay112_179.o
-Object src/to58_w16b_ov112_180_0.o
-    Object src/to90_extra2420_run01.o
-Object src/to53_overlay112_181.o
-Object src/to58_w16b_ov112_182_0.o
-Object src/to53_overlay112_183.o
-Object src/to57_overlay112_184_head.o
-Object src/op90_to57_overlay112_184_residual_r01.o
-Object src/to57_overlay112_184_tail.o
-Object src/to53_overlay112_185.o
-Object src/to58_w16b_ov112_186_0.o
-Object src/to53_overlay112_187.o
-Object src/to54_atomic_x09_01_run01.o
-Object src/to90_extra2415_run01.o
-Object src/to54_atomic_x09_03_run03.o
-Object src/to70_to54_atomic_x09_04_run04_extra899_run01.o
-Object src/to54_atomic_x09_05_run05.o
-Object src/to53_overlay112_189.o
-Object src/to58_w16b_ov112_190_0.o
-Object src/to53_overlay112_191.o
-Object src/to58_w16b_ov112_192_0.o
-Object src/to53_overlay112_193.o
-Object src/to90_extra2260_run01.o
-Object src/to90_extra2260_run02.o
-Object src/to53_overlay112_195.o
-Object src/to90_extra2073_run01.o
-Object src/to53_overlay112_197.o
-Object src/to55_overlay112_198_head.o
-Object src/to70_to55_overlay112_198_residual_extra472_run01.o
-Object src/to55_overlay112_198_tail.o
-Object src/to53_overlay112_199.o
+Object src/application/pokewalker/pokewalker_event_log.o
 Object src/application/pokewalker/pokewalker_trainer_house.o
 Object asm/to53_overlay112_202.o
 }

@@ -65,7 +65,7 @@ BOOL ov01_021E971C(FieldSystem *fieldSystem, DoorTransitionWork2 *work, u8 direc
         obj = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
         if (MapObject_IsMovementPaused(obj) == TRUE) {
             MapObject_ClearHeldMovementIfActive(obj);
-            ov01_02205790(fieldSystem, direction);
+            FollowMon_MoveToPlayer(fieldSystem, direction);
             work->state++;
         }
         break;
@@ -126,7 +126,7 @@ BOOL ov01_021E98F0(FieldSystem *fieldSystem, DoorTransitionWork2 *work, u8 direc
             MapObject_SetHeldMovement(obj, movement);
             if (FollowMon_IsActive(fieldSystem)) {
                 x = MapObject_GetPreviousXCoord(obj);
-                ov01_02205990(movement, x, MapObject_GetPreviousZCoord(obj), &fieldSystem->followMon);
+                FollowMon_QueuePlayerStep(movement, x, MapObject_GetPreviousZCoord(obj), &fieldSystem->followMon);
             }
         } else {
             GF_ASSERT(FALSE);

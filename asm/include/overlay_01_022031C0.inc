@@ -45,4 +45,4 @@
 .public FollowMonBall_New
 .public FollowMonBall_Free
 .public FollowMonBall_Spawn
-.public ov01_022055DC
+.public FollowMonObject_IsLarge

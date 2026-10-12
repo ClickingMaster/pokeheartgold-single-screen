@@ -6,7 +6,8 @@
 #include "math_util.h"
 #include "overlay_01_021F467C.h"
 #include "overlay_01_021F944C.h"
-#include "overlay_01_022053EC.h"
+#include "field/field_follow_mon.h"
+#include "field/field_shaymin_form_change.h"
 #include "screen_fade.h"
 #include "script_manager.h"
 #include "script_pokemon_util.h"
@@ -16,7 +17,7 @@
 
 typedef struct UnkStruct_022523D0 {
     int unk0;
-    u32 unk4;
+    FieldEffect *formChange;
     u32 unk8;
 } UnkStruct_022523D0;
 
@@ -55,17 +56,17 @@ static BOOL ov02_022523D0(TaskManager *taskMan) {
     switch (*state) {
     case 0:
         MapObject_UnpauseMovement(FollowMon_GetMapObject(fieldSystem));
-        TaskManager_Call(fieldSystem->taskman, ov01_02205A60, NULL);
+        TaskManager_Call(fieldSystem->taskman, Task_WaitFollowMonMovement, NULL);
         (*state)++;
         break;
     case 1:
         MapObject_CopyPositionVector(FollowMon_GetMapObject(fieldSystem), &pos);
         u32 res;
         if (FollowMon_IsVisible(fieldSystem)) {
-            env->unk4 = ShayminFormChange_Spawn(fieldSystem->fieldEffectManager, &pos);
+            env->formChange = ShayminFormChange_Spawn(fieldSystem->fieldEffectManager, &pos);
             res = 1;
         } else {
-            env->unk4 = 0;
+            env->formChange = NULL;
             res = 0;
         }
         env->unk8 = res;
@@ -96,10 +97,10 @@ static BOOL ov02_022523D0(TaskManager *taskMan) {
         break;
     case 4:
         u32 var = 0;
-        if (env->unk4 == 0) {
+        if (env->formChange == NULL) {
             var = 1;
-        } else if (ShayminFormChange_IsDone()) {
-            FieldEffect_Destroy(env->unk4);
+        } else if (ShayminFormChange_IsDone(env->formChange)) {
+            FieldEffect_Destroy((int)env->formChange);
             var = 1;
         }
         if (var != 0) {

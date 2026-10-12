@@ -46,10 +46,10 @@ void OrbitCursor_SetVisible(void *p, int value);
 void OrbitCursor_SetRadius(void *p, int a, int b);
 void PlaySE(int seqNo);
 void StopSE(int seqNo, int fadeFrames);
-BOOL ov40_0223D5CC(void);
+BOOL VsRecorder_IsNetIdle(void);
 void *BattleRecord_GetHeader(void);
 u64 BattleRecordHeader_GetField(void *p, int a, int b);
-void *ov40_0223D540(void *p);
+void *VsRecorder_GetNet(void *p);
 BOOL ov39_0222774C(void *p, u64 value);
 BOOL GlobalTerminalNet_GetError(void *p, u32 *value);
 BOOL System_GetTouchNew(void);
@@ -148,12 +148,12 @@ int ov40_0223A924(void *p) {
         break;
     case 4: {
         u64 value;
-        if (!ov40_0223D5CC()) {
+        if (!VsRecorder_IsNetIdle()) {
             return 0;
         }
         ov40_0223A510(p, 0x118, 0);
         value = BattleRecordHeader_GetField(BattleRecord_GetHeader(), 4, 0);
-        if (ov39_0222774C(ov40_0223D540(p), value) == TRUE) {
+        if (ov39_0222774C(VsRecorder_GetNet(p), value) == TRUE) {
             WORD(p, 8)
             ++;
         }
@@ -161,10 +161,10 @@ int ov40_0223A924(void *p) {
     }
     case 5: {
         u32 value;
-        if (!ov40_0223D5CC()) {
+        if (!VsRecorder_IsNetIdle()) {
             return 0;
         }
-        if (GlobalTerminalNet_GetError(ov40_0223D540(p), &value) == TRUE) {
+        if (GlobalTerminalNet_GetError(VsRecorder_GetNet(p), &value) == TRUE) {
             StopSE(0x57D, 0);
         } else {
             StopSE(0x57D, 0);

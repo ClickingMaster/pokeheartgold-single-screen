@@ -43,7 +43,7 @@ void BillboardObject_AdvanceFrame(Sprite *sprite, fx32 a1);
 fx32 BillboardObject_GetFrame(Sprite *sprite);
 void BillboardObject_SetSequenceFrame(Sprite *sprite, int a1);
 
-int ov01_02205564(LocalMapObject *object);
+int MapObject_HasFollowMonSprite(LocalMapObject *object);
 fx32 ov01_022054E0(LocalMapObject *object);
 int ov01_021FA44C(u32 direction);
 BOOL ov01_022055B0(LocalMapObject *object);

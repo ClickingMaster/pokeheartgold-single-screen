@@ -15,9 +15,9 @@ typedef struct FollowObjData {
 } FollowObjData;
 
 void ov01_021F8E70(LocalMapObject *object, u32 dir, VecFx32 *out);
-BOOL ov01_02205564(LocalMapObject *object);
-void ov01_0220589C(int a0, LocalMapObject *object, Sprite *sprite);
-BOOL ov01_0220553C(LocalMapObject *object);
+BOOL MapObject_HasFollowMonSprite(LocalMapObject *object);
+void MapObject_SetBillboardSepia(int a0, LocalMapObject *object, Sprite *sprite);
+BOOL MapObject_IsShinyPokemon(LocalMapObject *object);
 void ov01_02205808(int a0, LocalMapObject *object, Sprite *sprite);
 void ov01_021F9630(Sprite *sprite, void *a1);
 int ov01_021FA3E8(LocalMapObject *object, Sprite *sprite);
@@ -80,9 +80,9 @@ void ov01_021F7504(LocalMapObject *object) {
         facing.x = offset.x;
         facing.z = offset.z;
         MapObject_SetFacingVector(object, &facing);
-        if (ov01_02205564(object)) {
-            ov01_0220589C(1, object, data->sprite);
-        } else if (ov01_0220553C(object)) {
+        if (MapObject_HasFollowMonSprite(object)) {
+            MapObject_SetBillboardSepia(1, object, data->sprite);
+        } else if (MapObject_IsShinyPokemon(object)) {
             ov01_02205808(1, object, data->sprite);
         }
         ov01_021F9630(data->sprite, data->unk4);

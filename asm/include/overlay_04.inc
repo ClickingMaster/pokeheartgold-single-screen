@@ -116,8 +116,8 @@
 .public Field3dObject_GetActiveFlag
 .public Field3dObject_SetPosEx
 .public Field3dObjectList_GetRenderObjectByID
-.public ov01_02205A34
-.public ov01_02205A60
+.public FollowMon_SetHeight
+.public Task_WaitFollowMonMovement
 .public GymmickInit_Violet
 .public VioletGymmick_ElevatorAction
 .public GymmickInit_Azalea

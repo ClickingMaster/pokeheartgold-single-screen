@@ -115,12 +115,12 @@
 .public SurfMountEffect_SetBobbing
 .public RockClimbEffect_Create
 .public RockClimbEffect_SetFollow
-.public ov01_02205790
-.public ov01_02205D68
+.public FollowMon_MoveToPlayer
+.public FollowMon_StartRecall
 .public ov01_02205EE0
-.public ov01_0220609C
-.public ov01_02206268
-.public ov01_022062CC
+.public FollowMon_SetFacingDirection
+.public FollowMon_IsNextToPlayer
+.public FieldSystem_GetLeadMonIndex
 .public ov02_02249458
 .public ov02_0224953C
 .public ov02_02249548

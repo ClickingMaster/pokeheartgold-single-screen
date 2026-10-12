@@ -85,6 +85,6 @@
 .public MapProp_GetResModel
 .public ov01_021FB904
 .public ov01_021FB9E0
-.public ov01_02205790
-.public ov01_022057C4
-.public ov01_02205990
+.public FollowMon_MoveToPlayer
+.public FollowMon_CheckVisibleFlag
+.public FollowMon_QueuePlayerStep

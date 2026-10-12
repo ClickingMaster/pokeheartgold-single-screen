@@ -45,7 +45,7 @@
 .public _02102830
 .public _021028B4
 .public _021028C4
-.public ov40_02244920
+.public VsRecorder_SanitizeBattleSetupNames
 
 	.public sub_02087A8C
 	.public sub_02087B10

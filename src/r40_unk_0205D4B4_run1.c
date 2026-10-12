@@ -51,6 +51,6 @@ void sub_0205D4B4(PlayerAvatar *avatar, MapObject *object, int direction, int un
         void *fieldSystem = MapObject_GetFieldSystem(object);
         int x = MapObject_GetPreviousXCoord(object);
         int z = MapObject_GetPreviousZCoord(object);
-        ov01_02205990(movement, x, z, (u8 *)fieldSystem + 0xE4);
+        FollowMon_QueuePlayerStep(movement, x, z, (u8 *)fieldSystem + 0xE4);
     }
 }

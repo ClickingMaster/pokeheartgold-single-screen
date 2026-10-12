@@ -42,9 +42,9 @@
 .public NNS_GfdDefaultFuncFreePlttVram
 .public MapPropAnimationManager_GetAnimListNARCFileCount
 .public ov01_021E8F3C
-.public ov01_021EA724
-.public ov01_021EA73C
-.public ov01_021EA7E0
+.public BuildModelShapes_New
+.public BuildModelShapes_Load
+.public BuildModelShapes_Free
 .public AreaDataManager_Alloc
 .public ov01_021FB904
 .public ov01_021FB90C
@@ -52,7 +52,7 @@
 .public AreaDataManager_Free
 .public AreaDataManager_GetMapTexture
 .public ov01_021FB9E0
-.public ov01_021FB9F4
+.public AreaDataManager_GetBuildModelShapes
 .public ov01_021FBA00
 .public AreaDataManager_GetAreaLightArchiveID
 .public AreaDataManager_Load

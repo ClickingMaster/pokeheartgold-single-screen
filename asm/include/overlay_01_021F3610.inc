@@ -21,9 +21,9 @@
 .public _fsub
 .public _u32_div_f
 .public NNS_G3dGlb
-.public ov01_021EA7F8
-.public ov01_021EA804
-.public ov01_021EA81C
+.public BuildModelShapes_GetShapeCount
+.public BuildModelShapes_GetShapeRange
+.public BuildModelShapes_GetShapes
 .public ov01_021EA9B0
 .public MapPropManager_New
 .public MapPropManager_Free
@@ -46,7 +46,7 @@
 .public MapPropManager_GetMapPropByIndex_Checked_RequireActive
 .public MapPropManager_LoadOne
 .public ov01_021F3C9C
-.public ov01_021FB9F4
+.public AreaDataManager_GetBuildModelShapes
 .public ov01_022040F8
 .public ov01_0220411C
 .public ov01_02204154

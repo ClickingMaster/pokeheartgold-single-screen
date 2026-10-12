@@ -68,7 +68,7 @@ void ov40_0223A510(void *p, int msgId, int index) {
 int ov40_0223A640(void *p) {
     void *w = PTR(p, 0x860);
 
-    if (!ov40_0223D5CC(p)) {
+    if (!VsRecorder_IsNetIdle(p)) {
         return 0;
     }
     switch (WORD(p, 8)) {
@@ -104,7 +104,7 @@ int ov40_0223A640(void *p) {
     case 3: {
         u8 *entry;
 
-        void *result = ov40_0223D540(p);
+        void *result = VsRecorder_GetNet(p);
         entry = PTR((u8 *)p + WORD(p, 0x4D4) * 4, 0x2608);
         if (GlobalTerminalNet_RequestVideoDownload(result, PTR(entry, 0xD8), PTR(entry, 0xDC)) == TRUE) {
             WORD(p, 8)
@@ -117,7 +117,7 @@ int ov40_0223A640(void *p) {
         void *ctx;
 
         VsRecorder_HideTopMessage(p);
-        ctx = ov40_0223D540(p);
+        ctx = VsRecorder_GetNet(p);
         if (GlobalTerminalNet_GetError(ctx, &result) == TRUE) {
             StopSE(0x57D, 0);
             VsRecorder_ShowMessageScreen(p, 8, WORD(result, 0xC), WORD(result, 4));

@@ -83,7 +83,7 @@ void ov02_0224FE70(void *env, void *object, u8 oldDirection) {
     int z;
     int behavior;
     void *fieldSystem;
-    if (!ov01_022055DC(object) || oldDirection == (u8)MapObject_GetFacingDirection(object)) {
+    if (!FollowMonObject_IsLarge(object) || oldDirection == (u8)MapObject_GetFacingDirection(object)) {
         return;
     }
     if (U8(env, 0x87c) != 2 && U8(env, 0x87c) != 3) {

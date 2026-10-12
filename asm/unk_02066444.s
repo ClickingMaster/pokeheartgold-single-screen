@@ -130,7 +130,7 @@ _02066516:
 	bl VeryTallGrass_Spawn
 _0206652A:
 	add r0, r5, #0
-	bl ov01_022055DC
+	bl FollowMonObject_IsLarge
 	cmp r0, #0
 	beq _02066596
 	add r0, r5, #0
@@ -145,7 +145,7 @@ _0206652A:
 	add r0, r5, #0
 	add r1, sp, #8
 	add r2, sp, #4
-	bl ov01_02205604
+	bl MapObject_GetCoordsBehind
 	ldr r1, [sp, #8]
 	ldr r2, [sp, #4]
 	add r0, r4, #0

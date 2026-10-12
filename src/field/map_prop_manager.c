@@ -2,7 +2,7 @@
 
 #include "field/map_load_manager.h"
 #include "field/map_prop.h"
-#include "field/overlay_01_021EA6C4.h"
+#include "field/build_model_shapes.h"
 
 #include "field_system.h"
 #include "gf_3d_render.h"
@@ -36,7 +36,7 @@ struct MapPropManager {
 
 static void MapPropManager_Init(MapPropManager *mapPropManager, void *unkC0);
 static void MapProp_Init(MapProp *mapProp);
-static void DrawModelShapewise(const NNSG3dResMdl *mapPropManager, const VecFx32 *baseTrans, const MtxFx33 *prmBaseRot, const VecFx32 *baseScale, AreaDataManager_Sub8AC *a4, int a5);
+static void DrawModelShapewise(const NNSG3dResMdl *mapPropManager, const VecFx32 *baseTrans, const MtxFx33 *prmBaseRot, const VecFx32 *baseScale, BuildModelShapes *a4, int a5);
 
 static void MapPropManager_Init(MapPropManager *mapPropManager, void *unkC0) {
     mapPropManager->fsys_unkC0 = unkC0;
@@ -198,12 +198,12 @@ void ov01_021F3A3C(const VecFx32 *position, AreaDataManager *areaDataManager, BO
         if (!GF3d_ModelBoxTest(mapProp->render->model, &translation, &rotation, &mapProp->scale)) {
             continue;
         }
-        AreaDataManager_Sub8AC *r4 = ov01_021FB9F4(areaDataManager);
+        BuildModelShapes *r4 = AreaDataManager_GetBuildModelShapes(areaDataManager);
         if (a2 == TRUE) {
             ov01_021EA9B0(modelAttributes, mapProp->render->model, 0xF33);
         }
         u16 sp14;
-        ov01_021EA7F8(mapProp->buildModel, r4, &sp14);
+        BuildModelShapes_GetShapeCount(mapProp->buildModel, r4, &sp14);
         if (sp14 == 0) {
             GF3dRender_DrawModel(&mapProp->render->renderObj, &translation, &rotation, &mapProp->scale);
         } else {
@@ -270,7 +270,7 @@ MapProp *MapPropManager_GetMapPropByIndex_Checked_RequireActive(MapPropManager *
     return ret;
 }
 
-static void DrawModelShapewise(const NNSG3dResMdl *model, const VecFx32 *baseTrans, const MtxFx33 *prmBaseRot, const VecFx32 *baseScale, AreaDataManager_Sub8AC *a4, int buildModel) {
+static void DrawModelShapewise(const NNSG3dResMdl *model, const VecFx32 *baseTrans, const MtxFx33 *prmBaseRot, const VecFx32 *baseScale, BuildModelShapes *a4, int buildModel) {
     NNS_G3dGlbSetBaseTrans(baseTrans);
     NNS_G3dGlbSetBaseRot(prmBaseRot);
     NNS_G3dGlbSetBaseScale(baseScale);
@@ -278,8 +278,8 @@ static void DrawModelShapewise(const NNSG3dResMdl *model, const VecFx32 *baseTra
 
     u16 num;
     u16 sp0;
-    ov01_021EA804(buildModel, a4, &num, &sp0);
-    u16(*shpDat)[2] = ov01_021EA81C(sp0, a4);
+    BuildModelShapes_GetShapeRange(buildModel, a4, &num, &sp0);
+    u16(*shpDat)[2] = BuildModelShapes_GetShapes(sp0, a4);
     u8 i;
     u8 matID = 0xFF;
     for (i = 0; i < num; ++i) {
@@ -328,9 +328,9 @@ void ov01_021F3C9C(MapPropManager *mapPropManager, AreaDataManager *areaDataMana
         if (!mapProp->active || mapProp->culled) {
             continue;
         }
-        AreaDataManager_Sub8AC *r6 = ov01_021FB9F4(areaDataManager);
+        BuildModelShapes *r6 = AreaDataManager_GetBuildModelShapes(areaDataManager);
         u16 sp10;
-        ov01_021EA7F8(mapProp->buildModel, r6, &sp10);
+        BuildModelShapes_GetShapeCount(mapProp->buildModel, r6, &sp10);
         if (mapProp->overrideRotation) {
             Math_CalcRotationMatrixXYZ(&baseRot, &mapProp->rotation);
         }

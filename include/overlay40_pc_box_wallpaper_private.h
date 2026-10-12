@@ -53,10 +53,10 @@ void ov40_0224428C(void *w, int a);
 void ov40_022442CC(void *w);
 void ov40_02244494(void *w);
 int ov40_022444C0(void *w);
-void ov40_02244A84(void *str, u32 heapId);
-int ov40_02244AB0(void *save, void *a2, int a3, u16 *state, int a5);
-void ov40_02244B3C(void);
-int ov40_02244B70(void *save, void *a, void *b, u16 *state, int a5);
-int ov40_02244BBC(void *save, int a);
+void VsRecorder_LoadPlaceholderTrainerName(void *str, u32 heapId);
+int VsRecorder_WriteRecordAsync(void *save, void *a2, int a3, u16 *state, int a5);
+void VsRecorder_EncryptRecord(void);
+int VsRecorder_SaveRecordNumber(void *save, void *a, void *b, u16 *state, int a5);
+int VsRecorder_WriteRecord(void *save, int a);
 
 #endif

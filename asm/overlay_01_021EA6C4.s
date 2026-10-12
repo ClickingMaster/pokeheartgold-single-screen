@@ -14,8 +14,8 @@
 
 	.text
 
-	thumb_func_start ov01_021EA724
-ov01_021EA724: ; 0x021EA724
+	thumb_func_start BuildModelShapes_New
+BuildModelShapes_New: ; 0x021EA724
 	push {r4, lr}
 	mov r0, #4
 	mov r1, #8
@@ -27,10 +27,10 @@ _021EA736:
 	add r0, r4, #0
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021EA724
+	thumb_func_end BuildModelShapes_New
 
-	thumb_func_start ov01_021EA73C
-ov01_021EA73C: ; 0x021EA73C
+	thumb_func_start BuildModelShapes_Load
+BuildModelShapes_Load: ; 0x021EA73C
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0x4c
 	add r4, r0, #0
@@ -104,10 +104,10 @@ _021EA7D8:
 	bl GF_AssertFail
 	add sp, #0x4c
 	pop {r3, r4, r5, r6, pc}
-	thumb_func_end ov01_021EA73C
+	thumb_func_end BuildModelShapes_Load
 
-	thumb_func_start ov01_021EA7E0
-ov01_021EA7E0: ; 0x021EA7E0
+	thumb_func_start BuildModelShapes_Free
+BuildModelShapes_Free: ; 0x021EA7E0
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #4]
@@ -117,20 +117,20 @@ ov01_021EA7E0: ; 0x021EA7E0
 	add r0, r4, #0
 	bl Heap_Free
 	pop {r4, pc}
-	thumb_func_end ov01_021EA7E0
+	thumb_func_end BuildModelShapes_Free
 
-	thumb_func_start ov01_021EA7F8
-ov01_021EA7F8: ; 0x021EA7F8
+	thumb_func_start BuildModelShapes_GetShapeCount
+BuildModelShapes_GetShapeCount: ; 0x021EA7F8
 	ldr r1, [r1]
 	lsl r0, r0, #2
 	ldrh r0, [r1, r0]
 	strh r0, [r2]
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov01_021EA7F8
+	thumb_func_end BuildModelShapes_GetShapeCount
 
-	thumb_func_start ov01_021EA804
-ov01_021EA804: ; 0x021EA804
+	thumb_func_start BuildModelShapes_GetShapeRange
+BuildModelShapes_GetShapeRange: ; 0x021EA804
 	push {r3, r4}
 	lsl r4, r0, #2
 	ldr r0, [r1]
@@ -143,12 +143,12 @@ ov01_021EA804: ; 0x021EA804
 	pop {r3, r4}
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov01_021EA804
+	thumb_func_end BuildModelShapes_GetShapeRange
 
-	thumb_func_start ov01_021EA81C
-ov01_021EA81C: ; 0x021EA81C
+	thumb_func_start BuildModelShapes_GetShapes
+BuildModelShapes_GetShapes: ; 0x021EA81C
 	ldr r1, [r1, #4]
 	lsl r0, r0, #2
 	add r0, r1, r0
 	bx lr
-	thumb_func_end ov01_021EA81C
+	thumb_func_end BuildModelShapes_GetShapes

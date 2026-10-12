@@ -143,7 +143,7 @@ void *ov02_0224C660(u32 heap, u32 size) {
 }
 
 int ov02_0224C680(void *a, void *b, void *p) {
-    ov01_022060B8(b, 2, 1);
+    FollowMon_StartFlash(b, 2, 1);
     U32(p, 0)
     ++;
     return 0;

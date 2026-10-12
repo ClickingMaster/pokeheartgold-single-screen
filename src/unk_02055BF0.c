@@ -18,7 +18,7 @@
 #include "overlay_01_021E90C0.h"
 #include "overlay_01_021F1AFC.h"
 #include "overlay_01_022031C0.h"
-#include "overlay_01_022053EC.h"
+#include "field/field_follow_mon.h"
 #include "player_avatar.h"
 #include "save_follow_mon.h"
 #include "script.h"
@@ -144,12 +144,12 @@ BOOL sub_02055DBC(TaskManager *man) {
         env->transitionState = 0;
         env->unk24 = NULL;
         env->unk1 = 0;
-        if (FollowMon_IsActive(fieldSystem) && ov01_022057C4(fieldSystem) && PlayerAvatar_GetState(fieldSystem->playerAvatar) != PLAYER_STATE_CYCLING) {
+        if (FollowMon_IsActive(fieldSystem) && FollowMon_CheckVisibleFlag(fieldSystem) && PlayerAvatar_GetState(fieldSystem->playerAvatar) != PLAYER_STATE_CYCLING) {
             env->state = 9;
             break;
         }
     case 1:
-        if (FollowMon_IsActive(fieldSystem) && !ov01_022057C4(fieldSystem) && PlayerAvatar_GetState(fieldSystem->playerAvatar) != PLAYER_STATE_CYCLING) {
+        if (FollowMon_IsActive(fieldSystem) && !FollowMon_CheckVisibleFlag(fieldSystem) && PlayerAvatar_GetState(fieldSystem->playerAvatar) != PLAYER_STATE_CYCLING) {
             LocalMapObject *followMon = FollowMon_GetMapObject(fieldSystem);
             int species = FollowMon_GetSpecies(followMon);
             if (!FollowMon_GetPermissionBySpeciesAndMap(species, env->location.mapId)) {
@@ -164,7 +164,7 @@ BOOL sub_02055DBC(TaskManager *man) {
         }
         FieldBGM_TryFadeIn(fieldSystem, env->location.mapId);
         TaskManager_Call(man, sMapExitRoutines[env->transitionNo], env);
-        if (FollowMon_IsActive(fieldSystem) && ov01_022057C4(fieldSystem) && !FollowMon_GetPermission(fieldSystem)) {
+        if (FollowMon_IsActive(fieldSystem) && FollowMon_CheckVisibleFlag(fieldSystem) && !FollowMon_GetPermission(fieldSystem)) {
             ov01_022057D0(fieldSystem);
         }
         Save_FollowMon_SetMapID(fieldSystem->location->mapId, Save_FollowMon_Get(fieldSystem->saveData));
@@ -213,7 +213,7 @@ BOOL sub_02055DBC(TaskManager *man) {
             LocalMapObject *followerMon = FollowMon_GetMapObject(fieldSystem);
             if (FollowMon_IsActive(fieldSystem) && !FollowMon_GetPermission(fieldSystem)) {
                 sub_02069E84(followerMon, 1);
-                ov01_02205790(fieldSystem, (u8)PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
+                FollowMon_MoveToPlayer(fieldSystem, (u8)PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             }
             env->state++;
             break;
@@ -415,7 +415,7 @@ BOOL sub_020562B0(TaskManager *man) {
                 break;
             }
             if (flag) {
-                ov01_02205990(var, MapObject_GetPreviousXCoord(obj), MapObject_GetPreviousZCoord(obj), &fieldSystem->followMon);
+                FollowMon_QueuePlayerStep(var, MapObject_GetPreviousXCoord(obj), MapObject_GetPreviousZCoord(obj), &fieldSystem->followMon);
             }
         }
         fenv->transitionState++;

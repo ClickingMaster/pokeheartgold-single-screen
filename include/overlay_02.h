@@ -56,9 +56,9 @@ BOOL ov02_0224953C(void *work);
 void ov02_02249548(void *work);
 
 void ov02_02245B80(TaskManager *taskManager);
-void ov02_022460AC(TaskManager *taskMan, u8 a1);
-void ShowLegendaryWing(TaskManager *taskMan, u8 a1);
-void ov02_022462E8(TaskManager *taskMan);
+void ShowTrapEffect(TaskManager *taskManager, u8 kind);
+void ShowLegendaryWing(TaskManager *taskManager, u8 kind);
+void ShowHideoutAlarm(TaskManager *taskManager);
 void PokecenterAnimCreate(FieldSystem *fieldSystem, u8 kind);
 void ov02_0224BDE8(FieldSystem *fieldSystem, u8 direction, u8 length);
 int ov02_0224CD38(PlayerProfile *profile, u16 a, u16 b, u16 c, u16 d, enum HeapID heapID);
@@ -76,9 +76,9 @@ void ov02_022508B4(FieldSystem *fieldSystem);
 void ov02_022523B4(TaskManager *taskManager);
 
 void ov02_BattleExit_HandleRoamerAction(FieldSystem *fieldSystem, BattleSetup *setup);
-void ov02_02246714(TaskManager *man, u32 a1, u32 a2, u32 a3, u32 a4);
-void ov02_022469B4(TaskManager *man, LocalMapObject *obj1, LocalMapObject *obj2);
-void OpenAlphHiddenRoom(TaskManager *man, u32 a1);
+void ShakeScreen(TaskManager *taskManager, u32 amplitudeX, u32 amplitudeY, u32 repeats, u16 period);
+void LanceFliesAway(TaskManager *taskManager, LocalMapObject *lance, LocalMapObject *dragoniteObject);
+void OpenAlphHiddenRoom(TaskManager *taskManager, u32 msgNo);
 int ov02_0224E340(FieldSystem *fieldSystem);
 
 u16 ov02_0224E698(FieldSystem *fieldSystem);

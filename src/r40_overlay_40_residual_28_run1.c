@@ -6,7 +6,7 @@ void ov40_0223615C(void *p, const u32 *state) {
     void *inner = PTR(p, 0x860);
 
     if (*state != 1) {
-        PTR(inner, 0x2E4) = GlobalTerminalNet_GetDressUpList(ov40_0223D540(p), (u8 *)inner + 0x23C, 5);
+        PTR(inner, 0x2E4) = GlobalTerminalNet_GetDressUpList(VsRecorder_GetNet(p), (u8 *)inner + 0x23C, 5);
     }
 }
 

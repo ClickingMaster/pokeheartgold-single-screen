@@ -2,7 +2,7 @@
 
 #include "field_system.h"
 #include "overlay_01.h"
-#include "overlay_01_022053EC.h"
+#include "field/field_follow_mon.h"
 #include "overlay_04.h"
 #include "task.h"
 #include "sound_playback.h"
@@ -87,7 +87,7 @@ static BOOL Task_VioletGymmick_ElevatorUp(TaskManager *taskman) {
     switch (taskData->state) {
     case 0:
         // decomper's note: taskman == fieldSystem->taskman
-        TaskManager_Call(fieldSystem->taskman, ov01_02205A60, NULL);
+        TaskManager_Call(fieldSystem->taskman, Task_WaitFollowMonMovement, NULL);
         ++taskData->state;
         break;
     case 1:
@@ -109,7 +109,7 @@ static BOOL Task_VioletGymmick_ElevatorDown(TaskManager *taskman) {
     switch (taskData->state) {
     case 0:
         // decomper's note: taskman == fieldSystem->taskman
-        TaskManager_Call(fieldSystem->taskman, ov01_02205A60, NULL);
+        TaskManager_Call(fieldSystem->taskman, Task_WaitFollowMonMovement, NULL);
         ++taskData->state;
         break;
     case 1:
@@ -148,7 +148,7 @@ static void SysTask_ElevatorUp(SysTask *sysTask, void *taskData) {
         PlayerAvatar_CopyPositionVector(fieldSystem->playerAvatar, &playerPosition);
         playerPosition.y += ELEVATOR_Y_SPEED;
         PlayerAvatar_SetMapObjectYPosition(fieldSystem->playerAvatar, playerPosition.y);
-        ov01_02205A34(fieldSystem, playerPosition.y);
+        FollowMon_SetHeight(fieldSystem, playerPosition.y);
         MapProp_SetTranslation(mapProp, &elevatorTranslation);
     } break;
     case 4:
@@ -185,7 +185,7 @@ static void SysTask_ElevatorDown(SysTask *sysTask, void *taskData) {
         PlayerAvatar_CopyPositionVector(fieldSystem->playerAvatar, &playerPosition);
         playerPosition.y -= ELEVATOR_Y_SPEED;
         PlayerAvatar_SetMapObjectYPosition(fieldSystem->playerAvatar, playerPosition.y);
-        ov01_02205A34(fieldSystem, playerPosition.y);
+        FollowMon_SetHeight(fieldSystem, playerPosition.y);
         MapProp_SetTranslation(mapProp, &elevatorTranslation);
     } break;
     case 4:

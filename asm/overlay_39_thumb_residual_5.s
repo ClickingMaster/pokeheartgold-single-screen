@@ -185,7 +185,7 @@ _02227556:
 	lsl r1, r1, #4
 	str r0, [r5, r1]
 	ldr r0, [r5]
-	bl ov40_02244B3C
+	bl VsRecorder_EncryptRecord
 	bl BattleRecord_GetProfile
 	add r1, r0, #0
 	add r0, r4, #0

@@ -13,7 +13,7 @@
 #include "map_object.h"
 #include "overlay_01_021F72DC.h"
 #include "overlay_01_021F944C.h"
-#include "overlay_01_022053EC.h"
+#include "field/field_follow_mon.h"
 #include "player_avatar.h"
 
 // Map object reflections (field effect renderer 1): an upside-down copy of the object's billboard below it
@@ -45,8 +45,6 @@ typedef struct ReflectionRecord {
 // Copies the billboard record of the sprite into record; FALSE if the sprite has none.
 // (field object models, still in asm)
 BOOL ov01_021F9744(MapObjectManager *manager, u32 spriteId, ReflectionRecord *record);
-// field_effect_dispatch_3.c: swaps the record's sequence for a following Pokemon's alternate one.
-void ov01_02205870(BOOL select, LocalMapObject *mapObject, void *billboard, ReflectionRecord *record);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 1).
 typedef struct Reflection {
@@ -479,7 +477,7 @@ void FollowerReflectionEffect_CreateBillboard(FieldEffect *effect, ReflectionEff
             resource = FieldEffectManager_GetBillboardResource(work->args.manager, REFLECTION_RESOURCE_LARGE);
         }
         record.resource = resource;
-        if (ov01_0220553C(work->args.mapObject)) {
+        if (MapObject_IsShinyPokemon(work->args.mapObject)) {
             ov01_02205870(TRUE, work->args.mapObject, work->billboard, &record);
         }
         FieldEffect_GetPosition(effect, &position);

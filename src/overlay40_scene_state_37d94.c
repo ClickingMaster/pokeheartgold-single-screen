@@ -4,7 +4,7 @@ int ov40_02237D94(void *p) {
     Ov40Inner *inner = PTR(p, 0x860);
     void *selected;
 
-    if (!ov40_0223D5CC(p)) {
+    if (!VsRecorder_IsNetIdle(p)) {
         return 0;
     }
 
@@ -40,14 +40,14 @@ int ov40_02237D94(void *p) {
         ++;
         break;
     case 3:
-        if (GlobalTerminalNet_RequestBoxDownload(ov40_0223D540(p), PTR(inner, 0x380)) == 1) {
+        if (GlobalTerminalNet_RequestBoxDownload(VsRecorder_GetNet(p), PTR(inner, 0x380)) == 1) {
             WORD(p, 8)
             ++;
         }
         break;
     case 4:
         VsRecorder_HideTopMessage(p);
-        if (GlobalTerminalNet_GetError(ov40_0223D540(p), &selected) == 1) {
+        if (GlobalTerminalNet_GetError(VsRecorder_GetNet(p), &selected) == 1) {
             StopSE(0x57D, 0);
             VsRecorder_ShowMessageScreen(p, 3, WORD(selected, 0xC), WORD(selected, 4));
             WORD(inner, 0x388) = 0;

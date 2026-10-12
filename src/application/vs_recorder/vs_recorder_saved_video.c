@@ -394,7 +394,7 @@ BOOL ov40_02232A48(VsRecorderWork *work) {
         if (work->battleResult == 0) {
             int result;
             BattleRecord_Load(work->saveData, HEAP_ID_109, &result, NULL, work->selection);
-            ov40_02244BBC(work->saveData, work->selection);
+            VsRecorder_WriteRecord(work->saveData, work->selection);
             BattleRecord_Delete();
             VsRecorder_FreeSavedVideos(work);
             VsRecorder_LoadSavedVideos(work);

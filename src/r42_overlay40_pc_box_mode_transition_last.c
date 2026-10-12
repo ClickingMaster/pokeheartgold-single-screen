@@ -79,7 +79,7 @@ int ov40_02234D94(void *p) {
 int ov40_02234F98(void *p) {
     void *w = PTR(p, 0x860);
     void *q;
-    if (!ov40_0223D5CC(p)) {
+    if (!VsRecorder_IsNetIdle(p)) {
         return 0;
     }
     switch (S32(p, 8)) {
@@ -93,14 +93,14 @@ int ov40_02234F98(void *p) {
         ++;
         break;
     case 1:
-        if (GlobalTerminalNet_RequestDressUpDownload(ov40_0223D540(p), PTR(w, 0x2e0)) == 1) {
+        if (GlobalTerminalNet_RequestDressUpDownload(VsRecorder_GetNet(p), PTR(w, 0x2e0)) == 1) {
             S32(p, 8)
             ++;
         }
         break;
     case 2:
         VsRecorder_HideTopMessage(p);
-        if (GlobalTerminalNet_GetError(ov40_0223D540(p), &q) == 1) {
+        if (GlobalTerminalNet_GetError(VsRecorder_GetNet(p), &q) == 1) {
             StopSE(0x57d, 0);
             VsRecorder_ShowMessageScreen(p, 1, PTR(q, 0xc), PTR(q, 4));
             S32(w, 0x2e4) = 0;

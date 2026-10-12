@@ -45,8 +45,8 @@ extern void EventObjectMovementMan_Delete(EventObjectMovementMan *movement);
 extern BOOL IsPaletteFadeFinished(void);
 extern FieldMoveTaskEnvironment *ov02_0224C660(u32 heapId, u32 size);
 extern LocalMapObject *PlayerAvatar_GetMapObject(PlayerAvatar *avatar);
-extern BOOL ov01_02206268(FieldSystem *fieldSystem);
-extern u32 ov01_022062CC(FieldSystem *fieldSystem);
+extern BOOL FollowMon_IsNextToPlayer(FieldSystem *fieldSystem);
+extern u32 FieldSystem_GetLeadMonIndex(FieldSystem *fieldSystem);
 extern u32 PlayerAvatar_GetGender(PlayerAvatar *avatar);
 extern void *ov02_02249458(FieldSystem *, u32, Pokemon *, u32);
 extern BOOL ov02_02250780(FieldSystem *, u32);
@@ -55,7 +55,7 @@ extern void FieldSystem_UnkSub108_AddMonMood(void *, u32);
 extern u32 GetMonData(Pokemon *, u32, void *);
 extern void PlayCry(u16 species, u8 form);
 extern BOOL IsCryFinished(void);
-extern void ov01_02205A60(void);
+extern void Task_WaitFollowMonMovement(void);
 extern const Ov02FieldTaskFunc ov02_022536F0[];
 extern const Ov02FieldTaskFunc ov02_02253710[];
 extern const Ov02FieldTaskFunc ov02_02253754[];
@@ -145,7 +145,7 @@ FieldMoveTaskEnvironment *FieldMoveTask_CreateDigEnvironment(FieldSystem *fieldS
     env->fieldSystem = fieldSystem;
     env->mapObject = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
     env->mon = mon;
-    if (ov01_02206268(fieldSystem) && slot == ov01_022062CC(fieldSystem)) {
+    if (FollowMon_IsNextToPlayer(fieldSystem) && slot == FieldSystem_GetLeadMonIndex(fieldSystem)) {
         env->useMon = TRUE;
     } else {
         env->useMon = FALSE;
@@ -162,7 +162,7 @@ BOOL Task_FieldDig(TaskManager *taskManager) {
     switch (*state) {
     case 0:
         if (env->useMon) {
-            TaskManager_Call(taskManager, ov01_02205A60, NULL);
+            TaskManager_Call(taskManager, Task_WaitFollowMonMovement, NULL);
         }
         (*state)++;
         break;

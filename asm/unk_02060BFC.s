@@ -169,7 +169,7 @@ _02060D3A:
 	cmp r0, #0xfd
 	bne _02060D84
 	ldr r0, [sp, #4]
-	bl ov01_022055DC
+	bl FollowMonObject_IsLarge
 	cmp r0, #0
 	beq _02060D84
 	ldr r0, [sp, #4]
@@ -179,7 +179,7 @@ _02060D3A:
 	ldr r0, [sp, #4]
 	add r1, sp, #0xc
 	add r2, sp, #8
-	bl ov01_02205664
+	bl MapObject_GetPreviousCoordsBehind
 	ldr r0, [sp, #0xc]
 	cmp r0, r5
 	bne _02060D84

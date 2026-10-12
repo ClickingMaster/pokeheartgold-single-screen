@@ -59,7 +59,7 @@ extern int MapObject_GetMovementCommand(MapObject *);
 extern BOOL FollowMon_IsActive(void *fieldSystem);
 extern int MapObject_GetPreviousXCoord(MapObject *);
 extern int MapObject_GetPreviousZCoord(MapObject *);
-extern void ov01_02205990(int movement, int x, int z, void *followMon);
+extern void FollowMon_QueuePlayerStep(int movement, int x, int z, void *followMon);
 extern void MapObject_CopyPositionVector(MapObject *, VecFx32 *);
 extern void OffsetPositionInDirection(void *arg, VecFx32 *position, int distance);
 extern BOOL sub_0206121C(void *fieldSystem, VecFx32 *position);

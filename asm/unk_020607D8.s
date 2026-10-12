@@ -37,7 +37,7 @@ _020607F2:
 	b _0206096A
 _02060804:
 	add r0, r5, #0
-	bl ov01_022055DC
+	bl FollowMonObject_IsLarge
 	cmp r0, #0
 	beq _02060902
 	add r0, r5, #0
@@ -274,7 +274,7 @@ MapObject_UpdateReflection: ; 0x020609D4
 	cmp r0, #0xfd
 	bne _02060A96
 	add r0, r5, #0
-	bl ov01_022055DC
+	bl FollowMonObject_IsLarge
 	cmp r0, #0
 	beq _02060A96
 	add r0, r5, #0

@@ -32,8 +32,8 @@ typedef struct DoorModelList {
 extern const DoorModelList ov01_02206408;
 extern const DoorModelList ov01_02206418;
 extern NNSG3dResTex *ov01_021FB9E0(AreaDataManager *);
-extern void ov01_02205790(FieldSystem *, u8);
-extern void ov01_02205990(int, int, int, void *);
+extern void FollowMon_MoveToPlayer(FieldSystem *, u8);
+extern void FollowMon_QueuePlayerStep(int, int, int, void *);
 extern void StopSE(u16, int);
 extern BOOL ov01_021E971C(FieldSystem *, DoorTransitionWork2 *, u8);
 extern BOOL ov01_021E98F0(FieldSystem *, DoorTransitionWork2 *, u8);

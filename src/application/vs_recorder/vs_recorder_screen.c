@@ -855,7 +855,7 @@ BOOL VsRecorder_IsVideoSaved(VsRecorderWork *work, u64 number) {
 
 // replace a name the font cannot show by the placeholder name
 void VsRecorder_SanitizeName(VsRecorderWork *work, String *str) {
-    GlobalTerminalNet *net = ov40_0223D540(work);
+    GlobalTerminalNet *net = VsRecorder_GetNet(work);
     String *tmp = String_New(0x40, net->heapID);
     if (!FontID_String_AllCharsValid(0, str, tmp)) {
         VsRecorder_SetPlaceholderName(str, net->heapID);

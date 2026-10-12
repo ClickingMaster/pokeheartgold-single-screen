@@ -105,7 +105,7 @@ u32 sub_0206234C(int direction, int a1);
 u32 MapObject_CheckCollisionInDirection(LocalMapObject *object, int direction);
 u32 sub_0205DA34(PlayerAvatar *playerAvatar, LocalMapObject *object, int direction);
 u32 sub_0205DFEC(PlayerAvatar *playerAvatar, int direction);
-int ov01_022062CC(FieldSystem *fieldSystem);
+int FieldSystem_GetLeadMonIndex(FieldSystem *fieldSystem);
 
 extern void (*const sPlayerAvatarBitUpdateFuncs[15])(PlayerAvatar *);
 
@@ -168,7 +168,7 @@ void MapObject_SetHeldMovement(LocalMapObject *obj, u32 movement);
 BOOL MapObject_IsMovementPaused(LocalMapObject *obj);
 void MapObject_ClearHeldMovementIfActive(LocalMapObject *obj);
 void SurfMountEffect_SetBobbing(u32 a0, int a1);
-void ov01_0220609C(FieldSystem *fieldSystem, int a1);
+void FollowMon_SetFacingDirection(FieldSystem *fieldSystem, int a1);
 void sub_02069DC8(LocalMapObject *obj, BOOL enable);
 BOOL CheckFlag99A(void *varsFlags);
 void *Save_VarsFlags_Get(SaveData *saveData);

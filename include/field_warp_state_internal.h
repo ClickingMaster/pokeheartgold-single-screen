@@ -58,11 +58,11 @@ typedef struct WarpData {
 extern u8 *TaskManager_GetFieldSystem();
 extern FlyTaskEnv *TaskManager_GetEnvironment();
 extern void TaskManager_Call();
-extern void ov01_02205A60();
+extern void Task_WaitFollowMonMovement();
 extern int PlayerAvatar_GetState();
 extern void *SaveArray_Party_Get();
 extern int GetIdxOfFirstAliveMonInParty_CrashIfNone();
-extern void ov01_02205D68();
+extern void FollowMon_StartRecall();
 extern int FollowMon_IsVisible();
 extern int ov02_02250780();
 extern void FieldSystem_UnkSub108_AddMonMood();

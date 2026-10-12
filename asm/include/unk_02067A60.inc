@@ -57,8 +57,8 @@
 .public GetMonData
 .public SaveArray_Party_Get
 .public MIi_CpuClearFast
-.public ov01_02205A60
-.public ov01_02205D68
+.public Task_WaitFollowMonMovement
+.public FollowMon_StartRecall
 .public ov02_02249458
 .public ov02_0224953C
 .public ov02_02249548

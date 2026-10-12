@@ -196,7 +196,7 @@ extern const u8 sStrollTextWindowWidths[];
 extern const u8 sSpindaSpotMask[]; // where Spinda's spots may be drawn (2bpp picture)
 extern const void *sPokewalkerRouteImages[];
 
-void ov112_021F0D48(u8 *dst);
+void PokewalkerApp_WriteUploadBlocks(u8 *dst);
 
 void PokewalkerApp_BuildUploadImage(PokewalkerApp *app, u8 *dst) {
     Window window;
@@ -371,7 +371,7 @@ void PokewalkerApp_BuildUploadImage(PokewalkerApp *app, u8 *dst) {
     MI_CpuCopy8(ov112_021F5FF8, dst + 0x570, 0x60);
     MI_CpuCopy8(ov112_021F6118, dst + 0x5D0, 0x60);
     MI_CpuCopy8(ov112_021F60B8, dst + 0x630, 0x60);
-    ov112_021F0D48(dst + 0x8A30);
+    PokewalkerApp_WriteUploadBlocks(dst + 0x8A30);
     Heap_Free(buf);
     RemoveWindow(&window);
 }

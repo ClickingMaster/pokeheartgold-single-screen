@@ -12,7 +12,7 @@ void Sprite_DeleteAndFreeResources(void *sprite);
 void ov40_0222D7DC(void *p);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);
 void VsRecorder_DeleteMonIcon(void *p, void *a1, void *a2);
-void *ov40_0223D540(void *p);
+void *VsRecorder_GetNet(void *p);
 void ov39_02227F74(void *p, void *dest);
 void GlobalTerminalNet_GetRankings(void *p, void *dest1, void *dest2);
 void MI_CpuCopy8(const void *src, void *dest, u32 size);

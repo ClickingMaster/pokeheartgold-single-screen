@@ -48,7 +48,7 @@
 #include "overlay_01_021F8D80.h"
 #include "overlay_01_021F944C.h"
 #include "field_poison_effect.h"
-#include "overlay_01_022053EC.h"
+#include "field/field_follow_mon.h"
 #include "player_avatar.h"
 #include "poke_overlay.h"
 #include "save_local_field_data.h"
@@ -305,7 +305,7 @@ BOOL FieldMap_Exit(OverlayManager *man, int *state) {
         sub_0205F55C(fieldSystem->mapObjectManager);
         FieldEffectManager_Free(fieldSystem->fieldEffectManager);
 
-        ov01_02205424(fieldSystem);
+        FollowMon_MarkForRecreate(fieldSystem);
         MapObjectsToPreload_Free(fieldSystem->mapObjectsToPreload);
         fieldSystem->mapObjectsToPreload = NULL;
 
@@ -731,7 +731,7 @@ static void ov01_021E64A4(FieldSystem *fieldSystem) {
         sub_0205E580(fieldSystem->mapObjectManager);
     } else {
         sub_0205E520(fieldSystem->mapObjectManager);
-        ov01_022059AC(fieldSystem);
+        FollowMon_RecreateForMap(fieldSystem);
     }
 
     CommPlayerManager_ForcePosition();

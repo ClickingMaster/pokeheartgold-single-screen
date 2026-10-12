@@ -69,8 +69,8 @@ void VsRecorder_PlaceOrbitCursor(void *p, void *q, int a, int b);
 void VsRecorder_LoadScreen(void *p, int a, int b);
 int ov40_02230410(void *p);
 void VsRecorder_SetVBlankPaused(void *p, void *value);
-void *ov40_0223D540(void *p);
-BOOL ov40_0223D5CC(void *p);
+void *VsRecorder_GetNet(void *p);
+BOOL VsRecorder_IsNetIdle(void *p);
 
 void ov40_02240910(void *p);
 void ov40_02240E28(void *p, int a, int b);

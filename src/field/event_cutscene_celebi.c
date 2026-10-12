@@ -6,7 +6,7 @@
 #include "math_util.h"
 #include "overlay_01_021F467C.h"
 #include "overlay_01_021F944C.h"
-#include "overlay_01_022053EC.h"
+#include "field/field_follow_mon.h"
 #include "screen_fade.h"
 #include "script_manager.h"
 #include "script_pokemon_util.h"

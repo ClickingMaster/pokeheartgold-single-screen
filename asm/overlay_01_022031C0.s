@@ -118,7 +118,7 @@ _022036C4:
 	lsl r3, r3, #3
 	bl GF_CreateNewVramTransferTask
 	add r0, r6, #0
-	bl ov01_022055DC
+	bl FollowMonObject_IsLarge
 	cmp r0, #0
 	beq _02203734
 	add r0, r6, #0

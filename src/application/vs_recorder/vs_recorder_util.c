@@ -307,7 +307,7 @@ void VsRecorder_StartVBlankTask(VsRecorderWork *work) {
 }
 
 BOOL ov40_0222FC14(VsRecorderWork *work, u32 a1, u32 a2) {
-    u32 result = ov40_02244AB0(work->saveData, a1, a2, &work->unk_0834, &work->unk_0836);
+    u32 result = VsRecorder_WriteRecordAsync(work->saveData, a1, a2, &work->unk_0834, &work->unk_0836);
     return result > 1;
 }
 
@@ -322,7 +322,7 @@ void VsRecorder_SetBattleResult(VsRecorderWork *work, u32 result) {
 void ov40_0222FC4C(VsRecorderWork *work, int *state) {
     VsRecorderNetData *net = &work->net;
     if (*state != 1) {
-        int result = GlobalTerminalNet_GetVideoList(ov40_0223D540(work), net->videoList.headers, 30);
+        int result = GlobalTerminalNet_GetVideoList(VsRecorder_GetNet(work), net->videoList.headers, 30);
         int i = 0;
         net->videoList.count = result;
         if (net->videoList.count > 0) {

@@ -25,6 +25,6 @@ int sub_0206234C(int, int);
 void sub_0205DA1C(PlayerAvatar *, MapObject *, int);
 int MapObject_GetPreviousXCoord(MapObject *);
 int MapObject_GetPreviousZCoord(MapObject *);
-void ov01_02205990(int, int, int, void *);
+void FollowMon_QueuePlayerStep(int, int, int, void *);
 void sub_0205D4B4(PlayerAvatar *, MapObject *, int, int, u16);
 #endif

@@ -35,8 +35,8 @@ BOOL Task_UseSweetScentInField(TaskManager *taskManager) {
                 break;
             }
         }
-        if (work->partySlot == ov01_022062CC(fieldSystem) && FollowMon_IsVisible(fieldSystem)) {
-            TaskManager_Call(taskManager, ov01_02205A60, NULL);
+        if (work->partySlot == FieldSystem_GetLeadMonIndex(fieldSystem) && FollowMon_IsVisible(fieldSystem)) {
+            TaskManager_Call(taskManager, Task_WaitFollowMonMovement, NULL);
             *state = 4;
             break;
         }

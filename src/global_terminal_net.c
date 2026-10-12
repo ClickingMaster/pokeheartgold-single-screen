@@ -47,8 +47,8 @@ void sub_0203946C(void);
 u32 BattleRecord_sizeof(void);
 void *sub_0202FC74(void);
 void *BattleRecord_GetProfile(void);
-void ov40_02244B3C(SaveData *saveData);
-int ov40_02244B70(SaveData *saveData, int arg1, int arg2, void *out1, void *out2);
+void VsRecorder_EncryptRecord(SaveData *saveData);
+int VsRecorder_SaveRecordNumber(SaveData *saveData, int arg1, int arg2, void *out1, void *out2);
 
 extern const GlobalTerminalNetStepFunc *const sGlobalTerminalNetSequences[];
 extern OSHeapHandle sGlobalTerminalNetOsHeap;
@@ -365,7 +365,7 @@ BOOL GlobalTerminalNet_RequestVideoUpload(GlobalTerminalNet *net, const void *he
         GF_AssertFail();
     }
     net->request.video = sub_0202FC74();
-    ov40_02244B3C(net->saveData);
+    VsRecorder_EncryptRecord(net->saveData);
     MI_CpuCopy8(header, BattleRecord_GetProfile(), 0x80);
     net->sendDelay = 60;
     net->pendingCommand = GTS_REQUEST_VIDEO_UPLOAD;
@@ -623,7 +623,7 @@ BOOL ov39_02227B20(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *respon
 // stores the server's number for the uploaded video in the recording and saves it; done when the save finished
 BOOL GlobalTerminalNet_SaveUploadedVideoNumber(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
     GlobalTerminalNetVideoNumberResponse *response = GlobalTerminalServer_GetResponse(net);
-    int result = ov40_02244B70(net->saveData, response->numberLow, response->numberHigh, (u8 *)responseFunc + 4, (u8 *)responseFunc + 6);
+    int result = VsRecorder_SaveRecordNumber(net->saveData, response->numberLow, response->numberHigh, (u8 *)responseFunc + 4, (u8 *)responseFunc + 6);
     return (u32)(result - 2) <= 1;
 }
 

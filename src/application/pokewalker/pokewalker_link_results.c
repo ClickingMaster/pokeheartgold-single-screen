@@ -170,13 +170,13 @@ void ov112_021ED7DC(PokewalkerApp *app) {
     } else {
         params.steps = steps - savedSteps;
     }
-    ov112_021F30BC(&app->irStatus.records[23], &params);
-    if (ov112_021F31BC(app->irStatus.records)) {
+    PokewalkerEventLog_InitStrollEndRecord(&app->irStatus.records[23], &params);
+    if (PokewalkerEventLog_HasGiftMon(app->irStatus.records)) {
         giftMon.species = app->irBlocks.giftMon.mon.species;
         giftMon.form = app->irBlocks.giftMon.mon.form;
         giftMon.gender = app->irBlocks.giftMon.mon.gender;
         giftMon.isShiny = app->irBlocks.giftMon.mon.isShiny;
-        ov112_021F3140(app->irStatus.records, &giftMon);
+        PokewalkerEventLog_SetGiftMon(app->irStatus.records, &giftMon);
     }
 }
 

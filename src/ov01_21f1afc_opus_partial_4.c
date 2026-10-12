@@ -22,7 +22,7 @@ void CallFieldTask_Surf(TaskManager *taskManager, int direction, int partySlot) 
     state = PlayerAvatar_GetState(fieldSystem->playerAvatar);
     if (state - 1 <= 1) {
         work.unk0 = 1;
-    } else if (ov01_02206268(fieldSystem) != 0 && partySlot == ov01_022062CC(fieldSystem)) {
+    } else if (FollowMon_IsNextToPlayer(fieldSystem) != 0 && partySlot == FieldSystem_GetLeadMonIndex(fieldSystem)) {
         work.unk0 = 0;
     }
     ov01_021F202C(fieldSystem, direction, &work);

@@ -433,82 +433,82 @@
 	.extern PokewalkerBoxDisplay_GetMonPictureLocation
 	.extern PokewalkerBoxDisplay_LoadMonPicture
 	.extern PokewalkerBoxDisplay_TransferMonPicture
-	.extern ov112_021F0D48
-	.extern ov112_021F0DC0
-	.extern ov112_021F0DF4
-	.extern ov112_021F0E14
-	.extern ov112_021F0E60
-	.extern ov112_021F0EB4
-	.extern ov112_021F0EFC
-	.extern ov112_021F0F48
-	.extern ov112_021F0F60
-	.extern ov112_021F0F70
-	.extern ov112_021F0F90
-	.extern ov112_021F1288
-	.extern ov112_021F1324
-	.extern ov112_021F135C
-	.extern ov112_021F13BC
-	.extern ov112_021F13CC
-	.extern ov112_021F1488
-	.extern ov112_021F1504
-	.extern ov112_021F1548
-	.extern ov112_021F1584
-	.extern ov112_021F15CC
-	.extern ov112_021F15E4
-	.extern ov112_021F1624
-	.extern ov112_021F178C
-	.extern ov112_021F179C
-	.extern ov112_021F1814
-	.extern ov112_021F1838
-	.extern ov112_021F1904
-	.extern ov112_021F194C
-	.extern ov112_021F196C
-	.extern ov112_021F1A08
-	.extern ov112_021F1A40
-	.extern ov112_021F1AF4
-	.extern ov112_021F1B44
-	.extern ov112_021F1B94
-	.extern ov112_021F1CC8
-	.extern ov112_021F1D28
-	.extern ov112_021F1D58
-	.extern ov112_021F1D70
-	.extern ov112_021F1DC0
-	.extern ov112_021F1EFC
-	.extern ov112_021F1F3C
-	.extern ov112_021F1F54
-	.extern ov112_021F1F80
-	.extern ov112_021F1FD0
-	.extern ov112_021F2000
-	.extern ov112_021F2098
-	.extern ov112_021F2204
-	.extern ov112_021F22B0
-	.extern ov112_021F22D0
-	.extern ov112_021F2328
-	.extern ov112_021F2338
-	.extern ov112_021F2348
-	.extern ov112_021F235C
-	.extern ov112_021F238C
-	.extern ov112_021F24C4
-	.extern ov112_021F24D8
-	.extern ov112_021F24F8
-	.extern ov112_021F257C
-	.extern ov112_021F25FC
-	.extern ov112_021F2688
-	.extern ov112_021F26E8
-	.extern ov112_021F2768
-	.extern ov112_021F27B8
-	.extern ov112_021F27E0
-	.extern ov112_021F2810
-	.extern ov112_021F2874
-	.extern ov112_021F28DC
-	.extern ov112_021F2920
-	.extern ov112_021F2944
-	.extern ov112_021F298C
-	.extern ov112_021F2A78
-	.extern ov112_021F2B2C
-	.extern ov112_021F2B80
-	.extern ov112_021F2CC4
-	.extern ov112_021F31BC
+	.extern PokewalkerApp_WriteUploadBlocks
+	.extern PokewalkerEventLog_ResetDisplay
+	.extern PokewalkerEventLog_SetGxBanks
+	.extern PokewalkerEventLog_GetMonModelFileId
+	.extern PokewalkerEventLog_CheckExit
+	.extern PokewalkerEventLog_CheckPrevPage
+	.extern PokewalkerEventLog_CheckNextPage
+	.extern PokewalkerEventLog_IsMonShiny
+	.extern PokewalkerEventLog_GetCourse
+	.extern PokewalkerEventLog_CompareEntryTimes
+	.extern PokewalkerEventLog_BuildEntryList
+	.extern PokewalkerEventLog_InitText
+	.extern PokewalkerEventLog_FreeText
+	.extern PokewalkerEventLog_PrintToWindowWithFont
+	.extern PokewalkerEventLog_PrintToWindow
+	.extern PokewalkerEventLog_PrintMessage
+	.extern PokewalkerEventLog_BufferName
+	.extern PokewalkerEventLog_BufferItemName
+	.extern PokewalkerEventLog_BufferSpeciesName
+	.extern PokewalkerEventLog_BufferNickname
+	.extern PokewalkerEventLog_BufferNumber
+	.extern PokewalkerEventLog_ConvertEntryTime
+	.extern PokewalkerEventLog_PrintEntry
+	.extern PokewalkerEventLog_PrintQuit
+	.extern PokewalkerEventLog_InitBgs
+	.extern PokewalkerEventLog_FreeBgs
+	.extern PokewalkerEventLog_LoadBgGraphics
+	.extern PokewalkerEventLog_LoadSky
+	.extern PokewalkerEventLog_PlayCourseBgm
+	.extern PokewalkerEventLog_InitSpriteSystem
+	.extern PokewalkerEventLog_FreeSprites
+	.extern PokewalkerEventLog_LoadSpriteResources
+	.extern PokewalkerEventLog_CreateSprite
+	.extern PokewalkerEventLog_CreateEffectSprite
+	.extern PokewalkerEventLog_CreateSprites
+	.extern PokewalkerEventLog_SetSceneVisible
+	.extern PokewalkerEventLog_AdvanceSpriteAnim
+	.extern PokewalkerEventLog_SetCourseSprite
+	.extern PokewalkerEventLog_LoadSpriteCharData
+	.extern PokewalkerEventLog_LoadMonSpriteResources
+	.extern PokewalkerEventLog_SetMonSpriteVisible
+	.extern PokewalkerEventLog_SetMonSpriteAnim
+	.extern PokewalkerEventLog_SetMonSpritePosition
+	.extern PokewalkerEventLog_CreateMonSprites
+	.extern PokewalkerEventLog_DeleteMonSprites
+	.extern PokewalkerEventLog_CreateMonSprite
+	.extern PokewalkerEventLog_LoadMonSprite
+	.extern PokewalkerEventLog_ShowMon
+	.extern PokewalkerEventLog_ShowTrainer
+	.extern PokewalkerEventLog_ShowEffectAboveMon
+	.extern PokewalkerEventLog_ResetAnims
+	.extern PokewalkerEventLog_UpdateAnims
+	.extern PokewalkerEventLog_StartFleeAnim
+	.extern PokewalkerEventLog_ResetFleeAnim
+	.extern PokewalkerEventLog_UpdateFleeAnim
+	.extern PokewalkerEventLog_StartCatchAnim
+	.extern PokewalkerEventLog_ResetCatchAnim
+	.extern PokewalkerEventLog_UpdateCatchAnim
+	.extern PokewalkerEventLog_ShowPeerEvent
+	.extern PokewalkerEventLog_ShowDowsingItem
+	.extern PokewalkerEventLog_ShowGiftItem
+	.extern PokewalkerEventLog_ShowRadarCaught
+	.extern PokewalkerEventLog_ShowGiftMon
+	.extern PokewalkerEventLog_ShowRadarFled
+	.extern PokewalkerEventLog_ShowRadarLost
+	.extern PokewalkerEventLog_ShowMonFoundItem
+	.extern PokewalkerEventLog_ShowHappy
+	.extern PokewalkerEventLog_ShowMonJoined
+	.extern PokewalkerEventLog_ShowMonWentHome
+	.extern PokewalkerEventLog_ShowStrollStart
+	.extern PokewalkerEventLog_ShowStrollEnd
+	.extern PokewalkerEventLog_ShowSteps
+	.extern PokewalkerEventLog_ShowDistantPeer
+	.extern PokewalkerEventLog_ShowEntry
+	.extern PokewalkerEventLog_StartPageTurn
+	.extern PokewalkerEventLog_HasGiftMon
 	.extern PokewalkerApp_IsEventLogInvalid
 	.extern PokewalkerApp_BuildTrainerHouseData
 	.extern PokewalkerApp_SaveTrainerHouseData
@@ -813,23 +813,23 @@
 	.extern ov112_021FF1EC
 	.extern ov112_021FF200
 	.extern ov112_021FF21C
-	.extern ov112_021FF244
+	.extern sPokewalkerUploadBlocks
 	.extern ov112_021FF284
-	.extern ov112_021FF2CC
-	.extern ov112_021FF2DC
-	.extern ov112_021FF2EC
-	.extern ov112_021FF2F4
-	.extern ov112_021FF304
-	.extern ov112_021FF318
-	.extern ov112_021FF330
-	.extern ov112_021FF350
-	.extern ov112_021FF370
-	.extern ov112_021FF398
-	.extern ov112_021FF3CC
-	.extern ov112_021FF400
-	.extern ov112_021FF434
-	.extern ov112_021FF4C0
-	.extern ov112_021FF4C8
+	.extern sPokewalkerUploadBlockSizes
+	.extern sEventLogTouchBoxes
+	.extern sEventLogInvalidName
+	.extern sEventLogGraphicsModes
+	.extern sEventLogOamTransferParam
+	.extern sEventLogSpriteResourceCounts
+	.extern sEventLogOamManagerParam
+	.extern sEventLogWindowTemplates
+	.extern sEventLogGraphicsBanks
+	.extern sEventLogSpriteTemplate
+	.extern sEventLogEffectSpriteTemplate
+	.extern sEventLogMonSpriteTemplate
+	.extern sEventLogBgTemplates
+	.extern sEventLogBgLayers
+	.extern sEventLogFleeHopHeights
 	.extern sTrainerHouseDailyFlags
 	.extern _021FF500
 	.extern sSpindaSpotPixels
@@ -853,7 +853,7 @@
 	.extern sStartStrollStates
 	.extern sLinkSaveStates
 	.extern sStrollReportStates
-	.extern ov112_021FF9B8
+	.extern sEventLogCourseBgm
 	.extern _021FF9E0
 	.extern ov112_021FFA18
 	.extern ov112_021FFA20
@@ -868,8 +868,8 @@
 	.extern ov112_021FFBD8
 
 
-	thumb_func_start ov112_021F2CD4
-ov112_021F2CD4: ; 0x021F2CD4
+	thumb_func_start PokewalkerEventLog_UpdatePageTurn
+PokewalkerEventLog_UpdatePageTurn: ; 0x021F2CD4
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r0, #0
@@ -947,11 +947,11 @@ _021F2D5E:
 	bl ManagedSprite_SetDrawFlag
 	add r0, r4, #0
 	mov r1, #0
-	bl ov112_021F1CC8
+	bl PokewalkerEventLog_SetSceneVisible
 	add r0, r4, #0
-	bl ov112_021F2328
+	bl PokewalkerEventLog_ResetAnims
 	add r0, r4, #0
-	bl ov112_021F2B80
+	bl PokewalkerEventLog_ShowEntry
 	mov r0, #2
 	mov r1, #1
 	str r0, [sp]
@@ -1003,10 +1003,10 @@ _021F2DD4: .word 0x00007FFF
 _021F2DD8: .word 0xFFFF87FF
 _021F2DDC: .word 0x0000013D
 _021F2DE0: .word 0xFFFFFBFF
-	thumb_func_end ov112_021F2CD4
+	thumb_func_end PokewalkerEventLog_UpdatePageTurn
 
-	thumb_func_start ov112_021F2DE4
-ov112_021F2DE4: ; 0x021F2DE4
+	thumb_func_start PokewalkerEventLog_Setup
+PokewalkerEventLog_Setup: ; 0x021F2DE4
 	push {r3, r4, r5, lr}
 	add r4, r0, #0
 	bl OverlayManager_GetArgs
@@ -1032,9 +1032,9 @@ _021F2DF4:
 	str r0, [r4, #4]
 	add r0, r4, #0
 	str r5, [r4]
-	bl ov112_021F0F90
-	bl ov112_021F0DC0
-	bl ov112_021F0DF4
+	bl PokewalkerEventLog_BuildEntryList
+	bl PokewalkerEventLog_ResetDisplay
+	bl PokewalkerEventLog_SetGxBanks
 	ldr r0, _021F2E68 ; =gSystem + 0x60
 	mov r1, #1
 	strb r1, [r0, #9]
@@ -1044,42 +1044,42 @@ _021F2DF4:
 	bl NARC_New
 	str r0, [r4, #0x10]
 	add r0, r4, #0
-	bl ov112_021F179C
+	bl PokewalkerEventLog_InitBgs
 	add r0, r4, #0
-	bl ov112_021F1288
+	bl PokewalkerEventLog_InitText
 	add r0, r4, #0
-	bl ov112_021F196C
+	bl PokewalkerEventLog_InitSpriteSystem
 	mov r0, #0
 	bl ResetVisibleHardwareWindows
 	mov r0, #1
 	bl ResetVisibleHardwareWindows
-	ldr r0, _021F2E6C ; =ov112_021F2EB0
+	ldr r0, _021F2E6C ; =PokewalkerEventLog_VBlankCB
 	add r1, r4, #0
 	bl Main_SetVBlankIntrCB
 	pop {r3, r4, r5, pc}
 	nop
 _021F2E68: .word gSystem + 0x60
-_021F2E6C: .word ov112_021F2EB0
-	thumb_func_end ov112_021F2DE4
+_021F2E6C: .word PokewalkerEventLog_VBlankCB
+	thumb_func_end PokewalkerEventLog_Setup
 
-	thumb_func_start ov112_021F2E70
-ov112_021F2E70: ; 0x021F2E70
+	thumb_func_start PokewalkerEventLog_Teardown
+PokewalkerEventLog_Teardown: ; 0x021F2E70
 	push {r3, r4, r5, lr}
 	add r4, r0, #0
 	bl OverlayManager_GetData
 	add r5, r0, #0
-	bl ov112_021F1324
+	bl PokewalkerEventLog_FreeText
 	add r0, r5, #0
-	bl ov112_021F1814
+	bl PokewalkerEventLog_FreeBgs
 	add r0, r5, #0
-	bl ov112_021F1A08
+	bl PokewalkerEventLog_FreeSprites
 	ldr r0, [r5, #0x10]
 	bl NARC_Delete
 	ldr r0, _021F2EAC ; =gSystem + 0x60
 	mov r1, #0
 	strb r1, [r0, #9]
 	bl GfGfx_SwapDisplay
-	bl ov112_021F0DC0
+	bl PokewalkerEventLog_ResetDisplay
 	add r0, r4, #0
 	bl OverlayManager_FreeData
 	mov r0, #0x9b
@@ -1087,10 +1087,10 @@ ov112_021F2E70: ; 0x021F2E70
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _021F2EAC: .word gSystem + 0x60
-	thumb_func_end ov112_021F2E70
+	thumb_func_end PokewalkerEventLog_Teardown
 
-	thumb_func_start ov112_021F2EB0
-ov112_021F2EB0: ; 0x021F2EB0
+	thumb_func_start PokewalkerEventLog_VBlankCB
+PokewalkerEventLog_VBlankCB: ; 0x021F2EB0
 	push {r4, lr}
 	add r4, r0, #0
 	bne _021F2EBA
@@ -1121,10 +1121,10 @@ _021F2ECE:
 	.balign 4, 0
 _021F2EEC: .word 0x027E0000
 _021F2EF0: .word 0x00003FF8
-	thumb_func_end ov112_021F2EB0
+	thumb_func_end PokewalkerEventLog_VBlankCB
 
-	thumb_func_start ov112_021F2EF4
-ov112_021F2EF4: ; 0x021F2EF4
+	thumb_func_start PokewalkerEventLog_Init
+PokewalkerEventLog_Init: ; 0x021F2EF4
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -1148,27 +1148,27 @@ _021F2F14: ; jump table
 	.short _021F2F8E - _021F2F14 - 2 ; case 4
 _021F2F1E:
 	add r0, r6, #0
-	bl ov112_021F2DE4
+	bl PokewalkerEventLog_Setup
 	ldr r0, [r4]
 	add r0, r0, #1
 	str r0, [r4]
 	b _021F2FA0
 _021F2F2C:
-	bl ov112_021F1838
+	bl PokewalkerEventLog_LoadBgGraphics
 	add r0, r5, #0
-	bl ov112_021F1A40
+	bl PokewalkerEventLog_LoadSpriteResources
 	ldr r0, [r4]
 	add r0, r0, #1
 	str r0, [r4]
 	b _021F2FA0
 _021F2F3E:
-	bl ov112_021F1DC0
+	bl PokewalkerEventLog_LoadMonSpriteResources
 	cmp r0, #0
 	beq _021F2FA0
 	add r0, r5, #0
-	bl ov112_021F1B94
+	bl PokewalkerEventLog_CreateSprites
 	add r0, r5, #0
-	bl ov112_021F178C
+	bl PokewalkerEventLog_PrintQuit
 	mov r1, #0x51
 	lsl r1, r1, #2
 	ldr r2, [r5, r1]
@@ -1178,7 +1178,7 @@ _021F2F3E:
 	orr r0, r2
 	str r0, [r5, r1]
 	add r0, r5, #0
-	bl ov112_021F2B80
+	bl PokewalkerEventLog_ShowEntry
 	ldr r0, [r4]
 	add r0, r0, #1
 	str r0, [r4]
@@ -1213,10 +1213,10 @@ _021F2FA0:
 	pop {r3, r4, r5, r6, pc}
 	nop
 _021F2FA8: .word 0x00007FFF
-	thumb_func_end ov112_021F2EF4
+	thumb_func_end PokewalkerEventLog_Init
 
-	thumb_func_start ov112_021F2FAC
-ov112_021F2FAC: ; 0x021F2FAC
+	thumb_func_start PokewalkerEventLog_Exit
+PokewalkerEventLog_Exit: ; 0x021F2FAC
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -1260,7 +1260,7 @@ _021F2FFA:
 	cmp r0, #0
 	beq _021F3012
 	add r0, r5, #0
-	bl ov112_021F2E70
+	bl PokewalkerEventLog_Teardown
 	add sp, #0xc
 	mov r0, #1
 	pop {r4, r5, pc}
@@ -1270,21 +1270,21 @@ _021F3012:
 	mov r0, #0
 	add sp, #0xc
 	pop {r4, r5, pc}
-	thumb_func_end ov112_021F2FAC
+	thumb_func_end PokewalkerEventLog_Exit
 
-	thumb_func_start ov112_021F3018
-ov112_021F3018: ; 0x021F3018
+	thumb_func_start PokewalkerEventLog_Main
+PokewalkerEventLog_Main: ; 0x021F3018
 	push {r4, lr}
 	bl OverlayManager_GetData
 	add r4, r0, #0
-	bl ov112_021F2CD4
+	bl PokewalkerEventLog_UpdatePageTurn
 	cmp r0, #0
 	bne _021F302C
 	mov r0, #0
 	pop {r4, pc}
 _021F302C:
 	add r0, r4, #0
-	bl ov112_021F0EB4
+	bl PokewalkerEventLog_CheckPrevPage
 	cmp r0, #0
 	beq _021F3050
 	ldr r0, _021F30B4 ; =0x0000013D
@@ -1295,13 +1295,13 @@ _021F302C:
 	strb r1, [r4, r0]
 _021F3042:
 	add r0, r4, #0
-	bl ov112_021F2CC4
+	bl PokewalkerEventLog_StartPageTurn
 	ldr r0, _021F30B8 ; =0x000005DC
 	bl PlaySE
 	b _021F3088
 _021F3050:
 	add r0, r4, #0
-	bl ov112_021F0EFC
+	bl PokewalkerEventLog_CheckNextPage
 	cmp r0, #0
 	beq _021F307A
 	ldr r1, _021F30B4 ; =0x0000013D
@@ -1313,41 +1313,41 @@ _021F3050:
 	ldr r0, _021F30B4 ; =0x0000013D
 	strb r1, [r4, r0]
 	add r0, r4, #0
-	bl ov112_021F2CC4
+	bl PokewalkerEventLog_StartPageTurn
 	ldr r0, _021F30B8 ; =0x000005DC
 	bl PlaySE
 	b _021F3088
 _021F307A:
 	add r0, r4, #0
-	bl ov112_021F0E60
+	bl PokewalkerEventLog_CheckExit
 	cmp r0, #0
 	beq _021F3088
 	mov r0, #1
 	pop {r4, pc}
 _021F3088:
 	add r0, r4, #0
-	bl ov112_021F2338
+	bl PokewalkerEventLog_UpdateAnims
 	add r0, r4, #0
 	mov r1, #5
-	bl ov112_021F1D28
+	bl PokewalkerEventLog_AdvanceSpriteAnim
 	add r0, r4, #0
 	mov r1, #6
-	bl ov112_021F1D28
+	bl PokewalkerEventLog_AdvanceSpriteAnim
 	add r0, r4, #0
 	mov r1, #7
-	bl ov112_021F1D28
+	bl PokewalkerEventLog_AdvanceSpriteAnim
 	add r0, r4, #0
 	mov r1, #8
-	bl ov112_021F1D28
+	bl PokewalkerEventLog_AdvanceSpriteAnim
 	mov r0, #0
 	pop {r4, pc}
 	nop
 _021F30B4: .word 0x0000013D
 _021F30B8: .word 0x000005DC
-	thumb_func_end ov112_021F3018
+	thumb_func_end PokewalkerEventLog_Main
 
-	thumb_func_start ov112_021F30BC
-ov112_021F30BC: ; 0x021F30BC
+	thumb_func_start PokewalkerEventLog_InitStrollEndRecord
+PokewalkerEventLog_InitStrollEndRecord: ; 0x021F30BC
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -1412,10 +1412,10 @@ ov112_021F30BC: ; 0x021F30BC
 	sub r1, #0x1b
 	str r1, [r5]
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov112_021F30BC
+	thumb_func_end PokewalkerEventLog_InitStrollEndRecord
 
-	thumb_func_start ov112_021F3140
-ov112_021F3140: ; 0x021F3140
+	thumb_func_start PokewalkerEventLog_SetGiftMon
+PokewalkerEventLog_SetGiftMon: ; 0x021F3140
 	push {r4, r5, r6, r7}
 	add r6, r1, #0
 	mov r1, #0x1f
@@ -1480,4 +1480,4 @@ _021F31AE:
 	pop {r4, r5, r6, r7}
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov112_021F3140
+	thumb_func_end PokewalkerEventLog_SetGiftMon

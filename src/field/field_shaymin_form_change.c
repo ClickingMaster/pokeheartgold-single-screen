@@ -4,6 +4,7 @@
 
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
+#include "field/field_shaymin_form_change.h"
 #include "field/overlay_01_021FB878.h"
 
 #include "field_effects.h"
@@ -40,8 +41,6 @@ ShayminFormChange *ShayminFormChange_New(FieldEffectManager *manager);
 void ShayminFormChange_Free(ShayminFormChange *formChange);
 void ShayminFormChange_LoadModel(ShayminFormChange *formChange);
 void ShayminFormChange_FreeModel(ShayminFormChange *formChange);
-FieldEffect *ShayminFormChange_Spawn(FieldEffectManager *manager, VecFx32 *position);
-BOOL ShayminFormChange_IsDone(FieldEffect *effect);
 BOOL ShayminFormChangeEffect_Init(FieldEffect *effect, ShayminFormChangeEffect *work);
 void ShayminFormChangeEffect_Update(void);
 void ShayminFormChangeEffect_Destroy(FieldEffect *effect, ShayminFormChangeEffect *work);

@@ -133,9 +133,9 @@
 .public GroundDust_Spawn
 .public VeryTallGrass_Spawn
 .public VeryTallGrass_SpawnAt
-.public ov01_022055DC
-.public ov01_02205604
-.public ov01_02205664
+.public FollowMonObject_IsLarge
+.public MapObject_GetCoordsBehind
+.public MapObject_GetPreviousCoordsBehind
 .public ov01_022056C4
 
 	.public sub_0205FD98

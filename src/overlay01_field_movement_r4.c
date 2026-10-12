@@ -52,9 +52,9 @@ BOOL ov01_021F23B8(TaskManager *taskManager) {
             PlayerAvatar_SetState(work->playerAvatar, 0);
             FieldSystem_ProcessSoundplate(work->fieldSystem, 0);
             if (FollowMon_IsActive(work->fieldSystem)) {
-                ov01_02205790(work->fieldSystem, (u8)work->direction);
+                FollowMon_MoveToPlayer(work->fieldSystem, (u8)work->direction);
                 sub_02069DC8(FollowMon_GetMapObject(work->fieldSystem), 1);
-                ov01_0220609C(work->fieldSystem, 1);
+                FollowMon_SetFacingDirection(work->fieldSystem, 1);
                 sub_0205FC94(FollowMon_GetMapObject(work->fieldSystem), 0x30);
             }
             if (!CheckFlag99A(Save_VarsFlags_Get(work->fieldSystem->saveData))) {

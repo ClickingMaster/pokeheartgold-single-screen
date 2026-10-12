@@ -22,7 +22,7 @@ void VsRecorder_FreeMenuRows(void *);
 void BattleRecord_GetBattlerAndPartyCount(int, int *, int *);
 void *String_New(int, int);
 void *Heap_Alloc(int, int);
-void ov40_02244A84(void *, int);
+void VsRecorder_LoadPlaceholderTrainerName(void *, int);
 void CopyStringToU16Array(void *, u16 *, int);
 void String_SetEmpty(void *);
 void CopyU16ArrayToString(void *, u16 *);

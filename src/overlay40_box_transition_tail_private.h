@@ -64,7 +64,7 @@ void VsRecorder_HideNotice(void *p);
 void VsRecorder_ShowTopMessage(void *p, int value);
 void VsRecorder_HideTopMessage(void *p);
 void VsRecorder_OnTouchConfirm(void *p);
-void *ov40_0223D540(void *p);
+void *VsRecorder_GetNet(void *p);
 
 extern const u8 ov40_02245100[];
 extern const u8 ov40_02245104[];

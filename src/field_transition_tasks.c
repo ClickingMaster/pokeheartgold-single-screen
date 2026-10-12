@@ -95,7 +95,7 @@ BOOL FieldTransition_EnterFromWarpStairs(TaskManager *taskMan) {
         if (MapObject_IsMovementPaused(object) == TRUE) {
             MapObject_ClearHeldMovementIfActive(object);
             if (FollowMon_IsActive(fieldSystem)) {
-                ov01_02205790(fieldSystem, (u8)PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
+                FollowMon_MoveToPlayer(fieldSystem, (u8)PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             }
             env->transitionState++;
         }
@@ -176,7 +176,7 @@ BOOL FieldTransition_EnterRising(TaskManager *taskMan) {
     case 4:
         if (MapObject_AreBitsSetForMovementScriptInit(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)) && IsPaletteFadeFinished()) {
             if (FollowMon_IsActive(fieldSystem)) {
-                ov01_02205790(fieldSystem, 0);
+                FollowMon_MoveToPlayer(fieldSystem, 0);
                 sub_0205FC94(FollowMon_GetMapObject(fieldSystem), 0x30);
                 sub_02069DC8(FollowMon_GetMapObject(fieldSystem), TRUE);
             }
@@ -231,7 +231,7 @@ BOOL FieldTransition_EnterSinking(TaskManager *taskMan) {
     case 4:
         if (MapObject_AreBitsSetForMovementScriptInit(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)) && IsPaletteFadeFinished()) {
             if (FollowMon_IsActive(fieldSystem)) {
-                ov01_02205790(fieldSystem, 1);
+                FollowMon_MoveToPlayer(fieldSystem, 1);
                 sub_0205FC94(FollowMon_GetMapObject(fieldSystem), 0x30);
                 sub_02069DC8(FollowMon_GetMapObject(fieldSystem), TRUE);
             }

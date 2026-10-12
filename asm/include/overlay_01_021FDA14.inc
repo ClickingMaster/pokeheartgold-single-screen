@@ -51,5 +51,5 @@
 .public Reflection_Spawn
 .public Reflection_SpawnForBillboard
 .public Reflection_SpawnForFollower
-.public ov01_0220553C
+.public MapObject_IsShinyPokemon
 .public ov01_02205870

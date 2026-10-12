@@ -14,13 +14,11 @@
 #include "heap.h"
 #include "map_object.h"
 #include "overlay_01.h"
-#include "overlay_01_022053EC.h"
+#include "field/field_follow_mon.h"
 #include "overlay_02.h"
 #include "player_avatar.h"
 #include "task.h"
 
-// Still assembly-only (asm/include/*.inc only); no tracked prototype exists.
-extern u32 ov01_022062CC(FieldSystem *fieldSystem);
 
 // 0xc bytes: the task env that replaces FieldMoveData in state 0
 // (Heap_AllocAtEnd(HEAP_ID_FIELD2, 0xc); partySlot carried over to +0x8).

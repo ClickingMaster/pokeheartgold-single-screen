@@ -7,9 +7,9 @@
 .public FS_OpenFile
 .public FS_CloseFile
 .public FS_ReadFile
-.public ov01_021EA724
-.public ov01_021EA73C
-.public ov01_021EA7E0
-.public ov01_021EA7F8
-.public ov01_021EA804
-.public ov01_021EA81C
+.public BuildModelShapes_New
+.public BuildModelShapes_Load
+.public BuildModelShapes_Free
+.public BuildModelShapes_GetShapeCount
+.public BuildModelShapes_GetShapeRange
+.public BuildModelShapes_GetShapes

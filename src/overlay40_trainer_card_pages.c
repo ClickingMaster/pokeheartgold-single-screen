@@ -119,25 +119,25 @@ int ov40_022417DC(void *p) {
         ++;
         break;
     case 1:
-        if (!ov40_0223D5CC(p)) {
+        if (!VsRecorder_IsNetIdle(p)) {
             return 0;
         }
         BattleRecord_Load(PTR(p, 0x830), 0x6D, &a, 0, 0);
         PTR(w, 0x1D0) = FrontierCard_New(0x6D);
         FrontierCard_InitFromSave(PTR(w, 0x1D0), PTR(p, 0x830));
-        if (GlobalTerminalNet_RequestVideoUpload(ov40_0223D540(p), PTR(w, 0x1D0)) == 1) {
+        if (GlobalTerminalNet_RequestVideoUpload(VsRecorder_GetNet(p), PTR(w, 0x1D0)) == 1) {
             FrontierCard_Delete(PTR(w, 0x1D0));
             WORD(p, 8)
             ++;
         }
         break;
     case 2:
-        if (!ov40_0223D5CC(p)) {
+        if (!VsRecorder_IsNetIdle(p)) {
             return 0;
         }
         BattleRecord_Delete();
         VsRecorder_HideTopMessage(p);
-        if (GlobalTerminalNet_GetError(ov40_0223D540(p), (u32 *)&q) == 1) {
+        if (GlobalTerminalNet_GetError(VsRecorder_GetNet(p), (u32 *)&q) == 1) {
             StopSE(0x57D, 0);
             VsRecorder_ShowMessageScreen(p, 6, WORD(q, 0xC), WORD(q, 4));
             OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
@@ -743,12 +743,12 @@ int ov40_022425E8(void *p) {
         break;
     case 4: {
         u64 v;
-        if (!ov40_0223D5CC(p)) {
+        if (!VsRecorder_IsNetIdle(p)) {
             return 0;
         }
         ov40_02240F24(p, 0x118, 0);
         v = BattleRecordHeader_GetField(BattleRecord_GetHeader(), 4, 0);
-        if (ov39_0222774C(ov40_0223D540(p), (u32)v, (u32)(v >> 32)) == 1) {
+        if (ov39_0222774C(VsRecorder_GetNet(p), (u32)v, (u32)(v >> 32)) == 1) {
             WORD(p, 8)
             ++;
         }
@@ -756,10 +756,10 @@ int ov40_022425E8(void *p) {
     }
     case 5: {
         u32 tmp;
-        if (!ov40_0223D5CC(p)) {
+        if (!VsRecorder_IsNetIdle(p)) {
             return 0;
         }
-        if (GlobalTerminalNet_GetError(ov40_0223D540(p), &tmp) == 1) {
+        if (GlobalTerminalNet_GetError(VsRecorder_GetNet(p), &tmp) == 1) {
             StopSE(0x57D, 0);
         } else {
             StopSE(0x57D, 0);
@@ -1004,7 +1004,7 @@ BOOL ov40_02242CFC(void *p) {
 void ov40_02242DF0(void *p, u32 *flag) {
     void *w = PTR(p, 0x860);
     if (*flag != 1) {
-        u64 v = GlobalTerminalNet_GetUploadedVideoNumber(ov40_0223D540(p));
+        u64 v = GlobalTerminalNet_GetUploadedVideoNumber(VsRecorder_GetNet(p));
         WORD(w, 0x4B0) = (u32)v;
         WORD(w, 0x4B4) = (u32)(v >> 32);
     }
@@ -1012,7 +1012,7 @@ void ov40_02242DF0(void *p, u32 *flag) {
 
 void ov40_02242E14(void *p, u32 *flag) {
     if (*flag != 1) {
-        GlobalTerminalNet_GetDownloadedVideo(ov40_0223D540(p), (u8 *)p + 0x8B4);
+        GlobalTerminalNet_GetDownloadedVideo(VsRecorder_GetNet(p), (u8 *)p + 0x8B4);
         VsRecorder_ImportBattleRecord(p);
         BYTE(p, 0x2604) = BYTE(PTR(p, 0x8B4), 0xA7);
     }

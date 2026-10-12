@@ -885,7 +885,7 @@ static BOOL sub_02053CCC(TaskManager *taskManager) {
     case 0:
         env->unk1C = 0;
         if (FollowMon_IsActive(fieldSystem)
-            && !ov01_022057C4(fieldSystem)
+            && !FollowMon_CheckVisibleFlag(fieldSystem)
             && PlayerAvatar_GetState(fieldSystem->playerAvatar) != 1) {
             env->unk1C = FollowMonBall_Spawn(FollowMon_GetMapObject(fieldSystem), 1);
         }
@@ -923,7 +923,7 @@ static BOOL sub_02053CCC(TaskManager *taskManager) {
             follow_mon_obj = FollowMon_GetMapObject(fieldSystem);
             if (FollowMon_GetPermissionBySpeciesAndMap(FollowMon_GetSpecies(follow_mon_obj), location->mapId)) {
                 sub_02069E84(follow_mon_obj, 1);
-                ov01_02205790(fieldSystem, 1);
+                FollowMon_MoveToPlayer(fieldSystem, 1);
             }
         }
         env->unk0++;

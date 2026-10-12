@@ -11,7 +11,7 @@
 #include "ov01_door_transition_state_m14_internal.h"
 #include "overlay_01.h"
 #include "overlay_01_021E90C0.h"
-#include "overlay_01_022053EC.h"
+#include "field/field_follow_mon.h"
 #include "player_avatar.h"
 #include "unk_02062108.h"
 
@@ -115,10 +115,10 @@ prop_loaded_open:
     case 3: {
         LocalMapObject *obj = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
         MapObject_SetHeldMovement(obj, 12);
-        if (FollowMon_IsActive(fieldSystem) && !ov01_022057C4(fieldSystem)) {
+        if (FollowMon_IsActive(fieldSystem) && !FollowMon_CheckVisibleFlag(fieldSystem)) {
             int x = MapObject_GetPreviousXCoord(obj);
             int z = MapObject_GetPreviousZCoord(obj);
-            ov01_02205990(12, x, z, &fieldSystem->followMon);
+            FollowMon_QueuePlayerStep(12, x, z, &fieldSystem->followMon);
         }
         work->state++;
         break;
@@ -253,7 +253,7 @@ prop_loaded:
         LocalMapObject *obj = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
         if (MapObject_IsMovementPaused(obj) == TRUE) {
             MapObject_ClearHeldMovementIfActive(obj);
-            ov01_02205790(fieldSystem, 1);
+            FollowMon_MoveToPlayer(fieldSystem, 1);
             modelId = MapPropOneShotAnimationManager_GetAnimationMapPropModelID(fieldSystem->mapPropOneShotAnimationManager, 1);
             MapPropOneShotAnimationManager_PlayAnimationWithSoundEffect(fieldSystem->mapPropOneShotAnimationManager, 1, 1, GetDoorSE(fieldSystem, modelId, FALSE));
             work->state++;

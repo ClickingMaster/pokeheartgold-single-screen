@@ -11,41 +11,41 @@
 	.public ov02_02245D18
 	.public ov02_02245DB0
 	.public ov02_02245DE0
-	.public ov02_02245E04
-	.public ov02_02245E68
-	.public ov02_02245ED8
-	.public ov02_02245FD0
-	.public ov02_02246048
-	.public ov02_022460AC
-	.public ov02_022460CC
-	.public ov02_022460FC
+	.public FieldAnimModel_New
+	.public FieldAnimModel_Delete
+	.public FieldAnimModel_SetAnimations
+	.public FieldAnimModel_Animate
+	.public FieldAnimModel_AnimateLoop
+	.public ShowTrapEffect
+	.public TrapEffect_CreateTaskEnv
+	.public Task_ShowTrapEffect
 	.public ShowLegendaryWing
-	.public ov02_022461AC
-	.public ov02_022461DC
-	.public ov02_022462DC
-	.public ov02_022462E8
-	.public ov02_02246304
-	.public ov02_02246330
-	.public ov02_02246398
-	.public ov02_02246444
-	.public ov02_02246490
-	.public ov02_0224650C
-	.public ov02_02246534
-	.public ov02_02246548
-	.public ov02_0224662C
-	.public ov02_0224663C
-	.public ov02_02246714
-	.public ov02_02246744
-	.public ov02_02246798
+	.public LegendaryWing_CreateTaskEnv
+	.public Task_ShowLegendaryWing
+	.public LegendaryWing_AnimateLoop
+	.public ShowHideoutAlarm
+	.public HideoutAlarm_CreateTaskEnv
+	.public Task_ShowHideoutAlarm
+	.public HideoutAlarm_Load
+	.public HideoutAlarm_Unload
+	.public HideoutAlarm_Flash
+	.public CameraShake_New
+	.public CameraShake_Delete
+	.public CameraShake_Start
+	.public CameraShake_RestoreCamera
+	.public CameraShake_Update
+	.public ShakeScreen
+	.public ScreenShake_CreateTaskEnv
+	.public Task_ShakeScreen
 	.public OpenAlphHiddenRoom
-	.public ov02_022467E8
-	.public ov02_02246818
-	.public ov02_0224686C
-	.public ov02_02246964
-	.public ov02_022469A0
-	.public ov02_022469B4
-	.public ov02_022469D8
-	.public ov02_02246A34
+	.public AlphHiddenRoom_CreateTaskEnv
+	.public Task_OpenAlphHiddenRoom
+	.public AlphHiddenRoom_ShowMessage
+	.public AlphHiddenRoom_HideMessage
+	.public AlphHiddenRoom_IsAButtonPressed
+	.public LanceFliesAway
+	.public LanceFliesAway_CreateTaskEnv
+	.public Task_LanceFliesAway
 	.public ov02_0225321C
 	.public ov02_0225321E
 	.public ov02_02253222
@@ -55,9 +55,9 @@
 	.public ov02_0225323A
 	.public ov02_02253240
 	.public ov02_02253246
-	.public ov02_0225324C
-	.public ov02_02253254
-	.public ov02_02253264
+	.public sAlphHiddenRoomWindowTemplate
+	.public sLegendaryWingModels
+	.public sTrapEffects
 	.public ov02_02253D80
 	.public ov02_02253D84
 	.include "overlay_02.inc"
@@ -94,17 +94,17 @@ ov02_02253240:
 ov02_02253246:
 	.byte 0x07, 0x00, 0x08, 0x00, 0x09, 0x00
 
-ov02_0225324C: ; 0x0225324C
+sAlphHiddenRoomWindowTemplate: ; 0x0225324C
 	.byte 0x01, 0x09, 0x0A, 0x0E
 	.byte 0x02, 0x00, 0x80, 0x00
 
-ov02_02253254: ; 0x02253254
+sLegendaryWingModels: ; 0x02253254
 	.byte 0xAE, 0x00, 0x37, 0x03
 	.word ov02_02253240
 	.byte 0xAE, 0x00, 0x41, 0x03
 	.word ov02_02253222
 
-ov02_02253264: ; 0x02253264
+sTrapEffects: ; 0x02253264
 	.byte 0xAE, 0x00, 0x0A, 0x01
 	.word ov02_0225321C
 	.short SEQ_SE_GS_DENKI_TRAP

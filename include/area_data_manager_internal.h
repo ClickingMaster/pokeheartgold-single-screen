@@ -40,7 +40,7 @@ struct AreaDataManager {
     void *mapTexFile;                                            // 0x8A0
     NNSG3dResTex *mapPropTex;                                    // 0x8A4
     NNSG3dResTex *mapTex;                                        // 0x8A8
-    AreaDataManager_Sub8AC *unk8AC;                              // 0x8AC
+    BuildModelShapes *unk8AC;                              // 0x8AC
     AreaDataHeader header;                                       // 0x8B0
     AreaDataLoadContext *loadCtx;                                // 0x8B8
     u16 *mapPropIdList;                                          // 0x8BC
@@ -62,8 +62,8 @@ int sprintf(char *buf, const char *fmt, ...);
 SysTask *SysTask_CreateOnVWaitQueue(SysTaskFunc func, void *data, u32 priority);
 void SysTask_Destroy(SysTask *task);
 
-AreaDataManager_Sub8AC *ov01_021EA724(void);
-void ov01_021EA73C(const char *path, AreaDataManager_Sub8AC *a1);
-void ov01_021EA7E0(AreaDataManager_Sub8AC *a0);
+BuildModelShapes *BuildModelShapes_New(void);
+void BuildModelShapes_Load(const char *path, BuildModelShapes *a1);
+void BuildModelShapes_Free(BuildModelShapes *a0);
 
 #endif // PRIVATE_OV01_021FB878_H

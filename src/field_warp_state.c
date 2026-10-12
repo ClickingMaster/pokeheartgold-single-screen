@@ -108,7 +108,7 @@ BOOL FieldTask_Fly(void *task) {
     FlyTaskEnv *env = TaskManager_GetEnvironment(task);
     switch (env->state) {
     case 0:
-        TaskManager_Call(task, ov01_02205A60, 0);
+        TaskManager_Call(task, Task_WaitFollowMonMovement, 0);
         env->state++;
         break;
     case 1: {
@@ -120,7 +120,7 @@ BOOL FieldTask_Fly(void *task) {
         }
     }
         if (env->partySlot != GetIdxOfFirstAliveMonInParty_CrashIfNone(SaveArray_Party_Get(*(void **)(fs + 0xC)))) {
-            ov01_02205D68(env->fieldSystem);
+            FollowMon_StartRecall(env->fieldSystem);
             env->state = 4;
             env->flag = 0;
             break;

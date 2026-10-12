@@ -138,7 +138,7 @@ int ov02_0224C4D8(u32 a, u32 b, void *p) {
         return 0;
     }
     ov02_02249548(PTR(p, 0x18));
-    ov01_02205D68(PTR(p, 0x24));
+    FollowMon_StartRecall(PTR(p, 0x24));
     U32(p, 0)
     ++;
     return 0;

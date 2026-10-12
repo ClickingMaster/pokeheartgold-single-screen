@@ -89,7 +89,7 @@ _02087C9E:
 	bl BattleRecord_Get
 	ldr r1, [r5, #0x10]
 	add r2, r4, #0
-	bl ov40_02244920
+	bl VsRecorder_SanitizeBattleSetupNames
 	add r0, r6, #0
 	bl UnloadOverlayByID
 _02087CDA:

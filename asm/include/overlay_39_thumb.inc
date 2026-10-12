@@ -185,5 +185,5 @@
 .public ov39_0222A434
 .public GlobalTerminalServer_DownloadVideo
 .public ov39_0222A4C0
-.public ov40_02244B3C
-.public ov40_02244B70
+.public VsRecorder_EncryptRecord
+.public VsRecorder_SaveRecordNumber

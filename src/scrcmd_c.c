@@ -1490,8 +1490,8 @@ BOOL ScrCmd_FacePlayer(ScriptContext *ctx) {
     oldDir = MapObject_GetFacingDirection(*p_lastInteracted);
     ov01_021F9408(*p_lastInteracted, rvsDir);
     if (MapObject_GetID(*p_lastInteracted) == obj_partner_poke) {
-        if (ov01_022055DC(*p_lastInteracted) && oldDir != rvsDir) {
-            ov01_02205604(*p_lastInteracted, &x, &y);
+        if (FollowMonObject_IsLarge(*p_lastInteracted) && oldDir != rvsDir) {
+            MapObject_GetCoordsBehind(*p_lastInteracted, &x, &y);
             metatile = GetMetatileBehavior(fieldSystem, x, y);
             if (rvsDir == 2 || rvsDir == 3) {
                 if (MetatileBehavior_IsTallGrass(metatile) == TRUE) {
@@ -4422,7 +4422,7 @@ BOOL ScrCmd_FollowerPokeIsEventTrigger(ScriptContext *ctx) {
 BOOL ScrCmd_596(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    *p_ret = ov01_022055DC(MapObjectManager_GetFirstActiveObjectByID(fieldSystem->mapObjectManager, obj_partner_poke));
+    *p_ret = FollowMonObject_IsLarge(MapObjectManager_GetFirstActiveObjectByID(fieldSystem->mapObjectManager, obj_partner_poke));
     return FALSE;
 }
 
@@ -4456,7 +4456,7 @@ BOOL ScrCmd_599(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_600(ScriptContext *ctx) {
-    if (ov01_02205D68(ctx->fieldSystem)) {
+    if (FollowMon_StartRecall(ctx->fieldSystem)) {
         return TRUE;
     } else {
         return FALSE;
@@ -4466,7 +4466,7 @@ BOOL ScrCmd_600(ScriptContext *ctx) {
 BOOL ScrCmd_FollowMonFacePlayer(ScriptContext *ctx) {
     BOOL doFace = TRUE;
     if (FollowMon_IsActive(ctx->fieldSystem)) {
-        if (ov01_022055DC(FollowMon_GetMapObject(ctx->fieldSystem))) {
+        if (FollowMonObject_IsLarge(FollowMon_GetMapObject(ctx->fieldSystem))) {
             LocalMapObject *myObject = PlayerAvatar_GetMapObject(FieldSystem_GetPlayerAvatar(ctx->fieldSystem));
             int facingDirection = PlayerAvatar_GetFacingDirection(FieldSystem_GetPlayerAvatar(ctx->fieldSystem));
             int playerX = MapObject_GetXCoord(myObject);
@@ -4531,7 +4531,7 @@ BOOL ScrCmd_605(ScriptContext *ctx) {
     if (FollowMon_IsActive(ctx->fieldSystem)) {
         LocalMapObject *playerObj = PlayerAvatar_GetMapObject(ctx->fieldSystem->playerAvatar);
         LocalMapObject *tsurePokeObj = MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, obj_partner_poke);
-        ov01_02205720(playerObj, tsurePokeObj, r6, r4);
+        MapObject_SetPositionNextTo(playerObj, tsurePokeObj, r6, r4);
     }
     return FALSE;
 }
@@ -4542,7 +4542,7 @@ BOOL ScrCmd_606(ScriptContext *ctx) {
         if (FollowMon_GetPermissionBySpeciesAndMap(FollowMon_GetSpecies(object), ctx->fieldSystem->location->mapId)) {
             sub_02069E84(object, 1);
             sub_02069DEC(object, TRUE);
-            ov01_02205790(ctx->fieldSystem, 1);
+            FollowMon_MoveToPlayer(ctx->fieldSystem, 1);
         }
     }
     return FALSE;
@@ -4552,7 +4552,7 @@ BOOL ScrCmd_607(ScriptContext *ctx) {
     if (FollowMon_IsActive(ctx->fieldSystem)) {
         LocalMapObject *object = FollowMon_GetMapObject(ctx->fieldSystem);
         if (FollowMon_GetPermissionBySpeciesAndMap(FollowMon_GetSpecies(object), ctx->fieldSystem->location->mapId)) {
-            ov01_02205790(ctx->fieldSystem, 1);
+            FollowMon_MoveToPlayer(ctx->fieldSystem, 1);
         }
     }
     return FALSE;
@@ -4561,7 +4561,7 @@ BOOL ScrCmd_607(ScriptContext *ctx) {
 BOOL ScrCmd_608(ScriptContext *ctx) {
     if (FollowMon_IsActive(ctx->fieldSystem)) {
         LocalMapObject *object = MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, obj_partner_poke);
-        ov01_02205784(object);
+        FollowMon_SpawnReleaseBall(object);
     }
     return FALSE;
 }
@@ -4869,7 +4869,7 @@ BOOL ScrCmd_GetFollowPokePartyIndex(ScriptContext *ctx) {
 BOOL ScrCmd_728(ScriptContext *ctx) {
     u8 r1 = ScriptReadByte(ctx);
     u8 r2 = ScriptReadByte(ctx);
-    if (ov01_022060B8(ctx->fieldSystem, r1, r2)) {
+    if (FollowMon_StartFlash(ctx->fieldSystem, r1, r2)) {
         return TRUE;
     } else {
         return FALSE;
@@ -4890,7 +4890,7 @@ BOOL ScrCmd_730(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     if (!FollowMon_IsActive(ctx->fieldSystem)) {
         *p_ret = TRUE;
-    } else if (ov01_022057C4(ctx->fieldSystem)) {
+    } else if (FollowMon_CheckVisibleFlag(ctx->fieldSystem)) {
         *p_ret = TRUE;
     } else {
         *p_ret = FALSE;
@@ -5392,7 +5392,7 @@ BOOL ScrCmd_824(ScriptContext *ctx) {
 
 BOOL ScrCmd_829(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    if (ov01_02206268(ctx->fieldSystem)) {
+    if (FollowMon_IsNextToPlayer(ctx->fieldSystem)) {
         *p_ret = TRUE;
     } else {
         *p_ret = FALSE;

@@ -78,7 +78,7 @@ extern int FollowMon_GetSpecies(void *);
 extern void *FollowMon_GetMapObject(void *);
 
 extern void ov01_021F8F74(void *, s8);
-extern int ov01_022055DC(void *);
+extern int FollowMonObject_IsLarge(void *);
 extern void TallGrass_SpawnAt(void *, int, int, int, int);
 extern void VeryTallGrass_SpawnAt(void *, int, int, int, int);
 extern void ov01_021F8F68(void *, int);

@@ -10,7 +10,7 @@
 // Defined elsewhere without a header yet.
 int sub_020548EC(FieldSystem *fieldSystem, int x, int z); // defined as u8; the caller truncates the result itself
 int sub_02054940(FieldSystem *fieldSystem, int y, int x, int z, u8 *floorType);
-void ov01_02205664(LocalMapObject *object, int *x, int *z);
+void MapObject_GetPreviousCoordsBehind(LocalMapObject *object, int *x, int *z);
 
 BOOL sub_02060BFC(LocalMapObject *self, int x, int y, int z) {
     MapObjectManager *manager = MapObject_GetManager(self);
@@ -79,8 +79,8 @@ BOOL sub_02060CA8(LocalMapObject *self, int x, int y, int z) {
                     return TRUE;
                 }
             }
-            if (MapObject_GetID(object) == 0xFD && ov01_022055DC(object) != 0 && MapObject_CheckVisible(object) == FALSE) {
-                ov01_02205664(object, &objectX, &objectZ);
+            if (MapObject_GetID(object) == 0xFD && FollowMonObject_IsLarge(object) != 0 && MapObject_CheckVisible(object) == FALSE) {
+                MapObject_GetPreviousCoordsBehind(object, &objectX, &objectZ);
                 if (objectX == x && objectZ == z) {
                     int delta = MapObject_GetYCoord(object) - y;
                     if (delta < 0) {
