@@ -95,7 +95,7 @@ u8 PokeathlonEvent_LampJumpPoints(u32 score) {
     return PokeathlonEvent_ClampPoints((float)((double)(float)score / 3.5));
 }
 
-u8 PokeathlonEvent_Event6Points(u32 score) {
+u8 PokeathlonEvent_RelayRunPoints(u32 score) {
     return PokeathlonEvent_ClampPoints((float)(((double)(float)score / 1024.0) * 10.0));
 }
 
@@ -106,6 +106,6 @@ u8 PokeathlonEvent_RingDropPoints(u32 score) {
     return PokeathlonEvent_ClampPoints((float)points);
 }
 
-u8 PokeathlonEvent_Event8Points(int score) {
+u8 PokeathlonEvent_SnowThrowPoints(int score) {
     return PokeathlonEvent_ClampPoints((float)(score * 3));
 }

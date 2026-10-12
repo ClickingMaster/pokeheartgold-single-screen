@@ -237,7 +237,7 @@
 	.public PokeathlonEvent_CirclePushPoints
 	.public PokeathlonEvent_BlockSmashPoints
 	.public PokeathlonEvent_DiscCatchPoints
-	.public PokeathlonEvent_Event8Points
+	.public PokeathlonEvent_SnowThrowPoints
 
 	thumb_func_start PokeathlonEventIntro_Exit
 PokeathlonEventIntro_Exit: ; 0x021EF19C

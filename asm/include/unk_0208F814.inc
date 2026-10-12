@@ -4,8 +4,8 @@
 .public GF_AssertFail
 .public sub_02033250
 .public Comm_RegisterCommandTable
-.public sub_020342C0
-.public sub_020342C4
+.public CommCmd_GetSize0
+.public CommCmd_GetSize1
 .public sub_02037088
 .public sub_02037108
 .public Comm_CountConnected

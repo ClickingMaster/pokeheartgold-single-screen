@@ -3,8 +3,8 @@
 .public SavePalPad_Merge
 .public Save_SpecialRibbons_Get
 .public Comm_RegisterCommandTable
-.public sub_020342C0
-.public sub_020342C4
+.public CommCmd_GetSize0
+.public CommCmd_GetSize1
 .public Comm_GetLocalNetId
 .public sub_020378E4
 .public WirelessTrade_RegisterCommands

@@ -6,7 +6,7 @@
 #include "sound.h"
 #include "sound_playback.h"
 #include "unk_02032844.h"
-#include "unk_02033AE0.h"
+#include "communication_command.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
 typedef struct RecordMixingLinkWork {

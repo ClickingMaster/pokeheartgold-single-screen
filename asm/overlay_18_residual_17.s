@@ -1453,8 +1453,8 @@
 	.public PokedexApp_RemoveAllWindows
 	.public PokedexApp_PrintFormattedMessage
 	.public PokedexApp_SetupListWindows
-	.public ov18_021EE44C
-	.public ov18_021EE508
+	.public PokedexApp_DrawCountLabel
+	.public PokedexApp_DrawCountLabelAndCopy
 	.public PokedexApp_DrawCountNumber
 	.public PokedexApp_DrawCountNumberAndCopy
 	.public PokedexApp_DrawSeenAndCaughtCounts
@@ -1505,11 +1505,11 @@
 	.public PokedexApp_DrawWeightValue
 	.public PokedexApp_DrawSearchAreaValue
 	.public PokedexApp_DrawSearchCriteriaSummary
-	.public ov18_021EFFEC
+	.public PokedexApp_DrawSearchResultCounts
 	.public PokedexApp_PutWindowTilemap
 	.public PokedexApp_SetSearchSummaryVisible
 	.public PokedexApp_ClearSearchEntryWindows
-	.public ov18_021F0168
+	.public PokedexApp_InitAreaListCells
 	.public ov18_021F018C
 	.public ov18_021F01D4
 	.public PokedexApp_SetupAreaWindows
@@ -1520,8 +1520,8 @@
 	.public PokedexApp_ScrollAreaList
 	.public PokedexApp_SetupSizeCheckWindows
 	.public PokedexApp_FreeSizeCheckWindows
-	.public ov18_021F0858
-	.public ov18_021F08E0
+	.public PokedexApp_SetupEntryMenuWindows
+	.public PokedexApp_FreeEntryMenuWindows
 	.public PokedexApp_SetupFormsWindows
 	.public PokedexApp_FreeFormsWindows
 	.public PokedexApp_DrawFormsWindows
@@ -1594,22 +1594,22 @@
 	.public PokedexApp_CreateLanguageIconSprites
 	.public PokedexApp_UpdateCurrentLanguageIcon
 	.public PokedexApp_UpdateLanguageIcons
-	.public ov18_021F2648
-	.public ov18_021F26E4
-	.public ov18_021F2724
-	.public ov18_021F281C
+	.public PokedexApp_LoadMainObjResources
+	.public PokedexApp_UnloadMainObjResources
+	.public PokedexApp_LoadSubObjResources
+	.public PokedexApp_UnloadSubObjResources
 	.public PokedexApp_SetupListSprites
 	.public PokedexApp_LoadListSpriteResources
-	.public ov18_021F299C
+	.public PokedexApp_CreateListSprites
 	.public PokedexApp_SetSpritePairVisibleIfInternationalView
 	.public PokedexApp_SetSpriteVisibleIfInternationalView
-	.public ov18_021F2AC0
+	.public PokedexApp_SetDexModeSwitchPos
 	.public PokedexApp_IsTouchOnSprite0
 	.public PokedexApp_MoveSpriteX
 	.public PokedexApp_SetSpriteX
-	.public ov18_021F2B9C
+	.public PokedexApp_GetDexModeSwitchX
 	.public PokedexApp_MoveSpriteToListCursor
-	.public ov18_021F2BFC
+	.public PokedexApp_HideListCursor
 	.public PokedexApp_UpdateListPageArrows
 	.public PokedexApp_UpdateListScrollbarSize
 	.public PokedexApp_GetListScrollbarSizeAnim
@@ -1619,7 +1619,7 @@
 	.public PokedexApp_IsTouchOnListScrollbar
 	.public PokedexApp_DragListScrollbar
 	.public PokedexApp_GetListScrollbarYForPage
-	.public ov18_021F2E14
+	.public PokedexApp_GetListScrollbarStepCount
 	.public PokedexApp_MoveListScrollbar
 	.public PokedexApp_SyncListScrollbarToPage
 	.public PokedexApp_UpdateCaughtMarkSprite
@@ -1633,8 +1633,8 @@
 	.public PokedexApp_FreeSearchSprites
 	.public ov18_021F3448
 	.public PokedexApp_UpdateBodyTypeSprite
-	.public ov18_021F34C4
-	.public ov18_021F34EC
+	.public PokedexApp_HideBodyTypeOptionSprites
+	.public PokedexApp_SetBodyTypeSpriteLayout
 	.public PokedexApp_SetSliderSpritesVisible
 	.public PokedexApp_UpdateSliderSprites
 	.public PokedexApp_UpdateSearchSprites
@@ -1650,18 +1650,18 @@
 	.public PokedexApp_UpdateSliderLimitSprites
 	.public PokedexApp_GetSliderValue
 	.public PokedexApp_SliderValueToX
-	.public ov18_021F3AD8
-	.public ov18_021F3B2C
+	.public PokedexApp_ShowReturningDexModeSwitch
+	.public PokedexApp_MoveReturningDexModeSwitch
 	.public PokedexApp_SetSearchEntrySpritesVisible
-	.public ov18_021F3BA4
-	.public ov18_021F3BD4
+	.public PokedexApp_UpdateSearchBodyTypeIcon
+	.public PokedexApp_MoveSearchSummaryIcons
 	.public ov18_021F3C30
 	.public ov18_021F3C54
 	.public ov18_021F3C88
 	.public PokedexApp_GetSeenFormAndGender
-	.public ov18_021F3D34
-	.public ov18_021F3D6C
-	.public ov18_021F3D80
+	.public PokedexApp_CreateEntryTabCursor
+	.public PokedexApp_FreeEntryTabCursor
+	.public PokedexApp_MoveEntryTabCursor
 	.public PokedexApp_SetupAreaSprites
 	.public PokedexApp_FreeAreaSprites
 	.public PokedexApp_LoadAreaSpriteResources
@@ -1671,16 +1671,16 @@
 	.public PokedexApp_UpdatePlayerMarker
 	.public PokedexApp_UpdatePlayerMarkerVisibility
 	.public PokedexApp_CreateAreaMarkerSprites
-	.public ov18_021F41C4
-	.public ov18_021F42E4
+	.public PokedexApp_GetOverworldMarkerPos
+	.public PokedexApp_GetDungeonMarkerPos
 	.public PokedexApp_UpdateAreaMarkers
 	.public ov18_021F4478
 	.public PokedexApp_HideAreaMarkers
-	.public ov18_021F463C
+	.public PokedexApp_UpdateAreaMarkerPalettes
 	.public ov18_021F46EC
-	.public ov18_021F47C0
-	.public ov18_021F47F8
-	.public ov18_021F48AC
+	.public PokedexApp_GetSpecialAreaMarkers
+	.public PokedexApp_PlaceSpecialAreaMarkers
+	.public PokedexApp_UpdateSpecialAreaMarkers
 	.public ov18_021F4974
 	.public PokedexApp_SetupSizeCheckSprites
 	.public PokedexApp_FreeSizeCheckSprites
@@ -1689,63 +1689,63 @@
 	.public PokedexApp_SetSizeCheckMonIcons
 	.public PokedexApp_DrawSizeCheckMonPic
 	.public PokedexApp_ScaleSizeCheckTrainer
-	.public ov18_021F4EB0
-	.public ov18_021F4F98
-	.public ov18_021F4FC8
+	.public PokedexApp_RotatePoint
+	.public PokedexApp_SetPanSpritePos
+	.public PokedexApp_PlaceFigureOnPan
 	.public PokedexApp_UpdateScalePans
 	.public PokedexApp_InitWeightCheckAnim
-	.public ov18_021F50C0
+	.public PokedexApp_DropFiguresOntoPans
 	.public PokedexApp_RunWeightCheckAnim
-	.public ov18_021F5180
-	.public ov18_021F5198
-	.public ov18_021F51BC
-	.public ov18_021F51CC
-	.public ov18_021F5238
-	.public ov18_021F52A4
-	.public ov18_021F5310
-	.public ov18_021F537C
-	.public ov18_021F53E8
-	.public ov18_021F5454
-	.public ov18_021F54C0
-	.public ov18_021F555C
-	.public ov18_021F55D8
-	.public ov18_021F5638
-	.public ov18_021F56DC
+	.public PokedexApp_SetBeamRotation
+	.public PokedexApp_SetBeamSwing
+	.public PokedexApp_WeightAnim_Even
+	.public PokedexApp_WeightAnim_Tip1
+	.public PokedexApp_WeightAnim_Tip2
+	.public PokedexApp_WeightAnim_Tip3
+	.public PokedexApp_WeightAnim_Tip4
+	.public PokedexApp_WeightAnim_Tip5
+	.public PokedexApp_WeightAnim_Tip6
+	.public PokedexApp_WeightAnim_Tip7
+	.public PokedexApp_StartFigureThrow
+	.public PokedexApp_MoveThrownFigure
+	.public PokedexApp_UpdateThrownFigure
+	.public PokedexApp_WeightAnim_TipToStop
+	.public PokedexApp_WeightAnim_Throw1
 	.public ov18_021F56F2
 	.public ov18_021F56FA
 	.public ov18_021F5712
 	.public ov18_021F5798
-	.public ov18_021F57B4
+	.public PokedexApp_WeightAnim_Throw2
 	.public ov18_021F57CA
 	.public ov18_021F57D2
 	.public ov18_021F57EA
 	.public ov18_021F5870
-	.public ov18_021F588C
+	.public PokedexApp_WeightAnim_Throw3
 	.public ov18_021F58A2
 	.public ov18_021F58AA
 	.public ov18_021F58C2
 	.public ov18_021F5948
-	.public ov18_021F5964
+	.public PokedexApp_WeightAnim_Throw4
 	.public ov18_021F597A
 	.public ov18_021F5982
 	.public ov18_021F599A
 	.public ov18_021F5A20
-	.public ov18_021F5A3C
+	.public PokedexApp_WeightAnim_Throw5
 	.public ov18_021F5A52
 	.public ov18_021F5A5A
 	.public ov18_021F5A72
 	.public ov18_021F5AF8
-	.public ov18_021F5B14
+	.public PokedexApp_WeightAnim_Throw6
 	.public ov18_021F5B2A
 	.public ov18_021F5B32
 	.public ov18_021F5B4A
 	.public ov18_021F5BD0
-	.public ov18_021F5BEC
+	.public PokedexApp_WeightAnim_Throw7
 	.public ov18_021F5C02
 	.public ov18_021F5C0A
 	.public ov18_021F5C22
 	.public ov18_021F5CA8
-	.public ov18_021F5CC4
+	.public PokedexApp_WeightAnim_Throw8
 	.public ov18_021F5CDC
 	.public ov18_021F5CE4
 	.public ov18_021F5CFC
@@ -1772,7 +1772,7 @@
 	.public PokedexApp_DragAreaScrollbar
 	.public PokedexApp_GetFormScrollbarY
 	.public PokedexApp_GetAreaScrollbarY
-	.public ov18_021F6540
+	.public PokedexApp_GetScrollbarStepCount
 	.public PokedexApp_MoveScrollbar
 	.public PokedexApp_SyncFormScrollbar
 	.public PokedexApp_SyncAreaScrollbar
@@ -1780,14 +1780,14 @@
 	.public PokedexApp_HideFormListSprites
 	.public PokedexApp_ShowFormCompareSprites
 	.public PokedexApp_HideFormCompareSprites
-	.public ov18_021F6844
+	.public PokedexApp_SetCompareFormIcon
 	.public PokedexApp_ShowFormCompareMonPic
 	.public ov18_021F6984
 	.public PokedexApp_UpdateFormCompareSelector
 	.public PokedexApp_SetPlayerMarkerAnim
 	.public PokedexApp_LoadMonPicToBg
 	.public PokedexApp_SetMonPicBgAffine
-	.public ov18_021F6B00
+	.public PokedexApp_HandleListMenuInput
 	.public PokedexApp_HandleListInput
 	.public PokedexApp_CreateSearchMenuGrid
 	.public PokedexApp_HandleSearchMenuInput
@@ -1831,7 +1831,7 @@
 	.public PokedexApp_UpdateSearchFormCursor
 	.public PokedexApp_OnSearchFormGridMove
 	.public PokedexApp_OnSearchFormGridTouch
-	.public ov18_021F7974
+	.public PokedexApp_HandleSearchResultListInput
 	.public PokedexApp_FreeGridInput
 	.public PokedexApp_DummyGridCallback
 	.public PokedexApp_HandleEntryTabTouch
@@ -1839,7 +1839,7 @@
 	.public PokedexApp_HandleSizeCheckInput
 	.public PokedexApp_HandleFormsInput
 	.public PokedexApp_HandleFormCompareInput
-	.public ov18_021F7E70
+	.public PokedexApp_HandleEntryMenuInput
 	.public PokedexApp_RunSearch
 	.public PokedexApp_LoadSortData
 	.public PokedexApp_FilterSeen
@@ -1923,8 +1923,8 @@
 	.public PokedexEntryPopup_CreateResourceManagers
 	.public PokedexEntryPopup_DestroyResourceManagers
 	.public PokedexEntryPopup_InitSprites
-	.public ov18_021F8FF8
-	.public ov18_021F9054
+	.public PokedexEntryPopup_LoadBannerResources
+	.public PokedexEntryPopup_FreeBannerResources
 	.public PokedexEntryPopup_LoadTypeIconResources
 	.public PokedexEntryPopup_UnloadTypeIconResources
 	.public PokedexEntryPopup_LoadFootprintResources
@@ -1936,8 +1936,8 @@
 	.public PokedexEntryPopup_MakeResourcesHeader
 	.public PokedexEntryPopup_CreateTypeIconSprites
 	.public PokedexEntryPopup_DeleteTypeIconSprites
-	.public ov18_021F94BC
-	.public ov18_021F9508
+	.public PokedexEntryPopup_CreateBannerSprite
+	.public PokedexEntryPopup_DeleteBannerSprite
 	.public PokedexEntryPopup_CreateFootprintSprite
 	.public PokedexEntryPopup_DeleteFootprintSprite
 	.public PokedexEntryPopup_HideSprites
@@ -2076,8 +2076,8 @@
 	.public PokedexApp_OpenMonIconNarc
 	.public PokedexApp_CloseMonIconNarc
 	.public PokedexApp_ShowMonPic
-	.public ov18_021F2B9C
-	.public ov18_021F2BFC
+	.public PokedexApp_GetDexModeSwitchX
+	.public PokedexApp_HideListCursor
 	.public PokedexApp_GetListScrollbarMinY
 	.public PokedexApp_GetListScrollbarMaxY
 	.public PokedexApp_FreeListSprites
@@ -2086,11 +2086,11 @@
 	.public PokedexApp_FreeSearchSprites
 	.public PokedexApp_SetSliderSpritesVisible
 	.public PokedexApp_SliderValueToX
-	.public ov18_021F3D6C
+	.public PokedexApp_FreeEntryTabCursor
 	.public PokedexApp_FreeAreaSprites
 	.public PokedexApp_HideAreaMarkers
 	.public PokedexApp_FreeSizeCheckSprites
-	.public ov18_021F51BC
+	.public PokedexApp_WeightAnim_Even
 	.public PokedexApp_SetupFormsSprites
 	.public PokedexApp_FreeFormsSprites
 	.public PokedexApp_GetScrollbarLength
@@ -2118,13 +2118,13 @@
 	.public PokedexEntryPopup_DestroyResourceManagers
 	.public PokedexEntryPopup_FreeSprites
 	.public PokedexEntryPopup_DeleteTypeIconSprites
-	.public ov18_021F9508
+	.public PokedexEntryPopup_DeleteBannerSprite
 	.public PokedexEntryPopup_DeleteFootprintSprite
 	.public PokedexEntryPopup_HideSprites
 	.public PokedexEntryPopup_GetPokepic
 
-	thumb_func_start ov18_021F3AD8
-ov18_021F3AD8: ; 0x021F3AD8
+	thumb_func_start PokedexApp_ShowReturningDexModeSwitch
+PokedexApp_ShowReturningDexModeSwitch: ; 0x021F3AD8
 	push {r3, r4, lr}
 	sub sp, #4
 	ldr r1, _021F3B24 ; =0x00001860
@@ -2137,7 +2137,7 @@ ov18_021F3AD8: ; 0x021F3AD8
 	bl PokedexApp_SetSpriteVisible
 	add r0, r4, #0
 	mov r1, #0x11
-	bl ov18_021F2AC0
+	bl PokedexApp_SetDexModeSwitchPos
 	ldr r0, _021F3B28 ; =0x000006B4
 	add r1, sp, #0
 	ldr r0, [r4, r0]
@@ -2163,11 +2163,11 @@ _021F3B20:
 	.balign 4, 0
 _021F3B24: .word 0x00001860
 _021F3B28: .word 0x000006B4
-	thumb_func_end ov18_021F3AD8
+	thumb_func_end PokedexApp_ShowReturningDexModeSwitch
 
 
-	thumb_func_start ov18_021F3B2C
-ov18_021F3B2C: ; 0x021F3B2C
+	thumb_func_start PokedexApp_MoveReturningDexModeSwitch
+PokedexApp_MoveReturningDexModeSwitch: ; 0x021F3B2C
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	ldr r0, _021F3B5C ; =0x000006B4
@@ -2191,7 +2191,7 @@ ov18_021F3B2C: ; 0x021F3B2C
 	pop {r3, r4, r5, pc}
 	nop
 _021F3B5C: .word 0x000006B4
-	thumb_func_end ov18_021F3B2C
+	thumb_func_end PokedexApp_MoveReturningDexModeSwitch
 
 
 	thumb_func_start PokedexApp_SetSearchEntrySpritesVisible
@@ -2227,13 +2227,13 @@ _021F3B8C:
 	cmp r4, #0x3a
 	bls _021F3B8C
 	add r0, r5, #0
-	bl ov18_021F3BA4
+	bl PokedexApp_UpdateSearchBodyTypeIcon
 	pop {r4, r5, r6, pc}
 	thumb_func_end PokedexApp_SetSearchEntrySpritesVisible
 
 
-	thumb_func_start ov18_021F3BA4
-ov18_021F3BA4: ; 0x021F3BA4
+	thumb_func_start PokedexApp_UpdateSearchBodyTypeIcon
+PokedexApp_UpdateSearchBodyTypeIcon: ; 0x021F3BA4
 	push {r4, lr}
 	ldr r1, _021F3BD0 ; =0x0000188C
 	add r4, r0, #0
@@ -2256,11 +2256,11 @@ _021F3BBA:
 	pop {r4, pc}
 	.balign 4, 0
 _021F3BD0: .word 0x0000188C
-	thumb_func_end ov18_021F3BA4
+	thumb_func_end PokedexApp_UpdateSearchBodyTypeIcon
 
 
-	thumb_func_start ov18_021F3BD4
-ov18_021F3BD4: ; 0x021F3BD4
+	thumb_func_start PokedexApp_MoveSearchSummaryIcons
+PokedexApp_MoveSearchSummaryIcons: ; 0x021F3BD4
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	mov r0, #0x6e
@@ -2303,7 +2303,7 @@ ov18_021F3BD4: ; 0x021F3BD4
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _021F3C2C: .word 0x0000071C
-	thumb_func_end ov18_021F3BD4
+	thumb_func_end PokedexApp_MoveSearchSummaryIcons
 
 
 	thumb_func_start ov18_021F3C30
@@ -2454,11 +2454,11 @@ _021F3D30: .word 0x000018A4
 	thumb_func_end PokedexApp_GetSeenFormAndGender
 
 
-	thumb_func_start ov18_021F3D34
-ov18_021F3D34: ; 0x021F3D34
+	thumb_func_start PokedexApp_CreateEntryTabCursor
+PokedexApp_CreateEntryTabCursor: ; 0x021F3D34
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov18_021F2648
+	bl PokedexApp_LoadMainObjResources
 	ldr r1, _021F3D64 ; =0x00000668
 	ldr r2, _021F3D68 ; =ov18_021FA554
 	ldr r0, [r4, r1]
@@ -2479,4 +2479,4 @@ ov18_021F3D34: ; 0x021F3D34
 	.balign 4, 0
 _021F3D64: .word 0x00000668
 _021F3D68: .word ov18_021FA554
-	thumb_func_end ov18_021F3D34
+	thumb_func_end PokedexApp_CreateEntryTabCursor

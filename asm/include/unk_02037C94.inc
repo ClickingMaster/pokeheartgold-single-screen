@@ -39,7 +39,7 @@
 .public sub_02033FC4
 .public sub_02034044
 .public Comm_RegisterCommandTable
-.public sub_02034154
+.public Comm_FreeCommandTable
 .public CommPlayerInfo_Init
 .public CommPlayerInfo_Free
 .public CommPlayerInfo_SendLocal

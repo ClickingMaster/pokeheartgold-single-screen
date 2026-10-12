@@ -16,7 +16,7 @@
 .public Chatot_Copy
 .public BattleRecord_SetAiFlags
 .public Comm_RegisterCommandTable
-.public sub_020342B8
+.public CommCmd_GetSizeVariable
 .public sub_02036FD8
 .public Comm_SendCommand
 .public sub_02037190

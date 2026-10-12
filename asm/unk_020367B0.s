@@ -121,7 +121,7 @@ _02036882:
 	add r0, r0, r7
 	add r1, r5, #0
 	add r3, r4, r3
-	bl sub_02033AF0
+	bl ByteRing_Write
 	ldr r0, [sp]
 	mov r1, #0
 	add r5, r5, r0
@@ -159,7 +159,7 @@ _020368B4:
 	add r0, r0, r3
 	add r1, r5, #4
 	add r3, #0xbc
-	bl sub_02033AF0
+	bl ByteRing_Write
 _020368E0:
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}

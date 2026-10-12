@@ -147,7 +147,7 @@ void PokedexApp_ScaleSizeCheckTrainer(PokedexAppData *pokedexApp) {
 }
 
 // Moves (x, y) 56 pixels along the angle (sine and cosine rounded to whole fx32 units first).
-void ov18_021F4EB0(u16 angle, s16 *x, s16 *y) {
+void PokedexApp_RotatePoint(u16 angle, s16 *x, s16 *y) {
     s32 sinValue = FX_SinCosTable_[(angle >> 4) * 2];
     s32 cosValue;
     float rounded;
@@ -169,15 +169,15 @@ void ov18_021F4EB0(u16 angle, s16 *x, s16 *y) {
     *y += cosValue * 56 >> 12;
 }
 
-void ov18_021F4F98(PokedexAppData *pokedexApp, int index, u16 angle, s16 x, s16 y) {
-    ov18_021F4EB0(angle, &x, &y);
+void PokedexApp_SetPanSpritePos(PokedexAppData *pokedexApp, int index, u16 angle, s16 x, s16 y) {
+    PokedexApp_RotatePoint(angle, &x, &y);
     PokedexApp_SetSpritePos(pokedexApp, index, x, y, 1);
 }
 
 #pragma force_active on
 
 // Puts sprite index 16 pixels above sprite from.
-void ov18_021F4FC8(PokedexAppData *pokedexApp, int index, int from) {
+void PokedexApp_PlaceFigureOnPan(PokedexAppData *pokedexApp, int index, int from) {
     s16 x, y;
 
     PokedexApp_GetSpritePos(pokedexApp, from, &x, &y, 1);
@@ -190,10 +190,10 @@ void ov18_021F4FC8(PokedexAppData *pokedexApp, int index, int from) {
 // Swings the two pans (sprites 8 and 9, with the trainer and the Pokemon icon on top) around the scale's
 // pivot for the beam angle.
 void PokedexApp_UpdateScalePans(PokedexAppData *pokedexApp, u32 angle) {
-    ov18_021F4F98(pokedexApp, 8, (u16)(-0x4000 - angle), 0x80, 0x68);
-    ov18_021F4F98(pokedexApp, 9, (u16)(0x4000 - angle), 0x80, 0x68);
-    ov18_021F4FC8(pokedexApp, 2, 8);
-    ov18_021F4FC8(pokedexApp, 4, 9);
+    PokedexApp_SetPanSpritePos(pokedexApp, 8, (u16)(-0x4000 - angle), 0x80, 0x68);
+    PokedexApp_SetPanSpritePos(pokedexApp, 9, (u16)(0x4000 - angle), 0x80, 0x68);
+    PokedexApp_PlaceFigureOnPan(pokedexApp, 2, 8);
+    PokedexApp_PlaceFigureOnPan(pokedexApp, 4, 9);
 }
 
 #pragma force_active on
@@ -232,7 +232,7 @@ void PokedexApp_InitWeightCheckAnim(PokedexAppData *pokedexApp, PokedexAppData_U
 }
 
 // Lowers the trainer and the Pokemon icon onto the pans; FALSE once they rest at y 88.
-BOOL ov18_021F50C0(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_DropFiguresOntoPans(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     PokedexSpritePos trainer, mon;
 
     PokedexApp_GetSpritePos(anim->pokedexApp, 2, &trainer.x, &trainer.y, 1);
@@ -257,7 +257,7 @@ BOOL PokedexApp_RunWeightCheckAnim(PokedexAppData_UnkSub0868_State77_Sub4 *anim)
 }
 
 // Rotation speed and acceleration, signed by which side is heavier.
-void ov18_021F5180(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s32 speed, s32 accel) {
+void PokedexApp_SetBeamRotation(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s32 speed, s32 accel) {
     if (anim->monLighter == FALSE) {
         anim->rotationSpeed = -speed;
         anim->rotationAccel = accel;
@@ -268,7 +268,7 @@ void ov18_021F5180(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s32 speed, s32 
 }
 
 // Rotation speed, acceleration and the speed at which the swing stops, signed by which side is heavier.
-void ov18_021F5198(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s32 speed, s32 accel, s32 endSpeed) {
+void PokedexApp_SetBeamSwing(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s32 speed, s32 accel, s32 endSpeed) {
     if (anim->monLighter == FALSE) {
         anim->rotationSpeed = -speed;
         anim->rotationAccel = -accel;
@@ -281,17 +281,17 @@ void ov18_021F5198(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s32 speed, s32 
 }
 
 // Same weight: no swing.
-BOOL ov18_021F51BC(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Even(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     PlaySE(SEQ_SE_GS_ZUKAN01);
     return FALSE;
 }
 
 // Small differences: the beam swings and settles level again.
-BOOL ov18_021F51CC(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Tip1(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
-        ov18_021F5198(anim, 0x100, -32, -224);
+        PokedexApp_SetBeamSwing(anim, 0x100, -32, -224);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -305,11 +305,11 @@ BOOL ov18_021F51CC(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL ov18_021F5238(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Tip2(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
-        ov18_021F5198(anim, 0x120, -32, -256);
+        PokedexApp_SetBeamSwing(anim, 0x120, -32, -256);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -323,11 +323,11 @@ BOOL ov18_021F5238(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL ov18_021F52A4(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Tip3(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
-        ov18_021F5198(anim, 0x140, -32, -288);
+        PokedexApp_SetBeamSwing(anim, 0x140, -32, -288);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -341,11 +341,11 @@ BOOL ov18_021F52A4(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL ov18_021F5310(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Tip4(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
-        ov18_021F5198(anim, 0x160, -32, -320);
+        PokedexApp_SetBeamSwing(anim, 0x160, -32, -320);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -359,11 +359,11 @@ BOOL ov18_021F5310(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL ov18_021F537C(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Tip5(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
-        ov18_021F5198(anim, 0x180, -32, -352);
+        PokedexApp_SetBeamSwing(anim, 0x180, -32, -352);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -377,11 +377,11 @@ BOOL ov18_021F537C(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL ov18_021F53E8(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Tip6(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
-        ov18_021F5198(anim, 0x1C0, -64, -320);
+        PokedexApp_SetBeamSwing(anim, 0x1C0, -64, -320);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -395,11 +395,11 @@ BOOL ov18_021F53E8(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL ov18_021F5454(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Tip7(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
-        ov18_021F5198(anim, 0x200, -64, -384);
+        PokedexApp_SetBeamSwing(anim, 0x200, -64, -384);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -415,7 +415,7 @@ BOOL ov18_021F5454(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
 
 // Starts dropping the lighter side's figure (sprite 2 trainer / 4 Pokemon) towards its pan, with its
 // lower-screen copy (3 / 5) shown 192 pixels further down.
-void ov18_021F54C0(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s16 speed, s16 accel) {
+void PokedexApp_StartFigureThrow(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s16 speed, s16 accel) {
     PokedexSpritePos trainer;
     PokedexSpritePos mon;
 
@@ -436,7 +436,7 @@ void ov18_021F54C0(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s16 speed, s16 
     }
 }
 
-void ov18_021F555C(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+void PokedexApp_MoveThrownFigure(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     PokedexSpritePos pos;
 
     PokedexApp_GetSpritePos(anim->pokedexApp, anim->dropSprite, &pos.x, &pos.y, 1);
@@ -449,11 +449,11 @@ void ov18_021F555C(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
 }
 
 // FALSE once the dropping figure is back on its pan.
-BOOL ov18_021F55D8(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_UpdateThrownFigure(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     PokedexSpritePos figure;
     PokedexSpritePos pan;
 
-    ov18_021F555C(anim);
+    PokedexApp_MoveThrownFigure(anim);
     PokedexApp_GetSpritePos(anim->pokedexApp, anim->dropSprite, &figure.x, &figure.y, 1);
     PokedexApp_GetSpritePos(anim->pokedexApp, anim->dropTargetSprite, &pan.x, &pan.y, 1);
     if (figure.y >= pan.y - 16) {
@@ -465,13 +465,13 @@ BOOL ov18_021F55D8(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
 
 // Larger differences: the beam tips to its stop (0xF600 / 0xA00); from here on the lighter figure is
 // thrown up and falls back.
-BOOL ov18_021F5638(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_TipToStop(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     u32 rotation;
 
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
-        ov18_021F5180(anim, 0x300, 0);
+        PokedexApp_SetBeamRotation(anim, 0x300, 0);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -497,13 +497,13 @@ BOOL ov18_021F5638(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL ov18_021F56DC(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw1(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     u32 rotation;
 
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN02);
-        ov18_021F5180(anim, 0x300, 0);
+        PokedexApp_SetBeamRotation(anim, 0x300, 0);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -526,10 +526,10 @@ BOOL ov18_021F56DC(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
             anim->step++;
         }
     case 2:
-        ov18_021F54C0(anim, -4, 1);
+        PokedexApp_StartFigureThrow(anim, -4, 1);
         anim->step++;
     case 3:
-        if (ov18_021F55D8(anim) == FALSE) {
+        if (PokedexApp_UpdateThrownFigure(anim) == FALSE) {
             return FALSE;
         }
         break;
@@ -537,13 +537,13 @@ BOOL ov18_021F56DC(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL ov18_021F57B4(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw2(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     u32 rotation;
 
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN02);
-        ov18_021F5180(anim, 0x400, 0);
+        PokedexApp_SetBeamRotation(anim, 0x400, 0);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -566,10 +566,10 @@ BOOL ov18_021F57B4(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
             anim->step++;
         }
     case 2:
-        ov18_021F54C0(anim, -8, 1);
+        PokedexApp_StartFigureThrow(anim, -8, 1);
         anim->step++;
     case 3:
-        if (ov18_021F55D8(anim) == FALSE) {
+        if (PokedexApp_UpdateThrownFigure(anim) == FALSE) {
             return FALSE;
         }
         break;
@@ -577,13 +577,13 @@ BOOL ov18_021F57B4(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL ov18_021F588C(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw3(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     u32 rotation;
 
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN02);
-        ov18_021F5180(anim, 0x400, 0);
+        PokedexApp_SetBeamRotation(anim, 0x400, 0);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -606,10 +606,10 @@ BOOL ov18_021F588C(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
             anim->step++;
         }
     case 2:
-        ov18_021F54C0(anim, -12, 1);
+        PokedexApp_StartFigureThrow(anim, -12, 1);
         anim->step++;
     case 3:
-        if (ov18_021F55D8(anim) == FALSE) {
+        if (PokedexApp_UpdateThrownFigure(anim) == FALSE) {
             return FALSE;
         }
         break;
@@ -617,13 +617,13 @@ BOOL ov18_021F588C(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL ov18_021F5964(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw4(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     u32 rotation;
 
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN03);
-        ov18_021F5180(anim, 0x500, 0);
+        PokedexApp_SetBeamRotation(anim, 0x500, 0);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -646,10 +646,10 @@ BOOL ov18_021F5964(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
             anim->step++;
         }
     case 2:
-        ov18_021F54C0(anim, -14, 1);
+        PokedexApp_StartFigureThrow(anim, -14, 1);
         anim->step++;
     case 3:
-        if (ov18_021F55D8(anim) == FALSE) {
+        if (PokedexApp_UpdateThrownFigure(anim) == FALSE) {
             return FALSE;
         }
         break;
@@ -657,13 +657,13 @@ BOOL ov18_021F5964(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL ov18_021F5A3C(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw5(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     u32 rotation;
 
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN03);
-        ov18_021F5180(anim, 0x500, 0);
+        PokedexApp_SetBeamRotation(anim, 0x500, 0);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -686,10 +686,10 @@ BOOL ov18_021F5A3C(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
             anim->step++;
         }
     case 2:
-        ov18_021F54C0(anim, -18, 1);
+        PokedexApp_StartFigureThrow(anim, -18, 1);
         anim->step++;
     case 3:
-        if (ov18_021F55D8(anim) == FALSE) {
+        if (PokedexApp_UpdateThrownFigure(anim) == FALSE) {
             return FALSE;
         }
         break;
@@ -697,13 +697,13 @@ BOOL ov18_021F5A3C(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL ov18_021F5B14(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw6(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     u32 rotation;
 
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN03);
-        ov18_021F5180(anim, 0x600, 0);
+        PokedexApp_SetBeamRotation(anim, 0x600, 0);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -726,10 +726,10 @@ BOOL ov18_021F5B14(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
             anim->step++;
         }
     case 2:
-        ov18_021F54C0(anim, -21, 1);
+        PokedexApp_StartFigureThrow(anim, -21, 1);
         anim->step++;
     case 3:
-        if (ov18_021F55D8(anim) == FALSE) {
+        if (PokedexApp_UpdateThrownFigure(anim) == FALSE) {
             return FALSE;
         }
         break;
@@ -737,13 +737,13 @@ BOOL ov18_021F5B14(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL ov18_021F5BEC(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw7(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     u32 rotation;
 
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN03);
-        ov18_021F5180(anim, 0x700, 0);
+        PokedexApp_SetBeamRotation(anim, 0x700, 0);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -766,10 +766,10 @@ BOOL ov18_021F5BEC(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
             anim->step++;
         }
     case 2:
-        ov18_021F54C0(anim, -24, 1);
+        PokedexApp_StartFigureThrow(anim, -24, 1);
         anim->step++;
     case 3:
-        if (ov18_021F55D8(anim) == FALSE) {
+        if (PokedexApp_UpdateThrownFigure(anim) == FALSE) {
             return FALSE;
         }
         break;
@@ -778,14 +778,14 @@ BOOL ov18_021F5BEC(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
 }
 
 // The heaviest class throws the figure off the top of the screen.
-BOOL ov18_021F5CC4(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw8(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     u32 rotation;
     PokedexSpritePos pos;
 
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN04);
-        ov18_021F5180(anim, 0x800, 0);
+        PokedexApp_SetBeamRotation(anim, 0x800, 0);
         anim->step++;
     case 1:
         ManagedSprite_OffsetAffineZRotation(anim->pokedexApp->sprites[7], anim->rotationSpeed);
@@ -808,10 +808,10 @@ BOOL ov18_021F5CC4(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
             anim->step++;
         }
     case 2:
-        ov18_021F54C0(anim, -24, 0);
+        PokedexApp_StartFigureThrow(anim, -24, 0);
         anim->step++;
     case 3:
-        if (ov18_021F55D8(anim) == FALSE) {
+        if (PokedexApp_UpdateThrownFigure(anim) == FALSE) {
             return FALSE;
         }
         PokedexApp_GetSpritePos(anim->pokedexApp, anim->dropSprite, &pos.x, &pos.y, 1);

@@ -7,7 +7,7 @@ void ov49_0225A98C(void *work) {
     if (flag == 0 && U8_AT(work, 6) == 0) {
         ov49_0225EF24(PTR_AT(work, 0x3F0));
     }
-    ov49_0225E318(PTR_AT(work, 0x3E4));
+    WiFiPlazaModels_Update(PTR_AT(work, 0x3E4));
     flag = FLAGS_AT(work);
     if (flag == 0 && U8_AT(work, 6) == 0) {
         WiFiPlazaObj_UpdateManager(PTR_AT(work, 0x3E0));
@@ -31,7 +31,7 @@ void ov49_0225A98C(void *work) {
 void ov49_0225AA2C(void *work) {
     Thunk_G3X_Reset();
     WiFiPlazaCamera_Update(PTR_AT(work, 0x3EC));
-    ov49_0225E3A0(PTR_AT(work, 0x3E4));
+    WiFiPlazaModels_Draw(PTR_AT(work, 0x3E4));
     ov49_02258BD4(PTR_AT(work, 0x3E0));
     ov49_02265398(PTR_AT(work, 0x3D4));
     RequestSwap3DBuffers(0, 0);
@@ -54,7 +54,7 @@ void ov49_0225AA70(void *work) {
         } else {
             enabled = 0;
         }
-        ov49_0225E8C4(PTR_AT(work, 0x3E4), i, ov45_0222F314(i), state, enabled, value);
+        WiFiPlazaModels_UpdateMatchSign(PTR_AT(work, 0x3E4), i, ov45_0222F314(i), state, enabled, value);
     }
 }
 

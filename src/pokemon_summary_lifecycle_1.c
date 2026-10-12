@@ -44,7 +44,7 @@ BOOL PokemonSummary_Init(void *manager, u32 *state) {
     sub_0208B48C(data);
     sub_0208B4EC(data);
     sub_0208BECC(data);
-    sub_0208C3E4(data);
+    PokemonSummary_AddWindows(data);
     sub_02089CB4(data);
     PokemonSummary_CreateCamera(data);
     Main_SetVBlankIntrCB(sub_020885DC, data);
@@ -148,7 +148,7 @@ BOOL PokemonSummary_Exit(void *manager, u32 *state) {
     Main_SetVBlankIntrCB(NULL, NULL);
     PokemonSummary_FreePokepicAndCamera(data);
     sub_0208B258(data);
-    sub_0208C560(data);
+    PokemonSummary_RemoveWindows(data);
     sub_0208877C(*(void **)data);
     GF_TouchpadStopSampling();
     GF_DestroyVramTransferManager();

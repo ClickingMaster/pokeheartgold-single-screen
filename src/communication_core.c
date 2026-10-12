@@ -21,28 +21,28 @@ extern int sub_02033298(void);
 extern BOOL sub_02033800(void *data, u16 size, int, void (*callback)(void *));
 extern int sub_020338F4(void);
 extern void sub_02033A90(void (*callback)(int));
-extern void sub_02033AE0(void *ring, void *buffer, int size);
-extern void sub_02033AF0(void *ring, const void *data, int size, int line);
-extern int sub_02033B4C(void *ring, void *dest, int size);
-extern u8 sub_02033B68(void *ring);
-extern int sub_02033BC4(void *ring);
+extern void ByteRing_Init(void *ring, void *buffer, int size);
+extern void ByteRing_Write(void *ring, const void *data, int size, int line);
+extern int ByteRing_Read(void *ring, void *dest, int size);
+extern u8 ByteRing_ReadByte(void *ring);
+extern int ByteRing_GetReadableSize(void *ring);
 extern int sub_02033BE4(void *ring);
-extern void sub_02033C28(void *ring);
-extern int sub_02033C50(void *queue);
-extern int sub_02033DF0(void *queue, int command, void *data, int size, int, int);
-extern int sub_02033ECC(void *queue, ReceiveBuffer *receive, int);
-extern void sub_02033F44(void *queue, int count, void *ring);
-extern void sub_02033F70(void *queue);
-extern void sub_02033F90(void *queue);
-extern int sub_02033F9C(void *queue, int);
+extern void ByteRing_Commit(void *ring);
+extern int PacketPool_AllNodesFree(void *queue);
+extern int PacketPool_Enqueue(void *queue, int command, void *data, int size, int, int);
+extern int PacketPool_WriteFrame(void *queue, ReceiveBuffer *receive, int);
+extern void PacketPool_Init(void *queue, int count, void *ring);
+extern void PacketPool_Reset(void *queue);
+extern void PacketPool_Free(void *queue);
+extern int PacketPool_HasCommand(void *queue, int);
 extern int sub_02033FC4(u16);
 extern int sub_02033FF0(u16);
 extern int sub_02034044(int);
 extern int sub_02034084(int);
-extern void sub_02034170(int netId, int command, int size, void *data);
-extern u32 sub_020341DC(int command);
-extern int sub_02034244(int command);
-extern void *sub_02034280(int command, int netId, int size);
+extern void Comm_CallCommandRecv(int netId, int command, int size, void *data);
+extern u32 Comm_GetCommandSize(int command);
+extern int Comm_CommandHasBuffer(int command);
+extern void *Comm_GetCommandBuffer(int command, int netId, int size);
 extern void CommPlayerInfo_Free(void);
 extern void sub_02034E2C(void);
 extern int sub_02034EF0(int, int, int);
@@ -113,11 +113,11 @@ int Comm_InitWork(int create, int packetSize) {
         *(void **)(gCommCore.work + 0x488) = Heap_Alloc(HEAP_ID_15, *(u32 *)(gCommCore.work + 0x68c));
 
         if (sub_0203993C() == 10) {
-            sub_02033F44(gCommCore.work + 0x580, 100, gCommCore.work + 0x498);
-            sub_02033F44(gCommCore.work + 0x5a0, 800, gCommCore.work + 0x510);
+            PacketPool_Init(gCommCore.work + 0x580, 100, gCommCore.work + 0x498);
+            PacketPool_Init(gCommCore.work + 0x5a0, 800, gCommCore.work + 0x510);
         } else {
-            sub_02033F44(gCommCore.work + 0x580, 20, gCommCore.work + 0x498);
-            sub_02033F44(gCommCore.work + 0x5a0, packetSize + 238, gCommCore.work + 0x510);
+            PacketPool_Init(gCommCore.work + 0x580, 20, gCommCore.work + 0x498);
+            PacketPool_Init(gCommCore.work + 0x5a0, packetSize + 238, gCommCore.work + 0x510);
         }
     } else {
         existing = 1;
@@ -174,25 +174,25 @@ void Comm_ResetBuffers(void) {
     MI_CpuFill8(gCommCore.work + 0x51c, 0, 0x60);
     length = *(int *)(gCommCore.work + 0x68c) / count;
     for (i = 0; i < count; i++) {
-        sub_02033AE0(gCommCore.work + 0x51c + i * 12, (u8 *)*(void **)(gCommCore.work + 0x48c) + i * length, length);
+        ByteRing_Init(gCommCore.work + 0x51c + i * 12, (u8 *)*(void **)(gCommCore.work + 0x48c) + i * length, length);
     }
     MI_CpuFill8(*(void **)(gCommCore.work + 0x488), 0, *(int *)(gCommCore.work + 0x68c));
     MI_CpuFill8(gCommCore.work + 0x4b0, 0, 0x60);
     for (i = 0; i < count; i++) {
-        sub_02033AE0(gCommCore.work + 0x4b0 + i * 12, (u8 *)*(void **)(gCommCore.work + 0x488) + i * length, length);
+        ByteRing_Init(gCommCore.work + 0x4b0 + i * 12, (u8 *)*(void **)(gCommCore.work + 0x488) + i * length, length);
     }
     MI_CpuFill8(gCommCore.work + 0x308, 0, 0x180);
-    sub_02033AE0(gCommCore.work + 0x510, gCommCore.work + 0x308, 0x180);
+    ByteRing_Init(gCommCore.work + 0x510, gCommCore.work + 0x308, 0x180);
     MI_CpuFill8(gCommCore.work + 0x80, 0xee, 0x180);
     MI_CpuFill8(gCommCore.work + 0x140, 0xee, 0x180);
     MI_CpuFill8(gCommCore.work + 0x200, 0, 0x108);
-    sub_02033AE0(gCommCore.work + 0x498, gCommCore.work + 0x200, 0x108);
+    ByteRing_Init(gCommCore.work + 0x498, gCommCore.work + 0x200, 0x108);
     MI_CpuFill8(gCommCore.work, 0xee, 0x26);
     MI_CpuFill8(gCommCore.work + 0x40, 0xee, 0x26);
     gCommCore.work[0] = 0xff;
     gCommCore.work[0x40] = 0xff;
     MI_CpuFill8(*(void **)(gCommCore.work + 0x490), 0, *(int *)(gCommCore.work + 0x690) * 2);
-    sub_02033AE0(gCommCore.work + 0x4a4, *(void **)(gCommCore.work + 0x490), *(int *)(gCommCore.work + 0x690) * 2);
+    ByteRing_Init(gCommCore.work + 0x4a4, *(void **)(gCommCore.work + 0x490), *(int *)(gCommCore.work + 0x690) * 2);
     ResetPacketCursors();
     *(int *)(gCommCore.work + 0x668) = 0;
     gCommCore.work[0x62a] = 0xee;
@@ -202,8 +202,8 @@ void Comm_ResetBuffers(void) {
     gCommCore.work[0x6b2] = 1;
     gCommCore.work[0x6b3] = 1;
     gCommCore.initialized = 0;
-    sub_02033F70(gCommCore.work + 0x580);
-    sub_02033F70(gCommCore.work + 0x5a0);
+    PacketPool_Reset(gCommCore.work + 0x580);
+    PacketPool_Reset(gCommCore.work + 0x5a0);
     gCommCore.work[0x6b7] = 0;
 }
 
@@ -238,9 +238,9 @@ void Comm_ResetNetIdBuffers(int slot) {
     chunkSize = *(int *)(work + 0x68C) / (count + 1);
     offset *= chunkSize;
     ringOffset *= 12;
-    sub_02033AE0(work + 0x4B0 + ringOffset, *(u8 **)(work + 0x488) + offset, chunkSize);
+    ByteRing_Init(work + 0x4B0 + ringOffset, *(u8 **)(work + 0x488) + offset, chunkSize);
     work = gCommCore.work;
-    sub_02033AE0(work + 0x51C + ringOffset, *(u8 **)(work + 0x48C) + offset, chunkSize);
+    ByteRing_Init(work + 0x51C + ringOffset, *(u8 **)(work + 0x48C) + offset, chunkSize);
     (gCommCore.work + ringOffset)[0x5CA] = 0xEE;
     *(u16 *)(gCommCore.work + ringOffset + 0x5C8) = 0xFFFF;
     *(int *)(gCommCore.work + ringOffset + 0x5C4) = 0;
@@ -360,8 +360,8 @@ void sub_02036024(void) {
         Heap_Free(*(void **)(gCommCore.work + 0x494));
         Heap_Free(*(void **)(gCommCore.work + 0x48C));
         Heap_Free(*(void **)(gCommCore.work + 0x488));
-        sub_02033F90(gCommCore.work + 0x5A0);
-        sub_02033F90(gCommCore.work + 0x580);
+        PacketPool_Free(gCommCore.work + 0x5A0);
+        PacketPool_Free(gCommCore.work + 0x580);
         Heap_Free(gCommCore.allocation);
         gCommCore.work = NULL;
         gCommCore.allocation = NULL;
@@ -559,7 +559,7 @@ BOOL Comm_FillParentFrameFromChildren(int slot) {
         slotOffset = slot * 0xC0;
         do {
             u8 *ctx = gCommCore.work;
-            sub_02033C28(ctx + 0x4B0 + entryOffset);
+            ByteRing_Commit(ctx + 0x4B0 + entryOffset);
             if (Comm_IsNetIdConnected((u16)i)) {
                 ctx = gCommCore.work;
                 ctx[0x80 + slotOffset + rowOffset] = 14;
@@ -570,7 +570,7 @@ BOOL Comm_FillParentFrameFromChildren(int slot) {
                 goto update;
             }
             ctx = gCommCore.work;
-            sub_02033B4C(ctx + 0x4B0 + entryOffset, ctx + 0x80 + slotOffset + rowOffset, stride);
+            ByteRing_Read(ctx + 0x4B0 + entryOffset, ctx + 0x80 + slotOffset + rowOffset, stride);
             ctx = gCommCore.work;
             if (ctx[0x80 + slotOffset + rowOffset] == 14) {
                 bad++;
@@ -753,7 +753,7 @@ void Comm_OnParentFrameReceived(int netId, const u8 *data, int size) {
                 goto next;
             }
             data++;
-            sub_02033AF0(work + 0x51C + offset, data, stride - 1, i + 0x54C);
+            ByteRing_Write(work + 0x51C + offset, data, stride - 1, i + 0x54C);
             data += stride - 1;
             work = gCommCore.work;
             work[0x69E + i] = 0;
@@ -765,7 +765,7 @@ next:
         *(u16 *)(gCommCore.work + 0x694) = data[1];
         *(u16 *)(gCommCore.work + 0x694) <<= 8;
         *(u16 *)(gCommCore.work + 0x694) += data[2];
-        sub_02033AF0(gCommCore.work + 0x4A4, data + 4, data[3], 0x560);
+        ByteRing_Write(gCommCore.work + 0x4A4, data + 4, data[3], 0x560);
     }
 }
 
@@ -790,14 +790,14 @@ void Comm_OnChildFrameReceived(int slot, const u8 *data, int size) {
         remaining = sub_0203772C((u16)sub_0203993C());
         sub_02033FC4((u16)sub_0203993C());
         if ((data[0] & 2) == 0) {
-            sub_02033AF0(gCommCore.work + 0x4B0 + slot * 12, data, remaining, 0x5A5);
+            ByteRing_Write(gCommCore.work + 0x4B0 + slot * 12, data, remaining, 0x5A5);
         }
         received = gCommCore.work + 0x696;
         received[slot]++;
     } else {
         sub_02036D14(data, slot);
         if ((data[0] & 2) == 0) {
-            sub_02033AF0(gCommCore.work + 0x51C + slot * 12, data + 1, 11, 0x5AE);
+            ByteRing_Write(gCommCore.work + 0x51C + slot * 12, data + 1, 11, 0x5AE);
         }
     }
 }
@@ -835,7 +835,7 @@ void sub_020369CC(int slot, const u8 *data) {
             return;
         }
     }
-    sub_02033AF0(gCommCore.work + 0x51C + slot * 12, data + 1, remaining - 1, 0x5E7);
+    ByteRing_Write(gCommCore.work + 0x51C + slot * 12, data + 1, remaining - 1, 0x5E7);
     {
         u8 *received = gCommCore.work + 0x69E;
         received[slot] = 0;
@@ -1030,7 +1030,7 @@ int Comm_BuildChildFrame(u8 *data) {
         sub_02036DA0(data);
     }
     gCommCore.work[0x6B4] = 0;
-    if (sub_02033C50(gCommCore.work + 0x580)) {
+    if (PacketPool_AllNodesFree(gCommCore.work + 0x580)) {
         *data |= 2;
         if (*data == 2) {
             return 0;
@@ -1038,7 +1038,7 @@ int Comm_BuildChildFrame(u8 *data) {
     } else {
         receive.remaining = count - 1;
         receive.dest = data + 1;
-        if (sub_02033ECC(gCommCore.work + 0x580, &receive, 1) == 0) {
+        if (PacketPool_WriteFrame(gCommCore.work + 0x580, &receive, 1) == 0) {
             gCommCore.work[0x6B4] = 1;
         }
         if (Comm_GetTransferMode() == 1) {
@@ -1064,7 +1064,7 @@ void Comm_BuildParentFrame(u8 *data) {
     data[3] = value;
     receive.remaining = 0xBB;
     receive.dest = data + 5;
-    if (sub_02033ECC(gCommCore.work + 0x5A0, &receive, 0)) {
+    if (PacketPool_WriteFrame(gCommCore.work + 0x5A0, &receive, 0)) {
         gCommCore.work[0x6B5] = 0;
         data[4] = 0xBB - receive.remaining;
     } else {
@@ -1088,7 +1088,7 @@ int sub_02036FD8(int command, void *data, int size) {
     if (!Comm_IsNetIdConnected(Comm_GetLocalNetId())) {
         return 0;
     }
-    if (sub_02033DF0(gCommCore.work + 0x580, command, data, size, 1, 0)) {
+    if (PacketPool_Enqueue(gCommCore.work + 0x580, command, data, size, 1, 0)) {
         return 1;
     }
     if (sub_0203993C() == 10) {
@@ -1101,7 +1101,7 @@ int Comm_SendCommand(int command, void *data, int size) {
     if (!Comm_IsNetIdConnected(Comm_GetLocalNetId())) {
         return 0;
     }
-    if (sub_02033DF0(gCommCore.work + 0x580, command, data, size, 1, 1)) {
+    if (PacketPool_Enqueue(gCommCore.work + 0x580, command, data, size, 1, 1)) {
         return 1;
     }
     if (sub_0203993C() == 10) {
@@ -1121,7 +1121,7 @@ int sub_02037088(int command, void *data, int size) {
     if (Comm_GetTransferMode() == 1) {
         return sub_02036FD8(command, data, size);
     }
-    if (sub_02033DF0(gCommCore.work + 0x5A0, command, data, size, 1, 0)) {
+    if (PacketPool_Enqueue(gCommCore.work + 0x5A0, command, data, size, 1, 0)) {
         return 1;
     }
     if (sub_0203993C() == 10) {
@@ -1141,7 +1141,7 @@ int sub_02037108(void *command, void *data, int size) {
     if (Comm_GetTransferMode() == 1) {
         return Comm_SendCommand((int)command, data, size);
     }
-    if (sub_02033DF0(gCommCore.work + 0x5A0, (int)command, data, size, 1, 1)) {
+    if (PacketPool_Enqueue(gCommCore.work + 0x5A0, (int)command, data, size, 1, 1)) {
         return 1;
     }
     if (sub_0203993C() == 10) {
@@ -1159,7 +1159,7 @@ int sub_02037190(void) {
 }
 
 void Comm_FinishCommand(int netId, int command, int size, void *data, PacketCursor *cursor) {
-    sub_02034170(netId, command, size, data);
+    Comm_CallCommandRecv(netId, command, size, data);
     cursor->command = 0xEE;
     cursor->size = 0xFFFF;
     cursor->data = NULL;
@@ -1169,10 +1169,10 @@ void Comm_FinishCommand(int netId, int command, int size, void *data, PacketCurs
 #pragma force_active on
 
 void Comm_ReceiveCommands(CommRing *ring, int netId, u8 *buffer, PacketCursor *cursor) {
-    while (sub_02033BC4(ring)) {
+    while (ByteRing_GetReadableSize(ring)) {
         int command = cursor->command;
         if (command == 0xEE) {
-            command = sub_02033B68(ring);
+            command = ByteRing_ReadByte(ring);
             if (command == 0xEE) {
                 continue;
             }
@@ -1181,26 +1181,26 @@ void Comm_ReceiveCommands(CommRing *ring, int netId, u8 *buffer, PacketCursor *c
         cursor->command = command;
         int size = cursor->size;
         if (size == 0xFFFF) {
-            size = sub_020341DC(command);
+            size = Comm_GetCommandSize(command);
             if (gCommCore.work[0x6B8]) {
                 return;
             }
             if (size == 0xFFFF) {
-                if (sub_02033BC4(ring) < 1) {
+                if (ByteRing_GetReadableSize(ring) < 1) {
                     ring->read = start;
                     return;
                 }
-                size = sub_02033B68(ring) << 8;
-                size += sub_02033B68(ring);
+                size = ByteRing_ReadByte(ring) << 8;
+                size += ByteRing_ReadByte(ring);
                 start = ring->read;
             }
             cursor->size = size;
         }
-        if (sub_02034244(command)) {
+        if (Comm_CommandHasBuffer(command)) {
             if (!cursor->data) {
-                cursor->data = sub_02034280(command, netId, cursor->size);
+                cursor->data = Comm_GetCommandBuffer(command, netId, cursor->size);
             }
-            int copied = sub_02033B4C(ring, buffer, size - cursor->received);
+            int copied = ByteRing_Read(ring, buffer, size - cursor->received);
             if (cursor->data) {
                 MI_CpuCopy8(buffer, cursor->data + cursor->received, copied);
             }
@@ -1212,8 +1212,8 @@ void Comm_ReceiveCommands(CommRing *ring, int netId, u8 *buffer, PacketCursor *c
                 }
             }
         } else {
-            if (sub_02033BC4(ring) >= size) {
-                sub_02033B4C(ring, buffer, size);
+            if (ByteRing_GetReadableSize(ring) >= size) {
+                ByteRing_Read(ring, buffer, size);
                 Comm_FinishCommand(netId, command, size, buffer, cursor);
                 if (command == 17) {
                     break;
@@ -1231,8 +1231,8 @@ void Comm_ReceiveCommands(CommRing *ring, int netId, u8 *buffer, PacketCursor *c
 void Comm_ReceiveFromParent(void) {
     u8 *work = gCommCore.work;
     if (work != NULL && work[0x6BA] == 0) {
-        sub_02033C28(work + 0x4A4);
-        if (sub_02033BC4(gCommCore.work + 0x4A4) > 0) {
+        ByteRing_Commit(work + 0x4A4);
+        if (ByteRing_GetReadableSize(gCommCore.work + 0x4A4) > 0) {
             work = gCommCore.work;
             Comm_ReceiveCommands((CommRing *)(work + 0x4A4), 0, *(u8 **)(work + 0x494), (PacketCursor *)(work + 0x620));
         }
@@ -1251,8 +1251,8 @@ void Comm_ReceiveFromChildren(void) {
     if (count > 0) {
         offset = i;
         do {
-            sub_02033C28(gCommCore.work + 0x51C + offset);
-            if (sub_02033BC4(gCommCore.work + 0x51C + offset) > 0) {
+            ByteRing_Commit(gCommCore.work + 0x51C + offset);
+            if (ByteRing_GetReadableSize(gCommCore.work + 0x51C + offset) > 0) {
                 Comm_ReceiveCommands((CommRing *)(gCommCore.work + 0x51C + offset),
                     i,
                     *(u8 **)(gCommCore.work + 0x494),
@@ -1354,9 +1354,9 @@ int sub_0203751C(void) {
 
 int sub_0203753C(int command, void *data, int size) {
     if (Comm_GetTransferMode() == 1) {
-        return sub_02033DF0(gCommCore.work + 0x580, command, data, size, 1, 0);
+        return PacketPool_Enqueue(gCommCore.work + 0x580, command, data, size, 1, 0);
     }
-    return sub_02033DF0(gCommCore.work + 0x5A0, command, data, size, 1, 0);
+    return PacketPool_Enqueue(gCommCore.work + 0x5A0, command, data, size, 1, 0);
 }
 
 void sub_02037594(void) {
@@ -1485,15 +1485,15 @@ void CommRandom_Init(CommRandom *seed) {
 #pragma force_active off
 
 int sub_02037824(int value) {
-    return sub_02033F9C(gCommCore.work + 0x5A0, value);
+    return PacketPool_HasCommand(gCommCore.work + 0x5A0, value);
 }
 
 int sub_0203783C(void) {
-    return sub_02033C50(gCommCore.work + 0x5A0);
+    return PacketPool_AllNodesFree(gCommCore.work + 0x5A0);
 }
 
 int sub_02037854(void) {
-    return sub_02033C50(gCommCore.work + 0x580);
+    return PacketPool_AllNodesFree(gCommCore.work + 0x580);
 }
 
 void sub_0203786C(int value) {

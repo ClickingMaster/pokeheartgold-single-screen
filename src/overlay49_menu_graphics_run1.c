@@ -20,7 +20,7 @@ void ov49_0225A5AC(void *work, u32 index) {
 }
 
 void ov49_0225A5C8(void *work) {
-    ov49_0225E3AC(PTR_AT(work, 0x3E4));
+    WiFiPlazaModels_VBlank(PTR_AT(work, 0x3E4));
     ov49_02258BE0(PTR_AT(work, 0x3E0));
     ov49_0225A840(P_AT(work, 0x3C));
 }

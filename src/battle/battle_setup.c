@@ -17,7 +17,7 @@
 #include "save_wifi_history.h"
 #include "sys_flags.h"
 #include "system.h"
-#include "unk_02033AE0.h"
+#include "communication_command.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
 #include "unk_02054648.h"

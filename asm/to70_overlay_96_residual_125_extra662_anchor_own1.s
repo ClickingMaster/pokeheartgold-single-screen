@@ -83,7 +83,7 @@
 	.extern PokeathlonEvent_CirclePushPoints
 	.extern PokeathlonEvent_BlockSmashPoints
 	.extern PokeathlonEvent_DiscCatchPoints
-	.extern PokeathlonEvent_Event8Points
+	.extern PokeathlonEvent_SnowThrowPoints
 	.extern ov96_0221DC80
 	.extern ov96_0221DC88
 	.extern ov96_0221DC90
@@ -461,7 +461,7 @@ ov96_0221AEC4: ; 0x0221AEC4
 	.word PokeathlonCourseCmd_PacketSize
 	.word 0
 	.word PokeathlonCourseCmd_RecvEventData
-	.word sub_020342B8
+	.word CommCmd_GetSizeVariable
 	.word PokeathlonCourseCmd_GetEventDataBuffer
 	.word PokeathlonCourseCmd_RecvEventResult
 	.word PokeathlonCourseCmd_PacketSize

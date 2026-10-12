@@ -32,9 +32,9 @@ extern const u32 _021039B8[][3];
 
 void sub_020897C0(SummaryWork *);
 void sub_02089C50(SummaryWork *);
-void sub_0208C57C(SummaryWork *);
-void sub_0208C614(SummaryWork *);
-void sub_0208C6B4(SummaryWork *);
+void PokemonSummary_PrintNickname(SummaryWork *);
+void PokemonSummary_PrintLevel(SummaryWork *);
+void PokemonSummary_PrintHeldItem(SummaryWork *);
 void sub_02089F98(SummaryWork *);
 void PokemonSummary_ReloadPokepic(SummaryWork *);
 void sub_0208B448(SummaryWork *);
@@ -48,7 +48,7 @@ void sub_0208B48C(SummaryWork *);
 void sub_0208B4EC(SummaryWork *);
 void sub_0208BCD4(SummaryWork *);
 void sub_0208BD38(SummaryWork *);
-void sub_0208CBD4(SummaryWork *);
+void PokemonSummary_PrintPage(SummaryWork *);
 void sub_0208B400(SummaryWork *);
 void sub_0208BFD0(SummaryWork *);
 

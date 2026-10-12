@@ -62,7 +62,7 @@ extern const u8 sSearchFormCursorAnims[];
 
 // Entry screen tabs and list buttons (touch), A / B / Start (keys). In the national dex (unk_1860) left and
 // right switch between the Johto and national lists.
-int ov18_021F6B00(PokedexAppData *pokedexApp) {
+int PokedexApp_HandleListMenuInput(PokedexAppData *pokedexApp) {
     pokedexApp->unk_0864 = 0;
     if (System_GetTouchNew() == TRUE) {
         int hit = TouchscreenHitbox_FindRectAtTouchNew(ov18_021FB72C);
@@ -699,7 +699,7 @@ void PokedexApp_OnSearchFormGridTouch(PokedexAppData *pokedexApp, int target, in
 
 // The list in the search results (as PokedexApp_HandleListInput; the first entry of the first page
 // leaves the results).
-u32 ov18_021F7974(PokedexAppData *pokedexApp, int mode) {
+u32 PokedexApp_HandleSearchResultListInput(PokedexAppData *pokedexApp, int mode) {
     u32 x;
     u32 y;
     u32 input;
@@ -982,7 +982,7 @@ u32 PokedexApp_HandleFormCompareInput(PokedexAppData *pokedexApp, u32 *touched) 
     return -1;
 }
 
-u32 ov18_021F7E70(PokedexAppData *pokedexApp, u32 *touched) {
+u32 PokedexApp_HandleEntryMenuInput(PokedexAppData *pokedexApp, u32 *touched) {
     int ret = PokedexApp_HandleEntryTabTouch(pokedexApp, touched);
     if (ret != -1) {
         return ret;

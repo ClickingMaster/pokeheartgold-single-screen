@@ -18,7 +18,7 @@ sub_02089D68: ; 0x02089D68
 	ldrsb r1, [r5, r1]
 	cmp r1, r4
 	beq _02089E0C
-	bl sub_0208C4E0
+	bl PokemonSummary_RemovePageWindows
 	ldr r0, _02089E10 ; =0x000007BC
 	strb r4, [r5, r0]
 	add r0, r5, #0
@@ -34,7 +34,7 @@ sub_02089D68: ; 0x02089D68
 	add r0, r5, #0
 	bl sub_0208BCD4
 	add r0, r5, #0
-	bl sub_0208C42C
+	bl PokemonSummary_AddPageWindows
 	mov r0, #3
 	str r0, [sp]
 	mov r0, #0x12
@@ -66,7 +66,7 @@ sub_02089D68: ; 0x02089D68
 	mov r1, #4
 	bl BgCommitTilemapBufferToVram
 	add r0, r5, #0
-	bl sub_0208CBD4
+	bl PokemonSummary_PrintPage
 	add r0, r5, #0
 	bl sub_02089F98
 	mov r0, #0x8b

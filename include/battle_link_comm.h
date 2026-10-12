@@ -8,7 +8,7 @@
 #include "heap.h"
 #include "string_util.h"
 #include "sys_task.h"
-#include "unk_02033AE0.h"
+#include "communication_command.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
 typedef struct BattleLinkWork {

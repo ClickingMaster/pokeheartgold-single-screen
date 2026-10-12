@@ -35,7 +35,7 @@
 #include "metatile_behavior.h"
 #include "overlay_01.h"
 #include "overlay_01_021F1AFC.h"
-#include "overlay_01_021F3114.h"
+#include "field/spin_slide.h"
 #include "overlay_01_021F6830.h"
 #include "field_poison_effect.h"
 #include "overlay_04.h"
@@ -632,7 +632,7 @@ static u16 GetInteractedMetatileScript(FieldSystem *fieldSystem, u8 metatileBeha
 static BOOL FieldSystem_ProcessStep(FieldSystem *fieldSystem) {
     if (FieldSystem_IsSaveGymmickTypeEqualTo(fieldSystem, GYMMICK_BLACKTHORN) && BlackthornGymmick_TryStartPlatformAction(fieldSystem)) {
         return TRUE;
-    } else if (ov01_021F3114(fieldSystem, fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar)) == 1) {
+    } else if (PlayerAvatar_TryStartSpinSlide(fieldSystem, fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar)) == 1) {
         ViridianGymmick_HandleTileAction(fieldSystem, sub_0205F504(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)));
         return TRUE;
     }

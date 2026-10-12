@@ -165,70 +165,70 @@
 	.public _0208DE34
 	.public _0208DE38
 	.public _0208DE3C
-	.public _02104C84
-	.public _02104CC4
-	.public _02104D04
-	.public _02104D94
-	.public sub_0208C3E4
-	.public sub_0208C42C
-	.public sub_0208C4E0
-	.public sub_0208C560
-	.public sub_0208C57C
-	.public sub_0208C614
-	.public sub_0208C6B4
-	.public sub_0208C73C
-	.public sub_0208C778
-	.public sub_0208C7F8
-	.public sub_0208C850
-	.public sub_0208C87C
-	.public sub_0208C8C8
-	.public sub_0208C9A4
-	.public sub_0208CBD4
-	.public sub_0208CC88
-	.public sub_0208CFB4
-	.public sub_0208D078
-	.public sub_0208D0A4
-	.public sub_0208D178
-	.public sub_0208D474
+	.public gPokemonSummaryRibbonWindowTemplates
+	.public gPokemonSummaryInfoWindowTemplates
+	.public gPokemonSummaryStatsWindowTemplates
+	.public gPokemonSummaryWindowTemplates
+	.public PokemonSummary_AddWindows
+	.public PokemonSummary_AddPageWindows
+	.public PokemonSummary_RemovePageWindows
+	.public PokemonSummary_RemoveWindows
+	.public PokemonSummary_PrintNickname
+	.public PokemonSummary_PrintLevel
+	.public PokemonSummary_PrintHeldItem
+	.public PokemonSummary_IsPlayersMon
+	.public PokemonSummary_PrintBuffer
+	.public PokemonSummary_PrintStatLabel
+	.public PokemonSummary_PrintMessage
+	.public PokemonSummary_FormatNumber
+	.public PokemonSummary_PrintValuePair
+	.public PokemonSummary_PrintLabels
+	.public PokemonSummary_PrintPage
+	.public PokemonSummary_PrintInfo
+	.public PokemonSummary_PrintTrainerMemo
+	.public PokemonSummary_CountShinyLeaves
+	.public PokemonSummary_PrintMemo
+	.public PokemonSummary_PrintStats
+	.public PokemonSummary_PrintMoves
 	.public sub_0208D520
-	.public sub_0208D6B8
-	.public sub_0208D728
-	.public sub_0208D7C4
-	.public sub_0208D884
-	.public sub_0208D9A0
-	.public sub_0208DAD4
-	.public sub_0208DB1C
+	.public PokemonSummary_PrintRibbonCount
+	.public PokemonSummary_PrintFlavorPreference
+	.public PokemonSummary_PrintRibbonInfo
+	.public PokemonSummary_PrintMoveSlot
+	.public PokemonSummary_PrintMoveInfo
+	.public PokemonSummary_ClearMoveInfo
+	.public PokemonSummary_PrintMoveToLearn
 	.public sub_0208DB58
-	.public sub_0208DB64
+	.public PokemonSummary_PrintSwappedMoves
 	.public sub_0208DBF0
 	.public sub_0208DC68
 	.public sub_0208DD20
 	.public sub_0208DDA0
 	.text
-	.public sub_0208C4E0
-	.public sub_0208C560
-	.public sub_0208C73C
-	.public sub_0208C778
-	.public sub_0208C7F8
-	.public sub_0208C850
-	.public sub_0208C87C
-	.public sub_0208D078
-	.public sub_0208D0A4
-	.public sub_0208D474
-	.public sub_0208D6B8
-	.public sub_0208D728
-	.public sub_0208D7C4
-	.public sub_0208DAD4
-	.public sub_0208DB1C
+	.public PokemonSummary_RemovePageWindows
+	.public PokemonSummary_RemoveWindows
+	.public PokemonSummary_IsPlayersMon
+	.public PokemonSummary_PrintBuffer
+	.public PokemonSummary_PrintStatLabel
+	.public PokemonSummary_PrintMessage
+	.public PokemonSummary_FormatNumber
+	.public PokemonSummary_CountShinyLeaves
+	.public PokemonSummary_PrintMemo
+	.public PokemonSummary_PrintMoves
+	.public PokemonSummary_PrintRibbonCount
+	.public PokemonSummary_PrintFlavorPreference
+	.public PokemonSummary_PrintRibbonInfo
+	.public PokemonSummary_ClearMoveInfo
+	.public PokemonSummary_PrintMoveToLearn
 	.public sub_0208DB58
-	.public sub_0208DB64
+	.public PokemonSummary_PrintSwappedMoves
 	.public sub_0208DBF0
 	.public sub_0208DC68
 	.public sub_0208DD20
 	.public sub_0208DDA0
 
-	thumb_func_start sub_0208C8C8
-sub_0208C8C8: ; 0x0208C8C8
+	thumb_func_start PokemonSummary_PrintValuePair
+PokemonSummary_PrintValuePair: ; 0x0208C8C8
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x20
 	add r4, r0, #0
@@ -282,7 +282,7 @@ sub_0208C8C8: ; 0x0208C8C8
 	ldrb r3, [r3, #0x1c]
 	ldr r1, [sp, #0x10]
 	add r0, r4, #0
-	bl sub_0208C87C
+	bl PokemonSummary_FormatNumber
 	ldr r1, _0208C99C ; =0x000007AC
 	mov r0, #0
 	ldr r1, [r4, r1]
@@ -311,7 +311,7 @@ sub_0208C8C8: ; 0x0208C8C8
 	ldrb r3, [r3, #0x1c]
 	ldr r1, [sp, #0x38]
 	add r0, r4, #0
-	bl sub_0208C87C
+	bl PokemonSummary_FormatNumber
 	ldr r0, [sp, #0x1c]
 	mov r1, #0
 	str r0, [sp]
@@ -330,11 +330,11 @@ sub_0208C8C8: ; 0x0208C8C8
 	.balign 4, 0
 _0208C99C: .word 0x000007AC
 _0208C9A0: .word 0x00010200
-	thumb_func_end sub_0208C8C8
+	thumb_func_end PokemonSummary_PrintValuePair
 
 
-	thumb_func_start sub_0208C9A4
-sub_0208C9A4: ; 0x0208C9A4
+	thumb_func_start PokemonSummary_PrintLabels
+PokemonSummary_PrintLabels: ; 0x0208C9A4
 	push {r4, lr}
 	sub sp, #0x10
 	ldr r3, _0208CBC8 ; =0x000E0F00
@@ -342,35 +342,35 @@ sub_0208C9A4: ; 0x0208C9A4
 	mov r2, #7
 	add r4, r0, #0
 	str r1, [sp]
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #1
 	mov r2, #0x17
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #2
 	mov r2, #0x6d
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #3
 	mov r2, #0x7e
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #4
 	mov r2, #0x80
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0x8b
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
@@ -383,7 +383,7 @@ sub_0208C9A4: ; 0x0208C9A4
 	add r0, r4, #0
 	mov r1, #5
 	mov r2, #0x9d
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	b _0208CA1E
 _0208CA14:
 	add r0, r4, #0
@@ -397,97 +397,97 @@ _0208CA1E:
 	add r0, r4, #0
 	mov r1, #6
 	mov r2, #4
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #7
 	mov r2, #8
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #8
 	mov r2, #0xa
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #9
 	mov r2, #0xc
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #0xa
 	mov r2, #0xd
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #0xb
 	mov r2, #0xf
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #0xc
 	mov r2, #0x11
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #0xd
 	mov r2, #0x13
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #0xf
 	mov r2, #0x6e
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r3, #0
 	add r0, r4, #0
 	mov r1, #0x10
 	mov r2, #0x6f
 	str r3, [sp]
-	bl sub_0208C7F8
+	bl PokemonSummary_PrintStatLabel
 	mov r0, #0
 	str r0, [sp]
 	add r0, r4, #0
 	mov r1, #0x11
 	mov r2, #0x70
 	mov r3, #1
-	bl sub_0208C7F8
+	bl PokemonSummary_PrintStatLabel
 	mov r0, #0
 	str r0, [sp]
 	add r0, r4, #0
 	mov r1, #0x12
 	mov r2, #0x71
 	mov r3, #3
-	bl sub_0208C7F8
+	bl PokemonSummary_PrintStatLabel
 	mov r0, #0
 	str r0, [sp]
 	add r0, r4, #0
 	mov r1, #0x13
 	mov r2, #0x72
 	mov r3, #4
-	bl sub_0208C7F8
+	bl PokemonSummary_PrintStatLabel
 	mov r0, #0
 	str r0, [sp]
 	add r0, r4, #0
 	mov r1, #0x14
 	mov r2, #0x73
 	mov r3, #2
-	bl sub_0208C7F8
+	bl PokemonSummary_PrintStatLabel
 	mov r2, #0x7a
 	lsl r2, r2, #4
 	ldr r0, [r4, r2]
@@ -534,60 +534,60 @@ _0208CA1E:
 	add r0, r4, #0
 	mov r1, #0x18
 	mov r2, #0x95
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #0x19
 	mov r2, #0x93
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #0x1a
 	mov r2, #0x94
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #2
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #0x1b
 	mov r2, #0xa2
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #2
 	str r0, [sp]
 	ldr r3, _0208CBD0 ; =0x00010200
 	add r0, r4, #0
 	mov r1, #0x1c
 	mov r2, #0xa0
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBD0 ; =0x00010200
 	add r0, r4, #0
 	mov r1, #0x1d
 	mov r2, #0xb6
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	mov r0, #0
 	str r0, [sp]
 	ldr r3, _0208CBC8 ; =0x000E0F00
 	add r0, r4, #0
 	mov r1, #0x1e
 	mov r2, #0xb3
-	bl sub_0208C850
+	bl PokemonSummary_PrintMessage
 	add sp, #0x10
 	pop {r4, pc}
 	.balign 4, 0
 _0208CBC8: .word 0x000E0F00
 _0208CBCC: .word 0x000007AC
 _0208CBD0: .word 0x00010200
-	thumb_func_end sub_0208C9A4
+	thumb_func_end PokemonSummary_PrintLabels
 
 
-	thumb_func_start sub_0208CBD4
-sub_0208CBD4: ; 0x0208CBD4
+	thumb_func_start PokemonSummary_PrintPage
+PokemonSummary_PrintPage: ; 0x0208CBD4
 	push {r4, lr}
 	sub sp, #0x10
 	mov r2, #0
@@ -646,38 +646,38 @@ _0208CC40: ; jump table
 	.short _0208CC78 - _0208CC40 - 2 ; case 3
 _0208CC48:
 	add r0, r4, #0
-	bl sub_0208CC88
+	bl PokemonSummary_PrintInfo
 	add r0, r4, #0
-	bl sub_0208D0A4
+	bl PokemonSummary_PrintMemo
 	add sp, #0x10
 	pop {r4, pc}
 _0208CC58:
 	add r0, r4, #0
-	bl sub_0208D178
+	bl PokemonSummary_PrintStats
 	add r0, r4, #0
-	bl sub_0208D474
+	bl PokemonSummary_PrintMoves
 	add sp, #0x10
 	pop {r4, pc}
 _0208CC68:
 	add r0, r4, #0
 	bl sub_0208D520
 	add r0, r4, #0
-	bl sub_0208D6B8
+	bl PokemonSummary_PrintRibbonCount
 	add sp, #0x10
 	pop {r4, pc}
 _0208CC78:
 	add r0, r4, #0
-	bl sub_0208D728
+	bl PokemonSummary_PrintFlavorPreference
 _0208CC7E:
 	add sp, #0x10
 	pop {r4, pc}
 	nop
 _0208CC84: .word 0x000007BC
-	thumb_func_end sub_0208CBD4
+	thumb_func_end PokemonSummary_PrintPage
 
 
-	thumb_func_start sub_0208CC88
-sub_0208CC88: ; 0x0208CC88
+	thumb_func_start PokemonSummary_PrintInfo
+PokemonSummary_PrintInfo: ; 0x0208CC88
 	push {r3, r4, r5, lr}
 	sub sp, #0x10
 	add r4, r0, #0
@@ -824,7 +824,7 @@ _0208CD34:
 	add r0, r4, #0
 	mov r1, #9
 	mov r3, #3
-	bl sub_0208C87C
+	bl PokemonSummary_FormatNumber
 	b _0208CE00
 _0208CDF0:
 	mov r2, #0x7a
@@ -846,7 +846,7 @@ _0208CE00:
 	ldr r2, _0208CFA8 ; =0x00010200
 	add r0, r4, #0
 	mov r3, #2
-	bl sub_0208C778
+	bl PokemonSummary_PrintBuffer
 	b _0208CE2A
 _0208CE1C:
 	sub r1, #0x5c
@@ -854,7 +854,7 @@ _0208CE1C:
 	ldr r2, _0208CFAC ; =0x00050600
 	add r0, r4, #0
 	mov r3, #2
-	bl sub_0208C778
+	bl PokemonSummary_PrintBuffer
 _0208CE2A:
 	mov r1, #0x23
 	lsl r1, r1, #4
@@ -939,7 +939,7 @@ _0208CEC4:
 	mov r1, #0x10
 	lsr r2, r2, #0x10
 	mov r3, #5
-	bl sub_0208C87C
+	bl PokemonSummary_FormatNumber
 	mov r1, #0x89
 	lsl r1, r1, #2
 	ldr r1, [r4, r1]
@@ -947,7 +947,7 @@ _0208CEC4:
 	add r0, r4, #0
 	add r1, #0x30
 	mov r3, #2
-	bl sub_0208C778
+	bl PokemonSummary_PrintBuffer
 	mov r0, #0
 	mov r2, #0x92
 	str r0, [sp]
@@ -956,7 +956,7 @@ _0208CEC4:
 	add r0, r4, #0
 	mov r1, #0x12
 	mov r3, #7
-	bl sub_0208C87C
+	bl PokemonSummary_FormatNumber
 	mov r1, #0x89
 	lsl r1, r1, #2
 	ldr r1, [r4, r1]
@@ -964,7 +964,7 @@ _0208CEC4:
 	add r0, r4, #0
 	add r1, #0x40
 	mov r3, #1
-	bl sub_0208C778
+	bl PokemonSummary_PrintBuffer
 	ldr r3, _0208CFB0 ; =0x00000242
 	ldrb r0, [r4, r3]
 	lsl r0, r0, #0x19
@@ -982,7 +982,7 @@ _0208CEC4:
 	mov r1, #0x15
 	sub r2, r5, r2
 	mov r3, #7
-	bl sub_0208C87C
+	bl PokemonSummary_FormatNumber
 	b _0208CF4A
 _0208CF3C:
 	mov r2, #0
@@ -990,7 +990,7 @@ _0208CF3C:
 	mov r1, #0x15
 	mov r3, #7
 	str r2, [sp]
-	bl sub_0208C87C
+	bl PokemonSummary_FormatNumber
 _0208CF4A:
 	mov r1, #0x89
 	lsl r1, r1, #2
@@ -999,7 +999,7 @@ _0208CF4A:
 	add r0, r4, #0
 	add r1, #0x50
 	mov r3, #1
-	bl sub_0208C778
+	bl PokemonSummary_PrintBuffer
 	mov r0, #0x89
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
@@ -1035,11 +1035,11 @@ _0208CF4A:
 _0208CFA8: .word 0x00010200
 _0208CFAC: .word 0x00050600
 _0208CFB0: .word 0x00000242
-	thumb_func_end sub_0208CC88
+	thumb_func_end PokemonSummary_PrintInfo
 
 
-	thumb_func_start sub_0208CFB4
-sub_0208CFB4: ; 0x0208CFB4
+	thumb_func_start PokemonSummary_PrintTrainerMemo
+PokemonSummary_PrintTrainerMemo: ; 0x0208CFB4
 	push {r3, r4, r5, lr}
 	sub sp, #0x10
 	add r5, r0, #0
@@ -1134,4 +1134,4 @@ _0208D04E:
 	pop {r3, r4, r5, pc}
 	nop
 _0208D074: .word 0x00010200
-	thumb_func_end sub_0208CFB4
+	thumb_func_end PokemonSummary_PrintTrainerMemo

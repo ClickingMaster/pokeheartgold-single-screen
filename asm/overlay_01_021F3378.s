@@ -9,17 +9,17 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_021F3378
-	.public ov01_021F33B8
-	.public ov01_021F348C
-	.public ov01_021F35C4
+	.public WarpSpin_RotatePlayer
+	.public Task_WarpSpinDeparture
+	.public Task_WarpSpinArrival
+	.public FieldSystem_StartWarpSpin
 	.include "overlay_01_021F3378.inc"
 	.include "global.inc"
 
 	.text
 
-	thumb_func_start ov01_021F3378
-ov01_021F3378: ; 0x021F3378
+	thumb_func_start WarpSpin_RotatePlayer
+WarpSpin_RotatePlayer: ; 0x021F3378
 	add r1, r0, #0
 	ldr r0, [r1, #0x10]
 	cmp r0, #3
@@ -58,10 +58,10 @@ _021F33AA:
 	bx r3
 	.balign 4, 0
 _021F33B4: .word PlayerAvatar_SetFacingDirection
-	thumb_func_end ov01_021F3378
+	thumb_func_end WarpSpin_RotatePlayer
 
-	thumb_func_start ov01_021F33B8
-ov01_021F33B8: ; 0x021F33B8
+	thumb_func_start Task_WarpSpinDeparture
+Task_WarpSpinDeparture: ; 0x021F33B8
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x24
 	add r5, r1, #0
@@ -92,7 +92,7 @@ _021F33E2:
 	add r0, r2, r1
 	beq _021F33F8
 	add r0, r5, #0
-	bl ov01_021F3378
+	bl WarpSpin_RotatePlayer
 _021F33F8:
 	add r0, r6, #0
 	add r1, sp, #0x18
@@ -156,10 +156,10 @@ _021F347A:
 _021F3480: .word SEQ_SE_DP_TELE2
 _021F3484: .word 0x9999999A
 _021F3488: .word 0x40C19999
-	thumb_func_end ov01_021F33B8
+	thumb_func_end Task_WarpSpinDeparture
 
-	thumb_func_start ov01_021F348C
-ov01_021F348C: ; 0x021F348C
+	thumb_func_start Task_WarpSpinArrival
+Task_WarpSpinArrival: ; 0x021F348C
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x20
 	add r5, r1, #0
@@ -222,7 +222,7 @@ _021F3508:
 	add r0, r2, r1
 	beq _021F351E
 	add r0, r5, #0
-	bl ov01_021F3378
+	bl WarpSpin_RotatePlayer
 _021F351E:
 	add r0, r4, #0
 	add r1, sp, #0x14
@@ -296,10 +296,10 @@ _021F35B4:
 _021F35B8: .word 0x9999999A
 _021F35BC: .word 0x40C19999
 _021F35C0: .word SEQ_SE_DP_TELE2
-	thumb_func_end ov01_021F348C
+	thumb_func_end Task_WarpSpinArrival
 
-	thumb_func_start ov01_021F35C4
-ov01_021F35C4: ; 0x021F35C4
+	thumb_func_start FieldSystem_StartWarpSpin
+FieldSystem_StartWarpSpin: ; 0x021F35C4
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r6, r1, #0
@@ -318,18 +318,18 @@ ov01_021F35C4: ; 0x021F35C4
 	str r0, [r4, #0x10]
 	cmp r6, #0
 	beq _021F35FA
-	ldr r0, _021F3608 ; =ov01_021F33B8
+	ldr r0, _021F3608 ; =Task_WarpSpinDeparture
 	add r1, r4, #0
 	mov r2, #0x64
 	bl SysTask_CreateOnMainQueue
 	pop {r3, r4, r5, r6, r7, pc}
 _021F35FA:
-	ldr r0, _021F360C ; =ov01_021F348C
+	ldr r0, _021F360C ; =Task_WarpSpinArrival
 	add r1, r4, #0
 	mov r2, #0x64
 	bl SysTask_CreateOnMainQueue
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_021F3608: .word ov01_021F33B8
-_021F360C: .word ov01_021F348C
-	thumb_func_end ov01_021F35C4
+_021F3608: .word Task_WarpSpinDeparture
+_021F360C: .word Task_WarpSpinArrival
+	thumb_func_end FieldSystem_StartWarpSpin

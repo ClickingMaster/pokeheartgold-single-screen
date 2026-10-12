@@ -29,8 +29,8 @@ void sub_02089CB4(void *v) {
     sub_0208C2A0(v);
     sub_0208BD38(v);
     sub_0208BCD4(v);
-    sub_0208C42C(v);
-    sub_0208CBD4(v);
+    PokemonSummary_AddPageWindows(v);
+    PokemonSummary_PrintPage(v);
     sub_02089F98(v);
     sub_0208B9C8(v);
     if (*((u8 *)*(void **)(w + 0x22c) + 0x12) == 2) {

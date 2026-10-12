@@ -48,7 +48,7 @@ Comm_ResetNetIdBuffers: ; 0x02035DE0
 	ldr r2, [sp]
 	add r0, r0, r4
 	add r1, r1, r7
-	bl sub_02033AE0
+	bl ByteRing_Init
 	ldr r0, _02035E84 ; =gCommCore
 	ldr r1, _02035E90 ; =0x0000051C
 	ldr r2, [r0, #8]
@@ -58,7 +58,7 @@ Comm_ResetNetIdBuffers: ; 0x02035DE0
 	ldr r2, [sp]
 	add r0, r0, r4
 	add r1, r1, r7
-	bl sub_02033AE0
+	bl ByteRing_Init
 	ldr r3, _02035E84 ; =gCommCore
 	ldr r2, _02035E94 ; =0x000005CA
 	ldr r0, [r3, #8]

@@ -4,7 +4,7 @@ void sub_02089D68(SummaryState89 *state, int selection) {
     if ((s8)state->data[0x7B8] == selection) {
         return;
     }
-    sub_0208C4E0(state);
+    PokemonSummary_RemovePageWindows(state);
     state->data[0x7B8] = selection;
     sub_0208B448(state);
     sub_0208B5A8(state);
@@ -12,12 +12,12 @@ void sub_02089D68(SummaryState89 *state, int selection) {
     sub_0208B9C8(state);
     sub_0208C2A0(state);
     sub_0208BCD4(state);
-    sub_0208C42C(state);
+    PokemonSummary_AddPageWindows(state);
     FillBgTilemapRect(state->bgConfig, 1, 0, 0, 3, 0x12, 0x14, 0);
     BgCommitTilemapBufferToVram(state->bgConfig, 1);
     FillBgTilemapRect(state->bgConfig, 4, 0, 0, 3, 0x12, 0x14, 0);
     BgCommitTilemapBufferToVram(state->bgConfig, 4);
-    sub_0208CBD4(state);
+    PokemonSummary_PrintPage(state);
     sub_02089F98(state);
     if (*((u8 *)(*(void **)((u8 *)state + 0x22C)) + 0x12) == 2) {
         sub_0208A950(state);

@@ -133,7 +133,7 @@ PokemonSummary_Init: ; 0x02088298
 	add r0, r4, #0
 	bl sub_0208BECC
 	add r0, r4, #0
-	bl sub_0208C3E4
+	bl PokemonSummary_AddWindows
 	add r0, r4, #0
 	bl sub_02089CB4
 	add r0, r4, #0
@@ -345,7 +345,7 @@ PokemonSummary_Exit: ; 0x0208856C
 	add r0, r4, #0
 	bl sub_0208B258
 	add r0, r4, #0
-	bl sub_0208C560
+	bl PokemonSummary_RemoveWindows
 	ldr r0, [r4]
 	bl sub_0208877C
 	bl GF_TouchpadStopSampling

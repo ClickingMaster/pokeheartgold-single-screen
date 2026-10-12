@@ -12,7 +12,7 @@ extern void WiFiPlazaObj_GetPosition(void *p, VecFx32 *v);
 extern void WiFiPlazaObj_SetPosition(void *p, const VecFx32 *v);
 extern void WiFiPlazaCamera_SetTarget(void *p, u32 a, u32 b, u32 c);
 extern void ov45_0222AE08(void *p, fx32 *a, fx32 *b);
-extern void ov49_0225E420(void *p, fx32 a, fx32 b, VecFx32 *v);
+extern void WiFiPlazaModels_GetMoverFrontPos(void *p, fx32 a, fx32 b, VecFx32 *v);
 extern u32 ov49_0225EF88(void *p);
 extern void ov49_0225EF90(void *p);
 extern u32 WiFiPlazaRoom_GetLobby(void *p);

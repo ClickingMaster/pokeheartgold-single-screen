@@ -9,13 +9,14 @@
 #include <nitro/code32.h>
 #pragma force_active on
 
-// Handlers of the lines received from the chat server, part 1 (the command table): messages, the user and
-// channel commands, errors and invitations, and the channel user list replies (353 / 366). The server command of
-// each handler is noted above it.
+// Handlers of the lines received from the chat server (the command table): messages, the user and channel
+// commands, errors and invitations, the channel user list, topic and WHO replies, and nick errors. The server
+// command of each handler is noted above it.
 
 extern void __msl_assertion_failed(const char *, const char *, const char *, int);
 extern char *strchr(const char *, int);
 extern char *strtok(char *, const char *);
+extern const char ov45_02255E84[];
 extern const char ov45_02255E94[];
 extern const char ov45_02255EA4[];
 extern const char ov45_02255ED4[];
@@ -31,8 +32,13 @@ extern const char ov45_02255F64[];
 extern const char ov45_02255FA4[];
 extern const char ov45_02255FB4[];
 extern const char ov45_02255FE8[];
+extern const char ov45_0225604C[];
 extern const char ov45_02256088[];
 extern const char ov45_022560D8[];
+extern const char ov45_02256100[];
+extern const char ov45_02256140[];
+extern const char ov45_02256158[];
+extern const char ov45_022561D0[];
 extern const char ov45_02256324[];
 extern const char ov45_02256340[];
 extern const char ov45_022565C0[];
@@ -59,6 +65,10 @@ extern const char ov45_02256828[];
 extern const char ov45_02256838[];
 extern const char ov45_02256848[];
 extern const char ov45_02256860[];
+extern const char ov45_02256864[];
+extern const char ov45_0225687C[];
+extern const char ov45_02256894[];
+extern const char ov45_0225689C[];
 
 #define ASSERT(cond, message, func, line)                           \
     if (!(cond)) {                                                  \
@@ -818,4 +828,225 @@ void ov45_0224C9D8(ChatConnection *chat, ChatMessage *message) {
         usersResult.modes = list->modes;
         ov45_02249A0C(chat, request, (u32 *)&usersResult);
     }
+}
+
+// 332: the topic of a channel (answer to a topic request, or sent when the channel is entered).
+void ov45_0224CBAC(ChatConnection *chat, ChatMessage *message) {
+    char *channel, *topic;
+    ChatRequest *request;
+    ASSERT(message->paramCount == 3, ov45_02256848, ov45_0225604C, 2565);
+    if (message->paramCount != 3) {
+        return;
+    }
+    channel = message->params[1];
+    topic = message->params[2];
+    ov45_022486E0(chat, channel, topic);
+    ChatRequestKey key = { 0 };
+    u32 results[3];
+    ChatTopicArgs args;
+    key.type = 2;
+    key.name = channel;
+    request = ov45_022496AC(chat, 1, &key);
+    if (request) {
+        results[0] = TRUE;
+        results[1] = (u32)channel;
+        results[2] = (u32)topic;
+        ov45_02249A0C(chat, request, results);
+        return;
+    }
+    ChatChannelCallbacks *callbacks = ov45_02247E98(chat, channel);
+    if (!callbacks || !callbacks->topicChanged) {
+        return;
+    }
+    args.channel = channel;
+    args.topic = topic;
+    ov45_02244D30(chat, 9, callbacks->topicChanged, (u32 *)&args, callbacks->param, 0, channel, sizeof(args));
+}
+
+// 331: a channel has no topic.
+void ov45_0224CCC8(ChatConnection *chat, ChatMessage *message) {
+    char *channel;
+    ChatRequest *request;
+    ASSERT(message->paramCount >= 2, ov45_022567F4, ov45_02256100, 2620);
+    if (message->paramCount < 2) {
+        return;
+    }
+    channel = message->params[1];
+    ChatRequestKey key = { 0 };
+    u32 results[3];
+    ChatTopicArgs args;
+    key.type = 2;
+    key.name = channel;
+    request = ov45_022496AC(chat, 1, &key);
+    if (request) {
+        results[0] = TRUE;
+        results[1] = (u32)channel;
+        results[2] = (u32)ov45_02256708;
+        ov45_02249A0C(chat, request, results);
+        return;
+    }
+    ChatChannelCallbacks *callbacks = ov45_02247E98(chat, channel);
+    if (!callbacks || !callbacks->topicChanged) {
+        return;
+    }
+    args.channel = channel;
+    args.topic = ov45_02256708;
+    ov45_02244D30(chat, 9, callbacks->topicChanged, (u32 *)&args, callbacks->param, 0, channel, sizeof(args));
+}
+
+// 433: the nick is already in use (fails a nick change, or reported while connecting).
+void ov45_0224CDE0(ChatConnection *chat, ChatMessage *message) {
+    char *oldNick, *newNick;
+    ChatRequest *request;
+    ASSERT_CHAT(chat, ov45_022561D0, 2669);
+    ASSERT(message->paramCount == 3, ov45_02256848, ov45_022561D0, 2675);
+    if (message->paramCount != 3) {
+        return;
+    }
+    oldNick = message->params[0];
+    newNick = message->params[1];
+    ChatRequestKey key = { 0 };
+    u32 results[3];
+    key.type = 9;
+    key.name = oldNick;
+    key.name2 = newNick;
+    request = ov45_022496AC(chat, 1, &key);
+    if (request) {
+        results[0] = FALSE;
+        results[1] = (u32)oldNick;
+        results[2] = (u32)newNick;
+        ov45_02249A0C(chat, request, results);
+        return;
+    }
+    ASSERT(chat->connecting, ov45_02256864, ov45_022561D0, 2707);
+    if (!chat->connecting) {
+        return;
+    }
+    ov45_02251B0C(chat, 1, chat->nick, 0, 0);
+}
+
+// 352: one user of a WHO reply (channel, user, host, server, nick, flags "H@+", ...).
+void ov45_0224CF0C(ChatConnection *chat, ChatMessage *message) {
+    ChatRequestKey keys[3];
+    u32 modeResult[4];
+    u32 addressResult[4];
+    u32 channelResult[5];
+    char *channel, *nick, *user, *host;
+    ChatRequest *request;
+    ASSERT(message->paramCount == 8, ov45_0225687C, ov45_02256140, 2726);
+    if (message->paramCount != 8) {
+        return;
+    }
+    user = message->params[2];
+    host = message->params[3];
+    nick = message->params[5];
+    channel = message->params[1];
+    ov45_02249460(chat, nick, user, host);
+    {
+        memset(keys, 0, sizeof(keys));
+        keys[0].type = 6;
+        keys[1].type = 10;
+        keys[2].type = 11;
+        keys[0].name = nick;
+        keys[0].name2 = channel;
+        keys[1].name = nick;
+        keys[2].name = channel;
+        request = ov45_022496AC(chat, 3, keys);
+        if (request == NULL) {
+            return;
+        }
+        if (request->type == 6) {
+            u32 mode;
+            const char *flags;
+            flags = message->params[6];
+            mode = 0;
+            if (strchr(flags, '@') != NULL) {
+                mode |= 2;
+            }
+            if (strchr(flags, '+') != NULL) {
+                mode |= 1;
+            }
+            modeResult[0] = TRUE;
+            modeResult[1] = (u32)channel;
+            modeResult[2] = (u32)nick;
+            modeResult[3] = mode;
+            ov45_02249A0C(chat, request, modeResult);
+        } else if (request->type == 10) {
+            addressResult[0] = TRUE;
+            addressResult[1] = (u32)nick;
+            addressResult[2] = (u32)user;
+            addressResult[3] = (u32)host;
+            ov45_02244D30(chat, 21, request->callback, addressResult, request->param, request->id, NULL, sizeof(addressResult));
+            request->callback = NULL;
+        } else if (request->type == 11 && request->callback != NULL) {
+            channelResult[0] = TRUE;
+            channelResult[1] = (u32)request->name;
+            channelResult[2] = (u32)nick;
+            channelResult[3] = (u32)user;
+            channelResult[4] = (u32)host;
+            ov45_02244D30(chat, 22, request->callback, channelResult, request->param, request->id, NULL, sizeof(channelResult));
+        }
+    }
+}
+
+// 315: end of a WHO reply.
+void ov45_0224D128(ChatConnection *chat, ChatMessage *message) {
+    char *name;
+    ChatRequest *request;
+    ASSERT(message->paramCount == 3, ov45_02256848, ov45_02256158, 2829);
+    if (message->paramCount != 3) {
+        return;
+    }
+    name = message->params[1];
+    ChatRequestKey keys[2] = { 0 };
+    u32 addressResult[4];
+    u32 channelResult[5];
+    keys[0].type = 10;
+    keys[0].name = name;
+    keys[1].type = 11;
+    keys[1].name = name;
+    request = ov45_022496AC(chat, 2, keys);
+    if (!request) {
+        return;
+    }
+    if (request->type == 10) {
+        addressResult[0] = FALSE;
+        addressResult[1] = (u32)name;
+        addressResult[2] = 0;
+        addressResult[3] = 0;
+        ov45_02249A0C(chat, request, addressResult);
+        return;
+    }
+    if (request->type == 11) {
+        channelResult[0] = TRUE;
+        channelResult[1] = (u32)name;
+        channelResult[2] = 0;
+        channelResult[3] = 0;
+        channelResult[4] = 0;
+        ov45_02249A0C(chat, request, channelResult);
+    }
+}
+
+// Returns a heap copy of the field after the backslash at text (up to the next backslash or the end) and its
+// length with the backslash in *length; NULL when text does not start with a backslash.
+char *ov45_0224D240(const char *text, int *length) {
+    int n;
+    char *field;
+    ASSERT(text, ov45_02256894, ov45_02255E84, 2888);
+    ASSERT(length, ov45_0225689C, ov45_02255E84, 2889);
+    if (!text || *text != '\\') {
+        return NULL;
+    }
+    n = 0;
+    while (text[n + 1] && text[n + 1] != '\\') {
+        n++;
+    }
+    field = ov00_021EC3A8(n + 1);
+    if (!field) {
+        return NULL;
+    }
+    memcpy(field, text + 1, n);
+    field[n] = 0;
+    *length = n + 1;
+    return field;
 }

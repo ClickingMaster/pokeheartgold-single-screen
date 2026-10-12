@@ -4,7 +4,7 @@
 #include "player_avatar.h"
 #include "pokemon.h"
 #include "frontier_save_access.h"
-#include "unk_02033AE0.h"
+#include "communication_command.h"
 #include "unk_02035900.h"
 
 extern const u32 _02108594[];

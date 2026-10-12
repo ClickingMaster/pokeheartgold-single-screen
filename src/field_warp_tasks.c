@@ -4,6 +4,7 @@
 #include "constants/init_script_types.h"
 #include "constants/maps.h"
 
+#include "field/warp_spin.h"
 #include "field_bgm.h"
 #include "field_system_rtc_weather.h"
 #include "follow_mon.h"
@@ -482,7 +483,7 @@ static BOOL FieldTask_ContinueGame_CommError(TaskManager *taskManager) {
         break;
     case 3:
         env->state = 0;
-        ov01_021F35C4(fieldSystem, 0, &env->state);
+        FieldSystem_StartWarpSpin(fieldSystem, 0, &env->state);
         (*state_p)++;
         break;
     case 4:
@@ -893,7 +894,7 @@ static BOOL sub_02053CCC(TaskManager *taskManager) {
         break;
     case 1:
         if (env->unk1C == 0 || !FieldEffect_IsActive(env->unk1C)) {
-            ov01_021F35C4(fieldSystem, 1, &env->unk4);
+            FieldSystem_StartWarpSpin(fieldSystem, 1, &env->unk4);
             env->unk0++;
         }
         break;
@@ -918,7 +919,7 @@ static BOOL sub_02053CCC(TaskManager *taskManager) {
         break;
     case 5:
         env->unk4 = 0;
-        ov01_021F35C4(fieldSystem, 0, &env->unk4);
+        FieldSystem_StartWarpSpin(fieldSystem, 0, &env->unk4);
         if (FollowMon_IsActive(fieldSystem)) {
             follow_mon_obj = FollowMon_GetMapObject(fieldSystem);
             if (FollowMon_GetPermissionBySpeciesAndMap(FollowMon_GetSpecies(follow_mon_obj), location->mapId)) {
@@ -963,7 +964,7 @@ static BOOL sub_02053E5C(TaskManager *taskManager) {
     switch (*state_p) {
     case 0:
         FieldBGM_TryFadeIn(fieldSystem, location->mapId);
-        ov01_021F35C4(fieldSystem, 1, &env->unk4);
+        FieldSystem_StartWarpSpin(fieldSystem, 1, &env->unk4);
         (*state_p)++;
         break;
     case 1:
@@ -1038,7 +1039,7 @@ static BOOL sub_02053F70(TaskManager *taskManager) {
         break;
     case 4:
         env->unk4 = 0;
-        ov01_021F35C4(fieldSystem, 0, &env->unk4);
+        FieldSystem_StartWarpSpin(fieldSystem, 0, &env->unk4);
         (*state_p)++;
         break;
     case 5:

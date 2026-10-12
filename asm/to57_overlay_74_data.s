@@ -6,7 +6,7 @@
 	.include "overlay_74_thumb.inc"
 	.include "global.inc"
 	.public gApplication_TitleScreen
-	.public sub_020342C0
+	.public CommCmd_GetSize0
 
 	.public MainMenuApp_Init
 	.public MainMenuApp_Main
@@ -527,7 +527,7 @@ sMysteryGiftCommCommands:
 	.word MysteryGiftComm_GetRecvBufferSize
 	.word MysteryGiftComm_GetRecvBuffer
 	.word ov74_02229DE0
-	.word sub_020342C0
+	.word CommCmd_GetSize0
 	.word 0
 gApp_MainMenu_SelectOption_MysteryGift:
 	.word MysteryGiftApp_Init, MysteryGiftApp_Main, MysteryGiftApp_Exit, 0xFFFFFFFF

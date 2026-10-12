@@ -275,7 +275,7 @@
 	.public PokeathlonEvent_CirclePushPoints
 	.public PokeathlonEvent_BlockSmashPoints
 	.public PokeathlonEvent_DiscCatchPoints
-	.public PokeathlonEvent_Event8Points
+	.public PokeathlonEvent_SnowThrowPoints
 	.set R86_GAP, 1
 	.include "asm/macros.inc"
 	.include "overlay_96.inc"

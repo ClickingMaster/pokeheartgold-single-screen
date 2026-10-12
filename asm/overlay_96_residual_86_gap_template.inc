@@ -238,7 +238,7 @@
 	.public PokeathlonEvent_CirclePushPoints
 	.public PokeathlonEvent_BlockSmashPoints
 	.public PokeathlonEvent_DiscCatchPoints
-	.public PokeathlonEvent_Event8Points
+	.public PokeathlonEvent_SnowThrowPoints
 
 	.if 0
 	thumb_func_start ov96_02204DF8

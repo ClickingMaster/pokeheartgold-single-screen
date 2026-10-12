@@ -312,7 +312,7 @@
 .public ApricornRecord_New
 .public ApricornBox_StoreJuiceRecords
 .public Comm_RegisterCommandTable
-.public sub_020342B8
+.public CommCmd_GetSizeVariable
 .public CommPlayerInfo_GetProfile
 .public sub_02036FD8
 .public Comm_SendCommand

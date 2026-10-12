@@ -4,8 +4,8 @@
 
 	.bss
 
-	.public _021D412C
-_021D412C:
+	.public gCommCommandTable
+gCommCommandTable:
 	.space 0x4
 
 	.rodata
@@ -21,35 +21,35 @@ _020F6955:
 	.byte 0x01, 0x01, 0x01, 0x01, 0x03, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01
 	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01
 	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00
-	.public _020F6980
-_020F6980:
-	.word 0, sub_020342C0, 0
-	.word 0, sub_020342C0, 0
-	.word sub_0203776C, sub_020342C0, 0
+	.public gCommBaseCommands
+gCommBaseCommands:
+	.word 0, CommCmd_GetSize0, 0
+	.word 0, CommCmd_GetSize0, 0
+	.word sub_0203776C, CommCmd_GetSize0, 0
 	.word CommPlayerInfo_RecvPlayerEntry, CommPlayerInfo_GetEntrySize, 0
 	.word CommPlayerInfo_RecvEntry, CommPlayerInfo_GetEntrySize, 0
-	.word sub_02034524, sub_020342C0, 0
+	.word sub_02034524, CommCmd_GetSize0, 0
 	.word sub_02038B3C, sub_02038C18, 0
 	.word sub_02038B9C, sub_02038C18, 0
 	.word 0, 0, 0
 	.word 0, 0, 0
-	.word sub_02037618, sub_020342C4, 0
-	.word sub_02037640, sub_020342C4, 0
-	.word sub_02037668, sub_020342C4, 0
-	.word sub_020342CC, sub_020342C0, 0
-	.word sub_02034310, sub_020342C0, 0
-	.word sub_02034338, sub_020342C0, 0
-	.word LinkSync_RecvRequest, sub_020342C4, 0
-	.word LinkSync_RecvDone, sub_020342C4, 0
-	.word LinkSync_RecvState, sub_020342C8, 0
+	.word sub_02037618, CommCmd_GetSize1, 0
+	.word sub_02037640, CommCmd_GetSize1, 0
+	.word sub_02037668, CommCmd_GetSize1, 0
+	.word CommCmd_RecvReady, CommCmd_GetSize0, 0
+	.word CommCmd_RecvShutdown, CommCmd_GetSize0, 0
+	.word CommCmd_RecvNotReady, CommCmd_GetSize0, 0
+	.word LinkSync_RecvRequest, CommCmd_GetSize1, 0
+	.word LinkSync_RecvDone, CommCmd_GetSize1, 0
+	.word LinkSync_RecvState, CommCmd_GetSize2, 0
 	.word LinkSync_RecvValue, LinkSync_GetValueSize, 0
 	.word LinkSync_RecvPacket, sub_02037C94, 0
-	.word sub_02039220, sub_020342C0, 0
+	.word sub_02039220, CommCmd_GetSize0, 0
 
 	.text
 
-	thumb_func_start sub_02033BC4
-sub_02033BC4: ; 0x02033BC4
+	thumb_func_start ByteRing_GetReadableSize
+ByteRing_GetReadableSize: ; 0x02033BC4
 	mov r1, #4
 	mov r3, #6
 	ldrsh r1, [r0, r1]
@@ -67,19 +67,19 @@ _02033BDC:
 	sub r0, r0, r1
 	bx lr
 	.balign 4, 0
-	thumb_func_end sub_02033BC4
+	thumb_func_end ByteRing_GetReadableSize
 	thumb_func_start sub_02033BE4
 sub_02033BE4: ; 0x02033BE4
 	push {r4, lr}
 	add r4, r0, #0
-	bl sub_02033BC4
+	bl ByteRing_GetReadableSize
 	mov r1, #0xa
 	ldrsh r1, [r4, r1]
 	sub r0, r1, r0
 	pop {r4, pc}
 	thumb_func_end sub_02033BE4
-	thumb_func_start sub_02033BF4
-sub_02033BF4: ; 0x02033BF4
+	thumb_func_start ByteRing_GetWritableSize
+ByteRing_GetWritableSize: ; 0x02033BF4
 	mov r1, #4
 	mov r2, #8
 	ldrsh r3, [r0, r1]
@@ -97,9 +97,9 @@ _02033C06:
 	sub r0, r1, r0
 	bx lr
 	.balign 4, 0
-	thumb_func_end sub_02033BF4
-	thumb_func_start sub_02033C14
-sub_02033C14: ; 0x02033C14
+	thumb_func_end ByteRing_GetWritableSize
+	thumb_func_start ByteRing_Wrap
+ByteRing_Wrap: ; 0x02033C14
 	push {r3, lr}
 	add r2, r0, #0
 	add r0, r1, #0
@@ -109,16 +109,16 @@ sub_02033C14: ; 0x02033C14
 	add r0, r1, #0
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end sub_02033C14
-	thumb_func_start sub_02033C28
-sub_02033C28: ; 0x02033C28
+	thumb_func_end ByteRing_Wrap
+	thumb_func_start ByteRing_Commit
+ByteRing_Commit: ; 0x02033C28
 	mov r1, #8
 	ldrsh r1, [r0, r1]
 	strh r1, [r0, #6]
 	bx lr
-	thumb_func_end sub_02033C28
-	thumb_func_start sub_02033C30
-sub_02033C30: ; 0x02033C30
+	thumb_func_end ByteRing_Commit
+	thumb_func_start PacketPool_GetFreeNode
+PacketPool_GetFreeNode: ; 0x02033C30
 	ldr r3, [r0, #0x1c]
 	mov r2, #0
 	ldr r1, [r0, #0x18]
@@ -138,9 +138,9 @@ _02033C44:
 _02033C4C:
 	mov r0, #0
 	bx lr
-	thumb_func_end sub_02033C30
-	thumb_func_start sub_02033C50
-sub_02033C50: ; 0x02033C50
+	thumb_func_end PacketPool_GetFreeNode
+	thumb_func_start PacketPool_AllNodesFree
+PacketPool_AllNodesFree: ; 0x02033C50
 	ldr r3, [r0, #0x1c]
 	mov r2, #0
 	ldr r1, [r0, #0x18]
@@ -160,4 +160,4 @@ _02033C64:
 _02033C6C:
 	mov r0, #1
 	bx lr
-	thumb_func_end sub_02033C50
+	thumb_func_end PacketPool_AllNodesFree

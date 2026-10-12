@@ -29,12 +29,12 @@ _02037360:
 	ldr r0, _020373AC ; =0x0000051C
 	add r0, r1, r0
 	add r0, r0, r5
-	bl sub_02033C28
+	bl ByteRing_Commit
 	ldr r1, [r7, #8]
 	ldr r0, _020373AC ; =0x0000051C
 	add r0, r1, r0
 	add r0, r0, r5
-	bl sub_02033BC4
+	bl ByteRing_GetReadableSize
 	cmp r0, #0
 	ble _02037396
 	mov r3, #0x17

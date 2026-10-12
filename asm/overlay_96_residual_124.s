@@ -237,7 +237,7 @@
 	.public PokeathlonEvent_CirclePushPoints
 	.public PokeathlonEvent_BlockSmashPoints
 	.public PokeathlonEvent_DiscCatchPoints
-	.public PokeathlonEvent_Event8Points
+	.public PokeathlonEvent_SnowThrowPoints
 
 	thumb_func_start PokeathlonEvent_LampJumpPoints
 PokeathlonEvent_LampJumpPoints: ; 0x0221A6B0
@@ -255,8 +255,8 @@ _0221A6CC: .word 0x400C0000
 	thumb_func_end PokeathlonEvent_LampJumpPoints
 
 
-	thumb_func_start PokeathlonEvent_Event6Points
-PokeathlonEvent_Event6Points: ; 0x0221A6D0
+	thumb_func_start PokeathlonEvent_RelayRunPoints
+PokeathlonEvent_RelayRunPoints: ; 0x0221A6D0
 	push {r3, lr}
 	bl _ffltu
 	bl _f2d
@@ -274,7 +274,7 @@ PokeathlonEvent_Event6Points: ; 0x0221A6D0
 	.balign 4, 0
 _0221A6F8: .word 0x40900000
 _0221A6FC: .word 0x40240000
-	thumb_func_end PokeathlonEvent_Event6Points
+	thumb_func_end PokeathlonEvent_RelayRunPoints
 
 
 	thumb_func_start PokeathlonEvent_RingDropPoints

@@ -59,7 +59,7 @@
 .public GF_AssertFail
 .public String_Delete
 .public Comm_RegisterCommandTable
-.public sub_020342C0
+.public CommCmd_GetSize0
 .public Comm_SendCommand
 .public Comm_GetLocalNetId
 .public FX_Inv

@@ -2754,115 +2754,115 @@
 	.public WiFiPlazaCamera_SetTargetWithOffset
 	.public WiFiPlazaCamera_SetFollowObject
 	.public WiFiPlazaCamera_ClearFollowObject
-	.public ov49_0225CC4C
-	.public ov49_0225CCC0
-	.public ov49_0225CCF0
-	.public ov49_0225CD58
-	.public ov49_0225CDE8
-	.public ov49_0225CDEC
-	.public ov49_0225CE88
-	.public ov49_0225CED0
-	.public ov49_0225CEFC
-	.public ov49_0225CF28
-	.public ov49_0225CF94
-	.public ov49_0225CFA8
-	.public ov49_0225CFEC
-	.public ov49_0225D030
-	.public ov49_0225D040
-	.public ov49_0225D04C
-	.public ov49_0225D064
-	.public ov49_0225D07C
-	.public ov49_0225D088
-	.public ov49_0225D090
-	.public ov49_0225D098
-	.public ov49_0225D160
-	.public ov49_0225D1C0
-	.public ov49_0225D1C4
-	.public ov49_0225D1EC
-	.public ov49_0225D214
-	.public ov49_0225D224
-	.public ov49_0225D328
-	.public ov49_0225D394
-	.public ov49_0225D3BC
-	.public ov49_0225D3F8
-	.public ov49_0225D450
-	.public ov49_0225D470
-	.public ov49_0225D494
-	.public ov49_0225D4A0
-	.public ov49_0225D4C8
-	.public ov49_0225D4D0
-	.public ov49_0225D4E8
-	.public ov49_0225D4F0
-	.public ov49_0225D4FC
-	.public ov49_0225D520
-	.public ov49_0225D528
-	.public ov49_0225D574
-	.public ov49_0225D57C
-	.public ov49_0225D5A0
-	.public ov49_0225D5C8
-	.public ov49_0225D5E4
-	.public ov49_0225D5FC
-	.public ov49_0225D6AC
-	.public ov49_0225D6F0
-	.public ov49_0225D76C
-	.public ov49_0225D7B8
-	.public ov49_0225D804
-	.public ov49_0225D820
-	.public ov49_0225D854
-	.public ov49_0225D9D0
-	.public ov49_0225DA70
-	.public ov49_0225DAFC
-	.public ov49_0225DBF8
-	.public ov49_0225DC2C
-	.public ov49_0225DCBC
-	.public ov49_0225DD0C
-	.public ov49_0225DD68
-	.public ov49_0225DF18
-	.public ov49_0225E2B4
-	.public ov49_0225E318
-	.public ov49_0225E3A0
-	.public ov49_0225E3AC
-	.public ov49_0225E3B8
-	.public ov49_0225E3F4
-	.public ov49_0225E420
-	.public ov49_0225E47C
-	.public ov49_0225E4A4
-	.public ov49_0225E4CC
-	.public ov49_0225E4F8
-	.public ov49_0225E524
-	.public ov49_0225E54C
-	.public ov49_0225E574
-	.public ov49_0225E580
-	.public ov49_0225E58C
-	.public ov49_0225E624
-	.public ov49_0225E6E0
-	.public ov49_0225E714
-	.public ov49_0225E760
-	.public ov49_0225E824
-	.public ov49_0225E82C
-	.public ov49_0225E85C
-	.public ov49_0225E894
-	.public ov49_0225E8C4
-	.public ov49_0225E9D0
-	.public ov49_0225EA10
-	.public ov49_0225EA40
-	.public ov49_0225EA70
-	.public ov49_0225EAB4
-	.public ov49_0225EAE0
-	.public ov49_0225EB00
-	.public ov49_0225EB08
-	.public ov49_0225EB54
-	.public ov49_0225EB84
-	.public ov49_0225EBA8
-	.public ov49_0225EBE4
-	.public ov49_0225EC28
-	.public ov49_0225EC30
-	.public ov49_0225ECD4
-	.public ov49_0225ECF0
-	.public ov49_0225ED68
-	.public ov49_0225ED98
-	.public ov49_0225EE10
-	.public ov49_0225EE4C
+	.public WiFiPlazaModelSet_Create
+	.public WiFiPlazaModelSet_Delete
+	.public WiFiPlazaModelSet_Update
+	.public WiFiPlazaModelSet_Draw
+	.public WiFiPlazaModelSet_VBlank
+	.public WiFiPlazaModelSet_Load
+	.public WiFiPlazaModelSet_Unload
+	.public WiFiPlazaModelSet_StartBaseAnim4
+	.public WiFiPlazaModelSet_StopBaseAnim4
+	.public WiFiPlazaModelSet_AddMover
+	.public WiFiPlazaModelSet_RemoveMover
+	.public WiFiPlazaMover_SetPosition
+	.public WiFiPlazaMover_SetOffset
+	.public WiFiPlazaMover_GetPosition
+	.public WiFiPlazaMover_SetVisible
+	.public WiFiPlazaMover_StartAnim1
+	.public WiFiPlazaMover_StartAnim3
+	.public WiFiPlazaMover_SetAngle
+	.public WiFiPlazaMover_IsAnim1Playing
+	.public WiFiPlazaMover_IsAnim3Playing
+	.public WiFiPlazaModelSet_AddProp
+	.public WiFiPlazaModelSet_RemoveProp
+	.public WiFiPlazaProp_GetKind
+	.public WiFiPlazaProp_SetPos
+	.public WiFiPlazaProp_GetPos
+	.public WiFiPlazaModelSet_StartPropAnim
+	.public WiFiPlazaModelSet_StartPropAnimWithCallback
+	.public WiFiPlazaModelSet_StopPropAnim
+	.public WiFiPlazaModelSet_StopPropAnims
+	.public WiFiPlazaModelSet_IsPropAnimActive
+	.public WiFiPlazaModelSet_SetPropAnimFrame
+	.public WiFiPlazaProp_IsAnimActive
+	.public WiFiPlazaProp_GetAnimFrame
+	.public WiFiPlazaProp_SetVisible
+	.public WiFiPlazaModelSet_SetPropLights
+	.public WiFiPlazaProp_SetAnimSpeed
+	.public WiFiPlazaProp_SetAlpha
+	.public WiFiPlazaProp_ClearAlpha
+	.public WiFiPlazaProp_SetScale
+	.public WiFiPlazaModels_LoadLayout
+	.public WiFiPlazaModels_FreeLayout
+	.public WiFiPlazaModels_LoadModel
+	.public WiFiPlazaModels_FreeModel
+	.public WiFiPlazaModels_AdvanceFrameLooped
+	.public WiFiPlazaModels_AdvanceFrame
+	.public WiFiPlazaModels_RewindFrameLooped
+	.public WiFiPlazaModels_RewindFrame
+	.public WiFiPlazaModelSet_LoadBase
+	.public WiFiPlazaModelSet_FreeBase
+	.public WiFiPlazaModelSet_InitBase
+	.public WiFiPlazaModelSet_ResetBase
+	.public WiFiPlazaModelSet_UpdateBase
+	.public WiFiPlazaModelSet_DrawBase
+	.public WiFiPlazaModelSet_AllocMover
+	.public WiFiPlazaModelSet_LoadMovers
+	.public WiFiPlazaModelSet_FreeMovers
+	.public WiFiPlazaModelSet_UpdateMover
+	.public WiFiPlazaModelSet_DrawMover
+	.public WiFiPlazaModelSet_AllocProp
+	.public WiFiPlazaModelSet_LoadProps
+	.public WiFiPlazaModelSet_FreeProps
+	.public WiFiPlazaModelSet_DrawProp
+	.public WiFiPlazaModelSet_UpdateProp
+	.public WiFiPlazaModels_Create
+	.public WiFiPlazaModels_Delete
+	.public WiFiPlazaModels_Update
+	.public WiFiPlazaModels_Draw
+	.public WiFiPlazaModels_VBlank
+	.public WiFiPlazaModels_SetMoverX
+	.public WiFiPlazaModels_SetMoverOffset
+	.public WiFiPlazaModels_GetMoverFrontPos
+	.public WiFiPlazaModels_StartMoverAnim1
+	.public WiFiPlazaModels_StartMoverAnim3
+	.public WiFiPlazaModels_SetMoverVisible
+	.public WiFiPlazaModels_SetMoverAngle
+	.public WiFiPlazaModels_IsMoverAnim1Playing
+	.public WiFiPlazaModels_IsMoverAnim3Playing
+	.public WiFiPlazaModels_StartBaseAnim4
+	.public WiFiPlazaModels_StopBaseAnim4
+	.public WiFiPlazaModels_TouchPropsAt
+	.public WiFiPlazaModels_SetEffectActive
+	.public WiFiPlazaModels_TriggerStageBursts
+	.public WiFiPlazaModels_EnableKind1To4Lights
+	.public WiFiPlazaModels_SetPairAnim
+	.public WiFiPlazaModels_GetPairAnimState
+	.public WiFiPlazaModels_ShowEffectProps
+	.public WiFiPlazaModels_ShowEffectProp
+	.public WiFiPlazaModels_TriggerStageShows
+	.public WiFiPlazaModels_UpdateMatchSign
+	.public WiFiPlazaProp_IsAt
+	.public WiFiPlazaModels_OnPairAnimOpened
+	.public WiFiPlazaModels_OnPairAnimClosed
+	.public WiFiPlazaModels_TouchProp
+	.public WiFiPlazaModels_TouchPropQuiet
+	.public WiFiPlazaModels_PlayPropAnimsOnce
+	.public WiFiPlazaPropShow_Init
+	.public WiFiPlazaPropShow_UpdateEffect
+	.public WiFiPlazaPropShow_RequestShow
+	.public WiFiPlazaPropShow_RequestHide
+	.public WiFiPlazaPropShow_ShowEffect
+	.public WiFiPlazaPropShow_HideEffect
+	.public WiFiPlazaPropShow_StartFade
+	.public WiFiPlazaPropShow_UpdateFade
+	.public WiFiPlazaPropShow_Trigger
+	.public WiFiPlazaPropShow_UpdateStage
+	.public WiFiPlazaPropShow_ShowStage
+	.public WiFiPlazaPropShow_UpdateBurst
+	.public WiFiPlazaPropShow_ShowBurst
+	.public WiFiPlazaProp_ApplyTagShift
 	.public ov49_0225EEAC
 	.public ov49_0225EEF8
 	.public ov49_0225EF24
@@ -3169,11 +3169,11 @@
 	.public ov49_0226991C
 	.public ov49_022699AC
 	.public sWiFiPlazaCameraAngle
-	.public ov49_02269A74
+	.public sWiFiPlazaPropTagShiftX
 	.public ov49_02269A7C
 	.public ov49_02269A7E
-	.public ov49_02269A88
-	.public ov49_02269AAC
+	.public sWiFiPlazaMoverSpawns
+	.public sWiFiPlazaPropSpawns
 	.public ov49_02269B38
 	.public ov49_02269B40
 	.public ov49_02269B48
@@ -3347,30 +3347,30 @@
 	.public WiFiPlazaCamera_SetTargetWithOffset
 	.public WiFiPlazaCamera_SetFollowObject
 	.public WiFiPlazaCamera_ClearFollowObject
-	.public ov49_0225CDE8
-	.public ov49_0225CF94
-	.public ov49_0225D040
-	.public ov49_0225D04C
-	.public ov49_0225D064
-	.public ov49_0225D07C
-	.public ov49_0225D088
-	.public ov49_0225D090
-	.public ov49_0225D1C0
-	.public ov49_0225D494
-	.public ov49_0225D4C8
-	.public ov49_0225D4D0
-	.public ov49_0225D4E8
-	.public ov49_0225D520
-	.public ov49_0225D574
-	.public ov49_0225D5E4
-	.public ov49_0225E3A0
-	.public ov49_0225E3AC
-	.public ov49_0225E574
-	.public ov49_0225E580
-	.public ov49_0225E824
-	.public ov49_0225EB00
-	.public ov49_0225EC28
-	.public ov49_0225ECD4
+	.public WiFiPlazaModelSet_VBlank
+	.public WiFiPlazaModelSet_RemoveMover
+	.public WiFiPlazaMover_SetVisible
+	.public WiFiPlazaMover_StartAnim1
+	.public WiFiPlazaMover_StartAnim3
+	.public WiFiPlazaMover_SetAngle
+	.public WiFiPlazaMover_IsAnim1Playing
+	.public WiFiPlazaMover_IsAnim3Playing
+	.public WiFiPlazaProp_GetKind
+	.public WiFiPlazaProp_SetVisible
+	.public WiFiPlazaProp_SetAnimSpeed
+	.public WiFiPlazaProp_SetAlpha
+	.public WiFiPlazaProp_ClearAlpha
+	.public WiFiPlazaModels_FreeLayout
+	.public WiFiPlazaModels_FreeModel
+	.public WiFiPlazaModels_RewindFrame
+	.public WiFiPlazaModels_Draw
+	.public WiFiPlazaModels_VBlank
+	.public WiFiPlazaModels_StartBaseAnim4
+	.public WiFiPlazaModels_StopBaseAnim4
+	.public WiFiPlazaModels_GetPairAnimState
+	.public WiFiPlazaPropShow_Init
+	.public WiFiPlazaPropShow_StartFade
+	.public WiFiPlazaPropShow_Trigger
 	.public ov49_0225EF24
 	.public ov49_0225EF30
 	.public ov49_0225EF3C
@@ -3428,8 +3428,8 @@
 	.public ov49_02268CDC
 	.public ov49_02269090
 
-	thumb_func_start ov49_0225E3B8
-ov49_0225E3B8: ; 0x0225E3B8
+	thumb_func_start WiFiPlazaModels_SetMoverX
+WiFiPlazaModels_SetMoverX: ; 0x0225E3B8
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -3453,16 +3453,16 @@ _0225E3CE:
 	lsl r0, r0, #2
 	ldr r0, [r1, r0]
 	add r1, sp, #0
-	bl ov49_0225CFA8
+	bl WiFiPlazaMover_SetPosition
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
 	nop
 _0225E3F0: .word 0x00000613
-	thumb_func_end ov49_0225E3B8
+	thumb_func_end WiFiPlazaModels_SetMoverX
 
 
-	thumb_func_start ov49_0225E3F4
-ov49_0225E3F4: ; 0x0225E3F4
+	thumb_func_start WiFiPlazaModels_SetMoverOffset
+WiFiPlazaModels_SetMoverOffset: ; 0x0225E3F4
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	ldr r0, _0225E41C ; =0x00000613
@@ -3479,15 +3479,15 @@ _0225E408:
 	lsl r0, r0, #2
 	ldr r0, [r1, r0]
 	add r1, r6, #0
-	bl ov49_0225CFEC
+	bl WiFiPlazaMover_SetOffset
 	pop {r4, r5, r6, pc}
 	nop
 _0225E41C: .word 0x00000613
-	thumb_func_end ov49_0225E3F4
+	thumb_func_end WiFiPlazaModels_SetMoverOffset
 
 
-	thumb_func_start ov49_0225E420
-ov49_0225E420: ; 0x0225E420
+	thumb_func_start WiFiPlazaModels_GetMoverFrontPos
+WiFiPlazaModels_GetMoverFrontPos: ; 0x0225E420
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	ldr r0, _0225E470 ; =0x00000613
@@ -3509,7 +3509,7 @@ _0225E43E:
 	lsl r0, r0, #2
 	ldr r0, [r1, r0]
 	add r1, r4, #0
-	bl ov49_0225D030
+	bl WiFiPlazaMover_GetPosition
 	ldr r1, _0225E474 ; =ov49_02269A7C
 	lsl r0, r7, #2
 	ldrsh r1, [r1, r0]
@@ -3531,11 +3531,11 @@ _0225E43E:
 _0225E470: .word 0x00000613
 _0225E474: .word ov49_02269A7C
 _0225E478: .word ov49_02269A7E
-	thumb_func_end ov49_0225E420
+	thumb_func_end WiFiPlazaModels_GetMoverFrontPos
 
 
-	thumb_func_start ov49_0225E47C
-ov49_0225E47C: ; 0x0225E47C
+	thumb_func_start WiFiPlazaModels_StartMoverAnim1
+WiFiPlazaModels_StartMoverAnim1: ; 0x0225E47C
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	ldr r0, _0225E4A0 ; =0x00000613
@@ -3550,15 +3550,15 @@ _0225E48E:
 	mov r0, #0x82
 	lsl r0, r0, #2
 	ldr r0, [r1, r0]
-	bl ov49_0225D04C
+	bl WiFiPlazaMover_StartAnim1
 	pop {r3, r4, r5, pc}
 	nop
 _0225E4A0: .word 0x00000613
-	thumb_func_end ov49_0225E47C
+	thumb_func_end WiFiPlazaModels_StartMoverAnim1
 
 
-	thumb_func_start ov49_0225E4A4
-ov49_0225E4A4: ; 0x0225E4A4
+	thumb_func_start WiFiPlazaModels_StartMoverAnim3
+WiFiPlazaModels_StartMoverAnim3: ; 0x0225E4A4
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	ldr r0, _0225E4C8 ; =0x00000613
@@ -3573,15 +3573,15 @@ _0225E4B6:
 	mov r0, #0x82
 	lsl r0, r0, #2
 	ldr r0, [r1, r0]
-	bl ov49_0225D064
+	bl WiFiPlazaMover_StartAnim3
 	pop {r3, r4, r5, pc}
 	nop
 _0225E4C8: .word 0x00000613
-	thumb_func_end ov49_0225E4A4
+	thumb_func_end WiFiPlazaModels_StartMoverAnim3
 
 
-	thumb_func_start ov49_0225E4CC
-ov49_0225E4CC: ; 0x0225E4CC
+	thumb_func_start WiFiPlazaModels_SetMoverVisible
+WiFiPlazaModels_SetMoverVisible: ; 0x0225E4CC
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	ldr r0, _0225E4F4 ; =0x00000613
@@ -3598,15 +3598,15 @@ _0225E4E0:
 	lsl r0, r0, #2
 	ldr r0, [r1, r0]
 	add r1, r6, #0
-	bl ov49_0225D040
+	bl WiFiPlazaMover_SetVisible
 	pop {r4, r5, r6, pc}
 	nop
 _0225E4F4: .word 0x00000613
-	thumb_func_end ov49_0225E4CC
+	thumb_func_end WiFiPlazaModels_SetMoverVisible
 
 
-	thumb_func_start ov49_0225E4F8
-ov49_0225E4F8: ; 0x0225E4F8
+	thumb_func_start WiFiPlazaModels_SetMoverAngle
+WiFiPlazaModels_SetMoverAngle: ; 0x0225E4F8
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	ldr r0, _0225E520 ; =0x00000613
@@ -3623,15 +3623,15 @@ _0225E50C:
 	lsl r0, r0, #2
 	ldr r0, [r1, r0]
 	add r1, r6, #0
-	bl ov49_0225D07C
+	bl WiFiPlazaMover_SetAngle
 	pop {r4, r5, r6, pc}
 	nop
 _0225E520: .word 0x00000613
-	thumb_func_end ov49_0225E4F8
+	thumb_func_end WiFiPlazaModels_SetMoverAngle
 
 
-	thumb_func_start ov49_0225E524
-ov49_0225E524: ; 0x0225E524
+	thumb_func_start WiFiPlazaModels_IsMoverAnim1Playing
+WiFiPlazaModels_IsMoverAnim1Playing: ; 0x0225E524
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	ldr r0, _0225E548 ; =0x00000613
@@ -3646,15 +3646,15 @@ _0225E536:
 	mov r0, #0x82
 	lsl r0, r0, #2
 	ldr r0, [r1, r0]
-	bl ov49_0225D088
+	bl WiFiPlazaMover_IsAnim1Playing
 	pop {r3, r4, r5, pc}
 	nop
 _0225E548: .word 0x00000613
-	thumb_func_end ov49_0225E524
+	thumb_func_end WiFiPlazaModels_IsMoverAnim1Playing
 
 
-	thumb_func_start ov49_0225E54C
-ov49_0225E54C: ; 0x0225E54C
+	thumb_func_start WiFiPlazaModels_IsMoverAnim3Playing
+WiFiPlazaModels_IsMoverAnim3Playing: ; 0x0225E54C
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	ldr r0, _0225E570 ; =0x00000613
@@ -3669,8 +3669,8 @@ _0225E55E:
 	mov r0, #0x82
 	lsl r0, r0, #2
 	ldr r0, [r1, r0]
-	bl ov49_0225D090
+	bl WiFiPlazaMover_IsAnim3Playing
 	pop {r3, r4, r5, pc}
 	nop
 _0225E570: .word 0x00000613
-	thumb_func_end ov49_0225E54C
+	thumb_func_end WiFiPlazaModels_IsMoverAnim3Playing

@@ -10,7 +10,7 @@
 #include "system.h"
 #include "sound_playback.h"
 #include "unk_02032844.h"
-#include "unk_02033AE0.h"
+#include "communication_command.h"
 #include "communication_player_state.h"
 #include "unk_02034B0C.h"
 #include "link_synchronization.h"
@@ -92,7 +92,7 @@ void sub_02037C98(SaveData *saveData, s8 arg1) {
 
 void sub_02037D2C(void) {
     if (_021D4150) {
-        sub_02034154();
+        Comm_FreeCommandTable();
         if (_021D4150->unk0) {
             Heap_Free(_021D4150->unk0);
         }

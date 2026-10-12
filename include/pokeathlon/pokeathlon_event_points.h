@@ -25,9 +25,9 @@ u8 PokeathlonEvent_CirclePushPoints(int score);
 u8 PokeathlonEvent_BlockSmashPoints(u32 score);
 u8 PokeathlonEvent_DiscCatchPoints(float score);
 u8 PokeathlonEvent_LampJumpPoints(u32 score);
-u8 PokeathlonEvent_Event6Points(u32 score);
+u8 PokeathlonEvent_RelayRunPoints(u32 score);
 u8 PokeathlonEvent_RingDropPoints(u32 score);
-u8 PokeathlonEvent_Event8Points(int score);
+u8 PokeathlonEvent_SnowThrowPoints(int score);
 
 // pokeathlon_event_rank_points.c
 void PokeathlonEvent_CalcRankPoints(void *list);

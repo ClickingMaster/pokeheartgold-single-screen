@@ -17,7 +17,7 @@
 #include "sound_playback.h"
 #include "sprite_system.h"
 #include "text.h"
-#include "unk_02033AE0.h"
+#include "communication_command.h"
 #include "unk_02035900.h"
 #include "wobbuffet_pop.h"
 

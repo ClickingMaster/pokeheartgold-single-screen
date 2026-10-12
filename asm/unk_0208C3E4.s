@@ -165,76 +165,76 @@
 	.public _0208DE34
 	.public _0208DE38
 	.public _0208DE3C
-	.public _02104C84
-	.public _02104CC4
-	.public _02104D04
-	.public _02104D94
-	.public sub_0208C3E4
-	.public sub_0208C42C
-	.public sub_0208C4E0
-	.public sub_0208C560
-	.public sub_0208C57C
-	.public sub_0208C614
-	.public sub_0208C6B4
-	.public sub_0208C73C
-	.public sub_0208C778
-	.public sub_0208C7F8
-	.public sub_0208C850
-	.public sub_0208C87C
-	.public sub_0208C8C8
-	.public sub_0208C9A4
-	.public sub_0208CBD4
-	.public sub_0208CC88
-	.public sub_0208CFB4
-	.public sub_0208D078
-	.public sub_0208D0A4
-	.public sub_0208D178
-	.public sub_0208D474
+	.public gPokemonSummaryRibbonWindowTemplates
+	.public gPokemonSummaryInfoWindowTemplates
+	.public gPokemonSummaryStatsWindowTemplates
+	.public gPokemonSummaryWindowTemplates
+	.public PokemonSummary_AddWindows
+	.public PokemonSummary_AddPageWindows
+	.public PokemonSummary_RemovePageWindows
+	.public PokemonSummary_RemoveWindows
+	.public PokemonSummary_PrintNickname
+	.public PokemonSummary_PrintLevel
+	.public PokemonSummary_PrintHeldItem
+	.public PokemonSummary_IsPlayersMon
+	.public PokemonSummary_PrintBuffer
+	.public PokemonSummary_PrintStatLabel
+	.public PokemonSummary_PrintMessage
+	.public PokemonSummary_FormatNumber
+	.public PokemonSummary_PrintValuePair
+	.public PokemonSummary_PrintLabels
+	.public PokemonSummary_PrintPage
+	.public PokemonSummary_PrintInfo
+	.public PokemonSummary_PrintTrainerMemo
+	.public PokemonSummary_CountShinyLeaves
+	.public PokemonSummary_PrintMemo
+	.public PokemonSummary_PrintStats
+	.public PokemonSummary_PrintMoves
 	.public sub_0208D520
-	.public sub_0208D6B8
-	.public sub_0208D728
-	.public sub_0208D7C4
-	.public sub_0208D884
-	.public sub_0208D9A0
-	.public sub_0208DAD4
-	.public sub_0208DB1C
+	.public PokemonSummary_PrintRibbonCount
+	.public PokemonSummary_PrintFlavorPreference
+	.public PokemonSummary_PrintRibbonInfo
+	.public PokemonSummary_PrintMoveSlot
+	.public PokemonSummary_PrintMoveInfo
+	.public PokemonSummary_ClearMoveInfo
+	.public PokemonSummary_PrintMoveToLearn
 	.public sub_0208DB58
-	.public sub_0208DB64
+	.public PokemonSummary_PrintSwappedMoves
 	.public sub_0208DBF0
 	.public sub_0208DC68
 	.public sub_0208DD20
 	.public sub_0208DDA0
 	.text
-	.public sub_0208C4E0
-	.public sub_0208C560
-	.public sub_0208C73C
-	.public sub_0208C778
-	.public sub_0208C7F8
-	.public sub_0208C850
-	.public sub_0208C87C
-	.public sub_0208D078
-	.public sub_0208D0A4
-	.public sub_0208D474
-	.public sub_0208D6B8
-	.public sub_0208D728
-	.public sub_0208D7C4
-	.public sub_0208DAD4
-	.public sub_0208DB1C
+	.public PokemonSummary_RemovePageWindows
+	.public PokemonSummary_RemoveWindows
+	.public PokemonSummary_IsPlayersMon
+	.public PokemonSummary_PrintBuffer
+	.public PokemonSummary_PrintStatLabel
+	.public PokemonSummary_PrintMessage
+	.public PokemonSummary_FormatNumber
+	.public PokemonSummary_CountShinyLeaves
+	.public PokemonSummary_PrintMemo
+	.public PokemonSummary_PrintMoves
+	.public PokemonSummary_PrintRibbonCount
+	.public PokemonSummary_PrintFlavorPreference
+	.public PokemonSummary_PrintRibbonInfo
+	.public PokemonSummary_ClearMoveInfo
+	.public PokemonSummary_PrintMoveToLearn
 	.public sub_0208DB58
-	.public sub_0208DB64
+	.public PokemonSummary_PrintSwappedMoves
 	.public sub_0208DBF0
 	.public sub_0208DC68
 	.public sub_0208DD20
 	.public sub_0208DDA0
 
-	thumb_func_start sub_0208C3E4
-sub_0208C3E4: ; 0x0208C3E4
+	thumb_func_start PokemonSummary_AddWindows
+PokemonSummary_AddWindows: ; 0x0208C3E4
 	push {r3, r4, r5, r6, r7, lr}
 	add r7, r0, #0
 	mov r5, #0
 	add r4, r7, #4
 _0208C3EC:
-	ldr r2, _0208C428 ; =_02104D94
+	ldr r2, _0208C428 ; =gPokemonSummaryWindowTemplates
 	lsl r6, r5, #4
 	lsl r3, r5, #3
 	ldr r0, [r7]
@@ -250,21 +250,21 @@ _0208C3EC:
 	cmp r5, #0x22
 	blo _0208C3EC
 	add r0, r7, #0
-	bl sub_0208C9A4
+	bl PokemonSummary_PrintLabels
 	add r0, r7, #0
-	bl sub_0208C57C
+	bl PokemonSummary_PrintNickname
 	add r0, r7, #0
-	bl sub_0208C614
+	bl PokemonSummary_PrintLevel
 	add r0, r7, #0
-	bl sub_0208C6B4
+	bl PokemonSummary_PrintHeldItem
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-_0208C428: .word _02104D94
-	thumb_func_end sub_0208C3E4
+_0208C428: .word gPokemonSummaryWindowTemplates
+	thumb_func_end PokemonSummary_AddWindows
 
 
-	thumb_func_start sub_0208C42C
-sub_0208C42C: ; 0x0208C42C
+	thumb_func_start PokemonSummary_AddPageWindows
+PokemonSummary_AddPageWindows: ; 0x0208C42C
 	push {r3, r4, r5, r6, r7, lr}
 	add r4, r0, #0
 	ldr r0, _0208C4D0 ; =0x000007BC
@@ -286,21 +286,21 @@ _0208C44C:
 	mov r0, #0x8a
 	mov r1, #8
 	lsl r0, r0, #2
-	ldr r7, _0208C4D4 ; =_02104CC4
+	ldr r7, _0208C4D4 ; =gPokemonSummaryInfoWindowTemplates
 	str r1, [r4, r0]
 	b _0208C48C
 _0208C458:
 	mov r0, #0x8a
 	mov r1, #0x12
 	lsl r0, r0, #2
-	ldr r7, _0208C4D8 ; =_02104D04
+	ldr r7, _0208C4D8 ; =gPokemonSummaryStatsWindowTemplates
 	str r1, [r4, r0]
 	b _0208C48C
 _0208C464:
 	mov r0, #0x8a
 	mov r1, #8
 	lsl r0, r0, #2
-	ldr r7, _0208C4DC ; =_02104C84
+	ldr r7, _0208C4DC ; =gPokemonSummaryRibbonWindowTemplates
 	str r1, [r4, r0]
 	b _0208C48C
 _0208C470:
@@ -357,7 +357,7 @@ _0208C4CE:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _0208C4D0: .word 0x000007BC
-_0208C4D4: .word _02104CC4
-_0208C4D8: .word _02104D04
-_0208C4DC: .word _02104C84
-	thumb_func_end sub_0208C42C
+_0208C4D4: .word gPokemonSummaryInfoWindowTemplates
+_0208C4D8: .word gPokemonSummaryStatsWindowTemplates
+_0208C4DC: .word gPokemonSummaryRibbonWindowTemplates
+	thumb_func_end PokemonSummary_AddPageWindows

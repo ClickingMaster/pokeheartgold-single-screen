@@ -87,7 +87,7 @@ void PokeathlonEvent_CalcPoints(void *, int);
 void PokeathlonEvent_PennantCapturePoints(int);
 void PokeathlonEvent_CirclePushPoints(int);
 void PokeathlonEvent_BlockSmashPoints(u32);
-void PokeathlonEvent_Event8Points(int);
+void PokeathlonEvent_SnowThrowPoints(int);
 extern void *PokeathlonCourseMonObject_GetGfx(void **);
 extern void PokeathlonCourseMonGfx_SetScale(void *, void *, void *);
 extern void *PokeathlonResultsAnnouncement_NewPlates(void *, void *, void *);

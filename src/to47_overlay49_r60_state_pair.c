@@ -53,7 +53,7 @@ extern void ov49_0225EF98(void *, u32, const void *, u32);
 extern void *WiFiPlazaRoom_GetModels(void *);
 extern int ov45_0222ADA8(void *, int);
 extern void ov45_0222AE08(int, int *, int *);
-extern void ov49_0225E420(void *, int, int, VecFx32 *);
+extern void WiFiPlazaModels_GetMoverFrontPos(void *, int, int, VecFx32 *);
 extern void WiFiPlazaObj_GetPosition(void *, VecFx32 *);
 extern void WiFiPlazaObj_SetPosition(void *, VecFx32 *);
 extern void ov49_02259184(void *, u32);
@@ -110,7 +110,7 @@ BOOL ov49_02261930(void *state, void *ctx, u32 index) {
         break;
     case 1:
         if (WiFiPlazaObj_IsFinished(work->unk00) != 0) {
-            ov49_0225E420(third, work->unk04, work->unk08, &vecD);
+            WiFiPlazaModels_GetMoverFrontPos(third, work->unk04, work->unk08, &vecD);
             work->unk10 = vecD.x - 0x10000;
             WiFiPlazaObj_GetPosition(work->unk00, &vecD);
             work->unk0C = vecD.y;
@@ -131,7 +131,7 @@ BOOL ov49_02261930(void *state, void *ctx, u32 index) {
             work->unk14 = 0x18;
             done = TRUE;
         }
-        ov49_0225E420(third, work->unk04, work->unk08, &vecC);
+        WiFiPlazaModels_GetMoverFrontPos(third, work->unk04, work->unk08, &vecC);
         vecB.z = vecC.z;
         vecB.x = work->unk10;
         delta = vecC.y - work->unk0C;
@@ -154,7 +154,7 @@ BOOL ov49_02261930(void *state, void *ctx, u32 index) {
             ov49_0225F430(work->unk18);
         }
         offset = ov49_0225F394(work->unk18);
-        ov49_0225E420(third, work->unk04, work->unk08, &vecA);
+        WiFiPlazaModels_GetMoverFrontPos(third, work->unk04, work->unk08, &vecA);
         vecA.y += offset;
         WiFiPlazaObj_SetPosition(work->unk00, &vecA);
         if (ov45_0222AD80(field, work->unk04) == 2) {

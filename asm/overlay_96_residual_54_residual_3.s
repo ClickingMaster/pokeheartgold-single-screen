@@ -237,7 +237,7 @@
 	.public PokeathlonEvent_CirclePushPoints
 	.public PokeathlonEvent_BlockSmashPoints
 	.public PokeathlonEvent_DiscCatchPoints
-	.public PokeathlonEvent_Event8Points
+	.public PokeathlonEvent_SnowThrowPoints
 	.public PokeathlonCirclePush_Cosine
 	.public PokeathlonCirclePush_RecoverStamina
 	.public PokeathlonCirclePush_ShakeTask

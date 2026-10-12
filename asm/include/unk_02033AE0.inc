@@ -3,20 +3,20 @@
 .public Heap_Alloc
 .public Heap_Free
 .public GF_AssertFail
-.public sub_02033AE0
-.public sub_02033AF0
-.public sub_02033B4C
-.public sub_02033B68
-.public sub_02033BC4
+.public ByteRing_Init
+.public ByteRing_Write
+.public ByteRing_Read
+.public ByteRing_ReadByte
+.public ByteRing_GetReadableSize
 .public sub_02033BE4
-.public sub_02033C28
-.public sub_02033C50
-.public sub_02033DF0
-.public sub_02033ECC
-.public sub_02033F44
-.public sub_02033F70
-.public sub_02033F90
-.public sub_02033F9C
+.public ByteRing_Commit
+.public PacketPool_AllNodesFree
+.public PacketPool_Enqueue
+.public PacketPool_WriteFrame
+.public PacketPool_Init
+.public PacketPool_Reset
+.public PacketPool_Free
+.public PacketPool_HasCommand
 .public sub_02033FC4
 .public sub_02033FF0
 .public sub_0203401C
@@ -25,14 +25,14 @@
 .public sub_02034098
 .public sub_020340C4
 .public Comm_RegisterCommandTable
-.public sub_02034154
-.public sub_02034170
-.public sub_020341DC
-.public sub_02034244
-.public sub_02034280
-.public sub_020342B8
-.public sub_020342C0
-.public sub_020342C4
+.public Comm_FreeCommandTable
+.public Comm_CallCommandRecv
+.public Comm_GetCommandSize
+.public Comm_CommandHasBuffer
+.public Comm_GetCommandBuffer
+.public CommCmd_GetSizeVariable
+.public CommCmd_GetSize0
+.public CommCmd_GetSize1
 .public CommPlayerInfo_GetEntrySize
 .public sub_02034524
 .public CommPlayerInfo_RecvEntry
@@ -61,21 +61,21 @@
 .public MI_CpuCopy8
 .public _s32_div_f
 
-	.public sub_02033B78
-	.public sub_02033BF4
-	.public sub_02033C14
-	.public sub_02033C30
-	.public sub_02033C70
-	.public sub_02033C94
-	.public sub_02033CB0
-	.public sub_02033D28
-	.public sub_02033E88
-	.public sub_02033EA8
-	.public sub_020342C8
-	.public sub_020342CC
-	.public sub_02034310
-	.public sub_02034338
+	.public ByteRing_Peek
+	.public ByteRing_GetWritableSize
+	.public ByteRing_Wrap
+	.public PacketPool_GetFreeNode
+	.public PacketQueue_PopFront
+	.public ByteWriter_PutByte
+	.public Packet_WriteHeader
+	.public Packet_Write
+	.public PacketPool_PeekNext
+	.public PacketPool_PopNext
+	.public CommCmd_GetSize2
+	.public CommCmd_RecvReady
+	.public CommCmd_RecvShutdown
+	.public CommCmd_RecvNotReady
 	.public _020F692C
 	.public _020F6955
-	.public _020F6980
-	.public _021D412C
+	.public gCommBaseCommands
+	.public gCommCommandTable

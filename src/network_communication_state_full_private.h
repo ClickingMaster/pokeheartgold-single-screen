@@ -79,7 +79,7 @@ typedef struct {
 } MATHRandContext32;
 
 void CommRandom_Init(MATHRandContext32 *arg0);
-void sub_02034154(void);
+void Comm_FreeCommandTable(void);
 void sub_02034DE0(void);
 void sub_02036274(void);
 int sub_02034FE8(void);

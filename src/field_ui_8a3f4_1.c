@@ -88,7 +88,7 @@ BOOL sub_0208A564(u8 *work) {
         }
         break;
     case 2:
-        sub_0208DB1C(work);
+        PokemonSummary_PrintMoveToLearn(work);
         sub_0208A79C(work);
         thunk_Sprite_SetDrawFlag(*(void **)(work + 0x430), 1);
         sub_0208C068(work);
@@ -111,7 +111,7 @@ BOOL sub_0208A63C(u8 *work) {
         thunk_Sprite_SetDrawFlag(*(void **)(work + 0x450), 0);
         Sprite_SetDrawFlag(*(void **)(work + 0x428), 0);
         sub_0208DB58(work);
-        sub_0208DAD4(work);
+        PokemonSummary_ClearMoveInfo(work);
         work[0x7BE] = 1;
         break;
     case 1:

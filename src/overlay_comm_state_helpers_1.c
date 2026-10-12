@@ -79,7 +79,7 @@ int sub_02088E98(SummaryMoveWork *work) {
             PlaySE(0x5DD);
             sub_0208A834(work);
             sub_0208BB24(work, work->selectionLow, work->selectionHigh);
-            sub_0208DB64(work);
+            PokemonSummary_PrintSwappedMoves(work);
             sub_0208A79C(work);
         } else {
             PlaySE(0x5DC);
@@ -107,7 +107,7 @@ int sub_02088E98(SummaryMoveWork *work) {
             PlaySE(0x5DD);
             sub_0208A834(work);
             sub_0208BB24(work, work->selectionLow, work->selectionHigh);
-            sub_0208DB64(work);
+            PokemonSummary_PrintSwappedMoves(work);
             sub_0208A79C(work);
         } else {
             PlaySE(0x5DC);

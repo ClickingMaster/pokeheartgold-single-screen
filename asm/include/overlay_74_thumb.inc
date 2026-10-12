@@ -232,7 +232,7 @@
 .public MigratedPokemon_RecordMigration
 .public MigratedPokemon_CountPokemon
 .public Comm_RegisterCommandTable
-.public sub_020342C0
+.public CommCmd_GetSize0
 .public CommPlayerInfo_SendLocal
 .public CommPlayerInfo_GetProfile
 .public sub_02034D8C

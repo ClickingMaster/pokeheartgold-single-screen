@@ -1429,9 +1429,9 @@
 	.public PokeathlonEvent_BlockSmashPoints
 	.public PokeathlonEvent_DiscCatchPoints
 	.public PokeathlonEvent_LampJumpPoints
-	.public PokeathlonEvent_Event6Points
+	.public PokeathlonEvent_RelayRunPoints
 	.public PokeathlonEvent_RingDropPoints
-	.public PokeathlonEvent_Event8Points
+	.public PokeathlonEvent_SnowThrowPoints
 	.public PokeathlonEvent_CalcRankPoints
 	.public _0221A7D8
 	.public subOverlayTemplate

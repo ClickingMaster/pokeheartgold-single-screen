@@ -58,7 +58,7 @@ _0203693A:
 	add r1, r4, #0
 	add r2, r6, #0
 	add r3, #0xf5
-	bl sub_02033AF0
+	bl ByteRing_Write
 _02036982:
 	ldr r0, _020369BC ; =gCommCore
 	ldr r1, [r0, #8]
@@ -86,7 +86,7 @@ _02036992:
 	add r0, r1, r0
 	add r1, r4, #1
 	add r3, #0x92
-	bl sub_02033AF0
+	bl ByteRing_Write
 _020369BA:
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
@@ -182,7 +182,7 @@ _02036A68:
 	add r1, r4, #1
 	sub r2, r6, #1
 	add r3, #0xcb
-	bl sub_02033AF0
+	bl ByteRing_Write
 	ldr r0, _02036A8C ; =gCommCore
 	mov r2, #0
 	ldr r0, [r0, #8]

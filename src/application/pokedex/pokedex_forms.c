@@ -383,7 +383,7 @@ u32 PokedexApp_GetAreaScrollbarY(PokedexAppData *pokedexApp, int index) {
 }
 
 // Distance from sprite's y to y, in units of step.
-u32 ov18_021F6540(PokedexAppData *pokedexApp, int sprite, u32 y, u32 step) {
+u32 PokedexApp_GetScrollbarStepCount(PokedexAppData *pokedexApp, int sprite, u32 y, u32 step) {
     s16 spriteX;
     s16 spriteY;
 
@@ -457,8 +457,8 @@ void PokedexApp_ShowFormCompareSprites(PokedexAppData *pokedexApp) {
         PokedexApp_SetSpriteVisible(pokedexApp, 12, TRUE);
         PokedexApp_SetSpriteVisible(pokedexApp, 13, TRUE);
     }
-    ov18_021F6844(pokedexApp, 14, pokedexApp->unk_18C5);
-    ov18_021F6844(pokedexApp, 15, pokedexApp->unk_18C6);
+    PokedexApp_SetCompareFormIcon(pokedexApp, 14, pokedexApp->unk_18C5);
+    PokedexApp_SetCompareFormIcon(pokedexApp, 15, pokedexApp->unk_18C6);
     PokedexApp_SetSpritePos(pokedexApp, 14, 0x40, 0x50, 0);
     PokedexApp_SetSpritePos(pokedexApp, 15, 0xC0, 0x50, 0);
     PokedexApp_ShowFormCompareMonPic(pokedexApp, 1, pokedexApp->unk_18C5, 1);
@@ -482,7 +482,7 @@ void PokedexApp_HideFormCompareSprites(PokedexAppData *pokedexApp) {
     PokedexApp_SetSpriteVisible(pokedexApp, 4, FALSE);
 }
 
-void ov18_021F6844(PokedexAppData *pokedexApp, int sprite, int index) {
+void PokedexApp_SetCompareFormIcon(PokedexAppData *pokedexApp, int sprite, int index) {
     PokedexApp_SetFormListIcon(pokedexApp, sprite, index);
 }
 

@@ -35,7 +35,7 @@
 #include "touchpad.h"
 #include "unk_0200FA24.h"
 #include "unk_02026E30.h"
-#include "unk_02033AE0.h"
+#include "communication_command.h"
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"

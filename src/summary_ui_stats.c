@@ -162,9 +162,9 @@ void sub_0208A234(SummaryWork *work, u8 selection) {
     ((u8 *)work->monData)[0x14] = selection;
     sub_020897C0(work);
     sub_02089C50(work);
-    sub_0208C57C(work);
-    sub_0208C614(work);
-    sub_0208C6B4(work);
+    PokemonSummary_PrintNickname(work);
+    PokemonSummary_PrintLevel(work);
+    PokemonSummary_PrintHeldItem(work);
     sub_02089F98(work);
     PokemonSummary_ReloadPokepic(work);
     sub_0208B448(work);
@@ -178,7 +178,7 @@ void sub_0208A234(SummaryWork *work, u8 selection) {
     sub_0208B4EC(work);
     sub_0208BCD4(work);
     sub_0208BD38(work);
-    sub_0208CBD4(work);
+    PokemonSummary_PrintPage(work);
     sub_0208B400(work);
     sub_0208BFD0(work);
 }

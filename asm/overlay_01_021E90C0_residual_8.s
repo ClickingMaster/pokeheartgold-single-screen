@@ -268,22 +268,22 @@
 	.public ov01_021E9FF8
 	.public ov01_021EA128
 	.public ov01_021EA1F4
-	.public ov01_021EA300
-	.public ov01_021EA398
+	.public AreaLight_ApplyEntry
+	.public AreaLightManager_ApplyActiveEntry
 	.public ov01_021EA3B0
-	.public ov01_021EA3E0
-	.public ov01_021EA564
-	.public ov01_021EA578
-	.public ov01_021EA668
+	.public AreaLight_LoadEntries
+	.public AreaLight_FreeEntries
+	.public AreaLight_ParseLight
+	.public AreaLight_ParseColor
 	.public ov01_02206408
 	.public ov01_02206418
 	.public ov01_02206428
-	.public ov01_02206450
-	.public ov01_02209820
-	.public ov01_02209838
-	.public ov01_02209850
-	.public ov01_02209868
-	.public ov01_02209880
+	.public gAreaLightFilePaths
+	.public gAreaLightFileArea00
+	.public gAreaLightFileArea02
+	.public gAreaLightFileArea01
+	.public gAreaLightFileDun20_01
+	.public gAreaLightFileDun20_02
 	.include "overlay_01_021E90C0.inc"
 	.include "global.inc"
 
@@ -307,12 +307,12 @@
 	.public ov01_021E9EEC
 	.public ov01_021E9F78
 	.public ov01_021EA1F4
-	.public ov01_021EA300
-	.public ov01_021EA398
+	.public AreaLight_ApplyEntry
+	.public AreaLightManager_ApplyActiveEntry
 	.public ov01_021EA3B0
-	.public ov01_021EA564
-	.public ov01_021EA578
-	.public ov01_021EA668
+	.public AreaLight_FreeEntries
+	.public AreaLight_ParseLight
+	.public AreaLight_ParseColor
 	.rodata
 
 ov01_02206408: ; 0x02206408
@@ -327,27 +327,27 @@ ov01_02206428: ; 0x02206428
 	.byte 0x82, 0xE8, 0xC1, 0x05, 0x00, 0x00, 0x00, 0x00, 0xC3, 0xD4, 0x05, 0x00, 0x43, 0xC0, 0xFD, 0xFF, 0xC1, 0xAE, 0x29, 0x00
 	.byte 0x62, 0xE2, 0xC1, 0x05, 0x00, 0x00, 0x00, 0x00, 0x9B, 0x20, 0x05, 0x00, 0xDA, 0x6B, 0xFC, 0xFF, 0xC1, 0x7E, 0x2C, 0x00
 
-ov01_02206450:
-	.word ov01_02209820
-	.word ov01_02209850
-	.word ov01_02209838
-	.word ov01_02209868
-	.word ov01_02209880
+gAreaLightFilePaths:
+	.word gAreaLightFileArea00
+	.word gAreaLightFileArea01
+	.word gAreaLightFileArea02
+	.word gAreaLightFileDun20_01
+	.word gAreaLightFileDun20_02
 
 	.data
 
 	.balign 4, 0
-ov01_02209820:
+gAreaLightFileArea00:
 	.asciz "data/area00light.txt"
 	.balign 4, 0
-ov01_02209838:
+gAreaLightFileArea02:
 	.asciz "data/area02light.txt"
 	.balign 4, 0
-ov01_02209850:
+gAreaLightFileArea01:
 	.asciz "data/area01light.txt"
 	.balign 4, 0
-ov01_02209868:
+gAreaLightFileDun20_01:
 	.asciz "data/dun20_01light.txt"
 	.balign 4, 0
-ov01_02209880:
+gAreaLightFileDun20_02:
 	.asciz "data/dun20_02light.txt"

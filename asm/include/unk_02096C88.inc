@@ -5,7 +5,7 @@
 .public GF_AssertFail
 .public sub_02033250
 .public Comm_RegisterCommandTable
-.public sub_020342C0
+.public CommCmd_GetSize0
 .public CommPlayerInfo_GetProfile
 .public Comm_SendCommand
 .public Comm_CountConnected

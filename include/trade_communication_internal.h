@@ -5,7 +5,7 @@
 #include "save.h"
 #include "save_palpad.h"
 #include "save_special_ribbons.h"
-#include "unk_02033AE0.h"
+#include "communication_command.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
 typedef struct TradePacket {

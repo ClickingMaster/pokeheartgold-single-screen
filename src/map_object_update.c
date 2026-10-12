@@ -5,7 +5,7 @@
 #include "map_object_movement_utilities_internal.h"
 #include "metatile_behavior.h"
 #include "overlay_01.h"
-#include "unk_02033AE0.h"
+#include "communication_command.h"
 #include "unk_02037C94.h"
 #include "unk_02054648.h"
 

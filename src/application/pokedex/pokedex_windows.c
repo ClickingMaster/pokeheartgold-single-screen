@@ -73,8 +73,8 @@ void PokedexApp_SetupListWindows(PokedexAppData *pokedexApp) {
     u32 species;
 
     PokedexApp_AddWindows(pokedexApp, sListWindowTemplates, 20);
-    ov18_021EE508(pokedexApp, 0, 0);
-    ov18_021EE508(pokedexApp, 1, 1);
+    PokedexApp_DrawCountLabelAndCopy(pokedexApp, 0, 0);
+    PokedexApp_DrawCountLabelAndCopy(pokedexApp, 1, 1);
     PokedexApp_DrawSeenAndCaughtCounts(pokedexApp);
     cursor = PokedexApp_GetListCursorIndex(pokedexApp);
     species = PokedexApp_GetCursorSpecies(pokedexApp);
@@ -85,7 +85,7 @@ void PokedexApp_SetupListWindows(PokedexAppData *pokedexApp) {
 #pragma force_active on
 
 // A count label: a 12-tile bar from the graphics NARC with the message right-aligned on it.
-void ov18_021EE44C(PokedexAppData *pokedexApp, int windowId, u32 msgNo) {
+void PokedexApp_DrawCountLabel(PokedexAppData *pokedexApp, int windowId, u32 msgNo) {
     NNSG2dCharacterData *charData;
     void *allocation = GfGfxLoader_GetCharDataFromOpenNarc(pokedexApp->gfxNarc, 1, TRUE, &charData, HEAP_ID_POKEDEX_APP);
     u8 *pixels = charData->pRawData;
@@ -105,8 +105,8 @@ void ov18_021EE44C(PokedexAppData *pokedexApp, int windowId, u32 msgNo) {
 
 #pragma force_active reset
 
-void ov18_021EE508(PokedexAppData *pokedexApp, u32 windowId, u32 msgNo) {
-    ov18_021EE44C(pokedexApp, windowId, msgNo);
+void PokedexApp_DrawCountLabelAndCopy(PokedexAppData *pokedexApp, u32 windowId, u32 msgNo) {
+    PokedexApp_DrawCountLabel(pokedexApp, windowId, msgNo);
     ScheduleWindowCopyToVram(&pokedexApp->windows[windowId]);
 }
 
@@ -877,10 +877,10 @@ void PokedexApp_DrawSearchCriteriaSummary(PokedexAppData *pokedexApp) {
 #pragma force_active reset
 
 // The search results screen's counts (labels 95-96, counts 97-100 alternating as on the list screen).
-void ov18_021EFFEC(PokedexAppData *pokedexApp) {
+void PokedexApp_DrawSearchResultCounts(PokedexAppData *pokedexApp) {
     BgCellManager_GetCellTilemap(pokedexApp->unk_0008, 15);
-    ov18_021EE44C(pokedexApp, 95, 0);
-    ov18_021EE44C(pokedexApp, 96, 1);
+    PokedexApp_DrawCountLabel(pokedexApp, 95, 0);
+    PokedexApp_DrawCountLabel(pokedexApp, 96, 1);
     PokedexApp_DrawCountNumber(pokedexApp, pokedexApp->unk_185D + 97, pokedexApp->unk_0878.unk_7B4);
     PokedexApp_DrawCountNumber(pokedexApp, pokedexApp->unk_185D + 99, pokedexApp->unk_0878.unk_7B6);
     PokedexApp_PutWindowTilemap(pokedexApp, 95);
@@ -941,7 +941,7 @@ void PokedexApp_ClearSearchEntryWindows(PokedexAppData *pokedexApp) {
     }
 }
 
-void ov18_021F0168(PokedexAppData *pokedexApp) {
+void PokedexApp_InitAreaListCells(PokedexAppData *pokedexApp) {
     u32 i;
 
     for (i = 0; i < 6; i++) {
@@ -1163,7 +1163,7 @@ void PokedexApp_FreeSizeCheckWindows(PokedexAppData *pokedexApp) {
 }
 
 // Screen 4 (unidentified species): title and message.
-void ov18_021F0858(PokedexAppData *pokedexApp) {
+void PokedexApp_SetupEntryMenuWindows(PokedexAppData *pokedexApp) {
     u32 i;
     u8 *window;
 
@@ -1186,7 +1186,7 @@ void ov18_021F0858(PokedexAppData *pokedexApp) {
     }
 }
 
-void ov18_021F08E0(PokedexAppData *pokedexApp) {
+void PokedexApp_FreeEntryMenuWindows(PokedexAppData *pokedexApp) {
     u32 i;
     u8 *window = (u8 *)pokedexApp;
 

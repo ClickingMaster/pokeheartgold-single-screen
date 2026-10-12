@@ -9,19 +9,19 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_021F3114
-	.public ov01_021F3170
-	.public ov01_021F31A0
-	.public ov01_021F31CC
-	.public ov01_021F3348
-	.public ov01_021F336C
+	.public PlayerAvatar_TryStartSpinSlide
+	.public SpinSlide_Start
+	.public SpinSlide_RotateDirection
+	.public Task_SpinSlide
+	.public SpinSlide_AllocZeroed
+	.public SpinSlide_Free
 	.include "overlay_01_021F3114.inc"
 	.include "global.inc"
 
 	.text
 
-	thumb_func_start ov01_021F3114
-ov01_021F3114: ; 0x021F3114
+	thumb_func_start PlayerAvatar_TryStartSpinSlide
+PlayerAvatar_TryStartSpinSlide: ; 0x021F3114
 	push {r4, r5, r6, lr}
 	add r6, r1, #0
 	add r5, r0, #0
@@ -63,37 +63,37 @@ _021F3160:
 _021F3164:
 	add r0, r5, #0
 	add r1, r6, #0
-	bl ov01_021F3170
+	bl SpinSlide_Start
 	mov r0, #1
 	pop {r4, r5, r6, pc}
-	thumb_func_end ov01_021F3114
+	thumb_func_end PlayerAvatar_TryStartSpinSlide
 
-	thumb_func_start ov01_021F3170
-ov01_021F3170: ; 0x021F3170
+	thumb_func_start SpinSlide_Start
+SpinSlide_Start: ; 0x021F3170
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	mov r0, #0x18
 	add r6, r1, #0
 	add r7, r2, #0
-	bl ov01_021F3348
+	bl SpinSlide_AllocZeroed
 	add r4, r0, #0
 	str r5, [r4, #0xc]
 	str r6, [r4, #0x10]
 	ldr r0, _021F3198 ; =SEQ_SE_DP_F209
 	str r7, [r4]
 	bl PlaySE
-	ldr r1, _021F319C ; =ov01_021F31CC
+	ldr r1, _021F319C ; =Task_SpinSlide
 	add r0, r5, #0
 	add r2, r4, #0
 	bl FieldSystem_CreateTask
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _021F3198: .word SEQ_SE_DP_F209
-_021F319C: .word ov01_021F31CC
-	thumb_func_end ov01_021F3170
+_021F319C: .word Task_SpinSlide
+	thumb_func_end SpinSlide_Start
 
-	thumb_func_start ov01_021F31A0
-ov01_021F31A0: ; 0x021F31A0
+	thumb_func_start SpinSlide_RotateDirection
+SpinSlide_RotateDirection: ; 0x021F31A0
 	cmp r0, #3
 	bhi _021F31C8
 	add r0, r0, r0
@@ -122,10 +122,10 @@ _021F31C4:
 _021F31C8:
 	mov r0, #0
 	bx lr
-	thumb_func_end ov01_021F31A0
+	thumb_func_end SpinSlide_RotateDirection
 
-	thumb_func_start ov01_021F31CC
-ov01_021F31CC: ; 0x021F31CC
+	thumb_func_start Task_SpinSlide
+Task_SpinSlide: ; 0x021F31CC
 	push {r4, r5, r6, lr}
 	bl TaskManager_GetEnvironment
 	add r4, r0, #0
@@ -184,7 +184,7 @@ _021F3236:
 	bne _021F3254
 _021F3244:
 	ldr r0, [r4]
-	bl ov01_021F31A0
+	bl SpinSlide_RotateDirection
 	str r0, [r4]
 	ldr r0, [r4, #0x10]
 	ldr r1, [r4]
@@ -243,7 +243,7 @@ _021F32BC:
 	cmp r0, #1
 	ldr r0, [r4]
 	bne _021F32FA
-	bl ov01_021F31A0
+	bl SpinSlide_RotateDirection
 	str r0, [r4]
 	add r0, r6, #0
 	mov r1, #0x80
@@ -256,14 +256,14 @@ _021F32BC:
 	ldr r1, [r4]
 	bl PlayerAvatar_SetFacingDirection
 	add r0, r4, #0
-	bl ov01_021F336C
+	bl SpinSlide_Free
 	ldr r0, _021F3344 ; =SEQ_SE_DP_F209
 	mov r1, #0
 	bl StopSE
 	mov r0, #1
 	pop {r4, r5, r6, pc}
 _021F32FA:
-	bl ov01_021F31A0
+	bl SpinSlide_RotateDirection
 	str r0, [r4]
 _021F3300:
 	ldr r0, [r4, #0x10]
@@ -287,7 +287,7 @@ _021F3314:
 	ldr r1, [r4]
 	bl PlayerAvatar_SetFacingDirection
 	add r0, r4, #0
-	bl ov01_021F336C
+	bl SpinSlide_Free
 	ldr r0, _021F3344 ; =SEQ_SE_DP_F209
 	mov r1, #0
 	bl StopSE
@@ -298,10 +298,10 @@ _021F3340:
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 _021F3344: .word SEQ_SE_DP_F209
-	thumb_func_end ov01_021F31CC
+	thumb_func_end Task_SpinSlide
 
-	thumb_func_start ov01_021F3348
-ov01_021F3348: ; 0x021F3348
+	thumb_func_start SpinSlide_AllocZeroed
+SpinSlide_AllocZeroed: ; 0x021F3348
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	mov r0, #4
@@ -318,14 +318,14 @@ _021F335C:
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021F3348
+	thumb_func_end SpinSlide_AllocZeroed
 
-	thumb_func_start ov01_021F336C
-ov01_021F336C: ; 0x021F336C
+	thumb_func_start SpinSlide_Free
+SpinSlide_Free: ; 0x021F336C
 	ldr r3, _021F3374 ; =Heap_FreeExplicit
 	add r1, r0, #0
 	mov r0, #4
 	bx r3
 	.balign 4, 0
 _021F3374: .word Heap_FreeExplicit
-	thumb_func_end ov01_021F336C
+	thumb_func_end SpinSlide_Free

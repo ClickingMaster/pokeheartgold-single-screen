@@ -40,7 +40,7 @@ extern void sub_0208BC78(void *);
 extern void Sprite_SetDrawFlag(void *, BOOL);
 extern void sub_0208A834(void *);
 extern void sub_0208BB24(void *, u8, u8);
-extern void sub_0208DB64(void *);
+extern void PokemonSummary_PrintSwappedMoves(void *);
 extern int sub_0208ADDC(void *);
 extern BOOL MoveIsHM(u16);
 extern int sub_0208AED4(void *);

@@ -17,21 +17,21 @@ void ov01_021EA3B0(NNSG3dResMdl *renderObj);
 void LoadAreaOrDungeonLightTxt(u32 archiveID, ModelAttributes *modelAttributes);
 BOOL ov01_021E9EEC(TaskManager *taskman);
 BOOL ov01_021E9F78(TaskManager *taskman);
-const s8 *ov01_021EA668(const s8 *src, u16 *dest);
-const s8 *ov01_021EA578(const s8 *src, u16 *colorOut, s16 *vecOut);
+const s8 *AreaLight_ParseColor(const s8 *src, u16 *dest);
+const s8 *AreaLight_ParseLight(const s8 *src, u16 *colorOut, s16 *vecOut);
 
 /* ---- .rodata / .data --------------------------------------------------- */
 
-extern char ov01_02209868[24] __attribute__((aligned(4)));
-extern char ov01_02209880[24] __attribute__((aligned(4)));
-extern char ov01_02209850[24] __attribute__((aligned(4)));
-extern char ov01_02209820[24] __attribute__((aligned(4)));
-extern char ov01_02209838[24] __attribute__((aligned(4)));
+extern char gAreaLightFileDun20_01[24] __attribute__((aligned(4)));
+extern char gAreaLightFileDun20_02[24] __attribute__((aligned(4)));
+extern char gAreaLightFileArea01[24] __attribute__((aligned(4)));
+extern char gAreaLightFileArea00[24] __attribute__((aligned(4)));
+extern char gAreaLightFileArea02[24] __attribute__((aligned(4)));
 
 extern const u32 ov01_02206408[4];
 extern const u32 ov01_02206418[4];
 extern const AreaLightTemplate ov01_02206428[2];
-extern const char *const ov01_02206450[5];
+extern const char *const gAreaLightFilePaths[5];
 
 /* ---- functions --------------------------------------------------------- */
 

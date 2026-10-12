@@ -22,5 +22,5 @@
 .public sub_0205F504
 .public GetMovementForDirection
 .public memset
-.public ov01_021F3114
+.public PlayerAvatar_TryStartSpinSlide
 .public ViridianGymmick_HandleTileAction

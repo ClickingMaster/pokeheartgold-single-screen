@@ -4,7 +4,7 @@
 #include "overlay_03.h"
 #include "safari_zone.h"
 #include "task.h"
-#include "unk_02033AE0.h"
+#include "communication_command.h"
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"

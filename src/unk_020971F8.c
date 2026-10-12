@@ -1,6 +1,6 @@
 #include "unk_020971F8.h"
 
-#include "unk_02033AE0.h"
+#include "communication_command.h"
 #include "unk_0203AC88.h"
 
 void sub_020971F8(void *arg0) {

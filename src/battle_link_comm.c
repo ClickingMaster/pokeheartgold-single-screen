@@ -96,10 +96,10 @@ void *BattleLink_GetPalPadRecvBuffer(int sender, BattleLinkWork *work) {
 
 const u32 gBattleLinkCommands[] = {
     (u32)BattleLink_RecvEnd,
-    (u32)sub_020342B8,
+    (u32)CommCmd_GetSizeVariable,
     0,
     (u32)BattleLink_RecvData,
-    (u32)sub_020342B8,
+    (u32)CommCmd_GetSizeVariable,
     0,
     (u32)BattleLink_RecvAiFlags,
     (u32)BattleLink_GetAiFlagsSize,

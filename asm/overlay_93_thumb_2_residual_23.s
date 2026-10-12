@@ -314,7 +314,7 @@ ov93_022630D8:
 
 ov93_022630E4: ; 0x022630E4
 	.word 0
-	.word sub_020342C0
+	.word CommCmd_GetSize0
 	.word 0
 	.word WobbuffetPop_RecvPlayerValue
 	.word WobbuffetPop_GetPlayerValueCommandSize
@@ -323,7 +323,7 @@ ov93_022630E4: ; 0x022630E4
 	.word WobbuffetPop_GetEventCommandSize
 	.word 0
 	.word WobbuffetPop_RecvFinished
-	.word sub_020342C0
+	.word CommCmd_GetSize0
 	.word 0
 
 ov93_02263114: ; 0x02263114

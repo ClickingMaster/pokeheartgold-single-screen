@@ -11,7 +11,7 @@
 #include "overlay_manager.h"
 #include "player_data.h"
 #include "sys_task_api.h"
-#include "unk_02033AE0.h"
+#include "communication_command.h"
 #include "unk_02034B0C.h"
 
 // DS-wireless link used by Mystery Gift to receive a Wonder Card from a distribution system. The link

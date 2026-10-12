@@ -36,7 +36,6 @@ typedef struct UnkStruct_field_021F4360 {
 } UnkStruct_field_021F4360;
 
 void FieldSystem_DrawMapNameAnimation(FieldSystem *fieldSystem);
-void ov01_021F35C4(FieldSystem *fieldSystem, int a1, int *a2);
 u32 GetHoneySweetScentWorkSize(void);
 BOOL Task_HoneyOrSweetScent(TaskManager *taskManager);
 BOOL Task_OverworldFish(TaskManager *taskManager);

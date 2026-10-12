@@ -853,7 +853,7 @@ void PokedexApp_InitBgCells(PokedexAppData *pokedexApp) {
     BgCellManager_LoadCellTilemapFromOpenNarc(pokedexApp->unk_0008, 23, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000088_NSCR_lz, 1);
     BgCellManager_SetCellClipRect(pokedexApp->unk_0008, 11, 0, 32, 0, 19);
     BgCellManager_SetCellClipRect(pokedexApp->unk_0008, 12, 0, 32, 0, 19);
-    ov18_021F0168(pokedexApp);
+    PokedexApp_InitAreaListCells(pokedexApp);
 }
 
 void PokedexApp_FreeBgCells(PokedexAppData *pokedexApp) {
@@ -979,7 +979,7 @@ void PokedexApp_SetupScreen(PokedexAppData *pokedexApp, int a1) {
     case 4:
         PokedexApp_LoadEntryMenuGraphics(pokedexApp);
         PokedexApp_SetEntryMenuBgPriorities();
-        ov18_021F0858(pokedexApp);
+        PokedexApp_SetupEntryMenuWindows(pokedexApp);
         break;
     case 5:
         PokedexApp_LoadSearchGraphics(pokedexApp);
@@ -1488,7 +1488,7 @@ void PokedexApp_BuildListReturnCells(PokedexAppData *pokedexApp) {
         }
     }
 
-    ov18_021EFFEC(pokedexApp);
+    PokedexApp_DrawSearchResultCounts(pokedexApp);
 }
 
 void PokedexApp_UpdateSearchResultEntry(PokedexAppData *pokedexApp) {

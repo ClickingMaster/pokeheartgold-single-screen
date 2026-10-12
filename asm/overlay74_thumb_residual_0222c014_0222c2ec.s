@@ -6,7 +6,7 @@
 	.include "overlay_74_thumb.inc"
 	.include "global.inc"
 	.public gApplication_TitleScreen
-	.public sub_020342C0
+	.public CommCmd_GetSize0
 
 	.public MainMenuApp_Init
 	.public MainMenuApp_Main

@@ -26,7 +26,7 @@
 #include "string_util.h"
 #include "sys_task_api.h"
 #include "unk_02031B0C.h"
-#include "unk_02033AE0.h"
+#include "communication_command.h"
 #include "unk_02035900.h"
 #include "vram_transfer_manager.h"
 

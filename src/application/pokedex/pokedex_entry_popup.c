@@ -235,22 +235,22 @@ void PokedexEntryPopup_InitSprites(PokedexEntryPopup *popup) {
     ClearMainOAM(popup->heapId);
     PokedexEntryPopup_InitObjCharTransfer(popup);
     PokedexEntryPopup_CreateResourceManagers(popup);
-    ov18_021F8FF8(popup);
+    PokedexEntryPopup_LoadBannerResources(popup);
     PokedexEntryPopup_LoadTypeIconResources(popup);
     PokedexEntryPopup_LoadFootprintResources(popup);
-    ov18_021F94BC(popup);
+    PokedexEntryPopup_CreateBannerSprite(popup);
     PokedexEntryPopup_CreateTypeIconSprites(popup);
     PokedexEntryPopup_CreateFootprintSprite(popup);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
 // Banner sprite resources
-void ov18_021F8FF8(PokedexEntryPopup *popup) {
+void PokedexEntryPopup_LoadBannerResources(PokedexEntryPopup *popup) {
     PokedexEntryPopup_LoadSpriteResources(popup->sprites[0].resources, popup->resourceManagers, popup->heapId, popup->gfxNarc, 29, 32, 30, 31, 2, 0xC618, 0xC618, 0xC618, 0xC618);
     PaletteData_LoadPaletteSlotFromHardware(popup->paletteData, PLTTBUF_MAIN_OBJ, SpriteTransfer_GetPlttOffset(popup->sprites[0].resources[1], NNS_G2D_VRAM_TYPE_2DMAIN) << 4, 0x40);
 }
 
-void ov18_021F9054(PokedexEntryPopup *popup) {
+void PokedexEntryPopup_FreeBannerResources(PokedexEntryPopup *popup) {
     PokedexEntryPopup_FreeSpriteResources(popup->sprites[0].resources, popup->resourceManagers);
 }
 
@@ -284,10 +284,10 @@ void PokedexEntryPopup_UnloadFootprintResources(PokedexEntryPopup *popup) {
 void PokedexEntryPopup_FreeSprites(PokedexEntryPopup *popup) {
     PokedexEntryPopup_DeleteFootprintSprite(popup);
     PokedexEntryPopup_DeleteTypeIconSprites(popup);
-    ov18_021F9508(popup);
+    PokedexEntryPopup_DeleteBannerSprite(popup);
     PokedexEntryPopup_UnloadFootprintResources(popup);
     PokedexEntryPopup_UnloadTypeIconResources(popup);
-    ov18_021F9054(popup);
+    PokedexEntryPopup_FreeBannerResources(popup);
     PokedexEntryPopup_DestroyResourceManagers(popup);
     PokedexEntryPopup_DestroyObjCharTransfer();
     SpriteList_Delete(popup->spriteList);
@@ -374,7 +374,7 @@ void PokedexEntryPopup_DeleteTypeIconSprites(PokedexEntryPopup *popup) {
 }
 
 // Banner sprite
-void ov18_021F94BC(PokedexEntryPopup *popup) {
+void PokedexEntryPopup_CreateBannerSprite(PokedexEntryPopup *popup) {
     SimpleSpriteTemplate template;
     SpriteResourcesHeader header;
 
@@ -389,7 +389,7 @@ void ov18_021F94BC(PokedexEntryPopup *popup) {
     popup->sprites[0].sprite = Sprite_Create(&template);
 }
 
-void ov18_021F9508(PokedexEntryPopup *popup) {
+void PokedexEntryPopup_DeleteBannerSprite(PokedexEntryPopup *popup) {
     Sprite_Delete(popup->sprites[0].sprite);
 }
 

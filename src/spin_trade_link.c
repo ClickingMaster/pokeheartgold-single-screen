@@ -5,7 +5,7 @@
 #include "communication_player_state.h"
 #include "heap.h"
 #include "unk_02032844.h"
-#include "unk_02033AE0.h"
+#include "communication_command.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
 #include "unk_0205A44C.h"

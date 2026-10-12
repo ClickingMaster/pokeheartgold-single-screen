@@ -162,7 +162,7 @@
 	.extern PokeathlonEvent_CirclePushPoints
 	.extern PokeathlonEvent_BlockSmashPoints
 	.extern PokeathlonEvent_DiscCatchPoints
-	.extern PokeathlonEvent_Event8Points
+	.extern PokeathlonEvent_SnowThrowPoints
 	.extern ov96_0221DC80
 	.extern ov96_0221DC88
 	.extern ov96_0221DC90
@@ -446,7 +446,7 @@
 	.public PokeathlonEvent_CirclePushPoints
 	.public PokeathlonEvent_BlockSmashPoints
 	.public PokeathlonEvent_DiscCatchPoints
-	.public PokeathlonEvent_Event8Points
+	.public PokeathlonEvent_SnowThrowPoints
 	.extern ov96_0221DC80
 	.extern ov96_0221DC88
 	.extern ov96_0221DC90
@@ -1045,9 +1045,9 @@ ov96_0221D9C8: ; 0x0221D9C8
 	.word PokeathlonEvent_BlockSmashPoints
 	.word PokeathlonEvent_DiscCatchPoints
 	.word PokeathlonEvent_LampJumpPoints
-	.word PokeathlonEvent_Event6Points
+	.word PokeathlonEvent_RelayRunPoints
 	.word PokeathlonEvent_RingDropPoints
-	.word PokeathlonEvent_Event8Points
+	.word PokeathlonEvent_SnowThrowPoints
 	.word 0
 
 	.data

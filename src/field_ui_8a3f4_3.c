@@ -2,7 +2,7 @@
 
 void sub_0208A8F4(u8 *work) {
     ScheduleSetBgPosText(*(void **)work, 2, 0, 0);
-    sub_0208DB1C(work);
+    PokemonSummary_PrintMoveToLearn(work);
     sub_0208A79C(work);
     thunk_Sprite_SetDrawFlag(*(void **)(work + 0x430), 1);
     sub_0208C068(work);
@@ -13,7 +13,7 @@ void sub_0208A8F4(u8 *work) {
 }
 
 void sub_0208A950(u8 *work) {
-    sub_0208DB1C(work);
+    PokemonSummary_PrintMoveToLearn(work);
     sub_0208A79C(work);
     sub_0208C068(work);
     if (*(s8 *)(work + 0x7BC) == 1) {
