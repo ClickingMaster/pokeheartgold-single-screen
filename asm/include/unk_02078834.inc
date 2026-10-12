@@ -7,8 +7,8 @@
 .public Heap_AllocAtEnd
 .public Heap_Free
 .public sub_020378E4
-.public sub_020398C8
-.public sub_0203A05C
+.public CommState_GetWifiClubData
+.public Comm_HasWifiProfile
 .public FieldSystem_LaunchApplication
 .public CallTask_WirelessTrade
 .public Save_VarsFlags_Get
@@ -19,9 +19,9 @@
 .public TaskManager_GetEnvironment
 .public CallTask_02050960
 .public SetFlag970
-.public sub_02078B58
-.public sub_02078B78
-.public sub_02078D24
+.public CallTask_WifiClub
+.public CallTask_WifiClubWithResult
+.public WifiClub_IsMatchingActivity
 .public LoadOVY13
 .public Frontier_LaunchApp
 .public OS_ResetSystem

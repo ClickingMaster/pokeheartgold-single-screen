@@ -33,7 +33,7 @@ _02059F88:
 	add r1, r0, #0
 	bl CommState_SetErrorWatch
 	mov r0, #0xb
-	bl sub_0205A904
+	bl UnionRoom_SetBeaconActivity
 	ldr r1, _02059FF0 ; =sub_02059FF8
 	add r0, r4, #0
 	mov r2, #0
@@ -42,11 +42,11 @@ _02059FC8:
 	bl CommState_IsAlternateLinked
 	cmp r0, #0
 	bne _02059FEA
-	bl sub_02037FF0
+	bl CommState_ResumeAlternateSearch
 	add r0, r4, #0
-	bl sub_0205ABBC
+	bl UnionRoom_ResetTalk
 	mov r0, #0
-	bl sub_0205A904
+	bl UnionRoom_SetBeaconActivity
 	ldr r1, _02059FF4 ; =sub_02059F30
 	add r0, r4, #0
 	mov r2, #2
@@ -72,11 +72,11 @@ _0205A00C:
 	bl sub_020376F8
 	cmp r0, #0
 	bne _0205A02E
-	bl sub_02037FF0
+	bl CommState_ResumeAlternateSearch
 	add r0, r4, #0
-	bl sub_0205ABBC
+	bl UnionRoom_ResetTalk
 	mov r0, #0
-	bl sub_0205A904
+	bl UnionRoom_SetBeaconActivity
 	ldr r1, _0205A030 ; =sub_02059F30
 	add r0, r4, #0
 	mov r2, #2

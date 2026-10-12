@@ -38,7 +38,7 @@
 .public CommState_IsLinked
 .public CommState_SetErrorWatch
 .public CommState_GetLinkMode
-.public sub_02039980
+.public CommState_GetSelectedOrder
 .public sub_020399FC
 .public FieldSystem_GetSaveData
 .public StartMapSceneScript

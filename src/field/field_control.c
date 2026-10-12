@@ -54,12 +54,12 @@
 #include "unk_02035900.h"
 #include "comm_state.h"
 #include "field_interaction.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 #include "headbutt_tree.h"
 #include "unk_02055BF0.h"
 #include "communication_club_link.h"
 #include "unk_02058AEC.h"
-#include "unk_0205A44C.h"
+#include "union_room_talk.h"
 #include "player_avatar_movement.h"
 #include "map_object_behavior.h"
 #include "unk_0206D494.h"
@@ -394,7 +394,7 @@ BOOL FieldInput_Process_UnionRoom(FieldInput *input, FieldSystem *fieldSystem) {
         if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
             PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
         }
-        sub_020380B0(); // CommManager_PauseUnionClient?
+        CommState_RefuseJoins(); // CommManager_PauseUnionClient?
         StartMapSceneScript(fieldSystem, MapObject_GetScriptID(mapObject), mapObject);
         return TRUE;
     }
@@ -407,8 +407,8 @@ BOOL FieldInput_Process_UnionRoom(FieldInput *input, FieldSystem *fieldSystem) {
     if (input->menu && Comm_CountConnected() <= 1 && ov01_021E690C(fieldSystem)) {
         PlaySE(SEQ_SE_DP_WIN_OPEN);
         sub_0203BCDC(fieldSystem); // StartMenu_OpenUnionRoom?
-        sub_0205A904(4);
-        sub_020380CC(); // CommManager_PauseUnionServer?
+        UnionRoom_SetBeaconActivity(4);
+        CommState_RefuseJoinsAndRestart(); // CommManager_PauseUnionServer?
         return TRUE;
     }
     return FALSE;
@@ -513,7 +513,7 @@ static BOOL FieldSystem_CheckMapTransition(FieldSystem *fieldSystem, FieldInput 
 
     PlayerAvatar_GetFacingTileCoords(fieldSystem, &x, &z);
 
-    if (sub_020548C0(fieldSystem, x, z) == FALSE) { // TerrainCollisionManager_CheckCollision?
+    if (FieldSystem_CheckTileCollision(fieldSystem, x, z) == FALSE) { // TerrainCollisionManager_CheckCollision?
         return FALSE;
     }
 
@@ -894,7 +894,7 @@ static u8 FieldSystem_FacingMetatileBehavior(FieldSystem *fieldSystem) {
 static u8 ov01_021E7B70(FieldSystem *fieldSystem) {
     int x, z;
     PlayerAvatar_GetFacingTileCoords(fieldSystem, &x, &z);
-    return sub_020548C0(fieldSystem, x, z);
+    return FieldSystem_CheckTileCollision(fieldSystem, x, z);
 }
 
 static inline void SetLocation(Location *location, int mapId, int warpId, int x, int z, int dir) {
@@ -1080,7 +1080,7 @@ static BOOL FieldSystem_SoundplateIsActive(FieldSystem *fieldSystem, SoundplateS
 }
 
 static void FieldSystem_ProcessSoundplateAtCoords(FieldSystem *fieldSystem, int x, int z) {
-    SoundplateStruct *soundplateStruct = sub_02054874(fieldSystem, x, z);
+    SoundplateStruct *soundplateStruct = FieldSystem_GetSoundplateAt(fieldSystem, x, z);
 
     if (fieldSystem->environmentSoundState == ENVIRONMENT_SOUND_NONE_UNK2) {
         fieldSystem->environmentSoundState = ENVIRONMENT_SOUND_NONE;

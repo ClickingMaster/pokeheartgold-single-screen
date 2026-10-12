@@ -4,6 +4,8 @@
 
 #include "constants/sndseq.h"
 
+#include "field/map_object_models.h"
+
 #include "heap.h"
 #include "map_object.h"
 #include "player_avatar.h"
@@ -15,9 +17,6 @@
 
 // The height of the spin after n frames.
 #define WARP_SPIN_HEIGHT(n) ((fx32)((double)(n) * ((double)((n) << 11) + 9011.2)))
-
-// defined with the map object models, not declared by a header yet
-void ov01_021F92A0(LocalMapObject *mapObject);
 
 // A quarter turn counterclockwise.
 void WarpSpin_RotatePlayer(WarpSpinTask *task) {
@@ -81,7 +80,7 @@ void Task_WarpSpinArrival(SysTask *sysTask, WarpSpinTask *task) {
         n = WARP_SPIN_FRAMES - task->counter;
         pos.y = WARP_SPIN_HEIGHT(n);
         sub_0205F9A0(mapObject, &pos);
-        ov01_021F92A0(mapObject);
+        MapObject_TryUpdateDraw(mapObject);
         PlaySE(SEQ_SE_DP_TELE2);
         task->state = 1;
     case 1:

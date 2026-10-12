@@ -34,7 +34,7 @@ typedef struct GlobalTerminalApp {
 void LoadOVY38(void);
 void UnloadOVY38(void);
 void WirelessStatusIcon_SetLevel(int a0);
-const OverlayManagerTemplate *sub_02087E10(u8 a0);
+const OverlayManagerTemplate *VsRecorderApp_GetTemplate(u8 a0);
 BOOL CommWireless_IsStartedUp(void);
 void CommWireless_Terminate(void);
 void ov00_021EC294(void *(*alloc)(int, u32, int), void (*free)(int, void *, u32));

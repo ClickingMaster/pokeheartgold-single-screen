@@ -14,7 +14,7 @@
 #include "map_object_movement_utilities.h"
 #include "map_object_movement_utilities_internal.h"
 #include "overlay_01.h"
-#include "overlay_01_021F944C.h"
+#include "field/map_object_render.h"
 #include "overlay_01_022001E4.h"
 #include "player_avatar.h"
 #include "script_manager.h"
@@ -258,13 +258,13 @@ void ApricornTreeObject_Update(LocalMapObject *object) {
     MapObjectSpriteState *spriteState = (MapObjectSpriteState *)sub_0205F394(object);
     ApricornTreeState *state = (ApricornTreeState *)sub_0205F40C(object);
     int apricorn = sub_02055780(MapObject_GetFieldSystem(object), object);
-    if (ov01_021FA2D4(object) == TRUE) {
+    if (MapObject_IsBillboardPending(object) == TRUE) {
         return;
     }
     if (state->billboard == NULL) {
         state->spriteId = GetApricornTreeSpriteId(FieldSystem_ApricornTree_TryGetApricorn(MapObject_GetFieldSystem(object), object), apricorn);
         MapObject_SetSpriteID(object, state->spriteId);
-        ov01_021F94C0(object, &state->billboard, state->spriteId);
+        MapObject_RequestBillboard(object, &state->billboard, state->spriteId);
     } else if (apricorn != state->apricorns) {
         ov01_021F95CC(object, &state->billboard, state->spriteId);
         state->spriteId = GetApricornTreeSpriteId(FieldSystem_ApricornTree_TryGetApricorn(MapObject_GetFieldSystem(object), object), apricorn);
@@ -273,21 +273,21 @@ void ApricornTreeObject_Update(LocalMapObject *object) {
             if (apricorn == 1) {
                 ApricornRegrowth_Spawn(object);
             }
-            ov01_021F94C0(object, &state->billboard, state->spriteId);
+            MapObject_RequestBillboard(object, &state->billboard, state->spriteId);
         } else {
             GF_AssertFail();
         }
         spriteState->unk2 = 0;
     }
     state->apricorns = apricorn;
-    if (ov01_021FA2D4(object) == TRUE) {
+    if (MapObject_IsBillboardPending(object) == TRUE) {
         return;
     }
     if (state->billboard == NULL) {
         return;
     }
-    ov01_021FA3E8(object, state->billboard);
-    if (ov01_021F9344(object) == 0) {
+    MapObject_UpdateBillboardPosition(object, state->billboard);
+    if (MapObject_IsBillboardAnimPaused(object) == 0) {
         switch (sub_0205F330(object)) {
         case 0:
             if (BillboardObject_GetSequence(state->billboard) != 0) {
@@ -328,7 +328,7 @@ void ApricornTreeObject_Delete(LocalMapObject *object) {
 void ApricornTreeObject_Pause(LocalMapObject *object) {
     ApricornTreeState *state = (ApricornTreeState *)sub_0205F40C(object);
     if (state->billboard != NULL) {
-        ov01_021F9610(state->billboard, &state->savedState);
+        BillboardObject_SaveState(state->billboard, &state->savedState);
     }
     ov01_021F95CC(object, &state->billboard, state->spriteId);
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK21);
@@ -336,12 +336,12 @@ void ApricornTreeObject_Pause(LocalMapObject *object) {
 
 void ApricornTreeObject_Resume(LocalMapObject *object) {
     ApricornTreeState *state = (ApricornTreeState *)sub_0205F40C(object);
-    if (ov01_021FA2D4(object) == TRUE) {
+    if (MapObject_IsBillboardPending(object) == TRUE) {
         return;
     }
     if (state->billboard == NULL) {
         if (state->spriteId != 0xFFFF) {
-            ov01_021F94C0(object, &state->billboard, state->spriteId);
+            MapObject_RequestBillboard(object, &state->billboard, state->spriteId);
         } else {
             GF_AssertFail();
         }
@@ -349,13 +349,13 @@ void ApricornTreeObject_Resume(LocalMapObject *object) {
     if (state->billboard == NULL) {
         return;
     }
-    ov01_021F9630(state->billboard, &state->savedState);
-    ov01_021FA3E8(object, state->billboard);
+    BillboardObject_RestoreState(state->billboard, &state->savedState);
+    MapObject_UpdateBillboardPosition(object, state->billboard);
     MapObject_ClearFlagsBits(object, MAPOBJECTFLAG_UNK21);
 }
 
 void *ApricornTreeObject_GetBillboard(LocalMapObject *object) {
-    if (ov01_021FA2D4(object) == TRUE) {
+    if (MapObject_IsBillboardPending(object) == TRUE) {
         GF_AssertFail();
         return NULL;
     }
@@ -652,7 +652,7 @@ BOOL sub_02064668(TrainerApproachWork *work) {
     if (MapObject_CheckSingleMovement(object) == TRUE) {
         return FALSE;
     }
-    ov01_021F9408(work->trainer, work->movement);
+    MapObject_SetFacingAndUpdateDraw(work->trainer, work->movement);
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_MOVEMENT_PAUSED);
     work->state = 2;
     return TRUE;

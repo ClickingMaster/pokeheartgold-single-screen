@@ -242,7 +242,7 @@ void *CommPlayerInfo_GetExchangeToken(int netId) {
 }
 
 u8 sub_02034870(int a) {
-    return sub_0203A378(gCommPlayerInfo->save, a);
+    return Comm_FindFriendIndexOfPlayer(gCommPlayerInfo->save, a);
 }
 
 void *CommPlayerInfo_GetGroupName(int netId) {
@@ -335,7 +335,7 @@ void CommPlayerInfo_SaveRecords(void *save) {
     for (i = 0; i < Comm_CountConnected(); i++) {
         tok = CommPlayerInfo_GetExchangeToken(i);
         if (tok != NULL) {
-            int res = sub_0203A084(save, tok, &val);
+            int res = Comm_FindFriendSlot(save, tok, &val);
             switch (res) {
             case 0:
             case 1:

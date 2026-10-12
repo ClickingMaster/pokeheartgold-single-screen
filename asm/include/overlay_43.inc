@@ -172,7 +172,7 @@
 .public Save_Frontier_GetStatic
 .public FrontierSave_GetStat
 .public FrontierSave_DeleteRow
-.public sub_0203A128
+.public Comm_FindFriendSlotByKey
 .public Save_VarsFlags_Get
 .public GetUnionRoomAvatarAttrBySprite
 .public Save_VarsFlags_FlypointFlagAction

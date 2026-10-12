@@ -7,7 +7,7 @@
 .public Save_GameStats_Get
 .public GameStats_Inc
 .public GetMetatileBehavior
-.public sub_020549F4
+.public FieldSystem_CheckCollisionHeightAndGimmick
 .public MetatileBehavior_IsTallGrass
 .public MetatileBehavior_IsVeryTallGrass
 .public MetatileBehavior_IsDoor

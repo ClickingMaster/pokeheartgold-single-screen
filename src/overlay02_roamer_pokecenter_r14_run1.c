@@ -96,13 +96,13 @@ void PokecenterAnimCreate(void *fs, u8 kind) {
     VecFx32 delta, trans;
     void *prop;
     int idx;
-    if (sub_02054C20(fs, 0x24, &prop, &idx)) {
+    if (FieldSystem_FindMapProp(fs, 0x24, &prop, &idx)) {
         u8 *env = Heap_AllocAtEnd(4, 0x18);
         U8(env, 0xc) = kind;
         U8(env, 0xd) = 0;
         U8(env, 0xe) = 0;
         U8(env, 0xf) = 0;
-        sub_02054DC8(idx, MapMatrix_GetWidth(PTR(fs, 0x30)), &delta);
+        Terrain_GetChunkOrigin(idx, MapMatrix_GetWidth(PTR(fs, 0x30)), &delta);
         MapProp_GetTranslation(&trans, prop);
         *(VecFx32 *)env = trans;
         ((VecFx32 *)env)->x += delta.x;

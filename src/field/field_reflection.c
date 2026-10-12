@@ -12,7 +12,7 @@
 #include "field_system.h"
 #include "map_object.h"
 #include "field/map_object_billboard_motion.h"
-#include "overlay_01_021F944C.h"
+#include "field/map_object_render.h"
 #include "field/field_follow_mon.h"
 #include "player_avatar.h"
 
@@ -44,7 +44,7 @@ typedef struct ReflectionRecord {
 
 // Copies the billboard record of the sprite into record; FALSE if the sprite has none.
 // (field object models, still in asm)
-BOOL ov01_021F9744(MapObjectManager *manager, u32 spriteId, ReflectionRecord *record);
+BOOL MapObjectRender_GetBillboardResource(MapObjectManager *manager, u32 spriteId, ReflectionRecord *record);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 1).
 typedef struct Reflection {
@@ -300,7 +300,7 @@ void ReflectionEffect_CalcPosition(ReflectionEffect *work, LocalMapObject *mapOb
 void ReflectionEffect_CreateBillboard(FieldEffect *effect, ReflectionEffect *work) {
     VecFx32 position;
     ReflectionRecord record;
-    if (ov01_021F9744(MapObject_GetManager(work->args.mapObject), work->spriteId, &record) && ov01_021FA2D4(work->args.mapObject) != TRUE) {
+    if (MapObjectRender_GetBillboardResource(MapObject_GetManager(work->args.mapObject), work->spriteId, &record) && MapObject_IsBillboardPending(work->args.mapObject) != TRUE) {
         record.resource = FieldEffectManager_GetBillboardResource(work->args.manager, REFLECTION_RESOURCE);
         FieldEffect_GetPosition(effect, &position);
         work->billboard = FieldEffectManager_CreateBillboard(work->args.manager, (struct FieldEffectRecord *)&record, &position);
@@ -470,7 +470,7 @@ void FollowerReflectionEffect_CreateBillboard(FieldEffect *effect, ReflectionEff
     VecFx32 position;
     ReflectionRecord record;
     void *resource;
-    if (ov01_021F9744(MapObject_GetManager(work->args.mapObject), work->spriteId, &record) && ov01_021FA2D4(work->args.mapObject) != TRUE) {
+    if (MapObjectRender_GetBillboardResource(MapObject_GetManager(work->args.mapObject), work->spriteId, &record) && MapObject_IsBillboardPending(work->args.mapObject) != TRUE) {
         if (work->kind <= REFLECTION_KIND_FLOOR) {
             resource = FieldEffectManager_GetBillboardResource(work->args.manager, REFLECTION_RESOURCE);
         } else {

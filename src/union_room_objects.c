@@ -45,7 +45,7 @@ s32 CommState_IsAlternateLinked(void);
 UnkStruct_0206793C *ov01_021FD8E8(LocalMapObject *object, int index);
 UnkStruct_0206793C *UnionChatMarker_Spawn(LocalMapObject *object);
 
-extern const u16 _020FC824[];
+extern const u16 gUnionRoomGroupFirstSlot[];
 
 void UnionRoomObjects_ResetSlots(UnionRoomObjects *objects);
 void UnionRoomObjects_Task(SysTask *task, void *data);
@@ -130,7 +130,7 @@ BOOL UnionRoomObjects_UpdateGroup(UnionRoomObjects *objects, int index, UnionRoo
     u32 *trainerIds;
 
     if (record == NULL) {
-        k = _020FC824[index];
+        k = gUnionRoomGroupFirstSlot[index];
         for (i = 0; i < 4; i++) {
             UnionRoomSlots_SetRequest(objects->slots, k, 3);
             k++;
@@ -140,14 +140,14 @@ BOOL UnionRoomObjects_UpdateGroup(UnionRoomObjects *objects, int index, UnionRoo
     player = &record->player;
     group = &player->group;
     if (player->id != objects->slots[index].id) {
-        k = _020FC824[index];
+        k = gUnionRoomGroupFirstSlot[index];
         for (i = 0; i < 4; i++) {
             UnionRoomSlots_SetRequest(objects->slots, k, 3);
             k++;
         }
         return FALSE;
     }
-    k = _020FC824[index];
+    k = gUnionRoomGroupFirstSlot[index];
     trainerIds = group->trainerIds;
     for (i = 0; i < 4; i++) {
         switch (objects->slots[k].state) {

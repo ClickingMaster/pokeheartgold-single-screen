@@ -4,7 +4,7 @@
 
 #include "field_system.h"
 #include "field/map_object_billboard_motion.h"
-#include "overlay_01_021F944C.h"
+#include "field/map_object_render.h"
 #include "overlay_04.h"
 #include "sound_playback.h"
 #include "billboard_lists.h"
@@ -118,7 +118,7 @@ static BOOL Task_ExtinguishCandle(TaskManager *taskman) {
             MapProp_SetCulled(mapProp, TRUE);
             GymmickUnion *gymmickUnion = Save_Gymmick_AssertMagic_GetData(Save_GetGymmickPtr(FieldSystem_GetSaveData(taskData->fieldSystem)), GYMMICK_ECRUTEAK);
             gymmickUnion->ecruteak.candles[localData->candleIdx] = TRUE;
-            ov01_021FA930(localData->mapObject, SPRITE_ITAKO_);
+            MapObject_ChangeBillboardSprite(localData->mapObject, SPRITE_ITAKO_);
             ++taskData->state;
         } else {
             ++taskData->scaleFactor;
@@ -130,7 +130,7 @@ static BOOL Task_ExtinguishCandle(TaskManager *taskman) {
         break;
     }
     case 2:
-        if (!ov01_021FA2D4(localData->mapObject)) {
+        if (!MapObject_IsBillboardPending(localData->mapObject)) {
             ApplyFogToMapObjects(taskData->fieldSystem);
             Heap_Free(taskData);
             return TRUE;

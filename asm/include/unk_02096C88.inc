@@ -10,9 +10,9 @@
 .public Comm_SendCommand
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
-.public sub_02037FF0
+.public CommState_ResumeAlternateSearch
 .public CommState_SetMaxEntries
-.public sub_0205A904
+.public UnionRoom_SetBeaconActivity
 .public UnionRoomObjects_ResetSlots
 .public sub_02091570
 .public SpinTradeLink_New

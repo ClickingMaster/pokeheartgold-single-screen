@@ -12,7 +12,7 @@
 #include "player_data.h"
 #include "sys_task_api.h"
 #include "system.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 
 // Communication core, network state and player movement functions, declared with the types their call sites were
 // matched against (no header, or a header with other types).
@@ -357,7 +357,7 @@ BOOL CommPlayerManager_IsPositionBlocked(int x, int z, int excludedNetId) {
             return TRUE;
         }
     }
-    return sub_020548C0(gCommPlayerManager->fieldSystem, x, z);
+    return FieldSystem_CheckTileCollision(gCommPlayerManager->fieldSystem, x, z);
 }
 
 u32 CommPlayerManager_GetMoveDelay(int speed) {
@@ -455,7 +455,7 @@ void CommPlayerManager_ReceivePosition(int netId, int size, const u8 *data) {
     position->facing = data[4] & 15;
     gCommPlayerManager->active[netId] = 1;
     gCommPlayerManager->positionChanged[netId] = 1;
-    GF_ASSERT(sub_020548C0(gCommPlayerManager->fieldSystem, position->x, position->z) == 0);
+    GF_ASSERT(FieldSystem_CheckTileCollision(gCommPlayerManager->fieldSystem, position->x, position->z) == 0);
 }
 
 #pragma force_active off

@@ -297,7 +297,7 @@ _02239468:
 _02239478:
 	add r0, r4, #0
 	bl NintendoWfc_HideWaitingIcon
-	bl sub_020399EC
+	bl CommState_ShowRestartErrorAndHalt
 	b _0223949A
 _02239484:
 	ldr r0, _022394A0 ; =0x00000FD4
@@ -309,7 +309,7 @@ _02239484:
 	lsl r0, r0, #4
 	cmp r1, r0
 	bne _0223949A
-	bl sub_020399EC
+	bl CommState_ShowRestartErrorAndHalt
 _0223949A:
 	mov r0, #3
 	pop {r4, pc}
@@ -450,7 +450,7 @@ _02239586:
 _02239596:
 	add r0, r4, #0
 	bl NintendoWfc_HideWaitingIcon
-	bl sub_020399EC
+	bl CommState_ShowRestartErrorAndHalt
 	b _02239604
 _022395A2:
 	sub r0, #0x78
@@ -487,7 +487,7 @@ _022395D2:
 _022395E2:
 	add r0, r4, #0
 	bl NintendoWfc_HideWaitingIcon
-	bl sub_020399EC
+	bl CommState_ShowRestartErrorAndHalt
 	b _02239604
 _022395EE:
 	ldr r0, _02239608 ; =0x00000FD4
@@ -499,7 +499,7 @@ _022395EE:
 	lsl r0, r0, #4
 	cmp r1, r0
 	bne _02239604
-	bl sub_020399EC
+	bl CommState_ShowRestartErrorAndHalt
 _02239604:
 	mov r0, #3
 	pop {r3, r4, r5, pc}

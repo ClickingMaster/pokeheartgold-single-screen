@@ -20,12 +20,12 @@ int sub_0203774C(u32 arg0);
 int sub_0203775C(u32 arg0);
 int sub_020378AC(int arg0);
 void sub_020380F4(void);
-void sub_02038104(void);
+void CommState_SetUnionRoomLinkMode(void);
 int sub_02037824(int arg0);
 BOOL sub_02037880(void);
 int sub_020378AC(int);
 BOOL sub_02037958(void);
 void sub_020380F4(void);
-void sub_02038104(void);
+void CommState_SetUnionRoomLinkMode(void);
 
 #endif // POKEHEARTGOLD_UNK_02035900_H

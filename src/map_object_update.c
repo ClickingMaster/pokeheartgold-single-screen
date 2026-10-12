@@ -7,13 +7,13 @@
 #include "overlay_01.h"
 #include "communication_command.h"
 #include "comm_state.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 
 // Defined elsewhere without a header yet.
 void MapObject_ExecuteMovementCommand(LocalMapObject *object);
 void sub_02063A14(LocalMapObject *object);
 BOOL sub_02063A1C(LocalMapObject *object);
-const MapObjectEffectFlags *ov01_021F9318(LocalMapObject *object);
+const MapObjectEffectFlags *MapObject_GetEffectFlags(LocalMapObject *object);
 u32 ov01_022056C4(LocalMapObject *object, u32 direction);
 void Reflection_Spawn(LocalMapObject *object, int kind);
 void Reflection_SpawnForFollower(LocalMapObject *object, int kind);
@@ -126,7 +126,7 @@ void sub_0205FEDC(LocalMapObject *object) {
     if (sub_0205F73C(object) == 1) {
         previous = sub_0205F504(object);
         current = sub_0205F514(object);
-        effect = ov01_021F9318(object);
+        effect = MapObject_GetEffectFlags(object);
         sub_02060AB8(object, previous, current, effect);
         sub_020601BC(object, previous, current, effect);
         MapObject_UpdateShallowWaterRipple(object, previous, current, effect);
@@ -146,7 +146,7 @@ void sub_0205FF6C(LocalMapObject *object) {
     if (sub_0205F73C(object) == 1) {
         previous = sub_0205F504(object);
         current = sub_0205F514(object);
-        effect = ov01_021F9318(object);
+        effect = MapObject_GetEffectFlags(object);
         sub_02060AB8(object, previous, current, effect);
         sub_02060274(object, previous, current, effect);
         MapObject_SpawnFootprints(object, previous, current, effect);
@@ -166,7 +166,7 @@ void sub_02060020(LocalMapObject *object) {
     if (sub_0205F73C(object) == 1) {
         u8 previous = sub_0205F504(object);
         u8 current = sub_0205F514(object);
-        const MapObjectEffectFlags *effect = ov01_021F9318(object);
+        const MapObjectEffectFlags *effect = MapObject_GetEffectFlags(object);
         sub_02060AB8(object, previous, current, effect);
         sub_020603F8(object, previous, current, effect);
         MapObject_CreateReflection(object, previous, current, effect);
@@ -182,7 +182,7 @@ void sub_0206008C(LocalMapObject *object) {
     if (sub_0205F73C(object) == TRUE) {
         u8 a = sub_0205F504(object);
         u8 b = sub_0205F514(object);
-        const MapObjectEffectFlags *effect = ov01_021F9318(object);
+        const MapObjectEffectFlags *effect = MapObject_GetEffectFlags(object);
         sub_020601A4(object, a, b, effect);
         MapObject_SpawnPuddleSplash(object, a, b, effect);
         MapObject_SpawnMudSplash(object, a, b, effect);
@@ -197,7 +197,7 @@ void sub_02060114(LocalMapObject *object) {
     if (sub_0205F73C(object) == TRUE) {
         u8 a = sub_0205F504(object);
         u8 b = sub_0205F514(object);
-        const MapObjectEffectFlags *effect = ov01_021F9318(object);
+        const MapObjectEffectFlags *effect = MapObject_GetEffectFlags(object);
         sub_020601A4(object, a, b, effect);
         MapObject_SpawnPuddleSplash(object, a, b, effect);
         MapObject_SpawnMudSplash(object, a, b, effect);
@@ -643,7 +643,7 @@ u32 MapObject_CheckCollision(LocalMapObject *object, VecFx32 *position, int x, i
     if (MapObject_IsOutsideMovementRange(object, x, y, z) == TRUE) {
         result |= 1;
     }
-    if (sub_020549A8(MapObject_GetFieldSystem(object), position, x, z, (int)&slope) == TRUE) {
+    if (FieldSystem_CheckCollisionAndHeight(MapObject_GetFieldSystem(object), position, x, z, (int)&slope) == TRUE) {
         result |= 2;
         if (slope != 0) {
             result |= 8;

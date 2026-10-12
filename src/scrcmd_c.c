@@ -78,7 +78,7 @@
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 #include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "unk_02055418.h"
@@ -86,7 +86,7 @@
 #include "comm_player_manager.h"
 #include "communication_club_link.h"
 #include "unk_02058AEC.h"
-#include "unk_0205A44C.h"
+#include "union_room_talk.h"
 #include "union_room_objects.h"
 #include "union_room_avatar.h"
 #include "unk_0205BB1C.h"
@@ -97,7 +97,7 @@
 #include "trainer_card_data.h"
 #include "unk_0206B910.h"
 #include "unk_0206D494.h"
-#include "unk_02078834.h"
+#include "wifi_club.h"
 #include "unk_02091564.h"
 #include "gear_phone_ring_manager.h"
 #include "phone_rematch.h"
@@ -1055,7 +1055,7 @@ BOOL sub_02041900(ScriptContext *ctx) {
     u16 *p_var = GetVarPointer(fieldSystem, ctx->data[0]);
     struct ScriptMenu **pp_menu = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MENU_WINDOW);
     if (*p_var == 0xEEEE) {
-        if (sub_0205A478(fieldSystem->unk80)) {
+        if (UnionRoom_PartnerCancelled(fieldSystem->unk80)) {
             *p_var = 8;
             ScriptMenu_CloseMultichoice(*pp_menu);
             return TRUE;
@@ -1489,7 +1489,7 @@ BOOL ScrCmd_FacePlayer(ScriptContext *ctx) {
         return FALSE;
     }
     oldDir = MapObject_GetFacingDirection(*p_lastInteracted);
-    ov01_021F9408(*p_lastInteracted, rvsDir);
+    MapObject_SetFacingAndUpdateDraw(*p_lastInteracted, rvsDir);
     if (MapObject_GetID(*p_lastInteracted) == obj_partner_poke) {
         if (FollowMonObject_IsLarge(*p_lastInteracted) && oldDir != rvsDir) {
             MapObject_GetCoordsBehind(*p_lastInteracted, &x, &y);
@@ -1840,7 +1840,7 @@ BOOL ScrCmd_151(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_152(ScriptContext *ctx) {
-    sub_02078B58(ctx->taskman);
+    CallTask_WifiClub(ctx->taskman);
     return TRUE;
 }
 
@@ -2049,7 +2049,7 @@ BOOL ScrCmd_706(ScriptContext *ctx) {
 BOOL ScrCmd_165(ScriptContext *ctx) {
     u16 r6 = ScriptGetVar(ctx);
     u16 *r4 = ScriptGetVarPointer(ctx);
-    if (sub_0203A05C(ctx->fieldSystem->saveData)) {
+    if (Comm_HasWifiProfile(ctx->fieldSystem->saveData)) {
         *r4 = 1;
         sub_0203F844(ctx->fieldSystem, r6);
         SetupNativeScript(ctx, ScrNative_WaitApplication);
@@ -2061,7 +2061,7 @@ BOOL ScrCmd_165(ScriptContext *ctx) {
 
 BOOL ScrCmd_166(ScriptContext *ctx) {
     u16 *var_p = ScriptGetVarPointer(ctx);
-    sub_02078B78(ctx->taskman, var_p);
+    CallTask_WifiClubWithResult(ctx->taskman, var_p);
     return TRUE;
 }
 
@@ -2146,7 +2146,7 @@ BOOL ScrCmd_629(ScriptContext *ctx) {
 
 BOOL ScrCmd_630(ScriptContext *ctx) {
     u16 *ret_p = ScriptGetVarPointer(ctx);
-    u32 r5 = sub_0205A894();
+    u32 r5 = UnionRoom_GetPartnerGameVersion();
     u32 r0 = sub_02029084();
     if (r5 == r0) {
         *ret_p = FALSE;
@@ -2674,7 +2674,7 @@ BOOL ScrCmd_259(ScriptContext *ctx) {
     MessageFormat **p_msgFmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     u16 *p_ret = ScriptGetVarPointer(ctx);
 
-    *p_ret = sub_0205A6AC(*p_msgFmt);
+    *p_ret = UnionRoom_GetPartnerHometownMsg(*p_msgFmt);
     return FALSE;
 }
 
@@ -2682,7 +2682,7 @@ BOOL ScrCmd_260(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     MessageFormat **p_msgFmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
 
-    *p_ret = sub_0205A9A0(ctx->fieldSystem->unk80, *p_msgFmt);
+    *p_ret = UnionRoom_GetOwnChatMessageMsg(ctx->fieldSystem->unk80, *p_msgFmt);
     return FALSE;
 }
 
@@ -2691,10 +2691,10 @@ BOOL ScrCmd_261(ScriptContext *ctx) {
     if (command == 5 || command == 7 || command == 9 || command == 6 || command == 12 || command == 10) {
         sub_020380F4();
     } else if (command == 11) {
-        sub_02038104();
+        CommState_SetUnionRoomLinkMode();
     }
     if (!Comm_GetLocalNetId()) {
-        sub_0205A904(command);
+        UnionRoom_SetBeaconActivity(command);
     }
     return FALSE;
 }
@@ -2712,7 +2712,7 @@ BOOL ScrCmd_264(ScriptContext *ctx) {
     } else {
         objId = 0;
     }
-    sub_0205AA9C(*p_msgFmt, r4, objId, profile, easyChat);
+    UnionRoom_BufferPartnerLanguage(*p_msgFmt, r4, objId, profile, easyChat);
     return FALSE;
 }
 
@@ -2725,7 +2725,7 @@ BOOL sub_020441C4(ScriptContext *ctx);
 
 BOOL ScrCmd_266(ScriptContext *ctx) {
     UnionRoomObjects_RequestLeaveAll(ctx->fieldSystem->unk84);
-    sub_02037FF0();
+    CommState_ResumeAlternateSearch();
     SetupNativeScript(ctx, sub_020441C4);
     return TRUE;
 }
@@ -2739,13 +2739,13 @@ BOOL ScrCmd_267(ScriptContext *ctx) {
     u16 sp0 = ScriptReadHalfword(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
     MessageFormat **p_msgFmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
-    *p_ret = sub_0205A750(ctx->fieldSystem->unk80, MapObject_GetID(*p_lastInteracted), sp0, *p_msgFmt);
+    *p_ret = UnionRoom_GetTalkMsg(ctx->fieldSystem->unk80, MapObject_GetID(*p_lastInteracted), sp0, *p_msgFmt);
     return FALSE;
 }
 
 BOOL ScrCmd_586(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    *p_ret = sub_0205A4D8(ctx->fieldSystem->unk80);
+    *p_ret = UnionRoom_GetBattleCancel(ctx->fieldSystem->unk80);
     if (*p_ret) {
         void **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
         Heap_Free(*p_work);
@@ -2797,15 +2797,15 @@ BOOL ScrCmd_270(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_262(ScriptContext *ctx) {
-    sub_0205A904(4);
-    sub_020380CC();
+    UnionRoom_SetBeaconActivity(4);
+    CommState_RefuseJoinsAndRestart();
     return FALSE;
 }
 
 BOOL ScrCmd_263(ScriptContext *ctx) {
-    sub_02038104();
-    sub_02037FF0();
-    sub_0205A904(0);
+    CommState_SetUnionRoomLinkMode();
+    CommState_ResumeAlternateSearch();
+    UnionRoom_SetBeaconActivity(0);
     return FALSE;
 }
 
@@ -2831,7 +2831,7 @@ BOOL sub_020443D8(ScriptContext *ctx) {
     u32 r0 = sub_0205A35C(ctx->fieldSystem->unk80);
     if (r0 >= 1) {
         *p_ret = r0;
-        sub_0205ABB0(ctx->fieldSystem->unk80);
+        UnionRoom_ResetTalkReplies(ctx->fieldSystem->unk80);
         return TRUE;
     } else {
         *p_ret = 0;
@@ -2852,7 +2852,7 @@ BOOL sub_02044434(ScriptContext *ctx) {
     u16 *p_ret = GetVarPointer(ctx->fieldSystem, ctx->data[0]);
     int r0 = sub_0205A39C(ctx->fieldSystem->unk80);
     if (gSystem.newKeys & PAD_BUTTON_B) {
-        r0 = sub_0205A47C(ctx->fieldSystem->unk80, 8);
+        r0 = UnionRoom_TrySendTalkCancel(ctx->fieldSystem->unk80, 8);
     }
     if (r0 != 0) {
         *p_ret = r0;
@@ -3030,7 +3030,7 @@ BOOL ScrCmd_344(ScriptContext *ctx) {
     u16 dir = ScriptGetVar(ctx);
     LocalMapObject *object = MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, objectId);
     GF_ASSERT(object != NULL);
-    ov01_021F9408(object, dir);
+    MapObject_SetFacingAndUpdateDraw(object, dir);
     return FALSE;
 }
 
@@ -4023,7 +4023,7 @@ BOOL ScrCmd_560(ScriptContext *ctx) {
 
 BOOL ScrCmd_564(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    *p_ret = sub_0203A05C(ctx->fieldSystem->saveData);
+    *p_ret = Comm_HasWifiProfile(ctx->fieldSystem->saveData);
     return FALSE;
 }
 
@@ -4076,7 +4076,7 @@ BOOL ScrCmd_576(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 *p_ret = ScriptGetVarPointer(ctx);
     MessageFormat **p_msgFmt = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
-    *p_ret = sub_0205A6AC(*p_msgFmt);
+    *p_ret = UnionRoom_GetPartnerHometownMsg(*p_msgFmt);
     return FALSE;
 }
 
@@ -4211,7 +4211,7 @@ BOOL ScrCmd_662(ScriptContext *ctx) {
     u16 r6 = ScriptGetVar(ctx);
     u16 r7 = ScriptGetVar(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    if (sub_0203A05C(ctx->fieldSystem->saveData)) {
+    if (Comm_HasWifiProfile(ctx->fieldSystem->saveData)) {
         *p_ret = 1;
         sub_0203FC14(ctx->fieldSystem, r7, r6);
         SetupNativeScript(ctx, ScrNative_WaitApplication);
@@ -4223,7 +4223,7 @@ BOOL ScrCmd_662(ScriptContext *ctx) {
 
 BOOL ScrCmd_663(ScriptContext *ctx) {
     u16 *p_var = ScriptGetVarPointer(ctx);
-    if (sub_0203A05C(ctx->fieldSystem->saveData)) {
+    if (Comm_HasWifiProfile(ctx->fieldSystem->saveData)) {
         CallTask_WiFiPlaza(ctx->taskman, *p_var);
     }
     return TRUE;
@@ -4478,7 +4478,7 @@ BOOL ScrCmd_FollowMonFacePlayer(ScriptContext *ctx) {
             u8 facingTile = GetMetatileBehavior(ctx->fieldSystem, playerX + deltaX, playerZ + deltaY);
             VecFx32 posVec;
             MapObject_CopyPositionVector(myObject, &posVec);
-            if (sub_020549A8(ctx->fieldSystem, &posVec, playerX + deltaX, playerZ + deltaY, 0) || MetatileBehavior_IsSurfableWater(facingTile) || sub_02060BFC(myObject, playerX + deltaX, playerY, playerZ + deltaY)) {
+            if (FieldSystem_CheckCollisionAndHeight(ctx->fieldSystem, &posVec, playerX + deltaX, playerZ + deltaY, 0) || MetatileBehavior_IsSurfableWater(facingTile) || sub_02060BFC(myObject, playerX + deltaX, playerY, playerZ + deltaY)) {
                 doFace = FALSE;
             }
         }

@@ -410,7 +410,7 @@ BOOL VsRecorder_SavedVideoSave(VsRecorderWork *work) {
     return FALSE;
 }
 
-// play: leave the app with the resume screen set (sub_02087A84 starts the playback)
+// play: leave the app with the resume screen set (VsRecorderApp_SetResult starts the playback)
 BOOL VsRecorder_SavedVideoPlay(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
 
@@ -441,7 +441,7 @@ BOOL VsRecorder_SavedVideoPlay(VsRecorderWork *work) {
         VsRecorder_RebuildMenuRows(work);
         VsRecorder_SetVBlankPaused(work, FALSE);
         VsRecorder_SetResumeScreen(work, *work->screenPtr);
-        sub_02087A84(work->result, 1, 0);
+        VsRecorderApp_SetResult(work->result, 1, 0);
         work->step++;
         break;
     default:

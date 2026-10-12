@@ -59,7 +59,7 @@ void sub_0205876C(void);
 void CommRandom_Init(void *);
 void CommState_StartParentSession(SaveData *, s32, s32, LinkBattleRuleset *, int);
 void CommState_StartChildSession(SaveData *, u8, u32, LinkBattleRuleset *, int);
-void sub_02039980(void *);
+void CommState_GetSelectedOrder(void *);
 void sub_02058034(void);
 void CommClubLink_Init(FieldSystem *fieldSystem);
 void CommClubLink_Free(void);

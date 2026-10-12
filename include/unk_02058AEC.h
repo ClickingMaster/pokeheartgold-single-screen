@@ -12,7 +12,7 @@ int sub_0205A358(struct UnkStruct_02059E1C *fieldSystem_unk80);
 u32 sub_0205A35C(struct UnkStruct_02059E1C *fieldSystem_unk80);
 void sub_0205A3B0(struct UnkStruct_02059E1C *fieldSystem_unk80, int a1, int a2);
 int sub_0205A39C(struct UnkStruct_02059E1C *fieldSystem_unk80);
-int sub_0205A47C(struct UnkStruct_02059E1C *fieldSystem_unk80, int a1);
+int UnionRoom_TrySendTalkCancel(struct UnkStruct_02059E1C *fieldSystem_unk80, int a1);
 void sub_0205A408(void);
 void sub_0205A430(void);
 void sub_0205A40C(void);

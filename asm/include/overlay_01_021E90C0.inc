@@ -26,10 +26,10 @@
 .public TaskManager_Call
 .public TaskManager_GetFieldSystem
 .public TaskManager_GetEnvironment
-.public sub_02054A60
-.public sub_02054AE4
-.public sub_02054B74
-.public sub_02054D10
+.public Terrain_MakeTileRect
+.public FieldSystem_FindMapPropInRect
+.public FieldSystem_FindMapPropOfModelsInRect
+.public FieldSystem_CollectMapPropModelsInRect
 .public NewFieldFadeEnvironment
 .public PlayerAvatar_GetFacingDirection
 .public PlayerAvatar_GetMapObject

@@ -201,7 +201,7 @@ _0203530A:
 	str r0, [r5]
 	bl CommState_GetLinkMode
 	strb r0, [r5, #4]
-	bl sub_02039954
+	bl CommState_GetBeaconId
 	strb r0, [r5, #5]
 	ldr r0, _020353A8 ; =gCommWireless
 	mov r2, #8
@@ -224,7 +224,7 @@ _02035360:
 	str r0, [r4]
 	bl CommState_GetLinkMode
 	strb r0, [r4, #4]
-	bl sub_02039954
+	bl CommState_GetBeaconId
 	strb r0, [r4, #5]
 	ldr r0, _020353A8 ; =gCommWireless
 	add r4, #8

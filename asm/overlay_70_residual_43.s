@@ -2880,7 +2880,7 @@ GtsConnection_StartConnect: ; 0x02244888
 	add r4, r0, #0
 	ldr r0, [r4]
 	ldr r0, [r0, #0x20]
-	bl sub_02039418
+	bl CommState_InitWfcSession
 	mov r0, #4
 	bl Sys_SetSleepDisableFlag
 	add r0, r4, #0

@@ -10,7 +10,7 @@
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
 	.public ov01_021F9704
-	.public ov01_021F9744
+	.public MapObjectRender_GetBillboardResource
 	.public ov01_021F9778
 	.public ov01_021F9798
 	.public ov01_021F97BC
@@ -33,7 +33,7 @@
 	.public ov01_021F9FCC
 	.public ov01_021FA01C
 	.public ov01_021FA094
-	.public ov01_021FA108
+	.public MapObjectRender_ReleaseSpriteResources
 	.public ov01_021FA31C
 	.public ov01_021FA370
 	.public ov01_021FA470
@@ -46,7 +46,7 @@
 	.public ov01_021FA854
 	.public ov01_021FA97C
 	.public ov01_021FAB9C
-	.public sub_021FA248
+	.public SpriteId_GetBillboardInfo
 	.include "overlay_01_021F944C.inc"
 	.include "global.inc"
 
@@ -56,16 +56,16 @@
 	.public ov01_02208B80
 	.public ov01_02208B90
 	.public FldObjSys_ReadMModelFromNarc
-	.public ov01_021F944C
-	.public ov01_021F94A0
-	.public ov01_021F94C0
-	.public ov01_021F9510
+	.public MapObjectRender_Init
+	.public MapObjectRender_Free
+	.public MapObject_RequestBillboard
+	.public MapObject_CreateBillboard
 	.public ov01_021F9528
 	.public ov01_021F9574
-	.public ov01_021F95A8
+	.public MapObject_DeleteBillboard
 	.public ov01_021F95CC
-	.public ov01_021F9610
-	.public ov01_021F9630
+	.public BillboardObject_SaveState
+	.public BillboardObject_RestoreState
 	.public ov01_021F9654
 	.public ov01_021F9688
 	.public ov01_021F9698
@@ -102,9 +102,9 @@
 	.public ov01_021F9F54
 	.public ov01_021F9F6C
 	.public ov01_021F9F84
-	.public ov01_021F9FB0
+	.public MapObjectRender_ReleaseUnused
 	.public ov01_021FA1C8
-	.public ov01_021FA1D0
+	.public MapObjectRender_GetBillboards
 	.public ov01_021FA1D8
 	.public ov01_021FA1DC
 	.public ov01_021FA1E4
@@ -125,19 +125,19 @@
 	.public ov01_021FA22C
 	.public ov01_021FA230
 	.public ov01_021FA234
-	.public ov01_021FA28C
+	.public SpriteId_GetBillboardModelId
 	.public ov01_021FA298
-	.public ov01_021FA2A0
-	.public ov01_021FA2AC
-	.public ov01_021FA2B8
-	.public ov01_021FA2D4
+	.public SpriteId_GetBillboardSequenceId
+	.public SpriteId_GetBillboardRanges
+	.public MapObject_SetBillboardPending
+	.public MapObject_IsBillboardPending
 	.public ov01_021FA2EC
 	.public ov01_021FA314
-	.public ov01_021FA3DC
-	.public ov01_021FA3E8
+	.public MapObject_GetRender
+	.public MapObject_UpdateBillboardPosition
 	.public ov01_021FA40C
-	.public ov01_021FA44C
-	.public ov01_021FA458
+	.public Facing_GetBillboardStandSequence
+	.public Facing_GetBillboardWalkSequence
 	.public ov01_021FA464
 	.public ov01_021FA4F0
 	.public ov01_021FA524
@@ -147,7 +147,7 @@
 	.public ov01_021FA7F8
 	.public ov01_021FA804
 	.public ov01_021FA8F8
-	.public ov01_021FA930
+	.public MapObject_ChangeBillboardSprite
 
 	thumb_func_start ov01_021F9704
 ov01_021F9704: ; 0x021F9704
@@ -189,8 +189,8 @@ _021F9740: .word 0x0000FFFF
 	thumb_func_end ov01_021F9704
 
 
-	thumb_func_start ov01_021F9744
-ov01_021F9744: ; 0x021F9744
+	thumb_func_start MapObjectRender_GetBillboardResource
+MapObjectRender_GetBillboardResource: ; 0x021F9744
 	push {r3, r4, r5, lr}
 	add r5, r1, #0
 	add r4, r2, #0
@@ -219,7 +219,7 @@ _021F976C:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021F9744
+	thumb_func_end MapObjectRender_GetBillboardResource
 
 
 	thumb_func_start ov01_021F9778

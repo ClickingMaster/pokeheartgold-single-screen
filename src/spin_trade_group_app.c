@@ -39,7 +39,7 @@
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
-#include "unk_0205A44C.h"
+#include "union_room_talk.h"
 #include "union_room_avatar.h"
 #include "vram_transfer_manager.h"
 
@@ -172,10 +172,10 @@ extern int (*const ov85_021EA9E0[])(SpinTradeGroupApp *app, int state);
 
 // Not declared by the owners' headers
 u32 Wireless_GetConnectedBitmap(void);
-void sub_0203897C(void);
+void CommState_SetSpinTradeLinkMode(void);
 void CommState_SetMaxEntries(int count);
-void sub_02039EAC(s32 *state);
-BOOL sub_02039EB4(SaveData *saveData, int a1, s32 *state);
+void Comm_InitSyncedSave(s32 *state);
+BOOL Comm_SyncedSave(SaveData *saveData, int a1, s32 *state);
 void SpinTradeLink_RegisterCommands(SpinTradeGroupMenu *menu);
 BOOL SpinTradeLink_SendCommand(SpinTradeGroupMenu *menu, int command, void *data, int size);
 
@@ -288,10 +288,10 @@ BOOL SpinTradeGroupApp_Init(OverlayManager *manager, int *state) {
         SpinTradeGroup_InitWindows(app);
         Sound_SetSceneAndPlayBGM(52, 0, 0);
         SpinTradeLink_RegisterCommands(args->menu);
-        sub_0203897C();
+        CommState_SetSpinTradeLinkMode();
         CommState_SetMaxEntries(3);
         if (!Comm_GetLocalNetId()) {
-            sub_0205A904(13);
+            UnionRoom_SetBeaconActivity(13);
         }
         WirelessStatusIcon_Create();
         app->blinkTask = SysTask_CreateOnVBlankQueue(SpinTradeGroup_VBlankTask, app, 5);
@@ -811,7 +811,7 @@ int ov85_021E9700(SpinTradeGroupApp *app, int a1) {
             } else if (Comm_GetLocalNetId() == 0) {
                 app->subState = 0x18;
                 app->unk_4A52 = (u8)SpinTradeGroup_CountMembers();
-                sub_0205A904(0xC);
+                UnionRoom_SetBeaconActivity(0xC);
             } else {
                 GF_AssertFail();
             }
@@ -850,7 +850,7 @@ int ov85_021E9814(SpinTradeGroupApp *app, int state) {
 int SpinTradeGroup_State_StartSave(SpinTradeGroupApp *app, int state) {
     gSystem.softResetDisabled = 1;
     GameStats_AddScore(app->args->input.gameStats, SCORE_EVENT_RECORDS_MIXED);
-    sub_02039EAC(&app->saveState);
+    Comm_InitSyncedSave(&app->saveState);
     app->subState = 0x1C;
     return state;
 }
@@ -859,7 +859,7 @@ int SpinTradeGroup_State_Save(SpinTradeGroupApp *app, int a1) {
     if (Comm_GetLocalNetId() == 0) {
         Comm_CountConnected();
     }
-    if (sub_02039EB4(app->args->input.saveData, 2, &app->saveState) != 0) {
+    if (Comm_SyncedSave(app->args->input.saveData, 2, &app->saveState) != 0) {
         StopSE(0x657, 8);
         SpinTradeGroup_PrintMessage(app, 0xD, 0);
         SpinTradeGroup_WaitPrinterThen(app, 0x1D);
@@ -1037,7 +1037,7 @@ int ov85_021E9BDC(SpinTradeGroupApp *app, int a1) {
 
 int SpinTradeGroup_State_Proceed(SpinTradeGroupApp *app, int state) {
 #pragma unused(state)
-    sub_0205A904(0xC);
+    UnionRoom_SetBeaconActivity(0xC);
     BeginNormalPaletteFade(0, 0x10, 0x10, 0, 0x10, 1, HEAP_ID_102);
     app->result = 1;
     ov85_021E943C(app);
@@ -1402,7 +1402,7 @@ int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int a1) {
     case 2:
     case 3:
     case 4:
-        sub_0205A904(0xD);
+        UnionRoom_SetBeaconActivity(0xD);
         if (v < (int)app->lastMemberCount) {
             switch (app->unk_4A51) {
             case 0:
@@ -1416,7 +1416,7 @@ int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int a1) {
         }
         break;
     case 5:
-        sub_0205A904(0xC);
+        UnionRoom_SetBeaconActivity(0xC);
         SpinTradeGroup_SetMaxConnections(app, a1);
         break;
     }

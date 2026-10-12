@@ -25,7 +25,7 @@
 #include "map_section.h"
 #include "math_util.h"
 #include "field/map_object_billboard_motion.h"
-#include "overlay_01_021F944C.h"
+#include "field/map_object_render.h"
 #include "overlay_02.h"
 #include "overlay_03.h"
 #include "overlay_58.h"
@@ -652,7 +652,7 @@ BOOL ScrCmd_699(ScriptContext *ctx) {
         }
         sprite = MapObject_GetBillboard(curObj);
         if (sprite) {
-            ov01_021FA3E8(curObj, sprite);
+            MapObject_UpdateBillboardPosition(curObj, sprite);
             BillboardObject_SetVisible(sprite, 1);
         }
     }
@@ -683,7 +683,7 @@ BOOL ScrCmd_700(ScriptContext *ctx) {
 
 BOOL ScrCmd_BattleTowerSetUpMultiBattle(ScriptContext *ctx) {
     void *data = Save_WiFiHistory_Get(ctx->fieldSystem->saveData);
-    sub_02039F68(data);
+    Comm_RecordPlayerLocations(data);
     return TRUE;
 }
 

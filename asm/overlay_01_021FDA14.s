@@ -437,11 +437,11 @@ ReflectionEffect_CreateBillboard: ; 0x021FDD48
 	bl MapObject_GetManager
 	ldr r1, [r4, #8]
 	add r2, sp, #0
-	bl ov01_021F9744
+	bl MapObjectRender_GetBillboardResource
 	cmp r0, #0
 	beq _021FDD8E
 	ldr r0, [r4, #0x20]
-	bl ov01_021FA2D4
+	bl MapObject_IsBillboardPending
 	cmp r0, #1
 	beq _021FDD8E
 	ldr r0, [r4, #0x18]
@@ -979,11 +979,11 @@ FollowerReflectionEffect_CreateBillboard: ; 0x021FE190
 	bl MapObject_GetManager
 	ldr r1, [r4, #8]
 	add r2, sp, #0
-	bl ov01_021F9744
+	bl MapObjectRender_GetBillboardResource
 	cmp r0, #0
 	beq _021FE1FA
 	ldr r0, [r4, #0x20]
-	bl ov01_021FA2D4
+	bl MapObject_IsBillboardPending
 	cmp r0, #1
 	beq _021FE1FA
 	ldr r0, [r4, #0x10]

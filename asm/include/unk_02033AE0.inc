@@ -52,11 +52,11 @@
 .public LinkSync_RecvValue
 .public LinkSync_GetValueSize
 .public LinkSync_RecvPacket
-.public sub_02037C94
+.public CommState_GetSyncPacketSize
 .public CommState_RecvJoinRequest
 .public CommState_RecvJoinReply
-.public sub_02038C18
-.public sub_02039220
+.public CommState_GetJoinMessageSize
+.public CommState_RecvWifiDisconnect
 .public MI_CpuFill8
 .public MI_CpuCopy8
 .public _s32_div_f

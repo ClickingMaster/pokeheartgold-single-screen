@@ -228,7 +228,7 @@ _0224862C:
 _02248646:
 	ldr r0, [r4]
 	ldr r0, [r0, #4]
-	bl sub_0203A05C
+	bl Comm_HasWifiProfile
 	cmp r0, #0
 	bne _0224866E
 	ldr r0, [r4]
@@ -292,7 +292,7 @@ _022486C2:
 	add r0, #0x88
 	ldr r0, [r0]
 	bl YesNoPrompt_Destroy
-	bl sub_0203957C
+	bl CommState_FreeWiiMessageWfcSession
 	ldr r0, [r4]
 	mov r1, #6
 	mov r2, #0

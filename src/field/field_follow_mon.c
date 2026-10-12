@@ -6,6 +6,7 @@
 
 #include "field/field_effect_helpers.h"
 #include "field/field_follow_mon.h"
+#include "field/map_object_models.h"
 #include "field/resource_bank.h"
 
 #include "field_system.h"
@@ -25,7 +26,7 @@
 #include "script_pokemon_util.h"
 #include "sys_task_api.h"
 #include "task.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 #include "map_object_movement_commands.h"
 #include "vram_transfer_manager.h"
 
@@ -50,12 +51,10 @@ void sub_020659B8(LocalMapObject *object);
 // unk_02062108.c: the movement for a direction (movement + direction).
 u32 GetMovementForDirection(u32 direction, u32 movement);
 // field object models (still in asm or crammed).
-BOOL ov01_021F9744(MapObjectManager *manager, u32 spriteId, void *record);
-u32 ov01_021FA44C(u32 direction);
-void ov01_021F9048(LocalMapObject *object);
+BOOL MapObjectRender_GetBillboardResource(MapObjectManager *manager, u32 spriteId, void *record);
+u32 Facing_GetBillboardStandSequence(u32 direction);
 // The following Pokemon's billboard (field map object motion, still unnamed).
 void *ov01_021F771C(MapObjectManager *manager);
-int GetMoveModelNoBySpriteId(u32 spriteId);
 void BillboardGfxSequence_Init(void *sequence, void *dest);
 // billboard_lists.c
 void BillboardObject_SetResource(void *billboard, void *record);
@@ -382,7 +381,7 @@ void ov01_02205808(BOOL alternate, LocalMapObject *object, void *billboard) {
     u8 record[0x28];
     MapObjectManager *manager = MapObject_GetManager(object);
     u32 spriteId = MapObject_GetSpriteID(object);
-    ov01_021F9744(manager, spriteId, record);
+    MapObjectRender_GetBillboardResource(manager, spriteId, record);
     {
         u32 id = MapObject_GetID(object);
         if (id != obj_partner_poke && id != obj_daycare_poke_1 && id != obj_daycare_poke_2) {
@@ -390,7 +389,7 @@ void ov01_02205808(BOOL alternate, LocalMapObject *object, void *billboard) {
         }
         ov01_02205870(alternate, object, billboard, record);
         BillboardObject_SetResource(billboard, record);
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(MapObject_GetFacingDirection(object)));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(MapObject_GetFacingDirection(object)));
         BillboardObject_SetSequenceFrame(billboard, 0);
     }
 }
@@ -458,7 +457,7 @@ void FollowMon_RecreateForMap(FieldSystem *fieldSystem) {
                 u8 active = fieldSystem->followMon.active;
                 LocalMapObject *mapObject = fieldSystem->followMon.mapObject;
                 if (active == TRUE) {
-                    ov01_021F9048(mapObject);
+                    FollowMonBillboard_ResetPalette(mapObject);
                 }
             }
         } else {

@@ -28,7 +28,7 @@
 .public Save_FriendRoster_Get
 .public Save_FriendRoster_LoadFromSave
 .public Save_FriendRoster_StoreToSave
-.public sub_0203A01C
+.public Comm_EnsureDwcUserData
 .public DWC_IsValidFriendData
 .public MIi_CpuClearFast
 .public MIi_CpuCopyFast

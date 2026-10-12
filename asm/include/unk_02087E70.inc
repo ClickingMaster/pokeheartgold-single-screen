@@ -11,11 +11,11 @@
 .public Field_SetEnvironmentSoundState_None_Unk2
 .public sub_02055198
 .public OrbitCursor_Delete
-.public sub_02087A78
+.public VsRecorderApp_GetRecorderWork
 .public gOverlayTemplate_Battle
 .public gNatureStatMods
-.public _021028B4
-.public _021028C4
+.public gOverlayTemplate_VsRecorderMenu
+.public gOverlayTemplate_VsRecorderMenuFromTerminal
 .public gSystem
 .public VsRecorder_InitResources
 .public VsRecorder_FreeResources

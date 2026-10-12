@@ -26,7 +26,7 @@
 #include "script_pokemon_util.h"
 #include "sys_flags.h"
 #include "sys_vars.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 #include "player_avatar_movement.h"
 #include "unk_0206D494.h"
 #include "safari_zone_encounters.h"

@@ -24,7 +24,7 @@
 #include "script.h"
 #include "sound.h"
 #include "sound_playback.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 #include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "field_transition_tasks.h"

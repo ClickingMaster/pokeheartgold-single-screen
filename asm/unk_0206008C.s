@@ -36,7 +36,7 @@ sub_0206008C: ; 0x0206008C
 	lsl r0, r0, #0x18
 	lsr r4, r0, #0x18
 	add r0, r5, #0
-	bl ov01_021F9318
+	bl MapObject_GetEffectFlags
 	add r7, r0, #0
 	add r0, r5, #0
 	add r1, r6, #0
@@ -89,7 +89,7 @@ sub_02060114: ; 0x02060114
 	lsl r0, r0, #0x18
 	lsr r4, r0, #0x18
 	add r0, r5, #0
-	bl ov01_021F9318
+	bl MapObject_GetEffectFlags
 	add r7, r0, #0
 	add r0, r5, #0
 	add r1, r6, #0

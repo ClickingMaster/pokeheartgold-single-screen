@@ -6,7 +6,7 @@
 
 #include "filesystem.h"
 #include "heap.h"
-#include "overlay_01_021F944C.h"
+#include "field/map_object_render.h"
 #include "player_avatar.h"
 #include "script_manager.h"
 #include "sys_task_api.h"
@@ -18,9 +18,9 @@ extern UnkLMOCallbackStruct2 *ov01_02209A38[20];
 extern void sub_020611DC(LocalMapObject *object);
 extern BOOL sub_02061248(FieldSystem *fieldSystem, VecFx32 *, BOOL);
 extern void MapObject_ClearHeldMovement(LocalMapObject *object);
-extern void ov01_021FA2B8(LocalMapObject *object, BOOL set);
+extern void MapObject_SetBillboardPending(LocalMapObject *object, BOOL set);
 extern void sub_0205FD30(LocalMapObject *object);
-extern void ov01_021F92A0(LocalMapObject *object);
+extern void MapObject_TryUpdateDraw(LocalMapObject *object);
 extern ObjectEventGraphicsInfo *ObjectEvent_GetGraphicsInfo(u32 spriteId);
 extern void MapObject_SetPreviousCoordsToCurrent(LocalMapObject *object);
 extern void sub_0205FD20(LocalMapObject *object);
@@ -168,7 +168,7 @@ void sub_0205E104(MapObjectManager *manager, u32 unused, u32 mapId, u32 objectCo
         objects++;
     }
 
-    ov01_021F9FB0(manager, sub_0205F1A0(manager));
+    MapObjectRender_ReleaseUnused(manager, sub_0205F1A0(manager));
 }
 
 static MapObjectManager *MapObjectManager_New(u32 objectCount) {
@@ -820,7 +820,7 @@ static void sub_0205EFB4(LocalMapObject *object) {
 
     sub_0205EF8C(object);
     sub_0205F328(object, 0);
-    ov01_021FA2B8(object, FALSE);
+    MapObject_SetBillboardPending(object, FALSE);
     if (!MapObject_CheckFlag14(object)) {
         sub_0205ED18(object);
         sub_0205F470(object);
@@ -899,7 +899,7 @@ static void sub_0205F12C(SysTask *task, LocalMapObject *object) {
 
 static void sub_0205F148(LocalMapObject *object) {
     if (sub_0205F5D4(MapObject_GetManager(object)) == TRUE) {
-        ov01_021F92A0(object);
+        MapObject_TryUpdateDraw(object);
     }
 }
 

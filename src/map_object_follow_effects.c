@@ -6,7 +6,7 @@
 #include "map_object.h"
 #include "map_object_follow_internal.h"
 #include "metatile_behavior.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 
 // 3 for the step movements, 2 for the run movements, 1 for the fast run movements.
 int GetMovementSpeed(u32 movement) {

@@ -203,7 +203,7 @@ void ov44_02232EA8(OverlayManager *overlayMananger) {
     MI_CpuFill8(temp_r0->unk1C, 1, 4);
     MI_CpuFill8(temp_r0->unk20, 1, 4);
     GF_CreateVramTransferManager(16, HEAP_ID_103);
-    UnkStruct_ov44_0223197C *temp_r0_2 = sub_020398C8();
+    UnkStruct_ov44_0223197C *temp_r0_2 = CommState_GetWifiClubData();
     temp_r0->unk0 = &temp_r0_2->unk0;
     temp_r0_2->unk0.unk21 = temp_r0_2->unk0.unk22;
     temp_r0->unk4 = ov44_022331B0(temp_r0);
@@ -728,7 +728,7 @@ void ov44_02233D8C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enu
         if ((u8)(arg0->unk5 + 229) <= 2) {
             return;
         }
-        if ((sub_020390C4() <= 2) && (ov44_02233F64(arg0) <= 1) && (ov44_02233E6C(arg0) == 0)) {
+        if ((CommState_GetWifiMatchStatus() <= 2) && (ov44_02233F64(arg0) <= 1) && (ov44_02233E6C(arg0) == 0)) {
             return;
         }
     } else if ((arg0->unk5 == 15) || (arg0->unk5 == 16) || (arg0->unk5 == 17) || ((u8)(arg0->unk5 + 250) <= 1)) {
@@ -742,7 +742,7 @@ void ov44_02233D8C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enu
     } else {
         var_r5 = 0;
     }
-    if ((sub_020390C4() >= 3) || (sub_020393C8() != 0) || (sub_02039264() != 0) || (Comm_IsNetIdConnected(0) == 0) || (ov44_02233E6C(arg0) == 0) || (var_r5 == 1) || (temp_r6 == 1) || (temp_r7 == 1)) {
+    if ((CommState_GetWifiMatchStatus() >= 3) || (CommState_HasWifiFailed() != 0) || (CommState_WasWifiDisconnected() != 0) || (Comm_IsNetIdConnected(0) == 0) || (ov44_02233E6C(arg0) == 0) || (var_r5 == 1) || (temp_r6 == 1) || (temp_r7 == 1)) {
         if (arg0->unk4 != 0) {
             arg0->unk5 = 27;
             return;
@@ -752,7 +752,7 @@ void ov44_02233D8C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enu
 }
 
 void ov44_02233E48(UnkStruct_ov44_02235340 *arg0) {
-    if ((sub_020390C4() > 3) || (sub_02039264() != 0) || (sub_020393C8() != 0)) {
+    if ((CommState_GetWifiMatchStatus() > 3) || (CommState_WasWifiDisconnected() != 0) || (CommState_HasWifiFailed() != 0)) {
         arg0->unk5 = 15;
     }
 }
@@ -765,7 +765,7 @@ s32 ov44_02233E6C(UnkStruct_ov44_02235340 *arg0) {
 }
 
 s32 ov44_02233E80(u32 arg0, u32 arg1) {
-    s32 var_r5 = sub_02039080(arg0);
+    s32 var_r5 = CommState_StartWifiMatch(arg0);
     if (var_r5 == 1) {
         switch (arg1) {
         case 0:
@@ -1444,9 +1444,9 @@ s32 ov44_02234A68(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
         return 0;
     }
     arg0->unk7 = 0;
-    sub_02039358();
+    CommState_LeaveWifiMatch();
     ov44_02233FE8(arg0);
-    sub_02039B58();
+    CommState_SetWifiClubLinkMode();
     CommState_SetErrorWatch(0, 1);
     return 1;
 }
@@ -1468,21 +1468,21 @@ s32 Wifi_PromptMemberDropped(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args 
     arg0->unk5 = 29;
     ov44_02233FE8(arg0);
     ov44_02233EB4(arg0, arg1);
-    if ((u32)(sub_020390C4() - 4) <= 1U) {
+    if ((u32)(CommState_GetWifiMatchStatus() - 4) <= 1U) {
         ov00_021EDB1C();
     }
     return 0;
 }
 
 s32 ov44_02234B18(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if ((u32)(sub_020390C4() - 4) <= 1) {
+    if ((u32)(CommState_GetWifiMatchStatus() - 4) <= 1) {
         ov00_021EDB1C();
     }
     if (ov44_02233914(&arg0->unk30) == 0) {
         return 0;
     }
-    sub_02039358();
-    sub_02039B58();
+    CommState_LeaveWifiMatch();
+    CommState_SetWifiClubLinkMode();
     ov44_02233FE8(arg0);
     arg0->unk7 = 0;
     CommState_SetErrorWatch(0, 1);
@@ -1608,8 +1608,8 @@ s32 ov44_02234D4C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     ov44_02233C88(&arg0->unk30, arg1, 0, 0, heapID);
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, arg0->unk2D, heapID);
     arg0->unk5 = 7;
-    sub_02039358();
-    sub_02039B58();
+    CommState_LeaveWifiMatch();
+    CommState_SetWifiClubLinkMode();
     return 0;
 }
 
@@ -1755,8 +1755,8 @@ s32 ov44_02234FDC(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     if (ov44_02233914(&arg0->unk30) == 0) {
         return 0;
     }
-    sub_02039358();
-    sub_02039B58();
+    CommState_LeaveWifiMatch();
+    CommState_SetWifiClubLinkMode();
     arg0->unk7 = 0;
     CommState_SetErrorWatch(0, 1);
     return 1;
@@ -1821,7 +1821,7 @@ s32 ov44_02235100(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     arg0->unk26 = sub_02034870(0);
     GF_ASSERT(arg0->unk26 != 32);
     ov44_02233C88(&arg0->unk30, arg1, 0, 0, heapID);
-    sub_02039358();
+    CommState_LeaveWifiMatch();
     arg0->unk27 = 0;
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00132, heapID);
     arg0->unk5 = 22;
@@ -1879,7 +1879,7 @@ s32 ov44_022351DC(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 
 s32 ov44_02235218(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
     ov44_02233E48(arg0);
-    if (sub_020390C4() == 1 && Comm_IsNetIdConnected(0) == 1) {
+    if (CommState_GetWifiMatchStatus() == 1 && Comm_IsNetIdConnected(0) == 1) {
         sub_020378E4(0);
         ov44_022342E0(arg0, arg1, heapID);
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, heapID);
@@ -1936,8 +1936,8 @@ s32 ov44_0223532C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 s32 ov44_02235340(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    sub_02039358();
-    sub_02039B58();
+    CommState_LeaveWifiMatch();
+    CommState_SetWifiClubLinkMode();
     arg0->unk7 = 0;
     CommState_SetErrorWatch(0, 1);
     return 1;

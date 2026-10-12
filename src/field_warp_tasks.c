@@ -27,7 +27,7 @@
 #include "terrain_attributes.h"
 #include "sound_playback.h"
 #include "spawn_warp.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 #include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "unk_02055418.h"
@@ -335,7 +335,7 @@ static void sub_02053284(FieldSystem *fieldSystem) {
     fieldSystem->mapLoadMode = &sMapLoadModes[fieldSystem->mapLoadType];
     fieldSystem->skipMapAttributes = fieldSystem->mapLoadMode->skipMapAttributes;
     fieldSystem->bottomScreenType = fieldSystem->mapLoadMode->fieldBottomScreen;
-    sub_0205489C(&fieldSystem->unk60, fieldSystem->mapLoadMode->useSimpleTerrainCollisions);
+    FieldSystem_SetTerrainQueries(&fieldSystem->unk60, fieldSystem->mapLoadMode->useSimpleTerrainCollisions);
     if (fieldSystem->mapLoadMode->useSeparateTerrainAttributes) {
         TerrainAttributes_New(fieldSystem, fieldSystem->mapLoadMode->separateTerrainAttributesBlockCount);
     }

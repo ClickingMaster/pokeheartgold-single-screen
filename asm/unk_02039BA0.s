@@ -2,8 +2,8 @@
 	.include "unk_02037C94.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02039BA0
-sub_02039BA0: ; 0x02039BA0
+	thumb_func_start CommState_PlazaStart
+CommState_PlazaStart: ; 0x02039BA0
 	push {r3, lr}
 	bl CommWireless_IsStartedUp
 	cmp r0, #0
@@ -41,7 +41,7 @@ sub_02039BA0: ; 0x02039BA0
 	mov r0, #0
 	bl sub_020378E4
 	mov r1, #0xe1
-	ldr r0, _02039C10 ; =sub_0203960C
+	ldr r0, _02039C10 ; =CommState_WifiLogin
 	lsl r1, r1, #4
 	bl CommState_SetState
 _02039C04:
@@ -49,10 +49,10 @@ _02039C04:
 	nop
 _02039C08: .word gCommState
 _02039C0C: .word CommState_ShowErrorAndHalt
-_02039C10: .word sub_0203960C
-	thumb_func_end sub_02039BA0
-	thumb_func_start sub_02039C14
-sub_02039C14: ; 0x02039C14
+_02039C10: .word CommState_WifiLogin
+	thumb_func_end CommState_PlazaStart
+	thumb_func_start CommState_PlazaWaitLobby
+CommState_PlazaWaitLobby: ; 0x02039C14
 	push {r3, lr}
 	ldr r0, _02039C54 ; =gCommState
 	ldr r2, [r0]
@@ -63,46 +63,46 @@ sub_02039C14: ; 0x02039C14
 	ldr r0, [r0, #0x44]
 	cmp r0, #0
 	bgt _02039C32
-	ldr r0, _02039C58 ; =sub_02038E90
+	ldr r0, _02039C58 ; =CommState_WifiFailed
 	mov r1, #0
 	bl CommState_SetState
 	pop {r3, pc}
 _02039C32:
 	mov r0, #1
 	bl sub_0203786C
-	bl sub_02039D3C
+	bl CommState_PlazaUpdate
 	cmp r0, #0
 	beq _02039C50
 	bl ov45_0222E8F4
 	cmp r0, #0
 	beq _02039C50
-	ldr r0, _02039C5C ; =sub_02039C60
+	ldr r0, _02039C5C ; =CommState_PlazaLobby
 	mov r1, #0
 	bl CommState_SetState
 _02039C50:
 	pop {r3, pc}
 	nop
 _02039C54: .word gCommState
-_02039C58: .word sub_02038E90
-_02039C5C: .word sub_02039C60
-	thumb_func_end sub_02039C14
-	thumb_func_start sub_02039C60
-sub_02039C60: ; 0x02039C60
+_02039C58: .word CommState_WifiFailed
+_02039C5C: .word CommState_PlazaLobby
+	thumb_func_end CommState_PlazaWaitLobby
+	thumb_func_start CommState_PlazaLobby
+CommState_PlazaLobby: ; 0x02039C60
 	push {r3, lr}
-	bl sub_02039D3C
+	bl CommState_PlazaUpdate
 	cmp r0, #0
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end sub_02039C60
-	thumb_func_start sub_02039C6C
-sub_02039C6C: ; 0x02039C6C
+	thumb_func_end CommState_PlazaLobby
+	thumb_func_start CommState_PlazaCheckWifiResult
+CommState_PlazaCheckWifiResult: ; 0x02039C6C
 	push {r4, lr}
 	mov r4, #1
 	cmp r0, #0xa
 	blt _02039C84
 	cmp r0, #0x14
 	bge _02039C84
-	ldr r0, _02039CF4 ; =sub_02038EB4
+	ldr r0, _02039CF4 ; =CommState_WifiCancelled
 	mov r1, #0
 	bl CommState_SetState
 	mov r4, #0
@@ -110,7 +110,7 @@ sub_02039C6C: ; 0x02039C6C
 _02039C84:
 	cmp r0, #0
 	bge _02039C94
-	ldr r0, _02039CF8 ; =sub_02038E90
+	ldr r0, _02039CF8 ; =CommState_WifiFailed
 	mov r1, #0
 	bl CommState_SetState
 	mov r4, #0
@@ -118,7 +118,7 @@ _02039C84:
 _02039C94:
 	cmp r0, #0x17
 	bne _02039CA4
-	ldr r0, _02039CFC ; =sub_02039E7C
+	ldr r0, _02039CFC ; =CommState_PlazaTimedOut
 	mov r1, #0
 	bl CommState_SetState
 	mov r4, #0
@@ -133,12 +133,12 @@ _02039CA4:
 	ldrb r0, [r0]
 	cmp r0, #0
 	beq _02039CC0
-	ldr r0, _02039CF8 ; =sub_02038E90
+	ldr r0, _02039CF8 ; =CommState_WifiFailed
 	add r1, r4, #0
 	bl CommState_SetState
 	b _02039CC8
 _02039CC0:
-	ldr r0, _02039D04 ; =sub_02038EB0
+	ldr r0, _02039D04 ; =CommState_WifiDisconnected
 	add r1, r4, #0
 	bl CommState_SetState
 _02039CC8:
@@ -155,7 +155,7 @@ _02039CC8:
 	ldrb r1, [r1]
 	cmp r1, r0
 	beq _02039CEE
-	ldr r0, _02039CF8 ; =sub_02038E90
+	ldr r0, _02039CF8 ; =CommState_WifiFailed
 	mov r1, #0
 	bl CommState_SetState
 	mov r4, #0
@@ -163,14 +163,14 @@ _02039CEE:
 	add r0, r4, #0
 	pop {r4, pc}
 	nop
-_02039CF4: .word sub_02038EB4
-_02039CF8: .word sub_02038E90
-_02039CFC: .word sub_02039E7C
+_02039CF4: .word CommState_WifiCancelled
+_02039CF8: .word CommState_WifiFailed
+_02039CFC: .word CommState_PlazaTimedOut
 _02039D00: .word gCommState
-_02039D04: .word sub_02038EB0
-	thumb_func_end sub_02039C6C
-	thumb_func_start sub_02039D08
-sub_02039D08: ; 0x02039D08
+_02039D04: .word CommState_WifiDisconnected
+	thumb_func_end CommState_PlazaCheckWifiResult
+	thumb_func_start CommState_PlazaUpdateLobby
+CommState_PlazaUpdateLobby: ; 0x02039D08
 	push {r4, lr}
 	mov r4, #1
 	bl WiFiPlazaLobbyClient_Update
@@ -189,7 +189,7 @@ _02039D20: ; jump table
 	.short _02039D34 - _02039D20 - 2 ; case 3
 	.short _02039D2A - _02039D20 - 2 ; case 4
 _02039D2A:
-	ldr r0, _02039D38 ; =sub_02039DC0
+	ldr r0, _02039D38 ; =CommState_PlazaLobbyFailed
 	mov r1, #0
 	bl CommState_SetState
 	mov r4, #0
@@ -197,23 +197,23 @@ _02039D34:
 	add r0, r4, #0
 	pop {r4, pc}
 	.balign 4, 0
-_02039D38: .word sub_02039DC0
-	thumb_func_end sub_02039D08
-	thumb_func_start sub_02039D3C
-sub_02039D3C: ; 0x02039D3C
+_02039D38: .word CommState_PlazaLobbyFailed
+	thumb_func_end CommState_PlazaUpdateLobby
+	thumb_func_start CommState_PlazaUpdate
+CommState_PlazaUpdate: ; 0x02039D3C
 	push {r3, lr}
 	mov r0, #0
 	bl WifiConnection_Update
-	bl sub_02039C6C
+	bl CommState_PlazaCheckWifiResult
 	cmp r0, #0
 	beq _02039D50
-	bl sub_02039D08
+	bl CommState_PlazaUpdateLobby
 _02039D50:
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end sub_02039D3C
-	thumb_func_start sub_02039D54
-sub_02039D54: ; 0x02039D54
+	thumb_func_end CommState_PlazaUpdate
+	thumb_func_start CommState_PlazaUpdateMatch
+CommState_PlazaUpdateMatch: ; 0x02039D54
 	push {r4, lr}
 	add r4, r0, #0
 	mov r0, #0
@@ -225,11 +225,11 @@ sub_02039D54: ; 0x02039D54
 _02039D66:
 	mov r1, #0
 	str r1, [r4]
-	bl sub_02039C6C
+	bl CommState_PlazaCheckWifiResult
 	cmp r0, #0
 	beq _02039D76
 _02039D72:
-	bl sub_02039D08
+	bl CommState_PlazaUpdateLobby
 _02039D76:
 	pop {r4, pc}
-	thumb_func_end sub_02039D54
+	thumb_func_end CommState_PlazaUpdateMatch

@@ -372,7 +372,7 @@ void sub_0205876C(void) {
         battleType = 7;
         break;
     }
-    sub_02039980(data);
+    CommState_GetSelectedOrder(data);
     if (gCommClubLink->party == NULL) {
         sub_02051598(gCommClubLink->fieldSystem, data, battleType);
     } else {

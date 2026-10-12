@@ -239,7 +239,7 @@ _02228C90:
 	ldr r0, [r4]
 	ldr r0, [r0]
 	ldr r0, [r0, #4]
-	bl sub_02039418
+	bl CommState_InitWfcSession
 	mov r0, #4
 	bl Sys_SetSleepDisableFlag
 	bl WirelessStatusIcon_Create

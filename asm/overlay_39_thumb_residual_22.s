@@ -163,7 +163,7 @@ GlobalTerminalConnect_StateExit: ; 0x02228F18
 	ldr r0, [r4, #8]
 	cmp r0, #9
 	beq _02228F28
-	bl sub_0203946C
+	bl CommState_FreeWfcSession
 _02228F28:
 	bl WirelessStatusIcon_Destroy
 	add r0, r4, #0
@@ -296,7 +296,7 @@ _0222900C:
 	bl GlobalTerminalConnect_IsPrinting
 	cmp r0, #0
 	bne _02229080
-	bl sub_0203946C
+	bl CommState_FreeWfcSession
 	bl ov00_021EC8D8
 	add r0, r4, #0
 	add r0, #0x94

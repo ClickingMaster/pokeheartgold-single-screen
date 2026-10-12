@@ -414,7 +414,7 @@ SpinTrade_State_WaitSaveSync: ; 0x021E65D4
 	ldr r1, [r1, #0xc]
 	bl SpinTrade_ReceiveTradedMon
 	add r0, r4, #4
-	bl sub_02039EAC
+	bl Comm_InitSyncedSave
 	ldr r0, _021E6608 ; =0x00000CA8
 	mov r1, #0xa
 	add r0, r4, r0
@@ -441,7 +441,7 @@ SpinTrade_State_Save: ; 0x021E6610
 	mov r1, #2
 	ldr r0, [r0, #0x1c]
 	add r2, r4, #4
-	bl sub_02039EB4
+	bl Comm_SyncedSave
 	cmp r0, #0
 	beq _021E6638
 	ldr r0, _021E663C ; =gSystem + 0x60

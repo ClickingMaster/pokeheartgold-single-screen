@@ -289,18 +289,8 @@ Static main
     Object src/field_warp_tasks.o
     Object src/script_pokemon_util.o
     Object src/terrain_attributes.o
-    Object src/field_terrain_queries.o
-    Object asm/unk_02054648_data.o
-    Object src/terrain_collision_height.o
-    Object src/field_terrain_queries_2.o
-    Object src/field_terrain_dispatch.o
-    Object src/field_terrain_queries_3.o
-    Object src/field_metatile_query.o
-    Object src/field_terrain_queries_4.o
-    Object src/field_terrain_dispatch_extended.o
-    Object asm/slop_r1_unk_02054954_m08_residual.o
-    Object src/slop_r1_field_prop_collect_m08.o
-    Object src/field_terrain_dispatch_extended_2.o
+    Object asm/field_terrain_data.o
+    Object src/field_terrain.o
     Object src/headbutt_tree.o
     Object src/field_bgm.o
     Object src/battle_transition_task.o
@@ -316,16 +306,8 @@ Static main
     Object src/communication_club_link.o
     Object src/colosseum.o
     Object src/union_room.o
-    Object src/field_link_messages.o
-    Object asm/to90_extra2308_anchor.o
-    Object src/to90_extra2308_run01.o
-    Object src/field_link_messages_2.o
-    Object src/r40_unk_0205A904_run1.o
-    Object src/field_link_messages_3.o
-    Object src/r40_unk_0205AA9C_run1.o
-    Object src/field_link_messages_4.o
-    Object src/field_link_avatar_alloc.o
-    Object src/field_link_messages_5.o
+    Object asm/union_room_talk_data.o
+    Object src/union_room_talk.o
     Object src/union_room_objects.o
     Object src/union_room_avatar.o
     Object src/dialog_box.o
@@ -395,8 +377,8 @@ Static main
     Object src/bag_view.o
     Object src/item.o
     Object src/bag.o
-    Object src/field_app_controller_1.o
-    Object asm/unk_02078834_residual_1.o
+    Object src/wifi_club.o
+    Object asm/wifi_club_data.o
     Object src/wifi_plaza_player_info.o
     Object src/party_menu.o
     Object src/party_context_menu.o
@@ -407,13 +389,13 @@ Static main
     Object asm/code_entry_data.o
     Object src/code_entry.o
     Object src/orbit_cursor.o
-    Object src/battle_transition_application.o
-    Object src/field_transition_finish_1.o
-    Object asm/unk_02087A78_residual_1.o
-    Object src/battle_transition_application_2.o
-    Object src/unk_02087E70.o
-    Object src/summary_graphics_lookup_1.o
-    Object asm/unk_02087FD4_residual_1.o
+    Object src/vs_recorder_app.o
+    Object src/vs_recorder_playback.o
+    Object asm/vs_recorder_app_data.o
+    Object src/vs_recorder_app_2.o
+    Object src/vs_recorder_menu_app.o
+    Object src/vs_recorder_screen_table.o
+    Object asm/vs_recorder_screen_data.o
     Object src/unk_0208805C.o
     Object asm/pokemon_summary_data.o
     Object src/pokemon_summary.o
@@ -1163,44 +1145,9 @@ Overlay field
     Object asm/overlay_01_sprite_data.o
     Object src/field/map_object_billboard_motion.o
     Object asm/overlay_01_021F72DC_residual_16.o
-    Object src/field_object_models.o
-    Object src/field_map_object_render_1.o
-    Object src/opus_overlay01_anim_1.o
-    Object src/field_map_object_render_2.o
-    Object src/to70_overlay_01_021F944C_residual_2_extra551_run01.o
-    Object src/field_map_object_render_3.o
-    Object src/to80_extra1766_run01.o
-    Object src/field_map_object_render_4.o
-    Object src/r40_overlay_01_021F944C_residual_4_run1.o
-    Object src/to80_extra1870_run01.o
-    Object src/field_map_object_render_5.o
-    Object src/r40_overlay_01_021F944C_residual_5_run1.o
-    Object src/to80_extra1871_run01.o
-    Object src/field_map_object_render_6.o
-    Object src/r40_overlay_01_021F944C_residual_6_run1.o
-    Object src/to70_overlay_01_021F944C_residual_6_extra748_run01.o
-    Object src/r40_overlay_01_021F944C_residual_6_run2.o
-    Object src/field_map_object_render_7.o
-    Object src/to45_overlay01_r7_exact.o
-    Object src/field_map_object_render_8.o
-    Object src/to70_overlay_01_021F944C_residual_8_extra922_run01.o
-    Object src/field_map_object_render_9.o
-    Object src/to70_overlay_01_021F944C_residual_9_extra552_run01.o
-    Object src/field_map_object_render_10.o
-    Object src/to70_overlay_01_021F944C_residual_10_extra747_run01.o
-    Object src/field_map_object_render_11.o
-    Object src/op90_overlay_01_021F944C_residual_11_r01.o
-    Object src/field_map_object_render_12.o
-    Object src/op90_to90_extra1924_residual_1_r01.o
-    Object src/to90_extra1924_run01.o
-    Object src/to45_field_render_resource_passes_r12.o
-    Object src/to90_extra2355_run01.o
-    Object src/field_map_object_render_13.o
-    Object src/op90_overlay_01_021F944C_residual_13_r01.o
-    Object src/field_map_object_render_14.o
-    Object asm/op90_to52_r2_w13_overlay01_r14_residual_anchor.o
-    Object src/op90_to52_r2_w13_overlay01_r14_residual_r01.o
-    Object src/to52_r2_w13/to52_r2_w13_overlay01_r14_exact.o
+    Object src/field/map_object_models.o
+    Object asm/map_object_render_data.o
+    Object src/field/map_object_render.o
     Object src/field/map_load_buffers.o
     Object src/field/bdhc.o
     Object src/field/dynamic_terrain_height.o
@@ -1265,14 +1212,7 @@ Overlay OVY_2
     Object asm/overlay_02_02245B80_residual_6.o
     Object src/field/encounter_check.o
     Object src/field/sprite_gfx_manager.o
-    Object src/overlay02_port_r2.o
-    Object src/overlay02_248728_partial_2.o
-    Object src/overlay02_port_r3.o
-    Object src/overlay02_248728_partial_3.o
-    Object src/overlay02_port_r4.o
-    Object src/overlay02_248728_partial_4.o
-    Object src/overlay02_starter_anim_r5.o
-    Object src/overlay02_248728_partial_5.o
+    Object src/field/fly_landing_effect.o
     Object src/overlay02_port_r6.o
     Object src/overlay02_248728_partial_6.o
     Object src/overlay02_port_r7.o

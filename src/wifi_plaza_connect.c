@@ -97,10 +97,10 @@ typedef struct WiFiPlazaConnectWork {
 } WiFiPlazaConnectWork; // size: 0x404
 
 // network_communication_state_full.c and the OVY_45 lobby have no public headers.
-extern void sub_0203976C(SaveData *saveData, s32 profileId);
-extern void sub_020397C8(void);
-extern int sub_020397E4(void);
-extern BOOL sub_020397FC(void);
+extern void CommState_StartWifiPlaza(SaveData *saveData, s32 profileId);
+extern void CommState_LeaveWifiPlaza(void);
+extern int CommState_HasPlazaLobbyStarted(void);
+extern BOOL CommState_HasPlazaLobbyFailed(void);
 extern void *WiFiPlazaWork_GetMyPlayer(void *lobby);
 extern void ov45_0222B244(void *lobby);
 extern void ov45_0222B270(void *lobby);
@@ -199,27 +199,27 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
         break;
     }
     case 4:
-        sub_0203976C(work->saveData, (s32)WiFiPlazaWork_GetMyPlayer(args->lobby));
+        CommState_StartWifiPlaza(work->saveData, (s32)WiFiPlazaWork_GetMyPlayer(args->lobby));
         WiFiPlazaConnect_PrintMessage(&work->statusBox, msg_0800_00023);
         WiFiPlazaConnect_StartWaitingIcon(&work->statusBox);
         (*state)++;
         break;
     case 5:
-        if (sub_020393C8() || sub_020397FC()) {
+        if (CommState_HasWifiFailed() || CommState_HasPlazaLobbyFailed()) {
             WiFiPlazaConnect_StopWaitingIcon(&work->statusBox);
             *state = 9;
         }
-        if (sub_020397E4() == 1) {
+        if (CommState_HasPlazaLobbyStarted() == 1) {
             ov45_0222B244(args->lobby);
             (*state)++;
         }
         break;
     case 6:
-        if (sub_020393C8() || sub_020397FC()) {
+        if (CommState_HasWifiFailed() || CommState_HasPlazaLobbyFailed()) {
             WiFiPlazaConnect_StopWaitingIcon(&work->statusBox);
             *state = 9;
         }
-        if (sub_02039274()) {
+        if (CommState_IsWifiJoiningLobby()) {
             s64 seconds;
             WiFiPlazaConnect_StopWaitingIcon(&work->statusBox);
             GameStats_AddScore(Save_GameStats_Get(work->saveData), SCORE_EVENT_WIFI_PLAZA_ACCESSED);
@@ -232,7 +232,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
     case 9: {
         u32 errorCode;
         int msgId;
-        if (sub_020393C8()) {
+        if (CommState_HasWifiFailed()) {
             u32 *error = CommState_GetWifiError();
             msgId = ov45_0222D7CC(error[0], error[1]);
             errorCode = error[0];
@@ -251,7 +251,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
     }
     case 10:
         if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) || System_GetTouchNew() == TRUE) {
-            if (sub_020393C8()) {
+            if (CommState_HasWifiFailed()) {
                 u32 *error = CommState_GetWifiError();
                 if (ov45_0222D7FC(error[0], error[1]) == FALSE) {
                     *state = 11;
@@ -273,7 +273,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
         int result = YesNoPrompt_HandleInput(work->yesNoPrompt);
         if (result == YESNORESPONSE_YES) {
             YesNoPrompt_Destroy(work->yesNoPrompt);
-            sub_020397C8();
+            CommState_LeaveWifiPlaza();
             *state = 13;
         } else if (result == YESNORESPONSE_NO) {
             YesNoPrompt_Destroy(work->yesNoPrompt);
@@ -290,7 +290,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
         WiFiPlazaConnect_ClearMessageBox(&work->msgBox);
         WiFiPlazaConnect_ClearMessageBox(&work->statusBox);
         WiFiPlazaConnect_ClearMessageBox(&work->errorBox);
-        sub_020397C8();
+        CommState_LeaveWifiPlaza();
         (*state)++;
         break;
     case 15:
@@ -378,7 +378,7 @@ BOOL WiFiPlazaConnect_DisconnectMain(OverlayManager *man, int *state) {
         break;
     case 2:
         WiFiPlazaConnect_PrintMessage(&work->msgBox, msg_0800_00026);
-        if (sub_020393C8() || sub_020397FC()) {
+        if (CommState_HasWifiFailed() || CommState_HasPlazaLobbyFailed()) {
             *state = 5;
             WiFiPlazaConnect_StartWaitingIcon(&work->msgBox);
         } else {
@@ -398,7 +398,7 @@ BOOL WiFiPlazaConnect_DisconnectMain(OverlayManager *man, int *state) {
         }
         break;
     case 5:
-        sub_020397C8();
+        CommState_LeaveWifiPlaza();
         *state = 6;
         break;
     case 6:

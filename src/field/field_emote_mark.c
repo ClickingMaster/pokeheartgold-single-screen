@@ -4,6 +4,7 @@
 
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
+#include "field/map_object_models.h"
 
 #include "billboard_lists.h"
 #include "field_effects.h"
@@ -32,10 +33,6 @@
 #define EMOTE_MARK_POP_SPEED   (6 * FX32_ONE)
 #define EMOTE_MARK_POP_GRAVITY (2 * FX32_ONE)
 #define EMOTE_MARK_HOLD_FRAMES 30
-
-// Position of a map object's sprite: its position plus facing and the two sprite offset vectors.
-// (field_object_models.c keeps it private.)
-void ov01_021F93AC(LocalMapObject *mapObject, VecFx32 *position);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 9).
 typedef struct EmoteMark {
@@ -353,7 +350,7 @@ void MapObjectEmoteMarkEffect_Update(FieldEffect *effect, EmoteMarkEffect *work)
     if (sub_0205F0A8(mapObject, work->objectId, work->mapId) == FALSE) {
         GF_AssertFail();
     }
-    ov01_021F93AC(mapObject, &position);
+    MapObject_GetDrawPosition(mapObject, &position);
     position.y += 32 * FX32_ONE;
     position.z += FX32_ONE;
     switch (work->state) {

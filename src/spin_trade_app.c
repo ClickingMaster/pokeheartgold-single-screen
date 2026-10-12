@@ -431,8 +431,8 @@ void sub_0201A738(int a0);
 int GetUserFrameGfx2PaletteMember(int frame);
 BOOL sub_02036FD8(int command, void *data, int size);
 void CommState_SetMaxEntries(int count);
-void sub_02039EAC(s32 *state);
-BOOL sub_02039EB4(SaveData *saveData, int a1, s32 *state);
+void Comm_InitSyncedSave(s32 *state);
+BOOL Comm_SyncedSave(SaveData *saveData, int a1, s32 *state);
 int GF_TouchpadUpdate(SpinTradeTouchSamples *out, int mode, u32 threshold);
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapId);
 BOOL SpinTradeLink_SendCommand(SpinTradeLinkMenu *menu, int command, void *data, int size);
@@ -1359,7 +1359,7 @@ BOOL SpinTrade_State_StartSave(SpinTradeApp *app) {
 BOOL SpinTrade_State_WaitSaveSync(SpinTradeApp *app) {
     if (LinkSync_IsSynced(SPIN_TRADE_LINK_SYNC_NO)) {
         SpinTrade_ReceiveTradedMon(app, app->landedEgg->netId);
-        sub_02039EAC(&app->saveState);
+        Comm_InitSyncedSave(&app->saveState);
         app->waitingIcon = WaitingIcon_New(&app->text.msgWindow, 10);
         app->state = SPIN_TRADE_STATE_SAVE;
     }
@@ -1367,7 +1367,7 @@ BOOL SpinTrade_State_WaitSaveSync(SpinTradeApp *app) {
 }
 
 BOOL SpinTrade_State_Save(SpinTradeApp *app) {
-    if (sub_02039EB4(app->args->input.saveData, 2, &app->saveState)) {
+    if (Comm_SyncedSave(app->args->input.saveData, 2, &app->saveState)) {
         gSystem.softResetDisabled = FALSE;
         WaitingIcon_Delete(app->waitingIcon);
         app->state = SPIN_TRADE_STATE_START_EXIT_SYNC;
@@ -1405,7 +1405,7 @@ BOOL SpinTrade_State_WaitExitSync(SpinTradeApp *app) {
         if (LinkSync_IsSynced(SPIN_TRADE_LINK_SYNC_NO)) {
             CommState_SetErrorWatch(0, 0);
             CommState_SetMaxEntries(1);
-            sub_02037FF0();
+            CommState_ResumeAlternateSearch();
             app->state = SPIN_TRADE_STATE_WAIT_DISCONNECT;
         }
     } else {
@@ -1415,7 +1415,7 @@ BOOL SpinTrade_State_WaitExitSync(SpinTradeApp *app) {
             if (app->menu->unk_3C == 0) {
                 CommState_SetErrorWatch(0, 0);
                 CommState_SetMaxEntries(1);
-                sub_02037FF0();
+                CommState_ResumeAlternateSearch();
             }
             app->state = SPIN_TRADE_STATE_WAIT_DISCONNECT;
         }

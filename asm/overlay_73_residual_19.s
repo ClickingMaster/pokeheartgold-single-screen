@@ -325,7 +325,7 @@ NintendoWfcUnused_SessionInit: ; 0x021E84D0
 	bl GfGfx_EngineBTogglePlanes
 	ldr r0, [r4]
 	ldr r0, [r0, #0xc]
-	bl sub_02039418
+	bl CommState_InitWfcSession
 	add r0, r4, #0
 	bl NintendoWfcUnused_CreateWirelessIcon
 	ldr r0, [r4]

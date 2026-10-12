@@ -332,7 +332,7 @@ NintendoWfc_SessionInit: ; 0x0223886C
 	cmp r0, #0
 	beq _02238922
 	ldr r0, [r1, #0xc]
-	bl sub_02039418
+	bl CommState_InitWfcSession
 	ldr r0, _02238944 ; =0x00000F0F
 	mov r2, #1
 	str r0, [sp]
@@ -357,7 +357,7 @@ _02238922:
 _0223892E:
 	ldr r0, [r4]
 	ldr r0, [r0, #0xc]
-	bl sub_02039418
+	bl CommState_InitWfcSession
 	mov r0, #0x33
 	str r0, [r4, #0x1c]
 _0223893A:

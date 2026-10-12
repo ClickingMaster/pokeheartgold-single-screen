@@ -29,7 +29,7 @@
 .public TaskManager_GetFieldSystem
 .public TaskManager_GetEnvironment
 .public TaskManager_GetStatePtr
-.public sub_020548C0
+.public FieldSystem_CheckTileCollision
 .public GetMetatileBehavior
 .public MetatileBehavior_IsMagma
 .public PlayerAvatar_GetFacingDirection
@@ -96,8 +96,8 @@
 .public MapLoadManager_TrackTarget
 .public MapLoadManager_ForgetTrackedTarget
 .public MapObject_GetBillboard
-.public ov01_021FA2D4
-.public ov01_021FA930
+.public MapObject_IsBillboardPending
+.public MapObject_ChangeBillboardSprite
 .public DynamicTerrainHeightManager_SetPlate
 .public DynamicTerrainHeightManager_SetPlateHeight
 .public AreaDataManager_GetMapPropTexture

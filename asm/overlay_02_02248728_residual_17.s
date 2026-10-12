@@ -1219,28 +1219,28 @@
 	.public SpriteGfxManager_LoadAnim
 	.public SpriteGfxManager_CreateSprite
 	.public Sprite_CopyPositionVector
-	.public ov02_02248CAC
-	.public ov02_02248D18
-	.public ov02_02248D58
-	.public ov02_02248D8C
-	.public ov02_02248D98
-	.public ov02_02248DBC
-	.public ov02_02248DE4
-	.public ov02_02248DF0
-	.public ov02_02248E10
-	.public ov02_02248E20
-	.public ov02_02248F88
-	.public ov02_02249088
-	.public ov02_022490BC
-	.public ov02_022491A8
-	.public ov02_022491CC
-	.public ov02_02249290
-	.public ov02_0224939C
-	.public ov02_022493EC
-	.public ov02_022493F0
-	.public ov02_022493FC
-	.public ov02_02249420
-	.public ov02_02249444
+	.public FlyLanding_CreateFlyerSprite
+	.public FlyLanding_CreateTrainerSprite
+	.public FlyLandingEffect_Create
+	.public FlyLandingEffect_GetStatus
+	.public FlyLandingEffect_Init
+	.public FlyLandingEffect_Delete
+	.public FlyLandingEffect_Destroy
+	.public FlyLandingEffect_Update
+	.public FlyLandingEffect_Idle
+	.public FlyLandingEffect_Start
+	.public FlyLandingEffect_SwoopIn
+	.public FlyLandingEffect_StartClimb
+	.public FlyLandingEffect_Climb
+	.public FlyLandingEffect_HideFlyer
+	.public FlyLandingEffect_StartFlyAway
+	.public FlyLandingEffect_FlyAway
+	.public FlyLandingEffect_ShowPlayer
+	.public FlyLandingEffect_Done
+	.public FlyLanding_OpenNarc
+	.public FieldMove_FadeInFromWhite
+	.public FieldMove_FadeOutToWhite
+	.public FieldMove_SetPlayerVisible
 	.public ov02_02249458
 	.public ov02_022494C4
 	.public ov02_0224953C
@@ -1554,27 +1554,27 @@
 	.public ov02_022507E8
 	.public ov02_022508B4
 	.public ov02_022508D8
-	.public ov02_022532F8
+	.public sFlyLandingIdleSteps
 	.public ov02_022532FC
 	.public ov02_02253300
 	.public ov02_02253304
 	.public ov02_0225330A
 	.public ov02_02253310
-	.public ov02_02253320
+	.public sFlyLandingPhases
 	.public ov02_02253330
 	.public ov02_02253348
 	.public ov02_02253354
-	.public ov02_02253360
+	.public sFlyLandingFlyerScale
 	.public ov02_0225336C
 	.public ov02_02253378
 	.public ov02_02253384
 	.public ov02_02253390
-	.public ov02_0225339C
-	.public ov02_022533A8
-	.public ov02_022533B4
+	.public sFlyLandingSwoopCenter
+	.public sFlyLandingTrainerScale
+	.public sFlyLandingFlyAwayScale
 	.public ov02_022533C0
-	.public ov02_022533CC
-	.public ov02_022533D8
+	.public sFlyLandingSwoopScale
+	.public sFlyLandingFlyAwayCenter
 	.public ov02_022533E4
 	.public ov02_022533F0
 	.public ov02_022533FC
@@ -1583,13 +1583,13 @@
 	.public ov02_02253420
 	.public ov02_02253430
 	.public ov02_02253440
-	.public ov02_02253454
+	.public sFlyLandingEffectTemplate
 	.public ov02_02253468
 	.public ov02_0225347C
 	.public ov02_02253490
 	.public ov02_022534A4
 	.public ov02_022534B8
-	.public ov02_022534D0
+	.public sFlyLandingSteps
 	.public ov02_022534F0
 	.public ov02_02253520
 	.public ov02_02253550
@@ -1644,14 +1644,14 @@
 	.text
 	.public FieldSystem_FollowMonInteract
 	.public Sprite_CopyPositionVector
-	.public ov02_02248D8C
-	.public ov02_02248DE4
-	.public ov02_02248E10
-	.public ov02_022493EC
-	.public ov02_022493F0
-	.public ov02_022493FC
-	.public ov02_02249420
-	.public ov02_02249444
+	.public FlyLandingEffect_GetStatus
+	.public FlyLandingEffect_Destroy
+	.public FlyLandingEffect_Idle
+	.public FlyLandingEffect_Done
+	.public FlyLanding_OpenNarc
+	.public FieldMove_FadeInFromWhite
+	.public FieldMove_FadeOutToWhite
+	.public FieldMove_SetPlayerVisible
 	.public ov02_0224953C
 	.public ov02_02249548
 	.public ov02_0224957C

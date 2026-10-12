@@ -46,7 +46,7 @@
 #include "sys_flags.h"
 #include "system.h"
 #include "task.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 #include "unk_02055418.h"
 
 // What the following Pokemon and its surroundings look like when the player talks to it; compared against the
@@ -125,9 +125,9 @@ extern const VecFx32 ov02_02253B30;
 
 // Overlay 1 map object model helpers.
 void *ov01_021F771C(MapObjectManager *manager);
-void ov01_021F8F08(LocalMapObject *object, BOOL set);
-void ov01_021F8F68(LocalMapObject *object, s8 a1);
-void ov01_021F8F74(LocalMapObject *object, s8 a1);
+void FollowMonBillboard_SetShadowAnchored(LocalMapObject *object, BOOL set);
+void FollowMonBillboard_SetHeight(LocalMapObject *object, s8 a1);
+void FollowMonBillboard_AddHeight(LocalMapObject *object, s8 a1);
 
 int FollowMon_SelectInteraction(FieldSystem *fieldSystem);
 void FollowMon_GetSituation(FieldSystem *fieldSystem, FollowMonSituation *situation);
@@ -912,7 +912,7 @@ void FollowMonMovement_ApplyOffset(const FollowMonMovementStep *move, LocalMapOb
     if (move->unk3 != 0) {
         species = FollowMon_GetSpecies(object);
         if (species != SPECIES_DIGLETT && species != SPECIES_DUGTRIO) {
-            ov01_021F8F74(object, move->unk3);
+            FollowMonBillboard_AddHeight(object, move->unk3);
         }
     }
     if (move->dz != 0) {
@@ -1022,8 +1022,8 @@ BOOL FollowMonInteraction_RunMovement(FieldSystem *fieldSystem, FollowMonInterac
     case 1:
         MapObject_CopyPositionVector(fieldSystem->followMon.mapObject, &interaction->savedPosition);
         interaction->savedFacing = MapObject_GetFacingDirection(fieldSystem->followMon.mapObject);
-        ov01_021F8F68(fieldSystem->followMon.mapObject, 0);
-        ov01_021F8F08(fieldSystem->followMon.mapObject, TRUE);
+        FollowMonBillboard_SetHeight(fieldSystem->followMon.mapObject, 0);
+        FollowMonBillboard_SetShadowAnchored(fieldSystem->followMon.mapObject, TRUE);
         interaction->movementState = 2;
         interaction->movementIndex = 0;
         break;
@@ -1040,8 +1040,8 @@ BOOL FollowMonInteraction_RunMovement(FieldSystem *fieldSystem, FollowMonInterac
         break;
     case 4:
         direction = MapObject_GetFacingDirection(fieldSystem->followMon.mapObject);
-        ov01_021F8F68(fieldSystem->followMon.mapObject, 0);
-        ov01_021F8F08(fieldSystem->followMon.mapObject, FALSE);
+        FollowMonBillboard_SetHeight(fieldSystem->followMon.mapObject, 0);
+        FollowMonBillboard_SetShadowAnchored(fieldSystem->followMon.mapObject, FALSE);
         MapObject_SetPositionVector(fieldSystem->followMon.mapObject, &interaction->savedPosition);
         MapObject_SetFacingDirectionDirect(fieldSystem->followMon.mapObject, interaction->savedFacing);
         FollowMon_TryShakeGrass(interaction, fieldSystem->followMon.mapObject, direction);

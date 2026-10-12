@@ -29,8 +29,8 @@ gCommBaseCommands:
 	.word CommPlayerInfo_RecvPlayerEntry, CommPlayerInfo_GetEntrySize, 0
 	.word CommPlayerInfo_RecvEntry, CommPlayerInfo_GetEntrySize, 0
 	.word sub_02034524, CommCmd_GetSize0, 0
-	.word CommState_RecvJoinRequest, sub_02038C18, 0
-	.word CommState_RecvJoinReply, sub_02038C18, 0
+	.word CommState_RecvJoinRequest, CommState_GetJoinMessageSize, 0
+	.word CommState_RecvJoinReply, CommState_GetJoinMessageSize, 0
 	.word 0, 0, 0
 	.word 0, 0, 0
 	.word sub_02037618, CommCmd_GetSize1, 0
@@ -43,5 +43,5 @@ gCommBaseCommands:
 	.word LinkSync_RecvDone, CommCmd_GetSize1, 0
 	.word LinkSync_RecvState, CommCmd_GetSize2, 0
 	.word LinkSync_RecvValue, LinkSync_GetValueSize, 0
-	.word LinkSync_RecvPacket, sub_02037C94, 0
-	.word sub_02039220, CommCmd_GetSize0, 0
+	.word LinkSync_RecvPacket, CommState_GetSyncPacketSize, 0
+	.word CommState_RecvWifiDisconnect, CommCmd_GetSize0, 0

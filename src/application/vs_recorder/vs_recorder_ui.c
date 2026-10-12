@@ -93,7 +93,7 @@ void VsRecorder_MenuRunAction(VsRecorderWork *work) {
 
     switch (entry->action) {
     case VS_RECORDER_MENU_ACTION_CANCEL:
-        sub_02087A84(work->result, 0, 0);
+        VsRecorderApp_SetResult(work->result, 0, 0);
         VsRecorder_SetSubState(work, 2);
         break;
     case 4:
@@ -216,7 +216,7 @@ void VsRecorder_OnMenuTouch(u32 index, u32 event, void *arg) {
     work->selection = work->menu[work->menuCursor].selection;
     VsRecorder_SetSubState(work, work->menu[work->menuCursor].nextSubState);
     if (work->menu[work->menuCursor].nextSubState == VS_RECORDER_MENU_ACTION_CANCEL) {
-        sub_02087A84(work->result, 0, 0);
+        VsRecorderApp_SetResult(work->result, 0, 0);
     } else {
         VsRecorder_ClearMenuHitboxes(work);
         OrbitCursor_SetVisible(work->orbitCursors[0], 1);

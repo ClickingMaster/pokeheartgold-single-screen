@@ -1219,28 +1219,28 @@
 	.public SpriteGfxManager_LoadAnim
 	.public SpriteGfxManager_CreateSprite
 	.public Sprite_CopyPositionVector
-	.public ov02_02248CAC
-	.public ov02_02248D18
-	.public ov02_02248D58
-	.public ov02_02248D8C
-	.public ov02_02248D98
-	.public ov02_02248DBC
-	.public ov02_02248DE4
-	.public ov02_02248DF0
-	.public ov02_02248E10
-	.public ov02_02248E20
-	.public ov02_02248F88
-	.public ov02_02249088
-	.public ov02_022490BC
-	.public ov02_022491A8
-	.public ov02_022491CC
-	.public ov02_02249290
-	.public ov02_0224939C
-	.public ov02_022493EC
-	.public ov02_022493F0
-	.public ov02_022493FC
-	.public ov02_02249420
-	.public ov02_02249444
+	.public FlyLanding_CreateFlyerSprite
+	.public FlyLanding_CreateTrainerSprite
+	.public FlyLandingEffect_Create
+	.public FlyLandingEffect_GetStatus
+	.public FlyLandingEffect_Init
+	.public FlyLandingEffect_Delete
+	.public FlyLandingEffect_Destroy
+	.public FlyLandingEffect_Update
+	.public FlyLandingEffect_Idle
+	.public FlyLandingEffect_Start
+	.public FlyLandingEffect_SwoopIn
+	.public FlyLandingEffect_StartClimb
+	.public FlyLandingEffect_Climb
+	.public FlyLandingEffect_HideFlyer
+	.public FlyLandingEffect_StartFlyAway
+	.public FlyLandingEffect_FlyAway
+	.public FlyLandingEffect_ShowPlayer
+	.public FlyLandingEffect_Done
+	.public FlyLanding_OpenNarc
+	.public FieldMove_FadeInFromWhite
+	.public FieldMove_FadeOutToWhite
+	.public FieldMove_SetPlayerVisible
 	.public ov02_02249458
 	.public ov02_022494C4
 	.public ov02_0224953C
@@ -1554,27 +1554,27 @@
 	.public ov02_022507E8
 	.public ov02_022508B4
 	.public ov02_022508D8
-	.public ov02_022532F8
+	.public sFlyLandingIdleSteps
 	.public ov02_022532FC
 	.public ov02_02253300
 	.public ov02_02253304
 	.public ov02_0225330A
 	.public ov02_02253310
-	.public ov02_02253320
+	.public sFlyLandingPhases
 	.public ov02_02253330
 	.public ov02_02253348
 	.public ov02_02253354
-	.public ov02_02253360
+	.public sFlyLandingFlyerScale
 	.public ov02_0225336C
 	.public ov02_02253378
 	.public ov02_02253384
 	.public ov02_02253390
-	.public ov02_0225339C
-	.public ov02_022533A8
-	.public ov02_022533B4
+	.public sFlyLandingSwoopCenter
+	.public sFlyLandingTrainerScale
+	.public sFlyLandingFlyAwayScale
 	.public ov02_022533C0
-	.public ov02_022533CC
-	.public ov02_022533D8
+	.public sFlyLandingSwoopScale
+	.public sFlyLandingFlyAwayCenter
 	.public ov02_022533E4
 	.public ov02_022533F0
 	.public ov02_022533FC
@@ -1583,13 +1583,13 @@
 	.public ov02_02253420
 	.public ov02_02253430
 	.public ov02_02253440
-	.public ov02_02253454
+	.public sFlyLandingEffectTemplate
 	.public ov02_02253468
 	.public ov02_0225347C
 	.public ov02_02253490
 	.public ov02_022534A4
 	.public ov02_022534B8
-	.public ov02_022534D0
+	.public sFlyLandingSteps
 	.public ov02_022534F0
 	.public ov02_02253520
 	.public ov02_02253550
@@ -1644,14 +1644,14 @@
 	.text
 	.public FieldSystem_FollowMonInteract
 	.public Sprite_CopyPositionVector
-	.public ov02_02248D8C
-	.public ov02_02248DE4
-	.public ov02_02248E10
-	.public ov02_022493EC
-	.public ov02_022493F0
-	.public ov02_022493FC
-	.public ov02_02249420
-	.public ov02_02249444
+	.public FlyLandingEffect_GetStatus
+	.public FlyLandingEffect_Destroy
+	.public FlyLandingEffect_Idle
+	.public FlyLandingEffect_Done
+	.public FlyLanding_OpenNarc
+	.public FieldMove_FadeInFromWhite
+	.public FieldMove_FadeOutToWhite
+	.public FieldMove_SetPlayerVisible
 	.public ov02_0224953C
 	.public ov02_02249548
 	.public ov02_0224957C
@@ -1763,8 +1763,8 @@
 
     .rodata
 
-ov02_022532F8:
-	.word ov02_02248E10
+sFlyLandingIdleSteps:
+	.word FlyLandingEffect_Idle
 
 ov02_022532FC: ; 0x022532FC
 	.byte 0x07, 0x00, 0x08, 0x00
@@ -1781,8 +1781,8 @@ ov02_0225330A: ; 0x0225330A
 ov02_02253310: ; 0x02253310
 	.byte 0x12, 0x00, 0x15, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 
-ov02_02253320: ; 0x02253320
-	.word ov02_022532F8, ov02_022534D0, 0x01, 0x0F
+sFlyLandingPhases: ; 0x02253320
+	.word sFlyLandingIdleSteps, sFlyLandingSteps, 0x01, 0x0F
 
 ov02_02253330:
 	.word ov02_0224ACE0, ov02_0224ADEC, 0x00, 0x06
@@ -1795,7 +1795,7 @@ ov02_02253348: ; 0x02253348
 ov02_02253354: ; 0x02253354
 	.byte 0x00, 0x00, 0x08, 0x00, 0x00, 0x80, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov02_02253360: ; 0x02253360
+sFlyLandingFlyerScale: ; 0x02253360
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 ov02_0225336C: ; 0x0225336C
@@ -1812,15 +1812,15 @@ ov02_02253384: ; 0x02253384
 ov02_02253390: ; 0x02253390
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov02_0225339C: ; 0x0225339C
+sFlyLandingSwoopCenter: ; 0x0225339C
 	.byte 0x00, 0x00, 0x08, 0x00
 	.byte 0x00, 0xF0, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov02_022533A8: ; 0x022533A8
+sFlyLandingTrainerScale: ; 0x022533A8
 	.byte 0x00, 0x20, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov02_022533B4: ; 0x022533B4
+sFlyLandingFlyAwayScale: ; 0x022533B4
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 ov02_022533C0: ; 0x022533C0
@@ -1828,11 +1828,11 @@ ov02_022533C0: ; 0x022533C0
 	.word ov02_02253330
 	.word ov02_02253420
 
-ov02_022533CC: ; 0x022533CC
+sFlyLandingSwoopScale: ; 0x022533CC
 	.byte 0x00, 0x20, 0x00, 0x00
 	.byte 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov02_022533D8: ; 0x022533D8
+sFlyLandingFlyAwayCenter: ; 0x022533D8
 	.byte 0x00, 0x80, 0x08, 0x00, 0x00, 0xF0, 0x04, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
@@ -1866,11 +1866,11 @@ ov02_02253440: ; 0x02253440
 	.word ov02_0224B6E4
 	.word FieldEffect_DefaultDraw
 
-ov02_02253454: ; 0x02253454
+sFlyLandingEffectTemplate: ; 0x02253454
 	.byte 0x74, 0x00, 0x00, 0x00
-	.word ov02_02248D98
-	.word ov02_02248DE4
-	.word ov02_02248DF0
+	.word FlyLandingEffect_Init
+	.word FlyLandingEffect_Destroy
+	.word FlyLandingEffect_Update
 	.word FieldEffect_DefaultDraw
 
 ov02_02253468: ; 0x02253468
@@ -1909,15 +1909,15 @@ ov02_022534B8: ; 0x022534B8
 	.word ov02_0224B664
 	.word ov02_0224B68C
 
-ov02_022534D0:
-	.word ov02_02248F88
-	.word ov02_02249088
-	.word ov02_022490BC
-	.word ov02_022491A8
-	.word ov02_022491CC
-	.word ov02_02249290
-	.word ov02_0224939C
-	.word ov02_022493EC
+sFlyLandingSteps:
+	.word FlyLandingEffect_SwoopIn
+	.word FlyLandingEffect_StartClimb
+	.word FlyLandingEffect_Climb
+	.word FlyLandingEffect_HideFlyer
+	.word FlyLandingEffect_StartFlyAway
+	.word FlyLandingEffect_FlyAway
+	.word FlyLandingEffect_ShowPlayer
+	.word FlyLandingEffect_Done
 
 ov02_022534F0: ; 0x022534F0
 	.word ov02_022495D0

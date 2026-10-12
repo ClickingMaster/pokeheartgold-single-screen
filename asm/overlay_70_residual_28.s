@@ -2982,7 +2982,7 @@ _0224071C:
 	bl CommState_SetError
 	b _02240740
 _02240724:
-	bl sub_020399EC
+	bl CommState_ShowRestartErrorAndHalt
 	b _02240740
 _0224072A:
 	ldr r0, _02240744 ; =0x00001604
@@ -2994,7 +2994,7 @@ _0224072A:
 	lsl r0, r0, #4
 	cmp r1, r0
 	bne _02240740
-	bl sub_020399EC
+	bl CommState_ShowRestartErrorAndHalt
 _02240740:
 	mov r0, #3
 	pop {r4, pc}

@@ -201,12 +201,12 @@ extern BOOL Task_WaitFollowMonMovement(TaskManager *taskMan);                   
 extern void FieldEffectPool_DrawAll(void *a0);                                                                          // unk_020689C8.h
 extern void FieldCameraZoom_End(SysTask *task);                                                                    // no header included here
 extern BOOL FieldCameraZoom_IsDone(SysTask *task);                                                                    // no header included here
-extern void ov01_021F8F68(LocalMapObject *object, int a1);                                                   // no header included here
-extern void ov01_021F8F08(LocalMapObject *object, int a1);                                                   // no header included here
+extern void FollowMonBillboard_SetHeight(LocalMapObject *object, int a1);                                                   // no header included here
+extern void FollowMonBillboard_SetShadowAnchored(LocalMapObject *object, int a1);                                                   // no header included here
 extern void *Save_VarsFlags_Get(SaveData *saveData);                                                         // save_vars_flags.h, not included
 extern BOOL Save_VarsFlags_CheckSafariSysFlag(void *varsFlags);                                              // save_vars_flags.h, not included
 extern BOOL sub_0202F620(void *safariZone);                                                                  // no header included here
-extern fx32 sub_02054774(FieldSystem *fieldSystem, fx32 refHeight, fx32 xFx32, fx32 zFx32, u8 *outSelector); // unk_02054648.h, not included
+extern fx32 Terrain_GetHeight_Bdhc(FieldSystem *fieldSystem, fx32 refHeight, fx32 xFx32, fx32 zFx32, u8 *outSelector); // unk_02054648.h, not included
 WIP_LOCAL BOOL FieldSystem_CanPlaceSafariObject(FieldSystem *fieldSystem);
 // --- Task_FollowMonInteract (0x02250110) deps ---
 extern void ClearFrameAndWindow2(Window *window, BOOL dont_copy_to_vram);                                                   // render_window.h, not included
@@ -241,7 +241,7 @@ extern void _fsub(void);                      // soft-float runtime
 extern void _fflt(void);                      // soft-float runtime
 extern void _ffix(void);                      // soft-float runtime
 extern void Field3dObject_SetXRotation(void); // not in any included header (asm-only ref)
-extern void sub_020548C0(void);               // not in any included header (asm-only ref)
+extern void FieldSystem_CheckTileCollision(void);               // not in any included header (asm-only ref)
 WIP_LOCAL void WaterfallEffect_Update(void *a0, void *a1, void *a2);
 extern u16 GF_DegreeToSinCosIdxNoWrap(u16 deg);                           // math_util.h, not included
 extern BOOL Save_VarsFlags_CheckFlagInArray(void *varsFlags, u16 flagId); // save_vars_flags.h, not included
@@ -262,7 +262,7 @@ WIP_LOCAL BOOL ov02_022508D8(TaskManager *taskManager);
 typedef struct ov02_FieldList5 {
     u32 v[5];
 } ov02_FieldList5;
-extern int sub_02054C90(void *a0, void *a1, int a2, void **a3, void **a4);                                                                                 // no header included here
+extern int FieldSystem_FindMapPropOfModels(void *a0, void *a1, int a2, void **a3, void **a4);                                                                                 // no header included here
 extern void *AreaDataManager_GetMapPropTexture(void *a0);                                                                                                                      // no header included here
 extern void *MapProp_GetRenderSurface(void *a0);                                                                                                           // no header included here
 extern void *MapProp_GetResModel(void *a0);                                                                                                                // no header included here
@@ -302,7 +302,7 @@ extern u16 GF_DegreeToSinCosIdx(u16 deg);                                       
 extern u16 LCRandom(void);                                                                                           // math_util.h, not included
 extern fx32 GF_SinDeg(u16 deg);                                                                                      // math_util.h, not included
 extern fx32 GF_CosDeg(u16 deg);                                                                                      // math_util.h, not included
-extern void ov01_021F8F74(LocalMapObject *mapObject, int a1);                                                        // no header included here
+extern void FollowMonBillboard_AddHeight(LocalMapObject *mapObject, int a1);                                                        // no header included here
 extern BOOL FollowMonObject_IsLarge(LocalMapObject *mapObject);                                                                // no header included here
 extern void TallGrass_SpawnAt(LocalMapObject *mapObject, int a1, u32 x, u32 z, int a4);                                  // no header included here
 extern void VeryTallGrass_SpawnAt(LocalMapObject *mapObject, int a1, u32 x, u32 z, int a4);                                  // no header included here
@@ -329,8 +329,8 @@ typedef int (*ov02_AnimDispatchFunc)(void *data);
 // ScriptFieldMoveEffect_Start create-dispatch table (rodata, defined later): each entry builds a
 // Field3dObjectTask from the fieldSystem. Indexed by the anim type.
 typedef Field3dObjectTask *(*ov02_CreateDispatchFunc)(FieldSystem *fieldSystem);
-extern BOOL sub_02054C20(FieldSystem *fieldSystem, int targetType, int *outObj, void **outHandle); // unk_02054648.h, not included
-extern void sub_02054DC8(int idx, int width, VecFx32 *out);                                        // unk_02054648.h, not included
+extern BOOL FieldSystem_FindMapProp(FieldSystem *fieldSystem, int targetType, int *outObj, void **outHandle); // unk_02054648.h, not included
+extern void Terrain_GetChunkOrigin(int idx, int width, VecFx32 *out);                                        // unk_02054648.h, not included
 extern void MapProp_GetTranslation(VecFx32 *out, void *src);                                       // unk_02054648.h, not included
 extern u8 GetMetatileBehavior(FieldSystem *fieldSystem, int x, int z);                             // unk_02054648.h, not included
 extern void FieldSystem_ShowEmoteBubble(FieldSystem *fieldSystem, LocalMapObject *partnerPokeObj, int a2);       // overlay_01.h, not included
@@ -361,11 +361,11 @@ extern void *FieldEffectPool_AddBasicEffect(void *mgr, const ov02_LaunchTemplate
 // STRUCT-CLEANUP TODO: the getters/setters/deleters below use byte-offset casts
 // because their owning struct isn't named yet. They byte-match; replace the casts
 // with real struct field accesses once those structs are reversed.
-WIP_LOCAL u8 ov02_02248D8C(void *work);
-WIP_LOCAL void ov02_02248DE4(void *a0, void *work);
+WIP_LOCAL u8 FlyLandingEffect_GetStatus(void *work);
+WIP_LOCAL void FlyLandingEffect_Destroy(void *a0, void *work);
 WIP_LOCAL BOOL ov02_0224953C(void *work);
 WIP_LOCAL int ov02_0224997C(void *work);
-WIP_LOCAL int ov02_0224939C(void *work);
+WIP_LOCAL int FlyLandingEffect_ShowPlayer(void *work);
 WIP_LOCAL int ov02_02249774(void *work);
 WIP_LOCAL void FollowMonMovement_PlaySound(void *arg0, u16 arg1, int arg2, int arg3);
 WIP_LOCAL int FieldEscapeRope_SpinStart(TaskManager *taskManager, FieldSystem *fieldSystem, void *work);
@@ -374,7 +374,7 @@ WIP_LOCAL void Task_ScriptFieldMoveEffect(SysTask *task, void *data);
 WIP_LOCAL BOOL ov02_0224E640(SaveData *saveData);
 WIP_LOCAL void RockDebris_SpawnPiece(Field3dObject *obj, VecFx32 *arg1, fx32 arg2, fx32 arg3);
 WIP_LOCAL void FollowMonSituation_SetHiddenItems(FieldSystem *fieldSystem, void *out);
-WIP_LOCAL Sprite *ov02_02248CAC(void *mgr);
+WIP_LOCAL Sprite *FlyLanding_CreateFlyerSprite(void *mgr);
 WIP_LOCAL void ov02_0224A66C(void *work);
 WIP_LOCAL void ov02_0224A674(void *work);
 WIP_LOCAL void ov02_0224A690(void *work);
@@ -387,7 +387,7 @@ WIP_LOCAL BOOL ov02_0224B43C(SysTask *task);
 WIP_LOCAL BOOL MapId_IsSafariZone(int a0);
 WIP_LOCAL BOOL FollowMonInteraction_StepHasMovement(void *a0, u16 *a1);
 WIP_LOCAL Sprite *SpriteGfxManager_CreateSprite(void *mgr, VecFx32 *pos, int charId, int plttId, int cellId, int cellAnmId, int priority, int drawPriority);
-WIP_LOCAL Sprite *ov02_02248D18(void *mgr, int a1);
+WIP_LOCAL Sprite *FlyLanding_CreateTrainerSprite(void *mgr, int a1);
 WIP_LOCAL int FieldMoveArrival_Finish(void *a0, void *a1, void *work);
 WIP_LOCAL Sprite *ov02_0224A33C(void *mgr, VecFx32 *pos, int charId, int plttId, int cellId, int mode, int priority, int drawPriority);
 WIP_LOCAL Sprite *ov02_0224A9B8(void *mgr, VecFx32 *pos);
@@ -447,8 +447,8 @@ WIP_LOCAL void ov02_02249F6C(void *work);
 WIP_LOCAL void ov02_0224A028(void *work);
 WIP_LOCAL void ov02_02249FD4(void *work);
 WIP_LOCAL BOOL FollowMonMovement_HasNextStep(void *p);
-WIP_LOCAL BOOL ov02_02249088(void *mgr);
-WIP_LOCAL BOOL ov02_02248D98(void *a0, void *obj);
+WIP_LOCAL BOOL FlyLandingEffect_StartClimb(void *mgr);
+WIP_LOCAL BOOL FlyLandingEffect_Init(void *a0, void *obj);
 WIP_LOCAL void ov02_0224A834(void *mgr, void *src);
 WIP_LOCAL Sprite *ov02_0224A418(void *mgr, VecFx32 *pos);
 WIP_LOCAL void CutEffect_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, Field3dObject *obj);
@@ -458,18 +458,18 @@ WIP_LOCAL Roamer *ov02_0224BAA8(RoamerSaveData *roamerSave, int a1);
 WIP_LOCAL void ov02_0224B72C(void *work);
 WIP_LOCAL void ov02_0224AB58(void *work);
 WIP_LOCAL void *ov02_0224B298(void *mgr, void *arg1);
-WIP_LOCAL void ov02_02248E20(void *arg0);
-WIP_LOCAL void *ov02_02248D58(void *arg0, void *arg1, void *arg2, void *arg3);
+WIP_LOCAL void FlyLandingEffect_Start(void *arg0);
+WIP_LOCAL void *FlyLandingEffect_Create(void *arg0, void *arg1, void *arg2, void *arg3);
 WIP_LOCAL void ov02_0224AA44(void *arg0, VecFx32 *pos, VecFx32 *vec, void *arg3, u32 arg4, void *arg5);
 WIP_LOCAL void RockDebris_UpdatePiece(void *obj);
 WIP_LOCAL void RockClimbDebris_Update(void *a0, void *a1, void *data);
 WIP_LOCAL void RockDebris_Update(void *a0, void *a1, void *data);
 WIP_LOCAL int ov02_02249690(void *work);
 WIP_LOCAL int ov02_022496D0(void *work);
-WIP_LOCAL int ov02_022491CC(void *work);
-WIP_LOCAL int ov02_02249290(void *work);
-WIP_LOCAL int ov02_02248F88(void *work);
-WIP_LOCAL int ov02_022490BC(void *work);
+WIP_LOCAL int FlyLandingEffect_StartFlyAway(void *work);
+WIP_LOCAL int FlyLandingEffect_FlyAway(void *work);
+WIP_LOCAL int FlyLandingEffect_SwoopIn(void *work);
+WIP_LOCAL int FlyLandingEffect_Climb(void *work);
 WIP_LOCAL int ov02_0224B158(void *work);
 WIP_LOCAL int ov02_0224AF70(void *work);
 WIP_LOCAL int ov02_0224ACE0(void *work);
@@ -504,7 +504,7 @@ WIP_LOCAL void FollowMon_GetSituation(FieldSystem *fieldSystem, void *work);
 WIP_LOCAL void FollowMonSituation_SetMonCondition(Pokemon *mon, void *work);
 WIP_LOCAL void FollowMonSituation_SetNearbyObjects(FieldSystem *fieldSystem, void *work);
 WIP_LOCAL void FollowMonSituation_SetBestPokeathlonStat(FieldSystem *fieldSystem, int species, int form, void *work);
-WIP_LOCAL void ov02_02248E20(void *a0);
+WIP_LOCAL void FlyLandingEffect_Start(void *a0);
 WIP_LOCAL void ov02_0224B784(void *work);
 WIP_LOCAL BOOL FollowMonInteraction_TryShowEmote(FieldSystem *fieldSystem, void *a1, void *arg2);
 WIP_LOCAL void ov02_0224B364(void *a0, void *work);
@@ -539,10 +539,10 @@ WIP_LOCAL int ov02_0224B4AC(void *work);
 // forward decls for functions referenced only from the consolidated rodata tables
 extern void FieldEffect_DefaultDraw(void);
 extern void FieldEffect_DefaultDestroy(void);
-WIP_LOCAL void ov02_02248DF0(void *a0, u8 *sm);
-WIP_LOCAL int ov02_02248E10(void *work);
-WIP_LOCAL int ov02_022491A8(void *work);
-WIP_LOCAL int ov02_022493EC(void);
+WIP_LOCAL void FlyLandingEffect_Update(void *a0, u8 *sm);
+WIP_LOCAL int FlyLandingEffect_Idle(void *work);
+WIP_LOCAL int FlyLandingEffect_HideFlyer(void *work);
+WIP_LOCAL int FlyLandingEffect_Done(void);
 WIP_LOCAL int ov02_022495B8(void *work);
 WIP_LOCAL int ov02_022495D0(void *work);
 WIP_LOCAL int ov02_02249754(void *work);

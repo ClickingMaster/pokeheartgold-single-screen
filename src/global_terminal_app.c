@@ -57,7 +57,7 @@ BOOL GlobalTerminalApp_Main(OverlayManager *man, int *state) {
         }
         break;
     case 4: {
-        const OverlayManagerTemplate *tmpl = sub_02087E10(data->args->unk0C);
+        const OverlayManagerTemplate *tmpl = VsRecorderApp_GetTemplate(data->args->unk0C);
         data->subApp = OverlayManager_New(tmpl, data->args->unk00, HEAP_ID_123);
         ++*state;
         break;
@@ -104,7 +104,7 @@ void GlobalTerminalApp_LoadWifi(GlobalTerminalApp *data) {
     if (data->wifiLoaded == 0) {
         LoadDwcOverlay();
         LoadOVY38();
-        sub_02039FD8(HEAP_ID_123);
+        Comm_InitDwc(HEAP_ID_123);
         data->heapBuffer = Heap_Alloc(HEAP_ID_123, 0x20020);
         data->dwcHeap = NNS_FndCreateExpHeapEx((void *)(((u32)data->heapBuffer + 0x1F) & ~0x1F), 0x20000, 0);
         CommWireless_StartUp();

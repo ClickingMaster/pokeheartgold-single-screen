@@ -56,7 +56,7 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
         break;
     case BSTATE_LINK_INIT:
         Battle_LinkInit(man, setup);
-        sub_02039F68(setup->wifiHistory);
+        Comm_RecordPlayerLocations(setup->wifiHistory);
         if (!CommState_IsWifi()) {
             GameStats_Inc(setup->gameStats, GAME_STAT_LOCAL_LINK_BATTLES);
             if (setup->battleType != 0x8F) {

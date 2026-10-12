@@ -257,7 +257,7 @@ ov72_022391E8: ; 0x022391E8
 	add r4, r0, #0
 	ldr r0, [r4]
 	ldr r0, [r0, #0xc]
-	bl sub_02039418
+	bl CommState_InitWfcSession
 	mov r0, #4
 	bl Sys_SetSleepDisableFlag
 	add r0, r4, #0

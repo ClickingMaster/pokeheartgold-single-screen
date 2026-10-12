@@ -11,7 +11,7 @@
 #include "overlay_02.h"
 #include "sound_playback.h"
 #include "task.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 
 // Animations of map props started by script commands: the Pokemon Center healing machine (one Poke Ball prop per
 // Pokemon, then the machine's and the balls' animations and the healing fanfare), the elevator, and the one-shot
@@ -88,7 +88,7 @@ BOOL PokecenterAnimRun(TaskManager *taskManager) {
         ballModel = MapPropModelFile_GetModel(ballModelFile);
         machineModel = MapPropModelFile_GetModel(machineModelFile);
         MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, HEALING_ANIM_TAG_BALLS, MAP_PROP_HEALING_POKE_BALL, NULL, ballModel, AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager), 1, 1, FALSE);
-        if (!sub_02054C20(fieldSystem, MAP_PROP_HEALING_MACHINE, &machine, NULL)) {
+        if (!FieldSystem_FindMapProp(fieldSystem, MAP_PROP_HEALING_MACHINE, &machine, NULL)) {
             GF_AssertFail();
         }
         renderObj = MapProp_GetRenderSurface(machine);
@@ -148,7 +148,7 @@ BOOL PokecenterAnimRun(TaskManager *taskManager) {
 BOOL ElevatorAnimRun(TaskManager *taskManager);
 
 void ElevatorAnimCreate(FieldSystem *fieldSystem, u8 direction, u8 length) {
-    if (sub_02054C20(fieldSystem, MAP_PROP_ELEVATOR, NULL, NULL)) {
+    if (FieldSystem_FindMapProp(fieldSystem, MAP_PROP_ELEVATOR, NULL, NULL)) {
         ElevatorAnim *anim = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(ElevatorAnim));
         anim->length = length;
         anim->direction = direction;
@@ -169,7 +169,7 @@ BOOL ElevatorAnimRun(TaskManager *taskManager) {
         NNSG3dResMdl *model = MapPropModel_Get(fieldSystem->areaDataManager, MAP_PROP_ELEVATOR);
         NNSG3dRenderObj *renderObj;
         NNSG3dResTex *texture;
-        if (sub_02054C20(fieldSystem, MAP_PROP_ELEVATOR, &elevator, NULL) == FALSE) {
+        if (FieldSystem_FindMapProp(fieldSystem, MAP_PROP_ELEVATOR, &elevator, NULL) == FALSE) {
             GF_AssertFail();
         }
         renderObj = MapProp_GetRenderSurface(elevator);
@@ -211,7 +211,7 @@ void ov02_0224BF58(FieldSystem *fieldSystem, u8 tag) {
     int model;
     MapPropModelPair pair = ov02_022536E8;
 
-    if (sub_02054C90(fieldSystem, pair.models, 2, &prop, &model)) {
+    if (FieldSystem_FindMapPropOfModels(fieldSystem, pair.models, 2, &prop, &model)) {
         NNSG3dResTex *texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
         NNSG3dRenderObj *renderObj = MapProp_GetRenderSurface(prop);
         NNSG3dResMdl *resModel = MapProp_GetResModel(prop);

@@ -2,8 +2,8 @@
 	.include "unk_0205A44C.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0205AA9C
-sub_0205AA9C: ; 0x0205AA9C
+	thumb_func_start UnionRoom_BufferPartnerLanguage
+UnionRoom_BufferPartnerLanguage: ; 0x0205AA9C
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r7, r2, #0
@@ -56,7 +56,7 @@ _0205AADE:
 	cmp r0, #7
 	bhs _0205AB1C
 	lsl r1, r0, #2
-	ldr r0, _0205AB84 ; =_020FC898
+	ldr r0, _0205AB84 ; =gUnionRoomLanguageGreetings
 	ldr r1, [r0, r1]
 	cmp r1, #0
 	blt _0205AB1C
@@ -120,5 +120,5 @@ _0205AB56:
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
 _0205AB80: .word 0x000002E2
-_0205AB84: .word _020FC898
-	thumb_func_end sub_0205AA9C
+_0205AB84: .word gUnionRoomLanguageGreetings
+	thumb_func_end UnionRoom_BufferPartnerLanguage

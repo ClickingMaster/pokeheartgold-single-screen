@@ -76,7 +76,7 @@
 .public CommWireless_GetProfile
 .public CommWireless_GetParentProfile
 .public FieldSystem_TaskIsRunning
-.public sub_0205AA84
+.public UnionRoom_TakeOwnChatMessage
 .public FieldMessage_LoadTextPalettes
 .public DC_FlushRange
 .public _fadd

@@ -372,7 +372,7 @@ WiiMessageSettings_LoadNetworkOverlays: ; 0x02246B48
 	bl LoadDwcOverlay
 	bl LoadOVY38
 	mov r0, #0x73
-	bl sub_02039FD8
+	bl Comm_InitDwc
 	ldr r1, _02246B94 ; =0x00020020
 	mov r0, #0x73
 	bl Heap_Alloc

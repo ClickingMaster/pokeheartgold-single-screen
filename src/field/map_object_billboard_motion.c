@@ -11,7 +11,7 @@
 #include "follow_mon.h"
 #include "map_object.h"
 #include "map_object_movement_commands.h"
-#include "overlay_01_021F944C.h"
+#include "field/map_object_render.h"
 #include "party.h"
 #include "pokemon.h"
 #include "script_pokemon_util.h"
@@ -112,16 +112,11 @@ extern const u32 ov01_022073D8[];
 void *ApricornTreeObject_GetBillboard(LocalMapObject *object);
 // billboard_lists.h takes an int; this file passes the flag as a u8 (the caller narrows it)
 void BillboardObject_SetVisible(void *billboard, u8 visible);
-void ov01_021F8E70(LocalMapObject *object, u32 direction, VecFx32 *out);
-void ov01_021F8D80(LocalMapObject *object, Sprite *sprite, void *work, u32 direction, BOOL update);
-BOOL ov01_021F9344(void *object);
-void ov01_021F9510(void *object, void *work);
-void ov01_021F95A8(void *object, void *work);
-void ov01_021F9610(void *billboard, void *work);
-void ov01_021F9630(void *billboard, void *work);
-u32 ov01_021FA44C(int facing);
-u32 ov01_021FA458(int facing);
-u32 ov01_021FA464(int facing);
+void FollowMonBillboard_AddFacingOffset(LocalMapObject *object, u32 direction, VecFx32 *out);
+void FollowMonBillboard_Update(LocalMapObject *object, Sprite *sprite, void *work, u32 direction, BOOL update);
+BOOL MapObject_IsBillboardAnimPaused(void *object);
+void BillboardObject_SaveState(void *billboard, void *work);
+void BillboardObject_RestoreState(void *billboard, void *work);
 
 void ov01_021F73CC(void *object);
 void ov01_021F73F4(void *object);
@@ -222,12 +217,12 @@ static inline void BillboardMotion_Fall(void *billboard, const s8 *work, int fac
 
 static inline void BillboardMotion_Walk(void *object, void *billboard, const s8 *work, int facing, fx32 speed) {
     if (facing != work[0]) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
     } else if (work[2] == 9) {
-        ov01_021F8C64(billboard, ov01_021FA44C(facing));
+        ov01_021F8C64(billboard, Facing_GetBillboardStandSequence(facing));
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardObject_AdvanceFrame(billboard, speed);
     }
 }
@@ -275,7 +270,7 @@ Sprite *MapObject_GetBillboard(LocalMapObject *object) {
 void ov01_021F73CC(void *object) {
     s8 *work = (s8 *)sub_0205F3E8(object, 0x14);
     work[2] = -1;
-    ov01_021F9510(object, work + 4);
+    MapObject_CreateBillboard(object, work + 4);
     if (*(void **)(work + 4) != NULL) {
         sub_0205F484(object);
     }
@@ -283,28 +278,28 @@ void ov01_021F73CC(void *object) {
 
 void ov01_021F73F4(void *object) {
     u8 *work = sub_0205F40C(object);
-    ov01_021F95A8(object, work + 4);
+    MapObject_DeleteBillboard(object, work + 4);
 }
 
 void ov01_021F7408(void *object) {
     u8 *work = sub_0205F40C(object);
     void *billboard = *(void **)(work + 4);
     if (billboard != NULL) {
-        ov01_021F9610(billboard, work + 8);
+        BillboardObject_SaveState(billboard, work + 8);
     }
-    ov01_021F95A8(object, work + 4);
+    MapObject_DeleteBillboard(object, work + 4);
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK21);
 }
 
 void ov01_021F7434(void *object) {
     u8 *work = sub_0205F40C(object);
-    if (ov01_021FA2D4(object) != TRUE) {
+    if (MapObject_IsBillboardPending(object) != TRUE) {
         if (*(void **)(work + 4) == NULL) {
-            ov01_021F9510(object, work + 4);
+            MapObject_CreateBillboard(object, work + 4);
         }
         if (*(void **)(work + 4) != NULL) {
-            ov01_021F9630(*(void **)(work + 4), work + 8);
-            ov01_021FA3E8(object, *(void **)(work + 4));
+            BillboardObject_RestoreState(*(void **)(work + 4), work + 8);
+            MapObject_UpdateBillboardPosition(object, *(void **)(work + 4));
             MapObject_ClearFlagsBits(object, MAPOBJECTFLAG_UNK21);
         }
     }
@@ -322,7 +317,7 @@ void ov01_021F7478(void *object) {
     } Work;
     Work *work = (Work *)sub_0205F3E8(object, 0x18);
     work->facing = -1;
-    ov01_021F9510(object, work);
+    MapObject_CreateBillboard(object, work);
     work->unk15 = 0;
     work->flags &= ~2;
     work->flags &= ~1;
@@ -332,18 +327,18 @@ void ov01_021F7478(void *object) {
 }
 
 void ov01_021F74B4(void *object) {
-    ov01_021F95A8(object, sub_0205F40C(object));
+    MapObject_DeleteBillboard(object, sub_0205F40C(object));
 }
 
 void ov01_021F74C8(void *object) {
     u8 *work = sub_0205F40C(object);
     void *billboard = *(void **)work;
     if (billboard != NULL) {
-        ov01_021F9610(billboard, work + 4);
+        BillboardObject_SaveState(billboard, work + 4);
     }
     work[0x17] &= ~2;
     work[0x17] &= ~1;
-    ov01_021F95A8(object, work);
+    MapObject_DeleteBillboard(object, work);
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK21);
 }
 
@@ -391,11 +386,11 @@ void ov01_021F7504(LocalMapObject *object) {
         }
         FieldSystem_UnkSub108_Set(fieldSystem->unk108, mon, species, GetMonData(mon, MON_DATA_PERSONALITY, NULL));
     }
-    if (ov01_021FA2D4(object) == TRUE) {
+    if (MapObject_IsBillboardPending(object) == TRUE) {
         return;
     }
     if (work->sprite == NULL) {
-        ov01_021F9510(object, work);
+        MapObject_CreateBillboard(object, work);
     }
     if (work->sprite != NULL) {
         work->started = TRUE;
@@ -403,7 +398,7 @@ void ov01_021F7504(LocalMapObject *object) {
             VecFx32 offset = { 0, 0, 0 };
             MapObject_CopyFacingVector(object, &facing);
             MapObject_GetSpriteID(object);
-            ov01_021F8E70(object, MapObject_GetFacingDirection(object), &offset);
+            FollowMonBillboard_AddFacingOffset(object, MapObject_GetFacingDirection(object), &offset);
             facing.x = offset.x;
             facing.z = offset.z;
             MapObject_SetFacingVector(object, &facing);
@@ -412,8 +407,8 @@ void ov01_021F7504(LocalMapObject *object) {
             } else if (MapObject_IsShinyPokemon(object)) {
                 ov01_02205808(TRUE, object, work->sprite);
             }
-            ov01_021F9630(work->sprite, work->unk4);
-            ov01_021FA3E8(object, work->sprite);
+            BillboardObject_RestoreState(work->sprite, work->unk4);
+            MapObject_UpdateBillboardPosition(object, work->sprite);
             MapObject_ClearFlagsBits(object, MAPOBJECTFLAG_UNK21);
             sub_0205F484(object);
         }
@@ -446,7 +441,7 @@ void ov01_021F772C(void *object) {
     Work *work = (Work *)sub_0205F40C(object);
     void *billboard = work->billboard;
     int movement;
-    if (ov01_021FA2D4(object) == TRUE || billboard == NULL) {
+    if (MapObject_IsBillboardPending(object) == TRUE || billboard == NULL) {
         return;
     }
     facing.value = MapObject_GetFacingDirection(object);
@@ -458,17 +453,17 @@ void ov01_021F772C(void *object) {
     MapObject_GetFacingVector(object)->z = FX32_CONST(0.5);
     work->facing = facing.value;
     work->movement = sub_0205F330(object);
-    ov01_021FA3E8(object, billboard);
+    MapObject_UpdateBillboardPosition(object, billboard);
     MapObject_UpdateBillboardVisibility(object, billboard);
 }
 #pragma force_active reset
 
 void ov01_021F77A4(void *object) {
     u8 *work = sub_0205F40C(object);
-    if (ov01_021FA2D4(object) != TRUE) {
+    if (MapObject_IsBillboardPending(object) != TRUE) {
         void *billboard = *(void **)(work + 4);
         if (billboard != NULL) {
-            ov01_021FA3E8(object, billboard);
+            MapObject_UpdateBillboardPosition(object, billboard);
             MapObject_UpdateBillboardVisibility(object, billboard);
         }
     }
@@ -476,13 +471,13 @@ void ov01_021F77A4(void *object) {
 
 void ov01_021F77D0(void *object) {
     u8 *work = sub_0205F40C(object);
-    if (ov01_021FA2D4(object) != TRUE) {
+    if (MapObject_IsBillboardPending(object) != TRUE) {
         void *billboard = *(void **)(work + 4);
         if (billboard != NULL) {
-            if (!ov01_021F9344(object)) {
+            if (!MapObject_IsBillboardAnimPaused(object)) {
                 BillboardObject_AdvanceFrame(billboard, FX32_ONE);
             }
-            ov01_021FA3E8(object, billboard);
+            MapObject_UpdateBillboardPosition(object, billboard);
             MapObject_UpdateBillboardVisibility(object, billboard);
         }
     }
@@ -493,7 +488,7 @@ void ov01_021F7810(LocalMapObject *object) {
     Sprite *sprite = work->sprite;
     u32 direction;
 
-    if (ov01_021FA2D4(object) == TRUE || sprite == NULL) {
+    if (MapObject_IsBillboardPending(object) == TRUE || sprite == NULL) {
         return;
     }
     if (!work->active) {
@@ -505,9 +500,9 @@ void ov01_021F7810(LocalMapObject *object) {
         }
     }
     direction = MapObject_GetFacingDirection(object);
-    ov01_021F8D80(object, sprite, work, direction, TRUE);
+    FollowMonBillboard_Update(object, sprite, work, direction, TRUE);
     work->direction = direction;
-    ov01_021FA3E8(object, sprite);
+    MapObject_UpdateBillboardPosition(object, sprite);
     MapObject_UpdateBillboardVisibility(object, sprite);
 }
 
@@ -516,7 +511,7 @@ void ov01_021F7894(LocalMapObject *object) {
     Sprite *sprite = work->sprite;
     u32 direction;
 
-    if (ov01_021FA2D4(object) == TRUE || sprite == NULL) {
+    if (MapObject_IsBillboardPending(object) == TRUE || sprite == NULL) {
         return;
     }
     if (!work->active) {
@@ -528,9 +523,9 @@ void ov01_021F7894(LocalMapObject *object) {
         }
     }
     direction = MapObject_GetFacingDirection(object);
-    ov01_021F8D80(object, sprite, work, direction, TRUE);
+    FollowMonBillboard_Update(object, sprite, work, direction, TRUE);
     work->direction = direction;
-    ov01_021FA3E8(object, sprite);
+    MapObject_UpdateBillboardPosition(object, sprite);
     MapObject_UpdateBillboardVisibility(object, sprite);
 }
 
@@ -538,7 +533,7 @@ void ov01_021F7918(LocalMapObject *object) {
     FollowMonDrawWork *work = (FollowMonDrawWork *)sub_0205F40C(object);
     Sprite *sprite;
 
-    if (ov01_021FA2D4(object) == TRUE) {
+    if (MapObject_IsBillboardPending(object) == TRUE) {
         return;
     }
     sprite = work->sprite;
@@ -551,13 +546,13 @@ void ov01_021F7918(LocalMapObject *object) {
             ov01_02205808(TRUE, object, sprite);
         }
     }
-    ov01_021FA3E8(object, sprite);
+    MapObject_UpdateBillboardPosition(object, sprite);
     MapObject_UpdateBillboardVisibility(object, sprite);
 }
 
 void ov01_021F796C(void *object, void *billboard, const s8 *work, int facing) {
     if (facing != work[2]) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
     } else {
         ov01_021F8C30(billboard);
@@ -567,40 +562,40 @@ void ov01_021F796C(void *object, void *billboard, const s8 *work, int facing) {
 
 void ov01_021F79A0(void *object, void *billboard, const s8 *work, int facing) {
     if (facing != work[2]) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardObject_AdvanceFrame(billboard, FX32_CONST(0.5));
     }
 }
 
 void ov01_021F79DC(void *object, void *billboard, const s8 *work, int facing) {
     if (facing != work[2]) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardObject_AdvanceFrame(billboard, FX32_ONE);
     }
 }
 
 void ov01_021F7A18(void *object, void *billboard, const s8 *work, int facing) {
     if (facing != work[2]) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardObject_AdvanceFrame(billboard, 2 * FX32_ONE);
     }
 }
 
 void ov01_021F7A54(void *object, void *billboard, const s8 *work, int facing) {
     if (facing != work[2]) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardObject_AdvanceFrame(billboard, 4 * FX32_ONE);
     }
 }
@@ -608,14 +603,14 @@ void ov01_021F7A54(void *object, void *billboard, const s8 *work, int facing) {
 void ov01_021F7A90(void *object, void *billboard, s8 *workRaw, int facing) {
     SteppedWalkWork *work = (SteppedWalkWork *)workRaw;
     if (facing != work->prevFacing) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
         work->step = 0;
     }
     if (work->movement != 6) {
         work->step = 0;
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardFrameSteps7 steps = ov01_02208A64;
         BillboardObject_AdvanceFrame(billboard, steps.values[work->step]);
         work->step++;
@@ -628,14 +623,14 @@ void ov01_021F7A90(void *object, void *billboard, s8 *workRaw, int facing) {
 void ov01_021F7B14(void *object, void *billboard, s8 *workRaw, int facing) {
     SteppedWalkWork *work = (SteppedWalkWork *)workRaw;
     if (facing != work->prevFacing) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
         work->step = 0;
     }
     if (work->movement != 7) {
         work->step = 0;
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardFrameSteps4 steps = ov01_02208A08;
         BillboardObject_AdvanceFrame(billboard, steps.values[work->step]);
         work->step++;
@@ -648,14 +643,14 @@ void ov01_021F7B14(void *object, void *billboard, s8 *workRaw, int facing) {
 void ov01_021F7B90(void *object, void *billboard, s8 *workRaw, int facing) {
     SteppedWalkWork *work = (SteppedWalkWork *)workRaw;
     if (facing != work->prevFacing) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
         work->step = 0;
     }
     if (work->movement != 8) {
         work->step = 0;
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardFrameSteps8 steps = ov01_02208A80;
         BillboardObject_AdvanceFrame(billboard, steps.values[work->step]);
         work->step++;
@@ -679,7 +674,7 @@ void ov01_021F7C14(void *object) {
     void *billboard;
     work[0] = (Work *)sub_0205F40C(object);
     billboard = work[0]->billboard;
-    if (ov01_021FA2D4(object) != TRUE && billboard != NULL) {
+    if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
         facing[0] = MapObject_GetFacingDirection(object);
         movement = sub_0205F330(object);
         if (movement >= 10) {
@@ -688,7 +683,7 @@ void ov01_021F7C14(void *object) {
         ov01_02208B0C[movement](object, billboard, work[0], facing[0]);
         work[0]->facing = facing[0];
         work[0]->movement = sub_0205F330(object);
-        ov01_021FA3E8(object, billboard);
+        MapObject_UpdateBillboardPosition(object, billboard);
         MapObject_UpdateBillboardVisibility(object, billboard);
     }
 }
@@ -696,7 +691,7 @@ void ov01_021F7C14(void *object) {
 
 void ov01_021F7C80(void *object, void *billboard, const s8 *work, int facing) {
     if (facing != work[2] || work[3] == 9) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
     } else {
         ov01_021F8C30(billboard);
@@ -725,7 +720,7 @@ void ov01_021F7CE4(void *object) {
     Work *work = (Work *)sub_0205F40C(object);
     void *billboard = work->billboard;
     int sequence;
-    if (ov01_021FA2D4(object) != TRUE && billboard != NULL) {
+    if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
         facing = MapObject_GetFacingDirection(object);
         if (sub_0205F330(object) == 0) {
             sequence = (u32)facing > 1 ? 1 : 0;
@@ -745,7 +740,7 @@ void ov01_021F7CE4(void *object) {
         }
         work->facing = facing;
         work->movement = sub_0205F330(object);
-        ov01_021FA3E8(object, billboard);
+        MapObject_UpdateBillboardPosition(object, billboard);
         MapObject_UpdateBillboardVisibility(object, billboard);
     }
 }
@@ -754,7 +749,7 @@ void ov01_021F7CE4(void *object) {
 void ov01_021F7DA8(void *object) {
     s8 *work = (s8 *)sub_0205F3E8(object, 0x14);
     work[0] = -1;
-    ov01_021F9510(object, work + 4);
+    MapObject_CreateBillboard(object, work + 4);
     if (*(void **)(work + 4) != NULL) {
         sub_0205F484(object);
     }
@@ -763,7 +758,7 @@ void ov01_021F7DA8(void *object) {
 void ov01_021F7DD0(void *object) {
     VecFx32 offset = { 0, 0, 0 };
     u8 *work = sub_0205F40C(object);
-    ov01_021F95A8(object, work + 4);
+    MapObject_DeleteBillboard(object, work + 4);
     MapObject_SetFacingVector(object, &offset);
 }
 
@@ -771,21 +766,21 @@ void ov01_021F7DFC(void *object) {
     u8 *work = sub_0205F40C(object);
     void *billboard = *(void **)(work + 4);
     if (billboard != NULL) {
-        ov01_021F9610(billboard, work + 8);
+        BillboardObject_SaveState(billboard, work + 8);
     }
-    ov01_021F95A8(object, work + 4);
+    MapObject_DeleteBillboard(object, work + 4);
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK21);
 }
 
 void ov01_021F7E28(void *object) {
     u8 *work = sub_0205F40C(object);
-    if (ov01_021FA2D4(object) != TRUE) {
+    if (MapObject_IsBillboardPending(object) != TRUE) {
         if (*(void **)(work + 4) == NULL) {
-            ov01_021F9510(object, work + 4);
+            MapObject_CreateBillboard(object, work + 4);
         }
         if (*(void **)(work + 4) != NULL) {
-            ov01_021F9630(*(void **)(work + 4), work + 8);
-            ov01_021FA3E8(object, *(void **)(work + 4));
+            BillboardObject_RestoreState(*(void **)(work + 4), work + 8);
+            MapObject_UpdateBillboardPosition(object, *(void **)(work + 4));
             MapObject_ClearFlagsBits(object, MAPOBJECTFLAG_UNK21);
         }
     }
@@ -797,7 +792,7 @@ void ov01_021F7E6C(void *object) {
     s8 *work = (s8 *)sub_0205F40C(object);
     void *billboard = *(void **)(work + 4);
 
-    if (ov01_021FA2D4(object) != TRUE && billboard != NULL) {
+    if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
         facing = MapObject_GetFacingDirection(object);
         movement = sub_0205F330(object);
         if (movement >= 10) {
@@ -807,7 +802,7 @@ void ov01_021F7E6C(void *object) {
         MapObject_GetFacingVector(object)->z = FX32_CONST(0.5);
         work[0] = facing;
         work[2] = sub_0205F330(object);
-        ov01_021FA3E8(object, billboard);
+        MapObject_UpdateBillboardPosition(object, billboard);
         MapObject_UpdateBillboardVisibility(object, billboard);
     }
 }
@@ -815,7 +810,7 @@ void ov01_021F7E6C(void *object) {
 void ov01_021F7EE4(void *object, void *billboard, HeldStepWork *work, int facing) {
 #pragma unused(object)
     if (facing != work->facing) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
         work->held = 0;
         return;
@@ -825,7 +820,7 @@ void ov01_021F7EE4(void *object, void *billboard, HeldStepWork *work, int facing
         return;
     }
     if (work->held == 1) {
-        ov01_021F8C64(billboard, ov01_021FA44C(facing));
+        ov01_021F8C64(billboard, Facing_GetBillboardStandSequence(facing));
         work->held = 0;
         return;
     }
@@ -834,16 +829,16 @@ void ov01_021F7EE4(void *object, void *billboard, HeldStepWork *work, int facing
 
 void ov01_021F7F54(void *object, void *billboard, HeldStepWork *work, int facing) {
     if (facing != work->facing) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
     } else if (work->movement == 9) {
         work->held = 1;
         return;
     } else if (work->held == 1) {
-        ov01_021F8C64(billboard, ov01_021FA44C(facing));
+        ov01_021F8C64(billboard, Facing_GetBillboardStandSequence(facing));
         work->held = 0;
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardObject_AdvanceFrame(billboard, FX32_CONST(0.5));
     }
 }
@@ -862,16 +857,16 @@ void ov01_021F8070(void *object, void *billboard, const s8 *work, int facing) {
 
 void ov01_021F80C4(void *object, void *billboard, s8 *work, int facing) {
     if (facing != work[0]) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
         work[1] = 0;
     } else if (work[2] == 9) {
-        ov01_021F8C64(billboard, ov01_021FA44C(facing));
+        ov01_021F8C64(billboard, Facing_GetBillboardStandSequence(facing));
     }
     if (work[2] != 6) {
         work[1] = 0;
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardFrameSteps7 steps = ov01_02208A48;
         BillboardObject_AdvanceFrame(billboard, steps.values[work[1]]);
         work[1]++;
@@ -883,16 +878,16 @@ void ov01_021F80C4(void *object, void *billboard, s8 *work, int facing) {
 
 void ov01_021F8164(void *object, void *billboard, s8 *work, int facing) {
     if (facing != work[0]) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
         work[1] = 0;
     } else if (work[2] == 9) {
-        ov01_021F8C64(billboard, ov01_021FA44C(facing));
+        ov01_021F8C64(billboard, Facing_GetBillboardStandSequence(facing));
     }
     if (work[2] != 7) {
         work[1] = 0;
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardFrameSteps4 steps = ov01_022089D8;
         BillboardObject_AdvanceFrame(billboard, steps.values[work[1]]);
         work[1]++;
@@ -904,16 +899,16 @@ void ov01_021F8164(void *object, void *billboard, s8 *work, int facing) {
 
 void ov01_021F81FC(void *object, void *billboard, s8 *work, int facing) {
     if (facing != work[0]) {
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
         work[1] = 0;
     } else if (work[2] == 9) {
-        ov01_021F8C64(billboard, ov01_021FA44C(facing));
+        ov01_021F8C64(billboard, Facing_GetBillboardStandSequence(facing));
     }
     if (work[2] != 8) {
         work[1] = 0;
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardFrameSteps8 steps = ov01_02208AA0;
         BillboardObject_AdvanceFrame(billboard, steps.values[work[1]]);
         work[1]++;
@@ -925,12 +920,12 @@ void ov01_021F81FC(void *object, void *billboard, s8 *work, int facing) {
 
 void ov01_021F829C(void *object, void *billboard, const s8 *work, int facing) {
     if (facing != work[0]) {
-        BillboardObject_SetSequence(billboard, ov01_021FA458(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardWalkSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
     } else if (work[2] != 9) {
-        ov01_021F8C3C(billboard, ov01_021FA458(facing), 4);
+        ov01_021F8C3C(billboard, Facing_GetBillboardWalkSequence(facing), 4);
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardObject_AdvanceFrame(billboard, FX32_ONE);
     }
 }
@@ -940,7 +935,7 @@ void ov01_021F82F0(void *object) {
     HeldMotionWork *work = (HeldMotionWork *)sub_0205F40C(object);
     int facing, movement;
     void *billboard = work->billboard;
-    if (ov01_021FA2D4(object) != TRUE && billboard != NULL) {
+    if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
         facing = MapObject_GetFacingDirection(object);
         movement = sub_0205F330(object);
         if (movement >= 12) {
@@ -952,7 +947,7 @@ void ov01_021F82F0(void *object) {
         ov01_02208AE4[movement](object, billboard, work, facing);
         work->facing = facing;
         work->movement = movement;
-        ov01_021FA3E8(object, billboard);
+        MapObject_UpdateBillboardPosition(object, billboard);
         MapObject_UpdateBillboardVisibility(object, billboard);
     }
 }
@@ -989,7 +984,7 @@ void ov01_021F8400(void *object, void *billboard, const s8 *work, int facing) {
         BillboardObject_SetSequence(billboard, sequence);
         BillboardObject_SetSequenceFrame(billboard, 0);
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardObject_AdvanceFrame(billboard, FX32_CONST(0.5));
     }
 }
@@ -1006,7 +1001,7 @@ void ov01_021F847C(void *object, void *billboard, const s8 *work, int facing) {
         BillboardObject_SetSequence(billboard, sequence);
         BillboardObject_SetSequenceFrame(billboard, 0);
     }
-    if (!ov01_021F9344(object)) {
+    if (!MapObject_IsBillboardAnimPaused(object)) {
         BillboardObject_AdvanceFrame(billboard, FX32_ONE);
     }
 }
@@ -1019,7 +1014,7 @@ void ov01_021F84F4(void *object) {
     FacingMotionWork *work = (FacingMotionWork *)sub_0205F40C(object);
     void *billboard = work->billboard;
     int movement;
-    if (billboard == NULL || ov01_021FA2D4(object) == TRUE) {
+    if (billboard == NULL || MapObject_IsBillboardPending(object) == TRUE) {
         return;
     }
     facing.value = MapObject_GetFacingDirection(object);
@@ -1031,7 +1026,7 @@ void ov01_021F84F4(void *object) {
     ov01_021F8708(object, billboard, facing.value);
     work->facing = facing.value;
     work->movement = sub_0205F330(object);
-    ov01_021FA3E8(object, billboard);
+    MapObject_UpdateBillboardPosition(object, billboard);
     MapObject_UpdateBillboardVisibility(object, billboard);
 }
 #pragma force_active reset
@@ -1129,7 +1124,7 @@ void ov01_021F878C(void *object) {
     void *billboard = *(void **)(work + 4);
     int movement;
     BillboardMotionFunc func;
-    if (billboard != NULL && ov01_021FA2D4(object) != TRUE) {
+    if (billboard != NULL && MapObject_IsBillboardPending(object) != TRUE) {
         facing = MapObject_GetFacingDirection(object);
         movement = sub_0205F330(object);
         if (movement >= 2) {
@@ -1140,7 +1135,7 @@ void ov01_021F878C(void *object) {
         ov01_021F8874(object, billboard, facing);
         work[0] = facing;
         work[2] = sub_0205F330(object);
-        ov01_021FA3E8(object, billboard);
+        MapObject_UpdateBillboardPosition(object, billboard);
         MapObject_UpdateBillboardVisibility(object, billboard);
     }
 }
@@ -1189,14 +1184,14 @@ void ov01_021F88F0(void *object) {
     u8 *work = sub_0205F40C(object);
     void *billboard = *(void **)(work + 4);
     int facing;
-    if (ov01_021FA2D4(object) != TRUE && billboard != NULL) {
+    if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
         facing = MapObject_GetFacingDirection(object);
         work[0] = facing;
         work[2] = sub_0205F330(object);
-        BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+        BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
         BillboardObject_AdvanceFrame(billboard, 0);
-        ov01_021FA3E8(object, billboard);
+        MapObject_UpdateBillboardPosition(object, billboard);
         MapObject_UpdateBillboardVisibility(object, billboard);
     }
 }
@@ -1204,7 +1199,7 @@ void ov01_021F88F0(void *object) {
 void ov01_021F894C(void *object) {
     u8 *work = sub_0205F40C(object);
     void *billboard = *(void **)(work + 4);
-    if (ov01_021FA2D4(object) != TRUE && billboard != NULL) {
+    if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
         work[0] = MapObject_GetFacingDirection(object);
         work[2] = sub_0205F330(object);
         if (BillboardObject_GetSequence(billboard) != FALSE) {
@@ -1213,7 +1208,7 @@ void ov01_021F894C(void *object) {
         }
         BillboardObject_AdvanceFrame(billboard, FX32_ONE);
         MapObject_GetFacingVector(object)->z = FX32_CONST(0.5);
-        ov01_021FA3E8(object, billboard);
+        MapObject_UpdateBillboardPosition(object, billboard);
         MapObject_UpdateBillboardVisibility(object, billboard);
     }
 }
@@ -1223,7 +1218,7 @@ void ov01_021F89B8(void *object) {
     FacingMotionWork *work = (FacingMotionWork *)sub_0205F40C(object);
     void *billboard = work->billboard;
     int facing;
-    if (ov01_021FA2D4(object) == TRUE || billboard == NULL) {
+    if (MapObject_IsBillboardPending(object) == TRUE || billboard == NULL) {
         return;
     }
     facing = MapObject_GetFacingDirection(object);
@@ -1242,7 +1237,7 @@ void ov01_021F89B8(void *object) {
     }
     work->facing = facing;
     work->movement = sub_0205F330(object);
-    ov01_021FA3E8(object, billboard);
+    MapObject_UpdateBillboardPosition(object, billboard);
     MapObject_UpdateBillboardVisibility(object, billboard);
 }
 #pragma force_active reset
@@ -1251,14 +1246,14 @@ void ov01_021F8A4C(void *object) {
     s8 *work = (s8 *)sub_0205F40C(object);
     void *billboard = *(void **)(work + 4);
     int facing;
-    if (ov01_021FA2D4(object) != TRUE && billboard != NULL) {
+    if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
         facing = MapObject_GetFacingDirection(object);
         if (facing != work[0]) {
-            BillboardObject_SetSequence(billboard, ov01_021FA44C(facing));
+            BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
             BillboardObject_SetSequenceFrame(billboard, 0);
         }
         BillboardObject_AdvanceFrame(billboard, FX32_ONE);
-        ov01_021FA3E8(object, billboard);
+        MapObject_UpdateBillboardPosition(object, billboard);
         MapObject_UpdateBillboardVisibility(object, billboard);
         work[0] = facing;
         work[2] = sub_0205F330(object);
@@ -1270,7 +1265,7 @@ void ov01_021F8AB0(void *object) {
     int movement;
     SignedFacingMotionWork *work = (SignedFacingMotionWork *)sub_0205F40C(object);
     void *billboard = work->billboard;
-    if (ov01_021FA2D4(object) != TRUE && billboard) {
+    if (MapObject_IsBillboardPending(object) != TRUE && billboard) {
         int facing = MapObject_GetFacingDirection(object);
         movement = sub_0205F330(object);
         if (movement != work->movement) {
@@ -1285,7 +1280,7 @@ void ov01_021F8AB0(void *object) {
         MapObject_GetFacingVector(object)->z = FX32_CONST(0.5);
         work->facing = facing;
         work->movement = movement;
-        ov01_021FA3E8(object, billboard);
+        MapObject_UpdateBillboardPosition(object, billboard);
         MapObject_UpdateBillboardVisibility(object, billboard);
     }
 }
@@ -1294,7 +1289,7 @@ void ov01_021F8B30(void *object) {
     int facing;
     SignedFacingMotionWork *work = (SignedFacingMotionWork *)sub_0205F40C(object);
     void *billboard = work->billboard;
-    if (billboard && ov01_021FA2D4(object) != TRUE) {
+    if (billboard && MapObject_IsBillboardPending(object) != TRUE) {
         facing = MapObject_GetFacingDirection(object);
         int movement = sub_0205F330(object);
         if (movement >= 1) {
@@ -1304,7 +1299,7 @@ void ov01_021F8B30(void *object) {
         ov01_021F8BE0(object, billboard, facing);
         work->facing = facing;
         work->movement = sub_0205F330(object);
-        ov01_021FA3E8(object, billboard);
+        MapObject_UpdateBillboardPosition(object, billboard);
         MapObject_UpdateBillboardVisibility(object, billboard);
     }
 }

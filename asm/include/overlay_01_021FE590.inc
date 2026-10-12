@@ -22,7 +22,7 @@
 .public FieldEffectManager_FreeBillboardSequence
 .public FieldEffectManager_LoadTexResource
 .public FieldEffectManager_FreeTexResource
-.public ov01_021F93AC
+.public MapObject_GetDrawPosition
 .public ApricornRegrowth_New
 .public ApricornRegrowth_Free
 .public ApricornRegrowth_Spawn

@@ -26,7 +26,7 @@
 #include "wireless_status_icon.h"
 
 // unk_02037C94.c (no header declares it)
-BOOL sub_020397FC(void);
+BOOL CommState_HasPlazaLobbyFailed(void);
 
 // rodata of this overlay (asm/to90_extra2491_anchor.s)
 extern const u8 sWiFiPlazaListArrowY[2];
@@ -140,9 +140,9 @@ BOOL WiFiPlazaRoom_Main(OverlayManager *manager, int *state) {
         WiFiPlazaListMenu_Close(&room->listMenu, NULL, NULL);
         WiFiPlazaTextWindow_Close(&room->textWindow);
         WiFiPlazaYesNoMenu_Free(&room->yesNoMenu);
-        if (sub_020393C8() != FALSE) {
+        if (CommState_HasWifiFailed() != FALSE) {
             WiFiPlazaErrorWindow_PrintCommError(&room->errorWindow, &room->msg);
-        } else if (sub_020397FC() != 0) {
+        } else if (CommState_HasPlazaLobbyFailed() != 0) {
             WiFiPlazaErrorWindow_PrintLobbyError(&room->errorWindow, &room->msg, ov45_0222E7CC());
         } else {
             WiFiPlazaErrorWindow_PrintDisconnected(&room->errorWindow, &room->msg, ov45_0222A1FC(room->lobby));

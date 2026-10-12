@@ -2004,7 +2004,7 @@ BOOL VsRecorder_FoundVideoPlay(VsRecorderWork *work) {
         VsRecorder_RebuildMenuRows(work);
         VsRecorder_SetVBlankPaused(work, FALSE);
         VsRecorder_SetResumeScreen(work, *work->screenPtr);
-        sub_02087A84(work->result, 1, 0);
+        VsRecorderApp_SetResult(work->result, 1, 0);
         work->step++;
         break;
     default:

@@ -72,7 +72,7 @@ static void VBlankIntr(void) {
 }
 
 static BOOL sub_0203A9FC(u32 *error_code_ptr) {
-    if (!sub_020393C8() || !CommState_Exists()) {
+    if (!CommState_HasWifiFailed() || !CommState_Exists()) {
         return FALSE;
     }
 

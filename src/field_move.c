@@ -23,7 +23,7 @@
 #include "start_menu.h"
 #include "sys_flags.h"
 #include "field_interaction.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 #include "player_avatar_movement.h"
 
 static FieldUseMoveEnvironment *FieldMove_CreateUseEnvironment(FieldMoveUseData *useData, const FieldMoveCheckData *checkData);

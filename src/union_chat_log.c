@@ -8,7 +8,6 @@
 #include "msgdata/msg/msg_0738_UNION.h"
 
 #include "dialog_box.h"
-#include "field_link_messages_internal.h"
 #include "filesystem_files_def.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
@@ -25,6 +24,7 @@
 #include "task.h"
 #include "text.h"
 #include "touchscreen.h"
+#include "union_room_talk.h"
 
 // Link player record of the communication layer (wireless_connection_state_8.c); only the chat
 // message and its sender are read here.
@@ -40,7 +40,7 @@ typedef struct UnionChatLogPeer {
 } UnionChatLogPeer;
 
 // wireless_connection_state_8.c; its header declares CommWireless_GetParentProfile with another return type than
-// field_link_messages_internal.h, so the two are declared here.
+// union_room_talk.h, so the two are declared here.
 extern UnionChatLogPeer *CommWireless_GetParentInfo(int index);
 extern PlayerProfile *CommWireless_GetProfile(void);
 
@@ -719,7 +719,7 @@ void UnionChatLog_CollectMessages(UnionChatLogData *data) {
                 }
             }
         }
-        mail = sub_0205AA84(data->unk_08);
+        mail = UnionRoom_TakeOwnChatMessage(data->unk_08);
         if (mail != NULL) {
             UnionChatLog_AppendMessage(data, data->profile, mail, PlayerProfile_GetTrainerID(data->profile));
         }

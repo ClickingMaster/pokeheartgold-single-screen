@@ -8,7 +8,7 @@
 #include "communication_command.h"
 #include "unk_02035900.h"
 #include "comm_state.h"
-#include "unk_0205A44C.h"
+#include "union_room_talk.h"
 
 typedef struct SpinTradeLinkPacket {
     u32 command;
@@ -102,9 +102,9 @@ void SpinTradeLink_RegisterCommands(SpinTradeLink *menu) {
 void SpinTradeLink_Close(void *ptr) {
     SpinTradeLink *menu = ptr;
     CommState_SetMaxEntries(2);
-    sub_02037FF0();
+    CommState_ResumeAlternateSearch();
     UnionRoomObjects_ResetSlots(menu->parent->input.communication);
-    sub_0205A904(0);
+    UnionRoom_SetBeaconActivity(0);
 }
 
 BOOL SpinTradeLink_SendPacket(SpinTradeLink *menu, u32 command, void *data, u32 size) {

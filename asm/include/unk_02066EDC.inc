@@ -26,7 +26,7 @@
 .public FrontierSave_GetStat
 .public Comm_GetLocalNetId
 .public LinkSync_GetPacket
-.public sub_0203A05C
+.public Comm_HasWifiProfile
 .public FieldSystem_LaunchApplication
 .public NintendoWifiConnection_LaunchApp
 .public GetVarPointer

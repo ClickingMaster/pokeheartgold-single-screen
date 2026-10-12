@@ -25,7 +25,7 @@
 .public Save_WiFiHistory_Get
 .public CommPlayerInfo_GetProfile
 .public Comm_GetLocalNetId
-.public sub_02039F68
+.public Comm_RecordPlayerLocations
 .public MapHeader_GetMapSec
 .public ZeroMonData
 .public CreateMon

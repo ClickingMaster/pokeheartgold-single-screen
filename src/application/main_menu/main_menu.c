@@ -114,8 +114,8 @@ typedef struct MainMenuButton {
 
 extern void sub_02005AF8(u32 a0);
 extern void SystemCard_RebootIntoFile(const char *path);
-extern void sub_02038D28(SaveData *saveData);
-extern void sub_02038D64(void);
+extern void CommState_StartBeaconWatch(SaveData *saveData);
+extern void CommState_StopBeaconWatch(void);
 extern u32 CommState_GetSeenGames(void);
 
 extern BOOL CTRDG_IsExisting();
@@ -194,7 +194,7 @@ static u32 ov74_022270C4(MainMenuAppData *data, int *state, BOOL a2) {
         data->selectedApp = (MainMenu_AppOption)data->unkEC[data->currentOption];
         if (data->selectedApp == APPOPTION_MIGRATE_AGB && CTRDG_IsPulledOut() == TRUE) {
             if (data->unk13C != 12) {
-                sub_02038D64();
+                CommState_StopBeaconWatch();
             }
             ShowGBACartRemovedError(HEAP_ID_MAIN_MENU);
         }
@@ -529,7 +529,7 @@ static void ov74_022276AC(MainMenuAppData *data) {
         data->unk13C = 11;
         break;
     case 11:
-        sub_02038D28(data->saveData);
+        CommState_StartBeaconWatch(data->saveData);
         data->unk140 = 120;
         data->unk13C = 13;
         data->unk40 = 0;
@@ -572,14 +572,14 @@ static void ov74_022276AC(MainMenuAppData *data) {
 
         data->unk140--;
         if (data->unk140 == 0) {
-            sub_02038D64();
+            CommState_StopBeaconWatch();
             data->unk13C = 12;
         }
 
         break;
     }
     case 14:
-        sub_02038D64();
+        CommState_StopBeaconWatch();
         data->unk13C = 12;
         break;
     }

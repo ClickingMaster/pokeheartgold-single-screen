@@ -214,7 +214,7 @@ void *FriendRoster_GetDwcFriendData(FriendRoster *wifiList, int slot);
 void sub_0202C270(FriendRoster *wifiList, int slot, String *name);
 void FriendRoster_RemoveFriend(FriendRoster *wifiList, int slot);
 void FrontierSave_DeleteRow(void *frontier, int slot);
-int sub_0203A128(SaveData *saveData, u64 friendKey, int *slot);
+int Comm_FindFriendSlotByKey(SaveData *saveData, u64 friendKey, int *slot);
 u64 DWC_CreateFriendKey(void *userData);
 int DWC_CheckFriendKey(void *userData, u64 friendKey);
 void DWC_CreateFriendKeyToken(void *friendData, u64 friendKey);

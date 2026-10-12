@@ -7,7 +7,7 @@
 #include "wifi_connection.h"
 #include "wifi_plaza_internal.h"
 
-BOOL sub_020397FC(void);
+BOOL CommState_HasPlazaLobbyFailed(void);
 
 #pragma force_active on
 
@@ -194,7 +194,7 @@ BOOL ov45_0222D7FC(u32 errorCode, u32 context) {
 }
 
 BOOL ov45_0222D844(void) {
-    if (sub_020393C8() || sub_020397FC()) {
+    if (CommState_HasWifiFailed() || CommState_HasPlazaLobbyFailed()) {
         return TRUE;
     }
     return FALSE;

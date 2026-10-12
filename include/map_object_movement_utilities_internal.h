@@ -3,7 +3,7 @@
 
 #include "map_object_movement_utilities.h"
 
-// The ground effect bits of a map object's graphics info (ov01_021F9318).
+// The ground effect bits of a map object's graphics info (MapObject_GetEffectFlags).
 typedef struct MapObjectEffectFlags {
     u16 unk0 : 4;
     u16 shadow : 3;

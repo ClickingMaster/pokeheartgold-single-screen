@@ -36,40 +36,40 @@
 .public sub_020388E0
 .public CommState_SetErrorWatch
 .public CommState_SetError
-.public sub_0205A44C
-.public sub_0205A46C
-.public sub_0205A478
-.public sub_0205A47C
-.public sub_0205A498
-.public sub_0205A4B4
-.public sub_0205A4C4
-.public sub_0205A4D8
-.public sub_0205A508
-.public sub_0205A6AC
-.public sub_0205A750
-.public sub_0205A894
-.public sub_0205A904
-.public sub_0205A9A0
-.public sub_0205AA6C
-.public sub_0205AA84
-.public sub_0205AA9C
-.public sub_0205AB88
-.public sub_0205ABB0
-.public sub_0205ABBC
-.public sub_0205ABD8
-.public sub_0205AC4C
-.public sub_0205AC70
+.public UnionRoom_RecvTalkChoice
+.public UnionRoom_RecvTalkCancel
+.public UnionRoom_PartnerCancelled
+.public UnionRoom_TrySendTalkCancel
+.public UnionRoom_RecvTrainerCard
+.public UnionRoom_GetTrainerCardBuffer
+.public UnionRoom_RecvBattleChoice
+.public UnionRoom_GetBattleCancel
+.public UnionRoom_SendBattleChoice
+.public UnionRoom_GetPartnerHometownMsg
+.public UnionRoom_GetTalkMsg
+.public UnionRoom_GetPartnerGameVersion
+.public UnionRoom_SetBeaconActivity
+.public UnionRoom_GetOwnChatMessageMsg
+.public UnionRoom_SetOwnChatMessage
+.public UnionRoom_TakeOwnChatMessage
+.public UnionRoom_BufferPartnerLanguage
+.public UnionRoom_BroadcastChatMessage
+.public UnionRoom_ResetTalkReplies
+.public UnionRoom_ResetTalk
+.public UnionRoom_AllocTrainerCards
+.public UnionRoom_FreeTrainerCards
+.public UnionRoom_SendTrainerCard
 .public GetUnionRoomAvatarAttrBySprite
 .public TrainerCardData_Build
 .public TrainerCardData_New
 .public MI_CpuFill8
-.public _020FC824
+.public gUnionRoomGroupFirstSlot
 
-	.public sub_0205A51C
-	.public sub_0205A544
+	.public UnionRoom_GetGroupOfMemberSlot
+	.public UnionRoom_GetPlayerActivityMsg
 	.public sub_0205A730
-	.public sub_0205A8B4
-	.public sub_0205AA4C
+	.public UnionRoom_FillStatusMembers
+	.public UnionRoomStatus_Init
 	.public _020FC7D4
 	.public _020FC7DC
 	.public _020FC7E4
@@ -82,7 +82,7 @@
 	.public _020FC850
 	.public _020FC868
 	.public _020FC880
-	.public _020FC898
+	.public gUnionRoomLanguageGreetings
 	.public _020FC8B4
 	.public _020FC8D4
 	.public _020FC8F4
@@ -90,4 +90,4 @@
 	.public _020FC934
 	.public _020FC95C
 	.public _020FC99C
-	.public _020FC9D4
+	.public gUnionRoomChatMsgs

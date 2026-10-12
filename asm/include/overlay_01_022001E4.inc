@@ -33,7 +33,7 @@
 .public FieldEffectManager_FreeBillboardSequence
 .public FieldEffectManager_LoadTexResource
 .public FieldEffectManager_FreeTexResource
-.public ov01_021F93AC
+.public MapObject_GetDrawPosition
 .public EmoteMark_New
 .public EmoteMark_Free
 .public EmoteMark_IsDone

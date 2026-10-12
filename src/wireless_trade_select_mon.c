@@ -258,9 +258,9 @@ void FrontierSave_DeleteRow(FrontierSave *frontier, int row);
 void CommPlayerInfo_RecordTrades(SaveData *saveData, int a1);
 int sub_02036FD8(int command, void *data, int size);
 void sub_020399FC(enum HeapID heapID, BgConfig *bgConfig);
-void sub_02039EAC(s32 *a0);
-s32 sub_02039EB4(SaveData *saveData, s32 a1, s32 *a2);
-void sub_0203A280(SaveData *saveData, s32 netId, s32 slot, enum HeapID heapID, u32 a4);
+void Comm_InitSyncedSave(s32 *a0);
+s32 Comm_SyncedSave(SaveData *saveData, s32 a1, s32 *a2);
+void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 netId, s32 slot, enum HeapID heapID, u32 a4);
 
 extern const u8 sWirelessTradeSelectMonSummaryPages[];
 extern const TouchscreenListMenuTemplate sWirelessTradeSelectMonTouchMenuTemplate;
@@ -687,11 +687,11 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
         }
         break;
     case 4:
-        sub_02039EAC(&work->unk_36A8);
+        Comm_InitSyncedSave(&work->unk_36A8);
         work->exchangeState++;
         break;
     case 5:
-        if (sub_02039EB4(work->saveData, 2, &work->unk_36A8)) {
+        if (Comm_SyncedSave(work->saveData, 2, &work->unk_36A8)) {
             work->exchangeState++;
         }
         break;
@@ -1100,7 +1100,7 @@ void WirelessTradeSelectMon_InitWork(WirelessTradeSelectMon *work, OverlayManage
     memset(work->partnerParty, 0xFF, size);
     work->playerName = PlayerProfile_GetPlayerName_NewString(args->profile, HEAP_ID_26);
     work->itemLabel = NewString_ReadMsgData(work->msgData, 42); // "ITEM"
-    sub_02039F68(args->wifiHistory);
+    Comm_RecordPlayerLocations(args->wifiHistory);
 }
 
 void WirelessTradeSelectMon_FreeBgs(BgConfig *bgConfig) {
@@ -1748,7 +1748,7 @@ int WirelessTradeSelectMon_HandleDeletePrompt(WirelessTradeSelectMon *work) {
     case YESNORESPONSE_YES_TOUCH:
         FrontierSave_DeleteRow(Save_Frontier_GetStatic(work->saveData), work->chosenRosterSlot);
         FriendRoster_RemoveFriend(work->roster, work->chosenRosterSlot);
-        sub_0203A280(work->saveData, work->friendNetId, 31, HEAP_ID_26, 0);
+        Comm_StoreFriendFromPlayer(work->saveData, work->friendNetId, 31, HEAP_ID_26, 0);
         work->callback = WirelessTradeSelectMon_RegisterNextFriend;
         break;
     case YESNORESPONSE_NO:
@@ -1841,7 +1841,7 @@ int WirelessTradeSelectMon_HandleRegisterPrompt(WirelessTradeSelectMon *work) {
         work->callback = WirelessTradeSelectMon_RegisterNextFriend;
         for (i = 0; i < 32; i++) {
             if (!FriendRoster_IsFriendValid(work->roster, i)) {
-                sub_0203A280(work->saveData, work->friendNetId, i, HEAP_ID_26, 0);
+                Comm_StoreFriendFromPlayer(work->saveData, work->friendNetId, i, HEAP_ID_26, 0);
                 break;
             }
         }
@@ -1894,7 +1894,7 @@ int WirelessTradeSelectMon_RegisterNextFriend(WirelessTradeSelectMon *work) {
     roster = Save_FriendRoster_Get(work->saveData);
     for (j = 0; j < 32; j++) {
         if (!FriendRoster_IsFriendValid(roster, j)) {
-            sub_0203A280(work->saveData, work->friendNetId, j, HEAP_ID_26, 0);
+            Comm_StoreFriendFromPlayer(work->saveData, work->friendNetId, j, HEAP_ID_26, 0);
             break;
         }
     }
@@ -1903,8 +1903,8 @@ int WirelessTradeSelectMon_RegisterNextFriend(WirelessTradeSelectMon *work) {
 }
 
 int WirelessTradeSelectMon_StartFriendRegistration(WirelessTradeSelectMon *work) {
-    // unk_02037C94.h declares sub_0203A1C4 as void, but it returns whether anyone can be registered.
-    if (!((s32(*)(SaveData *, void *, enum HeapID))sub_0203A1C4)(work->saveData, work->friendStates, HEAP_ID_26)) {
+    // unk_02037C94.h declares Comm_RegisterLinkedFriends as void, but it returns whether anyone can be registered.
+    if (!((s32(*)(SaveData *, void *, enum HeapID))Comm_RegisterLinkedFriends)(work->saveData, work->friendStates, HEAP_ID_26)) {
         LinkSync_StartSync(0x13);
         WirelessTradeSelectMon_PrintMessage(&work->windows[23], 28, 1, work->msgData, work->msgFormat); // "Waiting for your friend to finish..."
         work->callback = WirelessTradeSelectMon_WaitQuitSync;

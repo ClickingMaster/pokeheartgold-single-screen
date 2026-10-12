@@ -77,10 +77,10 @@
 #include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "unk_02055418.h"
-#include "unk_0205A44C.h"
+#include "union_room_talk.h"
 #include "unk_0206D494.h"
 #include "evolution_scene.h"
-#include "unk_02087A78.h"
+#include "vs_recorder_app.h"
 #include "unk_02088288.h"
 #include "gear_phone_ring_manager.h"
 #include "legendary_cinematic_manager.h"
@@ -301,11 +301,11 @@ static BOOL Task_OpenPartyMenuForUnionRoomBattleSelect(TaskManager *taskman) {
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
             switch (data->unk4->partySlot) {
             case 7:
-                sub_0205A508(2);
+                UnionRoom_SendBattleChoice(2);
                 *state = PMMS_FREE;
                 break;
             case 6:
-                sub_0205A508(1);
+                UnionRoom_SendBattleChoice(1);
                 *state = PMMS_FREE;
                 break;
             default:
@@ -1023,8 +1023,8 @@ PalPadArgs *PalPad_LaunchApp(FieldSystem *fieldSystem, SaveData *saveData, enum 
     return args;
 }
 
-void sub_0203F570(FieldSystem *fieldSystem, SaveData *args) {
-    FieldSystem_LaunchApplication(fieldSystem, &_02102830, fieldSystem);
+void VsRecorder_LaunchApp(FieldSystem *fieldSystem, SaveData *args) {
+    FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_VsRecorderApp, fieldSystem);
 }
 
 static BOOL Task_NamingScreen(TaskManager *taskman) {
@@ -1186,7 +1186,7 @@ void sub_0203F844(FieldSystem *fieldSystem, u16 a1) {
     args->unk38 = sub_02088288(fieldSystem->saveData);
     args->saveData = fieldSystem->saveData;
     args->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
-    args->unk34 = sub_0203A040(args->unk14);
+    args->unk34 = Comm_GetOwnGsProfileId(args->unk14);
     args->bag = Save_Bag_Get(fieldSystem->saveData);
     args->unk3C = a1;
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
@@ -1203,7 +1203,7 @@ NintendoWifiConnectArgs *NintendoWifiConnection_LaunchApp(FieldSystem *fieldSyst
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     args->unk14 = FriendRoster_GetUserData(Save_FriendRoster_Get(fieldSystem->saveData));
     args->saveData = fieldSystem->saveData;
-    args->unk1C = sub_0203A040(Save_FriendRoster_Get(fieldSystem->saveData));
+    args->unk1C = Comm_GetOwnGsProfileId(Save_FriendRoster_Get(fieldSystem->saveData));
     args->unk18 = a1;
     args->unk24 = a2;
     args->unk20 = 1;

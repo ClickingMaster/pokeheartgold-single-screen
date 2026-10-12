@@ -4,23 +4,23 @@
 .public GF_AssertFail
 .public MapMatrix_GetWidth
 .public TerrainAttributes_Get
-.public sub_02054774
-.public sub_02054790
-.public sub_02054874
-.public sub_0205489C
-.public sub_020548C0
+.public Terrain_GetHeight_Bdhc
+.public Terrain_CalcHeightWithMode
+.public FieldSystem_GetSoundplateAt
+.public FieldSystem_SetTerrainQueries
+.public FieldSystem_CheckTileCollision
 .public sub_020548EC
 .public GetMetatileBehavior
-.public sub_02054940
-.public sub_020549A8
-.public sub_020549F4
-.public sub_02054A60
-.public sub_02054AE4
-.public sub_02054B74
-.public sub_02054C20
-.public sub_02054C90
-.public sub_02054D10
-.public sub_02054DC8
+.public FieldSystem_GetTerrainHeight
+.public FieldSystem_CheckCollisionAndHeight
+.public FieldSystem_CheckCollisionHeightAndGimmick
+.public Terrain_MakeTileRect
+.public FieldSystem_FindMapPropInRect
+.public FieldSystem_FindMapPropOfModelsInRect
+.public FieldSystem_FindMapProp
+.public FieldSystem_FindMapPropOfModels
+.public FieldSystem_CollectMapPropModelsInRect
+.public Terrain_GetChunkOrigin
 .public sub_02054E20
 .public Gymmick_CheckCollision
 .public _s32_div_f
@@ -39,15 +39,15 @@
 .public DynamicTerrainHeightManager_FindPlate
 .public DynamicTerrainHeightManager_GetPlateHeight
 
-	.public sub_02054648
-	.public sub_02054654
-	.public sub_020547A4
-	.public sub_020547D8
-	.public sub_02054824
-	.public sub_02054954
-	.public sub_02054A9C
+	.public Terrain_AbsDiff
+	.public Terrain_CalcHeight
+	.public Terrain_GetHeight_Simple
+	.public Terrain_GetAttributes_Loaded
+	.public Terrain_GetAttributes_Simple
+	.public FieldSystem_GetHeightStep
+	.public MapProp_IsInRect
 	.public sub_02054E00
 	.public _020FC5FC
-	.public _020FC604
+	.public gTerrainQueries_Bdhc
 	.public _020FC60C
-	.public _020FC614
+	.public gTerrainQueries_Simple

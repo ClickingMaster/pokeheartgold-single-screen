@@ -38,7 +38,7 @@ _02060B16:
 	ldr r1, [sp, #4]
 	add r2, r5, #0
 	add r3, r7, #0
-	bl sub_020549A8
+	bl FieldSystem_CheckCollisionAndHeight
 	cmp r0, #1
 	bne _02060B40
 	mov r0, #2

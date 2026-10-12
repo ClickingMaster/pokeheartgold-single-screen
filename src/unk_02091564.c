@@ -9,7 +9,7 @@
 #include "comm_player_manager.h"
 #include "communication_club_link.h"
 #include "unk_02058AEC.h"
-#include "unk_0205A44C.h"
+#include "union_room_talk.h"
 
 FS_EXTERN_OVERLAY(OVY_53);
 const OverlayManagerTemplate gApplication_OakSpeech = { OakSpeech_Init, OakSpeech_Main, OakSpeech_Exit, FS_OVERLAY_ID(OVY_53) };
@@ -94,11 +94,11 @@ static const UnkStruct_02091564 sUnkTable_02106078[] = {
     { sub_0205A408, PlayerProfile_sizeof, NULL         },
     { sub_0205A430, CommCmd_GetSize1,         NULL         },
     { sub_0205A40C, CommCmd_GetSize1,         NULL         },
-    { sub_0205A4C4, CommCmd_GetSize1,         NULL         },
+    { UnionRoom_RecvBattleChoice, CommCmd_GetSize1,         NULL         },
     { sub_0205A410, CommCmd_GetSize0,         NULL         },
-    { sub_0205A44C, CommCmd_GetSize1,         NULL         },
-    { sub_0205A46C, CommCmd_GetSize0,         NULL         },
-    { sub_0205A498, sub_02091588,         sub_0205A4B4 },
+    { UnionRoom_RecvTalkChoice, CommCmd_GetSize1,         NULL         },
+    { UnionRoom_RecvTalkCancel, CommCmd_GetSize0,         NULL         },
+    { UnionRoom_RecvTrainerCard, sub_02091588,         (UnkFuncPtr_02091564)UnionRoom_GetTrainerCardBuffer },
     { Colosseum_RecvMixBattleMons, Colosseum_GetMixBattleMonsSize,         Colosseum_GetMixBattleMonsBuffer },
     { Colosseum_RecvMixBattleChoice, CommCmd_GetSize1,         NULL         },
     { sub_02091570, CommCmd_GetSize1,         NULL         },

@@ -99,9 +99,9 @@ void ov00_021FA0D8(void);
 void ov00_021ED9B4(void);
 u64 DWC_CreateFriendKey(void *userData);
 // Not declared in a public header.
-void sub_02039418(SaveData *saveData);
-void sub_0203946C(void);
-void sub_020399EC(void);
+void CommState_InitWfcSession(SaveData *saveData);
+void CommState_FreeWfcSession(void);
+void CommState_ShowRestartErrorAndHalt(void);
 void WirelessStatusIcon_SetLevel(s32 level);
 
 int GtsConnection_Init(GtsApp *app, int state);
@@ -186,7 +186,7 @@ int GtsConnection_Init(GtsApp *app, int state) {
         args = app->args;
         if (args->unk3C != 0) {
             // Connect without asking.
-            sub_02039418(args->saveData);
+            CommState_InitWfcSession(args->saveData);
             Gts_PrintMessage(app, app->wifiMsgData, 1, 1, 0xF0F); // Connecting to Nintendo Wi-Fi Connection...
             Gts_SetState(app, GTS_CONNECTION_STATE_WAIT_TEXT, GTS_CONNECTION_STATE_START_CONNECT);
             Gts_CreateWaitingIcon(app);
@@ -197,7 +197,7 @@ int GtsConnection_Init(GtsApp *app, int state) {
     } else {
         // Back from the GTS: disconnect.
         args = app->args;
-        sub_02039418(args->saveData);
+        CommState_InitWfcSession(args->saveData);
         Gts_CreateWirelessStatusIcon(app);
         app->state = GTS_CONNECTION_STATE_PRINT_DISCONNECTING;
     }
@@ -420,7 +420,7 @@ int GtsConnection_HandleConnectPrompt(GtsApp *app) {
         Gts_CreateWaitingIcon(app);
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
-        sub_0203946C();
+        CommState_FreeWfcSession();
         Gts_SetNextScreen(app, 0, 0);
         app->state = GTS_CONNECTION_STATE_FADE_OUT;
     }
@@ -453,7 +453,7 @@ int GtsConnection_HandleDisconnectMenu(GtsApp *app) {
     if (ov00_021EC5B4() != 0) {
         ov00_021EC8D8();
     }
-    sub_0203946C();
+    CommState_FreeWfcSession();
     Gts_SetNextScreen(app, 0, 0);
     app->state = GTS_CONNECTION_STATE_FADE_OUT;
 done:
@@ -467,7 +467,7 @@ int GtsConnection_PrintDisconnecting(GtsApp *app) {
 }
 
 int GtsConnection_Disconnect(GtsApp *app) {
-    sub_0203946C();
+    CommState_FreeWfcSession();
     ov00_021EC8D8();
     Gts_SetNextScreen(app, 0, 0);
     app->state = GTS_CONNECTION_STATE_PRINT_DISCONNECTED;
@@ -482,7 +482,7 @@ int GtsConnection_PrintDisconnected(GtsApp *app) {
 }
 
 void GtsConnection_StartConnect(GtsApp *app) {
-    sub_02039418(app->args->saveData);
+    CommState_InitWfcSession(app->args->saveData);
     Sys_SetSleepDisableFlag(4);
     Gts_CreateWirelessStatusIcon(app);
     ov00_021EC3F0(app->wifiConnection, 2, 1, 20);
@@ -577,7 +577,7 @@ int GtsConnection_WaitAuth(GtsApp *app) {
             break;
         case 5:
         case 7:
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
         if (errorCode < -20000 && errorCode >= -29999) {
@@ -612,7 +612,7 @@ int GtsConnection_SendInfo(GtsApp *app) {
     return 3;
 }
 
-// Each request is given a minute; then the connection is dropped (sub_020399EC).
+// Each request is given a minute; then the connection is dropped (CommState_ShowRestartErrorAndHalt).
 int GtsConnection_WaitInfo(GtsApp *app) {
     if (GtsServer_IsRequestDone()) {
         int result = GtsServer_GetResult();
@@ -646,13 +646,13 @@ int GtsConnection_WaitInfo(GtsApp *app) {
             break;
         default:
             Gts_DeleteWaitingIcon(app);
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         app->requestFrames++;
         if (app->requestFrames == 60 * 60) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -695,7 +695,7 @@ int GtsConnection_WaitSetProfile(GtsApp *app) {
                     app->state = GTS_CONNECTION_STATE_PRINT_SERVER_ERROR;
                     break;
                 default:
-                    sub_020399EC();
+                    CommState_ShowRestartErrorAndHalt();
                     break;
                 }
                 break;
@@ -709,7 +709,7 @@ int GtsConnection_WaitSetProfile(GtsApp *app) {
                 break;
             default:
                 Gts_DeleteWaitingIcon(app);
-                sub_020399EC();
+                CommState_ShowRestartErrorAndHalt();
                 break;
             }
             break;
@@ -738,13 +738,13 @@ int GtsConnection_WaitSetProfile(GtsApp *app) {
             break;
         default:
             Gts_DeleteWaitingIcon(app);
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         app->requestFrames++;
         if (app->requestFrames == 60 * 60) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -839,7 +839,7 @@ int GtsConnection_DisconnectAfterError(GtsApp *app) {
         break;
     case 1:
         if (!TextPrinterCheckActive(app->textPrinterId)) {
-            sub_0203946C();
+            CommState_FreeWfcSession();
             ov00_021EC8D8();
             app->subState++;
         }

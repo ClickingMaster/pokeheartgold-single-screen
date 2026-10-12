@@ -43,7 +43,7 @@ BOOL ov39_0222A4C0(u32 argLow, u32 argHigh, void *response);
 // no public header
 void ov00_021EC210(void);
 void ov00_021EC8D8(void);
-void sub_0203946C(void);
+void CommState_FreeWfcSession(void);
 u32 BattleRecord_sizeof(void);
 void *sub_0202FC74(void);
 void *BattleRecord_GetProfile(void);
@@ -263,7 +263,7 @@ BOOL GlobalTerminalNet_SeqStopClient(GlobalTerminalNet *net) {
 BOOL GlobalTerminalNet_SeqDisconnect(GlobalTerminalNet *net) {
     ov00_021EC210();
     ov00_021EC8D8();
-    sub_0203946C();
+    CommState_FreeWfcSession();
     net->unk_3C8 = 0;
     return TRUE;
 }

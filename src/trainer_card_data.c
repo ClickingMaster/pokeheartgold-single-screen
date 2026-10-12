@@ -14,6 +14,7 @@
 #include "string_util.h"
 #include "sys_flags.h"
 #include "task.h"
+#include "union_room_talk.h"
 #include "unk_02055418.h"
 
 typedef struct LinkTrainerCardTaskEnv {
@@ -21,11 +22,6 @@ typedef struct LinkTrainerCardTaskEnv {
     TrainerCardData *partnerCard;
     TrainerCardAppArgs args;
 } LinkTrainerCardTaskEnv;
-
-// The field link's card exchange (src/field_link_messages*.c).
-void *sub_0205ABD8(struct UnkStruct_02059E1C *p);
-void sub_0205AC4C(struct UnkStruct_02059E1C *p);
-void *sub_0205AC70(struct UnkStruct_02059E1C *p);
 
 TrainerCardData *TrainerCardData_New(enum HeapID heapID);
 void TrainerCardData_SetHeader(u8 unk_04_0, u32 version, u32 stars, u32 unk_02, u8 language, TrainerCardData *card);
@@ -228,7 +224,7 @@ void TrainerCardData_SetBadges(PlayerProfile *profile, FieldSystem *fieldSystem,
 void LinkTrainerCard_StartTask(FieldSystem *fieldSystem) {
     LinkTrainerCardTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(LinkTrainerCardTaskEnv));
     env->state = 0;
-    env->partnerCard = sub_0205ABD8(fieldSystem->unk80);
+    env->partnerCard = UnionRoom_AllocTrainerCards(fieldSystem->unk80);
     TaskManager_Call(fieldSystem->taskman, Task_LinkTrainerCard, env);
 }
 
@@ -238,7 +234,7 @@ BOOL Task_LinkTrainerCard(TaskManager *taskManager) {
 
     switch (env->state) {
     case 0:
-        sub_0205AC70(fieldSystem->unk80);
+        UnionRoom_SendTrainerCard(fieldSystem->unk80);
         env->state = 1;
     case 1:
         if (env->partnerCard->received != 0) {
@@ -252,7 +248,7 @@ BOOL Task_LinkTrainerCard(TaskManager *taskManager) {
         break;
     case 11:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
-            sub_0205AC4C(fieldSystem->unk80);
+            UnionRoom_FreeTrainerCards(fieldSystem->unk80);
             Heap_Free(env);
             return TRUE;
         }

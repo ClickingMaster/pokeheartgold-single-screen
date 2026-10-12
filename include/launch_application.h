@@ -113,7 +113,7 @@ PartyMenuArgs *PartyMenu_LaunchApp_InGameTrade(enum HeapID heapID, FieldSystem *
 PartyMenuArgs *SelectPartyMonAndLearnMove(TaskManager *taskManager, enum HeapID heapID);      // todo: union party select screen
 int PartyMenuArgs_GetSlot(struct PartyMenuArgs *partyWork);
 int sub_0203E5F8(struct PartyMenuArgs *partyWork);
-void sub_0203F570(FieldSystem *fieldSystem, SaveData *saveData);
+void VsRecorder_LaunchApp(FieldSystem *fieldSystem, SaveData *saveData);
 SafariDecorationArgs *SafariDecoration_LaunchApp(FieldSystem *fieldSystem);
 void GeonetGlobe_LaunchApp(FieldSystem *fieldSystem);
 void ChooseStarter_LaunchApp(FieldSystem *fieldSystem, ChooseStarterArgs *args);

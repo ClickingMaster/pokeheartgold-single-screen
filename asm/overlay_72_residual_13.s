@@ -270,7 +270,7 @@ _022396A0:
 	str r0, [r4, #0x1c]
 	add r0, r4, #0
 	bl NintendoWfc_HideWaitingIcon
-	bl sub_020399EC
+	bl CommState_ShowRestartErrorAndHalt
 	b _022396C2
 _022396B4:
 	cmp r0, #0
@@ -294,7 +294,7 @@ _022396CA:
 	lsl r0, r0, #4
 	cmp r1, r0
 	bne _022396E0
-	bl sub_020399EC
+	bl CommState_ShowRestartErrorAndHalt
 _022396E0:
 	mov r0, #3
 	pop {r4, pc}

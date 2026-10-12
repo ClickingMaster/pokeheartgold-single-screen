@@ -204,12 +204,12 @@ PlazaGameRoster_CheckConnectionLost: ; 0x02258B54
 	beq _02258B6C
 	mov r4, #1
 _02258B6C:
-	bl sub_02039264
+	bl CommState_WasWifiDisconnected
 	cmp r0, #1
 	bne _02258B76
 	mov r4, #1
 _02258B76:
-	bl sub_020390C4
+	bl CommState_GetWifiMatchStatus
 	cmp r0, #2
 	blt _02258B80
 	mov r4, #1
@@ -250,10 +250,10 @@ _02258BB2:
 	cmp r0, #1
 	bne _02258BC4
 	bl CommPlayerInfo_Free
-	bl sub_0203986C
+	bl CommState_EndPlazaMatch
 	b _02258BD0
 _02258BC4:
-	bl sub_020392A0
+	bl CommState_IsWifiInLobby
 	cmp r0, #1
 	bne _02258BD0
 	mov r0, #1

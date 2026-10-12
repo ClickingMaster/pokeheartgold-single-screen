@@ -32,9 +32,9 @@
 .public sub_02055198
 .public Save_VarsFlags_FlypointFlagAction
 .public BagCursor_New
-.public sub_02087A78
-.public sub_02087A84
-.public sub_02087E10
+.public VsRecorderApp_GetRecorderWork
+.public VsRecorderApp_SetResult
+.public VsRecorderApp_GetTemplate
 .public sub_02087E1C
 .public sub_02087FF8
 .public LoadOVY38
@@ -42,29 +42,29 @@
 .public MI_CpuFill8
 .public gOverlayTemplate_Battle
 .public gNatureStatMods
-.public _02102830
-.public _021028B4
-.public _021028C4
+.public gOverlayTemplate_VsRecorderApp
+.public gOverlayTemplate_VsRecorderMenu
+.public gOverlayTemplate_VsRecorderMenuFromTerminal
 .public VsRecorder_SanitizeBattleSetupNames
 
-	.public sub_02087A8C
-	.public sub_02087B10
-	.public sub_02087B1C
-	.public sub_02087B28
-	.public sub_02087B34
-	.public sub_02087B40
-	.public sub_02087B4C
-	.public sub_02087B58
-	.public sub_02087B64
-	.public sub_02087BAC
-	.public sub_02087BE8
-	.public sub_02087C38
+	.public VsRecorderApp_Create
+	.public VsRecorderApp_InitMode0
+	.public VsRecorderApp_InitMode1
+	.public VsRecorderApp_InitMode2
+	.public VsRecorderApp_InitMode3
+	.public VsRecorderApp_InitMode4
+	.public VsRecorderApp_InitMode5
+	.public VsRecorderApp_InitMode6
+	.public VsRecorderApp_Main
+	.public VsRecorderApp_Exit
+	.public VsRecorderApp_RunMenu
+	.public VsRecorderApp_RunPlayback
 	.public sub_02087E34
-	.public _02102840
-	.public _02102850
-	.public _02102860
-	.public _02102870
-	.public _02102880
-	.public _02102890
+	.public gOverlayTemplate_VsRecorderAppMode6
+	.public gOverlayTemplate_VsRecorderAppMode5
+	.public gOverlayTemplate_VsRecorderAppMode4
+	.public gOverlayTemplate_VsRecorderAppMode3
+	.public gOverlayTemplate_VsRecorderAppMode2
+	.public gOverlayTemplate_VsRecorderAppMode1
 	.public _021028A0
-	.public _02110594
+	.public gVsRecorderAppTemplates

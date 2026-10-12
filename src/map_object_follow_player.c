@@ -13,7 +13,7 @@
 #include "metatile_behavior.h"
 #include "overlay_01.h"
 #include "player_avatar.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 
 void FollowPlayerMovement_Init(LocalMapObject *object) {
     FollowPlayerMovementState *state = (FollowPlayerMovementState *)sub_0205F370(object, sizeof(FollowPlayerMovementState));

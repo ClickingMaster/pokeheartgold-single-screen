@@ -29,13 +29,13 @@ _02059ED8:
 	cmp r0, #5
 	bne _02059EF6
 	ldr r0, [r4, #0x18]
-	bl sub_0203894C
+	bl CommState_JoinRecordMixing
 	b _02059F18
 _02059EF6:
 	cmp r0, #6
 	ldr r0, [r4, #0x18]
 	bne _02059F02
-	bl sub_0203898C
+	bl CommState_JoinSpinTrade
 	b _02059F18
 _02059F02:
 	bl CommState_JoinParent
@@ -46,7 +46,7 @@ _02059F08:
 	mov r0, #0
 	bl DrawingSessionLink_RegisterCommands
 	ldr r0, [r4, #0x18]
-	bl sub_02038918
+	bl CommState_ReconnectToParent
 _02059F18:
 	ldr r1, _02059F2C ; =sub_0205A0B4
 	add r0, r4, #0

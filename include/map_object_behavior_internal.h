@@ -82,12 +82,12 @@ extern const TrainerApproachStateFunc _020FE1A4[];
 
 // Defined elsewhere without a header yet.
 extern const u32 ov01_02207274[];
-int ov01_021F94C0(LocalMapObject *object, void **billboard, u32 spriteId);
+int MapObject_RequestBillboard(LocalMapObject *object, void **billboard, u32 spriteId);
 void ov01_021F95CC(LocalMapObject *object, void **billboard, u32 spriteId);
-BOOL ov01_021F9344(LocalMapObject *object);
+BOOL MapObject_IsBillboardAnimPaused(LocalMapObject *object);
 void ov01_021FA40C(LocalMapObject *object, void *billboard);
-void ov01_021F9610(void *billboard, VecFx32 *state);
-void ov01_021F9630(void *billboard, VecFx32 *state);
+void BillboardObject_SaveState(void *billboard, VecFx32 *state);
+void BillboardObject_RestoreState(void *billboard, VecFx32 *state);
 void ApricornRegrowth_Spawn(LocalMapObject *object);
 
 void sub_02063A14(LocalMapObject *object);

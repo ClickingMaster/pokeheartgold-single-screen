@@ -216,7 +216,7 @@ int PalPadShared_RegisterFriendCode(PalPadShared *shared, String *code, String *
                 if (!DWC_CheckFriendKey(FriendRoster_GetUserData(wifiList), key)) {
                     return 1;
                 }
-                if (!sub_0203A128(shared->saveData, key, &slot)) {
+                if (!Comm_FindFriendSlotByKey(shared->saveData, key, &slot)) {
                     return 2;
                 }
                 DWC_CreateFriendKeyToken(FriendRoster_GetDwcFriendData(wifiList, i), key);

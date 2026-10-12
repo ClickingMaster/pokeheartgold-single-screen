@@ -41,11 +41,11 @@ ov01_02206D28:
 
 	.public ov01_02206D3C
 ov01_02206D3C:
-	.word ov01_021F9058
-	.word ov01_021F9078
-	.word ov01_021F90C8
-	.word ov01_021F90D0
-	.word ov01_021F90FC
+	.word LegendaryBirdObject_Init
+	.word LegendaryBirdObject_Update
+	.word LegendaryBirdObject_Delete
+	.word LegendaryBirdObject_Pause
+	.word LegendaryBirdObject_Resume
 
 	.public ov01_02206D50
 ov01_02206D50:
@@ -304,11 +304,11 @@ ov01_022071C8:
 
 	.public ov01_0220724C
 ov01_0220724C:
-	.word ov01_021F9424
-	.word ov01_021F943C
-	.word ov01_021F9440
-	.word ov01_021F9444
-	.word ov01_021F9448
+	.word CameraFocusObject_Init
+	.word CameraFocusObject_Update
+	.word CameraFocusObject_Delete
+	.word CameraFocusObject_Pause
+	.word CameraFocusObject_Resume
 
 	.public ov01_02207260
 ov01_02207260: ; 0x02207260

@@ -130,9 +130,9 @@ void ov00_021ECD04(GlobalTerminalConnectWork *work);
 u32 ov00_021ECDC8(void);
 void ov00_021ED9B4(void);
 void ov00_021FA0D8(void);
-void sub_02039418(SaveData *saveData);
-void sub_0203946C(void);
-void sub_020399EC(void);
+void CommState_InitWfcSession(SaveData *saveData);
+void CommState_FreeWfcSession(void);
+void CommState_ShowRestartErrorAndHalt(void);
 u32 FashionEntry_sizeof(void);
 
 extern const GraphicsModes sGlobalTerminalConnectGraphicsModes;
@@ -643,7 +643,7 @@ BOOL GlobalTerminalConnect_StateAskConnect(GlobalTerminalConnectWork *work) {
 BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *work) {
     switch (work->substate) {
     case 0:
-        sub_02039418(work->args->launchArgs->saveData);
+        CommState_InitWfcSession(work->args->launchArgs->saveData);
         Sys_SetSleepDisableFlag(4);
         WirelessStatusIcon_Create();
         GlobalTerminalConnect_PrintMessage(work, work->msgDataConnecting, 1, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
@@ -746,7 +746,7 @@ BOOL ov39_02228DA0(GlobalTerminalConnectWork *work) {
             break;
         case 5:
         case 7:
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
         if (errorCode < -20000 && errorCode >= -29999) {
@@ -763,7 +763,7 @@ BOOL GlobalTerminalConnect_StateSaveProfileId(GlobalTerminalConnectWork *work) {
 
     FriendRoster_GetUserData(wifiList);
     if (Save_SysInfo_GetDwcProfileId(sysInfo) == 0) {
-        Save_SysInfo_SetDwcProfileId(sysInfo, (s32)sub_0203A040(wifiList));
+        Save_SysInfo_SetDwcProfileId(sysInfo, (s32)Comm_GetOwnGsProfileId(wifiList));
     }
     Save_SysInfo_GetDwcProfileId(sysInfo);
     work->state = GTC_STATE_EXIT_CONNECTED;
@@ -795,7 +795,7 @@ BOOL GlobalTerminalConnect_StateWaitErrorAck(GlobalTerminalConnectWork *work) {
 
 BOOL GlobalTerminalConnect_StateExit(GlobalTerminalConnectWork *work) {
     if (work->state != GTC_STATE_EXIT_CONNECTED) {
-        sub_0203946C();
+        CommState_FreeWfcSession();
     }
     WirelessStatusIcon_Destroy();
     GlobalTerminalConnect_HideWaitingIcon(work);
@@ -839,7 +839,7 @@ BOOL GlobalTerminalConnect_StateServerErrorDisconnect(GlobalTerminalConnectWork 
         break;
     case 1:
         if (GlobalTerminalConnect_IsPrinting(work->printerId) == FALSE) {
-            sub_0203946C();
+            CommState_FreeWfcSession();
             ov00_021EC8D8();
             work->substate++;
         }
@@ -881,7 +881,7 @@ BOOL GlobalTerminalConnect_StateDisconnect(GlobalTerminalConnectWork *work) {
         break;
     case 1:
         ov00_021EC8D8();
-        sub_0203946C();
+        CommState_FreeWfcSession();
         work->substate++;
         break;
     case 2:

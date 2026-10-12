@@ -274,7 +274,7 @@
 .public OrbitCursor_SetRadius
 .public sub_02087A30
 .public sub_02087A54
-.public sub_02087A84
+.public VsRecorderApp_SetResult
 .public sub_02087E1C
 .public sub_02088030
 .public NNS_G2dGetUnpackedPaletteData

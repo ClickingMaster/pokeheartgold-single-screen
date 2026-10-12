@@ -1,5 +1,5 @@
 #include "overlay02_248728_partial_internal.h"
-int ov02_022493EC(void);
+int FlyLandingEffect_Done(void);
 void ov02_0224AB54(void);
 void ov02_0224AC24(void);
 int ov02_0224ADEC(void);
@@ -20,9 +20,9 @@ void HeadbuttEffect_Delete(void *);
 void RockDebris_Delete(void *);
 void FollowMonSituation_SetMapId(void *, void *);
 void FollowMonInteraction_Delete(void *);
-u8 ov02_02248D8C(void *);
-void ov02_02248DE4(void *, void *);
-void *ov02_022493F0(void);
+u8 FlyLandingEffect_GetStatus(void *);
+void FlyLandingEffect_Destroy(void *, void *);
+void *FlyLanding_OpenNarc(void);
 u32 ov02_0224953C(void *);
 void *ov02_0224A074(void);
 void ov02_0224A63C(void *);
@@ -38,7 +38,7 @@ void CutEffect_Render(u32, u32, void *);
 void RockSmashEffect_Render(u32, u32, void *);
 void WhirlpoolEffect_Render(u32, u32, void *);
 void HeadbuttEffect_Render(u32, u32, void *);
-int ov02_02248E10(void *);
+int FlyLandingEffect_Idle(void *);
 void ov02_0224A32C(void *);
 void ov02_0224A7A8(u32, void *);
 void ov02_0224A800(void *, void *);
@@ -54,7 +54,7 @@ int SafariZone_CanPlaceObjectOnWater(void *, u32);
 int FollowMonInteraction_StepHasMovement(void *, u16 *);
 void FieldSystem_FollowMonInteract(void *);
 void Sprite_CopyPositionVector(void *, void *);
-void ov02_02249444(void *, u32);
+void FieldMove_SetPlayerVisible(void *, u32);
 void ov02_02249548(void *);
 int ov02_02249940(void *);
 int ov02_02249954(void *);
@@ -114,8 +114,8 @@ void ov02_0224B6B0(void *, u32);
 int FieldEscapeRope_Warp(void *, void *, void *);
 int FieldDig_Warp(void *, void *, void *);
 void *FieldMoveTask_CreateArrivalEnvironment(void *, u32, void *);
-void ov02_022493FC(void);
-void ov02_02249420(void);
+void FieldMove_FadeInFromWhite(void);
+void FieldMove_FadeOutToWhite(void);
 void ov02_0224A648(void *);
 void ov02_0224B418(void *, void *);
 int SafariZone_GetAreaIndexAt(s32, s32);
@@ -134,7 +134,7 @@ void ov02_0224AB9C(void *);
 int ov02_0224B638(void *);
 
 int ov02_0224B494(void *p) {
-    ov02_02249444(PTR(p, 0x14), 1);
+    FieldMove_SetPlayerVisible(PTR(p, 0x14), 1);
     U32(p, 0)
     ++;
     return 0;

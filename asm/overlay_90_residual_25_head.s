@@ -239,7 +239,7 @@ _0225B9BE:
 	add r1, r0, #0
 	ldr r0, [r5, #0xc]
 	add r2, r7, #0
-	bl sub_0203A084
+	bl Comm_FindFriendSlot
 	cmp r0, #0
 	beq _0225B9D8
 	cmp r0, #1

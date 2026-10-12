@@ -35,7 +35,7 @@
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
-#include "unk_0205A44C.h"
+#include "union_room_talk.h"
 #include "vram_transfer_manager.h"
 
 typedef struct DrawingSessionButtonSprite {
@@ -174,7 +174,7 @@ BOOL DrawingSession_Init(OverlayManager *man, int *state) {
         }
         WirelessStatusIcon_Create();
         if (Comm_GetLocalNetId() == 0) {
-            sub_0205A904(1);
+            UnionRoom_SetBeaconActivity(1);
             CommWireless_SetDetectDrops(TRUE);
         }
         NARC_Delete(narc);
@@ -269,10 +269,10 @@ BOOL DrawingSession_Exit(OverlayManager *man, int *state) {
         break;
     case 1:
         CommState_SetMaxEntries(1);
-        sub_02037FF0();
+        CommState_ResumeAlternateSearch();
         UnionRoomObjects_ResetSlots(args->unk0);
         GX_SetDispSelect(GX_DISP_SELECT_MAIN_SUB);
-        sub_0205A904(0);
+        UnionRoom_SetBeaconActivity(0);
         CommWireless_SetDetectDrops(FALSE);
         (*state)++;
         break;
@@ -1423,7 +1423,7 @@ int ov37_021E76F0(DrawingSessionWork *work) {
     case 2:
     case 3:
     case 4:
-        sub_0205A904(1);
+        UnionRoom_SetBeaconActivity(1);
         if (count < work->memberCount) {
             if (work->unk_93F4 == 2) {
                 ov37_021E76D0(work, 0);
@@ -1433,7 +1433,7 @@ int ov37_021E76F0(DrawingSessionWork *work) {
         }
         break;
     case 5:
-        sub_0205A904(8);
+        UnionRoom_SetBeaconActivity(8);
         break;
     default:
         break;

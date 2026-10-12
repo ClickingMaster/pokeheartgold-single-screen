@@ -19,4 +19,4 @@
 .public _dflt
 .public _dmul
 .public FieldSystem_StartWarpSpin
-.public ov01_021F92A0
+.public MapObject_TryUpdateDraw

@@ -148,13 +148,13 @@ void PrintErrorMessageAndReset(void) {
     SetMasterBrightnessNeutral(PM_LCD_BOTTOM);
     SetBlendBrightness(0, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BD | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG0), SCREEN_MASK_MAIN | SCREEN_MASK_SUB);
 
-    sub_02038D90();
+    CommState_StopForReset();
 
     while (TRUE) {
         HandleDSLidAction();
         Comm_Update();
 
-        if (sub_02039AA4()) {
+        if (CommState_IsLinkDown()) {
             break;
         }
 

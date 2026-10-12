@@ -7,7 +7,7 @@
 #include "pokemon.h"
 #include "scrcmd.h"
 
-extern void ov01_021F9048(LocalMapObject *map_object);
+extern void FollowMonBillboard_ResetPalette(LocalMapObject *map_object);
 extern void FollowMon_SetObjectParams(LocalMapObject *mapObject, u16 species, u8 form, BOOL shiny);
 extern u32 FollowMon_GetSpriteID(int species, u16 form, u32 gender);
 
@@ -195,7 +195,7 @@ static LocalMapObject *CreateDaycareMonSpriteInternal(MapObjectManager *object_m
     MapObject_SetFlagsBits(lmo, MAPOBJECTFLAG_START_MOVEMENT);
     MapObject_ClearFlagsBits(lmo, MAPOBJECTFLAG_NONE);
     MapObject_SetFlag29(lmo, TRUE);
-    ov01_021F9048(lmo);
+    FollowMonBillboard_ResetPalette(lmo);
 
     return lmo;
 }

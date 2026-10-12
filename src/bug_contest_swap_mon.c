@@ -119,7 +119,7 @@ typedef BOOL (*BugContestSwapMonStateFunc)(BugContestSwapMon *swapMon);
 // SwapMonText_PrintString(WithColor) pass x and y to SwapMonText_PrintOnWindow untruncated
 typedef void (*SwapMonTextPrintOnWindowUntruncated)(BgConfig *bgConfig, Window *window, MessageFormat *messageFormat, MsgData *msgData, int msgId, int bgLayer, int x, int y, u32 color, enum HeapID heapID);
 
-// unk_0200CE7C.h declares glyphId as u8; SwapMonText_PrintNumber passes it untruncated
+// message_printer_number.h declares glyphId as u8; SwapMonText_PrintNumber passes it untruncated
 void sub_0200CE7C(MessagePrinter *msgPrinter, int glyphId, u32 num, u32 ndigits, PrintingMode mode, Window *window, u32 x, u32 y);
 
 typedef struct BugContestSwapMonBgTemplates {

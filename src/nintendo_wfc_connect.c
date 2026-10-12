@@ -234,9 +234,9 @@ int GameStats_GetResponseLength(void);
 BOOL LoadOVY38(void);
 void UnloadOVY38(void);
 void CommWireless_Terminate(void);
-void sub_02039418(SaveData *saveData);
-void sub_0203946C(void);
-void sub_020399EC(void);
+void CommState_InitWfcSession(SaveData *saveData);
+void CommState_FreeWfcSession(void);
+void CommState_ShowRestartErrorAndHalt(void);
 void WirelessStatusIcon_SetLevel(s32 a0);
 int WCM_GetPhase(void);
 u64 DWC_CreateFriendKey(const void *data);
@@ -800,7 +800,7 @@ BOOL NintendoWfc_Init(OverlayManager *man, int *state) {
         // the definition returns BOOL; unk_020915B0.h declares it void, which changes the scheduling here
         ((BOOL(*)(void))LoadDwcOverlay)();
         LoadOVY38();
-        sub_02039FD8(HEAP_ID_67);
+        Comm_InitDwc(HEAP_ID_67);
         wfc = OverlayManager_CreateAndGetData(man, sizeof(NintendoWfcConnect), HEAP_ID_67);
         memset(wfc, 0, sizeof(NintendoWfcConnect));
         wfc->bgConfig = BgConfig_Alloc(HEAP_ID_67);
@@ -1146,7 +1146,7 @@ int NintendoWfc_SessionInit(NintendoWfcConnect *wfc) {
     if (!ov00_021EC5B4()) {
         NintendoWifiConnectArgs *args = wfc->args;
         if (args->unk24 != 0) {
-            sub_02039418(args->saveData);
+            CommState_InitWfcSession(args->saveData);
             NintendoWfc_PrintMessage(wfc, wfc->msgDataWfc, 1, 1, 0xF0F);
             NintendoWfc_SetState(wfc, 47, 2);
             NintendoWfc_ShowWaitingIcon(wfc);
@@ -1155,7 +1155,7 @@ int NintendoWfc_SessionInit(NintendoWfcConnect *wfc) {
             wfc->state = 0;
         }
     } else {
-        sub_02039418(wfc->args->saveData);
+        CommState_InitWfcSession(wfc->args->saveData);
         wfc->state = 51;
     }
     return 2;
@@ -1398,7 +1398,7 @@ int ov72_02239108(NintendoWfcConnect *wfc) {
     int choice = NintendoWfcYesNo_Run(&wfc->yesNoMenu);
     if (choice) {
         if (choice == 2) {
-            sub_0203946C();
+            CommState_FreeWfcSession();
             NintendoWfc_SetNextMode(wfc, 0, 0);
             wfc->state = 46;
         } else {
@@ -1441,7 +1441,7 @@ int ov72_02239198(NintendoWfcConnect *wfc) {
 }
 
 int ov72_022391E8(NintendoWfcConnect *wfc) {
-    sub_02039418(wfc->args->saveData);
+    CommState_InitWfcSession(wfc->args->saveData);
     Sys_SetSleepDisableFlag(4);
     ov72_0223A414(wfc);
     ov00_021EC3F0(wfc->unk_002C, 2, 1, 20);
@@ -1528,7 +1528,7 @@ int ov72_022392BC(NintendoWfcConnect *wfc) {
             break;
         case 5:
         case 7:
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
         if (value < -20000 && value >= -29999) {
@@ -1606,13 +1606,13 @@ int ov72_022393CC(NintendoWfcConnect *wfc) {
             break;
         default:
             NintendoWfc_HideWaitingIcon(wfc);
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         wfc->timeoutCounter++;
         if (wfc->timeoutCounter == 3600) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -1667,7 +1667,7 @@ int ov72_022394D8(NintendoWfcConnect *wfc) {
                 break;
             default:
                 NintendoWfc_HideWaitingIcon(wfc);
-                sub_020399EC();
+                CommState_ShowRestartErrorAndHalt();
                 break;
             }
             break;
@@ -1696,13 +1696,13 @@ int ov72_022394D8(NintendoWfcConnect *wfc) {
             break;
         default:
             NintendoWfc_HideWaitingIcon(wfc);
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         wfc->timeoutCounter++;
         if (wfc->timeoutCounter == 3600) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -1748,7 +1748,7 @@ int ov72_02239638(NintendoWfcConnect *wfc) {
             wfc->httpResult = value;
             wfc->state = 53;
             NintendoWfc_HideWaitingIcon(wfc);
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         default:
             if (value > 0) {
@@ -1761,7 +1761,7 @@ int ov72_02239638(NintendoWfcConnect *wfc) {
     } else {
         wfc->timeoutCounter++;
         if (wfc->timeoutCounter == 3600) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -1880,13 +1880,13 @@ int ov72_022398BC(NintendoWfcConnect *wfc) {
             wfc->httpResult = result;
             wfc->state = 53;
             NintendoWfc_HideWaitingIcon(wfc);
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         wfc->timeoutCounter++;
         if (wfc->timeoutCounter == 3600) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -1962,13 +1962,13 @@ int ov72_02239A88(NintendoWfcConnect *wfc) {
             wfc->httpResult = result;
             wfc->state = 53;
             NintendoWfc_HideWaitingIcon(wfc);
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         wfc->timeoutCounter++;
         if (wfc->timeoutCounter == 3600) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -2110,13 +2110,13 @@ int ov72_02239D6C(NintendoWfcConnect *wfc) {
             wfc->httpResult = result;
             wfc->state = 53;
             NintendoWfc_HideWaitingIcon(wfc);
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         ++*(volatile int *)&wfc->timeoutCounter;
         if (*(volatile int *)&wfc->timeoutCounter == 3600) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -2227,7 +2227,7 @@ int ov72_0223A010(void) {
 
 int NintendoWfc_StartExit(NintendoWfcConnect *wfc) {
     WirelessStatusIcon_Destroy();
-    sub_0203946C();
+    CommState_FreeWfcSession();
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 8, 1, HEAP_ID_67);
     wfc->state = 0;
     return 4;
@@ -2283,7 +2283,7 @@ int NintendoWfc_Disconnect(NintendoWfcConnect *wfc) {
         break;
     case 1:
         if (TextPrinterCheckActive((u8)wfc->textPrinterId) == 0) {
-            sub_0203946C();
+            CommState_FreeWfcSession();
             ov00_021EC8D8();
             wfc->subState++;
         }

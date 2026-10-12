@@ -72,7 +72,7 @@
 	.public BattleRecord_GetHeader
 	.public BattleRecordHeader_GetField
 	.public FrontierCard_NewNameString
-	.public sub_02087A84
+	.public VsRecorderApp_SetResult
 	.text
 
 	thumb_func_start VsRecorder_VideoListToggleProfile
@@ -334,7 +334,7 @@ _0223C416:
 	mov r1, #1
 	ldr r0, [r5, r0]
 	mov r2, #0
-	bl sub_02087A84
+	bl VsRecorderApp_SetResult
 	ldr r0, [r5, #8]
 	add r0, r0, #1
 	str r0, [r5, #8]

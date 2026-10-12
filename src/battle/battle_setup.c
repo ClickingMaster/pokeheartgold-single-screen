@@ -20,7 +20,7 @@
 #include "communication_command.h"
 #include "unk_02035900.h"
 #include "comm_state.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 #include "unk_02055418.h"
 #include "union_room_avatar.h"
 #include "unk_0205BB1C.h"

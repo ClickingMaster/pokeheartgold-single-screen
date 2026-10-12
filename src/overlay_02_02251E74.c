@@ -3,7 +3,7 @@
 #include "fashion_case.h"
 #include "math_util.h"
 #include "field/field_motion_blur.h"
-#include "overlay_01_021F944C.h"
+#include "field/map_object_render.h"
 #include "field/field_follow_mon.h"
 #include "screen_fade.h"
 #include "script_pokemon_util.h"

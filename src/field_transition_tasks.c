@@ -16,7 +16,7 @@
 #include "player_avatar.h"
 #include "screen_fade.h"
 #include "task.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 #include "unk_02055BF0.h"
 #include "map_object_movement_commands.h"
 
@@ -34,7 +34,7 @@ typedef struct WiFiPlazaTaskEnv {
 // Defined in field overlay / Wi-Fi Plaza sources that have no header yet.
 BOOL DoorTransition_WalkOutOfSideDoor(FieldSystem *fieldSystem, FieldEnvSubUnk18 *work, u8 direction);
 BOOL Task_WalkOutOfDoorAfterWarp(TaskManager *taskMan);
-int sub_02054940(FieldSystem *fieldSystem, int y, fx32 x, fx32 z, u8 *outKind);
+int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int y, fx32 x, fx32 z, u8 *outKind);
 BOOL WiFiPlaza_Init(OverlayManager *man, int *state);
 BOOL WiFiPlaza_Main(OverlayManager *man, int *state);
 BOOL WiFiPlaza_Exit(OverlayManager *man, int *state);
@@ -266,7 +266,7 @@ void FieldTransition_PlaceInsideSideDoor(FieldSystem *fieldSystem) {
     } else {
         playerPosition.x += FX32_ONE * 16;
     }
-    playerPosition.y = sub_02054940(fieldSystem, playerPosition.y, playerPosition.x, playerPosition.z, NULL);
+    playerPosition.y = FieldSystem_GetTerrainHeight(fieldSystem, playerPosition.y, playerPosition.x, playerPosition.z, NULL);
     sub_0205C810(fieldSystem->playerAvatar, &playerPosition, direction);
     Camera_SetLookAtTargetAndRecalcPos(PlayerAvatar_GetPositionVector(fieldSystem->playerAvatar), fieldSystem->camera);
     Camera_SetFixedTarget(PlayerAvatar_GetPositionVector(fieldSystem->playerAvatar), fieldSystem->camera);
@@ -300,7 +300,7 @@ void FieldTransition_PlaceOffWarpStairs(FieldSystem *fieldSystem) {
         playerPosition.x -= FX32_ONE * 16;
         direction = DIR_EAST;
     }
-    playerPosition.y = sub_02054940(fieldSystem, playerPosition.y, playerPosition.x, playerPosition.z, NULL);
+    playerPosition.y = FieldSystem_GetTerrainHeight(fieldSystem, playerPosition.y, playerPosition.x, playerPosition.z, NULL);
     sub_0205C810(fieldSystem->playerAvatar, &playerPosition, direction);
     Camera_SetLookAtTargetAndRecalcPos(PlayerAvatar_GetPositionVector(fieldSystem->playerAvatar), fieldSystem->camera);
     Camera_SetFixedTarget(PlayerAvatar_GetPositionVector(fieldSystem->playerAvatar), fieldSystem->camera);

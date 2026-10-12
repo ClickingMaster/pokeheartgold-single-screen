@@ -10,14 +10,14 @@
 	.include "field_transition_finish.inc"
 
 	.public gOverlayTemplate_Battle
-	.public _021028B4
-	.public _021028C4
+	.public gOverlayTemplate_VsRecorderMenu
+	.public gOverlayTemplate_VsRecorderMenuFromTerminal
 	.public gNatureStatMods
 
 	.text
 
-	thumb_func_start sub_02087C38
-sub_02087C38: ; 0x02087C38
+	thumb_func_start VsRecorderApp_RunPlayback
+VsRecorderApp_RunPlayback: ; 0x02087C38
 	push {r4, r5, r6, lr}
 	sub sp, #8
 	add r5, r0, #0
@@ -228,32 +228,32 @@ _02087E00: .word 0x00000874
 _02087E04: .word 0x0000047B
 _02087E08: .word 0x0000045D
 _02087E0C: .word gOverlayTemplate_Battle
-	thumb_func_end sub_02087C38
+	thumb_func_end VsRecorderApp_RunPlayback
 
 	.rodata
 
-	.public _02102830
-	.public _02102830
-_02102830:
-	.word sub_02087B10, sub_02087B64, sub_02087BAC, 0xFFFFFFFF
-	.public _02102840
-_02102840:
-	.word sub_02087B58, sub_02087B64, sub_02087BAC, 0xFFFFFFFF
-	.public _02102850
-_02102850:
-	.word sub_02087B4C, sub_02087B64, sub_02087BAC, 0xFFFFFFFF
-	.public _02102860
-_02102860:
-	.word sub_02087B40, sub_02087B64, sub_02087BAC, 0xFFFFFFFF
-	.public _02102870
-_02102870:
-	.word sub_02087B34, sub_02087B64, sub_02087BAC, 0xFFFFFFFF
-	.public _02102880
-_02102880:
-	.word sub_02087B28, sub_02087B64, sub_02087BAC, 0xFFFFFFFF
-	.public _02102890
-_02102890:
-	.word sub_02087B1C, sub_02087B64, sub_02087BAC, 0xFFFFFFFF
+	.public gOverlayTemplate_VsRecorderApp
+	.public gOverlayTemplate_VsRecorderApp
+gOverlayTemplate_VsRecorderApp:
+	.word VsRecorderApp_InitMode0, VsRecorderApp_Main, VsRecorderApp_Exit, 0xFFFFFFFF
+	.public gOverlayTemplate_VsRecorderAppMode6
+gOverlayTemplate_VsRecorderAppMode6:
+	.word VsRecorderApp_InitMode6, VsRecorderApp_Main, VsRecorderApp_Exit, 0xFFFFFFFF
+	.public gOverlayTemplate_VsRecorderAppMode5
+gOverlayTemplate_VsRecorderAppMode5:
+	.word VsRecorderApp_InitMode5, VsRecorderApp_Main, VsRecorderApp_Exit, 0xFFFFFFFF
+	.public gOverlayTemplate_VsRecorderAppMode4
+gOverlayTemplate_VsRecorderAppMode4:
+	.word VsRecorderApp_InitMode4, VsRecorderApp_Main, VsRecorderApp_Exit, 0xFFFFFFFF
+	.public gOverlayTemplate_VsRecorderAppMode3
+gOverlayTemplate_VsRecorderAppMode3:
+	.word VsRecorderApp_InitMode3, VsRecorderApp_Main, VsRecorderApp_Exit, 0xFFFFFFFF
+	.public gOverlayTemplate_VsRecorderAppMode2
+gOverlayTemplate_VsRecorderAppMode2:
+	.word VsRecorderApp_InitMode2, VsRecorderApp_Main, VsRecorderApp_Exit, 0xFFFFFFFF
+	.public gOverlayTemplate_VsRecorderAppMode1
+gOverlayTemplate_VsRecorderAppMode1:
+	.word VsRecorderApp_InitMode1, VsRecorderApp_Main, VsRecorderApp_Exit, 0xFFFFFFFF
 	.public _021028A0
 _021028A0:
 	.word 0x61
@@ -264,12 +264,12 @@ _021028A0:
 
 	.data
 
-	.public _02110594
-_02110594:
-	.word _02102830
-	.word _02102890
-	.word _02102880
-	.word _02102870
-	.word _02102860
-	.word _02102850
-	.word _02102840
+	.public gVsRecorderAppTemplates
+gVsRecorderAppTemplates:
+	.word gOverlayTemplate_VsRecorderApp
+	.word gOverlayTemplate_VsRecorderAppMode1
+	.word gOverlayTemplate_VsRecorderAppMode2
+	.word gOverlayTemplate_VsRecorderAppMode3
+	.word gOverlayTemplate_VsRecorderAppMode4
+	.word gOverlayTemplate_VsRecorderAppMode5
+	.word gOverlayTemplate_VsRecorderAppMode6

@@ -256,9 +256,9 @@ BOOL LoadOVY38(void);
 void UnloadOVY38(void);
 void CommWireless_Terminate(void);
 void WirelessStatusIcon_SetLevel(int a0);
-void sub_02039528(SaveData *saveData);
-void sub_0203957C(void);
-void sub_020399EC(void);
+void CommState_InitWiiMessageWfcSession(SaveData *saveData);
+void CommState_FreeWiiMessageWfcSession(void);
+void CommState_ShowRestartErrorAndHalt(void);
 void ov00_021EC294(void *(*alloc)(int, u32, int), void (*free)(int, void *));
 int ov00_021EC9D4(void);
 void ov00_021ECB40(void);
@@ -487,7 +487,7 @@ void WiiMessageSettings_LoadNetworkOverlays(WiiMessageSettings *app) {
         HandleLoadOverlay(FS_OVERLAY_ID(OVY_70), OVY_LOAD_ASYNC);
         LoadDwcOverlay();
         LoadOVY38();
-        sub_02039FD8(HEAP_ID_115);
+        Comm_InitDwc(HEAP_ID_115);
         app->expHeapMemory = Heap_Alloc(HEAP_ID_115, 0x20020);
         app->expHeap = NNS_FndCreateExpHeapEx((void *)(((u32)app->expHeapMemory + 0x1F) & ~0x1F), 0x20000, 0);
         CommWireless_StartUp();
@@ -682,7 +682,7 @@ void *ov75_02246EAC(WiiMessageSettings *app) {
 }
 
 void ov75_02246EDC(WiiMessageSettings *app) {
-    if (sub_0203A05C(app->saveData)) {
+    if (Comm_HasWifiProfile(app->saveData)) {
         SetFlag970(Save_VarsFlags_Get(app->saveData));
     }
     Heap_Free(app->childArgs);
@@ -728,9 +728,9 @@ BOOL WiiMessageSettingsScreen_Init(OverlayManager *man, int *state) {
 
     switch (WiiMessageSettings_GetScreenStartState(screen->app)) {
     case WMS_STATE_START_CONNECT:
-        if (ov00_021EC5B4() == 0 && sub_0203A05C(screen->app->saveData) == TRUE) {
+        if (ov00_021EC5B4() == 0 && Comm_HasWifiProfile(screen->app->saveData) == TRUE) {
             screen->state = WMS_STATE_START_CONNECT;
-            sub_02039528(screen->app->saveData);
+            CommState_InitWiiMessageWfcSession(screen->app->saveData);
             WirelessStatusIcon_Create();
         } else {
             screen->state = WMS_STATE_MAIN_MENU;
@@ -1525,7 +1525,7 @@ BOOL WiiMessageSettingsScreen_ConfirmConnect(WiiMessageSettingsScreen *screen) {
         }
         break;
     case 4:
-        if (sub_0203A05C(screen->app->saveData) == FALSE) {
+        if (Comm_HasWifiProfile(screen->app->saveData) == FALSE) {
             WiiMessageSettings_SetNextApp(screen->app, WII_MESSAGE_SETTINGS_APP_OV44, 0);
             WiiMessageSettings_SetScreenStartState(screen->app, WMS_STATE_START_CONNECT);
             screen->state = WMS_STATE_FADE_OUT;
@@ -1548,7 +1548,7 @@ BOOL ov75_02248684(WiiMessageSettingsScreen *screen) {
         WiiMessageSettingsScreen_ShowWaitingIcon(screen);
     } else if (input == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(screen->yesNoPrompt);
-        sub_0203957C();
+        CommState_FreeWiiMessageWfcSession();
         WiiMessageSettings_SetNextApp(screen->app, WII_MESSAGE_SETTINGS_APP_QUIT, 0);
         screen->state = WMS_STATE_FADE_OUT;
     }
@@ -1563,7 +1563,7 @@ BOOL WiiMessageSettingsScreen_PrintDisconnecting(WiiMessageSettingsScreen *scree
 }
 
 BOOL WiiMessageSettingsScreen_Disconnect(WiiMessageSettingsScreen *screen) {
-    sub_0203957C();
+    CommState_FreeWiiMessageWfcSession();
     ov00_021EC8D8();
     WirelessStatusIcon_Destroy();
     Sys_ClearSleepDisableFlag(4);
@@ -1586,7 +1586,7 @@ BOOL WiiMessageSettingsScreen_PrintDisconnected(WiiMessageSettingsScreen *screen
 BOOL WiiMessageSettingsScreen_StartConnect(WiiMessageSettingsScreen *screen) {
     switch (screen->subState) {
     case 0:
-        sub_02039528(screen->app->saveData);
+        CommState_InitWiiMessageWfcSession(screen->app->saveData);
         WirelessStatusIcon_Create();
         WiiMessageSettingsScreen_PrintMessage(screen, screen->wfcMsgData, msg_0778_00001, 1, 0xF0F);
         WiiMessageSettingsScreen_ShowWaitingIcon(screen);
@@ -1627,7 +1627,7 @@ BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen) {
             ov00_021EC210();
             ov00_021EC8D8();
             WirelessStatusIcon_Destroy();
-            sub_0203957C();
+            CommState_FreeWiiMessageWfcSession();
             Sys_ClearSleepDisableFlag(4);
             if (screen->app->serverSessionStarted == TRUE) {
                 GtsServer_Exit();
@@ -1685,7 +1685,7 @@ BOOL ov75_022488BC(WiiMessageSettingsScreen *screen) {
         ov00_021EC210();
         ov00_021EC8D8();
         WirelessStatusIcon_Destroy();
-        sub_0203957C();
+        CommState_FreeWiiMessageWfcSession();
         Sys_ClearSleepDisableFlag(4);
         if (screen->app->serverSessionStarted == TRUE) {
             GtsServer_Exit();
@@ -1710,7 +1710,7 @@ BOOL ov75_022488BC(WiiMessageSettingsScreen *screen) {
             break;
         case 5:
         case 7:
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
         if (errorCode < -20000 && errorCode >= -29999) {
@@ -1729,7 +1729,7 @@ BOOL WiiMessageSettingsScreen_StartServerSession(WiiMessageSettingsScreen *scree
     u64 friendKey;
 
     if (Save_SysInfo_GetDwcProfileId(sysInfo) == 0) {
-        Save_SysInfo_SetDwcProfileId(sysInfo, (s32)sub_0203A040(wifiList));
+        Save_SysInfo_SetDwcProfileId(sysInfo, (s32)Comm_GetOwnGsProfileId(wifiList));
     }
     profileId = Save_SysInfo_GetDwcProfileId(sysInfo);
     friendKey = DWC_CreateFriendKey(userData);
@@ -1780,7 +1780,7 @@ BOOL WiiMessageSettingsScreen_WaitRegistrationResponse(WiiMessageSettingsScreen 
                     screen->state = WMS_STATE_SHOW_REGISTRATION_ERROR;
                     break;
                 default:
-                    sub_020399EC();
+                    CommState_ShowRestartErrorAndHalt();
                     break;
                 }
                 break;
@@ -1796,7 +1796,7 @@ BOOL WiiMessageSettingsScreen_WaitRegistrationResponse(WiiMessageSettingsScreen 
                 break;
             default:
                 WiiMessageSettingsScreen_HideWaitingIcon(screen);
-                sub_020399EC();
+                CommState_ShowRestartErrorAndHalt();
                 break;
             }
             break;
@@ -1825,13 +1825,13 @@ BOOL WiiMessageSettingsScreen_WaitRegistrationResponse(WiiMessageSettingsScreen 
             break;
         default:
             WiiMessageSettingsScreen_HideWaitingIcon(screen);
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         screen->timeoutTimer++;
         if (screen->timeoutTimer == 3600) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return FALSE;
@@ -1952,7 +1952,7 @@ BOOL WiiMessageSettingsScreen_ConfirmRegistrationCode(WiiMessageSettingsScreen *
                         screen->state = WMS_STATE_SHOW_REGISTRATION_ERROR;
                         break;
                     default:
-                        sub_020399EC();
+                        CommState_ShowRestartErrorAndHalt();
                         break;
                     }
                     break;
@@ -1966,7 +1966,7 @@ BOOL WiiMessageSettingsScreen_ConfirmRegistrationCode(WiiMessageSettingsScreen *
                     break;
                 default:
                     GF_ASSERT(0);
-                    sub_020399EC();
+                    CommState_ShowRestartErrorAndHalt();
                     break;
                 }
                 break;
@@ -1990,13 +1990,13 @@ BOOL WiiMessageSettingsScreen_ConfirmRegistrationCode(WiiMessageSettingsScreen *
                 screen->state = WMS_STATE_SHOW_REGISTRATION_ERROR;
                 break;
             default:
-                sub_020399EC();
+                CommState_ShowRestartErrorAndHalt();
                 break;
             }
         } else {
             screen->timeoutTimer++;
             if (screen->timeoutTimer == 3600) {
-                sub_020399EC();
+                CommState_ShowRestartErrorAndHalt();
             }
         }
         break;
@@ -2103,7 +2103,7 @@ BOOL WiiMessageSettingsScreen_DisconnectAndWait(WiiMessageSettingsScreen *screen
     case 1:
         ov00_021EC8D8();
         WirelessStatusIcon_Destroy();
-        sub_0203957C();
+        CommState_FreeWiiMessageWfcSession();
         Sys_ClearSleepDisableFlag(4);
         if (screen->app->serverSessionStarted == TRUE) {
             GtsServer_Exit();
@@ -2151,7 +2151,7 @@ BOOL WiiMessageSettingsScreen_WaitCloseError(WiiMessageSettingsScreen *screen) {
 
 BOOL WiiMessageSettingsScreen_FadeOut(WiiMessageSettingsScreen *screen) {
     if (screen->state != WMS_STATE_FADE_OUT_ONLINE) {
-        sub_0203957C();
+        CommState_FreeWiiMessageWfcSession();
     }
     WirelessStatusIcon_Destroy();
     WiiMessageSettingsScreen_HideWaitingIcon(screen);
@@ -2245,7 +2245,7 @@ BOOL WiiMessageSettingsScreen_DisconnectAndQuit(WiiMessageSettingsScreen *screen
         break;
     case 1:
         if (!WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId)) {
-            sub_0203957C();
+            CommState_FreeWiiMessageWfcSession();
             ov00_021EC8D8();
             WirelessStatusIcon_Destroy();
             Sys_ClearSleepDisableFlag(4);

@@ -17,7 +17,7 @@
 #include "script_manager.h"
 #include "sound_playback.h"
 #include "task.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 
 // The darkening of Honey and Sweet Scent: a BG2 tint faded in (blend alpha), an encounter check, then faded out
 // with a "nothing happened" script when no wild Pokemon appears. Field_UseItem (Honey) and the Sweet Scent field

@@ -37,7 +37,7 @@
 #include "sound_playback.h"
 #include "comm_wireless.h"
 #include "comm_state.h"
-#include "unk_0205A44C.h"
+#include "union_room_talk.h"
 #include "union_room_objects.h"
 #include "player_avatar_movement.h"
 #include "frontier_field_support.h"
@@ -657,8 +657,8 @@ static BOOL StartMenu_HandleTouchInput(TaskManager *taskManager, FieldSystem *fi
 static void sub_0203C69C(StartMenuTaskData *startMenu, FieldSystem *fieldSystem) {
     if (CommWireless_Exists() && startMenu->unk_350) {
         UnionRoomObjects_RequestLeaveAll(fieldSystem->unk84);
-        sub_02037FF0();
-        sub_0205A904(0);
+        CommState_ResumeAlternateSearch();
+        UnionRoom_SetBeaconActivity(0);
     }
 }
 
@@ -1236,8 +1236,8 @@ static BOOL Task_StartMenu_HandleReturn_RemovedEasyChatThing(TaskManager *taskMa
         MailMessage mailMessage;
         sub_02090D60(startMenu->exitTaskEnvironment, &mailMessage);
         if (CommWireless_Exists()) {
-            sub_0205AB88(&mailMessage);
-            sub_0205AA6C(fieldSystem->unk80, &mailMessage);
+            UnionRoom_BroadcastChatMessage(&mailMessage);
+            UnionRoom_SetOwnChatMessage(fieldSystem->unk80, &mailMessage);
         }
         startMenu->state = START_MENU_STATE_10;
     } else {

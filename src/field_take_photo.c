@@ -13,8 +13,8 @@
 #include "launch_application.h"
 #include "field/field_effect_manager.h"
 #include "field/map_object_billboard_motion.h"
-#include "overlay_01_021F8D80.h"
-#include "overlay_01_021F944C.h"
+#include "field/map_object_models.h"
+#include "field/map_object_render.h"
 #include "field/field_follow_mon.h"
 #include "photo_album.h"
 #include "screen_fade.h"
@@ -383,7 +383,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
         ++taskData->state;
         break;
     case FIELD_PHOTO_DO_VIEW_STATE_3:
-        ov01_021F9FB0(fieldSystem->mapObjectManager, sub_0205F1A0(fieldSystem->mapObjectManager));
+        MapObjectRender_ReleaseUnused(fieldSystem->mapObjectManager, sub_0205F1A0(fieldSystem->mapObjectManager));
         ov01_022043D8(fieldSystem->unkC8);
         ov01_02204424(fieldSystem->unkC8);
         ov01_021EB1E8(fieldSystem->unk4->textureManager);
@@ -408,7 +408,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
         LocalMapObject *mapObject = taskData->parent->mapObjects[taskData->placeObjectCounter];
         if (mapObject != NULL) {
             if (MapObject_IsShinyPokemon(mapObject)) {
-                ov01_021F902C(1, mapObject);
+                FollowMonBillboard_LoadSequence(1, mapObject);
             }
             VecFx32 facingVec;
             MapObject_CopyFacingVector(mapObject, &facingVec);
@@ -457,7 +457,7 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
             sub_0205F484(taskData->parent->mapObjects[1]);
             LocalMapObject *mapObject = taskData->parent->mapObjects[1];
             if (MapObject_IsShinyPokemon(mapObject)) {
-                ov01_021F902C(1, mapObject);
+                FollowMonBillboard_LoadSequence(1, mapObject);
             }
         }
         Heap_Free(taskData);
@@ -611,7 +611,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
         takePhoto->state = TAKE_PHOTO_STATE_05;
         break;
     case TAKE_PHOTO_STATE_05:
-        ov01_021F9FB0(fieldSystem->mapObjectManager, sub_0205F1A0(fieldSystem->mapObjectManager));
+        MapObjectRender_ReleaseUnused(fieldSystem->mapObjectManager, sub_0205F1A0(fieldSystem->mapObjectManager));
         takePhoto->state = TAKE_PHOTO_STATE_ADJUST_PLAYER_FACING_VEC;
         break;
     case TAKE_PHOTO_STATE_ADJUST_PLAYER_FACING_VEC:
@@ -648,7 +648,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
             LocalMapObject *mapObject = takePhoto->mapObjects[takePhoto->curMon - 1];
             if (mapObject != NULL) {
                 if (MapObject_IsShinyPokemon(mapObject)) {
-                    ov01_021F902C(1, mapObject);
+                    FollowMonBillboard_LoadSequence(1, mapObject);
                 }
                 VecFx32 facingVec;
                 MapObject_CopyFacingVector(mapObject, &facingVec);
@@ -697,7 +697,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
             LocalMapObject *mapObject = takePhoto->mapObjects[1];
             if (mapObject != NULL) {
                 if (MapObject_IsShinyPokemon(mapObject)) {
-                    ov01_021F902C(1, mapObject);
+                    FollowMonBillboard_LoadSequence(1, mapObject);
                 }
                 VecFx32 facingVec;
                 MapObject_CopyFacingVector(mapObject, &facingVec);
@@ -826,7 +826,7 @@ static void sub_0206B82C(PlayerAvatar *playerAvatar, u8 state, u8 gender) {
     MapObjectManager *mapObjectManager = MapObject_GetManager(mapObject);
     int gfxId = MapObject_GetSpriteID(mapObject);
     sub_0205E420(mapObject);
-    ov01_021FA108(mapObjectManager, gfxId, mapObject);
+    MapObjectRender_ReleaseSpriteResources(mapObjectManager, gfxId, mapObject);
     sub_0205E38C(mapObject, spriteId);
     int r0 = PlayerAvatar_GetUnk34(playerAvatar);
     if (r0 != 0) {

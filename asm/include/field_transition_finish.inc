@@ -1,10 +1,10 @@
-	.public sub_02087C38
-	.public _02102830
-	.public _02102840
-	.public _02102850
-	.public _02102860
-	.public _02102870
-	.public _02102880
-	.public _02102890
+	.public VsRecorderApp_RunPlayback
+	.public gOverlayTemplate_VsRecorderApp
+	.public gOverlayTemplate_VsRecorderAppMode6
+	.public gOverlayTemplate_VsRecorderAppMode5
+	.public gOverlayTemplate_VsRecorderAppMode4
+	.public gOverlayTemplate_VsRecorderAppMode3
+	.public gOverlayTemplate_VsRecorderAppMode2
+	.public gOverlayTemplate_VsRecorderAppMode1
 	.public _021028A0
-	.public _02110594
+	.public gVsRecorderAppTemplates

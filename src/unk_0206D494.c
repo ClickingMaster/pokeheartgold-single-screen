@@ -32,7 +32,7 @@
 #include "sys_flags.h"
 #include "task.h"
 #include "sound_playback.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 #include "map_object_movement_utilities.h"
 #include "map_object_movement_commands.h"
 
@@ -222,7 +222,7 @@ static u32 sub_0206D7B8(LocalMapObject *object, u32 x, u32 height, u32 y) {
     VecFx32 position;
     MapObject_CopyPositionVector(object, &position);
     u32 flags = 0;
-    if (sub_020549F4(MapObject_GetFieldSystem(object), &position, x, y, &unk) == 1) {
+    if (FieldSystem_CheckCollisionHeightAndGimmick(MapObject_GetFieldSystem(object), &position, x, y, &unk) == 1) {
         flags |= 1;
     }
     if (MetatileBehavior_IsIce(GetMetatileBehavior(MapObject_GetFieldSystem(object), x, y)) == FALSE) {

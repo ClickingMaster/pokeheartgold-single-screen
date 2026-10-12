@@ -45,8 +45,8 @@
 #include "overlay_01_021EA824.h"
 #include "field/field_effect_manager.h"
 #include "field/bottom_screen_app.h"
-#include "overlay_01_021F8D80.h"
-#include "overlay_01_021F944C.h"
+#include "field/map_object_models.h"
+#include "field/map_object_render.h"
 #include "field_poison_effect.h"
 #include "field/field_follow_mon.h"
 #include "player_avatar.h"
@@ -113,7 +113,7 @@ static void FieldMap_VBlankCallback(void *fsys) {
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
 
-    sub_02023910(ov01_021FA1D0(sub_0205F1A0(fieldSystem->mapObjectManager)));
+    sub_02023910(MapObjectRender_GetBillboards(sub_0205F1A0(fieldSystem->mapObjectManager)));
 }
 
 BOOL FieldMap_Init(OverlayManager *man, int *state) {
@@ -300,7 +300,7 @@ BOOL FieldMap_Exit(OverlayManager *man, int *state) {
         }
 
         sub_0205E4C8(fieldSystem->mapObjectManager);
-        ov01_021F9250(fieldSystem->mapObjectManager);
+        MapObjectManager_FreeRender(fieldSystem->mapObjectManager);
 
         sub_0205F55C(fieldSystem->mapObjectManager);
         FieldEffectManager_Free(fieldSystem->fieldEffectManager);
@@ -722,7 +722,7 @@ static void ov01_021E64A4(FieldSystem *fieldSystem) {
         v0 = 5;
     }
 
-    ov01_021F91F8(fieldSystem->mapObjectManager, 32, MapObjectsToPreload_GetCount(fieldSystem->mapObjectsToPreload) + 3, MapObjectsToPreload_GetIDs(fieldSystem->mapObjectsToPreload), v0);
+    MapObjectManager_InitRender(fieldSystem->mapObjectManager, 32, MapObjectsToPreload_GetCount(fieldSystem->mapObjectsToPreload) + 3, MapObjectsToPreload_GetIDs(fieldSystem->mapObjectsToPreload), v0);
     ov01_022057DC(fieldSystem->mapObjectManager);
     MapObjectModelList_Init(fieldSystem->fieldEffectManager);
     PlayerAvatar_InitMapFeatures(fieldSystem->playerAvatar);

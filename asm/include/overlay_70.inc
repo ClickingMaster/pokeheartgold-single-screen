@@ -212,12 +212,12 @@
 .public CommWireless_StartUp
 .public CommWireless_IsStartedUp
 .public CommWireless_Terminate
-.public sub_02039418
-.public sub_0203946C
-.public sub_020399EC
+.public CommState_InitWfcSession
+.public CommState_FreeWfcSession
+.public CommState_ShowRestartErrorAndHalt
 .public CommState_SetError
-.public sub_02039FB8
-.public sub_02039FD8
+.public Comm_MarkLocationSeen
+.public Comm_InitDwc
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
 .public WirelessStatusIcon_SetLevel

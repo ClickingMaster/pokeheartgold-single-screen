@@ -14,7 +14,7 @@
 .public TaskManager_GetFieldSystem
 .public TaskManager_GetEnvironment
 .public GetMetatileBehavior
-.public sub_02054940
+.public FieldSystem_GetTerrainHeight
 .public FieldTransition_EnterThroughSideDoor
 .public FieldTransition_EnterFromWarpStairs
 .public FieldTransition_EnterWithDoorExit

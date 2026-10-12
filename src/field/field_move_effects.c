@@ -161,8 +161,8 @@ extern Field3dObjectTask *(*const sScriptFieldMoveEffectCreateFuncs[])(FieldSyst
 extern BOOL (*const sScriptFieldMoveEffectIsFinishedFuncs[])(Field3dObjectTask *task);
 
 // Not declared in any header yet.
-BOOL sub_02054C20(FieldSystem *fieldSystem, int buildModel, MapProp **outProp, int *outIdx);
-void sub_02054DC8(int idx, int width, VecFx32 *pos);
+BOOL FieldSystem_FindMapProp(FieldSystem *fieldSystem, int buildModel, MapProp **outProp, int *outIdx);
+void Terrain_GetChunkOrigin(int idx, int width, VecFx32 *pos);
 NNSG3dResFileHeader **AreaDataManager_GetMapPropModel(u32 mapPropId, AreaDataManager *areaDataManager);
 void Field3dObject_SetXRotation(Field3dObject *object, u16 angle, int axis);
 
@@ -242,13 +242,13 @@ void HallOfFame_StartBallAnim(FieldSystem *fieldSystem, u8 numBalls) {
     VecFx32 machinePos;
     HallOfFameBallAnim *env;
 
-    if (sub_02054C20(fieldSystem, HALL_OF_FAME_MACHINE, &machine, &machineIndex)) {
+    if (FieldSystem_FindMapProp(fieldSystem, HALL_OF_FAME_MACHINE, &machine, &machineIndex)) {
         env = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(HallOfFameBallAnim));
         env->numBalls = numBalls;
         env->numPlaced = 0;
         env->timer = 0;
         env->state = 0;
-        sub_02054DC8(machineIndex, MapMatrix_GetWidth(fieldSystem->mapMatrix), &tileCenter);
+        Terrain_GetChunkOrigin(machineIndex, MapMatrix_GetWidth(fieldSystem->mapMatrix), &tileCenter);
         MapProp_GetTranslation(&machinePos, machine);
         env->basePos = machinePos;
         env->basePos.x += tileCenter.x;

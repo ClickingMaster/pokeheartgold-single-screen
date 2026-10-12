@@ -67,7 +67,7 @@ void ScriptMenu_SetAnchorRight(struct ScriptMenu *menu, int set);
 void ScriptMenu_SetAnchorBottom(struct ScriptMenu *menu, int set);
 void ScriptMenu_AddListItem(struct ScriptMenu *menu, int a1, int a2, int a3);
 void ov01_021F7704(LocalMapObject *object);
-void ov01_021F9408(LocalMapObject *object, u32 dir);
+void MapObject_SetFacingAndUpdateDraw(LocalMapObject *object, u32 dir);
 u8 FollowMonObject_IsLarge(LocalMapObject *object);
 void MapObject_GetCoordsBehind(LocalMapObject *object, int *p_x, int *p_y);
 void TallGrass_SpawnAt(LocalMapObject *object, int a1, int x, int y, int a4);

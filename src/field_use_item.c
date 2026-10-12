@@ -36,7 +36,7 @@
 #include "task.h"
 #include "text.h"
 #include "field_interaction.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 #include "map_object_movement_commands.h"
 #include "frontier_field_support.h"
 
@@ -714,7 +714,7 @@ static PartyMenuArgs *_CreateGracideaWork(FieldSystem *fieldSystem) {
 static void ItemMenuUseFunc_VSRecorder(struct ItemMenuUseData *data, const struct ItemCheckUseData *dat2) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(data->taskManager);
     StartMenuTaskData *env = TaskManager_GetEnvironment(data->taskManager);
-    sub_0203F570(fieldSystem, fieldSystem->saveData);
+    VsRecorder_LaunchApp(fieldSystem, fieldSystem->saveData);
     env->exitTaskEnvironment = NULL;
     StartMenu_SetExitTaskFunc(env, Task_ReturnToMenuFromVSRecorder);
 }
@@ -726,7 +726,7 @@ static BOOL ItemFieldUseFunc_VSRecorder(struct ItemFieldUseData *data) {
 
 static void *_VsRecorderInit(FieldSystem *fieldSystem) {
     FieldSystem_TryStorePlayerLocation(fieldSystem);
-    sub_0203F570(fieldSystem, fieldSystem->saveData);
+    VsRecorder_LaunchApp(fieldSystem, fieldSystem->saveData);
     return NULL;
 }
 

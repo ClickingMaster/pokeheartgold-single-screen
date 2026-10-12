@@ -40,7 +40,7 @@ typedef struct VsRecorderRankingTeamCounts {
     int counts[3];
 } VsRecorderRankingTeamCounts;
 
-// launcher (battle_transition_application_2.c): flypoint flag 27 is set
+// launcher (vs_recorder_app_2.c): flypoint flag 27 is set
 BOOL sub_02087E1C(VsRecorderWork *work);
 
 extern const VsRecorderRankingTeamCounts ov40_022453A0;    // teams per kind: 16 trainer types, 12 months, 20 species

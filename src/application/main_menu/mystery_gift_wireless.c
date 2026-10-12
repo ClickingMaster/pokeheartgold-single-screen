@@ -42,8 +42,8 @@ extern void CommState_ConnectToSlot(int a0);
 extern int CommState_IsLinked(void);
 extern void CommState_RequestShutdown(void);
 extern int sub_02037088(int a0, void *a1, void *a2);
-extern void sub_02038114(void *a0, void *a1);
-extern void sub_02038148(void *a0, int a1);
+extern void CommState_StartMysteryGiftParent(void *a0, void *a1);
+extern void CommState_StartMysteryGiftChild(void *a0, int a1);
 extern void *CommWireless_GetParentMail(int a0);
 
 // The pieces of this module that poll the work pointer read it as volatile.
@@ -130,7 +130,7 @@ void MysteryGiftComm_Task(SysTask *task, void *data) {
 
 void ov74_02229CE0(void *owner, void *a1, void *a2) {
     if (!sub_02037474()) {
-        sub_02038114(a1, a2);
+        CommState_StartMysteryGiftParent(a1, a2);
         MysteryGiftComm_Start(owner);
         MysteryGiftComm_SetState(ov74_02229BD0, 0);
     }
@@ -145,7 +145,7 @@ int ov74_02229D0C(void *a0, void *a1) {
 void ov74_02229D1C(void *owner, int a1) {
     if (!sub_02037474()) {
         void **args = OverlayManager_GetArgs(MysteryGiftApp_GetOverlayManager());
-        sub_02038148(args[2], a1);
+        CommState_StartMysteryGiftChild(args[2], a1);
         MysteryGiftComm_Start(owner);
         MysteryGiftComm_SetState(ov74_02229C44, 0);
     }

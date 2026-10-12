@@ -537,5 +537,5 @@ int ov80_0222A7EC(PlayerProfile *profile) {
 }
 
 void ov80_0222A840(SaveData *saveData) {
-    sub_02039F68(Save_WiFiHistory_Get(saveData));
+    Comm_RecordPlayerLocations(Save_WiFiHistory_Get(saveData));
 }

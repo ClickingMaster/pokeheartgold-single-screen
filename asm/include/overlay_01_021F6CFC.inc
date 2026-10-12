@@ -29,8 +29,8 @@
 .public FrontierSave_DeleteRow
 .public CommPlayerInfo_GetProfile
 .public Comm_CountConnected
-.public sub_0203A1C4
-.public sub_0203A280
+.public Comm_RegisterLinkedFriends
+.public Comm_StoreFriendFromPlayer
 .public sub_0203E30C
 .public FieldSystem_CreateTask
 .public TaskManager_Call

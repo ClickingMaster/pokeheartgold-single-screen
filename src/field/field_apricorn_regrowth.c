@@ -2,6 +2,7 @@
 
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
+#include "field/map_object_models.h"
 
 #include "field_effects.h"
 #include "map_object.h"
@@ -17,10 +18,6 @@
 #define APRICORN_REGROWTH_TEXTURE  12
 
 #define APRICORN_REGROWTH_PLAY_COUNT 5
-
-// Position of a map object's sprite: its position plus facing and the two sprite offset vectors.
-// (field_object_models.c keeps it private.)
-void ov01_021F93AC(LocalMapObject *mapObject, VecFx32 *position);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 16).
 typedef struct ApricornRegrowth {
@@ -126,7 +123,7 @@ void ApricornRegrowth_Spawn(LocalMapObject *mapObject) {
     ApricornRegrowthEffectArgs args;
     FieldEffectManager *manager = FieldEffectManager_GetFromMapObject(mapObject);
 
-    ov01_021F93AC(mapObject, &position);
+    MapObject_GetDrawPosition(mapObject, &position);
     position.z += 8 * FX32_ONE;
     args.manager = manager;
     args.regrowth = FieldEffectManager_GetRendererData(manager, 16);

@@ -156,7 +156,7 @@ ApricornRegrowth_Spawn: ; 0x021FE66C
 	add r4, r0, #0
 	add r0, r5, #0
 	add r1, sp, #0x14
-	bl ov01_021F93AC
+	bl MapObject_GetDrawPosition
 	mov r0, #2
 	ldr r1, [sp, #0x1c]
 	lsl r0, r0, #0xe

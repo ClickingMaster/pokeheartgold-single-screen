@@ -176,11 +176,11 @@
 .public LinkSync_IsSynced
 .public sub_020399FC
 .public CommState_SetError
-.public sub_02039EAC
-.public sub_02039EB4
-.public sub_02039F68
-.public sub_0203A1C4
-.public sub_0203A280
+.public Comm_InitSyncedSave
+.public Comm_SyncedSave
+.public Comm_RecordPlayerLocations
+.public Comm_RegisterLinkedFriends
+.public Comm_StoreFriendFromPlayer
 .public WirelessStatusIcon_Create
 .public Save_VarsFlags_Get
 .public sub_02055198

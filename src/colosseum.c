@@ -32,7 +32,7 @@
 BOOL sub_02037108(int command, void *data, int size);
 BOOL sub_02037088(int command, void *data, u32 size);
 BOOL sub_02036FD8(int command, void *data, u32 size);
-void sub_0203996C(u8 *selectedOrder);
+void CommState_SetSelectedOrder(u8 *selectedOrder);
 void sub_02056E60(void);
 void sub_02057E08(void);
 void sub_02057F70(void);
@@ -304,7 +304,7 @@ BOOL Task_ColosseumEntry(TaskManager *taskManager) {
         }
         break;
     case 21:
-        sub_0203996C(entry->selectedOrder);
+        CommState_SetSelectedOrder(entry->selectedOrder);
 
         if (Colosseum_WaitFieldResumed(entry)) {
             entry->timer = 5;

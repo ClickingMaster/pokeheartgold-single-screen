@@ -87,8 +87,8 @@ extern int WM_GetLinkLevel(void);
 extern fx32 FX_Sqrt(fx32 value);
 extern void CommWireless_Terminate(void);
 extern void WirelessStatusIcon_SetLevel(int a0);
-extern void sub_02038D28(SaveData *saveData);
-extern void sub_02038D64(void);
+extern void CommState_StartBeaconWatch(SaveData *saveData);
+extern void CommState_StopBeaconWatch(void);
 extern u32 CommState_GetSeenGames(void);
 extern void CommState_SetErrorWatch(s8 a0, s8 a1);
 
@@ -2168,7 +2168,7 @@ BOOL MysteryGiftApp_Exit(OverlayManager *manager, int *state) {
 void ov74_0222CE10(MysteryGiftAppData *data) {
     switch (data->unk_05C8) {
     case 28:
-        sub_02038D28(data->saveData);
+        CommState_StartBeaconWatch(data->saveData);
         data->unk_05CC = 120;
         data->unk_05C8 = 30;
         break;
@@ -2180,7 +2180,7 @@ void ov74_0222CE10(MysteryGiftAppData *data) {
         }
         data->unk_05CC--;
         if (data->unk_05CC == 0) {
-            sub_02038D64();
+            CommState_StopBeaconWatch();
             data->unk_05C8 = 29;
         }
         break;

@@ -50,8 +50,8 @@ void sub_0202C5B4(FriendRoster *data, s32 index, s32 value);
 void *CommPlayerInfo_GetExchangeToken(int netId);
 u8 CommPlayerInfo_GetCountry(int netId);
 u8 CommPlayerInfo_GetRegion(int netId);
-void sub_0203986C(void);
-int sub_0203A084(SaveData *saveData, void *friendData, u32 *index);
+void CommState_EndPlazaMatch(void);
+int Comm_FindFriendSlot(SaveData *saveData, void *friendData, u32 *index);
 void WirelessStatusIcon_ShowOnBothScreens(int a0, enum HeapID heapId);
 void ov45_0222ACB8(void *lobby, u8 game, int count, u32 id0, u32 id1, u32 id2, u32 id3);
 
@@ -296,10 +296,10 @@ BOOL PlazaGameRoster_CheckConnectionLost(PlazaGameRoster *roster) {
         if (roster->count != Comm_CountConnected()) {
             result = TRUE;
         }
-        if (sub_02039264() == 1) {
+        if (CommState_WasWifiDisconnected() == 1) {
             result = TRUE;
         }
-        if (sub_020390C4() >= 2) {
+        if (CommState_GetWifiMatchStatus() >= 2) {
             result = TRUE;
         }
         if (result == TRUE) {
@@ -317,8 +317,8 @@ BOOL PlazaGameRoster_ProcessConnectionLost(PlazaGameRoster *roster) {
     GF_ASSERT(roster->args->connectionLost == TRUE);
     if (CommPlayerInfo_Exists() == 1) {
         CommPlayerInfo_Free();
-        sub_0203986C();
-    } else if (sub_020392A0() == 1) {
+        CommState_EndPlazaMatch();
+    } else if (CommState_IsWifiInLobby() == 1) {
         return TRUE;
     }
     return FALSE;
@@ -2390,7 +2390,7 @@ void PlazaGameResults_RecordFriendPlays(PlazaGameResults *results) {
     for (i = 0; i < results->roster.count; i++) {
         u32 index;
         void *friendData = CommPlayerInfo_GetExchangeToken(results->roster.netIds[i]);
-        int result = sub_0203A084(results->roster.saveData, friendData, &index);
+        int result = Comm_FindFriendSlot(results->roster.saveData, friendData, &index);
         switch (result) {
         case 0:
         case 1:

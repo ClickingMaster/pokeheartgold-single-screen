@@ -61,8 +61,8 @@ void sub_0203753C(int a, void *b, int c);
 int Comm_GetLocalNetId(void);
 int sub_02037824(int a);
 int sub_020378AC(int netId);
-int sub_0203A084(void *a, void *b, int *c);
-u8 sub_0203A378(void *save, int a);
+int Comm_FindFriendSlot(void *a, void *b, int *c);
+u8 Comm_FindFriendIndexOfPlayer(void *save, int a);
 void DWC_CreateExchangeToken(void *a, void *b);
 
 extern CommPlayerInfo *gCommPlayerInfo;

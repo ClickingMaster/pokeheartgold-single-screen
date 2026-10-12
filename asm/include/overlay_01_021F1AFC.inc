@@ -19,7 +19,7 @@
 .public TaskManager_Call
 .public TaskManager_GetFieldSystem
 .public TaskManager_GetEnvironment
-.public sub_02054790
+.public Terrain_CalcHeightWithMode
 .public FieldBGM_SetOverride
 .public FieldBGM_GetForMapHeader
 .public FieldBGM_TryFadeOut
@@ -110,7 +110,7 @@
 .public Field_PlayerAvatar_TryLeavePoketchPose
 .public Field_PlayerMovementSavingSet
 .public Field_PlayerMovementSavingClear
-.public ov01_021FA930
+.public MapObject_ChangeBillboardSprite
 .public SurfMountEffect_Create
 .public SurfMountEffect_SetBobbing
 .public RockClimbEffect_Create

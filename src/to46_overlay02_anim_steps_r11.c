@@ -7,7 +7,7 @@ int ov02_02249BD8(void *);
 int ov02_02249C74(void *);
 u8 ov02_0224AB8C(void *);
 void ov02_0224A69C(void *, u32, u32, u32, u32);
-void ov02_02249420(void);
+void FieldMove_FadeOutToWhite(void);
 void ov02_0224AB9C(void *);
 
 int ov02_02249B60(void *p) {
@@ -65,7 +65,7 @@ int ov02_02249BD8(void *p) {
     U32(p, 0x2c) = 1;
     if (U32(p, 0x18) == 0 && ov02_0224AB8C(p) == 4) {
         U32(p, 0x18) = 1;
-        ov02_02249420();
+        FieldMove_FadeOutToWhite();
     }
     if (U32(p, 0x4c) == (0x5f << 12) && U32(p, 0x50) == (0x61 << 12)) {
         U32(p, 0x34) = 0x11;
@@ -86,14 +86,14 @@ int ov02_02249C74(void *p) {
     }
     if (U32(p, 0x18) == 0 && ov02_0224AB8C(p) == 4) {
         U32(p, 0x18) = 1;
-        ov02_02249420();
+        FieldMove_FadeOutToWhite();
     }
     if (ov02_0224AB8C(p) != 2) {
         return 0;
     }
     if (U32(p, 0x18) == 0) {
         U32(p, 0x18) = 1;
-        ov02_02249420();
+        FieldMove_FadeOutToWhite();
     }
     ov02_0224AB9C(p);
     U32(p, 0)

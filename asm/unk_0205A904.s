@@ -2,8 +2,8 @@
 	.include "unk_0205A44C.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0205A904
-sub_0205A904: ; 0x0205A904
+	thumb_func_start UnionRoom_SetBeaconActivity
+UnionRoom_SetBeaconActivity: ; 0x0205A904
 	push {r4, lr}
 	sub sp, #0x20
 	add r4, r0, #0
@@ -37,42 +37,42 @@ _0205A924: ; jump table
 _0205A940:
 	add r0, sp, #0
 	mov r1, #2
-	bl sub_0205A8B4
+	bl UnionRoom_FillStatusMembers
 	b _0205A98E
 _0205A94A:
 	add r0, sp, #0
 	mov r1, #2
-	bl sub_0205A8B4
+	bl UnionRoom_FillStatusMembers
 	b _0205A98E
 _0205A954:
 	add r0, sp, #0
 	mov r1, #5
-	bl sub_0205A8B4
+	bl UnionRoom_FillStatusMembers
 	b _0205A98E
 _0205A95E:
 	add r0, sp, #0
 	mov r1, #4
-	bl sub_0205A8B4
+	bl UnionRoom_FillStatusMembers
 	b _0205A98E
 _0205A968:
 	add r0, sp, #0
 	mov r1, #5
-	bl sub_0205A8B4
+	bl UnionRoom_FillStatusMembers
 	b _0205A98E
 _0205A972:
 	add r0, sp, #0
 	mov r1, #4
-	bl sub_0205A8B4
+	bl UnionRoom_FillStatusMembers
 	b _0205A98E
 _0205A97C:
 	add r0, sp, #0
 	mov r1, #5
-	bl sub_0205A8B4
+	bl UnionRoom_FillStatusMembers
 	b _0205A98E
 _0205A986:
 	add r0, sp, #0
 	mov r1, #4
-	bl sub_0205A8B4
+	bl UnionRoom_FillStatusMembers
 _0205A98E:
 	add r0, sp, #0
 	strb r4, [r0, #0x1c]
@@ -81,9 +81,9 @@ _0205A98E:
 	bl CommWireless_RefreshBeacon
 	add sp, #0x20
 	pop {r4, pc}
-	thumb_func_end sub_0205A904
-	thumb_func_start sub_0205A9A0
-sub_0205A9A0: ; 0x0205A9A0
+	thumb_func_end UnionRoom_SetBeaconActivity
+	thumb_func_start UnionRoom_GetOwnChatMessageMsg
+UnionRoom_GetOwnChatMessageMsg: ; 0x0205A9A0
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	mov r3, #0
@@ -159,11 +159,11 @@ _0205AA1E:
 	mov r1, #0
 	bl BufferECWord
 _0205AA3A:
-	ldr r0, _0205AA48 ; =_020FC9D4
+	ldr r0, _0205AA48 ; =gUnionRoomChatMsgs
 	lsl r1, r4, #2
 	ldr r0, [r0, r1]
 	pop {r4, r5, r6, pc}
 	nop
 _0205AA44: .word 0x0000FFFF
-_0205AA48: .word _020FC9D4
-	thumb_func_end sub_0205A9A0
+_0205AA48: .word gUnionRoomChatMsgs
+	thumb_func_end UnionRoom_GetOwnChatMessageMsg

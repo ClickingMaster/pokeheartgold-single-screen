@@ -19,7 +19,7 @@
 #include "overlay_01_021F1AFC.h"
 #include "player_avatar.h"
 #include "sound_playback.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 #include "unk_0206D494.h"
 
 // Player avatar movement control (ARM9 static 0x0205CB48-0x0205E0A0): turns the d-pad input into the player's map
@@ -927,7 +927,7 @@ u32 MapObject_GetCollisionInDirection(PlayerAvatar *avatar, LocalMapObject *mapO
     if (MapObject_IsOutsideMovementRange(mapObject, x + dx, y, z + dz) == TRUE) {
         result |= 1;
     }
-    if (sub_020549F4(MapObject_GetFieldSystem(mapObject), &position, x + dx, z + dz, (u32 *)&heightFlag) == TRUE) {
+    if (FieldSystem_CheckCollisionHeightAndGimmick(MapObject_GetFieldSystem(mapObject), &position, x + dx, z + dz, (u32 *)&heightFlag) == TRUE) {
         result |= 2;
         if (heightFlag != 0) {
             result |= 8;

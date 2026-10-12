@@ -88,7 +88,7 @@ extern void *UnionRoom_GetRecord(void *, int);
 extern void UnionRoomObjects_UpdatePlayers(Manager *, void *, MapObjectManager *, void *);
 extern void UnionRoomObjects_UpdateMapObjects(Manager *, MapObjectManager *);
 extern BOOL UnionRoomObjects_UpdateGroup(Manager *, int, void *, void *);
-extern const u16 _020FC824[];
+extern const u16 gUnionRoomGroupFirstSlot[];
 
 void UnionRoomSlot_DestroyEffects(Slot *, BOOL);
 void UnionRoomSlot_TickEmote(Slot *);

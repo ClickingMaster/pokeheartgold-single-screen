@@ -8,7 +8,7 @@
 #include "metatile_behavior.h"
 #include "player_avatar.h"
 #include "script_manager.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 
 void sub_0203DB6C(void);
 void sub_0203DB70(void);

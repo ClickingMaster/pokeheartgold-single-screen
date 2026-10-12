@@ -14,7 +14,7 @@
 #include "math_util.h"
 #include "metatile_behavior.h"
 #include "save_arrays.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 
 #define PAL_PARK_AREA_NONE     0
 #define POINTS_LOST_PER_SECOND 2

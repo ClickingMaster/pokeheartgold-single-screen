@@ -47,7 +47,7 @@
 .public FieldEffect_Destroy
 .public FieldEffect_IsActive
 .public MIi_CpuClearFast
-.public _020FC824
+.public gUnionRoomGroupFirstSlot
 .public ov01_021FD8E8
 .public UnionChatMarker_Spawn
 

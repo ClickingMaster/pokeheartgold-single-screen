@@ -13,8 +13,8 @@
 
 	.text
 
-	thumb_func_start sub_02078834
-sub_02078834: ; 0x02078834
+	thumb_func_start Task_WifiClub
+Task_WifiClub: ; 0x02078834
 	push {r4, r5, r6, lr}
 	add r6, r0, #0
 	bl TaskManager_GetFieldSystem
@@ -73,7 +73,7 @@ _02078894:
 	cmp r0, #1
 	bne _020788E6
 	ldr r0, [r5, #0xc]
-	bl sub_0203A05C
+	bl Comm_HasWifiProfile
 	cmp r0, #0
 	beq _020788E6
 	mov r0, #0xa
@@ -83,7 +83,7 @@ _02078894:
 	strh r1, [r0]
 	b _02078B20
 _020788B8:
-	ldr r1, _02078B24 ; =_02101290
+	ldr r1, _02078B24 ; =gOverlayTemplate_WifiClub
 	ldr r2, [r4]
 	add r0, r6, #0
 	bl CallApplicationAsTask
@@ -93,7 +93,7 @@ _020788B8:
 	b _02078B20
 _020788CA:
 	ldr r0, [r5, #0xc]
-	bl sub_0203A05C
+	bl Comm_HasWifiProfile
 	cmp r0, #0
 	beq _020788DE
 	ldr r0, [r5, #0xc]
@@ -284,7 +284,7 @@ _02078A2C:
 	add r1, r5, #0
 	mov r2, #0xb
 	mov r3, #1
-	bl sub_02078B9C
+	bl WifiClub_LaunchGameEntry
 	ldr r0, [r4, #4]
 	add r0, r0, #1
 	str r0, [r4, #4]
@@ -295,14 +295,14 @@ _02078A3E:
 	cmp r0, #0
 	bne _02078B20
 	add r0, r4, #0
-	bl sub_02078BD8
+	bl WifiClub_FinishGameEntry
 	str r0, [r4, #4]
 	b _02078B20
 _02078A52:
 	ldr r2, [r4, #0x14]
 	add r0, r5, #0
 	mov r1, #0xb
-	bl sub_02078C18
+	bl WifiClub_LaunchSwalotPlop
 	str r0, [r4, #0x10]
 	ldr r0, [r4, #4]
 	add r0, r0, #1
@@ -316,13 +316,13 @@ _02078A66:
 	mov r0, #2
 	str r0, [r4, #4]
 	ldr r0, [r4, #0x10]
-	bl sub_02078C60
+	bl WifiClub_FinishSwalotPlop
 	b _02078B20
 _02078A7C:
 	add r1, r5, #0
 	mov r2, #0xb
 	mov r3, #2
-	bl sub_02078B9C
+	bl WifiClub_LaunchGameEntry
 	ldr r0, [r4, #4]
 	add r0, r0, #1
 	str r0, [r4, #4]
@@ -333,14 +333,14 @@ _02078A8E:
 	cmp r0, #0
 	bne _02078B20
 	add r0, r4, #0
-	bl sub_02078BD8
+	bl WifiClub_FinishGameEntry
 	str r0, [r4, #4]
 	b _02078B20
 _02078AA2:
 	ldr r2, [r4, #0x14]
 	add r0, r5, #0
 	mov r1, #0xb
-	bl sub_02078C74
+	bl WifiClub_LaunchMimeJrTop
 	str r0, [r4, #0x10]
 	ldr r0, [r4, #4]
 	add r0, r0, #1
@@ -354,13 +354,13 @@ _02078AB6:
 	mov r0, #2
 	str r0, [r4, #4]
 	ldr r0, [r4, #0x10]
-	bl sub_02078CB4
+	bl WifiClub_FinishMimeJrTop
 	b _02078B20
 _02078ACC:
 	add r1, r5, #0
 	mov r2, #0xb
 	mov r3, #3
-	bl sub_02078B9C
+	bl WifiClub_LaunchGameEntry
 	ldr r0, [r4, #4]
 	add r0, r0, #1
 	str r0, [r4, #4]
@@ -371,14 +371,14 @@ _02078ADE:
 	cmp r0, #0
 	bne _02078B20
 	add r0, r4, #0
-	bl sub_02078BD8
+	bl WifiClub_FinishGameEntry
 	str r0, [r4, #4]
 	b _02078B20
 _02078AF2:
 	ldr r2, [r4, #0x14]
 	add r0, r5, #0
 	mov r1, #0xb
-	bl sub_02078CC8
+	bl WifiClub_LaunchWobbuffetPop
 	str r0, [r4, #0x10]
 	ldr r0, [r4, #4]
 	add r0, r0, #1
@@ -392,7 +392,7 @@ _02078B06:
 	mov r0, #2
 	str r0, [r4, #4]
 	ldr r0, [r4, #0x10]
-	bl sub_02078D10
+	bl WifiClub_FinishWobbuffetPop
 	b _02078B20
 _02078B1C:
 	mov r0, #1
@@ -401,12 +401,12 @@ _02078B20:
 	mov r0, #0
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-_02078B24: .word _02101290
+_02078B24: .word gOverlayTemplate_WifiClub
 _02078B28: .word 0x00040100
-	thumb_func_end sub_02078834
+	thumb_func_end Task_WifiClub
 
-	thumb_func_start sub_02078B2C
-sub_02078B2C: ; 0x02078B2C
+	thumb_func_start WifiClubTask_New
+WifiClubTask_New: ; 0x02078B2C
 	push {r4, lr}
 	mov r0, #0xb
 	mov r1, #0x18
@@ -425,46 +425,46 @@ sub_02078B2C: ; 0x02078B2C
 	add r0, r4, #0
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end sub_02078B2C
+	thumb_func_end WifiClubTask_New
 
-	thumb_func_start sub_02078B58
-sub_02078B58: ; 0x02078B58
+	thumb_func_start CallTask_WifiClub
+CallTask_WifiClub: ; 0x02078B58
 	push {r4, lr}
 	add r4, r0, #0
-	bl sub_02078B2C
+	bl WifiClubTask_New
 	add r2, r0, #0
 	ldr r0, [r2]
 	mov r1, #2
 	str r1, [r0, #4]
-	ldr r1, _02078B74 ; =sub_02078834
+	ldr r1, _02078B74 ; =Task_WifiClub
 	add r0, r4, #0
 	bl TaskManager_Call
 	pop {r4, pc}
 	nop
-_02078B74: .word sub_02078834
-	thumb_func_end sub_02078B58
+_02078B74: .word Task_WifiClub
+	thumb_func_end CallTask_WifiClub
 
-	thumb_func_start sub_02078B78
-sub_02078B78: ; 0x02078B78
+	thumb_func_start CallTask_WifiClubWithResult
+CallTask_WifiClubWithResult: ; 0x02078B78
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
-	bl sub_02078B2C
+	bl WifiClubTask_New
 	add r2, r0, #0
 	ldr r0, [r2]
 	mov r1, #1
 	str r1, [r0, #4]
-	ldr r1, _02078B98 ; =sub_02078834
+	ldr r1, _02078B98 ; =Task_WifiClub
 	add r0, r5, #0
 	str r4, [r2, #8]
 	bl TaskManager_Call
 	pop {r3, r4, r5, pc}
 	nop
-_02078B98: .word sub_02078834
-	thumb_func_end sub_02078B78
+_02078B98: .word Task_WifiClub
+	thumb_func_end CallTask_WifiClubWithResult
 
-	thumb_func_start sub_02078B9C
-sub_02078B9C: ; 0x02078B9C
+	thumb_func_start WifiClub_LaunchGameEntry
+WifiClub_LaunchGameEntry: ; 0x02078B9C
 	push {r4, r5, r6, lr}
 	add r6, r0, #0
 	add r5, r1, #0
@@ -476,8 +476,8 @@ sub_02078B9C: ; 0x02078B9C
 	strb r4, [r2]
 	mov r0, #2
 	strb r0, [r2, #1]
-	ldr r0, _02078BD0 ; =_0210125C
-	ldr r1, _02078BD4 ; =_02101280
+	ldr r0, _02078BD0 ; =gWifiClubGameMaxPlayers
+	ldr r1, _02078BD4 ; =gOverlayTemplate_WifiClubGameEntry
 	ldrb r0, [r0, r4]
 	strb r0, [r2, #2]
 	mov r0, #0
@@ -490,12 +490,12 @@ sub_02078B9C: ; 0x02078B9C
 	bl FieldSystem_LaunchApplication
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-_02078BD0: .word _0210125C
-_02078BD4: .word _02101280
-	thumb_func_end sub_02078B9C
+_02078BD0: .word gWifiClubGameMaxPlayers
+_02078BD4: .word gOverlayTemplate_WifiClubGameEntry
+	thumb_func_end WifiClub_LaunchGameEntry
 
-	thumb_func_start sub_02078BD8
-sub_02078BD8: ; 0x02078BD8
+	thumb_func_start WifiClub_FinishGameEntry
+WifiClub_FinishGameEntry: ; 0x02078BD8
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #0x10]
@@ -532,10 +532,10 @@ _02078C08:
 	ldr r0, [r4, #4]
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end sub_02078BD8
+	thumb_func_end WifiClub_FinishGameEntry
 
-	thumb_func_start sub_02078C18
-sub_02078C18: ; 0x02078C18
+	thumb_func_start WifiClub_LaunchSwalotPlop
+WifiClub_LaunchSwalotPlop: ; 0x02078C18
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	add r0, r1, #0
@@ -558,7 +558,7 @@ sub_02078C18: ; 0x02078C18
 	str r0, [r4, #0x34]
 	ldr r0, _02078C58 ; =FS_OVERLAY_ID(OVY_90)
 	bl HandleLoadOverlay
-	ldr r1, _02078C5C ; =_02101260
+	ldr r1, _02078C5C ; =gOverlayTemplate_SwalotPlop
 	add r0, r5, #0
 	add r2, r4, #0
 	bl FieldSystem_LaunchApplication
@@ -566,11 +566,11 @@ sub_02078C18: ; 0x02078C18
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 _02078C58: .word FS_OVERLAY_ID(OVY_90)
-_02078C5C: .word _02101260
-	thumb_func_end sub_02078C18
+_02078C5C: .word gOverlayTemplate_SwalotPlop
+	thumb_func_end WifiClub_LaunchSwalotPlop
 
-	thumb_func_start sub_02078C60
-sub_02078C60: ; 0x02078C60
+	thumb_func_start WifiClub_FinishSwalotPlop
+WifiClub_FinishSwalotPlop: ; 0x02078C60
 	push {r3, lr}
 	bl Heap_Free
 	ldr r0, _02078C70 ; =FS_OVERLAY_ID(OVY_90)
@@ -578,10 +578,10 @@ sub_02078C60: ; 0x02078C60
 	pop {r3, pc}
 	nop
 _02078C70: .word FS_OVERLAY_ID(OVY_90)
-	thumb_func_end sub_02078C60
+	thumb_func_end WifiClub_FinishSwalotPlop
 
-	thumb_func_start sub_02078C74
-sub_02078C74: ; 0x02078C74
+	thumb_func_start WifiClub_LaunchMimeJrTop
+WifiClub_LaunchMimeJrTop: ; 0x02078C74
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	add r0, r1, #0
@@ -600,7 +600,7 @@ sub_02078C74: ; 0x02078C74
 	str r0, [r4, #0x34]
 	ldr r0, _02078CAC ; =FS_OVERLAY_ID(OVY_90)
 	bl HandleLoadOverlay
-	ldr r1, _02078CB0 ; =_02101270
+	ldr r1, _02078CB0 ; =gOverlayTemplate_MimeJrTop
 	add r0, r5, #0
 	add r2, r4, #0
 	bl FieldSystem_LaunchApplication
@@ -608,11 +608,11 @@ sub_02078C74: ; 0x02078C74
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 _02078CAC: .word FS_OVERLAY_ID(OVY_90)
-_02078CB0: .word _02101270
-	thumb_func_end sub_02078C74
+_02078CB0: .word gOverlayTemplate_MimeJrTop
+	thumb_func_end WifiClub_LaunchMimeJrTop
 
-	thumb_func_start sub_02078CB4
-sub_02078CB4: ; 0x02078CB4
+	thumb_func_start WifiClub_FinishMimeJrTop
+WifiClub_FinishMimeJrTop: ; 0x02078CB4
 	push {r3, lr}
 	bl Heap_Free
 	ldr r0, _02078CC4 ; =FS_OVERLAY_ID(OVY_90)
@@ -620,10 +620,10 @@ sub_02078CB4: ; 0x02078CB4
 	pop {r3, pc}
 	nop
 _02078CC4: .word FS_OVERLAY_ID(OVY_90)
-	thumb_func_end sub_02078CB4
+	thumb_func_end WifiClub_FinishMimeJrTop
 
-	thumb_func_start sub_02078CC8
-sub_02078CC8: ; 0x02078CC8
+	thumb_func_start WifiClub_LaunchWobbuffetPop
+WifiClub_LaunchWobbuffetPop: ; 0x02078CC8
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	add r0, r1, #0
@@ -646,7 +646,7 @@ sub_02078CC8: ; 0x02078CC8
 	str r0, [r4, #0x34]
 	ldr r0, _02078D08 ; =FS_OVERLAY_ID(OVY_90)
 	bl HandleLoadOverlay
-	ldr r1, _02078D0C ; =_021012A0
+	ldr r1, _02078D0C ; =gOverlayTemplate_WobbuffetPop
 	add r0, r5, #0
 	add r2, r4, #0
 	bl FieldSystem_LaunchApplication
@@ -654,11 +654,11 @@ sub_02078CC8: ; 0x02078CC8
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 _02078D08: .word FS_OVERLAY_ID(OVY_90)
-_02078D0C: .word _021012A0
-	thumb_func_end sub_02078CC8
+_02078D0C: .word gOverlayTemplate_WobbuffetPop
+	thumb_func_end WifiClub_LaunchWobbuffetPop
 
-	thumb_func_start sub_02078D10
-sub_02078D10: ; 0x02078D10
+	thumb_func_start WifiClub_FinishWobbuffetPop
+WifiClub_FinishWobbuffetPop: ; 0x02078D10
 	push {r3, lr}
 	bl Heap_Free
 	ldr r0, _02078D20 ; =FS_OVERLAY_ID(OVY_90)
@@ -666,13 +666,13 @@ sub_02078D10: ; 0x02078D10
 	pop {r3, pc}
 	nop
 _02078D20: .word FS_OVERLAY_ID(OVY_90)
-	thumb_func_end sub_02078D10
+	thumb_func_end WifiClub_FinishWobbuffetPop
 
-	thumb_func_start sub_02078D24
-sub_02078D24: ; 0x02078D24
+	thumb_func_start WifiClub_IsMatchingActivity
+WifiClub_IsMatchingActivity: ; 0x02078D24
 	push {r4, lr}
 	add r4, r0, #0
-	bl sub_020398C8
+	bl CommState_GetWifiClubData
 	mov r1, #0x24
 	ldrb r2, [r0, #0x1b]
 	mul r1, r4
@@ -772,19 +772,19 @@ _02078DC8:
 _02078DD4:
 	mov r0, #0
 	pop {r4, pc}
-	thumb_func_end sub_02078D24
+	thumb_func_end WifiClub_IsMatchingActivity
 
 	.rodata
 
-_0210125C:
+gWifiClubGameMaxPlayers:
 	.byte 0x03, 0x04, 0x04, 0x04
-_02101260:
+gOverlayTemplate_SwalotPlop:
 	.word SwalotPlop_Init, SwalotPlop_Main, SwalotPlop_Exit, FS_OVERLAY_ID(OVY_91)
-_02101270:
+gOverlayTemplate_MimeJrTop:
 	.word MimeJrTop_Init, MimeJrTop_Main, MimeJrTop_Exit, FS_OVERLAY_ID(OVY_92)
-_02101280:
+gOverlayTemplate_WifiClubGameEntry:
 	.word ov44_02232EA8, ov44_02232F64, ov44_022330A8, FS_OVERLAY_ID(OVY_44)
-_02101290:
+gOverlayTemplate_WifiClub:
 	.word ov44_0222A4B4, ov44_0222A60C, ov44_0222A758, FS_OVERLAY_ID(OVY_44)
-_021012A0:
+gOverlayTemplate_WobbuffetPop:
 	.word WobbuffetPopApp_Init, WobbuffetPopApp_Main, WobbuffetPopApp_Exit, FS_OVERLAY_ID(OVY_93)

@@ -25,7 +25,7 @@
 #include "metatile_behavior.h"
 #include "overlay_01.h"
 #include "overlay_01_021F1AFC.h"
-#include "overlay_01_021F944C.h"
+#include "field/map_object_render.h"
 #include "overlay_01_021FE780.h"
 #include "overlay_02.h"
 #include "party.h"
@@ -967,7 +967,7 @@ int WaterfallUp_Init(WaterfallWork *work, TaskManager *taskManager) {
     int x = MapObject_GetXCoord(work->mapObject) + (GetDeltaXByFacingDirection(0) << 1);
     int z = MapObject_GetZCoord(work->mapObject) + (GetDeltaYByFacingDirection(0) << 1);
     SetPositionToTileCenter(x, z, &work->targetPos);
-    work->targetPos.y = sub_02054790(work->fieldSystem, 1, work->targetPos.y, work->targetPos.x, work->targetPos.z, &kind);
+    work->targetPos.y = Terrain_CalcHeightWithMode(work->fieldSystem, 1, work->targetPos.y, work->targetPos.x, work->targetPos.z, &kind);
     GF_ASSERT(kind != 0);
     work->targetX = x;
     work->targetY = (work->targetPos.y >> 3) / FX32_ONE;
@@ -1309,7 +1309,7 @@ BOOL FieldMoveAnim_CheckFinished(FieldMoveAnim *anim) {
 }
 
 void Field_PlayerAvatar_SetSprite(PlayerAvatar *playerAvatar, u32 sprite) {
-    ov01_021FA930(PlayerAvatar_GetMapObject(playerAvatar), sprite);
+    MapObject_ChangeBillboardSprite(PlayerAvatar_GetMapObject(playerAvatar), sprite);
 }
 
 LocalMapObject *Field_PlayerAvatar_GetFacingMapObject(PlayerAvatar *playerAvatar, int direction) {

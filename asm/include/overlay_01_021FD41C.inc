@@ -33,8 +33,8 @@
 .public FieldEffectManager_CreateEffect
 .public FieldEffectManager_DestroyEffect
 .public FieldEffectManager_LoadRenderModel
-.public ov01_021F8F88
-.public ov01_021F8FA0
+.public FollowMonBillboard_IsShadowFollowing
+.public FollowMonBillboard_GetShadowOffset
 .public FieldShadow_New
 .public FieldShadow_Free
 .public FieldShadow_CreateMapObjectShadow

@@ -92,7 +92,7 @@
 .public sub_02037988
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
-.public sub_02037C94
+.public CommState_GetSyncPacketSize
 .public CommState_Exists
 .public CommState_StartParentSession
 .public CommState_StartChildSession
@@ -101,96 +101,96 @@
 .public CommState_RequestShutdown
 .public CommState_SetEntry
 .public CommState_IsLinked
-.public sub_02037F18
+.public CommState_StartAlternateSearch
 .public CommState_JoinParent
 .public CommState_GetJoinResult
 .public CommState_IsAlternateLinked
-.public sub_02037FF0
-.public sub_02038070
-.public sub_02038094
-.public sub_020380B0
-.public sub_020380CC
+.public CommState_ResumeAlternateSearch
+.public CommState_IsAlternateSearchReady
+.public CommState_StopAlternateSearch
+.public CommState_RefuseJoins
+.public CommState_RefuseJoinsAndRestart
 .public sub_020380F4
-.public sub_02038104
-.public sub_02038114
-.public sub_02038148
+.public CommState_SetUnionRoomLinkMode
+.public CommState_StartMysteryGiftParent
+.public CommState_StartMysteryGiftChild
 .public CommState_Main
 .public sub_020388E0
-.public sub_02038918
-.public sub_0203893C
-.public sub_0203894C
-.public sub_0203897C
-.public sub_0203898C
+.public CommState_ReconnectToParent
+.public CommState_SetRecordMixingLinkMode
+.public CommState_JoinRecordMixing
+.public CommState_SetSpinTradeLinkMode
+.public CommState_JoinSpinTrade
 .public CommState_RecvJoinRequest
 .public CommState_RecvJoinReply
-.public sub_02038C18
+.public CommState_GetJoinMessageSize
 .public CommState_SetMaxEntries
-.public sub_02038D28
-.public sub_02038D64
+.public CommState_StartBeaconWatch
+.public CommState_StopBeaconWatch
 .public CommState_GetSeenGames
-.public sub_02038D90
+.public CommState_StopForReset
 .public CommState_SetWifiError
-.public sub_02039080
-.public sub_020390C4
-.public sub_02039220
-.public sub_02039264
-.public sub_02039274
-.public sub_020392A0
+.public CommState_StartWifiMatch
+.public CommState_GetWifiMatchStatus
+.public CommState_RecvWifiDisconnect
+.public CommState_WasWifiDisconnected
+.public CommState_IsWifiJoiningLobby
+.public CommState_IsWifiInLobby
 .public CommState_GetWifiError
-.public sub_02039330
-.public sub_02039358
-.public sub_02039378
-.public sub_020393B4
-.public sub_020393C8
-.public sub_02039418
-.public sub_0203946C
-.public sub_020394A0
-.public sub_020394F4
-.public sub_02039528
-.public sub_0203957C
-.public sub_020396FC
-.public sub_0203976C
-.public sub_020397C8
-.public sub_020397E4
-.public sub_020397FC
-.public sub_0203981C
-.public sub_0203986C
-.public sub_0203988C
-.public sub_020398C8
+.public CommState_EndWifiSession
+.public CommState_LeaveWifiMatch
+.public CommState_EndWifiMatch
+.public CommState_SendWifiDisconnect
+.public CommState_HasWifiFailed
+.public CommState_InitWfcSession
+.public CommState_FreeWfcSession
+.public CommState_InitMysteryGiftWfcSession
+.public CommState_FreeMysteryGiftWfcSession
+.public CommState_InitWiiMessageWfcSession
+.public CommState_FreeWiiMessageWfcSession
+.public CommState_StartWifiClub
+.public CommState_StartWifiPlaza
+.public CommState_LeaveWifiPlaza
+.public CommState_HasPlazaLobbyStarted
+.public CommState_HasPlazaLobbyFailed
+.public CommState_StartPlazaMatch
+.public CommState_EndPlazaMatch
+.public CommState_GetPlazaMatchStatus
+.public CommState_GetWifiClubData
 .public CommState_SetErrorWatch
 .public CommState_ReportsErrors
 .public CommState_GetLinkMode
-.public sub_02039954
-.public sub_0203996C
-.public sub_02039980
+.public CommState_GetBeaconId
+.public CommState_SetSelectedOrder
+.public CommState_GetSelectedOrder
 .public CommState_IsWifi
 .public CommState_GetErrorScreen
 .public CommState_ShowErrorAndHalt
-.public sub_020399EC
+.public CommState_ShowRestartErrorAndHalt
 .public sub_020399FC
 .public CommState_CheckLinkError
-.public sub_02039AA4
+.public CommState_IsLinkDown
 .public CommState_SetError
 .public sub_02039AF8
 .public sub_02039B18
-.public sub_02039B38
-.public sub_02039B58
+.public CommState_SetPlazaLinkMode
+.public CommState_SetWifiClubLinkMode
 .public sub_02039B7C
 .public sub_02039E9C
-.public sub_02039EAC
-.public sub_02039EB4
-.public sub_02039F68
-.public sub_02039FB8
-.public sub_02039FD8
-.public sub_02039FFC
-.public sub_0203A01C
-.public sub_0203A040
-.public sub_0203A05C
-.public sub_0203A084
-.public sub_0203A128
-.public sub_0203A1C4
-.public sub_0203A280
-.public sub_0203A378
+.public Comm_InitSyncedSave
+.public Comm_SyncedSave
+.public Comm_RecordPlayerLocations
+.public Comm_MarkLocationSeen
+.public Comm_InitDwc
+.public Comm_LoadAndInitDwc
+.public Comm_EnsureDwcUserData
+.public Comm_GetOwnGsProfileId
+.public Comm_HasWifiProfile
+.public Comm_FindFriendSlot
+.public Comm_FindFriendSlotByKey
+.public Comm_RegisterLinkedFriends
+.public Comm_StoreFriendFromPlayer
+.public Comm_FindFriendIndexOfPlayer
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
 .public WirelessStatusIcon_SetLevel
@@ -263,8 +263,8 @@
 	.public CommState_RestartScanStart
 	.public CommState_Idle
 	.public CommState_FreeWhenDone
-	.public sub_02038418
-	.public sub_02038460
+	.public CommState_ResumeParentWaitAlone
+	.public CommState_ResumeChildStop
 	.public CommState_ShutdownWaitStopped
 	.public CommState_AlternateInit
 	.public CommState_AlternateScan
@@ -281,45 +281,45 @@
 	.public CommState_JoinFailed
 	.public CommState_JoinRetry
 	.public CommState_AlternateLinked
-	.public sub_020388A8
-	.public sub_020389BC
-	.public sub_020389D4
-	.public sub_02038A10
-	.public sub_02038A94
-	.public sub_02038C34
+	.public CommState_RestartIdle
+	.public CommState_ReconnectStop
+	.public CommState_ReconnectScan
+	.public CommState_ReconnectWaitParent
+	.public CommState_ReconnectWaitLinked
+	.public CommState_BeaconWatch
 	.public CommState_OnBeacon
-	.public sub_02038CC4
-	.public sub_02038CE8
-	.public sub_02038E00
-	.public sub_02038E48
-	.public sub_02038E90
-	.public sub_02038E94
-	.public sub_02038EB0
-	.public sub_02038EB4
-	.public sub_02038EB8
-	.public sub_02038F9C
-	.public sub_0203900C
-	.public sub_02039144
-	.public sub_020391D0
-	.public sub_020392F4
-	.public sub_020395B0
-	.public sub_0203960C
-	.public sub_02039694
+	.public CommState_BeaconWatchScan
+	.public CommState_BeaconWatchInit
+	.public CommState_MysteryGiftParentStart
+	.public CommState_MysteryGiftChildStart
+	.public CommState_WifiFailed
+	.public CommState_WifiTimedOut
+	.public CommState_WifiDisconnected
+	.public CommState_WifiCancelled
+	.public CommState_WifiConnected
+	.public CommState_WifiLobby
+	.public CommState_WifiStartMatch
+	.public CommState_WifiJoinLobby
+	.public CommState_WifiDisconnect
+	.public CommState_WifiShutdown
+	.public CommState_CheckDwcError
+	.public CommState_WifiLogin
+	.public CommState_WifiClubStart
 	.public CommState_SetErrorScreen
-	.public sub_02039BA0
-	.public sub_02039C14
-	.public sub_02039C60
-	.public sub_02039C6C
-	.public sub_02039D08
-	.public sub_02039D3C
-	.public sub_02039D54
-	.public sub_02039D78
-	.public sub_02039D8C
-	.public sub_02039DC0
-	.public sub_02039DC4
-	.public sub_02039DE4
-	.public sub_02039E30
-	.public sub_02039E7C
+	.public CommState_PlazaStart
+	.public CommState_PlazaWaitLobby
+	.public CommState_PlazaLobby
+	.public CommState_PlazaCheckWifiResult
+	.public CommState_PlazaUpdateLobby
+	.public CommState_PlazaUpdate
+	.public CommState_PlazaUpdateMatch
+	.public CommState_PlazaLogout
+	.public CommState_PlazaWaitLogout
+	.public CommState_PlazaLobbyFailed
+	.public CommState_PlazaMatchConnected
+	.public CommState_PlazaMatching
+	.public CommState_PlazaEndMatch
+	.public CommState_PlazaTimedOut
 	.public gCommLinkedStates
 	.public sJoinAccepted
 	.public sJoinRequest

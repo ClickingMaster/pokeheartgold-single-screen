@@ -5,7 +5,7 @@
 #include "follow_mon.h"
 #include "math_util.h"
 #include "field/field_motion_blur.h"
-#include "overlay_01_021F944C.h"
+#include "field/map_object_render.h"
 #include "field/field_follow_mon.h"
 #include "field/field_shaymin_form_change.h"
 #include "screen_fade.h"
@@ -77,7 +77,7 @@ static BOOL ov02_022523D0(TaskManager *taskMan) {
     case 2:
         if (env->unk8 != 0) {
             if (++env->unk0 >= 4) {
-                ov01_021FA930(fieldSystem->followMon.mapObject, SPRITE_FOLLOWER_MON_SHAYMIN);
+                MapObject_ChangeBillboardSprite(fieldSystem->followMon.mapObject, SPRITE_FOLLOWER_MON_SHAYMIN);
                 (*state)++;
             }
             break;
@@ -85,12 +85,12 @@ static BOOL ov02_022523D0(TaskManager *taskMan) {
         MapObjectManager *mapObjectMan = MapObject_GetManager(fieldSystem->followMon.mapObject);
         u32 spriteId = MapObject_GetSpriteID(fieldSystem->followMon.mapObject);
         sub_0205E420(fieldSystem->followMon.mapObject);
-        ov01_021FA108(mapObjectMan, spriteId, fieldSystem->followMon.mapObject);
+        MapObjectRender_ReleaseSpriteResources(mapObjectMan, spriteId, fieldSystem->followMon.mapObject);
         sub_0205E38C(fieldSystem->followMon.mapObject, SPRITE_FOLLOWER_MON_SHAYMIN);
         (*state)++;
         break;
     case 3:
-        if (ov01_021FA2D4(fieldSystem->followMon.mapObject) == 0) {
+        if (MapObject_IsBillboardPending(fieldSystem->followMon.mapObject) == 0) {
             fieldSystem->followMon.form = 0;
             (*state)++;
         }

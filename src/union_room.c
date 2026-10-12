@@ -18,15 +18,15 @@ BOOL sub_02037108(int command, void *data, int size);
 UnionRoomRecord *CommWireless_GetParentInfo(int netId);
 BOOL CommWireless_GetParentProfile(int netId);
 u8 *CommWireless_GetRuleset(void);
-void sub_02037F18(void);
+void CommState_StartAlternateSearch(void);
 BOOL CommState_IsAlternateLinked(void);
 BOOL CommState_GetJoinResult(void);
 void CommState_JoinParent(int netId);
-BOOL sub_02038070(void);
-void sub_02038094(void);
-void sub_02038918(int netId);
-void sub_0203894C(int netId);
-void sub_0203898C(int netId);
+BOOL CommState_IsAlternateSearchReady(void);
+void CommState_StopAlternateSearch(void);
+void CommState_ReconnectToParent(int netId);
+void CommState_JoinRecordMixing(int netId);
+void CommState_JoinSpinTrade(int netId);
 void CommState_SetMaxEntries(int mode);
 BOOL sub_020376F8(void);
 BOOL CommState_ReportsErrors(void);
@@ -34,11 +34,11 @@ void DrawingSessionLink_RegisterCommands(int a0);
 void CommRandom_Init(void *random);
 SaveData *FieldSystem_GetSaveData(FieldSystem *fieldSystem);
 BOOL FieldSystem_TaskIsRunning(FieldSystem *fieldSystem);
-void sub_0205A904(int command);
-void sub_0205AA6C(struct UnkStruct_02059E1C *unionRoom, MailMessage *message);
-void sub_0205AB88(MailMessage *message);
-void sub_0205ABB0(struct UnkStruct_02059E1C *unionRoom);
-void sub_0205ABBC(struct UnkStruct_02059E1C *unionRoom);
+void UnionRoom_SetBeaconActivity(int command);
+void UnionRoom_SetOwnChatMessage(struct UnkStruct_02059E1C *unionRoom, MailMessage *message);
+void UnionRoom_BroadcastChatMessage(MailMessage *message);
+void UnionRoom_ResetTalkReplies(struct UnkStruct_02059E1C *unionRoom);
+void UnionRoom_ResetTalk(struct UnkStruct_02059E1C *unionRoom);
 
 struct UnkStruct_02059E1C *UnionRoom_Start(FieldSystem *fieldSystem) {
     struct UnkStruct_02059E1C *unionRoom;
@@ -73,7 +73,7 @@ struct UnkStruct_02059E1C *UnionRoom_New(FieldSystem *fieldSystem) {
         return NULL;
     }
     saveData = FieldSystem_GetSaveData(fieldSystem);
-    sub_02037F18();
+    CommState_StartAlternateSearch();
     unionRoom = Heap_Alloc(HEAP_ID_31, sizeof(struct UnkStruct_02059E1C));
     MI_CpuFill8(unionRoom, 0, sizeof(struct UnkStruct_02059E1C));
     unionRoom->state = NULL;
@@ -82,7 +82,7 @@ struct UnkStruct_02059E1C *UnionRoom_New(FieldSystem *fieldSystem) {
     unionRoom->fieldSystem = fieldSystem;
     unionRoom->saveData = saveData;
     unionRoom->profile = Save_PlayerData_GetProfile(saveData);
-    sub_0205ABBC(unionRoom);
+    UnionRoom_ResetTalk(unionRoom);
     CommRandom_Init(unionRoom->random);
     return unionRoom;
 }
@@ -91,8 +91,8 @@ void sub_02059E88(struct UnkStruct_02059E1C *unionRoom) {
     MailMessage message;
     if (CommWireless_Exists() != 0) {
         MailMsg_Init_Default(&message);
-        sub_0205AB88(&message);
-        sub_0205AA6C(unionRoom, &message);
+        UnionRoom_BroadcastChatMessage(&message);
+        UnionRoom_SetOwnChatMessage(unionRoom, &message);
         UnionRoom_SetState(unionRoom, sub_02059EBC, 40);
     }
 }
@@ -107,22 +107,22 @@ void sub_02059EBC(struct UnkStruct_02059E1C *unionRoom) {
         unionRoom->unk28 = 2;
         if (unionRoom->unk20 == 1) {
             if (unionRoom->unk30 == 5) {
-                sub_0203894C(unionRoom->partnerNetId);
+                CommState_JoinRecordMixing(unionRoom->partnerNetId);
             } else if (unionRoom->unk30 == 6) {
-                sub_0203898C(unionRoom->partnerNetId);
+                CommState_JoinSpinTrade(unionRoom->partnerNetId);
             } else {
                 CommState_JoinParent(unionRoom->partnerNetId);
             }
         } else if (unionRoom->unk20 == 2) {
             DrawingSessionLink_RegisterCommands(0);
-            sub_02038918(unionRoom->partnerNetId);
+            CommState_ReconnectToParent(unionRoom->partnerNetId);
         }
         UnionRoom_SetState(unionRoom, sub_0205A0B4, 12);
     }
 }
 
 void sub_02059F30(struct UnkStruct_02059E1C *unionRoom) {
-    if (sub_02038070() == TRUE) {
+    if (CommState_IsAlternateSearchReady() == TRUE) {
         sub_02091574(unionRoom->fieldSystem);
         UnionRoom_SetState(unionRoom, sub_02059EBC, 2);
     }
@@ -152,14 +152,14 @@ void sub_02059F78(struct UnkStruct_02059E1C *unionRoom) {
     if (sub_020376F8() != 0 && UnionRoom_AnyOtherPlayerPresent() == TRUE && profile[0x1C] != 4) {
         CommPlayerInfo_SendLocal();
         CommState_SetErrorWatch(1, 1);
-        sub_0205A904(11);
+        UnionRoom_SetBeaconActivity(11);
         UnionRoom_SetState(unionRoom, sub_02059FF8, 0);
     }
 
     if (CommState_IsAlternateLinked() == 0) {
-        sub_02037FF0();
-        sub_0205ABBC(unionRoom);
-        sub_0205A904(0);
+        CommState_ResumeAlternateSearch();
+        UnionRoom_ResetTalk(unionRoom);
+        UnionRoom_SetBeaconActivity(0);
         UnionRoom_SetState(unionRoom, sub_02059F30, 2);
     }
 }
@@ -171,9 +171,9 @@ void sub_02059FF8(struct UnkStruct_02059E1C *unionRoom) {
         }
     }
     if (sub_020376F8() == 0) {
-        sub_02037FF0();
-        sub_0205ABBC(unionRoom);
-        sub_0205A904(0);
+        CommState_ResumeAlternateSearch();
+        UnionRoom_ResetTalk(unionRoom);
+        UnionRoom_SetBeaconActivity(0);
         UnionRoom_SetState(unionRoom, sub_02059F30, 2);
     }
 }
@@ -210,7 +210,7 @@ void sub_0205A07C(struct UnkStruct_02059E1C *unionRoom) {
         unionRoom->timer = timer - 1;
         return;
     }
-    sub_02038094();
+    CommState_StopAlternateSearch();
     UnionRoom_SetState(unionRoom, sub_0205A0A0, 0);
 }
 
@@ -242,9 +242,9 @@ void sub_0205A0B4(struct UnkStruct_02059E1C *unionRoom) {
 
 void sub_0205A114(struct UnkStruct_02059E1C *unionRoom) {
     if (FieldSystem_TaskIsRunning(unionRoom->fieldSystem) == 0) {
-        sub_02037FF0();
-        sub_0205ABBC(unionRoom);
-        sub_0205A904(0);
+        CommState_ResumeAlternateSearch();
+        UnionRoom_ResetTalk(unionRoom);
+        UnionRoom_SetBeaconActivity(0);
         UnionRoom_SetState(unionRoom, sub_02059F30, 2);
     }
 }
@@ -259,8 +259,8 @@ void sub_0205A144(struct UnkStruct_02059E1C *unionRoom) {
             UnionRoom_SetState(unionRoom, sub_0205A1AC, 3);
         }
     } else if (CommState_GetJoinResult() == 0) {
-        sub_02037FF0();
-        sub_0205ABBC(unionRoom);
+        CommState_ResumeAlternateSearch();
+        UnionRoom_ResetTalk(unionRoom);
         UnionRoom_SetState(unionRoom, sub_02059F30, 2);
         unionRoom->unk24 = 0;
         unionRoom->unk1C = 2;
@@ -271,8 +271,8 @@ void sub_0205A144(struct UnkStruct_02059E1C *unionRoom) {
 
 void sub_0205A1AC(struct UnkStruct_02059E1C *unionRoom) {
     if (CommState_GetJoinResult() == 0) {
-        sub_02037FF0();
-        sub_0205ABBC(unionRoom);
+        CommState_ResumeAlternateSearch();
+        UnionRoom_ResetTalk(unionRoom);
         UnionRoom_SetState(unionRoom, sub_02059F30, 2);
     }
 }
@@ -300,7 +300,7 @@ int sub_0205A200(struct UnkStruct_02059E1C *unionRoom, int objId) {
     UnionRoomRecord *record;
     UnionRoomRecordInfo *info;
     BOOL present = CommWireless_GetParentProfile(objId - 1);
-    sub_0205ABB0(unionRoom);
+    UnionRoom_ResetTalkReplies(unionRoom);
     if (!present) {
         return 5;
     }
@@ -464,7 +464,7 @@ void sub_0205A40C(void) {
 
 void sub_0205A410(int netId, int size, void *data, FieldSystem *fieldSystem) {
     UnionRoom_SetState(fieldSystem->unk80, sub_02059EBC, 2);
-    sub_0205ABBC(fieldSystem->unk80);
+    UnionRoom_ResetTalk(fieldSystem->unk80);
 }
 
 void sub_0205A430(int netId, int size, const u8 *data, FieldSystem *fieldSystem) {

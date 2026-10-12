@@ -68,9 +68,9 @@ int ov00_021ED3AC(void *fileList, int start, int count);
 int ov00_021ED3F4(void *fileInfo, void *buffer, int size);
 int ov00_021ED428(void);
 int ov00_021ED444(u32 *received, u32 *total);
-void sub_02039FD8(int a0);
-void sub_020394A0(SaveData *saveData);
-void sub_020394F4(void);
+void Comm_InitDwc(int a0);
+void CommState_InitMysteryGiftWfcSession(SaveData *saveData);
+void CommState_FreeMysteryGiftWfcSession(void);
 void LoadDwcOverlay(void);
 void UnloadDwcOverlay(void);
 void LoadOVY38(void);
@@ -174,7 +174,7 @@ void MysteryGiftWfc_OnCleanupDone(void) {
 
 void MysteryGiftWfc_Shutdown(void) {
     WirelessStatusIcon_Destroy();
-    sub_020394F4();
+    CommState_FreeMysteryGiftWfcSession();
     UnloadOVY38();
     UnloadDwcOverlay();
     CommWireless_Terminate();
@@ -195,13 +195,13 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
         CommWireless_StartUp();
         LoadDwcOverlay();
         LoadOVY38();
-        sub_02039FD8(3);
+        Comm_InitDwc(3);
         *state = WFC_STATE_WAIT_OVERLAYS;
         break;
     case WFC_STATE_WAIT_OVERLAYS:
         if (CommWireless_IsStartedUp()) {
             ov00_021EC294(MysteryGiftWfc_Alloc, MysteryGiftWfc_Free);
-            sub_020394A0(data->saveData);
+            CommState_InitMysteryGiftWfcSession(data->saveData);
             *state = WFC_STATE_INIT;
         }
         break;

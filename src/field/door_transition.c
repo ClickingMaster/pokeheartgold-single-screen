@@ -102,16 +102,16 @@ BOOL DoorTransition_WalkIntoDoor(FieldSystem *fieldSystem, FieldEnvSubUnk18 *arg
     case 0:
         work->adjustCamera = FALSE;
         work->cameraStep = 0;
-        sub_02054A60(work->x, work->z, -1, -1, 3, 1, rect);
+        Terrain_MakeTileRect(work->x, work->z, -1, -1, 3, 1, rect);
         work->animTag = DOOR_ANIM_TAG;
         found = FALSE;
         narc = AreaDataManager_GetMapPropAnimListNarc(fieldSystem->areaDataManager);
-        props = sub_02054D10(fieldSystem, HEAP_ID_FIELD1, 4, rect, 0);
+        props = FieldSystem_CollectMapPropModelsInRect(fieldSystem, HEAP_ID_FIELD1, 4, rect, 0);
         for (i = 0; i < 4; i++) {
             if (props[i] != 0) {
                 NARC_ReadWholeMember(narc, props[i], &entry);
                 if (entry.doorType != 0) {
-                    sub_02054AE4(fieldSystem, props[i], rect, &prop);
+                    FieldSystem_FindMapPropInRect(fieldSystem, props[i], rect, &prop);
                     found = TRUE;
                     modelId0 = props[i];
                     break;
@@ -231,16 +231,16 @@ BOOL DoorTransition_WalkOutOfDoor(FieldSystem *fieldSystem, FieldEnvSubUnk18 *ar
         zero = FALSE;
         work->adjustCamera = zero;
         work->cameraStep = zero;
-        sub_02054A60(work->x, work->z, -1, 0, 3, 1, rect);
+        Terrain_MakeTileRect(work->x, work->z, -1, 0, 3, 1, rect);
         work->animTag = DOOR_ANIM_TAG;
         found = FALSE;
         narc = AreaDataManager_GetMapPropAnimListNarc(fieldSystem->areaDataManager);
-        props = sub_02054D10(fieldSystem, HEAP_ID_FIELD1, 4, rect, 0);
+        props = FieldSystem_CollectMapPropModelsInRect(fieldSystem, HEAP_ID_FIELD1, 4, rect, 0);
         for (i = 0; i < 4; i++) {
             if (props[i] != 0) {
                 NARC_ReadWholeMember(narc, props[i], &entry);
                 if (entry.doorType != 0) {
-                    sub_02054AE4(fieldSystem, props[i], rect, &prop);
+                    FieldSystem_FindMapPropInRect(fieldSystem, props[i], rect, &prop);
                     found = TRUE;
                     modelId0 = props[i];
                     break;
@@ -421,12 +421,12 @@ BOOL DoorTransition_WalkOutOfSideDoor(FieldSystem *fieldSystem, FieldEnvSubUnk18
         MapProp *prop;
         int modelId;
         if (direction == DIR_WEST) {
-            sub_02054A60(work->x, work->z, -1, 0, 2, 1, rect);
+            Terrain_MakeTileRect(work->x, work->z, -1, 0, 2, 1, rect);
         } else {
-            sub_02054A60(work->x, work->z, 0, 0, 2, 1, rect);
+            Terrain_MakeTileRect(work->x, work->z, 0, 0, 2, 1, rect);
         }
         work->animTag = SIDE_DOOR_ANIM_TAG;
-        if (sub_02054B74(fieldSystem, models.ids, 4, rect, &prop, &modelId)) {
+        if (FieldSystem_FindMapPropOfModelsInRect(fieldSystem, models.ids, 4, rect, &prop, &modelId)) {
             texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
             renderObj = MapProp_GetRenderSurface(prop);
             model = MapProp_GetResModel(prop);
@@ -504,12 +504,12 @@ BOOL DoorTransition_WalkIntoSideDoor(FieldSystem *fieldSystem, FieldEnvSubUnk18 
         MapProp *prop;
         int modelId;
         if (direction == DIR_WEST) {
-            sub_02054A60(work->x, work->z, -1, 0, 2, 1, rect);
+            Terrain_MakeTileRect(work->x, work->z, -1, 0, 2, 1, rect);
         } else {
-            sub_02054A60(work->x, work->z, 0, 0, 2, 1, rect);
+            Terrain_MakeTileRect(work->x, work->z, 0, 0, 2, 1, rect);
         }
         work->animTag = SIDE_DOOR_ANIM_TAG;
-        if (sub_02054B74(fieldSystem, models.ids, 4, rect, &prop, &modelId)) {
+        if (FieldSystem_FindMapPropOfModelsInRect(fieldSystem, models.ids, 4, rect, &prop, &modelId)) {
             texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
             renderObj = MapProp_GetRenderSurface(prop);
             model = MapProp_GetResModel(prop);
@@ -594,15 +594,15 @@ void DoorAnimation_Load(FieldSystem *fieldSystem, int x, int z, u8 tag) {
     int i;
     int *cursor;
 
-    sub_02054A60(x, z, -1, 0, 3, 1, rect);
+    Terrain_MakeTileRect(x, z, -1, 0, 3, 1, rect);
     narc = AreaDataManager_GetMapPropAnimListNarc(fieldSystem->areaDataManager);
-    props = sub_02054D10(fieldSystem, HEAP_ID_FIELD1, 4, rect, 0);
+    props = FieldSystem_CollectMapPropModelsInRect(fieldSystem, HEAP_ID_FIELD1, 4, rect, 0);
     found = FALSE;
     for (i = 0, cursor = props; i < 4; i++, cursor++) {
         if (*cursor) {
             NARC_ReadWholeMember(narc, *cursor, &door.entry);
             if (door.entry.doorType) {
-                sub_02054AE4(fieldSystem, props[i], rect, &door.prop);
+                FieldSystem_FindMapPropInRect(fieldSystem, props[i], rect, &door.prop);
                 found = TRUE;
                 modelId = props[i];
                 break;
@@ -683,14 +683,14 @@ BOOL Task_WalkOutOfDoorAfterWarp(TaskManager *taskman) {
         if (PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar) == DIR_SOUTH) {
             work->animTag = DOOR_ANIM_TAG;
             found = FALSE;
-            sub_02054A60(work->x, work->z, -1, found, 3, 1, rect);
+            Terrain_MakeTileRect(work->x, work->z, -1, found, 3, 1, rect);
             narc = AreaDataManager_GetMapPropAnimListNarc(fieldSystem->areaDataManager);
-            props = sub_02054D10(fieldSystem, HEAP_ID_FIELD1, 4, rect, 0);
+            props = FieldSystem_CollectMapPropModelsInRect(fieldSystem, HEAP_ID_FIELD1, 4, rect, 0);
             for (i = 0; i < 4; i++) {
                 if (props[i] != 0) {
                     NARC_ReadWholeMember(narc, props[i], &entry);
                     if (entry.doorType != 0) {
-                        sub_02054AE4(fieldSystem, props[i], rect, &prop);
+                        FieldSystem_FindMapPropInRect(fieldSystem, props[i], rect, &prop);
                         found = TRUE;
                         modelId = props[i];
                         break;

@@ -385,7 +385,7 @@ BOOL Gts_Init(OverlayManager *man, int *state) {
         Heap_Create(HEAP_ID_3, HEAP_ID_61, 0x70000);
         LoadDwcOverlay();
         LoadOVY38();
-        sub_02039FD8(HEAP_ID_61);
+        Comm_InitDwc(HEAP_ID_61);
         app = OverlayManager_CreateAndGetData(man, sizeof(GtsApp), HEAP_ID_61);
         memset(app, 0, sizeof(GtsApp));
         app->bgConfig = BgConfig_Alloc(HEAP_ID_61);

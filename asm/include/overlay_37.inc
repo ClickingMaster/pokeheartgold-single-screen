@@ -115,11 +115,11 @@
 .public sub_02037854
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
-.public sub_02037FF0
+.public CommState_ResumeAlternateSearch
 .public CommState_SetMaxEntries
 .public CommState_SetErrorWatch
 .public WirelessStatusIcon_Create
-.public sub_0205A904
+.public UnionRoom_SetBeaconActivity
 .public UnionRoomObjects_ResetSlots
 .public DrawingSessionLink_RegisterCommands
 .public NNS_G2dInitOamManagerModule

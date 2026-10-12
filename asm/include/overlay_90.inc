@@ -155,11 +155,11 @@
 .public Comm_GetLocalNetId
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
-.public sub_020390C4
-.public sub_02039264
-.public sub_020392A0
-.public sub_0203986C
-.public sub_0203A084
+.public CommState_GetWifiMatchStatus
+.public CommState_WasWifiDisconnected
+.public CommState_IsWifiInLobby
+.public CommState_EndPlazaMatch
+.public Comm_FindFriendSlot
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
 .public WirelessStatusIcon_ShowOnBothScreens

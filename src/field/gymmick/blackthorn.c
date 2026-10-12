@@ -2,7 +2,7 @@
 #include "metatile_behavior.h"
 #include "overlay_04.h"
 #include "sound_playback.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 #include "map_object_movement_utilities.h"
 
 #define PLATFORM_TYPE_0_W    5
@@ -554,7 +554,7 @@ static u8 BlackthornGymmick_CheckWallCollision(FieldSystem *fieldSystem, const u
     u8 ret = 0xFF;
 
     for (int i = 0; i < dim; ++i) {
-        if (sub_020548C0(fieldSystem, points[i].x, points[i].z)) {
+        if (FieldSystem_CheckTileCollision(fieldSystem, points[i].x, points[i].z)) {
             ret = i;
             break;
         }
@@ -570,7 +570,7 @@ static u16 BlackthornGymmick_GetMaxRotationExtent(FieldSystem *fieldSystem, cons
     u16 ret = FX_DEG_TO_IDX(FX32_CONST(90));
 
     for (int i = 0; i < dim; ++i) {
-        BOOL isBonk = sub_020548C0(fieldSystem, points[i].x, points[i].z);
+        BOOL isBonk = FieldSystem_CheckTileCollision(fieldSystem, points[i].x, points[i].z);
         if (!isBonk) {
             isBonk = !MetatileBehavior_IsMagma(GetMetatileBehavior(fieldSystem, points[i].x, points[i].z));
         }

@@ -54,8 +54,8 @@
 .public Comm_GetLocalNetId
 .public sub_02037824
 .public sub_020378AC
-.public sub_0203A084
-.public sub_0203A378
+.public Comm_FindFriendSlot
+.public Comm_FindFriendIndexOfPlayer
 .public DWC_CreateExchangeToken
 .public OS_GetMacAddress
 .public MI_CpuFill8

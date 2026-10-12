@@ -14,10 +14,10 @@
 
 // Communication calls without a public declaration
 void CommPlayerInfo_SetProfile(void *profile);
-void sub_0203981C(u8 slot);
-void sub_0203986C(void);
-s32 sub_0203988C(void);
-void sub_02039B38(void);
+void CommState_StartPlazaMatch(u8 slot);
+void CommState_EndPlazaMatch(void);
+s32 CommState_GetPlazaMatchStatus(void);
+void CommState_SetPlazaLinkMode(void);
 
 // rodata of this overlay (asm/to90_extra2491_anchor.s)
 extern const u8 sWiFiPlazaGameStatusHeights[2];
@@ -83,7 +83,7 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
         } else if ((s32)entry->members > Comm_CountConnected()) {
             param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
             WiFiPlazaPlayerState_SetStep(savedState, 23);
-        } else if (sub_0203988C() == 0) {
+        } else if (CommState_GetPlazaMatchStatus() == 0) {
             param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
             WiFiPlazaPlayerState_SetStep(savedState, 23);
         } else {
@@ -105,7 +105,7 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
                 case 20:
                 case 21:
                 case 22:
-                    linkError = sub_020390C4();
+                    linkError = CommState_GetWifiMatchStatus();
                     switch (linkError) {
                     case 0:
                     case 1:
@@ -206,7 +206,7 @@ join:
             }
             WiFiPlazaRoom_PrintMessageInstant(room, message);
             WiFiPlazaRoom_ShowWaitingIcon(room);
-            sub_0203981C(param->slot);
+            CommState_StartPlazaMatch(param->slot);
             if (ov45_0222F464() == 1) {
                 ov45_0222AC14(lobby, param->game, 1, savedPlayerIndex, 0, 0, 0, 0);
                 entry->reportedMembers = 1;
@@ -217,7 +217,7 @@ join:
         }
         break;
     case 7: // waiting for members
-        connection = sub_0203988C();
+        connection = CommState_GetPlazaMatchStatus();
         members = ov45_0222F314(param->slot);
         entry->timeLeft = ov45_0222F3E8(param->slot);
         WiFiPlazaGameStatus_SetFrames(&entry->status, entry->timeLeft);
@@ -285,9 +285,9 @@ checkSession:
     case 8: // time is up, waiting for the link
         WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
         WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
-        linkState = sub_0203988C();
+        linkState = CommState_GetPlazaMatchStatus();
         members2 = ov45_0222F314(param->slot);
-        linkError2 = sub_020390C4();
+        linkError2 = CommState_GetWifiMatchStatus();
         switch (linkError2) {
         case 3:
         case 4:
@@ -313,7 +313,7 @@ checkSession:
         WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
         WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
         ov45_0222A5E8(WiFiPlazaRoom_GetLobby(room), param->playerStatus);
-        sub_02039B38();
+        CommState_SetPlazaLinkMode();
         CommPlayerInfo_Init(ov45_0222A2C8(WiFiPlazaRoom_GetLobby(room)), 0);
         CommPlayerInfo_SetProfile(ov45_0222AB1C(lobby));
         sub_020378E4(0);
@@ -502,11 +502,11 @@ next:
         break;
     case 23: // failed: end the link
         CommPlayerInfo_Free();
-        sub_0203986C();
+        CommState_EndPlazaMatch();
         WiFiPlazaPlayerState_SetStep(savedState, 24);
         break;
     case 24:
-        if (sub_0203988C() == 0) {
+        if (CommState_GetPlazaMatchStatus() == 0) {
             WiFiPlazaPlayerState_SetStep(savedState, 28);
         }
         break;
@@ -550,15 +550,15 @@ BOOL WiFiPlazaGameEntry_EndLink(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *
     switch (WiFiPlazaPlayerState_GetStep(state)) {
     case 0:
         CommState_SetErrorWatch(0, 0);
-        if (sub_020392A0() == FALSE) {
+        if (CommState_IsWifiInLobby() == FALSE) {
             CommPlayerInfo_Free();
-            sub_0203986C();
+            CommState_EndPlazaMatch();
         }
         WiFiPlazaRoom_SetMode(room, 1);
         WiFiPlazaPlayerState_SetStep(state, 1);
         break;
     case 1:
-        if (sub_020392A0() == TRUE) {
+        if (CommState_IsWifiInLobby() == TRUE) {
             return TRUE;
         }
         break;
@@ -650,7 +650,7 @@ void WiFiPlazaGameEntry_FreeMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *r
 
 BOOL WiFiPlazaGameEntry_UpdateWaiting(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, WiFiPlazaGameEntryParam *param, WiFiPlazaPlayerState *state, int playerIndex) {
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
-    s32 connection = sub_0203988C();
+    s32 connection = CommState_GetPlazaMatchStatus();
     u32 members = ov45_0222F314(param->slot);
 
     if (connection == 0) {

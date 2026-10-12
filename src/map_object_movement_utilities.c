@@ -5,11 +5,11 @@
 #include "map_object_movement_utilities_internal.h"
 #include "metatile_behavior.h"
 #include "overlay_01.h"
-#include "unk_02054648.h"
+#include "field_terrain.h"
 
 // Defined elsewhere without a header yet.
 int sub_020548EC(FieldSystem *fieldSystem, int x, int z); // defined as u8; the caller truncates the result itself
-int sub_02054940(FieldSystem *fieldSystem, int y, int x, int z, u8 *floorType);
+int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int y, int x, int z, u8 *floorType);
 void MapObject_GetPreviousCoordsBehind(LocalMapObject *object, int *x, int *z);
 
 BOOL sub_02060BFC(LocalMapObject *self, int x, int y, int z) {
@@ -334,7 +334,7 @@ int GetDirectionTowards(int x, int z, int targetX, int targetZ) {
 
 BOOL sub_0206121C(FieldSystem *fieldSystem, VecFx32 *position) {
     u8 behavior;
-    int y = sub_02054940(fieldSystem, position->y, position->x, position->z, &behavior);
+    int y = FieldSystem_GetTerrainHeight(fieldSystem, position->y, position->x, position->z, &behavior);
     if (behavior == 0) {
         return 0;
     }
@@ -344,7 +344,7 @@ BOOL sub_0206121C(FieldSystem *fieldSystem, VecFx32 *position) {
 
 BOOL sub_02061248(FieldSystem *fieldSystem, VecFx32 *position, BOOL allowType2) {
     u8 behavior;
-    int y = sub_02054940(fieldSystem, position->y, position->x, position->z, &behavior);
+    int y = FieldSystem_GetTerrainHeight(fieldSystem, position->y, position->x, position->z, &behavior);
     if (behavior == 0) {
         return 0;
     }

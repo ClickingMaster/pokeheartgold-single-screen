@@ -26,7 +26,7 @@
 #include "touchscreen.h"
 
 // VS Recorder app (overlay 40): the VS Recorder item (mode 0) and the Global Terminal data browser (modes 1-6).
-// The work is allocated by the main-ARM9 launcher (unk_02087E70.c), so only the fields known so far are named.
+// The work is allocated by the main-ARM9 launcher (vs_recorder_app.c), so only the fields known so far are named.
 
 typedef struct VsRecorderWork VsRecorderWork;
 
@@ -494,7 +494,7 @@ struct VsRecorderWork {
     u32 unk_0840[8];                         // 0x0840
     void *screenWork;                        // 0x0860
     void *unk_0864;                          // 0x0864
-    void *result;                            // 0x0868, Pair87 of the launcher
+    void *result;                            // 0x0868, VsRecorderAppResult of the launcher
     u32 selection;                           // 0x086C
     u32 boxUploaded;                         // 0x0870, a box was sent (only one per visit)
     u32 battleResult;                        // 0x0874
@@ -895,8 +895,8 @@ void VsRecorder_InitNet(VsRecorderWork *work);
 void VsRecorder_UpdateNet(VsRecorderWork *work);
 void VsRecorder_FreeNet(VsRecorderWork *work);
 
-// main ARM9 (unk_02087E70 launcher, banner object)
-void sub_02087A84(void *result, u32 first, u32 second);
+// main ARM9 (vs_recorder_app.c launcher, banner object)
+void VsRecorderApp_SetResult(void *result, u32 first, u32 second);
 void sub_02088030(VsRecorderWork *work);
 
 #endif // POKEHEARTGOLD_APPLICATION_VS_RECORDER_VS_RECORDER_INTERNAL_H

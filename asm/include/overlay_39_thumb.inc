@@ -96,10 +96,10 @@
 .public BattleRecord_sizeof
 .public sub_0202FC74
 .public BattleRecord_GetProfile
-.public sub_02039418
-.public sub_0203946C
-.public sub_020399EC
-.public sub_0203A040
+.public CommState_InitWfcSession
+.public CommState_FreeWfcSession
+.public CommState_ShowRestartErrorAndHalt
+.public Comm_GetOwnGsProfileId
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
 .public PCStorage_GetBoxWallpaper

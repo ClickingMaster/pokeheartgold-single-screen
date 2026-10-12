@@ -84,7 +84,7 @@
 .public sub_02036904
 .public sub_02037474
 .public CommState_GetLinkMode
-.public sub_02039954
+.public CommState_GetBeaconId
 .public CommState_ShowErrorAndHalt
 .public WVR_StartUpAsync
 .public WVR_TerminateAsync

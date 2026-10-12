@@ -63,7 +63,7 @@ void NitroMain(void) {
     sub_02005D00();
     InitSoundData(Save_Chatot_Get(_02111868.unk_10.saveData), Save_PlayerData_GetOptionsAddr(_02111868.unk_10.saveData));
     Init_Timer3();
-    if (sub_02039FFC(3) == 3) {
+    if (Comm_LoadAndInitDwc(3) == 3) {
         ShowWFCUserInfoWarning(HEAP_ID_3, 0);
     }
     if (!Save_FlashChipIsDetected(_02111868.unk_10.saveData)) {
@@ -176,7 +176,7 @@ static void sub_02000F14(void) {
 }
 
 static void sub_02000F40(u32 param) {
-    if (sub_02039AA4() && CARD_TryWaitBackupAsync() == TRUE) {
+    if (CommState_IsLinkDown() && CARD_TryWaitBackupAsync() == TRUE) {
         OS_ResetSystem(param);
     }
     sub_02000F14();
@@ -203,7 +203,7 @@ static void sub_02000F60(void) {
 static void DoSoftReset(u32 param) {
     SetMasterBrightnessByColor(PM_LCD_TOP, RGB_WHITE);
     SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_WHITE);
-    if (sub_02038D90()) {
+    if (CommState_StopForReset()) {
         Save_Cancel(SaveData_Get());
     }
     while (TRUE) {
@@ -240,7 +240,7 @@ static void sub_02000FD8(u32 a0, int a1) {
         }
     }
     ShowCommunicationError(HEAP_ID_DEFAULT, r5, 0);
-    sub_02038D90();
+    CommState_StopForReset();
     sub_02000F14();
     DoSoundUpdateFrame();
     while (1) {

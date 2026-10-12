@@ -37,9 +37,9 @@
 .public TaskManager_GetEnvironment
 .public sub_02055624
 .public FieldSystem_GetGameClearTime
-.public sub_0205ABD8
-.public sub_0205AC4C
-.public sub_0205AC70
+.public UnionRoom_AllocTrainerCards
+.public UnionRoom_FreeTrainerCards
+.public UnionRoom_SendTrainerCard
 .public CheckGameClearFlag
 .public TrainerCardData_Build
 .public TrainerCardData_New

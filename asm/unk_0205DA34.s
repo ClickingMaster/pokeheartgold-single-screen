@@ -121,7 +121,7 @@ _0205DAFC:
 	add r1, sp, #0x1c
 	add r2, r7, r2
 	add r3, r6, r3
-	bl sub_020549F4
+	bl FieldSystem_CheckCollisionHeightAndGimmick
 	cmp r0, #1
 	bne _0205DB2C
 	mov r0, #2

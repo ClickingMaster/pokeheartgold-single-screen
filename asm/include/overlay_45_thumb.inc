@@ -125,9 +125,9 @@
 .public Save_PlazaSurvey_Get
 .public PlazaSurvey_SetSurveyId
 .public PlazaSurvey_SetAnswer
-.public sub_020393C8
-.public sub_020397FC
-.public sub_02039FD8
+.public CommState_HasWifiFailed
+.public CommState_HasPlazaLobbyFailed
+.public Comm_InitDwc
 .public GetMonData
 .public Party_GetCount
 .public Party_GetMonByIndex

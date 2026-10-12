@@ -6,7 +6,7 @@
 
 #include "map_object.h"
 #include "overlay_01_021F1AFC.h"
-#include "overlay_01_021F944C.h"
+#include "field/map_object_render.h"
 #include "script.h"
 #include "task.h"
 #include "sound_playback.h"
@@ -154,16 +154,16 @@ static BOOL Task_AnimApricornTree(TaskManager *taskman) {
         env->state = 5;
         break;
     case 5:
-        if (ov01_021FA2D4(env->apricorn)) {
+        if (MapObject_IsBillboardPending(env->apricorn)) {
             break;
         }
-        ov01_021FA930(env->tree, 0x00000106);
+        MapObject_ChangeBillboardSprite(env->tree, 0x00000106);
         env->state = 7;
         break;
     case 6:
         break;
     case 7:
-        if (ov01_021FA2D4(env->tree)) {
+        if (MapObject_IsBillboardPending(env->tree)) {
             break;
         }
         env->expelTimer = TREE_EXPEL_FRAMES;

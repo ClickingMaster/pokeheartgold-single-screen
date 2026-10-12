@@ -25,7 +25,7 @@
 #include "trainer_data.h"
 #include "trainer_memo.h"
 #include "pokepic_anim.h"
-#include "unk_02078834.h"
+#include "wifi_club.h"
 
 void MonEncryptSegment(void *data, u32 size, u32 key);
 void MonDecryptSegment(void *data, u32 size, u32 key);

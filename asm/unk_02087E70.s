@@ -13,8 +13,8 @@
 
 	.text
 
-	thumb_func_start sub_02087E70
-sub_02087E70: ; 0x02087E70
+	thumb_func_start VsRecorderMenu_InitCommon
+VsRecorderMenu_InitCommon: ; 0x02087E70
 	push {r3, r4, r5, lr}
 	add r4, r0, #0
 	mov r0, #0
@@ -26,7 +26,7 @@ sub_02087E70: ; 0x02087E70
 	lsl r2, r2, #0xc
 	bl Heap_Create
 	add r0, r4, #0
-	bl sub_02087A78
+	bl VsRecorderApp_GetRecorderWork
 	add r4, r0, #0
 	bl VsRecorder_MenuPop
 	mov r0, #1
@@ -75,31 +75,31 @@ _02087EE6:
 	.balign 4, 0
 _02087EF0: .word 0x00000482
 _02087EF4: .word 0x00007FDD
-	thumb_func_end sub_02087E70
+	thumb_func_end VsRecorderMenu_InitCommon
 
-	thumb_func_start sub_02087EF8
-sub_02087EF8: ; 0x02087EF8
-	ldr r3, _02087F00 ; =sub_02087E70
+	thumb_func_start VsRecorderMenu_Init
+VsRecorderMenu_Init: ; 0x02087EF8
+	ldr r3, _02087F00 ; =VsRecorderMenu_InitCommon
 	mov r2, #0
 	bx r3
 	nop
-_02087F00: .word sub_02087E70
-	thumb_func_end sub_02087EF8
+_02087F00: .word VsRecorderMenu_InitCommon
+	thumb_func_end VsRecorderMenu_Init
 
-	thumb_func_start sub_02087F04
-sub_02087F04: ; 0x02087F04
-	ldr r3, _02087F0C ; =sub_02087E70
+	thumb_func_start VsRecorderMenu_InitFromTerminal
+VsRecorderMenu_InitFromTerminal: ; 0x02087F04
+	ldr r3, _02087F0C ; =VsRecorderMenu_InitCommon
 	mov r2, #1
 	bx r3
 	nop
-_02087F0C: .word sub_02087E70
-	thumb_func_end sub_02087F04
+_02087F0C: .word VsRecorderMenu_InitCommon
+	thumb_func_end VsRecorderMenu_InitFromTerminal
 
-	thumb_func_start sub_02087F10
-sub_02087F10: ; 0x02087F10
+	thumb_func_start VsRecorderMenu_Main
+VsRecorderMenu_Main: ; 0x02087F10
 	push {r4, lr}
 	add r4, r1, #0
-	bl sub_02087A78
+	bl VsRecorderApp_GetRecorderWork
 	add r1, r4, #0
 	str r4, [r0, #0x10]
 	bl VsRecorder_Main
@@ -110,13 +110,13 @@ sub_02087F10: ; 0x02087F10
 _02087F28:
 	mov r0, #0
 	pop {r4, pc}
-	thumb_func_end sub_02087F10
+	thumb_func_end VsRecorderMenu_Main
 
-	thumb_func_start sub_02087F2C
-sub_02087F2C: ; 0x02087F2C
+	thumb_func_start VsRecorderMenu_Exit
+VsRecorderMenu_Exit: ; 0x02087F2C
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
-	bl sub_02087A78
+	bl VsRecorderApp_GetRecorderWork
 	ldr r1, [r4]
 	add r5, r0, #0
 	cmp r1, #3
@@ -190,13 +190,13 @@ _02087FC2:
 _02087FC8: .word 0x000006F4
 _02087FCC: .word FS_OVERLAY_ID(OVY_40)
 _02087FD0: .word gSystem + 0x60
-	thumb_func_end sub_02087F2C
+	thumb_func_end VsRecorderMenu_Exit
 
 	.rodata
 
-	.public _021028B4
-_021028B4:
-	.word sub_02087EF8, sub_02087F10, sub_02087F2C, FS_OVERLAY_ID(OVY_40)
-	.public _021028C4
-_021028C4:
-	.word sub_02087F04, sub_02087F10, sub_02087F2C, FS_OVERLAY_ID(OVY_40)
+	.public gOverlayTemplate_VsRecorderMenu
+gOverlayTemplate_VsRecorderMenu:
+	.word VsRecorderMenu_Init, VsRecorderMenu_Main, VsRecorderMenu_Exit, FS_OVERLAY_ID(OVY_40)
+	.public gOverlayTemplate_VsRecorderMenuFromTerminal
+gOverlayTemplate_VsRecorderMenuFromTerminal:
+	.word VsRecorderMenu_InitFromTerminal, VsRecorderMenu_Main, VsRecorderMenu_Exit, FS_OVERLAY_ID(OVY_40)

@@ -72,7 +72,7 @@ _02056AAC:
 	ldr r2, [sp, #0x28]
 	ldr r3, [sp, #0x30]
 	add r0, r4, #0
-	bl sub_02054940
+	bl FieldSystem_GetTerrainHeight
 	str r0, [sp, #0x2c]
 	ldr r0, [r4, #0x40]
 	add r1, sp, #0x28
@@ -160,7 +160,7 @@ _02056B70:
 	ldr r2, [sp, #0x28]
 	ldr r3, [sp, #0x30]
 	add r0, r5, #0
-	bl sub_02054940
+	bl FieldSystem_GetTerrainHeight
 	str r0, [sp, #0x2c]
 	ldr r0, [r5, #0x40]
 	add r1, sp, #0x28

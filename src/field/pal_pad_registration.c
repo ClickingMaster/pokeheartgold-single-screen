@@ -25,8 +25,8 @@ BOOL FriendRoster_IsFriendValid(FriendRoster *roster, int slot);
 void FriendRoster_RemoveFriend(FriendRoster *roster, int slot);
 void FrontierSave_DeleteRow(FrontierSave *frontier, int row);
 int Comm_CountConnected(void);
-BOOL sub_0203A1C4(SaveData *saveData, u32 *requests, enum HeapID heapID);
-void sub_0203A280(SaveData *saveData, u32 netId, int slot, enum HeapID heapID, int mode);
+BOOL Comm_RegisterLinkedFriends(SaveData *saveData, u32 *requests, enum HeapID heapID);
+void Comm_StoreFriendFromPlayer(SaveData *saveData, u32 netId, int slot, enum HeapID heapID, int mode);
 void FieldSystem_SwitchBottomScreenApp(FieldSystem *fieldSystem, int appId, void *args);
 
 enum PalPadRegistrationState {
@@ -67,7 +67,7 @@ void FieldSystem_StartPalPadRegistration(FieldSystem *fieldSystem);
 
 BOOL PalPadRegistration_Start(PalPadRegistration *registration) {
     FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(registration->saveData), 0);
-    if (!sub_0203A1C4(registration->saveData, registration->requests, HEAP_ID_FIELD1)) {
+    if (!Comm_RegisterLinkedFriends(registration->saveData, registration->requests, HEAP_ID_FIELD1)) {
         return TRUE;
     }
     registration->partnerNetId = 0;
@@ -106,7 +106,7 @@ BOOL PalPadRegistration_NextPartner(PalPadRegistration *registration) {
     roster = Save_FriendRoster_Get(registration->saveData);
     for (i = 0; i < FRIEND_ROSTER_SIZE; i++) {
         if (!FriendRoster_IsFriendValid(roster, i)) {
-            sub_0203A280(registration->saveData, registration->partnerNetId, i, HEAP_ID_FIELD1, 0);
+            Comm_StoreFriendFromPlayer(registration->saveData, registration->partnerNetId, i, HEAP_ID_FIELD1, 0);
             break;
         }
     }
@@ -131,7 +131,7 @@ BOOL PalPadRegistration_AnswerRegister(PalPadRegistration *registration) {
             roster = Save_FriendRoster_Get(registration->saveData);
             for (i = 0; i < FRIEND_ROSTER_SIZE; i++) {
                 if (!FriendRoster_IsFriendValid(roster, i)) {
-                    sub_0203A280(registration->saveData, registration->partnerNetId, i, HEAP_ID_FIELD1, 0);
+                    Comm_StoreFriendFromPlayer(registration->saveData, registration->partnerNetId, i, HEAP_ID_FIELD1, 0);
                     break;
                 }
             }
@@ -246,7 +246,7 @@ BOOL PalPadRegistration_AnswerConfirmDelete(PalPadRegistration *registration) {
         if (registration->yesNoAnswer == 0) {
             FrontierSave_DeleteRow(Save_Frontier_GetStatic(registration->saveData), registration->deleteSlot);
             FriendRoster_RemoveFriend(roster, registration->deleteSlot);
-            sub_0203A280(registration->saveData, registration->partnerNetId, FRIEND_ROSTER_SIZE - 1, HEAP_ID_FIELD1, 0);
+            Comm_StoreFriendFromPlayer(registration->saveData, registration->partnerNetId, FRIEND_ROSTER_SIZE - 1, HEAP_ID_FIELD1, 0);
             registration->state = PAL_PAD_REGISTRATION_STATE_NEXT_PARTNER;
         } else {
             BufferPlayersName(registration->msgFormat, 0, CommPlayerInfo_GetProfile(registration->partnerNetId));

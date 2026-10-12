@@ -137,7 +137,7 @@
 .public CommState_IsWifi
 .public sub_020399FC
 .public CommState_SetError
-.public sub_02039F68
+.public Comm_RecordPlayerLocations
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
 .public WirelessStatusIcon_SetLevel

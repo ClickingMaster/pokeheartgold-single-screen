@@ -65,9 +65,9 @@
 .public CommWireless_StartUp
 .public CommWireless_IsStartedUp
 .public CommWireless_Terminate
-.public sub_02039FD8
+.public Comm_InitDwc
 .public WirelessStatusIcon_SetLevel
-.public sub_02087E10
+.public VsRecorderApp_GetTemplate
 .public LoadDwcOverlay
 .public UnloadDwcOverlay
 .public LoadOVY38

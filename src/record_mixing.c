@@ -39,7 +39,7 @@
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
-#include "unk_0205A44C.h"
+#include "union_room_talk.h"
 #include "union_room_avatar.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
@@ -153,10 +153,10 @@ typedef struct RecordMixingApp {
 } RecordMixingApp;                                                           // size: 0x4A8C
 
 // No public header declares these.
-void sub_0203893C(void);
+void CommState_SetRecordMixingLinkMode(void);
 void CommState_SetMaxEntries(int count); // defined with an s8 parameter; the callers pass an int untruncated
-void sub_02039EAC(s32 *arg0);
-s32 sub_02039EB4(SaveData *saveData, s32 arg1, u32 *arg2);
+void Comm_InitSyncedSave(s32 *arg0);
+s32 Comm_SyncedSave(SaveData *saveData, s32 arg1, u32 *arg2);
 void UnionRoomObjects_ResetSlots(struct UnionRoomObjects *manager);
 void RecordMixingLink_RegisterCommands(RecordMixingApp *app); // registers the comm command table (wireless_room.c)
 
@@ -296,10 +296,10 @@ BOOL RecordMixing_Init(OverlayManager *man, int *state) {
         Sound_SetSceneAndPlayBGM(0x34, 0, 0);
         reg_GX_POWCNT &= ~REG_GX_POWCNT_DSEL_MASK;
         RecordMixingLink_RegisterCommands(app);
-        sub_0203893C();
+        CommState_SetRecordMixingLinkMode();
         CommState_SetMaxEntries(3);
         if (!Comm_GetLocalNetId()) {
-            sub_0205A904(2);
+            UnionRoom_SetBeaconActivity(2);
         }
         WirelessStatusIcon_Create();
         RecordMixing_BuildSendBuffer(app->saveData, app->sendBuffer);
@@ -382,7 +382,7 @@ BOOL RecordMixing_Exit(OverlayManager *man, int *state) {
     RecordMixing_FreeButtonScreen(app);
     RecordMixing_FreeBgs(app->bgConfig);
     CommState_SetMaxEntries(2);
-    sub_02037FF0();
+    CommState_ResumeAlternateSearch();
     UnionRoomObjects_ResetSlots(app->args->unk4);
     GF_TouchpadStopSampling();
     FontID_Release(4);
@@ -392,7 +392,7 @@ BOOL RecordMixing_Exit(OverlayManager *man, int *state) {
     RecordMixing_FreeResources(app);
     OverlayManager_FreeData(man);
     reg_GX_POWCNT |= REG_GX_POWCNT_DSEL_MASK;
-    sub_0205A904(0);
+    UnionRoom_SetBeaconActivity(0);
     Main_SetVBlankIntrCB(NULL, NULL);
     Heap_Destroy(HEAP_ID_50);
     return TRUE;
@@ -1006,7 +1006,7 @@ int ov73_021E6BF8(RecordMixingApp *app, int state) {
 int ov73_021E6C20(RecordMixingApp *app, int state) {
     gSystem.softResetDisabled = TRUE;
     GameStats_AddScore(app->args->gameStats, 19);
-    sub_02039EAC(&app->unk_0374);
+    Comm_InitSyncedSave(&app->unk_0374);
     app->state = 28;
     return state;
 }
@@ -1015,7 +1015,7 @@ int ov73_021E6C50(RecordMixingApp *app, int state) {
     if (Comm_GetLocalNetId() == 0) {
         Comm_CountConnected();
     }
-    if (sub_02039EB4(app->args->saveData, 2, (u32 *)&app->unk_0374)) {
+    if (Comm_SyncedSave(app->args->saveData, 2, (u32 *)&app->unk_0374)) {
         StopSE(SEQ_SE_DP_F209, 8);
         RecordMixing_PrintMessage(app, 13, FALSE);
         RecordMixing_SetStateAfterText(app, 29);
@@ -1595,7 +1595,7 @@ int ov73_021E7870(RecordMixingApp *app, int arg1) {
     case 2:
     case 3:
     case 4:
-        sub_0205A904(2);
+        UnionRoom_SetBeaconActivity(2);
         if (n < app->unk_4A18) {
             switch (app->unk_4A29) {
             case 0:
@@ -1609,7 +1609,7 @@ int ov73_021E7870(RecordMixingApp *app, int arg1) {
         }
         break;
     case 5:
-        sub_0205A904(9);
+        UnionRoom_SetBeaconActivity(9);
         ov73_021E781C(app, arg1);
         break;
     }

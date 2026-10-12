@@ -44,8 +44,8 @@
 .public FieldEffectManager_GetBillboardResource
 .public FieldEffectManager_FreeBillboardResource
 .public MapObject_GetBillboard
-.public ov01_021F9744
-.public ov01_021FA2D4
+.public MapObjectRender_GetBillboardResource
+.public MapObject_IsBillboardPending
 .public Reflection_New
 .public Reflection_Free
 .public Reflection_Spawn

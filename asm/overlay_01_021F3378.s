@@ -207,7 +207,7 @@ _021F34B0:
 	add r1, sp, #0x14
 	bl sub_0205F9A0
 	add r0, r4, #0
-	bl ov01_021F92A0
+	bl MapObject_TryUpdateDraw
 	ldr r0, _021F35C0 ; =SEQ_SE_DP_TELE2
 	bl PlaySE
 	mov r0, #1

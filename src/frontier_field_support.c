@@ -68,7 +68,7 @@ extern const u8 gFrontierSummaryPages[];
 extern FrontierData *Save_FrontierData_Get(SaveData *saveData);
 extern void sub_0202D638(FrontierData *frontierData, u32 value);
 extern u32 sub_0202D63C(FrontierData *frontierData);
-extern BOOL sub_0203A05C(SaveData *saveData);
+extern BOOL Comm_HasWifiProfile(SaveData *saveData);
 
 u32 FrontierPartySelect_LaunchPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId);
 u32 FrontierPartySelect_WaitPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem);
@@ -211,7 +211,7 @@ void TaskManager_CallFrontierPartySelect(TaskManager *taskManager, void **runnin
 }
 
 u32 FrontierWifiConnection_Launch(FrontierWifiConnectionEnv *env, FieldSystem *fieldSystem) {
-    if (sub_0203A05C(fieldSystem->saveData)) {
+    if (Comm_HasWifiProfile(fieldSystem->saveData)) {
         env->app = NintendoWifiConnection_LaunchApp(fieldSystem, env->arg1, env->arg2);
         return 1;
     }

@@ -392,7 +392,7 @@ _02258A0A:
 	bl WiFiPlazaWork_GetMyPlayer
 	add r1, r0, #0
 	ldr r0, [r5]
-	bl sub_0203976C
+	bl CommState_StartWifiPlaza
 	add r0, r5, #0
 	add r0, #0x70
 	mov r1, #0x17
@@ -405,10 +405,10 @@ _02258A0A:
 	str r0, [r4]
 	b _02258C28
 _02258A32:
-	bl sub_020393C8
+	bl CommState_HasWifiFailed
 	cmp r0, #0
 	bne _02258A42
-	bl sub_020397FC
+	bl CommState_HasPlazaLobbyFailed
 	cmp r0, #0
 	beq _02258A4E
 _02258A42:
@@ -418,7 +418,7 @@ _02258A42:
 	mov r0, #9
 	str r0, [r4]
 _02258A4E:
-	bl sub_020397E4
+	bl CommState_HasPlazaLobbyStarted
 	cmp r0, #1
 	bne _02258B20
 	ldr r0, [r6, #4]
@@ -428,10 +428,10 @@ _02258A4E:
 	str r0, [r4]
 	b _02258C28
 _02258A64:
-	bl sub_020393C8
+	bl CommState_HasWifiFailed
 	cmp r0, #0
 	bne _02258A74
-	bl sub_020397FC
+	bl CommState_HasPlazaLobbyFailed
 	cmp r0, #0
 	beq _02258A80
 _02258A74:
@@ -441,7 +441,7 @@ _02258A74:
 	mov r0, #9
 	str r0, [r4]
 _02258A80:
-	bl sub_02039274
+	bl CommState_IsWifiJoiningLobby
 	cmp r0, #0
 	beq _02258B20
 	add r0, r5, #0
@@ -462,7 +462,7 @@ _02258A80:
 	str r0, [r4]
 	b _02258C28
 _02258AB2:
-	bl sub_020393C8
+	bl CommState_HasWifiFailed
 	cmp r0, #0
 	beq _02258ACE
 	bl CommState_GetWifiError
@@ -512,7 +512,7 @@ _02258B0E:
 _02258B20:
 	b _02258C28
 _02258B22:
-	bl sub_020393C8
+	bl CommState_HasWifiFailed
 	cmp r0, #0
 	beq _02258B46
 	bl CommState_GetWifiError
@@ -560,7 +560,7 @@ _02258B74:
 	add r5, #0xd0
 	ldr r0, [r5]
 	bl YesNoPrompt_Destroy
-	bl sub_020397C8
+	bl CommState_LeaveWifiPlaza
 	mov r0, #0xd
 	str r0, [r4]
 	b _02258C28
@@ -590,7 +590,7 @@ _02258BB4:
 	add r5, #0xa0
 	add r0, r5, #0
 	bl WiFiPlazaConnect_ClearMessageBox
-	bl sub_020397C8
+	bl CommState_LeaveWifiPlaza
 	ldr r0, [r4]
 	add r0, r0, #1
 	str r0, [r4]
@@ -870,10 +870,10 @@ _02258E14:
 	add r0, #0x40
 	mov r1, #0x1a
 	bl WiFiPlazaConnect_PrintMessage
-	bl sub_020393C8
+	bl CommState_HasWifiFailed
 	cmp r0, #0
 	bne _02258E2E
-	bl sub_020397FC
+	bl CommState_HasPlazaLobbyFailed
 	cmp r0, #0
 	beq _02258E3C
 _02258E2E:
@@ -913,7 +913,7 @@ _02258E6E:
 	str r0, [r4]
 	b _02258EF2
 _02258E74:
-	bl sub_020397C8
+	bl CommState_LeaveWifiPlaza
 	mov r0, #6
 	str r0, [r4]
 	b _02258EF2

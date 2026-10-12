@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include "field/field_effect_manager.h"
+#include "field/map_object_models.h"
 
 #include "field_system.h"
 #include "gf_rtc.h"
@@ -16,8 +17,6 @@ void *FieldEffect_GetParam(void *effect);
 void FieldEffect_SetPosition(void *effect, VecFx32 *position);
 void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *mdl, u32 alpha);
 void RenderObj_Draw(void *renderObj, VecFx32 *pos, VecFx32 *scale, MtxFx33 *mtx);
-BOOL ov01_021F8F88(LocalMapObject *object);
-void ov01_021F8FA0(LocalMapObject *object, VecFx32 *offset);
 
 // Renderer data of the field effect manager (renderer 0); 0x1C8 bytes.
 typedef struct FieldShadow {
@@ -306,7 +305,7 @@ void ov01_021FD838(FieldEffect *effect, FieldShadowEffect *work) {
     object = work->args.mapObject;
     renderObj = &shadow->renderObjs[0];
     FieldShadow_GetScale(shadow, &scale);
-    if (ov01_021F8F88(object) != 0) {
+    if (FollowMonBillboard_IsShadowFollowing(object) != 0) {
         FieldEffect_GetPosition(effect, &pos);
         pos.x -= 0x800;
         pos.y -= 0x4000;
@@ -314,7 +313,7 @@ void ov01_021FD838(FieldEffect *effect, FieldShadowEffect *work) {
         FieldShadow_OffsetByFacing(MapObject_GetFacingDirection(object), &pos);
     } else {
         MapObject_CopyPositionVector(object, &pos);
-        ov01_021F8FA0(object, &offset);
+        FollowMonBillboard_GetShadowOffset(object, &offset);
         pos.x += offset.x;
         pos.z += offset.z;
         pos.x -= 0x800;

@@ -79,10 +79,10 @@
 .public MIi_CpuCopy16
 .public MI_CpuFill8
 .public ov01_021F771C
-.public ov01_021F9048
+.public FollowMonBillboard_ResetPalette
 .public GetMoveModelNoBySpriteId
-.public ov01_021F9744
-.public ov01_021FA44C
+.public MapObjectRender_GetBillboardResource
+.public Facing_GetBillboardStandSequence
 .public ResourceBank_Get
 .public FollowMonBall_Spawn
 .public FollowMon_MarkForRecreate

@@ -4,8 +4,8 @@
 .public CommState_GetLinkMode
 .public sub_020548EC
 .public GetMetatileBehavior
-.public sub_02054940
-.public sub_020549A8
+.public FieldSystem_GetTerrainHeight
+.public FieldSystem_CheckCollisionAndHeight
 .public MetatileBehavior_IsTallGrass
 .public MetatileBehavior_IsVeryTallGrass
 .public MetatileBehavior_IsSurfableWater
@@ -115,7 +115,7 @@
 .public MapObject_ExecuteMovementCommand
 .public sub_02063A14
 .public sub_02063A1C
-.public ov01_021F9318
+.public MapObject_GetEffectFlags
 .public FieldShadow_CreateMapObjectShadow
 .public ov01_021FD684
 .public Reflection_Spawn

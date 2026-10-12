@@ -27,7 +27,7 @@ struct FriendRoster {
 // asm/friend_roster_data.s
 extern FriendRoster gFriendRoster;
 
-void sub_0203A01C(FriendRoster *data);
+void Comm_EnsureDwcUserData(FriendRoster *data);
 BOOL DWC_IsValidFriendData(void *data);
 
 u32 Save_FriendRoster_sizeof(void);
@@ -68,7 +68,7 @@ void Save_FriendRoster_Init(FriendRoster *data) {
         data->roster.entries[i].name[0] = 0xFFFF;
         data->roster.entries[i].value2E = 2;
     }
-    sub_0203A01C(data);
+    Comm_EnsureDwcUserData(data);
     MI_CpuCopy8(data, &gFriendRoster, sizeof(*data));
 }
 

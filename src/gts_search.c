@@ -101,7 +101,7 @@ extern int ov70_0224590C[];
 u32 GtsSave_GetDepositDate(void *gtsSave);
 u32 GtsSave_GetTradeDate(void *gtsSave);
 void ov00_021ECB94(RTCDate *date, RTCTime *time);
-void sub_020399EC(void);
+void CommState_ShowRestartErrorAndHalt(void);
 
 int GtsSearch_Init(GtsApp *app, int state);
 int GtsSearch_Main(GtsApp *app, int state);
@@ -572,7 +572,7 @@ int GtsSearch_WaitSearch(GtsApp *app) {
             app->state = GTS_SEARCH_STATE_SERVER_ERROR;
             break;
         case -13:
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         case -15:
         case -12:
@@ -582,7 +582,7 @@ int GtsSearch_WaitSearch(GtsApp *app) {
     } else {
         app->requestFrames++;
         if (app->requestFrames == 60 * 60) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;

@@ -27,7 +27,7 @@ BOOL WiFiPlaza_Init(OverlayManager *man, int *state) {
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_42), OVY_LOAD_ASYNC);
     LoadDwcOverlay();
     LoadOVY38();
-    sub_02039FD8(HEAP_ID_3);
+    Comm_InitDwc(HEAP_ID_3);
     Heap_Create(HEAP_ID_3, HEAP_ID_111, 0x5000);
     plaza = OverlayManager_CreateAndGetData(man, sizeof(WiFiPlaza), HEAP_ID_111);
     {

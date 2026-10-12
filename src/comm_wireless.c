@@ -17,7 +17,7 @@
 typedef struct CommBeacon {
     u32 trainerId;
     u8 kind;        // 0x04: link kind (CommState_GetLinkMode)
-    u8 id;          // 0x05: sub_02039954
+    u8 id;          // 0x05: CommState_GetBeaconId
     u8 memberCount; // 0x06: connected players
     u8 unk_07;
     MailMessage mail; // 0x08
@@ -101,7 +101,7 @@ u16 WM_GetDispersionBeaconPeriod(void);
 int CommPlayerInfo_DropDisconnected(void);
 
 int CommState_GetLinkMode(void);
-int sub_02039954(void);
+int CommState_GetBeaconId(void);
 void CommState_ShowErrorAndHalt(u32);
 BOOL sub_02037474(void);
 BOOL sub_0203401C(int value);
@@ -252,7 +252,7 @@ void CommWireless_OnParentFound(void *parentInfo) {
     int id;
 
     kind = CommState_GetLinkMode();
-    id = sub_02039954();
+    id = CommState_GetBeaconId();
     beacon = data + 0x50;
 
     if (kind != 14) {
@@ -601,7 +601,7 @@ void CommWireless_BuildBeacon(void) {
         MI_CpuCopy8(gCommWireless.work->ruleset, beacon + 0x30, LinkBattleRuleset_sizeof());
         *(u32 *)beacon = PlayerProfile_GetTrainerID(profile);
         beacon[4] = CommState_GetLinkMode();
-        beacon[5] = sub_02039954();
+        beacon[5] = CommState_GetBeaconId();
         MI_CpuCopy8(&gCommWireless.work->mail, beacon + 8, 8);
         beacon += 0x54;
         *beacon = Wireless_IsEntryLocked();
@@ -609,7 +609,7 @@ void CommWireless_BuildBeacon(void) {
         u8 *beacon = (u8 *)gCommWireless.work->beacon;
         *(u32 *)beacon = PlayerProfile_GetTrainerID(profile);
         beacon[4] = CommState_GetLinkMode();
-        beacon[5] = sub_02039954();
+        beacon[5] = CommState_GetBeaconId();
         MI_CpuCopy8(gCommWireless.work->customBeacon, beacon + 8, 0x54);
     }
     DC_FlushRange(gCommWireless.work->beacon, sizeof(CommBeacon));

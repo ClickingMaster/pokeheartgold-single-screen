@@ -101,7 +101,7 @@ void GtsSave_SetTradeDate(void *gtsSave, u32 value);
 u16 GtsSave_GetStoredMonBox(void *gtsSave);
 // Not declared in a public header.
 void WirelessStatusIcon_SetLevel(s32 level);
-void sub_020399EC(void);
+void CommState_ShowRestartErrorAndHalt(void);
 void ov00_021ECB94(RTCDate *date, RTCTime *time);
 
 int GtsTransaction_Init(GtsApp *app, int state);
@@ -314,7 +314,7 @@ int GtsTransaction_SendPost(GtsApp *app) {
     return 3;
 }
 
-// Each request is given a minute; then the connection is dropped (sub_020399EC).
+// Each request is given a minute; then the connection is dropped (CommState_ShowRestartErrorAndHalt).
 int GtsTransaction_WaitPost(GtsApp *app) {
     if (GtsServer_IsRequestDone()) {
         int result = GtsServer_GetResult();
@@ -351,13 +351,13 @@ int GtsTransaction_WaitPost(GtsApp *app) {
             app->state = GTS_TRANSACTION_STATE_SERVER_ERROR_EXIT;
             break;
         case -13:
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         app->requestFrames++;
         if (app->requestFrames == 60 * 60) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -393,13 +393,13 @@ int GtsTransaction_WaitPostFinish(GtsApp *app) {
             CommState_SetError(4);
             break;
         case -13:
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         app->requestFrames++;
         if (app->requestFrames == 60 * 60) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -446,13 +446,13 @@ int GtsTransaction_WaitGet(GtsApp *app) {
             app->state = GTS_TRANSACTION_STATE_SERVER_ERROR_EXIT;
             break;
         case -13:
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         app->requestFrames++;
         if (app->requestFrames == 60 * 60) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -485,13 +485,13 @@ int GtsTransaction_WaitReturn(GtsApp *app) {
             CommState_SetError(4);
             break;
         case -13:
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         app->requestFrames++;
         if (app->requestFrames == 60 * 60) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -543,13 +543,13 @@ int GtsTransaction_WaitExchange(GtsApp *app) {
             app->state = GTS_TRANSACTION_STATE_SERVER_ERROR_EXIT;
             break;
         case -13:
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         app->requestFrames++;
         if (app->requestFrames == 60 * 60) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -580,13 +580,13 @@ int GtsTransaction_WaitExchangeFinish(GtsApp *app) {
             CommState_SetError(4);
             break;
         case -13:
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         app->requestFrames++;
         if (app->requestFrames == 60 * 60) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -678,7 +678,7 @@ int GtsTransaction_WaitResult(GtsApp *app) {
     } else {
         app->requestFrames++;
         if (app->requestFrames == 60 * 60) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -723,7 +723,7 @@ int GtsTransaction_WaitStatusGet(GtsApp *app) {
             app->state = GTS_TRANSACTION_STATE_SERVER_ERROR_EXIT;
             return 3;
         case -13:
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             return 3;
         case -11:
         case -10:
@@ -740,7 +740,7 @@ int GtsTransaction_WaitStatusGet(GtsApp *app) {
     } else {
         app->requestFrames++;
         if (app->requestFrames == 60 * 60) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -807,13 +807,13 @@ int GtsTransaction_WaitDelete(GtsApp *app) {
             CommState_SetError(4);
             break;
         case -13:
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         app->requestFrames++;
         if (app->requestFrames == 60 * 60) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -883,13 +883,13 @@ int GtsTransaction_WaitUnsavedReturn(GtsApp *app) {
             CommState_SetError(4);
             break;
         case -13:
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
             break;
         }
     } else {
         app->requestFrames++;
         if (app->requestFrames == 60 * 60) {
-            sub_020399EC();
+            CommState_ShowRestartErrorAndHalt();
         }
     }
     return 3;
@@ -1148,7 +1148,7 @@ void GtsTransaction_SaveTradeDate(void *gtsSave, int exchange) {
 }
 
 void GtsTransaction_AddPartnerToWifiHistory(SaveWiFiHistory *wifiHistory, GtsRecord *record) {
-    sub_02039FB8(wifiHistory, record->country, record->city, record->language);
+    Comm_MarkLocationSeen(wifiHistory, record->country, record->city, record->language);
 }
 
 // 0: the Pokemon can be received, 1: the party and all boxes are full, 2: it holds Mail and the party is full.

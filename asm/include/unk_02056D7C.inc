@@ -25,7 +25,7 @@
 .public Field_GetObjectEvents
 .public sub_0203E2F4
 .public sub_0203E30C
-.public sub_020548C0
+.public FieldSystem_CheckTileCollision
 .public CommPlayerManager_Init
 .public CommPlayerManager_RemoveAllAvatars
 .public sub_02056E60
