@@ -413,9 +413,9 @@
 .public VisitorProfiles_Exit
 .public WiFiPlazaMap_PosToVecFx32
 .public WiFiPlazaMap_LoadModelFile
-.public ov49_02259AA4
-.public ov49_02259C90
-.public ov49_02259EF8
+.public WiFiPlazaRoom_Init
+.public WiFiPlazaRoom_Main
+.public WiFiPlazaRoom_Exit
 .public PlazaNews_Init
 .public PlazaNews_Main
 .public PlazaNews_Exit

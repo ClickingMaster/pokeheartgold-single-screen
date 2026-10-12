@@ -16,7 +16,7 @@
 #include "field/map_prop_animation.h"
 #include "field/model_attributes.h"
 #include "field/field_camera.h"
-#include "field/overlay_01_021EAF00.h"
+#include "field/field_bottom_screen.h"
 #include "field/field_texture_manager.h"
 #include "field/map_object_model_list.h"
 #include "field/overlay_01_02204004.h"

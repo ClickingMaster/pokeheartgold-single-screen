@@ -140,9 +140,9 @@
 .public WirelessStatusIcon_SetLevel
 .public Save_VarsFlags_Get
 .public SetFlag970
-.public sub_02085400
-.public sub_0208541C
-.public sub_02085438
+.public CodeEntryArgs_New
+.public CodeEntryArgs_NewWithFixedDigits
+.public CodeEntryArgs_Delete
 .public LoadDwcOverlay
 .public UnloadDwcOverlay
 .public LoadOVY38
@@ -161,7 +161,7 @@
 .public MIi_CpuClear32
 .public MI_CpuFill8
 .public _ull_mod
-.public _02102620
+.public gOverlayTemplate_CodeEntry
 .public gSystem
 .public WifiConnection_ClassifyErrorCode
 .public ov00_021EC0FC

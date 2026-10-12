@@ -773,9 +773,9 @@ ov45_02254B84: ; 0x02254B84
 	.word FS_OVERLAY_ID(OVY_48)
 
 ov45_02254B94: ; 0x02254B94
-	.word ov49_02259AA4
-	.word ov49_02259C90
-	.word ov49_02259EF8
+	.word WiFiPlazaRoom_Init
+	.word WiFiPlazaRoom_Main
+	.word WiFiPlazaRoom_Exit
 	.word FS_OVERLAY_ID(OVY_49)
 
 ov45_02254BA4: ; 0x02254BA4

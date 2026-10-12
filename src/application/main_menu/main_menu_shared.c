@@ -26,7 +26,7 @@ extern enum HeapID sMainMenuUtilCryptoHeapId;
 extern u32 ov74_0223E2D4[]; // = gMainMenuUtilWork + 0xE80
 
 #pragma force_active on
-// The first 0x34 bytes of the MainMenuUtilWork (up to .sprites); the rest of it is .bss of asm/to57_overlay_74_data.s
+// The first 0x34 bytes of the MainMenuUtilWork (up to .sprites); the rest of it is .bss of asm/main_menu_data.s
 u32 gMainMenuUtilWork[13];
 
 #define sMainMenuUtilWork ((MainMenuUtilWork *)gMainMenuUtilWork)

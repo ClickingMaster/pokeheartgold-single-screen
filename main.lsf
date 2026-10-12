@@ -412,37 +412,8 @@ Static main
     Object src/party_menu_list_items.o
     Object src/party_menu_items.o
     Object src/naming_screen.o
-    Object src/field_ui_overlay_controller_1.o
-    Object asm/unk_020850F4_residual_1.o
-    Object src/field_ui_85604_1.o
-    Object src/op90_unk_02085604_r01.o
-    Object src/field_ui_85604_2.o
-    Object src/to80_extra1374_run01.o
-    Object src/field_ui_85604_3.o
-    Object src/op90_unk_02085604_residual_3_r01.o
-    Object src/field_ui_85604_4.o
-    Object src/to53_field_ui_sprite_anim.o
-    Object src/to90_extra2514_run01.o
-    Object src/op90_to53_unk_02085604_tail_2_r01.o
-    Object src/field_ui_85604_5.o
-    Object asm/to70_unk_02085604_residual_5_extra913_anchor.o
-    Object src/to70_unk_02085604_residual_5_extra913_run01.o
-    Object src/op90_to70_unk_02085604_residual_5_extra913_residual_1_r01.o
-    Object src/field_ui_863f4_1.o
-    Object src/to70_unk_020863F4_cleanup_before_extra101_run01.o
-    Object src/field_ui_863f4_cleanup.o
-    Object src/to90_extra2511_run01.o
-    Object src/to53_field_ui_sprite_create.o
-    Object src/to55_bank_field_ui_sprite.o
-    Object src/field_ui_863f4_2.o
-    Object src/op90_unk_020863F4_residual_2_r01.o
-    Object src/op90_op90_unk_020863F4_residual_2_residual_1_r01.o
-    Object src/field_ui_863f4_3.o
-    Object src/op90_unk_020863F4_residual_3_r01.o
-    Object src/field_ui_863f4_4.o
-    Object src/op90_unk_020863F4_residual_4_r01.o
-    Object src/field_ui_863f4_5.o
-    Object asm/unk_020863F4_residual_5.o
+    Object asm/code_entry_data.o
+    Object src/code_entry.o
     Object src/orbit_cursor.o
     Object src/battle_transition_application.o
     Object src/field_transition_finish_1.o
@@ -1224,7 +1195,7 @@ Overlay field
     Object src/field/field_model_attributes.o
     Object src/field/field_camera.o
     Object asm/overlay_01_021EABA8_residual_2.o
-    Object src/bottom_screen_dispatch_1.o
+    Object src/field/field_bottom_screen.o
     Object src/field/field_texture_manager.o
     Object src/field/weather_manager.o
     Object src/field_move_tutor_menu_1.o
@@ -2297,90 +2268,13 @@ Overlay OVY_49
     After OVY_45
     Object src/wifi_plaza_map.o
     Object src/wifi_plaza_obj.o
-    Object src/overlay49_lifecycle_r15.o
-    Object src/overlay_49_sol_partial_16.o
-    Object src/to80_extra1784_run01.o
-    Object src/overlay_49_sol_partial_17.o
-    Object src/overlay49_task_bank_1.o
-    Object src/overlay_49_sol_partial_18.o
-    Object src/overlay49_offset_wrappers_r18.o
-    Object src/overlay_49_sol_partial_19.o
-    Object src/overlay49_menu_graphics_run1.o
-    Object src/to50_overlay49_menu_graphics_r19_2.o
-    Object src/overlay49_menu_graphics_run2.o
-    Object src/overlay49_graphics_cleanup_r19.o
-    Object src/overlay49_menu_graphics_run3.o
-    Object src/overlay49_3d_lighting_r19.o
-    Object src/overlay49_menu_graphics_run4.o
-    Object src/overlay_49_sol_partial_20.o
-    Object src/overlay49_menu_helpers_1.o
-    Object src/to91_w41420_ov49_ad20.o
-    Object src/overlay49_menu_helpers_2.o
-    Object src/overlay_49_sol_partial_21.o
-    Object src/to80_extra1786_run01.o
-    Object src/overlay_49_sol_partial_22.o
-    Object src/overlay49_menu_list_r22.o
-    Object src/overlay_49_sol_partial_23.o
-    Object src/to70_overlay_49_residual_23_extra806_run01.o
-    Object src/overlay_49_sol_partial_24.o
-    Object src/to47_overlay49_window_menu.o
-    Object src/overlay_49_sol_partial_25.o
-    Object src/overlay49_message_bank_1.o
-    Object src/overlay_49_sol_partial_26.o
-    Object src/overlay49_scene_setup_r26.o
-    Object src/op90_overlay_49_residual_26_holdout_r01.o
-    Object src/overlay_49_sol_partial_27.o
-    Object src/to80_extra1532_run01.o
-    Object src/overlay_49_sol_partial_28.o
-    Object src/overlay49_state_accessor_r28.o
-    Object src/overlay_49_sol_partial_29.o
-    Object src/to70_overlay_49_residual_29_extra970_run01.o
-    Object src/overlay_49_sol_partial_30.o
-    Object src/overlay49_state_dispatch_r40_30.o
-    Object src/overlay_49_sol_partial_31.o
-    Object src/to47_overlay49_palette_tasks.o
-    Object src/overlay_49_sol_partial_32.o
-    Object src/overlay49_window_setup_teardown.o
-    Object src/overlay_49_sol_partial_33.o
-    Object src/to70_overlay_49_residual_33_extra1208_run01.o
-    Object src/to45_overlay49_r33_exact.o
-    Object src/overlay_49_sol_partial_34.o
-    Object src/overlay49_sprite_resources_r34_run1.o
-    Object src/op90_overlay_49_residual_34_opus_d_residual_1_r01.o
-    Object src/overlay49_sprite_resources_r34_run2.o
-    Object src/to70_overlay_49_residual_34_opus_d_residual_2_extra491_run01.o
-    Object src/op90_to70_overlay_49_residual_34_opus_d_residual_2_extra491_residual_1_r01.o
-    Object src/ov49_wave34_windows_1.o
-    Object src/to70_overlay_49_residual_34_residual_2_extra1209_run01.o
-    Object src/ov49_wave34_windows_2.o
-    Object src/ov49_wave34_windows_r40_3.o
-    Object src/ov49_wave34_windows_3.o
-    Object src/to52_r5_overlay49_touch_state_r34_r4.o
-    Object src/ov49_wave34_windows_4.o
-    Object src/to70_overlay_49_residual_34_residual_5_extra807_run01.o
-    Object src/overlay_49_sol_partial_35.o
+    Object src/wifi_plaza_room.o
+    Object src/wifi_plaza_info_panel.o
     Object src/wifi_plaza_camera.o
     Object src/wifi_plaza_models.o
     Object src/wifi_plaza_player_state.o
-    Object src/to59_ov49_62028.o
-    Object src/overlay_49_sol_r9_60_run_03_62ac4.o
-    Object src/overlay_49_sol_partial_61.o
-    Object src/to46_overlay49_residual61.o
-    Object src/overlay_49_sol_partial_62.o
-    Object src/r40_overlay_49_residual_62_gap_1_run1.o
-    Object src/to80_extra1533_run01.o
-    Object src/to80_extra1533_run02.o
-    Object src/overlay49_r62_state_machine_tail.o
-    Object src/r40_overlay_49_residual_62_gap_1_run2.o
-    Object src/overlay49_battle_config_tail.o
-    Object src/overlay_49_sol_partial_63.o
-    Object src/overlay49_table_helpers_1.o
-    Object src/overlay_49_sol_partial_64.o
-    Object src/overlay_49_sol_partial_65.o
-    Object src/to45_overlay49_message_descriptor_r65.o
-    Object src/overlay_49_sol_partial_66.o
-    Object src/to47_overlay49_transition_r66.o
-    Object src/overlay_49_sol_partial_67.o
+    Object src/wifi_plaza_game_entry.o
+    Object src/wifi_plaza_talk.o
     Object src/wifi_plaza_instrument.o
     Object src/wifi_plaza_event.o
     Object asm/to90_extra2491_anchor.o
@@ -2424,13 +2318,13 @@ Overlay OVY_56
 {
     After OVY_55
     Object src/mail_view.o
-    Object asm/overlay_56_residual_3.o
+    Object asm/mail_view_data.o
 }
 Overlay OVY_57
 {
     After OVY_7
     Object src/ball_capsule_editor.o
-    Object asm/to45_overlay57_data_r14.o
+    Object asm/ball_capsule_editor_data.o
 }
 Overlay OVY_58
 {
@@ -2441,8 +2335,8 @@ Overlay OVY_59
 {
     After OVY_58
     Object src/apricorn_box_screens.o
-    Object asm/to70_overlay_59_residual_17_extra815_anchor.o
-    Object src/to70_overlay_59_residual_17_extra815_run01.o
+    Object asm/apricorn_box_screens_data.o
+    Object src/aprijuice_scene_camera.o
 }
 Overlay intro_title
 {
@@ -2475,13 +2369,13 @@ Overlay OVY_64
 {
     After main
     Object src/hall_of_fame_showcase.o
-    Object asm/overlay_64_residual_11.o
+    Object asm/hall_of_fame_showcase_data.o
 }
 Overlay OVY_65
 {
     After OVY_6
     Object src/wireless_trade_select_mon.o
-    Object asm/overlay_65_residual_16.o
+    Object asm/wireless_trade_select_mon_data.o
 }
 Overlay OVY_66
 {
@@ -2491,26 +2385,25 @@ Overlay OVY_67
 {
     After main
     Object src/battle_room_results.o
-    Object asm/overlay_67_residual_11.o
+    Object asm/battle_room_results_data.o
 }
 Overlay OVY_68
 {
     After main
     Object src/move_relearner_app.o
-    Object asm/to80_extra1791_anchor.o
-    Object src/to80_extra1791_run01.o
+    Object asm/move_relearner_app_data.o
+    Object src/move_relearner_sub_screen.o
 }
 Overlay OVY_69
 {
     After main
     Object src/geonet_globe_app.o
-    Object asm/overlay_69_residual_11.o
+    Object asm/geonet_globe_app_data.o
 }
 Overlay OVY_70
 {
     After OVY_7
     Object src/gts_server.o
-    Object asm/overlay_70_to52_publics_only.o
     Object src/gts.o
     Object src/gts_main_menu.o
     Object src/gts_summary.o
@@ -2523,7 +2416,7 @@ Overlay OVY_70
     Object src/gts_trade.o
     Object src/gts_selector.o
     Object src/gts_connection.o
-    Object asm/overlay_70_residual_45_r40_residual_1.o
+    Object asm/gts_data.o
 }
 Overlay OVY_71
 {
@@ -2536,18 +2429,18 @@ Overlay OVY_71
     Object src/trade_sequence_exchange.o
     Object src/trade_sequence_approach.o
     Object src/trade_sequence_arrive.o
-    Object asm/to70_overlay_71_residual_50_extra320_anchor_own1.o
+    Object asm/trade_sequence_bss.o
     Object src/trade_sequence_arrive_tasks.o
     Object src/trade_sequence_receive.o
-    Object asm/to70_overlay_71_residual_50_extra320_anchor.o
+    Object asm/trade_sequence_data.o
     Object src/trade_sequence_receive_bounce.o
 }
 Overlay OVY_72
 {
     After OVY_7
     Object src/nintendo_wfc_connect.o
-    Object asm/to80_extra1546_anchor.o
-    Object src/to80_extra1546_run01.o
+    Object asm/nintendo_wfc_connect_data.o
+    Object src/nintendo_wfc_connect_cursor.o
 }
 Overlay OVY_73
 {
@@ -2556,7 +2449,7 @@ Overlay OVY_73
     Object src/record_mixing_records.o
     Object src/nintendo_wfc_connect_unused.o
     Object src/record_mixing_exchange.o
-    Object asm/op90_overlay_73_residual_41_remaining_anchor.o
+    Object asm/record_mixing_data.o
     Object src/record_mixing_merge.o
 }
 Overlay OVY_74
@@ -2572,12 +2465,12 @@ Object src/application/main_menu/mystery_gift_wireless.o
     Object src/application/main_menu/migrate_from_agb.o
     Object src/application/main_menu/agb_cartridge.o
     Object src/application/main_menu/main_menu_util.o
-    Object asm/to57_overlay_74_data_own1.o
+    Object asm/main_menu_bss.o
     Object src/application/main_menu/main_menu_shared.o
     Object src/application/main_menu/mystery_gift_beacon.o
     Object src/application/main_menu/mystery_gift_wfc.o
     Object src/application/main_menu/agb_string.o
-    Object asm/to57_overlay_74_data.o
+    Object asm/main_menu_data.o
     Object asm/nitrocrypto_data.o
     Object lib/src/nitrocrypto_rc4.o
     Object lib/src/nitrocrypto_sign.o
@@ -2598,7 +2491,7 @@ Overlay OVY_75
 {
     After OVY_70
     Object src/wii_message_settings.o
-    Object asm/to70_overlay_75_residual_18_extra240_anchor.o
+    Object asm/wii_message_settings_data.o
     Object src/wii_number.o
 }
 Overlay credits
@@ -2805,40 +2698,9 @@ Overlay OVY_96
     Object src/op90_overlay_96_residual_80_r01.o
     Object asm/to70_overlay_96_residual_125_extra662_anchor_own3.o
     Object src/pokeathlon/pokeathlon_relay_run_cpu.o
-    Object src/op90_to70_overlay_96_residual_82_gap2_extra524_residual_1_r01.o
-    Object src/to45_overlay96_r82_run2.o
-    Object src/to70_overlay_96_residual_82_gap3_extra390_run01.o
-    Object src/to45_overlay96_r82_run3.o
-    Object src/to70_overlay_96_residual_82_gap4_extra247_run01.o
-    Object src/to45_overlay96_r82_run4.o
-    Object src/op90_overlay_96_residual_82_gap5_r01.o
-    Object src/to45_overlay96_r82_run5.o
-    Object src/op90_to90_extra2559_residual_1_r01.o
-    Object src/to90_extra2559_run01.o
-    Object src/op90_to90_extra2559_residual_2_r01.o
-    Object src/op90_op90_to90_extra2559_residual_2_residual_1_r01.o
-    Object src/overlay96_course_position_lookup.o
-    Object src/to45_overlay96_r82_run6.o
-    Object src/to41_overlay_96_residual_82_run1.o
-    Object src/op90_overlay_96_residual_82_to41_residual_2_r01.o
-    Object src/op90_overlay_96_residual_82_to41_residual_2_r02.o
-    Object src/overlay96_pokeathlon_course_ui.o
-    Object src/overlay96_exact_bank_82.o
-    Object src/to70_to70_overlay_96_residual_83_extra405_residual_1_extra1325_run01.o
-    Object src/to70_overlay_96_residual_83_extra405_run01.o
-    Object src/overlay96_exact_bank_83.o
-    Object src/overlay96_course_sprite_resources_r14_run1.o
-    Object src/to70_overlay_96_residual_84_residual_1_extra1044_run01.o
-    Object src/overlay96_course_sprite_resources_r14_run2.o
-    Object src/to70_to70_overlay_96_residual_84_residual_2_extra300_residual_1_extra1326_run01.o
-    Object src/to70_overlay_96_residual_84_residual_2_extra300_run01.o
-    Object src/overlay96_course_sprite_resources_r14_run3.o
-    Object src/to70_overlay_96_residual_84_residual_3_extra63_run01.o
-    Object src/overlay96_course_sprite_resources_r14_run4.o
-    Object src/overlay96_exact_bank_84.o
-    Object src/overlay96_course_r85_run1.o
-    Object src/op90_overlay_96_residual_85_prefix_r01.o
-    Object src/overlay96_course_r85_sort.o
+    Object src/pokeathlon/pokeathlon_snow_throw.o
+    Object src/pokeathlon/pokeathlon_snow_throw_display.o
+    Object src/pokeathlon/pokeathlon_snow_throw_cpu.o
     Object src/pokeathlon/pokeathlon_pennant_capture.o
     Object asm/to90_extra1935_anchor.o
     Object src/pokeathlon/pokeathlon_pennant_capture_play.o

@@ -84,27 +84,27 @@ extern const VsRecorderIconPositions sVsRecorderVideoListIconPositions;
 
 void VsRecorder_OnRankingsHeaderReceived(void *arg, GlobalTerminalNetError *error) {
     VsRecorderWork *work = arg;
-    VsRecorderRankingsDownload *download = work->screenWork;
+    VsRecorderRankings *rankings = work->screenWork;
 
     if (error->isError == TRUE) {
-        download->unk_71C = &download->unk_710;
+        rankings->recordIds = rankings->recordIdsBuf;
     } else {
-        ov39_02227F74(VsRecorder_GetNet(work), &download->unk_71C);
-        MI_CpuCopy8(download->unk_71C, &download->unk_710, 4);
+        ov39_02227F74(VsRecorder_GetNet(work), (void **)&rankings->recordIds);
+        MI_CpuCopy8(rankings->recordIds, rankings->recordIdsBuf, sizeof(rankings->recordIdsBuf));
     }
 }
 
 void VsRecorder_OnRankingsReceived(void *arg, GlobalTerminalNetError *error) {
     VsRecorderWork *work = arg;
-    VsRecorderRankingsDownload *download = work->screenWork;
+    VsRecorderRankings *rankings = work->screenWork;
 
     if (error->isError == TRUE) {
-        download->rankingsData = download->rankings;
-        download->ownRankingsData = download->ownRankings;
+        rankings->results = rankings->resultsBuf;
+        rankings->standings = rankings->standingsBuf;
     } else {
-        GlobalTerminalNet_GetRankings(VsRecorder_GetNet(work), &download->rankingsData, &download->ownRankingsData);
-        MI_CpuCopy8(download->rankingsData, download->rankings, sizeof(download->rankings));
-        MI_CpuCopy8(download->ownRankingsData, download->ownRankings, sizeof(download->ownRankings));
+        GlobalTerminalNet_GetRankings(VsRecorder_GetNet(work), (void **)&rankings->results, (void **)&rankings->standings);
+        MI_CpuCopy8(rankings->results, rankings->resultsBuf, sizeof(rankings->resultsBuf));
+        MI_CpuCopy8(rankings->standings, rankings->standingsBuf, sizeof(rankings->standingsBuf));
     }
 }
 

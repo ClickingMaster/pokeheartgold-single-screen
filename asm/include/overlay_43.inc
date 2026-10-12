@@ -179,8 +179,8 @@
 .public sub_02070D84
 .public NamingScreen_CreateArgs
 .public NamingScreen_DeleteArgs
-.public sub_02085400
-.public sub_02085438
+.public CodeEntryArgs_New
+.public CodeEntryArgs_Delete
 .public DWC_CheckFriendKey
 .public DWC_GetFriendKey
 .public DWC_CreateFriendKey
@@ -193,7 +193,7 @@
 .public _s32_div_f
 .public _u32_div_f
 .public gOverlayTemplate_NamingScreen
-.public _02102620
+.public gOverlayTemplate_CodeEntry
 .public gSystem
 .public ov42_02227060
 .public ov42_02227114

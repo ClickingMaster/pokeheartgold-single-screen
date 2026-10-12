@@ -23,9 +23,9 @@ typedef struct PalPadCodeEntryArgs {
     String *text;
 } PalPadCodeEntryArgs;
 
-extern const OverlayManagerTemplate _02102620;
-PalPadCodeEntryArgs *sub_02085400(enum HeapID heapId, u32 maxLen, const u32 *params, Options *options, u32 unk4, u32 unk5);
-void sub_02085438(PalPadCodeEntryArgs *args);
+extern const OverlayManagerTemplate gOverlayTemplate_CodeEntry;
+PalPadCodeEntryArgs *CodeEntryArgs_New(enum HeapID heapId, u32 maxLen, const u32 *params, Options *options, u32 unk4, u32 unk5);
+void CodeEntryArgs_Delete(PalPadCodeEntryArgs *args);
 
 // palettes of the return button: normal, pressed
 typedef struct PalPadButtonPalettes {
@@ -56,7 +56,7 @@ int PalPadNaming_Main(PalPadNaming *naming, PalPadWork *work, PalPadShared *shar
         codeEntryParams[1] = 4;
         codeEntryParams[2] = 4;
         codeEntryParams[3] = 0;
-        naming->codeEntryArgs = sub_02085400(heapId, 12, codeEntryParams, Save_PlayerData_GetOptionsAddr(shared->saveData), 0, 0);
+        naming->codeEntryArgs = CodeEntryArgs_New(heapId, 12, codeEntryParams, Save_PlayerData_GetOptionsAddr(shared->saveData), 0, 0);
         PalPad_TeardownScreens(work);
         naming->manager = OverlayManager_New(&gOverlayTemplate_NamingScreen, naming->namingArgs, heapId);
         shared->subState = 1;
@@ -65,7 +65,7 @@ int PalPadNaming_Main(PalPadNaming *naming, PalPadWork *work, PalPadShared *shar
         if (OverlayManager_Run(naming->manager)) {
             OverlayManager_Delete(naming->manager);
             if (naming->namingArgs->noInput == FALSE) {
-                naming->manager = OverlayManager_New(&_02102620, naming->codeEntryArgs, heapId);
+                naming->manager = OverlayManager_New(&gOverlayTemplate_CodeEntry, naming->codeEntryArgs, heapId);
                 shared->subState = 2;
             } else {
                 PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_MENU, 0);
@@ -83,7 +83,7 @@ int PalPadNaming_Main(PalPadNaming *naming, PalPadWork *work, PalPadShared *shar
         break;
     case 3:
         NamingScreen_DeleteArgs(naming->namingArgs);
-        sub_02085438(naming->codeEntryArgs);
+        CodeEntryArgs_Delete(naming->codeEntryArgs);
         PalPad_SetupScreens(work, heapId);
         return 1;
     case 4: // rewrite a friend's name

@@ -14,8 +14,8 @@
 
 	.text
 
-	thumb_func_start ov01_021EAF00
-ov01_021EAF00: ; 0x021EAF00
+	thumb_func_start FieldSystem_GetBottomScreenIndex
+FieldSystem_GetBottomScreenIndex: ; 0x021EAF00
 	push {r4, lr}
 	ldr r4, [r0, #0x18]
 	cmp r4, #0
@@ -28,13 +28,13 @@ _021EAF0C:
 _021EAF14:
 	sub r0, r4, #1
 	pop {r4, pc}
-	thumb_func_end ov01_021EAF00
+	thumb_func_end FieldSystem_GetBottomScreenIndex
 
 	thumb_func_start FieldSystem_InitBottomScreen
 FieldSystem_InitBottomScreen: ; 0x021EAF18
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov01_021EAF00
+	bl FieldSystem_GetBottomScreenIndex
 	add r1, r0, #0
 	lsl r2, r1, #4
 	ldr r1, _021EAF30 ; =ov01_022066DC
@@ -50,7 +50,7 @@ _021EAF30: .word ov01_022066DC
 FieldSystem_IsBottomScreenRunningDummy: ; 0x021EAF34
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov01_021EAF00
+	bl FieldSystem_GetBottomScreenIndex
 	lsl r1, r0, #4
 	ldr r0, _021EAF50 ; =ov01_022066DC + 4
 	ldr r1, [r0, r1]
@@ -70,7 +70,7 @@ _021EAF50: .word ov01_022066DC + 4
 FieldSystem_EndBottomScreen: ; 0x021EAF54
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov01_021EAF00
+	bl FieldSystem_GetBottomScreenIndex
 	add r1, r0, #0
 	lsl r2, r1, #4
 	ldr r1, _021EAF6C ; =ov01_022066DC + 8
@@ -86,7 +86,7 @@ _021EAF6C: .word ov01_022066DC + 8
 FieldSystem_IsBottomScreenDone: ; 0x021EAF70
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov01_021EAF00
+	bl FieldSystem_GetBottomScreenIndex
 	add r1, r0, #0
 	lsl r2, r1, #4
 	ldr r1, _021EAF88 ; =ov01_022066DC + 12
@@ -98,26 +98,26 @@ FieldSystem_IsBottomScreenDone: ; 0x021EAF70
 _021EAF88: .word ov01_022066DC + 12
 	thumb_func_end FieldSystem_IsBottomScreenDone
 
-	thumb_func_start ov01_021EAF8C
-ov01_021EAF8C: ; 0x021EAF8C
+	thumb_func_start BottomScreen_Blank_Init
+BottomScreen_Blank_Init: ; 0x021EAF8C
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov01_021EAF8C
+	thumb_func_end BottomScreen_Blank_Init
 
-	thumb_func_start ov01_021EAF90
-ov01_021EAF90: ; 0x021EAF90
+	thumb_func_start BottomScreen_Blank_End
+BottomScreen_Blank_End: ; 0x021EAF90
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov01_021EAF90
+	thumb_func_end BottomScreen_Blank_End
 
-	thumb_func_start ov01_021EAF94
-ov01_021EAF94: ; 0x021EAF94
+	thumb_func_start BottomScreen_Blank_IsDone
+BottomScreen_Blank_IsDone: ; 0x021EAF94
 	mov r0, #1
 	bx lr
-	thumb_func_end ov01_021EAF94
+	thumb_func_end BottomScreen_Blank_IsDone
 
-	thumb_func_start ov01_021EAF98
-ov01_021EAF98: ; 0x021EAF98
+	thumb_func_start BottomScreen_ViewPhoto_Init
+BottomScreen_ViewPhoto_Init: ; 0x021EAF98
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, _021EAFB0 ; =FS_OVERLAY_ID(OVY_19)
@@ -130,10 +130,10 @@ ov01_021EAF98: ; 0x021EAF98
 	pop {r4, pc}
 	.balign 4, 0
 _021EAFB0: .word FS_OVERLAY_ID(OVY_19)
-	thumb_func_end ov01_021EAF98
+	thumb_func_end BottomScreen_ViewPhoto_Init
 
-	thumb_func_start ov01_021EAFB4
-ov01_021EAFB4: ; 0x021EAFB4
+	thumb_func_start BottomScreen_ViewPhoto_End
+BottomScreen_ViewPhoto_End: ; 0x021EAFB4
 	push {r4, lr}
 	add r4, r0, #0
 	bl FieldSystem_DestroyViewPhotoTask
@@ -145,20 +145,20 @@ ov01_021EAFB4: ; 0x021EAFB4
 	pop {r4, pc}
 	nop
 _021EAFCC: .word FS_OVERLAY_ID(OVY_19)
-	thumb_func_end ov01_021EAFB4
+	thumb_func_end BottomScreen_ViewPhoto_End
 
-	thumb_func_start ov01_021EAFD0
-ov01_021EAFD0: ; 0x021EAFD0
+	thumb_func_start BottomScreen_ViewPhoto_IsDone
+BottomScreen_ViewPhoto_IsDone: ; 0x021EAFD0
 	mov r0, #1
 	bx lr
-	thumb_func_end ov01_021EAFD0
+	thumb_func_end BottomScreen_ViewPhoto_IsDone
 
 	.rodata
 
 ov01_022066DC: ; 0x022066DC
 	.word ov01_021F6894, 0x00000000, ov01_021F68B8, ov01_021F68C0
-	.word ov01_021EAF8C, 0x00000000, ov01_021EAF90, ov01_021EAF94
+	.word BottomScreen_Blank_Init, 0x00000000, BottomScreen_Blank_End, BottomScreen_Blank_IsDone
 	.word ov01_021F6894, 0x00000000, ov01_021F68B8, ov01_021F68C0
 	.word ov01_021F6840, 0x00000000, ov01_021F6864, ov01_021F6874
 	.word sub_0203DB6C, 0x00000000, sub_0203DB70, sub_0203DB74
-	.word ov01_021EAF98, 0x00000000, ov01_021EAFB4, ov01_021EAFD0
+	.word BottomScreen_ViewPhoto_Init, 0x00000000, BottomScreen_ViewPhoto_End, BottomScreen_ViewPhoto_IsDone

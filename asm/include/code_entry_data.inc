@@ -1,0 +1,9 @@
+#include <nitro/fs/overlay.h>
+#pragma once
+.public CodeEntry_Init
+.public CodeEntry_Main
+.public CodeEntry_Exit
+.public CodeEntry_State_Setup
+.public CodeEntry_State_Input
+.public CodeEntry_State_SwitchGroup
+.public CodeEntry_State_FadeOut

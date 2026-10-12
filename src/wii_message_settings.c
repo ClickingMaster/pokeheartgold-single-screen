@@ -241,15 +241,15 @@ typedef struct WiiMessageSettingsSubBgTemplates {
     BgTemplate bg1;
 } WiiMessageSettingsSubBgTemplates;
 
-// Defined in unk_020850F4 (number entry app _02102620); not declared in a header.
+// Defined in unk_020850F4 (number entry app gOverlayTemplate_CodeEntry); not declared in a header.
 typedef struct NumberEntryArgs {
     u8 filler_00[0x1C];
     String *string; // 0x1C
 } NumberEntryArgs;
 
-NumberEntryArgs *sub_02085400(enum HeapID heapID, u32 length, const u32 *groups, Options *options, u32 a4, u32 a5);
-NumberEntryArgs *sub_0208541C(enum HeapID heapID, u32 length, const u32 *groups, Options *options, u32 a4, u32 a5, u32 a6, u32 a7);
-void sub_02085438(NumberEntryArgs *args);
+NumberEntryArgs *CodeEntryArgs_New(enum HeapID heapID, u32 length, const u32 *groups, Options *options, u32 a4, u32 a5);
+NumberEntryArgs *CodeEntryArgs_NewWithFixedDigits(enum HeapID heapID, u32 length, const u32 *groups, Options *options, u32 a4, u32 a5, u32 a6, u32 a7);
+void CodeEntryArgs_Delete(NumberEntryArgs *args);
 
 // Network and server functions without a header.
 BOOL LoadOVY38(void);
@@ -288,7 +288,7 @@ void GtsServer_RequestSetProfile(Unk020317F4 *request, int *response);
 
 extern NNSFndHeapHandle _02249BE0;
 extern const WiiMessageSettingsAppEntry sWiiMessageSettingsApps[];
-extern const OverlayManagerTemplate _02102620;
+extern const OverlayManagerTemplate gOverlayTemplate_CodeEntry;
 extern const WiiMessageSettingsWindowRect sWiiMessageSettingsRegisteredMenuWindow;
 extern const WiiMessageSettingsWindowRect sWiiMessageSettingsUnregisteredMenuWindow;
 extern const GraphicsModes sWiiMessageSettingsGraphicsModes;
@@ -606,7 +606,7 @@ void *WiiMessageSettings_CreateWiiNumberEntryArgs(WiiMessageSettings *app) {
     groups[1] = 4;
     groups[2] = 4;
     groups[3] = 4;
-    app->childArgs = sub_02085400(HEAP_ID_115, 16, groups, Save_PlayerData_GetOptionsAddr(app->saveData), 4, 0);
+    app->childArgs = CodeEntryArgs_New(HEAP_ID_115, 16, groups, Save_PlayerData_GetOptionsAddr(app->saveData), 4, 0);
     return app->childArgs;
 }
 
@@ -624,7 +624,7 @@ void WiiMessageSettings_FinishWiiNumberEntry(WiiMessageSettings *app) {
         String_Copy(app->wiiNumber, args->string);
         WiiMessageSettings_SetWiiNumberEntryState(app, WII_NUMBER_ENTRY_ENTERED_ONCE);
     }
-    sub_02085438(args);
+    CodeEntryArgs_Delete(args);
     WiiMessageSettings_SetNextApp(app, WII_MESSAGE_SETTINGS_APP_SCREEN, 0);
 }
 
@@ -635,7 +635,7 @@ void *WiiMessageSettings_CreateRegistrationCodeEntryArgs(WiiMessageSettings *app
     groups[1] = 4;
     groups[2] = 0;
     groups[3] = 0;
-    app->childArgs = sub_0208541C(HEAP_ID_115, 7, groups, Save_PlayerData_GetOptionsAddr(app->saveData), 5, 1, 1, app->registrationCodePrefix);
+    app->childArgs = CodeEntryArgs_NewWithFixedDigits(HEAP_ID_115, 7, groups, Save_PlayerData_GetOptionsAddr(app->saveData), 5, 1, 1, app->registrationCodePrefix);
     return app->childArgs;
 }
 
@@ -646,7 +646,7 @@ void WiiMessageSettings_FinishRegistrationCodeEntry(WiiMessageSettings *app) {
     if (!success) {
         GF_AssertFail();
     }
-    sub_02085438(args);
+    CodeEntryArgs_Delete(args);
     WiiMessageSettings_SetNextApp(app, WII_MESSAGE_SETTINGS_APP_SCREEN, 0);
 }
 
@@ -656,7 +656,7 @@ void *WiiMessageSettings_CreatePasswordEntryArgs(WiiMessageSettings *app) {
     groups[1] = 0;
     groups[2] = 0;
     groups[3] = 0;
-    app->childArgs = sub_02085400(HEAP_ID_115, 4, groups, Save_PlayerData_GetOptionsAddr(app->saveData), 6, 0);
+    app->childArgs = CodeEntryArgs_New(HEAP_ID_115, 4, groups, Save_PlayerData_GetOptionsAddr(app->saveData), 6, 0);
     return app->childArgs;
 }
 
@@ -667,7 +667,7 @@ void WiiMessageSettings_FinishPasswordEntry(WiiMessageSettings *app) {
     if (!success) {
         GF_AssertFail();
     }
-    sub_02085438(args);
+    CodeEntryArgs_Delete(args);
     WiiMessageSettings_SetNextApp(app, WII_MESSAGE_SETTINGS_APP_SCREEN, 0);
 }
 

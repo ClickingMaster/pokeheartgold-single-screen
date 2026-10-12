@@ -16,7 +16,7 @@ typedef struct WiFiPlazaEventModelList {
 // Plaza-wide effect selected by the lobby (6 kinds, init and per-frame tables in rodata)
 typedef struct UnkStruct_ov49_02268A0C {
     WiFiPlazaWork *lobby;
-    void *models;
+    WiFiPlazaModels *models;
     u8 effect;       // 0x08
     u8 seLooping;    // 0x09 SEQ 0x5B5 is playing
     u16 activeCount; // 0x0A
@@ -43,7 +43,7 @@ typedef struct UnkStruct_ov49_02268FAC_Point {
 typedef struct UnkStruct_ov49_02268FAC {
     WiFiPlazaRoomWork *room;                 // 0x00
     WiFiPlazaWork *lobby;                    // 0x04
-    void *models;                            // 0x08
+    WiFiPlazaModels *models;                 // 0x08
     WiFiPlazaMap *map;                       // 0x0C
     u8 states[9][3];                         // 0x10
     u8 unk_2B;                               // 0x2B
@@ -57,8 +57,8 @@ typedef struct UnkStruct_ov49_02268FAC {
 typedef struct WiFiPlazaEvent {
     WiFiPlazaRoomWork *room;
     WiFiPlazaWork *lobby;
-    void *models;
-    void *objManager;
+    WiFiPlazaModels *models;
+    WiFiPlazaObjManager *objManager;
     WiFiPlazaLight *light;
     UnkStruct_ov49_02268FAC *unk14;
     UnkStruct_ov49_02268A0C *unk18;
@@ -72,7 +72,7 @@ int WiFiPlazaEvent_GetColorSet(int value);
 int WiFiPlazaEvent_GetLight1Set(int value);
 int ov49_022689D4(int value);
 void WiFiPlazaEvent_TurnOffLight2(WiFiPlazaEvent *event);
-UnkStruct_ov49_02268A0C *ov49_02268A0C(WiFiPlazaWork *lobby, void *models, enum HeapID heapID);
+UnkStruct_ov49_02268A0C *ov49_02268A0C(WiFiPlazaWork *lobby, WiFiPlazaModels *models, enum HeapID heapID);
 void ov49_02268A6C(UnkStruct_ov49_02268A0C *effect);
 void ov49_02268A7C(UnkStruct_ov49_02268A0C *effect);
 void ov49_02268ADC(UnkStruct_ov49_02268A0C *effect, int index, int arg);
@@ -99,11 +99,11 @@ void ov49_02269178(UnkStruct_ov49_02268FAC *work, int index);
 void ov49_02269240(UnkStruct_ov49_02268FAC *work, u32 index, BOOL hasOwnSelection, int isOwnIndex, int ownColumn);
 void ov49_022693A4(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 seqNo);
 void ov49_022693D4(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 species);
-BOOL ov49_022693F8(WiFiPlazaEventWobble *wobble, int kind, void *models, int index);
-BOOL ov49_02269430(WiFiPlazaEventWobble *wobble, void *models, int index);
+BOOL ov49_022693F8(WiFiPlazaEventWobble *wobble, int kind, WiFiPlazaModels *models, int index);
+BOOL ov49_02269430(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
 void ov49_02269474(WiFiPlazaEventWobble *wobble);
 void ov49_02269494(WiFiPlazaEventWobble *wobble);
-BOOL ov49_022694B4(WiFiPlazaEventWobble *wobble, void *models, int index);
+BOOL ov49_022694B4(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
 void ov49_022695C4(UnkStruct_ov49_02268FAC *work, int index);
 
 #endif // POKEHEARTGOLD_WIFI_PLAZA_EVENT_H

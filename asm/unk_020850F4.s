@@ -13,8 +13,8 @@
 
 	.text
 
-	thumb_func_start sub_020850F4
-sub_020850F4: ; 0x020850F4
+	thumb_func_start CodeEntry_Init
+CodeEntry_Init: ; 0x020850F4
 	push {r3, r4, r5, lr}
 	mov r2, #1
 	add r5, r0, #0
@@ -112,16 +112,16 @@ _0208512C:
 	mov r0, #0xbe
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
-	bl sub_0208545C
+	bl CodeEntry_SetupBgs
 	add r0, r4, #0
-	bl sub_020863F4
+	bl CodeEntry_InitSpriteSystem
 	add r0, r4, #0
-	bl sub_02085688
+	bl CodeEntry_InitLayout
 	bl GF_TouchpadResetSampling
 	mov r0, #4
 	bl GF_TouchpadStartSampling
 	add r0, r4, #0
-	bl sub_020860B8
+	bl CodeEntry_InitTouch
 	mov r0, #0xfa
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
@@ -146,7 +146,7 @@ _0208520A:
 	mov r2, #0xe
 	mov r3, #7
 	bl G2x_SetBlendAlpha_
-	ldr r0, _02085248 ; =sub_020855CC
+	ldr r0, _02085248 ; =CodeEntry_VBlank
 	add r1, r4, #0
 	bl Main_SetVBlankIntrCB
 	mov r0, #1
@@ -156,15 +156,15 @@ _02085238: .word 0xFFFFE0FF
 _0208523C: .word 0x04001000
 _02085240: .word 0x04000050
 _02085244: .word 0x04001050
-_02085248: .word sub_020855CC
-	thumb_func_end sub_020850F4
+_02085248: .word CodeEntry_VBlank
+	thumb_func_end CodeEntry_Init
 
-	thumb_func_start sub_0208524C
-sub_0208524C: ; 0x0208524C
+	thumb_func_start CodeEntry_Main
+CodeEntry_Main: ; 0x0208524C
 	push {r3, r4, r5, lr}
 	bl OverlayManager_GetData
 	add r4, r0, #0
-	bl sub_02085BEC
+	bl CodeEntry_RunState
 	add r5, r0, #0
 	mov r0, #0xfa
 	lsl r0, r0, #2
@@ -183,10 +183,10 @@ _02085270:
 _02085278:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
-	thumb_func_end sub_0208524C
+	thumb_func_end CodeEntry_Main
 
-	thumb_func_start sub_0208527C
-sub_0208527C: ; 0x0208527C
+	thumb_func_start CodeEntry_Exit
+CodeEntry_Exit: ; 0x0208527C
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	bl OverlayManager_GetData
@@ -199,7 +199,7 @@ sub_0208527C: ; 0x0208527C
 	bl WirelessStatusIcon_Destroy
 _02085294:
 	add r0, r4, #0
-	bl sub_020866CC
+	bl CodeEntry_FreeGraphics
 	mov r0, #1
 	mov r1, #0
 	bl GfGfx_EngineATogglePlanes
@@ -313,10 +313,10 @@ _02085294:
 	mov r0, #1
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end sub_0208527C
+	thumb_func_end CodeEntry_Exit
 
-	thumb_func_start sub_020853B4
-sub_020853B4: ; 0x020853B4
+	thumb_func_start CodeEntryArgs_Alloc
+CodeEntryArgs_Alloc: ; 0x020853B4
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r1, #0
 	str r0, [sp]
@@ -354,44 +354,44 @@ _020853DA:
 	str r0, [r4, #0x30]
 	add r0, r4, #0
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end sub_020853B4
+	thumb_func_end CodeEntryArgs_Alloc
 
-	thumb_func_start sub_02085400
-sub_02085400: ; 0x02085400
+	thumb_func_start CodeEntryArgs_New
+CodeEntryArgs_New: ; 0x02085400
 	push {r4, lr}
 	sub sp, #8
 	ldr r4, [sp, #0x10]
 	str r4, [sp]
 	ldr r4, [sp, #0x14]
 	str r4, [sp, #4]
-	bl sub_020853B4
+	bl CodeEntryArgs_Alloc
 	mov r1, #0
 	str r1, [r0, #0x24]
 	str r1, [r0, #0x28]
 	add sp, #8
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end sub_02085400
+	thumb_func_end CodeEntryArgs_New
 
-	thumb_func_start sub_0208541C
-sub_0208541C: ; 0x0208541C
+	thumb_func_start CodeEntryArgs_NewWithFixedDigits
+CodeEntryArgs_NewWithFixedDigits: ; 0x0208541C
 	push {r4, lr}
 	sub sp, #8
 	ldr r4, [sp, #0x10]
 	str r4, [sp]
 	ldr r4, [sp, #0x14]
 	str r4, [sp, #4]
-	bl sub_020853B4
+	bl CodeEntryArgs_Alloc
 	ldr r1, [sp, #0x18]
 	str r1, [r0, #0x24]
 	ldr r1, [sp, #0x1c]
 	str r1, [r0, #0x28]
 	add sp, #8
 	pop {r4, pc}
-	thumb_func_end sub_0208541C
+	thumb_func_end CodeEntryArgs_NewWithFixedDigits
 
-	thumb_func_start sub_02085438
-sub_02085438: ; 0x02085438
+	thumb_func_start CodeEntryArgs_Delete
+CodeEntryArgs_Delete: ; 0x02085438
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #0x1c]
@@ -408,15 +408,15 @@ _0208544E:
 	add r0, r4, #0
 	bl Heap_Free
 	pop {r4, pc}
-	thumb_func_end sub_02085438
+	thumb_func_end CodeEntryArgs_Delete
 
-	thumb_func_start sub_0208545C
-sub_0208545C: ; 0x0208545C
+	thumb_func_start CodeEntry_SetupBgs
+CodeEntry_SetupBgs: ; 0x0208545C
 	push {r4, r5, lr}
 	sub sp, #0xec
 	add r4, r0, #0
 	bl GfGfx_DisableEngineAPlanes
-	ldr r5, _020855BC ; =_02102630
+	ldr r5, _020855BC ; =sCodeEntryGraphicsBanks
 	add r3, sp, #0
 	mov r2, #5
 _0208546C:
@@ -450,7 +450,7 @@ _0208546C:
 	lsl r1, r1, #0x14
 	lsl r2, r2, #0x10
 	bl MIi_CpuClear32
-	ldr r5, _020855C0 ; =_02102658
+	ldr r5, _020855C0 ; =sCodeEntryMainBgTemplates
 	add r3, sp, #0x98
 	mov r2, #0xa
 _020854B8:
@@ -496,7 +496,7 @@ _020854B8:
 	mov r0, #8
 	mov r1, #0
 	bl GfGfx_EngineATogglePlanes
-	ldr r5, _020855C4 ; =_021026AC
+	ldr r5, _020855C4 ; =sCodeEntrySubBgTemplates
 	add r3, sp, #0x28
 	mov r2, #0xe
 _02085526:
@@ -561,14 +561,14 @@ _02085526:
 	add sp, #0xec
 	pop {r4, r5, pc}
 	.balign 4, 0
-_020855BC: .word _02102630
-_020855C0: .word _02102658
-_020855C4: .word _021026AC
+_020855BC: .word sCodeEntryGraphicsBanks
+_020855C0: .word sCodeEntryMainBgTemplates
+_020855C4: .word sCodeEntrySubBgTemplates
 _020855C8: .word gSystem + 0x60
-	thumb_func_end sub_0208545C
+	thumb_func_end CodeEntry_SetupBgs
 
-	thumb_func_start sub_020855CC
-sub_020855CC: ; 0x020855CC
+	thumb_func_start CodeEntry_VBlank
+CodeEntry_VBlank: ; 0x020855CC
 	push {r4, lr}
 	add r4, r0, #0
 	bl GF_RunVramTransferTasks
@@ -591,25 +591,25 @@ sub_020855CC: ; 0x020855CC
 	nop
 _020855FC: .word OS_IRQTable
 _02085600: .word 0x00003FF8
-	thumb_func_end sub_020855CC
+	thumb_func_end CodeEntry_VBlank
 
 	.rodata
 
-	.public _02102620
-_02102620:
-	.word sub_020850F4, sub_0208524C, sub_0208527C, 0xFFFFFFFF
-_02102630:
+	.public gOverlayTemplate_CodeEntry
+gOverlayTemplate_CodeEntry:
+	.word CodeEntry_Init, CodeEntry_Main, CodeEntry_Exit, 0xFFFFFFFF
+sCodeEntryGraphicsBanks:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00
-_02102658:
+sCodeEntryMainBgTemplates:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x02, 0x03, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x06, 0x04, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-_021026AC:
+sCodeEntrySubBgTemplates:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x0D, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

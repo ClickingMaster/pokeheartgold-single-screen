@@ -185,11 +185,11 @@
 	.public PokeathlonRelayRunHud_GetBenchMember
 	.public PokeathlonRelayRunCpu_SetTeam
 	.public PokeathlonRelayRunCpu_Delete
-	.public ov96_02203BC0
-	.public ov96_02203CC4
-	.public ov96_02203CD4
-	.public ov96_022043AC
-	.public ov96_022043B8
+	.public PokeathlonSnowThrowDisplay_ShowTired
+	.public PokeathlonSnowThrowDisplay_IsPicAnimated
+	.public PokeathlonSnowThrowDisplay_Shake
+	.public PokeathlonSnowThrowCpu_SetMon
+	.public PokeathlonSnowThrowCpu_Delete
 	.public PokeathlonPennantCapture_Draw
 	.public PokeathlonPennantCapture_TickFreezeTimer
 	.public PokeathlonPennantCapture_AddPoint2D

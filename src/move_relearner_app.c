@@ -247,7 +247,7 @@ int MoveRelearner_UpdateButtonFlash(MoveRelearner *relearner);
 int MoveRelearner_AskGiveUp(MoveRelearner *relearner);
 int MoveRelearner_AskTeachAfterFlash(MoveRelearner *relearner);
 int MoveRelearner_AskTeach(MoveRelearner *relearner);
-// Defined in to80_extra1791_run01.c (after the overlay's data). Not in the public header: its includers
+// Defined in move_relearner_sub_screen.c (after the overlay's data). Not in the public header: its includers
 // (launch_application.c) would see their static-local symbol numbering shift.
 void MoveRelearner_DimSubScreen(int on);
 

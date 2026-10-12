@@ -34,17 +34,6 @@ typedef struct VsRecorderDeleteVideo {
     Window yesNoWindows[2];
 } VsRecorderDeleteVideo; // size 0x30
 
-// rankings received from the server (onResponse[4] / [5]); the start of the rankings screens' work
-typedef struct VsRecorderRankingsDownload {
-    u8 unk_000[0xE0];
-    u8 rankings[0x558];    // 0x0E0
-    u8 ownRankings[0xD8];  // 0x638
-    u32 unk_710;           // 0x710
-    void *rankingsData;    // 0x714, the response (or rankings when offline)
-    void *ownRankingsData; // 0x718
-    void *unk_71C;         // 0x71C
-} VsRecorderRankingsDownload;
-
 // party part of a video header: the profile, then species and forms of both sides
 typedef struct VsRecorderVideoParty {
     u8 profile[0x80];

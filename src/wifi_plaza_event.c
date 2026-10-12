@@ -36,8 +36,8 @@ extern const u8 ov49_0226A830[];
 extern const u8 ov49_0226A834[];
 extern const u8 ov49_0226A8C8[];
 extern const u16 ov49_0226A8DC[][6];
-extern BOOL (*const ov49_0226A8CC[])(WiFiPlazaEventWobble *wobble, void *models, int index);
-extern BOOL (*const ov49_0226A8D4[])(WiFiPlazaEventWobble *wobble, void *models, int index);
+extern BOOL (*const ov49_0226A8CC[])(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
+extern BOOL (*const ov49_0226A8D4[])(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
 
 void WiFiPlazaLight_Delete(WiFiPlazaLight *light) {
     Heap_Free(light);
@@ -311,7 +311,7 @@ void WiFiPlazaEvent_TurnOffLight2(WiFiPlazaEvent *event) {
 
 #pragma force_active on
 
-UnkStruct_ov49_02268A0C *ov49_02268A0C(WiFiPlazaWork *lobby, void *models, enum HeapID heapID) {
+UnkStruct_ov49_02268A0C *ov49_02268A0C(WiFiPlazaWork *lobby, WiFiPlazaModels *models, enum HeapID heapID) {
     UnkStruct_ov49_02268A0C *effect = Heap_Alloc(heapID, sizeof(UnkStruct_ov49_02268A0C));
     u32 effectId;
     u8 *cursor = (u8 *)effect;
@@ -545,9 +545,9 @@ void WiFiPlazaEvent_StopLoopSE(UnkStruct_ov49_02268A0C *effect) {
 BOOL ov49_02268DCC(void *state, WiFiPlazaRoomWork *room) {
     u32 *nextStep = WiFiPlazaPlayerState_GetWork(state);
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
-    void *objManager = WiFiPlazaRoom_GetObjManager(room);
-    void *special = WiFiPlazaObj_GetSpecial(objManager);
-    void *player = WiFiPlazaObj_GetOwnPlayer(objManager);
+    WiFiPlazaObjManager *objManager = WiFiPlazaRoom_GetObjManager(room);
+    WiFiPlazaObj *special = WiFiPlazaObj_GetSpecial(objManager);
+    WiFiPlazaObj *player = WiFiPlazaObj_GetOwnPlayer(objManager);
 
     switch (WiFiPlazaPlayerState_GetStep(state)) {
     case 0: {
@@ -833,7 +833,7 @@ void ov49_022693D4(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 
     PlayCry(species, 0);
 }
 
-BOOL ov49_022693F8(WiFiPlazaEventWobble *wobble, int kind, void *models, int index) {
+BOOL ov49_022693F8(WiFiPlazaEventWobble *wobble, int kind, WiFiPlazaModels *models, int index) {
     if ((u32)kind >= 2) {
         GF_AssertFail();
     }
@@ -846,7 +846,7 @@ BOOL ov49_022693F8(WiFiPlazaEventWobble *wobble, int kind, void *models, int ind
     return TRUE;
 }
 
-BOOL ov49_02269430(WiFiPlazaEventWobble *wobble, void *models, int index) {
+BOOL ov49_02269430(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index) {
     if (wobble->active != FALSE) {
         if (ov49_0226A8CC[wobble->kind](wobble, models, index) == TRUE) {
             u8 *p = (u8 *)wobble;
@@ -887,7 +887,7 @@ void ov49_02269494(WiFiPlazaEventWobble *wobble) {
     wobble->repeats = 2;
 }
 
-BOOL ov49_022694B4(WiFiPlazaEventWobble *wobble, void *models, int index) {
+BOOL ov49_022694B4(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index) {
     VecFx32 offset = { 0, 0, 0 };
     BOOL done = FALSE;
     int next = wobble->frame + 1;

@@ -463,6 +463,6 @@
 .public ov45_02230994
 .public WiFiPlazaMap_PosToVecFx32
 .public WiFiPlazaMap_LoadModelFile
-.public ov49_02259AA4
-.public ov49_02259C90
-.public ov49_02259EF8
+.public WiFiPlazaRoom_Init
+.public WiFiPlazaRoom_Main
+.public WiFiPlazaRoom_Exit

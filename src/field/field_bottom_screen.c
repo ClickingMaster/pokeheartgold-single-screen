@@ -1,0 +1,85 @@
+#include "field/field_bottom_screen.h"
+
+#include "global.h"
+
+#include "application/view_photo.h"
+
+#include "assert.h"
+#include "poke_overlay.h"
+
+FS_EXTERN_OVERLAY(OVY_19);
+
+// defined in the field app dispatcher (overlay 01 0x021F6830), not declared by a header yet
+void ov01_021F6840(FieldSystem *fieldSystem);
+void ov01_021F6864(FieldSystem *fieldSystem);
+BOOL ov01_021F6874(FieldSystem *fieldSystem);
+void ov01_021F6894(FieldSystem *fieldSystem);
+void ov01_021F68B8(FieldSystem *fieldSystem);
+BOOL ov01_021F68C0(FieldSystem *fieldSystem);
+// defined in field_interaction.c (empty), not declared by a header yet
+void sub_0203DB6C(FieldSystem *fieldSystem);
+void sub_0203DB70(FieldSystem *fieldSystem);
+BOOL sub_0203DB74(FieldSystem *fieldSystem);
+
+static const BottomScreenOps sBottomScreenOps[];
+
+int FieldSystem_GetBottomScreenIndex(FieldSystem *fieldSystem) {
+    int type = fieldSystem->bottomScreenType;
+    GF_ASSERT(type != 0);
+    GF_ASSERT(type < 7);
+    return type - 1;
+}
+
+void FieldSystem_InitBottomScreen(FieldSystem *fieldSystem) {
+    sBottomScreenOps[FieldSystem_GetBottomScreenIndex(fieldSystem)].init(fieldSystem);
+}
+
+BOOL FieldSystem_IsBottomScreenRunningDummy(FieldSystem *fieldSystem) {
+    BOOL (*isRunning)(FieldSystem *) = sBottomScreenOps[FieldSystem_GetBottomScreenIndex(fieldSystem)].isRunning;
+    if (isRunning == NULL) {
+        return TRUE;
+    }
+    return isRunning(fieldSystem);
+}
+
+void FieldSystem_EndBottomScreen(FieldSystem *fieldSystem) {
+    sBottomScreenOps[FieldSystem_GetBottomScreenIndex(fieldSystem)].end(fieldSystem);
+}
+
+BOOL FieldSystem_IsBottomScreenDone(FieldSystem *fieldSystem) {
+    return sBottomScreenOps[FieldSystem_GetBottomScreenIndex(fieldSystem)].isDone(fieldSystem);
+}
+
+void BottomScreen_Blank_Init(FieldSystem *fieldSystem) {
+}
+
+void BottomScreen_Blank_End(FieldSystem *fieldSystem) {
+}
+
+BOOL BottomScreen_Blank_IsDone(FieldSystem *fieldSystem) {
+    return TRUE;
+}
+
+void BottomScreen_ViewPhoto_Init(FieldSystem *fieldSystem) {
+    HandleLoadOverlay(FS_OVERLAY_ID(OVY_19), OVY_LOAD_ASYNC);
+    fieldSystem->unk_D8 = FieldSystem_CreateViewPhotoTask(fieldSystem); // the bottom screen app task
+}
+
+void BottomScreen_ViewPhoto_End(FieldSystem *fieldSystem) {
+    FieldSystem_DestroyViewPhotoTask(fieldSystem);
+    fieldSystem->unk_D8 = NULL;
+    UnloadOverlayByID(FS_OVERLAY_ID(OVY_19));
+}
+
+BOOL BottomScreen_ViewPhoto_IsDone(FieldSystem *fieldSystem) {
+    return TRUE;
+}
+
+static const BottomScreenOps sBottomScreenOps[] = {
+    { ov01_021F6894,           NULL, ov01_021F68B8,          ov01_021F68C0                 },
+    { BottomScreen_Blank_Init, NULL, BottomScreen_Blank_End, BottomScreen_Blank_IsDone     },
+    { ov01_021F6894,           NULL, ov01_021F68B8,          ov01_021F68C0                 },
+    { ov01_021F6840,           NULL, ov01_021F6864,          ov01_021F6874                 },
+    { sub_0203DB6C,            NULL, sub_0203DB70,           sub_0203DB74                  },
+    { BottomScreen_ViewPhoto_Init, NULL, BottomScreen_ViewPhoto_End, BottomScreen_ViewPhoto_IsDone },
+};

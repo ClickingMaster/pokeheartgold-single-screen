@@ -234,10 +234,10 @@ ov96_0221A844: ; 0x0221A844
 	.word 0
 
 ov96_0221A858:
-	.word ov96_02201558
-	.word ov96_02201B18
-	.word ov96_02201B34
-	.word ov96_02201B98
+	.word PokeathlonSnowThrow_Init
+	.word PokeathlonSnowThrow_Draw
+	.word PokeathlonSnowThrow_ShowResults
+	.word PokeathlonSnowThrow_Exit
 	.word 0
 
 ov96_0221A86C: ; 0x0221A86C
