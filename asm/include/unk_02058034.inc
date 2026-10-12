@@ -4,7 +4,7 @@
 .public SysTask_Destroy
 .public BeginNormalPaletteFade
 .public ResetVisibleHardwareWindows
-.public sub_0200FC60
+.public FillScreenWithColor
 .public Heap_Alloc
 .public Heap_Free
 .public GF_AssertFail

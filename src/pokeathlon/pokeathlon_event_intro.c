@@ -26,7 +26,7 @@
 FS_EXTERN_OVERLAY(OVY_98);
 
 // Not declared by a header yet.
-void sub_0200FC20(u16 color);
+void SetBothScreensBrightnessByColor(u16 color);
 void sub_02005B78(u16 seqNo, u32 variable, s16 *value);
 
 // Trainer class -> overworld model of the NPC trainer, as two parallel columns of one table.
@@ -372,7 +372,7 @@ void PokeathlonEventIntro_Create(PokeathlonCourseData *course) {
     Main_SetVBlankIntrCB((GFIntrCB)PokeathlonEventIntro_VBlankCallback, intro);
     gSystem.screensFlipped = TRUE;
     GfGfx_SwapDisplay();
-    sub_0200FC20(0x7FFF);
+    SetBothScreensBrightnessByColor(0x7FFF);
     if (intro->linkMode) {
         intro->showRecord = FALSE;
     } else {

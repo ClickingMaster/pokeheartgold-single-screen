@@ -61,7 +61,7 @@ extern void (*const ov93_02263114[])(WobbuffetPop *game, WobbuffetPopEvent *even
 // font_sprite.c; called without its palette argument.
 void TextOBJ_SetPalOffset(TextOBJ *object);
 // Without a header here.
-void sub_0200FC20(u16 a0);
+void SetBothScreensBrightnessByColor(u16 a0);
 
 void WobbuffetPopInflation_Start(BgConfig *bgConfig, int playerCount, int size, WobbuffetPopInflation *inflation);
 void WobbuffetPopInflation_Stop(BgConfig *bgConfig, WobbuffetPopInflation *inflation);
@@ -1909,9 +1909,9 @@ BOOL WobbuffetPopPlazaScreen_Main(OverlayManager *man, int *state) {
         switch (screen->app->connectionLostState) {
         case 0:
             if (IsPaletteFadeFinished() == TRUE) {
-                sub_0200FB70();
+                StopPaletteFade();
             }
-            sub_0200FC20(0);
+            SetBothScreensBrightnessByColor(0);
             screen->app->connectionLostState++;
             break;
         case 1:

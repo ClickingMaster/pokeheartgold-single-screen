@@ -21,7 +21,7 @@
 	.public ShayminFormChangeEffect_Draw
 	.public ShayminFormChange_AdvanceAnimations
 	.public ShayminFormChange_SetAnimationsFrame
-	.public ov01_022096CC
+	.public sShayminFormChangeTemplate
 	.include "overlay_01_022051EC.inc"
 	.include "global.inc"
 
@@ -149,7 +149,7 @@ ShayminFormChange_Spawn: ; 0x022052C4
 	str r0, [sp]
 	mov r0, #0xff
 	str r0, [sp, #4]
-	ldr r1, _022052F0 ; =ov01_022096CC
+	ldr r1, _022052F0 ; =sShayminFormChangeTemplate
 	add r0, r5, #0
 	add r2, r4, #0
 	mov r3, #0
@@ -157,7 +157,7 @@ ShayminFormChange_Spawn: ; 0x022052C4
 	add sp, #0x10
 	pop {r3, r4, r5, pc}
 	nop
-_022052F0: .word ov01_022096CC
+_022052F0: .word sShayminFormChangeTemplate
 	thumb_func_end ShayminFormChange_Spawn
 
 	thumb_func_start ShayminFormChange_IsDone
@@ -309,7 +309,7 @@ _022053E8:
 
 	.rodata
 
-ov01_022096CC: ; 0x022096CC
+sShayminFormChangeTemplate: ; 0x022096CC
 	.word 0x00000008
 	.word ShayminFormChangeEffect_Init
 	.word ShayminFormChangeEffect_Destroy

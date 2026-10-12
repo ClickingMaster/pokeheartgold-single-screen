@@ -2,8 +2,8 @@
 #pragma once
 .public SysTask_CreateOnVWaitQueue
 .public SysTask_Destroy
-.public sub_0200FF88
-.public sub_0200FFB4
+.public FadeBlankPair_StartOnVBlank
+.public FadeBlankPair_StopOnVBlank
 .public ScreenWipeScanlines_HBlankCallback
 .public ScreenWipeScanlines_Init
 .public ScreenWipeScanlines_Free

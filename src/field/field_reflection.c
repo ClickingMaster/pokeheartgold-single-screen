@@ -119,10 +119,10 @@ void FollowerReflectionEffect_Update(FieldEffect *effect, ReflectionEffect *work
 void FollowerReflectionEffect_Draw(FieldEffect *effect, ReflectionEffect *work);
 void FollowerReflectionEffect_CreateBillboard(FieldEffect *effect, ReflectionEffect *work);
 
-// The three effect templates stay in asm (asm/overlay_01_021FDA14_residual_1.s, linked ahead of this file).
-extern const FieldEffectBasicTemplate ov01_02208F74; // follower
-extern const FieldEffectBasicTemplate ov01_02208F88; // map object
-extern const FieldEffectBasicTemplate ov01_02208F9C; // billboard
+// The three effect templates stay in asm (asm/field_reflection_data.s, linked ahead of this file).
+extern const FieldEffectBasicTemplate sFollowerReflectionTemplate; // follower
+extern const FieldEffectBasicTemplate sMapObjectReflectionTemplate; // map object
+extern const FieldEffectBasicTemplate sBillboardReflectionTemplate; // billboard
 
 static const ReflectionDepths sReflectionDepths = {
     { 14 * FX32_ONE, 20 * FX32_ONE, 14 * FX32_ONE, 14 * FX32_ONE, 20 * FX32_ONE, 14 * FX32_ONE }
@@ -166,7 +166,7 @@ void Reflection_FreeGfx(Reflection *reflection) {
 }
 
 void Reflection_Spawn(LocalMapObject *mapObject, int kind) {
-    Reflection_SpawnWithTemplate(mapObject, kind, &ov01_02208F88);
+    Reflection_SpawnWithTemplate(mapObject, kind, &sMapObjectReflectionTemplate);
 }
 
 BOOL ReflectionEffect_Init(FieldEffect *effect, ReflectionEffect *work) {
@@ -345,7 +345,7 @@ FieldEffect *Reflection_SpawnForBillboard(FieldEffectManager *manager, const Ref
     args.reflection = FieldEffectManager_GetRendererData(manager, 1);
     args.record = *record;
     args.source = source;
-    return FieldEffectManager_CreateEffect(manager, &ov01_02208F9C, position, kind, &args, priority);
+    return FieldEffectManager_CreateEffect(manager, &sBillboardReflectionTemplate, position, kind, &args, priority);
 }
 
 BOOL BillboardReflectionEffect_Init(FieldEffect *effect, BillboardReflectionEffect *work) {
@@ -393,7 +393,7 @@ void BillboardReflectionEffect_Draw(FieldEffect *effect, BillboardReflectionEffe
 }
 
 void Reflection_SpawnForFollower(LocalMapObject *mapObject, int kind) {
-    Reflection_SpawnWithTemplate(mapObject, kind, &ov01_02208F74);
+    Reflection_SpawnWithTemplate(mapObject, kind, &sFollowerReflectionTemplate);
 }
 
 BOOL FollowerReflectionEffect_Init(FieldEffect *effect, ReflectionEffect *work) {

@@ -74,7 +74,7 @@
 .public ClearFrameAndWindow2
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_0200FB70
+.public StopPaletteFade
 .public SetMasterBrightness
 .public FontSystem_NewInit
 .public FontSystem_Delete

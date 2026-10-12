@@ -2,8 +2,8 @@
 	.include "unk_0200FA24.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_020100C4
-sub_020100C4: ; 0x020100C4
+	thumb_func_start PaletteFade_Clear
+PaletteFade_Clear: ; 0x020100C4
 	push {r4, lr}
 	add r4, r0, #0
 	add r2, r4, #0
@@ -39,4 +39,4 @@ _020100F6:
 	mov r2, #0xc0
 	bl memset
 	pop {r4, pc}
-	thumb_func_end sub_020100C4
+	thumb_func_end PaletteFade_Clear

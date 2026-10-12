@@ -73,8 +73,8 @@
 .public EraseFrameAndWindow1
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_0200FB70
-.public sub_0200FC20
+.public StopPaletteFade
+.public SetBothScreensBrightnessByColor
 .public ModelResource_LoadFromNarc
 .public ModelResource_Free
 .public ModelAnimation_LoadFromNarc

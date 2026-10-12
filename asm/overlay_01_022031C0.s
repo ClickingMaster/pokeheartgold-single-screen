@@ -11,13 +11,13 @@
 	.include "asm/macros.inc"
 	.public FollowMonBallEffect_UpdateRecallWhite
 	.public FollowMonBallEffect_UpdateRecall
-	.public ov01_022094B0
-	.public ov01_022094BC
+	.public sFollowMonBallRecallScale
+	.public sFollowMonBallRecallWhiteScale
 	.public ov01_022094C8
 	.public ov01_022094DC
 	.public ov01_022094F0
 	.public ov01_02209504
-	.public ov01_02209B18
+	.public sFollowMonWhitePalette
 	.include "overlay_01_022031C0.inc"
 	.include "global.inc"
 
@@ -112,7 +112,7 @@ _022036C4:
 	lsl r1, r1, #0x10
 	and r3, r4
 	lsr r3, r3, #0x10
-	ldr r2, _022037E0 ; =ov01_02209B18
+	ldr r2, _022037E0 ; =sFollowMonWhitePalette
 	mov r0, #1
 	lsr r1, r1, #0xd
 	lsl r3, r3, #3
@@ -150,7 +150,7 @@ _02203738:
 	add r0, r0, #1
 	str r0, [r5]
 _0220373E:
-	ldr r3, _022037E4 ; =ov01_022094BC
+	ldr r3, _022037E4 ; =sFollowMonBallRecallWhiteScale
 	add r2, sp, #4
 	ldmia r3!, {r0, r1}
 	stmia r2!, {r0, r1}
@@ -225,6 +225,6 @@ _022037D8:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _022037DC: .word 0xFFFF0000
-_022037E0: .word ov01_02209B18
-_022037E4: .word ov01_022094BC
+_022037E0: .word sFollowMonWhitePalette
+_022037E4: .word sFollowMonBallRecallWhiteScale
 	thumb_func_end FollowMonBallEffect_UpdateRecallWhite

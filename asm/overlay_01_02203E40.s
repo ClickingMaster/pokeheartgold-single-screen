@@ -119,7 +119,7 @@ FlashDarkness_Show: ; 0x02203EA0
 	add r1, sp, #0x2c
 	str r1, [sp]
 	str r0, [sp, #4]
-	ldr r1, _02203F28 ; =ov01_022095B4
+	ldr r1, _02203F28 ; =sFlashDarknessTemplate
 	add r0, r4, #0
 	add r2, sp, #0x20
 	mov r3, #0
@@ -132,7 +132,7 @@ _02203F24:
 	add sp, #0x48
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-_02203F28: .word ov01_022095B4
+_02203F28: .word sFlashDarknessTemplate
 	thumb_func_end FlashDarkness_Show
 
 	thumb_func_start FlashDarkness_SetScale
@@ -251,7 +251,7 @@ _02204000: .word 0x45800000
 
 	.rodata
 
-ov01_022095B4: ; 0x022095B4
+sFlashDarknessTemplate: ; 0x022095B4
 	.word 0x00000020
 	.word FlashDarknessEffect_Init
 	.word FlashDarknessEffect_Destroy

@@ -3,7 +3,7 @@
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
 .public SetMasterBrightnessByColor
-.public sub_0200FC20
+.public SetBothScreensBrightnessByColor
 .public Heap_Alloc
 .public BG_ClearCharDataRange
 .public BG_LoadPlttData

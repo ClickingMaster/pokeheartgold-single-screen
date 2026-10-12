@@ -2,8 +2,8 @@
 	.include "unk_0200FA24.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0200FEE4
-sub_0200FEE4: ; 0x0200FEE4
+	thumb_func_start FadeBlankPair_Start
+FadeBlankPair_Start: ; 0x0200FEE4
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -34,7 +34,7 @@ _0200FF14:
 	ldr r0, [r5, #0x14]
 	cmp r0, #0
 	bne _0200FF2E
-	ldr r0, _0200FF54 ; =sub_0200FECC
+	ldr r0, _0200FF54 ; =FadeBlankPair_HBlankCallback
 	add r1, r5, #0
 	bl Main_SetHBlankIntrCB
 	lsl r0, r0, #0x18
@@ -53,7 +53,7 @@ _0200FF38:
 	str r7, [r6, r4]
 	b _0200FF48
 _0200FF44:
-	ldr r0, _0200FF58 ; =sub_02010014
+	ldr r0, _0200FF58 ; =FadeBlankPair_DummyCallback
 	str r0, [r6, r4]
 _0200FF48:
 	ldr r0, [sp, #8]
@@ -62,6 +62,6 @@ _0200FF48:
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	nop
-_0200FF54: .word sub_0200FECC
-_0200FF58: .word sub_02010014
-	thumb_func_end sub_0200FEE4
+_0200FF54: .word FadeBlankPair_HBlankCallback
+_0200FF58: .word FadeBlankPair_DummyCallback
+	thumb_func_end FadeBlankPair_Start

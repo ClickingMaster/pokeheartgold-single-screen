@@ -1,47 +1,29 @@
-#include "constants/sndseq.h"
-#include "constants/moves.h"
-#include "constants/std_script.h"
-#include "constants/species.h"
-#include "constants/sprites.h"
-#include "constants/maps.h"
-#include "constants/mmodel.h"
-#include "constants/items.h"
-#include "msgdata/msg/msg_0096_D31R0201.h"
-#include "msgdata/msg/msg_0066_D23R0102.h"
+#include <nitro/fs/overlay.h>
 	.include "asm/macros.inc"
-	.public WarpArrowEffect_Draw
-	.include "overlay_01_02200858.inc"
 	.include "global.inc"
 
-	.text
-	.public ov01_02209334
-	.public ov01_02209340
-	.public ov01_02209354
-	.public WarpArrow_New
-	.public WarpArrow_Free
-	.public WarpArrow_LoadModel
-	.public WarpArrow_FreeModel
-	.public WarpArrow_Spawn
-	.public WarpArrowEffect_Init
+	.public sWarpArrowScale
+	.public sWarpArrowTemplate
+	.public sWarpArrowOffsets
 	.public WarpArrowEffect_Destroy
+	.public WarpArrowEffect_Draw
+	.public WarpArrowEffect_Init
 	.public WarpArrowEffect_Update
-	.public WarpArrow_GetWarpDirection
-	.public ov01_02209334
-	.public ov01_02209340
-	.public ov01_02209354
+
+	.text
 	.rodata
 
-ov01_02209334: ; 0x02209334
+sWarpArrowScale: ; 0x02209334
 	.word 0x1000, 0x1000, 0x1000
 
-ov01_02209340: ; 0x02209340
+sWarpArrowTemplate: ; 0x02209340
 	.word 0x00000030
 	.word WarpArrowEffect_Init
 	.word WarpArrowEffect_Destroy
 	.word WarpArrowEffect_Update
 	.word WarpArrowEffect_Draw
 
-ov01_02209354: ; 0x02209354
+sWarpArrowOffsets: ; 0x02209354
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xE0, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

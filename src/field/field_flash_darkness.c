@@ -57,8 +57,8 @@ void FlashDarknessEffect_Destroy(void);
 void FlashDarknessEffect_Update(FieldEffect *effect, FlashDarknessEffect *work);
 void FlashDarknessEffect_Draw(FieldEffect *effect, FlashDarknessEffect *work);
 
-// The effect template stays in asm (asm/overlay_01_02203E40_residual_1.s, linked ahead of this file).
-extern const FieldEffectBasicTemplate ov01_022095B4;
+// The effect template stays in asm (asm/field_flash_darkness_data.s, linked ahead of this file).
+extern const FieldEffectBasicTemplate sFlashDarknessTemplate;
 
 FlashDarkness *FlashDarkness_New(FieldEffectManager *manager) {
     FlashDarkness *darkness = FieldEffectManager_HeapAllocAndFill(manager, sizeof(FlashDarkness), FALSE, 0);
@@ -104,7 +104,7 @@ FieldEffect *FlashDarkness_Show(LocalMapObject *mapObject) {
     args.distance /= 3;
     VEC_Normalize(&args.direction, &args.direction);
     MapObject_CopyPositionVector(mapObject, &position);
-    args.darkness->effect = FieldEffectManager_CreateEffect(manager, &ov01_022095B4, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
+    args.darkness->effect = FieldEffectManager_CreateEffect(manager, &sFlashDarknessTemplate, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
     return args.darkness->effect;
 }
 

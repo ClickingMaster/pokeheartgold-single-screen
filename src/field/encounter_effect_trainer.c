@@ -115,7 +115,7 @@ void BlockWipe_Free(void *circleWipe);
 void BlockWipe_Start(void *circleWipe, u8 arg1, u8 arg2, Window *window, u8 fillColor);
 BOOL BlockWipe_Update(void *circleWipe);
 void EncounterEffectHBlankWave_AlternateDirection(EncounterEffectHBlankWave *wave, int unused);
-void sub_0200FC20(u16 color);
+void SetBothScreensBrightnessByColor(u16 color);
 
 void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect) {
     SpinZoomEffectWork *work = effect->work;
@@ -204,7 +204,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         }
         break;
     case 7:
-        sub_0200FC20(RGB_BLACK);
+        SetBothScreensBrightnessByColor(RGB_BLACK);
         if (effect->done != NULL) {
             *effect->done = TRUE;
         }
@@ -305,7 +305,7 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         }
         break;
     case 7:
-        sub_0200FC20(RGB_BLACK);
+        SetBothScreensBrightnessByColor(RGB_BLACK);
         if (effect->done != NULL) {
             *effect->done = TRUE;
         }
@@ -541,7 +541,7 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         }
         break;
     case 7:
-        sub_0200FC20(RGB_BLACK);
+        SetBothScreensBrightnessByColor(RGB_BLACK);
         if (effect->done != NULL) {
             *effect->done = TRUE;
         }
@@ -776,7 +776,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
         }
         break;
     case 9:
-        sub_0200FC20(RGB_BLACK);
+        SetBothScreensBrightnessByColor(RGB_BLACK);
         if (effect->done != NULL) {
             *effect->done = TRUE;
         }

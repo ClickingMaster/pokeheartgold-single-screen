@@ -156,7 +156,7 @@ static BOOL IntroMovie_Exit(OverlayManager *man, int *state) {
     G2S_BlendNone();
     GX_SetVisibleWnd(GX_WNDMASK_NONE);
     GXS_SetVisibleWnd(0);
-    sub_0200FB70();
+    StopPaletteFade();
     SetLCRNGSeed(data->savedLCRngSeed);
     OverlayManager_FreeData(man);
     Heap_Destroy(HEAP_ID_INTRO_MOVIE);

@@ -55,11 +55,11 @@ void WarpArrowEffect_Update(FieldEffect *effect, WarpArrowEffect *work);
 void WarpArrowEffect_Draw(FieldEffect *effect, WarpArrowEffect *work);
 int WarpArrow_GetWarpDirection(u8 behavior);
 
-// Data stays in asm (asm/overlay_01_02200858_residual_2.s, linked after this file): the model scale (1, 1, 1),
+// Data stays in asm (asm/field_warp_arrow_data.s, linked after this file): the model scale (1, 1, 1),
 // the effect template and the arrow's two offsets per direction (none, 2 units towards the exit).
-extern const VecFx32 ov01_02209334;
-extern const FieldEffectBasicTemplate ov01_02209340;
-extern const VecFx32 ov01_02209354[4][2];
+extern const VecFx32 sWarpArrowScale;
+extern const FieldEffectBasicTemplate sWarpArrowTemplate;
+extern const VecFx32 sWarpArrowOffsets[4][2];
 
 WarpArrow *WarpArrow_New(FieldEffectManager *manager) {
     WarpArrow *arrow = FieldEffectManager_HeapAllocAndFill(manager, sizeof(WarpArrow), FALSE, 0);
@@ -91,7 +91,7 @@ void WarpArrow_Spawn(PlayerAvatar *playerAvatar) {
     args.manager = manager;
     args.arrow = FieldEffectManager_GetRendererData(manager, 3);
     args.playerAvatar = playerAvatar;
-    FieldEffectManager_CreateEffect(manager, &ov01_02209340, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
+    FieldEffectManager_CreateEffect(manager, &sWarpArrowTemplate, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
 BOOL WarpArrowEffect_Init(FieldEffect *effect, WarpArrowEffect *work) {
@@ -160,9 +160,9 @@ void WarpArrowEffect_Draw(FieldEffect *effect, WarpArrowEffect *work) {
         return;
     }
     angle = 0;
-    scale = ov01_02209334;
+    scale = sWarpArrowScale;
     renderObj = &work->args.arrow->renderObj;
-    offset = &ov01_02209354[work->direction][work->frame];
+    offset = &sWarpArrowOffsets[work->direction][work->frame];
     switch (work->direction) {
     case 0:
         angle = 180;

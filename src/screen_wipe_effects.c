@@ -172,7 +172,7 @@ void CircleWipe_Init(CircleWipe *wipe, const CircleWipeConfig *config, int steps
     } else {
         ScreenFade_SetWindowVisible(regQueue, 2, screen, wipe->queued);
     }
-    sub_0200FF88(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
+    FadeBlankPair_StartOnVBlank(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
 BOOL CircleWipe_Step(CircleWipe *wipe) {
@@ -186,7 +186,7 @@ BOOL CircleWipe_Step(CircleWipe *wipe) {
             CircleWipe_BuildScanlines(wipe);
             SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
         } else {
-            sub_0200FFB4(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
+            FadeBlankPair_StopOnVBlank(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
             return TRUE;
         }
     }
@@ -300,7 +300,7 @@ void WedgeWipe_Init(WedgeWipe *wipe, const AngleWipeConfig *config, int steps, i
     } else {
         ScreenFade_SetWindowVisible(regQueue, 2, screen, wipe->queued);
     }
-    sub_0200FF88(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
+    FadeBlankPair_StartOnVBlank(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
 BOOL WedgeWipe_Step(WedgeWipe *wipe) {
@@ -314,7 +314,7 @@ BOOL WedgeWipe_Step(WedgeWipe *wipe) {
             WedgeWipe_BuildScanlines(wipe);
             SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
         } else {
-            sub_0200FFB4(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
+            FadeBlankPair_StopOnVBlank(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
             return TRUE;
         }
     }
@@ -392,7 +392,7 @@ void SlopeWipe_Init(SlopeWipe *wipe, const AngleWipeConfig *config, int steps, i
     } else {
         ScreenFade_SetWindowVisible(regQueue, 2, screen, wipe->queued);
     }
-    sub_0200FF88(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
+    FadeBlankPair_StartOnVBlank(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
 BOOL SlopeWipe_Step(SlopeWipe *wipe) {
@@ -406,7 +406,7 @@ BOOL SlopeWipe_Step(SlopeWipe *wipe) {
             SlopeWipe_BuildScanlines(wipe);
             SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
         } else {
-            sub_0200FFB4(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
+            FadeBlankPair_StopOnVBlank(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
             return TRUE;
         }
     }
@@ -516,7 +516,7 @@ void MultiRectWipe_Init(MultiRectWipe *wipe, const MultiRectWipeConfig *config, 
     } else {
         ScreenFade_SetWindowVisible(wipe->regQueue, 2, screen, wipe->queued);
     }
-    sub_0200FF88(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
+    FadeBlankPair_StartOnVBlank(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
 BOOL MultiRectWipe_Step(MultiRectWipe *wipe) {
@@ -530,7 +530,7 @@ BOOL MultiRectWipe_Step(MultiRectWipe *wipe) {
             MultiRectWipe_BuildScanlines(wipe);
             SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
         } else {
-            sub_0200FFB4(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
+            FadeBlankPair_StopOnVBlank(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
             return TRUE;
         }
     }
@@ -636,7 +636,7 @@ void SectorWipe_Init(SectorWipe *wipe, const SectorWipeConfig *config, int steps
     ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, 0, screen, buffer0->nextLeft[0], 0, buffer0->nextRight[0], 192, wipe->queued);
     ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, 1, screen, buffer1->nextLeft[0], 0, buffer1->nextRight[0], 192, wipe->queued);
     ScreenFade_SetWindowVisible(regQueue, 3, screen, wipe->queued);
-    sub_0200FF88(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
+    FadeBlankPair_StartOnVBlank(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
 BOOL SectorWipe_Step(SectorWipe *wipe) {
@@ -652,7 +652,7 @@ BOOL SectorWipe_Step(SectorWipe *wipe) {
             SectorWipe_BuildScanlines(wipe);
             SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
         } else {
-            sub_0200FFB4(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
+            FadeBlankPair_StopOnVBlank(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
             return TRUE;
         }
     }
@@ -773,7 +773,7 @@ void MirroredSectorWipe_Init(SectorWipe *wipe, const SectorWipeConfig *config, i
     ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, 0, screen, 0, 0, 255, 192, wipe->queued);
     ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, 1, screen, 0, 0, 255, 192, wipe->queued);
     ScreenFade_SetWindowVisible(regQueue, 3, screen, wipe->queued);
-    sub_0200FF88(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
+    FadeBlankPair_StartOnVBlank(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
 BOOL MirroredSectorWipe_Step(SectorWipe *wipe) {
@@ -787,7 +787,7 @@ BOOL MirroredSectorWipe_Step(SectorWipe *wipe) {
             MirroredSectorWipe_BuildScanlines(wipe);
             SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
         } else {
-            sub_0200FFB4(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
+            FadeBlankPair_StopOnVBlank(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
             return TRUE;
         }
     }

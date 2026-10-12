@@ -126,13 +126,13 @@ typedef struct FollowMonFlash {
     u16 blended[32];
 } FollowMonFlash;
 
-extern const MovementTable ov01_02209710;
-extern const MovementTable ov01_02209720;
-extern const MovementTable ov01_02209730;
-extern const MovementTable ov01_02209740;
+extern const MovementTable sFollowMonFastMovements;
+extern const MovementTable sFollowMonSlowMovements;
+extern const MovementTable sFollowMonStepMovements;
+extern const MovementTable sFollowMonRunMovements;
 extern const HopHeightTable ov01_02209750;
 extern const HopOffsets ov01_022096F0;
-extern const VecFx32 ov01_022096F8;
+extern const VecFx32 sFollowMonRecallScale;
 extern const VecFx32 ov01_02209704;
 
 const HopTable ov01_022096E0 = { { 1, 2, 2, 3, 3, 2, 2, 0 }, { 14, 12 } };
@@ -160,10 +160,10 @@ void FollowMon_MarkForRecreate(FieldSystem *fieldSystem) {
 
 // The next faster movement in direction after movement (8-11, then steps 12-15, runs 16-19, 20-23).
 u32 FollowMon_GetFasterMovement(u32 direction, u32 movement) {
-    MovementTable slow = ov01_02209720;
-    MovementTable step = ov01_02209730;
-    MovementTable run = ov01_02209740;
-    MovementTable fast = ov01_02209710;
+    MovementTable slow = sFollowMonSlowMovements;
+    MovementTable step = sFollowMonStepMovements;
+    MovementTable run = sFollowMonRunMovements;
+    MovementTable fast = sFollowMonFastMovements;
     u8 i;
     for (i = 0; i < 4; i++) {
         if (movement == slow.movements[i]) {
@@ -684,7 +684,7 @@ BOOL Task_FollowMonRecall(TaskManager *taskMan) {
             void *billboard;
             u32 plttKey, plttAddr;
             FollowMon_MoveToPlayer(fieldSystem, DIR_NORTH);
-            scale = ov01_022096F8;
+            scale = sFollowMonRecallScale;
             billboard = ov01_021F771C(fieldSystem->mapObjectManager);
             BillboardObject_SetScale(billboard, &scale);
             plttKey = BillboardObject_GetPlttKey(billboard);

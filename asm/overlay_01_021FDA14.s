@@ -95,14 +95,14 @@ Reflection_Spawn: ; 0x021FDA74
 	str r1, [sp]
 	str r0, [sp, #4]
 	ldr r0, [sp, #0xc]
-	ldr r1, _021FDABC ; =ov01_02208F88
+	ldr r1, _021FDABC ; =sMapObjectReflectionTemplate
 	add r2, sp, #0x18
 	add r3, r4, #0
 	bl FieldEffectManager_CreateEffect
 	add sp, #0x24
 	pop {r4, r5, pc}
 	nop
-_021FDABC: .word ov01_02208F88
+_021FDABC: .word sMapObjectReflectionTemplate
 	thumb_func_end Reflection_Spawn
 
 	thumb_func_start ReflectionEffect_Init
@@ -591,7 +591,7 @@ _021FDE86:
 	add r0, sp, #8
 	str r0, [sp]
 	ldr r0, [sp, #0x5c]
-	ldr r1, _021FDEA8 ; =ov01_02208F9C
+	ldr r1, _021FDEA8 ; =sBillboardReflectionTemplate
 	str r0, [sp, #4]
 	ldr r3, [sp, #0x58]
 	add r0, r5, #0
@@ -600,7 +600,7 @@ _021FDE86:
 	add sp, #0x40
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-_021FDEA8: .word ov01_02208F9C
+_021FDEA8: .word sBillboardReflectionTemplate
 	thumb_func_end Reflection_SpawnForBillboard
 
 	thumb_func_start BillboardReflectionEffect_Init
@@ -745,14 +745,14 @@ Reflection_SpawnForFollower: ; 0x021FDF88
 	str r1, [sp]
 	str r0, [sp, #4]
 	ldr r0, [sp, #0xc]
-	ldr r1, _021FDFD0 ; =ov01_02208F74
+	ldr r1, _021FDFD0 ; =sFollowerReflectionTemplate
 	add r2, sp, #0x18
 	add r3, r4, #0
 	bl FieldEffectManager_CreateEffect
 	add sp, #0x24
 	pop {r4, r5, pc}
 	nop
-_021FDFD0: .word ov01_02208F74
+_021FDFD0: .word sFollowerReflectionTemplate
 	thumb_func_end Reflection_SpawnForFollower
 
 	thumb_func_start FollowerReflectionEffect_Init
@@ -1026,21 +1026,21 @@ _021FE1FA:
 
 	.rodata
 
-ov01_02208F74: ; 0x02208F74
+sFollowerReflectionTemplate: ; 0x02208F74
 	.word 0x00000038
 	.word FollowerReflectionEffect_Init
 	.word ReflectionEffect_Destroy
 	.word FollowerReflectionEffect_Update
 	.word FollowerReflectionEffect_Draw
 
-ov01_02208F88: ; 0x02208F88
+sMapObjectReflectionTemplate: ; 0x02208F88
 	.word 0x00000038
 	.word ReflectionEffect_Init
 	.word ReflectionEffect_Destroy
 	.word ReflectionEffect_Update
 	.word ReflectionEffect_Draw
 
-ov01_02208F9C: ; 0x02208F9C
+sBillboardReflectionTemplate: ; 0x02208F9C
 	.word 0x00000038
 	.word BillboardReflectionEffect_Init
 	.word BillboardReflectionEffect_Destroy

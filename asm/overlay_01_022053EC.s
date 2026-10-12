@@ -19,12 +19,12 @@
 	.public FollowMon_IsNextToPlayer
 	.public ov01_022096E0
 	.public ov01_022096F0
-	.public ov01_022096F8
+	.public sFollowMonRecallScale
 	.public ov01_02209704
-	.public ov01_02209710
-	.public ov01_02209720
-	.public ov01_02209730
-	.public ov01_02209740
+	.public sFollowMonFastMovements
+	.public sFollowMonSlowMovements
+	.public sFollowMonStepMovements
+	.public sFollowMonRunMovements
 	.public ov01_02209750
 	.include "overlay_01_022053EC.inc"
 	.include "global.inc"

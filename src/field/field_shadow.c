@@ -49,14 +49,14 @@ typedef struct FieldShadowEffect {
     FieldShadowEffectArgs args;
 } FieldShadowEffect;
 
-extern const u32 ov01_02208E90[4];
-extern const FieldEffectBasicTemplate ov01_02208EA0;
-extern const fx32 ov01_02208EB4[5];
+extern const u32 sShadowModelFiles[4];
+extern const FieldEffectBasicTemplate sMapObjectShadowTemplate;
+extern const fx32 sShadowAlphaByTimeOfDay[5];
 extern const FieldEffectBasicTemplate ov01_02208EC8;
 extern const FieldEffectBasicTemplate ov01_02208EDC;
 extern const MtxFx33 ov01_02208EF0;
-extern const MtxFx33 ov01_02208F14;
-extern const VecFx32 ov01_02208F38[5];
+extern const MtxFx33 sShadowDrawRotation;
+extern const VecFx32 sShadowScaleByTimeOfDay[5];
 
 FieldShadow *FieldShadow_New(FieldEffectManager *manager);
 void FieldShadow_Free(FieldShadow *shadow);
@@ -116,8 +116,8 @@ int FieldShadow_FxToAlpha(fx32 value) {
 }
 
 void FieldShadow_SetTimeOfDayParams(FieldShadow *shadow, int timeOfDay) {
-    shadow->alpha = ov01_02208EB4[shadow->timeOfDay];
-    shadow->scale = ov01_02208F38[shadow->timeOfDay];
+    shadow->alpha = sShadowAlphaByTimeOfDay[shadow->timeOfDay];
+    shadow->scale = sShadowScaleByTimeOfDay[shadow->timeOfDay];
 }
 
 void FieldShadow_StepTowards(fx32 *value, fx32 target, fx32 step) {
@@ -161,8 +161,8 @@ void FieldShadow_UpdateTask(SysTask *task, FieldShadow *shadow) {
         shadow->state = state + 1;
         // fallthrough
     case 2:
-        alpha = ov01_02208EB4[timeOfDay];
-        scale = ov01_02208F38[timeOfDay];
+        alpha = sShadowAlphaByTimeOfDay[timeOfDay];
+        scale = sShadowScaleByTimeOfDay[timeOfDay];
         FieldShadow_StepTowards(&shadow->scale.x, scale.x, 0x10);
         y = scale.y;
         FieldShadow_StepTowards(&shadow->scale.y, y, 0x10);
@@ -181,7 +181,7 @@ void FieldShadow_UpdateTask(SysTask *task, FieldShadow *shadow) {
 void FieldShadow_LoadModels(FieldShadow *shadow) {
     int i;
     for (i = 0; i < 4; i++) {
-        FieldEffectManager_LoadRenderModel(shadow->manager, &shadow->models[i], 0, ov01_02208E90[i], 0);
+        FieldEffectManager_LoadRenderModel(shadow->manager, &shadow->models[i], 0, sShadowModelFiles[i], 0);
         RenderObj_InitFromModel(&shadow->renderObjs[i], &shadow->models[i]);
     }
 }
@@ -206,7 +206,7 @@ void FieldShadow_CreateMapObjectShadow(LocalMapObject *object) {
     args.shadow = FieldEffectManager_GetRendererData(manager, 0);
     args.mapObject = object;
     MapObject_CopyPositionVector(object, &pos);
-    FieldEffectManager_CreateEffect(manager, &ov01_02208EA0, &pos, 0, &args, MapObject_GetPriorityPlusValue(object, 2));
+    FieldEffectManager_CreateEffect(manager, &sMapObjectShadowTemplate, &pos, 0, &args, MapObject_GetPriorityPlusValue(object, 2));
 }
 
 void ov01_021FD684(LocalMapObject *object) {
@@ -278,7 +278,7 @@ void FieldShadowEffect_Draw(FieldEffect *effect, FieldShadowEffect *work) {
     if (work->hidden != 0) {
         return;
     }
-    mtx = ov01_02208F14;
+    mtx = sShadowDrawRotation;
     shadow = work->args.shadow;
     FieldShadow_GetScale(shadow, &scale);
     FieldEffect_GetPosition(effect, &pos);

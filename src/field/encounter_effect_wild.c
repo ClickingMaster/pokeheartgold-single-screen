@@ -152,7 +152,7 @@ void WildEffectBgLoader_Start(WildEffectBgLoader *loader, EncounterEffectTask *e
 BOOL WildEffectBgLoader_IsDone(WildEffectBgLoader *loader);
 void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white);
 
-void sub_0200FC20(u16 color);
+void SetBothScreensBrightnessByColor(u16 color);
 
 extern const u32 ov120_022601F4[];
 extern const u32 ov120_022601F8[];
@@ -504,7 +504,7 @@ void EncounterEffect_PkmnTrainerRed(SysTask *task, EncounterEffectTask *effect) 
         }
         break;
     case 5:
-        sub_0200FC20(0);
+        SetBothScreensBrightnessByColor(0);
         if (effect->done) {
             *effect->done = TRUE;
         }
@@ -662,7 +662,7 @@ void WildEffect_RunCellGridRows(SysTask *task, EncounterEffectTask *effect, BOOL
         }
         break;
     case 5:
-        sub_0200FC20(0);
+        SetBothScreensBrightnessByColor(0);
         if (effect->done) {
             *effect->done = TRUE;
         }
@@ -736,7 +736,7 @@ void WildEffect_RunCellGridDiagonals(SysTask *task, EncounterEffectTask *effect,
         }
         break;
     case 5:
-        sub_0200FC20(0);
+        SetBothScreensBrightnessByColor(0);
         if (effect->done) {
             *effect->done = TRUE;
         }
@@ -920,7 +920,7 @@ void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white) 
         }
         break;
     case 7:
-        sub_0200FC20(0);
+        SetBothScreensBrightnessByColor(0);
         if (effect->done) {
             *effect->done = TRUE;
         }

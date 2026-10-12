@@ -48,8 +48,8 @@ void ShayminFormChangeEffect_Draw(FieldEffect *effect, ShayminFormChangeEffect *
 BOOL ShayminFormChange_AdvanceAnimations(Field3DModelAnimation *animations, u32 count);
 void ShayminFormChange_SetAnimationsFrame(Field3DModelAnimation *animations, u32 count, fx32 frame);
 
-// The effect template stays in asm (asm/overlay_01_022051EC_residual_1.s, linked after this file).
-extern const FieldEffectBasicTemplate ov01_022096CC;
+// The effect template stays in asm (asm/field_shaymin_form_change_data.s, linked after this file).
+extern const FieldEffectBasicTemplate sShayminFormChangeTemplate;
 
 ShayminFormChange *ShayminFormChange_New(FieldEffectManager *manager) {
     ShayminFormChange *formChange = FieldEffectManager_HeapAllocAndFill(manager, sizeof(ShayminFormChange), FALSE, 0);
@@ -85,7 +85,7 @@ FieldEffect *ShayminFormChange_Spawn(FieldEffectManager *manager, VecFx32 *posit
     ShayminFormChangeEffectArgs args;
     args.manager = manager;
     args.formChange = FieldEffectManager_GetRendererData(manager, 22);
-    return FieldEffectManager_CreateEffect(manager, &ov01_022096CC, position, 0, &args, 0xFF);
+    return FieldEffectManager_CreateEffect(manager, &sShayminFormChangeTemplate, position, 0, &args, 0xFF);
 }
 
 BOOL ShayminFormChange_IsDone(FieldEffect *effect) {

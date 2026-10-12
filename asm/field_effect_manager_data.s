@@ -1,0 +1,12 @@
+#include <nitro/fs/overlay.h>
+	.include "asm/macros.inc"
+	.include "global.inc"
+
+	.public sBillboardDefaultScale
+
+.text
+	.rodata
+
+sBillboardDefaultScale: ; 0x02206988
+	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
+	.byte 0x00, 0x10, 0x00, 0x00

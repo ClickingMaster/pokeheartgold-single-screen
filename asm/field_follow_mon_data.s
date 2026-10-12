@@ -1,89 +1,39 @@
-#include "constants/sndseq.h"
-#include "constants/moves.h"
-#include "constants/std_script.h"
-#include "constants/species.h"
-#include "constants/sprites.h"
-#include "constants/maps.h"
-#include "constants/mmodel.h"
-#include "constants/items.h"
-#include "msgdata/msg/msg_0096_D31R0201.h"
-#include "msgdata/msg/msg_0066_D23R0102.h"
+#include <nitro/fs/overlay.h>
 	.include "asm/macros.inc"
-	.public ov01_022054E0
-	.public ov01_022057DC
-	.public MapObject_SetBillboardSepia
-	.public ov01_02205B14
-	.public Task_FollowMonRecall
-	.public ov01_02205F00
-	.public Task_FollowMonFlash
-	.public FollowMon_IsNextToPlayer
-	.public ov01_022096E0
-	.public ov01_022096F0
-	.public ov01_022096F8
-	.public ov01_02209704
-	.public ov01_02209710
-	.public ov01_02209720
-	.public ov01_02209730
-	.public ov01_02209740
-	.public ov01_02209750
-	.include "overlay_01_022053EC.inc"
 	.include "global.inc"
 
+	.public ov01_022096F0
+	.public sFollowMonRecallScale
+	.public ov01_02209704
+	.public sFollowMonFastMovements
+	.public sFollowMonSlowMovements
+	.public sFollowMonStepMovements
+	.public sFollowMonRunMovements
+	.public ov01_02209750
+
 	.text
-	.public ScrCmd_808
-	.public FollowMon_MarkForRecreate
-	.public FollowMon_GetFasterMovement
-	.public MapObject_IsShinyPokemon
-	.public MapObject_HasFollowMonSprite
-	.public ov01_02205584
-	.public ov01_022055B0
-	.public FollowMonObject_IsLarge
-	.public MapObject_GetCoordsBehind
-	.public MapObject_GetPreviousCoordsBehind
-	.public ov01_022056C4
-	.public MapObject_SetPositionNextTo
-	.public FollowMon_SpawnReleaseBall
-	.public FollowMon_MoveToPlayer
-	.public FollowMon_CheckVisibleFlag
-	.public ov01_022057D0
-	.public ov01_02205808
-	.public ov01_02205870
-	.public ov01_0220596C
-	.public FollowMon_QueuePlayerStep
-	.public FollowMon_RecreateForMap
-	.public FollowMon_SetHeight
-	.public Task_WaitFollowMonMovement
-	.public ov01_02205AEC
-	.public ov01_02205CF0
-	.public FollowMon_StartRecall
-	.public ov01_02205EE0
-	.public MapObject_StepTowards
-	.public SpriteId_GetModelNo
-	.public FollowMon_SetFacingDirection
-	.public FollowMon_StartFlash
-	.public FieldSystem_GetLeadMonIndex
 	.rodata
 
 ov01_022096F0: ; 0x022096F0
 	.byte 0x04, 0x04, 0x04, 0x02, 0x02, 0x02, 0x00, 0x00
 
-ov01_022096F8: ; 0x022096F8
+sFollowMonRecallScale: ; 0x022096F8
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 	.byte 0x00, 0x10, 0x00, 0x00
 
 ov01_02209704: ; 0x02209704
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 
-ov01_02209710: ; 0x02209710
+sFollowMonFastMovements: ; 0x02209710
 	.byte 0x14, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x00, 0x16, 0x00, 0x00, 0x00, 0x17, 0x00, 0x00, 0x00
 
-ov01_02209720: ; 0x02209720
+sFollowMonSlowMovements: ; 0x02209720
 	.byte 0x08, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00
 
-ov01_02209730: ; 0x02209730
+sFollowMonStepMovements: ; 0x02209730
 	.byte 0x0C, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00
 
-ov01_02209740: ; 0x02209740
+sFollowMonRunMovements: ; 0x02209740
 	.byte 0x10, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00, 0x13, 0x00, 0x00, 0x00
 
 ov01_02209750: ; 0x02209750

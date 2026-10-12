@@ -48,7 +48,7 @@
 BOOL GF_TouchpadStartRecording(TPData *data, u32 capacity, u32 frequency);
 int GF_TouchpadUpdate(SwalotPlopTouch *out, int mode, u32 threshold);
 void TextOBJ_UpdatePosition(TextOBJ *object);
-void sub_0200FC20(u16 color);
+void SetBothScreensBrightnessByColor(u16 color);
 void GF_SndHandleSetTempoRatio(int handleNo, int ratio);
 void NNS_G3dMdlSetMdlAmbAll(NNSG3dResMdl *model, GXRgb color);
 int MTX_Inverse33(const MtxFx33 *src, MtxFx33 *dst);
@@ -121,9 +121,9 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
         switch (app->connectionLostState) {
         case 0:
             if (IsPaletteFadeFinished() == TRUE) {
-                sub_0200FB70();
+                StopPaletteFade();
             }
-            sub_0200FC20(0);
+            SetBothScreensBrightnessByColor(0);
             app->connectionLostState++;
             break;
         case 1:

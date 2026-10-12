@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "fcab9f1be928ac4e72bf9cee7c5c0c5380f2bfe3",
+  "commit": "b5a25e9df211a44d15740bf1d52fcbff17c92cfe",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "d6db2989a5a64a1262a8003ad387a592822d331202a5c71299dcb1ebd0d2d7f2",
+    "ARM9": "69a2bac25a6abca1ca93bd95ad8badd35a2e23f4e0abce901f46f771bab14efa",
     "ARM7": "d726d92f810e881692e1b4d2ec232d6ca89b38985dcb26b08751c0037036d92a"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -1012,10 +1012,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_13",
-      "object": "mb_task_piece.o",
+      "object": "mb_task_piece_buffer.o",
       "bytes": 1288,
       "status": "c",
-      "source": "lib/NitroSDK/src/mb/mb_task_piece.c"
+      "source": "lib/NitroSDK/src/mb/mb_task_piece_buffer.c"
     },
     {
       "cpu": "ARM9",
@@ -9406,14 +9406,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "hblank_fade_pair_1.o",
-      "bytes": 120,
-      "status": "c",
-      "source": "src/hblank_fade_pair_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "headbutt_tree.o",
       "bytes": 192,
       "status": "c",
@@ -11226,22 +11218,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "palette_fade_reset.o",
-      "bytes": 440,
-      "status": "c",
-      "source": "src/palette_fade_reset.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "palette_fade_state_2.o",
-      "bytes": 408,
-      "status": "c",
-      "source": "src/palette_fade_state_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "palette_vram_addr.o",
       "bytes": 42,
       "status": "c",
@@ -11542,14 +11518,6 @@
       "bytes": 374,
       "status": "c",
       "source": "src/pokewalker.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "r40_unk_020100C4_run1.o",
-      "bytes": 72,
-      "status": "c",
-      "source": "src/r40_unk_020100C4_run1.c"
     },
     {
       "cpu": "ARM9",
@@ -12069,26 +12037,18 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "screen_fade.o",
+      "bytes": 1756,
+      "status": "c",
+      "source": "src/screen_fade.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "screen_fade_effects.o",
       "bytes": 5422,
       "status": "c",
       "source": "src/screen_fade_effects.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "screen_fade_update.o",
-      "bytes": 360,
-      "status": "c",
-      "source": "src/screen_fade_update.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "screen_fade_update_2.o",
-      "bytes": 356,
-      "status": "c",
-      "source": "src/screen_fade_update_2.c"
     },
     {
       "cpu": "ARM9",

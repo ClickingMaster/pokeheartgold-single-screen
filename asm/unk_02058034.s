@@ -17,10 +17,10 @@ CommClubLink_StartCardExchange: ; 0x02058190
 	add r4, r0, #0
 	mov r0, #0
 	add r1, r0, #0
-	bl sub_0200FC60
+	bl FillScreenWithColor
 	mov r0, #1
 	mov r1, #0
-	bl sub_0200FC60
+	bl FillScreenWithColor
 	mov r0, #1
 	add r1, r0, #0
 	bl CommState_SetErrorWatch

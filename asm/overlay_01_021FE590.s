@@ -171,7 +171,7 @@ ApricornRegrowth_Spawn: ; 0x021FE66C
 	str r0, [sp]
 	mov r0, #0xff
 	str r0, [sp, #4]
-	ldr r1, _021FE6B0 ; =ov01_02209084
+	ldr r1, _021FE6B0 ; =sApricornRegrowthTemplate
 	add r0, r4, #0
 	add r2, sp, #0x14
 	mov r3, #0
@@ -179,7 +179,7 @@ ApricornRegrowth_Spawn: ; 0x021FE66C
 	add sp, #0x20
 	pop {r3, r4, r5, pc}
 	nop
-_021FE6B0: .word ov01_02209084
+_021FE6B0: .word sApricornRegrowthTemplate
 	thumb_func_end ApricornRegrowth_Spawn
 
 	thumb_func_start ApricornRegrowthEffect_Init
@@ -291,7 +291,7 @@ ApricornRegrowthEffect_Draw: ; 0x021FE768
 
 	.rodata
 
-ov01_02209084: ; 0x02209084
+sApricornRegrowthTemplate: ; 0x02209084
 	.word 0x0000001C
 	.word ApricornRegrowthEffect_Init
 	.word ApricornRegrowthEffect_Destroy

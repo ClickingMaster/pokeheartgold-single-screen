@@ -30,7 +30,7 @@ enum FadeType {
 void BeginNormalPaletteFade(enum FadeMode fadeMode, enum FadeType typeMain, enum FadeType typeSub, u16 color, int steps, int framesPerStep, enum HeapID heapID);
 void HandleFadeUpdateFrame(void);
 BOOL IsPaletteFadeFinished(void);
-void sub_0200FB70(void);
+void StopPaletteFade(void);
 void ResetVisibleHardwareWindows(PMLCDTarget screen);
 void SetMasterBrightnessNeutral(PMLCDTarget screen);
 void SetMasterBrightnessByColor(PMLCDTarget screen, u16 color);

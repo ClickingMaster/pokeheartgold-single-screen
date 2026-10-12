@@ -242,7 +242,7 @@ BOOL FootprintStamp_Main(OverlayManager *man, int *state) {
         break;
     case 9:
         if (!IsPaletteFadeFinished()) {
-            sub_0200FB70();
+            StopPaletteFade();
         }
         BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 6, 1, HEAP_ID_125);
         (*state)++;

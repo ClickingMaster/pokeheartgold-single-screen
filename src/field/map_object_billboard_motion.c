@@ -17,7 +17,7 @@
 #include "script_pokemon_util.h"
 
 // Billboard sequence callback: called with the map object, its billboard, the object's draw work and the facing
-// direction. The dispatch tables are in asm/overlay_01_021F72DC_residual_16.s.
+// direction. The dispatch tables are in asm/map_object_billboard_motion_data.s.
 typedef void (*BillboardMotionFunc)(void *object, void *billboard, void *work, int facing);
 
 typedef struct BillboardFrameSteps4 {

@@ -47,13 +47,7 @@ Static main
     Object src/render_window.o
     Object src/render_window_frame_icon.o
     Object src/render_window_icons.o
-    Object asm/unk_0200FA24_head.o
-    Object src/palette_fade_reset.o
-    Object src/palette_fade_state_2.o
-    Object src/screen_fade_update.o
-    Object src/hblank_fade_pair_1.o
-    Object src/screen_fade_update_2.o
-    Object src/r40_unk_020100C4_run1.o
+    Object src/screen_fade.o
     Object src/screen_fade_effects.o
     Object src/screen_wipe_effects.o
     Object src/screen_window_wipe.o
@@ -989,12 +983,12 @@ Overlay field
     Object src/field/map_prop_animation.o
     Object src/field/door_transition.o
     Object src/field/area_light.o
-    Object asm/overlay_01_021E90C0_residual_8.o
+    Object asm/door_transition_area_light_data.o
     Object src/field/build_model_shapes.o
     Object src/overlay_01_021EA824.o
     Object src/field/field_model_attributes.o
     Object src/field/field_camera.o
-    Object asm/overlay_01_021EABA8_residual_2.o
+    Object asm/field_camera_data.o
     Object src/field/field_bottom_screen.o
     Object src/field/field_texture_manager.o
     Object src/field/weather_manager.o
@@ -1005,13 +999,13 @@ Overlay field
     Object src/field/encounter_effect_wipe.o
     Object src/field/encounter_effect_util.o
     Object src/field/encounter_effect_particles.o
-    Object asm/op90_overlay_01_021EFB38_residual_19_anchor.o
+    Object asm/encounter_effect_data.o
     Object src/field/encounter_effect_wave_direction.o
     Object src/field/field_effect_manager.o
-    Object asm/to80_extra1765_anchor.o
+    Object asm/field_effect_manager_data.o
     Object src/field/field_effect_manager_texture.o
     Object src/field/player_avatar_actions.o
-    Object asm/overlay_01_021F1AFC_residual_13.o
+    Object asm/player_avatar_actions_data.o
     Object src/field/spin_slide.o
     Object src/field/warp_spin.o
     Object src/field/map_prop_manager.o
@@ -1025,7 +1019,7 @@ Overlay field
     Object src/field/pal_pad_registration.o
     Object asm/overlay_01_sprite_data.o
     Object src/field/map_object_billboard_motion.o
-    Object asm/overlay_01_021F72DC_residual_16.o
+    Object asm/map_object_billboard_motion_data.o
     Object src/field/map_object_models.o
     Object asm/map_object_render_data.o
     Object src/field/map_object_render.o
@@ -1035,7 +1029,7 @@ Overlay field
     Object src/field/hblank_system.o
     Object src/field/field_poison_effect.o
     Object src/field/area_data.o
-    Object asm/overlay_01_021FB878_residual_3.o
+    Object asm/area_data_tables.o
     Object src/field/honey_sweet_scent.o
     Object src/field/resource_bank.o
     Object asm/overlay_01_data_02208BFC.o
@@ -1044,13 +1038,13 @@ Overlay field
     Object src/field/field_move_sweet_scent.o
     Object src/field/map_object_model_list.o
     Object src/field/field_shadow.o
-    Object asm/overlay_01_021FD41C_residual_4.o
-    Object asm/overlay_01_021FDA14_residual_1.o
+    Object asm/field_shadow_data.o
+    Object asm/field_reflection_data.o
     Object src/field/field_reflection.o
     Object src/field/field_footprints.o
-    Object asm/overlay_01_021FE590_residual_1.o
+    Object asm/field_apricorn_regrowth_data.o
     Object src/field/field_apricorn_regrowth.o
-    Object asm/overlay_01_021FE590_residual_2.o
+    Object asm/field_apricorn_regrowth_gfx_data.o
     Object src/field/field_surf_mount.o
     Object src/field/field_rock_climb_effect.o
     Object src/field/field_puddle_splash.o
@@ -1068,23 +1062,23 @@ Overlay field
     Object asm/overlay_01_022001E4.o
     Object src/field/field_union_chat_marker.o
     Object src/field/field_warp_arrow.o
-    Object asm/overlay_01_02200858_residual_2.o
+    Object asm/field_warp_arrow_data.o
     Object src/field/scrcmd_pokemon_misc.o
     Object src/field/scrcmd_move_tutor.o
     Object src/field/scrcmd_moneybox.o
     Object src/field/field_follow_mon_ball.o
-    Object asm/overlay_01_022031C0_residual_3.o
+    Object asm/field_follow_mon_ball_data.o
     Object src/field/field_emote_bubble.o
-    Object asm/overlay_01_02203E40_residual_1.o
+    Object asm/field_flash_darkness_data.o
     Object src/field/field_flash_darkness.o
     Object src/field/overlay_01_02204004.o
     Object src/field/apricorn_tree_anim.o
     Object src/field/rock_smash_item.o
     Object src/field/headbutt.o
     Object src/field/field_shaymin_form_change.o
-    Object asm/overlay_01_022051EC_residual_1.o
+    Object asm/field_shaymin_form_change_data.o
     Object src/field/field_follow_mon.o
-    Object asm/overlay_01_022053EC_residual_8.o
+    Object asm/field_follow_mon_data.o
 }
 Overlay OVY_2
 {
@@ -1229,7 +1223,7 @@ Overlay OVY_13
     Object lib/NitroSDK/src/mb/mb_wm_error.o
     Object lib/NitroSDK/src/mb/mb_cache.o
     Object lib/NitroSDK/src/mb/mb_task_thread.o
-    Object lib/NitroSDK/src/mb/mb_task_piece.o
+    Object lib/NitroSDK/src/mb/mb_task_piece_buffer.o
     Object src/wifi_setup.o
     Object src/wifi_setup_session.o
     Object src/wifi_setup_state.o

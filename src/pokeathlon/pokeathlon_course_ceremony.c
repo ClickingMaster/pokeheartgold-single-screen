@@ -66,7 +66,7 @@ extern const u32 ov96_0221B124[29];
 extern const u32 ov96_0221AF54[4];
 
 // Not declared by a header yet.
-void sub_0200FC20(u16 color);
+void SetBothScreensBrightnessByColor(u16 color);
 
 // NitroSDK math (not declared by a header yet).
 u32 MATH_CountPopulation(u32 value);
@@ -147,7 +147,7 @@ BOOL PokeathlonCourseOpening_Introduce(PokeathlonCourseData *course) {
             ceremony->state = 1;
             break;
         case 1:
-            sub_0200FC20(0x7FFF);
+            SetBothScreensBrightnessByColor(0x7FFF);
             PlaySE(SEQ_SE_GS_VOICE01);
             ceremony->state = 2;
             break;

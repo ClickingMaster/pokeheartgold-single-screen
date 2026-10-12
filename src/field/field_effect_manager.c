@@ -23,7 +23,7 @@ void RenderModel_BindTexturesOnVBlank(void *model);
 void RenderAnimation_LoadFromNarc(void *animation, int unused, NARC *narc, int fileId, enum HeapID heapID, BOOL atEnd);
 void RenderAnimation_InitForModel(void *animation, void *model, void *source, int unused, enum HeapID heapID);
 
-extern const VecFx32 ov01_02206988;
+extern const VecFx32 sBillboardDefaultScale;
 
 FieldEffectManager *FieldEffectManager_New(FieldSystem *fieldSystem, u32 rendererCount, enum HeapID heapID) {
     FieldEffectManager *manager = Heap_Alloc(heapID, sizeof(FieldEffectManager));
@@ -288,7 +288,7 @@ void *FieldEffectManager_CreateBillboard(FieldEffectManager *manager, FieldEffec
     template.billboards = manager->gfx->billboards;
     template.record = record;
     template.position = *position;
-    template.scale = ov01_02206988;
+    template.scale = sBillboardDefaultScale;
     billboard = BillboardObject_Create(&template);
     GF_ASSERT(billboard != NULL);
     if (billboard != NULL) {

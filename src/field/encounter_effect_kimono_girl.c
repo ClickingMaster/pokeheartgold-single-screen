@@ -13,7 +13,7 @@ typedef struct KimonoGirlEffectWork {
 } KimonoGirlEffectWork;
 
 void EncounterEffect_LoadBgGraphicsMirrored(NARC *narc, int member1, int member2, int member3, int arg4, int arg5, BgConfig *bgConfig, int bgId1, int bgId2);
-extern void sub_0200FC20(); // called without its color argument here
+extern void SetBothScreensBrightnessByColor(); // called without its color argument here
 
 // BgTemplates for BG1 and BG3 (512x256, 16 colors; screen base 0x0000 / 0x1000, char base 0x4000 /
 // 0x8000, priority 0 / 1). Kept as byte arrays: MWCC places char arrays in their own .rodata sections.
@@ -95,7 +95,7 @@ void EncounterEffect_KimonoGirl(SysTask *task, EncounterEffectTask *effect) {
         break;
     case 8:
         work->scrolling = FALSE;
-        sub_0200FC20();
+        SetBothScreensBrightnessByColor();
         if (effect->done) {
             *effect->done = TRUE;
         }

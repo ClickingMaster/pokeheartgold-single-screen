@@ -6,7 +6,7 @@
 #include "trainer_card_data.h"
 
 // Declared with the types their call sites were matched against (no header, or a header with other types).
-void sub_0200FC60(int screen, u16 color);
+void FillScreenWithColor(int screen, u16 color);
 int LinkSync_GetPlayerState(int index);
 void sub_020399FC(int, void *);
 
@@ -77,8 +77,8 @@ void CommClubLink_StartCardExchange(FieldSystem *fieldSystem) {
     int i;
     int netId;
 
-    sub_0200FC60(0, 0);
-    sub_0200FC60(1, 0);
+    FillScreenWithColor(0, 0);
+    FillScreenWithColor(1, 0);
     CommState_SetErrorWatch(1, 1);
     if (CommState_Exists()) {
         if (gCommClubLink == NULL) {

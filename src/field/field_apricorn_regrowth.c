@@ -59,9 +59,9 @@ void ApricornRegrowthEffect_Update(FieldEffect *effect, ApricornRegrowthEffect *
 void ApricornRegrowthEffect_Draw(FieldEffect *effect, ApricornRegrowthEffect *work);
 
 // The effect template and the record parameters ({ 0, 9, 1, 0, 0, 2 }) stay in asm, linked around this file
-// (asm/overlay_01_021FE590_residual_1.s before it, _residual_2.s after it): MWCC would not keep the update
+// (asm/field_apricorn_regrowth_data.s before it, asm/field_apricorn_regrowth_gfx_data.s after it): MWCC would not keep the update
 // function's speed table between them.
-extern const FieldEffectBasicTemplate ov01_02209084;
+extern const FieldEffectBasicTemplate sApricornRegrowthTemplate;
 extern const u32 ov01_022090AC[6];
 
 ApricornRegrowth *ApricornRegrowth_New(FieldEffectManager *manager) {
@@ -127,7 +127,7 @@ void ApricornRegrowth_Spawn(LocalMapObject *mapObject) {
     position.z += 8 * FX32_ONE;
     args.manager = manager;
     args.regrowth = FieldEffectManager_GetRendererData(manager, 16);
-    FieldEffectManager_CreateEffect(manager, &ov01_02209084, &position, 0, &args, 0xFF);
+    FieldEffectManager_CreateEffect(manager, &sApricornRegrowthTemplate, &position, 0, &args, 0xFF);
 }
 
 BOOL ApricornRegrowthEffect_Init(FieldEffect *effect, ApricornRegrowthEffect *work) {

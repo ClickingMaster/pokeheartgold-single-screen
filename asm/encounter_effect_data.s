@@ -1,3 +1,7 @@
+#include <nitro/fs/overlay.h>
+	.include "asm/macros.inc"
+	.include "global.inc"
+
 	.public ov01_022067D0
 	.public sParticleBaseScale
 	.public sParticleGraphicsModes
@@ -6,51 +10,53 @@
 	.public sEncounterEffectFuncs
 	.public sBlockWipeColumnOrder
 	.public gEncounterEffectState
-#include "constants/sndseq.h"
-#include "constants/moves.h"
-#include "constants/std_script.h"
-#include "constants/species.h"
-#include "constants/sprites.h"
-#include "constants/maps.h"
-#include "constants/mmodel.h"
-#include "constants/items.h"
-#include "msgdata/msg/msg_0096_D31R0201.h"
-#include "msgdata/msg/msg_0066_D23R0102.h"
-	.include "asm/macros.inc"
-	.public Task_RunEncounterEffect
-	.public EncounterEffect_LoadOverlay
-	.public EncounterEffect_UnloadOverlay
-	.public Task_EncounterEffectFlash
-	.public EncounterEffectQuadInterp_Init
-	.public EncounterEffectQuadInterp_Update
-	.public StripeWipe_New
-	.public StripeWipe_Start
-	.public Task_StripeWipe_Update
-	.public StripeWipe_End
-	.public HBlank_StripeWipe
-	.public SplitWipe_New
-	.public SplitWipe_Start
-	.public Task_SplitWipe_Update
-	.public HBlank_SplitWipe
-	.public SplitWipe_End
-	.public EncounterEffect_LoadBgGraphics
-	.public EncounterEffect_LoadBgGraphicsMirrored
-	.public EncounterEffect_LoadSpriteResources
-	.public RectTrail_Update
-	.public MovingRect_Update
-	.public BlockWipe_Update
-	.public ZigzagWipe_Start
-	.public ZigzagWipe_End
-	.public EncounterEffect_GetDefaultEffect
-	.public EncounterEffect_StartParticleMode
-	.public EncounterEffect_LoadParticles
-	.public Task_ParticleSetup_Main
-	.public EncounterEffect_SetupParticleGraphics
-	.public EncounterEffectParticles_AllocTexVram
-	.public EncounterEffectParticles_AllocPlttVram
-	.public EncounterEffectHBlankWave_AlternateDirection
-	.include "overlay_01_021EFB38.inc"
-	.include "global.inc"
+	.public EncounterEffect_Champion
+	.public EncounterEffect_EliteFourBruno
+	.public EncounterEffect_EliteFourKaren
+	.public EncounterEffect_EliteFourKoga
+	.public EncounterEffect_EliteFourWill
+	.public EncounterEffect_ExecutiveArcher
+	.public EncounterEffect_ExecutiveAriana
+	.public EncounterEffect_ExecutivePetrel
+	.public EncounterEffect_ExecutiveProton
+	.public EncounterEffect_KimonoGirl
+	.public EncounterEffect_LeaderBlaine
+	.public EncounterEffect_LeaderBlue
+	.public EncounterEffect_LeaderBrock
+	.public EncounterEffect_LeaderBugsy
+	.public EncounterEffect_LeaderChuck
+	.public EncounterEffect_LeaderClair
+	.public EncounterEffect_LeaderErika
+	.public EncounterEffect_LeaderFalkner
+	.public EncounterEffect_LeaderJanine
+	.public EncounterEffect_LeaderJasmine
+	.public EncounterEffect_LeaderLtSurge
+	.public EncounterEffect_LeaderMisty
+	.public EncounterEffect_LeaderMorty
+	.public EncounterEffect_LeaderPryce
+	.public EncounterEffect_LeaderSabrina
+	.public EncounterEffect_LeaderWhitney
+	.public EncounterEffect_PkmnTrainerRed
+	.public EncounterEffect_Rival
+	.public EncounterEffect_RocketBoss
+	.public EncounterEffect_TeamRocket
+	.public EncounterEffect_TrainerBallDrop
+	.public EncounterEffect_TrainerBallFall
+	.public EncounterEffect_TrainerFadeSpin
+	.public EncounterEffect_TrainerRisingBall
+	.public EncounterEffect_TrainerSpinApart
+	.public EncounterEffect_TrainerSpinZoom
+	.public EncounterEffect_WildDiagonalsBlack
+	.public EncounterEffect_WildDiagonalsWhite
+	.public EncounterEffect_WildRowsBlack
+	.public EncounterEffect_WildRowsWhite
+	.public EncounterEffect_WildWaveBlack
+	.public EncounterEffect_WildWaveWhite
+	.public ov114_0225F020
+	.public ov114_0225F280
+	.public ov116_0225F054
+	.public ov116_0225F364
+	.public ov116_0225F374
 
 .text
 	.rodata

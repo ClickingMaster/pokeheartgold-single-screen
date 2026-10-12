@@ -229,7 +229,7 @@ _0225F1EA:
 _0225F1FA:
 	mov r0, #0
 	str r0, [r5, #0x1c]
-	bl sub_0200FC20
+	bl SetBothScreensBrightnessByColor
 	ldr r1, [r4, #0x14]
 	cmp r1, #0
 	beq _0225F20C

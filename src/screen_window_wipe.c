@@ -66,7 +66,7 @@ void ClockWipe_Init(ClockWipe *wipe, const ClockWipeConfig *config, int steps, i
     } else {
         ScreenFade_SetWindowVisible(regQueue, 2, screen, wipe->queued);
     }
-    sub_0200FF88(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
+    FadeBlankPair_StartOnVBlank(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
 BOOL ClockWipe_Step(ClockWipe *wipe) {
@@ -89,7 +89,7 @@ BOOL ClockWipe_Step(ClockWipe *wipe) {
             ClockWipe_BuildScanlines(wipe);
             SysTask_CreateOnVWaitQueue(ScreenWipeScanlines_CommitTask, wipe, 0x3FF);
         } else {
-            sub_0200FFB4(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
+            FadeBlankPair_StopOnVBlank(wipe->blankPair, wipe->scanlines.screen, wipe->heapId);
             return TRUE;
         }
     }

@@ -37,7 +37,7 @@ void GX_BeginLoadTexPltt(void);
 void GX_LoadTexPltt(const void *src, u32 destSlotAddr, u32 size);
 void GX_EndLoadTexPltt(void);
 void sub_020399FC(enum HeapID heapId, BgConfig *bgConfig);
-void sub_0200FC20(u16 a0);
+void SetBothScreensBrightnessByColor(u16 a0);
 
 // Defined in the other parts of the overlay.
 void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon);
@@ -355,9 +355,9 @@ BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
         switch (game->app->connectionLostState) {
         case 0:
             if (IsPaletteFadeFinished() == TRUE) {
-                sub_0200FB70();
+                StopPaletteFade();
             }
-            sub_0200FC20(0);
+            SetBothScreensBrightnessByColor(0);
             GX_SetVisibleWnd(GX_WNDMASK_NONE);
             game->app->connectionLostState++;
             break;

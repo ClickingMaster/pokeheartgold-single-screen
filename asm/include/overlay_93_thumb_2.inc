@@ -35,8 +35,8 @@
 .public ManagedSprite_SetOamMode
 .public SpriteManager_GetSpriteList
 .public IsPaletteFadeFinished
-.public sub_0200FB70
-.public sub_0200FC20
+.public StopPaletteFade
+.public SetBothScreensBrightnessByColor
 .public FontOAM_Create
 .public FontOAM_Delete
 .public FontOAM_GetCharSize

@@ -1,0 +1,53 @@
+#include <nitro/fs/overlay.h>
+	.include "asm/macros.inc"
+	.include "global.inc"
+
+	.public gSideDoorExitModels
+	.public gSideDoorEntryModels
+	.public gDoorCameraPaths
+	.public gAreaLightFilePaths
+	.public gAreaLightFileArea00
+	.public gAreaLightFileArea02
+	.public gAreaLightFileArea01
+	.public gAreaLightFileDun20_01
+	.public gAreaLightFileDun20_02
+
+	.text
+	.rodata
+
+gSideDoorExitModels: ; 0x02206408
+	.byte 0x0B, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00
+	.byte 0x0C, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00
+
+gSideDoorEntryModels: ; 0x02206418
+	.byte 0x0B, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00
+	.byte 0x0C, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00
+
+gDoorCameraPaths: ; 0x02206428
+	.byte 0x82, 0xE8, 0xC1, 0x05, 0x00, 0x00, 0x00, 0x00, 0xC3, 0xD4, 0x05, 0x00, 0x43, 0xC0, 0xFD, 0xFF, 0xC1, 0xAE, 0x29, 0x00
+	.byte 0x62, 0xE2, 0xC1, 0x05, 0x00, 0x00, 0x00, 0x00, 0x9B, 0x20, 0x05, 0x00, 0xDA, 0x6B, 0xFC, 0xFF, 0xC1, 0x7E, 0x2C, 0x00
+
+gAreaLightFilePaths:
+	.word gAreaLightFileArea00
+	.word gAreaLightFileArea01
+	.word gAreaLightFileArea02
+	.word gAreaLightFileDun20_01
+	.word gAreaLightFileDun20_02
+
+	.data
+
+	.balign 4, 0
+gAreaLightFileArea00:
+	.asciz "data/area00light.txt"
+	.balign 4, 0
+gAreaLightFileArea02:
+	.asciz "data/area02light.txt"
+	.balign 4, 0
+gAreaLightFileArea01:
+	.asciz "data/area01light.txt"
+	.balign 4, 0
+gAreaLightFileDun20_01:
+	.asciz "data/dun20_01light.txt"
+	.balign 4, 0
+gAreaLightFileDun20_02:
+	.asciz "data/dun20_02light.txt"

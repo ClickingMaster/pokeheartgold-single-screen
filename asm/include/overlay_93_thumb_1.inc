@@ -62,8 +62,8 @@
 .public DrawFrameAndWindow1
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_0200FB70
-.public sub_0200FC20
+.public StopPaletteFade
+.public SetBothScreensBrightnessByColor
 .public FontSystem_NewInit
 .public FontSystem_Delete
 .public ParticleSystem_ZeroAll

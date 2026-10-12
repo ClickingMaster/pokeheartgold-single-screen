@@ -1,31 +1,12 @@
-#include "constants/sndseq.h"
-#include "constants/moves.h"
-#include "constants/std_script.h"
-#include "constants/species.h"
-#include "constants/sprites.h"
-#include "constants/maps.h"
-#include "constants/mmodel.h"
-#include "constants/items.h"
-#include "msgdata/msg/msg_0096_D31R0201.h"
-#include "msgdata/msg/msg_0066_D23R0102.h"
+#include <nitro/fs/overlay.h>
 	.include "asm/macros.inc"
-	.public FieldCameraShift_Start
-	.public FieldCameraShift_Update
+	.include "global.inc"
+
 	.public gFieldCameraShiftPresets
 	.public gFieldCameraPresets
 	.public gFieldCameraShiftMode
-	.include "overlay_01_021EABA8.inc"
-	.include "global.inc"
 
 	.text
-	.public FieldCamera_Create
-	.public FieldCamera_Delete
-	.public FieldCameraShift_New
-	.public FieldCameraShift_Free
-	.public FieldCamera_InitShift
-	.public FieldCameraShift_SetAngle
-	.public FieldCameraShift_MoveLookAt
-	.public FieldCameraShift_GetStepDelta
 	.rodata
 
 gFieldCameraShiftPresets:

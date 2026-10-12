@@ -136,9 +136,9 @@ void LineMask_CommitTask(SysTask *task, void *data);
 void LineMask_HBlankCallback(void *data);
 
 // Palette fade state
-void sub_0200FCDC(u16 color);
+void SetBothBackdropColors(u16 color);
 void SetMasterBrightness(int screen, int brightness);
-void sub_0200FF88(void *blankPair, void *data, void (*callback)(void *data), int screen, enum HeapID heapId);
-void sub_0200FFB4(void *blankPair, int screen, enum HeapID heapId);
+void FadeBlankPair_StartOnVBlank(void *blankPair, void *data, void (*callback)(void *data), int screen, enum HeapID heapId);
+void FadeBlankPair_StopOnVBlank(void *blankPair, int screen, enum HeapID heapId);
 
 #endif // POKEHEARTGOLD_SCREEN_FADE_EFFECTS_H

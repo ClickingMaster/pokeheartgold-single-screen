@@ -5,16 +5,16 @@
 .public BeginNormalPaletteFade
 .public HandleFadeUpdateFrame
 .public IsPaletteFadeFinished
-.public sub_0200FB70
+.public StopPaletteFade
 .public ResetVisibleHardwareWindows
 .public SetMasterBrightnessNeutral
 .public SetMasterBrightnessByColor
-.public sub_0200FC20
-.public sub_0200FC60
-.public sub_0200FCDC
+.public SetBothScreensBrightnessByColor
+.public FillScreenWithColor
+.public SetBothBackdropColors
 .public SetMasterBrightness
-.public sub_0200FF88
-.public sub_0200FFB4
+.public FadeBlankPair_StartOnVBlank
+.public FadeBlankPair_StopOnVBlank
 .public FadeFunc_00
 .public FadeFunc_01
 .public FadeFunc_02
@@ -77,25 +77,25 @@
 	.public DoFadeUpdateFrame
 	.public FadeWork_UpdateFrame
 	.public CallFadeFunc
-	.public sub_0200FE14
-	.public sub_0200FE78
-	.public sub_0200FE84
-	.public sub_0200FEB0
-	.public sub_0200FECC
-	.public sub_0200FEE4
-	.public sub_0200FF5C
-	.public sub_0200FFD8
-	.public sub_0200FFF8
-	.public sub_02010014
-	.public sub_02010018
-	.public sub_0201002C
-	.public sub_02010050
-	.public sub_02010064
-	.public sub_02010094
-	.public sub_020100C4
+	.public PaletteFade_SetMode
+	.public PaletteFade_SetScreenOrder
+	.public ScreenFade_Init
+	.public FadeBlankPair_Init
+	.public FadeBlankPair_HBlankCallback
+	.public FadeBlankPair_Start
+	.public FadeBlankPair_Stop
+	.public FadeBlankPair_StartTask
+	.public FadeBlankPair_StopTask
+	.public FadeBlankPair_DummyCallback
+	.public PaletteFade_ResolveColor
+	.public PaletteFade_GetEndColor
+	.public ScreenFade_ResetBrightnessTask
+	.public ScreenFade_QueueBrightnessReset
+	.public ScreenFade_HoldFadeColor
+	.public PaletteFade_Clear
 	.public sFadeFuncPtrs
 
-	.public _021D0EF4
+	.public gPaletteFade
 	.public _021D0EF8
 	.public _021D0EFC
 	.public _021D0F08

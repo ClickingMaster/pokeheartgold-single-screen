@@ -144,7 +144,7 @@
 .public WaitingIcon_Delete
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_0200FC20
+.public SetBothScreensBrightnessByColor
 .public FontSystem_NewInit
 .public FontSystem_Delete
 .public FontOAM_Create

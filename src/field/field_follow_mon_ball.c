@@ -88,15 +88,15 @@ void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, FollowMonBallEffect *
 void FollowMonBall_GetPullCoordinate(u32 direction, VecFx32 *position, fx32 **coordinate);
 int FollowMonBall_GetPullStep(u32 direction);
 
-// Data stays in asm (asm/overlay_01_022031C0_residual_3.s, linked after this file): two unit scales, the four
+// Data stays in asm (asm/field_follow_mon_ball_data.s, linked after this file): two unit scales, the four
 // effect templates (kinds 3, 0, 1, 2) and the white palette (.data).
-extern const VecFx32 ov01_022094B0;
-extern const VecFx32 ov01_022094BC;
+extern const VecFx32 sFollowMonBallRecallScale;
+extern const VecFx32 sFollowMonBallRecallWhiteScale;
 extern const FieldEffectBasicTemplate ov01_022094C8;
 extern const FieldEffectBasicTemplate ov01_022094DC;
 extern const FieldEffectBasicTemplate ov01_022094F0;
 extern const FieldEffectBasicTemplate ov01_02209504;
-extern u8 ov01_02209B18[];
+extern u8 sFollowMonWhitePalette[];
 
 FollowMonBall *FollowMonBall_New(FieldEffectManager *manager) {
     FollowMonBall *ball = FieldEffectManager_HeapAllocAndFill(manager, sizeof(FollowMonBall), FALSE, 0);
@@ -314,7 +314,7 @@ void FollowMonBallEffect_UpdateRecallWhite(FieldEffect *effect, FollowMonBallEff
         billboard = ov01_021F771C(work->args.fieldSystem->mapObjectManager);
         plttKey = BillboardObject_GetPlttKey(billboard);
         plttKey2 = BillboardObject_GetPlttKey(billboard);
-        GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_PLTT, (u16)plttKey2 << 3, ov01_02209B18, ((plttKey & 0xFFFF0000) >> 16) << 3);
+        GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_PLTT, (u16)plttKey2 << 3, sFollowMonWhitePalette, ((plttKey & 0xFFFF0000) >> 16) << 3);
         if (FollowMonObject_IsLarge(mapObject)) {
             direction = (u8)MapObject_GetFacingDirection(mapObject);
             MapObject_CopyPositionVector(mapObject, &work->position);
@@ -326,7 +326,7 @@ void FollowMonBallEffect_UpdateRecallWhite(FieldEffect *effect, FollowMonBallEff
         }
         ++work->state;
     case 1:
-        scale = ov01_022094BC;
+        scale = sFollowMonBallRecallWhiteScale;
         ++work->timer;
         scale.x = FX32_ONE / work->timer;
         scale.y = FX32_ONE / work->timer;
@@ -406,7 +406,7 @@ void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, FollowMonBallEffect *
         work->state++;
     }
     case 1: {
-        VecFx32 scale = ov01_022094B0;
+        VecFx32 scale = sFollowMonBallRecallScale;
         work->timer++;
         scale.x = FX32_ONE / work->timer;
         scale.y = FX32_ONE / work->timer;

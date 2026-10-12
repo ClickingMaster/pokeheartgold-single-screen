@@ -45,7 +45,7 @@
 
 // Declared in no public header.
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapId);
-void sub_0200FC20(u16 color);
+void SetBothScreensBrightnessByColor(u16 color);
 void MTX_MultVec43(const VecFx32 *vec, const MtxFx43 *mtx, VecFx32 *dst);
 fx32 FX_Sqrt(fx32 x);
 fx64c FX_SinFx64c(fx32 x);
@@ -982,9 +982,9 @@ int MimeJrTop_HandleConnectionLost(MimeJrTopApp *app) {
     if (PlazaGameRoster_CheckConnectionLost(&app->roster) == TRUE) {
         if (app->resources.connectionLost == FALSE) {
             if (IsPaletteFadeFinished() == TRUE) {
-                sub_0200FB70();
+                StopPaletteFade();
             }
-            sub_0200FC20(0);
+            SetBothScreensBrightnessByColor(0);
             app->resources.connectionLost = TRUE;
             return 1;
         } else {

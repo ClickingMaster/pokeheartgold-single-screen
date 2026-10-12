@@ -8,7 +8,7 @@
 .public SysTask_Destroy
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_0200FC20
+.public SetBothScreensBrightnessByColor
 .public Heap_Alloc
 .public Heap_Free
 .public InitBgFromTemplate
