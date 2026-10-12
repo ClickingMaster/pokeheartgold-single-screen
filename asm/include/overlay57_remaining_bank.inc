@@ -1,8 +1,0 @@
-	.public BallCapsuleEditor_SaveSealCounts
-	.public BallCapsuleEditor_RestoreSealCounts
-	.public BallCapsuleEditor_CopyPreviewMon
-	.public BallCapsuleEditor_SetMode
-	.public BallCapsuleEditor_SetButtonFrame
-	.public BallCapsuleEditor_MoveButtonLabel
-	.public BallCapsuleEditor_Task_ButtonPress
-	.public BallCapsuleEditor_StartButtonPress

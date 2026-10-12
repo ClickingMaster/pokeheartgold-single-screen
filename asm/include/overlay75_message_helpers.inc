@@ -1,8 +1,0 @@
-	.public WiiMessageSettingsScreen_PrintMessage
-	.public WiiMessageSettingsScreen_IsPrinterActive
-	.public WiiMessageSettingsScreen_PrintWiiNumberReentry
-	.public WiiMessageSettingsScreen_CheckPassword
-	.public WiiMessageSettingsScreen_GetAlignedX
-	.public WiiMessageSettingsScreen_PrintAligned
-	.public WiiMessageSettingsScreen_PrintError
-	.public WiiMessageSettingsScreen_PrintErrorCode

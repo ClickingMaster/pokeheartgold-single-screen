@@ -1,9 +1,0 @@
-#include <nitro/fs/overlay.h>
-#pragma once
-.public Heap_Alloc
-.public Heap_Free
-.public MI_CpuFill8
-.public MapLoadBuffers_New
-.public MapLoadBuffers_Free
-.public MapLoadBuffers_GetPrimary
-.public MapLoadBuffers_GetSecondary
