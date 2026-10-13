@@ -152,7 +152,7 @@
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
 .public CommState_SetErrorWatch
-.public sub_020399FC
+.public CommState_FrameDummy
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
 .public NNS_G3dGlbFlushP

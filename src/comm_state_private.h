@@ -282,7 +282,7 @@ void CommState_SetErrorScreen(s8 arg0);
 u8 CommState_GetErrorScreen(void);
 void CommState_ShowErrorAndHalt(u32 errorCode);
 void CommState_ShowRestartErrorAndHalt(void);
-void sub_020399FC(void);
+void CommState_FrameDummy(void);
 void CommState_CheckLinkError(void);
 BOOL CommState_IsLinkDown(void);
 BOOL CommState_SetError(int arg0);

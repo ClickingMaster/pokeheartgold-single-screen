@@ -120,7 +120,7 @@ extern void LinkBattleScreen_Start(BattleLinkScreenArgs *args);
 extern void BattleRecord_StoreSetup(BattleSetup *setup);
 extern void ParticleSystem_FreeAll(void);
 extern void sub_02037930(int mode);
-extern void sub_020399FC(int a0, BgConfig *bgConfig);
+extern void CommState_FrameDummy(int a0, BgConfig *bgConfig);
 extern void WirelessStatusIcon_SetLevel(int linkLevel);
 extern int DWC_GetLinkLevel(void);
 extern BOOL CommWireless_Exists(void);
@@ -914,7 +914,7 @@ void Battle_LinkVBlankCallback(void *data) {
 void Task_DrawBattleGraphics(SysTask *task, void *data) {
     BattleSystem *battleSystem = data;
 
-    sub_020399FC(5, battleSystem->bgConfig);
+    CommState_FrameDummy(5, battleSystem->bgConfig);
     if (battleSystem->graphicsMode == 0 || battleSystem->graphicsMode == 3) {
         if (battleSystem->graphicsMode == 0) {
             BattleParticleSystem_DrawAll();
@@ -1061,7 +1061,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
     BOOL done;
     int i;
 
-    sub_020399FC(5, work->bgConfig);
+    CommState_FrameDummy(5, work->bgConfig);
     done = FALSE;
     switch (work->state) {
     case 0:

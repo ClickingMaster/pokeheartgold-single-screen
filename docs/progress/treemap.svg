@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 5551124c7 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 843cd5402 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -4511,15 +4511,15 @@ src/wifi_plaza_camera.c</title></rect>
 96 bytes · C-only source
 src/wifi_plaza_mover_markers.c</title></rect>
 <rect x="883.121" y="292.663" width="82.399" height="133.622" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="965.519" y="292.663" width="39.217" height="36.475" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021E9270.o
+<rect x="965.519" y="292.663" width="39.217" height="36.475" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_map_view.o
 8,940 bytes · C-only source
-src/application/pokegear/map/overlay_101_021E9270.c</title></rect>
-<rect x="965.519" y="329.138" width="39.217" height="32.567" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021EB568.o
+src/application/pokegear/map/pokegear_map_view.c</title></rect>
+<rect x="965.519" y="329.138" width="39.217" height="32.567" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_map_input.o
 7,982 bytes · C-only source
-src/application/pokegear/map/overlay_101_021EB568.c</title></rect>
-<rect x="1004.736" y="292.663" width="21.394" height="35.331" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021E7FF4.o
+src/application/pokegear/map/pokegear_map_input.c</title></rect>
+<rect x="1004.736" y="292.663" width="21.394" height="35.331" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_map_gfx.o
 4,724 bytes · C-only source
-src/application/pokegear/map/overlay_101_021E7FF4.c</title></rect>
+src/application/pokegear/map/pokegear_map_gfx.c</title></rect>
 <rect x="1026.131" y="292.663" width="16.349" height="35.331" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021F0F48.o
 3,610 bytes · C-only source
 src/application/pokegear/phone/overlay_101_021F0F48.c</title></rect>

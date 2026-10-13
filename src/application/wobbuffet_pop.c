@@ -36,7 +36,7 @@
 void GX_BeginLoadTexPltt(void);
 void GX_LoadTexPltt(const void *src, u32 destSlotAddr, u32 size);
 void GX_EndLoadTexPltt(void);
-void sub_020399FC(enum HeapID heapId, BgConfig *bgConfig);
+void CommState_FrameDummy(enum HeapID heapId, BgConfig *bgConfig);
 void SetBothScreensBrightnessByColor(u16 a0);
 
 // Defined in the other parts of the overlay.
@@ -634,7 +634,7 @@ void WobbuffetPop_DrawTask(SysTask *task, void *data) {
     SpriteSystem_DrawSprites(game->spriteManager);
     SpriteSystem_UpdateTransfer();
     RequestSwap3DBuffers(GX_SORTMODE_AUTO, GX_BUFFERMODE_Z);
-    sub_020399FC(HEAP_ID_117, game->bgConfig);
+    CommState_FrameDummy(HEAP_ID_117, game->bgConfig);
 }
 
 void WobbuffetPop_InitBgs(BgConfig *bgConfig) {

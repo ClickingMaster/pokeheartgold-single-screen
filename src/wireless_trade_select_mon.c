@@ -257,7 +257,7 @@ void FriendRoster_RemoveFriend(FriendRoster *roster, int index);
 void FrontierSave_DeleteRow(FrontierSave *frontier, int row);
 void CommPlayerInfo_RecordTrades(SaveData *saveData, int a1);
 int Comm_SendCommandNoCopy(int command, void *data, int size);
-void sub_020399FC(enum HeapID heapID, BgConfig *bgConfig);
+void CommState_FrameDummy(enum HeapID heapID, BgConfig *bgConfig);
 void Comm_InitSyncedSave(s32 *a0);
 s32 Comm_SyncedSave(SaveData *saveData, s32 a1, s32 *a2);
 void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 netId, s32 slot, enum HeapID heapID, u32 a4);
@@ -436,7 +436,7 @@ BOOL WirelessTradeSelectMon_Init(OverlayManager *man, int *state) {
     WirelessTrade_RegisterCommands(work->fieldSystem);
     ToggleBgLayer(GF_BG_LYR_MAIN_0, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
-    sub_020399FC(HEAP_ID_26, work->bgConfig);
+    CommState_FrameDummy(HEAP_ID_26, work->bgConfig);
     WirelessStatusIcon_Create();
     IsNighttime();
     FieldBGM_Play(NULL, SEQ_GS_POKESEN);
@@ -581,7 +581,7 @@ BOOL WirelessTradeSelectMon_Main(OverlayManager *man, int *state) {
         WirelessTradeSelectMon_ScrollBg(work);
         SpriteList_RenderAndAnimateSprites(work->spriteList);
     }
-    sub_020399FC(HEAP_ID_26, work->bgConfig);
+    CommState_FrameDummy(HEAP_ID_26, work->bgConfig);
     return ret;
 }
 

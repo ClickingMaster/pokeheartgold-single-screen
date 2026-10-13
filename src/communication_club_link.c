@@ -8,11 +8,11 @@
 // Declared with the types their call sites were matched against (no header, or a header with other types).
 void FillScreenWithColor(int screen, u16 color);
 int LinkSync_GetPlayerState(int index);
-void sub_020399FC(int, void *);
+void CommState_FrameDummy(int, void *);
 
 void CommClubLink_StartCardExchange(FieldSystem *fieldSystem);
 
-void sub_02058034(void) {
+void CommClubLink_InitDummy(void) {
 }
 
 void CommClubLink_Init(FieldSystem *fieldSystem) {
@@ -24,7 +24,7 @@ void CommClubLink_Init(FieldSystem *fieldSystem) {
         gCommClubLink->task = SysTask_CreateOnMainQueue(CommClubLink_Task, NULL, 10);
         gCommClubLink->fieldSystem = fieldSystem;
         gCommClubLink->party = NULL;
-        sub_02058034();
+        CommClubLink_InitDummy();
         CommRandom_Init(gCommClubLink->random);
     }
 }
@@ -145,21 +145,21 @@ void CommClubLink_WaitParentConnected(void) {
     if (((BOOL(*)(void))Comm_IsNetIdConnected)()) {
         CommClub_OnParentConnected();
         CommPlayerInfo_SendLocal();
-        CommClubLink_SetState(sub_02058328, 0);
+        CommClubLink_SetState(CommClubLink_IdleParentConnected, 0);
     }
 }
 
-void sub_02058328(void) {
+void CommClubLink_IdleParentConnected(void) {
 }
 
 void CommClubLink_WaitChildStarted(void) {
     if (CommWireless_IsStartedUp()) {
         CommClub_OnChildStarted();
-        CommClubLink_SetState(sub_02058348, 0);
+        CommClubLink_SetState(CommClubLink_IdleChildStarted, 0);
     }
 }
 
-void sub_02058348(void) {
+void CommClubLink_IdleChildStarted(void) {
 }
 
 void CommClubLink_ConnectToSlot(void) {
@@ -170,11 +170,11 @@ void CommClubLink_ConnectToSlot(void) {
 void CommClubLink_WaitLinked(void) {
     if (CommState_IsLinked()) {
         CommPlayerInfo_SendLocal();
-        CommClubLink_SetState(sub_02058388, 0);
+        CommClubLink_SetState(CommClubLink_IdleLinked, 0);
     }
 }
 
-void sub_02058388(void) {
+void CommClubLink_IdleLinked(void) {
 }
 
 void CommClubLink_HostInitRoom(void) {
@@ -285,7 +285,7 @@ void sub_0205857C(void) {
             StartMapSceneScript(gCommClubLink->fieldSystem, 0x238e, 0);
         }
     }
-    sub_020399FC(4, gCommClubLink->fieldSystem->bgConfig);
+    CommState_FrameDummy(4, gCommClubLink->fieldSystem->bgConfig);
 }
 
 void CommClubLink_WaitLeaveSpot(void) {
@@ -315,7 +315,7 @@ void CommClubLink_OnEntryResult(int start, Party *party) {
     }
 }
 
-void sub_02058690(void) {
+void CommClubLink_GoToWaitLeaveSpot(void) {
     CommClubLink_SetState(CommClubLink_WaitLeaveSpot, 0);
 }
 
@@ -327,7 +327,7 @@ void CommClubLink_StartEntry(void) {
         }
         CommPlayerManager_PauseField();
         Colosseum_StartEntry(gCommClubLink->fieldSystem, CommClubLink_OnEntryResult);
-        CommClubLink_SetState(sub_02058690, 0);
+        CommClubLink_SetState(CommClubLink_GoToWaitLeaveSpot, 0);
     }
 }
 

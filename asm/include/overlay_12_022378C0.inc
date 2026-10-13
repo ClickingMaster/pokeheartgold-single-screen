@@ -135,7 +135,7 @@
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
 .public CommState_IsWifi
-.public sub_020399FC
+.public CommState_FrameDummy
 .public CommState_SetError
 .public Comm_RecordPlayerLocations
 .public WirelessStatusIcon_Create

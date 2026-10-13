@@ -1472,7 +1472,7 @@ void CommState_ShowRestartErrorAndHalt(void) {
     while (TRUE) {}
 }
 
-void sub_020399FC(void) {
+void CommState_FrameDummy(void) {
 }
 
 void CommState_CheckLinkError(void) {
