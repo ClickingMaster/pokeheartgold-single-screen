@@ -172,7 +172,7 @@ extern const u32 sBattleAnimBgEffectMasks[6];
 extern const s16 sBattleAnimBgWaveSteps[16];
 extern const u32 sBattleAnimBackgroundFiles[][5];
 extern const u32 sBattleAnimBgLayers[];
-extern const u32 _02234B80[];
+extern const u32 sBattleAnimBgMaskLayers[];
 extern const SpriteResourceCountsListUnion sBattleAnimBattlerSpriteCapacities;
 extern const u32 sBattleAnimBattlerSpritePriorities[6];
 extern void (*const sBattleAnimEmitterCallbackTable[])(SPLEmitter *);
@@ -481,7 +481,7 @@ SpriteManager *BattleAnimSystem_GetBattlerSpriteManager(BattleAnimSystem *system
     return system->battlerSpriteManager;
 }
 
-SpriteManager *ov07_0221C528(BattleAnimSystem *system) {
+SpriteManager *BattleAnimSystem_GetFirstSpriteManager(BattleAnimSystem *system) {
     return system->spriteManagers[0];
 }
 
@@ -1374,7 +1374,7 @@ void BattleAnimScriptCmd_CopyBattlerToBg(BattleAnimSystem *system) {
     BgSetPosTextAndCommit(system->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_X, -(x - 40));
     BgSetPosTextAndCommit(system->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_Y, -(y - 40));
     ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_ON);
-    SetBgPriority(GF_BG_LYR_MAIN_2, (u8)ov07_0221FAE8(system));
+    SetBgPriority(GF_BG_LYR_MAIN_2, (u8)BattleAnimSystem_GetBasePriority(system));
 }
 
 #pragma force_active reset
@@ -1697,7 +1697,7 @@ void *BattleAnimSystem_FindBgEffect(BattleAnimBgEffect **effects, int kind) {
     return NULL;
 }
 
-BOOL ov07_0221DDB0(BattleAnimBgSwitchWork *work, BattleAnimSystem *system, int argIndex) {
+BOOL BattleAnimBackground_ShouldFlip(BattleAnimBgSwitchWork *work, BattleAnimSystem *system, int argIndex) {
     int attackerSide = BattleAnimUtil_GetBattlerSide(system, system->context->attacker);
     int defenderSide = BattleAnimUtil_GetBattlerSide(system, system->context->defender);
     int arg = work->args[argIndex];
@@ -1727,14 +1727,14 @@ void BattleAnimBackground_LoadGraphics(BattleAnimBgSwitchWork *work, BattleAnimS
     screen = 2;
     if (ov07_0221BFC0(system) == 1) {
         screen = 4;
-    } else if (ov07_0221DDB0(work, system, 7) == TRUE) {
+    } else if (BattleAnimBackground_ShouldFlip(work, system, 7) == TRUE) {
         screen = 3;
     }
     member = BattleAnimSystem_GetBackgroundFile(bgId, screen);
     GfGfxLoader_LoadScrnData(NARC_a_0_0_7, member, system->bgConfig, layer, 0, 0, TRUE, system->heapId);
 }
 
-BOOL ov07_0221DEB0(u32 flags, u32 mask) {
+BOOL BattleAnimBackground_HasEffectFlags(u32 flags, u32 mask) {
     return mask == (mask & (flags << 16));
 }
 
@@ -1744,7 +1744,7 @@ void BattleAnimBackground_StartEffects(BattleAnimBgSwitchWork *work) {
 
     ARRAY_ASSIGN(masks, sBattleAnimBgEffectMasks);
     for (i = 0; i < 6; i++) {
-        if (ov07_0221DEB0(work->effectFlags, masks[i])) {
+        if (BattleAnimBackground_HasEffectFlags(work->effectFlags, masks[i])) {
             int bit = masks[i] >> 16;
             int index = 0;
             while (bit >= 2) {
@@ -2019,7 +2019,7 @@ BOOL BattleAnimBackground_StartEffectsOnly(SysTask *task, BattleAnimBgSwitchWork
     return FALSE;
 }
 
-BOOL ov07_0221E5EC(SysTask *task, BattleAnimBgSwitchWork *work) {
+BOOL BattleAnimBackground_StartEffectsAndStopMarked(SysTask *task, BattleAnimBgSwitchWork *work) {
     BattleAnimBackground_StartEffects(work);
     BattleAnimBackground_StopMarkedEffects(work);
     return FALSE;
@@ -2081,7 +2081,7 @@ BOOL BattleAnimBackground_StartScroll(BattleAnimBgSwitchWork *work) {
     scroll->dy = work->system->args[1];
     scroll->layer = GF_BG_LYR_MAIN_3;
     scroll->unk_10 = 3;
-    if (ov07_0221DDB0(work, work->system, 6) == TRUE) {
+    if (BattleAnimBackground_ShouldFlip(work, work->system, 6) == TRUE) {
         scroll->dx *= -1;
         scroll->dy *= -1;
         scroll->x *= -1;
@@ -2105,14 +2105,14 @@ BOOL BattleAnimBackground_StartWave(BattleAnimBgSwitchWork *work) {
     BattleAnimSystem_RegisterBgEffect(system->bgEffects, wave, 2);
     work->stopWave = TRUE;
     wave->stop = FALSE;
-    wave->bands->scanline = BattleAnimScanline_New(BattleAnimUtil_GetBgOffsetRegister(ov07_0221FAF8(system, 2)), BattleAnimUtil_PackXY(0, 0), system->heapId);
+    wave->bands->scanline = BattleAnimScanline_New(BattleAnimUtil_GetBgOffsetRegister(BattleAnimSystem_GetBgMaskLayer(system, 2)), BattleAnimUtil_PackXY(0, 0), system->heapId);
     for (i = 0; i < 16; i++) {
         wave->bands->bands[i].start = i * 8;
         wave->bands->bands[i].end = wave->bands->bands[i].start + 8;
         wave->bands->bands[i].step = sBattleAnimBgWaveSteps[i];
         wave->bands->bands[i].offset = 0;
         wave->bands->bands[i].scroll = BattleAnimUtil_PackXY(0, 0);
-        if (ov07_0221DDB0(work, work->system, 6) == TRUE) {
+        if (BattleAnimBackground_ShouldFlip(work, work->system, 6) == TRUE) {
             wave->bands->bands[i].step *= -1;
         }
     }
@@ -2490,7 +2490,7 @@ void BattleAnimScriptCmd_SetBackground(BattleAnimSystem *system) {
     PaletteData_LoadNarc(system->paletteData, NARC_a_0_0_7, member, system->heapId, PLTTBUF_MAIN_BG, 32, 0x90);
     BgClearTilemapBufferAndCommit(system->bgConfig, GF_BG_LYR_MAIN_3);
     screen = 2;
-    if (ov07_0221DDB0(work, system, 7) == TRUE) {
+    if (BattleAnimBackground_ShouldFlip(work, system, 7) == TRUE) {
         screen = 3;
     }
     member = BattleAnimSystem_GetBackgroundFile(bgId, screen);
@@ -3008,7 +3008,7 @@ BOOL BattleAnimSystem_IsBattlerSemiInvulnerable(BattleAnimSystem *system, int ba
     return (system->context->moveEffectFlags[battler] & MOVE_EFFECT_FLAG_SEMI_INVULNERABLE) != 0;
 }
 
-int ov07_0221FAE8(BattleAnimSystem *system) {
+int BattleAnimSystem_GetBasePriority(BattleAnimSystem *system) {
     return 1;
 }
 
@@ -3016,8 +3016,8 @@ u32 BattleAnimSystem_GetBgLayer(BattleAnimSystem *system, int index) {
     return sBattleAnimBgLayers[index];
 }
 
-u32 ov07_0221FAF8(BattleAnimSystem *system, int index) {
-    return _02234B80[index];
+u32 BattleAnimSystem_GetBgMaskLayer(BattleAnimSystem *system, int index) {
+    return sBattleAnimBgMaskLayers[index];
 }
 
 int BattleAnimSystem_GetBgPriority(BattleAnimSystem *system, int kind) {
@@ -3029,7 +3029,7 @@ int BattleAnimSystem_GetBgPriority(BattleAnimSystem *system, int kind) {
     case 2:
         return 3;
     case 3:
-        return ov07_0221FAE8(system);
+        return BattleAnimSystem_GetBasePriority(system);
     }
     // no return value for other kinds
 }
@@ -3042,7 +3042,7 @@ void BattleAnimSystem_LoadBattleBgPalette(BattleAnimSystem *system) {
     PaletteData_LoadPalette(system->paletteData, system->context->battleBgPalette, PLTTBUF_MAIN_BG, 0, 0x200);
 }
 
-BOOL ov07_0221FB78(BattleAnimSystem *system, int side) {
+BOOL BattleAnimSystem_ShouldFlipSide(BattleAnimSystem *system, int side) {
     return FALSE;
 }
 
@@ -3258,5 +3258,5 @@ int BattleAnimSystem_GetSideSign(BattleAnimSystem *system, int battlerA, int bat
 
 #pragma force_active reset
 
-void ov07_0221FF74(void) {
+void BattleAnimEmitterCb_Dummy(void) {
 }

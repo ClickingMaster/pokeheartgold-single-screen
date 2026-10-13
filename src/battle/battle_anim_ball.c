@@ -531,7 +531,7 @@ void BallSealEffect_Emit(BallSealEffect *effect, void (*callback)(SPLEmitter *))
 void BallSealEffect_GetBasePosition(int battlerType, VecFx32 *pos) {
     int x, y;
 
-    ov07_02231DE0(battlerType, pos, 0, 1);
+    BattleAnimUtil_GetEmitterPositionKind0Alt(battlerType, pos, 0, 1);
     switch (battlerType) {
     case BATTLER_TYPE_SOLO_PLAYER:
         x = 0;
@@ -709,7 +709,7 @@ BOOL UnkBallData_BallAnimShake(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_02232EE0(UnkBallData *data) {
+BOOL UnkBallData_BallAnimSkip(UnkBallData *data) {
     if (data->ballAnimStarted == 0) {
         data->ballAnimStarted++;
         UnkBallData_SetCaptureState(data, 19);
@@ -897,7 +897,7 @@ BOOL UnkBallData_CaptureStateDrop(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_02233224(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateNone(UnkBallData *data) {
     return TRUE;
 }
 
@@ -991,12 +991,12 @@ BOOL UnkBallData_CaptureStateShakeDone(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_02233390(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateGoToSkip(UnkBallData *data) {
     UnkBallData_GoToCaptureState(data, 20);
     return TRUE;
 }
 
-BOOL ov07_0223339C(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateSkip(UnkBallData *data) {
     UnkBallData_GoToCaptureState(data, 27);
     return TRUE;
 }
@@ -1802,7 +1802,7 @@ BattleAnimEmitter *BattleAnimEmitter_New(enum HeapID heapId, BattleAnimEmitterTe
 
 void BattleAnimEmitter_Start(BattleAnimEmitter *emitter) {
     emitter->active = TRUE;
-    BattleAnimEmitter_CreateEmitters(emitter, (void (*)(SPLEmitter *))ov07_02234710);
+    BattleAnimEmitter_CreateEmitters(emitter, (void (*)(SPLEmitter *))UnkBallData_GetEmitterParam);
     emitter->task = SysTask_CreateOnMainQueue(BattleAnimEmitter_WaitTask, emitter, 1000);
 }
 
@@ -1827,7 +1827,7 @@ void BattleAnimEmitter_CreateEmitters(BattleAnimEmitter *emitter, void (*callbac
     ParticleSystem_SetPerspectiveType(emitter->particleSystem, emitter->template.perspective);
 }
 
-void *ov07_02234710(void) {
+void *UnkBallData_GetEmitterParam(void) {
     return ParticleSystem_GetEmitterParam();
 }
 

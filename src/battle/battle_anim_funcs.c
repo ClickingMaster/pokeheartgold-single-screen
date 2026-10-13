@@ -461,7 +461,7 @@ void BattleAnimFunc_OneFrameUncountedTask(BattleAnimSystem *system) {
 
 #pragma force_active on
 
-void ov07_0222314C(SysTask *task, void *data) {
+void BattleAnimTask_SpreadSpriteCopies(SysTask *task, void *data) {
     BattleAnimSpriteCopiesWork *work = data;
     switch (work->state) {
     case 0:
@@ -483,7 +483,7 @@ void ov07_0222314C(SysTask *task, void *data) {
     }
 }
 
-void ov07_022231BC(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite) {
+void BattleAnimSpriteFunc_SpreadSpriteCopies(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite) {
     BattleAnimSpriteCopiesWork *work = Heap_Alloc(HEAP_ID_BATTLE, 0x1CC);
     ManagedSpriteTemplate template;
     int i;
@@ -498,7 +498,7 @@ void ov07_022231BC(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteM
     for (i = 1; i < 3; i++) {
         work->sprites[i] = SpriteSystem_NewSprite(work->spriteSystem, work->spriteManager, &template);
     }
-    BattleAnimSystem_CreateTask(system, ov07_0222314C, work, 0x1000);
+    BattleAnimSystem_CreateTask(system, BattleAnimTask_SpreadSpriteCopies, work, 0x1000);
 }
 
 #pragma force_active reset
@@ -868,7 +868,7 @@ void BattleAnimFunc_RotateBattler(BattleAnimSystem *system) {
         battler = BattleAnimSystem_GetAttacker(work->system);
     }
     BattleAnimUtil_InitValueMotion(&work->rotation, work->startAngle, BattleAnimSystem_GetArg(system, 1), work->duration);
-    sign = ov07_02222004(system, battler);
+    sign = BattleAnimUtil_GetBattlerSideSignByMode(system, battler);
     work->rotation.step *= sign;
     if (mode == 2) {
         sign *= -1;
@@ -907,7 +907,7 @@ void BattleAnimFunc_CircleBattler(BattleAnimSystem *system) {
     BattleAnimCircleBattlerWork *work;
     work = Heap_Alloc(BattleAnimSystem_GetHeapID(system), sizeof(BattleAnimCircleBattlerWork));
     work->system = system;
-    ov07_02222A44(&work->motion, BattleAnimSystem_GetArg(system, 0), BattleAnimSystem_GetArg(system, 1));
+    BattleAnimUtil_InitCircleMotion(&work->motion, BattleAnimSystem_GetArg(system, 0), BattleAnimSystem_GetArg(system, 1));
     role = BattleAnimSystem_GetArg(system, 2);
     switch (role) {
     case BATTLE_ANIM_ROLE_ATTACKER:
@@ -1019,7 +1019,7 @@ void BattleAnimSpriteFunc_SpritePops(BattleAnimSystem *system, SpriteSystem *spr
     ManagedSprite_SetAffineOverwriteMode(work->sprite, 2);
     ManagedSprite_SetDrawFlag(work->sprite, FALSE);
     work->delay = 4;
-    work->side = ov07_02222004(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->side = BattleAnimUtil_GetBattlerSideSignByMode(work->system, BattleAnimSystem_GetAttacker(work->system));
     pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetDefender(system));
     work->x = Pokepic_GetAttr(pokepic, POKEPIC_X);
     work->y = Pokepic_GetAttr(pokepic, POKEPIC_Y);
@@ -1279,7 +1279,7 @@ void BattleAnimFunc_PulseBattlerSprite(BattleAnimSystem *system) {
     BattleAnimUtil_SetBlendWithBattleBg(work->system, work->eva, 16 - work->eva);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_PulseBattlerSprite, work);
     int side = BattleAnimSystem_GetArg(system, 0) != 0;
-    if (ov07_0221FB78(work->system, side) == TRUE) {
+    if (BattleAnimSystem_ShouldFlipSide(work->system, side) == TRUE) {
         work->flipX = TRUE;
     }
 }
@@ -1559,7 +1559,7 @@ void BattleAnimFunc_SlideBattler(BattleAnimSystem *system) {
     BattleAnimUtil_InitCommonWork(system, &work->common);
     work->target.pokepic = BattleAnimSystem_GetBattlerPokepic(system, battler);
     BattleAnimUtil_GetPicPosition(work->target.pokepic, work->target.pos);
-    if (ov07_02222004(system, battler) <= 0) {
+    if (BattleAnimUtil_GetBattlerSideSignByMode(system, battler) <= 0) {
         work->dx *= -1;
     }
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_SlideBattler, work);
@@ -1625,7 +1625,7 @@ void BattleAnimFunc_SlideBattler2(BattleAnimSystem *system) {
     }
     work->target.pokepic = BattleAnimSystem_GetBattlerPokepic(system, battler);
     BattleAnimUtil_GetPicPosition(work->target.pokepic, work->target.pos);
-    if (ov07_02222004(system, battler) <= 0) {
+    if (BattleAnimUtil_GetBattlerSideSignByMode(system, battler) <= 0) {
         work->dx *= -1;
     }
     ov07_0221BFC0(system);
@@ -1871,7 +1871,7 @@ void BattleAnimFunc_MoveBattlerBy(BattleAnimSystem *system) {
         return;
     }
     BattleAnimUtil_GetPicPosition(work->target.pokepic, work->target.pos);
-    if (ov07_02222004(system, battler) <= 0) {
+    if (BattleAnimUtil_GetBattlerSideSignByMode(system, battler) <= 0) {
         work->dx *= -1;
         work->dy *= -1;
     }
@@ -1904,7 +1904,7 @@ void BattleAnimFunc_MoveBattlerSin(BattleAnimSystem *system) {
     BattleAnimUtil_CollectPicsByFlags(system, BattleAnimSystem_GetArg(system, 0), &work->target, &count);
     work->target.pos[1] += 8;
     multiplier = BattleAnimSystem_GetArg(system, 1);
-    ov07_02222A44(&work->motion, multiplier, BattleAnimSystem_GetArg(system, 2));
+    BattleAnimUtil_InitCircleMotion(&work->motion, multiplier, BattleAnimSystem_GetArg(system, 2));
     work->motion.ampX /= 2;
     work->motion.ampY /= 2;
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_MoveBattlerSin, work);
@@ -2176,7 +2176,7 @@ int BattleAnimUtil_GetRoleBattler(BattleAnimSystem *system, int role) {
     return battler;
 }
 
-void ov07_02225B38(SysTask *task, void *data) {
+void BattleAnimTask_RevealBattlerRise(SysTask *task, void *data) {
     BattleAnimRevealBattlerWork *work = data;
     switch (work->common.state[0]) {
     case 0:
@@ -2205,7 +2205,7 @@ void ov07_02225B38(SysTask *task, void *data) {
     }
 }
 
-void ov07_02225BC4(SysTask *task, void *data) {
+void BattleAnimTask_RevealBattlerSink(SysTask *task, void *data) {
     BattleAnimRevealBattlerWork *work = data;
     switch (work->common.state[0]) {
     case 0:
@@ -2234,7 +2234,7 @@ void ov07_02225BC4(SysTask *task, void *data) {
     }
 }
 
-void ov07_02225C50(SysTask *task, void *data) {
+void BattleAnimTask_RevealBattlerUpward(SysTask *task, void *data) {
     BattleAnimRevealBattlerWork *work = data;
     switch (work->common.state[0]) {
     case 0:
@@ -2275,7 +2275,7 @@ void BattleAnimFunc_RevealBattler(BattleAnimSystem *system) {
         work->height = 80 - BattleAnimSystem_GetBattlerHeight(system, flags);
         work->maxHeight = 0;
         Pokepic_SetVisible(work->target.pokepic, 0, work->height, 80, 0);
-        BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, ov07_02225C50, work);
+        BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_RevealBattlerUpward, work);
     } else {
         work->y = Pokepic_GetAttr(work->target.pokepic, POKEPIC_Y);
         work->baseY = work->y;
@@ -2283,13 +2283,13 @@ void BattleAnimFunc_RevealBattler(BattleAnimSystem *system) {
         work->maxHeight = work->height;
         if (work->step > 0) {
             Pokepic_SetVisible(work->target.pokepic, 0, 0, 80, work->height);
-            BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, ov07_02225BC4, work);
+            BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_RevealBattlerSink, work);
         } else {
             work->height = 0;
             work->y += work->maxHeight;
             Pokepic_SetAttr(work->target.pokepic, POKEPIC_Y, work->y);
             Pokepic_SetVisible(work->target.pokepic, 0, 0, 80, work->height);
-            BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, ov07_02225B38, work);
+            BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_RevealBattlerRise, work);
         }
     }
 }
@@ -2500,9 +2500,9 @@ void BattleAnimFunc_MoveEmitter(BattleAnimSystem *system) {
 
     BattleAnimUtil_InitCommonWork(system, &work->common);
     BattleAnimEmitterMotion_Init(system, work);
-    side = ov07_02222004(system, BattleAnimSystem_GetAttacker(system));
-    ov07_02231B90(system, work->fromBattler, &from);
-    ov07_02231B90(system, work->toBattler, &to);
+    side = BattleAnimUtil_GetBattlerSideSignByMode(system, BattleAnimSystem_GetAttacker(system));
+    BattleAnimUtil_GetBattlerEmitterPositionKind0(system, work->fromBattler, &from);
+    BattleAnimUtil_GetBattlerEmitterPositionKind0(system, work->toBattler, &to);
     fromX = from.x / BATTLE_ANIM_EMITTER_PIXEL;
     toX = to.x / BATTLE_ANIM_EMITTER_PIXEL;
     fromY = from.y / BATTLE_ANIM_EMITTER_PIXEL;
@@ -2524,7 +2524,7 @@ void BattleAnimFunc_MoveEmitter(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_MoveEmitter, work);
 }
 
-void ov07_022262E8(BattleAnimSystem *system) {
+void BattleAnimFunc_MoveEmitterVertical(BattleAnimSystem *system) {
     BattleAnimEmitterMotionWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimEmitterMotionWork));
     VecFx32 from;
     VecFx32 to;
@@ -2565,13 +2565,13 @@ void ov07_022262E8(BattleAnimSystem *system) {
     if (work->emitter == NULL) {
         GF_AssertFail();
     }
-    ov07_02231B90(system, work->fromBattler, &from);
-    ov07_02231B90(system, work->toBattler, &to);
+    BattleAnimUtil_GetBattlerEmitterPositionKind0(system, work->fromBattler, &from);
+    BattleAnimUtil_GetBattlerEmitterPositionKind0(system, work->toBattler, &to);
     if (mode == 0) {
-        ov07_02231DD0(&from);
+        BattleAnimUtil_GetEmitterHighPosition(&from);
         from.x = to.x;
     } else {
-        ov07_02231DD0(&to);
+        BattleAnimUtil_GetEmitterHighPosition(&to);
         to.x = from.x;
     }
     fromX = from.x / BATTLE_ANIM_EMITTER_PIXEL;
@@ -2618,9 +2618,9 @@ void BattleAnimFunc_MoveEmitterArc(BattleAnimSystem *system) {
 
     BattleAnimUtil_InitCommonWork(system, &work->common);
     BattleAnimEmitterMotion_Init(system, work);
-    side = ov07_02222004(system, BattleAnimSystem_GetAttacker(system));
-    ov07_02231B90(system, work->fromBattler, &from);
-    ov07_02231B90(system, work->toBattler, &to);
+    side = BattleAnimUtil_GetBattlerSideSignByMode(system, BattleAnimSystem_GetAttacker(system));
+    BattleAnimUtil_GetBattlerEmitterPositionKind0(system, work->fromBattler, &from);
+    BattleAnimUtil_GetBattlerEmitterPositionKind0(system, work->toBattler, &to);
     fromX = from.x / BATTLE_ANIM_EMITTER_PIXEL;
     toX = to.x / BATTLE_ANIM_EMITTER_PIXEL;
     fromY = from.y / BATTLE_ANIM_EMITTER_PIXEL;
@@ -2683,7 +2683,7 @@ void BattleAnimFunc_EmitterSinMotion(BattleAnimSystem *system) {
     } else {
         work->battler = BattleAnimSystem_GetDefender(system);
     }
-    ov07_02231B90(system, work->battler, &work->base);
+    BattleAnimUtil_GetBattlerEmitterPositionKind0(system, work->battler, &work->base);
     work->emitter = BattleAnimSystem_GetEmitter(system, work->emitterIndex);
     work->particleSystem = (ParticleSystem *)BattleAnimSystem_GetParticleSystem(system, BattleAnimSystem_GetArg(system, 9));
     startAngleX = work->startAngleX * 0xFFFF / 360;
@@ -2736,10 +2736,10 @@ void BattleAnimTask_SpriteOrbit(SysTask *task, void *data) {
         if (dx != 255) {
             if (dx == 0) {
                 int priority = ManagedSprite_GetPriority(work->sprite);
-                if (priority == ov07_0221FAE8(work->common.system)) {
+                if (priority == BattleAnimSystem_GetBasePriority(work->common.system)) {
                     ManagedSprite_SetPriority(work->sprite, BattleAnimSystem_GetBgPriority(work->common.system, 2));
                 } else {
-                    ManagedSprite_SetPriority(work->sprite, ov07_0221FAE8(work->common.system));
+                    ManagedSprite_SetPriority(work->sprite, BattleAnimSystem_GetBasePriority(work->common.system));
                 }
             }
             ManagedSprite_OffsetPositionXY(work->sprite, dx, 0);
@@ -2807,7 +2807,7 @@ void BattleAnimSpriteFunc_SpriteOrbit(BattleAnimSystem *system, SpriteSystem *sp
     } else {
         ManagedSprite_SetAnim(work->sprite, 0);
     }
-    ManagedSprite_SetPriority(work->sprite, ov07_0221FAE8(work->common.system));
+    ManagedSprite_SetPriority(work->sprite, BattleAnimSystem_GetBasePriority(work->common.system));
     ManagedSprite_OffsetPositionXY(work->sprite, 0, 12);
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_SpriteOrbit, work);
 }

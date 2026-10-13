@@ -173,7 +173,7 @@ void BattleSystem_FreeInputForSubMenu(BattleSystem *battleSystem) {
     BgConfig_CleanupBattleMenuBackgrounds(battleSystem->bgConfig);
     battleSystem->subMenuBanksRequested = 1;
     FontID_Release(4);
-    ov12_0223BBF0(battleSystem, 3);
+    BattleSystem_SetGraphicsState(battleSystem, 3);
 
     if (battleSystem->trainerAIOverlayLoaded == 0) {
         UnloadOverlayByID(FS_OVERLAY_ID(OVY_7));
@@ -188,7 +188,7 @@ void BattleSystem_FreeGraphics(BattleSystem *battleSystem) {
     BattleInput_Free(battleSystem->battleInput);
     RemoveWindow(battleSystem->window);
     BgConfig_CleanupBattleBackgrounds(battleSystem->bgConfig);
-    ov12_02238A64(battleSystem);
+    BattleSystem_FreeGraphicsDummy(battleSystem);
     SpriteSystem_FreeResourcesAndManager(battleSystem->spriteRenderer, battleSystem->gfxHandler);
     SpriteSystem_Free(battleSystem->spriteRenderer);
     GF_DestroyVramTransferManager();
@@ -204,7 +204,7 @@ void BattleSystem_RestoreInputAfterSubMenu(BattleSystem *battleSystem) {
         HandleLoadOverlay(FS_OVERLAY_ID(OVY_10), OVY_LOAD_ASYNC);
     }
 
-    ov12_0223BBF0(battleSystem, 0);
+    BattleSystem_SetGraphicsState(battleSystem, 0);
 
     int size = GetSubBgPlttSize();
     void *data = GetSubBgPlttAddr();
@@ -261,7 +261,7 @@ void BattleSystem_FreeMainBgLayers(BattleSystem *battleSystem) {
 
 BOOL Battle_BattleMain(OverlayManager *man);
 void Battle_InitBackgrounds(BattleSystem *battleSystem, BgConfig *bgConfig);
-void ov12_022389B8(BattleSystem *battleSystem);
+void BattleSystem_InitTerrainsAndBalls(BattleSystem *battleSystem);
 
 void BattleSystem_ReinitMainBgLayers(BattleSystem *battleSystem) {
     u32 frame;

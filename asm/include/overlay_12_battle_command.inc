@@ -141,11 +141,11 @@
 .public BattleSystem_GetTimezone
 .public BattleSystem_GetOptions
 .public BattleSystem_GetTextFrameDelay
-.public ov12_0223B870
+.public BattleSystem_EmptyMonFunc
 .public BattleSystem_MetBill
 .public BattleSystem_GameStatIncrement
 .public BattleSystem_AddSpeciesCaughtScore
-.public ov12_0223BBF0
+.public BattleSystem_SetGraphicsState
 .public BattleSystem_HpBar_Delete
 .public BattleSystem_SetCriticalHpMusicFlag
 .public BattleSystem_SetCaughtBattlerId
@@ -393,7 +393,7 @@
 .public BattleSystem_ReloadMonData
 .public Link_QueueNotEmpty
 .public GetBattlerVar
-.public ov12_022567D4
+.public BattleSystem_SetCaughtMonCatchData
 .public BattleBuffer_GetNext
 .public BattleSystem_IsPlayerOT
 .public OpponentData_SetSpriteDrawFlag

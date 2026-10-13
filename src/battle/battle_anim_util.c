@@ -439,7 +439,7 @@ BOOL BattleAnimUtil_UpdateSpriteSequence(BattleAnimSpriteSequence *sequence) {
     return FALSE;
 }
 
-void ov07_02222A44(BattleAnimSinMotion *motion, int multiplier, int duration) {
+void BattleAnimUtil_InitCircleMotion(BattleAnimSinMotion *motion, int multiplier, int duration) {
     BattleAnimUtil_InitSinMotion(motion, 0, 0xFFFF, 0, 0xFFFF, 2 << 16, -0x8000, duration);
     motion->duration *= multiplier;
 }

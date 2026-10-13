@@ -1193,7 +1193,7 @@ BOOL BtlCmd_GoToMoveScript(BattleSystem *battleSystem, BattleContext *ctx) {
 
     if (unkA == 0) {
         ctx->battlerIdTarget = BattleSystem_GetMoveTarget(battleSystem, ctx, ctx->battlerIdAttacker, (u16)ctx->moveTemp, 1, 0);
-        ov12_02250A18(battleSystem, ctx, ctx->battlerIdAttacker, ctx->moveTemp);
+        BattleSystem_TryRedirectMoveTarget(battleSystem, ctx, ctx->battlerIdAttacker, ctx->moveTemp);
         ctx->playerActions[ctx->battlerIdAttacker].battlerIdTarget = ctx->battlerIdTarget;
     }
 
@@ -1418,7 +1418,7 @@ BOOL BtlCmd_SwitchAndUpdateMon(BattleSystem *battleSystem, BattleContext *ctx) {
     ctx->switchMonIndex[battlerId] = 6;
 
     BattleSystem_GetBattleMon(battleSystem, ctx, battlerId, ctx->selectedMonIndex[battlerId]);
-    ov12_02256F78(battleSystem, ctx, battlerId, ctx->selectedMonIndex[battlerId]);
+    BattleSystem_MoveMonToFrontOfPartyOrder(battleSystem, ctx, battlerId, ctx->selectedMonIndex[battlerId]);
 
     ctx->hpTemp = ctx->battleMons[1].hp;
 
@@ -6790,7 +6790,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
             BattleSystem_SetCaughtBattlerId(data->battleSystem, battlerId);
             Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]); // Get the data of the caught Pokemon.
             if (BattleSystem_GetBattleType(data->battleSystem) & (BATTLE_TYPE_PAL_PARK | BATTLE_TYPE_TUTORIAL)) {           // If this was the Catching Demo or a Pal Park encounter...
-                ov12_022567D4(data->battleSystem, data->ctx, BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]));
+                BattleSystem_SetCaughtMonCatchData(data->battleSystem, data->ctx, BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]));
                 PaletteBlink_SetState(BattleSystem_GetMessageIcon(data->battleSystem), 1);
                 PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, RGB_BLACK);
                 Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, RGB_BLACK);
@@ -6960,7 +6960,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
             }
 
             BattleSystem_FreeGraphics(data->battleSystem);
-            ov12_0223BBF0(data->battleSystem, 1);
+            BattleSystem_SetGraphicsState(data->battleSystem, 1);
         }
         break;
     case STATE_GET_POKEMON_WAIT_FOR_NAMING_SCREEN:
@@ -6973,7 +6973,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
             }
             NamingScreen_DeleteArgs(namingScreenArgs);
             OverlayManager_Delete(data->tempPointers[POINTER_GET_POKEMON_NAMING_SCREEN_OVERLAY_MANAGER]);
-            ov12_0223BBF0(data->battleSystem, 2);
+            BattleSystem_SetGraphicsState(data->battleSystem, 2);
             data->state = STATE_GET_POKEMON_STORE_MON_AFTER_NAMING_SCREEN;
         }
         break;
@@ -6984,8 +6984,8 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
             Party *party = BattleSystem_GetParty(data->battleSystem, BATTLER_PLAYER);
             Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
             BattleSystem_SetPokedexCaught(data->battleSystem, battlerId);
-            ov12_022567D4(data->battleSystem, data->ctx, mon);
-            ov12_0223B870(data->battleSystem, mon);
+            BattleSystem_SetCaughtMonCatchData(data->battleSystem, data->ctx, mon);
+            BattleSystem_EmptyMonFunc(data->battleSystem, mon);
             BattleController_EmitIncrementGameStat(data->battleSystem, BATTLER_PLAYER, 0, GAME_STAT_CAUGHT_MON);
             if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_BUG_CONTEST) {
                 if (data->state == STATE_GET_POKEMON_STORE_NEW_MON_BUG_CONTEST) {

@@ -99,7 +99,7 @@ BOOL BattleAnimEmitterCameraCb_ResetAngle(SPLEmitter *emitter, BattleAnimEmitter
 BOOL BattleAnimEmitterCameraCb_SetPresetAngle4(SPLEmitter *emitter, BattleAnimEmitterConfig *config);
 BOOL BattleAnimEmitterCameraCb_SetAngleFromScript(SPLEmitter *emitter, BattleAnimEmitterConfig *config);
 BOOL BattleAnimEmitterCameraCb_SetPresetAngle3(SPLEmitter *emitter, BattleAnimEmitterConfig *config);
-BOOL ov07_02221DC4(SPLEmitter *emitter, BattleAnimEmitterConfig *config);
+BOOL BattleAnimEmitterCameraCb_SetAngleByMode(SPLEmitter *emitter, BattleAnimEmitterConfig *config);
 BOOL BattleAnimEmitterCameraCb_SetPresetAngle0(SPLEmitter *emitter, BattleAnimEmitterConfig *config);
 BOOL BattleAnimEmitterCameraCb_SetPresetAngle1(SPLEmitter *emitter, BattleAnimEmitterConfig *config);
 BOOL BattleAnimEmitterCameraCb_LookAtBattlerA(SPLEmitter *emitter, BattleAnimEmitterConfig *config);
@@ -109,7 +109,7 @@ void BattleAnimUtil_LookupScreenPos(int set, int index, s16 *x, s16 *y);
 void BattleAnimSystem_GetBattlerScreenPos(BattleAnimSystem *system, int index, s16 *x, s16 *y);
 s16 BattleAnimSystem_GetBattlerScreenCoord(BattleAnimSystem *system, int battler, u32 coord);
 u8 BattleAnimUtil_GetSpritePaletteSlot(ManagedSprite *sprite);
-int ov07_02222004(BattleAnimSystem *system, int battler);
+int BattleAnimUtil_GetBattlerSideSignByMode(BattleAnimSystem *system, int battler);
 int BattleAnimUtil_GetBattlerSideSign(BattleAnimSystem *system, int battler);
 fx32 BattleAnimUtil_CalcStep(fx32 start, fx32 end, int duration);
 int BattleAnimUtil_CalcStepCount(fx32 start, fx32 end, fx32 step);

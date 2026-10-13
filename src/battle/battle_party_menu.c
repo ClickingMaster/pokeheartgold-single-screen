@@ -197,8 +197,8 @@ int BattlePartyMenu_GetSlotType(BattlePartyMenu *menu, int slot);
 u8 BattlePartyMenu_FindNextMon(BattlePartyMenu *menu, int slot, int direction);
 void BattlePartyMenu_DrawExpBar(BattlePartyMenu *menu, int page);
 void BattlePartyMenu_SetExpBarTile(BattlePartyMenu *menu, u16 tile, u16 x, int y);
-void ov08_0221D77C(BattlePartyMenu *menu, u16 tile, int pos);
-void ov08_0221D81C(BattlePartyMenu *menu);
+void BattlePartyMenu_SetContestInfoTile(BattlePartyMenu *menu, u16 tile, int pos);
+void BattlePartyMenu_ClearContestInfoTiles(BattlePartyMenu *menu);
 void BattlePartyMenu_ChangePage(BattlePartyMenu *menu, int page);
 void BattlePartyMenu_LoadPageTilemaps(BattlePartyMenu *menu, int page);
 int BattlePartyMenu_CanSwitchToSelectedMon(BattlePartyMenu *menu);
@@ -1409,7 +1409,7 @@ void BattlePartyMenu_SetExpBarTile(BattlePartyMenu *menu, u16 tile, u16 x, int y
 #pragma force_active on
 
 // writes the 2x2 tile block at row 14 of background 7 for one of six slots
-void ov08_0221D77C(BattlePartyMenu *menu, u16 tile, int pos) {
+void BattlePartyMenu_SetContestInfoTile(BattlePartyMenu *menu, u16 tile, int pos) {
     FillBgTilemapRect(menu->bgConfig, 7, tile, pos * 2 + 2, 14, 1, 1, TILEMAP_FILL_KEEP_PAL);
     FillBgTilemapRect(menu->bgConfig, 7, tile + 1, pos * 2 + 3, 14, 1, 1, TILEMAP_FILL_KEEP_PAL);
     FillBgTilemapRect(menu->bgConfig, 7, tile + 32, pos * 2 + 2, 15, 1, 1, TILEMAP_FILL_KEEP_PAL);
@@ -1418,11 +1418,11 @@ void ov08_0221D77C(BattlePartyMenu *menu, u16 tile, int pos) {
 
 #pragma force_active reset
 
-void ov08_0221D81C(BattlePartyMenu *menu) {
+void BattlePartyMenu_ClearContestInfoTiles(BattlePartyMenu *menu) {
     u16 i;
 
     for (i = 0; i < 6; i++) {
-        ov08_0221D77C(menu, 0x125, (u8)i);
+        BattlePartyMenu_SetContestInfoTile(menu, 0x125, (u8)i);
     }
 }
 
@@ -1612,7 +1612,7 @@ void BattlePartyMenu_ClearBattleMoveInfo(BattlePartyMenu *menu) {
 #pragma force_active on
 
 void BattlePartyMenu_ClearContestMoveInfo(BattlePartyMenu *menu) {
-    ov08_0221D81C(menu);
+    BattlePartyMenu_ClearContestInfoTiles(menu);
     ScheduleBgTilemapBufferTransfer(menu->bgConfig, 7);
 }
 

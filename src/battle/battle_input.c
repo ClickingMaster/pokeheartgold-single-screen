@@ -57,7 +57,7 @@ static int BattleInput_GetBallGaugeAnimSeq(u8 task);
 static void String_GetFontLength(String *str, u32 fontId, int *lengthOut, int *charLengthOut);
 static void BattleInput_CreateTextObject(BattleInput *battleInput, BattleInputTextObject *textObj, String *str, u32 fontId, int textColor, int palOffset, int palId, int x, int y, int centerText, BattleInputMoveMemory_DisplayObj *param10);
 static void BattleInput_DeleteTextObjects(BattleInput *battleInput);
-static void ov12_022686BC(BattleInput *battleInput);
+static void BattleInput_DrawTargetLinkTiles(BattleInput *battleInput);
 static BattleInputMoveMemory *BattleInput_GetMoveMemory(BattleInput *battleInput, int battlerType);
 static void BattleInput_FreeMoveMemory(BattleInput *battleInput);
 static void BattleInput_SetMoveDisplayObjectTextFont(BattleInput *battleInput, String *str, u32 fontId, BattleInputMoveMemory_DisplayObj *display, int textColor);
@@ -68,14 +68,14 @@ static void BattleInput_LoadMoveTypePalette(BattleInput *battleInput, int moveTy
 static void BattleInput_SetEmptyMoveButtons(BattleInput *battleInput, int movePos);
 static void BattleInput_SetEmptyTargetButton(BattleInput *battleInput, int param1);
 static void BattleInput_ShowOnlySubBgLayer2(void);
-static void ov12_02268D88(BattleInput *battleInput, int param1, int param2);
+static void BattleInput_FinishFeedback(BattleInput *battleInput, int param1, int param2);
 static void BattleInput_FreePersistentResources(BattleInput *battleInput);
 static void BattleInput_GetMonsHitArray(BattleInput *battleInput, u8 *monsHit, int checkMonExists);
 static void BattleInput_GetMonsHitBySelectedTarget(BattleInput *battleInput, int param1, u8 *monsHit, int checkExists);
 static void BattleInput_StartFeedbackTask(SysTaskFunc task, BattleInput *battleInput);
 static void BattleInput_DestroyFeedbackTask(BattleInput *battleInput);
-static void BattleInput_Deadstriped_02268EDC(BattleInput *battleInput, int touchInput);
-static void BattleInput_Deadstriped_02268EE0(BattleInput *battleInput, int unused);
+static void BattleInput_TargetFeedbackDummy(BattleInput *battleInput, int touchInput);
+static void BattleInput_ButtonFeedbackDummy(BattleInput *battleInput, int unused);
 static void BattleInput_CopyButtonTilemap(BattleInput *battleInput, const s16 *offsets, const TouchscreenHitbox *hitbox, int bufferIndex, int offsetIndex);
 static void Task_ButtonFeedback(SysTask *task, void *data);
 static void Task_FightMenuButtonFeedback(SysTask *task, void *data);
@@ -1750,7 +1750,7 @@ int BattleInput_CheckTouch(BattleInput *battleInput) {
 }
 
 BOOL BattleInput_CheckFeedbackDone(BattleInput *battleInput) {
-    if ((battleInput->feedbackTask == NULL) && (battleInput->unk10 == NULL) && (ov12_022698B0(battleInput) == 1)) {
+    if ((battleInput->feedbackTask == NULL) && (battleInput->unk10 == NULL) && (BattleInput_IsUnusedTaskNull(battleInput) == 1)) {
         return TRUE;
     }
 
@@ -2255,7 +2255,7 @@ static void BattleInput_CreateTargetMenuObjects(BattleInput *battleInput, int pa
 
     BattleInput_GetMonsHitArray(battleInput, monsHit, 0);
     BattleInput_LoadPokemonIconResources(battleInput);
-    ov12_022686BC(battleInput);
+    BattleInput_DrawTargetLinkTiles(battleInput);
     BattleSystem_GetBattlerTypes(battleInput->battleSystem, v10);
     BattleSystem_GetBattlerIdsByType(battleInput->battleSystem, v11);
 
@@ -2347,7 +2347,7 @@ static int BattleInput_TouchCallback_MainMenu(BattleInput *battleInput, int touc
         break;
     }
 
-    BattleInput_Deadstriped_02268EE0(battleInput, unused);
+    BattleInput_ButtonFeedbackDummy(battleInput, unused);
     BattleInput_StartFeedbackTask(Task_ButtonFeedback, battleInput);
 
     battleInput->feedback.button.screenOffsets = sMainMenuButtonsScreenOffsets[touchInput - 1];
@@ -2397,7 +2397,7 @@ static int BattleInput_TouchCallback_FightMenu(BattleInput *battleInput, int tou
         break;
     }
 
-    BattleInput_Deadstriped_02268EE0(battleInput, unusedParam);
+    BattleInput_ButtonFeedbackDummy(battleInput, unusedParam);
     BattleInput_StartFeedbackTask(Task_FightMenuButtonFeedback, battleInput);
 
     battleInput->feedback.button.screenOffsets = offsets;
@@ -2424,7 +2424,7 @@ static int BattleInput_TouchCallback_TwoOptionMenu(BattleInput *battleInput, int
         break;
     }
 
-    BattleInput_Deadstriped_02268EE0(battleInput, unused);
+    BattleInput_ButtonFeedbackDummy(battleInput, unused);
     BattleInput_StartFeedbackTask(Task_ButtonFeedback, battleInput);
 
     if (touchInput == BATTLE_INPUT_YES) {
@@ -2477,7 +2477,7 @@ static int BattleInput_TouchCallback_TargetMenu(BattleInput *battleInput, int to
         }
         break;
     case BATTLE_INPUT_CANCEL:
-        BattleInput_Deadstriped_02268EE0(battleInput, 4);
+        BattleInput_ButtonFeedbackDummy(battleInput, 4);
         BattleInput_StartFeedbackTask(Task_ButtonFeedback, battleInput);
 
         battleInput->feedback.button.screenOffsets = sTargetMenuButtonsScreenOffsets[4];
@@ -2497,7 +2497,7 @@ static int BattleInput_TouchCallback_TargetMenu(BattleInput *battleInput, int to
     BgFillTilemapBufferAndCommit(bgConfig, 5, 0x6000 / 0x20 - 1);
     ScheduleBgTilemapBufferTransfer(bgConfig, 5);
 
-    BattleInput_Deadstriped_02268EDC(battleInput, touchInput);
+    BattleInput_TargetFeedbackDummy(battleInput, touchInput);
     BattleInput_StartFeedbackTask(Task_TargetMenuButtonFeedback, battleInput);
 
     battleInput->feedback.monSelect.ret = touchInput;
@@ -2514,7 +2514,7 @@ static int BattleInput_TouchCallback_VSRecorderMenu(BattleInput *battleInput, in
         break;
     }
 
-    BattleInput_Deadstriped_02268EE0(battleInput, unused);
+    BattleInput_ButtonFeedbackDummy(battleInput, unused);
     BattleInput_StartFeedbackTask(Task_ButtonFeedback, battleInput);
 
     battleInput->feedback.button.screenOffsets = ov12_0226E228;
@@ -2795,7 +2795,7 @@ static void BattleInput_DeleteTextObjects(BattleInput *battleInput) {
     }
 }
 
-static void ov12_022686BC(BattleInput *battleInput) {
+static void BattleInput_DrawTargetLinkTiles(BattleInput *battleInput) {
     u8 moveRange[4], hitsMultiple[4];
     int j, i;
     u16 *src, *dest;
@@ -3065,7 +3065,7 @@ static void BattleInput_ShowOnlySubBgLayer2(void) {
     }
 }
 
-static void ov12_02268D88(BattleInput *battleInput, int param1, int param2) {
+static void BattleInput_FinishFeedback(BattleInput *battleInput, int param1, int param2) {
     if (param1 == 1) {
         BattleInput_FreePersistentResources(battleInput);
     }
@@ -3145,10 +3145,10 @@ static void BattleInput_DestroyFeedbackTask(BattleInput *battleInput) {
     }
 }
 
-static void BattleInput_Deadstriped_02268EDC(BattleInput *battleInput, int touchInput) {
+static void BattleInput_TargetFeedbackDummy(BattleInput *battleInput, int touchInput) {
 }
 
-static void BattleInput_Deadstriped_02268EE0(BattleInput *battleInput, int unused) {
+static void BattleInput_ButtonFeedbackDummy(BattleInput *battleInput, int unused) {
 }
 
 static void BattleInput_CopyButtonTilemap(BattleInput *battleInput, const s16 *offsets, const TouchscreenHitbox *hitbox, int bufferIndex, int offsetIndex) {
@@ -3221,7 +3221,7 @@ static void Task_ButtonFeedback(SysTask *task, void *data) {
         battleInput->feedback.delay++;
 
         if (battleInput->feedback.delay > 0) {
-            ov12_02268D88(battleInput, battleInput->feedback.button.shouldDeleteAfter, 0);
+            BattleInput_FinishFeedback(battleInput, battleInput->feedback.button.shouldDeleteAfter, 0);
             BattleInput_DestroyFeedbackTask(battleInput);
             return;
         }
@@ -3344,7 +3344,7 @@ static void Task_FightMenuButtonFeedback(SysTask *task, void *data) {
 
         if (battleInput->feedback.delay > 0) {
             BattleInput_CopyButtonTilemap(battleInput, battleInput->feedback.unkBugContest.unk4, battleInput->feedback.unkBugContest.unk8, battleInput->feedback.button.bufferIndex, 0);
-            ov12_02268D88(battleInput, 1, 1);
+            BattleInput_FinishFeedback(battleInput, 1, 1);
             BattleInput_DestroyFeedbackTask(battleInput);
             return;
         }
@@ -3419,7 +3419,7 @@ static void Task_TargetMenuButtonFeedback(SysTask *task, void *data) {
         }
         break;
     default:
-        ov12_02268D88(battleInput, 1, 1);
+        BattleInput_FinishFeedback(battleInput, 1, 1);
         BattleInput_DestroyFeedbackTask(battleInput);
         return;
     }
@@ -3482,11 +3482,11 @@ static void Task_BattleMenuSlideIn(SysTask *task, void *data) {
         SysTask_Destroy(menuSlideIn->vblankTask);
         HBlankInterruptDisable();
         GXS_SetVisibleWnd(GX_WNDMASK_NONE);
-        BattleInput_Deadstriped_022698AC(menuSlideIn->battleInput, 1);
+        BattleInput_SetMenuOpenDummy(menuSlideIn->battleInput, 1);
         menuSlideIn->state++;
         break;
     default:
-        if (ov12_022698B0(menuSlideIn->battleInput) == 0) {
+        if (BattleInput_IsUnusedTaskNull(menuSlideIn->battleInput) == 0) {
             break;
         }
 
@@ -3630,10 +3630,10 @@ static void Task_ShowOnlySubBgLayer2(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void BattleInput_Deadstriped_022698AC(BattleInput *battleInput, int unused) {
+void BattleInput_SetMenuOpenDummy(BattleInput *battleInput, int unused) {
 }
 
-int ov12_022698B0(BattleInput *battleInput) {
+int BattleInput_IsUnusedTaskNull(BattleInput *battleInput) {
     if (battleInput->unused_664 == NULL) {
         // always returns TRUE
         return TRUE;

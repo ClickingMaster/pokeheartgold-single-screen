@@ -317,8 +317,8 @@
 	.public _0221D734
 	.public _0221D74A
 	.public BattlePartyMenu_SetExpBarTile
-	.public ov08_0221D77C
-	.public ov08_0221D81C
+	.public BattlePartyMenu_SetContestInfoTile
+	.public BattlePartyMenu_ClearContestInfoTiles
 	.public _0221D824
 	.public _0221D83C
 	.public BattlePartyMenu_ChangePage

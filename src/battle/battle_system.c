@@ -838,7 +838,7 @@ void BattleSystem_FlagMonBattled(BattleSystem *battleSystem, int battlerId, int 
 }
 
 // used to be related to poketch in dppt
-void ov12_0223B870() {
+void BattleSystem_EmptyMonFunc() {
 }
 
 void BattleSystem_SetBackground(BattleSystem *battleSystem) {
@@ -971,7 +971,7 @@ void ov12_0223BB64(BattleSystem *battleSystem, int a1) {
     battleSystem->unk2440 = a1;
 }
 
-void ov12_0223BB6C(BattleSystem *battleSystem, u8 a1) {
+void BattleSystem_SetSwitchingOrCanPickCommandMask(BattleSystem *battleSystem, u8 a1) {
     battleSystem->unk2442 = a1;
 }
 
@@ -1007,7 +1007,7 @@ void MonPicData_SetHeight(MonPicData *ptr, int index, int a2) {
     ptr[index].height = a2;
 }
 
-void ov12_0223BBF0(BattleSystem *battleSystem, u8 a1) {
+void BattleSystem_SetGraphicsState(BattleSystem *battleSystem, u8 a1) {
     battleSystem->graphicsMode = a1;
 }
 

@@ -173,7 +173,7 @@ BOOL BattleAnimUtil_UpdateShake(BattleAnimShake *shake);
 BOOL BattleAnimUtil_UpdateShakePokepic(BattleAnimShake *shake, int x, int y, Pokepic *pokepic);
 void BattleAnimUtil_InitSpriteSequence(BattleAnimSpriteSequence *sequence, const BattleAnimSinMotion *motion, BattleAnimSinMotionFunc update, s16 x, s16 y, u16 interval, u8 count, u8 scale, ManagedSprite *sprite0, ManagedSprite *sprite1, ManagedSprite *sprite2, ManagedSprite *sprite3);
 BOOL BattleAnimUtil_UpdateSpriteSequence(BattleAnimSpriteSequence *sequence);
-void ov07_02222A44(BattleAnimSinMotion *motion, int multiplier, int duration);
+void BattleAnimUtil_InitCircleMotion(BattleAnimSinMotion *motion, int multiplier, int duration);
 void BattleAnimTask_BlendAlphaMotion(SysTask *task, void *data);
 void BattleAnimUtil_StartBlendAlphaMotion(BattleAnimBlendAlphaMotion *blend, s16 startEva, s16 endEva, s16 startEvb, s16 endEvb, int duration);
 BOOL BattleAnimUtil_IsBlendAlphaMotionDone(BattleAnimBlendAlphaMotion *blend);

@@ -551,7 +551,7 @@ void BattleAnimTask_SkewSlideAttackerBg(SysTask *task, void *data) {
         BattleAnimScanline_FreeWave(work->wave);
         bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
         SetBgPriority((u8)bgLayer, (u8)BattleAnimSystem_GetBgPriority(work->system, 1));
-        SetBgPriority(0, (u8)ov07_0221FAE8(work->system));
+        SetBgPriority(0, (u8)BattleAnimSystem_GetBasePriority(work->system));
         bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
         BG_ClearCharDataRange((u8)bgLayer, 0x4000, 0, BattleAnimSystem_GetHeapID(work->system));
         BgClearTilemapBufferAndCommit(BattleAnimSystem_GetBgConfig(work->system), BattleAnimSystem_GetBgLayer(work->system, 1));
@@ -583,7 +583,7 @@ void BattleAnimFunc_SkewSlideAttackerBg(BattleAnimSystem *system) {
     work->x -= 40;
     work->y -= 40;
     Pokepic_SetAttr(work->pokepic, POKEPIC_VANISHED, TRUE);
-    direction = ov07_02222004(work->system, BattleAnimSystem_GetAttacker(work->system));
+    direction = BattleAnimUtil_GetBattlerSideSignByMode(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->top = work->y - 8;
     work->bottom = work->y + 88;
     if (work->top < 0) {
@@ -592,7 +592,7 @@ void BattleAnimFunc_SkewSlideAttackerBg(BattleAnimSystem *system) {
     if (work->bottom > 191) {
         work->bottom = 191;
     }
-    bgIndex = ov07_0221FAF8(system, 1);
+    bgIndex = BattleAnimSystem_GetBgMaskLayer(system, 1);
     priority = SysTask_GetPriority(task);
     scroll = BattleAnimUtil_PackXY(work->x, work->y);
     work->wave = BattleAnimScanline_NewWaveU32Step(work->top, work->bottom, 910, direction << 15, 80, bgIndex, priority + 1, scroll, BattleAnimSystem_GetHeapID(system));
@@ -601,8 +601,8 @@ void BattleAnimFunc_SkewSlideAttackerBg(BattleAnimSystem *system) {
     type = BattleAnimUtil_GetBattlerType(work->system, BattleAnimSystem_GetAttacker(system));
     if (type == BATTLER_TYPE_ENEMY_SIDE_SLOT_1 || type == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
         bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
-        SetBgPriority(bgLayer, (u8)ov07_0221FAE8(work->system));
-        SetBgPriority(0, (u8)(ov07_0221FAE8(work->system) + 1));
+        SetBgPriority(bgLayer, (u8)BattleAnimSystem_GetBasePriority(work->system));
+        SetBgPriority(0, (u8)(BattleAnimSystem_GetBasePriority(work->system) + 1));
     }
     BattleAnimTask_SkewSlideAttackerBg(task, work);
 }
@@ -735,7 +735,7 @@ void BattleAnimFunc_ShakeDefenderBlackFlash(BattleAnimSystem *system) {
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
     work->shadowHeight = Pokepic_GetAttr(work->pokepic, POKEPIC_SHADOW_H);
     BattleAnimUtil_InitShake(&work->shake, 4, 0, 1, 4);
-    work->shake.x += ov07_02222004(work->system, BattleAnimSystem_GetDefender(work->system));
+    work->shake.x += BattleAnimUtil_GetBattlerSideSignByMode(work->system, BattleAnimSystem_GetDefender(work->system));
     Pokepic_StartPaletteFade(work->pokepic, 0, 16, 0, 0);
     work->sprite = BattleAnimSystem_GetBattlerSprite(work->system, 1);
     attackerType = BattleAnimUtil_GetBattlerType(work->system, BattleAnimSystem_GetAttacker(work->system));
@@ -810,7 +810,7 @@ void BattleAnimTask_WaveDefenderOnBg(SysTask *task, void *data) {
         int bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
         int priority = BattleAnimSystem_GetBgPriority(work->system, 1);
         SetBgPriority((u8)bgLayer, (u8)priority);
-        SetBgPriority(0, (u8)ov07_0221FAE8(work->system));
+        SetBgPriority(0, (u8)BattleAnimSystem_GetBasePriority(work->system));
         int defender = BattleAnimSystem_GetDefender(work->system);
         if (BattleAnimSystem_IsBattlerSemiInvulnerable(work->system, defender) == FALSE) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_VANISHED, FALSE);
@@ -851,8 +851,8 @@ void BattleAnimFunc_WaveDefenderOnBg(BattleAnimSystem *system) {
         ManagedSprite_SetPriority(work->sprite, 2);
     } else {
         int bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
-        SetBgPriority((u8)bgLayer, (u8)ov07_0221FAE8(work->system));
-        SetBgPriority(0, (u8)(ov07_0221FAE8(work->system) + 1));
+        SetBgPriority((u8)bgLayer, (u8)BattleAnimSystem_GetBasePriority(work->system));
+        SetBgPriority(0, (u8)(BattleAnimSystem_GetBasePriority(work->system) + 1));
         ManagedSprite_SetDrawFlag(work->sprite, FALSE);
     }
     bottom = y + 80;
@@ -863,7 +863,7 @@ void BattleAnimFunc_WaveDefenderOnBg(BattleAnimSystem *system) {
     if (bottom > 191) {
         bottom = 191;
     }
-    bgIndex = ov07_0221FAF8(system, 1);
+    bgIndex = BattleAnimSystem_GetBgMaskLayer(system, 1);
     scroll = BattleAnimUtil_PackXY((u16)(-(s16)(x - 40)), (u16)(-top));
     type = BattleAnimSystem_GetHeapID(system);
     work->wave = BattleAnimScanline_NewWaveU32Step((u8)y, (u8)bottom, 910, 0x5000, 100, bgIndex, 0, scroll, (enum HeapID)type);
@@ -928,9 +928,9 @@ void BattleAnimSpriteFunc_GrowRockShrinkSprite(BattleAnimSystem *system, SpriteS
     work->spriteSystem = spriteSystem;
     work->spriteManager = spriteManager;
     int attacker = BattleAnimSystem_GetAttacker(work->system);
-    int direction = ov07_02222004(work->system, attacker);
+    int direction = BattleAnimUtil_GetBattlerSideSignByMode(work->system, attacker);
     int offset;
-    if (ov07_0221FB78(work->system, 0) == TRUE) {
+    if (BattleAnimSystem_ShouldFlipSide(work->system, 0) == TRUE) {
         work->sign = -1;
         offset = -direction;
     } else {
@@ -1159,7 +1159,7 @@ void BattleAnimSpriteFunc_BoomerangSprite(BattleAnimSystem *system, SpriteSystem
     work->system = system;
     work->spriteSystem = spriteSystem;
     work->spriteManager = spriteManager;
-    work->direction = ov07_02222004(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->direction = BattleAnimUtil_GetBattlerSideSignByMode(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->attackerPokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(system));
     work->attackerX = Pokepic_GetAttr(work->attackerPokepic, POKEPIC_X);
     work->attackerY = Pokepic_GetAttr(work->attackerPokepic, POKEPIC_Y);
@@ -1177,7 +1177,7 @@ void BattleAnimSpriteFunc_BoomerangSprite(BattleAnimSystem *system, SpriteSystem
 
 #pragma force_active reset
 
-void ov07_0222DA60(SysTask *task, void *data) {
+void BattleAnimTask_AttackerCircleFade(SysTask *task, void *data) {
     BattleAnimWork0222DB14 *work = data;
 
     switch (work->state) {
@@ -1211,13 +1211,13 @@ void ov07_0222DA60(SysTask *task, void *data) {
 
 #pragma force_active on
 
-void ov07_0222DB14(BattleAnimSystem *system) {
+void BattleAnimFunc_AttackerCircleFade(BattleAnimSystem *system) {
     BattleAnimWork0222DB14 *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimWork0222DB14));
     int direction;
 
     work->system = system;
     work->spriteManager = BattleAnimSystem_GetBattlerSpriteManager(system);
-    direction = ov07_02222004(work->system, BattleAnimSystem_GetAttacker(work->system));
+    direction = BattleAnimUtil_GetBattlerSideSignByMode(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(system));
     work->x = Pokepic_GetAttr(work->pokepic, POKEPIC_X);
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
@@ -1226,11 +1226,11 @@ void ov07_0222DB14(BattleAnimSystem *system) {
     work->sprite = BattleAnimSystem_GetBattlerSprite(work->system, 0);
     ManagedSprite_SetOamMode(work->sprite, GX_OAM_MODE_XLU);
     Pokepic_SetAttr(work->pokepic, POKEPIC_VANISHED, TRUE);
-    ov07_02222A44(&work->motion, 2, 16);
+    BattleAnimUtil_InitCircleMotion(&work->motion, 2, 16);
     BattleAnimUtil_SetBlendWithBattleBg(work->system, 16, 0);
     BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 16, 0, 0, 16, 32);
     work->motion.ampX *= direction;
-    BattleAnimSystem_CreateTaskDefaultPriority(work->system, ov07_0222DA60, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_AttackerCircleFade, work);
     SpriteSystem_DrawSprites(work->spriteManager);
 }
 
@@ -1321,7 +1321,7 @@ void BattleAnimSpriteFunc_RisingSpriteStretchAttacker(BattleAnimSystem *system, 
     work->system = system;
     work->spriteSystem = spriteSystem;
     work->spriteManager = spriteManager;
-    dirX = ov07_02222004(work->system, BattleAnimSystem_GetAttacker(work->system));
+    dirX = BattleAnimUtil_GetBattlerSideSignByMode(work->system, BattleAnimSystem_GetAttacker(work->system));
     dirY = BattleAnimUtil_GetBattlerSideSign(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(system));
     x = (s16)Pokepic_GetAttr(work->pokepic, POKEPIC_X);
@@ -1659,7 +1659,7 @@ void BattleAnimFunc_WaddlePic(BattleAnimSystem *system) {
     int direction;
 
     work->system = system;
-    direction = ov07_02222004(work->system, BattleAnimSystem_GetAttacker(system));
+    direction = BattleAnimUtil_GetBattlerSideSignByMode(work->system, BattleAnimSystem_GetAttacker(system));
     if ((s32)BattleAnimSystem_GetArg(system, 0) == 0) {
         work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(system));
         work->x = Pokepic_GetAttr(work->pokepic, POKEPIC_X);
@@ -1951,7 +1951,7 @@ static void BattleAnimTask_AttackerLungeKnockback(SysTask *task, void *data) {
 
     switch (work->state) {
     case 0:
-        ov07_02222A44(&work->attackerMove.sin, 1, 64);
+        BattleAnimUtil_InitCircleMotion(&work->attackerMove.sin, 1, 64);
         work->attackerMove.sin.ampX *= work->direction;
         work->state++;
         break;
@@ -2010,7 +2010,7 @@ static void BattleAnimTask_AttackerLungeKnockback(SysTask *task, void *data) {
 void BattleAnimFunc_AttackerLungeKnockback(BattleAnimSystem *system) {
     BattleAnimLungeKnockbackWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimLungeKnockbackWork));
     work->system = system;
-    work->direction = ov07_02222004(work->system, BattleAnimSystem_GetAttacker(system));
+    work->direction = BattleAnimUtil_GetBattlerSideSignByMode(work->system, BattleAnimSystem_GetAttacker(system));
     work->attackerPokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(system));
     work->attackerX = Pokepic_GetAttr(work->attackerPokepic, POKEPIC_X);
     work->attackerY = Pokepic_GetAttr(work->attackerPokepic, POKEPIC_Y);
@@ -2486,8 +2486,8 @@ void BattleAnimFunc_DarkSpriteJump(BattleAnimSystem *system) {
     ManagedSprite_SetOamMode(work->sprites[1], GX_OAM_MODE_XLU);
     ManagedSprite_SetAffineOverwriteMode(work->sprites[1], 2);
     ManagedSprite_SetAffineTranslation(work->sprites[1], 0, 40);
-    work->flipRise = ov07_0221FB78(work->system, 0);
-    work->flipDrop = ov07_0221FB78(work->system, 1);
+    work->flipRise = BattleAnimSystem_ShouldFlipSide(work->system, 0);
+    work->flipDrop = BattleAnimSystem_ShouldFlipSide(work->system, 1);
     work->sprites[2] = BattleAnimSystem_GetBattlerSprite(work->system, 2);
     work->sprites[3] = BattleAnimSystem_GetBattlerSprite(work->system, 3);
     ManagedSprite_SetDrawFlag(work->sprites[2], FALSE);
@@ -2608,7 +2608,7 @@ void BattleAnimTask_SpritesOrbitAttackerBobbingUpdate(BattleAnimOrbitSpritesWork
         if (work->paths[i].angleX >= 0x3FFF && work->paths[i].angleX <= 0xBF49) {
             ManagedSprite_SetPriority(work->sprites[i], 1);
         } else {
-            ManagedSprite_SetPriority(work->sprites[i], ov07_0221FAE8(work->system) + 1);
+            ManagedSprite_SetPriority(work->sprites[i], BattleAnimSystem_GetBasePriority(work->system) + 1);
         }
     }
 }
@@ -2682,7 +2682,7 @@ void BattleAnimSpriteFunc_SpritesOrbitAttackerBobbing(BattleAnimSystem *system, 
         ManagedSprite_SetOamMode(work->sprites[i], GX_OAM_MODE_XLU);
         ManagedSprite_SetAnimateFlag(work->sprites[i], TRUE);
     }
-    work->direction = ov07_02222004(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->direction = BattleAnimUtil_GetBattlerSideSignByMode(work->system, BattleAnimSystem_GetAttacker(work->system));
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_SpritesOrbitAttackerBobbing, work);
 }
 
@@ -2786,7 +2786,7 @@ void BattleAnimSpriteFunc_FloatingSpriteStream(BattleAnimSystem *system, SpriteS
         ManagedSprite_SetPositionXY(work->sprites[i], x, y);
         ManagedSprite_SetAnim(work->sprites[i], i % 3);
     }
-    work->dirX = ov07_02222004(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->dirX = BattleAnimUtil_GetBattlerSideSignByMode(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->dirY = BattleAnimUtil_GetBattlerSideSign(work->system, BattleAnimSystem_GetAttacker(work->system));
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_FloatingSpriteStream, work);
 }
@@ -2894,7 +2894,7 @@ void BattleAnimTask_WobbleDefenderOnBg(SysTask *task, void *data) {
         BattleAnimScanline_Free(work->scanline);
         bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
         SetBgPriority(bgLayer, (u8)BattleAnimSystem_GetBgPriority(work->system, 1));
-        SetBgPriority(0, (u8)ov07_0221FAE8(work->system));
+        SetBgPriority(0, (u8)BattleAnimSystem_GetBasePriority(work->system));
         bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
         BG_ClearCharDataRange(bgLayer, 0x4000, 0, BattleAnimSystem_GetHeapID(work->system));
         bgConfig = BattleAnimSystem_GetBgConfig(work->system);
@@ -2927,14 +2927,14 @@ void BattleAnimFunc_WobbleDefenderOnBg(BattleAnimSystem *system) {
     y -= 40;
     work->top = y;
     work->scroll = BattleAnimUtil_PackXY(-x, -y);
-    work->scanline = BattleAnimScanline_New(BattleAnimUtil_GetBgOffsetRegister(ov07_0221FAF8(work->system, 1)), work->scroll, BattleAnimSystem_GetHeapID(work->system));
+    work->scanline = BattleAnimScanline_New(BattleAnimUtil_GetBgOffsetRegister(BattleAnimSystem_GetBgMaskLayer(work->system, 1)), work->scroll, BattleAnimSystem_GetHeapID(work->system));
     work->alternation = 1;
     {
         int type = BattleAnimUtil_GetBattlerType(work->system, BattleAnimSystem_GetDefender(system));
         if (type == BATTLER_TYPE_ENEMY_SIDE_SLOT_1 || type == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
             int bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
-            ((SetBgPriorityU8Func)SetBgPriority)(bgLayer, ov07_0221FAE8(work->system));
-            ((SetBgPriorityU8Func)SetBgPriority)(0, ov07_0221FAE8(work->system) + 1);
+            ((SetBgPriorityU8Func)SetBgPriority)(bgLayer, BattleAnimSystem_GetBasePriority(work->system));
+            ((SetBgPriorityU8Func)SetBgPriority)(0, BattleAnimSystem_GetBasePriority(work->system) + 1);
         }
     }
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_WobbleDefenderOnBg, work);
@@ -3134,7 +3134,7 @@ void BattleAnimFunc_ShootSpriteFromAttacker(BattleAnimSystem *system) {
     u16 attacker;
 
     work->system = system;
-    work->spriteManager = ov07_0221C528(system);
+    work->spriteManager = BattleAnimSystem_GetFirstSpriteManager(system);
     attacker = BattleAnimSystem_GetAttacker(system);
     if (BattleAnimUtil_GetBattlerSide(system, attacker) == BATTLE_ANIM_SIDE_PLAYER) {
         work->sprite = BattleAnimSystem_GetSprite(system, 0);
@@ -3144,7 +3144,7 @@ void BattleAnimFunc_ShootSpriteFromAttacker(BattleAnimSystem *system) {
         Sprite_DeleteAndFreeResources(BattleAnimSystem_GetSprite(system, 0));
     }
     {
-        int dirX = ov07_02222004(system, attacker);
+        int dirX = BattleAnimUtil_GetBattlerSideSignByMode(system, attacker);
         int dirY = BattleAnimUtil_GetBattlerSideSign(system, attacker);
         int baseX = BattleAnimSystem_GetBattlerScreenCoord(system, attacker, 0);
         int baseY = BattleAnimSystem_GetBattlerScreenCoord(system, attacker, 1);
@@ -3206,7 +3206,7 @@ void BattleAnimFunc_AttackerShakeLunge(BattleAnimSystem *system) {
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(system, attacker);
     work->x = Pokepic_GetAttr(work->pokepic, POKEPIC_X);
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
-    work->dirX = ov07_02222004(system, attacker);
+    work->dirX = BattleAnimUtil_GetBattlerSideSignByMode(system, attacker);
     work->dirY = BattleAnimUtil_GetBattlerSideSign(system, attacker);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_AttackerShakeLunge, work);
 }
@@ -3257,7 +3257,7 @@ void BattleAnimFunc_DefenderKnockback(BattleAnimSystem *system) {
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(system, defender);
     work->x = Pokepic_GetAttr(work->pokepic, POKEPIC_X);
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
-    work->dirX = ov07_02222004(system, defender);
+    work->dirX = BattleAnimUtil_GetBattlerSideSignByMode(system, defender);
     work->dirY = BattleAnimUtil_GetBattlerSideSign(system, defender);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_DefenderKnockback, work);
 }
@@ -3274,7 +3274,7 @@ void BattleAnimSpriteFunc_RisingShrinkSprites(BattleAnimSystem *system, SpriteSy
     work->system = system;
     work->spriteManager = spriteManager;
     attacker = BattleAnimSystem_GetAttacker(system);
-    work->direction = ov07_02222004(system, attacker);
+    work->direction = BattleAnimUtil_GetBattlerSideSignByMode(system, attacker);
     BattleAnimSystem_GetSpriteTemplate(&template, work->system);
     template.x = BattleAnimSystem_GetBattlerScreenCoord(system, attacker, 0);
     template.y = BattleAnimSystem_GetBattlerScreenCoord(system, attacker, 1);
@@ -3421,7 +3421,7 @@ void BattleAnimSpriteFunc_SpriteRowSequence(BattleAnimSystem *system, SpriteSyst
     work->system = system;
     work->spriteManager = spriteManager;
     attacker = BattleAnimSystem_GetAttacker(work->system);
-    direction = ov07_02222004(system, attacker);
+    direction = BattleAnimUtil_GetBattlerSideSignByMode(system, attacker);
     BattleAnimSystem_GetSpriteTemplate(&template, work->system);
     template.x = BattleAnimSystem_GetBattlerScreenCoord(system, attacker, 0);
     template.y = BattleAnimSystem_GetBattlerScreenCoord(system, attacker, 1);
@@ -3522,7 +3522,7 @@ void BattleAnimTask_SpritesOrbitAttackerUpdate(BattleAnimOrbitSpritesWork *work)
         if (work->paths[i].angleX >= 0x3FFF && work->paths[i].angleX <= 0xBF49) {
             ManagedSprite_SetPriority(work->sprites[i], 1);
         } else {
-            ManagedSprite_SetPriority(work->sprites[i], ov07_0221FAE8(work->system) + 1);
+            ManagedSprite_SetPriority(work->sprites[i], BattleAnimSystem_GetBasePriority(work->system) + 1);
         }
     }
 }
@@ -3594,7 +3594,7 @@ void BattleAnimSpriteFunc_SpritesOrbitAttacker(BattleAnimSystem *system, SpriteS
         ManagedSprite_SetOamMode(work->sprites[i], GX_OAM_MODE_XLU);
         ManagedSprite_SetAnimateFlag(work->sprites[i], TRUE);
     }
-    work->direction = ov07_02222004(work->system, BattleAnimSystem_GetAttacker(work->system));
+    work->direction = BattleAnimUtil_GetBattlerSideSignByMode(work->system, BattleAnimSystem_GetAttacker(work->system));
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_SpritesOrbitAttacker, work);
 }
 

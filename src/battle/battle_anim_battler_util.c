@@ -146,40 +146,40 @@ void BattleAnimUtil_GetEmitterPosition(int battlerType, VecFx32 *pos, int unused
         func(battlerType, pos, unk, perspective);                                                     \
     }
 
-EMITTER_POSITION_FUNC(ov07_02231AD0, 0)
-EMITTER_POSITION_FUNC(ov07_02231AE0, 1)
-EMITTER_POSITION_FUNC(ov07_02231AF0, 2)
-EMITTER_POSITION_FUNC(ov07_02231B00, 3)
-EMITTER_POSITION_FUNC(ov07_02231B10, 4)
-EMITTER_POSITION_FUNC(ov07_02231B20, 5)
-EMITTER_POSITION_FUNC(ov07_02231B30, 6)
-EMITTER_POSITION_FUNC(ov07_02231B40, 7)
-EMITTER_POSITION_FUNC(ov07_02231B50, 8)
-EMITTER_POSITION_FUNC(ov07_02231B60, 9)
-EMITTER_POSITION_FUNC(ov07_02231B70, 10)
-EMITTER_POSITION_FUNC(ov07_02231B80, 11)
+EMITTER_POSITION_FUNC(BattleAnimUtil_GetEmitterPositionKind0, 0)
+EMITTER_POSITION_FUNC(BattleAnimUtil_GetEmitterPositionKind1, 1)
+EMITTER_POSITION_FUNC(BattleAnimUtil_GetEmitterPositionKind2, 2)
+EMITTER_POSITION_FUNC(BattleAnimUtil_GetEmitterPositionKind3, 3)
+EMITTER_POSITION_FUNC(BattleAnimUtil_GetEmitterPositionKind4, 4)
+EMITTER_POSITION_FUNC(BattleAnimUtil_GetEmitterPositionKind5, 5)
+EMITTER_POSITION_FUNC(BattleAnimUtil_GetEmitterPositionKind6, 6)
+EMITTER_POSITION_FUNC(BattleAnimUtil_GetEmitterPositionKind7, 7)
+EMITTER_POSITION_FUNC(BattleAnimUtil_GetEmitterPositionKind8, 8)
+EMITTER_POSITION_FUNC(BattleAnimUtil_GetEmitterPositionKind9, 9)
+EMITTER_POSITION_FUNC(BattleAnimUtil_GetEmitterPositionKind10, 10)
+EMITTER_POSITION_FUNC(BattleAnimUtil_GetEmitterPositionKind11, 11)
 
-BATTLER_EMITTER_POSITION_FUNC(ov07_02231B90, ov07_02231AD0)
-BATTLER_EMITTER_POSITION_FUNC(ov07_02231BC0, ov07_02231AE0)
-BATTLER_EMITTER_POSITION_FUNC(ov07_02231BF0, ov07_02231AF0)
-BATTLER_EMITTER_POSITION_FUNC(ov07_02231C20, ov07_02231B00)
-BATTLER_EMITTER_POSITION_FUNC(ov07_02231C50, ov07_02231B10)
-BATTLER_EMITTER_POSITION_FUNC(ov07_02231C80, ov07_02231B20)
-BATTLER_EMITTER_POSITION_FUNC(ov07_02231CB0, ov07_02231B30)
-BATTLER_EMITTER_POSITION_FUNC(ov07_02231CE0, ov07_02231B40)
-BATTLER_EMITTER_POSITION_FUNC(ov07_02231D10, ov07_02231B50)
-BATTLER_EMITTER_POSITION_FUNC(ov07_02231D40, ov07_02231B60)
-BATTLER_EMITTER_POSITION_FUNC(ov07_02231D70, ov07_02231B70)
-BATTLER_EMITTER_POSITION_FUNC(ov07_02231DA0, ov07_02231B80)
+BATTLER_EMITTER_POSITION_FUNC(BattleAnimUtil_GetBattlerEmitterPositionKind0, BattleAnimUtil_GetEmitterPositionKind0)
+BATTLER_EMITTER_POSITION_FUNC(BattleAnimUtil_GetBattlerEmitterPositionKind1, BattleAnimUtil_GetEmitterPositionKind1)
+BATTLER_EMITTER_POSITION_FUNC(BattleAnimUtil_GetBattlerEmitterPositionKind2, BattleAnimUtil_GetEmitterPositionKind2)
+BATTLER_EMITTER_POSITION_FUNC(BattleAnimUtil_GetBattlerEmitterPositionKind3, BattleAnimUtil_GetEmitterPositionKind3)
+BATTLER_EMITTER_POSITION_FUNC(BattleAnimUtil_GetBattlerEmitterPositionKind4, BattleAnimUtil_GetEmitterPositionKind4)
+BATTLER_EMITTER_POSITION_FUNC(BattleAnimUtil_GetBattlerEmitterPositionKind5, BattleAnimUtil_GetEmitterPositionKind5)
+BATTLER_EMITTER_POSITION_FUNC(BattleAnimUtil_GetBattlerEmitterPositionKind6, BattleAnimUtil_GetEmitterPositionKind6)
+BATTLER_EMITTER_POSITION_FUNC(BattleAnimUtil_GetBattlerEmitterPositionKind7, BattleAnimUtil_GetEmitterPositionKind7)
+BATTLER_EMITTER_POSITION_FUNC(BattleAnimUtil_GetBattlerEmitterPositionKind8, BattleAnimUtil_GetEmitterPositionKind8)
+BATTLER_EMITTER_POSITION_FUNC(BattleAnimUtil_GetBattlerEmitterPositionKind9, BattleAnimUtil_GetEmitterPositionKind9)
+BATTLER_EMITTER_POSITION_FUNC(BattleAnimUtil_GetBattlerEmitterPositionKind10, BattleAnimUtil_GetEmitterPositionKind10)
+BATTLER_EMITTER_POSITION_FUNC(BattleAnimUtil_GetBattlerEmitterPositionKind11, BattleAnimUtil_GetEmitterPositionKind11)
 
-void ov07_02231DD0(VecFx32 *pos) {
+void BattleAnimUtil_GetEmitterHighPosition(VecFx32 *pos) {
     pos->x = 0;
     pos->y = 0x68D0;
     pos->z = 0;
 }
 
-void ov07_02231DE0(int battlerType, VecFx32 *pos, int unused, int perspective) {
-    ov07_02231AD0(battlerType, pos, unused, perspective);
+void BattleAnimUtil_GetEmitterPositionKind0Alt(int battlerType, VecFx32 *pos, int unused, int perspective) {
+    BattleAnimUtil_GetEmitterPositionKind0(battlerType, pos, unused, perspective);
 }
 
 void BattleAnimUtil_GetCameraUp(BOOL flipped, VecFx32 *up) {
@@ -197,7 +197,7 @@ void BattleAnimUtil_SetBlendWithBattleBg(BattleAnimSystem *system, int eva, int 
     if (evb == -1) {
         evb = 5;
     }
-    int plane2 = (1 << ov07_0221FAF8(system, 2)) | GX_BLEND_PLANEMASK_BG0;
+    int plane2 = (1 << BattleAnimSystem_GetBgMaskLayer(system, 2)) | GX_BLEND_PLANEMASK_BG0;
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_NONE, plane2, eva, evb);
 }
 
@@ -218,8 +218,8 @@ void BattleAnimUtil_SetBlendBgOverBattleBg(BattleAnimSystem *system, int eva, in
     if (evb == -1) {
         evb = 5;
     }
-    int plane2 = (1 << ov07_0221FAF8(system, 2)) | GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_OBJ;
-    int plane1 = 1 << ov07_0221FAF8(system, 1);
+    int plane2 = (1 << BattleAnimSystem_GetBgMaskLayer(system, 2)) | GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_OBJ;
+    int plane1 = 1 << BattleAnimSystem_GetBgMaskLayer(system, 1);
     G2_SetBlendAlpha(plane1, plane2, eva, evb);
 }
 
@@ -227,11 +227,11 @@ void BattleAnimUtil_SetBlendBgOverBattleBg(BattleAnimSystem *system, int eva, in
 
 void BattleAnimUtil_SetWindowInsidePlanes(BattleAnimSystem *system, int window, BOOL effect) {
     if (window == 0) {
-        G2_SetWnd0InsidePlane((1 << ov07_0221FAF8(system, 2)) | (1 << ov07_0221FAF8(system, 0)) | (1 << ov07_0221FAF8(system, 1)) | GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_OBJ, effect);
+        G2_SetWnd0InsidePlane((1 << BattleAnimSystem_GetBgMaskLayer(system, 2)) | (1 << BattleAnimSystem_GetBgMaskLayer(system, 0)) | (1 << BattleAnimSystem_GetBgMaskLayer(system, 1)) | GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_OBJ, effect);
     } else {
-        G2_SetWnd1InsidePlane((1 << ov07_0221FAF8(system, 2)) | (1 << ov07_0221FAF8(system, 0)) | (1 << ov07_0221FAF8(system, 1)) | GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_OBJ, effect);
+        G2_SetWnd1InsidePlane((1 << BattleAnimSystem_GetBgMaskLayer(system, 2)) | (1 << BattleAnimSystem_GetBgMaskLayer(system, 0)) | (1 << BattleAnimSystem_GetBgMaskLayer(system, 1)) | GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_OBJ, effect);
     }
-    G2_SetWndOutsidePlane((1 << ov07_0221FAF8(system, 0)) | (1 << ov07_0221FAF8(system, 1)) | GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_OBJ, TRUE);
+    G2_SetWndOutsidePlane((1 << BattleAnimSystem_GetBgMaskLayer(system, 0)) | (1 << BattleAnimSystem_GetBgMaskLayer(system, 1)) | GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_OBJ, TRUE);
 }
 
 #pragma force_active reset
@@ -263,7 +263,7 @@ void BattleAnimUtil_InitCommonWork(BattleAnimSystem *system, BattleAnimCommonWor
     work->system = system;
     work->spriteSystem = BattleAnimSystem_GetSpriteSystem(system);
     work->battlerSpriteManager = BattleAnimSystem_GetBattlerSpriteManager(system);
-    work->spriteManager = ov07_0221C528(system);
+    work->spriteManager = BattleAnimSystem_GetFirstSpriteManager(system);
     work->bgConfig = BattleAnimSystem_GetBgConfig(system);
     work->paletteData = BattleAnimSystem_GetPaletteData(system);
 }

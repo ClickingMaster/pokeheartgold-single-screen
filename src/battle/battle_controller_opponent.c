@@ -1120,7 +1120,7 @@ ManagedSprite *BattleControllerOpponent_CreateTrainerSprite(BattleSystem *battle
 void OpponentData_StartMoveAnimation(BattleSystem *battleSystem, OpponentData *opponentData, BattleAnimSystem *animSystem, MoveAnimData *animData);
 void BattleController_InitBattlerPicParams(BattleSystem *battleSystem, MoveAnimData *animData, BattleAnimBattlerPicParams *params, u32 battlerId);
 void MoveAnim_GetDisplayFlags(u8 *disableHpBar, u8 *updateG3, BOOL isEffect, int effect, u16 move);
-BOOL ov12_02261DC8(OpponentTrainerEncounterWork *work, ManagedSprite *unused);
+BOOL OpponentTrainerEncounter_HandleAnimFrame(OpponentTrainerEncounterWork *work, ManagedSprite *unused);
 void Task_FlashBrightness(SysTask *task, s32 *state);
 void BattleSystem_StopRecordingDataCorrupted(BattleSystem *battleSystem);
 void BattleSystem_StopRecordingTooLong(BattleSystem *battleSystem);
@@ -1533,7 +1533,7 @@ void BattleControllerOpponent_HealthbarSlideOut(BattleSystem *battleSystem, Oppo
 
 void BattleControllerOpponent_SelectCommand(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleControllerPacketSelectCommand *packet = OPPONENT_COMMAND(opponentData);
-    ov12_0223BB6C(battleSystem, packet->switchingOrCanPickCommandMask);
+    BattleSystem_SetSwitchingOrCanPickCommandMask(battleSystem, packet->switchingOrCanPickCommandMask);
     OpponentData_SelectCommand(battleSystem, opponentData, packet);
     OpponentData_ClearCommand(opponentData);
 }
@@ -1810,12 +1810,12 @@ void BattleControllerOpponent_EndSelection(BattleSystem *battleSystem, OpponentD
         narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
         battleInput = BattleSystem_GetBattleInput(battleSystem);
         BattleInput_ChangeMenu(narc0, narc1, battleInput, 0, 0, NULL);
-        BattleInput_Deadstriped_022698AC(battleInput, 0);
+        BattleInput_SetMenuOpenDummy(battleInput, 0);
         NARC_Delete(narc0);
         NARC_Delete(narc1);
         partner = BattleSystem_GetBattlerIdPartner(battleSystem, opponentData->battlerId);
         if (partner != opponentData->battlerId) {
-            ov12_02265D74(BattleSystem_GetHpBar(battleSystem, partner));
+            BattleHpBar_MenuCloseDummy(BattleSystem_GetHpBar(battleSystem, partner));
         }
         BattleHpBar_StopActiveEffect(&opponentData->hpBar);
         BattleInput_DisableBallGauge(battleInput);
@@ -4022,7 +4022,7 @@ void Task_TrainerEncounter(SysTask *task, void *data) {
         break;
     case 3:
         if (ManagedSprite_IsAnimated(work->managedSprite) == 1) {
-            if (ov12_02261DC8(work, work->managedSprite) == FALSE) {
+            if (OpponentTrainerEncounter_HandleAnimFrame(work, work->managedSprite) == FALSE) {
                 break;
             }
         }
@@ -4445,7 +4445,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
             action.monIconStatus = work->ballStatusBattler;
             action.cancelRunDisplay = BattleSystem_GetCancelRunDisplay(work->battleSystem, work->battlerId, work->switchingOrCanPickCommandMask);
             if (opponent->unk197 != 0) {
-                BattleInput_Deadstriped_022698AC(battleInput, 1);
+                BattleInput_SetMenuOpenDummy(battleInput, 1);
                 if (BattleSystem_GetBattleSpecial(work->battleSystem) & BATTLE_SPECIAL_FIRST_RIVAL) {
                     BattleInput_ChangeMenu(narc0, narc1, battleInput, 6, 0, (int *)&action);
                 } else if (BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_PAL_PARK) {
@@ -4482,7 +4482,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
             NARC_Delete(narc0);
             NARC_Delete(narc1);
             if (hpBar != NULL) {
-                ov12_02265D70(hpBar);
+                BattleHpBar_MenuOpenDummy(hpBar);
             }
             work->state = 5;
         }
@@ -4514,8 +4514,8 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
                 NARC *narc0 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
                 NARC *narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
                 BattleInput_ChangeMenu(narc0, narc1, battleInput, 0, 0, NULL);
-                BattleInput_Deadstriped_022698AC(battleInput, 0);
-                ov12_02265D74(hpBar);
+                BattleInput_SetMenuOpenDummy(battleInput, 0);
+                BattleHpBar_MenuCloseDummy(hpBar);
                 BattleHpBar_StopActiveEffect(work->hpBar);
                 OpponentData_StopPokepicBobTask(opponent);
                 NARC_Delete(narc0);
@@ -4526,8 +4526,8 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
                 NARC *narc0 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
                 NARC *narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
                 BattleInput_ChangeMenu(narc0, narc1, battleInput, 0, 0, NULL);
-                BattleInput_Deadstriped_022698AC(battleInput, 0);
-                ov12_02265D74(hpBar);
+                BattleInput_SetMenuOpenDummy(battleInput, 0);
+                BattleHpBar_MenuCloseDummy(hpBar);
                 BattleHpBar_StopActiveEffect(work->hpBar);
                 OpponentData_StopPokepicBobTask(opponent);
                 NARC_Delete(narc0);
@@ -4538,7 +4538,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
                 NARC *narc0 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
                 NARC *narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
                 if (BattleInput_GetCancelRunFlag(battleInput) == 1) {
-                    ov12_02265D74(hpBar);
+                    BattleHpBar_MenuCloseDummy(hpBar);
                     work->input = 0xFF;
                 }
                 BattleInput_ChangeMenu(narc0, narc1, battleInput, 0, 0, NULL);
@@ -4558,8 +4558,8 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
             NARC *narc0 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
             NARC *narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
             BattleInput_ChangeMenu(narc0, narc1, battleInput, 0, 0, NULL);
-            BattleInput_Deadstriped_022698AC(battleInput, 0);
-            ov12_02265D74(hpBar);
+            BattleInput_SetMenuOpenDummy(battleInput, 0);
+            BattleHpBar_MenuCloseDummy(hpBar);
             BattleHpBar_StopActiveEffect(work->hpBar);
             OpponentData_StopPokepicBobTask(opponent);
             BattleInput_DisableBallGauge(battleInput);
@@ -4569,7 +4569,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
         }
         break;
     case 8:
-        if (ov12_022698B0(battleInput) == 1) {
+        if (BattleInput_IsUnusedTaskNull(battleInput) == 1) {
             BattleController_ReplyCommandSelection(work->battleSystem, work->battlerId, work->input);
             BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
             Heap_Free(work);
@@ -4692,8 +4692,8 @@ void Task_PlayerSelectMove(SysTask *task, void *data) {
     case 2:
         if (work->input != 0xFF) {
             if (!(BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_DOUBLES)) {
-                BattleInput_Deadstriped_022698AC(battleInput, 0);
-                ov12_02265D74(hpBar);
+                BattleInput_SetMenuOpenDummy(battleInput, 0);
+                BattleHpBar_MenuCloseDummy(hpBar);
                 BattleHpBar_StopActiveEffect(work->hpBar);
                 OpponentData_StopPokepicBobTask(opponent);
             }
@@ -4705,7 +4705,7 @@ void Task_PlayerSelectMove(SysTask *task, void *data) {
     case 3:
         work->state++;
     default:
-        if (ov12_022698B0(battleInput) == 1) {
+        if (BattleInput_IsUnusedTaskNull(battleInput) == 1) {
             BattleSystem_SetTutorialState(work->battleSystem, 1);
             BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
             Heap_Free(work);
@@ -4824,9 +4824,9 @@ void Task_PlayerSelectTarget(SysTask *task, void *data) {
         if (work->input != 0xFF) {
             BattleHpBar_StopActiveEffect(work->hpBar);
             OpponentData_StopPokepicBobTask(opponent);
-            ov12_02265D74(hpBar);
+            BattleHpBar_MenuCloseDummy(hpBar);
             if (work->unk_32 == 1) {
-                BattleInput_Deadstriped_022698AC(battleInput, 0);
+                BattleInput_SetMenuOpenDummy(battleInput, 0);
             }
         }
         work->state++;
@@ -4834,7 +4834,7 @@ void Task_PlayerSelectTarget(SysTask *task, void *data) {
     case 3:
         work->state++;
     default:
-        if (ov12_022698B0(battleInput) == 1) {
+        if (BattleInput_IsUnusedTaskNull(battleInput) == 1) {
             int input = work->input;
             u32 battleType = BattleSystem_GetBattleType(work->battleSystem);
             u8 order[6];
@@ -5737,11 +5737,11 @@ void Task_PlayerDrawYesNoBox(SysTask *task, void *data) {
             narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
             BattleHpBar_StopActiveEffect(work->hpBar);
             OpponentData_StopPokepicBobTask(opponentData);
-            ov12_02265D74(partnerHpBar);
+            BattleHpBar_MenuCloseDummy(partnerHpBar);
             BattleInput_DisableBallGauge(battleInput);
             BattleInput_ChangeMenu(narc0, narc1, battleInput, 0, 0, NULL);
             if (work->input == 1) {
-                BattleInput_Deadstriped_022698AC(battleInput, 0);
+                BattleInput_SetMenuOpenDummy(battleInput, 0);
             }
             work->state = 4;
             NARC_Delete(narc0);
@@ -5749,7 +5749,7 @@ void Task_PlayerDrawYesNoBox(SysTask *task, void *data) {
         }
         break;
     case 4:
-        if (ov12_022698B0(battleInput) == TRUE) {
+        if (BattleInput_IsUnusedTaskNull(battleInput) == TRUE) {
             BattleController_ReplyCommandSelection(work->battleSystem, work->battlerId, work->input);
             BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
             Heap_Free(work);
@@ -7203,7 +7203,7 @@ void MoveAnim_GetDisplayFlags(u8 *disableHpBar, u8 *updateG3, BOOL isEffect, int
     }
 }
 
-BOOL ov12_02261DC8(OpponentTrainerEncounterWork *work, ManagedSprite *unused) {
+BOOL OpponentTrainerEncounter_HandleAnimFrame(OpponentTrainerEncounterWork *work, ManagedSprite *unused) {
     u32 attr;
     BOOL done = FALSE;
 

@@ -193,7 +193,7 @@ void Battle_BattleInit(OverlayManager *manager) {
     BattleSystem_HpBar_Init(battleSystem);
     Battle_ReserveTexAndPlttVram();
     battleSystem->animSystem = BattleAnimSystem_New(HEAP_ID_BATTLE);
-    ov12_022389B8(battleSystem);
+    BattleSystem_InitTerrainsAndBalls(battleSystem);
     GF_TouchpadResetSampling();
     GF_TouchpadStartSampling(4);
     battleSystem->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 197, HEAP_ID_BATTLE);
@@ -290,7 +290,7 @@ void Battle_BattleExit(OverlayManager *man) {
     SetMasterBrightnessByColor(1, color);
     BattleSystem_TryChangeForm(battleSystem);
     if (battleSystem->battleOutcomeFlag != 4) {
-        ov12_0223B870(battleSystem, Party_GetMonByIndex(battleSystem->trainerParty[1], 0));
+        BattleSystem_EmptyMonFunc(battleSystem, Party_GetMonByIndex(battleSystem->trainerParty[1], 0));
     }
     for (i = 0; i < 4; i++) {
         Party_Copy(battleSystem->trainerParty[i], setup->party[i]);
@@ -432,7 +432,7 @@ void Battle_InitBackgrounds(BattleSystem *battleSystem, BgConfig *bgConfig) {
     Main_SetVBlankIntrCB(Battle_VBlankCallback, battleSystem);
 }
 
-void ov12_022389B8(BattleSystem *battleSystem) {
+void BattleSystem_InitTerrainsAndBalls(BattleSystem *battleSystem) {
     BattleContext *ctx;
     int i;
     Terrain terrain = BattleSystem_GetTerrainId(battleSystem);
@@ -459,7 +459,7 @@ void BgConfig_CleanupBattleBackgrounds(BgConfig *bgConfig) {
     BgConfig_CleanupBattleMenuBackgrounds(bgConfig);
 }
 
-void ov12_02238A64(BattleSystem *battleSystem) {
+void BattleSystem_FreeGraphicsDummy(BattleSystem *battleSystem) {
 }
 
 void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup);
@@ -542,7 +542,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
         BattleLink_Start(battleSystem);
         u8 networkID = BattleSystem_GetNetworkId(battleSystem);
 
-        ov12_0223A664(battleSystem, setup);
+        BattleSystem_ChooseLinkServer(battleSystem, setup);
 
         if (battleSystem->battleType & BATTLE_TYPE_FRONTIER) {
             for (i = 0; i < BATTLER_MAX; i++) {
@@ -569,7 +569,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
                 }
                 BattleContext_Set(battleSystem, battleSystem->ctx, 2, i, slot);
             }
-            ov12_02256F28(battleSystem, battleSystem->ctx);
+            BattleSystem_InitPartyOrder(battleSystem, battleSystem->ctx);
         } else if (battleSystem->battleType & BATTLE_TYPE_MULTI) {
             for (i = 0; i < BATTLER_MAX; i++) {
                 battlerInitData.battler = i;
@@ -592,7 +592,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
                 }
                 BattleContext_Set(battleSystem, battleSystem->ctx, 2, i, slot);
             }
-            ov12_02256F28(battleSystem, battleSystem->ctx);
+            BattleSystem_InitPartyOrder(battleSystem, battleSystem->ctx);
         } else if (battleSystem->battleType & BATTLE_TYPE_DOUBLES) {
             for (i = 0; i < BATTLER_MAX; i++) {
                 battlerInitData.battler = i;
@@ -643,7 +643,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
                 BattleContext_Set(battleSystem, battleSystem->ctx, 2, i, slot);
             }
         }
-        ov12_02256F28(battleSystem, battleSystem->ctx);
+        BattleSystem_InitPartyOrder(battleSystem, battleSystem->ctx);
     } else if (battleSystem->battleType & BATTLE_TYPE_TAG) {
         int playerSlot;
         for (i = 0; i < BATTLER_MAX; i++) {
@@ -677,7 +677,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
                 playerSlot = slot;
             }
         }
-        ov12_02256F28(battleSystem, battleSystem->ctx);
+        BattleSystem_InitPartyOrder(battleSystem, battleSystem->ctx);
         battleSystem->isServer = 1;
     } else if (battleSystem->battleType & BATTLE_TYPE_MULTI) {
         for (i = 0; i < BATTLER_MAX; i++) {
@@ -701,7 +701,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
             }
             BattleContext_Set(battleSystem, battleSystem->ctx, 2, i, slot);
         }
-        ov12_02256F28(battleSystem, battleSystem->ctx);
+        BattleSystem_InitPartyOrder(battleSystem, battleSystem->ctx);
         battleSystem->isServer = 1;
     } else if (battleSystem->battleType & BATTLE_TYPE_DOUBLES) {
         for (i = 0; i < BATTLER_MAX; i++) {
@@ -732,7 +732,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
             }
             BattleContext_Set(battleSystem, battleSystem->ctx, 2, i, slot);
         }
-        ov12_02256F28(battleSystem, battleSystem->ctx);
+        BattleSystem_InitPartyOrder(battleSystem, battleSystem->ctx);
         battleSystem->isServer = 1;
     } else {
         for (i = 0; i < BATTLER_MAX / 2; i++) {
@@ -754,7 +754,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
             }
             BattleContext_Set(battleSystem, battleSystem->ctx, 2, i, slot);
         }
-        ov12_02256F28(battleSystem, battleSystem->ctx);
+        BattleSystem_InitPartyOrder(battleSystem, battleSystem->ctx);
         battleSystem->isServer = 1;
     }
 
@@ -1545,7 +1545,7 @@ static inline void SwapInts(int *a, int *b) {
 
 #pragma force_active on
 
-void ov12_0223A664(BattleSystem *battleSystem, BattleSetup *setup) {
+void BattleSystem_ChooseLinkServer(BattleSystem *battleSystem, BattleSetup *setup) {
     int ids[4];
     int values[4];
     int netId;

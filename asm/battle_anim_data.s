@@ -4,7 +4,7 @@
 	.include "overlay_07.inc"
 	.include "global.inc"
 
-	.public _02234B80
+	.public sBattleAnimBgMaskLayers
 	.public _02237840
 	.public sBattleAnimBgLayers
 	.public sBattleAnimWeatherMasks
@@ -191,7 +191,7 @@
 	.extern BattleAnimBackground_FadeIn
 	.extern BattleAnimBackground_FadeOut
 	.extern BattleAnimBackground_StartEffectsOnly
-	.extern ov07_0221E5EC
+	.extern BattleAnimBackground_StartEffectsAndStopMarked
 	.extern BattleAnimBackground_EffectNone
 	.extern BattleAnimBackground_StartScroll
 	.extern BattleAnimBackground_StartWave
@@ -243,7 +243,7 @@
 	.extern BattleAnimEmitterCb_None
 	.extern BattleAnimSystem_NewParticleSystem
 	.extern BattleAnimSystem_FreeParticleSystem
-	.extern ov07_0221FF74
+	.extern BattleAnimEmitterCb_Dummy
 	.extern BattleAnimEmitterCb_SetPositionAtFirstOpponent
 	.extern BattleAnimEmitterCb_SetPositionAtBattler0
 	.extern BattleAnimEmitterCb_SetPositionAtDefender
@@ -283,7 +283,7 @@
 	.extern BattleAnimEmitterCameraCb_SetPresetAngle4
 	.extern BattleAnimEmitterCameraCb_SetAngleFromScript
 	.extern BattleAnimEmitterCameraCb_SetPresetAngle3
-	.extern ov07_02221DC4
+	.extern BattleAnimEmitterCameraCb_SetAngleByMode
 	.extern BattleAnimEmitterCameraCb_SetPresetAngle0
 	.extern BattleAnimEmitterCameraCb_SetPresetAngle1
 	.extern BattleAnimEmitterCameraCb_LookAtBattlerA
@@ -293,7 +293,7 @@
 	.extern BattleAnimFunc_OneFrameTask
 	.extern BattleAnimFunc_OneFrameSoundTask
 	.extern BattleAnimFunc_OneFrameUncountedTask
-	.extern ov07_022231BC
+	.extern BattleAnimSpriteFunc_SpreadSpriteCopies
 	.extern BattleAnimFunc_ShakeTargets
 	.extern BattleAnimFunc_SlidingBg
 	.extern BattleAnimFunc_SlidingBg2
@@ -323,7 +323,7 @@
 	.extern BattleAnimFunc_ShakeBg
 	.extern BattleAnimFunc_SpriteMosaic
 	.extern BattleAnimFunc_MoveEmitter
-	.extern ov07_022262E8
+	.extern BattleAnimFunc_MoveEmitterVertical
 	.extern BattleAnimFunc_MoveEmitterArc
 	.extern BattleAnimFunc_EmitterSinMotion
 	.extern BattleAnimSpriteFunc_MoveSpriteAndAnimate
@@ -352,7 +352,7 @@
 	.extern BattleAnimFunc_ShakeSpritePair
 	.extern BattleAnimSpriteFunc_ThrowSpriteArc
 	.extern BattleAnimFunc_StretchFadeSprite
-	.extern ov07_02229BFC
+	.extern BattleAnimSpriteFunc_CrossingSprites
 	.extern BattleAnimSpriteFunc_BlinkSpritesCenter
 	.extern BattleAnimSpriteFunc_SlidingSpritePairs
 	.extern BattleAnimSpriteFunc_PopAndScatterSprites
@@ -362,10 +362,10 @@
 	.extern BattleAnimFunc_ShrinkSpriteOnDefender
 	.extern BattleAnimFunc_AttackerDashAfterimages
 	.extern BattleAnimSpriteFunc_SpriteTrailToDefender
-	.extern ov07_0222B640
+	.extern BattleAnimFunc_SquashSprite
 	.extern BattleAnimFunc_SlideOutAndTransform
 	.extern BattleAnimFunc_WipeOutDefender
-	.extern ov07_0222BE00
+	.extern BattleAnimFunc_PicOrbit
 	.extern BattleAnimFunc_AttackerRecoilTilt
 	.extern BattleAnimSpriteFunc_OrbitingSpriteTrail
 	.extern BattleAnimFunc_ShakeDefenderWithOverlay
@@ -376,7 +376,7 @@
 	.extern BattleAnimSpriteFunc_GrowRockShrinkSprite
 	.extern BattleAnimSpriteFunc_StackedSpritesOnDefender
 	.extern BattleAnimSpriteFunc_BoomerangSprite
-	.extern ov07_0222DB14
+	.extern BattleAnimFunc_AttackerCircleFade
 	.extern BattleAnimSpriteFunc_RisingSpriteStretchAttacker
 	.extern BattleAnimSpriteFunc_ZigzagSlash
 	.extern BattleAnimSpriteFunc_ZigzagFlash
@@ -413,7 +413,7 @@
 	.extern UnkBallData_BallAnimDeflect
 	.extern UnkBallData_BallAnimFall
 	.extern UnkBallData_BallAnimShake
-	.extern ov07_02232EE0
+	.extern UnkBallData_BallAnimSkip
 	.extern UnkBallData_BallAnimClick
 	.extern UnkBallData_BallAnimFade
 	.extern UnkBallData_CaptureStateIdle
@@ -428,15 +428,15 @@
 	.extern UnkBallData_CaptureStateFlash
 	.extern UnkBallData_CaptureStateGoToDrop
 	.extern UnkBallData_CaptureStateDrop
-	.extern ov07_02233224
+	.extern UnkBallData_CaptureStateNone
 	.extern UnkBallData_CaptureStateBounce
 	.extern UnkBallData_CaptureStateBounceDone
 	.extern UnkBallData_CaptureStateShakeWait
 	.extern UnkBallData_CaptureStateGoToShake
 	.extern UnkBallData_CaptureStateShake
 	.extern UnkBallData_CaptureStateShakeDone
-	.extern ov07_02233390
-	.extern ov07_0223339C
+	.extern UnkBallData_CaptureStateGoToSkip
+	.extern UnkBallData_CaptureStateSkip
 	.extern UnkBallData_CaptureStateClick
 	.extern UnkBallData_CaptureStateClickDone
 	.extern UnkBallData_CaptureStateRestorePalette
@@ -484,14 +484,14 @@
 	.public BattleAnimEmitter_IsActive
 	.public BattleAnimEmitter_WaitTask
 	.public BattleAnimEmitter_CreateEmitters
-	.public ov07_02234710
+	.public UnkBallData_GetEmitterParam
 	.public BattleAnimEmitter_GetEmitterCount
 	.public BattleAnimUtil_LoadMonIntoPicSameFacing
 	.public BattleAnimUtil_LoadMonIntoPicOppositeFacing
 	.public ov07_02234B5C
 	.rodata
 
-_02234B80:
+sBattleAnimBgMaskLayers:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 
 sBattleAnimBgLayers: ; 0x02234B8C
@@ -512,7 +512,7 @@ sBattleAnimBgSwitchFuncs: ; 0x02234BC0
 	.word BattleAnimBackground_StartEffectsOnly
 	.word BattleAnimBackground_BlendOut
 	.word BattleAnimBackground_FadeOut
-	.word ov07_0221E5EC
+	.word BattleAnimBackground_StartEffectsAndStopMarked
 
 sBattleAnimBattlerSpritePriorities: ; 0x02234BD8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -768,7 +768,7 @@ sBattleAnimEmitterCallbackTable: ; 0x022353E4
 	.word BattleAnimEmitterCb_SetPositionAtAttackerSide
 	.word BattleAnimEmitterCb_SetPositionAtDefenderSide
 	.word BattleAnimEmitterCb_SetPositionAtAttacker2
-	.word ov07_0221FF74
+	.word BattleAnimEmitterCb_Dummy
 
 ov07_02235440: ; 0x02235440
 	.byte 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -1126,7 +1126,7 @@ sBattleAnimEmitterCameraCallbacks: ; 0x02236444
 	.word BattleAnimEmitterCameraCb_SetPresetAngle4
 	.word BattleAnimEmitterCameraCb_SetAngleFromScript
 	.word BattleAnimEmitterCameraCb_SetPresetAngle3
-	.word ov07_02221DC4
+	.word BattleAnimEmitterCameraCb_SetAngleByMode
 	.word BattleAnimEmitterCameraCb_SetPresetAngle0
 	.word BattleAnimEmitterCameraCb_SetPresetAngle1
 	.word BattleAnimEmitterCameraCb_LookAtBattlerA
@@ -1142,10 +1142,10 @@ ov07_0223646A: ; 0x0223646A
 	.byte 0x50, 0x00, 0x78, 0x00, 0xB0, 0x00, 0x2A, 0x00, 0x00, 0x00, 0x00, 0x00
 
 sBattleAnimSpriteFuncTable: ; 0x0223649C
-	.word ov07_022231BC
+	.word BattleAnimSpriteFunc_SpreadSpriteCopies
 	.word BattleAnimSpriteFunc_BlinkScaleFadeSprites
 	.word BattleAnimSpriteFunc_OrbitingSpriteTrail
-	.word ov07_02229BFC
+	.word BattleAnimSpriteFunc_CrossingSprites
 	.word BattleAnimSpriteFunc_GrowRockShrinkSprite
 	.word BattleAnimSpriteFunc_StackedSpritesOnDefender
 	.word BattleAnimSpriteFunc_BoomerangSprite
@@ -1185,7 +1185,7 @@ sBattleAnimFuncTable: ; 0x02236520
 	.word BattleAnimFunc_AttackerGrowFlashRed
 	.word BattleAnimFunc_AttackerSquashStretch
 	.word BattleAnimFunc_AttackerAfterimages
-	.word ov07_0222BE00
+	.word BattleAnimFunc_PicOrbit
 	.word BattleAnimFunc_AttackerRecoilTilt
 	.word BattleAnimFunc_CircleBattler
 	.word BattleAnimFunc_ShakeDefenderWithOverlay
@@ -1200,7 +1200,7 @@ sBattleAnimFuncTable: ; 0x02236520
 	.word BattleAnimFunc_WaveDefenderOnBg
 	.word BattleAnimFunc_ShowAttackerObjWindowSprites
 	.word BattleAnimFunc_AttackerSquashAfterimages
-	.word ov07_0222DB14
+	.word BattleAnimFunc_AttackerCircleFade
 	.word BattleAnimFunc_ShakeBattlefieldFlashing
 	.word BattleAnimFunc_WaddlePic
 	.word BattleAnimFunc_SpriteDriftFade
@@ -1247,10 +1247,10 @@ sBattleAnimFuncTable: ; 0x02236520
 	.word BattleAnimFunc_RevealBattler
 	.word BattleAnimFunc_ShakeBg
 	.word BattleAnimFunc_SpriteMosaic
-	.word ov07_0222B640
+	.word BattleAnimFunc_SquashSprite
 	.word BattleAnimFunc_SlideOutAndTransform
 	.word BattleAnimFunc_EmitterSinMotion
-	.word ov07_022262E8
+	.word BattleAnimFunc_MoveEmitterVertical
 	.word BattleAnimFunc_SetBgPaletteGrayscale
 	.word BattleAnimFunc_DropSpriteStepwise
 	.word BattleAnimFunc_BattleBgWave
@@ -1614,7 +1614,7 @@ sUnkBallDataBallAnimFuncs: ; 0x022371B8
 	.word UnkBallData_BallAnimDeflect
 	.word UnkBallData_BallAnimFall
 	.word UnkBallData_BallAnimShake
-	.word ov07_02232EE0
+	.word UnkBallData_BallAnimSkip
 	.word UnkBallData_BallAnimClick
 	.word UnkBallData_BallAnimFade
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
@@ -1652,15 +1652,15 @@ sUnkBallDataCaptureStateFuncs: ; 0x0223729C
 	.word UnkBallData_CaptureStateFlash
 	.word UnkBallData_CaptureStateGoToDrop
 	.word UnkBallData_CaptureStateDrop
-	.word ov07_02233224
+	.word UnkBallData_CaptureStateNone
 	.word UnkBallData_CaptureStateBounce
 	.word UnkBallData_CaptureStateBounceDone
 	.word UnkBallData_CaptureStateShakeWait
 	.word UnkBallData_CaptureStateGoToShake
 	.word UnkBallData_CaptureStateShake
 	.word UnkBallData_CaptureStateShakeDone
-	.word ov07_02233390
-	.word ov07_0223339C
+	.word UnkBallData_CaptureStateGoToSkip
+	.word UnkBallData_CaptureStateSkip
 	.word UnkBallData_CaptureStateClick
 	.word UnkBallData_CaptureStateClickDone
 	.word UnkBallData_CaptureStateRestorePalette

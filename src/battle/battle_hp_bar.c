@@ -1450,10 +1450,10 @@ static void Task_ExpBarFullFlash(SysTask *task, void *data) {
     }
 }
 
-void ov12_02265D70(BattleHpBar *hpBar) {
+void BattleHpBar_MenuOpenDummy(BattleHpBar *hpBar) {
 }
 
-void ov12_02265D74(BattleHpBar *hpBar) {
+void BattleHpBar_MenuCloseDummy(BattleHpBar *hpBar) {
 }
 
 static void BattleHpBar_StartBobTask(BattleHpBar *hpBar) {

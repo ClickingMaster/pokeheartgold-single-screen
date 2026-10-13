@@ -276,7 +276,7 @@
 	.public OpponentData_StartMoveAnimation
 	.public BattleController_InitBattlerPicParams
 	.public MoveAnim_GetDisplayFlags
-	.public ov12_02261DC8
+	.public OpponentTrainerEncounter_HandleAnimFrame
 	.public Task_FlashBrightness
 	.public BattleSystem_StopRecordingDataCorrupted
 	.public BattleSystem_StopRecordingTooLong

@@ -215,8 +215,8 @@
 .public BattleSystem_CheckEvolution
 .public BattleSystem_GetFrame
 .public BattleSystem_TryChangeForm
-.public ov12_0223B870
-.public ov12_0223BBF0
+.public BattleSystem_EmptyMonFunc
+.public BattleSystem_SetGraphicsState
 .public BattleSystem_HpBar_Init
 .public BattleSystem_SetHpBarDisabled
 .public BattleSystem_GetCriticalHpMusicFlag
@@ -229,7 +229,7 @@
 .public BattleContext_New
 .public BattleContext_Main
 .public BattleContext_Delete
-.public ov12_02256F28
+.public BattleSystem_InitPartyOrder
 .public BattleContext_Get
 .public BattleContext_Set
 .public OpponentData_New

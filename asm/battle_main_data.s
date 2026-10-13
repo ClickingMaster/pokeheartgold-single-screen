@@ -13,7 +13,7 @@
 	.public Battle_BattleMain
 	.public Battle_BattleExit
 	.public Battle_InitBackgrounds
-	.public ov12_022389B8
+	.public BattleSystem_InitTerrainsAndBalls
 	.public BattleSystem_InitFromSetup
 	.public Battle_Setup3D
 	.public Battle_VBlankCallback
@@ -24,7 +24,7 @@
 	.public Battle_PartyPreviewInit
 	.public Battle_VsScreenInit
 	.public Battle_EndInit
-	.public ov12_0223A664
+	.public BattleSystem_ChooseLinkServer
 	.public sLinkSinglesBattlerTypes
 	.public sLinkDoublesBattlerTypes
 	.public sBattleGraphicsModes
@@ -44,7 +44,7 @@
 	.public sDoublesBattlerTypes
 
 	.public BgConfig_CleanupBattleBackgrounds
-	.public ov12_02238A64
+	.public BattleSystem_FreeGraphicsDummy
 	.public Battle_IsLeagueTrainerClass
 	.public Battle_Create3DVramMan
 	.public Battle_Delete3DVramMan

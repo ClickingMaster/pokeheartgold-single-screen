@@ -1255,7 +1255,7 @@ void BattleSystem_SetExperienceEarnFlags(BattleSystem *battleSystem, BattleConte
     }
 }
 
-BOOL ov12_022503EC(BattleSystem *battleSystem, BattleContext *ctx, int *out) {
+BOOL BattleSystem_TryDirectSideEffect(BattleSystem *battleSystem, BattleContext *ctx, int *out) {
     BOOL ret = FALSE;
 
     if (ctx->sideEffectFlagsDirect & (1 << 29)) {
@@ -1275,7 +1275,7 @@ BOOL ov12_022503EC(BattleSystem *battleSystem, BattleContext *ctx, int *out) {
     return ret;
 }
 
-BOOL ov12_02250490(BattleSystem *battleSystem, BattleContext *ctx, int *out) {
+BOOL BattleSystem_TryIndirectSideEffect(BattleSystem *battleSystem, BattleContext *ctx, int *out) {
     BOOL ret = FALSE;
     u16 effectChance;
 
@@ -1479,7 +1479,7 @@ int BattleSystem_GetMoveTarget(BattleSystem *battleSystem, BattleContext *ctx, i
     return battlerIdTarget;
 }
 
-void ov12_02250A18(BattleSystem *battleSystem, BattleContext *ctx, int battlerIdAttacker, u16 moveNo) {
+void BattleSystem_TryRedirectMoveTarget(BattleSystem *battleSystem, BattleContext *ctx, int battlerIdAttacker, u16 moveNo) {
     int side;
     int battlerId;
     int battlerIdTarget;
@@ -1747,7 +1747,7 @@ void BattleContext_Init(BattleContext *ctx) {
     }
 }
 
-void ov12_02251038(BattleSystem *battleSystem, BattleContext *ctx) {
+void BattleContext_InitBattleStart(BattleSystem *battleSystem, BattleContext *ctx) {
     int battleType;
 
     for (int battlerId = 0; battlerId < 4; battlerId++) {
@@ -2196,7 +2196,7 @@ static const u8 sTypeEffectiveness[][3] = {
 };
 
 // static
-BOOL ov12_02251C74(BattleContext *ctx, int battlerIdAttacker, int battlerIdTarget, int index) {
+BOOL BattleSystem_IsTypeMatchupActive(BattleContext *ctx, int battlerIdAttacker, int battlerIdTarget, int index) {
     int item = GetBattlerHeldItemEffect(ctx, battlerIdTarget);
     BOOL ret = TRUE;
 
@@ -2284,7 +2284,7 @@ int BattleSystem_ApplyTypeEffectiveness(BattleSystem *battleSystem, BattleContex
             if (sTypeEffectiveness[i][TYPETABLE_ATTACKER] == moveType) {
                 // sTypeEffectiveness[i][TYPETABLE_DEFENDER] -> sp10
                 if (sTypeEffectiveness[i][TYPETABLE_DEFENDER] == GetBattlerVar(ctx, battlerIdTarget, BMON_DATA_TYPE_1, NULL)) {
-                    if (ov12_02251C74(ctx, battlerIdAttacker, battlerIdTarget, i) == TRUE) {
+                    if (BattleSystem_IsTypeMatchupActive(ctx, battlerIdAttacker, battlerIdTarget, i) == TRUE) {
                         damage = ApplyTypeMultiplier(ctx, battlerIdAttacker, sTypeEffectiveness[i][TYPETABLE_EFFECT], damage, movePower, moveStatusFlag);
                         if (sTypeEffectiveness[i][TYPETABLE_EFFECT] == TYPE_MUL_SUPER_EFFECTIVE) {
                             seffectMod *= 2;
@@ -2292,7 +2292,7 @@ int BattleSystem_ApplyTypeEffectiveness(BattleSystem *battleSystem, BattleContex
                     }
                 }
                 if (sTypeEffectiveness[i][TYPETABLE_DEFENDER] == GetBattlerVar(ctx, battlerIdTarget, BMON_DATA_TYPE_2, NULL) && GetBattlerVar(ctx, battlerIdTarget, BMON_DATA_TYPE_1, NULL) != GetBattlerVar(ctx, battlerIdTarget, BMON_DATA_TYPE_2, NULL)) {
-                    if (ov12_02251C74(ctx, battlerIdAttacker, battlerIdTarget, i) == TRUE) {
+                    if (BattleSystem_IsTypeMatchupActive(ctx, battlerIdAttacker, battlerIdTarget, i) == TRUE) {
                         damage = ApplyTypeMultiplier(ctx, battlerIdAttacker, sTypeEffectiveness[i][TYPETABLE_EFFECT], damage, movePower, moveStatusFlag);
                         if (sTypeEffectiveness[i][TYPETABLE_EFFECT] == TYPE_MUL_SUPER_EFFECTIVE) {
                             seffectMod *= 2;
@@ -5221,7 +5221,7 @@ BOOL Battler_CanSelectAction(BattleContext *ctx, int battlerId) {
     return ret;
 }
 
-void ov12_022567D4(BattleSystem *battleSystem, BattleContext *ctx, Pokemon *mon) {
+void BattleSystem_SetCaughtMonCatchData(BattleSystem *battleSystem, BattleContext *ctx, Pokemon *mon) {
     PlayerProfile *profile = BattleSystem_GetPlayerProfile(battleSystem, BATTLER_PLAYER);
     int location = BattleSystem_GetLocation(battleSystem);
     int terrain = BattleSystem_GetTerrainId(battleSystem);
@@ -5410,7 +5410,7 @@ BOOL Battler_CheckWeatherFormChange(BattleSystem *battleSystem, BattleContext *c
     return ret;
 }
 
-void ov12_02256F28(BattleSystem *battleSystem, BattleContext *ctx) {
+void BattleSystem_InitPartyOrder(BattleSystem *battleSystem, BattleContext *ctx) {
     int battlerId;
     int index;
 
@@ -5418,11 +5418,11 @@ void ov12_02256F28(BattleSystem *battleSystem, BattleContext *ctx) {
         for (index = 0; index < 6; index++) {
             ctx->partyOrder[battlerId][index] = index;
         }
-        ov12_02256F78(battleSystem, ctx, battlerId, ctx->selectedMonIndex[battlerId]);
+        BattleSystem_MoveMonToFrontOfPartyOrder(battleSystem, ctx, battlerId, ctx->selectedMonIndex[battlerId]);
     }
 }
 
-void ov12_02256F78(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u8 selectedMonIndex) {
+void BattleSystem_MoveMonToFrontOfPartyOrder(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u8 selectedMonIndex) {
     int index;
     int dat;
     int flag;

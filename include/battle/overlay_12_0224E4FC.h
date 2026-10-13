@@ -21,10 +21,10 @@ void BattleMon_AddVar(BattleMon *mon, u32 varId, int data);
 u8 CheckSortSpeed(BattleSystem *battleSystem, BattleContext *ctx, int battlerId1, int battlerId2, int flag);
 void BattleSystem_ClearExperienceEarnFlags(BattleContext *ctx, int battlerId);
 void BattleSystem_SetExperienceEarnFlags(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
-BOOL ov12_022503EC(BattleSystem *battleSystem, BattleContext *ctx, int *out);
-BOOL ov12_02250490(BattleSystem *battleSystem, BattleContext *ctx, int *out);
+BOOL BattleSystem_TryDirectSideEffect(BattleSystem *battleSystem, BattleContext *ctx, int *out);
+BOOL BattleSystem_TryIndirectSideEffect(BattleSystem *battleSystem, BattleContext *ctx, int *out);
 int BattleSystem_GetMoveTarget(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u16 move, int a4, int a5);
-void ov12_02250A18(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u16 a3);
+void BattleSystem_TryRedirectMoveTarget(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u16 a3);
 BOOL BattleContext_TryRedirectAbility(BattleSystem *battleSystem, BattleContext *ctx);
 void CopyBattleMonToPartyMon(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
 void LockBattlerIntoCurrentMove(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
@@ -32,7 +32,7 @@ void UnlockBattlerOutOfCurrentMove(BattleSystem *battleSystem, BattleContext *ct
 int GetBattlerStatusCondition(BattleContext *ctx, int battlerId);
 BOOL CheckTrainerMessage(BattleSystem *battleSystem, BattleContext *ctx);
 void BattleContext_Init(BattleContext *ctx);
-void ov12_02251038(BattleSystem *battleSystem, BattleContext *ctx);
+void BattleContext_InitBattleStart(BattleSystem *battleSystem, BattleContext *ctx);
 void InitSwitchWork(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
 void InitFaintedWork(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
 void BattleContext_ResetTurnData(BattleSystem *battleSystem, BattleContext *ctx);
@@ -98,14 +98,14 @@ void BattleContext_UpdateMetronomeItem(BattleSystem *battleSystem, BattleContext
 void BattleContext_UndoMetronomeItemOnFail(BattleSystem *battleSystem, BattleContext *ctx);
 int ov12_02256748(BattleContext *ctx, int battlerId, int battlerType, BOOL encounter);
 BOOL Battler_CanSelectAction(BattleContext *ctx, int battlerId);
-void ov12_022567D4(BattleSystem *battleSystem, BattleContext *ctx, Pokemon *mon);
+void BattleSystem_SetCaughtMonCatchData(BattleSystem *battleSystem, BattleContext *ctx, Pokemon *mon);
 u8 BattleBuffer_GetNext(BattleContext *ctx, int battlerId);
 BOOL BattlerCheckSubstitute(BattleContext *ctx, int battlerId);
 BOOL BattleContext_IsAttackerPlayerOT(BattleSystem *battleSystem, BattleContext *ctx);
 BOOL BattleSystem_IsPlayerOT(BattleSystem *battleSystem, Pokemon *mon);
 BOOL Battler_CheckWeatherFormChange(BattleSystem *battleSystem, BattleContext *ctx, int *script);
-void ov12_02256F28(BattleSystem *battleSystem, BattleContext *ctx);
-void ov12_02256F78(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u8 selectedMonIndex);
+void BattleSystem_InitPartyOrder(BattleSystem *battleSystem, BattleContext *ctx);
+void BattleSystem_MoveMonToFrontOfPartyOrder(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u8 selectedMonIndex);
 int CalcMoveDamage(BattleSystem *battleSystem, BattleContext *ctx, u32 moveNo, u32 sideCondition, u32 fieldCondition, u16 power, u8 type, u8 battlerIdAttacker, u8 battlerIdTarget, u8 crit);
 int ApplyDamageRange(BattleSystem *battleSystem, BattleContext *ctx, int damage);
 u32 TryCriticalHit(BattleSystem *battleSystem, BattleContext *ctx, int battlerIdAttacker, int battlerIdTarget, int critCnt, u32 sideCondition);
@@ -123,7 +123,7 @@ int BattleContext_Get(BattleSystem *battleSystem, BattleContext *ctx, int var, i
 void BattleContext_Set(BattleSystem *battleSystem, BattleContext *ctx, int var, int battlerId, int data);
 
 // The following functions are static, but the rest of the file is still being worked on
-BOOL ov12_02251C74(BattleContext *ctx, int battlerIdAttacker, int battlerIdTarget, int index);
+BOOL BattleSystem_IsTypeMatchupActive(BattleContext *ctx, int battlerIdAttacker, int battlerIdTarget, int index);
 
 // The following functions haven't been decompiled as of now, and are in fact in different files
 void Link_CheckTimeout(BattleContext *ctx);

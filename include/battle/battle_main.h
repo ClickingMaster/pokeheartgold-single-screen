@@ -27,7 +27,7 @@ extern const BattleBgTemplateSet ov12_0226C174;
 extern const GraphicsBanks sBattleGraphicsBanks;
 extern const GraphicsModes sBattleGraphicsModes;
 
-void ov12_022389B8(BattleSystem *battleSystem);
+void BattleSystem_InitTerrainsAndBalls(BattleSystem *battleSystem);
 void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup);
 BOOL Battle_IsLeagueTrainerClass(int trainerClass);
 GF3DVramMan *Battle_Create3DVramMan(void);
@@ -40,7 +40,7 @@ void Task_DrawBattleGraphics(SysTask *task, void *data);
 void Task_UpdateCriticalHpMusic(SysTask *task, void *data);
 void VBlankTask_ScrollBattleBackground(SysTask *task, void *data);
 void Battle_StaticInit(void);
-void ov12_0223A664(BattleSystem *battleSystem, BattleSetup *setup);
+void BattleSystem_ChooseLinkServer(BattleSystem *battleSystem, BattleSetup *setup);
 void Battle_CreateWirelessStatusIcon(void);
 
 // Defined in other modules that have no header declaring them yet.

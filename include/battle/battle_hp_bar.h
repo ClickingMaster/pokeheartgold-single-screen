@@ -18,7 +18,7 @@ void BattleHpBar_SetEnabled(BattleHpBar *hpBar, BOOL a1);
 void BattleHpBar_StartSlide(BattleHpBar *hpBar, BOOL a1);
 u8 BattleHpBar_Util_GetBarTypeFromBattlerSide(u8 a0, u32 battleType);
 SysTask *BattleHpBar_BeginExpBarFullFlashEffect(BattleHpBar *hpBar, u8 *a1);
-void ov12_02265D70(BattleHpBar *hpBar);
-void ov12_02265D74(BattleHpBar *hpBar);
+void BattleHpBar_MenuOpenDummy(BattleHpBar *hpBar);
+void BattleHpBar_MenuCloseDummy(BattleHpBar *hpBar);
 
 #endif

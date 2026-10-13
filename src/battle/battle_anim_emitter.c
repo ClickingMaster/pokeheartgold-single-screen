@@ -155,14 +155,14 @@ void BattleAnimEmitterCb_SetPositionAtFirstOpponent(SPLEmitter *emitter) {
     BattleAnimSystem_GetDefender(system);
     particleSystem = BattleAnimSystem_GetCurrentParticleSystem(system);
     if (BattleAnimUtil_GetBattlerSide(system, 1) == 3) {
-        ov07_02231B90(system, 1, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(system, 1, &pos);
     } else {
         int type = BattleAnimUtil_GetBattlerType(system, 1);
         int opposingType = BattleAnimUtil_GetOpposingBattlerType(type);
         int perspective = ParticleSystem_GetPerspectiveType((ParticleSystem *)particleSystem);
         int mode = ov07_0221BFC0(system);
-        ov07_02231AD0(opposingType, &pos, mode, perspective);
-        ov07_02231AD0(type, &unusedPos, mode, perspective);
+        BattleAnimUtil_GetEmitterPositionKind0(opposingType, &pos, mode, perspective);
+        BattleAnimUtil_GetEmitterPositionKind0(type, &unusedPos, mode, perspective);
     }
     SPL_SetEmitterPosition(emitter, &pos);
     BattleAnimUtil_GetCameraUp(1, &up);
@@ -177,7 +177,7 @@ void BattleAnimEmitterCb_SetPositionAtBattler0(SPLEmitter *emitter) {
     BattleAnimSystem *system = ParticleSystem_GetEmitterParam();
     int defender = BattleAnimSystem_GetDefender(system);
     SPLEmitter *particleSystem = BattleAnimSystem_GetCurrentParticleSystem(system);
-    ov07_02231B90(system, 0, &pos);
+    BattleAnimUtil_GetBattlerEmitterPositionKind0(system, 0, &pos);
     SPL_SetEmitterPosition(emitter, &pos);
     BattleAnimUtil_GetCameraUp(defender, &up);
     ParticleSystem_SetCameraUp((ParticleSystem *)particleSystem, &up);
@@ -187,7 +187,7 @@ void BattleAnimEmitterCb_SetPositionAtDefender(SPLEmitter *emitter) {
     VecFx32 pos;
     BattleAnimSystem *system = ParticleSystem_GetEmitterParam();
     int defender = BattleAnimSystem_GetDefender(system);
-    ov07_02231B90(system, defender, &pos);
+    BattleAnimUtil_GetBattlerEmitterPositionKind0(system, defender, &pos);
     SPL_SetEmitterPosition(emitter, &pos);
 }
 
@@ -195,7 +195,7 @@ void BattleAnimEmitterCb_SetPositionAtAttacker(SPLEmitter *emitter) {
     VecFx32 pos;
     BattleAnimSystem *system = ParticleSystem_GetEmitterParam();
     int attacker = BattleAnimSystem_GetAttacker(system);
-    ov07_02231B90(system, attacker, &pos);
+    BattleAnimUtil_GetBattlerEmitterPositionKind0(system, attacker, &pos);
     SPL_SetEmitterPosition(emitter, &pos);
 }
 
@@ -204,7 +204,7 @@ void BattleAnimEmitterCb_SetPositionAtAttacker2(SPLEmitter *emitter) {
     BattleAnimSystem *system = ParticleSystem_GetEmitterParam();
     int attacker = BattleAnimSystem_GetAttacker(system);
     BattleAnimSystem_GetDefender(system);
-    ov07_02231B90(system, attacker, &pos);
+    BattleAnimUtil_GetBattlerEmitterPositionKind0(system, attacker, &pos);
     SPL_SetEmitterPosition(emitter, &pos);
 }
 
@@ -216,7 +216,7 @@ void BattleAnimEmitterCb_SetPositionAtAttackerSide(SPLEmitter *emitter) {
     int attacker = BattleAnimSystem_GetAttacker(system);
     int type = BattleAnimUtil_GetBattlerSide(system, attacker) == 3 ? 0 : 1;
     int mode = ov07_0221BFC0(system);
-    ov07_02231AD0(type, &pos, mode, perspective);
+    BattleAnimUtil_GetEmitterPositionKind0(type, &pos, mode, perspective);
     SPL_SetEmitterPosition(emitter, &pos);
 }
 
@@ -228,7 +228,7 @@ void BattleAnimEmitterCb_SetPositionAtDefenderSide(SPLEmitter *emitter) {
     int defender = BattleAnimSystem_GetDefender(system);
     int type = BattleAnimUtil_GetBattlerSide(system, defender) == 3 ? 0 : 1;
     int mode = ov07_0221BFC0(system);
-    ov07_02231AD0(type, &pos, mode, perspective);
+    BattleAnimUtil_GetEmitterPositionKind0(type, &pos, mode, perspective);
     SPL_SetEmitterPosition(emitter, &pos);
 }
 
@@ -315,10 +315,10 @@ void BattleAnimEmitter_SetConvergenceTarget(BattleAnimSystem *system, SPLEmitter
         pos.z = 0;
         break;
     case 3:
-        ov07_02231B90(system, battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(system, battlerB, &pos);
         break;
     case 4:
-        ov07_02231B90(system, battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(system, battlerA, &pos);
         break;
     case 5: {
         BattleAnimEmitterTargetArgs args = { 0 };
@@ -353,10 +353,10 @@ void BattleAnimEmitter_SetMagnetTarget(BattleAnimSystem *system, SPLEmitter *emi
         pos.z = 0;
         break;
     case 3:
-        ov07_02231B90(system, battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(system, battlerB, &pos);
         break;
     case 4:
-        ov07_02231B90(system, battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(system, battlerA, &pos);
         break;
     case 5: {
         s32 args[4] = { 0, 0, 0, 0 }; // BattleAnimEmitterTargetArgs
@@ -454,7 +454,7 @@ void BattleAnimEmitter_SetTransformFromScript(BattleAnimSystem *system, SPLEmitt
     sign = ((s8(*)(BattleAnimSystem *, int, int))BattleAnimSystem_GetSideSign)(system, battlerA, battlerB);
     memset((void *)&posArg, 0, sizeof(posArg));
     BattleAnimSystem_ReadScriptArgs(system, (u32 *)&posArg, 3);
-    ov07_02231B90(system, battlerA, &pos);
+    BattleAnimUtil_GetBattlerEmitterPositionKind0(system, battlerA, &pos);
     if (posArg.x == 0 && posArg.y == 0 && posArg.z == 0) {
         final = pos;
         SPL_SetEmitterPosition(emitter, &pos);
@@ -569,7 +569,7 @@ void BattleAnimEmitter_GetDefenderSidePosition(SPLEmitter *emitter, BattleAnimEm
     int defender = BattleAnimSystem_GetDefender(system);
     int type = BattleAnimUtil_GetBattlerSide(system, defender) != 3;
     int mode = ov07_0221BFC0(system);
-    ov07_02231AD0(type, pos, mode, perspective);
+    BattleAnimUtil_GetEmitterPositionKind0(type, pos, mode, perspective);
 }
 
 void BattleAnimEmitter_GetAttackerSidePosition(SPLEmitter *emitter, BattleAnimEmitterConfig *config, VecFx32 *pos) {
@@ -578,7 +578,7 @@ void BattleAnimEmitter_GetAttackerSidePosition(SPLEmitter *emitter, BattleAnimEm
     int attacker = BattleAnimSystem_GetAttacker(system);
     int type = BattleAnimUtil_GetBattlerSide(system, attacker) != 3;
     int mode = ov07_0221BFC0(system);
-    ov07_02231AD0(type, pos, mode, perspective);
+    BattleAnimUtil_GetEmitterPositionKind0(type, pos, mode, perspective);
 }
 
 void BattleAnimEmitter_ApplyConfiguredPosition(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
@@ -590,70 +590,70 @@ void BattleAnimEmitter_ApplyConfiguredPosition(SPLEmitter *emitter, BattleAnimEm
 
     switch (config->positionMode) {
     case 1:
-        ov07_02231B90(config->system, config->battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(config->system, config->battlerA, &pos);
         break;
     case 2:
-        ov07_02231B90(config->system, config->battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(config->system, config->battlerB, &pos);
         break;
     case 6:
-        ov07_02231BC0(config->system, config->battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind1(config->system, config->battlerA, &pos);
         break;
     case 7:
-        ov07_02231BC0(config->system, config->battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind1(config->system, config->battlerB, &pos);
         break;
     case 10:
-        ov07_02231BF0(config->system, config->battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind2(config->system, config->battlerA, &pos);
         break;
     case 11:
-        ov07_02231BF0(config->system, config->battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind2(config->system, config->battlerB, &pos);
         break;
     case 14:
-        ov07_02231C20(config->system, config->battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind3(config->system, config->battlerA, &pos);
         break;
     case 15:
-        ov07_02231C20(config->system, config->battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind3(config->system, config->battlerB, &pos);
         break;
     case 16:
-        ov07_02231C50(config->system, config->battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind4(config->system, config->battlerA, &pos);
         break;
     case 17:
-        ov07_02231C50(config->system, config->battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind4(config->system, config->battlerB, &pos);
         break;
     case 18:
-        ov07_02231C80(config->system, config->battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind5(config->system, config->battlerA, &pos);
         break;
     case 19:
-        ov07_02231C80(config->system, config->battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind5(config->system, config->battlerB, &pos);
         break;
     case 20:
-        ov07_02231CB0(config->system, config->battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind6(config->system, config->battlerA, &pos);
         break;
     case 21:
-        ov07_02231CB0(config->system, config->battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind6(config->system, config->battlerB, &pos);
         break;
     case 22:
-        ov07_02231CE0(config->system, config->battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind7(config->system, config->battlerA, &pos);
         break;
     case 23:
-        ov07_02231CE0(config->system, config->battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind7(config->system, config->battlerB, &pos);
         break;
     case 24:
-        ov07_02231D10(config->system, config->battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind8(config->system, config->battlerA, &pos);
         break;
     case 25:
-        ov07_02231D10(config->system, config->battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind8(config->system, config->battlerB, &pos);
         break;
     case 26:
-        ov07_02231D40(config->system, config->battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind9(config->system, config->battlerA, &pos);
         break;
     case 27:
-        ov07_02231D40(config->system, config->battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind9(config->system, config->battlerB, &pos);
         break;
     case 8:
-        ov07_02231DA0(config->system, config->battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind11(config->system, config->battlerA, &pos);
         break;
     case 9:
-        ov07_02231DA0(config->system, config->battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind11(config->system, config->battlerB, &pos);
         break;
     case 3:
         BattleAnimSystem_ReadScriptArgs(config->system, (u32 *)&args, 4);
@@ -668,19 +668,19 @@ void BattleAnimEmitter_ApplyConfiguredPosition(SPLEmitter *emitter, BattleAnimEm
         pos.y *= config->sideSign;
         break;
     case 4:
-        ov07_02231B90(config->system, config->battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(config->system, config->battlerA, &pos);
         BattleAnimEmitter_AddOffsetFromScript(config, &pos);
         break;
     case 5:
-        ov07_02231B90(config->system, config->battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(config->system, config->battlerB, &pos);
         BattleAnimEmitter_AddOffsetFromScript(config, &pos);
         break;
     case 100:
-        ov07_02231B90(config->system, config->battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(config->system, config->battlerA, &pos);
         BattleAnimEmitter_AddOffsetForBattlerType(config, config->battlerA, &pos);
         break;
     case 101:
-        ov07_02231B90(config->system, config->battlerB, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(config->system, config->battlerB, &pos);
         BattleAnimEmitter_AddOffsetForBattlerType(config, config->battlerB, &pos);
         break;
     case 12:
@@ -702,7 +702,7 @@ void BattleAnimEmitter_ApplyConfiguredPosition(SPLEmitter *emitter, BattleAnimEm
         pos.z = 0;
         break;
     case 34:
-        ov07_02231B90(config->system, config->battlerA, &pos);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(config->system, config->battlerA, &pos);
         break;
     case 31:
         positions6 = ov07_022354E0;
@@ -1234,10 +1234,10 @@ BOOL BattleAnimEmitterFlagCb_SetMagnetPos(SPLEmitter *emitter, BattleAnimEmitter
         value.z *= config->sideSign;
         break;
     case 2:
-        ov07_02231B90(config->system, config->battlerA, &value);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(config->system, config->battlerA, &value);
         break;
     case 3:
-        ov07_02231B90(config->system, config->battlerB, &value);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(config->system, config->battlerB, &value);
         break;
     case 0xFF:
         break;
@@ -1371,7 +1371,7 @@ BOOL BattleAnimEmitterFlagCb_SetConvergencePos(SPLEmitter *emitter, BattleAnimEm
         value.z *= config->sideSign;
         break;
     case 4:
-        ov07_02231B90(config->system, config->battlerB, &value);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(config->system, config->battlerB, &value);
         {
             int num = params.value.x, den = params.value.y;
             value.x = value.x * num / den;
@@ -1380,10 +1380,10 @@ BOOL BattleAnimEmitterFlagCb_SetConvergencePos(SPLEmitter *emitter, BattleAnimEm
         }
         break;
     case 2:
-        ov07_02231B90(config->system, config->battlerA, &value);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(config->system, config->battlerA, &value);
         break;
     case 3:
-        ov07_02231B90(config->system, config->battlerB, &value);
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(config->system, config->battlerB, &value);
         break;
     case 255:
         break;
@@ -1520,7 +1520,7 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle3(SPLEmitter *emitter, BattleAnimEm
 #pragma force_active reset
 
 // Preset 2 in the 0221BFC0 mode, else preset 5
-BOOL ov07_02221DC4(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
+BOOL BattleAnimEmitterCameraCb_SetAngleByMode(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     CameraAngle angle1 = sBattleAnimEmitterCameraAngles[2];
     CameraAngle angle2 = sBattleAnimEmitterCameraAngles[5];
     Camera *camera = ParticleSystem_GetCamera(config->particleSystem);
@@ -1563,7 +1563,7 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle1(SPLEmitter *emitter, BattleAnimEm
 BOOL BattleAnimEmitterCameraCb_LookAtBattlerA(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     VecFx32 target;
     Camera *camera = ParticleSystem_GetCamera(config->particleSystem);
-    ov07_02231D70(config->system, config->battlerA, &target);
+    BattleAnimUtil_GetBattlerEmitterPositionKind10(config->system, config->battlerA, &target);
     Camera_SetLookAtCamTarget(&target, camera);
     return TRUE;
 }
@@ -1571,7 +1571,7 @@ BOOL BattleAnimEmitterCameraCb_LookAtBattlerA(SPLEmitter *emitter, BattleAnimEmi
 BOOL BattleAnimEmitterCameraCb_LookAtBattlerB(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     VecFx32 target;
     Camera *camera = ParticleSystem_GetCamera(config->particleSystem);
-    ov07_02231D70(config->system, config->battlerB, &target);
+    BattleAnimUtil_GetBattlerEmitterPositionKind10(config->system, config->battlerB, &target);
     Camera_SetLookAtCamTarget(&target, camera);
     return TRUE;
 }
@@ -1624,7 +1624,7 @@ u8 BattleAnimUtil_GetSpritePaletteSlot(ManagedSprite *sprite) {
     return ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(sprite->sprite), NNS_G2D_VRAM_TYPE_2DMAIN);
 }
 
-int ov07_02222004(BattleAnimSystem *system, int battler) {
+int BattleAnimUtil_GetBattlerSideSignByMode(BattleAnimSystem *system, int battler) {
     int sign = 1;
     int side = BattleAnimUtil_GetBattlerSide(system, battler);
 

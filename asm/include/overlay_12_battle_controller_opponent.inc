@@ -197,7 +197,7 @@
 .public BattleSystem_SetTutorialState
 .public BattleSystem_GameStatIncrement
 .public ov12_0223BB64
-.public ov12_0223BB6C
+.public BattleSystem_SetSwitchingOrCanPickCommandMask
 .public BattleSystem_GetWaitingIcon
 .public BattleSystem_SetWaitingIcon
 .public BattleSystem_GetMonPicData
@@ -274,8 +274,8 @@
 .public BattleHpBar_StartSlide
 .public BattleHpBar_Util_GetBarTypeFromBattlerSide
 .public BattleHpBar_BeginExpBarFullFlashEffect
-.public ov12_02265D70
-.public ov12_02265D74
+.public BattleHpBar_MenuOpenDummy
+.public BattleHpBar_MenuCloseDummy
 .public BattleInput_ChangeMenu
 .public BattleInput_SetPartyExpPercents
 .public BattleInput_UpdateBallGaugeAnimation
@@ -286,8 +286,8 @@
 .public BattleInput_GetTargetSelectionType
 .public BattleInput_StartMenuScrollHorizontalTask
 .public BattleInput_LoadFightMenuText
-.public BattleInput_Deadstriped_022698AC
-.public ov12_022698B0
+.public BattleInput_SetMenuOpenDummy
+.public BattleInput_IsUnusedTaskNull
 .public BattleInput_GetKeyPressed
 .public BattleInput_SetKeyPressed
 .public BattleInput_GetCancelRunFlag
