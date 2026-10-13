@@ -17,7 +17,7 @@
 #include "igt_counter.h"
 #include "touchpad.h"
 #include "swap_3d_buffers.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "comm_state.h"
 #include "wfc_user_info_warning.h"
 

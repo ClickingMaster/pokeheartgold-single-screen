@@ -129,7 +129,7 @@
 .public Save_SpecialRibbons_Get
 .public HallTypeRanks_Get
 .public Comm_SendCommand
-.public sub_02037474
+.public Comm_IsActive
 .public Comm_GetLocalNetId
 .public LinkSync_Init
 .public LinkSync_StartSync
@@ -149,7 +149,7 @@
 .public sub_02088288
 .public PokemonSummary_SetPages
 .public PokemonSummaryArgs_SetPlayer
-.public sub_02096910
+.public FrontierLink_RegisterCommands
 .public NNS_G2dInitOamManagerModule
 .public G2x_SetBlendBrightness_
 .public GX_LoadBGPltt

@@ -35,7 +35,7 @@
 #include "sprite_resource.h"
 #include "wireless_manager.h"
 #include "communication_player_state.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"

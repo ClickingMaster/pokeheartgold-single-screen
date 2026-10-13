@@ -4,19 +4,19 @@
 #include "script.h"
 
 void Colosseum_ShowOpponentTrainerCard(FieldSystem *fieldSystem);
-struct UnkStruct_02059E1C *UnionRoom_Start(FieldSystem *fieldSystem);
+struct UnionRoom *UnionRoom_Start(FieldSystem *fieldSystem);
 void UnionRoom_Stop(FieldSystem *fieldSystem);
-int sub_0205A200(struct UnkStruct_02059E1C *fieldSystem_unk80, int objId);
-int sub_0205A284(struct UnkStruct_02059E1C *fieldSystem_unk80, int objId, u16 a2);
-int sub_0205A358(struct UnkStruct_02059E1C *fieldSystem_unk80);
-u32 sub_0205A35C(struct UnkStruct_02059E1C *fieldSystem_unk80);
-void sub_0205A3B0(struct UnkStruct_02059E1C *fieldSystem_unk80, int a1, int a2);
-int sub_0205A39C(struct UnkStruct_02059E1C *fieldSystem_unk80);
-int UnionRoom_TrySendTalkCancel(struct UnkStruct_02059E1C *fieldSystem_unk80, int a1);
+int UnionRoom_GetPlayerActivityType(struct UnionRoom *fieldSystem_unk80, int objId);
+int UnionRoom_RequestJoinPlayer(struct UnionRoom *fieldSystem_unk80, int objId, u16 a2);
+int UnionRoom_GetJoinStatus(struct UnionRoom *fieldSystem_unk80);
+u32 UnionRoom_GetTalkChoice(struct UnionRoom *fieldSystem_unk80);
+void UnionRoom_SendTalkResponse(struct UnionRoom *fieldSystem_unk80, int a1, int a2);
+int UnionRoom_GetTalkReply(struct UnionRoom *fieldSystem_unk80);
+int UnionRoom_TrySendTalkCancel(struct UnionRoom *fieldSystem_unk80, int a1);
 void sub_0205A408(void);
-void sub_0205A430(void);
+void UnionRoom_RecvTalkReply(void);
 void sub_0205A40C(void);
-void sub_0205A410(void);
+void UnionRoom_RecvRestartSearch(void);
 void Colosseum_RecvMixBattleMons(void);
 u32 Colosseum_GetMixBattleMonsSize(void);
 void Colosseum_GetMixBattleMonsBuffer(void);

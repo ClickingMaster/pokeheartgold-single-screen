@@ -6,7 +6,7 @@
 #include "heap.h"
 #include "sys_task_api.h"
 #include "system.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "comm_state.h"
 
 typedef struct WirelessStatusIconOam {
@@ -384,7 +384,7 @@ void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapId) {
 }
 
 void WirelessStatusIcon_CreateIfConnected(void) {
-    if (sub_02037474()) {
+    if (Comm_IsActive()) {
         if (Comm_CountConnected() > 1 || CommState_IsWifi() != 0) {
             WirelessStatusIcon_Create();
         }
@@ -394,7 +394,7 @@ void WirelessStatusIcon_CreateIfConnected(void) {
 }
 
 void WirelessStatusIcon_CreateOnScreenIfConnected(int screen) {
-    if (sub_02037474()) {
+    if (Comm_IsActive()) {
         if (Comm_CountConnected() > 1 || CommState_IsWifi() != 0) {
             WirelessStatusIcon_CreateOnScreen(screen);
         }

@@ -85,11 +85,11 @@ extern const CommCommandBytes _020F692C;
 extern const CommCommandBytes _020F6955;
 extern const CommCommand gCommBaseCommands[COMM_BASE_COMMAND_COUNT];
 
-void sub_02037974(void);
+void Comm_SetLinkError(void);
 int Comm_GetLocalNetId(void);
 int Comm_IsNetIdConnected(u16 netId);
-void sub_02037108(int command, int a1, int a2);
-BOOL sub_020376E0(int command, void *data);
+void Comm_SendParentCommand(int command, int a1, int a2);
+BOOL Comm_SendFixedCommand(int command, void *data);
 
 void ByteRing_Init(ByteRing *ring, u8 *data, u16 capacity);
 void ByteRing_Write(ByteRing *ring, const u8 *src, int count, int unused);
@@ -143,7 +143,7 @@ void ByteRing_Write(ByteRing *ring, const u8 *src, int count, int unused) {
     int pos;
     int i;
     if (ByteRing_GetWritableSize(ring) <= count) {
-        sub_02037974();
+        Comm_SetLinkError();
         return;
     }
     pos = *(volatile s16 *)&ring->write;
@@ -557,7 +557,7 @@ void Comm_CallCommandRecv(int netId, int command, int size, void *data) {
     } else {
         GF_ASSERT(gCommCommandTable != NULL);
         if (command > gCommCommandTable->count + COMM_BASE_COMMAND_COUNT) {
-            sub_02037974();
+            Comm_SetLinkError();
             return;
         }
         func = gCommCommandTable->commands[command - COMM_BASE_COMMAND_COUNT].recv;
@@ -579,12 +579,12 @@ u32 Comm_GetCommandSize(int command) {
     } else {
         GF_ASSERT(gCommCommandTable != NULL);
         if (gCommCommandTable == NULL) {
-            sub_02037974();
+            Comm_SetLinkError();
             return 0;
         }
         if (command > gCommCommandTable->count + COMM_BASE_COMMAND_COUNT) {
             GF_ASSERT(FALSE);
-            sub_02037974();
+            Comm_SetLinkError();
             return 0;
         }
         func = gCommCommandTable->commands[command - COMM_BASE_COMMAND_COUNT].getSize;
@@ -642,7 +642,7 @@ void CommCmd_RecvReady(int netId) {
                 return;
             }
         }
-        sub_02037108(14, 0, 0);
+        Comm_SendParentCommand(14, 0, 0);
     }
 }
 
@@ -651,7 +651,7 @@ void CommCmd_RecvShutdown(int netId, int size, void *data) {
     gCommCommandTable->count = 0;
     gCommCommandTable->context = NULL;
     gCommCommandTable->shutdown = 1;
-    sub_020376E0(15, data);
+    Comm_SendFixedCommand(15, data);
 }
 
 void CommCmd_RecvNotReady(int netId) {

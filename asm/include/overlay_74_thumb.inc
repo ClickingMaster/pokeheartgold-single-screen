@@ -241,9 +241,9 @@
 .public CommWireless_GetParentInfo
 .public CommWireless_SetCustomBeacon
 .public CommWireless_GetParentMail
-.public sub_02037088
+.public Comm_SendParentCommandNoCopy
 .public Comm_IsNetIdConnected
-.public sub_02037474
+.public Comm_IsActive
 .public Comm_GetLocalNetId
 .public CommRandom_Init
 .public LinkSync_StartSync

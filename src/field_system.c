@@ -19,7 +19,7 @@
 #include "overlay_manager.h"
 #include "poke_overlay.h"
 #include "system.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "comm_player_manager.h"
 #include "player_avatar_movement.h"
 #include "unk_02092BB8.h"
@@ -231,7 +231,7 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
                 movementAllowed = FALSE;
             }
         }
-        sub_020573F0(fieldSystem, movementAllowed);
+        CommPlayerManager_FieldUpdate(fieldSystem, movementAllowed);
         break;
     case 2:
         if (movementAllowed && FieldInput_Process_UnionRoom(&fieldInput, fieldSystem) != TRUE) {
@@ -286,12 +286,12 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
 
 void FieldSystem_PauseProcesses() {
     sFieldSysPtr->processManager->isPaused = TRUE;
-    sub_02037504();
+    Comm_DisableKeySync();
 }
 
 void FieldSystem_ResumeProcesses() {
     sFieldSysPtr->processManager->isPaused = FALSE;
-    sub_020374E4();
+    Comm_EnableKeySync();
 }
 
 int sub_0203E324() {

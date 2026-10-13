@@ -24,7 +24,7 @@
 #include "sprite_resource.h"
 #include "oam_manager.h"
 #include "communication_player_state.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
@@ -1039,7 +1039,7 @@ void ov44_0223438C(UnkStruct_ov44_02235340 *arg0) {
     int sp0 = 0;
     if (CommPlayerInfo_Exists() != 0) {
         int sp_count = CommPlayerInfo_CountAccepted();
-        if ((CommPlayerInfo_HasNewEntries() != 0) && (sub_02037824(5) == 0)) {
+        if ((CommPlayerInfo_HasNewEntries() != 0) && (Comm_ParentQueueHasCommand(5) == 0)) {
             sp0 = 1;
         }
         int var_r4 = 0;

@@ -179,7 +179,7 @@
 .public GameStats_AddScore
 .public Wireless_GetConnectedBitmap
 .public CommPlayerInfo_GetProfile
-.public sub_02036FD8
+.public Comm_SendCommandNoCopy
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
 .public LinkSync_StartSync

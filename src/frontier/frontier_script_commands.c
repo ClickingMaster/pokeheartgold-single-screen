@@ -17,7 +17,7 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 
 // Script variables: 0x8000-0x8007 are the task's own, 0x8008-0x800F the frontier system's (shared by all tasks),
 // 0x8010-0x8013 the task's data words. Other values are literals.
@@ -520,7 +520,7 @@ BOOL FrtCmd_034(FrontierScriptContext *ctx) {
             gfx.id = Frontier_GetPlayerSpriteId(Save_PlayerData_GetProfile(args->saveData));
             FrontierMap_AddObjectGfx(map, &gfx);
         } else if (gfx.id == FRONTIER_ID_LINK_MONS) {
-            if (sub_02037474() == TRUE) {
+            if (Comm_IsActive() == TRUE) {
                 int count = Comm_CountConnected();
                 int i;
                 for (i = 0; i < count; i++) {

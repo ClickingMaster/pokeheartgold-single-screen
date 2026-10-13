@@ -61,7 +61,7 @@
 #include "friend_roster.h"
 #include "frontier_save_access.h"
 #include "communication_player_state.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
@@ -256,7 +256,7 @@ BOOL FriendRoster_IsFriendValid(FriendRoster *roster, int index);
 void FriendRoster_RemoveFriend(FriendRoster *roster, int index);
 void FrontierSave_DeleteRow(FrontierSave *frontier, int row);
 void CommPlayerInfo_RecordTrades(SaveData *saveData, int a1);
-int sub_02036FD8(int command, void *data, int size);
+int Comm_SendCommandNoCopy(int command, void *data, int size);
 void sub_020399FC(enum HeapID heapID, BgConfig *bgConfig);
 void Comm_InitSyncedSave(s32 *a0);
 s32 Comm_SyncedSave(SaveData *saveData, s32 a1, s32 *a2);
@@ -1565,7 +1565,7 @@ void *WirelessTradeSelectMon_GetPartyChunk(void *party, u32 chunk) {
 
 void WirelessTradeSelectMon_SendPartyChunk(u32 netId, void *party, u32 chunk) {
     if (Comm_IsNetIdConnected((u16)netId)) {
-        sub_02036FD8(WIRELESS_TRADE_CMD_PARTY_CHUNK, WirelessTradeSelectMon_GetPartyChunk(party, chunk), WIRELESS_TRADE_PARTY_CHUNK_SIZE);
+        Comm_SendCommandNoCopy(WIRELESS_TRADE_CMD_PARTY_CHUNK, WirelessTradeSelectMon_GetPartyChunk(party, chunk), WIRELESS_TRADE_PARTY_CHUNK_SIZE);
     }
 }
 
@@ -1589,11 +1589,11 @@ s32 WirelessTradeSelectMon_SendPalPad(PlayerProfile *profile, SavePalPad *palPad
         packet->unk_68[i] = palPad->filler_14[0];
         packet->filler_78[i] = palPad->filler_14[2];
     }
-    return sub_02036FD8(WIRELESS_TRADE_CMD_PALPAD, packet, sizeof(*packet));
+    return Comm_SendCommandNoCopy(WIRELESS_TRADE_CMD_PALPAD, packet, sizeof(*packet));
 }
 
 int WirelessTradeSelectMon_SendChatot(SOUND_CHATOT *chatot) {
-    return sub_02036FD8(WIRELESS_TRADE_CMD_CHATOT, chatot, 1000);
+    return Comm_SendCommandNoCopy(WIRELESS_TRADE_CMD_CHATOT, chatot, 1000);
 }
 
 s32 WirelessTradeSelectMon_HandleKeys(WirelessTradeSelectMon *work) {

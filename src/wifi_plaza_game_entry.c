@@ -10,7 +10,7 @@
 #include "link_synchronization.h"
 #include "sound_playback.h"
 #include "system.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 
 // Communication calls without a public declaration
 void CommPlayerInfo_SetProfile(void *profile);

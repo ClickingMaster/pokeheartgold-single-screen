@@ -171,7 +171,7 @@
 .public Options_GetFrame
 .public CommPlayerInfo_GetProfile
 .public Comm_SendCommand
-.public sub_02037474
+.public Comm_IsActive
 .public Comm_GetLocalNetId
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
@@ -190,7 +190,7 @@
 .public SaveArray_IsNatDexEnabled
 .public PokemonSummary_SetPages
 .public PokemonSummaryArgs_SetPlayer
-.public sub_02096910
+.public FrontierLink_RegisterCommands
 .public NNS_G2dSetupSoftwareSpriteCamera
 .public NNS_G2dInitOamManagerModule
 .public NNS_G2dGetImageLocation

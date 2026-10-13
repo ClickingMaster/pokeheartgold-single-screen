@@ -42,11 +42,11 @@
 #include "grid_input_handler.h"
 #include "swap_3d_buffers.h"
 #include "communication_player_state.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "wireless_status_icon.h"
 #include "unk_02088288.h"
-#include "unk_02096910.h"
+#include "battle_frontier_communication.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
@@ -494,7 +494,7 @@ BOOL BattleFactoryApp_Init(OverlayManager *man, int *state) {
     BattleFactoryApp_InitGraphics(app);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
-        sub_02096910(app);
+        FrontierLink_RegisterCommands(app);
     }
     *state = 0;
     return TRUE;
@@ -2297,7 +2297,7 @@ void BattleFactoryApp_InitGraphics(BattleFactoryApp *app) {
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_12_OFFSET, HEAP_ID_100);
     LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_12_OFFSET, HEAP_ID_100);
     app->pokepicManager = PokepicManager_Create(HEAP_ID_100);
-    if (sub_02037474()) {
+    if (Comm_IsActive()) {
         G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN, GX_OBJVRAMMODE_CHAR_1D_32K);
         G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
         WirelessStatusIcon_Create();

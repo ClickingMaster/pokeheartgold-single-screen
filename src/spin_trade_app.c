@@ -39,7 +39,7 @@
 #include "touchpad.h"
 #include "swap_3d_buffers.h"
 #include "communication_player_state.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
@@ -429,7 +429,7 @@ extern const int gSpinTradeHoverOffsets[];
 void Sys_SetSoftResetDisableFlag(int a0);
 void Sys_ClearSoftResetDisableFlag(int a0);
 int GetUserFrameGfx2PaletteMember(int frame);
-BOOL sub_02036FD8(int command, void *data, int size);
+BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 void CommState_SetMaxEntries(int count);
 void Comm_InitSyncedSave(s32 *state);
 BOOL Comm_SyncedSave(SaveData *saveData, int a1, s32 *state);
@@ -868,7 +868,7 @@ BOOL SpinTrade_State_SendTradeSlot(SpinTradeApp *app) {
 }
 
 BOOL SpinTrade_State_SendParty(SpinTradeApp *app) {
-    if (sub_02036FD8(0x83, app->party, sizeof(PartyCore))) {
+    if (Comm_SendCommandNoCopy(0x83, app->party, sizeof(PartyCore))) {
         app->state = SPIN_TRADE_STATE_CHECK_EGGS;
     }
     return FALSE;

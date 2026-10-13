@@ -130,7 +130,7 @@
 .public CommWireless_Exists
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
-.public sub_020378AC
+.public Comm_GetBattleSlot
 .public sub_02037930
 .public LinkSync_StartSync
 .public LinkSync_IsSynced

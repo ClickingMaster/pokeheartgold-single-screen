@@ -8,18 +8,18 @@
 .public PlayerProfile_GetVersion
 .public CommPlayerInfo_ClearPlayer
 .public CommPlayerInfo_GetProfile
-.public sub_02037108
-.public sub_02037184
+.public Comm_SendParentCommand
+.public Comm_SendFixedParentCommand
 .public Comm_IsNetIdConnected
-.public sub_02037474
-.public sub_02037498
-.public sub_020374AC
-.public sub_020374C0
-.public sub_020374E4
+.public Comm_IsActive
+.public Comm_SetLocalMoveSpeed
+.public Comm_GetMoveSpeed
+.public Comm_TakeDirectionKeys
+.public Comm_EnableKeySync
 .public Comm_GetLocalNetId
-.public sub_020376E0
-.public sub_0203774C
-.public sub_02037894
+.public Comm_SendFixedCommand
+.public Comm_GetMaxPlayers
+.public Comm_SetBattleSlot
 .public CommState_GetLinkMode
 .public Field_GetNumObjectEvents
 .public Field_GetObjectEvents
@@ -28,13 +28,13 @@
 .public FieldSystem_CheckTileCollision
 .public CommPlayerManager_Init
 .public CommPlayerManager_RemoveAllAvatars
-.public sub_02056E60
+.public CommPlayerManager_ResyncLocalPlayer
 .public CommPlayerManager_Delete
 .public CommPlayerManager_IsInitialized
 .public CommPlayerManager_SendLocalPosition
 .public CommPlayerManager_sizeof
-.public sub_020573AC
-.public sub_020573F0
+.public CommPlayerManager_ReceiveMoveEnabled
+.public CommPlayerManager_FieldUpdate
 .public CommPlayerManager_ReceivePosition
 .public CommPlayerManager_ReceiveRemovePlayer
 .public CommPlayerManager_GetPositionSize
@@ -45,15 +45,15 @@
 .public CommPlayerManager_GetPlayerZ
 .public CommPlayerManager_GetPlayerFrontX
 .public CommPlayerManager_GetPlayerFrontZ
-.public sub_02057C94
+.public CommPlayerManager_AssignBattleSlots
 .public sub_02057D50
-.public sub_02057E08
-.public sub_02057E50
+.public CommPlayerManager_FaceRoomCenter
+.public CommPlayerManager_StepAllPlayersBack
 .public CommPlayerManager_GetMoveTimer
 .public CommPlayerManager_SetLocalFacing
-.public sub_02057F58
-.public sub_02057F70
-.public sub_02057F80
+.public CommPlayerManager_PauseField
+.public CommPlayerManager_ResumeField
+.public CommPlayerManager_ResumeFieldOnce
 .public CommPlayerManager_ForcePosition
 .public PlayerAvatar_CreateWithParams
 .public PlayerAvatar_FreeToHeap
@@ -87,15 +87,15 @@
 	.public CommPlayerManager_InitLocalPlayer
 	.public CommPlayerManager_SendPosition
 	.public CommPlayerManager_SendHostPosition
-	.public sub_020570C8
+	.public CommPlayerManager_SendPositionWhenStopped
 	.public CommPlayerManager_SendChangedHostPositions
 	.public CommPlayerManager_CreateAvatar
 	.public CommPlayerManager_RemovePlayer
-	.public sub_020572AC
+	.public CommPlayerManager_UpdateLocalMoveSpeed
 	.public CommPlayerManager_Task
 	.public CommPlayerManager_UpdateAvatars
-	.public sub_02057358
-	.public sub_02057384
+	.public CommPlayerManager_SendMoveEnabled
+	.public CommPlayerManager_SetMoveEnabled
 	.public CommPlayerManager_KeysToDirection
 	.public CommPlayerManager_IsObjectEventAt
 	.public CommPlayerManager_IsPositionBlocked
@@ -106,7 +106,7 @@
 	.public CommPlayerManager_GetHostZ
 	.public CommPlayerManager_GetHostFrontX
 	.public CommPlayerManager_GetHostFrontZ
-	.public sub_02057C5C
+	.public CommPlayerManager_SetPlayerMoveEnabled
 	.public sub_02057D74
 	.public CommPlayerManager_GetOppositeDirection
 	.public CommPlayerManager_SetLocalMoveDelay

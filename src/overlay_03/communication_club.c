@@ -14,7 +14,7 @@
 #include "sound_playback.h"
 #include "communication_player_state.h"
 #include "comm_wireless.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "communication_club_link.h"
@@ -399,7 +399,7 @@ static void ov03_02254420() {
 static void ov03_02254500(void *arg0, CommClubManager *commClubManager) {
     ov03_022543AC(commClubManager);
     if (FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem) == TRUE) {
-        if (sub_02037700()) {
+        if (Comm_HasLinkError()) {
             sCommClubManager->retCode = 3;
             ov03_02254B44();
             ov03_0225574C(arg0, commClubManager);
@@ -456,7 +456,7 @@ static void ov03_02254600(CommClubManager *commClubManager_unused) {
 }
 
 static void ov03_02254660(void *arg0, CommClubManager *commClubManager) {
-    if (sub_02037700()) {
+    if (Comm_HasLinkError()) {
         ov03_0225574C(arg0, commClubManager);
         ov03_02253E20(0, FALSE);
         ov03_02255ADC(commClubManager);
@@ -470,7 +470,7 @@ static void ov03_02254660(void *arg0, CommClubManager *commClubManager) {
 }
 
 static void ov03_022546B0(void *arg0, CommClubManager *commClubManager) {
-    if (sub_02037700()) {
+    if (Comm_HasLinkError()) {
         ov03_0225574C(arg0, commClubManager);
         ov03_02253E20(0, FALSE);
         ov03_02255ADC(commClubManager);
@@ -502,7 +502,7 @@ static void ov03_022546B0(void *arg0, CommClubManager *commClubManager) {
 }
 
 static BOOL ov03_022547D8(void *arg0, CommClubManager *commClubManager) {
-    if (sub_02037700()) {
+    if (Comm_HasLinkError()) {
         ov03_0225574C(arg0, commClubManager);
         ov03_02253E20(0, FALSE);
         ov03_02255ADC(commClubManager);
@@ -842,7 +842,7 @@ static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
         ov03_02254B4C(&ov03_02255714);
         return;
     }
-    if (sub_02037700()) {
+    if (Comm_HasLinkError()) {
         ov03_02254B44();
         ov03_0225574C(arg0, commClubManager);
         sCommClubManager->retCode = 3;
@@ -952,7 +952,7 @@ static void ov03_02255078(void *arg0, CommClubManager *commClubManager) {
             ov03_02253E20(0, FALSE);
             ov03_02254B4C(&ov03_022552C8);
         }
-    } else if (sub_02037700() || ov03_02255C80()) {
+    } else if (Comm_HasLinkError() || ov03_02255C80()) {
         ov03_02255CE4(commClubManager);
         CommPlayerInfo_ClearPlayer(commClubManager->unk95);
         ov03_02253E20(0, FALSE);
@@ -1102,7 +1102,7 @@ static void ov03_02255404(void *arg0, CommClubManager *commClubManager) {
     }
 
     if (ov03_02255CD0(commClubManager)) {
-        if (sub_02037700() || commClubManager->connectedCount != Comm_CountConnected()) {
+        if (Comm_HasLinkError() || commClubManager->connectedCount != Comm_CountConnected()) {
             ov03_02255CE4(commClubManager);
             ov03_02254B4C(&ov03_022554E0);
         } else {
@@ -1266,7 +1266,7 @@ static void ov03_0225562C(void *arg0, CommClubManager *commClubManager) {
     }
 
     if (ov03_02255CD0(commClubManager)) {
-        if (sub_02037700()) {
+        if (Comm_HasLinkError()) {
             ov03_02255CE4(commClubManager);
             ov03_02254BEC();
             ov03_02254B4C(&ov03_0225530C);
@@ -1284,7 +1284,7 @@ static void ov03_0225562C(void *arg0, CommClubManager *commClubManager) {
 }
 
 static void ov03_022556BC(void *arg0, CommClubManager *commClubManager) {
-    if (sub_02037700() || commClubManager->connectedCount != Comm_CountConnected()) {
+    if (Comm_HasLinkError() || commClubManager->connectedCount != Comm_CountConnected()) {
         ov03_02254B4C(&ov03_022554E0);
     } else {
         ov03_02254C9C(commClubManager);
@@ -1344,7 +1344,7 @@ static void ov03_02255804(CommClubManager *commClubManager) {
 static void ov03_02255860(u32 arg0_unused, CommClubManager *commClubManager) {
     if (Comm_GetLocalNetId() == FALSE && commClubManager->connectedCount != Comm_CountConnected()) {
         ov03_02254B4C(&ov03_02255A00);
-    } else if (ov03_02255C80() || sub_02037700()) {
+    } else if (ov03_02255C80() || Comm_HasLinkError()) {
         ov03_02254B4C(&ov03_02255A00);
     } else if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
         LinkSync_StartSync(10);
@@ -1355,7 +1355,7 @@ static void ov03_02255860(u32 arg0_unused, CommClubManager *commClubManager) {
 static void ov03_022558C4(void *task, CommClubManager *commClubManager) {
     if (Comm_GetLocalNetId() == 0 && commClubManager->connectedCount != Comm_CountConnected()) {
         ov03_02254B4C(&ov03_02255A00);
-    } else if (ov03_02255C80() || sub_02037700()) {
+    } else if (ov03_02255C80() || Comm_HasLinkError()) {
         ov03_02254B4C(&ov03_02255A00);
         return;
     } else if (Comm_IsNetIdConnected(0) == 0) {
@@ -1486,11 +1486,11 @@ static void ov03_02255B44(CommClubManager *commClubManager_unused) {
 }
 
 static int ov03_02255B70() {
-    return sub_0203775C(sCommClubManager->commType);
+    return Comm_GetMinPlayers(sCommClubManager->commType);
 }
 
 static int ov03_02255B84() {
-    return sub_0203774C(sCommClubManager->commType);
+    return Comm_GetMaxPlayers(sCommClubManager->commType);
 }
 
 static int ov03_02255B98() {

@@ -483,7 +483,7 @@ BOOL PokeathlonCourseObject_IsDrawn(PokeathlonCourseMonObject *object);
 u32 ApricornJuiceRecord_sizeof(void);
 ApricornRecord *ApricornRecord_New(SaveApricornBox *box, PlayerProfile *profile, u32 value, enum HeapID heapId);
 void ApricornBox_StoreJuiceRecords(SaveApricornBox *box, ApricornRecord *records, int count, int skip);
-BOOL sub_02036FD8(int command, void *data, int size);
+BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 
 // pokeathlon.h declares PokeathlonCourseLink_SendCommand as void; it returns whether the command was sent.
 #define PokeathlonCourse_TrySendCommand(cmd, data, size, link) (((BOOL(*)(int, void *, void *, int))PokeathlonCourseLink_SendCommand)(cmd, data, size, link))

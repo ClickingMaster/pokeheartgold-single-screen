@@ -25,11 +25,11 @@ typedef struct FrontierLinkLobbyGlobals {
 } FrontierLinkLobbyGlobals;
 
 // Link messages (battle_frontier_communication.c).
-extern BOOL sub_02096A34(FrontierLinkLobby *lobby);
-extern BOOL sub_02096AAC(FrontierLinkLobby *lobby, u16 choice);
-extern BOOL sub_02096AF4(FrontierLinkLobby *lobby, u16 first, u16 second);
-extern BOOL sub_02096BF8(FrontierLinkLobby *lobby, u16 value);
-extern BOOL sub_02096C40(FrontierLinkLobby *lobby, u16 value);
+extern BOOL FrontierLinkLobby_SendFacility(FrontierLinkLobby *lobby);
+extern BOOL FrontierLinkLobby_SendChoice(FrontierLinkLobby *lobby, u16 choice);
+extern BOOL FrontierLinkLobby_SendParty(FrontierLinkLobby *lobby, u16 first, u16 second);
+extern BOOL FrontierLinkLobby_SendValue74(FrontierLinkLobby *lobby, u16 value);
+extern BOOL FrontierLinkLobby_SendValue71(FrontierLinkLobby *lobby, u16 value);
 extern const u8 ov80_0223C040[];
 
 void FrontierLinkLobby_New(SaveData *saveData);
@@ -56,17 +56,17 @@ void FrontierLinkLobby_Free(FrontierLinkLobby *lobby) {
 BOOL FrontierLinkLobby_Send(FrontierLinkLobby *lobby, int kind, u16 a, u16 b) {
     switch (kind) {
     case LINK_LOBBY_SEND_FACILITY:
-        return sub_02096A34(lobby);
+        return FrontierLinkLobby_SendFacility(lobby);
     case LINK_LOBBY_SEND_CHOICE:
-        return sub_02096AAC(lobby, a);
+        return FrontierLinkLobby_SendChoice(lobby, a);
     case LINK_LOBBY_SEND_PARTY:
-        return sub_02096AF4(lobby, a, b);
+        return FrontierLinkLobby_SendParty(lobby, a, b);
     case 3:
         break;
     case LINK_LOBBY_SEND_VALUE74:
-        return sub_02096BF8(lobby, a);
+        return FrontierLinkLobby_SendValue74(lobby, a);
     case LINK_LOBBY_SEND_VALUE71:
-        return sub_02096C40(lobby, a);
+        return FrontierLinkLobby_SendValue71(lobby, a);
     }
 }
 

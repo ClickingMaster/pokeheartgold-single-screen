@@ -19,7 +19,7 @@
 #include "party.h"
 #include "pokemon.h"
 #include "sys_task_api.h"
-#include "unk_02096910.h"
+#include "battle_frontier_communication.h"
 
 // Script commands of the Battle Factory (BattleFactoryData, frontier/battle_factory_data.h).
 
@@ -276,7 +276,7 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         *var = data->unk_57D;
         break;
     case 27:
-        sub_02096910(data);
+        FrontierLink_RegisterCommands(data);
         break;
     case 28:
         *var = BattleFactory_IsMultiType(data->type);

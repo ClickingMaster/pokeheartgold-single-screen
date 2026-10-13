@@ -5,9 +5,9 @@
 #include "pokemon.h"
 #include "frontier_save_access.h"
 #include "communication_command.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 
-extern const u32 _02108594[];
+extern const u32 gFrontierLinkCommands[];
 typedef struct CommDataBits {
     u8 pad[0x10];
     u8 low : 3;
@@ -15,28 +15,28 @@ typedef struct CommDataBits {
     u8 mid : 1;
     u8 high : 3;
 } CommDataBits;
-void sub_02096910(void *data);
-void sub_02096924(int sender, int unused, const u16 *src, u8 *data);
-BOOL sub_02096998(u8 *data);
-void sub_020969C4(int sender, int unused, const void *src, u8 *data);
+void FrontierLink_RegisterCommands(void *data);
+void BattleTowerLink_ReceivePartnerInfo(int sender, int unused, const u16 *src, u8 *data);
+BOOL BattleTowerLink_SendTrainers(u8 *data);
+void BattleTowerLink_ReceiveTrainers(int sender, int unused, const void *src, u8 *data);
 void sub_020969F8(int sender, int unused, const u16 *src, u8 *data);
-BOOL sub_02096A34(u8 *data);
-void sub_02096A7C(int sender, int unused, const u16 *src, u8 *data);
-BOOL sub_02096AAC(u8 *data, u16 value);
-void sub_02096ACC(int sender, int unused, const u16 *src, u8 *data);
-BOOL sub_02096AF4(u8 *data, u8 first, u8 second);
-void sub_02096BB8(int sender, int unused, const u16 *src, u8 *data);
-BOOL sub_02096BF8(u8 *data, u16 value);
-void sub_02096C18(int sender, int unused, const u16 *src, u8 *data);
-BOOL sub_02096C40(u8 *data, u16 value);
-void sub_02096C60(int sender, int unused, const u16 *src, u8 *data);
+BOOL FrontierLinkLobby_SendFacility(u8 *data);
+void FrontierLinkLobby_ReceiveFacility(int sender, int unused, const u16 *src, u8 *data);
+BOOL FrontierLinkLobby_SendChoice(u8 *data, u16 value);
+void FrontierLinkLobby_ReceiveChoice(int sender, int unused, const u16 *src, u8 *data);
+BOOL FrontierLinkLobby_SendParty(u8 *data, u8 first, u8 second);
+void FrontierLinkLobby_ReceiveParty(int sender, int unused, const u16 *src, u8 *data);
+BOOL FrontierLinkLobby_SendValue74(u8 *data, u16 value);
+void FrontierLinkLobby_ReceiveValue74(int sender, int unused, const u16 *src, u8 *data);
+BOOL FrontierLinkLobby_SendValue71(u8 *data, u16 value);
+void FrontierLinkLobby_ReceiveValue71(int sender, int unused, const u16 *src, u8 *data);
 int ov80_022385D8(int value);
 
-void sub_02096910(void *data) {
-    Comm_RegisterCommandTable(_02108594, 52, data);
+void FrontierLink_RegisterCommands(void *data) {
+    Comm_RegisterCommandTable(gFrontierLinkCommands, 52, data);
 }
 
-void sub_02096924(int sender, int unused, const u16 *src, u8 *data) {
+void BattleTowerLink_ReceivePartnerInfo(int sender, int unused, const u16 *src, u8 *data) {
     u16 result = 0;
     data[0x8D4]++;
     if (sender != Comm_GetLocalNetId()) {
@@ -55,7 +55,7 @@ void sub_02096924(int sender, int unused, const u16 *src, u8 *data) {
     }
 }
 
-BOOL sub_02096998(u8 *data) {
+BOOL BattleTowerLink_SendTrainers(u8 *data) {
     MI_CpuCopy8(data + 0x3E, data + 0x83E, 0x1C);
     if (Comm_SendCommand(0x3F, data + 0x83E, 0x1C) == 1) {
         return TRUE;
@@ -63,7 +63,7 @@ BOOL sub_02096998(u8 *data) {
     return FALSE;
 }
 
-void sub_020969C4(int sender, int unused, const void *src, u8 *data) {
+void BattleTowerLink_ReceiveTrainers(int sender, int unused, const void *src, u8 *data) {
     data[0x8D4]++;
     if (sender != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         MI_CpuCopy8(src, data + 0x3E, 0x1C);
@@ -80,7 +80,7 @@ void sub_020969F8(int sender, int unused, const u16 *src, u8 *data) {
     }
 }
 
-BOOL sub_02096A34(u8 *data) {
+BOOL FrontierLinkLobby_SendFacility(u8 *data) {
     int stat;
     FrontierSave *frontier;
     *(u16 *)(data + 8) = data[0xA0];
@@ -93,7 +93,7 @@ BOOL sub_02096A34(u8 *data) {
     return FALSE;
 }
 
-void sub_02096A7C(int sender, int unused, const u16 *src, u8 *data) {
+void FrontierLinkLobby_ReceiveFacility(int sender, int unused, const u16 *src, u8 *data) {
     data[0x6F]++;
     if (sender != Comm_GetLocalNetId()) {
         data[0x6E] = src[0];
@@ -101,7 +101,7 @@ void sub_02096A7C(int sender, int unused, const u16 *src, u8 *data) {
     }
 }
 
-BOOL sub_02096AAC(u8 *data, u16 value) {
+BOOL FrontierLinkLobby_SendChoice(u8 *data, u16 value) {
     *(u16 *)(data + 8) = value;
     if (Comm_SendCommand(0x3A, data + 8, 0x28) == 1) {
         return TRUE;
@@ -109,14 +109,14 @@ BOOL sub_02096AAC(u8 *data, u16 value) {
     return FALSE;
 }
 
-void sub_02096ACC(int sender, int unused, const u16 *src, u8 *data) {
+void FrontierLinkLobby_ReceiveChoice(int sender, int unused, const u16 *src, u8 *data) {
     data[0x6F]++;
     if (sender != Comm_GetLocalNetId()) {
         data[0x59] = src[0];
     }
 }
 
-BOOL sub_02096AF4(u8 *data, u8 first, u8 second) {
+BOOL FrontierLinkLobby_SendParty(u8 *data, u8 first, u8 second) {
     Party *party = SaveArray_Party_Get(*(SaveData **)data);
     Pokemon *mon;
     data[0x6A] = first;
@@ -144,7 +144,7 @@ BOOL sub_02096AF4(u8 *data, u8 first, u8 second) {
     return FALSE;
 }
 
-void sub_02096BB8(int sender, int unused, const u16 *src, u8 *data) {
+void FrontierLinkLobby_ReceiveParty(int sender, int unused, const u16 *src, u8 *data) {
     data[0x6F]++;
     if (sender != Comm_GetLocalNetId()) {
         *(u16 *)(data + 0x86) = src[0];
@@ -154,7 +154,7 @@ void sub_02096BB8(int sender, int unused, const u16 *src, u8 *data) {
     }
 }
 
-BOOL sub_02096BF8(u8 *data, u16 value) {
+BOOL FrontierLinkLobby_SendValue74(u8 *data, u16 value) {
     *(u16 *)(data + 8) = value;
     if (Comm_SendCommand(0x3C, data + 8, 0x28) == 1) {
         return TRUE;
@@ -162,14 +162,14 @@ BOOL sub_02096BF8(u8 *data, u16 value) {
     return FALSE;
 }
 
-void sub_02096C18(int sender, int unused, const u16 *src, u8 *data) {
+void FrontierLinkLobby_ReceiveValue74(int sender, int unused, const u16 *src, u8 *data) {
     data[0x6F]++;
     if (sender != Comm_GetLocalNetId()) {
         *(u16 *)(data + 0x74) = src[0];
     }
 }
 
-BOOL sub_02096C40(u8 *data, u16 value) {
+BOOL FrontierLinkLobby_SendValue71(u8 *data, u16 value) {
     *(u16 *)(data + 8) = value;
     if (Comm_SendCommand(0x3D, data + 8, 0x28) == 1) {
         return TRUE;
@@ -177,7 +177,7 @@ BOOL sub_02096C40(u8 *data, u16 value) {
     return FALSE;
 }
 
-void sub_02096C60(int sender, int unused, const u16 *src, u8 *data) {
+void FrontierLinkLobby_ReceiveValue71(int sender, int unused, const u16 *src, u8 *data) {
     data[0x6F]++;
     if (sender != Comm_GetLocalNetId()) {
         data[0x71] = src[0];

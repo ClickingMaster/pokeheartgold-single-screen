@@ -27,7 +27,7 @@
 #include "sys_task_api.h"
 #include "unk_02031B0C.h"
 #include "communication_command.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "vram_transfer_manager.h"
 
 #pragma force_active on
@@ -2010,7 +2010,7 @@ void PokeathlonCourseLink_SendCommand(int a0, void *a1, void *a2, int a3) {
 
 BOOL PokeathlonCourseLink_SendLargeCommand(int cmd, void *data, int size, PokeathlonCourseLink *link) {
     if (link->isLink == 1) {
-        return sub_02036FD8(cmd, data, size);
+        return Comm_SendCommandNoCopy(cmd, data, size);
     } else {
         PokeathlonCourseCmdQueue_AddLarge(link->queue, cmd, data, size);
     }

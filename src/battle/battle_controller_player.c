@@ -20,7 +20,7 @@
 #include "heap.h"
 #include "screen_fade.h"
 #include "sound.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 
 static void BattleControllerPlayer_GetBattleMon(BattleSystem *battleSystem, BattleContext *ctx);
 static void BattleControllerPlayer_StartEncounter(BattleSystem *battleSystem, BattleContext *ctx);
@@ -3404,7 +3404,7 @@ static void BattleControllerPlayer_AfterBattle(BattleSystem *battleSystem, Battl
     }
 
     if (battleType & BATTLE_TYPE_LINK) {
-        sub_020376EC(22);
+        Comm_SendEmptyCommand(22);
     }
 
     ctx->command = CONTROLLER_COMMAND_45;

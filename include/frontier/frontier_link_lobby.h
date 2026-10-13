@@ -10,7 +10,7 @@
 
 // What the linked players exchange in the frontier lobby before a link challenge: the facility, the streak and the
 // chosen party (FrtCmd_LinkLobbyAlloc, Frontier_GetData while the lobby scripts run). Its link command handlers
-// (sub_02096A34 and on) fill the partner fields and count the received messages in receiveCount.
+// (FrontierLinkLobby_SendFacility and on) fill the partner fields and count the received messages in receiveCount.
 typedef struct FrontierLinkLobby {
     SaveData *saveData;                          // 0x00
     u8 filler_04[4];                             // 0x04

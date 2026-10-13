@@ -9,7 +9,7 @@
 #include "string_util.h"
 #include "sys_task.h"
 #include "communication_command.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 typedef struct BattleLinkWork {
     BattleSetup *setup;
@@ -32,8 +32,8 @@ typedef struct BattleLinkHeader {
     u16 size;
 } BattleLinkHeader;
 extern const u32 gBattleLinkCommands[];
-int sub_02037190(void);
-BOOL sub_02036FD8(int command, void *data, int size);
+int Comm_GetSendBufferFreeSpace(void);
+BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 void BattleRecord_SetAiFlags(int sender, u32 flags);
 BOOL BattleController_RecvLinkData(BattleSystem *battle, u8 *data);
 void BattleLink_Start(BattleSystem *battle);

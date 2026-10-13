@@ -17,7 +17,7 @@
 #include "player_data.h"
 #include "trainer_card_data.h"
 #include "union_room_avatar.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 
 // Union Room talk (ARM9 static 0x0205A44C-0x0205AC88): the part of the Union Room object (FieldSystem.unionRoom,
 // union_room.c) used while the player talks to another player: the link commands of the talk menu (choice,
@@ -47,12 +47,12 @@ typedef struct UnionRoomPeerRecord {
 } UnionRoomPeerRecord;
 
 // The Union Room object; only the fields used here.
-struct UnkStruct_02059E1C {
+struct UnionRoom {
     FieldSystem *fieldSystem;         // 0x000
     SaveData *saveData;               // 0x004
     PlayerProfile *profile;           // 0x008
     u8 unk00C[0x20 - 0x0C];           // 0x00C
-    u32 unk20;                        // 0x020
+    u32 connectRequest;               // 0x020
     u32 unk24;                        // 0x024
     u32 unk28;                        // 0x028
     u32 talkChoiceReceived;           // 0x02C: set by link command 0x67
@@ -81,15 +81,15 @@ void sub_020388E0(void);
 u32 CommPlayerInfo_GetCountry(int netId);
 u32 CommPlayerInfo_GetRegion(int netId);
 TrainerCardData *TrainerCardData_New(enum HeapID heapID);
-BOOL sub_02036FD8(int command, void *data, int size);
+BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 
-int UnionRoom_TrySendTalkCancel(struct UnkStruct_02059E1C *unionRoom, int ret);
+int UnionRoom_TrySendTalkCancel(struct UnionRoom *unionRoom, int ret);
 int UnionRoom_GetGroupOfMemberSlot(int slot);
-int UnionRoom_GetPlayerActivityMsg(struct UnkStruct_02059E1C *unionRoom, int slot);
+int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot);
 int sub_0205A730(int a0, int gender, MessageFormat *msgFmt);
 void UnionRoom_FillStatusMembers(UnionRoomStatus *status, int unused);
 void UnionRoomStatus_Init(UnionRoomStatus *status);
-void UnionRoom_ResetTalk(struct UnkStruct_02059E1C *unionRoom);
+void UnionRoom_ResetTalk(struct UnionRoom *unionRoom);
 
 // gender-indexed message ids
 extern const int _020FC7D4[2];
@@ -127,11 +127,11 @@ void UnionRoom_RecvTalkCancel(int netId, int size, u8 *data, FieldSystem *fieldS
     fieldSystem->unionRoom->partnerCancelled = 1;
 }
 
-BOOL UnionRoom_PartnerCancelled(struct UnkStruct_02059E1C *unionRoom) {
+BOOL UnionRoom_PartnerCancelled(struct UnionRoom *unionRoom) {
     return unionRoom->partnerCancelled;
 }
 
-int UnionRoom_TrySendTalkCancel(struct UnkStruct_02059E1C *unionRoom, int ret) {
+int UnionRoom_TrySendTalkCancel(struct UnionRoom *unionRoom, int ret) {
     if (unionRoom->talkReply == 0) {
         Comm_SendCommand(0x68, NULL, 0);
         return ret;
@@ -152,7 +152,7 @@ void UnionRoom_RecvBattleChoice(int netId, int size, u8 *data, FieldSystem *fiel
     fieldSystem->unionRoom->battleChoice[netId] = *data;
 }
 
-int UnionRoom_GetBattleCancel(struct UnkStruct_02059E1C *unionRoom) {
+int UnionRoom_GetBattleCancel(struct UnionRoom *unionRoom) {
     int netId = Comm_GetLocalNetId();
     if (unionRoom->battleChoice[netId] == 2) {
         return 1;
@@ -182,7 +182,7 @@ int UnionRoom_GetGroupOfMemberSlot(int slot) {
 
 #pragma force_active on
 
-int UnionRoom_GetPlayerActivityMsg(struct UnkStruct_02059E1C *unionRoom, int slot) {
+int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot) {
     int index, gender;
     UnionRoomPeerInfo *info;
     UnionRoomStatus *status;
@@ -272,7 +272,7 @@ int sub_0205A730(int a0, int gender, MessageFormat *msgFmt) {
     return UnionRoom_GetPartnerHometownMsg(msgFmt);
 }
 
-int UnionRoom_GetTalkMsg(struct UnkStruct_02059E1C *unionRoom, int objId, int kind, MessageFormat *msgFmt) {
+int UnionRoom_GetTalkMsg(struct UnionRoom *unionRoom, int objId, int kind, MessageFormat *msgFmt) {
     PlayerProfile *profile;
     int gender;
 
@@ -402,7 +402,7 @@ void UnionRoom_SetBeaconActivity(int activity) {
     CommWireless_RefreshBeacon();
 }
 
-int UnionRoom_GetOwnChatMessageMsg(struct UnkStruct_02059E1C *unionRoom, MessageFormat *msgFmt) {
+int UnionRoom_GetOwnChatMessageMsg(struct UnionRoom *unionRoom, MessageFormat *msgFmt) {
     int i;
     int count = 0;
     int msgNo;
@@ -446,12 +446,12 @@ void UnionRoomStatus_Init(UnionRoomStatus *status) {
     }
 }
 
-void UnionRoom_SetOwnChatMessage(struct UnkStruct_02059E1C *unionRoom, MailMessage *message) {
+void UnionRoom_SetOwnChatMessage(struct UnionRoom *unionRoom, MailMessage *message) {
     MailMsg_Copy(&unionRoom->ownChatMessage, message);
     unionRoom->ownChatMessageIsNew = 1;
 }
 
-MailMessage *UnionRoom_TakeOwnChatMessage(struct UnkStruct_02059E1C *unionRoom) {
+MailMessage *UnionRoom_TakeOwnChatMessage(struct UnionRoom *unionRoom) {
     if (unionRoom->ownChatMessageIsNew == 0) {
         return NULL;
     }
@@ -524,14 +524,14 @@ void UnionRoom_BroadcastChatMessage(MailMessage *message) {
     CommWireless_RefreshBeacon();
 }
 
-void UnionRoom_ResetTalkReplies(struct UnkStruct_02059E1C *unionRoom) {
+void UnionRoom_ResetTalkReplies(struct UnionRoom *unionRoom) {
     unionRoom->talkReply = 0;
     unionRoom->talkChoice = 0;
     unionRoom->partnerCancelled = 0;
 }
 
-void UnionRoom_ResetTalk(struct UnkStruct_02059E1C *unionRoom) {
-    unionRoom->unk20 = 0;
+void UnionRoom_ResetTalk(struct UnionRoom *unionRoom) {
+    unionRoom->connectRequest = 0;
     unionRoom->unk24 = 0;
     unionRoom->talkChoiceReceived = 0;
     unionRoom->talkReply = 0;
@@ -542,7 +542,7 @@ void UnionRoom_ResetTalk(struct UnkStruct_02059E1C *unionRoom) {
 }
 
 // Allocates the trainer cards to exchange and builds the player's own; returns the partner's receive buffer.
-TrainerCardData *UnionRoom_AllocTrainerCards(struct UnkStruct_02059E1C *unionRoom) {
+TrainerCardData *UnionRoom_AllocTrainerCards(struct UnionRoom *unionRoom) {
     int gender;
     int trainerClass;
     unionRoom->ownCard = TrainerCardData_New(HEAP_ID_DEFAULT);
@@ -554,12 +554,12 @@ TrainerCardData *UnionRoom_AllocTrainerCards(struct UnkStruct_02059E1C *unionRoo
     return unionRoom->cards[Comm_GetLocalNetId() ^ 1];
 }
 
-void UnionRoom_FreeTrainerCards(struct UnkStruct_02059E1C *unionRoom) {
+void UnionRoom_FreeTrainerCards(struct UnionRoom *unionRoom) {
     Heap_Free(unionRoom->cards[0]);
     Heap_Free(unionRoom->cards[1]);
     Heap_Free(unionRoom->ownCard);
 }
 
-BOOL UnionRoom_SendTrainerCard(struct UnkStruct_02059E1C *unionRoom) {
-    return sub_02036FD8(0x69, unionRoom->ownCard, sizeof(TrainerCardData));
+BOOL UnionRoom_SendTrainerCard(struct UnionRoom *unionRoom) {
+    return Comm_SendCommandNoCopy(0x69, unionRoom->ownCard, sizeof(TrainerCardData));
 }

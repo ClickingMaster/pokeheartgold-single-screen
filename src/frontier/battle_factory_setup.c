@@ -15,7 +15,7 @@
 #include "party.h"
 #include "player_data.h"
 #include "pokemon.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "use_item_on_mon.h"
 
 // Battle Factory trainers, sets and battles: the trainers of a round, the ranges of set ids their Pokemon and the

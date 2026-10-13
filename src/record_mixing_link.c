@@ -110,7 +110,7 @@ void RecordMixingLink_SendRecords(RecordMixingLinkWork *room, int unused) {
     }
     room->checksum = checksum;
     room->random = LCRandom();
-    sub_02036FD8(116, room->send, 0xbc0);
+    Comm_SendCommandNoCopy(116, room->send, 0xbc0);
 }
 
 u32 sub_0208FD7C(void) {

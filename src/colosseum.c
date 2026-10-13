@@ -23,19 +23,19 @@
 #include "system.h"
 #include "text.h"
 #include "union_room_internal.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "comm_state.h"
 #include "map_object_movement_commands.h"
 
 // Communication core and communication player manager functions, declared with the types their call sites were
 // matched against.
-BOOL sub_02037108(int command, void *data, int size);
-BOOL sub_02037088(int command, void *data, u32 size);
-BOOL sub_02036FD8(int command, void *data, u32 size);
+BOOL Comm_SendParentCommand(int command, void *data, int size);
+BOOL Comm_SendParentCommandNoCopy(int command, void *data, u32 size);
+BOOL Comm_SendCommandNoCopy(int command, void *data, u32 size);
 void CommState_SetSelectedOrder(u8 *selectedOrder);
-void sub_02056E60(void);
-void sub_02057E08(void);
-void sub_02057F70(void);
+void CommPlayerManager_ResyncLocalPlayer(void);
+void CommPlayerManager_FaceRoomCenter(void);
+void CommPlayerManager_ResumeField(void);
 int CommPlayerManager_GetPlayerX(int netId);
 int CommPlayerManager_GetPlayerZ(int netId);
 int CommPlayerManager_GetPlayerFrontX(void);
@@ -143,7 +143,7 @@ BOOL Colosseum_FinishSummary(ColosseumEntry *entry, FieldSystem *fieldSystem) {
 BOOL Colosseum_WaitFieldResumed(ColosseumEntry *entry) {
     if (FieldSystem_IsOverworldRestored(entry->fieldSystem) != 0) {
         FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_IN);
-        sub_02056E60();
+        CommPlayerManager_ResyncLocalPlayer();
         return TRUE;
     }
     return FALSE;
@@ -171,7 +171,7 @@ BOOL Task_ColosseumEntry(TaskManager *taskManager) {
 
         if (entry->timer == 0) {
             entry->state = 1;
-            sub_02057E08();
+            CommPlayerManager_FaceRoomCenter();
         }
         break;
     case 1:
@@ -216,7 +216,7 @@ BOOL Task_ColosseumEntry(TaskManager *taskManager) {
     case 5:
         Colosseum_FreeEntry(entry);
         Heap_Free(entry);
-        sub_02057F70();
+        CommPlayerManager_ResumeField();
         return TRUE;
     case 8:
         if (LinkSync_IsSynced(93)) {
@@ -241,7 +241,7 @@ BOOL Task_ColosseumEntry(TaskManager *taskManager) {
         }
         break;
     case 11:
-        sub_02057E08();
+        CommPlayerManager_FaceRoomCenter();
         ReadMsgDataIntoString(entry->msgData, msg_0014_00013, entry->message);
 
         entry->printerId = Colosseum_PrintMessage(entry, entry->message);
@@ -260,7 +260,7 @@ BOOL Task_ColosseumEntry(TaskManager *taskManager) {
         entry->timer--;
 
         if (entry->timer == 0) {
-            sub_02057E08();
+            CommPlayerManager_FaceRoomCenter();
             entry->state = 15;
         }
         break;
@@ -333,7 +333,7 @@ BOOL Task_ColosseumEntry(TaskManager *taskManager) {
         }
         break;
     case 24:
-        sub_02057E08();
+        CommPlayerManager_FaceRoomCenter();
         ReadMsgDataIntoString(entry->msgData, msg_0014_00019, entry->message);
         entry->printerId = Colosseum_PrintMessage(entry, entry->message);
         entry->state = 25;
@@ -652,9 +652,9 @@ BOOL Colosseum_SendMixBattleMons(ColosseumEntry *entry) {
         u8 *mons = entry->sentMons;
         u32 size = Colosseum_GetMixBattleMonsSize();
         if (entry->netId == 0) {
-            result = sub_02037088(106, mons, size);
+            result = Comm_SendParentCommandNoCopy(106, mons, size);
         } else {
-            result = sub_02036FD8(106, mons, size);
+            result = Comm_SendCommandNoCopy(106, mons, size);
         }
         if (result) {
             entry->exchangeFlags |= COLOSSEUM_EXCHANGE_SENT;
@@ -679,7 +679,7 @@ BOOL Colosseum_OpponentIsReady(ColosseumEntry *entry) {
 BOOL Colosseum_SendMixBattleChoice(ColosseumEntry *entry) {
     BOOL result;
     if (entry->netId == 0) {
-        result = sub_02037108(107, &entry->choice, 1);
+        result = Comm_SendParentCommand(107, &entry->choice, 1);
     } else {
         result = Comm_SendCommand(107, &entry->choice, 1);
     }
@@ -913,12 +913,12 @@ BOOL Task_ColosseumTrainerCard(TaskManager *taskManager) {
     case 6:
         if (!FieldSystem_IsOverworldRestored(fieldSystem)) {
             FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_IN);
-            sub_02056E60();
+            CommPlayerManager_ResyncLocalPlayer();
             env->state++;
         }
         break;
     case 7:
-        sub_02057F70();
+        CommPlayerManager_ResumeField();
         Heap_Free(env);
         return TRUE;
     default:

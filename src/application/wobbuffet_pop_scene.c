@@ -18,7 +18,7 @@
 #include "sprite_system.h"
 #include "text.h"
 #include "communication_command.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "wobbuffet_pop.h"
 
 // Data of this part of the overlay, still in asm.

@@ -40,7 +40,7 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "comm_wireless.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "comm_state.h"
 #include "communication_club_link.h"
 #include "use_item_on_mon.h"
@@ -85,7 +85,7 @@ typedef struct FrontierCameraPos {
 extern BOOL (*const ov80_0223B9EC[])(FrontierTransitionWork *work);
 
 void *Frontier_GetMap(void *frontierWork);
-BOOL sub_02096BF8(u8 *data, u16 value);
+BOOL FrontierLinkLobby_SendValue74(u8 *data, u16 value);
 BOOL BattleRecord_Load(SaveData *saveData, enum HeapID heapId, int *result, BattleSetup *setup, int index);
 void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u32 idx, u32 on);
 void *FrontierParticles_CreateSystem(void *manager, u32 index, u32 member, u32 camera);
@@ -1420,7 +1420,7 @@ BOOL FrontierScriptNative_WaitLinkSyncOrAbort(FrontierScriptContext *ctx) {
             } else if (*(u16 *)(data + 0x74) == 0) {
                 if (PlayerProfile_GetVersion(CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1)) == VERSION_PLATINUM) {
                     data[0x6F] = 0;
-                    sub_02096BF8(data, 0);
+                    FrontierLinkLobby_SendValue74(data, 0);
                 }
             }
         }

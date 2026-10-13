@@ -14,7 +14,7 @@
 #include "launch_application.h"
 #include "party.h"
 #include "pokemon.h"
-#include "unk_02096910.h"
+#include "battle_frontier_communication.h"
 
 // Script commands of the Battle Castle (BattleCastleData, frontier/battle_castle_data.h).
 
@@ -258,7 +258,7 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         BattleCastleData_RecordLinkPartyPP(data);
         break;
     case 29:
-        sub_02096910(data);
+        FrontierLink_RegisterCommands(data);
         break;
     case 30:
         if (data->decidedChoice >= 6) {

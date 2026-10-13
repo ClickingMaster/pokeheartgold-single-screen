@@ -166,7 +166,7 @@
 .public FrontierSave_DeleteRow
 .public CommPlayerInfo_GetProfile
 .public CommPlayerInfo_RecordTrades
-.public sub_02036FD8
+.public Comm_SendCommandNoCopy
 .public Comm_SendCommand
 .public Comm_IsNetIdConnected
 .public Comm_CountConnected

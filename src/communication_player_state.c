@@ -130,7 +130,7 @@ BOOL CommPlayerInfo_HostRedistribute(void) {
     if (Comm_GetLocalNetId() != 0) {
         return FALSE;
     }
-    if (sub_02037824(5) == 0) {
+    if (Comm_ParentQueueHasCommand(5) == 0) {
         for (i = 0; i < 8; i++) {
             if (gCommPlayerInfo->status[i] != 0) {
                 gCommPlayerInfo->entries[i].index = i;
@@ -300,7 +300,7 @@ void CommPlayerInfo_AddToRecords(int mode, int delta) {
         return;
     }
     if (mode != 2) {
-        parity = sub_020378AC(Comm_GetLocalNetId()) & 1;
+        parity = Comm_GetBattleSlot(Comm_GetLocalNetId()) & 1;
     }
     for (i = 0; i < Comm_CountConnected(); i++) {
         if (!Comm_IsNetIdConnected((u16)i)) {
@@ -310,12 +310,12 @@ void CommPlayerInfo_AddToRecords(int mode, int delta) {
             continue;
         }
         if (mode == 0) {
-            if (parity == (sub_020378AC(i) & 1)) {
+            if (parity == (Comm_GetBattleSlot(i) & 1)) {
                 continue;
             }
             gCommPlayerInfo->scores[i].wins += delta;
         } else if (mode == 1) {
-            if (parity == (sub_020378AC(i) & 1)) {
+            if (parity == (Comm_GetBattleSlot(i) & 1)) {
                 continue;
             }
             gCommPlayerInfo->scores[i].losses += delta;

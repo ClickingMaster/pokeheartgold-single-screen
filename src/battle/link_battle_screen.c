@@ -51,7 +51,7 @@
 #include "swap_3d_buffers.h"
 #include "battle_recording.h"
 #include "communication_player_state.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "wireless_status_icon.h"
 #include "unk_0208805C.h"
@@ -929,7 +929,7 @@ int LinkBattleScreen_Finish(SysTask *task, LinkBattleScreen *screen) {
 #pragma force_active reset
 
 BOOL LinkBattleScreen_IsLocalPlayerOnLeft(void) {
-    switch (sub_020378AC(Comm_GetLocalNetId())) {
+    switch (Comm_GetBattleSlot(Comm_GetLocalNetId())) {
     case 0:
     case 2:
         return TRUE;

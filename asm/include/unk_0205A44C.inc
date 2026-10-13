@@ -30,7 +30,7 @@
 .public CommWireless_SetMail
 .public CommWireless_SetRuleset
 .public CommWireless_RefreshBeacon
-.public sub_02036FD8
+.public Comm_SendCommandNoCopy
 .public Comm_SendCommand
 .public Comm_GetLocalNetId
 .public sub_020388E0

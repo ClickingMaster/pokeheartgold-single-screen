@@ -7,7 +7,7 @@
 #include "sound_playback.h"
 #include "wireless_manager.h"
 #include "communication_command.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "comm_state.h"
 typedef struct RecordMixingLinkWork {
     u8 pad0[0x384];
@@ -32,7 +32,7 @@ void RecordMixing_SetStateFromLinkInMenu(RecordMixingLinkWork *, int, int);
 int ov73_021E7488(void);
 u32 MATH_CountPopulation(u32);
 void CommState_SetMaxEntries(int);
-BOOL sub_02036FD8(int, void *, int);
+BOOL Comm_SendCommandNoCopy(int, void *, int);
 void RecordMixingLink_RegisterCommands(RecordMixingLinkWork *room);
 void sub_0208FB78(int sender, int unused, void *data, RecordMixingLinkWork *room);
 void sub_0208FB88(int sender, int unused, u8 *data, RecordMixingLinkWork *room);

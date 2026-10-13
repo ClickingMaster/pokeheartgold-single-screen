@@ -18,7 +18,7 @@
 #include "save_special_ribbons.h"
 #include "save_trainer_card.h"
 #include "task.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "unk_0204B538.h"
 #include "unk_02088288.h"
 

@@ -10,7 +10,7 @@
 #include "player_data.h"
 #include "render_text.h"
 #include "communication_player_state.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 
 // External functions used throughout this file (in assembly for now)
 extern int ov97_0221E5C0(OverlayManager *man, int *state); // Init

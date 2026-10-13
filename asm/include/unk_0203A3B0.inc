@@ -8,7 +8,7 @@
 .public GF_AssertFail
 .public CommWireless_IsOn
 .public Comm_CountConnected
-.public sub_02037474
+.public Comm_IsActive
 .public CommState_IsWifi
 .public WirelessStatusIcon_LoadPaletteFile
 .public WirelessStatusIcon_Refresh

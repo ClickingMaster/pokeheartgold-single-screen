@@ -33,14 +33,14 @@ void LinkSync_RecvRequest(int sender, int unused, u8 *data) {
     }
     packet[0] = sender;
     packet[1] = state;
-    sub_02037184(18, packet);
+    Comm_SendFixedParentCommand(18, packet);
     gLinkSync->states[sender] = state;
     for (i = 0; i < 8; i++) {
         if (Comm_IsNetIdConnected((u16)i) && state != gLinkSync->states[i]) {
             return;
         }
     }
-    if (sub_02037184(17, &state) == 0) {
+    if (Comm_SendFixedParentCommand(17, &state) == 0) {
         gLinkSync->resend = 1;
     }
 }
@@ -60,10 +60,10 @@ void LinkSync_StartSync(u8 state) {
 
 void LinkSync_Update(void) {
     if (gLinkSync) {
-        if (gLinkSync->pending && sub_020376E0(16, &gLinkSync->requested)) {
+        if (gLinkSync->pending && Comm_SendFixedCommand(16, &gLinkSync->requested)) {
             gLinkSync->pending = 0;
         }
-        if (gLinkSync->resend && sub_02037184(17, gLinkSync->states)) {
+        if (gLinkSync->resend && Comm_SendFixedParentCommand(17, gLinkSync->states)) {
             gLinkSync->resend = 0;
         }
     }
@@ -96,7 +96,7 @@ void LinkSync_SendValue(u32 key, u8 value) {
     u8 packet[2];
     packet[0] = key;
     packet[1] = value;
-    sub_020376E0(19, packet);
+    Comm_SendFixedCommand(19, packet);
 }
 
 s32 LinkSync_GetValue(s32 sender, s32 key) {
@@ -126,7 +126,7 @@ void LinkSync_ClearPackets(void) {
 u32 LinkSync_SendPacket(u32 index, s16 *data) {
     if (gLinkSync) {
         MI_CpuCopy8(data, &gLinkSync->packets[index], 0x46);
-        sub_020376E0(20, &gLinkSync->packets[index]);
+        Comm_SendFixedCommand(20, &gLinkSync->packets[index]);
         return TRUE;
     }
     return FALSE;

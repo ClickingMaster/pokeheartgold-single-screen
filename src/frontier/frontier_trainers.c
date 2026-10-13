@@ -20,7 +20,7 @@
 #include "string_util.h"
 #include "trainer_memo.h"
 #include "communication_player_state.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "comm_state.h"
 #include "unk_0208805C.h"
 

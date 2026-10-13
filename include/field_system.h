@@ -238,7 +238,7 @@ struct FieldSystem {
     u16 lastFacingDirection;   // 0x7A, used to determine whether the following field should be incremented
     u16 reverseTurnFrameSteps; // 0x7C, turning back and forth in place will increase the effective encounter rate
     u16 encounterInhibitSteps; // 0x7E, don't generate an encounter in the first 4 steps on a new map
-    struct UnkStruct_02059E1C *unionRoom;
+    struct UnionRoom *unionRoom;
     struct UnionRoomObjects *unionRoomObjects;
     u8 filler_88[0x8];
     int unk90;

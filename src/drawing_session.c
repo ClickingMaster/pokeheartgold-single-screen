@@ -31,7 +31,7 @@
 #include "touchpad.h"
 #include "wireless_manager.h"
 #include "communication_player_state.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
@@ -46,9 +46,9 @@ typedef struct DrawingSessionButtonSprite {
 
 // Link layer functions without a public header (the headers of their units declare them with
 // placeholder types).
-extern BOOL sub_02037108(int command, const void *data, int size);
-extern int sub_0203783C(void);
-extern int sub_02037854(void);
+extern BOOL Comm_SendParentCommand(int command, const void *data, int size);
+extern int Comm_IsParentQueueEmpty(void);
+extern int Comm_IsChildQueueEmpty(void);
 extern void CommState_SetMaxEntries(int count);
 extern void CommWireless_SetDetectDrops(BOOL value);
 extern void UnionRoomObjects_ResetSlots(struct UnionRoomObjects *unionRoom);
@@ -888,7 +888,7 @@ int DrawingSession_StateHandleDisbandPrompt(DrawingSessionWork *work, int state)
     switch (input) {
     case YESNORESPONSE_YES:
         DrawingSession_SetNextSubState(work, 15);
-        sub_02037108(0x7F, NULL, 0);
+        Comm_SendParentCommand(0x7F, NULL, 0);
         BufferPlayersName(work->msgFormat, 0, CommPlayerInfo_GetProfile(0));
         state = 2;
         DrawingSession_HideYesNo(work);
@@ -1288,7 +1288,7 @@ void DrawingSession_PrintMemberNames(Window *windows, int unused, u32 color, Dra
 
 void DrawingSession_SendStrokes(DrawingSessionWork *work) {
     if (Comm_GetLocalNetId() == 0) {
-        if (sub_0203783C()) {
+        if (Comm_IsParentQueueEmpty()) {
             work->ownStroke.unk_09 = work->unk_93F4;
             {
                 // byte copy of the own stroke into the first slot of the leader's packet
@@ -1303,10 +1303,10 @@ void DrawingSession_SendStrokes(DrawingSessionWork *work) {
                     dest++;
                 }
             }
-            sub_02037108(120, work->strokeSendBuffer, sizeof(work->strokeSendBuffer));
+            Comm_SendParentCommand(120, work->strokeSendBuffer, sizeof(work->strokeSendBuffer));
         }
     } else {
-        if (sub_02037854()) {
+        if (Comm_IsChildQueueEmpty()) {
             Comm_SendCommand(119, &work->ownStroke, sizeof(DrawingSessionStroke));
         }
     }

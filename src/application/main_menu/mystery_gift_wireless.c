@@ -36,12 +36,12 @@ extern const u8 sMysteryGiftCommCommands[]; // command table
 
 extern u16 Comm_GetLocalNetId(void);
 extern int Comm_IsNetIdConnected(u16 a0);
-extern BOOL sub_02037474(void);
+extern BOOL Comm_IsActive(void);
 extern void CommRandom_Init(void *a0);
 extern void CommState_ConnectToSlot(int a0);
 extern int CommState_IsLinked(void);
 extern void CommState_RequestShutdown(void);
-extern int sub_02037088(int a0, void *a1, void *a2);
+extern int Comm_SendParentCommandNoCopy(int a0, void *a1, void *a2);
 extern void CommState_StartMysteryGiftParent(void *a0, void *a1);
 extern void CommState_StartMysteryGiftChild(void *a0, int a1);
 extern void *CommWireless_GetParentMail(int a0);
@@ -129,7 +129,7 @@ void MysteryGiftComm_Task(SysTask *task, void *data) {
 }
 
 void MysteryGiftComm_StartParent(void *owner, void *a1, void *a2) {
-    if (!sub_02037474()) {
+    if (!Comm_IsActive()) {
         CommState_StartMysteryGiftParent(a1, a2);
         MysteryGiftComm_Start(owner);
         MysteryGiftComm_SetState(MysteryGiftComm_ParentWaitStartup, 0);
@@ -137,13 +137,13 @@ void MysteryGiftComm_StartParent(void *owner, void *a1, void *a2) {
 }
 
 int ov74_02229D0C(void *a0, void *a1) {
-    return sub_02037088(0x16, a0, a1);
+    return Comm_SendParentCommandNoCopy(0x16, a0, a1);
 }
 
 #pragma force_active on
 
 void MysteryGiftComm_StartChild(void *owner, int a1) {
-    if (!sub_02037474()) {
+    if (!Comm_IsActive()) {
         void **args = OverlayManager_GetArgs(MysteryGiftApp_GetOverlayManager());
         CommState_StartMysteryGiftChild(args[2], a1);
         MysteryGiftComm_Start(owner);

@@ -67,10 +67,10 @@ DWCFriendData *FriendRoster_GetDwcFriendData(WiFiList *a0, int a1);
 
 BOOL Comm_IsNetIdConnected(u16 arg0);
 int Comm_CountConnected(void);
-BOOL sub_02037474(void);
-void sub_020374E4(void);
+BOOL Comm_IsActive(void);
+void Comm_EnableKeySync(void);
 u16 Comm_GetLocalNetId(void);
-BOOL sub_02037700(void);
+BOOL Comm_HasLinkError(void);
 
 typedef struct {
     u64 x;
@@ -81,9 +81,9 @@ typedef struct {
 void CommRandom_Init(MATHRandContext32 *arg0);
 void Comm_FreeCommandTable(void);
 void CommWireless_Terminate(void);
-void sub_02036274(void);
+void Comm_ResetWorkAndParents(void);
 int CommWireless_Stop(void);
-void sub_02036024(void);
+void Comm_Shutdown(void);
 void Wireless_SetEntry(int arg0);
 void Wireless_SetEntryLocked(int arg0);
 void Wireless_SetMaxEntries(int arg0);
@@ -93,25 +93,25 @@ int ov00_021EC9D4(void);
 s32 WM_GetLinkLevel(void);
 int CommWireless_IsIdle(void);
 void CommWireless_SetManagerEnded(int arg0);
-void sub_0203622C(void);
+void Comm_ResetWork(void);
 void CommWireless_Init(PlayerProfile *playerProfile, int arg1);
-int sub_02035ED8(int arg0, int arg1, int arg2, int arg3);
+int Comm_StartParent(int arg0, int arg1, int arg2, int arg3);
 void sub_02035FD8(void);
-int sub_02035F14(int arg0, int arg1, int arg2);
+int Comm_StartScan(int arg0, int arg1, int arg2);
 void CommWireless_UpdateParents(void);
-int sub_020360E4(int arg0);
+int Comm_ConnectToParent(int arg0);
 void sub_0203624C(void);
 int CommWireless_HasSentBeacons(void);
-int sub_020376F8(void);
+int Comm_GetConnectedChildren(void);
 int CommWireless_GetParentMemberCount(int arg0);
-void sub_020376E0(int arg0, u8 *arg1);
+void Comm_SendFixedCommand(int arg0, u8 *arg1);
 void sub_02035FE4(void);
-void sub_02037184(int arg0, u8 *arg1);
+void Comm_SendFixedParentCommand(int arg0, u8 *arg1);
 void Wireless_SetBeaconCallback(void *arg0);
-void sub_02037988(void);
+void Comm_StopFrameUpdate(void);
 void WifiConnection_Shutdown(void);
 int WifiConnection_Update(int arg0);
-void sub_0203786C(int arg0);
+void Comm_SetWifiConnected(int arg0);
 u32 WifiConnection_StartMatchmaking(s32 arg0, s32 arg1, s32 arg2);
 s32 sub_02033FC4(u8 arg0);
 void WifiConnection_SetReceiveCallbacks(void (*func0)(), void (*func1)());
@@ -329,8 +329,8 @@ int ov45_0222F254(void);
 
 DWCFriendData *CommPlayerInfo_GetExchangeToken(int arg0);
 u16 *CommPlayerInfo_GetGroupName(int arg0);
-void sub_020367A8(void);
-void sub_02036904(void);
-void sub_020369CC(void);
+void Comm_RecvParentFrameCallback(void);
+void Comm_RecvChildFrameCallback(void);
+void Comm_RecvPeerFrameCallback(void);
 
 #endif // POKEHEARTGOLD_PR488_PRIVATE_H

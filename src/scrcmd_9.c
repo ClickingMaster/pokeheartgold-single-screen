@@ -28,12 +28,12 @@
 #include "sys_vars.h"
 #include "frontier_data_access.h"
 #include "frontier_save_access.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "frontier_field_system.h"
 #include "unk_0204B538.h"
 #include "frontier_field_support.h"
-#include "unk_02096910.h"
+#include "battle_frontier_communication.h"
 
 static BOOL sub_0204A1E8(ScriptContext *ctx);
 static u32 FrontierFieldSystem_0204A2A8(FrontierFieldSystem *frontierFsys, u8 a1);
@@ -246,7 +246,7 @@ BOOL ScrCmd_416(ScriptContext *ctx) {
             return TRUE;
         }
     } else {
-        sub_02096910((void *)frontierFsys);
+        FrontierLink_RegisterCommands((void *)frontierFsys);
         if (Comm_SendCommand(unk0, frontierFsys->unk83e, sizeof(frontierFsys->unk83e)) == 1) {
             *unkPtr = TRUE;
         }

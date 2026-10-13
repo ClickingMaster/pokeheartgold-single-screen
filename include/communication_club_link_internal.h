@@ -6,7 +6,7 @@
 #include "heap.h"
 #include "party.h"
 #include "sys_task.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "comm_state.h"
 typedef void (*CommClubLinkState)(void);
@@ -30,15 +30,15 @@ void CommState_ConnectToSlot(u8);
 BOOL CommState_IsLinked(void);
 u32 CommPlayerManager_sizeof(void);
 void CommPlayerManager_Init(void *, FieldSystem *, int);
-void sub_02057F80(void);
+void CommPlayerManager_ResumeFieldOnce(void);
 void CommPlayerInfo_HostRedistribute(void);
-void sub_02056E60(void);
+void CommPlayerManager_ResyncLocalPlayer(void);
 void CommPlayerManager_SendLocalPosition(int);
-BOOL sub_02057E50(void);
-BOOL sub_02057C94(void);
-void sub_020376E0(int, void *);
+BOOL CommPlayerManager_StepAllPlayersBack(void);
+BOOL CommPlayerManager_AssignBattleSlots(void);
+void Comm_SendFixedCommand(int, void *);
 BOOL CommPlayerManager_GetMoveTimer(int);
-void sub_02057F58(void);
+void CommPlayerManager_PauseField(void);
 void Colosseum_StartEntry(FieldSystem *, void (*)(int, Party *));
 BOOL sub_02036010(void);
 void sub_02035FD8(void);
@@ -47,7 +47,7 @@ void CommPlayerManager_Delete(int);
 void CommState_RestartScan(void);
 BOOL CommWireless_IsIdle(void);
 void CommState_RequestShutdown(void);
-BOOL sub_02036FD8(int, void *, int);
+BOOL Comm_SendCommandNoCopy(int, void *, int);
 void CommClubLink_Free(void);
 void sub_020583EC(void);
 void sub_02058518(void);

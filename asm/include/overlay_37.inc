@@ -108,11 +108,11 @@
 .public CommPlayerInfo_GetProfile
 .public CommWireless_SetDetectDrops
 .public Comm_SendCommand
-.public sub_02037108
+.public Comm_SendParentCommand
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
-.public sub_0203783C
-.public sub_02037854
+.public Comm_IsParentQueueEmpty
+.public Comm_IsChildQueueEmpty
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
 .public CommState_ResumeAlternateSearch

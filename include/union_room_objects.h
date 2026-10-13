@@ -37,7 +37,7 @@ typedef struct UnionRoomMessage {
 } UnionRoomMessage;
 
 typedef struct UnionRoomObjects {
-    struct UnkStruct_02059E1C *unionRoom;
+    struct UnionRoom *unionRoom;
     SysTask *task;
     PlayerAvatar *avatar;
     UnionRoomSlot slots[51];
@@ -48,7 +48,7 @@ typedef struct UnionRoomObjects {
     u32 unk4E4;
 } UnionRoomObjects;
 
-UnionRoomObjects *UnionRoomObjects_New(struct UnkStruct_02059E1C *unionRoom);
+UnionRoomObjects *UnionRoomObjects_New(struct UnionRoom *unionRoom);
 void UnionRoomObjects_RequestLeaveAll(UnionRoomObjects *objects);
 void UnionRoomObjects_Delete(UnionRoomObjects *objects);
 void UnionRoomObjects_RestoreAfterScript(MapObjectManager *mapObjectManager, UnionRoomObjects *objects);

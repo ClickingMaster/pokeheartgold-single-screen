@@ -45,11 +45,11 @@
 #include "char_tiles.h"
 #include "frontier_save_access.h"
 #include "communication_player_state.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "wireless_status_icon.h"
 #include "unk_0205BFF0.h"
-#include "unk_02096910.h"
+#include "battle_frontier_communication.h"
 #include "vram_transfer_manager.h"
 
 FS_EXTERN_OVERLAY(OVY_80);
@@ -514,7 +514,7 @@ BOOL BattleCastleOpponentApp_Init(OverlayManager *manager, int *state) {
     app->partnerCursorPos = 0;
     BattleCastleOpponentApp_InitGraphics(app);
     if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
-        sub_02096910(app);
+        FrontierLink_RegisterCommands(app);
     }
     return TRUE;
 }
@@ -1306,7 +1306,7 @@ void BattleCastleOpponentApp_InitGraphics(BattleCastleOpponentApp *app) {
     app->partyGrid = BattleCastleOpponentApp_CreatePartyGrid(app, 1, app->numMons);
     app->listMenuSpawner = BattleCastle_CreateListMenuSpawner(app->spriteGfx.spriteList, app->paletteData);
     BattleCastlePrompt_Init(&app->yesNoPrompt);
-    if (sub_02037474()) {
+    if (Comm_IsActive()) {
         G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN, GX_OBJVRAMMODE_CHAR_1D_32K);
         G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
         WirelessStatusIcon_Create();

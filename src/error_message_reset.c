@@ -20,7 +20,7 @@
 #include "screen_fade.h"
 #include "system.h"
 #include "text.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "comm_state.h"
 
 static const GraphicsBanks sErrorMessageBanksConfig = {

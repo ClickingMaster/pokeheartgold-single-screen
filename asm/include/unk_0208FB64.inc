@@ -4,7 +4,7 @@
 .public LCRandom
 .public Wireless_GetConnectedBitmap
 .public Comm_RegisterCommandTable
-.public sub_02036FD8
+.public Comm_SendCommandNoCopy
 .public Comm_SendCommand
 .public Comm_CountConnected
 .public Comm_GetLocalNetId

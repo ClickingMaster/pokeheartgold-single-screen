@@ -6,8 +6,8 @@
 .public Comm_RegisterCommandTable
 .public CommCmd_GetSize0
 .public CommCmd_GetSize1
-.public sub_02037088
-.public sub_02037108
+.public Comm_SendParentCommandNoCopy
+.public Comm_SendParentCommand
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
 .public CommState_SetMaxEntries

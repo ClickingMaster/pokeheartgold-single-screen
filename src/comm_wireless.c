@@ -103,11 +103,11 @@ int CommPlayerInfo_DropDisconnected(void);
 int CommState_GetLinkMode(void);
 int CommState_GetBeaconId(void);
 void CommState_ShowErrorAndHalt(u32);
-BOOL sub_02037474(void);
+BOOL Comm_IsActive(void);
 BOOL sub_0203401C(int value);
 int sub_02033FC4(u16);
-void sub_02036904(void);
-void sub_020367A8(void);
+void Comm_RecvChildFrameCallback(void);
+void Comm_RecvParentFrameCallback(void);
 
 u32 Wireless_GetWorkSize(void);
 void Wireless_Init(void *buffer, int mode);
@@ -378,7 +378,7 @@ BOOL CommWireless_StartParent(int unused, BOOL renewTgid, BOOL entryFlag) {
     CommWireless_SetRenewTgid(renewTgid);
     Wireless_ClearBeaconCount();
     if (gCommWireless.work->portCallbackSet == 0) {
-        Wireless_SetReceiveCallback(sub_02036904, 14);
+        Wireless_SetReceiveCallback(Comm_RecvChildFrameCallback, 14);
         gCommWireless.work->portCallbackSet = 1;
     }
     gCommWireless.work->entryFlag = entryFlag;
@@ -396,7 +396,7 @@ BOOL CommWireless_StartScan(int unused, BOOL clearParents) {
         CommWireless_ClearParents();
     }
     if (gCommWireless.work->portCallbackSet == 0) {
-        Wireless_SetReceiveCallback(sub_020367A8, 14);
+        Wireless_SetReceiveCallback(Comm_RecvParentFrameCallback, 14);
         gCommWireless.work->portCallbackSet = 1;
     }
     if (Wireless_GetState() == 1) {
@@ -474,7 +474,7 @@ int CommWireless_CountParents(void) {
     u8 *ptr;
     int count;
 
-    if (!sub_02037474()) {
+    if (!Comm_IsActive()) {
         return 0;
     }
     count = 0;

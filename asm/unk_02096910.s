@@ -9,8 +9,8 @@
 	.include "global.inc"
 
 	.rodata
-	.public _02108594
-_02108594:
+	.public gFrontierLinkCommands
+gFrontierLinkCommands:
 	.word BattleFactoryLink_ReceiveRecord, CommCmd_GetSizeVariable, 0
 	.word BattleFactoryLink_ReceiveTrainerIds, CommCmd_GetSizeVariable, 0
 	.word BattleFactoryLink_ReceiveRentalMons, CommCmd_GetSizeVariable, 0
@@ -46,13 +46,13 @@ _02108594:
 	.word BattleCastleOpponentApp_ReceiveAction, CommCmd_GetSizeVariable, 0
 	.word BattleCastleOpponentApp_ReceiveCursor, CommCmd_GetSizeVariable, 0
 	.word BattleCastleOpponentApp_ReceiveExit, CommCmd_GetSizeVariable, 0
-	.word sub_02096A7C, CommCmd_GetSizeVariable, 0
-	.word sub_02096ACC, CommCmd_GetSizeVariable, 0
-	.word sub_02096BB8, CommCmd_GetSizeVariable, 0
-	.word sub_02096C18, CommCmd_GetSizeVariable, 0
-	.word sub_02096C60, CommCmd_GetSizeVariable, 0
-	.word sub_02096924, CommCmd_GetSizeVariable, 0
-	.word sub_020969C4, CommCmd_GetSizeVariable, 0
+	.word FrontierLinkLobby_ReceiveFacility, CommCmd_GetSizeVariable, 0
+	.word FrontierLinkLobby_ReceiveChoice, CommCmd_GetSizeVariable, 0
+	.word FrontierLinkLobby_ReceiveParty, CommCmd_GetSizeVariable, 0
+	.word FrontierLinkLobby_ReceiveValue74, CommCmd_GetSizeVariable, 0
+	.word FrontierLinkLobby_ReceiveValue71, CommCmd_GetSizeVariable, 0
+	.word BattleTowerLink_ReceivePartnerInfo, CommCmd_GetSizeVariable, 0
+	.word BattleTowerLink_ReceiveTrainers, CommCmd_GetSizeVariable, 0
 	.word sub_020969F8, CommCmd_GetSizeVariable, 0
 	.word BattleArcadeLink_ReceiveWinStreak, CommCmd_GetSizeVariable, 0
 	.word BattleArcadeLink_ReceiveTrainerIds, CommCmd_GetSizeVariable, 0

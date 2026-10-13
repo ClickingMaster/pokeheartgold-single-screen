@@ -20,7 +20,7 @@ void DrawingSessionLink_ReceivePictureChunk(void *a, void *b, void *data, Drawin
             progress->progress++;
             DrawingSessionLink_SendPictureChunk(work, U32(work, 0x43cc));
         } else {
-            sub_02037108(0x7c, 0, 0);
+            Comm_SendParentCommand(0x7c, 0, 0);
         }
     }
 }
@@ -76,7 +76,7 @@ void DrawingSessionLink_HandleJoinRequest(int id, void *unused, const FourBytes 
         case 1:
             break;
         }
-        sub_02037108(0x7e, &local, 4);
+        Comm_SendParentCommand(0x7e, &local, 4);
     } else {
         int sender;
         switch (packet->data[2]) {
@@ -132,7 +132,7 @@ void sub_0208FAA8(int value, void *b, void *c, DrawingSessionLinkWork *work) {
     if (Comm_GetLocalNetId() == 0) {
         if (U32(work, 0x93fc) != 0) {
             packet = value;
-            sub_02037108(0x7b, &packet, 1);
+            Comm_SendParentCommand(0x7b, &packet, 1);
         } else {
             U32(work, 0x93fc) = 1;
         }
@@ -161,7 +161,7 @@ void DrawingSessionLink_SendPictureChunk(DrawingSessionLinkWork *work, int index
         U32(work, 0x7ff8) = checksum;
     }
     U8(work, 0x7ffc) = index;
-    sub_02037088(0x76, &work->raw[0x7c10], 0x3f0);
+    Comm_SendParentCommandNoCopy(0x76, &work->raw[0x7c10], 0x3f0);
 }
 
 void *DrawingSessionLink_GetChunkRecvBuffer(int index, void *base) {

@@ -18,7 +18,7 @@
 #include "party.h"
 #include "player_data.h"
 #include "pokemon.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "use_item_on_mon.h"
 
 // Battle Castle trainers and battles: the trainers of a round, the battle setup of a castle battle, the party kept

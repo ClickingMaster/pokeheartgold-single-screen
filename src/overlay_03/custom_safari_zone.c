@@ -6,7 +6,7 @@
 #include "task.h"
 #include "communication_command.h"
 #include "communication_player_state.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 
 typedef struct CustomSafariLinkWork {
@@ -82,7 +82,7 @@ static void CustomSafariLink_WaitDone(CustomSafariLinkWork *unkCommStruct) {
 
 static void CustomSafariLink_SendAreaSet(CustomSafariLinkWork *unkCommStruct) {
     if (LinkSync_IsSynced(12) && CommPlayerInfo_GetProfile(1)) {
-        sub_020376D4(22, SafariZone_GetAreaSet(unkCommStruct->safariZone, 0));
+        Comm_SendFixedCommandNoCopy(22, SafariZone_GetAreaSet(unkCommStruct->safariZone, 0));
         LinkSync_StartSync(13);
         CustomSafariLink_SetStep(&CustomSafariLink_WaitDone, unkCommStruct);
     }

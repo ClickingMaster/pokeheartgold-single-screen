@@ -136,7 +136,7 @@
 .public BattleRecord_AreAiFlagsValid
 .public CommPlayerInfo_GetProfile
 .public Comm_GetLocalNetId
-.public sub_020378AC
+.public Comm_GetBattleSlot
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
 .public WirelessStatusIcon_Create

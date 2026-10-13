@@ -38,8 +38,8 @@ typedef struct UnionRoomPlayerRecord {
     UnionRoomPlayer player; // 0x50
 } UnionRoomPlayerRecord;
 
-FieldSystem *UnionRoom_GetFieldSystem(struct UnkStruct_02059E1C *unionRoom);
-UnionRoomPlayerRecord *UnionRoom_GetRecord(struct UnkStruct_02059E1C *unionRoom, int index);
+FieldSystem *UnionRoom_GetFieldSystem(struct UnionRoom *unionRoom);
+UnionRoomPlayerRecord *UnionRoom_GetRecord(struct UnionRoom *unionRoom, int index);
 s32 CommState_GetJoinResult(void);
 s32 CommState_IsAlternateLinked(void);
 UnkStruct_0206793C *ov01_021FD8E8(LocalMapObject *object, int index);
@@ -51,7 +51,7 @@ void UnionRoomObjects_ResetSlots(UnionRoomObjects *objects);
 void UnionRoomObjects_Task(SysTask *task, void *data);
 BOOL UnionRoomObjects_UpdateGroup(UnionRoomObjects *objects, int index, UnionRoomPlayerRecord *record, SavePalPad *palPad);
 void UnionRoomSlots_SetRequest(UnionRoomSlot *slots, int index, u8 request);
-void UnionRoomObjects_UpdatePlayers(UnionRoomObjects *objects, struct UnkStruct_02059E1C *unionRoom, MapObjectManager *mapObjectManager, SavePalPad *palPad);
+void UnionRoomObjects_UpdatePlayers(UnionRoomObjects *objects, struct UnionRoom *unionRoom, MapObjectManager *mapObjectManager, SavePalPad *palPad);
 void UnionRoomObjects_UpdateMapObjects(UnionRoomObjects *objects, MapObjectManager *mapObjectManager);
 void UnionRoomSlot_DestroyEffects(UnionRoomSlot *slot, BOOL both);
 void UnionRoomSlot_TickEmote(UnionRoomSlot *slot);
@@ -66,7 +66,7 @@ void UnionRoomMessages_FreeAll(UnionRoomMessage *messages);
 UnionRoomMessage *UnionRoomMessages_New(int heapID);
 void UnionRoomMessages_Free(UnionRoomMessage *messages);
 
-UnionRoomObjects *UnionRoomObjects_New(struct UnkStruct_02059E1C *unionRoom) {
+UnionRoomObjects *UnionRoomObjects_New(struct UnionRoom *unionRoom) {
     UnionRoomObjects *objects = Heap_Alloc((enum HeapID)0x1F, sizeof(UnionRoomObjects));
     MIi_CpuClearFast(0, (u32 *)objects, sizeof(UnionRoomObjects));
     objects->unionRoom = unionRoom;
@@ -109,7 +109,7 @@ void UnionRoomObjects_Delete(UnionRoomObjects *objects) {
 
 void UnionRoomObjects_Task(SysTask *task, void *data) {
     UnionRoomObjects *objects = data;
-    struct UnkStruct_02059E1C *unionRoom = objects->unionRoom;
+    struct UnionRoom *unionRoom = objects->unionRoom;
 
     if (!FieldSystem_TaskIsRunning(objects->fieldSystem)) {
         objects->avatar = objects->fieldSystem->playerAvatar;
@@ -183,7 +183,7 @@ void UnionRoomSlots_SetRequest(UnionRoomSlot *slots, int index, u8 request) {
     slots[index].request = request;
 }
 
-void UnionRoomObjects_UpdatePlayers(UnionRoomObjects *objects, struct UnkStruct_02059E1C *unionRoom, MapObjectManager *mapObjectManager, SavePalPad *palPad) {
+void UnionRoomObjects_UpdatePlayers(UnionRoomObjects *objects, struct UnionRoom *unionRoom, MapObjectManager *mapObjectManager, SavePalPad *palPad) {
     int i;
 
     for (i = 0; i < 10; i++) {

@@ -3,7 +3,7 @@
 #include "global.h"
 
 #include "heap.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 typedef struct SyncPacket {
     u8 data[0x48];
@@ -16,8 +16,8 @@ typedef struct LinkSync {
     u8 resend, completed, requested, pending;
 } LinkSync;
 extern LinkSync *gLinkSync;
-BOOL sub_02037184(int, void *);
-BOOL sub_020376E0(int, void *);
+BOOL Comm_SendFixedParentCommand(int, void *);
+BOOL Comm_SendFixedCommand(int, void *);
 void LinkSync_Init(enum HeapID heap);
 void LinkSync_Free(void);
 BOOL LinkSync_Exists(void);

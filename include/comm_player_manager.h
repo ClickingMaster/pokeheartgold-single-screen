@@ -4,14 +4,14 @@
 #include "script.h"
 
 void CommPlayerManager_RemoveAllAvatars(void);
-void sub_020573F0(FieldSystem *fieldSystem, int a1);
+void CommPlayerManager_FieldUpdate(FieldSystem *fieldSystem, int a1);
 int CommPlayerManager_IsLocalPlayerConnected(void);
 void CommPlayerManager_SetLocalFacing(u16 val);
 void CommPlayerManager_ReceivePosition(void);
 u32 CommPlayerManager_GetPositionSize(void);
 void CommPlayerManager_ReceiveHostPosition(void);
 void CommPlayerManager_ReceiveRemovePlayer(void);
-void sub_020573AC(void);
+void CommPlayerManager_ReceiveMoveEnabled(void);
 void sub_02057D50(void);
 void CommPlayerManager_ForcePosition();
 

@@ -16,7 +16,7 @@
 #include "player_data.h"
 #include "scrcmd.h"
 #include "communication_player_state.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "map_object_movement_utilities.h"
 
 static PlayerAvatar *PlayerAvatar_Create(void);

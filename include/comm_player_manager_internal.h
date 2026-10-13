@@ -12,7 +12,7 @@
 // players walk their avatars to the positions they receive. The module's full declarations; include/unk_02056D7C.h
 // keeps the declarations other modules were matched against. comm_player_manager.c: the manager and its set-up;
 // comm_player_sync.c: the rest (one TU in the original; the lobby tables must stay outside the sync TU, whose
-// sub_02057C94 was matched against them as external symbols).
+// CommPlayerManager_AssignBattleSlots was matched against them as external symbols).
 
 typedef struct CommPlayerPosition CommPlayerPosition;
 typedef struct CommPlayerManager CommPlayerManager;
@@ -63,25 +63,25 @@ extern const u16 _0210FAC4[4];
 
 BOOL CommPlayerManager_Init(CommPlayerManager *manager, FieldSystem *fieldSystem, int unused);
 void CommPlayerManager_RemoveAllAvatars(void);
-void sub_02056E60(void);
+void CommPlayerManager_ResyncLocalPlayer(void);
 void CommPlayerManager_Delete(int deleteFromMap);
 BOOL CommPlayerManager_IsInitialized(void);
 void CommPlayerManager_InitLocalPlayer(void);
 void CommPlayerManager_SendPosition(int forceSend, int x, int z);
 void CommPlayerManager_SendLocalPosition(int forceSend);
 void CommPlayerManager_SendHostPosition(int netId, const CommPlayerPosition *position);
-void sub_020570C8(FieldSystem *unused);
+void CommPlayerManager_SendPositionWhenStopped(FieldSystem *unused);
 void CommPlayerManager_SendChangedHostPositions(FieldSystem *unused);
 u32 CommPlayerManager_sizeof(void);
 void CommPlayerManager_CreateAvatar(int netId);
 void CommPlayerManager_RemovePlayer(int netId, int keepActive, int deleteFromMap);
-void sub_020572AC(FieldSystem *fieldSystem);
+void CommPlayerManager_UpdateLocalMoveSpeed(FieldSystem *fieldSystem);
 void CommPlayerManager_Task(SysTask *task, void *fieldSystem);
 void CommPlayerManager_UpdateAvatars(FieldSystem *unused);
-void sub_02057358(int value);
-void sub_02057384(int value);
-void sub_020573AC(int netId, int size, const u8 *data);
-void sub_020573F0(FieldSystem *fieldSystem, int value);
+void CommPlayerManager_SendMoveEnabled(int value);
+void CommPlayerManager_SetMoveEnabled(int value);
+void CommPlayerManager_ReceiveMoveEnabled(int netId, int size, const u8 *data);
+void CommPlayerManager_FieldUpdate(FieldSystem *fieldSystem, int value);
 int CommPlayerManager_KeysToDirection(int unused, int keys);
 BOOL CommPlayerManager_IsObjectEventAt(int x, int z);
 BOOL CommPlayerManager_IsPositionBlocked(int x, int z, int excludedNetId);
@@ -102,18 +102,18 @@ int CommPlayerManager_GetHostX(int netId);
 int CommPlayerManager_GetHostZ(int netId);
 int CommPlayerManager_GetHostFrontX(int netId);
 int CommPlayerManager_GetHostFrontZ(int netId);
-void sub_02057C5C(int netId, int value);
-BOOL sub_02057C94(void);
+void CommPlayerManager_SetPlayerMoveEnabled(int netId, int value);
+BOOL CommPlayerManager_AssignBattleSlots(void);
 void sub_02057D50(int netId, int size, const u8 *data);
 void sub_02057D74(void);
-void sub_02057E08(void);
-BOOL sub_02057E50(void);
+void CommPlayerManager_FaceRoomCenter(void);
+BOOL CommPlayerManager_StepAllPlayersBack(void);
 int CommPlayerManager_GetOppositeDirection(int facing);
 int CommPlayerManager_GetMoveTimer(int netId);
 void CommPlayerManager_SetLocalFacing(int facing);
-void sub_02057F58(void);
-void sub_02057F70(void);
-void sub_02057F80(void);
+void CommPlayerManager_PauseField(void);
+void CommPlayerManager_ResumeField(void);
+void CommPlayerManager_ResumeFieldOnce(void);
 void CommPlayerManager_ForcePosition(void);
 void CommPlayerManager_SetLocalMoveDelay(void);
 

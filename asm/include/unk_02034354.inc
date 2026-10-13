@@ -52,8 +52,8 @@
 .public Comm_CountConnected
 .public sub_0203753C
 .public Comm_GetLocalNetId
-.public sub_02037824
-.public sub_020378AC
+.public Comm_ParentQueueHasCommand
+.public Comm_GetBattleSlot
 .public Comm_FindFriendSlot
 .public Comm_FindFriendIndexOfPlayer
 .public DWC_CreateExchangeToken

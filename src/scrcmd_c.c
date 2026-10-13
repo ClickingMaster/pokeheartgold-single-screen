@@ -74,7 +74,7 @@
 #include "trainer_memo.h"
 #include "friend_roster.h"
 #include "comm_wireless.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
@@ -591,7 +591,7 @@ BOOL ScrCmd_SetOrCopyVar(ScriptContext *ctx) {
 BOOL ScrCmd_048(ScriptContext *ctx) {
     u8 msg_no = ScriptReadByte(ctx);
 
-    if (!sub_02037474()) {
+    if (!Comm_IsActive()) {
         ovFieldMain_ShowMessage(ctx, ctx->msgdata, msg_no, TRUE, NULL);
     } else {
         struct MessagePrintOptions unk_struct;
@@ -2757,7 +2757,7 @@ BOOL ScrCmd_268(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     LocalMapObject **p_lastInteracted = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_LAST_INTERACTED);
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    *p_ret = sub_0205A200(fieldSystem->unionRoom, MapObject_GetID(*p_lastInteracted));
+    *p_ret = UnionRoom_GetPlayerActivityType(fieldSystem->unionRoom, MapObject_GetID(*p_lastInteracted));
     return FALSE;
 }
 
@@ -2766,7 +2766,7 @@ BOOL ScrCmd_274(ScriptContext *ctx) {
     LocalMapObject **p_lastInteracted = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_LAST_INTERACTED);
     u16 r7 = ScriptGetVar(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    *p_ret = sub_0205A284(fieldSystem->unionRoom, MapObject_GetID(*p_lastInteracted), r7);
+    *p_ret = UnionRoom_RequestJoinPlayer(fieldSystem->unionRoom, MapObject_GetID(*p_lastInteracted), r7);
     return FALSE;
 }
 
@@ -2781,7 +2781,7 @@ BOOL ScrCmd_269(ScriptContext *ctx) {
 
 BOOL sub_02044318(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    int result = sub_0205A358(fieldSystem->unionRoom);
+    int result = UnionRoom_GetJoinStatus(fieldSystem->unionRoom);
     u16 *p_ret = GetVarPointer(fieldSystem, ctx->data[0]);
     if (result == 0) {
         return FALSE;
@@ -2813,7 +2813,7 @@ BOOL ScrCmd_271(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 r6 = ScriptGetVar(ctx);
     u16 r2 = ScriptGetVar(ctx);
-    sub_0205A3B0(fieldSystem->unionRoom, r6, r2);
+    UnionRoom_SendTalkResponse(fieldSystem->unionRoom, r6, r2);
     return FALSE;
 }
 
@@ -2828,7 +2828,7 @@ BOOL ScrCmd_272(ScriptContext *ctx) {
 
 BOOL sub_020443D8(ScriptContext *ctx) {
     u16 *p_ret = GetVarPointer(ctx->fieldSystem, ctx->data[0]);
-    u32 r0 = sub_0205A35C(ctx->fieldSystem->unionRoom);
+    u32 r0 = UnionRoom_GetTalkChoice(ctx->fieldSystem->unionRoom);
     if (r0 >= 1) {
         *p_ret = r0;
         UnionRoom_ResetTalkReplies(ctx->fieldSystem->unionRoom);
@@ -2850,7 +2850,7 @@ BOOL ScrCmd_273(ScriptContext *ctx) {
 
 BOOL sub_02044434(ScriptContext *ctx) {
     u16 *p_ret = GetVarPointer(ctx->fieldSystem, ctx->data[0]);
-    int r0 = sub_0205A39C(ctx->fieldSystem->unionRoom);
+    int r0 = UnionRoom_GetTalkReply(ctx->fieldSystem->unionRoom);
     if (gSystem.newKeys & PAD_BUTTON_B) {
         r0 = UnionRoom_TrySendTalkCancel(ctx->fieldSystem->unionRoom, 8);
     }

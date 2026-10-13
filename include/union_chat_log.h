@@ -48,7 +48,7 @@ typedef struct UnionChatLogRow {
 typedef struct UnionChatLogData {
     u32 state;
     Manager *unionRoom;
-    struct UnkStruct_02059E1C *unk_08;
+    struct UnionRoom *unk_08;
     FieldSystem *fieldSystem;
     PlayerProfile *profile;
     BgConfig *bgConfig;

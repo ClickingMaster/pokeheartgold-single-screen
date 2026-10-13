@@ -89,7 +89,7 @@
 .public Save_PlayerData_GetProfile
 .public PlayerProfile_GetTrainerGender
 .public Comm_GetLocalNetId
-.public sub_02037958
+.public Comm_IsSendingMoveKeys
 .public LocalFieldData_GetPlayer
 .public LocalFieldData_GetSafariBallsCounter
 .public Save_LocalFieldData_Get

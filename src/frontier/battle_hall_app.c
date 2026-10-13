@@ -39,11 +39,11 @@
 #include "sprite_resource.h"
 #include "oam_manager.h"
 #include "unk_0200FA24.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "wireless_status_icon.h"
 #include "unk_02088288.h"
-#include "unk_02096910.h"
+#include "battle_frontier_communication.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
@@ -269,7 +269,7 @@ BOOL BattleHallApp_Init(OverlayManager *man, int *state) {
     app->savedCursor = NO_SAVED_CURSOR;
     BattleHallApp_InitGraphics(app);
     if (BattleHall_IsMultiType(app->mode) == TRUE) {
-        sub_02096910(app);
+        FrontierLink_RegisterCommands(app);
     }
     *state = HALL_STATE_FADE_IN;
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
@@ -816,7 +816,7 @@ void BattleHallApp_InitGraphics(BattleHallApp *app) {
     app->cursorSprite = BattleHallSprite_Create(&app->spriteGfx, 0, 1, x, y, NULL);
     app->monIcon = BattleHallSprite_Create(&app->spriteGfx, 1, 1, 160, 160, NULL);
     BattleHallSprite_SetIconPalette(app->monIcon, Party_GetMonByIndex(app->party, 0));
-    if (sub_02037474()) {
+    if (Comm_IsActive()) {
         G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN, GX_OBJVRAMMODE_CHAR_1D_32K);
         G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
         WirelessStatusIcon_Create();

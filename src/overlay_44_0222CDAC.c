@@ -38,7 +38,7 @@
 #include "save_wii_message.h"
 #include "communication_player_state.h"
 #include "comm_wireless.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
@@ -3281,7 +3281,7 @@ s32 ov44_0222E45C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_53);
             arg0->unk384 = 0;
             arg1 = 2;
-        } else if (sub_02037880() == 1) {
+        } else if (Comm_IsWifiConnected() == 1) {
             ov44_0222F780(arg0, WifiConnection_GetTargetFriendIndex());
             ov44_0222F510(arg0, 18, 0);
             arg0->unk348 = 27;

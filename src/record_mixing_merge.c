@@ -5,7 +5,7 @@
 #include "save.h"
 #include "save_arrays.h"
 #include "communication_player_state.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 
 // Merges the records received from the other members into the save, record type by record type (a separate TU from
 // record_mixing_exchange.c: the overlay's data lies between them).

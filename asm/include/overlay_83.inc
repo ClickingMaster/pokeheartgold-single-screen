@@ -175,7 +175,7 @@
 .public FrontierSave_SetStat
 .public CommPlayerInfo_GetProfile
 .public Comm_SendCommand
-.public sub_02037474
+.public Comm_IsActive
 .public Comm_GetLocalNetId
 .public LinkSync_Init
 .public LinkSync_StartSync
@@ -212,7 +212,7 @@
 .public sub_0207CAA8
 .public CalculateHpBarColor
 .public UseItemOnPokemon
-.public sub_02096910
+.public FrontierLink_RegisterCommands
 .public NNS_G2dInitOamManagerModule
 .public NNS_G2dGetImageLocation
 .public NNS_G2dGetImagePaletteLocation

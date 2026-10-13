@@ -15,7 +15,7 @@
 #include "party.h"
 #include "player_data.h"
 #include "pokemon.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "use_item_on_mon.h"
 
 // Battle Hall trainers and battles: the trainers and sets of the next battle (from the cell's type and its rank),

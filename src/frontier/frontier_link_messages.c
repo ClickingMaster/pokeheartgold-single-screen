@@ -10,7 +10,7 @@
 #include "player_data.h"
 #include "pokemon.h"
 #include "frontier_save_access.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "unk_0205BFF0.h"
 
 // Link messages of the Battle Frontier facilities' script side in multi battles with a friend (wireless): for each
@@ -25,7 +25,7 @@
 #define LINK_MON_BUFFER_SIZE 0x200
 
 // Partner Pokemon are sent as raw Pokemon structs through a large-data command (up to 0x200 bytes).
-BOOL sub_02036FD8(int command, void *data, int size);
+BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 u32 BattleCastle_GetPartySize(u8 type, int a1);
 u32 BattleFactory_GetPartySize(u8 type);
 
@@ -115,7 +115,7 @@ BOOL BattleHallLink_SendPartyMon(BattleHallData *work) {
     u32 size = SizeOfStructPokemon();
     Pokemon *mon = Party_GetMonByIndex(SaveArray_Party_Get(work->saveData), work->partySlots[0]);
     MI_CpuCopy8(mon, work->linkMonBuffer, size);
-    return sub_02036FD8(0x26, work->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
+    return Comm_SendCommandNoCopy(0x26, work->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
 }
 
 void BattleHallLink_ReceivePartnerMon(int netId, int size, const void *data, BattleHallData *work) {
@@ -612,7 +612,7 @@ BOOL BattleCastleLink_SendPartyMons(BattleCastleData *work) {
             offset += size;
         } while (i < count);
     }
-    return sub_02036FD8(0x30, work->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
+    return Comm_SendCommandNoCopy(0x30, work->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
 }
 
 #pragma force_active on
@@ -800,7 +800,7 @@ BOOL BattleArcadeLink_SendPartyMons(ArcadeContext *ctx) {
             offset += size;
         } while (i < count);
     }
-    return sub_02036FD8(0x46, ctx->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
+    return Comm_SendCommandNoCopy(0x46, ctx->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
 }
 
 #pragma force_active on

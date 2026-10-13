@@ -29,10 +29,10 @@
 #include "sprite_resource.h"
 #include "oam_manager.h"
 #include "frontier_save_access.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "wireless_status_icon.h"
-#include "unk_02096910.h"
+#include "battle_frontier_communication.h"
 #include "vram_transfer_manager.h"
 
 FS_EXTERN_OVERLAY(OVY_80);
@@ -145,7 +145,7 @@ BOOL BattleArcadeGameBoard_InitOverlay(OverlayManager *man, int *state) {
     BattleArcadeGameBoard_InitObjects(work);
 
     if (BattleArcade_MultiplayerCheck(work->type) == TRUE) {
-        sub_02096910(work);
+        FrontierLink_RegisterCommands(work);
     }
 
     *state = 0;
@@ -607,7 +607,7 @@ static void BattleArcadeGameBoard_InitObjects(GAME_BOARD_WORK *work) {
 
     work->button = BattleArcadeObject_Create(&work->unk3E8, 0, 0, 0, 2, 128, 96, 0, 0, 1);
 
-    if (sub_02037474()) {
+    if (Comm_IsActive()) {
         G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN, GX_OBJVRAMMODE_CHAR_1D_32K);
         G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
         WirelessStatusIcon_Create();

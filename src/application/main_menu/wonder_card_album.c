@@ -38,7 +38,7 @@
 #include "sprite.h"
 #include "sys_task_api.h"
 #include "system.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "wireless_status_icon.h"
 
 // Main menu > Mystery Gift > "Check card": browses the three saved Wonder Cards, flips a card between its

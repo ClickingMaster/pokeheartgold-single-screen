@@ -32,7 +32,7 @@
 #include "sprite_resource.h"
 #include "oam_manager.h"
 #include "touchpad.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
@@ -168,7 +168,7 @@ int TrainerCardMainApp_Init(OverlayManager *manager, int *state) {
     options = Save_PlayerData_GetOptionsAddr(cardMain->args->unk66C.saveData);
     cardMain->textSpeed = Options_GetTextFrameDelay(options);
     cardMain->frame = Options_GetFrame(options);
-    if (sub_02037474() == 1) {
+    if (Comm_IsActive() == 1) {
         cardMain->isConnected = TRUE;
     }
     if (cardMain->card->clearMonth != 0) {

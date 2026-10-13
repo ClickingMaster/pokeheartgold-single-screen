@@ -25,7 +25,7 @@ _020F6955:
 gCommBaseCommands:
 	.word 0, CommCmd_GetSize0, 0
 	.word 0, CommCmd_GetSize0, 0
-	.word sub_0203776C, CommCmd_GetSize0, 0
+	.word Comm_RecvShutdown, CommCmd_GetSize0, 0
 	.word CommPlayerInfo_RecvPlayerEntry, CommPlayerInfo_GetEntrySize, 0
 	.word CommPlayerInfo_RecvEntry, CommPlayerInfo_GetEntrySize, 0
 	.word sub_02034524, CommCmd_GetSize0, 0
@@ -33,9 +33,9 @@ gCommBaseCommands:
 	.word CommState_RecvJoinReply, CommState_GetJoinMessageSize, 0
 	.word 0, 0, 0
 	.word 0, 0, 0
-	.word sub_02037618, CommCmd_GetSize1, 0
-	.word sub_02037640, CommCmd_GetSize1, 0
-	.word sub_02037668, CommCmd_GetSize1, 0
+	.word Comm_RecvTransferModeRequest, CommCmd_GetSize1, 0
+	.word Comm_RecvTransferModeChange, CommCmd_GetSize1, 0
+	.word Comm_RecvTransferModeAck, CommCmd_GetSize1, 0
 	.word CommCmd_RecvReady, CommCmd_GetSize0, 0
 	.word CommCmd_RecvShutdown, CommCmd_GetSize0, 0
 	.word CommCmd_RecvNotReady, CommCmd_GetSize0, 0

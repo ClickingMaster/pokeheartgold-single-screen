@@ -18,7 +18,7 @@
 #include "sys_flags.h"
 #include "system.h"
 #include "communication_command.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "comm_state.h"
 #include "field_terrain.h"
 #include "unk_02055418.h"
@@ -73,9 +73,9 @@ BattleSetup *BattleSetup_New(enum HeapID heapID, u32 battleTypeFlags) {
 
     setup->unk_19C = RngSeedFromRTC();
 
-    if (sub_02037474() == TRUE) {
+    if (Comm_IsActive() == TRUE) {
         for (i = 0; i < Comm_CountConnected(); ++i) {
-            setup->unk_1A0[i] = sub_020378AC(i);
+            setup->unk_1A0[i] = Comm_GetBattleSlot(i);
         }
         setup->unk1B0 = Comm_GetLocalNetId();
     }

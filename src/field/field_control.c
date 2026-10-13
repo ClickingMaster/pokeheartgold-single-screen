@@ -51,7 +51,7 @@
 #include "unk_02031B0C.h"
 #include "wireless_manager.h"
 #include "communication_player_state.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "comm_state.h"
 #include "field_interaction.h"
 #include "field_terrain.h"
@@ -340,7 +340,7 @@ BOOL FieldInput_Process_Colosseum(FieldInput *input, FieldSystem *fieldSystem) {
         return TRUE;
     }
 
-    if (sub_02037958() || CommPlayerManager_GetMoveTimer(Comm_GetLocalNetId()) || !sub_02058740()) {
+    if (Comm_IsSendingMoveKeys() || CommPlayerManager_GetMoveTimer(Comm_GetLocalNetId()) || !sub_02058740()) {
         return FALSE;
     }
 

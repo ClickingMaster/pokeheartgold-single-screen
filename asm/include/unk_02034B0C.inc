@@ -80,9 +80,9 @@
 .public CommWireless_HasSentBeacons
 .public CommWireless_SetCustomBeacon
 .public CommWireless_GetParentMail
-.public sub_020367A8
-.public sub_02036904
-.public sub_02037474
+.public Comm_RecvParentFrameCallback
+.public Comm_RecvChildFrameCallback
+.public Comm_IsActive
 .public CommState_GetLinkMode
 .public CommState_GetBeaconId
 .public CommState_ShowErrorAndHalt

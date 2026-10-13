@@ -26,7 +26,7 @@
 #include "text.h"
 #include "touchpad.h"
 #include "swap_3d_buffers.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"

@@ -2,9 +2,9 @@
 
 #include "comm_player_manager_internal.h"
 #include "sys_task_api.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 
-// Player positions in the link lobby, 2 and 4 players; sub_02057C94 (comm_player_sync.c) matches the players to them.
+// Player positions in the link lobby, 2 and 4 players; CommPlayerManager_AssignBattleSlots (comm_player_sync.c) matches the players to them.
 const u16 __attribute__((aligned(4))) _020FC7A0[4] = { 4, 7, 11, 7 };
 const u16 _020FC7A8[8] = { 4, 6, 11, 6, 4, 8, 11, 8 };
 CommPlayerManager *gCommPlayerManager;
@@ -35,7 +35,7 @@ BOOL CommPlayerManager_Init(CommPlayerManager *manager, FieldSystem *fieldSystem
     gCommPlayerManager->unk_ED = 0;
     gCommPlayerManager->unk_EF = 0;
     gCommPlayerManager->task = SysTask_CreateOnMainQueue(CommPlayerManager_Task, gCommPlayerManager->fieldSystem, 200);
-    sub_020374E4();
+    Comm_EnableKeySync();
     CommPlayerManager_InitLocalPlayer();
     return TRUE;
 }

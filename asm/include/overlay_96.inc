@@ -314,7 +314,7 @@
 .public Comm_RegisterCommandTable
 .public CommCmd_GetSizeVariable
 .public CommPlayerInfo_GetProfile
-.public sub_02036FD8
+.public Comm_SendCommandNoCopy
 .public Comm_SendCommand
 .public Comm_CountConnected
 .public Comm_GetLocalNetId

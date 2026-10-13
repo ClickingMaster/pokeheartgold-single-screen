@@ -14,9 +14,9 @@
 #include "scrcmd_battle_hall.h"
 #include "scrcmd_9.h"
 #include "frontier_field_system.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "unk_0205BFF0.h"
-#include "unk_02096910.h"
+#include "battle_frontier_communication.h"
 #include "use_item_on_mon.h"
 
 // Script commands of the frontier link lobby (FrontierLinkLobby, frontier/frontier_link_lobby.h) and of the link
@@ -28,7 +28,7 @@ u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
 
 u8 LinkSync_GetPlayerState(int netId);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
-BOOL sub_02096998(FrontierFieldSystem *frontierFsys);
+BOOL BattleTowerLink_SendTrainers(FrontierFieldSystem *frontierFsys);
 // Defined returning void in frontier_link_lobby.c, which leaves the new lobby in r0.
 FrontierLinkLobby *FrontierLinkLobby_New(SaveData *saveData);
 
@@ -166,7 +166,7 @@ BOOL FrtCmd_LinkLobbyAction(FrontierScriptContext *ctx) {
 
     switch (action) {
     case 0:
-        sub_02096910(lobby);
+        FrontierLink_RegisterCommands(lobby);
         break;
     case 1:
         *result = lobby->partnerSpecies[0];
@@ -299,14 +299,14 @@ BOOL FrtCmd_LinkLobbyStartTower(FrontierScriptContext *ctx) {
         FrontierFieldSystem_SetRandomFrontierTrainers(frontierFsys, args->saveData);
     }
     HealParty(SaveArray_Party_Get(args->saveData));
-    sub_02096910(frontierFsys);
+    FrontierLink_RegisterCommands(frontierFsys);
     frontierFsys->unk8D4 = 0;
     return FALSE;
 }
 
 BOOL FrtCmd_TowerLinkSendTrainers(FrontierScriptContext *ctx) {
     u16 *result = FrontierScript_ReadVarPtr(ctx);
-    *result = sub_02096998(Frontier_GetData(ctx->frontierSystem->frontierWork));
+    *result = BattleTowerLink_SendTrainers(Frontier_GetData(ctx->frontierSystem->frontierWork));
     return TRUE;
 }
 

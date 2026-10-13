@@ -47,7 +47,7 @@ void CommClubLink_Free(void) {
 }
 
 void sub_020580E4(FieldSystem *fieldSystem, s32 arg1, s32 arg2) {
-    if (sub_02037474() == 0) {
+    if (Comm_IsActive() == 0) {
         CommState_StartParentSession(FieldSystem_GetSaveData(fieldSystem), arg1, arg2, fieldSystem->linkBattleRuleset, 0);
         CommClubLink_Init(fieldSystem);
         CommClubLink_SetState(sub_02058304, 0);
@@ -55,7 +55,7 @@ void sub_020580E4(FieldSystem *fieldSystem, s32 arg1, s32 arg2) {
 }
 
 void sub_02058124(FieldSystem *fieldSystem, u8 arg1, u32 arg2) {
-    if (sub_02037474() == 0) {
+    if (Comm_IsActive() == 0) {
         CommState_StartChildSession(FieldSystem_GetSaveData(fieldSystem), arg1, arg2, fieldSystem->linkBattleRuleset, 0);
         CommClubLink_Init(fieldSystem);
         CommClubLink_SetState(sub_0205832C, 0);
@@ -181,8 +181,8 @@ void sub_0205838C(void) {
     if (LinkSync_IsSynced(98)) {
         void *data = Heap_Alloc((enum HeapID)15, CommPlayerManager_sizeof());
         CommPlayerManager_Init(data, gCommClubLink->fieldSystem, 0);
-        sub_02057F80();
-        sub_02037504();
+        CommPlayerManager_ResumeFieldOnce();
+        Comm_DisableKeySync();
         LinkSync_StartSync(92);
         CommClubLink_SetState(sub_020583EC, 0);
         return;
@@ -203,7 +203,7 @@ void sub_020583EC(void) {
         BeginNormalPaletteFade((enum FadeMode)0, (enum FadeType)1, (enum FadeType)1, 0, 6, 1, (enum HeapID)4);
         ResetVisibleHardwareWindows((PMLCDTarget)0);
         ResetVisibleHardwareWindows((PMLCDTarget)1);
-        sub_02056E60();
+        CommPlayerManager_ResyncLocalPlayer();
         CommPlayerManager_SendLocalPosition(0);
         CommClubLink_SetState(sub_02058478, 1);
     }
@@ -215,7 +215,7 @@ void sub_02058444(void) {
         return;
     }
     if (LinkSync_IsSynced(30)) {
-        sub_020374E4();
+        Comm_EnableKeySync();
         CommClubLink_SetState(sub_02058608, 0);
     }
 }
@@ -226,7 +226,7 @@ void sub_02058478(void) {
         return;
     }
     if (Comm_GetLocalNetId() == 0) {
-        if (sub_02057E50() == 0) {
+        if (CommPlayerManager_StepAllPlayersBack() == 0) {
             return;
         }
         LinkSync_StartSync(30);
@@ -240,7 +240,7 @@ void sub_020584BC(void) {
     if (LinkSync_IsSynced(98)) {
         void *data = Heap_Alloc((enum HeapID)15, CommPlayerManager_sizeof());
         CommPlayerManager_Init(data, gCommClubLink->fieldSystem, 0);
-        sub_02057F80();
+        CommPlayerManager_ResumeFieldOnce();
         LinkSync_StartSync(92);
         CommClubLink_SetState(sub_02058518, 0);
         return;
@@ -259,10 +259,10 @@ void sub_02058518(void) {
     }
     if (LinkSync_IsSynced(92)) {
         u8 flag;
-        sub_02056E60();
+        CommPlayerManager_ResyncLocalPlayer();
         CommPlayerManager_SendLocalPosition(0);
         flag = 1;
-        sub_020376E0(94, &flag);
+        Comm_SendFixedCommand(94, &flag);
         BeginNormalPaletteFade((enum FadeMode)0, (enum FadeType)1, (enum FadeType)1, 0, 6, 1, (enum HeapID)4);
         ResetVisibleHardwareWindows((PMLCDTarget)0);
         ResetVisibleHardwareWindows((PMLCDTarget)1);
@@ -289,11 +289,11 @@ void sub_0205857C(void) {
 }
 
 void sub_02058608(void) {
-    if (sub_02057C94() == 0) {
+    if (CommPlayerManager_AssignBattleSlots() == 0) {
         u8 flag;
         gCommClubLink->ready = 0;
         flag = 1;
-        sub_020376E0(94, &flag);
+        Comm_SendFixedCommand(94, &flag);
         CommClubLink_SetState(sub_020586EC, 0);
     }
     sub_0205857C();
@@ -310,7 +310,7 @@ void sub_02058640(int start, Party *party) {
     }
     {
         u8 flag = 3;
-        sub_020376E0(94, &flag);
+        Comm_SendFixedCommand(94, &flag);
         CommClubLink_SetState(sub_02058608, 0);
     }
 }
@@ -320,12 +320,12 @@ void sub_02058690(void) {
 }
 
 void sub_020586A0(void) {
-    if (sub_02037958() == 0 && CommPlayerManager_GetMoveTimer(Comm_GetLocalNetId()) == 0) {
+    if (Comm_IsSendingMoveKeys() == 0 && CommPlayerManager_GetMoveTimer(Comm_GetLocalNetId()) == 0) {
         if (gCommClubLink->timer) {
             gCommClubLink->timer--;
             return;
         }
-        sub_02057F58();
+        CommPlayerManager_PauseField();
         Colosseum_StartEntry(gCommClubLink->fieldSystem, sub_02058640);
         CommClubLink_SetState(sub_02058690, 0);
     }
@@ -336,7 +336,7 @@ void sub_020586EC(void) {
         u8 flag;
         CommClubLink_SetState(sub_020586A0, 5);
         flag = 0;
-        sub_020376E0(94, &flag);
+        Comm_SendFixedCommand(94, &flag);
     }
     sub_0205857C();
 }
@@ -445,7 +445,7 @@ void *CommClubLink_GetCard(int index) {
 void CommClubLink_SendCard(void) {
     int id = Comm_GetLocalNetId();
     if (LinkSync_IsSynced(95)) {
-        sub_02036FD8(88, gCommClubLink->cards[id], 0x66c);
+        Comm_SendCommandNoCopy(88, gCommClubLink->cards[id], 0x66c);
         CommClubLink_SetState(sub_02058930, 0);
     }
 }

@@ -36,8 +36,8 @@ void OS_ResetSystem(u32 parameter);
 u32 BattleHallData_GetTrainerSprite(BattleHallData *data, u8 index);
 u32 BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value);
 int BattleHall_GetPartySize(u8 type);
-// unk_02096910.h declares it with a parameter; this call passes none.
-void sub_02096910(void);
+// battle_frontier_communication.h declares it with a parameter; this call passes none.
+void FrontierLink_RegisterCommands(void);
 
 void BattleHall_OnAppExit(void *args);
 BOOL FrontierScriptNative_WaitHallLink(FrontierScriptContext *ctx);
@@ -219,7 +219,7 @@ BOOL FrtCmd_HallAction(FrontierScriptContext *ctx) {
         break;
     }
     case 29:
-        sub_02096910();
+        FrontierLink_RegisterCommands();
         break;
     case 30:
         *result = BattleHall_IsMultiType(data->type);

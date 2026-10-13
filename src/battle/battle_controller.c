@@ -16,7 +16,7 @@
 #include "party.h"
 #include "pokemon.h"
 #include "battle_recording.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 
 // Packets sent by the BattleController_Emit* functions. The first byte is the command that
 // OpponentData_RunCommand dispatches on.

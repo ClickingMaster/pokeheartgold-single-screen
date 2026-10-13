@@ -25,7 +25,7 @@ typedef struct FourBytes {
 extern const u8 gDrawingSessionLinkCommands[];
 void *Comm_RegisterCommandTable(const void *, int, void *);
 int Comm_GetLocalNetId(void);
-void sub_02037108(int, const void *, int);
+void Comm_SendParentCommand(int, const void *, int);
 void CopyWindowToVram(void *);
 void DrawingSession_HandleNetEvent(void *, int, int);
 int Comm_CountConnected(void);
@@ -35,7 +35,7 @@ int MATH_CountPopulation(u32);
 void CommState_SetMaxEntries(int);
 void GF_AssertFail(void);
 void CommState_SetErrorWatch(int, int);
-void sub_02037088(int, const void *, int);
+void Comm_SendParentCommandNoCopy(int, const void *, int);
 
 void *DrawingSessionLink_RegisterCommands(void *);
 void DrawingSessionLink_ReceivePictureChunk(void *, void *, void *, DrawingSessionLinkWork *);

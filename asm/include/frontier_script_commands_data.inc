@@ -137,7 +137,7 @@
 .public CommPlayerInfo_GetProfile
 .public CommWireless_Exists
 .public Comm_CountConnected
-.public sub_02037474
+.public Comm_IsActive
 .public Comm_GetLocalNetId
 .public sub_020378E4
 .public LinkSync_StartSync
@@ -171,7 +171,7 @@
 .public Frontier_LaunchApplication
 .public Frontier_RequestExit
 .public Frontier_ChangeMode
-.public sub_02096BF8
+.public FrontierLinkLobby_SendValue74
 .public G2x_SetBGyAffine_
 .public GX_LoadOBJ
 .public DC_FlushRange

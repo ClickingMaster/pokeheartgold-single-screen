@@ -6,7 +6,7 @@
 #include "heap.h"
 #include "wireless_manager.h"
 #include "communication_command.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "comm_state.h"
 #include "union_room_talk.h"
 

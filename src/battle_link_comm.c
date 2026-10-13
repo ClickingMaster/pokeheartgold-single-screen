@@ -178,7 +178,7 @@ void BattleLink_RecvData(int sender, int size, u8 *data, BattleSystem *battle) {
 }
 
 BOOL BattleLink_SendAiFlags(BattleLinkWork *work, u32 value, ...) {
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     if (LinkSync_IsSynced(51) == 0) {
@@ -194,7 +194,7 @@ void BattleLink_RecvAiFlags(int sender, int unused, u32 *data, BattleLinkWork *w
 }
 
 BOOL BattleLink_PrepareProfile(BattleLinkWork *work) {
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     PlayerProfile_Copy(work->setup->profile[0], (PlayerProfile *)&work->buffer);
@@ -202,13 +202,13 @@ BOOL BattleLink_PrepareProfile(BattleLinkWork *work) {
 }
 
 BOOL BattleLink_SendProfile(BattleLinkWork *work) {
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     if (LinkSync_IsSynced(52) == 0) {
         return FALSE;
     }
-    return sub_02036FD8(25, &work->buffer, PlayerProfile_sizeof());
+    return Comm_SendCommandNoCopy(25, &work->buffer, PlayerProfile_sizeof());
 }
 
 void BattleLink_RecvProfile(int sender, int unused, void *data, BattleLinkWork *work) {
@@ -216,7 +216,7 @@ void BattleLink_RecvProfile(int sender, int unused, void *data, BattleLinkWork *
 }
 
 BOOL BattleLink_PrepareTrainer(BattleLinkWork *work) {
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     work->buffer.trainer = work->setup->trainer[0];
@@ -224,13 +224,13 @@ BOOL BattleLink_PrepareTrainer(BattleLinkWork *work) {
 }
 
 BOOL BattleLink_SendTrainer(BattleLinkWork *work) {
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     if (LinkSync_IsSynced(53) == 0) {
         return FALSE;
     }
-    return sub_02036FD8(26, &work->buffer, 52);
+    return Comm_SendCommandNoCopy(26, &work->buffer, 52);
 }
 
 void BattleLink_RecvTrainer(int sender, int unused, void *data, BattleLinkWork *work) {
@@ -238,7 +238,7 @@ void BattleLink_RecvTrainer(int sender, int unused, void *data, BattleLinkWork *
 }
 
 BOOL BattleLink_PrepareParty(BattleLinkWork *work) {
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     Party_Copy(work->setup->party[0], (Party *)&work->buffer);
@@ -246,13 +246,13 @@ BOOL BattleLink_PrepareParty(BattleLinkWork *work) {
 }
 
 BOOL BattleLink_SendParty(BattleLinkWork *work) {
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     if (LinkSync_IsSynced(54) == 0) {
         return FALSE;
     }
-    return sub_02036FD8(27, &work->buffer, PartyCore_sizeof());
+    return Comm_SendCommandNoCopy(27, &work->buffer, PartyCore_sizeof());
 }
 
 void BattleLink_RecvParty(int sender, int unused, void *data, BattleLinkWork *work) {
@@ -260,7 +260,7 @@ void BattleLink_RecvParty(int sender, int unused, void *data, BattleLinkWork *wo
 }
 
 BOOL BattleLink_PrepareChatot(BattleLinkWork *work) {
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     Chatot_Copy(&work->buffer.chatot, work->setup->chatot[0]);
@@ -268,20 +268,20 @@ BOOL BattleLink_PrepareChatot(BattleLinkWork *work) {
 }
 
 BOOL BattleLink_SendChatot(BattleLinkWork *work) {
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     if (LinkSync_IsSynced(55) == 0) {
         return FALSE;
     }
-    return sub_02036FD8(28, &work->buffer, 1000);
+    return Comm_SendCommandNoCopy(28, &work->buffer, 1000);
 }
 
 BOOL BattleLink_PreparePalPad(BattleLinkWork *work) {
     BattleSetup *setup;
     int index;
     int i;
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     setup = work->setup;
@@ -298,13 +298,13 @@ BOOL BattleLink_PreparePalPad(BattleLinkWork *work) {
 }
 
 BOOL BattleLink_SendPalPad(BattleLinkWork *work) {
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     if (LinkSync_IsSynced(56) == 0) {
         return FALSE;
     }
-    return sub_02036FD8(33, &work->buffer, 1000);
+    return Comm_SendCommandNoCopy(33, &work->buffer, 1000);
 }
 
 void BattleLink_RecvChatot(int sender, int unused, void *data, BattleLinkWork *work) {
@@ -312,7 +312,7 @@ void BattleLink_RecvChatot(int sender, int unused, void *data, BattleLinkWork *w
 }
 
 BOOL BattleLink_PreparePartnerTrainer(BattleLinkWork *work, int index) {
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     work->buffer.trainer = work->setup->trainer[index];
@@ -320,16 +320,16 @@ BOOL BattleLink_PreparePartnerTrainer(BattleLinkWork *work, int index) {
 }
 
 BOOL BattleLink_SendPartnerTrainer(BattleLinkWork *work, int index, int command) {
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     if (!LinkSync_IsSynced((u8)command)) {
         return FALSE;
     }
     if (index == 1) {
-        return sub_02036FD8(29, &work->buffer, 52);
+        return Comm_SendCommandNoCopy(29, &work->buffer, 52);
     }
-    return sub_02036FD8(30, &work->buffer, 52);
+    return Comm_SendCommandNoCopy(30, &work->buffer, 52);
 }
 
 void BattleLink_RecvPartnerTrainer(int sender, int unused, void *data, BattleLinkWork *work) {
@@ -337,7 +337,7 @@ void BattleLink_RecvPartnerTrainer(int sender, int unused, void *data, BattleLin
 }
 
 BOOL BattleLink_PreparePartnerParty(BattleLinkWork *work, int index) {
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     Party_Copy(work->setup->party[index], (Party *)&work->buffer);
@@ -345,16 +345,16 @@ BOOL BattleLink_PreparePartnerParty(BattleLinkWork *work, int index) {
 }
 
 BOOL BattleLink_SendPartnerParty(BattleLinkWork *work, int index, int command) {
-    if (sub_02037190() != 264) {
+    if (Comm_GetSendBufferFreeSpace() != 264) {
         return FALSE;
     }
     if (!LinkSync_IsSynced((u8)command)) {
         return FALSE;
     }
     if (index == 1) {
-        return sub_02036FD8(31, &work->buffer, PartyCore_sizeof());
+        return Comm_SendCommandNoCopy(31, &work->buffer, PartyCore_sizeof());
     }
-    return sub_02036FD8(32, &work->buffer, PartyCore_sizeof());
+    return Comm_SendCommandNoCopy(32, &work->buffer, PartyCore_sizeof());
 }
 
 void BattleLink_RecvPartnerParty(int sender, int unused, void *data, BattleLinkWork *work) {
@@ -370,7 +370,7 @@ void BattleLink_SendTask(SysTask *task, void *ptr) {
     switch (work->state) {
     case 0: {
         int size;
-        if (sub_02037190() != 264) {
+        if (Comm_GetSendBufferFreeSpace() != 264) {
             break;
         }
         if (*read == *write) {

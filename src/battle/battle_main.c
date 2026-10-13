@@ -50,7 +50,7 @@
 #include "touchpad.h"
 #include "swap_3d_buffers.h"
 #include "palette_vram_addr.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
@@ -1315,7 +1315,7 @@ BOOL Battle_PartyPreviewInit(OverlayManager *man) {
     battleSystem->linkScreenArgs = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleLinkScreenArgs));
     MIi_CpuClearFast(0, battleSystem->linkScreenArgs, sizeof(BattleLinkScreenArgs));
     netId = Comm_GetLocalNetId();
-    switch (sub_020378AC(netId)) {
+    switch (Comm_GetBattleSlot(netId)) {
     case 0:
     case 3:
         LINK_SCREEN_ARGS(battleSystem)->parties[0] = battleSystem->trainerParty[netId];
@@ -1329,7 +1329,7 @@ BOOL Battle_PartyPreviewInit(OverlayManager *man) {
     }
     LINK_SCREEN_ARGS(battleSystem)->heapId = HEAP_ID_BATTLE;
     LINK_SCREEN_ARGS(battleSystem)->mode = 0;
-    switch (sub_020378AC(netId)) {
+    switch (Comm_GetBattleSlot(netId)) {
     case 0:
     case 3:
         LINK_SCREEN_ARGS(battleSystem)->multiOrSide = 0;
@@ -1380,8 +1380,8 @@ BOOL Battle_VsScreenInit(OverlayManager *man) {
     if (battleSystem->battleType & BATTLE_TYPE_MULTI) {
         BattleSystem *cursor;
         for (i = 0, cursor = battleSystem; i < 4; cursor = (BattleSystem *)((u8 *)cursor + 4), i++) {
-            LINK_SCREEN_ARGS(battleSystem)->parties[sub_020378AC(i)] = cursor->trainerParty[0];
-            slot = sub_020378AC(i);
+            LINK_SCREEN_ARGS(battleSystem)->parties[Comm_GetBattleSlot(i)] = cursor->trainerParty[0];
+            slot = Comm_GetBattleSlot(i);
             LINK_SCREEN_ARGS(battleSystem)->names[slot] = PlayerProfile_GetPlayerName_NewString(cursor->playerProfile[0], HEAP_ID_BATTLE);
         }
         LINK_SCREEN_ARGS(battleSystem)->heapId = HEAP_ID_BATTLE;
@@ -1389,12 +1389,12 @@ BOOL Battle_VsScreenInit(OverlayManager *man) {
         LINK_SCREEN_ARGS(battleSystem)->multiOrSide = 1;
     } else {
         int other;
-        LINK_SCREEN_ARGS(battleSystem)->parties[sub_020378AC(netId)] = battleSystem->trainerParty[netId];
+        LINK_SCREEN_ARGS(battleSystem)->parties[Comm_GetBattleSlot(netId)] = battleSystem->trainerParty[netId];
         other = netId ^ 1;
-        LINK_SCREEN_ARGS(battleSystem)->parties[sub_020378AC(other)] = battleSystem->trainerParty[other];
-        slot = sub_020378AC(netId);
+        LINK_SCREEN_ARGS(battleSystem)->parties[Comm_GetBattleSlot(other)] = battleSystem->trainerParty[other];
+        slot = Comm_GetBattleSlot(netId);
         LINK_SCREEN_ARGS(battleSystem)->names[slot] = PlayerProfile_GetPlayerName_NewString(battleSystem->playerProfile[netId], HEAP_ID_BATTLE);
-        slot = sub_020378AC(other);
+        slot = Comm_GetBattleSlot(other);
         LINK_SCREEN_ARGS(battleSystem)->names[slot] = PlayerProfile_GetPlayerName_NewString(battleSystem->playerProfile[other], HEAP_ID_BATTLE);
         LINK_SCREEN_ARGS(battleSystem)->heapId = HEAP_ID_BATTLE;
         LINK_SCREEN_ARGS(battleSystem)->mode = 1;
@@ -1471,8 +1471,8 @@ BOOL Battle_EndInit(OverlayManager *man) {
     }
     if (setup->battleType & 8) {
         for (i = 0; i < 4; i++) {
-            args->parties[sub_020378AC(i)] = setup->party[i];
-            slot = sub_020378AC(i);
+            args->parties[Comm_GetBattleSlot(i)] = setup->party[i];
+            slot = Comm_GetBattleSlot(i);
             args->names[slot] = PlayerProfile_GetPlayerName_NewString(setup->profile[i], HEAP_ID_BATTLE);
         }
         args->heapId = HEAP_ID_BATTLE;
@@ -1485,12 +1485,12 @@ BOOL Battle_EndInit(OverlayManager *man) {
         }
     } else {
         offset = netId;
-        args->parties[sub_020378AC(netId)] = setup->party[offset];
+        args->parties[Comm_GetBattleSlot(netId)] = setup->party[offset];
         other = netId ^ 1;
-        args->parties[sub_020378AC(other)] = setup->party[other];
-        slot = sub_020378AC(netId);
+        args->parties[Comm_GetBattleSlot(other)] = setup->party[other];
+        slot = Comm_GetBattleSlot(netId);
         args->names[slot] = PlayerProfile_GetPlayerName_NewString(setup->profile[offset], HEAP_ID_BATTLE);
-        slot = sub_020378AC(other);
+        slot = Comm_GetBattleSlot(other);
         args->names[slot] = PlayerProfile_GetPlayerName_NewString(setup->profile[other], HEAP_ID_BATTLE);
         args->heapId = HEAP_ID_BATTLE;
         args->mode = 2;
@@ -1577,8 +1577,8 @@ void ov12_0223A664(BattleSystem *battleSystem, BattleSetup *setup) {
     }
     if (!(battleSystem->battleType & BATTLE_TYPE_FRONTIER)) {
         if (battleSystem->battleType & BATTLE_TYPE_MULTI) {
-            int side = sub_020378AC(netId);
-            switch (sub_020378AC(ids[0])) {
+            int side = Comm_GetBattleSlot(netId);
+            switch (Comm_GetBattleSlot(ids[0])) {
             case 0:
             case 2:
                 if (side & 1) {

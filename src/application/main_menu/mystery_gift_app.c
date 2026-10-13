@@ -54,7 +54,7 @@
 #include "unk_02009D48.h"
 #include "sprite_resource.h"
 #include "comm_wireless.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "wireless_status_icon.h"
 
 // Main menu option "Mystery Gift": receives a gift (from a friend or a distribution over DS wireless, or

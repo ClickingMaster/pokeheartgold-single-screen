@@ -15,7 +15,7 @@
 #include "overlay_42.h"
 #include "particle_system.h"
 #include "communication_player_state.h"
-#include "unk_02096910.h"
+#include "battle_frontier_communication.h"
 
 static void GameBoardArgs_Set(GAME_BOARD_ARGS *args, ArcadeContext *data);
 static void BattleArcade_OnGameBoardExit(void *data);
@@ -302,7 +302,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         }
         break;
     case 6:
-        sub_02096910(arcadeCtx);
+        FrontierLink_RegisterCommands(arcadeCtx);
         break;
     case 28:
         *out = BattleArcade_MultiplayerCheck(arcadeCtx->type);

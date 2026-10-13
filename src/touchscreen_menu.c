@@ -54,7 +54,7 @@
 #include "touchscreen.h"
 #include "unk_02009D48.h"
 #include "sprite_resource.h"
-#include "unk_02035900.h"
+#include "communication_core.h"
 #include "field_interaction.h"
 #include "comm_player_manager.h"
 #include "communication_club_link.h"
@@ -1090,7 +1090,7 @@ BOOL TouchscreenMenu_HandleTouchInput(TouchscreenMenuData *data) {
     }
     if (data->layout == TOUCHSCREEN_MENU_LAYOUT_5) {
         u32 netId = Comm_GetLocalNetId();
-        if (!sub_02058740() || !sub_02058258() || !CommPlayerManager_IsInitialized() || !CommPlayerManager_IsLocalPlayerConnected() || CommPlayerManager_GetMoveTimer(netId) || sub_02037958()) {
+        if (!sub_02058740() || !sub_02058258() || !CommPlayerManager_IsInitialized() || !CommPlayerManager_IsLocalPlayerConnected() || CommPlayerManager_GetMoveTimer(netId) || Comm_IsSendingMoveKeys()) {
             return TRUE;
         }
     }

@@ -2,10 +2,10 @@
 #pragma once
 .public Heap_Alloc
 .public Heap_Free
-.public sub_02037184
+.public Comm_SendFixedParentCommand
 .public Comm_IsNetIdConnected
 .public Comm_GetLocalNetId
-.public sub_020376E0
+.public Comm_SendFixedCommand
 .public LinkSync_Init
 .public LinkSync_Free
 .public LinkSync_Exists
