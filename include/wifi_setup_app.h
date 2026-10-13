@@ -115,13 +115,13 @@ void WifiSetupText_UnloadBank(WifiSetupTextBank *bank);
 u16 *WifiSetupText_GetString(WifiSetupTextBank *bank, int index);
 u16 *WifiSetupText_GetStringWithDigit(WifiSetupTextBank *bank, u32 index, int pos, u32 digit);
 
-void ov13_0222BB20(WifiSetupSessionCallback callback);
-void ov13_0222BC0C(void);
-void ov13_0222BC2C(void *task);
-BOOL ov13_0222BC68(void);
-void ov13_0222BC84(WifiSetupSessionCallback callback);
-void ov13_0222BC9C(void);
-u8 *ov13_0222BCA8(void);
-void ov13_0222BCC0(void *task);
+void WifiSetupTransfer_Start(WifiSetupSessionCallback callback);
+void WifiSetupTransfer_Cancel(void);
+void WifiSetupTransfer_CancelTask(void *task);
+BOOL WifiSetupTransfer_IsFinished(void);
+void WifiSetupTransfer_SetCallback(WifiSetupSessionCallback callback);
+void WifiSetupTransfer_StartDownload(void);
+u8 *WifiSetupTransfer_GetChildUser(void);
+void WifiSetupTransfer_Task(void *task);
 
 #endif // POKEHEARTGOLD_WIFI_SETUP_APP_H

@@ -125,9 +125,9 @@ inline Handler *Find(Manager *m, u32 id) {
 extern "C" void ov45_0223FC5C(Str *dst, Manager *m);
 extern "C" void ov45_02242D30(Manager *m, Str *a, Str *b);
 extern "C" int ov45_02243808(Manager *m, Str *s);
-extern "C" int ov45_02250F5C(void *net, const char *name);
-extern "C" void ov45_02250E6C(void *net, const char *name, int n);
-extern "C" void ov45_02251208(void *session, const char *name, void *cb, u32 id, u32 z);
+extern "C" int chatGetChannelNumUsersA(void *net, const char *name);
+extern "C" void chatSetChannelLimitA(void *net, const char *name, int n);
+extern "C" void chatEnumUsersA(void *session, const char *name, void *cb, u32 id, u32 z);
 extern "C" void ov45_022412CC(const char *s);
 extern "C" void ov45_0224005C(void *self, int result, const char *name, int count, const char **names, u32 unused, u32 id);
 extern "C" void ov45_02240234(void *session, int ok, int error, const char *name, u32 id);
@@ -144,7 +144,7 @@ extern "C" void ov45_02240234(void *session, int ok, int error, const char *name
         int found = ov45_02243808(ov45_022577DC, &s);
         ov45_02237BC8(&s);
         if (found != 0) {
-            int limit = ov45_02250F5C(ov45_022577DC->net, name);
+            int limit = chatGetChannelNumUsersA(ov45_022577DC->net, name);
             if (found == -1) {
                 ok = 0;
                 error = 7;
@@ -152,7 +152,7 @@ extern "C" void ov45_02240234(void *session, int ok, int error, const char *name
                 ok = 0;
                 error = 2;
             } else {
-                ov45_02250E6C(ov45_022577DC->net, name, found);
+                chatSetChannelLimitA(ov45_022577DC->net, name, found);
             }
         }
     }
@@ -164,7 +164,7 @@ extern "C" void ov45_02240234(void *session, int ok, int error, const char *name
         ov45_02242D30(ov45_022577DC, &a, &b);
         ov45_02237BC8(&b);
         ov45_02237BC8(&a);
-        ov45_02251208(session, name, (void *)ov45_0224005C, id, 0);
+        chatEnumUsersA(session, name, (void *)ov45_0224005C, id, 0);
         return;
     }
     {

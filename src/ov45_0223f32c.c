@@ -30,7 +30,7 @@ extern u8 *ov45_022577DC;
 void ov45_02237B58(String *, const char *);
 void ov45_02237BC8(String *);
 int ov45_02243808(void *, String *);
-int ov45_02250F5C(int, const char *);
+int chatGetChannelNumUsersA(int, const char *);
 char *ov45_02242A2C(String *);
 void ov45_0224367C(String *, void *, char *);
 int ov45_02243280(void *, String *, String *);
@@ -57,7 +57,7 @@ void ov45_0223F32C(void *unused, const char *key, const char *value) {
     ov45_02237B58(&a, key);
     exists = ov45_02243808(ov45_022577DC, &a);
     ov45_02237BC8(&a);
-    if (exists && ov45_02250F5C(*(int *)ov45_022577DC, key) > exists) {
+    if (exists && chatGetChannelNumUsersA(*(int *)ov45_022577DC, key) > exists) {
         return;
     }
     ov45_02237B58(&b, value);

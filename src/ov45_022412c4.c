@@ -254,7 +254,7 @@ typedef struct CbObj {
 } CbObj;
 
 extern int ov45_022577E0;
-extern void ov45_022504E0(void *p);
+extern void chatDisconnect(void *p);
 extern void *ov45_02242394(u32 size);
 extern void ov45_0224206C(InsertResult *out, Tree *t, Obj **val);
 
@@ -292,20 +292,20 @@ static inline CbObj *CbObjCreate(void *vt, int xc, void *x8) {
 }
 
 extern int ov45_02237FD8(Str *a, const char *b);
-extern void ov45_022507D8(void *h, const char *name, int x);
+extern void chatLeaveChannelA(void *h, const char *name, int x);
 extern void ov45_0224335C(Ctx *c, Str *s);
-extern void ov45_0225089C(void *h, const char *name, const char *msg, int x);
+extern void chatSendChannelMessageA(void *h, const char *name, const char *msg, int x);
 extern void ov45_0224367C(Str *out, Ctx *c, int a);
 extern char ov45_02255304[];
-extern void ov45_02251350(void *h, const char *name, const char *msg, int x);
-extern void ov45_022505A0(void *h, const char *name, void *f1, void *f2, int h2, int z);
+extern void chatSendUserMessageA(void *h, const char *name, const char *msg, int x);
+extern void chatEnumChannelsA(void *h, const char *name, void *f1, void *f2, int h2, int z);
 extern void ov45_0223FE20(void);
 extern void ov45_0223FC6C(void);
 extern void ov45_0223FE28(void);
 extern void ov45_02240718(void);
-extern int ov45_02251024(void *h, const char *name);
-extern void ov45_02251208(void *h, const char *name, void *f, int h2, int z);
-extern void ov45_02250C80(void *h, const char *name, void *f, int h2, int z);
+extern int chatInChannelA(void *h, const char *name);
+extern void chatEnumUsersA(void *h, const char *name, void *f, int h2, int z);
+extern void chatGetChannelModeA(void *h, const char *name, void *f, int h2, int z);
 extern void *ov45_022552B0;
 extern void *ov45_02255298;
 extern void *ov45_02255250;
@@ -330,7 +330,7 @@ static inline void OpDelete(void *p) {
 }
 
 extern void ov45_0223DAD4(Str *s, const char *cstr);
-extern void ov45_02251554(void *h, const char *name, const char *who, int x, const char **key, const char **val);
+extern void chatSetChannelKeysA(void *h, const char *name, const char *who, int x, const char **key, const char **val);
 
 extern void ov45_02243840(InsertResult *out, Tree *t, NamedEntry *e);
 extern void ov45_02243F1C(TreeHdr *t);
@@ -434,7 +434,7 @@ static inline BOOL StrEqC(Str *a, const char *b) {
 }
 
 extern Ctx *ov45_022577DC;
-extern void ov45_02250A80(void *h, const char *name, int arg);
+extern void chatSetChannelModeA(void *h, const char *name, int arg);
 
 static inline int CtxState(void) {
     return (*(Ctx *volatile *)&ov45_022577DC)->state;
@@ -486,7 +486,7 @@ int ov45_022412CC(const char *name) {
     CTX_CHECK(c);
     ov45_02237B58(&s1, name);
     ov45_022428C8(&s2, ov45_022577DC, &s1);
-    ov45_022507D8(ov45_022577DC->unk0, StrData(&s2), 0);
+    chatLeaveChannelA(ov45_022577DC->unk0, StrData(&s2), 0);
     ov45_02237BC8(&s2);
     ov45_02237BC8(&s1);
     ov45_02237B58(&s3, name);
@@ -507,7 +507,7 @@ int ov45_022413D4(const char *name, const char *msg) {
     }
     ov45_02237B58(&s1, name);
     ov45_022428C8(&s2, ov45_022577DC, &s1);
-    ov45_0225089C(ov45_022577DC->unk0, StrData(&s2), msg, 3);
+    chatSendChannelMessageA(ov45_022577DC->unk0, StrData(&s2), msg, 3);
     ov45_02237BC8(&s2);
     ov45_02237BC8(&s1);
     return 0;
@@ -525,7 +525,7 @@ int ov45_022414C0(int a, const char *msg) {
         ov45_02237BC8(&s);
         return 3;
     }
-    ov45_02251350(ov45_022577DC->unk0, StrData(&s), msg, 3);
+    chatSendUserMessageA(ov45_022577DC->unk0, StrData(&s), msg, 3);
     ov45_02237BC8(&s);
     return 0;
 }
@@ -554,7 +554,7 @@ int ov45_022415CC(const char *name, int a, const char *key, const char *val) {
     }
     ov45_02237B58(&s1, name);
     ov45_022428C8(&s2, ov45_022577DC, &s1);
-    ov45_02251554(ov45_022577DC->unk0, StrData(&s2), StrData(&s), 1, &key, &val);
+    chatSetChannelKeysA(ov45_022577DC->unk0, StrData(&s2), StrData(&s), 1, &key, &val);
     ov45_02237BC8(&s2);
     ov45_02237BC8(&s1);
     ov45_02237BC8(&s);

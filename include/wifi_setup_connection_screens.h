@@ -34,7 +34,7 @@
 
 // gWifiSetupMethodMenu.selected
 #define WIFI_SETUP_METHOD_MENU_AP_SCAN 0
-#define WIFI_SETUP_METHOD_MENU_CLIENT  1 // ov13_0222F2AC
+#define WIFI_SETUP_METHOD_MENU_CLIENT  1 // WifiSetupAoss_Init
 #define WIFI_SETUP_METHOD_MENU_AUTO    2 // WifiSetupAutoSearch_Init
 #define WIFI_SETUP_METHOD_MENU_MANUAL  3
 

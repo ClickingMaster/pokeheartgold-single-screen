@@ -118,7 +118,7 @@ extern const struct {
     ChatBytes2 last;
 } ov45_02257140;
 
-// Cookie buffer and counter of ov45_022514F4.
+// Cookie buffer and counter of ciGetNextCookie.
 extern char ov45_022577F0[];
 extern int ov45_022577F4;
 
@@ -132,7 +132,7 @@ extern int ov45_022577F4;
 #define ASSERT_CHANNEL(name, func, line)     \
     ASSERT(name, ov45_02256E9C, func, line); \
     ASSERT(*name, ov45_02256EAC, func, line);
-// A string argument of ov45_0224FABC: asserted and required.
+// A string argument of chatConnectDoit: asserted and required.
 #define REQUIRE_STRING(s, message, line)                 \
     ASSERT((s) && (s)[0], message, ov45_02256A08, line); \
     if (!(s) || !(s)[0]) {                               \
@@ -147,15 +147,15 @@ static inline void ConnectFailed(ChatConnection *chat) {
     }
 }
 
-// Calls ov45_0224F770 until the request id has been answered.
+// Calls ciThink until the request id has been answered.
 #define WAIT_FOR_REQUEST(chat, id) \
     do {                           \
-        ov45_0224F770(chat, id);   \
+        ciThink(chat, id);   \
         ov00_021FF3C0(10);         \
-    } while (ov45_0224F660(chat, id))
+    } while (ciCheckForID(chat, id))
 
 // Calls the handler of the message's command; returns whether the command is known.
-int ov45_0224F5BC(ChatConnection *chat, ChatMessage *message) {
+int ciProcessServerMessage(ChatConnection *chat, ChatMessage *message) {
     int i;
     ASSERT(message, ov45_02256B84, ov45_02256B24, 79);
     for (i = 0; i < ov45_02255DA0; i++) {
@@ -171,15 +171,15 @@ int ov45_0224F5BC(ChatConnection *chat, ChatMessage *message) {
 }
 
 // Whether the request id is still waiting for an answer or a callback.
-BOOL ov45_0224F660(ChatConnection *chat, int id) {
-    if (ov45_0224A630(chat, id) || ov45_022474FC(chat, id)) {
+BOOL ciCheckForID(ChatConnection *chat, int id) {
+    if (ciCheckFiltersForID(chat, id) || ciCheckCallbacksForID(chat, id)) {
         return TRUE;
     }
     return FALSE;
 }
 
 // The connection was lost: queue the disconnected callback once.
-void ov45_0224F69C(ChatConnection *chat, const char *reason) {
+void ciHandleDisconnect(ChatConnection *chat, const char *reason) {
     const char *args;
     ASSERT_CHAT(chat, ov45_02256A54, 115);
     if (chat->disconnected) {
@@ -198,36 +198,36 @@ void ov45_0224F69C(ChatConnection *chat, const char *reason) {
         return;
     }
     args = reason;
-    ov45_02244D30(chat, 1, chat->globalCallbacks.disconnected, (u32 *)&args, chat->globalCallbacks.param, 0, NULL, 4);
+    ciAddCallback_(chat, 1, chat->globalCallbacks.disconnected, (u32 *)&args, chat->globalCallbacks.param, 0, NULL, 4);
 }
 
 // Per-frame work: receive and handle the server lines, then call the queued callbacks of the request id
 // (0 = all).
-void ov45_0224F770(ChatConnection *chat, int id) {
+void ciThink(ChatConnection *chat, int id) {
     ChatMessage *message;
     u32 text;
     ASSERT_CHAT(chat, ov45_022569A0, 154);
     if (chat->socket.state == 1) {
-        ov45_02252AA0(&chat->socket);
+        ciSocketThink(&chat->socket);
         message = ov45_02253B5C(&chat->socket);
         while (message) {
             if (chat->globalCallbacks.raw) {
                 text = (u32)message->text;
-                ov45_02244D30(chat, 0, chat->globalCallbacks.raw, &text, chat->globalCallbacks.param, 0, NULL, 4);
+                ciAddCallback_(chat, 0, chat->globalCallbacks.raw, &text, chat->globalCallbacks.param, 0, NULL, 4);
             }
-            ov45_0224F5BC(chat, message);
+            ciProcessServerMessage(chat, message);
             message = ov45_02253B5C(&chat->socket);
         }
         if (chat->socket.state == 2) {
-            ov45_0224F69C(chat, ov45_02256BB0);
+            ciHandleDisconnect(chat, ov45_02256BB0);
         }
     }
-    ov45_0224A578(chat);
-    ov45_022471A0(chat, id);
+    ciFilterThink(chat);
+    ciCallCallbacks(chat, id);
 }
 
 // Sends the nick (login types 0 and 2) or "*".
-void ov45_0224F860(ChatConnection *chat) {
+void ciSendNick(ChatConnection *chat) {
     const char *nick;
     int error;
     ASSERT_CHAT(chat, ov45_022569A8, 206);
@@ -248,34 +248,34 @@ void ov45_0224F860(ChatConnection *chat) {
     } else {
         nick = ov45_02256BC0.bytes;
     }
-    ov45_02252F74(&chat->socket, ov45_02256BC4, nick);
+    ciSocketSendf(&chat->socket, ov45_02256BC4, nick);
 }
 
-void ov45_0224F934(ChatConnection *chat) {
+void ciSendUser(ChatConnection *chat) {
     ASSERT_CHAT(chat, ov45_022569B4, 260);
-    ov45_02252F74(&chat->socket, ov45_02256BCC, chat->user, ov45_02256BE0, chat->serverAddress, chat->realName);
+    ciSocketSendf(&chat->socket, ov45_02256BCC, chat->user, ov45_02256BE0, chat->serverAddress, chat->realName);
 }
 
-void ov45_0224F9A0(ChatConnection *chat) {
-    ov45_0224F934(chat);
-    ov45_0224F860(chat);
+void ciSendNickAndUser(ChatConnection *chat) {
+    ciSendUser(chat);
+    ciSendNick(chat);
 }
 
 // Sends the login of login types 1 .. 3.
-void ov45_0224F9B8(ChatConnection *chat) {
+void ciSendLogin(ChatConnection *chat) {
     char hash[36];
     ASSERT_CHAT(chat, ov45_022569CC, 280);
     if (chat->loginType == 3) {
-        ov45_02252F74(&chat->socket, ov45_02256BEC, chat->authTicket, chat->partnerKey);
+        ciSocketSendf(&chat->socket, ov45_02256BEC, chat->authTicket, chat->partnerKey);
         return;
     }
     ov00_021FF31C(chat->password, strlen(chat->password), hash);
     if (chat->loginType == 1) {
-        ov45_02252F74(&chat->socket, ov45_02256C00, chat->accountSpace, chat->registeredNick, hash);
+        ciSocketSendf(&chat->socket, ov45_02256C00, chat->accountSpace, chat->registeredNick, hash);
         return;
     }
     if (chat->loginType == 2) {
-        ov45_02252F74(&chat->socket, ov45_02256C10, chat->accountSpace, hash, chat->accountNick, chat->email);
+        ciSocketSendf(&chat->socket, ov45_02256C10, chat->accountSpace, hash, chat->accountNick, chat->email);
         return;
     }
     __msl_assertion_failed(ov45_02256C28, ov45_02256B94, ov45_022569CC, 318);
@@ -283,7 +283,7 @@ void ov45_0224F9B8(ChatConnection *chat) {
 
 // Creates the connection and starts the login; with blocking, waits until the connect attempt has ended
 // (NULL if it failed).
-ChatConnection *ov45_0224FABC(int loginType, const char *serverAddress, int serverPort, const char *nick, const char *user, const char *realName, int accountSpace, const char *email, const char *accountNick, const char *registeredNick, const char *password, const char *authTicket, const char *partnerKey, const char *gameName, const char *gameKey, const ChatGlobalCallbacks *callbacks, void *nickErrorCallback, void *userAddressCallback, void *connectedCallback, void *connectParam, BOOL blocking) {
+ChatConnection *chatConnectDoit(int loginType, const char *serverAddress, int serverPort, const char *nick, const char *user, const char *realName, int accountSpace, const char *email, const char *accountNick, const char *registeredNick, const char *password, const char *authTicket, const char *partnerKey, const char *gameName, const char *gameKey, const ChatGlobalCallbacks *callbacks, void *nickErrorCallback, void *userAddressCallback, void *connectedCallback, void *connectParam, BOOL blocking) {
     const char *socketName = ov45_02256C2C;
     ChatConnection *chat;
     ASSERT(serverAddress != NULL, ov45_02256C30, ov45_02256A08, 347);
@@ -374,28 +374,28 @@ ChatConnection *ov45_0224FABC(int loginType, const char *serverAddress, int serv
     chat->nextRequestId = 1;
     chat->connecting = TRUE;
     chat->unk_824 = 0;
-    if (!ov45_02247968(chat)) {
+    if (!ciInitChannels(chat)) {
         ov00_021EC3D8(chat);
         ov00_021FF3D0();
         return NULL;
     }
-    if (!ov45_02244B9C(chat)) {
-        ov45_022479F0(chat);
+    if (!ciInitCallbacks(chat)) {
+        ciCleanupChannels(chat);
         ov00_021EC3D8(chat);
         ov00_021FF3D0();
         return NULL;
     }
     if (!ov45_02251EF0(&chat->socket, socketName)) {
-        ov45_02244BCC(chat);
-        ov45_022479F0(chat);
+        ciCleanupCallbacks(chat);
+        ciCleanupChannels(chat);
         ov00_021EC3D8(chat);
         ov00_021FF3D0();
         return NULL;
     }
-    if (!ov45_02251F6C(&chat->socket, serverAddress, serverPort)) {
-        ov45_022522B4(&chat->socket);
-        ov45_02244BCC(chat);
-        ov45_022479F0(chat);
+    if (!ciSocketConnect(&chat->socket, serverAddress, serverPort)) {
+        ciSocketDisconnect(&chat->socket);
+        ciCleanupCallbacks(chat);
+        ciCleanupChannels(chat);
         ov00_021EC3D8(chat);
         ov00_021FF3D0();
         return NULL;
@@ -407,19 +407,19 @@ ChatConnection *ov45_0224FABC(int loginType, const char *serverAddress, int serv
     if (gameName && gameName[0] && gameKey && gameKey[0]) {
         strncpy(chat->gameKey, gameKey, 128);
         chat->gameKey[127] = 0;
-        ov45_02252F74(&chat->socket, ov45_02256DB8, ov45_0225699C, gameName);
+        ciSocketSendf(&chat->socket, ov45_02256DB8, ov45_0225699C, gameName);
     } else if (chat->userAddressCallback) {
-        ov45_02252CB4(&chat->socket, ov45_02256DC8);
+        ciSocketSend(&chat->socket, ov45_02256DC8);
     } else {
-        ov45_0224F9A0(chat);
+        ciSendNickAndUser(chat);
     }
     if (blocking) {
         do {
-            ov45_0224F770(chat, 0);
+            ciThink(chat, 0);
             ov00_021FF3C0(10);
         } while (chat->connecting);
         if (!chat->connected) {
-            ov45_022504E0(chat);
+            chatDisconnect(chat);
             chat = NULL;
         }
     }
@@ -427,12 +427,12 @@ ChatConnection *ov45_0224FABC(int loginType, const char *serverAddress, int serv
 }
 
 // Connects with a nick only (login type 0).
-ChatConnection *ov45_022502D0(const char *serverAddress, int serverPort, const char *nick, const char *realName, const char *gameName, const char *gameKey, const ChatGlobalCallbacks *callbacks, void *nickErrorCallback, void *userAddressCallback, void *connectedCallback, void *connectParam, BOOL blocking) {
-    return ov45_0224FABC(0, serverAddress, serverPort, nick, NULL, realName, 0, NULL, NULL, NULL, NULL, NULL, NULL, gameName, gameKey, callbacks, nickErrorCallback, userAddressCallback, connectedCallback, connectParam, blocking);
+ChatConnection *chatConnectSpecialA(const char *serverAddress, int serverPort, const char *nick, const char *realName, const char *gameName, const char *gameKey, const ChatGlobalCallbacks *callbacks, void *nickErrorCallback, void *userAddressCallback, void *connectedCallback, void *connectParam, BOOL blocking) {
+    return chatConnectDoit(0, serverAddress, serverPort, nick, NULL, realName, 0, NULL, NULL, NULL, NULL, NULL, NULL, gameName, gameKey, callbacks, nickErrorCallback, userAddressCallback, connectedCallback, connectParam, blocking);
 }
 
 // Tries another nick after the nick error callback (NULL gives up).
-void ov45_0225035C(ChatConnection *chat, const char *nick) {
+void chatRetryWithNickA(ChatConnection *chat, const char *nick) {
     int error;
     ASSERT_CHAT(chat, ov45_02256A68, 901);
     if (chat->connected) {
@@ -449,11 +449,11 @@ void ov45_0225035C(ChatConnection *chat, const char *nick) {
         ov45_02251B0C(chat, error, nick, 0, 0);
         return;
     }
-    ov45_02252F74(&chat->socket, ov45_02256DD0, nick);
+    ciSocketSendf(&chat->socket, ov45_02256DD0, nick);
 }
 
 // Registers a nick for the login (NULL gives up).
-void ov45_02250424(ChatConnection *chat, int accountSpace, const char *nick, const char *cdKey) {
+void chatRegisterUniqueNickA(ChatConnection *chat, int accountSpace, const char *nick, const char *cdKey) {
     ASSERT_CHAT(chat, ov45_02256B3C, 957);
     if (chat->connected) {
         return;
@@ -465,35 +465,35 @@ void ov45_02250424(ChatConnection *chat, int accountSpace, const char *nick, con
     if (!cdKey) {
         cdKey = ov45_02256C2C;
     }
-    ov45_02252F74(&chat->socket, ov45_02256DDC, accountSpace, nick, cdKey);
+    ciSocketSendf(&chat->socket, ov45_02256DDC, accountSpace, nick, cdKey);
     strncpy(chat->registeredNick, nick, 64);
     chat->registeredNick[63] = 0;
 }
 
 // Disconnects and frees the connection.
-void ov45_022504E0(ChatConnection *chat) {
+void chatDisconnect(ChatConnection *chat) {
     ASSERT_CHAT(chat, ov45_022569E8, 1007);
-    ov45_0224A6B4(chat);
+    ciCleanupFilters(chat);
     if (!chat->disconnected && chat->globalCallbacks.disconnected) {
         ((void (*)(ChatConnection *, const char *, void *))chat->globalCallbacks.disconnected)(chat, ov45_02256C2C, chat->globalCallbacks.param);
     }
     if (chat->connected) {
-        ov45_02252CB4(&chat->socket, ov45_02256DF4);
-        ov45_02252AA0(&chat->socket);
+        ciSocketSend(&chat->socket, ov45_02256DF4);
+        ciSocketThink(&chat->socket);
     }
-    ov45_022479F0(chat);
-    ov45_02244BCC(chat);
-    ov45_022522B4(&chat->socket);
+    ciCleanupChannels(chat);
+    ciCleanupCallbacks(chat);
+    ciSocketDisconnect(&chat->socket);
     ov00_021EC3D8(chat);
     ov00_021FF3D0();
 }
 
-void ov45_02250590(ChatConnection *chat) {
-    ov45_0224F770(chat, 0);
+void chatThink(ChatConnection *chat) {
+    ciThink(chat, 0);
 }
 
 // Lists the channels matching the filter.
-void ov45_022505A0(ChatConnection *chat, const char *filter, void *callbackEach, void *callbackAll, void *param, BOOL blocking) {
+void chatEnumChannelsA(ChatConnection *chat, const char *filter, void *callbackEach, void *callbackAll, void *param, BOOL blocking) {
     int id;
     ASSERT_CHAT(chat, ov45_02256A18, 1422);
     if (!chat || !chat->connected) {
@@ -503,8 +503,8 @@ void ov45_022505A0(ChatConnection *chat, const char *filter, void *callbackEach,
     if (!filter) {
         filter = ov45_02256C2C;
     }
-    ov45_02252F74(&chat->socket, ov45_02256E94, filter);
-    id = ov45_0224A7F0(chat, callbackEach, callbackAll, param);
+    ciSocketSendf(&chat->socket, ov45_02256E94, filter);
+    id = ciAddLISTFilter(chat, callbackEach, callbackAll, param);
     if (!blocking) {
         return;
     }
@@ -512,7 +512,7 @@ void ov45_022505A0(ChatConnection *chat, const char *filter, void *callbackEach,
 }
 
 // Enters a channel.
-void ov45_02250688(ChatConnection *chat, const char *channel, const char *password, const ChatChannelCallbacks *callbacks, void *callback, void *param, BOOL blocking) {
+void chatEnterChannelA(ChatConnection *chat, const char *channel, const char *password, const ChatChannelCallbacks *callbacks, void *callback, void *param, BOOL blocking) {
     int id;
     ASSERT_CHAT(chat, ov45_02256A2C, 1459);
     if (!chat || !chat->connected) {
@@ -523,9 +523,9 @@ void ov45_02250688(ChatConnection *chat, const char *channel, const char *passwo
     if (!password) {
         password = ov45_02256C2C;
     }
-    ov45_02252F74(&chat->socket, ov45_02256EC0, channel, password);
-    id = ov45_0224A874(chat, channel, callback, param, callbacks, password);
-    ov45_02247A44(chat, channel);
+    ciSocketSendf(&chat->socket, ov45_02256EC0, channel, password);
+    id = ciAddJOINFilter(chat, channel, callback, param, callbacks, password);
+    ciChannelEntering(chat, channel);
     if (!blocking) {
         return;
     }
@@ -533,7 +533,7 @@ void ov45_02250688(ChatConnection *chat, const char *channel, const char *passwo
 }
 
 // Leaves a channel.
-void ov45_022507D8(ChatConnection *chat, const char *channel, const char *reason) {
+void chatLeaveChannelA(ChatConnection *chat, const char *channel, const char *reason) {
     ASSERT_CHAT(chat, ov45_02256A40, 1499);
     if (!chat || !chat->connected) {
         return;
@@ -542,12 +542,12 @@ void ov45_022507D8(ChatConnection *chat, const char *channel, const char *reason
     if (!reason) {
         reason = ov45_02256C2C;
     }
-    ov45_02252F74(&chat->socket, ov45_02256ECC, channel, reason);
-    ov45_02247D84(chat, channel);
+    ciSocketSendf(&chat->socket, ov45_02256ECC, channel, reason);
+    ciChannelLeft(chat, channel);
 }
 
 // Sends a message of the given type (0 .. 4) to a channel and queues the own channel message callback.
-void ov45_0225089C(ChatConnection *chat, const char *channel, const char *message, u32 type) {
+void chatSendChannelMessageA(ChatConnection *chat, const char *channel, const char *message, u32 type) {
     ChatChannelCallbacks *callbacks;
     ChatChannelMessageArgs args;
     ASSERT_CHAT(chat, ov45_02256B6C, 1532);
@@ -560,19 +560,19 @@ void ov45_0225089C(ChatConnection *chat, const char *channel, const char *messag
         return;
     }
     if (type == 0) {
-        ov45_02252F74(&chat->socket, ov45_02256F50, channel, message);
+        ciSocketSendf(&chat->socket, ov45_02256F50, channel, message);
     } else if (type == 1) {
-        ov45_02252F74(&chat->socket, ov45_02256F60, channel, message);
+        ciSocketSendf(&chat->socket, ov45_02256F60, channel, message);
     } else if (type == 2) {
-        ov45_02252F74(&chat->socket, ov45_02256F78, channel, message);
+        ciSocketSendf(&chat->socket, ov45_02256F78, channel, message);
     } else if (type == 3) {
-        ov45_02252F74(&chat->socket, ov45_02256F88, channel, message);
+        ciSocketSendf(&chat->socket, ov45_02256F88, channel, message);
     } else if (type == 4) {
-        ov45_02252F74(&chat->socket, ov45_02256F94, channel, message);
+        ciSocketSendf(&chat->socket, ov45_02256F94, channel, message);
     } else {
         return;
     }
-    callbacks = ov45_02247E98(chat, channel);
+    callbacks = ciGetChannelCallbacks(chat, channel);
     if (!callbacks) {
         return;
     }
@@ -580,11 +580,11 @@ void ov45_0225089C(ChatConnection *chat, const char *channel, const char *messag
     args.channel = channel;
     args.message = message;
     args.type = type;
-    ov45_02244D30(chat, 4, callbacks->message, (u32 *)&args, callbacks->param, 0, (char *)channel, sizeof(args));
+    ciAddCallback_(chat, 4, callbacks->message, (u32 *)&args, callbacks->param, 0, (char *)channel, sizeof(args));
 }
 
 // Sets the mode of a channel ("+i-p..." from the eight mode fields, then the limit).
-void ov45_02250A80(ChatConnection *chat, const char *channel, const ChatChannelMode *mode) {
+void chatSetChannelModeA(ChatConnection *chat, const char *channel, const ChatChannelMode *mode) {
     char buffer[64];
     int limit;
     ASSERT_CHAT(chat, ov45_02256ACC, 1663);
@@ -638,11 +638,11 @@ void ov45_02250A80(ChatConnection *chat, const char *channel, const ChatChannelM
     if (limit > 0) {
         sprintf(buffer + strlen(buffer), ov45_02256FD8, limit);
     }
-    ov45_02252F74(&chat->socket, ov45_02256FDC, channel, buffer);
+    ciSocketSendf(&chat->socket, ov45_02256FDC, channel, buffer);
 }
 
 // Gets the mode of a channel: from the channel table when it is known, else from the server.
-void ov45_02250C80(ChatConnection *chat, const char *channel, void *callback, void *param, BOOL blocking) {
+void chatGetChannelModeA(ChatConnection *chat, const char *channel, void *callback, void *param, BOOL blocking) {
     ChatChannelMode mode;
     ChatChannelModeArgs args;
     int id;
@@ -652,19 +652,19 @@ void ov45_02250C80(ChatConnection *chat, const char *channel, void *callback, vo
     }
     ASSERT_CHANNEL(channel, ov45_02256AE0, 1733);
     ASSERT(callback, ov45_02256FA0, ov45_02256AE0, 1734);
-    if (ov45_02248238(chat, channel) && ov45_02248288(chat, channel, &mode)) {
-        id = ov45_0224A5E4(chat);
+    if (ciInChannel(chat, channel) && ciGetChannelMode(chat, channel, &mode)) {
+        id = ciGetNextID(chat);
         args.success = TRUE;
         args.mode = &mode;
         args.channel = channel;
-        ov45_02244D30(chat, 17, callback, (u32 *)&args, param, id, NULL, sizeof(args));
+        ciAddCallback_(chat, 17, callback, (u32 *)&args, param, id, NULL, sizeof(args));
         if (!blocking) {
             return;
         }
         WAIT_FOR_REQUEST(chat, id);
     } else {
-        ov45_02252F74(&chat->socket, ov45_02256FE8, channel);
-        id = ov45_0224A9F8(chat, channel, callback, param);
+        ciSocketSendf(&chat->socket, ov45_02256FE8, channel);
+        id = ciAddCMODEFilter(chat, channel, callback, param);
         if (!blocking) {
             return;
         }
@@ -673,7 +673,7 @@ void ov45_02250C80(ChatConnection *chat, const char *channel, void *callback, vo
 }
 
 // Sets (limit > 0) or removes the user limit of a channel.
-void ov45_02250E6C(ChatConnection *chat, const char *channel, int limit) {
+void chatSetChannelLimitA(ChatConnection *chat, const char *channel, int limit) {
     ASSERT_CHAT(chat, ov45_02256AF4, 1870);
     if (!chat || !chat->connected) {
         return;
@@ -681,14 +681,14 @@ void ov45_02250E6C(ChatConnection *chat, const char *channel, int limit) {
     ASSERT_CHANNEL(channel, ov45_02256AF4, 1873);
     ASSERT(limit >= 0, ov45_02256FF0, ov45_02256AF4, 1874);
     if (limit) {
-        ov45_02252F74(&chat->socket, ov45_02256FFC, channel, limit);
+        ciSocketSendf(&chat->socket, ov45_02256FFC, channel, limit);
     } else {
-        ov45_02252F74(&chat->socket, ov45_0225700C, channel);
+        ciSocketSendf(&chat->socket, ov45_0225700C, channel);
     }
 }
 
 // Number of users in a joined channel, -1 if unknown.
-int ov45_02250F5C(ChatConnection *chat, const char *channel) {
+int chatGetChannelNumUsersA(ChatConnection *chat, const char *channel) {
     ASSERT_CHAT(chat, ov45_02256B54, 2006);
     if (!chat->connected) {
         return -1;
@@ -697,14 +697,14 @@ int ov45_02250F5C(ChatConnection *chat, const char *channel) {
     if (!channel || !*channel) {
         return -1;
     }
-    if (!ov45_02248238(chat, channel)) {
+    if (!ciInChannel(chat, channel)) {
         return -1;
     }
-    return ov45_022487BC(chat, channel);
+    return ciGetChannelNumUsers(chat, channel);
 }
 
 // Whether the channel has been joined.
-BOOL ov45_02251024(ChatConnection *chat, const char *channel) {
+BOOL chatInChannelA(ChatConnection *chat, const char *channel) {
     ASSERT_CHAT(chat, ov45_022569D8, 2036);
     if (!chat->connected) {
         return FALSE;
@@ -713,11 +713,11 @@ BOOL ov45_02251024(ChatConnection *chat, const char *channel) {
     if (!channel || !*channel) {
         return FALSE;
     }
-    return ov45_02248238(chat, channel);
+    return ciInChannel(chat, channel);
 }
 
-// ChatUserListFunc of ov45_02251208: passes the user list of a joined channel to the enum users callback.
-void ov45_022510D4(ChatConnection *chat, const char *channel, int count, ChatChannelUser **users, int *modes, ChatEnumUsers *volatile enumUsers) {
+// ChatUserListFunc of chatEnumUsersA: passes the user list of a joined channel to the enum users callback.
+void ciEnumUsersCallback(ChatConnection *chat, const char *channel, int count, ChatChannelUser **users, int *modes, ChatEnumUsers *volatile enumUsers) {
     ASSERT_CHAT(chat, ov45_02256A90, 2066);
     ASSERT_CHANNEL(channel, ov45_02256A90, 2070);
     ASSERT(count >= 0, ov45_02257018, ov45_02256A90, 2071);
@@ -730,7 +730,7 @@ void ov45_022510D4(ChatConnection *chat, const char *channel, int count, ChatCha
 }
 
 // Lists the users of a channel: from the channel table when it is joined, else from the server.
-void ov45_02251208(ChatConnection *chat, const char *channel, ChatEnumUsersFunc callback, void *param, BOOL blocking) {
+void chatEnumUsersA(ChatConnection *chat, const char *channel, ChatEnumUsersFunc callback, void *param, BOOL blocking) {
     ChatEnumUsers enumUsers;
     int id;
     ASSERT_CHAT(chat, ov45_022569F8, 2119);
@@ -741,24 +741,24 @@ void ov45_02251208(ChatConnection *chat, const char *channel, ChatEnumUsersFunc 
     if (channel == NULL) {
         channel = ov45_02256C2C;
     }
-    if (*channel && ov45_02248238(chat, channel)) {
+    if (*channel && ciInChannel(chat, channel)) {
         enumUsers.callback = callback;
         enumUsers.param = param;
-        ov45_022480EC(chat, channel, (ChatUserListFunc)ov45_022510D4, (int)&enumUsers);
+        ciChannelListUsers(chat, channel, (ChatUserListFunc)ciEnumUsersCallback, (int)&enumUsers);
         return;
     }
-    ov45_02252F74(&chat->socket, ov45_02257050, channel);
+    ciSocketSendf(&chat->socket, ov45_02257050, channel);
     if (*channel == 0) {
         channel = NULL;
     }
-    id = ov45_0224A978(chat, channel, callback, param);
+    id = ciAddNAMESFilter(chat, channel, callback, param);
     if (blocking) {
         WAIT_FOR_REQUEST(chat, id);
     }
 }
 
 // Sends a message of the given type (0 .. 4) to a user.
-void ov45_02251350(ChatConnection *chat, const char *nick, const char *message, u32 type) {
+void chatSendUserMessageA(ChatConnection *chat, const char *nick, const char *message, u32 type) {
     ASSERT_CHAT(chat, ov45_02256B0C, 2185);
     if (!chat || !chat->connected) {
         return;
@@ -771,36 +771,36 @@ void ov45_02251350(ChatConnection *chat, const char *nick, const char *message, 
         return;
     }
     if (type == 0) {
-        ov45_02252F74(&chat->socket, ov45_02256F50, nick, message);
+        ciSocketSendf(&chat->socket, ov45_02256F50, nick, message);
         return;
     }
     if (type == 1) {
-        ov45_02252F74(&chat->socket, ov45_02256F60, nick, message);
+        ciSocketSendf(&chat->socket, ov45_02256F60, nick, message);
         return;
     }
     if (type == 2) {
-        ov45_02252F74(&chat->socket, ov45_02256F78, nick, message);
+        ciSocketSendf(&chat->socket, ov45_02256F78, nick, message);
         return;
     }
     if (type == 3) {
-        ov45_02252F74(&chat->socket, ov45_02256F88, nick, message);
+        ciSocketSendf(&chat->socket, ov45_02256F88, nick, message);
         return;
     }
     if (type == 4) {
-        ov45_02252F74(&chat->socket, ov45_02256F94, nick, message);
+        ciSocketSendf(&chat->socket, ov45_02256F94, nick, message);
         return;
     }
 }
 
 // Next request cookie, "000" .. "999".
-char *ov45_022514F4(void) {
+char *ciGetNextCookie(void) {
     sprintf(ov45_022577F0, ov45_0225709C, ov45_022577F4++);
     ov45_022577F4 %= 1000;
     return ov45_022577F0;
 }
 
 // Sets keys of a channel (nick NULL or empty) or of a user in it.
-void ov45_02251554(ChatConnection *chat, const char *channel, const char *nick, int count, const char **keys, const char **values) {
+void chatSetChannelKeysA(ChatConnection *chat, const char *channel, const char *nick, int count, const char **keys, const char **values) {
     char buffer[512];
     int i;
     const char *value;
@@ -820,12 +820,12 @@ void ov45_02251554(ChatConnection *chat, const char *channel, const char *nick, 
         }
         sprintf(buffer + strlen(buffer), ov45_02257094, keys[i], value);
     }
-    ov45_02252CB4(&chat->socket, buffer);
+    ciSocketSend(&chat->socket, buffer);
 }
 
 // Sends the get keys request for a channel or a user ('\' in the keys becomes '/'); returns whether the
 // broadcast keys were asked for.
-BOOL ov45_02251650(ChatConnection *chat, const char *channel, const char *nick, const char *cookie, int count, const char **keys) {
+BOOL ciSendGetChannelKey(ChatConnection *chat, const char *channel, const char *nick, const char *cookie, int count, const char **keys) {
     char buffer[512];
     BOOL broadcastKeys = FALSE;
     int i, length, total;
@@ -878,12 +878,12 @@ BOOL ov45_02251650(ChatConnection *chat, const char *channel, const char *nick, 
     if (count == 0 && (nick == NULL || *nick == 0)) {
         memcpy(buffer + total, &ov45_02256BC0, 2);
     }
-    ov45_02252CB4(&chat->socket, buffer);
+    ciSocketSend(&chat->socket, buffer);
     return broadcastKeys;
 }
 
 // Gets keys of a channel (nick NULL or empty), of a user in it or of all its users (nick "*").
-void ov45_022518F0(ChatConnection *chat, const char *channel, const char *nick, int count, const char **keys, void *callback, void *param, BOOL blocking) {
+void chatGetChannelKeysA(ChatConnection *chat, const char *channel, const char *nick, int count, const char **keys, void *callback, void *param, BOOL blocking) {
     char *cookie;
     BOOL broadcastKeys;
     int id;
@@ -893,17 +893,17 @@ void ov45_022518F0(ChatConnection *chat, const char *channel, const char *nick, 
     }
     ASSERT(count >= 0, ov45_022570B8, ov45_02256AA4, 2930);
     ASSERT(count == 0 || keys != NULL, ov45_022570FC, ov45_02256AA4, 2931);
-    cookie = ov45_022514F4();
-    broadcastKeys = ov45_02251650(chat, channel, nick, cookie, count, keys);
+    cookie = ciGetNextCookie();
+    broadcastKeys = ciSendGetChannelKey(chat, channel, nick, cookie, count, keys);
     if (nick == NULL || *nick == 0) {
-        id = ov45_0224ABA0(chat, cookie, count, keys, broadcastKeys, callback, param);
+        id = ciAddGETCHANKEYFilter(chat, cookie, count, keys, broadcastKeys, callback, param);
     } else {
-        id = ov45_0224AA2C(chat, cookie, count, keys, strcmp(nick, ov45_02256BC0.bytes) == 0, broadcastKeys, callback, param);
+        id = ciAddGETCKEYFilter(chat, cookie, count, keys, strcmp(nick, ov45_02256BC0.bytes) == 0, broadcastKeys, callback, param);
     }
     if (blocking) {
         do {
-            ov45_0224F770(chat, id);
+            ciThink(chat, id);
             ov00_021FF3C0(10);
-        } while (ov45_0224F660(chat, id) != 0);
+        } while (ciCheckForID(chat, id) != 0);
     }
 }

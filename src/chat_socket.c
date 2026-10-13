@@ -48,7 +48,7 @@ extern const char ov45_02257610[];
 extern const char ov45_02257620[];
 extern const char ov45_02257624[];
 
-// Line buffer of ov45_02252F74 (4096 bytes).
+// Line buffer of ciSocketSendf (4096 bytes).
 extern char ov45_022577F8[];
 
 // Assertion with the message, the name of the checking function and the line.
@@ -79,7 +79,7 @@ extern char ov45_022577F8[];
     }
 
 // Connects the socket to the server (a dotted address or a host name).
-BOOL ov45_02251F6C(ChatSocket *socket, const char *address, int port) {
+BOOL ciSocketConnect(ChatSocket *socket, const char *address, int port) {
     u32 ip;
     ChatSocketAddress addr;
     ASSERT_SOCKET(socket, ov45_022571D4, 216);
@@ -114,7 +114,7 @@ BOOL ov45_02251F6C(ChatSocket *socket, const char *address, int port) {
 }
 
 // Closes the socket and frees its buffers and the last message.
-void ov45_022522B4(ChatSocket *socket) {
+void ciSocketDisconnect(ChatSocket *socket) {
     int i;
     ASSERT_SOCKET(socket, ov45_02257234, 283);
     if (socket->handle != -1) {
@@ -139,7 +139,7 @@ void ov45_022522B4(ChatSocket *socket) {
 }
 
 // Readiness of the socket handle (each output may be NULL).
-void ov45_02252530(int handle, BOOL *readable, BOOL *writable, BOOL *except) {
+void ciSocketSelect(int handle, BOOL *readable, BOOL *writable, BOOL *except) {
     int r = 0, w = 0, e = 0;
     ov00_021FF59C(handle, &r, &w, &e);
     if (readable) {
@@ -154,13 +154,13 @@ void ov45_02252530(int handle, BOOL *readable, BOOL *writable, BOOL *except) {
 }
 
 // Sends as much of the output buffer as the socket takes (1024 bytes at a time).
-void ov45_02252590(ChatSocket *socket) {
+void ciSocketThinkSend(ChatSocket *socket) {
     ASSERT_SOCKET(socket, ov45_0225720C, 340);
     ASSERT(socket->state == 1, ov45_022575D8, ov45_0225720C, 341);
     while (socket->output.length > 0) {
         BOOL writable;
         int sent;
-        ov45_02252530(socket->handle, NULL, &writable, NULL);
+        ciSocketSelect(socket->handle, NULL, &writable, NULL);
         if (!writable) {
             return;
         }
@@ -174,14 +174,14 @@ void ov45_02252590(ChatSocket *socket) {
 }
 
 // Appends everything the socket has received to the input buffer (decrypted); state 2 when it was closed.
-void ov45_02252800(ChatSocket *socket) {
+void ciSocketThinkRecv(ChatSocket *socket) {
     BOOL readable;
     int received, length;
     u8 *data;
     ASSERT_SOCKET(socket, ov45_02257220, 378);
     ASSERT(socket->state == 1, ov45_022575D8, ov45_02257220, 379);
     for (;;) {
-        ov45_02252530(socket->handle, &readable, NULL, NULL);
+        ciSocketSelect(socket->handle, &readable, NULL, NULL);
         if (!readable) {
             return;
         }
@@ -196,7 +196,7 @@ void ov45_02252800(ChatSocket *socket) {
             return;
         }
         if (socket->encrypted) {
-            ov45_022495DC(data + length, received, &socket->inputCipher);
+            gs_crypt(data + length, received, &socket->inputCipher);
         }
         socket->input.length += received;
         socket->input.data[socket->input.length] = 0;
@@ -204,18 +204,18 @@ void ov45_02252800(ChatSocket *socket) {
 }
 
 // Sends and receives.
-void ov45_02252AA0(ChatSocket *socket) {
+void ciSocketThink(ChatSocket *socket) {
     ASSERT_SOCKET(socket, ov45_022571B4, 446);
     ASSERT(socket->state == 1, ov45_022575D8, ov45_022571B4, 447);
     if (socket->state == 2) {
         return;
     }
-    ov45_02252590(socket);
-    ov45_02252800(socket);
+    ciSocketThinkSend(socket);
+    ciSocketThinkRecv(socket);
 }
 
 // Queues a line (CR LF appended, encrypted when the socket is).
-BOOL ov45_02252CB4(ChatSocket *socket, const char *line) {
+BOOL ciSocketSend(ChatSocket *socket, const char *line) {
     int length;
     u8 *data;
     int start;
@@ -242,13 +242,13 @@ BOOL ov45_02252CB4(ChatSocket *socket, const char *line) {
         socket->output.data[i] = '\n';
     }
     if (socket->encrypted) {
-        ov45_022495DC(data + start, length + 2, &socket->outputCipher);
+        gs_crypt(data + start, length + 2, &socket->outputCipher);
     }
     return TRUE;
 }
 
 // Queues a formatted line.
-BOOL ov45_02252F74(ChatSocket *socket, const char *format, ...) {
+BOOL ciSocketSendf(ChatSocket *socket, const char *format, ...) {
     va_list args;
     int length;
     ASSERT_SOCKET(socket, ov45_022571A4, 531);
@@ -263,11 +263,11 @@ BOOL ov45_02252F74(ChatSocket *socket, const char *format, ...) {
     } else {
         ov45_022577F8[4095] = 0;
     }
-    return ov45_02252CB4(socket, ov45_022577F8);
+    return ciSocketSend(socket, ov45_022577F8);
 }
 
 // Splits the prefix of a message into nick "!" user "@" host (heap copies in the message).
-BOOL ov45_022531D8(char *prefix, ChatMessage *message) {
+BOOL ciParseUser(char *prefix, ChatMessage *message) {
     char *user = NULL, *host = NULL, *p;
     int nickLength = 0, userLength = 0, hostLength = 0;
     if (!prefix || !*(volatile char *)prefix) {
@@ -326,7 +326,7 @@ BOOL ov45_022531D8(char *prefix, ChatMessage *message) {
 }
 
 // Appends a heap copy of param to the message's parameters.
-BOOL ov45_02253374(const char *param, ChatMessage *message) {
+BOOL ciAddParam(const char *param, ChatMessage *message) {
     char **params;
     char *copy;
     int i;
@@ -346,7 +346,7 @@ BOOL ov45_02253374(const char *param, ChatMessage *message) {
 }
 
 // Splits the parameters of a message: words separated by spaces, then the part after " :".
-BOOL ov45_022533E4(const char *params, ChatMessage *message) {
+BOOL ciParseParam(const char *params, ChatMessage *message) {
     char *trailing;
     char *word;
     char *copy;
@@ -370,14 +370,14 @@ BOOL ov45_022533E4(const char *params, ChatMessage *message) {
     word = strtok(copy, ov45_02257624);
     if (word) {
         do {
-            if (!ov45_02253374(word, message)) {
+            if (!ciAddParam(word, message)) {
                 ov00_021EC3D8(copy);
                 return FALSE;
             }
             word = strtok(NULL, ov45_02257624);
         } while (word);
     }
-    if (trailing && !ov45_02253374(trailing, message)) {
+    if (trailing && !ciAddParam(trailing, message)) {
         ov00_021EC3D8(copy);
         return FALSE;
     }
@@ -386,7 +386,7 @@ BOOL ov45_022533E4(const char *params, ChatMessage *message) {
 }
 
 // Parses one line into socket->message: [":" prefix] command [middle] [":" trailing].
-BOOL ov45_02253528(ChatSocket *socket, char *line) {
+BOOL ciParseMessage(ChatSocket *socket, char *line) {
     int prefixLength = 0, commandLength = 0, middleLength = 0, trailingLength = 0, length;
     char *start;
     if (!line || !*line) {
@@ -450,7 +450,7 @@ BOOL ov45_02253528(ChatSocket *socket, char *line) {
             memcpy(socket->message.prefix, start, prefixLength);
             socket->message.prefix[prefixLength] = 0;
         }
-        if (!ov45_022531D8(socket->message.prefix, &socket->message)) {
+        if (!ciParseUser(socket->message.prefix, &socket->message)) {
             FREE_PART(socket->message.text);
             FREE_PART(socket->message.prefix);
             return FALSE;
@@ -462,7 +462,7 @@ BOOL ov45_02253528(ChatSocket *socket, char *line) {
         socket->message.host = NULL;
     }
     if (middleLength) {
-        if (!ov45_022533E4(socket->message.middle, &socket->message)) {
+        if (!ciParseParam(socket->message.middle, &socket->message)) {
             FREE_PART(socket->message.text);
             FREE_PART(socket->message.prefix);
             FREE_PART(socket->message.nick);
@@ -471,7 +471,7 @@ BOOL ov45_02253528(ChatSocket *socket, char *line) {
             return FALSE;
         }
     } else if (trailingLength) {
-        if (!ov45_022533E4(socket->message.trailing, &socket->message)) {
+        if (!ciParseParam(socket->message.trailing, &socket->message)) {
             FREE_PART(socket->message.text);
             FREE_PART(socket->message.prefix);
             FREE_PART(socket->message.nick);

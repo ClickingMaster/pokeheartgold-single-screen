@@ -63,7 +63,7 @@ extern const char ov45_02255644[];
         __msl_assertion_failed(ov45_022554DC, ov45_02255468, func, line); \
     }
 
-void ov45_02244500(ChatCallback *callback) {
+void ciFreeCallbackData(ChatCallback *callback) {
     ASSERT_CALLBACK(callback, ov45_022553F8, 171);
     switch (callback->type) {
     case 0: {
@@ -318,12 +318,12 @@ void ov45_02244500(ChatCallback *callback) {
     ov00_021EC3D8(callback->param);
 }
 
-ChatResult ov45_02244B9C(ChatConnection *chat) {
+ChatResult ciInitCallbacks(ChatConnection *chat) {
     chat->callbacks = ov00_021FE5B4(sizeof(ChatCallback), 0x80, ov45_022444C8);
     return chat->callbacks == NULL ? CHAT_FAILURE : CHAT_SUCCESS;
 }
 
-void ov45_02244BCC(ChatConnection *chat) {
+void ciCleanupCallbacks(ChatConnection *chat) {
     ChatCallback *callback;
     int n, i;
     ASSERT_CHAT(chat, ov45_0225540C, 506);
@@ -334,7 +334,7 @@ void ov45_02244BCC(ChatConnection *chat) {
     for (i = 0; i < n; i++) {
         callback = ov00_021FE6EC(chat->callbacks, i);
         ASSERT_CALLBACK(callback, ov45_0225540C, 525);
-        ov45_02244500(callback);
+        ciFreeCallbackData(callback);
     }
     ov00_021FE678(chat->callbacks);
 }
@@ -357,7 +357,7 @@ void ov45_02244BCC(ChatConnection *chat) {
         }                                            \
     }
 
-BOOL ov45_02244D30(ChatConnection *chat, int type, void *func, u32 *src, void *user, int id, char *channel, int size) {
+BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *user, int id, char *channel, int size) {
     ChatCallback item;
     ASSERT(chat, ov45_022554F0, 0x21f);
     ASSERT(type >= 0, ov45_02255500, 0x221);
@@ -911,7 +911,7 @@ BOOL ov45_02244D30(ChatConnection *chat, int type, void *func, u32 *src, void *u
 #undef FAIL
 #undef ASSERT
 
-void ov45_02246BA4(ChatConnection *chat, ChatCallback *callback) {
+void ciCallCallback(ChatConnection *chat, ChatCallback *callback) {
     void *user;
     ASSERT_CHAT(chat, ov45_022553D8, 909);
     ASSERT_CALLBACK(callback, ov45_022553D8, 911);
@@ -1010,7 +1010,7 @@ void ov45_02246BA4(ChatConnection *chat, ChatCallback *callback) {
     case 15: {
         u32 *args = callback->param;
         ChatCallbackFunc3 func = (ChatCallbackFunc3)callback->callback;
-        ov45_02248558(chat, (const char *)args[2]);
+        ciJoinCallbackCalled(chat, (const char *)args[2]);
         func(chat, args[0], args[1], args[2], user);
         break;
     }
@@ -1114,10 +1114,10 @@ void ov45_02246BA4(ChatConnection *chat, ChatCallback *callback) {
         __msl_assertion_failed(ov45_022554EC, ov45_02255468, ov45_022553D8, 0x5ef);
         break;
     }
-    ov45_02244500(callback);
+    ciFreeCallbackData(callback);
 }
 
-void ov45_022471A0(ChatConnection *chat, int id) {
+void ciCallCallbacks(ChatConnection *chat, int id) {
     ChatCallback *callback;
     int i;
     ChatCallback copy;
@@ -1126,13 +1126,13 @@ void ov45_022471A0(ChatConnection *chat, int id) {
     while (i < ArrayLength(chat->callbacks)) {
         callback = ov00_021FE6EC(chat->callbacks, i);
         ASSERT_CALLBACK(callback, ov45_022553E8, 0x605);
-        if (callback->channel && !ov45_02248238(chat, callback->channel)) {
-            ov45_02244500(callback);
+        if (callback->channel && !ciInChannel(chat, callback->channel)) {
+            ciFreeCallbackData(callback);
             ov00_021FE968(chat->callbacks, i);
-        } else if ((!callback->channel || ov45_0224861C(chat, callback->channel)) && (!id || callback->id == id)) {
+        } else if ((!callback->channel || ciWasJoinCallbackCalled(chat, callback->channel)) && (!id || callback->id == id)) {
             copy = *callback;
             ov00_021FE968(chat->callbacks, i);
-            ov45_02246BA4(chat, &copy);
+            ciCallCallback(chat, &copy);
             if (id) {
                 return;
             }
@@ -1142,7 +1142,7 @@ void ov45_022471A0(ChatConnection *chat, int id) {
     }
 }
 
-int ov45_0224739C(ChatConnection *chat, int id) {
+int ciGetCallbackIndexByID(ChatConnection *chat, int id) {
     ChatCallback *callback;
     int i, count;
     ASSERT_CHAT(chat, ov45_02255420, 0x63b);
@@ -1157,6 +1157,6 @@ int ov45_0224739C(ChatConnection *chat, int id) {
     return -1;
 }
 
-ChatResult ov45_022474FC(ChatConnection *chat, int id) {
-    return ov45_0224739C(chat, id) == -1 ? CHAT_FAILURE : CHAT_SUCCESS;
+ChatResult ciCheckCallbacksForID(ChatConnection *chat, int id) {
+    return ciGetCallbackIndexByID(chat, id) == -1 ? CHAT_FAILURE : CHAT_SUCCESS;
 }

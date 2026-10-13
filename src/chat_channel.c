@@ -110,7 +110,7 @@ extern const char ov45_02255D38[];
     ASSERT(*nick, ov45_02255B54, func, line); \
     ASSERT(strlen(nick) < 128, ov45_02255B64, func, line);
 
-int ov45_02247518(const signed char *s, int count) {
+int ciHashString(const signed char *s, int count) {
     int value, c;
     ASSERT(s, ov45_0225590C, ov45_02255668, 153);
     ASSERT(*s, ov45_02255928, ov45_02255668, 153);
@@ -122,21 +122,21 @@ int ov45_02247518(const signed char *s, int count) {
     return value % count;
 }
 
-ChatChannel *ov45_022475B8(ChatConnection *chat, const char *channel) {
+ChatChannel *ciGetChannel(ChatConnection *chat, const char *channel) {
     char key[sizeof(ChatChannel)];
     strncpy(key, channel, 257);
     key[256] = 0;
     return ov00_021FF0C0(chat->channels, key);
 }
 
-int ov45_022475F0(const void *element, int numBuckets) {
+int ciChannelTableHashFn(const void *element, int numBuckets) {
     char *name = (char *)element;
     ASSERT(name, ov45_02255938, ov45_022557FC, 0xb4);
     ASSERT(numBuckets > 0, ov45_02255948, ov45_022557FC, 0xb5);
-    return ov45_02247518((const signed char *)name, numBuckets);
+    return ciHashString((const signed char *)name, numBuckets);
 }
 
-int ov45_02247650(const void *first, const void *second) {
+int ciChannelTableCompareFn(const void *first, const void *second) {
     char *a = (char *)first, *b = (char *)second;
     ASSERT(a, ov45_02255958, ov45_022558BC, 0xc1);
     ASSERT(b, ov45_02255968, ov45_022558BC, 0xc2);
@@ -149,7 +149,7 @@ int ov45_02247650(const void *first, const void *second) {
     return strnicmp(a, b);
 }
 
-void ov45_02247770(void *element) {
+void ciChannelTableElementFreeFn(void *element) {
     ChatChannel *channel = element;
     ASSERT(channel, ov45_02255938, ov45_022558F0, 0xd2);
     ov00_021EC3D8(channel->topic);
@@ -158,14 +158,14 @@ void ov45_02247770(void *element) {
     }
 }
 
-int ov45_022477B8(const void *element, int numBuckets) {
+int ciUserTableHashFn(const void *element, int numBuckets) {
     char *nick = (char *)element;
     ASSERT(nick, ov45_02255938, ov45_02255714, 0xe1);
     ASSERT(numBuckets > 0, ov45_02255948, ov45_02255714, 0xe2);
-    return ov45_02247518((const signed char *)nick, numBuckets);
+    return ciHashString((const signed char *)nick, numBuckets);
 }
 
-int ov45_02247818(const void *first, const void *second) {
+int ciUserTableCompareFn(const void *first, const void *second) {
     char *a = (char *)first, *b = (char *)second;
     ASSERT(a, ov45_02255958, ov45_022557B4, 0xee);
     ASSERT(b, ov45_02255968, ov45_022557B4, 0xef);
@@ -182,12 +182,12 @@ int ov45_02247818(const void *first, const void *second) {
     return strnicmp(a, b);
 }
 
-void ov45_02247934(void *element) {
+void ciUserTableElementFreeFn(void *element) {
     ASSERT(element, ov45_02255938, ov45_022558D4, 0x10a);
 }
 
-BOOL ov45_02247968(ChatConnection *chat) {
-    chat->channels = ov00_021FED4C(sizeof(ChatChannel), 7, 2, ov45_022475F0, ov45_02247650, ov45_02247770);
+BOOL ciInitChannels(ChatConnection *chat) {
+    chat->channels = ov00_021FED4C(sizeof(ChatChannel), 7, 2, ciChannelTableHashFn, ciChannelTableCompareFn, ciChannelTableElementFreeFn);
     if (!chat->channels) {
         return FALSE;
     }
@@ -199,7 +199,7 @@ BOOL ov45_02247968(ChatConnection *chat) {
     return FALSE;
 }
 
-void ov45_022479F0(ChatConnection *chat) {
+void ciCleanupChannels(ChatConnection *chat) {
     ASSERT(chat, ov45_022559B8, ov45_02255700, 0x127);
     if (chat->channels) {
         ov00_021FEE8C(chat->channels);
@@ -209,7 +209,7 @@ void ov45_022479F0(ChatConnection *chat) {
     }
 }
 
-void ov45_02247A44(ChatConnection *chat, const char *channel) {
+void ciChannelEntering(ChatConnection *chat, const char *channel) {
     ASSERT(chat, ov45_022559B8, ov45_0225573C, 0x134);
 
     // a zeroed channel record that only carries the name
@@ -222,11 +222,11 @@ void ov45_02247A44(ChatConnection *chat, const char *channel) {
     ov00_021FE754(chat->enteringChannels, &entry);
 }
 
-int ov45_02247AD4(const void *a, const void *b) {
+int ciEnteringChannelCompareFn(const void *a, const void *b) {
     return strnicmp((const char *)a, (const char *)b);
 }
 
-BOOL ov45_02247AE0(ChatConnection *chat, const char *channel) {
+BOOL ciIsEnteringChannel(ChatConnection *chat, const char *channel) {
     int i, n;
     char *name;
     ASSERT(chat, ov45_022559B8, ov45_022557A0, 0x14d);
@@ -241,7 +241,7 @@ BOOL ov45_02247AE0(ChatConnection *chat, const char *channel) {
     return FALSE;
 }
 
-void ov45_02247B94(ChatConnection *chat, const char *name, const ChatChannelCallbacks *callbacks) {
+void ciChannelEntered(ChatConnection *chat, const char *name, const ChatChannelCallbacks *callbacks) {
     char *topic;
     ASSERT(chat, ov45_022559B8, ov45_0225569C, 0x160);
     ASSERT_CHANNEL(name, ov45_0225569C, 0x162);
@@ -256,7 +256,7 @@ void ov45_02247B94(ChatConnection *chat, const char *name, const ChatChannelCall
         channel.callbacks = *callbacks;
         strncpy(channel.name, name, 257);
         channel.name[256] = 0;
-        channel.users = ov00_021FED4C(sizeof(ChatChannelUser), 61, 2, ov45_022477B8, ov45_02247818, ov45_02247934);
+        channel.users = ov00_021FED4C(sizeof(ChatChannelUser), 61, 2, ciUserTableHashFn, ciUserTableCompareFn, ciUserTableElementFreeFn);
         if (!channel.users) {
             return;
         }
@@ -265,7 +265,7 @@ void ov45_02247B94(ChatConnection *chat, const char *name, const ChatChannelCall
         channel.joined = FALSE;
         channel.key[0] = 0;
         {
-            int index = ov00_021FEA40(chat->enteringChannels, &channel, ov45_02247AD4, 0, 0);
+            int index = ov00_021FEA40(chat->enteringChannels, &channel, ciEnteringChannelCompareFn, 0, 0);
             if (index != -1) {
                 ov00_021FE8D8(chat->enteringChannels, index);
             }
@@ -274,14 +274,14 @@ void ov45_02247B94(ChatConnection *chat, const char *name, const ChatChannelCall
     }
 }
 
-void ov45_02247D84(ChatConnection *chat, const char *name) {
+void ciChannelLeft(ChatConnection *chat, const char *name) {
     ChatChannel channel;
     ASSERT(chat, ov45_022559B8, ov45_02255678, 0x189);
     ASSERT_CHANNEL(name, ov45_02255678, 0x18b);
     strncpy(channel.name, name, 257);
     channel.name[256] = 0;
     {
-        int index = ov00_021FEA40(chat->enteringChannels, &channel, ov45_02247AD4, 0, 0);
+        int index = ov00_021FEA40(chat->enteringChannels, &channel, ciEnteringChannelCompareFn, 0, 0);
         if (index != -1) {
             ov00_021FE8D8(chat->enteringChannels, index);
             return;
@@ -290,18 +290,18 @@ void ov45_02247D84(ChatConnection *chat, const char *name) {
     ov00_021FF01C(chat->channels, &channel);
 }
 
-ChatChannelCallbacks *ov45_02247E98(ChatConnection *chat, const char *name) {
+ChatChannelCallbacks *ciGetChannelCallbacks(ChatConnection *chat, const char *name) {
     ChatChannel *channel;
     ASSERT(chat, ov45_022559B8, ov45_02255844, 0x1a9);
     ASSERT_CHANNEL(name, ov45_02255844, 0x1ab);
-    channel = ov45_022475B8(chat, name);
+    channel = ciGetChannel(chat, name);
     if (channel == NULL) {
         return NULL;
     }
     return &channel->callbacks;
 }
 
-void ov45_02247F60(void *element, void *arg) {
+void ciChannelListUsersMap(void *element, void *arg) {
     ChatChannelUser *user = element;
     ChatUserList *list = arg;
     void *p;
@@ -328,13 +328,13 @@ void ov45_02247F60(void *element, void *arg) {
     list->count++;
 }
 
-void ov45_022480EC(ChatConnection *chat, const char *name, ChatUserListFunc callback, int param) {
+void ciChannelListUsers(ChatConnection *chat, const char *name, ChatUserListFunc callback, int param) {
     ChatUserList list;
     ChatChannel *channel;
     ASSERT(chat, ov45_022559B8, ov45_02255778, 496);
     ASSERT_CHANNEL(name, ov45_02255778, 498);
     ASSERT(callback, ov45_02255AA8, ov45_02255778, 499);
-    channel = ov45_022475B8(chat, name);
+    channel = ciGetChannel(chat, name);
     if (!channel) {
         return;
     }
@@ -342,25 +342,25 @@ void ov45_022480EC(ChatConnection *chat, const char *name, ChatUserListFunc call
     list.count = 0;
     list.users = NULL;
     list.modes = NULL;
-    ov00_021FF160(channel->users, ov45_02247F60, &list);
+    ov00_021FF160(channel->users, ciChannelListUsersMap, &list);
     callback(chat, name, list.count, list.users, list.modes, param);
     ov00_021EC3D8(list.users);
     ov00_021EC3D8(list.modes);
 }
 
-BOOL ov45_02248238(ChatConnection *chat, const char *name) {
+BOOL ciInChannel(ChatConnection *chat, const char *name) {
     ASSERT(chat, ov45_022559B8, ov45_0225565C, 0x20f);
-    if (ov45_022475B8(chat, name) == NULL) {
+    if (ciGetChannel(chat, name) == NULL) {
         return FALSE;
     }
     return TRUE;
 }
 
-BOOL ov45_02248288(ChatConnection *chat, const char *name, void *mode) {
+BOOL ciGetChannelMode(ChatConnection *chat, const char *name, void *mode) {
     ChatChannel *channel;
     ASSERT(chat, ov45_022559B8, ov45_022556B0, 0x21a);
     ASSERT_CHANNEL(name, ov45_022556B0, 0x21c);
-    channel = ov45_022475B8(chat, name);
+    channel = ciGetChannel(chat, name);
     if (!channel) {
         return FALSE;
     }
@@ -371,11 +371,11 @@ BOOL ov45_02248288(ChatConnection *chat, const char *name, void *mode) {
     return TRUE;
 }
 
-void ov45_02248374(ChatConnection *chat, const char *name, const void *mode) {
+void ciSetChannelMode(ChatConnection *chat, const char *name, const void *mode) {
     ChatChannel *channel;
     ASSERT(chat, ov45_022559B8, ov45_02255688, 0x233);
     ASSERT_CHANNEL(name, ov45_02255688, 0x235);
-    channel = ov45_022475B8(chat, name);
+    channel = ciGetChannel(chat, name);
     if (!channel) {
         return;
     }
@@ -383,12 +383,12 @@ void ov45_02248374(ChatConnection *chat, const char *name, const void *mode) {
     memcpy(channel->mode, mode, sizeof(channel->mode));
 }
 
-void ov45_02248454(ChatConnection *chat, const char *name, const char *topic) {
+void ciSetChannelPassword(ChatConnection *chat, const char *name, const char *topic) {
     ChatChannel *channel;
     int n;
     ASSERT(chat, ov45_022559B8, ov45_022557CC, 0x24a);
     ASSERT_CHANNEL(name, ov45_022557CC, 0x24c);
-    channel = ov45_022475B8(chat, name);
+    channel = ciGetChannel(chat, name);
     if (!channel) {
         return;
     }
@@ -404,32 +404,32 @@ void ov45_02248454(ChatConnection *chat, const char *name, const char *topic) {
     memcpy(channel->topic, topic, n + 1);
 }
 
-void ov45_02248558(ChatConnection *chat, const char *name) {
+void ciJoinCallbackCalled(ChatConnection *chat, const char *name) {
     ChatChannel *channel;
     ASSERT(chat, ov45_022559B8, ov45_022557E4, 0x278);
     ASSERT_CHANNEL(name, ov45_022557E4, 0x27a);
-    channel = ov45_022475B8(chat, name);
+    channel = ciGetChannel(chat, name);
     if (channel) {
         channel->joined = TRUE;
     }
 }
 
-BOOL ov45_0224861C(ChatConnection *chat, const char *name) {
+BOOL ciWasJoinCallbackCalled(ChatConnection *chat, const char *name) {
     ChatChannel *channel;
     ASSERT(chat, ov45_022559B8, ov45_022558A4, 0x28a);
     ASSERT_CHANNEL(name, ov45_022558A4, 0x28c);
-    channel = ov45_022475B8(chat, name);
+    channel = ciGetChannel(chat, name);
     if (channel == NULL) {
         return FALSE;
     }
     return channel->joined;
 }
 
-void ov45_022486E0(ChatConnection *chat, const char *name, const char *key) {
+void ciSetChannelTopic(ChatConnection *chat, const char *name, const char *key) {
     ChatChannel *channel;
     ASSERT(chat, ov45_022559B8, ov45_02255728, 0x29a);
     ASSERT_CHANNEL(name, ov45_02255728, 0x29c);
-    channel = ov45_022475B8(chat, name);
+    channel = ciGetChannel(chat, name);
     if (!channel) {
         return;
     }
@@ -437,18 +437,18 @@ void ov45_022486E0(ChatConnection *chat, const char *name, const char *key) {
     channel->key[127] = 0;
 }
 
-int ov45_022487BC(ChatConnection *chat, const char *name) {
+int ciGetChannelNumUsers(ChatConnection *chat, const char *name) {
     ChatChannel *channel;
     ASSERT(chat, ov45_022559B8, ov45_02255814, 0x2bc);
     ASSERT_CHANNEL(name, ov45_02255814, 0x2be);
-    channel = ov45_022475B8(chat, name);
+    channel = ciGetChannel(chat, name);
     if (!channel) {
         return -1;
     }
     return ov00_021FEF00(channel->users);
 }
 
-void ov45_02248888(ChatConnection *chat, const char *nick, const char *name, int mode, const char *user, const char *address) {
+void ciUserEnteredChannel(ChatConnection *chat, const char *nick, const char *name, int mode, const char *user, const char *address) {
     ChatChannel *channel;
     ASSERT(chat != NULL, ov45_022559B8, ov45_0225582C, 720);
     ASSERT(nick != NULL, ov45_02255ABC, ov45_0225582C, 722);
@@ -457,7 +457,7 @@ void ov45_02248888(ChatConnection *chat, const char *nick, const char *name, int
     ASSERT(name != NULL, ov45_022559D4, ov45_0225582C, 723);
     ASSERT(*name != 0, ov45_022559E4, ov45_0225582C, 723);
     ASSERT(mode >= 0 && mode <= 3, ov45_02255AF4, ov45_0225582C, 724);
-    channel = ov45_022475B8(chat, name);
+    channel = ciGetChannel(chat, name);
     if (channel == NULL) {
         return;
     }
@@ -480,14 +480,14 @@ void ov45_02248888(ChatConnection *chat, const char *nick, const char *name, int
     }
 }
 
-void ov45_02248A98(ChatConnection *chat, const char *nick, const char *name) {
+void ciUserLeftChannel(ChatConnection *chat, const char *nick, const char *name) {
     char key[sizeof(ChatChannelUser)];
     ChatChannel *channel;
     ASSERT(chat, ov45_022559B8, ov45_022556EC, 0x2fe);
     ASSERT_NICK(nick, ov45_022556EC, 0x300);
     ASSERT(name, ov45_022559D4, ov45_022556EC, 0x301);
     ASSERT(*name, ov45_022559E4, ov45_022556EC, 0x301);
-    channel = ov45_022475B8(chat, name);
+    channel = ciGetChannel(chat, name);
     if (!channel) {
         return;
     }
@@ -496,7 +496,7 @@ void ov45_02248A98(ChatConnection *chat, const char *nick, const char *name) {
     ov00_021FF01C(channel->users, key);
 }
 
-void ov45_02248BCC(void *element, void *arg) {
+void ciUserEnumChannelsMap(void *element, void *arg) {
     ChatChannel *channel = element;
     ChatUserSearch *search = arg;
     ASSERT(channel, ov45_02255938, ov45_0225588C, 0x318);
@@ -511,7 +511,7 @@ void ov45_02248BCC(void *element, void *arg) {
     search->callback(search->chat, search->nick, channel, search->param);
 }
 
-void ov45_02248CE8(ChatConnection *chat, const char *nick, ChatUserSearchFunc callback, void *param) {
+void ciUserEnumChannels(ChatConnection *chat, const char *nick, ChatUserSearchFunc callback, void *param) {
     ChatUserSearch search;
     ASSERT(chat, ov45_022559B8, ov45_02255750, 0x336);
     ASSERT_NICK(nick, ov45_02255750, 0x338);
@@ -522,10 +522,10 @@ void ov45_02248CE8(ChatConnection *chat, const char *nick, ChatUserSearchFunc ca
     search.callback = callback;
     search.param = param;
     search.nick = search.buffer;
-    ov00_021FF160(chat->channels, ov45_02248BCC, &search);
+    ov00_021FF160(chat->channels, ciUserEnumChannelsMap, &search);
 }
 
-void ov45_02248E00(void *element, void *arg) {
+void ciUserChangeNickMap(void *element, void *arg) {
     ChatChannel *channel = element;
     ChatNickChange *change = arg;
     u8 entry[sizeof(ChatChannelUser)];
@@ -549,15 +549,15 @@ void ov45_02248E00(void *element, void *arg) {
     strncpy((char *)entry, change->newNick, 128);
     entry[127] = 0;
     ov00_021FEF74(channel->users, entry);
-    if (ov45_0224861C(change->chat, channel->name) && channel->callbacks.nickChanged) {
+    if (ciWasJoinCallbackCalled(change->chat, channel->name) && channel->callbacks.nickChanged) {
         args.channel = channel->name;
         args.oldNick = change->oldNick;
         args.newNick = change->newNick;
-        ov45_02244D30(change->chat, 8, channel->callbacks.nickChanged, (u32 *)&args, channel->callbacks.param, 0, channel->name, sizeof(args));
+        ciAddCallback_(change->chat, 8, channel->callbacks.nickChanged, (u32 *)&args, channel->callbacks.param, 0, channel->name, sizeof(args));
     }
 }
 
-void ov45_02249054(ChatConnection *chat, const char *oldNick, const char *newNick) {
+void ciUserChangedNick(ChatConnection *chat, const char *oldNick, const char *newNick) {
     ChatNickChange change;
     ASSERT(chat, ov45_022559B8, ov45_022556C4, 0x386);
     ASSERT(oldNick, ov45_02255C98, ov45_022556C4, 0x388);
@@ -569,10 +569,10 @@ void ov45_02249054(ChatConnection *chat, const char *oldNick, const char *newNic
     change.chat = chat;
     change.oldNick = oldNick;
     change.newNick = newNick;
-    ov00_021FF160(chat->channels, ov45_02248E00, &change);
+    ov00_021FF160(chat->channels, ciUserChangeNickMap, &change);
 }
 
-void ov45_02249194(ChatConnection *chat, const char *nick, const char *name, int mode, BOOL set) {
+void ciUserChangedMode(ChatConnection *chat, const char *nick, const char *name, int mode, BOOL set) {
     // the callback arguments and the two lookup keys share one stack block
     struct {
         ChatUserModeArgs args;
@@ -612,10 +612,10 @@ void ov45_02249194(ChatConnection *chat, const char *nick, const char *name, int
     frame.args.channel = name;
     frame.args.nick = nick;
     frame.args.mode = user->mode;
-    ov45_02244D30(chat, 11, channel->callbacks.userModeChanged, (u32 *)&frame.args, channel->callbacks.param, 0, (char *)name, sizeof(frame.args));
+    ciAddCallback_(chat, 11, channel->callbacks.userModeChanged, (u32 *)&frame.args, channel->callbacks.param, 0, (char *)name, sizeof(frame.args));
 }
 
-void ov45_02249390(void *element, void *arg) {
+void ciSetUserBasicInfoMap(void *element, void *arg) {
     ChatChannel *channel = element;
     ChatUserInfo *info = arg;
     ChatChannelUser *user;
@@ -633,7 +633,7 @@ void ov45_02249390(void *element, void *arg) {
     user->hasUserInfo = TRUE;
 }
 
-void ov45_02249460(ChatConnection *chat, const char *nick, const char *user, const char *address) {
+void ciSetUserBasicInfo(ChatConnection *chat, const char *nick, const char *user, const char *address) {
     char buffer[sizeof(ChatChannelUser)];
     ChatUserInfo info;
     ASSERT(chat, ov45_022559B8, ov45_02255764, 1085);
@@ -645,5 +645,5 @@ void ov45_02249460(ChatConnection *chat, const char *nick, const char *user, con
     info.user = user;
     info.address = address;
     info.nick = buffer;
-    ov00_021FF160(chat->channels, ov45_02249390, &info);
+    ov00_021FF160(chat->channels, ciSetUserBasicInfoMap, &info);
 }

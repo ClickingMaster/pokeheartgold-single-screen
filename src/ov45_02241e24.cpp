@@ -74,7 +74,7 @@ struct InsertResult {
 
 extern "C" void ov45_0224206C(InsertResult *out, void *list, Handler **h);
 extern "C" Str ov45_022428C8(Mgr *m, const Str &s);
-extern "C" void ov45_02250C80(void *ctx, const char *name, void (*cb)(), u32 id, u32 z);
+extern "C" void chatGetChannelModeA(void *ctx, const char *name, void (*cb)(), u32 id, u32 z);
 extern "C" void ov45_02240718();
 
 inline Mgr *GetMgr() {
@@ -135,7 +135,7 @@ extern "C" int ov45_02241E24(const char *name, u32 a, u32 b) {
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);
     Str t = ov45_022428C8(GetMgr(), s);
-    ov45_02250C80(GetMgr()->unk0, t.c_str(), ov45_02240718, id, 0);
+    chatGetChannelModeA(GetMgr()->unk0, t.c_str(), ov45_02240718, id, 0);
     t.destroy();
     s.destroy();
     return 0;

@@ -178,10 +178,10 @@ struct Op {
 
 extern "C" void *ov45_02242394(u32);
 extern "C" int ov45_0223AEDC(void *, void *);
-extern "C" void ov45_0225443C(int, const char *);
-extern "C" int ov45_02254A04(const char *, int, const u8 *, u32, int);
-extern "C" int ov45_022549E0(const char *, int, const u8 *, u32, int);
-extern "C" void ov45_022546F8(void);
+extern "C" void StatsUpload_Start(int, const char *);
+extern "C" int StatsUpload_UploadWithLastHash(const char *, int, const u8 *, u32, int);
+extern "C" int StatsUpload_Upload(const char *, int, const u8 *, u32, int);
+extern "C" void StatsUpload_Stop(void);
 
 struct Data {
     u8 pad0[4];
@@ -266,20 +266,20 @@ extern "C" int ov45_02232E60(int mode) {
         o = (Op *)ov45_02242394(sizeof(Op));
         PNEW(o, flag, name, host, x, (const u8 *)&p, (const u8 *)&p + sizeof(p));
         ov45_022577D4 = o;
-        ov45_0225443C(o->flag, o->a.CStr());
+        StatsUpload_Start(o->flag, o->a.CStr());
         int ret;
         if (o->x3c) {
             u32 n = o->vec.size;
-            ret = ov45_02254A04(o->b.CStr(), o->id, ov45_02231C78(&o->vec), n, 0);
+            ret = StatsUpload_UploadWithLastHash(o->b.CStr(), o->id, ov45_02231C78(&o->vec), n, 0);
         } else {
             u32 n = o->vec.size;
-            ret = ov45_022549E0(o->b.CStr(), o->id, ov45_02231C78(&o->vec), n, 0);
+            ret = StatsUpload_Upload(o->b.CStr(), o->id, ov45_02231C78(&o->vec), n, 0);
         }
         int ok;
         if (ret == 0) {
             ok = 1;
         } else {
-            ov45_022546F8();
+            StatsUpload_Stop();
             ok = 0;
         }
         if (!ok) {
@@ -846,10 +846,10 @@ struct Work {
 extern "C" Work *_022577C4;
 extern "C" Obj *ov45_022577D4;
 extern "C" void *ov45_02242394(u32);
-extern "C" void ov45_0225443C(int, const char *);
-extern "C" int ov45_02254A04(const char *, u32, const char *, u32, int);
-extern "C" int ov45_022549E0(const char *, u32, const char *, u32, int);
-extern "C" void ov45_022546F8(int);
+extern "C" void StatsUpload_Start(int, const char *);
+extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
+extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
+extern "C" void StatsUpload_Stop(int);
 extern "C" void ov45_022335A0(void);
 #pragma force_active on
 
@@ -878,20 +878,20 @@ extern "C" void ov45_022335A0(void) {
     o = (Obj *)ov45_02242394(sizeof(Obj));
     new (o) Obj(flag, name, host, x, info);
     ov45_022577D4 = o;
-    ov45_0225443C(o->flag, o->name.CStr());
+    StatsUpload_Start(o->flag, o->name.CStr());
     int ret;
     if (o->x3c) {
         u32 n = o->data.size;
-        ret = ov45_02254A04(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
+        ret = StatsUpload_UploadWithLastHash(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
     } else {
         u32 n = o->data.size;
-        ret = ov45_022549E0(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
+        ret = StatsUpload_Upload(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
     }
     int ok;
     if (ret == 0) {
         ok = 1;
     } else {
-        ov45_022546F8(ret);
+        StatsUpload_Stop(ret);
         ok = 0;
     }
     if (ok) {
@@ -2582,10 +2582,10 @@ extern "C" Work *_022577C4;
 extern "C" Obj *ov45_022577D4;
 extern "C" int ov45_02234A24(int, int, int, void **, u32 *);
 extern "C" void *ov45_02242394(u32);
-extern "C" void ov45_0225443C(int, const char *);
-extern "C" int ov45_02254A04(const char *, u32, const char *, u32, int);
-extern "C" int ov45_022549E0(const char *, u32, const char *, u32, int);
-extern "C" void ov45_022546F8(int);
+extern "C" void StatsUpload_Start(int, const char *);
+extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
+extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
+extern "C" void StatsUpload_Stop(int);
 extern "C" int ov45_022325B0(const void *, u32, int);
 extern "C" void ov45_02234A88(int a0, int a1, int a2);
 #pragma force_active on
@@ -2635,20 +2635,20 @@ extern "C" void ov45_02234A88(int a0, int a1, int a2) {
     o = (Obj *)ov45_02242394(sizeof(Obj));
     new (o) Obj(flag, name, host, x, info);
     ov45_022577D4 = o;
-    ov45_0225443C(o->flag, o->name.CStr());
+    StatsUpload_Start(o->flag, o->name.CStr());
     int ret;
     if (o->x3c) {
         u32 n = o->data.size;
-        ret = ov45_02254A04(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
+        ret = StatsUpload_UploadWithLastHash(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
     } else {
         u32 n = o->data.size;
-        ret = ov45_022549E0(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
+        ret = StatsUpload_Upload(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
     }
     int ok;
     if (ret == 0) {
         ok = 1;
     } else {
-        ov45_022546F8(ret);
+        StatsUpload_Stop(ret);
         ok = 0;
     }
     if (ok) {
@@ -2825,10 +2825,10 @@ extern "C" Obj *ov45_022577D4;
 extern "C" int ov45_02234A24(int, int, int, void **, u32 *);
 extern "C" int ov45_022325B0(const void *, u32, int);
 extern "C" void *ov45_02242394(u32);
-extern "C" void ov45_0225443C(int, const char *);
-extern "C" int ov45_02254A04(const char *, u32, const char *, u32, int);
-extern "C" int ov45_022549E0(const char *, u32, const char *, u32, int);
-extern "C" void ov45_022546F8(int);
+extern "C" void StatsUpload_Start(int, const char *);
+extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
+extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
+extern "C" void StatsUpload_Stop(int);
 extern "C" int ov45_0223AC78(void *, void *, u32);
 extern "C" void ov45_02238C74(void *, void *, u32);
 extern "C" void ov45_02234D68(int a0, int a1, int a2);
@@ -2886,19 +2886,19 @@ extern "C" void ov45_02234D68(int a0, int a1, int a2) {
     o = (Obj *)ov45_02242394(sizeof(Obj));
     new (o) Obj(flag, name, host, x, i2);
     ov45_022577D4 = o;
-    ov45_0225443C(o->flag, o->name.CStr());
+    StatsUpload_Start(o->flag, o->name.CStr());
     if (o->x3c) {
         u32 n = o->data.size;
-        ret = ov45_02254A04(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
+        ret = StatsUpload_UploadWithLastHash(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
     } else {
         u32 n = o->data.size;
-        ret = ov45_022549E0(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
+        ret = StatsUpload_Upload(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
     }
     int ok;
     if (ret == 0) {
         ok = 1;
     } else {
-        ov45_022546F8(ret);
+        StatsUpload_Stop(ret);
         ok = 0;
     }
     if (ok) {
@@ -3067,10 +3067,10 @@ extern "C" Work *_022577C4;
 extern "C" Obj *ov45_022577D4;
 extern "C" int ov45_02234A24(int, int, int, void **, u32 *);
 extern "C" void *ov45_02242394(u32);
-extern "C" void ov45_0225443C(int, const char *);
-extern "C" int ov45_02254A04(const char *, u32, const char *, u32, int);
-extern "C" int ov45_022549E0(const char *, u32, const char *, u32, int);
-extern "C" void ov45_022546F8(int);
+extern "C" void StatsUpload_Start(int, const char *);
+extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
+extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
+extern "C" void StatsUpload_Stop(int);
 extern "C" int ov45_0223AE84(void *, void *, u32);
 extern "C" void ov45_0223ACA4(void *, void *, u32);
 extern "C" void ov45_022350FC(int a0, int a1, int a2);
@@ -3119,20 +3119,20 @@ extern "C" void ov45_022350FC(int a0, int a1, int a2) {
     o = (Obj *)ov45_02242394(sizeof(Obj));
     new (o) Obj(flag, name, host, x, info);
     ov45_022577D4 = o;
-    ov45_0225443C(o->flag, o->name.CStr());
+    StatsUpload_Start(o->flag, o->name.CStr());
     int ret;
     if (o->x3c) {
         u32 n = o->data.size;
-        ret = ov45_02254A04(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
+        ret = StatsUpload_UploadWithLastHash(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
     } else {
         u32 n = o->data.size;
-        ret = ov45_022549E0(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
+        ret = StatsUpload_Upload(o->host.CStr(), o->x, ov45_02231C78(&o->data), n, 0);
     }
     int ok;
     if (ret == 0) {
         ok = 1;
     } else {
-        ov45_022546F8(ret);
+        StatsUpload_Stop(ret);
         ok = 0;
     }
     if (ok) {

@@ -14,7 +14,7 @@ struct RTCTime {
 
 extern "C" s64 RTC_ConvertDateTimeToSecond(const RTCDate *date, const RTCTime *time);
 extern "C" void ov00_021ECB94(RTCDate *date, RTCTime *time);
-extern "C" void ov45_02250590(void *p);
+extern "C" void chatThink(void *p);
 
 struct Node {
     Node *a, *b, *c;
@@ -148,7 +148,7 @@ extern "C" int ov45_02240874(void) {
     }
     void *p = g->unk0;
     if (p != NULL) {
-        ov45_02250590(p);
+        chatThink(p);
     }
     Mgr *w = ov45_022577DC;
     RTCTime time;

@@ -266,13 +266,13 @@ void WifiSetupClient_Free(void *p) {
     WifiSetupHeap_Free(p);
 }
 
-void ov13_0222C10C(void) {
+void WifiSetupScreens_StartQuit(void) {
     WifiSetupFade_Start(3, 1, 0x3f, 0x14);
     WifiSetupFade_Start(3, 0, 0x3f, 0x14);
-    WifiSetupApp_SetStateFunc(ov13_0222C148);
+    WifiSetupApp_SetStateFunc(WifiSetupScreens_Quit);
 }
 
-void ov13_0222C148(void) {
+void WifiSetupScreens_Quit(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -291,7 +291,7 @@ void ov13_0222C148(void) {
     WifiSetupApp_Exit();
 }
 
-void ov13_0222C1BC(void) {
+void WifiSetupScreens_Init(void) {
     WifiSetupConnections_Load();
     WifiSetupText_InitBanks();
     WifiSetupCursor_Init();
@@ -325,16 +325,16 @@ void ov13_0222C1BC(void) {
     SET_PRI3(0x0400000A);
     WifiSetupDisplay_ShowPlanes(1, 2);
     WifiSetupDisplay_ShowPlanes(0, 2);
-    WifiSetupApp_SetStateFunc(ov13_0222C39C);
+    WifiSetupApp_SetStateFunc(WifiSetupScreens_FadeIn);
 }
 
-void ov13_0222C39C(void) {
+void WifiSetupScreens_FadeIn(void) {
     WifiSetupFade_Start(2, 1, 2, 0x14);
     WifiSetupFade_Start(2, 0, 2, 0x14);
-    WifiSetupApp_SetStateFunc(ov13_0222C3D8);
+    WifiSetupApp_SetStateFunc(WifiSetupScreens_WaitFadeIn);
 }
 
-void ov13_0222C3D8(void) {
+void WifiSetupScreens_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -344,7 +344,7 @@ void ov13_0222C3D8(void) {
     switch (WifiSetupApp_GetKind()) {
     case 0:
         WifiSetupApp_SetTransition(0, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222C44C);
+        WifiSetupApp_SetStateFunc(WifiSetupTopMenu_Init);
         break;
     case 1:
         WifiSetupApp_SetTransition(1, 1);
@@ -353,18 +353,18 @@ void ov13_0222C3D8(void) {
     }
 }
 
-void ov13_0222C44C(void) {
+void WifiSetupTopMenu_Init(void) {
     int i;
-    ov13_0222C4C8();
+    WifiSetupTopMenu_LoadGraphics();
     WifiSetupBackground_LoadHeader(0);
     WifiSetupMessage_Show(0x2e, -1, 0);
     WifiSetupBanner_LoadScreen(4);
     i = ov13_0224F4FC.selected * 4;
     WifiSetupCursor_ShowCorners(ov13_0224533E[i], ov13_02245342[i], ov13_02245340[i], ov13_02245344[i]);
-    WifiSetupApp_SetStateFunc(ov13_0222C5B4);
+    WifiSetupApp_SetStateFunc(WifiSetupTopMenu_FadeIn);
 }
 
-void ov13_0222C4C8(void) {
+void WifiSetupTopMenu_LoadGraphics(void) {
     WifiSetupPath22 name;
     name = ov13_0224534E;
     WifiSetup_LoadGraphics(ov13_0224614C, GX_LoadBG2Char);
@@ -377,15 +377,15 @@ void ov13_0222C4C8(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222C5B4(void) {
+void WifiSetupTopMenu_FadeIn(void) {
     WifiSetupFade_Start(2, 1, 1, 8);
     WifiSetupFade_Start(2, 0, 0x14, 8);
     WifiSetupDisplay_ShowPlanes(1, 1);
     WifiSetupDisplay_ShowPlanes(0, 0x14);
-    WifiSetupApp_SetStateFunc(ov13_0222C608);
+    WifiSetupApp_SetStateFunc(WifiSetupTopMenu_WaitFadeIn);
 }
 
-void ov13_0222C608(void) {
+void WifiSetupTopMenu_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -393,24 +393,24 @@ void ov13_0222C608(void) {
         return;
     }
     WifiSetupButtonBar_Show(0);
-    WifiSetupApp_SetStateFunc(ov13_0222C644);
+    WifiSetupApp_SetStateFunc(WifiSetupTopMenu_WaitButtonBar);
 }
 
-void ov13_0222C644(void) {
+void WifiSetupTopMenu_WaitButtonBar(void) {
     if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
     WifiSetupButtonBar_Unlock();
-    WifiSetupApp_SetStateFunc(ov13_0222C66C);
+    WifiSetupApp_SetStateFunc(WifiSetupTopMenu_Main);
 }
 
-void ov13_0222C66C(void) {
-    ov13_0222C680();
-    ov13_0222C7AC();
-    ov13_0222C7B0();
+void WifiSetupTopMenu_Main(void) {
+    WifiSetupTopMenu_HandleInput();
+    WifiSetupTopMenu_Update();
+    WifiSetupTopMenu_CheckButtons();
 }
 
-void ov13_0222C680(void) {
+void WifiSetupTopMenu_HandleInput(void) {
     u32 i;
     WifiSetupRect *entry = ov13_0224532E;
     for (i = 0; i < 2; i++, entry++) {
@@ -432,55 +432,55 @@ void ov13_0222C680(void) {
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(0x40) != 0) {
-        ov13_0222C914(1);
+        WifiSetupTopMenu_MoveCursor(1);
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(0x80) != 0) {
-        ov13_0222C914(3);
+        WifiSetupTopMenu_MoveCursor(3);
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(0x20) != 0) {
-        ov13_0222C914(0);
+        WifiSetupTopMenu_MoveCursor(0);
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(0x10) != 0) {
-        ov13_0222C914(2);
+        WifiSetupTopMenu_MoveCursor(2);
     }
 }
 
-void ov13_0222C7AC(void) {
+void WifiSetupTopMenu_Update(void) {
 }
 
-void ov13_0222C7B0(void) {
+void WifiSetupTopMenu_CheckButtons(void) {
     switch (WifiSetupButtonBar_GetSelected()) {
     case 0:
         WifiSetupSound_Play(7);
-        WifiSetupApp_SetStateFunc(ov13_0222C10C);
+        WifiSetupApp_SetStateFunc(WifiSetupScreens_StartQuit);
         break;
     case 1:
         WifiSetupSound_Play(6);
-        ov13_0222C984();
-        WifiSetupApp_SetStateFunc(ov13_0222C800);
+        WifiSetupTopMenu_HighlightSelection();
+        WifiSetupApp_SetStateFunc(WifiSetupTopMenu_Exit);
         break;
     }
 }
 
-void ov13_0222C800(void) {
+void WifiSetupTopMenu_Exit(void) {
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
-    WifiSetupApp_SetStateFunc(ov13_0222C820);
+    WifiSetupApp_SetStateFunc(WifiSetupTopMenu_WaitFadeOut);
 }
 
-void ov13_0222C820(void) {
+void WifiSetupTopMenu_WaitFadeOut(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
     WifiSetupFade_Start(3, 1, 1, 8);
     WifiSetupFade_Start(3, 0, 0x16, 8);
-    WifiSetupApp_SetStateFunc(ov13_0222C86C);
+    WifiSetupApp_SetStateFunc(WifiSetupTopMenu_End);
 }
 
-void ov13_0222C86C(void) {
+void WifiSetupTopMenu_End(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -499,12 +499,12 @@ void ov13_0222C86C(void) {
         break;
     case 1:
         WifiSetupApp_SetTransition(0, 0);
-        WifiSetupApp_SetStateFunc(ov13_0222D454);
+        WifiSetupApp_SetStateFunc(WifiSetupOptions_Init);
         break;
     }
 }
 
-void ov13_0222C914(int dir) {
+void WifiSetupTopMenu_MoveCursor(int dir) {
     int idx;
     if (dir == 1 || dir == 3) {
         return;
@@ -515,21 +515,21 @@ void ov13_0222C914(int dir) {
     WifiSetupCursor_ShowCorners(ov13_0224533E[idx], ov13_02245342[idx], ov13_02245340[idx], ov13_02245344[idx]);
 }
 
-void ov13_0222C984(void) {
+void WifiSetupTopMenu_HighlightSelection(void) {
     WifiSetupBytePair tbl = ov13_0224532C;
     WifiSetupPalette_LoadRow(ov13_0224F4FC.graphics, tbl.values[ov13_0224F4FC.selected], tbl.values[ov13_0224F4FC.selected]);
 }
 
-void ov13_0222C9C4(void) {
+void WifiSetupEraseConfirm_Init(void) {
     ov13_0224F504 = 0;
-    ov13_0222CA0C();
+    WifiSetupEraseConfirm_LoadGraphics();
     WifiSetupBackground_LoadHeader(0x12);
     WifiSetupMessage_Show(0x3b, -1, 0);
     WifiSetup_PrintMessage(0x17);
-    WifiSetupApp_SetStateFunc(ov13_0222CA8C);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseConfirm_FadeIn);
 }
 
-void ov13_0222CA0C(void) {
+void WifiSetupEraseConfirm_LoadGraphics(void) {
     WifiSetup_LoadGraphics(ov13_02246190, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
@@ -538,15 +538,15 @@ void ov13_0222CA0C(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222CA8C(void) {
+void WifiSetupEraseConfirm_FadeIn(void) {
     WifiSetupFade_Start(2, 1, 1, 8);
     WifiSetupFade_Start(2, 0, 0x15, 8);
     WifiSetupDisplay_ShowPlanes(1, 1);
     WifiSetupDisplay_ShowPlanes(0, 0x15);
-    WifiSetupApp_SetStateFunc(ov13_0222CAE0);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseConfirm_WaitFadeIn);
 }
 
-void ov13_0222CAE0(void) {
+void WifiSetupEraseConfirm_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -554,24 +554,24 @@ void ov13_0222CAE0(void) {
         return;
     }
     WifiSetupButtonBar_Show(3);
-    WifiSetupApp_SetStateFunc(ov13_0222CB1C);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseConfirm_WaitButtonBar);
 }
 
-void ov13_0222CB1C(void) {
+void WifiSetupEraseConfirm_WaitButtonBar(void) {
     if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
     WifiSetupButtonBar_Unlock();
-    WifiSetupApp_SetStateFunc(ov13_0222CB44);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseConfirm_Main);
 }
 
-void ov13_0222CB44(void) {
-    ov13_0222CB58();
-    ov13_0222CB90();
-    ov13_0222CB94();
+void WifiSetupEraseConfirm_Main(void) {
+    WifiSetupEraseConfirm_HandleInput();
+    WifiSetupEraseConfirm_Update();
+    WifiSetupEraseConfirm_CheckButtons();
 }
 
-void ov13_0222CB58(void) {
+void WifiSetupEraseConfirm_HandleInput(void) {
     if (WifiSetupInput_IsKeyPressed(1) != 0) {
         WifiSetupButtonBar_SelectIfNone(1);
     }
@@ -580,31 +580,31 @@ void ov13_0222CB58(void) {
     }
 }
 
-void ov13_0222CB90(void) {
+void WifiSetupEraseConfirm_Update(void) {
 }
 
-void ov13_0222CB94(void) {
+void WifiSetupEraseConfirm_CheckButtons(void) {
     switch (WifiSetupButtonBar_GetSelected()) {
     case 0:
         WifiSetupSound_Play(7);
-        WifiSetupApp_SetStateFunc(ov13_0222CBFC);
+        WifiSetupApp_SetStateFunc(WifiSetupEraseConfirm_Exit);
         break;
     case 1:
         WifiSetupSound_Play(6);
         WifiSetupDialog_Open(0x18, 0, 1, -1, 0);
         WifiSetupButtonBar_Lock();
-        WifiSetupApp_SetStateFunc(ov13_0222CD38);
+        WifiSetupApp_SetStateFunc(WifiSetupEraseConfirm_WaitDialog);
         break;
     }
 }
 
-void ov13_0222CBFC(void) {
+void WifiSetupEraseConfirm_Exit(void) {
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
-    WifiSetupApp_SetStateFunc(ov13_0222CC1C);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseConfirm_WaitFadeOut);
 }
 
-void ov13_0222CC1C(void) {
+void WifiSetupEraseConfirm_WaitFadeOut(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -613,10 +613,10 @@ void ov13_0222CC1C(void) {
         WifiSetupFade_Start(3, 1, 1, 8);
     }
     WifiSetupFade_Start(3, 0, 0x15, 8);
-    WifiSetupApp_SetStateFunc(ov13_0222CC80);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseConfirm_End);
 }
 
-void ov13_0222CC80(void) {
+void WifiSetupEraseConfirm_End(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
@@ -636,14 +636,14 @@ void ov13_0222CC80(void) {
     WifiSetupDisplay_HidePlanes(0, 0x15);
     if (ov13_0224F504 == 0) {
         WifiSetupApp_SetTransition(0, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222D454);
+        WifiSetupApp_SetStateFunc(WifiSetupOptions_Init);
     } else {
         WifiSetupApp_SetTransition(0, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222CDA8);
+        WifiSetupApp_SetStateFunc(WifiSetupEraseDone_Init);
     }
 }
 
-void ov13_0222CD38(void) {
+void WifiSetupEraseConfirm_WaitDialog(void) {
     int r = WifiSetupDialog_GetSelected();
     if (r != 0) {
         if (r != 1) {
@@ -655,24 +655,24 @@ void ov13_0222CD38(void) {
         WifiSetupSound_Play(7);
     }
     WifiSetupDialog_Close();
-    WifiSetupApp_SetStateFunc(ov13_0222CD88);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseConfirm_WaitDialogClosed);
 }
 
-void ov13_0222CD88(void) {
+void WifiSetupEraseConfirm_WaitDialogClosed(void) {
     if (WifiSetupDialog_IsOpen() != 0) {
         return;
     }
-    WifiSetupApp_SetStateFunc(ov13_0222CBFC);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseConfirm_Exit);
 }
 
-void ov13_0222CDA8(void) {
-    ov13_0222CDCC();
+void WifiSetupEraseDone_Init(void) {
+    WifiSetupEraseDone_LoadGraphics();
     WifiSetup_PrintMessage(0x19);
     WifiSetupConnections_Reset();
-    WifiSetupApp_SetStateFunc(ov13_0222CE4C);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseDone_FadeIn);
 }
 
-void ov13_0222CDCC(void) {
+void WifiSetupEraseDone_LoadGraphics(void) {
     WifiSetup_LoadGraphics(ov13_022461A4, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
@@ -681,67 +681,67 @@ void ov13_0222CDCC(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222CE4C(void) {
+void WifiSetupEraseDone_FadeIn(void) {
     WifiSetupFade_Start(2, 0, 0x15, 8);
     WifiSetupDisplay_ShowPlanes(0, 0x15);
-    WifiSetupApp_SetStateFunc(ov13_0222CE80);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseDone_WaitFadeIn);
 }
 
-void ov13_0222CE80(void) {
+void WifiSetupEraseDone_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     WifiSetupButtonBar_Show(5);
-    WifiSetupApp_SetStateFunc(ov13_0222CEAC);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseDone_WaitButtonBar);
 }
 
-void ov13_0222CEAC(void) {
+void WifiSetupEraseDone_WaitButtonBar(void) {
     if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
     WifiSetupButtonBar_Unlock();
-    WifiSetupApp_SetStateFunc(ov13_0222CED4);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseDone_Main);
 }
 
-void ov13_0222CED4(void) {
-    ov13_0222CEE8();
-    ov13_0222CF08();
-    ov13_0222CF0C();
+void WifiSetupEraseDone_Main(void) {
+    WifiSetupEraseDone_HandleInput();
+    WifiSetupEraseDone_Update();
+    WifiSetupEraseDone_CheckButtons();
 }
 
-void ov13_0222CEE8(void) {
+void WifiSetupEraseDone_HandleInput(void) {
     if (WifiSetupInput_IsKeyPressed(1) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
     }
 }
 
-void ov13_0222CF08(void) {
+void WifiSetupEraseDone_Update(void) {
 }
 
-void ov13_0222CF0C(void) {
+void WifiSetupEraseDone_CheckButtons(void) {
     if (WifiSetupButtonBar_GetSelected() != 0) {
         return;
     }
     WifiSetupSound_Play(6);
-    WifiSetupApp_SetStateFunc(ov13_0222CF34);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseDone_Exit);
 }
 
-void ov13_0222CF34(void) {
+void WifiSetupEraseDone_Exit(void) {
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
-    WifiSetupApp_SetStateFunc(ov13_0222CF54);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseDone_WaitFadeOut);
 }
 
-void ov13_0222CF54(void) {
+void WifiSetupEraseDone_WaitFadeOut(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
     WifiSetupFade_Start(3, 1, 0x3f, 0x40);
     WifiSetupFade_Start(3, 0, 0x3f, 0x40);
-    WifiSetupApp_SetStateFunc(ov13_0222CFA0);
+    WifiSetupApp_SetStateFunc(WifiSetupEraseDone_PowerOff);
 }
 
-void ov13_0222CFA0(void) {
+void WifiSetupEraseDone_PowerOff(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -752,15 +752,15 @@ void ov13_0222CFA0(void) {
     PM_ForceToPowerOff();
 }
 
-void ov13_0222CFD4(void) {
-    ov13_0222D008();
+void WifiSetupSystemInfo_Init(void) {
+    WifiSetupSystemInfo_LoadGraphics();
     WifiSetupBackground_LoadHeader(0x11);
     WifiSetupMessage_Show(0x3a, -1, 0);
-    ov13_0222D088();
-    WifiSetupApp_SetStateFunc(ov13_0222D25C);
+    WifiSetupSystemInfo_DrawInfo();
+    WifiSetupApp_SetStateFunc(WifiSetupSystemInfo_FadeIn);
 }
 
-void ov13_0222D008(void) {
+void WifiSetupSystemInfo_LoadGraphics(void) {
     WifiSetup_LoadGraphics(ov13_022461B8, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
@@ -769,7 +769,7 @@ void ov13_0222D008(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222D088(void) {
+void WifiSetupSystemInfo_DrawInfo(void) {
     WifiSetupWiFiInfo info;
     u32 parts[4];
     u16 buf[0x14];
@@ -797,15 +797,15 @@ void ov13_0222D088(void) {
     WifiSetupText_MarkDirty(win);
 }
 
-void ov13_0222D25C(void) {
+void WifiSetupSystemInfo_FadeIn(void) {
     WifiSetupFade_Start(2, 1, 1, 8);
     WifiSetupFade_Start(2, 0, 0x15, 8);
     WifiSetupDisplay_ShowPlanes(1, 1);
     WifiSetupDisplay_ShowPlanes(0, 0x15);
-    WifiSetupApp_SetStateFunc(ov13_0222D2B0);
+    WifiSetupApp_SetStateFunc(WifiSetupSystemInfo_WaitFadeIn);
 }
 
-void ov13_0222D2B0(void) {
+void WifiSetupSystemInfo_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -813,57 +813,57 @@ void ov13_0222D2B0(void) {
         return;
     }
     WifiSetupButtonBar_Show(2);
-    WifiSetupApp_SetStateFunc(ov13_0222D2EC);
+    WifiSetupApp_SetStateFunc(WifiSetupSystemInfo_WaitButtonBar);
 }
 
-void ov13_0222D2EC(void) {
+void WifiSetupSystemInfo_WaitButtonBar(void) {
     if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
     WifiSetupButtonBar_Unlock();
-    WifiSetupApp_SetStateFunc(ov13_0222D314);
+    WifiSetupApp_SetStateFunc(WifiSetupSystemInfo_Main);
 }
 
-void ov13_0222D314(void) {
-    ov13_0222D328();
-    ov13_0222D348();
-    ov13_0222D34C();
+void WifiSetupSystemInfo_Main(void) {
+    WifiSetupSystemInfo_HandleInput();
+    WifiSetupSystemInfo_Update();
+    WifiSetupSystemInfo_CheckButtons();
 }
 
-void ov13_0222D328(void) {
+void WifiSetupSystemInfo_HandleInput(void) {
     if (WifiSetupInput_IsKeyPressed(2) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
     }
 }
 
-void ov13_0222D348(void) {
+void WifiSetupSystemInfo_Update(void) {
 }
 
-void ov13_0222D34C(void) {
+void WifiSetupSystemInfo_CheckButtons(void) {
     if (WifiSetupButtonBar_GetSelected() != 0) {
         return;
     }
     WifiSetupSound_Play(7);
-    WifiSetupApp_SetStateFunc(ov13_0222D374);
+    WifiSetupApp_SetStateFunc(WifiSetupSystemInfo_Exit);
 }
 
-void ov13_0222D374(void) {
+void WifiSetupSystemInfo_Exit(void) {
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
-    WifiSetupApp_SetStateFunc(ov13_0222D394);
+    WifiSetupApp_SetStateFunc(WifiSetupSystemInfo_WaitFadeOut);
 }
 
-void ov13_0222D394(void) {
+void WifiSetupSystemInfo_WaitFadeOut(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
     WifiSetupButtonBar_Close();
     WifiSetupFade_Start(3, 1, 1, 8);
     WifiSetupFade_Start(3, 0, 0x15, 8);
-    WifiSetupApp_SetStateFunc(ov13_0222D3E4);
+    WifiSetupApp_SetStateFunc(WifiSetupSystemInfo_End);
 }
 
-void ov13_0222D3E4(void) {
+void WifiSetupSystemInfo_End(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -878,13 +878,13 @@ void ov13_0222D3E4(void) {
     WifiSetupDisplay_HidePlanes(1, 1);
     WifiSetupDisplay_HidePlanes(0, 0x15);
     WifiSetupApp_SetTransition(0, 1);
-    WifiSetupApp_SetStateFunc(ov13_0222D454);
+    WifiSetupApp_SetStateFunc(WifiSetupOptions_Init);
 }
 
-void ov13_0222D454(void) {
+void WifiSetupOptions_Init(void) {
     int idx;
     ov13_0224F508.unk_1 = 0;
-    ov13_0222D51C();
+    WifiSetupOptions_LoadGraphics();
     WifiSetupBackground_LoadHeader(0x10);
     WifiSetupBanner_LoadScreen(3);
     WifiSetupMessage_Show(0x39, -1, 0);
@@ -893,10 +893,10 @@ void ov13_0222D454(void) {
     ov13_0224F508.oam->attr2 = (ov13_0224F508.oam->attr2 & ~0xc00) | 0xc00;
     idx = ov13_0224F508.selected * 4;
     WifiSetupCursor_ShowCorners(ov13_022453B2[idx], ov13_022453B6[idx], ov13_022453B4[idx], ov13_022453B8[idx]);
-    WifiSetupApp_SetStateFunc(ov13_0222D6B8);
+    WifiSetupApp_SetStateFunc(WifiSetupOptions_FadeIn);
 }
 
-void ov13_0222D51C(void) {
+void WifiSetupOptions_LoadGraphics(void) {
     WifiSetupPath22 a;
     WifiSetupPath23 b;
     WifiSetupWiFiInfo info;
@@ -929,15 +929,15 @@ void ov13_0222D51C(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222D6B8(void) {
+void WifiSetupOptions_FadeIn(void) {
     WifiSetupFade_Start(2, 1, 1, 8);
     WifiSetupFade_Start(2, 0, 0x14, 8);
     WifiSetupDisplay_ShowPlanes(1, 1);
     WifiSetupDisplay_ShowPlanes(0, 0x14);
-    WifiSetupApp_SetStateFunc(ov13_0222D70C);
+    WifiSetupApp_SetStateFunc(WifiSetupOptions_WaitFadeIn);
 }
 
-void ov13_0222D70C(void) {
+void WifiSetupOptions_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -945,24 +945,24 @@ void ov13_0222D70C(void) {
         return;
     }
     WifiSetupButtonBar_Show(0);
-    WifiSetupApp_SetStateFunc(ov13_0222D748);
+    WifiSetupApp_SetStateFunc(WifiSetupOptions_WaitButtonBar);
 }
 
-void ov13_0222D748(void) {
+void WifiSetupOptions_WaitButtonBar(void) {
     if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
     WifiSetupButtonBar_Unlock();
-    WifiSetupApp_SetStateFunc(ov13_0222D770);
+    WifiSetupApp_SetStateFunc(WifiSetupOptions_Main);
 }
 
-void ov13_0222D770(void) {
-    ov13_0222D784();
-    ov13_0222D878();
-    ov13_0222D87C();
+void WifiSetupOptions_Main(void) {
+    WifiSetupOptions_HandleInput();
+    WifiSetupOptions_Update();
+    WifiSetupOptions_CheckButtons();
 }
 
-void ov13_0222D784(void) {
+void WifiSetupOptions_HandleInput(void) {
     u32 i;
     WifiSetupRect *entry = ov13_0224539A;
     for (i = 0; i < 3; i++, entry++) {
@@ -984,18 +984,18 @@ void ov13_0222D784(void) {
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(0x40) != 0) {
-        ov13_0222DAB0(1);
+        WifiSetupOptions_MoveCursor(1);
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(0x80) != 0) {
-        ov13_0222DAB0(3);
+        WifiSetupOptions_MoveCursor(3);
     }
 }
 
-void ov13_0222D878(void) {
+void WifiSetupOptions_Update(void) {
 }
 
-void ov13_0222D87C(void) {
+void WifiSetupOptions_CheckButtons(void) {
     WifiSetupWiFiInfo info;
     switch (WifiSetupButtonBar_GetSelected()) {
     case 0:
@@ -1009,22 +1009,22 @@ void ov13_0222D87C(void) {
             return;
         }
         WifiSetupSound_Play(6);
-        ov13_0222DB40();
+        WifiSetupOptions_HighlightSelection();
         ov13_0224F508.unk_1 = 1;
         break;
     default:
         return;
     }
-    WifiSetupApp_SetStateFunc(ov13_0222D920);
+    WifiSetupApp_SetStateFunc(WifiSetupOptions_Exit);
 }
 
-void ov13_0222D920(void) {
+void WifiSetupOptions_Exit(void) {
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
-    WifiSetupApp_SetStateFunc(ov13_0222D940);
+    WifiSetupApp_SetStateFunc(WifiSetupOptions_WaitFadeOut);
 }
 
-void ov13_0222D940(void) {
+void WifiSetupOptions_WaitFadeOut(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -1033,10 +1033,10 @@ void ov13_0222D940(void) {
     }
     WifiSetupFade_Start(3, 1, 1, 8);
     WifiSetupFade_Start(3, 0, 0x14, 8);
-    WifiSetupApp_SetStateFunc(ov13_0222D9A4);
+    WifiSetupApp_SetStateFunc(WifiSetupOptions_End);
 }
 
-void ov13_0222D9A4(void) {
+void WifiSetupOptions_End(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -1054,26 +1054,26 @@ void ov13_0222D9A4(void) {
     WifiSetupDisplay_HidePlanes(0, 0x14);
     if (ov13_0224F508.unk_1 == 0) {
         WifiSetupApp_SetTransition(0, 0);
-        WifiSetupApp_SetStateFunc(ov13_0222C44C);
+        WifiSetupApp_SetStateFunc(WifiSetupTopMenu_Init);
         return;
     }
     switch (ov13_0224F508.selected) {
     case 0:
         WifiSetupApp_SetTransition(0, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222CFD4);
+        WifiSetupApp_SetStateFunc(WifiSetupSystemInfo_Init);
         break;
     case 1:
         WifiSetupApp_SetTransition(0, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222C9C4);
+        WifiSetupApp_SetStateFunc(WifiSetupEraseConfirm_Init);
         break;
     case 2:
         WifiSetupApp_SetTransition(0, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222E220);
+        WifiSetupApp_SetStateFunc(WifiSetupTransferIntro_Init);
         break;
     }
 }
 
-void ov13_0222DAB0(int dir) {
+void WifiSetupOptions_MoveCursor(int dir) {
     int idx;
     if (dir == 1) {
         ov13_0224F508.selected = FX_ModS32(ov13_0224F508.selected + 2, 3);
@@ -1085,20 +1085,20 @@ void ov13_0222DAB0(int dir) {
     WifiSetupCursor_ShowCorners(ov13_022453B2[idx], ov13_022453B6[idx], ov13_022453B4[idx], ov13_022453B8[idx]);
 }
 
-void ov13_0222DB40(void) {
+void WifiSetupOptions_HighlightSelection(void) {
     WifiSetupPalette_LoadRow(ov13_0224F508.graphics, ov13_02245364[ov13_0224F508.selected], ov13_02245364[ov13_0224F508.selected]);
 }
 
-void ov13_0222DB6C(void) {
-    ov13_0222DBA4();
+void WifiSetupTransferring_Init(void) {
+    WifiSetupTransferring_LoadGraphics();
     WifiSetup_PrintMessage(0x1e);
     WifiSetupBusyIcon_Create(0);
     WifiSetupSignalIcon_Create(1);
     WifiSetupSound_Play(0xb);
-    WifiSetupApp_SetStateFunc(ov13_0222DC24);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferring_FadeIn);
 }
 
-void ov13_0222DBA4(void) {
+void WifiSetupTransferring_LoadGraphics(void) {
     WifiSetup_LoadGraphics(ov13_02246288, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
@@ -1107,41 +1107,41 @@ void ov13_0222DBA4(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222DC24(void) {
+void WifiSetupTransferring_FadeIn(void) {
     WifiSetupFade_Start(2, 0, 0x15, 8);
     WifiSetupDisplay_ShowPlanes(0, 0x15);
-    WifiSetupApp_SetStateFunc(ov13_0222DC58);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferring_WaitFadeIn);
 }
 
-void ov13_0222DC58(void) {
+void WifiSetupTransferring_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
-    ov13_0222BC84((WifiSetupSessionCallback)ov13_0222DD5C);
-    WifiSetupApp_SetStateFunc(ov13_0222DC88);
+    WifiSetupTransfer_SetCallback((WifiSetupSessionCallback)WifiSetupTransferring_OnTransferEvent);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferring_Main);
 }
 
-void ov13_0222DC88(void) {
-    ov13_0222DC98();
-    ov13_0222DC9C();
+void WifiSetupTransferring_Main(void) {
+    WifiSetupTransferring_HandleInput();
+    WifiSetupTransferring_Update();
 }
 
-void ov13_0222DC98(void) {
+void WifiSetupTransferring_HandleInput(void) {
 }
 
-void ov13_0222DC9C(void) {
+void WifiSetupTransferring_Update(void) {
 }
 
-void ov13_0222DCA0(void) {
+void WifiSetupTransferring_FadeOut(void) {
     WifiSetupFade_Start(3, 0, 0x15, 8);
-    WifiSetupApp_SetStateFunc(ov13_0222DCC8);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferring_End);
 }
 
-void ov13_0222DCC8(void) {
+void WifiSetupTransferring_End(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
-    if (ov13_0222BC68() == 0) {
+    if (WifiSetupTransfer_IsFinished() == 0) {
         return;
     }
     WifiSetupSignalIcon_Destroy();
@@ -1150,15 +1150,15 @@ void ov13_0222DCC8(void) {
     WifiSetupDisplay_HidePlanes(0, 0x15);
     WifiSetupApp_SetTransition(0, 1);
     if (ov13_0224F514 == 0) {
-        WifiSetupApp_SetStateFunc(ov13_0222E754);
+        WifiSetupApp_SetStateFunc(WifiSetupTransferFailed_Init);
     } else if (ov13_0224F514 == 2) {
-        WifiSetupApp_SetStateFunc(ov13_0222E56C);
+        WifiSetupApp_SetStateFunc(WifiSetupTransferCancelled_Init);
     } else {
-        WifiSetupApp_SetStateFunc(ov13_0222DDE4);
+        WifiSetupApp_SetStateFunc(WifiSetupTransferDone_Init);
     }
 }
 
-void ov13_0222DD5C(int a) {
+void WifiSetupTransferring_OnTransferEvent(int a) {
     if (a == 2) {
         WifiSetupConnections_Reset();
         ov13_0224F514 = 1;
@@ -1173,18 +1173,18 @@ void ov13_0222DD5C(int a) {
         WifiSetupSound_Stop();
         WifiSetupSound_Play(0x12);
     }
-    ov13_0222BC84(NULL);
-    ov13_0222BC0C();
-    WifiSetupApp_SetStateFunc(ov13_0222DCA0);
+    WifiSetupTransfer_SetCallback(NULL);
+    WifiSetupTransfer_Cancel();
+    WifiSetupApp_SetStateFunc(WifiSetupTransferring_FadeOut);
 }
 
-void ov13_0222DDE4(void) {
-    ov13_0222DE04();
+void WifiSetupTransferDone_Init(void) {
+    WifiSetupTransferDone_LoadGraphics();
     WifiSetup_PrintMessage(0x1f);
-    WifiSetupApp_SetStateFunc(ov13_0222DE6C);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferDone_FadeIn);
 }
 
-void ov13_0222DE04(void) {
+void WifiSetupTransferDone_LoadGraphics(void) {
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
     SET_PRI3(0x04000008);
@@ -1192,67 +1192,67 @@ void ov13_0222DE04(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222DE6C(void) {
+void WifiSetupTransferDone_FadeIn(void) {
     WifiSetupFade_Start(2, 0, 0x15, 8);
     WifiSetupDisplay_ShowPlanes(0, 0x15);
-    WifiSetupApp_SetStateFunc(ov13_0222DEA0);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferDone_WaitFadeIn);
 }
 
-void ov13_0222DEA0(void) {
+void WifiSetupTransferDone_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     WifiSetupButtonBar_Show(5);
-    WifiSetupApp_SetStateFunc(ov13_0222DECC);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferDone_WaitButtonBar);
 }
 
-void ov13_0222DECC(void) {
+void WifiSetupTransferDone_WaitButtonBar(void) {
     if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
     WifiSetupButtonBar_Unlock();
-    WifiSetupApp_SetStateFunc(ov13_0222DEF4);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferDone_Main);
 }
 
-void ov13_0222DEF4(void) {
-    ov13_0222DF08();
-    ov13_0222DF28();
-    ov13_0222DF2C();
+void WifiSetupTransferDone_Main(void) {
+    WifiSetupTransferDone_HandleInput();
+    WifiSetupTransferDone_Update();
+    WifiSetupTransferDone_CheckButtons();
 }
 
-void ov13_0222DF08(void) {
+void WifiSetupTransferDone_HandleInput(void) {
     if (WifiSetupInput_IsKeyPressed(1) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
     }
 }
 
-void ov13_0222DF28(void) {
+void WifiSetupTransferDone_Update(void) {
 }
 
-void ov13_0222DF2C(void) {
+void WifiSetupTransferDone_CheckButtons(void) {
     if (WifiSetupButtonBar_GetSelected() != 0) {
         return;
     }
     WifiSetupSound_Play(6);
-    WifiSetupApp_SetStateFunc(ov13_0222DF54);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferDone_Exit);
 }
 
-void ov13_0222DF54(void) {
+void WifiSetupTransferDone_Exit(void) {
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
-    WifiSetupApp_SetStateFunc(ov13_0222DF74);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferDone_WaitFadeOut);
 }
 
-void ov13_0222DF74(void) {
+void WifiSetupTransferDone_WaitFadeOut(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
     WifiSetupFade_Start(3, 1, 0x3f, 0x40);
     WifiSetupFade_Start(3, 0, 0x3f, 0x40);
-    WifiSetupApp_SetStateFunc(ov13_0222DFC0);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferDone_PowerOff);
 }
 
-void ov13_0222DFC0(void) {
+void WifiSetupTransferDone_PowerOff(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -1263,13 +1263,13 @@ void ov13_0222DFC0(void) {
     PM_ForceToPowerOff();
 }
 
-void ov13_0222DFF4(void) {
-    ov13_0222E014();
+void WifiSetupTransferInfo_Init(void) {
+    WifiSetupTransferInfo_LoadGraphics();
     WifiSetup_PrintMessage(0x1a);
-    WifiSetupApp_SetStateFunc(ov13_0222E07C);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferInfo_FadeIn);
 }
 
-void ov13_0222E014(void) {
+void WifiSetupTransferInfo_LoadGraphics(void) {
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
     SET_PRI3(0x04000008);
@@ -1277,13 +1277,13 @@ void ov13_0222E014(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222E07C(void) {
+void WifiSetupTransferInfo_FadeIn(void) {
     WifiSetupFade_Start(2, 0, 0x15, 8);
     WifiSetupDisplay_ShowPlanes(0, 0x15);
-    WifiSetupApp_SetStateFunc(ov13_0222E0B0);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferInfo_WaitFadeIn);
 }
 
-void ov13_0222E0B0(void) {
+void WifiSetupTransferInfo_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -1291,56 +1291,56 @@ void ov13_0222E0B0(void) {
         return;
     }
     WifiSetupButtonBar_Show(4);
-    WifiSetupApp_SetStateFunc(ov13_0222E0EC);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferInfo_WaitButtonBar);
 }
 
-void ov13_0222E0EC(void) {
+void WifiSetupTransferInfo_WaitButtonBar(void) {
     if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
     WifiSetupButtonBar_Unlock();
-    WifiSetupApp_SetStateFunc(ov13_0222E114);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferInfo_Main);
 }
 
-void ov13_0222E114(void) {
-    ov13_0222E128();
-    ov13_0222E148();
-    ov13_0222E14C();
+void WifiSetupTransferInfo_Main(void) {
+    WifiSetupTransferInfo_HandleInput();
+    WifiSetupTransferInfo_Update();
+    WifiSetupTransferInfo_CheckButtons();
 }
 
-void ov13_0222E128(void) {
+void WifiSetupTransferInfo_HandleInput(void) {
     if (WifiSetupInput_IsKeyPressed(1) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
     }
 }
 
-void ov13_0222E148(void) {
+void WifiSetupTransferInfo_Update(void) {
 }
 
-void ov13_0222E14C(void) {
+void WifiSetupTransferInfo_CheckButtons(void) {
     if (WifiSetupButtonBar_GetSelected() != 0) {
         return;
     }
     WifiSetupSound_Play(6);
-    WifiSetupApp_SetStateFunc(ov13_0222E174);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferInfo_Exit);
 }
 
-void ov13_0222E174(void) {
+void WifiSetupTransferInfo_Exit(void) {
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
-    WifiSetupApp_SetStateFunc(ov13_0222E194);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferInfo_WaitFadeOut);
 }
 
-void ov13_0222E194(void) {
+void WifiSetupTransferInfo_WaitFadeOut(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
     WifiSetupButtonBar_Close();
     WifiSetupFade_Start(3, 0, 0x15, 8);
-    WifiSetupApp_SetStateFunc(ov13_0222E1D0);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferInfo_End);
 }
 
-void ov13_0222E1D0(void) {
+void WifiSetupTransferInfo_End(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
@@ -1350,19 +1350,19 @@ void ov13_0222E1D0(void) {
     WifiSetupText_FreeBgCanvas(0);
     WifiSetupDisplay_HidePlanes(0, 0x15);
     WifiSetupApp_SetTransition(0, 1);
-    WifiSetupApp_SetStateFunc(ov13_0222EEB4);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferWait_Init);
 }
 
-void ov13_0222E220(void) {
+void WifiSetupTransferIntro_Init(void) {
     ov13_0224F518 = 0;
-    ov13_0222E268();
+    WifiSetupTransferIntro_LoadGraphics();
     WifiSetupBackground_LoadHeader(0x13);
     WifiSetupMessage_Show(0x3c, -1, 0);
     WifiSetup_PrintMessage(0x1b);
-    WifiSetupApp_SetStateFunc(ov13_0222E2E8);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferIntro_FadeIn);
 }
 
-void ov13_0222E268(void) {
+void WifiSetupTransferIntro_LoadGraphics(void) {
     WifiSetup_LoadGraphics(ov13_0224629C, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
@@ -1371,37 +1371,37 @@ void ov13_0222E268(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222E2E8(void) {
+void WifiSetupTransferIntro_FadeIn(void) {
     WifiSetupFade_Start(2, 1, 1, 8);
     WifiSetupFade_Start(2, 0, 0x15, 8);
     WifiSetupDisplay_ShowPlanes(1, 1);
     WifiSetupDisplay_ShowPlanes(0, 0x15);
-    WifiSetupApp_SetStateFunc(ov13_0222E33C);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferIntro_WaitFadeIn);
 }
 
-void ov13_0222E33C(void) {
+void WifiSetupTransferIntro_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     WifiSetupButtonBar_Show(3);
-    WifiSetupApp_SetStateFunc(ov13_0222E368);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferIntro_WaitButtonBar);
 }
 
-void ov13_0222E368(void) {
+void WifiSetupTransferIntro_WaitButtonBar(void) {
     if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
     WifiSetupButtonBar_Unlock();
-    WifiSetupApp_SetStateFunc(ov13_0222E390);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferIntro_Main);
 }
 
-void ov13_0222E390(void) {
-    ov13_0222E3A4();
-    ov13_0222E3DC();
-    ov13_0222E3E0();
+void WifiSetupTransferIntro_Main(void) {
+    WifiSetupTransferIntro_HandleInput();
+    WifiSetupTransferIntro_Update();
+    WifiSetupTransferIntro_CheckButtons();
 }
 
-void ov13_0222E3A4(void) {
+void WifiSetupTransferIntro_HandleInput(void) {
     if (WifiSetupInput_IsKeyPressed(1) != 0) {
         WifiSetupButtonBar_SelectIfNone(1);
     }
@@ -1410,10 +1410,10 @@ void ov13_0222E3A4(void) {
     }
 }
 
-void ov13_0222E3DC(void) {
+void WifiSetupTransferIntro_Update(void) {
 }
 
-void ov13_0222E3E0(void) {
+void WifiSetupTransferIntro_CheckButtons(void) {
     switch (WifiSetupButtonBar_GetSelected()) {
     case 0:
         WifiSetupSound_Play(7);
@@ -1425,16 +1425,16 @@ void ov13_0222E3E0(void) {
     default:
         return;
     }
-    WifiSetupApp_SetStateFunc(ov13_0222E430);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferIntro_Exit);
 }
 
-void ov13_0222E430(void) {
+void WifiSetupTransferIntro_Exit(void) {
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
-    WifiSetupApp_SetStateFunc(ov13_0222E450);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferIntro_WaitFadeOut);
 }
 
-void ov13_0222E450(void) {
+void WifiSetupTransferIntro_WaitFadeOut(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -1443,10 +1443,10 @@ void ov13_0222E450(void) {
         WifiSetupFade_Start(3, 1, 1, 8);
     }
     WifiSetupFade_Start(3, 0, 0x15, 8);
-    WifiSetupApp_SetStateFunc(ov13_0222E4B4);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferIntro_End);
 }
 
-void ov13_0222E4B4(void) {
+void WifiSetupTransferIntro_End(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
@@ -1466,21 +1466,21 @@ void ov13_0222E4B4(void) {
     WifiSetupDisplay_HidePlanes(0, 0x15);
     if (ov13_0224F518 == 0) {
         WifiSetupApp_SetTransition(0, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222D454);
+        WifiSetupApp_SetStateFunc(WifiSetupOptions_Init);
     } else {
         WifiSetupApp_SetTransition(0, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222DFF4);
+        WifiSetupApp_SetStateFunc(WifiSetupTransferInfo_Init);
     }
 }
 
-void ov13_0222E56C(void) {
+void WifiSetupTransferCancelled_Init(void) {
     ov13_0224F51C = 0;
-    ov13_0222E59C();
+    WifiSetupTransferCancelled_LoadGraphics();
     WifiSetup_PrintMessage(0x21);
-    WifiSetupApp_SetStateFunc(ov13_0222E608);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferCancelled_FadeIn);
 }
 
-void ov13_0222E59C(void) {
+void WifiSetupTransferCancelled_LoadGraphics(void) {
     WifiSetup_LoadGraphics(ov13_022462B0, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
@@ -1488,37 +1488,37 @@ void ov13_0222E59C(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222E608(void) {
+void WifiSetupTransferCancelled_FadeIn(void) {
     WifiSetupFade_Start(2, 0, 0x15, 8);
     WifiSetupDisplay_ShowPlanes(0, 0x15);
-    WifiSetupApp_SetStateFunc(ov13_0222E63C);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferCancelled_WaitFadeIn);
 }
 
-void ov13_0222E63C(void) {
+void WifiSetupTransferCancelled_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
-    if (ov13_0222BC68() == 0) {
+    if (WifiSetupTransfer_IsFinished() == 0) {
         return;
     }
-    WifiSetupApp_SetStateFunc(ov13_0222E66C);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferCancelled_Main);
 }
 
-void ov13_0222E66C(void) {
-    ov13_0222E720();
-    ov13_0222E67C();
+void WifiSetupTransferCancelled_Main(void) {
+    WifiSetupTransferCancelled_UpdateTimer();
+    WifiSetupTransferCancelled_Update();
 }
 
-void ov13_0222E67C(void) {
+void WifiSetupTransferCancelled_Update(void) {
 }
 
-void ov13_0222E680(void) {
+void WifiSetupTransferCancelled_FadeOut(void) {
     WifiSetupFade_Start(3, 1, 1, 8);
     WifiSetupFade_Start(3, 0, 0x15, 8);
-    WifiSetupApp_SetStateFunc(ov13_0222E6BC);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferCancelled_End);
 }
 
-void ov13_0222E6BC(void) {
+void WifiSetupTransferCancelled_End(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -1530,24 +1530,24 @@ void ov13_0222E6BC(void) {
     WifiSetupDisplay_HidePlanes(1, 1);
     WifiSetupDisplay_HidePlanes(0, 0x15);
     WifiSetupApp_SetTransition(0, 1);
-    WifiSetupApp_SetStateFunc(ov13_0222D454);
+    WifiSetupApp_SetStateFunc(WifiSetupOptions_Init);
 }
 
-void ov13_0222E720(void) {
+void WifiSetupTransferCancelled_UpdateTimer(void) {
     if (++ov13_0224F51C < 0x78) {
         return;
     }
-    WifiSetupApp_SetStateFunc(ov13_0222E680);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferCancelled_FadeOut);
 }
 
-void ov13_0222E754(void) {
-    ov13_0222E790();
+void WifiSetupTransferFailed_Init(void) {
+    WifiSetupTransferFailed_LoadGraphics();
     WifiSetup_PrintMessage(0x20);
     ov13_0224F520[0] = WifiSetupMessage_Show(0x3c, -1, 0);
-    WifiSetupApp_SetStateFunc(ov13_0222E810);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferFailed_FadeIn);
 }
 
-void ov13_0222E790(void) {
+void WifiSetupTransferFailed_LoadGraphics(void) {
     WifiSetup_LoadGraphics(ov13_022462C4, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
@@ -1556,17 +1556,17 @@ void ov13_0222E790(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222E810(void) {
+void WifiSetupTransferFailed_FadeIn(void) {
     WifiSetupFade_Start(2, 0, 0x15, 8);
     WifiSetupDisplay_ShowPlanes(0, 0x15);
     if (ov13_0224F520[0] != 0) {
         WifiSetupFade_Start(2, 1, 1, 8);
         WifiSetupDisplay_ShowPlanes(1, 1);
     }
-    WifiSetupApp_SetStateFunc(ov13_0222E878);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferFailed_WaitFadeIn);
 }
 
-void ov13_0222E878(void) {
+void WifiSetupTransferFailed_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -1574,27 +1574,27 @@ void ov13_0222E878(void) {
         return;
     }
     WifiSetupButtonBar_Show(3);
-    WifiSetupApp_SetStateFunc(ov13_0222E8B4);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferFailed_WaitButtonBar);
 }
 
-void ov13_0222E8B4(void) {
+void WifiSetupTransferFailed_WaitButtonBar(void) {
     if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
-    if (ov13_0222BC68() == 0) {
+    if (WifiSetupTransfer_IsFinished() == 0) {
         return;
     }
     WifiSetupButtonBar_Unlock();
-    WifiSetupApp_SetStateFunc(ov13_0222E8E8);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferFailed_Main);
 }
 
-void ov13_0222E8E8(void) {
-    ov13_0222E8FC();
-    ov13_0222E934();
-    ov13_0222E938();
+void WifiSetupTransferFailed_Main(void) {
+    WifiSetupTransferFailed_HandleInput();
+    WifiSetupTransferFailed_Update();
+    WifiSetupTransferFailed_CheckButtons();
 }
 
-void ov13_0222E8FC(void) {
+void WifiSetupTransferFailed_HandleInput(void) {
     if (WifiSetupInput_IsKeyPressed(1) != 0) {
         WifiSetupButtonBar_SelectIfNone(1);
     }
@@ -1603,10 +1603,10 @@ void ov13_0222E8FC(void) {
     }
 }
 
-void ov13_0222E934(void) {
+void WifiSetupTransferFailed_Update(void) {
 }
 
-void ov13_0222E938(void) {
+void WifiSetupTransferFailed_CheckButtons(void) {
     int r = WifiSetupButtonBar_GetSelected();
     if (r != 0) {
         if (r != 1) {
@@ -1618,16 +1618,16 @@ void ov13_0222E938(void) {
         ov13_0224F520[1] = 0;
         WifiSetupSound_Play(7);
     }
-    WifiSetupApp_SetStateFunc(ov13_0222E990);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferFailed_Exit);
 }
 
-void ov13_0222E990(void) {
+void WifiSetupTransferFailed_Exit(void) {
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
-    WifiSetupApp_SetStateFunc(ov13_0222E9B0);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferFailed_WaitFadeOut);
 }
 
-void ov13_0222E9B0(void) {
+void WifiSetupTransferFailed_WaitFadeOut(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -1636,10 +1636,10 @@ void ov13_0222E9B0(void) {
         WifiSetupFade_Start(3, 1, 1, 8);
     }
     WifiSetupFade_Start(3, 0, 0x15, 8);
-    WifiSetupApp_SetStateFunc(ov13_0222EA14);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferFailed_End);
 }
 
-void ov13_0222EA14(void) {
+void WifiSetupTransferFailed_End(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -1657,30 +1657,30 @@ void ov13_0222EA14(void) {
     WifiSetupDisplay_HidePlanes(0, 0x15);
     if (ov13_0224F520[1] == 0) {
         WifiSetupApp_SetTransition(0, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222D454);
+        WifiSetupApp_SetStateFunc(WifiSetupOptions_Init);
     } else {
         WifiSetupApp_SetTransition(0, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222EEB4);
+        WifiSetupApp_SetStateFunc(WifiSetupTransferWait_Init);
     }
 }
 
-void ov13_0222EABC(void) {
+void WifiSetupTransferConfirm_Init(void) {
     u16 buf[11];
-    u8 *src = ov13_0222BCA8();
+    u8 *src = WifiSetupTransfer_GetChildUser();
     WifiSetupCanvas *win = WifiSetupText_InitBgCanvas(0, 0);
     ov13_0224F524[1] = 0;
     ov13_0224F524[0] = 0;
-    ov13_0222EB8C();
+    WifiSetupTransferConfirm_LoadGraphics();
     MIi_CpuClear16(0, buf, sizeof(buf));
     MIi_CpuCopy16((u16 *)(src + 2), buf, src[1] * 2);
     WifiSetupText_DrawInRect(win, 8, 0x35, 0xf0, 0x1c, 2, 0x480, buf);
     WifiSetupText_MarkDirty(win);
-    ov13_0222BC84((WifiSetupSessionCallback)ov13_0222EE80);
+    WifiSetupTransfer_SetCallback((WifiSetupSessionCallback)WifiSetupTransferConfirm_OnTransferEvent);
     WifiSetupDialog_Open(0x1d, 4, 0, -1, 0);
-    WifiSetupApp_SetStateFunc(ov13_0222EC0C);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferConfirm_FadeIn);
 }
 
-void ov13_0222EB8C(void) {
+void WifiSetupTransferConfirm_LoadGraphics(void) {
     WifiSetup_LoadGraphics(ov13_022462D8, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
@@ -1689,29 +1689,29 @@ void ov13_0222EB8C(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222EC0C(void) {
+void WifiSetupTransferConfirm_FadeIn(void) {
     WifiSetupFade_Start(2, 0, 0x15, 8);
     WifiSetupDisplay_ShowPlanes(0, 0x15);
-    WifiSetupApp_SetStateFunc(ov13_0222EC40);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferConfirm_WaitFadeIn);
 }
 
-void ov13_0222EC40(void) {
+void WifiSetupTransferConfirm_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
-    WifiSetupApp_SetStateFunc(ov13_0222EC64);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferConfirm_WaitDialog);
 }
 
-void ov13_0222EC64(void) {
+void WifiSetupTransferConfirm_WaitDialog(void) {
     if (WifiSetupDialog_GetSelected() == -2) {
         return;
     }
-    WifiSetupApp_SetStateFunc(ov13_0222EC88);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferConfirm_Main);
 }
 
-void ov13_0222EC88(void) {
-    ov13_0222ECF8();
-    ov13_0222ECFC();
+void WifiSetupTransferConfirm_Main(void) {
+    WifiSetupTransferConfirm_HandleInput();
+    WifiSetupTransferConfirm_Update();
     switch (WifiSetupDialog_GetSelected()) {
     case 0:
         ov13_0224F524[1] = 0;
@@ -1724,18 +1724,18 @@ void ov13_0222EC88(void) {
     default:
         return;
     }
-    ov13_0222BC84(NULL);
+    WifiSetupTransfer_SetCallback(NULL);
     WifiSetupDialog_Close();
-    WifiSetupApp_SetStateFunc(ov13_0222ED00);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferConfirm_WaitDialogClosed);
 }
 
-void ov13_0222ECF8(void) {
+void WifiSetupTransferConfirm_HandleInput(void) {
 }
 
-void ov13_0222ECFC(void) {
+void WifiSetupTransferConfirm_Update(void) {
 }
 
-void ov13_0222ED00(void) {
+void WifiSetupTransferConfirm_WaitDialogClosed(void) {
     if (WifiSetupDialog_IsOpen() != 0) {
         return;
     }
@@ -1743,10 +1743,10 @@ void ov13_0222ED00(void) {
         WifiSetupFade_Start(3, 1, 1, 8);
     }
     WifiSetupFade_Start(3, 0, 0x15, 8);
-    WifiSetupApp_SetStateFunc(ov13_0222ED5C);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferConfirm_WaitFadeOut);
 }
 
-void ov13_0222ED5C(void) {
+void WifiSetupTransferConfirm_WaitFadeOut(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -1754,16 +1754,16 @@ void ov13_0222ED5C(void) {
         return;
     }
     if (ov13_0224F524[0] == 0 && ov13_0224F524[1] == 1) {
-        ov13_0222BC9C();
+        WifiSetupTransfer_StartDownload();
     } else {
-        ov13_0222BC0C();
+        WifiSetupTransfer_Cancel();
     }
-    WifiSetupApp_SetStateFunc(ov13_0222EDB8);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferConfirm_End);
 }
 
-void ov13_0222EDB8(void) {
+void WifiSetupTransferConfirm_End(void) {
     if (ov13_0224F524[0] != 0 || ov13_0224F524[1] == 0) {
-        if (ov13_0222BC68() == 0) {
+        if (WifiSetupTransfer_IsFinished() == 0) {
             return;
         }
     }
@@ -1775,34 +1775,34 @@ void ov13_0222EDB8(void) {
     }
     WifiSetupApp_SetTransition(0, 1);
     if (ov13_0224F524[0] != 0) {
-        WifiSetupApp_SetStateFunc(ov13_0222E754);
+        WifiSetupApp_SetStateFunc(WifiSetupTransferFailed_Init);
     } else if (ov13_0224F524[1] == 0) {
         WifiSetupDisplay_HidePlanes(1, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222D454);
+        WifiSetupApp_SetStateFunc(WifiSetupOptions_Init);
     } else {
-        WifiSetupApp_SetStateFunc(ov13_0222DB6C);
+        WifiSetupApp_SetStateFunc(WifiSetupTransferring_Init);
     }
 }
 
-void ov13_0222EE80(void) {
+void WifiSetupTransferConfirm_OnTransferEvent(void) {
     ov13_0224F524[0] = 1;
 }
 
-int ov13_0222EE94(void) {
+int WifiSetupTransferWait_IsLidClosed(void) {
     return ((*(vu16 *)0x027FFFA8 & 0x8000) >> 15) ? TRUE : FALSE;
 }
 
-void ov13_0222EEB4(void) {
-    ov13_0222BB20((WifiSetupSessionCallback)ov13_0222F230);
+void WifiSetupTransferWait_Init(void) {
+    WifiSetupTransfer_Start((WifiSetupSessionCallback)WifiSetupTransferWait_OnTransferEvent);
     ov13_0224F528 = 0;
-    ov13_0222EF00();
+    WifiSetupTransferWait_LoadGraphics();
     WifiSetup_PrintMessage(0x1c);
     WifiSetupBusyIcon_Create(0);
     WifiSetupSound_Play(0xb);
-    WifiSetupApp_SetStateFunc(ov13_0222EF80);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferWait_FadeIn);
 }
 
-void ov13_0222EF00(void) {
+void WifiSetupTransferWait_LoadGraphics(void) {
     WifiSetup_LoadGraphics(ov13_022462EC, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
@@ -1811,70 +1811,70 @@ void ov13_0222EF00(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222EF80(void) {
+void WifiSetupTransferWait_FadeIn(void) {
     WifiSetupFade_Start(2, 0, 0x15, 8);
     WifiSetupDisplay_ShowPlanes(0, 0x15);
-    WifiSetupApp_SetStateFunc(ov13_0222EFB4);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferWait_WaitFadeIn);
 }
 
-void ov13_0222EFB4(void) {
+void WifiSetupTransferWait_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
     WifiSetupButtonBar_Show(1);
-    WifiSetupApp_SetStateFunc(ov13_0222EFE0);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferWait_WaitButtonBar);
 }
 
-void ov13_0222EFE0(void) {
+void WifiSetupTransferWait_WaitButtonBar(void) {
     if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
-    WifiSetupApp_SetStateFunc(ov13_0222F004);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferWait_Main);
 }
 
-void ov13_0222F004(void) {
-    ov13_0222F018();
-    ov13_0222F050();
-    ov13_0222F054();
+void WifiSetupTransferWait_Main(void) {
+    WifiSetupTransferWait_HandleInput();
+    WifiSetupTransferWait_Update();
+    WifiSetupTransferWait_CheckButtons();
 }
 
-void ov13_0222F018(void) {
+void WifiSetupTransferWait_HandleInput(void) {
     if (WifiSetupInput_IsKeyPressed(2) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
         return;
     }
-    if (ov13_0222EE94() != 0) {
+    if (WifiSetupTransferWait_IsLidClosed() != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
     }
 }
 
-void ov13_0222F050(void) {
+void WifiSetupTransferWait_Update(void) {
 }
 
-void ov13_0222F054(void) {
+void WifiSetupTransferWait_CheckButtons(void) {
     if (WifiSetupButtonBar_GetSelected() != 0) {
         return;
     }
     WifiSetupSound_Stop();
     WifiSetupSound_Play(7);
-    WifiSetupApp_SetStateFunc(ov13_0222F080);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferWait_Exit);
 }
 
-void ov13_0222F080(void) {
+void WifiSetupTransferWait_Exit(void) {
     if (ov13_0224F528 == 0) {
-        ov13_0222BC0C();
+        WifiSetupTransfer_Cancel();
     }
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
-    WifiSetupApp_SetStateFunc(ov13_0222F0B8);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferWait_WaitFadeOut);
 }
 
-void ov13_0222F0B8(void) {
+void WifiSetupTransferWait_WaitFadeOut(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
     if (ov13_0224F528 == 0) {
-        if (ov13_0222BC68() == 0) {
+        if (WifiSetupTransfer_IsFinished() == 0) {
             return;
         }
     }
@@ -1883,10 +1883,10 @@ void ov13_0222F0B8(void) {
         WifiSetupFade_Start(3, 1, 1, 8);
     }
     WifiSetupFade_Start(3, 0, 0x15, 8);
-    WifiSetupApp_SetStateFunc(ov13_0222F138);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferWait_End);
 }
 
-void ov13_0222F138(void) {
+void WifiSetupTransferWait_End(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
@@ -1899,7 +1899,7 @@ void ov13_0222F138(void) {
         return;
     }
     if (ov13_0224F528 == 0) {
-        if (ov13_0222BC68() == 0) {
+        if (WifiSetupTransfer_IsFinished() == 0) {
             return;
         }
     }
@@ -1912,17 +1912,17 @@ void ov13_0222F138(void) {
     WifiSetupDisplay_HidePlanes(0, 0x15);
     if (ov13_0224F528 == 0) {
         WifiSetupApp_SetTransition(0, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222D454);
+        WifiSetupApp_SetStateFunc(WifiSetupOptions_Init);
     } else if (ov13_0224F528 == 2) {
         WifiSetupApp_SetTransition(0, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222E754);
+        WifiSetupApp_SetStateFunc(WifiSetupTransferFailed_Init);
     } else {
         WifiSetupApp_SetTransition(0, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222EABC);
+        WifiSetupApp_SetStateFunc(WifiSetupTransferConfirm_Init);
     }
 }
 
-void ov13_0222F230(int a) {
+void WifiSetupTransferWait_OnTransferEvent(int a) {
     WifiSetupSound_Stop();
     if (a == 0) {
         ov13_0224F528 = 1;
@@ -1931,17 +1931,17 @@ void ov13_0222F230(int a) {
         ov13_0224F528 = 2;
         WifiSetupSound_Play(0x12);
     }
-    ov13_0222BC84(NULL);
-    WifiSetupApp_SetStateFunc(ov13_0222F080);
+    WifiSetupTransfer_SetCallback(NULL);
+    WifiSetupApp_SetStateFunc(WifiSetupTransferWait_Exit);
 }
 
-int ov13_0222F28C(void) {
+int WifiSetupAoss_IsLidClosed(void) {
     return ((*(vu16 *)0x027FFFA8 & 0x8000) >> 15) ? TRUE : FALSE;
 }
 
-void ov13_0222F2AC(void) {
+void WifiSetupAoss_Init(void) {
     ov13_0224F52C.counter = 0;
-    ov13_0222F30C();
+    WifiSetupAoss_LoadGraphics();
     WifiSetupBackground_LoadSlotHeader();
     WifiSetupMessage_Show(0x36, -1, 0);
     WifiSetupBanner_Show(2);
@@ -1949,10 +1949,10 @@ void ov13_0222F2AC(void) {
     WifiSetupBusyIcon_Create(0);
     WifiSetupApp_StartClient();
     WifiSetupSound_Play(0xb);
-    WifiSetupApp_SetStateFunc(ov13_0222F3B4);
+    WifiSetupApp_SetStateFunc(WifiSetupAoss_FadeIn);
 }
 
-void ov13_0222F30C(void) {
+void WifiSetupAoss_LoadGraphics(void) {
     WifiSetup_LoadGraphics(ov13_02246300, GX_LoadBG2Char);
     WifiSetup_LoadGraphics(ov13_02246318, GX_LoadBGPltt);
     WifiSetup_LoadGraphics(ov13_02246330, GX_LoadBG2Scr);
@@ -1963,15 +1963,15 @@ void ov13_0222F30C(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222F3B4(void) {
+void WifiSetupAoss_FadeIn(void) {
     WifiSetupFade_Start(2, 1, 1, 8);
     WifiSetupFade_Start(2, 0, 0x15, 8);
     WifiSetupDisplay_ShowPlanes(1, 1);
     WifiSetupDisplay_ShowPlanes(0, 0x15);
-    WifiSetupApp_SetStateFunc(ov13_0222F408);
+    WifiSetupApp_SetStateFunc(WifiSetupAoss_WaitFadeIn);
 }
 
-void ov13_0222F408(void) {
+void WifiSetupAoss_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -1979,21 +1979,21 @@ void ov13_0222F408(void) {
         return;
     }
     WifiSetupButtonBar_Show(1);
-    WifiSetupApp_SetStateFunc(ov13_0222F444);
+    WifiSetupApp_SetStateFunc(WifiSetupAoss_WaitButtonBar);
 }
 
-void ov13_0222F444(void) {
+void WifiSetupAoss_WaitButtonBar(void) {
     if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
-    ov13_0224F52C.task = WifiSetupTask_Create(1, (WifiSetupTaskFunc)ov13_0222F764, 0, 0x78);
-    WifiSetupApp_SetStateFunc(ov13_0222F48C);
+    ov13_0224F52C.task = WifiSetupTask_Create(1, (WifiSetupTaskFunc)WifiSetupAoss_InputTask, 0, 0x78);
+    WifiSetupApp_SetStateFunc(WifiSetupAoss_Main);
 }
 
-void ov13_0222F48C(void) {
-    ov13_0222F560();
-    ov13_0222F598();
-    ov13_0222F59C();
+void WifiSetupAoss_Main(void) {
+    WifiSetupAoss_HandleInput();
+    WifiSetupAoss_Update();
+    WifiSetupAoss_CheckButtons();
     switch (WifiSetupApp_PollClient()) {
     case 0:
         return;
@@ -2004,7 +2004,7 @@ void ov13_0222F48C(void) {
         ov13_0224F52C.flag = 1;
         WifiSetupTask_Destroy(1, ov13_0224F52C.task);
         ov13_0224F52C.task = NULL;
-        WifiSetupApp_SetStateFunc(ov13_0222F7CC);
+        WifiSetupApp_SetStateFunc(WifiSetupAoss_WaitFinish);
         break;
     case 2:
         if (ov13_0224F52C.task == NULL) {
@@ -2016,25 +2016,25 @@ void ov13_0222F48C(void) {
         WifiSetupButtonBar_Lock();
         WifiSetupTask_Destroy(1, ov13_0224F52C.task);
         ov13_0224F52C.task = NULL;
-        WifiSetupApp_SetStateFunc(ov13_0222F780);
+        WifiSetupApp_SetStateFunc(WifiSetupAoss_WaitErrorDialog);
         break;
     }
 }
 
-void ov13_0222F560(void) {
+void WifiSetupAoss_HandleInput(void) {
     if (WifiSetupInput_IsKeyPressed(2) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
         return;
     }
-    if (ov13_0222F28C() != 0) {
+    if (WifiSetupAoss_IsLidClosed() != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
     }
 }
 
-void ov13_0222F598(void) {
+void WifiSetupAoss_Update(void) {
 }
 
-void ov13_0222F59C(void) {
+void WifiSetupAoss_CheckButtons(void) {
     if (WifiSetupButtonBar_GetSelected() != 0) {
         return;
     }
@@ -2044,19 +2044,19 @@ void ov13_0222F59C(void) {
     WifiSetupTask_DestroyLater(1, ov13_0224F52C.task);
     ov13_0224F52C.task = NULL;
     WifiSetupButtonBar_Lock();
-    WifiSetupApp_SetStateFunc(ov13_0222F818);
+    WifiSetupApp_SetStateFunc(WifiSetupAoss_Cancel);
 }
 
-void ov13_0222F5E8(void) {
+void WifiSetupAoss_Exit(void) {
     WifiSetupButtonBar_Lock();
     if (ov13_0224F52C.task != NULL) {
         WifiSetupTask_Destroy(1, ov13_0224F52C.task);
     }
     WifiSetupFade_StartDelay(8);
-    WifiSetupApp_SetStateFunc(ov13_0222F624);
+    WifiSetupApp_SetStateFunc(WifiSetupAoss_WaitFadeOut);
 }
 
-void ov13_0222F624(void) {
+void WifiSetupAoss_WaitFadeOut(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -2065,10 +2065,10 @@ void ov13_0222F624(void) {
         WifiSetupFade_Start(3, 1, 1, 8);
     }
     WifiSetupFade_Start(3, 0, 0x15, 8);
-    WifiSetupApp_SetStateFunc(ov13_0222F688);
+    WifiSetupApp_SetStateFunc(WifiSetupAoss_End);
 }
 
-void ov13_0222F688(void) {
+void WifiSetupAoss_End(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
@@ -2093,62 +2093,62 @@ void ov13_0222F688(void) {
         WifiSetupApp_SetStateFunc(WifiSetupMethodMenu_Init);
     } else {
         WifiSetupApp_SetTransition(0, 0);
-        WifiSetupApp_SetStateFunc(ov13_0222F848);
+        WifiSetupApp_SetStateFunc(WifiSetupAossDone_Init);
     }
 }
 
-void ov13_0222F764(void) {
+void WifiSetupAoss_InputTask(void) {
     WifiSetupInput_Update();
     WifiSetupTask_RunQueue(0);
-    ov13_0222F560();
-    ov13_0222F59C();
+    WifiSetupAoss_HandleInput();
+    WifiSetupAoss_CheckButtons();
 }
 
-void ov13_0222F780(void) {
+void WifiSetupAoss_WaitErrorDialog(void) {
     if (WifiSetupDialog_GetSelected() != 0) {
         return;
     }
     WifiSetupSound_Play(6);
     WifiSetupDialog_Close();
-    WifiSetupApp_SetStateFunc(ov13_0222F7AC);
+    WifiSetupApp_SetStateFunc(WifiSetupAoss_WaitErrorDialogClosed);
 }
 
-void ov13_0222F7AC(void) {
+void WifiSetupAoss_WaitErrorDialogClosed(void) {
     if (WifiSetupDialog_IsOpen() != 0) {
         return;
     }
-    WifiSetupApp_SetStateFunc(ov13_0222F5E8);
+    WifiSetupApp_SetStateFunc(WifiSetupAoss_Exit);
 }
 
-void ov13_0222F7CC(void) {
-    ov13_0222F560();
-    ov13_0222F598();
-    ov13_0222F59C();
+void WifiSetupAoss_WaitFinish(void) {
+    WifiSetupAoss_HandleInput();
+    WifiSetupAoss_Update();
+    WifiSetupAoss_CheckButtons();
     ov13_0224F52C.counter++;
     if (ov13_0224F52C.counter < 0x438) {
         return;
     }
     WifiSetupSound_Stop();
-    WifiSetupApp_SetStateFunc(ov13_0222F5E8);
+    WifiSetupApp_SetStateFunc(WifiSetupAoss_Exit);
 }
 
-void ov13_0222F818(void) {
+void WifiSetupAoss_Cancel(void) {
     WifiSetupSound_Stop();
     WifiSetupSound_Play(7);
     ov13_0224F52C.flag = 0;
-    WifiSetupApp_SetStateFunc(ov13_0222F5E8);
+    WifiSetupApp_SetStateFunc(WifiSetupAoss_Exit);
 }
 
-void ov13_0222F848(void) {
+void WifiSetupAossDone_Init(void) {
     ov13_0224F534 = 0;
-    ov13_0222F884();
+    WifiSetupAossDone_LoadGraphics();
     WifiSetupBackground_LoadSlotHeader();
     WifiSetup_PrintMessage(0x23);
     WifiSetupSound_Play(0x10);
-    WifiSetupApp_SetStateFunc(ov13_0222F8F0);
+    WifiSetupApp_SetStateFunc(WifiSetupAossDone_FadeIn);
 }
 
-void ov13_0222F884(void) {
+void WifiSetupAossDone_LoadGraphics(void) {
     WifiSetup_LoadGraphics(ov13_02246344, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
     SET_PRI3(0x0400100A);
@@ -2156,34 +2156,34 @@ void ov13_0222F884(void) {
     SET_PRI3(0x0400000C);
 }
 
-void ov13_0222F8F0(void) {
+void WifiSetupAossDone_FadeIn(void) {
     WifiSetupFade_Start(2, 0, 0x15, 8);
     WifiSetupDisplay_ShowPlanes(0, 0x15);
-    WifiSetupApp_SetStateFunc(ov13_0222F924);
+    WifiSetupApp_SetStateFunc(WifiSetupAossDone_WaitFadeIn);
 }
 
-void ov13_0222F924(void) {
+void WifiSetupAossDone_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
-    WifiSetupApp_SetStateFunc(ov13_0222F948);
+    WifiSetupApp_SetStateFunc(WifiSetupAossDone_Main);
 }
 
-void ov13_0222F948(void) {
-    ov13_0222FA08();
-    ov13_0222F958();
+void WifiSetupAossDone_Main(void) {
+    WifiSetupAossDone_UpdateTimer();
+    WifiSetupAossDone_Update();
 }
 
-void ov13_0222F958(void) {
+void WifiSetupAossDone_Update(void) {
 }
 
-void ov13_0222F95C(void) {
+void WifiSetupAossDone_FadeOut(void) {
     WifiSetupFade_Start(3, 1, 1, 8);
     WifiSetupFade_Start(3, 0, 0x15, 8);
-    WifiSetupApp_SetStateFunc(ov13_0222F998);
+    WifiSetupApp_SetStateFunc(WifiSetupAossDone_End);
 }
 
-void ov13_0222F998(void) {
+void WifiSetupAossDone_End(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
@@ -2199,11 +2199,11 @@ void ov13_0222F998(void) {
     WifiSetupApp_SetStateFunc(WifiSetupTestPrompt_Init);
 }
 
-void ov13_0222FA08(void) {
+void WifiSetupAossDone_UpdateTimer(void) {
     if (++ov13_0224F534 < 0x78) {
         return;
     }
-    WifiSetupApp_SetStateFunc(ov13_0222F95C);
+    WifiSetupApp_SetStateFunc(WifiSetupAossDone_FadeOut);
 }
 
 void WifiSetupListScreen_Init(void) {

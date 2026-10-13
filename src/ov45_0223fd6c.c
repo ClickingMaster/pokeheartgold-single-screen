@@ -40,7 +40,7 @@ void ov45_0223DAD4(Str *, char *);
 void *ov45_02242C3C(void *, Str *);
 void ov45_022428D8(Str *, void *, Str *);
 void ov45_022428C8(Str *, void *, Str *);
-int ov45_02251024(void *, char *);
+int chatInChannelA(void *, char *);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void *ov45_02242394(unsigned);
 void *ov45_0223EA34(void *, unsigned, char *);

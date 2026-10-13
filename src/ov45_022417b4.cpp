@@ -89,7 +89,7 @@ struct InsertResult {
 
 extern "C" void ov45_0224206C(InsertResult *out, void *list, Handler **h);
 extern "C" Str ov45_022428C8(Mgr *m, const Str &s);
-extern "C" void ov45_022518F0(void *ctx, const char *name, const char *msg, int x, const char **desc, void (*cb)(), u32 id, u32 z);
+extern "C" void chatGetChannelKeysA(void *ctx, const char *name, const char *msg, int x, const char **desc, void (*cb)(), u32 id, u32 z);
 extern "C" void ov45_02240494();
 extern "C" unsigned long strlen(const char *);
 extern "C" const char ov45_02255304[];
@@ -168,7 +168,7 @@ extern "C" int ov45_022417B4(const char *name, int idx, const char *desc, u32 a,
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);
     Str t = ov45_022428C8(GetMgr(), s);
-    ov45_022518F0(GetMgr()->unk0, t.c_str(), msg.c_str(), 1, &desc, ov45_02240494, id, 0);
+    chatGetChannelKeysA(GetMgr()->unk0, t.c_str(), msg.c_str(), 1, &desc, ov45_02240494, id, 0);
     t.destroy();
     s.destroy();
     msg.destroy();

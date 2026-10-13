@@ -83,7 +83,7 @@ BOOL ov45_02253968(ChatSocket *socket) {
     FREE_PART(socket->message.params);
     socket->message.paramCount = 0;
     memset(&socket->message, 0, sizeof(ChatMessage));
-    if (!ov45_02253528(socket, line)) {
+    if (!ciParseMessage(socket, line)) {
         memset(&socket->message, 0, sizeof(ChatMessage));
         return FALSE;
     }

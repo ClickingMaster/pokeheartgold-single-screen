@@ -40,7 +40,7 @@ void ov45_0223DAD4(Str *, char *);
 void *ov45_02242C3C(void *, Str *);
 void ov45_022428D8(Str *, void *, Str *);
 void ov45_022428C8(Str *, void *, Str *);
-int ov45_02251024(void *, char *);
+int chatInChannelA(void *, char *);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void *ov45_02242394(unsigned);
 void *ov45_0223EA34(void *, unsigned, char *);
@@ -95,7 +95,7 @@ int ov45_02240A80(char *s) {
     }
     ov45_02237B58(&x, s);
     ov45_022428C8(&y, ov45_022577DC, &x);
-    r = ov45_02251024(P(ov45_022577DC, 0), !y.b.flag ? y.s.inlinebuf : y.b.data) == 1;
+    r = chatInChannelA(P(ov45_022577DC, 0), !y.b.flag ? y.s.inlinebuf : y.b.data) == 1;
     ov45_02237BC8(&y);
     ov45_02237BC8(&x);
     return r;

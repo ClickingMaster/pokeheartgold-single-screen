@@ -123,7 +123,7 @@ extern "C" Root *ov45_0224268C(Root *, String *, String *, int, void *, String *
 extern "C" int ov45_0224246C(void);
 extern "C" void ov45_0223ED00(void), ov45_0223ED1C(void), ov45_0223F1C8(void), ov45_0223EDD8(void), ov45_0223FA3C(void), ov45_0223F9C4(void), ov45_0223F92C(void);
 extern "C" int ov45_02240850(void);
-extern "C" u32 ov45_022502D0(const char *, int, const char *, const char *, const char *, const char *, Callbacks *, void (*)(void), void (*)(void), void (*)(void), void *, int);
+extern "C" u32 chatConnectSpecialA(const char *, int, const char *, const char *, const char *, const char *, Callbacks *, void (*)(void), void (*)(void), void (*)(void), void *, int);
 extern "C" void ov00_021ECB94(RTCDate *, RTCTime *);
 extern "C" void ov45_022424DC(void), ov45_02242858(Root *), ov00_021EC2EC(int, void *, int);
 
@@ -202,7 +202,7 @@ extern "C" int ov45_02240B10(const char *a, const char *b, int n, u8 *config, vo
         ov45_02240F7C(&s3, ov45_022577DC);
         ov45_02240F6C(&s2, ov45_022577DC);
         ov45_02240F8C(&s1, ov45_022577DC);
-        u32 connection = ov45_022502D0(s5.c_str(), 0x1a0b, s4.c_str(), s3.c_str(), s2.c_str(), s1.c_str(), &callbacks, ov45_0223FA3C, ov45_0223F9C4, ov45_0223F92C, *(void **)(config + 8), 0);
+        u32 connection = chatConnectSpecialA(s5.c_str(), 0x1a0b, s4.c_str(), s3.c_str(), s2.c_str(), s1.c_str(), &callbacks, ov45_0223FA3C, ov45_0223F9C4, ov45_0223F92C, *(void **)(config + 8), 0);
         s1.destroy();
         s2.destroy();
         s3.destroy();

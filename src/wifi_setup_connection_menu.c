@@ -186,7 +186,7 @@ void WifiSetupConnectionList_CheckButtons(void) {
             break;
         case 1:
             WifiSetupButtonBar_Lock();
-            WifiSetupApp_SetStateFunc(ov13_0222C10C);
+            WifiSetupApp_SetStateFunc(WifiSetupScreens_StartQuit);
             return;
         }
         break;
@@ -275,7 +275,7 @@ void WifiSetupConnectionList_End(void) {
     WifiSetupDisplay_HidePlanes(0, 0x14);
     if (gWifiSetupConnectionList.work->exit == WIFI_SETUP_CONNECTION_LIST_BACK) {
         WifiSetupApp_SetTransition(0, 0);
-        WifiSetupApp_SetStateFunc(ov13_0222C44C);
+        WifiSetupApp_SetStateFunc(WifiSetupTopMenu_Init);
     } else {
         switch (gWifiSetupConnectionList.selected) {
         case 0:
@@ -629,7 +629,7 @@ void WifiSetupMethodMenu_End(void) {
         break;
     case 1:
         WifiSetupApp_SetTransition(2, 1);
-        WifiSetupApp_SetStateFunc(ov13_0222F2AC);
+        WifiSetupApp_SetStateFunc(WifiSetupAoss_Init);
         break;
     case 2:
         WifiSetupApp_SetTransition(2, 1);
@@ -881,7 +881,7 @@ void WifiSetupConnectionOk_End(void) {
         WifiSetupApp_SetStateFunc(WifiSetupSettings_Init);
         return;
     }
-    WifiSetupApp_SetStateFunc(ov13_0222C44C);
+    WifiSetupApp_SetStateFunc(WifiSetupTopMenu_Init);
 }
 
 void WifiSetupConnectionOk_UpdateTimer(void) {
@@ -895,7 +895,7 @@ void WifiSetupConnectionOk_UpdateTimer(void) {
         break;
     case 1:
         if (mode != 0) {
-            WifiSetupApp_SetStateFunc(ov13_0222C10C);
+            WifiSetupApp_SetStateFunc(WifiSetupScreens_StartQuit);
             return;
         }
         break;

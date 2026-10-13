@@ -97,7 +97,7 @@ struct Callbacks {
     u32 f2C;
 };
 
-extern "C" void ov45_02250688(void *ctx, const char *name, u32 b, Callbacks *cb, void (*cb2)(), u32 id, u32 z);
+extern "C" void chatEnterChannelA(void *ctx, const char *name, u32 b, Callbacks *cb, void (*cb2)(), u32 id, u32 z);
 extern "C" void ov45_0223F1E4();
 extern "C" void ov45_0223F2D8();
 extern "C" void ov45_0223F32C();
@@ -189,7 +189,7 @@ extern "C" int ov45_02241048(const char *name, u32 p1, u32 p2, Arg3 *p3, u32 a, 
     cb.f2C = p3->unk14;
     Str s2(name);
     Str t2 = ov45_022428C8(GetMgr(), s2);
-    ov45_02250688(GetMgr()->unk0, t2.c_str(), p1, &cb, ov45_02240234, id, 0);
+    chatEnterChannelA(GetMgr()->unk0, t2.c_str(), p1, &cb, ov45_02240234, id, 0);
     t2.destroy();
     s2.destroy();
     return 0;

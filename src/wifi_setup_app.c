@@ -21,7 +21,7 @@ typedef struct WifiSetupRequestKey {
 extern void WifiSetupConnections_SetFromInfo(u8 *result);
 extern void WifiSetupSound_Init(void);
 extern void WifiSetupSound_Free(void);
-extern void ov13_0222C1BC(void);
+extern void WifiSetupScreens_Init(void);
 extern void WifiSetupArchive_Load(void);
 extern void WifiSetupShare_Init(WifiSetupSession *session, WifiSetupSessionParams *params);
 extern int WifiSetupShare_Start(void);
@@ -113,7 +113,7 @@ int WifiSetupApp_Run(void *heap, s32 language, s32 flags) {
     WifiSetupApp_InitSystem();
     WifiSetupApp_InitDisplay();
     WifiSetupSound_Init();
-    WifiSetupApp_SetStateFunc(ov13_0222C1BC);
+    WifiSetupApp_SetStateFunc(WifiSetupScreens_Init);
     do {
         WifiSetupInput_Update();
         gWifiSetupApp.stateFunc();
@@ -358,7 +358,7 @@ u16 *WifiSetupText_GetStringWithDigit(WifiSetupTextBank *bank, u32 index, int po
     return str;
 }
 
-void ov13_0222BB20(WifiSetupSessionCallback callback) {
+void WifiSetupTransfer_Start(WifiSetupSessionCallback callback) {
     WifiSetupSessionParams params;
     gWifiSetupSession = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupSession), 32);
     gWifiSetupSession->callback = callback;
@@ -372,14 +372,14 @@ void ov13_0222BB20(WifiSetupSessionCallback callback) {
     if (WifiSetupShare_Start() == 0) {
         OS_Terminate();
     }
-    gWifiSetupSession->task = WifiSetupTask_Create(0, (WifiSetupTaskFunc)ov13_0222BCC0, NULL, 120);
+    gWifiSetupSession->task = WifiSetupTask_Create(0, (WifiSetupTaskFunc)WifiSetupTransfer_Task, NULL, 120);
 }
 
-void ov13_0222BC0C(void) {
-    WifiSetupTask_Create(0, (WifiSetupTaskFunc)ov13_0222BC2C, NULL, 120);
+void WifiSetupTransfer_Cancel(void) {
+    WifiSetupTask_Create(0, (WifiSetupTaskFunc)WifiSetupTransfer_CancelTask, NULL, 120);
 }
 
-void ov13_0222BC2C(void *task) {
+void WifiSetupTransfer_CancelTask(void *task) {
     if (WifiSetupShare_Cancel() == 0) {
         return;
     }
@@ -387,25 +387,25 @@ void ov13_0222BC2C(void *task) {
     WifiSetupTask_DestroyLater(0, task);
 }
 
-BOOL ov13_0222BC68(void) {
+BOOL WifiSetupTransfer_IsFinished(void) {
     return gWifiSetupSession == NULL;
 }
 
-void ov13_0222BC84(WifiSetupSessionCallback callback) {
+void WifiSetupTransfer_SetCallback(WifiSetupSessionCallback callback) {
     gWifiSetupSession->callback = callback;
 }
 
-void ov13_0222BC9C(void) {
+void WifiSetupTransfer_StartDownload(void) {
     WifiSetupShare_StartDownload();
 }
 
-u8 *ov13_0222BCA8(void) {
+u8 *WifiSetupTransfer_GetChildUser(void) {
     return gWifiSetupSession->unk_1E280;
 }
 
 WifiSetupSession *gWifiSetupSession;
 
-void ov13_0222BCC0(void *task) {
+void WifiSetupTransfer_Task(void *task) {
     u8 event;
     u8 ok;
 

@@ -56,7 +56,7 @@ extern const char ov45_022566E0[];
 #define REQUEST_TIMEOUT 60000 // ms
 
 // Finds the request matching one of the keys (names compared without case) and extends its timeout.
-ChatRequest *ov45_022496AC(ChatConnection *chat, int count, const ChatRequestKey *keys) {
+ChatRequest *ciFindFilter(ChatConnection *chat, int count, const ChatRequestKey *keys) {
     int i;
     const char *name;
     const char *name2;
@@ -87,7 +87,7 @@ ChatRequest *ov45_022496AC(ChatConnection *chat, int count, const ChatRequestKey
 }
 
 // Finds the channel keys request (type 12) of the channel.
-ChatRequest *ov45_0224983C(ChatConnection *chat, const char *channel) {
+ChatRequest *ciFindGetKeyFilter(ChatConnection *chat, const char *channel) {
     ChatRequest *request;
     ASSERT_CHAT(chat, ov45_0225609C, 0x17F);
     ASSERT(channel, ov45_02256630, ov45_0225609C, 0x181);
@@ -102,7 +102,7 @@ ChatRequest *ov45_0224983C(ChatConnection *chat, const char *channel) {
     return NULL;
 }
 
-void ov45_02249904(ChatRequest *request) {
+void ciDestroyFilter(ChatRequest *request) {
     ASSERT(request, ov45_02256644, ov45_02255FC4, 403);
     ov00_021EC3D8(request->data);
     ov00_021EC3D8(request->name);
@@ -111,7 +111,7 @@ void ov45_02249904(ChatRequest *request) {
 }
 
 // Unlinks and frees the request.
-void ov45_02249958(ChatConnection *chat, ChatRequest *target) {
+void ciRemoveFilter(ChatConnection *chat, ChatRequest *target) {
     ChatRequest *previous = NULL, *head, *request;
     ASSERT_CHAT(chat, ov45_02255F74, 0x19F);
     ASSERT(target, ov45_02256644, ov45_02255F74, 0x1A1);
@@ -128,7 +128,7 @@ void ov45_02249958(ChatConnection *chat, ChatRequest *target) {
             if (previous) {
                 previous->next = request->next;
             }
-            ov45_02249904(request);
+            ciDestroyFilter(request);
             return;
         }
         previous = request;
@@ -138,7 +138,7 @@ void ov45_02249958(ChatConnection *chat, ChatRequest *target) {
 
 // Completes the request: queues its callback with the results (callback types 14 .. 31, by request type), frees
 // the collected data and the request.
-void ov45_02249A0C(ChatConnection *chat, ChatRequest *request, u32 *results) {
+void ciFinishFilter(ChatConnection *chat, ChatRequest *request, u32 *results) {
     int i, valid;
     ChatRequestData *data;
     ASSERT(request, ov45_02256654, ov45_02255F84, 0x1C1);
@@ -150,7 +150,7 @@ void ov45_02249A0C(ChatConnection *chat, ChatRequest *request, u32 *results) {
     if (request->type == 0) {
         data = request->data;
         if (request->callback2) {
-            ov45_02244D30(chat, 14, request->callback2, results, request->param, request->id, NULL, 20);
+            ciAddCallback_(chat, 14, request->callback2, results, request->param, request->id, NULL, 20);
         }
         for (i = 0; i < data->channels.count; i++) {
             ov00_021EC3D8(data->channels.names[i]);
@@ -161,17 +161,17 @@ void ov45_02249A0C(ChatConnection *chat, ChatRequest *request, u32 *results) {
         ov00_021EC3D8(data->channels.numUsers);
     } else if (request->type == 1) {
         if (request->callback) {
-            ov45_02244D30(chat, 15, request->callback, results, request->param, request->id, NULL, 12);
+            ciAddCallback_(chat, 15, request->callback, results, request->param, request->id, NULL, 12);
         }
     } else if (request->type == 2) {
         i = results[1];
         if (request->callback) {
-            ov45_02244D30(chat, 16, request->callback, results, request->param, request->id, (char *)i, 12);
+            ciAddCallback_(chat, 16, request->callback, results, request->param, request->id, (char *)i, 12);
         }
     } else if (request->type == 3) {
         data = request->data;
         if (request->callback) {
-            ov45_02244D30(chat, 19, request->callback, results, request->param, request->id, NULL, 20);
+            ciAddCallback_(chat, 19, request->callback, results, request->param, request->id, NULL, 20);
         }
         for (i = 0; i < data->nicks.count; i++) {
             ov00_021EC3D8(data->nicks.nicks[i]);
@@ -181,7 +181,7 @@ void ov45_02249A0C(ChatConnection *chat, ChatRequest *request, u32 *results) {
     } else if (request->type == 4) {
         data = request->data;
         if (request->callback) {
-            ov45_02244D30(chat, 20, request->callback, results, request->param, request->id, NULL, 28);
+            ciAddCallback_(chat, 20, request->callback, results, request->param, request->id, NULL, 28);
         }
         for (i = 0; i < data->whois.channelCount; i++) {
             ov00_021EC3D8(data->whois.channels[i]);
@@ -192,38 +192,38 @@ void ov45_02249A0C(ChatConnection *chat, ChatRequest *request, u32 *results) {
         ov00_021EC3D8(data->whois.user);
     } else if (request->type == 10) {
         if (request->callback) {
-            ov45_02244D30(chat, 21, request->callback, results, request->param, request->id, NULL, 16);
+            ciAddCallback_(chat, 21, request->callback, results, request->param, request->id, NULL, 16);
         }
     } else if (request->type == 11) {
         if (request->callback) {
-            ov45_02244D30(chat, 22, request->callback, results, request->param, request->id, NULL, 16);
+            ciAddCallback_(chat, 22, request->callback, results, request->param, request->id, NULL, 16);
         }
     } else if (request->type == 5) {
         if (request->callback) {
-            ov45_02244D30(chat, 17, request->callback, results, request->param, request->id, NULL, 12);
+            ciAddCallback_(chat, 17, request->callback, results, request->param, request->id, NULL, 12);
         }
     } else if (request->type == 6) {
         if (request->callback) {
-            ov45_02244D30(chat, 23, request->callback, results, request->param, request->id, NULL, 16);
+            ciAddCallback_(chat, 23, request->callback, results, request->param, request->id, NULL, 16);
         }
     } else if (request->type == 7) {
         ov00_021EC3D8(*(void **)request->data);
     } else if (request->type == 8) {
         data = request->data;
         if (request->callback) {
-            ov45_02244D30(chat, 24, request->callback, results, request->param, request->id, NULL, 16);
+            ciAddCallback_(chat, 24, request->callback, results, request->param, request->id, NULL, 16);
         }
         for (i = 0; i < data->banList.count; i++) {
             ov00_021EC3D8(data->banList.bans[i]);
         }
     } else if (request->type == 9) {
         if (request->callback) {
-            ov45_02244D30(chat, 26, request->callback, results, request->param, request->id, NULL, 12);
+            ciAddCallback_(chat, 26, request->callback, results, request->param, request->id, NULL, 12);
         }
     } else if (request->type == 12) {
         data = request->data;
         if (request->callback) {
-            ov45_02244D30(chat, 29, request->callback, results, request->param, request->id, NULL, 20);
+            ciAddCallback_(chat, 29, request->callback, results, request->param, request->id, NULL, 20);
         }
         ov00_021EC3D8(data->keys.arg.channel);
         for (i = 0; i < data->keys.count; i++) {
@@ -233,7 +233,7 @@ void ov45_02249A0C(ChatConnection *chat, ChatRequest *request, u32 *results) {
     } else if (request->type == 13) {
         data = request->data;
         if (request->callback) {
-            ov45_02244D30(chat, 30, request->callback, results, request->param, request->id, NULL, 24);
+            ciAddCallback_(chat, 30, request->callback, results, request->param, request->id, NULL, 24);
         }
         for (i = 0; i < data->keys.count; i++) {
             ov00_021EC3D8(data->keys.keys[i]);
@@ -242,7 +242,7 @@ void ov45_02249A0C(ChatConnection *chat, ChatRequest *request, u32 *results) {
     } else if (request->type == 14) {
         data = request->data;
         if (request->callback) {
-            ov45_02244D30(chat, 30, request->callback, results, request->param, request->id, NULL, 24);
+            ciAddCallback_(chat, 30, request->callback, results, request->param, request->id, NULL, 24);
         }
         for (i = 0; i < data->keys.count; i++) {
             ov00_021EC3D8(data->keys.keys[i]);
@@ -251,7 +251,7 @@ void ov45_02249A0C(ChatConnection *chat, ChatRequest *request, u32 *results) {
     } else if (request->type == 15) {
         data = request->data;
         if (request->callback) {
-            ov45_02244D30(chat, 27, request->callback, results, request->param, request->id, NULL, 16);
+            ciAddCallback_(chat, 27, request->callback, results, request->param, request->id, NULL, 16);
         }
         for (i = 0; i < data->nicks.count; i++) {
             ov00_021EC3D8(data->nicks.nicks[i]);
@@ -260,16 +260,16 @@ void ov45_02249A0C(ChatConnection *chat, ChatRequest *request, u32 *results) {
         ov00_021EC3D8(data->nicks.modes);
     } else if (request->type == 16) {
         if (request->callback) {
-            ov45_02244D30(chat, 31, request->callback, results, request->param, request->id, NULL, 8);
+            ciAddCallback_(chat, 31, request->callback, results, request->param, request->id, NULL, 8);
         }
     } else {
         __msl_assertion_failed(ov45_02256690, ov45_022565D0, ov45_02255F84, 0x25C);
     }
-    ov45_02249958(chat, request);
+    ciRemoveFilter(chat, request);
 }
 
 // Ends the request without an answer: completes it with failed (zeroed) results.
-void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
+void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
     BOOL valid;
     ASSERT(request, ov45_02256654, ov45_02256010, 0x268);
     valid = FALSE;
@@ -284,7 +284,7 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
         results[2] = 0;
         results[3] = 0;
         results[4] = 0;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     if (request->type == 1) {
@@ -292,7 +292,7 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
         results[0] = 0;
         results[1] = (u32)CHAT_ENTER_TIMED_OUT;
         results[2] = (u32)request->name;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     if (request->type == 2) {
@@ -300,7 +300,7 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
         results[0] = 0;
         results[1] = (u32)request->name;
         results[2] = 0;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     if (request->type == 3) {
@@ -310,7 +310,7 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
         results[2] = 0;
         results[3] = 0;
         results[4] = 0;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     if (request->type == 4) {
@@ -322,7 +322,7 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
         results[4] = 0;
         results[5] = 0;
         results[6] = 0;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     if (request->type == 10) {
@@ -331,7 +331,7 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
         results[1] = (u32)request->name;
         results[2] = 0;
         results[3] = 0;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     if (request->type == 11) {
@@ -341,7 +341,7 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
         results[2] = 0;
         results[3] = 0;
         results[4] = 0;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     if (request->type == 5) {
@@ -349,7 +349,7 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
         results[0] = 0;
         results[1] = (u32)request->name;
         results[2] = 0;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     if (request->type == 6) {
@@ -358,11 +358,11 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
         results[1] = (u32)request->name2;
         results[2] = (u32)request->name;
         results[3] = 0;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     if (request->type == 7) {
-        ov45_02249A0C(chat, request, NULL);
+        ciFinishFilter(chat, request, NULL);
         return;
     }
     if (request->type == 8) {
@@ -370,7 +370,7 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
         results[1] = (u32)request->name;
         results[2] = 0;
         results[3] = 0;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     if (request->type == 9) {
@@ -378,7 +378,7 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
         results[0] = 0;
         results[1] = (u32)request->name;
         results[2] = (u32)request->name2;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     if (request->type == 12) {
@@ -388,7 +388,7 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
         results[2] = 0;
         results[3] = 0;
         results[4] = 0;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     if (request->type == 13) {
@@ -399,7 +399,7 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
         results[3] = 0;
         results[4] = 0;
         results[5] = 0;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     if (request->type == 14) {
@@ -410,25 +410,25 @@ void ov45_0224A14C(ChatConnection *chat, ChatRequest *request) {
         results[3] = 0;
         results[4] = 0;
         results[5] = 0;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     if (request->type == 15) {
-        ov45_02249958(chat, request);
+        ciRemoveFilter(chat, request);
         return;
     }
     if (request->type == 16) {
         u32 results[2];
         results[0] = 0;
         results[1] = (u32)ov45_02256694;
-        ov45_02249A0C(chat, request, results);
+        ciFinishFilter(chat, request, results);
         return;
     }
     __msl_assertion_failed(ov45_02256690, ov45_022565D0, ov45_02256010, 0x311);
 }
 
 // Ends every request whose timeout has passed.
-void ov45_0224A578(ChatConnection *chat) {
+void ciFilterThink(ChatConnection *chat) {
     ChatRequest *request, *next;
     u32 now;
     ASSERT_CHAT(chat, ov45_02255EC4, 794);
@@ -436,13 +436,13 @@ void ov45_0224A578(ChatConnection *chat) {
     for (request = chat->requests; request; request = next) {
         next = request->next;
         if (now > request->expireTime) {
-            ov45_0224A14C(chat, request);
+            ciFilterTimedout(chat, request);
         }
     }
 }
 
 // Returns a new request id (1 .. 0x7FFFFFFF, wrapping).
-int ov45_0224A5E4(ChatConnection *chat) {
+int ciGetNextID(ChatConnection *chat) {
     ASSERT_CHAT(chat, ov45_02255E60, 813);
     u32 id = chat->nextRequestId;
     u32 next;
@@ -456,7 +456,7 @@ int ov45_0224A5E4(ChatConnection *chat) {
 }
 
 // Returns whether the request with this id is still waiting.
-BOOL ov45_0224A630(ChatConnection *chat, int id) {
+BOOL ciCheckFiltersForID(ChatConnection *chat, int id) {
     ChatRequest *request;
     ASSERT_CHAT(chat, ov45_022560B0, 832);
     ASSERT(id > 0, ov45_022566A0, ov45_022560B0, 834);
@@ -469,15 +469,15 @@ BOOL ov45_0224A630(ChatConnection *chat, int id) {
 }
 
 // Ends all requests.
-void ov45_0224A6B4(ChatConnection *chat) {
+void ciCleanupFilters(ChatConnection *chat) {
     ASSERT_CHAT(chat, ov45_02255FD4, 851);
     while (chat->requests) {
-        ov45_0224A14C(chat, chat->requests);
+        ciFilterTimedout(chat, chat->requests);
     }
 }
 
 // Appends a request (names are copied) and returns its id, 0 when out of memory.
-int ov45_0224A708(ChatConnection *chat, int type, const char *name, const char *name2, void *callback, void *callback2, void *param, void *data) {
+int ciAddFilter(ChatConnection *chat, int type, const char *name, const char *name2, void *callback, void *callback2, void *param, void *data) {
     ChatRequest *request;
     ASSERT_CHAT(chat, ov45_02255E6C, 860);
     request = ov00_021EC3A8(sizeof(ChatRequest));
@@ -493,7 +493,7 @@ int ov45_0224A708(ChatConnection *chat, int type, const char *name, const char *
     request->data = data;
     request->name = name ? ov00_021FF3D4(name) : NULL;
     request->name2 = name2 ? ov00_021FF3D4(name2) : NULL;
-    request->id = ov45_0224A5E4(chat);
+    request->id = ciGetNextID(chat);
     if (!chat->requests) {
         chat->requests = request;
     } else {
@@ -503,16 +503,16 @@ int ov45_0224A708(ChatConnection *chat, int type, const char *name, const char *
     return request->id;
 }
 
-int ov45_0224A7F0(ChatConnection *chat, void *callbackEach, void *callbackAll, void *param) {
+int ciAddLISTFilter(ChatConnection *chat, void *callbackEach, void *callbackAll, void *param) {
     void *data = ov00_021EC3A8(sizeof(ChatChannelListData));
     if (!data) {
         return 0;
     }
     memset(data, 0, sizeof(ChatChannelListData));
-    return ov45_0224A708(chat, 0, NULL, NULL, callbackEach, callbackAll, param, data);
+    return ciAddFilter(chat, 0, NULL, NULL, callbackEach, callbackAll, param, data);
 }
 
-int ov45_0224A874(ChatConnection *chat, const char *channel, void *callback, void *param, const ChatChannelCallbacks *callbacks, const char *password) {
+int ciAddJOINFilter(ChatConnection *chat, const char *channel, void *callback, void *param, const ChatChannelCallbacks *callbacks, const char *password) {
     ChatEnterData *data;
     int id;
     ASSERT(password, ov45_022566A8, ov45_02255F94, 913);
@@ -525,28 +525,28 @@ int ov45_0224A874(ChatConnection *chat, const char *channel, void *callback, voi
     data->callbacks = *callbacks;
     strncpy(data->password, password, 32);
     data->password[31] = 0;
-    id = ov45_0224A708(chat, 1, channel, NULL, callback, NULL, param, data);
+    id = ciAddFilter(chat, 1, channel, NULL, callback, NULL, param, data);
     if (!id) {
         ov00_021EC3D8(data);
     }
     return id;
 }
 
-int ov45_0224A978(ChatConnection *chat, const char *channel, ChatEnumUsersFunc callback, void *param) {
+int ciAddNAMESFilter(ChatConnection *chat, const char *channel, ChatEnumUsersFunc callback, void *param) {
     void *data = ov00_021EC3A8(sizeof(ChatNickListData));
     if (!data) {
         return 0;
     }
     memset(data, 0, sizeof(ChatNickListData));
-    return ov45_0224A708(chat, 3, channel, NULL, callback, NULL, param, data);
+    return ciAddFilter(chat, 3, channel, NULL, callback, NULL, param, data);
 }
 
-int ov45_0224A9F8(ChatConnection *chat, const char *channel, void *callback, void *param) {
-    return ov45_0224A708(chat, 5, channel, NULL, callback, NULL, param, NULL);
+int ciAddCMODEFilter(ChatConnection *chat, const char *channel, void *callback, void *param) {
+    return ciAddFilter(chat, 5, channel, NULL, callback, NULL, param, NULL);
 }
 
 // Copies the keys, without the empty ones.
-int ov45_0224AA2C(ChatConnection *chat, const char *cookie, int count, const char **keys, BOOL allUsers, BOOL broadcastKeys, void *callback, void *param) {
+int ciAddGETCKEYFilter(ChatConnection *chat, const char *cookie, int count, const char **keys, BOOL allUsers, BOOL broadcastKeys, void *callback, void *param) {
     int i, j;
     ChatKeysData *data = ov00_021EC3A8(sizeof(ChatKeysData));
     if (!data) {
@@ -582,10 +582,10 @@ int ov45_0224AA2C(ChatConnection *chat, const char *cookie, int count, const cha
         }
     }
     data->count = j;
-    return ov45_0224A708(chat, 13, cookie, NULL, callback, NULL, param, data);
+    return ciAddFilter(chat, 13, cookie, NULL, callback, NULL, param, data);
 }
 
-int ov45_0224ABA0(ChatConnection *chat, const char *cookie, int count, const char **keys, BOOL broadcastKeys, void *callback, void *param) {
+int ciAddGETCHANKEYFilter(ChatConnection *chat, const char *cookie, int count, const char **keys, BOOL broadcastKeys, void *callback, void *param) {
     int i, j;
     ChatKeysData *data = ov00_021EC3A8(12);
     const char *key;
@@ -636,14 +636,14 @@ int ov45_0224ABA0(ChatConnection *chat, const char *cookie, int count, const cha
         }
         data->count = j;
     }
-    return ov45_0224A708(chat, 14, cookie, NULL, callback, NULL, param, data);
+    return ciAddFilter(chat, 14, cookie, NULL, callback, NULL, param, data);
 }
 
 // Parses a channel mode string ("+" / "-" then mode letters, "+" / "-" may appear again; letters b, k, l, o and v
 // take the next argument) into a 0-terminated array of changes (heap).
 #pragma opt_strength_reduction off
 
-ChatModeChange *ov45_0224AD24(const char *modes, const char **args, int argCount) {
+ChatModeChange *ciParseMode(const char *modes, const char **args, int argCount) {
     ChatModeChange *changes = NULL;
     char c;
     int type;
@@ -767,7 +767,7 @@ ChatModeChange *ov45_0224AD24(const char *modes, const char **args, int argCount
 #define MODE_TYPE(change) (((volatile ChatModeChange *)(change))->type)
 
 // Applies the channel mode changes (up to the CHAT_MODE_END entry) to mode.
-void ov45_0224AFD8(ChatChannelMode *mode, ChatModeChange *changes) {
+void ciApplyChangesToMode(ChatChannelMode *mode, ChatModeChange *changes) {
     if (MODE_TYPE(changes) == CHAT_MODE_END) {
         return;
     }

@@ -47,11 +47,11 @@ extern void ov45_022443DC(void *p, void *node);
 extern void ov45_02244428(void *p, void *node);
 extern void ov45_0224447C(void *p, void *node);
 extern void ov45_022444C8(void *p);
-extern int ov45_02244B9C(void *p);
+extern int ciInitCallbacks(void *p);
 extern int ArrayLength(void *);
 extern void *ov00_021FE6EC(void *, int);
 extern void ov00_021FE678(void *);
-extern void ov45_02244500(void *);
+extern void ciFreeCallbackData(void *);
 extern char ov45_022554F0[];
 extern char ov45_0225540C[];
 extern char ov45_02255478[];
@@ -60,7 +60,7 @@ extern char ov45_022554A4[];
 extern char ov45_022554BC[];
 extern char ov45_022554DC[];
 extern void *ov45_02243A98(void *p);
-extern void ov45_02244BCC(void *p);
+extern void ciCleanupCallbacks(void *p);
 
 typedef struct {
     Node *node;

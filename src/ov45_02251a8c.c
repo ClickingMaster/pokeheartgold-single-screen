@@ -77,7 +77,7 @@ void ov45_02251B0C(ChatConnection *chat, int type, const char *nick, int unk_0C,
         args.type = type;
         args.nick = nick;
         args.unk_08 = unk_0C;
-        ov45_02244D30(chat, 25, chat->nickErrorCallback, (u32 *)&args, chat->connectParam, 0, NULL, sizeof(args));
+        ciAddCallback_(chat, 25, chat->nickErrorCallback, (u32 *)&args, chat->connectParam, 0, NULL, sizeof(args));
         return;
     }
     chat->connecting = FALSE;

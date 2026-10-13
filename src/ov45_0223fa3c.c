@@ -37,8 +37,8 @@ extern void ov45_022429E0(String *, void *);
 extern void ov45_02237D48(String *, String *);
 extern void ov45_02237BC8(String *);
 extern void ov45_0223FC5C(String *, Work *);
-extern void ov45_0225035C(void *, char *);
-extern void ov45_02250424(void *, int, char *, char *);
+extern void chatRetryWithNickA(void *, char *);
+extern void chatRegisterUniqueNickA(void *, int, char *, char *);
 void ov45_0223FA3C(void *, int);
 
 void ov45_0223FA3C(void *out, int state) {
@@ -52,21 +52,21 @@ void ov45_0223FA3C(void *out, int state) {
         ov45_02237D48(&ov45_022577DC->text, &a);
         ov45_02237BC8(&a);
         ov45_0223FC5C(&b, ov45_022577DC);
-        ov45_0225035C(out, getString(&b));
+        chatRetryWithNickA(out, getString(&b));
         ov45_02237BC8(&b);
     } else if (state == 2) {
         ov45_022429E0(&c, ov45_022577DC->source);
         ov45_02237D48(&ov45_022577DC->text, &c);
         ov45_02237BC8(&c);
         ov45_0223FC5C(&d, ov45_022577DC);
-        ov45_0225035C(out, getString(&d));
+        chatRetryWithNickA(out, getString(&d));
         ov45_02237BC8(&d);
     } else if ((u32)(state - 3) <= 1) {
         ov45_022429E0(&e, ov45_022577DC->source);
         ov45_02237D48(&ov45_022577DC->text, &e);
         ov45_02237BC8(&e);
         ov45_0223FC5C(&f, ov45_022577DC);
-        ov45_02250424(out, 2, getString(&f), ov45_02255304);
+        chatRegisterUniqueNickA(out, 2, getString(&f), ov45_02255304);
         ov45_02237BC8(&f);
     } else if (state == 5) {
         return;
@@ -75,7 +75,7 @@ void ov45_0223FA3C(void *out, int state) {
         ov45_02237D48(&ov45_022577DC->text, &g);
         ov45_02237BC8(&g);
         ov45_0223FC5C(&h, ov45_022577DC);
-        ov45_0225035C(out, getString(&h));
+        chatRetryWithNickA(out, getString(&h));
         ov45_02237BC8(&h);
     }
 }

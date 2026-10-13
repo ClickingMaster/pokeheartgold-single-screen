@@ -43,7 +43,7 @@ extern const char ov45_022577AC[]; // ""
 
 // Checks the 40 hex digit SHA-1 at the end of the response: it is computed over the base64 encoding of the rest,
 // between two copies of the secret key. On success the rest becomes the body.
-BOOL ov45_02253ED8(const char *response, int length) {
+BOOL StatsUpload_CheckResponseHash(const char *response, int length) {
     char hash[41];
     u8 digest[20];
     HexDigits hex;
@@ -83,11 +83,11 @@ BOOL ov45_02253ED8(const char *response, int length) {
 }
 
 // Progress callback of the HTTP requests.
-void ov45_02254088(void) {
+void StatsUpload_OnRequestProgress(void) {
 }
 
 // Completion callback of the HTTP requests: the challenge (state 5) or the upload response (state 7).
-void ov45_0225408C(char *response, int length, int error) {
+void StatsUpload_OnRequestCompleted(char *response, int length, int error) {
     ov45_0225762C.request = -1;
     if (ov45_0225762C.state == STATS_UPLOAD_FAILED) {
         return;
@@ -116,28 +116,28 @@ void ov45_0225408C(char *response, int length, int error) {
                 strncpy(ov45_022576A0, ov45_0225762C.hash, 41);
                 ov45_0225762C.state = STATS_UPLOAD_SEND;
             } else {
-                ov45_022545BC();
+                StatsUpload_SetFailed();
             }
             ov00_021EC3D8(response);
             break;
         case STATS_UPLOAD_WAIT_RESPONSE:
             if (strncmp(response, ov45_022576D4, strlen(ov45_022576D4)) == 0) {
                 ov00_021EC3D8(response);
-                ov45_022545BC();
+                StatsUpload_SetFailed();
                 return;
             }
             if (ov45_0225762C.response) {
                 ov00_021EC3D8(ov45_0225762C.response);
                 ov45_0225762C.response = NULL;
             }
-            if (!ov45_02253ED8(response, length)) {
+            if (!StatsUpload_CheckResponseHash(response, length)) {
                 ov00_021EC3D8(response);
-                ov45_022545BC();
+                StatsUpload_SetFailed();
                 return;
             }
             if (ov45_0225762C.callback && !ov45_0225762C.callback(response, length)) {
                 ov00_021EC3D8(response);
-                ov45_022545BC();
+                StatsUpload_SetFailed();
                 return;
             }
             ov45_0225762C.response = response;
@@ -146,14 +146,14 @@ void ov45_0225408C(char *response, int length, int error) {
             break;
         }
     } else {
-        ov45_022545BC();
+        StatsUpload_SetFailed();
     }
 }
 
 // Writes the base64 encoding of [checksum][first][second] to out (NUL terminated). The data bytes are xored
 // with the random number generator seeded with their sum; the checksum (big endian) is that sum xored with
 // checksumKey. Returns 0, or 2 when out of memory.
-int ov45_022542F4(char *out, const u8 *first, int firstLength, const u8 *second, volatile int secondLength) {
+int StatsUpload_EncodeData(char *out, const u8 *first, int firstLength, const u8 *second, volatile int secondLength) {
     u8 *buf;
     u32 sum = 0;
     int length = secondLength + firstLength;
@@ -198,7 +198,7 @@ int ov45_022542F4(char *out, const u8 *first, int firstLength, const u8 *second,
 
 // Starts the client: server 0 = the game stats server, 1 and 2 = development servers. key is the 20 character
 // secret key, the four random number generator constants as 8 hex digits each and the game name.
-void ov45_0225443C(int server, char *key) {
+void StatsUpload_Start(int server, char *key) {
     char secretKey[21];
     char hex[9] = { 0 };
     u32 multiplier, increment, modulus, checksumKey;
@@ -231,7 +231,7 @@ void ov45_0225443C(int server, char *key) {
     ov45_0225762C.active = TRUE;
 }
 
-void ov45_022545BC(void) {
+void StatsUpload_SetFailed(void) {
     if (!ov00_021EC230()) {
         ov00_021EC24C(6, -90040);
     }
@@ -239,7 +239,7 @@ void ov45_022545BC(void) {
 }
 
 // Advances the upload; returns the state.
-int ov45_022545F0(void) {
+int StatsUpload_Process(void) {
     int request;
     switch ((u32)ov45_0225762C.state) {
     case STATS_UPLOAD_NONE:
@@ -248,34 +248,34 @@ int ov45_022545F0(void) {
     case STATS_UPLOAD_DONE:
         break;
     case STATS_UPLOAD_FAILED:
-        ov45_022545BC();
+        StatsUpload_SetFailed();
         break;
     case STATS_UPLOAD_GET_CHALLENGE:
-        request = ov00_021FA488(ov45_0225762C.url, 0, 0, ov45_02254088, ov45_0225408C, 0);
+        request = ov00_021FA488(ov45_0225762C.url, 0, 0, StatsUpload_OnRequestProgress, StatsUpload_OnRequestCompleted, 0);
         ov45_0225762C.request = request;
         if (request >= 0) {
             ov45_0225762C.state = STATS_UPLOAD_WAIT_CHALLENGE;
         } else {
-            ov45_022545BC();
+            StatsUpload_SetFailed();
         }
         break;
     case STATS_UPLOAD_WAIT_CHALLENGE:
         if (!ov00_021FA118()) {
-            ov45_022545BC();
+            StatsUpload_SetFailed();
         }
         break;
     case STATS_UPLOAD_SEND:
-        request = ov00_021FA488(ov45_0225762C.url, 0, 0, ov45_02254088, ov45_0225408C, 0);
+        request = ov00_021FA488(ov45_0225762C.url, 0, 0, StatsUpload_OnRequestProgress, StatsUpload_OnRequestCompleted, 0);
         ov45_0225762C.request = request;
         if (request >= 0) {
             ov45_0225762C.state = STATS_UPLOAD_WAIT_RESPONSE;
         } else {
-            ov45_022545BC();
+            StatsUpload_SetFailed();
         }
         break;
     case STATS_UPLOAD_WAIT_RESPONSE:
         if (!ov00_021FA118()) {
-            ov45_022545BC();
+            StatsUpload_SetFailed();
         }
         break;
     }
@@ -283,7 +283,7 @@ int ov45_022545F0(void) {
 }
 
 // Stops the client and frees the URL and the last response.
-void ov45_022546F8(void) {
+void StatsUpload_Stop(void) {
     if (!ov45_0225762C.active) {
         return;
     }
@@ -301,7 +301,7 @@ void ov45_022546F8(void) {
     ov45_0225762C.active = FALSE;
 }
 
-const char *ov45_02254774(int *length) {
+const char *StatsUpload_GetResponseBody(int *length) {
     *length = ov45_0225762C.bodyLength;
     return ov45_0225762C.body;
 }
@@ -309,7 +309,7 @@ const char *ov45_02254774(int *length) {
 // Builds the upload URL for size bytes of data. With useLastHash the hash of the last challenge is used and
 // the URL is sent at once, else a new challenge is fetched first. Returns 0, 2 when out of memory or 3 when
 // the key is not set.
-int ov45_0225478C(char *name, int pid, const void *data, int size, StatsUploadResponseFunc callback, BOOL useLastHash) {
+int StatsUpload_PrepareUpload(char *name, int pid, const void *data, int size, StatsUploadResponseFunc callback, BOOL useLastHash) {
     int dataLength, dataTagLength, hashTagLength, pidLength, pidTagLength, nameLength, serverLength, gameNameLength;
     char pidText[16];
 
@@ -345,7 +345,7 @@ int ov45_0225478C(char *name, int pid, const void *data, int size, StatsUploadRe
     ov45_0225762C.hash = ov45_0225762C.data - strlen(ov45_02257750) - 40;
     header.pid = pid;
     header.size = size;
-    if (ov45_022542F4(ov45_0225762C.data, (const u8 *)&header, 8, data, size) == 2) {
+    if (StatsUpload_EncodeData(ov45_0225762C.data, (const u8 *)&header, 8, data, size) == 2) {
         ov00_021EC2EC(7, ov45_0225762C.url, 0);
         ov45_0225762C.url = NULL;
         return 2;
@@ -361,10 +361,10 @@ int ov45_0225478C(char *name, int pid, const void *data, int size, StatsUploadRe
     return 0;
 }
 
-int ov45_022549E0(char *name, int pid, const void *data, int size, StatsUploadResponseFunc callback) {
-    return ov45_0225478C(name, pid, data, size, callback, FALSE);
+int StatsUpload_Upload(char *name, int pid, const void *data, int size, StatsUploadResponseFunc callback) {
+    return StatsUpload_PrepareUpload(name, pid, data, size, callback, FALSE);
 }
 
-int ov45_02254A04(char *name, int pid, const void *data, int size, StatsUploadResponseFunc callback) {
-    return ov45_0225478C(name, pid, data, size, callback, TRUE);
+int StatsUpload_UploadWithLastHash(char *name, int pid, const void *data, int size, StatsUploadResponseFunc callback) {
+    return StatsUpload_PrepareUpload(name, pid, data, size, callback, TRUE);
 }

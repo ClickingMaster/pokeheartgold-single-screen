@@ -9,7 +9,7 @@
 
 // Stream cipher of the chat connection (RC4 style, with a reversed initial permutation) and a repeating-key xor.
 
-void ov45_02249554(const u8 *key, int keyLength, ChatCipher *cipher) {
+void gs_prepare_key(const u8 *key, int keyLength, ChatCipher *cipher) {
     int i, k, j;
     for (i = 0; i < 256; i++) {
         cipher->state[255 - i] = i;
@@ -30,7 +30,7 @@ void ov45_02249554(const u8 *key, int keyLength, ChatCipher *cipher) {
     }
 }
 
-void ov45_022495DC(u8 *data, int length, ChatCipher *cipher) {
+void gs_crypt(u8 *data, int length, ChatCipher *cipher) {
     int x = cipher->x, y = cipher->y, k;
     for (k = 0; k < length; k++) {
         int t;
@@ -50,7 +50,7 @@ void ov45_022495DC(u8 *data, int length, ChatCipher *cipher) {
 }
 
 // xors data with key repeated (key is NUL-terminated).
-void ov45_0224966C(s8 *data, int length, const s8 *key) {
+void gs_xcode_buf(s8 *data, int length, const s8 *key) {
     int i;
     const s8 *p = key;
     for (i = 0; i < length; i++) {

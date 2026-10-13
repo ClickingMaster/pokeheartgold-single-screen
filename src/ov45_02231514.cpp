@@ -176,16 +176,16 @@ extern "C" Lobby *_022577C4;
 extern "C" u8 ov45_02254FA0[];
 extern "C" char ov45_022550B0[];
 
-extern "C" int ov45_022545F0(void);
-extern "C" void *ov45_02254774(u32 *len);
+extern "C" int StatsUpload_Process(void);
+extern "C" void *StatsUpload_GetResponseBody(u32 *len);
 extern "C" void *ov00_021EC2A8(int heap, u32 size);
 extern "C" void ov00_021EC2EC(int heap, void *p, int unk);
 extern "C" void ov00_021EC210(void);
-extern "C" void ov45_022546F8(void);
-extern "C" void ov45_0225443C(int mode, char *s);
+extern "C" void StatsUpload_Stop(void);
+extern "C" void StatsUpload_Start(int mode, char *s);
 extern "C" void *ov45_02231C78(Vec *v);
-extern "C" int ov45_02254A04(char *a, int b, void *c, u32 d, int e);
-extern "C" int ov45_022549E0(char *a, int b, void *c, u32 d, int e);
+extern "C" int StatsUpload_UploadWithLastHash(char *a, int b, void *c, u32 d, int e);
+extern "C" int StatsUpload_Upload(char *a, int b, void *c, u32 d, int e);
 extern "C" int ov45_02240874(void);
 extern "C" int ov45_02231490(void);
 extern "C" Vec *ov45_0223770C(Vec *);
@@ -219,7 +219,7 @@ static inline char *Str_CStr(Str *s) {
 static inline void Request_Finish(Request *r, int ok, void *buf, u32 len) {
     void *arg = r->arg;
     Request *tmp;
-    ov45_022546F8();
+    StatsUpload_Stop();
     tmp = (Request *)ov45_022577D8;
     ov45_022577D8 = (Deletable *)ov45_022577D4;
     ov45_022577D4 = tmp;
@@ -230,7 +230,7 @@ static inline void Request_Succeed(Request *r, void *buf, const u32 &size) {
     void *arg = r->arg;
     u32 len = size;
     Request *tmp;
-    ov45_022546F8();
+    StatsUpload_Stop();
     tmp = (Request *)ov45_022577D8;
     ov45_022577D8 = (Deletable *)ov45_022577D4;
     ov45_022577D4 = tmp;
@@ -239,27 +239,27 @@ static inline void Request_Succeed(Request *r, void *buf, const u32 &size) {
 
 static inline int Request_Send(Request *r) {
     int ret;
-    ov45_022546F8();
-    ov45_0225443C(r->mode, Str_CStr(&r->url));
+    StatsUpload_Stop();
+    StatsUpload_Start(r->mode, Str_CStr(&r->url));
     if (r->alt) {
         u32 n = r->body.size;
-        ret = ov45_02254A04(Str_CStr(&r->post), r->len24, ov45_02231C78(&r->body), n, 0);
+        ret = StatsUpload_UploadWithLastHash(Str_CStr(&r->post), r->len24, ov45_02231C78(&r->body), n, 0);
     } else {
         u32 n = r->body.size;
-        ret = ov45_022549E0(Str_CStr(&r->post), r->len24, ov45_02231C78(&r->body), n, 0);
+        ret = StatsUpload_Upload(Str_CStr(&r->post), r->len24, ov45_02231C78(&r->body), n, 0);
     }
     if (ret == 0) {
         return 1;
     }
-    ov45_022546F8();
+    StatsUpload_Stop();
     return 0;
 }
 
 static inline int Request_Poll(Request *r) {
     u32 len = 0;
-    switch (ov45_022545F0()) {
+    switch (StatsUpload_Process()) {
     case 8: {
-        void *data = ov45_02254774(&len);
+        void *data = StatsUpload_GetResponseBody(&len);
         void *buf = ov00_021EC2A8(0, len);
         if (buf != NULL) {
             MI_CpuCopy8(data, buf, len);

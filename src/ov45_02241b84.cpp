@@ -74,8 +74,8 @@ struct InsertResult {
 
 extern "C" void ov45_0224206C(InsertResult *out, void *list, Handler **h);
 extern "C" Str ov45_022428C8(Mgr *m, const Str &s);
-extern "C" void ov45_02251208(void *ctx, const char *name, void (*cb)(), u32 id, u32 z);
-extern "C" int ov45_02251024(void *ctx, const char *name);
+extern "C" void chatEnumUsersA(void *ctx, const char *name, void (*cb)(), u32 id, u32 z);
+extern "C" int chatInChannelA(void *ctx, const char *name);
 extern "C" void ov45_0223FE28();
 
 inline Mgr *GetMgr() {
@@ -132,7 +132,7 @@ extern "C" int ov45_02241B84(const char *name, u32 a, u32 b) {
     {
         Str s(name);
         Str t = ov45_022428C8(GetMgr(), s);
-        BOOL exists = ov45_02251024(GetMgr()->unk0, t.c_str()) == 0;
+        BOOL exists = chatInChannelA(GetMgr()->unk0, t.c_str()) == 0;
         t.destroy();
         s.destroy();
         if (exists) {
@@ -146,7 +146,7 @@ extern "C" int ov45_02241B84(const char *name, u32 a, u32 b) {
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);
     Str t = ov45_022428C8(GetMgr(), s);
-    ov45_02251208(GetMgr()->unk0, t.c_str(), ov45_0223FE28, id, 0);
+    chatEnumUsersA(GetMgr()->unk0, t.c_str(), ov45_0223FE28, id, 0);
     t.destroy();
     s.destroy();
     return 0;
