@@ -76,53 +76,53 @@
 	.extern NintendoWfcUnused_SessionInit
 	.extern NintendoWfcUnused_SessionMain
 	.extern NintendoWfcUnused_SessionExit
-	.extern ov73_021E8BFC
-	.extern ov73_021E8C2C
-	.extern ov73_021E8C8C
-	.extern ov73_021E8CBC
-	.extern ov73_021E8D0C
-	.extern ov73_021E8D2C
-	.extern ov73_021E8DB8
-	.extern ov73_021E8DC8
-	.extern ov73_021E8E7C
-	.extern ov73_021E8EBC
-	.extern ov73_021E8ED8
-	.extern ov73_021E8FB0
-	.extern ov73_021E8FE4
-	.extern ov73_021E9120
-	.extern ov73_021E9144
-	.extern ov73_021E91F4
-	.extern ov73_021E9224
-	.extern ov73_021E926C
-	.extern ov73_021E9378
-	.extern ov73_021E93EC
-	.extern ov73_021E941C
-	.extern ov73_021E944C
-	.extern ov73_021E955C
-	.extern ov73_021E9598
-	.extern ov73_021E95CC
-	.extern ov73_021E9618
-	.extern ov73_021E96EC
-	.extern ov73_021E9728
-	.extern ov73_021E9758
-	.extern ov73_021E97A8
-	.extern ov73_021E987C
-	.extern ov73_021E98AC
-	.extern ov73_021E98FC
-	.extern ov73_021E99D4
-	.extern ov73_021E9A3C
-	.extern ov73_021E9A6C
-	.extern ov73_021E9B58
-	.extern ov73_021E9B94
+	.extern NintendoWfcUnused_AskConnect
+	.extern NintendoWfcUnused_HandleConnectChoice
+	.extern NintendoWfcUnused_AskLogOut
+	.extern NintendoWfcUnused_HandleLogOutChoice
+	.extern NintendoWfcUnused_StartConnect
+	.extern NintendoWfcUnused_WaitConnect
+	.extern NintendoWfcUnused_StartAuth
+	.extern NintendoWfcUnused_WaitAuth
+	.extern NintendoWfcUnused_InitHttp
+	.extern NintendoWfcUnused_RequestInfo
+	.extern NintendoWfcUnused_WaitInfo
+	.extern NintendoWfcUnused_RequestSetProfile
+	.extern NintendoWfcUnused_WaitSetProfile
+	.extern NintendoWfcUnused_RequestRoomCount
+	.extern NintendoWfcUnused_WaitRoomCount
+	.extern NintendoWfcUnused_AskChallengeRoom
+	.extern NintendoWfcUnused_StartChallengeRoomInput
+	.extern NintendoWfcUnused_HandleChallengeRoomInput
+	.extern NintendoWfcUnused_PrintReceivingTrainers
+	.extern NintendoWfcUnused_PrintRoomUnavailable
+	.extern NintendoWfcUnused_RequestTrainersDownload
+	.extern NintendoWfcUnused_WaitTrainersDownload
+	.extern NintendoWfcUnused_PrintTrainersReceived
+	.extern NintendoWfcUnused_PrintSendingRecord
+	.extern NintendoWfcUnused_RequestUpload
+	.extern NintendoWfcUnused_WaitUpload
+	.extern NintendoWfcUnused_PrintRecordSent
+	.extern NintendoWfcUnused_AskLeadersRank
+	.extern NintendoWfcUnused_StartLeadersRankInput
+	.extern NintendoWfcUnused_HandleLeadersRankInput
+	.extern NintendoWfcUnused_AskLeadersRoom
+	.extern NintendoWfcUnused_StartLeadersRoomInput
+	.extern NintendoWfcUnused_HandleLeadersRoomInput
+	.extern NintendoWfcUnused_PrintReceivingLeaders
+	.extern NintendoWfcUnused_RequestLeadersDownload
+	.extern NintendoWfcUnused_WaitLeadersDownload
+	.extern NintendoWfcUnused_PrintLeadersReceived
+	.extern NintendoWfcUnused_StartDisconnect
 	.extern NintendoWfcUnused_StartSave
 	.extern NintendoWfcUnused_Save
-	.extern ov73_021E9BD4
-	.extern ov73_021E9C04
-	.extern ov73_021E9C30
-	.extern ov73_021E9C60
-	.extern ov73_021E9C8C
-	.extern ov73_021E9CBC
-	.extern ov73_021E9CD8
+	.extern NintendoWfcUnused_AskCancelChallenge
+	.extern NintendoWfcUnused_HandleCancelChallengeChoice
+	.extern NintendoWfcUnused_AskCancelDownload
+	.extern NintendoWfcUnused_HandleCancelDownloadChoice
+	.extern NintendoWfcUnused_PrintDisconnecting
+	.extern NintendoWfcUnused_CloseConnection
+	.extern NintendoWfcUnused_PrintDisconnected
 	.extern ov73_021E9D10
 	.extern NintendoWfcUnused_StartExit
 	.extern ov73_021E9D44
@@ -321,59 +321,59 @@ sNintendoWfcUnusedModeExit: ; 0x021EA844
 	.word NintendoWfcUnused_SessionExit
 
 sNintendoWfcUnusedStates: ; 0x021EA848
-	.word ov73_021E8BFC
-	.word ov73_021E8C2C
-	.word ov73_021E8D0C
-	.word ov73_021E8D2C
-	.word ov73_021E8DB8
-	.word ov73_021E8DC8
-	.word ov73_021E8E7C
-	.word ov73_021E8EBC
-	.word ov73_021E8ED8
-	.word ov73_021E8FB0
-	.word ov73_021E8FE4
-	.word ov73_021E9120
-	.word ov73_021E9144
-	.word ov73_021E91F4
-	.word ov73_021E9224
-	.word ov73_021E926C
-	.word ov73_021E9378
-	.word ov73_021E941C
-	.word ov73_021E944C
-	.word ov73_021E955C
-	.word ov73_021E93EC
-	.word ov73_021E9BD4
-	.word ov73_021E9C04
-	.word ov73_021E9C30
-	.word ov73_021E9C60
-	.word ov73_021E9598
-	.word ov73_021E95CC
-	.word ov73_021E9618
-	.word ov73_021E96EC
-	.word ov73_021E9728
-	.word ov73_021E9758
-	.word ov73_021E97A8
-	.word ov73_021E987C
-	.word ov73_021E98AC
-	.word ov73_021E98FC
-	.word ov73_021E99D4
-	.word ov73_021E9A3C
-	.word ov73_021E9A6C
-	.word ov73_021E9B58
+	.word NintendoWfcUnused_AskConnect
+	.word NintendoWfcUnused_HandleConnectChoice
+	.word NintendoWfcUnused_StartConnect
+	.word NintendoWfcUnused_WaitConnect
+	.word NintendoWfcUnused_StartAuth
+	.word NintendoWfcUnused_WaitAuth
+	.word NintendoWfcUnused_InitHttp
+	.word NintendoWfcUnused_RequestInfo
+	.word NintendoWfcUnused_WaitInfo
+	.word NintendoWfcUnused_RequestSetProfile
+	.word NintendoWfcUnused_WaitSetProfile
+	.word NintendoWfcUnused_RequestRoomCount
+	.word NintendoWfcUnused_WaitRoomCount
+	.word NintendoWfcUnused_AskChallengeRoom
+	.word NintendoWfcUnused_StartChallengeRoomInput
+	.word NintendoWfcUnused_HandleChallengeRoomInput
+	.word NintendoWfcUnused_PrintReceivingTrainers
+	.word NintendoWfcUnused_RequestTrainersDownload
+	.word NintendoWfcUnused_WaitTrainersDownload
+	.word NintendoWfcUnused_PrintTrainersReceived
+	.word NintendoWfcUnused_PrintRoomUnavailable
+	.word NintendoWfcUnused_AskCancelChallenge
+	.word NintendoWfcUnused_HandleCancelChallengeChoice
+	.word NintendoWfcUnused_AskCancelDownload
+	.word NintendoWfcUnused_HandleCancelDownloadChoice
+	.word NintendoWfcUnused_PrintSendingRecord
+	.word NintendoWfcUnused_RequestUpload
+	.word NintendoWfcUnused_WaitUpload
+	.word NintendoWfcUnused_PrintRecordSent
+	.word NintendoWfcUnused_AskLeadersRank
+	.word NintendoWfcUnused_StartLeadersRankInput
+	.word NintendoWfcUnused_HandleLeadersRankInput
+	.word NintendoWfcUnused_AskLeadersRoom
+	.word NintendoWfcUnused_StartLeadersRoomInput
+	.word NintendoWfcUnused_HandleLeadersRoomInput
+	.word NintendoWfcUnused_PrintReceivingLeaders
+	.word NintendoWfcUnused_RequestLeadersDownload
+	.word NintendoWfcUnused_WaitLeadersDownload
+	.word NintendoWfcUnused_PrintLeadersReceived
 	.word NintendoWfcUnused_StartSave
 	.word NintendoWfcUnused_Save
-	.word ov73_021E9C8C
-	.word ov73_021E9CBC
-	.word ov73_021E9CD8
+	.word NintendoWfcUnused_PrintDisconnecting
+	.word NintendoWfcUnused_CloseConnection
+	.word NintendoWfcUnused_PrintDisconnected
 	.word ov73_021E9D10
-	.word ov73_021E9B94
+	.word NintendoWfcUnused_StartDisconnect
 	.word NintendoWfcUnused_StartExit
 	.word NintendoWfcUnused_WaitMessage
 	.word NintendoWfcUnused_OpenYesNoPrompt
 	.word NintendoWfcUnused_WaitMessageAndDelay
 	.word ov73_021E9D44
-	.word ov73_021E8C8C
-	.word ov73_021E8CBC
+	.word NintendoWfcUnused_AskLogOut
+	.word NintendoWfcUnused_HandleLogOutChoice
 	.word NintendoWfcUnused_ShowHttpError
 	.word NintendoWfcUnused_Disconnect
 	.word NintendoWfcUnused_ShowDwcError

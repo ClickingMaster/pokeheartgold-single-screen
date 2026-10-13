@@ -1,53 +1,53 @@
 	.extern NintendoWfc_SessionInit
 	.extern NintendoWfc_SessionMain
 	.extern NintendoWfc_SessionExit
-	.extern ov72_022390D8
-	.extern ov72_02239108
-	.extern ov72_02239168
-	.extern ov72_02239198
-	.extern ov72_022391E8
-	.extern ov72_02239220
-	.extern ov72_022392AC
-	.extern ov72_022392BC
-	.extern ov72_02239370
-	.extern ov72_022393B0
-	.extern ov72_022393CC
-	.extern ov72_022394A4
-	.extern ov72_022394D8
-	.extern ov72_02239614
-	.extern ov72_02239638
-	.extern ov72_022396E8
-	.extern ov72_02239760
-	.extern ov72_02239784
-	.extern ov72_022397E8
-	.extern ov72_0223985C
-	.extern ov72_0223988C
-	.extern ov72_022398BC
-	.extern ov72_022399CC
-	.extern ov72_02239A08
-	.extern ov72_02239A3C
-	.extern ov72_02239A88
-	.extern ov72_02239B5C
-	.extern ov72_02239B98
-	.extern ov72_02239BC8
-	.extern ov72_02239BEC
-	.extern ov72_02239C14
-	.extern ov72_02239C8C
-	.extern ov72_02239CB4
-	.extern ov72_02239CD8
-	.extern ov72_02239D3C
-	.extern ov72_02239D6C
-	.extern ov72_02239E58
-	.extern ov72_02239E94
+	.extern NintendoWfc_AskConnect
+	.extern NintendoWfc_HandleConnectChoice
+	.extern NintendoWfc_AskLogOut
+	.extern NintendoWfc_HandleLogOutChoice
+	.extern NintendoWfc_StartConnect
+	.extern NintendoWfc_WaitConnect
+	.extern NintendoWfc_StartAuth
+	.extern NintendoWfc_WaitAuth
+	.extern NintendoWfc_InitHttp
+	.extern NintendoWfc_RequestInfo
+	.extern NintendoWfc_WaitInfo
+	.extern NintendoWfc_RequestSetProfile
+	.extern NintendoWfc_WaitSetProfile
+	.extern NintendoWfc_RequestRoomCount
+	.extern NintendoWfc_WaitRoomCount
+	.extern NintendoWfc_AskChallengeRoom
+	.extern NintendoWfc_StartChallengeRoomInput
+	.extern NintendoWfc_HandleChallengeRoomInput
+	.extern NintendoWfc_PrintReceivingTrainers
+	.extern NintendoWfc_PrintRoomUnavailable
+	.extern NintendoWfc_RequestTrainersDownload
+	.extern NintendoWfc_WaitTrainersDownload
+	.extern NintendoWfc_PrintTrainersReceived
+	.extern NintendoWfc_PrintSendingRecord
+	.extern NintendoWfc_RequestUpload
+	.extern NintendoWfc_WaitUpload
+	.extern NintendoWfc_PrintRecordSent
+	.extern NintendoWfc_AskLeadersRank
+	.extern NintendoWfc_StartLeadersRankInput
+	.extern NintendoWfc_HandleLeadersRankInput
+	.extern NintendoWfc_AskLeadersRoom
+	.extern NintendoWfc_StartLeadersRoomInput
+	.extern NintendoWfc_HandleLeadersRoomInput
+	.extern NintendoWfc_PrintReceivingLeaders
+	.extern NintendoWfc_RequestLeadersDownload
+	.extern NintendoWfc_WaitLeadersDownload
+	.extern NintendoWfc_PrintLeadersReceived
+	.extern NintendoWfc_StartDisconnect
 	.extern NintendoWfc_StartSave
 	.extern NintendoWfc_Save
-	.extern ov72_02239ED4
-	.extern ov72_02239F04
-	.extern ov72_02239F30
-	.extern ov72_02239F60
-	.extern ov72_02239F8C
-	.extern ov72_02239FBC
-	.extern ov72_02239FD8
+	.extern NintendoWfc_AskCancelChallenge
+	.extern NintendoWfc_HandleCancelChallengeChoice
+	.extern NintendoWfc_AskCancelDownload
+	.extern NintendoWfc_HandleCancelDownloadChoice
+	.extern NintendoWfc_PrintDisconnecting
+	.extern NintendoWfc_CloseConnection
+	.extern NintendoWfc_PrintDisconnected
 	.extern ov72_0223A010
 	.extern NintendoWfc_StartExit
 	.extern ov72_0223A044
@@ -112,33 +112,33 @@
 	.public NintendoWfc_PaletteCycleTask
 	.public NintendoWfc_AddWindows
 	.public NintendoWfc_InitStrings
-	.public ov72_02239108
-	.public ov72_02239198
-	.public ov72_022391E8
-	.public ov72_02239220
-	.public ov72_022392BC
-	.public ov72_02239370
-	.public ov72_022393CC
-	.public ov72_022394A4
-	.public ov72_022394D8
-	.public ov72_02239638
-	.public ov72_022396E8
-	.public ov72_02239760
-	.public ov72_02239784
-	.public ov72_022397E8
-	.public ov72_022398BC
-	.public ov72_02239A3C
-	.public ov72_02239A88
-	.public ov72_02239BEC
-	.public ov72_02239C14
-	.public ov72_02239CB4
-	.public ov72_02239CD8
-	.public ov72_02239D6C
-	.public ov72_02239E58
-	.public ov72_02239F04
-	.public ov72_02239F60
-	.public ov72_02239F8C
-	.public ov72_02239FD8
+	.public NintendoWfc_HandleConnectChoice
+	.public NintendoWfc_HandleLogOutChoice
+	.public NintendoWfc_StartConnect
+	.public NintendoWfc_WaitConnect
+	.public NintendoWfc_WaitAuth
+	.public NintendoWfc_InitHttp
+	.public NintendoWfc_WaitInfo
+	.public NintendoWfc_RequestSetProfile
+	.public NintendoWfc_WaitSetProfile
+	.public NintendoWfc_WaitRoomCount
+	.public NintendoWfc_AskChallengeRoom
+	.public NintendoWfc_StartChallengeRoomInput
+	.public NintendoWfc_HandleChallengeRoomInput
+	.public NintendoWfc_PrintReceivingTrainers
+	.public NintendoWfc_WaitTrainersDownload
+	.public NintendoWfc_RequestUpload
+	.public NintendoWfc_WaitUpload
+	.public NintendoWfc_HandleLeadersRankInput
+	.public NintendoWfc_AskLeadersRoom
+	.public NintendoWfc_HandleLeadersRoomInput
+	.public NintendoWfc_PrintReceivingLeaders
+	.public NintendoWfc_WaitLeadersDownload
+	.public NintendoWfc_PrintLeadersReceived
+	.public NintendoWfc_HandleCancelChallengeChoice
+	.public NintendoWfc_HandleCancelDownloadChoice
+	.public NintendoWfc_PrintDisconnecting
+	.public NintendoWfc_PrintDisconnected
 	.public NintendoWfc_StartExit
 	.public ov72_0223A044
 	.public NintendoWfc_ShowHttpError
@@ -241,28 +241,28 @@
 	.public NintendoWfc_FreeBgs
 	.public NintendoWfc_RemoveWindows
 	.public NintendoWfc_FreeStrings
-	.public ov72_022390D8
-	.public ov72_02239168
-	.public ov72_022392AC
-	.public ov72_022393B0
-	.public ov72_02239614
-	.public ov72_0223985C
-	.public ov72_0223988C
-	.public ov72_022399CC
-	.public ov72_02239A08
-	.public ov72_02239B5C
-	.public ov72_02239B98
-	.public ov72_02239BC8
-	.public ov72_02239C8C
-	.public ov72_02239D3C
-	.public ov72_02239E94
+	.public NintendoWfc_AskConnect
+	.public NintendoWfc_AskLogOut
+	.public NintendoWfc_StartAuth
+	.public NintendoWfc_RequestInfo
+	.public NintendoWfc_RequestRoomCount
+	.public NintendoWfc_PrintRoomUnavailable
+	.public NintendoWfc_RequestTrainersDownload
+	.public NintendoWfc_PrintTrainersReceived
+	.public NintendoWfc_PrintSendingRecord
+	.public NintendoWfc_PrintRecordSent
+	.public NintendoWfc_AskLeadersRank
+	.public NintendoWfc_StartLeadersRankInput
+	.public NintendoWfc_StartLeadersRoomInput
+	.public NintendoWfc_RequestLeadersDownload
+	.public NintendoWfc_StartDisconnect
 	.public NintendoWfc_StartSave
 	.public NintendoWfc_Save
-	.public ov72_02239ED4
-	.public ov72_02239F30
-	.public ov72_02239FBC
+	.public NintendoWfc_AskCancelChallenge
+	.public NintendoWfc_AskCancelDownload
+	.public NintendoWfc_CloseConnection
 	.public ov72_0223A010
-	.public ov72_0223A414
+	.public NintendoWfc_CreateWirelessIcon
 	.public ov72_0223A41C
 	.public NintendoWfc_HideWaitingIcon
 	.public NintendoWfc_NumberInput_WaitFadeIn
@@ -414,59 +414,59 @@ sNintendoWfcModeExit: ; 0x0223B65C
 	.word NintendoWfc_SessionExit
 
 sNintendoWfcStates: ; 0x0223B660
-	.word ov72_022390D8
-	.word ov72_02239108
-	.word ov72_022391E8
-	.word ov72_02239220
-	.word ov72_022392AC
-	.word ov72_022392BC
-	.word ov72_02239370
-	.word ov72_022393B0
-	.word ov72_022393CC
-	.word ov72_022394A4
-	.word ov72_022394D8
-	.word ov72_02239614
-	.word ov72_02239638
-	.word ov72_022396E8
-	.word ov72_02239760
-	.word ov72_02239784
-	.word ov72_022397E8
-	.word ov72_0223988C
-	.word ov72_022398BC
-	.word ov72_022399CC
-	.word ov72_0223985C
-	.word ov72_02239ED4
-	.word ov72_02239F04
-	.word ov72_02239F30
-	.word ov72_02239F60
-	.word ov72_02239A08
-	.word ov72_02239A3C
-	.word ov72_02239A88
-	.word ov72_02239B5C
-	.word ov72_02239B98
-	.word ov72_02239BC8
-	.word ov72_02239BEC
-	.word ov72_02239C14
-	.word ov72_02239C8C
-	.word ov72_02239CB4
-	.word ov72_02239CD8
-	.word ov72_02239D3C
-	.word ov72_02239D6C
-	.word ov72_02239E58
+	.word NintendoWfc_AskConnect
+	.word NintendoWfc_HandleConnectChoice
+	.word NintendoWfc_StartConnect
+	.word NintendoWfc_WaitConnect
+	.word NintendoWfc_StartAuth
+	.word NintendoWfc_WaitAuth
+	.word NintendoWfc_InitHttp
+	.word NintendoWfc_RequestInfo
+	.word NintendoWfc_WaitInfo
+	.word NintendoWfc_RequestSetProfile
+	.word NintendoWfc_WaitSetProfile
+	.word NintendoWfc_RequestRoomCount
+	.word NintendoWfc_WaitRoomCount
+	.word NintendoWfc_AskChallengeRoom
+	.word NintendoWfc_StartChallengeRoomInput
+	.word NintendoWfc_HandleChallengeRoomInput
+	.word NintendoWfc_PrintReceivingTrainers
+	.word NintendoWfc_RequestTrainersDownload
+	.word NintendoWfc_WaitTrainersDownload
+	.word NintendoWfc_PrintTrainersReceived
+	.word NintendoWfc_PrintRoomUnavailable
+	.word NintendoWfc_AskCancelChallenge
+	.word NintendoWfc_HandleCancelChallengeChoice
+	.word NintendoWfc_AskCancelDownload
+	.word NintendoWfc_HandleCancelDownloadChoice
+	.word NintendoWfc_PrintSendingRecord
+	.word NintendoWfc_RequestUpload
+	.word NintendoWfc_WaitUpload
+	.word NintendoWfc_PrintRecordSent
+	.word NintendoWfc_AskLeadersRank
+	.word NintendoWfc_StartLeadersRankInput
+	.word NintendoWfc_HandleLeadersRankInput
+	.word NintendoWfc_AskLeadersRoom
+	.word NintendoWfc_StartLeadersRoomInput
+	.word NintendoWfc_HandleLeadersRoomInput
+	.word NintendoWfc_PrintReceivingLeaders
+	.word NintendoWfc_RequestLeadersDownload
+	.word NintendoWfc_WaitLeadersDownload
+	.word NintendoWfc_PrintLeadersReceived
 	.word NintendoWfc_StartSave
 	.word NintendoWfc_Save
-	.word ov72_02239F8C
-	.word ov72_02239FBC
-	.word ov72_02239FD8
+	.word NintendoWfc_PrintDisconnecting
+	.word NintendoWfc_CloseConnection
+	.word NintendoWfc_PrintDisconnected
 	.word ov72_0223A010
-	.word ov72_02239E94
+	.word NintendoWfc_StartDisconnect
 	.word NintendoWfc_StartExit
 	.word NintendoWfc_WaitMessage
 	.word NintendoWfc_OpenYesNoMenu
 	.word NintendoWfc_WaitMessageAndDelay
 	.word ov72_0223A044
-	.word ov72_02239168
-	.word ov72_02239198
+	.word NintendoWfc_AskLogOut
+	.word NintendoWfc_HandleLogOutChoice
 	.word NintendoWfc_ShowHttpError
 	.word NintendoWfc_Disconnect
 	.word NintendoWfc_ShowDwcError
