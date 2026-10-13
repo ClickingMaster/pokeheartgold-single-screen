@@ -44,9 +44,9 @@ BOOL ScrCmd_GetTrainerPathToPlayer(ScriptContext *ctx) {
 BOOL ScrCmd_TrainerStepTowardsPlayer(ScriptContext *ctx) {
     int *r5;
     u16 trainerNum = ScriptGetVar(ctx);
-    u16 *var1 = ScriptGetVarPointer(ctx);
+    u16 *retPtr = ScriptGetVarPointer(ctx);
 
-    *var1 = 0;
+    *retPtr = 0;
     if (trainerNum == 0) {
         r5 = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_ENGAGED_TRAINER_0_FIELD_18);
     } else {
@@ -54,14 +54,14 @@ BOOL ScrCmd_TrainerStepTowardsPlayer(ScriptContext *ctx) {
     }
 
     if (*r5 == 0) {
-        *var1 = 1;
+        *retPtr = 1;
         return TRUE;
     }
 
     if (TrainerApproach_IsDone() == TRUE) {
         TrainerApproach_Delete(*r5);
         *r5 = 0;
-        *var1 = 1;
+        *retPtr = 1;
     }
 
     return TRUE;
@@ -100,8 +100,8 @@ BOOL ScrCmd_TrainerBattle(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 *script = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ACTIVE_SCRIPT_NUMBER);
     u32 *winFlag = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_BATTLE_WIN_FLAG);
-    u16 var0 = ScriptGetVar(ctx);
-    u16 var1 = ScriptGetVar(ctx);
+    u16 opponentTrainer1 = ScriptGetVar(ctx);
+    u16 opponentTrainer2 = ScriptGetVar(ctx);
     u8 var2 = ScriptReadByte(ctx);
     u8 var3 = ScriptReadByte(ctx);
     u16 followerTrainerNum = 0;
@@ -110,18 +110,18 @@ BOOL ScrCmd_TrainerBattle(ScriptContext *ctx) {
         followerTrainerNum = Save_VarsFlags_GetFollowerTrainerNum(Save_VarsFlags_Get(fieldSystem->saveData));
     }
 
-    SetupAndStartTrainerBattle(ctx->taskman, var0, var1, followerTrainerNum, var2, var3, HEAP_ID_FIELD2, winFlag);
+    SetupAndStartTrainerBattle(ctx->taskman, opponentTrainer1, opponentTrainer2, followerTrainerNum, var2, var3, HEAP_ID_FIELD2, winFlag);
     return TRUE;
 }
 
 BOOL ScrCmd_MultiBattle(ScriptContext *ctx) {
     u32 *winFlag = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_BATTLE_WIN_FLAG);
-    u16 var0 = ScriptGetVar(ctx);
-    u16 var1 = ScriptGetVar(ctx);
-    u16 var2 = ScriptGetVar(ctx);
+    u16 followerTrainerNum = ScriptGetVar(ctx);
+    u16 opponentTrainer1 = ScriptGetVar(ctx);
+    u16 opponentTrainer2 = ScriptGetVar(ctx);
     u8 var3 = ScriptReadByte(ctx);
 
-    SetupAndStartTrainerBattle(ctx->taskman, var1, var2, var0, 0, var3, HEAP_ID_FIELD2, winFlag);
+    SetupAndStartTrainerBattle(ctx->taskman, opponentTrainer1, opponentTrainer2, followerTrainerNum, 0, var3, HEAP_ID_FIELD2, winFlag);
     return TRUE;
 }
 
@@ -211,10 +211,10 @@ BOOL ScrCmd_CheckBattleWon(ScriptContext *ctx) {
 
 BOOL ScrCmd_StaticWildWonOrCaughtCheck(ScriptContext *ctx) {
     u16 *retPtr = ScriptGetVarPointer(ctx);
-    u8 var0 = ScriptReadByte(ctx);
+    u8 useResultVar = ScriptReadByte(ctx);
 
     int val;
-    if (var0 == 1) {
+    if (useResultVar == 1) {
         val = IsBattleResultStaticWildWin(FieldSystem_VarGet(ctx->fieldSystem, VAR_BATTLE_RESULT));
     } else {
         val = IsBattleResultStaticWildWin(*(u32 *)FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_BATTLE_WIN_FLAG));

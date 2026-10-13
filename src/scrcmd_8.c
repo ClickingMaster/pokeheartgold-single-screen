@@ -20,15 +20,15 @@ BOOL ScrCmd_465(ScriptContext *ctx) {
     u16 var = ScriptReadHalfword(ctx);
     switch (var) {
     case 0: {
-        u16 var0 = ScriptGetVar(ctx);
+        u16 groupIndex = ScriptGetVar(ctx);
         u16 *retPtr = ScriptGetVarPointer(ctx);
-        *retPtr = Save_FriendGroup_IsGroupValid(group, var0);
+        *retPtr = Save_FriendGroup_IsGroupValid(group, groupIndex);
         return FALSE;
     }
     case 1: {
-        u16 var0 = ScriptGetVar(ctx);
+        u16 groupIndex = ScriptGetVar(ctx);
         u16 *retPtr = ScriptGetVarPointer(ctx);
-        *retPtr = Save_FriendGroup_IsCurrentGroup(group, var0);
+        *retPtr = Save_FriendGroup_IsCurrentGroup(group, groupIndex);
         return FALSE;
     }
     case 2: {
@@ -50,9 +50,9 @@ BOOL ScrCmd_465(ScriptContext *ctx) {
         return TRUE;
     }
     case 5: {
-        u16 var0 = ScriptGetVar(ctx);
+        u16 groupIndex = ScriptGetVar(ctx);
         Save_FriendGroup_IsGroupValid(group, 1);
-        Save_FriendGroup_CopyGroup(group, var0, 1);
+        Save_FriendGroup_CopyGroup(group, groupIndex, 1);
         return FALSE;
     }
     case 6: {

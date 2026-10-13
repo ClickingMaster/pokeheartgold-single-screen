@@ -82,7 +82,7 @@ extern const GraphicsBanks sTradeSequenceApproachGraphicsBanks;
 extern u32 _0224C020[]; // 1 in the data: the ball spirals (when 0 it would only follow the center)
 
 // No header declares it.
-void WirelessStatusIcon_ShowOnBothScreens(int a0, enum HeapID heapID);
+void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 
 TradeSequenceApproach *TradeSequenceApproach_Init(TradeSequence *ts);
 void TradeSequenceApproach_Exit(TradeSequenceApproach *approach);

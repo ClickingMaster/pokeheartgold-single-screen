@@ -52,9 +52,9 @@ u32 GF_GetNumPendingVramTransferTasks(void) {
     return sVramTransferManager->nCur;
 }
 
-NNSG2dCellTransferState *CreateCellTransferStateManager(int a0, enum HeapID heapID) {
-    NNSG2dCellTransferState *ret = Heap_Alloc(heapID, a0 * sizeof(NNSG2dCellTransferState));
-    NNS_G2dInitCellTransferStateManager(ret, a0, CellTransfer_RegisterVramTransferTask);
+NNSG2dCellTransferState *CreateCellTransferStateManager(int numStates, enum HeapID heapID) {
+    NNSG2dCellTransferState *ret = Heap_Alloc(heapID, numStates * sizeof(NNSG2dCellTransferState));
+    NNS_G2dInitCellTransferStateManager(ret, numStates, CellTransfer_RegisterVramTransferTask);
     return ret;
 }
 

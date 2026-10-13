@@ -748,25 +748,25 @@ static void SysTask_BlackthornGymmick_MovePlatform(SysTask *task, void *data) {
         break;
     case STATE_MOVE_RUN: {
         MapProp *mapProp = MapPropManager_GetMapPropByIndex(fieldSystem->mapPropManager, localData->platforms[taskData->platformIdx].mapPropID);
-        VecFx32 sp34;
-        MapProp_GetTranslation(&sp34, mapProp);
-        VEC_Add(&sp34, &taskData->moveVector, &sp34);
-        MapProp_SetTranslation(mapProp, &sp34);
+        VecFx32 platformPos;
+        MapProp_GetTranslation(&platformPos, mapProp);
+        VEC_Add(&platformPos, &taskData->moveVector, &platformPos);
+        MapProp_SetTranslation(mapProp, &platformPos);
         LocalMapObject *playerObject = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
-        VecFx32 sp28;
-        MapObject_CopyPositionVector(playerObject, &sp28);
-        VEC_Add(&sp28, &taskData->moveVector, &sp28);
-        MapObject_SetPositionVector(playerObject, &sp28);
+        VecFx32 playerPos;
+        MapObject_CopyPositionVector(playerObject, &playerPos);
+        VEC_Add(&playerPos, &taskData->moveVector, &playerPos);
+        MapObject_SetPositionVector(playerObject, &playerPos);
         ++taskData->moveStepTimer;
         if (taskData->moveStepTimer >= 2) {
             taskData->moveStepTimer = 0;
             BlackthornGymmick_GetNextLeadingWallCoordinates(localData->platforms[taskData->platformIdx].height, taskData);
             ++taskData->moveStepCount;
             if (taskData->moveStepCount >= taskData->moveDistance) {
-                VecFx32 sp1C;
-                MapObject_CopyPositionVector(playerObject, &sp1C);
-                MapObject_SetCurrentX(playerObject, sp1C.x / (16 * FX32_ONE));
-                MapObject_SetCurrentZ(playerObject, sp1C.z / (16 * FX32_ONE));
+                VecFx32 playerFinalPos;
+                MapObject_CopyPositionVector(playerObject, &playerFinalPos);
+                MapObject_SetCurrentX(playerObject, playerFinalPos.x / (16 * FX32_ONE));
+                MapObject_SetCurrentZ(playerObject, playerFinalPos.z / (16 * FX32_ONE));
                 MapObject_SetPreviousCoordsToCurrent(playerObject);
                 SysTask_Destroy(task);
                 taskData->state = STATE_MOVE_APPLY;
@@ -791,15 +791,15 @@ static void SysTask_BlackthornGymmick_MovePlatform(SysTask *task, void *data) {
         break;
     case STATE_MOVE_BONK_RETURN: {
         MapProp *mapProp = MapPropManager_GetMapPropByIndex(fieldSystem->mapPropManager, localData->platforms[taskData->platformIdx].mapPropID);
-        VecFx32 sp10;
-        MapProp_GetTranslation(&sp10, mapProp);
-        VEC_Add(&sp10, &taskData->moveVector, &sp10);
-        MapProp_SetTranslation(mapProp, &sp10);
+        VecFx32 returnPlatformPos;
+        MapProp_GetTranslation(&returnPlatformPos, mapProp);
+        VEC_Add(&returnPlatformPos, &taskData->moveVector, &returnPlatformPos);
+        MapProp_SetTranslation(mapProp, &returnPlatformPos);
         LocalMapObject *playerObject = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
-        VecFx32 sp04;
-        MapObject_CopyPositionVector(playerObject, &sp04);
-        VEC_Add(&sp04, &taskData->moveVector, &sp04);
-        MapObject_SetPositionVector(playerObject, &sp04);
+        VecFx32 returnPlayerPos;
+        MapObject_CopyPositionVector(playerObject, &returnPlayerPos);
+        VEC_Add(&returnPlayerPos, &taskData->moveVector, &returnPlayerPos);
+        MapObject_SetPositionVector(playerObject, &returnPlayerPos);
         ++taskData->moveStepTimer;
         if (taskData->moveStepTimer >= 2) {
             taskData->moveStepTimer = 0;

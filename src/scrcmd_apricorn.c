@@ -22,15 +22,15 @@ BOOL ScrCmd_ApricornTreeGetApricorn(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_GiveApricornFromTree(ScriptContext *ctx) {
-    u16 var0 = ScriptGetVar(ctx);
-    u8 var1 = ScriptGetVar(ctx);
+    u16 apricornArg = ScriptGetVar(ctx);
+    u8 quantity = ScriptGetVar(ctx);
     u16 *retPtr = ScriptGetVarPointer(ctx);
     SaveApricornBox *apricornBox = Save_ApricornBox_Get(ctx->fieldSystem->saveData);
-    u8 var2 = var0;
-    int apricornCount = ApricornBox_CountApricorn(apricornBox, var2);
+    u8 apricorn = apricornArg;
+    int apricornCount = ApricornBox_CountApricorn(apricornBox, apricorn);
 
-    if ((var1 + apricornCount) <= 99) {
-        ApricornBox_GiveApricorn(apricornBox, var2, var1);
+    if ((quantity + apricornCount) <= 99) {
+        ApricornBox_GiveApricorn(apricornBox, apricorn, quantity);
         *retPtr = TRUE;
     } else {
         *retPtr = FALSE;

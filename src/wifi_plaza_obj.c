@@ -29,20 +29,20 @@ extern const WiFiPlazaObjSpawn sWiFiPlazaObjMapSpawns[];
 extern const WiFiPlazaObjFunc sWiFiPlazaObjExitHandlers[];
 extern const WiFiPlazaObjFunc sWiFiPlazaObjHandlers[10];
 
-WiFiPlazaObjManager *WiFiPlazaObj_CreateManager(u32 count, u32 unk_0E, WiFiPlazaMap *map, enum HeapID heapID, u32 arg4) {
+WiFiPlazaObjManager *WiFiPlazaObj_CreateManager(u32 count, u32 mode, WiFiPlazaMap *map, enum HeapID heapID, u32 loadHeapID) {
     WiFiPlazaObjManager *manager = Heap_Alloc(heapID, sizeof(WiFiPlazaObjManager));
     u32 bytes;
 
     memset(manager, 0, sizeof(WiFiPlazaObjManager));
     manager->gridObjs = Field2DObjectManager_New(count, heapID);
-    manager->avatars = WiFiPlazaPlayerObjects_New(count, unk_0E, heapID, arg4);
+    manager->avatars = WiFiPlazaPlayerObjects_New(count, mode, heapID, loadHeapID);
     manager->commands = Field2DCommandQueue_New(0x20, heapID);
     bytes = sizeof(WiFiPlazaObj) * count;
     manager->count = count;
     manager->objs = Heap_Alloc(heapID, bytes);
     memset(manager->objs, 0, bytes);
     manager->map = map;
-    manager->unk_0E = unk_0E;
+    manager->unk_0E = mode;
     WiFiPlazaObj_SpawnMapObjects(manager);
     return manager;
 }

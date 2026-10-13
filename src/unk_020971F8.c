@@ -23,20 +23,20 @@ s32 sub_02097234(void) {
     return 4;
 }
 
-void sub_02097238(void *arg0, void *arg1, String *arg2, WifiClubGameEntry *arg3) {
-    if (arg3 != NULL) {
-        WifiClubGameEntry_OnJoinAnswer(arg3, arg2);
+void sub_02097238(void *arg0, void *arg1, String *string, WifiClubGameEntry *entry) {
+    if (entry != NULL) {
+        WifiClubGameEntry_OnJoinAnswer(entry, string);
     }
 }
 
-void sub_02097248(void *arg0, void *arg1, String *arg2, WifiClubGameEntry *arg3) {
-    if (arg3 != NULL) {
-        WifiClubGameEntry_OnStartCommand(arg3);
+void sub_02097248(void *arg0, void *arg1, String *arg2, WifiClubGameEntry *entry) {
+    if (entry != NULL) {
+        WifiClubGameEntry_OnStartCommand(entry);
     }
 }
 
-void sub_02097258(void *arg0, void *arg1, String *arg2, WifiClubGameEntry *arg3) {
-    if (arg3 != NULL) {
-        WifiClubGameEntry_OnVoiceChatFlags(arg3, arg2);
+void sub_02097258(void *arg0, void *arg1, String *string, WifiClubGameEntry *entry) {
+    if (entry != NULL) {
+        WifiClubGameEntry_OnVoiceChatFlags(entry, string);
     }
 }

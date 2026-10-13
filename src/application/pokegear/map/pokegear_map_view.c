@@ -17,7 +17,7 @@ static void ov101_021E9848(PokegearMapAppData *mapApp, u16 xIn, u16 yIn, s16 a3,
 static BOOL PokegearMap_ShouldLocationBeHidden(PokegearMapAppData *mapApp, int a1);
 static int PokegearMap_GetFlypointIndexAtCoord(PokegearMapAppData *mapApp, u16 a1, u16 a2);
 static BOOL PokegearMap_MapHasPhoneRematchOrGift(PokegearMapAppData *mapApp, int a1);
-static void PokegearMap_PrintLocationPanel(PokegearMapAppData *mapApp, BOOL a1, BOOL a2);
+static void PokegearMap_PrintLocationPanel(PokegearMapAppData *mapApp, BOOL copyToVram, BOOL a2);
 static void PokegearMap_PrintMarkingECWord(PokegearMapAppData *mapApp, u8 a1, u16 a2);
 static void PokegearMap_GetLandmarkNameFromMapID(u16 mapno, enum HeapID heapID, String *dest);
 
@@ -641,11 +641,11 @@ static BOOL PokegearMap_ShouldLocationBeHidden(PokegearMapAppData *mapApp, int m
     return FALSE;
 }
 
-BOOL PokegearMap_CanMarkLocation(PokegearMapAppData *mapApp, PokegearMapSelectedLocation *a1) {
-    if (!a1->locationSpec) {
+BOOL PokegearMap_CanMarkLocation(PokegearMapAppData *mapApp, PokegearMapSelectedLocation *location) {
+    if (!location->locationSpec) {
         return FALSE;
     }
-    if (a1->locationSpec->mapId == MAP_SINJOH_RUINS_EXTERIOR || a1->locationSpec->mapId == MAP_SS_AQUA_1F) {
+    if (location->locationSpec->mapId == MAP_SINJOH_RUINS_EXTERIOR || location->locationSpec->mapId == MAP_SS_AQUA_1F) {
         return FALSE;
     }
     return TRUE;
@@ -683,22 +683,22 @@ const PokegearMapLocationSpec *PokegearMap_GetLocationSpecByMapID(PokegearMapApp
     return NULL;
 }
 
-void PokegearMap_SelectLocationAtCoord(PokegearMapAppData *mapApp, PokegearMapSelectedLocation *a1, u8 x, u8 y) {
-    a1->locationSpec = PokegearMap_GetLocationSpecByCoord(mapApp, x, y);
+void PokegearMap_SelectLocationAtCoord(PokegearMapAppData *mapApp, PokegearMapSelectedLocation *location, u8 x, u8 y) {
+    location->locationSpec = PokegearMap_GetLocationSpecByCoord(mapApp, x, y);
     if (mapApp->mapUnlockLevel == 0) {
         // New Bark is at x=21, anything east is Kanto. Hide if haven't unlocked it yet.
         // Carve out an exception for Mt. Silver which is at (25, 10)
         if (!(x == 25 && y == 10) && x >= 22) {
-            a1->locationSpec = NULL;
+            location->locationSpec = NULL;
         }
     }
-    if (a1->locationSpec == NULL) {
-        a1->markingsNode = NULL;
+    if (location->locationSpec == NULL) {
+        location->markingsNode = NULL;
     } else {
-        a1->markingsNode = MapApp_GetMarkingsHeapNodeByMapID(mapApp, mapApp->selectedLoc.locationSpec->mapId);
+        location->markingsNode = MapApp_GetMarkingsHeapNodeByMapID(mapApp, mapApp->selectedLoc.locationSpec->mapId);
     }
-    a1->x = x;
-    a1->y = y;
+    location->x = x;
+    location->y = y;
 }
 
 BOOL PokegearMap_IsCoordInCurrentRegion(PokegearMapAppData *mapApp, u16 x, u16 y) {
@@ -746,13 +746,13 @@ int PokegearMap_GetFlyDestinationAtCoord(PokegearMapAppData *mapApp, u16 x, u16 
     return gMapFlypointParams[idx].mapIDforWarp;
 }
 
-int FlyMap_SelectLocationAtCoord(PokegearMapAppData *mapApp, PokegearMapSelectedLocation *a1, u8 x, u8 y) {
+int FlyMap_SelectLocationAtCoord(PokegearMapAppData *mapApp, PokegearMapSelectedLocation *location, u8 x, u8 y) {
     int mapID;
     int idx;
 
     idx = PokegearMap_GetFlypointIndexAtCoord(mapApp, x, y - 2);
     if (idx < 0) {
-        PokegearMap_SelectLocationAtCoord(mapApp, a1, x, y);
+        PokegearMap_SelectLocationAtCoord(mapApp, location, x, y);
         if (mapApp->flyDestination >= 0) {
             Sprite_SetAnimCtrlSeq(mapApp->objManager->objects[PGMAP_SPRITE_FLY_MENU_WARPS_BEGIN + mapApp->flyDestination].sprite, 10);
             mapApp->flyDestination = -1;
@@ -761,9 +761,9 @@ int FlyMap_SelectLocationAtCoord(PokegearMapAppData *mapApp, PokegearMapSelected
     }
 
     mapID = gMapFlypointParams[idx].mapIDforName;
-    a1->x = x;
-    a1->y = y;
-    a1->locationSpec = PokegearMap_GetLocationSpecByMapID(mapApp, mapID);
+    location->x = x;
+    location->y = y;
+    location->locationSpec = PokegearMap_GetLocationSpecByMapID(mapApp, mapID);
     if (mapApp->flyDestination != idx) {
         if (mapApp->flyDestination >= 0) {
             Sprite_SetAnimCtrlSeq(mapApp->objManager->objects[PGMAP_SPRITE_FLY_MENU_WARPS_BEGIN + mapApp->flyDestination].sprite, 10);
@@ -774,7 +774,7 @@ int FlyMap_SelectLocationAtCoord(PokegearMapAppData *mapApp, PokegearMapSelected
             mapApp->flyDestination = idx;
         }
     }
-    a1->markingsNode = MapApp_GetMarkingsHeapNodeByMapID(mapApp, mapID);
+    location->markingsNode = MapApp_GetMarkingsHeapNodeByMapID(mapApp, mapID);
     return mapID;
 }
 
@@ -802,7 +802,7 @@ static BOOL PokegearMap_MapHasPhoneRematchOrGift(PokegearMapAppData *mapApp, int
     return FALSE;
 }
 
-static void PokegearMap_PrintLocationPanel(PokegearMapAppData *mapApp, BOOL a1, int regionNo) {
+static void PokegearMap_PrintLocationPanel(PokegearMapAppData *mapApp, BOOL copyToVram, int regionNo) {
     u32 mapNameY;
     u32 i;
     u32 tilemap174blockId;
@@ -836,7 +836,7 @@ static void PokegearMap_PrintLocationPanel(PokegearMapAppData *mapApp, BOOL a1, 
             mapNameY = 0;
         }
         AddTextPrinterParameterizedWithColor(&mapApp->windows[1], 0, mapApp->mapNameString, 0, mapNameY, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
-        if (a1) {
+        if (copyToVram) {
             for (i = 0; i <= 1; ++i) {
                 CopyWindowToVram(&mapApp->windows[i]);
             }
@@ -892,9 +892,9 @@ static void PokegearMap_PrintLocationPanel(PokegearMapAppData *mapApp, BOOL a1, 
     ScheduleBgTilemapBufferTransfer(mapApp->pokegear->bgConfig, GF_BG_LYR_SUB_3);
 }
 
-void PokegearMap_UpdateLocationPanel(PokegearMapAppData *mapApp, BOOL a1) {
+void PokegearMap_UpdateLocationPanel(PokegearMapAppData *mapApp, BOOL copyToVram) {
     // Pokegear_RegionFromCoords returning 0 and 1 are considered Kanto, 2 is Johto
-    PokegearMap_PrintLocationPanel(mapApp, a1, (Pokegear_RegionFromCoords(mapApp->playerX, mapApp->playerY - 2) / 2) ^ TRUE);
+    PokegearMap_PrintLocationPanel(mapApp, copyToVram, (Pokegear_RegionFromCoords(mapApp->playerX, mapApp->playerY - 2) / 2) ^ TRUE);
 }
 
 static void PokegearMap_PrintMarkingECWord(PokegearMapAppData *mapApp, u8 index, u16 word) {
@@ -996,7 +996,7 @@ void PokegearMap_DrawMapTilemap(PokegearMapAppData *mapApp) {
     }
 }
 
-void PokegearMap_HighlightSelectedLocation(PokegearMapAppData *mapApp, u8 a1) {
+void PokegearMap_HighlightSelectedLocation(PokegearMapAppData *mapApp, u8 show) {
     int i;
     u16 destX;
     u16 destY;
@@ -1006,7 +1006,7 @@ void PokegearMap_HighlightSelectedLocation(PokegearMapAppData *mapApp, u8 a1) {
         return;
     }
 
-    if (a1 == 0 || mapApp->selectedLoc.locationSpec == NULL) {
+    if (show == 0 || mapApp->selectedLoc.locationSpec == NULL) {
         BgClearTilemapBufferAndCommit(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_2);
         ScheduleBgTilemapBufferTransfer(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_2);
         mapApp->lastSelectedMapID = MAP_EVERYWHERE;

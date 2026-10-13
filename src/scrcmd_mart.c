@@ -486,7 +486,7 @@ BOOL ScrCmd_772(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_834(ScriptContext *ctx) {
-    u16 *sp0;
+    u16 *retPtr;
     PokeathlonSave *pokeathlon;
     SaveVarsFlags *varsFlags;
     int r6;
@@ -495,7 +495,7 @@ BOOL ScrCmd_834(ScriptContext *ctx) {
     const struct MartItem *r3;
     int i;
 
-    sp0 = ScriptGetVarPointer(ctx);
+    retPtr = ScriptGetVarPointer(ctx);
     pokeathlon = Save_Pokeathlon_Get(ctx->fieldSystem->saveData);
     r6 = 0;
     r4 = 0;
@@ -518,9 +518,9 @@ BOOL ScrCmd_834(ScriptContext *ctx) {
         }
     }
     if (r6 <= r4) {
-        *sp0 = FALSE;
+        *retPtr = FALSE;
     } else {
-        *sp0 = TRUE;
+        *retPtr = TRUE;
     }
     return FALSE;
 }

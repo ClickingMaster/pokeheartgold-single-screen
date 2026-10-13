@@ -6,7 +6,7 @@
 #include "screen_fade.h"
 #include "system.h"
 
-u8 StepNumberWithWrap(s16 *a0, u16 a1, s16 a2);
+u8 StepNumberWithWrap(s16 *value, u16 max, s16 step);
 
 static const u16 sOamCharSizes[] = {
     0x20,
@@ -57,50 +57,50 @@ u8 CalculateHpBarColor(u16 hp, u16 maxHp, u32 pixelsWide) {
     return HpBar_GetColorIdx(CalculateHpBarPixelsLength(hp, maxHp, pixelsWide), pixelsWide);
 }
 
-void BeginAppScreenFade(u8 a0, enum HeapID heapID) {
-    if (a0 == 0) {
+void BeginAppScreenFade(u8 fadeOut, enum HeapID heapID) {
+    if (fadeOut == 0) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, heapID);
     } else {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_UNK_8, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, heapID);
     }
 }
 
-u8 StepNumberWithWrap(s16 *a0, u16 a1, s16 a2) {
-    s16 prev = *a0;
-    switch (a2) {
+u8 StepNumberWithWrap(s16 *value, u16 max, s16 step) {
+    s16 prev = *value;
+    switch (step) {
     case -1:
-        --(*a0);
-        if (*a0 <= 0) {
-            *a0 = a1;
+        --(*value);
+        if (*value <= 0) {
+            *value = max;
         }
-        if (*a0 == prev) {
+        if (*value == prev) {
             return 0;
         }
         return 2;
     case -10:
-        *a0 -= 10;
-        if (*a0 <= 0) {
-            *a0 = 1;
+        *value -= 10;
+        if (*value <= 0) {
+            *value = 1;
         }
-        if (*a0 == prev) {
+        if (*value == prev) {
             return 0;
         }
         return 2;
     case 1:
-        ++(*a0);
-        if (*a0 > a1) {
-            *a0 = 1;
+        ++(*value);
+        if (*value > max) {
+            *value = 1;
         }
-        if (*a0 == prev) {
+        if (*value == prev) {
             return 0;
         }
         return 1;
     case 10:
-        *a0 += 10;
-        if (*a0 > a1) {
-            *a0 = a1;
+        *value += 10;
+        if (*value > max) {
+            *value = max;
         }
-        if (*a0 == prev) {
+        if (*value == prev) {
             return 0;
         }
         return 1;
@@ -109,18 +109,18 @@ u8 StepNumberWithWrap(s16 *a0, u16 a1, s16 a2) {
     return 0;
 }
 
-int HandleNumberSelectInput(s16 *a0, u16 a1) {
+int HandleNumberSelectInput(s16 *value, u16 max) {
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
-        return StepNumberWithWrap(a0, a1, 1);
+        return StepNumberWithWrap(value, max, 1);
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
-        return StepNumberWithWrap(a0, a1, -1);
+        return StepNumberWithWrap(value, max, -1);
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_LEFT) {
-        return StepNumberWithWrap(a0, a1, -10);
+        return StepNumberWithWrap(value, max, -10);
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_RIGHT) {
-        return StepNumberWithWrap(a0, a1, 10);
+        return StepNumberWithWrap(value, max, 10);
     }
     return 0;
 }

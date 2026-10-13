@@ -648,7 +648,7 @@ SysTask *VsRecorder_StartFlipScreens(VsRecorderWork *work, int flipped);
 u32 VsRecorder_IsFlipScreensDone(VsRecorderWork *work);
 void VsRecorder_VBlankTask(SysTask *task, void *data);
 void VsRecorder_StartVBlankTask(VsRecorderWork *work);
-BOOL VsRecorder_StepRecordSave(VsRecorderWork *work, u32 a1, u32 a2); // TRUE when done
+BOOL VsRecorder_StepRecordSave(VsRecorderWork *work, u32 index, u32 sealed); // TRUE when done
 void VsRecorder_SetBattleResult(VsRecorderWork *work, u32 result);
 void VsRecorder_OnVideoListReceived(VsRecorderWork *work, int *state);
 void VsRecorder_LoadSavedVideos(VsRecorderWork *work);

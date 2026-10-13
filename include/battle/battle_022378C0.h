@@ -31,7 +31,7 @@ void BattleSystem_SetupTextFlags(BattleSystem *battleSystem);
 // src/battle/battle_022378C0.c, src/battle/battle_main.c
 void BgConfig_CleanupBattleBackgrounds(BgConfig *config);
 void BattleSystem_FreeGraphicsDummy(BattleSystem *battleSystem);
-void BattleSystem_SetTrainerAIOverlayLoaded(BattleSystem *battleSystem, int a1);
+void BattleSystem_SetTrainerAIOverlayLoaded(BattleSystem *battleSystem, int loaded);
 void Battle_InitBackgrounds(BattleSystem *battleSystem, BgConfig *bgConfig);
 void BattleSystem_InitTerrainsAndBalls(BattleSystem *battleSystem);
 

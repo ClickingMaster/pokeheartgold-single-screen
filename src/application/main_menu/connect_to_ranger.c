@@ -114,7 +114,7 @@ extern const GraphicsModes _0223B330;
 extern const GraphicsBanks _0223B340;
 
 extern void CommWireless_Terminate(void);
-extern void WirelessStatusIcon_SetLevel(int a0);
+extern void WirelessStatusIcon_SetLevel(int level);
 
 // Wireless link with Pokemon Ranger (link_status part of this overlay)
 

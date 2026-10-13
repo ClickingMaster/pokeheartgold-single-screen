@@ -3,7 +3,7 @@
 #include "map_object.h"
 #include "overlay_26.h"
 
-static LocalMapObject *FindDoubleBattlePartner(FieldSystem *fieldSystem, LocalMapObject *a1, BOOL a2);
+static LocalMapObject *FindDoubleBattlePartner(FieldSystem *fieldSystem, LocalMapObject *talkedObj, BOOL a2);
 
 static void ChangeTrainerMovement(LocalMapObject *last_talked, u16 movement) {
     MapObject_ChangeMovement(last_talked, movement);
@@ -34,9 +34,9 @@ void SetTalkedTrainerMovement(FieldSystem *fieldSystem, LocalMapObject *last_tal
     ChangeTrainerMovement(last_talked, movement);
 }
 
-static LocalMapObject *FindDoubleBattlePartner(FieldSystem *fieldSystem, LocalMapObject *a1, BOOL a2) {
+static LocalMapObject *FindDoubleBattlePartner(FieldSystem *fieldSystem, LocalMapObject *talkedObj, BOOL a2) {
     u32 num_events = Field_GetNumObjectEvents(fieldSystem);
-    u16 script = MapObject_GetScriptID(a1);
+    u16 script = MapObject_GetScriptID(talkedObj);
     u32 trainer = ScriptNumToTrainerNum(script);
 
     if (!TrainerNumIsDouble(trainer)) {

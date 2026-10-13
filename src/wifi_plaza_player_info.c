@@ -15,7 +15,7 @@ typedef struct WiFiPlazaPlayerInfo {
     u8 filler_1F[5];
 } WiFiPlazaPlayerInfo;
 
-BOOL WifiConnection_SetOwnStatusData(void *arg0, s32 arg1);
+BOOL WifiConnection_SetOwnStatusData(void *data, s32 size);
 WiFiPlazaPlayerInfo *WiFiPlazaPlayerInfo_New(PlayerProfile *profile, enum HeapID heapId);
 void WiFiPlazaPlayerInfo_Free(void *ptr);
 

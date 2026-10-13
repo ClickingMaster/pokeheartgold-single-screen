@@ -51,8 +51,8 @@ typedef struct BugContestSwapMonWork {
 
 static BOOL Task_PushIceBlock(TaskManager *taskManager);
 static LocalMapObject *IceBlock_GetFacingBlock(LocalMapObject *object);
-static LocalMapObject *IceBlock_FindObjectAt(MapObjectManager *a0, u32 x, u32 a2, u32 y);
-static u32 IceBlock_UpdateSlide(IceBlockPushWork *a0);
+static LocalMapObject *IceBlock_FindObjectAt(MapObjectManager *manager, u32 x, u32 height, u32 y);
+static u32 IceBlock_UpdateSlide(IceBlockPushWork *work);
 static u32 IceBlock_GetBlockedFlags(LocalMapObject *object, u32 x, u32 height, u32 y);
 static u32 GetStepMovementForDirection(u32 direction);
 static void IceBlock_EndPlayerForcedMovement(PlayerAvatar *playerAvatar);
@@ -133,7 +133,7 @@ static LocalMapObject *IceBlock_GetFacingBlock(LocalMapObject *object) {
     return NULL;
 }
 
-static LocalMapObject *IceBlock_FindObjectAt(MapObjectManager *manager, u32 x, u32 a2, u32 y) {
+static LocalMapObject *IceBlock_FindObjectAt(MapObjectManager *manager, u32 x, u32 height, u32 y) {
     LocalMapObject *object = MapObjectManager_GetObjects(manager);
     u32 count = MapObjectManager_GetObjectCount(manager);
     do {
@@ -142,7 +142,7 @@ static LocalMapObject *IceBlock_FindObjectAt(MapObjectManager *manager, u32 x, u
             u32 curX = MapObject_GetXCoord(object);
             u32 curZ = MapObject_GetZCoord(object);
             if (curX == x && curZ == y) {
-                s32 y = MapObject_GetYCoord(object) - a2;
+                s32 y = MapObject_GetYCoord(object) - height;
                 if (y < 0) {
                     y = -y;
                 }
@@ -156,60 +156,60 @@ static LocalMapObject *IceBlock_FindObjectAt(MapObjectManager *manager, u32 x, u
     return NULL;
 }
 
-static u32 IceBlock_UpdateSlide(IceBlockPushWork *a0) {
-    switch (a0->slideState) {
+static u32 IceBlock_UpdateSlide(IceBlockPushWork *work) {
+    switch (work->slideState) {
     case 0:
-        if (MapObject_IsMovementPaused(a0->block)) {
-            u32 x = MapObject_GetXCoord(a0->block);
-            u32 dx = GetDeltaXByFacingDirection(a0->direction);
-            u32 y = MapObject_GetYCoord(a0->block);
-            u32 z = MapObject_GetZCoord(a0->block);
-            u32 dy = GetDeltaYByFacingDirection(a0->direction);
-            u32 flags = IceBlock_GetBlockedFlags(a0->block, x + dx, y, z + dy);
+        if (MapObject_IsMovementPaused(work->block)) {
+            u32 x = MapObject_GetXCoord(work->block);
+            u32 dx = GetDeltaXByFacingDirection(work->direction);
+            u32 y = MapObject_GetYCoord(work->block);
+            u32 z = MapObject_GetZCoord(work->block);
+            u32 dy = GetDeltaYByFacingDirection(work->direction);
+            u32 flags = IceBlock_GetBlockedFlags(work->block, x + dx, y, z + dy);
             if (flags & 2) {
-                MapObjectManager *manager = MapObject_GetManager(a0->block);
+                MapObjectManager *manager = MapObject_GetManager(work->block);
                 LocalMapObject *object = IceBlock_FindObjectAt(manager, x + dx, y, z + dy);
                 if (!object) {
                     GF_ASSERT(FALSE);
                     return TRUE;
                 }
                 if (MapObject_GetSpriteID(object) == SPRITE_ICE) {
-                    a0->hitBlock = object;
-                    MapObject_SetHeldMovement(a0->block, MOVEMENT_UNK_72);
-                    a0->slideState = 2;
+                    work->hitBlock = object;
+                    MapObject_SetHeldMovement(work->block, MOVEMENT_UNK_72);
+                    work->slideState = 2;
                 } else {
-                    a0->hitBlock = NULL;
-                    MapObject_SetHeldMovement(a0->block, MOVEMENT_UNK_72);
-                    a0->slideState = 2;
+                    work->hitBlock = NULL;
+                    MapObject_SetHeldMovement(work->block, MOVEMENT_UNK_72);
+                    work->slideState = 2;
                 }
             } else {
                 if (flags & 1 || flags & 4) {
                     return TRUE;
                 }
-                MapObject_SetHeldMovement(a0->block, MOVEMENT_UNK_71);
-                a0->slideState = 1;
+                MapObject_SetHeldMovement(work->block, MOVEMENT_UNK_71);
+                work->slideState = 1;
             }
         }
         break;
     case 1:
-        if (MapObject_IsMovementPaused(a0->block)) {
-            u32 movement = GetStepMovementForDirection(a0->direction);
+        if (MapObject_IsMovementPaused(work->block)) {
+            u32 movement = GetStepMovementForDirection(work->direction);
             if (movement != MOVEMENT_NONE) {
-                MapObject_SetHeldMovement(a0->block, movement);
+                MapObject_SetHeldMovement(work->block, movement);
             } else {
                 GF_ASSERT(FALSE);
                 return TRUE;
             }
-            a0->slideState = 0;
+            work->slideState = 0;
         }
         break;
     case 2:
-        if (MapObject_IsMovementPaused(a0->block)) {
+        if (MapObject_IsMovementPaused(work->block)) {
             PlaySE(SEQ_SE_GS_HYOUKAI_KETUGOU);
-            if (a0->hitBlock) {
-                MapObject_SetHeldMovement(a0->hitBlock, MOVEMENT_FACE_UP);
+            if (work->hitBlock) {
+                MapObject_SetHeldMovement(work->hitBlock, MOVEMENT_FACE_UP);
             }
-            MapObject_SetHeldMovement(a0->block, MOVEMENT_FACE_UP);
+            MapObject_SetHeldMovement(work->block, MOVEMENT_FACE_UP);
             return TRUE;
         }
         break;

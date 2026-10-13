@@ -35,12 +35,12 @@ u32 BagView_sizeof(void) {
     return sizeof(BagView);
 }
 
-void BagView_SetMode(BagView *bagView, u8 a1) {
-    bagView->mode = a1;
+void BagView_SetMode(BagView *bagView, u8 mode) {
+    bagView->mode = mode;
 }
 
-void BagView_Init(BagView *bagView, SaveData *save, u8 a2, BagCursor *cursor, MenuInputStateMgr *menuInputStateMgr) {
-    BagView_SetMode(bagView, a2);
+void BagView_Init(BagView *bagView, SaveData *save, u8 mode, BagCursor *cursor, MenuInputStateMgr *menuInputStateMgr) {
+    BagView_SetMode(bagView, mode);
     bagView->saveData = save;
     bagView->menuInputStateMgr = menuInputStateMgr;
     bagView->cursor = cursor;
@@ -65,12 +65,12 @@ void BagView_SetItemCheckUseData(BagView *bagView, ItemCheckUseData *checkUseDat
     bagView->checkUseData = checkUseData;
 }
 
-void BagView_SetPartySlot(BagView *bagView, u8 a1) {
-    bagView->partySlot = a1;
+void BagView_SetPartySlot(BagView *bagView, u8 partySlot) {
+    bagView->partySlot = partySlot;
 }
 
-void BagView_SetMapLoadType(BagView *bagView, u16 a1) {
-    bagView->mapLoadType = a1;
+void BagView_SetMapLoadType(BagView *bagView, u16 mapLoadType) {
+    bagView->mapLoadType = mapLoadType;
 }
 
 u16 BagView_GetItemId(BagView *bagView) {

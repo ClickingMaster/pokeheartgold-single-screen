@@ -50,7 +50,7 @@ u32 GetMonGender(void *mon);
 u32 MonIsShiny(void *mon);
 void GetMonSpriteCharAndPlttNarcIdsEx(void *template, u16 species, u8 gender, int whichFacing, u8 shiny, u8 form, int personality);
 u32 GetMonData(void *mon, int field, void *dest);
-void CharTiles_LoadMonObjBlocksFromNarc(u16 narcId, u16 charId, enum HeapID heapId, int x, int y, int width, int height, void *dest, u32 personality, int a9, int whichFacing, int species);
+void CharTiles_LoadMonObjBlocksFromNarc(u16 narcId, u16 charId, enum HeapID heapId, int x, int y, int width, int height, void *dest, u32 personality, int isAnimated, int whichFacing, int species);
 u32 GetItemIndexMapping(u16 itemId, int attr);
 u32 GetItemIconCell(u32 plttId);
 u32 GetItemIconAnim(u32 cell);

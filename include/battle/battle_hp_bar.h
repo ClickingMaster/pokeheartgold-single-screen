@@ -14,10 +14,10 @@ int BattleHpBar_UpdateExpChange(BattleHpBar *hpBar);
 void BattleHpBar_StartActiveEffect(BattleHpBar *hpBar);
 void BattleHpBar_StopActiveEffect(BattleHpBar *hpBar);
 void BattleHpBar_SetPriority(BattleHpBar *hpBar, int prio);
-void BattleHpBar_SetEnabled(BattleHpBar *hpBar, BOOL a1);
-void BattleHpBar_StartSlide(BattleHpBar *hpBar, BOOL a1);
+void BattleHpBar_SetEnabled(BattleHpBar *hpBar, BOOL enabled);
+void BattleHpBar_StartSlide(BattleHpBar *hpBar, BOOL slideOut);
 u8 BattleHpBar_Util_GetBarTypeFromBattlerSide(u8 a0, u32 battleType);
-SysTask *BattleHpBar_BeginExpBarFullFlashEffect(BattleHpBar *hpBar, u8 *a1);
+SysTask *BattleHpBar_BeginExpBarFullFlashEffect(BattleHpBar *hpBar, u8 *doneFlag);
 void BattleHpBar_MenuOpenDummy(BattleHpBar *hpBar);
 void BattleHpBar_MenuCloseDummy(BattleHpBar *hpBar);
 

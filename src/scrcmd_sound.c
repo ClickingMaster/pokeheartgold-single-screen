@@ -12,9 +12,9 @@ BOOL ScrNative_WaitCry(ScriptContext *ctx);
 BOOL ScrNative_WaitFanfare(ScriptContext *ctx);
 
 BOOL ScrCmd_575(ScriptContext *ctx) {
-    u16 var0 = ScriptReadHalfword(ctx);
+    u16 seqNo = ScriptReadHalfword(ctx);
     u16 *retPtr = ScriptGetVarPointer(ctx);
-    *retPtr = GF_SndCountPlayingSeqBySeqNo(var0);
+    *retPtr = GF_SndCountPlayingSeqBySeqNo(seqNo);
     return FALSE;
 }
 
@@ -60,28 +60,28 @@ BOOL ScrNative_GetFadeTimer(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_FadeInBGM(ScriptContext *ctx) {
-    u16 var0 = ScriptReadHalfword(ctx);
-    GF_SndStartFadeInBGM(0x7f, var0, 0);
+    u16 frames = ScriptReadHalfword(ctx);
+    GF_SndStartFadeInBGM(0x7f, frames, 0);
     SetupNativeScript(ctx, ScrNative_GetFadeTimer);
     return TRUE;
 }
 
 BOOL ScrCmd_086(ScriptContext *ctx) {
-    u8 var0 = ScriptReadByte(ctx);
-    u8 var1 = ScriptReadByte(ctx);
-    Sound_SetPlayerPause(var0, var1);
+    u8 playerNo = ScriptReadByte(ctx);
+    u8 paused = ScriptReadByte(ctx);
+    Sound_SetPlayerPause(playerNo, paused);
     return FALSE;
 }
 
 BOOL ScrCmd_TempBGM(ScriptContext *ctx) {
-    u16 var0 = ScriptReadHalfword(ctx);
-    PlayBGMOnBGMPlayerInField(var0);
+    u16 seqNo = ScriptReadHalfword(ctx);
+    PlayBGMOnBGMPlayerInField(seqNo);
     return FALSE;
 }
 
 BOOL ScrCmd_088(ScriptContext *ctx) {
-    u8 var0 = ScriptReadByte(ctx);
-    GF_SND_BGM_DisableSet(var0);
+    u8 disabled = ScriptReadByte(ctx);
+    GF_SND_BGM_DisableSet(disabled);
     return FALSE;
 }
 
@@ -113,9 +113,9 @@ BOOL ScrNative_SEPlaying(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_PlayCry(ScriptContext *ctx) {
-    u16 var0 = ScriptGetVar(ctx);
-    u16 var1 = ScriptGetVar(ctx);
-    PlayCryEx(var1, var0, 0, 100, 0x20, 0);
+    u16 species = ScriptGetVar(ctx);
+    u16 pattern = ScriptGetVar(ctx);
+    PlayCryEx(pattern, species, 0, 100, 0x20, 0);
     return FALSE;
 }
 
@@ -133,8 +133,8 @@ BOOL ScrNative_WaitCry(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_PlayFanfare(ScriptContext *ctx) {
-    u16 var0 = ScriptGetVar(ctx);
-    PlayFanfare(var0);
+    u16 seqNo = ScriptGetVar(ctx);
+    PlayFanfare(seqNo);
     return FALSE;
 }
 
@@ -192,9 +192,9 @@ BOOL ScrCmd_093(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_544(ScriptContext *ctx) {
-    u16 var0 = ScriptGetVar(ctx);
-    u16 var1 = ScriptGetVar(ctx);
-    GF_SetVolumeBySeqNo(var0, var1);
+    u16 seqNo = ScriptGetVar(ctx);
+    u16 volume = ScriptGetVar(ctx);
+    GF_SetVolumeBySeqNo(seqNo, volume);
     return FALSE;
 }
 
@@ -203,8 +203,8 @@ BOOL ScrCmd_664(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_665(ScriptContext *ctx) {
-    u16 var0 = ScriptGetVar(ctx);
-    FieldBGM_Play(ctx->fieldSystem, var0);
+    u16 seqNo = ScriptGetVar(ctx);
+    FieldBGM_Play(ctx->fieldSystem, seqNo);
     return TRUE;
 }
 

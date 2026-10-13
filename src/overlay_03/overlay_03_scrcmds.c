@@ -47,8 +47,8 @@ BOOL ScrCmd_720(ScriptContext *ctx) {
 
     u32 areaID;
     SafariZoneAreaSet *areaSet;
-    u16 *sp8;
-    u8 *sp4;
+    u16 *permissions;
+    u8 *permissionBytes;
 
     u16 safariObjectID = FieldSystem_VarGet(ctx->fieldSystem, ScriptReadHalfword(ctx));
     u32 facingDirection = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
@@ -62,12 +62,12 @@ BOOL ScrCmd_720(ScriptContext *ctx) {
     areaID = areaX / 32 + (areaY / 32 * 3);
 
     areaSet = SafariZone_GetAreaSet(Save_SafariZone_Get(fieldSystem->saveData), 0);
-    u32 temp_r0 = MapLoadManager_GetCurrentMapSlot(fieldSystem->mapLoadManager);
+    u32 mapSlot = MapLoadManager_GetCurrentMapSlot(fieldSystem->mapLoadManager);
 
     MapPropManager *mapPropManager;
-    MapLoadManager_GetMapPropManager((u8)temp_r0, fieldSystem->mapLoadManager, &mapPropManager);
-    sp8 = MapLoadManager_GetPermissions(fieldSystem->mapLoadManager, (u8)temp_r0);
-    sp4 = MapLoadManager_GetPermissionBytes(fieldSystem->mapLoadManager, (u8)temp_r0);
+    MapLoadManager_GetMapPropManager((u8)mapSlot, fieldSystem->mapLoadManager, &mapPropManager);
+    permissions = MapLoadManager_GetPermissions(fieldSystem->mapLoadManager, (u8)mapSlot);
+    permissionBytes = MapLoadManager_GetPermissionBytes(fieldSystem->mapLoadManager, (u8)mapSlot);
 
     SAFARIZONE_OBJECT *safariObject = &areaSet->areas[areaID].objects[safariObjectID];
 
@@ -76,7 +76,7 @@ BOOL ScrCmd_720(ScriptContext *ctx) {
 
     for (int unkHeightCounter = safariObject->z; unkHeightCounter > safariObject->z - objectConfig.height; unkHeightCounter--) {
         for (int unkWidthCounter = safariObject->x; unkWidthCounter < safariObject->x + objectConfig.width; unkWidthCounter++) {
-            sp8[unkWidthCounter + unkHeightCounter * 32] = sp4[unkWidthCounter + unkHeightCounter * 32];
+            permissions[unkWidthCounter + unkHeightCounter * 32] = permissionBytes[unkWidthCounter + unkHeightCounter * 32];
         }
     }
 

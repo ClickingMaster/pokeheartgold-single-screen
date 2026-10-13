@@ -202,12 +202,12 @@ static BOOL Task_UseItemInAlphChamber(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     struct AlphItemUseData *env = TaskManager_GetEnvironment(taskManager);
     u32 *state_p = TaskManager_GetStatePtr(taskManager);
-    LocalMapObject *sp0;
+    LocalMapObject *facingObject;
 
     switch (*state_p) {
     case 0:
-        FieldSystem_GetFacingObject(fieldSystem, &sp0);
-        QueueScript(taskManager, env->scriptNo, sp0, NULL);
+        FieldSystem_GetFacingObject(fieldSystem, &facingObject);
+        QueueScript(taskManager, env->scriptNo, facingObject, NULL);
         *(u16 *)FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_SPECIAL_VAR_8000) = env->var_8000;
         *(u16 *)FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_SPECIAL_VAR_8001) = env->var_8001;
         *(u16 *)FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_SPECIAL_VAR_8002) = env->var_8002;

@@ -49,6 +49,6 @@ u64 GetTimer3Ticks(void) {
     return Timer3_GetTicks();
 }
 
-u64 Timer3TicksToSeconds(u64 a0) {
-    return (a0 * 64) / OS_SYSTEM_CLOCK;
+u64 Timer3TicksToSeconds(u64 ticks) {
+    return (ticks * 64) / OS_SYSTEM_CLOCK;
 }

@@ -245,19 +245,19 @@ void PokemonSummary_InitConditionChart(PokemonSummaryScene *summary) {
 }
 
 void PokemonSummary_CreatePokepic(PokemonSummaryScene *a) {
-    u32 sp10[4];
+    u32 pokepicTemplate[4];
     int species;
 
     a->pokepicManager = PokepicManager_Create(0x13);
     species = PokemonSummary_GetShownMon(a);
     if (((struct UnkStruct22C *)a->args)->monDataType == 2) {
-        GetBoxmonSpriteCharAndPlttNarcIds(sp10, species, 2, 0);
+        GetBoxmonSpriteCharAndPlttNarcIds(pokepicTemplate, species, 2, 0);
     } else {
-        GetPokemonSpriteCharAndPlttNarcIds(sp10, species, 2);
+        GetPokemonSpriteCharAndPlttNarcIds(pokepicTemplate, species, 2);
     }
     NARC_ReadPokepicAnimScript(a->pokepicAnimNarc, a->pokepicAnimScript, a->species, 1);
     a->unk_2D4 = 0;
-    a->pokepic = PokepicManager_CreatePokepic(a->pokepicManager, sp10, 0xd0, 0x68, 0, 0, a->pokepicAnimScript, 0);
+    a->pokepic = PokepicManager_CreatePokepic(a->pokepicManager, pokepicTemplate, 0xd0, 0x68, 0, 0, a->pokepicAnimScript, 0);
     Pokepic_SetAttr(a->pokepic, 6, 1);
     Pokepic_SetAttr(a->pokepic, 0x23, 0);
 }

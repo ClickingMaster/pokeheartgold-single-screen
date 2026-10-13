@@ -306,8 +306,8 @@ void VsRecorder_StartVBlankTask(VsRecorderWork *work) {
     work->task = SysTask_CreateOnVBlankQueue(VsRecorder_VBlankTask, work, 5);
 }
 
-BOOL VsRecorder_StepRecordSave(VsRecorderWork *work, u32 a1, u32 a2) {
-    u32 result = VsRecorder_WriteRecordAsync(work->saveData, a1, a2, &work->recordWriteStep, &work->recordWriteState);
+BOOL VsRecorder_StepRecordSave(VsRecorderWork *work, u32 index, u32 sealed) {
+    u32 result = VsRecorder_WriteRecordAsync(work->saveData, index, sealed, &work->recordWriteStep, &work->recordWriteState);
     return result > 1;
 }
 

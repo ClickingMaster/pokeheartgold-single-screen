@@ -25,13 +25,13 @@ BOOL ScrCmd_MomGiftCheck(ScriptContext *ctx) {
 
 BOOL ScrCmd_PalParkAction(ScriptContext *ctx) {
     SaveVarsFlags *script = Save_VarsFlags_Get(ctx->fieldSystem->saveData);
-    u16 var0 = ScriptGetVar(ctx);
-    if (var0 == 2) {
+    u16 action = ScriptGetVar(ctx);
+    if (action == 2) {
         Save_VarsFlags_SetPalParkSysFlag(script);
         CatchingShow_ClearState(ctx->fieldSystem);
-    } else if (var0 == 0) {
+    } else if (action == 0) {
         CatchingShow_Start(ctx->fieldSystem);
-    } else if (var0 == 1) {
+    } else if (action == 1) {
         Save_VarsFlags_ClearPalParkSysFlag(script);
         CatchingShow_End(ctx->fieldSystem);
     } else {
@@ -76,10 +76,10 @@ BOOL ScrCmd_510(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_PalParkScoreGet(ScriptContext *ctx) {
-    u16 var0 = ScriptGetVar(ctx);
+    u16 scoreKind = ScriptGetVar(ctx);
     u16 *retPtr = ScriptGetVarPointer(ctx);
 
-    switch (var0) {
+    switch (scoreKind) {
     case 0:
         *retPtr = CatchingShow_CalcCatchingPoints(ctx->fieldSystem);
         break;

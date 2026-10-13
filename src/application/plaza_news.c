@@ -132,7 +132,7 @@ typedef struct PlazaNewsWork {
 // Lobby (overlay 45) interface.
 int WiFiPlazaWork_IsClosing(void *lobby);
 void ov45_0222A4A8(void *lobby);
-void WiFiPlazaWork_SetLowVolume(void *lobby, int a1);
+void WiFiPlazaWork_SetLowVolume(void *lobby, int value);
 int WiFiPlazaWork_IsSpecialVisitor(void *lobby, int index);
 void WiFiPlazaWork_GetSpecialVisitors(void *lobby, void *out);
 u32 WiFiPlazaWork_GetOpenDuration(void *lobby);
@@ -177,9 +177,9 @@ void PlazaNewsTileset_Load(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphic
 void PlazaNewsTileset_Free(PlazaNewsTileset *tileset);
 void PlazaNewsClock_DrawCell(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, u32 tile, u8 col, u8 row);
 void PlazaNewsPeople_DrawIcon(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, u32 col, u32 row, u32 tile, u32 altRow, u32 usePalette3, u32 altPage, u32 usePalette4);
-void PlazaNewsClock_Init(PlazaNewsClock *clock, PlazaNewsGraphics *graphics, PlazaNewsTileset *tileset, void *newsData, const PlazaNewsTime *a4, void *lobby, enum HeapID heapID);
+void PlazaNewsClock_Init(PlazaNewsClock *clock, PlazaNewsGraphics *graphics, PlazaNewsTileset *tileset, void *newsData, const PlazaNewsTime *endTime, void *lobby, enum HeapID heapID);
 void PlazaNewsClock_Free(PlazaNewsClock *clock);
-BOOL PlazaNewsClock_UpdateTime(PlazaNewsClock *clock, void *newsData, const PlazaNewsTime *a2);
+BOOL PlazaNewsClock_UpdateTime(PlazaNewsClock *clock, void *newsData, const PlazaNewsTime *endTime);
 void PlazaNewsClock_Draw(PlazaNewsClock *clock, PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics);
 void PlazaNewsClock_DrawWaiting(PlazaNewsClock *clock, PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics);
 void PlazaNewsClock_DrawGauge(PlazaNewsClock *clock, PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics);
@@ -439,7 +439,7 @@ void PlazaNewsPeople_DrawIcon(PlazaNewsTileset *tileset, PlazaNewsGraphics *grap
     ScheduleBgTilemapBufferTransfer(graphics->bgConfig, 3);
 }
 
-void PlazaNewsClock_Init(PlazaNewsClock *clock, PlazaNewsGraphics *graphics, PlazaNewsTileset *tileset, void *newsData, const PlazaNewsTime *a4, void *lobby, enum HeapID heapID) {
+void PlazaNewsClock_Init(PlazaNewsClock *clock, PlazaNewsGraphics *graphics, PlazaNewsTileset *tileset, void *newsData, const PlazaNewsTime *endTime, void *lobby, enum HeapID heapID) {
     u32 seconds = WiFiPlazaWork_GetOpenDuration(lobby);
     clock->time.hms.hour = 0;
     clock->time.hms.minute = seconds / 60 + 1;
@@ -448,7 +448,7 @@ void PlazaNewsClock_Init(PlazaNewsClock *clock, PlazaNewsGraphics *graphics, Pla
     clock->isWaiting = TRUE;
     clock->blinkTimer = 0;
     clock->needsRedraw = FALSE;
-    PlazaNewsClock_UpdateTime(clock, newsData, a4);
+    PlazaNewsClock_UpdateTime(clock, newsData, endTime);
     PlazaNewsClock_Draw(clock, tileset, graphics);
 }
 
@@ -456,7 +456,7 @@ void PlazaNewsClock_Free(PlazaNewsClock *clock) {
 }
 
 #pragma force_active on
-BOOL PlazaNewsClock_UpdateTime(PlazaNewsClock *clock, void *newsData, const PlazaNewsTime *a2) {
+BOOL PlazaNewsClock_UpdateTime(PlazaNewsClock *clock, void *newsData, const PlazaNewsTime *endTime) {
     PlazaNewsTime now;
     PlazaNewsTime remaining;
     PlazaNewsTime diff;
@@ -469,7 +469,7 @@ BOOL PlazaNewsClock_UpdateTime(PlazaNewsClock *clock, void *newsData, const Plaz
         changed = TRUE;
         clock->needsRedraw = changed;
     }
-    WiFiPlazaTime_Subtract(a2, &now, &remaining);
+    WiFiPlazaTime_Subtract(endTime, &now, &remaining);
     WiFiPlazaTime_Subtract(&remaining, &clock->time, &diff);
     if (diff.hms.second >= clock->secondsPerCell || diff.hms.minute != 0 || diff.hms.hour != 0) {
         changed = TRUE;

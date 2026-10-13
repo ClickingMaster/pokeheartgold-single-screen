@@ -81,7 +81,7 @@ struct WiFiPlazaObjManager {
     WiFiPlazaObj *special;             // 0x24 object spawned on map tag 97
 };
 
-WiFiPlazaObjManager *WiFiPlazaObj_CreateManager(u32 count, u32 unk_0E, WiFiPlazaMap *map, enum HeapID heapID, u32 arg4);
+WiFiPlazaObjManager *WiFiPlazaObj_CreateManager(u32 count, u32 mode, WiFiPlazaMap *map, enum HeapID heapID, u32 loadHeapID);
 void WiFiPlazaObj_DeleteManager(WiFiPlazaObjManager *manager);
 void ov49_02258B44(WiFiPlazaObjManager *manager);
 void WiFiPlazaObj_UpdateManager(WiFiPlazaObjManager *manager);

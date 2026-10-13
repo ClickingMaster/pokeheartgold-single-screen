@@ -1281,10 +1281,10 @@ void PCBox_LoadWallpaperTilemap(PCBoxWork *work, s32 unused, u32 tile, u32 adden
     FillBgTilemapRect(work->view->bgConfig, 3, 0x1001, x, 0, 2, 0x14, 0x11);
 }
 
-void PCBox_LoadWallpaper(PCBoxWork *work, s32 member, u32 a2, u32 a3, u32 a4) {
+void PCBox_LoadWallpaper(PCBoxWork *work, s32 member, u32 a2, u32 a3, u32 palette) {
     PCBox_LoadWallpaperChars(work, member, a2, a3);
-    PCBox_LoadWallpaperPalette(work, member, a4);
-    PCBox_LoadWallpaperTilemap(work, member, a2, a3, a4);
+    PCBox_LoadWallpaperPalette(work, member, palette);
+    PCBox_LoadWallpaperTilemap(work, member, a2, a3, palette);
     ScheduleBgTilemapBufferTransfer(work->view->bgConfig, 3);
 }
 

@@ -64,14 +64,14 @@ void BattleController_EmitTrainerSlideIn(BattleSystem *battleSystem, int battler
 void BattleController_EmitBackgroundSlideIn(BattleSystem *battleSystem, int battlerId);
 void BattleController_EmitHealthbarSlideIn(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u32 delay);
 void BattleController_EmitHealthbarSlideOut(BattleSystem *battleSystem, int battlerId);
-void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u32 a3, u32 a4, u32 a5);
-void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext *ctx, int a2, int a3, int a4, int a5, int a6);
+void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u32 a3, u32 canSwitch, u32 a5);
+void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext *ctx, int a2, int msgId, int a4, int a5, int a6);
 void BattleController_EmitShowWaitMessage(BattleSystem *battleSystem, int battlerId);
 void BattleController_EmitPrintAttackMessage(BattleSystem *battleSystem, BattleContext *ctx);
 void BattleController_EmitPrintMessage(BattleSystem *battleSystem, BattleContext *ctx, BattleMessage *msg);
 void BattleController_SetMoveAnimation(BattleSystem *battleSystem, BattleContext *ctx, u16 move);
 void BattleController_SetMoveAnimationForBattlers(BattleSystem *battleSystem, BattleContext *ctx, u16 move, int attacker, int target);
-void BattleController_EmitMonFlicker(BattleSystem *battleSystem, int battlerId, int a2);
+void BattleController_EmitMonFlicker(BattleSystem *battleSystem, int battlerId, int moveStatusFlag);
 void BattleController_EmitHealthbarUpdate(BattleSystem *battleSystem, BattleContext *ctx, int side);
 void BattleController_EmitPlayFaintAnimation(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
 void BattleController_EmitPlaySE(BattleSystem *battleSystem, BattleContext *ctx, u32 sndSeqNo, int battlerId);
@@ -81,8 +81,8 @@ void BattleController_EmitHealthbarStatus(BattleSystem *battleSystem, int battle
 void BattleController_EmitPrintTrainerMessage(BattleSystem *battleSystem, int battlerId, int msg);
 void BattleController_EmitSetStatus2Effect(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int status);
 void BattleController_EmitCopyStatus2Effect(BattleSystem *battleSystem, BattleContext *ctx, int battlerIdA, int battlerIdB, int status);
-void BattleController_EmitPrintReturnMessage(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int a3);
-void BattleController_EmitPrintSendOutMessage(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int a3);
+void BattleController_EmitPrintReturnMessage(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int selectedMonIndex);
+void BattleController_EmitPrintSendOutMessage(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int selectedMonIndex);
 void BattleController_EmitPrintEncounterMessage(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
 void BattleController_EmitPrintFirstSendOutMessage(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
 void BattleController_EmitBattleMonToPartyMonCopy(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);

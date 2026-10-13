@@ -100,8 +100,8 @@ BOOL Pokegear_GetMapZoomed(SavePokegear *pokegear) {
     return pokegear->mapZoomed;
 }
 
-void Pokegear_SetMapZoomed(SavePokegear *pokegear, u8 a1) {
-    pokegear->mapZoomed = a1;
+void Pokegear_SetMapZoomed(SavePokegear *pokegear, u8 zoomed) {
+    pokegear->mapZoomed = zoomed;
 }
 
 void Pokegear_SetRadioCursorCoords(SavePokegear *pokegear, u8 x, u8 y) {

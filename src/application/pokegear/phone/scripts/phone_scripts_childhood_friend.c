@@ -62,25 +62,25 @@ u8 ov101_021F3D34(PokegearPhoneCallContext *ctx) {
     u8 count;
     u8 *ptr;
     u8 unlockLevel;
-    u8 sp0[4];
+    u8 regionAvailable[4];
 
     count = 0;
     unlockLevel = Pokegear_GetMapUnlockLevel(SaveData_Pokegear_Get(ctx->saveData));
-    sp0[0] = 1;
+    regionAvailable[0] = 1;
     if (Save_VarsFlags_FlypointFlagAction(ctx->saveVarsFlags, FLAG_ACTION_CHECK, FLYPOINT_UNK25)) {
-        sp0[1] = 1; // 2D 2E 48
-    } // UB: else, sp0[1] is undefined
+        regionAvailable[1] = 1; // 2D 2E 48
+    } // UB: else, regionAvailable[1] is undefined
     if (unlockLevel != 0) {
-        sp0[2] = 1; // 19 1A 39
-    } // UB: else, sp0[2] is undefined
+        regionAvailable[2] = 1; // 19 1A 39
+    } // UB: else, regionAvailable[2] is undefined
     if (unlockLevel > 1) {
-        sp0[3] = 1; // 00-17 1A 2F-37 39
-    } // UB: else, sp0[3] is undefined
+        regionAvailable[3] = 1; // 00-17 1A 2F-37 39
+    } // UB: else, regionAvailable[3] is undefined
 
     ptr = Heap_AllocAtEnd(ctx->heapID, 73);
     MI_CpuClear8(ptr, 73);
     for (i = 0; i < 73; ++i) {
-        if (sp0[gEthanLyraRandomMsgConditions[i]]) {
+        if (regionAvailable[gEthanLyraRandomMsgConditions[i]]) {
             ptr[count++] = i;
         }
     }

@@ -28,20 +28,20 @@ static void Task_AnimateBallGauge(SysTask *task, void *data);
 static void BattleInput_InitMenuWindow(BattleInput *battleInput);
 static void Task_BattleMenuScrollHorizontal(SysTask *task, void *data);
 static void BattleInput_InitMenuSlideIn(BattleInput *battleInput, int battlerId);
-static void BattleInput_CreateMainMenuObjectsInitial(BattleInput *battleInput, int a1, int a2);
-static void BattleInput_CreateMainMenuObjects(BattleInput *battleInput, int a1, int a2);
-static void BattleInput_CreateMainMenuFightObjectInitial(BattleInput *battleInput, int param1, int param2);
-static void BattleInput_CreateMainMenuFightObject(BattleInput *battleInput, int param1, int param2);
-static void BattleInput_CreatePalParkMenuObjectsInitial(BattleInput *battleInput, int param1, int param2);
-static void BattleInput_CreatePalParkMenuObjects(BattleInput *battleInput, int param1, int param2);
-static void BattleInput_CreateFightMenuObjects(BattleInput *battleInput, int param1, int param2);
-static void BattleInput_CreateYesNoMenuObjects(BattleInput *battleInput, int param1, int param2);
-static void BattleInput_CreateKeepForgetMenuObjects(BattleInput *battleInput, int param1, int param2);
-static void BattleInput_CreateGiveUpOnMoveMenuObjects(BattleInput *battleInput, int param1, int param2);
-static void BattleInput_CreateVSRecorderPlaybackMenuObjects(BattleInput *battleInput, int param1, int param2);
-static void BattleInput_CreateSwitchOrFleeMenuObjects(BattleInput *battleInput, int param1, int param2);
-static void BattleInput_CreateSwitchOrKeepMenuObjects(BattleInput *battleInput, int param1, int param2);
-static void BattleInput_CreateTargetMenuObjects(BattleInput *battleInput, int param1, int param2);
+static void BattleInput_CreateMainMenuObjectsInitial(BattleInput *battleInput, int menuId, int forceReload);
+static void BattleInput_CreateMainMenuObjects(BattleInput *battleInput, int menuId, int forceReload);
+static void BattleInput_CreateMainMenuFightObjectInitial(BattleInput *battleInput, int menuId, int forceReload);
+static void BattleInput_CreateMainMenuFightObject(BattleInput *battleInput, int menuId, int forceReload);
+static void BattleInput_CreatePalParkMenuObjectsInitial(BattleInput *battleInput, int menuId, int forceReload);
+static void BattleInput_CreatePalParkMenuObjects(BattleInput *battleInput, int menuId, int forceReload);
+static void BattleInput_CreateFightMenuObjects(BattleInput *battleInput, int menuId, int forceReload);
+static void BattleInput_CreateYesNoMenuObjects(BattleInput *battleInput, int menuId, int forceReload);
+static void BattleInput_CreateKeepForgetMenuObjects(BattleInput *battleInput, int menuId, int forceReload);
+static void BattleInput_CreateGiveUpOnMoveMenuObjects(BattleInput *battleInput, int menuId, int forceReload);
+static void BattleInput_CreateVSRecorderPlaybackMenuObjects(BattleInput *battleInput, int menuId, int forceReload);
+static void BattleInput_CreateSwitchOrFleeMenuObjects(BattleInput *battleInput, int menuId, int forceReload);
+static void BattleInput_CreateSwitchOrKeepMenuObjects(BattleInput *battleInput, int menuId, int forceReload);
+static void BattleInput_CreateTargetMenuObjects(BattleInput *battleInput, int menuId, int forceReload);
 static int BattleInput_TouchCallback_MainMenu(BattleInput *battleInput, int param1, int param2);
 static int BattleInput_TouchCallback_FightMenu(BattleInput *battleInput, int param1, int param2);
 static int BattleInput_TouchCallback_TwoOptionMenu(BattleInput *battleInput, int param1, int param2);
@@ -55,7 +55,7 @@ static ManagedSprite *BattleInput_SetBugContestPokemonIcon(BattleInput *battleIn
 static void Task_AnimatePokemonIconSprite(SysTask *task, void *data);
 static int BattleInput_GetBallGaugeAnimSeq(u8 task);
 static void String_GetFontLength(String *str, u32 fontId, int *lengthOut, int *charLengthOut);
-static void BattleInput_CreateTextObject(BattleInput *battleInput, BattleInputTextObject *textObj, String *str, u32 fontId, int textColor, int palOffset, int palId, int x, int y, int centerText, BattleInputMoveMemory_DisplayObj *param10);
+static void BattleInput_CreateTextObject(BattleInput *battleInput, BattleInputTextObject *textObj, String *str, u32 fontId, int textColor, int palOffset, int palId, int x, int y, int centerText, BattleInputMoveMemory_DisplayObj *displayObj);
 static void BattleInput_DeleteTextObjects(BattleInput *battleInput);
 static void BattleInput_DrawTargetLinkTiles(BattleInput *battleInput);
 static BattleInputMoveMemory *BattleInput_GetMoveMemory(BattleInput *battleInput, int battlerType);
@@ -68,10 +68,10 @@ static void BattleInput_LoadMoveTypePalette(BattleInput *battleInput, int moveTy
 static void BattleInput_SetEmptyMoveButtons(BattleInput *battleInput, int movePos);
 static void BattleInput_SetEmptyTargetButton(BattleInput *battleInput, int param1);
 static void BattleInput_ShowOnlySubBgLayer2(void);
-static void BattleInput_FinishFeedback(BattleInput *battleInput, int param1, int param2);
+static void BattleInput_FinishFeedback(BattleInput *battleInput, int freeResources, int showOnlyLayer2);
 static void BattleInput_FreePersistentResources(BattleInput *battleInput);
 static void BattleInput_GetMonsHitArray(BattleInput *battleInput, u8 *monsHit, int checkMonExists);
-static void BattleInput_GetMonsHitBySelectedTarget(BattleInput *battleInput, int param1, u8 *monsHit, int checkExists);
+static void BattleInput_GetMonsHitBySelectedTarget(BattleInput *battleInput, int target, u8 *monsHit, int checkExists);
 static void BattleInput_StartFeedbackTask(SysTaskFunc task, BattleInput *battleInput);
 static void BattleInput_DestroyFeedbackTask(BattleInput *battleInput);
 static void BattleInput_TargetFeedbackDummy(BattleInput *battleInput, int touchInput);
@@ -92,11 +92,11 @@ static int BattleInput_CheckCursorInput(BattleInput *battleInput);
 static int BattleInput_CursorMove_MainMenu(BattleInput *battleInput, int shouldInitialize);
 static void BattleInput_CursorSave_MainMenu(BattleInput *battleInput, int param1);
 static int BattleInput_CursorMove_PalParkMenu(BattleInput *battleInput, int param1);
-static int BattleInput_CursorMove_FightMenu(BattleInput *battleInput, int param1);
+static int BattleInput_CursorMove_FightMenu(BattleInput *battleInput, int justEnabled);
 static void BattleInput_CursorSave_FightMenu(BattleInput *battleInput, int param1);
-static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param1);
+static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int justEnabled);
 static void BattleInput_CursorSave_TargetMenu(BattleInput *battleInput, int input);
-static int BattleInput_CursorMove_TwoOptionsMenu(BattleInput *battleInput, int param1);
+static int BattleInput_CursorMove_TwoOptionsMenu(BattleInput *battleInput, int justEnabled);
 static u32 BattleCursor_CheckKeyInput(BattleMenuCursor *cursor, int xMax, int yMax, const u8 *moveData);
 static int BattleInput_CatchingTutorialMain(BattleInput *battleInput);
 static int BattleInput_CatchingTutorialCB_Fight(BattleInput *battleInput);
@@ -1452,11 +1452,11 @@ static void BattleInput_FreeDefaultResources(BattleInput *battleInput) {
     }
 }
 
-void BattleInput_ChangeMenu(NARC *narc0, NARC *narc1, BattleInput *battleInput, int menuId, int a4, int *a5) {
+void BattleInput_ChangeMenu(NARC *narc0, NARC *narc1, BattleInput *battleInput, int menuId, int forceReload, int *menuData) {
     const BattleMenuTemplate *menuTemplate, *prevMenuTemplate;
 
-    if (a5 != NULL) {
-        MI_CpuCopy8(a5, &battleInput->menu, sizeof(BattleInputMenu));
+    if (menuData != NULL) {
+        MI_CpuCopy8(menuData, &battleInput->menu, sizeof(BattleInputMenu));
     }
 
     battleInput->isTouchDisabled = FALSE;
@@ -1466,7 +1466,7 @@ void BattleInput_ChangeMenu(NARC *narc0, NARC *narc1, BattleInput *battleInput, 
     SpriteManager *spriteManager = BattleSystem_GetSpriteManager(battleInput->battleSystem);
 
     if (battleInput->curMenuId == BATTLE_MENU_NONE) {
-        a4 = 1;
+        forceReload = 1;
         prevMenuTemplate = NULL;
     } else {
         prevMenuTemplate = &sBattleMenuTemplates[battleInput->curMenuId];
@@ -1477,7 +1477,7 @@ void BattleInput_ChangeMenu(NARC *narc0, NARC *narc1, BattleInput *battleInput, 
     PaletteData_LoadPalette(BattleSystem_GetPaletteData(battleInput->battleSystem), battleInput->paletteBuffer, PLTTBUF_SUB_BG, 0, 0x200);
 
     for (int i = 0; i < 4; i++) {
-        if ((menuTemplate->screenBufferIds[i] != 0xffff) && ((a4 == 1) || (menuTemplate->screenBufferIds[i] != prevMenuTemplate->screenBufferIds[i]))) {
+        if ((menuTemplate->screenBufferIds[i] != 0xffff) && ((forceReload == 1) || (menuTemplate->screenBufferIds[i] != prevMenuTemplate->screenBufferIds[i]))) {
             BG_LoadScreenTilemapData(bgConfig, 4 + i, battleInput->screenBuffer[menuTemplate->screenBufferIds[i]], 0x800);
             ScheduleBgTilemapBufferTransfer(bgConfig, 4 + i);
         }
@@ -1491,7 +1491,7 @@ void BattleInput_ChangeMenu(NARC *narc0, NARC *narc1, BattleInput *battleInput, 
     BattleInput_FreePersistentResources(battleInput);
 
     if (menuTemplate->funcCreateMenuObjects != NULL) {
-        menuTemplate->funcCreateMenuObjects(battleInput, menuId, a4);
+        menuTemplate->funcCreateMenuObjects(battleInput, menuId, forceReload);
     }
 
     SysTask_CreateOnVWaitQueue(Task_ApplyMenuBgLayerSettings, battleInput, 10);
@@ -1653,12 +1653,12 @@ void BattleInput_SetPartyExpPercents(BattleInput *battleInput, u8 *percentExpToN
     }
 }
 
-void BattleInput_UpdateBallGaugeAnimation(BattleInput *battleInput, u8 *a1, u8 *a2) {
+void BattleInput_UpdateBallGaugeAnimation(BattleInput *battleInput, u8 *playerStatus, u8 *opponentStatus) {
     for (int i = 0; i < 6; i++) {
-        Sprite_SetAnimCtrlSeq(battleInput->spriteBallGauge[i]->sprite, BattleInput_GetBallGaugeAnimSeq(a1[i]));
+        Sprite_SetAnimCtrlSeq(battleInput->spriteBallGauge[i]->sprite, BattleInput_GetBallGaugeAnimSeq(playerStatus[i]));
         Sprite_TickFrame(battleInput->spriteBallGauge[i]->sprite);
 
-        Sprite_SetAnimCtrlSeq(battleInput->spriteBallGaugeOpponent[i]->sprite, BattleInput_GetBallGaugeAnimSeq(a2[i]));
+        Sprite_SetAnimCtrlSeq(battleInput->spriteBallGaugeOpponent[i]->sprite, BattleInput_GetBallGaugeAnimSeq(opponentStatus[i]));
         Sprite_TickFrame(battleInput->spriteBallGaugeOpponent[i]->sprite);
     }
 }
@@ -1866,13 +1866,13 @@ static void BattleInput_InitMenuSlideIn(BattleInput *battleInput, int battlerId)
     menuSlideIn->vblankTask = SysTask_CreateOnVBlankQueue(VBlankTask_BattleMenuSlideIn, menuSlideIn, 10);
 }
 
-static void BattleInput_CreateMainMenuObjectsInitial(BattleInput *battleInput, int a1, int a2) {
+static void BattleInput_CreateMainMenuObjectsInitial(BattleInput *battleInput, int menuId, int forceReload) {
     int battlerType = battleInput->menu.main.battlerType;
-    BattleInput_CreateMainMenuObjects(battleInput, a1, a2);
+    BattleInput_CreateMainMenuObjects(battleInput, menuId, forceReload);
     BattleInput_InitMenuSlideIn(battleInput, battlerType);
 }
 
-static void BattleInput_CreateMainMenuObjects(BattleInput *battleInput, int a1, int a2) {
+static void BattleInput_CreateMainMenuObjects(BattleInput *battleInput, int menuId, int forceReload) {
     String *strFight, *strBag, *strPokemon, *strRun;
     MsgData *msgLoader;
     int battlerType;
@@ -1995,17 +1995,17 @@ static void BattleInput_CreateMainMenuObjects(BattleInput *battleInput, int a1, 
     }
 }
 
-static void BattleInput_CreateMainMenuFightObjectInitial(BattleInput *battleInput, int param1, int param2) {
+static void BattleInput_CreateMainMenuFightObjectInitial(BattleInput *battleInput, int menuId, int forceReload) {
     int battlerType = battleInput->menu.main.battlerType;
 
-    BattleInput_CreateMainMenuFightObject(battleInput, param1, param2);
+    BattleInput_CreateMainMenuFightObject(battleInput, menuId, forceReload);
     BattleInput_InitMenuSlideIn(battleInput, battlerType);
 }
 
-static void BattleInput_CreateMainMenuFightObject(BattleInput *battleInput, int param1, int param2) {
+static void BattleInput_CreateMainMenuFightObject(BattleInput *battleInput, int menuId, int forceReload) {
     int battlerType = battleInput->menu.main.battlerType;
 
-    BattleInput_CreateMainMenuObjects(battleInput, param1, param2);
+    BattleInput_CreateMainMenuObjects(battleInput, menuId, forceReload);
 
     BgConfig *bgConfig = BattleSystem_GetBgConfig(battleInput->battleSystem);
 
@@ -2017,17 +2017,17 @@ static void BattleInput_CreateMainMenuFightObject(BattleInput *battleInput, int 
     TextOBJ_SetSpritesDrawFlag(battleInput->textObj[MENUTXT_RUN].textObj, 0);
 }
 
-static void BattleInput_CreatePalParkMenuObjectsInitial(BattleInput *battleInput, int param1, int param2) {
+static void BattleInput_CreatePalParkMenuObjectsInitial(BattleInput *battleInput, int menuId, int forceReload) {
     int battlerType = battleInput->menu.main.battlerType;
 
-    BattleInput_CreatePalParkMenuObjects(battleInput, param1, param2);
+    BattleInput_CreatePalParkMenuObjects(battleInput, menuId, forceReload);
     BattleInput_InitMenuSlideIn(battleInput, battlerType);
 }
 
-void BattleInput_CreatePalParkMenuObjects(BattleInput *battleInput, int param1, int param2) {
+void BattleInput_CreatePalParkMenuObjects(BattleInput *battleInput, int menuId, int forceReload) {
     int battlerType = battleInput->menu.main.battlerType;
 
-    BattleInput_CreateMainMenuObjects(battleInput, param1, param2);
+    BattleInput_CreateMainMenuObjects(battleInput, menuId, forceReload);
 
     BgConfig *bgConfig = BattleSystem_GetBgConfig(battleInput->battleSystem);
 
@@ -2039,7 +2039,7 @@ void BattleInput_CreatePalParkMenuObjects(BattleInput *battleInput, int param1, 
     TextOBJ_SetSpritesDrawFlag(battleInput->textObj[MENUTXT_POKEMON].textObj, 0);
 }
 
-static void BattleInput_CreateFightMenuObjects(BattleInput *battleInput, int param1, int param2) {
+static void BattleInput_CreateFightMenuObjects(BattleInput *battleInput, int menuId, int forceReload) {
     BattleInputFightMenu *fightMenu;
     int i;
     MsgData *msgLoader;
@@ -2110,7 +2110,7 @@ static void BattleInput_CreateFightMenuObjects(BattleInput *battleInput, int par
     }
 }
 
-static void BattleInput_CreateYesNoMenuObjects(BattleInput *battleInput, int param1, int param2) {
+static void BattleInput_CreateYesNoMenuObjects(BattleInput *battleInput, int menuId, int forceReload) {
     MsgData *msgLoader = BattleSystem_GetMessageLoader(battleInput->battleSystem);
     String *strYes = NewString_ReadMsgData(msgLoader, msg_0197_00940); // Yes
     String *strNo = NewString_ReadMsgData(msgLoader, msg_0197_00941);  // No
@@ -2122,7 +2122,7 @@ static void BattleInput_CreateYesNoMenuObjects(BattleInput *battleInput, int par
     String_Delete(strNo);
 }
 
-static void BattleInput_CreateKeepForgetMenuObjects(BattleInput *battleInput, int param1, int param2) {
+static void BattleInput_CreateKeepForgetMenuObjects(BattleInput *battleInput, int menuId, int forceReload) {
     MsgData *msgLoader = BattleSystem_GetMessageLoader(battleInput->battleSystem);
     String *strForget = NewString_ReadMsgData(msgLoader, msg_0197_01181); // Forget a move!
     String *strKeep = NewString_ReadMsgData(msgLoader, msg_0197_01182);   // Keep old moves!
@@ -2134,7 +2134,7 @@ static void BattleInput_CreateKeepForgetMenuObjects(BattleInput *battleInput, in
     String_Delete(strKeep);
 }
 
-static void BattleInput_CreateGiveUpOnMoveMenuObjects(BattleInput *battleInput, int param1, int param2) {
+static void BattleInput_CreateGiveUpOnMoveMenuObjects(BattleInput *battleInput, int menuId, int forceReload) {
     BattleInputTwoOptionMenu *menu = &battleInput->menu.twoOption;
     MsgData *msgLoader = BattleSystem_GetMessageLoader(battleInput->battleSystem);
     MessageFormat *strTemplate = BattleSystem_GetMessageFormat(battleInput->battleSystem);
@@ -2156,7 +2156,7 @@ static void BattleInput_CreateGiveUpOnMoveMenuObjects(BattleInput *battleInput, 
     String_Delete(strDontGiveUpFormated);
 }
 
-static void BattleInput_CreateVSRecorderPlaybackMenuObjects(BattleInput *battleInput, int param1, int param2) {
+static void BattleInput_CreateVSRecorderPlaybackMenuObjects(BattleInput *battleInput, int menuId, int forceReload) {
     G2S_SetBlendAlpha(2, 15, 31, 0);
 
     MsgData *msgLoader = BattleSystem_GetMessageLoader(battleInput->battleSystem);
@@ -2182,7 +2182,7 @@ static void BattleInput_CreateVSRecorderPlaybackMenuObjects(BattleInput *battleI
     String_Delete(strStop);
 }
 
-static void BattleInput_CreateSwitchOrFleeMenuObjects(BattleInput *battleInput, int param1, int param2) {
+static void BattleInput_CreateSwitchOrFleeMenuObjects(BattleInput *battleInput, int menuId, int forceReload) {
     BattleInputTwoOptionMenu *menu = &battleInput->menu.twoOption;
     MsgData *msgLoader = BattleSystem_GetMessageLoader(battleInput->battleSystem);
     MessageFormat *strTemplate = BattleSystem_GetMessageFormat(battleInput->battleSystem);
@@ -2204,7 +2204,7 @@ static void BattleInput_CreateSwitchOrFleeMenuObjects(BattleInput *battleInput, 
     String_Delete(strFleeFormated);
 }
 
-static void BattleInput_CreateSwitchOrKeepMenuObjects(BattleInput *battleInput, int param1, int param2) {
+static void BattleInput_CreateSwitchOrKeepMenuObjects(BattleInput *battleInput, int menuId, int forceReload) {
     MsgData *msgLoader;
     String *strSwitchPokemon, *strKeepBattling, *strSwitchPokemonFormated, *strKeepBattlingFormated;
     MessageFormat *strTemplate;
@@ -2231,7 +2231,7 @@ static void BattleInput_CreateSwitchOrKeepMenuObjects(BattleInput *battleInput, 
     String_Delete(strKeepBattlingFormated);
 }
 
-static void BattleInput_CreateTargetMenuObjects(BattleInput *battleInput, int param1, int param2) {
+static void BattleInput_CreateTargetMenuObjects(BattleInput *battleInput, int menuId, int forceReload) {
     BattleInputTargetMenu *menu;
     int i;
     MsgData *msgLoader;
@@ -2241,8 +2241,8 @@ static void BattleInput_CreateTargetMenuObjects(BattleInput *battleInput, int pa
     BoxPokemon *boxMon;
     MessageFormat *messageFormat;
     int monNameColor;
-    u8 v10[6];
-    u8 v11[6];
+    u8 battlerTypes[6];
+    u8 battlerIds[6];
     int battlerId;
 
     menu = &battleInput->menu.target;
@@ -2256,13 +2256,13 @@ static void BattleInput_CreateTargetMenuObjects(BattleInput *battleInput, int pa
     BattleInput_GetMonsHitArray(battleInput, monsHit, 0);
     BattleInput_LoadPokemonIconResources(battleInput);
     BattleInput_DrawTargetLinkTiles(battleInput);
-    BattleSystem_GetBattlerTypes(battleInput->battleSystem, v10);
-    BattleSystem_GetBattlerIdsByType(battleInput->battleSystem, v11);
+    BattleSystem_GetBattlerTypes(battleInput->battleSystem, battlerTypes);
+    BattleSystem_GetBattlerIdsByType(battleInput->battleSystem, battlerIds);
 
     strPokemonName = String_New(24, HEAP_ID_BATTLE);
 
     for (i = MENUTXT_MON_NAME_1; i < MENUTXT_MON_NAME_4 + 1; i++) {
-        battlerId = v11[2 + i];
+        battlerId = battlerIds[2 + i];
 
         if ((menu->targetMons[battlerId].hide == 1) && (monsHit[i] == 1)) {
             if (menu->targetMons[battlerId].gender == MON_MALE) {
@@ -2719,7 +2719,7 @@ static void String_GetFontLength(String *str, u32 fontId, int *lengthOut, int *c
     *charLengthOut = charLength;
 }
 
-static void BattleInput_CreateTextObject(BattleInput *battleInput, BattleInputTextObject *battleTextObj, String *str, u32 fontId, int textColor, int palOffset, int palId, int x, int y, int centerText, BattleInputMoveMemory_DisplayObj *param10) {
+static void BattleInput_CreateTextObject(BattleInput *battleInput, BattleInputTextObject *battleTextObj, String *str, u32 fontId, int textColor, int palOffset, int palId, int x, int y, int centerText, BattleInputMoveMemory_DisplayObj *displayObj) {
     TextOBJTemplate textObjTemplate;
     Window window;
     ObjCharSpaceReservation charTransferAlloc;
@@ -2734,19 +2734,19 @@ static void BattleInput_CreateTextObject(BattleInput *battleInput, BattleInputTe
     spriteManager = BattleSystem_GetSpriteManager(battleInput->battleSystem);
     bgConfig = BattleSystem_GetBgConfig(battleInput->battleSystem);
 
-    if (param10 == NULL) {
+    if (displayObj == NULL) {
         String_GetFontLength(str, fontId, &fontLength, &charLength);
     } else {
-        fontLength = param10->fontLength;
-        charLength = param10->charLength;
+        fontLength = displayObj->fontLength;
+        charLength = displayObj->charLength;
     }
 
-    if (param10 == NULL) {
+    if (displayObj == NULL) {
         InitWindow(&window);
         AddTextWindowTopLeftCorner(bgConfig, &window, charLength, 16 / 8, 0, 0);
         AddTextPrinterParameterizedWithColorAndSpacing(&window, fontId, str, 0, 0, 0xFF, textColor, 0, 0, NULL);
     } else {
-        window = param10->window;
+        window = displayObj->window;
     }
 
     size = FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DSUB, 5);
@@ -2776,7 +2776,7 @@ static void BattleInput_CreateTextObject(BattleInput *battleInput, BattleInputTe
     TextOBJ_SetPalOffsetRespectVramOffset(textObj, palOffset);
     TextOBJ_SetPosition(textObj, x, y);
 
-    if (param10 == NULL) {
+    if (displayObj == NULL) {
         RemoveWindow(&window);
     }
 
@@ -3065,12 +3065,12 @@ static void BattleInput_ShowOnlySubBgLayer2(void) {
     }
 }
 
-static void BattleInput_FinishFeedback(BattleInput *battleInput, int param1, int param2) {
-    if (param1 == 1) {
+static void BattleInput_FinishFeedback(BattleInput *battleInput, int freeResources, int showOnlyLayer2) {
+    if (freeResources == 1) {
         BattleInput_FreePersistentResources(battleInput);
     }
 
-    if (param2 == 1) {
+    if (showOnlyLayer2 == 1) {
         SysTask_CreateOnVWaitQueue(Task_ShowOnlySubBgLayer2, battleInput, 10);
     }
 }
@@ -3104,7 +3104,7 @@ static void BattleInput_GetMonsHitArray(BattleInput *battleInput, u8 *monsHit, i
     }
 }
 
-static void BattleInput_GetMonsHitBySelectedTarget(BattleInput *battleInput, int param1, u8 *monsHit, int checkExists) {
+static void BattleInput_GetMonsHitBySelectedTarget(BattleInput *battleInput, int target, u8 *monsHit, int checkExists) {
     BattleInputTargetMenu *menu;
     int i;
 
@@ -3117,7 +3117,7 @@ static void BattleInput_GetMonsHitBySelectedTarget(BattleInput *battleInput, int
     case TARGET_ANY_ALLY:
     case TARGET_ANY_OPPONENT:
         for (i = 0; i < 4; i++) {
-            if (i == param1 - 1) {
+            if (i == target - 1) {
                 monsHit[i] = 1;
             } else {
                 monsHit[i] = 0;
@@ -3356,16 +3356,16 @@ static void Task_TargetMenuButtonFeedback(SysTask *task, void *data) {
     BattleInput *battleInput = data;
     BgConfig *bgConfig;
     int i, x, y;
-    u8 v4[4];
+    u8 monsHit[4];
 
     bgConfig = BattleSystem_GetBgConfig(battleInput->battleSystem);
 
     switch (battleInput->feedback.state) {
     case 0:
-        BattleInput_GetMonsHitBySelectedTarget(battleInput, battleInput->feedback.monSelect.ret, v4, 1);
+        BattleInput_GetMonsHitBySelectedTarget(battleInput, battleInput->feedback.monSelect.ret, monsHit, 1);
 
         for (i = 0; i < 4; i++) {
-            if (v4[i] == 1) {
+            if (monsHit[i] == 1) {
                 BattleInput_CopyButtonTilemap(battleInput, sTargetMenuButtonsScreenOffsets[i], &sTargetMenuButtonsTouchscreenRect[i], 4, 2);
 
                 if (battleInput->textObj[0 + i].textObj != 0) {
@@ -3391,10 +3391,10 @@ static void Task_TargetMenuButtonFeedback(SysTask *task, void *data) {
         battleInput->feedback.delay = 0;
         battleInput->feedback.state++;
     case 2:
-        BattleInput_GetMonsHitBySelectedTarget(battleInput, battleInput->feedback.monSelect.ret, v4, 1);
+        BattleInput_GetMonsHitBySelectedTarget(battleInput, battleInput->feedback.monSelect.ret, monsHit, 1);
 
         for (i = 0; i < 4; i++) {
-            if (v4[i] == 1) {
+            if (monsHit[i] == 1) {
                 BattleInput_CopyButtonTilemap(battleInput, sTargetMenuButtonsScreenOffsets[i], &sTargetMenuButtonsTouchscreenRect[i], 4, 1);
 
                 if (battleInput->textObj[0 + i].textObj != 0) {
@@ -3881,7 +3881,7 @@ static int BattleInput_CursorMove_PalParkMenu(BattleInput *battleInput, int shou
     return TOUCH_MENU_NO_INPUT;
 }
 
-static int BattleInput_CursorMove_FightMenu(BattleInput *battleInput, int param1) {
+static int BattleInput_CursorMove_FightMenu(BattleInput *battleInput, int justEnabled) {
     BattleMenuCursor *cursor;
     u32 keyPressed;
     const BattleMenuTemplate *menuTemplate;
@@ -3895,7 +3895,7 @@ static int BattleInput_CursorMove_FightMenu(BattleInput *battleInput, int param1
     menuTemplate = &sBattleMenuTemplates[battleInput->curMenuId];
     menu = &battleInput->menu.fight;
 
-    if (param1 == 1) {
+    if (justEnabled == 1) {
         cursor->menuX = cursorPos->moveX;
         cursor->menuY = cursorPos->moveY;
         input = sCursorArrayFightMenu[cursor->menuY][cursor->menuX];
@@ -3967,7 +3967,7 @@ static void BattleInput_CursorSave_FightMenu(BattleInput *battleInput, int input
     }
 }
 
-static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param1) {
+static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int justEnabled) {
     BattleMenuCursor *cursor;
     u32 keyPressed;
     const BattleMenuTemplate *menuTemplate;
@@ -3976,7 +3976,7 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param
     u8 moveRange[4], connectRange[4]; // Connect range checks if the mon exists or not
     u8 buttonInputArray[3][2];
     int i, j, menuMaxX, menuMaxY;
-    int cursorLeft, cursorRight, cursorTop, cursorBottom, v17, v18;
+    int cursorLeft, cursorRight, cursorTop, cursorBottom, extraCursorX, extraCursorY;
     int topOpponent, bottomOpponent, leftOpponent, rightOpponent;
     int topPlayer, bottomPlayer, leftPlayer, rightPlayer;
     int cursorLeftBottom, cursorRightBottom;
@@ -4067,8 +4067,8 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param
             bottomPlayer = -1;
         }
 
-        v17 = -1;
-        v18 = -1;
+        extraCursorX = -1;
+        extraCursorY = -1;
         cursorLeftBottom = -1;
         cursorRightBottom = -1;
 
@@ -4080,7 +4080,7 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param
             cursorLeft = leftPlayer;
         } else {
             cursorLeft = leftOpponent;
-            v17 = leftPlayer;
+            extraCursorX = leftPlayer;
             anim = 2;
         }
 
@@ -4092,7 +4092,7 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param
             cursorRight = rightPlayer;
         } else {
             cursorRight = rightOpponent;
-            v17 = rightPlayer;
+            extraCursorX = rightPlayer;
             anim = 3;
         }
 
@@ -4102,7 +4102,7 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param
             cursorTop = topPlayer;
         } else {
             cursorTop = topOpponent;
-            v18 = bottomOpponent;
+            extraCursorY = bottomOpponent;
         }
 
         if ((bottomOpponent != -1) && (bottomPlayer == -1)) {
@@ -4111,7 +4111,7 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param
             cursorBottom = bottomPlayer;
         } else {
             cursorBottom = bottomPlayer;
-            v18 = bottomPlayer;
+            extraCursorY = bottomPlayer;
 
             if (anim == 2) {
                 cursorRightBottom = bottomOpponent;
@@ -4123,7 +4123,7 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param
         break;
     }
 
-    if (param1 == 1) {
+    if (justEnabled == 1) {
         if (multiTarget == FALSE) {
             if (cursorPos->monTargetType == battleInput->monTargetType) {
                 cursor->menuX = cursorPos->targetX;
@@ -4148,7 +4148,7 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param
             cursor->menuX = 0;
             cursor->menuY = 0;
 
-            if (((cursorRightBottom == -1) && (cursorLeftBottom == -1)) || (v17 == -1)) {
+            if (((cursorRightBottom == -1) && (cursorLeftBottom == -1)) || (extraCursorX == -1)) {
                 BattleCursor_SetRectWithOffset(battleInput->cursor, cursorLeft, cursorRight, cursorTop, cursorBottom, FX32_CONST(272));
             } else if ((cursorRightBottom != -1) && (cursorLeftBottom == -1)) {
                 BattleCursor_SetCornersWithOffset(battleInput->cursor, cursorLeft, cursorTop, cursorRight, cursorTop, cursorLeft, cursorRightBottom, cursorRight, cursorBottom, FX32_CONST(272));
@@ -4156,8 +4156,8 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param
                 BattleCursor_SetCornersWithOffset(battleInput->cursor, cursorLeft, cursorTop, cursorRight, cursorTop, cursorLeft, cursorBottom, cursorRight, cursorLeftBottom, FX32_CONST(272));
             }
 
-            if (v17 != -1) {
-                BattleCursor_ShowExtraSpriteWithOffset(battleInput->cursor, v17, v18, anim, FX32_CONST(272));
+            if (extraCursorX != -1) {
+                BattleCursor_ShowExtraSpriteWithOffset(battleInput->cursor, extraCursorX, extraCursorY, anim, FX32_CONST(272));
             }
         }
 
@@ -4180,7 +4180,7 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param
             BattleCursor_SetRectWithOffset(battleInput->cursor, menuTemplate->touchscreenRect[input].rect.left + 8, menuTemplate->touchscreenRect[input].rect.right - 8, menuTemplate->touchscreenRect[input].rect.top + 8, menuTemplate->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
         } else {
             if (cursor->menuY == 0) {
-                if (((cursorLeftBottom == -1) && (cursorRightBottom == -1)) || (v17 == -1)) {
+                if (((cursorLeftBottom == -1) && (cursorRightBottom == -1)) || (extraCursorX == -1)) {
                     BattleCursor_SetRectWithOffset(battleInput->cursor, cursorLeft, cursorRight, cursorTop, cursorBottom, FX32_CONST(272));
                 } else if ((cursorRightBottom != -1) && (cursorLeftBottom == -1)) {
                     BattleCursor_SetCornersWithOffset(battleInput->cursor, cursorLeft, cursorTop, cursorRight, cursorTop, cursorLeft, cursorRightBottom, cursorRight, cursorBottom, FX32_CONST(272));
@@ -4188,8 +4188,8 @@ static int BattleInput_CursorMove_TargetMenu(BattleInput *battleInput, int param
                     BattleCursor_SetCornersWithOffset(battleInput->cursor, cursorLeft, cursorTop, cursorRight, cursorTop, cursorLeft, cursorBottom, cursorRight, cursorLeftBottom, FX32_CONST(272));
                 }
 
-                if (v17 != -1) {
-                    BattleCursor_ShowExtraSpriteWithOffset(battleInput->cursor, v17, v18, anim, FX32_CONST(272));
+                if (extraCursorX != -1) {
+                    BattleCursor_ShowExtraSpriteWithOffset(battleInput->cursor, extraCursorX, extraCursorY, anim, FX32_CONST(272));
                 } else {
                     BattleCursor_HideExtraSprite(battleInput->cursor);
                 }
@@ -4250,7 +4250,7 @@ static void BattleInput_CursorSave_TargetMenu(BattleInput *battleInput, int inpu
     }
 }
 
-static int BattleInput_CursorMove_TwoOptionsMenu(BattleInput *battleInput, int param1) {
+static int BattleInput_CursorMove_TwoOptionsMenu(BattleInput *battleInput, int justEnabled) {
     BattleMenuCursor *cursor;
     u32 keyPressed;
     const BattleMenuTemplate *menuTemplate;
@@ -4259,7 +4259,7 @@ static int BattleInput_CursorMove_TwoOptionsMenu(BattleInput *battleInput, int p
     cursor = &battleInput->menuCursor;
     menuTemplate = &sBattleMenuTemplates[battleInput->curMenuId];
 
-    if (param1 == 1) {
+    if (justEnabled == 1) {
         input = sTwoOptionsMenuCursorInput[cursor->menuY][cursor->menuX];
         BattleCursor_SetRectWithOffset(battleInput->cursor, menuTemplate->touchscreenRect[input].rect.left + 8, menuTemplate->touchscreenRect[input].rect.right - 8, menuTemplate->touchscreenRect[input].rect.top + 8, menuTemplate->touchscreenRect[input].rect.bottom - 8, FX32_CONST(272));
         return TOUCH_MENU_NO_INPUT;

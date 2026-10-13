@@ -124,7 +124,7 @@ BOOL NativeScript_WaitYesNo(ScriptContext *ctx);
 BOOL sub_02042C78(ScriptContext *ctx);
 BOOL ScrNative_WaitApplication(ScriptContext *ctx);
 LocalMapObject *Script_GetMapObjectByPerson(FieldSystem *fieldSystem, u16 person);
-void _ScheduleObjectEventMovement(FieldSystem *fieldSystem, EventObjectMovementMan *movementMan, MovementScriptCommand *a2);
+void _ScheduleObjectEventMovement(FieldSystem *fieldSystem, EventObjectMovementMan *movementMan, MovementScriptCommand *cmds);
 void Script_SetMonSeenFlagBySpecies(FieldSystem *fieldSystem, u16 species);
 
 #include "data/fieldmap.h"
@@ -990,7 +990,7 @@ BOOL ScrCmd_RemoveWaitingIcon(ScriptContext *ctx) {
     return FALSE;
 }
 
-static void Script_CreateMenuFromArgs(ScriptContext *ctx, struct ScriptMenu **a1, MsgData *msgData) {
+static void Script_CreateMenuFromArgs(ScriptContext *ctx, struct ScriptMenu **outMenu, MsgData *msgData) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     MessageFormat **msgFmt = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     u8 x = ScriptReadByte(ctx);
@@ -998,7 +998,7 @@ static void Script_CreateMenuFromArgs(ScriptContext *ctx, struct ScriptMenu **a1
     u8 initCursorPos = ScriptReadByte(ctx);
     u8 cancellable = ScriptReadByte(ctx);
     u16 var = ScriptReadHalfword(ctx);
-    *a1 = ScriptMenu_Create(fieldSystem, x, y, initCursorPos, cancellable, GetVarPointer(fieldSystem, var), *msgFmt, FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_WINDOW), msgData);
+    *outMenu = ScriptMenu_Create(fieldSystem, x, y, initCursorPos, cancellable, GetVarPointer(fieldSystem, var), *msgFmt, FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_WINDOW), msgData);
     ctx->data[0] = var;
 }
 
@@ -1103,9 +1103,9 @@ BOOL ScrCmd_695(ScriptContext *ctx) {
 
 BOOL ScrCmd_677(ScriptContext *ctx) {
     struct ScriptMenu **pp_menu = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MENU_WINDOW);
-    u16 *var1 = ScriptGetVarPointer(ctx);
-    u16 *var2 = ScriptGetVarPointer(ctx);
-    ScriptMenu_ShowListAtPosition(*pp_menu, var1, var2);
+    u16 *scrollPtr = ScriptGetVarPointer(ctx);
+    u16 *rowPtr = ScriptGetVarPointer(ctx);
+    ScriptMenu_ShowListAtPosition(*pp_menu, scrollPtr, rowPtr);
     SetupNativeScript(ctx, NativeScript_WaitMultichoice);
     return TRUE;
 }
@@ -1229,7 +1229,7 @@ struct ObjectMovementTaskEnv {
 
 void _RunObjectEventMovement(SysTask *task, struct ObjectMovementTaskEnv *env);
 
-void _ScheduleObjectEventMovement(FieldSystem *fieldSystem, EventObjectMovementMan *movementMan, MovementScriptCommand *a2) {
+void _ScheduleObjectEventMovement(FieldSystem *fieldSystem, EventObjectMovementMan *movementMan, MovementScriptCommand *cmds) {
     struct ObjectMovementTaskEnv *env = Heap_Alloc(HEAP_ID_FIELD1, sizeof(struct ObjectMovementTaskEnv));
     if (env == NULL) {
         GF_ASSERT(FALSE);
@@ -1237,7 +1237,7 @@ void _ScheduleObjectEventMovement(FieldSystem *fieldSystem, EventObjectMovementM
     }
     env->fieldSystem = fieldSystem;
     env->movementMan = movementMan;
-    env->cmd = a2;
+    env->cmd = cmds;
     env->task = SysTask_CreateOnMainQueue((SysTaskFunc)_RunObjectEventMovement, env, 0);
 }
 
@@ -1806,31 +1806,31 @@ BOOL ScrCmd_436(ScriptContext *ctx) {
     return TRUE;
 }
 
-static BOOL Fashion_IsEntrySaved(FieldSystem *fieldSystem, int a1, int a2) {
+static BOOL Fashion_IsEntrySaved(FieldSystem *fieldSystem, int isLarge, int entryIndex) {
     SaveFashionData *fashionData = Save_FashionData_Get(fieldSystem->saveData);
-    if (a1 == 0) {
-        if (!Save_FashionData_IsEntrySaved(fashionData, a2)) {
+    if (isLarge == 0) {
+        if (!Save_FashionData_IsEntrySaved(fashionData, entryIndex)) {
             return FALSE;
         }
     } else {
-        if (!Save_FashionData_IsLargeEntrySaved(fashionData, a2)) {
+        if (!Save_FashionData_IsLargeEntrySaved(fashionData, entryIndex)) {
             return FALSE;
         }
     }
     return TRUE;
 }
 
-static FashionAppData *FashionAppData_New(enum HeapID heapID, FieldSystem *fieldSystem, int a2, int a3) {
+static FashionAppData *FashionAppData_New(enum HeapID heapID, FieldSystem *fieldSystem, int isLarge, int entryIndex) {
     SaveFashionData *saveFashionData = Save_FashionData_Get(fieldSystem->saveData);
     FashionAppData *fashionAppData;
-    if (!Fashion_IsEntrySaved(fieldSystem, a2, a3)) {
+    if (!Fashion_IsEntrySaved(fieldSystem, isLarge, entryIndex)) {
         return NULL;
     }
     fashionAppData = Heap_Alloc(heapID, sizeof(FashionAppData));
     memset(fashionAppData, 0, sizeof(FashionAppData));
     fashionAppData->saveFashionData = saveFashionData;
-    fashionAppData->mode = a2;
-    fashionAppData->entryIndex = a3;
+    fashionAppData->mode = isLarge;
+    fashionAppData->entryIndex = entryIndex;
     return fashionAppData;
 }
 

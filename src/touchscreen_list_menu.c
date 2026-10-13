@@ -27,7 +27,7 @@ static void TouchscreenListMenu_DrawButtonsAndTransfer(TouchscreenListMenu *menu
 static int TouchscreenListMenu_HandleTouchInput(TouchscreenListMenu *menu, BOOL *flagRet);
 static int TouchscreenListMenu_HandleKeyInput(TouchscreenListMenu *menu);
 static void TouchscreenListMenu_PlaySE(TouchscreenListMenu *menu, u16 sndseq);
-static void TouchscreenListMenu_InvokeCallback(TouchscreenListMenu *menu, int a1);
+static void TouchscreenListMenu_InvokeCallback(TouchscreenListMenu *menu, int event);
 
 TouchscreenListMenuSpawner *TouchscreenListMenuSpawner_Create(enum HeapID heapID, PaletteData *paletteData) {
     TouchscreenListMenuSpawner *ret = Heap_Alloc(heapID, sizeof(TouchscreenListMenuSpawner));

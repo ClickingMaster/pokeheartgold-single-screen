@@ -15,8 +15,8 @@ u16 GetOamCharSize(int a0);
 u8 CalculateHpBarPixelsLength(u32 hp, u32 maxHp, u8 pixelsWide);
 u8 HpBar_GetColorIdx(u32 pixelsCur, u32 pixelsWide);
 u8 CalculateHpBarColor(u16 hp, u16 maxHp, u32 pixelsWide);
-void BeginAppScreenFade(u8 a0, enum HeapID heapID);
-int HandleNumberSelectInput(s16 *a0, u16 a1);
+void BeginAppScreenFade(u8 fadeOut, enum HeapID heapID);
+int HandleNumberSelectInput(s16 *value, u16 max);
 void BgConfig_LoadAssetFromOpenNarc(BgConfig *bgConfig, enum HeapID heapID, NARC *narc, NarcId unused, int fileId, GFBgLayer layer, BgGfxAssetType kind, u32 szByte, u32 offest);
 
 #endif

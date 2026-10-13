@@ -930,15 +930,15 @@ static void RegisterHallOfFame_CreateSpriteGfxHandlers(RegisterHallOfFameData *d
     data->spriteGfxHandler = SpriteManager_New(data->spriteRenderer);
 
     {
-        OamManagerParam sp2C = sRegisterHofOamManagerParam;
-        OamCharTransferParam sp18 = sRegisterHofOamCharTransferParam;
-        SpriteSystem_Init(data->spriteRenderer, &sp2C, &sp18, 0x20);
+        OamManagerParam oamManagerParam = sRegisterHofOamManagerParam;
+        OamCharTransferParam oamCharTransferParam = sRegisterHofOamCharTransferParam;
+        SpriteSystem_Init(data->spriteRenderer, &oamManagerParam, &oamCharTransferParam, 0x20);
     }
 
     {
-        SpriteResourceCountsListUnion sp00 = sSpriteGfxHandlerCapacities;
+        SpriteResourceCountsListUnion capacities = sSpriteGfxHandlerCapacities;
         SpriteSystem_InitSprites(data->spriteRenderer, data->spriteGfxHandler, 15);
-        SpriteSystem_InitManagerWithCapacities(data->spriteRenderer, data->spriteGfxHandler, &sp00);
+        SpriteSystem_InitManagerWithCapacities(data->spriteRenderer, data->spriteGfxHandler, &capacities);
     }
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(data->spriteRenderer), 0, FX32_CONST(1024));
 }
@@ -1986,9 +1986,9 @@ static BOOL RegisterHallOfFame_ShowMon_RightSide(RegisterHallOfFameData *data) {
 
 static void RegisterHallOfFame_GetPartyDetails(RegisterHallOfFameData *data) {
     u32 i;
-    PokepicTemplate sp40;
-    TileRect sp20[2];
-    ARRAY_ASSIGN(sp20, sRegisterHofMonPicTileRects);
+    PokepicTemplate pokepicTemplate;
+    TileRect tileRects[2];
+    ARRAY_ASSIGN(tileRects, sRegisterHofMonPicTileRects);
     NARC *narc = NARC_New(NARC_a_1_8_0, HEAP_ID_REGISTER_HALL_OF_FAME);
     BOOL encry;
     Pokemon *pokemon;
@@ -2014,12 +2014,12 @@ static void RegisterHallOfFame_GetPartyDetails(RegisterHallOfFameData *data) {
                 hofMon->printGender = TRUE;
             }
             ReadWholeNarcMemberByIdPair(hofMon->followPokeParam, NARC_fielddata_tsurepoke_tp_param, SpeciesToOverworldModelIndexOffset(hofMon->species));
-            GetPokemonSpriteCharAndPlttNarcIds(&sp40, pokemon, MON_PIC_FACING_FRONT);
-            CharTiles_LoadMonRectAsObjFromNarc((NarcId)sp40.narcID, sp40.charDataID, HEAP_ID_REGISTER_HALL_OF_FAME, &sp20[0], hofMon->frontspriteCharbuf[0], hofMon->personality, TRUE, 2, hofMon->species);
-            CharTiles_LoadMonRectAsObjFromNarc((NarcId)sp40.narcID, sp40.charDataID, HEAP_ID_REGISTER_HALL_OF_FAME, &sp20[1], hofMon->frontspriteCharbuf[1], hofMon->personality, TRUE, 2, hofMon->species);
-            GetPokemonSpriteCharAndPlttNarcIds(&sp40, pokemon, MON_PIC_FACING_BACK);
-            CharTiles_LoadMonRectAsObjFromNarc((NarcId)sp40.narcID, sp40.charDataID, HEAP_ID_REGISTER_HALL_OF_FAME, &sp20[0], hofMon->backspriteCharbuf[0], hofMon->personality, TRUE, 0, hofMon->species);
-            CharTiles_LoadMonRectAsObjFromNarc((NarcId)sp40.narcID, sp40.charDataID, HEAP_ID_REGISTER_HALL_OF_FAME, &sp20[1], hofMon->backspriteCharbuf[1], hofMon->personality, TRUE, 0, hofMon->species);
+            GetPokemonSpriteCharAndPlttNarcIds(&pokepicTemplate, pokemon, MON_PIC_FACING_FRONT);
+            CharTiles_LoadMonRectAsObjFromNarc((NarcId)pokepicTemplate.narcID, pokepicTemplate.charDataID, HEAP_ID_REGISTER_HALL_OF_FAME, &tileRects[0], hofMon->frontspriteCharbuf[0], hofMon->personality, TRUE, 2, hofMon->species);
+            CharTiles_LoadMonRectAsObjFromNarc((NarcId)pokepicTemplate.narcID, pokepicTemplate.charDataID, HEAP_ID_REGISTER_HALL_OF_FAME, &tileRects[1], hofMon->frontspriteCharbuf[1], hofMon->personality, TRUE, 2, hofMon->species);
+            GetPokemonSpriteCharAndPlttNarcIds(&pokepicTemplate, pokemon, MON_PIC_FACING_BACK);
+            CharTiles_LoadMonRectAsObjFromNarc((NarcId)pokepicTemplate.narcID, pokepicTemplate.charDataID, HEAP_ID_REGISTER_HALL_OF_FAME, &tileRects[0], hofMon->backspriteCharbuf[0], hofMon->personality, TRUE, 0, hofMon->species);
+            CharTiles_LoadMonRectAsObjFromNarc((NarcId)pokepicTemplate.narcID, pokepicTemplate.charDataID, HEAP_ID_REGISTER_HALL_OF_FAME, &tileRects[1], hofMon->backspriteCharbuf[1], hofMon->personality, TRUE, 0, hofMon->species);
             NARC_ReadPokepicAnimScript(narc, hofMon->frontspriteAnim, hofMon->species, 1);
             NARC_ReadPokepicAnimScript(narc, hofMon->backspriteAnim, hofMon->species, 0);
             ++data->numMons;
@@ -2106,14 +2106,14 @@ static void RegisterHallOfFame_CreateTask_IndivMonAnimAndCry(RegisterHallOfFameD
 }
 
 static void Task_RegisterHallOfFame_IndivMonAnimAndCry(SysTask *task, void *taskData) {
-    u8 sp4;
+    u8 cryDelay;
     RegisterHofTaskData_IndivMonAnimAndCry *showPic = (RegisterHofTaskData_IndivMonAnimAndCry *)taskData;
     if (showPic->startCry == TRUE) {
-        NARC_ReadPokepicCryDelay(showPic->narc, &sp4, showPic->hofMon->species, showPic->isFrontpic);
+        NARC_ReadPokepicCryDelay(showPic->narc, &cryDelay, showPic->hofMon->species, showPic->isFrontpic);
         if (showPic->hofMon->species == SPECIES_CHATOT) {
-            Chatot_PlayCryWithDelayedFallback(NULL, 0, 100, 0, sp4);
+            Chatot_PlayCryWithDelayedFallback(NULL, 0, 100, 0, cryDelay);
         } else {
-            PlayCryDelayed(showPic->hofMon->species, sp4, showPic->hofMon->form);
+            PlayCryDelayed(showPic->hofMon->species, cryDelay, showPic->hofMon->form);
         }
         showPic->startCry = FALSE;
     }
@@ -2342,8 +2342,8 @@ static void RegisterHallOfFame_WholePartyScene_DeleteWindows(RegisterHallOfFameD
 
 static void RegisterHallOfFame_WholePartyScene_CreateSprites(RegisterHallOfFameData *data) {
 
-    TrainerPicFileIds sp2C;
-    TileRect sp1C = sRegisterHofTrainerPicTileRect;
+    TrainerPicFileIds trainerPicFileIds;
+    TileRect tileRect = sRegisterHofTrainerPicTileRect;
     NARC *narc = NARC_New(NARC_a_0_0_8, HEAP_ID_REGISTER_HALL_OF_FAME);
     u32 i;
     int tag;
@@ -2390,16 +2390,16 @@ static void RegisterHallOfFame_WholePartyScene_CreateSprites(RegisterHallOfFameD
     ManagedSprite_SetDrawFlag(data->monPics[REGHOF_PIC_WHOLE_PLAYER_SHADOW], FALSE);
 
     if (PlayerProfile_GetTrainerGender(data->args->profile) == TRAINER_FEMALE) {
-        GetTrainerPicFileIdsNoLink(TRAINERCLASS_PKMN_TRAINER_LYRA, 2, &sp2C);
+        GetTrainerPicFileIdsNoLink(TRAINERCLASS_PKMN_TRAINER_LYRA, 2, &trainerPicFileIds);
     } else {
-        GetTrainerPicFileIdsNoLink(TRAINERCLASS_PKMN_TRAINER_ETHAN, 2, &sp2C);
+        GetTrainerPicFileIdsNoLink(TRAINERCLASS_PKMN_TRAINER_ETHAN, 2, &trainerPicFileIds);
     }
     r4 = Heap_Alloc(HEAP_ID_REGISTER_HALL_OF_FAME, 0x1900);
-    CharTiles_LoadRectAsObjFromNarc(sp2C.narcId, sp2C.ncbr_id, HEAP_ID_REGISTER_HALL_OF_FAME, &sp1C, r4);
+    CharTiles_LoadRectAsObjFromNarc(trainerPicFileIds.narcId, trainerPicFileIds.ncbr_id, HEAP_ID_REGISTER_HALL_OF_FAME, &tileRect, r4);
     RegisterHallOfFame_ReplaceSpriteChar(r4, NNS_G2dGetImageLocation(Sprite_GetImageProxy(data->monPics[REGHOF_PIC_WHOLE_PLAYER]->sprite), NNS_G2D_VRAM_TYPE_2DMAIN), 3200);
     Heap_Free(r4);
 
-    GfGfxLoader_GXLoadPal(sp2C.narcId, sp2C.nclr_id, GF_PAL_LOCATION_MAIN_OBJ, (enum GFPalSlotOffset)NNS_G2dGetImagePaletteLocation(Sprite_GetPaletteProxy(data->monPics[REGHOF_PIC_WHOLE_PLAYER]->sprite), NNS_G2D_VRAM_TYPE_2DMAIN), 0x20, HEAP_ID_REGISTER_HALL_OF_FAME);
+    GfGfxLoader_GXLoadPal(trainerPicFileIds.narcId, trainerPicFileIds.nclr_id, GF_PAL_LOCATION_MAIN_OBJ, (enum GFPalSlotOffset)NNS_G2dGetImagePaletteLocation(Sprite_GetPaletteProxy(data->monPics[REGHOF_PIC_WHOLE_PLAYER]->sprite), NNS_G2D_VRAM_TYPE_2DMAIN), 0x20, HEAP_ID_REGISTER_HALL_OF_FAME);
 
     data->monPics[REGHOF_PIC_WHOLE_TWINKLE] = SpriteSystem_NewSprite(data->spriteRenderer, data->spriteGfxHandler, &sPicTemplates[20]);
     ManagedSprite_SetDrawFlag(data->monPics[REGHOF_PIC_WHOLE_TWINKLE], FALSE);
@@ -2612,12 +2612,12 @@ static SysTask *RegisterHallOfFame_CreateConfettiTask(RegisterHallOfFameData *da
         if (particleId >= 8) {
             particleId = 0;
         }
-        fx16 sp8 = (LCRandom() % FX32_CONST(2)) - FX32_ONE;
-        fx16 sp4 = (LCRandom() % FX32_CONST(2)) + FX32_ONE;
-        fx16 sp0 = (LCRandom() % FX32_CONST(0.16015625)) - FX32_CONST(0.080078125);
+        fx16 offsetX = (LCRandom() % FX32_CONST(2)) - FX32_ONE;
+        fx16 offsetY = (LCRandom() % FX32_CONST(2)) + FX32_ONE;
+        fx16 offsetZ = (LCRandom() % FX32_CONST(0.16015625)) - FX32_CONST(0.080078125);
 
         for (j = 0; j < 4; ++j) {
-            SetVec(confetti->particles[i].vertices[j], sp8 + sConfettiCoords[j].x, sp4 + sConfettiCoords[j].y, sp0 + sConfettiCoords[j].z);
+            SetVec(confetti->particles[i].vertices[j], offsetX + sConfettiCoords[j].x, offsetY + sConfettiCoords[j].y, offsetZ + sConfettiCoords[j].z);
             SetVec(confetti->particles[i].rotation, 0, 0, 0);
             SetVec(confetti->particles[i].rotationSpeed, (LCRandom() % FX32_CONST(0.125)) + FX32_CONST(0.125), (LCRandom() % FX32_CONST(0.125)) + FX32_CONST(0.125), (LCRandom() % FX32_CONST(0.125)) + FX32_CONST(0.125));
             MTX_Identity44(&confetti->particles[i].translationMat);

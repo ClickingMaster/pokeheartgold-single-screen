@@ -132,8 +132,8 @@ static BOOL VoltorbFlip_IsPrinterFinished(VoltorbFlipAppData *work);
 static void VoltorbFlip_FormatGameLevel(VoltorbFlipAppData *work, int idx);
 static void VoltorbFlip_DimLayersExceptBG3(u8 *isDimmed);
 static void VoltorbFlip_UndimLayersExceptBG3(u8 *isDimmed);
-static void VoltorbFlip_DimBG0(u8 *a0);
-static void VoltorbFlip_UndimBG0(u8 *a0);
+static void VoltorbFlip_DimBG0(u8 *isDimmed);
+static void VoltorbFlip_UndimBG0(u8 *isDimmed);
 static void VoltorbFlip_InitBgs(VoltorbFlipAppData *work);
 static void VoltorbFlip_UnloadBgs(VoltorbFlipAppData *work);
 static void VoltorbFlip_LoadBgGfx(VoltorbFlipAppData *work);
@@ -723,8 +723,8 @@ BOOL VoltorbFlipTaskEngine_SelectMainMenu_Begin(VoltorbFlipTaskEngine *workflow,
 }
 
 BOOL VoltorbFlipTaskEngine_SelectMainMenu_Main(VoltorbFlipTaskEngine *workflow, VoltorbFlipAppData *work) {
-    int var1 = VoltorbFlip_HandleListMenuInput(work);
-    switch (var1 + 2) {
+    int selection = VoltorbFlip_HandleListMenuInput(work);
+    switch (selection + 2) {
     case 2: // Play
         VoltorbFlip_UndimLayersExceptBG3(&work->screenIsDimmed);
         VoltorbFlipTaskEngine_Enqueue(workflow, WORKFLOW_RENDER_BOARD);
@@ -755,8 +755,8 @@ BOOL VoltorbFlipTaskEngine_SelectGameInfo_Begin(VoltorbFlipTaskEngine *workflow,
 }
 
 BOOL VoltorbFlipTaskEngine_SelectGameInfo_Main(VoltorbFlipTaskEngine *workflow, VoltorbFlipAppData *work) {
-    int var1 = VoltorbFlip_HandleListMenuInput(work);
-    switch (var1 + 2) {
+    int selection = VoltorbFlip_HandleListMenuInput(work);
+    switch (selection + 2) {
     case 1:
         break;
     case 2:
@@ -1038,8 +1038,8 @@ BOOL VoltorbFlipTaskEngine_AwardCoins_Main(VoltorbFlipTaskEngine *workflow, Volt
     int state = VoltorbFlipTaskEngine_CurrentTaskState(workflow);
     switch (state) {
     case 0: {
-        int var2 = VoltorbFlipGameState_GetGamePayout(work->game);
-        BufferIntegerAsString(work->msgFmt, 0, var2, 5, PRINTING_MODE_LEFT_ALIGN, 1);
+        int payout = VoltorbFlipGameState_GetGamePayout(work->game);
+        BufferIntegerAsString(work->msgFmt, 0, payout, 5, PRINTING_MODE_LEFT_ALIGN, 1);
         BufferPlayersName(work->msgFmt, 1, work->profile);
         // {STRVAR_1 3, 1, 0}\nreceived {STRVAR_1 53, 0, 0} Coin(s)!\r
         VoltorbFlip_PrintTextWindow(work, msg_0039_00040, TRUE);
@@ -1149,8 +1149,8 @@ BOOL VoltorbFlipTaskEngine_MemoTouch_Run(VoltorbFlipTaskEngine *workflow, Voltor
     case 8: {
         int cardId = VoltorbFlipInputHandler_GetCursorPos(work->inputHandler);
 
-        u8 var3 = input - 5;
-        VoltorbFlip_TryToggleCardMemo(work, cardId, var3);
+        u8 memoId = input - 5;
+        VoltorbFlip_TryToggleCardMemo(work, cardId, memoId);
         break;
     }
     case 0:
@@ -1956,18 +1956,18 @@ static void VoltorbFlip_UndimLayersExceptBG3(u8 *isDimmed) {
     *isDimmed = FALSE;
 }
 
-static void VoltorbFlip_DimBG0(u8 *a0) {
-    if (!*a0) {
+static void VoltorbFlip_DimBG0(u8 *isDimmed) {
+    if (!*isDimmed) {
         InitScreenBrightnessData(SCREEN_MASK_MAIN);
         StartBrightnessTransition(1, -6, 0, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BD | GX_BLEND_PLANEMASK_BG0), SCREEN_MASK_MAIN);
-        *a0 = TRUE;
+        *isDimmed = TRUE;
     }
 }
 
-static void VoltorbFlip_UndimBG0(u8 *a0) {
+static void VoltorbFlip_UndimBG0(u8 *isDimmed) {
     InitScreenBrightnessData(SCREEN_MASK_MAIN);
     StartBrightnessTransition(1, 0, -6, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BD | GX_BLEND_PLANEMASK_BG0), SCREEN_MASK_MAIN);
-    *a0 = FALSE;
+    *isDimmed = FALSE;
 }
 
 static void VoltorbFlip_InitBgs(VoltorbFlipAppData *work) {

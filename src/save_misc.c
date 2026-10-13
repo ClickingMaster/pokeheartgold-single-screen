@@ -112,40 +112,40 @@ static const u8 _020F677C[3][2] = {
     { 6, 2 },
 };
 
-BOOL SaveMisc_PhoneRecentCallers_Contains(SAVE_MISC_DATA *saveMiscData, int a1, int a2) {
+BOOL SaveMisc_PhoneRecentCallers_Contains(SAVE_MISC_DATA *saveMiscData, int chunk, int callerId) {
     int i;
-    if (a1 > NELEMS(_020F677C) - 1) {
+    if (chunk > NELEMS(_020F677C) - 1) {
         return FALSE;
     }
-    for (i = 0; i < _020F677C[a1][1]; i++) {
-        if (saveMiscData->phoneRecentCallers[_020F677C[a1][0] + i] == 0xFF) {
+    for (i = 0; i < _020F677C[chunk][1]; i++) {
+        if (saveMiscData->phoneRecentCallers[_020F677C[chunk][0] + i] == 0xFF) {
             break;
         }
-        if (saveMiscData->phoneRecentCallers[_020F677C[a1][0] + i] == a2) {
+        if (saveMiscData->phoneRecentCallers[_020F677C[chunk][0] + i] == callerId) {
             return TRUE;
         }
     }
     return FALSE;
 }
 
-void SaveMisc_PhoneRecentCallers_Clear(SAVE_MISC_DATA *saveMiscData, int a1) {
+void SaveMisc_PhoneRecentCallers_Clear(SAVE_MISC_DATA *saveMiscData, int chunk) {
     int i;
-    if (a1 > NELEMS(_020F677C) - 1) {
+    if (chunk > NELEMS(_020F677C) - 1) {
         return;
     }
-    for (i = 0; i < _020F677C[a1][1]; i++) {
-        saveMiscData->phoneRecentCallers[_020F677C[a1][0] + i] = 0xFF;
+    for (i = 0; i < _020F677C[chunk][1]; i++) {
+        saveMiscData->phoneRecentCallers[_020F677C[chunk][0] + i] = 0xFF;
     }
 }
 
-u8 SaveMisc_PhoneRecentCallers_Count(SAVE_MISC_DATA *saveMiscData, int a1) {
+u8 SaveMisc_PhoneRecentCallers_Count(SAVE_MISC_DATA *saveMiscData, int chunk) {
     int n = 0;
     int i, min, max;
-    if (a1 > NELEMS(_020F677C) - 1) {
+    if (chunk > NELEMS(_020F677C) - 1) {
         return 0;
     }
-    min = _020F677C[a1][0];
-    max = _020F677C[a1][0] + _020F677C[a1][1] - 1;
+    min = _020F677C[chunk][0];
+    max = _020F677C[chunk][0] + _020F677C[chunk][1] - 1;
     for (i = min; i <= max; i++) {
         if (saveMiscData->phoneRecentCallers[i] != 0xFF) {
             n++;
@@ -154,27 +154,27 @@ u8 SaveMisc_PhoneRecentCallers_Count(SAVE_MISC_DATA *saveMiscData, int a1) {
     return n;
 }
 
-void SaveMisc_PhoneRecentCallers_Add(SAVE_MISC_DATA *saveMiscData, u8 a1, u8 a2, u8 a3) {
+void SaveMisc_PhoneRecentCallers_Add(SAVE_MISC_DATA *saveMiscData, u8 chunk, u8 a2, u8 callerId) {
     int i, len, min, max;
-    if (a1 > NELEMS(_020F677C) - 1) {
+    if (chunk > NELEMS(_020F677C) - 1) {
         return;
     }
-    len = _020F677C[a1][1];
-    min = _020F677C[a1][0];
+    len = _020F677C[chunk][1];
+    min = _020F677C[chunk][0];
     max = min + len - 1;
     for (i = min; i <= max; i++) {
         if (saveMiscData->phoneRecentCallers[i] == 0xFF) {
-            saveMiscData->phoneRecentCallers[i] = a3;
+            saveMiscData->phoneRecentCallers[i] = callerId;
             return;
         }
     }
     if (a2 == len + 1) {
-        SaveMisc_PhoneRecentCallers_Clear(saveMiscData, a1);
-        saveMiscData->phoneRecentCallers[_020F677C[a1][0]] = a3;
+        SaveMisc_PhoneRecentCallers_Clear(saveMiscData, chunk);
+        saveMiscData->phoneRecentCallers[_020F677C[chunk][0]] = callerId;
         return;
     }
-    MI_CpuCopy8(&saveMiscData->phoneRecentCallers[_020F677C[a1][0] + 1], &saveMiscData->phoneRecentCallers[_020F677C[a1][0]], len - 1);
-    saveMiscData->phoneRecentCallers[max] = a3;
+    MI_CpuCopy8(&saveMiscData->phoneRecentCallers[_020F677C[chunk][0] + 1], &saveMiscData->phoneRecentCallers[_020F677C[chunk][0]], len - 1);
+    saveMiscData->phoneRecentCallers[max] = callerId;
 }
 
 void SaveMisc_SetTogepiPersonalityGender(SAVE_MISC_DATA *saveMiscData, int personality, u8 gender) {
@@ -195,22 +195,22 @@ void SaveMisc_SetBattleGreeting(SAVE_MISC_DATA *saveMiscData, MailMessage *mailM
     saveMiscData->battleGreetingEC = *mailMessage;
 }
 
-void SaveMisc_GetVsRecorderColorScheme(SAVE_MISC_DATA *saveMiscData, u8 *a1) {
-    *a1 = saveMiscData->vsRecorderColorScheme;
+void SaveMisc_GetVsRecorderColorScheme(SAVE_MISC_DATA *saveMiscData, u8 *colorScheme) {
+    *colorScheme = saveMiscData->vsRecorderColorScheme;
 }
 
-void SaveMisc_SetVsRecorderColorScheme(SAVE_MISC_DATA *saveMiscData, u8 a1) {
-    saveMiscData->vsRecorderColorScheme = a1;
+void SaveMisc_SetVsRecorderColorScheme(SAVE_MISC_DATA *saveMiscData, u8 colorScheme) {
+    saveMiscData->vsRecorderColorScheme = colorScheme;
 }
 
-void SaveMisc_GetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int a1, u32 *a2, u32 *a3, u8 *a4) {
-    *a2 = saveMiscData->extraChunkKeys[0][a1 - 1];
-    *a3 = saveMiscData->extraChunkKeys[1][a1 - 1];
-    *a4 = saveMiscData->unk_02D0[a1 - 1];
+void SaveMisc_GetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int chunkId, u32 *key0, u32 *key1, u8 *a4) {
+    *key0 = saveMiscData->extraChunkKeys[0][chunkId - 1];
+    *key1 = saveMiscData->extraChunkKeys[1][chunkId - 1];
+    *a4 = saveMiscData->unk_02D0[chunkId - 1];
 }
 
-void SaveMisc_SetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int a1, u32 a2, u32 a3, u8 a4) {
-    saveMiscData->extraChunkKeys[0][a1 - 1] = a2;
-    saveMiscData->extraChunkKeys[1][a1 - 1] = a3;
-    saveMiscData->unk_02D0[a1 - 1] = a4;
+void SaveMisc_SetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int chunkId, u32 key0, u32 key1, u8 a4) {
+    saveMiscData->extraChunkKeys[0][chunkId - 1] = key0;
+    saveMiscData->extraChunkKeys[1][chunkId - 1] = key1;
+    saveMiscData->unk_02D0[chunkId - 1] = a4;
 }

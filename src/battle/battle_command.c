@@ -7890,8 +7890,8 @@ static int GetNicknameMessageNo(BattleSystem *battleSystem, BattleContext *ctx, 
     }
 }
 
-static int GetMoveMessageNo(BattleContext *ctx, int arg1) {
-    switch (arg1) {
+static int GetMoveMessageNo(BattleContext *ctx, int move) {
+    switch (move) {
     case 1:
         return ctx->moveNoCur;
     case 255:

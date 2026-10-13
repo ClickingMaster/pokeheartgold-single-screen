@@ -26,7 +26,7 @@ void BattleFinger_LoadResources(SpriteSystem *renderer, SpriteManager *gfxHandle
 void BattleFinger_FreeResources(SpriteManager *gfxHandler, u32 character, u32 pal, u32 cell, u32 animation);
 BattleFinger *BattleFinger_New(SpriteSystem *renderer, SpriteManager *gfxHandler, enum HeapID heapID, u32 character, u32 pal, u32 cell, u32 animation, u32 spritePriority, u32 bgPriority);
 void BattleFinger_Delete(BattleFinger *finger);
-void BattleFinger_EnableWithOffset(BattleFinger *finger, int x, int y, fx32 a3);
+void BattleFinger_EnableWithOffset(BattleFinger *finger, int x, int y, fx32 yOffset);
 void BattleFinger_Enable(BattleFinger *finger, int x, int y);
 void BattleFinger_Disable(BattleFinger *finger);
 void BattleFinger_SetTouchDelay(BattleFinger *finger, int delay);

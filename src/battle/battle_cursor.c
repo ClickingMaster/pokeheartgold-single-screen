@@ -35,7 +35,7 @@ static const ManagedSpriteTemplate sBattleCursorSpriteTemplate = {
     .vramTransfer = 0
 };
 
-BattleCursor *BattleCursor_New(SpriteSystem *renderer, SpriteManager *gfxHandler, enum HeapID heapID, u32 character, u32 pal, u32 cell, u32 animation, u32 a7, u32 a8) {
+BattleCursor *BattleCursor_New(SpriteSystem *renderer, SpriteManager *gfxHandler, enum HeapID heapID, u32 character, u32 pal, u32 cell, u32 animation, u32 drawPriority, u32 bgPriority) {
     BattleCursor *cursor;
     ManagedSpriteTemplate unkStruct;
     int i;
@@ -45,8 +45,8 @@ BattleCursor *BattleCursor_New(SpriteSystem *renderer, SpriteManager *gfxHandler
     unkStruct.resIdList[1] = pal;
     unkStruct.resIdList[2] = cell;
     unkStruct.resIdList[3] = animation;
-    unkStruct.drawPriority = a7;
-    unkStruct.bgPriority = a8;
+    unkStruct.drawPriority = drawPriority;
+    unkStruct.bgPriority = bgPriority;
 
     cursor = Heap_Alloc(heapID, sizeof(BattleCursor));
     MI_CpuFill8(cursor, 0, sizeof(BattleCursor));
@@ -70,13 +70,13 @@ void BattleCursor_Delete(BattleCursor *cursor) {
     Heap_Free(cursor);
 }
 
-void BattleCursor_SetCornersWithOffset(BattleCursor *cursor, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, fx32 a9) {
+void BattleCursor_SetCornersWithOffset(BattleCursor *cursor, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, fx32 yOffset) {
     int i;
 
-    ManagedSprite_SetPositionXYWithSubscreenOffset(cursor->sprites[0], x0, y0, a9);
-    ManagedSprite_SetPositionXYWithSubscreenOffset(cursor->sprites[1], x1, y1, a9);
-    ManagedSprite_SetPositionXYWithSubscreenOffset(cursor->sprites[2], x2, y2, a9);
-    ManagedSprite_SetPositionXYWithSubscreenOffset(cursor->sprites[3], x3, y3, a9);
+    ManagedSprite_SetPositionXYWithSubscreenOffset(cursor->sprites[0], x0, y0, yOffset);
+    ManagedSprite_SetPositionXYWithSubscreenOffset(cursor->sprites[1], x1, y1, yOffset);
+    ManagedSprite_SetPositionXYWithSubscreenOffset(cursor->sprites[2], x2, y2, yOffset);
+    ManagedSprite_SetPositionXYWithSubscreenOffset(cursor->sprites[3], x3, y3, yOffset);
 
     ManagedSprite_SetAnim(cursor->sprites[0], 0);
     ManagedSprite_SetAnim(cursor->sprites[1], 1);
@@ -96,13 +96,13 @@ void BattleCursor_SetRect(BattleCursor *cursor, int left, int right, int top, in
     BattleCursor_SetCorners(cursor, left, top, right, top, left, bottom, right, bottom);
 }
 
-void BattleCursor_SetRectWithOffset(BattleCursor *cursor, int left, int right, int top, int bottom, fx32 a5) {
-    BattleCursor_SetCornersWithOffset(cursor, left, top, right, top, left, bottom, right, bottom, a5);
+void BattleCursor_SetRectWithOffset(BattleCursor *cursor, int left, int right, int top, int bottom, fx32 yOffset) {
+    BattleCursor_SetCornersWithOffset(cursor, left, top, right, top, left, bottom, right, bottom, yOffset);
 }
 
-void BattleCursor_ShowExtraSpriteWithOffset(BattleCursor *cursor, int x, int y, int a3, fx32 a4) {
-    ManagedSprite_SetPositionXYWithSubscreenOffset(cursor->sprites[4], x, y, a4);
-    ManagedSprite_SetAnim(cursor->sprites[4], a3);
+void BattleCursor_ShowExtraSpriteWithOffset(BattleCursor *cursor, int x, int y, int anim, fx32 yOffset) {
+    ManagedSprite_SetPositionXYWithSubscreenOffset(cursor->sprites[4], x, y, yOffset);
+    ManagedSprite_SetAnim(cursor->sprites[4], anim);
     ManagedSprite_SetDrawFlag(cursor->sprites[4], TRUE);
 }
 

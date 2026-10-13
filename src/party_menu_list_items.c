@@ -356,10 +356,10 @@ void PartyMenu_CancelSwitchMon(PartyMenu *partyMenu) {
 void PartyMenu_BeginSwapMons(PartyMenu *partyMenu) {
     u16 *bg2Tilemap;
     u16 *bg1Tilemap;
-    s8 spC;
-    s8 sp8;
-    s8 sp4;
-    s8 sp0;
+    s8 slot0PanelY;
+    s8 slot0PanelX;
+    s8 slot1PanelY;
+    s8 slot1PanelX;
     u16 i;
     partyMenu->swapMonsData.slots[0] = partyMenu->partyMonIndex;
     partyMenu->swapMonsData.slots[1] = partyMenu->softboiledDonorSlot;
@@ -380,16 +380,16 @@ void PartyMenu_BeginSwapMons(PartyMenu *partyMenu) {
     bg2Tilemap = GetBgTilemapBuffer(partyMenu->bgConfig, GF_BG_LYR_MAIN_2);
     bg1Tilemap = GetBgTilemapBuffer(partyMenu->bgConfig, GF_BG_LYR_MAIN_1);
 
-    spC = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[0]].panelY;
-    sp8 = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[0]].panelX;
-    sp4 = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[1]].panelY;
-    sp0 = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[1]].panelX;
+    slot0PanelY = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[0]].panelY;
+    slot0PanelX = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[0]].panelX;
+    slot1PanelY = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[1]].panelY;
+    slot1PanelX = partyMenu->monsDrawState[partyMenu->swapMonsData.slots[1]].panelX;
 
     for (i = 0; i < PARTY_SIZE; ++i) {
-        memcpy(&partyMenu->swapMonsData.bg2Tilemaps[0][i * 16], &bg2Tilemap[sp8 + (spC + i) * 32], 0x20);
-        memcpy(&partyMenu->swapMonsData.bg1Tilemaps[0][i * 16], &bg1Tilemap[sp8 + (spC + i) * 32], 0x20);
-        memcpy(&partyMenu->swapMonsData.bg2Tilemaps[1][i * 16], &bg2Tilemap[sp0 + (sp4 + i) * 32], 0x20);
-        memcpy(&partyMenu->swapMonsData.bg1Tilemaps[1][i * 16], &bg1Tilemap[sp0 + (sp4 + i) * 32], 0x20);
+        memcpy(&partyMenu->swapMonsData.bg2Tilemaps[0][i * 16], &bg2Tilemap[slot0PanelX + (slot0PanelY + i) * 32], 0x20);
+        memcpy(&partyMenu->swapMonsData.bg1Tilemaps[0][i * 16], &bg1Tilemap[slot0PanelX + (slot0PanelY + i) * 32], 0x20);
+        memcpy(&partyMenu->swapMonsData.bg2Tilemaps[1][i * 16], &bg2Tilemap[slot1PanelX + (slot1PanelY + i) * 32], 0x20);
+        memcpy(&partyMenu->swapMonsData.bg1Tilemaps[1][i * 16], &bg1Tilemap[slot1PanelX + (slot1PanelY + i) * 32], 0x20);
     }
     Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], FALSE);
     Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_SWITCH_MON_CURSOR], FALSE);

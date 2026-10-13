@@ -30,87 +30,87 @@ const WifiClubRoomLightStep sWifiClubRoomLightSequence[8] = {
 
 const u16 sWifiClubRoomLightBlinkFrames[2] = { 3, 2 };
 
-YesNoPrompt *WifiClub_CreateYesNoPromptIgnoreTouch(BgConfig *arg0, const WindowTemplate *arg1, u32 arg2) {
-    YesNoPrompt *yesNoPrompt = WifiClub_CreateYesNoPrompt(arg0, arg1, arg2);
+YesNoPrompt *WifiClub_CreateYesNoPromptIgnoreTouch(BgConfig *bgConfig, const WindowTemplate *windowTemplate, u32 initialCursorPos) {
+    YesNoPrompt *yesNoPrompt = WifiClub_CreateYesNoPrompt(bgConfig, windowTemplate, initialCursorPos);
     YesNoPrompt_SetIgnoreTouch(yesNoPrompt, 1);
     return yesNoPrompt;
 }
 
-YesNoPrompt *WifiClub_CreateYesNoPrompt(BgConfig *arg0, const WindowTemplate *arg1, u32 arg2) {
+YesNoPrompt *WifiClub_CreateYesNoPrompt(BgConfig *bgConfig, const WindowTemplate *windowTemplate, u32 initialCursorPos) {
     YesNoPrompt *yesNoPrompt = YesNoPrompt_Create(HEAP_ID_53);
     YesNoPromptTemplate yesNoPromptTemplate;
-    yesNoPromptTemplate.bgConfig = arg0;
-    yesNoPromptTemplate.bgId = arg1->bgId;
-    yesNoPromptTemplate.tileStart = arg1->baseTile;
-    yesNoPromptTemplate.plttSlot = arg1->palette;
-    yesNoPromptTemplate.x = arg1->left;
-    yesNoPromptTemplate.y = arg1->top;
+    yesNoPromptTemplate.bgConfig = bgConfig;
+    yesNoPromptTemplate.bgId = windowTemplate->bgId;
+    yesNoPromptTemplate.tileStart = windowTemplate->baseTile;
+    yesNoPromptTemplate.plttSlot = windowTemplate->palette;
+    yesNoPromptTemplate.x = windowTemplate->left;
+    yesNoPromptTemplate.y = windowTemplate->top;
     yesNoPromptTemplate.ignoreTouchFlag = 0;
-    yesNoPromptTemplate.initialCursorPos = arg2;
+    yesNoPromptTemplate.initialCursorPos = initialCursorPos;
     yesNoPromptTemplate.shapeParam = 0;
     YesNoPrompt_InitFromTemplate(yesNoPrompt, &yesNoPromptTemplate);
     return yesNoPrompt;
 }
 
-void WifiClubRoom_Init(WifiClubRoom *arg0, enum HeapID arg1, NARC *arg2, BgConfig *arg3, s32 arg4, u32 arg5) {
-    memset(arg0, 0, sizeof(WifiClubRoom));
-    arg0->heapID = arg1;
-    u32 temp_r7 = (arg5 - 1) / 8;
-    arg0->bgConfig = arg3;
-    WifiClubRoomGfx_Init(&arg0->gfx, arg0->heapID, arg2);
-    WifiClubRoom_InitBgs(arg0->bgConfig, arg1);
+void WifiClubRoom_Init(WifiClubRoom *room, enum HeapID heapID, NARC *narc, BgConfig *bgConfig, s32 playerSpriteId, u32 friendCount) {
+    memset(room, 0, sizeof(WifiClubRoom));
+    room->heapID = heapID;
+    u32 mapIndex = (friendCount - 1) / 8;
+    room->bgConfig = bgConfig;
+    WifiClubRoomGfx_Init(&room->gfx, room->heapID, narc);
+    WifiClubRoom_InitBgs(room->bgConfig, heapID);
 
-    Field2DPoint sp4 = WifiClubRoom_GetMapSize(temp_r7);
-    arg0->map = Field2DMap_New(sp4.unk0, sp4.unk2, arg1);
-    Field2DMap_Load(arg0->map, WifiClubRoom_GetMapCells(temp_r7));
-    arg0->objects = Field2DObjectManager_New(0x30, arg1);
-    WifiClubRoom_CreateDrawers(arg0, arg4, arg1);
-    Field2DCamera_Init(&arg0->cameraPos);
-    WifiClubRoom_CreateMapBg(arg0, arg1, arg2, temp_r7);
-    WifiClubRoom_LoadBgGfx(arg0->bgConfig, arg1, arg2);
-    WifiClubRoomLights_Init(arg0, &arg0->lights, arg2);
-    arg0->commandQueue = Field2DCommandQueue_New(0x80, arg1);
-    arg0->initialized = 1;
+    Field2DPoint mapSize = WifiClubRoom_GetMapSize(mapIndex);
+    room->map = Field2DMap_New(mapSize.unk0, mapSize.unk2, heapID);
+    Field2DMap_Load(room->map, WifiClubRoom_GetMapCells(mapIndex));
+    room->objects = Field2DObjectManager_New(0x30, heapID);
+    WifiClubRoom_CreateDrawers(room, playerSpriteId, heapID);
+    Field2DCamera_Init(&room->cameraPos);
+    WifiClubRoom_CreateMapBg(room, heapID, narc, mapIndex);
+    WifiClubRoom_LoadBgGfx(room->bgConfig, heapID, narc);
+    WifiClubRoomLights_Init(room, &room->lights, narc);
+    room->commandQueue = Field2DCommandQueue_New(0x80, heapID);
+    room->initialized = 1;
 }
 
-void WifiClubRoom_Free(WifiClubRoom *arg0) {
-    Field2DCommandQueue_Free(arg0->commandQueue);
-    WifiClubRoom_DeleteMapBg(arg0);
-    WifiClubRoomLights_Free(arg0, &arg0->lights);
-    WifiClubRoom_DeleteAllPersons(arg0);
-    WifiClubRoom_DeleteDrawers(arg0);
-    Field2DObjectManager_Free(arg0->objects);
-    Field2DMap_Free(arg0->map);
-    WifiClubRoomGfx_Free(&arg0->gfx);
-    WifiClubRoom_FreeBgs(arg0->bgConfig);
-    memset(arg0, 0, sizeof(WifiClubRoom));
+void WifiClubRoom_Free(WifiClubRoom *room) {
+    Field2DCommandQueue_Free(room->commandQueue);
+    WifiClubRoom_DeleteMapBg(room);
+    WifiClubRoomLights_Free(room, &room->lights);
+    WifiClubRoom_DeleteAllPersons(room);
+    WifiClubRoom_DeleteDrawers(room);
+    Field2DObjectManager_Free(room->objects);
+    Field2DMap_Free(room->map);
+    WifiClubRoomGfx_Free(&room->gfx);
+    WifiClubRoom_FreeBgs(room->bgConfig);
+    memset(room, 0, sizeof(WifiClubRoom));
 }
 
-s32 WifiClubRoom_IsInitialized(WifiClubRoom *arg0) {
-    return arg0->initialized;
+s32 WifiClubRoom_IsInitialized(WifiClubRoom *room) {
+    return room->initialized;
 }
 
-s32 WifiClubRoom_Update(WifiClubRoom *arg0) {
-    Field2DObjectManager_Update(arg0->objects);
-    WifiClubRoom_UpdatePersons(arg0);
-    WifiClubRoom_ProcessMoveCommands(arg0);
-    Field2DCamera_CenterOnObject(&arg0->cameraPos, arg0->player->object);
-    Field2DBgLayer_SetCamera(arg0->mapBg, &arg0->cameraPos);
-    Field2DObjectSpriteManager_Update(arg0->drawers);
-    WifiClubRoom_AnimatePersons(arg0);
-    WifiClubRoom_HideExitArrow(arg0);
-    if (WifiClubRoom_IsPlayerIdle(arg0) == 1) {
-        if (WifiClubRoom_IsPlayerAtEntrance(arg0) == 1) {
-            WifiClubRoom_ShowExitArrow(arg0);
+s32 WifiClubRoom_Update(WifiClubRoom *room) {
+    Field2DObjectManager_Update(room->objects);
+    WifiClubRoom_UpdatePersons(room);
+    WifiClubRoom_ProcessMoveCommands(room);
+    Field2DCamera_CenterOnObject(&room->cameraPos, room->player->object);
+    Field2DBgLayer_SetCamera(room->mapBg, &room->cameraPos);
+    Field2DObjectSpriteManager_Update(room->drawers);
+    WifiClubRoom_AnimatePersons(room);
+    WifiClubRoom_HideExitArrow(room);
+    if (WifiClubRoom_IsPlayerIdle(room) == 1) {
+        if (WifiClubRoom_IsPlayerAtEntrance(room) == 1) {
+            WifiClubRoom_ShowExitArrow(room);
             if (gSystem.heldKeys & PAD_KEY_DOWN) {
                 return 1;
             }
         }
         if (gSystem.newKeys & PAD_BUTTON_A) {
-            if (WifiClubRoom_GetTalkPartnerId(arg0) != 0) {
+            if (WifiClubRoom_GetTalkPartnerId(room) != 0) {
                 return 2;
             }
-            if (WifiClubRoom_IsPlayerFacingCounter(arg0) == 1) {
+            if (WifiClubRoom_IsPlayerFacingCounter(room) == 1) {
                 return 3;
             }
         }
@@ -118,228 +118,228 @@ s32 WifiClubRoom_Update(WifiClubRoom *arg0) {
     return 0;
 }
 
-void WifiClubRoom_Draw(WifiClubRoom *arg0) {
-    if (arg0->initialized != 0) {
-        SpriteList_RenderAndAnimateSprites(arg0->gfx.spriteList);
+void WifiClubRoom_Draw(WifiClubRoom *room) {
+    if (room->initialized != 0) {
+        SpriteList_RenderAndAnimateSprites(room->gfx.spriteList);
     }
 }
 
-u8 WifiClubRoom_GetTalkPartnerId(WifiClubRoom *arg0) {
-    GF_ASSERT(arg0->player != NULL);
-    return arg0->player->talkPartnerId;
+u8 WifiClubRoom_GetTalkPartnerId(WifiClubRoom *room) {
+    GF_ASSERT(room->player != NULL);
+    return room->player->talkPartnerId;
 }
 
-s32 WifiClubRoom_GetTileUnderPlayer(WifiClubRoom *arg0) {
-    GF_ASSERT(arg0->player != NULL);
-    Field2DPoint temp_r0 = Field2DObject_GetPos(arg0->player->object);
-    return Field2DMap_GetTag(arg0->map, temp_r0.unk0 / 16, temp_r0.unk2 / 16);
+s32 WifiClubRoom_GetTileUnderPlayer(WifiClubRoom *room) {
+    GF_ASSERT(room->player != NULL);
+    Field2DPoint pos = Field2DObject_GetPos(room->player->object);
+    return Field2DMap_GetTag(room->map, pos.unk0 / 16, pos.unk2 / 16);
 }
 
-s32 WifiClubRoom_GetTileBelowPlayer(WifiClubRoom *arg0) {
-    GF_ASSERT(arg0->player != NULL);
-    Field2DPoint sp0 = Field2DObject_GetPos(arg0->player->object);
-    return Field2DMap_GetTag(arg0->map, sp0.unk0 / 16, (sp0.unk2 / 16) + 1);
+s32 WifiClubRoom_GetTileBelowPlayer(WifiClubRoom *room) {
+    GF_ASSERT(room->player != NULL);
+    Field2DPoint pos = Field2DObject_GetPos(room->player->object);
+    return Field2DMap_GetTag(room->map, pos.unk0 / 16, (pos.unk2 / 16) + 1);
 }
 
-void WifiClubRoom_ShowFriendMarker(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
-    Field2DPoint sp0 = Field2DObject_GetPos(arg1->object);
-    WifiClubRoom_ShowFriendMarkerAt(arg0, sp0, Field2DObjectSprite_GetDrawPriority(arg1->drawer) - 2);
+void WifiClubRoom_ShowFriendMarker(WifiClubRoom *room, WifiClubRoomPerson *person) {
+    Field2DPoint pos = Field2DObject_GetPos(person->object);
+    WifiClubRoom_ShowFriendMarkerAt(room, pos, Field2DObjectSprite_GetDrawPriority(person->drawer) - 2);
 }
 
-void WifiClubRoom_HideFriendMarker(WifiClubRoom *arg0) {
-    WifiClubRoom_HideFriendMarkerSprite(arg0);
+void WifiClubRoom_HideFriendMarker(WifiClubRoom *room) {
+    WifiClubRoom_HideFriendMarkerSprite(room);
 }
 
-void WifiClubRoom_SetInputLocked(WifiClubRoom *arg0, s32 arg1) {
-    arg0->inputLocked = arg1;
+void WifiClubRoom_SetInputLocked(WifiClubRoom *room, s32 locked) {
+    room->inputLocked = locked;
 }
 
-s32 WifiClubRoom_IsInputLocked(WifiClubRoom *arg0) {
-    return arg0->inputLocked;
+s32 WifiClubRoom_IsInputLocked(WifiClubRoom *room) {
+    return room->inputLocked;
 }
 
-WifiClubRoomPerson *WifiClubRoom_AddPlayer(WifiClubRoom *arg0, s16 arg1) {
-    s16 spC;
-    WifiClubRoomPerson *temp_r0 = WifiClubRoom_AllocPerson(arg0);
-    arg0->player = temp_r0;
-    WifiClubRoom_FindEntrancePos(arg0, &spC);
-    WifiClubRoom_CreatePersonObject(arg0, temp_r0, &spC, 0, arg1, 0, 0);
-    WifiClubRoom_SetPersonModePlayer(arg0, temp_r0);
-    WifiClubRoom_CreatePersonDrawer(arg0, temp_r0, 1);
-    Field2DCamera_CenterOnObject(&arg0->cameraPos, arg0->player->object);
-    Field2DBgLayer_SetCamera(arg0->mapBg, &arg0->cameraPos);
-    return temp_r0;
+WifiClubRoomPerson *WifiClubRoom_AddPlayer(WifiClubRoom *room, s16 spriteId) {
+    s16 pos;
+    WifiClubRoomPerson *person = WifiClubRoom_AllocPerson(room);
+    room->player = person;
+    WifiClubRoom_FindEntrancePos(room, &pos);
+    WifiClubRoom_CreatePersonObject(room, person, &pos, 0, spriteId, 0, 0);
+    WifiClubRoom_SetPersonModePlayer(room, person);
+    WifiClubRoom_CreatePersonDrawer(room, person, 1);
+    Field2DCamera_CenterOnObject(&room->cameraPos, room->player->object);
+    Field2DBgLayer_SetCamera(room->mapBg, &room->cameraPos);
+    return person;
 }
 
-WifiClubRoomPerson *WifiClubRoom_AddFriend(WifiClubRoom *arg0, s16 arg1, s16 arg2) {
-    s16 spC[2];
-    WifiClubRoomPerson *temp_r4 = WifiClubRoom_AllocPerson(arg0);
-    WifiClubRoom_FindFriendSpawnPos(arg0, &spC[0], arg2 - 1);
-    if (arg0->player != NULL) {
-        Field2DPoint sp0 = Field2DObject_GetPos(arg0->player->object);
-        if ((sp0.unk0 == spC[0]) && (sp0.unk2 == spC[1])) {
+WifiClubRoomPerson *WifiClubRoom_AddFriend(WifiClubRoom *room, s16 spriteId, s16 id) {
+    s16 pos[2];
+    WifiClubRoomPerson *person = WifiClubRoom_AllocPerson(room);
+    WifiClubRoom_FindFriendSpawnPos(room, &pos[0], id - 1);
+    if (room->player != NULL) {
+        Field2DPoint playerPos = Field2DObject_GetPos(room->player->object);
+        if ((playerPos.unk0 == pos[0]) && (playerPos.unk2 == pos[1])) {
             return NULL;
         }
     }
-    WifiClubRoom_CreatePersonObject(arg0, temp_r4, &spC[0], arg2, arg1, 1, 4);
-    WifiClubRoom_SetPersonModeWarpIn(arg0, temp_r4);
-    WifiClubRoom_CreatePersonDrawer(arg0, temp_r4, 0);
-    return temp_r4;
+    WifiClubRoom_CreatePersonObject(room, person, &pos[0], id, spriteId, 1, 4);
+    WifiClubRoom_SetPersonModeWarpIn(room, person);
+    WifiClubRoom_CreatePersonDrawer(room, person, 0);
+    return person;
 }
 
-void WifiClubRoom_StartPersonLeave(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
-    Field2DObject_GetParam(arg1->object, 6);
-    arg1->update = WifiClubRoomPerson_UpdateWarpOut;
-    arg1->animate = WifiClubRoomPerson_AnimateWarp;
-    arg1->mode = 2;
-    arg1->timer = 0;
-    Field2DObjectSprite_SetAutoUpdate(arg1->drawer, 0);
-    Field2DObjectSprite_StartLoopAnim(arg1->drawer);
-    WifiClubRoom_QueuePersonCommand(arg0, 4, arg1);
+void WifiClubRoom_StartPersonLeave(WifiClubRoom *room, WifiClubRoomPerson *person) {
+    Field2DObject_GetParam(person->object, 6);
+    person->update = WifiClubRoomPerson_UpdateWarpOut;
+    person->animate = WifiClubRoomPerson_AnimateWarp;
+    person->mode = 2;
+    person->timer = 0;
+    Field2DObjectSprite_SetAutoUpdate(person->drawer, 0);
+    Field2DObjectSprite_StartLoopAnim(person->drawer);
+    WifiClubRoom_QueuePersonCommand(room, 4, person);
 }
 
-void WifiClubRoomPerson_Delete(WifiClubRoomPerson *arg0) {
-    Field2DObjectSprite_Delete(arg0->drawer);
-    Field2DObject_Delete(arg0->object);
-    memset(arg0, 0, sizeof(WifiClubRoomPerson));
+void WifiClubRoomPerson_Delete(WifiClubRoomPerson *person) {
+    Field2DObjectSprite_Delete(person->drawer);
+    Field2DObject_Delete(person->object);
+    memset(person, 0, sizeof(WifiClubRoomPerson));
 }
 
-u8 WifiClubRoomPerson_GetId(WifiClubRoomPerson *arg0) {
-    return Field2DObject_GetParam(arg0->object, 4);
+u8 WifiClubRoomPerson_GetId(WifiClubRoomPerson *person) {
+    return Field2DObject_GetParam(person->object, 4);
 }
 
-s32 WifiClubRoomPerson_GetOppositeDirection(WifiClubRoomPerson *arg0) {
-    return Field2D_GetOppositeDirection(Field2DObject_GetParam(arg0->object, 6));
+s32 WifiClubRoomPerson_GetOppositeDirection(WifiClubRoomPerson *person) {
+    return Field2D_GetOppositeDirection(Field2DObject_GetParam(person->object, 6));
 }
 
-void WifiClubRoom_StartTalk(WifiClubRoom *arg0, WifiClubRoomPerson *arg1, s32 arg2) {
-    arg1->savedUpdate = arg1->update;
-    arg1->update = WifiClubRoomPerson_UpdateTalking;
-    arg1->savedMode = arg1->mode;
-    arg1->mode = 5;
-    WifiClubRoom_QueueMoveCommand(arg0, 0, arg2, Field2DObject_GetParam(arg1->object, 4));
-    Field2DObjectSprite_SetAutoUpdate(arg1->drawer, 0);
-    Field2DObjectSprite_FaceDirection(arg1->drawer, arg2);
+void WifiClubRoom_StartTalk(WifiClubRoom *room, WifiClubRoomPerson *person, s32 direction) {
+    person->savedUpdate = person->update;
+    person->update = WifiClubRoomPerson_UpdateTalking;
+    person->savedMode = person->mode;
+    person->mode = 5;
+    WifiClubRoom_QueueMoveCommand(room, 0, direction, Field2DObject_GetParam(person->object, 4));
+    Field2DObjectSprite_SetAutoUpdate(person->drawer, 0);
+    Field2DObjectSprite_FaceDirection(person->drawer, direction);
 
-    Field2DPoint temp_r3 = { Field2DObject_GetParam(arg1->object, 0), Field2DObject_GetParam(arg1->object, 1) };
-    Field2DObjectSprite_SetPosition(arg1->drawer, temp_r3);
+    Field2DPoint pos = { Field2DObject_GetParam(person->object, 0), Field2DObject_GetParam(person->object, 1) };
+    Field2DObjectSprite_SetPosition(person->drawer, pos);
 }
 
-void WifiClubRoom_EndTalk(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
-    if (arg1 != NULL) {
-        if (arg1->savedUpdate != 0) {
-            arg1->update = arg1->savedUpdate;
-            arg1->savedUpdate = 0;
-            arg1->mode = arg1->savedMode;
-            Field2DObjectSprite_SetAutoUpdate(arg1->drawer, 1);
+void WifiClubRoom_EndTalk(WifiClubRoom *room, WifiClubRoomPerson *person) {
+    if (person != NULL) {
+        if (person->savedUpdate != 0) {
+            person->update = person->savedUpdate;
+            person->savedUpdate = 0;
+            person->mode = person->savedMode;
+            Field2DObjectSprite_SetAutoUpdate(person->drawer, 1);
         }
     }
 }
 
-void WifiClubRoom_SetPersonBusy(WifiClubRoom *arg0, WifiClubRoomPerson *arg1, u8 arg2) {
-    if (WifiClubRoomPerson_IsNotWarping(arg1) == 0) {
-        arg1->activityMode = arg2;
+void WifiClubRoom_SetPersonBusy(WifiClubRoom *room, WifiClubRoomPerson *person, u8 activityMode) {
+    if (WifiClubRoomPerson_IsNotWarping(person) == 0) {
+        person->activityMode = activityMode;
         return;
     }
-    WifiClubRoom_SetPersonActivityMode(arg0, arg1, arg2);
+    WifiClubRoom_SetPersonActivityMode(room, person, activityMode);
 }
 
-void WifiClubRoom_StartCounterLight(WifiClubRoom *arg0) {
-    if (WifiClubRoom_IsPlayerFacingCounter(arg0) == 1) {
-        s8 temp_r4 = (s8)WifiClubRoom_GetTileBelowPlayer(arg0) - 3;
-        GF_ASSERT(temp_r4 >= 0 && temp_r4 < 4);
-        WifiClubRoomLights_Start(&arg0->lights, temp_r4);
+void WifiClubRoom_StartCounterLight(WifiClubRoom *room) {
+    if (WifiClubRoom_IsPlayerFacingCounter(room) == 1) {
+        s8 light = (s8)WifiClubRoom_GetTileBelowPlayer(room) - 3;
+        GF_ASSERT(light >= 0 && light < 4);
+        WifiClubRoomLights_Start(&room->lights, light);
         return;
     }
     GF_AssertFail();
 }
 
-void WifiClubRoom_ContinueLightSequence(WifiClubRoom *arg0) {
-    WifiClubRoomLights_Continue(&arg0->lights);
+void WifiClubRoom_ContinueLightSequence(WifiClubRoom *room) {
+    WifiClubRoomLights_Continue(&room->lights);
 }
 
-void WifiClubRoom_UpdateLights(WifiClubRoom *arg0) {
-    WifiClubRoomLights_Update(arg0, &arg0->lights);
+void WifiClubRoom_UpdateLights(WifiClubRoom *room) {
+    WifiClubRoomLights_Update(room, &room->lights);
 }
 
-void WifiClubRoom_DeleteAllPersons(WifiClubRoom *arg0) {
+void WifiClubRoom_DeleteAllPersons(WifiClubRoom *room) {
     for (s32 i = 0; i < 48; i++) {
-        if (arg0->persons[i].object != 0) {
-            WifiClubRoomPerson_Delete(&arg0->persons[i]);
+        if (room->persons[i].object != 0) {
+            WifiClubRoomPerson_Delete(&room->persons[i]);
         }
     }
 }
 
-s32 WifiClubRoom_IsPlayerIdle(WifiClubRoom *arg0) {
-    if (Field2DObject_GetParam(arg0->player->object, 5) == 0) {
+s32 WifiClubRoom_IsPlayerIdle(WifiClubRoom *room) {
+    if (Field2DObject_GetParam(room->player->object, 5) == 0) {
         return 1;
     }
     return 0;
 }
 
-s32 WifiClubRoom_IsPlayerFacingCounter(WifiClubRoom *arg0) {
-    Field2DPoint sp0 = Field2DObject_GetPos(arg0->player->object);
-    u32 temp_r4 = Field2DObject_GetParam(arg0->player->object, 6);
-    sp0 = Field2D_StepInDirection(sp0, temp_r4);
-    s32 temp_r0_3 = Field2DMap_GetTag(arg0->map, sp0.unk0 / 16, sp0.unk2 / 16);
-    if ((temp_r4 == 0) && (temp_r0_3 == 2)) {
+s32 WifiClubRoom_IsPlayerFacingCounter(WifiClubRoom *room) {
+    Field2DPoint pos = Field2DObject_GetPos(room->player->object);
+    u32 direction = Field2DObject_GetParam(room->player->object, 6);
+    pos = Field2D_StepInDirection(pos, direction);
+    s32 tag = Field2DMap_GetTag(room->map, pos.unk0 / 16, pos.unk2 / 16);
+    if ((direction == 0) && (tag == 2)) {
         return 1;
     }
     return 0;
 }
 
-void WifiClubRoom_ProcessMoveCommands(WifiClubRoom *arg0) {
-    Field2DCommand sp8;
-    Field2DMove sp0;
-    if (Field2DCommandQueue_Pop(arg0->commandQueue, &sp8) == 1) {
+void WifiClubRoom_ProcessMoveCommands(WifiClubRoom *room) {
+    Field2DCommand command;
+    Field2DMove move;
+    if (Field2DCommandQueue_Pop(room->commandQueue, &command) == 1) {
         do {
-            if (Field2DObjectManager_TryCommand(arg0->map, arg0->objects, &sp8, &sp0) == 1) {
-                Field2DObjectManager_StartMove(arg0->objects, &sp0);
+            if (Field2DObjectManager_TryCommand(room->map, room->objects, &command, &move) == 1) {
+                Field2DObjectManager_StartMove(room->objects, &move);
             }
-        } while (Field2DCommandQueue_Pop(arg0->commandQueue, &sp8) == 1);
+        } while (Field2DCommandQueue_Pop(room->commandQueue, &command) == 1);
     }
 }
 
-void WifiClubRoom_UpdatePersons(WifiClubRoom *arg0) {
+void WifiClubRoom_UpdatePersons(WifiClubRoom *room) {
     for (s32 i = 0; i < 48; i++) {
-        if ((arg0->persons[i].object != 0) && (arg0->persons[i].update(arg0, &arg0->persons[i]) == 1)) {
-            WifiClubRoomPerson_Delete(&arg0->persons[i]);
+        if ((room->persons[i].object != 0) && (room->persons[i].update(room, &room->persons[i]) == 1)) {
+            WifiClubRoomPerson_Delete(&room->persons[i]);
         }
     }
 }
 
-void WifiClubRoom_AnimatePersons(WifiClubRoom *arg0) {
+void WifiClubRoom_AnimatePersons(WifiClubRoom *room) {
     for (s32 i = 0; i < 48; i++) {
-        if (arg0->persons[i].object != 0) {
-            arg0->persons[i].animate(arg0, &arg0->persons[i]);
+        if (room->persons[i].object != 0) {
+            room->persons[i].animate(room, &room->persons[i]);
         }
     }
 }
 
-WifiClubRoomPerson *WifiClubRoom_GetPersonInDirection(WifiClubRoom *arg0, WifiClubRoomPerson *arg1, u32 arg2) {
-    Field2DObject *temp_r0 = Field2DObject_FindObjectInDirection(arg1->object, arg0->objects, arg2);
-    if (temp_r0 != NULL) {
+WifiClubRoomPerson *WifiClubRoom_GetPersonInDirection(WifiClubRoom *room, WifiClubRoomPerson *person, u32 direction) {
+    Field2DObject *object = Field2DObject_FindObjectInDirection(person->object, room->objects, direction);
+    if (object != NULL) {
         for (s32 i = 0; i < 48; i++) {
-            Field2DObject *temp_r3 = arg0->persons[i].object;
-            if (temp_r3 == temp_r0) {
-                return &arg0->persons[i];
+            Field2DObject *personObject = room->persons[i].object;
+            if (personObject == object) {
+                return &room->persons[i];
             }
         }
     }
     return NULL;
 }
 
-void WifiClubRoom_CreateDrawers(WifiClubRoom *arg0, s32 arg1, enum HeapID arg2) {
-    arg0->drawers = Field2DObjectSpriteManager_NewWithShadow(arg0->gfx.spriteList, NULL, 48, arg1, 0, 1, arg2);
-    Field2DObjectSpriteManager_LoadAvatarChars(arg0->drawers, 2, arg2);
+void WifiClubRoom_CreateDrawers(WifiClubRoom *room, s32 spriteId, enum HeapID heapID) {
+    room->drawers = Field2DObjectSpriteManager_NewWithShadow(room->gfx.spriteList, NULL, 48, spriteId, 0, 1, heapID);
+    Field2DObjectSpriteManager_LoadAvatarChars(room->drawers, 2, heapID);
 }
 
-void WifiClubRoom_DeleteDrawers(WifiClubRoom *arg0) {
-    Field2DObjectSpriteManager_Free(arg0->drawers);
+void WifiClubRoom_DeleteDrawers(WifiClubRoom *room) {
+    Field2DObjectSpriteManager_Free(room->drawers);
 }
 
-void WifiClubRoom_CreateMapBg(WifiClubRoom *arg0, enum HeapID arg1, NARC *arg2, s32 arg3) {
-    Field2DBgLayerTemplate sp0 = {
+void WifiClubRoom_CreateMapBg(WifiClubRoom *room, enum HeapID heapID, NARC *narc, s32 mapIndex) {
+    Field2DBgLayerTemplate bgLayerTemplate = {
         .unk_0 = 0,
         .unk_1 = 0,
         .colorMode = GX_BG_COLORMODE_16,
@@ -353,53 +353,53 @@ void WifiClubRoom_CreateMapBg(WifiClubRoom *arg0, enum HeapID arg1, NARC *arg2, 
         .compressed = FALSE,
     };
 
-    sp0.fileId += arg3;
-    arg0->mapBg = Field2DBgLayer_New(&arg0->gfx.g2dRenderer, arg0->bgConfig, &sp0, arg1);
+    bgLayerTemplate.fileId += mapIndex;
+    room->mapBg = Field2DBgLayer_New(&room->gfx.g2dRenderer, room->bgConfig, &bgLayerTemplate, heapID);
 }
 
-void WifiClubRoom_DeleteMapBg(WifiClubRoom *arg0) {
-    Field2DBgLayer_Free(arg0->mapBg);
+void WifiClubRoom_DeleteMapBg(WifiClubRoom *room) {
+    Field2DBgLayer_Free(room->mapBg);
 }
 
-void WifiClubRoomGfx_Init(WifiClubRoomGfx *arg0, enum HeapID heapID, NARC *narc) {
-    arg0->spriteList = G2dRenderer_Init(96, &arg0->g2dRenderer, heapID);
-    G2dRenderer_SetSubSurfaceCoords(&arg0->g2dRenderer, 0, 0x320000);
+void WifiClubRoomGfx_Init(WifiClubRoomGfx *gfx, enum HeapID heapID, NARC *narc) {
+    gfx->spriteList = G2dRenderer_Init(96, &gfx->g2dRenderer, heapID);
+    G2dRenderer_SetSubSurfaceCoords(&gfx->g2dRenderer, 0, 0x320000);
     for (s32 i = 0; i < 4; i++) {
-        arg0->resManagers[i] = Create2DGfxResObjMan(16, (GfGfxResType)i, heapID);
+        gfx->resManagers[i] = Create2DGfxResObjMan(16, (GfGfxResType)i, heapID);
     }
-    WifiClubRoomGfx_LoadResources(arg0, heapID, narc);
-    WifiClubRoomGfx_CreateSprites(arg0, heapID);
+    WifiClubRoomGfx_LoadResources(gfx, heapID, narc);
+    WifiClubRoomGfx_CreateSprites(gfx, heapID);
 }
 
-void WifiClubRoomGfx_Free(WifiClubRoomGfx *arg0) {
-    WifiClubRoomGfx_DeleteSprites(arg0);
-    WifiClubRoomGfx_FreeResources(arg0);
+void WifiClubRoomGfx_Free(WifiClubRoomGfx *gfx) {
+    WifiClubRoomGfx_DeleteSprites(gfx);
+    WifiClubRoomGfx_FreeResources(gfx);
     for (s32 i = 0; i < 4; i++) {
-        Destroy2DGfxResObjMan(arg0->resManagers[i]);
+        Destroy2DGfxResObjMan(gfx->resManagers[i]);
     }
-    SpriteList_Delete(arg0->spriteList);
+    SpriteList_Delete(gfx->spriteList);
 }
 
-void WifiClubRoomGfx_LoadResources(WifiClubRoomGfx *arg0, enum HeapID heapID, NARC *narc) {
-    WifiClubRoomGfx_LoadSpriteResources(arg0, heapID, narc);
+void WifiClubRoomGfx_LoadResources(WifiClubRoomGfx *gfx, enum HeapID heapID, NARC *narc) {
+    WifiClubRoomGfx_LoadSpriteResources(gfx, heapID, narc);
 }
 
-void WifiClubRoomGfx_FreeResources(WifiClubRoomGfx *arg0) {
-    WifiClubRoomGfx_FreeSpriteResources(arg0);
+void WifiClubRoomGfx_FreeResources(WifiClubRoomGfx *gfx) {
+    WifiClubRoomGfx_FreeSpriteResources(gfx);
 }
 
-void WifiClubRoomGfx_CreateSprites(WifiClubRoomGfx *arg1, enum HeapID heapID) {
-    WifiClubRoomGfx_CreateMarkerSprites(arg1, heapID);
+void WifiClubRoomGfx_CreateSprites(WifiClubRoomGfx *gfx, enum HeapID heapID) {
+    WifiClubRoomGfx_CreateMarkerSprites(gfx, heapID);
 }
 
-void WifiClubRoomGfx_DeleteSprites(WifiClubRoomGfx *arg0) {
-    WifiClubRoomGfx_DeleteMarkerSprites(arg0);
+void WifiClubRoomGfx_DeleteSprites(WifiClubRoomGfx *gfx) {
+    WifiClubRoomGfx_DeleteMarkerSprites(gfx);
 }
 
-void WifiClubRoom_InitBgs(BgConfig *arg0, enum HeapID heapID) {
+void WifiClubRoom_InitBgs(BgConfig *bgConfig, enum HeapID heapID) {
 }
 
-void WifiClubRoom_FreeBgs(BgConfig *arg0) {
+void WifiClubRoom_FreeBgs(BgConfig *bgConfig) {
 }
 
 void WifiClubRoom_LoadBgGfx(BgConfig *bgConfig, enum HeapID heapID, NARC *narc) {
@@ -408,30 +408,30 @@ void WifiClubRoom_LoadBgGfx(BgConfig *bgConfig, enum HeapID heapID, NARC *narc) 
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 30, bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, heapID);
 }
 
-void WifiClubRoomGfx_LoadSpriteResources(WifiClubRoomGfx *arg0, enum HeapID heapID, NARC *narc) {
-    arg0->resources[0] = AddCharResObjFromOpenNarc(arg0->resManagers[0], narc, NARC_a_0_3_8, FALSE, 50, NNS_G2D_VRAM_TYPE_2DMAIN, heapID);
-    arg0->resources[1] = AddPlttResObjFromOpenNarc(arg0->resManagers[1], narc, NARC_fielddata_encountdata_g_enc_data, FALSE, 50, NNS_G2D_VRAM_TYPE_2DMAIN, 1, heapID);
-    arg0->resources[2] = AddCellOrAnimResObjFromOpenNarc(arg0->resManagers[2], narc, NARC_a_0_3_9, FALSE, 50, GF_GFX_RES_TYPE_CELL, heapID);
-    arg0->resources[3] = AddCellOrAnimResObjFromOpenNarc(arg0->resManagers[3], narc, NARC_a_0_4_0, FALSE, 50, GF_GFX_RES_TYPE_ANIM, heapID);
-    GF_ASSERT(SpriteTransfer_CreateCharTransferTask_AllocAtEnd(arg0->resources[0]) == TRUE);
-    GF_ASSERT(SpriteTransfer_CreatePlttTransferTask(arg0->resources[1]) == TRUE);
-    GF2DGfxResObj_FreeData(arg0->resources[0]);
-    GF2DGfxResObj_FreeData(arg0->resources[1]);
-    CreateSpriteResourcesHeader(&arg0->resourcesHeader, 50, 50, 50, 50, -1, -1, 0, 2, arg0->resManagers[0], arg0->resManagers[1], arg0->resManagers[2], arg0->resManagers[3], 0, 0);
+void WifiClubRoomGfx_LoadSpriteResources(WifiClubRoomGfx *gfx, enum HeapID heapID, NARC *narc) {
+    gfx->resources[0] = AddCharResObjFromOpenNarc(gfx->resManagers[0], narc, NARC_a_0_3_8, FALSE, 50, NNS_G2D_VRAM_TYPE_2DMAIN, heapID);
+    gfx->resources[1] = AddPlttResObjFromOpenNarc(gfx->resManagers[1], narc, NARC_fielddata_encountdata_g_enc_data, FALSE, 50, NNS_G2D_VRAM_TYPE_2DMAIN, 1, heapID);
+    gfx->resources[2] = AddCellOrAnimResObjFromOpenNarc(gfx->resManagers[2], narc, NARC_a_0_3_9, FALSE, 50, GF_GFX_RES_TYPE_CELL, heapID);
+    gfx->resources[3] = AddCellOrAnimResObjFromOpenNarc(gfx->resManagers[3], narc, NARC_a_0_4_0, FALSE, 50, GF_GFX_RES_TYPE_ANIM, heapID);
+    GF_ASSERT(SpriteTransfer_CreateCharTransferTask_AllocAtEnd(gfx->resources[0]) == TRUE);
+    GF_ASSERT(SpriteTransfer_CreatePlttTransferTask(gfx->resources[1]) == TRUE);
+    GF2DGfxResObj_FreeData(gfx->resources[0]);
+    GF2DGfxResObj_FreeData(gfx->resources[1]);
+    CreateSpriteResourcesHeader(&gfx->resourcesHeader, 50, 50, 50, 50, -1, -1, 0, 2, gfx->resManagers[0], gfx->resManagers[1], gfx->resManagers[2], gfx->resManagers[3], 0, 0);
 }
 
-void WifiClubRoomGfx_FreeSpriteResources(WifiClubRoomGfx *arg0) {
-    SpriteTransfer_DeleteCharTransferTask(arg0->resources[0]);
-    SpriteTransfer_DeletePlttTransferTask(arg0->resources[1]);
+void WifiClubRoomGfx_FreeSpriteResources(WifiClubRoomGfx *gfx) {
+    SpriteTransfer_DeleteCharTransferTask(gfx->resources[0]);
+    SpriteTransfer_DeletePlttTransferTask(gfx->resources[1]);
     for (s32 i = 0; i < 4; i++) {
-        DestroySingle2DGfxResObj(arg0->resManagers[i], arg0->resources[i]);
+        DestroySingle2DGfxResObj(gfx->resManagers[i], gfx->resources[i]);
     }
 }
 
-void WifiClubRoomGfx_CreateMarkerSprites(WifiClubRoomGfx *arg0, enum HeapID heapID) {
+void WifiClubRoomGfx_CreateMarkerSprites(WifiClubRoomGfx *gfx, enum HeapID heapID) {
     SpriteTemplate spriteTemplate = { };
-    spriteTemplate.spriteList = arg0->spriteList;
-    spriteTemplate.header = &arg0->resourcesHeader;
+    spriteTemplate.spriteList = gfx->spriteList;
+    spriteTemplate.header = &gfx->resourcesHeader;
 
     spriteTemplate.whichScreen = NNS_G2D_VRAM_TYPE_2DMAIN;
 
@@ -441,75 +441,75 @@ void WifiClubRoomGfx_CreateMarkerSprites(WifiClubRoomGfx *arg0, enum HeapID heap
 
     spriteTemplate.drawPriority = 0;
 
-    arg0->exitArrowSprite = Sprite_CreateAffine(&spriteTemplate);
-    arg0->friendMarkerSprite = Sprite_CreateAffine(&spriteTemplate);
-    Sprite_SetDrawFlag(arg0->exitArrowSprite, 0);
-    Sprite_SetDrawFlag(arg0->friendMarkerSprite, 0);
-    Sprite_SetAnimActiveFlag(arg0->exitArrowSprite, 1);
-    Sprite_SetAnimCtrlSeq(arg0->friendMarkerSprite, 1);
+    gfx->exitArrowSprite = Sprite_CreateAffine(&spriteTemplate);
+    gfx->friendMarkerSprite = Sprite_CreateAffine(&spriteTemplate);
+    Sprite_SetDrawFlag(gfx->exitArrowSprite, 0);
+    Sprite_SetDrawFlag(gfx->friendMarkerSprite, 0);
+    Sprite_SetAnimActiveFlag(gfx->exitArrowSprite, 1);
+    Sprite_SetAnimCtrlSeq(gfx->friendMarkerSprite, 1);
 }
 
-void WifiClubRoomGfx_DeleteMarkerSprites(WifiClubRoomGfx *arg0) {
-    Sprite_Delete(arg0->exitArrowSprite);
-    Sprite_Delete(arg0->friendMarkerSprite);
+void WifiClubRoomGfx_DeleteMarkerSprites(WifiClubRoomGfx *gfx) {
+    Sprite_Delete(gfx->exitArrowSprite);
+    Sprite_Delete(gfx->friendMarkerSprite);
 }
 
-void WifiClubRoom_ShowExitArrow(WifiClubRoom *arg0) {
+void WifiClubRoom_ShowExitArrow(WifiClubRoom *room) {
     VecFx32 vec;
-    s16 sp0[2];
+    s16 pos[2];
 
-    WifiClubRoom_FindEntrancePos(arg0, sp0);
-    sp0[0] = sp0[0] + 8;
-    sp0[1] = sp0[1] + 32;
-    vec.x = sp0[0] << 12;
-    vec.y = sp0[1] << 12;
-    Sprite_SetMatrix(arg0->gfx.exitArrowSprite, &vec);
-    Sprite_SetDrawFlag(arg0->gfx.exitArrowSprite, 1);
+    WifiClubRoom_FindEntrancePos(room, pos);
+    pos[0] = pos[0] + 8;
+    pos[1] = pos[1] + 32;
+    vec.x = pos[0] << 12;
+    vec.y = pos[1] << 12;
+    Sprite_SetMatrix(room->gfx.exitArrowSprite, &vec);
+    Sprite_SetDrawFlag(room->gfx.exitArrowSprite, 1);
 }
 
-void WifiClubRoom_HideExitArrow(WifiClubRoom *arg0) {
-    Sprite_SetDrawFlag(arg0->gfx.exitArrowSprite, 0);
+void WifiClubRoom_HideExitArrow(WifiClubRoom *room) {
+    Sprite_SetDrawFlag(room->gfx.exitArrowSprite, 0);
 }
 
-void WifiClubRoom_ShowFriendMarkerAt(WifiClubRoom *arg0, Field2DPoint arg1, s32 arg2) {
+void WifiClubRoom_ShowFriendMarkerAt(WifiClubRoom *room, Field2DPoint pos, s32 drawPriority) {
     VecFx32 vec;
-    vec.x = (s16)(arg1.unk0 + 8) * FX32_ONE;
-    vec.y = arg1.unk2 * FX32_ONE;
-    Sprite_SetMatrix(arg0->gfx.friendMarkerSprite, &vec);
-    Sprite_SetDrawPriority(arg0->gfx.friendMarkerSprite, arg2);
-    Sprite_SetDrawFlag(arg0->gfx.friendMarkerSprite, 1);
+    vec.x = (s16)(pos.unk0 + 8) * FX32_ONE;
+    vec.y = pos.unk2 * FX32_ONE;
+    Sprite_SetMatrix(room->gfx.friendMarkerSprite, &vec);
+    Sprite_SetDrawPriority(room->gfx.friendMarkerSprite, drawPriority);
+    Sprite_SetDrawFlag(room->gfx.friendMarkerSprite, 1);
 }
 
-void WifiClubRoom_HideFriendMarkerSprite(WifiClubRoom *arg0) {
-    Sprite_SetDrawFlag(arg0->gfx.friendMarkerSprite, 0);
+void WifiClubRoom_HideFriendMarkerSprite(WifiClubRoom *room) {
+    Sprite_SetDrawFlag(room->gfx.friendMarkerSprite, 0);
 }
 
-s32 WifiClubRoom_IsPlayerAtEntrance(WifiClubRoom *arg0) {
-    if (arg0->player == 0) {
+s32 WifiClubRoom_IsPlayerAtEntrance(WifiClubRoom *room) {
+    if (room->player == 0) {
         return 0;
     }
-    Field2DPoint sp0 = Field2DObject_GetPos(arg0->player->object);
-    u32 temp_r4 = Field2DObject_GetParam(arg0->player->object, 6);
-    if (Field2DMap_GetTag(arg0->map, sp0.unk0 / 16, sp0.unk2 / 16) == 0xF && temp_r4 == 1) {
+    Field2DPoint pos = Field2DObject_GetPos(room->player->object);
+    u32 direction = Field2DObject_GetParam(room->player->object, 6);
+    if (Field2DMap_GetTag(room->map, pos.unk0 / 16, pos.unk2 / 16) == 0xF && direction == 1) {
         return 1;
     }
     return 0;
 }
 
-void WifiClubRoom_FindFriendSpawnPos(WifiClubRoom *arg0, s16 *arg1, u32 arg2) {
-    u32 r7 = arg2 / 8;
-    u32 r4 = arg2 % 8;
-    u16 r6 = Field2DMap_GetWidth(arg0->map);
-    u16 sp4 = Field2DMap_GetHeight(arg0->map);
+void WifiClubRoom_FindFriendSpawnPos(WifiClubRoom *room, s16 *pos, u32 spawnIndex) {
+    u32 counterIndex = spawnIndex / 8;
+    u32 seatIndex = spawnIndex % 8;
+    u16 width = Field2DMap_GetWidth(room->map);
+    u16 height = Field2DMap_GetHeight(room->map);
 
-    for (u32 i = 0; i < sp4; i++) {
-        for (u32 j = 0; j < r6; j++) {
-            s32 temp_r0 = Field2DMap_GetTag(arg0->map, j, i);
-            if (temp_r0 == r4 + 7) {
-                temp_r0 = Field2DMap_GetTag(arg0->map, j, i + 1);
-                if (temp_r0 == r7 + 3) {
-                    arg1[0] = j << 4;
-                    arg1[1] = i << 4;
+    for (u32 i = 0; i < height; i++) {
+        for (u32 j = 0; j < width; j++) {
+            s32 tag = Field2DMap_GetTag(room->map, j, i);
+            if (tag == seatIndex + 7) {
+                tag = Field2DMap_GetTag(room->map, j, i + 1);
+                if (tag == counterIndex + 3) {
+                    pos[0] = j << 4;
+                    pos[1] = i << 4;
                     return;
                 }
             }
@@ -518,15 +518,15 @@ void WifiClubRoom_FindFriendSpawnPos(WifiClubRoom *arg0, s16 *arg1, u32 arg2) {
     GF_AssertFail();
 }
 
-void WifiClubRoom_FindEntrancePos(WifiClubRoom *arg0, s16 *arg1) {
-    u16 temp_r5 = Field2DMap_GetWidth(arg0->map);
-    u16 temp_r0 = Field2DMap_GetHeight(arg0->map);
+void WifiClubRoom_FindEntrancePos(WifiClubRoom *room, s16 *pos) {
+    u16 width = Field2DMap_GetWidth(room->map);
+    u16 height = Field2DMap_GetHeight(room->map);
 
-    for (u32 i = 0; i < temp_r0; i++) {
-        for (u32 j = 0; j < temp_r5; j++) {
-            if (Field2DMap_GetTag(arg0->map, j, i) == 15) {
-                arg1[0] = j << 4;
-                arg1[1] = i << 4;
+    for (u32 i = 0; i < height; i++) {
+        for (u32 j = 0; j < width; j++) {
+            if (Field2DMap_GetTag(room->map, j, i) == 15) {
+                pos[0] = j << 4;
+                pos[1] = i << 4;
                 return;
             }
         }
@@ -534,39 +534,39 @@ void WifiClubRoom_FindEntrancePos(WifiClubRoom *arg0, s16 *arg1) {
     GF_AssertFail();
 }
 
-WifiClubRoomPerson *WifiClubRoom_AllocPerson(WifiClubRoom *arg0) {
+WifiClubRoomPerson *WifiClubRoom_AllocPerson(WifiClubRoom *room) {
     for (s32 i = 0; i < 48; i++) {
-        if (arg0->persons[i].object == 0) {
-            return &arg0->persons[i];
+        if (room->persons[i].object == 0) {
+            return &room->persons[i];
         }
     }
     GF_AssertFail();
     return NULL;
 }
 
-void WifiClubRoom_CreatePersonDrawer(WifiClubRoom *arg0, WifiClubRoomPerson *arg1, s32 arg2) {
-    arg1->drawer = Field2DObjectSpriteManager_CreateSprite(arg0->drawers, arg1->object, arg2, arg0->heapID);
-    if (arg2 == 0) {
-        Field2DObjectSprite_SetAutoUpdate(arg1->drawer, 0);
-        Field2DObjectSprite_StartLoopAnim(arg1->drawer);
-        Field2DObjectSprite_SetVisible(arg1->drawer, 0);
+void WifiClubRoom_CreatePersonDrawer(WifiClubRoom *room, WifiClubRoomPerson *person, s32 priorityMode) {
+    person->drawer = Field2DObjectSpriteManager_CreateSprite(room->drawers, person->object, priorityMode, room->heapID);
+    if (priorityMode == 0) {
+        Field2DObjectSprite_SetAutoUpdate(person->drawer, 0);
+        Field2DObjectSprite_StartLoopAnim(person->drawer);
+        Field2DObjectSprite_SetVisible(person->drawer, 0);
     }
 }
 
-void WifiClubRoom_CreatePersonObject(WifiClubRoom *arg0, WifiClubRoomPerson *arg1, s16 *arg2, s16 arg3, u16 arg4, u8 arg5, s32 arg6) {
-    Field2DObjectTemplate sp;
-    sp.unk0 = arg2[0];
-    sp.unk2 = arg2[1];
-    sp.unk4 = arg3;
-    sp.unk6 = arg6;
-    sp.unk8 = arg5;
-    sp.unkA = arg4;
+void WifiClubRoom_CreatePersonObject(WifiClubRoom *room, WifiClubRoomPerson *person, s16 *pos, s16 id, u16 spriteId, u8 direction, s32 action) {
+    Field2DObjectTemplate template;
+    template.unk0 = pos[0];
+    template.unk2 = pos[1];
+    template.unk4 = id;
+    template.unk6 = action;
+    template.unk8 = direction;
+    template.unkA = spriteId;
 
-    arg1->object = Field2DObjectManager_AddObject(arg0->objects, &sp);
+    person->object = Field2DObjectManager_AddObject(room->objects, &template);
 }
 
-s32 WifiClubRoomPerson_CanTalk(WifiClubRoomPerson *arg0) {
-    switch (arg0->mode) {
+s32 WifiClubRoomPerson_CanTalk(WifiClubRoomPerson *person) {
+    switch (person->mode) {
     case 0:
     case 3:
     case 4:
@@ -580,305 +580,305 @@ s32 WifiClubRoomPerson_CanTalk(WifiClubRoomPerson *arg0) {
     }
 }
 
-void WifiClubRoom_SetPersonModePlayer(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
-    arg1->update = WifiClubRoomPerson_UpdatePlayer;
-    arg1->animate = WifiClubRoomPerson_AnimateNone;
-    arg1->mode = 0;
-    WifiClubRoom_QueuePersonCommand(arg0, 0, arg1);
+void WifiClubRoom_SetPersonModePlayer(WifiClubRoom *room, WifiClubRoomPerson *person) {
+    person->update = WifiClubRoomPerson_UpdatePlayer;
+    person->animate = WifiClubRoomPerson_AnimateNone;
+    person->mode = 0;
+    WifiClubRoom_QueuePersonCommand(room, 0, person);
 }
 
-void WifiClubRoom_SetPersonModeWarpIn(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
-    arg1->update = WifiClubRoomPerson_UpdateWarpIn;
-    arg1->animate = WifiClubRoomPerson_AnimateWarp;
-    arg1->timer = 45;
-    arg1->mode = 1;
+void WifiClubRoom_SetPersonModeWarpIn(WifiClubRoom *room, WifiClubRoomPerson *person) {
+    person->update = WifiClubRoomPerson_UpdateWarpIn;
+    person->animate = WifiClubRoomPerson_AnimateWarp;
+    person->timer = 45;
+    person->mode = 1;
 }
 
-void WifiClubRoom_SetPersonModeWander(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
-    arg1->update = WifiClubRoomPerson_UpdateWander;
-    arg1->animate = WifiClubRoomPerson_AnimateNone;
-    arg1->timer = (1023 & MTRandom()) + 256;
-    arg1->mode = 3;
-    WifiClubRoom_QueuePersonCommand(arg0, 0, arg1);
-    Field2DObjectSprite_SetAutoUpdate(arg1->drawer, 1);
+void WifiClubRoom_SetPersonModeWander(WifiClubRoom *room, WifiClubRoomPerson *person) {
+    person->update = WifiClubRoomPerson_UpdateWander;
+    person->animate = WifiClubRoomPerson_AnimateNone;
+    person->timer = (1023 & MTRandom()) + 256;
+    person->mode = 3;
+    WifiClubRoom_QueuePersonCommand(room, 0, person);
+    Field2DObjectSprite_SetAutoUpdate(person->drawer, 1);
 }
 
-void WifiClubRoom_SetPersonModeBusy(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
-    arg1->update = WifiClubRoomPerson_UpdateBusy;
-    arg1->animate = WifiClubRoomPerson_AnimateHop;
-    arg1->timer = 28;
-    arg1->mode = 4;
-    WifiClubRoom_QueuePersonCommand(arg0, 4, arg1);
-    Field2DObjectSprite_SetAutoUpdate(arg1->drawer, 0);
+void WifiClubRoom_SetPersonModeBusy(WifiClubRoom *room, WifiClubRoomPerson *person) {
+    person->update = WifiClubRoomPerson_UpdateBusy;
+    person->animate = WifiClubRoomPerson_AnimateHop;
+    person->timer = 28;
+    person->mode = 4;
+    WifiClubRoom_QueuePersonCommand(room, 4, person);
+    Field2DObjectSprite_SetAutoUpdate(person->drawer, 0);
 }
 
-void WifiClubRoomPerson_AnimateNone(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
+void WifiClubRoomPerson_AnimateNone(WifiClubRoom *room, WifiClubRoomPerson *person) {
 }
 
-void WifiClubRoomPerson_AnimateWarp(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
-    Field2DObjectSprite_UpdateAnim(arg1->drawer);
-    if (Field2DObjectSprite_IsVisible(arg1->drawer) == 0) {
-        Field2DObjectSprite_SetVisible(arg1->drawer, 1);
+void WifiClubRoomPerson_AnimateWarp(WifiClubRoom *room, WifiClubRoomPerson *person) {
+    Field2DObjectSprite_UpdateAnim(person->drawer);
+    if (Field2DObjectSprite_IsVisible(person->drawer) == 0) {
+        Field2DObjectSprite_SetVisible(person->drawer, 1);
     }
-    Field2DPoint sp0 = { Field2DObject_GetParam(arg1->object, 0), Field2DObject_GetParam(arg1->object, 1) };
-    Field2DPoint sp4 = sp0;
+    Field2DPoint pos = { Field2DObject_GetParam(person->object, 0), Field2DObject_GetParam(person->object, 1) };
+    Field2DPoint shadowPos = pos;
 
-    s64 temp_ret = (s64)GF_SinDegNoWrap(arg1->timer) * (signed)0xFFF40000;
-    temp_ret += 2048;
+    s64 offset = (s64)GF_SinDegNoWrap(person->timer) * (signed)0xFFF40000;
+    offset += 2048;
 
-    s32 r1 = (temp_ret >> 12);
-    sp0.unk2 = (s16)sp0.unk2 + (r1 >> 12);
+    s32 r1 = (offset >> 12);
+    pos.unk2 = (s16)pos.unk2 + (r1 >> 12);
 
-    Field2DObjectSprite_SetPosition(arg1->drawer, sp0);
-    Field2DObjectSprite_SetShadowPosition(arg1->drawer, sp4);
+    Field2DObjectSprite_SetPosition(person->drawer, pos);
+    Field2DObjectSprite_SetShadowPosition(person->drawer, shadowPos);
 }
 
-void WifiClubRoomPerson_AnimateHop(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
-    Field2DPoint sp0 = { Field2DObject_GetParam(arg1->object, 0), Field2DObject_GetParam(arg1->object, 1) };
-    Field2DPoint sp4 = sp0;
+void WifiClubRoomPerson_AnimateHop(WifiClubRoom *room, WifiClubRoomPerson *person) {
+    Field2DPoint pos = { Field2DObject_GetParam(person->object, 0), Field2DObject_GetParam(person->object, 1) };
+    Field2DPoint shadowPos = pos;
 
-    s16 temp_r0 = arg1->timer - 16;
-    if (temp_r0 > 0) {
-        s32 temp_r0_2 = (s16)(temp_r0 % 6) * 180;
-        s32 temp_r0_3 = GF_SinDegNoWrap(temp_r0_2 / 6);
+    s16 hopTimer = person->timer - 16;
+    if (hopTimer > 0) {
+        s32 temp_r0_2 = (s16)(hopTimer % 6) * 180;
+        s32 sine = GF_SinDegNoWrap(temp_r0_2 / 6);
 
-        s64 r6 = ((s64)temp_r0_3 << 14) + 2048;
-        sp0.unk2 = (s16)sp0.unk2 - ((s32)(r6 >> 12) >> 12);
+        s64 r6 = ((s64)sine << 14) + 2048;
+        pos.unk2 = (s16)pos.unk2 - ((s32)(r6 >> 12) >> 12);
     }
-    Field2DObjectSprite_SetPosition(arg1->drawer, sp0);
-    Field2DObjectSprite_SetShadowPosition(arg1->drawer, sp4);
+    Field2DObjectSprite_SetPosition(person->drawer, pos);
+    Field2DObjectSprite_SetShadowPosition(person->drawer, shadowPos);
 
-    Field2DObjectSprite_FaceDirection(arg1->drawer, 1);
+    Field2DObjectSprite_FaceDirection(person->drawer, 1);
 }
 
-s32 WifiClubRoomPerson_UpdatePlayer(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
-    u32 temp_r4 = Field2DObject_GetParam(arg1->object, 6);
-    u32 temp_r7 = Field2DObject_GetParam(arg1->object, 4);
-    if (Field2DObject_GetParam(arg1->object, 5) != 0) {
+s32 WifiClubRoomPerson_UpdatePlayer(WifiClubRoom *room, WifiClubRoomPerson *person) {
+    u32 direction = Field2DObject_GetParam(person->object, 6);
+    u32 id = Field2DObject_GetParam(person->object, 4);
+    if (Field2DObject_GetParam(person->object, 5) != 0) {
         return 0;
     }
     if (gSystem.newKeys & PAD_BUTTON_A) {
-        WifiClubRoomPerson *temp_r0 = WifiClubRoom_GetPersonInDirection(arg0, arg1, temp_r4);
-        if (temp_r0 != NULL) {
-            if (WifiClubRoomPerson_CanTalk(temp_r0) == 1) {
-                arg1->talkPartnerId = Field2DObject_GetParam(temp_r0->object, 4);
+        WifiClubRoomPerson *partner = WifiClubRoom_GetPersonInDirection(room, person, direction);
+        if (partner != NULL) {
+            if (WifiClubRoomPerson_CanTalk(partner) == 1) {
+                person->talkPartnerId = Field2DObject_GetParam(partner->object, 4);
             } else {
-                arg1->talkPartnerId = 0;
+                person->talkPartnerId = 0;
             }
         } else {
-            arg1->talkPartnerId = 0;
+            person->talkPartnerId = 0;
         }
     }
-    if (arg0->inputLocked == 1) {
+    if (room->inputLocked == 1) {
         return 0;
     }
-    s16 var_r1 = 2;
+    s16 moveAction = 2;
     if (gSystem.heldKeys & PAD_BUTTON_B) {
-        var_r1 = 3;
+        moveAction = 3;
     }
     if (gSystem.heldKeys & PAD_KEY_UP) {
-        if (temp_r4 == 0) {
-            WifiClubRoom_QueueMoveCommand(arg0, var_r1, temp_r4, temp_r7);
+        if (direction == 0) {
+            WifiClubRoom_QueueMoveCommand(room, moveAction, direction, id);
         } else {
-            WifiClubRoom_QueueMoveCommand(arg0, 1, 0, temp_r7);
+            WifiClubRoom_QueueMoveCommand(room, 1, 0, id);
         }
     } else if (gSystem.heldKeys & PAD_KEY_DOWN) {
-        if (temp_r4 == 1) {
-            WifiClubRoom_QueueMoveCommand(arg0, var_r1, temp_r4, temp_r7);
+        if (direction == 1) {
+            WifiClubRoom_QueueMoveCommand(room, moveAction, direction, id);
         } else {
-            WifiClubRoom_QueueMoveCommand(arg0, 1, 1, temp_r7);
+            WifiClubRoom_QueueMoveCommand(room, 1, 1, id);
         }
     } else if (gSystem.heldKeys & PAD_KEY_LEFT) {
-        if (temp_r4 == 2) {
-            WifiClubRoom_QueueMoveCommand(arg0, var_r1, temp_r4, temp_r7);
+        if (direction == 2) {
+            WifiClubRoom_QueueMoveCommand(room, moveAction, direction, id);
         } else {
-            WifiClubRoom_QueueMoveCommand(arg0, 1, 2, temp_r7);
+            WifiClubRoom_QueueMoveCommand(room, 1, 2, id);
         }
     } else if (gSystem.heldKeys & PAD_KEY_RIGHT) {
-        if (temp_r4 == 3) {
-            WifiClubRoom_QueueMoveCommand(arg0, var_r1, temp_r4, temp_r7);
+        if (direction == 3) {
+            WifiClubRoom_QueueMoveCommand(room, moveAction, direction, id);
         } else {
-            WifiClubRoom_QueueMoveCommand(arg0, 1, 3, temp_r7);
+            WifiClubRoom_QueueMoveCommand(room, 1, 3, id);
         }
     }
     return 0;
 }
 
-s32 WifiClubRoomPerson_UpdateWarpIn(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
-    arg1->timer--;
-    if (arg1->timer <= 0) {
-        Field2DObjectSprite_SyncAnim(arg1->drawer);
-        Field2DObjectSprite_SetAutoUpdate(arg1->drawer, 1);
-        u32 temp_r6 = Field2DObject_GetParam(arg0->player->object, 4);
-        u32 temp_r0 = Field2DObject_GetParam(arg1->object, 4);
-        if (temp_r0 == temp_r6) {
-            WifiClubRoom_SetPersonModePlayer(arg0, arg1);
+s32 WifiClubRoomPerson_UpdateWarpIn(WifiClubRoom *room, WifiClubRoomPerson *person) {
+    person->timer--;
+    if (person->timer <= 0) {
+        Field2DObjectSprite_SyncAnim(person->drawer);
+        Field2DObjectSprite_SetAutoUpdate(person->drawer, 1);
+        u32 playerId = Field2DObject_GetParam(room->player->object, 4);
+        u32 id = Field2DObject_GetParam(person->object, 4);
+        if (id == playerId) {
+            WifiClubRoom_SetPersonModePlayer(room, person);
         } else {
-            WifiClubRoom_SetPersonActivityMode(arg0, arg1, arg1->activityMode);
+            WifiClubRoom_SetPersonActivityMode(room, person, person->activityMode);
         }
     }
     return 0;
 }
 
-s32 WifiClubRoomPerson_UpdateWarpOut(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
-    arg1->timer++;
-    if (arg1->timer > 45) {
+s32 WifiClubRoomPerson_UpdateWarpOut(WifiClubRoom *room, WifiClubRoomPerson *person) {
+    person->timer++;
+    if (person->timer > 45) {
         return 1;
     }
     return 0;
 }
 
-s32 WifiClubRoomPerson_UpdateWander(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
-    arg1->timer--;
-    if (arg1->timer <= 0) {
-        arg1->timer = (1023 & MTRandom()) + 256;
-        u32 temp_r4 = MTRandom() & 3;
-        WifiClubRoom_QueueMoveCommand(arg0, 0, temp_r4, Field2DObject_GetParam(arg1->object, 4));
+s32 WifiClubRoomPerson_UpdateWander(WifiClubRoom *room, WifiClubRoomPerson *person) {
+    person->timer--;
+    if (person->timer <= 0) {
+        person->timer = (1023 & MTRandom()) + 256;
+        u32 direction = MTRandom() & 3;
+        WifiClubRoom_QueueMoveCommand(room, 0, direction, Field2DObject_GetParam(person->object, 4));
     }
     return 0;
 }
 
-s32 WifiClubRoomPerson_UpdateBusy(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
-    arg1->timer--;
-    if (arg1->timer < 0) {
-        arg1->timer = 28;
+s32 WifiClubRoomPerson_UpdateBusy(WifiClubRoom *room, WifiClubRoomPerson *person) {
+    person->timer--;
+    if (person->timer < 0) {
+        person->timer = 28;
     }
     return 0;
 }
 
-s32 WifiClubRoomPerson_UpdateTalking(WifiClubRoom *arg0, WifiClubRoomPerson *arg1) {
+s32 WifiClubRoomPerson_UpdateTalking(WifiClubRoom *room, WifiClubRoomPerson *person) {
     return 0;
 }
 
-void WifiClubRoom_QueueMoveCommand(WifiClubRoom *arg0, s16 arg1, u32 arg2, u32 arg3) {
-    Field2DCommand temp;
-    temp.unk0 = arg1;
-    temp.unk2 = arg2;
-    temp.unk3 = arg3;
+void WifiClubRoom_QueueMoveCommand(WifiClubRoom *room, s16 action, u32 direction, u32 objectId) {
+    Field2DCommand command;
+    command.unk0 = action;
+    command.unk2 = direction;
+    command.unk3 = objectId;
 
-    Field2DCommandQueue_Push(arg0->commandQueue, &temp);
+    Field2DCommandQueue_Push(room->commandQueue, &command);
 }
 
-void WifiClubRoom_QueuePersonCommand(WifiClubRoom *arg0, s16 arg1, WifiClubRoomPerson *arg2) {
-    u32 temp_r7 = Field2DObject_GetParam(arg2->object, 6);
-    WifiClubRoom_QueueMoveCommand(arg0, arg1, temp_r7, Field2DObject_GetParam(arg2->object, 4));
+void WifiClubRoom_QueuePersonCommand(WifiClubRoom *room, s16 action, WifiClubRoomPerson *person) {
+    u32 direction = Field2DObject_GetParam(person->object, 6);
+    WifiClubRoom_QueueMoveCommand(room, action, direction, Field2DObject_GetParam(person->object, 4));
 }
 
-s32 WifiClubRoomPerson_IsNotWarping(WifiClubRoomPerson *arg0) {
-    if (arg0->animate != WifiClubRoomPerson_AnimateWarp) {
+s32 WifiClubRoomPerson_IsNotWarping(WifiClubRoomPerson *person) {
+    if (person->animate != WifiClubRoomPerson_AnimateWarp) {
         return 1;
     }
     return 0;
 }
 
-void WifiClubRoom_SetPersonActivityMode(WifiClubRoom *arg0, WifiClubRoomPerson *arg1, u8 arg2) {
-    switch (arg2) {
+void WifiClubRoom_SetPersonActivityMode(WifiClubRoom *room, WifiClubRoomPerson *person, u8 activityMode) {
+    switch (activityMode) {
     case 0:
-        WifiClubRoom_SetPersonModeWander(arg0, arg1);
+        WifiClubRoom_SetPersonModeWander(room, person);
         break;
     case 1:
-        WifiClubRoom_SetPersonModeBusy(arg0, arg1);
+        WifiClubRoom_SetPersonModeBusy(room, person);
         break;
     default:
         GF_AssertFail();
         break;
     }
-    arg1->activityMode = arg2;
+    person->activityMode = activityMode;
 }
 
-void WifiClubRoomLights_Init(WifiClubRoom *arg0, WifiClubRoomLights *arg1, NARC *arg2) {
-    memset(arg1, 0, sizeof(WifiClubRoomLights));
-    arg1->plttDataRaw = GfGfxLoader_GetPlttDataFromOpenNarc(arg2, 32, &arg1->plttData, arg0->heapID);
-    arg1->blinkMask = 15;
-    arg1->blinkPhase = 0;
-    arg1->blinkTimer = sWifiClubRoomLightBlinkFrames[arg1->blinkPhase];
+void WifiClubRoomLights_Init(WifiClubRoom *room, WifiClubRoomLights *lights, NARC *narc) {
+    memset(lights, 0, sizeof(WifiClubRoomLights));
+    lights->plttDataRaw = GfGfxLoader_GetPlttDataFromOpenNarc(narc, 32, &lights->plttData, room->heapID);
+    lights->blinkMask = 15;
+    lights->blinkPhase = 0;
+    lights->blinkTimer = sWifiClubRoomLightBlinkFrames[lights->blinkPhase];
 }
 
-void WifiClubRoomLights_Free(WifiClubRoom *arg0, WifiClubRoomLights *arg1) {
-    Heap_Free(arg1->plttDataRaw);
-    memset(arg1, 0, sizeof(WifiClubRoomLights));
+void WifiClubRoomLights_Free(WifiClubRoom *room, WifiClubRoomLights *lights) {
+    Heap_Free(lights->plttDataRaw);
+    memset(lights, 0, sizeof(WifiClubRoomLights));
 }
 
-void WifiClubRoomLights_Update(WifiClubRoom *arg0, WifiClubRoomLights *arg1) {
-    WifiClubRoomLights_UpdateBlink(arg1);
-    WifiClubRoomLights_UpdateSequence(arg1);
+void WifiClubRoomLights_Update(WifiClubRoom *room, WifiClubRoomLights *lights) {
+    WifiClubRoomLights_UpdateBlink(lights);
+    WifiClubRoomLights_UpdateSequence(lights);
 }
 
-void WifiClubRoomLights_UpdateBlink(WifiClubRoomLights *arg0) {
-    s32 var_r6;
+void WifiClubRoomLights_UpdateBlink(WifiClubRoomLights *lights) {
+    s32 colorIndex;
 
-    arg0->blinkTimer--;
-    if (arg0->blinkTimer <= 0) {
-        arg0->blinkPhase = (arg0->blinkPhase + 1) % 2;
-        arg0->blinkTimer = sWifiClubRoomLightBlinkFrames[arg0->blinkPhase];
-        if (arg0->blinkPhase == 1) {
-            var_r6 = 2;
+    lights->blinkTimer--;
+    if (lights->blinkTimer <= 0) {
+        lights->blinkPhase = (lights->blinkPhase + 1) % 2;
+        lights->blinkTimer = sWifiClubRoomLightBlinkFrames[lights->blinkPhase];
+        if (lights->blinkPhase == 1) {
+            colorIndex = 2;
         } else {
-            var_r6 = 1;
+            colorIndex = 1;
         }
         for (s32 i = 0; i < 4; i++) {
-            if (arg0->blinkMask & (1 << i)) {
-                GF_CreateNewVramTransferTask(NNS_GFD_DST_2D_BG_PLTT_MAIN, ((i + 1) * 2) + 224, WifiClubRoomLights_GetColor(arg0, var_r6), 2);
+            if (lights->blinkMask & (1 << i)) {
+                GF_CreateNewVramTransferTask(NNS_GFD_DST_2D_BG_PLTT_MAIN, ((i + 1) * 2) + 224, WifiClubRoomLights_GetColor(lights, colorIndex), 2);
             }
         }
     }
 }
 
-void WifiClubRoomLights_UpdateSequence(WifiClubRoomLights *arg0) {
-    u32 r0 = 0;
-    u32 r1 = 0;
-    u32 r2 = 0;
-    if (sWifiClubRoomLightSequence[arg0->step].timed == 1) {
-        arg0->stepTimer--;
-        if (arg0->stepTimer <= 0) {
-            r2 = 1;
+void WifiClubRoomLights_UpdateSequence(WifiClubRoomLights *lights) {
+    u32 setColor = 0;
+    u32 colorIndex = 0;
+    u32 advance = 0;
+    if (sWifiClubRoomLightSequence[lights->step].timed == 1) {
+        lights->stepTimer--;
+        if (lights->stepTimer <= 0) {
+            advance = 1;
         }
-    } else if (arg0->triggered != 0) {
-        arg0->triggered = 0;
-        r2 = 1;
+    } else if (lights->triggered != 0) {
+        lights->triggered = 0;
+        advance = 1;
     }
-    if (r2 != 0) {
-        arg0->step++;
-        if (arg0->step >= 8) {
-            WifiClubRoomLights_EndSequence(arg0);
+    if (advance != 0) {
+        lights->step++;
+        if (lights->step >= 8) {
+            WifiClubRoomLights_EndSequence(lights);
             return;
         }
-        arg0->stepTimer = sWifiClubRoomLightSequence[arg0->step].frames;
-        r0 = sWifiClubRoomLightSequence[arg0->step].setColor;
-        r1 = sWifiClubRoomLightSequence[arg0->step].color;
+        lights->stepTimer = sWifiClubRoomLightSequence[lights->step].frames;
+        setColor = sWifiClubRoomLightSequence[lights->step].setColor;
+        colorIndex = sWifiClubRoomLightSequence[lights->step].color;
     }
-    if (r0 != 0) {
-        GF_CreateNewVramTransferTask(NNS_GFD_DST_2D_BG_PLTT_MAIN, ((arg0->activeLight + 1) * 2) + 224, WifiClubRoomLights_GetColor(arg0, r1), 2);
+    if (setColor != 0) {
+        GF_CreateNewVramTransferTask(NNS_GFD_DST_2D_BG_PLTT_MAIN, ((lights->activeLight + 1) * 2) + 224, WifiClubRoomLights_GetColor(lights, colorIndex), 2);
     }
 }
 
-void *WifiClubRoomLights_GetColor(WifiClubRoomLights *arg0, s32 arg1) {
-    return arg0->plttData->pRawData + (arg1 + 1) * 2;
+void *WifiClubRoomLights_GetColor(WifiClubRoomLights *lights, s32 colorIndex) {
+    return lights->plttData->pRawData + (colorIndex + 1) * 2;
 }
 
-void WifiClubRoomLights_EndSequence(WifiClubRoomLights *arg0) {
-    arg0->blinkMask = (arg0->blinkMask | (1 << arg0->activeLight));
-    arg0->activeLight = 0;
-    arg0->step = 0;
-    arg0->stepTimer = 0;
-    arg0->triggered = 0;
+void WifiClubRoomLights_EndSequence(WifiClubRoomLights *lights) {
+    lights->blinkMask = (lights->blinkMask | (1 << lights->activeLight));
+    lights->activeLight = 0;
+    lights->step = 0;
+    lights->stepTimer = 0;
+    lights->triggered = 0;
 }
 
-void WifiClubRoomLights_Trigger(WifiClubRoomLights *arg0) {
-    arg0->triggered = 1;
+void WifiClubRoomLights_Trigger(WifiClubRoomLights *lights) {
+    lights->triggered = 1;
 }
 
-void WifiClubRoomLights_Start(WifiClubRoomLights *arg0, u8 arg1) {
-    if (arg0->step != 0) {
-        WifiClubRoomLights_EndSequence(arg0);
+void WifiClubRoomLights_Start(WifiClubRoomLights *lights, u8 light) {
+    if (lights->step != 0) {
+        WifiClubRoomLights_EndSequence(lights);
     }
-    arg0->blinkMask = arg0->blinkMask ^ (1 << arg1);
-    arg0->activeLight = arg1;
-    WifiClubRoomLights_Trigger(arg0);
+    lights->blinkMask = lights->blinkMask ^ (1 << light);
+    lights->activeLight = light;
+    WifiClubRoomLights_Trigger(lights);
 }
 
-void WifiClubRoomLights_Continue(WifiClubRoomLights *arg0) {
-    if (arg0->step != 0) {
-        WifiClubRoomLights_Trigger(arg0);
+void WifiClubRoomLights_Continue(WifiClubRoomLights *lights) {
+    if (lights->step != 0) {
+        WifiClubRoomLights_Trigger(lights);
     }
 }

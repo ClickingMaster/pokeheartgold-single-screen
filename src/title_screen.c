@@ -90,7 +90,7 @@ static void TitleScreen_Create3DVramMan(TitleScreenOverlayData *data);
 static void TitleScreen_Delete3DVramMan(TitleScreenOverlayData *data);
 static void TitleScreen_Load3DObjects(TitleScreenAnimObject *animObj, int texFileId, int anim1Id, int anim2Id, int anim3Id, int anim4Id, enum HeapID heapID);
 static void TitleScreen_Unload3DObjects(TitleScreenAnimObject *animObj);
-static void TitleScreen_AdvanceAnimObjsFrame(NNSG3dAnmObj **ppAnmObj, fx32 a1);
+static void TitleScreen_AdvanceAnimObjsFrame(NNSG3dAnmObj **ppAnmObj, fx32 frameBy);
 static void TitleScreenAnimObjs_Run(TitleScreenAnimObject *animObj);
 static void TitleScreen_InitBgs(TitleScreenOverlayData *data);
 static void TitleScreen_ReleaseBgs(TitleScreenOverlayData *data);

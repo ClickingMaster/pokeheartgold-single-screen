@@ -196,7 +196,7 @@ BOOL TypeBehavior_SpinCheck(LocalMapObject *object) {
 }
 
 BOOL TypeBehavior_SpinUpdate(LocalMapObject *object) {
-    DirectionMovementTable sp0 = gTypeBehaviorSpinOrders;
+    DirectionMovementTable spinOrders = gTypeBehaviorSpinOrders;
     volatile TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
     int i;
     int dir;
@@ -209,7 +209,7 @@ search_next:
         i++;
 search_check:
         if (i < 4) {
-            if (dir != sp0.values[state->sequence][i]) {
+            if (dir != spinOrders.values[state->sequence][i]) {
                 goto search_next;
             }
         }
@@ -220,7 +220,7 @@ search_check:
         state->index = (i + 1) % 4;
         state->turnState++;
     case 1:
-        MapObject_ForceSetHeldMovement(object, GetMovementForDirection(sp0.values[state->sequence][state->index], 0));
+        MapObject_ForceSetHeldMovement(object, GetMovementForDirection(spinOrders.values[state->sequence][state->index], 0));
         state->turnState++;
     case 2:
         if (MapObject_RunForcedMovement(object) == 0) {

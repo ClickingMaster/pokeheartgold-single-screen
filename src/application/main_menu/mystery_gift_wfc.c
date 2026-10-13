@@ -68,7 +68,7 @@ int DWC_NdGetFileListAsync(void *fileList, int start, int count);
 int DWC_NdGetFileAsync(void *fileInfo, void *buffer, int size);
 int DWC_NdCancelAsync(void);
 int DWC_NdGetProgress(u32 *received, u32 *total);
-void Comm_InitDwc(int a0);
+void Comm_InitDwc(int heapID);
 void CommState_InitMysteryGiftWfcSession(SaveData *saveData);
 void CommState_FreeMysteryGiftWfcSession(void);
 void LoadDwcOverlay(void);

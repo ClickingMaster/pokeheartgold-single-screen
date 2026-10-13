@@ -656,11 +656,11 @@ void HealParty(Party *party) {
     for (i = 0; i < partyCount; i++) {
         Pokemon *mon = Party_GetMonByIndex(party, i);
         if (GetMonData(mon, MON_DATA_SPECIES_EXISTS, NULL)) {
-            u32 sp8 = GetMonData(mon, MON_DATA_MAX_HP, NULL);
-            SetMonData(mon, MON_DATA_HP, &sp8);
+            u32 value = GetMonData(mon, MON_DATA_MAX_HP, NULL);
+            SetMonData(mon, MON_DATA_HP, &value);
 
-            sp8 = 0;
-            SetMonData(mon, MON_DATA_STATUS, &sp8);
+            value = 0;
+            SetMonData(mon, MON_DATA_STATUS, &value);
 
             for (j = 0; j < MAX_MON_MOVES; j++) {
                 if (MonMoveCanRestorePP(mon, j) == 1) {

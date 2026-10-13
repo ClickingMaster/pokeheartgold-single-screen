@@ -35,16 +35,16 @@ extern MysteryGiftCommWork *sMysteryGiftCommWork;
 extern const u8 sMysteryGiftCommCommands[]; // command table
 
 extern u16 Comm_GetLocalNetId(void);
-extern int Comm_IsNetIdConnected(u16 a0);
+extern int Comm_IsNetIdConnected(u16 slot);
 extern BOOL Comm_IsActive(void);
-extern void CommRandom_Init(void *a0);
+extern void CommRandom_Init(void *seed);
 extern void CommState_ConnectToSlot(int a0);
 extern int CommState_IsLinked(void);
 extern void CommState_RequestShutdown(void);
-extern int Comm_SendParentCommandNoCopy(int a0, void *a1, void *a2);
-extern void CommState_StartMysteryGiftParent(void *a0, void *a1);
-extern void CommState_StartMysteryGiftChild(void *a0, int a1);
-extern void *CommWireless_GetParentMail(int a0);
+extern int Comm_SendParentCommandNoCopy(int command, void *data, void *size);
+extern void CommState_StartMysteryGiftParent(void *saveData, void *a1);
+extern void CommState_StartMysteryGiftChild(void *saveData, int a1);
+extern void *CommWireless_GetParentMail(int slot);
 
 // The pieces of this module that poll the work pointer read it as volatile.
 #define VOLATILE_WORK (*(MysteryGiftCommWork *volatile *)&sMysteryGiftCommWork)
@@ -128,16 +128,16 @@ void MysteryGiftComm_Task(SysTask *task, void *data) {
     }
 }
 
-void MysteryGiftComm_StartParent(void *owner, void *a1, void *a2) {
+void MysteryGiftComm_StartParent(void *owner, void *saveData, void *a2) {
     if (!Comm_IsActive()) {
-        CommState_StartMysteryGiftParent(a1, a2);
+        CommState_StartMysteryGiftParent(saveData, a2);
         MysteryGiftComm_Start(owner);
         MysteryGiftComm_SetState(MysteryGiftComm_ParentWaitStartup, 0);
     }
 }
 
-int MysteryGiftWireless_SendCard(void *a0, void *a1) {
-    return Comm_SendParentCommandNoCopy(0x16, a0, a1);
+int MysteryGiftWireless_SendCard(void *data, void *size) {
+    return Comm_SendParentCommandNoCopy(0x16, data, size);
 }
 
 #pragma force_active on

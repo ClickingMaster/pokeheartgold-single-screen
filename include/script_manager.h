@@ -12,7 +12,7 @@ typedef struct HiddenItemResponse {
 } HiddenItemResponse;
 
 void StartMapSceneScript(FieldSystem *fieldSystem, u16 script, LocalMapObject *lastTalked);
-void FieldSystem_SetEngagedTrainer(FieldSystem *fieldSystem, LocalMapObject *obj, int a2, int a3, int a4, int trainerId, int encounterType, int idx);
+void FieldSystem_SetEngagedTrainer(FieldSystem *fieldSystem, LocalMapObject *obj, int sightDistance, int sightDirection, int scriptId, int trainerId, int encounterType, int idx);
 void QueueScript(TaskManager *taskman, u16 script, LocalMapObject *lastTalked, void *a3);
 void StartScriptFromMenu(TaskManager *taskman, u16 script, LocalMapObject *lastTalked);
 BOOL Task_RunScripts(TaskManager *taskman);
@@ -41,11 +41,11 @@ void ClearTempFieldEventData(FieldSystem *fieldSystem);
 void ClearDailyFlags(FieldSystem *fieldSystem);
 void FieldMove_SetArgs(FieldSystem *fieldSystem, u16 v8000, u16 v8001, u16 v8002, u16 v8003);
 u16 ScriptNumToTrainerNum(u16 script);
-BOOL ScriptNoToDoublePartnerNo(u16 a0);
+BOOL ScriptNoToDoublePartnerNo(u16 scriptNo);
 BOOL TrainerNumIsDouble(u32 trainer);
-BOOL TrainerFlagCheck(SaveData *a0, u32 trno);
-void TrainerFlagSet(SaveData *a0, u32 trno);
-void TrainerFlagClear(SaveData *a0, u32 trno);
+BOOL TrainerFlagCheck(SaveData *saveData, u32 trno);
+void TrainerFlagSet(SaveData *saveData, u32 trno);
+void TrainerFlagClear(SaveData *saveData, u32 trno);
 u16 HiddenItemScriptNoToFlagId(u16 script);
 u16 HiddenItemScriptNoToHiddenItemIdx(u16 script);
 u8 sub_02040578(u16 script);

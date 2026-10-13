@@ -112,7 +112,7 @@ typedef struct MainMenuButton {
     MainMenuPrintFunction printFunction;
 } MainMenuButton;
 
-extern void Sound_SetBGMPlayerChannels(u32 a0);
+extern void Sound_SetBGMPlayerChannels(u32 mode);
 extern void SystemCard_RebootIntoFile(const char *path);
 extern void CommState_StartBeaconWatch(SaveData *saveData);
 extern void CommState_StopBeaconWatch(void);
@@ -121,20 +121,20 @@ extern u32 CommState_GetSeenGames(void);
 extern BOOL CTRDG_IsExisting();
 
 static void MainMenu_HighlightOption(MainMenuAppData *data, int currentOption);
-static void MainMenu_HighlightNewGameOption(MainMenuAppData *data, int a1);
+static void MainMenu_HighlightNewGameOption(MainMenuAppData *data, int selection);
 static BOOL ChangeCurrentAppOption(MainMenuAppData *data, int offset);
-static void MainMenu_ScrollToOption(MainMenuAppData *data, int a1);
+static void MainMenu_ScrollToOption(MainMenuAppData *data, int option);
 static void MainMenu_UpdateArrowSprites(MainMenuAppData *data);
 static void AdvanceButtonBorderAnimation(MainMenuAppData *data);
 
-static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
-static BOOL MainMenu_PrintMigrateFromAgbButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
-static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
-static BOOL MainMenu_PrintConnectToRangerButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
-static BOOL MainMenu_PrintConnectToWiiButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
-static BOOL MainMenu_PrintNintendoWFCSetupButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
-static BOOL MainMenu_PrintConnectToPokewalkerButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
-static BOOL MainMenu_PrintWiiMessageSettingsButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3);
+static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y);
+static BOOL MainMenu_PrintMigrateFromAgbButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y);
+static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 a3);
+static BOOL MainMenu_PrintConnectToRangerButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y);
+static BOOL MainMenu_PrintConnectToWiiButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y);
+static BOOL MainMenu_PrintNintendoWFCSetupButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y);
+static BOOL MainMenu_PrintConnectToPokewalkerButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y);
+static BOOL MainMenu_PrintWiiMessageSettingsButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y);
 
 static MainMenuButton sMainMenuButtons[] = {
     { .id = APPOPTION_CONTINUE,       .height = 10, .msgId = msg_0442_00000, .printFunction = MainMenu_PrintContinueButton            },
@@ -188,8 +188,8 @@ static u32 GetNthAvailableApp(MainMenuAppData *data, u8 n) {
     return 0;
 }
 
-static u32 MainMenu_ConfirmOption(MainMenuAppData *data, int *state, BOOL a2) {
-    if (!a2) {
+static u32 MainMenu_ConfirmOption(MainMenuAppData *data, int *state, BOOL cancelled) {
+    if (!cancelled) {
         PlaySE(SEQ_SE_DP_SELECT);
         data->selectedApp = (MainMenu_AppOption)data->optionIds[data->currentOption];
         if (data->selectedApp == APPOPTION_MIGRATE_AGB && CTRDG_IsPulledOut() == TRUE) {
@@ -222,10 +222,10 @@ static u32 MainMenu_ConfirmOption(MainMenuAppData *data, int *state, BOOL a2) {
     return TRUE;
 }
 
-static int CountAvailableAppsBefore(MainMenuAppData *data, int a1) {
+static int CountAvailableAppsBefore(MainMenuAppData *data, int index) {
     int i;
     int apps = 0;
-    for (i = 0; i < a1; i++) {
+    for (i = 0; i < index; i++) {
         if (data->optionIds[i] != 0) {
             apps++;
         }
@@ -878,7 +878,7 @@ static void MainMenu_BufferAlignedNumber(MessageFormat *messageFormat, int numbe
     BufferIntegerAsString(messageFormat, 0, number, digits, printingMode, 1);
 }
 
-static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3) {
+static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y) {
     MessageFormat *messageFormat;
     MsgData *msgData;
 
@@ -886,7 +886,7 @@ static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 a1, MainMenu
     messageFormat = MessageFormat_New(HEAP_ID_MAIN_MENU);
     u32 textColor = (PlayerProfile_GetTrainerGender(data->profile) == PLAYER_GENDER_FEMALE) ? MAKE_TEXT_COLOR(3, 4, 15) : MAKE_TEXT_COLOR(7, 8, 15);
 
-    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
+    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, printer, 3, y, sMainMenuButtons[index].msgId);
 
     static u32 sContinueButtonMsgs[] = {
         msg_0442_00000, // "CONTINUE"
@@ -901,35 +901,35 @@ static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 a1, MainMenu
         }
 
         String *string = ReadMsgData_ExpandPlaceholders(messageFormat, msgData, sContinueButtonMsgs[i], HEAP_ID_MAIN_MENU);
-        AddTextPrinterParameterizedWithColor(a2->window, 0, string, 32, i * 16, TEXT_SPEED_NOTRANSFER, textColor, NULL);
+        AddTextPrinterParameterizedWithColor(printer->window, 0, string, 32, i * 16, TEXT_SPEED_NOTRANSFER, textColor, NULL);
         String_Delete(string);
     }
 
     BufferPlayersName(messageFormat, 0, data->profile);
-    PrintPlayerInfoField(a2->window, msgData, messageFormat, textColor, msg_0442_00017, 16);
+    PrintPlayerInfoField(printer->window, msgData, messageFormat, textColor, msg_0442_00017, 16);
 
     MainMenu_BufferAlignedNumber(messageFormat, GetIGTHours(data->igt));
     BufferIntegerAsString(messageFormat, 1, GetIGTMinutes(data->igt), 2, PRINTING_MODE_LEADING_ZEROS, 1);
-    PrintPlayerInfoField(a2->window, msgData, messageFormat, textColor, msg_0442_00018, 32);
+    PrintPlayerInfoField(printer->window, msgData, messageFormat, textColor, msg_0442_00018, 32);
 
     BufferIntegerAsString(messageFormat, 0, data->badges, 2, PRINTING_MODE_LEFT_ALIGN, 1);
-    PrintPlayerInfoField(a2->window, msgData, messageFormat, textColor, msg_0442_00020, 48);
+    PrintPlayerInfoField(printer->window, msgData, messageFormat, textColor, msg_0442_00020, 48);
 
     if (data->hasPokedex) {
         MainMenu_BufferAlignedNumber(messageFormat, Pokedex_CountDexOwned(data->pokedex));
-        PrintPlayerInfoField(a2->window, msgData, messageFormat, textColor, msg_0442_00019, 64);
+        PrintPlayerInfoField(printer->window, msgData, messageFormat, textColor, msg_0442_00019, 64);
     }
 
-    DrawFrameAndWindow1(a2->window, FALSE, a2->frameBaseTile, a2->framePalette);
+    DrawFrameAndWindow1(printer->window, FALSE, printer->frameBaseTile, printer->framePalette);
 
-    data->optionIds[a1] = sMainMenuButtons[a1].id;
+    data->optionIds[index] = sMainMenuButtons[index].id;
     MessageFormat_Delete(messageFormat);
     DestroyMsgData(msgData);
 
     return TRUE;
 }
 
-static BOOL MainMenu_PrintMigrateFromAgbButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3) {
+static BOOL MainMenu_PrintMigrateFromAgbButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y) {
     if (data->connectedAgbGame == 0) {
         return FALSE;
     }
@@ -953,14 +953,14 @@ static BOOL MainMenu_PrintMigrateFromAgbButton(MainMenuAppData *data, u32 a1, Ma
         break;
     }
 
-    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, msgId);
-    ClearWirelessIcon(data, 23, a3);
-    data->optionIds[a1] = sMainMenuButtons[a1].id;
+    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, printer, 3, y, msgId);
+    ClearWirelessIcon(data, 23, y);
+    data->optionIds[index] = sMainMenuButtons[index].id;
 
     return TRUE;
 }
 
-static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 y) {
+static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y) {
     if (!data->drawMysteryGiftButton) {
         if (SaveMysteryGift_TestFlagx7FF(data->mysteryGift) == TRUE) {
             data->drawMysteryGiftButton = TRUE;
@@ -983,9 +983,9 @@ static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 a1, MainM
     }
 
     if (data->drawMysteryGiftButton == TRUE) {
-        MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, y, sMainMenuButtons[a1].msgId);
+        MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, printer, 3, y, sMainMenuButtons[index].msgId);
         ClearWirelessIcon(data, 23, y);
-        data->optionIds[a1] = sMainMenuButtons[a1].id;
+        data->optionIds[index] = sMainMenuButtons[index].id;
         data->wirelessButtonsShown |= (1 << 0);
         SaveMysteryGift_SetFlagx7FF(data->mysteryGift);
 
@@ -995,12 +995,12 @@ static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 a1, MainM
     return FALSE;
 }
 
-static BOOL MainMenu_PrintConnectToRangerButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3) {
+static BOOL MainMenu_PrintConnectToRangerButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y) {
     if (data->drawConnectToRangerButton == TRUE && data->hasPokedex == TRUE) {
-        MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
-        DrawWirelessIcon(data, 23, a3, 1);
-        data->wirelessIconTypes[a1] = 1;
-        data->optionIds[a1] = sMainMenuButtons[a1].id;
+        MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, printer, 3, y, sMainMenuButtons[index].msgId);
+        DrawWirelessIcon(data, 23, y, 1);
+        data->wirelessIconTypes[index] = 1;
+        data->optionIds[index] = sMainMenuButtons[index].id;
         data->wirelessButtonsShown |= (1 << 1);
 
         return TRUE;
@@ -1009,12 +1009,12 @@ static BOOL MainMenu_PrintConnectToRangerButton(MainMenuAppData *data, u32 a1, M
     return FALSE;
 }
 
-static BOOL MainMenu_PrintConnectToWiiButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3) {
+static BOOL MainMenu_PrintConnectToWiiButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y) {
     if (data->drawConnectToWiiButton == TRUE) {
-        MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
-        data->wirelessIconTypes[a1] = 1;
-        DrawWirelessIcon(data, 23, a3, 1);
-        data->optionIds[a1] = sMainMenuButtons[a1].id;
+        MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, printer, 3, y, sMainMenuButtons[index].msgId);
+        data->wirelessIconTypes[index] = 1;
+        DrawWirelessIcon(data, 23, y, 1);
+        data->optionIds[index] = sMainMenuButtons[index].id;
 
         return TRUE;
     }
@@ -1022,27 +1022,27 @@ static BOOL MainMenu_PrintConnectToWiiButton(MainMenuAppData *data, u32 a1, Main
     return FALSE;
 }
 
-static BOOL MainMenu_PrintNintendoWFCSetupButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3) {
-    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
-    data->wirelessIconTypes[a1] = 2;
-    DrawWirelessIcon(data, 23, a3, 2);
-    data->optionIds[a1] = sMainMenuButtons[a1].id;
+static BOOL MainMenu_PrintNintendoWFCSetupButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y) {
+    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, printer, 3, y, sMainMenuButtons[index].msgId);
+    data->wirelessIconTypes[index] = 2;
+    DrawWirelessIcon(data, 23, y, 2);
+    data->optionIds[index] = sMainMenuButtons[index].id;
 
     return TRUE;
 }
 
-static BOOL MainMenu_PrintConnectToPokewalkerButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3) {
-    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
-    ClearWirelessIcon(data, 23, a3);
-    data->optionIds[a1] = sMainMenuButtons[a1].id;
+static BOOL MainMenu_PrintConnectToPokewalkerButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y) {
+    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, printer, 3, y, sMainMenuButtons[index].msgId);
+    ClearWirelessIcon(data, 23, y);
+    data->optionIds[index] = sMainMenuButtons[index].id;
 
     return TRUE;
 }
 
-static BOOL MainMenu_PrintWiiMessageSettingsButton(MainMenuAppData *data, u32 a1, MainMenuTextPrinter *a2, u32 a3) {
-    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
-    ClearWirelessIcon(data, 23, a3);
-    data->optionIds[a1] = sMainMenuButtons[a1].id;
+static BOOL MainMenu_PrintWiiMessageSettingsButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y) {
+    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, printer, 3, y, sMainMenuButtons[index].msgId);
+    ClearWirelessIcon(data, 23, y);
+    data->optionIds[index] = sMainMenuButtons[index].id;
 
     return TRUE;
 }
@@ -1128,20 +1128,20 @@ static void MainMenu_HighlightOption(MainMenuAppData *data, int currentOption) {
     BgCommitTilemapBufferToVram(data->bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-static void MainMenu_HighlightNewGameOption(MainMenuAppData *data, int a1) {
+static void MainMenu_HighlightNewGameOption(MainMenuAppData *data, int selection) {
     for (int i = 0; i < (int)NELEMS(data->newGameOptionWindows); i++) {
         Window *window = &data->newGameOptionWindows[i];
         if (!WindowIsInUse(window)) {
             continue;
         }
 
-        if (a1 < 0) {
+        if (selection < 0) {
             DrawFrameAndWindow1(window, TRUE, 0x3F7, 2);
             BgTilemapRectChangePalette(data->bgConfig, GF_BG_LYR_MAIN_1, GetWindowX(window), GetWindowY(window), GetWindowWidth(window), GetWindowHeight(window), 1);
         } else if (data->menuInputState.state == MENU_INPUT_STATE_TOUCH) {
             DrawFrameAndWindow1(window, TRUE, 0x3EE, 2);
             BgTilemapRectChangePalette(data->bgConfig, GF_BG_LYR_MAIN_1, GetWindowX(window), GetWindowY(window), GetWindowWidth(window), GetWindowHeight(window), 0);
-        } else if (i == a1) {
+        } else if (i == selection) {
             DrawFrameAndWindow1(window, TRUE, 0x3EE, 3);
             BgTilemapRectChangePalette(data->bgConfig, GF_BG_LYR_MAIN_1, GetWindowX(window), GetWindowY(window), GetWindowWidth(window), GetWindowHeight(window), 0);
         } else {
@@ -1187,8 +1187,8 @@ static BOOL ChangeCurrentAppOption(MainMenuAppData *data, int offset) {
     return FALSE;
 }
 
-static void MainMenu_ScrollToOption(MainMenuAppData *data, int a1) {
-    Window *window = &data->optionWindows[a1];
+static void MainMenu_ScrollToOption(MainMenuAppData *data, int option) {
+    Window *window = &data->optionWindows[option];
 
     int optionY = (GetWindowY(window) - 1) * 8;
     int optionHeight = GetWindowHeight(window); // unused

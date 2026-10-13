@@ -409,7 +409,7 @@ static BOOL IntroMovie_Scene2_WaitSpritePanEffect(IntroMovieScene2Data *sceneDat
 
 static void Task_IntroMovie_Scene2_SpritePan(SysTask *task, void *pVoid) {
     IntroMovieScene2SpritePanController *spritePanCnt = (IntroMovieScene2SpritePanController *)pVoid;
-    VecFx32 sp4 = { 0, 0, 0 };
+    VecFx32 position = { 0, 0, 0 };
     ++spritePanCnt->counter;
     int x = spritePanCnt->xSpeed * spritePanCnt->counter / spritePanCnt->duration;
     int y = spritePanCnt->ySpeed * spritePanCnt->counter / spritePanCnt->duration;
@@ -421,11 +421,11 @@ static void Task_IntroMovie_Scene2_SpritePan(SysTask *task, void *pVoid) {
         spritePanCnt->finished = TRUE;
         spritePanCnt->active = FALSE;
     }
-    sp4.x = x * FX32_ONE;
-    sp4.y = y * FX32_ONE;
-    Sprite_SetMatrix(spritePanCnt->sprite0, &sp4);
-    Sprite_SetMatrix(spritePanCnt->sprite1, &sp4);
-    Sprite_SetMatrix(spritePanCnt->sprite2, &sp4);
+    position.x = x * FX32_ONE;
+    position.y = y * FX32_ONE;
+    Sprite_SetMatrix(spritePanCnt->sprite0, &position);
+    Sprite_SetMatrix(spritePanCnt->sprite1, &position);
+    Sprite_SetMatrix(spritePanCnt->sprite2, &position);
 }
 
 enum HeapID _deadstrip_02(int idx);

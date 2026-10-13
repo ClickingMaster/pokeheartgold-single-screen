@@ -52,7 +52,7 @@ u8 CommPlayerInfo_GetCountry(int netId);
 u8 CommPlayerInfo_GetRegion(int netId);
 void CommState_EndPlazaMatch(void);
 int Comm_FindFriendSlot(SaveData *saveData, void *friendData, u32 *index);
-void WirelessStatusIcon_ShowOnBothScreens(int a0, enum HeapID heapId);
+void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapId);
 void WiFiPlaza_SendMinigameResultNews(void *lobby, u8 game, int count, u32 id0, u32 id1, u32 id2, u32 id3);
 
 extern const u8 sPlazaGameMimeJrTopSelectionWeights[];

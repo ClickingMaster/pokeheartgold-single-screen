@@ -20,10 +20,10 @@ const u32 WifiClubRoomMap_32Friends[308] = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 
 const u32 *WifiClubRoomMaps[4] = { WifiClubRoomMap_8Friends, WifiClubRoomMap_16Friends, WifiClubRoomMap_24Friends, WifiClubRoomMap_32Friends };
 
-Field2DPoint WifiClubRoom_GetMapSize(s32 arg0) {
-    return WifiClubRoomMapSizes[arg0];
+Field2DPoint WifiClubRoom_GetMapSize(s32 mapIndex) {
+    return WifiClubRoomMapSizes[mapIndex];
 }
 
-const u32 *WifiClubRoom_GetMapCells(u32 arg0) {
-    return WifiClubRoomMaps[arg0];
+const u32 *WifiClubRoom_GetMapCells(u32 mapIndex) {
+    return WifiClubRoomMaps[mapIndex];
 }

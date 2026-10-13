@@ -49,10 +49,10 @@ static u32 GetMonSizeHash(Pokemon *mon) {
     return ret + (ret2 << 8);
 }
 
-static u8 TranslateBigMonSizeTableIndex(u32 a0) {
+static u8 TranslateBigMonSizeTableIndex(u32 randValue) {
     u8 i;
     for (i = 1; i < NELEMS(sBigMonSizeTable) - 1; i++) {
-        if (a0 < sBigMonSizeTable[i][2]) {
+        if (randValue < sBigMonSizeTable[i][2]) {
             return i - 1;
         }
     }

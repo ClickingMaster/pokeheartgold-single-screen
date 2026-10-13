@@ -29,7 +29,7 @@
 // Declared only in other modules' private headers.
 void *ov45_0222A2C8(void *lobby);
 void *ov45_0222A2CC(void *lobby);
-void WiFiPlazaWork_SetLowVolume(void *lobby, int a1);
+void WiFiPlazaWork_SetLowVolume(void *lobby, int value);
 void ov45_0222A4A8(void *lobby);
 u32 WiFiPlazaWork_IsClosing(void *lobby);
 BOOL WiFiPlaza_HasConnectionFailed(void);

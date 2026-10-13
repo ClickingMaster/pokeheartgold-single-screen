@@ -307,7 +307,7 @@ enum VisitorProfilesMode {
 // The Wi-Fi Plaza lobby (OVY_45) has no public header.
 extern u32 WiFiPlazaWork_IsClosing(void *lobby);
 extern void ov45_0222A4A8(void *lobby);
-extern void WiFiPlazaWork_SetLowVolume(void *lobby, u32 a1);
+extern void WiFiPlazaWork_SetLowVolume(void *lobby, u32 value);
 extern u32 WiFiPlazaPlaces_GetCountry(void *visitors, u8 index);
 extern u32 WiFiPlazaPlaces_GetRegion(void *visitors, u8 index);
 extern u32 WiFiPlazaPlaces_GetValue(void *visitors, u8 index);

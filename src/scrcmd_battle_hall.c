@@ -284,12 +284,12 @@ static BOOL Task_BattleHallSpeciesCheck(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void BattleHall_StartSelectMons(TaskManager *taskManager, void *a1, BattleHallChallengeType challengeType) {
+static void BattleHall_StartSelectMons(TaskManager *taskManager, void *appArgs, BattleHallChallengeType challengeType) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     BattleHallSelectMonsEnv *r4 = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BattleHallSelectMonsEnv));
     MI_CpuFill8(r4, 0, sizeof(BattleHallSelectMonsEnv));
     r4->challengeType = challengeType;
-    r4->appArgs = a1;
+    r4->appArgs = appArgs;
     TaskManager_Call(fieldSystem->taskman, Task_BattleHallSelectMons, r4);
 }
 
@@ -316,7 +316,7 @@ static BOOL Task_BattleHallSelectMons(TaskManager *taskManager) {
     return FALSE;
 }
 
-static u32 BattleHallSelectMons_OpenPartyMenu(BattleHallSelectMonsEnv *a0, FieldSystem *fieldSystem, enum HeapID unused) {
+static u32 BattleHallSelectMons_OpenPartyMenu(BattleHallSelectMonsEnv *env, FieldSystem *fieldSystem, enum HeapID unused) {
     PartyMenuArgs *partyMenuArgs = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PartyMenuArgs));
     MIi_CpuClearFast(0, (u32 *)partyMenuArgs, sizeof(PartyMenuArgs));
     partyMenuArgs->party = SaveArray_Party_Get(fieldSystem->saveData);
@@ -326,43 +326,43 @@ static u32 BattleHallSelectMons_OpenPartyMenu(BattleHallSelectMonsEnv *a0, Field
     partyMenuArgs->panelLayout = 0;
     partyMenuArgs->context = PARTY_MENU_CONTEXT_BATTLE_HALL;
     partyMenuArgs->fieldSystem = fieldSystem;
-    partyMenuArgs->partySlot = a0->partySlot;
+    partyMenuArgs->partySlot = env->partySlot;
     for (u8 i = 0; i < 2; i++) {
-        partyMenuArgs->selectedOrder[i] = a0->selectedMons[i];
+        partyMenuArgs->selectedOrder[i] = env->selectedMons[i];
     }
     partyMenuArgs->maxLevel = 30;
     partyMenuArgs->minMonsToSelect = 1;
     partyMenuArgs->maxMonsToSelect = 1;
     partyMenuArgs->menuInputStatePtr = &fieldSystem->menuInputState;
-    if (a0->challengeType == BATTLE_HALL_CHALLENGE_TYPE_DOUBLE) {
+    if (env->challengeType == BATTLE_HALL_CHALLENGE_TYPE_DOUBLE) {
         partyMenuArgs->minMonsToSelect = 2;
         partyMenuArgs->maxMonsToSelect = 2;
     }
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PartyMenu, partyMenuArgs);
-    *(a0->appArgs) = partyMenuArgs;
+    *(env->appArgs) = partyMenuArgs;
     return 1;
 }
 
-static u32 BattleHallSelectMons_WaitPartyMenu(BattleHallSelectMonsEnv *a0, FieldSystem *fieldSystem) {
+static u32 BattleHallSelectMons_WaitPartyMenu(BattleHallSelectMonsEnv *env, FieldSystem *fieldSystem) {
     if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
         return 1;
     }
-    PartyMenuArgs *partyMenu = *(a0->appArgs);
+    PartyMenuArgs *partyMenu = *(env->appArgs);
     switch (partyMenu->partySlot) {
     case 7:
         return 4;
     case 6:
         return 4;
     default:
-        MI_CpuCopy8(partyMenu->selectedOrder, a0->selectedMons, 2);
-        a0->partySlot = partyMenu->partySlot;
+        MI_CpuCopy8(partyMenu->selectedOrder, env->selectedMons, 2);
+        env->partySlot = partyMenu->partySlot;
         Heap_Free(partyMenu);
-        *(a0->appArgs) = NULL;
+        *(env->appArgs) = NULL;
         return 2;
     }
 }
 
-static u32 BattleHallSelectMons_OpenSummary(BattleHallSelectMonsEnv *a0, FieldSystem *fieldSystem, enum HeapID heapID) {
+static u32 BattleHallSelectMons_OpenSummary(BattleHallSelectMonsEnv *env, FieldSystem *fieldSystem, enum HeapID heapID) {
     SaveData *saveData = fieldSystem->saveData;
     PokemonSummaryArgs *args = Heap_AllocAtEnd(heapID, sizeof(PokemonSummaryArgs));
     MI_CpuFill8(args, 0, sizeof(PokemonSummaryArgs));
@@ -371,7 +371,7 @@ static u32 BattleHallSelectMons_OpenSummary(BattleHallSelectMonsEnv *a0, FieldSy
     args->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
     args->unk2C = sub_02088288(saveData);
     args->monDataType = 1;
-    args->partySlot = a0->partySlot;
+    args->partySlot = env->partySlot;
     args->partyCount = Party_GetCount(args->party);
     args->moveToLearn = MOVE_NONE;
     args->mode = 0;
@@ -380,18 +380,18 @@ static u32 BattleHallSelectMons_OpenSummary(BattleHallSelectMonsEnv *a0, FieldSy
     PokemonSummary_SetPages(args, sBattleHallSummaryPages);
     PokemonSummaryArgs_SetPlayer(args, Save_PlayerData_GetProfile(saveData));
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, args);
-    *(a0->appArgs) = args;
+    *(env->appArgs) = args;
     return 3;
 }
 
-static u32 BattleHallSelectMons_WaitSummary(BattleHallSelectMonsEnv *a0, FieldSystem *fieldSystem) {
+static u32 BattleHallSelectMons_WaitSummary(BattleHallSelectMonsEnv *env, FieldSystem *fieldSystem) {
     if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
         return 3;
     }
-    PokemonSummaryArgs *pokemonSummaryArgs = *(a0->appArgs);
-    a0->partySlot = pokemonSummaryArgs->partySlot;
+    PokemonSummaryArgs *pokemonSummaryArgs = *(env->appArgs);
+    env->partySlot = pokemonSummaryArgs->partySlot;
     Heap_Free(pokemonSummaryArgs);
-    *(a0->appArgs) = NULL;
+    *(env->appArgs) = NULL;
     return 0;
 }
 
@@ -528,19 +528,19 @@ BOOL ScrCmd_697(ScriptContext *ctx) {
     return FALSE;
 }
 
-void BattleHall_RecvPartnerSpecies(u32 a0, u32 unused, BattleHallSpeciesCheck *a2, BattleHallSpeciesCheck *a3) {
-    a3->numReceived++;
-    if (Comm_GetLocalNetId() != a0) {
-        a3->partnerTeam = a2->playerTeam;
+void BattleHall_RecvPartnerSpecies(u32 netId, u32 unused, BattleHallSpeciesCheck *received, BattleHallSpeciesCheck *speciesCheck) {
+    speciesCheck->numReceived++;
+    if (Comm_GetLocalNetId() != netId) {
+        speciesCheck->partnerTeam = received->playerTeam;
     }
 }
 
-void BattleHall_ResetStreak(SaveData *saveData, u32 a1, u8 a2) {
+void BattleHall_ResetStreak(SaveData *saveData, u32 hallFlags, u8 challengeType) {
     u8 unk0;
     unk0 = 0;
-    HallFlags_SetField(a1, 5, a2, 0, &unk0);
-    if (a2 == 3) {
+    HallFlags_SetField(hallFlags, 5, challengeType, 0, &unk0);
+    if (challengeType == 3) {
         FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 0x6a, FrontierStat_GetFriendIndex(0x6a), 0);
     }
-    FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), BattleHall_GetWinStreakStat(a2), FrontierStat_GetFriendIndex(BattleHall_GetWinStreakStat(a2)), 0);
+    FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), BattleHall_GetWinStreakStat(challengeType), FrontierStat_GetFriendIndex(BattleHall_GetWinStreakStat(challengeType)), 0);
 }

@@ -24,15 +24,15 @@ static void BattleArcade_ParticleEmitterCallback(SPLEmitter *emitter);
 static BOOL FrontierScriptNative_WaitArcadeLink(FrontierScriptContext *ctx);
 
 BOOL FrtCmd_ArcadeAlloc(FrontierScriptContext *ctx) {
-    u32 spC = FrontierScript_ReadVar(ctx);
-    u32 r4 = FrontierScript_ReadVar(ctx);
-    u32 sp10 = FrontierScript_ReadVar(ctx);
-    u32 r6 = FrontierScript_ReadVar(ctx);
-    u32 r7 = FrontierScript_ReadVar(ctx);
-    u16 *sp14 = FrontierScript_ReadVarPtr(ctx);
+    u32 resume = FrontierScript_ReadVar(ctx);
+    u32 type = FrontierScript_ReadVar(ctx);
+    u32 slot0 = FrontierScript_ReadVar(ctx);
+    u32 slot1 = FrontierScript_ReadVar(ctx);
+    u32 slot2 = FrontierScript_ReadVar(ctx);
+    u16 *resultVar = FrontierScript_ReadVarPtr(ctx);
 
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
-    Frontier_SetData(ctx->frontierSystem->frontierWork, BattleArcadeData_Alloc(args->saveData, spC, r4, sp10, r6, r7, sp14));
+    Frontier_SetData(ctx->frontierSystem->frontierWork, BattleArcadeData_Alloc(args->saveData, resume, type, slot0, slot1, slot2, resultVar));
 
     return FALSE;
 }

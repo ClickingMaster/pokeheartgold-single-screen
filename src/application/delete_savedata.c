@@ -110,7 +110,7 @@ const OverlayManagerTemplate gApplication_DeleteSave = {
     .ovy_id = FS_OVERLAY_ID_NONE,
 };
 
-extern void Sound_SetBGMPlayerChannels(u32 a0);
+extern void Sound_SetBGMPlayerChannels(u32 mode);
 
 static void DeleteSavedataApp_OnVBlank(DeleteSavedataApp_Data *data);
 static void DeleteSavedataApp_SetupBgConfig(DeleteSavedataApp_Data *data);

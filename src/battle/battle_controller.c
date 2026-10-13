@@ -1028,7 +1028,7 @@ void BattleController_ReplyItemSelection(BattleSystem *battleSystem, int battler
 
 #pragma force_active on
 
-void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u32 a3, u32 a4, u32 a5) {
+void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u32 a3, u32 canSwitch, u32 a5) {
     BattleControllerPacketShowMonList packet;
     int i;
     int j;
@@ -1037,7 +1037,7 @@ void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext 
     packet.command = 18;
     packet.battlerId = battlerId;
     packet.mode = a3;
-    packet.trapped = a4;
+    packet.trapped = canSwitch;
     packet.reservedMon = a5;
     packet.switchInFlag = ctx->switchInFlag;
     for (i = 0; i < BATTLER_MAX; i++) {
@@ -1057,12 +1057,12 @@ void BattleController_ReplyPartySelection(BattleSystem *battleSystem, int battle
 
 #pragma force_active on
 
-void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int a3, int a4, int a5, int a6) {
+void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int msgId, int a4, int a5, int a6) {
     BattleControllerPacketYesNoBox packet;
 
     BattleBuffer_Clear(ctx, battlerId);
     packet.command = 19;
-    packet.msgId = a3;
+    packet.msgId = msgId;
     packet.mode = a4;
     packet.value = a5;
     packet.param = a6;
@@ -1097,7 +1097,7 @@ void BattleController_SetMoveAnimationForBattlers(BattleSystem *battleSystem, Ba
     BattleController_EmitPacket(battleSystem, 1, attacker, &packet, sizeof(packet));
 }
 
-void BattleController_EmitMonFlicker(BattleSystem *battleSystem, int battlerId, int a2) {
+void BattleController_EmitMonFlicker(BattleSystem *battleSystem, int battlerId, int moveStatusFlag) {
     u32 command = 23;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &command, sizeof(command));
 }
@@ -1236,20 +1236,20 @@ void BattleController_EmitCopyStatus2Effect(BattleSystem *battleSystem, BattleCo
 
 #pragma force_active on
 
-void BattleController_EmitPrintReturnMessage(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int a3) {
+void BattleController_EmitPrintReturnMessage(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int selectedMonIndex) {
     BattleControllerPacketSwitchMessage packet;
 
     packet.command = 32;
-    packet.selectedMonIndex = a3;
+    packet.selectedMonIndex = selectedMonIndex;
     packet.value = (100 * (ctx->hpTemp - ctx->battleMons[BATTLER_ENEMY].hp)) / ctx->hpTemp;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-void BattleController_EmitPrintSendOutMessage(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int a3) {
+void BattleController_EmitPrintSendOutMessage(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int selectedMonIndex) {
     BattleControllerPacketSwitchMessage packet;
 
     packet.command = 33;
-    packet.selectedMonIndex = a3;
+    packet.selectedMonIndex = selectedMonIndex;
     if (ctx->battleMons[BATTLER_ENEMY].hp == 0) {
         packet.value = 1000;
     } else {

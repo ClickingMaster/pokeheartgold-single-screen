@@ -22,7 +22,7 @@ BOOL GiveMon(enum HeapID heapID, SaveData *saveData, int species, int level, int
     Party *party;
     Pokemon *mon;
     PlayerProfile *profile;
-    u32 sp1C;
+    u32 heldItemValue;
     BOOL result;
 
     profile = Save_PlayerData_GetProfile(saveData);
@@ -32,8 +32,8 @@ BOOL GiveMon(enum HeapID heapID, SaveData *saveData, int species, int level, int
         ZeroMonData(mon);
         CreateMon(mon, species, level, 32, FALSE, 0, 0, 0);
         MonSetCatchData(mon, profile, ITEM_POKE_BALL, ball, encounterType, heapID);
-        sp1C = heldItem;
-        SetMonData(mon, MON_DATA_HELD_ITEM, &sp1C);
+        heldItemValue = heldItem;
+        SetMonData(mon, MON_DATA_HELD_ITEM, &heldItemValue);
         SetMonData(mon, MON_DATA_FORM, &form);
         if (ability != 0) {
             SetMonData(mon, MON_DATA_ABILITY, &ability);

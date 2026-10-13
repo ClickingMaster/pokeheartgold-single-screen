@@ -69,12 +69,12 @@ void StartMapSceneScript(FieldSystem *fieldSystem, u16 script, LocalMapObject *l
     FieldSystem_CreateTask(fieldSystem, Task_RunScripts, r4);
 }
 
-void FieldSystem_SetEngagedTrainer(FieldSystem *fieldSystem, LocalMapObject *obj, int a2, int a3, int a4, int trainerId, int encounterType, int idx) {
+void FieldSystem_SetEngagedTrainer(FieldSystem *fieldSystem, LocalMapObject *obj, int sightDistance, int sightDirection, int scriptId, int trainerId, int encounterType, int idx) {
     ScriptEnvironment *env = TaskManager_GetEnvironment(fieldSystem->taskman);
     EngagedTrainer *r0 = &env->engagedTrainers[idx];
-    r0->sightDistance = a2;
-    r0->sightDirection = a3;
-    r0->scriptId = a4;
+    r0->sightDistance = sightDistance;
+    r0->sightDirection = sightDirection;
+    r0->scriptId = scriptId;
     r0->trainerId = trainerId;
     r0->encounterType = encounterType;
     r0->overworldEvent = obj;
@@ -430,8 +430,8 @@ u16 ScriptNumToTrainerNum(u16 script) {
     }
 }
 
-BOOL ScriptNoToDoublePartnerNo(u16 a0) {
-    return a0 >= _std_npc_trainer_2;
+BOOL ScriptNoToDoublePartnerNo(u16 scriptNo) {
+    return scriptNo >= _std_npc_trainer_2;
 }
 
 BOOL TrainerNumIsDouble(u32 trainer) {
@@ -645,14 +645,14 @@ u16 GetMapSceneScriptId(FieldSystem *fieldSystem, u8 *header, u8 type) {
     }
     header += ofs;
     while (1) {
-        u16 var1;
-        u16 var2;
-        var1 = header[0] + (header[1] << 8);
-        if (var1 == 0) {
+        u16 varId;
+        u16 compareVarId;
+        varId = header[0] + (header[1] << 8);
+        if (varId == 0) {
             return 0xFFFF;
         }
-        var2 = header[2] + (header[3] << 8);
-        if (FieldSystem_VarGet(fieldSystem, var1) == FieldSystem_VarGet(fieldSystem, var2)) {
+        compareVarId = header[2] + (header[3] << 8);
+        if (FieldSystem_VarGet(fieldSystem, varId) == FieldSystem_VarGet(fieldSystem, compareVarId)) {
             return header[4] + (header[5] << 8);
         }
         header += 6;

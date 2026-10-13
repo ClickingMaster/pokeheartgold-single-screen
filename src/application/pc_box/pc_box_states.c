@@ -4355,15 +4355,15 @@ u32 PCBox_CancelExit(PCBoxWork *work) {
     return 0xc;
 }
 
-u32 PCBox_FlashPanel(PCBoxWork *work, u32 a1, u32 a2) {
+u32 PCBox_FlashPanel(PCBoxWork *work, u32 panelIndex, u32 nextState) {
     s8 a;
     s8 b;
     u16 c;
     u16 d;
-    BgCellManager_GetCellPosition(work->view->panels, a1, &a, &b);
-    BgCellManager_GetCellSize(work->view->panels, a1, &c, &d);
+    BgCellManager_GetCellPosition(work->view->panels, panelIndex, &a, &b);
+    BgCellManager_GetCellSize(work->view->panels, panelIndex, &c, &d);
     work->view->paletteFlash.isBg = 1;
-    work->view->paletteFlash.index = BgCellManager_GetCellBgId(work->view->panels, a1);
+    work->view->paletteFlash.index = BgCellManager_GetCellBgId(work->view->panels, panelIndex);
     work->view->paletteFlash.palA = 0xd;
     work->view->paletteFlash.palB = 0xc;
     work->view->paletteFlash.state = 0;
@@ -4372,19 +4372,19 @@ u32 PCBox_FlashPanel(PCBoxWork *work, u32 a1, u32 a2) {
     work->view->paletteFlash.y = b;
     work->view->paletteFlash.w = c;
     work->view->paletteFlash.h = d;
-    work->nextState = a2;
+    work->nextState = nextState;
     return 8;
 }
 
-u32 PCBox_StartCellPaletteFlash(PCBoxWork *work, u32 a1, u32 a2) {
+u32 PCBox_StartCellPaletteFlash(PCBoxWork *work, u32 panelIndex, u32 nextState) {
     s8 a;
     s8 b;
     u16 c;
     u16 d;
-    BgCellManager_GetCellPosition(work->view->panels, a1, &a, &b);
-    BgCellManager_GetCellSize(work->view->panels, a1, &c, &d);
+    BgCellManager_GetCellPosition(work->view->panels, panelIndex, &a, &b);
+    BgCellManager_GetCellSize(work->view->panels, panelIndex, &c, &d);
     work->view->paletteFlash.isBg = 1;
-    work->view->paletteFlash.index = BgCellManager_GetCellBgId(work->view->panels, a1);
+    work->view->paletteFlash.index = BgCellManager_GetCellBgId(work->view->panels, panelIndex);
     work->view->paletteFlash.palA = 3;
     work->view->paletteFlash.palB = 2;
     work->view->paletteFlash.state = 0;
@@ -4393,18 +4393,18 @@ u32 PCBox_StartCellPaletteFlash(PCBoxWork *work, u32 a1, u32 a2) {
     work->view->paletteFlash.y = b;
     work->view->paletteFlash.w = c;
     work->view->paletteFlash.h = d;
-    work->nextState = a2;
+    work->nextState = nextState;
     return 8;
 }
 
-u32 PCBox_FlashMarkingMenuButton(PCBoxWork *work, u32 a1, u32 a2) {
+u32 PCBox_FlashMarkingMenuButton(PCBoxWork *work, u32 button, u32 nextState) {
     work->view->paletteFlash.isBg = 1;
     work->view->paletteFlash.index = BgCellManager_GetCellBgId(work->view->panels, 2);
     work->view->paletteFlash.palA = 3;
     work->view->paletteFlash.palB = 2;
     work->view->paletteFlash.state = 0;
     work->view->paletteFlash.timer = 0;
-    if (a1 == 0) {
+    if (button == 0) {
         work->view->paletteFlash.y = 0x10;
     } else {
         work->view->paletteFlash.y = 0x14;
@@ -4412,18 +4412,18 @@ u32 PCBox_FlashMarkingMenuButton(PCBoxWork *work, u32 a1, u32 a2) {
     work->view->paletteFlash.x = 0x16;
     work->view->paletteFlash.w = 9;
     work->view->paletteFlash.h = 4;
-    work->nextState = a2;
+    work->nextState = nextState;
     return 8;
 }
 
-u32 PCBox_FlashPartyPanelButton(PCBoxWork *work, u32 a1, u32 a2) {
+u32 PCBox_FlashPartyPanelButton(PCBoxWork *work, u32 button, u32 nextState) {
     work->view->paletteFlash.isBg = 1;
     work->view->paletteFlash.index = BgCellManager_GetCellBgId(work->view->panels, 1);
     work->view->paletteFlash.palA = 3;
     work->view->paletteFlash.palB = 2;
     work->view->paletteFlash.state = 0;
     work->view->paletteFlash.timer = 0;
-    if (a1 == 0) {
+    if (button == 0) {
         work->view->paletteFlash.x = 3;
     } else {
         work->view->paletteFlash.x = 0x16;
@@ -4431,7 +4431,7 @@ u32 PCBox_FlashPartyPanelButton(PCBoxWork *work, u32 a1, u32 a2) {
     work->view->paletteFlash.y = 0x14;
     work->view->paletteFlash.w = 9;
     work->view->paletteFlash.h = 4;
-    work->nextState = a2;
+    work->nextState = nextState;
     return 8;
 }
 

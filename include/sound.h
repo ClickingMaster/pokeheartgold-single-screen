@@ -60,7 +60,7 @@ void GF_InitMic(SND_WORK *work);
 void GF_SndOnStartSeqFailed(u16 unk);
 BOOL GF_SndWorkMicCounterFull(void);
 void GF_SndWorkMicCounterReset(void);
-void GF_SndWorkSetGbSoundsVolume(u8 a0);
+void GF_SndWorkSetGbSoundsVolume(u8 volume);
 u8 GF_SndWorkGetGbSoundsVolume(void);
 void GF_SndStartFadeOutBGM(u16 volume, u16 frames);
 NNSSndHandle *GF_GetSoundHandle(int playerNo);

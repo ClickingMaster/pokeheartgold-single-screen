@@ -39,7 +39,7 @@ struct SysTaskState_02016DF8 {
 };
 
 static void YesNoPrompt_InitFromTemplate_Internal(YesNoPrompt *yesno, const YesNoPromptTemplate *template);
-static void YesNoPrompt_UpdateButtonGraphicalState(YesNoPrompt *yesno, u8 a1, int a2);
+static void YesNoPrompt_UpdateButtonGraphicalState(YesNoPrompt *yesno, u8 whichButton, int whichScreen);
 static void YesNoPrompt_HighlightSelectedButton(YesNoPrompt *yesno);
 static BOOL YesNoPrompt_HandleButtonInput(YesNoPrompt *yesno, int joyInput);
 static BOOL YesNoPrompt_HandleInput_Internal(YesNoPrompt *yesno);
@@ -213,9 +213,9 @@ void YesNoPrompt_Reset(YesNoPrompt *yesno) {
     YesNoPrompt_Init(yesno, yesno->heapID);
 }
 
-void YesNoPrompt_SetIgnoreTouch(YesNoPrompt *yesno, int a1) {
+void YesNoPrompt_SetIgnoreTouch(YesNoPrompt *yesno, int ignoreTouch) {
     GF_ASSERT(yesno != NULL);
-    yesno->ignoreTouch = a1;
+    yesno->ignoreTouch = ignoreTouch;
 }
 
 static void YesNoPrompt_Init(YesNoPrompt *yesno, enum HeapID heapID) {

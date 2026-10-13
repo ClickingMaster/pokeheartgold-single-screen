@@ -74,6 +74,6 @@ void YesNoPrompt_InitFromTemplateWithPalette(YesNoPrompt *, const YesNoPromptTem
 YesNoResponse YesNoPrompt_HandleInputForSave(YesNoPrompt *);
 YesNoResponse YesNoPrompt_HandleInput(YesNoPrompt *);
 MenuInputState YesNoPrompt_IsInTouchMode(YesNoPrompt *);
-void YesNoPrompt_SetIgnoreTouch(YesNoPrompt *yesno, int a1);
+void YesNoPrompt_SetIgnoreTouch(YesNoPrompt *yesno, int ignoreTouch);
 
 #endif // POKEHEARTGOLD_YES_NO_PROMPT_H

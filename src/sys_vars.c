@@ -105,47 +105,47 @@ u16 Save_VarsFlags_GetUnownReportLevel(SaveVarsFlags *state) {
     return GetScriptVar(state, VAR_UNOWN_REPORT_LEVEL);
 }
 
-u16 Save_VarsFlags_GetEventKeyMagic(s32 a0) {
-    GF_ASSERT(a0 >= 0 && (u32)a0 < NELEMS(_020FE4A4));
-    return _020FE4A4[a0];
+u16 Save_VarsFlags_GetEventKeyMagic(s32 key) {
+    GF_ASSERT(key >= 0 && (u32)key < NELEMS(_020FE4A4));
+    return _020FE4A4[key];
 }
 
-void Save_VarsFlags_SetEventKey(SaveVarsFlags *state, u32 a1) {
-    SetScriptVar(state, VAR_UNK_4043 + a1, Save_VarsFlags_GetEventKeyMagic(a1));
+void Save_VarsFlags_SetEventKey(SaveVarsFlags *state, u32 key) {
+    SetScriptVar(state, VAR_UNK_4043 + key, Save_VarsFlags_GetEventKeyMagic(key));
 }
 
-BOOL Save_VarsFlags_CheckEventKey(SaveVarsFlags *state, u32 a1) {
-    u16 var1 = GetScriptVar(state, VAR_UNK_4043 + a1);
-    u16 var2 = Save_VarsFlags_GetEventKeyMagic(a1);
-    return var1 == var2;
+BOOL Save_VarsFlags_CheckEventKey(SaveVarsFlags *state, u32 key) {
+    u16 value = GetScriptVar(state, VAR_UNK_4043 + key);
+    u16 magic = Save_VarsFlags_GetEventKeyMagic(key);
+    return value == magic;
 }
 
-void Save_VarsFlags_SetRoamerStatus(SaveVarsFlags *state, u32 a1, u16 value) {
-    if (a1 < NELEMS(_020FE4A8)) {
-        SetScriptVar(state, VAR_ROAMER_RAIKOU_STATUS + a1, value);
+void Save_VarsFlags_SetRoamerStatus(SaveVarsFlags *state, u32 roamer, u16 value) {
+    if (roamer < NELEMS(_020FE4A8)) {
+        SetScriptVar(state, VAR_ROAMER_RAIKOU_STATUS + roamer, value);
     }
 }
 
-u32 Save_VarsFlags_GetMapEventKeyMagic(s32 a0) {
-    GF_ASSERT(a0 >= 0 && a0 < (s32)NELEMS(_020FE4A8));
-    return _020FE4A8[a0];
+u32 Save_VarsFlags_GetMapEventKeyMagic(s32 key) {
+    GF_ASSERT(key >= 0 && key < (s32)NELEMS(_020FE4A8));
+    return _020FE4A8[key];
 }
 
-void Save_VarsFlags_SetMapEventKey(SaveVarsFlags *state, s32 a1) {
-    GF_ASSERT(a1 >= 0 && a1 < (s32)NELEMS(_020FE4A8));
-    SetScriptVar(state, VAR_UNK_4036 + a1, Save_VarsFlags_GetMapEventKeyMagic(a1));
+void Save_VarsFlags_SetMapEventKey(SaveVarsFlags *state, s32 key) {
+    GF_ASSERT(key >= 0 && key < (s32)NELEMS(_020FE4A8));
+    SetScriptVar(state, VAR_UNK_4036 + key, Save_VarsFlags_GetMapEventKeyMagic(key));
 }
 
-void Save_VarsFlags_ClearMapEventKey(SaveVarsFlags *state, s32 a1) {
-    GF_ASSERT(a1 >= 0 && a1 < (s32)NELEMS(_020FE4A8));
-    SetScriptVar(state, VAR_UNK_4036 + a1, 0);
+void Save_VarsFlags_ClearMapEventKey(SaveVarsFlags *state, s32 key) {
+    GF_ASSERT(key >= 0 && key < (s32)NELEMS(_020FE4A8));
+    SetScriptVar(state, VAR_UNK_4036 + key, 0);
 }
 
-BOOL Save_VarsFlags_CheckMapEventKey(SaveVarsFlags *state, s32 a1) {
-    GF_ASSERT(a1 >= 0 && a1 < (s32)NELEMS(_020FE4A8));
-    u16 var1 = GetScriptVar(state, VAR_UNK_4036 + a1);
-    u32 var2 = Save_VarsFlags_GetMapEventKeyMagic(a1);
-    return var1 == var2;
+BOOL Save_VarsFlags_CheckMapEventKey(SaveVarsFlags *state, s32 key) {
+    GF_ASSERT(key >= 0 && key < (s32)NELEMS(_020FE4A8));
+    u16 value = GetScriptVar(state, VAR_UNK_4036 + key);
+    u32 magic = Save_VarsFlags_GetMapEventKeyMagic(key);
+    return value == magic;
 }
 
 void Save_VarsFlags_SetLotoId(SaveVarsFlags *state, u32 id) {

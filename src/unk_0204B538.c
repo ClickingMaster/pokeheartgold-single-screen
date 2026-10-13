@@ -179,12 +179,12 @@ u16 FrontierFieldSystem_ReceiveLinkAllyData(FieldSystem *fieldSystem, u16 *linkA
     return match; // return 1 if partyMonSpecies[0] matches, 2 if partyMonSpecies[1] matches, 3 if both match.
 }
 
-BOOL FrontierFieldSystem_ReceiveRoundTrainers(FieldSystem *fieldSystem, u16 *a1) {
+BOOL FrontierFieldSystem_ReceiveRoundTrainers(FieldSystem *fieldSystem, u16 *trainers) {
     FrontierFieldSystem *frontierFsys = fieldSystem->frontierFsys;
     if (Comm_GetLocalNetId() == 0) {
         return FALSE;
     }
-    MI_CpuCopy8(a1, frontierFsys->trainersInCurrentRound, sizeof(frontierFsys->trainersInCurrentRound));
+    MI_CpuCopy8(trainers, frontierFsys->trainersInCurrentRound, sizeof(frontierFsys->trainersInCurrentRound));
     return TRUE;
 }
 

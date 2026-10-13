@@ -61,7 +61,7 @@ extern void (*const sWobbuffetPopEventFuncs[])(WobbuffetPop *game, WobbuffetPopE
 // font_sprite.c; called without its palette argument.
 void TextOBJ_SetPalOffset(TextOBJ *object);
 // Without a header here.
-void SetBothScreensBrightnessByColor(u16 a0);
+void SetBothScreensBrightnessByColor(u16 color);
 
 void WobbuffetPopInflation_Start(BgConfig *bgConfig, int playerCount, int size, WobbuffetPopInflation *inflation);
 void WobbuffetPopInflation_Stop(BgConfig *bgConfig, WobbuffetPopInflation *inflation);

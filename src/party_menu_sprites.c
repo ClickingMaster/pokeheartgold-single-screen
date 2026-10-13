@@ -393,7 +393,7 @@ void PartyMenu_InitSpriteSystem(PartyMenu *partyMenu) {
 
 void PartyMenu_CreateMonIconSprites(PartyMenu *partyMenu, u8 partySlot, u16 x, u16 y, NARC *narc) {
     Pokemon *mon = Party_GetMonByIndex(partyMenu->args->party, partySlot);
-    UnmanagedSpriteTemplate sp1C;
+    UnmanagedSpriteTemplate spriteTemplate;
     int isEgg;
 
     partyMenu->monsDrawState[partySlot].iconX = x;
@@ -403,24 +403,24 @@ void PartyMenu_CreateMonIconSprites(PartyMenu *partyMenu, u8 partySlot, u16 x, u
 
     isEgg = GetMonData(mon, MON_DATA_IS_EGG, NULL);
 
-    sp1C.resourceSet = partySlot + 4;
-    sp1C.x = x;
-    sp1C.y = y;
-    sp1C.z = 0;
-    sp1C.animation = 0;
-    sp1C.drawPriority = 0;
-    sp1C.pal = GetMonIconPaletteEx(partyMenu->monsDrawState[partySlot].species, partyMenu->monsDrawState[partySlot].form, isEgg) + 3;
-    sp1C.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
-    sp1C.paletteMode = 0;
-    sp1C.unk_1C = 0;
-    sp1C.unk_20 = 0;
-    sp1C.unk_24 = 0;
-    partyMenu->monsDrawState[partySlot].iconSprite = SpriteSystem_CreateSpriteFromResourceHeader(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, &sp1C);
-    sp1C.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
-    sp1C.pal = GetMonIconPaletteEx(partyMenu->monsDrawState[partySlot].species, partyMenu->monsDrawState[partySlot].form, isEgg) + 1;
-    sp1C.x = x;
-    sp1C.y = y + 0x100;
-    partyMenu->monsDrawState[partySlot].mainScreenIconSprite = SpriteSystem_CreateSpriteFromResourceHeader(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, &sp1C);
+    spriteTemplate.resourceSet = partySlot + 4;
+    spriteTemplate.x = x;
+    spriteTemplate.y = y;
+    spriteTemplate.z = 0;
+    spriteTemplate.animation = 0;
+    spriteTemplate.drawPriority = 0;
+    spriteTemplate.pal = GetMonIconPaletteEx(partyMenu->monsDrawState[partySlot].species, partyMenu->monsDrawState[partySlot].form, isEgg) + 3;
+    spriteTemplate.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
+    spriteTemplate.paletteMode = 0;
+    spriteTemplate.unk_1C = 0;
+    spriteTemplate.unk_20 = 0;
+    spriteTemplate.unk_24 = 0;
+    partyMenu->monsDrawState[partySlot].iconSprite = SpriteSystem_CreateSpriteFromResourceHeader(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, &spriteTemplate);
+    spriteTemplate.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
+    spriteTemplate.pal = GetMonIconPaletteEx(partyMenu->monsDrawState[partySlot].species, partyMenu->monsDrawState[partySlot].form, isEgg) + 1;
+    spriteTemplate.x = x;
+    spriteTemplate.y = y + 0x100;
+    partyMenu->monsDrawState[partySlot].mainScreenIconSprite = SpriteSystem_CreateSpriteFromResourceHeader(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, &spriteTemplate);
 }
 
 void PartyMenu_ReloadMonIconGraphics(PartyMenu *partyMenu, u8 partySlot) {
@@ -477,21 +477,21 @@ void PartyMenu_CreateSprites(PartyMenu *partyMenu) {
 }
 
 void PartyMenu_CreateBallSprite(PartyMenu *partyMenu, u8 partySlot, u16 x, u16 y) {
-    UnmanagedSpriteTemplate sp0;
+    UnmanagedSpriteTemplate spriteTemplate;
 
-    sp0.resourceSet = 0;
-    sp0.x = x;
-    sp0.y = y;
-    sp0.z = 0;
-    sp0.animation = 0;
-    sp0.pal = 0;
-    sp0.paletteMode = 0;
-    sp0.unk_1C = 0;
-    sp0.unk_20 = 0;
-    sp0.unk_24 = 0;
-    sp0.drawPriority = 1;
-    sp0.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
-    partyMenu->sprites[partySlot + PARTY_MENU_SPRITE_ID_BALL] = SpriteSystem_CreateSpriteFromResourceHeader(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, &sp0);
+    spriteTemplate.resourceSet = 0;
+    spriteTemplate.x = x;
+    spriteTemplate.y = y;
+    spriteTemplate.z = 0;
+    spriteTemplate.animation = 0;
+    spriteTemplate.pal = 0;
+    spriteTemplate.paletteMode = 0;
+    spriteTemplate.unk_1C = 0;
+    spriteTemplate.unk_20 = 0;
+    spriteTemplate.unk_24 = 0;
+    spriteTemplate.drawPriority = 1;
+    spriteTemplate.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
+    partyMenu->sprites[partySlot + PARTY_MENU_SPRITE_ID_BALL] = SpriteSystem_CreateSpriteFromResourceHeader(partyMenu->spriteRenderer, partyMenu->spriteGfxHandler, &spriteTemplate);
 }
 
 void PartyMenu_RemoveSpriteRenderer(PartyMenu *partyMenu) {
@@ -609,11 +609,11 @@ void PartyMenu_UpdateMonIconAnims(PartyMenu *partyMenu) {
 }
 
 void PartyMenu_ShowCursorAtSlot(PartyMenu *partyMenu, u8 partySlot, int selected) {
-    u8 sp1, sp0;
-    DpadMenuBox_GetPosition(&partyMenu->dpadMenuBox[partySlot], &sp1, &sp0);
+    u8 x, y;
+    DpadMenuBox_GetPosition(&partyMenu->dpadMenuBox[partySlot], &x, &y);
     Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], PartyMenu_IsLeadPanelSlot(partyMenu->args->panelLayout, partySlot));
     Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], TRUE);
-    Sprite_SetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], sp1, sp0);
+    Sprite_SetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], x, y);
     thunk_Sprite_SetPaletteOverride(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], selected);
 }
 

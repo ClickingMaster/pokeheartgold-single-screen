@@ -18,7 +18,7 @@ static void *getResObjExtra(SpriteResource *obj);
 static void Add2DGfxResObjFromFile(GF_2DGfxResMan *mgr, SpriteResource *obj, char *name, int id, int vram, int pltt_num, GfGfxResType type, enum HeapID heapID);
 static void Add2DGfxResObjFromNarc(GF_2DGfxResMan *mgr, SpriteResource *obj, NarcId narcId, int fileId, BOOL compressed, int id, int vram, int pltt_num, GfGfxResType type, enum HeapID heapID, BOOL atEnd);
 static void Add2DGfxResObjFromOpenNarc(GF_2DGfxResMan *mgr, SpriteResource *obj, NARC *narc, int fileId, BOOL compressed, int id, int vram, int pltt_num, GfGfxResType type, enum HeapID heapID, BOOL atEnd);
-static int GF2DGfxResHeaderNarc_CountObjects(const GF_2DGfxResHeaderNarc *a0);
+static int GF2DGfxResHeaderNarc_CountObjects(const GF_2DGfxResHeaderNarc *headers);
 static void *loadResourceFromNarc(NARC *narc, int fileId, BOOL compressed, enum HeapID heapID, BOOL atEnd);
 
 GF_2DGfxResMan *Create2DGfxResObjMan(int num, GfGfxResType type, enum HeapID heapID) {
@@ -252,9 +252,9 @@ void Delete2DGfxResObjList(GF_2DGfxResObjList *list) {
     Heap_Free(list);
 }
 
-BOOL GF2DGfxResObjExistsById(GF_2DGfxResMan *mgr, int a1) {
+BOOL GF2DGfxResObjExistsById(GF_2DGfxResMan *mgr, int id) {
     GF_ASSERT(mgr != NULL);
-    return GF2dGfxRawResMan_DoesNotHaveObjWithId(mgr->resourceMgr, a1);
+    return GF2dGfxRawResMan_DoesNotHaveObjWithId(mgr->resourceMgr, id);
 }
 
 void GF2DGfxResObj_FreeData(SpriteResource *obj) {
@@ -263,13 +263,13 @@ void GF2DGfxResObj_FreeData(SpriteResource *obj) {
     GF2dGfxRawResObj_ReplaceData(obj->resource, NULL);
 }
 
-void DestroySingle2DGfxResObj(GF_2DGfxResMan *a0, SpriteResource *a1) {
-    GF_ASSERT(a0 != NULL);
-    GF_ASSERT(a0->objects != NULL);
-    destroyResObjExtra(a1);
-    GF2dGfxRawResMan_FreeObj(a0->resourceMgr, a1->resource);
-    a1->resource = NULL;
-    a0->num--;
+void DestroySingle2DGfxResObj(GF_2DGfxResMan *mgr, SpriteResource *obj) {
+    GF_ASSERT(mgr != NULL);
+    GF_ASSERT(mgr->objects != NULL);
+    destroyResObjExtra(obj);
+    GF2dGfxRawResMan_FreeObj(mgr->resourceMgr, obj->resource);
+    obj->resource = NULL;
+    mgr->num--;
 }
 
 static void destroyAllObjects(GF_2DGfxResMan *mgr) {
@@ -573,9 +573,9 @@ static void Add2DGfxResObjFromOpenNarc(GF_2DGfxResMan *mgr, SpriteResource *obj,
     GF2DGfxResObj_LoadExDat(obj, type, vram, pltt_num, heapID);
 }
 
-static int GF2DGfxResHeaderNarc_CountObjects(const GF_2DGfxResHeaderNarc *a0) {
+static int GF2DGfxResHeaderNarc_CountObjects(const GF_2DGfxResHeaderNarc *headers) {
     int n = 0;
-    while (a0[n].narcId != -2) {
+    while (headers[n].narcId != -2) {
         n++;
     }
     return n;

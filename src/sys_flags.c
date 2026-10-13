@@ -291,12 +291,12 @@ BOOL CheckFlag96A(SaveVarsFlags *state) {
     return CheckScriptFlag(state, FLAG_UNK_96A);
 }
 
-BOOL sub_020669B4(SaveVarsFlags *state, u32 a1) {
-    if (a1 > 2) {
+BOOL sub_020669B4(SaveVarsFlags *state, u32 index) {
+    if (index > 2) {
         return FALSE;
     }
 
-    return CheckScriptFlag(state, FLAG_UNK_96B + a1);
+    return CheckScriptFlag(state, FLAG_UNK_96B + index);
 }
 
 BOOL CheckDisabledCianwoodWaterfall(SaveVarsFlags *state) {

@@ -508,11 +508,11 @@ void GF_SndWorkMicCounterReset(void) {
     work->micCounter = 0;
 }
 
-void GF_SndWorkSetGbSoundsVolume(u8 a0) {
+void GF_SndWorkSetGbSoundsVolume(u8 volume) {
     SND_WORK *work;
 
     work = GetSoundDataPointer();
-    work->gbSoundsVolume = a0;
+    work->gbSoundsVolume = volume;
 }
 
 u8 GF_SndWorkGetGbSoundsVolume(void) {

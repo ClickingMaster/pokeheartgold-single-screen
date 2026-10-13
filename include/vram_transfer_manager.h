@@ -14,7 +14,7 @@ void GF_DestroyVramTransferManager(void);
 BOOL GF_CreateNewVramTransferTask(NNS_GFD_DST_TYPE type, u32 dstAddr, void *pSrc, u32 szByte);
 void GF_RunVramTransferTasks(void);
 u32 GF_GetNumPendingVramTransferTasks(void);
-NNSG2dCellTransferState *CreateCellTransferStateManager(int a0, enum HeapID heapID);
+NNSG2dCellTransferState *CreateCellTransferStateManager(int numStates, enum HeapID heapID);
 void thunk_UpdateCellTransferStateManager(void);
 void DestroyCellTransferStateManager(NNSG2dCellTransferState *state);
 

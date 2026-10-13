@@ -230,16 +230,16 @@ void InitKeypadAndTouchpad(void) {
     }
 }
 
-void Sys_SetAgbCartridgeVersion(int a0) {
-    gSystem.agbCartridgeVersion = a0;
+void Sys_SetAgbCartridgeVersion(int version) {
+    gSystem.agbCartridgeVersion = version;
 }
 
-void Sys_SetSleepDisableFlag(int a0) {
-    gSystem.lidClosedPauseDisabled |= a0;
+void Sys_SetSleepDisableFlag(int flag) {
+    gSystem.lidClosedPauseDisabled |= flag;
 }
 
-void Sys_ClearSleepDisableFlag(int a0) {
-    gSystem.lidClosedPauseDisabled &= ~a0;
+void Sys_ClearSleepDisableFlag(int flag) {
+    gSystem.lidClosedPauseDisabled &= ~flag;
 }
 
 void ReadKeypadAndTouchpad(void) {
@@ -358,12 +358,12 @@ void SetKeyRepeatTimers(int cont, int start) {
     gSystem.keyRepeatStartDelay = start;
 }
 
-void Sys_SetSoftResetDisableFlag(int a0) {
-    gSystem.softResetDisabled |= a0;
+void Sys_SetSoftResetDisableFlag(int flag) {
+    gSystem.softResetDisabled |= flag;
 }
 
-void Sys_ClearSoftResetDisableFlag(int a0) {
-    gSystem.softResetDisabled &= ~a0;
+void Sys_ClearSoftResetDisableFlag(int flag) {
+    gSystem.softResetDisabled &= ~flag;
 }
 
 void Sys_SetAsyncSaveMarker(enum HeapID heapID) {

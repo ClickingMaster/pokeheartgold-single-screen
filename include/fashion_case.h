@@ -29,15 +29,15 @@ SaveFashionData *Save_FashionData_Get(SaveData *saveData);
 FashionCase *Save_FashionData_GetFashionCase(SaveFashionData *unk);
 u32 FashionCase_CountAccessories(FashionCase *fashionCase);
 u32 FashionCase_CountWallpapers(FashionCase *fashionCase);
-BOOL Save_FashionData_IsEntrySaved(SaveFashionData *fashionData, int a1);
-BOOL Save_FashionData_IsLargeEntrySaved(SaveFashionData *fashionData, int a1);
-SaveFashionDataSub *Save_FashionData_GetEntry(SaveFashionData *fashionData, int a1);
-void FashionEntry_SetMailMessageWord(SaveFashionDataSub *fashionDataSub, int a1);
+BOOL Save_FashionData_IsEntrySaved(SaveFashionData *fashionData, int index);
+BOOL Save_FashionData_IsLargeEntrySaved(SaveFashionData *fashionData, int index);
+SaveFashionDataSub *Save_FashionData_GetEntry(SaveFashionData *fashionData, int index);
+void FashionEntry_SetMailMessageWord(SaveFashionDataSub *fashionDataSub, int value);
 void FashionCase_GiveFashionItem(FashionCase *fashionCase, int id, int quantity);
-int FashionCase_CanGiveAccessory(FashionCase *fashionCase, int a1, int a2);
-u32 FashionCase_GetAccessoryCount(FashionCase *fashionCase, int a1);
+int FashionCase_CanGiveAccessory(FashionCase *fashionCase, int id, int quantity);
+u32 FashionCase_GetAccessoryCount(FashionCase *fashionCase, int id);
 void FashionCase_GiveContestBackground(FashionCase *fashionCase, int id);
-int FashionCase_HasWallpaper(FashionCase *fashionCase, int a1);
-void FashionCase_TakeAccessory(FashionCase *fashionCase, int a1, int a2);
+int FashionCase_HasWallpaper(FashionCase *fashionCase, int index);
+void FashionCase_TakeAccessory(FashionCase *fashionCase, int id, int quantity);
 
 #endif // POKEHEARTGOLD_FASHION_CASE_H

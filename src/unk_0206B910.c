@@ -59,8 +59,8 @@ static const OverlayManagerTemplate sOverlayTemplate_BallCapsuleEditor = {
 
 static BOOL Task_BallCapsuleEditor(TaskManager *taskManager);
 static BOOL sub_0206BB90(ScriptContext *ctx);
-static void sub_0206BCA4(UnkStruct_0206BCD4 *a0, u8 a1);
-static BOOL sub_0206BCB4(UnkStruct_0206BCD4 *a0, u8 a1);
+static void sub_0206BCA4(UnkStruct_0206BCD4 *a0, u8 syncState);
+static BOOL sub_0206BCB4(UnkStruct_0206BCD4 *a0, u8 syncState);
 static UnkStruct_0206BCD4 *sub_0206BCD4(void);
 static UnkStruct_0206BCD4 *sub_0206BCEC(UnkStruct_0206BCEC *unused);
 static void sub_0206BD00(UnkStruct_0206BCD4 *a0);
@@ -214,17 +214,17 @@ BOOL ScrCmd_237(ScriptContext *ctx) {
     return FALSE;
 }
 
-static void sub_0206BCA4(UnkStruct_0206BCD4 *a0, u8 a1) {
+static void sub_0206BCA4(UnkStruct_0206BCD4 *a0, u8 syncState) {
     if (a0->unk04 != 0) {
-        LinkSync_StartSync(a1);
+        LinkSync_StartSync(syncState);
     }
 }
 
-static BOOL sub_0206BCB4(UnkStruct_0206BCD4 *a0, u8 a1) {
+static BOOL sub_0206BCB4(UnkStruct_0206BCD4 *a0, u8 syncState) {
     if (a0->unk04 == 0) {
         return TRUE;
     }
-    return LinkSync_IsSynced(a1) == TRUE;
+    return LinkSync_IsSynced(syncState) == TRUE;
 }
 
 static UnkStruct_0206BCD4 *sub_0206BCD4(void) {

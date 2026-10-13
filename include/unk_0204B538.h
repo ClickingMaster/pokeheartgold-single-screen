@@ -8,7 +8,7 @@
 MessageFormat *Frontier_NewBannedSpeciesMessageFormat(SaveData *saveData, u16 numEligiblePokemon, u16 a2, u8 a3, u8 *numLegendaryPokemonSeen);
 u32 GetFrontierTrainerOverworld(u8 trainerClass);
 u16 FrontierFieldSystem_ReceiveLinkAllyData(FieldSystem *fieldSystem, u16 *linkAllyData); // SetLinkAllyData?
-BOOL FrontierFieldSystem_ReceiveRoundTrainers(FieldSystem *fieldSystem, u16 *a1);
+BOOL FrontierFieldSystem_ReceiveRoundTrainers(FieldSystem *fieldSystem, u16 *trainers);
 BOOL sub_0204B690(FieldSystem *fieldSystem, u16 *a1);
 void FrontierFieldSystem_PackLinkAllyData(FrontierFieldSystem *frontierFsys, SaveData *saveData);
 void FrontierFieldSystem_PackRoundTrainers(FrontierFieldSystem *frontierFsys);

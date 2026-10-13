@@ -55,7 +55,7 @@ BOOL CheckGotPokegear(SaveVarsFlags *state);
 BOOL CheckGotPokedex(SaveVarsFlags *state);
 BOOL CheckGotMenuIconI(SaveVarsFlags *state, s32 icon_idx);
 BOOL CheckFlag96A(SaveVarsFlags *state);
-BOOL sub_020669B4(SaveVarsFlags *state, u32 a1);
+BOOL sub_020669B4(SaveVarsFlags *state, u32 index);
 BOOL CheckDisabledCianwoodWaterfall(SaveVarsFlags *state);
 BOOL CheckSolvedLtSurgeGym(SaveVarsFlags *state);
 BOOL CheckFlag982(SaveVarsFlags *state);

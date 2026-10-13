@@ -262,7 +262,7 @@ static void BattleHpBar_DeleteBoxSprite(BattleHpBar *hpBar);
 static void BattleHpBar_DeleteArrowSprite(BattleHpBar *hpBar);
 static void BattleHpBar_UnloadBoxResources(BattleHpBar *hpBar);
 static void BattleHpBar_UnloadArrowResources(BattleHpBar *hpBar);
-static void BattleHpBar_SetArrowDrawFlag(BattleHpBar *hpBar, int a1);
+static void BattleHpBar_SetArrowDrawFlag(BattleHpBar *hpBar, int draw);
 static void BattleHpBar_SetOffset(BattleHpBar *hpBar, int x, int y);
 static void Task_BattleHpBarSlide(SysTask *task, void *data);
 static void BattleHpBar_DrawNickname(BattleHpBar *hpBar);
@@ -271,7 +271,7 @@ static void BattleHpBar_DrawLevel(BattleHpBar *hpBar);
 static void BattleHpBar_DrawCurrentHp(BattleHpBar *hpBar, u32 num);
 static void BattleHpBar_DrawMaxHp(BattleHpBar *hpBar);
 static void BattleHpBar_DrawCaughtIcon(BattleHpBar *hpBar);
-static void BattleHpBar_DrawStatusIcon(BattleHpBar *hpBar, int a1);
+static void BattleHpBar_DrawStatusIcon(BattleHpBar *hpBar, int componentId);
 static void BattleHpBar_PrintSafariOrParkBallsString(BattleHpBar *hpBar, u32 flag);
 static void BattleHpBar_PrintNumRemainingSafariOrParkBalls(BattleHpBar *hpBar, u32 flag);
 static int BattleHpBar_StepGauge(BattleHpBar *hpBar, BOOL isExp);
@@ -766,18 +766,18 @@ void BattleHpBar_SetPriority(BattleHpBar *hpBar, int prio) {
     }
 }
 
-static void BattleHpBar_SetArrowDrawFlag(BattleHpBar *hpBar, int a1) {
+static void BattleHpBar_SetArrowDrawFlag(BattleHpBar *hpBar, int draw) {
     if (hpBar->arrowObj != NULL) {
-        if (!(BattleSystem_GetBattleType(hpBar->battleSystem) & (BATTLE_TYPE_PAL_PARK | BATTLE_TYPE_SAFARI)) || a1 != TRUE) {
-            ManagedSprite_SetDrawFlag(hpBar->arrowObj, a1);
+        if (!(BattleSystem_GetBattleType(hpBar->battleSystem) & (BATTLE_TYPE_PAL_PARK | BATTLE_TYPE_SAFARI)) || draw != TRUE) {
+            ManagedSprite_SetDrawFlag(hpBar->arrowObj, draw);
         }
     }
 }
 
-void BattleHpBar_SetEnabled(BattleHpBar *hpBar, BOOL a1) {
+void BattleHpBar_SetEnabled(BattleHpBar *hpBar, BOOL enabled) {
     if (hpBar->boxObj != NULL) {
-        ManagedSprite_SetDrawFlag(hpBar->boxObj, a1);
-        BattleHpBar_SetArrowDrawFlag(hpBar, a1);
+        ManagedSprite_SetDrawFlag(hpBar->boxObj, enabled);
+        BattleHpBar_SetArrowDrawFlag(hpBar, enabled);
     }
 }
 
@@ -797,12 +797,12 @@ static void BattleHpBar_SetOffset(BattleHpBar *hpBar, int x, int y) {
 }
 
 
-void BattleHpBar_StartSlide(BattleHpBar *hpBar, BOOL a1) {
+void BattleHpBar_StartSlide(BattleHpBar *hpBar, BOOL slideOut) {
     GF_ASSERT(hpBar != NULL);
     GF_ASSERT(hpBar->boxObj != NULL);
     hpBar->slideDone = FALSE;
-    hpBar->slideOut = a1;
-    if (!a1) {
+    hpBar->slideOut = slideOut;
+    if (!slideOut) {
         switch (hpBar->type) {
         case HP_BAR_TYPE_SINGLE_PLAYER:
         case HP_BAR_TYPE_DOUBLE_PLAYER_LHS:
@@ -1011,8 +1011,8 @@ static void BattleHpBar_DrawCaughtIcon(BattleHpBar *hpBar) {
     MI_CpuCopy16(r4, (void *)((u32)vramAddr + sCaughtIconVramRegions[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sCaughtIconVramRegions[hpBar->type].size);
 }
 
-static void BattleHpBar_DrawStatusIcon(BattleHpBar *hpBar, int a1) {
-    const u8 *r4 = BattleHpBar_Util_GetComponentRawGraphic(a1);
+static void BattleHpBar_DrawStatusIcon(BattleHpBar *hpBar, int componentId) {
+    const u8 *r4 = BattleHpBar_Util_GetComponentRawGraphic(componentId);
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
 
@@ -1402,12 +1402,12 @@ typedef struct BattleHpBarExpBarFullFlashEffectTaskData {
     s8 ev;
 } BattleHpBarExpBarFullFlashEffectTaskData;
 
-SysTask *BattleHpBar_BeginExpBarFullFlashEffect(BattleHpBar *hpBar, u8 *a1) {
-    *a1 = 0;
+SysTask *BattleHpBar_BeginExpBarFullFlashEffect(BattleHpBar *hpBar, u8 *doneFlag) {
+    *doneFlag = 0;
     BattleHpBarExpBarFullFlashEffectTaskData *taskData = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleHpBarExpBarFullFlashEffectTaskData));
     MI_CpuFill8(taskData, 0, sizeof(BattleHpBarExpBarFullFlashEffectTaskData));
     taskData->hpBar = hpBar;
-    taskData->pDoneFlag = a1;
+    taskData->pDoneFlag = doneFlag;
     return SysTask_CreateOnMainQueue(Task_ExpBarFullFlash, taskData, 1000);
 }
 

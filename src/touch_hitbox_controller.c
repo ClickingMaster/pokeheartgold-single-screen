@@ -5,7 +5,7 @@
 static void TouchHitboxControllerTemplate_Init(TouchHitboxControllerTemplate *template);
 static int TouchHitbox_StateIdle(TouchHitboxControllerTemplate *template, u32 unused, u32 touchNew);
 static int TouchHitbox_StateHeld(TouchHitboxControllerTemplate *template, u32 touchHeld, u32 unused);
-static void TouchHitbox_SetState(TouchHitboxControllerTemplate *template, u8 a1);
+static void TouchHitbox_SetState(TouchHitboxControllerTemplate *template, u8 state);
 
 TouchHitboxController *TouchHitboxController_Create(const TouchscreenHitbox *hitboxes, u32 numTemplates, TouchHitboxControllerCallback callback, void *callbackArg, enum HeapID heapID) {
     GF_ASSERT(numTemplates != 0);
@@ -109,7 +109,7 @@ static int TouchHitbox_StateHeld(TouchHitboxControllerTemplate *template, u32 to
     }
 }
 
-static void TouchHitbox_SetState(TouchHitboxControllerTemplate *template, u8 a1) {
-    template->state = a1;
+static void TouchHitbox_SetState(TouchHitboxControllerTemplate *template, u8 state) {
+    template->state = state;
     template->numFramesActive = 0;
 }

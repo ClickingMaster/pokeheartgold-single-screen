@@ -102,9 +102,9 @@ extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, Strin
 // Other modules (not in a header yet).
 extern void RTC_ConvertDayToDate(RTCDate *date, s32 day);
 extern void WirelessStatusIcon_Create(void);
-extern void CommWireless_SetCustomBeacon(void *a0);
-extern void LinkSync_StartSync(u8 a0);
-extern int LinkSync_IsSynced(u8 a0);
+extern void CommWireless_SetCustomBeacon(void *src);
+extern void LinkSync_StartSync(u8 state);
+extern int LinkSync_IsSynced(u8 state);
 extern BOOL CommState_Exists(void);
 extern void CommState_SetErrorWatch(u32 a0, u32 a1);
 extern PlayerProfile *CommPlayerInfo_GetProfile(int netId);

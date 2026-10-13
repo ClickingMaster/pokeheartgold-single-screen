@@ -76,17 +76,17 @@ void SaveMisc_SetExtraChunksExist(SAVE_MISC_DATA *saveMiscData);
 BOOL SaveMisc_CheckExtraChunksExist(SAVE_MISC_DATA *saveMiscData);
 void SaveMisc_SetFavoriteMon(SAVE_MISC_DATA *saveMiscData, int species, int form, int isEgg);
 void SaveMisc_GetFavoriteMon(SAVE_MISC_DATA *saveMiscData, int *species, int *form, int *isEgg);
-BOOL SaveMisc_PhoneRecentCallers_Contains(SAVE_MISC_DATA *saveMiscData, int a1, int a2);
-void SaveMisc_PhoneRecentCallers_Clear(SAVE_MISC_DATA *saveMiscData, int a1);
-u8 SaveMisc_PhoneRecentCallers_Count(SAVE_MISC_DATA *saveMiscData, int a1);
-void SaveMisc_PhoneRecentCallers_Add(SAVE_MISC_DATA *saveMiscData, u8 a1, u8 a2, u8 a3);
+BOOL SaveMisc_PhoneRecentCallers_Contains(SAVE_MISC_DATA *saveMiscData, int chunk, int callerId);
+void SaveMisc_PhoneRecentCallers_Clear(SAVE_MISC_DATA *saveMiscData, int chunk);
+u8 SaveMisc_PhoneRecentCallers_Count(SAVE_MISC_DATA *saveMiscData, int chunk);
+void SaveMisc_PhoneRecentCallers_Add(SAVE_MISC_DATA *saveMiscData, u8 chunk, u8 a2, u8 callerId);
 void SaveMisc_SetTogepiPersonalityGender(SAVE_MISC_DATA *saveMiscData, int personality, u8 gender);
 void SaveMisc_GetTogepiPersonalityGender(SAVE_MISC_DATA *saveMiscData, int *personality, u8 *gender);
 void SaveMisc_GetBattleGreeting(SAVE_MISC_DATA *saveMiscData, MailMessage *mailMessage);
 void SaveMisc_SetBattleGreeting(SAVE_MISC_DATA *saveMiscData, MailMessage *mailMessage);
-void SaveMisc_GetVsRecorderColorScheme(SAVE_MISC_DATA *saveMiscData, u8 *a1);
-void SaveMisc_SetVsRecorderColorScheme(SAVE_MISC_DATA *saveMiscData, u8 a1);
-void SaveMisc_GetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int a1, u32 *a2, u32 *a3, u8 *a4);
-void SaveMisc_SetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int a1, u32 a2, u32 a3, u8 a4);
+void SaveMisc_GetVsRecorderColorScheme(SAVE_MISC_DATA *saveMiscData, u8 *colorScheme);
+void SaveMisc_SetVsRecorderColorScheme(SAVE_MISC_DATA *saveMiscData, u8 colorScheme);
+void SaveMisc_GetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int chunkId, u32 *key0, u32 *key1, u8 *a4);
+void SaveMisc_SetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int chunkId, u32 key0, u32 key1, u8 a4);
 
 #endif // POKEHEARTGOLD_SAVE_MISC_DATA_H

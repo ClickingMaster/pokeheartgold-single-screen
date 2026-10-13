@@ -89,20 +89,20 @@ BOOL BallSealEffect_IsActive(void *ballOpenEffect);
 void BallSealEffect_Free(void *ballOpenEffect);
 BOOL BallThrow_IsActive(BallThrow *ballData);
 BOOL BallThrow_HasOpened(BallThrow *ballData);
-void BallThrow_SetMode(BallThrow *ballData, u32 a1);
-void BallThrow_SetDrawFlag(BallThrow *ballData, int a1);
+void BallThrow_SetMode(BallThrow *ballData, u32 mode);
+void BallThrow_SetDrawFlag(BallThrow *ballData, int flag);
 void BallThrow_SetPosition(BallThrow *ballData, s16 x, s16 y);
-void BallThrow_SetAnimateSprite(BallThrow *ballData, u32 a1);
-void BallThrow_SetDrawPriority(BallThrow *ballData, u16 a1);
-void BallThrow_SetPriority(BallThrow *ballData, int a1);
-void BallThrow_SetDelay(BallThrow *ballData, s32 a1);
+void BallThrow_SetAnimateSprite(BallThrow *ballData, u32 animate);
+void BallThrow_SetDrawPriority(BallThrow *ballData, u16 priority);
+void BallThrow_SetPriority(BallThrow *ballData, int priority);
+void BallThrow_SetDelay(BallThrow *ballData, s32 delay);
 void *BattleAnimEmitterManager_New(enum HeapID heapID, s32 a1);
 void *BattleAnimEmitterManager_AddEmitter(void *emitterManager, BattleEmitterParams *params);
 void BattleAnimEmitterManager_Free(void *emitterManager);
 void BattleAnimEmitterManager_StopAll(void *emitterManager);
 void BattleAnimEmitter_Start(void *emitter);
 u32 BattleAnimEmitter_IsActive(void *emitter);
-s16 ov07_02234B5C(u32 battlerType, u32 a1);
+s16 ov07_02234B5C(u32 battlerType, u32 index);
 
 extern const s16 ov07_022377DC[][2];
 // Pokemon/trainer positions (x, y, z) by battler type: [0] on the field, [1] off screen where a slide-in starts.
@@ -1416,7 +1416,7 @@ OpponentData *OpponentData_New(BattleSystem *battleSystem, const u8 *data) {
 
 #pragma force_active on
 
-void OpponentData_CreateBallData(BattleSystem *battleSystem, OpponentData *opponentData, u16 ball, int a3) {
+void OpponentData_CreateBallData(BattleSystem *battleSystem, OpponentData *opponentData, u16 ball, int battlerId) {
     BattleBallParams ballParams;
 
     if ((BattleSystem_GetBattleType(battleSystem) & (BATTLE_TYPE_SAFARI | BATTLE_TYPE_PAL_PARK)) == 0) {

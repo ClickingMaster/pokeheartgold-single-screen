@@ -218,28 +218,28 @@ u8 Mail_GetVersion(const Mail *mail) {
 
 u16 Mail_GetMonIconData(Mail *mail, u8 r1, u8 r4, u16 r3) {
     int i;
-    union MailPatternData sp0;
+    union MailPatternData iconData;
     if (r1 < NELEMS(mail->mon_icons)) {
-        sp0 = mail->mon_icons[r1];
+        iconData = mail->mon_icons[r1];
         for (i = 0; i < NELEMS(sFormOverrides); i++) {
-            if (sFormOverrides[i].base_icon == sp0.icon && sFormOverrides[i].form == ((r3 >> (5 * r1)) & 31)) {
-                sp0.icon = sFormOverrides[i].formed_icon;
-                sp0.pal = GetMonIconPaletteEx(sFormOverrides[i].species, sFormOverrides[i].form, FALSE);
+            if (sFormOverrides[i].base_icon == iconData.icon && sFormOverrides[i].form == ((r3 >> (5 * r1)) & 31)) {
+                iconData.icon = sFormOverrides[i].formed_icon;
+                iconData.pal = GetMonIconPaletteEx(sFormOverrides[i].species, sFormOverrides[i].form, FALSE);
                 break;
             }
         }
-        if (sp0.icon > 546) {
-            sp0.icon = 7;
-            sp0.pal = 0;
+        if (iconData.icon > 546) {
+            iconData.icon = 7;
+            iconData.pal = 0;
         }
         switch (r4) {
         case 0:
-            return sp0.icon;
+            return iconData.icon;
         case 1:
-            return sp0.pal;
+            return iconData.pal;
         case 2:
         default:
-            return sp0.raw;
+            return iconData.raw;
         }
     }
 

@@ -29,14 +29,14 @@ typedef struct {
 } WifiServerProfile;
 
 u32 Save_WiiMessage_sizeof(void);
-void Save_WiiMessage_Init(WiiMessageSave *a0);
+void Save_WiiMessage_Init(WiiMessageSave *wiiMessage);
 void Save_WiiMessage_Reset(SaveData *saveData);
 BOOL Save_WiiMessage_IsRegistered(SaveData *saveData);
-void Save_WiiMessage_SetWiiAddress(SaveData *saveData, char *a1);
+void Save_WiiMessage_SetWiiAddress(SaveData *saveData, char *wiiAddress);
 WiiMessageSave *Save_WiiMessage_Get(SaveData *saveData);
-void Save_WiiMessage_SetParam(SaveData *saveData, u32 a1, u32 a2);
-u32 Save_WiiMessage_GetParam(SaveData *saveData, u32 a1);
-s32 Save_WiiMessage_InitRegistrationProfile(SaveData *saveData, WifiServerProfile *a1);
-void Save_WiiMessage_GetServerProfile(SaveData *saveData, WifiServerProfile *a1);
+void Save_WiiMessage_SetParam(SaveData *saveData, u32 param, u32 value);
+u32 Save_WiiMessage_GetParam(SaveData *saveData, u32 param);
+s32 Save_WiiMessage_InitRegistrationProfile(SaveData *saveData, WifiServerProfile *serverProfile);
+void Save_WiiMessage_GetServerProfile(SaveData *saveData, WifiServerProfile *serverProfile);
 
 #endif // POKEHEARTGOLD_SAVE_WII_MESSAGE_H

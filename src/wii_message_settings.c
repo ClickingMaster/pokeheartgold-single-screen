@@ -247,15 +247,15 @@ typedef struct NumberEntryArgs {
     String *string; // 0x1C
 } NumberEntryArgs;
 
-NumberEntryArgs *CodeEntryArgs_New(enum HeapID heapID, u32 length, const u32 *groups, Options *options, u32 a4, u32 a5);
-NumberEntryArgs *CodeEntryArgs_NewWithFixedDigits(enum HeapID heapID, u32 length, const u32 *groups, Options *options, u32 a4, u32 a5, u32 a6, u32 a7);
+NumberEntryArgs *CodeEntryArgs_New(enum HeapID heapID, u32 length, const u32 *groups, Options *options, u32 promptMsg, u32 showWirelessIcon);
+NumberEntryArgs *CodeEntryArgs_NewWithFixedDigits(enum HeapID heapID, u32 length, const u32 *groups, Options *options, u32 promptMsg, u32 showWirelessIcon, u32 fixedGroups, u32 fixedValue);
 void CodeEntryArgs_Delete(NumberEntryArgs *args);
 
 // Network and server functions without a header.
 BOOL LoadOVY38(void);
 void UnloadOVY38(void);
 void CommWireless_Terminate(void);
-void WirelessStatusIcon_SetLevel(int a0);
+void WirelessStatusIcon_SetLevel(int level);
 void CommState_InitWiiMessageWfcSession(SaveData *saveData);
 void CommState_FreeWiiMessageWfcSession(void);
 void CommState_ShowRestartErrorAndHalt(void);

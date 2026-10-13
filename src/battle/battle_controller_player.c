@@ -506,11 +506,11 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
             break;
         case SSI_STATE_9: // switching..?
         {
-            int v8;
+            int canSwitch;
             int v9 = 6;
             int partnerId;
 
-            v8 = BattlerCanSwitch(battleSystem, ctx, battlerId);
+            canSwitch = BattlerCanSwitch(battleSystem, ctx, battlerId);
 
             if (((BattleSystem_GetBattlerType(battleSystem, battlerId) == 4) || (BattleSystem_GetBattlerType(battleSystem, battlerId) == 5)) && ((battleType == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES)) || (battleType == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_LINK)) || (battleType == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_FRONTIER)) || ((battleType == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_TAG)) && (BattleSystem_GetBattlerType(battleSystem, battlerId) == 4)))) {
                 partnerId = BattleSystem_GetBattlerIdPartner(battleSystem, battlerId);
@@ -520,7 +520,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
                 }
             }
 
-            BattleController_EmitShowMonList(battleSystem, ctx, battlerId, 0, v8, v9);
+            BattleController_EmitShowMonList(battleSystem, ctx, battlerId, 0, canSwitch, v9);
             ctx->selectionState[battlerId] = SSI_STATE_10;
         }
         // fallthrough

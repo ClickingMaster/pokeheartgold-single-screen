@@ -98,8 +98,8 @@ void PCBox_StartHeldItemMove(PCBoxWork *work, int fromSlot, int toSlot, int part
 
 #pragma force_active reset
 
-void PCBox_StartHeldItemMoveWithIcon(PCBoxWork *work, u32 a1, u32 a2, u32 a3) {
-    PCBox_StartHeldItemMove(work, a1, a2, a3, 1);
+void PCBox_StartHeldItemMoveWithIcon(PCBoxWork *work, u32 fromSlot, u32 toSlot, u32 partyLayout) {
+    PCBox_StartHeldItemMove(work, fromSlot, toSlot, partyLayout, 1);
 }
 
 #pragma force_active on
@@ -196,8 +196,8 @@ void PCBox_FreePanels(PCBoxView *view) {
     BgCellManager_Delete(view->panels);
 }
 
-void PCBox_LoadPanelTilemap(BgCellManager *panels, u32 a1, u32 a2) {
-    BgCellManager_LoadCellTilemap(panels, a1, 0x13, a2, 1);
+void PCBox_LoadPanelTilemap(BgCellManager *panels, u32 index, u32 fileId) {
+    BgCellManager_LoadCellTilemap(panels, index, 0x13, fileId, 1);
 }
 
 #pragma force_active on

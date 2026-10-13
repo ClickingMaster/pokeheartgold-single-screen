@@ -194,14 +194,14 @@ static u16 getRandomEncounterSlot(u16 mapId, u8 trainerClass, u8 timeOfDay) {
     }
 }
 
-static u16 getRandomTrainerMon(u16 trainerID, enum HeapID a1) {
+static u16 getRandomTrainerMon(u16 trainerID, enum HeapID heapID) {
     int i;
     Trainer trdata;
     TRPOKE *trpoke;
     u16 teamSpecies[PARTY_SIZE];
 
     TrainerData_ReadTrData(trainerID, &trdata);
-    trpoke = Heap_Alloc(a1, sizeof(TRPOKE) * PARTY_SIZE);
+    trpoke = Heap_Alloc(heapID, sizeof(TRPOKE) * PARTY_SIZE);
     MI_CpuClear8(trpoke, sizeof(TRPOKE) * PARTY_SIZE);
     TrainerData_ReadTrPoke(trainerID, trpoke);
     switch (trdata.data.trainerType) {

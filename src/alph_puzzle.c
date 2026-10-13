@@ -180,10 +180,10 @@ static void AlphPuzzle_DeleteSpriteGraphics(AlphPuzzleData *data);
 static void AlphPuzzle_CreateSprites(AlphPuzzleData *data);
 static void AlphPuzzle_DeleteSprites(AlphPuzzleData *data);
 static BOOL AlphPuzzle_CheckComplete(AlphPuzzleData *data);
-static void AlphPuzzle_ToggleDropCursorSprite(AlphPuzzleData *data, int a1);
-static void AlphPuzzle_PrintConfirmQuitText(AlphPuzzleData *data, int a1, int a2, u8 textFrameDelay);
+static void AlphPuzzle_ToggleDropCursorSprite(AlphPuzzleData *data, int animSeq);
+static void AlphPuzzle_PrintConfirmQuitText(AlphPuzzleData *data, int msgIndex, int instant, u8 textFrameDelay);
 static void AlphPuzzle_PrintHintText(AlphPuzzleData *data);
-static void AlphPuzzle_ClearOrSetBgTilesAtCoords(AlphPuzzleData *data, u8 x, u8 y, int a3);
+static void AlphPuzzle_ClearOrSetBgTilesAtCoords(AlphPuzzleData *data, u8 x, u8 y, int tileIndex);
 static void AlphPuzzle_UpdateHoverGraphicOnBg(AlphPuzzleData *data, u8 x, u8 y);
 static void AlphPuzzle_Quit_CreateYesNoPrompt(AlphPuzzleData *data);
 static AlphPuzzleStates AlphPuzzle_Quit_HandleYesNoPrompt(AlphPuzzleData *data);
@@ -1275,10 +1275,10 @@ static BOOL AlphPuzzle_CheckComplete(AlphPuzzleData *data) {
     return TRUE;
 }
 
-void AlphPuzzle_ToggleDropCursorSprite(AlphPuzzleData *data, int a1) {
+void AlphPuzzle_ToggleDropCursorSprite(AlphPuzzleData *data, int animSeq) {
     FillWindowPixelBuffer(data->window, 0);
-    Sprite_SetAnimCtrlSeq(data->sprites[ALPH_SPRITE_INDEX_DROP_CURSOR], a1);
-    if (a1 == 1) {
+    Sprite_SetAnimCtrlSeq(data->sprites[ALPH_SPRITE_INDEX_DROP_CURSOR], animSeq);
+    if (animSeq == 1) {
         Sprite_ResetAnimCtrlState(data->sprites[ALPH_SPRITE_INDEX_DROP_CURSOR]);
         Sprite_SetAnimActiveFlag(data->sprites[ALPH_SPRITE_INDEX_DROP_CURSOR], 1);
     } else {
@@ -1286,19 +1286,19 @@ void AlphPuzzle_ToggleDropCursorSprite(AlphPuzzleData *data, int a1) {
     }
 
     u32 width = FontID_String_GetWidth(4, data->quitText, 0);
-    AddTextPrinterParameterizedWithColor(data->window, 4, data->quitText, (48 - width) / 2, 4, 0xFF, sQuitButtonTextColors[a1], NULL);
+    AddTextPrinterParameterizedWithColor(data->window, 4, data->quitText, (48 - width) / 2, 4, 0xFF, sQuitButtonTextColors[animSeq], NULL);
     ScheduleWindowCopyToVram(data->window);
 }
 
-static void AlphPuzzle_PrintConfirmQuitText(AlphPuzzleData *data, int a1, int a2, u8 textFrameDelay) {
-    if (a2) {
+static void AlphPuzzle_PrintConfirmQuitText(AlphPuzzleData *data, int msgIndex, int instant, u8 textFrameDelay) {
+    if (instant) {
         DrawFrameAndWindow2(&data->window[ALPH_WINDOW_CONFIRM_QUIT], 1, 1, 5);
     }
     FillWindowPixelBuffer(&data->window[ALPH_WINDOW_CONFIRM_QUIT], 15);
     if (textFrameDelay == 0) {
-        AddTextPrinterParameterizedWithColor(&data->window[ALPH_WINDOW_CONFIRM_QUIT], 1, data->confirmQuitText[a1], 0, 0, 0xFF, 0x1020F, 0);
+        AddTextPrinterParameterizedWithColor(&data->window[ALPH_WINDOW_CONFIRM_QUIT], 1, data->confirmQuitText[msgIndex], 0, 0, 0xFF, 0x1020F, 0);
     } else {
-        data->textPrinterId = AddTextPrinterParameterizedWithColor(&data->window[ALPH_WINDOW_CONFIRM_QUIT], 1, data->confirmQuitText[a1], 0, 0, textFrameDelay, MAKE_TEXT_COLOR(1, 2, 15), NULL);
+        data->textPrinterId = AddTextPrinterParameterizedWithColor(&data->window[ALPH_WINDOW_CONFIRM_QUIT], 1, data->confirmQuitText[msgIndex], 0, 0, textFrameDelay, MAKE_TEXT_COLOR(1, 2, 15), NULL);
     }
     ScheduleWindowCopyToVram(&data->window[ALPH_WINDOW_CONFIRM_QUIT]);
 }
@@ -1309,11 +1309,11 @@ static void AlphPuzzle_PrintHintText(AlphPuzzleData *data) {
     ScheduleWindowCopyToVram(&data->window[ALPH_WINDOW_FLAVOR_TEXT]);
 }
 
-void AlphPuzzle_ClearOrSetBgTilesAtCoords(AlphPuzzleData *data, u8 x, u8 y, int a3) {
-    if (a3 == 0) {
+void AlphPuzzle_ClearOrSetBgTilesAtCoords(AlphPuzzleData *data, u8 x, u8 y, int tileIndex) {
+    if (tileIndex == 0) {
         FillBgTilemapRect(data->bgConfig, 2, 0, 4 * x + 4, 4 * y, 4, 4, 0);
     } else {
-        CopyToBgTilemapRect(data->bgConfig, 2, 4 * x + 4, y * 4, 4, 4, &data->screenData->rawData, 4 * (a3 - 1), 0, data->screenData->screenWidth / 8, data->screenData->screenHeight / 8);
+        CopyToBgTilemapRect(data->bgConfig, 2, 4 * x + 4, y * 4, 4, 4, &data->screenData->rawData, 4 * (tileIndex - 1), 0, data->screenData->screenWidth / 8, data->screenData->screenHeight / 8);
     }
 }
 

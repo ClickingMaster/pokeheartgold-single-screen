@@ -37,7 +37,7 @@ void GX_BeginLoadTexPltt(void);
 void GX_LoadTexPltt(const void *src, u32 destSlotAddr, u32 size);
 void GX_EndLoadTexPltt(void);
 void CommState_FrameDummy(enum HeapID heapId, BgConfig *bgConfig);
-void SetBothScreensBrightnessByColor(u16 a0);
+void SetBothScreensBrightnessByColor(u16 color);
 
 // Defined in the other parts of the overlay.
 void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon);

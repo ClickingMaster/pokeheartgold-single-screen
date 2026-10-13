@@ -25,20 +25,20 @@ static void PokedexApp_SetEntryMenuBgPriorities(void);
 static void PokedexApp_LoadListGraphics(PokedexAppData *pokedexApp);
 static void PokedexApp_3DigitNumToTiles(u16 *a0, u16 a1, u16 a2);
 static void PokedexApp_LoadSearchGraphics(PokedexAppData *pokedexApp);
-static void PokedexApp_HighlightSearchOption(PokedexAppData *pokedexApp, const PokedexBgRect *a1, BOOL a2);
-static void PokedexApp_MoveSearchOptionHighlight(PokedexAppData *pokedexApp, const PokedexBgRect *a1, u32 *a2, int a3);
+static void PokedexApp_HighlightSearchOption(PokedexAppData *pokedexApp, const PokedexBgRect *rect, BOOL highlight);
+static void PokedexApp_MoveSearchOptionHighlight(PokedexAppData *pokedexApp, const PokedexBgRect *rects, u32 *selection, int newIndex);
 static void ov18_021E7564(PokedexAppData *pokedexApp);
-static void PokedexApp_HighlightBodyTypeOption(PokedexAppData *pokedexApp, u32 a1, BOOL a2);
-static void PokedexApp_HighlightLetterOption(PokedexAppData *pokedexApp, u32 a1, BOOL a2);
+static void PokedexApp_HighlightBodyTypeOption(PokedexAppData *pokedexApp, u32 index, BOOL highlight);
+static void PokedexApp_HighlightLetterOption(PokedexAppData *pokedexApp, u32 index, BOOL highlight);
 static void PokedexApp_ApplyPendingSubBgPriority(PokedexAppData *pokedexApp);
 static void PokedexApp_LoadAreaGraphics(PokedexAppData *pokedexApp);
 static void PokedexApp_LoadSizeCheckGraphics(PokedexAppData *pokedexApp);
 static void PokedexApp_LoadEntryMenuGraphics(PokedexAppData *pokedexApp);
 static u8 PokedexApp_GetSeenGenderForm(PokedexAppData *pokedexApp, u8 idx);
-static void PokedexApp_LoadEncounterMaps(PokedexMapList *a0, u16 species, int a2);
-static void PokedexApp_AddOverworldAreas(PokedexAppData *pokedexApp, PokedexMapList *a1, int a2, int a3);
-static void PokedexApp_AddDungeonAreas(PokedexAppData *pokedexApp, PokedexMapList *a1, int a2, int a3, int a4);
-static u32 PokedexApp_GetAlphabeticalMapIndex(u32 a0);
+static void PokedexApp_LoadEncounterMaps(PokedexMapList *mapList, u16 species, int table);
+static void PokedexApp_AddOverworldAreas(PokedexAppData *pokedexApp, PokedexMapList *mapList, int region, int sourceBit);
+static void PokedexApp_AddDungeonAreas(PokedexAppData *pokedexApp, PokedexMapList *mapList, int region, int startIndex, int sourceBit);
+static u32 PokedexApp_GetAlphabeticalMapIndex(u32 mapId);
 static void PokedexApp_SortAreaList(PokedexAppData *pokedexApp);
 static u32 PokedexApp_GetRoute2AreaIndex(void);
 static u32 PokedexApp_GetRoute16AreaIndex(void);
@@ -950,8 +950,8 @@ void PokedexApp_HideAreaUnknownBanner(PokedexAppData *pokedexApp) {
     ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[3]);
 }
 
-void PokedexApp_SetupScreen(PokedexAppData *pokedexApp, int a1) {
-    switch (a1) {
+void PokedexApp_SetupScreen(PokedexAppData *pokedexApp, int screen) {
+    switch (screen) {
     case 0:
         PokedexApp_LoadListGraphics(pokedexApp);
         PokedexApp_SetListBgPriorities();
@@ -1054,7 +1054,7 @@ static void PokedexApp_3DigitNumToTiles(u16 *dest, u16 num, u16 baseTile) {
     }
 }
 
-u16 *PokedexApp_BuildListNumberTilemap(PokedexAppData *pokedexApp, u32 a1) {
+u16 *PokedexApp_BuildListNumberTilemap(PokedexAppData *pokedexApp, u32 firstIndex) {
     u16 *ret = Heap_AllocAtEnd(HEAP_ID_POKEDEX_APP, 160 * 10 * sizeof(u16));
     u16 *sp14 = BgCellManager_GetCellTilemap(pokedexApp->bgCellManager, 5);
     u32 sp10 = PokedexApp_GetListLength(pokedexApp, TRUE);
@@ -1062,7 +1062,7 @@ u16 *PokedexApp_BuildListNumberTilemap(PokedexAppData *pokedexApp, u32 a1) {
     for (u16 i = 0; i < 10; ++i) {
         MI_CpuCopy16(sp14, &ret[160 * i], 160 * sizeof(u16));
         for (u16 j = 0; j < 5; ++j) {
-            u32 r1 = a1 + 5 * i + j;
+            u32 r1 = firstIndex + 5 * i + j;
             if (r1 >= sp10) {
                 break;
             }
@@ -1078,14 +1078,14 @@ u16 *PokedexApp_BuildListNumberTilemap(PokedexAppData *pokedexApp, u32 a1) {
     return ret;
 }
 
-u16 *PokedexApp_BuildSearchResultNumberTilemap(PokedexAppData *pokedexApp, u32 a1) {
+u16 *PokedexApp_BuildSearchResultNumberTilemap(PokedexAppData *pokedexApp, u32 firstIndex) {
     u16 *ret = Heap_AllocAtEnd(HEAP_ID_POKEDEX_APP, 160 * 10 * sizeof(u16));
     u16 *sp14 = BgCellManager_GetCellTilemap(pokedexApp->bgCellManager, 5);
 
     for (u16 i = 0; i < 10; ++i) {
         MI_CpuCopy16(sp14, &ret[160 * i], 160 * sizeof(u16));
         for (u16 j = 0; j < 5; ++j) {
-            u32 sp4 = a1 + 5 * i + j;
+            u32 sp4 = firstIndex + 5 * i + j;
             if (pokedexApp->listEntries[sp4].species == SPECIES_NONE) {
                 continue;
             }
@@ -1102,8 +1102,8 @@ u16 *PokedexApp_BuildSearchResultNumberTilemap(PokedexAppData *pokedexApp, u32 a
     return ret;
 }
 
-void PokedexApp_FreeNumberTilemap(u16 *a0) {
-    Heap_Free(a0);
+void PokedexApp_FreeNumberTilemap(u16 *tilemap) {
+    Heap_Free(tilemap);
 }
 
 void PokedexApp_DrawListNumbers(PokedexAppData *pokedexApp) {
@@ -1118,8 +1118,8 @@ void PokedexApp_DrawSearchResultNumbers(PokedexAppData *pokedexApp) {
     PokedexApp_FreeNumberTilemap(r5);
 }
 
-void PokedexApp_LoadNumberTilemap(PokedexAppData *pokedexApp, u16 *a1) {
-    LoadRectToBgTilemapRect(pokedexApp->bgConfig, GF_BG_LYR_MAIN_3, a1, 0, 0, 32, 24);
+void PokedexApp_LoadNumberTilemap(PokedexAppData *pokedexApp, u16 *tilemap) {
+    LoadRectToBgTilemapRect(pokedexApp->bgConfig, GF_BG_LYR_MAIN_3, tilemap, 0, 0, 32, 24);
     ScheduleBgTilemapBufferTransfer(pokedexApp->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
@@ -1142,14 +1142,14 @@ BOOL PokedexApp_HasForeignEntries(PokedexAppData *pokedexApp, u16 species) {
     return FALSE;
 }
 
-void PokedexApp_CycleListEntryLanguage(PokedexAppData *pokedexApp, u16 species, s16 a2) {
+void PokedexApp_CycleListEntryLanguage(PokedexAppData *pokedexApp, u16 species, s16 delta) {
     if (Pokedex_GetInternationalViewFlag(pokedexApp->args->pokedex) == FALSE) {
         return;
     }
 
     s16 r7 = LanguageToDexFlag(pokedexApp->language);
     for (u32 i = 0; i < 6; ++i) {
-        r7 = CycleDexLanguageFlag(r7, a2);
+        r7 = CycleDexLanguageFlag(r7, delta);
         s16 r4 = DexFlagToLanguage(r7);
         if (r4 == pokedexApp->language) {
             return;
@@ -1268,11 +1268,11 @@ static void PokedexApp_LoadSearchGraphics(PokedexAppData *pokedexApp) {
     ScheduleBgTilemapBufferTransfer(pokedexApp->bgConfig, GF_BG_LYR_SUB_3);
 }
 
-void PokedexApp_SetupSearchPage(PokedexAppData *pokedexApp, int a1, int a2) {
-    switch (a1) {
+void PokedexApp_SetupSearchPage(PokedexAppData *pokedexApp, int searchPage, int initialPos) {
+    switch (searchPage) {
     case 0:
         GfGfxLoader_LoadScrnDataFromOpenNarc(pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000057_NSCR_lz, pokedexApp->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, HEAP_ID_POKEDEX_APP);
-        PokedexApp_CreateSearchMenuGrid(pokedexApp, a2);
+        PokedexApp_CreateSearchMenuGrid(pokedexApp, initialPos);
         PokedexApp_DrawSearchMessage(pokedexApp, 0);
         PokedexApp_DrawSearchMenuPage(pokedexApp);
         PokedexApp_DrawSearchCriteria(pokedexApp);
@@ -1336,23 +1336,23 @@ void PokedexApp_SetupSearchPage(PokedexAppData *pokedexApp, int a1, int a2) {
     }
 }
 
-static void PokedexApp_HighlightSearchOption(PokedexAppData *pokedexApp, const PokedexBgRect *a1, BOOL a2) {
-    if (a2 == TRUE) {
-        BgTilemapRectChangePalette(pokedexApp->bgConfig, GF_BG_LYR_MAIN_2, a1->x, a1->y, a1->width, a1->height, 3);
+static void PokedexApp_HighlightSearchOption(PokedexAppData *pokedexApp, const PokedexBgRect *rect, BOOL highlight) {
+    if (highlight == TRUE) {
+        BgTilemapRectChangePalette(pokedexApp->bgConfig, GF_BG_LYR_MAIN_2, rect->x, rect->y, rect->width, rect->height, 3);
     } else {
-        BgTilemapRectChangePalette(pokedexApp->bgConfig, GF_BG_LYR_MAIN_2, a1->x, a1->y, a1->width, a1->height, 2);
+        BgTilemapRectChangePalette(pokedexApp->bgConfig, GF_BG_LYR_MAIN_2, rect->x, rect->y, rect->width, rect->height, 2);
     }
     ScheduleBgTilemapBufferTransfer(pokedexApp->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
-static void PokedexApp_MoveSearchOptionHighlight(PokedexAppData *pokedexApp, const PokedexBgRect *a1, u32 *a2, int a3) {
-    PokedexApp_HighlightSearchOption(pokedexApp, &a1[*a2], FALSE);
-    *a2 = a3;
-    PokedexApp_HighlightSearchOption(pokedexApp, &a1[a3], TRUE);
+static void PokedexApp_MoveSearchOptionHighlight(PokedexAppData *pokedexApp, const PokedexBgRect *rects, u32 *selection, int newIndex) {
+    PokedexApp_HighlightSearchOption(pokedexApp, &rects[*selection], FALSE);
+    *selection = newIndex;
+    PokedexApp_HighlightSearchOption(pokedexApp, &rects[newIndex], TRUE);
 }
 
-void PokedexApp_SelectSearchOrder(PokedexAppData *pokedexApp, int a1) {
-    PokedexApp_MoveSearchOptionHighlight(pokedexApp, sSearchOrderOptionRects, pokedexApp->dexSearchCriteria, a1);
+void PokedexApp_SelectSearchOrder(PokedexAppData *pokedexApp, int index) {
+    PokedexApp_MoveSearchOptionHighlight(pokedexApp, sSearchOrderOptionRects, pokedexApp->dexSearchCriteria, index);
     PokedexApp_DrawSearchOrderValue(pokedexApp, 37);
     ScheduleWindowCopyToVram(&pokedexApp->windows[37]);
 }
@@ -1365,8 +1365,8 @@ void PokedexApp_HighlightSearchTypes(PokedexAppData *pokedexApp) {
     PokedexApp_HighlightSearchOption(pokedexApp, &sSearchTypeOptionRects[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2]], TRUE);
 }
 
-void PokedexApp_SelectSearchArea(PokedexAppData *pokedexApp, int a1) {
-    PokedexApp_MoveSearchOptionHighlight(pokedexApp, sSearchAreaOptionRects, &pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_AREA], a1);
+void PokedexApp_SelectSearchArea(PokedexAppData *pokedexApp, int index) {
+    PokedexApp_MoveSearchOptionHighlight(pokedexApp, sSearchAreaOptionRects, &pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_AREA], index);
     PokedexApp_DrawSearchAreaValue(pokedexApp, 75);
     ScheduleWindowCopyToVram(&pokedexApp->windows[75]);
 }
@@ -1398,15 +1398,15 @@ static void ov18_021E7564(PokedexAppData *pokedexApp) {
     ScheduleBgTilemapBufferTransfer(pokedexApp->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
-static void PokedexApp_HighlightBodyTypeOption(PokedexAppData *pokedexApp, u32 a1, BOOL a2) {
+static void PokedexApp_HighlightBodyTypeOption(PokedexAppData *pokedexApp, u32 index, BOOL highlight) {
     PokedexBgRect sp0;
 
     sp0.width = 4;
     sp0.height = 4;
-    sp0.x = 6 * (a1 % 5) + 2;
-    sp0.y = 5 * (a1 / 5 + 1);
+    sp0.x = 6 * (index % 5) + 2;
+    sp0.y = 5 * (index / 5 + 1);
 
-    PokedexApp_HighlightSearchOption(pokedexApp, &sp0, a2);
+    PokedexApp_HighlightSearchOption(pokedexApp, &sp0, highlight);
 }
 
 void PokedexApp_SelectSearchBodyType(PokedexAppData *pokedexApp, u32 bodyType) {
@@ -1416,19 +1416,19 @@ void PokedexApp_SelectSearchBodyType(PokedexAppData *pokedexApp, u32 bodyType) {
     PokedexApp_UpdateBodyTypeSprite(pokedexApp);
 }
 
-u8 PokedexApp_GetLetterGridCell(int a0) {
-    return sLetterGridCells[a0];
+u8 PokedexApp_GetLetterGridCell(int index) {
+    return sLetterGridCells[index];
 }
 
-static void PokedexApp_HighlightLetterOption(PokedexAppData *pokedexApp, u32 a1, BOOL a2) {
+static void PokedexApp_HighlightLetterOption(PokedexAppData *pokedexApp, u32 index, BOOL highlight) {
     PokedexBgRect sp0;
 
     sp0.width = 2;
     sp0.height = 2;
-    sp0.x = 4 * (sLetterGridCells[a1] % 7) + 3;
-    sp0.y = 4 * (sLetterGridCells[a1] / 7) + 5;
+    sp0.x = 4 * (sLetterGridCells[index] % 7) + 3;
+    sp0.y = 4 * (sLetterGridCells[index] / 7) + 5;
 
-    PokedexApp_HighlightSearchOption(pokedexApp, &sp0, a2);
+    PokedexApp_HighlightSearchOption(pokedexApp, &sp0, highlight);
 }
 
 void PokedexApp_SelectSearchLetter(PokedexAppData *pokedexApp, u32 letter) {
@@ -1557,7 +1557,7 @@ static void PokedexApp_ApplyPendingSubBgPriority(PokedexAppData *pokedexApp) {
     pokedexApp->subBgPriorityRequest = 0;
 }
 
-void PokedexApp_CycleSearchEntryLanguage(PokedexAppData *pokedexApp, u16 species, s16 a2) {
+void PokedexApp_CycleSearchEntryLanguage(PokedexAppData *pokedexApp, u16 species, s16 delta) {
     if (!Pokedex_GetInternationalViewFlag(pokedexApp->args->pokedex)) {
         return;
     }
@@ -1569,7 +1569,7 @@ void PokedexApp_CycleSearchEntryLanguage(PokedexAppData *pokedexApp, u16 species
 
     s16 dexLangFlag = LanguageToDexFlag(pokedexApp->language);
     for (int i = 0; i < 6u; ++i) {
-        dexLangFlag += a2;
+        dexLangFlag += delta;
         if (dexLangFlag < 0) {
             dexLangFlag = 5;
         } else if (dexLangFlag >= 6) {
@@ -1595,8 +1595,8 @@ void PokedexApp_CycleSearchEntryLanguage(PokedexAppData *pokedexApp, u16 species
     }
 }
 
-void PokedexApp_SetSubScreenClipWindow(BOOL a0) {
-    if (a0 == TRUE) {
+void PokedexApp_SetSubScreenClipWindow(BOOL enable) {
+    if (enable == TRUE) {
         GXS_SetVisibleWnd(GX_WNDMASK_W0);
         G2S_SetWnd0InsidePlane(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG1 | GX_PLANEMASK_BG2 | GX_PLANEMASK_BG3, TRUE);
         G2S_SetWndOutsidePlane(GX_PLANEMASK_ALL, TRUE);
@@ -1836,10 +1836,10 @@ void PokedexApp_FreeSizeData(PokedexAppData *pokedexApp) {
     Heap_Free(r5->mon_scale);
 }
 
-void PokedexApp_BuildAreaList(PokedexAppData *pokedexApp, int a1, int a2) {
-    PokedexApp_LoadEncounterMaps(&pokedexApp->areaList.overworldByTime, pokedexApp->curSpecies, a1 + 4);
+void PokedexApp_BuildAreaList(PokedexAppData *pokedexApp, int timeOfDay, int region) {
+    PokedexApp_LoadEncounterMaps(&pokedexApp->areaList.overworldByTime, pokedexApp->curSpecies, timeOfDay + 4);
     PokedexApp_LoadEncounterMaps(&pokedexApp->areaList.overworldOther, pokedexApp->curSpecies, 7);
-    PokedexApp_LoadEncounterMaps(&pokedexApp->areaList.dungeonByTime, pokedexApp->curSpecies, a1);
+    PokedexApp_LoadEncounterMaps(&pokedexApp->areaList.dungeonByTime, pokedexApp->curSpecies, timeOfDay);
     PokedexApp_LoadEncounterMaps(&pokedexApp->areaList.dungeonOther, pokedexApp->curSpecies, 3);
 
     u32 nMaps = 1;
@@ -1856,11 +1856,11 @@ void PokedexApp_BuildAreaList(PokedexAppData *pokedexApp, int a1, int a2) {
     pokedexApp->areaList.areas.nMaps = 1;
     pokedexApp->areaList.areaSources[0] = 0;
 
-    PokedexApp_AddOverworldAreas(pokedexApp, &pokedexApp->areaList.overworldByTime, a2, 0);
-    PokedexApp_AddOverworldAreas(pokedexApp, &pokedexApp->areaList.overworldOther, a2, 1);
+    PokedexApp_AddOverworldAreas(pokedexApp, &pokedexApp->areaList.overworldByTime, region, 0);
+    PokedexApp_AddOverworldAreas(pokedexApp, &pokedexApp->areaList.overworldOther, region, 1);
     u32 r6 = pokedexApp->areaList.areas.nMaps;
-    PokedexApp_AddDungeonAreas(pokedexApp, &pokedexApp->areaList.dungeonByTime, a2, r6, 0);
-    PokedexApp_AddDungeonAreas(pokedexApp, &pokedexApp->areaList.dungeonOther, a2, r6, 1);
+    PokedexApp_AddDungeonAreas(pokedexApp, &pokedexApp->areaList.dungeonByTime, region, r6, 0);
+    PokedexApp_AddDungeonAreas(pokedexApp, &pokedexApp->areaList.dungeonOther, region, r6, 1);
     PokedexApp_SortAreaList(pokedexApp);
 }
 
@@ -1873,11 +1873,11 @@ void PokedexApp_FreeAreaList(PokedexAppData *pokedexApp) {
     Heap_Free(pokedexApp->areaList.areaSources);
 }
 
-static void PokedexApp_LoadEncounterMaps(PokedexMapList *a0, u16 species, int a2) {
+static void PokedexApp_LoadEncounterMaps(PokedexMapList *mapList, u16 species, int table) {
     int base;
     u32 size;
 
-    switch (a2) {
+    switch (table) {
     case 0:
         base = NARC_zukan_enc_zukan_enc_00000002; // 0 * 495 + 2
         break;
@@ -1904,36 +1904,36 @@ static void PokedexApp_LoadEncounterMaps(PokedexMapList *a0, u16 species, int a2
         break;
     }
     // UB: if unexpected a2, r3 is uninitialized
-    a0->maps = GfGfxLoader_LoadFromNarc_GetSizeOut(NARC_application_zukanlist_zkn_data_zukan_enc, base + species, FALSE, HEAP_ID_POKEDEX_APP, FALSE, &size);
-    a0->nMaps = size / sizeof(u32);
+    mapList->maps = GfGfxLoader_LoadFromNarc_GetSizeOut(NARC_application_zukanlist_zkn_data_zukan_enc, base + species, FALSE, HEAP_ID_POKEDEX_APP, FALSE, &size);
+    mapList->nMaps = size / sizeof(u32);
 }
 
-static void PokedexApp_AddOverworldAreas(PokedexAppData *pokedexApp, PokedexMapList *a1, int a2, int a3) {
+static void PokedexApp_AddOverworldAreas(PokedexAppData *pokedexApp, PokedexMapList *mapList, int region, int sourceBit) {
     u16 i;
     u16 j;
 
-    if (a2 == 0) {
-        for (i = 0; i < a1->nMaps - 1; ++i) {
-            if (pokedexApp->overworldAreaTable[a1->maps[i]].x >= 22) {
+    if (region == 0) {
+        for (i = 0; i < mapList->nMaps - 1; ++i) {
+            if (pokedexApp->overworldAreaTable[mapList->maps[i]].x >= 22) {
                 continue;
             }
             for (j = 0; j < pokedexApp->areaList.areas.nMaps; ++j) {
-                if (pokedexApp->areaList.areas.maps[j] == a1->maps[i]) {
-                    pokedexApp->areaList.areaSources[j] |= 1 << a3;
+                if (pokedexApp->areaList.areas.maps[j] == mapList->maps[i]) {
+                    pokedexApp->areaList.areaSources[j] |= 1 << sourceBit;
                     break;
                 }
             }
             if (j == pokedexApp->areaList.areas.nMaps) {
-                pokedexApp->areaList.areas.maps[pokedexApp->areaList.areas.nMaps] = a1->maps[i];
-                pokedexApp->areaList.areaSources[pokedexApp->areaList.areas.nMaps] = 1 << a3;
+                pokedexApp->areaList.areas.maps[pokedexApp->areaList.areas.nMaps] = mapList->maps[i];
+                pokedexApp->areaList.areaSources[pokedexApp->areaList.areas.nMaps] = 1 << sourceBit;
                 ++pokedexApp->areaList.areas.nMaps;
             }
         }
     } else {
         u32 mapId;
-        for (i = 0; i < a1->nMaps - 1; ++i) {
-            mapId = a1->maps[i];
-            if (pokedexApp->overworldAreaTable[a1->maps[i]].x < 22) {
+        for (i = 0; i < mapList->nMaps - 1; ++i) {
+            mapId = mapList->maps[i];
+            if (pokedexApp->overworldAreaTable[mapList->maps[i]].x < 22) {
                 continue;
             }
             if (PokedexApp_IsRoute2Area(mapId) == TRUE) {
@@ -1943,63 +1943,63 @@ static void PokedexApp_AddOverworldAreas(PokedexAppData *pokedexApp, PokedexMapL
             }
             for (j = 0; j < pokedexApp->areaList.areas.nMaps; ++j) {
                 if (pokedexApp->areaList.areas.maps[j] == mapId) {
-                    pokedexApp->areaList.areaSources[j] |= 1 << a3;
+                    pokedexApp->areaList.areaSources[j] |= 1 << sourceBit;
                     break;
                 }
             }
             if (j == pokedexApp->areaList.areas.nMaps) {
                 pokedexApp->areaList.areas.maps[pokedexApp->areaList.areas.nMaps] = mapId;
-                pokedexApp->areaList.areaSources[pokedexApp->areaList.areas.nMaps] = 1 << a3;
+                pokedexApp->areaList.areaSources[pokedexApp->areaList.areas.nMaps] = 1 << sourceBit;
                 ++pokedexApp->areaList.areas.nMaps;
             }
         }
     }
 }
 
-static void PokedexApp_AddDungeonAreas(PokedexAppData *pokedexApp, PokedexMapList *a1, int a2, int a3, int a4) {
+static void PokedexApp_AddDungeonAreas(PokedexAppData *pokedexApp, PokedexMapList *mapList, int region, int startIndex, int sourceBit) {
     u16 i;
     u16 j;
 
-    if (a2 == 0) {
-        for (i = 0; i < a1->nMaps - 1; ++i) {
-            if (pokedexApp->dungeonAreaTable[a1->maps[i]].x >= 22) {
+    if (region == 0) {
+        for (i = 0; i < mapList->nMaps - 1; ++i) {
+            if (pokedexApp->dungeonAreaTable[mapList->maps[i]].x >= 22) {
                 continue;
             }
-            for (j = a3; j < pokedexApp->areaList.areas.nMaps; ++j) {
-                if (pokedexApp->areaList.areas.maps[j] == a1->maps[i]) {
-                    pokedexApp->areaList.areaSources[j] |= 1 << a4;
+            for (j = startIndex; j < pokedexApp->areaList.areas.nMaps; ++j) {
+                if (pokedexApp->areaList.areas.maps[j] == mapList->maps[i]) {
+                    pokedexApp->areaList.areaSources[j] |= 1 << sourceBit;
                     break;
                 }
             }
             if (j == pokedexApp->areaList.areas.nMaps) {
-                pokedexApp->areaList.areas.maps[pokedexApp->areaList.areas.nMaps] = a1->maps[i];
-                pokedexApp->areaList.areaSources[pokedexApp->areaList.areas.nMaps] = 0x80000000 + (1 << a4);
+                pokedexApp->areaList.areas.maps[pokedexApp->areaList.areas.nMaps] = mapList->maps[i];
+                pokedexApp->areaList.areaSources[pokedexApp->areaList.areas.nMaps] = 0x80000000 + (1 << sourceBit);
                 ++pokedexApp->areaList.areas.nMaps;
             }
         }
     } else {
-        for (i = 0; i < a1->nMaps - 1; ++i) {
-            if (pokedexApp->dungeonAreaTable[a1->maps[i]].x < 22) {
+        for (i = 0; i < mapList->nMaps - 1; ++i) {
+            if (pokedexApp->dungeonAreaTable[mapList->maps[i]].x < 22) {
                 continue;
             }
-            for (j = a3; j < pokedexApp->areaList.areas.nMaps; ++j) {
-                if (pokedexApp->areaList.areas.maps[j] == a1->maps[i]) {
-                    pokedexApp->areaList.areaSources[j] |= 1 << a4;
+            for (j = startIndex; j < pokedexApp->areaList.areas.nMaps; ++j) {
+                if (pokedexApp->areaList.areas.maps[j] == mapList->maps[i]) {
+                    pokedexApp->areaList.areaSources[j] |= 1 << sourceBit;
                     break;
                 }
             }
             if (j == pokedexApp->areaList.areas.nMaps) {
-                pokedexApp->areaList.areas.maps[pokedexApp->areaList.areas.nMaps] = a1->maps[i];
-                pokedexApp->areaList.areaSources[pokedexApp->areaList.areas.nMaps] = 0x80000000 + (1 << a4);
+                pokedexApp->areaList.areas.maps[pokedexApp->areaList.areas.nMaps] = mapList->maps[i];
+                pokedexApp->areaList.areaSources[pokedexApp->areaList.areas.nMaps] = 0x80000000 + (1 << sourceBit);
                 ++pokedexApp->areaList.areas.nMaps;
             }
         }
     }
 }
 
-static u32 PokedexApp_GetAlphabeticalMapIndex(u32 a0) {
+static u32 PokedexApp_GetAlphabeticalMapIndex(u32 mapId) {
     for (u32 i = 0; i < NELEMS(sMapIDs_Alphabetical); ++i) {
-        if (a0 == sMapIDs_Alphabetical[i]) {
+        if (mapId == sMapIDs_Alphabetical[i]) {
             return i;
         }
     }
@@ -2036,22 +2036,22 @@ static void PokedexApp_SortAreaList(PokedexAppData *pokedexApp) {
     }
 }
 
-BOOL PokedexApp_IsDungeonArea(PokedexAppData *pokedexApp, u32 a1) {
-    if (pokedexApp->areaList.areaSources[a1] & 0x80000000) {
+BOOL PokedexApp_IsDungeonArea(PokedexAppData *pokedexApp, u32 areaIndex) {
+    if (pokedexApp->areaList.areaSources[areaIndex] & 0x80000000) {
         return TRUE;
     }
     return FALSE;
 }
 
-u32 PokedexApp_GetAreaEncounterFlag(PokedexAppData *pokedexApp, u32 a1, u32 a2) {
-    return pokedexApp->areaList.areaSources[a1] & (1 << a2);
+u32 PokedexApp_GetAreaEncounterFlag(PokedexAppData *pokedexApp, u32 areaIndex, u32 sourceBit) {
+    return pokedexApp->areaList.areaSources[areaIndex] & (1 << sourceBit);
 }
 
-u32 PokedexApp_GetAreaMapId(PokedexAppData *pokedexApp, u32 a1) {
-    if (PokedexApp_IsDungeonArea(pokedexApp, a1) == FALSE) { // explicit comparison required to match
-        return PokedexApp_GetOverworldMapId(pokedexApp->areaList.areas.maps[a1]);
+u32 PokedexApp_GetAreaMapId(PokedexAppData *pokedexApp, u32 areaIndex) {
+    if (PokedexApp_IsDungeonArea(pokedexApp, areaIndex) == FALSE) { // explicit comparison required to match
+        return PokedexApp_GetOverworldMapId(pokedexApp->areaList.areas.maps[areaIndex]);
     } else {
-        return PokedexApp_GetDungeonMapId(pokedexApp->areaList.areas.maps[a1]);
+        return PokedexApp_GetDungeonMapId(pokedexApp->areaList.areas.maps[areaIndex]);
     }
 }
 
@@ -2059,8 +2059,8 @@ u32 PokedexApp_GetOverworldMapId(u32 idx) {
     return sOverworldMapIDs[idx];
 }
 
-u32 PokedexApp_GetDungeonMapId(u32 a0) {
-    return sDungeonMapIDs[a0];
+u32 PokedexApp_GetDungeonMapId(u32 index) {
+    return sDungeonMapIDs[index];
 }
 
 BOOL PokedexApp_IsRoute2Area(u32 idx) {

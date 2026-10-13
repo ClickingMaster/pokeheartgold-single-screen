@@ -7,9 +7,9 @@ BOOL ScrNative_WaitApplication(ScriptContext *ctx);
 
 // Triggered for move deleter
 BOOL ScrCmd_394(ScriptContext *ctx) {
-    u16 var0 = ScriptGetVar(ctx);
+    u16 partySlot = ScriptGetVar(ctx);
     PokemonSummaryArgs **runningAppData = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-    *runningAppData = LearnForgetMove_LaunchApp(HEAP_ID_FIELD3, ctx->fieldSystem, var0, 0);
+    *runningAppData = LearnForgetMove_LaunchApp(HEAP_ID_FIELD3, ctx->fieldSystem, partySlot, 0);
     SetupNativeScript(ctx, ScrNative_WaitApplication);
     return TRUE;
 }

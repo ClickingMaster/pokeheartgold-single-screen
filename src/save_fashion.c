@@ -62,12 +62,12 @@ u32 MATH_CalcCRC32(const u32 *table, const void *data, u32 size);
 void *SaveArray_Get(SaveData *saveData, int id);
 
 BOOL IsValidFashionMagic(u32 value);
-void GetFashionObjectPlacement(int a0, u8 *a1, u8 *a2, u8 *a3);
-void FashionMon_Init(SaveFashionMon *dst, Pokemon *mon, u8 a2, u8 a3, s8 a4);
-void FashionMon_InitAtObject(SaveFashionMon *dst, Pokemon *mon, int a2);
+void GetFashionObjectPlacement(int monPicId, u8 *outX, u8 *outY, u8 *outZ);
+void FashionMon_Init(SaveFashionMon *dst, Pokemon *mon, u8 x, u8 y, s8 z);
+void FashionMon_InitAtObject(SaveFashionMon *dst, Pokemon *mon, int monPicId);
 void FashionMon_SetSecondText(SaveFashionMon *dst, String *str, u8 a2);
 void FashionMon_CreatePokemon(SaveFashionMon *src, Pokemon *mon);
-void SetFashionItemPlacement(u8 *dst, u8 a1, u8 a2, u8 a3, u8 a4);
+void SetFashionItemPlacement(u8 *dst, u8 x, u8 y, u8 z, u8 a4);
 void SetStackableAccessoryCount(u32 *data, int value, u8 index);
 u8 GetStackableAccessoryCount(u32 *data, u8 index);
 void SetUniqueAccessoryFlag(u32 *data, u8 value, u8 index);
@@ -116,34 +116,34 @@ BOOL IsValidFashionMagic(u32 value) {
     return FALSE;
 }
 
-void GetFashionObjectPlacement(int a0, u8 *a1, u8 *a2, u8 *a3) {
+void GetFashionObjectPlacement(int monPicId, u8 *outX, u8 *outY, u8 *outZ) {
     int x;
     int y;
     int z;
-    DressUpMon_GetCenterPos(a0, &x, &y);
-    z = DressUpMon_GetPriority(a0);
+    DressUpMon_GetCenterPos(monPicId, &x, &y);
+    z = DressUpMon_GetPriority(monPicId);
     GF_ASSERT(x < 256);
     GF_ASSERT(y < 256);
     GF_ASSERT(z > -128);
-    *a1 = x;
-    *a2 = y;
-    *a3 = z;
+    *outX = x;
+    *outY = y;
+    *outZ = z;
 }
 
-void FashionMon_Init(SaveFashionMon *dst, Pokemon *mon, u8 a2, u8 a3, s8 a4) {
+void FashionMon_Init(SaveFashionMon *dst, Pokemon *mon, u8 x, u8 y, s8 z) {
     dst->species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     GetMonData(mon, MON_DATA_NICKNAME, dst->nickname);
     dst->personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     dst->otId = GetMonData(mon, MON_DATA_OT_ID, NULL);
     dst->form = GetMonData(mon, MON_DATA_FORM, NULL);
-    dst->x = a2;
-    dst->y = a3;
-    dst->z = a4;
+    dst->x = x;
+    dst->y = y;
+    dst->z = z;
 }
 
-void FashionMon_InitAtObject(SaveFashionMon *dst, Pokemon *mon, int a2) {
+void FashionMon_InitAtObject(SaveFashionMon *dst, Pokemon *mon, int monPicId) {
     u8 x, y, z;
-    GetFashionObjectPlacement(a2, &x, &y, &z);
+    GetFashionObjectPlacement(monPicId, &x, &y, &z);
     FashionMon_Init(dst, mon, x, y, (s8)z);
 }
 
@@ -158,10 +158,10 @@ void FashionMon_CreatePokemon(SaveFashionMon *src, Pokemon *mon) {
     SetMonData(mon, MON_DATA_FORM, &src->form);
 }
 
-void SetFashionItemPlacement(u8 *dst, u8 a1, u8 a2, u8 a3, u8 a4) {
-    dst[0] = a1;
-    dst[1] = a2;
-    dst[2] = a3;
+void SetFashionItemPlacement(u8 *dst, u8 x, u8 y, u8 z, u8 a4) {
+    dst[0] = x;
+    dst[1] = y;
+    dst[2] = z;
     dst[3] = a4;
 }
 

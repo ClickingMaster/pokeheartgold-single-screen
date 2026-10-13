@@ -86,7 +86,7 @@ extern const GraphicsBanks sTradeSequenceSendGraphicsBanks;
 // Defined in render_window.c; not declared in its header.
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
 // No header declares it.
-void WirelessStatusIcon_ShowOnBothScreens(int a0, enum HeapID heapID);
+void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 
 TradeSequenceSend *TradeSequenceSend_Init(TradeSequence *ts);
 void TradeSequenceSend_Exit(TradeSequenceSend *send);

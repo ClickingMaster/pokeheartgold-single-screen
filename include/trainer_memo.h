@@ -32,7 +32,7 @@ typedef struct TrainerMemo {
 void MonSetTrainerMemo(Pokemon *mon, PlayerProfile *profile, int strat, int mapsec, enum HeapID heapID);
 void BoxMonSetTrainerMemo(BoxPokemon *boxMon, PlayerProfile *profile, int strat, int mapsec, enum HeapID heapID);
 BOOL MonMetadataMatchesEvent(u8 eventNo, Pokemon *mon, BOOL isMine);
-TrainerMemo *TrainerMemo_New(Pokemon *a0, int a1, enum HeapID a2, int a3);
-void TrainerMemo_Delete(TrainerMemo *a0);
+TrainerMemo *TrainerMemo_New(Pokemon *mon, int isMine, enum HeapID heapID, int a3);
+void TrainerMemo_Delete(TrainerMemo *memo);
 
 #endif // POKEHEARTGOLD_TRAINER_MEMO_H

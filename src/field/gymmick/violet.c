@@ -46,12 +46,12 @@ static inline fx32 GymmickInit_Violet_sub(u8 state) {
 
 void GymmickInit_Violet(FieldSystem *fieldSystem) {
     GymmickUnion *gymmick = Save_Gymmick_AssertMagic_GetData(Save_GetGymmickPtr(FieldSystem_GetSaveData(fieldSystem)), GYMMICK_VIOLET);
-    VecFx32 sp18 = {
+    VecFx32 propPos = {
         FX32_CONST(0xF8),
         0,
         FX32_CONST(0x148),
     };
-    MapPropManager_LoadOne(fieldSystem->mapPropManager, 111, &sp18, 0, fieldSystem->mapPropAnimationManager);
+    MapPropManager_LoadOne(fieldSystem->mapPropManager, 111, &propPos, 0, fieldSystem->mapPropAnimationManager);
     DynamicTerrainHeightManager_SetPlate(0, 14, 19, 3, 3, FX32_CONST(32), fieldSystem->dynamicTerrainHeightManager);
     fx32 y = GymmickInit_Violet_sub(gymmick->violet.liftState);
     MapProp *mapProp = MapPropManager_FindMapPropByBuildModel(fieldSystem->mapPropManager, 111);

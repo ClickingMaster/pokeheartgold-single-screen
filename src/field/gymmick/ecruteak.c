@@ -47,9 +47,9 @@ void GymmickInit_Ecruteak(FieldSystem *fieldSystem) {
     ApplyFogToMapObjects(fieldSystem);
 
     for (int i = 0; i < NUM_CANDLES; ++i) {
-        VecFx32 sp08;
-        MapObject_CopyPositionVector(MapObjectManager_GetFirstActiveObjectByID(fieldSystem->mapObjectManager, obj_T27GYM0101_itako + i), &sp08);
-        localData->candleMapProps[i] = MapPropManager_LoadOne(fieldSystem->mapPropManager, 128, &sp08, NULL, fieldSystem->mapPropAnimationManager);
+        VecFx32 objectPos;
+        MapObject_CopyPositionVector(MapObjectManager_GetFirstActiveObjectByID(fieldSystem->mapObjectManager, obj_T27GYM0101_itako + i), &objectPos);
+        localData->candleMapProps[i] = MapPropManager_LoadOne(fieldSystem->mapPropManager, 128, &objectPos, NULL, fieldSystem->mapPropAnimationManager);
         if (gymmickUnion->ecruteak.candles[i]) {
             MapProp_SetCulled(MapPropManager_GetMapPropByIndex(fieldSystem->mapPropManager, localData->candleMapProps[i]), TRUE);
         }

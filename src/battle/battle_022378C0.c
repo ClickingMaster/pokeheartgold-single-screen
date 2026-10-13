@@ -310,14 +310,14 @@ void BattleSystem_ReinitMainBgLayers(BattleSystem *battleSystem) {
     BattleSystem_SetupTextFlags(battleSystem);
 }
 
-void BattleSystem_SetTrainerAIOverlayLoaded(BattleSystem *battleSystem, int a1) {
-    if (battleSystem->trainerAIOverlayLoaded == a1) {
+void BattleSystem_SetTrainerAIOverlayLoaded(BattleSystem *battleSystem, int loaded) {
+    if (battleSystem->trainerAIOverlayLoaded == loaded) {
         GF_AssertFail();
     }
 
-    battleSystem->trainerAIOverlayLoaded = a1;
+    battleSystem->trainerAIOverlayLoaded = loaded;
 
-    if (a1 == 0) {
+    if (loaded == 0) {
         UnloadOverlayByID(FS_OVERLAY_ID(OVY_10));
         HandleLoadOverlay(FS_OVERLAY_ID(OVY_7), OVY_LOAD_ASYNC);
     } else {

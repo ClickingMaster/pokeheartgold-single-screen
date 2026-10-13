@@ -67,12 +67,12 @@ void BattleFinger_Delete(BattleFinger *finger) {
     Heap_Free(finger);
 }
 
-void BattleFinger_EnableWithOffset(BattleFinger *finger, int x, int y, fx32 a3) {
+void BattleFinger_EnableWithOffset(BattleFinger *finger, int x, int y, fx32 yOffset) {
     BattleFinger_ResetAnimation(finger);
     finger->x = x;
     finger->y = y;
-    finger->yOffset = a3;
-    ManagedSprite_SetPositionXYWithSubscreenOffset(finger->sprite, x, y, a3);
+    finger->yOffset = yOffset;
+    ManagedSprite_SetPositionXYWithSubscreenOffset(finger->sprite, x, y, yOffset);
     ManagedSprite_SetDrawFlag(finger->sprite, TRUE);
 }
 

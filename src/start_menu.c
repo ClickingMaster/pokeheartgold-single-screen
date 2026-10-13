@@ -119,7 +119,7 @@ static BOOL Task_StartMenu_HandleInput(TaskManager *taskManager);
 static BOOL StartMenu_HandleKeyInput(TaskManager *taskManager, FieldSystem *fieldSystem, StartMenuTaskData *startMenu);
 static BOOL StartMenu_HandleTouchInput(TaskManager *taskManager, FieldSystem *fieldSystem, StartMenuTaskData *startMenu);
 static void sub_0203C69C(StartMenuTaskData *startMenu, FieldSystem *fieldSystem);
-static void StartMenu_CreateCursor(StartMenuTaskData *startMenu, u8 *a1, u32 a2, u8 gender);
+static void StartMenu_CreateCursor(StartMenuTaskData *startMenu, u8 *insertionOrder, u32 numButtons, u8 gender);
 static void StartMenu_DestroyCursor(StartMenuTaskData *startMenu);
 static void Task_StartMenu_WaitFade(TaskManager *taskManager);
 static void Task_StartMenu_WaitApp(TaskManager *taskManager);
@@ -152,9 +152,9 @@ static BOOL Task_StartMenu_HandleSelection_Pokegear(TaskManager *taskManager);
 static BOOL Task_StartMenu_Pokegear(TaskManager *taskManager);
 static BOOL Task_StartMenu_HandleReturn_Pokegear(TaskManager *taskManager);
 static BOOL Task_StartMenu_HandleReturn_Summary(TaskManager *taskManager);
-static void sub_0203D664(TaskManager *taskManager, int a1);
+static void sub_0203D664(TaskManager *taskManager, int itemId);
 static BOOL sub_0203D6C8(TaskManager *taskManager);
-static void StartMenu_ReturnToPartyMenuAfterMail(FieldSystem *fieldSystem, StartMenuTaskData *startMenu, u8 a2);
+static void StartMenu_ReturnToPartyMenuAfterMail(FieldSystem *fieldSystem, StartMenuTaskData *startMenu, u8 context);
 static void Task_StartMenu_Evolution(TaskManager *taskManager);
 static void Task_StartMenu_WaitEvolution(TaskManager *taskManager);
 
@@ -662,7 +662,7 @@ static void sub_0203C69C(StartMenuTaskData *startMenu, FieldSystem *fieldSystem)
     }
 }
 
-static void StartMenu_CreateCursor(StartMenuTaskData *startMenu, u8 *a1, u32 a2, u8 gender) {
+static void StartMenu_CreateCursor(StartMenuTaskData *startMenu, u8 *insertionOrder, u32 numButtons, u8 gender) {
     startMenu->spriteList = G2dRenderer_Init(1, &startMenu->g2dRenderer, HEAP_ID_FIELD2);
     for (int i = 0; i < 4; ++i) {
         startMenu->gfxResMan[i] = Create2DGfxResObjMan(1, (GfGfxResType)i, HEAP_ID_FIELD2);
@@ -1331,7 +1331,7 @@ static BOOL Task_StartMenu_HandleReturn_Summary(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void sub_0203D664(TaskManager *taskManager, int a1) {
+static void sub_0203D664(TaskManager *taskManager, int itemId) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
@@ -1436,13 +1436,13 @@ BOOL Task_ReturnToMenuFromMail(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void StartMenu_ReturnToPartyMenuAfterMail(FieldSystem *fieldSystem, StartMenuTaskData *startMenu, u8 a2) {
+static void StartMenu_ReturnToPartyMenuAfterMail(FieldSystem *fieldSystem, StartMenuTaskData *startMenu, u8 context) {
     StartMenuMailReturn *unk = startMenu->exitTaskEnvironment2;
     PartyMenuArgs *partyMenuArgs = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PartyMenuArgs));
     StartMenu_InitPartyMenuArgs(partyMenuArgs, fieldSystem, startMenu);
     partyMenuArgs->itemId = unk->itemId;
     partyMenuArgs->partySlot = unk->partySlot;
-    partyMenuArgs->context = a2;
+    partyMenuArgs->context = context;
     UseMailArgs_GiveMailToMon(startMenu->exitTaskEnvironment, Party_GetMonByIndex(partyMenuArgs->party, unk->partySlot));
     UseMailArgs_Free(startMenu->exitTaskEnvironment);
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PartyMenu, partyMenuArgs);

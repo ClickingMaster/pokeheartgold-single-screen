@@ -86,7 +86,7 @@ extern BOOL CTRDG_IsExisting();
 extern int WM_GetLinkLevel(void);
 extern fx32 FX_Sqrt(fx32 value);
 extern void CommWireless_Terminate(void);
-extern void WirelessStatusIcon_SetLevel(int a0);
+extern void WirelessStatusIcon_SetLevel(int level);
 extern void CommState_StartBeaconWatch(SaveData *saveData);
 extern void CommState_StopBeaconWatch(void);
 extern u32 CommState_GetSeenGames(void);

@@ -35,25 +35,25 @@ static BOOL PalPadEntry_IsEqual(SavePalPad *a, SavePalPad *b) {
 
 void SavePalPad_Merge(SavePalPad *a, SavePalPad *b, int n, enum HeapID heapID) {
     int i, j, k;
-    int sp18[5];
+    int existingIndex[5];
     SavePalPad *c;
 
     c = Heap_Alloc(heapID, sizeof(SavePalPad) * NUM_PALPAD_ENTRIES);
     Save_PalPad_Init(c);
 
     for (i = 0; i < n; i++) {
-        sp18[i] = -1;
+        existingIndex[i] = -1;
         for (j = 0; j < NUM_PALPAD_ENTRIES; j++) {
             if (PalPadEntry_IsEqual(&a[j], &b[i])) {
-                sp18[i] = j;
+                existingIndex[i] = j;
             }
         }
     }
     k = 0;
     for (i = 0; i < n; i++) {
         c[k] = b[i];
-        if (sp18[i] >= 0) {
-            a[sp18[i]].name[0] = EOS;
+        if (existingIndex[i] >= 0) {
+            a[existingIndex[i]].name[0] = EOS;
         }
         k++;
     }
