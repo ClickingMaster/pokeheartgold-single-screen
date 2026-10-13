@@ -57,9 +57,9 @@
 .public _02108FC0
 .public _02108FC8
 .public _021D4670
-.public ov13_02220908
-.public ov13_02222C1C
-.public ov13_02222CE0
-.public ov13_02226D74
-.public ov13_02226E5C
-.public ov13_02226F28
+.public WifiSetup_RunAoss
+.public WifiSetup_Startup
+.public WifiSetup_Cleanup
+.public WifiSetup_StartSimpleStart
+.public WifiSetup_StopSimpleStart
+.public WifiSetup_GetSimpleStartResult

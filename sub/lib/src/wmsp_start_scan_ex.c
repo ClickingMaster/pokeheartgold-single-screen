@@ -89,7 +89,7 @@ void WMSP_StartScanEx(WmspStartScanExRequest *req) {
         bssid[0] &= ~1;
     }
     bits = s->enableChannel & (u16)(bits << 1);
-    if (bits && (!(s->unk_c8 & 1) || mode == 1) && req->output && !((u32)req->output & 3) && req->capacity >= 64) {
+    if (bits && (!(s->miscFlags & 1) || mode == 1) && req->output && !((u32)req->output & 3) && req->capacity >= 64) {
         goto valid_scan;
     }
     {
@@ -103,7 +103,7 @@ void WMSP_StartScanEx(WmspStartScanExRequest *req) {
 
 valid_scan: {
     u16 role = 2;
-    s->unk_e6 = role;
+    s->mode = role;
 }
     r = WMSP_WL_DevGetStationState(buffer);
     if (!r[2]) {
@@ -130,21 +130,21 @@ station_ready:;
         s->pwrMgtMode = 1;
     }
     if (mode == 0) {
-        if (s->unk_1ee == 1) {
+        if (s->preamble == 1) {
             r = WMSP_WL_ParamSetPreambleType(buffer, 0);
             if (r[2]) {
                 WmspError_06003ED4(0x20e, r[2], 1);
                 return;
             }
-            s->unk_1ee = 0;
+            s->preamble = 0;
         }
-    } else if (s->unk_1ee == 0) {
+    } else if (s->preamble == 0) {
         r = WMSP_WL_ParamSetPreambleType(buffer, 1);
         if (r[2]) {
             WmspError_06003ED4(0x20e, r[2], 1);
             return;
         }
-        s->unk_1ee = 1;
+        s->preamble = 1;
     }
     if (options.custom != 1) {
         goto mask_ready;

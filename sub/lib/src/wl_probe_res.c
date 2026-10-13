@@ -30,7 +30,7 @@ static inline u32 SetGameInfoElement(u8 *element) {
     i += 10;
     if (bss->gameInfoLength) {
         src = bss->gameInfo;
-        if (bss->unk_a2 & 1) {
+        if (bss->gameInfoOdd & 1) {
             src++;
         }
         for (j = 0; j < bss->gameInfoLength; j++) {

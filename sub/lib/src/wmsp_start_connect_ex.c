@@ -28,7 +28,7 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
     u16 lost;
     u8 rssi;
     status = work->status;
-    if (status->state != 2 || (status->unk_c8 & 1)) {
+    if (status->state != 2 || (status->miscFlags & 1)) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 12;
         cb[1] = 3;
@@ -61,28 +61,28 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
     cb[1] = 0;
     cb[4] = 6;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
-    if (status->unk_1ec == 1) {
+    if (status->rate == 1) {
         if (parent->bssDesc.rateSet.basic & 1) {
-            status->unk_1ec = 1;
+            status->rate = 1;
         } else {
-            status->unk_1ec = 2;
+            status->rate = 2;
         }
     } else {
         if (parent->bssDesc.rateSet.basic & 2) {
-            status->unk_1ec = 2;
+            status->rate = 2;
         } else {
-            status->unk_1ec = 1;
+            status->rate = 1;
         }
     }
     if (parent->bssDesc.capaInfo & 32) {
-        status->unk_1ee = 1;
+        status->preamble = 1;
     } else {
-        status->unk_1ee = 0;
+        status->preamble = 0;
     }
     if (parent->bssDesc.gameInfoLength == 0) {
-        status->unk_e6 = 3;
+        status->mode = 3;
     } else {
-        status->unk_e6 = 2;
+        status->mode = 2;
     }
     if (!WMSP_SetAllParams(12, (u8 *)output)) {
         return;
@@ -117,7 +117,7 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
     }
     status->pwrMgtMode = power;
     __VENEER_MI_CpuCopy8(&parent->bssDesc, &descriptor, 64);
-    if (status->unk_e6 == 2) {
+    if (status->mode == 2) {
         // SSID: ggid, tgid, 0, then the request's 24 bytes
         descriptor.data[5] = 32;
         descriptor.data[6] = parent->ggid;
@@ -164,7 +164,7 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
         return;
     }
     status->aid = result[4];
-    status->unk_ba = parent->tgid;
+    status->currTgid = parent->tgid;
     __VENEER_MIi_CpuClear16(1, status->portSeqNo, 16);
     rssi = parent->bssDesc.rssi & 255;
     if (!(rssi & 2)) {
@@ -176,7 +176,7 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
     WMSP_FillRssiIntoList(rssi);
     inner = __VENEER_OS_DisableInterrupts();
     status->childBitmap = 1;
-    status->unk_86 = 1;
+    status->readyBitmap = 1;
     if (status->recvTimeout != 0) {
         OSTick tick = __VENEER_OS_GetTick() | 1;
         ((u32 *)&status->lastRecvTick[0])[0] = (u32)tick;
@@ -186,7 +186,7 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
     WMSP_SetParentMaxSize(parent->parentMaxSize + ((parent->attribute & 4) ? 42 : 0));
     WMSP_SetChildMaxSize(parent->childMaxSize + ((parent->attribute & 4) ? 6 : 0));
     __VENEER_OS_RestoreInterrupts((OSIntrMode)inner);
-    status->unk_c2 = 1;
+    status->beaconIndicateFlag = 1;
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 12;
     cb[1] = 0;

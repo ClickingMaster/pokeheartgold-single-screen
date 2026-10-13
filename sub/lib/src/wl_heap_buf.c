@@ -183,7 +183,7 @@ void InitializeHeapBuf(WlHeapParam *param) {
     InitHeapBufMan(&w->heap.bufMan[10], 12);
     bss->gameInfo = (u8 *)AllocateHeapBuf(&w->heap.bufMan[0], 129) + sizeof(WlHeapBuf);
     bss->gameInfoLength = 0;
-    bss->unk_a4 = 0;
+    bss->gameInfoUpdated = 0;
 }
 
 // Frees the buffers of managers 1..8.

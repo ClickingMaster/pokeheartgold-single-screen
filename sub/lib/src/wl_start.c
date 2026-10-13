@@ -52,7 +52,7 @@ void WStart(void) {
     if (param->wepMode) {
         bss->capability |= 0x10;
     }
-    bss->unk_12 = 0;
+    bss->joined = 0;
     WL_REG(0x032) = 0x8000;
     WL_REG(0x134) = 0xFFFF;
     WL_REG(0x02A) = 0;

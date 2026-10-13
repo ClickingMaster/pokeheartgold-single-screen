@@ -2713,7 +2713,7 @@ void WifiSetupDialog_Open(int message, int kind, u8 fade, int digitPos, int digi
     WifiSetupDialogPlanes tbl = *(WifiSetupDialogPlanes *)(ov13_02245878 + 4);
     u32 numObjs;
     int i;
-    text = WifiSetupText_GetStringWithDigit(ov13_0224F4F8, message, digitPos, digit);
+    text = WifiSetupText_GetStringWithDigit(gWifiSetupTextBank, message, digitPos, digit);
     gWifiSetupDialog = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupDialog), 4);
     gWifiSetupDialog->kind = kind;
     gWifiSetupDialog->selected = -2;

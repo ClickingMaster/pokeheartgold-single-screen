@@ -24,7 +24,7 @@ void WMSP_StartParent(u32 *request) {
     u16 pm;
     u32 e;
     u16 len;
-    if (st->state != 2 || (st->unk_c8 & 1)) {
+    if (st->state != 2 || (st->miscFlags & 1)) {
         res = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         res[0] = 8;
         res[1] = 3;
@@ -41,13 +41,13 @@ void WMSP_StartParent(u32 *request) {
         __VENEER_WMSP_ReturnResult2Wm9(res);
         return;
     }
-    st->unk_e6 = 1;
+    st->mode = 1;
     st->aid = 0;
     e = __VENEER_OS_DisableInterrupts();
     st->childBitmap = 0;
-    st->unk_86 = 0;
+    st->readyBitmap = 0;
     __VENEER_OS_RestoreInterrupts((OSIntrMode)e);
-    st->unk_1ee = 1;
+    st->preamble = 1;
     if (!WMSP_SetAllParams(8, (u8 *)buf)) {
         return;
     }
@@ -77,8 +77,8 @@ void WMSP_StartParent(u32 *request) {
         WmspError_060033F4(9, r[2]);
         return;
     }
-    WMSP_SetParentMaxSize((u16)(pp->parentMaxSize + (pp->entryFlag ? 0x2a : 0)));
-    WMSP_SetChildMaxSize((u16)(pp->childMaxSize + (pp->entryFlag ? 6 : 0)));
+    WMSP_SetParentMaxSize((u16)(pp->parentMaxSize + (pp->KS_Flag ? 0x2a : 0)));
+    WMSP_SetChildMaxSize((u16)(pp->childMaxSize + (pp->KS_Flag ? 6 : 0)));
     res = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     st->state = 7;
     res[0] = 8;
@@ -87,7 +87,7 @@ void WMSP_StartParent(u32 *request) {
     res[0x16] = st->parentSize;
     res[0x17] = st->childSize;
     __VENEER_WMSP_ReturnResult2Wm9(res);
-    st->unk_c2 = 1;
+    st->beaconIndicateFlag = 1;
 }
 
 #pragma pop

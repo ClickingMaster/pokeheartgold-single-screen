@@ -41,7 +41,7 @@ extern const u32 ov13_02244AB0[];
     }
 
 // Worker thread: runs the setup session, then reports the final state.
-void ov13_02225320(void *arg) {
+void WifiSetup_SimpleStartThread(void *arg) {
     int result = WifiSetup_RunSession();
 
     ov13_0224DF30.error = result;
@@ -52,7 +52,7 @@ void ov13_02225320(void *arg) {
         ov13_0224DF30.state = 7;
     }
     ov13_02245A58.deadline = -1;
-    ov13_02226F3C();
+    WifiSetup_ReportSimpleStartStatus();
 }
 
 #pragma force_active on
@@ -60,7 +60,7 @@ void ov13_02225320(void *arg) {
 
 #pragma opt_strength_reduction off
 
-int ov13_02225358(u8 *out, const u8 *in, u32 length, const void *key, u32 keylen) {
+int WifiSetup_AesKeyWrap(u8 *out, const u8 *in, u32 length, const void *key, u32 keylen) {
     u32 ctx[80];
     u8 block[16];
     u64 swapped;
@@ -92,7 +92,7 @@ int ov13_02225358(u8 *out, const u8 *in, u32 length, const void *key, u32 keylen
             WifiSetup_AesEncryptBlock(ctx, mode, block, block);
             t = (s64)n * j + i;
             swapped = ((t & 0x00000000000000ffULL) << 56) | ((t & 0x000000000000ff00ULL) << 40) | ((t & 0x0000000000ff0000ULL) << 24) | ((t & 0x00000000ff000000ULL) << 8) | ((t & 0x000000ff00000000ULL) >> 8) | ((t & 0x0000ff0000000000ULL) >> 24) | ((t & 0x00ff000000000000ULL) >> 40) | ((t & 0xff00000000000000ULL) >> 56);
-            ov13_022256C8(block, (const u8 *)&swapped, block);
+            WifiSetup_XorBlock8(block, (const u8 *)&swapped, block);
             *(WifiSetupBlock8 *)r = *(WifiSetupBlock8 *)(block + 8);
         }
     }
@@ -104,7 +104,7 @@ int ov13_02225358(u8 *out, const u8 *in, u32 length, const void *key, u32 keylen
 
 #pragma opt_strength_reduction off
 
-int ov13_02225510(u8 *out, const u8 *in, u32 length, const void *key, u32 keylen) {
+int WifiSetup_AesKeyUnwrap(u8 *out, const u8 *in, u32 length, const void *key, u32 keylen) {
     int n, j, i, mode;
     int result = 1;
     u32 ctx[80];
@@ -135,7 +135,7 @@ int ov13_02225510(u8 *out, const u8 *in, u32 length, const void *key, u32 keylen
             u8 *r;
             t = (s64)n * j + i;
             swapped = ((t & 0x00000000000000ffULL) << 56) | ((t & 0x000000000000ff00ULL) << 40) | ((t & 0x0000000000ff0000ULL) << 24) | ((t & 0x00000000ff000000ULL) << 8) | ((t & 0x000000ff00000000ULL) >> 8) | ((t & 0x0000ff0000000000ULL) >> 24) | ((t & 0x00ff000000000000ULL) >> 40) | ((t & 0xff00000000000000ULL) >> 56);
-            ov13_022256C8(block, (const u8 *)&swapped, block);
+            WifiSetup_XorBlock8(block, (const u8 *)&swapped, block);
             r = (u8 *)&((u64 *)out)[i - 1];
             *(WifiSetupBlock8 *)(block + 8) = *(WifiSetupBlock8 *)r;
             WifiSetup_AesDecryptBlock(ctx, mode, block, block);
@@ -151,7 +151,7 @@ int ov13_02225510(u8 *out, const u8 *in, u32 length, const void *key, u32 keylen
 #pragma opt_strength_reduction reset
 #pragma force_active reset
 
-void ov13_022256C8(const u8 *a, const u8 *b, u8 *out) {
+void WifiSetup_XorBlock8(const u8 *a, const u8 *b, u8 *out) {
     out[0] = a[0] ^ b[0];
     out[1] = a[1] ^ b[1];
     out[2] = a[2] ^ b[2];

@@ -25,7 +25,7 @@ void WlIntrRxEndTask(void) {
         u32 status;
         WlRxFrame *frame;
         index = WL_REG(0x05A);
-        if (index == rx->unk_04) {
+        if (index == rx->readIndex) {
             return;
         }
         if (index >= 0x8C6) {
@@ -48,7 +48,7 @@ void WlIntrRxEndTask(void) {
             continue;
         }
         if ((wlWorkPlain->hwWorkarounds & 8) && (frame->frameCtrl & 0x4000)) {
-            rx->unk_02 = 0;
+            rx->cntupBusyCount = 0;
         }
         release = 1;
         status = frame->status;
@@ -112,7 +112,7 @@ void WlIntrRxEndTask(void) {
             u32 i;
             for (i = 0; i < 7; i++) {
                 if ((u32)raw >= 0x04805F60) {
-                    raw = (u16 *)((u8 *)raw - wlWorkPlain->bss.unk_9a);
+                    raw = (u16 *)((u8 *)raw - wlWorkPlain->bss.rxBufSize);
                 }
                 *raw = 0xFFFF;
                 raw++;

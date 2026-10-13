@@ -15,12 +15,12 @@ void WlIntrMpEnd(int timeout) {
             if ((state == 3 || state == 5) && ack == 0) {
                 u32 count = 0;
                 WlTxFrame *frame = (WlTxFrame *)txCtrl->txq[3].frame;
-                u16 stations = frame->unk_02;
+                u16 stations = frame->clientBits;
                 while (stations) {
                     count += stations & 1;
                     stations = (u16)(stations >> 1);
                 }
-                SetupUsTimeOut((u16)(count * (frame->unk_24 + 10) + 0xC0 + (frame->length << 2)), (OSAlarmHandler)MacBugTxMp);
+                SetupUsTimeOut((u16)(count * (frame->body0 + 10) + 0xC0 + (frame->length << 2)), (OSAlarmHandler)MacBugTxMp);
                 wlWorkPlain->bss.mpTimeOutCount++;
                 return;
             }

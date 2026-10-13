@@ -73,7 +73,7 @@ void WMSP_SendMaKeyData(void) {
     mask = 1;
     skip = 1;
     if (error) {
-        if (s->unk_7c6) {
+        if (s->currentMinPollBmpMode) {
             skip = 0;
             mask = 1;
         }
@@ -167,7 +167,7 @@ void WMSP_SendMaKeyData(void) {
             sent->tail = index;
             e->inFlightBitmap = dest;
             index = prev;
-            if (s->unk_7c8 == 1) {
+            if (s->currentSinglePacketMode == 1) {
                 goto unlock;
             }
 next:
@@ -188,7 +188,7 @@ finish:
         status->unk_8a = 0;
         return;
     }
-    if (status->unk_1c == 1) {
+    if (status->vsyncFlag == 1) {
         header |= 0x8000;
     }
     {
@@ -349,7 +349,7 @@ void WMSP_SendMaMP(u16 bitmap) {
     {
         OSIntrMode irq = __VENEER_OS_DisableInterrupts();
         connected = status->childBitmap;
-        children = status->unk_86;
+        children = status->readyBitmap;
         __VENEER_OS_RestoreInterrupts(irq);
     }
     header = 0;
@@ -390,7 +390,7 @@ void WMSP_SendMaMP(u16 bitmap) {
         mask = children;
         skip = 1;
         if (parent) {
-            if (s->unk_7c6) {
+            if (s->currentMinPollBmpMode) {
                 skip = 0;
                 mask = connected;
             }
@@ -486,7 +486,7 @@ void WMSP_SendMaMP(u16 bitmap) {
                 e->inFlightBitmap = dest;
                 destBitmap |= e->destBitmap;
                 index = prev;
-                if (s->unk_7c8 == 1) {
+                if (s->currentSinglePacketMode == 1) {
                     goto unlock;
                 }
 next:
@@ -505,22 +505,22 @@ unlock:
         error = 0;
 finish:
         if (error == 1) {
-            status->unk_62 = 0;
-            status->unk_64 = 0;
+            status->mpCount = 0;
+            status->mpLimitCount = 0;
             return;
         }
         time = recvSize + 2;
-        if (status->unk_7c6 != 1) {
+        if (status->currentMinPollBmpMode != 1) {
             destBitmap = bitmap;
         }
         destBitmap &= connected;
         if ((s32)status->mpBufSize < (s32)(((recvSize + 12) * __VENEER_MATH_CountPopulation(destBitmap) + 0x29) & ~31U)) {
             WmspFlushSendQueue(destBitmap);
-            status->unk_62 = 0;
-            status->unk_64 = 0;
+            status->mpCount = 0;
+            status->mpLimitCount = 0;
             return;
         }
-        if (status->unk_62 != 1 && status->unk_64 != 1) {
+        if (status->mpCount != 1 && status->mpLimitCount != 1) {
             tmptt = 0;
         } else {
             tmptt = WmspGetTmptt(size, time, destBitmap, (u16)status->parentVAlarmLine);
@@ -535,14 +535,14 @@ finish:
         time = 0x80d6;
         {
             OSIntrMode irq = __VENEER_OS_DisableInterrupts();
-            status->unk_62++;
-            status->unk_64++;
+            status->mpCount++;
+            status->mpLimitCount++;
             __VENEER_OS_RestoreInterrupts(irq);
         }
     }
     WMSP_WL_MaMp(buf, 0, 0, (u16)time, (u16)destBitmap, tmptt, REG_WL_TSF0, (u16)size, header, (u32)status->sendBuf);
-    status->unk_68 = destBitmap;
-    status->unk_6a = header;
-    status->unk_6c = time;
-    status->unk_6e = size;
+    status->prevPollBitmap = destBitmap;
+    status->prevWmHeader = header;
+    status->prevTxop = time;
+    status->prevDataLength = size;
 }

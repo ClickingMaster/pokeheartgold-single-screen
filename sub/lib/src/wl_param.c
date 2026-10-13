@@ -43,7 +43,7 @@ u32 WSetMacAdrs(const u16 *addr) {
     WSetMacAdrs1((u16 *)&WL_REG(0x018), addr);
     {
         WlWork *w = wlWork;
-        w->param.unk_340 |= 2;
+        w->param.setMask |= 2;
     }
     return PARAM_OK;
 }
@@ -65,7 +65,7 @@ u32 WSetEnableChannel(u32 channels) {
     wlWork->param.enableChannel = channels;
     {
         WlWork *w = wlWork;
-        w->param.unk_340 |= 4;
+        w->param.setMask |= 4;
     }
     return PARAM_OK;
 }
@@ -80,7 +80,7 @@ u32 WSetMode(u16 mode) {
     WSetPowerMgtMode(wlWork->bss.powerMgtMode);
     {
         WlWork *w = wlWork;
-        w->param.unk_340 |= 8;
+        w->param.setMask |= 8;
     }
     return PARAM_OK;
 }
@@ -104,10 +104,10 @@ u32 WSetWepMode(u32 mode) {
     w->param.wepMode = mode;
     if (mode == 0) {
         bss->capability &= ~0x10;
-        bss->unk_8a &= ~0x4000;
+        bss->dataFrameCtrl &= ~0x4000;
     } else {
         bss->capability |= 0x10;
-        bss->unk_8a |= 0x4000;
+        bss->dataFrameCtrl |= 0x4000;
     }
     if (bss->state == 0x40 && mode == 1) {
         *(u16 *)(wlWork->txCtrl.beacon.frame + 0x2E) = bss->capability;

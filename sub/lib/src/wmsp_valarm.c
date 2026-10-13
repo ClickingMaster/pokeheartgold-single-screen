@@ -26,13 +26,13 @@ void WMSP_CancelVAlarm(void) {
 void WMSP_SetVAlarm(void) {
     OSVAlarm *alarm = &wmspVAlarm;
     WmspStatus *status = wmspW.status;
-    if (status->unk_e6 == 1) {
+    if (status->mode == 1) {
         if (alarm->handler) {
             __VENEER_OS_CancelVAlarm(alarm);
         }
         __VENEER_OS_SetVAlarm(&wmspVAlarm, 203, 263, WmspParentAdjustVSync, (void *)3);
-    } else if (status->unk_e6 == 2) {
-        status->unk_1c = 0;
+    } else if (status->mode == 2) {
+        status->vsyncFlag = 0;
         if (alarm->handler) {
             __VENEER_OS_CancelVAlarm(alarm);
         }
@@ -102,7 +102,7 @@ void WmspChildAdjustVSync1(void *arg) {
     if (status->vsyncAdjust > 127) {
         __VENEER_OS_SetVAlarm(&wmspVAlarm, 208, 263, WmspChildAdjustVSync2, (void *)2);
     } else {
-        status->unk_1c = 1;
+        status->vsyncFlag = 1;
         __VENEER_OS_SetVAlarm(&wmspVAlarm, status->childVAlarmLine, 263, WmspChildVAlarmMP, (void *)4);
     }
 }
@@ -124,7 +124,7 @@ void WmspChildAdjustVSync2(void *arg) {
         status->vsyncAdjust -= i * 63;
     }
     if (status->vsyncAdjust >= 127) {
-        status->unk_1c = 0;
+        status->vsyncFlag = 0;
     }
     __VENEER_OS_SetVAlarm(&wmspVAlarm, status->childVAlarmLine, 263, WmspChildVAlarmMP, (void *)4);
 }
@@ -252,23 +252,23 @@ void WMSP_VAlarmSetMPData(void *request) {
         OSIntrMode irq = __VENEER_OS_DisableInterrupts();
         int skip, send;
         if (status->childBitmap == 0) {
-            status->unk_62 = 0;
+            status->mpCount = 0;
             __VENEER_OS_RestoreInterrupts(irq);
             return;
         }
         skip = 1;
-        if (status->unk_62 > 0 && status->unk_64 > 0) {
+        if (status->mpCount > 0 && status->mpLimitCount > 0) {
             skip = 0;
         }
-        if (status->unk_62 < 0) {
-            status->unk_62 = 0;
+        if (status->mpCount < 0) {
+            status->mpCount = 0;
         }
-        status->unk_62 += status->unk_7c2;
-        if (status->unk_62 > 256) {
-            status->unk_62 = 256;
+        status->mpCount += status->currentFreq;
+        if (status->mpCount > 256) {
+            status->mpCount = 256;
         }
-        status->unk_64 = status->unk_7c4;
-        if (skip && status->unk_62 > 0 && status->unk_64 > 0) {
+        status->mpLimitCount = status->currentMaxFreq;
+        if (skip && status->mpCount > 0 && status->mpLimitCount > 0) {
             send = 1;
         } else {
             send = 0;
@@ -277,7 +277,7 @@ void WMSP_VAlarmSetMPData(void *request) {
         if (send) {
             WMSP_SendMaMP(0xffff);
         }
-        if (status->unk_7c6 == 1) {
+        if (status->currentMinPollBmpMode == 1) {
             status->unk_a0--;
             if (!status->unk_a0) {
                 status->unk_9e = 1;

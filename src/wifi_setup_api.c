@@ -39,7 +39,7 @@ void WifiSetup_FillBytes(void *dst, int value, u32 count) {
     }
 }
 
-void ov13_02226C94(u8 *digest, const u8 *src, u32 len) {
+void WifiSetup_CalcMd5(u8 *digest, const u8 *src, u32 len) {
     WifiSetupMd5Context context;
     WifiSetup_Md5Init(&context);
     WifiSetup_Md5Update(&context, src, len);
@@ -47,11 +47,11 @@ void ov13_02226C94(u8 *digest, const u8 *src, u32 len) {
 }
 
 // Milliseconds since start-up.
-u32 ov13_02226CBC(void) {
+u32 WifiSetup_GetMilliseconds(void) {
     return (u32)((OS_GetTick() << 6) / 0x82ea);
 }
 
-void *ov13_02226CD8(u32 count, u32 size) {
+void *WifiSetup_WorkCalloc(u32 count, u32 size) {
     u32 total = count * size;
     void *ptr = ov13_0224DF30.alloc(total);
     if (ptr != NULL) {
@@ -60,14 +60,14 @@ void *ov13_02226CD8(u32 count, u32 size) {
     return ptr;
 }
 
-void ov13_02226CFC(void *ptr) {
+void WifiSetup_WorkFree(void *ptr) {
     ov13_0224DF30.free(ptr);
 }
 
 #pragma force_active on
 
 // Two uppercase hex digits of a byte.
-int ov13_02226D0C(char *dst, int value) {
+int WifiSetup_FormatHexByte(char *dst, int value) {
     char *cursor = dst;
     int count;
     u8 byte = value;
@@ -92,11 +92,11 @@ int ov13_02226D0C(char *dst, int value) {
 #pragma force_active reset
 
 // "XX:XX:XX:XX:XX:XX"
-int ov13_02226D40(char *dst, const s8 *mac) {
+int WifiSetup_FormatMacAddress(char *dst, const s8 *mac) {
     char *p = dst;
     int i;
     for (i = 0; i < 6; i++) {
-        p += ov13_02226D0C(p, *mac++);
+        p += WifiSetup_FormatHexByte(p, *mac++);
         if (i < 5) {
             *p++ = ':';
         }
@@ -110,7 +110,7 @@ int ov13_02226D40(char *dst, const s8 *mac) {
 
 #pragma force_active on
 
-int ov13_02226D74(u32 priority, u32 count, void (*statusCallback)(s32 *), WifiSetupWorkAllocFunc alloc, WifiSetupWorkFreeFunc free, u32 stackSize) {
+int WifiSetup_StartSimpleStart(u32 priority, u32 count, void (*statusCallback)(s32 *), WifiSetupWorkAllocFunc alloc, WifiSetupWorkFreeFunc free, u32 stackSize) {
     int result;
     int state;
 
@@ -139,12 +139,12 @@ int ov13_02226D74(u32 priority, u32 count, void (*statusCallback)(s32 *), WifiSe
         ov13_0224DF30.error = -9;
         return -9;
     }
-    OS_CreateThread(&ov13_0224DFDC, ov13_02225320, NULL, (u8 *)ov13_0224DF30.threadStack + (ov13_02245A58.threadStackSize & ~7), ov13_02245A58.threadStackSize, priority);
+    OS_CreateThread(&ov13_0224DFDC, WifiSetup_SimpleStartThread, NULL, (u8 *)ov13_0224DF30.threadStack + (ov13_02245A58.threadStackSize & ~7), ov13_02245A58.threadStackSize, priority);
     WORK_STATE = 1;
-    ov13_02245A58.deadline = ov13_02226CBC() + 60000;
+    ov13_02245A58.deadline = WifiSetup_GetMilliseconds() + 60000;
     ov13_0224DF30.stop = 0;
     memset(&ov13_0224E09C, 0, sizeof(ov13_0224E09C));
-    ov13_02226F3C();
+    WifiSetup_ReportSimpleStartStatus();
     OS_WakeupThreadDirect(&ov13_0224DFDC);
     ov13_0224DF30.active = 1;
     return 1;
@@ -154,7 +154,7 @@ int ov13_02226D74(u32 priority, u32 count, void (*statusCallback)(s32 *), WifiSe
 
 #undef WORK_STATE
 
-int ov13_02226E5C(void) {
+int WifiSetup_StopSimpleStart(void) {
     s32 old;
     if (ov13_0224DF30.active != 0) {
         old = ov13_0224DF30.state;
@@ -173,7 +173,7 @@ int ov13_02226E5C(void) {
         }
         ov13_0224DF30.active = 0;
         if (old != ov13_0224DF30.state) {
-            ov13_02226F3C();
+            WifiSetup_ReportSimpleStartStatus();
         }
     }
     if (ov13_0224DF30.resultReady > 0) {
@@ -184,24 +184,24 @@ int ov13_02226E5C(void) {
     return -10;
 }
 
-int ov13_02226EF0(s32 *status) {
+int WifiSetup_GetSimpleStartStatus(s32 *status) {
     status[0] = ov13_0224DF30.state;
     if (ov13_02245A58.deadline == -1) {
         status[1] = -1;
     } else {
-        status[1] = ov13_02245A58.deadline - ov13_02226CBC();
+        status[1] = ov13_02245A58.deadline - WifiSetup_GetMilliseconds();
     }
     status[2] = ov13_0224DF30.error;
     return 1;
 }
 
-int ov13_02226F28(void *dst) {
+int WifiSetup_GetSimpleStartResult(void *dst) {
     memcpy(dst, (u8 *)&ov13_0224E09C, sizeof(ov13_0224E09C));
     return 1;
 }
 
-void ov13_02226F3C(void) {
+void WifiSetup_ReportSimpleStartStatus(void) {
     s32 status[3];
-    ov13_02226EF0(status);
+    WifiSetup_GetSimpleStartStatus(status);
     ov13_0224DF30.statusCallback(status);
 }

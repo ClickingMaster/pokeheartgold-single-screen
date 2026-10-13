@@ -24,8 +24,8 @@ WlTxHeapFrame *MakeAuthFrame(const u16 *macAdrs, u16 length, u32 test) {
     p->header.command = 65535;
     InitManHeader(&p->frame, macAdrs);
     if (length) {
-        WL_WriteByte((u8 *)&p->frame.frame.unk_28 + 2, (u8)16);
-        WL_WriteByte((u8 *)&p->frame.frame.unk_28 + 3, (u8)length);
+        WL_WriteByte((u8 *)&p->frame.frame.body2 + 2, (u8)16);
+        WL_WriteByte((u8 *)&p->frame.frame.body2 + 3, (u8)length);
         length += 2;
     }
     p->frame.bodyLength = length + 6;
@@ -47,7 +47,7 @@ WlTxHeapFrame *MakeDeAuthFrame(const u16 *macAdrs, u16 reason, u32 test) {
     }
     p->header.command = 65535;
     InitManHeader(&p->frame, macAdrs);
-    p->frame.frame.unk_24 = reason;
+    p->frame.frame.body0 = reason;
     p->frame.bodyLength = 2;
     p->frame.frame.length = p->frame.bodyLength + 28;
     p->frame.frame.frameCtrl = 0xC0;
@@ -58,7 +58,7 @@ WlTxHeapFrame *MakeDeAuthFrame(const u16 *macAdrs, u16 reason, u32 test) {
 void MakePsPollFrame(u16 aid) {
     WlTxFrame *p = (WlTxFrame *)wlWorkPlain->txCtrl.txq[2].frame;
     p->status = 0;
-    p->unk_02 = 0;
+    p->clientBits = 0;
     p->retry = 0;
     p->length = 20;
     p->frameCtrl = 0xA4;

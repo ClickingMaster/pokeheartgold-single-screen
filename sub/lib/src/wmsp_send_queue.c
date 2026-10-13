@@ -28,17 +28,17 @@ void WMSP_ResumeMaMP(u32 bitmap) {
     mask &= status->childBitmap;
     recvSize = status->recvSize;
     current = REG_WL_TSF0;
-    time = status->unk_6a;
+    time = status->prevWmHeader;
     if ((s32)status->mpBufSize < (s32)(((recvSize + 12) * __VENEER_MATH_CountPopulation(mask) + 0x29) & ~31U)) {
         __VENEER_OS_Sleep(2);
         WMSP_RequestResumeMP();
         return;
     }
-    if (status->unk_62 != 1 && status->unk_64 != 1) {
+    if (status->mpCount != 1 && status->mpLimitCount != 1) {
         time &= ~0x8000;
         tmptt = 0;
     } else {
-        tmptt = WmspGetTmptt(status->unk_6e, status->unk_6c, mask, (u16)status->parentVAlarmLine);
+        tmptt = WmspGetTmptt(status->prevDataLength, status->prevTxop, mask, (u16)status->parentVAlarmLine);
         time |= 0x8000;
     }
     WMSP_WL_MaMp(buf, 0x800c, 0, 0, (u16)mask, tmptt, current, 0, time, 0);

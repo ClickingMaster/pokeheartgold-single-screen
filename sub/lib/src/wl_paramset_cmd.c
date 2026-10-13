@@ -65,7 +65,7 @@ u32 PARAMSET_ModeReqCmd(WlParamReq *req, WlCmdCfm *cfm) {
     if (state > 32) {
         return 1;
     }
-    if (state == 32 && w->bss.unk_12 != 0) {
+    if (state == 32 && w->bss.joined != 0) {
         return 1;
     }
     return WSetMode(req->param[0]);

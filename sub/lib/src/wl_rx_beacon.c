@@ -47,7 +47,7 @@ void RxBeaconFrame(WlRxFrame *frame) {
         info.match |= 1;
     }
     info.found = 0x38;
-    info.unk_04 = frame->status;
+    info.rxStatus = frame->status;
     info.capaInfo = WL_RX_BODY(frame, WlBeaconBody)->capaInfo;
     ElementChecker(&info);
     if (info.cf && (frame->duration & 0x8000)) {
@@ -94,7 +94,7 @@ void RxBeaconFrame(WlRxFrame *frame) {
             WSetDTIMPeriod(WL_ReadByte(info.tim + 3));
             bss->dtimCount = WL_ReadByte(info.tim + 2);
             WSetBeaconPeriod(WL_RX_BODY(frame, WlBeaconBody)->beaconPeriod);
-            bss->unk_12 = 1;
+            bss->joined = 1;
             bss->unk_1a = 1;
             if (bss->mode == 2) {
                 WL_REG(0x048) = 3;
@@ -119,10 +119,10 @@ void RxBeaconFrame(WlRxFrame *frame) {
                 // copied by halfwords: from one byte earlier when the game information is not aligned
                 if ((u32)info.gameInfo & 1) {
                     __VENEER_MIi_CpuCopy16(info.gameInfo + 9, bss->gameInfo, bss->gameInfoLength + 2);
-                    bss->unk_a2 = 1;
+                    bss->gameInfoOdd = 1;
                 } else {
                     __VENEER_MIi_CpuCopy16(info.gameInfo + 10, bss->gameInfo, bss->gameInfoLength + 1);
-                    bss->unk_a2 = 0;
+                    bss->gameInfoOdd = 0;
                 }
             }
         }

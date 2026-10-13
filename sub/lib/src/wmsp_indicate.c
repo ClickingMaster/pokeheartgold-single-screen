@@ -117,7 +117,7 @@ void WMSP_IndicateThread(void *arg) {
                     if ((st->childBitmap & (1 << (i + 1))) && mac[0] == st->childMacAddress[i][0] && mac[1] == st->childMacAddress[i][1] && mac[2] == st->childMacAddress[i][2] && mac[3] == st->childMacAddress[i][3] && mac[4] == st->childMacAddress[i][4] && mac[5] == st->childMacAddress[i][5]) {
                         aid85 = (u16)(i + 1);
                         st->childBitmap &= ~(1 << aid85);
-                        st->unk_86 &= ~(1 << aid85);
+                        st->readyBitmap &= ~(1 << aid85);
                         st->lastRecvTick[aid85] = 0;
                         __VENEER_MI_CpuFill8(st->childMacAddress[i], 0, 6);
                         __VENEER_OS_RestoreInterrupts(irq);
@@ -155,15 +155,15 @@ void WMSP_IndicateThread(void *arg) {
                     WMSP_SetThreadPriorityLow();
                 }
                 st->childBitmap = 0;
-                st->unk_86 = 0;
+                st->readyBitmap = 0;
                 st->unk_14 = 0;
                 st->dcfActive = 0;
-                st->unk_1c = 0;
+                st->vsyncFlag = 0;
                 st->wepEnabled = 0;
                 st->wepMode = 0;
                 __VENEER_MI_CpuFill8(st->wepKey, 0, 80);
                 WMSP_ResetSizeVars();
-                st->unk_c2 = 0;
+                st->beaconIndicateFlag = 0;
                 st->state = 3;
                 __VENEER_OS_RestoreInterrupts(irq);
                 cb_2 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
@@ -207,7 +207,7 @@ void WMSP_IndicateThread(void *arg) {
             }
             irq = __VENEER_OS_DisableInterrupts();
             st->childBitmap |= 1 << aid86;
-            st->unk_86 &= ~(1 << aid86);
+            st->readyBitmap &= ~(1 << aid86);
             st->lastRecvTick[aid86] = __VENEER_OS_GetTick() | 1;
             __VENEER_MI_CpuCopy8((u8 *)message + 16, st->childMacAddress[aid86 - 1], 6);
             __VENEER_OS_RestoreInterrupts(irq);
@@ -239,7 +239,7 @@ void WMSP_IndicateThread(void *arg) {
             __VENEER_WMSP_ReturnResult2Wm9(cb_5);
             break;
         case 0x8b:
-            if (st->unk_c2) {
+            if (st->beaconIndicateFlag) {
                 cb_6 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                 cb_6[0] = 12;
                 cb_6[1] = 0;
@@ -248,7 +248,7 @@ void WMSP_IndicateThread(void *arg) {
             }
             break;
         case 0x8c:
-            if (st->unk_c2) {
+            if (st->beaconIndicateFlag) {
                 cb_7 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                 cb_7[0] = 8;
                 cb_7[1] = 0;
@@ -264,7 +264,7 @@ void WMSP_IndicateThread(void *arg) {
             if (st->state != 8 && st->state != 10) {
                 break;
             }
-            if (st->unk_ba != H(message, 0x44)) {
+            if (st->currTgid != H(message, 0x44)) {
                 req = WMSP_GetInternalRequestBuf();
                 if (!req) {
                     ok = 0;
@@ -284,7 +284,7 @@ void WMSP_IndicateThread(void *arg) {
                 }
                 break;
             }
-            if (!wmspW.status->unk_c2) {
+            if (!wmspW.status->beaconIndicateFlag) {
                 break;
             }
             cb_8 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
@@ -351,7 +351,7 @@ void WMSP_IndicateThread(void *arg) {
                 __VENEER_OS_CancelAlarm(&wmspMPAckAlarm);
             }
             st->mpAckAlarmSet = 1;
-            st->unk_82 = H(mpRecvBuf, 10);
+            st->ackTime = H(mpRecvBuf, 10);
             more = H(message, 24);
             hasData = (more & 0x2000) ? 1 : 0;
             st->unk_90 = (u16)hasData;
@@ -463,7 +463,7 @@ void WMSP_IndicateThread(void *arg) {
                 if (rcv >= 2 && rcv != 0xffff) {
                     rcv = (u16)(rcv - 2);
                     H(child, 0) = rcv;
-                    st->unk_86 |= 1 << aid84;
+                    st->readyBitmap |= 1 << aid84;
                     st->lastRecvTick[aid84] = tick;
                     if (rcv) {
                         WMSP_ParsePortPacket(aid84, H(child, 8), child + 10, rcv, mpEndBuf);
@@ -507,12 +507,12 @@ void WMSP_IndicateThread(void *arg) {
             st->mpBufIndex ^= 1;
             irq = __VENEER_OS_DisableInterrupts();
             if (!resume) {
-                st->unk_62--;
+                st->mpCount--;
             }
-            if (st->unk_64 > 0) {
-                st->unk_64--;
+            if (st->mpLimitCount > 0) {
+                st->mpLimitCount--;
             }
-            canKick = st->unk_62 > 0 && st->unk_64 > 0;
+            canKick = st->mpCount > 0 && st->mpLimitCount > 0;
             __VENEER_OS_RestoreInterrupts(irq);
             if (canKick) {
                 if (resume == 1) {
@@ -543,7 +543,7 @@ void WMSP_IndicateThread(void *arg) {
                 if (old > current) {
                     upper = timer[1];
                 }
-                if ((s16)((u16)((upper << 12) | (current >> 4)) - st->unk_82) <= 0) {
+                if ((s16)((u16)((upper << 12) | (current >> 4)) - st->ackTime) <= 0) {
                     break;
                 }
             } else {
@@ -611,7 +611,7 @@ void WMSP_IndicateThread(void *arg) {
             break;
         }
         case 0x186:
-            if (st->unk_7cc == 1 && H(message, 16) == 32) {
+            if (st->currentIgnoreFatalErrorMode == 1 && H(message, 16) == 32) {
                 irq = __VENEER_OS_DisableInterrupts();
                 __VENEER_OS_CancelAlarm(&wmspMPAckAlarm);
                 st->mpAckAlarmSet = 0;

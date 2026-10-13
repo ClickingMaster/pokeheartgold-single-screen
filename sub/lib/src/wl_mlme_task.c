@@ -143,7 +143,7 @@ void MLME_AuthTask(void) {
             AddTask(2, 2);
         } else {
             // body: algorithm, transaction sequence number, status code
-            u16 *body = &frame->frame.unk_24;
+            u16 *body = &frame->frame.body0;
             body[0] = p->req.peer->param;
             body[1] = 1;
             body[2] = 0;

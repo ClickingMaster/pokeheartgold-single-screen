@@ -4,7 +4,7 @@
 #include <nitro/code32.h>
 
 // Management frames (MakeDisAssFrame .. MakeProbeReqFrame) are built in a driver heap buffer shaped like an MA data
-// request: command 0xFFFF (no confirm), the TX frame and its body (from WlTxFrame.unk_24).
+// request: command 0xFFFF (no confirm), the TX frame and its body (from WlTxFrame.body0).
 
 // -ipa file would otherwise inline the small functions of this file into their callers here.
 #pragma dont_inline on
@@ -35,7 +35,7 @@ void SetManCtrlFrame(WlTxHeapFrame *frame) {
 void TxPsPollFrame(void) {
     WlWork *w = wlWork;
     WlTxDesc *desc = &w->txCtrl.txq[2];
-    ++VOLATILE_U16(desc->unk_02);
+    ++VOLATILE_U16(desc->pendingCount);
     if (VOLATILE_U16(w->txCtrl.txq[2].active)) {
         VOLATILE_U16(((WlTxFrame *)desc->frame)->retry) = 0;
     } else {
@@ -78,15 +78,15 @@ void MakeBeaconFrame(void) {
     param = &w->param;
     bss = &w->bss;
     frame->status = 0;
-    frame->unk_02 = 0;
+    frame->clientBits = 0;
     frame->retry = 0;
-    frame->unk_06 = 0;
+    frame->reqRate = 0;
     frame->rate = WCalcManRate();
     frame->frameCtrl = 0x80;
     frame->duration = 0;
     WSetMacAdrs3(frame->addr1, (const u16 *)BC_ADRS, param->macAddress, param->macAddress);
     frame->seqCtrl = 0;
-    body = (u8 *)&frame->unk_24;
+    body = (u8 *)&frame->body0;
     ((u32 *)body)[0] = 0;
     ((u32 *)body)[1] = 0;
     ((u16 *)body)[4] = bss->beaconPeriod;
@@ -116,8 +116,8 @@ void MakeBeaconFrame(void) {
     WL_WriteByte(pos, 3);
     WL_WriteByte(pos + 1, 1);
     WL_WriteByte(pos + 2, bss->channel & 255);
-    bss->unk_94 = (u16)(pos + 3 - body);
-    WL_REG(0x084) = bss->unk_94 + 2;
+    bss->timOffset = (u16)(pos + 3 - body);
+    WL_REG(0x084) = bss->timOffset + 2;
     WL_WriteByte(pos + 3, 5);
     WL_WriteByte(pos + 4, 5);
     WL_WriteByte(pos + 5, 0);
@@ -126,7 +126,7 @@ void MakeBeaconFrame(void) {
     WL_WriteByte(pos + 8, 0);
     WL_WriteByte(pos + 9, 0);
     bss->gameInfoOffset = (u16)(pos + 10 - body);
-    bss->unk_a2 = bss->gameInfoOffset & 1;
+    bss->gameInfoOdd = bss->gameInfoOffset & 1;
     WL_WriteByte(pos + 10, 0xDD);
     WL_WriteByte(pos + 11, (bss->gameInfoLength + 8) & 255);
     WL_WriteByte(pos + 12, 0);
@@ -164,7 +164,7 @@ void MakeBeaconFrame(void) {
         pos++;
         source++;
     }
-    if (bss->unk_a2) {
+    if (bss->gameInfoOdd) {
         u32 length = bss->gameInfoLength;
         source = (u8 *)((u32)bss->gameInfo + length - 1U);
         i = 0;
@@ -181,7 +181,7 @@ void MakeBeaconFrame(void) {
         ((u16 *)aligned)[0] = 0xB6B8;
         ((u16 *)aligned)[1] = 0x1D46;
     }
-    bss->unk_a4 = 0;
+    bss->gameInfoUpdated = 0;
     frame->length = (u16)(pos + 0x1C - body);
 }
 
@@ -193,7 +193,7 @@ void UpdateGameInfoElement(void) {
     u32 length = bss->gameInfoLength;
     u8 *out = beacon + 0x24 + bss->gameInfoOffset;
     if (length) {
-        u16 odd = bss->unk_a2;
+        u16 odd = bss->gameInfoOdd;
         u8 *source = *(u8 *volatile *)&bss->gameInfo, *destination = out + 10;
         if (odd & 1) {
             DMA_Write(destination - 1, source, length + 2);
@@ -209,7 +209,7 @@ void UpdateGameInfoElement(void) {
         ((u16 *)end)[0] = 0xB6B8;
         ((u16 *)end)[1] = 0x1D46;
     }
-    bss->unk_a4 = 0;
+    bss->gameInfoUpdated = 0;
 }
 
 // Room for another management frame: fewer than 24 queued, counting one per AID handed out.
@@ -227,7 +227,7 @@ WlTxHeapFrame *MakeDisAssFrame(const u16 *macAdrs, u32 reason) {
     }
     buf->header.command = 0xFFFF;
     InitManHeader(&buf->frame, macAdrs);
-    buf->frame.frame.unk_24 = (u16)reason;
+    buf->frame.frame.body0 = (u16)reason;
     buf->frame.bodyLength = 2;
     buf->frame.frame.length = (u16)(buf->frame.bodyLength + 28);
     buf->frame.frame.frameCtrl = 0xA0;
@@ -246,10 +246,10 @@ WlTxHeapFrame *MakeAssReqFrame(const u16 *macAdrs) {
     }
     VOLATILE_U16(buf->header.command) = 0xFFFF;
     InitManHeader(&buf->frame, macAdrs);
-    VOLATILE_U16(buf->frame.frame.unk_24) = VOLATILE_U16(bss->capability);
-    VOLATILE_U16(buf->frame.frame.unk_26) = VOLATILE_U16(bss->listenInterval);
-    length = SetSSIDElement((u8 *)&buf->frame.frame.unk_28);
-    length += SetSupRateSet((u8 *)&buf->frame.frame.unk_28 + length);
+    VOLATILE_U16(buf->frame.frame.body0) = VOLATILE_U16(bss->capability);
+    VOLATILE_U16(buf->frame.frame.body1) = VOLATILE_U16(bss->listenInterval);
+    length = SetSSIDElement((u8 *)&buf->frame.frame.body2);
+    length += SetSupRateSet((u8 *)&buf->frame.frame.body2 + length);
     VOLATILE_U16(buf->frame.bodyLength) = (u16)(length + 4);
     VOLATILE_U16(buf->frame.frame.length) = (u16)(VOLATILE_U16(buf->frame.bodyLength) + 28);
     VOLATILE_U16(buf->frame.frame.frameCtrl) = 0;
@@ -268,11 +268,11 @@ WlTxHeapFrame *MakeReAssReqFrame(const u16 *macAdrs) {
     }
     VOLATILE_U16(buf->header.command) = 0xFFFF;
     InitManHeader(&buf->frame, macAdrs);
-    VOLATILE_U16(buf->frame.frame.unk_24) = VOLATILE_U16(bss->capability);
-    VOLATILE_U16(buf->frame.frame.unk_26) = VOLATILE_U16(bss->listenInterval);
-    WSetMacAdrs1(&buf->frame.frame.unk_28, bss->parentMacAdrs);
-    length = SetSSIDElement((u8 *)&buf->frame.frame.unk_28 + 6);
-    length += SetSupRateSet((u8 *)&buf->frame.frame.unk_28 + 6 + length);
+    VOLATILE_U16(buf->frame.frame.body0) = VOLATILE_U16(bss->capability);
+    VOLATILE_U16(buf->frame.frame.body1) = VOLATILE_U16(bss->listenInterval);
+    WSetMacAdrs1(&buf->frame.frame.body2, bss->parentMacAdrs);
+    length = SetSSIDElement((u8 *)&buf->frame.frame.body2 + 6);
+    length += SetSupRateSet((u8 *)&buf->frame.frame.body2 + 6 + length);
     VOLATILE_U16(buf->frame.bodyLength) = (u16)(length + 10);
     VOLATILE_U16(buf->frame.frame.length) = (u16)(VOLATILE_U16(buf->frame.bodyLength) + 28);
     VOLATILE_U16(buf->frame.frame.frameCtrl) = 0x20;
@@ -300,11 +300,11 @@ WlTxHeapFrame *MakeAssResFrame(u32 station, u32 status, const u8 *element) {
         aid = 0;
     }
     InitManHeader(&frame->frame, CAM_GetMacAdrs(station));
-    frame->frame.frame.unk_24 = wlWorkPlain->bss.capability;
-    frame->frame.frame.unk_26 = status;
-    frame->frame.frame.unk_28 = aid;
+    frame->frame.frame.body0 = wlWorkPlain->bss.capability;
+    frame->frame.frame.body1 = status;
+    frame->frame.frame.body2 = aid;
     if (aid) {
-        frame->frame.frame.unk_28 |= 0xC000;
+        frame->frame.frame.body2 |= 0xC000;
     }
     frame->frame.bodyLength = SetSupRateSet(p + 0x42) + 6;
     frame->frame.frame.length = frame->frame.bodyLength + 28;
@@ -354,9 +354,9 @@ WlTxHeapFrame *MakeReAssResFrame(u32 station, u32 status, const u8 *extra) {
         aid = 0;
     }
     InitManHeader(&frame->frame, CAM_GetMacAdrs(station));
-    frame->frame.frame.unk_24 = wlWorkPlain->bss.capability;
-    frame->frame.frame.unk_26 = status;
-    frame->frame.frame.unk_28 = aid | 0xC000;
+    frame->frame.frame.body0 = wlWorkPlain->bss.capability;
+    frame->frame.frame.body1 = status;
+    frame->frame.frame.body2 = aid | 0xC000;
     frame->frame.bodyLength = SetSupRateSet(p + 0x42) + 6;
     frame->frame.frame.length = frame->frame.bodyLength + 28;
     frame->frame.frame.frameCtrl = 0x30;
@@ -393,8 +393,8 @@ WlTxHeapFrame *MakeProbeReqFrame(const u16 *bssid) {
     }
     p->header.command = 65535;
     InitManHeader(&p->frame, bssid);
-    length = SetSSIDElement((u8 *)&p->frame.frame.unk_24);
-    length += SetSupRateSet((u8 *)&p->frame.frame.unk_24 + length);
+    length = SetSSIDElement((u8 *)&p->frame.frame.body0);
+    length += SetSupRateSet((u8 *)&p->frame.frame.body0 + length);
     p->frame.bodyLength = length;
     p->frame.frame.length = length + 28;
     p->frame.frame.frameCtrl = 0x40;

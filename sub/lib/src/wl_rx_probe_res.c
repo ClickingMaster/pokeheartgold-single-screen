@@ -48,7 +48,7 @@ void RxProbeResFrame(WlRxFrame *frame, WlElements *info) {
         elements.length = length - 12;
         elements.match = 3;
         elements.found = 0x38;
-        elements.unk_04 = frame->status;
+        elements.rxStatus = frame->status;
         elements.capaInfo = WL_RX_BODY(frame, WlBeaconBody)->capaInfo;
         ElementChecker(&elements);
         info = &elements;

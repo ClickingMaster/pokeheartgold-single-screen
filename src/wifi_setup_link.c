@@ -583,7 +583,7 @@ int WifiSetupLink_ConnectSelectedAp(void) {
     OS_CreateAlarm(&alarm);
     OS_SetAlarm(&alarm, 0x3FEC42, (OSAlarmHandler)WifiSetupLink_PostEvent, (void *)18);
     do {
-        if (ov13_02226CBC() >= ov13_02245A58.deadline) {
+        if (WifiSetup_GetMilliseconds() >= ov13_02245A58.deadline) {
             result = -3;
             break;
         }

@@ -53,9 +53,9 @@ void InitRxCtrl(void) {
     WL_REG(0x056) = (u16)(start >> 1);
     WL_REG(0x052) = 0x5F60;
     WL_REG(0x05A) = (u16)(start >> 1);
-    rx->unk_04 = (u16)(start >> 1);
+    rx->readIndex = (u16)(start >> 1);
     rx->lastMpSeqCtrl = 0xFFFF;
-    bss->unk_9a = (u16)(0x1F60 - start);
+    bss->rxBufSize = (u16)(0x1F60 - start);
     WL_REG(0x062) = 0x5F5E;
     WL_REG(0x030) = 0x8001;
     WL_REG(0x24C) = 0xFFFF;

@@ -22,16 +22,16 @@ void CopyTxFrmToMacBuf(void *dest, void *source) {
             WUpdateCounter();
         }
         if (src->header.command == 0xFFFF) {
-            DMA_WepWriteHeaderData(d, &src->frame.frame, &src->frame.frame.unk_24, src->frame.bodyLength);
+            DMA_WepWriteHeaderData(d, &src->frame.frame, &src->frame.frame.body0, src->frame.bodyLength);
         } else {
-            DMA_WepWriteHeaderData(d, &src->frame.frame, *(u8 **)&src->frame.frame.unk_24, src->frame.bodyLength);
+            DMA_WepWriteHeaderData(d, &src->frame.frame, *(u8 **)&src->frame.frame.body0, src->frame.bodyLength);
         }
         x = WL_REG(0x044);
         y = WL_REG(0x044);
-        ((WlTxFrame *)d)->unk_24 = (u16)(x + (y << 8));
+        ((WlTxFrame *)d)->body0 = (u16)(x + (y << 8));
         w = *root;
         x = WL_REG(0x044) & 255;
-        ((WlTxFrame *)d)->unk_26 = (w->param.wepKeyId << 14) | x;
+        ((WlTxFrame *)d)->body1 = (w->param.wepKeyId << 14) | x;
         if (wlWorkPlain->hwWorkarounds & 8) {
             tail = (u8 *)(((u32)(d + 12 + src->frame.frame.length) - 7) & ~1u);
             ((u16 *)tail)[0] = 0;
@@ -41,7 +41,7 @@ void CopyTxFrmToMacBuf(void *dest, void *source) {
         if (src->header.command == 0xFFFF) {
             DMA_Write(d, &src->frame.frame, src->frame.bodyLength + 0x24);
         } else {
-            DMA_WriteHeaderData(d, &src->frame.frame, *(u8 **)&src->frame.frame.unk_24, src->frame.bodyLength);
+            DMA_WriteHeaderData(d, &src->frame.frame, *(u8 **)&src->frame.frame.body0, src->frame.bodyLength);
         }
     }
     if (wlWorkPlain->hwWorkarounds & 4) {
@@ -51,11 +51,11 @@ void CopyTxFrmToMacBuf(void *dest, void *source) {
     }
 }
 
-// The frame life time (WlBss.unk_8c, 1/8 for data frames and the parent's responses) has run out.
+// The frame life time (WlBss.txLifeTime, 1/8 for data frames and the parent's responses) has run out.
 int CheckFrameTimeout(WlTxHeapFrame *frame) {
     WlBss *bss = &wlWork->bss;
     WlFrameCtrlBits *frameCtrl = (WlFrameCtrlBits *)&frame->frame.frameCtrl;
-    u16 timeout = (u16)(bss->unk_8c << 3);
+    u16 timeout = (u16)(bss->txLifeTime << 3);
     if (frameCtrl->type == 0) {
         if (bss->mode == 1) {
             u32 subtype = frameCtrl->subtype;
@@ -142,12 +142,12 @@ void TxqEndManCtrl(void *arg, u32 schedule) {
     switch (kind) {
     case 0xB0: // authentication: body = algorithm, transaction sequence number, status code
         if (index && !(frame->frame.status & 2)) {
-            if (frame->frame.unk_24 == 0 && frame->frame.unk_26 == 2 && frame->frame.unk_28 == 0) {
+            if (frame->frame.body0 == 0 && frame->frame.body1 == 2 && frame->frame.body2 == 0) {
                 CAM_SetStaState((u16)index, 0x30);
-                MLME_IssueAuthIndication(frame->frame.addr1, frame->frame.unk_24);
-            } else if (frame->frame.unk_24 == 1 && frame->frame.unk_26 == 4 && frame->frame.unk_28 == 0) {
+                MLME_IssueAuthIndication(frame->frame.addr1, frame->frame.body0);
+            } else if (frame->frame.body0 == 1 && frame->frame.body1 == 4 && frame->frame.body2 == 0) {
                 CAM_SetStaState((u16)index, 0x30);
-                MLME_IssueAuthIndication(frame->frame.addr1, frame->frame.unk_24);
+                MLME_IssueAuthIndication(frame->frame.addr1, frame->frame.body0);
             }
         }
         break;
@@ -157,12 +157,12 @@ void TxqEndManCtrl(void *arg, u32 schedule) {
             break;
         }
         if (!(frame->frame.status & 2)) {
-            if (frame->frame.unk_26 == 0 && CAM_GetStaState(index) == 0x30) {
+            if (frame->frame.body1 == 0 && CAM_GetStaState(index) == 0x30) {
                 CAM_SetStaState((u16)index, 0x40);
                 if (kind == 0x10) {
-                    MLME_IssueAssIndication(frame->frame.addr1, frame->frame.unk_28, (u8 *)&frame->frame.frameCtrl + frame->frame.length);
+                    MLME_IssueAssIndication(frame->frame.addr1, frame->frame.body2, (u8 *)&frame->frame.frameCtrl + frame->frame.length);
                 } else {
-                    MLME_IssueReAssIndication(frame->frame.addr1, frame->frame.unk_28, (u8 *)&frame->frame.frameCtrl + frame->frame.length);
+                    MLME_IssueReAssIndication(frame->frame.addr1, frame->frame.body2, (u8 *)&frame->frame.frameCtrl + frame->frame.length);
                 }
             }
         } else {
@@ -170,7 +170,7 @@ void TxqEndManCtrl(void *arg, u32 schedule) {
             CAM_ReleaseAID((u16)index);
             deauth = MakeDeAuthFrame(frame->frame.addr1, 1, 0);
             if (deauth) {
-                deauth->unk_00 = 2;
+                deauth->deAuthAction = 2;
                 if (schedule) {
                     SetManCtrlFrame(deauth);
                     TxqPri(1);
@@ -235,16 +235,16 @@ void TxqEndManCtrl(void *arg, u32 schedule) {
             mlme->state = 0;
             IssueMlmeConfirm();
         }
-        if (frame->unk_00 == 1) {
+        if (frame->deAuthAction == 1) {
             if (index) {
                 WlWork *current = wlWorkPlain;
                 u32 bit = 1U << index;
-                current->cam.unk_08 &= ~bit;
+                current->cam.deAuthMap &= ~bit;
                 CAM_Delete((u16)index);
             }
             MLME_IssueDeAuthIndication(frame->frame.addr1, 1);
-        } else if (frame->unk_00 == 2) {
-            MLME_IssueDeAuthIndication(frame->frame.addr1, frame->frame.unk_24);
+        } else if (frame->deAuthAction == 2) {
+            MLME_IssueDeAuthIndication(frame->frame.addr1, frame->frame.body0);
         }
         break;
     }
@@ -455,7 +455,7 @@ void DeleteAllTxFrames(void) {
         MessageDeleteTx(2, 1);
         if (VOLATILE_U16(txCtrl->txq[3].active)) {
             VOLATILE_U16(txCtrl->txq[3].active) = 0;
-            --VOLATILE_U16(txCtrl->txq[3].unk_02);
+            --VOLATILE_U16(txCtrl->txq[3].pendingCount);
             ReleaseHeapBuf(&wlWork->heap.bufMan[0], (WlHeapBuf *)txCtrl->mpState);
         }
         break;

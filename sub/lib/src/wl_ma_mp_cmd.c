@@ -33,16 +33,16 @@ int MA_MpReqCmd(WlMaMpReq *req, WlCmdCfm *cfm) {
     frame = (WlTxFrame *)txCtrl->txq[3].frame;
     if (req->flags & 0x8000) {
         if (!(req->flags & 2)) {
-            req->interval = txCtrl->unk_94;
+            req->interval = txCtrl->mpInterval;
         }
         if (!(req->flags & 4)) {
-            req->bitmap = txCtrl->unk_a0;
+            req->bitmap = txCtrl->mpLastRemainBitmap;
         }
         if (!(req->flags & 8)) {
-            req->period = txCtrl->unk_96;
+            req->period = txCtrl->mpPeriod;
         }
         if (!(req->flags & 16)) {
-            req->payloadBytes = txCtrl->unk_9c;
+            req->payloadBytes = txCtrl->mpPayloadBytes;
             send = 0;
         }
     }
@@ -56,7 +56,7 @@ int MA_MpReqCmd(WlMaMpReq *req, WlCmdCfm *cfm) {
             count++;
         }
     }
-    txCtrl->unk_94 = req->interval;
+    txCtrl->mpInterval = req->interval;
     if (req->interval & 0x8000) {
         req->interval &= 0x7FFF;
         slot = ((u32)req->interval - 208) >> 2;
@@ -90,14 +90,14 @@ int MA_MpReqCmd(WlMaMpReq *req, WlCmdCfm *cfm) {
         return 8;
     }
     txCtrl->txq[3].active = 1;
-    txCtrl->txq[3].unk_02++;
-    txCtrl->unk_96 = req->period;
-    txCtrl->unk_98 = req->bitmap;
-    txCtrl->unk_9a = 0;
-    txCtrl->unk_9c = req->payloadBytes;
-    txCtrl->unk_9e = req->retryLimit;
+    txCtrl->txq[3].pendingCount++;
+    txCtrl->mpPeriod = req->period;
+    txCtrl->mpBitmap = req->bitmap;
+    txCtrl->mpAnsweredBitmap = 0;
+    txCtrl->mpPayloadBytes = req->payloadBytes;
+    txCtrl->mpRetryLimit = req->retryLimit;
     frame->status = 0;
-    frame->unk_02 = req->bitmap;
+    frame->clientBits = req->bitmap;
     frame->retry = 0;
     frame->rate = 20;
     frame->length = req->payloadBytes + 34;
@@ -110,33 +110,33 @@ int MA_MpReqCmd(WlMaMpReq *req, WlCmdCfm *cfm) {
         frame->seqCtrl = 0xFFFF;
         ctl = 0;
     }
-    frame->unk_24 = req->interval;
-    frame->unk_26 = req->bitmap;
-    frame->unk_28 = req->sequence;
+    frame->body0 = req->interval;
+    frame->body1 = req->bitmap;
+    frame->body2 = req->sequence;
     if (send && req->payloadBytes) {
         WUpdateCounter();
         DMA_Write((u8 *)frame + 0x2A, req->payload, req->payloadBytes);
     }
     if (flags & 4) {
         u32 length = req->payloadBytes + 2;
-        u8 *payload = (u8 *)&frame->unk_28;
+        u8 *payload = (u8 *)&frame->body2;
         tail = (u8 *)(((u32)(payload + length) + 3) & ~3u);
         ((u16 *)tail)[0] = 0xB6B8;
         ((u16 *)tail)[1] = 0x1D46;
     }
     txCtrl->mpState->header.command = 0x184;
     txCtrl->mpState->header.length = (bytes + 11) >> 1;
-    txCtrl->mpState->unk_10 = req->bitmap;
+    txCtrl->mpState->remainBitmap = req->bitmap;
     txCtrl->mpState->count = count;
     txCtrl->mpState->entrySize = entrySize;
-    txCtrl->mpState->unk_18 = 0;
+    txCtrl->mpState->retryOverCount = 0;
     entry = txCtrl->mpState->entries;
     {
         u32 aid;
         u16 station;
         for (aid = 1, station = 2; station != 0; station = (u16)(station << 1), aid++) {
             if (req->bitmap & station) {
-                ((WlMpEntry *)entry)->unk_00 = 0xFFFF;
+                ((WlMpEntry *)entry)->length = 0xFFFF;
                 ((WlMpEntry *)entry)->unk_02 = 0;
                 ((WlMpEntry *)entry)->missCount = 0;
                 ((WlMpEntry *)entry)->aid = aid;
@@ -173,7 +173,7 @@ int MA_MpReqCmd(WlMaMpReq *req, WlCmdCfm *cfm) {
             __VENEER_OS_RestoreInterrupts((OSIntrMode)irq);
             ReleaseHeapBuf(&w->heap.bufMan[0], (WlHeapBuf *)txCtrl->mpState);
             txCtrl->txq[3].active = 0;
-            txCtrl->txq[3].unk_02--;
+            txCtrl->txq[3].pendingCount--;
             return 5;
         }
     }

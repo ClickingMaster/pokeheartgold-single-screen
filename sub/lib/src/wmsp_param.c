@@ -75,7 +75,7 @@ void WMSP_StartDCF(u32 *request) {
     status->rxBufIndex = 0;
     status->dcfData = NULL;
     status->dcfDataSize = 0;
-    status->unk_18 = 0;
+    status->dcfSendFlag = 0;
     status->state = 11;
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 17;
@@ -94,11 +94,11 @@ void WMSP_SetDCFData(u32 *request) {
     __VENEER_MI_CpuCopy8(request + 1, status->dcfDestAddress, 6);
     status->dcfData = (u16 *)request[3];
     status->dcfDataSize = request[4];
-    status->unk_18 = 1;
+    status->dcfSendFlag = 1;
     __VENEER_MIi_CpuClear16(0, &frame, sizeof(frame));
     frame.unk_00 = 0;
     frame.length = request[4];
-    frame.rate = status->unk_1ec == 2 ? 20 : 10;
+    frame.rate = status->rate == 2 ? 20 : 10;
     __VENEER_MI_CpuCopy8(request + 1, frame.destAddress, 6);
     __VENEER_MI_CpuCopy8(status->macAddress, frame.srcAddress, 6);
     frame.data = (u16 *)request[3];
@@ -231,9 +231,9 @@ void WMSP_SetGameInfo(u32 *request) {
     status->parentParam.tgid = request[4];
     flags = request[5];
     status->parentParam.unk_0e = (flags & 1) ? 1 : 0;
-    status->parentParam.unk_12 = (flags & 2) ? 1 : 0;
-    status->parentParam.entryFlag = (flags & 4) ? 1 : 0;
-    status->parentParam.unk_16 = (flags & 8) ? 1 : 0;
+    status->parentParam.multiBootFlag = (flags & 2) ? 1 : 0;
+    status->parentParam.KS_Flag = (flags & 4) ? 1 : 0;
+    status->parentParam.CS_Flag = (flags & 8) ? 1 : 0;
     WMSP_CopyParentParam(param, (u8 *)&status->parentParam);
     reply = WMSP_WL_ParamSetGameInfo(buf, (u16)(status->parentParam.userGameInfoLength + 16), param);
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
@@ -356,7 +356,7 @@ void WMSP_MeasureChannel(u16 *request) {
     }
     {
         u16 stationState = reply[3];
-        status->unk_e6 = 2;
+        status->mode = 2;
         if (stationState == 0x10) {
             if (!WMSP_SetAllParams(10, (u8 *)buf)) {
                 return;

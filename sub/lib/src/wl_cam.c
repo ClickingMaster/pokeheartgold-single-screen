@@ -124,7 +124,7 @@ void CAM_IncFrameCount(void *frame) {
     }
     sta->frameCount++;
     __VENEER_OS_EnableIrqMask(irq);
-    if (!(wlWorkPlain->cam.unk_08 & (1U << index))) {
+    if (!(wlWorkPlain->cam.deAuthMap & (1U << index))) {
         sta->timer = sta->lifeTime;
     }
 }
@@ -151,12 +151,12 @@ void CAM_SetStaState(u16 aid, u16 state) {
     e = __VENEER_OS_DisableIrqMask(WL_IRQ_MASK);
     if (state < 0x40) {
         wlWorkPlain->cam.activeMap |= 1 << aid;
-        wlWorkPlain->cam.unk_06 |= 1 << aid;
+        wlWorkPlain->cam.notAssocMap |= 1 << aid;
         if (wlWorkPlain->bss.mode == 1 && CAM_GetAID(aid) != 0) {
             CAM_ReleaseAID(aid);
         }
     } else {
-        wlWorkPlain->cam.unk_06 &= ~(1 << aid);
+        wlWorkPlain->cam.notAssocMap &= ~(1 << aid);
         if ((wlWorkPlain->cam.powerMgtMap >> aid) & 1) {
             CAM_SetDoze(aid);
         }
@@ -177,7 +177,7 @@ void CAM_SetPowerMgtMode(u16 index, u16 mode) {
     volatile WlCam *cam = &w->cam;
     u32 awake;
     cam->powerMgtMap = (cam->powerMgtMap & ~(1U << index)) | (mode << index);
-    awake = cam->unk_06;
+    awake = cam->notAssocMap;
     if (cam->powerMgtMap & ~awake) {
         WL_REG(0x0AC) = 8;
     } else {
@@ -298,10 +298,10 @@ void CAM_SetTIMElementBitmap(u32 index) {
     if (CAM_GetStaState(index) != 0x40) {
         return;
     }
-    if (VOLATILE_U16(wlWorkPlain->cam.unk_08) & (1U << index)) {
+    if (VOLATILE_U16(wlWorkPlain->cam.deAuthMap) & (1U << index)) {
         return;
     }
-    tim = (u8 *)0x0480425C + VOLATILE_U16(wlWorkPlain->bss.unk_94);
+    tim = (u8 *)0x0480425C + VOLATILE_U16(wlWorkPlain->bss.timOffset);
     old = __VENEER_OS_DisableIrqMask(WL_IRQ_MASK);
     if (index == 0) {
         value = WL_ReadByte(tim + 4);
@@ -322,7 +322,7 @@ void CAM_ClrTIMElementBitmap(u32 index) {
     if (CAM_GetStaState(index) != 0x40) {
         return;
     }
-    tim = (u8 *)0x0480425C + VOLATILE_U16(wlWorkPlain->bss.unk_94);
+    tim = (u8 *)0x0480425C + VOLATILE_U16(wlWorkPlain->bss.timOffset);
     old = __VENEER_OS_DisableIrqMask(WL_IRQ_MASK);
     if (index == 0) {
         value = WL_ReadByte(tim + 4);
@@ -364,12 +364,12 @@ void CAM_TimerTask(void) {
                             }
                             {
                                 WlTxHeapFrame *frame;
-                                wlWorkPlain->cam.unk_08 |= 1 << aid;
+                                wlWorkPlain->cam.deAuthMap |= 1 << aid;
                                 CAM_SetPowerMgtMode(aid, 0);
                                 wlWorkPlain->cam.activeMap |= 1 << aid;
                                 frame = MakeDeAuthFrame(sta->macAdrs, 1, 0);
                                 if (frame) {
-                                    frame->unk_00 = 1;
+                                    frame->deAuthAction = 1;
                                     TxManCtrlFrame(frame);
                                     count++;
                                     continue;
@@ -379,7 +379,7 @@ void CAM_TimerTask(void) {
                         } else if (aid == w->bss.parentStation) {
                             WlTxHeapFrame *frame = MakeDeAuthFrame(sta->macAdrs, 1, 0);
                             if (frame) {
-                                frame->unk_00 = 1;
+                                frame->deAuthAction = 1;
                                 TxManCtrlFrame(frame);
                                 count++;
                                 continue;
@@ -432,9 +432,9 @@ void InitCAM(void) {
     cam->numSta = 1;
     cam->powerMgtMap = 0;
     cam->activeMap = 1;
-    cam->unk_06 = 0xFFFE;
+    cam->notAssocMap = 0xFFFE;
     cam->aidCount = 0;
-    cam->unk_08 = 0;
+    cam->deAuthMap = 0;
     cam->aidMap = 1;
 }
 
@@ -446,7 +446,7 @@ void CAM_InitElement(u32 index, const u8 *addr) {
     }
     __VENEER_MIi_CpuClear16(0, sta, 26);
     w = wlWorkPlain;
-    w->cam.unk_08 &= ~(1U << index);
+    w->cam.deAuthMap &= ~(1U << index);
     CAM_SetPowerMgtMode(index, 0);
     w = wlWorkPlain;
     w->cam.activeMap |= (1U << index);

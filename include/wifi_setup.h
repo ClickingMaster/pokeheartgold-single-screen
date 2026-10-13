@@ -11,7 +11,7 @@ typedef void (*WifiSetupFreeFunc)(void *ptr);
 
 typedef struct WifiSetupRuntime {
     WifiSetupAllocFunc alloc;   // 0x00
-    s32 (*callback)(s32 event); // 0x04, see ov13_02223100
+    s32 (*callback)(s32 event); // 0x04, see WifiSetup_NotifyStatus
     void *allocation;           // 0x08, wireless work buffer
     WifiSetupFreeFunc free;     // 0x0C, also addressed through its own label gWifiSetupFreeHook
 } WifiSetupRuntime;
@@ -34,7 +34,7 @@ typedef struct WifiSetupState {
     u32 netmask;          // 0x38
 } WifiSetupState;
 
-// Request/result block passed in by the caller of ov13_02220908.
+// Request/result block passed in by the caller of WifiSetup_RunAoss.
 typedef struct WifiSetupRequest {
     u16 requestMask;    // 0x000, which settings to fetch
     u8 unk_002;         // 0x002
@@ -71,14 +71,14 @@ extern OSMessageQueue gWifiSetupMessageQueue;
 
 void *WifiSetup_Alloc(int size);
 void WifiSetup_Free(void *ptr);
-int ov13_02220908(WifiSetupRequest *request);
-int ov13_022209F8(WifiSetupRequest *request);
+int WifiSetup_RunAoss(WifiSetupRequest *request);
+int WifiSetup_RunAossSession(WifiSetupRequest *request);
 u32 WifiSetup_NextHostAddress(u32 value, u32 mask);
 void WifiSetup_FreeWorkBuffers(void);
 void WifiSetup_InitState(WifiSetupRequest *request);
 void WifiSetup_SetError(int error);
 int WifiSetup_GetError(void);
-int ov13_022217D0(int value);
+int WifiSetup_SetStatus(int value);
 void *WifiSetup_SocketAlloc(s32 unused, s32 size);
 void *WifiSetup_SocketFree(s32 unused, s32 ptr);
 int WifiSetup_StartupSocket(u32 address, u32 netmask, u32 gateway);
@@ -89,7 +89,7 @@ void WifiSetup_MemFill(void *dst, int value, u32 size);
 int WifiSetup_RecvFrom(int socket, void *buffer, int size, int flags, u8 *address, u32 *addressLength);
 int WifiSetup_Poll(void *unused, WifiSetupPollTime *fd, int unused2, int unused3, WifiSetupPollTime *timeout);
 int WifiSetup_SendTo(int socket, const void *buffer, int size, int flags, u8 *address, u32 addressLength);
-void ov13_022229FC(void);
+void WifiSetup_SetSockOpt(void);
 int WifiSetup_Socket(int domain, int type, int protocol);
 int WifiSetup_Bind(int socket, u8 *address, int addressLength);
 int WifiSetup_Close(int socket);
@@ -101,14 +101,14 @@ s32 WifiSetup_StrLen(const char *str);
 u16 WifiSetup_Random(void);
 void WifiSetup_ClearPollSet(void *set);
 void WifiSetup_AddToPollSet(u32 socket, void *set);
-void ov13_02222B34(const void *src, void *dst);
-void ov13_02222BC0(const void *src, void *dst);
-void ov13_02222BE4(void *dst, const void *src, u32 value);
-BOOL ov13_02222BF4(void *message);
-BOOL ov13_02222C08(void *message);
-int ov13_02222C1C(WifiSetupAllocFunc alloc, WifiSetupFreeFunc free);
-int ov13_02222CE0(void);
-int ov13_02222D78(void);
-int ov13_02222DB0(void **output);
+void WifiSetup_ConvertBssDesc(const void *src, void *dst);
+void WifiSetup_CopyConnectSsid(const void *src, void *dst);
+void WifiSetup_StoreConnectResult(void *dst, const void *src, u32 value);
+BOOL WifiSetup_OnWcmNotify(void *message);
+BOOL WifiSetup_OnTimeoutAlarm(void *message);
+int WifiSetup_Startup(WifiSetupAllocFunc alloc, WifiSetupFreeFunc free);
+int WifiSetup_Cleanup(void);
+int WifiSetup_DisconnectAccessPoint(void);
+int WifiSetup_SearchAccessPoints(void **output);
 
 #endif // POKEHEARTGOLD_WIFI_SETUP_H

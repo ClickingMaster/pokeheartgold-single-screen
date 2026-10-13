@@ -30,16 +30,16 @@ extern ApInfo ov13_0224DDC0;
 void MI_CpuFill8(void *dest, u8 value, u32 size);
 void MI_CpuCopy8(const void *src, void *dst, u32 size);
 void WCM_ClearApList(void);
-void ov13_02222BC0(ConnectParam *param, ApInfo *info);
+void WifiSetup_CopyConnectSsid(ConnectParam *param, ApInfo *info);
 BOOL WifiSetupWcm_StartConnect(ApInfo *info, ConnectSetting *setting, u32 mode);
-void ov13_02222BE4(void *out, ApInfo *info, BOOL failed);
-int ov13_02222F28(ConnectParam *param, void *out);
+void WifiSetup_StoreConnectResult(void *out, ApInfo *info, BOOL failed);
+int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out);
 #define APINFO2 ((ApInfo *)((u8 *)&gWifiSetupRuntime + 0x40))
-// @fn ov13_02222F28
+// @fn WifiSetup_ConnectAccessPoint
 #pragma optimization_level 2
 #pragma opt_propagation off
 #pragma opt_loop_invariants on
-int ov13_02222F28(ConnectParam *param, void *out) {
+int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out) {
     OSAlarm alarm;
     OSMessage message;
     BOOL running = TRUE;
@@ -72,7 +72,7 @@ int ov13_02222F28(ConnectParam *param, void *out) {
     if (WifiSetupWcm_StartSearch(0, (u32)param->unk04, param->unk00, 0x0030BFFE)) {
         retries = 0;
         OS_CreateAlarm(&alarm);
-        OS_SetAlarm(&alarm, 0x003FEC42, (OSAlarmHandler)ov13_02222C08, (void *)0x12);
+        OS_SetAlarm(&alarm, 0x003FEC42, (OSAlarmHandler)WifiSetup_OnTimeoutAlarm, (void *)0x12);
         while (running) {
             OS_ReceiveMessage(&gWifiSetupMessageQueue, &message, OS_MESSAGE_BLOCK);
             switch ((u32)message) {
@@ -92,7 +92,7 @@ int ov13_02222F28(ConnectParam *param, void *out) {
                     if (WifiSetupWcm_CopyApList(&ov13_0224DDC0, 1) != 1) {
                         running = FALSE;
                     } else {
-                        ov13_02222BC0(param, &ov13_0224DDC0);
+                        WifiSetup_CopyConnectSsid(param, &ov13_0224DDC0);
                         i = 0;
                         n = APINFO2->count;
                         for (; i < n; i++) {
@@ -106,7 +106,7 @@ int ov13_02222F28(ConnectParam *param, void *out) {
                 }
                 break;
             case 10:
-                ov13_02222BC0(param, &ov13_0224DDC0);
+                WifiSetup_CopyConnectSsid(param, &ov13_0224DDC0);
                 if (!WifiSetupWcm_StartConnect(&ov13_0224DDC0, &ov13_0224DE80, mode)) {
                     running = FALSE;
                 }
@@ -137,7 +137,7 @@ int ov13_02222F28(ConnectParam *param, void *out) {
         while (OS_ReceiveMessage(&gWifiSetupMessageQueue, &message, OS_MESSAGE_NOBLOCK) == TRUE) {
         }
     }
-    ov13_02222BE4(out, &ov13_0224DDC0, result == 0);
+    WifiSetup_StoreConnectResult(out, &ov13_0224DDC0, result == 0);
     return result;
 }
 #pragma optimization_level reset

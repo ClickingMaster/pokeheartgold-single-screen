@@ -29,8 +29,8 @@ void WStop(void) {
     __VENEER_OS_CancelAlarm(&wlWorkPlain->periodicTimeOutAlarm);
     __VENEER_OS_CancelAlarm(&wlWorkPlain->timeOutAlarm);
     WSetStaState(32);
-    bss->unk_a4 = 0;
-    bss->unk_12 = 0;
+    bss->gameInfoUpdated = 0;
+    bss->joined = 0;
     WL_REG(0x012) = 0;
     WL_REG(0x004) = 0;
     WL_REG(0x0EA) = 0;

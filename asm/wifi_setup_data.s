@@ -25,53 +25,53 @@
 
 	.extern WifiSetup_Alloc
 	.extern WifiSetup_Free
-	.extern ov13_02220908
-	.extern ov13_022209F8
+	.extern WifiSetup_RunAoss
+	.extern WifiSetup_RunAossSession
 	.extern WifiSetup_NextHostAddress
 	.extern WifiSetup_FreeWorkBuffers
 	.extern WifiSetup_InitState
 	.extern WifiSetup_SetError
 	.extern WifiSetup_GetError
-	.extern ov13_022214C4
+	.extern WifiSetup_StoreAossResult
 	.extern WifiSetup_CheckPrintable
-	.extern ov13_022216E0
-	.extern ov13_0222175C
-	.extern ov13_022217A0
-	.extern ov13_022217D0
-	.extern ov13_022217FC
-	.extern ov13_0222189C
-	.extern ov13_02221978
-	.extern ov13_02221A50
-	.extern ov13_02221AF4
-	.extern ov13_02221BE8
-	.extern ov13_02221C2C
-	.extern ov13_02221C78
-	.extern ov13_02221D34
-	.extern ov13_02221D58
-	.extern ov13_02221EAC
+	.extern WifiSetup_FindAossAccessPoint
+	.extern WifiSetup_InitAossConnectInfo
+	.extern WifiSetup_InitPacketAddresses
+	.extern WifiSetup_SetStatus
+	.extern WifiSetup_HandlePacket
+	.extern WifiSetup_HandleJoinReply
+	.extern WifiSetup_HandleSettingsReply
+	.extern WifiSetup_HandleDoneReply
+	.extern WifiSetup_DecryptPacket
+	.extern WifiSetup_CheckPeer
+	.extern WifiSetup_CheckReplySequence
+	.extern WifiSetup_ParseJoinReply
+	.extern WifiSetup_ReadLittleEndian
+	.extern WifiSetup_ParseWepRecord
+	.extern WifiSetup_ParseWpaRecord
 	.extern ov13_02221F64
-	.extern ov13_02221F94
-	.extern ov13_022220A4
-	.extern ov13_022220B4
-	.extern ov13_02222108
-	.extern ov13_0222224C
-	.extern ov13_02222328
-	.extern ov13_02222394
-	.extern ov13_02222420
-	.extern ov13_02222474
-	.extern ov13_022224CC
-	.extern ov13_02222534
-	.extern ov13_022225B0
-	.extern ov13_02222638
-	.extern ov13_0222269C
+	.extern WifiSetup_ParseSecurityRecords
+	.extern WifiSetup_IsEncryptionRequested
+	.extern WifiSetup_SendRequest
+	.extern WifiSetup_SendJoinRequest
+	.extern WifiSetup_SendSettingsRequest
+	.extern WifiSetup_SendDoneRequest
+	.extern WifiSetup_BuildJoinPayload
+	.extern WifiSetup_WriteBody
+	.extern WifiSetup_WritePacketHeader
+	.extern WifiSetup_SendPacket
+	.extern WifiSetup_Encrypt
+	.extern WifiSetup_Decrypt
+	.extern WifiSetup_CipherInit
+	.extern WifiSetup_CipherXor
 	.extern WifiSetup_CipherNextByte
 	.extern WifiSetup_CalcCrc32
 	.extern WifiSetup_UpdateCrc32
 	.extern WifiSetup_InitCrc32Table
-	.extern ov13_022227A0
-	.extern ov13_0222281C
-	.extern ov13_02222850
-	.extern ov13_02222874
+	.extern WifiSetup_Scramble
+	.extern WifiSetup_ScrambleMakeKey
+	.extern WifiSetup_ScrambleXorHalf
+	.extern WifiSetup_ScrambleSwapHalves
 	.extern WifiSetup_SocketAlloc
 	.extern WifiSetup_SocketFree
 	.extern WifiSetup_StartupSocket
@@ -82,7 +82,7 @@
 	.extern WifiSetup_RecvFrom
 	.extern WifiSetup_Poll
 	.extern WifiSetup_SendTo
-	.extern ov13_022229FC
+	.extern WifiSetup_SetSockOpt
 	.extern WifiSetup_Socket
 	.extern WifiSetup_Bind
 	.extern WifiSetup_Close
@@ -94,18 +94,18 @@
 	.extern WifiSetup_Random
 	.extern WifiSetup_ClearPollSet
 	.extern WifiSetup_AddToPollSet
-	.extern ov13_02222B34
-	.extern ov13_02222BC0
-	.extern ov13_02222BE4
-	.extern ov13_02222BF4
-	.extern ov13_02222C08
-	.extern ov13_02222C1C
-	.extern ov13_02222CE0
-	.extern ov13_02222D78
-	.extern ov13_02222DB0
-	.extern ov13_02222F28
+	.extern WifiSetup_ConvertBssDesc
+	.extern WifiSetup_CopyConnectSsid
+	.extern WifiSetup_StoreConnectResult
+	.extern WifiSetup_OnWcmNotify
+	.extern WifiSetup_OnTimeoutAlarm
+	.extern WifiSetup_Startup
+	.extern WifiSetup_Cleanup
+	.extern WifiSetup_DisconnectAccessPoint
+	.extern WifiSetup_SearchAccessPoints
+	.extern WifiSetup_ConnectAccessPoint
 	.extern WifiSetup_Sleep
-	.extern ov13_02223100
+	.extern WifiSetup_NotifyStatus
 	.extern WifiSetupWcm_HandleEvent
 	.extern WifiSetupWcm_ReturnToIdle
 	.extern WifiSetupWcm_CopyApList
@@ -134,30 +134,30 @@
 	.extern WifiSetupLink_Close
 	.extern WifiSetupLink_ConnectSelectedAp
 	.extern WifiSetupLink_DisconnectAp
-	.extern ov13_02224164
-	.extern ov13_02224330
-	.extern ov13_022245C4
-	.extern ov13_022245DC
-	.extern ov13_02224618
-	.extern ov13_02224624
-	.extern ov13_02224694
-	.extern ov13_022246E4
-	.extern ov13_02224718
-	.extern ov13_022247DC
-	.extern ov13_0222483C
-	.extern ov13_02224864
-	.extern ov13_02224938
-	.extern ov13_02224988
-	.extern ov13_02224A24
-	.extern ov13_02224A30
-	.extern ov13_02224B2C
-	.extern ov13_02224D00
-	.extern ov13_02224DB4
+	.extern WifiSetup_PickSetupAccessPoint
+	.extern WifiSetup_FindSetupAccessPoint
+	.extern WifiSetup_SendDatagram
+	.extern WifiSetup_BroadcastDatagram
+	.extern WifiSetup_SendSetupPacket
+	.extern WifiSetup_GetPacketPayload
+	.extern WifiSetup_NextRecord
+	.extern WifiSetup_FirstRecord
+	.extern WifiSetup_BuildPacket
+	.extern WifiSetup_AppendRecord
+	.extern WifiSetup_BuildSingleRecordList
+	.extern WifiSetup_CheckVersionReply
+	.extern WifiSetup_ReadPacket
+	.extern WifiSetup_BuildVersionRequest
+	.extern WifiSetup_GetOwnMacAddress
+	.extern WifiSetup_BuildMacPair
+	.extern WifiSetup_ParseSettingsRecords
+	.extern WifiSetup_HexToBytes
+	.extern WifiSetup_StoreSimpleStartResult
 	.extern WifiSetup_RunSession
-	.extern ov13_02225320
-	.extern ov13_02225358
-	.extern ov13_02225510
-	.extern ov13_022256C8
+	.extern WifiSetup_SimpleStartThread
+	.extern WifiSetup_AesKeyWrap
+	.extern WifiSetup_AesKeyUnwrap
+	.extern WifiSetup_XorBlock8
 	.extern WifiSetup_AesSetEncryptKey
 	.extern WifiSetup_AesSetDecryptKey
 	.extern WifiSetup_AesEncryptBlock
@@ -170,17 +170,17 @@
 	.extern WifiSetup_DecodeLittleEndian
 	.extern WifiSetup_CopyBytes
 	.extern WifiSetup_FillBytes
-	.extern ov13_02226C94
-	.extern ov13_02226CBC
-	.extern ov13_02226CD8
-	.extern ov13_02226CFC
-	.extern ov13_02226D0C
-	.extern ov13_02226D40
-	.extern ov13_02226D74
-	.extern ov13_02226E5C
-	.extern ov13_02226EF0
-	.extern ov13_02226F28
-	.extern ov13_02226F3C
+	.extern WifiSetup_CalcMd5
+	.extern WifiSetup_GetMilliseconds
+	.extern WifiSetup_WorkCalloc
+	.extern WifiSetup_WorkFree
+	.extern WifiSetup_FormatHexByte
+	.extern WifiSetup_FormatMacAddress
+	.extern WifiSetup_StartSimpleStart
+	.extern WifiSetup_StopSimpleStart
+	.extern WifiSetup_GetSimpleStartStatus
+	.extern WifiSetup_GetSimpleStartResult
+	.extern WifiSetup_ReportSimpleStartStatus
 	.global _0224267C
 	.global ov13_02242680
 	.global ov13_02242688

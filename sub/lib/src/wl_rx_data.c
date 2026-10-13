@@ -144,14 +144,14 @@ int RxMpFrame(WlRxFrame *frame) {
     }
     // body: interval (+0x2C), bitmap of the stations asked (+0x2E)
     if ((*(u16 *)((u8 *)frame + 0x2E) & (u16)(1 << bss->aid)) == 0) {
-        rx->unk_06 = 0;
+        rx->mpStatusFlags = 0;
     } else {
-        rx->unk_06 = 0x2000;
+        rx->mpStatusFlags = 0x2000;
     }
     ctrl = WL_REG(0x098);
     if (ctrl & 0x8000) {
         if (*(u16 *)(0x04804000 + (u16)(ctrl << 1) + 4) != 0) {
-            rx->unk_06 |= 0x4000;
+            rx->mpStatusFlags |= 0x4000;
         }
     }
     CAM_UpdateLifeTime(bss->parentStation);
@@ -167,7 +167,7 @@ int RxMpFrame(WlRxFrame *frame) {
         }
         bits >>= 1;
     }
-    msg->frame.status |= rx->unk_06 | ((int)(WL_REG(0x098) & 0x8000) >> 4) | ((int)(WL_REG(0x094) & 0x8000) >> 3);
+    msg->frame.status |= rx->mpStatusFlags | ((int)(WL_REG(0x098) & 0x8000) >> 4) | ((int)(WL_REG(0x094) & 0x8000) >> 3);
     msg->frame.unk_0a = msg->frame.unk_0c + ((n * (*(u16 *)((u8 *)msg + 0x3C) + 10) + 0xFC) >> 4);
     SendMessageToWmDirect(&wlWorkPlain->heap.bufMan[0], msg);
     return 0;
@@ -200,7 +200,7 @@ void RxKeyDataFrame(WlRxFrame *frame) {
         }
         deauth = MakeDeAuthFrame(frame->addr2, 7, 0);
         if (deauth) {
-            deauth->unk_00 = 2;
+            deauth->deAuthAction = 2;
             TxManCtrlFrame(deauth);
         }
         return;
@@ -211,25 +211,25 @@ void RxKeyDataFrame(WlRxFrame *frame) {
     CAM_SetPowerMgtMode(aid, ((WlFrameCtrlBits *)&frame->frameCtrl)->pwrMgt);
     CAM_UpdateLifeTime(aid);
     bit = (u16)(1 << CAM_GetAID(aid));
-    if (bit & txCtrl->unk_9a) {
+    if (bit & txCtrl->mpAnsweredBitmap) {
         return;
     }
-    if (!(bit & txCtrl->unk_98)) {
+    if (!(bit & txCtrl->mpBitmap)) {
         return;
     }
-    txCtrl->unk_9a |= bit;
-    mp->unk_10 &= ~bit;
+    txCtrl->mpAnsweredBitmap |= bit;
+    mp->remainBitmap &= ~bit;
     dst = mp->entries;
     for (m = bit >> 1; m != 1; m >>= 1) {
-        if (m & txCtrl->unk_98) {
+        if (m & txCtrl->mpBitmap) {
             dst += mp->entrySize;
         }
     }
-    ((WlMpEntry *)dst)->unk_00 = frame->frameLength - 0x18;
+    ((WlMpEntry *)dst)->length = frame->frameLength - 0x18;
     WL_WriteByte(dst + 3, frame->rssi & 0xFF);
     WL_WriteByte(dst + 2, frame->unk_0e & 0xFF);
-    if (((WlMpEntry *)dst)->unk_00) {
-        __VENEER_MIi_CpuCopy16((u8 *)frame + 0x2C, dst + 8, ((WlMpEntry *)dst)->unk_00 + 1);
+    if (((WlMpEntry *)dst)->length) {
+        __VENEER_MIi_CpuCopy16((u8 *)frame + 0x2C, dst + 8, ((WlMpEntry *)dst)->length + 1);
     }
 }
 
@@ -248,7 +248,7 @@ int RxMpAckFrame(WlRxFrame *frame) {
     msg = (WlRxBuf *)((u8 *)frame - 0x10);
     msg->command = 0x185;
     msg->length = 0x18;
-    msg->frame.status |= wlWorkPlain->rxCtrl.unk_06 | ((int)(WL_REG(0x098) & 0x8000) >> 4) | ((int)(WL_REG(0x094) & 0x8000) >> 3);
+    msg->frame.status |= wlWorkPlain->rxCtrl.mpStatusFlags | ((int)(WL_REG(0x098) & 0x8000) >> 4) | ((int)(WL_REG(0x094) & 0x8000) >> 3);
     SendMessageToWmDirect(&wlWorkPlain->heap.bufMan[0], msg);
     return 0;
 }

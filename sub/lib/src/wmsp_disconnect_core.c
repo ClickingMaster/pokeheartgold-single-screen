@@ -75,10 +75,10 @@ BOOL WMSP_DisconnectCore(u32 *request, BOOL indication, u16 *disconnected) {
             }
         }
         status->childBitmap = 0;
-        status->unk_86 = 0;
+        status->readyBitmap = 0;
         status->unk_14 = 0;
         status->dcfActive = 0;
-        status->unk_1c = 0;
+        status->vsyncFlag = 0;
         __VENEER_OS_RestoreInterrupts((OSIntrMode)irq);
     } else {
         if (!indication) {
@@ -119,7 +119,7 @@ BOOL WMSP_DisconnectCore(u32 *request, BOOL indication, u16 *disconnected) {
             }
         }
 deauthenticated:
-        status->unk_c2 = 0;
+        status->beaconIndicateFlag = 0;
         status->state = 3;
         done = 1;
         result = WMSP_WL_MlmeReset(output, 1);
@@ -204,7 +204,7 @@ deauthed:
             if (status->childBitmap & bit) {
                 done |= 1u << aid;
                 status->childBitmap &= ~bit;
-                status->unk_86 &= ~bit;
+                status->readyBitmap &= ~bit;
                 ((TickWords *)status->lastRecvTick)[aid].low = 0;
                 ((TickWords *)status->lastRecvTick)[aid].high = 0;
                 __VENEER_MI_CpuFill8(mac + offset, 0, 6);

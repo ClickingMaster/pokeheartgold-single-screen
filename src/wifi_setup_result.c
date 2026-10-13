@@ -21,9 +21,9 @@ void WifiSetup_MemFill(void *dst, int value, u32 size);
 void WifiSetup_MemCopy(void *dst, const void *src, u32 size);
 int WifiSetup_StrLen(const void *str);
 int WifiSetup_CheckPrintable(const void *str, int length);
-int ov13_022214C4(Out *out);
-// @fn ov13_022214C4
-int ov13_022214C4(Out *out) {
+int WifiSetup_StoreAossResult(Out *out);
+// @fn WifiSetup_StoreAossResult
+int WifiSetup_StoreAossResult(Out *out) {
     Record *a = &ov13_0224D8C0;
     u8 *dst = out->data;
     Record *c = &ov13_0224D660;

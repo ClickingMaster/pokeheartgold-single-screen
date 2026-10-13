@@ -91,21 +91,21 @@ void WlIntrTbtt(void) {
         }
         {
             WlWork *w2 = wlWork;
-            w2->cam.activeMap = ~w2->cam.powerMgtMap | w2->cam.unk_06;
+            w2->cam.activeMap = ~w2->cam.powerMgtMap | w2->cam.notAssocMap;
         }
         {
             u32 flags = WL_REG(0x0B6);
             if ((flags & 0x18) || (flags & 6) == 2) {
-                txCtrl->unk_8c &= ~2u;
+                txCtrl->pendingFlags &= ~2u;
                 SetParentTbttTxq();
             } else {
-                txCtrl->unk_8c |= 2;
+                txCtrl->pendingFlags |= 2;
             }
         }
         break;
     }
     case 2:
-        if (bss->unk_12 == 0) {
+        if (bss->joined == 0) {
             WL_REG(0x134) = 0xFFFF;
         } else {
             WL_REG(0x134) = param->activeZoneTime + WL_REG(0x134) + 1;
@@ -154,7 +154,7 @@ void WlIntrTbtt(void) {
                     ResetTxqPri(i);
                     *(u16 *)desc->frame = 2;
                     AddTask(0, 14);
-                    txCtrl->unk_ae++;
+                    txCtrl->txTimeOutCount++;
                 }
             }
         }
@@ -238,12 +238,12 @@ void WlIntrRxCntup(void) {
         if (!((busy & 1) && txq[0].active) && !((busy & 4) && txq[1].active) && !((busy & 8) && txq[2].active) && !(WL_REG(0x19C) & 1)) {
             WL_REG(0x032) = 0;
             WL_REG(0x032) = 0x8000;
-            rx->unk_02 = 0;
+            rx->cntupBusyCount = 0;
         } else {
-            u32 previous = rx->unk_02;
-            rx->unk_02 = (u16)(previous + 1);
+            u32 previous = rx->cntupBusyCount;
+            rx->cntupBusyCount = (u16)(previous + 1);
             if (previous > 12) {
-                rx->unk_02 = 0;
+                rx->cntupBusyCount = 0;
                 WL_REG(0x032) = 0;
                 WL_REG(0x032) = 0x8000;
                 wlWorkPlain->bss.txResetCount++;
@@ -276,7 +276,7 @@ void WlIntrTxEnd(void) {
     switch (status) {
     case 0x300: {
         WlWork *w2;
-        if (q->unk_8c & 2) {
+        if (q->pendingFlags & 2) {
             SetParentTbttTxq();
         }
         w2 = wlWorkPlain;
@@ -287,12 +287,12 @@ void WlIntrTxEnd(void) {
     case 0x800: {
         u16 retry = ((WlTxFrame *)q->txq[3].frame)->retry & 255;
         WlMpState *mp;
-        if (q->unk_9e <= retry) {
+        if (q->mpRetryLimit <= retry) {
             WL_REG(0x0AC) = 2;
-            q->unk_a8++;
+            q->mpRetryOverCount++;
         }
         mp = q->mpState;
-        mp->unk_18++;
+        mp->retryOverCount++;
         break;
     }
     case 0xB00: {
@@ -305,11 +305,11 @@ void WlIntrTxEnd(void) {
         if (q->txq[3].active && ((WlTxFrame *)q->txq[3].frame)->seqCtrl == 0xFFFF) {
             if (((WlTxFrame *)q->txq[3].frame)->retry) {
                 ((WlTxFrame *)q->txq[3].frame)->retry = 0;
-                ((WlTxFrame *)q->txq[3].frame)->unk_02 = q->unk_98;
+                ((WlTxFrame *)q->txq[3].frame)->clientBits = q->mpBitmap;
             }
         }
-        bits = ((WlTxFrame *)q->txq[3].frame)->unk_02;
-        mask = q->unk_98;
+        bits = ((WlTxFrame *)q->txq[3].frame)->clientBits;
+        mask = q->mpBitmap;
         entry = q->mpState->entries;
         if (bits > 1 && wlWorkPlain->param.flags.bits.diversity) {
             if (!(WL_REG(0x19C) & 1)) {
@@ -342,11 +342,11 @@ void WlIntrTxEnd(void) {
             WL_REG(0x0B4) = 2;
             WL_REG(0x048) = 0;
             if (WL_REG(0x010) & 0x1000) {
-                q->unk_ac++;
+                q->mpEndPendingCount++;
             } else {
                 WlIntrMpEnd(2);
             }
-            q->unk_aa++;
+            q->mpEndCount++;
         }
         WL_REG(0x0AE) = 2;
     }

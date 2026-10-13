@@ -64,7 +64,7 @@ void WMSP_Enable(void *request) {
     status = req->status;
     wmspW.status = status;
     arm9Buf->status = status;
-    arm9Buf->unk_08 = req->unk_0c;
+    arm9Buf->callbackBuf = req->callbackBuf;
     WMSPi_CommonInit(req->flags);
     {
         u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
@@ -89,27 +89,27 @@ void WMSPi_CommonInit(u32 flags) {
         WMSP_SetThreadPriorityLow();
     }
     status->childBitmap = 0;
-    status->unk_86 = 0;
+    status->readyBitmap = 0;
     status->unk_14 = 0;
     status->dcfActive = 0;
-    status->unk_1c = 0;
+    status->vsyncFlag = 0;
     status->vAlarmRequestQueued = 0;
-    status->unk_c2 = 0;
-    status->unk_58 = 1;
-    status->unk_5a = 1;
-    status->unk_5c = 6;
+    status->beaconIndicateFlag = 0;
+    status->minFreq = 1;
+    status->freq = 1;
+    status->maxFreq = 6;
     status->defaultRetryCount = 0;
-    status->unk_92 = 0;
-    status->unk_94 = 0;
-    status->unk_9a = 0;
-    status->unk_9c = 0;
-    status->unk_7c0 = status->unk_58;
-    status->unk_7c2 = status->unk_5a;
-    status->unk_7c4 = status->unk_5c;
+    status->minPollBmpMode = 0;
+    status->singlePacketMode = 0;
+    status->ignoreFatalErrorMode = 0;
+    status->ignoreSizePrecheckMode = 0;
+    status->currentMinFreq = status->minFreq;
+    status->currentFreq = status->freq;
+    status->currentMaxFreq = status->maxFreq;
     status->sendRetryCount = status->defaultRetryCount;
-    status->unk_7c6 = status->unk_92;
-    status->unk_7c8 = status->unk_94;
-    status->unk_7cc = status->unk_9a;
+    status->currentMinPollBmpMode = status->minPollBmpMode;
+    status->currentSinglePacketMode = status->singlePacketMode;
+    status->currentIgnoreFatalErrorMode = status->ignoreFatalErrorMode;
     status->wepEnabled = 0;
     status->wepMode = 0;
     __VENEER_MI_CpuFill8(status->wepKey, 0, 0x50);
@@ -121,8 +121,8 @@ void WMSPi_CommonInit(u32 flags) {
     status->parentIntervalTick = 0x20b;
     status->childIntervalTick = 0;
     status->pwrMgtMode = 0;
-    status->unk_1ee = 1;
-    status->unk_c8 = flags;
+    status->preamble = 1;
+    status->miscFlags = flags;
     __VENEER_OS_RestoreInterrupts(irq);
     if (clean) {
         WMSP_CleanSendQueue(0xffff);
@@ -220,8 +220,8 @@ BOOL WMSPi_CommonWlIdle(u16 *command, u16 *wlResult) {
     }
     WMSP_WL_ParamSetLifeTime(buf, 0xffff, 40, 5);
     status->recvTimeout = 0x1ff621;
-    status->unk_1ec = 2;
-    status->unk_1ee = 1;
+    status->rate = 2;
+    status->preamble = 1;
     result = WMSP_WL_DevGetVersion(buf);
     if (result[2]) {
         *command = 0x306;
@@ -311,9 +311,9 @@ u32 WMSP_SetMPParameterCore(WmspMPParam *input, WmspMPParam *old) {
     irq = __VENEER_OS_DisableInterrupts();
     if (old) {
         old->mask = 0x3fff;
-        old->unk_04 = status->unk_58;
-        old->unk_06 = status->unk_5a;
-        old->unk_08 = status->unk_5c;
+        old->unk_04 = status->minFreq;
+        old->unk_06 = status->freq;
+        old->unk_08 = status->maxFreq;
         old->parentSize = status->parentSize;
         old->childSize = status->childSize;
         old->parentInterval = status->parentInterval;
@@ -321,28 +321,28 @@ u32 WMSP_SetMPParameterCore(WmspMPParam *input, WmspMPParam *old) {
         old->parentVAlarmLine = AS_U16(status->parentVAlarmLine);
         old->childVAlarmLine = AS_U16(status->childVAlarmLine);
         old->retryCount = status->defaultRetryCount;
-        old->unk_18 = status->unk_92;
-        old->unk_19 = status->unk_94;
-        old->unk_1a = status->unk_9a;
-        old->unk_1b = status->unk_9c;
+        old->unk_18 = status->minPollBmpMode;
+        old->unk_19 = status->singlePacketMode;
+        old->unk_1a = status->ignoreFatalErrorMode;
+        old->unk_1b = status->ignoreSizePrecheckMode;
     }
     if (mask & 1) {
         u16 value = input->unk_04;
         if (value == 0) {
             value = 16;
         }
-        status->unk_58 = value;
-        status->unk_7c0 = value;
+        status->minFreq = value;
+        status->currentMinFreq = value;
     }
     if (mask & 2) {
         u16 value = input->unk_06;
         if (value == 0) {
             value = 16;
         }
-        status->unk_5a = value;
-        AS_U16(status->unk_7c2) = value;
-        if (status->unk_62 > (s32)value) {
-            status->unk_62 = value;
+        status->freq = value;
+        AS_U16(status->currentFreq) = value;
+        if (status->mpCount > (s32)value) {
+            status->mpCount = value;
         }
     }
     if (mask & 4) {
@@ -350,10 +350,10 @@ u32 WMSP_SetMPParameterCore(WmspMPParam *input, WmspMPParam *old) {
         if (value == 0) {
             value = 16;
         }
-        status->unk_5c = value;
-        status->unk_7c4 = value;
-        if (status->unk_62 > (s32)value) {
-            status->unk_62 = value;
+        status->maxFreq = value;
+        status->currentMaxFreq = value;
+        if (status->mpCount > (s32)value) {
+            status->mpCount = value;
         }
     }
     if (mask & 8) {
@@ -412,17 +412,17 @@ u32 WMSP_SetMPParameterCore(WmspMPParam *input, WmspMPParam *old) {
         status->sendRetryCount = value;
     }
     if (mask & 1024) {
-        status->unk_92 = input->unk_18;
+        status->minPollBmpMode = input->unk_18;
     }
     if (mask & 2048) {
-        status->unk_94 = input->unk_19;
+        status->singlePacketMode = input->unk_19;
     }
     if (mask & 4096) {
-        status->unk_9a = input->unk_1a;
-        status->unk_7cc = status->unk_9a;
+        status->ignoreFatalErrorMode = input->unk_1a;
+        status->currentIgnoreFatalErrorMode = status->ignoreFatalErrorMode;
     }
     if (mask & 8192) {
-        status->unk_9c = input->unk_1b;
+        status->ignoreSizePrecheckMode = input->unk_1b;
     }
     __VENEER_OS_RestoreInterrupts(irq);
     return result;
@@ -480,11 +480,11 @@ void WMSP_SetPowerSaveMode(void *request) {
     __VENEER_MI_CpuCopy8(status->bssid, status->dcfDestAddress, 6);
     status->dcfData = bufArr;
     status->dcfDataSize = 0;
-    status->unk_18 = 1;
+    status->dcfSendFlag = 1;
     __VENEER_MIi_CpuClear16(0, &frame, sizeof(frame));
     frame.unk_00 = 0;
     frame.length = 0;
-    frame.rate = (status->unk_1ec == 2) ? 20 : 10;
+    frame.rate = (status->rate == 2) ? 20 : 10;
     __VENEER_MI_CpuCopy8(status->bssid, frame.destAddress, 6);
     __VENEER_MI_CpuCopy8(status->macAddress, frame.srcAddress, 6);
     frame.data = bufArr;

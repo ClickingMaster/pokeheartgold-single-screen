@@ -22,7 +22,7 @@ typedef struct WifiSetupApInfo {
     u8 unk_2E[0x92]; // 0x2E
 } WifiSetupApInfo;
 
-// Scan result as compared by ov13_02224164 (0x30 bytes)
+// Scan result as compared by WifiSetup_PickSetupAccessPoint (0x30 bytes)
 typedef struct WifiSetupApEntry {
     u32 ssidLength;
     char ssid[32];
@@ -93,7 +93,7 @@ extern WifiSetupWork ov13_0224DF30;
 extern WifiSetupConfig ov13_02245A58;
 extern OSThread ov13_0224DFDC;
 
-// result block handed to the caller (ov13_02226F28)
+// result block handed to the caller (WifiSetup_GetSimpleStartResult)
 typedef struct WifiSetupResult {
     u32 words[58];
 } WifiSetupResult;
@@ -127,13 +127,13 @@ void WifiSetupLink_DisconnectAp(void);
 int WifiSetup_RunSession(void);
 
 // wifi_setup_ap_select.c
-int ov13_02224164(const WifiSetupApEntryList *current, const WifiSetupApEntryList *previous, u32 *selected);
+int WifiSetup_PickSetupAccessPoint(const WifiSetupApEntryList *current, const WifiSetupApEntryList *previous, u32 *selected);
 
 // wifi_setup_crypto.c
-void ov13_02225320(void *arg);
-int ov13_02225358(u8 *out, const u8 *in, u32 length, const void *key, u32 keyLength);
-int ov13_02225510(u8 *out, const u8 *in, u32 length, const void *key, u32 keyLength);
-void ov13_022256C8(const u8 *a, const u8 *b, u8 *out);
+void WifiSetup_SimpleStartThread(void *arg);
+int WifiSetup_AesKeyWrap(u8 *out, const u8 *in, u32 length, const void *key, u32 keyLength);
+int WifiSetup_AesKeyUnwrap(u8 *out, const u8 *in, u32 length, const void *key, u32 keyLength);
+void WifiSetup_XorBlock8(const u8 *a, const u8 *b, u8 *out);
 int WifiSetup_AesSetEncryptKey(u32 *roundKeys, const u8 *key, int keyBits);
 int WifiSetup_AesSetDecryptKey(u32 *roundKeys, const u8 *key, int keyBits);
 void WifiSetup_AesEncryptBlock(const u32 *roundKeys, int rounds, const u8 *in, u8 *out);
@@ -150,16 +150,16 @@ void WifiSetup_EncodeLittleEndian(u8 *dst, const volatile u32 *src, u32 len);
 void WifiSetup_DecodeLittleEndian(u32 *dst, const u8 *src, u32 len);
 void WifiSetup_CopyBytes(u8 *dst, const u8 *src, u32 len);
 void WifiSetup_FillBytes(void *dst, int value, u32 count);
-int ov13_02226D0C(char *dst, int value);
-void ov13_02226C94(u8 *digest, const u8 *src, u32 len);
-u32 ov13_02226CBC(void);
-void *ov13_02226CD8(u32 count, u32 size);
-void ov13_02226CFC(void *ptr);
-int ov13_02226D40(char *dst, const s8 *mac);
-int ov13_02226D74(u32 priority, u32 count, void (*statusCallback)(s32 *), WifiSetupWorkAllocFunc alloc, WifiSetupWorkFreeFunc free, u32 stackSize);
-int ov13_02226E5C(void);
-int ov13_02226EF0(s32 *status);
-int ov13_02226F28(void *dst);
-void ov13_02226F3C(void);
+int WifiSetup_FormatHexByte(char *dst, int value);
+void WifiSetup_CalcMd5(u8 *digest, const u8 *src, u32 len);
+u32 WifiSetup_GetMilliseconds(void);
+void *WifiSetup_WorkCalloc(u32 count, u32 size);
+void WifiSetup_WorkFree(void *ptr);
+int WifiSetup_FormatMacAddress(char *dst, const s8 *mac);
+int WifiSetup_StartSimpleStart(u32 priority, u32 count, void (*statusCallback)(s32 *), WifiSetupWorkAllocFunc alloc, WifiSetupWorkFreeFunc free, u32 stackSize);
+int WifiSetup_StopSimpleStart(void);
+int WifiSetup_GetSimpleStartStatus(s32 *status);
+int WifiSetup_GetSimpleStartResult(void *dst);
+void WifiSetup_ReportSimpleStartStatus(void);
 
 #endif // POKEHEARTGOLD_WIFI_SETUP_INTERNAL_H

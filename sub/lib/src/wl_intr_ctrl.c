@@ -10,7 +10,7 @@
 #pragma dont_inline on
 
 // RX start (hwWorkarounds bit 5): when an MP frame for this station starts arriving while the TX is busy,
-// stops the TX of the key data frame (its pointer is saved in WlTxCtrl.unk_a4 and restored at the end).
+// stops the TX of the key data frame (its pointer is saved in WlTxCtrl.savedTxPointer and restored at the end).
 void WlIntrStartRx(void) {
     u16 *cursor = 0;
     u32 startTime = 0, start = 0, index = 0;
@@ -22,7 +22,7 @@ void WlIntrStartRx(void) {
     if (!(wlWork->hwWorkarounds & 0x20)) {
         goto done;
     }
-    if (txCtrl->unk_a4 != 0xFFFF || (WL_REG(0x19C) & 3) != 3) {
+    if (txCtrl->savedTxPointer != 0xFFFF || (WL_REG(0x19C) & 3) != 3) {
         goto done;
     }
     if ((int)WL_REG(0x268) < (int)(((u32)WL_REG(0x050) >> 1) & 0xFFF)) {
@@ -41,7 +41,7 @@ void WlIntrStartRx(void) {
     for (;;) {
         distance = (u16)(WL_REG(0x268) - start);
         if (distance & 0x8000) {
-            distance = (u16)(distance + ((u32)bss->unk_9a >> 1));
+            distance = (u16)(distance + ((u32)bss->rxBufSize >> 1));
         }
         if (distance > 14) {
             break;
@@ -61,7 +61,7 @@ void WlIntrStartRx(void) {
     for (;;) {
         distance = (u16)(WL_REG(0x268) - start);
         if (distance & 0x8000) {
-            distance = (u16)(distance + ((u32)bss->unk_9a >> 1));
+            distance = (u16)(distance + ((u32)bss->rxBufSize >> 1));
         }
         if (distance > 20) {
             break;
@@ -74,7 +74,7 @@ void WlIntrStartRx(void) {
     if (*cursor & (1u << WL_REG(0x028))) {
         goto done;
     }
-    txCtrl->unk_a4 = WL_REG(0x098);
+    txCtrl->savedTxPointer = WL_REG(0x098);
     WL_REG(0x0B4) = 0x40;
     bss->keyRestoreCount++;
     while ((WL_REG(0x19C) & 3) == 3) {}
@@ -84,13 +84,13 @@ void WlIntrStartRx(void) {
     WL_REG(0x228) = 0;
     {
         WlTxCtrl *txCtrl2 = &wlWork->txCtrl;
-        u16 saved = txCtrl2->unk_a4;
+        u16 saved = txCtrl2->savedTxPointer;
         if (saved != 0xFFFF) {
             u16 old = WL_REG(0x094);
             WL_REG(0x094) = saved;
             WL_REG(0x030) |= 0x80;
             WL_REG(0x094) = old;
-            txCtrl2->unk_a4 = 0xFFFF;
+            txCtrl2->savedTxPointer = 0xFFFF;
         }
     }
 done:;
@@ -151,7 +151,7 @@ void MacBugTxMp(void) {
 // Wraps a pointer that ran past the end of the RX ring in the MAC memory.
 u16 *AdjustRingPointer(u16 *pointer) {
     if ((u32)pointer >= 0x04805F60) {
-        pointer = (u16 *)((u32)pointer - wlWorkPlain->bss.unk_9a);
+        pointer = (u16 *)((u32)pointer - wlWorkPlain->bss.rxBufSize);
     }
     return pointer;
 }
@@ -197,7 +197,7 @@ void ReleaseIntr(void) {
 }
 
 void WlIntrTxBeaconTask(void) {
-    if (wlWorkPlain->bss.unk_a4) {
+    if (wlWorkPlain->bss.gameInfoUpdated) {
         UpdateGameInfoElement();
     }
     if (wlWorkPlain->param.flags.bits.beaconIndicate) {
@@ -236,7 +236,7 @@ void WlIntrTxEndTask(void) {
                         if (CheckFrameTimeout(desc->heapFrame)) {
                             desc->heapFrame->frame.status = 2;
                             desc->count++;
-                            txCtrl->unk_ae++;
+                            txCtrl->txTimeOutCount++;
                             desc->callback(desc->heapFrame, 1);
                         } else {
                             desc->heapFrame->frame.retry = 0;

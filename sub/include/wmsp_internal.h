@@ -25,9 +25,9 @@ typedef struct WmspParentParam {
     u16 tgid;
     u16 unk_0e;
     u16 maxEntry; // passed to WMSP_WL_ParamSetMaxConnectableChild
-    u16 unk_12;
-    u16 entryFlag;
-    u16 unk_16;
+    u16 multiBootFlag;
+    u16 KS_Flag;
+    u16 CS_Flag;
     u16 beaconPeriod;
     u8 unk_1a[0x32 - 0x1a];
     u16 channel;
@@ -68,8 +68,8 @@ typedef struct WmspStatus {
     u32 mpActive;
     u32 dcfActive; // 1 from WMSP_StartDCF until WMSP_EndDCF
     u32 unk_14;
-    u32 unk_18;      // cleared by WMSP_StartDCF, set by WMSP_SetDCFData
-    u32 unk_1c;      // child: 1 once the VSync adjustment is done (WmspChildAdjustVSync1/2)
+    u32 dcfSendFlag; // cleared by WMSP_StartDCF, set by WMSP_SetDCFData
+    u32 vsyncFlag;   // child: 1 once the VSync adjustment is done (WmspChildAdjustVSync1/2)
     u8 wlVersion[8]; // WMSP_WL_DevGetVersion reply (WMSPi_CommonWlIdle)
     u16 unk_28;
     u16 unk_2a;
@@ -89,37 +89,37 @@ typedef struct WmspStatus {
     u16 childInterval;
     OSTick parentIntervalTick;
     OSTick childIntervalTick;
-    u16 unk_58;
-    u16 unk_5a;
-    u16 unk_5c;
+    u16 minFreq;
+    u16 freq;
+    u16 maxFreq;
     u16 unk_5e;
     u16 unk_60;
-    s16 unk_62;
-    s16 unk_64;
+    s16 mpCount;
+    s16 mpLimitCount;
     u16 resumePending; // set once WMSP_RequestResumeMP queued its request
-    u16 unk_68;
-    u16 unk_6a;
-    u16 unk_6c;
-    u16 unk_6e;
+    u16 prevPollBitmap;
+    u16 prevWmHeader;
+    u16 prevTxop;
+    u16 prevDataLength;
     u16 mpBufIndex;
     u16 mpBufSize;
     u8 *mpBuf[2];
     u8 *sendBuf; // WMSP_StartMP: ARM9 buffer of the MP send data
     u16 sendBufSize;
-    u16 unk_82;
+    u16 ackTime;
     u16 mpAckAlarmSet; // 1 while wmspMPAckAlarm is set
-    u16 unk_86;
+    u16 readyBitmap;
     u16 unk_88;
     u16 unk_8a;
     u16 unk_8c;
     u16 unk_8e;
     u16 unk_90;
-    u16 unk_92;
-    u16 unk_94;
+    u16 minPollBmpMode;
+    u16 singlePacketMode;
     u16 unk_96;
     u16 defaultRetryCount; // MP parameter; copied to sendRetryCount
-    u16 unk_9a;
-    u16 unk_9c; // non-zero: WMSP_StartMP does not check the buffer sizes
+    u16 ignoreFatalErrorMode;
+    u16 ignoreSizePrecheckMode; // non-zero: WMSP_StartMP does not check the buffer sizes
     u16 unk_9e;
     u16 unk_a0;
     u8 dcfDestAddress[6]; // WMSP_SetDCFData: destination of the DCF frame
@@ -128,14 +128,14 @@ typedef struct WmspStatus {
     u16 rxBufIndex;
     u8 *rxBuf[2];
     u16 rxBufSize; // size of each rxBuf (WMSP_StartDCF)
-    u16 unk_ba;
+    u16 currTgid;
     u16 linkLevel;
     u16 minRssi;
     u16 linkLevelCountdown; // MP frames until linkLevel is updated from minRssi
-    u16 unk_c2;
+    u16 beaconIndicateFlag;
     u16 wepKeyId;
     u16 pwrMgtMode; // WMSP_StartParent: argument of WMSP_WL_MlmePowerManagement
-    u32 unk_c8;
+    u32 miscFlags;
     u16 unk_cc;
     u16 vAlarmRequestQueued; // 1 while the VAlarm's request 28 (WMSP_VAlarmSetMPData) is queued
     u32 vsyncTime;           // child: VSync time stamp of the parent, then the next VSync after now
@@ -144,7 +144,7 @@ typedef struct WmspStatus {
     u16 vcountResyncCount;   // parent: VAlarms since VCOUNT was last rewritten
     u16 unk_de;
     u8 macAddress[6];
-    u16 unk_e6;
+    u16 mode;
     WmspParentParam parentParam; // copied from the ARM9 by WMSP_SetParentParam
     u8 childMacAddress[15][6];
     u16 childBitmap; // bit n: child n (aid) is connected
@@ -156,8 +156,8 @@ typedef struct WmspStatus {
     u16 wepMode; // WMSP_SetWEPKey: 0 none, 1-3 enabled
     u32 wepEnabled;
     u8 wepKey[0x50];
-    u16 unk_1ec; // 1: 1 Mbps, 2: 2 Mbps (from the parent's basic rate set)
-    u16 unk_1ee; // preamble type last set with WMSP_WL_ParamSetPreambleType
+    u16 rate;     // 1: 1 Mbps, 2: 2 Mbps (from the parent's basic rate set)
+    u16 preamble; // preamble type last set with WMSP_WL_ParamSetPreambleType
     u8 unk_1f0[0x1f4 - 0x1f0];
     u16 enableChannel;    // bit n: channel n usable (WMSP_SetParentParam)
     u16 allowedChannel;   // bit n-1: channel n allowed (WMSP_StartParent)
@@ -170,13 +170,13 @@ typedef struct WmspStatus {
     u32 sendInFlight;        // 1 from WMSP_SendMaMP / WMSP_SendMaKeyData until WMSP_FlushSendQueue
     OSTick lastRecvTick[16]; // per aid; 0: not tracked
     OSTick recvTimeout;
-    u16 unk_7c0;
-    s16 unk_7c2;
-    u16 unk_7c4;
-    u16 unk_7c6;
-    u16 unk_7c8;
+    u16 currentMinFreq;
+    s16 currentFreq;
+    u16 currentMaxFreq;
+    u16 currentMinPollBmpMode;
+    u16 currentSinglePacketMode;
     u16 sendRetryCount; // retryCount of new send queue entries
-    u16 unk_7cc;
+    u16 currentIgnoreFatalErrorMode;
 } WmspStatus;
 
 // BSS description of a parent, as reported by a scan.
@@ -206,7 +206,7 @@ typedef struct WmspBssDesc {
 typedef struct WmspArm9Buf {
     WmspStatus *status; // WMSP_Enable
     u32 unk_04;
-    u32 unk_08;
+    u32 callbackBuf;
     u32 unk_0c;
     WmspBssDesc bssDesc; // parent to connect to, followed by its game info (WMSP_StartConnectEx)
     u8 unk_50[3];
@@ -266,8 +266,8 @@ typedef struct WmspEnableRequest {
     u32 command;
     WmspArm9Buf *arm9Buf;
     WmspStatus *status;
-    u32 unk_0c; // stored in arm9Buf->unk_08
-    u32 flags;  // argument of WMSPi_CommonInit
+    u32 callbackBuf; // stored in arm9Buf->callbackBuf
+    u32 flags;       // argument of WMSPi_CommonInit
 } WmspEnableRequest;
 
 // MP parameters (WMSP_SetMPParameterCore): `mask` bit n selects field n after it.
@@ -336,13 +336,13 @@ typedef struct WmspStartMPRequest {
     u32 sendBufSize;
     WmspMPParam param; // given to WMSP_SetMPParameterCore
     u32 flags;         // bit n: take the matching field below instead of the status default
-    u16 unk_34;
-    u16 unk_36;
-    u16 unk_38;
-    u16 unk_3a;
-    u8 unk_3c;
-    u8 unk_3d;
-    u8 unk_3e;
+    u16 minFreq;
+    u16 freq;
+    u16 maxFreq;
+    u16 defaultRetryCount;
+    u8 minPollBmpMode;
+    u8 singlePacketMode;
+    u8 ignoreFatalErrorMode;
 } WmspStartMPRequest;
 
 // ARM9 request of WMSP_SetMPData: the WMSP_PutSendQueue arguments.

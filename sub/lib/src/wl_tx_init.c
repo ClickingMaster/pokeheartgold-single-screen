@@ -4,7 +4,7 @@
 #include <nitro/code32.h>
 
 // Lays out the TX slots in the MAC memory for the mode (0: test, 1: parent, 2: child, 3: other), sets their
-// TX end callbacks and the fixed tails, and the data frame control template (WlBss.unk_8a; 0x4000: WEP).
+// TX end callbacks and the fixed tails, and the data frame control template (WlBss.dataFrameCtrl; 0x4000: WEP).
 void InitTxCtrl(void) {
     WlWork *w = wlWorkPlain;
     WlTxCtrl *txCtrl = &w->txCtrl;
@@ -18,7 +18,7 @@ void InitTxCtrl(void) {
     txCtrl->txq[2].active = 0;
     txCtrl->txq[2].heapFrame = NULL;
     txCtrl->unk_a2 = 0xFFFF;
-    txCtrl->unk_a4 = 0xFFFF;
+    txCtrl->savedTxPointer = 0xFFFF;
     switch (bss->mode) {
     case 0:
         txCtrl->txq[0].frame = (u8 *)0x04804170;
@@ -33,7 +33,7 @@ void InitTxCtrl(void) {
         *(vu16 *)0x0480416E = 0x1D46;
         *(vu16 *)0x04804790 = 0xB6B8;
         *(vu16 *)0x04804792 = 0x1D46;
-        bss->unk_8a = 8;
+        bss->dataFrameCtrl = 8;
         WL_REG(0x0AE) = 1;
         break;
     case 1:
@@ -55,7 +55,7 @@ void InitTxCtrl(void) {
         *(vu16 *)0x04804A9E = 0x1D46;
         *(vu16 *)0x048050C0 = 0xB6B8;
         *(vu16 *)0x048050C2 = 0x1D46;
-        bss->unk_8a = 0x208;
+        bss->dataFrameCtrl = 0x208;
         txCtrl->beacon.frame = (u8 *)0x04804238;
         MakeBeaconFrame();
         break;
@@ -78,7 +78,7 @@ void InitTxCtrl(void) {
         *(vu16 *)0x048045D6 = 0x1D46;
         *(vu16 *)0x04804BF8 = 0xB6B8;
         *(vu16 *)0x04804BFA = 0x1D46;
-        bss->unk_8a = 0x108;
+        bss->dataFrameCtrl = 0x108;
         WL_REG(0x0AE) = 13;
         break;
     case 3:
@@ -94,11 +94,11 @@ void InitTxCtrl(void) {
         *(vu16 *)0x0480416E = 0x1D46;
         *(vu16 *)0x04804790 = 0xB6B8;
         *(vu16 *)0x04804792 = 0x1D46;
-        bss->unk_8a = 0x108;
+        bss->dataFrameCtrl = 0x108;
         WL_REG(0x0AE) = 13;
         break;
     }
     if (param->wepMode) {
-        bss->unk_8a |= 0x4000;
+        bss->dataFrameCtrl |= 0x4000;
     }
 }

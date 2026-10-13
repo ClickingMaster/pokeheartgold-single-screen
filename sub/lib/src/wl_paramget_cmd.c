@@ -245,7 +245,7 @@ int PARAMGET_GameInfoReqCmd(WlParamReq *req, WlParamCfm *cfm) {
         return 4;
     }
     if (cfm->param[0]) {
-        if (w->bss.unk_a2 & 1) {
+        if (w->bss.gameInfoOdd & 1) {
             src = w->bss.gameInfo;
             dst = (u8 *)(cfm->param + 1);
             src++;

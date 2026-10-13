@@ -122,7 +122,7 @@ void ElementChecker(WlElements *info) {
         p += length;
         remaining -= length + 2;
     }
-    if ((info->found & 8) && ((bss->bssid[0] & 1) || (info->unk_04 & 0x8000))) {
+    if ((info->found & 8) && ((bss->bssid[0] & 1) || (info->rxStatus & 0x8000))) {
         info->match |= 8;
     }
     if (info->found & 0x30) {

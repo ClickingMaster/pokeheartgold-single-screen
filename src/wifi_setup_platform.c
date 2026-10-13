@@ -87,7 +87,7 @@ int WifiSetup_CleanupSocket(void) {
     if (SOC_Cleanup() < 0) {
         return -1;
     }
-    return -!!ov13_02222D78();
+    return -!!WifiSetup_DisconnectAccessPoint();
 }
 
 int WifiSetup_MemCompare(const u8 *a, const u8 *b, int n) {
@@ -135,7 +135,7 @@ int WifiSetup_SendTo(int socket, const void *buffer, int size, int flags, u8 *ad
     return SOC_SendTo(socket, buffer, size, flags, address);
 }
 
-void ov13_022229FC(void) {
+void WifiSetup_SetSockOpt(void) {
 }
 
 int WifiSetup_Socket(int domain, int type, int protocol) {
@@ -213,7 +213,7 @@ void WifiSetup_AddToPollSet(u32 socket, void *set) {
 
 #pragma force_active on
 
-void ov13_02222B34(const void *src, void *dst) {
+void WifiSetup_ConvertBssDesc(const void *src, void *dst) {
     const ScanRecord *s = src;
     AccessPointInfo *t = dst;
     int i;
@@ -249,27 +249,27 @@ void ov13_02222B34(const void *src, void *dst) {
 
 #pragma force_active reset
 
-void ov13_02222BC0(const void *src, void *dst) {
+void WifiSetup_CopyConnectSsid(const void *src, void *dst) {
     u8 *p = dst;
     MIi_CpuClear16(0, (u16 *)(p + 0xC), 0x20);
     *(u16 *)(p + 0xA) = *(u32 *)src;
     MI_CpuCopy8((const u8 *)src + 4, p + 0xC, *(u16 *)(p + 0xA));
 }
 
-void ov13_02222BE4(void *dst, const void *src, u32 value) {
+void WifiSetup_StoreConnectResult(void *dst, const void *src, u32 value) {
     *(u32 *)dst = value;
-    ov13_02222B34(src, (u8 *)dst + 4);
+    WifiSetup_ConvertBssDesc(src, (u8 *)dst + 4);
 }
 
-BOOL ov13_02222BF4(void *message) {
+BOOL WifiSetup_OnWcmNotify(void *message) {
     return OS_SendMessage(&gWifiSetupMessageQueue, message, OS_MESSAGE_NOBLOCK);
 }
 
-BOOL ov13_02222C08(void *message) {
+BOOL WifiSetup_OnTimeoutAlarm(void *message) {
     return OS_SendMessage(&gWifiSetupMessageQueue, message, OS_MESSAGE_NOBLOCK);
 }
 
-int ov13_02222C1C(WifiSetupAllocFunc alloc, WifiSetupFreeFunc free) {
+int WifiSetup_Startup(WifiSetupAllocFunc alloc, WifiSetupFreeFunc free) {
     OSMessage message;
     BOOL running = TRUE;
 
@@ -287,7 +287,7 @@ int ov13_02222C1C(WifiSetupAllocFunc alloc, WifiSetupFreeFunc free) {
     if (gWifiSetupRuntime.allocation == NULL) {
         return -1;
     }
-    if (!WifiSetupWcm_Init(ov13_02222BF4, gWifiSetupRuntime.allocation, 0x5890)) {
+    if (!WifiSetupWcm_Init(WifiSetup_OnWcmNotify, gWifiSetupRuntime.allocation, 0x5890)) {
         running = FALSE;
     }
 
@@ -322,7 +322,7 @@ int ov13_02222C1C(WifiSetupAllocFunc alloc, WifiSetupFreeFunc free) {
     return -1;
 }
 
-int ov13_02222CE0(void) {
+int WifiSetup_Cleanup(void) {
     OSMessage message;
     BOOL running = TRUE;
     int result = -1;
@@ -376,7 +376,7 @@ int ov13_02222CE0(void) {
     return result;
 }
 
-int ov13_02222D78(void) {
+int WifiSetup_DisconnectAccessPoint(void) {
     OSMessage message;
     int result = -1;
     BOOL running;
@@ -402,7 +402,7 @@ typedef struct ScanLocals {
     OSAlarm alarm;
 } ScanLocals;
 
-int ov13_02222DB0(void **output) {
+int WifiSetup_SearchAccessPoints(void **output) {
     ScanLocals local;
     local.result = -1;
     local.running = TRUE;
@@ -429,7 +429,7 @@ int ov13_02222DB0(void **output) {
 started:
 
     OS_CreateAlarm(&local.alarm);
-    OS_SetAlarm(&local.alarm, 0x003FEC42, (OSAlarmHandler)ov13_02222C08, (void *)0x13);
+    OS_SetAlarm(&local.alarm, 0x003FEC42, (OSAlarmHandler)WifiSetup_OnTimeoutAlarm, (void *)0x13);
     do {
         OS_ReceiveMessage(&gWifiSetupMessageQueue, &local.message, OS_MESSAGE_BLOCK);
         switch ((u32)local.message) {
@@ -508,7 +508,7 @@ allocated: {
     if (records > 0) {
         dst = (u8 *)allocation + 4;
         do {
-            ov13_02222B34(buffer, dst);
+            WifiSetup_ConvertBssDesc(buffer, dst);
             i++;
             buffer += 0xc0;
             dst += 0x54;

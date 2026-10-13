@@ -14,7 +14,7 @@ void WifiSetup_Free(void *ptr) {
 
 #pragma force_active on
 
-int ov13_02220908(WifiSetupRequest *request) {
+int WifiSetup_RunAoss(WifiSetupRequest *request) {
     int valid;
 
     if (request->connectRetries == 0 || request->connectRetries < -1 || request->connectDelay < -1 || request->receiveRetries == 0 || request->receiveRetries < -1 || request->receiveDelay < -1 || request->receiveTimeout < -1 || request->keyLength == 0 || request->keyLength > 256 || request->key[request->keyLength - 1] != 0) {
@@ -36,8 +36,8 @@ int ov13_02220908(WifiSetupRequest *request) {
         WifiSetup_FreeWorkBuffers();
         return -1;
     }
-    ov13_022217D0(-1);
-    int result = ov13_022209F8(request);
+    WifiSetup_SetStatus(-1);
+    int result = WifiSetup_RunAossSession(request);
     WifiSetup_Free(gWifiSetupState.data);
     WifiSetup_FreeWorkBuffers();
     if (ov13_022459B4 != -1) {

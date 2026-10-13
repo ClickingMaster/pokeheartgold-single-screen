@@ -4,7 +4,7 @@
 
 extern int ov13_022459B4[2];
 extern u32 ov13_0224D258[256];
-s32 ov13_02223100(s32 state);
+s32 WifiSetup_NotifyStatus(s32 state);
 
 typedef struct {
     u32 length;
@@ -57,44 +57,44 @@ extern u8 ov13_0224DD02[];
 u32 _u32_div_f(u32, u32);
 
 int WifiSetup_CheckPrintable(const u8 *data, int length);
-int ov13_022216E0(List *list);
-int ov13_0222175C(void *out);
-void ov13_022217A0(int count, u8 *dst, const void *src);
-int ov13_022217D0(int value);
-int ov13_022217FC(int state, void *packet, int *counter, void *context);
-int ov13_0222189C(int state, void *packet, int *counter, void *context);
-int ov13_02221978(int state, void *packet, int *counter, void *context);
-int ov13_02221A50(int state, void *packet, int *counter, void *context);
-int ov13_02221AF4(Packet *p);
-int ov13_02221BE8(int value, const void *data);
-int ov13_02221C2C(const u8 *a, u8 *b);
-int ov13_02221C78(const u8 *src, u8 *dst);
-int ov13_02221D34(const u8 *src, int length);
-int ov13_02221D58(const u8 *src, u8 *dst);
-int ov13_02221EAC(const u8 *src, u8 *dst);
+int WifiSetup_FindAossAccessPoint(List *list);
+int WifiSetup_InitAossConnectInfo(void *out);
+void WifiSetup_InitPacketAddresses(int count, u8 *dst, const void *src);
+int WifiSetup_SetStatus(int value);
+int WifiSetup_HandlePacket(int state, void *packet, int *counter, void *context);
+int WifiSetup_HandleJoinReply(int state, void *packet, int *counter, void *context);
+int WifiSetup_HandleSettingsReply(int state, void *packet, int *counter, void *context);
+int WifiSetup_HandleDoneReply(int state, void *packet, int *counter, void *context);
+int WifiSetup_DecryptPacket(Packet *p);
+int WifiSetup_CheckPeer(int value, const void *data);
+int WifiSetup_CheckReplySequence(const u8 *a, u8 *b);
+int WifiSetup_ParseJoinReply(const u8 *src, u8 *dst);
+int WifiSetup_ReadLittleEndian(const u8 *src, int length);
+int WifiSetup_ParseWepRecord(const u8 *src, u8 *dst);
+int WifiSetup_ParseWpaRecord(const u8 *src, u8 *dst);
 int ov13_02221F64(const u8 *a, void *dst);
-int ov13_02221F94(int id, u8 *p, int remaining, u8 *out, u8 *other);
-int ov13_022220A4(int value);
-int ov13_022220B4(int which, void *a, void *b, void *c);
-int ov13_02222108(void *unused, const u8 *src, void *arg);
-int ov13_0222224C(void *unused, const u8 *src, void *arg);
-int ov13_02222328(void *unused, const u8 *src, void *arg);
-int ov13_02222394(u8 *dst);
-void ov13_02222420(int mode, u8 *dst, const void *src, s16 *length, u16 *flag, const void *extra);
-void ov13_02222474(u8 *dst, int a1, int a2, int a3, s8 a4, s8 a5, const void *src);
-void ov13_022224CC(void *a0, void *a1, int index, void *a3);
-int ov13_02222534(void *src, void *dst, int size, u8 *checksum, void *seedDst, const void *seedSrc, int seedSize);
-int ov13_022225B0(void *dst, const void *src, int size, int expected, void *seedDst, const void *seedSrc, int seedSize);
-void ov13_02222638(WifiSetupCipher *state, const u8 *key, u32 keySize, u32 tableSize);
-void ov13_0222269C(WifiSetupCipher *state, u8 *dst, const u8 *src, u32 size);
+int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, u8 *out, u8 *other);
+int WifiSetup_IsEncryptionRequested(int value);
+int WifiSetup_SendRequest(int which, void *a, void *b, void *c);
+int WifiSetup_SendJoinRequest(void *unused, const u8 *src, void *arg);
+int WifiSetup_SendSettingsRequest(void *unused, const u8 *src, void *arg);
+int WifiSetup_SendDoneRequest(void *unused, const u8 *src, void *arg);
+int WifiSetup_BuildJoinPayload(u8 *dst);
+void WifiSetup_WriteBody(int mode, u8 *dst, const void *src, s16 *length, u16 *flag, const void *extra);
+void WifiSetup_WritePacketHeader(u8 *dst, int a1, int a2, int a3, s8 a4, s8 a5, const void *src);
+void WifiSetup_SendPacket(void *a0, void *a1, int index, void *a3);
+int WifiSetup_Encrypt(void *src, void *dst, int size, u8 *checksum, void *seedDst, const void *seedSrc, int seedSize);
+int WifiSetup_Decrypt(void *dst, const void *src, int size, int expected, void *seedDst, const void *seedSrc, int seedSize);
+void WifiSetup_CipherInit(WifiSetupCipher *state, const u8 *key, u32 keySize, u32 tableSize);
+void WifiSetup_CipherXor(WifiSetupCipher *state, u8 *dst, const u8 *src, u32 size);
 u8 WifiSetup_CipherNextByte(WifiSetupCipher *state);
 u8 WifiSetup_CalcCrc32(const void *data, s32 size);
 u32 WifiSetup_UpdateCrc32(u32 crc, const u8 *data, s32 size, s32 init, u32 *table);
 void WifiSetup_InitCrc32Table(s32 unused, u32 *table);
-s32 ov13_022227A0(void *dst, s32 size, const s8 *key, s32 keySize);
-void ov13_0222281C(int start, s8 *out, int length, const s8 *key, int keylen);
-void ov13_02222850(s8 *in, u8 *out, int length);
-void ov13_02222874(u8 *dst, s32 size, u8 *tmp);
+s32 WifiSetup_Scramble(void *dst, s32 size, const s8 *key, s32 keySize);
+void WifiSetup_ScrambleMakeKey(int start, s8 *out, int length, const s8 *key, int keylen);
+void WifiSetup_ScrambleXorHalf(s8 *in, u8 *out, int length);
+void WifiSetup_ScrambleSwapHalves(u8 *dst, s32 size, u8 *tmp);
 
 int WifiSetup_CheckPrintable(const u8 *data, int length) {
     int i;
@@ -109,7 +109,7 @@ int WifiSetup_CheckPrintable(const u8 *data, int length) {
 
 #pragma force_active on
 
-int ov13_022216E0(List *list) {
+int WifiSetup_FindAossAccessPoint(List *list) {
     int result = 0;
     int matches = 0;
     int i;
@@ -139,7 +139,7 @@ int ov13_022216E0(List *list) {
 
 #pragma force_active reset
 
-int ov13_0222175C(void *out) {
+int WifiSetup_InitAossConnectInfo(void *out) {
     u8 *p = out;
     *(u32 *)p = WifiSetup_StrLen(ov13_02245A14);
     WifiSetup_MemCopy(p + 4, ov13_02245A14, *(u32 *)p);
@@ -152,7 +152,7 @@ int ov13_0222175C(void *out) {
     return 0;
 }
 
-void ov13_022217A0(int count, u8 *dst, const void *src) {
+void WifiSetup_InitPacketAddresses(int count, u8 *dst, const void *src) {
     int i;
     for (i = 0; i < count; i++) {
         WifiSetup_MemCopy(dst, src, 6);
@@ -162,19 +162,19 @@ void ov13_022217A0(int count, u8 *dst, const void *src) {
     }
 }
 
-int ov13_022217D0(int value) {
+int WifiSetup_SetStatus(int value) {
     if (value == -1) {
         ov13_022459B4[1] = value;
         return 0;
     }
     if (ov13_022459B4[1] != value) {
         ov13_022459B4[1] = value;
-        return ov13_02223100(value);
+        return WifiSetup_NotifyStatus(value);
     }
     return 0;
 }
 
-int ov13_022217FC(int state, void *packet, int *counter, void *context) {
+int WifiSetup_HandlePacket(int state, void *packet, int *counter, void *context) {
     u8 *header = (u8 *)packet + 0xC;
     int type;
 
@@ -186,26 +186,26 @@ int ov13_022217FC(int state, void *packet, int *counter, void *context) {
         (*counter)++;
         return state;
     }
-    if (ov13_02221AF4((Packet *)((u8 *)packet + 0xC)) > 0) {
+    if (WifiSetup_DecryptPacket((Packet *)((u8 *)packet + 0xC)) > 0) {
         (*counter)++;
         return state;
     }
     type = WifiSetup_NetToHost16(U16_AT(header, 6));
     switch (type) {
     case 0x1010:
-        state = ov13_0222189C(state, packet, counter, context);
+        state = WifiSetup_HandleJoinReply(state, packet, counter, context);
         break;
     case 0x2010:
-        state = ov13_02221978(state, packet, counter, context);
+        state = WifiSetup_HandleSettingsReply(state, packet, counter, context);
         break;
     case 0x3010:
-        state = ov13_02221A50(state, packet, counter, context);
+        state = WifiSetup_HandleDoneReply(state, packet, counter, context);
         break;
     }
     return state;
 }
 
-int ov13_0222189C(int state, void *packet, int *counter, void *context) {
+int WifiSetup_HandleJoinReply(int state, void *packet, int *counter, void *context) {
     u8 *header;
     u8 *body;
     int value;
@@ -216,7 +216,7 @@ int ov13_0222189C(int state, void *packet, int *counter, void *context) {
     }
     header = (u8 *)packet + 0xC;
     body = (u8 *)packet + 0x24;
-    if (ov13_02221C2C(context, header + 0x10) < 0) {
+    if (WifiSetup_CheckReplySequence(context, header + 0x10) < 0) {
         (*counter)++;
         return state;
     }
@@ -242,7 +242,7 @@ int ov13_0222189C(int state, void *packet, int *counter, void *context) {
         (*counter)++;
         return state;
     }
-    value = ov13_02221C78(body + 4, ov13_0224CFD8);
+    value = WifiSetup_ParseJoinReply(body + 4, ov13_0224CFD8);
     if (value < 0) {
         if (value == -2) {
             WifiSetup_SetError(0x16);
@@ -251,12 +251,12 @@ int ov13_0222189C(int state, void *packet, int *counter, void *context) {
         (*counter)++;
         return state;
     }
-    gWifiSetupState.unk_00 = ov13_022220A4(WifiSetup_NetToHost16(U16_AT(header, 0xC)));
+    gWifiSetupState.unk_00 = WifiSetup_IsEncryptionRequested(WifiSetup_NetToHost16(U16_AT(header, 0xC)));
     *counter = 0;
     return 1;
 }
 
-int ov13_02221978(int state, void *packet, int *counter, void *context) {
+int WifiSetup_HandleSettingsReply(int state, void *packet, int *counter, void *context) {
     u8 *header;
     u8 *body;
     int value;
@@ -267,7 +267,7 @@ int ov13_02221978(int state, void *packet, int *counter, void *context) {
     }
     header = (u8 *)packet + 0xC;
     body = (u8 *)packet + 0x24;
-    if (ov13_02221C2C((u8 *)context + 8, header + 0x10) < 0) {
+    if (WifiSetup_CheckReplySequence((u8 *)context + 8, header + 0x10) < 0) {
         (*counter)++;
         return state;
     }
@@ -291,7 +291,7 @@ int ov13_02221978(int state, void *packet, int *counter, void *context) {
     }
     WifiSetup_MemFill(ov13_0224D658, 0, 0x6A0);
     value = WifiSetup_NetToHost16(U16_AT(header, 0xA));
-    if (ov13_02221F94(0, body, value, ov13_0224D658, ov13_0224CFD8) < 0) {
+    if (WifiSetup_ParseSecurityRecords(0, body, value, ov13_0224D658, ov13_0224CFD8) < 0) {
         (*counter)++;
         return state;
     }
@@ -302,7 +302,7 @@ int ov13_02221978(int state, void *packet, int *counter, void *context) {
     return 2;
 }
 
-int ov13_02221A50(int state, void *packet, int *counter, void *context) {
+int WifiSetup_HandleDoneReply(int state, void *packet, int *counter, void *context) {
     u8 *body;
     int value;
 
@@ -313,7 +313,7 @@ int ov13_02221A50(int state, void *packet, int *counter, void *context) {
     body = (u8 *)packet + 0x24;
     context = (u8 *)context + 0x10;
     packet = (u8 *)packet + 0xC;
-    if (ov13_02221C2C(context, (u8 *)packet + 0x10) < 0) {
+    if (WifiSetup_CheckReplySequence(context, (u8 *)packet + 0x10) < 0) {
         (*counter)++;
         return state;
     }
@@ -345,17 +345,17 @@ int ov13_02221A50(int state, void *packet, int *counter, void *context) {
 
 #pragma force_active on
 
-int ov13_02221AF4(Packet *p) {
+int WifiSetup_DecryptPacket(Packet *p) {
     u8 address[8];
     u16 *body = &p->length;
     int result;
     WifiSetup_MemCopy(address, p->address, 8);
-    result = ov13_022227A0(address, 8, ov13_02245A20, WifiSetup_StrLen(ov13_02245A20));
+    result = WifiSetup_Scramble(address, 8, ov13_02245A20, WifiSetup_StrLen(ov13_02245A20));
     if (result == -1) {
         WifiSetup_SetError(2);
         return -100;
     }
-    result = ov13_02221BE8(WifiSetup_NetToHost16(p->kind), address);
+    result = WifiSetup_CheckPeer(WifiSetup_NetToHost16(p->kind), address);
     if (result == 0) {
         int size;
         void *buffer;
@@ -371,7 +371,7 @@ int ov13_02221AF4(Packet *p) {
             WifiSetup_SetError(2);
             return 100;
         }
-        if (ov13_022225B0(body + 2, buffer, size, p->mode, body + 1, ov13_0224DCF8, 8) < 0) {
+        if (WifiSetup_Decrypt(body + 2, buffer, size, p->mode, body + 1, ov13_0224DCF8, 8) < 0) {
             WifiSetup_Free(buffer);
             if (WifiSetup_GetError() == 2) {
                 return 100;
@@ -388,7 +388,7 @@ int ov13_02221AF4(Packet *p) {
 
 #pragma force_active reset
 
-int ov13_02221BE8(int value, const void *data) {
+int WifiSetup_CheckPeer(int value, const void *data) {
     int i;
     int present;
     int result;
@@ -410,9 +410,9 @@ int ov13_02221BE8(int value, const void *data) {
     return result;
 }
 
-int ov13_02221C2C(const u8 *a, u8 *b) {
+int WifiSetup_CheckReplySequence(const u8 *a, u8 *b) {
     int result = 0;
-    ov13_022227A0(b, 8, ov13_02245A20, WifiSetup_StrLen(ov13_02245A20));
+    WifiSetup_Scramble(b, 8, ov13_02245A20, WifiSetup_StrLen(ov13_02245A20));
     if (WifiSetup_MemCompare(a, b, 6) != 0) {
         result = -1;
     } else {
@@ -425,7 +425,7 @@ int ov13_02221C2C(const u8 *a, u8 *b) {
     return result;
 }
 
-int ov13_02221C78(const u8 *src, u8 *dst) {
+int WifiSetup_ParseJoinReply(const u8 *src, u8 *dst) {
     const u8 *entry;
     u8 *dst80;
     int length;
@@ -457,10 +457,10 @@ int ov13_02221C78(const u8 *src, u8 *dst) {
             }
             break;
         case 5:
-            gWifiSetupState.address = WifiSetup_NetToHost32(ov13_02221D34(entry + 6, length));
+            gWifiSetupState.address = WifiSetup_NetToHost32(WifiSetup_ReadLittleEndian(entry + 6, length));
             break;
         case 6:
-            gWifiSetupState.netmask = WifiSetup_NetToHost32(ov13_02221D34(entry + 6, length));
+            gWifiSetupState.netmask = WifiSetup_NetToHost32(WifiSetup_ReadLittleEndian(entry + 6, length));
             break;
         default:
             return -1;
@@ -473,7 +473,7 @@ int ov13_02221C78(const u8 *src, u8 *dst) {
     return 0;
 }
 
-int ov13_02221D34(const u8 *src, int length) {
+int WifiSetup_ReadLittleEndian(const u8 *src, int length) {
     int offset = length - 1;
     int value = 0;
     const u8 *p = src + offset;
@@ -484,7 +484,7 @@ int ov13_02221D34(const u8 *src, int length) {
     return value;
 }
 
-int ov13_02221D58(const u8 *src, u8 *dst) {
+int WifiSetup_ParseWepRecord(const u8 *src, u8 *dst) {
     const u8 *entry = src + 6;
     const u8 *base;
     u8 *dst08 = dst + 8;
@@ -560,7 +560,7 @@ int ov13_02221D58(const u8 *src, u8 *dst) {
     return 0;
 }
 
-int ov13_02221EAC(const u8 *src, u8 *dst) {
+int WifiSetup_ParseWpaRecord(const u8 *src, u8 *dst) {
     const u8 *entry = src + 6;
     const u8 *base;
     u8 *dst08 = dst + 8;
@@ -623,7 +623,7 @@ int ov13_02221F64(const u8 *a, void *dst) {
 
 #pragma force_active on
 
-int ov13_02221F94(int id, u8 *p, int remaining, u8 *out, u8 *other) {
+int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, u8 *out, u8 *other) {
     int flags = 0;
     if (remaining <= 0) {
         return -2;
@@ -656,19 +656,19 @@ int ov13_02221F94(int id, u8 *p, int remaining, u8 *out, u8 *other) {
         int r;
         switch (p[0]) {
         case 3:
-            r = ov13_02221D58(p, first);
+            r = WifiSetup_ParseWepRecord(p, first);
             flags |= 1;
             break;
         case 4:
-            r = ov13_02221D58(p, base + 0x138);
+            r = WifiSetup_ParseWepRecord(p, base + 0x138);
             flags |= 2;
             break;
         case 5:
-            r = ov13_02221EAC(p, base + 0x268);
+            r = WifiSetup_ParseWpaRecord(p, base + 0x268);
             flags |= 4;
             break;
         case 6:
-            r = ov13_02221EAC(p, base + 0x2d8);
+            r = WifiSetup_ParseWpaRecord(p, base + 0x2d8);
             flags |= 8;
             break;
         case 10:
@@ -691,7 +691,7 @@ int ov13_02221F94(int id, u8 *p, int remaining, u8 *out, u8 *other) {
 
 #pragma force_active reset
 
-int ov13_022220A4(int value) {
+int WifiSetup_IsEncryptionRequested(int value) {
     int result = 0;
     if (value & 0x10) {
         result = 1;
@@ -699,23 +699,23 @@ int ov13_022220A4(int value) {
     return result;
 }
 
-int ov13_022220B4(int which, void *a, void *b, void *c) {
+int WifiSetup_SendRequest(int which, void *a, void *b, void *c) {
     switch (which) {
     case 0:
-        ov13_022217D0(2);
-        return ov13_02222108(a, b, c);
+        WifiSetup_SetStatus(2);
+        return WifiSetup_SendJoinRequest(a, b, c);
     case 1:
-        ov13_022217D0(3);
-        return ov13_0222224C(a, b, c);
+        WifiSetup_SetStatus(3);
+        return WifiSetup_SendSettingsRequest(a, b, c);
     case 2:
-        ov13_022217D0(5);
-        return ov13_02222328(a, b, c);
+        WifiSetup_SetStatus(5);
+        return WifiSetup_SendDoneRequest(a, b, c);
     default:
         return -1;
     }
 }
 
-int ov13_02222108(void *unused, const u8 *src, void *arg) {
+int WifiSetup_SendJoinRequest(void *unused, const u8 *src, void *arg) {
     struct Header {
         s8 value;
         u8 pad;
@@ -743,7 +743,7 @@ int ov13_02222108(void *unused, const u8 *src, void *arg) {
     encoded = work + 0x18;
     WifiSetup_MemCopy(ov13_0224DCF8, src, 8);
     WifiSetup_MemCopy(data, ov13_0224DCF8, 8);
-    header.length = ov13_02222394(payload + 4);
+    header.length = WifiSetup_BuildJoinPayload(payload + 4);
     if (header.length < 0) {
         WifiSetup_SetError(3);
         if (payload != NULL) {
@@ -754,25 +754,25 @@ int ov13_02222108(void *unused, const u8 *src, void *arg) {
     payload[0] = 0;
     *(u16 *)(payload + 2) = WifiSetup_HostToNet16((u16)header.length);
     header.length += 4;
-    ov13_02222420(0, encoded, payload, &header.length, (u16 *)&header.flag, &header);
+    WifiSetup_WriteBody(0, encoded, payload, &header.length, (u16 *)&header.flag, &header);
     header.flag |= 0x10;
-    if (ov13_022227A0(data, 8, ov13_02245A20, 6) != 0) {
+    if (WifiSetup_Scramble(data, 8, ov13_02245A20, 6) != 0) {
         WifiSetup_SetError(2);
         if (payload != NULL) {
             WifiSetup_Free(payload);
         }
         return -1;
     }
-    ov13_02222474(work, 1 << 12, header.length, header.flag, header.value, 0x11, data);
+    WifiSetup_WritePacketHeader(work, 1 << 12, header.length, header.flag, header.value, 0x11, data);
     header.length += 0x18;
-    ov13_022224CC(work, (void *)(int)header.length, 0xFF, arg);
+    WifiSetup_SendPacket(work, (void *)(int)header.length, 0xFF, arg);
     if (payload != NULL) {
         WifiSetup_Free(payload);
     }
     return 0;
 }
 
-int ov13_0222224C(void *unused, const u8 *src, void *arg) {
+int WifiSetup_SendSettingsRequest(void *unused, const u8 *src, void *arg) {
     struct Header {
         s8 value;
         u8 pad;
@@ -799,20 +799,20 @@ int ov13_0222224C(void *unused, const u8 *src, void *arg) {
     *(u32 *)(packet + 4) = gWifiSetupState.requestedMask;
     *(u32 *)(packet + 4) = WifiSetup_HostToNet32(*(u32 *)(packet + 4));
     header.length = 8;
-    ov13_02222420(gWifiSetupState.unk_00, work + 0x18, packet, &header.length, (u16 *)&header.flag, &header);
+    WifiSetup_WriteBody(gWifiSetupState.unk_00, work + 0x18, packet, &header.length, (u16 *)&header.flag, &header);
     WifiSetup_MemCopy(data, src + 8, 8);
-    size = ov13_022227A0(data, 8, ov13_02245A20, 6);
+    size = WifiSetup_Scramble(data, 8, ov13_02245A20, 6);
     if (size != 0) {
         WifiSetup_SetError(2);
         return -1;
     }
-    ov13_02222474(work, 2 << 12, header.length, header.flag, header.value, 0x11, data);
+    WifiSetup_WritePacketHeader(work, 2 << 12, header.length, header.flag, header.value, 0x11, data);
     header.length += 0x18;
-    ov13_022224CC(work, (void *)(int)header.length, 0, arg);
+    WifiSetup_SendPacket(work, (void *)(int)header.length, 0, arg);
     return 0;
 }
 
-int ov13_02222328(void *unused, const u8 *src, void *arg) {
+int WifiSetup_SendDoneRequest(void *unused, const u8 *src, void *arg) {
     u8 data[8];
     u8 *work = gWifiSetupState.data;
     int size;
@@ -820,13 +820,13 @@ int ov13_02222328(void *unused, const u8 *src, void *arg) {
     WifiSetup_MemFill(work, 0, 0x5DC);
     WifiSetup_MemCopy(data, src + 0x10, 8);
     size = WifiSetup_StrLen(ov13_02245A20);
-    ov13_022227A0(data, 8, ov13_02245A20, size);
-    ov13_02222474(work, 3 << 12, 0, 0, 0, 0x11, data);
-    ov13_022224CC(work, (void *)0x18, 0, arg);
+    WifiSetup_Scramble(data, 8, ov13_02245A20, size);
+    WifiSetup_WritePacketHeader(work, 3 << 12, 0, 0, 0, 0x11, data);
+    WifiSetup_SendPacket(work, (void *)0x18, 0, arg);
     return 0;
 }
 
-int ov13_02222394(u8 *dst) {
+int WifiSetup_BuildJoinPayload(u8 *dst) {
     s16 sourceLen;
     s16 secondLen;
     s16 total = 0;
@@ -853,10 +853,10 @@ int ov13_02222394(u8 *dst) {
     return (s16)total;
 }
 
-void ov13_02222420(int mode, u8 *dst, const void *src, s16 *length, u16 *flag, const void *extra) {
+void WifiSetup_WriteBody(int mode, u8 *dst, const void *src, s16 *length, u16 *flag, const void *extra) {
     if (mode == 1) {
         *flag = 1;
-        ov13_02222534(src, dst + 4, *length, extra, dst + 2, ov13_0224DCF8, 8);
+        WifiSetup_Encrypt(src, dst + 4, *length, extra, dst + 2, ov13_0224DCF8, 8);
         *(u16 *)dst = WifiSetup_HostToNet16((u16)*length);
         *length += 4;
     } else {
@@ -864,7 +864,7 @@ void ov13_02222420(int mode, u8 *dst, const void *src, s16 *length, u16 *flag, c
     }
 }
 
-void ov13_02222474(u8 *dst, int a1, int a2, int a3, s8 a4, s8 a5, const void *src) {
+void WifiSetup_WritePacketHeader(u8 *dst, int a1, int a2, int a3, s8 a4, s8 a5, const void *src) {
     *(u16 *)(dst + 0) = WifiSetup_HostToNet16(1);
     *(u16 *)(dst + 2) = 0;
     *(u16 *)(dst + 4) = 0;
@@ -877,7 +877,7 @@ void ov13_02222474(u8 *dst, int a1, int a2, int a3, s8 a4, s8 a5, const void *sr
     WifiSetup_MemCopy(dst + 16, src, 8);
 }
 
-void ov13_022224CC(void *a0, void *a1, int index, void *a3) {
+void WifiSetup_SendPacket(void *a0, void *a1, int index, void *a3) {
     u8 packet[8];
     int value;
 
@@ -892,7 +892,7 @@ void ov13_022224CC(void *a0, void *a1, int index, void *a3) {
     WifiSetup_SendTo((int)a3, a0, (int)a1, 0, packet, sizeof(packet));
 }
 
-int ov13_02222534(void *src, void *dst, int size, u8 *checksum, void *seedDst, const void *seedSrc, int seedSize) {
+int WifiSetup_Encrypt(void *src, void *dst, int size, u8 *checksum, void *seedDst, const void *seedSrc, int seedSize) {
     u16 seed;
     WifiSetupCipher state;
 
@@ -905,13 +905,13 @@ int ov13_02222534(void *src, void *dst, int size, u8 *checksum, void *seedDst, c
     WifiSetup_MemCopy(seedDst, &seed, 2);
     WifiSetup_MemCopy(ov13_0224DD00, seedDst, 2);
     WifiSetup_MemCopy(ov13_0224DD02, seedSrc, seedSize);
-    ov13_02222638(&state, ov13_0224DD00, seedSize + 2, size);
-    ov13_0222269C(&state, dst, src, size);
+    WifiSetup_CipherInit(&state, ov13_0224DD00, seedSize + 2, size);
+    WifiSetup_CipherXor(&state, dst, src, size);
     WifiSetup_Free(state.table);
     return 0;
 }
 
-int ov13_022225B0(void *dst, const void *src, int size, int expected, void *seedDst, const void *seedSrc, int seedSize) {
+int WifiSetup_Decrypt(void *dst, const void *src, int size, int expected, void *seedDst, const void *seedSrc, int seedSize) {
     WifiSetupCipher state;
 
     state.table = WifiSetup_Alloc(size);
@@ -921,8 +921,8 @@ int ov13_022225B0(void *dst, const void *src, int size, int expected, void *seed
     }
     WifiSetup_MemCopy(ov13_0224DD00, seedDst, 2);
     WifiSetup_MemCopy(ov13_0224DD02, seedSrc, seedSize);
-    ov13_02222638(&state, ov13_0224DD00, seedSize + 2, size);
-    ov13_0222269C(&state, src, dst, size);
+    WifiSetup_CipherInit(&state, ov13_0224DD00, seedSize + 2, size);
+    WifiSetup_CipherXor(&state, src, dst, size);
     {
         int actual = WifiSetup_CalcCrc32(src, size);
         if (actual != expected) {
@@ -935,7 +935,7 @@ int ov13_022225B0(void *dst, const void *src, int size, int expected, void *seed
     return 0;
 }
 
-void ov13_02222638(WifiSetupCipher *state, const u8 *key, u32 keySize, u32 tableSize) {
+void WifiSetup_CipherInit(WifiSetupCipher *state, const u8 *key, u32 keySize, u32 tableSize) {
     u8 *table = state->table;
     u32 i;
     u32 keyIndex;
@@ -963,7 +963,7 @@ void ov13_02222638(WifiSetupCipher *state, const u8 *key, u32 keySize, u32 table
     }
 }
 
-void ov13_0222269C(WifiSetupCipher *state, u8 *dst, const u8 *src, u32 size) {
+void WifiSetup_CipherXor(WifiSetupCipher *state, u8 *dst, const u8 *src, u32 size) {
     u32 i;
 
     for (i = 0; i < size; i++) {
@@ -1018,7 +1018,7 @@ void WifiSetup_InitCrc32Table(s32 unused, u32 *table) {
     }
 }
 
-s32 ov13_022227A0(void *dst, s32 size, const s8 *key, s32 keySize) {
+s32 WifiSetup_Scramble(void *dst, s32 size, const s8 *key, s32 keySize) {
     s32 i;
     u8 *a = WifiSetup_Alloc((s32)(size + ((u32)size >> 31)) >> 1);
     u8 *b;
@@ -1031,9 +1031,9 @@ s32 ov13_022227A0(void *dst, s32 size, const s8 *key, s32 keySize) {
         return -1;
     }
     for (i = 0; i < 2; i++) {
-        ov13_0222281C(i, (s8 *)a, size, key, keySize);
-        ov13_02222850((s8 *)a, dst, size);
-        ov13_02222874(dst, size, b);
+        WifiSetup_ScrambleMakeKey(i, (s8 *)a, size, key, keySize);
+        WifiSetup_ScrambleXorHalf((s8 *)a, dst, size);
+        WifiSetup_ScrambleSwapHalves(dst, size, b);
     }
     WifiSetup_Free(a);
     WifiSetup_Free(b);
@@ -1042,7 +1042,7 @@ s32 ov13_022227A0(void *dst, s32 size, const s8 *key, s32 keySize) {
 
 #pragma force_active on
 
-void ov13_0222281C(int start, s8 *out, int length, const s8 *key, int keylen) {
+void WifiSetup_ScrambleMakeKey(int start, s8 *out, int length, const s8 *key, int keylen) {
     int half = length / 2, pos = start % keylen, i;
     for (i = 0; i < half; i++) {
         out[i] = i;
@@ -1053,7 +1053,7 @@ void ov13_0222281C(int start, s8 *out, int length, const s8 *key, int keylen) {
     }
 }
 
-void ov13_02222850(s8 *in, u8 *out, int length) {
+void WifiSetup_ScrambleXorHalf(s8 *in, u8 *out, int length) {
     int i;
     int half = length / 2;
     for (i = 0; i < half; i++) {
@@ -1063,7 +1063,7 @@ void ov13_02222850(s8 *in, u8 *out, int length) {
 
 #pragma force_active reset
 
-void ov13_02222874(u8 *dst, s32 size, u8 *tmp) {
+void WifiSetup_ScrambleSwapHalves(u8 *dst, s32 size, u8 *tmp) {
     s32 half = (s32)(size + ((u32)size >> 31)) >> 1;
     WifiSetup_MemCopy(tmp, dst + half, half);
     WifiSetup_MemCopy(tmp + half, dst, half);

@@ -5,7 +5,7 @@
 
 // Body of a received / sent authentication frame.
 #define RX_AUTH(frame)     WL_RX_BODY(frame, WlAuthBody)
-#define TX_AUTH(heapFrame) ((WlAuthBody *)&(heapFrame)->frame.unk_24)
+#define TX_AUTH(heapFrame) ((WlAuthBody *)&(heapFrame)->frame.body0)
 
 // Shared key, parent: the challenge text of the station's third frame against the one sent (the random sequence
 // of the station's seed).
@@ -52,7 +52,7 @@ void RxAuthFrame(WlRxFrame *frame) {
         if (((busy & 1) == 0 || tx->txq[0].active == 0) && ((busy & 4) == 0 || tx->txq[1].active == 0) && ((busy & 8) == 0 || tx->txq[2].active == 0) && !(WL_REG(0x19C) & 1)) {
             WL_REG(0x032) = 0;
             WL_REG(0x032) = 0x8000;
-            wlWorkPlain->rxCtrl.unk_02 = 0;
+            wlWorkPlain->rxCtrl.cntupBusyCount = 0;
         }
     }
     if (IsExistManFrame(frame->addr2, 0xB0)) {

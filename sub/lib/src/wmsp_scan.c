@@ -49,7 +49,7 @@ void WMSP_EndParent(void *request) {
             OSIntrMode irq = __VENEER_OS_DisableInterrupts();
             if (status->childBitmap & mask) {
                 status->childBitmap &= ~mask;
-                status->unk_86 &= ~mask;
+                status->readyBitmap &= ~mask;
                 status->lastRecvTick[aid] = 0;
                 __VENEER_OS_RestoreInterrupts(irq);
                 WMSP_IndicateDisconnectionFromMyself(TRUE, (u16)aid, mac);
@@ -63,7 +63,7 @@ void WMSP_EndParent(void *request) {
         WmspError_060035F4(0, error);
         return;
     }
-    status->unk_c2 = 0;
+    status->beaconIndicateFlag = 0;
     status->state = 3;
     error = WMSP_WL_DevIdle(buf)[2];
     if (error) {
@@ -134,7 +134,7 @@ void WMSP_StartScan(void *request) {
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
     }
-    status->unk_e6 = 2;
+    status->mode = 2;
     reply = WMSP_WL_DevGetStationState(buf);
     if (reply[2]) {
         WmspError_06003ED4(0x308, reply[2], 0);

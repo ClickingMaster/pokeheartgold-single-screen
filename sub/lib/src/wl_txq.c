@@ -39,7 +39,7 @@ void TxqPri(u32 pri) {
         frame = (WlTxHeapFrame *)(cur + 0x10);
         aid = frame->station;
         if (CheckFrameTimeout(frame)) {
-            txCtrl->unk_ae++;
+            txCtrl->txTimeOutCount++;
             frame->frame.status = 2;
             desc->count++;
             desc->callback(frame, 0);
@@ -59,7 +59,7 @@ void TxqPri(u32 pri) {
         break;
     }
     desc->active = 1;
-    desc->unk_02++;
+    desc->pendingCount++;
     desc->heapFrame = frame;
     buf = desc->frame;
     if (bss->powerState == 0) {

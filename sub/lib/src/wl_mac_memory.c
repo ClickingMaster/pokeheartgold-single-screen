@@ -22,7 +22,7 @@ void DMA_Read(void *dest, const void *src, u32 size) {
     }
     __VENEER_MIi_CpuCopy16(src, dest, first);
     if (rest) {
-        u32 wrapped = (u32)src + first - wlWorkPlain->bss.unk_9a;
+        u32 wrapped = (u32)src + first - wlWorkPlain->bss.rxBufSize;
         __VENEER_MIi_CpuCopy16((void *)wrapped, (u8 *)dest + first, rest);
     }
 }

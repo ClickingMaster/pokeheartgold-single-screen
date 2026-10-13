@@ -11,7 +11,7 @@ extern u8 _02108FC0[]; // BSSID ff:ff:ff:ff:ff:ff (any)
 extern u8 _02108FC8[]; // SSID of 0xFF bytes (any)
 
 void WifiSetup_Sleep(s32 ticks);
-s32 ov13_02223100(s32 arg);
+s32 WifiSetup_NotifyStatus(s32 arg);
 void WifiSetupWcm_HandleEvent(WifiSetupWcmEvent *event);
 int WifiSetupWcm_ReturnToIdle(void);
 int WifiSetupWcm_CopyApList(u8 *dst, int max);
@@ -26,7 +26,7 @@ void WifiSetup_Sleep(s32 ticks) {
     OS_Sleep(ticks);
 }
 
-s32 ov13_02223100(s32 arg) {
+s32 WifiSetup_NotifyStatus(s32 arg) {
     s32 (*callback)(s32) = gWifiSetupRuntime.callback;
     if (callback != NULL) {
         callback(arg);

@@ -139,7 +139,7 @@ void WifiSetupErrorScreen_DrawMessage(void) {
         code = 0;
     }
     canvas = WifiSetupText_InitBgCanvas(0, ov13_022454CC[WifiSetupApp_GetLanguage()]);
-    msg = WifiSetupText_GetString(ov13_0224F4F8, code);
+    msg = WifiSetupText_GetString(gWifiSetupTextBank, code);
     swprintf(text, 8, ov13_0224646C, -gWifiSetupErrorCode);
     {
         int y = ov13_022454DE[WifiSetupApp_GetLanguage() * 2];

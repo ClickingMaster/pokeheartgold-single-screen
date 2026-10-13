@@ -125,8 +125,8 @@ typedef struct WlCam {
     u16 numSta;      // used entries, the broadcast entry included
     u16 powerMgtMap; // stations in power save mode (bit per entry)
     u16 activeMap;   // stations awake (CAM_SetAwake / CAM_SetDoze)
-    u16 unk_06;      // bit per entry: state below 0x40 (CAM_SetStaState)
-    u16 unk_08;      // bit per entry: CAM_SetTIMElementBitmap leaves the entry alone, timer not reloaded
+    u16 notAssocMap; // bit per entry: state below 0x40 (CAM_SetStaState)
+    u16 deAuthMap;   // bit per entry: CAM_SetTIMElementBitmap leaves the entry alone, timer not reloaded
     u16 unk_0a;
     u16 aidCount; // AIDs handed out
     u16 aidMap;   // AIDs in use (bit 0: reserved)
@@ -148,7 +148,7 @@ typedef struct WlParam {
     WlParamFlags flags;
     u16 activeZoneTime;
     u16 errors;  // DiagMacRegister errors; bit 7: bad flash checksum
-    u32 unk_340; // bits set by WSetMacAdrs (1), WSetEnableChannel (2), WSetMode (3)
+    u32 setMask; // bits set by WSetMacAdrs (1), WSetEnableChannel (2), WSetMode (3)
 } WlParam;
 
 // BSS state, cleared by InitializeParam.
@@ -159,7 +159,7 @@ typedef struct WlBss {
     u16 mode; // copy of WlParam.mode
     u16 powerMgtMode;
     u16 powerState; // WSetPowerState: hardware power state >> 1
-    u16 unk_12;
+    u16 joined;
     u16 receiveDtims; // MLME_PwrMgtReqCmd: wake up for the DTIM beacons
     u16 unk_16;       // DEV_TestSignalReqCmd: rate of the test signal
     u16 unk_18;       // carrier suppression test running
@@ -184,19 +184,19 @@ typedef struct WlBss {
     u16 beaconLostCount;
     u16 parentMacAdrs[3]; // child: the parent associated with (RxAssResFrame); MLME_BeaconLostTask reports it
     u16 parentStation;    // child: CAM index of the parent; WClearAids drops its frames and CAM state
-    u16 unk_8a;           // bit 14 set while WEP is on
-    u16 unk_8c;           // WSetFrameLifeTime: life time * beaconPeriod / 100 (0xFFFF: none)
+    u16 dataFrameCtrl;    // bit 14 set while WEP is on
+    u16 txLifeTime;       // WSetFrameLifeTime: life time * beaconPeriod / 100 (0xFFFF: none)
     u16 parentBuffered;   // child in power save: the parent's TIM (RxBeaconFrame), bit 0: broadcast frames, 1: frames for the own AID; no doze while set
     u16 unk_90;
     u16 ssidOffset;     // offset of the SSID in the beacon frame
-    u16 unk_94;         // offset of the beacon's TIM element (MakeBeaconFrame; MAC memory 0x0480425C + unk_94)
+    u16 timOffset;      // offset of the beacon's TIM element (MakeBeaconFrame; MAC memory 0x0480425C + timOffset)
     u16 gameInfoOffset; // offset of the beacon's game information element (MakeBeaconFrame)
     u16 unk_98;
-    u16 unk_9a;   // DMA_Read: MAC memory reads past 0x04805F60 continue this many bytes lower
-    u8 *gameInfo; // 129-byte buffer (InitializeHeapBuf)
+    u16 rxBufSize; // DMA_Read: MAC memory reads past 0x04805F60 continue this many bytes lower
+    u8 *gameInfo;  // 129-byte buffer (InitializeHeapBuf)
     u16 gameInfoLength;
-    u16 unk_a2;            // bit 0: WSetGameInfo writes gameInfo byte by byte (WL_WriteByte)
-    u16 unk_a4;            // set by WSetGameInfo
+    u16 gameInfoOdd;       // bit 0: WSetGameInfo writes gameInfo byte by byte (WL_WriteByte)
+    u16 gameInfoUpdated;   // set by WSetGameInfo
     u16 tmpttPowerSaveOff; // WDisableTmpttPowerSave / WEnableTmpttPowerSave
     u32 intervalCount;     // WIntervalTimer calls (every 100 ms in state 0x40)
     u16 unk_ac;            // DEV_TestSignalReqCmd: BBP register 6 during the carrier suppression test
@@ -235,10 +235,10 @@ typedef struct WlSeqCtrlBits {
 // TX frame in the MAC memory: hardware TX header, then the 802.11 header.
 typedef struct WlTxFrame {
     u16 status;
-    u16 unk_02; // MP: stations still to answer (bit per AID)
-    u16 retry;  // low byte: retry count
-    u16 unk_06; // MA_DataReqCmd: rate requested (0: the station's rate)
-    u16 rate;   // 10: 1 Mbps, 20: 2 Mbps
+    u16 clientBits; // MP: stations still to answer (bit per AID)
+    u16 retry;      // low byte: retry count
+    u16 reqRate;    // MA_DataReqCmd: rate requested (0: the station's rate)
+    u16 rate;       // 10: 1 Mbps, 20: 2 Mbps
     u16 length;
     u16 frameCtrl; // 0x4000: WEP
     u16 duration;
@@ -246,14 +246,14 @@ typedef struct WlTxFrame {
     u16 addr2[3];
     u16 addr3[3];
     u16 seqCtrl;
-    u16 unk_24; // the body: MP frame: time per answer; key data frame: its header
-    u16 unk_26;
-    u16 unk_28;
+    u16 body0; // the body: MP frame: time per answer; key data frame: its header
+    u16 body1;
+    u16 body2;
 } WlTxFrame;
 
 // TX frame in the driver heap (after its WlHeapBuf): queue data, then the frame as copied to the MAC memory.
 typedef struct WlTxHeapFrame {
-    u16 unk_00;
+    u16 deAuthAction;
     u16 station; // CAM index
     u16 time;    // low half of WlBss.intervalCount when queued (CheckFrameTimeout)
     u16 bodyLength;
@@ -269,7 +269,7 @@ typedef struct WlIndHeader {
 
 // Entry of a station in the MP state.
 typedef struct WlMpEntry {
-    u16 unk_00;
+    u16 length;
     u16 unk_02;
     u16 aid;
     u16 missCount; // MP answers missing (WlIntrTxEnd)
@@ -278,12 +278,12 @@ typedef struct WlMpEntry {
 // MP sequence state (WlTxCtrl.mpState): an indication (0x184) sent to the WMSP when the sequence ends.
 typedef struct WlMpState {
     WlIndHeader header;
-    u16 unk_10; // stations addressed (bit per AID)
-    u16 unk_12; // WlIntrMpEndTask: stations addressed that answered
-    u16 count;  // stations
+    u16 remainBitmap; // stations addressed (bit per AID)
+    u16 unk_12;       // WlIntrMpEndTask: stations addressed that answered
+    u16 count;        // stations
     u16 entrySize;
-    u16 unk_18;    // WlIntrTxEnd: MP frame retried up to the threshold
-    u8 entries[8]; // WlMpEntry, entrySize bytes per station; the table continues past the struct
+    u16 retryOverCount; // WlIntrTxEnd: MP frame retried up to the threshold
+    u8 entries[8];      // WlMpEntry, entrySize bytes per station; the table continues past the struct
 } WlMpState;
 
 // Received frame in the driver heap (TakeoutRxFrame): driver data, then the hardware RX header and the
@@ -350,7 +350,7 @@ typedef struct WlReAssReqBody {
 // A frame waiting in the MAC memory (WlTxCtrl.txq / beacon).
 typedef struct WlTxDesc {
     u16 active; // txq[4], txq[5]: 2 while the key data frame is sent, then 1 (CheckKeyTxEndMain)
-    u16 unk_02;
+    u16 pendingCount;
     u16 count; // frames completed
     u16 unk_06;
     u8 *frame;                                 // the frame's place in the MAC memory
@@ -362,22 +362,22 @@ typedef struct WlTxDesc {
 typedef struct WlTxCtrl {
     WlTxDesc txq[6]; // [0..2]: by priority (ResetTxqPri); [3]: MP frame, its active flag makes WDisableTmpttPowerSave leave the hardware alone; [5]: PS-Poll
     WlTxDesc beacon;
-    u32 unk_8c; // bit 1: SetParentTbttTxq is due at the next TX end
+    u32 pendingFlags; // bit 1: SetParentTbttTxq is due at the next TX end
     WlMpState *mpState;
-    u16 unk_94; // MA_MpReqCmd: interval
-    u16 unk_96; // MA_MpReqCmd: period
-    u16 unk_98; // MP: stations addressed (bit per AID)
-    u16 unk_9a;
-    u16 unk_9c;
-    u16 unk_9e; // MP: retry count from which WlIntrTxEnd stops the TX queue
-    u16 unk_a0; // WlIntrMpEndTask: WlMpState.unk_10 of the last MP sequence
+    u16 mpInterval; // MA_MpReqCmd: interval
+    u16 mpPeriod;   // MA_MpReqCmd: period
+    u16 mpBitmap;   // MP: stations addressed (bit per AID)
+    u16 mpAnsweredBitmap;
+    u16 mpPayloadBytes;
+    u16 mpRetryLimit;       // MP: retry count from which WlIntrTxEnd stops the TX queue
+    u16 mpLastRemainBitmap; // WlIntrMpEndTask: WlMpState.remainBitmap of the last MP sequence
     u16 unk_a2;
-    u16 unk_a4; // TX pointer saved by WlIntrStartRx (0xFFFF: none)
+    u16 savedTxPointer; // TX pointer saved by WlIntrStartRx (0xFFFF: none)
     u16 unk_a6;
-    u16 unk_a8; // WlIntrTxEnd: MP stopped at the retry threshold
-    u16 unk_aa; // WlIntrTxEnd: MP ended
-    u16 unk_ac; // WlIntrTxEnd: MP ended with the MP end interrupt pending
-    u16 unk_ae; // WlIntrTbtt: queued frames timed out
+    u16 mpRetryOverCount;  // WlIntrTxEnd: MP stopped at the retry threshold
+    u16 mpEndCount;        // WlIntrTxEnd: MP ended
+    u16 mpEndPendingCount; // WlIntrTxEnd: MP ended with the MP end interrupt pending
+    u16 txTimeOutCount;    // WlIntrTbtt: queued frames timed out
 } WlTxCtrl;
 
 // Frame a fragment belongs to: destination, source and sequence control (fragment number: last one received).
@@ -398,10 +398,10 @@ typedef struct WlDefrag {
 
 // RX side of the MAC (WlWork+0x4DC).
 typedef struct WlRxCtrl {
-    u16 lastMpSeqCtrl; // sequence control of the last MP frame received
-    u16 unk_02;        // WlIntrRxCntup: RX counter interrupts while TX was busy
-    u16 unk_04;        // next frame to read (halfword index into the MAC memory)
-    u16 unk_06;
+    u16 lastMpSeqCtrl;  // sequence control of the last MP frame received
+    u16 cntupBusyCount; // WlIntrRxCntup: RX counter interrupts while TX was busy
+    u16 readIndex;      // next frame to read (halfword index into the MAC memory)
+    u16 mpStatusFlags;
     WlDefrag defrag[3]; // fragment reassembly slots (DefragTimerTask)
 } WlRxCtrl;
 
@@ -679,15 +679,15 @@ typedef struct WlMaDataConfirm {
 
 typedef struct WlMaKeyDataReq {
     WlCmdRequest header;
-    u16 length; // bytes of data
-    u16 unk_12; // key data header
+    u16 length;    // bytes of data
+    u16 keyHeader; // key data header
     void *data;
 } WlMaKeyDataReq;
 
 typedef struct WlMaMpReq {
     WlCmdRequest header;
     u16 flags;      // bit 15: keep the values of the last sequence for the fields whose bit (1..4) is clear
-    u16 retryLimit; // WlTxCtrl.unk_9e
+    u16 retryLimit; // WlTxCtrl.mpRetryLimit
     u16 interval;   // bit 15: in microseconds, else in slots
     u16 bitmap;     // stations addressed (bit per AID)
     u16 period;     // 0: send now
@@ -726,7 +726,7 @@ typedef struct WlMlmeBeaconRecvInd {
     u16 gameInfoLength;
     u8 unk_18[6];
     u8 unk_1e; // low byte of the RX header's unk_0e
-    u8 unk_1f; // low byte of the RX header's rssi
+    u8 rssi;   // low byte of the RX header's rssi
     u8 unk_20[14];
     u16 srcMacAdrs[3];
     u8 unk_34[8];
@@ -735,7 +735,7 @@ typedef struct WlMlmeBeaconRecvInd {
 
 // AP list entry (UpdateApList: from beacons and probe responses).
 typedef struct WlApEntry {
-    u16 unk_00; // low byte of the RX header's rssi; 0: entry free
+    u16 rssi; // low byte of the RX header's rssi; 0: entry free
     u16 strength;
     u16 capaInfo;
     u16 bssid[3];
@@ -758,7 +758,7 @@ typedef struct WlCapaBits {
 // Elements of a received management frame body (ElementChecker).
 typedef struct WlElements {
     u8 *elements;
-    u16 unk_04; // bit 15: BSSID check passes
+    u16 rxStatus; // bit 15: BSSID check passes
     u16 capaInfo;
     u16 length;
     u16 match; // 1: SSID, 2: channel, 4: rates, 8: BSSID, 16 / 32: capability bits

@@ -18,7 +18,7 @@ void UpdateApList(u32 strength, const WlRxFrame *frame, const u8 *ssid) {
     oldest = empty;
     min = 0x400;
     for (i = 0; i < 4; i++, entry++) {
-        if (entry->unk_00) {
+        if (entry->rssi) {
             if (MatchMacAdrs(entry->bssid, frame->addr3)) {
                 goto filled;
             }
@@ -41,7 +41,7 @@ filled:
     entry = &wlWorkPlain->apList[i];
     __VENEER_MIi_CpuClear16(0, entry, sizeof(WlApEntry));
     entry->lifeTime = 0x400;
-    entry->unk_00 = (u16)(frame->rssi & 255);
+    entry->rssi = (u16)(frame->rssi & 255);
     entry->strength = (u16)strength;
     WSetMacAdrs1(entry->bssid, frame->addr3);
     entry->ssidLength = WL_ReadByte(ssid + 1);

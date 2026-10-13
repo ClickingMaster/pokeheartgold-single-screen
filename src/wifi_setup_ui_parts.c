@@ -23,7 +23,7 @@ extern u8 ov13_0224F46C;
 extern char ov13_0224F470[];
 extern WifiSetupOamBlock **ov13_0224F4B0;
 extern void *ov13_0224F4B4;
-extern void *ov13_0224F4F8;
+extern void *gWifiSetupTextBank;
 extern u16 ov13_02244EB8[];
 extern u16 ov13_02244EBC[];
 extern u16 ov13_02244EBE[];
@@ -250,7 +250,7 @@ int WifiSetupMessage_Show(int a, int b, int c) {
     WifiSetup_LoadGraphics(ov13_02245B20, GXS_LoadBG0Scr);
     *(vu32 *)0x04001010 = 0x01920000;
     canvas = WifiSetupText_InitBgCanvas(1, 0);
-    text = WifiSetupText_GetStringWithDigit(ov13_0224F4F8, a, b, c);
+    text = WifiSetupText_GetStringWithDigit(gWifiSetupTextBank, a, b, c);
     flags = WifiSetup_GetTextFlags();
     WifiSetupText_DrawInRect(canvas, 20, 0, 216, 64, 2, flags, text);
     WifiSetupText_MarkDirty(canvas);
@@ -315,7 +315,7 @@ void WifiSetup_PrintMessage(int message) {
     void *canvas, *text;
     u32 flags;
     canvas = WifiSetupText_InitBgCanvas(0, 0);
-    text = WifiSetupText_GetString(ov13_0224F4F8, message);
+    text = WifiSetupText_GetString(gWifiSetupTextBank, message);
     flags = WifiSetup_GetTextFlags();
     WifiSetupText_DrawInRect(canvas, 13, 40, 230, 112, 2, flags, text);
     WifiSetupText_MarkDirty(canvas);
@@ -326,7 +326,7 @@ void WifiSetup_PrintMessageWithText(const u16 *str, int message) {
     u32 flags;
     int x, y;
     canvas = WifiSetupText_InitBgCanvas(0, 0);
-    text = WifiSetupText_GetString(ov13_0224F4F8, message);
+    text = WifiSetupText_GetString(gWifiSetupTextBank, message);
     flags = WifiSetup_GetTextFlags();
     WifiSetupText_DrawInRect(canvas, 13, 60, 230, 94, 2, flags, text);
     x = WifiSetupApp_GetLanguage();

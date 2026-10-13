@@ -27,7 +27,7 @@ void WlIntrRxEnd(void) {
         u16 *durationp;
         u32 len;
         u32 frameCtrl;
-        current = rx->unk_04;
+        current = rx->readIndex;
         end = WL_REG(0x054);
         if (current == end) {
             break;
@@ -57,7 +57,7 @@ void WlIntrRxEnd(void) {
         len = *lengthp;
         current = ((len + (current << 1) + 15) >> 2) * 2;
         if (current >= 0xFB0) {
-            current -= (u32)bss->unk_9a >> 1;
+            current -= (u32)bss->rxBufSize >> 1;
         }
         if (len > 0x92C) {
             current = end;
@@ -70,12 +70,12 @@ void WlIntrRxEnd(void) {
             if (next < 0x04805F5A) {
                 rate = *(u16 *)(next + 6) & 255;
             } else {
-                rate = *(u16 *)(next - bss->unk_9a + 6);
+                rate = *(u16 *)(next - bss->rxBufSize + 6);
             }
             if ((status & 0x7C00) || (rate != 10 && rate != 20) || len > 0xFFF) {
                 bss->rxDropCount++;
                 packet[0] = 0xFFFF;
-                rx->unk_04 = (u16)end;
+                rx->readIndex = (u16)end;
                 *nextp = (u16)end;
                 break;
             }
@@ -120,7 +120,7 @@ void WlIntrRxEnd(void) {
                 }
             }
         }
-        rx->unk_04 = (u16)current;
+        rx->readIndex = (u16)current;
         *nextp = (u16)current;
     }
     if (checkRing) {

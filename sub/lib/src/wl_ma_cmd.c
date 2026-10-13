@@ -28,17 +28,17 @@ int MA_DataReqCmd(WlMaDataReq *req, WlCmdCfm *cfm) {
     }
     req->frame.station = id;
     req->frame.time = wlWork->bss.intervalCount;
-    if (req->frame.frame.unk_06 & 255) {
-        req->frame.frame.rate = req->frame.frame.unk_06;
-        req->frame.frame.unk_06 = 0;
+    if (req->frame.frame.reqRate & 255) {
+        req->frame.frame.rate = req->frame.frame.reqRate;
+        req->frame.frame.reqRate = 0;
     } else {
         req->frame.frame.rate = CAM_GetTxRate(id);
     }
     if (req->frame.bodyLength == 0) {
-        req->frame.frame.frameCtrl = (bss->unk_8a | 64) & ~0x4000;
+        req->frame.frame.frameCtrl = (bss->dataFrameCtrl | 64) & ~0x4000;
         req->frame.frame.length = 28;
     } else {
-        req->frame.frame.frameCtrl = bss->unk_8a;
+        req->frame.frame.frameCtrl = bss->dataFrameCtrl;
         if (param->wepMode == 0) {
             req->frame.frame.length = req->frame.bodyLength + 28;
         } else {
@@ -53,7 +53,7 @@ int MA_DataReqCmd(WlMaDataReq *req, WlCmdCfm *cfm) {
             CAM_AddBcFrame(&w->heap.bufMan[10], (WlHeapBuf *)req);
             {
                 WlWork *w2 = wlWork;
-                if ((w2->cam.powerMgtMap & ~w2->cam.unk_06) == 0) {
+                if ((w2->cam.powerMgtMap & ~w2->cam.notAssocMap) == 0) {
                     TxqPri(2);
                 }
             }
@@ -115,7 +115,7 @@ int MA_KeyDataReqCmd(WlMaKeyDataReq *req, WlCmdCfm *cfm) {
     frame->length = req->length + 30;
     frame->frameCtrl = 0x118;
     WSetMacAdrs3(frame->addr1, w->bss.bssid, param->macAddress, (const u16 *)MPKEY_ADRS);
-    frame->unk_24 = req->unk_12;
+    frame->body0 = req->keyHeader;
     if (req->length) {
         if (i == 0) {
             WUpdateCounter();
@@ -125,7 +125,7 @@ int MA_KeyDataReqCmd(WlMaKeyDataReq *req, WlCmdCfm *cfm) {
     if (flags & 4) {
         {
             u32 length = req->length + 2;
-            u8 *payload = (u8 *)&frame->unk_24;
+            u8 *payload = (u8 *)&frame->body0;
             tail = (u8 *)(((u32)(payload + length) + 3) & ~3u);
         }
         ((u16 *)tail)[0] = 0xB6B8;

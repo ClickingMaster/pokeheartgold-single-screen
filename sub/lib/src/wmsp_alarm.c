@@ -17,7 +17,7 @@ void WMSP_RequestResumeMP(void) {
     BOOL ok;
     if (request) {
         request[0] = WMSP_REQ_RESUME_MP;
-        request[1] = status->unk_68;
+        request[1] = status->prevPollBitmap;
         ok = __VENEER_OS_SendMessage(&wmspW.pxiQueue, request, OS_MESSAGE_NOBLOCK);
     } else {
         ok = FALSE;

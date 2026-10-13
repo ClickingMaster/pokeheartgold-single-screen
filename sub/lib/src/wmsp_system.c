@@ -231,8 +231,8 @@ BOOL WMSP_SetAllParams(u32 command, u8 *buf) {
     __VENEER_MI_CpuCopy8(status->macAddress, params->macAddress, 6);
     params->unk_16 = 7;
     params->unk_18 = status->enableChannel;
-    params->unk_1e = status->unk_1ec;
-    params->unk_1c = status->unk_e6;
+    params->unk_1e = status->rate;
+    params->unk_1c = status->mode;
     if (!status->wepEnabled) {
         params->wepMode = 0;
         params->wepKeyId = 0;
@@ -246,7 +246,7 @@ BOOL WMSP_SetAllParams(u32 command, u8 *buf) {
     }
     params->unk_74 = 1;
     params->unk_76 = 1;
-    params->unk_78 = status->unk_e6 == 1 ? 0 : 16;
+    params->unk_78 = status->mode == 1 ? 0 : 16;
     params->unk_7a = 10;
     if (command == 0x26) {
         __VENEER_MIi_CpuClear16(0, params->unk_7c, 32);
@@ -254,7 +254,7 @@ BOOL WMSP_SetAllParams(u32 command, u8 *buf) {
         __VENEER_MIi_CpuClear16(0, params->unk_7c, 8);
         __VENEER_MIi_CpuClear16(0xffff, params->unk_7c + 4, 24);
     }
-    params->unk_9c = status->unk_1ee;
+    params->unk_9c = status->preamble;
     error = WMSP_WL_ParamSetAll(buf)[2];
     if (!error) {
         return TRUE;

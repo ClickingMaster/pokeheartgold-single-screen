@@ -40,7 +40,7 @@ typedef struct CtrdgHeader {
     u16 makerCode; // 0xB0
     u8 fixed;      // 0xB2, 0x96
     u8 unk_b3[0xBE - 0xB3];
-    u16 unk_be;
+    u16 cartId;
 } CtrdgHeader;
 
 #define CTRDG_HEADER ((CtrdgHeader *)0x08000000)
@@ -185,7 +185,7 @@ BOOL CTRDG_IsExisting(void) {
     }
     CTRDGi_ChangeLatestAccessCycle(&cycle);
     fixed = header->fixed;
-    if ((fixed == 0x96 && info->cartId != header->unk_be) || (fixed != 0x96 && info->cartId != *(u16 *)0x0801FFFE)
+    if ((fixed == 0x96 && info->cartId != header->cartId) || (fixed != 0x96 && info->cartId != *(u16 *)0x0801FFFE)
         || (info->gameCode != header->gameCode && info->isAgb)) {
         ret = FALSE;
         info->isPulledOut = 1;

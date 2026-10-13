@@ -42,13 +42,13 @@ void WMSP_EndScan(void *request) {
             return;
         }
         status->state = 2;
-        if (!status->unk_1ee) {
+        if (!status->preamble) {
             error = WMSP_WL_ParamSetPreambleType(b, 1)[2];
             if (error) {
                 WmspError_06003FF0(0x20e, error);
                 return;
             }
-            status->unk_1ee = 1;
+            status->preamble = 1;
         }
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 11;

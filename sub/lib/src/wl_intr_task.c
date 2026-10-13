@@ -12,7 +12,7 @@ void WlIntrMpEndTask(void) {
     WlTxCtrl *txCtrl = &wlWorkPlain->txCtrl;
     if (txCtrl->txq[3].active) {
         WlMpState *mp = txCtrl->mpState;
-        if (mp->unk_10 != ((WlTxFrame *)txCtrl->txq[3].frame)->unk_02) {
+        if (mp->remainBitmap != ((WlTxFrame *)txCtrl->txq[3].frame)->clientBits) {
             WlIntrRxEndTask();
         }
         {
@@ -25,8 +25,8 @@ void WlIntrMpEndTask(void) {
         }
         txCtrl->txq[3].count++;
         mp = txCtrl->mpState;
-        mp->unk_12 = mp->unk_10 ^ ((WlTxFrame *)txCtrl->txq[3].frame)->unk_02;
-        txCtrl->unk_a0 = txCtrl->mpState->unk_10;
+        mp->unk_12 = mp->remainBitmap ^ ((WlTxFrame *)txCtrl->txq[3].frame)->clientBits;
+        txCtrl->mpLastRemainBitmap = txCtrl->mpState->remainBitmap;
         txCtrl->txq[3].active = 0;
         if (wlWorkPlain->bss.tmpttPowerSaveOff) {
             WDisableTmpttPowerSave();
@@ -44,7 +44,7 @@ void SetParentTbttTxqTask(void) {
         WL_REG(0x0AE) = 8;
         TxqPri(2);
     } else {
-        if (!(w->cam.powerMgtMap & ~w->cam.unk_06)) {
+        if (!(w->cam.powerMgtMap & ~w->cam.notAssocMap)) {
             WL_REG(0x0AE) = 8;
             if (heap->bufMan[3].count) {
                 TxqPri(2);

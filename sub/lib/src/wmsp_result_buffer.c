@@ -23,7 +23,7 @@ u16 *WMSP_GetBuffer4Callback2Wm9(void) {
         VENEER_SVC_WaitByLoop(0x100);
     }
     *flag = value | 1;
-    return (u16 *)wmspW.arm9Buf->unk_08;
+    return (u16 *)wmspW.arm9Buf->callbackBuf;
 }
 
 #include <nitro/wram_end.h>

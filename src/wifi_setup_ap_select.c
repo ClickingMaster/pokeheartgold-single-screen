@@ -21,7 +21,7 @@ static inline char *CopyName(char *name, const WifiSetupApEntry *entry) {
 // Compares two scan results. Picks the first access point of current that is also in previous
 // (same SSID and BSSID) but has just dropped privacy, or else the open setup access point
 // (ov13_02245AC4) when it is new in current. Returns 1 and its index in *selected if one was found.
-int ov13_02224164(const WifiSetupApEntryList *current, const WifiSetupApEntryList *previous, u32 *selected) {
+int WifiSetup_PickSetupAccessPoint(const WifiSetupApEntryList *current, const WifiSetupApEntryList *previous, u32 *selected) {
     int changed = 0;
     int result = 0;
     int newHas;

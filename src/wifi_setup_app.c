@@ -68,14 +68,14 @@ void WifiSetupApp_StartClient(void) {
     gWifiSetupClient.request->receiveDelay = -1;
     gWifiSetupClient.request->receiveTimeout = -1;
     OS_GetMacAddress(gWifiSetupClient.request->unk_110);
-    if (ov13_02222C1C(WifiSetupApp_ClientAlloc, WifiSetupApp_ClientFree)) {
+    if (WifiSetup_Startup(WifiSetupApp_ClientAlloc, WifiSetupApp_ClientFree)) {
         OS_Terminate();
     }
 }
 
 // Stops the setup client; with `apply`, the settings it received are taken over.
 void WifiSetupApp_StopClient(BOOL apply) {
-    ov13_02222CE0();
+    WifiSetup_Cleanup();
     if (apply && gWifiSetupClient.request->error == 0 && gWifiSetupClient.done == TRUE) {
         WifiSetupConnections_SetFromInfo(gWifiSetupClient.request->result);
     }
@@ -84,7 +84,7 @@ void WifiSetupApp_StopClient(BOOL apply) {
 
 int WifiSetupApp_PollClient(void) {
     u32 error;
-    if (!ov13_02220908(gWifiSetupClient.request)) {
+    if (!WifiSetup_RunAoss(gWifiSetupClient.request)) {
         gWifiSetupClient.done = TRUE;
         return WIFI_SETUP_CLIENT_DONE;
     }
@@ -362,11 +362,11 @@ void WifiSetupTransfer_Start(WifiSetupSessionCallback callback) {
     WifiSetupSessionParams params;
     gWifiSetupSession = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupSession), 32);
     gWifiSetupSession->callback = callback;
-    gWifiSetupSession->unk_1E2A0 = 0;
-    gWifiSetupSession->unk_1E2A1 = 0;
+    gWifiSetupSession->missedEvent = 0;
+    gWifiSetupSession->cancelled = 0;
     params = ov13_02245F8C;
-    params.title = WifiSetupText_GetString(ov13_0224F4F8, 0);
-    params.description = WifiSetupText_GetString(ov13_0224F4F8, 1);
+    params.title = WifiSetupText_GetString(gWifiSetupTextBank, 0);
+    params.description = WifiSetupText_GetString(gWifiSetupTextBank, 1);
     params.languageCode = WifiSetupApp_GetLanguageCode();
     WifiSetupShare_Init(gWifiSetupSession, &params);
     if (WifiSetupShare_Start() == 0) {
@@ -383,7 +383,7 @@ void WifiSetupTransfer_CancelTask(void *task) {
     if (WifiSetupShare_Cancel() == 0) {
         return;
     }
-    gWifiSetupSession->unk_1E2A1 = 1;
+    gWifiSetupSession->cancelled = 1;
     WifiSetupTask_DestroyLater(0, task);
 }
 
@@ -400,7 +400,7 @@ void WifiSetupTransfer_StartDownload(void) {
 }
 
 u8 *WifiSetupTransfer_GetChildUser(void) {
-    return gWifiSetupSession->unk_1E280;
+    return gWifiSetupSession->childUser;
 }
 
 WifiSetupSession *gWifiSetupSession;
@@ -410,7 +410,7 @@ void WifiSetupTransfer_Task(void *task) {
     u8 ok;
 
     WifiSetupShare_Update(task);
-    if (gWifiSetupSession->unk_1E2A0 && !gWifiSetupSession->unk_1E2A1) {
+    if (gWifiSetupSession->missedEvent && !gWifiSetupSession->cancelled) {
         if (gWifiSetupSession->callback != NULL) {
             gWifiSetupSession->callback(0);
         }
@@ -423,12 +423,12 @@ void WifiSetupTransfer_Task(void *task) {
             return;
         }
         {
-            u8 *dst = gWifiSetupSession->unk_1E280;
+            u8 *dst = gWifiSetupSession->childUser;
             u16 *src = WifiSetupShare_GetChildUser();
             MIi_CpuCopy16(src, (u16 *)dst, 0x16);
         }
         if (gWifiSetupSession->callback == NULL) {
-            gWifiSetupSession->unk_1E2A0 = 1;
+            gWifiSetupSession->missedEvent = 1;
             return;
         }
         gWifiSetupSession->callback(0);
@@ -438,7 +438,7 @@ void WifiSetupTransfer_Task(void *task) {
             return;
         }
         if (gWifiSetupSession->callback == NULL) {
-            gWifiSetupSession->unk_1E2A0 = 1;
+            gWifiSetupSession->missedEvent = 1;
             return;
         }
         gWifiSetupSession->callback(1);
@@ -449,7 +449,7 @@ void WifiSetupTransfer_Task(void *task) {
             return;
         }
         if (gWifiSetupSession->callback == NULL) {
-            gWifiSetupSession->unk_1E2A0 = 1;
+            gWifiSetupSession->missedEvent = 1;
             return;
         }
         gWifiSetupSession->callback(3);
@@ -460,7 +460,7 @@ void WifiSetupTransfer_Task(void *task) {
             return;
         }
         if (gWifiSetupSession->callback == NULL) {
-            gWifiSetupSession->unk_1E2A0 = 1;
+            gWifiSetupSession->missedEvent = 1;
             return;
         }
         gWifiSetupSession->callback(4);
@@ -470,7 +470,7 @@ void WifiSetupTransfer_Task(void *task) {
             return;
         }
         if (gWifiSetupSession->callback == NULL) {
-            gWifiSetupSession->unk_1E2A0 = 1;
+            gWifiSetupSession->missedEvent = 1;
             return;
         }
         gWifiSetupSession->callback(2);

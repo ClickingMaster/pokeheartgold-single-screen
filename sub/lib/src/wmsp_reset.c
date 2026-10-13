@@ -44,11 +44,11 @@ void WMSP_Reset(void) {
         }
     }
     status->childBitmap = 0;
-    status->unk_86 = 0;
+    status->readyBitmap = 0;
     status->unk_14 = 0;
     status->dcfActive = 0;
-    status->unk_1c = 0;
-    status->unk_c2 = 0;
+    status->vsyncFlag = 0;
+    status->beaconIndicateFlag = 0;
     __VENEER_OS_RestoreInterrupts((OSIntrMode)irq);
     if (cancel) {
         WMSP_CleanSendQueue(0xffff);
@@ -115,13 +115,13 @@ reset:
             return;
         }
     case 16:
-        if (status->unk_1ee == 0) {
+        if (status->preamble == 0) {
             result = WMSP_WL_ParamSetPreambleType(buffer, 1);
             if (result[2]) {
                 WmspError_06002FC0(0x20e, result[2]);
                 return;
             }
-            status->unk_1ee = 1;
+            status->preamble = 1;
         }
         status->state = 2;
         status->wepEnabled = 0;

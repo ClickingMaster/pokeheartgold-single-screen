@@ -96,14 +96,14 @@ int WSetFrameLifeTime(u32 time) {
     u32 value;
     if (time == 0xFFFF) {
         param->frameLifeTime = 0xFFFF;
-        bss->unk_8c = 0xFFFF;
+        bss->txLifeTime = 0xFFFF;
     } else {
         value = __VENEER__u32_div_f(time * bss->beaconPeriod, 100);
         if (value > 0x10000) {
             return 5;
         }
         param->frameLifeTime = time;
-        bss->unk_8c = value;
+        bss->txLifeTime = value;
     }
     return 0;
 }
@@ -138,7 +138,7 @@ int WSetGameInfo(u32 length, const u8 *data) {
         return 4;
     }
     if (length) {
-        if (bss->unk_a2 & 1) {
+        if (bss->gameInfoOdd & 1) {
             u8 *dest = bss->gameInfo;
             u32 i;
             WL_WriteByte(dest, 0xFF);
@@ -153,7 +153,7 @@ int WSetGameInfo(u32 length, const u8 *data) {
         }
     }
     bss->gameInfoLength = length;
-    bss->unk_a4 = 1;
+    bss->gameInfoUpdated = 1;
     return 0;
 }
 

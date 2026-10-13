@@ -19,7 +19,7 @@ void WMSP_StartMP(WmspStartMPRequest *request) {
     u32 buffer[128];
     u16 *cb;
     u16 *result;
-    if (!status->unk_9c) {
+    if (!status->ignoreSizePrecheckMode) {
         u32 needed = (status->sendMaxSize + 31) & ~31u;
         if (sendBufSize < needed) {
             error = 6;
@@ -34,7 +34,7 @@ void WMSP_StartMP(WmspStartMPRequest *request) {
             error = 6;
         }
     }
-    if (status->unk_e6 == 2) {
+    if (status->mode == 2) {
         if (!(status->allowedChannel & ((1 << work->arm9Buf->bssDesc.channel) >> 1))) {
             error = 6;
         }
@@ -67,35 +67,35 @@ void WMSP_StartMP(WmspStartMPRequest *request) {
             u32 old = __VENEER_OS_DisableInterrupts();
             // the original addresses these three fields from settings + 0x700
             u8 *mp = (u8 *)settings + 0x700;
-            u32 max = (flags & 4) ? request->unk_38 : settings->unk_5c;
+            u32 max = (flags & 4) ? request->maxFreq : settings->maxFreq;
             u32 a, b;
             if (!max) {
                 max = 16;
             }
-            a = (flags & 1) ? request->unk_34 : settings->unk_58;
+            a = (flags & 1) ? request->minFreq : settings->minFreq;
             if (!a) {
                 a = 16;
             }
             if (a > max) {
                 a = max;
             }
-            b = (flags & 2) ? request->unk_36 : settings->unk_5a;
-            ((WmspStatus *)(mp - 0x700))->unk_7c4 = max;
+            b = (flags & 2) ? request->freq : settings->freq;
+            ((WmspStatus *)(mp - 0x700))->currentMaxFreq = max;
             if (!b) {
                 b = 16;
             }
-            ((WmspStatus *)(mp - 0x700))->unk_7c0 = a;
+            ((WmspStatus *)(mp - 0x700))->currentMinFreq = a;
             if (b > max) {
                 b = max;
             }
-            ((WmspStatus *)(mp - 0x700))->unk_7c2 = b;
-            if (settings->unk_62 > (s32)max) {
-                settings->unk_62 = max;
+            ((WmspStatus *)(mp - 0x700))->currentFreq = b;
+            if (settings->mpCount > (s32)max) {
+                settings->mpCount = max;
             }
-            settings->sendRetryCount = (flags & 0x200) ? request->unk_3a : settings->defaultRetryCount;
-            settings->unk_7c6 = (flags & 0x400) ? request->unk_3c : settings->unk_92;
-            settings->unk_7c8 = (flags & 0x800) ? request->unk_3d : settings->unk_94;
-            settings->unk_7cc = (flags & 0x1000) ? request->unk_3e : settings->unk_9a;
+            settings->sendRetryCount = (flags & 0x200) ? request->defaultRetryCount : settings->defaultRetryCount;
+            settings->currentMinPollBmpMode = (flags & 0x400) ? request->minPollBmpMode : settings->minPollBmpMode;
+            settings->currentSinglePacketMode = (flags & 0x800) ? request->singlePacketMode : settings->singlePacketMode;
+            settings->currentIgnoreFatalErrorMode = (flags & 0x1000) ? request->ignoreFatalErrorMode : settings->ignoreFatalErrorMode;
             __VENEER_OS_RestoreInterrupts((OSIntrMode)old);
         }
     }
@@ -121,10 +121,10 @@ void WMSP_StartMP(WmspStartMPRequest *request) {
         status->mpBufIndex = 0;
         status->sendBuf = sendBuf;
         status->sendBufSize = sendBufSize;
-        status->unk_62 = 0;
-        status->unk_64 = 0;
-        status->unk_68 = 0;
-        status->unk_6a = 0;
+        status->mpCount = 0;
+        status->mpLimitCount = 0;
+        status->prevPollBitmap = 0;
+        status->prevWmHeader = 0;
         status->minRssi = 0xffff;
         status->linkLevelCountdown = 1;
         tick = __VENEER_OS_GetTick() | 1;

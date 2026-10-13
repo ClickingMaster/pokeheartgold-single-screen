@@ -239,7 +239,7 @@ int MLME_DeAuthReqCmd(WlMlmePeerReq *req, WlMlmeDeAuthCfm *cfm) {
         frame->time = wlWorkPlain->bss.intervalCount;
         CAM_AddBcFrame(&wlWorkPlain->heap.bufMan[0], (WlHeapBuf *)((u8 *)frame - 16));
         w = wlWorkPlain;
-        if (!(w->cam.powerMgtMap & ~w->cam.unk_06)) {
+        if (!(w->cam.powerMgtMap & ~w->cam.notAssocMap)) {
             TxqPri(2);
         }
     } else {
@@ -353,7 +353,7 @@ int MLME_DisAssReqCmd(WlMlmePeerReq *req, WlCmdCfm *cfm) {
         frame->time = wlWorkPlain->bss.intervalCount;
         CAM_AddBcFrame(&wlWorkPlain->heap.bufMan[0], (WlHeapBuf *)((u8 *)frame - 16));
         w = wlWorkPlain;
-        if (!(w->cam.powerMgtMap & ~w->cam.unk_06)) {
+        if (!(w->cam.powerMgtMap & ~w->cam.notAssocMap)) {
             TxqPri(2);
         }
     } else {
@@ -428,7 +428,7 @@ int MLME_StartReqCmd(WlMlmeStartReq *req, WlCmdCfm *cfm) {
     WSetChannel(r->channel, 0);
     WSetRateSet((const u16 *)&r->rateSet);
     WInitGameInfo(r->gameInfoLength, req->gameInfo);
-    bss->unk_a4 = 0;
+    bss->gameInfoUpdated = 0;
     WStart();
     return 0;
 }

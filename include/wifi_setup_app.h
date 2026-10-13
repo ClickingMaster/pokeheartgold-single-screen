@@ -59,11 +59,11 @@ typedef void (*WifiSetupSessionCallback)(int event);
 
 typedef struct WifiSetupSession {
     u8 share[0x1E280]; // WifiSetupShare (wifi_setup_share.h)
-    u8 unk_1E280[0x18];
+    u8 childUser[0x18];
     WifiSetupSessionCallback callback; // 0x1E298
     void *task;                        // 0x1E29C
-    u8 unk_1E2A0;                      // 0x1E2A0, an event arrived while there was no callback
-    u8 unk_1E2A1;                      // 0x1E2A1
+    u8 missedEvent;                      // 0x1E2A0, an event arrived while there was no callback
+    u8 cancelled;                      // 0x1E2A1
 } WifiSetupSession;
 
 // Parameters of the session (WifiSetupShare_Init); the first part is also the Download Play parent's
@@ -83,7 +83,7 @@ extern WifiSetupRequest *ov13_0224F4C8; // = gWifiSetupClient.request
 extern WifiSetupApp gWifiSetupApp;
 extern WifiSetupTextBanks *gWifiSetupTextBanks;
 extern WifiSetupSession *gWifiSetupSession;
-extern WifiSetupTextBank *ov13_0224F4F8;
+extern WifiSetupTextBank *gWifiSetupTextBank;
 extern const u8 ov13_02245320[12];
 extern const WifiSetupSessionParams ov13_02245F8C;
 

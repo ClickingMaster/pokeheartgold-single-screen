@@ -29,7 +29,7 @@ int DEV_IdleReqCmd(WlParamReq *req, WlParamCfm *cfm) {
     int result = 1;
     cfm->header.length = result;
     w = wlWork;
-    if (w->bss.state <= 32 && w->bss.unk_12 == 0) {
+    if (w->bss.state <= 32 && w->bss.joined == 0) {
         if (FLASH_VerifyCheckSum(NULL)) {
             result = 14;
         } else {
@@ -46,7 +46,7 @@ int DEV_Class1ReqCmd(WlParamReq *req, WlParamCfm *cfm) {
     cfm->header.length = 1;
     w = wlWork;
     state = w->bss.state;
-    if (state == 16 || (state == 32 && w->bss.unk_12 == 0)) {
+    if (state == 16 || (state == 32 && w->bss.joined == 0)) {
         WSetStaState(32);
         return 0;
     } else {
