@@ -53,14 +53,14 @@ struct Obj {
     Deque deq;
 };
 
-extern "C" int ov45_0223AC78(Obj *, Src *);
+extern "C" int PPWLobbySchedule_IsSizeValid(Obj *, Src *);
 extern "C" void ov45_0223AAE4(Vec8 *, Elem *, Elem *, Tag);
-extern "C" void ov45_022391EC(It, It, Less);
+extern "C" void LobbySort_StableSort(It, It, Less);
 extern "C" void ov45_02238D54(Deque *, It, const It &, Tag);
-extern "C" int ov45_02238C74(Obj *, Src *);
+extern "C" int PPWLobbySchedule_Load(Obj *, Src *);
 
 inline void Sort(It first, It last, Less c) {
-    ov45_022391EC(first, last, c);
+    LobbySort_StableSort(first, last, c);
 }
 
 inline void Assign(Deque *d, It first, It last) {
@@ -70,9 +70,9 @@ inline void Assign(Deque *d, It first, It last) {
 
 #pragma force_active on
 
-extern "C" int ov45_02238C74(Obj *o, Src *s) {
+extern "C" int PPWLobbySchedule_Load(Obj *o, Src *s) {
     Less c;
-    if (!ov45_0223AC78(o, s)) {
+    if (!PPWLobbySchedule_IsSizeValid(o, s)) {
         return 0;
     }
     o->b28 = s->c;

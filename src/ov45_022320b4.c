@@ -71,7 +71,7 @@ extern int ov45_02237890();
 extern int LobbyCharVector_Destroy();
 extern int LobbyString_InitFromCStr();
 extern int LobbyString_Destroy();
-extern int ov45_02238B70();
+extern int PPWLobbySchedule_Copy();
 extern int ov45_0223DF4C();
 extern int LobbyChat_ToErrorCode();
 extern int LobbyChat_IsInChannel();
@@ -151,5 +151,5 @@ int PPW_LobbyGetSchedule(void *p, u32 *size) {
             return 4;
         }
     }
-    return ov45_02238B70(root + 0x144, p, size) ? 0 : 3;
+    return PPWLobbySchedule_Copy(root + 0x144, p, size) ? 0 : 3;
 }

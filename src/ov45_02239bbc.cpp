@@ -101,9 +101,9 @@ inline Cursor CopyBackB(ConstructingOut first, ConstructingOut last, Cursor resu
     return result;
 }
 
-extern "C" Cursor ov45_02239BBC(Cursor first1, Cursor last1, ConstructingOut first2, ConstructingOut last2, Cursor result, void *ctx);
+extern "C" Cursor LobbySort_MergeBackward(Cursor first1, Cursor last1, ConstructingOut first2, ConstructingOut last2, Cursor result, void *ctx);
 
-extern "C" Cursor ov45_02239BBC(Cursor first1, Cursor last1, ConstructingOut first2, ConstructingOut last2, Cursor result, void *ctx) {
+extern "C" Cursor LobbySort_MergeBackward(Cursor first1, Cursor last1, ConstructingOut first2, ConstructingOut last2, Cursor result, void *ctx) {
     if (first1 == last1) {
         return CopyBackB(first2, last2, result);
     }

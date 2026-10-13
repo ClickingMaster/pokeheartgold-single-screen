@@ -38,8 +38,8 @@ int ov45_0223DFC8(void *);
 void DWC_GetDateTime(RTCDate *, RTCTime *);
 void ov45_0223B8D0(const char *);
 void ov45_0223BD0C(void);
-void ov45_0223AA80(void *, int);
-int ov45_0223AC78(void *, void *, u32);
+void LobbySort_GetTemporaryBuffer(void *, int);
+int PPWLobbySchedule_IsSizeValid(void *, void *, u32);
 int ov45_0223AE84(void *, void *, u32);
 int ov45_0223AEDC(void *, void *);
 int ov45_0223AF04(void *, void *);
@@ -50,7 +50,7 @@ void ov45_0223B81C(void *, u32);
 u32 ov45_0223BBFC(void *, u32);
 u32 ov45_0223BD94(Vec *, u32);
 u32 ov45_0223BED0(Vec *, u32);
-void ov45_0223A9C0(Iter, Iter);
+void LobbySort_InsertionSort(Iter, Iter);
 void ov45_0223AAE4(Vec *, Pair *, Pair *);
 void ov45_0223ACF0(Vec *, Pair *, Pair *);
 void ov45_0223BE60(Vec *, u32, u32);
@@ -61,7 +61,7 @@ int ov45_0223ACA4(void *, void *, u32);
 void ov45_0223B250(void *, void *, u32);
 void ov45_0223CD78(void *, u32);
 
-void ov45_0223AA80(void *p, int n) {
+void LobbySort_GetTemporaryBuffer(void *p, int n) {
     P(p, 0) = 0;
     W(p, 4) = ov45_02255198[1];
     while (n > 0) {
@@ -124,7 +124,7 @@ alloc:
     }
 }
 
-int ov45_0223AC78(void *p, void *d, u32 n) {
+int PPWLobbySchedule_IsSizeValid(void *p, void *d, u32 n) {
     if (n < 16) {
         return 0;
     }

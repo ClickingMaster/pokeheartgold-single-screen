@@ -106,9 +106,9 @@ inline Cursor Copy(ConstructingOut first, ConstructingOut last, Cursor output) {
 }
 
 using namespace NativeSort;
-extern "C" Cursor ov45_02239F48(ConstructingOut first1, ConstructingOut last1, ConstructingOut first2, ConstructingOut last2, Cursor out, void *ctx);
+extern "C" Cursor LobbySort_MergeBuffers(ConstructingOut first1, ConstructingOut last1, ConstructingOut first2, ConstructingOut last2, Cursor out, void *ctx);
 
-extern "C" Cursor ov45_02239F48(ConstructingOut first1, ConstructingOut last1, ConstructingOut first2, ConstructingOut last2, Cursor out, void *ctx) {
+extern "C" Cursor LobbySort_MergeBuffers(ConstructingOut first1, ConstructingOut last1, ConstructingOut first2, ConstructingOut last2, Cursor out, void *ctx) {
     while (first1 != last1 && first2 != last2) {
         if (Less(*first2, *first1)) {
             *out = *first2;

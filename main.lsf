@@ -1604,8 +1604,8 @@ Overlay OVY_45
     Object src/ov45_02238f18.o
     Object src/ov45_02239090.o
     Object src/ov45_022391ec.o
-    Object src/ov45_02239294.o
-    Object src/ov45_02239518.o
+    Object src/lobby_sort_stable_sort_adaptive.o
+    Object src/lobby_sort_merge_adaptive.o
     Object src/ov45_022399a8.o
     Object src/ov45_02239abc.o
     Object src/ov45_02239b3c.o

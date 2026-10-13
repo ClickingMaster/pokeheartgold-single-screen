@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "714fbcbaac93b62036e66e1b8707d727bb77f497",
+  "commit": "331981f51a7521bc8a36a08cb6b95bb2da980ab3",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "65c1f24712a3b5d804e4c8babaaddfbb38f17cbf45921e2da698685e675b962b",
+    "ARM9": "dd476d123881fa1bc9dc01bd14ae4c2dde040eeb1fbf3efb1f3e9ceefcd241c0",
     "ARM7": "b44058d8b791338c04a234352793bd8125685d2c2662d6032830bb6faf239276"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -2644,6 +2644,22 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
+      "object": "lobby_sort_merge_adaptive.o",
+      "bytes": 1168,
+      "status": "cpp",
+      "source": "src/lobby_sort_merge_adaptive.cpp"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "lobby_sort_stable_sort_adaptive.o",
+      "bytes": 644,
+      "status": "cpp",
+      "source": "src/lobby_sort_stable_sort_adaptive.cpp"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
       "object": "lobby_timer_map_find_insert_pos.o",
       "bytes": 108,
       "status": "c",
@@ -2992,22 +3008,6 @@
       "bytes": 168,
       "status": "c",
       "source": "src/ov45_022391ec.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ov45_02239294.o",
-      "bytes": 644,
-      "status": "cpp",
-      "source": "src/ov45_02239294.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ov45_02239518.o",
-      "bytes": 1168,
-      "status": "cpp",
-      "source": "src/ov45_02239518.cpp"
     },
     {
       "cpu": "ARM9",

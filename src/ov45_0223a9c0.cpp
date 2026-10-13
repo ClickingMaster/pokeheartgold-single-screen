@@ -23,9 +23,9 @@ static inline Elem *Next(const It &it) {
     return it.p + 1;
 }
 
-extern "C" void ov45_0223A9C0(It first, It last, Less comp);
+extern "C" void LobbySort_InsertionSort(It first, It last, Less comp);
 
-extern "C" void ov45_0223A9C0(It first, It last, Less comp) {
+extern "C" void LobbySort_InsertionSort(It first, It last, Less comp) {
     Elem *i;
     Elem *k;
 

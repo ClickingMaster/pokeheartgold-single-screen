@@ -8,7 +8,7 @@
 #define H(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define B(p, o) (*(u8 *)((u8 *)(p) + (o)))
 void *ov45_02238C08(void *);
-int ov45_02238B70(u8 *, u8 *, u32 *);
+int PPWLobbySchedule_Copy(u8 *, u8 *, u32 *);
 void ov45_02238C1C(u32 *, u8 *);
 extern void LobbyCharVector_Grow(void *, u32);
 extern void *LobbyByteVector_Data(void *);
@@ -23,7 +23,7 @@ void *ov45_02238C08(void *p) {
 void ov45_02238C1C(u32 *v, u8 *p) {
     u32 len;
     len = 0;
-    ov45_02238B70(p, 0, &len);
+    PPWLobbySchedule_Copy(p, 0, &len);
     {
         u32 n = len;
         u32 zero = 0;
@@ -32,5 +32,5 @@ void ov45_02238C1C(u32 *v, u8 *p) {
         v[2] = zero;
         LobbyCharVector_Grow(v, n);
     }
-    ov45_02238B70(p, LobbyByteVector_Data(v), &len);
+    PPWLobbySchedule_Copy(p, LobbyByteVector_Data(v), &len);
 }

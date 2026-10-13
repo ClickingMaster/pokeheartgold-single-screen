@@ -102,9 +102,9 @@ inline bool Less(const Pair &a, const Pair &b) {
 }
 
 using namespace NativeSort;
-extern "C" ConstructingOut ov45_0223A7E4(Cursor first, Cursor last, ConstructingOut result, void *ctx);
+extern "C" ConstructingOut LobbySort_InsertionSortToBuffer(Cursor first, Cursor last, ConstructingOut result, void *ctx);
 
-extern "C" ConstructingOut ov45_0223A7E4(Cursor first, Cursor last, ConstructingOut result, void *ctx) {
+extern "C" ConstructingOut LobbySort_InsertionSortToBuffer(Cursor first, Cursor last, ConstructingOut result, void *ctx) {
     bool more = first != last;
     ConstructingOut end = result;
     if (more) {

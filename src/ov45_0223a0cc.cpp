@@ -129,13 +129,13 @@ inline ConstructingOut CopyReverse(Cursor first, Cursor last, ConstructingOut ou
 }
 
 using namespace NativeSort;
-extern "C" ConstructingOut ov45_0223A7E4(Cursor, Cursor, ConstructingOut, void *);
-extern "C" ConstructingOut ov45_0223A4C8(Cursor, Cursor, Cursor, Cursor, ConstructingOut, void *);
-extern "C" void ov45_02239294(Cursor, Cursor, ConstructingOut, ConstructingOut, void *);
+extern "C" ConstructingOut LobbySort_InsertionSortToBuffer(Cursor, Cursor, ConstructingOut, void *);
+extern "C" ConstructingOut LobbySort_Merge(Cursor, Cursor, Cursor, Cursor, ConstructingOut, void *);
+extern "C" void LobbySort_StableSortAdaptive(Cursor, Cursor, ConstructingOut, ConstructingOut, void *);
 #pragma force_active on
-extern "C" void ov45_0223A0CC(Cursor, Cursor, ConstructingOut, void *);
+extern "C" void LobbySort_StableSortToBuffer(Cursor, Cursor, ConstructingOut, void *);
 
-extern "C" void ov45_0223A0CC(Cursor first, Cursor last, ConstructingOut output, void *context) {
+extern "C" void LobbySort_StableSortToBuffer(Cursor first, Cursor last, ConstructingOut output, void *context) {
     Cursor middle;
     s32 count = last - first;
     if (count <= 0) {
@@ -155,14 +155,14 @@ extern "C" void ov45_0223A0CC(Cursor first, Cursor last, ConstructingOut output,
         return;
     }
     if (count <= 20) {
-        ov45_0223A7E4(first, last, output, context);
+        LobbySort_InsertionSortToBuffer(first, last, output, context);
         return;
     }
     s32 half = count - count / 2;
     middle = first + half;
-    ov45_02239294(first, middle, output, output + half, context);
-    ov45_02239294(middle, last, output + half, output + count, context);
-    ov45_0223A4C8(first, first + half, first + half, first + count, output, context);
+    LobbySort_StableSortAdaptive(first, middle, output, output + half, context);
+    LobbySort_StableSortAdaptive(middle, last, output + half, output + count, context);
+    LobbySort_Merge(first, first + half, first + half, first + count, output, context);
 }
 
 #pragma force_active off

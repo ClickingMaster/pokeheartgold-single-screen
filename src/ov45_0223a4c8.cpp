@@ -86,9 +86,9 @@ inline Out Copy(It first, It last, Out result) {
     return result;
 }
 
-extern "C" Out ov45_0223A4C8(It first1, It last1, It first2, It last2, Out result, Less comp);
+extern "C" Out LobbySort_Merge(It first1, It last1, It first2, It last2, Out result, Less comp);
 
-extern "C" Out ov45_0223A4C8(It first1, It last1, It first2, It last2, Out result, Less comp) {
+extern "C" Out LobbySort_Merge(It first1, It last1, It first2, It last2, Out result, Less comp) {
     while (first1 != last1 && first2 != last2) {
         if (comp(*first2, *first1)) {
             *result = *first2;

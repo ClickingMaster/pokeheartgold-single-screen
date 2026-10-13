@@ -14,9 +14,9 @@ typedef struct {
     Pair *p;
 } It;
 
-void ov45_022399A8(It *out, It first, It middle, It last);
+void LobbySort_Rotate(It *out, It first, It middle, It last);
 
-void ov45_022399A8(It *out, It first, It middle, It last) {
+void LobbySort_Rotate(It *out, It first, It middle, It last) {
     Pair *m, *a, *b, *result;
     Pair temp1, temp2;
     a = ((volatile It *)&first)->p;

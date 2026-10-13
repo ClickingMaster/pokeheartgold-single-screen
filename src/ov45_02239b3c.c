@@ -14,9 +14,9 @@ typedef struct {
     Pair *p;
 } It;
 
-void ov45_02239B3C(It *out, It first, It last, const int *key);
+void LobbySort_UpperBound(It *out, It first, It last, const int *key);
 
-void ov45_02239B3C(It *out, It first, It last, const int *key) {
+void LobbySort_UpperBound(It *out, It first, It last, const int *key) {
     It start = first;
     int count = last.p - start.p;
     while (count > 0) {

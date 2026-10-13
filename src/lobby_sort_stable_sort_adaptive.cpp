@@ -1,4 +1,3 @@
-#pragma force_active on
 #include <nitro/types.h>
 
 // The code below is compiled as ARM (32-bit) code.
@@ -9,6 +8,7 @@ inline void *operator new(std::size_t, void *storage) {
     return storage;
 }
 
+namespace NativeSort {
 struct Pair {
     s32 key;
     u32 payload;
@@ -94,13 +94,22 @@ struct ConstructingOut {
         return *this;
     }
 
+    s32 operator-(const ConstructingOut &o) const {
+        return position - o.position;
+    }
+
     ConstructingOut &operator++() {
         ++position;
         return *this;
     }
 
-    s32 operator-(const ConstructingOut &o) const {
-        return position - o.position;
+    ConstructingOut &operator+=(s32 n) {
+        position += n;
+        return *this;
+    }
+
+    ConstructingOut operator+(s32 n) const {
+        return ConstructingOut(*this) += n;
     }
 };
 
@@ -113,10 +122,6 @@ inline ConstructingOut CopyForward(Cursor first, Cursor last, ConstructingOut ou
     return output;
 }
 
-inline s32 Distance(Cursor first, Cursor last) {
-    return last - first;
-}
-
 inline void IterSwap(const Cursor &a, const Cursor &b) {
     Pair t = *a;
     *a = *b;
@@ -127,44 +132,49 @@ inline bool Less(const Pair &a, const Pair &b) {
     return a.key < b.key;
 }
 
-extern "C" Cursor ov45_02239DF0(ConstructingOut, ConstructingOut, Cursor, Cursor, Cursor, void *);
-extern "C" Cursor ov45_02239BBC(Cursor, Cursor, ConstructingOut, ConstructingOut, Cursor, void *);
-extern "C" Cursor ov45_02239B3C(Cursor, Cursor, const Pair &, void *);
-extern "C" Cursor ov45_02239ABC(Cursor, Cursor, const Pair &, void *);
-extern "C" Cursor ov45_022399A8(Cursor, Cursor, Cursor);
-extern "C" void ov45_02239518(Cursor first, Cursor middle, Cursor last, void *ctx, s32 len1, s32 len2, ConstructingOut buf, ConstructingOut bufEnd);
+inline ConstructingOut CopyReverse(Cursor first, Cursor last, ConstructingOut output) {
+    while (first != last) {
+        --last;
+        *output = *last;
+        ++output;
+    }
+    return output;
+}
+}
 
-extern "C" void ov45_02239518(Cursor first, Cursor middle, Cursor last, void *ctx, s32 len1, s32 len2, ConstructingOut buf, ConstructingOut bufEnd) {
-    Cursor first_cut, second_cut;
-    s32 len11, len22;
-    if (len1 == 0 || len2 == 0) {
+using namespace NativeSort;
+extern "C" void LobbySort_InsertionSort(Cursor, Cursor, void *);
+extern "C" void LobbySort_StableSortToBuffer(Cursor, Cursor, ConstructingOut, void *);
+extern "C" Cursor LobbySort_MergeBuffers(ConstructingOut, ConstructingOut, ConstructingOut, ConstructingOut, Cursor, void *);
+extern "C" void LobbySort_MergeAdaptive(Cursor first, Cursor middle, Cursor last, void *ctx, s32 len1, s32 len2, ConstructingOut buf, ConstructingOut bufEnd);
+#pragma force_active on
+extern "C" void LobbySort_StableSortAdaptive(Cursor first, Cursor last, ConstructingOut buf, ConstructingOut bufEnd, void *ctx);
+
+extern "C" void LobbySort_StableSortAdaptive(Cursor first, Cursor last, ConstructingOut buf, ConstructingOut bufEnd, void *ctx) {
+    s32 len = last - first;
+    if (len <= 1) {
         return;
     }
-    if (len1 + len2 == 2) {
-        if (Less(*middle, *first)) {
-            IterSwap(first, middle);
+    if (len == 2) {
+        --last;
+        if (Less(*last, *first)) {
+            IterSwap(first, last);
         }
         return;
     }
-    s32 cap = bufEnd - buf;
-    if (len1 <= len2 && len1 <= cap) {
-        ov45_02239DF0(buf, CopyForward(first, middle, buf), middle, last, first, ctx);
-    } else if (len2 <= cap) {
-        ov45_02239BBC(first, middle, buf, CopyForward(middle, last, buf), last, ctx);
+    if (len <= 20) {
+        LobbySort_InsertionSort(first, last, ctx);
+        return;
+    }
+    s32 half = len - len / 2;
+    Cursor middle = first + half;
+    if (len <= bufEnd - buf) {
+        LobbySort_StableSortToBuffer(first, middle, buf, ctx);
+        LobbySort_StableSortToBuffer(middle, last, buf + half, ctx);
+        LobbySort_MergeBuffers(buf, buf + half, buf + half, buf + len, first, ctx);
     } else {
-        if (len1 <= len2) {
-            len22 = len2 / 2;
-            second_cut = middle + len22;
-            first_cut = ov45_02239B3C(first, middle, *second_cut, ctx);
-            len11 = Distance(first, first_cut);
-        } else {
-            len11 = len1 / 2;
-            first_cut = first + len11;
-            second_cut = ov45_02239ABC(middle, last, *first_cut, ctx);
-            len22 = Distance(middle, second_cut);
-        }
-        middle = ov45_022399A8(first_cut, middle, second_cut);
-        ov45_02239518(first, first_cut, middle, ctx, len11, len22, buf, bufEnd);
-        ov45_02239518(middle, second_cut, last, ctx, len1 - len11, len2 - len22, buf, bufEnd);
+        LobbySort_StableSortAdaptive(first, middle, buf, bufEnd, ctx);
+        LobbySort_StableSortAdaptive(middle, last, buf, bufEnd, ctx);
+        LobbySort_MergeAdaptive(first, middle, last, ctx, middle.position - first.position, last.position - middle.position, buf, bufEnd);
     }
 }
