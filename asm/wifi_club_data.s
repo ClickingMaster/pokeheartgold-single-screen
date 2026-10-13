@@ -40,7 +40,7 @@ gOverlayTemplate_SwalotPlop:
 gOverlayTemplate_MimeJrTop:
 	.word MimeJrTop_Init, MimeJrTop_Main, MimeJrTop_Exit, FS_OVERLAY_ID(OVY_92)
 gOverlayTemplate_WifiClubGameEntry:
-	.word ov44_02232EA8, ov44_02232F64, ov44_022330A8, FS_OVERLAY_ID(OVY_44)
+	.word WifiClubGameEntry_Init, WifiClubGameEntry_Main, WifiClubGameEntry_Exit, FS_OVERLAY_ID(OVY_44)
 gOverlayTemplate_WifiClub:
 	.word ov44_0222A4B4, ov44_0222A60C, ov44_0222A758, FS_OVERLAY_ID(OVY_44)
 gOverlayTemplate_WobbuffetPop:

@@ -19,7 +19,7 @@ typedef struct SpinTradeLink {
     SpinTradeArgs *parent;
     SpinTradeLinkPacket packet;
     u32 blocked, count, state, remoteValue, participantCount, participantMask, unk34;
-    u16 unk38;
+    u16 assignedCount;
     u8 pad3a[6];
     u16 receivedStatus, memberMask, flags44;
     s16 partyReceivedMask;
@@ -195,7 +195,7 @@ void SpinTradeLink_HandleJoinRequest(int sender, int unused, void *data, SpinTra
             SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 8, id);
             return;
         }
-        menu->unk38 = src->count;
+        menu->assignedCount = src->count;
         SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 7, src->sender);
         return;
     }

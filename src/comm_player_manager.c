@@ -29,11 +29,11 @@ BOOL CommPlayerManager_Init(CommPlayerManager *manager, FieldSystem *fieldSystem
         gCommPlayerManager->hostPositions[i].x = 0xFFFF;
         gCommPlayerManager->hostPositions[i].z = 0xFFFF;
         gCommPlayerManager->hostPositions[i].speed = 2;
-        gCommPlayerManager->unk_B4[i] = 0;
-        gCommPlayerManager->unk_BC[i] = 0;
+        gCommPlayerManager->moveEnabled[i] = 0;
+        gCommPlayerManager->inputLocked[i] = 0;
     }
-    gCommPlayerManager->unk_ED = 0;
-    gCommPlayerManager->unk_EF = 0;
+    gCommPlayerManager->localMoveEnabled = 0;
+    gCommPlayerManager->fieldResumed = 0;
     gCommPlayerManager->task = SysTask_CreateOnMainQueue(CommPlayerManager_Task, gCommPlayerManager->fieldSystem, 200);
     Comm_EnableKeySync();
     CommPlayerManager_InitLocalPlayer();

@@ -27,7 +27,7 @@ typedef struct DrawingSessionStroke {
     u8 color : 3;
     u8 count : 3;
     u8 size : 2;
-    u8 unk_09; // the leader's copy carries DrawingSessionWork.unk_93F4
+    u8 joinState; // the leader's copy carries DrawingSessionWork.joinState
 } DrawingSessionStroke;
 
 // Last point a member's stroke ended at, so the next stroke continues the line.
@@ -47,7 +47,7 @@ typedef struct DrawingSessionWork DrawingSessionWork;
 
 typedef struct DrawingSessionState {
     int (*func)(DrawingSessionWork *work, int state);
-    u32 unk_04; // the state also runs while the main state is 2
+    u32 runsWhileClosing; // the state also runs while the main state is 2
 } DrawingSessionState;
 
 struct DrawingSessionWork {
@@ -81,8 +81,8 @@ struct DrawingSessionWork {
     u32 unk_30C;
     int counter;
     int memberCount;
-    int unk_318;
-    u32 unk_31C;
+    int connectedCount;
+    u32 connectedBitmap;
     u32 joinedMember; // 0x320
     u8 unk_324[0x10];
     DrawingSessionMember members[DRAWING_SESSION_MAX_MEMBERS]; // 0x334
@@ -94,21 +94,21 @@ struct DrawingSessionWork {
     DrawingSessionStroke strokes[DRAWING_SESSION_MAX_MEMBERS];   // 0x4382
     DrawingSessionPoint lastPoints[DRAWING_SESSION_MAX_MEMBERS]; // 0x43B4
     void *unk_43C8;
-    u32 unk_43CC;
+    u32 pictureChunk;
     u8 unk_43D0[0x93B0 - 0x43D0];
-    u32 unk_93B0;
-    u32 unk_93B4;
-    u16 unk_93B8;
+    u32 leaveConnectedCount;
+    u32 leavingMask;
+    u16 assignedCount;
     s16 networkCounter;                                                              // 0x93BA
     u8 leaveRequested;                                                               // 0x93BC
     u8 strokeSendBuffer[DRAWING_SESSION_MAX_MEMBERS * sizeof(DrawingSessionStroke)]; // 0x93BD
     YesNoPrompt *yesNoPrompt;                                                        // 0x93F0
-    u32 unk_93F4;
+    u32 joinState;
     BOOL yesNoActive;
     u32 unk_93FC;
-    u32 unk_9400;
-    u32 unk_9404;
-    u32 unk_9408;
+    u32 waitDisconnect;
+    u32 newConnection;
+    u32 newConnectionBit;
 }; // size: 0x940C
 
 void DrawingSession_HandleNetEvent(DrawingSessionWork *work, int event, u32 member);

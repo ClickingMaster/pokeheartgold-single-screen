@@ -57,7 +57,7 @@ BattleSetup *BattleSetup_New(enum HeapID heapID, u32 battleTypeFlags) {
         setup->party[i] = SaveArray_Party_Alloc(heapID);
         setup->profile[i] = PlayerProfile_New(heapID);
         setup->chatot[i] = Chatot_New(heapID);
-        setup->unk1CC[i] = 0xFF;
+        setup->followMonSlot[i] = 0xFF;
     }
     setup->bag = Save_Bag_New(heapID);
     setup->pokedex = Pokedex_New(heapID);
@@ -71,15 +71,15 @@ BattleSetup *BattleSetup_New(enum HeapID heapID, u32 battleTypeFlags) {
     setup->fixedDamaageMovesBanned = FALSE;
     setup->bugContestMon = AllocMonZeroed(heapID);
 
-    setup->unk_19C = RngSeedFromRTC();
+    setup->randSeed = RngSeedFromRTC();
 
     if (Comm_IsActive() == TRUE) {
         for (i = 0; i < Comm_CountConnected(); ++i) {
-            setup->unk_1A0[i] = Comm_GetBattleSlot(i);
+            setup->linkPositions[i] = Comm_GetBattleSlot(i);
         }
-        setup->unk1B0 = Comm_GetLocalNetId();
+        setup->networkId = Comm_GetLocalNetId();
     }
-    MI_CpuClear8(&setup->unk138, sizeof(setup->unk138));
+    MI_CpuClear8(&setup->battleTotals, sizeof(setup->battleTotals));
     return setup;
 }
 
@@ -130,7 +130,7 @@ BattleSetup *BattleSetup_New_Tutorial(enum HeapID heapID, FieldSystem *fieldSyst
         Party_AddMon(setup->party[BATTLER_ENEMY], pokemon);
         Heap_Free(pokemon);
     }
-    setup->unk1CC[BATTLER_PLAYER] = 0;
+    setup->followMonSlot[BATTLER_PLAYER] = 0;
     setup->storagePC = SaveArray_PCStorage_Get(fieldSystem->saveData);
     setup->bagCursor = fieldSystem->bagCursor;
     setup->unk1B8 = NULL;
@@ -216,7 +216,7 @@ void BattleSetup_InitFromSaveData(BattleSetup *setup, FieldSystem *fieldSystem, 
             setup->timeOfDay = RTC_TIMEOFDAY_NITE;
         }
         if (FollowMon_IsActive(fieldSystem) && FollowMon_IsVisible(fieldSystem)) {
-            setup->unk1CC[BATTLER_PLAYER] = Save_GetPartyLeadAlive(saveData);
+            setup->followMonSlot[BATTLER_PLAYER] = Save_GetPartyLeadAlive(saveData);
         }
     } else {
         setup->battleBg = MapHeader_GetBattleBg(mapno);

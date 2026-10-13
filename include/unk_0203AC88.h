@@ -6,7 +6,7 @@
 #include "overlay_44.h"
 
 typedef s32 (*UnkFuncPtr_0203AC88)(void);
-typedef void (*UnkFuncPtr_0203AC88_void)(void *, void *, String *, UnkStruct_ov44_02235340 *);
+typedef void (*UnkFuncPtr_0203AC88_void)(void *, void *, String *, WifiClubGameEntry *);
 
 typedef struct UnkStruct_0203AC88 {
     UnkFuncPtr_0203AC88_void func1;

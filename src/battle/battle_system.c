@@ -238,7 +238,7 @@ BagCursor *BattleSystem_GetBagCursor(BattleSystem *battleSystem) {
 }
 
 u16 BattleSystem_GetMonBall(BattleSystem *battleSystem, Pokemon *mon) {
-    if (battleSystem->unk2474_2) {
+    if (battleSystem->hasNonHgssPlayer) {
         return GetMonData(mon, MON_DATA_DP_POKEBALL, NULL);
     } else {
         return GetMonData(mon, MON_DATA_POKEBALL, NULL);

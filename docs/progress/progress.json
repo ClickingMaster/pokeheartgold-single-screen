@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "de669eddd62d768e5d17b5143248da7000250237",
+  "commit": "60e6cdd9ef7728b5c668bb582789e156f20d8987",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "a485314b6fa5e167a6046a95f385c55a07cf9489acc594be45dc8362b5338403",
+    "ARM9": "e3c1adc032f5fbf5a4bae8686255a69ca0247b29ec3c664d702e243995602592",
     "ARM7": "d726d92f810e881692e1b4d2ec232d6ca89b38985dcb26b08751c0037036d92a"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -2484,14 +2484,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_44",
-      "object": "overlay_44_02231A14.o",
-      "bytes": 5198,
-      "status": "c",
-      "source": "src/overlay_44_02231A14.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_44",
       "object": "overlay_44_02232E90.o",
       "bytes": 24,
       "status": "c",
@@ -2500,10 +2492,18 @@
     {
       "cpu": "ARM9",
       "module": "OVY_44",
-      "object": "overlay_44_02235340.o",
+      "object": "wifi_club_game_entry.o",
       "bytes": 9266,
       "status": "c",
-      "source": "src/overlay_44_02235340.c"
+      "source": "src/wifi_club_game_entry.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_44",
+      "object": "wifi_club_room.o",
+      "bytes": 5198,
+      "status": "c",
+      "source": "src/wifi_club_room.c"
     },
     {
       "cpu": "ARM9",

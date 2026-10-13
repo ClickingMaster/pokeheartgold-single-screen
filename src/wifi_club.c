@@ -287,7 +287,7 @@ void CallTask_WifiClubWithResult(TaskManager *taskManager, u16 *result) {
 }
 
 void WifiClub_LaunchGameEntry(WifiClubTask *task, FieldSystem *fieldSystem, enum HeapID heapID, int game) {
-    UnkStruct_ov44_args *args = Heap_Alloc(heapID, sizeof(UnkStruct_ov44_args));
+    WifiClubGameEntryArgs *args = Heap_Alloc(heapID, sizeof(WifiClubGameEntryArgs));
     args->unk0 = game;
     args->unk1 = 2;
     args->unk2 = gWifiClubGameMaxPlayers[game];
@@ -299,7 +299,7 @@ void WifiClub_LaunchGameEntry(WifiClubTask *task, FieldSystem *fieldSystem, enum
 }
 
 u32 WifiClub_FinishGameEntry(WifiClubTask *task) {
-    UnkStruct_ov44_args *args = task->launchedArgs;
+    WifiClubGameEntryArgs *args = task->launchedArgs;
     if (args->unk3 == 1) {
         switch ((enum WifiClubGame)args->unk0) {
         case WIFI_CLUB_GAME_SWALOT_PLOP:

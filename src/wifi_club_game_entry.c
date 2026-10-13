@@ -31,9 +31,9 @@
 #include "unk_020971F8.h"
 #include "vram_transfer_manager.h"
 
-const u8 ov44_02236458[4] = { 0x08, 0x00, 0x04, 0x0C };
+const u8 sWifiClubGameEntryAvatarSpinFrames[4] = { 0x08, 0x00, 0x04, 0x0C };
 
-const WindowTemplate ov44_0223645C = {
+const WindowTemplate sWifiClubGameEntryYesNoWindowTemplate = {
     .bgId = 2,
     .left = 25,
     .top = 13,
@@ -43,22 +43,22 @@ const WindowTemplate ov44_0223645C = {
     .baseTile = 57,
 };
 
-const func_type_022341C0 ov44_02236464[4] = { ov44_02234324, ov44_02234328, ov44_0223435C, ov44_02234388 };
+const WifiClubGameEntryAvatarFunc sWifiClubGameEntryAvatarFuncs[4] = { WifiClubGameEntry_AvatarNone, WifiClubGameEntry_AvatarStartSpin, WifiClubGameEntry_AvatarUpdateSpin, WifiClubGameEntry_AvatarIdle };
 
-const ObjCharTransferTemplate ov44_02236484 = {
+const ObjCharTransferTemplate sWifiClubGameEntryObjCharTransferTemplate = {
     4,
     0x20000,
     0x4000,
     HEAP_ID_DEFAULT
 };
-const GraphicsModes ov44_02236474 = {
+const GraphicsModes sWifiClubGameEntryGraphicsModes = {
     GX_DISPMODE_GRAPHICS,
     GX_BGMODE_0,
     GX_BGMODE_0,
     GX_BG0_AS_2D
 };
 
-const BgTemplate ov44_022364B0 = {
+const BgTemplate sWifiClubGameEntryBgTemplateMain0 = {
     .x = 0,
     .y = 0,
     .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
@@ -74,7 +74,7 @@ const BgTemplate ov44_022364B0 = {
     .mosaic = 0,
 };
 
-const BgTemplate ov44_022364CC = {
+const BgTemplate sWifiClubGameEntryBgTemplateMain2 = {
     .x = 0,
     .y = 0,
     .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
@@ -90,7 +90,7 @@ const BgTemplate ov44_022364CC = {
     .mosaic = 0,
 };
 
-const BgTemplate ov44_02236494 = {
+const BgTemplate sWifiClubGameEntryBgTemplateMain1 = {
     .x = 0,
     .y = 0,
     .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
@@ -106,119 +106,119 @@ const BgTemplate ov44_02236494 = {
     .mosaic = 0,
 };
 
-const GraphicsBanks ov44_022364E8 = {
+const GraphicsBanks sWifiClubGameEntryGraphicsBanks = {
     GX_VRAM_BG_128_A, GX_VRAM_BGEXTPLTT_NONE, GX_VRAM_SUB_BG_128_C, GX_VRAM_SUB_BGEXTPLTT_NONE, GX_VRAM_OBJ_128_B, GX_VRAM_OBJEXTPLTT_NONE, GX_VRAM_SUB_OBJ_16_I, GX_VRAM_SUB_OBJEXTPLTT_NONE, GX_VRAM_TEX_NONE, GX_VRAM_TEXPLTT_NONE
 };
 
-const UnkStruct_ov42_02122667 ov44_02236510[4] = {
+const UnkStruct_ov42_02122667 sWifiClubGameEntryAvatarTemplates[4] = {
     { 208, 48, 0, 0, 1, 0 },
     { 232, 72, 1, 0, 2, 0 },
     { 208, 96, 2, 0, 0, 0 },
     { 184, 72, 3, 0, 3, 0 },
 };
 
-const func_type_02232F64 ov44_02236540[30] = {
-    ov44_02234BF0,
-    ov44_02234C10,
+const WifiClubGameEntryStateFunc sWifiClubGameEntryMemberStates[30] = {
+    WifiClubGameEntry_Member_Start,
+    WifiClubGameEntry_Member_WaitLeaderInfo,
     Wifi_PromptAwaitingResponse,
-    ov44_02234C88,
-    ov44_02234CE8,
-    ov44_02234D28,
-    ov44_02234D4C,
-    ov44_02234D88,
+    WifiClubGameEntry_Member_WaitJoinAnswer,
+    WifiClubGameEntry_Member_PrintApproved,
+    WifiClubGameEntry_Member_WaitApproved,
+    WifiClubGameEntry_Member_PrintRefused,
+    WifiClubGameEntry_Member_EndRefused,
     Wifi_PromptAwaitingMembers,
-    ov44_02234DE4,
-    ov44_02234E08,
-    ov44_02234EA4,
-    ov44_02234EF4,
-    ov44_02234F44,
-    ov44_02234F60,
-    ov44_02234F88,
+    WifiClubGameEntry_Member_WaitAwaitingMessage,
+    WifiClubGameEntry_Member_WaitStart,
+    WifiClubGameEntry_Member_SendStatus,
+    WifiClubGameEntry_Member_CheckStatuses,
+    WifiClubGameEntry_Member_StartFinalSync,
+    WifiClubGameEntry_Member_WaitFinalSync,
+    WifiClubGameEntry_Member_OnDropped,
     Wifi_PromptMemberDrop,
-    ov44_02234FDC,
+    WifiClubGameEntry_Member_EndAfterDropped,
     Wifi_PromptToggleVoiceChat_,
-    ov44_02235038,
-    ov44_02235090,
-    ov44_02235100,
-    ov44_02235158,
-    ov44_0223518C,
-    ov44_022351BC,
-    ov44_022351DC,
-    ov44_02235218,
-    ov44_02235268,
-    ov44_0223532C,
-    ov44_02235340,
+    WifiClubGameEntry_Member_ShowVoiceChatYesNo,
+    WifiClubGameEntry_Member_HandleVoiceChatYesNo,
+    WifiClubGameEntry_Member_PrintLeaderBusy,
+    WifiClubGameEntry_Member_ShowApplyAgainYesNo,
+    WifiClubGameEntry_Member_HandleApplyAgainYesNo,
+    WifiClubGameEntry_Member_PrintContacting,
+    WifiClubGameEntry_Member_ApplyAgain,
+    WifiClubGameEntry_Member_WaitReconnected,
+    WifiClubGameEntry_Member_RebuildScreen,
+    WifiClubGameEntry_Member_WaitFadeIn,
+    WifiClubGameEntry_Member_Cancel,
 };
 
-const func_type_02232F64 ov44_022365B8[33] = {
-    ov44_02234474,
+const WifiClubGameEntryStateFunc sWifiClubGameEntryLeaderStates[33] = {
+    WifiClubGameEntry_Leader_Start,
     Wifi_PromptReadyMessage,
-    ov44_022344C4,
+    WifiClubGameEntry_Leader_HandleInput,
     Wifi_PromptUserJoinRequest,
-    ov44_022345C8,
-    ov44_022345FC,
+    WifiClubGameEntry_Leader_ShowAcceptYesNo,
+    WifiClubGameEntry_Leader_HandleAcceptYesNo,
     Wifi_PromptInsufficientMembers,
-    ov44_022346B4,
+    WifiClubGameEntry_Leader_WaitNotEnoughMembers,
     Wifi_PromptConfirmMembers,
-    ov44_022346E8,
-    ov44_0223471C,
-    ov44_02234764,
-    ov44_0223479C,
-    ov44_022347D4,
-    ov44_022347FC,
-    ov44_02234828,
-    ov44_02234858,
-    ov44_022348A8,
-    ov44_022348C4,
+    WifiClubGameEntry_Leader_ShowConfirmYesNo,
+    WifiClubGameEntry_Leader_HandleConfirmYesNo,
+    WifiClubGameEntry_Leader_StartCommunicating,
+    WifiClubGameEntry_Leader_WaitMembersConnected,
+    WifiClubGameEntry_Leader_SendStartCommand,
+    WifiClubGameEntry_Leader_WaitStartSync,
+    WifiClubGameEntry_Leader_SendStatus,
+    WifiClubGameEntry_Leader_CheckStatuses,
+    WifiClubGameEntry_Leader_StartFinalSync,
+    WifiClubGameEntry_Leader_WaitFinalSync,
     Wifi_PromptStopFindingMembers,
-    ov44_02234904,
-    ov44_02234944,
+    WifiClubGameEntry_Leader_ShowStopSeekingYesNo,
+    WifiClubGameEntry_Leader_HandleStopSeekingYesNo,
     Wifi_PromptDropAsLeader,
-    ov44_022349B4,
-    ov44_022349F4,
+    WifiClubGameEntry_Leader_ShowDisbandYesNo,
+    WifiClubGameEntry_Leader_HandleDisbandYesNo,
     Wifi_PromptCancelInvites,
-    ov44_02234A68,
-    ov44_02234AA8,
+    WifiClubGameEntry_Leader_Cancel,
+    WifiClubGameEntry_Leader_OnMemberDropped,
     Wifi_PromptMemberDropped,
-    ov44_02234B18,
+    WifiClubGameEntry_Leader_EndAfterMemberDropped,
     Wifi_PromptToggleVoiceChat,
-    ov44_02234B80,
-    ov44_02234BB4,
+    WifiClubGameEntry_Leader_ShowVoiceChatYesNo,
+    WifiClubGameEntry_Leader_HandleVoiceChatYesNo,
 };
 
-const u8 ov44_0223663C[20] = { 5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5, 0, 0 };
+const u8 sWifiClubGameEntryBgPaletteFrames[20] = { 5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5, 0, 0 };
 
-u8 ov44_0223689C[4] = { 126, 127, 127, 127 };
+u8 sWifiClubGameEntryTitleMsgIds[4] = { 126, 127, 127, 127 };
 
 FS_EXTERN_OVERLAY(OVY_42);
 
-void ov44_02232EA8(OverlayManager *overlayMananger) {
-    UnkStruct_ov44_args *temp_r5 = OverlayManager_GetArgs(overlayMananger);
+void WifiClubGameEntry_Init(OverlayManager *overlayMananger) {
+    WifiClubGameEntryArgs *temp_r5 = OverlayManager_GetArgs(overlayMananger);
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_42), OVY_LOAD_ASYNC);
     GF_ASSERT(CommState_IsWifi() == 1);
     Heap_Create(HEAP_ID_3, HEAP_ID_103, 0x18000);
     Heap_Create(HEAP_ID_3, HEAP_ID_104, 0xA000);
-    UnkStruct_ov44_02235340 *temp_r0 = OverlayManager_CreateAndGetData(overlayMananger, sizeof(UnkStruct_ov44_02235340), HEAP_ID_103);
-    MI_CpuFill8(temp_r0, 0, sizeof(UnkStruct_ov44_02235340));
+    WifiClubGameEntry *temp_r0 = OverlayManager_CreateAndGetData(overlayMananger, sizeof(WifiClubGameEntry), HEAP_ID_103);
+    MI_CpuFill8(temp_r0, 0, sizeof(WifiClubGameEntry));
     MI_CpuFill8(temp_r0->unk1C, 1, 4);
     MI_CpuFill8(temp_r0->unk20, 1, 4);
     GF_CreateVramTransferManager(16, HEAP_ID_103);
     UnkStruct_ov44_0223197C *temp_r0_2 = CommState_GetWifiClubData();
     temp_r0->unk0 = &temp_r0_2->unk0;
     temp_r0_2->unk0.unk21 = temp_r0_2->unk0.unk22;
-    temp_r0->unk4 = ov44_022331B0(temp_r0);
+    temp_r0->unk4 = WifiClubGameEntry_IsLocalLeader(temp_r0);
     temp_r0->unk6 = 255;
     WifiClubComm_RegisterCommands(temp_r0);
-    ov44_02234028(temp_r0);
-    ov44_022331C4(temp_r0, temp_r5, HEAP_ID_103);
-    Main_SetVBlankIntrCB((void *)&ov44_0223319C, temp_r0);
+    WifiClubGameEntry_SetDisconnectCallback(temp_r0);
+    WifiClubGameEntry_InitScreen(temp_r0, temp_r5, HEAP_ID_103);
+    Main_SetVBlankIntrCB((void *)&WifiClubGameEntry_VBlankCB, temp_r0);
     WirelessStatusIcon_Create();
     temp_r0->unk27 = 1;
 }
 
-s32 ov44_02232F64(OverlayManager *overlayManager, u32 *arg1) {
-    UnkStruct_ov44_args *temp_r7;
-    UnkStruct_ov44_02235340 *temp_r4;
+s32 WifiClubGameEntry_Main(OverlayManager *overlayManager, u32 *arg1) {
+    WifiClubGameEntryArgs *temp_r7;
+    WifiClubGameEntry *temp_r4;
     s32 var_r6;
 
     temp_r4 = OverlayManager_GetData(overlayManager);
@@ -235,25 +235,25 @@ s32 ov44_02232F64(OverlayManager *overlayManager, u32 *arg1) {
         break;
     case 2:
         if (temp_r4->unk27 != 0) {
-            ov44_02233D8C(temp_r4, temp_r7, HEAP_ID_103);
+            WifiClubGameEntry_CheckConnectionLost(temp_r4, temp_r7, HEAP_ID_103);
         }
         if (temp_r4->unk4 != 0) {
             if (CommPlayerInfo_Exists() == 1) {
-                ov44_0223438C(temp_r4);
+                WifiClubGameEntry_SendVoiceChatFlags(temp_r4);
                 CommPlayerInfo_HostRedistribute();
-                ov44_02234248(temp_r4);
+                WifiClubGameEntry_RefuseLateApplicants(temp_r4);
             }
-            var_r6 = ov44_022365B8[temp_r4->unk5](temp_r4, temp_r7, HEAP_ID_103);
+            var_r6 = sWifiClubGameEntryLeaderStates[temp_r4->unk5](temp_r4, temp_r7, HEAP_ID_103);
         } else {
-            var_r6 = ov44_02236540[temp_r4->unk5](temp_r4, temp_r7, HEAP_ID_103);
+            var_r6 = sWifiClubGameEntryMemberStates[temp_r4->unk5](temp_r4, temp_r7, HEAP_ID_103);
             if (CommPlayerInfo_Exists() == 1) {
-                ov44_0223427C(temp_r4, HEAP_ID_103);
+                WifiClubGameEntry_AcceptAnnouncedMembers(temp_r4, HEAP_ID_103);
             }
         }
-        if (ov44_0223407C(temp_r4) != 0) {
-            ov44_02233A50(temp_r4, temp_r7, HEAP_ID_103);
+        if (WifiClubGameEntry_CheckMemberListChanged(temp_r4) != 0) {
+            WifiClubGameEntry_DrawMemberList(temp_r4, temp_r7, HEAP_ID_103);
         }
-        ov44_022341C0(temp_r4);
+        WifiClubGameEntry_UpdateAvatars(temp_r4);
         if (var_r6 == 1) {
             temp_r7->unk3 = temp_r4->unk7;
             temp_r7->unk4 = temp_r4->unk11;
@@ -269,21 +269,21 @@ s32 ov44_02232F64(OverlayManager *overlayManager, u32 *arg1) {
             return 1;
         }
     }
-    ov44_02233CCC(&temp_r4->unk30);
+    WifiClubGameEntry_AnimateBgPalette(&temp_r4->unk30);
     SpriteList_RenderAndAnimateSprites(temp_r4->unk30.spriteList);
     return 0;
 }
 
-s32 ov44_022330A8(OverlayManager *arg0) {
-    UnkStruct_ov44_02235340 *temp_r4;
+s32 WifiClubGameEntry_Exit(OverlayManager *arg0) {
+    WifiClubGameEntry *temp_r4;
 
     temp_r4 = OverlayManager_GetData(arg0);
     OverlayManager_GetArgs(arg0);
     Main_SetVBlankIntrCB(0, 0);
-    ov44_02234038(temp_r4);
-    ov44_02234204(temp_r4);
-    ov44_02233F20(temp_r4);
-    FreeStructOv44_02235340(temp_r4, HEAP_ID_103);
+    WifiClubGameEntry_ClearDisconnectCallback(temp_r4);
+    WifiClubGameEntry_DeleteAvatars(temp_r4);
+    WifiClubGameEntry_StopVoiceChat(temp_r4);
+    WifiClubGameEntry_FreeScreen(temp_r4, HEAP_ID_103);
     GF_DestroyVramTransferManager();
     OverlayManager_FreeData(arg0);
     Heap_Destroy(HEAP_ID_104);
@@ -292,7 +292,7 @@ s32 ov44_022330A8(OverlayManager *arg0) {
     return 1;
 }
 
-void ov44_02233100(UnkStruct_ov44_02235340 *arg0, String *arg1) {
+void WifiClubGameEntry_OnJoinAnswer(WifiClubGameEntry *arg0, String *arg1) {
     if (arg0->unk4 == 0) {
 
         if (arg1->maxsize == Comm_GetLocalNetId()) {
@@ -327,70 +327,70 @@ void ov44_02233100(UnkStruct_ov44_02235340 *arg0, String *arg1) {
     }
 }
 
-void ov44_02233160(UnkStruct_ov44_02235340 *arg0) {
+void WifiClubGameEntry_OnStartCommand(WifiClubGameEntry *arg0) {
     if (arg0->unk2C == 0) {
         arg0->unk2C = 1;
         LinkSync_StartSync(13);
     }
 }
 
-void ov44_0223317C(UnkStruct_ov44_02235340 *arg0, String *arg1) {
+void WifiClubGameEntry_OnVoiceChatFlags(WifiClubGameEntry *arg0, String *arg1) {
     if (arg0->unk4 != 1) {
         memcpy(arg0->unk20, arg1, 4);
     }
 }
 
-void ov44_0223319C(UnkStruct_ov44_02235340 *arg0) {
+void WifiClubGameEntry_VBlankCB(WifiClubGameEntry *arg0) {
     DoScheduledBgGpuUpdates(arg0->unk30.bgConfig);
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
 }
 
-s32 ov44_022331B0(UnkStruct_ov44_02235340 *arg0) {
+s32 WifiClubGameEntry_IsLocalLeader(WifiClubGameEntry *arg0) {
     if (Comm_GetLocalNetId() == 0) {
         return 1;
     }
     return 0;
 }
 
-void ov44_022331C4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    ov44_0223323C();
+void WifiClubGameEntry_InitScreen(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    WifiClubGameEntry_SetGfxBanks();
     InitBgAndScrnData(&arg0->unk30, heapID);
     InitWindowList(&arg0->unk30, arg1, heapID);
     InitStringAndMsgData(&arg0->unk30, arg1, heapID);
-    ov44_02233698(&arg0->unk30, arg1, heapID);
-    ov44_02233A50(arg0, arg1, heapID);
+    WifiClubGameEntry_PrintTitle(&arg0->unk30, arg1, heapID);
+    WifiClubGameEntry_DrawMemberList(arg0, arg1, heapID);
     InitSpritesAnd2DGfxResObjs(&arg0->unk30, heapID);
 }
 
-void FreeStructOv44_02235340(UnkStruct_ov44_02235340 *arg0, enum HeapID heapID) {
+void WifiClubGameEntry_FreeScreen(WifiClubGameEntry *arg0, enum HeapID heapID) {
     FreeSpritesAnd2DGfxResObjs(&arg0->unk30);
     FreeStringAndMsgData(&arg0->unk30);
     FreeWindowList(&arg0->unk30, heapID);
     FreeBgAndScreenData(&arg0->unk30);
 }
 
-void ov44_0223323C(void) {
-    GraphicsBanks graphicsBanks = ov44_022364E8;
+void WifiClubGameEntry_SetGfxBanks(void) {
+    GraphicsBanks graphicsBanks = sWifiClubGameEntryGraphicsBanks;
     GfGfx_SetBanks(&graphicsBanks);
 }
 
-void InitBgAndScrnData(UnkStruct_ov44_02232F64 *arg0, enum HeapID heapID) {
+void InitBgAndScrnData(WifiClubGameEntryScreen *arg0, enum HeapID heapID) {
     arg0->bgConfig = BgConfig_Alloc(heapID);
-    GraphicsModes graphicModes = ov44_02236474;
+    GraphicsModes graphicModes = sWifiClubGameEntryGraphicsModes;
     SetBothScreensModesAndDisable(&graphicModes);
 
-    BgTemplate bgTemplate1 = ov44_022364B0;
+    BgTemplate bgTemplate1 = sWifiClubGameEntryBgTemplateMain0;
     InitBgFromTemplate(arg0->bgConfig, GF_BG_LYR_MAIN_0, &bgTemplate1, 0);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 32, 0, heapID);
     BgClearTilemapBufferAndCommit(arg0->bgConfig, GF_BG_LYR_MAIN_0);
 
-    BgTemplate bgTemplate2 = ov44_02236494;
+    BgTemplate bgTemplate2 = sWifiClubGameEntryBgTemplateMain1;
     InitBgFromTemplate(arg0->bgConfig, GF_BG_LYR_MAIN_1, &bgTemplate2, 0);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 32, 0, heapID);
     BgClearTilemapBufferAndCommit(arg0->bgConfig, GF_BG_LYR_MAIN_1);
 
-    BgTemplate bgTemplate3 = ov44_022364CC;
+    BgTemplate bgTemplate3 = sWifiClubGameEntryBgTemplateMain2;
     InitBgFromTemplate(arg0->bgConfig, GF_BG_LYR_MAIN_2, &bgTemplate3, 0);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_2, 32, 0, heapID);
     BgClearTilemapBufferAndCommit(arg0->bgConfig, GF_BG_LYR_MAIN_2);
@@ -410,13 +410,13 @@ void InitBgAndScrnData(UnkStruct_ov44_02232F64 *arg0, enum HeapID heapID) {
     arg0->plttDataRaw = GfGfxLoader_GetPlttDataFromOpenNarc(narc, 45, &arg0->plttData, heapID);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 46, arg0->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, heapID);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 47, arg0->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, heapID);
-    ov44_02233D08(arg0, 0);
+    WifiClubGameEntry_LoadBgPaletteFrame(arg0, 0);
     arg0->unk1F4 = 3;
     arg0->unk1F6 = 1;
     NARC_Delete(narc);
 }
 
-void FreeBgAndScreenData(UnkStruct_ov44_02232F64 *arg0) {
+void FreeBgAndScreenData(WifiClubGameEntryScreen *arg0) {
     Heap_Free(arg0->scrnDataRaw);
     Heap_Free(arg0->plttDataRaw);
     FreeBgTilemapBuffer(arg0->bgConfig, GF_BG_LYR_MAIN_2);
@@ -425,7 +425,7 @@ void FreeBgAndScreenData(UnkStruct_ov44_02232F64 *arg0) {
     Heap_Free(arg0->bgConfig);
 }
 
-void InitWindowList(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+void InitWindowList(WifiClubGameEntryScreen *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_1_OFFSET, heapID);
 
     Options *options = Save_PlayerData_GetOptionsAddr(arg1->unk8);
@@ -447,8 +447,8 @@ void InitWindowList(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, en
     FillWindowPixelBuffer(&arg0->windowList[4], 15);
 }
 
-void FreeWindowList(UnkStruct_ov44_02232F64 *arg0, enum HeapID heapID) {
-    ov44_02233954(arg0);
+void FreeWindowList(WifiClubGameEntryScreen *arg0, enum HeapID heapID) {
+    WifiClubGameEntry_ClearMessage(arg0);
     ClearFrameAndWindow2(&arg0->windowList[0], 0);
     RemoveWindow(&arg0->windowList[0]);
     EraseFrameAndWindow1(&arg0->windowList[1], 0);
@@ -464,7 +464,7 @@ void FreeWindowList(UnkStruct_ov44_02232F64 *arg0, enum HeapID heapID) {
     }
 }
 
-void InitStringAndMsgData(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+void InitStringAndMsgData(WifiClubGameEntryScreen *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     arg0->msgFmt = MessageFormat_New(heapID);
     arg0->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0778_bin, heapID);
     arg0->string1 = String_New(256, heapID);
@@ -475,14 +475,14 @@ void InitStringAndMsgData(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *ar
     arg0->textFrameDelay = Options_GetTextFrameDelay(options);
 }
 
-void FreeStringAndMsgData(UnkStruct_ov44_02232F64 *arg0) {
+void FreeStringAndMsgData(WifiClubGameEntryScreen *arg0) {
     String_Delete(arg0->string2);
     String_Delete(arg0->string1);
     DestroyMsgData(arg0->msgData);
     MessageFormat_Delete(arg0->msgFmt);
 }
 
-void ov44_02233698(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+void WifiClubGameEntry_PrintTitle(WifiClubGameEntryScreen *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     switch (arg1->unk0) {
     case 0:
         break;
@@ -498,7 +498,7 @@ void ov44_02233698(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, enu
     }
 
     // Seeking Poffin cooks! OR // Seeking {STRVAR_3 0, 0, 0} players!
-    ReadMsgDataIntoString(arg0->msgData, ov44_0223689C[arg1->unk0], arg0->string2);
+    ReadMsgDataIntoString(arg0->msgData, sWifiClubGameEntryTitleMsgIds[arg1->unk0], arg0->string2);
     StringExpandPlaceholders(arg0->msgFmt, arg0->string1, arg0->string2);
     AddTextPrinterParameterizedWithColor(&arg0->windowList[1], 0, arg0->string1, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 15), 0);
     ScheduleWindowCopyToVram(&arg0->windowList[1]);
@@ -511,10 +511,10 @@ void ov44_02233698(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, enu
     ScheduleWindowCopyToVram(&arg0->windowList[0]);
 }
 
-void InitSpritesAnd2DGfxResObjs(UnkStruct_ov44_02232F64 *arg0, enum HeapID heapID) {
+void InitSpritesAnd2DGfxResObjs(WifiClubGameEntryScreen *arg0, enum HeapID heapID) {
     NNS_G2dInitOamManagerModule();
     OamManager_Create(0, 126, 0, 31, 0, 126, 0, 31, heapID);
-    ObjCharTransferTemplate objCharTransferTemplate = ov44_02236484;
+    ObjCharTransferTemplate objCharTransferTemplate = sWifiClubGameEntryObjCharTransferTemplate;
     objCharTransferTemplate.heapID = heapID;
     ObjCharTransfer_InitEx(&objCharTransferTemplate, GX_OBJVRAMMODE_CHAR_1D_128K, GX_OBJVRAMMODE_CHAR_1D_32K);
     ObjPlttTransfer_Init(4, heapID);
@@ -532,7 +532,7 @@ void InitSpritesAnd2DGfxResObjs(UnkStruct_ov44_02232F64 *arg0, enum HeapID heapI
     arg0->unk158 = ov42_02228EDC(arg0->spriteList, 0, 4, 1, heapID);
 }
 
-void FreeSpritesAnd2DGfxResObjs(UnkStruct_ov44_02232F64 *arg0) {
+void FreeSpritesAnd2DGfxResObjs(WifiClubGameEntryScreen *arg0) {
     ov42_02228F94(arg0->unk158);
     ov42_02228050(arg0->unk154);
     SpriteList_Delete(arg0->spriteList);
@@ -546,11 +546,11 @@ void FreeSpritesAnd2DGfxResObjs(UnkStruct_ov44_02232F64 *arg0) {
     OamManager_Free();
 }
 
-void Wifi_LoadAndPrintTextToWindowWrapper(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, s32 strno, enum HeapID heapID) {
+void Wifi_LoadAndPrintTextToWindowWrapper(WifiClubGameEntryScreen *arg0, WifiClubGameEntryArgs *arg1, s32 strno, enum HeapID heapID) {
     Wifi_LoadAndPrintTextToWindow(arg0, arg1, strno, 0, heapID);
 }
 
-void Wifi_LoadAndPrintTextToWindow(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, s32 strno, s32 arg3, enum HeapID heapID) {
+void Wifi_LoadAndPrintTextToWindow(WifiClubGameEntryScreen *arg0, WifiClubGameEntryArgs *arg1, s32 strno, s32 arg3, enum HeapID heapID) {
     if ((arg0->printerId != 255) && (TextPrinterCheckActive(arg0->printerId) != 0)) {
         RemoveTextPrinter(arg0->printerId);
         arg0->printerId = 255;
@@ -567,7 +567,7 @@ void Wifi_LoadAndPrintTextToWindow(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44
     arg0->unk15 = arg3;
 }
 
-s32 ov44_02233914(UnkStruct_ov44_02232F64 *arg0) {
+s32 WifiClubGameEntry_IsMessageFinished(WifiClubGameEntryScreen *arg0) {
     if (arg0->printerId == 255) {
         if (arg0->unk15 != 0) {
             arg0->unk15--;
@@ -582,7 +582,7 @@ s32 ov44_02233914(UnkStruct_ov44_02232F64 *arg0) {
     return 0;
 }
 
-void ov44_02233954(UnkStruct_ov44_02232F64 *arg0) {
+void WifiClubGameEntry_ClearMessage(WifiClubGameEntryScreen *arg0) {
     if (arg0->printerId != 255) {
         if (TextPrinterCheckActive(arg0->printerId) != 0) {
             RemoveTextPrinter(arg0->printerId);
@@ -595,12 +595,12 @@ void ov44_02233954(UnkStruct_ov44_02232F64 *arg0) {
 }
 
 // {STRVAR_1 3, 0, 0}\nID {STRVAR_1 54, 1, 0}
-void ov44_0223398C(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, s32 arg2, enum HeapID heapID) {
+void WifiClubGameEntry_ShowApplicantInfo(WifiClubGameEntryScreen *arg0, WifiClubGameEntryArgs *arg1, s32 arg2, enum HeapID heapID) {
     String *string1 = String_New(256, heapID);
     String *string2 = String_New(256, heapID);
 
-    ov44_02233C88(arg0, arg1, arg2, 0, heapID);
-    ov44_02233CA0(arg0, arg1, arg2, 1, heapID);
+    WifiClubGameEntry_BufferPlayerName(arg0, arg1, arg2, 0, heapID);
+    WifiClubGameEntry_BufferTrainerId(arg0, arg1, arg2, 1, heapID);
 
     ReadMsgDataIntoString(arg0->msgData, msg_0778_00131, string1);
     StringExpandPlaceholders(arg0->msgFmt, string2, string1);
@@ -612,32 +612,32 @@ void ov44_0223398C(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, s32
     String_Delete(string2);
 }
 
-void ov44_02233A34(UnkStruct_ov44_02232F64 *arg0) {
+void WifiClubGameEntry_HideApplicantInfo(WifiClubGameEntryScreen *arg0) {
     EraseFrameAndWindow1(&arg0->windowList[4], 1);
     ClearWindowTilemapAndScheduleTransfer(&arg0->windowList[4]);
 }
 
-void ov44_02233A50(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    UnkStruct_ov44_02232F64 *temp_r6;
+void WifiClubGameEntry_DrawMemberList(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    WifiClubGameEntryScreen *temp_r6;
 
     if (CommPlayerInfo_Exists() != 0) {
         temp_r6 = &arg0->unk30;
         for (s32 i = 0; i < 4; i++) {
             if ((i == 0) && (CommPlayerInfo_IsReceivedOrAccepted(i) == 1)) {
-                ov44_02233AB8(arg0, temp_r6, arg1, i, heapID);
+                WifiClubGameEntry_DrawMember(arg0, temp_r6, arg1, i, heapID);
             } else if (CommPlayerInfo_IsAccepted(i) == 1) {
-                ov44_02233AB8(arg0, temp_r6, arg1, i, heapID);
+                WifiClubGameEntry_DrawMember(arg0, temp_r6, arg1, i, heapID);
             } else {
-                ov44_02233C18(temp_r6, arg1, i, heapID);
+                WifiClubGameEntry_ClearMember(temp_r6, arg1, i, heapID);
             }
         }
     }
 }
 
-void ov44_02233AB8(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_02232F64 *arg1, UnkStruct_ov44_args *arg2, s32 arg3, enum HeapID heapID) {
+void WifiClubGameEntry_DrawMember(WifiClubGameEntry *arg0, WifiClubGameEntryScreen *arg1, WifiClubGameEntryArgs *arg2, s32 arg3, enum HeapID heapID) {
     String *string1 = String_New(256, heapID);
     String *string2 = String_New(256, heapID);
-    ov44_02233C88(arg1, arg2, arg3, 0, heapID);
+    WifiClubGameEntry_BufferPlayerName(arg1, arg2, arg3, 0, heapID);
 
     // {STRVAR_1 3, 0, 0}
     ReadMsgDataIntoString(arg1->msgData, msg_0778_00129, string1);
@@ -646,7 +646,7 @@ void ov44_02233AB8(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_02232F64 *arg1,
     u32 temp_r6 = arg3 * 16;
     FillWindowPixelRect(&arg1->windowList[3], 15, 0, temp_r6, 160, 16);
     AddTextPrinterParameterizedWithColor(&arg1->windowList[3], 0, string2, 0, temp_r6, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 15), 0);
-    ov44_02233CA0(arg1, arg2, arg3, 0, heapID);
+    WifiClubGameEntry_BufferTrainerId(arg1, arg2, arg3, 0, heapID);
 
     // ID {STRVAR_1 54, 0, 0}
     ReadMsgDataIntoString(arg1->msgData, msg_0778_00130, string1);
@@ -675,7 +675,7 @@ void ov44_02233AB8(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_02232F64 *arg1,
     String_Delete(string2);
 }
 
-void ov44_02233C18(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, s32 arg2, enum HeapID heapID) {
+void WifiClubGameEntry_ClearMember(WifiClubGameEntryScreen *arg0, WifiClubGameEntryArgs *arg1, s32 arg2, enum HeapID heapID) {
     FillWindowPixelRect(&arg0->windowList[3], 15, 0, arg2 * 16, 160, 16);
 
     NNSG2dScreenData *screenData = arg0->scrnData;
@@ -684,17 +684,17 @@ void ov44_02233C18(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, s32
     ScheduleWindowCopyToVram(&arg0->windowList[3]);
 }
 
-void ov44_02233C88(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, s32 arg2, s32 arg3, enum HeapID heapID) {
+void WifiClubGameEntry_BufferPlayerName(WifiClubGameEntryScreen *arg0, WifiClubGameEntryArgs *arg1, s32 arg2, s32 arg3, enum HeapID heapID) {
     BufferPlayersName(arg0->msgFmt, arg3, CommPlayerInfo_GetProfile(arg2));
 }
 
-void ov44_02233CA0(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, s32 arg2, s32 arg3, enum HeapID heapID) {
+void WifiClubGameEntry_BufferTrainerId(WifiClubGameEntryScreen *arg0, WifiClubGameEntryArgs *arg1, s32 arg2, s32 arg3, enum HeapID heapID) {
     BufferIntegerAsString(arg0->msgFmt, arg3, PlayerProfile_GetTrainerID_VisibleHalf(CommPlayerInfo_GetProfile(arg2)), 5, PRINTING_MODE_LEADING_ZEROS, 1);
 }
 
-void ov44_02233CCC(UnkStruct_ov44_02232F64 *arg0) {
+void WifiClubGameEntry_AnimateBgPalette(WifiClubGameEntryScreen *arg0) {
     if (arg0->unk1F4 <= 0) {
-        ov44_02233D08(arg0, arg0->unk1F6);
+        WifiClubGameEntry_LoadBgPaletteFrame(arg0, arg0->unk1F6);
         arg0->unk1F4 = 3;
         arg0->unk1F6 = (arg0->unk1F6 + 1) % 18;
         return;
@@ -702,24 +702,24 @@ void ov44_02233CCC(UnkStruct_ov44_02232F64 *arg0) {
     arg0->unk1F4--;
 }
 
-void ov44_02233D08(UnkStruct_ov44_02232F64 *arg0, s32 arg1) {
-    GF_ASSERT(GF_CreateNewVramTransferTask(NNS_GFD_DST_2D_BG_PLTT_MAIN, 0, (ov44_0223663C[arg1] << 5) + arg0->plttData->pRawData, 32));
+void WifiClubGameEntry_LoadBgPaletteFrame(WifiClubGameEntryScreen *arg0, s32 arg1) {
+    GF_ASSERT(GF_CreateNewVramTransferTask(NNS_GFD_DST_2D_BG_PLTT_MAIN, 0, (sWifiClubGameEntryBgPaletteFrames[arg1] << 5) + arg0->plttData->pRawData, 32));
 }
 
-u8 ov44_02233D38(UnkStruct_ov44_02235340 *arg0, enum HeapID heapID) {
+u8 WifiClubGameEntry_ToggleVoiceChat(WifiClubGameEntry *arg0, enum HeapID heapID) {
     arg0->unk0->unk22 = 1 - arg0->unk0->unk22;
     arg0->unk0->unk21 = arg0->unk0->unk22;
     ov00_021E70B8(arg0->unk0->unk21);
     ov00_021E6D60(arg0->unk0, 36);
     if (arg0->unk0->unk21 == 1) {
-        ov44_02233F3C(arg0);
+        WifiClubGameEntry_EnableVoiceChat(arg0);
     } else {
-        ov44_02233F50(arg0);
+        WifiClubGameEntry_DisableVoiceChat(arg0);
     }
     return arg0->unk0->unk22;
 }
 
-void ov44_02233D8C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+void WifiClubGameEntry_CheckConnectionLost(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r7;
     s32 temp_r6;
     s32 var_r5;
@@ -728,21 +728,21 @@ void ov44_02233D8C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enu
         if ((u8)(arg0->unk5 + 229) <= 2) {
             return;
         }
-        if ((CommState_GetWifiMatchStatus() <= 2) && (ov44_02233F64(arg0) <= 1) && (ov44_02233E6C(arg0) == 0)) {
+        if ((CommState_GetWifiMatchStatus() <= 2) && (WifiClubGameEntry_CountMembers(arg0) <= 1) && (WifiClubGameEntry_IsAnyoneConnected(arg0) == 0)) {
             return;
         }
     } else if ((arg0->unk5 == 15) || (arg0->unk5 == 16) || (arg0->unk5 == 17) || ((u8)(arg0->unk5 + 250) <= 1)) {
         return;
     }
 
-    temp_r6 = ov44_02234458(arg0);
-    temp_r7 = ov44_02234044(arg0);
-    if (ov44_02233F64(arg0) > Comm_CountConnected()) {
+    temp_r6 = WifiClubGameEntry_HasTimedOut(arg0);
+    temp_r7 = WifiClubGameEntry_CheckMemberDisconnected(arg0);
+    if (WifiClubGameEntry_CountMembers(arg0) > Comm_CountConnected()) {
         var_r5 = 1;
     } else {
         var_r5 = 0;
     }
-    if ((CommState_GetWifiMatchStatus() >= 3) || (CommState_HasWifiFailed() != 0) || (CommState_WasWifiDisconnected() != 0) || (Comm_IsNetIdConnected(0) == 0) || (ov44_02233E6C(arg0) == 0) || (var_r5 == 1) || (temp_r6 == 1) || (temp_r7 == 1)) {
+    if ((CommState_GetWifiMatchStatus() >= 3) || (CommState_HasWifiFailed() != 0) || (CommState_WasWifiDisconnected() != 0) || (Comm_IsNetIdConnected(0) == 0) || (WifiClubGameEntry_IsAnyoneConnected(arg0) == 0) || (var_r5 == 1) || (temp_r6 == 1) || (temp_r7 == 1)) {
         if (arg0->unk4 != 0) {
             arg0->unk5 = 27;
             return;
@@ -751,20 +751,20 @@ void ov44_02233D8C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enu
     }
 }
 
-void ov44_02233E48(UnkStruct_ov44_02235340 *arg0) {
+void WifiClubGameEntry_CheckMatchFailed(WifiClubGameEntry *arg0) {
     if ((CommState_GetWifiMatchStatus() > 3) || (CommState_WasWifiDisconnected() != 0) || (CommState_HasWifiFailed() != 0)) {
         arg0->unk5 = 15;
     }
 }
 
-s32 ov44_02233E6C(UnkStruct_ov44_02235340 *arg0) {
+s32 WifiClubGameEntry_IsAnyoneConnected(WifiClubGameEntry *arg0) {
     if (Comm_CountConnected() > 0) {
         return 1;
     }
     return 0;
 }
 
-s32 ov44_02233E80(u32 arg0, u32 arg1) {
+s32 WifiClubGameEntry_StartMatch(u32 arg0, u32 arg1) {
     s32 var_r5 = CommState_StartWifiMatch(arg0);
     if (var_r5 == 1) {
         switch (arg1) {
@@ -780,7 +780,7 @@ s32 ov44_02233E80(u32 arg0, u32 arg1) {
     return var_r5;
 }
 
-void ov44_02233EB4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1) {
+void WifiClubGameEntry_SetPlayingStatus(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1) {
     switch (arg1->unk0) {
     case 0:
         arg0->unk0->unk1B = 18;
@@ -798,11 +798,11 @@ void ov44_02233EB4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1) {
     ov00_021E6D60(arg0->unk0, 36);
 }
 
-s32 ov44_02233EF8(UnkStruct_ov44_02235340 *arg0) {
+s32 WifiClubGameEntry_StartVoiceChat(WifiClubGameEntry *arg0) {
     if (arg0->unk11 == 1) {
         return 0;
     }
-    if (ov44_02233E6C(arg0) == 1) {
+    if (WifiClubGameEntry_IsAnyoneConnected(arg0) == 1) {
         WifiConnection_StartVoiceChat(104);
         arg0->unk11 = 1;
         return 1;
@@ -810,7 +810,7 @@ s32 ov44_02233EF8(UnkStruct_ov44_02235340 *arg0) {
     return 0;
 }
 
-s32 ov44_02233F20(UnkStruct_ov44_02235340 *arg0) {
+s32 WifiClubGameEntry_StopVoiceChat(WifiClubGameEntry *arg0) {
     if (arg0->unk11 == 0) {
         return 0;
     }
@@ -819,28 +819,28 @@ s32 ov44_02233F20(UnkStruct_ov44_02235340 *arg0) {
     return 1;
 }
 
-void ov44_02233F3C(UnkStruct_ov44_02235340 *arg0) {
-    if (ov44_02233EF8(arg0) != 0) {
+void WifiClubGameEntry_EnableVoiceChat(WifiClubGameEntry *arg0) {
+    if (WifiClubGameEntry_StartVoiceChat(arg0) != 0) {
         GF_GetCurrentPlayingBGM();
         sub_02005448();
     }
 }
 
-void ov44_02233F50(UnkStruct_ov44_02235340 *arg0) {
-    if (ov44_02233F20(arg0) != 0) {
+void WifiClubGameEntry_DisableVoiceChat(WifiClubGameEntry *arg0) {
+    if (WifiClubGameEntry_StopVoiceChat(arg0) != 0) {
         GF_SndHandleSetInitialVolume(0, 120);
     }
 }
 
-s32 ov44_02233F64(UnkStruct_ov44_02235340 *arg0) {
+s32 WifiClubGameEntry_CountMembers(WifiClubGameEntry *arg0) {
     return CommPlayerInfo_CountAccepted();
 }
 
-s32 ov44_02233F6C(UnkStruct_ov44_02235340 *arg0, enum HeapID heapID) {
+s32 WifiClubGameEntry_AcceptEarlierMembers(WifiClubGameEntry *arg0, enum HeapID heapID) {
     s32 var_r7 = 1;
     for (s32 i = Comm_GetLocalNetId() - 1; i >= 0; i--) {
         if (CommPlayerInfo_IsReceived(i) == 1) {
-            ov44_022340BC(arg0, i, heapID);
+            WifiClubGameEntry_AcceptMember(arg0, i, heapID);
         } else if (CommPlayerInfo_IsAccepted(i) == 0) {
             var_r7 = 0;
         }
@@ -848,8 +848,8 @@ s32 ov44_02233F6C(UnkStruct_ov44_02235340 *arg0, enum HeapID heapID) {
     return var_r7;
 }
 
-void ov44_02233FA8(UnkStruct_ov44_02235340 *arg0) {
-    UnkStruct_ov44_022345FC var_r5;
+void WifiClubGameEntry_RefusePendingApplicants(WifiClubGameEntry *arg0) {
+    WifiClubGameEntryJoinAnswer var_r5;
     var_r5.unk2 = 0;
     for (s32 i = 1; i < 4; i++) {
         if (CommPlayerInfo_IsReceived(i) == 1) {
@@ -860,8 +860,8 @@ void ov44_02233FA8(UnkStruct_ov44_02235340 *arg0) {
     }
 }
 
-void ov44_02233FE8(UnkStruct_ov44_02235340 *arg0) {
-    UnkStruct_ov44_022345FC var_r5;
+void WifiClubGameEntry_ReleaseAllMembers(WifiClubGameEntry *arg0) {
+    WifiClubGameEntryJoinAnswer var_r5;
     var_r5.unk2 = 0;
     for (s32 i = 1; i < 4; i++) {
         if (CommPlayerInfo_IsReceivedOrAccepted(i) == 1) {
@@ -872,15 +872,15 @@ void ov44_02233FE8(UnkStruct_ov44_02235340 *arg0) {
     }
 }
 
-void ov44_02234028(UnkStruct_ov44_02235340 *arg0) {
-    WifiConnection_SetDisconnectCallback(ov44_02234070, arg0);
+void WifiClubGameEntry_SetDisconnectCallback(WifiClubGameEntry *arg0) {
+    WifiConnection_SetDisconnectCallback(WifiClubGameEntry_OnDisconnect, arg0);
 }
 
-void ov44_02234038(UnkStruct_ov44_02235340 *arg0) {
+void WifiClubGameEntry_ClearDisconnectCallback(WifiClubGameEntry *arg0) {
     WifiConnection_SetDisconnectCallback(0, 0);
 }
 
-s32 ov44_02234044(UnkStruct_ov44_02235340 *arg0) {
+s32 WifiClubGameEntry_CheckMemberDisconnected(WifiClubGameEntry *arg0) {
     s32 var_r7 = 0;
     for (s32 i = 0; i < 4; i++) {
         if (arg0->unk14[i] == 1) {
@@ -894,12 +894,12 @@ s32 ov44_02234044(UnkStruct_ov44_02235340 *arg0) {
     return var_r7;
 }
 
-void ov44_02234070(u8 arg0, UnkStruct_ov44_02235340 *arg1, s32 arg2) {
+void WifiClubGameEntry_OnDisconnect(u8 arg0, WifiClubGameEntry *arg1, s32 arg2) {
     arg1->unk14[arg0] = 1;
     arg1->unk18[arg0] = arg0;
 }
 
-s32 ov44_0223407C(UnkStruct_ov44_02235340 *arg0) {
+s32 WifiClubGameEntry_CheckMemberListChanged(WifiClubGameEntry *arg0) {
     s32 i;
     s32 ret = 0;
     for (i = 0; i < 4; i++) {
@@ -917,24 +917,24 @@ s32 ov44_0223407C(UnkStruct_ov44_02235340 *arg0) {
     return ret;
 }
 
-void ov44_022340B4(UnkStruct_ov44_02235340 *arg0) {
+void WifiClubGameEntry_RequestMemberListRedraw(WifiClubGameEntry *arg0) {
     arg0->unk24 = 1;
 }
 
-void ov44_022340BC(UnkStruct_ov44_02235340 *arg0, s32 arg1, enum HeapID heapID) {
+void WifiClubGameEntry_AcceptMember(WifiClubGameEntry *arg0, s32 arg1, enum HeapID heapID) {
     if (CommPlayerInfo_IsAccepted(arg1) == 0) {
         CommPlayerInfo_Accept(arg1);
         arg0->unk25 = arg1;
-        ov44_022340EC(arg0, arg1, heapID);
-        ov44_022340B4(arg0);
+        WifiClubGameEntry_AddMemberAvatar(arg0, arg1, heapID);
+        WifiClubGameEntry_RequestMemberListRedraw(arg0);
     }
 }
 
-void ov44_022340EC(UnkStruct_ov44_02235340 *arg0, s32 arg1, enum HeapID heapID) {
+void WifiClubGameEntry_AddMemberAvatar(WifiClubGameEntry *arg0, s32 arg1, enum HeapID heapID) {
     UnkStruct_ov42_02122667 sp4;
 
     if (arg0->unk30.unk15C[arg1].unk0 == 0) {
-        sp4 = ov44_02236510[arg1];
+        sp4 = sWifiClubGameEntryAvatarTemplates[arg1];
 
         if (arg1 != Comm_GetLocalNetId()) {
             PlayerProfile *playerProfile = CommPlayerInfo_GetProfile(arg1);
@@ -956,52 +956,52 @@ void ov44_022340EC(UnkStruct_ov44_02235340 *arg0, s32 arg1, enum HeapID heapID) 
     }
 }
 
-void ov44_022341C0(UnkStruct_ov44_02235340 *arg0) {
+void WifiClubGameEntry_UpdateAvatars(WifiClubGameEntry *arg0) {
     for (s32 i = 0; i < 4; i++) {
-        func_type_022341C0 ov44_func = ov44_02236464[arg0->unk30.unk15C[i].unk8];
+        WifiClubGameEntryAvatarFunc ov44_func = sWifiClubGameEntryAvatarFuncs[arg0->unk30.unk15C[i].unk8];
         ov44_func(arg0, &arg0->unk30.unk15C[i]);
     }
     ov42_0222807C(arg0->unk30.unk154);
     ov42_022290DC(arg0->unk30.unk158);
 }
 
-void ov44_02234204(UnkStruct_ov44_02235340 *arg0) {
+void WifiClubGameEntry_DeleteAvatars(WifiClubGameEntry *arg0) {
     ov42_0222901C(arg0->unk30.unk158);
     memset(&arg0->unk30.unk15C, 0, 48);
 }
 
-void ov44_02234224(UnkStruct_ov44_02235340 *arg0, s32 arg1) {
-    UnkStruct_ov44_022345FC sp;
+void WifiClubGameEntry_SendLeaderBusy(WifiClubGameEntry *arg0, s32 arg1) {
+    WifiClubGameEntryJoinAnswer sp;
     sp.unk0 = arg1;
     sp.unk2 = 2;
     GF_ASSERT(Comm_SendCommand(22, &sp, 8) == 1);
 }
 
-void ov44_02234248(UnkStruct_ov44_02235340 *arg0) {
+void WifiClubGameEntry_RefuseLateApplicants(WifiClubGameEntry *arg0) {
     for (s32 i = 0; i < 4; i++) {
         if (((arg0->unk25 + 1) < i) && (CommPlayerInfo_IsReceived(i) == 1)) {
-            ov44_02234224(arg0, i);
+            WifiClubGameEntry_SendLeaderBusy(arg0, i);
             CommPlayerInfo_ClearPlayer(i);
         }
     }
 }
 
-void ov44_0223427C(UnkStruct_ov44_02235340 *arg0, enum HeapID heapID) {
+void WifiClubGameEntry_AcceptAnnouncedMembers(WifiClubGameEntry *arg0, enum HeapID heapID) {
     for (s32 i = 0; i < 4; i++) {
         if ((arg0->unk28[i] == 1) && (CommPlayerInfo_IsReceivedOrAccepted(i) == 1)) {
-            ov44_022340BC(arg0, i, heapID);
+            WifiClubGameEntry_AcceptMember(arg0, i, heapID);
             arg0->unk28[i] = 0;
             arg0->unk12 = 1;
         }
     }
 }
 
-void ov44_022342B8(UnkStruct_ov44_02235340 *arg0) {
+void WifiClubGameEntry_ShowWaitingIcon(WifiClubGameEntry *arg0) {
     GF_ASSERT(!arg0->unk30.waitingIcon);
     arg0->unk30.waitingIcon = WaitingIcon_New(&arg0->unk30.windowList[0], 1);
 }
 
-void ov44_022342E0(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+void WifiClubGameEntry_HideWaitingIcon(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (arg0->unk30.waitingIcon != 0) {
         WaitingIcon_Delete(arg0->unk30.waitingIcon);
         arg0->unk30.waitingIcon = 0;
@@ -1010,19 +1010,19 @@ void ov44_022342E0(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enu
     }
 }
 
-void ov44_02234324(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_022341C0 *arg1) {
+void WifiClubGameEntry_AvatarNone(WifiClubGameEntry *arg0, WifiClubGameEntryAvatar *arg1) {
 }
 
-void ov44_02234328(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_022341C0 *arg1) {
+void WifiClubGameEntry_AvatarStartSpin(WifiClubGameEntry *arg0, WifiClubGameEntryAvatar *arg1) {
     ov42_0222919C(arg1->unk4, 0);
     ov42_022291A0(arg1->unk4);
     ov42_02229200(arg1->unk4, 1);
     arg1->unk8 = 2;
     s32 idx = ov42_02228188(arg1->unk0, 6);
-    arg1->unkA = ov44_02236458[idx] + 16;
+    arg1->unkA = sWifiClubGameEntryAvatarSpinFrames[idx] + 16;
 }
 
-void ov44_0223435C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_022341C0 *arg1) {
+void WifiClubGameEntry_AvatarUpdateSpin(WifiClubGameEntry *arg0, WifiClubGameEntryAvatar *arg1) {
     ov42_022291AC(arg1->unk4);
     arg1->unkA = (arg1->unkA - 1);
     if (arg1->unkA <= 0) {
@@ -1032,10 +1032,10 @@ void ov44_0223435C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_022341C0 *arg1)
     }
 }
 
-void ov44_02234388(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_022341C0 *arg1) {
+void WifiClubGameEntry_AvatarIdle(WifiClubGameEntry *arg0, WifiClubGameEntryAvatar *arg1) {
 }
 
-void ov44_0223438C(UnkStruct_ov44_02235340 *arg0) {
+void WifiClubGameEntry_SendVoiceChatFlags(WifiClubGameEntry *arg0) {
     int sp0 = 0;
     if (CommPlayerInfo_Exists() != 0) {
         int sp_count = CommPlayerInfo_CountAccepted();
@@ -1068,23 +1068,23 @@ void ov44_0223438C(UnkStruct_ov44_02235340 *arg0) {
     }
 }
 
-int ov44_0223442C(UnkStruct_ov44_02235340 *arg0) {
+int WifiClubGameEntry_IsStartSynced(WifiClubGameEntry *arg0) {
     if (LinkSync_IsSynced(13) != 0) {
         return 1;
     }
     return 0;
 }
 
-void ov44_02234440(UnkStruct_ov44_02235340 *arg0) {
+void WifiClubGameEntry_StartTimeout(WifiClubGameEntry *arg0) {
     arg0->unk10 = 1;
     arg0->unkC = 1800;
 }
 
-void ov44_02234450(UnkStruct_ov44_02235340 *arg0) {
+void WifiClubGameEntry_StopTimeout(WifiClubGameEntry *arg0) {
     arg0->unk10 = 0;
 }
 
-s32 ov44_02234458(UnkStruct_ov44_02235340 *arg0) {
+s32 WifiClubGameEntry_HasTimedOut(WifiClubGameEntry *arg0) {
     if (arg0->unk10 == 0) {
         return 0;
     }
@@ -1095,35 +1095,35 @@ s32 ov44_02234458(UnkStruct_ov44_02235340 *arg0) {
     return 1;
 }
 
-s32 ov44_02234474(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_Start(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (arg0->unk0->unk21 == 1) {
-        ov44_02233F3C(arg0);
+        WifiClubGameEntry_EnableVoiceChat(arg0);
     }
     ov00_021E7220(0);
     CommState_SetErrorWatch(0, 1);
-    ov44_022340EC(arg0, Comm_GetLocalNetId(), heapID);
+    WifiClubGameEntry_AddMemberAvatar(arg0, Comm_GetLocalNetId(), heapID);
     arg0->unk5 = 1;
     return 0;
 }
 
 // When the group is ready:\nA Button: Proceed   B Button: Cancel
-s32 Wifi_PromptReadyMessage(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 Wifi_PromptReadyMessage(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00107, heapID);
     arg0->unk5 = 2;
     return 0;
 }
 
-s32 ov44_022344C4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_HandleInput(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
-    if (ov44_02233914(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
-    if (ov44_02233E6C(arg0) == 1) {
+    if (WifiClubGameEntry_IsAnyoneConnected(arg0) == 1) {
         temp_r0 = CommPlayerInfo_FindReceived();
         if ((temp_r0 != 255) && (arg0->unk6 != 0)) {
             if (CommPlayerInfo_GetFriendIndex(temp_r0) == 32) {
-                UnkStruct_ov44_022345FC subroutine_arg0;
+                WifiClubGameEntryJoinAnswer subroutine_arg0;
                 subroutine_arg0.unk0 = temp_r0;
                 subroutine_arg0.unk2 = 0;
                 CommPlayerInfo_ClearPlayer(temp_r0);
@@ -1135,9 +1135,9 @@ s32 ov44_022344C4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     }
     if (gSystem.newKeys & PAD_BUTTON_A) {
         PlaySE(SEQ_SE_DP_DECIDE);
-        if (ov44_02233E6C(arg0) == 0) {
+        if (WifiClubGameEntry_IsAnyoneConnected(arg0) == 0) {
             arg0->unk5 = 6;
-        } else if (arg1->unk1 <= ov44_02233F64(arg0)) {
+        } else if (arg1->unk1 <= WifiClubGameEntry_CountMembers(arg0)) {
             arg0->unk5 = 8;
         } else {
             arg0->unk5 = 6;
@@ -1156,37 +1156,37 @@ s32 ov44_022344C4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 // Someone wishes to join.\nAccept this Trainer as a member?
-s32 Wifi_PromptUserJoinRequest(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    ov44_0223398C(&arg0->unk30, arg1, arg0->unk6, heapID);
+s32 Wifi_PromptUserJoinRequest(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    WifiClubGameEntry_ShowApplicantInfo(&arg0->unk30, arg1, arg0->unk6, heapID);
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00108, heapID);
     arg0->unk5 = 4;
     return 0;
 }
 
-s32 ov44_022345C8(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if (ov44_02233914(&arg0->unk30) == 0) {
+s32 WifiClubGameEntry_Leader_ShowAcceptYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
-    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &ov44_0223645C, 48, 4, heapID);
+    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
     arg0->unk5 = 5;
     return 0;
 }
 
-s32 ov44_022345FC(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_HandleAcceptYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
     temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk30.listMenu2D, heapID);
     if (temp_r0 != -1) {
-        UnkStruct_ov44_022345FC subroutine_arg0;
+        WifiClubGameEntryJoinAnswer subroutine_arg0;
         subroutine_arg0.unk0 = (s16)arg0->unk6;
         if (temp_r0 == 0) {
             subroutine_arg0.unk2 = 1;
-            ov44_022340BC(arg0, arg0->unk6, heapID);
+            WifiClubGameEntry_AcceptMember(arg0, arg0->unk6, heapID);
             if (arg0->unk0->unk21 == 1) {
-                ov44_02233F20(arg0);
-                ov44_02233F3C(arg0);
+                WifiClubGameEntry_StopVoiceChat(arg0);
+                WifiClubGameEntry_EnableVoiceChat(arg0);
             }
-            if (arg1->unk2 <= ov44_02233F64(arg0)) {
+            if (arg1->unk2 <= WifiClubGameEntry_CountMembers(arg0)) {
                 arg0->unk5 = 8;
             } else {
                 arg0->unk5 = 1;
@@ -1198,21 +1198,21 @@ s32 ov44_022345FC(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
         }
         GF_ASSERT(Comm_SendCommand(22, &subroutine_arg0, 8) == TRUE);
         arg0->unk6 = 255;
-        ov44_02233A34(&arg0->unk30);
+        WifiClubGameEntry_HideApplicantInfo(&arg0->unk30);
         arg0->unk30.listMenu2D = NULL;
     }
     return 0;
 }
 
 // There aren’t enough members.\r
-s32 Wifi_PromptInsufficientMembers(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 Wifi_PromptInsufficientMembers(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00119, heapID);
     arg0->unk5 = 7;
     return 0;
 }
 
-s32 ov44_022346B4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if (ov44_02233914(&arg0->unk30) == 0) {
+s32 WifiClubGameEntry_Leader_WaitNotEnoughMembers(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
     arg0->unk5 = 19;
@@ -1220,29 +1220,29 @@ s32 ov44_022346B4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 // Are these members OK?
-s32 Wifi_PromptConfirmMembers(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 Wifi_PromptConfirmMembers(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00111, heapID);
     arg0->unk5 = 9;
     return 0;
 }
 
-s32 ov44_022346E8(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if (ov44_02233914(&arg0->unk30) == 0) {
+s32 WifiClubGameEntry_Leader_ShowConfirmYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
-    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &ov44_0223645C, 48, 4, heapID);
+    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
     arg0->unk5 = 10;
     return 0;
 }
 
-s32 ov44_0223471C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_HandleConfirmYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
     temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk30.listMenu2D, heapID);
     if (temp_r0 != -1) {
         if (temp_r0 == 0) {
             arg0->unk5 = 11;
-        } else if (arg1->unk2 <= ov44_02233F64(arg0)) {
+        } else if (arg1->unk2 <= WifiClubGameEntry_CountMembers(arg0)) {
             arg0->unk5 = 19;
         } else {
             arg0->unk5 = 1;
@@ -1253,20 +1253,20 @@ s32 ov44_0223471C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 // Communicating. Please stand by...
-s32 ov44_02234764(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_StartCommunicating(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     arg0->unk8 = 30;
-    ov44_02233FA8(arg0);
+    WifiClubGameEntry_RefusePendingApplicants(arg0);
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00102, heapID);
-    ov44_022342B8(arg0);
-    ov44_02234440(arg0);
+    WifiClubGameEntry_ShowWaitingIcon(arg0);
+    WifiClubGameEntry_StartTimeout(arg0);
     arg0->unk5 = 12;
     ov00_021E7130();
     return 0;
 }
 
-s32 ov44_0223479C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_WaitMembersConnected(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (Comm_CountConnected() != CommPlayerInfo_CountAccepted()) {
-        ov44_02233FA8(arg0);
+        WifiClubGameEntry_RefusePendingApplicants(arg0);
         return 0;
     }
     if (ov00_021E70F4() == 0) {
@@ -1277,7 +1277,7 @@ s32 ov44_0223479C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     return 0;
 }
 
-s32 ov44_022347D4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_SendStartCommand(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (arg0->unk8 == 0) {
         if (Comm_SendCommand(23, NULL, 0) != 0) {
             arg0->unk5 = 14;
@@ -1288,9 +1288,9 @@ s32 ov44_022347D4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     return 0;
 }
 
-s32 ov44_022347FC(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_WaitStartSync(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (LinkSync_IsSynced(13) != 0) {
-        ov44_02233EB4(arg0, arg1);
+        WifiClubGameEntry_SetPlayingStatus(arg0, arg1);
         LinkSync_ClearPackets();
         LinkSync_StartSync(14);
         arg0->unk5 = 15;
@@ -1298,7 +1298,7 @@ s32 ov44_022347FC(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     return 0;
 }
 
-s32 ov44_02234828(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_SendStatus(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (LinkSync_IsSynced(14) != 0) {
         s16 subroutine_arg0 = (s16)arg0->unk0->unk1B;
         if (LinkSync_SendPacket(Comm_GetLocalNetId(), &subroutine_arg0) == 1) {
@@ -1308,9 +1308,9 @@ s32 ov44_02234828(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     return 0;
 }
 
-s32 ov44_02234858(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_CheckStatuses(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 i = 0;
-    s32 temp_r7 = ov44_02233F64(arg0);
+    s32 temp_r7 = WifiClubGameEntry_CountMembers(arg0);
     s32 sp0 = Comm_GetLocalNetId();
     s32 var_r5 = 0;
 
@@ -1334,47 +1334,47 @@ s32 ov44_02234858(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     return 0;
 }
 
-s32 ov44_022348A8(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_StartFinalSync(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     CommState_SetErrorWatch(1, 1);
     LinkSync_StartSync(18);
     arg0->unk5 = 18;
     return 0;
 }
 
-s32 ov44_022348C4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_WaitFinalSync(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (LinkSync_IsSynced(18) != 0) {
         arg0->unk7 = 1;
-        ov44_022342E0(arg0, arg1, heapID);
+        WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
         return 1;
     }
     return 0;
 }
 
 // Stop looking for members?
-s32 Wifi_PromptStopFindingMembers(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 Wifi_PromptStopFindingMembers(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00120, heapID);
     arg0->unk5 = 20;
     return 0;
 }
 
-s32 ov44_02234904(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if (ov44_02233914(&arg0->unk30) == 0) {
+s32 WifiClubGameEntry_Leader_ShowStopSeekingYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
-    arg0->unk30.listMenu2D = CreateYesNoMenu(arg0->unk30.bgConfig, &ov44_0223645C, 48U, 4, 1, heapID);
+    arg0->unk30.listMenu2D = CreateYesNoMenu(arg0->unk30.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48U, 4, 1, heapID);
     arg0->unk5 = 21;
     return 0;
 }
 
-s32 ov44_02234944(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_HandleStopSeekingYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
     temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk30.listMenu2D, heapID);
     if (temp_r0 != -1) {
         if (temp_r0 == 0) {
             arg0->unk5 = 22;
-        } else if (ov44_02233E6C(arg0) != 0) {
-            if (arg1->unk2 <= ov44_02233F64(arg0)) {
+        } else if (WifiClubGameEntry_IsAnyoneConnected(arg0) != 0) {
+            if (arg1->unk2 <= WifiClubGameEntry_CountMembers(arg0)) {
                 arg0->unk5 = 8;
             } else {
                 arg0->unk5 = 1;
@@ -1388,30 +1388,30 @@ s32 ov44_02234944(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 // If the leader drops out, the group will\nbe disbanded. Is that OK?
-s32 Wifi_PromptDropAsLeader(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 Wifi_PromptDropAsLeader(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00121, heapID);
     arg0->unk5 = 23;
     return 0;
 }
 
-s32 ov44_022349B4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if (ov44_02233914(&arg0->unk30) == 0) {
+s32 WifiClubGameEntry_Leader_ShowDisbandYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
-    arg0->unk30.listMenu2D = CreateYesNoMenu(arg0->unk30.bgConfig, &ov44_0223645C, 48, 4, 1, heapID);
+    arg0->unk30.listMenu2D = CreateYesNoMenu(arg0->unk30.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, 1, heapID);
     arg0->unk5 = 24;
     return 0;
 }
 
-s32 ov44_022349F4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_HandleDisbandYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
     temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk30.listMenu2D, heapID);
     if (temp_r0 != -1) {
         if (temp_r0 == 0) {
             arg0->unk5 = 25;
-        } else if (ov44_02233E6C(arg0) != 0) {
-            if (arg1->unk2 <= ov44_02233F64(arg0)) {
+        } else if (WifiClubGameEntry_IsAnyoneConnected(arg0) != 0) {
+            if (arg1->unk2 <= WifiClubGameEntry_CountMembers(arg0)) {
                 arg0->unk5 = 8;
             } else {
                 arg0->unk5 = 1;
@@ -1425,17 +1425,17 @@ s32 ov44_022349F4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 // The member invitations will be canceled.
-s32 Wifi_PromptCancelInvites(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 Wifi_PromptCancelInvites(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00122, heapID);
     arg0->unk8 = 30;
     arg0->unk5 = 26;
     return 0;
 }
 
-s32 ov44_02234A68(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_Cancel(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
-    if (ov44_02233914(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
     temp_r0 = arg0->unk8 - 1;
@@ -1445,51 +1445,51 @@ s32 ov44_02234A68(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     }
     arg0->unk7 = 0;
     CommState_LeaveWifiMatch();
-    ov44_02233FE8(arg0);
+    WifiClubGameEntry_ReleaseAllMembers(arg0);
     CommState_SetWifiClubLinkMode();
     CommState_SetErrorWatch(0, 1);
     return 1;
 }
 
-s32 ov44_02234AA8(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_OnMemberDropped(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (arg0->unk30.listMenu2D != NULL) {
         Clear2dMenuWindowAndDelete(arg0->unk30.listMenu2D, heapID);
         arg0->unk30.listMenu2D = NULL;
     }
-    ov44_02233A34(&arg0->unk30);
-    ov44_022342E0(arg0, arg1, heapID);
+    WifiClubGameEntry_HideApplicantInfo(&arg0->unk30);
+    WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
     arg0->unk5 = 28;
     return 0;
 }
 
 // A member had to drop out.\nPlease register from the start again.\r
-s32 Wifi_PromptMemberDropped(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 Wifi_PromptMemberDropped(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00118, heapID);
     arg0->unk5 = 29;
-    ov44_02233FE8(arg0);
-    ov44_02233EB4(arg0, arg1);
+    WifiClubGameEntry_ReleaseAllMembers(arg0);
+    WifiClubGameEntry_SetPlayingStatus(arg0, arg1);
     if ((u32)(CommState_GetWifiMatchStatus() - 4) <= 1U) {
         ov00_021EDB1C();
     }
     return 0;
 }
 
-s32 ov44_02234B18(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_EndAfterMemberDropped(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if ((u32)(CommState_GetWifiMatchStatus() - 4) <= 1) {
         ov00_021EDB1C();
     }
-    if (ov44_02233914(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
     CommState_LeaveWifiMatch();
     CommState_SetWifiClubLinkMode();
-    ov44_02233FE8(arg0);
+    WifiClubGameEntry_ReleaseAllMembers(arg0);
     arg0->unk7 = 0;
     CommState_SetErrorWatch(0, 1);
     return 1;
 }
 
-s32 Wifi_PromptToggleVoiceChat(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 Wifi_PromptToggleVoiceChat(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 strno;
 
     if (arg0->unk0->unk21 == 1) {
@@ -1504,23 +1504,23 @@ s32 Wifi_PromptToggleVoiceChat(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_arg
     return 0;
 }
 
-s32 ov44_02234B80(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if (ov44_02233914(&arg0->unk30) == 0) {
+s32 WifiClubGameEntry_Leader_ShowVoiceChatYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
-    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &ov44_0223645C, 48, 4, heapID);
+    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
     arg0->unk5 = 32;
     return 0;
 }
 
-s32 ov44_02234BB4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Leader_HandleVoiceChatYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
     temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk30.listMenu2D, heapID);
     if (temp_r0 != -1) {
         if (temp_r0 == 0) {
-            ov44_02233D38(arg0, heapID);
-            ov44_022340B4(arg0);
+            WifiClubGameEntry_ToggleVoiceChat(arg0, heapID);
+            WifiClubGameEntry_RequestMemberListRedraw(arg0);
         }
         arg0->unk5 = 1;
         arg0->unk30.listMenu2D = NULL;
@@ -1528,45 +1528,45 @@ s32 ov44_02234BB4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     return 0;
 }
 
-s32 ov44_02234BF0(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_Start(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     CommPlayerInfo_SendLocal();
     CommState_SetErrorWatch(0, 1);
-    ov44_02234440(arg0);
+    WifiClubGameEntry_StartTimeout(arg0);
     arg0->unk5 = 1;
     return 0;
 }
 
-s32 ov44_02234C10(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    ov44_02233F6C(arg0, heapID);
+s32 WifiClubGameEntry_Member_WaitLeaderInfo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
     if (Comm_IsNetIdConnected(0) == 0) {
-        ov44_02234450(arg0);
+        WifiClubGameEntry_StopTimeout(arg0);
         arg0->unk5 = 15;
     } else if (CommPlayerInfo_IsAccepted(0) != 0) {
-        ov44_02234450(arg0);
+        WifiClubGameEntry_StopTimeout(arg0);
         arg0->unk5 = 2;
     }
     return 0;
 }
 
 // Awaiting {STRVAR_1 3, 0, 0}’s response...
-s32 Wifi_PromptAwaitingResponse(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    ov44_02233F6C(arg0, heapID);
-    ov44_02233C88(&arg0->unk30, arg1, 0, 0, heapID);
+s32 Wifi_PromptAwaitingResponse(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
+    WifiClubGameEntry_BufferPlayerName(&arg0->unk30, arg1, 0, 0, heapID);
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00114, heapID);
-    ov44_022342B8(arg0);
+    WifiClubGameEntry_ShowWaitingIcon(arg0);
     arg0->unk5 = 3;
     return 0;
 }
 
-s32 ov44_02234C88(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_WaitJoinAnswer(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     u8 temp_r0;
 
-    ov44_02233F6C(arg0, heapID);
-    if (ov44_02233914(&arg0->unk30) == 0) {
+    WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
     if (arg0->unk13 != 0) {
-        ov44_022342E0(arg0, arg1, heapID);
+        WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
         temp_r0 = arg0->unk13;
         switch (temp_r0) {
         case 1:
@@ -1586,26 +1586,26 @@ s32 ov44_02234C88(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 // {STRVAR_1 3, 0, 0} approved your\nmember-registration request.
-s32 ov44_02234CE8(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    ov44_02233C88(&arg0->unk30, arg1, 0, 0, heapID);
+s32 WifiClubGameEntry_Member_PrintApproved(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    WifiClubGameEntry_BufferPlayerName(&arg0->unk30, arg1, 0, 0, heapID);
 
     Wifi_LoadAndPrintTextToWindow(&arg0->unk30, arg1, msg_0778_00115, 30, heapID);
     arg0->unk5 = 5;
-    ov44_022340BC(arg0, Comm_GetLocalNetId(), HEAP_ID_103);
+    WifiClubGameEntry_AcceptMember(arg0, Comm_GetLocalNetId(), HEAP_ID_103);
     return 0;
 }
 
-s32 ov44_02234D28(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    ov44_02233F6C(arg0, heapID);
-    if (ov44_02233914(&arg0->unk30) == 0) {
+s32 WifiClubGameEntry_Member_WaitApproved(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
     arg0->unk5 = 8;
     return 0;
 }
 
-s32 ov44_02234D4C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    ov44_02233C88(&arg0->unk30, arg1, 0, 0, heapID);
+s32 WifiClubGameEntry_Member_PrintRefused(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    WifiClubGameEntry_BufferPlayerName(&arg0->unk30, arg1, 0, 0, heapID);
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, arg0->unk2D, heapID);
     arg0->unk5 = 7;
     CommState_LeaveWifiMatch();
@@ -1613,8 +1613,8 @@ s32 ov44_02234D4C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     return 0;
 }
 
-s32 ov44_02234D88(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if (ov44_02233914(&arg0->unk30) == 0) {
+s32 WifiClubGameEntry_Member_EndRefused(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
     arg0->unk7 = 0;
@@ -1623,20 +1623,20 @@ s32 ov44_02234D88(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 // Awaiting other members.
-s32 Wifi_PromptAwaitingMembers(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    ov44_02233F6C(arg0, heapID);
+s32 Wifi_PromptAwaitingMembers(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00123, heapID);
-    ov44_022342B8(arg0);
+    WifiClubGameEntry_ShowWaitingIcon(arg0);
     arg0->unk5 = 9;
     if (arg0->unk0->unk21 == 1) {
-        ov44_02233F3C(arg0);
+        WifiClubGameEntry_EnableVoiceChat(arg0);
     }
     return 0;
 }
 
-s32 ov44_02234DE4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    ov44_02233F6C(arg0, heapID);
-    if (ov44_02233914(&arg0->unk30) == 0) {
+s32 WifiClubGameEntry_Member_WaitAwaitingMessage(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
     arg0->unk5 = 10;
@@ -1644,38 +1644,38 @@ s32 ov44_02234DE4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 // Communicating. Please stand by...
-s32 ov44_02234E08(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    ov44_02233F6C(arg0, heapID);
+s32 WifiClubGameEntry_Member_WaitStart(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
     if (arg0->unk12 != 0) {
         arg0->unk12 = 0U;
         if (arg0->unk0->unk21 == 1) {
-            ov44_02233F20(arg0);
-            ov44_02233F3C(arg0);
+            WifiClubGameEntry_StopVoiceChat(arg0);
+            WifiClubGameEntry_EnableVoiceChat(arg0);
         }
-        ov44_022340B4(arg0);
+        WifiClubGameEntry_RequestMemberListRedraw(arg0);
     }
-    if (ov44_0223442C(arg0) == 1) {
+    if (WifiClubGameEntry_IsStartSynced(arg0) == 1) {
         LinkSync_ClearPackets();
         LinkSync_StartSync(14);
-        ov44_022342E0(arg0, arg1, heapID);
+        WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
         Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00102, heapID);
-        ov44_02234440(arg0);
+        WifiClubGameEntry_StartTimeout(arg0);
         arg0->unk8 = 300;
-        ov44_022342B8(arg0);
+        WifiClubGameEntry_ShowWaitingIcon(arg0);
         arg0->unk5 = 11;
     } else if (gSystem.newKeys & PAD_BUTTON_X) {
-        ov44_022342E0(arg0, arg1, heapID);
+        WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
         arg0->unk5 = 18;
     }
     return 0;
 }
 
-s32 ov44_02234EA4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_SendStatus(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
     if (LinkSync_IsSynced(14) != 0) {
         s16 subroutine_arg0 = (s16)arg0->unk0->unk1B;
-        if (ov44_02233F64(arg0) != Comm_CountConnected()) {
+        if (WifiClubGameEntry_CountMembers(arg0) != Comm_CountConnected()) {
             temp_r0 = arg0->unk8 - 1;
             arg0->unk8 = temp_r0;
             if (temp_r0 <= 0) {
@@ -1690,9 +1690,9 @@ s32 ov44_02234EA4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     return 0;
 }
 
-s32 ov44_02234EF4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_CheckStatuses(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 i = 0;
-    s32 temp_r7 = ov44_02233F64(arg0);
+    s32 temp_r7 = WifiClubGameEntry_CountMembers(arg0);
     s32 sp0 = Comm_GetLocalNetId();
     s32 var_r5 = 0;
 
@@ -1717,42 +1717,42 @@ s32 ov44_02234EF4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     return 0;
 }
 
-s32 ov44_02234F44(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_StartFinalSync(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     CommState_SetErrorWatch(1, 1);
     LinkSync_StartSync(18);
     arg0->unk5 = 14;
     return 0;
 }
 
-s32 ov44_02234F60(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_WaitFinalSync(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (LinkSync_IsSynced(18) != 0) {
-        ov44_022342E0(arg0, arg1, heapID);
+        WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
         arg0->unk7 = 1;
         return 1;
     }
     return 0;
 }
 
-s32 ov44_02234F88(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_OnDropped(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (arg0->unk30.listMenu2D != NULL) {
         Clear2dMenuWindowAndDelete(arg0->unk30.listMenu2D, heapID);
         arg0->unk30.listMenu2D = NULL;
     }
-    ov44_02233A34(&arg0->unk30);
-    ov44_022342E0(arg0, arg1, heapID);
+    WifiClubGameEntry_HideApplicantInfo(&arg0->unk30);
+    WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
     arg0->unk5 = 16;
     return 0;
 }
 
 // A member had to drop out.\nPlease register from the start again.\r
-s32 Wifi_PromptMemberDrop(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 Wifi_PromptMemberDrop(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00118, heapID);
     arg0->unk5 = 17;
     return 0;
 }
 
-s32 ov44_02234FDC(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if (ov44_02233914(&arg0->unk30) == 0) {
+s32 WifiClubGameEntry_Member_EndAfterDropped(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
     CommState_LeaveWifiMatch();
@@ -1762,10 +1762,10 @@ s32 ov44_02234FDC(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     return 1;
 }
 
-s32 Wifi_PromptToggleVoiceChat_(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 Wifi_PromptToggleVoiceChat_(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 strno;
 
-    ov44_02233F6C(arg0, heapID);
+    WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
     if (arg0->unk0->unk21 == 1) {
         // Is it OK to turn off the Voice Chat?
         strno = msg_0778_00125;
@@ -1778,28 +1778,28 @@ s32 Wifi_PromptToggleVoiceChat_(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_ar
     return 0;
 }
 
-s32 ov44_02235038(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    ov44_02233F6C(arg0, heapID);
-    if (ov44_0223442C(arg0) == 1) {
+s32 WifiClubGameEntry_Member_ShowVoiceChatYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
+    if (WifiClubGameEntry_IsStartSynced(arg0) == 1) {
         arg0->unk5 = 10;
-        ov44_02233954(&arg0->unk30);
+        WifiClubGameEntry_ClearMessage(&arg0->unk30);
         return 0;
     }
-    if (ov44_02233914(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
-    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &ov44_0223645C, 48, 4, heapID);
+    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
     arg0->unk5 = 20;
     return 0;
 }
 
-s32 ov44_02235090(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_HandleVoiceChatYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
-    ov44_02233F6C(arg0, heapID);
-    if (ov44_0223442C(arg0) == 1) {
+    WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
+    if (WifiClubGameEntry_IsStartSynced(arg0) == 1) {
         arg0->unk5 = 10;
-        ov44_02233954(&arg0->unk30);
+        WifiClubGameEntry_ClearMessage(&arg0->unk30);
         Clear2dMenuWindowAndDelete(arg0->unk30.listMenu2D, heapID);
         arg0->unk30.listMenu2D = 0;
         return 0;
@@ -1807,8 +1807,8 @@ s32 ov44_02235090(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk30.listMenu2D, heapID);
     if (temp_r0 != -1) {
         if (temp_r0 == 0) {
-            ov44_02233D38(arg0, heapID);
-            ov44_022340B4(arg0);
+            WifiClubGameEntry_ToggleVoiceChat(arg0, heapID);
+            WifiClubGameEntry_RequestMemberListRedraw(arg0);
         }
         arg0->unk5 = 8;
         arg0->unk30.listMenu2D = 0;
@@ -1817,10 +1817,10 @@ s32 ov44_02235090(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 // The leader appears busy.\nPlease apply again.\r
-s32 ov44_02235100(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_PrintLeaderBusy(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     arg0->unk26 = CommPlayerInfo_GetFriendIndex(0);
     GF_ASSERT(arg0->unk26 != 32);
-    ov44_02233C88(&arg0->unk30, arg1, 0, 0, heapID);
+    WifiClubGameEntry_BufferPlayerName(&arg0->unk30, arg1, 0, 0, heapID);
     CommState_LeaveWifiMatch();
     arg0->unk27 = 0;
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00132, heapID);
@@ -1828,16 +1828,16 @@ s32 ov44_02235100(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     return 0;
 }
 
-s32 ov44_02235158(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if (ov44_02233914(&arg0->unk30) == 0) {
+s32 WifiClubGameEntry_Member_ShowApplyAgainYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
-    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &ov44_0223645C, 48, 4, heapID);
+    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
     arg0->unk5 = 23;
     return 0;
 }
 
-s32 ov44_0223518C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_HandleApplyAgainYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
     s8 var_r0;
 
@@ -1855,51 +1855,51 @@ s32 ov44_0223518C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 // Communicating with {STRVAR_1 3, 0, 0}...
-s32 ov44_022351BC(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_PrintContacting(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00017, heapID);
-    ov44_022342B8(arg0);
+    WifiClubGameEntry_ShowWaitingIcon(arg0);
     arg0->unk8 = 90;
     arg0->unk5 = 25;
     return 0;
 }
 
-s32 ov44_022351DC(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_ApplyAgain(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (arg0->unk8 > 0) {
         arg0->unk8 = arg0->unk8 - 1;
         return 0;
     }
-    if (ov44_02233914(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
         return 0;
     }
-    if (ov44_02233E80(arg0->unk26, arg1->unk0) != 0) {
+    if (WifiClubGameEntry_StartMatch(arg0->unk26, arg1->unk0) != 0) {
         arg0->unk5 = 26;
     }
     return 0;
 }
 
-s32 ov44_02235218(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    ov44_02233E48(arg0);
+s32 WifiClubGameEntry_Member_WaitReconnected(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
+    WifiClubGameEntry_CheckMatchFailed(arg0);
     if (CommState_GetWifiMatchStatus() == 1 && Comm_IsNetIdConnected(0) == 1) {
         sub_020378E4(0);
-        ov44_022342E0(arg0, arg1, heapID);
+        WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, heapID);
         arg0->unk5 = 27;
     }
     return 0;
 }
 
-s32 ov44_02235268(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_RebuildScreen(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     u8 *temp_r0;
 
     if (IsPaletteFadeFinished()) {
         CommPlayerInfo_Init(arg1->unk8, 0);
         arg0->unk27 = 1;
-        ov44_02234204(arg0);
-        FreeStructOv44_02235340(arg0, heapID);
+        WifiClubGameEntry_DeleteAvatars(arg0);
+        WifiClubGameEntry_FreeScreen(arg0, heapID);
         arg0 = arg0;
         memset(&arg0->unk30, 0, 504);
-        ov44_02234028(arg0);
-        ov44_022331C4(arg0, arg1, heapID);
+        WifiClubGameEntry_SetDisconnectCallback(arg0);
+        WifiClubGameEntry_InitScreen(arg0, arg1, heapID);
         WirelessStatusIcon_Create();
         arg0->unk12 = 0;
         arg0->unk13 = 0;
@@ -1928,14 +1928,14 @@ s32 ov44_02235268(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     return 0;
 }
 
-s32 ov44_0223532C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_WaitFadeIn(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (IsPaletteFadeFinished() != 0) {
         arg0->unk5 = 0;
     }
     return 0;
 }
 
-s32 ov44_02235340(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
+s32 WifiClubGameEntry_Member_Cancel(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     CommState_LeaveWifiMatch();
     CommState_SetWifiClubLinkMode();
     arg0->unk7 = 0;

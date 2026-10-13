@@ -929,8 +929,8 @@ s32 ov44_0222A60C(OverlayManager *overlayManager, s32 *arg1) {
     if (temp_r0 != NULL) {
         SpriteList_RenderAndAnimateSprites(temp_r0);
     }
-    if (ov44_02231BB0(&data->unk38C) == 1) {
-        ov44_02231C60(&data->unk38C);
+    if (WifiClubRoom_IsInitialized(&data->unk38C) == 1) {
+        WifiClubRoom_Draw(&data->unk38C);
     }
     return 0;
 }
@@ -942,8 +942,8 @@ void ov44_0222A68C(UnkStruct_ov44_022319EC *arg0) {
         arg0->unkD68.unk0 = NULL;
         arg0->unkD68.unk4 = 0;
     }
-    if (ov44_02231BB0(&arg0->unk38C) == 1) {
-        ov44_02231B4C(&arg0->unk38C);
+    if (WifiClubRoom_IsInitialized(&arg0->unk38C) == 1) {
+        WifiClubRoom_Free(&arg0->unk38C);
     }
     if (ov44_0222F98C(arg0) == 1) {
         ov44_0222FA28(arg0);
@@ -1073,7 +1073,7 @@ void ov44_0222A850(BgConfig *arg0) {
     reg_G2S_DB_BLDCNT = 0;
 }
 
-void ov44_0222AA94(UnkStruct_ov44_022319EC *arg0, UnkStruct_ov44_02232B74 *arg1) {
+void ov44_0222AA94(UnkStruct_ov44_022319EC *arg0, WifiClubRoomPerson *arg1) {
     for (int i = 0; i < 33; i++) {
         if (arg0->unkA88[i] == NULL) {
             arg0->unkA88[i] = arg1;
@@ -1084,7 +1084,7 @@ void ov44_0222AA94(UnkStruct_ov44_022319EC *arg0, UnkStruct_ov44_02232B74 *arg1)
     return;
 }
 
-void ov44_0222AAC0(UnkStruct_ov44_022319EC *arg0, UnkStruct_ov44_02232B74 *arg1) {
+void ov44_0222AAC0(UnkStruct_ov44_022319EC *arg0, WifiClubRoomPerson *arg1) {
     for (int i = 0; i < 33; i++) {
         if (arg0->unkA88[i] == arg1) {
             arg0->unkA88[i] = NULL;
@@ -1095,9 +1095,9 @@ void ov44_0222AAC0(UnkStruct_ov44_022319EC *arg0, UnkStruct_ov44_02232B74 *arg1)
     return;
 }
 
-UnkStruct_ov44_02232B74 *ov44_0222AAEC(UnkStruct_ov44_022319EC *arg0, u32 arg1) {
+WifiClubRoomPerson *ov44_0222AAEC(UnkStruct_ov44_022319EC *arg0, u32 arg1) {
     for (s32 i = 0; i < 33; i++) {
-        if ((arg0->unkA88[i] != NULL) && (arg1 == ov44_02231EF4(arg0->unkA88[i]))) {
+        if ((arg0->unkA88[i] != NULL) && (arg1 == WifiClubRoomPerson_GetId(arg0->unkA88[i]))) {
             return arg0->unkA88[i];
         }
     }
@@ -1426,7 +1426,7 @@ s32 ov44_0222B228(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             SetBgPriority(3, 0);
             SetBgPriority(2, 1);
             ov44_0222F66C(arg0, 18);
-            arg0->unk188 = ov44_02231A28(arg0->unk15C, &ov44_02235384, 0);
+            arg0->unk188 = WifiClub_CreateYesNoPrompt(arg0->unk15C, &ov44_02235384, 0);
             arg0->unk348 = 6;
         } else {
             FriendRoster_GetUserData(arg0->unk0);
@@ -1444,7 +1444,7 @@ s32 ov44_0222B228(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 
 s32 ov44_0222B36C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) == 0) {
-        arg0->unk188 = ov44_02231A28(arg0->unk15C, &ov44_0223537C, 0);
+        arg0->unk188 = WifiClub_CreateYesNoPrompt(arg0->unk15C, &ov44_0223537C, 0);
         arg0->unk348 = 2;
     }
     return arg1;
@@ -1475,7 +1475,7 @@ s32 ov44_0222B42C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         SetBgPriority(2, 1);
         SetBgPriority(1, 0);
         SetBgPriority(0, 3);
-        arg0->unk188 = ov44_02231A28(arg0->unk15C, &ov44_02235384, 1);
+        arg0->unk188 = WifiClub_CreateYesNoPrompt(arg0->unk15C, &ov44_02235384, 1);
         arg0->unk348 = 4;
     }
     return arg1;
@@ -1488,7 +1488,7 @@ s32 ov44_0222B494(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         ClearFrameAndWindow2(&arg0->unk300, 0);
         RemoveWindow(&arg0->unk300);
         ov44_0222F66C(arg0, 22);
-        arg0->unk188 = ov44_02231A28(arg0->unk15C, &ov44_02235384, 1);
+        arg0->unk188 = WifiClub_CreateYesNoPrompt(arg0->unk15C, &ov44_02235384, 1);
         arg0->unk348 = 5;
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(arg0->unk188);
@@ -1630,14 +1630,14 @@ s32 ov44_0222B8E0(UnkStruct_ov44_022319EC *arg0) {
         UnkStruct_ov44_02231958 *temp_r0 = ov44_02231958(arg0, i);
         s32 temp_r0_2 = ov44_02229F00(arg0, temp_r0);
         if ((temp_r0_2 != arg0->unk4C[i]) || (temp_r0->unk21 != arg0->unkCC[i])) {
-            UnkStruct_ov44_02232B74 *temp_r0_3 = ov44_0222AAEC(arg0, i + 1);
+            WifiClubRoomPerson *temp_r0_3 = ov44_0222AAEC(arg0, i + 1);
             if (temp_r0_3 != NULL) {
                 sp8 = ov44_02229FDC(arg0->unk4C[i]);
                 s32 temp_r0_4 = ov44_02229FDC(temp_r0_2);
                 if ((sp8 == 1) && (temp_r0_4 == 0)) {
-                    ov44_02231FA8(&arg0->unk38C, temp_r0_3, 0);
+                    WifiClubRoom_SetPersonBusy(&arg0->unk38C, temp_r0_3, 0);
                 } else if ((sp8 == 0) && (temp_r0_4 == 1)) {
-                    ov44_02231FA8(&arg0->unk38C, temp_r0_3, 1);
+                    WifiClubRoom_SetPersonBusy(&arg0->unk38C, temp_r0_3, 1);
                 }
                 arg0->unk4C[i] = temp_r0_2;
                 arg0->unkCC[i] = temp_r0->unk21;
@@ -1739,7 +1739,7 @@ s32 ov44_0222BB38(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 473, 11, HEAP_ID_53);
         } else {
-            arg0->unk188 = ov44_02231A28(arg0->unk15C, &ov44_02235374, 0);
+            arg0->unk188 = WifiClub_CreateYesNoPrompt(arg0->unk15C, &ov44_02235374, 0);
         }
         arg0->unk348 = 12;
     }
@@ -1789,10 +1789,10 @@ s32 ov44_0222BC78(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (CommWireless_IsStartedUp() != 0) {
 
     } else {
-        if (ov44_02231BB0(&arg0->unk38C) == 1) {
+        if (WifiClubRoom_IsInitialized(&arg0->unk38C) == 1) {
             SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
             SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
-            ov44_02231B4C(&arg0->unk38C);
+            WifiClubRoom_Free(&arg0->unk38C);
             for (s32 i = 0; i < 33; i++) {
                 arg0->unkA88[i] = 0;
             }
@@ -2045,7 +2045,7 @@ s32 ov44_0222C35C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         ListMenuItems_Delete(arg0->unk14C);
         arg0->unk14C = NULL;
     }
-    if (ov44_02231BB0(&arg0->unk38C) == 0) {
+    if (WifiClubRoom_IsInitialized(&arg0->unk38C) == 0) {
         s16 var_r4;
         if (arg0->unk4->unk0.unk1C[2] == 0) {
             var_r4 = 0;
@@ -2053,8 +2053,8 @@ s32 ov44_0222C35C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             var_r4 = 97;
         }
         arg0->unk10BE = FriendRoster_GetUsedSlotCount(arg0->unk0);
-        ov44_02231A7C(&arg0->unk38C, HEAP_ID_53, temp_r0, arg0->unk15C, var_r4, arg0->unk10BE);
-        ov44_0222AA94(arg0, ov44_02231D9C(&arg0->unk38C, var_r4));
+        WifiClubRoom_Init(&arg0->unk38C, HEAP_ID_53, temp_r0, arg0->unk15C, var_r4, arg0->unk10BE);
+        ov44_0222AA94(arg0, WifiClubRoom_AddPlayer(&arg0->unk38C, var_r4));
     }
     if (ov44_0222F98C(arg0) == 0) {
         ov44_0222F9A0(arg0, temp_r0, HEAP_ID_53);
@@ -2105,9 +2105,9 @@ s32 ov44_0222C524(UnkStruct_ov44_022319EC *arg0) {
                 }
             }
             if ((var_r2 == 0) && (arg0->unk2C[i] != 0)) {
-                UnkStruct_ov44_02232B74 *temp_r0 = ov44_0222AAEC(arg0, arg0->unk2C[i]);
+                WifiClubRoomPerson *temp_r0 = ov44_0222AAEC(arg0, arg0->unk2C[i]);
                 if (temp_r0 != NULL) {
-                    ov44_02231E94(&arg0->unk38C, temp_r0);
+                    WifiClubRoom_StartPersonLeave(&arg0->unk38C, temp_r0);
                     ov44_0222AAC0(arg0, temp_r0);
                     ov44_02230028(arg0, arg0->unk2C[i]);
                     ov44_0222F970(arg0, arg0->unk2C[i], HEAP_ID_53);
@@ -2123,7 +2123,7 @@ s32 ov44_0222C524(UnkStruct_ov44_022319EC *arg0) {
             }
             if (var_r2 == 0 && arg0->unkC[i] != 0) {
                 UnkStruct_ov44_02231958 *temp = ov44_02231958(arg0, arg0->unkC[i] - 1);
-                UnkStruct_ov44_02232B74 *temp_r0_2 = ov44_02231E08(&arg0->unk38C, temp->unk1C[1], arg0->unkC[i]);
+                WifiClubRoomPerson *temp_r0_2 = WifiClubRoom_AddFriend(&arg0->unk38C, temp->unk1C[1], arg0->unkC[i]);
                 if (temp_r0_2 != NULL) {
                     ov44_0222FFF4(arg0, arg0->unkC[i], 2);
                     ov44_0222AA94(arg0, temp_r0_2);
@@ -2175,8 +2175,8 @@ s32 ov44_0222C684(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     }
     ov44_0222C670(arg0, HEAP_ID_53);
     ov44_0222FBA0(arg0);
-    ov44_02232008(&arg0->unk38C);
-    if (ov44_02231D98(&arg0->unk38C) == 0) {
+    WifiClubRoom_ContinueLightSequence(&arg0->unk38C);
+    if (WifiClubRoom_IsInputLocked(&arg0->unk38C) == 0) {
         if ((ov00_021E709C() == -1) && (gSystem.newKeys & PAD_BUTTON_X)) {
             if (ov44_0222F8C0(arg0) != 0) {
                 ov44_0222F510(arg0, 90, 0);
@@ -2190,15 +2190,15 @@ s32 ov44_0222C684(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             return arg1;
         }
         u32 temp_r0 = ov44_0222FA80(arg0, HEAP_ID_53);
-        UnkStruct_ov44_02232B74 *temp_r1 = ov44_0222AAEC(arg0, temp_r0);
+        WifiClubRoomPerson *temp_r1 = ov44_0222AAEC(arg0, temp_r0);
         if (temp_r0 != 0) {
             if (temp_r1 != NULL) {
-                ov44_02231D48(&arg0->unk38C, temp_r1);
+                WifiClubRoom_ShowFriendMarker(&arg0->unk38C, temp_r1);
             } else {
-                ov44_02231D8C(&arg0->unk38C);
+                WifiClubRoom_HideFriendMarker(&arg0->unk38C);
             }
         } else {
-            ov44_02231D8C(&arg0->unk38C);
+            WifiClubRoom_HideFriendMarker(&arg0->unk38C);
         }
     }
     if ((ov44_0222C4EC(arg0) != 0) && (arg0->unk370 != -1)) {
@@ -2231,8 +2231,8 @@ s32 ov44_0222C684(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             ov44_0222F950(arg0, HEAP_ID_53);
             return arg1;
         }
-        var_r7 = ov44_02231BB4(&arg0->unk38C);
-        ov44_02232018(&arg0->unk38C);
+        var_r7 = WifiClubRoom_Update(&arg0->unk38C);
+        WifiClubRoom_UpdateLights(&arg0->unk38C);
     }
     switch (var_r7) {
     case 0:
@@ -2251,10 +2251,10 @@ s32 ov44_0222C684(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     case 3:
         PlaySE(SEQ_SE_DP_DECIDE);
         if (ov44_02229FDC(r0) != 0) {
-            ov44_02231FCC(&arg0->unk38C);
+            WifiClubRoom_StartCounterLight(&arg0->unk38C);
             arg0->unk348 = 39;
         } else if (r0 == 16 && CommState_IsWifiInLobby() == 1) {
-            ov44_02231FCC(&arg0->unk38C);
+            WifiClubRoom_StartCounterLight(&arg0->unk38C);
             arg0->unk348 = 36;
         }
         ov44_0222F950(arg0, HEAP_ID_53);
@@ -2412,7 +2412,7 @@ s32 ov44_0222CDAC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 473, 11, HEAP_ID_53);
         } else {
-            arg0->unk188 = ov44_02231A14(arg0->unk15C, &ov44_02235374, 0);
+            arg0->unk188 = WifiClub_CreateYesNoPromptIgnoreTouch(arg0->unk15C, &ov44_02235374, 0);
         }
         arg0->unk348 = 26;
     }
@@ -2499,7 +2499,7 @@ s32 ov44_0222CFE0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         ov44_0222F7BC(arg0);
         CommState_LeaveWifiMatch();
         CommState_SetWifiClubLinkMode();
-        if (ov44_02231BB0(&arg0->unk38C) == 0) {
+        if (WifiClubRoom_IsInitialized(&arg0->unk38C) == 0) {
             arg0->unk35C = 20;
             arg0->unk348 = 65;
         } else {
@@ -2545,7 +2545,7 @@ s32 ov44_0222D10C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         ov44_0222F7BC(arg0);
         ov44_0222F818(arg0, 16);
         CommState_SetWifiClubLinkMode();
-        if (ov44_02231BB0(&arg0->unk38C) == 0) {
+        if (WifiClubRoom_IsInitialized(&arg0->unk38C) == 0) {
             arg0->unk348 = ov44_0222ADD0();
         } else {
             ov44_0222F8F0(arg0);
@@ -2584,19 +2584,19 @@ s32 ov44_0222D1C8(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 }
 
 s32 ov44_0222D214(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
-    ov44_02232018(&arg0->unk38C);
+    WifiClubRoom_UpdateLights(&arg0->unk38C);
     ov44_0222F510(arg0, 10, 0);
     arg0->unk348 = 40;
     return arg1;
 }
 
 s32 ov44_0222D23C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
-    ov44_02232018(&arg0->unk38C);
+    WifiClubRoom_UpdateLights(&arg0->unk38C);
     if (TextPrinterCheckActive(arg0->unk180) == 0) {
         if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 473, 11, HEAP_ID_53);
         } else {
-            arg0->unk188 = ov44_02231A14(arg0->unk15C, &ov44_02235374, 0);
+            arg0->unk188 = WifiClub_CreateYesNoPromptIgnoreTouch(arg0->unk15C, &ov44_02235374, 0);
         }
         arg0->unk348 = 41;
     }
@@ -2606,7 +2606,7 @@ s32 ov44_0222D23C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 s32 ov44_0222D2B0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
         s32 var_r5 = Handle2dMenuInput_DeleteOnFinish(arg0->unk184, HEAP_ID_53);
-        ov44_02232018(&arg0->unk38C);
+        WifiClubRoom_UpdateLights(&arg0->unk38C);
         if ((arg0->unk370 == -1) && (ov00_021E709C() != -1)) {
             ov00_021E70B8(arg0->unk4->unk0.unk21);
             if (var_r5 == -1) {
@@ -2626,7 +2626,7 @@ s32 ov44_0222D2B0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         }
     } else {
         enum YesNoResponse yesNoResponse = YesNoPrompt_HandleInput(arg0->unk188);
-        ov44_02232018(&arg0->unk38C);
+        WifiClubRoom_UpdateLights(&arg0->unk38C);
         if ((arg0->unk370 == -1) && (ov00_021E709C() != -1)) {
             ov00_021E70B8(arg0->unk4->unk0.unk21);
             yesNoResponse = YESNORESPONSE_NO;
@@ -2697,7 +2697,7 @@ s32 ov44_0222D3DC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     arg0->unk158 = ListMenuInit(&listMenuTemplate, 0, arg0->unk374, HEAP_ID_53);
     ScheduleWindowCopyToVram(&arg0->unk320);
     ov44_0222F510(arg0, 8, 0);
-    ov44_02232018(&arg0->unk38C);
+    WifiClubRoom_UpdateLights(&arg0->unk38C);
     arg0->unk348 = 37;
     return arg1;
 }
@@ -2705,7 +2705,7 @@ s32 ov44_0222D3DC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 s32 ov44_0222D594(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     s32 sp0 = ov44_0222A168(arg0);
     s32 temp_r6 = ov44_0222E02C(arg0);
-    ov44_02232018(&arg0->unk38C);
+    WifiClubRoom_UpdateLights(&arg0->unk38C);
     if (CommState_HasWifiFailed() != 0) {
         EraseFrameAndWindow1(&arg0->unk320, 0);
         RemoveWindow(&arg0->unk320);
@@ -2797,7 +2797,7 @@ s32 ov44_0222D824(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         ov44_0222B9A0(arg0);
         return arg1;
     }
-    ov44_02232018(&arg0->unk38C);
+    WifiClubRoom_UpdateLights(&arg0->unk38C);
     if (ov44_0222C500(arg0) != 0) {
         arg0->unk348 = 19;
     }
@@ -2864,7 +2864,7 @@ s32 ov44_0222D8B0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 }
 
 s32 ov44_0222DA64(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
-    ov44_02232018(&arg0->unk38C);
+    WifiClubRoom_UpdateLights(&arg0->unk38C);
     if (CommState_HasWifiFailed() != 0) {
         EraseFrameAndWindow1(&arg0->unk320, 0);
         RemoveWindow(&arg0->unk320);
@@ -2923,17 +2923,17 @@ s32 ov44_0222DA64(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 }
 
 s32 ov44_0222DC18(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
-    u8 temp_r5 = ov44_02231C70(&arg0->unk38C);
-    UnkStruct_ov44_02232B74 *temp_r0 = ov44_0222AAEC(arg0, 0);
+    u8 temp_r5 = WifiClubRoom_GetTalkPartnerId(&arg0->unk38C);
+    WifiClubRoomPerson *temp_r0 = ov44_0222AAEC(arg0, 0);
     GF_ASSERT(temp_r0 != 0);
-    UnkStruct_ov44_02232B74 *temp_r0_2 = ov44_0222AAEC(arg0, temp_r5);
+    WifiClubRoomPerson *temp_r0_2 = ov44_0222AAEC(arg0, temp_r5);
     if (temp_r0_2 == 0) {
         ov44_0222F780(arg0, temp_r5 - 1);
         ov44_0222F510(arg0, 16, 0);
         arg0->unk348 = 29;
         return arg1;
     }
-    ov44_02231F14(&arg0->unk38C, temp_r0_2, ov44_02231F04(temp_r0));
+    WifiClubRoom_StartTalk(&arg0->unk38C, temp_r0_2, WifiClubRoomPerson_GetOppositeDirection(temp_r0));
     u32 temp_r7 = temp_r5 - 1;
     u16 temp_r5_2 = ov44_02229F00(arg0, ov44_02231958(arg0, temp_r7));
     arg0->unk37E = temp_r5_2;
@@ -2989,16 +2989,16 @@ s32 ov44_0222DD64(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         ov44_0222B9A0(arg0);
         return arg1;
     }
-    s32 temp_r0 = ov44_02231C70(&arg0->unk38C);
-    UnkStruct_ov44_02232B74 *temp_r6 = ov44_0222AAEC(arg0, temp_r0);
+    s32 temp_r0 = WifiClubRoom_GetTalkPartnerId(&arg0->unk38C);
+    WifiClubRoomPerson *temp_r6 = ov44_0222AAEC(arg0, temp_r0);
     if (ov44_0222C500(arg0) != 0) {
-        ov44_02231F88(&arg0->unk38C, temp_r6);
+        WifiClubRoom_EndTalk(&arg0->unk38C, temp_r6);
         ov44_0222F7BC(arg0);
         arg0->unk348 = 19;
         return arg1;
     }
     if (temp_r6 == 0) {
-        ov44_02231F88(&arg0->unk38C, temp_r6);
+        WifiClubRoom_EndTalk(&arg0->unk38C, temp_r6);
         DestroyListMenu(arg0->unk158, 0, 0);
         ov44_0222F780(arg0, temp_r0 - 1);
         ov44_0222F510(arg0, 16, 0);
@@ -3006,7 +3006,7 @@ s32 ov44_0222DD64(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         return arg1;
     }
     if (arg0->unk37E != ov44_02229F00(arg0, ov44_02231958(arg0, temp_r0 - 1))) {
-        ov44_02231F88(&arg0->unk38C, temp_r6);
+        WifiClubRoom_EndTalk(&arg0->unk38C, temp_r6);
         ov44_0222F780(arg0, temp_r0 - 1);
         ov44_0222F510(arg0, 16, 0);
         arg0->unk348 = 29;
@@ -3018,7 +3018,7 @@ s32 ov44_0222DD64(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     s32 sp1C = 2;
     ListMenuTemplate listMenuTemplate = ov44_022354C8;
     const UnkStruct_ov44_0222DD64 *listMenuItems = ov44_022353A0;
-    UnkStruct_ov44_02231958 *r6 = ov44_02231958(arg0, ov44_02231C70(&arg0->unk38C) - 1);
+    UnkStruct_ov44_02231958 *r6 = ov44_02231958(arg0, WifiClubRoom_GetTalkPartnerId(&arg0->unk38C) - 1);
     u16 temp_r4 = ov44_02229F00(arg0, r6);
     u8 r1 = r6->unk21;
     arg0->unk380 = r1;
@@ -3102,15 +3102,15 @@ s32 ov44_0222E090(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (ov44_0222C500(arg0) != 0) {
         var_r7 = -2;
     }
-    s32 temp_r0 = ov44_02231C70(&arg0->unk38C);
-    UnkStruct_ov44_02232B74 *sp14 = ov44_0222AAEC(arg0, temp_r0);
+    s32 temp_r0 = WifiClubRoom_GetTalkPartnerId(&arg0->unk38C);
+    WifiClubRoomPerson *sp14 = ov44_0222AAEC(arg0, temp_r0);
     if (CommState_HasWifiFailed() != 0) {
         EraseFrameAndWindow1(&arg0->unk320, 0);
         RemoveWindow(&arg0->unk320);
         DestroyListMenu(arg0->unk158, 0, NULL);
         ListMenuItems_Delete(arg0->unk154);
         if (sp14 != 0) {
-            ov44_02231F88(&arg0->unk38C, sp14);
+            WifiClubRoom_EndTalk(&arg0->unk38C, sp14);
         }
         ov44_0222B9A0(arg0);
         return arg1;
@@ -3241,7 +3241,7 @@ s32 ov44_0222E090(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     DestroyListMenu(arg0->unk158, 0, NULL);
     ListMenuItems_Delete(arg0->unk154);
     if (sp14 != 0) {
-        ov44_02231F88(&arg0->unk38C, sp14);
+        WifiClubRoom_EndTalk(&arg0->unk38C, sp14);
     }
     return arg1;
 }
@@ -3567,7 +3567,7 @@ s32 ov44_0222EC2C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 473, 11, HEAP_ID_53);
         } else {
-            arg0->unk188 = ov44_02231A14(arg0->unk15C, &ov44_02235374, 0);
+            arg0->unk188 = WifiClub_CreateYesNoPromptIgnoreTouch(arg0->unk15C, &ov44_02235374, 0);
         }
         arg0->unk348 = 58;
     }
@@ -3662,7 +3662,7 @@ s32 ov44_0222EE54(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 473, 11, HEAP_ID_53);
         } else {
-            arg0->unk188 = ov44_02231A28(arg0->unk15C, &ov44_02235374, 0);
+            arg0->unk188 = WifiClub_CreateYesNoPrompt(arg0->unk15C, &ov44_02235374, 0);
         }
         arg0->unk348 = 62;
     }
@@ -3739,7 +3739,7 @@ s32 ov44_0222EED4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 }
 
 s32 ov44_0222F0AC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
-    u32 temp_r0 = ov44_02231C70(&arg0->unk38C);
+    u32 temp_r0 = WifiClubRoom_GetTalkPartnerId(&arg0->unk38C);
     if (ov44_0222AAEC(arg0, temp_r0) == 0) {
         ov44_0222F780(arg0, temp_r0 - 1);
         ov44_0222F510(arg0, 16, 0);
@@ -3759,7 +3759,7 @@ s32 ov44_0222F0AC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 473, 11, HEAP_ID_53);
         } else {
-            arg0->unk188 = ov44_02231A14(arg0->unk15C, &ov44_02235374, 0);
+            arg0->unk188 = WifiClub_CreateYesNoPromptIgnoreTouch(arg0->unk15C, &ov44_02235374, 0);
         }
         arg0->unk348 = 64;
     }
@@ -3767,7 +3767,7 @@ s32 ov44_0222F0AC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 }
 
 s32 ov44_0222F194(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
-    s32 temp_r0 = ov44_02231C70(&arg0->unk38C);
+    s32 temp_r0 = WifiClubRoom_GetTalkPartnerId(&arg0->unk38C);
     if (ov44_0222AAEC(arg0, temp_r0) == 0) {
         if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             Clear2dMenuWindowAndDelete(arg0->unk184, HEAP_ID_53);
@@ -4043,7 +4043,7 @@ void ov44_0222F910(UnkStruct_ov44_022319EC *arg0) {
 
 void ov44_0222F950(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     ov44_0222FC0C(arg0);
-    ov44_02231D8C(&arg0->unk38C);
+    WifiClubRoom_HideFriendMarker(&arg0->unk38C);
     ov44_02230060(arg0, heapID);
 }
 
@@ -4089,8 +4089,8 @@ void ov44_0222FA28(UnkStruct_ov44_022319EC *arg0) {
 }
 
 u8 ov44_0222FA80(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
-    u32 var_r5 = ov44_02231C8C(&arg0->unk38C);
-    u32 temp_r0 = ov44_02231CE8(&arg0->unk38C);
+    u32 var_r5 = WifiClubRoom_GetTileUnderPlayer(&arg0->unk38C);
+    u32 temp_r0 = WifiClubRoom_GetTileBelowPlayer(&arg0->unk38C);
     if ((temp_r0 >= 3) && (temp_r0 <= 6)) {
         var_r5 = temp_r0;
     }
@@ -5006,7 +5006,7 @@ s32 ov44_0223197C(UnkStruct_ov44_022319EC *arg0, s32 arg1, s32 arg2) {
 void ov44_022319BC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (arg0->unkD64 == 0) {
         arg0->unkD64 = 1;
-        ov44_02231D94(&arg0->unk38C, 1);
+        WifiClubRoom_SetInputLocked(&arg0->unk38C, 1);
         if (arg1 == 1) {
             ov44_0222F510(arg0, 9, 0);
         }
@@ -5017,6 +5017,6 @@ void ov44_022319EC(UnkStruct_ov44_022319EC *arg0) {
     if (arg0->unkD64 == 1) {
         arg0->unkD64 = 0;
         ov44_0222F7BC(arg0);
-        ov44_02231D94(&arg0->unk38C, 0);
+        WifiClubRoom_SetInputLocked(&arg0->unk38C, 0);
     }
 }

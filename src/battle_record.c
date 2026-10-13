@@ -442,16 +442,16 @@ void BattleRecord_StoreSetup(BattleSetup *setup) {
     data->evolutionLocation = setup->evolutionLocation;
     data->unk_100 = setup->unk_164;
     data->metBill = setup->metBill;
-    data->unk_108 = setup->unk_170;
+    data->unk_108 = setup->caughtBattlerId;
     data->weatherType = setup->weatherType;
     data->levelUpFlag = setup->levelUpFlag;
     data->battleSpecial = setup->battleSpecial;
     data->safariBalls = setup->safariBalls;
     data->fixedDamageMovesBanned = setup->fixedDamaageMovesBanned;
-    data->unk_130 = setup->unk_19C;
-    data->player = setup->unk1B0;
+    data->unk_130 = setup->randSeed;
+    data->player = setup->networkId;
     data->unk_146 = setup->unk1B3;
-    data->unk_148 = setup->unk1B4;
+    data->unk_148 = setup->totalTurns;
     for (int i = 0; i < 4; i++) {
         data->trainerId[i] = setup->trainerId[i];
         data->trainer[i] = setup->trainer[i];
@@ -460,8 +460,8 @@ void BattleRecord_StoreSetup(BattleSetup *setup) {
         } else {
             data->aiFlags[i] = setup->aiFlags[i];
         }
-        data->positions[i] = setup->unk_1A0[i];
-        data->chatot[i] = setup->unk1BC[i];
+        data->positions[i] = setup->linkPositions[i];
+        data->chatot[i] = setup->chatotVoiceParam[i];
     }
     for (int i = 0; i < 4; i++) {
         BattleRecordParty_FromParty(setup->party[i], &data->parties[i]);
@@ -501,13 +501,13 @@ void BattleRecord_RestoreSetup(BattleSetup *setup, SaveData *save) {
     setup->evolutionLocation = data->evolutionLocation;
     setup->unk_164 = data->unk_100;
     setup->metBill = data->metBill;
-    setup->unk_170 = data->unk_108;
+    setup->caughtBattlerId = data->unk_108;
     setup->weatherType = data->weatherType;
     setup->battleSpecial = data->battleSpecial | 16;
     setup->safariBalls = data->safariBalls;
     setup->fixedDamaageMovesBanned = data->fixedDamageMovesBanned;
-    setup->unk_19C = data->unk_130;
-    setup->unk1B0 = data->player;
+    setup->randSeed = data->unk_130;
+    setup->networkId = data->player;
     setup->winFlag = 0;
     setup->levelUpFlag = 0;
     Pokedex_Copy(Save_Pokedex_Get(save), setup->pokedex);
@@ -515,10 +515,10 @@ void BattleRecord_RestoreSetup(BattleSetup *setup, SaveData *save) {
         setup->trainerId[i] = data->trainerId[i];
         setup->trainer[i] = data->trainer[i];
         setup->aiFlags[i] = data->aiFlags[i];
-        setup->unk_1A0[i] = data->positions[i];
+        setup->linkPositions[i] = data->positions[i];
         BattleRecordParty_ToParty(&data->parties[i], setup->party[i]);
         PlayerProfile_Copy(&data->profiles[i], setup->profile[i]);
-        setup->unk1BC[i] = data->chatot[i];
+        setup->chatotVoiceParam[i] = data->chatot[i];
     }
     Options_Copy(Save_PlayerData_GetOptionsAddr(save), setup->options);
     setup->options->frame = data->options.frame;

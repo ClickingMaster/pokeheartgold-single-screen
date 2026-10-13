@@ -211,7 +211,7 @@ struct WirelessTradeSelectMon {
     Window rosterWindow;                                         // 0x3690
     FriendRoster *roster;                                  // 0x36A0
     u32 tradesDone;                                              // 0x36A4
-    s32 unk_36A8;                                                // 0x36A8
+    s32 saveState;                                                // 0x36A8
     int lastSentValue;                                           // 0x36AC
     int lastSentCommand;                                         // 0x36B0
     WaitingIcon *waitingIcon;                                    // 0x36B4
@@ -687,11 +687,11 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
         }
         break;
     case 4:
-        Comm_InitSyncedSave(&work->unk_36A8);
+        Comm_InitSyncedSave(&work->saveState);
         work->exchangeState++;
         break;
     case 5:
-        if (Comm_SyncedSave(work->saveData, 2, &work->unk_36A8)) {
+        if (Comm_SyncedSave(work->saveData, 2, &work->saveState)) {
             work->exchangeState++;
         }
         break;

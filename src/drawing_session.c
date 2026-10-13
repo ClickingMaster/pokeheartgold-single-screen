@@ -192,8 +192,8 @@ BOOL DrawingSession_Init(OverlayManager *man, int *state) {
 
 BOOL DrawingSession_Main(OverlayManager *man, int *state) {
     DrawingSessionWork *work = OverlayManager_GetData(man);
-    if (!Comm_GetLocalNetId() && work->unk_93B4) {
-        work->unk_93B4 &= Wireless_GetConnectedBitmap();
+    if (!Comm_GetLocalNetId() && work->leavingMask) {
+        work->leavingMask &= Wireless_GetConnectedBitmap();
     }
     work->mainState = *state;
     DrawingSession_ApplyNextSubState(work, *state);
@@ -224,7 +224,7 @@ BOOL DrawingSession_Main(OverlayManager *man, int *state) {
         DrawingSession_AnimateCursorPalette(&work->cursorPaletteAngle);
         break;
     case 2:
-        if (sDrawingSessionSubStates[work->subState].func && sDrawingSessionSubStates[work->subState].unk_04) {
+        if (sDrawingSessionSubStates[work->subState].func && sDrawingSessionSubStates[work->subState].runsWhileClosing) {
             *state = sDrawingSessionSubStates[work->subState].func(work, *state);
         }
         break;
@@ -277,7 +277,7 @@ BOOL DrawingSession_Exit(OverlayManager *man, int *state) {
         (*state)++;
         break;
     case 2:
-        if (work->unk_9400 != 0) {
+        if (work->waitDisconnect != 0) {
             if (Wireless_GetConnectedBitmap() == 1) {
                 (*state)++;
             }
@@ -353,15 +353,15 @@ void DrawingSession_InitWork(DrawingSessionWork *work) {
     work->messageText = String_New(0x50, HEAP_ID_39);
     work->penColor = 0;
     work->penSize = 1;
-    work->unk_93F4 = 1;
+    work->joinState = 1;
     work->yesNoActive = FALSE;
-    work->unk_318 = 2;
-    work->unk_31C = Wireless_GetConnectedBitmap();
+    work->connectedCount = 2;
+    work->connectedBitmap = Wireless_GetConnectedBitmap();
     work->unk_93FC = 0;
-    work->unk_9400 = 0;
+    work->waitDisconnect = 0;
     work->subState = 0;
-    work->unk_9404 = 0;
-    work->unk_9408 = 0;
+    work->newConnection = 0;
+    work->newConnectionBit = 0;
     Comm_GetLocalNetId();
     DrawingSession_SetNextSubState(work, 4);
     ReadMsgDataIntoString(work->msgData, msg_0252_00007, work->quitText);
@@ -582,19 +582,19 @@ void DrawingSession_HandleTouch(DrawingSessionWork *work) {
         case 8:
             if (work->subState == 4) {
                 if (Comm_GetLocalNetId() == 0) {
-                    if (work->unk_31C != Wireless_GetConnectedBitmap()) {
+                    if (work->connectedBitmap != Wireless_GetConnectedBitmap()) {
                         PlaySE(SEQ_SE_DP_CUSTOM06);
                         break;
                     }
                     CommState_SetMaxEntries(Comm_CountConnected());
-                    work->unk_93F4 = 2;
+                    work->joinState = 2;
                     DrawingSession_PrintMessage(work, msg_0252_00001, 1);
                     DrawingSession_SetNextSubState(work, 5);
                     DrawingSession_SetQuitButtonPressed(work->buttons, TRUE);
                     changed = 1;
                     PlaySE(SEQ_SE_DP_SELECT);
                 } else {
-                    if (work->strokes[0].unk_09 == 2) {
+                    if (work->strokes[0].joinState == 2) {
                         PlaySE(SEQ_SE_DP_CUSTOM06);
                         break;
                     }
@@ -712,7 +712,7 @@ int DrawingSession_StateResumeDrawing(DrawingSessionWork *work, int state) {
     ov37_021E76D0(work, 1);
     DrawingSession_SetNextSubState(work, 4);
     DrawingSession_UpdateCanvas(work);
-    work->unk_9404 = 0;
+    work->newConnection = 0;
     return state;
 }
 
@@ -741,14 +741,14 @@ int DrawingSession_StateHandleQuitPrompt(DrawingSessionWork *work, int state) {
     u32 memberCount;
 
     work->ownStroke.count = 0;
-    if (work->strokes[0].unk_09 == 2 && Comm_GetLocalNetId() != 0) {
+    if (work->strokes[0].joinState == 2 && Comm_GetLocalNetId() != 0) {
         DrawingSession_UpdateCanvas(work);
         if (DrawingSession_IsYesNoAreaTouched(work)) {
             PlaySE(SEQ_SE_DP_CUSTOM06);
         }
         return state;
     }
-    if (Comm_GetLocalNetId() == 0 && work->unk_93B4 != 0) {
+    if (Comm_GetLocalNetId() == 0 && work->leavingMask != 0) {
         DrawingSession_UpdateCanvas(work);
         return state;
     }
@@ -783,7 +783,7 @@ int DrawingSession_StateHandleQuitPrompt(DrawingSessionWork *work, int state) {
         CopyWindowToVram(&work->canvasWindow);
         if (Comm_GetLocalNetId() == 0) {
             CommState_SetMaxEntries(Comm_CountConnected() + 1);
-            work->unk_93F4 = 1;
+            work->joinState = 1;
         }
         break;
     default:
@@ -804,7 +804,7 @@ int DrawingSession_StateLeaveAccepted(DrawingSessionWork *work, int state) {
     u8 packet[4];
 
     work->ownStroke.count = 0;
-    if (work->unk_93B8 != Comm_CountConnected() || work->unk_93B8 != DrawingSession_CountMembers()) {
+    if (work->assignedCount != Comm_CountConnected() || work->assignedCount != DrawingSession_CountMembers()) {
         work->networkCounter = 0;
         DrawingSession_SetNextSubState(work, 9);
         DrawingSession_UpdateCanvas(work);
@@ -881,7 +881,7 @@ int DrawingSession_StateHandleDisbandPrompt(DrawingSessionWork *work, int state)
     YesNoResponse input;
 
     input = YesNoPrompt_HandleInput(work->yesNoPrompt);
-    if (work->unk_318 != DrawingSession_CountMembers() || work->unk_93B4 != 0) {
+    if (work->connectedCount != DrawingSession_CountMembers() || work->leavingMask != 0) {
         DrawingSession_UpdateCanvas(work);
         return state;
     }
@@ -900,7 +900,7 @@ int DrawingSession_StateHandleDisbandPrompt(DrawingSessionWork *work, int state)
         DrawingSession_HideYesNo(work);
         if (Comm_GetLocalNetId() == 0) {
             CommState_SetMaxEntries(Comm_CountConnected() + 1);
-            work->unk_93F4 = 1;
+            work->joinState = 1;
         }
         break;
     }
@@ -964,15 +964,15 @@ int DrawingSession_StatePrintMemberLeft(DrawingSessionWork *work, int state) {
     if (!Comm_GetLocalNetId()) {
         ov37_021E76D0(work, 0);
     }
-    work->unk_93B0 = Comm_CountConnected();
+    work->leaveConnectedCount = Comm_CountConnected();
     DrawingSession_UpdateCanvas(work);
     return state;
 }
 
 int DrawingSession_StateWaitMemberLeftMsg(DrawingSessionWork *work, int state) {
-    if (work->unk_93B0 != 0) {
-        if (work->unk_93B0 != Comm_CountConnected()) {
-            work->unk_93B0 = 0;
+    if (work->leaveConnectedCount != 0) {
+        if (work->leaveConnectedCount != Comm_CountConnected()) {
+            work->leaveConnectedCount = 0;
         }
     }
     if (DrawingSession_IsPrinterDone(work->printerId)) {
@@ -984,17 +984,17 @@ int DrawingSession_StateWaitMemberLeftMsg(DrawingSessionWork *work, int state) {
 }
 
 int DrawingSession_StateWaitAfterMemberLeft(DrawingSessionWork *work, int state) {
-    if (work->unk_93B0 != 0) {
-        if (work->unk_93B0 != Comm_CountConnected()) {
-            work->unk_93B0 = 0;
+    if (work->leaveConnectedCount != 0) {
+        if (work->leaveConnectedCount != Comm_CountConnected()) {
+            work->leaveConnectedCount = 0;
         }
     }
     work->counter++;
-    if (work->counter > 60 && work->unk_93B0 == 0) {
+    if (work->counter > 60 && work->leaveConnectedCount == 0) {
         DrawingSession_ClearMessageWindow(work);
         DrawingSession_SetNextSubState(work, 4);
         if (!Comm_GetLocalNetId()) {
-            work->unk_93F4 = 1;
+            work->joinState = 1;
             ov37_021E76D0(work, 1);
         }
     }
@@ -1011,7 +1011,7 @@ void DrawingSession_HandleNetEvent(DrawingSessionWork *work, int event, u32 memb
         DrawingSession_SetQuitButtonPressed(work->buttons, FALSE);
         BufferPlayersName(work->msgFormat, 0, CommPlayerInfo_GetProfile(member));
         work->joinedMember = member;
-        work->unk_93B4 = 0;
+        work->leavingMask = 0;
         break;
     case 3:
         DrawingSession_ClearMessageWindow(work);
@@ -1029,7 +1029,7 @@ void DrawingSession_HandleNetEvent(DrawingSessionWork *work, int event, u32 memb
             return;
         }
         if (Comm_GetLocalNetId() == 0) {
-            work->unk_93B4 &= 0xFFFF ^ member;
+            work->leavingMask &= 0xFFFF ^ member;
         }
         if (work->subState == 6 || work->subState == 14) {
             DrawingSession_HideYesNo(work);
@@ -1289,7 +1289,7 @@ void DrawingSession_PrintMemberNames(Window *windows, int unused, u32 color, Dra
 void DrawingSession_SendStrokes(DrawingSessionWork *work) {
     if (Comm_GetLocalNetId() == 0) {
         if (Comm_IsParentQueueEmpty()) {
-            work->ownStroke.unk_09 = work->unk_93F4;
+            work->ownStroke.joinState = work->joinState;
             {
                 // byte copy of the own stroke into the first slot of the leader's packet
                 u32 remaining;
@@ -1409,7 +1409,7 @@ int ov37_021E76F0(DrawingSessionWork *work) {
     case 1:
         if (work->subState <= 14) {
             if (Wireless_GetConnectedBitmap() != 1) {
-                work->unk_9400 = 1;
+                work->waitDisconnect = 1;
             }
             work->nextSubState = 19;
             CommState_SetMaxEntries(1);
@@ -1425,7 +1425,7 @@ int ov37_021E76F0(DrawingSessionWork *work) {
     case 4:
         UnionRoom_SetBeaconActivity(1);
         if (count < work->memberCount) {
-            if (work->unk_93F4 == 2) {
+            if (work->joinState == 2) {
                 ov37_021E76D0(work, 0);
             } else {
                 ov37_021E76D0(work, 1);
@@ -1439,21 +1439,21 @@ int ov37_021E76F0(DrawingSessionWork *work) {
         break;
     }
     if (count < work->memberCount) {
-        work->unk_318 = Comm_CountConnected();
-        work->unk_31C = Wireless_GetConnectedBitmap();
-        if (work->unk_9404 && !(work->unk_31C & work->unk_9408)) {
+        work->connectedCount = Comm_CountConnected();
+        work->connectedBitmap = Wireless_GetConnectedBitmap();
+        if (work->newConnection && !(work->connectedBitmap & work->newConnectionBit)) {
             ov37_021E76D0(work, 1);
-            work->unk_93F4 = 1;
-            work->unk_9404 = 0;
-            work->unk_9408 = 0;
+            work->joinState = 1;
+            work->newConnection = 0;
+            work->newConnectionBit = 0;
         }
     }
     work->memberCount = DrawingSession_CountMembers();
-    if (work->unk_318 < Comm_CountConnected()) {
-        work->unk_93F4 = 2;
-        work->unk_9404 = 1;
-        work->unk_9408 = Wireless_GetConnectedBitmap() ^ work->unk_31C;
-        GF_ASSERT(DrawingSession_IsOneMemberBit(work->unk_9408));
+    if (work->connectedCount < Comm_CountConnected()) {
+        work->joinState = 2;
+        work->newConnection = 1;
+        work->newConnectionBit = Wireless_GetConnectedBitmap() ^ work->connectedBitmap;
+        GF_ASSERT(DrawingSession_IsOneMemberBit(work->newConnectionBit));
     }
     return 1;
 }
@@ -1470,7 +1470,7 @@ void DrawingSession_ApplyNextSubState(DrawingSessionWork *work, int mainState) {
     if (work->subState != state) {
         if (mainState != 2) {
             work->subState = state;
-        } else if (sDrawingSessionSubStates[state].unk_04 != 0) {
+        } else if (sDrawingSessionSubStates[state].runsWhileClosing != 0) {
             work->subState = state;
         }
     }

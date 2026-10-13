@@ -214,14 +214,14 @@ void Battle_BattleInit(OverlayManager *manager) {
     battleSystem->drawGraphicsTask = (u32)SysTask_CreateOnMainQueue(Task_DrawBattleGraphics, battleSystem, 60000);
     battleSystem->criticalHpMusicTask = (u32)SysTask_CreateOnMainQueue(Task_UpdateCriticalHpMusic, battleSystem, 50000);
     battleSystem->scrollBgTask = (u32)SysTask_CreateOnVBlankQueue(VBlankTask_ScrollBattleBackground, battleSystem, 1200);
-    battleSystem->unk2438 = -51;
+    battleSystem->bgScrollY = -51;
     BattleSystem_SetupTextFlags(battleSystem);
     BagCursor_Battle_Init(BattleSystem_GetBagCursor(battleSystem));
     battleSystem->pokepicAnimManager = PokepicAnimManager_New(HEAP_ID_BATTLE, 4, 0);
     battleSystem->cellTransferState = (void *)CreateCellTransferStateManager(4, HEAP_ID_BATTLE);
     if (battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING) {
         for (i = 0; i < 4; i++) {
-            battleSystem->chatotVoiceParam[i] = setup->unk1BC[i];
+            battleSystem->chatotVoiceParam[i] = setup->chatotVoiceParam[i];
         }
     }
 }
@@ -271,7 +271,7 @@ void Battle_BattleExit(OverlayManager *man) {
     int color;
     int i;
 
-    setup->unk_19C = battleSystem->randTemp;
+    setup->randSeed = battleSystem->randTemp;
     setup->battleSpecial = battleSystem->battleSpecial;
     if (!(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
         BattleRecord_StoreSetup(setup);
@@ -310,12 +310,12 @@ void Battle_BattleExit(OverlayManager *man) {
     setup->unk_134 = (struct UnkStruct_02067A60 *)battleSystem->unk9C;
     setup->safariBalls = battleSystem->safariBallCnt;
     setup->winFlag = battleSystem->battleOutcomeFlag & 0x3F;
-    setup->unk_170 = battleSystem->caughtBattlerId;
+    setup->caughtBattlerId = battleSystem->caughtBattlerId;
     setup->levelUpFlag = BattleContext_Get(battleSystem, battleSystem->ctx, 4, 0);
-    setup->unk138.unk_0 += BattleContext_Get(battleSystem, battleSystem->ctx, 3, 0);
-    setup->unk138.unk_4 += BattleContext_Get(battleSystem, battleSystem->ctx, 6, 0) + BattleContext_Get(battleSystem, battleSystem->ctx, 6, 2);
-    setup->unk138.unk_8 += BattleContext_Get(battleSystem, battleSystem->ctx, 7, 0) + BattleContext_Get(battleSystem, battleSystem->ctx, 7, 2);
-    setup->unk1B4 = BattleContext_Get(battleSystem, battleSystem->ctx, 3, 0);
+    setup->battleTotals.totalTurns += BattleContext_Get(battleSystem, battleSystem->ctx, 3, 0);
+    setup->battleTotals.totalTimesFainted += BattleContext_Get(battleSystem, battleSystem->ctx, 6, 0) + BattleContext_Get(battleSystem, battleSystem->ctx, 6, 2);
+    setup->battleTotals.totalDamage += BattleContext_Get(battleSystem, battleSystem->ctx, 7, 0) + BattleContext_Get(battleSystem, battleSystem->ctx, 7, 2);
+    setup->totalTurns = BattleContext_Get(battleSystem, battleSystem->ctx, 3, 0);
     setup->unk1C4 = battleSystem->isRecordingPaused;
     for (i = 0; i < 4; i++) {
         Heap_Free(battleSystem->monPicData[i].charBuffer);
@@ -395,7 +395,7 @@ void Battle_InitBackgrounds(BattleSystem *battleSystem, BgConfig *bgConfig) {
     modes = sBattleGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
 
-    battleSystem->unk240F_0 = 1;
+    battleSystem->resetBlendRequested = 1;
 
     templates = ov12_0226C174;
 
@@ -477,15 +477,15 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
         battleSystem->chatotVoice[i] = setup->chatot[i];
     }
 
-    battleSystem->networkId = setup->unk1B0;
+    battleSystem->networkId = setup->networkId;
 
     for (i = 0; i < BATTLER_MAX; i++) {
-        battleSystem->linkPositions[i] = setup->unk_1A0[i];
+        battleSystem->linkPositions[i] = setup->linkPositions[i];
     }
 
     battleSystem->lcrngSeedBackup = GetLCRNGSeed();
-    battleSystem->rand = setup->unk_19C;
-    battleSystem->randTemp = setup->unk_19C;
+    battleSystem->rand = setup->randSeed;
+    battleSystem->randTemp = setup->randSeed;
     battleSystem->battleSpecial = setup->battleSpecial;
     battleSystem->bag = Save_Bag_New(HEAP_ID_BATTLE);
     Save_Bag_Copy(setup->bag, battleSystem->bag);
@@ -498,17 +498,17 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
     battleSystem->bagCursor = setup->bagCursor;
     battleSystem->unk1C0 = setup->unk1B8;
     battleSystem->unk98 = setup->unk_128;
-    battleSystem->unk2424 = setup->evolutionLocation;
+    battleSystem->evolutionLocation = setup->evolutionLocation;
     battleSystem->unk9C = (u32 *)setup->unk_134;
     battleSystem->safariBallCnt = setup->safariBalls;
     battleSystem->terrain = setup->terrain;
     battleSystem->backgroundId = setup->battleBg;
     battleSystem->location = setup->mapSection;
     battleSystem->timezone = setup->timeOfDay;
-    battleSystem->unk241C = setup->fixedDamaageMovesBanned;
+    battleSystem->regulationFlag = setup->fixedDamaageMovesBanned;
     battleSystem->unk2428 = setup->unk_164;
     battleSystem->metBill = setup->metBill;
-    battleSystem->unk2474_1 = setup->momsSavingsActive;
+    battleSystem->momsSavingsActive = setup->momsSavingsActive;
     battleSystem->isFishing = setup->isFishing;
     battleSystem->weather = setup->weatherType;
     battleSystem->gameStats = setup->gameStats;
@@ -525,7 +525,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
 
     for (i = 0; i < BATTLER_MAX; i++) {
         battleSystem->trainerParty[i] = SaveArray_Party_Alloc(HEAP_ID_BATTLE);
-        battleSystem->followMonSlot[i] = setup->unk1CC[i];
+        battleSystem->followMonSlot[i] = setup->followMonSlot[i];
     }
 
     int gender;
@@ -779,8 +779,8 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
         }
     }
 
-    battleSystem->unk2478 = 0;
-    battleSystem->unk2474_2 = 0;
+    battleSystem->linkVersionMismatch = 0;
+    battleSystem->hasNonHgssPlayer = 0;
     int incompatible = 0;
     for (i = 0; i < battleSystem->maxBattlers; i++) {
         int version = PlayerProfile_GetVersion(BattleSystem_GetPlayerProfile(battleSystem, i));
@@ -788,14 +788,14 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
             incompatible = 1;
         }
         if (version != VERSION_HEARTGOLD && version != VERSION_SOULSILVER) {
-            battleSystem->unk2474_2 = 1;
+            battleSystem->hasNonHgssPlayer = 1;
         }
     }
     if (battleSystem->isServer != 0) {
-        battleSystem->unk2478 = incompatible;
+        battleSystem->linkVersionMismatch = incompatible;
         return;
     }
-    battleSystem->unk2478 = 0;
+    battleSystem->linkVersionMismatch = 0;
 }
 
 BOOL Battle_IsLeagueTrainerClass(int trainerClass) {
@@ -877,8 +877,8 @@ void Battle_VBlankCallback(void *data) {
     GraphicsBanks banks;
     GraphicsBanks banks2;
 
-    if (battleSystem->unk240F_0) {
-        battleSystem->unk240F_0 = 0;
+    if (battleSystem->resetBlendRequested) {
+        battleSystem->resetBlendRequested = 0;
         reg_G2_BLDCNT = 0;
         reg_G2S_DB_BLDCNT = 0;
     }
@@ -981,9 +981,9 @@ void Task_UpdateCriticalHpMusic(SysTask *task, void *data) {
 void VBlankTask_ScrollBattleBackground(SysTask *task, void *data) {
     BattleSystem *battleSystem = data;
 
-    battleSystem->unk2438 += 3;
-    BgSetPosTextAndCommit(battleSystem->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_Y, battleSystem->unk2438);
-    if (battleSystem->unk2438 == 0) {
+    battleSystem->bgScrollY += 3;
+    BgSetPosTextAndCommit(battleSystem->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_Y, battleSystem->bgScrollY);
+    if (battleSystem->bgScrollY == 0) {
         SysTask_Destroy(task);
     }
 }
@@ -1501,7 +1501,7 @@ BOOL Battle_EndInit(OverlayManager *man) {
             args->outcome = 3;
         }
     }
-    args->unk_2C = setup->unk1B2;
+    args->unk_2C = setup->linkBattleMode;
     LinkBattleScreen_Start(args);
     return TRUE;
 }

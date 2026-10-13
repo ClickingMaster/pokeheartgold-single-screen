@@ -263,17 +263,17 @@ void CommPlayerManager_UpdateAvatars(FieldSystem *unused) {
 
 void CommPlayerManager_SendMoveEnabled(int value) {
     if (gCommPlayerManager != NULL) {
-        if (gCommPlayerManager->unk_ED != value) {
-            gCommPlayerManager->unk_ED = value;
+        if (gCommPlayerManager->localMoveEnabled != value) {
+            gCommPlayerManager->localMoveEnabled = value;
         }
-        Comm_SendFixedCommand(0x3E, &gCommPlayerManager->unk_ED);
+        Comm_SendFixedCommand(0x3E, &gCommPlayerManager->localMoveEnabled);
     }
 }
 
 void CommPlayerManager_SetMoveEnabled(int value) {
-    if (gCommPlayerManager != NULL && gCommPlayerManager->unk_ED != value) {
-        gCommPlayerManager->unk_ED = value;
-        Comm_SendFixedCommand(0x3E, &gCommPlayerManager->unk_ED);
+    if (gCommPlayerManager != NULL && gCommPlayerManager->localMoveEnabled != value) {
+        gCommPlayerManager->localMoveEnabled = value;
+        Comm_SendFixedCommand(0x3E, &gCommPlayerManager->localMoveEnabled);
     }
 }
 
@@ -304,7 +304,7 @@ void CommPlayerManager_FieldUpdate(FieldSystem *fieldSystem, int value) {
         return;
     }
     CommPlayerManager_SetMoveEnabled(value);
-    gCommPlayerManager->unk_F1 = value;
+    gCommPlayerManager->localWalkEnabled = value;
     avatar = fieldSystem->playerAvatar;
     if (avatar != NULL) {
         gCommPlayerManager->avatars[Comm_GetLocalNetId()] = avatar;
@@ -377,14 +377,14 @@ void CommPlayerManager_MoveHostPlayers(SysTask *task, CommPlayerManager *unused)
         int direction;
         int x;
         int z;
-        if (!gCommPlayerManager->active[i] || !gCommPlayerManager->unk_B4[i]) {
+        if (!gCommPlayerManager->active[i] || !gCommPlayerManager->moveEnabled[i]) {
             continue;
         }
         position = &gCommPlayerManager->hostPositions[i];
         if (gCommPlayerManager->hostMoveTimer[i]) {
             --gCommPlayerManager->hostMoveTimer[i];
         }
-        if (gCommPlayerManager->unk_BC[i]) {
+        if (gCommPlayerManager->inputLocked[i]) {
             direction = 0;
         } else {
             direction = Comm_TakeDirectionKeys(i);
@@ -503,7 +503,7 @@ void CommPlayerManager_MoveAvatar(int netId) {
         gCommPlayerManager->moveTimer[netId]--;
         return;
     }
-    if (position->x != 0xFFFF && position->z != 0xFFFF && !gCommPlayerManager->unk_EE && (netId != Comm_GetLocalNetId() || gCommPlayerManager->unk_F1)) {
+    if (position->x != 0xFFFF && position->z != 0xFFFF && !gCommPlayerManager->unk_EE && (netId != Comm_GetLocalNetId() || gCommPlayerManager->localWalkEnabled)) {
         PlayerAvatar *avatar;
         int speed;
         int dx;
@@ -710,7 +710,7 @@ int CommPlayerManager_GetHostFrontZ(int netId) {
 #define MANAGER_VOLATILE (*(CommPlayerManager *volatile *)&gCommPlayerManager)
 
 void CommPlayerManager_SetPlayerMoveEnabled(int netId, int value) {
-    u8 *values = MANAGER_VOLATILE->unk_B4;
+    u8 *values = MANAGER_VOLATILE->moveEnabled;
     if (values[netId] != value) {
         values[netId] = value;
         MANAGER_VOLATILE->hostPositions[netId].bumped = 0;
@@ -778,7 +778,7 @@ BOOL CommPlayerManager_AssignBattleSlots(void) {
 void sub_02057D50(int netId, int size, const u8 *data) {
     int value = *data;
     if (value == 3) {
-        gCommPlayerManager->unk_BC[netId] = 0;
+        gCommPlayerManager->inputLocked[netId] = 0;
     } else {
         gCommPlayerManager->unk_E6[netId] = value;
     }
@@ -801,7 +801,7 @@ void sub_02057D74(void) {
                 pair = table;
                 do {
                     if (CommPlayerManager_GetHostX(i) == pair[0] && CommPlayerManager_GetHostZ(i) == pair[1]) {
-                        gCommPlayerManager->unk_BC[i] = 1;
+                        gCommPlayerManager->inputLocked[i] = 1;
                         Comm_SendFixedParentCommand(0x5F, &i);
                     }
                     j++;
@@ -881,7 +881,7 @@ void CommPlayerManager_SetLocalFacing(int facing) {
 
 void CommPlayerManager_PauseField(void) {
     FieldSystem_PauseProcesses();
-    gCommPlayerManager->unk_ED = 0;
+    gCommPlayerManager->localMoveEnabled = 0;
 }
 
 void CommPlayerManager_ResumeField(void) {
@@ -890,9 +890,9 @@ void CommPlayerManager_ResumeField(void) {
 }
 
 void CommPlayerManager_ResumeFieldOnce(void) {
-    if (gCommPlayerManager->unk_EF == 0) {
+    if (gCommPlayerManager->fieldResumed == 0) {
         CommPlayerManager_ResumeField();
-        gCommPlayerManager->unk_EF = 1;
+        gCommPlayerManager->fieldResumed = 1;
     }
 }
 

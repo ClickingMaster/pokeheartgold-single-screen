@@ -52,7 +52,7 @@ typedef struct SpinTradeGroupMenu {
     u32 participantCount; // 0x2C
     u32 participantMask;  // 0x30
     u32 unk_34;           // 0x34
-    u16 unk_38;           // 0x38
+    u16 assignedCount;           // 0x38
 } SpinTradeGroupMenu;
 
 // Leader marker palette animation
@@ -138,19 +138,19 @@ typedef struct SpinTradeGroupApp {
     s32 saveState;                          // 0x03B0
     u16 blinkAngle;                         // 0x03B4
     u16 unk_3B6;                            // 0x03B6
-    void *unk_3B8;                          // 0x03B8
+    void *avatarPalette;                          // 0x03B8
     u8 unk_03BC[0xF80 - 0x3BC];             // 0x03BC
     u8 unk_F80[0x3AC4];                     // 0x0F80
     int lastMemberCount;                    // 0x4A44
-    u32 unk_4A48;                           // 0x4A48
+    u32 joinPending;                           // 0x4A48
     u32 unk_4A4C;                           // 0x4A4C
-    u8 unk_4A50;                            // 0x4A50
-    s8 unk_4A51;                            // 0x4A51
-    u8 unk_4A52;                            // 0x4A52
+    u8 leaveRequested;                            // 0x4A50
+    s8 maxEntriesMode;                            // 0x4A51
+    u8 startMemberCount;                            // 0x4A52
     u8 unk_4A53;                            // 0x4A53
-    s32 unk_4A54;                           // 0x4A54
-    u32 unk_4A58;                           // 0x4A58
-    s16 unk_4A5C;                           // 0x4A5C
+    s32 leaveTimeout;                           // 0x4A54
+    u32 leaveConnectedCount;                           // 0x4A58
+    s16 leaveWaitFrames;                           // 0x4A5C
     u8 unk_4A5E[2];                         // 0x4A5E
     SpinTradeGroupTrainerIds trainerIds[5]; // 0x4A60
 } SpinTradeGroupApp;                        // size 0x4AB0
@@ -456,7 +456,7 @@ void SpinTradeGroup_InitData(SpinTradeGroupApp *app, NARC *narc) {
     app->subState = 0;
     ReadMsgDataIntoString(app->msgData, 0x11, app->titleString);
     SpinTradeGroup_LoadAvatarGraphics(app, narc);
-    app->unk_3B8 = sub_0205B4A4(HEAP_ID_102);
+    app->avatarPalette = sub_0205B4A4(HEAP_ID_102);
     app->blink.active = 0;
     app->blink.timer = 0;
     app->blink.frame = 0;
@@ -470,7 +470,7 @@ void SpinTradeGroup_FreeData(SpinTradeGroupApp *app) {
     int i;
     SpinTradeGroup_FreeAvatarGraphics(app);
     Heap_Free(app->blink.plttFile);
-    Heap_Free(app->unk_3B8);
+    Heap_Free(app->avatarPalette);
     for (i = 0; i < 5; i++) {
         String_Delete(app->names[i]);
     }
@@ -649,7 +649,7 @@ void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
             }
         }
     } else {
-        if (app->unk_4A48 == 0 && !Comm_GetLocalNetId() && app->menu->participantCount == Comm_CountConnected()) {
+        if (app->joinPending == 0 && !Comm_GetLocalNetId() && app->menu->participantCount == Comm_CountConnected()) {
             c = 0;
             SpinTradeLink_SendCommand(app->menu, 7, &c, 1);
         }
@@ -739,8 +739,8 @@ int SpinTradeGroup_State_HandleCancelYesNo(SpinTradeGroupApp *app, int state) {
             MI_CpuFill8(buf, 0, 4);
             buf[2] = 0;
             buf[0] = (u8)Comm_GetLocalNetId();
-            app->unk_4A50 = 1;
-            app->unk_4A5C = 0;
+            app->leaveRequested = 1;
+            app->leaveWaitFrames = 0;
             app->subState = 6;
             SpinTradeLink_SendCommand(app->menu, 2, buf, 4);
         }
@@ -751,26 +751,26 @@ int SpinTradeGroup_State_HandleCancelYesNo(SpinTradeGroupApp *app, int state) {
 }
 
 int ov85_021E9614(SpinTradeGroupApp *app, int state) {
-    app->unk_4A5C = 0;
+    app->leaveWaitFrames = 0;
     ov85_021E943C(app);
     return state;
 }
 
 int ov85_021E962C(SpinTradeGroupApp *app, int a1) {
-    if (app->menu->unk_38 != Comm_CountConnected() || app->menu->unk_38 != SpinTradeGroup_CountMembers()) {
-        app->unk_4A5C = 0;
+    if (app->menu->assignedCount != Comm_CountConnected() || app->menu->assignedCount != SpinTradeGroup_CountMembers()) {
+        app->leaveWaitFrames = 0;
         app->subState = 8;
         ov85_021E943C(app);
         return a1;
     }
-    app->unk_4A5C++;
-    if (app->unk_4A5C > 30) {
+    app->leaveWaitFrames++;
+    if (app->leaveWaitFrames > 30) {
         u8 buf[4];
         MI_CpuFill8(buf, 0, 4);
         buf[2] = 1;
         buf[0] = (u8)Comm_GetLocalNetId();
         SpinTradeLink_SendCommand(app->menu, 2, buf, 4);
-        app->unk_4A5C = 0;
+        app->leaveWaitFrames = 0;
         app->subState = 9;
     }
     ov85_021E943C(app);
@@ -778,7 +778,7 @@ int ov85_021E962C(SpinTradeGroupApp *app, int a1) {
 }
 
 int ov85_021E96B0(SpinTradeGroupApp *app, int state) {
-    app->unk_4A50 = 0;
+    app->leaveRequested = 0;
     SpinTradeGroup_WaitPrinterThen(app, 0);
     ov85_021E943C(app);
     return state;
@@ -810,7 +810,7 @@ int SpinTradeGroup_State_HandleConfirmYesNo(SpinTradeGroupApp *app, int a1) {
                 SpinTradeGroup_WaitPrinterThen(app, 0);
             } else if (Comm_GetLocalNetId() == 0) {
                 app->subState = 0x18;
-                app->unk_4A52 = (u8)SpinTradeGroup_CountMembers();
+                app->startMemberCount = (u8)SpinTradeGroup_CountMembers();
                 UnionRoom_SetBeaconActivity(0xC);
             } else {
                 GF_AssertFail();
@@ -996,16 +996,16 @@ int SpinTradeGroup_State_ShowMemberLeft(SpinTradeGroupApp *app, int a1) {
     if (Comm_GetLocalNetId() == 0) {
         SpinTradeGroup_SetMaxConnections(app, 0);
     }
-    app->unk_4A58 = Comm_CountConnected();
-    app->unk_4A54 = 0x12C;
+    app->leaveConnectedCount = Comm_CountConnected();
+    app->leaveTimeout = 0x12C;
     ov85_021E943C(app);
     return a1;
 }
 
 int ov85_021E9BA0(SpinTradeGroupApp *app, int state) {
-    if (app->unk_4A58 != 0) {
-        if (app->unk_4A58 != Comm_CountConnected()) {
-            app->unk_4A58 = 0;
+    if (app->leaveConnectedCount != 0) {
+        if (app->leaveConnectedCount != Comm_CountConnected()) {
+            app->leaveConnectedCount = 0;
         }
     }
     app->subState = 0x15;
@@ -1015,17 +1015,17 @@ int ov85_021E9BA0(SpinTradeGroupApp *app, int state) {
 }
 
 int ov85_021E9BDC(SpinTradeGroupApp *app, int a1) {
-    if (app->unk_4A58 != 0) {
-        if (app->unk_4A58 != Comm_CountConnected()) {
-            app->unk_4A58 = 0;
+    if (app->leaveConnectedCount != 0) {
+        if (app->leaveConnectedCount != Comm_CountConnected()) {
+            app->leaveConnectedCount = 0;
         }
     }
-    app->unk_4A54--;
-    if (app->unk_4A54 < 0) {
-        app->unk_4A58 = 0;
+    app->leaveTimeout--;
+    if (app->leaveTimeout < 0) {
+        app->leaveConnectedCount = 0;
     }
     app->timer++;
-    if (app->timer > 0x3C && app->unk_4A58 == 0) {
+    if (app->timer > 0x3C && app->leaveConnectedCount == 0) {
         app->subState = 0;
         if (Comm_GetLocalNetId() == 0) {
             SpinTradeGroup_SetMaxConnections(app, 1);
@@ -1069,7 +1069,7 @@ void SpinTradeGroup_HandleLinkEvent(SpinTradeGroupApp *app, int msg, int a2) {
         }
         break;
     case 0x13:
-        if (app->unk_4A50 == 1) {
+        if (app->leaveRequested == 1) {
             return;
         }
         BufferPlayersName(app->msgFormat, 0, CommPlayerInfo_GetProfile(a2));
@@ -1366,11 +1366,11 @@ void SpinTradeGroup_SetMaxConnections(SpinTradeGroupApp *app, int a1) {
             CommState_SetMaxEntries(v);
         }
         if (a1 == -1) {
-            app->unk_4A51 = 2;
+            app->maxEntriesMode = 2;
         } else if (a1 == 0) {
-            app->unk_4A51 = 1;
+            app->maxEntriesMode = 1;
         } else {
-            app->unk_4A51 = 0;
+            app->maxEntriesMode = 0;
         }
     }
 }
@@ -1380,9 +1380,9 @@ int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int a1) {
     if (v > (int)app->menu->participantCount) {
         u8 x = 1;
         SpinTradeLink_SendCommand(app->menu, 7, &x, 1);
-        app->unk_4A48 = 1;
+        app->joinPending = 1;
     } else {
-        app->unk_4A48 = 0;
+        app->joinPending = 0;
     }
     if (v == (int)app->lastMemberCount) {
         return 1;
@@ -1404,7 +1404,7 @@ int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int a1) {
     case 4:
         UnionRoom_SetBeaconActivity(0xD);
         if (v < (int)app->lastMemberCount) {
-            switch (app->unk_4A51) {
+            switch (app->maxEntriesMode) {
             case 0:
                 SpinTradeGroup_SetMaxConnections(app, a1);
                 break;

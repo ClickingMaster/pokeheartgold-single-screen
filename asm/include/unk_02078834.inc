@@ -33,9 +33,9 @@
 .public ov44_0222A4B4
 .public ov44_0222A60C
 .public ov44_0222A758
-.public ov44_02232EA8
-.public ov44_02232F64
-.public ov44_022330A8
+.public WifiClubGameEntry_Init
+.public WifiClubGameEntry_Main
+.public WifiClubGameEntry_Exit
 .public SwalotPlop_Init
 .public SwalotPlop_Main
 .public SwalotPlop_Exit

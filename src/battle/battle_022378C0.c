@@ -267,7 +267,7 @@ void BattleSystem_ReinitMainBgLayers(BattleSystem *battleSystem) {
     u32 frame;
     BattleBgTemplateSet templates;
 
-    battleSystem->unk240F_0 = 1;
+    battleSystem->resetBlendRequested = 1;
 
     templates = ov12_0226C120;
 

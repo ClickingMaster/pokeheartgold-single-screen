@@ -20,9 +20,9 @@
 #include "evolution_scene.h"
 
 struct BattleSetupSub_138 {
-    int unk_0;
-    int unk_4;
-    int unk_8;
+    int totalTurns;
+    int totalTimesFainted;
+    int totalDamage;
 };
 
 struct BattleSetup {                     // declared in trainer_data.h
@@ -41,7 +41,7 @@ struct BattleSetup {                     // declared in trainer_data.h
     SaveWiFiHistory *wifiHistory;
     Options *options; // 130
     struct UnkStruct_02067A60 *unk_134;
-    struct BattleSetupSub_138 unk138;
+    struct BattleSetupSub_138 battleTotals;
     GameStats *gameStats; // 144
     SavePalPad *palPad;   // 148
     BattleBg battleBg;    // 14C
@@ -53,7 +53,7 @@ struct BattleSetup {                     // declared in trainer_data.h
     u32 unk_164;
     BOOL metBill;          // 168
     int momsSavingsActive; // 16C
-    u32 unk_170;
+    u32 caughtBattlerId;
     u32 weatherType; // 174
     int levelUpFlag; // 178
     u32 aiFlags[BATTLER_MAX];
@@ -61,18 +61,18 @@ struct BattleSetup {                     // declared in trainer_data.h
     int safariBalls;   // 190
     BOOL fixedDamaageMovesBanned;
     EvolutionTaskData *evolutionTaskData;
-    int unk_19C;
-    int unk_1A0[4];
-    u16 unk1B0;
-    u8 unk1B2;
+    int randSeed;
+    int linkPositions[4];
+    u16 networkId;
+    u8 linkBattleMode;
     u8 unk1B3;
-    int unk1B4;
+    int totalTurns;
     void *unk1B8;
-    u8 unk1BC[BATTLER_MAX];
+    u8 chatotVoiceParam[BATTLER_MAX];
     SaveData *saveData; // 1c0
     int unk1C4;
     Pokemon *bugContestMon; // 1c8
-    u8 unk1CC[BATTLER_MAX];
+    u8 followMonSlot[BATTLER_MAX];
     BOOL isFishing;
 };
 

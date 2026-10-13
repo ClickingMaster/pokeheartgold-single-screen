@@ -36,8 +36,8 @@ struct CommPlayerManager {
     FieldSystem *fieldSystem;            // 0x30
     CommPlayerPosition hostPositions[8]; // 0x34
     CommPlayerPosition positions[8];     // 0x74
-    u8 unk_B4[8];                        // 0xB4
-    u8 unk_BC[8];                        // 0xBC
+    u8 moveEnabled[8];                        // 0xB4
+    u8 inputLocked[8];                        // 0xBC
     u8 unk_C4[8];                        // 0xC4
     u8 positionChanged[8];               // 0xCC: the host must send this player's position
     u8 hostMoveTimer[8];                 // 0xD4
@@ -46,11 +46,11 @@ struct CommPlayerManager {
     u8 unk_E6[5];                        // 0xE6
     u8 localPositionSent;                // 0xEB
     u8 sendAllPositions;                 // 0xEC
-    u8 unk_ED;                           // 0xED: sent with command 0x3E
+    u8 localMoveEnabled;                           // 0xED: sent with command 0x3E
     u8 unk_EE;                           // 0xEE
-    u8 unk_EF;                           // 0xEF
+    u8 fieldResumed;                           // 0xEF
     u8 localMoveDelay;                   // 0xF0
-    u8 unk_F1;                           // 0xF1
+    u8 localWalkEnabled;                           // 0xF1
     u8 unk_F2[2];                        // 0xF2
 };
 

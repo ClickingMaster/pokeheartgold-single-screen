@@ -272,7 +272,7 @@ static BOOL Task_020509F0(TaskManager *taskManager) {
     case 3:
         BattleSetup_CopyPokedexToSaveData(encounter->setup, fieldSystem);
         if (fieldSystem->frontierFsys != NULL) {
-            sub_02067484(fieldSystem, &encounter->setup->unk138);
+            sub_02067484(fieldSystem, &encounter->setup->battleTotals);
         }
         Encounter_GetResult(encounter, fieldSystem);
         CallTask_RestoreOverworld(taskManager);
@@ -726,9 +726,9 @@ void SetupAndStartTrainerBattle(TaskManager *taskManager, u32 opponentTrainer1, 
 
     if (a5) {
         if (battleType & BATTLE_TYPE_MULTI) {
-            setup->unk1CC[2] = 0;
+            setup->followMonSlot[2] = 0;
         } else if (!(battleType & BATTLE_TYPE_DOUBLES)) {
-            setup->unk1CC[1] = 0;
+            setup->followMonSlot[1] = 0;
         }
     }
 
@@ -794,7 +794,7 @@ void CallTask_02050960(TaskManager *taskManager, s32 target, s32 maxLevel, u32 f
 
     BattleRecord_Create(fieldSystem->saveData, HEAP_ID_FIELD2, &result);
 
-    setup->unk1B2 = mode;
+    setup->linkBattleMode = mode;
 
     encounter = Encounter_New(setup, BattleSetup_GetWildTransitionEffect(setup), BattleSetup_GetWildBattleMusic(setup), NULL);
     encounter->unkC = target;
@@ -830,7 +830,7 @@ void FieldSystem_StartCommClubLinkBattle(FieldSystem *fieldSystem, void *param1,
     BattleSetup_InitForLinkBattle(setup, fieldSystem, param1);
     BattleRecord_Create(fieldSystem->saveData, HEAP_ID_FIELD2, &var);
 
-    setup->unk1B2 = Encounter_GetLinkBattleMode(fieldSystem->linkBattleRuleset, battleType);
+    setup->linkBattleMode = Encounter_GetLinkBattleMode(fieldSystem->linkBattleRuleset, battleType);
 
     encounter = Encounter_New(setup, BattleSetup_GetWildTransitionEffect(setup), BattleSetup_GetWildBattleMusic(setup), NULL);
 
@@ -845,7 +845,7 @@ void FieldSystem_StartCommClubLinkBattleWithParty(FieldSystem *fieldSystem, Part
     BattleSetup_InitForLinkBattleWithParty(setup, fieldSystem, party, NULL);
     BattleRecord_Create(fieldSystem->saveData, HEAP_ID_FIELD2, &var);
 
-    setup->unk1B2 = Encounter_GetLinkBattleMode(fieldSystem->linkBattleRuleset, battleType);
+    setup->linkBattleMode = Encounter_GetLinkBattleMode(fieldSystem->linkBattleRuleset, battleType);
 
     encounter = Encounter_New(setup, BattleSetup_GetWildTransitionEffect(setup), BattleSetup_GetWildBattleMusic(setup), NULL);
 

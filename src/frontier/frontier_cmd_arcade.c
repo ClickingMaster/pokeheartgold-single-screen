@@ -71,7 +71,7 @@ BOOL FrtCmd_187(FrontierScriptContext *ctx) {
     ArcadeContext *arcadeData = Frontier_GetData(ctx->frontierSystem->frontierWork);
     BattleSetup *setup = arcadeData->battleSetup;
 
-    arcadeData->bpGain = BattleArcade_GetWonBattlePoints(arcadeData, setup->party[0], arcadeData->battleSetup->party[2], setup->unk1B4);
+    arcadeData->bpGain = BattleArcade_GetWonBattlePoints(arcadeData, setup->party[0], arcadeData->battleSetup->party[2], setup->totalTurns);
 
     arcadeData->battleWon = IsBattleResultWin(setup->winFlag);
 

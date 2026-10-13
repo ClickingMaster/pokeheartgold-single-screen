@@ -1174,8 +1174,8 @@ int TrainerAI_PostKOSwitchIn(BattleSystem *battleSystem, int battler) {
                 && (battlersDisregarded & MaskOfFlagNo(i)) == FALSE
                 && ctx->selectedMonIndex[slot1] != i
                 && ctx->selectedMonIndex[slot2] != i
-                && i != ctx->unk_21A4[slot1]
-                && i != ctx->unk_21A4[slot2]) {
+                && i != ctx->aiSwitchedPartySlot[slot1]
+                && i != ctx->aiSwitchedPartySlot[slot2]) {
                 opponentType1 = GetBattlerVar(ctx, opponent, BMON_DATA_TYPE_1, NULL);
                 opponentType2 = GetBattlerVar(ctx, opponent, BMON_DATA_TYPE_2, NULL);
                 monType1 = GetMonData(mon, MON_DATA_TYPE_1, NULL);
@@ -1248,8 +1248,8 @@ int TrainerAI_PostKOSwitchIn(BattleSystem *battleSystem, int battler) {
             && GetMonData(mon, MON_DATA_HP, NULL)
             && ctx->selectedMonIndex[slot1] != i
             && ctx->selectedMonIndex[slot2] != i
-            && i != ctx->unk_21A4[slot1]
-            && i != ctx->unk_21A4[slot2]) {
+            && i != ctx->aiSwitchedPartySlot[slot1]
+            && i != ctx->aiSwitchedPartySlot[slot2]) {
             for (j = 0; j < MAX_MON_MOVES; j++) {
                 move = GetMonData(mon, MON_DATA_MOVE1 + j, NULL);
                 moveType = TrainerAI_GetMoveType(battleSystem, ctx, mon, move);
@@ -1294,7 +1294,7 @@ int TrainerAI_PostKOSwitchIn(BattleSystem *battleSystem, int battler) {
 
 int TrainerAI_GetSwitchedPartySlot(BattleSystem *battleSystem, int battler) {
     BattleContext *ctx = BattleSystem_GetBattleContext(battleSystem);
-    return ctx->unk_21A4[battler];
+    return ctx->aiSwitchedPartySlot[battler];
 }
 
 int TrainerAI_GetMoveType(BattleSystem *battleSystem, BattleContext *ctx, Pokemon *mon, int move) {

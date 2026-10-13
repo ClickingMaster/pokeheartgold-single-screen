@@ -90,9 +90,9 @@ typedef struct TurnData {
     int specialDamage[4];
     int battlerIdSpecialDamage;
     int battlerBitSpecialDamage;
-    int unk34;
-    int unk38;
-    int unk3C;
+    int lastDamageTaken;
+    int battlerIdLastDamage;
+    int assuranceDamageMask;
 } TurnData;
 
 typedef struct SelfTurnData {
@@ -108,36 +108,36 @@ typedef struct SelfTurnData {
     int battlerIdPhysicalAttacker;
     int specialDamage;
     int battlerIdSpecialAttacker;
-    int unk14;
+    int statusFlags;
     int shellBellDamage;
 } SelfTurnData;
 
 typedef struct TrainerAIData {
-    u8 unk0;
-    u8 unk1;
-    u16 unk2;
+    u8 evalStep;
+    u8 moveSlot;
+    u16 move;
     s8 movePoints[4]; // higher points = more priority for selection
-    int unk8;
+    int calcTemp;
     u32 aiFlags;
-    u8 unk10;
-    u8 unk11;
+    u8 stateFlags;
+    u8 aiBitShift;
     u8 unk12;
     u8 unk13;
     u8 *unk14;
-    u8 unk18[4];
+    u8 moveDamageRolls[4];
     u16 moves[BATTLER_MAX][MOVES_MAX];
     u8 abilities[BATTLER_MAX];
     u16 heldItems[BATTLER_MAX];
-    u16 unk68[2][4];
-    u32 unk78[8];
-    u8 unk98;
-    u8 unk99[2];
+    u16 trainerItems[2][4];
+    u32 scriptStackPointer[8];
+    u8 scriptStackSize;
+    u8 trainerItemCounts[2];
     u8 battlerIdAttacker;
     u8 battlerIdTarget;
     u8 useItem[2];
-    u8 unk9F[2];
-    u16 unkA0[2];
-    u8 unkA4[4];
+    u8 usedItemCondition[2];
+    u16 usedItem[2];
+    u8 selectedTarget[4];
     MoveTbl moveData[NUM_MOVES + 1];
     ItemData *itemData;
     u16 unk280[4];
@@ -158,7 +158,7 @@ typedef struct MoveFailFlags {
     u32 unused : 21;
 } MoveFailFlags;
 
-typedef struct UnkBattlemonSub {
+typedef struct MoveEffectData {
     u32 disabledTurns : 3;
     u32 encoredTurns : 3;
     u32 isCharged : 2;
@@ -201,8 +201,8 @@ typedef struct UnkBattlemonSub {
     u16 lastResortMoves[4];
     u16 moveNoChoice;
     u16 transformGender;
-    int unk30;
-} UnkBattlemonSub;
+    int heldItemRestoreHp;
+} MoveEffectData;
 
 typedef struct BattleMon {
     u16 species;
@@ -262,7 +262,7 @@ typedef struct BattleMon {
     u8 ball;
     u32 moveEffectFlags;
     u32 moveEffectFlagsTemp;
-    UnkBattlemonSub unk88;
+    MoveEffectData moveEffectData;
 } BattleMon;
 
 typedef struct PokemonStats {
@@ -271,14 +271,14 @@ typedef struct PokemonStats {
 
 typedef struct PlayerActions {
     ControllerCommand command;
-    u32 unk4;
+    u32 battlerIdTarget;
     u32 unk8;
     u32 inputSelection;
 } PlayerActions;
 
 typedef struct BattleContext {
-    u8 unk_0[4];
-    u8 unk_4[4];
+    u8 selectionState[4];
+    u8 selectionNextState[4];
     ControllerCommand command;
     ControllerCommand commandNext;
     int stateFieldConditionUpdate;
@@ -289,18 +289,18 @@ typedef struct BattleContext {
     int updateFieldConditionExtraData;
     int stateBeforeTurn;
     int beforeTurnData;
-    int unk_30;
+    int attackerAfterMoveState;
     int unk_34;
-    int unk_38;
-    int unk_3C;
-    int unk_40;
-    int unk_44;
-    int unk_48;
-    int unk_4C;
-    int unk_50;
-    int unk_54;
+    int afterMoveMessageType;
+    int afterMoveHitState;
+    int afterMoveEffectState;
+    int afterMoveEffectIndex;
+    int tryMoveState;
+    int checkMoveHitState;
+    int checkAttackerStatusState;
+    int checkMoveImmunityState;
     int sendOutState;
-    int unk_5C;
+    int vanishOffBattlerId;
     int unk_60;
     int battlerIdAttacker;
     int battlerIdAttackerTemp;
@@ -315,10 +315,10 @@ typedef struct BattleContext {
     int statChangeParam;
     int statChangeFlag;
     int battlerIdStatChange;
-    int unk_98;
+    int lastBattlerId;
     int gainedExp;
     int partyGainedExp;
-    u32 unk_A4[2];
+    u32 expEarnFlags[2];
     NarcId scriptNarcId;
     int scriptFileId;
     int scriptSeqNo;
@@ -327,7 +327,7 @@ typedef struct BattleContext {
     int scriptStackFileId[4];
     int scriptStackSeqNo[4];
     int executionIndex;
-    int unk_F0;
+    int waitCounter;
     BattleMessage buffMsg;
     int battlerIdTemp;
     int battlerIdLeechSeedRecv;
@@ -338,8 +338,8 @@ typedef struct BattleContext {
     int msgTemp;
     int calcTemp;
     int tempData;
-    u32 unk_13C[4];
-    u32 unk_14C;
+    u32 showPartyFlags[4];
+    u32 payDayCount;
     int totalTurns;
     int totalTimesFainted[4];
     int totalDamage[4];
@@ -354,8 +354,8 @@ typedef struct BattleContext {
     SelfTurnData selfTurnData[4];
     MoveFailFlags moveFail[4];
     TrainerAIData trainerAIData;
-    u32 *unk_2134;
-    u32 unk_2138;
+    u32 *aiScriptTemp;
+    u32 aiScriptCursor;
     u32 battleStatus;
     u32 battleStatus2;
     int damage;
@@ -363,26 +363,26 @@ typedef struct BattleContext {
     int criticalCnt;
     int criticalMultiplier;
     int movePower;
-    int unk_2158;
+    int powerMultiplier;
     int hpCalc;
     int moveType;
-    int unk_2164;
+    int moveAnimVariant;
     int prizeMoneyValue;
     u32 moveStatusFlag;
-    u32 unk_2170;
-    u32 unk_2174;
-    u32 unk_2178;
+    u32 sideEffectFlagsDirect;
+    u32 sideEffectFlagsIndirect;
+    u32 sideEffectFlagsAbility;
     u8 multiHitCount;
     u8 multiHitCountTemp;
-    u8 unk_217E;
+    u8 moveTargetLoopIndex;
     u8 beatUpCount;
-    u32 unk_2180;
-    u32 unk_2184;
+    u32 multiHitLoop;
+    u32 moveCheckSkipFlags;
     u32 checkMultiHit;
-    u32 unk_218C[4];
+    u32 status2ClearMask[4];
     u8 selectedMonIndex[4];
-    u8 unk_21A0[4];
-    u8 unk_21A4[4];
+    u8 switchMonIndex[4];
+    u8 aiSwitchedPartySlot[4];
     PlayerActions playerActions[4];
     u8 executionOrder[4]; // accounts for running, items, etc used in battler
                           // slots
@@ -404,19 +404,19 @@ typedef struct BattleContext {
     u16 moveNoCopied[4];
     u16 moveNoCopiedHit[4][4];
     u16 moveNoSketch[4];
-    u16 unk_30B4[4];
+    u16 moveNoSelected[4];
     u16 movePos[4];
     u16 conversion2Move[4];
     u16 conversion2BattlerId[4];
     u16 conversion2Type[4];
     u16 moveNoMetronome[4];
-    int unk_30E4[4];
-    int unk_30F4[4];
-    int unk_3104;
+    int storedDamage[4];
+    int battlerIdStoredDamage[4];
+    int turnOrderIndexTemp;
     u8 switchInFlag;
     u8 levelUpMons;
     u16 unk_310A;
-    u16 unk_310C[4];
+    u16 quickClawRandom[4];
     int flingData;
     int flingScript;
     u8 safariCatchRateStage;
@@ -427,10 +427,10 @@ typedef struct BattleContext {
     u8 weatherCheckFlag;
     s16 hpTemp;
     u16 recycleItem[4];
-    u8 unk_312C[4][6];
-    int unk_3144;
+    u8 partyOrder[4][6];
+    int victoryMusicPlayed;
     int queueTimeout;
-    u8 unk_314C[4];
+    u8 recordInputFlags[4];
     int battlersOnField;
     u32 battleContinueFlag : 1;
     u32 unused : 31;
@@ -589,7 +589,7 @@ struct BattleSystem {
     u8 isServer;
     u8 unk23FD;
     u8 battleFinished;
-    u8 unk240F_0 : 1;
+    u8 resetBlendRequested : 1;
     u8 unk240F_1 : 1;
     u8 unk240E_F : 1;
     u8 criticalHpMusic : 2;
@@ -601,16 +601,16 @@ struct BattleSystem {
     int timezone; // might be timeOfDay? unclear
     int safariBallCnt;
     u8 monsBattled[4];
-    u32 unk241C;
+    u32 regulationFlag;
     u8 battleOutcomeFlag;
     u8 tutorialState;
-    u16 unk2422;
-    int unk2424;
+    u16 ballsThrown;
+    int evolutionLocation;
     int unk2428;
     int weather;
     BOOL metBill;
     u32 lcrngSeedBackup;
-    int unk2438;
+    int bgScrollY;
     int caughtBattlerId;
     int unk2440;
     u8 unk2442;
@@ -623,11 +623,11 @@ struct BattleSystem {
     u16 recordInputCount[4];
     int linkPositions[4];
     u32 isRecordingPaused : 1;
-    u32 unk2474_1 : 1;
-    u32 unk2474_2 : 1;
+    u32 momsSavingsActive : 1;
+    u32 hasNonHgssPlayer : 1;
     u32 isFishing : 1;
     u32 unk2474_4 : 28;
-    u32 unk2478;
+    u32 linkVersionMismatch;
     SysTask *recordingStopTask;
     u8 chatotVoiceParam[4];
     Pokemon *bugContestCaughtMon;

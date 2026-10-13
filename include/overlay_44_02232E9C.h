@@ -16,7 +16,7 @@
 #include "friend_roster.h"
 #include "yes_no_prompt.h"
 
-typedef struct UnkStruct_ov44_02232E80 {
+typedef struct WifiClubRoomLights {
     void *unk0;
     NNSG2dPaletteData *unk4;
     u8 unk8;
@@ -26,23 +26,23 @@ typedef struct UnkStruct_ov44_02232E80 {
     u8 unkD;
     s16 unkE;
     u8 unk10;
-} UnkStruct_ov44_02232E80;
+} WifiClubRoomLights;
 
 typedef struct UnkStruct_ov44_0222DD64 {
     u32 strno;
     u32 value;
 } UnkStruct_ov44_0222DD64;
 
-typedef struct UnkStruct_ov44_02232DA0 UnkStruct_ov44_02232DA0;
-typedef struct UnkStruct_ov44_02232B74 UnkStruct_ov44_02232B74;
+typedef struct WifiClubRoom WifiClubRoom;
+typedef struct WifiClubRoomPerson WifiClubRoomPerson;
 typedef struct UnkStruct_ov44_022319EC UnkStruct_ov44_022319EC;
 
-typedef s32 (*func_type_022328E4)(UnkStruct_ov44_02232DA0 *, UnkStruct_ov44_02232B74 *);
-typedef void (*func_type_022328A0)(UnkStruct_ov44_02232DA0 *, UnkStruct_ov44_02232B74 *);
+typedef s32 (*WifiClubRoomPersonUpdateFunc)(WifiClubRoom *, WifiClubRoomPerson *);
+typedef void (*WifiClubRoomPersonAnimFunc)(WifiClubRoom *, WifiClubRoomPerson *);
 typedef void (*func_type_02236680)(UnkStruct_ov44_022319EC *, enum HeapID);
 typedef s32 (*func_type_0222A60C)(UnkStruct_ov44_022319EC *, s32);
 
-struct UnkStruct_ov44_02232B74 {
+struct WifiClubRoomPerson {
     UnkStruct_ov42_02228110 *unk0;
     UnkStruct_ov42_0222903C *unk4;
     s16 unk8;
@@ -50,9 +50,9 @@ struct UnkStruct_ov44_02232B74 {
     u8 unkB;
     u16 unkC;
     u16 unkE;
-    func_type_022328E4 unk10;
+    WifiClubRoomPersonUpdateFunc unk10;
     void *unk14;
-    func_type_022328A0 unk18;
+    WifiClubRoomPersonAnimFunc unk18;
 };
 
 typedef struct UnkStruct_ov44_02232C4C {
@@ -61,7 +61,7 @@ typedef struct UnkStruct_ov44_02232C4C {
     u8 unk3;
 } UnkStruct_ov44_02232C4C;
 
-typedef struct UnkStruct_ov44_02231A7C {
+typedef struct WifiClubRoomGfx {
     SpriteList *unk0;
     G2dRenderer unk4;
     GF_2DGfxResMan *unk12C[4];
@@ -69,9 +69,9 @@ typedef struct UnkStruct_ov44_02231A7C {
     SpriteResourcesHeader unk14C;
     Sprite *unk170;
     Sprite *unk174;
-} UnkStruct_ov44_02231A7C;
+} WifiClubRoomGfx;
 
-struct UnkStruct_ov44_02232DA0 {
+struct WifiClubRoom {
     s32 unk0;
     enum HeapID unk4;
     u8 unk8;
@@ -79,10 +79,10 @@ struct UnkStruct_ov44_02232DA0 {
     s16 unkA;
     u32 unkC;
     BgConfig *unk10;
-    UnkStruct_ov44_02231A7C unk14;
-    UnkStruct_ov44_02232B74 unk18C[48];
-    UnkStruct_ov44_02232B74 *unk6CC;
-    UnkStruct_ov44_02232E80 unk6D0;
+    WifiClubRoomGfx unk14;
+    WifiClubRoomPerson unk18C[48];
+    WifiClubRoomPerson *unk6CC;
+    WifiClubRoomLights unk6D0;
     UnkStruct_ov42_02227F68 *unk6E4;
     UnkStruct_ov42_022280A8 *unk6E8;
     UnkStruct_ov42_02228EDC *unk6EC;
@@ -217,8 +217,8 @@ struct UnkStruct_ov44_022319EC {
     u16 unk382;
     u32 unk384;
     u8 unk388[4];
-    UnkStruct_ov44_02232DA0 unk38C;
-    UnkStruct_ov44_02232B74 *unkA88[0x21];
+    WifiClubRoom unk38C;
+    WifiClubRoomPerson *unkA88[0x21];
     UnkStruct_ov44_0222AB24 unkB0C;
     UnkStruct_ov44_02231800 unkB1C;
     u32 unkD64;
@@ -259,9 +259,9 @@ s32 ov44_0222A758(OverlayManager *overlayManager);
 void ov44_0222A7F8(UnkStruct_ov44_022319EC *arg0);
 void ov44_0222A830(void);
 void ov44_0222A850(BgConfig *arg0);
-void ov44_0222AA94(UnkStruct_ov44_022319EC *arg0, UnkStruct_ov44_02232B74 *arg1);
-void ov44_0222AAC0(UnkStruct_ov44_022319EC *arg0, UnkStruct_ov44_02232B74 *arg1);
-UnkStruct_ov44_02232B74 *ov44_0222AAEC(UnkStruct_ov44_022319EC *arg0, u32 arg1);
+void ov44_0222AA94(UnkStruct_ov44_022319EC *arg0, WifiClubRoomPerson *arg1);
+void ov44_0222AAC0(UnkStruct_ov44_022319EC *arg0, WifiClubRoomPerson *arg1);
+WifiClubRoomPerson *ov44_0222AAEC(UnkStruct_ov44_022319EC *arg0, u32 arg1);
 void ov44_0222AB24(BgConfig *arg0, UnkStruct_ov44_0222AB24 *arg1, NARC *arg2, enum HeapID arg3);
 void ov44_0222ABB8(UnkStruct_ov44_0222AB24 *arg0);
 void ov44_0222ABDC(BgConfig *arg0, UnkStruct_ov44_0222AB24 *arg1, s32 arg2, u8 arg3, u8 arg4, s32 arg5, s32 arg6);
@@ -434,7 +434,7 @@ s32 ov44_0223183C(UnkStruct_ov44_02231800 *arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 ov44_02229F44(s32);
 void ov44_0222F510(UnkStruct_ov44_022319EC *, s32, s32);
 void ov44_0222F7BC(UnkStruct_ov44_022319EC *);
-s32 ov44_02231CE8(UnkStruct_ov44_02232DA0 *arg0);
+s32 WifiClubRoom_GetTileBelowPlayer(WifiClubRoom *arg0);
 
 // The following functions are static
 void ov44_02231918(UnkStruct_ov44_022319EC *arg0, s32 arg1);
@@ -443,93 +443,93 @@ s32 ov44_02231974(s32 arg0);
 s32 ov44_0223197C(UnkStruct_ov44_022319EC *arg0, s32 arg1, s32 arg2);
 void ov44_022319BC(UnkStruct_ov44_022319EC *arg0, s32 arg1);
 void ov44_022319EC(UnkStruct_ov44_022319EC *arg0);
-YesNoPrompt *ov44_02231A14(BgConfig *arg0, const WindowTemplate *arg1, u32 arg2);
-YesNoPrompt *ov44_02231A28(BgConfig *arg0, const WindowTemplate *arg1, u32 arg2);
-void ov44_02231A7C(UnkStruct_ov44_02232DA0 *arg0, enum HeapID heapID, NARC *arg2, BgConfig *arg3, s32 arg4, u32 arg5);
-void ov44_02231B4C(UnkStruct_ov44_02232DA0 *arg0);
-s32 ov44_02231BB0(UnkStruct_ov44_02232DA0 *arg0);
-s32 ov44_02231BB4(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_02231C60(UnkStruct_ov44_02232DA0 *arg0);
-u8 ov44_02231C70(UnkStruct_ov44_02232DA0 *arg0);
-s32 ov44_02231C8C(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_02231D48(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-void ov44_02231D8C(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_02231D94(UnkStruct_ov44_02232DA0 *arg0, s32 arg1);
-s32 ov44_02231D98(UnkStruct_ov44_02232DA0 *arg0);
-UnkStruct_ov44_02232B74 *ov44_02231D9C(UnkStruct_ov44_02232DA0 *arg0, s16 arg1);
-UnkStruct_ov44_02232B74 *ov44_02231E08(UnkStruct_ov44_02232DA0 *arg0, s16 arg1, s16 arg2);
-void ov44_02231E94(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-void ov44_02231ED4(UnkStruct_ov44_02232B74 *arg0);
-u8 ov44_02231EF4(UnkStruct_ov44_02232B74 *arg0);
-s32 ov44_02231F04(UnkStruct_ov44_02232B74 *arg0);
-void ov44_02231F14(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1, s32 arg2);
-void ov44_02231F88(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-void ov44_02231FA8(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1, u8 arg2);
-void ov44_02231FCC(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_02232008(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_02232018(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_02232028(UnkStruct_ov44_02232DA0 *arg0);
-s32 ov44_02232050(UnkStruct_ov44_02232DA0 *arg0);
-s32 ov44_02232070(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_02232104(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_02232158(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_02232194(UnkStruct_ov44_02232DA0 *arg0);
-UnkStruct_ov44_02232B74 *ov44_022321C4(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1, u32 arg2);
-void ov44_02232204(UnkStruct_ov44_02232DA0 *arg0, s32 arg1, enum HeapID arg2);
-void ov44_02232238(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_02232248(UnkStruct_ov44_02232DA0 *arg0, enum HeapID arg1, NARC *arg2, s32 arg3);
-void ov44_02232288(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_02232298(UnkStruct_ov44_02231A7C *arg0, enum HeapID heapID, NARC *narc);
-void ov44_022322E8(UnkStruct_ov44_02231A7C *arg0);
-void ov44_02232314(UnkStruct_ov44_02231A7C *arg0, enum HeapID heapID, NARC *narc);
-void ov44_0223231C(UnkStruct_ov44_02231A7C *arg0);
-void ov44_02232324(UnkStruct_ov44_02231A7C *arg1, enum HeapID heapID);
-void ov44_0223232C(UnkStruct_ov44_02231A7C *arg0);
-void ov44_02232334(BgConfig *arg0, enum HeapID heapID);
-void ov44_02232338(BgConfig *arg0);
-void ov44_0223233C(BgConfig *bgConfig, enum HeapID heapID, NARC *narc);
-void ov44_0223237C(UnkStruct_ov44_02231A7C *arg0, enum HeapID heapID, NARC *narc);
-void ov44_0223247C(UnkStruct_ov44_02231A7C *arg0);
-void ov44_022324B0(UnkStruct_ov44_02231A7C *arg0, enum HeapID heapID);
-void ov44_02232530(UnkStruct_ov44_02231A7C *arg0);
-void ov44_0223254C(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_02232594(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_022325A4(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232914 arg1, s32 arg2);
-void ov44_022325F4(UnkStruct_ov44_02232DA0 *arg0);
-s32 ov44_02232604(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_02232680(UnkStruct_ov44_02232DA0 *arg0, s16 *arg1, u32 arg2);
-void ov44_02232724(UnkStruct_ov44_02232DA0 *arg0, s16 *arg1);
-UnkStruct_ov44_02232B74 *ov44_02232798(UnkStruct_ov44_02232DA0 *arg0);
-void ov44_022327C8(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1, s32 arg2);
-void ov44_02232800(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1, s16 *arg2, s16 arg3, u16 arg4, u8 arg5, s32 arg6);
-s32 ov44_02232838(UnkStruct_ov44_02232B74 *arg0);
-void ov44_02232864(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-void ov44_02232884(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-void ov44_022328A0(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-void ov44_022328E4(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-void ov44_02232910(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-void ov44_02232914(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-void ov44_022329B0(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-s32 ov44_02232A60(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-s32 ov44_02232B74(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-s32 ov44_02232BCC(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-s32 ov44_02232BE4(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-s32 ov44_02232C30(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-s32 ov44_02232C48(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1);
-void ov44_02232C4C(UnkStruct_ov44_02232DA0 *arg0, s16 arg1, u32 arg2, u32 arg3);
-void ov44_02232C6C(UnkStruct_ov44_02232DA0 *arg0, s16 arg1, UnkStruct_ov44_02232B74 *arg2);
-s32 ov44_02232C94(UnkStruct_ov44_02232B74 *arg0);
-void ov44_02232CA8(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232B74 *arg1, u8 arg2);
-void ov44_02232CCC(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232E80 *arg1, NARC *arg2);
-void ov44_02232D08(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232E80 *arg1);
-void ov44_02232D20(UnkStruct_ov44_02232DA0 *arg0, UnkStruct_ov44_02232E80 *arg1);
-void ov44_02232D34(UnkStruct_ov44_02232E80 *arg0);
-void ov44_02232DA0(UnkStruct_ov44_02232E80 *arg0);
-void *ov44_02232E2C(UnkStruct_ov44_02232E80 *arg0, s32 arg1);
-void ov44_02232E38(UnkStruct_ov44_02232E80 *arg0);
-void ov44_02232E54(UnkStruct_ov44_02232E80 *arg0);
-void ov44_02232E5C(UnkStruct_ov44_02232E80 *arg0, u8 arg1);
-void ov44_02232E80(UnkStruct_ov44_02232E80 *arg0);
+YesNoPrompt *WifiClub_CreateYesNoPromptIgnoreTouch(BgConfig *arg0, const WindowTemplate *arg1, u32 arg2);
+YesNoPrompt *WifiClub_CreateYesNoPrompt(BgConfig *arg0, const WindowTemplate *arg1, u32 arg2);
+void WifiClubRoom_Init(WifiClubRoom *arg0, enum HeapID heapID, NARC *arg2, BgConfig *arg3, s32 arg4, u32 arg5);
+void WifiClubRoom_Free(WifiClubRoom *arg0);
+s32 WifiClubRoom_IsInitialized(WifiClubRoom *arg0);
+s32 WifiClubRoom_Update(WifiClubRoom *arg0);
+void WifiClubRoom_Draw(WifiClubRoom *arg0);
+u8 WifiClubRoom_GetTalkPartnerId(WifiClubRoom *arg0);
+s32 WifiClubRoom_GetTileUnderPlayer(WifiClubRoom *arg0);
+void WifiClubRoom_ShowFriendMarker(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+void WifiClubRoom_HideFriendMarker(WifiClubRoom *arg0);
+void WifiClubRoom_SetInputLocked(WifiClubRoom *arg0, s32 arg1);
+s32 WifiClubRoom_IsInputLocked(WifiClubRoom *arg0);
+WifiClubRoomPerson *WifiClubRoom_AddPlayer(WifiClubRoom *arg0, s16 arg1);
+WifiClubRoomPerson *WifiClubRoom_AddFriend(WifiClubRoom *arg0, s16 arg1, s16 arg2);
+void WifiClubRoom_StartPersonLeave(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+void WifiClubRoomPerson_Delete(WifiClubRoomPerson *arg0);
+u8 WifiClubRoomPerson_GetId(WifiClubRoomPerson *arg0);
+s32 WifiClubRoomPerson_GetOppositeDirection(WifiClubRoomPerson *arg0);
+void WifiClubRoom_StartTalk(WifiClubRoom *arg0, WifiClubRoomPerson *arg1, s32 arg2);
+void WifiClubRoom_EndTalk(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+void WifiClubRoom_SetPersonBusy(WifiClubRoom *arg0, WifiClubRoomPerson *arg1, u8 arg2);
+void WifiClubRoom_StartCounterLight(WifiClubRoom *arg0);
+void WifiClubRoom_ContinueLightSequence(WifiClubRoom *arg0);
+void WifiClubRoom_UpdateLights(WifiClubRoom *arg0);
+void WifiClubRoom_DeleteAllPersons(WifiClubRoom *arg0);
+s32 WifiClubRoom_IsPlayerIdle(WifiClubRoom *arg0);
+s32 WifiClubRoom_IsPlayerFacingCounter(WifiClubRoom *arg0);
+void WifiClubRoom_ProcessMoveCommands(WifiClubRoom *arg0);
+void WifiClubRoom_UpdatePersons(WifiClubRoom *arg0);
+void WifiClubRoom_AnimatePersons(WifiClubRoom *arg0);
+WifiClubRoomPerson *WifiClubRoom_GetPersonInDirection(WifiClubRoom *arg0, WifiClubRoomPerson *arg1, u32 arg2);
+void WifiClubRoom_CreateDrawers(WifiClubRoom *arg0, s32 arg1, enum HeapID arg2);
+void WifiClubRoom_DeleteDrawers(WifiClubRoom *arg0);
+void WifiClubRoom_CreateMapBg(WifiClubRoom *arg0, enum HeapID arg1, NARC *arg2, s32 arg3);
+void WifiClubRoom_DeleteMapBg(WifiClubRoom *arg0);
+void WifiClubRoomGfx_Init(WifiClubRoomGfx *arg0, enum HeapID heapID, NARC *narc);
+void WifiClubRoomGfx_Free(WifiClubRoomGfx *arg0);
+void WifiClubRoomGfx_LoadResources(WifiClubRoomGfx *arg0, enum HeapID heapID, NARC *narc);
+void WifiClubRoomGfx_FreeResources(WifiClubRoomGfx *arg0);
+void WifiClubRoomGfx_CreateSprites(WifiClubRoomGfx *arg1, enum HeapID heapID);
+void WifiClubRoomGfx_DeleteSprites(WifiClubRoomGfx *arg0);
+void WifiClubRoom_InitBgs(BgConfig *arg0, enum HeapID heapID);
+void WifiClubRoom_FreeBgs(BgConfig *arg0);
+void WifiClubRoom_LoadBgGfx(BgConfig *bgConfig, enum HeapID heapID, NARC *narc);
+void WifiClubRoomGfx_LoadSpriteResources(WifiClubRoomGfx *arg0, enum HeapID heapID, NARC *narc);
+void WifiClubRoomGfx_FreeSpriteResources(WifiClubRoomGfx *arg0);
+void WifiClubRoomGfx_CreateMarkerSprites(WifiClubRoomGfx *arg0, enum HeapID heapID);
+void WifiClubRoomGfx_DeleteMarkerSprites(WifiClubRoomGfx *arg0);
+void WifiClubRoom_ShowExitArrow(WifiClubRoom *arg0);
+void WifiClubRoom_HideExitArrow(WifiClubRoom *arg0);
+void WifiClubRoom_ShowFriendMarkerAt(WifiClubRoom *arg0, UnkStruct_ov44_02232914 arg1, s32 arg2);
+void WifiClubRoom_HideFriendMarkerSprite(WifiClubRoom *arg0);
+s32 WifiClubRoom_IsPlayerAtEntrance(WifiClubRoom *arg0);
+void WifiClubRoom_FindFriendSpawnPos(WifiClubRoom *arg0, s16 *arg1, u32 arg2);
+void WifiClubRoom_FindEntrancePos(WifiClubRoom *arg0, s16 *arg1);
+WifiClubRoomPerson *WifiClubRoom_AllocPerson(WifiClubRoom *arg0);
+void WifiClubRoom_CreatePersonDrawer(WifiClubRoom *arg0, WifiClubRoomPerson *arg1, s32 arg2);
+void WifiClubRoom_CreatePersonObject(WifiClubRoom *arg0, WifiClubRoomPerson *arg1, s16 *arg2, s16 arg3, u16 arg4, u8 arg5, s32 arg6);
+s32 WifiClubRoomPerson_CanTalk(WifiClubRoomPerson *arg0);
+void WifiClubRoom_SetPersonModePlayer(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+void WifiClubRoom_SetPersonModeWarpIn(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+void WifiClubRoom_SetPersonModeWander(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+void WifiClubRoom_SetPersonModeBusy(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+void WifiClubRoomPerson_AnimateNone(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+void WifiClubRoomPerson_AnimateWarp(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+void WifiClubRoomPerson_AnimateHop(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+s32 WifiClubRoomPerson_UpdatePlayer(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+s32 WifiClubRoomPerson_UpdateWarpIn(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+s32 WifiClubRoomPerson_UpdateWarpOut(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+s32 WifiClubRoomPerson_UpdateWander(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+s32 WifiClubRoomPerson_UpdateBusy(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+s32 WifiClubRoomPerson_UpdateTalking(WifiClubRoom *arg0, WifiClubRoomPerson *arg1);
+void WifiClubRoom_QueueMoveCommand(WifiClubRoom *arg0, s16 arg1, u32 arg2, u32 arg3);
+void WifiClubRoom_QueuePersonCommand(WifiClubRoom *arg0, s16 arg1, WifiClubRoomPerson *arg2);
+s32 WifiClubRoomPerson_IsNotWarping(WifiClubRoomPerson *arg0);
+void WifiClubRoom_SetPersonActivityMode(WifiClubRoom *arg0, WifiClubRoomPerson *arg1, u8 arg2);
+void WifiClubRoomLights_Init(WifiClubRoom *arg0, WifiClubRoomLights *arg1, NARC *arg2);
+void WifiClubRoomLights_Free(WifiClubRoom *arg0, WifiClubRoomLights *arg1);
+void WifiClubRoomLights_Update(WifiClubRoom *arg0, WifiClubRoomLights *arg1);
+void WifiClubRoomLights_UpdateBlink(WifiClubRoomLights *arg0);
+void WifiClubRoomLights_UpdateSequence(WifiClubRoomLights *arg0);
+void *WifiClubRoomLights_GetColor(WifiClubRoomLights *arg0, s32 arg1);
+void WifiClubRoomLights_EndSequence(WifiClubRoomLights *arg0);
+void WifiClubRoomLights_Trigger(WifiClubRoomLights *arg0);
+void WifiClubRoomLights_Start(WifiClubRoomLights *arg0, u8 arg1);
+void WifiClubRoomLights_Continue(WifiClubRoomLights *arg0);
 UnkStruct_ov44_02232914 ov44_02232E90(s32 arg0);
 const u32 *ov44_02232E9C(u32 arg0);
 

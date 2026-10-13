@@ -14,30 +14,11 @@
 #include "system.h"
 
 // Current-tree field names for the same verified layouts.
-#define evalStep                            unk0
-#define moveSlot                            unk1
-#define move                                unk2
 #define moveScore                           movePoints
-#define calcTemp                            unk8
-#define stateFlags                          unk10
-#define aiBitShift                          unk11
-#define moveDamageRolls                     unk18
-#define trainerItems                        unk68
-#define scriptStackPointer                  unk78
-#define scriptStackSize                     unk98
-#define trainerItemCounts                   unk99
 #define attacker                            battlerIdAttacker
 #define defender                            battlerIdTarget
 #define usedItemType                        useItem
-#define usedItemCondition                   unk9F
-#define usedItem                            unkA0
-#define selectedTarget                      unkA4
-#define aiScriptTemp                        unk_2134
-#define aiScriptCursor                      unk_2138
-#define MoveEffectData                      UnkBattlemonSub
-#define moveEffectData                      unk88
 #define embargoTurns                        embargoFlag
-#define aiSwitchedPartySlot                 unk_21A4
 #define AI_FLAG_BASIC                       (1 << 0)
 #define AI_FLAG_DOUBLES                     AI_DOUBLES
 #define AI_FLAG_ROAMING_POKEMON             AI_29
