@@ -55,7 +55,7 @@ struct CommClubManager {
     u8 buttonCloseRequest;
     u16 buttonSelection;
     u32 choiceResult;
-    u32 unkA8;
+    u32 buttonsShown;
 };
 
 static void CommClub_ParentListPrintRow(ListMenu *list, u16 cursorPos_unused, u8 itemsAbove);
@@ -496,7 +496,7 @@ static void CommClub_AskForRegistration(void *arg0, CommClubManager *commClubMan
         TextFlags_SetCanTouchSpeedUpPrint(FALSE);
         sCommClubManager->printerID = AddTextPrinterParameterized(&sCommClubManager->windows[2], 1, sCommClubManager->string[5], 0, 0, 1, NULL);
     }
-    sCommClubManager->unkA8 = 0;
+    sCommClubManager->buttonsShown = 0;
     sCommClubManager->buttonCloseRequest = 1;
     CommClub_SetState(&CommClub_WaitHostReply);
 }
@@ -536,19 +536,19 @@ static BOOL CommClub_HandleHostReply(void *arg0, CommClubManager *commClubManage
 
 static void CommClub_WaitHostReply(void *arg0, CommClubManager *unk_ovo3) {
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
-        if (unk_ovo3->unkA8 == 0) {
+        if (unk_ovo3->buttonsShown == 0) {
             sCommClubManager->buttonMsgIds = &sRemoveFromMembersButton;
             sCommClubManager->buttonCount = 1;
             sCommClubManager->buttonSelection = 0xFFFF;
             sCommClubManager->buttonCloseRequest = 0;
             FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->buttonMsgIds);
-            unk_ovo3->unkA8 = 1;
+            unk_ovo3->buttonsShown = 1;
         } else if (FieldSystem_GetBottomScreenAppState(unk_ovo3->fieldSystem) == TRUE) {
             if (CommClub_HandleHostReply(arg0, unk_ovo3)) {
                 unk_ovo3->buttonCloseRequest = 2;
             } else if (PAD_BUTTON_B & gSystem.newKeys || unk_ovo3->buttonSelection == 0) {
                 PlaySE(SEQ_SE_DP_SELECT);
-                unk_ovo3->unkA8 = 0;
+                unk_ovo3->buttonsShown = 0;
                 CommClub_PrintMessage(3, FALSE);
                 CommClub_SetState(&CommClub_OpenLeaveGroupChoice);
             }
@@ -568,9 +568,9 @@ static void CommClub_OpenLeaveGroupChoice(void *arg0, CommClubManager *commClubM
 }
 
 static void CommClub_HandleLeaveGroupChoice(void *arg0, CommClubManager *commClubManager) {
-    if (commClubManager->unkA8 == 0) {
+    if (commClubManager->buttonsShown == 0) {
         if (CommClub_InitYesNoButtons(commClubManager) == TRUE) {
-            commClubManager->unkA8 = 1;
+            commClubManager->buttonsShown = 1;
         } else {
             return;
         }
@@ -924,9 +924,9 @@ static void CommClub_HandleMemberList(void *arg0, CommClubManager *commClubManag
 
 static void CommClub_HandleContactChoice(void *arg0, CommClubManager *commClubManager) {
     CommClub_PrintPlayerCount(commClubManager);
-    if (commClubManager->unkA8 == 0) {
+    if (commClubManager->buttonsShown == 0) {
         if (CommClub_InitYesNoButtons(commClubManager) == TRUE) {
-            commClubManager->unkA8 = 1;
+            commClubManager->buttonsShown = 1;
         } else {
             return;
         }
@@ -1093,9 +1093,9 @@ static void CommClub_OpenConfirmGroupChoice(void *arg0_unused, CommClubManager *
 
 static void CommClub_HandleConfirmGroupChoice(void *arg0, CommClubManager *commClubManager) {
     CommClub_PrintPlayerCount(commClubManager);
-    if (commClubManager->unkA8 == 0) {
+    if (commClubManager->buttonsShown == 0) {
         if (CommClub_InitYesNoButtons(commClubManager) == TRUE) {
-            commClubManager->unkA8 = 1;
+            commClubManager->buttonsShown = 1;
         } else {
             return;
         }
@@ -1257,9 +1257,9 @@ static void CommClub_OpenCancelGroupChoice(void *arg0_unused, CommClubManager *c
 
 static void CommClub_HandleCancelGroupChoice(void *arg0, CommClubManager *commClubManager) {
     CommClub_PrintPlayerCount(commClubManager);
-    if (commClubManager->unkA8 == 0) {
+    if (commClubManager->buttonsShown == 0) {
         if (CommClub_InitYesNoButtons(commClubManager) == TRUE) {
-            commClubManager->unkA8 = 1;
+            commClubManager->buttonsShown = 1;
         } else {
             return;
         }
@@ -1549,7 +1549,7 @@ static BOOL ov03_02255C80() {
 
 static void CommClub_OpenYesNoButtons(CommClubManager *commClubManager) {
     FieldSystem_SwitchBottomScreenApp(commClubManager->fieldSystem, 3, NULL);
-    commClubManager->unkA8 = 0;
+    commClubManager->buttonsShown = 0;
     commClubManager->choiceResult = 0;
 }
 

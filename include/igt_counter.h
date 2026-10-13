@@ -4,12 +4,12 @@
 #include "igt.h"
 
 typedef struct IGTCounter {
-    u32 unk0;
+    u32 active;
     IGT *igt;
-    u64 unk8;
+    u64 countedSeconds;
     u32 unk10;
     u32 unk14;
-    u64 unk18;
+    u64 startTicks;
 } IGTCounter;
 
 void IGTCounter_Init(void);

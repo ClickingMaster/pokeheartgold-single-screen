@@ -152,7 +152,7 @@
 .public PlayerProfile_GetVersion
 .public PlayerProfile_GetLanguage
 .public Options_GetFrame
-.public sub_0202C254
+.public FriendRoster_GetPlayerName
 .public FriendRoster_IsFriendValid
 .public FriendRoster_CountFriends
 .public FriendRoster_RemoveFriend

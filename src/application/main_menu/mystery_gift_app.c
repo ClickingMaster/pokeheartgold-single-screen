@@ -298,7 +298,7 @@ int MysteryGiftApp_AcceptGift(OverlayManager *manager) {
 WonderCard *MysteryGiftApp_GetReceivedCard(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
     WonderCard *card = &data->receivedCard;
-    UnkWonderCardSubstruct_104 *header = &data->receivedHeader;
+    WonderCardInfo *header = &data->receivedHeader;
 
     switch (data->receiveMode) {
     case 1:
@@ -307,8 +307,8 @@ WonderCard *MysteryGiftApp_GetReceivedCard(OverlayManager *manager) {
         break;
     case 3: {
         u8 *src = data->recvBuffer;
-        memcpy(card, src + sizeof(UnkWonderCardSubstruct_104), sizeof(WonderCard));
-        memcpy(header, src, sizeof(UnkWonderCardSubstruct_104));
+        memcpy(card, src + sizeof(WonderCardInfo), sizeof(WonderCard));
+        memcpy(header, src, sizeof(WonderCardInfo));
         break;
     }
     }
@@ -356,7 +356,7 @@ void MysteryGiftApp_WaitForSave(MysteryGiftAppData *data) {
 
 void MysteryGiftApp_SaveReceivedGift(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
-    UnkWonderCardSubstruct_104 *header = &data->receivedHeader;
+    WonderCardInfo *header = &data->receivedHeader;
     WonderCard *card = &data->receivedCard;
     SaveData *saveData = ((MainOverlayArgs *)OverlayManager_GetArgs(manager))->saveData;
     BOOL isCard;
@@ -788,7 +788,7 @@ void MysteryGiftApp_RunWfcDownload(OverlayManager *manager, int *state) {
 
     switch (MysteryGiftWfc_Run(manager, &data->wfcState)) {
     case 1:
-        memcpy(&data->receivedHeader, data->wfcRecvBuffer, sizeof(UnkWonderCardSubstruct_104) + sizeof(WonderCard));
+        memcpy(&data->receivedHeader, data->wfcRecvBuffer, sizeof(WonderCardInfo) + sizeof(WonderCard));
         MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
         data->giftCheckSource = 27;
         *state = 19;
@@ -2003,7 +2003,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             data->resultDelay--;
         } else {
             if (data->giftCheckSource != 27) {
-                MainMenuUtil_ReadCartridgeGift(&data->receivedHeader, sizeof(UnkWonderCardSubstruct_104) + sizeof(WonderCard));
+                MainMenuUtil_ReadCartridgeGift(&data->receivedHeader, sizeof(WonderCardInfo) + sizeof(WonderCard));
             }
             data->giftCheckResult = MysteryGift_CheckCanReceive(data->saveData, &data->receivedHeader);
             if (data->giftCheckResult == 1) {

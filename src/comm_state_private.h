@@ -43,16 +43,16 @@ void Save_FriendRoster_StoreToSave(SaveData *saveData);
 WiFiList *Save_FriendRoster_Get(SaveData *saveData);
 int FriendRoster_CountFriends(WiFiList *a0);
 DWCUserData *FriendRoster_GetUserData(WiFiList *a0);
-u16 *sub_0202C254(WiFiList *a0, s32 a1);
-u16 *sub_0202C298(WiFiList *a0, s32 a1);
+u16 *FriendRoster_GetPlayerName(WiFiList *a0, s32 a1);
+u16 *FriendRoster_GetGroupName(WiFiList *a0, s32 a1);
 s32 FriendRoster_GetEntryField(WiFiList *a0, s32 a1, s32 a2);
 void FriendRoster_Compact(WiFiList *a0);
 void FriendRoster_UpdateDate(WiFiList *a0, s32 a1);
 u16 FriendRoster_GetUsedSlotCount(WiFiList *a0);
 void FriendRoster_SetEntryField(WiFiList *a0, int a1, int a2, u32 a3);
 void Save_FriendRoster_Init(WiFiList *a0);
-void sub_0202C2B4(WiFiList *a0, int a1, String *a2);
-void sub_0202C270(WiFiList *a0, int a1, String *a2);
+void FriendRoster_SetGroupName(WiFiList *a0, int a1, String *a2);
+void FriendRoster_SetPlayerName(WiFiList *a0, int a1, String *a2);
 DWCFriendData *FriendRoster_GetDwcFriendData(WiFiList *a0, int a1);
 
 #endif // POKEHEARTGOLD_FRIEND_ROSTER_H

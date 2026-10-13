@@ -14,7 +14,7 @@ void WMSP_SetEntry(u32 *request) {
     u32 buf[128], parent[32];
     WmspStatus *status = wmspW.status;
     u16 *result, *cb;
-    status->parentParam.unk_0e = request[1];
+    status->parentParam.entryFlag = request[1];
     WMSP_CopyParentParam((u8 *)parent, (u8 *)&status->parentParam);
     result = WMSP_WL_ParamSetGameInfo(buf, (u16)(status->parentParam.userGameInfoLength + 16), parent);
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();

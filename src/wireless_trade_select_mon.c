@@ -1779,7 +1779,7 @@ int WirelessTradeSelectMon_HandleRosterListInput(WirelessTradeSelectMon *work) {
         PlaySE(SEQ_SE_DP_SELECT);
         work->chosenRosterSlot = choice;
         PlayerProfile *profile = PlayerProfile_New(HEAP_ID_26);
-        Save_Profile_PlayerName_Set(profile, sub_0202C254(work->roster, choice));
+        Save_Profile_PlayerName_Set(profile, FriendRoster_GetPlayerName(work->roster, choice));
         BufferPlayersName(work->rosterMsgFormat, 0, profile);
         Heap_Free(profile);
         WirelessTradeSelectMon_PrintRosterMessage(work, 65); // "Delete {name}'s data from your Friend Roster?"
@@ -1800,7 +1800,7 @@ int WirelessTradeSelectMon_ShowRosterList(WirelessTradeSelectMon *work) {
     String *name = String_New(100, HEAP_ID_26);
     for (int i = 0; i < 32; i++) {
         if (FriendRoster_IsFriendValid(work->roster, i) != FALSE) {
-            CopyU16ArrayToString(name, sub_0202C254(work->roster, i));
+            CopyU16ArrayToString(name, FriendRoster_GetPlayerName(work->roster, i));
             ListMenuItems_AddItem(work->rosterItems, name, i);
         }
     }

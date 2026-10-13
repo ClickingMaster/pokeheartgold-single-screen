@@ -207,7 +207,7 @@ int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)16, (enum FadeType)16, RGB_BLACK, 6, 1, heapId);
         index = PalPadRoster_GetSelectedIndex(roster);
         wifiList = Save_FriendRoster_Get(shared->saveData);
-        PalPadShared_SetInitialName(shared, sub_0202C254(wifiList, shared->friends.slots[index]));
+        PalPadShared_SetInitialName(shared, FriendRoster_GetPlayerName(wifiList, shared->friends.slots[index]));
         shared->subState = 11;
         break;
     case 11:
@@ -220,7 +220,7 @@ int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx
     case 12: // back from the naming screen with a new name
         index = PalPadRoster_GetSelectedIndex(roster);
         wifiList = Save_FriendRoster_Get(shared->saveData);
-        sub_0202C270(wifiList, shared->friends.slots[index], shared->name);
+        FriendRoster_SetPlayerName(wifiList, shared->friends.slots[index], shared->name);
         // fallthrough
     case 13:
         PalPadRoster_Show(roster, shared, gfx, heapId);
@@ -994,7 +994,7 @@ void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, CharSpriteManager *trai
         *(CharSprite **)(owner + offsetof(PalPadRosterPage, icons) + slot * sizeof(CharSprite *)) = CharSpriteManager_CreateSprite(trainerIcons, position, avatar, heapId);
     }
     string = String_New(0x80, heapId);
-    CopyU16ArrayToString(string, sub_0202C254(wifiList, friendSlot));
+    CopyU16ArrayToString(string, FriendRoster_GetPlayerName(wifiList, friendSlot));
     AddTextPrinterParameterizedWithColor((Window *)(owner + offsetof(PalPadRosterPage, window)), 4, string, sPalPadRosterSlotRects[slot].x * 8, sPalPadRosterSlotY[slot].y * 8 - 24, TEXT_SPEED_NOTRANSFER, sPalPadRosterNameColors[gender], NULL);
     String_Delete(string);
 }

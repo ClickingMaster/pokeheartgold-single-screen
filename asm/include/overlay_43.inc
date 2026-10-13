@@ -163,9 +163,9 @@
 .public FriendRoster_GetEntryField
 .public FriendRoster_SetEntryField
 .public FriendRoster_GetDwcFriendData
-.public sub_0202C254
-.public sub_0202C270
-.public sub_0202C298
+.public FriendRoster_GetPlayerName
+.public FriendRoster_SetPlayerName
+.public FriendRoster_GetGroupName
 .public FriendRoster_IsFriendValid
 .public FriendRoster_RemoveFriend
 .public Save_FriendRoster_Get

@@ -29,7 +29,7 @@ void WMSP_EndParent(void *request) {
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
     }
-    status->parentParam.unk_0e = 0;
+    status->parentParam.entryFlag = 0;
     // Deauthenticate every connected child.
     for (aid = 1; aid < 16; aid++) {
         u32 mask = 1u << aid;

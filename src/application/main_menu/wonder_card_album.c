@@ -46,7 +46,7 @@
 struct WonderCardAlbum {
     enum HeapID heapId;                        // 0x0000
     u8 commOwner[0x8C];                        // 0x0004, start of the MysteryGiftComm owner work (MysteryGiftComm_StartParent)
-    UnkWonderCardSubstruct_104 shareHeader;    // 0x0090, sent with shareCard
+    WonderCardInfo shareHeader;    // 0x0090, sent with shareCard
     WonderCard shareCard;                      // 0x00E0, copy of the card being shared
     u8 unk_0438[0x25C4];                       // 0x0438
     BgConfig *bgConfig;                        // 0x29FC
@@ -307,7 +307,7 @@ BOOL WonderCardAlbum_PrintMessageOnly(void) {
 BOOL WonderCardAlbum_PrintCardTitle(WonderCardAlbum *album, Window *window, u32 color) {
     String *string = String_New(37, album->heapId);
 
-    CopyU16ArrayToStringN(string, album->cards[album->cardIndex]->unk104.name, 36);
+    CopyU16ArrayToStringN(string, album->cards[album->cardIndex]->info.name, 36);
     AddTextPrinterParameterizedWithColor(window, 1, string, 0, 0, 0xFF, color, NULL);
     String_Delete(string);
     return TRUE;
@@ -320,7 +320,7 @@ BOOL WonderCardAlbum_PrintGiftStatus(WonderCardAlbum *album, Window *window, u32
     int index = album->cardIndex;
     String *string;
 
-    if (!album->cards[index]->unk104.unk8E_3) {
+    if (!album->cards[index]->info.unk8E_3) {
         msgId = msg_0247_00040;
     } else if (album->mysteryGift == NULL || SaveMysteryGift_HasAnyGift(album->mysteryGift, index) == TRUE) {
         msgId = msg_0247_00038;
@@ -1035,7 +1035,7 @@ int WonderCardAlbum_StartSharing(WonderCardAlbum *album) {
     WonderCard *card = album->cards[album->cardIndex];
 
     memcpy(&album->shareCard, card, sizeof(WonderCard));
-    memcpy(&album->shareHeader, &card->unk104, sizeof(UnkWonderCardSubstruct_104));
+    memcpy(&album->shareHeader, &card->info, sizeof(WonderCardInfo));
     album->shareCard.shareMax = 0;
     album->shareHeader.unk8E_4 = 0;
     album->shareHeader.unk8E_5 = 1;

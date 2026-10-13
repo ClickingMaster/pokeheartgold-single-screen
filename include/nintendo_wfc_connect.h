@@ -9,15 +9,15 @@
 
 typedef struct NintendoWifiConnectArgs {
     FrontierData *frontierData;
-    u32 unk4; // BattleRoomDownload (Save_BattleRoomDownload_Get)
+    u32 battleRoomDownload; // BattleRoomDownload (Save_BattleRoomDownload_Get)
     SysInfo *sysInfo;
     SaveData *saveData;
     Options *options;
-    void *unk14; // DWC user data, friend key source
-    int unk18;   // 0: download a Battle Room, 1: upload the record, 2: check the records of a rank
-    void *unk1C; // default DWC profile id
-    int unk20;
-    int unk24; // nonzero: connect right away
+    void *dwcUserData; // DWC user data, friend key source
+    int mode;   // 0: download a Battle Room, 1: upload the record, 2: check the records of a rank
+    void *dwcProfileId; // default DWC profile id
+    int incomplete;
+    int connectNow; // nonzero: connect right away
 } NintendoWifiConnectArgs;
 
 BOOL NintendoWfc_Init(OverlayManager *man, int *state);

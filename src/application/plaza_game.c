@@ -44,9 +44,9 @@ u16 *DoubleBuffer_GetCurrent(struct DoubleBuffer *buffer);
 s16 *DoubleBuffer_GetOther(struct DoubleBuffer *buffer);
 void DoubleBuffer_SetEnabled(struct DoubleBuffer *buffer, u8 enabled);
 void DoubleBuffer_Swap(struct DoubleBuffer *buffer);
-void sub_0202C554(FriendRoster *data, s32 index, s32 value);
-void sub_0202C584(FriendRoster *data, s32 index, s32 value);
-void sub_0202C5B4(FriendRoster *data, s32 index, s32 value);
+void FriendRoster_AddPlazaGame0Plays(FriendRoster *data, s32 index, s32 value);
+void FriendRoster_AddPlazaGame1Plays(FriendRoster *data, s32 index, s32 value);
+void FriendRoster_AddPlazaGame2Plays(FriendRoster *data, s32 index, s32 value);
 void *CommPlayerInfo_GetExchangeToken(int netId);
 u8 CommPlayerInfo_GetCountry(int netId);
 u8 CommPlayerInfo_GetRegion(int netId);
@@ -2396,13 +2396,13 @@ void PlazaGameResults_RecordFriendPlays(PlazaGameResults *results) {
         case 1:
             switch (results->game) {
             case 0:
-                sub_0202C554(friends, index, 1);
+                FriendRoster_AddPlazaGame0Plays(friends, index, 1);
                 break;
             case 1:
-                sub_0202C584(friends, index, 1);
+                FriendRoster_AddPlazaGame1Plays(friends, index, 1);
                 break;
             case 2:
-                sub_0202C5B4(friends, index, 1);
+                FriendRoster_AddPlazaGame2Plays(friends, index, 1);
                 break;
             }
             break;

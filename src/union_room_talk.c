@@ -57,7 +57,7 @@ struct UnionRoom {
     u32 unk28;                        // 0x028
     u32 talkChoiceReceived;           // 0x02C: set by link command 0x67
     u32 talkReply;                    // 0x030: the partner's answer (link command 0x63)
-    u32 unk34;                        // 0x034
+    u32 sentTalkReply;                        // 0x034
     u8 unk038[0x40 - 0x38];           // 0x038
     u32 talkChoice;                   // 0x040: what the partner chose to do (link command 0x67)
     u32 partnerCancelled;             // 0x044: link command 0x68
@@ -288,14 +288,14 @@ int UnionRoom_GetTalkMsg(struct UnionRoom *unionRoom, int objId, int kind, Messa
     gender = PlayerProfile_GetTrainerGender(profile);
     switch (kind) {
     case 1:
-        return sub_0205A730(unionRoom->unk34 - 1, gender, msgFmt);
+        return sub_0205A730(unionRoom->sentTalkReply - 1, gender, msgFmt);
     case 2:
         return _020FC7D4[gender];
     case 9:
-        if (unionRoom->unk34 == 0) {
+        if (unionRoom->sentTalkReply == 0) {
             return 0;
         }
-        return _020FC95C[unionRoom->unk34][gender];
+        return _020FC95C[unionRoom->sentTalkReply][gender];
     case 19:
     case 20:
     case 21:

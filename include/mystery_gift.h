@@ -56,7 +56,7 @@ typedef union {
     u8 raw[256];
 } MysteryGiftData;
 
-typedef struct UnkWonderCardSubstruct_104 {
+typedef struct WonderCardInfo {
     u16 name[36];
     u32 version;   // 88
     u16 id;        // 8C
@@ -67,7 +67,7 @@ typedef struct UnkWonderCardSubstruct_104 {
     u8 unk8E_4 : 1;
     u8 unk8E_5 : 1;
     u8 unk8E_6 : 2;
-} UnkWonderCardSubstruct_104;
+} WonderCardInfo;
 
 typedef struct {
     u16 tag;
@@ -80,7 +80,7 @@ typedef struct {
     u16 tag;
     u16 flag;
     MysteryGiftData data;
-    UnkWonderCardSubstruct_104 unk104;
+    WonderCardInfo info;
     u16 text[250];
     u8 shareMax;
     u16 monIcon[3];

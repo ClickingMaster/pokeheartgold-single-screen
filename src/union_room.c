@@ -437,7 +437,7 @@ void UnionRoom_SendTalkResponse(struct UnionRoom *unionRoom, int mode, int value
     switch (mode) {
     case 0:
         if (unionRoom->partnerCancelled == 0) {
-            unionRoom->unk34 = data[2];
+            unionRoom->sentTalkReply = data[2];
             Comm_SendCommand(0x63, &data[2], 1);
         }
         break;

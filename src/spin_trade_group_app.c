@@ -269,7 +269,7 @@ BOOL SpinTradeGroupApp_Init(OverlayManager *manager, int *state) {
         GF_ASSERT(narc != NULL);
         app = OverlayManager_CreateAndGetData(manager, sizeof(SpinTradeGroupApp), HEAP_ID_102);
         memset(app, 0, sizeof(SpinTradeGroupApp));
-        args->field38 = app;
+        args->groupApp = app;
         app->args = args;
         app->menu = args->menu;
         app->bgConfig = BgConfig_Alloc(HEAP_ID_102);

@@ -383,7 +383,7 @@ BOOL RecordMixing_Exit(OverlayManager *man, int *state) {
     RecordMixing_FreeBgs(app->bgConfig);
     CommState_SetMaxEntries(2);
     CommState_ResumeAlternateSearch();
-    UnionRoomObjects_ResetSlots(app->args->unk4);
+    UnionRoomObjects_ResetSlots(app->args->unionRoomObjects);
     GF_TouchpadStopSampling();
     FontID_Release(4);
     DestroyMsgData(app->msgData);

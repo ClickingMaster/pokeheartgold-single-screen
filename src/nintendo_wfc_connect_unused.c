@@ -594,7 +594,7 @@ int NintendoWfcUnused_SessionInit(NintendoWfcUnused *wfc) {
     wfc->room = 1;
     wfc->waitingIcon = NULL;
     if (DWC_CheckInet() == 0) {
-        if (wfc->args->unk24 != 0) {
+        if (wfc->args->connectNow != 0) {
             NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataWfc, 1, 1, 0xF0F);
             NintendoWfcUnused_SetState(wfc, 47, 2);
             NintendoWfcUnused_ShowWaitingIcon(wfc);
@@ -850,7 +850,7 @@ int NintendoWfcUnused_HandleLogOutChoice(NintendoWfcUnused *wfc) {
             } else {
                 wfc->state = 41;
             }
-            wfc->args->unk20 = 1;
+            wfc->args->incomplete = 1;
         }
     }
     return 3;
@@ -960,10 +960,10 @@ int NintendoWfcUnused_WaitAuth(NintendoWfcUnused *wfc) {
 
 int NintendoWfcUnused_InitHttp(NintendoWfcUnused *wfc) {
     if (Save_SysInfo_GetDwcProfileId(wfc->args->sysInfo) == 0) {
-        Save_SysInfo_SetDwcProfileId(wfc->args->sysInfo, (u32)wfc->args->unk1C);
+        Save_SysInfo_SetDwcProfileId(wfc->args->sysInfo, (u32)wfc->args->dwcProfileId);
     }
     u32 profileId = Save_SysInfo_GetDwcProfileId(wfc->args->sysInfo);
-    u64 friendKey = DWC_CreateFriendKey(wfc->args->unk14);
+    u64 friendKey = DWC_CreateFriendKey(wfc->args->dwcUserData);
     NintendoWfcHttp_Init(profileId, (u32)friendKey, (u32)(friendKey >> 32));
     wfc->state = 7;
     return 3;
@@ -985,7 +985,7 @@ int NintendoWfcUnused_WaitInfo(NintendoWfcUnused *wfc) {
         switch (result) {
         case 0:
             NintendoWfcUnused_HideWaitingIcon(wfc);
-            switch (wfc->args->unk18) {
+            switch (wfc->args->mode) {
             case 0:
                 NintendoWfcUnused_SetState(wfc, 11, 13);
                 break;
@@ -1057,7 +1057,7 @@ int NintendoWfcUnused_WaitSetProfile(NintendoWfcUnused *wfc) {
             case 0:
                 switch (wfc->profileResponse[1]) {
                 case 0:
-                    switch (wfc->args->unk18) {
+                    switch (wfc->args->mode) {
                     case 0:
                         NintendoWfcUnused_SetState(wfc, 11, 13);
                         break;
@@ -1227,7 +1227,7 @@ int NintendoWfcUnused_HandleChallengeRoomInput(NintendoWfcUnused *wfc) {
     } else if (gSystem.newKeys & PAD_BUTTON_A) {
         DWC_GetDateTime(date, time);
         // BattleRoomDownload_IsRoomMarked takes u32 group/entry; the original call truncated them to u8
-        if (BattleRoomDownload_IsRoomMarked((BattleRoomDownload *)wfc->args->unk4, (u8)wfc->rank, (u8)wfc->room, date)) {
+        if (BattleRoomDownload_IsRoomMarked((BattleRoomDownload *)wfc->args->battleRoomDownload, (u8)wfc->rank, (u8)wfc->room, date)) {
             wfc->state = 20;
         } else {
             wfc->state = 16;
@@ -1278,10 +1278,10 @@ int NintendoWfcUnused_WaitTrainersDownload(NintendoWfcUnused *wfc) {
         switch (result) {
         case 0:
             // BattleRoomDownload_SetTrainers / BattleRoomDownload_MarkRoom take u32; the original calls truncated rank and room to u8
-            BattleRoomDownload_SetTrainers((BattleRoomDownload *)wfc->args->unk4, wfc->downloadBuffer, (u8)wfc->ownRank, (u8)wfc->room);
+            BattleRoomDownload_SetTrainers((BattleRoomDownload *)wfc->args->battleRoomDownload, wfc->downloadBuffer, (u8)wfc->ownRank, (u8)wfc->room);
             NintendoWfcUnused_SetState(wfc, 39, 19);
             DWC_GetDateTime(date, time);
-            BattleRoomDownload_MarkRoom((BattleRoomDownload *)wfc->args->unk4, (u8)wfc->rank, (u8)wfc->room, date);
+            BattleRoomDownload_MarkRoom((BattleRoomDownload *)wfc->args->battleRoomDownload, (u8)wfc->rank, (u8)wfc->room, date);
             break;
         case -1:
             wfc->httpResult = result;
@@ -1331,7 +1331,7 @@ int NintendoWfcUnused_PrintTrainersReceived(NintendoWfcUnused *wfc) {
     NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, 3, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 47, 45);
     NintendoWfcUnused_HideWaitingIcon(wfc);
-    wfc->args->unk20 = 0;
+    wfc->args->incomplete = 0;
     return 3;
 }
 
@@ -1345,7 +1345,7 @@ int NintendoWfcUnused_PrintSendingRecord(NintendoWfcUnused *wfc) {
 int NintendoWfcUnused_RequestUpload(NintendoWfcUnused *wfc) {
     int record = FrontierData_GetWifiWinCount(wfc->args->frontierData);
     u8 rankRoom[4];
-    BattleRoomDownload_GetTrainersRoom((BattleRoomDownload *)wfc->args->unk4, rankRoom);
+    BattleRoomDownload_GetTrainersRoom((BattleRoomDownload *)wfc->args->battleRoomDownload, rankRoom);
     sub_02069528(wfc->args->saveData, 1, &wfc->uploadRecord);
     NintendoWfcHttp_RequestUpload(rankRoom[0], rankRoom[1], record, &wfc->uploadRecord);
     wfc->state = 27;
@@ -1412,7 +1412,7 @@ int NintendoWfcUnused_PrintRecordSent(NintendoWfcUnused *wfc) {
     NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, 8, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 47, 45);
     NintendoWfcUnused_HideWaitingIcon(wfc);
-    wfc->args->unk20 = 0;
+    wfc->args->incomplete = 0;
     return 3;
 }
 
@@ -1538,7 +1538,7 @@ int NintendoWfcUnused_WaitLeadersDownload(NintendoWfcUnused *wfc) {
         switch (result) {
         case 0:
             // BattleRoomDownload_SetLeaders takes u32; the original call truncated rank and room to u8
-            BattleRoomDownload_SetLeaders((BattleRoomDownload *)wfc->args->unk4, wfc->downloadBuffer + 0x63C, (u8)wfc->rank, (u8)wfc->room);
+            BattleRoomDownload_SetLeaders((BattleRoomDownload *)wfc->args->battleRoomDownload, wfc->downloadBuffer + 0x63C, (u8)wfc->rank, (u8)wfc->room);
             NintendoWfcUnused_SetState(wfc, 39, 38);
             break;
         case -1:
@@ -1588,7 +1588,7 @@ int NintendoWfcUnused_PrintLeadersReceived(NintendoWfcUnused *wfc) {
     NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, 3, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 47, 45);
     NintendoWfcUnused_HideWaitingIcon(wfc);
-    wfc->args->unk20 = 0;
+    wfc->args->incomplete = 0;
     return 3;
 }
 
@@ -1624,7 +1624,7 @@ int NintendoWfcUnused_HandleCancelChallengeChoice(NintendoWfcUnused *wfc) {
             wfc->state = 13;
         } else {
             wfc->state = 41;
-            wfc->args->unk20 = 1;
+            wfc->args->incomplete = 1;
         }
     }
     return 3;
@@ -1643,7 +1643,7 @@ int NintendoWfcUnused_HandleCancelDownloadChoice(NintendoWfcUnused *wfc) {
             wfc->state = 29;
         } else {
             wfc->state = 41;
-            wfc->args->unk20 = 1;
+            wfc->args->incomplete = 1;
         }
     }
     return 3;

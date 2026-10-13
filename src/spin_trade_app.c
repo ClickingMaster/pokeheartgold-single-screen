@@ -645,7 +645,7 @@ BOOL SpinTradeApp_Init(OverlayManager *man, int *state) {
     Heap_Create(HEAP_ID_3, HEAP_ID_102, 0x80000);
     app = OverlayManager_CreateAndGetData(man, sizeof(SpinTradeApp), HEAP_ID_102);
     memset(app, 0, sizeof(SpinTradeApp));
-    args->field34 = app;
+    args->tradeApp = app;
     app->args = args;
     app->menu = args->menu;
     app->party = SaveArray_Party_Get(app->args->input.saveData);

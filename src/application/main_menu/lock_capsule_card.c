@@ -182,7 +182,7 @@ BOOL LockCapsuleCard_PrintMessageOnly(void) {
 BOOL LockCapsuleCard_PrintCardTitle(LockCapsuleCardView *view, Window *window, u32 color) {
     String *string = String_New(37, view->heapId);
 
-    CopyU16ArrayToStringN(string, view->card->unk104.name, 36);
+    CopyU16ArrayToStringN(string, view->card->info.name, 36);
     AddTextPrinterParameterizedWithColor(window, 1, string, 0, 0, 0xFF, color, NULL);
     String_Delete(string);
     return TRUE;
@@ -769,7 +769,7 @@ void WonderCard_InitBgLayers(BgConfig *bgConfig) {
 // 0: the gift can be received; 1: not for this game, 2: already received (unique gift), 3: no free gift slot,
 // 4: no free Wonder Card slot, 5: delivered by another route. A header with all bits set wipes the Mystery Gift
 // save data and resets the system.
-int MysteryGift_CheckCanReceive(SaveData *saveData, UnkWonderCardSubstruct_104 *header) {
+int MysteryGift_CheckCanReceive(SaveData *saveData, WonderCardInfo *header) {
     MysteryGiftSave *mg = Save_MysteryGift_Get(saveData);
     u32 versions = header->version;
 

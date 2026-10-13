@@ -221,7 +221,7 @@ BOOL PalPadRegistration_HandleFriendRosterChoice(PalPadRegistration *registratio
         registration->deleteSlot = registration->rosterChoice;
         roster = Save_FriendRoster_Get(registration->saveData);
         profile = PlayerProfile_New(HEAP_ID_FIELD1);
-        Save_Profile_PlayerName_Set(profile, sub_0202C254(roster, registration->deleteSlot));
+        Save_Profile_PlayerName_Set(profile, FriendRoster_GetPlayerName(roster, registration->deleteSlot));
         BufferPlayersName(registration->msgFormat, 0, profile);
         Heap_Free(profile);
         PalPadRegistration_PrintMessage(registration, msg_0779_00065);

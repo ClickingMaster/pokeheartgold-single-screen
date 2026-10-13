@@ -359,7 +359,7 @@ BOOL ConnectToRanger_Main(OverlayManager *manager, int *state) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
         WonderCardAlbum_DrawCardOnBg(app->bgConfig, &app->wonderCard, HEAP_ID_83);
         MainMenuUtil_StartFade(1, 6, state, 13);
-        app->wonderCard.unk104.unk8E_2 = FALSE;
+        app->wonderCard.info.unk8E_2 = FALSE;
         break;
     case 6:
         if (gSystem.newKeys) {
@@ -392,7 +392,7 @@ BOOL ConnectToRanger_Exit(OverlayManager *manager, int *state) {
 
 #pragma force_active on
 
-// UnkWonderCardSubstruct_104 with its flag bits seen as one byte.
+// WonderCardInfo with its flag bits seen as one byte.
 typedef struct WonderCardInfoFlags {
     u16 name[36];
     u32 version;
@@ -400,7 +400,7 @@ typedef struct WonderCardInfoFlags {
     u8 flags;
 } WonderCardInfoFlags;
 
-#define WONDER_CARD_FLAG_BYTE(card) (((WonderCardInfoFlags *)&(card)->unk104)->flags)
+#define WONDER_CARD_FLAG_BYTE(card) (((WonderCardInfoFlags *)&(card)->info)->flags)
 
 // Builds the Wonder Card of the Manaphy Egg received from Pokemon Ranger, stores it and shows it.
 void ConnectToRanger_StoreManaphyEggCard(ConnectToRangerApp *app) {
@@ -416,21 +416,21 @@ void ConnectToRanger_StoreManaphyEggCard(ConnectToRangerApp *app) {
     msgFormat = MessageFormat_New(app->heapID);
     wonderCard->tag = 7;
     string = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msg_0247_00078, app->heapID);
-    CopyStringToU16Array(string, wonderCard->unk104.name, NELEMS(wonderCard->unk104.name));
+    CopyStringToU16Array(string, wonderCard->info.name, NELEMS(wonderCard->info.name));
     String_Delete(string);
     heartGold = ov74_02235A68(8);
     soulSilver = ov74_02235A68(7);
     diamond = ov74_02235A68(12);
     pearl = ov74_02235A68(10);
     platinum = ov74_02235A68(11);
-    wonderCard->unk104.version = soulSilver | (pearl | platinum | diamond) | heartGold;
-    wonderCard->unk104.id = 1;
-    wonderCard->unk104.unique = FALSE;
-    wonderCard->unk104.unk8E_1 = FALSE;
+    wonderCard->info.version = soulSilver | (pearl | platinum | diamond) | heartGold;
+    wonderCard->info.id = 1;
+    wonderCard->info.unique = FALSE;
+    wonderCard->info.unk8E_1 = FALSE;
     // unk8E_2 = unk8E_3 = TRUE, written to the flag byte (the bitfield stores do not match)
     WONDER_CARD_FLAG_BYTE(wonderCard) = WONDER_CARD_FLAG_BYTE(wonderCard) | 4;
     WONDER_CARD_FLAG_BYTE(wonderCard) = WONDER_CARD_FLAG_BYTE(wonderCard) | 8;
-    wonderCard->unk104.unk8E_5 = FALSE;
+    wonderCard->info.unk8E_5 = FALSE;
     string = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msg_0247_00077, app->heapID);
     CopyStringToU16Array(string, wonderCard->text, NELEMS(wonderCard->text));
     String_Delete(string);

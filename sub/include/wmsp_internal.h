@@ -23,7 +23,7 @@ typedef struct WmspParentParam {
     u16 unk_06;
     u32 ggid;
     u16 tgid;
-    u16 unk_0e;
+    u16 entryFlag;
     u16 maxEntry; // passed to WMSP_WL_ParamSetMaxConnectableChild
     u16 multiBootFlag;
     u16 KS_Flag;
@@ -199,7 +199,7 @@ typedef struct WmspBssDesc {
     u16 cfpPeriod;
     u16 cfpMaxDuration;
     u16 gameInfoLength;
-    u16 unk_3e;
+    u16 otherElementCount;
 } WmspBssDesc;
 
 // Buffer set up by the ARM9; 0xD0: pool of 32 16-byte request buffers (bit 15 of the first word: free).

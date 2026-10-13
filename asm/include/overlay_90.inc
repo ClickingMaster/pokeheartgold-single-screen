@@ -136,9 +136,9 @@
 .public Save_PlayerData_GetProfile
 .public Save_PlayerData_GetOptionsAddr
 .public Options_GetFrame
-.public sub_0202C554
-.public sub_0202C584
-.public sub_0202C5B4
+.public FriendRoster_AddPlazaGame0Plays
+.public FriendRoster_AddPlazaGame1Plays
+.public FriendRoster_AddPlazaGame2Plays
 .public Save_FriendRoster_Get
 .public Save_GameStats_Get
 .public GameStats_AddScore

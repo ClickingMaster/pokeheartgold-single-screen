@@ -230,7 +230,7 @@ void WMSP_SetGameInfo(u32 *request) {
     status->parentParam.ggid = request[3];
     status->parentParam.tgid = request[4];
     flags = request[5];
-    status->parentParam.unk_0e = (flags & 1) ? 1 : 0;
+    status->parentParam.entryFlag = (flags & 1) ? 1 : 0;
     status->parentParam.multiBootFlag = (flags & 2) ? 1 : 0;
     status->parentParam.KS_Flag = (flags & 4) ? 1 : 0;
     status->parentParam.CS_Flag = (flags & 8) ? 1 : 0;

@@ -36,10 +36,10 @@ void *FriendRoster_GetUserData(FriendRoster *data);
 s32 FriendRoster_GetEntryField(FriendRoster *data, s32 index, s32 field);
 void FriendRoster_SetEntryField(FriendRoster *data, int index, int field, u8 value);
 void *FriendRoster_GetDwcFriendData(FriendRoster *data, int index);
-u16 *sub_0202C254(FriendRoster *data, s32 index);
-void sub_0202C270(FriendRoster *data, int index, String *name);
-u16 *sub_0202C298(FriendRoster *data, s32 index);
-void sub_0202C2B4(FriendRoster *data, int index, String *name);
+u16 *FriendRoster_GetPlayerName(FriendRoster *data, s32 index);
+void FriendRoster_SetPlayerName(FriendRoster *data, int index, String *name);
+u16 *FriendRoster_GetGroupName(FriendRoster *data, s32 index);
+void FriendRoster_SetGroupName(FriendRoster *data, int index, String *name);
 BOOL FriendRoster_IsFriendValid(FriendRoster *data, int index);
 int FriendRoster_CountFriends(FriendRoster *data);
 int FriendRoster_GetUsedSlotCount(FriendRoster *data);
@@ -48,9 +48,9 @@ void FriendRoster_MoveFriend(FriendRoster *data, int dest, int src);
 void FriendRoster_Compact(FriendRoster *data);
 void FriendRoster_UpdateDate(FriendRoster *data, s32 index);
 void FriendRoster_AddWinsLossesTrades(FriendRoster *data, s32 index, s32 a, s32 b, s32 c);
-void sub_0202C554(FriendRoster *data, s32 index, s32 value);
-void sub_0202C584(FriendRoster *data, s32 index, s32 value);
-void sub_0202C5B4(FriendRoster *data, s32 index, s32 value);
+void FriendRoster_AddPlazaGame0Plays(FriendRoster *data, s32 index, s32 value);
+void FriendRoster_AddPlazaGame1Plays(FriendRoster *data, s32 index, s32 value);
+void FriendRoster_AddPlazaGame2Plays(FriendRoster *data, s32 index, s32 value);
 void FriendRoster_MergeFriend(FriendRoster *data, s32 src, s32 dest);
 FriendRoster *Save_FriendRoster_Get(SaveData *saveData);
 void Save_FriendRoster_LoadFromSave(SaveData *saveData);
@@ -164,22 +164,22 @@ void *FriendRoster_GetDwcFriendData(FriendRoster *data, int index) {
     return data->friendData[index];
 }
 
-u16 *sub_0202C254(FriendRoster *data, s32 index) {
+u16 *FriendRoster_GetPlayerName(FriendRoster *data, s32 index) {
     GF_ASSERT(index < 32);
     return data->roster.entries[index].name2;
 }
 
-void sub_0202C270(FriendRoster *data, int index, String *name) {
+void FriendRoster_SetPlayerName(FriendRoster *data, int index, String *name) {
     GF_ASSERT(index < 32);
     CopyStringToU16Array(name, data->roster.entries[index].name2, 16);
 }
 
-u16 *sub_0202C298(FriendRoster *data, s32 index) {
+u16 *FriendRoster_GetGroupName(FriendRoster *data, s32 index) {
     GF_ASSERT(index < 32);
     return data->roster.entries[index].name;
 }
 
-void sub_0202C2B4(FriendRoster *data, int index, String *name) {
+void FriendRoster_SetGroupName(FriendRoster *data, int index, String *name) {
     GF_ASSERT(index < 32);
     CopyStringToU16Array(name, data->roster.entries[index].name, 16);
 }
@@ -279,7 +279,7 @@ void FriendRoster_AddWinsLossesTrades(FriendRoster *data, s32 index, s32 a, s32 
     }
 }
 
-void sub_0202C554(FriendRoster *data, s32 index, s32 value) {
+void FriendRoster_AddPlazaGame0Plays(FriendRoster *data, s32 index, s32 value) {
     if (index >= 0 && index < 32) {
         data->roster.entries[index].value32 += value;
         if (data->roster.entries[index].value32 > 9999) {
@@ -289,7 +289,7 @@ void sub_0202C554(FriendRoster *data, s32 index, s32 value) {
     }
 }
 
-void sub_0202C584(FriendRoster *data, s32 index, s32 value) {
+void FriendRoster_AddPlazaGame1Plays(FriendRoster *data, s32 index, s32 value) {
     if (index >= 0 && index < 32) {
         data->roster.entries[index].value34 += value;
         if (data->roster.entries[index].value34 > 9999) {
@@ -299,7 +299,7 @@ void sub_0202C584(FriendRoster *data, s32 index, s32 value) {
     }
 }
 
-void sub_0202C5B4(FriendRoster *data, s32 index, s32 value) {
+void FriendRoster_AddPlazaGame2Plays(FriendRoster *data, s32 index, s32 value) {
     if (index >= 0 && index < 32) {
         data->roster.entries[index].value36 += value;
         if (data->roster.entries[index].value36 > 9999) {

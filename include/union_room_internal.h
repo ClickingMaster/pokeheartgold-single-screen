@@ -48,7 +48,7 @@ struct UnionRoom {
     u32 unk28;                              // 0x28
     u32 talkChoiceReceived;                 // 0x2C
     u32 talkReply;                          // 0x30
-    u32 unk34;                              // 0x34
+    u32 sentTalkReply;                              // 0x34
     u8 pad38[4];                            // 0x38
     u32 unk3C;                              // 0x3C
     int talkChoice;                         // 0x40

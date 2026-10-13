@@ -211,7 +211,7 @@ typedef struct PalPadWork {
 // No public header declares these (friend list save, DWC friend keys).
 int FriendRoster_IsFriendValid(FriendRoster *wifiList, int slot);
 void *FriendRoster_GetDwcFriendData(FriendRoster *wifiList, int slot);
-void sub_0202C270(FriendRoster *wifiList, int slot, String *name);
+void FriendRoster_SetPlayerName(FriendRoster *wifiList, int slot, String *name);
 void FriendRoster_RemoveFriend(FriendRoster *wifiList, int slot);
 void FrontierSave_DeleteRow(void *frontier, int slot);
 int Comm_FindFriendSlotByKey(SaveData *saveData, u64 friendKey, int *slot);

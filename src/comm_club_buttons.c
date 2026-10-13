@@ -30,8 +30,8 @@ typedef struct CommClubButtonsLayout {
 
 typedef struct CommClubButtonsData {
     BgConfig *bgConfig;
-    void *unk_04;
-    void *unk_08;
+    void *lastTouchMenuInput;
+    void *fieldSystem;
     CommClubButtonsArgs *unk_0C;
     CommClubButtonsArgs *args;
     SysTask *task;
@@ -87,8 +87,8 @@ SysTask *CommClubButtons_Init(BgConfig *bgConfig, void *a1, void *a2, CommClubBu
     task = CreateSysTaskAndEnvironment(CommClubButtons_Task, sizeof(CommClubButtonsData), 10, HEAP_ID_8);
     data = SysTask_GetData(task);
     data->bgConfig = bgConfig;
-    data->unk_04 = a1;
-    data->unk_08 = a2;
+    data->lastTouchMenuInput = a1;
+    data->fieldSystem = a2;
     data->unk_0C = args;
     data->task = task;
     data->args = args;

@@ -78,7 +78,7 @@ void MainMenuUtil_ShowCardSubScreen(BgConfig *bgConfig, WonderCard *card) {
 }
 
 // Encrypts the Wonder Card that follows the header (RC4, the key mixes the CRC-16 of the header with our MAC address)
-void MainMenuUtil_EncryptWonderCard(UnkWonderCardSubstruct_104 *header, void *dest, enum HeapID heapID) {
+void MainMenuUtil_EncryptWonderCard(WonderCardInfo *header, void *dest, enum HeapID heapID) {
     MATHCRC16Table *table = Heap_Alloc(heapID, sizeof(MATHCRC16Table));
     u16 crc;
     u16 key[4];
@@ -88,7 +88,7 @@ void MainMenuUtil_EncryptWonderCard(UnkWonderCardSubstruct_104 *header, void *de
     CRYPTORC4Context *rc4;
 
     MATHi_CRC16InitTableRev(table, 0xA001);
-    crc = MATH_CalcCRC16(table, header, sizeof(UnkWonderCardSubstruct_104));
+    crc = MATH_CalcCRC16(table, header, sizeof(WonderCardInfo));
     Heap_Free(table);
     OS_GetMacAddress((u8 *)key);
     key[3] = key[1];
@@ -105,7 +105,7 @@ void MainMenuUtil_EncryptWonderCard(UnkWonderCardSubstruct_104 *header, void *de
 }
 
 // Decrypts a received Wonder Card (the same key, with the MAC address of the sender)
-void MainMenuUtil_DecryptWonderCard(UnkWonderCardSubstruct_104 *header, WonderCard *dest, enum HeapID heapID) {
+void MainMenuUtil_DecryptWonderCard(WonderCardInfo *header, WonderCard *dest, enum HeapID heapID) {
     MATHCRC16Table *table;
     u16 crc;
     const u8 *mac;
@@ -117,7 +117,7 @@ void MainMenuUtil_DecryptWonderCard(UnkWonderCardSubstruct_104 *header, WonderCa
 
     table = Heap_Alloc(heapID, sizeof(MATHCRC16Table));
     MATHi_CRC16InitTableRev(table, 0xA001);
-    crc = MATH_CalcCRC16(table, header, sizeof(UnkWonderCardSubstruct_104));
+    crc = MATH_CalcCRC16(table, header, sizeof(WonderCardInfo));
     Heap_Free(table);
     mac = CommWireless_GetParentInfo(0);
     bytes = (u8 *)key;

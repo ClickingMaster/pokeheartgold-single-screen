@@ -16,7 +16,7 @@ typedef struct SpinTradeFlow {
     u8 sendData[4];
     u32 frame;
     SaveData *saveData;
-    void *unk14;
+    void *unionRoomObjects;
     Options *options;
     GameStats *gameStats;
     FieldSystem *fieldSystem2;
@@ -65,7 +65,7 @@ void *SpinTradeFlow_New(FieldSystem *fieldSystem) {
     memset(work, 0, sizeof(SpinTradeFlow));
     work->fieldSystem = fieldSystem;
     work->saveData = fieldSystem->saveData;
-    work->unk14 = fieldSystem->unionRoomObjects;
+    work->unionRoomObjects = fieldSystem->unionRoomObjects;
     work->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     work->gameStats = Save_GameStats_Get(fieldSystem->saveData);
     work->frame = Options_GetFrame(work->options);

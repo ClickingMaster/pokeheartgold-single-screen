@@ -7,29 +7,29 @@
 static IGTCounter sIGTCounter;
 
 void IGTCounter_Init(void) {
-    sIGTCounter.unk0 = 0;
+    sIGTCounter.active = 0;
 }
 
 void IGTCounter_Start(IGT *igt) {
-    sIGTCounter.unk0 = 1;
+    sIGTCounter.active = 1;
     sIGTCounter.unk10 = 0;
     sIGTCounter.unk14 = 0;
-    sIGTCounter.unk8 = 0;
+    sIGTCounter.countedSeconds = 0;
     sIGTCounter.igt = igt;
-    sIGTCounter.unk18 = GetTimer3Ticks();
+    sIGTCounter.startTicks = GetTimer3Ticks();
 }
 
 void IGTCounter_Update(void) {
-    if (sIGTCounter.unk0 == 0) {
+    if (sIGTCounter.active == 0) {
         return;
     }
 
     u64 val = GetTimer3Ticks();
-    u64 val2 = Timer3TicksToSeconds(val - sIGTCounter.unk18);
-    if (sIGTCounter.unk8 >= val2) {
+    u64 val2 = Timer3TicksToSeconds(val - sIGTCounter.startTicks);
+    if (sIGTCounter.countedSeconds >= val2) {
         return;
     }
 
-    AddIGTSeconds(sIGTCounter.igt, val2 - sIGTCounter.unk8);
-    sIGTCounter.unk8 = val2;
+    AddIGTSeconds(sIGTCounter.igt, val2 - sIGTCounter.countedSeconds);
+    sIGTCounter.countedSeconds = val2;
 }

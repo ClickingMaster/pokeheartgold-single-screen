@@ -151,12 +151,12 @@ void sub_02096DBC(int sender, int unused, void *data, SpinTradeLink *menu) {
     if (Comm_GetLocalNetId() != 0) {
         menu->count = 0;
         menu->state = 1;
-        SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 31, (u8)sender);
+        SpinTradeGroup_HandleLinkEvent(menu->parent->groupApp, 31, (u8)sender);
     }
 }
 
 void SpinTradeLink_HandleClearMessage(int sender, int unused, void *data, SpinTradeLink *menu) {
-    SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 2, 0);
+    SpinTradeGroup_HandleLinkEvent(menu->parent->groupApp, 2, 0);
 }
 
 void SpinTradeLink_HandleJoinRequest(int sender, int unused, void *data, SpinTradeLink *menu) {
@@ -192,21 +192,21 @@ void SpinTradeLink_HandleJoinRequest(int sender, int unused, void *data, SpinTra
             return;
         }
         if (src->accepted == 0) {
-            SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 8, id);
+            SpinTradeGroup_HandleLinkEvent(menu->parent->groupApp, 8, id);
             return;
         }
         menu->assignedCount = src->count;
-        SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 7, src->sender);
+        SpinTradeGroup_HandleLinkEvent(menu->parent->groupApp, 7, src->sender);
         return;
     }
     case 1:
-        SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 19, src->sender);
+        SpinTradeGroup_HandleLinkEvent(menu->parent->groupApp, 19, src->sender);
         break;
     }
 }
 
 void SpinTradeLink_HandleMemberJoined(int sender, int unused, void *data, SpinTradeLink *menu) {
-    SpinTradeGroup_HandleMemberEvent(menu->parent->field38, 1, *(u8 *)data);
+    SpinTradeGroup_HandleMemberEvent(menu->parent->groupApp, 1, *(u8 *)data);
     if (Comm_GetLocalNetId() == 0) {
         menu->unk34 = 0;
     }
@@ -214,7 +214,7 @@ void SpinTradeLink_HandleMemberJoined(int sender, int unused, void *data, SpinTr
 
 void SpinTradeLink_HandleCloseYesNo(int sender, int unused, void *data, SpinTradeLink *menu) {
     if (Comm_GetLocalNetId() != 0) {
-        SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 13, 0);
+        SpinTradeGroup_HandleLinkEvent(menu->parent->groupApp, 13, 0);
     }
 }
 
@@ -234,29 +234,29 @@ void SpinTradeLink_HandleJoin(int sender, int unused, void *data, SpinTradeLink 
 }
 
 void SpinTradeLink_HandleSlot(int sender, int unused, void *data, SpinTradeLink *menu) {
-    SpinTrade_ReceiveMemberSlot(menu->parent->field34, data);
+    SpinTrade_ReceiveMemberSlot(menu->parent->tradeApp, data);
 }
 
 void SpinTradeLink_HandleCount(int sender, int unused, void *data, SpinTradeLink *menu) {
-    SpinTrade_ReceivePlayerCount(menu->parent->field34, *(u32 *)data);
+    SpinTrade_ReceivePlayerCount(menu->parent->tradeApp, *(u32 *)data);
 }
 
 void SpinTradeLink_HandleJump(int sender, int unused, void *data, SpinTradeLink *menu) {
-    SpinTrade_ReceiveJump(menu->parent->field34, *(u8 *)data);
+    SpinTrade_ReceiveJump(menu->parent->tradeApp, *(u8 *)data);
 }
 
 void SpinTradeLink_HandleSpin(int sender, int unused, void *data, SpinTradeLink *menu) {
     if (Comm_GetLocalNetId() != 0) {
-        SpinTrade_ReceiveSpinData(menu->parent->field34, data);
+        SpinTrade_ReceiveSpinData(menu->parent->tradeApp, data);
     }
 }
 
 void SpinTradeLink_HandleTradeSlot(int sender, int unused, void *data, SpinTradeLink *menu) {
-    SpinTrade_ReceiveTradeSlot(menu->parent->field34, sender, *(u32 *)data);
+    SpinTrade_ReceiveTradeSlot(menu->parent->tradeApp, sender, *(u32 *)data);
 }
 
 void SpinTradeLink_HandleResult(int sender, int unused, void *data, SpinTradeLink *menu) {
-    SpinTrade_ReceiveResult(menu->parent->field34, data);
+    SpinTrade_ReceiveResult(menu->parent->tradeApp, data);
 }
 
 void SpinTradeLink_HandleCancel(int sender, int unused, void *data, SpinTradeLink *menu) {

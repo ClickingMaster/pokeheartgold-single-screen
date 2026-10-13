@@ -220,7 +220,7 @@ int PalPadShared_RegisterFriendCode(PalPadShared *shared, String *code, String *
                     return 2;
                 }
                 DWC_CreateFriendKeyToken(FriendRoster_GetDwcFriendData(wifiList, i), key);
-                sub_0202C270(wifiList, i, name);
+                FriendRoster_SetPlayerName(wifiList, i, name);
                 FriendRoster_SetEntryField(wifiList, i, 8, 2);
                 return 0;
             }
@@ -486,7 +486,7 @@ void PalPadGfx_BufferFriendName(PalPadGfx *gfx, SaveData *saveData, int slot, en
     FriendRoster *wifiList = Save_FriendRoster_Get(saveData);
     PlayerProfile *profile = PlayerProfile_New(heapId);
 
-    Save_Profile_PlayerName_Set(profile, sub_0202C254(wifiList, slot));
+    Save_Profile_PlayerName_Set(profile, FriendRoster_GetPlayerName(wifiList, slot));
     BufferPlayersName(gfx->msgFormat, 0, profile);
     Heap_Free(profile);
 }
@@ -495,7 +495,7 @@ void ov43_0222AB5C(PalPadGfx *gfx, SaveData *saveData, int slot, enum HeapID hea
     PlayerProfile *profile = PlayerProfile_New(heapId);
     FriendRoster *wifiList = Save_FriendRoster_Get(saveData);
 
-    Save_Profile_PlayerName_Set(profile, sub_0202C298(wifiList, slot));
+    Save_Profile_PlayerName_Set(profile, FriendRoster_GetGroupName(wifiList, slot));
     BufferPlayersName(gfx->msgFormat, 0, profile);
     Heap_Free(profile);
 }

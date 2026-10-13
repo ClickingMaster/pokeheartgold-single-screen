@@ -24,7 +24,7 @@ typedef struct CommStateWork {
     void (*stateFunc)(void);
     SaveData *saveData;
     PlayerProfile *profile;
-    s32 unk30;
+    s32 rules;
     u32 wifiError;
     s32 wifiErrorArg1;
     s32 wifiErrorArg2;
@@ -39,7 +39,7 @@ typedef struct CommStateWork {
     u8 beaconId;
     u8 waitHostDisconnect;
     s8 matchFriendIndex;
-    u8 unk52;
+    u8 renewTgid;
     u8 watchMembers;
     u8 reportErrors;
     u8 unk55;
@@ -75,7 +75,7 @@ void CommState_Init(SaveData *saveData, s8 arg1) {
         ;
         MI_CpuClear8(gCommState, sizeof(CommStateWork));
         gCommState->timer = 50;
-        gCommState->unk52 = 1;
+        gCommState->renewTgid = 1;
         gCommState->saveData = saveData;
         gCommState->profile = Save_PlayerData_GetProfile(saveData);
         gCommState->maxEntries = 2;
@@ -116,7 +116,7 @@ void CommState_StartParentSession(SaveData *saveData, s8 arg1, s8 arg2, s32 arg3
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_15, 28800);
         CommState_Init(saveData, arg1);
         gCommState->beaconId = arg2;
-        gCommState->unk30 = arg3;
+        gCommState->rules = arg3;
         CommState_SetState(CommState_ParentStart, 0);
     }
 }
@@ -126,7 +126,7 @@ void CommState_StartChildSession(SaveData *saveData, s8 arg1, s8 arg2, s32 arg3)
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_15, 28800);
         CommState_Init(saveData, arg1);
         gCommState->beaconId = arg2;
-        gCommState->unk30 = arg3;
+        gCommState->rules = arg3;
         CommState_SetState(CommState_ChildStartScan, 0);
     }
 }
@@ -335,7 +335,7 @@ void CommState_StopWireless(void) {
 void CommState_ParentStart(void) {
     if (CommWireless_IsStartedUp()) {
         CommWireless_Init(gCommState->profile, 1);
-        CommPlayerInfo_Init(gCommState->saveData, gCommState->unk30);
+        CommPlayerInfo_Init(gCommState->saveData, gCommState->rules);
         if (Comm_StartParent(1, 1, 512, 1)) {
             sub_02035FD8();
             CommState_SetState(CommState_WaitLinked, 0);
@@ -358,7 +358,7 @@ void CommState_ParentLinked(void) {
 void CommState_ChildStartScan(void) {
     if (CommWireless_IsStartedUp()) {
         CommWireless_Init(gCommState->profile, 1);
-        CommPlayerInfo_Init(gCommState->saveData, gCommState->unk30);
+        CommPlayerInfo_Init(gCommState->saveData, gCommState->rules);
         if (Comm_StartScan(1, 1, 512)) {
             sub_02035FD8();
             CommState_SetState(CommState_ChildScanning, 0);
@@ -495,13 +495,13 @@ void CommState_AlternateWaitStopped(void) {
 }
 
 void CommState_AlternateStartParent(void) {
-    if (CommWireless_IsIdle() && Comm_StartParent(0, gCommState->unk52, 512, 1)) {
+    if (CommWireless_IsIdle() && Comm_StartParent(0, gCommState->renewTgid, 512, 1)) {
         // Equivalent to MATH_Rand32(&gCommState->mathRandContext, 0);
         MATHRandContext32 *mathRandContext = &gCommState->mathRandContext;
         mathRandContext->x = (mathRandContext->mul * mathRandContext->x) + mathRandContext->add;
         //
         sub_02035FD8();
-        gCommState->unk52 = 0;
+        gCommState->renewTgid = 0;
         CommState_SetState(&CommState_AlternateParentWait, 10000);
     }
 }
@@ -509,7 +509,7 @@ void CommState_AlternateStartParent(void) {
 void CommState_AlternateParentWait(void) {
     if (!CommWireless_HasSentBeacons()) {
         if (Comm_GetConnectedChildren()) {
-            gCommState->unk52 = 1;
+            gCommState->renewTgid = 1;
             WirelessStatusIcon_Create();
             CommState_SetState(CommState_AlternateLinked, 0);
             return;
@@ -642,7 +642,7 @@ void CommState_AlternateLinked(void) {
 }
 
 void CommState_RestartIdle(void) {
-    if (CommWireless_IsIdle() && Comm_StartParent(0, gCommState->unk52, 512, 0)) {
+    if (CommWireless_IsIdle() && Comm_StartParent(0, gCommState->renewTgid, 512, 0)) {
         sub_02035FD8();
         CommState_SetState(CommState_Idle, 0);
     }
@@ -1903,7 +1903,7 @@ void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 arg1, s32 arg2, enum Hea
     }
     if (arg4 == 0) {
         String *string = PlayerProfile_GetPlayerName_NewString(playerProfile, heapID);
-        sub_0202C270(wifiList, arg2, string);
+        FriendRoster_SetPlayerName(wifiList, arg2, string);
         String_Delete(string);
         FriendRoster_SetEntryField(wifiList, arg2, 8, PlayerProfile_GetTrainerGender(playerProfile));
         FriendRoster_SetEntryField(wifiList, arg2, 0, PlayerProfile_GetTrainerID(playerProfile));
@@ -1913,7 +1913,7 @@ void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 arg1, s32 arg2, enum Hea
     }
     String *string = String_New(120, heapID);
     CopyU16ArrayToString(string, CommPlayerInfo_GetGroupName(arg1));
-    sub_0202C2B4(wifiList, arg2, string);
+    FriendRoster_SetGroupName(wifiList, arg2, string);
     String_Delete(string);
     FriendRoster_SetEntryField(wifiList, arg2, 7, PlayerProfile_GetAvatar(playerProfile));
     CommPlayerInfo_SaveRecords(saveData);

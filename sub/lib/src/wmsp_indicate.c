@@ -186,7 +186,7 @@ void WMSP_IndicateThread(void *arg) {
             if (aid86 == 0 || aid86 >= 16) {
                 break;
             }
-            if (!st->parentParam.unk_0e) {
+            if (!st->parentParam.entryFlag) {
                 req = WMSP_GetInternalRequestBuf();
                 if (!req) {
                     ok = 0;

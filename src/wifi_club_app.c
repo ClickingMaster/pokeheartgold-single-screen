@@ -1986,7 +1986,7 @@ void WifiClub_PrintOwnStatus(WifiClubApp *arg0) {
             } else if (temp_r0_3 == 1) {
                 color = MAKE_TEXT_COLOR(3, 4, 0);
             }
-            CopyU16ArrayToString(arg0->msgRaw, sub_0202C254(arg0->friendRoster, WifiConnection_GetTargetFriendIndex()));
+            CopyU16ArrayToString(arg0->msgRaw, FriendRoster_GetPlayerName(arg0->friendRoster, WifiConnection_GetTargetFriendIndex()));
         }
     } else {
         ReadMsgDataIntoString(arg0->msgData, temp_r6, arg0->msgRaw);
@@ -3963,7 +3963,7 @@ void WifiClub_ShowConnectionNotice(WifiClubApp *arg0, s32 arg1) {
 void WifiClub_BufferFriendName(WifiClubApp *arg0, s32 arg1) {
     if (arg1 != -1) {
         PlayerProfile *playerProfile = PlayerProfile_New(HEAP_ID_53);
-        Save_Profile_PlayerName_Set(playerProfile, sub_0202C254(arg0->friendRoster, arg1));
+        Save_Profile_PlayerName_Set(playerProfile, FriendRoster_GetPlayerName(arg0->friendRoster, arg1));
         BufferPlayersName(arg0->msgFormat, 0, playerProfile);
         Heap_Free(playerProfile);
     }
@@ -4403,7 +4403,7 @@ void WifiClub_DrawProfileSummary(WifiClubApp *arg0, enum HeapID heapID) {
     ReadMsgDataIntoString(arg0->msgData, WifiClub_GetStatusLabel(temp_r0, &color), arg0->msgRaw);
     AddTextPrinterParameterizedWithColor(&arg0->roster.profileWindow, 0, arg0->msgRaw, 104, 8, 255, color, 0);
     PlayerProfile *playerProfile = PlayerProfile_New(HEAP_ID_53);
-    Save_Profile_PlayerName_Set(playerProfile, sub_0202C298(arg0->friendRoster, temp_r4));
+    Save_Profile_PlayerName_Set(playerProfile, FriendRoster_GetGroupName(arg0->friendRoster, temp_r4));
     BufferPlayersName(arg0->roster.msgFormat, 0, playerProfile);
     Heap_Free(playerProfile);
     // GROUP
@@ -4974,7 +4974,7 @@ s32 WifiClub_UpdateProfileButton(WifiClubRoster *arg0, s32 arg1, s32 arg2, s32 a
 void WifiClub_BufferRosterFriendName(WifiClubApp *arg0, s32 arg1) {
     if (arg1 != -1) {
         PlayerProfile *playerProfile = PlayerProfile_New(HEAP_ID_53);
-        Save_Profile_PlayerName_Set(playerProfile, sub_0202C254(arg0->friendRoster, arg1));
+        Save_Profile_PlayerName_Set(playerProfile, FriendRoster_GetPlayerName(arg0->friendRoster, arg1));
         BufferPlayersName(arg0->roster.msgFormat, 0, playerProfile);
         Heap_Free(playerProfile);
     }

@@ -36,7 +36,7 @@ struct MysteryGiftAppData {
     int giftCheckResult;                               // 0x0080, MysteryGift_CheckCanReceive: 0 ok, 1..5 why the gift cannot be received
     int giftCheckSource;                               // 0x0084
     u32 unk_0088;                                      // 0x0088
-    UnkWonderCardSubstruct_104 receivedHeader;         // 0x008C
+    WonderCardInfo receivedHeader;         // 0x008C
     WonderCard receivedCard;                           // 0x00DC
     int timeout;                                       // 0x0434
     int channel;                                       // 0x0438, partner found by the wireless search

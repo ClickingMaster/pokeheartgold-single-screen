@@ -10,10 +10,10 @@
 .public FriendRoster_GetEntryField
 .public FriendRoster_SetEntryField
 .public FriendRoster_GetDwcFriendData
-.public sub_0202C254
-.public sub_0202C270
-.public sub_0202C298
-.public sub_0202C2B4
+.public FriendRoster_GetPlayerName
+.public FriendRoster_SetPlayerName
+.public FriendRoster_GetGroupName
+.public FriendRoster_SetGroupName
 .public FriendRoster_IsFriendValid
 .public FriendRoster_CountFriends
 .public FriendRoster_GetUsedSlotCount
@@ -21,9 +21,9 @@
 .public FriendRoster_Compact
 .public FriendRoster_UpdateDate
 .public FriendRoster_AddWinsLossesTrades
-.public sub_0202C554
-.public sub_0202C584
-.public sub_0202C5B4
+.public FriendRoster_AddPlazaGame0Plays
+.public FriendRoster_AddPlazaGame1Plays
+.public FriendRoster_AddPlazaGame2Plays
 .public FriendRoster_MergeFriend
 .public Save_FriendRoster_Get
 .public Save_FriendRoster_LoadFromSave

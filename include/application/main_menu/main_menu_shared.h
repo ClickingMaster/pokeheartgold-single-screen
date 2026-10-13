@@ -20,8 +20,8 @@
 #define SAVE_STATE_PAUSED  4 // after WRITE_STATUS_NEXT, until MainMenuUtil_ResumeSave
 
 void MainMenuUtil_ShowCardSubScreen(BgConfig *bgConfig, WonderCard *card);
-void MainMenuUtil_EncryptWonderCard(UnkWonderCardSubstruct_104 *header, void *dest, enum HeapID heapID);
-void MainMenuUtil_DecryptWonderCard(UnkWonderCardSubstruct_104 *header, WonderCard *dest, enum HeapID heapID);
+void MainMenuUtil_EncryptWonderCard(WonderCardInfo *header, void *dest, enum HeapID heapID);
+void MainMenuUtil_DecryptWonderCard(WonderCardInfo *header, WonderCard *dest, enum HeapID heapID);
 void MainMenuUtil_ListMenuCursorCallback(ListMenu *list, s32 index, u8 onInit);
 void MainMenuUtil_CartridgeIrqHandler(void);
 void MainMenuUtil_EnableCartridgePullOutCheck(BOOL enable);

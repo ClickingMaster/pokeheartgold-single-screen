@@ -41,6 +41,6 @@ BOOL LockCapsuleCard_Exit(OverlayManager *manager, int *state);
 void LockCapsuleCard_DrawCardOnBg(BgConfig *bgConfig, WonderCard *card, enum HeapID heapID);
 void WonderCard_SetGraphicsBanks(void);
 void WonderCard_InitBgLayers(BgConfig *bgConfig);
-int MysteryGift_CheckCanReceive(SaveData *saveData, UnkWonderCardSubstruct_104 *header);
+int MysteryGift_CheckCanReceive(SaveData *saveData, WonderCardInfo *header);
 
 #endif // POKEHEARTGOLD_APPLICATION_MAIN_MENU_LOCK_CAPSULE_CARD_H

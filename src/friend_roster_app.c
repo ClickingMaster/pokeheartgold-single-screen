@@ -306,7 +306,7 @@ void FriendRosterApp_PrintNames(FriendRosterAppData *data) {
     profile = PlayerProfile_New(HEAP_ID_8);
     center = (u16)(GetWindowWidth(&windows[0]) * 8 / 2);
     for (i = 0; i < FRIEND_ROSTER_APP_NAMES_PER_PAGE; i++) {
-        Save_Profile_PlayerName_Set(profile, sub_0202C254(data->roster, i + data->page * FRIEND_ROSTER_APP_NAMES_PER_PAGE));
+        Save_Profile_PlayerName_Set(profile, FriendRoster_GetPlayerName(data->roster, i + data->page * FRIEND_ROSTER_APP_NAMES_PER_PAGE));
         BufferPlayersName(data->msgFormat, 0, profile);
         StringExpandPlaceholders(data->msgFormat, buf, template);
         FillWindowPixelBuffer(&windows[i], 0);

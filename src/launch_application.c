@@ -1004,7 +1004,7 @@ void DrawingSession_LaunchApp(FieldSystem *fieldSystem) {
 RecordMixingArgs *RecordMixing_LaunchApp(FieldSystem *fieldSystem) {
     RecordMixingArgs *args = Heap_Alloc(HEAP_ID_FIELD2, sizeof(RecordMixingArgs));
     args->saveData = fieldSystem->saveData;
-    args->unk4 = fieldSystem->unionRoomObjects;
+    args->unionRoomObjects = fieldSystem->unionRoomObjects;
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     args->gameStats = Save_GameStats_Get(fieldSystem->saveData);
     args->menuInputStatePtr = &fieldSystem->menuInputState;
@@ -1198,15 +1198,15 @@ NintendoWifiConnectArgs *NintendoWifiConnection_LaunchApp(FieldSystem *fieldSyst
 
     NintendoWifiConnectArgs *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(NintendoWifiConnectArgs));
     args->frontierData = Save_FrontierData_Get(fieldSystem->saveData);
-    args->unk4 = Save_BattleRoomDownload_Get(fieldSystem->saveData);
+    args->battleRoomDownload = Save_BattleRoomDownload_Get(fieldSystem->saveData);
     args->sysInfo = Save_SysInfo_Get(fieldSystem->saveData);
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    args->unk14 = FriendRoster_GetUserData(Save_FriendRoster_Get(fieldSystem->saveData));
+    args->dwcUserData = FriendRoster_GetUserData(Save_FriendRoster_Get(fieldSystem->saveData));
     args->saveData = fieldSystem->saveData;
-    args->unk1C = Comm_GetOwnGsProfileId(Save_FriendRoster_Get(fieldSystem->saveData));
-    args->unk18 = a1;
-    args->unk24 = a2;
-    args->unk20 = 1;
+    args->dwcProfileId = Comm_GetOwnGsProfileId(Save_FriendRoster_Get(fieldSystem->saveData));
+    args->mode = a1;
+    args->connectNow = a2;
+    args->incomplete = 1;
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
     return args;
 }

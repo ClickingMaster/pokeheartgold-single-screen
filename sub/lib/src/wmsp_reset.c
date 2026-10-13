@@ -54,7 +54,7 @@ void WMSP_Reset(void) {
         WMSP_CleanSendQueue(0xffff);
     }
     if (parent) {
-        status->parentParam.unk_0e = 0;
+        status->parentParam.entryFlag = 0;
     }
     if (connections) {
         for (index = 0; index < 16; index++) {

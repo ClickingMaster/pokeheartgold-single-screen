@@ -20,8 +20,8 @@ typedef struct SpinTradeArgs {
     u32 result;
     SpinTradeCommonArgs input;
     void *menu;
-    void *field34;
-    void *field38;
+    void *tradeApp;
+    void *groupApp;
 } SpinTradeArgs;
 
 void *SpinTradeLink_New(SpinTradeArgs *work, enum HeapID heapID);

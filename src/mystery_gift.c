@@ -80,14 +80,14 @@ BOOL SaveMysteryGift_TryInsertCard(MysteryGiftSave *mg, const WonderCard *src) {
         return FALSE;
     }
 
-    if (src->unk104.unk8E_3 == 1 && !SaveMysteryGift_FindAvailable(mg)) {
+    if (src->info.unk8E_3 == 1 && !SaveMysteryGift_FindAvailable(mg)) {
         return FALSE;
     }
 
     for (i = 0; i < NUM_SAVED_WONDER_CARDS; ++i) {
         if (!MysteryGiftTagIsValid(mg->cards[i].tag)) {
             MI_CpuCopy8(src, &mg->cards[i], sizeof(WonderCard));
-            if (src->unk104.unk8E_3 == 1) {
+            if (src->info.unk8E_3 == 1) {
                 SaveMysteryGift_TryInsertGift(mg, (const MysteryGift *)src, i);
             }
             ret = TRUE;
@@ -120,7 +120,7 @@ BOOL SaveMysteryGift_SetReceivedByIdx(MysteryGiftSave *mg, int index) {
 BOOL SaveMysteryGift_ReceiveGiftAndClearCardByIndex(MysteryGiftSave *mg, int index) {
     GF_ASSERT(index < NUM_SAVED_WONDER_CARDS);
     mg->cards[index].tag = MG_TAG_INVALID;
-    SaveMysteryGift_ReceivedFlagClear(mg, mg->cards[index].unk104.id);
+    SaveMysteryGift_ReceivedFlagClear(mg, mg->cards[index].info.id);
     SaveMysteryGift_SetReceivedByCardId(mg, index);
     SaveSubstruct_UpdateCRC(SAVE_MYSTERY_GIFT);
     return TRUE;
