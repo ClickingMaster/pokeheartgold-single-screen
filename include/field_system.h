@@ -321,7 +321,7 @@ BOOL FieldSystem_IsPlayerMovementAllowed(FieldSystem *fieldSystem);
 void FieldSystem_Control(FieldSystem *fieldSystem);
 void FieldSystem_PauseProcesses();
 void FieldSystem_ResumeProcesses();
-int sub_0203E324();
+int FieldSystem_GetBottomScreenState();
 void FieldSystem_SetSavedBottomScreenAppId(FieldSystem *fieldSystem, int a1);
 BgConfig *FieldSystem_GetBgConfigPtr(FieldSystem *fieldSystem);
 SaveData *FieldSystem_GetSaveData(FieldSystem *fieldSystem);

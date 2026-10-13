@@ -280,7 +280,7 @@ BOOL FootprintStamp_Main(OverlayManager *man, int *state) {
             }
         }
     }
-    ov89_0225A468(work);
+    FootprintStamp_UpdateDummy(work);
     return FALSE;
 }
 

@@ -18,7 +18,7 @@
 
 	.text
 	.public UnownReport_Exit
-	.public ov113_021E59F8
+	.public UnownReport_ResetDisplay
 	.public UnownReport_GetSeenPunctuationForms
 	.public UnownReport_RestoreMenuInputState
 	.public UnownReport_SetupGraphics

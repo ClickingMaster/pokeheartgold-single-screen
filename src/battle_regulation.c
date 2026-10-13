@@ -8,7 +8,7 @@
 #include "party.h"
 #include "pokemon.h"
 
-static BOOL sub_02074C50(u16 *a0, u16 *a1, u16 *a2, int a3, int a4, int a5, int a6);
+static BOOL BattleRegulation_CanPickMonsWithinLevelTotal(u16 *a0, u16 *a1, u16 *a2, int a3, int a4, int a5, int a6);
 
 PokedexData *PokedexData_CreateAndLoad(enum HeapID heapID) {
     PokedexData *pokedex = PokedexData_Create(heapID);
@@ -174,7 +174,7 @@ BattleRegulationComplianceMessage LinkBattleRuleset_GetPartySelectionComplianceM
     return BTL_REG_COMPLIANCE_OK;
 }
 
-static BOOL sub_02074C50(u16 *species, u16 *levels, u16 *visited, int numMonsLeft, int curIdx, int totalLevel, int totalNumMons) {
+static BOOL BattleRegulation_CanPickMonsWithinLevelTotal(u16 *species, u16 *levels, u16 *visited, int numMonsLeft, int curIdx, int totalLevel, int totalNumMons) {
     // called recursively
     int cur_numMonsLeft = numMonsLeft;
     int i;
@@ -191,7 +191,7 @@ static BOOL sub_02074C50(u16 *species, u16 *levels, u16 *visited, int numMonsLef
         visited[curIdx] = 1;
     }
     for (i = curIdx + 1; i < totalNumMons; ++i) {
-        if (sub_02074C50(species, levels, visited, cur_numMonsLeft, i, cur_totalLevel, totalNumMons)) {
+        if (BattleRegulation_CanPickMonsWithinLevelTotal(species, levels, visited, cur_numMonsLeft, i, cur_totalLevel, totalNumMons)) {
             return TRUE;
         }
     }
@@ -199,7 +199,7 @@ static BOOL sub_02074C50(u16 *species, u16 *levels, u16 *visited, int numMonsLef
     return FALSE;
 }
 
-int sub_02074CD0(LinkBattleRuleset *ruleset, Party *party, PokedexData *pokedex) {
+int BattleRegulation_ValidateParty(LinkBattleRuleset *ruleset, Party *party, PokedexData *pokedex) {
     Pokemon *mon;
     int rule;
     int partyCount;
@@ -266,7 +266,7 @@ int sub_02074CD0(LinkBattleRuleset *ruleset, Party *party, PokedexData *pokedex)
     }
 
     for (i = 0; i < partyCount; ++i) {
-        if (sub_02074C50(species, levels, sp30, rule, i, numLegalMons, partyCount)) {
+        if (BattleRegulation_CanPickMonsWithinLevelTotal(species, levels, sp30, rule, i, numLegalMons, partyCount)) {
             return 0;
         }
     }

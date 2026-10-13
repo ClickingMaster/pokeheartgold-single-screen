@@ -159,7 +159,7 @@ u32 BattleSetup_GetWildTransitionEffect(BattleSetupLite *setup) {
     return BattleStartGetTransition(BattleSetup_GetTransitionAndMusicParam(setup), setup);
 }
 
-BOOL sub_020517F8(u32 param) {
+BOOL BattleIntroConfig_AlwaysTrue(u32 param) {
     return TRUE;
 }
 
@@ -172,7 +172,7 @@ u32 BattleSetup_GetWildBattleMusic(BattleSetupLite *setup) {
             music = 0x465;
         } else if (music == 0x45d) {
             music = 0x466;
-        } else if (music == 0x45e && !sub_020517F8(param)) {
+        } else if (music == 0x45e && !BattleIntroConfig_AlwaysTrue(param)) {
             music = 0x467;
         }
     }

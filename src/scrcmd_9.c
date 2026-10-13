@@ -48,7 +48,7 @@ BOOL ScrCmd_410(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_409(ScriptContext *ctx) {
-    FrontierFieldSystem_0204A810(&ctx->fieldSystem->frontierFsys);
+    FrontierFieldSystem_AssertCleared(&ctx->fieldSystem->frontierFsys);
     return FALSE;
 }
 
@@ -77,25 +77,25 @@ BOOL ScrCmd_412(ScriptContext *ctx) {
         ResetSystem();
         break;
     case 3:
-        sub_0204A698(Save_BattleTowerChallenge_Get(ctx->fieldSystem->saveData));
+        FrontierFieldSystem_ClearSavedChallenge(Save_BattleTowerChallenge_Get(ctx->fieldSystem->saveData));
         break;
     case 4:
-        *result = sub_0204A6A0(Save_BattleTowerChallenge_Get(ctx->fieldSystem->saveData));
+        *result = FrontierFieldSystem_GetSavedChallenge(Save_BattleTowerChallenge_Get(ctx->fieldSystem->saveData));
         break;
     case 5:
-        sub_0204A6A8(ctx->fieldSystem);
+        FrontierFieldSystem_SetReturnWarp(ctx->fieldSystem);
         break;
     case 6:
-        sub_0204A6E8(ctx->fieldSystem);
+        FrontierFieldSystem_ClearReturnWarpFlag(ctx->fieldSystem);
         break;
     case 8: // unused
-        *result = sub_0204A6F8(ctx->fieldSystem->saveData, arg);
+        *result = FrontierFieldSystem_GetWinStreak(ctx->fieldSystem->saveData, arg);
         break;
     case 9:
-        *result = FrontierFieldSystem_0204B120(NULL, ctx->fieldSystem->saveData, 2);
+        *result = FrontierFieldSystem_WifiRankAction(NULL, ctx->fieldSystem->saveData, 2);
         break;
     case 10:
-        *result = FrontierFieldSystem_0204B120(NULL, ctx->fieldSystem->saveData, 0);
+        *result = FrontierFieldSystem_WifiRankAction(NULL, ctx->fieldSystem->saveData, 0);
         break;
     case 11:
         sub_0204A730(ctx->fieldSystem->saveData, arg);
@@ -104,7 +104,7 @@ BOOL ScrCmd_412(ScriptContext *ctx) {
         *result = sub_0204A750(ctx->fieldSystem->saveData);
         break;
     case 14:
-        *result = sub_0204A764(ctx->fieldSystem->saveData);
+        *result = FrontierFieldSystem_ForfeitSavedChallenge(ctx->fieldSystem->saveData);
         break;
     case 15:
         *result = Save_BattleRoomDownload_HasTrainers(ctx->fieldSystem->saveData);
@@ -114,32 +114,32 @@ BOOL ScrCmd_412(ScriptContext *ctx) {
         return TRUE;
     case 30:
         unk = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-        FrontierFieldSystem_0204AA58(frontierFsys, ctx->taskman, unk);
+        FrontierFieldSystem_StartPartySelect(frontierFsys, ctx->taskman, unk);
         return TRUE;
     case 31:
         unk = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-        *result = FrontierFieldSystem_0204AA78(frontierFsys, unk, ctx->fieldSystem->saveData);
+        *result = FrontierFieldSystem_ReadPartySelection(frontierFsys, unk, ctx->fieldSystem->saveData);
         break;
     case 32:
         *result = FrontierFieldSystem_PartyHasDuplicateSpeciesOrItems(frontierFsys, ctx->fieldSystem->saveData);
         break;
     case 35:
-        *result = FrontierFieldSystem_0204AC7C(frontierFsys);
+        *result = FrontierFieldSystem_HasWonSet(frontierFsys);
         break;
     case 37: // unused
-        FrontierFieldSystem_0204AD04(frontierFsys, ctx->fieldSystem->saveData);
+        FrontierFieldSystem_RecordSetLost(frontierFsys, ctx->fieldSystem->saveData);
         break;
     case 38: // unused
-        FrontierFieldSystem_0204AE20(frontierFsys, ctx->fieldSystem->saveData);
+        FrontierFieldSystem_RecordSetWon(frontierFsys, ctx->fieldSystem->saveData);
         break;
     case 39:
-        FrontierFieldSystem_0204AF2C(frontierFsys);
+        FrontierFieldSystem_SaveChallenge(frontierFsys);
         break;
     case 56:
-        FrontierFieldSystem_0204AFE0(frontierFsys);
+        FrontierFieldSystem_GenerateStatTrainers(frontierFsys);
         break;
     case 41: // unused
-        *result = FrontierFieldSystem_0204B044(frontierFsys, arg);
+        *result = FrontierFieldSystem_GetTrainerOverworld(frontierFsys, arg);
         break;
     case 43:
         *result = FrontierFieldSystem_GetBattleTowerMode(frontierFsys);
@@ -169,13 +169,13 @@ BOOL ScrCmd_412(ScriptContext *ctx) {
         *result = frontierFsys->partyMonIndexes[arg];
         break;
     case 54:
-        *result = FrontierFieldSystem_0204B120(frontierFsys, ctx->fieldSystem->saveData, 1);
+        *result = FrontierFieldSystem_WifiRankAction(frontierFsys, ctx->fieldSystem->saveData, 1);
         break;
     case 55:
         *result = FrontierFieldSystem_0204A2A8(frontierFsys, arg);
         break;
     case 57:
-        *result = FrontierFieldSystem_0204B258(frontierFsys, ctx->fieldSystem->saveData);
+        *result = FrontierFieldSystem_InitChallengeRandom(frontierFsys, ctx->fieldSystem->saveData);
         break;
     case 100:
         if (frontierFsys == NULL) {
@@ -208,13 +208,13 @@ BOOL ScrCmd_413(ScriptContext *ctx) {
 
 BOOL ScrCmd_414(ScriptContext *ctx) {
     u16 *unk = ScriptGetVarPointer(ctx);
-    *unk = sub_020672D8(ctx->fieldSystem->saveData);
+    *unk = BattleTower_ClaimRecordMilestone(ctx->fieldSystem->saveData);
     return FALSE;
 }
 
 BOOL ScrCmd_415(ScriptContext *ctx) {
     u16 *unk = ScriptGetVarPointer(ctx);
-    *unk = sub_02067398(ctx->fieldSystem->saveData);
+    *unk = BattleTower_GetRecordMilestone(ctx->fieldSystem->saveData);
     return FALSE;
 }
 

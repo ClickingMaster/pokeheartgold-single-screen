@@ -2481,7 +2481,7 @@ BOOL ScrCmd_229(ScriptContext *ctx) {
 BOOL ScrCmd_230(ScriptContext *ctx) {
     struct UnkStruct_ScrCmd230 **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     struct UnkStruct_ScrCmd230 *work = *p_work;
-    CallTask_020508B8(ctx->fieldSystem->taskman, &work->unk_30, 5);
+    CallTask_LinkBattle(ctx->fieldSystem->taskman, &work->unk_30, 5);
     Heap_Free(work);
     *p_work = NULL;
     return TRUE;
@@ -4841,7 +4841,7 @@ BOOL ScrCmd_722(ScriptContext *ctx) {
     u16 sp8 = ScriptReadHalfword(ctx);
     u16 r4 = ScriptReadHalfword(ctx);
     u16 sp4 = ScriptReadHalfword(ctx);
-    sub_020977CC(ctx->fieldSystem, r7, r6, sp8, r4, sp4);
+    CallTask_MagnetTrainRide(ctx->fieldSystem, r7, r6, sp8, r4, sp4);
     return TRUE;
 }
 
@@ -4851,13 +4851,13 @@ BOOL ScrCmd_723(ScriptContext *ctx) {
     u16 sp8 = ScriptReadHalfword(ctx);
     u16 r4 = ScriptReadHalfword(ctx);
     u16 sp4 = ScriptReadHalfword(ctx);
-    sub_020979A8(ctx->fieldSystem, r7, r6, sp8, r4, sp4);
+    CallTask_ShipVoyage(ctx->fieldSystem, r7, r6, sp8, r4, sp4);
     return TRUE;
 }
 
 BOOL ScrCmd_Cinematic(ScriptContext *ctx) {
     u16 scene = ScriptReadHalfword(ctx);
-    sub_02097BE0(ctx->fieldSystem, scene);
+    CallTask_LegendaryCinematic(ctx->fieldSystem, scene);
     return TRUE;
 }
 

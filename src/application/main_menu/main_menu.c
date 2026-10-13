@@ -435,7 +435,7 @@ static u32 MainMenu_NewGame_HandleInput(MainMenuAppData *data) {
     return ret;
 }
 
-static u32 ov74_02227580(MainMenuAppData *data) {
+static u32 MainMenu_AlwaysZero(MainMenuAppData *data) {
     return 0;
 }
 
@@ -1376,7 +1376,7 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
         *state = 1;
         break;
     case 1:
-        if (ov74_02227580(data) == 0) { // always 0
+        if (MainMenu_AlwaysZero(data) == 0) { // always 0
             *state = 3;
         } else {
             MainMenuUtil_StartFade(1, 2, state, 8);

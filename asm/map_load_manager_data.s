@@ -335,11 +335,11 @@
 	.public MapLoadManager_Scroll
 	.public TileIndex_ToMatrixIndex
 	.public TileCoords_ToIndex
-	.public ov01_021F5A30
+	.public MapLoadManager_GetMatrixIndexFromTile
 	.public Quadrant_ToMapSlot
 	.public TileIndex_Step
 	.public MapSlot_Step
-	.public ov01_021F5B24
+	.public MapLoadManager_UpdateCurrentMapSlot
 	.public Direction_GetOpposite
 	.public MapLoadManager_FindOppositeSlot
 	.public MapLoadManager_StartQueuedSlot
@@ -394,7 +394,7 @@
 	.public MapLoadManager_SwapMaps
 	.public TileIndex_ToMatrixIndex
 	.public TileCoords_ToIndex
-	.public ov01_021F5A30
+	.public MapLoadManager_GetMatrixIndexFromTile
 	.public Quadrant_ToMapSlot
 	.public MapSlot_Step
 	.public Direction_GetOpposite

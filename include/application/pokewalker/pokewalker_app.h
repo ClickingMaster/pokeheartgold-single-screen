@@ -271,7 +271,7 @@ void PokewalkerApp_LoadTilemap(PokewalkerApp *app, int bgId, int member);
 void PokewalkerApp_StartLink(PokewalkerApp *app);
 void PokewalkerApp_BuildUploadData(PokewalkerApp *app);
 void PokewalkerApp_BuildSendStrollData(PokewalkerApp *app);
-void ov112_021E7DC0(PokewalkerApp *app);
+void PokewalkerApp_BuildOwnRecord(PokewalkerApp *app);
 void PokewalkerApp_BuildUploadImage(PokewalkerApp *app, u8 *dst);
 void PokewalkerApp_PickRouteMons(PokewalkerMon *mons, u16 *steps, u8 *chances, int courseId, u8 *chosen);
 void PokewalkerApp_ApplyAdvantageTypes(const u8 *types, BoxPokemon *boxMon, u16 *steps);
@@ -299,7 +299,7 @@ void PokewalkerApp_DrawSpindaSpots(u8 *picture, const u8 *mask, u32 personality,
 void PokewalkerApp_DrawSpindaSpotsOnPicture(void *picture, const void *mask, u32 personality);
 void PokewalkerApp_AddWindowBank(PokewalkerApp *app, int bank);
 void PokewalkerApp_RemoveWindowBank(PokewalkerApp *app, int bank);
-void ov112_021E9C94(PokewalkerApp *app);
+void PokewalkerApp_OnModeChangeDummy(PokewalkerApp *app);
 void PokewalkerApp_LoadStrings(PokewalkerApp *app);
 void PokewalkerApp_FreeStrings(PokewalkerApp *app);
 void PokewalkerApp_PrintExit(PokewalkerApp *app, int window);

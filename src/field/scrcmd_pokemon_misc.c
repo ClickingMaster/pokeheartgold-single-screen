@@ -987,7 +987,7 @@ static LocalMapObject *FriendshipRoom_CreateStatueObject(MapObjectManager *mapOb
     MapObject_SetEventFlag(mapObj, 0);
     MapObject_SetScriptID(mapObj, 0);
     MapObject_SetParam(mapObj, 0, 2);
-    sub_02069F0C(mapObj, species, (u8)form, FALSE, spriteId);
+    FollowMon_SetObjectMon(mapObj, species, (u8)form, FALSE, spriteId);
     MapObject_SetXRange(mapObj, -1);
     MapObject_SetYRange(mapObj, -1);
     MapObject_SetFlagsBits(mapObj, MAPOBJECTFLAG_UNK30);

@@ -154,7 +154,7 @@ void BattleRoomResults_PrintLeaderNames(BattleRoomResults *results);
 void BattleRoomResults_PrintPageNumber(BattleRoomResults *results);
 void BattleRoomResults_PrintLeadersScreen(BattleRoomResults *results);
 void BattleRoomResults_PrintLeaderInfo(BattleRoomResults *results, int leader);
-void ov67_021E681C(BattleRoomResults *results);
+void BattleRoomResults_LeadersDummy(BattleRoomResults *results);
 void BattleRoomResults_InitSprites(BattleRoomResults *results);
 void BattleRoomResults_FreeSprites(BattleRoomResults *results);
 void BattleRoomResults_UpdateSprites(BattleRoomResults *results);
@@ -281,7 +281,7 @@ BOOL BattleRoomResults_SetupScreens(BattleRoomResults *results) {
         } else {
             BattleRoomResults_LoadLeaders(results);
             BattleRoomResults_PrintLeadersScreen(results);
-            ov67_021E681C(results);
+            BattleRoomResults_LeadersDummy(results);
             BattleRoomResults_CreateGridInput(results);
         }
         break;
@@ -759,7 +759,7 @@ void BattleRoomResults_PrintLeaderInfo(BattleRoomResults *results, int leader) {
     results->infoWindowSet ^= 1;
 }
 
-void ov67_021E681C(BattleRoomResults *results) {
+void BattleRoomResults_LeadersDummy(BattleRoomResults *results) {
 }
 
 #pragma force_active on

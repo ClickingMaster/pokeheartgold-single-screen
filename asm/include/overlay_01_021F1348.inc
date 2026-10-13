@@ -45,7 +45,7 @@
 .public NNS_G3dGetTex
 .public DC_FlushRange
 .public memset
-.public ov01_021EA3B0
+.public AreaLight_ClearMaterialModifyFlags
 .public FieldEffectManager_New
 .public FieldEffectManager_InitAnimManagerList
 .public FieldEffectManager_InitGfx

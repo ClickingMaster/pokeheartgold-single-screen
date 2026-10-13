@@ -161,8 +161,8 @@ void EasyChatApp_SubHandler_ConfirmFinish(EasyChatApp *app, u32 *state);
 void EasyChatApp_SubHandler_ConfirmQuit(EasyChatApp *app, u32 *state);
 BOOL EasyChatApp_HasChanged(EasyChatApp *app);
 BOOL EasyChatApp_IsComplete(EasyChatApp *app);
-void ov102_021E8F5C(u8 *result, u8 a, u8 b);
-u8 ov102_021E8F64(u8 *result);
+void EasyChatYesNo_Set(u8 *result, u8 a, u8 b);
+u8 EasyChatYesNo_GetCursor(u8 *result);
 
 #pragma force_active on
 
@@ -1461,7 +1461,7 @@ void EasyChatApp_SubHandler_ConfirmFinish(EasyChatApp *app, u32 *state) {
     case 0:
         if (EasyChatApp_HasChanged(app) || sub_02090D88(app->args)) {
             if (EasyChatApp_IsComplete(app)) {
-                ov102_021E8F5C(app->unk_70, 1, 0);
+                EasyChatYesNo_Set(app->unk_70, 1, 0);
                 EasyChatAppView_StartCommand(app->view, 21);
                 *state = 1;
             } else {
@@ -1507,7 +1507,7 @@ void EasyChatApp_SubHandler_ConfirmFinish(EasyChatApp *app, u32 *state) {
 void EasyChatApp_SubHandler_ConfirmQuit(EasyChatApp *app, u32 *state) {
     switch (*state) {
     case 0:
-        ov102_021E8F5C(app->unk_70, 1, 1);
+        EasyChatYesNo_Set(app->unk_70, 1, 1);
         EasyChatAppView_StartCommand(app->view, 22);
         *state = 1;
         break;
@@ -1561,12 +1561,12 @@ BOOL EasyChatApp_IsComplete(EasyChatApp *app) {
 
 #pragma force_active reset
 
-void ov102_021E8F5C(u8 *result, u8 a, u8 b) {
+void EasyChatYesNo_Set(u8 *result, u8 a, u8 b) {
     result[0] = b;
     result[1] = a;
 }
 
-u8 ov102_021E8F64(u8 *result) {
+u8 EasyChatYesNo_GetCursor(u8 *result) {
     return result[0];
 }
 
@@ -1660,10 +1660,10 @@ BOOL EasyChatApp_CanScrollWordListDown(EasyChatApp *app) {
     return FALSE;
 }
 
-u32 ov102_021E9084(EasyChatApp *app) {
+u32 EasyChatApp_GetFrame(EasyChatApp *app) {
     return EasyChatArgs_GetFrame(app->args);
 }
 
-u8 ov102_021E9090(EasyChatApp *app) {
-    return ov102_021E8F64(app->unk_70);
+u8 EasyChatApp_GetYesNoCursor(EasyChatApp *app) {
+    return EasyChatYesNo_GetCursor(app->unk_70);
 }

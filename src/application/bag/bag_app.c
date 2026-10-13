@@ -156,7 +156,7 @@ void BagApp_LoadPocketItemNames(BagApp *app);
 void BagApp_AllocItemNameStrings(BagApp *app);
 void BagApp_FreeItemNameStrings(BagApp *app);
 void BagApp_ClampPocketScroll(s16 *scroll, u16 *position, s32 itemCount);
-void ov15_021FA070(s16 *scroll, u16 *position, u32 itemCount, enum HeapID heapID);
+void BagApp_PocketScrollDummy(s16 *scroll, u16 *position, u32 itemCount, enum HeapID heapID);
 s32 BagApp_GetPageItemCount(BagApp *app);
 int BagApp_GetMovingItemPageSlot(BagApp *app);
 void ov15_021FA0D8(BagApp *app);
@@ -304,7 +304,7 @@ BOOL Bag_Init(OverlayManager *man, int *state) {
     BagApp_LoadPocketItemNames(app);
     BagApp_PrintCancelButton(app, FALSE);
     BagApp_ClampPocketScroll(&app->bagView->pockets[app->bagView->pocketIndex].scroll, &app->bagView->pockets[app->bagView->pocketIndex].position, app->bagView->pockets[app->bagView->pocketIndex].itemCount);
-    ov15_021FA070(&app->bagView->pockets[app->bagView->pocketIndex].scroll, &app->bagView->pockets[app->bagView->pocketIndex].position, app->bagView->pockets[app->bagView->pocketIndex].itemCount, HEAP_ID_6);
+    BagApp_PocketScrollDummy(&app->bagView->pockets[app->bagView->pocketIndex].scroll, &app->bagView->pockets[app->bagView->pocketIndex].position, app->bagView->pockets[app->bagView->pocketIndex].itemCount, HEAP_ID_6);
     BagApp_InitSprites(app);
     BagApp_LoadSubScreenLayout(app, 0, BagApp_GetPageItemCount(app), 0);
     BagApp_DrawItemList(app, app->bagView->pockets[app->bagView->pocketIndex].scroll, -1, 0);
@@ -785,7 +785,7 @@ void BagApp_ClampPocketScroll(s16 *scroll, u16 *position, s32 itemCount) {
     }
 }
 
-void ov15_021FA070(s16 *scroll, u16 *position, u32 itemCount, enum HeapID heapID) {
+void BagApp_PocketScrollDummy(s16 *scroll, u16 *position, u32 itemCount, enum HeapID heapID) {
 }
 
 s32 BagApp_GetPageItemCount(BagApp *app) {
@@ -1286,7 +1286,7 @@ BOOL BagApp_RunPocketSwitch(BagApp *app) {
         BagApp_LoadPocketObjPalette(app, app->bagView->pocketIndex);
         BagApp_LoadPocketSubBgPalette(app, 1, app->bagView->pocketIndex);
         BagApp_ClampPocketScroll(&app->bagView->pockets[app->bagView->pocketIndex].scroll, &app->bagView->pockets[app->bagView->pocketIndex].position, app->bagView->pockets[app->bagView->pocketIndex].itemCount);
-        ov15_021FA070(&app->bagView->pockets[app->bagView->pocketIndex].scroll, &app->bagView->pockets[app->bagView->pocketIndex].position, app->bagView->pockets[app->bagView->pocketIndex].itemCount, HEAP_ID_6);
+        BagApp_PocketScrollDummy(&app->bagView->pockets[app->bagView->pocketIndex].scroll, &app->bagView->pockets[app->bagView->pocketIndex].position, app->bagView->pockets[app->bagView->pocketIndex].itemCount, HEAP_ID_6);
         pocketSwitch->stage++;
         return TRUE;
     case 2:
@@ -1872,7 +1872,7 @@ void BagApp_TakeUsedItem(BagApp *app) {
     Pocket_TakeItem(app->bagView->pockets[app->bagView->pocketIndex].slots, app->bagView->pockets[app->bagView->pocketIndex].itemCount, app->bagView->itemId, app->quantity, HEAP_ID_6);
     BagApp_LoadPocketItemNames(app);
     BagApp_ClampPocketScroll(&app->bagView->pockets[app->bagView->pocketIndex].scroll, &app->bagView->pockets[app->bagView->pocketIndex].position, app->bagView->pockets[app->bagView->pocketIndex].itemCount);
-    ov15_021FA070(&app->bagView->pockets[app->bagView->pocketIndex].scroll, &app->bagView->pockets[app->bagView->pocketIndex].position, app->bagView->pockets[app->bagView->pocketIndex].itemCount, HEAP_ID_6);
+    BagApp_PocketScrollDummy(&app->bagView->pockets[app->bagView->pocketIndex].scroll, &app->bagView->pockets[app->bagView->pocketIndex].position, app->bagView->pockets[app->bagView->pocketIndex].itemCount, HEAP_ID_6);
 }
 
 #pragma force_active reset

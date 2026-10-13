@@ -32,20 +32,20 @@ gBattleArcadeEventFuncs: ; 0x0223DCB8
 	.word BattleArcade_Event_GiveBerry
 	.word BattleArcade_Event_GiveItem
 	.word BattleArcade_Event_LevelUp
-	.word ov80_022352BC
+	.word BattleArcade_Event_Sun
 	.word BattleArcade_Event_Rain
 	.word BattleArcade_Event_Sandstorm
-	.word ov80_022352D8
-	.word ov80_022352E0
-	.word ov80_022352E8
+	.word BattleArcade_Event_Hail
+	.word BattleArcade_Event_Fog
+	.word BattleArcade_Event_TrickRoom
 	.word BattleArcade_Event_SpeedUp
 	.word BattleArcade_Event_SpeedDown
 	.word BattleArcade_Event_Random
-	.word ov80_02235314
-	.word ov80_02235318
-	.word ov80_0223531C
-	.word ov80_02235320
-	.word ov80_02235318
+	.word BattleArcade_Event_SwapParties
+	.word BattleArcade_Event_Dummy28
+	.word BattleArcade_Event_Dummy29
+	.word BattleArcade_Event_Dummy30
+	.word BattleArcade_Event_Dummy28
 
     .bss
 

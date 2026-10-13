@@ -45,12 +45,12 @@ static BOOL Task_StartBattle(TaskManager *taskManager);
 static void CallTask_StartBattle(TaskManager *taskManager, BattleSetup *setup);
 static Encounter *Encounter_New(BattleSetup *setup, s32 effect, s32 bgm, u32 *winFlag);
 static void Encounter_Delete(Encounter *encounter);
-static void sub_02050724(BattleSetup *setup, FieldSystem *fieldSystem);
+static void Encounter_CopyResultsToSaveData(BattleSetup *setup, FieldSystem *fieldSystem);
 static BOOL Task_StartEncounter(TaskManager *taskManager);
 static void RecordLinkBattleResult(s32 flag, FieldSystem *fieldSystem);
-static BOOL Task_020508B8(TaskManager *taskManager);
-static BOOL Task_02050960(TaskManager *taskManager);
-static BOOL Task_020509F0(TaskManager *taskManager);
+static BOOL Task_LinkBattle(TaskManager *taskManager);
+static BOOL Task_WifiClubBattle(TaskManager *taskManager);
+static BOOL Task_TrainerHouseBattle(TaskManager *taskManager);
 static BOOL Task_WildEncounter(TaskManager *taskManager);
 static BOOL Task_SafariEncounter(TaskManager *taskManager);
 static BOOL Task_BugContestEncounter(TaskManager *taskManager);
@@ -107,7 +107,7 @@ static BOOL Encounter_GetResult(Encounter *encounter, FieldSystem *fieldSystem) 
     return IsBattleResultWin(encounter->setup->winFlag);
 }
 
-static void sub_02050724(BattleSetup *setup, FieldSystem *fieldSystem) {
+static void Encounter_CopyResultsToSaveData(BattleSetup *setup, FieldSystem *fieldSystem) {
     if (!(setup->battleType & BATTLE_TYPE_DEBUG)) {
         BattleSetup_CopyResultsToSaveData(setup, fieldSystem);
     }
@@ -133,7 +133,7 @@ static BOOL Task_StartEncounter(TaskManager *taskManager) { // todo: better name
         (*state)++;
         break;
     case 3:
-        sub_02050724(encounter->setup, fieldSystem);
+        Encounter_CopyResultsToSaveData(encounter->setup, fieldSystem);
         if (encounter->setup->battleType == BATTLE_TYPE_NONE || encounter->setup->battleType == BATTLE_TYPE_ROAMER || encounter->setup->battleType == (BATTLE_TYPE_DOUBLES | BATTLE_TYPE_MULTI | BATTLE_TYPE_AI)) {
             FieldSystem_TryTriggerBillPCFullCall(fieldSystem);
             FieldSystem_TryTriggerOakDexProgressCall(fieldSystem);
@@ -190,7 +190,7 @@ static void RecordLinkBattleResult(s32 flag, FieldSystem *fieldSystem) {
     }
 }
 
-static BOOL Task_020508B8(TaskManager *taskManager) {
+static BOOL Task_LinkBattle(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     Encounter *encounter = TaskManager_GetEnvironment(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
@@ -224,7 +224,7 @@ static BOOL Task_020508B8(TaskManager *taskManager) {
     return FALSE;
 }
 
-static BOOL Task_02050960(TaskManager *taskManager) {
+static BOOL Task_WifiClubBattle(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     Encounter *encounter = TaskManager_GetEnvironment(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
@@ -251,7 +251,7 @@ static BOOL Task_02050960(TaskManager *taskManager) {
     return FALSE;
 }
 
-static BOOL Task_020509F0(TaskManager *taskManager) {
+static BOOL Task_TrainerHouseBattle(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     Encounter *encounter = TaskManager_GetEnvironment(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
@@ -289,9 +289,9 @@ static BOOL Task_020509F0(TaskManager *taskManager) {
     return FALSE;
 }
 
-void CallTask_020509F0(TaskManager *taskManager, BattleSetup *battleSetup, s32 effect, s32 bgm, u32 *winFlag) {
+void CallTask_TrainerHouseBattle(TaskManager *taskManager, BattleSetup *battleSetup, s32 effect, s32 bgm, u32 *winFlag) {
     Encounter *encounter = Encounter_New(battleSetup, effect, bgm, winFlag);
-    TaskManager_Call(taskManager, Task_020509F0, encounter);
+    TaskManager_Call(taskManager, Task_TrainerHouseBattle, encounter);
 }
 
 static WildEncounter *WildEncounter_New(BattleSetup *setup, s32 effect, s32 bgm, u32 *winFlag) {
@@ -366,7 +366,7 @@ static BOOL Task_WildEncounter(TaskManager *taskManager) {
         encounter->state++;
         break;
     case 3:
-        sub_02050724(encounter->setup, fieldSystem);
+        Encounter_CopyResultsToSaveData(encounter->setup, fieldSystem);
         FieldSystem_TryTriggerBillPCFullCall(fieldSystem);
         FieldSystem_TryTriggerOakDexProgressCall(fieldSystem);
 
@@ -420,7 +420,7 @@ static BOOL Task_SafariEncounter(TaskManager *taskManager) {
         (*state)++;
         break;
     case 3:
-        sub_02050724(encounter->setup, fieldSystem);
+        Encounter_CopyResultsToSaveData(encounter->setup, fieldSystem);
         if (encounter->setup->winFlag == BATTLE_OUTCOME_MON_CAUGHT) {
             sub_020270C4(fieldSystem->saveData); // Save_SafariZone_Get?
             Party_GetMonByIndex(encounter->setup->party[BATTLER_ENEMY], 0);
@@ -497,10 +497,10 @@ static BOOL Task_BugContestEncounter(TaskManager *taskManager) {
         (*state)++;
         break;
     case 3:
-        sub_02050724(encounter->setup, fieldSystem);
+        Encounter_CopyResultsToSaveData(encounter->setup, fieldSystem);
         if (!IsBattleResultWin(encounter->setup->winFlag)) {
             Encounter_Delete(encounter);
-            TaskManager_Jump(taskManager, sub_0205298C, NULL);
+            TaskManager_Jump(taskManager, Task_BugContestWarpToJudging, NULL);
             return FALSE;
         }
 
@@ -596,7 +596,7 @@ static BOOL Task_PalParkEncounter(TaskManager *taskManager) {
         (*state)++;
         break;
     case 3:
-        sub_02050724(encounter->setup, fieldSystem);
+        Encounter_CopyResultsToSaveData(encounter->setup, fieldSystem);
         FieldSystem_UpdateCatchingShowResult(fieldSystem, encounter->setup);
         Encounter_AddBattleScore(fieldSystem, encounter->setup);
         (*state)++;
@@ -735,7 +735,7 @@ void SetupAndStartTrainerBattle(TaskManager *taskManager, u32 opponentTrainer1, 
     CallTask_StartEncounter(taskManager, setup, BattleSetup_GetWildTransitionEffect(setup), BattleSetup_GetWildBattleMusic(setup), winFlag);
 }
 
-void CallTask_020508B8(TaskManager *taskManager, void *param1, u32 battleType) {
+void CallTask_LinkBattle(TaskManager *taskManager, void *param1, u32 battleType) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     Encounter *encounter;
     BattleSetup *setup;
@@ -745,7 +745,7 @@ void CallTask_020508B8(TaskManager *taskManager, void *param1, u32 battleType) {
     BattleSetup_InitForLinkBattle(setup, fieldSystem, param1);
 
     encounter = Encounter_New(setup, BattleSetup_GetWildTransitionEffect(setup), BattleSetup_GetWildBattleMusic(setup), NULL);
-    TaskManager_Call(taskManager, Task_020508B8, encounter);
+    TaskManager_Call(taskManager, Task_LinkBattle, encounter);
 }
 
 static u32 Encounter_GetLinkBattleMode(LinkBattleRuleset *ruleset, u32 battleType) {
@@ -766,7 +766,7 @@ static u32 Encounter_GetLinkBattleMode(LinkBattleRuleset *ruleset, u32 battleTyp
     return mode;
 }
 
-void CallTask_02050960(TaskManager *taskManager, s32 target, s32 maxLevel, u32 flag) {
+void CallTask_WifiClubBattle(TaskManager *taskManager, s32 target, s32 maxLevel, u32 flag) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     Encounter *encounter;
     BattleSetup *setup;
@@ -799,7 +799,7 @@ void CallTask_02050960(TaskManager *taskManager, s32 target, s32 maxLevel, u32 f
     encounter = Encounter_New(setup, BattleSetup_GetWildTransitionEffect(setup), BattleSetup_GetWildBattleMusic(setup), NULL);
     encounter->unkC = target;
 
-    TaskManager_Call(taskManager, Task_02050960, encounter);
+    TaskManager_Call(taskManager, Task_WifiClubBattle, encounter);
 }
 
 static BOOL Task_CommClubLinkBattle(TaskManager *taskManager) {
@@ -809,7 +809,7 @@ static BOOL Task_CommClubLinkBattle(TaskManager *taskManager) {
 
     switch (*state) {
     case 0:
-        TaskManager_Call(taskManager, Task_020508B8, encounter);
+        TaskManager_Call(taskManager, Task_LinkBattle, encounter);
         (*state)++;
         break;
     case 1:

@@ -209,7 +209,7 @@ void TrainerHouse_StartBattle(FieldSystem *fieldSystem, u32 trainerNum) {
     u32 effect = BattleSetup_GetWildTransitionEffect(setup);
     u32 bgm = BattleSetup_GetWildBattleMusic(setup);
     u32 *winFlag = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_BATTLE_WIN_FLAG);
-    CallTask_020509F0(fieldSystem->taskman, setup, effect, bgm, winFlag);
+    CallTask_TrainerHouseBattle(fieldSystem->taskman, setup, effect, bgm, winFlag);
 }
 
 static void TrainerHouse_SetNames(TrainerHouseSet *set) {

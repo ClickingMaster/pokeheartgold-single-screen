@@ -118,7 +118,7 @@ BOOL PokewalkerApp_Main(OverlayManager *manager, int *state) {
             *state = 4;
         } else {
             app->mode = app->nextMode;
-            ov112_021E9C94(app);
+            PokewalkerApp_OnModeChangeDummy(app);
         }
         break;
     case 4:
@@ -272,15 +272,15 @@ void PokewalkerApp_StartLink(PokewalkerApp *app) {
 void PokewalkerApp_BuildUploadData(PokewalkerApp *app) {
     PokewalkerApp_BuildUploadImage(app, app->uploadImage);
     PokewalkerApp_BuildStrollData(&app->strollData, app);
-    ov112_021E7DC0(app);
+    PokewalkerApp_BuildOwnRecord(app);
 }
 
 void PokewalkerApp_BuildSendStrollData(PokewalkerApp *app) {
     PokewalkerApp_BuildStrollData(&app->strollData, app);
-    ov112_021E7DC0(app);
+    PokewalkerApp_BuildOwnRecord(app);
 }
 
-void ov112_021E7DC0(PokewalkerApp *app) {
+void PokewalkerApp_BuildOwnRecord(PokewalkerApp *app) {
     void *p;
     PokewalkerApp_BuildTrainerHouseData(app->saveData, app->ownTrainerHouseData);
     app->unk_F1D0 = 1;

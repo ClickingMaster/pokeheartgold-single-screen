@@ -20,6 +20,6 @@ void MapObject_CreateBillboard(LocalMapObject *object, void *work);
 void MapObject_DeleteBillboard(LocalMapObject *object, void *work);
 u32 Facing_GetBillboardStandSequence(u32);
 u32 Facing_GetBillboardWalkSequence(u32);
-u32 ov01_021FA464(u32);
+u32 MapObjectRender_GetFacingSequence(u32);
 
 #endif // POKEHEARTGOLD_FIELD_MAP_OBJECT_RENDER_H

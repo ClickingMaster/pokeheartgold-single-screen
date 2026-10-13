@@ -950,7 +950,7 @@ void PokedexApp_InitAreaListCells(PokedexAppData *pokedexApp) {
 }
 
 // Cells 17-22 show the list windows 8-13: their tilemaps point at the windows' tiles (palette 1).
-void ov18_021F018C(PokedexAppData *pokedexApp) {
+void PokedexApp_SetAreaWindowCellTiles(PokedexAppData *pokedexApp) {
     u16 i;
     u16 *tilemap;
     u16 baseTile;
@@ -965,7 +965,7 @@ void ov18_021F018C(PokedexAppData *pokedexApp) {
     }
 }
 
-void ov18_021F01D4(PokedexAppData *pokedexApp) {
+void PokedexApp_SetFormsWindowCellTiles(PokedexAppData *pokedexApp) {
     u16 i;
     u16 *tilemap;
     u16 baseTile;

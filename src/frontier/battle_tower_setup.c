@@ -360,12 +360,12 @@ u32 BattleTower_GetBattleType(u32 towerMode) {
     return battleType;
 }
 
-void ov80_02236ABC(FrontierFieldSystem *tower, u16 value) {
+void BattleTowerSetup_SetLinkFlag(FrontierFieldSystem *tower, u16 value) {
     tower->unk10_3 = value;
     tower->linkSendBuffer[0] = value;
 }
 
-BOOL ov80_02236AD8(FrontierFieldSystem *tower, const u16 *remote) {
+BOOL BattleTowerSetup_IsLinkFlagSetByEither(FrontierFieldSystem *tower, const u16 *remote) {
     if (tower->unk10_3 || *remote != 0) {
         return TRUE;
     }

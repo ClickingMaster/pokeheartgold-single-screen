@@ -152,7 +152,7 @@ void TrainerCard_LaunchApp(FieldSystem *fieldSystem, TrainerCardAppArgs *a1);
 int Pokedex_LaunchApp(FieldSystem *fieldSystem, PokedexArgs *a1);
 NintendoWifiConnectArgs *NintendoWifiConnection_LaunchApp(FieldSystem *fieldSystem, u16 a1, u16 a2);
 void PokeathlonCourse_LaunchApp(FieldSystem *fieldSystem, PokeathlonCourseArgs *args);
-void sub_0203FC68(FieldSystem *fieldSystem, void *args);
+void MagnetTrainCutscene_LaunchApp(FieldSystem *fieldSystem, void *args);
 void ShipDepartureCutscene_LaunchApp(FieldSystem *fieldSystem, void *args);
 LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *a0, UnkStruct_0203FCC4 *a1, u16 a2, u16 a3, enum HeapID a4);
 void LaunchApp_ViewRankings(FieldSystem *fieldSystem, ViewRankingsArgs *args);

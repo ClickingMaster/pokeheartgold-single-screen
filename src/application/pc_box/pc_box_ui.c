@@ -353,7 +353,7 @@ u32 PCBox_UpdatePartyPanelSlide(PCBoxWork *work) {
     return 1;
 }
 
-u32 ov14_021E813C(PCBoxWork *work) {
+u32 PCBox_UpdatePartyPanelMove(PCBoxWork *work) {
     s8 a[4];
     u32 x;
     BgCellManager_GetCellPosition(work->view->panels, 1, &a[3], &a[2]);
@@ -1166,7 +1166,7 @@ int PCBox_WaitPartyPanelAndActionMenuSlide(PCBoxWork *work) {
 
 #pragma force_active reset
 
-void ov14_021E954C(PCBoxWork *work) {
+void PCBox_WaitPartyPanelSlideFunc(PCBoxWork *work) {
     PCBox_WaitPartyPanelSlide(work);
 }
 
@@ -1382,7 +1382,7 @@ u32 PCBox_UpdateDepositDrag(PCBoxWork *work) {
             &coords.pos[0]);
     }
     readyA = PCBox_UpdateActionMenuSlide(work->view->panels);
-    readyB = ov14_021E813C(work);
+    readyB = PCBox_UpdatePartyPanelMove(work);
     readyC = BgCellManager_UpdateCellMove(work->view->panels, 10);
 
     switch (view->subState) {

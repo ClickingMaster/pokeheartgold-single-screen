@@ -15,11 +15,11 @@ typedef struct NightTaskEnv {
     void *destination;
 } NightTaskEnv;
 void LoadAreaOrDungeonLightTxt(u32 archiveId, ModelAttributes *attributes);
-void sub_020979A8(FieldSystem *, u8, u8, u32, u32, u32);
+void CallTask_ShipVoyage(FieldSystem *, u8, u8, u32, u32, u32);
 void ShipDepartureCutscene_LaunchApp(FieldSystem *, void *);
 void CallTask_LeaveOverworld(TaskManager *);
 void CallTask_RestoreOverworldAndFadeIn(TaskManager *);
-void sub_020979EC(FieldSystem *, u8, void *);
-BOOL sub_02097A48(TaskManager *);
-BOOL sub_02097AA0(TaskManager *);
+void CallTask_ShipDepartureCutscene(FieldSystem *, u8, void *);
+BOOL Task_ShipDepartureCutscene(TaskManager *);
+BOOL Task_ShipVoyage(TaskManager *);
 #endif

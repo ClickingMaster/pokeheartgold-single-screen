@@ -73,7 +73,7 @@
 .public AreaLightManager_New
 .public AreaLightManager_Free
 .public AreaLightManager_UpdateActiveTemplate
-.public ov01_021EA3B0
+.public AreaLight_ClearMaterialModifyFlags
 .public LoadAreaOrDungeonLightTxt
 .public ModelAttributes_SetLightVector
 .public ModelAttributes_SetLightColor

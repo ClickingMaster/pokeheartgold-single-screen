@@ -47,7 +47,7 @@ int EasyChatApp_GetWordListCursor(EasyChatApp *app);
 s32 EasyChatApp_GetWordListScroll(EasyChatApp *app);
 BOOL EasyChatApp_CanScrollWordListUp(EasyChatApp *app);
 BOOL EasyChatApp_CanScrollWordListDown(EasyChatApp *app);
-u32 ov102_021E9084(EasyChatApp *app);
-u8 ov102_021E9090(EasyChatApp *app);
+u32 EasyChatApp_GetFrame(EasyChatApp *app);
+u8 EasyChatApp_GetYesNoCursor(EasyChatApp *app);
 
 #endif // POKEHEARTGOLD_EASY_CHAT_APP_INTERNAL_H

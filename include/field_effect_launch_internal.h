@@ -26,12 +26,12 @@ typedef struct GenderTaskEnv {
 } GenderTaskEnv;
 
 void LoadAreaOrDungeonLightTxt(u32 archiveId, ModelAttributes *attributes);
-void sub_020977CC(FieldSystem *fieldSystem, u8 param1, u8 param2, u32 mapId, u32 x, u32 y);
-void sub_0203FC68(FieldSystem *fieldSystem, void *args);
+void CallTask_MagnetTrainRide(FieldSystem *fieldSystem, u8 param1, u8 param2, u32 mapId, u32 x, u32 y);
+void MagnetTrainCutscene_LaunchApp(FieldSystem *fieldSystem, void *args);
 void CallTask_LeaveOverworld(TaskManager *taskManager);
 void CallTask_RestoreOverworldAndFadeIn(TaskManager *taskManager);
-void sub_02097810(FieldSystem *fieldSystem, u8 param, void *destination);
-BOOL sub_02097878(TaskManager *taskManager);
-BOOL sub_020978D0(TaskManager *taskManager);
+void CallTask_MagnetTrainCutscene(FieldSystem *fieldSystem, u8 param, void *destination);
+BOOL Task_MagnetTrainCutscene(TaskManager *taskManager);
+BOOL Task_MagnetTrainRide(TaskManager *taskManager);
 
 #endif

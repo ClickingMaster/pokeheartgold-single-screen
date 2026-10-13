@@ -8,12 +8,12 @@
 	.public TallGrassEffect_Destroy
 	.public TallGrassEffect_Update
 	.public TallGrassEffect_Draw
-	.public ov01_021FF394
-	.public ov01_021FF418
-	.public ov01_021FF424
-	.public ov01_021FF44C
+	.public TallGrassUnusedEffect_Init
+	.public TallGrassUnusedEffect_Destroy
+	.public TallGrassUnusedEffect_Update
+	.public TallGrassUnusedEffect_Draw
 	.public ov01_02209138
-	.public ov01_0220914C
+	.public sTallGrassUnusedEffectTemplate
 	.public ov01_02209160
 	.public ov01_02209178
 	.public ov01_02209190
@@ -23,7 +23,7 @@
 	.include "global.inc"
 
 	.public ov01_02209138
-	.public ov01_0220914C
+	.public sTallGrassUnusedEffectTemplate
 	.public ov01_02209160
 	.public ov01_02209178
 	.public ov01_02209190
@@ -37,12 +37,12 @@ ov01_02209138: ; 0x02209138
 	.word TallGrassEffect_Update
 	.word TallGrassEffect_Draw
 
-ov01_0220914C:
+sTallGrassUnusedEffectTemplate:
 	.word 0x00000028
-	.word ov01_021FF394
-	.word ov01_021FF418
-	.word ov01_021FF424
-	.word ov01_021FF44C
+	.word TallGrassUnusedEffect_Init
+	.word TallGrassUnusedEffect_Destroy
+	.word TallGrassUnusedEffect_Update
+	.word TallGrassUnusedEffect_Draw
 
 ov01_02209160: ; 0x02209160
 	.byte 0x00, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

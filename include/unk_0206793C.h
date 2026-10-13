@@ -10,7 +10,7 @@ void FieldSystem_ClearFollowingTrainer(FieldSystem *fieldSystem);
 void FieldSystem_ResetStateOnWarp(FieldSystem *fieldSystem);
 void FieldSystem_ResetStateOnMapConnection(FieldSystem *fieldSystem);
 void FieldSystem_ResetStateOnFlyWarp(FieldSystem *fieldSystem);
-void sub_02067BA4(FieldSystem *fieldSystem);
+void FieldSystem_ClearSafariAndRandomizeRoamers(FieldSystem *fieldSystem);
 void FieldSystem_ClearSafariSysFlag(FieldSystem *fieldSystem);
 void FieldSystem_RandomizeRoamers(FieldSystem *fieldSystem);
 BOOL FieldEffect_IsActive(UnkStruct_0206793C *unk);

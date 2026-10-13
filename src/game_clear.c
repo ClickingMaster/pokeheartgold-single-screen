@@ -91,11 +91,11 @@ static BOOL Task_GameClear(TaskManager *taskman);
 static void GameClearSave_InitGraphics(FieldSystem *fieldSystem, GameClearWork *env);
 static void GameClearSave_PrintSaving(FieldSystem *fieldSystem, GameClearWork *env);
 static BOOL GameClearSave_IsPrintFinished(GameClearWork *env);
-static void sub_02052E70(GameClearWork *env);
+static void GameClear_FreeSaveMessage(GameClearWork *env);
 static void GameClearSave_PrintSaveStatus(FieldSystem *fieldSystem, GameClearWork *env, int a2);
 static void GameClearSave_Free(FieldSystem *fieldSystem, GameClearWork *env);
 
-BOOL sub_0205298C(TaskManager *taskman) {
+BOOL Task_BugContestWarpToJudging(TaskManager *taskman) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
     u32 *state = TaskManager_GetStatePtr(taskman);
 
@@ -198,7 +198,7 @@ static BOOL Task_GameClear(TaskManager *taskman) {
         if (!env->vsTrainerRed) {
             AddHallOfFameEntry(fieldSystem, env->gameCleared);
         }
-        sub_02052E70(env);
+        GameClear_FreeSaveMessage(env);
         GameClearSave_PrintSaveStatus(fieldSystem, env, writeStatus);
         ++(*state);
         break;
@@ -327,7 +327,7 @@ static BOOL GameClearSave_IsPrintFinished(GameClearWork *env) {
     return DialogBox_IsPrintFinished((u8)env->printerId);
 }
 
-static void sub_02052E70(GameClearWork *env) {
+static void GameClear_FreeSaveMessage(GameClearWork *env) {
     String_Delete(env->windowText);
     WaitingIcon_Delete(env->waitingIcon);
     DialogBox_Clear(&env->window);

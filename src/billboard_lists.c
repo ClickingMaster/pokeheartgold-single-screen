@@ -23,7 +23,7 @@ void BillboardObject_Clear(BillboardObject *object);
 Billboard *Billboard_Create(BillboardCreateParams *params);
 BOOL Billboard_Delete(Billboard *billboard);
 BOOL Billboard_DeleteAllObjects(Billboard *billboard);
-BOOL sub_020238F8(Billboard *billboard);
+BOOL Billboard_HasPendingFree(Billboard *billboard);
 Billboard *BillboardLists_GetFree(void);
 void Billboard_Draw(Billboard *billboard);
 void BillboardObject_LoadResource(BillboardObject *object, BillboardResource *resource);
@@ -210,7 +210,7 @@ BOOL Billboard_DeleteAllObjects(Billboard *billboard) {
     return TRUE;
 }
 
-BOOL sub_020238F8(Billboard *billboard) {
+BOOL Billboard_HasPendingFree(Billboard *billboard) {
     GF_ASSERT(billboard != NULL);
     if (billboard->state == 0) {
         return FALSE;
@@ -218,7 +218,7 @@ BOOL sub_020238F8(Billboard *billboard) {
     return TRUE;
 }
 
-void sub_02023910(void *arg0) {
+void Billboard_ClearPendingFree(void *arg0) {
     Billboard *billboard = arg0;
     if (billboard->state == 2) {
         billboard->state = 0;

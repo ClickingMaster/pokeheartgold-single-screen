@@ -38,7 +38,7 @@
 .public MI_CpuFill8
 .public _s32_div_f
 .public _u32_div_f
-.public ov01_021EA3B0
+.public AreaLight_ClearMaterialModifyFlags
 .public MapPropManager_New
 .public MapPropManager_Free
 .public MapPropManager_Reset
@@ -76,7 +76,7 @@
 .public Bdhc_CancelLoadTask
 .public Bdhc_SetUnloaded
 .public AreaDataManager_GetMapTexture
-.public ov01_021FBA00
+.public AreaDataManager_IsLit
 .public AreaMapAnimation_AddToRenderObj
 .public AreaMapAnimation_RemoveFromRenderObj
 .public AreaMapAnimation_IsLoaded

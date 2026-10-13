@@ -84,8 +84,8 @@ void FrontierMap_DeleteItemIcon(FrontierMap *map, ManagedSprite *sprite);
 void BattleArcadeLink_SendWinStreak(ArcadeContext *ctx);
 void BattleArcadeLink_SendTrainerIds(ArcadeContext *ctx);
 void BattleArcadeLink_SendOpponentMons(ArcadeContext *ctx);
-void ov80_0222BC48(ArcadeContext *ctx, u32 value);
-void ov80_0222BC94(ArcadeContext *ctx, u32 value);
+void BattleArcadeLink_SendValueA(ArcadeContext *ctx, u32 value);
+void BattleArcadeLink_SendValueB(ArcadeContext *ctx, u32 value);
 void BattleArcadeLink_SendPartyMons(ArcadeContext *ctx);
 
 void BattleArcadeData_InitNew(ArcadeContext *ctx);
@@ -102,19 +102,19 @@ void BattleArcade_Event_Freeze(ArcadeContext *ctx, Party *party, int count);
 void BattleArcade_Event_GiveBerry(ArcadeContext *ctx, Party *party, int count);
 void BattleArcade_Event_GiveItem(ArcadeContext *ctx, Party *party, int count);
 void BattleArcade_Event_LevelUp(ArcadeContext *ctx, Party *party, int count);
-void ov80_022352BC(ArcadeContext *ctx);
+void BattleArcade_Event_Sun(ArcadeContext *ctx);
 void BattleArcade_Event_Rain(ArcadeContext *ctx);
 void BattleArcade_Event_Sandstorm(ArcadeContext *ctx);
-void ov80_022352D8(ArcadeContext *ctx);
-void ov80_022352E0(ArcadeContext *ctx);
-void ov80_022352E8(ArcadeContext *ctx);
+void BattleArcade_Event_Hail(ArcadeContext *ctx);
+void BattleArcade_Event_Fog(ArcadeContext *ctx);
+void BattleArcade_Event_TrickRoom(ArcadeContext *ctx);
 void BattleArcade_Event_SpeedUp(ArcadeContext *ctx);
 void BattleArcade_Event_SpeedDown(ArcadeContext *ctx);
 void BattleArcade_Event_Random(ArcadeContext *ctx);
-void ov80_02235314(ArcadeContext *ctx);
-void ov80_02235318(ArcadeContext *ctx);
-void ov80_0223531C(ArcadeContext *ctx);
-void ov80_02235320(ArcadeContext *ctx);
+void BattleArcade_Event_SwapParties(ArcadeContext *ctx);
+void BattleArcade_Event_Dummy28(ArcadeContext *ctx);
+void BattleArcade_Event_Dummy29(ArcadeContext *ctx);
+void BattleArcade_Event_Dummy30(ArcadeContext *ctx);
 
 static inline void BattleArcadeData_AllocContext(void) {
     ArcadeContextStorage *storage = Heap_Alloc(HEAP_ID_FIELD2, sizeof(ArcadeContextStorage));
@@ -714,10 +714,10 @@ u16 BattleArcade_SendBuffer(ArcadeContext *ctx, u32 cmd, u32 value) {
         BattleArcadeLink_SendOpponentMons(ctx);
         break;
     case 3:
-        ov80_0222BC48(ctx, value);
+        BattleArcadeLink_SendValueA(ctx, value);
         break;
     case 4:
-        ov80_0222BC94(ctx, value);
+        BattleArcadeLink_SendValueB(ctx, value);
         break;
     case 5:
         BattleArcadeLink_SendPartyMons(ctx);
@@ -959,7 +959,7 @@ void BattleArcade_Event_LevelUp(ArcadeContext *ctx, Party *party, int count) {
     }
 }
 
-void ov80_022352BC(ArcadeContext *ctx) {
+void BattleArcade_Event_Sun(ArcadeContext *ctx) {
     ctx->weather = 1001;
 }
 
@@ -971,15 +971,15 @@ void BattleArcade_Event_Sandstorm(ArcadeContext *ctx) {
     ctx->weather = 7;
 }
 
-void ov80_022352D8(ArcadeContext *ctx) {
+void BattleArcade_Event_Hail(ArcadeContext *ctx) {
     ctx->weather = 4;
 }
 
-void ov80_022352E0(ArcadeContext *ctx) {
+void BattleArcade_Event_Fog(ArcadeContext *ctx) {
     ctx->weather = 9;
 }
 
-void ov80_022352E8(ArcadeContext *ctx) {
+void BattleArcade_Event_TrickRoom(ArcadeContext *ctx) {
     ctx->weather = 1002;
 }
 
@@ -999,16 +999,16 @@ void BattleArcade_Event_Random(ArcadeContext *ctx) {
     ctx->randomFlag = 1;
 }
 
-void ov80_02235314(ArcadeContext *ctx) {
+void BattleArcade_Event_SwapParties(ArcadeContext *ctx) {
 }
 
-void ov80_02235318(ArcadeContext *ctx) {
+void BattleArcade_Event_Dummy28(ArcadeContext *ctx) {
 }
 
-void ov80_0223531C(ArcadeContext *ctx) {
+void BattleArcade_Event_Dummy29(ArcadeContext *ctx) {
 }
 
-void ov80_02235320(ArcadeContext *ctx) {
+void BattleArcade_Event_Dummy30(ArcadeContext *ctx) {
 }
 
 u32 ov80_02235324(ArcadeContext *ctx) {

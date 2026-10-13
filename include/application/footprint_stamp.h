@@ -391,7 +391,7 @@ void FootprintStamp_FreeTextSprite(FootprintStampTextSprite *text);
 void FootprintStamp_GetTextSize(String *string, int font, int *width, int *tiles);
 void FootprintStamp_UpdateInkGauge(FootprintStamp *work);
 BOOL FootprintStamp_UseInk(FootprintStamp *work, fx32 amount);
-void ov89_0225A468(FootprintStamp *work);
+void FootprintStamp_UpdateDummy(FootprintStamp *work);
 void FootprintStampBoard_Init(FootprintStampBoard *board, void *unk19E0);
 void FootprintStampBoard_Free(FootprintStampBoard *board);
 BOOL FootprintStampBoard_AddStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0);

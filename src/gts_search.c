@@ -146,7 +146,7 @@ int GtsSearch_OpenCountrySelector(GtsApp *app);
 int GtsSearch_HandleCountrySelector(GtsApp *app);
 int GtsSearch_ShowExitPrompt(GtsApp *app);
 int GtsSearch_HandleExitPrompt(GtsApp *app);
-int ov70_0223C928(GtsApp *app);
+int GtsSearch_ReturnToInput(GtsApp *app);
 
 #pragma force_active on
 
@@ -901,7 +901,7 @@ int GtsSearch_HandleExitPrompt(GtsApp *app) {
     return 3;
 }
 
-int ov70_0223C928(GtsApp *app) {
+int GtsSearch_ReturnToInput(GtsApp *app) {
     app->state = GTS_SEARCH_STATE_HANDLE_INPUT;
     return 3;
 }

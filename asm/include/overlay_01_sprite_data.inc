@@ -19,7 +19,7 @@
 .public FollowMonDraw_UpdateLarge
 .public FollowMonDraw_Update
 .public BillboardDraw_UpdatePcWoman
-.public ov01_021F7CE4
+.public BillboardDraw_UpdateTwoSequences
 .public PlayerDraw_Init
 .public PlayerDraw_Delete
 .public PlayerDraw_Pause

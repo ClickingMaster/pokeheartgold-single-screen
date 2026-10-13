@@ -151,7 +151,7 @@ BOOL FollowPlayerState_FollowMonStart(LocalMapObject *object, FollowPlayerMoveme
                 FollowMon_SpawnStepEffects(object);
             }
             if (sub_020623C8(FollowMon_GetMovement(object))) {
-                sub_02069E28(object, (u8)PlayerAvatar_GetFacingDirection(FieldSystem_GetPlayerAvatar(fieldSystem)));
+                FollowMon_SetPendingHop(object, (u8)PlayerAvatar_GetFacingDirection(FieldSystem_GetPlayerAvatar(fieldSystem)));
             }
             return TRUE;
         }
@@ -310,7 +310,7 @@ int FollowPlayerMovement_GetPlayerMovement(LocalMapObject *object) {
 #pragma force_active on
 
 // Steps the following Pokemon onto the player's previous tile, at the player's speed. A pending hop movement of the
-// Pokemon (sub_02069EC0) is played instead, twice (FollowPlayerState_Hop).
+// Pokemon (FollowMon_GetPendingHop) is played instead, twice (FollowPlayerState_Hop).
 BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlayerMovementState *state) {
     u8 nextState;
     u32 x, z, previousX, previousZ, movement;
@@ -327,7 +327,7 @@ BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlaye
 
     playerMovement = FollowMon_GetMovement(object);
     direction = GetDirectionTowards((int)x, (int)z, (int)previousX, (int)previousZ);
-    movement = sub_02069EC0(object);
+    movement = FollowMon_GetPendingHop(object);
     fastMovement = sub_020623C8(playerMovement);
     nextState = 1;
     if (movement) {
@@ -338,7 +338,7 @@ BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlaye
             nextState = 2;
             state->hopCount = 0;
             state->hopFrame = 0;
-            sub_02069E28(object, (u8)PlayerAvatar_GetFacingDirection(avatar));
+            FollowMon_SetPendingHop(object, (u8)PlayerAvatar_GetFacingDirection(avatar));
         } else {
             if (!PlayerAvatar_CheckFlag6(avatar)) {
                 return FALSE;
@@ -349,11 +349,11 @@ BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlaye
             nextState = 2;
             state->hopCount = 0;
             state->hopFrame = 0;
-            sub_02069E28(object, 0);
+            FollowMon_SetPendingHop(object, 0);
         }
     } else if (fastMovement) {
         movement = sub_020623D8(direction);
-        sub_02069E28(object, (u8)PlayerAvatar_GetFacingDirection(avatar));
+        FollowMon_SetPendingHop(object, (u8)PlayerAvatar_GetFacingDirection(avatar));
     } else {
         movement = GetMovementForDirection(direction, (u32)playerMovement);
     }

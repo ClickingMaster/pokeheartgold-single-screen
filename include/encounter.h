@@ -22,7 +22,7 @@ typedef struct WildEncounter {
     BattleSetup *setup;
 } WildEncounter;
 
-void CallTask_020509F0(TaskManager *taskManager, BattleSetup *battleSetup, s32 effect, s32 bgm, u32 *winFlag);
+void CallTask_TrainerHouseBattle(TaskManager *taskManager, BattleSetup *battleSetup, s32 effect, s32 bgm, u32 *winFlag);
 void FieldSystem_StartWildEncounter(FieldSystem *fieldSystem, BattleSetup *setup);
 void FieldSystem_StartForcedWildBattle(FieldSystem *fieldSystem, TaskManager *taskManager, BattleSetup *setup);
 void SetupAndStartWildBattle(TaskManager *taskManager, u16 species, u8 level, u32 *winFlag, BOOL canFlee, BOOL shiny);
@@ -31,8 +31,8 @@ void FieldSystem_StartPalParkEncounter(FieldSystem *fieldSystem, BattleSetup *se
 void SetupAndStartFirstBattle(TaskManager *taskManager, u16 species, u8 level);
 void SetupAndStartTutorialBattle(TaskManager *taskManager);
 void SetupAndStartTrainerBattle(TaskManager *taskManager, u32 opponentTrainer1, u32 opponentTrainer2, u32 followerTrainerNum, u32 a4, u32 a5, enum HeapID heapID, u32 *winFlag);
-void CallTask_020508B8(TaskManager *taskManager, void *param1, u32 battleType);
-void CallTask_02050960(TaskManager *taskManager, s32 target, s32 maxLevel, u32 flag);
+void CallTask_LinkBattle(TaskManager *taskManager, void *param1, u32 battleType);
+void CallTask_WifiClubBattle(TaskManager *taskManager, s32 target, s32 maxLevel, u32 flag);
 void FieldSystem_StartCommClubLinkBattle(FieldSystem *fieldSystem, void *param1, s32 battleType);
 void FieldSystem_StartCommClubLinkBattleWithParty(FieldSystem *fieldSystem, Party *party, s32 battleType);
 

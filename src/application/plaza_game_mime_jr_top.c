@@ -1382,7 +1382,7 @@ void MimeJrTopGame_ShowRivalNames(MimeJrTopApp *app, MimeJrTopGame *game) {
         int n = 0;
         do {
             if (i != game->localIndex) {
-                int flag = ov90_022588A4(&app->roster, i);
+                int flag = PlazaGameRoster_IsSpecialVisitor(&app->roster, i);
                 PlayerProfile *profile = PlazaGameRoster_GetProfile(&app->roster, i);
                 InitWindow(window);
                 s16 *coords = (s16 *)((u8 *)table + game->playerCount * 24 + n * 8);

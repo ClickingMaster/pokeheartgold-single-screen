@@ -473,7 +473,7 @@ void SwalotPlop_LoadSharedData(SwalotPlopApp *app, int heapId) {
         // walks profiles[] and nameFlags[] through a pointer advanced by 4 bytes per player
         do {
             walker->shared.profiles[0] = PlazaGameRoster_GetProfile(roster, i);
-            walker->shared.nameFlags[0] = ov90_022588A4(roster, i);
+            walker->shared.nameFlags[0] = PlazaGameRoster_IsSpecialVisitor(roster, i);
             i++;
             walker = (SwalotPlopApp *)((u8 *)walker + 4);
         } while (i < app->roster.count);
@@ -1240,7 +1240,7 @@ void SwalotPlopFinish_Init(SwalotPlopGfx *gfx, u32 playerCount, u32 localIndex, 
     gfx->finish.counter = 0;
 }
 
-void ov91_0225DBE0(SwalotPlopGfx *gfx, u32 playerCount) {
+void SwalotPlopGfx_FreeDummy1(SwalotPlopGfx *gfx, u32 playerCount) {
 }
 
 void SwalotPlopFinish_Start(SwalotPlopGfx *gfx) {
@@ -2341,9 +2341,9 @@ void SwalotPlopGame_InitGfx(SwalotPlopGame *game, enum HeapID heapId) {
 void SwalotPlopGame_FreeGfx(SwalotPlopGame *game) {
     SwalotPlopCombo_Free(&game->gfx.combo, &game->gfx);
     SwalotPlopPopups_Free(game->gfx.popups, &game->gfx);
-    ov91_0225DBE0(&game->gfx, game->playerCount);
+    SwalotPlopGfx_FreeDummy1(&game->gfx, game->playerCount);
     SwalotPlopIntro_Free(&game->gfx.intro, &game->gfx);
-    ov91_0225FEFC(&game->gfx);
+    SwalotPlopGfx_FreeDummy2(&game->gfx);
     SwalotPlopParticles_Free(&game->gfx, game->gfx.particles);
     SwalotPlopCursor_Free(&game->gfx.cursor);
     SwalotPlopGfx_FreeShotViews(&game->gfx);
@@ -2582,7 +2582,7 @@ void SwalotPlopGfx_LoadSubBgs(SwalotPlopGfx *gfx, NARC *narc, int localIndex, en
 
 #pragma force_active reset
 
-void ov91_0225FEFC(SwalotPlopGfx *gfx) {
+void SwalotPlopGfx_FreeDummy2(SwalotPlopGfx *gfx) {
 }
 
 static inline const NNSG3dResName *GetResNameByIdx(const NNSG3dResDict *dict, u32 idx) {

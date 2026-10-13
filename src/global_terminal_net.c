@@ -45,7 +45,7 @@ void DWC_ClearError(void);
 void DWC_CleanupInet(void);
 void CommState_FreeWfcSession(void);
 u32 BattleRecord_sizeof(void);
-void *sub_0202FC74(void);
+void *BattleRecord_GetProfile2(void);
 void *BattleRecord_GetProfile(void);
 void VsRecorder_EncryptRecord(SaveData *saveData);
 int VsRecorder_SaveRecordNumber(SaveData *saveData, int arg1, int arg2, void *out1, void *out2);
@@ -55,12 +55,12 @@ extern OSHeapHandle sGlobalTerminalNetOsHeap;
 
 BOOL GlobalTerminalNet_SendPendingRequest(GlobalTerminalNet *net);
 BOOL GlobalTerminalNet_PollStatus(GlobalTerminalNet *net);
-BOOL ov39_02227B1C(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
-BOOL ov39_02227B20(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
+BOOL GlobalTerminalNet_CompleteResponse(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
+BOOL GlobalTerminalNet_CompleteVideoUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
 BOOL GlobalTerminalNet_SaveUploadedVideoNumber(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
-BOOL ov39_02227B50(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
-BOOL ov39_02227B54(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
-BOOL ov39_02227B58(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
+BOOL GlobalTerminalNet_CompleteDressUpUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
+BOOL GlobalTerminalNet_CompleteBoxUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
+BOOL GlobalTerminalNet_CompleteError(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
 BOOL GlobalTerminalNet_HandleResponse(GlobalTerminalNet *net);
 void GlobalTerminalNet_PrintMessage(GlobalTerminalNet *net, String *message);
 void GlobalTerminalNet_ShowErrorMessage(GlobalTerminalNet *net, int msgId, int errorNumber);
@@ -364,7 +364,7 @@ BOOL GlobalTerminalNet_RequestVideoUpload(GlobalTerminalNet *net, const void *he
     if (BattleRecord_sizeof() - 4 != 0x1D4C) {
         GF_AssertFail();
     }
-    net->request.video = sub_0202FC74();
+    net->request.video = BattleRecord_GetProfile2();
     VsRecorder_EncryptRecord(net->saveData);
     MI_CpuCopy8(header, BattleRecord_GetProfile(), 0x80);
     net->sendDelay = 60;
@@ -591,10 +591,10 @@ BOOL GlobalTerminalNet_PollStatus(GlobalTerminalNet *net) {
             net->error.command = 0;
             net->error.code = 7;
             net->error.isError = 1;
-            net->completeFunc = ov39_02227B58;
+            net->completeFunc = GlobalTerminalNet_CompleteError;
             break;
         case 8:
-            net->completeFunc = ov39_02227B1C;
+            net->completeFunc = GlobalTerminalNet_CompleteResponse;
             GlobalTerminalNet_HandleResponse(net);
             break;
         case 9:
@@ -602,7 +602,7 @@ BOOL GlobalTerminalNet_PollStatus(GlobalTerminalNet *net) {
             net->error.command = 0;
             net->error.code = GlobalTerminalServer_GetError();
             net->error.isError = 1;
-            net->completeFunc = ov39_02227B58;
+            net->completeFunc = GlobalTerminalNet_CompleteError;
             break;
         }
         net->prevStatus = net->status;
@@ -610,11 +610,11 @@ BOOL GlobalTerminalNet_PollStatus(GlobalTerminalNet *net) {
     return TRUE;
 }
 
-BOOL ov39_02227B1C(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
+BOOL GlobalTerminalNet_CompleteResponse(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
     return TRUE;
 }
 
-BOOL ov39_02227B20(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
+BOOL GlobalTerminalNet_CompleteVideoUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
     return TRUE;
 }
 
@@ -629,15 +629,15 @@ BOOL GlobalTerminalNet_SaveUploadedVideoNumber(GlobalTerminalNet *net, GlobalTer
 
 #pragma force_active reset
 
-BOOL ov39_02227B50(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
+BOOL GlobalTerminalNet_CompleteDressUpUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
     return TRUE;
 }
 
-BOOL ov39_02227B54(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
+BOOL GlobalTerminalNet_CompleteBoxUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
     return TRUE;
 }
 
-BOOL ov39_02227B58(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
+BOOL GlobalTerminalNet_CompleteError(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
     return TRUE;
 }
 
@@ -657,7 +657,7 @@ BOOL GlobalTerminalNet_HandleResponse(GlobalTerminalNet *net) {
         result = GlobalTerminalNet_CheckDressUpUploadResult(net, response);
         net->responseFunc = net->callbacks.onResponse[0];
         if (!result) {
-            net->completeFunc = ov39_02227B50;
+            net->completeFunc = GlobalTerminalNet_CompleteDressUpUploadFailed;
         }
         break;
     case GTS_REQUEST_DRESS_UP_DOWNLOAD:
@@ -668,7 +668,7 @@ BOOL GlobalTerminalNet_HandleResponse(GlobalTerminalNet *net) {
         result = GlobalTerminalNet_CheckBoxUploadResult(net, response);
         net->responseFunc = net->callbacks.onResponse[2];
         if (!result) {
-            net->completeFunc = ov39_02227B54;
+            net->completeFunc = GlobalTerminalNet_CompleteBoxUploadFailed;
         }
         break;
     case GTS_REQUEST_BOX_DOWNLOAD:
@@ -687,7 +687,7 @@ BOOL GlobalTerminalNet_HandleResponse(GlobalTerminalNet *net) {
         result = GlobalTerminalNet_CheckVideoUploadResult(net, response);
         net->responseFunc = net->callbacks.onResponse[6];
         if (!result) {
-            net->completeFunc = ov39_02227B20;
+            net->completeFunc = GlobalTerminalNet_CompleteVideoUploadFailed;
         } else {
             net->completeFunc = GlobalTerminalNet_SaveUploadedVideoNumber;
         }

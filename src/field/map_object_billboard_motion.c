@@ -144,7 +144,7 @@ void BillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard, s8 *w
 void BillboardDraw_UpdatePcWoman(void *object);
 void BillboardMotion_PcWomanStand(void *object, void *billboard, const s8 *work, int facing);
 void BillboardMotion_PcWomanBow(void *object, void *billboard, const s8 *work, int facing);
-void ov01_021F7CE4(void *object);
+void BillboardDraw_UpdateTwoSequences(void *object);
 void PlayerDraw_Init(void *object);
 void PlayerDraw_Delete(void *object);
 void PlayerDraw_Pause(void *object);
@@ -161,8 +161,8 @@ void PlayerBillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard,
 void PlayerBillboardMotion_Run(void *object, void *billboard, const s8 *work, int facing);
 void PlayerDraw_UpdateCycling(void *object);
 void PlayerBillboardMotion_CyclingStand(void *object, void *billboard, HeldMotionWork *work, int facing);
-void ov01_021F8400(void *object, void *billboard, const s8 *work, int facing);
-void ov01_021F847C(void *object, void *billboard, const s8 *work, int facing);
+void PlayerBillboardMotion_CyclingAnimateHalfSpeed(void *object, void *billboard, const s8 *work, int facing);
+void PlayerBillboardMotion_CyclingAnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing);
 void PlayerDraw_UpdateFishing(void *object);
 void PlayerBillboardMotion_FishingIdle(void *object, void *billboard, const s8 *work, int facing);
 void PlayerBillboardMotion_FishingCast(void *object, void *billboard, const s8 *work, int facing);
@@ -170,8 +170,8 @@ void PlayerBillboardMotion_FishingBite(void *object, void *billboard, void *work
 void PlayerBillboardMotion_FishingReel(void *object, void *billboard, const s8 *work, int facing);
 void PlayerDraw_SetFishingOffset(void *object, void *billboard, u32 facing);
 void PlayerDraw_UpdateLadder(void *object);
-void ov01_021F8804(void *object, void *billboard, const s8 *work, int facing);
-void ov01_021F883C(void *object, void *billboard, const s8 *work, int facing);
+void PlayerBillboardMotion_Ladder0(void *object, void *billboard, const s8 *work, int facing);
+void PlayerBillboardMotion_Ladder1(void *object, void *billboard, const s8 *work, int facing);
 void PlayerDraw_SetLadderOffset(void *object, void *billboard, u32 facing);
 void PlayerDraw_UpdateSurfing(void *object);
 void PlayerDraw_UpdateUseHmOrSaving(void *object);
@@ -708,7 +708,7 @@ void BillboardMotion_PcWomanBow(void *object, void *billboard, const s8 *work, i
 }
 
 #pragma force_active on
-void ov01_021F7CE4(void *object) {
+void BillboardDraw_UpdateTwoSequences(void *object) {
     typedef struct {
         s8 unk0;
         s8 unk1;
@@ -972,8 +972,8 @@ void PlayerBillboardMotion_CyclingStand(void *object, void *billboard, HeldMotio
 }
 #pragma force_active reset
 
-void ov01_021F8400(void *object, void *billboard, const s8 *work, int facing) {
-    u32 sequence = ov01_021FA464(facing);
+void PlayerBillboardMotion_CyclingAnimateHalfSpeed(void *object, void *billboard, const s8 *work, int facing) {
+    u32 sequence = MapObjectRender_GetFacingSequence(facing);
     if (facing != work[0] || work[2] != 0) {
         BillboardObject_SetSequence(billboard, sequence);
         BillboardObject_SetSequenceFrame(billboard, 0);
@@ -989,8 +989,8 @@ void ov01_021F8400(void *object, void *billboard, const s8 *work, int facing) {
     }
 }
 
-void ov01_021F847C(void *object, void *billboard, const s8 *work, int facing) {
-    u32 sequence = ov01_021FA464(facing);
+void PlayerBillboardMotion_CyclingAnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing) {
+    u32 sequence = MapObjectRender_GetFacingSequence(facing);
     if (facing != work[0]) {
         BillboardObject_SetSequence(billboard, sequence);
         BillboardObject_SetSequenceFrame(billboard, 0);
@@ -1141,11 +1141,11 @@ void PlayerDraw_UpdateLadder(void *object) {
 }
 #pragma force_active reset
 
-void ov01_021F8804(void *object, void *billboard, const s8 *work, int facing) {
+void PlayerBillboardMotion_Ladder0(void *object, void *billboard, const s8 *work, int facing) {
     BillboardMotion_Loop(billboard, work, facing, 0, gPlayerLadderSequences);
 }
 
-void ov01_021F883C(void *object, void *billboard, const s8 *work, int facing) {
+void PlayerBillboardMotion_Ladder1(void *object, void *billboard, const s8 *work, int facing) {
     BillboardMotion_Loop(billboard, work, facing, 1, gPlayerLadderSequences);
 }
 

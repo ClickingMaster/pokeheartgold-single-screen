@@ -2141,7 +2141,7 @@
 	.public Gts_VBlankCB
 	.public Gts_SetGfxBanks
 	.public Gts_InitData
-	.public ov70_0223887C
+	.public Gts_ExitDummy
 	.public Gts_SetupWindow0
 	.public Gts_InitObjTransfer
 	.public Gts_InitSpriteResources
@@ -2187,7 +2187,7 @@
 	.public GtsMainMenu_CreateStrings
 	.public GtsMainMenu_DeleteStrings
 	.public GtsMainMenu_WaitEnterAnim
-	.public ov70_02239698
+	.public GtsMainMenu_WaitTextBeforeFadeIn
 	.public GtsMainMenu_StartFadeIn
 	.public GtsMainMenu_WaitFadeIn
 	.public GtsMainMenu_WaitFadeIn2
@@ -2307,7 +2307,7 @@
 	.public GtsSearch_HandleCountrySelector
 	.public GtsSearch_ShowExitPrompt
 	.public GtsSearch_HandleExitPrompt
-	.public ov70_0223C928
+	.public GtsSearch_ReturnToInput
 	.public GtsSearch_PrintSearchFailed
 	.public GtsSearch_WaitText
 	.public GtsSearch_WaitTextAndPause
@@ -2392,8 +2392,8 @@
 	.public GtsWanted_Start
 	.public GtsWanted_HandleInput
 	.public GtsWanted_OpenSpeciesSelector
-	.public ov70_0223EDCC
-	.public ov70_0223EDD8
+	.public GtsWanted_InvalidState4
+	.public GtsWanted_InvalidState5
 	.public Gts_SetFixedGender
 	.public GtsWanted_HandleSpeciesSelector
 	.public GtsWanted_AskGender
@@ -2790,7 +2790,7 @@
 	.text
 	.public GtsServer_Exit
 	.public GtsServer_GetResult
-	.public ov70_0223887C
+	.public Gts_ExitDummy
 	.public Gts_DestroyListMenu
 	.public Gts_SetState
 	.public Gts_GetWifiIconLevel
@@ -2804,7 +2804,7 @@
 	.public GtsMainMenu_FreeBgs
 	.public GtsMainMenu_DeleteCursor
 	.public GtsMainMenu_DeleteStrings
-	.public ov70_02239698
+	.public GtsMainMenu_WaitTextBeforeFadeIn
 	.public GtsMainMenu_WaitFadeIn
 	.public GtsMainMenu_WaitFadeIn2
 	.public GtsMainMenu_StartExitAnim
@@ -2813,15 +2813,15 @@
 	.public GtsSummary_Start
 	.public GtsSearchResult_FreeBgs
 	.public GtsSearchResult_DeleteMonSprite
-	.public ov70_0223C928
+	.public GtsSearch_ReturnToInput
 	.public GtsSelectMon_StepIndex
 	.public GtsSelectMon_SetSummaryLevel
 	.public Gts_IsPartyBox
 	.public GtsSelectMon_CanOffer
 	.public Gts_MonHoldsMail
 	.public GtsWanted_DeleteSprites
-	.public ov70_0223EDCC
-	.public ov70_0223EDD8
+	.public GtsWanted_InvalidState4
+	.public GtsWanted_InvalidState5
 	.public ov70_0223F948
 	.public ov70_0223F960
 	.public GtsTransaction_Idle
@@ -3467,7 +3467,7 @@ sGtsScreens: ; 0x022463EC
 
 sGtsMainMenuStates: ; 0x02246464
 	.word GtsMainMenu_WaitEnterAnim
-	.word ov70_02239698
+	.word GtsMainMenu_WaitTextBeforeFadeIn
 	.word GtsMainMenu_StartFadeIn
 	.word GtsMainMenu_WaitFadeIn
 	.word GtsMainMenu_WaitFadeIn2
@@ -3550,7 +3550,7 @@ sGtsSearchStates: ; 0x02246528
 	.word GtsSearch_WaitTextAndPause
 	.word GtsSearch_ShowExitPrompt
 	.word GtsSearch_HandleExitPrompt
-	.word ov70_0223C928
+	.word GtsSearch_ReturnToInput
 	.word GtsSearch_PrintSearchFailed
 	.word GtsSearch_ServerError
 	.word GtsSearch_ServerErrorExit
@@ -3588,8 +3588,8 @@ sGtsWantedStates: ; 0x02246614
 	.word GtsWanted_HandleInput
 	.word GtsWanted_FadeOut
 	.word GtsWanted_OpenSpeciesSelector
-	.word ov70_0223EDCC
-	.word ov70_0223EDD8
+	.word GtsWanted_InvalidState4
+	.word GtsWanted_InvalidState5
 	.word GtsWanted_HandleSpeciesSelector
 	.word GtsWanted_AskGender
 	.word GtsWanted_OpenGenderSelector

@@ -63,7 +63,7 @@ int sprintf(char *buf, const char *fmt, ...);
 
 // Not in the public headers yet: other sources still declare these with other parameter types.
 NNSG3dResFileHeader **AreaDataManager_GetMapPropModel(u32 mapPropId, AreaDataManager *areaDataManager);
-BOOL ov01_021FBA00(AreaDataManager *areaDataManager);
+BOOL AreaDataManager_IsLit(AreaDataManager *areaDataManager);
 void Field3dObject_SetXRotation(Field3dObject *object, u16 angle, int axis);
 
 extern const u16 gAreaEdgeColorTableLightKind0[8];
@@ -146,7 +146,7 @@ BuildModelShapes *AreaDataManager_GetBuildModelShapes(AreaDataManager *areaDataM
     return areaDataManager->buildModelShapes;
 }
 
-BOOL ov01_021FBA00(AreaDataManager *areaDataManager) {
+BOOL AreaDataManager_IsLit(AreaDataManager *areaDataManager) {
     if (areaDataManager->header.lightKind != 0) {
         return TRUE;
     }

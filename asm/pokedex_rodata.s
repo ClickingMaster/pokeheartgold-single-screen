@@ -1510,8 +1510,8 @@
 	.public PokedexApp_SetSearchSummaryVisible
 	.public PokedexApp_ClearSearchEntryWindows
 	.public PokedexApp_InitAreaListCells
-	.public ov18_021F018C
-	.public ov18_021F01D4
+	.public PokedexApp_SetAreaWindowCellTiles
+	.public PokedexApp_SetFormsWindowCellTiles
 	.public PokedexApp_SetupAreaWindows
 	.public PokedexApp_FreeAreaWindows
 	.public PokedexApp_DrawTimeOfDayLabel
@@ -1571,8 +1571,8 @@
 	.public PokedexApp_ScrollListIconsForward
 	.public PokedexApp_LoadMonPicResources
 	.public PokedexApp_UnloadMonPicResources
-	.public ov18_021F193C
-	.public ov18_021F19EC
+	.public PokedexApp_LoadFormsSpriteResources
+	.public PokedexApp_UnloadFormsSpriteResources
 	.public PokedexApp_CreateMonPicSprites
 	.public PokedexApp_LoadMonPicToSprite
 	.public PokedexApp_SwapMonPic

@@ -264,7 +264,7 @@ typedef struct PlazaGameResults {
 void PlazaGameRoster_Init(PlazaGameRoster *roster, u32 fromLobby, SaveData *saveData, u8 unkA, PlazaGameArgs *args);
 int PlazaGameRoster_GetIndexOfNetId(const PlazaGameRoster *roster, u32 netId);
 u8 PlazaGameRoster_GetNetId(const PlazaGameRoster *roster, u32 index);
-u32 ov90_022588A4(const PlazaGameRoster *roster, u32 netId);
+u32 PlazaGameRoster_IsSpecialVisitor(const PlazaGameRoster *roster, u32 netId);
 PlayerProfile *PlazaGameRoster_GetProfile(const PlazaGameRoster *roster, u32 netId);
 PlazaGameEntry *PlazaGameEntry_NewSwalotPlop(const PlazaGameRoster *roster, enum HeapID heapId);
 PlazaGameEntry *PlazaGameEntry_NewMimeJrTop(const PlazaGameRoster *roster, enum HeapID heapId);

@@ -136,7 +136,7 @@ void MysteryGiftComm_StartParent(void *owner, void *a1, void *a2) {
     }
 }
 
-int ov74_02229D0C(void *a0, void *a1) {
+int MysteryGiftWireless_SendCard(void *a0, void *a1) {
     return Comm_SendParentCommandNoCopy(0x16, a0, a1);
 }
 

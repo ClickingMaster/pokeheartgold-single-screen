@@ -120,7 +120,7 @@ typedef struct UnownReportInfoPage {
     UnownReportTextBlock right;
 } UnownReportInfoPage;
 
-void ov113_021E59F8();
+void UnownReport_ResetDisplay();
 int UnownReport_GetSeenPunctuationForms(Pokedex *pokedex, u8 *forms);
 void UnownReport_InitData(UnownReportApp *app);
 void UnownReport_RestoreMenuInputState(UnownReportApp *app);
@@ -192,7 +192,7 @@ BOOL UnownReport_Init(OverlayManager *man, int *state) {
 
     switch (*state) {
     case 0:
-        ov113_021E59F8(man);
+        UnownReport_ResetDisplay(man);
         Heap_Create(HEAP_ID_3, HEAP_ID_152, 0x20000);
         app = OverlayManager_CreateAndGetData(man, sizeof(UnownReportApp), HEAP_ID_152);
         MI_CpuFill8(app, 0, sizeof(UnownReportApp));
@@ -241,7 +241,7 @@ BOOL UnownReport_Exit(OverlayManager *man, int *state) {
     if (!UnownReport_Teardown(app)) {
         return FALSE;
     }
-    ov113_021E59F8();
+    UnownReport_ResetDisplay();
     UnownReport_RestoreMenuInputState(app);
     OverlayManager_FreeData(man);
     Heap_Destroy(HEAP_ID_152);
@@ -249,7 +249,7 @@ BOOL UnownReport_Exit(OverlayManager *man, int *state) {
 }
 
 // Called with the overlay manager from UnownReport_Init and without arguments from UnownReport_Exit
-void ov113_021E59F8(void) {
+void UnownReport_ResetDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();

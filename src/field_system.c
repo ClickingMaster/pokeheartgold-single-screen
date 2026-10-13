@@ -183,7 +183,7 @@ static BOOL FieldSystem_Main(FieldSystem *fieldSystem) {
     FieldSystem_Control(fieldSystem);
     if (FieldSystem_RunTaskFrame(fieldSystem) == TRUE) {
         if (fieldSystem->mapSystems) {
-            ov01_021F6830(fieldSystem, 0, 0);
+            FieldSystem_SendBottomScreenEvent(fieldSystem, 0, 0);
         }
     }
     if (fieldSystem->processManager->parent) {
@@ -244,14 +244,14 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
                 FieldDrawMapName_Reset(fieldSystem->mapSystems->drawMapNameInfo);
                 FieldSystem_SetAndExecuteSignpostWindowCommand(fieldSystem, MAPSIGNCOMMAND_HIDE);
                 Field_PlayerAvatar_TryLeavePoketchPose(fieldSystem->playerAvatar);
-                ov01_021F6830(fieldSystem, 0, 1);
+                FieldSystem_SendBottomScreenEvent(fieldSystem, 0, 1);
                 break;
             }
             if (gSystem.newKeys & PAD_BUTTON_A) {
                 FieldDrawMapName_Reset(fieldSystem->mapSystems->drawMapNameInfo);
             }
             movementAllowed = 0;
-            if (sub_0203E324()) {
+            if (FieldSystem_GetBottomScreenState()) {
                 movementAllowed = ov35_02259DB8();
             }
             PlayerAvatar_MoveControl(fieldSystem->playerAvatar, fieldSystem->mapLoadManager, -1, fieldInput.newKeys, fieldInput.heldKeys, movementAllowed);
@@ -265,7 +265,7 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
                 FieldSystem_SetAndExecuteSignpostWindowCommand(fieldSystem, MAPSIGNCOMMAND_HIDE);
                 PlayerAvatar_ResetMovement(fieldSystem->playerAvatar);
                 Field_PlayerAvatar_TryLeavePoketchPose(fieldSystem->playerAvatar);
-                ov01_021F6830(fieldSystem, 0, 1);
+                FieldSystem_SendBottomScreenEvent(fieldSystem, 0, 1);
                 if (newEvent != 2) {
                     GearPhoneRingManager_ResetIfActive(fieldSystem->phoneRingManager);
                 }
@@ -274,7 +274,7 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
                     FieldDrawMapName_Reset(fieldSystem->mapSystems->drawMapNameInfo);
                 }
                 u32 flag = 0;
-                if (sub_0203E324()) {
+                if (FieldSystem_GetBottomScreenState()) {
                     flag = ov35_02259DB8();
                 }
                 PlayerAvatar_MoveControl(fieldSystem->playerAvatar, fieldSystem->mapLoadManager, -1, fieldInput.newKeys, fieldInput.heldKeys, flag);
@@ -294,7 +294,7 @@ void FieldSystem_ResumeProcesses() {
     Comm_EnableKeySync();
 }
 
-int sub_0203E324() {
+int FieldSystem_GetBottomScreenState() {
     if (sFieldSysPtr->mapSystems == NULL) {
         return 0;
     }

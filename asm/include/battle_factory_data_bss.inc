@@ -45,8 +45,8 @@
 .public BattleFactoryLink_SendTrainerIds
 .public BattleFactoryLink_SendRentalMons
 .public BattleFactoryLink_SendOpponentMons
-.public ov80_0222B3B0
-.public ov80_0222B3FC
+.public BattleFactoryLink_SendValueA
+.public BattleFactoryLink_SendValueB
 .public BattleFactoryLink_SendPartyMons
 .public BattleFactoryData_Alloc
 .public BattleFactoryData_Init

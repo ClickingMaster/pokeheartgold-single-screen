@@ -405,14 +405,14 @@ void PokedexApp_UnloadMonPicResources(PokedexAppData *pokedexApp) {
 }
 
 // a second Pokemon picture pair (characters 0xC58E-0xC58F), sharing the first pair's cells and animations
-void ov18_021F193C(PokedexAppData *pokedexApp) {
+void PokedexApp_LoadFormsSpriteResources(PokedexAppData *pokedexApp) {
     SpriteSystem_LoadCharResObj(pokedexApp->spriteSystem, pokedexApp->spriteManager, NARC_a_0_0_8, 76, FALSE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC58E);
     SpriteSystem_LoadCharResObj(pokedexApp->spriteSystem, pokedexApp->spriteManager, NARC_a_0_0_8, 76, FALSE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC58F);
     SpriteSystem_LoadPaletteBuffer(pokedexApp->paletteData, PLTTBUF_SUB_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, NARC_a_0_0_8, 75, FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 0xC554);
     SpriteSystem_LoadPaletteBuffer(pokedexApp->paletteData, PLTTBUF_SUB_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, NARC_a_0_0_8, 75, FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 0xC555);
 }
 
-void ov18_021F19EC(PokedexAppData *pokedexApp) {
+void PokedexApp_UnloadFormsSpriteResources(PokedexAppData *pokedexApp) {
     SpriteManager_UnloadCharObjById(pokedexApp->spriteManager, 0xC58E);
     SpriteManager_UnloadCharObjById(pokedexApp->spriteManager, 0xC58F);
     SpriteManager_UnloadPlttObjById(pokedexApp->spriteManager, 0xC554);

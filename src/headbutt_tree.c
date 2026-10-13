@@ -26,7 +26,7 @@ u16 MapCoordToMatrixIndex(FieldSystem *fieldSystem, int coordX, int coordY) {
     return posX + posY * width;
 }
 
-void sub_02054EB0(FieldSystem *fieldSystem, int buildModel, BOOL culled) {
+void FieldSystem_SetBuildModelCulled(FieldSystem *fieldSystem, int buildModel, BOOL culled) {
     MapPropManager *mapPropManager;
     for (u8 i = 0; i < 4; i++) {
         MapLoadManager_GetMapPropManager(i, fieldSystem->mapLoadManager, &mapPropManager);

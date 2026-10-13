@@ -173,8 +173,8 @@ typedef struct FrontierMapBgAnim FrontierMapBgAnim;
 
 FrontierMapTileBlink *FrontierMapTileBlink_Create(BgConfig *bgConfig);
 void FrontierMapTileBlink_Free(FrontierMapTileBlink *blink);
-u32 ov80_022385D8(u32 value);
-u32 ov80_02238610(u32 value);
+u32 FrontierLinkLobby_GetWinStreakStat(u32 value);
+u32 FrontierLinkLobby_GetStreakActiveStat(u32 value);
 
 void FrontierMapSprite_LoadResources(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, PaletteData *paletteData, u16 kind);
 void FrontierMapSprite_UnloadResources(SpriteManager *spriteManager, u32 kind);

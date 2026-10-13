@@ -591,7 +591,7 @@ BOOL FootprintStamp_UseInk(FootprintStamp *work, fx32 amount) {
     return TRUE;
 }
 
-void ov89_0225A468(FootprintStamp *work) {
+void FootprintStamp_UpdateDummy(FootprintStamp *work) {
 }
 
 void FootprintStampBoard_Init(FootprintStampBoard *board, void *unk19E0) {

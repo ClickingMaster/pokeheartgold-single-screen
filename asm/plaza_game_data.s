@@ -6,7 +6,7 @@
 	.public sPlazaGameMimeJrTopSelectionWeights
 	.public PlazaGameRoster_Init
 	.public PlazaGameRoster_GetNetId
-	.public ov90_022588A4
+	.public PlazaGameRoster_IsSpecialVisitor
 	.public PlazaGameRoster_GetProfile
 	.public PlazaGameEntry_Free
 	.public PlazaGameResults_Free

@@ -570,10 +570,10 @@ u16 BattleFactory_SendBuffer(BattleFactoryData *data, u32 command, int value) {
         BattleFactoryLink_SendOpponentMons(data);
         break;
     case 4:
-        ov80_0222B3B0(data, (u8)value);
+        BattleFactoryLink_SendValueA(data, (u8)value);
         break;
     case 5:
-        ov80_0222B3FC(data, (u8)value);
+        BattleFactoryLink_SendValueB(data, (u8)value);
         break;
     case 6:
         BattleFactoryLink_SendPartyMons(data);

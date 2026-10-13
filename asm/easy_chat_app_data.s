@@ -12,7 +12,7 @@
 	.extern EasyChatAppView_Cmd_FocusMenu
 	.extern EasyChatAppView_Cmd_FocusSentence
 	.extern EasyChatAppView_Cmd_OpenCategories
-	.extern ov102_021E9A24
+	.extern EasyChatAppView_Cmd_SwitchMode
 	.extern EasyChatAppView_Cmd_SwitchListMode
 	.extern EasyChatAppView_Cmd_CloseCategories
 	.extern EasyChatAppView_Cmd_OpenWordList
@@ -28,7 +28,7 @@
 	.extern EasyChatAppView_Cmd_ConfirmFinish
 	.extern EasyChatAppView_Cmd_ConfirmQuit
 	.extern EasyChatAppView_Cmd_ShowIncompleteMessage
-	.extern ov102_021EA144
+	.extern EasyChatAppView_Cmd_DrawYesNoCursor
 	.extern EasyChatAppView_Cmd_CloseYesNo
 	.extern EasyChatAppView_Cmd_PressPageUp
 	.extern EasyChatAppView_Cmd_PressPageDown
@@ -99,8 +99,8 @@
 	.public EasyChatApp_SubHandler_ConfirmQuit
 	.public EasyChatApp_HasChanged
 	.public EasyChatApp_IsComplete
-	.public ov102_021E8F5C
-	.public ov102_021E8F64
+	.public EasyChatYesNo_Set
+	.public EasyChatYesNo_GetCursor
 	.public EasyChatApp_GetMenuInputStatePtr
 	.public EasyChatApp_GetType
 	.public ov102_021E8F70
@@ -118,8 +118,8 @@
 	.public EasyChatApp_GetWordListScroll
 	.public EasyChatApp_CanScrollWordListUp
 	.public EasyChatApp_CanScrollWordListDown
-	.public ov102_021E9084
-	.public ov102_021E9090
+	.public EasyChatApp_GetFrame
+	.public EasyChatApp_GetYesNoCursor
 	.public EasyChatAppView_Create
 	.public EasyChatAppView_Delete
 	.public EasyChatAppView_InitCharTransfer
@@ -145,7 +145,7 @@
 	.public EasyChatAppView_Cmd_FocusMenu
 	.public EasyChatAppView_Cmd_FocusSentence
 	.public EasyChatAppView_Cmd_OpenCategories
-	.public ov102_021E9A24
+	.public EasyChatAppView_Cmd_SwitchMode
 	.public EasyChatAppView_Cmd_SwitchListMode
 	.public EasyChatAppView_Cmd_CloseCategories
 	.public EasyChatAppView_Cmd_OpenWordList
@@ -161,7 +161,7 @@
 	.public EasyChatAppView_Cmd_ConfirmFinish
 	.public EasyChatAppView_Cmd_ConfirmQuit
 	.public EasyChatAppView_Cmd_ShowIncompleteMessage
-	.public ov102_021EA144
+	.public EasyChatAppView_Cmd_DrawYesNoCursor
 	.public EasyChatAppView_Cmd_CloseYesNo
 	.public EasyChatAppView_Cmd_PressPageUp
 	.public EasyChatAppView_Cmd_PressPageDown
@@ -234,7 +234,7 @@
 	.public EasyChatCategoryView_Load
 	.public EasyChatCategoryView_DrawCategories
 	.public EasyChatCategoryView_DrawInitials
-	.public ov102_021EB94C
+	.public EasyChatCategoryView_LoadGfxDummy
 	.public EasyChatCategoryView_CreateCursor
 	.public EasyChatCategoryView_SetCursorVisible
 	.public EasyChatCategoryView_MoveCursor
@@ -335,8 +335,8 @@
 	.public EasyChatApp_EndSubHandler
 	.public EasyChatApp_SubHandler_Start
 	.public EasyChatApp_HasChanged
-	.public ov102_021E8F5C
-	.public ov102_021E8F64
+	.public EasyChatYesNo_Set
+	.public EasyChatYesNo_GetCursor
 	.public EasyChatApp_GetMenuInputStatePtr
 	.public EasyChatApp_GetType
 	.public ov102_021E8F70
@@ -354,8 +354,8 @@
 	.public EasyChatApp_GetWordListScroll
 	.public EasyChatApp_CanScrollWordListUp
 	.public EasyChatApp_CanScrollWordListDown
-	.public ov102_021E9084
-	.public ov102_021E9090
+	.public EasyChatApp_GetFrame
+	.public EasyChatApp_GetYesNoCursor
 	.public EasyChatAppView_FreeCharTransfer
 	.public EasyChatAppView_CreateVBlankTask
 	.public EasyChatAppView_MainTask
@@ -371,7 +371,7 @@
 	.public EasyChatAppView_Cmd_SetWordListCursor
 	.public EasyChatAppView_Cmd_HideMessage
 	.public EasyChatAppView_Cmd_ShowIncompleteMessage
-	.public ov102_021EA144
+	.public EasyChatAppView_Cmd_DrawYesNoCursor
 	.public EasyChatAppView_Cmd_PressPageUp
 	.public EasyChatAppView_Cmd_PressPageDown
 	.public EasyChatAppView_Cmd_ReleasePageUp
@@ -405,7 +405,7 @@
 	.public EasyChatMenuView_ShowMainButtons
 	.public EasyChatCategoryView_Create
 	.public EasyChatCategoryView_Delete
-	.public ov102_021EB94C
+	.public EasyChatCategoryView_LoadGfxDummy
 	.public EasyChatCategoryView_StartOpen
 	.public EasyChatCategoryView_StartClose
 	.public EasyChatCategoryView_ResetScrollY
@@ -553,9 +553,9 @@ ov102_021EC788: ; 0x021EC788
 	.word EasyChatAppView_Cmd_ConfirmFinish
 	.word EasyChatAppView_Cmd_ConfirmQuit
 	.word EasyChatAppView_Cmd_ShowIncompleteMessage
-	.word ov102_021EA144
+	.word EasyChatAppView_Cmd_DrawYesNoCursor
 	.word EasyChatAppView_Cmd_CloseYesNo
-	.word ov102_021E9A24
+	.word EasyChatAppView_Cmd_SwitchMode
 	.word EasyChatAppView_Cmd_SwitchListMode
 	.word EasyChatAppView_Cmd_PressPageUp
 	.word EasyChatAppView_Cmd_PressPageDown

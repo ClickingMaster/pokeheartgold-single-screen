@@ -972,7 +972,7 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
         album->timer--;
         if (album->timer == 0) {
             MainMenuUtil_EncryptWonderCard(&album->shareHeader, album->encryptedCard, album->heapId);
-            ov74_02229D0C(album->encryptedCard, (void *)sizeof(WonderCard));
+            MysteryGiftWireless_SendCard(album->encryptedCard, (void *)sizeof(WonderCard));
             WonderCardAlbum_CountShare(album);
             *state = 24;
         }

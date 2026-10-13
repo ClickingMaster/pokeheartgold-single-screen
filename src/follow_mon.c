@@ -1687,7 +1687,7 @@ u8 FollowMon_IsHiddenUntilStep(LocalMapObject *mapObject) {
     return (MapObject_GetParam(mapObject, 2) >> 1) & 1;
 }
 
-void sub_02069E28(LocalMapObject *mapObject, u32 a1) { // todo: figure out what this does
+void FollowMon_SetPendingHop(LocalMapObject *mapObject, u32 a1) { // todo: figure out what this does
     int param = MapObject_GetParam(mapObject, 2);
 
     u16 b = (u16)(param >> 10) << 10;
@@ -1731,7 +1731,7 @@ u8 FollowMon_IsReleaseBallPending(LocalMapObject *mapObject) {
     return (MapObject_GetParam(mapObject, 2) >> 2) & 1;
 }
 
-u8 sub_02069EC0(LocalMapObject *mapObject) {
+u8 FollowMon_GetPendingHop(LocalMapObject *mapObject) {
     return (MapObject_GetParam(mapObject, 2) >> 8) & 3;
 }
 
@@ -1745,7 +1745,7 @@ void FollowMon_SetObjectParams(LocalMapObject *mapObject, int species, u8 form, 
     MapObject_SetParam(mapObject, species, FOLLOW_MON_PARAM_SPECIES);
 }
 
-void sub_02069F0C(LocalMapObject *mapObject, int species, u8 form, BOOL shiny, int a4) { // a4 is sprite ID?
+void FollowMon_SetObjectMon(LocalMapObject *mapObject, int species, u8 form, BOOL shiny, int a4) { // a4 is sprite ID?
     MapObject_SetParam(mapObject, a4, 2);
     FollowMon_SetObjectShiny(mapObject, shiny);
     FollowMon_SetObjectForm(mapObject, species, form);

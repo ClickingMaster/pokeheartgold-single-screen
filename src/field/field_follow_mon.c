@@ -366,7 +366,7 @@ void FollowMon_SetNoBallEffect(FieldSystem *fieldSystem) {
 }
 
 #pragma force_active on
-void ov01_022057DC(MapObjectManager *manager) {
+void FollowMon_SetAltSequenceFrameFlags(MapObjectManager *manager) {
     BillboardSequenceData *sequence = ResourceBank_Get(((MapObjectRenderData *)MapObjectManager_GetRender(manager))->sequenceBank, BILLBOARD_SEQUENCE_FOLLOW_MON_ALT);
     int count = sequence->count, i;
     u8 *flags = (u8 *)(sequence->frames + count);
@@ -691,7 +691,7 @@ BOOL Task_FollowMonRecall(TaskManager *taskMan) {
             plttAddr = BillboardObject_GetPlttKey(billboard);
             GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_PLTT, (u16)plttAddr << 3, env->palette, ((plttKey & 0xFFFF0000) >> 16) << 3);
             FollowMon_Hide(fieldSystem);
-            sub_02069E28(FollowMon_GetMapObject(fieldSystem), 0);
+            FollowMon_SetPendingHop(FollowMon_GetMapObject(fieldSystem), 0);
             (*state)++;
         }
         break;

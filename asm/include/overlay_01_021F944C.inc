@@ -10,7 +10,7 @@
 .public Heap_FreeExplicit
 .public Billboard_Create
 .public Billboard_Delete
-.public sub_020238F8
+.public Billboard_HasPendingFree
 .public BillboardObject_Create
 .public BillboardObject_Delete
 .public BillboardResource_Init
@@ -71,7 +71,7 @@
 .public NNS_G3dMdlSetMdlFogEnableFlagAll
 .public NNS_G3dGetTex
 .public memset
-.public ov01_021EA3B0
+.public AreaLight_ClearMaterialModifyFlags
 .public FieldEffectManager_GetFromMapObject
 .public MapObject_GetBillboard
 .public GetMoveModelNoBySpriteId
@@ -90,14 +90,14 @@
 .public MapObjectRender_ReleaseUnused
 .public MapObjectRender_ReleaseSpriteResources
 .public MapObjectRender_GetBillboards
-.public ov01_021FA298
+.public MapObjectRender_GetSpriteModelId
 .public MapObject_SetBillboardPending
 .public MapObject_IsBillboardPending
 .public MapObject_UpdateBillboardPosition
 .public MapObject_SetBillboardVisibleFromFlags
 .public Facing_GetBillboardStandSequence
 .public Facing_GetBillboardWalkSequence
-.public ov01_021FA464
+.public MapObjectRender_GetFacingSequence
 .public MapObject_ChangeBillboardSprite
 .public ResourceBank_Create
 .public ResourceBank_Destroy

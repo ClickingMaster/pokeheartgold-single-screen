@@ -9,7 +9,7 @@
 #include "sound_playback.h"
 #include "unk_02055418.h"
 
-void sub_020977CC(FieldSystem *fieldSystem, u8 param1, u8 param2, u32 mapId, u32 x, u32 y) {
+void CallTask_MagnetTrainRide(FieldSystem *fieldSystem, u8 param1, u8 param2, u32 mapId, u32 x, u32 y) {
     AreaLightTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(AreaLightTaskEnv));
 
     env->param1 = param1;
@@ -19,10 +19,10 @@ void sub_020977CC(FieldSystem *fieldSystem, u8 param1, u8 param2, u32 mapId, u32
     env->y = y;
     LoadAreaOrDungeonLightTxt(0, &env->light);
     env->state = 0;
-    TaskManager_Call(fieldSystem->taskman, sub_020978D0, env);
+    TaskManager_Call(fieldSystem->taskman, Task_MagnetTrainRide, env);
 }
 
-void sub_02097810(FieldSystem *fieldSystem, u8 param, void *destination) {
+void CallTask_MagnetTrainCutscene(FieldSystem *fieldSystem, u8 param, void *destination) {
     GenderTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(GenderTaskEnv));
 
     env->destination = destination;
@@ -43,17 +43,17 @@ void sub_02097810(FieldSystem *fieldSystem, u8 param, void *destination) {
         break;
     }
     env->gender = PlayerProfile_GetTrainerGender(Save_PlayerData_GetProfile(fieldSystem->saveData));
-    TaskManager_Call(fieldSystem->taskman, sub_02097878, env);
+    TaskManager_Call(fieldSystem->taskman, Task_MagnetTrainCutscene, env);
 }
 
-BOOL sub_02097878(TaskManager *taskManager) {
+BOOL Task_MagnetTrainCutscene(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     GenderTaskEnv *env = TaskManager_GetEnvironment(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
 
     switch (*state) {
     case 0:
-        sub_0203FC68(fieldSystem, env);
+        MagnetTrainCutscene_LaunchApp(fieldSystem, env);
         break;
     case 1:
         if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
@@ -68,7 +68,7 @@ BOOL sub_02097878(TaskManager *taskManager) {
     return FALSE;
 }
 
-BOOL sub_020978D0(TaskManager *taskManager) {
+BOOL Task_MagnetTrainRide(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     AreaLightTaskEnv *env = TaskManager_GetEnvironment(taskManager);
 
@@ -87,7 +87,7 @@ BOOL sub_020978D0(TaskManager *taskManager) {
         env->state = 2;
         break;
     case 2:
-        sub_02097810(fieldSystem, env->param1, &env->light);
+        CallTask_MagnetTrainCutscene(fieldSystem, env->param1, &env->light);
         env->state = 3;
         break;
     case 3:

@@ -56,8 +56,8 @@ BOOL BattleCastleLink_SendRecord(BattleCastleData *data);
 BOOL BattleCastleLink_SendTrainerIds(BattleCastleData *data);
 BOOL BattleCastleLink_SendChoice(BattleCastleData *data);
 BOOL BattleCastleLink_SendOpponentMons(BattleCastleData *data);
-BOOL ov80_0222B8D8(BattleCastleData *data, u16 value);
-BOOL ov80_0222B920(BattleCastleData *data, u16 value);
+BOOL BattleCastleLink_SendValueA(BattleCastleData *data, u16 value);
+BOOL BattleCastleLink_SendValueB(BattleCastleData *data, u16 value);
 BOOL BattleCastleLink_SendPartyMons(BattleCastleData *data);
 
 extern const u8 ov80_0223BE54[];
@@ -611,10 +611,10 @@ BOOL BattleCastleData_SendLinkMessage(BattleCastleData *data, u32 kind, u16 valu
         BattleCastleLink_SendOpponentMons(data);
         break;
     case 4:
-        ov80_0222B8D8(data, value);
+        BattleCastleLink_SendValueA(data, value);
         break;
     case 5:
-        ov80_0222B920(data, value);
+        BattleCastleLink_SendValueB(data, value);
         break;
     case 6:
         BattleCastleLink_SendPartyMons(data);

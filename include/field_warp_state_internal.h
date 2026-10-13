@@ -42,7 +42,7 @@ void FieldSystem_SetWarpResetSuppressed(void *, void *);
 void FieldSystem_ResetStateOnMapConnection(u8 *);
 void FieldSystem_ResetStateOnWarp(u8 *);
 void FieldSystem_ResetStateOnFlyWarp(u8 *);
-void sub_02067BA4(u8 *);
+void FieldSystem_ClearSafariAndRandomizeRoamers(u8 *);
 void FieldSystem_ClearSafariSysFlag(u8 *);
 void FieldSystem_ClearFollowingTrainer(u8 *);
 void FieldSystem_RandomizeRoamers(u8 *);

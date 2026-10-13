@@ -8,7 +8,7 @@
 #include "sound_playback.h"
 #include "unk_02055418.h"
 
-void sub_020979A8(FieldSystem *fieldSystem, u8 param1, u8 param2, u32 mapId, u32 x, u32 y) {
+void CallTask_ShipVoyage(FieldSystem *fieldSystem, u8 param1, u8 param2, u32 mapId, u32 x, u32 y) {
     AreaLightTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(AreaLightTaskEnv));
 
     env->param1 = param1;
@@ -18,10 +18,10 @@ void sub_020979A8(FieldSystem *fieldSystem, u8 param1, u8 param2, u32 mapId, u32
     env->y = y;
     LoadAreaOrDungeonLightTxt(0, &env->light);
     env->state = 0;
-    TaskManager_Call(fieldSystem->taskman, sub_02097AA0, env);
+    TaskManager_Call(fieldSystem->taskman, Task_ShipVoyage, env);
 }
 
-void sub_020979EC(FieldSystem *fieldSystem, u8 param, void *destination) {
+void CallTask_ShipDepartureCutscene(FieldSystem *fieldSystem, u8 param, void *destination) {
     NightTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(NightTaskEnv));
 
     env->destination = destination;
@@ -41,10 +41,10 @@ void sub_020979EC(FieldSystem *fieldSystem, u8 param, void *destination) {
         env->night = FALSE;
         break;
     }
-    TaskManager_Call(fieldSystem->taskman, sub_02097A48, env);
+    TaskManager_Call(fieldSystem->taskman, Task_ShipDepartureCutscene, env);
 }
 
-BOOL sub_02097A48(TaskManager *taskManager) {
+BOOL Task_ShipDepartureCutscene(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     NightTaskEnv *env = TaskManager_GetEnvironment(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
@@ -66,7 +66,7 @@ BOOL sub_02097A48(TaskManager *taskManager) {
     return FALSE;
 }
 
-BOOL sub_02097AA0(TaskManager *taskManager) {
+BOOL Task_ShipVoyage(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     AreaLightTaskEnv *env = TaskManager_GetEnvironment(taskManager);
 
@@ -85,7 +85,7 @@ BOOL sub_02097AA0(TaskManager *taskManager) {
         env->state = 2;
         break;
     case 2:
-        sub_020979EC(fieldSystem, env->param1, &env->light);
+        CallTask_ShipDepartureCutscene(fieldSystem, env->param1, &env->light);
         env->state = 3;
         break;
     case 3:

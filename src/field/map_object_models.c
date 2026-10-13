@@ -43,7 +43,7 @@ void MapObject_CreateBillboard(LocalMapObject *object, void *work);
 void MapObject_DeleteBillboard(LocalMapObject *object, void *work);
 void BillboardObject_SaveState(Sprite *billboard, VecFx32 *state);
 void BillboardObject_RestoreState(Sprite *billboard, VecFx32 *state);
-u32 ov01_021FA298(u32 spriteId);
+u32 MapObjectRender_GetSpriteModelId(u32 spriteId);
 BOOL MapObject_IsBillboardPending(LocalMapObject *object);
 void MapObject_UpdateBillboardPosition(LocalMapObject *object, Sprite *billboard);
 int Facing_GetBillboardStandSequence(u32 direction);
@@ -122,7 +122,7 @@ void FollowMonBillboard_AddFacingOffset(LocalMapObject *object, u32 direction, V
     VecFx32 unused;
 
     MapObject_CopyFacingVector(object, &unused);
-    if (ov01_021FA298(MapObject_GetSpriteID(object)) == 10) {
+    if (MapObjectRender_GetSpriteModelId(MapObject_GetSpriteID(object)) == 10) {
         switch (direction) {
         case DIR_NORTH:
             offset->z += FX32_ONE;

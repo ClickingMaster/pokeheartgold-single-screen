@@ -66,7 +66,7 @@
 .public FollowPlayerMovement_Reset
 .public FollowMon_InitMapObject
 .public FollowMon_GetMapObject
-.public sub_02069E28
+.public FollowMon_SetPendingHop
 .public FollowMon_SetReleaseBallPending
 .public FollowMon_GetSpecies
 .public FollowMon_IsActive
@@ -100,7 +100,7 @@
 .public FollowMon_MoveToPlayer
 .public FollowMon_CheckVisibleFlag
 .public FollowMon_SetNoBallEffect
-.public ov01_022057DC
+.public FollowMon_SetAltSequenceFrameFlags
 .public FollowMonBillboard_SetResource
 .public FollowMonBillboard_InitSequence
 .public MapObject_SetBillboardSepia

@@ -89,7 +89,7 @@ void FrontierMapTileBlink_DestroyTask(FrontierMapTileBlinkTask *blinkTask) {
     Heap_Free(blinkTask);
 }
 
-u32 ov80_022385D8(u32 value) {
+u32 FrontierLinkLobby_GetWinStreakStat(u32 value) {
     switch (value) {
     case 2:
         return 0x73;
@@ -108,7 +108,7 @@ u32 ov80_022385D8(u32 value) {
     }
 }
 
-u32 ov80_02238610(u32 value) {
+u32 FrontierLinkLobby_GetStreakActiveStat(u32 value) {
     switch (value) {
     case 2:
         return 0x66;

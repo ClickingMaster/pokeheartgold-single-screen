@@ -292,7 +292,7 @@
 	.public PhotoAlbumApp_FreeSpritesAndMenus
 	.public PhotoAlbumApp_CreateSprites
 	.public PhotoAlbumApp_DeleteSprites
-	.public ov109_021E6F7C
+	.public PhotoAlbumApp_DrawPageArrows
 	.public ov109_021E6FD4
 	.public PhotoAlbumApp_DrawGridColumns
 	.public PhotoAlbumApp_DrawPage

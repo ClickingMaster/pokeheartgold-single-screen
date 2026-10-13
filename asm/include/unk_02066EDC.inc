@@ -40,8 +40,8 @@
 .public TaskManager_CallFrontierPartySelect
 .public TaskManager_CallFrontierWifiConnection
 .public TaskManager_CallFrontierLinkPartnerCheck
-.public sub_020672D8
-.public sub_02067398
+.public BattleTower_ClaimRecordMilestone
+.public BattleTower_GetRecordMilestone
 .public sub_02067484
 .public BattleTower_NextRandom
 .public BattleTower_InitSeed

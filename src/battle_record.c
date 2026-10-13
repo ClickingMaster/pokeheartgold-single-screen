@@ -87,7 +87,7 @@ u32 BattleRecord_sizeof(void);
 void BattleRecord_Init(BattleRecord *record);
 void BattleRecord_Delete(void);
 BattleRecord *BattleRecord_Get(void);
-void *sub_0202FC74(void);
+void *BattleRecord_GetProfile2(void);
 BOOL BattleRecord_Load(SaveData *save, enum HeapID heapId, int *out, void *battle, int index);
 BOOL BattleRecord_IsSlotValid(SaveData *save, enum HeapID heapId, int *out, int index);
 void BattleRecord_Decrypt(void *data, u32 size, u32 seed);
@@ -152,7 +152,7 @@ BattleRecord *BattleRecord_Get(void) {
     return gBattleRecord;
 }
 
-void *sub_0202FC74(void) {
+void *BattleRecord_GetProfile2(void) {
     GF_ASSERT(gBattleRecord != NULL);
     return gBattleRecord->profile;
 }

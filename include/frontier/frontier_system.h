@@ -52,7 +52,7 @@ void FrontierSystem_Delete(FrontierSystem *system);
 void FrontierSystem_AddTask(FrontierSystem *system, u16 mapId, u32 scriptIndex);
 BOOL FrontierSystem_InsertTask(FrontierSystem *system, struct FrontierScriptContext *task);
 void FrontierSystem_FreeTask(FrontierSystem *system, struct FrontierScriptContext *task);
-void FrontierSystem_deadstripped_0222AA3C(FrontierSystem *system, u16 mapId, u32 a2, u32 a3);
+void FrontierSystem_InitDummy(FrontierSystem *system, u16 mapId, u32 a2, u32 a3);
 void FrontierSystem_LoadMapScripts(u8 **scripts, MsgData **msgData, u32 mapId, enum HeapID heapId);
 void FrontierSystem_ChangeMsgBank(FrontierSystem *system, u16 mapId, enum HeapID heapId);
 u16 *FrontierSystem_SaveVars(FrontierSystem *system, enum HeapID heapId);

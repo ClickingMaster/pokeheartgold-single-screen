@@ -19,7 +19,7 @@ void FrontierLink_RegisterCommands(void *data);
 void BattleTowerLink_ReceivePartnerInfo(int sender, int unused, const u16 *src, u8 *data);
 BOOL BattleTowerLink_SendTrainers(u8 *data);
 void BattleTowerLink_ReceiveTrainers(int sender, int unused, const void *src, u8 *data);
-void sub_020969F8(int sender, int unused, const u16 *src, u8 *data);
+void BattleTowerLink_ReceiveFlag(int sender, int unused, const u16 *src, u8 *data);
 BOOL FrontierLinkLobby_SendFacility(u8 *data);
 void FrontierLinkLobby_ReceiveFacility(int sender, int unused, const u16 *src, u8 *data);
 BOOL FrontierLinkLobby_SendChoice(u8 *data, u16 value);
@@ -30,7 +30,7 @@ BOOL FrontierLinkLobby_SendValue74(u8 *data, u16 value);
 void FrontierLinkLobby_ReceiveValue74(int sender, int unused, const u16 *src, u8 *data);
 BOOL FrontierLinkLobby_SendValue71(u8 *data, u16 value);
 void FrontierLinkLobby_ReceiveValue71(int sender, int unused, const u16 *src, u8 *data);
-int ov80_022385D8(int value);
+int FrontierLinkLobby_GetWinStreakStat(int value);
 
 void FrontierLink_RegisterCommands(void *data) {
     Comm_RegisterCommandTable(gFrontierLinkCommands, 52, data);
@@ -70,7 +70,7 @@ void BattleTowerLink_ReceiveTrainers(int sender, int unused, const void *src, u8
     }
 }
 
-void sub_020969F8(int sender, int unused, const u16 *src, u8 *data) {
+void BattleTowerLink_ReceiveFlag(int sender, int unused, const u16 *src, u8 *data) {
     *(u16 *)(data + 0x8D8) = 0;
     data[0x8D4]++;
     if (sender != Comm_GetLocalNetId()) {
@@ -84,7 +84,7 @@ BOOL FrontierLinkLobby_SendFacility(u8 *data) {
     int stat;
     FrontierSave *frontier;
     *(u16 *)(data + 8) = data[0xA0];
-    stat = ov80_022385D8(data[0xA0]);
+    stat = FrontierLinkLobby_GetWinStreakStat(data[0xA0]);
     frontier = Save_Frontier_GetStatic(*(SaveData **)data);
     *(u16 *)(data + 0xA) = FrontierSave_GetStat(frontier, stat, FrontierStat_GetFriendIndex(stat));
     if (Comm_SendCommand(0x39, data + 8, 0x28) == 1) {

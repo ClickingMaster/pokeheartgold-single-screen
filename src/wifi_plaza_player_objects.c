@@ -179,7 +179,7 @@ void WiFiPlazaPlayerObjects_Draw(WiFiPlazaPlayerObjects *objects) {
 }
 
 void ov45_022306F4(WiFiPlazaPlayerObjects *objects) {
-    sub_02023910(objects->billboards);
+    Billboard_ClearPendingFree(objects->billboards);
 }
 
 void WiFiPlazaPlayerObjects_SetModelAlpha(WiFiPlazaPlayerObjects *objects, int alpha) {

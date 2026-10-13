@@ -17,8 +17,8 @@ u32 BattleTower_GenerateFrontierMon(FrontierFieldSystem *tower, FrontierMon *mon
 BattleSetup *BattleTower_NewBattleSetup(FrontierFieldSystem *tower, FrontierLaunchArgs *args);
 void BattleTower_AddTrainerToBattle(BattleSetup *setup, FrontierTrainer *trainer, int count, int battler, enum HeapID heapID);
 u32 BattleTower_GetBattleType(u32 towerMode);
-void ov80_02236ABC(FrontierFieldSystem *tower, u16 value);
-BOOL ov80_02236AD8(FrontierFieldSystem *tower, const u16 *remote);
+void BattleTowerSetup_SetLinkFlag(FrontierFieldSystem *tower, u16 value);
+BOOL BattleTowerSetup_IsLinkFlagSetByEither(FrontierFieldSystem *tower, const u16 *remote);
 NarcId BattleTower_GetMonSetNarc(u32 towerMode);
 NarcId BattleTower_GetTrainerNarc(u32 towerMode);
 u32 BattleTower_GetTrainerMessageBank(u32 towerMode);

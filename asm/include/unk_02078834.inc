@@ -17,7 +17,7 @@
 .public CallApplicationAsTask
 .public TaskManager_GetFieldSystem
 .public TaskManager_GetEnvironment
-.public CallTask_02050960
+.public CallTask_WifiClubBattle
 .public SetFlag970
 .public CallTask_WifiClub
 .public CallTask_WifiClubWithResult

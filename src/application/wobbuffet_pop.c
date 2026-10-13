@@ -102,7 +102,7 @@ BOOL WobbuffetPop_HostStartGame(WobbuffetPop *game, WobbuffetPopSequence *sequen
 BOOL WobbuffetPop_HostPlayGame(WobbuffetPop *game, WobbuffetPopSequence *sequence);
 BOOL WobbuffetPop_HostFinishGame(WobbuffetPop *game, WobbuffetPopSequence *sequence);
 BOOL WobbuffetPop_RunHostSteps(WobbuffetPop *game);
-void ov93_0225E7AC(Camera *camera);
+void WobbuffetPop_UpdateCameraDummy(Camera *camera);
 WobbuffetPopBalloon *WobbuffetPopBalloon_New(WobbuffetPop *game);
 void WobbuffetPopBalloon_Free(WobbuffetPop *game, WobbuffetPopBalloon *balloon);
 void WobbuffetPopBalloon_VBlank(WobbuffetPop *game, WobbuffetPopBalloon *balloon);
@@ -458,7 +458,7 @@ BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
         }
         break;
     }
-    ov93_0225E7AC(game->camera);
+    WobbuffetPop_UpdateCameraDummy(game->camera);
     game->frameCounter++;
     return FALSE;
 }
@@ -728,7 +728,7 @@ void WobbuffetPop_PrintPlayerNames(WobbuffetPop *game) {
         if (self != game->app->netIds[i]) {
             name = PlayerProfile_GetPlayerName_NewString(PlazaGameRoster_GetProfile(&game->app->roster, game->app->netIds[i]), HEAP_ID_117);
             position = WobbuffetPop_GetPlayerSeat(game, game->app->netIds[i]);
-            if (ov90_022588A4(&game->app->roster, game->app->netIds[i]) == TRUE) {
+            if (PlazaGameRoster_IsSpecialVisitor(&game->app->roster, game->app->netIds[i]) == TRUE) {
                 color = MAKE_TEXT_COLOR(7, 8, 15);
             } else {
                 color = MAKE_TEXT_COLOR(1, 2, 15);
@@ -1534,7 +1534,7 @@ BOOL WobbuffetPop_RunHostSteps(WobbuffetPop *game) {
     return FALSE;
 }
 
-void ov93_0225E7AC(Camera *camera) {
+void WobbuffetPop_UpdateCameraDummy(Camera *camera) {
 }
 
 WobbuffetPopBalloon *WobbuffetPopBalloon_New(WobbuffetPop *game) {

@@ -198,7 +198,7 @@
 .public WifiConnection_StartVoiceChat
 .public WifiConnection_StopVoiceChat
 .public PlazaGameRoster_Init
-.public ov90_022588A4
+.public PlazaGameRoster_IsSpecialVisitor
 .public PlazaGameRoster_GetProfile
 .public PlazaGameEntry_NewMimeJrTop
 .public PlazaGameEntry_Free

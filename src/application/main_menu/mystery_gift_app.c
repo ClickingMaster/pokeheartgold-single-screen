@@ -1048,7 +1048,7 @@ void MysteryGiftAnim_CreateSparkles(MysteryGiftAnimData *anim) {
 
 #pragma force_active reset
 
-void ov74_0222B2C4(MysteryGiftAnimData *anim) {
+void MysteryGiftAnim_CreateSparkleSprites(MysteryGiftAnimData *anim) {
     s32 i;
     MysteryGiftAnimData *cursor = anim;
 
@@ -1618,7 +1618,7 @@ void MysteryGiftAnim_Task(SysTask *task, MysteryGiftAnimData *anim) {
         break;
     case 3:
         if (*anim->status == 2) {
-            ov74_0222B2C4(anim);
+            MysteryGiftAnim_CreateSparkleSprites(anim);
             MysteryGiftAnim_StartSparkleTasks(anim);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
             MysteryGiftAnim_SetMaskColorsBlack();

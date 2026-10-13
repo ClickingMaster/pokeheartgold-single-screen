@@ -38,14 +38,14 @@
 	.public PlayerBillboardMotion_WalkEverSoSlightlyFast
 	.public PlayerBillboardMotion_Run
 	.public PlayerBillboardMotion_CyclingStand
-	.public ov01_021F8400
-	.public ov01_021F847C
+	.public PlayerBillboardMotion_CyclingAnimateHalfSpeed
+	.public PlayerBillboardMotion_CyclingAnimateNormalSpeed
 	.public PlayerBillboardMotion_FishingIdle
 	.public PlayerBillboardMotion_FishingCast
 	.public PlayerBillboardMotion_FishingBite
 	.public PlayerBillboardMotion_FishingReel
-	.public ov01_021F8804
-	.public ov01_021F883C
+	.public PlayerBillboardMotion_Ladder0
+	.public PlayerBillboardMotion_Ladder1
 	.public PlayerBillboardMotion_ApricornShake
 
 	.text
@@ -53,8 +53,8 @@
 
 ov01_022089CC: ; 0x022089CC
 	.word PlayerBillboardMotion_ApricornShake
-	.word ov01_021F8804
-	.word ov01_021F883C
+	.word PlayerBillboardMotion_Ladder0
+	.word PlayerBillboardMotion_Ladder1
 
 gPlayerWalkSlightlyFasterFrameSteps: ; 0x022089D8
 	.byte 0x00, 0x30, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00
@@ -123,8 +123,8 @@ gPlayerCyclingBillboardMotions: ; 0x02208AE4
 	.word PlayerBillboardMotion_WalkSlightlyFast
 	.word PlayerBillboardMotion_WalkSlightlyFast
 	.word PlayerBillboardMotion_WalkSlightlyFast
-	.word ov01_021F8400
-	.word ov01_021F847C
+	.word PlayerBillboardMotion_CyclingAnimateHalfSpeed
+	.word PlayerBillboardMotion_CyclingAnimateNormalSpeed
 
 gPcWomanBillboardMotions: ; 0x02208B0C
 	.word BillboardMotion_PcWomanStand

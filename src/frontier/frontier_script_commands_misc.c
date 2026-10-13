@@ -32,7 +32,7 @@ BOOL FrtCmd_132(void *ctx) {
         *dst = BattleTower_IncBattleNumber(data);
         break;
     case 0x23:
-        *dst = FrontierFieldSystem_0204AC7C(data);
+        *dst = FrontierFieldSystem_HasWonSet(data);
         break;
     case 0x24:
         *dst = ov80_022358E8(data);
@@ -50,13 +50,13 @@ BOOL FrtCmd_132(void *ctx) {
         BattleTower_SetPalmerDefeated(data, value);
         break;
     case 0x25:
-        FrontierFieldSystem_0204AD04(data, *(void **)((u8 *)args + 8));
+        FrontierFieldSystem_RecordSetLost(data, *(void **)((u8 *)args + 8));
         break;
     case 0x26:
-        FrontierFieldSystem_0204AE20(data, *(void **)((u8 *)args + 8));
+        FrontierFieldSystem_RecordSetWon(data, *(void **)((u8 *)args + 8));
         break;
     case 0x27:
-        FrontierFieldSystem_0204AF2C(data);
+        FrontierFieldSystem_SaveChallenge(data);
         break;
     case 0x3A:
         MI_CpuFill8(data + 0x884, 0, 0x46);
@@ -150,7 +150,7 @@ BOOL FrtCmd_137(void *ctx) {
     dst = FrontierScript_ReadVarPtr(ctx);
     data = Frontier_GetData(**(void ***)ctx);
     if (kind == 2) {
-        ov80_02236ABC(data, value);
+        BattleTowerSetup_SetLinkFlag(data, value);
     } else {
         GF_AssertFail();
     }
@@ -186,7 +186,7 @@ BOOL FrontierScript_ReadPartnerPacket(void *ctx, void *data, void *fieldSystem, 
     }
     dst = FrontierScript_GetVarPtr(ctx, value);
     if (mode == 2) {
-        *dst = ov80_02236AD8(data, remote);
+        *dst = BattleTowerSetup_IsLinkFlagSetByEither(data, remote);
     } else {
         GF_AssertFail();
     }

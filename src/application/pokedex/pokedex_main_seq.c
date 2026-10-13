@@ -2417,7 +2417,7 @@ static int PokedexApp_MainSeq_68(PokedexAppData *pokedexApp) {
         pokedexApp->areaListPos = 0;
         PokedexApp_LoadAreaTables(pokedexApp);
         PokedexApp_BuildAreaList(pokedexApp, pokedexApp->areaTimeOfDay, pokedexApp->areaRegion);
-        ov18_021F018C(pokedexApp);
+        PokedexApp_SetAreaWindowCellTiles(pokedexApp);
         PokedexApp_SetupScreen(pokedexApp, 1);
         PokedexApp_DrawAreaRegionTabs(pokedexApp);
         PokedexApp_ScrollAreaMapToJohto(pokedexApp);
@@ -2887,7 +2887,7 @@ static int PokedexApp_MainSeq_79(PokedexAppData *pokedexApp) {
     switch (pokedexApp->seqState.state_10.state) {
     case 0:
         pokedexApp->selectedForm = 0;
-        ov18_021F01D4(pokedexApp);
+        PokedexApp_SetFormsWindowCellTiles(pokedexApp);
         PokedexApp_SetupScreen(pokedexApp, 3);
         PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, 0xF7BE, -2, 16, 0, RGB_BLACK);
         PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ_F, 0xFFEF, -2, 16, 0, RGB_BLACK);

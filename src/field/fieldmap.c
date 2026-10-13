@@ -113,7 +113,7 @@ static void FieldMap_VBlankCallback(void *fsys) {
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
 
-    sub_02023910(MapObjectRender_GetBillboards(MapObjectManager_GetRender(fieldSystem->mapObjectManager)));
+    Billboard_ClearPendingFree(MapObjectRender_GetBillboards(MapObjectManager_GetRender(fieldSystem->mapObjectManager)));
 }
 
 BOOL FieldMap_Init(OverlayManager *man, int *state) {
@@ -238,7 +238,7 @@ BOOL FieldMap_Main(OverlayManager *man, int *state) {
     FieldSystem *fieldSystem = OverlayManager_GetArgs(man);
 
     if (FieldSystem_UpdateLocationToPlayerPosition(fieldSystem)) {
-        ov01_021F6830(fieldSystem, 1, 1);
+        FieldSystem_SendBottomScreenEvent(fieldSystem, 1, 1);
         FieldMap_ChangeZone(fieldSystem);
     }
 
@@ -723,7 +723,7 @@ static void FieldMap_InitFieldEffectsAndObjects(FieldSystem *fieldSystem) {
     }
 
     MapObjectManager_InitRender(fieldSystem->mapObjectManager, 32, MapObjectsToPreload_GetCount(fieldSystem->mapObjectsToPreload) + 3, MapObjectsToPreload_GetIDs(fieldSystem->mapObjectsToPreload), v0);
-    ov01_022057DC(fieldSystem->mapObjectManager);
+    FollowMon_SetAltSequenceFrameFlags(fieldSystem->mapObjectManager);
     MapObjectModelList_Init(fieldSystem->fieldEffectManager);
     PlayerAvatar_InitMapFeatures(fieldSystem->playerAvatar);
 

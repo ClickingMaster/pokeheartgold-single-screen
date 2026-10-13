@@ -178,7 +178,7 @@ void PhotoAlbumApp_InitSpritesAndMenus(PhotoAlbumApp *app);
 void PhotoAlbumApp_FreeSpritesAndMenus(PhotoAlbumApp *app);
 void PhotoAlbumApp_CreateSprites(PhotoAlbumApp *app);
 void PhotoAlbumApp_DeleteSprites(PhotoAlbumApp *app);
-void ov109_021E6F7C(PhotoAlbumApp *app, int position, int draw);
+void PhotoAlbumApp_DrawPageArrows(PhotoAlbumApp *app, int position, int draw);
 void ov109_021E6FD4(PhotoAlbumApp *app, int bgId, int mode, int index);
 void PhotoAlbumApp_DrawGridColumns(PhotoAlbumApp *app, int bgId, int page, u8 start);
 void PhotoAlbumApp_DrawPage(PhotoAlbumApp *app, int bgId, int mask, u8 page);
@@ -834,7 +834,7 @@ int PhotoAlbumApp_FlipToPrevPage(PhotoAlbumApp *app) {
         PhotoAlbumApp_UpdateSelectionSprite(app, 0);
         PhotoAlbumApp_RequestBgToggle(app, 1);
         PhotoAlbumApp_SetZoom(app, FX32_ONE);
-        ov109_021E6F7C(app, 1, 1);
+        PhotoAlbumApp_DrawPageArrows(app, 1, 1);
         PhotoAlbumApp_DrawPage(app, 2, 1, app->curPage);
         PhotoAlbumApp_DrawPage(app, 3, 1, app->curPage - 1);
         app->pageFlipPhase = 0;
@@ -844,7 +844,7 @@ int PhotoAlbumApp_FlipToPrevPage(PhotoAlbumApp *app) {
         app->pageFlipPhase++;
         PhotoAlbumApp_SetZoom(app, ov109_021E78DC[app->pageFlipPhase]);
         if (app->pageFlipPhase >= 4) {
-            ov109_021E6F7C(app, 2, 1);
+            PhotoAlbumApp_DrawPageArrows(app, 2, 1);
             PhotoAlbumApp_DrawPage(app, 2, 2, app->curPage - 1);
             app->subState++;
         }
@@ -877,7 +877,7 @@ int PhotoAlbumApp_FlipToNextPage(PhotoAlbumApp *app) {
         PhotoAlbumApp_UpdateSelectionSprite(app, 0);
         PhotoAlbumApp_RequestBgToggle(app, 1);
         PhotoAlbumApp_SetZoom(app, FX32_ONE);
-        ov109_021E6F7C(app, 2, 1);
+        PhotoAlbumApp_DrawPageArrows(app, 2, 1);
         PhotoAlbumApp_DrawPage(app, 2, 2, app->curPage);
         PhotoAlbumApp_DrawPage(app, 3, 2, app->curPage + 1);
         app->pageFlipPhase = 0;
@@ -887,7 +887,7 @@ int PhotoAlbumApp_FlipToNextPage(PhotoAlbumApp *app) {
         app->pageFlipPhase++;
         PhotoAlbumApp_SetZoom(app, ov109_021E78DC[app->pageFlipPhase]);
         if (app->pageFlipPhase >= 4) {
-            ov109_021E6F7C(app, 1, 1);
+            PhotoAlbumApp_DrawPageArrows(app, 1, 1);
             PhotoAlbumApp_DrawPage(app, 2, 1, app->curPage + 1);
             app->subState++;
         }
@@ -1177,7 +1177,7 @@ void PhotoAlbumApp_DeleteSprites(PhotoAlbumApp *app) {
 }
 
 #pragma force_active on
-void ov109_021E6F7C(PhotoAlbumApp *app, int position, int draw) {
+void PhotoAlbumApp_DrawPageArrows(PhotoAlbumApp *app, int position, int draw) {
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_2);
     if (draw) {
         CopyToBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_2, (u8)(16 * (position / 2)), 0, 16, 24, app->pageArrows->rawData, (u8)(16 * (position / 2)), 0, (u8)(app->pageArrows->screenWidth >> 3), (u8)(app->pageArrows->screenHeight >> 3));

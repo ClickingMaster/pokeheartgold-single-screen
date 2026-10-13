@@ -8,7 +8,7 @@
 void BillboardLists_Create(int count, enum HeapID heapID);
 void BillboardLists_Delete(void);
 void BillboardLists_Draw(void);
-void sub_02023910(void *arg0);
+void Billboard_ClearPendingFree(void *arg0);
 void BillboardObject_SetVisible(Sprite *sprite, int arg1);
 NNSG3dResMdl *BillboardObject_GetModel(void *object);
 

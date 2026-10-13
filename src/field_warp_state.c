@@ -70,7 +70,7 @@ void FieldSystem_ResetStateOnFlyWarp(u8 *fs) {
     Save_RandomizeRoamersLocation(Save_Roamers_Get(*(void **)(fs + 0xC)));
 }
 
-void sub_02067BA4(u8 *fs) {
+void FieldSystem_ClearSafariAndRandomizeRoamers(u8 *fs) {
     Save_VarsFlags_ClearSafariSysFlag(Save_VarsFlags_Get(*(void **)(fs + 0xC)));
     Save_RandomizeRoamersLocation(Save_Roamers_Get(*(void **)(fs + 0xC)));
 }

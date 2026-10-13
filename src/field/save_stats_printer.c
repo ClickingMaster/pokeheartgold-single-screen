@@ -277,7 +277,7 @@ int Field_SaveGameNormal(FieldSystem *fieldSystem) {
 // Map objects and the player's position into the save data.
 void FieldSystem_StorePlayerLocation(FieldSystem *fieldSystem) {
     FieldSystem_SyncMapObjectsToSave(fieldSystem);
-    ov01_021F6830(fieldSystem, 4, 0);
+    FieldSystem_SendBottomScreenEvent(fieldSystem, 4, 0);
     fieldSystem->location->x = PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
     fieldSystem->location->y = PlayerAvatar_GetZCoord(fieldSystem->playerAvatar);
     fieldSystem->location->warpId = -1;

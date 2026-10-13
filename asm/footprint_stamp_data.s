@@ -760,7 +760,7 @@
 	.public FootprintStamp_GetTextSize
 	.public FootprintStamp_UpdateInkGauge
 	.public FootprintStamp_UseInk
-	.public ov89_0225A468
+	.public FootprintStamp_UpdateDummy
 	.public FootprintStampBoard_Init
 	.public FootprintStampBoard_Free
 	.public FootprintStampBoard_AddStamp
@@ -851,7 +851,7 @@
 	.public FootprintStamp_GetLinkFilter
 	.public FootprintStamp_ClearPlayerName
 	.public FootprintStamp_FreeTextSprite
-	.public ov89_0225A468
+	.public FootprintStamp_UpdateDummy
 	.public FootprintStampBoard_Init
 	.public FootprintStampBoard_Free
 	.public FootprintStamp_DeleteStamp

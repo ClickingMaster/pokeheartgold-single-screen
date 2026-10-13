@@ -67,7 +67,7 @@
 	.extern PokewalkerApp_StartLink
 	.extern PokewalkerApp_BuildUploadData
 	.extern PokewalkerApp_BuildSendStrollData
-	.extern ov112_021E7DC0
+	.extern PokewalkerApp_BuildOwnRecord
 	.extern PokewalkerApp_BuildUploadImage
 	.extern PokewalkerApp_PickRouteMons
 	.extern PokewalkerApp_ApplyAdvantageTypes
@@ -95,7 +95,7 @@
 	.extern PokewalkerApp_DrawSpindaSpotsOnPicture
 	.extern PokewalkerApp_AddWindowBank
 	.extern PokewalkerApp_RemoveWindowBank
-	.extern ov112_021E9C94
+	.extern PokewalkerApp_OnModeChangeDummy
 	.extern PokewalkerApp_LoadStrings
 	.extern PokewalkerApp_FreeStrings
 	.extern PokewalkerApp_PrintExit

@@ -53,4 +53,4 @@
 .public Field_SaveStatsPrinter_DeleteTouchSave
 .public Field_SaveGameNormal
 .public FieldSystem_TryStorePlayerLocation
-.public ov01_021F6830
+.public FieldSystem_SendBottomScreenEvent

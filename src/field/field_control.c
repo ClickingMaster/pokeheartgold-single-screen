@@ -114,7 +114,7 @@ static BOOL FieldSystem_IsBottomScreenAppReady(FieldSystem *fieldSystem) {
     return FieldSystem_GetBottomScreenAppState(fieldSystem) == TRUE;
 }
 
-static void ov01_021F6B64_thunk(FieldSystem *fieldSystem, int arg1) {
+static void FieldControl_RequestRegisteredItemAnim(FieldSystem *fieldSystem, int arg1) {
     FieldSystem_RequestTouchscreenMenuRegisteredItemAnim(fieldSystem, arg1);
 }
 
@@ -295,7 +295,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
     if (fieldInput->registeredItem) {
         u32 registeredItemResult = UseRegisteredItemButtonInField(fieldSystem, fieldInput->registeredItem);
         if (registeredItemResult) {
-            ov01_021F6B64_thunk(fieldSystem, fieldInput->registeredItem);
+            FieldControl_RequestRegisteredItemAnim(fieldSystem, fieldInput->registeredItem);
             return registeredItemResult;
         }
     }
@@ -455,7 +455,7 @@ int FieldInput_Process_BattleTower(FieldInput *fieldInput, FieldSystem *fieldSys
     if (fieldInput->registeredItem) {
         int registeredItemResult = UseRegisteredItemButtonInField(fieldSystem, fieldInput->registeredItem);
         if (registeredItemResult) {
-            ov01_021F6B64_thunk(fieldSystem, fieldInput->registeredItem);
+            FieldControl_RequestRegisteredItemAnim(fieldSystem, fieldInput->registeredItem);
             return registeredItemResult;
         }
     }
@@ -657,7 +657,7 @@ static BOOL FieldSystem_ProcessStep(FieldSystem *fieldSystem) {
         return FALSE;
     }
 
-    ov01_021F6830(fieldSystem, 5, 1);
+    FieldSystem_SendBottomScreenEvent(fieldSystem, 5, 1);
     FieldSystem_UpdateApricornBoxSteps(fieldSystem);
 
     if (FieldSystem_UpdatePoison(fieldSystem) == TRUE) { // Returns TRUE if a mon survived poisoning.

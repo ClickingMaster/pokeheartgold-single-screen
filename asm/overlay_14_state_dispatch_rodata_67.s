@@ -2304,7 +2304,7 @@
 	.public PCBox_ShiftPartyPanelAndReturnButtonLeft
 	.public PCBox_ShiftPartyPanelLeft
 	.public PCBox_UpdatePartyPanelSlide
-	.public ov14_021E813C
+	.public PCBox_UpdatePartyPanelMove
 	.public PCBox_LoadPartyPanelTilemap
 	.public PCBox_SlideInWallpaperList
 	.public PCBox_SlideOutWallpaperList
@@ -2378,7 +2378,7 @@
 	.public PCBox_WaitBottomButtonsSlide
 	.public PCBox_WaitPartyPanelSlide
 	.public PCBox_WaitPartyPanelAndActionMenuSlide
-	.public ov14_021E954C
+	.public PCBox_WaitPartyPanelSlideFunc
 	.public PCBox_UpdateBoxTraySlideIn
 	.public PCBox_UpdateBoxTraySlideOut
 	.public PCBox_WaitReturnButtonSlide
@@ -2635,7 +2635,7 @@
 	.public PCBox_ConfirmExit
 	.public PCBox_CancelExit
 	.public PCBox_FlashPanel
-	.public ov14_021F2330
+	.public PCBox_StartCellPaletteFlash
 	.public PCBox_FlashMarkingMenuButton
 	.public PCBox_FlashPartyPanelButton
 	.public PCBox_DimForExitPrompt
@@ -2794,7 +2794,7 @@
 	.public PCBox_DrawTrayBoxNameAndCount
 	.public PCBox_DrawWallpaperName
 	.public PCBox_DrawButtonWindow
-	.public ov14_021F5BD8
+	.public PCBox_PrintWindowMessage
 	.public PCBox_DrawPartyButton
 	.public PCBox_DrawTabWindow
 	.public PCBox_DrawTrayTab

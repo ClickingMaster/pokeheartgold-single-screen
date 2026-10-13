@@ -87,7 +87,7 @@ BOOL GtsServer_StartRequest(const char *url, void *payload, int payloadSize, voi
 void Gts_VBlankCB(void *arg);
 void Gts_SetGfxBanks(void);
 void Gts_InitData(GtsApp *app, OverlayManager *man);
-void ov70_0223887C(GtsApp *app);
+void Gts_ExitDummy(GtsApp *app);
 void Gts_ListMenuCallback(TouchscreenListMenu *menu, u8 cursorPos, void *callbackArg, int event);
 void *Gts_Alloc(void *unused, u32 size, int alignment);
 void Gts_Free(void *unused, void *ptr);
@@ -485,7 +485,7 @@ BOOL Gts_Exit(OverlayManager *man, int *state) {
     DestroyMsgData(app->gtsMsgData);
     DestroyMsgData(app->countryNames);
     MessageFormat_Delete(app->msgFormat);
-    ov70_0223887C(app);
+    Gts_ExitDummy(app);
     CommWireless_Terminate();
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
     Heap_Free(app->bgConfig);
@@ -545,7 +545,7 @@ void Gts_InitData(GtsApp *app, OverlayManager *man) {
     app->searchCountry = 0;
 }
 
-void ov70_0223887C(GtsApp *app) {
+void Gts_ExitDummy(GtsApp *app) {
 }
 
 // Shows window 0 (the top right corner of the main screen, 0xF0-0xFF x 0x00-0x10) on the main screen only.

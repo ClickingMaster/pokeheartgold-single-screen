@@ -40,7 +40,7 @@ u32 BattleSetup_GetTransitionAndMusicParam(BattleSetupLite *);
 u32 BattleStartGetTransition(u32, BattleSetupLite *);
 u32 BattleStartGetMusic(u32, BattleSetupLite *);
 u32 BattleSetup_GetWildTransitionEffect(BattleSetupLite *);
-BOOL sub_020517F8(u32);
+BOOL BattleIntroConfig_AlwaysTrue(u32);
 u32 BattleSetup_GetWildBattleMusic(BattleSetupLite *);
 u32 NPCTrainerGetBattleIntroAndMusicParam(u32);
 u32 WildPokemonGetBattleIntroAndMusicParam(void *, u32);

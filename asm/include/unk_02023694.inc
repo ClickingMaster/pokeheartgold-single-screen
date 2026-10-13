@@ -15,8 +15,8 @@
 .public BillboardLists_Draw
 .public Billboard_Create
 .public Billboard_Delete
-.public sub_020238F8
-.public sub_02023910
+.public Billboard_HasPendingFree
+.public Billboard_ClearPendingFree
 .public BillboardObject_Create
 .public BillboardObject_Delete
 .public BillboardResource_InitWithKeys

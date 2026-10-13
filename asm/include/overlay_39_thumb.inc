@@ -94,7 +94,7 @@
 .public FriendRoster_GetUserData
 .public Save_FriendRoster_Get
 .public BattleRecord_sizeof
-.public sub_0202FC74
+.public BattleRecord_GetProfile2
 .public BattleRecord_GetProfile
 .public CommState_InitWfcSession
 .public CommState_FreeWfcSession

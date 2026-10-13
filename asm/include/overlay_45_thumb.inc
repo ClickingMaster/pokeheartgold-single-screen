@@ -55,7 +55,7 @@
 .public BillboardLists_Draw
 .public Billboard_Create
 .public Billboard_Delete
-.public sub_02023910
+.public Billboard_ClearPendingFree
 .public BillboardObject_Create
 .public BillboardObject_Delete
 .public BillboardResource_InitWithKeys

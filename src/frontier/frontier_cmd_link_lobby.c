@@ -227,21 +227,21 @@ BOOL FrtCmd_LinkLobbyAction(FrontierScriptContext *ctx) {
         u32 stat;
         u16 streak;
         *result = 1;
-        stat = ov80_022385D8(lobby->facility);
+        stat = FrontierLinkLobby_GetWinStreakStat(lobby->facility);
         streak = FrontierSave_GetStat(Save_Frontier_GetStatic(lobby->saveData), stat, FrontierStat_GetFriendIndex(stat));
         if (streak != lobby->partnerStreak) {
             FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), stat, FrontierStat_GetFriendIndex(stat), 0);
-            stat = ov80_02238610(lobby->facility);
+            stat = FrontierLinkLobby_GetStreakActiveStat(lobby->facility);
             FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), stat, FrontierStat_GetFriendIndex(stat), 0);
             *result = 0;
         }
         break;
     }
     case 12: {
-        u32 stat = ov80_02238610(lobby->facility);
+        u32 stat = FrontierLinkLobby_GetStreakActiveStat(lobby->facility);
         *result = FrontierSave_GetStat(Save_Frontier_GetStatic(lobby->saveData), stat, FrontierStat_GetFriendIndex(stat));
         if (*result == 0) {
-            stat = ov80_022385D8(lobby->facility);
+            stat = FrontierLinkLobby_GetWinStreakStat(lobby->facility);
             FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), stat, FrontierStat_GetFriendIndex(stat), 0);
             if (lobby->facility == 1) {
                 FrontierData_TowerRoundAction(Save_FrontierData_Get(lobby->saveData), 6, 2);

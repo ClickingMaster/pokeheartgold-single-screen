@@ -131,7 +131,7 @@ u8 PlazaGameRoster_GetNetId(const PlazaGameRoster *roster, u32 index) {
 
 #pragma force_active on
 
-u32 ov90_022588A4(const PlazaGameRoster *roster, u32 netId) {
+u32 PlazaGameRoster_IsSpecialVisitor(const PlazaGameRoster *roster, u32 netId) {
     int index;
     if (netId >= 4) {
         GF_ASSERT(netId < 4);
@@ -779,7 +779,7 @@ PlazaGameEntry *PlazaGameEntry_New(const PlazaGameRoster *roster, u16 game, enum
     PlazaGameGfx_Init(&entry->gfx, 1, heapId);
     PlazaGameText_Init(&entry->text, heapId);
     PlazaGameEntry_LoadGraphics(entry, heapId);
-    PlazaGameMessageBox_Init(&entry->messageBox, &entry->bg, entry->roster.saveData, ov90_022588A4(&entry->roster, PlazaGameRoster_GetNetId(&entry->roster, entry->roster.localIndex)), heapId);
+    PlazaGameMessageBox_Init(&entry->messageBox, &entry->bg, entry->roster.saveData, PlazaGameRoster_IsSpecialVisitor(&entry->roster, PlazaGameRoster_GetNetId(&entry->roster, entry->roster.localIndex)), heapId);
     entry->task = SysTask_CreateOnMainQueue(PlazaGameEntry_MainTask, entry, 0);
     entry->vblankTask = SysTask_CreateOnVWaitQueue(PlazaGameEntry_VBlankTask, entry, 0);
     if (entry->roster.voiceChat) {
@@ -867,7 +867,7 @@ void PlazaGameEntry_MainTask(SysTask *task, void *data) {
         showCountries = PlazaGamePlayerInfo_HasDifferentCountries(&entry->roster, entry->info.countries);
         for (i = 0; i < entry->roster.count; i++) {
             PlazaGamePlayer_Init(&entry->players[i], entry->roster.count, entry->game, entry->screen, &entry->bg, i, entry->roster.localIndex, &entry->sprites, entry->gfxRes, (enum HeapID)entry->heapId);
-            PlazaGamePlayer_PrintName(&entry->players[i], &entry->text, entry->info.profiles[i], 8, 0, ov90_022588A4(&entry->roster, PlazaGameRoster_GetNetId(&entry->roster, i)));
+            PlazaGamePlayer_PrintName(&entry->players[i], &entry->text, entry->info.profiles[i], 8, 0, PlazaGameRoster_IsSpecialVisitor(&entry->roster, PlazaGameRoster_GetNetId(&entry->roster, i)));
             PlazaGamePlayer_PrintLocation(&entry->players[i], &entry->text, showCountries, entry->info.countries[i], entry->info.regions[i], 8);
             PlazaGamePlayer_StartSlideIn(&entry->players[i], -8, i * 3);
         }
@@ -1503,7 +1503,7 @@ PlazaGameResults *PlazaGameResults_New(const PlazaGameRoster *roster, const Plaz
     PlazaGameGfx_Init(&results->gfx, 2, heapId);
     PlazaGameText_Init(&results->text, heapId);
     PlazaGameResults_LoadGraphics(results, heapId);
-    PlazaGameMessageBox_Init(&results->messageBox, &results->bg, results->roster.saveData, ov90_022588A4(&results->roster, PlazaGameRoster_GetNetId(&results->roster, results->roster.localIndex)), heapId);
+    PlazaGameMessageBox_Init(&results->messageBox, &results->bg, results->roster.saveData, PlazaGameRoster_IsSpecialVisitor(&results->roster, PlazaGameRoster_GetNetId(&results->roster, results->roster.localIndex)), heapId);
     PlazaGameContinue_Init(&results->continuePrompt, &results->bg, results->roster.voiceChat, heapId);
     results->showCountries = PlazaGamePlayerInfo_HasDifferentCountries(&results->roster, results->info.countries);
     switch (results->game) {
@@ -1878,7 +1878,7 @@ void PlazaGameResults_TeamTask(SysTask *task, void *data) {
         PlazaGameLineScroll_Init(&results->lineScroll, &results->bg, (enum HeapID)results->heapId);
         for (i = 0; i < results->roster.count; i++) {
             PlazaGamePlayer_Init(&results->players[i], results->roster.count, results->game, results->screen, &results->bg, i, results->roster.localIndex, &results->sprites, results->gfxRes, (enum HeapID)results->heapId);
-            PlazaGamePlayer_PrintName(&results->players[i], &results->text, results->info.profiles[i], 8, 0, ov90_022588A4(&results->roster, PlazaGameRoster_GetNetId(&results->roster, i)));
+            PlazaGamePlayer_PrintName(&results->players[i], &results->text, results->info.profiles[i], 8, 0, PlazaGameRoster_IsSpecialVisitor(&results->roster, PlazaGameRoster_GetNetId(&results->roster, i)));
             PlazaGamePlayer_PrintLocation(&results->players[i], &results->text, results->showCountries, results->info.countries[i], results->info.regions[i], 8);
             PlazaGamePlayer_ScheduleTransfer(&results->players[i], &results->bg);
             PlazaGamePlayer_ShowSprite(&results->players[i]);
@@ -2321,7 +2321,7 @@ void PlazaGameResults_ShowPlayer(PlazaGameResults *results, int index, int rank)
     u32 highlight;
     int digits;
     PlazaGamePlayer_Init((PlazaGamePlayer *)((u8 *)players + offset), results->roster.count, results->game, results->screen, &results->bg, index, results->roster.localIndex, &results->sprites, results->gfxRes, (enum HeapID)results->heapId);
-    highlight = ov90_022588A4(&results->roster, PlazaGameRoster_GetNetId(&results->roster, index));
+    highlight = PlazaGameRoster_IsSpecialVisitor(&results->roster, PlazaGameRoster_GetNetId(&results->roster, index));
     PlazaGamePlayer_PrintName((PlazaGamePlayer *)((u8 *)players + offset), &results->text, results->info.profiles[index], 8, 0, highlight);
     PlazaGamePlayer_PrintLocation((PlazaGamePlayer *)((u8 *)players + offset), &results->text, results->showCountries, results->info.countries[index], results->info.regions[index], 8);
     if (results->game == 0) {

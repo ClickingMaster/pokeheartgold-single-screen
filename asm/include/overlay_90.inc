@@ -181,7 +181,7 @@
 .public WiFiPlaza_SendMinigameResultNews
 .public PlazaGameRoster_Init
 .public PlazaGameRoster_GetIndexOfNetId
-.public ov90_022588A4
+.public PlazaGameRoster_IsSpecialVisitor
 .public PlazaGameRoster_GetProfile
 .public PlazaGameEntry_NewSwalotPlop
 .public PlazaGameEntry_NewMimeJrTop

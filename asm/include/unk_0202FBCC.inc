@@ -29,7 +29,7 @@
 .public BattleRecord_Delete
 .public BattleRecord_Exists
 .public BattleRecord_Get
-.public sub_0202FC74
+.public BattleRecord_GetProfile2
 .public BattleRecord_Load
 .public BattleRecord_IsSlotValid
 .public BattleRecord_WriteSlot

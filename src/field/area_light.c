@@ -127,7 +127,7 @@ void AreaLightManager_ApplyActiveEntry(AreaLightManager *areaLightManager) {
     AreaLight_ApplyEntry(&areaLightManager->entries[areaLightManager->activeIndex], areaLightManager->modelAttributes);
 }
 
-void ov01_021EA3B0(NNSG3dResMdl *model) {
+void AreaLight_ClearMaterialModifyFlags(NNSG3dResMdl *model) {
     NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_DIFFUSE);
     NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_AMBIENT);
     NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_SPECULAR);

@@ -802,7 +802,7 @@ static BOOL Task_FieldMoveWarp(TaskManager *taskManager) {
         }
         FieldBGM_PlayForMapHeader(fieldSystem, location->mapId, FALSE);
         if (env->kind == 2) {
-            sub_02067BA4(fieldSystem);
+            FieldSystem_ClearSafariAndRandomizeRoamers(fieldSystem);
         } else if (env->kind == 0 || env->kind == 1) {
             FieldSystem_ClearSafariSysFlag(fieldSystem);
         } else {

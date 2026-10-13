@@ -375,7 +375,7 @@ static void BattleRegulationMenu_RemoveRulesWindow(BattleRegulationMenu *menu) {
 }
 
 static BOOL BattleRegulationMenu_HandleValidationResult(BattleRegulationMenu *menu) {
-    int result = sub_02074CD0(&menu->fieldSystem->linkBattleRuleset[0], SaveArray_Party_Get(menu->fieldSystem->saveData), menu->pokedexData);
+    int result = BattleRegulation_ValidateParty(&menu->fieldSystem->linkBattleRuleset[0], SaveArray_Party_Get(menu->fieldSystem->saveData), menu->pokedexData);
     switch (result) {
     case BATTLE_REGULATION_VALIDATION_RESULT_SUCCESS:
         return TRUE;
@@ -642,7 +642,7 @@ u16 BattleRegulation_CheckParty(FieldSystem *fieldSystem, MessageFormat *message
         }
         unkValue = validMons < 2 ? 7 : 0;
     } else {
-        unkValue = sub_02074CD0(&fieldSystem->linkBattleRuleset[0], party, pokedexData);
+        unkValue = BattleRegulation_ValidateParty(&fieldSystem->linkBattleRuleset[0], party, pokedexData);
     }
     PokedexData_UnloadAndDelete(pokedexData);
     int ruleValue;

@@ -20,7 +20,7 @@ void FollowMon_SpawnReleaseBall(LocalMapObject *object);
 void FollowMon_MoveToPlayer(FieldSystem *fieldSystem, u8 direction);
 BOOL FollowMon_CheckVisibleFlag(FieldSystem *fieldSystem);
 void FollowMon_SetNoBallEffect(FieldSystem *fieldSystem);
-void ov01_022057DC(MapObjectManager *manager);
+void FollowMon_SetAltSequenceFrameFlags(MapObjectManager *manager);
 void FollowMonBillboard_SetResource(BOOL alternate, LocalMapObject *object, void *billboard);
 void FollowMonBillboard_InitSequence(BOOL alternate, LocalMapObject *object, void *billboard, void *record);
 void MapObject_SetBillboardSepia(void *unused, LocalMapObject *object, void *billboard);

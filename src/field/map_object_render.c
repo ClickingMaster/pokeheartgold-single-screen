@@ -161,7 +161,7 @@ extern const u8 gSpriteBillboardInfos[];
 // billboard_lists.c
 void *Billboard_Create(BillboardCreateParams *params);
 void Billboard_Delete(void *billboards);
-BOOL sub_020238F8(void *billboards);
+BOOL Billboard_HasPendingFree(void *billboards);
 void *BillboardObject_Create(MapObjectBillboardCreateParams *params);
 VecFx32 *BillboardObject_GetPosition(void *billboard);
 u32 BillboardObject_IsVisible(void *billboard);
@@ -172,7 +172,7 @@ void MapObject_GetDrawPosition(LocalMapObject *object, VecFx32 *position);
 void *ReadMModelFromNarcInternal(MapObjectManager *manager, u32 memberIdx, BOOL atStart);
 int GetMoveModelNoBySpriteId(u32 spriteId);
 // render_animation.c, field reflections
-void ov01_021EA3B0(NNSG3dResMdl *model);
+void AreaLight_ClearMaterialModifyFlags(NNSG3dResMdl *model);
 void *Reflection_SpawnForBillboard(void *manager, MapObjectBillboardResource *resource, void *billboard, VecFx32 *position, int kind, int priority);
 // g3d_util_internal.h is not included here (it takes const / u32)
 int NNS_G3dMdlGetMdlFogEnableFlag(NNSG3dResMdl *model, int matId);
@@ -276,7 +276,7 @@ u32 MapObjectRender_GetDynamicTextureCount(MapObjectRender *render);
 void *FldObjSys_ReadMModelFromNarc(MapObjectRender *render, u32 memberIdx, BOOL atStart);
 const SpriteBillboardInfo *SpriteId_GetBillboardInfo(u32 spriteId);
 u8 SpriteId_GetBillboardModelId(u32 spriteId);
-u8 ov01_021FA298(u32 spriteId);
+u8 MapObjectRender_GetSpriteModelId(u32 spriteId);
 u8 SpriteId_GetBillboardSequenceId(u32 spriteId);
 u32 SpriteId_GetBillboardRanges(u32 spriteId);
 void MapObject_SetBillboardPending(LocalMapObject *object, BOOL set);
@@ -1162,7 +1162,7 @@ u8 SpriteId_GetBillboardModelId(u32 spriteId) {
     return SpriteId_GetBillboardInfo(spriteId)->modelId;
 }
 
-u8 ov01_021FA298(u32 spriteId) {
+u8 MapObjectRender_GetSpriteModelId(u32 spriteId) {
     return SpriteId_GetBillboardModelId(spriteId);
 }
 
@@ -1211,7 +1211,7 @@ void *MapObjectBillboards_CreateBillboard(void *billboards, MapObjectBillboardRe
         BillboardObject_SetVisible(billboard, 0);
         BillboardObject_SetSequence(billboard, 0);
         BillboardObject_SetSequenceFrame(billboard, 0);
-        ov01_021EA3B0(BillboardObject_GetModel(billboard));
+        AreaLight_ClearMaterialModifyFlags(BillboardObject_GetModel(billboard));
     }
     return billboard;
 }
@@ -1261,7 +1261,7 @@ u32 Facing_GetBillboardWalkSequence(u32 facing) {
     return gFacingBillboardWalkSequences[facing];
 }
 
-u32 ov01_021FA464(u32 facing) {
+u32 MapObjectRender_GetFacingSequence(u32 facing) {
     return ov01_02208B90[facing];
 }
 
@@ -1270,7 +1270,7 @@ u32 ov01_021FA464(u32 facing) {
 // billboards are busy)
 int MapObjectRender_LoadOrQueueTexture(MapObjectRender *render, u32 spriteId, u32 modelId, u32 dynamic) {
     MapObjectRenderQueue *queue = render->queue;
-    if (queue->loadsThisFrame >= queue->loadsPerFrame || sub_020238F8(render->billboards) == TRUE) {
+    if (queue->loadsThisFrame >= queue->loadsPerFrame || Billboard_HasPendingFree(render->billboards) == TRUE) {
         int i;
         TextureLoadRequest *request = queue->loads;
         for (i = 0; i < queue->count; i++, request++) {
@@ -1332,7 +1332,7 @@ void MapObjectRender_TextureLoadTask(SysTask *task, void *data) {
     int j;
     TextureLoadRequest *request = queue->loads;
     TextureLoadRequest *requests;
-    if (sub_020238F8(render->billboards) == TRUE) {
+    if (Billboard_HasPendingFree(render->billboards) == TRUE) {
         return;
     }
     while (queue->loadsThisFrame < queue->loadsPerFrame && i < queue->count) {

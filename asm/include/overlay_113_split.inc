@@ -9,7 +9,7 @@
 	.public _021E59AE
 	.public _021E59B2
 	.public _021E59DE
-	.public ov113_021E59F8
+	.public UnownReport_ResetDisplay
 	.public _021E5A40
 	.public _021E5A44
 	.public UnownReport_GetSeenPunctuationForms

@@ -81,7 +81,7 @@ void GtsMainMenu_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3
 void GtsMainMenu_PrintPrompt(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4);
 void GtsMainMenu_PrintButtonLabel(Window *window, MsgData *msgData, int fontId, int msgId, u32 unused);
 int GtsMainMenu_WaitEnterAnim(GtsApp *app);
-int ov70_02239698(GtsApp *app);
+int GtsMainMenu_WaitTextBeforeFadeIn(GtsApp *app);
 void GtsMainMenu_StartFadeIn(GtsApp *app);
 int GtsMainMenu_WaitFadeIn(GtsApp *app);
 int GtsMainMenu_WaitFadeIn2(GtsApp *app);
@@ -315,7 +315,7 @@ int GtsMainMenu_WaitEnterAnim(GtsApp *app) {
 
 #pragma force_active reset
 
-int ov70_02239698(GtsApp *app) {
+int GtsMainMenu_WaitTextBeforeFadeIn(GtsApp *app) {
     Gts_SetState(app, GTS_MAIN_MENU_STATE_WAIT_TEXT, GTS_MAIN_MENU_STATE_2);
     return 3;
 }

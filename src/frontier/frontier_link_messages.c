@@ -31,19 +31,19 @@ u32 BattleFactory_GetPartySize(u8 type);
 
 // Battle Hall
 
-void ov80_0222AEF8(int netId, int size, void *data, BattleHallData *work) {
+void BattleHallLink_ReceiveUnused(int netId, int size, void *data, BattleHallData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         return;
     }
 }
 
-BOOL ov80_0222AF10(BattleHallData *work) {
+BOOL BattleHallLink_SendEmptyRecord(BattleHallData *work) {
     Save_PlayerData_GetProfile(work->saveData);
     return Comm_SendCommand(0x22, work->linkBuffer, 0x2C) == TRUE;
 }
 
-void ov80_0222AF3C(int netId, int size, void *data, BattleHallData *work) {
+void BattleHallLink_ReceiveEmptyRecord(int netId, int size, void *data, BattleHallData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         return;
@@ -312,24 +312,24 @@ void BattleFactoryLink_ReceiveOpponentMons(int netId, int size, const u16 *data,
     }
 }
 
-BOOL ov80_0222B3B0(BattleFactoryData *work, u16 value) {
+BOOL BattleFactoryLink_SendValueA(BattleFactoryData *work, u16 value) {
     work->linkBuffer[0] = value;
     return Comm_SendCommand(0x1A, work->linkBuffer, 0x3C) == TRUE;
 }
 
-void ov80_0222B3D4(int netId, int size, const u16 *data, BattleFactoryData *work) {
+void BattleFactoryLink_ReceiveValueA(int netId, int size, const u16 *data, BattleFactoryData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         work->unk_57C = *data;
     }
 }
 
-BOOL ov80_0222B3FC(BattleFactoryData *work, u16 value) {
+BOOL BattleFactoryLink_SendValueB(BattleFactoryData *work, u16 value) {
     work->linkBuffer[0] = value;
     return Comm_SendCommand(0x1B, work->linkBuffer, 0x3C) == TRUE;
 }
 
-void ov80_0222B420(int netId, int size, const u16 *data, BattleFactoryData *work) {
+void BattleFactoryLink_ReceiveValueB(int netId, int size, const u16 *data, BattleFactoryData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         work->unk_57D = *data;
@@ -574,24 +574,24 @@ void BattleCastleLink_ReceiveOpponentMons(int netId, int size, void *data, Battl
     offset += 4 * 2;
 }
 
-BOOL ov80_0222B8D8(BattleCastleData *work, u16 value) {
+BOOL BattleCastleLink_SendValueA(BattleCastleData *work, u16 value) {
     work->linkBuffer[0] = value;
     return Comm_SendCommand(0x2E, work->linkBuffer, 0x28) == TRUE;
 }
 
-void ov80_0222B8F8(int netId, int size, const u16 *data, BattleCastleData *work) {
+void BattleCastleLink_ReceiveValueA(int netId, int size, const u16 *data, BattleCastleData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         work->unk_A10 = *data;
     }
 }
 
-BOOL ov80_0222B920(BattleCastleData *work, u16 value) {
+BOOL BattleCastleLink_SendValueB(BattleCastleData *work, u16 value) {
     work->linkBuffer[0] = value;
     return Comm_SendCommand(0x2F, work->linkBuffer, 0x28) == TRUE;
 }
 
-void ov80_0222B940(int netId, int size, const u16 *data, BattleCastleData *work) {
+void BattleCastleLink_ReceiveValueB(int netId, int size, const u16 *data, BattleCastleData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         work->unk_A11 = *data;
@@ -762,24 +762,24 @@ void BattleArcadeLink_ReceiveOpponentMons(int netId, int size, ArcadeMonsMessage
 
 #pragma force_active reset
 
-BOOL ov80_0222BC48(ArcadeContext *ctx, u16 value) {
+BOOL BattleArcadeLink_SendValueA(ArcadeContext *ctx, u16 value) {
     ctx->linkBuffer[0] = value;
     return Comm_SendCommand(0x44, ctx->linkBuffer, 0x28) == TRUE;
 }
 
-void ov80_0222BC6C(int netId, int size, const u16 *data, ArcadeContext *ctx) {
+void BattleArcadeLink_ReceiveValueA(int netId, int size, const u16 *data, ArcadeContext *ctx) {
     ctx->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         ctx->unkA74 = *data;
     }
 }
 
-BOOL ov80_0222BC94(ArcadeContext *ctx, u16 value) {
+BOOL BattleArcadeLink_SendValueB(ArcadeContext *ctx, u16 value) {
     ctx->linkBuffer[0] = value;
     return Comm_SendCommand(0x45, ctx->linkBuffer, 0x28) == TRUE;
 }
 
-void ov80_0222BCB8(int netId, int size, const u16 *data, ArcadeContext *ctx) {
+void BattleArcadeLink_ReceiveValueB(int netId, int size, const u16 *data, ArcadeContext *ctx) {
     ctx->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         ctx->unkA75 = *data;

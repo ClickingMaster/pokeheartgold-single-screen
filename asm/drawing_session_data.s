@@ -15,7 +15,7 @@
 	.extern DrawingSession_StatePrintLeaderLeft
 	.extern DrawingSession_StateWaitLeaderLeftMsg
 	.extern DrawingSession_StateWaitSyncAndFadeOut
-	.extern ov37_021E6E6C
+	.extern DrawingSession_StateNone
 	.extern DrawingSession_StatePrintNoMembers
 	.extern DrawingSession_StateWaitNoMembersMsg
 	.extern DrawingSession_StatePrintMemberLeft
@@ -50,7 +50,7 @@
 	.public DrawingSession_PrintMemberNames
 	.public DrawingSession_SendStrokes
 	.public DrawingSession_PrintMessage
-	.public ov37_021E76F0
+	.public DrawingSession_HandleMemberCount
 	.public DrawingSession_BuildStroke
 	.public sDrawingSessionCanvasHitbox
 	.public sDrawingSessionGraphicsModes
@@ -85,18 +85,18 @@
 	.public DrawingSession_StatePrintLeaderLeft
 	.public DrawingSession_StateWaitLeaderLeftMsg
 	.public DrawingSession_StateWaitSyncAndFadeOut
-	.public ov37_021E6E6C
+	.public DrawingSession_StateNone
 	.public DrawingSession_StatePrintNoMembers
 	.public DrawingSession_StateWaitNoMembersMsg
 	.public DrawingSession_StatePrintMemberLeft
 	.public DrawingSession_StateWaitMemberLeftMsg
-	.public ov37_021E745C
+	.public DrawingSession_CountPlayerProfiles
 	.public DrawingSession_CountMembers
 	.public DrawingSession_GetMemberCount
 	.public DrawingSession_UpdateMembers
 	.public DrawingSession_IsPrinterDone
 	.public DrawingSession_ClearMessageWindow
-	.public ov37_021E76D0
+	.public DrawingSession_UpdateMaxEntries
 	.public DrawingSession_SetNextSubState
 	.public DrawingSession_ApplyNextSubState
 	.public DrawingSession_ShowYesNo
@@ -224,7 +224,7 @@ sDrawingSessionSubStates:
 	.word DrawingSession_StatePrintLeaderLeft, 1
 	.word DrawingSession_StateWaitLeaderLeftMsg, 1
 	.word DrawingSession_StateWaitSyncAndFadeOut, 1
-	.word ov37_021E6E6C, 1
+	.word DrawingSession_StateNone, 1
 	.word DrawingSession_StatePrintNoMembers, 1
 	.word DrawingSession_StateWaitNoMembersMsg, 1
 	.word DrawingSession_StatePrintMemberLeft, 1

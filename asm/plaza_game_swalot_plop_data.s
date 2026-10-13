@@ -898,7 +898,7 @@
 	.extern SwalotPlopIntro_Wait
 	.extern SwalotPlopGfx_SetScenePos
 	.extern SwalotPlopFinish_Init
-	.extern ov91_0225DBE0
+	.extern SwalotPlopGfx_FreeDummy1
 	.extern SwalotPlopFinish_Start
 	.extern SwalotPlopFinish_Update
 	.extern SwalotPlopFinish_IsSignDone
@@ -986,7 +986,7 @@
 	.extern SwalotPlopGfx_FreeCamera
 	.extern SwalotPlopGfx_ApplyCamera
 	.extern SwalotPlopGfx_LoadSubBgs
-	.extern ov91_0225FEFC
+	.extern SwalotPlopGfx_FreeDummy2
 	.extern SwalotPlopScene_Init
 	.extern SwalotPlopScene_Free
 	.extern SwalotPlopScene_Update

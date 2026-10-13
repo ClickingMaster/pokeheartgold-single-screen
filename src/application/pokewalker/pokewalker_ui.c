@@ -372,7 +372,7 @@ void PokewalkerApp_RemoveWindowBank(PokewalkerApp *app, int bank) {
     }
 }
 
-void ov112_021E9C94(PokewalkerApp *app) {
+void PokewalkerApp_OnModeChangeDummy(PokewalkerApp *app) {
 }
 
 void PokewalkerApp_LoadStrings(PokewalkerApp *app) {

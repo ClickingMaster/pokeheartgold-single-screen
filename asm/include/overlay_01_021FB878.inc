@@ -53,7 +53,7 @@
 .public AreaDataManager_GetMapTexture
 .public AreaDataManager_GetMapPropTexture
 .public AreaDataManager_GetBuildModelShapes
-.public ov01_021FBA00
+.public AreaDataManager_IsLit
 .public AreaDataManager_GetAreaLightArchiveID
 .public AreaDataManager_Load
 .public Field3dModel_LoadFromFilesystem

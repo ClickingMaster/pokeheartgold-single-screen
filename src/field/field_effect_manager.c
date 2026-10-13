@@ -16,7 +16,7 @@ void Billboard_Delete(void *billboards);
 void *BillboardObject_Create(const FieldEffectBillboardTemplate *template);
 NNSG3dResMdl *BillboardObject_GetModel(void *object);
 void BillboardGfxSequence_Init(void *data, FieldEffectGfxSequence *sequence);
-void ov01_021EA3B0(NNSG3dResMdl *mdl);
+void AreaLight_ClearMaterialModifyFlags(NNSG3dResMdl *mdl);
 void NNS_G3dMdlSetMdlFogEnableFlagAll(NNSG3dResMdl *mdl, int flag);
 void RenderModel_LoadFromNarc(void *model, int index, NARC *narc, int fileId, enum HeapID heapID, BOOL atEnd);
 void RenderModel_BindTexturesOnVBlank(void *model);
@@ -293,7 +293,7 @@ void *FieldEffectManager_CreateBillboard(FieldEffectManager *manager, FieldEffec
     GF_ASSERT(billboard != NULL);
     if (billboard != NULL) {
         NNS_G3dMdlSetMdlFogEnableFlagAll(BillboardObject_GetModel(billboard), 1);
-        ov01_021EA3B0(BillboardObject_GetModel(billboard));
+        AreaLight_ClearMaterialModifyFlags(BillboardObject_GetModel(billboard));
     }
     return billboard;
 }

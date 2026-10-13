@@ -138,7 +138,7 @@ gPlayerFishingDrawCallbacks:
 	.public ov01_02206E2C
 ov01_02206E2C:
 	.word BillboardDraw_Init
-	.word ov01_021F7CE4
+	.word BillboardDraw_UpdateTwoSequences
 	.word BillboardDraw_Delete
 	.word BillboardDraw_Pause
 	.word BillboardDraw_Resume

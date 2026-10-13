@@ -22,9 +22,9 @@ void VeryTallGrass_Spawn(LocalMapObject *object, int mode);
 void PuddleSplash_Spawn(LocalMapObject *object, int x, int y, int z);
 void MudSplash_Spawn(LocalMapObject *object, int x, int y, int z);
 void ShallowWaterRipple_Spawn(LocalMapObject *object, int value);
-void ov01_021FE3DC(LocalMapObject *object);
-void ov01_021FE3E8(LocalMapObject *object);
-void ov01_021FE3F4(LocalMapObject *object);
+void Footprints_SpawnInSnow(LocalMapObject *object);
+void Footprints_SpawnOnBehavior169(LocalMapObject *object);
+void Footprints_SpawnTracksOnBehavior169(LocalMapObject *object);
 void Footprints_SpawnInSand(LocalMapObject *object);
 void Footprints_SpawnTracksInSand(LocalMapObject *object);
 void FieldShadow_CreateMapObjectShadow(LocalMapObject *object);
@@ -291,9 +291,9 @@ void MapObject_SpawnFootprints(LocalMapObject *object, u8 behavior, u8 prevBehav
     if (sub_0205BA94(prevBehavior) == TRUE) {
         kind = flags->footprints;
         if (kind == 1) {
-            ov01_021FE3E8(object);
+            Footprints_SpawnOnBehavior169(object);
         } else if (kind == 2) {
-            ov01_021FE3F4(object);
+            Footprints_SpawnTracksOnBehavior169(object);
         }
     }
     if (MapObject_CheckSandBehavior(object, prevBehavior) == TRUE) {
@@ -306,7 +306,7 @@ void MapObject_SpawnFootprints(LocalMapObject *object, u8 behavior, u8 prevBehav
             return;
         }
     } else if (sub_02060ED4(object, prevBehavior) == TRUE) {
-        ov01_021FE3DC(object);
+        Footprints_SpawnInSnow(object);
     }
 }
 

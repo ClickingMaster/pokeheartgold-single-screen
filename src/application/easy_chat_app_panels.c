@@ -274,7 +274,7 @@ void EasyChatCategoryView_Delete(EasyChatCategoryView *categories);
 void EasyChatCategoryView_Load(EasyChatCategoryView *categories, NARC *narc);
 u32 EasyChatCategoryView_DrawCategories(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile);
 u32 EasyChatCategoryView_DrawInitials(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile);
-u32 ov102_021EB94C(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile);
+u32 EasyChatCategoryView_LoadGfxDummy(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile);
 void EasyChatCategoryView_CreateCursor(EasyChatCategoryView *categories);
 void EasyChatCategoryView_SetCursorVisible(EasyChatCategoryView *categories, BOOL draw);
 void EasyChatCategoryView_MoveCursor(EasyChatCategoryView *categories, u32 category);
@@ -412,7 +412,7 @@ void EasyChatSentenceView_Load(EasyChatSentenceView *sentence, NARC *narc) {
     sentence->iconTile = baseTile + 222;
     GfGfxLoader_GXLoadPal(NARC_a_0_3_8, 25, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_14_OFFSET, 32, HEAP_ID_35);
     sentence->frameTile = baseTile + 231;
-    LoadUserFrameGfx2(bgConfig, GF_BG_LYR_MAIN_0, baseTile + 231, 15, ov102_021E9084(sentence->app), HEAP_ID_35);
+    LoadUserFrameGfx2(bgConfig, GF_BG_LYR_MAIN_0, baseTile + 231, 15, EasyChatApp_GetFrame(sentence->app), HEAP_ID_35);
     sentence->messageWindow = &sentence->messageWindows[0];
     DrawFrame2AroundWindow(&sentence->messageWindows[0], baseTile + 231, 15);
     PutWindowTilemap(&sentence->sentenceWindows[0]);
@@ -1196,7 +1196,7 @@ void EasyChatCategoryView_Load(EasyChatCategoryView *categories, NARC *narc) {
     size = GfGfxLoader_LoadCharDataFromOpenNarc(narc, 3, bgConfig, GF_BG_LYR_MAIN_1, 0, 0, TRUE, HEAP_ID_35);
     tile = EasyChatCategoryView_DrawCategories(categories, bgConfig, size >> 5);
     tile = EasyChatCategoryView_DrawInitials(categories, bgConfig, tile);
-    ov102_021EB94C(categories, bgConfig, tile);
+    EasyChatCategoryView_LoadGfxDummy(categories, bgConfig, tile);
     BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_MAIN_1, (enum BgPosAdjustOp)zero, zero - 4);
     BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_Y, 16);
     EasyChatCategoryView_CreateCursor(categories);
@@ -1269,7 +1269,7 @@ u32 EasyChatCategoryView_DrawInitials(EasyChatCategoryView *categories, BgConfig
     return tile + 200;
 }
 
-u32 ov102_021EB94C(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile) {
+u32 EasyChatCategoryView_LoadGfxDummy(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile) {
 #pragma unused(categories, bgConfig)
     return tile;
 }

@@ -72,7 +72,7 @@ void MysteryGiftAnim_DeleteGiftMainSprite(MysteryGiftAnimData *anim);
 void MysteryGiftAnim_DeleteGiftSubSprite(MysteryGiftAnimData *anim);
 void MysteryGiftAnim_UpdateSprites(MysteryGiftAnimData *anim);
 void MysteryGiftAnim_CreateSparkles(MysteryGiftAnimData *anim);
-void ov74_0222B2C4(MysteryGiftAnimData *anim);
+void MysteryGiftAnim_CreateSparkleSprites(MysteryGiftAnimData *anim);
 void MysteryGiftAnim_CreateRibbons(MysteryGiftAnimData *anim);
 void MysteryGiftAnim_DeleteSparkles(MysteryGiftAnimData *anim);
 void MysteryGiftAnim_DeleteRibbons(MysteryGiftAnimData *anim);

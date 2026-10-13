@@ -481,7 +481,7 @@ void SwalotPlopIntro_StartScene(SwalotPlopIntro *intro, SwalotPlopGfx *gfx);
 BOOL SwalotPlopIntro_Wait(SwalotPlopIntro *intro, SwalotPlopGfx *gfx);
 void SwalotPlopGfx_SetScenePos(SwalotPlopGfx *gfx, SwalotPlopBody *body);
 void SwalotPlopFinish_Init(SwalotPlopGfx *gfx, u32 playerCount, u32 localIndex, enum HeapID heapId);
-void ov91_0225DBE0(SwalotPlopGfx *gfx, u32 playerCount);
+void SwalotPlopGfx_FreeDummy1(SwalotPlopGfx *gfx, u32 playerCount);
 void SwalotPlopFinish_Start(SwalotPlopGfx *gfx);
 BOOL SwalotPlopFinish_Update(SwalotPlopGfx *gfx);
 BOOL SwalotPlopFinish_IsSignDone(SwalotPlopGfx *gfx);
@@ -569,7 +569,7 @@ void SwalotPlopGfx_InitCamera(SwalotPlopGfx *gfx, int playerCount, int localInde
 void SwalotPlopGfx_FreeCamera(SwalotPlopGfx *gfx);
 void SwalotPlopGfx_ApplyCamera(SwalotPlopGfx *gfx);
 void SwalotPlopGfx_LoadSubBgs(SwalotPlopGfx *gfx, NARC *narc, int localIndex, enum HeapID heapId);
-void ov91_0225FEFC(SwalotPlopGfx *gfx);
+void SwalotPlopGfx_FreeDummy2(SwalotPlopGfx *gfx);
 void SwalotPlopScene_Init(SwalotPlopScene *scene, NARC *narc, enum HeapID heapId, NNSFndAllocator *allocator);
 void SwalotPlopScene_Free(SwalotPlopScene *scene, NNSFndAllocator *allocator);
 void SwalotPlopScene_Update(SwalotPlopScene *scene, SwalotPlopBody *body, u32 phase);

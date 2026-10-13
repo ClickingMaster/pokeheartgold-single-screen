@@ -289,14 +289,14 @@ u32 PCBox_State_MoveModeInput(PCBoxWork *work) {
         PlaySE(SEQ_SE_DP_OPEN7);
         work->moveWithButtons = 0;
         work->moveFromSlot = 0;
-        return ov14_021F2330(work, 9, 0x96);
+        return PCBox_StartCellPaletteFlash(work, 9, 0x96);
     case 36:
         PlaySE(SEQ_SE_DP_DECIDE);
         if (System_GetTouchNew() == 0) {
             work->moveWithButtons = 1;
         }
         work->moveFromSlot = work->selectedSlot;
-        return ov14_021F2330(work, 3, 0xb2);
+        return PCBox_StartCellPaletteFlash(work, 3, 0xb2);
     case 37:
         PlaySE(SEQ_SE_DP_DECIDE);
         work->returnCursorPos = 0x25;
@@ -928,7 +928,7 @@ int PCBox_State_MoveModePartyInput(PCBoxWork *work) {
                 work->moveWithButtons = 2;
             }
             work->moveFromSlot = work->selectedSlot;
-            return ov14_021F2330(work, 3, 157);
+            return PCBox_StartCellPaletteFlash(work, 3, 157);
         case 9:
             PlaySE(SEQ_SE_DP_DECIDE);
             work->returnCursorPos = 9;
@@ -1100,7 +1100,7 @@ u32 PCBox_State_BoxTrayInput(PCBoxWork *work) {
             PlaySE(SEQ_SE_DP_DECIDE);
             work->selectedSlot = (u8)v;
             work->summaryFromTray = 1;
-            return ov14_021F2330(work, 0xf, 0x97);
+            return PCBox_StartCellPaletteFlash(work, 0xf, 0x97);
         }
         return 0x29;
     }
@@ -2224,7 +2224,7 @@ u32 PCBox_State_EndDepositMove(PCBoxWork *work) {
     PCBox_RevertShayminFormOnMove(work, moveWork->from, moveWork->to);
     PCBox_FreeMoveWork(work);
     PCBox_ShiftPartyPanelLeft(work->view->panels);
-    return PCBox_WaitForUpdateFunc(work, ov14_021E954C, 0x6c);
+    return PCBox_WaitForUpdateFunc(work, PCBox_WaitPartyPanelSlideFunc, 0x6c);
 }
 
 u32 PCBox_State_ShowDepositReturnButton(PCBoxWork *work) {
@@ -2373,7 +2373,7 @@ u32 PCBox_State_ItemModeInput(PCBoxWork *work) {
         return PCBox_FlashPanel(work, 8, 0xab);
     case 0x22:
         PlaySE(SEQ_SE_DP_OPEN7);
-        return ov14_021F2330(work, 9, 0xac);
+        return PCBox_StartCellPaletteFlash(work, 9, 0xac);
     case 0x24:
         PlaySE(SEQ_SE_DP_DECIDE);
         return PCBox_FlashPanel(work, 7, 0xad);
@@ -2704,7 +2704,7 @@ u32 PCBox_State_ItemModeBoxTrayInput(PCBoxWork *work) {
             PlaySE(SEQ_SE_DP_DECIDE);
             work->selectedSlot = (u8)v;
             work->summaryFromTray = 1;
-            return ov14_021F2330(work, 0xf, 0x97);
+            return PCBox_StartCellPaletteFlash(work, 0xf, 0x97);
         }
         return 0x82;
     }
@@ -3570,7 +3570,7 @@ u32 PCBox_CloseTrayToPartyPanel(PCBoxWork *work) {
     work->selectedSlot = 0xff;
     PCBox_SetIconsTranslucent(work, 1, 1);
     PCBox_ShiftPartyPanelAndReturnButtonLeft(work->view->panels);
-    return PCBox_WaitForUpdateFunc(work, ov14_021E954C, 0x2e);
+    return PCBox_WaitForUpdateFunc(work, PCBox_WaitPartyPanelSlideFunc, 0x2e);
 }
 
 u32 PCBox_OpenTrayFromBox(PCBoxWork *work) {
@@ -4240,7 +4240,7 @@ u32 PCBox_State_BoxTrayHoldingInput(PCBoxWork *work) {
         work->summaryFromTray = 1;
         work->summaryFromHolding = 1;
         work->summaryCursorPos = GridInputHandler_GetNextInput(work->view->gridInput);
-        return ov14_021F2330(work, 0xf, 0x97);
+        return PCBox_StartCellPaletteFlash(work, 0xf, 0x97);
     }
     v = PCBox_GetTrayHoldingInput(work);
     if (GridInputHandler_IsButtonInputMode(work->view->gridInput) == 0) {
@@ -4376,7 +4376,7 @@ u32 PCBox_FlashPanel(PCBoxWork *work, u32 a1, u32 a2) {
     return 8;
 }
 
-u32 ov14_021F2330(PCBoxWork *work, u32 a1, u32 a2) {
+u32 PCBox_StartCellPaletteFlash(PCBoxWork *work, u32 a1, u32 a2) {
     s8 a;
     s8 b;
     u16 c;

@@ -608,7 +608,7 @@ void PCBox_DrawButtonWindow(PCBoxWork *work, u32 win, u32 msgId, u32 style) {
     CopyWindowPixelsToVram_TextMode(w);
 }
 
-void ov14_021F5BD8(PCBoxWork *work, u32 win, u32 msgId, u32 style, u8 align) {
+void PCBox_PrintWindowMessage(PCBoxWork *work, u32 win, u32 msgId, u32 style, u8 align) {
     Window *w = &work->view->windows[win];
     u8 bg, x, y, width, height;
     String *str;
@@ -736,7 +736,7 @@ void PCBox_DrawChangeBoxButton(PCBoxWork *work) {
 }
 
 void PCBox_DrawChangeBoxTitle(PCBoxWork *work) {
-    ov14_021F5BD8(work, 0x29, 0x4d, 0, 3);
+    PCBox_PrintWindowMessage(work, 0x29, 0x4d, 0, 3);
 }
 
 void PCBox_DrawBoxMenu(PCBoxWork *work) {
@@ -746,11 +746,11 @@ void PCBox_DrawBoxMenu(PCBoxWork *work) {
 }
 
 void PCBox_DrawChangeWallpaperTitle(PCBoxWork *work) {
-    ov14_021F5BD8(work, 0x29, 0x4e, 0, 3);
+    PCBox_PrintWindowMessage(work, 0x29, 0x4e, 0, 3);
 }
 
 void PCBox_DrawDepositTitle(PCBoxWork *work) {
-    ov14_021F5BD8(work, 0x29, 0x4f, 0, 3);
+    PCBox_PrintWindowMessage(work, 0x29, 0x4f, 0, 3);
 }
 
 #pragma force_active on

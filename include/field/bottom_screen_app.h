@@ -30,7 +30,7 @@ enum BottomScreenAppState {
     BOTTOM_SCREEN_APP_STATE_FADE_IN,
 };
 
-void ov01_021F6830(FieldSystem *fieldSystem, int a1, int a2);
+void FieldSystem_SendBottomScreenEvent(FieldSystem *fieldSystem, int a1, int a2);
 void BottomScreen_TouchSave_Init(FieldSystem *fieldSystem);
 void BottomScreen_TouchSave_End(FieldSystem *fieldSystem);
 BOOL BottomScreen_TouchSave_IsDone(FieldSystem *fieldSystem);

@@ -82,8 +82,8 @@ BOOL Task_FrontierWifiConnection(TaskManager *taskManager);
 void TaskManager_CallFrontierWifiConnection(TaskManager *taskManager, u16 arg1, u16 outputVar, u16 arg2);
 BOOL Task_FrontierLinkPartnerCheck(TaskManager *taskManager);
 void TaskManager_CallFrontierLinkPartnerCheck(TaskManager *taskManager, u16 kind, u16 outputVar);
-u32 sub_020672D8(SaveData *saveData);
-u32 sub_02067398(SaveData *saveData);
+u32 BattleTower_ClaimRecordMilestone(SaveData *saveData);
+u32 BattleTower_GetRecordMilestone(SaveData *saveData);
 void sub_02067484(Unk67484Outer *outer, const int *delta);
 u32 BattleTower_NextRandom(u32 value);
 u32 BattleTower_NextSeed(u32 value);
@@ -289,7 +289,7 @@ void TaskManager_CallFrontierLinkPartnerCheck(TaskManager *taskManager, u16 kind
     TaskManager_Call(fieldSystem->taskman, Task_FrontierLinkPartnerCheck, env);
 }
 
-u32 sub_020672D8(SaveData *saveData) {
+u32 BattleTower_ClaimRecordMilestone(SaveData *saveData) {
     FrontierData *frontierData;
     u32 stat;
     u8 flag13;
@@ -328,7 +328,7 @@ u32 sub_020672D8(SaveData *saveData) {
     return 3;
 }
 
-u32 sub_02067398(SaveData *saveData) {
+u32 BattleTower_GetRecordMilestone(SaveData *saveData) {
     FrontierData *frontierData;
     u32 stat;
     u8 flag13;

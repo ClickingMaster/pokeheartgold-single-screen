@@ -110,8 +110,8 @@ void GtsWanted_FreeData(GtsApp *app);
 int GtsWanted_Start(GtsApp *app);
 int GtsWanted_HandleInput(GtsApp *app);
 int GtsWanted_OpenSpeciesSelector(GtsApp *app);
-int ov70_0223EDCC(GtsApp *app);
-int ov70_0223EDD8(GtsApp *app);
+int GtsWanted_InvalidState4(GtsApp *app);
+int GtsWanted_InvalidState5(GtsApp *app);
 int GtsWanted_HandleSpeciesSelector(GtsApp *app);
 int GtsWanted_AskGender(GtsApp *app);
 int GtsWanted_OpenGenderSelector(GtsApp *app);
@@ -340,12 +340,12 @@ int GtsWanted_OpenSpeciesSelector(GtsApp *app) {
 }
 
 // States 4 and 5 are not used.
-int ov70_0223EDCC(GtsApp *app) {
+int GtsWanted_InvalidState4(GtsApp *app) {
     GF_AssertFail();
     return 3;
 }
 
-int ov70_0223EDD8(GtsApp *app) {
+int GtsWanted_InvalidState5(GtsApp *app) {
     GF_AssertFail();
     return 3;
 }

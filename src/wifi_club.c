@@ -165,7 +165,7 @@ BOOL Task_WifiClub(TaskManager *taskManager) {
         }
         break;
     case 4:
-        CallTask_02050960(taskManager, task->clubArgs->partnerFriendIndex, task->maxLevel, task->doubleBattle);
+        CallTask_WifiClubBattle(taskManager, task->clubArgs->partnerFriendIndex, task->maxLevel, task->doubleBattle);
         task->state++;
         break;
     case 5:

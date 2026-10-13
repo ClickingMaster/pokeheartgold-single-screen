@@ -28,7 +28,7 @@ FrontierSystem *FrontierSystem_Create(void *frontierWork, enum HeapID heapId, u3
     system->msgFormat = MessageFormat_New_Custom(8, 64, heapId);
     system->msgBuffer = String_New(1024, heapId);
     system->msgTemplate = String_New(1024, heapId);
-    FrontierSystem_deadstripped_0222AA3C(system, mapId, 0, 0);
+    FrontierSystem_InitDummy(system, mapId, 0, 0);
     return system;
 }
 
@@ -105,7 +105,7 @@ void FrontierSystem_FreeTask(FrontierSystem *system, FrontierScriptContext *task
     Heap_Free(task);
 }
 
-void FrontierSystem_deadstripped_0222AA3C(FrontierSystem *system, u16 mapId, u32 a2, u32 a3) {
+void FrontierSystem_InitDummy(FrontierSystem *system, u16 mapId, u32 a2, u32 a3) {
 }
 
 void FrontierSystem_LoadMapScripts(u8 **scripts, MsgData **msgData, u32 mapId, enum HeapID heapId) {

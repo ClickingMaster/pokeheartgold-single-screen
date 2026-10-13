@@ -22,7 +22,7 @@ extern const u16 ov18_021FB5B4[];
 void PokedexApp_SetupFormsSprites(PokedexAppData *pokedexApp) {
     PokedexApp_LoadMonIconResources(pokedexApp, 6);
     PokedexApp_LoadMonPicResources(pokedexApp);
-    ov18_021F193C(pokedexApp);
+    PokedexApp_LoadFormsSpriteResources(pokedexApp);
     PokedexApp_CreateFormsSprites(pokedexApp);
 }
 
@@ -34,7 +34,7 @@ void PokedexApp_FreeFormsSprites(PokedexAppData *pokedexApp) {
     }
     PokedexApp_UnloadMonIconResources(pokedexApp, 6);
     PokedexApp_UnloadMonPicResources(pokedexApp);
-    ov18_021F19EC(pokedexApp);
+    PokedexApp_UnloadFormsSpriteResources(pokedexApp);
 }
 
 #pragma force_active on

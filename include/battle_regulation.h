@@ -21,6 +21,6 @@ PokedexData *PokedexData_CreateAndLoad(enum HeapID heapID);
 void PokedexData_UnloadAndDelete(PokedexData *pokedex);
 BOOL LinkBattleRuleset_CheckDexBasedRules(LinkBattleRuleset *ruleset, Pokemon *pokemon, PokedexData *pokedex);
 BattleRegulationComplianceMessage LinkBattleRuleset_GetPartySelectionComplianceMessage(LinkBattleRuleset *ruleset, Party *party, PokedexData *pokedex, u8 *a3);
-int sub_02074CD0(LinkBattleRuleset *ruleset, Party *party, PokedexData *pokedex);
+int BattleRegulation_ValidateParty(LinkBattleRuleset *ruleset, Party *party, PokedexData *pokedex);
 
 #endif // GUARD_POKEHEARTGOLD_UNK_02074944_H

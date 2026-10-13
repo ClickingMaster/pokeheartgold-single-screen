@@ -11,9 +11,9 @@
 FS_EXTERN_OVERLAY(OVY_19);
 
 // defined in field_interaction.c (empty), not declared by a header yet
-void sub_0203DB6C(FieldSystem *fieldSystem);
-void sub_0203DB70(FieldSystem *fieldSystem);
-BOOL sub_0203DB74(FieldSystem *fieldSystem);
+void BottomScreen_None_Init(FieldSystem *fieldSystem);
+void BottomScreen_None_End(FieldSystem *fieldSystem);
+BOOL BottomScreen_None_IsDone(FieldSystem *fieldSystem);
 
 static const BottomScreenOps sBottomScreenOps[];
 
@@ -74,6 +74,6 @@ static const BottomScreenOps sBottomScreenOps[] = {
     { BottomScreen_Blank_Init, NULL, BottomScreen_Blank_End, BottomScreen_Blank_IsDone     },
     { BottomScreen_Apps_Init,           NULL, BottomScreen_Apps_End,          BottomScreen_Apps_IsDone                 },
     { BottomScreen_TouchSave_Init,           NULL, BottomScreen_TouchSave_End,          BottomScreen_TouchSave_IsDone                 },
-    { sub_0203DB6C,            NULL, sub_0203DB70,           sub_0203DB74                  },
+    { BottomScreen_None_Init,            NULL, BottomScreen_None_End,           BottomScreen_None_IsDone                  },
     { BottomScreen_ViewPhoto_Init, NULL, BottomScreen_ViewPhoto_End, BottomScreen_ViewPhoto_IsDone },
 };

@@ -103,7 +103,7 @@ int DrawingSession_StateHandleDisbandPrompt(DrawingSessionWork *work, int state)
 int DrawingSession_StatePrintLeaderLeft(DrawingSessionWork *work, int state);
 int DrawingSession_StateWaitLeaderLeftMsg(DrawingSessionWork *work, int state);
 int DrawingSession_StateWaitSyncAndFadeOut(DrawingSessionWork *work, int state);
-int ov37_021E6E6C(DrawingSessionWork *work, int state);
+int DrawingSession_StateNone(DrawingSessionWork *work, int state);
 int DrawingSession_StatePrintNoMembers(DrawingSessionWork *work, int state);
 int DrawingSession_StateWaitNoMembersMsg(DrawingSessionWork *work, int state);
 int DrawingSession_StatePrintMemberLeft(DrawingSessionWork *work, int state);
@@ -115,7 +115,7 @@ void DrawingSession_SaveLastPoints(const DrawingSessionStroke *strokes, DrawingS
 void DrawingSession_DrawStrokes(Window *window, DrawingSessionStroke *strokes, DrawingSessionPoint *points, BOOL copyToVram);
 void DrawingSession_UpdatePenCursors(DrawingSessionWork *work);
 void DrawingSession_AnimateCursorPalette(u16 *angle);
-u32 ov37_021E745C(void);
+u32 DrawingSession_CountPlayerProfiles(void);
 void DrawingSession_PrintMemberNames(Window *windows, int unused, u32 color, DrawingSessionWork *work);
 void DrawingSession_SendStrokes(DrawingSessionWork *work);
 int DrawingSession_CountMembers(void);
@@ -123,8 +123,8 @@ BOOL DrawingSession_UpdateMembers(DrawingSessionWork *work);
 void DrawingSession_PrintMessage(DrawingSessionWork *work, u32 msgId, u32 speed);
 BOOL DrawingSession_IsPrinterDone(u32 printerId);
 void DrawingSession_ClearMessageWindow(DrawingSessionWork *work);
-void ov37_021E76D0(DrawingSessionWork *work, int extra);
-int ov37_021E76F0(DrawingSessionWork *work);
+void DrawingSession_UpdateMaxEntries(DrawingSessionWork *work, int extra);
+int DrawingSession_HandleMemberCount(DrawingSessionWork *work);
 void DrawingSession_SetNextSubState(DrawingSessionWork *work, int state);
 void DrawingSession_ApplyNextSubState(DrawingSessionWork *work, int mainState);
 BOOL DrawingSession_ShowYesNo(DrawingSessionWork *work, const YesNoPromptTemplate *template);
@@ -216,7 +216,7 @@ BOOL DrawingSession_Main(OverlayManager *man, int *state) {
         }
         DrawingSession_PrintMemberNames(work->nameWindows, 0, MAKE_TEXT_COLOR(14, 13, 15), work);
         if (!Comm_GetLocalNetId()) {
-            int next = ov37_021E76F0(work);
+            int next = DrawingSession_HandleMemberCount(work);
             if (*state == 1) {
                 *state = next;
             }
@@ -670,7 +670,7 @@ void DrawingSession_SetQuitButtonPressed(Sprite **buttons, BOOL pressed) {
 int DrawingSession_StateDraw(DrawingSessionWork *work, int state) {
     DrawingSession_HandleTouch(work);
     if (Comm_GetLocalNetId() == 0) {
-        if (ov37_021E745C() != 1) {
+        if (DrawingSession_CountPlayerProfiles() != 1) {
             DrawingSession_SendStrokes(work);
         }
     } else {
@@ -709,7 +709,7 @@ int DrawingSession_StateHidePenCursors(DrawingSessionWork *work, int state) {
 
 int DrawingSession_StateResumeDrawing(DrawingSessionWork *work, int state) {
     G2_BlendNone();
-    ov37_021E76D0(work, 1);
+    DrawingSession_UpdateMaxEntries(work, 1);
     DrawingSession_SetNextSubState(work, 4);
     DrawingSession_UpdateCanvas(work);
     work->newConnection = 0;
@@ -934,7 +934,7 @@ int DrawingSession_StateWaitSyncAndFadeOut(DrawingSessionWork *work, int state) 
     return state;
 }
 
-int ov37_021E6E6C(DrawingSessionWork *work, int state) {
+int DrawingSession_StateNone(DrawingSessionWork *work, int state) {
 #pragma unused(work)
     return state;
 }
@@ -962,7 +962,7 @@ int DrawingSession_StatePrintMemberLeft(DrawingSessionWork *work, int state) {
     DrawingSession_SetNextSubState(work, 22);
     PlaySE(SEQ_SE_DP_BUTTON9);
     if (!Comm_GetLocalNetId()) {
-        ov37_021E76D0(work, 0);
+        DrawingSession_UpdateMaxEntries(work, 0);
     }
     work->leaveConnectedCount = Comm_CountConnected();
     DrawingSession_UpdateCanvas(work);
@@ -995,7 +995,7 @@ int DrawingSession_StateWaitAfterMemberLeft(DrawingSessionWork *work, int state)
         DrawingSession_SetNextSubState(work, 4);
         if (!Comm_GetLocalNetId()) {
             work->joinState = 1;
-            ov37_021E76D0(work, 1);
+            DrawingSession_UpdateMaxEntries(work, 1);
         }
     }
     DrawingSession_UpdateCanvas(work);
@@ -1229,7 +1229,7 @@ void DrawingSession_AnimateCursorPalette(u16 *angle) {
 }
 
 // Same body as DrawingSession_CountMembers.
-u32 ov37_021E745C(void) {
+u32 DrawingSession_CountPlayerProfiles(void) {
     int i;
     u32 count = 0;
     for (i = 0; i < DRAWING_SESSION_MAX_MEMBERS; i++) {
@@ -1376,7 +1376,7 @@ void DrawingSession_ClearMessageWindow(DrawingSessionWork *work) {
     ClearFrameAndWindow2(&work->messageWindow, FALSE);
 }
 
-void ov37_021E76D0(DrawingSessionWork *work, int extra) {
+void DrawingSession_UpdateMaxEntries(DrawingSessionWork *work, int extra) {
 #pragma unused(work)
     s32 count;
     if (!Comm_GetLocalNetId()) {
@@ -1403,7 +1403,7 @@ static inline BOOL DrawingSession_IsOneMemberBit(u32 bits) {
     return result;
 }
 
-int ov37_021E76F0(DrawingSessionWork *work) {
+int DrawingSession_HandleMemberCount(DrawingSessionWork *work) {
     int count = DrawingSession_CountMembers();
     switch (count) {
     case 1:
@@ -1426,9 +1426,9 @@ int ov37_021E76F0(DrawingSessionWork *work) {
         UnionRoom_SetBeaconActivity(1);
         if (count < work->memberCount) {
             if (work->joinState == 2) {
-                ov37_021E76D0(work, 0);
+                DrawingSession_UpdateMaxEntries(work, 0);
             } else {
-                ov37_021E76D0(work, 1);
+                DrawingSession_UpdateMaxEntries(work, 1);
             }
         }
         break;
@@ -1442,7 +1442,7 @@ int ov37_021E76F0(DrawingSessionWork *work) {
         work->connectedCount = Comm_CountConnected();
         work->connectedBitmap = Wireless_GetConnectedBitmap();
         if (work->newConnection && !(work->connectedBitmap & work->newConnectionBit)) {
-            ov37_021E76D0(work, 1);
+            DrawingSession_UpdateMaxEntries(work, 1);
             work->joinState = 1;
             work->newConnection = 0;
             work->newConnectionBit = 0;

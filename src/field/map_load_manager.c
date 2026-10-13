@@ -179,7 +179,7 @@ typedef struct MapModelLoad {
 BOOL AreaMapAnimation_IsLoaded(AreaMapAnimation *unkCC);
 
 BOOL sub_02054E20(u32 modelNo); // u16 in the field terrain headers; called here without narrowing
-BOOL ov01_021FBA00(AreaDataManager *areaDataManager);
+BOOL AreaDataManager_IsLit(AreaDataManager *areaDataManager);
 
 extern const MapLoadFuncs sMapLoadFuncs_Default;
 extern const MapLoadFuncs sMapLoadFuncs_SafariZone;
@@ -215,11 +215,11 @@ void MapLoadManager_SwapMaps(int mapSlot1, int mapSlot2, int mapSlot3, int mapSl
 void MapLoadManager_Scroll(int matrixIndex, u8 direction, MapLoadManager *mapLoadManager);
 u32 TileIndex_ToMatrixIndex(u32 tile, u32 width, u32 stride);
 u32 TileCoords_ToIndex(u32 x, u32 z, u32 stride);
-u32 ov01_021F5A30(u32 tile, u32 width, u32 stride);
+u32 MapLoadManager_GetMatrixIndexFromTile(u32 tile, u32 width, u32 stride);
 int Quadrant_ToMapSlot(int quadrant);
 int TileIndex_Step(int direction, int height, int stride, int tile);
 u32 MapSlot_Step(u32 direction, int mapSlot);
-void ov01_021F5B24(int direction, int target, u8 *mapSlot);
+void MapLoadManager_UpdateCurrentMapSlot(int direction, int target, u8 *mapSlot);
 int Direction_GetOpposite(u32 direction);
 BOOL MapLoadManager_FindOppositeSlot(u8 direction, MapLoadManager *mapLoadManager, u8 *slot);
 BOOL MapLoadManager_StartQueuedSlot(MapLoadManager *mapLoadManager);
@@ -485,7 +485,7 @@ void MapLoadManager_LoadModelAndBdhc(MapLoadManager *mapLoadManager, LoadedMap *
     NNSG3dResTex *texture = AreaDataManager_GetMapTexture(areaDataManager);
     NNSG3dResMdl *model = LoadMapModel(mapLoadManager->narc, header->modelSize, &map->renderObj, &map->modelFile, texture);
     if (applyLight) {
-        ov01_021EA3B0(model);
+        AreaLight_ClearMaterialModifyFlags(model);
     }
     map->modelLoaded = TRUE;
     map->matrixIndex = matrixIndex;
@@ -701,8 +701,8 @@ void MapLoadManager_Tick(MapLoadManager *mapLoadManager) {
             map = slot->maps[slot->numStarted - 1];
             if (map->modelLoaded == TRUE) {
                 model = NNS_G3dGetMdlByIdx(NNS_G3dGetMdlSet(map->modelFile), 0);
-                if (ov01_021FBA00(mapLoadManager->areaDataManager) == TRUE) {
-                    ov01_021EA3B0(model);
+                if (AreaDataManager_IsLit(mapLoadManager->areaDataManager) == TRUE) {
+                    AreaLight_ClearMaterialModifyFlags(model);
                 }
             }
             if (mapLoadManager->mapLoadedCallback != NULL) {
@@ -955,7 +955,7 @@ void MapLoadManager_RenderLoadedMap(int mapSlot, MapLoadManager *mapLoadManager,
     }
     map = mapLoadManager->maps[mapSlot];
     if (map->modelLoaded == TRUE) {
-        BOOL lit = ov01_021FBA00(mapLoadManager->areaDataManager);
+        BOOL lit = AreaDataManager_IsLit(mapLoadManager->areaDataManager);
         MapPropManager_DrawWithOffset(&pos, mapLoadManager->areaDataManager, lit, (ModelAttributes *)savedModelAttributes, map->propManager);
     }
 }
@@ -972,7 +972,7 @@ u32 TileCoords_ToIndex(u32 x, u32 z, u32 stride) {
     return x + z * stride;
 }
 
-u32 ov01_021F5A30(u32 tile, u32 width, u32 stride) {
+u32 MapLoadManager_GetMatrixIndexFromTile(u32 tile, u32 width, u32 stride) {
     u32 x = tile % stride;
     u32 z = tile / stride;
 
@@ -1054,7 +1054,7 @@ u32 MapSlot_Step(u32 direction, int mapSlot) {
     return direction;
 }
 
-void ov01_021F5B24(int direction, int target, u8 *mapSlot) {
+void MapLoadManager_UpdateCurrentMapSlot(int direction, int target, u8 *mapSlot) {
     int current = MapSlot_Step(direction, target);
     u8 result;
 
@@ -1186,7 +1186,7 @@ void InitialLoad_Default(MapLoadManager *mapLoadManager, int x, int z, u32 strid
     for (i = 0; i < 4; i++) {
         mapLoadManager->maps[i]->bdhc = Bdhc_New();
         Bdhc_SetUnloaded(mapLoadManager->maps[i]->bdhc);
-        LoadMapNow_Default(matrixIndices[i], i, mapLoadManager->areaDataManager, mapLoadManager->mapMatrix, mapLoadManager->width, mapLoadManager->height, ov01_021FBA00(mapLoadManager->areaDataManager), mapLoadManager);
+        LoadMapNow_Default(matrixIndices[i], i, mapLoadManager->areaDataManager, mapLoadManager->mapMatrix, mapLoadManager->width, mapLoadManager->height, AreaDataManager_IsLit(mapLoadManager->areaDataManager), mapLoadManager);
     }
 }
 
@@ -1198,7 +1198,7 @@ void InitialLoad_NoCollision(MapLoadManager *mapLoadManager, int x, int z, u32 s
     CalcMapIndicesAroundPosition(x, z, mapLoadManager->width, mapLoadManager->height, stride, matrixIndices);
     for (i = 0; i < 4; i++) {
         mapLoadManager->maps[i]->bdhc = NULL;
-        LoadMapNow_NoCollision(matrixIndices[i], i, mapLoadManager->areaDataManager, mapLoadManager->mapMatrix, mapLoadManager->width, mapLoadManager->height, ov01_021FBA00(mapLoadManager->areaDataManager), mapLoadManager);
+        LoadMapNow_NoCollision(matrixIndices[i], i, mapLoadManager->areaDataManager, mapLoadManager->mapMatrix, mapLoadManager->width, mapLoadManager->height, AreaDataManager_IsLit(mapLoadManager->areaDataManager), mapLoadManager);
     }
 }
 
@@ -1211,7 +1211,7 @@ void InitialLoad_SafariZone(MapLoadManager *mapLoadManager, int x, int z, u32 st
     for (i = 0; i < 4; i++) {
         mapLoadManager->maps[i]->bdhc = Bdhc_New();
         Bdhc_SetUnloaded(mapLoadManager->maps[i]->bdhc);
-        LoadMapNow_SafariZone(matrixIndices[i], i, mapLoadManager->areaDataManager, mapLoadManager->mapMatrix, mapLoadManager->width, mapLoadManager->height, ov01_021FBA00(mapLoadManager->areaDataManager), mapLoadManager);
+        LoadMapNow_SafariZone(matrixIndices[i], i, mapLoadManager->areaDataManager, mapLoadManager->mapMatrix, mapLoadManager->width, mapLoadManager->height, AreaDataManager_IsLit(mapLoadManager->areaDataManager), mapLoadManager);
     }
 }
 
@@ -1232,7 +1232,7 @@ void MapLoadManager_SetPosition(int x, int z, MapLoadManager *mapLoadManager) {
     mapLoadManager->currentTile = TileCoords_ToIndex(x, z, mapLoadManager->stride);
     mapLoadManager->quadrant = TileIndex_GetQuadrant(mapLoadManager->currentTile, mapLoadManager->stride);
     mapLoadManager->currentMapSlot = Quadrant_ToMapSlot(mapLoadManager->quadrant);
-    mapLoadManager->currentMatrixIndex = ov01_021F5A30(mapLoadManager->currentTile, mapLoadManager->width, mapLoadManager->stride);
+    mapLoadManager->currentMatrixIndex = MapLoadManager_GetMatrixIndexFromTile(mapLoadManager->currentTile, mapLoadManager->width, mapLoadManager->stride);
 }
 
 // The world position of a map's origin (its altitude from the map matrix)
@@ -1299,7 +1299,7 @@ void MapLoadManager_OnTileStep(u8 direction, MapLoadManager *mapLoadManager) {
     int quadrant = TileIndex_GetQuadrant(tile, mapLoadManager->stride);
     if (mapLoadManager->currentMatrixIndex == matrixIndex && mapLoadManager->quadrant != quadrant) {
         MapLoadManager_Scroll(matrixIndex, direction, mapLoadManager);
-        ov01_021F5B24(direction, mapLoadManager->quadrant, &mapLoadManager->currentMapSlot);
+        MapLoadManager_UpdateCurrentMapSlot(direction, mapLoadManager->quadrant, &mapLoadManager->currentMapSlot);
     }
 }
 

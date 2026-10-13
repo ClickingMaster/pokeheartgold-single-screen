@@ -36,7 +36,7 @@ static void IntroMovie_Scene2_DeleteSprites(IntroMovieOverlayData *data, IntroMo
 static void IntroMovie_Scene2_CreateSprites(IntroMovieOverlayData *data, IntroMovieScene2Data *sceneData);
 static void IntroMovie_Scene2_StartSpritePanEffect(IntroMovieScene2Data *sceneData, int whichSprites, int xSpeed, int ySpeed, int duration);
 static BOOL IntroMovie_Scene2_WaitSpritePanEffect(IntroMovieScene2Data *sceneData, int whichSprites);
-static void ov60_021E8B7C(SysTask *task, void *pVoid);
+static void Task_IntroMovie_Scene2_SpritePan(SysTask *task, void *pVoid);
 
 static const int sIntroMovie_Scene2_FlowerSpriteAppearTiming[10] = {
     1,
@@ -386,7 +386,7 @@ static void IntroMovie_Scene2_StartSpritePanEffect(IntroMovieScene2Data *sceneDa
     spritePanEffect->yOffset = mtx->y / FX32_ONE;
     spritePanEffect->xSpeed = xSpeed;
     spritePanEffect->ySpeed = ySpeed;
-    spritePanEffect->task = SysTask_CreateOnMainQueue(ov60_021E8B7C, spritePanEffect, 0);
+    spritePanEffect->task = SysTask_CreateOnMainQueue(Task_IntroMovie_Scene2_SpritePan, spritePanEffect, 0);
 }
 
 static BOOL IntroMovie_Scene2_WaitSpritePanEffect(IntroMovieScene2Data *sceneData, int whichSprites) {
@@ -407,7 +407,7 @@ static BOOL IntroMovie_Scene2_WaitSpritePanEffect(IntroMovieScene2Data *sceneDat
     return FALSE;
 }
 
-static void ov60_021E8B7C(SysTask *task, void *pVoid) {
+static void Task_IntroMovie_Scene2_SpritePan(SysTask *task, void *pVoid) {
     IntroMovieScene2SpritePanController *spritePanCnt = (IntroMovieScene2SpritePanController *)pVoid;
     VecFx32 sp4 = { 0, 0, 0 };
     ++spritePanCnt->counter;

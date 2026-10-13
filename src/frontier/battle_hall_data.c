@@ -345,7 +345,7 @@ void BattleHallData_EndRound(BattleHallData *data) {
 void BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value) {
     switch (kind) {
     case 0:
-        ov80_0222AF10(data);
+        BattleHallLink_SendEmptyRecord(data);
         break;
     case 1:
         BattleHallLink_SendTrainerIds(data);

@@ -105,13 +105,13 @@ static int ViewPhotoFieldTask_RestorePlayerOverworldPosition(FieldSystem *fieldS
 static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager);
 static LocalMapObject *createPartymonMapObject(MapObjectManager *objectMan, u16 species, u16 form, int gender, int direction, int x, int y, BOOL shiny);
 static LocalMapObject *createSpecialMapObject(MapObjectManager *objectMan, int spriteId, int direction, int x, int y, int localId);
-static void sub_0206AF78(FieldSystem *fieldSystem, Photo *photo);
+static void TakePhoto_IterateMapObjectsDummy(FieldSystem *fieldSystem, Photo *photo);
 static void FieldTakePhoto_RemoveAllMapObjects(FieldTakePhoto *takePhoto);
 static void setCameraParam(Camera *camera);
 static void Photo_InitFromArcData(Photo *photo, FieldSystem *fieldSystem, u8 iconId, int mapId, int x, int y, int a6, int a7, u16 a8, u16 subjectObjId);
 static BOOL FieldTask_TakePhoto(TaskManager *taskManager);
-static void sub_0206B82C(PlayerAvatar *playerAvatar, u8 state, u8 gender);
-static void sub_0206B880(FieldSystem *fieldSystem, Photo *photo);
+static void TakePhoto_RestorePlayerSprite(PlayerAvatar *playerAvatar, u8 state, u8 gender);
+static void TakePhoto_CullHiddenProps(FieldSystem *fieldSystem, Photo *photo);
 static void drawCameraGfx(BgConfig *bgConfig, enum HeapID heapID);
 
 typedef struct Coord2U16 {
@@ -367,12 +367,12 @@ static BOOL FieldTask_DoViewPhoto(TaskManager *taskManager) {
         break;
     case FIELD_PHOTO_DO_VIEW_STATE_2:
         setCameraParam(fieldSystem->camera);
-        sub_0206AF78(fieldSystem, photo);
-        sub_0206B880(fieldSystem, photo);
+        TakePhoto_IterateMapObjectsDummy(fieldSystem, photo);
+        TakePhoto_CullHiddenProps(fieldSystem, photo);
         NNS_G3dGlbSetViewPort(4, 3, 252, 188);
         {
             u8 profileGender = PlayerProfile_GetTrainerGender(Save_PlayerData_GetProfile(FieldSystem_GetSaveData(fieldSystem)));
-            sub_0206B82C(fieldSystem->playerAvatar, photo->avatarStateBak, profileGender);
+            TakePhoto_RestorePlayerSprite(fieldSystem->playerAvatar, photo->avatarStateBak, profileGender);
         }
         {
             VecFx32 facingVec;
@@ -489,7 +489,7 @@ static LocalMapObject *createSpecialMapObject(MapObjectManager *objectMan, int s
 }
 
 // this function was partially stubbed, or called a static inline child routine that was subbed
-static void sub_0206AF78(FieldSystem *fieldSystem, Photo *photo) {
+static void TakePhoto_IterateMapObjectsDummy(FieldSystem *fieldSystem, Photo *photo) {
     s32 index = 0;
     LocalMapObject *curObj;
     PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
@@ -606,8 +606,8 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
         break;
     case TAKE_PHOTO_STATE_POSITION_CAMERA:
         setCameraParam(fieldSystem->camera);
-        sub_0206AF78(fieldSystem, takePhoto->pPhoto);
-        sub_0206B880(fieldSystem, takePhoto->pPhoto);
+        TakePhoto_IterateMapObjectsDummy(fieldSystem, takePhoto->pPhoto);
+        TakePhoto_CullHiddenProps(fieldSystem, takePhoto->pPhoto);
         takePhoto->state = TAKE_PHOTO_STATE_05;
         break;
     case TAKE_PHOTO_STATE_05:
@@ -616,7 +616,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
         break;
     case TAKE_PHOTO_STATE_ADJUST_PLAYER_FACING_VEC:
         u8 profileGender = PlayerProfile_GetTrainerGender(Save_PlayerData_GetProfile(FieldSystem_GetSaveData(fieldSystem)));
-        sub_0206B82C(fieldSystem->playerAvatar, takePhoto->pPhoto->avatarStateBak, profileGender);
+        TakePhoto_RestorePlayerSprite(fieldSystem->playerAvatar, takePhoto->pPhoto->avatarStateBak, profileGender);
         {
             VecFx32 facingVec;
             MapObject_CopyFacingVector(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar), &facingVec);
@@ -820,7 +820,7 @@ static BOOL FieldTask_TakePhoto(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void sub_0206B82C(PlayerAvatar *playerAvatar, u8 state, u8 gender) {
+static void TakePhoto_RestorePlayerSprite(PlayerAvatar *playerAvatar, u8 state, u8 gender) {
     int spriteId = PlayerAvatar_GetSpriteByStateAndGender(state, gender);
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(playerAvatar);
     MapObjectManager *mapObjectManager = MapObject_GetManager(mapObject);
@@ -835,10 +835,10 @@ static void sub_0206B82C(PlayerAvatar *playerAvatar, u8 state, u8 gender) {
     PlayerAvatar_SetUnk34(playerAvatar, 0);
 }
 
-static void sub_0206B880(FieldSystem *fieldSystem, Photo *photo) {
+static void TakePhoto_CullHiddenProps(FieldSystem *fieldSystem, Photo *photo) {
     for (u8 i = 0; i < 2; ++i) {
         if (photo->hiddenPropModels[i] != 0) {
-            sub_02054EB0(fieldSystem, photo->hiddenPropModels[i], TRUE);
+            FieldSystem_SetBuildModelCulled(fieldSystem, photo->hiddenPropModels[i], TRUE);
         }
     }
 }

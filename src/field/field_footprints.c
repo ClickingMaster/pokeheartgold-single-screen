@@ -52,9 +52,9 @@ NNSG3dRenderObj *Footprints_GetRenderObj(Footprints *footprints, u32 kind, u32 d
 UnkOv01_021FFECC_sub *Footprints_GetModel(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection);
 BOOL Footprints_SpawnInSand(LocalMapObject *mapObject);
 BOOL Footprints_SpawnTracksInSand(LocalMapObject *mapObject);
-BOOL ov01_021FE3DC(LocalMapObject *mapObject);
-BOOL ov01_021FE3E8(LocalMapObject *mapObject);
-BOOL ov01_021FE3F4(LocalMapObject *mapObject);
+BOOL Footprints_SpawnInSnow(LocalMapObject *mapObject);
+BOOL Footprints_SpawnOnBehavior169(LocalMapObject *mapObject);
+BOOL Footprints_SpawnTracksOnBehavior169(LocalMapObject *mapObject);
 BOOL Footprints_Spawn(LocalMapObject *mapObject, u32 kind);
 BOOL FootprintEffect_Init(FieldEffect *effect, FootprintEffect *work);
 void FootprintEffect_Destroy(FieldEffect *effect, FootprintEffect *work);
@@ -195,15 +195,15 @@ BOOL Footprints_SpawnTracksInSand(LocalMapObject *mapObject) {
     return Footprints_Spawn(mapObject, 1);
 }
 
-BOOL ov01_021FE3DC(LocalMapObject *mapObject) {
+BOOL Footprints_SpawnInSnow(LocalMapObject *mapObject) {
     return Footprints_Spawn(mapObject, 2);
 }
 
-BOOL ov01_021FE3E8(LocalMapObject *mapObject) {
+BOOL Footprints_SpawnOnBehavior169(LocalMapObject *mapObject) {
     return Footprints_Spawn(mapObject, 4);
 }
 
-BOOL ov01_021FE3F4(LocalMapObject *mapObject) {
+BOOL Footprints_SpawnTracksOnBehavior169(LocalMapObject *mapObject) {
     return FALSE;
 }
 

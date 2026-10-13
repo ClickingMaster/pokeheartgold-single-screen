@@ -49,7 +49,7 @@
 	.public BattleRoomResults_PrintPageNumber
 	.public BattleRoomResults_PrintLeadersScreen
 	.public BattleRoomResults_PrintLeaderInfo
-	.public ov67_021E681C
+	.public BattleRoomResults_LeadersDummy
 	.public BattleRoomResults_InitSprites
 	.public BattleRoomResults_FreeSprites
 	.public BattleRoomResults_UpdateSprites

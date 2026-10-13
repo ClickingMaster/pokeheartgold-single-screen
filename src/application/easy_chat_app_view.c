@@ -176,7 +176,7 @@ void EasyChatAppView_Cmd_ShowWordListCursor(SysTask *task, EasyChatViewCommand *
 void EasyChatAppView_Cmd_FocusMenu(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_FocusSentence(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_OpenCategories(SysTask *task, EasyChatViewCommand *command);
-void ov102_021E9A24(SysTask *task, EasyChatViewCommand *command);
+void EasyChatAppView_Cmd_SwitchMode(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_SwitchListMode(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_CloseCategories(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_OpenWordList(SysTask *task, EasyChatViewCommand *command);
@@ -192,7 +192,7 @@ void EasyChatAppView_Cmd_HideMessage(SysTask *task, EasyChatViewCommand *command
 void EasyChatAppView_Cmd_ConfirmFinish(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_ConfirmQuit(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_ShowIncompleteMessage(SysTask *task, EasyChatViewCommand *command);
-void ov102_021EA144(SysTask *task, EasyChatViewCommand *command);
+void EasyChatAppView_Cmd_DrawYesNoCursor(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_CloseYesNo(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_PressPageUp(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_PressPageDown(SysTask *task, EasyChatViewCommand *command);
@@ -610,7 +610,7 @@ void EasyChatAppView_Cmd_OpenCategories(SysTask *task, EasyChatViewCommand *comm
     }
 }
 
-void ov102_021E9A24(SysTask *task, EasyChatViewCommand *command) {
+void EasyChatAppView_Cmd_SwitchMode(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView *view = command->view;
 
     switch (command->state) {
@@ -904,7 +904,7 @@ void EasyChatAppView_Cmd_ConfirmFinish(SysTask *task, EasyChatViewCommand *comma
     } else {
         EasyChatSentenceView_DeactivateCursor(view->sentence);
     }
-    EasyChatSentenceView_StartYesNo(view->sentence, ov102_021E9090(command->app));
+    EasyChatSentenceView_StartYesNo(view->sentence, EasyChatApp_GetYesNoCursor(command->app));
     EasyChatAppView_EndCommand(command);
 }
 
@@ -918,7 +918,7 @@ void EasyChatAppView_Cmd_ConfirmQuit(SysTask *task, EasyChatViewCommand *command
     } else {
         EasyChatSentenceView_DeactivateCursor(view->sentence);
     }
-    EasyChatSentenceView_StartYesNo(view->sentence, ov102_021E9090(command->app));
+    EasyChatSentenceView_StartYesNo(view->sentence, EasyChatApp_GetYesNoCursor(command->app));
     EasyChatAppView_EndCommand(command);
 }
 
@@ -927,10 +927,10 @@ void EasyChatAppView_Cmd_ShowIncompleteMessage(SysTask *task, EasyChatViewComman
     EasyChatAppView_EndCommand(command);
 }
 
-void ov102_021EA144(SysTask *task, EasyChatViewCommand *command) {
+void EasyChatAppView_Cmd_DrawYesNoCursor(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView *view = command->view;
 
-    EasyChatSentenceView_DrawYesNoCursor(view->sentence, ov102_021E9090(command->app));
+    EasyChatSentenceView_DrawYesNoCursor(view->sentence, EasyChatApp_GetYesNoCursor(command->app));
     EasyChatAppView_EndCommand(command);
 }
 

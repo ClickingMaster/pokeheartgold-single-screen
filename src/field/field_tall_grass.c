@@ -10,7 +10,7 @@
 // The tall grass a map object stands in (field effect renderer 8): a billboard over the tile that rustles
 // (12 frames) when the object walks in, then holds its last frame until the object leaves the tile (or
 // turns away, for grass shown ahead of it). The renderer also loads records 5-7 for a three-kind
-// billboard effect (template ov01_0220914C) that nothing in the game creates.
+// billboard effect (template sTallGrassUnusedEffectTemplate) that nothing in the game creates.
 
 #define TALL_GRASS_RECORD 0
 
@@ -74,14 +74,14 @@ BOOL TallGrassEffect_Init(FieldEffect *effect, TallGrassEffect *work);
 BOOL TallGrassEffect_Destroy(FieldEffect *effect, TallGrassEffect *work);
 void TallGrassEffect_Update(FieldEffect *effect, TallGrassEffect *work);
 void TallGrassEffect_Draw(FieldEffect *effect, TallGrassEffect *work);
-BOOL ov01_021FF394(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
-BOOL ov01_021FF418(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
-void ov01_021FF424(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
-void ov01_021FF44C(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
+BOOL TallGrassUnusedEffect_Init(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
+BOOL TallGrassUnusedEffect_Destroy(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
+void TallGrassUnusedEffect_Update(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
+void TallGrassUnusedEffect_Draw(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
 
 // In asm/overlay_01_021FEEEC_data_local.s (its order of these objects is not one MWCC reproduces).
 extern const FieldEffectBasicTemplate ov01_02209138; // tall grass effect
-extern const FieldEffectBasicTemplate ov01_0220914C; // created nowhere
+extern const FieldEffectBasicTemplate sTallGrassUnusedEffectTemplate; // created nowhere
 extern const u32 ov01_02209160[6];                   // record 6 params
 extern const u32 ov01_02209178[6];                   // tall grass record params
 extern const u32 ov01_02209190[6];                   // record 5 params
@@ -279,7 +279,7 @@ void TallGrassEffect_Draw(FieldEffect *effect, TallGrassEffect *work) {
 }
 
 #pragma force_active on
-BOOL ov01_021FF394(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
+BOOL TallGrassUnusedEffect_Init(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
     VecFx32 position;
     int record;
 
@@ -308,11 +308,11 @@ BOOL ov01_021FF394(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
 }
 #pragma force_active reset
 
-BOOL ov01_021FF418(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
+BOOL TallGrassUnusedEffect_Destroy(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
     return BillboardObject_Delete(work->billboard);
 }
 
-void ov01_021FF424(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
+void TallGrassUnusedEffect_Update(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
     switch (work->state) {
     case 0:
         if (BillboardObject_AdvanceFrame(work->billboard, FX32_ONE) == TRUE) {
@@ -325,7 +325,7 @@ void ov01_021FF424(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
     }
 }
 
-void ov01_021FF44C(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
+void TallGrassUnusedEffect_Draw(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
     VecFx32 position;
 
     FieldEffect_GetPosition(effect, &position);
