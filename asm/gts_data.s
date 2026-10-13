@@ -2188,7 +2188,7 @@
 	.public GtsMainMenu_DeleteStrings
 	.public GtsMainMenu_WaitEnterAnim
 	.public ov70_02239698
-	.public ov70_022396A8
+	.public GtsMainMenu_StartFadeIn
 	.public GtsMainMenu_WaitFadeIn
 	.public GtsMainMenu_WaitFadeIn2
 	.public GtsMainMenu_ShowPrompt
@@ -3468,7 +3468,7 @@ sGtsScreens: ; 0x022463EC
 sGtsMainMenuStates: ; 0x02246464
 	.word GtsMainMenu_WaitEnterAnim
 	.word ov70_02239698
-	.word ov70_022396A8
+	.word GtsMainMenu_StartFadeIn
 	.word GtsMainMenu_WaitFadeIn
 	.word GtsMainMenu_WaitFadeIn2
 	.word GtsMainMenu_ShowPrompt

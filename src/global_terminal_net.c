@@ -206,7 +206,7 @@ void GlobalTerminalNet_CopyRequestHeader(const void *src, void *dst) {
 
 #pragma force_active on
 
-void ov39_022271CC(SaveData *saveData, const GlobalTerminalNetRankingsSource *src, GlobalTerminalNetRankingsHeader *dst) {
+void GlobalTerminalNet_SetRankingsHeader(SaveData *saveData, const GlobalTerminalNetRankingsSource *src, GlobalTerminalNetRankingsHeader *dst) {
     MI_CpuFill8(dst, 0, sizeof(GlobalTerminalNetRankingsHeader));
     dst->unk_00 = src->unk_19;
     dst->unk_01 = src->unk_1A;
@@ -334,7 +334,7 @@ BOOL GlobalTerminalNet_RequestBoxDownload(GlobalTerminalNet *net, u8 arg) {
     return TRUE;
 }
 
-BOOL ov39_022274B4(GlobalTerminalNet *net) {
+BOOL GlobalTerminalNet_RequestRankingsHeader(GlobalTerminalNet *net) {
     if (!GlobalTerminalNet_IsIdle(net)) {
         return FALSE;
     }
@@ -349,7 +349,7 @@ BOOL GlobalTerminalNet_RequestRankings(GlobalTerminalNet *net, const GlobalTermi
         return FALSE;
     }
     MI_CpuCopy8(Save_PlayerData_GetIGTAddr(net->saveData), &net->request.rankings.playTime, 4);
-    ov39_022271CC(net->saveData, src, &net->request.rankings.header);
+    GlobalTerminalNet_SetRankingsHeader(net->saveData, src, &net->request.rankings.header);
     for (i = 0; i < 3; i++) {
         net->request.rankings.pairs[i] = pairs[i];
     }
@@ -387,7 +387,7 @@ BOOL GlobalTerminalNet_RequestVideoSearch(GlobalTerminalNet *net, u16 arg0, u8 a
     return TRUE;
 }
 
-BOOL ov39_022275E8(GlobalTerminalNet *net) {
+BOOL GlobalTerminalNet_RequestDefaultVideoSearchNoFrontier(GlobalTerminalNet *net) {
     if (!GlobalTerminalNet_IsIdle(net)) {
         return FALSE;
     }
@@ -402,7 +402,7 @@ BOOL ov39_022275E8(GlobalTerminalNet *net) {
     return TRUE;
 }
 
-BOOL ov39_02227648(GlobalTerminalNet *net) {
+BOOL GlobalTerminalNet_RequestDefaultVideoSearch(GlobalTerminalNet *net) {
     if (!GlobalTerminalNet_IsIdle(net)) {
         return FALSE;
     }
@@ -417,7 +417,7 @@ BOOL ov39_02227648(GlobalTerminalNet *net) {
     return TRUE;
 }
 
-BOOL ov39_022276A4(GlobalTerminalNet *net) {
+BOOL GlobalTerminalNet_RequestLatestVideos(GlobalTerminalNet *net) {
     if (!GlobalTerminalNet_IsIdle(net)) {
         return FALSE;
     }
@@ -428,7 +428,7 @@ BOOL ov39_022276A4(GlobalTerminalNet *net) {
     return TRUE;
 }
 
-BOOL ov39_022276E0(GlobalTerminalNet *net) {
+BOOL GlobalTerminalNet_RequestPopularVideos(GlobalTerminalNet *net) {
     if (!GlobalTerminalNet_IsIdle(net)) {
         return FALSE;
     }
@@ -449,7 +449,7 @@ BOOL GlobalTerminalNet_RequestVideoDownload(GlobalTerminalNet *net, u32 numberLo
     return TRUE;
 }
 
-BOOL ov39_0222774C(GlobalTerminalNet *net, u32 argLow, u32 argHigh) {
+BOOL GlobalTerminalNet_ReportVideoSaved(GlobalTerminalNet *net, u32 argLow, u32 argHigh) {
     if (!GlobalTerminalNet_IsIdle(net)) {
         return FALSE;
     }
@@ -910,7 +910,7 @@ BOOL GlobalTerminalNet_Check22000Result(GlobalTerminalNet *net, GlobalTerminalNe
     return ret;
 }
 
-void ov39_02227F74(GlobalTerminalNet *net, void **out) {
+void GlobalTerminalNet_GetRankingsHeader(GlobalTerminalNet *net, void **out) {
     GlobalTerminalNetBlockResponse *response = GlobalTerminalServer_GetResponse(net);
     *out = &response->data;
 }

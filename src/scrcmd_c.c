@@ -1905,7 +1905,7 @@ BOOL ScrCmd_454(ScriptContext *ctx) {
     LocalMapObject **p_lastInteracted = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_LAST_INTERACTED);
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_26), OVY_LOAD_ASYNC);
     if (*p_lastInteracted != NULL) {
-        ov26_022599D8(ctx->fieldSystem, *p_lastInteracted);
+        SetTalkedTrainerMovement(ctx->fieldSystem, *p_lastInteracted);
     }
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_26));
     return FALSE;

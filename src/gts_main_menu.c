@@ -82,7 +82,7 @@ void GtsMainMenu_PrintPrompt(GtsApp *app, int msgId, int textSpeed, int unused3,
 void GtsMainMenu_PrintButtonLabel(Window *window, MsgData *msgData, int fontId, int msgId, u32 unused);
 int GtsMainMenu_WaitEnterAnim(GtsApp *app);
 int ov70_02239698(GtsApp *app);
-void ov70_022396A8(GtsApp *app);
+void GtsMainMenu_StartFadeIn(GtsApp *app);
 int GtsMainMenu_WaitFadeIn(GtsApp *app);
 int GtsMainMenu_WaitFadeIn2(GtsApp *app);
 int GtsMainMenu_ShowPrompt(GtsApp *app);
@@ -323,7 +323,7 @@ int ov70_02239698(GtsApp *app) {
 #pragma force_active on
 
 // Returns nothing although it is a state function (the state table ignores it: Gts_Main state 3).
-void ov70_022396A8(GtsApp *app) {
+void GtsMainMenu_StartFadeIn(GtsApp *app) {
     BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_61);
     app->state = GTS_MAIN_MENU_STATE_WAIT_FADE_IN;
 }

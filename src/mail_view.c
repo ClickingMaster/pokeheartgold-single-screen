@@ -32,7 +32,7 @@
 #include "yes_no_prompt.h"
 
 // args->mailMessageIdx is the cursor row (0-2: message lines, 3: button row); the byte after it in
-// UnkStruct_ov55_021E5B08 (not declared in overlay_55.h) holds the selected button.
+// MailViewArgs (not declared in overlay_55.h) holds the selected button.
 #define MAIL_VIEW_ARGS_BUTTON(args) (((u8 *)(args))[3])
 
 #define MAIL_VIEW_ROW_BUTTONS 3
@@ -49,7 +49,7 @@ typedef union MailViewIcon {
 
 // The args seen through a byte offset into unk18[] (iconOffset = 2 * mon).
 typedef struct MailViewShiftedArgs {
-    u8 filler_00[offsetof(UnkStruct_ov55_021E5B08, unk18)];
+    u8 filler_00[offsetof(MailViewArgs, unk18)];
     MailViewIcon icon;
 } MailViewShiftedArgs;
 
@@ -81,7 +81,7 @@ typedef struct MailView {
     u8 cursorPos;                              // 0x16
     u8 prevCursorPos;                          // 0x17
     BgConfig *bgConfig;                        // 0x18
-    UnkStruct_ov55_021E5B08 *args;             // 0x1C
+    MailViewArgs *args;             // 0x1C
     MsgData *msgData;                          // 0x20
     u8 filler_24[0xC];                         // 0x24
     PaletteData *palette;                      // 0x30

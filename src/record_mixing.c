@@ -179,8 +179,8 @@ void RecordMixing_CreateSprites(RecordMixingApp *app);
 void RecordMixing_AddWindows(RecordMixingApp *app, OverlayManager *unused);
 void RecordMixing_PrintCenteredString(Window *window, String *string, int textSpeed);
 void RecordMixing_RemoveWindows(RecordMixingApp *app);
-int ov73_021E6444(RecordMixingApp *app, int state);
-int ov73_021E6484(RecordMixingApp *app, int state);
+int RecordMixing_State_PrintGroupPrompt(RecordMixingApp *app, int state);
+int RecordMixing_State_HandleGroupMenu(RecordMixingApp *app, int state);
 BOOL RecordMixing_UpdateMenuInputState(RecordMixingApp *app);
 void RecordMixing_HandleInput(RecordMixingApp *app);
 void ov73_021E66F0(RecordMixingApp *app);
@@ -190,35 +190,35 @@ int RecordMixing_State_WaitText(RecordMixingApp *app, int state);
 int ov73_021E6778(RecordMixingApp *app, int state);
 void RecordMixing_ShowYesNo(RecordMixingApp *app);
 void RecordMixing_HideYesNo(RecordMixingApp *app);
-int ov73_021E6890(RecordMixingApp *app, int state);
-int ov73_021E68AC(RecordMixingApp *app, int state);
-int ov73_021E69D0(RecordMixingApp *app, int state);
-int ov73_021E69E8(RecordMixingApp *app, int state);
+int RecordMixing_State_ShowCancelYesNo(RecordMixingApp *app, int state);
+int RecordMixing_State_HandleCancelYesNo(RecordMixingApp *app, int state);
+int RecordMixing_State_WaitLeaveReply(RecordMixingApp *app, int state);
+int RecordMixing_State_SendLeave(RecordMixingApp *app, int state);
 int ov73_021E6A70(RecordMixingApp *app, int state);
-int ov73_021E6A90(RecordMixingApp *app, int state);
-int ov73_021E6AAC(RecordMixingApp *app, int state);
-int ov73_021E6B6C(RecordMixingApp *app, int state);
+int RecordMixing_State_ShowConfirmYesNo(RecordMixingApp *app, int state);
+int RecordMixing_State_HandleConfirmYesNo(RecordMixingApp *app, int state);
+int RecordMixing_State_SendStartMixing(RecordMixingApp *app, int state);
 void RecordMixing_StartFlash(RecordMixingApp *app);
-int ov73_021E6BC8(RecordMixingApp *app, int state);
-int ov73_021E6BF8(RecordMixingApp *app, int state);
-int ov73_021E6C20(RecordMixingApp *app, int state);
-int ov73_021E6C50(RecordMixingApp *app, int state);
-int ov73_021E6CC0(RecordMixingApp *app, int state);
-int ov73_021E6CDC(RecordMixingApp *app, int state);
-int ov73_021E6CFC(RecordMixingApp *app, int state);
-int ov73_021E6D38(RecordMixingApp *app, int state);
-int ov73_021E6D54(RecordMixingApp *app, int state);
-int ov73_021E6DF8(RecordMixingApp *app, int state);
-int ov73_021E6E48(RecordMixingApp *app, int state);
-int ov73_021E6E6C(RecordMixingApp *app, int state);
-int ov73_021E6E8C(RecordMixingApp *app, int state);
-int ov73_021E6ECC(RecordMixingApp *app, int state);
-int ov73_021E6EF8(RecordMixingApp *app, int state);
-int ov73_021E6F1C(RecordMixingApp *app, int state);
-int ov73_021E6FAC(RecordMixingApp *app, int state);
-int ov73_021E6FE8(RecordMixingApp *app, int state);
-void ov73_021E705C(RecordMixingApp *app, int state, int netId);
-void ov73_021E7120(RecordMixingApp *app, int state, int netId);
+int RecordMixing_State_WaitRecords(RecordMixingApp *app, int state);
+int RecordMixing_State_MergeRecords(RecordMixingApp *app, int state);
+int RecordMixing_State_StartSave(RecordMixingApp *app, int state);
+int RecordMixing_State_Save(RecordMixingApp *app, int state);
+int RecordMixing_State_WaitAfterSave(RecordMixingApp *app, int state);
+int RecordMixing_State_PrintCanceled(RecordMixingApp *app, int state);
+int RecordMixing_State_FadeOutAfterDelay(RecordMixingApp *app, int state);
+int RecordMixing_State_ShowDisbandYesNo(RecordMixingApp *app, int state);
+int RecordMixing_State_HandleDisbandYesNo(RecordMixingApp *app, int state);
+int RecordMixing_State_PrintDisband(RecordMixingApp *app, int state);
+int RecordMixing_State_WaitDisband(RecordMixingApp *app, int state);
+int RecordMixing_State_StartExitSync(RecordMixingApp *app, int state);
+int RecordMixing_State_WaitExitSync(RecordMixingApp *app, int state);
+int RecordMixing_State_PrintMemberUnavailable(RecordMixingApp *app, int state);
+int RecordMixing_State_WaitMemberUnavailable(RecordMixingApp *app, int state);
+int RecordMixing_State_PrintMemberLeft(RecordMixingApp *app, int state);
+int RecordMixing_State_StartMemberLeftWait(RecordMixingApp *app, int state);
+int RecordMixing_State_WaitMemberLeft(RecordMixingApp *app, int state);
+void RecordMixing_SetStateFromLink(RecordMixingApp *app, int state, int netId);
+void RecordMixing_SetStateFromLinkInMenu(RecordMixingApp *app, int state, int netId);
 void RecordMixing_SetButtonState(RecordMixingApp *app, int button, int buttonState);
 void RecordMixing_PrintButtons(RecordMixingApp *app);
 void RecordMixing_PulsePalette(u16 *angle);
@@ -236,8 +236,8 @@ void RecordMixing_LoadAvatarGraphics(RecordMixingApp *app, NARC *narc);
 void RecordMixing_LoadAvatar(NNSG2dCharacterData **charData, NNSG2dPaletteData **plttData, u32 slot, int trainerClass, int gender);
 void RecordMixing_FreeAvatarGraphics(RecordMixingApp *app);
 int RecordMixing_GetTextSpeed(RecordMixingApp *app);
-void ov73_021E781C(RecordMixingApp *app, int index);
-int ov73_021E7870(RecordMixingApp *app, int arg1);
+void RecordMixing_UpdateMaxEntries(RecordMixingApp *app, int index);
+int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int arg1);
 
 extern const u8 sRecordMixingButtonX[];
 extern const u16 sRecordMixingAvatarVramOffsets[];
@@ -341,7 +341,7 @@ BOOL RecordMixing_Main(OverlayManager *man, int *state) {
         }
         RecordMixing_UpdateMemberSprites(app);
         if (Comm_GetLocalNetId() == 0) {
-            int value = ov73_021E7870(app, 1);
+            int value = RecordMixing_LeaderUpdateMembers(app, 1);
             if (*state == 1) {
                 *state = value;
             }
@@ -636,7 +636,7 @@ void RecordMixing_RemoveWindows(RecordMixingApp *app) {
     RemoveWindow(&app->buttonWindows[1]);
 }
 
-int ov73_021E6444(RecordMixingApp *app, int state) {
+int RecordMixing_State_PrintGroupPrompt(RecordMixingApp *app, int state) {
     CommState_SetErrorWatch(0, 1);
     if (Comm_GetLocalNetId() == 0) {
         if (Comm_CountConnected() >= 2) {
@@ -649,7 +649,7 @@ int ov73_021E6444(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E6484(RecordMixingApp *app, int state) {
+int RecordMixing_State_HandleGroupMenu(RecordMixingApp *app, int state) {
     RecordMixing_HandleInput(app);
     if (Comm_GetLocalNetId() == 0) {
         if (ov73_021E7340() != 1) {
@@ -708,7 +708,7 @@ void RecordMixing_HandleInput(RecordMixingApp *app) {
                 RecordMixing_PrintMessage(app, 3, FALSE);
                 RecordMixing_SetStateAfterText(app, 22);
                 Comm_SendCommand(117, &packet.send[2], 1);
-                ov73_021E781C(app, 0);
+                RecordMixing_UpdateMaxEntries(app, 0);
                 PlaySE(SEQ_SE_DP_SELECT);
                 RecordMixing_SetButtonState(app, 0, 1);
                 ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_1);
@@ -732,7 +732,7 @@ void RecordMixing_HandleInput(RecordMixingApp *app) {
                 RecordMixing_PrintMessage(app, 4, FALSE);
                 RecordMixing_SetStateAfterText(app, 4);
                 Comm_SendCommand(117, &packet.send[1], 1);
-                ov73_021E781C(app, 0);
+                RecordMixing_UpdateMaxEntries(app, 0);
                 PlaySE(SEQ_SE_GS_GEARCANCEL);
                 RecordMixing_SetButtonState(app, 1, 1);
                 ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_1);
@@ -833,14 +833,14 @@ void RecordMixing_HideYesNo(RecordMixingApp *app) {
     }
 }
 
-int ov73_021E6890(RecordMixingApp *app, int state) {
+int RecordMixing_State_ShowCancelYesNo(RecordMixingApp *app, int state) {
     RecordMixing_ShowYesNo(app);
     app->state = 5;
     ov73_021E66F0(app);
     return state;
 }
 
-int ov73_021E68AC(RecordMixingApp *app, int state) {
+int RecordMixing_State_HandleCancelYesNo(RecordMixingApp *app, int state) {
     u32 noData;
     u8 data[4];
     int input;
@@ -872,7 +872,7 @@ int ov73_021E68AC(RecordMixingApp *app, int state) {
             if (Comm_GetLocalNetId() == 0) {
                 noData = 0;
                 Comm_SendCommand(117, &noData, 1);
-                ov73_021E781C(app, 1);
+                RecordMixing_UpdateMaxEntries(app, 1);
             }
             RecordMixing_SetStateAfterText(app, 0);
         } else if (Comm_GetLocalNetId() == 0) {
@@ -893,7 +893,7 @@ int ov73_021E68AC(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E69D0(RecordMixingApp *app, int state) {
+int RecordMixing_State_WaitLeaveReply(RecordMixingApp *app, int state) {
     app->unk_4A32 = 0;
     ov73_021E66F0(app);
     return state;
@@ -901,7 +901,7 @@ int ov73_021E69D0(RecordMixingApp *app, int state) {
 
 #pragma force_active on
 
-int ov73_021E69E8(RecordMixingApp *app, int state) {
+int RecordMixing_State_SendLeave(RecordMixingApp *app, int state) {
     u8 data[4];
 
     if (app->unk_4A30 != Comm_CountConnected() || app->unk_4A30 != RecordMixing_CountMembers()) {
@@ -932,14 +932,14 @@ int ov73_021E6A70(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E6A90(RecordMixingApp *app, int state) {
+int RecordMixing_State_ShowConfirmYesNo(RecordMixingApp *app, int state) {
     RecordMixing_ShowYesNo(app);
     app->state = 23;
     ov73_021E66F0(app);
     return state;
 }
 
-int ov73_021E6AAC(RecordMixingApp *app, int state) {
+int RecordMixing_State_HandleConfirmYesNo(RecordMixingApp *app, int state) {
     u32 data;
     int input;
 
@@ -956,7 +956,7 @@ int ov73_021E6AAC(RecordMixingApp *app, int state) {
         if (input == YESNORESPONSE_NO) {
             data = 0;
             Comm_SendCommand(117, &data, 1);
-            ov73_021E781C(app, 1);
+            RecordMixing_UpdateMaxEntries(app, 1);
             RecordMixing_SetStateAfterText(app, 0);
         } else {
             RecordMixing_SetButtonState(app, 1, 2);
@@ -973,7 +973,7 @@ int ov73_021E6AAC(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E6B6C(RecordMixingApp *app, int state) {
+int RecordMixing_State_SendStartMixing(RecordMixingApp *app, int state) {
     if (app->unk_4A2B == 0 && Comm_SendCommand(115, NULL, 0) == TRUE) {
         app->unk_4A2B = 1;
     }
@@ -987,7 +987,7 @@ void RecordMixing_StartFlash(RecordMixingApp *app) {
     app->flash.active = 1;
 }
 
-int ov73_021E6BC8(RecordMixingApp *app, int state) {
+int RecordMixing_State_WaitRecords(RecordMixingApp *app, int state) {
     if (Comm_GetLocalNetId() == 0) {
         Comm_CountConnected();
     }
@@ -997,13 +997,13 @@ int ov73_021E6BC8(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E6BF8(RecordMixingApp *app, int state) {
+int RecordMixing_State_MergeRecords(RecordMixingApp *app, int state) {
     RecordMixing_MergeReceivedRecords(app->saveData, app->receiveBuffers);
     app->state = 27;
     return state;
 }
 
-int ov73_021E6C20(RecordMixingApp *app, int state) {
+int RecordMixing_State_StartSave(RecordMixingApp *app, int state) {
     gSystem.softResetDisabled = TRUE;
     GameStats_AddScore(app->args->gameStats, 19);
     Comm_InitSyncedSave(&app->unk_0374);
@@ -1011,7 +1011,7 @@ int ov73_021E6C20(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E6C50(RecordMixingApp *app, int state) {
+int RecordMixing_State_Save(RecordMixingApp *app, int state) {
     if (Comm_GetLocalNetId() == 0) {
         Comm_CountConnected();
     }
@@ -1028,21 +1028,21 @@ int ov73_021E6C50(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E6CC0(RecordMixingApp *app, int state) {
+int RecordMixing_State_WaitAfterSave(RecordMixingApp *app, int state) {
     if (app->counter++ > 60) {
         app->state = 15;
     }
     return state;
 }
 
-int ov73_021E6CDC(RecordMixingApp *app, int state) {
+int RecordMixing_State_PrintCanceled(RecordMixingApp *app, int state) {
     RecordMixing_PrintMessage(app, 5, FALSE);
     RecordMixing_SetStateAfterText(app, 10);
     ov73_021E66F0(app);
     return state;
 }
 
-int ov73_021E6CFC(RecordMixingApp *app, int state) {
+int RecordMixing_State_FadeOutAfterDelay(RecordMixingApp *app, int state) {
     app->counter++;
     if (app->counter > 60) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)16, (enum FadeType)16, RGB_BLACK, 16, 1, HEAP_ID_50);
@@ -1052,7 +1052,7 @@ int ov73_021E6CFC(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E6D38(RecordMixingApp *app, int state) {
+int RecordMixing_State_ShowDisbandYesNo(RecordMixingApp *app, int state) {
     RecordMixing_ShowYesNo(app);
     app->state = 12;
     ov73_021E66F0(app);
@@ -1061,7 +1061,7 @@ int ov73_021E6D38(RecordMixingApp *app, int state) {
 
 #pragma force_active on
 
-int ov73_021E6D54(RecordMixingApp *app, int state) {
+int RecordMixing_State_HandleDisbandYesNo(RecordMixingApp *app, int state) {
     int input;
     int data;
 
@@ -1078,7 +1078,7 @@ int ov73_021E6D54(RecordMixingApp *app, int state) {
             data = 0;
             app->state = 0;
             Comm_SendCommand(117, &data, 1);
-            ov73_021E781C(app, 1);
+            RecordMixing_UpdateMaxEntries(app, 1);
         } else {
             app->state = 13;
             Comm_SendCommand(113, NULL, 0);
@@ -1092,7 +1092,7 @@ int ov73_021E6D54(RecordMixingApp *app, int state) {
 
 #pragma force_active reset
 
-int ov73_021E6DF8(RecordMixingApp *app, int state) {
+int RecordMixing_State_PrintDisband(RecordMixingApp *app, int state) {
     if (Comm_GetLocalNetId() == 0) {
         RecordMixing_PrintMessage(app, 5, FALSE);
     } else {
@@ -1106,7 +1106,7 @@ int ov73_021E6DF8(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E6E48(RecordMixingApp *app, int state) {
+int RecordMixing_State_WaitDisband(RecordMixingApp *app, int state) {
     app->counter++;
     if (app->counter > 45) {
         app->state = 15;
@@ -1115,14 +1115,14 @@ int ov73_021E6E48(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E6E6C(RecordMixingApp *app, int state) {
+int RecordMixing_State_StartExitSync(RecordMixingApp *app, int state) {
     LinkSync_StartSync(201);
     app->state = 16;
     ov73_021E66F0(app);
     return state;
 }
 
-int ov73_021E6E8C(RecordMixingApp *app, int state) {
+int RecordMixing_State_WaitExitSync(RecordMixingApp *app, int state) {
     if (LinkSync_IsSynced(201) != FALSE) {
         CommState_SetErrorWatch(0, 0);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)16, (enum FadeType)16, RGB_BLACK, 16, 1, HEAP_ID_50);
@@ -1132,7 +1132,7 @@ int ov73_021E6E8C(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E6ECC(RecordMixingApp *app, int state) {
+int RecordMixing_State_PrintMemberUnavailable(RecordMixingApp *app, int state) {
     if (RecordMixing_IsPrinterDone(app->printerId) != FALSE) {
         RecordMixing_PrintMessage(app, 9, FALSE);
     }
@@ -1141,7 +1141,7 @@ int ov73_021E6ECC(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E6EF8(RecordMixingApp *app, int state) {
+int RecordMixing_State_WaitMemberUnavailable(RecordMixingApp *app, int state) {
     if (RecordMixing_IsPrinterDone(app->printerId) != FALSE) {
         app->state = 10;
     }
@@ -1149,7 +1149,7 @@ int ov73_021E6EF8(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E6F1C(RecordMixingApp *app, int state) {
+int RecordMixing_State_PrintMemberLeft(RecordMixingApp *app, int state) {
     if (Comm_GetLocalNetId() == 0) {
         RecordMixing_SetButtonState(app, 0, 2);
     }
@@ -1162,7 +1162,7 @@ int ov73_021E6F1C(RecordMixingApp *app, int state) {
     RecordMixing_PrintMessage(app, 15, TRUE);
     app->state = 20;
     if (Comm_GetLocalNetId() == 0) {
-        ov73_021E781C(app, 0);
+        RecordMixing_UpdateMaxEntries(app, 0);
     }
     app->unk_4A2C = Comm_CountConnected();
     app->unk_4A34 = 300;
@@ -1170,7 +1170,7 @@ int ov73_021E6F1C(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E6FAC(RecordMixingApp *app, int state) {
+int RecordMixing_State_StartMemberLeftWait(RecordMixingApp *app, int state) {
     if (app->unk_4A2C != 0) {
         int connected = Comm_CountConnected();
         if (app->unk_4A2C != connected) {
@@ -1183,7 +1183,7 @@ int ov73_021E6FAC(RecordMixingApp *app, int state) {
     return state;
 }
 
-int ov73_021E6FE8(RecordMixingApp *app, int state) {
+int RecordMixing_State_WaitMemberLeft(RecordMixingApp *app, int state) {
     if (app->unk_4A2C != 0) {
         int connected = Comm_CountConnected();
         if (app->unk_4A2C != connected) {
@@ -1198,14 +1198,14 @@ int ov73_021E6FE8(RecordMixingApp *app, int state) {
     if (app->counter > 60 && app->unk_4A2C == 0) {
         app->state = 0;
         if (Comm_GetLocalNetId() == 0) {
-            ov73_021E781C(app, 1);
+            RecordMixing_UpdateMaxEntries(app, 1);
         }
     }
     ov73_021E66F0(app);
     return state;
 }
 
-void ov73_021E705C(RecordMixingApp *app, int state, int netId) {
+void RecordMixing_SetStateFromLink(RecordMixingApp *app, int state, int netId) {
     switch (state) {
     case 2:
         RecordMixing_ClearMessageWindow(app);
@@ -1244,13 +1244,13 @@ void ov73_021E705C(RecordMixingApp *app, int state, int netId) {
     app->state = state;
 }
 
-void ov73_021E7120(RecordMixingApp *app, int state, int netId) {
+void RecordMixing_SetStateFromLinkInMenu(RecordMixingApp *app, int state, int netId) {
     if (app->state == 3) {
         switch (state) {
         case 1: {
             u32 one;
             BufferPlayersName(app->msgFmt, 0, CommPlayerInfo_GetProfile(netId));
-            ov73_021E781C(app, 1);
+            RecordMixing_UpdateMaxEntries(app, 1);
             app->state = state;
             app->unk_4A1C = Comm_CountConnected();
             app->unk_4A24 = 0;
@@ -1546,7 +1546,7 @@ int RecordMixing_GetTextSpeed(RecordMixingApp *app) {
     return 1;
 }
 
-void ov73_021E781C(RecordMixingApp *app, int index) {
+void RecordMixing_UpdateMaxEntries(RecordMixingApp *app, int index) {
     if (Comm_GetLocalNetId() == 0) {
         if (index == -1) {
             CommState_SetMaxEntries(1);
@@ -1569,7 +1569,7 @@ void ov73_021E781C(RecordMixingApp *app, int index) {
 
 #pragma force_active on
 
-int ov73_021E7870(RecordMixingApp *app, int arg1) {
+int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int arg1) {
     u8 flag[1];
     int n = RecordMixing_CountMembers();
 
@@ -1589,7 +1589,7 @@ int ov73_021E7870(RecordMixingApp *app, int arg1) {
             return 1;
         }
         app->state = 17;
-        ov73_021E781C(app, -1);
+        RecordMixing_UpdateMaxEntries(app, -1);
         RecordMixing_HideYesNo(app);
         return 2;
     case 2:
@@ -1599,10 +1599,10 @@ int ov73_021E7870(RecordMixingApp *app, int arg1) {
         if (n < app->unk_4A18) {
             switch (app->unk_4A29) {
             case 0:
-                ov73_021E781C(app, arg1);
+                RecordMixing_UpdateMaxEntries(app, arg1);
                 break;
             case 1:
-                ov73_021E781C(app, 0);
+                RecordMixing_UpdateMaxEntries(app, 0);
                 break;
             }
             app->unk_4A1C = Comm_CountConnected();
@@ -1610,7 +1610,7 @@ int ov73_021E7870(RecordMixingApp *app, int arg1) {
         break;
     case 5:
         UnionRoom_SetBeaconActivity(9);
-        ov73_021E781C(app, arg1);
+        RecordMixing_UpdateMaxEntries(app, arg1);
         break;
     }
     app->unk_4A18 = RecordMixing_CountMembers();

@@ -125,7 +125,7 @@ typedef struct GlobalTerminalNetPair {
     u32 unk_04;
 } GlobalTerminalNetPair;
 
-// 8-byte header of the rankings request, built from a 0x24-byte source by ov39_022271CC
+// 8-byte header of the rankings request, built from a 0x24-byte source by GlobalTerminalNet_SetRankingsHeader
 typedef struct GlobalTerminalNetRankingsHeader {
     u8 unk_00;
     u8 unk_01;
@@ -251,7 +251,7 @@ void GlobalTerminalNet_PackBoxData(SaveData *saveData, PCStorage *storage, int b
 void GlobalTerminalNet_SealBoxData(SaveData *saveData, GlobalTerminalNetBoxForm *form, int value);
 void GlobalTerminalNet_SetRequestHeader(SaveData *saveData, const void *src, void *dst);
 void GlobalTerminalNet_CopyRequestHeader(const void *src, void *dst);
-void ov39_022271CC(SaveData *saveData, const GlobalTerminalNetRankingsSource *src, GlobalTerminalNetRankingsHeader *dst);
+void GlobalTerminalNet_SetRankingsHeader(SaveData *saveData, const GlobalTerminalNetRankingsSource *src, GlobalTerminalNetRankingsHeader *dst);
 BOOL GlobalTerminalNet_Init(GlobalTerminalNet *net, GlobalTerminalNetArgs *args);
 void GlobalTerminalNet_Free(GlobalTerminalNet *net);
 BOOL GlobalTerminalNet_SeqStopClient(GlobalTerminalNet *net);
@@ -262,22 +262,22 @@ BOOL GlobalTerminalNet_RequestDressUpUpload(GlobalTerminalNet *net, const void *
 BOOL GlobalTerminalNet_RequestDressUpDownload(GlobalTerminalNet *net, u16 arg);
 BOOL GlobalTerminalNet_RequestBoxUpload(GlobalTerminalNet *net, int value, const void *header, PCStorage *storage, int box);
 BOOL GlobalTerminalNet_RequestBoxDownload(GlobalTerminalNet *net, u8 arg);
-BOOL ov39_022274B4(GlobalTerminalNet *net);
+BOOL GlobalTerminalNet_RequestRankingsHeader(GlobalTerminalNet *net);
 BOOL GlobalTerminalNet_RequestRankings(GlobalTerminalNet *net, const GlobalTerminalNetRankingsSource *src, const GlobalTerminalNetPair *pairs);
 BOOL GlobalTerminalNet_RequestVideoUpload(GlobalTerminalNet *net, const void *header);
 BOOL GlobalTerminalNet_RequestVideoSearch(GlobalTerminalNet *net, u16 arg0, u8 arg1, u8 arg2, u8 arg3);
-BOOL ov39_022275E8(GlobalTerminalNet *net);
-BOOL ov39_02227648(GlobalTerminalNet *net);
-BOOL ov39_022276A4(GlobalTerminalNet *net);
-BOOL ov39_022276E0(GlobalTerminalNet *net);
+BOOL GlobalTerminalNet_RequestDefaultVideoSearchNoFrontier(GlobalTerminalNet *net);
+BOOL GlobalTerminalNet_RequestDefaultVideoSearch(GlobalTerminalNet *net);
+BOOL GlobalTerminalNet_RequestLatestVideos(GlobalTerminalNet *net);
+BOOL GlobalTerminalNet_RequestPopularVideos(GlobalTerminalNet *net);
 BOOL GlobalTerminalNet_RequestVideoDownload(GlobalTerminalNet *net, u32 numberLow, u32 numberHigh);
-BOOL ov39_0222774C(GlobalTerminalNet *net, u32 argLow, u32 argHigh);
+BOOL GlobalTerminalNet_ReportVideoSaved(GlobalTerminalNet *net, u32 argLow, u32 argHigh);
 BOOL GlobalTerminalNet_Update(GlobalTerminalNet *net);
 u32 GlobalTerminalNet_GetError(GlobalTerminalNet *net, GlobalTerminalNetError **error);
 u64 GlobalTerminalNet_GetUploadedVideoNumber(GlobalTerminalNet *net);
 int GlobalTerminalNet_GetDressUpList(GlobalTerminalNet *net, void **out, int max);
 int GlobalTerminalNet_GetBoxList(GlobalTerminalNet *net, void **out, int max);
-void ov39_02227F74(GlobalTerminalNet *net, void **out);
+void GlobalTerminalNet_GetRankingsHeader(GlobalTerminalNet *net, void **out);
 void GlobalTerminalNet_GetRankings(GlobalTerminalNet *net, void **out1, void **out2);
 u32 GlobalTerminalNet_GetDownloadedVideo(GlobalTerminalNet *net, u8 **out);
 int GlobalTerminalNet_GetVideoList(GlobalTerminalNet *net, GlobalTerminalNetVideoHeader **out, int max);

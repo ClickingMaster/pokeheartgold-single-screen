@@ -120,10 +120,10 @@ extern u32 CommState_GetSeenGames(void);
 
 extern BOOL CTRDG_IsExisting();
 
-static void ov74_0222841C(MainMenuAppData *data, int currentOption);
-static void ov74_02228548(MainMenuAppData *data, int a1);
+static void MainMenu_HighlightOption(MainMenuAppData *data, int currentOption);
+static void MainMenu_HighlightNewGameOption(MainMenuAppData *data, int a1);
 static BOOL ChangeCurrentAppOption(MainMenuAppData *data, int offset);
-static void ov74_022286F8(MainMenuAppData *data, int a1);
+static void MainMenu_ScrollToOption(MainMenuAppData *data, int a1);
 static void MainMenu_UpdateArrowSprites(MainMenuAppData *data);
 static void AdvanceButtonBorderAnimation(MainMenuAppData *data);
 
@@ -167,7 +167,7 @@ extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_NintendoWFCSetup;
 extern const OverlayManagerTemplate ov112_App_MainMenu_SelectOption_ConnectToPokewalker;
 extern const OverlayManagerTemplate ov75_App_MainMenu_SelectOption_WiiMessageSettings;
 
-static u32 ov74_02227060(MainMenuAppData *data) {
+static u32 MainMenu_GetNewInput(MainMenuAppData *data) {
     if (gSystem.newKeys & (PAD_BUTTON_Y | PAD_BUTTON_X | PAD_KEY_UP | PAD_KEY_DOWN | PAD_KEY_LEFT | PAD_KEY_RIGHT | PAD_BUTTON_B | PAD_BUTTON_A)) {
         data->menuInputState.state = MENU_INPUT_STATE_BUTTONS;
         return gSystem.newKeys;
@@ -188,7 +188,7 @@ static u32 GetNthAvailableApp(MainMenuAppData *data, u8 n) {
     return 0;
 }
 
-static u32 ov74_022270C4(MainMenuAppData *data, int *state, BOOL a2) {
+static u32 MainMenu_ConfirmOption(MainMenuAppData *data, int *state, BOOL a2) {
     if (!a2) {
         PlaySE(SEQ_SE_DP_SELECT);
         data->selectedApp = (MainMenu_AppOption)data->unkEC[data->currentOption];
@@ -238,14 +238,14 @@ static BOOL MainMenu_HandleKeyInput(MainMenuAppData *data, int *state) {
 
     if (gSystem.newKeys & (PAD_BUTTON_Y | PAD_BUTTON_X | PAD_KEY_UP | PAD_KEY_DOWN | PAD_KEY_LEFT | PAD_KEY_RIGHT | PAD_BUTTON_B | PAD_BUTTON_A) && data->menuInputState.state == MENU_INPUT_STATE_TOUCH) {
         data->menuInputState.state = MENU_INPUT_STATE_BUTTONS;
-        ov74_0222841C(data, data->currentOption);
+        MainMenu_HighlightOption(data, data->currentOption);
         return FALSE;
     }
 
     if (gSystem.newKeys & PAD_BUTTON_A) {
-        return ov74_022270C4(data, state, FALSE);
+        return MainMenu_ConfirmOption(data, state, FALSE);
     } else if (gSystem.newKeys & PAD_BUTTON_B) {
-        return ov74_022270C4(data, state, TRUE);
+        return MainMenu_ConfirmOption(data, state, TRUE);
     }
 
     if (data->unk48) {
@@ -271,7 +271,7 @@ static BOOL MainMenu_HandleKeyInput(MainMenuAppData *data, int *state) {
     }
 
     if (changedOption) {
-        ov74_022286F8(data, unk);
+        MainMenu_ScrollToOption(data, unk);
     }
 
     return FALSE;
@@ -315,8 +315,8 @@ static BOOL MainMenu_HandleTouchInput(MainMenuAppData *data, int *state, BOOL *v
 
     if (hitArrowButton) {
         data->menuInputState.state = MENU_INPUT_STATE_TOUCH;
-        ov74_0222841C(data, data->currentOption);
-        ov74_022286F8(data, data->currentOption);
+        MainMenu_HighlightOption(data, data->currentOption);
+        MainMenu_ScrollToOption(data, data->currentOption);
         data->unk1B4 = 6;
         return FALSE;
     }
@@ -352,8 +352,8 @@ static BOOL MainMenu_HandleTouchInput(MainMenuAppData *data, int *state, BOOL *v
     data->currentOption = GetNthAvailableApp(data, touchedOption);
 
     data->menuInputState.state = MENU_INPUT_STATE_TOUCH;
-    ov74_0222841C(data, data->currentOption);
-    return ov74_022270C4(data, state, FALSE);
+    MainMenu_HighlightOption(data, data->currentOption);
+    return MainMenu_ConfirmOption(data, state, FALSE);
 }
 
 static BOOL MainMenu_HandleInput(MainMenuAppData *data, int *newState) {
@@ -362,7 +362,7 @@ static BOOL MainMenu_HandleInput(MainMenuAppData *data, int *newState) {
     if (hadTouchInput) {
         data->menuInputState.state = MENU_INPUT_STATE_TOUCH;
         if (data->unk1B4 != 6) {
-            ov74_0222841C(data, 0xFF);
+            MainMenu_HighlightOption(data, 0xFF);
         }
         return touchResult;
     }
@@ -399,7 +399,7 @@ static u32 MainMenu_NewGame_HandleInput(MainMenuAppData *data) {
     u32 touchResult = MainMenu_NewGame_HandleTouchInput(data, &hadTouchInput);
     if (hadTouchInput) {
         data->menuInputState.state = MENU_INPUT_STATE_TOUCH;
-        ov74_02228548(data, 0xFF);
+        MainMenu_HighlightNewGameOption(data, 0xFF);
         return touchResult;
     }
 
@@ -409,13 +409,13 @@ static u32 MainMenu_NewGame_HandleInput(MainMenuAppData *data) {
 
     if (gSystem.newKeys & (PAD_BUTTON_Y | PAD_BUTTON_X | PAD_KEY_UP | PAD_KEY_DOWN | PAD_KEY_LEFT | PAD_KEY_RIGHT | PAD_BUTTON_B | PAD_BUTTON_A) && data->menuInputState.state == MENU_INPUT_STATE_TOUCH) {
         data->menuInputState.state = MENU_INPUT_STATE_BUTTONS;
-        ov74_02228548(data, data->currentNewGameOption);
+        MainMenu_HighlightNewGameOption(data, data->currentNewGameOption);
         return 0;
     }
 
     if (gSystem.newKeys & (PAD_KEY_UP | PAD_KEY_DOWN)) {
         data->currentNewGameOption ^= 1;
-        ov74_02228548(data, data->currentNewGameOption);
+        MainMenu_HighlightNewGameOption(data, data->currentNewGameOption);
         PlaySE(SEQ_SE_DP_SELECT);
         return 0;
     }
@@ -450,7 +450,7 @@ typedef struct UnkStruct_ov74_0223BBD4 {
 } UnkStruct_ov74_0223BBD4;
 
 // Unused warning screen for wifi user info
-static BOOL ov74_02227584(MainMenuAppData *data) {
+static BOOL MainMenu_PrintWifiInfoErasedWarning(MainMenuAppData *data) {
     static UnkStruct_ov74_0223BBD4 ov74_0223BBD4[] = {
         {
          .x = 5,
@@ -478,7 +478,7 @@ static BOOL ov74_02227584(MainMenuAppData *data) {
             }
         }
     } else {
-        if (ov74_02227060(data) & (PAD_BUTTON_B | PAD_BUTTON_A)) {
+        if (MainMenu_GetNewInput(data) & (PAD_BUTTON_B | PAD_BUTTON_A)) {
             PlaySE(SEQ_SE_DP_SELECT);
             EraseFrameAndWindow1(&data->unk190, FALSE);
             RemoveWindow(&data->unk190);
@@ -523,7 +523,7 @@ static void DetectInsertedGBACart(MainMenuAppData *data) {
     }
 }
 
-static void ov74_022276AC(MainMenuAppData *data) {
+static void MainMenu_UpdateBeaconWatch(MainMenuAppData *data) {
     switch (data->unk13C) {
     case 10:
         data->unk13C = 11;
@@ -659,7 +659,7 @@ static BOOL ov74_0222779C(MainMenuAppData *data) {
                 MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &unk, unk3->x, unk3->y, unk3->msgId);
             }
             data->currentNewGameOption = 0;
-            ov74_02228548(data, -1);
+            MainMenu_HighlightNewGameOption(data, -1);
             data->unk144 = 19;
             data->unk14C = 30;
         } else {
@@ -680,10 +680,10 @@ static BOOL ov74_0222779C(MainMenuAppData *data) {
         }
 
         u32 oldInputState = data->menuInputState.state;
-        u32 unk = ov74_02227060(data);
+        u32 unk = MainMenu_GetNewInput(data);
         if (unk & (PAD_BUTTON_B | PAD_BUTTON_A)) {
             if (oldInputState != data->menuInputState.state) {
-                ov74_0222841C(data, data->currentOption);
+                MainMenu_HighlightOption(data, data->currentOption);
             }
             RemoveWindow(&data->unk154);
             data->unk144 = 20;
@@ -696,7 +696,7 @@ static BOOL ov74_0222779C(MainMenuAppData *data) {
         if (data->unk14C != 0) {
             data->unk14C--;
             if (data->unk14C == 0) {
-                ov74_02228548(data, 0);
+                MainMenu_HighlightNewGameOption(data, 0);
             }
         } else {
             u32 inputResult = MainMenu_NewGame_HandleInput(data);
@@ -705,7 +705,7 @@ static BOOL ov74_0222779C(MainMenuAppData *data) {
                 RemoveWindow(&data->unk154);
                 RemoveWindow(&data->unk164[0]);
                 RemoveWindow(&data->unk164[1]);
-                ov74_0222841C(data, data->currentOption);
+                MainMenu_HighlightOption(data, data->currentOption);
                 data->unk144 = 20;
                 data->unk150 = inputResult;
                 PlaySE(SEQ_SE_DP_SELECT);
@@ -860,7 +860,7 @@ static void PrintPlayerInfoField(Window *window, MsgData *msgData, MessageFormat
     String_Delete(string);
 }
 
-static void ov74_02227E64(MessageFormat *messageFormat, int number) {
+static void MainMenu_BufferAlignedNumber(MessageFormat *messageFormat, int number) {
     u32 digits;
     PrintingMode printingMode;
 
@@ -908,7 +908,7 @@ static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 a1, MainMenu
     BufferPlayersName(messageFormat, 0, data->profile);
     PrintPlayerInfoField(a2->window, msgData, messageFormat, textColor, msg_0442_00017, 16);
 
-    ov74_02227E64(messageFormat, GetIGTHours(data->igt));
+    MainMenu_BufferAlignedNumber(messageFormat, GetIGTHours(data->igt));
     BufferIntegerAsString(messageFormat, 1, GetIGTMinutes(data->igt), 2, PRINTING_MODE_LEADING_ZEROS, 1);
     PrintPlayerInfoField(a2->window, msgData, messageFormat, textColor, msg_0442_00018, 32);
 
@@ -916,7 +916,7 @@ static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 a1, MainMenu
     PrintPlayerInfoField(a2->window, msgData, messageFormat, textColor, msg_0442_00020, 48);
 
     if (data->hasPokedex) {
-        ov74_02227E64(messageFormat, Pokedex_CountDexOwned(data->pokedex));
+        MainMenu_BufferAlignedNumber(messageFormat, Pokedex_CountDexOwned(data->pokedex));
         PrintPlayerInfoField(a2->window, msgData, messageFormat, textColor, msg_0442_00019, 64);
     }
 
@@ -1047,7 +1047,7 @@ static BOOL MainMenu_PrintWiiMessageSettingsButton(MainMenuAppData *data, u32 a1
     return TRUE;
 }
 
-static BOOL ov74_022282CC(MainMenuAppData *data) {
+static BOOL MainMenu_DrawOptionWindows(MainMenuAppData *data) {
     u32 y;
     u32 i;
 
@@ -1093,12 +1093,12 @@ static BOOL ov74_022282CC(MainMenuAppData *data) {
     }
 
     MainMenu_UpdateArrowSprites(data);
-    ov74_0222841C(data, data->currentOption);
+    MainMenu_HighlightOption(data, data->currentOption);
 
     return ret;
 }
 
-static void ov74_0222841C(MainMenuAppData *data, int currentOption) {
+static void MainMenu_HighlightOption(MainMenuAppData *data, int currentOption) {
     for (int i = 0; i < NELEMS(data->unk5C); i++) {
         Window *window = &data->unk5C[i];
         if (!WindowIsInUse(window)) {
@@ -1128,7 +1128,7 @@ static void ov74_0222841C(MainMenuAppData *data, int currentOption) {
     BgCommitTilemapBufferToVram(data->bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-static void ov74_02228548(MainMenuAppData *data, int a1) {
+static void MainMenu_HighlightNewGameOption(MainMenuAppData *data, int a1) {
     for (int i = 0; i < (int)NELEMS(data->unk164); i++) {
         Window *window = &data->unk164[i];
         if (!WindowIsInUse(window)) {
@@ -1179,7 +1179,7 @@ static BOOL ChangeCurrentAppOption(MainMenuAppData *data, int offset) {
     data->currentOption = option;
 
     if (data->currentOption != oldOption) {
-        ov74_0222841C(data, data->currentOption);
+        MainMenu_HighlightOption(data, data->currentOption);
         data->unk1B4 = 6;
         return TRUE;
     }
@@ -1187,7 +1187,7 @@ static BOOL ChangeCurrentAppOption(MainMenuAppData *data, int offset) {
     return FALSE;
 }
 
-static void ov74_022286F8(MainMenuAppData *data, int a1) {
+static void MainMenu_ScrollToOption(MainMenuAppData *data, int a1) {
     Window *window = &data->unk5C[a1];
 
     int optionY = (GetWindowY(window) - 1) * 8;
@@ -1207,7 +1207,7 @@ static void ov74_022286F8(MainMenuAppData *data, int a1) {
         ScheduleBgTilemapBufferTransfer(data->bgConfig, GF_BG_LYR_MAIN_0);
         ScheduleBgTilemapBufferTransfer(data->bgConfig, GF_BG_LYR_MAIN_2);
     } else if (data->effectiveScreenY == 0) {
-        ov74_022282CC(data);
+        MainMenu_DrawOptionWindows(data);
     }
 }
 
@@ -1359,7 +1359,7 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
     BOOL cartInserted = CTRDG_IsExisting(); // unused
 
     if (ov74_0222779C(data) == TRUE) {
-        ov74_022276AC(data);
+        MainMenu_UpdateBeaconWatch(data);
         HandleScreenScroll(data);
         return FALSE;
     }
@@ -1384,7 +1384,7 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
         }
         break;
     case 2:
-        if (!ov74_02227584(data)) {
+        if (!MainMenu_PrintWifiInfoErasedWarning(data)) {
             MainMenuUtil_StartFade(0, 3, state, 8);
         }
         break;
@@ -1402,8 +1402,8 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
         MainMenu_SetupSprites(data);
         MainMenu_SetupWifiTiles(data);
         Main_SetVBlankIntrCB((GFIntrCB)MainMenu_OnVBlank, data->bgConfig);
-        ov74_022282CC(data);
-        ov74_0222841C(data, data->currentOption);
+        MainMenu_DrawOptionWindows(data);
+        MainMenu_HighlightOption(data, data->currentOption);
         MainMenuUtil_StartFade(1, 5, state, 8);
         ((vu16 *)HW_PLTT)[0] = MAIN_MENU_BACKGROUND_COLOR;
         data->unk13C = 10;
@@ -1411,7 +1411,7 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
     case 5:
         MainMenu_HandleInput(data, state);
         if (data->unk48 == TRUE) {
-            ov74_022282CC(data);
+            MainMenu_DrawOptionWindows(data);
             data->unk48 = FALSE;
         } else if (*state == 5 && data->unk188 == TRUE) {
             data->unk188 = FALSE;
@@ -1437,7 +1437,7 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
         return TRUE;
     }
 
-    ov74_022276AC(data);
+    MainMenu_UpdateBeaconWatch(data);
     HandleScreenScroll(data);
     MainMenuUtil_UpdateSprites();
     return FALSE;

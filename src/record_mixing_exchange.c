@@ -31,8 +31,8 @@ void RecordMixing_Fashion_Merge(RecordMixingMergeArgs *args);
 void ov73_021EA2FC(RecordMixingMergeArgs *args);
 SaveRankingsEntry *RecordMixing_Rankings_Load(SaveData *saveData, enum HeapID heapID);
 void RecordMixing_Rankings_Merge(RecordMixingMergeArgs *args);
-void *ov73_021EA348(SaveData *saveData, enum HeapID heapID, u32 size);
-void ov73_021EA370(RecordMixingMergeArgs *args);
+void *RecordMixing_BattleRoomTrainer_Load(SaveData *saveData, enum HeapID heapID, u32 size);
+void RecordMixing_BattleRoomTrainer_Merge(RecordMixingMergeArgs *args);
 void RecordMixing_BuildSendBuffer(SaveData *saveData, void *dest);
 
 u32 RecordMixing_FriendGroup_GetSize(SaveData *saveData) {
@@ -85,14 +85,14 @@ void RecordMixing_Rankings_Merge(RecordMixingMergeArgs *args) {
     ((void (*)(SaveData *, int, u8, SaveRankingsEntry **, enum HeapID))Save_UpdateRankingsFromMixing)(args->saveData, args->localId, (u8)args->numPlayers, (SaveRankingsEntry **)args->records, args->heapID);
 }
 
-void *ov73_021EA348(SaveData *saveData, enum HeapID heapID, u32 size) {
+void *RecordMixing_BattleRoomTrainer_Load(SaveData *saveData, enum HeapID heapID, u32 size) {
     void *dest = Heap_AllocAtEnd(heapID, size);
     MI_CpuFill8(dest, 0, size);
     sub_02069528(saveData, 0, dest);
     return dest;
 }
 
-void ov73_021EA370(RecordMixingMergeArgs *args) {
+void RecordMixing_BattleRoomTrainer_Merge(RecordMixingMergeArgs *args) {
 }
 
 // Copies the data of every record type into the send buffer.

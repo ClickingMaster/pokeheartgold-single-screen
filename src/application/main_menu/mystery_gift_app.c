@@ -254,7 +254,7 @@ int MysteryGiftApp_StartSearch(OverlayManager *manager) {
     }
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[2], FALSE);
     if (data->receiveMode != 2) {
-        ov74_02229D1C(data, 15);
+        MysteryGiftComm_StartChild(data, 15);
         data->timeout = 7200;
         WirelessStatusIcon_Create();
         MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
@@ -278,7 +278,7 @@ int MysteryGiftApp_AcceptGift(OverlayManager *manager) {
         return 49;
     }
     if (data->receiveMode == 1) {
-        ov74_02229D50(data->channel);
+        MysteryGiftComm_ConnectToChannel(data->channel);
     }
     MysteryGiftApp_PrintMessage(manager, &data->messageWindow, 6);
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[2], FALSE);
@@ -1857,7 +1857,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         }
         break;
     case 7:
-        data->channel = ov74_02229D6C(data);
+        data->channel = MysteryGiftComm_GetFirstParentInfo(data);
         if (data->channel != -1) {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             data->giftCheckResult = MysteryGift_CheckCanReceive(data->saveData, &data->receivedHeader);

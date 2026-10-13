@@ -360,14 +360,14 @@ BOOL WiiMessageSettingsScreen_RegisterWiiNumber(WiiMessageSettingsScreen *screen
 BOOL WiiMessageSettingsScreen_StartWiiNumberEntry(WiiMessageSettingsScreen *screen);
 BOOL WiiMessageSettingsScreen_CheckWiiNumberEntry(WiiMessageSettingsScreen *screen);
 BOOL WiiMessageSettingsScreen_ConfirmConnect(WiiMessageSettingsScreen *screen);
-BOOL ov75_02248684(WiiMessageSettingsScreen *screen);
+BOOL WiiMessageSettingsScreen_HandleConnectYesNo(WiiMessageSettingsScreen *screen);
 BOOL WiiMessageSettingsScreen_PrintDisconnecting(WiiMessageSettingsScreen *screen);
 BOOL WiiMessageSettingsScreen_Disconnect(WiiMessageSettingsScreen *screen);
 BOOL WiiMessageSettingsScreen_PrintDisconnected(WiiMessageSettingsScreen *screen);
 BOOL WiiMessageSettingsScreen_StartConnect(WiiMessageSettingsScreen *screen);
 BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen);
-BOOL ov75_022488AC(WiiMessageSettingsScreen *screen);
-BOOL ov75_022488BC(WiiMessageSettingsScreen *screen);
+BOOL WiiMessageSettingsScreen_StartAuth(WiiMessageSettingsScreen *screen);
+BOOL WiiMessageSettingsScreen_WaitAuth(WiiMessageSettingsScreen *screen);
 BOOL WiiMessageSettingsScreen_StartServerSession(WiiMessageSettingsScreen *screen);
 BOOL WiiMessageSettingsScreen_SendRegistrationRequest(WiiMessageSettingsScreen *screen);
 BOOL WiiMessageSettingsScreen_WaitRegistrationResponse(WiiMessageSettingsScreen *screen);
@@ -1538,7 +1538,7 @@ BOOL WiiMessageSettingsScreen_ConfirmConnect(WiiMessageSettingsScreen *screen) {
     return FALSE;
 }
 
-BOOL ov75_02248684(WiiMessageSettingsScreen *screen) {
+BOOL WiiMessageSettingsScreen_HandleConnectYesNo(WiiMessageSettingsScreen *screen) {
     int input = YesNoPrompt_HandleInput(screen->yesNoPrompt);
 
     if (input == YESNORESPONSE_YES) {
@@ -1660,7 +1660,7 @@ BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen) {
 
 #pragma force_active reset
 
-BOOL ov75_022488AC(WiiMessageSettingsScreen *screen) {
+BOOL WiiMessageSettingsScreen_StartAuth(WiiMessageSettingsScreen *screen) {
     ov00_021ECD04();
     screen->state = WMS_STATE_15;
     return FALSE;
@@ -1668,7 +1668,7 @@ BOOL ov75_022488AC(WiiMessageSettingsScreen *screen) {
 
 #pragma force_active on
 
-BOOL ov75_022488BC(WiiMessageSettingsScreen *screen) {
+BOOL WiiMessageSettingsScreen_WaitAuth(WiiMessageSettingsScreen *screen) {
     int errorCode;
     u32 errorType;
 

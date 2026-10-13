@@ -21,25 +21,25 @@ extern BOOL EasyChat_Init(OverlayManager *, int *);
 extern BOOL EasyChat_Main(OverlayManager *, int *);
 extern BOOL EasyChat_Exit(OverlayManager *, int *);
 
-static const OverlayManagerTemplate ov55_021E5BF4 = {
+static const OverlayManagerTemplate sUseMailMailViewTemplate = {
     .init = MailView_Init,
     .exec = MailView_Main,
     .exit = MailView_Exit,
     .ovy_id = FS_OVERLAY_ID(OVY_56),
 };
 
-static const OverlayManagerTemplate ov55_021E5C04 = {
+static const OverlayManagerTemplate sUseMailEasyChatTemplate = {
     .init = EasyChat_Init,
     .exec = EasyChat_Main,
     .exit = EasyChat_Exit,
     .ovy_id = FS_OVERLAY_ID(OVY_102),
 };
 
-static UnkStruct_ov55_021E5B08 *ov55_021E5B08(Mail *, enum HeapID);
-static void ov55_021E5BAC(UnkStruct_ov55_021E5B08 *);
-static void ov55_021E5BC4(Mail *, UnkStruct_ov55_021E5B08 *);
+static MailViewArgs *UseMail_CreateMailViewArgs(Mail *, enum HeapID);
+static void UseMail_FreeMailViewArgs(MailViewArgs *);
+static void UseMail_SaveMail(Mail *, MailViewArgs *);
 
-static BOOL ov55_021E5900(OverlayManager **manager) {
+static BOOL UseMail_RunSubApp(OverlayManager **manager) {
     if (*manager != NULL && OverlayManager_Run(*manager)) {
         OverlayManager_Delete(*manager);
         *manager = NULL;
@@ -50,45 +50,45 @@ static BOOL ov55_021E5900(OverlayManager **manager) {
 }
 
 BOOL ov55_UnkApp_Init(OverlayManager *manager, int *state) {
-    UnkStruct_ov55_021E5924 *overlayData;
+    UseMailData *overlayData;
     UseMailArgs *args;
 
     args = OverlayManager_GetArgs(manager);
     Heap_Create(HEAP_ID_3, HEAP_ID_OV55, 0x1000);
-    overlayData = OverlayManager_CreateAndGetData(manager, sizeof(UnkStruct_ov55_021E5924), HEAP_ID_OV55);
-    MI_CpuFill8(overlayData, 0, sizeof(UnkStruct_ov55_021E5924));
+    overlayData = OverlayManager_CreateAndGetData(manager, sizeof(UseMailData), HEAP_ID_OV55);
+    MI_CpuFill8(overlayData, 0, sizeof(UseMailData));
 
     overlayData->heapID = HEAP_ID_OV55;
-    overlayData->unk10 = ov55_021E5B08(args->mail, HEAP_ID_OV55);
-    overlayData->unk10->options = Save_PlayerData_GetOptionsAddr(args->saveData);
+    overlayData->mailViewArgs = UseMail_CreateMailViewArgs(args->mail, HEAP_ID_OV55);
+    overlayData->mailViewArgs->options = Save_PlayerData_GetOptionsAddr(args->saveData);
     if (args->unk0 == 1) {
-        overlayData->unk10->mailType = args->mailType;
+        overlayData->mailViewArgs->mailType = args->mailType;
     }
-    if (overlayData->unk10->mailType >= NUM_MAIL) {
-        overlayData->unk10->mailType = MAIL_GRASS;
+    if (overlayData->mailViewArgs->mailType >= NUM_MAIL) {
+        overlayData->mailViewArgs->mailType = MAIL_GRASS;
     }
-    overlayData->unk10->unk0 = args->unk0;
-    overlayData->unk10->menuInputStateMgr = args->menuInputStatePtr;
+    overlayData->mailViewArgs->unk0 = args->unk0;
+    overlayData->mailViewArgs->menuInputStateMgr = args->menuInputStatePtr;
     return TRUE;
 }
 
 BOOL ov55_UnkApp_Main(OverlayManager *manager, int *state) {
-    UnkStruct_ov55_021E5924 *overlayData = OverlayManager_GetData(manager);
+    UseMailData *overlayData = OverlayManager_GetData(manager);
     UseMailArgs *args = OverlayManager_GetArgs(manager);
 
     switch (*state) {
     case 0:
-        overlayData->unk10->unk0 = args->unk0;
-        overlayData->unkC = OverlayManager_New(&ov55_021E5BF4, overlayData->unk10, overlayData->heapID);
+        overlayData->mailViewArgs->unk0 = args->unk0;
+        overlayData->subApp = OverlayManager_New(&sUseMailMailViewTemplate, overlayData->mailViewArgs, overlayData->heapID);
         *state = 1;
         break;
 
     case 1:
-        if (!ov55_021E5900(&overlayData->unkC)) {
+        if (!UseMail_RunSubApp(&overlayData->subApp)) {
             break;
         }
 
-        switch (overlayData->unk10->unk0) {
+        switch (overlayData->mailViewArgs->unk0) {
         case 0xFFFF:
             *state = 2;
             break;
@@ -104,8 +104,8 @@ BOOL ov55_UnkApp_Main(OverlayManager *manager, int *state) {
 
     case 2:
         if (args->unk0 == 1) {
-            if (overlayData->unk10->unk0 == 3) {
-                ov55_021E5BC4(args->mail, overlayData->unk10);
+            if (overlayData->mailViewArgs->unk0 == 3) {
+                UseMail_SaveMail(args->mail, overlayData->mailViewArgs);
                 GameStats_AddScore(Save_GameStats_Get(args->saveData), SCORE_EVENT_WROTE_MAIL);
                 GameStats_Inc(Save_GameStats_Get(args->saveData), GAME_STAT_MAIL_WRITTEN);
                 args->unk4 = 1;
@@ -117,23 +117,23 @@ BOOL ov55_UnkApp_Main(OverlayManager *manager, int *state) {
         return TRUE;
 
     case 3:
-        overlayData->unk8 = EasyChat_CreateArgs(2, 0, args->saveData, args->menuInputStatePtr, overlayData->heapID);
-        if (MailMsg_IsInit(&overlayData->unk10->mailMessages[overlayData->unk10->mailMessageIdx])) {
-            MailMsg_Copy(&overlayData->unk14, &overlayData->unk10->mailMessages[overlayData->unk10->mailMessageIdx]);
+        overlayData->easyChatArgs = EasyChat_CreateArgs(2, 0, args->saveData, args->menuInputStatePtr, overlayData->heapID);
+        if (MailMsg_IsInit(&overlayData->mailViewArgs->mailMessages[overlayData->mailViewArgs->mailMessageIdx])) {
+            MailMsg_Copy(&overlayData->editMessage, &overlayData->mailViewArgs->mailMessages[overlayData->mailViewArgs->mailMessageIdx]);
         } else {
-            MailMsg_Init_WithBank(&overlayData->unk14, MAILMSG_BANK_0293_GMM);
+            MailMsg_Init_WithBank(&overlayData->editMessage, MAILMSG_BANK_0293_GMM);
         }
-        EasyChatArgs_SetMailMessage(overlayData->unk8, &overlayData->unk14);
-        overlayData->unkC = OverlayManager_New(&ov55_021E5C04, overlayData->unk8, overlayData->heapID);
+        EasyChatArgs_SetMailMessage(overlayData->easyChatArgs, &overlayData->editMessage);
+        overlayData->subApp = OverlayManager_New(&sUseMailEasyChatTemplate, overlayData->easyChatArgs, overlayData->heapID);
         *state = 4;
         break;
 
     case 4:
-        if (ov55_021E5900(&overlayData->unkC)) {
-            if (EasyChatArgs_IsCancelled(overlayData->unk8) == 0) {
-                EasyChatArgs_GetMailMessage(overlayData->unk8, &overlayData->unk10->mailMessages[overlayData->unk10->mailMessageIdx]);
+        if (UseMail_RunSubApp(&overlayData->subApp)) {
+            if (EasyChatArgs_IsCancelled(overlayData->easyChatArgs) == 0) {
+                EasyChatArgs_GetMailMessage(overlayData->easyChatArgs, &overlayData->mailViewArgs->mailMessages[overlayData->mailViewArgs->mailMessageIdx]);
             }
-            EasyChat_FreeArgs(overlayData->unk8);
+            EasyChat_FreeArgs(overlayData->easyChatArgs);
             *state = 0;
         }
 
@@ -144,16 +144,16 @@ BOOL ov55_UnkApp_Main(OverlayManager *manager, int *state) {
 }
 
 BOOL ov55_UnkApp_Exit(OverlayManager *manager, int *state) {
-    UnkStruct_ov55_021E5924 *overlayData = OverlayManager_GetData(manager);
-    ov55_021E5BAC(overlayData->unk10);
+    UseMailData *overlayData = OverlayManager_GetData(manager);
+    UseMail_FreeMailViewArgs(overlayData->mailViewArgs);
     OverlayManager_FreeData(manager);
     Heap_Destroy(overlayData->heapID);
     return TRUE;
 }
 
-static UnkStruct_ov55_021E5B08 *ov55_021E5B08(Mail *mail, enum HeapID heapID) {
-    UnkStruct_ov55_021E5B08 *ret = Heap_Alloc(heapID, sizeof(UnkStruct_ov55_021E5B08));
-    MI_CpuFill8(ret, 0, sizeof(UnkStruct_ov55_021E5B08));
+static MailViewArgs *UseMail_CreateMailViewArgs(Mail *mail, enum HeapID heapID) {
+    MailViewArgs *ret = Heap_Alloc(heapID, sizeof(MailViewArgs));
+    MI_CpuFill8(ret, 0, sizeof(MailViewArgs));
 
     ret->unk0 = 0;
     ret->mailOTID = Mail_GetOTID(mail);
@@ -174,7 +174,7 @@ static UnkStruct_ov55_021E5B08 *ov55_021E5B08(Mail *mail, enum HeapID heapID) {
     return ret;
 }
 
-static void ov55_021E5BAC(UnkStruct_ov55_021E5B08 *unk) {
+static void UseMail_FreeMailViewArgs(MailViewArgs *unk) {
     if (unk->mailAuthorName != NULL) {
         String_Delete(unk->mailAuthorName);
     }
@@ -182,7 +182,7 @@ static void ov55_021E5BAC(UnkStruct_ov55_021E5B08 *unk) {
     Heap_Free(unk);
 }
 
-static void ov55_021E5BC4(Mail *mail, UnkStruct_ov55_021E5B08 *unk) {
+static void UseMail_SaveMail(Mail *mail, MailViewArgs *unk) {
     for (u16 i = 0; i < 3; i++) {
         Mail_SetMessage(mail, &unk->mailMessages[i], (u8)i);
     }

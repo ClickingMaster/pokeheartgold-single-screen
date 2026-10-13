@@ -165,8 +165,8 @@ BOOL GlobalTerminalConnect_ErrorAllowsRetry(int errorCode, int errorType);
 BOOL GlobalTerminalConnect_StateAskConnect(GlobalTerminalConnectWork *work);
 BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *work);
 BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *work);
-BOOL ov39_02228D90(GlobalTerminalConnectWork *work);
-BOOL ov39_02228DA0(GlobalTerminalConnectWork *work);
+BOOL GlobalTerminalConnect_StateStartAuth(GlobalTerminalConnectWork *work);
+BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work);
 BOOL GlobalTerminalConnect_StateSaveProfileId(GlobalTerminalConnectWork *work);
 BOOL GlobalTerminalConnect_StateShowError(GlobalTerminalConnectWork *work);
 BOOL GlobalTerminalConnect_StateWaitErrorAck(GlobalTerminalConnectWork *work);
@@ -702,7 +702,7 @@ BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *work) {
     return FALSE;
 }
 
-BOOL ov39_02228D90(GlobalTerminalConnectWork *work) {
+BOOL GlobalTerminalConnect_StateStartAuth(GlobalTerminalConnectWork *work) {
     ov00_021ECD04(work);
     work->state = GTC_STATE_4;
     return FALSE;
@@ -710,7 +710,7 @@ BOOL ov39_02228D90(GlobalTerminalConnectWork *work) {
 
 #pragma force_active on
 
-BOOL ov39_02228DA0(GlobalTerminalConnectWork *work) {
+BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work) {
     int errorCode;
     u32 errorType;
 

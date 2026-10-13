@@ -89,7 +89,7 @@ void VsRecorder_OnRankingsHeaderReceived(void *arg, GlobalTerminalNetError *erro
     if (error->isError == TRUE) {
         rankings->recordIds = rankings->recordIdsBuf;
     } else {
-        ov39_02227F74(VsRecorder_GetNet(work), (void **)&rankings->recordIds);
+        GlobalTerminalNet_GetRankingsHeader(VsRecorder_GetNet(work), (void **)&rankings->recordIds);
         MI_CpuCopy8(rankings->recordIds, rankings->recordIdsBuf, sizeof(rankings->recordIdsBuf));
     }
 }
@@ -362,7 +362,7 @@ BOOL VsRecorder_VideoListSave(VsRecorderWork *work) {
         }
         VsRecorder_PrintVideoListMessage(work, 0x118, 0);
         number = BattleRecordHeader_GetField(BattleRecord_GetHeader(), 4, 0);
-        if (ov39_0222774C(VsRecorder_GetNet(work), (u32)number, (u32)(number >> 32)) == TRUE) {
+        if (GlobalTerminalNet_ReportVideoSaved(VsRecorder_GetNet(work), (u32)number, (u32)(number >> 32)) == TRUE) {
             work->step++;
         }
         break;
@@ -901,21 +901,21 @@ BOOL VsRecorder_VideoListDownloadList(VsRecorderWork *work) {
     case 1:
         if (work->selection == 300) {
             listWork->listType = VS_RECORDER_VIDEO_LIST_LATEST;
-            if (ov39_022276A4(VsRecorder_GetNet(work)) == TRUE) {
+            if (GlobalTerminalNet_RequestLatestVideos(VsRecorder_GetNet(work)) == TRUE) {
                 work->step++;
             }
         } else if (work->selection == 301) {
             listWork->listType = VS_RECORDER_VIDEO_LIST_POPULAR;
-            if (ov39_022276E0(VsRecorder_GetNet(work)) == TRUE) {
+            if (GlobalTerminalNet_RequestPopularVideos(VsRecorder_GetNet(work)) == TRUE) {
                 work->step++;
             }
         } else if (work->selection == 200) {
             listWork->listType = VS_RECORDER_VIDEO_LIST_SEARCH;
             if (VsRecorderApp_HasVisitedBattleFrontier(work) == TRUE) {
-                if (ov39_02227648(VsRecorder_GetNet(work)) == TRUE) {
+                if (GlobalTerminalNet_RequestDefaultVideoSearch(VsRecorder_GetNet(work)) == TRUE) {
                     work->step++;
                 }
-            } else if (ov39_022275E8(VsRecorder_GetNet(work)) == TRUE) {
+            } else if (GlobalTerminalNet_RequestDefaultVideoSearchNoFrontier(VsRecorder_GetNet(work)) == TRUE) {
                 work->step++;
             }
         } else {

@@ -1078,12 +1078,12 @@ static void PokegearMap_SetBgParam_MapMode(PokegearMapAppData *mapApp) {
     ov101_021EB38C(mapApp, 1, mapApp->zoomed);
     CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_SUB_2, 0, 7, 32, 17, mapApp->unk_16C->rawData, 0, 7, mapApp->unk_16C->screenWidth / 8, mapApp->unk_16C->screenHeight / 8);
 
-    ov101_021EA794(mapApp, &mapApp->selectedLoc, mapApp->playerX, mapApp->playerY);
+    PokegearMap_SelectLocationAtCoord(mapApp, &mapApp->selectedLoc, mapApp->playerX, mapApp->playerY);
     ov101_021EAD90(mapApp, FALSE);
     ov101_021EB1E0(mapApp, 1);
     PokegearMap_LoadMapHasMarkingsIndicatorSprites(mapApp);
-    ov101_021EA238(mapApp, 0);
-    ov101_021EA608(mapApp, 1);
+    PokegearMap_UpdateLocationIcons(mapApp, 0);
+    PokegearMap_SetMapSpritesVisible(mapApp, 1);
     if (mapApp->pokegear->cursorInAppSwitchZone == TRUE) {
         PokegearCursorManager_SetCursorSpritesDrawState(mapApp->pokegear->cursorManager, 0, TRUE);
         Sprite_SetDrawFlag(objects[PGMAP_SPRITE_CURSOR].sprite, FALSE);
@@ -1132,10 +1132,10 @@ static void PokegearMap_SetBgParam_MarkingsMode(PokegearMapAppData *mapApp) {
     ScheduleBgTilemapBufferTransfer(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_3);
     PokegearMap_CreateAuxSprites_MarkingsMode(mapApp);
     PokegearMap_InitUIButtons(mapApp);
-    ov101_021EA608(mapApp, 0);
+    PokegearMap_SetMapSpritesVisible(mapApp, 0);
 
     if (mapApp->inMarkingsMode == TRUE) {
-        ov101_021EA794(mapApp, &mapApp->selectedLoc, mapApp->sessionState.playerX, mapApp->sessionState.playerY);
+        PokegearMap_SelectLocationAtCoord(mapApp, &mapApp->selectedLoc, mapApp->sessionState.playerX, mapApp->sessionState.playerY);
         if (mapApp->pokegear->menuInputState != MENU_INPUT_STATE_TOUCH) {
             PokegearCursorManager_SetCursorSpritesDrawState(mapApp->pokegear->cursorManager, 1, TRUE);
         } else {

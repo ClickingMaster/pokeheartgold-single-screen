@@ -1768,7 +1768,7 @@ BOOL VsRecorder_FoundVideoSave(VsRecorderWork *work) {
         }
         VsRecorder_PrintSearchMessage(work, 0x118, 0);
         number = BattleRecordHeader_GetField(BattleRecord_GetHeader(), 4, 0);
-        if (ov39_0222774C(VsRecorder_GetNet(work), (u32)number, (u32)(number >> 32)) == TRUE) {
+        if (GlobalTerminalNet_ReportVideoSaved(VsRecorder_GetNet(work), (u32)number, (u32)(number >> 32)) == TRUE) {
             work->step++;
         }
         break;
@@ -2034,6 +2034,6 @@ void VsRecorder_OnVideoDownloaded(void *arg, GlobalTerminalNetError *error) {
     }
 }
 
-// onResponse[9] (ov39_0222774C, sent after saving a downloaded video): nothing to do
+// onResponse[9] (GlobalTerminalNet_ReportVideoSaved, sent after saving a downloaded video): nothing to do
 void VsRecorder_OnVideoSaveReported(void *arg, GlobalTerminalNetError *error) {
 }

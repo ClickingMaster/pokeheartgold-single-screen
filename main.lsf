@@ -1366,8 +1366,8 @@ Overlay OVY_25
 Overlay OVY_26
 {
     After OVY_3
-    Object src/overlay_26_022598C0.o
-    Object src/overlay_26_022599D0.o
+    Object src/trainer_rematch.o
+    Object src/talked_trainer_movement.o
 }
 Overlay OVY_27
 {
@@ -1414,7 +1414,7 @@ Overlay OVY_34
     After OVY_27
     Object src/union_chat_log.o
     Object asm/union_chat_log_data.o
-    Object src/ov34_0225e630.o
+    Object src/union_chat_log_arrows.o
 }
 Overlay OVY_35
 {
@@ -1431,7 +1431,7 @@ Overlay OVY_37
     After main
     Object src/drawing_session.o
     Object asm/drawing_session_data.o
-    Object src/ov37_021e78e0.o
+    Object src/drawing_session_stroke.o
 }
 Overlay OVY_38
 {

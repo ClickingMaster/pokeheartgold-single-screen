@@ -27,8 +27,8 @@ typedef struct RecordMixingJoinRequest {
 } RecordMixingJoinRequest;
 extern const u32 gRecordMixingLinkCommands[];
 void RecordMixing_StartFlash(RecordMixingLinkWork *);
-void ov73_021E705C(RecordMixingLinkWork *, int, int);
-void ov73_021E7120(RecordMixingLinkWork *, int, int);
+void RecordMixing_SetStateFromLink(RecordMixingLinkWork *, int, int);
+void RecordMixing_SetStateFromLinkInMenu(RecordMixingLinkWork *, int, int);
 int ov73_021E7488(void);
 u32 MATH_CountPopulation(u32);
 void CommState_SetMaxEntries(int);

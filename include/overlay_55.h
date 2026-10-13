@@ -7,7 +7,7 @@
 #include "overlay_manager.h"
 #include "pm_string.h"
 
-typedef struct UnkStruct_ov55_021E5B08 {
+typedef struct MailViewArgs {
     u16 unk0;
     u8 mailMessageIdx;
     Options *options;
@@ -20,16 +20,16 @@ typedef struct UnkStruct_ov55_021E5B08 {
     String *mailAuthorName;
     u16 unk18[3];
     MailMessage mailMessages[3];
-} UnkStruct_ov55_021E5B08;
+} MailViewArgs;
 
-typedef struct UnkStruct_ov55_021E5924 {
+typedef struct UseMailData {
     enum HeapID heapID;
     u8 unk4[0x4];
-    EasyChatArgs *unk8;
-    OverlayManager *unkC;
-    UnkStruct_ov55_021E5B08 *unk10;
-    MailMessage unk14;
-} UnkStruct_ov55_021E5924;
+    EasyChatArgs *easyChatArgs;
+    OverlayManager *subApp;
+    MailViewArgs *mailViewArgs;
+    MailMessage editMessage;
+} UseMailData;
 
 BOOL ov55_UnkApp_Init(OverlayManager *manager, int *state);
 BOOL ov55_UnkApp_Main(OverlayManager *manager, int *state);

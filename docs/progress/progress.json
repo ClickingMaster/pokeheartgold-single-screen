@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "335467688fd0963fef623ebaf3e35dc84dcc70c6",
+  "commit": "afd7b4caf8ebe2900ecb4866a13eab5d3bbeb476",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "184f6fb10239992a91e4d888910f285dac994ba5ca5ab8737b195c8e87922de3",
+    "ARM9": "e84b9d92c5cf4f34a7b58accfada2b3eaca0d3801b598358edd2f88bc722e8a0",
     "ARM7": "d726d92f810e881692e1b4d2ec232d6ca89b38985dcb26b08751c0037036d92a"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -1788,18 +1788,18 @@
     {
       "cpu": "ARM9",
       "module": "OVY_26",
-      "object": "overlay_26_022598C0.o",
-      "bytes": 270,
+      "object": "talked_trainer_movement.o",
+      "bytes": 250,
       "status": "c",
-      "source": "src/overlay_26_022598C0.c"
+      "source": "src/talked_trainer_movement.c"
     },
     {
       "cpu": "ARM9",
       "module": "OVY_26",
-      "object": "overlay_26_022599D0.o",
-      "bytes": 250,
+      "object": "trainer_rematch.o",
+      "bytes": 270,
       "status": "c",
-      "source": "src/overlay_26_022599D0.c"
+      "source": "src/trainer_rematch.c"
     },
     {
       "cpu": "ARM9",
@@ -1908,18 +1908,18 @@
     {
       "cpu": "ARM9",
       "module": "OVY_34",
-      "object": "ov34_0225e630.o",
-      "bytes": 100,
-      "status": "c",
-      "source": "src/ov34_0225e630.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_34",
       "object": "union_chat_log.o",
       "bytes": 4348,
       "status": "c",
       "source": "src/union_chat_log.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_34",
+      "object": "union_chat_log_arrows.o",
+      "bytes": 100,
+      "status": "c",
+      "source": "src/union_chat_log_arrows.c"
     },
     {
       "cpu": "ARM9",
@@ -1948,10 +1948,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_37",
-      "object": "ov37_021e78e0.o",
+      "object": "drawing_session_stroke.o",
       "bytes": 134,
       "status": "c",
-      "source": "src/ov37_021e78e0.c"
+      "source": "src/drawing_session_stroke.c"
     },
     {
       "cpu": "ARM9",

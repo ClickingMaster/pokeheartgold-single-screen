@@ -10,8 +10,8 @@
 	.extern GlobalTerminalConnect_StateAskConnect
 	.extern GlobalTerminalConnect_StateStartConnect
 	.extern GlobalTerminalConnect_StateWaitConnect
-	.extern ov39_02228D90
-	.extern ov39_02228DA0
+	.extern GlobalTerminalConnect_StateStartAuth
+	.extern GlobalTerminalConnect_StateWaitAuth
 	.extern GlobalTerminalConnect_StateSaveProfileId
 	.extern GlobalTerminalConnect_StateShowError
 	.extern GlobalTerminalConnect_StateWaitErrorAck
@@ -79,8 +79,8 @@ sGlobalTerminalConnectStates:
 	.word GlobalTerminalConnect_StateAskConnect
 	.word GlobalTerminalConnect_StateStartConnect
 	.word GlobalTerminalConnect_StateWaitConnect
-	.word ov39_02228D90
-	.word ov39_02228DA0
+	.word GlobalTerminalConnect_StateStartAuth
+	.word GlobalTerminalConnect_StateWaitAuth
 	.word GlobalTerminalConnect_StateSaveProfileId
 	.word GlobalTerminalConnect_StateShowError
 	.word GlobalTerminalConnect_StateWaitErrorAck

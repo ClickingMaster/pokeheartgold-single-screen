@@ -68,18 +68,18 @@ void MysteryGiftComm_SetState(MysteryGiftCommStateFunc func, u16 arg) {
 
 #pragma force_active on
 
-void ov74_02229BD0(void) {
+void MysteryGiftComm_ParentWaitStartup(void) {
     int i;
     if (Comm_IsNetIdConnected(Comm_GetLocalNetId())) {
         for (i = 0; i < 16; i++) {
             VOLATILE_WORK->unk_3C1[i] = 0;
         }
         CommPlayerInfo_SendLocal();
-        MysteryGiftComm_SetState(ov74_02229C0C, 0);
+        MysteryGiftComm_SetState(MysteryGiftComm_ParentCollectProfiles, 0);
     }
 }
 
-void ov74_02229C0C(void) {
+void MysteryGiftComm_ParentCollectProfiles(void) {
     int i;
     for (i = 0; i < 16; i++) {
         if (VOLATILE_WORK->profiles[i] == NULL && Comm_IsNetIdConnected((u16)i) == 1) {
@@ -90,30 +90,30 @@ void ov74_02229C0C(void) {
 
 #pragma force_active reset
 
-void ov74_02229C44(void) {
+void MysteryGiftComm_ChildWaitStartup(void) {
     if (CommWireless_IsStartedUp()) {
-        MysteryGiftComm_SetState(ov74_02229C5C, 0);
+        MysteryGiftComm_SetState(MysteryGiftComm_ChildStateIdle, 0);
     }
 }
 
-void ov74_02229C5C(void) {
+void MysteryGiftComm_ChildStateIdle(void) {
 }
 
-void ov74_02229C60(void) {
+void MysteryGiftComm_ChildConnect(void) {
     CommState_ConnectToSlot(sMysteryGiftCommWork->channel);
-    MysteryGiftComm_SetState(ov74_02229C80, 0);
+    MysteryGiftComm_SetState(MysteryGiftComm_ChildWaitLinked, 0);
 }
 
-void ov74_02229C80(void) {
+void MysteryGiftComm_ChildWaitLinked(void) {
     if (CommState_IsLinked()) {
         sMysteryGiftCommWork->received = FALSE;
         CommPlayerInfo_SendLocal();
         LinkSync_StartSync(0xAB);
-        MysteryGiftComm_SetState(ov74_02229CB4, 0);
+        MysteryGiftComm_SetState(MysteryGiftComm_ChildStateLinked, 0);
     }
 }
 
-void ov74_02229CB4(void) {
+void MysteryGiftComm_ChildStateLinked(void) {
 }
 
 void MysteryGiftComm_Task(SysTask *task, void *data) {
@@ -128,11 +128,11 @@ void MysteryGiftComm_Task(SysTask *task, void *data) {
     }
 }
 
-void ov74_02229CE0(void *owner, void *a1, void *a2) {
+void MysteryGiftComm_StartParent(void *owner, void *a1, void *a2) {
     if (!sub_02037474()) {
         CommState_StartMysteryGiftParent(a1, a2);
         MysteryGiftComm_Start(owner);
-        MysteryGiftComm_SetState(ov74_02229BD0, 0);
+        MysteryGiftComm_SetState(MysteryGiftComm_ParentWaitStartup, 0);
     }
 }
 
@@ -142,24 +142,24 @@ int ov74_02229D0C(void *a0, void *a1) {
 
 #pragma force_active on
 
-void ov74_02229D1C(void *owner, int a1) {
+void MysteryGiftComm_StartChild(void *owner, int a1) {
     if (!sub_02037474()) {
         void **args = OverlayManager_GetArgs(MysteryGiftApp_GetOverlayManager());
         CommState_StartMysteryGiftChild(args[2], a1);
         MysteryGiftComm_Start(owner);
-        MysteryGiftComm_SetState(ov74_02229C44, 0);
+        MysteryGiftComm_SetState(MysteryGiftComm_ChildWaitStartup, 0);
     }
 }
 
 #pragma force_active reset
 
-void ov74_02229D50(int channel) {
+void MysteryGiftComm_ConnectToChannel(int channel) {
     sMysteryGiftCommWork->channel = channel;
-    MysteryGiftComm_SetState(ov74_02229C60, 0);
+    MysteryGiftComm_SetState(MysteryGiftComm_ChildConnect, 0);
 }
 
 // Copies the first partner's 0x50-byte info block (non-zero at +0x4C) to dst + 0x8C; returns its index.
-int ov74_02229D6C(void *dst) {
+int MysteryGiftComm_GetFirstParentInfo(void *dst) {
     int i;
     for (i = 0; i < 16; i++) {
         u8 *src = CommWireless_GetParentMail(i);

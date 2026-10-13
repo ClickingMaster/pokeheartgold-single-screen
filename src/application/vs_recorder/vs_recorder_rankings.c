@@ -493,7 +493,7 @@ BOOL VsRecorder_RankingsDownload(VsRecorderWork *work) {
         work->step++;
         break;
     case 1:
-        if (ov39_022274B4(VsRecorder_GetNet(work)) == TRUE) {
+        if (GlobalTerminalNet_RequestRankingsHeader(VsRecorder_GetNet(work)) == TRUE) {
             work->step++;
         }
         break;

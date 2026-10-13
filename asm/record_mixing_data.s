@@ -33,37 +33,37 @@
 	.public sNintendoWfcUnusedModeMain
 	.public sNintendoWfcUnusedModeExit
 	.public sNintendoWfcUnusedStates
-	.extern ov73_021E6444
-	.extern ov73_021E6484
+	.extern RecordMixing_State_PrintGroupPrompt
+	.extern RecordMixing_State_HandleGroupMenu
 	.extern ov73_021E66F4
 	.extern RecordMixing_State_WaitText
 	.extern ov73_021E6778
-	.extern ov73_021E6890
-	.extern ov73_021E68AC
-	.extern ov73_021E69D0
-	.extern ov73_021E69E8
+	.extern RecordMixing_State_ShowCancelYesNo
+	.extern RecordMixing_State_HandleCancelYesNo
+	.extern RecordMixing_State_WaitLeaveReply
+	.extern RecordMixing_State_SendLeave
 	.extern ov73_021E6A70
-	.extern ov73_021E6A90
-	.extern ov73_021E6AAC
-	.extern ov73_021E6B6C
-	.extern ov73_021E6BC8
-	.extern ov73_021E6BF8
-	.extern ov73_021E6C20
-	.extern ov73_021E6C50
-	.extern ov73_021E6CC0
-	.extern ov73_021E6CDC
-	.extern ov73_021E6CFC
-	.extern ov73_021E6D38
-	.extern ov73_021E6D54
-	.extern ov73_021E6DF8
-	.extern ov73_021E6E48
-	.extern ov73_021E6E6C
-	.extern ov73_021E6E8C
-	.extern ov73_021E6ECC
-	.extern ov73_021E6EF8
-	.extern ov73_021E6F1C
-	.extern ov73_021E6FAC
-	.extern ov73_021E6FE8
+	.extern RecordMixing_State_ShowConfirmYesNo
+	.extern RecordMixing_State_HandleConfirmYesNo
+	.extern RecordMixing_State_SendStartMixing
+	.extern RecordMixing_State_WaitRecords
+	.extern RecordMixing_State_MergeRecords
+	.extern RecordMixing_State_StartSave
+	.extern RecordMixing_State_Save
+	.extern RecordMixing_State_WaitAfterSave
+	.extern RecordMixing_State_PrintCanceled
+	.extern RecordMixing_State_FadeOutAfterDelay
+	.extern RecordMixing_State_ShowDisbandYesNo
+	.extern RecordMixing_State_HandleDisbandYesNo
+	.extern RecordMixing_State_PrintDisband
+	.extern RecordMixing_State_WaitDisband
+	.extern RecordMixing_State_StartExitSync
+	.extern RecordMixing_State_WaitExitSync
+	.extern RecordMixing_State_PrintMemberUnavailable
+	.extern RecordMixing_State_WaitMemberUnavailable
+	.extern RecordMixing_State_PrintMemberLeft
+	.extern RecordMixing_State_StartMemberLeftWait
+	.extern RecordMixing_State_WaitMemberLeft
 	.extern ov73_021E7A74
 	.extern ov73_021E7A7C
 	.extern ov73_021E7A84
@@ -142,8 +142,8 @@
 	.extern ov73_021EA2FC
 	.extern RecordMixing_Rankings_Load
 	.extern RecordMixing_Rankings_Merge
-	.extern ov73_021EA348
-	.extern ov73_021EA370
+	.extern RecordMixing_BattleRoomTrainer_Load
+	.extern RecordMixing_BattleRoomTrainer_Merge
 #include "config.h"
 	.include "asm/macros.inc"
 	.include "overlay_73.inc"
@@ -271,7 +271,7 @@ sRecordMixingHandlers: ; 0x021EA744
 	.word ov73_021E7A84, ov73_021E7BC8, 0
 	.word ov73_021E7A74, ov73_021E7B3C, 0
 	.word Save_Rankings_GetMixingSize, RecordMixing_Rankings_Load, RecordMixing_Rankings_Merge
-	.word BattleRoomTrainer_sizeof, ov73_021EA348, ov73_021EA370
+	.word BattleRoomTrainer_sizeof, RecordMixing_BattleRoomTrainer_Load, RecordMixing_BattleRoomTrainer_Merge
 	.word ov73_021E7A7C, ov73_021E7C50, 0
 	.word ov73_021E7A84, ov73_021E7C94, 0
 	.word ov73_021E7A74, ov73_021E7C0C, ov73_021EA2FC
@@ -279,36 +279,36 @@ sRecordMixingHandlers: ; 0x021EA744
 	.data
 
 sRecordMixingStateFuncs:
-	.word ov73_021E6444
+	.word RecordMixing_State_PrintGroupPrompt
 	.word ov73_021E66F4
 	.word ov73_021E6778
-	.word ov73_021E6484
-	.word ov73_021E6890
-	.word ov73_021E68AC
-	.word ov73_021E69D0
-	.word ov73_021E69E8
+	.word RecordMixing_State_HandleGroupMenu
+	.word RecordMixing_State_ShowCancelYesNo
+	.word RecordMixing_State_HandleCancelYesNo
+	.word RecordMixing_State_WaitLeaveReply
+	.word RecordMixing_State_SendLeave
 	.word ov73_021E6A70
-	.word ov73_021E6CDC
-	.word ov73_021E6CFC
-	.word ov73_021E6D38
-	.word ov73_021E6D54
-	.word ov73_021E6DF8
-	.word ov73_021E6E48
-	.word ov73_021E6E6C
-	.word ov73_021E6E8C
-	.word ov73_021E6ECC
-	.word ov73_021E6EF8
-	.word ov73_021E6F1C
-	.word ov73_021E6FAC
-	.word ov73_021E6FE8
-	.word ov73_021E6A90
-	.word ov73_021E6AAC
-	.word ov73_021E6B6C
-	.word ov73_021E6BC8
-	.word ov73_021E6BF8
-	.word ov73_021E6C20
-	.word ov73_021E6C50
-	.word ov73_021E6CC0
+	.word RecordMixing_State_PrintCanceled
+	.word RecordMixing_State_FadeOutAfterDelay
+	.word RecordMixing_State_ShowDisbandYesNo
+	.word RecordMixing_State_HandleDisbandYesNo
+	.word RecordMixing_State_PrintDisband
+	.word RecordMixing_State_WaitDisband
+	.word RecordMixing_State_StartExitSync
+	.word RecordMixing_State_WaitExitSync
+	.word RecordMixing_State_PrintMemberUnavailable
+	.word RecordMixing_State_WaitMemberUnavailable
+	.word RecordMixing_State_PrintMemberLeft
+	.word RecordMixing_State_StartMemberLeftWait
+	.word RecordMixing_State_WaitMemberLeft
+	.word RecordMixing_State_ShowConfirmYesNo
+	.word RecordMixing_State_HandleConfirmYesNo
+	.word RecordMixing_State_SendStartMixing
+	.word RecordMixing_State_WaitRecords
+	.word RecordMixing_State_MergeRecords
+	.word RecordMixing_State_StartSave
+	.word RecordMixing_State_Save
+	.word RecordMixing_State_WaitAfterSave
 	.word RecordMixing_State_WaitText
 
 sNintendoWfcUnusedModeInit: ; 0x021EA83C

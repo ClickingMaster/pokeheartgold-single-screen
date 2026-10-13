@@ -19,13 +19,13 @@ void sub_0208FB98(int sender, int unused, void *data, RecordMixingLinkWork *room
     room->active = 1;
     RecordMixingLink_SendRecords(room, Comm_GetLocalNetId());
     RecordMixing_StartFlash(room);
-    ov73_021E705C(room, 25, (u8)sender);
+    RecordMixing_SetStateFromLink(room, 25, (u8)sender);
     CommState_SetErrorWatch(1, 1);
     PlaySE(0x657);
 }
 
 void sub_0208FBE0(int sender, int unused, void *data, RecordMixingLinkWork *room) {
-    ov73_021E705C(room, 2, 0);
+    RecordMixing_SetStateFromLink(room, 2, 0);
 }
 
 void RecordMixingLink_HandleJoinRequest(int sender, int unused, void *data, RecordMixingLinkWork *room) {
@@ -61,21 +61,21 @@ void RecordMixingLink_HandleJoinRequest(int sender, int unused, void *data, Reco
             return;
         }
         if (src->accepted == 0) {
-            ov73_021E705C(room, 8, id);
+            RecordMixing_SetStateFromLink(room, 8, id);
             return;
         }
         room->assignedCount = src->count;
-        ov73_021E705C(room, 7, src->sender);
+        RecordMixing_SetStateFromLink(room, 7, src->sender);
         return;
     }
     case 1:
-        ov73_021E705C(room, 19, src->sender);
+        RecordMixing_SetStateFromLink(room, 19, src->sender);
         break;
     }
 }
 
 void sub_0208FCDC(int sender, int unused, u8 *data, RecordMixingLinkWork *room) {
-    ov73_021E7120(room, 1, *data);
+    RecordMixing_SetStateFromLinkInMenu(room, 1, *data);
     if (Comm_GetLocalNetId() == 0) {
         room->flag = 0;
     }
@@ -89,7 +89,7 @@ void sub_0208FD00(int sender, int unused, void *data, RecordMixingLinkWork *room
 
 void sub_0208FD04(int sender, int unused, void *data, RecordMixingLinkWork *room) {
     if (Comm_GetLocalNetId() != 0) {
-        ov73_021E705C(room, 13, 0);
+        RecordMixing_SetStateFromLink(room, 13, 0);
     }
 }
 

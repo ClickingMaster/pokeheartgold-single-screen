@@ -249,8 +249,8 @@
 .public RecordMixing_Main
 .public RecordMixing_Exit
 .public RecordMixing_StartFlash
-.public ov73_021E705C
-.public ov73_021E7120
+.public RecordMixing_SetStateFromLink
+.public RecordMixing_SetStateFromLinkInMenu
 .public ov73_021E7488
 .public NintendoWfcUnused_Init
 .public NintendoWfcUnused_Main

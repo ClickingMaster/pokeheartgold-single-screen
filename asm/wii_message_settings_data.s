@@ -22,14 +22,14 @@
 	.extern WiiMessageSettingsScreen_StartWiiNumberEntry
 	.extern WiiMessageSettingsScreen_CheckWiiNumberEntry
 	.extern WiiMessageSettingsScreen_ConfirmConnect
-	.extern ov75_02248684
+	.extern WiiMessageSettingsScreen_HandleConnectYesNo
 	.extern WiiMessageSettingsScreen_PrintDisconnecting
 	.extern WiiMessageSettingsScreen_Disconnect
 	.extern WiiMessageSettingsScreen_PrintDisconnected
 	.extern WiiMessageSettingsScreen_StartConnect
 	.extern WiiMessageSettingsScreen_WaitConnect
-	.extern ov75_022488AC
-	.extern ov75_022488BC
+	.extern WiiMessageSettingsScreen_StartAuth
+	.extern WiiMessageSettingsScreen_WaitAuth
 	.extern WiiMessageSettingsScreen_StartServerSession
 	.extern WiiMessageSettingsScreen_SendRegistrationRequest
 	.extern WiiMessageSettingsScreen_WaitRegistrationResponse
@@ -89,12 +89,12 @@
 	.public WiiMessageSettingsScreen_RunExplanation
 	.public WiiMessageSettingsScreen_RegisterWiiNumber
 	.public WiiMessageSettingsScreen_ConfirmConnect
-	.public ov75_02248684
+	.public WiiMessageSettingsScreen_HandleConnectYesNo
 	.public WiiMessageSettingsScreen_PrintDisconnecting
 	.public WiiMessageSettingsScreen_PrintDisconnected
 	.public WiiMessageSettingsScreen_StartConnect
 	.public WiiMessageSettingsScreen_WaitConnect
-	.public ov75_022488BC
+	.public WiiMessageSettingsScreen_WaitAuth
 	.public WiiMessageSettingsScreen_StartServerSession
 	.public WiiMessageSettingsScreen_WaitRegistrationResponse
 	.public WiiMessageSettingsScreen_RegistrationCodeSent
@@ -169,7 +169,7 @@
 	.public WiiMessageSettingsScreen_StartWiiNumberEntry
 	.public WiiMessageSettingsScreen_CheckWiiNumberEntry
 	.public WiiMessageSettingsScreen_Disconnect
-	.public ov75_022488AC
+	.public WiiMessageSettingsScreen_StartAuth
 	.public WiiMessageSettingsScreen_SendRegistrationRequest
 	.public WiiMessageSettingsScreen_StartRegistrationCodeEntry
 	.public WiiMessageSettingsScreen_FadeOut
@@ -279,14 +279,14 @@ sWiiMessageSettingsScreenStates: ; 0x02249B30
 	.word WiiMessageSettingsScreen_StartWiiNumberEntry
 	.word WiiMessageSettingsScreen_CheckWiiNumberEntry
 	.word WiiMessageSettingsScreen_ConfirmConnect
-	.word ov75_02248684
+	.word WiiMessageSettingsScreen_HandleConnectYesNo
 	.word WiiMessageSettingsScreen_PrintDisconnecting
 	.word WiiMessageSettingsScreen_Disconnect
 	.word WiiMessageSettingsScreen_PrintDisconnected
 	.word WiiMessageSettingsScreen_StartConnect
 	.word WiiMessageSettingsScreen_WaitConnect
-	.word ov75_022488AC
-	.word ov75_022488BC
+	.word WiiMessageSettingsScreen_StartAuth
+	.word WiiMessageSettingsScreen_WaitAuth
 	.word WiiMessageSettingsScreen_StartServerSession
 	.word WiiMessageSettingsScreen_SendRegistrationRequest
 	.word WiiMessageSettingsScreen_WaitRegistrationResponse

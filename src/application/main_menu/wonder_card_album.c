@@ -45,7 +45,7 @@
 // front and back, deletes it, or shares it with other players over DS wireless.
 struct WonderCardAlbum {
     enum HeapID heapId;                        // 0x0000
-    u8 commOwner[0x8C];                        // 0x0004, start of the MysteryGiftComm owner work (ov74_02229CE0)
+    u8 commOwner[0x8C];                        // 0x0004, start of the MysteryGiftComm owner work (MysteryGiftComm_StartParent)
     UnkWonderCardSubstruct_104 shareHeader;    // 0x0090, sent with shareCard
     WonderCard shareCard;                      // 0x00E0, copy of the card being shared
     u8 unk_0438[0x25C4];                       // 0x0438
@@ -1039,7 +1039,7 @@ int WonderCardAlbum_StartSharing(WonderCardAlbum *album) {
     album->shareCard.shareMax = 0;
     album->shareHeader.unk8E_4 = 0;
     album->shareHeader.unk8E_5 = 1;
-    ov74_02229CE0(album->commOwner, album->saveData, (void *)15);
+    MysteryGiftComm_StartParent(album->commOwner, album->saveData, (void *)15);
     return 0;
 }
 

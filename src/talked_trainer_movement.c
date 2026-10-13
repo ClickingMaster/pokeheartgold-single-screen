@@ -3,13 +3,13 @@
 #include "map_object.h"
 #include "overlay_26.h"
 
-static LocalMapObject *ov26_02259A24(FieldSystem *fieldSystem, LocalMapObject *a1, BOOL a2);
+static LocalMapObject *FindDoubleBattlePartner(FieldSystem *fieldSystem, LocalMapObject *a1, BOOL a2);
 
-static void ov26_022599D0(LocalMapObject *last_talked, u16 movement) {
+static void ChangeTrainerMovement(LocalMapObject *last_talked, u16 movement) {
     MapObject_ChangeMovement(last_talked, movement);
 }
 
-void ov26_022599D8(FieldSystem *fieldSystem, LocalMapObject *last_talked) {
+void SetTalkedTrainerMovement(FieldSystem *fieldSystem, LocalMapObject *last_talked) {
     if (last_talked == NULL) {
         return;
     }
@@ -27,14 +27,14 @@ void ov26_022599D8(FieldSystem *fieldSystem, LocalMapObject *last_talked) {
         movement = 17;
     }
 
-    LocalMapObject *unk_lmo = ov26_02259A24(fieldSystem, last_talked, TRUE);
+    LocalMapObject *unk_lmo = FindDoubleBattlePartner(fieldSystem, last_talked, TRUE);
     if (unk_lmo != NULL) {
-        ov26_022599D0(unk_lmo, movement);
+        ChangeTrainerMovement(unk_lmo, movement);
     }
-    ov26_022599D0(last_talked, movement);
+    ChangeTrainerMovement(last_talked, movement);
 }
 
-static LocalMapObject *ov26_02259A24(FieldSystem *fieldSystem, LocalMapObject *a1, BOOL a2) {
+static LocalMapObject *FindDoubleBattlePartner(FieldSystem *fieldSystem, LocalMapObject *a1, BOOL a2) {
     u32 num_events = Field_GetNumObjectEvents(fieldSystem);
     u16 script = MapObject_GetScriptID(a1);
     u32 trainer = ScriptNumToTrainerNum(script);

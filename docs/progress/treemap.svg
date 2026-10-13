@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 335467688 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · afd7b4caf · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -5460,9 +5460,9 @@ src/frontier/battle_hall_app.c</title></rect>
 <rect x="991.033" y="573.547" width="37.850" height="34.377" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_37 / drawing_session.o
 8,132 bytes · C-only source
 src/drawing_session.c</title></rect>
-<rect x="1028.883" y="573.547" width="0.624" height="34.377" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_37 / ov37_021e78e0.o
+<rect x="1028.883" y="573.547" width="0.624" height="34.377" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_37 / drawing_session_stroke.o
 134 bytes · C-only source
-src/ov37_021e78e0.c</title></rect>
+src/drawing_session_stroke.c</title></rect>
 <rect x="991.033" y="573.547" width="38.474" height="34.377" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="991.033" y="607.924" width="38.474" height="33.370" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_109 / photo_album_app.o
 8,024 bytes · C-only source
@@ -5640,9 +5640,9 @@ src/field/encounter_effect_wild.c</title></rect>
 <rect x="1064.021" y="643.183" width="32.993" height="21.086" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_34 / union_chat_log.o
 4,348 bytes · C-only source
 src/union_chat_log.c</title></rect>
-<rect x="1097.014" y="643.183" width="0.759" height="21.086" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_34 / ov34_0225e630.o
+<rect x="1097.014" y="643.183" width="0.759" height="21.086" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_34 / union_chat_log_arrows.o
 100 bytes · C-only source
-src/ov34_0225e630.c</title></rect>
+src/union_chat_log_arrows.c</title></rect>
 <rect x="1064.021" y="643.183" width="33.752" height="21.086" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1064.021" y="664.269" width="33.752" height="20.489" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_88 / plaza_news.o
 4,322 bytes · C-only source
@@ -5773,12 +5773,12 @@ src/overlay_22.c</title></rect>
 592 bytes · C-only source
 src/field/encounter_effect_kimono_girl.c</title></rect>
 <rect x="1161.305" y="681.478" width="10.695" height="8.857" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="1161.305" y="690.335" width="5.553" height="7.780" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_26 / overlay_26_022598C0.o
+<rect x="1161.305" y="690.335" width="5.553" height="7.780" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_26 / trainer_rematch.o
 270 bytes · C-only source
-src/overlay_26_022598C0.c</title></rect>
-<rect x="1166.858" y="690.335" width="5.142" height="7.780" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_26 / overlay_26_022599D0.o
+src/trainer_rematch.c</title></rect>
+<rect x="1166.858" y="690.335" width="5.142" height="7.780" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_26 / talked_trainer_movement.o
 250 bytes · C-only source
-src/overlay_26_022599D0.c</title></rect>
+src/talked_trainer_movement.c</title></rect>
 <rect x="1161.305" y="690.335" width="10.695" height="7.780" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1154.784" y="698.115" width="6.396" height="8.605" fill="#6f8fd8" stroke="#101722" stroke-width="0.6"><title>ARM7 / ichneumon_sub / crt0.o
 344 bytes · Original hand-written assembly

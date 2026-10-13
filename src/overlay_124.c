@@ -13,7 +13,7 @@
 
 FS_EXTERN_OVERLAY(ds_protect);
 
-static void ov124_02260D1C(FieldSystem *fieldSystem);
+static void ClobberHeapByBadgeCount(FieldSystem *fieldSystem);
 static void ov124_02260D68(void);
 static void ov124_02260D6C(void);
 static void ov124_02260D58(void);
@@ -35,19 +35,19 @@ void FieldSystem_Init(OverlayManager *man, FieldSystem *fieldSystem) {
 
     // all combinations of the three prime multipliers above are coprime with 2441 and 4073
     if ((key + key2) % 2441) {
-        ov124_02260D1C(fieldSystem);
+        ClobberHeapByBadgeCount(fieldSystem);
     }
     fieldSystem->unkA8 = UnkStruct_02092BB8_New(HEAP_ID_FIELD2);
     fieldSystem->followMonMood = FollowMonMood_New(HEAP_ID_FIELD2);
     fieldSystem->phoneRingManager = GearPhoneRingManager_New(HEAP_ID_FIELD2, fieldSystem);
     fieldSystem->judgeStatPosition = 0;
     if ((key + key2) % 4073) {
-        ov124_02260D1C(fieldSystem);
+        ClobberHeapByBadgeCount(fieldSystem);
     }
 }
 
 // clobbers the heap worse if you have made more progress through the game
-static void ov124_02260D1C(FieldSystem *fieldSystem) {
+static void ClobberHeapByBadgeCount(FieldSystem *fieldSystem) {
     int i = 0;
     int numBadges = 0;
     for (i = 0; i < 16; ++i) {
