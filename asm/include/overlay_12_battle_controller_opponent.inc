@@ -135,14 +135,14 @@
 .public BattleAnimEmitter_Start
 .public BattleAnimEmitter_IsActive
 .public BattleAnimUtil_RestorePic
-.public ov07_02234A20
+.public BattleAnimUtil_LoadSubstituteIntoPic
 .public ov07_02234B5C
 .public ov07_022377DC
 .public ov07_022377F4
 .public BattleBagMenu_Create
-.public ov10_0221BE20
-.public ov10_0221BEF4
-.public ov10_022205BC
+.public TrainerAI_Init
+.public TrainerAI_SelectMove
+.public TrainerAI_SelectCommand
 .public BattleSystem_FreeInputForSubMenu
 .public BattleSystem_RestoreInputAfterSubMenu
 .public BattleSystem_SetTrainerAIOverlayLoaded
@@ -283,7 +283,7 @@
 .public BattleInput_DisableBallGauge
 .public BattleInput_CheckTouch
 .public BattleInput_CheckFeedbackDone
-.public ov12_02266C84
+.public BattleInput_GetTargetSelectionType
 .public BattleInput_StartMenuScrollHorizontalTask
 .public BattleInput_LoadFightMenuText
 .public BattleInput_Deadstriped_022698AC

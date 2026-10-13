@@ -3424,7 +3424,7 @@ BOOL ScrCmd_SafariZoneAction(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_459(ScriptContext *ctx) {
-    ov02_02245B80(ctx->taskman);
+    ShowLighthouseLightUp(ctx->taskman);
     return TRUE;
 }
 
@@ -3626,21 +3626,21 @@ BOOL ScrCmd_PrimoPasswordCheck2(ScriptContext *ctx) {
 BOOL ScrCmd_500(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u8 r1 = ScriptReadByte(ctx);
-    ov02_0224BF58(fieldSystem, r1);
+    PCProp_LoadAnimations(fieldSystem, r1);
     return FALSE;
 }
 
 BOOL ScrCmd_501(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u8 r1 = ScriptReadByte(ctx);
-    ov02_0224BFC0(fieldSystem, r1);
+    PCProp_PlayPowerOnAnimation(fieldSystem, r1);
     return FALSE;
 }
 
 BOOL ScrCmd_502(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u8 r1 = ScriptReadByte(ctx);
-    ov02_0224BFCC(fieldSystem, r1);
+    PCProp_PlayPowerOffAnimation(fieldSystem, r1);
     return FALSE;
 }
 
@@ -5185,7 +5185,7 @@ BOOL ScrCmd_LegendCutsceneLugiaEyeGlimmerEffect(ScriptContext *ctx) {
 
 // Unreferenced
 BOOL ScrCmd_760(ScriptContext *ctx) {
-    ov02_02250B30(ctx->fieldSystem);
+    LegendCutscene_StartUnusedHoOhAnim(ctx->fieldSystem);
     return TRUE;
 }
 
@@ -5325,7 +5325,7 @@ BOOL ScrCmd_805(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_806(ScriptContext *ctx) {
-    ov02_022523B4(ctx->fieldSystem->taskman);
+    StartShayminRevertToLandForm(ctx->fieldSystem->taskman);
     return TRUE;
 }
 

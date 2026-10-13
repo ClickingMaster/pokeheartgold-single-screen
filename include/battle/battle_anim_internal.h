@@ -350,7 +350,7 @@ void ov07_0221FF74(void);
 
 // overlay 7 functions defined in sources not merged yet
 s16 BattleAnimSystem_GetBattlerScreenCoord(BattleAnimSystem *system, int battler, u32 coord);
-void ov07_02234A20(BattleAnimBattlerPicParams *params, enum HeapID heapId);
+void BattleAnimUtil_LoadSubstituteIntoPic(BattleAnimBattlerPicParams *params, enum HeapID heapId);
 void BattleAnimUtil_LoadMonIntoPicSameFacing(BattleAnimBattlerPicParams *params, enum HeapID heapId);
 void BattleAnimUtil_LoadMonIntoPicOppositeFacing(BattleAnimBattlerPicParams *params, enum HeapID heapId);
 void BattleAnimUtil_RestorePic(BattleAnimBattlerPicParams *params, enum HeapID heapId);

@@ -191,12 +191,12 @@ int LinkBattleScreen_WaitFadeAndDelay(LinkBattleScreen *screen);
 int LinkBattleScreen_SlidePanelsIn(LinkBattleScreen *screen);
 int LinkBattleScreen_ShakePanels(LinkBattleScreen *screen);
 int LinkBattleScreen_SlidePanelsOut(LinkBattleScreen *screen);
-int ov05_0221C558(LinkBattleScreen *screen);
+int LinkBattleScreen_DelayBeforeNudge(LinkBattleScreen *screen);
 int LinkBattleScreen_DetermineNudgeDirection(LinkBattleScreen *screen);
 int LinkBattleScreen_NudgePanels(LinkBattleScreen *screen);
 int LinkBattleScreen_NudgePanelsRight(LinkBattleScreen *screen);
 int LinkBattleScreen_NudgePanelsLeft(LinkBattleScreen *screen);
-int ov05_0221C7FC(LinkBattleScreen *screen);
+int LinkBattleScreen_DelayBeforeReveal(LinkBattleScreen *screen);
 int LinkBattleScreen_RevealCenterBand(LinkBattleScreen *screen);
 int LinkBattleScreen_ShowWinLoseSprites(LinkBattleScreen *screen);
 int LinkBattleScreen_ShowDrawSprite(LinkBattleScreen *screen);
@@ -650,7 +650,7 @@ int LinkBattleScreen_SlidePanelsOut(LinkBattleScreen *screen) {
     return 0;
 }
 
-int ov05_0221C558(LinkBattleScreen *screen) {
+int LinkBattleScreen_DelayBeforeNudge(LinkBattleScreen *screen) {
     screen->delayFrames = 16;
     return 2;
 }
@@ -723,7 +723,7 @@ int LinkBattleScreen_NudgePanelsLeft(LinkBattleScreen *screen) {
     return FALSE;
 }
 
-int ov05_0221C7FC(LinkBattleScreen *screen) {
+int LinkBattleScreen_DelayBeforeReveal(LinkBattleScreen *screen) {
     screen->delayFrames = 16;
     return 2;
 }

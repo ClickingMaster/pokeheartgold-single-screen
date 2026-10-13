@@ -2,31 +2,31 @@
 	.public VeryTallGrassEffect_Destroy
 	.public VeryTallGrassEffect_Update
 	.public VeryTallGrassEffect_Draw
-	.public ov01_021FFCA8
-	.public ov01_021FFD64
-	.public ov01_021FFD70
-	.public ov01_021FFE98
-	.public ov01_02209218
-	.public ov01_0220922C
+	.public UnusedBillboardEffect_Init
+	.public UnusedBillboardEffect_Destroy
+	.public UnusedBillboardEffect_Update
+	.public UnusedBillboardEffect_Draw
+	.public sVeryTallGrassEffectTemplate
+	.public sVeryTallGrassRecordParams
 
 	.rodata
 
-ov01_02209218:
+sVeryTallGrassEffectTemplate:
 	.word 0x00000040
 	.word VeryTallGrassEffect_Init
 	.word VeryTallGrassEffect_Destroy
 	.word VeryTallGrassEffect_Update
 	.word VeryTallGrassEffect_Draw
 
-ov01_0220922C:
+sVeryTallGrassRecordParams:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00
 
-ov01_02209244:
+sUnusedBillboardEffectTemplate:
 	.word 0x00000040
-	.word ov01_021FFCA8
-	.word ov01_021FFD64
-	.word ov01_021FFD70
-	.word ov01_021FFE98
+	.word UnusedBillboardEffect_Init
+	.word UnusedBillboardEffect_Destroy
+	.word UnusedBillboardEffect_Update
+	.word UnusedBillboardEffect_Draw

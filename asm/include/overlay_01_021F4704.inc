@@ -44,7 +44,7 @@
 .public MapPropManager_Reset
 .public MapPropManager_LoadFromNARC
 .public MapPropManager_LoadFromSafariZone
-.public ov01_021F3A3C
+.public MapPropManager_DrawWithOffset
 .public MapLoadManager_Tick
 .public MapLoadManager_New
 .public MapLoadManager_InitialLoad

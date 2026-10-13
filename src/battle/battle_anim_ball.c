@@ -757,7 +757,7 @@ void UnkBallData_GoToCaptureState(UnkBallData *data, int state) {
     data->unk10 = 0;
 }
 
-BOOL ov07_02232F80(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateIdle(UnkBallData *data) {
     return TRUE;
 }
 
@@ -768,7 +768,7 @@ BOOL UnkBallData_CaptureStateThrow(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_02232F9C(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateGoToOpen(UnkBallData *data) {
     UnkBallData_GoToCaptureState(data, 3);
     return TRUE;
 }
@@ -814,7 +814,7 @@ BOOL UnkBallData_CaptureStateOpen(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_02233088(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateOpenDone(UnkBallData *data) {
     return TRUE;
 }
 
@@ -832,16 +832,16 @@ BOOL UnkBallData_CaptureStateDeflect(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_022330E0(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateDeflectDone(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_022330E4(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateStartFall(UnkBallData *data) {
     UnkBallData_GoToCaptureState(data, 8);
     return TRUE;
 }
 
-BOOL ov07_022330F0(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateGoToFlash(UnkBallData *data) {
     UnkBallData_GoToCaptureState(data, 9);
     return TRUE;
 }
@@ -870,7 +870,7 @@ BOOL UnkBallData_CaptureStateFlash(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_022331A4(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateGoToDrop(UnkBallData *data) {
     UnkBallData_GoToCaptureState(data, 11);
     return TRUE;
 }
@@ -933,7 +933,7 @@ BOOL UnkBallData_CaptureStateBounce(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_022332C4(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateBounceDone(UnkBallData *data) {
     return TRUE;
 }
 
@@ -948,7 +948,7 @@ BOOL UnkBallData_CaptureStateShakeWait(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_022332E8(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateGoToShake(UnkBallData *data) {
     UnkBallData_GoToCaptureState(data, 17);
     return TRUE;
 }
@@ -986,7 +986,7 @@ BOOL UnkBallData_CaptureStateShake(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_0223338C(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateShakeDone(UnkBallData *data) {
     return TRUE;
 }
 
@@ -1040,7 +1040,7 @@ BOOL UnkBallData_CaptureStateClick(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_02233498(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateClickDone(UnkBallData *data) {
     return TRUE;
 }
 
@@ -1064,7 +1064,7 @@ BOOL UnkBallData_CaptureStateRestorePalette(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_02233500(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateGoToFadeOut(UnkBallData *data) {
     UnkBallData_GoToCaptureState(data, 25);
     return TRUE;
 }
@@ -1094,7 +1094,7 @@ BOOL UnkBallData_CaptureStateFadeOut(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_02233590(UnkBallData *data) {
+BOOL UnkBallData_CaptureStateGoToEnd(UnkBallData *data) {
     UnkBallData_GoToCaptureState(data, 27);
     return TRUE;
 }
@@ -1182,7 +1182,7 @@ BOOL UnkBallData_RunThrowArc(UnkBallData *data) {
     return TRUE;
 }
 
-BOOL ov07_02233874(UnkBallData *data) {
+BOOL UnkBallData_ThrowArcAndOpen(UnkBallData *data) {
     switch (data->unk8) {
     case 0:
         BattleAnimUtil_InitLinearSinMotion(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), BALL_X(data), BALL_TARGET_X(data), BALL_Y(data), BALL_TARGET_Y(data), BALL_ARC_DURATION(data), data->unkC8 << FX32_SHIFT);
@@ -1951,7 +1951,7 @@ void BattleAnimUtil_RestorePic(BattleAnimBattlerPicParams *params, enum HeapID h
 // Loads a fixed graphic of the otherpoke NARC (not a species) into the battler's pic, front or back by its battler type
 #pragma force_active on
 
-void ov07_02234A20(BattleAnimBattlerPicParams *params, enum HeapID heapId) {
+void BattleAnimUtil_LoadSubstituteIntoPic(BattleAnimBattlerPicParams *params, enum HeapID heapId) {
     PokepicTemplate template;
     PokepicTemplate *picTemplate;
     u8 height;

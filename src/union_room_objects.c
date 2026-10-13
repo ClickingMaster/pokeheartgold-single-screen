@@ -42,7 +42,7 @@ FieldSystem *UnionRoom_GetFieldSystem(struct UnionRoom *unionRoom);
 UnionRoomPlayerRecord *UnionRoom_GetRecord(struct UnionRoom *unionRoom, int index);
 s32 CommState_GetJoinResult(void);
 s32 CommState_IsAlternateLinked(void);
-UnkStruct_0206793C *ov01_021FD8E8(LocalMapObject *object, int index);
+UnkStruct_0206793C *FieldShadow_CreateFriendShadow(LocalMapObject *object, int index);
 UnkStruct_0206793C *UnionChatMarker_Spawn(LocalMapObject *object);
 
 extern const u16 gUnionRoomGroupFirstSlot[];
@@ -344,9 +344,9 @@ void UnionRoomSlot_Appear(UnionRoomSlot *slot, LocalMapObject *object, u32 x, u3
         slot->state = 1;
         if (slot->friendship != 0) {
             if (slot->friendship == 1) {
-                slot->friendEffect = ov01_021FD8E8(object, 1);
+                slot->friendEffect = FieldShadow_CreateFriendShadow(object, 1);
             } else if (slot->friendship >= 2) {
-                slot->friendEffect = ov01_021FD8E8(object, 2);
+                slot->friendEffect = FieldShadow_CreateFriendShadow(object, 2);
             }
             slot->friendship = 0;
         }
@@ -404,9 +404,9 @@ void UnionRoomObjects_RestoreAfterScript(MapObjectManager *mapObjectManager, Uni
                     slot->state = 1;
                     if (slot->friendship != 0) {
                         if (slot->friendship == 1) {
-                            slot->friendEffect = ov01_021FD8E8(object, 1);
+                            slot->friendEffect = FieldShadow_CreateFriendShadow(object, 1);
                         } else if (slot->friendship >= 2) {
-                            slot->friendEffect = ov01_021FD8E8(object, 2);
+                            slot->friendEffect = FieldShadow_CreateFriendShadow(object, 2);
                         }
                         slot->friendship = 0;
                     }

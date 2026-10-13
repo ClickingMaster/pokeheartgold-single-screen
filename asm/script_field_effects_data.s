@@ -5,12 +5,12 @@
 #include "constants/pokemon.h"
 #include "constants/std_script.h"
 	.include "asm/macros.inc"
-	.public ov02_02245B80
-	.public ov02_02245B9C
-	.public ov02_02245BC8
-	.public ov02_02245D18
-	.public ov02_02245DB0
-	.public ov02_02245DE0
+	.public ShowLighthouseLightUp
+	.public LighthouseLightUp_CreateTaskEnv
+	.public Task_ShowLighthouseLightUp
+	.public LighthouseLightUp_Load
+	.public LighthouseLightUp_Unload
+	.public LighthouseLightUp_Animate
 	.public FieldAnimModel_New
 	.public FieldAnimModel_Delete
 	.public FieldAnimModel_SetAnimations

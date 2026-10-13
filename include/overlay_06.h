@@ -5,16 +5,16 @@
 #include "palette.h"
 #include "particle_system.h"
 
-const u16 *ov06_0221BA00(int param_1);
-void ov06_0221BA1C(PaletteData *palData, int param_2, int unused, PaletteBufferId param_4, u32 param_5);
-SPLEmitter *ov06_0221BA40(enum HeapID heapID);
-SPLEmitter *ov06_0221BA88(enum HeapID heapID);
-void ov06_0221BAD8(SPLEmitter *param_1);
-void ov06_0221BAF0(void);
-u32 ov06_0221BB14(u32 szByte, BOOL is4x4comp);
-u32 ov06_0221BB30(u32 szByte, BOOL is4pltt);
+const u16 *GetMoveTypePalette(int param_1);
+void LoadMoveTypePalette(PaletteData *palData, int param_2, int unused, PaletteBufferId param_4, u32 param_5);
+SPLEmitter *BattleParticleSystem_New(enum HeapID heapID);
+SPLEmitter *BattleParticleSystem_NewSmallHeap(enum HeapID heapID);
+void BattleParticleSystem_Free(SPLEmitter *param_1);
+void BattleParticleSystem_DrawAll(void);
+u32 BattleParticleSystem_AllocTexVram(u32 szByte, BOOL is4x4comp);
+u32 BattleParticleSystem_AllocPlttVram(u32 szByte, BOOL is4pltt);
 
-static const u16 ov06_0221BD8C[] = {
+static const u16 sMoveTypePalette_Fighting[] = {
     0x75CD,
     0x7FFF,
     0x3ADF,
@@ -50,7 +50,7 @@ static const u16 ov06_0221BD8C[] = {
     0x002D,
     0x002D,
 };
-static const u16 ov06_0221BD6C[] = {
+static const u16 sMoveTypePalette_Flying[] = {
     0x75CD,
     0x7FFF,
     0x7EAF,
@@ -68,7 +68,7 @@ static const u16 ov06_0221BD6C[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BD4C[] = {
+static const u16 sMoveTypePalette_Poison[] = {
     0x75CD,
     0x7FFF,
     0x7E1A,
@@ -86,7 +86,7 @@ static const u16 ov06_0221BD4C[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BD2C[] = {
+static const u16 sMoveTypePalette_Ground[] = {
     0x75CD,
     0x7FFF,
     0x32DE,
@@ -104,7 +104,7 @@ static const u16 ov06_0221BD2C[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BD0C[] = {
+static const u16 sMoveTypePalette_Rock[] = {
     0x75CD,
     0x7FFF,
     0x4276,
@@ -122,7 +122,7 @@ static const u16 ov06_0221BD0C[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BCEC[] = {
+static const u16 sMoveTypePalette_Bug[] = {
     0x75CD,
     0x7FFF,
     0x373A,
@@ -140,7 +140,7 @@ static const u16 ov06_0221BCEC[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BCCC[] = {
+static const u16 sMoveTypePalette_Ghost[] = {
     0x75CD,
     0x7FFF,
     0x50D9,
@@ -158,7 +158,7 @@ static const u16 ov06_0221BCCC[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BCAC[] = {
+static const u16 sMoveTypePalette_Steel[] = {
     0x75CD,
     0x7FFF,
     0x6B9C,
@@ -176,7 +176,7 @@ static const u16 ov06_0221BCAC[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BC8C[] = {
+static const u16 sMoveTypePalette_Mystery[] = {
     0x75CD,
     0x7FFF,
     0x5A7A,
@@ -194,7 +194,7 @@ static const u16 ov06_0221BC8C[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BC6C[] = {
+static const u16 sMoveTypePalette_Fire[] = {
     0x75CD,
     0x7FFF,
     0x3A3F,
@@ -212,7 +212,7 @@ static const u16 ov06_0221BC6C[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BB4C[] = {
+static const u16 sMoveTypePalette_Normal[] = {
     0x75CD,
     0x7FFF,
     0x6AD7,
@@ -230,7 +230,7 @@ static const u16 ov06_0221BB4C[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BC2C[] = {
+static const u16 sMoveTypePalette_Grass[] = {
     0x75CD,
     0x7FFF,
     0x23AF,
@@ -248,7 +248,7 @@ static const u16 ov06_0221BC2C[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BC0C[] = {
+static const u16 sMoveTypePalette_Electric[] = {
     0x75CD,
     0x7FFF,
     0x37BF,
@@ -266,7 +266,7 @@ static const u16 ov06_0221BC0C[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BBEC[] = {
+static const u16 sMoveTypePalette_Psychic[] = {
     0x75CD,
     0x7FFF,
     0x7DFF,
@@ -284,7 +284,7 @@ static const u16 ov06_0221BBEC[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BBCC[] = {
+static const u16 sMoveTypePalette_Ice[] = {
     0x75CD,
     0x7FFF,
     0x7F94,
@@ -302,7 +302,7 @@ static const u16 ov06_0221BBCC[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BC4C[] = {
+static const u16 sMoveTypePalette_Water[] = {
     0x75CD,
     0x7FFF,
     0x7792,
@@ -320,7 +320,7 @@ static const u16 ov06_0221BC4C[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BB8C[] = {
+static const u16 sMoveTypePalette_Dark[] = {
     0x75CD,
     0x7FFF,
     0x3DD5,
@@ -338,7 +338,7 @@ static const u16 ov06_0221BB8C[] = {
     0x637C,
     0x0000,
 };
-static const u16 ov06_0221BB6C[] = {
+static const u16 sMoveTypePaletteNone[] = {
     0x3F05,
     0x7FFF,
     0x7FBD,
@@ -356,7 +356,7 @@ static const u16 ov06_0221BB6C[] = {
     0x5AD6,
     0x0000,
 };
-static const u16 ov06_0221BBAC[] = {
+static const u16 sMoveTypePalette_Dragon[] = {
     0x75CD,
     0x7FFF,
     0x6DF2,
@@ -375,25 +375,25 @@ static const u16 ov06_0221BBAC[] = {
     0x0000,
 };
 
-static const u16 *const ov06_0221BDD0[] = {
-    ov06_0221BB4C,
-    ov06_0221BD8C,
-    ov06_0221BD6C,
-    ov06_0221BD4C,
-    ov06_0221BD2C,
-    ov06_0221BD0C,
-    ov06_0221BCEC,
-    ov06_0221BCCC,
-    ov06_0221BCAC,
-    ov06_0221BC8C,
-    ov06_0221BC6C,
-    ov06_0221BC4C,
-    ov06_0221BC2C,
-    ov06_0221BC0C,
-    ov06_0221BBEC,
-    ov06_0221BBCC,
-    ov06_0221BBAC,
-    ov06_0221BB8C,
+static const u16 *const sMoveTypePalettes[] = {
+    sMoveTypePalette_Normal,
+    sMoveTypePalette_Fighting,
+    sMoveTypePalette_Flying,
+    sMoveTypePalette_Poison,
+    sMoveTypePalette_Ground,
+    sMoveTypePalette_Rock,
+    sMoveTypePalette_Bug,
+    sMoveTypePalette_Ghost,
+    sMoveTypePalette_Steel,
+    sMoveTypePalette_Mystery,
+    sMoveTypePalette_Fire,
+    sMoveTypePalette_Water,
+    sMoveTypePalette_Grass,
+    sMoveTypePalette_Electric,
+    sMoveTypePalette_Psychic,
+    sMoveTypePalette_Ice,
+    sMoveTypePalette_Dragon,
+    sMoveTypePalette_Dark,
 };
 
 #endif // POKEHEARTGOLD_OVERLAY_06_H

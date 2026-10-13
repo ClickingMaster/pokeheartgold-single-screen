@@ -33,7 +33,7 @@ extern const u8 ov02_02253A4C[];
 
 BOOL MapId_IsSafariZone(u32 mapId);
 int SafariZone_GetAreaIndexAt(s32 x, s32 z);
-BOOL ov02_0224E640(SaveData *saveData);
+BOOL SafariZone_IsWaterObjectPlacementUnlocked(SaveData *saveData);
 BOOL SafariZone_FindSpotFor1x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater);
 BOOL SafariZone_FindSpotFor2x1Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater);
 BOOL SafariZone_FindSpotFor2x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater);
@@ -188,7 +188,7 @@ SafariDecorationArgs *SafariDecoration_CreateArgs(FieldSystem *fieldSystem, enum
 
 #pragma force_active reset
 
-BOOL ov02_0224E640(SaveData *saveData) {
+BOOL SafariZone_IsWaterObjectPlacementUnlocked(SaveData *saveData) {
     u32 trainerId = PlayerProfile_GetTrainerID(Save_PlayerData_GetProfile(saveData));
     int unlockLevel = SafariZone_GetObjectUnlockLevel(Save_SafariZone_Get(saveData));
     u8 digit = trainerId % 10;
@@ -223,7 +223,7 @@ u16 FieldSystem_CheckSafariObjectPlacement(FieldSystem *fieldSystem) {
     if (PlayerAvatar_GetState(fieldSystem->playerAvatar) != PLAYER_STATE_SURFING) {
         return 0;
     }
-    if (!ov02_0224E640(fieldSystem->saveData)) {
+    if (!SafariZone_IsWaterObjectPlacementUnlocked(fieldSystem->saveData)) {
         return 2;
     }
     if (SafariZone_FindSpotFor2x2Object(fieldSystem, x, z, direction, position.y, &spotX, &spotZ, TRUE)) {

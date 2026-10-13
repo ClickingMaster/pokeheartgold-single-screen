@@ -55,8 +55,8 @@ typedef struct MapPropModelPair {
     int models[2];
 } MapPropModelPair;
 
-// the two prop models whose animations ov02_0224BF58 loads (asm data)
-extern const MapPropModelPair ov02_022536E8;
+// the two prop models whose animations PCProp_LoadAnimations loads (asm data)
+extern const MapPropModelPair sPCPropModels;
 
 static inline NNSG3dResMdl *MapPropModel_Get(AreaDataManager *areaDataManager, int mapPropId) {
     return NNS_G3dGetMdlByIdx(NNS_G3dGetMdlSet(*AreaDataManager_GetMapPropModel(mapPropId, areaDataManager)), 0);
@@ -205,11 +205,11 @@ BOOL ElevatorAnimRun(TaskManager *taskManager) {
 }
 
 #pragma force_active on
-// Loads the two one-shot animations of the first of the props ov02_022536E8 found on the map under the tag.
-void ov02_0224BF58(FieldSystem *fieldSystem, u8 tag) {
+// Loads the two one-shot animations of the first of the props sPCPropModels found on the map under the tag.
+void PCProp_LoadAnimations(FieldSystem *fieldSystem, u8 tag) {
     MapProp *prop;
     int model;
-    MapPropModelPair pair = ov02_022536E8;
+    MapPropModelPair pair = sPCPropModels;
 
     if (FieldSystem_FindMapPropOfModels(fieldSystem, pair.models, 2, &prop, &model)) {
         NNSG3dResTex *texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
@@ -222,10 +222,10 @@ void ov02_0224BF58(FieldSystem *fieldSystem, u8 tag) {
 }
 #pragma force_active reset
 
-void ov02_0224BFC0(FieldSystem *fieldSystem, u8 tag) {
+void PCProp_PlayPowerOnAnimation(FieldSystem *fieldSystem, u8 tag) {
     MapPropOneShotAnimationManager_PlayAnimation(fieldSystem->mapPropOneShotAnimationManager, tag, 0);
 }
 
-void ov02_0224BFCC(FieldSystem *fieldSystem, u8 tag) {
+void PCProp_PlayPowerOffAnimation(FieldSystem *fieldSystem, u8 tag) {
     MapPropOneShotAnimationManager_PlayAnimation(fieldSystem->mapPropOneShotAnimationManager, tag, 1);
 }

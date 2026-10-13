@@ -233,7 +233,7 @@ void BattleInput_EnableBallGauge(BattleInput *battleInput);
 void BattleInput_DisableBallGauge(BattleInput *battleInput);
 int BattleInput_CheckTouch(BattleInput *battleInput);
 BOOL BattleInput_CheckFeedbackDone(BattleInput *battleInput);
-int ov12_02266C84(int moveRange, int battlerId);
+int BattleInput_GetTargetSelectionType(int moveRange, int battlerId);
 void BattleInput_StartMenuScrollHorizontalTask(BattleInput *battleInput, int xSpeed, int xEnd);
 void BattleInput_LoadFightMenuText(BattleInput *battleInput, int battlerId, const BattleInputMove *moveDisplay);
 void BattleInput_Deadstriped_022698AC(BattleInput *battleInput, int unused);

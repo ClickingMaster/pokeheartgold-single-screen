@@ -5984,10 +5984,10 @@ typedef struct TempStatsStruct {
     u32 stats[6];
 } TempStatsStruct;
 
-extern TempStatsStruct ov12_0226C354;
-extern TempStatsStruct ov12_0226C36C;
-extern TempStatsStruct ov12_0226C384;
-extern TempStatsStruct ov12_0226C33C;
+extern TempStatsStruct sLevelUpOldStatParams;
+extern TempStatsStruct sLevelUpStatNameParams;
+extern TempStatsStruct sLevelUpDiffStatParams;
+extern TempStatsStruct sLevelUpNewStatParams;
 
 static void Task_GetExp(SysTask *task, void *inData) {
     int i;
@@ -6148,7 +6148,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
 
     case STATE_GET_EXP_WAIT_LEVEL_UP_EFFECT:
         if (Link_QueueNotEmpty(data->ctx)) {
-            TempStatsStruct stats = ov12_0226C354;
+            TempStatsStruct stats = sLevelUpOldStatParams;
             int level = GetMonData(mon, MON_DATA_LEVEL, NULL);
             // Cache the stats from the previous level for later.
             data->ctx->prevLevelStats = Heap_Alloc(HEAP_ID_BATTLE, sizeof(PokemonStats));
@@ -6213,8 +6213,8 @@ static void Task_GetExp(SysTask *task, void *inData) {
         break;
     }
     case STATE_GET_EXP_LEVEL_UP_SUMMARY_PRINT_DIFF: {
-        TempStatsStruct stats = ov12_0226C36C;
-        TempStatsStruct monData = ov12_0226C384;
+        TempStatsStruct stats = sLevelUpStatNameParams;
+        TempStatsStruct monData = sLevelUpDiffStatParams;
 
         Window *window = BattleSystem_GetWindow(data->battleSystem, 1);
         PokemonStats *oldStats = data->ctx->prevLevelStats;
@@ -6239,7 +6239,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
         break;
     }
     case STATE_GET_EXP_LEVEL_UP_SUMMARY_PRINT_TRUE: {
-        TempStatsStruct monData = ov12_0226C33C;
+        TempStatsStruct monData = sLevelUpNewStatParams;
         Window *window = BattleSystem_GetWindow(data->battleSystem, 1);
 
         FillWindowPixelRect(window, 0xF, 80, 0, 36, 96); // clear out the diff section (keep the printed stat names)

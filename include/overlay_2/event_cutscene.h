@@ -3,8 +3,8 @@
 
 #include "field_system.h"
 
-BOOL ov02_02252334(FieldSystem *fieldSystem);
-void ov02_022523B4(TaskManager *taskMan);
+BOOL FieldSystem_FollowMonShayminNeedsRevert(FieldSystem *fieldSystem);
+void StartShayminRevertToLandForm(TaskManager *taskMan);
 void FieldSystem_BeginCelebiTimeTravelCutsceneTask(FieldSystem *fieldSystem);
 void FieldSystem_BeginSinjohCutsceneTask(FieldSystem *fieldSystem);
 void FieldSystem_BeginSinjohGetEggCutsceneTask(FieldSystem *fieldSystem, u8 a1);

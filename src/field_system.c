@@ -88,7 +88,7 @@ BOOL Field_AppExit(OverlayManager *man, int *unused) {
     return TRUE;
 }
 
-extern OverlayManagerTemplate ov01_02206378;
+extern OverlayManagerTemplate gOverlayTemplate_FieldMap;
 
 void FieldSystem_LoadFieldOverlayInternal(FieldSystem *fieldSystem) {
     GF_ASSERT(fieldSystem->processManager->child == NULL);
@@ -98,7 +98,7 @@ void FieldSystem_LoadFieldOverlayInternal(FieldSystem *fieldSystem) {
 
     fieldSystem->runningFieldMap = FALSE;
     fieldSystem->processManager->isPaused = FALSE;
-    fieldSystem->processManager->parent = OverlayManager_New(&ov01_02206378, fieldSystem, HEAP_ID_FIELD2);
+    fieldSystem->processManager->parent = OverlayManager_New(&gOverlayTemplate_FieldMap, fieldSystem, HEAP_ID_FIELD2);
 }
 
 void FieldSystem_ClearRunningFieldMap(FieldSystem *fieldSystem) {

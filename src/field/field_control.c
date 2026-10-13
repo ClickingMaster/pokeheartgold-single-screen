@@ -306,7 +306,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
         return 2;
     }
 
-    if (ov02_02252334(fieldSystem)) {
+    if (FieldSystem_FollowMonShayminNeedsRevert(fieldSystem)) {
         StartMapSceneScript(fieldSystem, std_revert_shaymin, NULL);
         return 1;
     }

@@ -144,7 +144,7 @@ static void setBellsModelsActiveFlag(ClearBellCutscene3dObjectTaskData *taskData
 static void loadEyeGlimmer3dModel(enum HeapID heapID, FieldSystem *fieldSystem, LegendCutsceneLugiaEyeGlimmerTaskData *taskData);
 static void unloadEyeGlimmer3dModel(LegendCutsceneLugiaEyeGlimmerTaskData *taskData);
 static BOOL Task_LugiaEyeGlimmer(TaskManager *taskman);
-static BOOL ov02_02251320(TaskManager *taskman);
+static BOOL Task_UnusedHoOhAnim(TaskManager *taskman);
 static BOOL Task_WaitCameraPan(TaskManager *taskman);
 static BOOL Task_BirdFinalApproach(TaskManager *taskman);
 static void beginWavesEffect(FieldSystem *fieldSystem);
@@ -297,8 +297,8 @@ void LegendCutscene_ClearBellShimmer(FieldSystem *fieldSystem, u8 shimmerClearBe
 }
 
 // Part of an unreferenced code path
-void ov02_02250B30(FieldSystem *fieldSystem) {
-    TaskManager_Call(fieldSystem->taskman, ov02_02251320, NULL);
+void LegendCutscene_StartUnusedHoOhAnim(FieldSystem *fieldSystem) {
+    TaskManager_Call(fieldSystem->taskman, Task_UnusedHoOhAnim, NULL);
 }
 
 static void startBellShimmer(FieldSystem *fieldSystem) {
@@ -548,7 +548,7 @@ static BOOL Task_LugiaEyeGlimmer(TaskManager *taskman) {
 
 // TODO: Document based on overlay_01_02204004.s, overlay_01_021E8744.s
 // Part of an unreferenced code path
-static BOOL ov02_02251320(TaskManager *taskman) {
+static BOOL Task_UnusedHoOhAnim(TaskManager *taskman) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
     u32 *pState = TaskManager_GetStatePtr(taskman);
     UnkStruct_FieldSysC0_SubC *unkC0_SubC;

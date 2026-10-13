@@ -62,7 +62,7 @@ void ApricornRegrowthEffect_Draw(FieldEffect *effect, ApricornRegrowthEffect *wo
 // (asm/field_apricorn_regrowth_data.s before it, asm/field_apricorn_regrowth_gfx_data.s after it): MWCC would not keep the update
 // function's speed table between them.
 extern const FieldEffectBasicTemplate sApricornRegrowthTemplate;
-extern const u32 ov01_022090AC[6];
+extern const u32 sApricornRegrowthRecordParams[6];
 
 ApricornRegrowth *ApricornRegrowth_New(FieldEffectManager *manager) {
     ApricornRegrowth *regrowth = FieldEffectManager_HeapAllocAndFill(manager, sizeof(ApricornRegrowth), FALSE, 0);
@@ -92,7 +92,7 @@ void ApricornRegrowth_LoadGfx(ApricornRegrowth *regrowth) {
         FieldEffectManager_LoadBillboardResource(regrowth->manager, APRICORN_REGROWTH_RESOURCE, 0x80);
         FieldEffectManager_LoadBillboardSequence(regrowth->manager, APRICORN_REGROWTH_SEQUENCE, 0x95);
         FieldEffectManager_LoadTexResource(regrowth->manager, APRICORN_REGROWTH_TEXTURE, 0x1A, TRUE);
-        FieldEffectManager_AddRecord(regrowth->manager, APRICORN_REGROWTH_RECORD, APRICORN_REGROWTH_RESOURCE, APRICORN_REGROWTH_SEQUENCE, APRICORN_REGROWTH_TEXTURE, 0, ov01_022090AC);
+        FieldEffectManager_AddRecord(regrowth->manager, APRICORN_REGROWTH_RECORD, APRICORN_REGROWTH_RESOURCE, APRICORN_REGROWTH_SEQUENCE, APRICORN_REGROWTH_TEXTURE, 0, sApricornRegrowthRecordParams);
     }
 }
 

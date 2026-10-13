@@ -54,8 +54,8 @@
 // The OAM copy of the battler's pokepic (BattleAnimBattlerSprites_New) is kept at 0x8C.
 #define OPPONENT_SPRITE_OAM(opponentData) (*(void **)&(opponentData)->unk8C[0x00])
 
-// The battle party menu overlay's entry point, which is linked at the same address as ov10_0221BE20.
-#define BATTLE_PARTY_MENU_START(args) ((void (*)(BattlePartyMenuArgs *))ov10_0221BE20)(args)
+// The battle party menu overlay's entry point, which is linked at the same address as TrainerAI_Init.
+#define BATTLE_PARTY_MENU_START(args) ((void (*)(BattlePartyMenuArgs *))TrainerAI_Init)(args)
 
 // An item selection reply. It is passed by value as a struct: battle_controller.h declares the u32 it amounts to.
 typedef struct BattleItemInput {
@@ -3048,7 +3048,7 @@ void OpponentData_ForfeitMessage(BattleSystem *battleSystem, OpponentData *oppon
 void OpponentData_SwapToSubstituteSprite(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData) {
     BattleAnimBattlerPicParams params;
     BattleController_InitBattlerPicParams(battleSystem, animData, &params, opponentData->unk194);
-    ov07_02234A20(&params, HEAP_ID_BATTLE);
+    BattleAnimUtil_LoadSubstituteIntoPic(&params, HEAP_ID_BATTLE);
     BattleController_EmitCommandComplete(battleSystem, opponentData->unk194, animData->command);
 }
 
@@ -3643,7 +3643,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
         break;
     case 10:
         BattleController_InitBattlerPicParams(work->battleSystem, &work->animData, &params, work->battlerId);
-        ov07_02234A20(&params, HEAP_ID_BATTLE);
+        BattleAnimUtil_LoadSubstituteIntoPic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &unsubstituteAnimData, 1, 16, work->battlerId, work->battlerId, 0);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &unsubstituteAnimData);
         work->opponentData->unk1A0 = 1;
@@ -3725,7 +3725,7 @@ void Task_FollowMonSendOut(SysTask *task, void *data) {
         break;
     case 8:
         BattleController_InitBattlerPicParams(work->battleSystem, &work->animData, &params, work->battlerId);
-        ov07_02234A20(&params, HEAP_ID_BATTLE);
+        BattleAnimUtil_LoadSubstituteIntoPic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &unsubstituteAnimData, 1, 16, work->battlerId, work->battlerId, 0);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &unsubstituteAnimData);
         work->opponentData->unk1A0 = 1;
@@ -4581,7 +4581,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
 
 void Task_AISelectCommand(SysTask *task, void *data) {
     OpponentSelectCommandWork *work = data;
-    u32 input = ov10_022205BC(work->battleSystem, work->battlerId);
+    u32 input = TrainerAI_SelectCommand(work->battleSystem, work->battlerId);
     BattleController_ReplyCommandSelection(work->battleSystem, work->battlerId, input);
     BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
     Heap_Free(work);
@@ -4723,7 +4723,7 @@ void Task_AISelectMove(SysTask *task, void *data) {
 
     if ((battleType & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_ROAMER)) || (BattleSystem_GetBattleSpecial(work->battleSystem) & BATTLE_SPECIAL_FIRST_RIVAL)
         || BattleSystem_GetFieldSide(work->battleSystem, work->battlerId) == 0) {
-        selected = ov10_0221BEF4(work->battleSystem, work->battlerId);
+        selected = TrainerAI_SelectMove(work->battleSystem, work->battlerId);
         if (selected == 0xFF) {
             return;
         }
@@ -4806,7 +4806,7 @@ void Task_PlayerSelectTarget(SysTask *task, void *data) {
                 menu.targetMons[i] = work->targetMons[i];
             }
             menu.battlerType = work->battlerType;
-            menu.selectionType = ov12_02266C84(work->moveRange, work->battlerType);
+            menu.selectionType = BattleInput_GetTargetSelectionType(work->moveRange, work->battlerType);
             BattleInput_ChangeMenu(narc0, narc1, battleInput, 12, 0, (int *)&menu);
             NARC_Delete(narc0);
             NARC_Delete(narc1);
@@ -5850,7 +5850,7 @@ void Task_PlayMoveAnimation(SysTask *task, void *data) {
         return;
     case 8:
         BattleController_InitBattlerPicParams(work->battleSystem, &work->animData, &resubstituteParams, work->battlerId);
-        ov07_02234A20(&resubstituteParams, HEAP_ID_BATTLE);
+        BattleAnimUtil_LoadSubstituteIntoPic(&resubstituteParams, HEAP_ID_BATTLE);
         battlerId = work->battlerId;
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &restoreAnimData, 1, 16, battlerId, battlerId, 0);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, work->animSystem, &restoreAnimData);
@@ -6105,7 +6105,7 @@ void Task_ToggleVanish(SysTask *task, void *data) {
         break;
     case 3:
         BattleController_InitBattlerPicParams(work->battleSystem, &work->animData, &params, work->battlerId);
-        ov07_02234A20(&params, HEAP_ID_BATTLE);
+        BattleAnimUtil_LoadSubstituteIntoPic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &restoreAnimData, 1, 16, work->battlerId, work->battlerId, 0);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &restoreAnimData);
         work->opponentData->unk1A0 = 1;

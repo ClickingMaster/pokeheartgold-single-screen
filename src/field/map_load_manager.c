@@ -956,7 +956,7 @@ void MapLoadManager_RenderLoadedMap(int mapSlot, MapLoadManager *mapLoadManager,
     map = mapLoadManager->maps[mapSlot];
     if (map->modelLoaded == TRUE) {
         BOOL lit = ov01_021FBA00(mapLoadManager->areaDataManager);
-        ov01_021F3A3C(&pos, mapLoadManager->areaDataManager, lit, (ModelAttributes *)savedModelAttributes, map->propManager);
+        MapPropManager_DrawWithOffset(&pos, mapLoadManager->areaDataManager, lit, (ModelAttributes *)savedModelAttributes, map->propManager);
     }
 }
 #pragma force_active reset

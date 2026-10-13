@@ -186,7 +186,7 @@
 .public NNS_GfdDefaultFuncAllocPlttVram
 .public ov00_021EC9D4
 .public LinkBattleScreen_Start
-.public ov06_0221BAF0
+.public BattleParticleSystem_DrawAll
 .public BattleAnimSystem_New
 .public BattleAnimSystem_Delete
 .public Battle_Run

@@ -183,7 +183,7 @@ void MapPropManager_LoadFromSafariZone(NARC *a0, MapPropManager *mapPropManager,
     }
 }
 
-void ov01_021F3A3C(const VecFx32 *position, AreaDataManager *areaDataManager, BOOL a2, ModelAttributes *modelAttributes, MapPropManager *mapPropManager) {
+void MapPropManager_DrawWithOffset(const VecFx32 *position, AreaDataManager *areaDataManager, BOOL a2, ModelAttributes *modelAttributes, MapPropManager *mapPropManager) {
     VecFx32 translation;
     MtxFx33 rotation = { FX32_ONE, 0, 0, 0, FX32_ONE, 0, 0, 0, FX32_ONE };
 
@@ -320,7 +320,7 @@ u8 MapPropManager_LoadOne(MapPropManager *mapPropManager, int modelID, const Vec
     return MAP_PROP_MAX;
 }
 
-void ov01_021F3C9C(MapPropManager *mapPropManager, AreaDataManager *areaDataManager) {
+void MapPropManager_Draw(MapPropManager *mapPropManager, AreaDataManager *areaDataManager) {
     MtxFx33 baseRot = { FX32_ONE, 0, 0, 0, FX32_ONE, 0, 0, 0, FX32_ONE };
 
     for (u8 i = 0; i < MAP_PROP_MAX; ++i) {

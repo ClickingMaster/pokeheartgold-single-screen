@@ -591,7 +591,7 @@ static void FieldMap_Render3D(FieldSystem *fieldSystem) {
 
     MapLoadManager_RenderLoadedMaps(fieldSystem->mapLoadManager, fieldSystem->modelAttributes);
 
-    ov01_021F3C9C(fieldSystem->mapPropManager, fieldSystem->areaDataManager);
+    MapPropManager_Draw(fieldSystem->mapPropManager, fieldSystem->areaDataManager);
 
     camAngle = Camera_GetAngle(fieldSystem->camera);
     fx64 temp_ret = (fieldSystem->unk11C << FX32_SHIFT) * (fx64)(FX_CosIdx((u16)(-camAngle.x)));

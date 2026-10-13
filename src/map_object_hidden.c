@@ -59,7 +59,7 @@ void HiddenObjectMovement_Resume(LocalMapObject *object) {
 
 BOOL HiddenObjectState_CreateCover(LocalMapObject *object, HiddenObjectMovementState *state) {
     if (state->revealed == FALSE) {
-        HiddenObjectMovement_SetCoverEffect(object, ov01_021FFF5C(object, state->coverType));
+        HiddenObjectMovement_SetCoverEffect(object, HiddenObjectCover_Spawn(object, state->coverType));
     }
     MapObject_ClearSingleMovement(object);
     MapObject_ClearEndMovement(object);
@@ -70,7 +70,7 @@ BOOL HiddenObjectState_CreateCover(LocalMapObject *object, HiddenObjectMovementS
 BOOL HiddenObjectState_Wait(LocalMapObject *object, HiddenObjectMovementState *state) {
     if (state->revealed == FALSE) {
         if (HiddenObjectMovement_GetCoverEffect(object) == 0 && MapObject_IsDrawInitialized(object) == TRUE) {
-            HiddenObjectMovement_SetCoverEffect(object, ov01_021FFF5C(object, state->coverType));
+            HiddenObjectMovement_SetCoverEffect(object, HiddenObjectCover_Spawn(object, state->coverType));
         }
         MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK20);
     }

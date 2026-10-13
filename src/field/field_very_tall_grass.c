@@ -61,8 +61,8 @@ void VeryTallGrassEffect_Update(FieldEffect *effect, VeryTallGrassEffect *work);
 void VeryTallGrassEffect_Draw(FieldEffect *effect, VeryTallGrassEffect *work);
 
 // In asm/overlay_01_021FF854_data_local.s.
-extern const FieldEffectBasicTemplate ov01_02209218; // very tall grass effect
-extern const u32 ov01_0220922C[6];                   // very tall grass record params
+extern const FieldEffectBasicTemplate sVeryTallGrassEffectTemplate; // very tall grass effect
+extern const u32 sVeryTallGrassRecordParams[6];                   // very tall grass record params
 
 VeryTallGrass *VeryTallGrass_New(FieldEffectManager *manager) {
     VeryTallGrass *grass = FieldEffectManager_HeapAllocAndFill(manager, sizeof(VeryTallGrass), FALSE, 0);
@@ -80,7 +80,7 @@ void VeryTallGrass_LoadGfx(VeryTallGrass *grass) {
     FieldEffectManager_LoadBillboardResource(grass->manager, VERY_TALL_GRASS_RESOURCE, 0x7A);
     FieldEffectManager_LoadBillboardSequence(grass->manager, VERY_TALL_GRASS_SEQUENCE, 0x92);
     FieldEffectManager_LoadTexResource(grass->manager, VERY_TALL_GRASS_TEXTURE, 0x15, TRUE);
-    FieldEffectManager_AddRecord(grass->manager, VERY_TALL_GRASS_RECORD, VERY_TALL_GRASS_RESOURCE, VERY_TALL_GRASS_SEQUENCE, VERY_TALL_GRASS_TEXTURE, 0, ov01_0220922C);
+    FieldEffectManager_AddRecord(grass->manager, VERY_TALL_GRASS_RECORD, VERY_TALL_GRASS_RESOURCE, VERY_TALL_GRASS_SEQUENCE, VERY_TALL_GRASS_TEXTURE, 0, sVeryTallGrassRecordParams);
 }
 
 void VeryTallGrass_FreeGfx(VeryTallGrass *grass) {
@@ -106,7 +106,7 @@ void VeryTallGrass_Spawn(LocalMapObject *mapObject, BOOL animate) {
     args.grass = FieldEffectManager_GetRendererData(manager, 12);
     args.mapObject = mapObject;
     MapObject_CopyPositionVector(mapObject, &position);
-    FieldEffectManager_CreateEffect(manager, &ov01_02209218, &position, animate, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
+    FieldEffectManager_CreateEffect(manager, &sVeryTallGrassEffectTemplate, &position, animate, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
 void VeryTallGrass_SpawnAt(LocalMapObject *mapObject, BOOL animate, int x, int z, BOOL checkFacing) {
@@ -129,7 +129,7 @@ void VeryTallGrass_SpawnAt(LocalMapObject *mapObject, BOOL animate, int x, int z
     args.grass = FieldEffectManager_GetRendererData(manager, 12);
     args.mapObject = mapObject;
     MapObject_CopyPositionVector(mapObject, &position);
-    FieldEffectManager_CreateEffect(manager, &ov01_02209218, &position, animate, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
+    FieldEffectManager_CreateEffect(manager, &sVeryTallGrassEffectTemplate, &position, animate, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
 BOOL VeryTallGrassEffect_Init(FieldEffect *effect, VeryTallGrassEffect *work) {

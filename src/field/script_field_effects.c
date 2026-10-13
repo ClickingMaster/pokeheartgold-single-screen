@@ -51,7 +51,7 @@ typedef struct TrapEffectTemplate {
     u16 se;
 } TrapEffectTemplate;
 
-typedef struct Ov02_02245B80Env {
+typedef struct LighthouseLightUpEnv {
     enum HeapID heapId;
     FieldSystem *fieldSystem;
     u16 state;
@@ -61,7 +61,7 @@ typedef struct Ov02_02245B80Env {
     Field3dObject object;
     NNSFndAllocator allocator;
     s32 seTimer;
-} Ov02_02245B80Env;
+} LighthouseLightUpEnv;
 
 typedef struct TrapEffectEnv {
     enum HeapID heapId;
@@ -142,11 +142,11 @@ extern const TrapEffectTemplate sTrapEffects[];
 extern const u16 *sLegendaryWingLoopAnimLists[];
 extern const u16 *sLegendaryWingEndAnimLists[];
 
-Ov02_02245B80Env *ov02_02245B9C(FieldSystem *fieldSystem);
-BOOL ov02_02245BC8(TaskManager *taskManager);
-void ov02_02245D18(Ov02_02245B80Env *env);
-void ov02_02245DB0(Ov02_02245B80Env *env);
-void ov02_02245DE0(Ov02_02245B80Env *env);
+LighthouseLightUpEnv *LighthouseLightUp_CreateTaskEnv(FieldSystem *fieldSystem);
+BOOL Task_ShowLighthouseLightUp(TaskManager *taskManager);
+void LighthouseLightUp_Load(LighthouseLightUpEnv *env);
+void LighthouseLightUp_Unload(LighthouseLightUpEnv *env);
+void LighthouseLightUp_Animate(LighthouseLightUpEnv *env);
 FieldAnimModel *FieldAnimModel_New(const FieldAnimModelTemplate *template, enum HeapID heapId);
 void FieldAnimModel_Delete(FieldAnimModel *animModel);
 void FieldAnimModel_SetAnimations(FieldAnimModel *animModel, NarcId narcId, const u16 *fileIds, u8 count);
@@ -177,19 +177,19 @@ BOOL AlphHiddenRoom_IsAButtonPressed(void);
 LanceFliesAwayEnv *LanceFliesAway_CreateTaskEnv(FieldSystem *fieldSystem, LocalMapObject *lance, LocalMapObject *dragoniteObject);
 BOOL Task_LanceFliesAway(TaskManager *taskManager);
 
-void ov02_02245B80(TaskManager *taskManager) {
+void ShowLighthouseLightUp(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    Ov02_02245B80Env *env = ov02_02245B9C(fieldSystem);
-    TaskManager_Call(taskManager, ov02_02245BC8, env);
+    LighthouseLightUpEnv *env = LighthouseLightUp_CreateTaskEnv(fieldSystem);
+    TaskManager_Call(taskManager, Task_ShowLighthouseLightUp, env);
 }
 
-Ov02_02245B80Env *ov02_02245B9C(FieldSystem *fieldSystem) {
-    Ov02_02245B80Env *env = Heap_Alloc(HEAP_ID_FIELD1, sizeof(Ov02_02245B80Env));
+LighthouseLightUpEnv *LighthouseLightUp_CreateTaskEnv(FieldSystem *fieldSystem) {
+    LighthouseLightUpEnv *env = Heap_Alloc(HEAP_ID_FIELD1, sizeof(LighthouseLightUpEnv));
     if (env == NULL) {
         GF_ASSERT(FALSE);
         return NULL;
     }
-    MI_CpuFill8(env, 0, sizeof(Ov02_02245B80Env));
+    MI_CpuFill8(env, 0, sizeof(LighthouseLightUpEnv));
     env->fieldSystem = fieldSystem;
     env->heapId = HEAP_ID_FIELD1;
     return env;
@@ -197,11 +197,11 @@ Ov02_02245B80Env *ov02_02245B9C(FieldSystem *fieldSystem) {
 
 #pragma force_active on
 
-BOOL ov02_02245BC8(TaskManager *taskManager) {
-    Ov02_02245B80Env *env = TaskManager_GetEnvironment(taskManager);
+BOOL Task_ShowLighthouseLightUp(TaskManager *taskManager) {
+    LighthouseLightUpEnv *env = TaskManager_GetEnvironment(taskManager);
     switch (env->state) {
     case 0:
-        ov02_02245D18(env);
+        LighthouseLightUp_Load(env);
         env->timer = 0;
         env->seTimer = 0;
         env->state++;
@@ -219,14 +219,14 @@ BOOL ov02_02245BC8(TaskManager *taskManager) {
             }
             env->seTimer = (s32)((u32)env->seTimer + 1);
         }
-        ov02_02245DE0(env);
+        LighthouseLightUp_Animate(env);
         if (env->timer++ >= 90) {
             BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 24, 2, env->heapId);
             env->state++;
         }
         break;
     case 2:
-        ov02_02245DE0(env);
+        LighthouseLightUp_Animate(env);
         if (IsPaletteFadeFinished()) {
             env->timer = 0;
             env->state++;
@@ -234,7 +234,7 @@ BOOL ov02_02245BC8(TaskManager *taskManager) {
         break;
     case 3:
         if (env->timer++ >= 60) {
-            ov02_02245DB0(env);
+            LighthouseLightUp_Unload(env);
             AreaLightManager_Free(&env->fieldSystem->areaLightManager);
             env->fieldSystem->areaLightManager = AreaLightManager_New(env->fieldSystem->modelAttributes, 4);
             BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_WHITE, 18, 1, env->heapId);
@@ -255,7 +255,7 @@ BOOL ov02_02245BC8(TaskManager *taskManager) {
 
 #pragma force_active reset
 
-void ov02_02245D18(Ov02_02245B80Env *env) {
+void LighthouseLightUp_Load(LighthouseLightUpEnv *env) {
     HeapExp_FndInitAllocator(&env->allocator, env->heapId, 32);
     Field3dModel_LoadFromFilesystem(&env->model, NARC_demo_legend, 0, env->heapId);
     Field3dModelAnimation_LoadFromFilesystem(&env->anims[0], &env->model, NARC_demo_legend, 1, env->heapId, &env->allocator);
@@ -267,14 +267,14 @@ void ov02_02245D18(Ov02_02245B80Env *env) {
     Field3dObject_SetActiveFlag(&env->object, TRUE);
 }
 
-void ov02_02245DB0(Ov02_02245B80Env *env) {
+void LighthouseLightUp_Unload(LighthouseLightUpEnv *env) {
     Field3dObject_SetActiveFlag(&env->object, FALSE);
     Field3dModelAnimation_Unload(&env->anims[1], &env->allocator);
     Field3dModelAnimation_Unload(&env->anims[0], &env->allocator);
     Field3dModel_Unload(&env->model);
 }
 
-void ov02_02245DE0(Ov02_02245B80Env *env) {
+void LighthouseLightUp_Animate(LighthouseLightUpEnv *env) {
     Field3dModelAnimation_FrameAdvanceAndLoop(&env->anims[0], FX32_ONE);
     Field3dModelAnimation_FrameAdvanceAndLoop(&env->anims[1], FX32_ONE);
     Field3dObject_Draw(&env->object);

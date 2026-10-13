@@ -57,10 +57,10 @@ void SurfMountEffect_Update(FieldEffect *effect, SurfMountEffect *work);
 void SurfMountEffect_Draw(FieldEffect *effect, SurfMountEffect *work);
 void SurfMountEffect_SetBobbing(FieldEffect *effect, BOOL bobbing);
 
-const VecFx32 ov01_022090D0 = { 0, 4 * FX32_ONE, 4 * FX32_ONE };
-const VecFx32 ov01_022090C4 = { FX32_ONE, FX32_ONE, FX32_ONE };
+const VecFx32 sSurfMountBobbingOffset = { 0, 4 * FX32_ONE, 4 * FX32_ONE };
+const VecFx32 sSurfMountScale = { FX32_ONE, FX32_ONE, FX32_ONE };
 
-const FieldEffectBasicTemplate ov01_022090DC = {
+const FieldEffectBasicTemplate sSurfMountEffectTemplate = {
     sizeof(SurfMountEffect),
     (FieldEffectInitFunc)SurfMountEffect_Init,
     (FieldEffectFunc)SurfMountEffect_Destroy,
@@ -104,11 +104,11 @@ FieldEffect *SurfMountEffect_Create(LocalMapObject *mapObject, u32 x, u32 z, u32
         position.z = (z << 16) + (2 << 14);
         FieldSystem_SnapToTerrainHeight(fieldSystem, &position);
     } else {
-        offset = ov01_022090D0;
+        offset = sSurfMountBobbingOffset;
         MapObject_CopyPositionVector(mapObject, &position);
         MapObject_SetDrawOffset(mapObject, &offset);
     }
-    return FieldEffectManager_CreateEffect(args.manager, &ov01_022090DC, &position, bobbing, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
+    return FieldEffectManager_CreateEffect(args.manager, &sSurfMountEffectTemplate, &position, bobbing, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
 BOOL SurfMountEffect_Init(FieldEffect *effect, SurfMountEffect *work) {
@@ -186,7 +186,7 @@ void SurfMountEffect_Draw(FieldEffect *effect, SurfMountEffect *work) {
     }
     work->timer++;
     angle = 0;
-    scale = ov01_022090C4;
+    scale = sSurfMountScale;
     renderObj = &work->args.mount->renderObj;
     switch (work->direction) {
     case DIR_NORTH:

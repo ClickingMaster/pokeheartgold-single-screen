@@ -11,12 +11,12 @@
 	.public LinkBattleScreen_SlidePanelsIn
 	.public LinkBattleScreen_ShakePanels
 	.public LinkBattleScreen_SlidePanelsOut
-	.public ov05_0221C558
+	.public LinkBattleScreen_DelayBeforeNudge
 	.public LinkBattleScreen_DetermineNudgeDirection
 	.public LinkBattleScreen_NudgePanels
 	.public LinkBattleScreen_NudgePanelsRight
 	.public LinkBattleScreen_NudgePanelsLeft
-	.public ov05_0221C7FC
+	.public LinkBattleScreen_DelayBeforeReveal
 	.public LinkBattleScreen_RevealCenterBand
 	.public LinkBattleScreen_ShowWinLoseSprites
 	.public LinkBattleScreen_ShowDrawSprite
@@ -221,7 +221,7 @@ sResultDrawSequence: ; 0x0221EC28
 	.word LinkBattleScreen_WaitFadeAndDelay
 	.word LinkBattleScreen_SlidePanelsIn
 	.word LinkBattleScreen_ShakePanels
-	.word ov05_0221C7FC
+	.word LinkBattleScreen_DelayBeforeReveal
 	.word LinkBattleScreen_RevealCenterBand
 	.word LinkBattleScreen_WaitFadeAndDelay
 	.word LinkBattleScreen_ShowDrawSprite
@@ -243,11 +243,11 @@ sResultSequence: ; 0x0221EC98
 	.word LinkBattleScreen_WaitFadeAndDelay
 	.word LinkBattleScreen_SlidePanelsIn
 	.word LinkBattleScreen_ShakePanels
-	.word ov05_0221C558
+	.word LinkBattleScreen_DelayBeforeNudge
 	.word LinkBattleScreen_WaitFadeAndDelay
 	.word LinkBattleScreen_DetermineNudgeDirection
 	.word LinkBattleScreen_NudgePanels
-	.word ov05_0221C7FC
+	.word LinkBattleScreen_DelayBeforeReveal
 	.word LinkBattleScreen_RevealCenterBand
 	.word LinkBattleScreen_WaitFadeAndDelay
 	.word LinkBattleScreen_ShowWinLoseSprites

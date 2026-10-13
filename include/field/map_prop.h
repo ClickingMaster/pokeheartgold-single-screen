@@ -16,7 +16,7 @@ void MapPropManager_Reset(MapPropManager *mapPropManager);
 void MapPropManager_RemoveMapPropByIndex(int modelID, MapPropManager *mapPropManager);
 void MapPropManager_LoadFromNARC(NARC *narc, u32 size, MapPropManager *mapPropManager, int a3);
 void MapPropManager_LoadFromSafariZone(NARC *a0, MapPropManager *mapPropManager, int a2, const SAFARIZONE_AREA *safariArea, u16 *a4, BOOL gender);
-void ov01_021F3A3C(const VecFx32 *position, AreaDataManager *areaDataManager, BOOL a2, ModelAttributes *modelAttributes, MapPropManager *mapPropManager);
+void MapPropManager_DrawWithOffset(const VecFx32 *position, AreaDataManager *areaDataManager, BOOL a2, ModelAttributes *modelAttributes, MapPropManager *mapPropManager);
 VecFx32 *MapProp_GetScale(MapProp *mapProp);
 VecFx32 *MapProp_GetRotation(MapProp *mapProp);
 void MapProp_GetTranslation(VecFx32 *vec, MapProp *mapProp);
@@ -30,6 +30,6 @@ MapProp *MapPropManager_GetMapPropByIndex(MapPropManager *mapPropManager, u8 ind
 MapProp *MapPropManager_FindMapPropByBuildModel(MapPropManager *mapPropManager, int buildModel);
 MapProp *MapPropManager_GetMapPropByIndex_Checked_RequireActive(MapPropManager *mapPropManager, int index);
 u8 MapPropManager_LoadOne(MapPropManager *mapPropManager, int modelID, const VecFx32 *position, const VecFx32 *rotation, MapPropAnimationManager *mapPropAnimationManager);
-void ov01_021F3C9C(MapPropManager *mapPropManager, AreaDataManager *areaDataManager);
+void MapPropManager_Draw(MapPropManager *mapPropManager, AreaDataManager *areaDataManager);
 
 #endif // POKEHEARTGOLD_FIELD_MAP_PROP_H

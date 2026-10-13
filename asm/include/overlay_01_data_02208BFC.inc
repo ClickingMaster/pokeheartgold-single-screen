@@ -26,10 +26,10 @@
 .public GroundDust_Free
 .public VeryTallGrass_New
 .public VeryTallGrass_Free
-.public ov01_021FFC0C
-.public ov01_021FFC28
-.public ov01_021FFECC
-.public ov01_021FFEE8
+.public UnusedBillboard_New
+.public UnusedBillboard_Free
+.public HiddenObjectCover_New
+.public HiddenObjectCover_Free
 .public TrainerReveal_New
 .public TrainerReveal_Free
 .public EmoteMark_New

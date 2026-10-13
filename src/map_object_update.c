@@ -28,7 +28,7 @@ void ov01_021FE3F4(LocalMapObject *object);
 void Footprints_SpawnInSand(LocalMapObject *object);
 void Footprints_SpawnTracksInSand(LocalMapObject *object);
 void FieldShadow_CreateMapObjectShadow(LocalMapObject *object);
-void ov01_021FD684(LocalMapObject *object);
+void FieldShadow_CreateFollowMonShadow(LocalMapObject *object);
 void GroundDust_Spawn(LocalMapObject *object);
 
 void MapObject_CallMovementAndBehaviorInit(LocalMapObject *object) {
@@ -361,7 +361,7 @@ void MapObject_CreateShadow(LocalMapObject *object, u8 behavior, u8 prevBehavior
             return;
         }
         if (MapObject_GetFlagsBitsMask(object, MAPOBJECTFLAG_UNK15) == 0) {
-            ov01_021FD684(object);
+            FieldShadow_CreateFollowMonShadow(object);
             MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK15);
         }
     } else {

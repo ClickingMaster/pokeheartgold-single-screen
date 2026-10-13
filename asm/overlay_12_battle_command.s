@@ -58,8 +58,8 @@ ov12_0226C324: ; 0x0226C324
 	.word STAT_SPDEF
 	.word STAT_SPEED
 
-.public ov12_0226C33C
-ov12_0226C33C: ; 0x0226C33C
+.public sLevelUpNewStatParams
+sLevelUpNewStatParams: ; 0x0226C33C
 	.word MON_DATA_MAX_HP
 	.word MON_DATA_ATK
 	.word MON_DATA_DEF
@@ -67,8 +67,8 @@ ov12_0226C33C: ; 0x0226C33C
 	.word MON_DATA_SP_DEF
 	.word MON_DATA_SPEED
 
-.public ov12_0226C354
-ov12_0226C354: ; 0x0226C354
+.public sLevelUpOldStatParams
+sLevelUpOldStatParams: ; 0x0226C354
 	.word MON_DATA_MAX_HP
 	.word MON_DATA_ATK
 	.word MON_DATA_DEF
@@ -76,8 +76,8 @@ ov12_0226C354: ; 0x0226C354
 	.word MON_DATA_SP_DEF
 	.word MON_DATA_SPEED
 
-.public ov12_0226C36C
-ov12_0226C36C: ; 0x0226C36C
+.public sLevelUpStatNameParams
+sLevelUpStatNameParams: ; 0x0226C36C
 	.word NUM_BATTLE_STATS
 	.word STAT_ATK
 	.word STAT_DEF
@@ -85,8 +85,8 @@ ov12_0226C36C: ; 0x0226C36C
 	.word STAT_SPDEF
 	.word STAT_SPEED
 
-.public ov12_0226C384
-ov12_0226C384: ; 0x0226C384
+.public sLevelUpDiffStatParams
+sLevelUpDiffStatParams: ; 0x0226C384
 	.word MON_DATA_MAX_HP
 	.word MON_DATA_ATK
 	.word MON_DATA_DEF

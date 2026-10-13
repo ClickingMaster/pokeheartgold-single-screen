@@ -1056,7 +1056,7 @@ Overlay field
     Object asm/overlay_01_021FF854_data_local.o
     Object src/field/field_very_tall_grass.o
     Object src/field/field_unused_billboard_effect.o
-    Object src/field/overlay_01_021FFECC.o
+    Object src/field/field_hidden_object_cover.o
     Object src/field/field_trainer_reveal.o
     Object src/field/field_emote_mark.o
     Object asm/overlay_01_022001E4.o

@@ -38,6 +38,6 @@
 .public FieldShadow_New
 .public FieldShadow_Free
 .public FieldShadow_CreateMapObjectShadow
-.public ov01_021FD684
-.public ov01_021FD8E8
+.public FieldShadow_CreateFollowMonShadow
+.public FieldShadow_CreateFriendShadow
 .public FieldShadow_OffsetByFacing

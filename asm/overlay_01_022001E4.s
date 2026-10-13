@@ -40,26 +40,26 @@
 	.public EmoteMark_Spawn
 	.public MapObjectEmoteMarkEffect_Init
 	.public MapObjectEmoteMarkEffect_Update
-	.public ov01_022092C8
-	.public ov01_022092DC
-	.public ov01_022092F0
+	.public sEmoteMarkTemplate
+	.public sMapObjectEmoteMarkTemplate
+	.public sEmoteMarkRecordParams
 
 	.rodata
 
-ov01_022092C8:
+sEmoteMarkTemplate:
 	.word 0x00000044
 	.word EmoteMarkEffect_Init
 	.word EmoteMarkEffect_Destroy
 	.word EmoteMarkEffect_Update
 	.word EmoteMarkEffect_Draw
 
-ov01_022092DC: ; 0x022092DC
+sMapObjectEmoteMarkTemplate: ; 0x022092DC
 	.word 0x00000044
 	.word MapObjectEmoteMarkEffect_Init
 	.word EmoteMarkEffect_Destroy
 	.word MapObjectEmoteMarkEffect_Update
 	.word EmoteMarkEffect_Draw
 
-ov01_022092F0: ; 0x022092F0
+sEmoteMarkRecordParams: ; 0x022092F0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00

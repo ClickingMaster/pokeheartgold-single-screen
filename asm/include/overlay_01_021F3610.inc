@@ -31,7 +31,7 @@
 .public MapPropManager_RemoveMapPropByIndex
 .public MapPropManager_LoadFromNARC
 .public MapPropManager_LoadFromSafariZone
-.public ov01_021F3A3C
+.public MapPropManager_DrawWithOffset
 .public MapProp_GetScale
 .public MapProp_GetRotation
 .public MapProp_GetTranslation
@@ -45,7 +45,7 @@
 .public MapPropManager_FindMapPropByBuildModel
 .public MapPropManager_GetMapPropByIndex_Checked_RequireActive
 .public MapPropManager_LoadOne
-.public ov01_021F3C9C
+.public MapPropManager_Draw
 .public AreaDataManager_GetBuildModelShapes
 .public Field3dObjectList_GetOrAddInstance
 .public Field3dObjectList_ReleaseInstance

@@ -79,7 +79,7 @@ typedef struct {
 extern void GF_AssertFail(void);
 extern void MapObject_ChangeMovement(LocalMapObject *, u32);
 extern void MapObject_ChangeSprite(LocalMapObject *, u32);
-extern void *ov01_021FD8E8(LocalMapObject *, int);
+extern void *FieldShadow_CreateFriendShadow(LocalMapObject *, int);
 extern void *UnionChatMarker_Spawn(LocalMapObject *);
 extern BOOL CommState_IsAlternateLinked(void);
 extern BOOL CommState_GetJoinResult(void);

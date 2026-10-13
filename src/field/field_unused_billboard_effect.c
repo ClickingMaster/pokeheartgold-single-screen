@@ -8,88 +8,88 @@
 #include "field_effects.h"
 
 // Field effect renderer 13: a billboard over a map object's tile in the style of the grass effects (two
-// frames, then held while the object stays on the tile). Nothing creates it: its template, ov01_02209244,
+// frames, then held while the object stays on the tile). Nothing creates it: its template, sUnusedBillboardEffectTemplate,
 // is referenced from nowhere.
 
-#define OV01_021FFC0C_RECORD   10
-#define OV01_021FFC0C_RESOURCE 8
-#define OV01_021FFC0C_SEQUENCE 8
-#define OV01_021FFC0C_TEXTURE  9
+#define UNUSED_BILLBOARD_RECORD   10
+#define UNUSED_BILLBOARD_RESOURCE 8
+#define UNUSED_BILLBOARD_SEQUENCE 8
+#define UNUSED_BILLBOARD_TEXTURE  9
 
 // Puts position->y on the ground of the tile at position->x/z; FALSE while that tile has no ground yet.
 // (unk_0205FD20.h declares it returning void.)
 BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 13).
-typedef struct UnkOv01_021FFC0C {
+typedef struct UnusedBillboard {
     FieldEffectManager *manager;
-} UnkOv01_021FFC0C;
+} UnusedBillboard;
 
-typedef struct UnkOv01_021FFC0C_Args {
+typedef struct UnusedBillboardEffectArgs {
     int x;
     int y;
     int z;
     FieldSystem *fieldSystem;
     FieldEffectManager *manager;
-    UnkOv01_021FFC0C *renderer;
+    UnusedBillboard *renderer;
     LocalMapObject *mapObject;
     s16 dx;
     s16 dz;
     s8 direction; // -1: any facing
-} UnkOv01_021FFC0C_Args;
+} UnusedBillboardEffectArgs;
 
-typedef struct UnkOv01_021FFC0C_Effect {
+typedef struct UnusedBillboardEffect {
     int state;
     u32 spriteId;
     u32 objectId;
     u32 mapId;
     u8 unk10[4];
     BOOL onGround;
-    UnkOv01_021FFC0C_Args args;
+    UnusedBillboardEffectArgs args;
     void *billboard;
-} UnkOv01_021FFC0C_Effect;
+} UnusedBillboardEffect;
 
-UnkOv01_021FFC0C *ov01_021FFC0C(FieldEffectManager *manager);
-void ov01_021FFC28(UnkOv01_021FFC0C *renderer);
-void ov01_021FFC38(UnkOv01_021FFC0C *renderer);
-void ov01_021FFC80(UnkOv01_021FFC0C *renderer);
-BOOL ov01_021FFCA8(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work);
-void ov01_021FFD64(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work);
-void ov01_021FFD70(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work);
-void ov01_021FFE98(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work);
+UnusedBillboard *UnusedBillboard_New(FieldEffectManager *manager);
+void UnusedBillboard_Free(UnusedBillboard *renderer);
+void UnusedBillboard_LoadGfx(UnusedBillboard *renderer);
+void UnusedBillboard_FreeGfx(UnusedBillboard *renderer);
+BOOL UnusedBillboardEffect_Init(FieldEffect *effect, UnusedBillboardEffect *work);
+void UnusedBillboardEffect_Destroy(FieldEffect *effect, UnusedBillboardEffect *work);
+void UnusedBillboardEffect_Update(FieldEffect *effect, UnusedBillboardEffect *work);
+void UnusedBillboardEffect_Draw(FieldEffect *effect, UnusedBillboardEffect *work);
 
-static const u32 ov01_02209258[6] = { 0, 2, 0, 0, 0, 2 };
+static const u32 sUnusedBillboardRecordParams[6] = { 0, 2, 0, 0, 0, 2 };
 
-UnkOv01_021FFC0C *ov01_021FFC0C(FieldEffectManager *manager) {
-    UnkOv01_021FFC0C *renderer = FieldEffectManager_HeapAllocAndFill(manager, sizeof(UnkOv01_021FFC0C), FALSE, 0);
+UnusedBillboard *UnusedBillboard_New(FieldEffectManager *manager) {
+    UnusedBillboard *renderer = FieldEffectManager_HeapAllocAndFill(manager, sizeof(UnusedBillboard), FALSE, 0);
     renderer->manager = manager;
-    ov01_021FFC38(renderer);
+    UnusedBillboard_LoadGfx(renderer);
     return renderer;
 }
 
-void ov01_021FFC28(UnkOv01_021FFC0C *renderer) {
-    ov01_021FFC80(renderer);
+void UnusedBillboard_Free(UnusedBillboard *renderer) {
+    UnusedBillboard_FreeGfx(renderer);
     FieldEffectManager_HeapFree(renderer);
 }
 
-void ov01_021FFC38(UnkOv01_021FFC0C *renderer) {
-    FieldEffectManager_LoadBillboardResource(renderer->manager, OV01_021FFC0C_RESOURCE, 0x7B);
-    FieldEffectManager_LoadBillboardSequence(renderer->manager, OV01_021FFC0C_SEQUENCE, 0x93);
-    FieldEffectManager_LoadTexResource(renderer->manager, OV01_021FFC0C_TEXTURE, 0x16, TRUE);
-    FieldEffectManager_AddRecord(renderer->manager, OV01_021FFC0C_RECORD, OV01_021FFC0C_RESOURCE, OV01_021FFC0C_SEQUENCE, OV01_021FFC0C_TEXTURE, 0, ov01_02209258);
+void UnusedBillboard_LoadGfx(UnusedBillboard *renderer) {
+    FieldEffectManager_LoadBillboardResource(renderer->manager, UNUSED_BILLBOARD_RESOURCE, 0x7B);
+    FieldEffectManager_LoadBillboardSequence(renderer->manager, UNUSED_BILLBOARD_SEQUENCE, 0x93);
+    FieldEffectManager_LoadTexResource(renderer->manager, UNUSED_BILLBOARD_TEXTURE, 0x16, TRUE);
+    FieldEffectManager_AddRecord(renderer->manager, UNUSED_BILLBOARD_RECORD, UNUSED_BILLBOARD_RESOURCE, UNUSED_BILLBOARD_SEQUENCE, UNUSED_BILLBOARD_TEXTURE, 0, sUnusedBillboardRecordParams);
 }
 
-void ov01_021FFC80(UnkOv01_021FFC0C *renderer) {
-    FieldEffectManager_FreeBillboardResource(renderer->manager, OV01_021FFC0C_RESOURCE);
-    FieldEffectManager_FreeBillboardSequence(renderer->manager, OV01_021FFC0C_SEQUENCE);
-    FieldEffectManager_FreeTexResource(renderer->manager, OV01_021FFC0C_TEXTURE);
-    FieldEffectManager_ReleaseRecord(renderer->manager, OV01_021FFC0C_RECORD);
+void UnusedBillboard_FreeGfx(UnusedBillboard *renderer) {
+    FieldEffectManager_FreeBillboardResource(renderer->manager, UNUSED_BILLBOARD_RESOURCE);
+    FieldEffectManager_FreeBillboardSequence(renderer->manager, UNUSED_BILLBOARD_SEQUENCE);
+    FieldEffectManager_FreeTexResource(renderer->manager, UNUSED_BILLBOARD_TEXTURE);
+    FieldEffectManager_ReleaseRecord(renderer->manager, UNUSED_BILLBOARD_RECORD);
 }
 
-BOOL ov01_021FFCA8(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work) {
+BOOL UnusedBillboardEffect_Init(FieldEffect *effect, UnusedBillboardEffect *work) {
     VecFx32 position;
 
-    work->args = *(UnkOv01_021FFC0C_Args *)FieldEffect_GetUserData(effect);
+    work->args = *(UnusedBillboardEffectArgs *)FieldEffect_GetUserData(effect);
     work->spriteId = MapObject_GetSpriteID(work->args.mapObject);
     work->objectId = MapObject_GetID(work->args.mapObject);
     work->mapId = MapObject_GetMapID(work->args.mapObject);
@@ -101,7 +101,7 @@ BOOL ov01_021FFCA8(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work) {
     position.y -= 2 << 14;
     position.z += 0xD << 12;
     FieldEffect_SetPosition(effect, &position);
-    work->billboard = FieldEffectManager_CreateBillboardFromRecord(work->args.manager, OV01_021FFC0C_RECORD, &position);
+    work->billboard = FieldEffectManager_CreateBillboardFromRecord(work->args.manager, UNUSED_BILLBOARD_RECORD, &position);
     if (MapObject_TestFlagsBits(work->args.mapObject, MAPOBJECTFLAG_VISIBLE) == TRUE) {
         BillboardObject_SetVisible(work->billboard, FALSE);
     }
@@ -112,11 +112,11 @@ BOOL ov01_021FFCA8(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work) {
     return TRUE;
 }
 
-void ov01_021FFD64(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work) {
+void UnusedBillboardEffect_Destroy(FieldEffect *effect, UnusedBillboardEffect *work) {
     BillboardObject_Delete(work->billboard);
 }
 
-void ov01_021FFD70(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work) {
+void UnusedBillboardEffect_Update(FieldEffect *effect, UnusedBillboardEffect *work) {
     struct {
         VecFx32 target;
         VecFx32 current;
@@ -175,7 +175,7 @@ void ov01_021FFD70(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work) {
     }
 }
 
-void ov01_021FFE98(FieldEffect *effect, UnkOv01_021FFC0C_Effect *work) {
+void UnusedBillboardEffect_Draw(FieldEffect *effect, UnusedBillboardEffect *work) {
     VecFx32 position;
 
     if (!MapObject_CheckIDAndMap(work->args.mapObject, work->objectId, work->mapId)) {

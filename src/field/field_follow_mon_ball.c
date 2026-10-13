@@ -92,10 +92,10 @@ int FollowMonBall_GetPullStep(u32 direction);
 // effect templates (kinds 3, 0, 1, 2) and the white palette (.data).
 extern const VecFx32 sFollowMonBallRecallScale;
 extern const VecFx32 sFollowMonBallRecallWhiteScale;
-extern const FieldEffectBasicTemplate ov01_022094C8;
-extern const FieldEffectBasicTemplate ov01_022094DC;
-extern const FieldEffectBasicTemplate ov01_022094F0;
-extern const FieldEffectBasicTemplate ov01_02209504;
+extern const FieldEffectBasicTemplate sFollowMonBallRecallTemplate;
+extern const FieldEffectBasicTemplate sFollowMonBallReleaseTemplate;
+extern const FieldEffectBasicTemplate sFollowMonBallRecallWhiteTemplate;
+extern const FieldEffectBasicTemplate sFollowMonBallBurstTemplate;
 extern u8 sFollowMonWhitePalette[];
 
 FollowMonBall *FollowMonBall_New(FieldEffectManager *manager) {
@@ -148,15 +148,15 @@ FieldEffect *FollowMonBall_Spawn(LocalMapObject *mapObject, int kind) {
     MapObject_CopyPositionVector(mapObject, &position);
     priority = MapObject_GetPriorityPlusValue(mapObject, 2);
     if (kind == 0) {
-        return FieldEffectManager_CreateEffect(manager, &ov01_022094DC, &position, 1, &args, priority);
+        return FieldEffectManager_CreateEffect(manager, &sFollowMonBallReleaseTemplate, &position, 1, &args, priority);
     }
     if (kind == 1) {
-        return FieldEffectManager_CreateEffect(manager, &ov01_022094F0, &position, 1, &args, priority);
+        return FieldEffectManager_CreateEffect(manager, &sFollowMonBallRecallWhiteTemplate, &position, 1, &args, priority);
     }
     if (kind == 2) {
-        return FieldEffectManager_CreateEffect(manager, &ov01_02209504, &position, 1, &args, priority);
+        return FieldEffectManager_CreateEffect(manager, &sFollowMonBallBurstTemplate, &position, 1, &args, priority);
     }
-    return FieldEffectManager_CreateEffect(manager, &ov01_022094C8, &position, 1, &args, priority);
+    return FieldEffectManager_CreateEffect(manager, &sFollowMonBallRecallTemplate, &position, 1, &args, priority);
 }
 
 BOOL FollowMonBallEffect_InitBurst(FieldEffect *effect, FollowMonBallEffect *work) {

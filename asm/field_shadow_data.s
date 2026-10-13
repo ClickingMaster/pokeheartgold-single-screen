@@ -5,19 +5,19 @@
 	.public sShadowModelFiles
 	.public sMapObjectShadowTemplate
 	.public sShadowAlphaByTimeOfDay
-	.public ov01_02208EC8
-	.public ov01_02208EDC
-	.public ov01_02208EF0
+	.public sFollowMonShadowTemplate
+	.public sFriendShadowTemplate
+	.public sFollowMonShadowDrawRotation
 	.public sShadowDrawRotation
 	.public sShadowScaleByTimeOfDay
 	.public FieldShadowEffect_Destroy
 	.public FieldShadowEffect_Draw
 	.public FieldShadowEffect_Init
 	.public FieldShadowEffect_Update
-	.public ov01_021FD784
-	.public ov01_021FD838
-	.public ov01_021FD92C
-	.public ov01_021FD980
+	.public FieldShadowEffect_InitFollowMon
+	.public FieldShadowEffect_DrawFollowMon
+	.public FieldShadowEffect_UpdateFriendShadow
+	.public FieldShadowEffect_DrawFriendShadow
 
 	.text
 
@@ -40,21 +40,21 @@ sShadowAlphaByTimeOfDay: ; 0x02208EB4
 	.byte 0x00, 0xE0, 0x00, 0x00, 0x00, 0x20, 0x01, 0x00, 0x00, 0x20, 0x01, 0x00
 	.byte 0x00, 0x80, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
 
-ov01_02208EC8: ; 0x02208EC8
+sFollowMonShadowTemplate: ; 0x02208EC8
 	.word 0x00000020
-	.word ov01_021FD784
+	.word FieldShadowEffect_InitFollowMon
 	.word FieldShadowEffect_Destroy
 	.word FieldShadowEffect_Update
-	.word ov01_021FD838
+	.word FieldShadowEffect_DrawFollowMon
 
-ov01_02208EDC: ; 0x02208EDC
+sFriendShadowTemplate: ; 0x02208EDC
 	.word 0x00000020
 	.word FieldShadowEffect_Init
 	.word FieldShadowEffect_Destroy
-	.word ov01_021FD92C
-	.word ov01_021FD980
+	.word FieldShadowEffect_UpdateFriendShadow
+	.word FieldShadowEffect_DrawFriendShadow
 
-ov01_02208EF0: ; 0x02208EF0
+sFollowMonShadowDrawRotation: ; 0x02208EF0
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x10, 0x00, 0x00

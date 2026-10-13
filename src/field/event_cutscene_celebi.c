@@ -16,7 +16,7 @@
 
 typedef struct CelebiTimeTravelCutsceneTaskData {
     u16 unk0;
-    u8 unk2;
+    u8 swirlTaskDone;
     u8 isSwirlFinished;
     FieldMotionBlur *motionBlur;
     FieldSystem *fieldSystem; // 0x8
@@ -24,30 +24,30 @@ typedef struct CelebiTimeTravelCutsceneTaskData {
     Field3dModel model;       // 0x1C
     Field3DModelAnimation animations[3];
     Field3dObject object3d;
-    s32 unkE0;
+    s32 swirlRotation;
     u16 unkE4;
-    u16 unkE6;
-    u16 unkE8;
+    u16 swirlFrame;
+    u16 swirlDuration;
     u16 perspective;
-    u16 unkEC;
-    u16 unkEE;
-    u8 unkF0;
-    u8 unkF1;
+    u16 swirlTargetPerspective;
+    u16 swirlTaskState;
+    u8 animateModel;
+    u8 drawModel;
     u8 frameTimer;
     u8 unkF3;
 } CelebiTimeTravelCutsceneTaskData;
 
-typedef struct UnkStruct_02253CE0 {
-    u32 unk0;
-    u32 unk4;
-    u16 unk8;
-} UnkStruct_02253CE0;
+typedef struct CelebiSwirlParams {
+    u32 rotation;
+    u32 duration;
+    u16 perspective;
+} CelebiSwirlParams;
 
 static BOOL Task_CelebiTimeTravelCutscene(TaskManager *taskMan);
 static void CelebiCutscene_StartSwirlTask(CelebiTimeTravelCutsceneTaskData *data);
-static BOOL ov02_022526EC(CelebiTimeTravelCutsceneTaskData *data);
+static BOOL CelebiCutscene_IsSwirlTaskDone(CelebiTimeTravelCutsceneTaskData *data);
 static void Task_CelebiCutsceneSwirl(SysTask *task, void *data);
-static void CelebiCutscene_InitSwirlData(CelebiTimeTravelCutsceneTaskData *a0, UnkStruct_02253CE0 *a1);
+static void CelebiCutscene_InitSwirlData(CelebiTimeTravelCutsceneTaskData *a0, CelebiSwirlParams *a1);
 static BOOL CelebiCutscene_SwirlEffect(CelebiTimeTravelCutsceneTaskData *data);
 static void Task_CelebiCutsceneSwirlEffect(SysTask *task, void *data);
 static BOOL CelebiCutscene_IsSwirlFinished(CelebiTimeTravelCutsceneTaskData *data);
@@ -92,7 +92,7 @@ static BOOL Task_CelebiTimeTravelCutscene(TaskManager *taskMan) {
     case CTT_STATE_2:
         if (IsPaletteFadeFinished()) {
             MapObject_CallDrawUpdate(FollowMon_GetMapObject(data->fieldSystem));
-            data->unkF0 = 1;
+            data->animateModel = 1;
             (*state)++;
         }
         break;
@@ -110,17 +110,17 @@ static BOOL Task_CelebiTimeTravelCutscene(TaskManager *taskMan) {
         }
         break;
     case CTT_STATE_WAIT_UNLOAD_RESOURCES:
-        if (IsPaletteFadeFinished() && ov02_022526EC(data)) {
+        if (IsPaletteFadeFinished() && CelebiCutscene_IsSwirlTaskDone(data)) {
             CelebiCutscene_UnloadResources(data);
             FieldMotionBlur_Stop(&data->motionBlur);
             Heap_Free(data);
             return TRUE;
         }
     }
-    if (data->unkF0) {
+    if (data->animateModel) {
         CelebiCutsceneAnimations_FrameAdvanceAndCheck(&data->animations[0]);
     }
-    if (data->unkF1) {
+    if (data->drawModel) {
         Field3dObject_Draw(&data->object3d);
     }
 
@@ -130,38 +130,38 @@ static BOOL Task_CelebiTimeTravelCutscene(TaskManager *taskMan) {
 static void CelebiCutscene_StartSwirlTask(CelebiTimeTravelCutsceneTaskData *data) {
     data->motionBlur = FieldMotionBlur_Start(3, 13);
     SysTask_CreateOnMainQueue(Task_CelebiCutsceneSwirl, data, 0);
-    data->unk2 = 0;
+    data->swirlTaskDone = 0;
 }
 
-static BOOL ov02_022526EC(CelebiTimeTravelCutsceneTaskData *data) {
-    return data->unk2 != 0;
+static BOOL CelebiCutscene_IsSwirlTaskDone(CelebiTimeTravelCutsceneTaskData *data) {
+    return data->swirlTaskDone != 0;
 }
 
 static void Task_CelebiCutsceneSwirl(SysTask *task, void *_data) {
     CelebiTimeTravelCutsceneTaskData *data = _data;
-    switch (data->unkEE) {
+    switch (data->swirlTaskState) {
     case 0:
-        UnkStruct_02253CE0 unk = { 0xFFFF0000, 0xB4, 0x500 };
-        unk.unk8 = Camera_GetPerspectiveAngle(data->fieldSystem->camera);
+        CelebiSwirlParams unk = { 0xFFFF0000, 0xB4, 0x500 };
+        unk.perspective = Camera_GetPerspectiveAngle(data->fieldSystem->camera);
         CelebiCutscene_InitSwirlData(data, &unk);
-        data->unkEE++;
+        data->swirlTaskState++;
         break;
     case 1:
         if (CelebiCutscene_IsSwirlFinished(data)) {
-            data->unk2 = 1;
+            data->swirlTaskDone = 1;
             SysTask_Destroy(task);
         }
     }
 }
 
-static void CelebiCutscene_InitSwirlData(CelebiTimeTravelCutsceneTaskData *data, UnkStruct_02253CE0 *a1) {
+static void CelebiCutscene_InitSwirlData(CelebiTimeTravelCutsceneTaskData *data, CelebiSwirlParams *a1) {
     data->isSwirlFinished = FALSE;
-    data->unkE6 = 0;
-    data->unkE0 = a1->unk0;
+    data->swirlFrame = 0;
+    data->swirlRotation = a1->rotation;
     data->unkE4 = data->unk0;
     data->perspective = Camera_GetPerspectiveAngle(data->fieldSystem->camera);
-    data->unkEC = a1->unk8;
-    data->unkE8 = a1->unk4;
+    data->swirlTargetPerspective = a1->perspective;
+    data->swirlDuration = a1->duration;
     SysTask_CreateOnMainQueue(Task_CelebiCutsceneSwirlEffect, data, 1);
 }
 
@@ -171,20 +171,20 @@ static BOOL CelebiCutscene_SwirlEffect(CelebiTimeTravelCutsceneTaskData *data) {
     const VecFx32 vec2 = { 0, 0x1000, 0 };
     Camera *camera = data->fieldSystem->camera;
 
-    data->unkE6++;
-    int e6 = data->unkE6;
-    int e8 = data->unkE8;
+    data->swirlFrame++;
+    int e6 = data->swirlFrame;
+    int e8 = data->swirlDuration;
 
-    int angle = data->unkEC - data->perspective;
+    int angle = data->swirlTargetPerspective - data->perspective;
     angle *= e6;
     angle /= e8;
     angle += data->perspective;
-    u16 index = ((data->unkE0 * e6) / e8) + data->unkE4;
+    u16 index = ((data->swirlRotation * e6) / e8) + data->unkE4;
     MTX_RotZ33(&rotMatrix, FX_SinIdx(index), FX_CosIdx(index));
     MTX_MultVec33(&vec2, &rotMatrix, &vec);
     Camera_SetLookAtCamUp(&vec, camera);
     Camera_SetPerspectiveAngle(angle, camera);
-    return data->unkE6 >= data->unkE8;
+    return data->swirlFrame >= data->swirlDuration;
 }
 
 static void Task_CelebiCutsceneSwirlEffect(SysTask *task, void *_data) {
@@ -216,7 +216,7 @@ static void CelebiCutscene_LoadResources(CelebiTimeTravelCutsceneTaskData *data)
     VecFx32 pos;
     MapObject_CopyPositionVector(followMonObj, &pos);
     Field3dObject_SetPosEx(&data->object3d, pos.x, pos.y, pos.z);
-    data->unkF1 = 1;
+    data->drawModel = 1;
 }
 
 static void CelebiCutscene_UnloadResources(CelebiTimeTravelCutsceneTaskData *data) {

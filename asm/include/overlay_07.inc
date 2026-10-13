@@ -188,9 +188,9 @@
 .public _u32_div_f
 .public FX_SinCosTable_
 .public gSystem
-.public ov06_0221BA40
-.public ov06_0221BA88
-.public ov06_0221BAD8
+.public BattleParticleSystem_New
+.public BattleParticleSystem_NewSmallHeap
+.public BattleParticleSystem_Free
 .public BattleAnimSystem_New
 .public BattleAnimSystem_Delete
 .public BattleAnimSystem_StartMove
@@ -230,7 +230,7 @@
 .public BattleAnimEmitter_Start
 .public BattleAnimEmitter_IsActive
 .public BattleAnimUtil_RestorePic
-.public ov07_02234A20
+.public BattleAnimUtil_LoadSubstituteIntoPic
 .public ov07_02234B5C
 .public ov07_022377DC
 .public ov07_022377F4

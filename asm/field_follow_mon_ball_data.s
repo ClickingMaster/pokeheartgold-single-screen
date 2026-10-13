@@ -4,10 +4,10 @@
 
 	.public sFollowMonBallRecallScale
 	.public sFollowMonBallRecallWhiteScale
-	.public ov01_022094C8
-	.public ov01_022094DC
-	.public ov01_022094F0
-	.public ov01_02209504
+	.public sFollowMonBallRecallTemplate
+	.public sFollowMonBallReleaseTemplate
+	.public sFollowMonBallRecallWhiteTemplate
+	.public sFollowMonBallBurstTemplate
 	.public sFollowMonWhitePalette
 	.public FollowMonBallEffect_Destroy
 	.public FollowMonBallEffect_DrawBall
@@ -30,28 +30,28 @@ sFollowMonBallRecallScale: ; 0x022094B0
 sFollowMonBallRecallWhiteScale: ; 0x022094BC
 	.word 0x1000, 0x1000, 0x1000
 
-ov01_022094C8: ; 0x022094C8
+sFollowMonBallRecallTemplate: ; 0x022094C8
 	.word 0x00000054
 	.word FollowMonBallEffect_InitRecall
 	.word FollowMonBallEffect_Destroy
 	.word FollowMonBallEffect_UpdateRecall
 	.word FollowMonBallEffect_DrawBall
 
-ov01_022094DC: ; 0x022094DC
+sFollowMonBallReleaseTemplate: ; 0x022094DC
 	.word 0x00000054
 	.word FollowMonBallEffect_InitBurst
 	.word FollowMonBallEffect_Destroy
 	.word FollowMonBallEffect_UpdateRelease
 	.word FollowMonBallEffect_DrawRelease
 
-ov01_022094F0: ; 0x022094F0
+sFollowMonBallRecallWhiteTemplate: ; 0x022094F0
 	.word 0x00000054
 	.word FollowMonBallEffect_InitRecallWhite
 	.word FollowMonBallEffect_Destroy
 	.word FollowMonBallEffect_UpdateRecallWhite
 	.word FollowMonBallEffect_DrawBall
 
-ov01_02209504: ; 0x02209504
+sFollowMonBallBurstTemplate: ; 0x02209504
 	.word 0x00000054
 	.word FollowMonBallEffect_InitBurst
 	.word FollowMonBallEffect_Destroy

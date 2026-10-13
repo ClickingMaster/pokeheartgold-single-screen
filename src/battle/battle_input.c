@@ -53,7 +53,7 @@ static void BattleInput_DeletePokemonIconSprites(BattleInput *battleInput);
 static ManagedSprite *BattleInput_SetPokemonIcon(BattleInput *battleInput, Pokemon *pokemon, int battlerType, int hp, int maxHp, int status);
 static ManagedSprite *BattleInput_SetBugContestPokemonIcon(BattleInput *battleInput, Pokemon *pokemon);
 static void Task_AnimatePokemonIconSprite(SysTask *task, void *data);
-static int ov12_022684F8(u8 task);
+static int BattleInput_GetBallGaugeAnimSeq(u8 task);
 static void String_GetFontLength(String *str, u32 fontId, int *lengthOut, int *charLengthOut);
 static void BattleInput_CreateTextObject(BattleInput *battleInput, BattleInputTextObject *textObj, String *str, u32 fontId, int textColor, int palOffset, int palId, int x, int y, int centerText, BattleInputMoveMemory_DisplayObj *param10);
 static void BattleInput_DeleteTextObjects(BattleInput *battleInput);
@@ -65,8 +65,8 @@ static void BattleInput_CreateMoveTypeIcons(BattleInput *battleInput);
 static void BattleInput_DeleteAndFreeTypeIconGraphics(BattleInput *battleInput);
 static void BattleInput_DeleteAndFreeCategoryIconGraphics(BattleInput *battleInput);
 static void BattleInput_LoadMoveTypePalette(BattleInput *battleInput, int moveType, int movePos);
-static void ov12_02268C4C(BattleInput *battleInput, int movePos);
-static void ov12_02268CA0(BattleInput *battleInput, int param1);
+static void BattleInput_SetEmptyMoveButtons(BattleInput *battleInput, int movePos);
+static void BattleInput_SetEmptyTargetButton(BattleInput *battleInput, int param1);
 static void BattleInput_ShowOnlySubBgLayer2(void);
 static void ov12_02268D88(BattleInput *battleInput, int param1, int param2);
 static void BattleInput_FreePersistentResources(BattleInput *battleInput);
@@ -76,7 +76,7 @@ static void BattleInput_StartFeedbackTask(SysTaskFunc task, BattleInput *battleI
 static void BattleInput_DestroyFeedbackTask(BattleInput *battleInput);
 static void BattleInput_Deadstriped_02268EDC(BattleInput *battleInput, int touchInput);
 static void BattleInput_Deadstriped_02268EE0(BattleInput *battleInput, int unused);
-static void ov12_02268EE4(BattleInput *battleInput, const s16 *offsets, const TouchscreenHitbox *hitbox, int bufferIndex, int offsetIndex);
+static void BattleInput_CopyButtonTilemap(BattleInput *battleInput, const s16 *offsets, const TouchscreenHitbox *hitbox, int bufferIndex, int offsetIndex);
 static void Task_ButtonFeedback(SysTask *task, void *data);
 static void Task_FightMenuButtonFeedback(SysTask *task, void *data);
 static void Task_TargetMenuButtonFeedback(SysTask *task, void *data);
@@ -1655,10 +1655,10 @@ void BattleInput_SetPartyExpPercents(BattleInput *battleInput, u8 *percentExpToN
 
 void BattleInput_UpdateBallGaugeAnimation(BattleInput *battleInput, u8 *a1, u8 *a2) {
     for (int i = 0; i < 6; i++) {
-        Sprite_SetAnimCtrlSeq(battleInput->spriteBallGauge[i]->sprite, ov12_022684F8(a1[i]));
+        Sprite_SetAnimCtrlSeq(battleInput->spriteBallGauge[i]->sprite, BattleInput_GetBallGaugeAnimSeq(a1[i]));
         Sprite_TickFrame(battleInput->spriteBallGauge[i]->sprite);
 
-        Sprite_SetAnimCtrlSeq(battleInput->spriteBallGaugeOpponent[i]->sprite, ov12_022684F8(a2[i]));
+        Sprite_SetAnimCtrlSeq(battleInput->spriteBallGaugeOpponent[i]->sprite, BattleInput_GetBallGaugeAnimSeq(a2[i]));
         Sprite_TickFrame(battleInput->spriteBallGaugeOpponent[i]->sprite);
     }
 }
@@ -1757,7 +1757,7 @@ BOOL BattleInput_CheckFeedbackDone(BattleInput *battleInput) {
     return FALSE;
 }
 
-int ov12_02266C84(int moveRange, int battlerId) {
+int BattleInput_GetTargetSelectionType(int moveRange, int battlerId) {
     switch (moveRange) {
     case 0:
         return (battlerId == 4) ? 9 : 8;
@@ -2078,7 +2078,7 @@ static void BattleInput_CreateFightMenuObjects(BattleInput *battleInput, int par
             moveType = GetMoveAttr(fightMenu->moveNo[i], MOVEATTR_TYPE);
             BattleInput_LoadMoveTypePalette(battleInput, moveType, i);
         } else {
-            ov12_02268C4C(battleInput, i);
+            BattleInput_SetEmptyMoveButtons(battleInput, i);
             break;
         }
     }
@@ -2298,7 +2298,7 @@ static void BattleInput_CreateTargetMenuObjects(BattleInput *battleInput, int pa
             }
         } else {
             if (monsHit[i] == 0) {
-                ov12_02268CA0(battleInput, i);
+                BattleInput_SetEmptyTargetButton(battleInput, i);
             }
         }
     }
@@ -2683,7 +2683,7 @@ static void Task_AnimatePokemonIconSprite(SysTask *task, void *data) {
     ManagedSprite_TickFrame((ManagedSprite *)data);
 }
 
-static int ov12_022684F8(u8 task) {
+static int BattleInput_GetBallGaugeAnimSeq(u8 task) {
     int animationState;
 
     switch (task) {
@@ -3025,29 +3025,29 @@ static void BattleInput_DeleteAndFreeCategoryIconGraphics(BattleInput *battleInp
 }
 
 static void BattleInput_LoadMoveTypePalette(BattleInput *battleInput, int moveType, int movePos) {
-    ov06_0221BA1C(BattleSystem_GetPaletteData(battleInput->battleSystem), moveType, HEAP_ID_BATTLE, PLTTBUF_SUB_BG, 8 + movePos);
+    LoadMoveTypePalette(BattleSystem_GetPaletteData(battleInput->battleSystem), moveType, HEAP_ID_BATTLE, PLTTBUF_SUB_BG, 8 + movePos);
 }
 
-static void ov12_02268C4C(BattleInput *battleInput, int movePos) {
+static void BattleInput_SetEmptyMoveButtons(BattleInput *battleInput, int movePos) {
     PaletteData *palette;
     int i;
 
     palette = BattleSystem_GetPaletteData(battleInput->battleSystem);
 
     for (i = movePos; i < 4; i++) {
-        ov12_02268EE4(battleInput, &ov12_0226E258[i], &ov12_0226E2A8[i], 3, 0);
+        BattleInput_CopyButtonTilemap(battleInput, &ov12_0226E258[i], &ov12_0226E2A8[i], 3, 0);
         PaletteData_LoadPalette(palette, &battleInput->paletteBuffer[14 * 16], PLTTBUF_SUB_BG, (8 + i) * 16, 0x20);
     }
 }
 
-static void ov12_02268CA0(BattleInput *battleInput, int textObjId) {
+static void BattleInput_SetEmptyTargetButton(BattleInput *battleInput, int textObjId) {
     PaletteData *palette;
     const u8 paletteNo[] = { 6, 12, 13, 5 };
 
     BgConfig *bgConfig = BattleSystem_GetBgConfig(battleInput->battleSystem);
     palette = BattleSystem_GetPaletteData(battleInput->battleSystem);
 
-    ov12_02268EE4(battleInput, &ov12_0226E238[textObjId], &ov12_0226E2F8[textObjId], 4, 0);
+    BattleInput_CopyButtonTilemap(battleInput, &ov12_0226E238[textObjId], &ov12_0226E2F8[textObjId], 4, 0);
 
     PaletteData_LoadPalette(palette, &battleInput->paletteBuffer[14 * 16], PLTTBUF_SUB_BG, paletteNo[textObjId] * 16, 0x20);
     ScheduleBgTilemapBufferTransfer(bgConfig, 4);
@@ -3151,7 +3151,7 @@ static void BattleInput_Deadstriped_02268EDC(BattleInput *battleInput, int touch
 static void BattleInput_Deadstriped_02268EE0(BattleInput *battleInput, int unused) {
 }
 
-static void ov12_02268EE4(BattleInput *battleInput, const s16 *offsets, const TouchscreenHitbox *hitbox, int bufferIndex, int offsetIndex) {
+static void BattleInput_CopyButtonTilemap(BattleInput *battleInput, const s16 *offsets, const TouchscreenHitbox *hitbox, int bufferIndex, int offsetIndex) {
     int x, y;
     BgConfig *bgConfig;
     u16 *src, *dest;
@@ -3183,7 +3183,7 @@ static void Task_ButtonFeedback(SysTask *task, void *data) {
     switch (battleInput->feedback.state) {
     case 0:
         // Button down
-        ov12_02268EE4(battleInput, battleInput->feedback.button.screenOffsets, battleInput->feedback.button.touchscreenHitbox, battleInput->feedback.button.unk10, 2);
+        BattleInput_CopyButtonTilemap(battleInput, battleInput->feedback.button.screenOffsets, battleInput->feedback.button.touchscreenHitbox, battleInput->feedback.button.unk10, 2);
         TextOBJ_GetPosition(battleInput->textObj[battleInput->feedback.button.textObjId].textObj, &x, &y);
         TextOBJ_SetPosition(battleInput->textObj[battleInput->feedback.button.textObjId].textObj, x, y - 2);
 
@@ -3206,7 +3206,7 @@ static void Task_ButtonFeedback(SysTask *task, void *data) {
         // fallthrough
     case 2:
         // Button up
-        ov12_02268EE4(battleInput, battleInput->feedback.button.screenOffsets, battleInput->feedback.button.touchscreenHitbox, battleInput->feedback.button.unk10, 1);
+        BattleInput_CopyButtonTilemap(battleInput, battleInput->feedback.button.screenOffsets, battleInput->feedback.button.touchscreenHitbox, battleInput->feedback.button.unk10, 1);
         TextOBJ_GetPosition(battleInput->textObj[battleInput->feedback.button.textObjId].textObj, &x, &y);
         TextOBJ_SetPosition(battleInput->textObj[battleInput->feedback.button.textObjId].textObj, x, y + 1);
 
@@ -3281,7 +3281,7 @@ static void Task_FightMenuButtonFeedback(SysTask *task, void *data) {
 
     switch (battleInput->feedback.state) {
     case 0:
-        ov12_02268EE4(battleInput, battleInput->feedback.button.screenOffsets, battleInput->feedback.button.touchscreenHitbox, battleInput->feedback.button.unk10, 2);
+        BattleInput_CopyButtonTilemap(battleInput, battleInput->feedback.button.screenOffsets, battleInput->feedback.button.touchscreenHitbox, battleInput->feedback.button.unk10, 2);
 
         if (battleInput->feedback.button.ret != BATTLE_INPUT_CANCEL) {
             TextOBJ_GetPosition(battleInput->textObj[moveTextObjId].textObj, &x, &y);
@@ -3315,7 +3315,7 @@ static void Task_FightMenuButtonFeedback(SysTask *task, void *data) {
         battleInput->feedback.delay = 0;
         battleInput->feedback.state++;
     case 2:
-        ov12_02268EE4(battleInput, battleInput->feedback.button.screenOffsets, battleInput->feedback.button.touchscreenHitbox, battleInput->feedback.button.unk10, 1);
+        BattleInput_CopyButtonTilemap(battleInput, battleInput->feedback.button.screenOffsets, battleInput->feedback.button.touchscreenHitbox, battleInput->feedback.button.unk10, 1);
 
         if (battleInput->feedback.button.ret != 0xff) {
             TextOBJ_GetPosition(battleInput->textObj[moveTextObjId].textObj, &x, &y);
@@ -3343,7 +3343,7 @@ static void Task_FightMenuButtonFeedback(SysTask *task, void *data) {
         battleInput->feedback.delay++;
 
         if (battleInput->feedback.delay > 0) {
-            ov12_02268EE4(battleInput, battleInput->feedback.unkBugContest.unk4, battleInput->feedback.unkBugContest.unk8, battleInput->feedback.button.unk10, 0);
+            BattleInput_CopyButtonTilemap(battleInput, battleInput->feedback.unkBugContest.unk4, battleInput->feedback.unkBugContest.unk8, battleInput->feedback.button.unk10, 0);
             ov12_02268D88(battleInput, 1, 1);
             BattleInput_DestroyFeedbackTask(battleInput);
             return;
@@ -3366,7 +3366,7 @@ static void Task_TargetMenuButtonFeedback(SysTask *task, void *data) {
 
         for (i = 0; i < 4; i++) {
             if (v4[i] == 1) {
-                ov12_02268EE4(battleInput, sTargetMenuButtonsScreenOffsets[i], &ov12_0226E348[i], 4, 2);
+                BattleInput_CopyButtonTilemap(battleInput, sTargetMenuButtonsScreenOffsets[i], &ov12_0226E348[i], 4, 2);
 
                 if (battleInput->textObj[0 + i].textObj != 0) {
                     TextOBJ_GetPosition(battleInput->textObj[0 + i].textObj, &x, &y);
@@ -3395,7 +3395,7 @@ static void Task_TargetMenuButtonFeedback(SysTask *task, void *data) {
 
         for (i = 0; i < 4; i++) {
             if (v4[i] == 1) {
-                ov12_02268EE4(battleInput, sTargetMenuButtonsScreenOffsets[i], &ov12_0226E348[i], 4, 1);
+                BattleInput_CopyButtonTilemap(battleInput, sTargetMenuButtonsScreenOffsets[i], &ov12_0226E348[i], 4, 1);
 
                 if (battleInput->textObj[0 + i].textObj != 0) {
                     TextOBJ_GetPosition(battleInput->textObj[0 + i].textObj, &x, &y);

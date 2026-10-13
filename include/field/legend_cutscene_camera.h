@@ -9,7 +9,7 @@ void LegendCutscene_BeginClearBellAnim(FieldSystem *fieldSystem);
 void LegendCutscene_EndClearBellAnim(FieldSystem *fieldSystem);
 void LegendCutscene_ClearBellRiseFromBag(FieldSystem *fieldSystem);
 void LegendCutscene_ClearBellShimmer(FieldSystem *fieldSystem, u8 shimmerClearBellOnly);
-void ov02_02250B30(FieldSystem *fieldSystem);
+void LegendCutscene_StartUnusedHoOhAnim(FieldSystem *fieldSystem);
 void LegendCutscene_LugiaEyeGlimmerEffect(FieldSystem *fieldSystem);
 void LegendCutscene_MoveCamera(FieldSystem *fieldSystem, u8 destIndex);
 void LegendCutscene_StartPanCameraTo(FieldSystem *fieldSystem, u8 destIndex);

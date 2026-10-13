@@ -56,8 +56,8 @@ gFieldEffectRenderers: ; 0x02208C5C
 	.word 0x0000000A, ShallowWaterRipple_New, ShallowWaterRipple_Free
 	.word 0x0000000B, GroundDust_New, GroundDust_Free
 	.word 0x0000000C, VeryTallGrass_New, VeryTallGrass_Free
-	.word 0x0000000D, ov01_021FFC0C, ov01_021FFC28
-	.word 0x0000000E, ov01_021FFECC, ov01_021FFEE8
+	.word 0x0000000D, UnusedBillboard_New, UnusedBillboard_Free
+	.word 0x0000000E, HiddenObjectCover_New, HiddenObjectCover_Free
 	.word 0x0000000F, TrainerReveal_New, TrainerReveal_Free
 	.word 0x00000010, ApricornRegrowth_New, ApricornRegrowth_Free
 	.word 0x00000011, FollowMonBall_New, FollowMonBall_Free

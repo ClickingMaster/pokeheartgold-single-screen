@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "ea29187e7696858f1ffb438b5bd451682d4f540b",
+  "commit": "6be3e3cfd9e7075a1ff0b792db269184360dea5c",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "37e54226d96dd3ca531cc1f5ab3817d35780729118ea42069cf2aae3487e4377",
+    "ARM9": "36098e18f51567967c0dc38382601b2980c674dea8b0bab8476e024832e0547c",
     "ARM7": "d726d92f810e881692e1b4d2ec232d6ca89b38985dcb26b08751c0037036d92a"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -6349,6 +6349,14 @@
     {
       "cpu": "ARM9",
       "module": "field",
+      "object": "field_hidden_object_cover.o",
+      "bytes": 362,
+      "status": "c",
+      "source": "src/field/field_hidden_object_cover.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "field",
       "object": "field_model_attributes.o",
       "bytes": 696,
       "status": "c",
@@ -6617,14 +6625,6 @@
       "bytes": 2068,
       "status": "c",
       "source": "src/field/map_prop_render.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "overlay_01_021FFECC.o",
-      "bytes": 362,
-      "status": "c",
-      "source": "src/field/overlay_01_021FFECC.c"
     },
     {
       "cpu": "ARM9",

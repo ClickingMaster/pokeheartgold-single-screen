@@ -225,7 +225,7 @@ void AICmd_LoadAbility(BattleSystem *battleSystem, BattleContext *ctx);
 
 extern const AICommandFunc sAICommandTable[];
 
-void ov10_0221BE20(BattleSystem *battleSystem, BattleContext *ctx, u8 battlerID, u8 initScore) {
+void TrainerAI_Init(BattleSystem *battleSystem, BattleContext *ctx, u8 battlerID, u8 initScore) {
     int i;
     u8 invalidMoves;
 
@@ -266,7 +266,7 @@ void ov10_0221BE20(BattleSystem *battleSystem, BattleContext *ctx, u8 battlerID,
     }
 }
 
-u8 ov10_0221BEF4(BattleSystem *battleSystem, u8 battlerID) {
+u8 TrainerAI_SelectMove(BattleSystem *battleSystem, u8 battlerID) {
     u8 ret;
     BattleContext *ctx = battleSystem->ctx;
 
@@ -274,7 +274,7 @@ u8 ov10_0221BEF4(BattleSystem *battleSystem, u8 battlerID) {
         ctx->trainerAIData.attacker = battlerID;
         ctx->trainerAIData.defender = Battler_GetRandomOpposingBattlerId(battleSystem, ctx, battlerID);
 
-        ov10_0221BE20(battleSystem, ctx, ctx->trainerAIData.attacker, AI_INIT_SCORE_ALL_MOVES);
+        TrainerAI_Init(battleSystem, ctx, ctx->trainerAIData.attacker, AI_INIT_SCORE_ALL_MOVES);
     }
 
     if ((battleSystem->battleType & BATTLE_TYPE_DOUBLES) == FALSE) {
@@ -359,7 +359,7 @@ static u8 TrainerAI_MainDoubles(BattleSystem *battleSystem, BattleContext *ctx) 
             continue;
         }
 
-        ov10_0221BE20(battleSystem, ctx, ctx->trainerAIData.attacker, AI_INIT_SCORE_ALL_MOVES);
+        TrainerAI_Init(battleSystem, ctx, ctx->trainerAIData.attacker, AI_INIT_SCORE_ALL_MOVES);
 
         // Record the last moves of enemy battlers.
         ctx->trainerAIData.defender = battlerID;
@@ -3864,7 +3864,7 @@ static BOOL TrainerAI_ShouldSwitch(BattleSystem *battleSystem, BattleContext *ct
     return FALSE;
 }
 
-int ov10_022205BC(BattleSystem *battleSystem, int battler) {
+int TrainerAI_SelectCommand(BattleSystem *battleSystem, int battler) {
     // must declare C89-style to match
     int i;
     u8 battler1, battler2;

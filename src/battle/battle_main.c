@@ -917,7 +917,7 @@ void Task_DrawBattleGraphics(SysTask *task, void *data) {
     sub_020399FC(5, battleSystem->bgConfig);
     if (battleSystem->unk23FD == 0 || battleSystem->unk23FD == 3) {
         if (battleSystem->unk23FD == 0) {
-            ov06_0221BAF0();
+            BattleParticleSystem_DrawAll();
         }
         PokepicManager_DrawAll(battleSystem->pokepicManager);
         SpriteSystem_DrawSprites(battleSystem->gfxHandler);

@@ -694,7 +694,7 @@ void BattleAnimScriptCmd_ChangeBattlerPic(BattleAnimSystem *system) {
     system->scriptPtr++;
     BattleAnimSystem_BuildBattlerPicParams(system, &params, mode);
     if (mode == 2) {
-        ov07_02234A20(&params, system->heapId);
+        BattleAnimUtil_LoadSubstituteIntoPic(&params, system->heapId);
     } else if (mode == 3) {
         BattleAnimUtil_LoadMonIntoPicOppositeFacing(&params, system->heapId);
     } else {
@@ -3193,14 +3193,14 @@ void BattleAnimEmitterCb_None(SPLEmitter *emitter) {
 }
 
 SPLEmitter *BattleAnimSystem_NewParticleSystem(enum HeapID heapId, int resId, BOOL loadNow) {
-    SPLEmitter *particleSystem = ov06_0221BA40(heapId);
+    SPLEmitter *particleSystem = BattleParticleSystem_New(heapId);
     void *resource = ParticleSystem_LoadResourceFile(NARC_a_0_2_9, resId, heapId);
     ParticleSystem_SetResource(particleSystem, resource, 10, loadNow);
     return particleSystem;
 }
 
 SPLEmitter *BattleAnimSystem_NewParticleSystemFromNarc(enum HeapID heapId, NarcId narcId, int resId, BOOL loadNow) {
-    SPLEmitter *particleSystem = ov06_0221BA40(heapId);
+    SPLEmitter *particleSystem = BattleParticleSystem_New(heapId);
     void *resource = ParticleSystem_LoadResourceFile(narcId, resId, heapId);
     ParticleSystem_SetResource(particleSystem, resource, 10, loadNow);
     return particleSystem;
@@ -3211,7 +3211,7 @@ void *BattleAnimSystem_ReadNarcMember(NARC *narc, int member, enum HeapID heapId
 }
 
 SPLEmitter *BattleAnimSystem_NewParticleSystemFromOpenNarc(NARC *narc, enum HeapID heapId, int member, BOOL loadNow) {
-    SPLEmitter *particleSystem = ov06_0221BA88(heapId);
+    SPLEmitter *particleSystem = BattleParticleSystem_NewSmallHeap(heapId);
     void *resource;
     if (particleSystem == NULL) {
         return NULL;
@@ -3227,7 +3227,7 @@ SPLEmitter *BattleAnimSystem_CreateEmitter(SPLEmitter *particleSystem, int resId
 }
 
 void BattleAnimSystem_FreeParticleSystem(SPLEmitter *particleSystem) {
-    ov06_0221BAD8(particleSystem);
+    BattleParticleSystem_Free(particleSystem);
 }
 
 #pragma force_active on

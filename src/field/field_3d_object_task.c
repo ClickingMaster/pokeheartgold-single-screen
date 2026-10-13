@@ -7,7 +7,7 @@
 static void Task_Field3dObject_Update(SysTask *task, void *taskdata);
 static void Task_Field3dObject_Render(SysTask *task, void *taskData);
 
-const OverlayManagerTemplate ov01_02206378 = {
+const OverlayManagerTemplate gOverlayTemplate_FieldMap = {
     .init = FieldMap_Init,
     .exec = FieldMap_Main,
     .exit = FieldMap_Exit,

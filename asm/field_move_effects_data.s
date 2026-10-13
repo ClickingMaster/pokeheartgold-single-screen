@@ -1380,9 +1380,9 @@
 	.public Roamers_GetActiveRoamerBySpecies
 	.public ElevatorAnimCreate
 	.public ElevatorAnimRun
-	.public ov02_0224BF58
-	.public ov02_0224BFC0
-	.public ov02_0224BFCC
+	.public PCProp_LoadAnimations
+	.public PCProp_PlayPowerOnAnimation
+	.public PCProp_PlayPowerOffAnimation
 	.public FieldEscapeRope_SpinStart
 	.public FieldEscapeRope_SpinAndFadeOut
 	.public FieldEscapeRope_WaitFadeOut
@@ -1504,7 +1504,7 @@
 	.public FieldSystem_CanPlaceSafariObject
 	.public SafariZone_CanPlaceObjectOnLand
 	.public SafariZone_CanPlaceObjectOnWater
-	.public ov02_0224E640
+	.public SafariZone_IsWaterObjectPlacementUnlocked
 	.public FieldSystem_CheckSafariObjectPlacement
 	.public FieldSystem_GetFacingSafariObject
 	.public SafariZone_FindSpotFor1x2Object
@@ -1595,7 +1595,7 @@
 	.public sFieldMoveCutInSteps
 	.public sFieldMoveCutInFlySteps
 	.public sCutInScrollSpriteTemplates
-	.public ov02_022536E8
+	.public sPCPropModels
 	.public sFieldMoveArrivalSteps
 	.public sEscapeRopeSteps
 	.public sDigWithFollowMonSteps
@@ -1704,8 +1704,8 @@
 	.public FieldMoveCutIn_DestroyTrainerClipEffect
 	.public CutInModelEffect_Destroy
 	.public CutInModelEffect_Draw
-	.public ov02_0224BFC0
-	.public ov02_0224BFCC
+	.public PCProp_PlayPowerOnAnimation
+	.public PCProp_PlayPowerOffAnimation
 	.public FieldEscapeRope_Warp
 	.public FieldMoveTask_CreateArrivalEnvironment
 	.public FieldMove_WaitCutIn
@@ -1998,7 +1998,7 @@ sCutInScrollSpriteTemplates: ; 0x022535E4
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0xD0, 0x0D, 0x00, 0x00, 0xC0, 0x07, 0x00, 0x00, 0x80, 0x01, 0x00
 	.byte 0x80, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-ov02_022536E8: ; 0x022536E8
+sPCPropModels: ; 0x022536E8
 	.byte 0x21, 0x00, 0x00, 0x00, 0x8A, 0x00, 0x00, 0x00
 
 sFieldMoveArrivalSteps: ; 0x022536F0

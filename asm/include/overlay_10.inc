@@ -8,9 +8,9 @@
 .public Party_GetMonByIndex
 .public _s32_div_f
 .public _u32_div_f
-.public ov10_0221BE20
-.public ov10_0221BEF4
-.public ov10_022205BC
+.public TrainerAI_Init
+.public TrainerAI_SelectMove
+.public TrainerAI_SelectCommand
 .public ov10_02220AAC
 .public BattleSystem_GetBattleType
 .public BattleSystem_GetMaxBattlers

@@ -451,7 +451,7 @@
 .public FollowMon_StartFlash
 .public FollowMon_IsNextToPlayer
 .public FieldSystem_GetLeadMonIndex
-.public ov02_02245B80
+.public ShowLighthouseLightUp
 .public ShowTrapEffect
 .public ShowLegendaryWing
 .public ShowHideoutAlarm
@@ -475,9 +475,9 @@
 .public PlayerStepEvent_RepelCounterDecrement
 .public PokecenterAnimCreate
 .public ElevatorAnimCreate
-.public ov02_0224BF58
-.public ov02_0224BFC0
-.public ov02_0224BFCC
+.public PCProp_LoadAnimations
+.public PCProp_PlayPowerOnAnimation
+.public PCProp_PlayPowerOffAnimation
 .public CreateFieldEscapeRopeTaskEnv
 .public Task_FieldEscapeRope
 .public FieldMoveTask_CreateArrivalEnvironment
@@ -513,7 +513,7 @@
 .public LegendCutscene_EndClearBellAnim
 .public LegendCutscene_ClearBellRiseFromBag
 .public LegendCutscene_ClearBellShimmer
-.public ov02_02250B30
+.public LegendCutscene_StartUnusedHoOhAnim
 .public LegendCutscene_LugiaEyeGlimmerEffect
 .public LegendCutscene_MoveCamera
 .public LegendCutscene_StartPanCameraTo
@@ -529,8 +529,8 @@
 .public GearPhoneRingManager_GetCallerParams
 .public GearPhoneRingManager_TryStartCall
 .public GetRadioMusicPlayingSeq
-.public ov02_02252334
-.public ov02_022523B4
+.public FieldSystem_FollowMonShayminNeedsRevert
+.public StartShayminRevertToLandForm
 .public FieldSystem_BeginCelebiTimeTravelCutsceneTask
 .public FieldSystem_BeginSinjohCutsceneTask
 .public FieldSystem_BeginSinjohGetEggCutsceneTask

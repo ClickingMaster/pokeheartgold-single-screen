@@ -50,7 +50,7 @@
 .public CameraFocusObject_Pause
 .public CameraFocusObject_Resume
 .public gResidentBillboardSequenceIds
-.public ov01_02206D00
+.public sSpriteEffectFlags
 .public gCameraFocusObjectDrawCallbacks
 .public gResidentBillboardModelIds
 .public ov01_02207274

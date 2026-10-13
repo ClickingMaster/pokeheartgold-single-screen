@@ -15,15 +15,15 @@
 #include "map_object_movement_commands.h"
 #include "field_effects.h"
 
-typedef struct UnkStruct_022523D0 {
-    int unk0;
+typedef struct ShayminRevertEnv {
+    int timer;
     FieldEffect *formChange;
-    u32 unk8;
-} UnkStruct_022523D0;
+    u32 followMonVisible;
+} ShayminRevertEnv;
 
-static BOOL ov02_022523D0(TaskManager *taskMan);
+static BOOL Task_RevertShayminToLandForm(TaskManager *taskMan);
 
-BOOL ov02_02252334(FieldSystem *fieldSystem) {
+BOOL FieldSystem_FollowMonShayminNeedsRevert(FieldSystem *fieldSystem) {
     if (!MapObject_AreBitsSetForMovementScriptInit(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar))) {
         return FALSE;
     }
@@ -43,16 +43,16 @@ BOOL ov02_02252334(FieldSystem *fieldSystem) {
     return FALSE;
 }
 
-void ov02_022523B4(TaskManager *taskMan) {
-    UnkStruct_022523D0 *data = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(UnkStruct_022523D0));
-    TaskManager_Call(taskMan, ov02_022523D0, data);
+void StartShayminRevertToLandForm(TaskManager *taskMan) {
+    ShayminRevertEnv *data = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(ShayminRevertEnv));
+    TaskManager_Call(taskMan, Task_RevertShayminToLandForm, data);
 }
 
-static BOOL ov02_022523D0(TaskManager *taskMan) {
+static BOOL Task_RevertShayminToLandForm(TaskManager *taskMan) {
     int *state = TaskManager_GetStatePtr(taskMan);
     VecFx32 pos;
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
-    UnkStruct_022523D0 *env = TaskManager_GetEnvironment(taskMan);
+    ShayminRevertEnv *env = TaskManager_GetEnvironment(taskMan);
     switch (*state) {
     case 0:
         MapObject_UnpauseMovement(FollowMon_GetMapObject(fieldSystem));
@@ -69,14 +69,14 @@ static BOOL ov02_022523D0(TaskManager *taskMan) {
             env->formChange = NULL;
             res = 0;
         }
-        env->unk8 = res;
-        env->unk0 = 0;
+        env->followMonVisible = res;
+        env->timer = 0;
         FollowMon_SetObjectParams(fieldSystem->followMon.mapObject, SPECIES_SHAYMIN, 0, fieldSystem->followMon.shiny);
         (*state)++;
         break;
     case 2:
-        if (env->unk8 != 0) {
-            if (++env->unk0 >= 4) {
+        if (env->followMonVisible != 0) {
+            if (++env->timer >= 4) {
                 MapObject_ChangeBillboardSprite(fieldSystem->followMon.mapObject, SPRITE_FOLLOWER_MON_SHAYMIN);
                 (*state)++;
             }

@@ -416,37 +416,37 @@
 	.extern ov07_02232EE0
 	.extern UnkBallData_BallAnimClick
 	.extern UnkBallData_BallAnimFade
-	.extern ov07_02232F80
+	.extern UnkBallData_CaptureStateIdle
 	.extern UnkBallData_CaptureStateThrow
-	.extern ov07_02232F9C
+	.extern UnkBallData_CaptureStateGoToOpen
 	.extern UnkBallData_CaptureStateOpen
-	.extern ov07_02233088
+	.extern UnkBallData_CaptureStateOpenDone
 	.extern UnkBallData_CaptureStateDeflect
-	.extern ov07_022330E0
-	.extern ov07_022330E4
-	.extern ov07_022330F0
+	.extern UnkBallData_CaptureStateDeflectDone
+	.extern UnkBallData_CaptureStateStartFall
+	.extern UnkBallData_CaptureStateGoToFlash
 	.extern UnkBallData_CaptureStateFlash
-	.extern ov07_022331A4
+	.extern UnkBallData_CaptureStateGoToDrop
 	.extern UnkBallData_CaptureStateDrop
 	.extern ov07_02233224
 	.extern UnkBallData_CaptureStateBounce
-	.extern ov07_022332C4
+	.extern UnkBallData_CaptureStateBounceDone
 	.extern UnkBallData_CaptureStateShakeWait
-	.extern ov07_022332E8
+	.extern UnkBallData_CaptureStateGoToShake
 	.extern UnkBallData_CaptureStateShake
-	.extern ov07_0223338C
+	.extern UnkBallData_CaptureStateShakeDone
 	.extern ov07_02233390
 	.extern ov07_0223339C
 	.extern UnkBallData_CaptureStateClick
-	.extern ov07_02233498
+	.extern UnkBallData_CaptureStateClickDone
 	.extern UnkBallData_CaptureStateRestorePalette
-	.extern ov07_02233500
+	.extern UnkBallData_CaptureStateGoToFadeOut
 	.extern UnkBallData_CaptureStateFadeOut
-	.extern ov07_02233590
+	.extern UnkBallData_CaptureStateGoToEnd
 	.extern UnkBallData_CaptureStateEnd
 	.extern UnkBallData_RunCaptureState
 	.extern UnkBallData_RunThrowArc
-	.extern ov07_02233874
+	.extern UnkBallData_ThrowArcAndOpen
 	.extern UnkBallData_OpenInPlace
 	.extern UnkBallData_Wobble
 	.extern UnkBallData_TrackPosition
@@ -1602,7 +1602,7 @@ sUnkBallDataFlashingKinds: ; 0x02237188
 
 sUnkBallDataModeFuncs: ; 0x022371A0
 	.word UnkBallData_RunThrowArc
-	.word ov07_02233874
+	.word UnkBallData_ThrowArcAndOpen
 	.word UnkBallData_Wobble
 	.word UnkBallData_RunCaptureState
 	.word UnkBallData_TrackPosition
@@ -1640,33 +1640,33 @@ sUnkBallDataShakeOffsets: ; 0x02237254
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00
 
 sUnkBallDataCaptureStateFuncs: ; 0x0223729C
-	.word ov07_02232F80
+	.word UnkBallData_CaptureStateIdle
 	.word UnkBallData_CaptureStateThrow
-	.word ov07_02232F9C
+	.word UnkBallData_CaptureStateGoToOpen
 	.word UnkBallData_CaptureStateOpen
-	.word ov07_02233088
+	.word UnkBallData_CaptureStateOpenDone
 	.word UnkBallData_CaptureStateDeflect
-	.word ov07_022330E0
-	.word ov07_022330E4
-	.word ov07_022330F0
+	.word UnkBallData_CaptureStateDeflectDone
+	.word UnkBallData_CaptureStateStartFall
+	.word UnkBallData_CaptureStateGoToFlash
 	.word UnkBallData_CaptureStateFlash
-	.word ov07_022331A4
+	.word UnkBallData_CaptureStateGoToDrop
 	.word UnkBallData_CaptureStateDrop
 	.word ov07_02233224
 	.word UnkBallData_CaptureStateBounce
-	.word ov07_022332C4
+	.word UnkBallData_CaptureStateBounceDone
 	.word UnkBallData_CaptureStateShakeWait
-	.word ov07_022332E8
+	.word UnkBallData_CaptureStateGoToShake
 	.word UnkBallData_CaptureStateShake
-	.word ov07_0223338C
+	.word UnkBallData_CaptureStateShakeDone
 	.word ov07_02233390
 	.word ov07_0223339C
 	.word UnkBallData_CaptureStateClick
-	.word ov07_02233498
+	.word UnkBallData_CaptureStateClickDone
 	.word UnkBallData_CaptureStateRestorePalette
-	.word ov07_02233500
+	.word UnkBallData_CaptureStateGoToFadeOut
 	.word UnkBallData_CaptureStateFadeOut
-	.word ov07_02233590
+	.word UnkBallData_CaptureStateGoToEnd
 	.word UnkBallData_CaptureStateEnd
 
 ov07_0223730C:
