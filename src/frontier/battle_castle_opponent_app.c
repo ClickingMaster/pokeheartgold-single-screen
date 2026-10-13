@@ -213,7 +213,7 @@ typedef struct BattleCastleOpponentApp {
     u8 linkLevelChange;                          // 0x012 (level change of the pending link action)
     u8 action;                                   // 0x013 (CASTLE_OPP_ACTION_*)
     u8 numMons;                                  // 0x014 (3, or 4 for the link challenge)
-    u8 unk_015;                                  // 0x015 (4; grid positions from here on are the EXIT button / partner's slots)
+    u8 numOwnSlots;                                  // 0x015 (4; grid positions from here on are the EXIT button / partner's slots)
     u8 timer;                                    // 0x016
     u8 linkRecvCount;                            // 0x017 (incremented by the link receive callbacks)
     u8 unk_018[8];                               // 0x018
@@ -230,8 +230,8 @@ typedef struct BattleCastleOpponentApp {
     MessagePrinter *msgPrinter;                  // 0x2B4
     Options *options;                            // 0x2B8
     SaveData *saveData;                          // 0x2BC
-    void *unk_2C0;                               // 0x2C0 (Save_Frontier_GetCastleChallenge)
-    u32 unk_2C4;                                 // 0x2C4 (Save_Frontier_GetCastleFlags)
+    void *castleChallenge;                               // 0x2C0 (Save_Frontier_GetCastleChallenge)
+    u32 castleFlags;                                 // 0x2C4 (Save_Frontier_GetCastleFlags)
     BattleCastleSpriteGfx spriteGfx;             // 0x2C8
     BattleCastleSprite *monIcons[4];             // 0x4E4
     BattleCastleSprite *hiddenMonIcons[4];       // 0x4F4 (shown until the mon is checked)
@@ -492,8 +492,8 @@ BOOL BattleCastleOpponentApp_Init(OverlayManager *manager, int *state) {
     app->manager = manager;
     args = OverlayManager_GetArgs(manager);
     app->saveData = args->saveData;
-    app->unk_2C0 = Save_Frontier_GetCastleChallenge(app->saveData);
-    app->unk_2C4 = Save_Frontier_GetCastleFlags(app->saveData);
+    app->castleChallenge = Save_Frontier_GetCastleChallenge(app->saveData);
+    app->castleFlags = Save_Frontier_GetCastleFlags(app->saveData);
     app->frontierType = args->frontierType;
     app->selectionOut = &args->selection;
     app->options = Save_PlayerData_GetOptionsAddr(app->saveData);
@@ -509,8 +509,8 @@ BOOL BattleCastleOpponentApp_Init(OverlayManager *manager, int *state) {
         app->partnerRanks[i] = 1;
     }
     app->numMons = BattleCastle_IsMultiType(app->frontierType) == FALSE ? 3 : 4;
-    app->unk_015 = 4;
-    app->prevCursorPos = app->unk_015 - 1;
+    app->numOwnSlots = 4;
+    app->prevCursorPos = app->numOwnSlots - 1;
     app->partnerCursorPos = 0;
     BattleCastleOpponentApp_InitGraphics(app);
     if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
@@ -699,7 +699,7 @@ BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app) {
             PlaySE(SEQ_SE_DP_SELECT);
             return TRUE;
         case (u32)GRID_MENU_CANCEL:
-            if (app->cursorPos != app->unk_015) {
+            if (app->cursorPos != app->numOwnSlots) {
                 ov83_02247B04(app->partyGrid);
                 BattleCastleOpponentApp_SetCursorPos(app, CASTLE_OPP_GRID_EXIT, app->cursorPos);
             }
@@ -1076,7 +1076,7 @@ BOOL BattleCastleOpponentApp_LinkAction(BattleCastleOpponentApp *app) {
         }
         break;
     case 2: {
-        int slot = BattleCastle_GetSideSlot(app->unk_015, app->linkSlot);
+        int slot = BattleCastle_GetSideSlot(app->numOwnSlots, app->linkSlot);
         if (BattleCastleOpponentApp_PlayActionEffect(app, slot, app->action) == TRUE) {
             app->timer = 30;
             app->subState++;
@@ -1097,7 +1097,7 @@ BOOL BattleCastleOpponentApp_LinkAction(BattleCastleOpponentApp *app) {
         }
         break;
     case 5: {
-        int slot = BattleCastle_GetSideSlot(app->unk_015, app->linkSlot);
+        int slot = BattleCastle_GetSideSlot(app->numOwnSlots, app->linkSlot);
         if (BattleCastleOpponentApp_FinishLinkAction(app, slot, app->action) == TRUE) {
             LinkSync_ClearPackets();
             LinkSync_Init(HEAP_ID_107);
@@ -1660,7 +1660,7 @@ void BattleCastleOpponentApp_DrawCursor(BattleCastleOpponentApp *app, u32 index,
         seq = 2;
         exitSeq = 17;
     }
-    if (index >= app->unk_015) {
+    if (index >= app->numOwnSlots) {
         BattleCastleSprite_SetAnim(cursor, exitSeq);
         BattleCastleSprite_SetPosition(cursor, 224, 160);
         if (isPartner == FALSE) {
@@ -1671,7 +1671,7 @@ void BattleCastleOpponentApp_DrawCursor(BattleCastleOpponentApp *app, u32 index,
         BattleCastleOpponentApp_GetCursorPos(app, (u32 *)&x, (u32 *)&y, index);
         BattleCastleSprite_SetPosition(cursor, (u16)x, (u16)y);
         if (isPartner == FALSE) {
-            if (app->prevCursorPos >= app->unk_015) {
+            if (app->prevCursorPos >= app->numOwnSlots) {
                 BattleCastleOpponentApp_ShowSummaryPanel(app, TRUE);
             }
             BattleCastleOpponentApp_ShowMonSummary(app, 0);
@@ -1765,7 +1765,7 @@ int BattleCastleOpponentApp_PlayActionEffect(BattleCastleOpponentApp *app, int s
 
 // After a link action: which menu to reopen; TRUE when done
 int BattleCastleOpponentApp_FinishLinkAction(BattleCastleOpponentApp *app, int slot, int action) {
-    u8 ownSlots = app->unk_015;
+    u8 ownSlots = app->numOwnSlots;
     int index = BattleCastle_GetMonIndex(app->numMons, slot);
 
     Party_GetMonByIndex(app->party, index);
@@ -1920,7 +1920,7 @@ void BattleCastleOpponentApp_ReceiveAction(int netId, int unused, u16 *data, Bat
                 app->partnerSlot = 0;
                 return;
             }
-            app->linkSlot = app->partnerSlot + app->unk_015;
+            app->linkSlot = app->partnerSlot + app->numOwnSlots;
             app->linkLevelChange = data[4];
             app->action = data[5];
         } else {
@@ -2091,7 +2091,7 @@ void BattleCastleOpponentApp_ApplyAction(BattleCastleOpponentApp *app, u8 slot, 
     int cost;
 
     PlaySE(SEQ_SE_DP_PIRORIRO2);
-    ownSlots = app->unk_015;
+    ownSlots = app->numOwnSlots;
     index = BattleCastle_GetSideSlot(ownSlots, slot);
     switch (action) {
     case CASTLE_OPP_ACTION_CHECK:
@@ -2236,7 +2236,7 @@ void BattleCastleOpponentApp_UpdateMonIcons(BattleCastleOpponentApp *app) {
 
         if (app->monIcons[i] != NULL) {
             BattleCastleSprite_ChangeAnim(app->monIcons[i], hpState);
-            if (i != BattleCastle_GetMonIndex(app->numMons, app->cursorPos) || app->cursorPos >= app->unk_015) {
+            if (i != BattleCastle_GetMonIndex(app->numMons, app->cursorPos) || app->cursorPos >= app->numOwnSlots) {
                 BattleCastleSprite_SetBounce(app->monIcons[i], 0);
             } else {
                 BattleCastleSprite_SetBounce(app->monIcons[i], 1);
@@ -2284,7 +2284,7 @@ void BattleCastleOpponentApp_RankUp(BattleCastleOpponentApp *app, u8 slot, int a
     } else {
         GF_AssertFail();
     }
-    ownSlots = app->unk_015;
+    ownSlots = app->numOwnSlots;
     BattleCastle_GetSideSlot(ownSlots, slot);
     // from here on, slot holds the rank before the purchase
     if (Comm_GetLocalNetId() == 0) {

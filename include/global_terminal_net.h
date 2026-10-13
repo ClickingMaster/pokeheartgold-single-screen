@@ -110,9 +110,9 @@ typedef struct GlobalTerminalNetBoxForm {
     u16 name[20];              // 0x000
     u16 species[30];           // 0x028
     u32 personality[30];       // 0x064
-    u32 unk_DC[30];            // 0x0DC, mon data 7
+    u32 otIds[30];             // 0x0DC, mon data 7
     u32 eggFlags;              // 0x154, bit per slot (mon data 174 == 494)
-    u8 unk_158[30];            // 0x158, mon data 112
+    u8 forms[30];              // 0x158, mon data 112
     u8 wallpaper;              // 0x176
     u8 unk_177;                // 0x177
     u8 unk_178[0x198 - 0x178]; // 0x178
@@ -121,39 +121,39 @@ typedef struct GlobalTerminalNetBoxForm {
 } GlobalTerminalNetBoxForm;    // size 0x19C
 
 typedef struct GlobalTerminalNetPair {
-    u32 unk_00;
-    u32 unk_04;
+    u32 recordId;
+    u32 value;
 } GlobalTerminalNetPair;
 
 // 8-byte header of the rankings request, built from a 0x24-byte source by GlobalTerminalNet_SetRankingsHeader
 typedef struct GlobalTerminalNetRankingsHeader {
-    u8 unk_00;
+    u8 version;
     u8 unk_01;
-    u8 unk_02;
-    u8 unk_03;
-    u16 unk_04;
-    u8 unk_06_0 : 1;
+    u8 birthdayMonth;
+    u8 avatar;
+    u16 species;
+    u8 isEgg : 1;
     u8 unk_06_1 : 7;
     u8 unk_07;
 } GlobalTerminalNetRankingsHeader;
 
 typedef struct GlobalTerminalNetRankingsSource {
     u8 unk_00[0x15];
-    u8 unk_15;
-    u8 unk_16;
+    u8 birthdayMonth;
+    u8 avatar;
     u8 unk_17[2];
-    u8 unk_19;
+    u8 version;
     u8 unk_1A;
-    u8 unk_1B_0 : 1;
-    u8 unk_1B_1 : 7;
-    u16 unk_1C;
+    u8 isEgg : 1;
+    u8 form : 7;
+    u16 species;
 } GlobalTerminalNetRankingsSource;
 
 typedef struct GlobalTerminalNetVideoSearch {
-    u16 unk_00;   // 0x00
-    u8 unk_02;    // 0x02
-    u8 unk_03;    // 0x03
-    u8 unk_04;    // 0x04
+    u16 species;  // 0x00
+    u8 facility;  // 0x02
+    u8 country;   // 0x03
+    u8 region;    // 0x04
     u8 unk_05[3]; // 0x05
     u32 unk_08;   // 0x08
     u32 unk_0C;   // 0x0C
@@ -207,7 +207,7 @@ struct GlobalTerminalNet {
 
     u32 requestArgHigh;                         // 0x3B0
     void *responseBuffer;                       // 0x3B4
-    int unk_3B8;                                // 0x3B8
+    int initialized;                            // 0x3B8
     u32 sequence;                               // 0x3BC
     u32 sequenceStep;                           // 0x3C0
     int isRunning;                              // 0x3C4

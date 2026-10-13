@@ -80,7 +80,7 @@ typedef struct BattleBagMenu {
     u8 buttonAnimTimer;
     u8 buttonAnimButton;
     u8 buttonAnimActive : 4;
-    u8 unk_1141_4 : 4;
+    u8 buttonAnimMode : 4;
     u8 filler_1142[8];
     u8 state;
     u8 nextState;
@@ -1561,7 +1561,7 @@ void BattleBagMenu_StartButtonAnim(BattleBagMenu *menu, u8 button, u8 mode) {
     menu->buttonAnimState = 0;
     menu->buttonAnimTimer = 0;
     menu->buttonAnimButton = button;
-    menu->unk_1141_4 = mode;
+    menu->buttonAnimMode = mode;
     menu->buttonAnimActive = TRUE;
 }
 

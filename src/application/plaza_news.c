@@ -37,7 +37,7 @@ typedef union PlazaNewsTime {
 
 typedef struct PlazaNewsArgs {
     void *newsData;
-    const PlazaNewsTime *unk_04;
+    const PlazaNewsTime *time;
     void *lobby;
 } PlazaNewsArgs;
 
@@ -120,7 +120,7 @@ typedef struct PlazaNewsTitleTemplate {
 
 typedef struct PlazaNewsWork {
     void *newsData;
-    const PlazaNewsTime *unk_04;
+    const PlazaNewsTime *time;
     PlazaNewsGraphics graphics;
     PlazaNewsTileset tileset;
     PlazaNewsClock clock;
@@ -220,10 +220,10 @@ BOOL PlazaNews_Init(OverlayManager *man, int *state) {
     work = OverlayManager_CreateAndGetData(man, sizeof(PlazaNewsWork), HEAP_ID_114);
     memset(work, 0, sizeof(PlazaNewsWork));
     work->newsData = args->newsData;
-    work->unk_04 = args->unk_04;
+    work->time = args->time;
     PlazaNewsGraphics_Init(&work->graphics, HEAP_ID_114);
     PlazaNewsTileset_Load(&work->tileset, &work->graphics, HEAP_ID_114);
-    PlazaNewsClock_Init(&work->clock, &work->graphics, &work->tileset, work->newsData, work->unk_04, args->lobby, HEAP_ID_114);
+    PlazaNewsClock_Init(&work->clock, &work->graphics, &work->tileset, work->newsData, work->time, args->lobby, HEAP_ID_114);
     PlazaNewsPeople_Init(&work->people, &work->graphics, &work->tileset, work->newsData, args->lobby, HEAP_ID_114);
     PlazaNewsHeadlines_Init(&work->headlines, &work->graphics, HEAP_ID_114);
     PlazaNewsTitles_Init(&work->titles, &work->graphics, HEAP_ID_114);
@@ -253,7 +253,7 @@ BOOL PlazaNews_Main(OverlayManager *man, u32 *state) {
             }
             *state = 3;
         } else {
-            if (PlazaNewsClock_UpdateTime(&work->clock, work->newsData, work->unk_04) == TRUE) {
+            if (PlazaNewsClock_UpdateTime(&work->clock, work->newsData, work->time) == TRUE) {
                 PlazaNewsTitles_StartFlash(&work->titles, 1);
             }
             if (PlazaNewsPeople_UpdateState(&work->people, work->newsData) == TRUE) {

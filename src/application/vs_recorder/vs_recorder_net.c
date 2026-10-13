@@ -54,20 +54,20 @@ void VsRecorder_InitNet(VsRecorderWork *work) {
 #pragma force_active reset
 
 BOOL VsRecorder_IsNetIdle(VsRecorderWork *work) {
-    if (VsRecorder_NetClient(work)->unk_3B8 == 0) {
+    if (VsRecorder_NetClient(work)->initialized == 0) {
         return FALSE;
     }
     return GlobalTerminalNet_IsIdle(VsRecorder_GetNet(work));
 }
 
 void VsRecorder_UpdateNet(VsRecorderWork *work) {
-    if (VsRecorder_NetClient(work)->unk_3B8 != 0) {
+    if (VsRecorder_NetClient(work)->initialized != 0) {
         GlobalTerminalNet_Update(VsRecorder_GetNet(work));
     }
 }
 
 void VsRecorder_FreeNet(VsRecorderWork *work) {
-    if (VsRecorder_NetClient(work)->unk_3B8 != 0) {
+    if (VsRecorder_NetClient(work)->initialized != 0) {
         GlobalTerminalNet_Free(VsRecorder_GetNet(work));
     }
 }

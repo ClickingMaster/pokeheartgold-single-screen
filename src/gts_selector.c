@@ -95,7 +95,7 @@ struct GtsSelector {
     MsgData *gtsMsgData;        // 0x24
     MsgData *speciesNames;      // 0x28
     MsgData *countryNames;      // 0x2C
-    void *unk_30;               // 0x30
+    void *johtoDexFlags;        // 0x30
     ListMenuItem *listItems;    // 0x34
     MessagePrinter *printer;    // 0x38, of the page numbers
     s16 group;                  // 0x3C, letter group 0..8; -1 none, -2 ANY (countries)
@@ -436,7 +436,7 @@ GtsSelector *GtsSelector_New(GtsSelectorArgs *args, int bgId, int levelRangeKind
     selector->speciesNames = args->speciesNames;
     selector->countryNames = args->countryNames;
     selector->pokedex = args->pokedex;
-    selector->unk_30 = args->unk_2C;
+    selector->johtoDexFlags = args->johtoDexFlags;
     selector->bgId = bgId;
     selector->levelRangeKind = levelRangeKind;
     selector->group = 0;
@@ -1550,7 +1550,7 @@ int GtsSelector_OpenSpeciesList(GtsSelector *selector) {
     BgCellManager_GetCellTilemap(selector->cellManager, 0);
     GtsSelector_AddWindows(selector, GTS_SELECTOR_PAGE_SPECIES_LIST);
     value = selector->letter + ov70_02245E84[selector->group];
-    selector->count = GtsSelector_CreateSpeciesListItems(&selector->listItems, selector->speciesNames, selector->gtsMsgData, selector->unk_30, value, selector->pokedex);
+    selector->count = GtsSelector_CreateSpeciesListItems(&selector->listItems, selector->speciesNames, selector->gtsMsgData, selector->johtoDexFlags, value, selector->pokedex);
     selector->page = 0;
     GtsSelector_PrintListPage(selector, 0, selector->count);
     value = GtsSelector_CountPages(selector->count, 4);
@@ -1983,7 +1983,7 @@ void GtsSelector_PrintPageNumber(BgCellManager *cellManager, MessagePrinter *pri
 int GtsSelector_CountSeenSpeciesOfLetter(GtsSelector *selector, int letter) {
     u32 count;
     u16 *species = Gts_LoadSpeciesByLetter(HEAP_ID_61, letter, &count);
-    int seen = GtsSelector_CountSeenSpecies(selector->unk_30, selector->pokedex, count, species);
+    int seen = GtsSelector_CountSeenSpecies(selector->johtoDexFlags, selector->pokedex, count, species);
     Heap_Free(species);
     return seen;
 }

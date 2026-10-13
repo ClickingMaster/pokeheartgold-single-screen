@@ -47,7 +47,7 @@ typedef struct BattleCastleData {
     u8 unk_374[4];                                            // 0x374
     u8 unk_378[4];                                            // 0x378
     u8 unk_37C[4];                                            // 0x37C
-    u16 unk_380[6];                                           // 0x380
+    u16 selections[6];                                           // 0x380
     u8 filler_38C[8];                                         // 0x38C
     u16 startPP[4][4];                                        // 0x394, PP of each move when the battle started
     u8 filler_3B4[0xC];                                       // 0x3B4

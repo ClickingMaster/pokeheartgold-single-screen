@@ -98,10 +98,10 @@ typedef struct BattleCastlePartyApp {
     BattleCastlePartyAppFlags flags;             // 0x00E
     u8 linkRecvCount;                            // 0x00F (incremented by the link receive callbacks)
     u16 selectedItem;                            // 0x010
-    u8 unk_012;                                  // 0x012 (slot of the pending link action, 0xFF = none)
+    u8 linkSlot;                                  // 0x012 (slot of the pending link action, 0xFF = none)
     u8 action;                                   // 0x013 (menu action id: 1-3 heal, 4/8 rank up, 6/7 rental, 9/10 summary)
     u8 numMons;                                  // 0x014 (3, or 4 for the link challenge)
-    u8 unk_015;                                  // 0x015 (4)
+    u8 numOwnSlots;                                  // 0x015 (4)
     u8 unk_016[6];                               // 0x016
     MsgData *itemDescMsgData;                    // 0x01C (msg_0221)
     MsgData *msgData;                            // 0x020 (msg_0031)
@@ -119,8 +119,8 @@ typedef struct BattleCastlePartyApp {
     MessagePrinter *msgPrinter;                  // 0x504
     Options *options;                            // 0x508
     SaveData *saveData;                          // 0x50C
-    void *unk_510;                               // 0x510 (Save_Frontier_GetCastleChallenge)
-    u32 unk_514;                                 // 0x514 (Save_Frontier_GetCastleFlags)
+    void *castleChallenge;                               // 0x510 (Save_Frontier_GetCastleChallenge)
+    u32 castleFlags;                                 // 0x514 (Save_Frontier_GetCastleFlags)
     BattleCastleSpriteGfx spriteGfx;             // 0x518
     BattleCastleSprite *unk_734;                 // 0x734
     BattleCastleSprite *unk_738;                 // 0x738
@@ -141,8 +141,8 @@ typedef struct BattleCastlePartyApp {
     u16 linkSendBuf[20];                         // 0x7AC (Comm_SendCommand payload, 0x28 bytes)
     u8 unk_7D4[0x28];                            // 0x7D4
     u8 partnerCursorPos;                         // 0x7FC
-    u8 unk_7FD;                                  // 0x7FD
-    u8 unk_7FE;                                  // 0x7FE
+    u8 partnerSlot;                                  // 0x7FD
+    u8 partnerExited;                                  // 0x7FE
     u8 partnerRanks[3];                          // 0x7FF
     u16 partnerPoints;                           // 0x802 (args 0x28)
     BattleCastleMonSummary summary;              // 0x804
@@ -154,7 +154,7 @@ typedef struct BattleCastlePartyApp {
     BattleCastlePrompt yesNoPrompt;              // 0x84C
     u8 unk_858[4];                               // 0x858
     GridInputHandler *itemGrid;                  // 0x85C
-    u8 unk_860;                                  // 0x860
+    u8 rentalItemIndex;                                  // 0x860
     u8 numItems;                                 // 0x861
     s16 itemPage;                                // 0x862 (one piece writes it as u16)
     u16 pressedButton;                           // 0x864

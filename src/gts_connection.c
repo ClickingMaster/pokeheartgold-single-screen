@@ -436,7 +436,7 @@ int GtsConnection_AskDisconnect(GtsApp *app) {
 // Reads a 2D menu that nothing in the GTS creates (the state before shows a Yes/No prompt instead). Cancel goes
 // back to the GTS (screen 7 checks its status) when connected, anything else disconnects and leaves the app.
 int GtsConnection_HandleDisconnectMenu(GtsApp *app) {
-    int result = Handle2dMenuInput_DeleteOnFinish(app->unk_11B0, HEAP_ID_61);
+    int result = Handle2dMenuInput_DeleteOnFinish(app->disconnectMenu, HEAP_ID_61);
     if (result == -1) {
         goto done;
     }

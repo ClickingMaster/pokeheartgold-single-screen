@@ -58,7 +58,7 @@ typedef struct GtsRecord {
     u8 country;                              // 0x11E
     u8 city;                                 // 0x11F
     u8 trainerClass;                         // 0x120
-    s8 unk_121;                              // 0x121, nonzero once the Pokemon was traded (get.asp)
+    s8 isTraded;                             // 0x121, nonzero once the Pokemon was traded (get.asp)
     u8 version;                              // 0x122
     u8 language;                             // 0x123
 } GtsRecord;                                 // size: GTS_RECORD_SIZE
@@ -141,7 +141,7 @@ typedef struct GtsSearchCursor {
     u16 unk_08;
     u16 unk_0A;
     u8 unk_0C[8];
-    void *unk_14;
+    void *johtoDexFlags;
     u16 *alphabeticalSpecies;     // 0x18
     u32 alphabeticalSpeciesCount; // 0x1C
     u32 genderRatio;              // 0x20, of the wanted species
@@ -173,7 +173,7 @@ typedef struct GtsSelectorArgs {
     MsgData *speciesNames;
     MsgData *countryNames;
     Pokedex *pokedex;
-    void *unk_2C;
+    void *johtoDexFlags;
 } GtsSelectorArgs;
 
 typedef struct GtsGlobals {
@@ -266,7 +266,7 @@ struct GtsApp {
     SpriteResourcesHeader headers[2];        // 0x0D60
     u8 filler_0DA8[0x24];                    // 0x0DA8
     Sprite *cursorSprite;                    // 0x0DCC
-    Sprite *unk_0DD0;                        // 0x0DD0
+    Sprite *selectorCursorSprite;            // 0x0DD0
     u8 filler_0DD4[4];                       // 0x0DD4
     Sprite *monIconSprites[30];              // 0x0DD8, of the shown box
     Sprite *heldItemSprites[30];             // 0x0E50
@@ -289,7 +289,7 @@ struct GtsApp {
     Window panelWindow;                      // 0x1198, the caption of the sub screen panel
     GtsSelector *selector;                   // 0x11A8, the species/gender/level/country selector
     ListMenuItem *listItems;                 // 0x11AC
-    struct ListMenu2D *unk_11B0;             // 0x11B0, only read by screen 0 (GtsConnection_HandleDisconnectMenu)
+    struct ListMenu2D *disconnectMenu;       // 0x11B0, only read by screen 0 (GtsConnection_HandleDisconnectMenu)
     u8 filler_11B4[8];                       // 0x11B4
     WaitingIcon *waitingIcon;                // 0x11BC
     int waitFrames;                          // 0x11C0

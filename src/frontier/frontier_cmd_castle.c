@@ -190,7 +190,7 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         data->type = arg;
         break;
     case 3:
-        *result = data->unk_380[arg];
+        *result = data->selections[arg];
         break;
     case 4:
         *result = data->winStreak;

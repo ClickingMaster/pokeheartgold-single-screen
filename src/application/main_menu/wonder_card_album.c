@@ -84,7 +84,7 @@ struct WonderCardAlbum {
     u8 unk_2C48[0x17C];                        // 0x2C48
     Sprite *buttonSprites[2];                  // 0x2DC4, share / cancel
     Sprite *monIconSprites[3];                 // 0x2DCC
-    u8 unk_2DD8[sizeof(WonderCard)];           // 0x2DD8
+    u8 encryptedCard[sizeof(WonderCard)];      // 0x2DD8
     WonderCardFlipEffect flipEffect;           // 0x3130
     void (*callback)(WonderCardAlbum *album);  // 0x3D48, run every frame while set
     int selection;                             // 0x3D4C, 0: share, 1: cancel
@@ -971,8 +971,8 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
     case 22:
         album->timer--;
         if (album->timer == 0) {
-            MainMenuUtil_EncryptWonderCard(&album->shareHeader, album->unk_2DD8, album->heapId);
-            ov74_02229D0C(album->unk_2DD8, (void *)sizeof(WonderCard));
+            MainMenuUtil_EncryptWonderCard(&album->shareHeader, album->encryptedCard, album->heapId);
+            ov74_02229D0C(album->encryptedCard, (void *)sizeof(WonderCard));
             WonderCardAlbum_CountShare(album);
             *state = 24;
         }

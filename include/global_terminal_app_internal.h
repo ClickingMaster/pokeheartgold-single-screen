@@ -12,10 +12,10 @@
 #include "network_overlay_loader.h"
 
 typedef struct GlobalTerminalAppArgs {
-    void *unk00;
+    void *fieldSystem;
     u32 unk04;
     u32 unk08;
-    u8 unk0C;
+    u8 vsRecorderMode;
     u8 padding[3];
 } GlobalTerminalAppArgs;
 
@@ -26,7 +26,7 @@ typedef struct GlobalTerminalApp {
     OverlayManager *subApp;   // 0x08
     void *heapBuffer;         // 0x0C
     NNSFndHeapHandle dwcHeap; // 0x10, inside heapBuffer, 32-byte aligned
-    u8 unk14[0x78 - 0x14];
+    u8 wifiConnection[0x78 - 0x14];
     int wifiLoaded;  // 0x78
     int isConnected; // 0x7C, set by the connect app
 } GlobalTerminalApp;

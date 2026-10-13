@@ -58,12 +58,12 @@ typedef struct GAME_BOARD_SUB_3C4 {
     u32 unk4;
 } GAME_BOARD_SUB_3C4;
 
-typedef struct GAME_BOARD_SUB_3E8 {
+typedef struct GAME_BOARD_SPRITE_GFX {
     void *spriteList;
     G2dRenderer render;
     void *resourceMan[4];
     void *resourceObj[11][4];
-} GAME_BOARD_SUB_3E8;
+} GAME_BOARD_SPRITE_GFX;
 
 typedef struct GAME_BOARD_WORK {
     OverlayManager *man;
@@ -78,9 +78,9 @@ typedef struct GAME_BOARD_WORK {
     u8 linkMessageCount;
     u8 cursorTimer;
     u8 colorOddsRow;
-    u8 unk12;
-    u8 unk13_0 : 1;
-    u8 unk13_1 : 7;
+    u8 bpGain;
+    u8 animPhase : 1;
+    u8 animPhaseTimer : 7;
     u8 stopRequestPos;
     u8 unk15;
     u16 cursorPosStart;
@@ -115,7 +115,7 @@ typedef struct GAME_BOARD_WORK {
     SaveData *saveData;
     void *arcadeSaveData;
     void *arcadeScoreSaveData;
-    GAME_BOARD_SUB_3E8 unk3E8;
+    GAME_BOARD_SPRITE_GFX spriteGfx;
     void *cursor;
     void *panel[16];
     void *iconA[4];

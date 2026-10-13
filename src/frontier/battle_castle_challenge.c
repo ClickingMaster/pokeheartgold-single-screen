@@ -298,7 +298,7 @@ void BattleCastleData_Free(BattleCastleData *data) {
 void BattleCastleData_ReadAppResult(BattleCastleData *data, BattleCastleAppArgs *args) {
     int i;
     for (i = 0; i < 6; i++) {
-        data->unk_380[i] = BattleCastleAppArgs_GetSelection(args, (u8)i);
+        data->selections[i] = BattleCastleAppArgs_GetSelection(args, (u8)i);
     }
     for (i = 0; i < 4; i++) {
         data->unk_370[i] = args->unk_08[i];

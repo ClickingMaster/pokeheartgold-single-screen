@@ -76,8 +76,8 @@ typedef struct VisitorProfilesArgs {
 
 // Entry of the lobby's visitor table as VisitorProfiles_InitSettings reads it directly.
 typedef struct VisitorProfilesVisitor {
-    u16 unk_00;
-    u8 unk_02;
+    u16 country;
+    u8 region;
     u8 unk_03_0 : 4;
     u8 language : 4;
 } VisitorProfilesVisitor;
@@ -1076,7 +1076,7 @@ void VisitorProfiles_InitSettings(VisitorProfilesWork *work, VisitorProfilesArgs
     }
     if (work->settings.japaneseGame == 1) {
         for (i = 0; i < VISITOR_PROFILES_NUM_VISITORS; i++) {
-            if (((VisitorProfilesVisitor *)args->visitors)[i].language == LANGUAGE_JAPANESE && ((VisitorProfilesVisitor *)args->visitors)[i].unk_00 != 103) {
+            if (((VisitorProfilesVisitor *)args->visitors)[i].language == LANGUAGE_JAPANESE && ((VisitorProfilesVisitor *)args->visitors)[i].country != 103) {
                 work->settings.fullGlobe = 1;
             }
         }

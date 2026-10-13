@@ -19,7 +19,7 @@
 
 typedef struct MysteryGiftCommWork {
     void *owner;                        // 0x000
-    u8 unk_004[0x18];                   // 0x004, initialised by CommRandom_Init
+    u8 random[0x18];                    // 0x004, initialised by CommRandom_Init
     SysTask *task;                      // 0x01C
     MysteryGiftCommStateFunc stateFunc; // 0x020
     u16 stateArg;                       // 0x024
@@ -57,7 +57,7 @@ void MysteryGiftComm_Start(void *owner) {
         sMysteryGiftCommWork->stateArg = 50;
         sMysteryGiftCommWork->task = SysTask_CreateOnMainQueue(MysteryGiftComm_Task, NULL, 10);
         sMysteryGiftCommWork->owner = owner;
-        CommRandom_Init(sMysteryGiftCommWork->unk_004);
+        CommRandom_Init(sMysteryGiftCommWork->random);
     }
 }
 

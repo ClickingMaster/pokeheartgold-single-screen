@@ -6,7 +6,7 @@
 
 typedef struct BattleRoomResultsArgs {
     SaveData *saveData;
-    u16 unk_4;
+    u16 showLeaders;
     u16 unk_6;
 } BattleRoomResultsArgs;
 

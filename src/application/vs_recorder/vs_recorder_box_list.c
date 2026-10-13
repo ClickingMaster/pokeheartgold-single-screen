@@ -345,7 +345,7 @@ BOOL VsRecorder_BoxDataViewOpenBox(VsRecorderWork *work) {
             OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
             OrbitCursor_SetRadius(work->orbitCursors[0], 12, 12);
             if (boxData->form.species[boxData->cursor] != 0 && VsRecorder_HasAllBits(boxData->form.eggFlags, 1 << boxData->cursor) != TRUE) {
-                PlayCry(boxData->form.species[boxData->cursor], boxData->form.unk_158[boxData->cursor]);
+                PlayCry(boxData->form.species[boxData->cursor], boxData->form.forms[boxData->cursor]);
             }
             VsRecorder_SetSubState(work, 10);
         }

@@ -128,7 +128,7 @@ typedef struct SafariDecoration {
     MessageFormat *msgFormat;            // 0x310
     String *tmpString;                   // 0x314
     String *string;                      // 0x318
-    String *unk_31C[4];                  // 0x31C
+    String *placeMessages[4];            // 0x31C
     String *pageTemplate;                // 0x32C
     String *backText;                    // 0x330
     SafariDecorationObject *objects;     // 0x334
@@ -1109,7 +1109,7 @@ void SafariDecoration_CreateStrings(SafariDecoration *decor) {
     decor->pageTemplate = NewString_ReadMsgData(decor->msgData, 12);
     decor->backText = NewString_ReadMsgData(decor->msgData, 8);
     for (i = 0; i < 4; i++) {
-        decor->unk_31C[i] = NewString_ReadMsgData(decor->msgData, i);
+        decor->placeMessages[i] = NewString_ReadMsgData(decor->msgData, i);
     }
 }
 #pragma force_active reset
@@ -1118,7 +1118,7 @@ void SafariDecoration_DeleteStrings(SafariDecoration *decor) {
     int i;
 
     for (i = 0; i < 4; i++) {
-        String_Delete(decor->unk_31C[i]);
+        String_Delete(decor->placeMessages[i]);
     }
     String_Delete(decor->backText);
     String_Delete(decor->pageTemplate);

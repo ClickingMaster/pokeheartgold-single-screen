@@ -261,7 +261,7 @@ void VsRecorder_OnBoxDataBoxTouch(u32 index, u32 event, void *arg) {
             cursor = boxData->cursor;
             if (boxData->form.species[cursor] != 0) {
                 if (VsRecorder_HasAllBits(boxData->form.eggFlags, 1 << cursor) != TRUE) {
-                    PlayCry(boxData->form.species[boxData->cursor], boxData->form.unk_158[boxData->cursor]);
+                    PlayCry(boxData->form.species[boxData->cursor], boxData->form.forms[boxData->cursor]);
                 }
             }
             break;
@@ -821,7 +821,7 @@ void VsRecorder_CreateBoxMonIcons(VsRecorderWork *work) {
     SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconAnim64KNaix(), FALSE, 100000);
     for (i = 0; i < 30; i++) {
         u16 species = boxData->form.species[i];
-        u32 form = boxData->form.unk_158[i];
+        u32 form = boxData->form.forms[i];
         int isEgg = VsRecorder_HasAllBits(boxData->form.eggFlags, 1 << i);
         if (species != 0) {
             SpriteSystem_LoadCharResObjAtEndWithHardwareMappingType(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconNaixEx(species, isEgg, form), FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 100000 + i);
@@ -884,8 +884,8 @@ void VsRecorder_CreateBoxMonPic(VsRecorderWork *work);
 void VsRecorder_CreateBoxMonPic(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
     int cursor = boxData->cursor;
-    u32 otId = boxData->form.unk_DC[cursor];
-    int form = boxData->form.unk_158[cursor];
+    u32 otId = boxData->form.otIds[cursor];
+    int form = boxData->form.forms[cursor];
     u16 species = boxData->form.species[cursor];
     u32 personality = boxData->form.personality[cursor];
     BASE_STATS *personal;

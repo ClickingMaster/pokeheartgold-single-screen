@@ -178,7 +178,7 @@ BOOL BattleRoomResults_Init(OverlayManager *man, int *state) {
     Heap_Create(HEAP_ID_3, HEAP_ID_72, 0x20000);
     results = OverlayManager_CreateAndGetData(man, sizeof(BattleRoomResults), HEAP_ID_72);
     memset(results, 0, sizeof(BattleRoomResults));
-    results->showLeaders = args->unk_4;
+    results->showLeaders = args->showLeaders;
     results->unk_0A = args->unk_6;
     results->options = Save_PlayerData_GetOptionsAddr(args->saveData);
     results->frontierSave = Save_Frontier_GetStatic(args->saveData);

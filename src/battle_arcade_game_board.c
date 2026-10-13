@@ -74,15 +74,15 @@ static u8 BattleArcadeGameBoard_PickEventColor(GAME_BOARD_WORK *, u8);
 static void BattleArcadeGameBoard_UpdateItemIcons(GAME_BOARD_WORK *work);
 static BOOL BattleArcadeGameBoard_CheckButtonPress(GAME_BOARD_WORK *work);
 static void BattleArcadeGameBoard_PressButton(GAME_BOARD_WORK *work);
-static void GameBoard_InitSpriteGfx(GAME_BOARD_SUB_3E8 *work, Party *playerParty, Party *opponentParty, u8 type);
-static Sprite *GameBoard_CreateSprite(GAME_BOARD_SUB_3E8 *work, u32 chara, u32 pal, u32 cell, u32 anim, u32 prio, int bgPrio, u8 display);
-static void GameBoard_FreeSpriteGfx(GAME_BOARD_SUB_3E8 *work);
+static void GameBoard_InitSpriteGfx(GAME_BOARD_SPRITE_GFX *work, Party *playerParty, Party *opponentParty, u8 type);
+static Sprite *GameBoard_CreateSprite(GAME_BOARD_SPRITE_GFX *work, u32 chara, u32 pal, u32 cell, u32 anim, u32 prio, int bgPrio, u8 display);
+static void GameBoard_FreeSpriteGfx(GAME_BOARD_SPRITE_GFX *work);
 static void GameBoard_InitCharPlttTransfer(void);
-static void GameBoard_LoadEventGraphics(GAME_BOARD_SUB_3E8 *work);
-static void GameBoard_LoadItemIconGraphics(GAME_BOARD_SUB_3E8 *work);
-static void GameBoard_LoadMonIconGraphics(GAME_BOARD_SUB_3E8 *work, Party *playerParty, Party *opponentParty, u8 type);
-static void GameBoard_LoadButtonGraphics(GAME_BOARD_SUB_3E8 *work);
-static BATTLE_ARCADE_OBJECT *BattleArcadeObject_Create(GAME_BOARD_SUB_3E8 *work, u32 chara, u32 pal, u32 cell, u32 anim, u16 x, u16 y, u32 priority, int bgPrio, u8 display);
+static void GameBoard_LoadEventGraphics(GAME_BOARD_SPRITE_GFX *work);
+static void GameBoard_LoadItemIconGraphics(GAME_BOARD_SPRITE_GFX *work);
+static void GameBoard_LoadMonIconGraphics(GAME_BOARD_SPRITE_GFX *work, Party *playerParty, Party *opponentParty, u8 type);
+static void GameBoard_LoadButtonGraphics(GAME_BOARD_SPRITE_GFX *work);
+static BATTLE_ARCADE_OBJECT *BattleArcadeObject_Create(GAME_BOARD_SPRITE_GFX *work, u32 chara, u32 pal, u32 cell, u32 anim, u16 x, u16 y, u32 priority, int bgPrio, u8 display);
 static void *BattleArcadeObj_Delete(BATTLE_ARCADE_OBJECT *obj);
 static void BattleArcadeObj_SetVisible(BATTLE_ARCADE_OBJECT *obj, int flag);
 static void BattleArcadeObj_SetPos(BATTLE_ARCADE_OBJECT *obj, u16 x, u16 y);
@@ -115,7 +115,7 @@ BOOL BattleArcadeGameBoard_InitOverlay(OverlayManager *man, int *state) {
     work->round = args->round;
     work->winStreak = args->winStreak;
     work->multiWinStreak = args->multiWinStreak;
-    work->unk12 = args->bpGain;
+    work->bpGain = args->bpGain;
     work->returnWork = &args->returnWork;
     work->options = Save_PlayerData_GetOptionsAddr(work->saveData);
     work->playerParty = args->playerParty;
@@ -198,13 +198,13 @@ BOOL BattleArcadeGameBoard_Main(OverlayManager *man, int *state) {
         break;
     }
 
-    work->unk13_1++;
-    if (work->unk13_1 >= 4) {
-        work->unk13_1 = 0;
-        work->unk13_0 ^= 1;
+    work->animPhaseTimer++;
+    if (work->animPhaseTimer >= 4) {
+        work->animPhaseTimer = 0;
+        work->animPhase ^= 1;
     }
 
-    SpriteList_RenderAndAnimateSprites(work->unk3E8.spriteList);
+    SpriteList_RenderAndAnimateSprites(work->spriteGfx.spriteList);
 
     return FALSE;
 }
@@ -528,7 +528,7 @@ static void BattleArcadeGameBoard_Delete(GAME_BOARD_WORK *work) {
     PaletteData_Free(work->paletteData);
     work->paletteData = NULL;
 
-    GameBoard_FreeSpriteGfx(&work->unk3E8);
+    GameBoard_FreeSpriteGfx(&work->spriteGfx);
 
     DestroyMsgData(work->msgData);
     MessageFormat_Delete(work->msgFmt);
@@ -574,11 +574,11 @@ static void BattleArcadeGameBoard_InitObjects(GAME_BOARD_WORK *work) {
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_13_OFFSET, HEAP_ID_GAME_BOARD);
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_12_OFFSET, HEAP_ID_GAME_BOARD);
     BattleArcadeGameBoard_AddWindows(work->bgConfig, work->window);
-    work->cursor = BattleArcadeObject_Create(&work->unk3E8, 1, 1, 1, 35, 68, 36, 0, 2, 0);
+    work->cursor = BattleArcadeObject_Create(&work->spriteGfx, 1, 1, 1, 35, 68, 36, 0, 2, 0);
     BattleArcadeObj_SetVisible(work->cursor, 0);
 
     for (i = 0; i < 16; i++) {
-        work->panel[i] = BattleArcadeObject_Create(&work->unk3E8, 1, 1, 1, 32, 68 + 40 * (i % 4), 36 + 40 * (i / 4), 1, 2, 0);
+        work->panel[i] = BattleArcadeObject_Create(&work->spriteGfx, 1, 1, 1, 32, 68 + 40 * (i % 4), 36 + 40 * (i / 4), 1, 2, 0);
         BattleArcadeObj_SetVisible(work->panel[i], 0);
     }
 
@@ -593,10 +593,10 @@ static void BattleArcadeGameBoard_InitObjects(GAME_BOARD_WORK *work) {
     }
 
     for (i = 0; i < max; i++) {
-        work->itemA[i] = BattleArcadeObject_Create(&work->unk3E8, 2, 2, 2, 0, 24, yOffset2 + i * 40, 0, 2, 0);
-        work->itemB[i] = BattleArcadeObject_Create(&work->unk3E8, 2, 2, 2, 0, 246, yOffset2 + i * 40, 0, 2, 0);
-        work->iconA[i] = BattleArcadeObject_Create(&work->unk3E8, 3 + i, 3, 3, 1, 16, yOffset + i * 40, 1, 2, 0);
-        work->iconB[i] = BattleArcadeObject_Create(&work->unk3E8, 7 + i, 3, 3, 1, 238, yOffset + i * 40, 1, 2, 0);
+        work->itemA[i] = BattleArcadeObject_Create(&work->spriteGfx, 2, 2, 2, 0, 24, yOffset2 + i * 40, 0, 2, 0);
+        work->itemB[i] = BattleArcadeObject_Create(&work->spriteGfx, 2, 2, 2, 0, 246, yOffset2 + i * 40, 0, 2, 0);
+        work->iconA[i] = BattleArcadeObject_Create(&work->spriteGfx, 3 + i, 3, 3, 1, 16, yOffset + i * 40, 1, 2, 0);
+        work->iconB[i] = BattleArcadeObject_Create(&work->spriteGfx, 7 + i, 3, 3, 1, 238, yOffset + i * 40, 1, 2, 0);
         BattleArcadeObj_SetMonIconPalette(work->iconA[i], Party_GetMonByIndex(work->playerParty, i));
         BattleArcadeObj_SetMonIconPalette(work->iconB[i], Party_GetMonByIndex(work->opponentParty, i));
         BattleArcadeObj_SetAnimActive(work->iconA[i], 0);
@@ -605,7 +605,7 @@ static void BattleArcadeGameBoard_InitObjects(GAME_BOARD_WORK *work) {
 
     BattleArcadeGameBoard_UpdateItemIcons(work);
 
-    work->button = BattleArcadeObject_Create(&work->unk3E8, 0, 0, 0, 2, 128, 96, 0, 0, 1);
+    work->button = BattleArcadeObject_Create(&work->spriteGfx, 0, 0, 0, 2, 128, 96, 0, 0, 1);
 
     if (Comm_IsActive()) {
         G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN, GX_OBJVRAMMODE_CHAR_1D_32K);
@@ -631,7 +631,7 @@ static void BattleArcadeGameBoard_InitBg(GAME_BOARD_WORK *work) {
 }
 
 static void BattleArcadeGameBoard_InitSprites(GAME_BOARD_WORK *work) {
-    GameBoard_InitSpriteGfx(&work->unk3E8, work->playerParty, work->opponentParty, BattleArcade_MultiplayerCheck(work->type));
+    GameBoard_InitSpriteGfx(&work->spriteGfx, work->playerParty, work->opponentParty, BattleArcade_MultiplayerCheck(work->type));
 }
 
 static void BattleArcadeGameBoard_FreeBg(BgConfig *config) {
@@ -1060,7 +1060,7 @@ static void BattleArcadeGameBoard_CountEventColors(GAME_BOARD_WORK *work) {
     int i;
 
     for (i = 0; i < NELEMS(_0223F900); i++) {
-        if (work->unk12 >= _0223F900[i]) {
+        if (work->bpGain >= _0223F900[i]) {
             break;
         }
     }
@@ -1210,7 +1210,7 @@ static void BattleArcadeGameBoard_PressButton(GAME_BOARD_WORK *work) {
 
 extern u8 gBattleArcadeGameBoardResObjCounts[4];
 
-static void GameBoard_InitSpriteGfx(GAME_BOARD_SUB_3E8 *work, Party *playerParty, Party *opponentParty, u8 type) {
+static void GameBoard_InitSpriteGfx(GAME_BOARD_SPRITE_GFX *work, Party *playerParty, Party *opponentParty, u8 type) {
     int i;
 
     GF_CreateVramTransferManager(32, HEAP_ID_GAME_BOARD);
@@ -1242,7 +1242,7 @@ static void GameBoard_InitSpriteGfx(GAME_BOARD_SUB_3E8 *work, Party *playerParty
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-static Sprite *GameBoard_CreateSprite(GAME_BOARD_SUB_3E8 *work, u32 chara, u32 pal, u32 cell, u32 anim, u32 prio, int bgPrio, u8 display) {
+static Sprite *GameBoard_CreateSprite(GAME_BOARD_SPRITE_GFX *work, u32 chara, u32 pal, u32 cell, u32 anim, u32 prio, int bgPrio, u8 display) {
     struct SpriteResourcesHeader resourceHeader;
     Sprite *sprite;
 
@@ -1278,7 +1278,7 @@ static Sprite *GameBoard_CreateSprite(GAME_BOARD_SUB_3E8 *work, u32 chara, u32 p
     return sprite;
 }
 
-static void GameBoard_FreeSpriteGfx(GAME_BOARD_SUB_3E8 *work) {
+static void GameBoard_FreeSpriteGfx(GAME_BOARD_SPRITE_GFX *work) {
     u8 i;
 
     for (i = 0; i < 11; i++) {
@@ -1309,14 +1309,14 @@ static void GameBoard_InitCharPlttTransfer(void) {
     ObjPlttTransfer_Reset();
 }
 
-static void GameBoard_LoadEventGraphics(GAME_BOARD_SUB_3E8 *work) {
+static void GameBoard_LoadEventGraphics(GAME_BOARD_SPRITE_GFX *work) {
     work->resourceObj[1][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(work->resourceMan[0], NARC_a_1_8_4, 18, TRUE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_GAME_BOARD);
     work->resourceObj[1][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(work->resourceMan[1], NARC_a_1_8_4, 56, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 8, HEAP_ID_GAME_BOARD);
     work->resourceObj[1][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromNarc(work->resourceMan[2], NARC_a_1_8_4, 20, TRUE, 1, GF_GFX_RES_TYPE_CELL, HEAP_ID_GAME_BOARD);
     work->resourceObj[1][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(work->resourceMan[3], NARC_a_1_8_4, 19, TRUE, 1, GF_GFX_RES_TYPE_ANIM, HEAP_ID_GAME_BOARD);
 }
 
-static void GameBoard_LoadItemIconGraphics(GAME_BOARD_SUB_3E8 *work) {
+static void GameBoard_LoadItemIconGraphics(GAME_BOARD_SPRITE_GFX *work) {
     NARC *narc = NARC_New(NARC_graphic_plist_gra, HEAP_ID_GAME_BOARD);
 
     work->resourceObj[2][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(work->resourceMan[0], narc, sub_0207CA9C(), FALSE, 2, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_GAME_BOARD);
@@ -1327,7 +1327,7 @@ static void GameBoard_LoadItemIconGraphics(GAME_BOARD_SUB_3E8 *work) {
     NARC_Delete(narc);
 }
 
-static void GameBoard_LoadMonIconGraphics(GAME_BOARD_SUB_3E8 *work, Party *playerParty, Party *opponentParty, u8 type) {
+static void GameBoard_LoadMonIconGraphics(GAME_BOARD_SPRITE_GFX *work, Party *playerParty, Party *opponentParty, u8 type) {
     u32 i;
     Pokemon *playerMon;
     Pokemon *opponentMon;
@@ -1358,14 +1358,14 @@ static void GameBoard_LoadMonIconGraphics(GAME_BOARD_SUB_3E8 *work, Party *playe
     NARC_Delete(narc);
 }
 
-static void GameBoard_LoadButtonGraphics(GAME_BOARD_SUB_3E8 *work) {
+static void GameBoard_LoadButtonGraphics(GAME_BOARD_SPRITE_GFX *work) {
     work->resourceObj[0][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(work->resourceMan[0], NARC_a_1_8_4, 21, TRUE, 0, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_GAME_BOARD);
     work->resourceObj[0][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(work->resourceMan[1], NARC_a_1_8_4, 57, FALSE, 0, NNS_G2D_VRAM_TYPE_2DSUB, 2, HEAP_ID_GAME_BOARD);
     work->resourceObj[0][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromNarc(work->resourceMan[2], NARC_a_1_8_4, 23, TRUE, 0, GF_GFX_RES_TYPE_CELL, HEAP_ID_GAME_BOARD);
     work->resourceObj[0][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(work->resourceMan[3], NARC_a_1_8_4, 22, TRUE, 0, GF_GFX_RES_TYPE_ANIM, HEAP_ID_GAME_BOARD);
 }
 
-static BATTLE_ARCADE_OBJECT *BattleArcadeObject_Create(GAME_BOARD_SUB_3E8 *work, u32 chara, u32 pal, u32 cell, u32 anim, u16 x, u16 y, u32 priority, int bgPrio, u8 display) {
+static BATTLE_ARCADE_OBJECT *BattleArcadeObject_Create(GAME_BOARD_SPRITE_GFX *work, u32 chara, u32 pal, u32 cell, u32 anim, u16 x, u16 y, u32 priority, int bgPrio, u8 display) {
     BATTLE_ARCADE_OBJECT *obj;
     VecFx32 vec;
     u32 i;

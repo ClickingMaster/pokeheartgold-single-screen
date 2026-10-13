@@ -420,7 +420,7 @@ int GtsTransaction_WaitGet(GtsApp *app) {
         app->requestFrames = 0;
         switch (result) {
         case 0: {
-            s8 traded = app->record.unk_121;
+            s8 traded = app->record.isTraded;
             if (traded != 0) {
                 app->state = GTS_TRANSACTION_STATE_SEND_RESULT;
             } else {
@@ -770,7 +770,7 @@ void GtsTransaction_RecordTradeStats(GtsApp *app, Pokemon *mon) {
 }
 
 int GtsTransaction_ReceiveTradedMon(GtsApp *app) {
-    GtsTransaction_ReceiveMon(app, &app->record.mon, GtsSave_GetStoredMonBox((void *)app->args->unk0), app->record.unk_121);
+    GtsTransaction_ReceiveMon(app, &app->record.mon, GtsSave_GetStoredMonBox((void *)app->args->unk0), app->record.isTraded);
     GtsTransaction_AddPartnerToWifiHistory(app->args->wifiHistory, &app->record);
     GtsTransaction_RecordTradeStats(app, &app->record.mon);
     GtsSave_SetHasStoredMon((void *)app->args->unk0, 0);

@@ -260,7 +260,7 @@ int MysteryGiftApp_StartSearch(OverlayManager *manager) {
         MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
         return 7;
     }
-    data->unk_0084 = 19;
+    data->giftCheckSource = 19;
     return 19;
 }
 
@@ -341,7 +341,7 @@ BOOL ov74_0222A0E4(WonderCard *card) {
 
 // Callback while the received gift is being saved.
 void MysteryGiftApp_WaitForSave(MysteryGiftAppData *data) {
-    if (data->unk_29EC == 1) {
+    if (data->saveCancelled == 1) {
         data->callback = NULL;
     }
     if ((u32)(MainMenuUtil_RunSave() - 2) <= 1) {
@@ -384,7 +384,7 @@ void MysteryGiftApp_SaveReceivedGift(OverlayManager *manager) {
         SaveMysteryGift_TryInsertCard(mysteryGift, card);
     }
     MainMenuUtil_StartSave(saveData);
-    data->unk_29EC = 0;
+    data->saveCancelled = 0;
     data->callback = MysteryGiftApp_WaitForSave;
 }
 
@@ -559,8 +559,8 @@ int MysteryGiftApp_SelectReceiveGift(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
     Save_MysteryGift_Get(data->saveData);
-    if (data->unk_05C8 == 30) {
-        data->unk_05CC = 1;
+    if (data->beaconWatchState == 30) {
+        data->beaconWatchTimer = 1;
         MysteryGiftApp_UpdateBeaconWatch(data);
     }
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[0], FALSE);
@@ -578,8 +578,8 @@ int MysteryGiftApp_SelectReceiveGift(OverlayManager *manager) {
 int MysteryGiftApp_SelectCheckCard(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
-    if (data->unk_05C8 == 30) {
-        data->unk_05CC = 1;
+    if (data->beaconWatchState == 30) {
+        data->beaconWatchTimer = 1;
         MysteryGiftApp_UpdateBeaconWatch(data);
     }
     MainMenuUtil_StartFade(0, 54, data->mainState, 2);
@@ -589,8 +589,8 @@ int MysteryGiftApp_SelectCheckCard(OverlayManager *manager) {
 int MysteryGiftApp_SelectViewLockCapsuleCard(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
-    if (data->unk_05C8 == 30) {
-        data->unk_05CC = 1;
+    if (data->beaconWatchState == 30) {
+        data->beaconWatchTimer = 1;
         MysteryGiftApp_UpdateBeaconWatch(data);
     }
     MainMenuUtil_StartFade(0, 55, data->mainState, 2);
@@ -600,8 +600,8 @@ int MysteryGiftApp_SelectViewLockCapsuleCard(OverlayManager *manager) {
 int MysteryGiftApp_SelectExit(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
-    if (data->unk_05C8 == 30) {
-        data->unk_05CC = 1;
+    if (data->beaconWatchState == 30) {
+        data->beaconWatchTimer = 1;
     }
     MainMenuUtil_SetFadeWhite(1);
     MainMenuUtil_StartFade(0, 53, data->mainState, 2);
@@ -790,14 +790,14 @@ void MysteryGiftApp_RunWfcDownload(OverlayManager *manager, int *state) {
     case 1:
         memcpy(&data->receivedHeader, data->wfcRecvBuffer, sizeof(UnkWonderCardSubstruct_104) + sizeof(WonderCard));
         MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
-        data->unk_0084 = 27;
+        data->giftCheckSource = 27;
         *state = 19;
-        data->unk_15DC = 0;
+        data->resultDelay = 0;
         break;
     case 2:
     case 3:
         MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
-        data->unk_15DC = 0;
+        data->resultDelay = 0;
         *state = 17;
         break;
     case 4:
@@ -910,7 +910,7 @@ BOOL MysteryGiftApp_Init(OverlayManager *manager, int *state) {
         Sys_SetAgbCartridgeVersion(gGameVersion);
         MainMenuUtil_EnableCartridgePullOutCheck(TRUE);
     }
-    data->unk_05C8 = 29;
+    data->beaconWatchState = 29;
     args = OverlayManager_GetArgs(manager);
     data->saveData = args->saveData;
     data->options = Save_PlayerData_GetOptionsAddr(data->saveData);
@@ -1735,7 +1735,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
     int result;
 
     CTRDG_IsExisting();
-    if (data->unk_05C8 != 29) {
+    if (data->beaconWatchState != 29) {
         MysteryGiftApp_UpdateBeaconWatch(data);
     }
     switch (*state) {
@@ -1930,7 +1930,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         result = Comm_GetLocalNetId();
         if (result && !Comm_IsNetIdConnected((u16)result)) {
             MysteryGiftComm_Free();
-            data->unk_29EC = 1;
+            data->saveCancelled = 1;
             MainMenuUtil_CancelSave();
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             WirelessStatusIcon_Destroy();
@@ -1981,8 +1981,8 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         *state = 18;
         break;
     case 17:
-        if (data->unk_15DC) {
-            data->unk_15DC--;
+        if (data->resultDelay) {
+            data->resultDelay--;
         } else {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             PlaySE(SEQ_SE_DP_SELECT);
@@ -1999,10 +1999,10 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         }
         break;
     case 19:
-        if (data->unk_15DC) {
-            data->unk_15DC--;
+        if (data->resultDelay) {
+            data->resultDelay--;
         } else {
-            if (data->unk_0084 != 27) {
+            if (data->giftCheckSource != 27) {
                 MainMenuUtil_ReadCartridgeGift(&data->receivedHeader, sizeof(UnkWonderCardSubstruct_104) + sizeof(WonderCard));
             }
             data->giftCheckResult = MysteryGift_CheckCanReceive(data->saveData, &data->receivedHeader);
@@ -2166,22 +2166,22 @@ BOOL MysteryGiftApp_Exit(OverlayManager *manager, int *state) {
 }
 
 void MysteryGiftApp_UpdateBeaconWatch(MysteryGiftAppData *data) {
-    switch (data->unk_05C8) {
+    switch (data->beaconWatchState) {
     case 28:
         CommState_StartBeaconWatch(data->saveData);
-        data->unk_05CC = 120;
-        data->unk_05C8 = 30;
+        data->beaconWatchTimer = 120;
+        data->beaconWatchState = 30;
         break;
     case 29:
         break;
     case 30:
         if (CommState_GetSeenGames() & 1) {
-            data->unk_05D0 = 1;
+            data->giftBeaconSeen = 1;
         }
-        data->unk_05CC--;
-        if (data->unk_05CC == 0) {
+        data->beaconWatchTimer--;
+        if (data->beaconWatchTimer == 0) {
             CommState_StopBeaconWatch();
-            data->unk_05C8 = 29;
+            data->beaconWatchState = 29;
         }
         break;
     }

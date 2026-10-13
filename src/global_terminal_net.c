@@ -181,7 +181,7 @@ void GlobalTerminalNet_PackBoxData(SaveData *saveData, PCStorage *storage, int b
         if (PCStorage_GetMonDataByIndexPair(storage, box, i, 174, NULL) == 494) {
             form->eggFlags |= 1 << i;
         }
-        form->unk_158[i] = PCStorage_GetMonDataByIndexPair(storage, box, i, 112, NULL);
+        form->forms[i] = PCStorage_GetMonDataByIndexPair(storage, box, i, 112, NULL);
     }
     form->wallpaper = PCStorage_GetBoxWallpaper(storage, box);
     form->unk_177 = 0;
@@ -208,12 +208,12 @@ void GlobalTerminalNet_CopyRequestHeader(const void *src, void *dst) {
 
 void GlobalTerminalNet_SetRankingsHeader(SaveData *saveData, const GlobalTerminalNetRankingsSource *src, GlobalTerminalNetRankingsHeader *dst) {
     MI_CpuFill8(dst, 0, sizeof(GlobalTerminalNetRankingsHeader));
-    dst->unk_00 = src->unk_19;
+    dst->version = src->version;
     dst->unk_01 = src->unk_1A;
-    dst->unk_02 = src->unk_15;
-    dst->unk_03 = src->unk_16;
-    dst->unk_04 = src->unk_1C;
-    dst->unk_06_0 = src->unk_1B_0;
+    dst->birthdayMonth = src->birthdayMonth;
+    dst->avatar = src->avatar;
+    dst->species = src->species;
+    dst->isEgg = src->isEgg;
 }
 
 BOOL GlobalTerminalNet_Init(GlobalTerminalNet *net, GlobalTerminalNetArgs *args) {
@@ -237,7 +237,7 @@ BOOL GlobalTerminalNet_Init(GlobalTerminalNet *net, GlobalTerminalNetArgs *args)
     net->login.unk_05 = 2;
     GF_ASSERT(GlobalTerminalServer_Init(&net->login) == TRUE);
     net->isRunning = 1;
-    net->unk_3B8 = 1;
+    net->initialized = 1;
     return TRUE;
 }
 
@@ -377,10 +377,10 @@ BOOL GlobalTerminalNet_RequestVideoSearch(GlobalTerminalNet *net, u16 arg0, u8 a
         return FALSE;
     }
     MI_CpuFill8(&net->request, 0, sizeof(GlobalTerminalNetVideoSearch));
-    net->request.search.unk_00 = arg0;
-    net->request.search.unk_02 = arg1;
-    net->request.search.unk_03 = arg2;
-    net->request.search.unk_04 = arg3;
+    net->request.search.species = arg0;
+    net->request.search.facility = arg1;
+    net->request.search.country = arg2;
+    net->request.search.region = arg3;
     net->request.search.unk_08 = 0x140;
     net->searchKind = 0;
     net->pendingCommand = GTS_REQUEST_VIDEO_SEARCH;
@@ -392,10 +392,10 @@ BOOL GlobalTerminalNet_RequestDefaultVideoSearchNoFrontier(GlobalTerminalNet *ne
         return FALSE;
     }
     MI_CpuFill8(&net->request, 0, sizeof(GlobalTerminalNetVideoSearch));
-    net->request.search.unk_00 = 0xFFFF;
-    net->request.search.unk_02 = 0xFE;
-    net->request.search.unk_03 = 0xFF;
-    net->request.search.unk_04 = 0xFF;
+    net->request.search.species = 0xFFFF;
+    net->request.search.facility = 0xFE;
+    net->request.search.country = 0xFF;
+    net->request.search.region = 0xFF;
     net->request.search.unk_08 = 0x140;
     net->searchKind = 0;
     net->pendingCommand = GTS_REQUEST_VIDEO_SEARCH;
@@ -407,10 +407,10 @@ BOOL GlobalTerminalNet_RequestDefaultVideoSearch(GlobalTerminalNet *net) {
         return FALSE;
     }
     MI_CpuFill8(&net->request, 0, sizeof(GlobalTerminalNetVideoSearch));
-    net->request.search.unk_00 = 0xFFFF;
-    net->request.search.unk_02 = 0xFF;
-    net->request.search.unk_03 = 0xFF;
-    net->request.search.unk_04 = 0xFF;
+    net->request.search.species = 0xFFFF;
+    net->request.search.facility = 0xFF;
+    net->request.search.country = 0xFF;
+    net->request.search.region = 0xFF;
     net->request.search.unk_08 = 0x140;
     net->searchKind = 0;
     net->pendingCommand = GTS_REQUEST_VIDEO_SEARCH;

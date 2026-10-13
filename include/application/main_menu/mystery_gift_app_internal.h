@@ -34,7 +34,7 @@ struct MysteryGiftAppData {
     struct ListMenu *listMenu;                         // 0x0078
     ListMenuItem *listMenuItems;                       // 0x007C
     int giftCheckResult;                               // 0x0080, MysteryGift_CheckCanReceive: 0 ok, 1..5 why the gift cannot be received
-    int unk_0084;                                      // 0x0084
+    int giftCheckSource;                               // 0x0084
     u32 unk_0088;                                      // 0x0088
     UnkWonderCardSubstruct_104 receivedHeader;         // 0x008C
     WonderCard receivedCard;                           // 0x00DC
@@ -44,13 +44,13 @@ struct MysteryGiftAppData {
     int exitTarget;                                    // 0x0440, 0: title screen, 1: Wonder Card viewer, 2: Lock Capsule card
     u8 unk_0444[0x180];                                // 0x0444
     Sprite *sprite;                                    // 0x05C4
-    int unk_05C8;                                      // 0x05C8
-    int unk_05CC;                                      // 0x05CC
-    int unk_05D0;                                      // 0x05D0
+    int beaconWatchState;                              // 0x05C8
+    int beaconWatchTimer;                              // 0x05CC
+    int giftBeaconSeen;                                // 0x05D0
     u8 recvBuffer[0x1000];                             // 0x05D4, receivedHeader + receivedCard (receive mode 3)
     int receiveMode;                                   // 0x15D4, 1/2: from a friend, 3: DS wireless, 4: Nintendo WFC
     int *mainState;                                    // 0x15D8
-    int unk_15DC;                                      // 0x15DC
+    int resultDelay;                                   // 0x15DC
     int wfcState;                                      // 0x15E0, Nintendo WFC download (MysteryGiftWfc_Run)
     u8 unk_15E4[4];                                    // 0x15E4
     u8 wfcConfig[0x68];                                // 0x15E8, Wi-Fi library setup (ov00_021EC3F0)
@@ -70,7 +70,7 @@ struct MysteryGiftAppData {
     Window wfcErrorWindow;                             // 0x2680
     u8 unk_2690[0x358];                                // 0x2690
     void (*callback)(struct MysteryGiftAppData *data); // 0x29E8, run every frame while set
-    int unk_29EC;                                      // 0x29EC
+    int saveCancelled;                                 // 0x29EC
     struct WaitingIcon *waitingIcon;                   // 0x29F0
     int animStatus;                                    // 0x29F4, gift animation task: 1 running, 2 may finish, 0 done
 }; // size: 0x29F8

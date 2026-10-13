@@ -59,7 +59,7 @@ typedef struct GlobalTerminalConnectArgs {
     GlobalTerminalLaunchArgs *launchArgs; // 0x00
     BOOL disconnect;                // 0x04, second run after the VS Recorder: only disconnect
     u8 unk_08[0x14 - 0x08];         // 0x08
-    u8 unk_14[0x7C - 0x14];         // 0x14
+    u8 wifiConnection[0x7C - 0x14]; // 0x14
     BOOL isConnected;               // 0x7C
 } GlobalTerminalConnectArgs;
 
@@ -656,7 +656,7 @@ BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *work) {
         }
         break;
     case 2:
-        ov00_021EC3F0(work->args->unk_14, 2, 1, 20);
+        ov00_021EC3F0(work->args->wifiConnection, 2, 1, 20);
         ov00_021EC454(2);
         ov00_021EC4A4();
         work->state = GTC_STATE_WAIT_CONNECT;

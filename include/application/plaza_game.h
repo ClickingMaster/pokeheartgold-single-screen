@@ -21,8 +21,8 @@
 // Launch arguments of a Plaza Game, shared with the Wi-Fi Plaza lobby.
 typedef struct PlazaGameArgs {
     u32 tapToy;                 // 0x00
-    u8 unk04[4];                // 0x04
-    u8 unk08[4];                // 0x08
+    u8 slots[4];                // 0x04
+    u8 specialVisitors[4];      // 0x08
     u8 unk0C[0x10];             // 0x0C
     BOOL connectionLost;        // 0x1C
     PlayerProfile *profiles[4]; // 0x20

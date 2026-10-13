@@ -167,7 +167,7 @@ void FootprintStamp_FreeCamera(FootprintStamp *work) {
 #pragma force_active on
 
 void FootprintStamp_LoadBoardModel(FootprintStamp *work, NARC *narc) {
-    int fileId = work->args->unk04 == 0 ? 28 : 27;
+    int fileId = work->args->boardType == 0 ? 28 : 27;
 
     ModelResource_LoadFromNarc(&work->boardModel, narc, fileId, HEAP_ID_125);
     ModelInstance_Init(&work->boardInstance, &work->boardModel);

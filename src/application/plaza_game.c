@@ -137,11 +137,11 @@ u32 ov90_022588A4(const PlazaGameRoster *roster, u32 netId) {
         GF_ASSERT(netId < 4);
         return 0;
     }
-    index = roster->args->unk04[netId];
+    index = roster->args->slots[netId];
     if (index == -1) {
         return 0;
     }
-    return roster->args->unk08[index];
+    return roster->args->specialVisitors[index];
 }
 
 PlayerProfile *PlazaGameRoster_GetProfile(const PlazaGameRoster *roster, u32 netId) {
@@ -2434,7 +2434,7 @@ void PlazaGameResults_ReportWinners(PlazaGameResults *results) {
     threshold = PlazaGameResults_GetScoreThreshold(results);
     for (i = 0; i < results->roster.count; i++) {
         if (results->data.ranks[i] == 0 && results->data.scores[i] != threshold) {
-            ids[count] = results->roster.args->unk04[i];
+            ids[count] = results->roster.args->slots[i];
             count++;
         }
     }
@@ -2448,7 +2448,7 @@ void PlazaGameResults_ReportWinners(PlazaGameResults *results) {
 void PlazaGameResults_ReportTeamWin(PlazaGameResults *results) {
     if (results->roster.count != 0 && results->data.total >= 10) {
         PlazaGameArgs *args = results->roster.args;
-        WiFiPlaza_SendMinigameResultNews(args->unk30, results->game, results->roster.count, args->unk04[0], args->unk04[1], args->unk04[2], args->unk04[3]);
+        WiFiPlaza_SendMinigameResultNews(args->unk30, results->game, results->roster.count, args->slots[0], args->slots[1], args->slots[2], args->slots[3]);
     }
 }
 

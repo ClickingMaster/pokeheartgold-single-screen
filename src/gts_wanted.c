@@ -145,7 +145,7 @@ int GtsWanted_Init(GtsApp *app, int state) {
     args.bgConfig = app->bgConfig;
     args.windows = app->windows;
     args.messageWindow = &app->selectorWindow;
-    args.sprites[0] = app->unk_0DD0;
+    args.sprites[0] = app->selectorCursorSprite;
     args.sprites[1] = app->arrowSprites[0];
     args.sprites[2] = app->arrowSprites[1];
     args.sprites[3] = NULL;
@@ -153,7 +153,7 @@ int GtsWanted_Init(GtsApp *app, int state) {
     args.speciesNames = app->speciesNames;
     args.countryNames = app->countryNames;
     args.pokedex = app->args->pokedex;
-    args.unk_2C = app->searchCursor->unk_14;
+    args.johtoDexFlags = app->searchCursor->johtoDexFlags;
     app->selector = GtsSelector_New(&args, 2, 0);
     app->state = GTS_WANTED_STATE_START;
     return 2;
@@ -277,9 +277,9 @@ void GtsWanted_CreateSprites(GtsApp *app) {
     Gts_InitSpriteTemplate(&template, app, &app->headers[0], NNS_G2D_VRAM_TYPE_2DMAIN);
     template.position.x = 10 << 16;
     template.position.y = 2 << 16;
-    app->unk_0DD0 = Sprite_CreateAffine(&template);
-    Sprite_SetAnimCtrlSeq(app->unk_0DD0, 47);
-    Sprite_SetDrawFlag(app->unk_0DD0, FALSE);
+    app->selectorCursorSprite = Sprite_CreateAffine(&template);
+    Sprite_SetAnimCtrlSeq(app->selectorCursorSprite, 47);
+    Sprite_SetDrawFlag(app->selectorCursorSprite, FALSE);
 
     template.position.x = 57 << 14;
     template.position.y = 117 * FX32_ONE;
@@ -294,7 +294,7 @@ void GtsWanted_CreateSprites(GtsApp *app) {
 }
 
 void GtsWanted_DeleteSprites(GtsApp *app) {
-    Sprite_Delete(app->unk_0DD0);
+    Sprite_Delete(app->selectorCursorSprite);
     Sprite_Delete(app->arrowSprites[0]);
     Sprite_Delete(app->arrowSprites[1]);
 }
@@ -304,12 +304,12 @@ void GtsWanted_CreateData(GtsApp *app) {
     app->searchCursor = Heap_Alloc(HEAP_ID_61, sizeof(GtsSearchCursor));
     MI_CpuClearFast(app->searchCursor, sizeof(GtsSearchCursor));
     app->searchCursor->alphabeticalSpecies = Gts_LoadAlphabeticalSpecies(HEAP_ID_61, 0, &app->searchCursor->alphabeticalSpeciesCount);
-    app->searchCursor->unk_14 = Gts_CreateJohtoDexFlags(HEAP_ID_61);
+    app->searchCursor->johtoDexFlags = Gts_CreateJohtoDexFlags(HEAP_ID_61);
     ov70_0223F948(&app->unk_1234);
 }
 
 void GtsWanted_FreeData(GtsApp *app) {
-    Heap_Free(app->searchCursor->unk_14);
+    Heap_Free(app->searchCursor->johtoDexFlags);
     Heap_Free(app->searchCursor->alphabeticalSpecies);
     Heap_Free(app->searchCursor);
     String_Delete(app->msgBuffer);

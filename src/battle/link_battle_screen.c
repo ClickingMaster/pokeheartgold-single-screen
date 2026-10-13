@@ -119,8 +119,8 @@ struct LinkBattleScreen {
     u8 delayFrames;                                                 // 0xB81
     u8 frame;                                                       // 0xB82
     u8 unk_B83;                                                     // 0xB83
-    u16 unk_B84;                                                    // 0xB84, battle record save state
-    u16 unk_B86;                                                    // 0xB86, battle record save state
+    u16 recordSaveState;                                                    // 0xB84, battle record save state
+    u16 recordWriteState;                                                    // 0xB86, battle record save state
     Window msgWindow;                                               // 0xB88
     Window yesNoWindow;                                             // 0xB98
     BOOL use3D;                                                     // 0xBA8
@@ -796,7 +796,7 @@ int LinkBattleScreen_SaveBattleVideo(LinkBattleScreen *screen) {
         screen->frame++;
         break;
     case 1:
-        result = BattleRecord_Save(screen->args->setup->saveData, screen->args->unk_2C, 0, 0, &screen->unk_B84, &screen->unk_B86);
+        result = BattleRecord_Save(screen->args->setup->saveData, screen->args->unk_2C, 0, 0, &screen->recordSaveState, &screen->recordWriteState);
         if (result == 2) {
             ReadMsgDataIntoString(screen->msgData, msg_0638_00006, screen->string);
             PlaySE(SEQ_SE_DP_SAVE);

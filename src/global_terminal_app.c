@@ -57,8 +57,8 @@ BOOL GlobalTerminalApp_Main(OverlayManager *man, int *state) {
         }
         break;
     case 4: {
-        const OverlayManagerTemplate *tmpl = VsRecorderApp_GetTemplate(data->args->unk0C);
-        data->subApp = OverlayManager_New(tmpl, data->args->unk00, HEAP_ID_123);
+        const OverlayManagerTemplate *tmpl = VsRecorderApp_GetTemplate(data->args->vsRecorderMode);
+        data->subApp = OverlayManager_New(tmpl, data->args->fieldSystem, HEAP_ID_123);
         ++*state;
         break;
     }

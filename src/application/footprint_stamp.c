@@ -72,7 +72,7 @@ BOOL FootprintStamp_Init(OverlayManager *man, int *state) {
     work->saveData = ov45_0222A2C8(work->args->lobby);
     work->unk19E0 = ov45_0222A2CC(work->args->lobby);
     FootprintStamp_InitLinkFilter(work);
-    FootprintStamp_LoadParty(work->args->unk04, work->saveData, work->party);
+    FootprintStamp_LoadParty(work->args->boardType, work->saveData, work->party);
     work->ink = FOOTPRINT_STAMP_INK_MAX;
     work->inkShown = work->ink;
     work->vramMan3d = FootprintStamp_Create3DVramMan(HEAP_ID_125);
@@ -146,7 +146,7 @@ BOOL FootprintStamp_Main(OverlayManager *man, int *state) {
     FootprintStampMon dummy;
     YesNoPromptTemplate template;
 
-    FootprintStampBoard_Update(&work->board, work->camera, work->phase, work->args->unk04);
+    FootprintStampBoard_Update(&work->board, work->camera, work->phase, work->args->boardType);
     switch (*state) {
     case 0:
         work->linkFilter.active = TRUE;
@@ -415,7 +415,7 @@ void FootprintStamp_LoadBgGfx(FootprintStamp *work, NARC *narc) {
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 17, work->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, FALSE, HEAP_ID_125);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 20, work->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, HEAP_ID_125);
     PaletteData_LoadNarc(work->plttData, NARC_a_2_0_8, 23, HEAP_ID_125, PLTTBUF_SUB_BG, 0, 0);
-    if (work->args->unk04 == 0) {
+    if (work->args->boardType == 0) {
         PaletteData_CopyPalette(work->plttData, PLTTBUF_SUB_BG, 0x10, PLTTBUF_SUB_BG, 0, 0x20);
     }
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 22, work->bgConfig, GF_BG_LYR_SUB_2, 0, 0, FALSE, HEAP_ID_125);
@@ -429,7 +429,7 @@ void FootprintStamp_LoadBgGfx(FootprintStamp *work, NARC *narc) {
     PaletteData_LoadNarc(work->plttData, NARC_a_0_3_8, GetUserFrameGfx2PaletteMember(frame), HEAP_ID_125, PLTTBUF_MAIN_BG, 0x20, 0xE0);
     LoadUserFrameGfx2(work->bgConfig, GF_BG_LYR_MAIN_1, 1, 14, frame, HEAP_ID_125);
     PaletteData_LoadNarc(work->plttData, NARC_graphic_font, 7, HEAP_ID_125, PLTTBUF_MAIN_BG, 0x20, 0xD0);
-    if (work->args->unk04 == 0) {
+    if (work->args->boardType == 0) {
         PaletteData_LoadNarc(work->plttData, NARC_graphic_font, 7, HEAP_ID_125, PLTTBUF_SUB_BG, 0x20, 0xD0);
     } else {
         PaletteData_LoadNarc(work->plttData, NARC_a_2_0_8, 25, HEAP_ID_125, PLTTBUF_SUB_BG, 0x20, 0xD0);
@@ -452,7 +452,7 @@ void FootprintStamp_LoadPartySpriteGfx(FootprintStamp *work, NARC *narc) {
     SpriteSystem_LoadCellResObjFromOpenNarc(work->spriteSystem, work->spriteManager, narc, 15, FALSE, 10001);
     SpriteSystem_LoadAnimResObjFromOpenNarc(work->spriteSystem, work->spriteManager, narc, 14, FALSE, 10001);
     plttNum = SpriteSystem_LoadPaletteBufferFromOpenNarc(work->plttData, PLTTBUF_MAIN_OBJ, work->spriteSystem, work->spriteManager, narc, 3, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 10002);
-    if (work->args->unk04 == 0) {
+    if (work->args->boardType == 0) {
         color = RGB_BLACK;
     } else {
         color = RGB_WHITE;

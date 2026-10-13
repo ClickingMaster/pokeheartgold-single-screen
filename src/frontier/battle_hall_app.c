@@ -125,7 +125,7 @@ typedef struct BattleHallApp {
     u16 *resultOut;                  // 0x210
     Party *party;                    // 0x214
     void *hallRecords;               // 0x218
-    u16 *unk_21C;                    // 0x21C
+    u16 *partnerLevel;                    // 0x21C
     NARC *narc;                      // 0x220
     u16 linkCommand;                 // 0x224
     u16 linkArg;                     // 0x226
@@ -261,7 +261,7 @@ BOOL BattleHallApp_Init(OverlayManager *man, int *state) {
     app->options = Save_PlayerData_GetOptionsAddr(app->saveData);
     app->party = args->party;
     app->hallRecords = args->hallRecords;
-    app->unk_21C = args->partnerLevel;
+    app->partnerLevel = args->partnerLevel;
     app->battleNo = args->battleNo + 1;
     app->cursor = args->cursor;
     app->partnerCursor = NO_LINK_CHOICE;
@@ -1373,7 +1373,7 @@ void BattleHall_ReceiveChoice(u32 netId, u32 unused, const u16 *msg, BattleHallA
     } else {
         app->linkChoice = (u8)msg[2];
     }
-    *app->unk_21C = msg[3];
+    *app->partnerLevel = msg[3];
 }
 
 void BattleHallApp_PrepareLinkAnswer(BattleHallApp *app, u16 command, u16 answer) {

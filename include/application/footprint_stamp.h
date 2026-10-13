@@ -47,7 +47,7 @@ enum FootprintStampEffect {
 // Launch args (the lobby's overlay template for OVY_89).
 typedef struct FootprintStampArgs {
     void *lobby; // ov45 Wi-Fi Plaza lobby state
-    u8 unk04;    // selects the board model, palettes and ink color column
+    u8 boardType; // selects the board model, palettes and ink color column
 } FootprintStampArgs;
 
 // A party Pokemon as shown in the party bar, and the 12-byte stamp record sent to the other players.

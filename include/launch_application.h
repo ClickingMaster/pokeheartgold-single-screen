@@ -89,7 +89,7 @@ typedef struct UnkStruct_0203E8C8 {
 
 static inline void InitUnkStructScrCmd408(BattleRoomResultsArgs *data, u16 a1, u16 a2, ScriptContext *ctx) {
     MI_CpuClear8(data, sizeof(BattleRoomResultsArgs));
-    data->unk_4 = a1;
+    data->showLeaders = a1;
     data->unk_6 = a2;
     data->saveData = ctx->fieldSystem->saveData;
 }
