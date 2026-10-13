@@ -305,14 +305,14 @@ void PalPadDetails_Setup(PalPadDetails *details, PalPadShared *shared, PalPadGfx
 void PalPadDetails_Teardown(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx);
 void PalPadDetailsSlot_CopyWindowsToVram(PalPadDetailsSlot *slot, u32 page);
 void PalPadDetailsSlot_ClearWindows(PalPadDetailsSlot *slot, u32 page);
-void ov43_0222DFB0(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx);
-void ov43_0222E0E8(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx);
-void ov43_0222E220(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
-void ov43_0222E5B4(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
-void ov43_0222E78C(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
-void ov43_0222E904(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
+void PalPadDetails_PrintUnionRoomPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx);
+void PalPadDetails_PrintBattleTowerPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx);
+void PalPadDetails_PrintBattleFactoryPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
+void PalPadDetails_PrintBattleCastlePage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
+void PalPadDetails_PrintBattleHallPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
+void PalPadDetails_PrintBattleArcadePage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
 void PalPadDetails_PrintWiFiPlazaPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
-void ov43_0222EBD8(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx);
+void PalPadDetails_PrintReturnPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx);
 
 // palpad_details_text.c
 void PalPadDetailsSlot_ClearBg(PalPadGfx *gfx, PalPadDetailsSlot *slot);

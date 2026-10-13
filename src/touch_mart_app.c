@@ -249,7 +249,7 @@ BOOL TouchMartApp_IsSelectionValid(TouchMartAppData *data, u32 selection) {
     case 4:
     case 5: {
         MartData *martData = data->martData;
-        if (selection + martData->unk271 < martData->unk270) {
+        if (selection + martData->pageStart < martData->numItems) {
             return TRUE;
         }
         break;
@@ -275,22 +275,22 @@ void TouchMartApp_RunTask(SysTask *task, TouchMartAppData *data) {
         case 3:
             selection = TouchMartApp_GetTouchedButton(data, 0);
             if (selection != -1 && TouchMartApp_IsSelectionValid(data, selection)) {
-                data->martData->unk294 = selection;
+                data->martData->touchButton = selection;
             }
             break;
         case 7:
             selection = TouchMartApp_GetTouchedButton(data, 1);
             if (selection != -1) {
-                data->martData->unk294 = selection;
+                data->martData->touchButton = selection;
             }
             break;
         case 11:
             TouchMartApp_HandleYesNoPrompt(data);
             break;
         }
-        if (data->martData->unk298 != 0) {
-            TouchMartApp_HandleAction(data, data->martData->unk298);
-            data->martData->unk298 = 0;
+        if (data->martData->touchMartAction != 0) {
+            TouchMartApp_HandleAction(data, data->martData->touchMartAction);
+            data->martData->touchMartAction = 0;
         }
         return;
     }
@@ -489,7 +489,7 @@ void TouchMartApp_PrintItemList(TouchMartAppData *data) {
         window++;
     }
 
-    count = data->martData->unk270 - data->martData->unk271;
+    count = data->martData->numItems - data->martData->pageStart;
     if (count > TOUCH_MART_ITEMS_PER_PAGE) {
         count = TOUCH_MART_ITEMS_PER_PAGE;
     } else if (count < 0) {
@@ -501,8 +501,8 @@ void TouchMartApp_PrintItemList(TouchMartAppData *data) {
         window = &data->windows[TOUCH_MART_WINDOW_ITEM_0];
         do {
             martData = data->martData;
-            index = i + martData->unk271;
-            itemId = martData->unk268[index];
+            index = i + martData->pageStart;
+            itemId = martData->itemIds[index];
             string = NewString_ReadMsgData(data->itemNameMsgData, itemId);
             TouchMartApp_PrintItemName(data, window, string, i);
             String_Delete(string);
@@ -594,8 +594,8 @@ void TouchMartApp_PrintPageNumber(TouchMartAppData *data) {
     string = String_New(6, HEAP_ID_FIELD2);
     template = NewString_ReadMsgData(data->msgData, msg_0435_00043);
     martData = data->martData;
-    page = (martData->unk271 + TOUCH_MART_ITEMS_PER_PAGE) / TOUCH_MART_ITEMS_PER_PAGE;
-    itemCount = martData->unk270;
+    page = (martData->pageStart + TOUCH_MART_ITEMS_PER_PAGE) / TOUCH_MART_ITEMS_PER_PAGE;
+    itemCount = martData->numItems;
     pageCount = itemCount / TOUCH_MART_ITEMS_PER_PAGE;
     if (itemCount % TOUCH_MART_ITEMS_PER_PAGE != 0) {
         pageCount++;
@@ -652,16 +652,16 @@ void TouchMartApp_PrintSelectedItem(TouchMartAppData *data) {
     String *string;
 
     martData = data->martData;
-    index = martData->unk290 + martData->unk271;
-    string = NewString_ReadMsgData(data->itemNameMsgData, martData->unk268[index]);
+    index = martData->cursorPos + martData->pageStart;
+    string = NewString_ReadMsgData(data->itemNameMsgData, martData->itemIds[index]);
     TouchMartApp_PrintItemName(data, &data->windows[TOUCH_MART_WINDOW_SELECTED_ITEM], string, index);
     String_Delete(string);
     martData = data->martData;
-    itemId = martData->unk268[index];
+    itemId = martData->itemIds[index];
     if (ov31_0225E12C(martData, index, itemId)) {
         int price;
         martData = data->martData;
-        itemId = martData->unk268[index];
+        itemId = martData->itemIds[index];
         price = MartData_GetItemPrice(martData, itemId);
         TouchMartApp_PrintPrice(data->messageFormat, data->msgData, &data->windows[TOUCH_MART_WINDOW_SELECTED_ITEM], price, martData->martType);
     }
@@ -834,12 +834,12 @@ BOOL TouchMartApp_HandleYesNoPrompt(TouchMartAppData *data) {
     case YESNORESPONSE_YES:
         YesNoPrompt_Destroy(data->yesNoPrompt);
         data->yesNoPrompt = NULL;
-        data->martData->unk294 = 0;
+        data->martData->touchButton = 0;
         return TRUE;
     case YESNORESPONSE_NO:
         YesNoPrompt_Destroy(data->yesNoPrompt);
         data->yesNoPrompt = NULL;
-        data->martData->unk294 = 1;
+        data->martData->touchButton = 1;
         return TRUE;
     }
     return FALSE;

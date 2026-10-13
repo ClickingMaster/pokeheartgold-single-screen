@@ -77,7 +77,7 @@ static const u16 ov03_0225945C[4] = {
     0
 };
 
-static const WindowTemplate ov03_022594C6[6] = {
+static const WindowTemplate sMartWindowTemplates[6] = {
     {
      .bgId = GF_BG_LYR_MAIN_2,
      .left = 13,
@@ -184,36 +184,36 @@ static u32 Mart_CountItems(const u16 *items, u16 *priceOverrides, u32 martType) 
 }
 
 static void MartData_CopyItems(MartData *data, const u16 *items, BOOL flag09A) {
-    int max = data->unk270;
+    int max = data->numItems;
     int i;
     int k = 0;
     for (i = 0; i < max; i++) {
         if (flag09A == FALSE) {
             if (items[i] == 4) {
-                data->unk270--;
+                data->numItems--;
             } else {
-                data->unk268[k] = items[i];
+                data->itemIds[k] = items[i];
                 k++;
             }
         } else {
-            data->unk268[k] = items[i];
+            data->itemIds[k] = items[i];
             k++;
         }
     }
 }
 
 static void MartData_CopyPriceOverrideItems(MartData *data, u16 *priceOverrides) {
-    for (int i = 0, j = 0; i < data->unk270; i++, j += 2) {
-        data->unk268[i] = priceOverrides[j]; // martItem->cost?
+    for (int i = 0, j = 0; i < data->numItems; i++, j += 2) {
+        data->itemIds[i] = priceOverrides[j]; // martItem->cost?
     }
 }
 
 static void MartData_InitItemList(MartData *data, const u16 *items, BOOL flag09A, const struct MartItem *priceOverrides) {
-    data->unk270 = Mart_CountItems(items, (u16 *)priceOverrides, data->martType);
-    if (data->unk270 >= 0xFF) {
+    data->numItems = Mart_CountItems(items, (u16 *)priceOverrides, data->martType);
+    if (data->numItems >= 0xFF) {
         GF_AssertFail();
     }
-    data->unk268 = Heap_Alloc(HEAP_ID_FIELD2, data->unk270 * 2);
+    data->itemIds = Heap_Alloc(HEAP_ID_FIELD2, data->numItems * 2);
     if (data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
         MartData_CopyPriceOverrideItems(data, (u16 *)priceOverrides);
     } else {
@@ -238,10 +238,10 @@ void Mart_Init(TaskManager *taskManager, FieldSystem *fieldSystem, const u16 *it
     martData->apricornBox = Save_ApricornBox_Get(fieldSystem->saveData);
     martData->unk264 = deco_which;
     martData->martType = kind;
-    martData->unk271 = 0;
-    martData->unk290 = 0;
-    martData->unk294 = -1;
-    martData->unk298 = 0;
+    martData->pageStart = 0;
+    martData->cursorPos = 0;
+    martData->touchButton = -1;
+    martData->touchMartAction = 0;
     martData->pokeathlonSave = Save_Pokeathlon_Get(fieldSystem->saveData);
     martData->priceOverrides = priceOverrides;
     martData->unk273 = buy_sell;
@@ -308,11 +308,11 @@ BOOL Task_Mart(TaskManager *taskManager) {
         data->state = MartData_WaitForBottomScreenApp(fieldSystem, data); // Returns 2 or 3.
         break;
     case TASK_MART_3:
-        if (data->unk294 == -1) {
+        if (data->touchButton == -1) {
             data->state = MartData_HandleItemListInput(data);
         } else {
-            data->state = MartData_SelectItemListButton(data, data->unk294);
-            data->unk294 = -1;
+            data->state = MartData_SelectItemListButton(data, data->touchButton);
+            data->touchButton = -1;
         }
         break;
     case TASK_MART_4:
@@ -320,18 +320,18 @@ BOOL Task_Mart(TaskManager *taskManager) {
         break;
     case TASK_MART_6:
         if (!Sprite_IsAnimated(data->sprites[10])) {
-            data->state = MartData_BeginPurchase(data, data->unk268[data->unk290 + data->unk271]);
+            data->state = MartData_BeginPurchase(data, data->itemIds[data->cursorPos + data->pageStart]);
         }
         break;
     case TASK_MART_5:
         data->state = MartData_WaitQuantityPrompt(data); // Returns 5 or 7.
         break;
     case TASK_MART_7:
-        if (data->unk294 == -1) {
+        if (data->touchButton == -1) {
             data->state = MartData_HandleQuantityInput(data);
         } else {
-            data->state = MartData_HandleQuantityButton(data, data->unk294);
-            data->unk294 = -1;
+            data->state = MartData_HandleQuantityButton(data, data->touchButton);
+            data->touchButton = -1;
         }
         break;
     case TASK_MART_8:
@@ -344,9 +344,9 @@ BOOL Task_Mart(TaskManager *taskManager) {
         data->state = MartData_WaitConfirmPrompt(data);
         break;
     case TASK_MART_11:
-        if (data->unk294 != -1) {
-            data->state = MartData_HandleConfirmInput(data, data->unk294);
-            data->unk294 = -1;
+        if (data->touchButton != -1) {
+            data->state = MartData_HandleConfirmInput(data, data->touchButton);
+            data->touchButton = -1;
         }
         break;
     case TASK_MART_12:
@@ -418,7 +418,7 @@ static BOOL MartData_Destroy(FieldSystem *fieldSystem_unused, MartData *data) {
     DestroyMsgData(data->messageData);
     MessageFormat_Delete(data->messageFormat);
     String_Delete(data->string);
-    Heap_Free(data->unk268);
+    Heap_Free(data->itemIds);
     Heap_Free(data);
     return TRUE;
 }
@@ -438,7 +438,7 @@ static void MartData_AddWindows(MartData *data) {
         if (data->martType != MART_TYPE_NORMAL && data->martType != MART_TYPE_3 && data->martType != MART_TYPE_4 && i == 1) {
             AddWindow(data->bgConfig, &data->windows[i], &ov03_02259464);
         } else {
-            AddWindow(data->bgConfig, &data->windows[i], &ov03_022594C6[i]);
+            AddWindow(data->bgConfig, &data->windows[i], &sMartWindowTemplates[i]);
         }
     }
 }
@@ -494,12 +494,12 @@ static u8 MartData_WaitForBottomScreenApp(FieldSystem *fieldSystem, MartData *da
     data->unk281 = 0;
     MartData_LoadBgGraphics(data); // MartData_InitFrames?
     MartData_SaveAndSetBgPriorities(data); // MartData_ToggleBgOn?
-    MartData_PrintItemDescription(data, data->unk290);
+    MartData_PrintItemDescription(data, data->cursorPos);
     Sprite_SetDrawFlag(data->sprites[3], TRUE);
     return TASK_MART_3;
 }
 
-static const u8 ov03_0225949E[10][4] = {
+static const u8 sMartCursorSpriteParams[10][4] = {
     { 48,  56,  0, 7 },
     { 176, 56,  0, 7 },
     { 48,  96,  0, 7 },
@@ -515,9 +515,9 @@ static const u8 ov03_0225949E[10][4] = {
 static void MartData_SetCursorPosition(MartData *data, int index, int arg2) {
     switch (arg2) {
     case 0:
-        Sprite_SetAnimCtrlSeq(data->sprites[10], ov03_0225949E[data->unk290][2]);
-        thunk_Sprite_SetPaletteOverride(data->sprites[10], ov03_0225949E[index][3]);
-        Sprite_SetPositionXY(data->sprites[10], ov03_0225949E[index][0], ov03_0225949E[index][1]);
+        Sprite_SetAnimCtrlSeq(data->sprites[10], sMartCursorSpriteParams[data->cursorPos][2]);
+        thunk_Sprite_SetPaletteOverride(data->sprites[10], sMartCursorSpriteParams[index][3]);
+        Sprite_SetPositionXY(data->sprites[10], sMartCursorSpriteParams[index][0], sMartCursorSpriteParams[index][1]);
     case 1:
     case 2:
         break;
@@ -527,7 +527,7 @@ static void MartData_SetCursorPosition(MartData *data, int index, int arg2) {
 static void MartData_PrintItemDescription(MartData *data, u32 arg1) {
     MsgData *msgData;
     String *string;
-    u16 itemID = data->unk268[data->unk290 + data->unk271];
+    u16 itemID = data->itemIds[data->cursorPos + data->pageStart];
     switch (arg1) {
     case 0:
     case 1:
@@ -536,7 +536,7 @@ static void MartData_PrintItemDescription(MartData *data, u32 arg1) {
     case 4:
     case 5:
         FillWindowPixelBuffer(&data->windows[1], 0);
-        if (data->unk290 + data->unk271 < data->unk270) {
+        if (data->cursorPos + data->pageStart < data->numItems) {
             if (data->martType == MART_TYPE_NORMAL || data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
                 string = String_New(130, HEAP_ID_FIELD2);
                 GetItemDescIntoString(string, itemID, HEAP_ID_FIELD2);
@@ -567,7 +567,7 @@ static void MartData_PrintItemDescription(MartData *data, u32 arg1) {
     }
 }
 
-static const u8 ov03_0225947A[9][4] = {
+static const u8 sMartCursorNeighbors[9][4] = {
     { 4, 2, 6, 1 },
     { 8, 3, 0, 7 },
     { 0, 4, 6, 3 },
@@ -583,45 +583,45 @@ static int MartData_HandleItemListInput(MartData *data) {
     u8 unkExternVal;
     BOOL unkBool = FALSE;
     if (gSystem.newKeys & PAD_KEY_UP) {
-        data->unk290 = ov03_0225947A[data->unk290][0];
+        data->cursorPos = sMartCursorNeighbors[data->cursorPos][0];
         PlaySE(SEQ_SE_DP_SELECT);
         unkBool++;
     } else if (gSystem.newKeys & PAD_KEY_DOWN) {
-        data->unk290 = ov03_0225947A[data->unk290][1];
+        data->cursorPos = sMartCursorNeighbors[data->cursorPos][1];
         PlaySE(SEQ_SE_DP_SELECT);
         unkBool++;
     } else if (gSystem.newKeys & PAD_KEY_LEFT) {
-        unkExternVal = ov03_0225947A[data->unk290][2];
+        unkExternVal = sMartCursorNeighbors[data->cursorPos][2];
         if (unkExternVal == 6) {
             return MartData_SelectItemListButton(data, 6);
         }
-        if (data->unk290 != 8) {
-            data->unk290 = unkExternVal;
+        if (data->cursorPos != 8) {
+            data->cursorPos = unkExternVal;
             PlaySE(SEQ_SE_DP_SELECT);
             unkBool++;
         }
     } else if (gSystem.newKeys & PAD_KEY_RIGHT) {
-        unkExternVal = ov03_0225947A[data->unk290][3];
+        unkExternVal = sMartCursorNeighbors[data->cursorPos][3];
         if (unkExternVal == 7) {
             return MartData_SelectItemListButton(data, 7);
         }
-        if (data->unk290 != 8) {
-            data->unk290 = unkExternVal;
+        if (data->cursorPos != 8) {
+            data->cursorPos = unkExternVal;
             PlaySE(SEQ_SE_DP_SELECT);
             unkBool++;
         }
     }
 
     if (unkBool) {
-        MartData_SetCursorPosition(data, data->unk290, 0);
-        MartData_PrintItemDescription(data, data->unk290);
+        MartData_SetCursorPosition(data, data->cursorPos, 0);
+        MartData_PrintItemDescription(data, data->cursorPos);
     }
     if (gSystem.newKeys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
         return MartData_StartButtonPressAnim(data, 13, 16);
     }
     if (gSystem.newKeys & PAD_BUTTON_A) {
-        return MartData_SelectItemListButton(data, data->unk290);
+        return MartData_SelectItemListButton(data, data->cursorPos);
     }
     return TASK_MART_3;
 }
@@ -634,23 +634,23 @@ static u8 MartData_SelectItemListButton(MartData *data, u32 arg1) {
     case 3:
     case 4:
     case 5:
-        if (arg1 + data->unk271 < data->unk270) {
-            data->unk290 = arg1;
-            MartData_SetCursorPosition(data, data->unk290, 0);
+        if (arg1 + data->pageStart < data->numItems) {
+            data->cursorPos = arg1;
+            MartData_SetCursorPosition(data, data->cursorPos, 0);
             Sprite_SetAnimCtrlSeq(data->sprites[10], 19);
             PlaySE(SEQ_SE_DP_SELECT);
-            MartData_PrintItemDescription(data, data->unk290);
+            MartData_PrintItemDescription(data, data->cursorPos);
             return TASK_MART_6;
         }
         break;
     case 6:
-        if (data->unk271) {
+        if (data->pageStart) {
             PlaySE(SEQ_SE_DP_SELECT);
             return MartData_StartButtonPressAnim(data, 11, 19);
         }
         break;
     case 7:
-        if (data->unk271 + 6 < data->unk270) {
+        if (data->pageStart + 6 < data->numItems) {
             PlaySE(SEQ_SE_DP_SELECT);
             return MartData_StartButtonPressAnim(data, 12, 20);
         }
@@ -666,18 +666,18 @@ static u8 MartData_SelectItemListButton(MartData *data, u32 arg1) {
 }
 
 static u8 MartData_PrevPage(MartData *data) {
-    data->unk271 -= 6;
-    MartData_DrawPageItemIcons(data, data->unk271, data->unk270);
-    data->unk298 = 1;
-    MartData_PrintItemDescription(data, data->unk290);
+    data->pageStart -= 6;
+    MartData_DrawPageItemIcons(data, data->pageStart, data->numItems);
+    data->touchMartAction = 1;
+    MartData_PrintItemDescription(data, data->cursorPos);
     return TASK_MART_3;
 }
 
 static u8 MartData_NextPage(MartData *data) {
-    data->unk271 += 6;
-    MartData_DrawPageItemIcons(data, data->unk271, data->unk270);
-    data->unk298 = 1;
-    MartData_PrintItemDescription(data, data->unk290);
+    data->pageStart += 6;
+    MartData_DrawPageItemIcons(data, data->pageStart, data->numItems);
+    data->touchMartAction = 1;
+    MartData_PrintItemDescription(data, data->cursorPos);
     return TASK_MART_3;
 }
 
@@ -693,7 +693,7 @@ static void MartData_DrawPageItemIcons(MartData *data, int arg1, u8 arg2) {
         }
 
         if (i < temp) {
-            MartData_LoadItemIcon(data, i + 3, i + 2, data->unk268[i + arg1]);
+            MartData_LoadItemIcon(data, i + 3, i + 2, data->itemIds[i + arg1]);
             Sprite_SetDrawFlag(data->sprites[i + 4], TRUE);
         } else {
             Sprite_SetDrawFlag(data->sprites[i + 4], FALSE);
@@ -719,7 +719,7 @@ static u32 MartData_GetCurrency(MartData *data, u32 martType) {
 
 int MartData_CheckCannotBuy(MartData *data, u32 unkAmount) {
     if (data->martType == MART_TYPE_3) {
-        if (PokeathlonSave_GetUnkB7C_AtIndex(data->pokeathlonSave, data->unk290 + data->unk271)) {
+        if (PokeathlonSave_GetUnkB7C_AtIndex(data->pokeathlonSave, data->cursorPos + data->pageStart)) {
             return 2;
         }
     } else if (data->martType == MART_TYPE_4 && PokeathlonSave_GetUnkB78_AtIndex(data->pokeathlonSave, data->item - 505)) {
@@ -740,18 +740,18 @@ static u8 MartData_BeginPurchase(MartData *data, u16 itemID) {
     data->cost = MartData_GetItemPrice(data, data->item);
     u32 unkAmount = MartData_GetCurrency(data, data->martType);
     if (MartData_CheckCannotBuy(data, unkAmount)) {
-        data->unk298 = 10;
+        data->touchMartAction = 10;
         return TASK_MART_14;
     }
-    data->unk288 = unkAmount / data->cost;
-    if (data->unk288 > 99) {
-        data->unk288 = 99;
+    data->maxQuantity = unkAmount / data->cost;
+    if (data->maxQuantity > 99) {
+        data->maxQuantity = 99;
     }
     if (data->martType == MART_TYPE_1 || data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
         return MartData_CheckInventorySpace(data);
     }
     MartData_UpdateButtonSprites(data, 1);
-    data->unk298 = 2;
+    data->touchMartAction = 2;
     return TASK_MART_5;
 }
 
@@ -783,7 +783,7 @@ static u8 MartData_FinishQuantityInput(MartData *data) {
     EraseFrameAndWindow1(&data->windows[4], TRUE);
     EraseFrameAndWindow1(&data->windows[3], TRUE);
     FillWindowPixelBuffer(&data->windows[5], 15);
-    data->unk298 = 7;
+    data->touchMartAction = 7;
     Sprite_SetDrawFlag(data->sprites[18], FALSE);
     Sprite_SetDrawFlag(data->sprites[13], FALSE);
     Sprite_SetDrawFlag(data->sprites[14], FALSE);
@@ -802,15 +802,15 @@ static u8 MartData_CancelQuantityInput(MartData *data) {
     Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
     ov03_022586BC(data, 0);
     MartData_UpdateButtonSprites(data, 0);
-    data->unk298 = 4;
+    data->touchMartAction = 4;
     Sprite_SetDrawFlag(data->sprites[13], TRUE);
     return TASK_MART_3;
 }
 
 static u8 MartData_HandleQuantityInput(MartData *data) {
-    if (HandleNumberSelectInput(&data->quantity, data->unk288)) {
+    if (HandleNumberSelectInput(&data->quantity, data->maxQuantity)) {
         PlaySE(SEQ_SE_DP_BAG_004);
-        data->unk298 = 6;
+        data->touchMartAction = 6;
         return TASK_MART_7;
     }
     if (PAD_BUTTON_A & gSystem.newKeys) {
@@ -827,39 +827,39 @@ static u8 MartData_HandleQuantityInput(MartData *data) {
 static u8 MartData_HandleQuantityButton(MartData *data, u32 arg1) {
     switch (arg1) {
     case 0:
-        if (data->unk288 >= 10) {
-            data->quantity = Mart_StepQuantity(data->quantity, data->unk288, 10);
+        if (data->maxQuantity >= 10) {
+            data->quantity = Mart_StepQuantity(data->quantity, data->maxQuantity, 10);
             Sprite_SetAnimationFrame(data->sprites[14], 0);
             Sprite_SetAnimCtrlSeq(data->sprites[14], 13);
             PlaySE(SEQ_SE_DP_BAG_004);
-            data->unk298 = 6;
+            data->touchMartAction = 6;
         }
         break;
     case 1:
-        if (data->unk288 != 1) {
-            data->quantity = Mart_StepQuantity(data->quantity, data->unk288, 1);
+        if (data->maxQuantity != 1) {
+            data->quantity = Mart_StepQuantity(data->quantity, data->maxQuantity, 1);
             Sprite_SetAnimationFrame(data->sprites[15], 0);
             Sprite_SetAnimCtrlSeq(data->sprites[15], 13);
             PlaySE(SEQ_SE_DP_BAG_004);
-            data->unk298 = 6;
+            data->touchMartAction = 6;
         }
         break;
     case 2:
-        if (data->unk288 >= 10) {
-            data->quantity = Mart_StepQuantity(data->quantity, data->unk288, -10);
+        if (data->maxQuantity >= 10) {
+            data->quantity = Mart_StepQuantity(data->quantity, data->maxQuantity, -10);
             Sprite_SetAnimationFrame(data->sprites[16], 0);
             Sprite_SetAnimCtrlSeq(data->sprites[16], 15);
             PlaySE(SEQ_SE_DP_BAG_004);
-            data->unk298 = 6;
+            data->touchMartAction = 6;
         }
         break;
     case 3:
-        if (data->unk288 != 1) {
-            data->quantity = Mart_StepQuantity(data->quantity, data->unk288, -1);
+        if (data->maxQuantity != 1) {
+            data->quantity = Mart_StepQuantity(data->quantity, data->maxQuantity, -1);
             Sprite_SetAnimationFrame(data->sprites[17], 0);
             Sprite_SetAnimCtrlSeq(data->sprites[17], 15);
             PlaySE(SEQ_SE_DP_BAG_004);
-            data->unk298 = 6;
+            data->touchMartAction = 6;
         }
         break;
     case 4:
@@ -881,15 +881,15 @@ static u8 MartData_CheckInventorySpace(MartData *data) {
     } else if (data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
         if (data->item >= ITEM_RED_APRICORN && data->item <= ITEM_BLK_APRICORN) {
             if (ApricornBox_CountApricorn(data->apricornBox, data->item - ITEM_RED_APRICORN) == 99) {
-                data->unk298 = 12;
+                data->touchMartAction = 12;
                 return TASK_MART_14;
             }
         } else if (Bag_HasSpaceForItem(data->inventory, data->item, data->quantity, HEAP_ID_FIELD2) == FALSE) {
-            data->unk298 = 12;
+            data->touchMartAction = 12;
             return TASK_MART_14;
         }
         MartData_UpdateButtonSprites(data, 2);
-        data->unk298 = 3;
+        data->touchMartAction = 3;
         return TASK_MART_10;
     } else {
         quantity = SealCase_CheckSealQuantity(data->inventory, data->item, data->quantity);
@@ -897,7 +897,7 @@ static u8 MartData_CheckInventorySpace(MartData *data) {
 
     if (quantity == 0) {
         data->quantity = 0;
-        data->unk298 = 11;
+        data->touchMartAction = 11;
         return TASK_MART_13;
     }
     return TASK_MART_10;
@@ -907,14 +907,14 @@ static u8 MartData_WaitConfirmPrompt(MartData *data) {
     if (DialogBox_IsPrintFinished(data->printerID) == FALSE) {
         return TASK_MART_10;
     }
-    data->unk298 = 8;
+    data->touchMartAction = 8;
     return TASK_MART_11;
 }
 
 static u8 MartData_HandleConfirmInput(MartData *data, u32 arg1) {
     switch (arg1) {
     case 0:
-        data->unk298 = 9;
+        data->touchMartAction = 9;
         return TASK_MART_12;
     case 1:
         ClearFrameAndWindow2(&data->windows[5], FALSE);
@@ -923,7 +923,7 @@ static u8 MartData_HandleConfirmInput(MartData *data, u32 arg1) {
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
         ov03_022586BC(data, 0);
         MartData_UpdateButtonSprites(data, 0);
-        data->unk298 = 4;
+        data->touchMartAction = 4;
         return TASK_MART_3;
     default:
         return TASK_MART_11;
@@ -954,7 +954,7 @@ static u8 MartData_PerformTransaction(MartData *data) {
         Bag_AddItem(data->inventory, data->item, data->quantity, HEAP_ID_FIELD2);
     } else if (data->martType == MART_TYPE_3) {
         MartData_Inventory_AddApricornOrItem(data, data->item);
-        PokeathlonSave_SetUnkB7C_AtIndex(data->pokeathlonSave, data->unk290 + data->unk271);
+        PokeathlonSave_SetUnkB7C_AtIndex(data->pokeathlonSave, data->cursorPos + data->pageStart);
     } else if (data->martType == MART_TYPE_4) {
         PokeathlonSave_SetUnkB78_AtIndex(data->pokeathlonSave, data->item - 505);
     } else {
@@ -974,7 +974,7 @@ static u8 MartData_WaitPurchaseMessage(MartData *data) {
             Save_VarsFlags_IncrementVar4042(data->varsFlags);
         }
         if (data->martType == MART_TYPE_NORMAL && data->item == ITEM_POKE_BALL && data->quantity >= 10 && Bag_AddItem(data->inventory, ITEM_PREMIER_BALL, 1, HEAP_ID_FIELD2) == TRUE) {
-            data->unk298 = 13;
+            data->touchMartAction = 13;
             GameStats_Inc(data->gameStats, GAME_STAT_PREMIER_BALLS_EARNED);
             return TASK_MART_15;
         }
@@ -984,7 +984,7 @@ static u8 MartData_WaitPurchaseMessage(MartData *data) {
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
         ov03_022586BC(data, 0);
         MartData_UpdateButtonSprites(data, 0);
-        data->unk298 = 4;
+        data->touchMartAction = 4;
         return TASK_MART_4;
     }
     return TASK_MART_13;
@@ -1001,7 +1001,7 @@ static u8 MartData_WaitErrorMessage(MartData *data) {
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
         ov03_022586BC(data, 0);
         MartData_UpdateButtonSprites(data, 0);
-        data->unk298 = 5;
+        data->touchMartAction = 5;
         return TASK_MART_4;
     }
     return TASK_MART_14;
@@ -1018,7 +1018,7 @@ static u8 MartData_WaitPremierBallMessage(MartData *data) {
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
         ov03_022586BC(data, 0);
         MartData_UpdateButtonSprites(data, 0);
-        data->unk298 = 4;
+        data->touchMartAction = 4;
         return TASK_MART_3;
     }
     return TASK_MART_15;
@@ -1040,7 +1040,7 @@ u32 MartData_GetItemPrice(MartData *data, u16 itemID) {
     } else if (data->martType == MART_TYPE_1) {
         return 100;
     } else if (data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
-        return Mart_GetPriceOverride(itemID, data->priceOverrides, data->unk270);
+        return Mart_GetPriceOverride(itemID, data->priceOverrides, data->numItems);
     }
     return 100;
 }
@@ -1299,8 +1299,8 @@ void MartData_CreateSprites(MartData *data) {
     GfGfx_EngineATogglePlanes(16, 1);
     GfGfx_EngineBTogglePlanes(16, 1);
     MartData_UpdateButtonSprites(data, 0);
-    MartData_SetCursorPosition(data, data->unk290, 0);
-    MartData_DrawPageItemIcons(data, data->unk271, data->unk270);
+    MartData_SetCursorPosition(data, data->cursorPos, 0);
+    MartData_DrawPageItemIcons(data, data->pageStart, data->numItems);
 }
 
 static void MartData_DeleteSprites(MartData *data) {
@@ -1351,19 +1351,19 @@ static void MartData_UpdateButtonSprites(MartData *data, int arg1) {
         }
         for (i = 0; i < NELEMS(ov03_02259850); i++) {
             if (ov03_02259850[i][OV03_02259850_DATA_1] == 4) {
-                if (data->unk271 + 6 < data->unk270) {
+                if (data->pageStart + 6 < data->numItems) {
                     Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], TRUE);
                 } else {
                     Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], FALSE);
                 }
             } else if (ov03_02259850[i][OV03_02259850_DATA_1] == 3) {
-                if (data->unk271 == 0) {
+                if (data->pageStart == 0) {
                     Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], FALSE);
                 } else {
                     Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], TRUE);
                 }
             } else if (ov03_02259850[i][OV03_02259850_DATA_1] == 5) {
-                if (data->unk271 + i < data->unk270) {
+                if (data->pageStart + i < data->numItems) {
                     Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], TRUE);
                 } else {
                     Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], FALSE);
@@ -1378,7 +1378,7 @@ static void MartData_UpdateButtonSprites(MartData *data, int arg1) {
     case 1:
         for (i = 0; i < NELEMS(ov03_02259850); i++) {
             if (ov03_02259850[i][OV03_02259850_DATA_2] == 2) {
-                if (data->unk290 == i) {
+                if (data->cursorPos == i) {
                     VecFx32 vec2;
                     vec2.x = 0x56000;
                     vec2.y = 0x10C000;
@@ -1390,13 +1390,13 @@ static void MartData_UpdateButtonSprites(MartData *data, int arg1) {
                 }
             } else {
                 if (ov03_02259850[i][OV03_02259850_SPRITE_INDEX] == 14 || ov03_02259850[i][OV03_02259850_SPRITE_INDEX] == 16) {
-                    if (data->unk288 < 10) {
+                    if (data->maxQuantity < 10) {
                         Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], FALSE);
                     } else {
                         Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], TRUE);
                     }
                 } else if (ov03_02259850[i][OV03_02259850_SPRITE_INDEX] == 15 || ov03_02259850[i][OV03_02259850_SPRITE_INDEX] == 17) {
-                    if (data->unk288 == 1) {
+                    if (data->maxQuantity == 1) {
                         Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], FALSE);
                     } else {
                         Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], TRUE);
@@ -1411,7 +1411,7 @@ static void MartData_UpdateButtonSprites(MartData *data, int arg1) {
         break;
     case 2:
         for (i = 0; i < NELEMS(ov03_02259850); i++) {
-            if (data->unk290 == i) {
+            if (data->cursorPos == i) {
                 VecFx32 vec3;
                 vec3.x = 0x56000;
                 vec3.y = 0x10C000;

@@ -60,10 +60,10 @@ typedef struct MartData {
     GameStats *gameStats;
     SaveVarsFlags *varsFlags;
     u32 unk264;
-    u16 *unk268;
+    u16 *itemIds;
     const struct MartItem *priceOverrides;
-    u8 unk270;
-    u8 unk271;
+    u8 numItems;
+    u8 pageStart;
     u8 state;
     u8 unk273;
     String *string;
@@ -75,12 +75,12 @@ typedef struct MartData {
     u8 martType;
     u16 item;
     s16 quantity;
-    u16 unk288;
+    u16 maxQuantity;
     u16 unk28A;
     int cost;
-    int unk290;
-    u32 unk294;
-    u32 unk298;
+    int cursorPos;
+    u32 touchButton;
+    u32 touchMartAction;
     UnkMiniStruct unk29C;
     u32 unk2A0;
 } MartData;
@@ -93,10 +93,10 @@ void ov03_02255C54();
 u32 ov03_02255C64();
 
 void StartTask_BattleRegulationMenu(TaskManager *taskManager, u16 *result);
-void ov03_022566D0(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset);
-void ov03_02256710(FieldSystem *fieldSystem, u16 a1);
-void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset);
-u16 ov03_02256A2C(FieldSystem *fieldSystem, MessageFormat *msgFmt, u32 a2);
+void BattleRegulation_BufferName(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset);
+void BattleRegulation_SetActiveRuleset(FieldSystem *fieldSystem, u16 a1);
+void BattleRegulation_PrintRulesWindow(FieldSystem *fieldSystem, Window *window, u32 ruleset);
+u16 BattleRegulation_CheckParty(FieldSystem *fieldSystem, MessageFormat *msgFmt, u32 a2);
 u32 ov03_02256B40(int);
 
 BOOL Task_Mart(TaskManager *taskManager);
@@ -104,7 +104,7 @@ int MartData_CheckCannotBuy(MartData *data, u32 unkAmount);
 int MartData_GetOwnedQuantity(MartData *data, int itemID);
 u32 MartData_GetItemPrice(MartData *data, u16 itemID);
 void MartData_CreateSprites(MartData *data);
-void ov03_02258910(FieldSystem *fieldSystem);
-void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData data);
+void CustomSafariLink_ExchangeAreaSets(FieldSystem *fieldSystem);
+void PokeathlonRecords_Show(TaskManager *taskManager, enum PokeathlonData data);
 
 #endif // POKEHEARTGOLD_OVERLAY_03_H

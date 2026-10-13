@@ -1374,7 +1374,7 @@ void PokeathlonCourse_LaunchApp(FieldSystem *fieldSystem, PokeathlonCourseArgs *
 }
 
 void sub_0203FC68(FieldSystem *fieldSystem, void *args) {
-    static const OverlayManagerTemplate _020FA454 = { ov104_021E5900, ov104_021E59E4, ov104_021E5B14, FS_OVERLAY_ID(OVY_104) };
+    static const OverlayManagerTemplate _020FA454 = { Ov104Scene_Init, Ov104Scene_Main, Ov104Scene_Exit, FS_OVERLAY_ID(OVY_104) };
     OverlayManagerTemplate template = _020FA454;
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }

@@ -698,7 +698,7 @@ void PalPadDetailsSlot_Clear(PalPadDetailsSlot *slot, PalPadGfx *gfx) {
 }
 
 // Record pages: Union Room records, Wi-Fi Plaza, Battle Frontier facilities, return tab
-void ov43_0222DFB0(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx) {
+void PalPadDetails_PrintUnionRoomPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx) {
     FriendRoster *wifiList = Save_FriendRoster_Get(shared->saveData);
     u32 i;
     u32 y;
@@ -719,7 +719,7 @@ void ov43_0222DFB0(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx
     PalPadDetailsSlot_CopyWindowsToVram(slot, 0);
 }
 
-void ov43_0222E0E8(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx) {
+void PalPadDetails_PrintBattleTowerPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx) {
     FrontierSave *frontier = Save_Frontier_GetStatic(shared->saveData);
 
     PalPadDetailsSlot_Print(slot, 2, 0, shared, gfx, 0x1D, 0, 0, 0x10200, gfx->pageText, gfx->pageBuffer, 0);
@@ -732,7 +732,7 @@ void ov43_0222E0E8(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx
     PalPadDetailsSlot_CopyWindowsToVram(slot, 2);
 }
 
-void ov43_0222E220(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
+void PalPadDetails_PrintBattleFactoryPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     FrontierSave *frontier = Save_Frontier_GetStatic(shared->saveData);
     String *raw = String_New(0x80, heapId);
     String *expanded = String_New(0x80, heapId);
@@ -774,7 +774,7 @@ void ov43_0222E220(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx
     String_Delete(expanded);
 }
 
-void ov43_0222E5B4(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
+void PalPadDetails_PrintBattleCastlePage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     FrontierSave *frontier = Save_Frontier_GetStatic(shared->saveData);
     String *raw = String_New(0x80, heapId);
     String *expanded = String_New(0x80, heapId);
@@ -798,7 +798,7 @@ void ov43_0222E5B4(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx
     String_Delete(expanded);
 }
 
-void ov43_0222E78C(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
+void PalPadDetails_PrintBattleHallPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     FrontierSave *frontier = Save_Frontier_GetStatic(shared->saveData);
     String *raw = String_New(0x80, heapId);
     String *expanded = String_New(0x80, heapId);
@@ -828,7 +828,7 @@ void ov43_0222E78C(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx
     String_Delete(expanded);
 }
 
-void ov43_0222E904(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
+void PalPadDetails_PrintBattleArcadePage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     FrontierSave *frontier = Save_Frontier_GetStatic(shared->saveData);
     String *raw = String_New(0x80, heapId);
     String *expanded = String_New(0x80, heapId);
@@ -874,7 +874,7 @@ void PalPadDetails_PrintWiFiPlazaPage(PalPadDetailsSlot *slot, PalPadShared *sha
     String_Delete(expanded);
 }
 
-void ov43_0222EBD8(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx) {
+void PalPadDetails_PrintReturnPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx) {
     PalPadDetailsSlot_Print(slot, 7, 0, shared, gfx, 0xe, 0, 0, 0x10200, gfx->pageText, gfx->pageBuffer, 0);
     PalPadDetailsSlot_CopyWindowsToVram(slot, 7);
 }

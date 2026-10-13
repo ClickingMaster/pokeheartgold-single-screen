@@ -3,8 +3,8 @@
 
 #include "overlay_manager.h"
 
-BOOL ov104_021E5900(OverlayManager *man, int *state);
-BOOL ov104_021E59E4(OverlayManager *man, int *state);
-BOOL ov104_021E5B14(OverlayManager *man, int *state);
+BOOL Ov104Scene_Init(OverlayManager *man, int *state);
+BOOL Ov104Scene_Main(OverlayManager *man, int *state);
+BOOL Ov104Scene_Exit(OverlayManager *man, int *state);
 
 #endif // POKEHEARTGOLD_OVY_104_H

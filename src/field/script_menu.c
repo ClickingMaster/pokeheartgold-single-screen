@@ -809,7 +809,7 @@ u8 ScriptMenu_GetCount(ScriptMenu *menu) {
 
 Window *BattleRegulationWindow_New(FieldSystem *fieldSystem, u16 a1) {
     Window *windows = AllocWindows(HEAP_ID_FIELD1, 1);
-    ov03_02256730(fieldSystem, windows, a1);
+    BattleRegulation_PrintRulesWindow(fieldSystem, windows, a1);
     return windows;
 }
 

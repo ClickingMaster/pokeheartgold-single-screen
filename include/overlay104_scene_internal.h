@@ -42,9 +42,9 @@ typedef struct Ov104Work {
     Ov104Model models[3];
     NNSFndAllocator allocator;
     VecFx32 target;
-    u8 unk164;
-    u8 unk165;
-    u8 unk166;
+    u8 variant;
+    u8 gender;
+    u8 isNight;
     u8 unk167;
     u8 step;
     u8 counter;
@@ -64,9 +64,9 @@ typedef struct Ov104Lighting {
 } Ov104Lighting;
 
 typedef struct Ov104Args {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
+    u8 variant;
+    u8 gender;
+    u8 isNight;
     u8 unk3;
     const Ov104Lighting *lighting;
 } Ov104Args;

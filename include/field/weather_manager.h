@@ -35,12 +35,12 @@ typedef struct WeatherDraw {
 } WeatherDraw;
 
 typedef struct WeatherBgGfxFiles {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    NNSG2dScreenData *unkC;
-    NNSG2dCharacterData *unk10;
-    NNSG2dPaletteData *unk14;
+    void *paletteFile;
+    void *charFile;
+    void *screenFile;
+    NNSG2dScreenData *screenData;
+    NNSG2dCharacterData *charData;
+    NNSG2dPaletteData *paletteData;
 } WeatherBgGfxFiles;
 
 typedef struct WeatherSystem WeatherSystem;
@@ -49,9 +49,9 @@ typedef struct WeatherWork WeatherWork;
 typedef struct WeatherObject WeatherObject;
 struct WeatherObject {
     WeatherSystem *weatherSystem;
-    Sprite *unk4;
-    u32 *unk8;
-    u32 unk10[10];
+    Sprite *sprite;
+    u32 *data;
+    u32 dataBuffer[10];
     WeatherObject *next;
     WeatherObject *prev;
 };
@@ -61,69 +61,69 @@ typedef struct WeatherManager {
     u32 weather;
     u32 nextWeather;
     u32 state;
-    u32 unk10;
+    u32 queuedWeather;
     SysTask *task;
 } WeatherManager;
 
 typedef struct WeatherLerp {
-    u32 unk0;
-    u32 unk4;
-    u32 unk8;
-    int unkC;
-    int unk10;
+    u32 value;
+    u32 start;
+    u32 delta;
+    int frame;
+    int duration;
 } WeatherLerp;
 typedef void (*WeatherSpawnFunc)(WeatherWork *, int);
 typedef struct WeatherSpawnRamp {
-    WeatherWork *unk0;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    s16 unk12;
-    s32 unk14;
-    WeatherSpawnFunc unk18;
+    WeatherWork *work;
+    s16 count;
+    s16 timer;
+    s16 interval;
+    s16 countTimer;
+    s16 targetCount;
+    s16 targetInterval;
+    s16 intervalStep;
+    s16 countStepSpawns;
+    s32 countStep;
+    WeatherSpawnFunc spawnFunc;
 } WeatherSpawnRamp;
 
 typedef void (*WeatherObjectFunc)(WeatherObject *);
 
 typedef struct WeatherFogChange {
     FogData *fog;
-    WeatherLerp unk4;
-    WeatherLerp unk18;
-    WeatherLerp unk2C;
-    WeatherLerp unk40;
-    WeatherLerp unk54;
+    WeatherLerp offset;
+    WeatherLerp red;
+    WeatherLerp green;
+    WeatherLerp blue;
+    WeatherLerp slope;
 } WeatherFogChange;
 
 typedef struct WeatherFogTableFade {
     FogData *fog;
-    u8 unk4[0x20];
-    s32 unk24;
-    s32 unk28;
-    s16 unk2C;
-    s16 unk2E;
+    u8 table[0x20];
+    s32 stepsLeft;
+    s32 frameTimer;
+    s16 framesPerStep;
+    s16 direction;
 } WeatherFogTableFade;
 
 typedef struct WeatherParticleTaskData {
-    WeatherSpawnRamp unk0;
-    WeatherFogTableFade unk1C;
-    WeatherFogChange unk50;
+    WeatherSpawnRamp spawnRamp;
+    WeatherFogTableFade fogTableFade;
+    WeatherFogChange fogChange;
     s32 data[10];
 } WeatherParticleTaskData;
 
 typedef struct WeatherFogTaskData {
-    WeatherFogTableFade unk1C;
-    WeatherFogChange unk50;
+    WeatherFogTableFade fogTableFade;
+    WeatherFogChange fogChange;
     s32 data[10];
 } WeatherFogTaskData;
 
 typedef struct WeatherMistTaskData {
-    WeatherLerp unk0;
-    WeatherFogTableFade unk1C;
-    WeatherFogChange unk50;
+    WeatherLerp blendLerp;
+    WeatherFogTableFade fogTableFade;
+    WeatherFogChange fogChange;
 } WeatherMistTaskData;
 
 typedef struct UnkStruct_021ED710_Sub_Sub4 {
@@ -148,9 +148,9 @@ typedef struct UnkStruct_021ED710_Sub {
 
 typedef struct WeatherFlashTaskData {
     UnkStruct_021ED710_Sub unk0;
-    void *unk62C;
-    u16 unk630;
-    u16 unk632;
+    void *darkness;
+    u16 scaleFrame;
+    u16 endStep;
 } WeatherFlashTaskData;
 
 void FieldTextureManager_KeepTextures(FieldTextureManager *textureManager);

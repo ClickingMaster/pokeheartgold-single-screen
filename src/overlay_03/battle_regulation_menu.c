@@ -50,7 +50,7 @@ typedef struct BattleRegulationMenu {
     int printerID;
     u16 itemsAbove[REGULATION_MENU_MAX];
     int state;
-    u16 unk80[REGULATION_MENU_MAX];
+    u16 listPos[REGULATION_MENU_MAX];
 } BattleRegulationMenu;
 
 typedef struct ConfirmMenuEntry {
@@ -154,10 +154,10 @@ static int BattleRegulationMenu_ProcessListMenuInputRegulations(BattleRegulation
     int input = ListMenu_ProcessInput(menu->listMenu[REGULATION_MENU_REGULATIONS]);
     ListMenuGetScrollAndRow(menu->listMenu[REGULATION_MENU_REGULATIONS], 0, &menu->itemsAbove[REGULATION_MENU_REGULATIONS]);
 
-    u16 prev = menu->unk80[REGULATION_MENU_REGULATIONS];
-    ListMenuGetCurrentItemArrayId(menu->listMenu[REGULATION_MENU_REGULATIONS], &menu->unk80[REGULATION_MENU_REGULATIONS]);
+    u16 prev = menu->listPos[REGULATION_MENU_REGULATIONS];
+    ListMenuGetCurrentItemArrayId(menu->listMenu[REGULATION_MENU_REGULATIONS], &menu->listPos[REGULATION_MENU_REGULATIONS]);
 
-    if (prev != menu->unk80[REGULATION_MENU_REGULATIONS]) {
+    if (prev != menu->listPos[REGULATION_MENU_REGULATIONS]) {
         PlaySE(SEQ_SE_DP_SELECT);
     }
 
@@ -213,10 +213,10 @@ static int BattleRegulationMenu_ProcessListMenuInputConfirm(BattleRegulationMenu
     int input = ListMenu_ProcessInput(menu->listMenu[REGULATION_MENU_CONFIRM]);
     ListMenuGetScrollAndRow(menu->listMenu[REGULATION_MENU_CONFIRM], 0, &menu->itemsAbove[REGULATION_MENU_CONFIRM]);
 
-    u16 prev = menu->unk80[REGULATION_MENU_CONFIRM];
-    ListMenuGetCurrentItemArrayId(menu->listMenu[REGULATION_MENU_CONFIRM], &menu->unk80[REGULATION_MENU_CONFIRM]);
+    u16 prev = menu->listPos[REGULATION_MENU_CONFIRM];
+    ListMenuGetCurrentItemArrayId(menu->listMenu[REGULATION_MENU_CONFIRM], &menu->listPos[REGULATION_MENU_CONFIRM]);
 
-    if (prev != menu->unk80[REGULATION_MENU_CONFIRM]) {
+    if (prev != menu->listPos[REGULATION_MENU_CONFIRM]) {
         PlaySE(SEQ_SE_DP_SELECT);
     }
 
@@ -525,14 +525,14 @@ void StartTask_BattleRegulationMenu(TaskManager *taskManager, u16 *result) {
     TaskManager_Call(taskManager, Task_BattleRegulationMenu, menu);
 }
 
-void ov03_022566D0(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset) {
+void BattleRegulation_BufferName(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset) {
     String *string = String_New(180, HEAP_ID_FIELD1);
     sub_0202921C(fieldSystem->saveData, ruleset, string, HEAP_ID_FIELD1);
     BufferString(messageFormat, 0, string, 0, 1, 2);
     String_Delete(string);
 }
 
-void ov03_02256710(FieldSystem *fieldSystem, u16 arg1) {
+void BattleRegulation_SetActiveRuleset(FieldSystem *fieldSystem, u16 arg1) {
     if (arg1 == 12 || arg1 == 6) {
         fieldSystem->linkBattleRuleset = NULL;
     } else {
@@ -540,7 +540,7 @@ void ov03_02256710(FieldSystem *fieldSystem, u16 arg1) {
     }
 }
 
-void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset) {
+void BattleRegulation_PrintRulesWindow(FieldSystem *fieldSystem, Window *window, u32 ruleset) {
     int ruleValue, valueMessage;
     const int xOffset = 2;
     const int xOffsetCupName = 55;
@@ -556,7 +556,7 @@ void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset) {
     MessageFormat *messageFormat = MessageFormat_New(HEAP_ID_FIELD1);
     String *fmtString = String_New(180, HEAP_ID_FIELD1);
     String *destString = String_New(180, HEAP_ID_FIELD1);
-    ov03_022566D0(fieldSystem, messageFormat, ruleset);
+    BattleRegulation_BufferName(fieldSystem, messageFormat, ruleset);
     ReadMsgDataIntoString(msgData, CommunicationClub_Text_Cup, fmtString); // {STRVAR_1 26, 0, 0} Cup
     StringExpandPlaceholders(messageFormat, destString, fmtString);
     AddTextPrinterParameterized(window, 0, destString, xOffset + xOffsetCupName, 0, TEXT_SPEED_NOTRANSFER, 0);
@@ -628,7 +628,7 @@ void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset) {
     CopyWindowToVram(window);
 }
 
-u16 ov03_02256A2C(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset) {
+u16 BattleRegulation_CheckParty(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset) {
     Party *party = SaveArray_Party_Get(fieldSystem->saveData);
     PokedexData *pokedexData = PokedexData_CreateAndLoad(HEAP_ID_FIELD2);
     u32 unkValue;
@@ -650,12 +650,12 @@ u16 ov03_02256A2C(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ru
     case 0:
         return 0;
     case 4:
-        ov03_022566D0(fieldSystem, messageFormat, ruleset);
+        BattleRegulation_BufferName(fieldSystem, messageFormat, ruleset);
         ruleValue = LinkBattleRuleset_GetRuleValue(&fieldSystem->linkBattleRuleset[0], LINKBATTLERULE_PARTY_COUNT);
         BufferIntegerAsString(messageFormat, 1, ruleValue, 1, PRINTING_MODE_RIGHT_ALIGN, TRUE);
         return 1;
     case 7:
-        ov03_022566D0(fieldSystem, messageFormat, ruleset);
+        BattleRegulation_BufferName(fieldSystem, messageFormat, ruleset);
         BufferIntegerAsString(messageFormat, 1, 2, 1, PRINTING_MODE_RIGHT_ALIGN, TRUE);
         return 1;
     case 1:
@@ -664,7 +664,7 @@ u16 ov03_02256A2C(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ru
     case 5:
     case 6:
     default:
-        ov03_022566D0(fieldSystem, messageFormat, ruleset);
+        BattleRegulation_BufferName(fieldSystem, messageFormat, ruleset);
         ruleValue = LinkBattleRuleset_GetRuleValue(&fieldSystem->linkBattleRuleset[0], LINKBATTLERULE_MAX_TOTAL_LEVEL);
         BufferIntegerAsString(messageFormat, 1, ruleValue, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
         return 2;

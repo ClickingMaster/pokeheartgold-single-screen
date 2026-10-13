@@ -1,14 +1,14 @@
 #include "overlay104_scene_internal.h"
 
-BOOL ov104_021E5900(OverlayManager *man, int *state);
-BOOL ov104_021E59E4(OverlayManager *man, int *state);
-BOOL ov104_021E5B14(OverlayManager *man, int *state);
-void ov104_021E5B88(void);
-void ov104_021E5BEC(Ov104Work *work);
-void ov104_021E5CA8(void);
-void ov104_021E5CC8(Ov104Work *work);
-BOOL ov104_021E5E78(Ov104Model *model, int idx);
-void ov104_021E5EB0(int idx, enum HeapID heapId);
+BOOL Ov104Scene_Init(OverlayManager *man, int *state);
+BOOL Ov104Scene_Main(OverlayManager *man, int *state);
+BOOL Ov104Scene_Exit(OverlayManager *man, int *state);
+void Ov104Scene_InitGraphics(void);
+void Ov104Scene_SetupCamera(Ov104Work *work);
+void Ov104Scene_SetGfxBanks(void);
+void Ov104Scene_LoadModels(Ov104Work *work);
+BOOL Ov104Scene_IsStepAnimDone(Ov104Model *model, int idx);
+void Ov104Scene_StartStepFadeOut(int idx, enum HeapID heapId);
 
 static const u32 sSeTableA[3] = { 0x6D5, 0x6F3, 0x6F1 };
 static const VecFx32 sModelScale = { FX32_ONE, FX32_ONE, FX32_ONE };
@@ -97,7 +97,7 @@ static Ov104ModelIds sModelIds_H[3] = {
     { 0x18, { 0x19, 0x1A } }
 };
 
-BOOL ov104_021E5900(OverlayManager *man, int *state) {
+BOOL Ov104Scene_Init(OverlayManager *man, int *state) {
     Ov104Work *work;
     u8 i;
     Ov104Args *args;
@@ -106,14 +106,14 @@ BOOL ov104_021E5900(OverlayManager *man, int *state) {
     work = OverlayManager_CreateAndGetData(man, sizeof(Ov104Work), HEAPID(0x95));
     memset(work, 0, sizeof(Ov104Work));
     args = OverlayManager_GetArgs(man);
-    work->unk164 = args->unk0;
-    work->unk165 = args->unk1;
-    work->unk166 = args->unk2;
+    work->variant = args->variant;
+    work->gender = args->gender;
+    work->isNight = args->isNight;
     work->unk167 = 0;
     work->camera = Camera_New(HEAPID(0x95));
-    ov104_021E5B88();
-    ov104_021E5CC8(work);
-    ov104_021E5BEC(work);
+    Ov104Scene_InitGraphics();
+    Ov104Scene_LoadModels(work);
+    Ov104Scene_SetupCamera(work);
     for (i = 0; i < 4; i++) {
         NNS_G3dGlbLightVector((GXLightId)i, args->lighting->lightVec[i].x, args->lighting->lightVec[i].y, args->lighting->lightVec[i].z);
         NNS_G3dGlbLightColor((GXLightId)i, args->lighting->lightColor[i]);
@@ -125,7 +125,7 @@ BOOL ov104_021E5900(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-BOOL ov104_021E59E4(OverlayManager *man, int *state) {
+BOOL Ov104Scene_Main(OverlayManager *man, int *state) {
     Ov104Model *model;
     Ov104Work *work;
     BOOL ret;
@@ -138,8 +138,8 @@ BOOL ov104_021E59E4(OverlayManager *man, int *state) {
     ret = FALSE;
     switch (*state) {
     case 0:
-        if (ov104_021E5E78(model, work->step)) {
-            ov104_021E5EB0(work->step, HEAPID(0x95));
+        if (Ov104Scene_IsStepAnimDone(model, work->step)) {
+            Ov104Scene_StartStepFadeOut(work->step, HEAPID(0x95));
             (*state)++;
         }
         break;
@@ -150,7 +150,7 @@ BOOL ov104_021E59E4(OverlayManager *man, int *state) {
             if (work->counter >= 3) {
                 ret = TRUE;
             } else {
-                ov104_021E5BEC(work);
+                Ov104Scene_SetupCamera(work);
                 BeginAppScreenFade(0, HEAPID(0x95));
                 *state = 0;
             }
@@ -181,7 +181,7 @@ BOOL ov104_021E59E4(OverlayManager *man, int *state) {
     return ret;
 }
 
-BOOL ov104_021E5B14(OverlayManager *man, int *state) {
+BOOL Ov104Scene_Exit(OverlayManager *man, int *state) {
     Ov104Work *work;
     Ov104Model *model;
     u8 i;
@@ -203,40 +203,40 @@ BOOL ov104_021E5B14(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void ov104_021E5B88(void) {
+void Ov104Scene_InitGraphics(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
     GfGfx_DisableEngineBPlanes();
     reg_GX_DISPCNT &= 0xFFFFE0FF;
     reg_GXS_DB_DISPCNT &= 0xFFFFE0FF;
-    ov104_021E5CA8();
+    Ov104Scene_SetGfxBanks();
     GF3dRender_InitSimpleManager(HEAPID(0x95));
     reg_G3X_DISP3DCNT = (u16)((reg_G3X_DISP3DCNT & ~0x3000) | 0x20);
     G3X_SetEdgeColorTable(sEdgeColors);
     GfGfx_SwapDisplay();
 }
 
-void ov104_021E5BEC(Ov104Work *work) {
+void Ov104Scene_SetupCamera(Ov104Work *work) {
     VecFx32 target = { 0, 0, 0 };
     u8 step;
     u8 scene;
 
     work->target = target;
     step = work->step;
-    scene = work->unk164;
+    scene = work->variant;
     Camera_Init_FromTargetDistanceAndAngle(&work->target, sCameraParams[scene][step].distance, &sCameraParams[scene][step].angle, sCameraParams[scene][step].perspective, sCameraParams[scene][step].perspectiveType, TRUE, work->camera);
-    Camera_OffsetLookAtPosAndTarget(&sCameraOffsets[work->unk164][step], work->camera);
-    Camera_SetPerspectiveClippingPlane(sClipPlanes[work->unk164][step][0] << FX32_SHIFT, sClipPlanes[work->unk164][step][1] << FX32_SHIFT, work->camera);
+    Camera_OffsetLookAtPosAndTarget(&sCameraOffsets[work->variant][step], work->camera);
+    Camera_SetPerspectiveClippingPlane(sClipPlanes[work->variant][step][0] << FX32_SHIFT, sClipPlanes[work->variant][step][1] << FX32_SHIFT, work->camera);
     Camera_SetStaticPtr(work->camera);
 }
 
-void ov104_021E5CA8(void) {
+void Ov104Scene_SetGfxBanks(void) {
     GraphicsBanks banks = sBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void ov104_021E5CC8(Ov104Work *work) {
+void Ov104Scene_LoadModels(Ov104Work *work) {
     u8 i;
     u8 j;
     Ov104ModelIds *ids;
@@ -247,15 +247,15 @@ void ov104_021E5CC8(Ov104Work *work) {
 
     narc = NARC_New((NarcId)0xEB, HEAPID(0x95));
     HeapExp_FndInitAllocator(&work->allocator, HEAPID(0x95), 4);
-    if (work->unk164 == 0) {
-        if (work->unk166 == 0) {
-            if (work->unk165 == 0) {
+    if (work->variant == 0) {
+        if (work->isNight == 0) {
+            if (work->gender == 0) {
                 ids = sModelIds_E;
             } else {
                 ids = sModelIds_H;
             }
         } else {
-            if (work->unk165 == 0) {
+            if (work->gender == 0) {
                 ids = sModelIds_F;
             } else {
                 ids = sModelIds_A;
@@ -263,14 +263,14 @@ void ov104_021E5CC8(Ov104Work *work) {
         }
         work->seTable = sSeTableA;
     } else {
-        if (work->unk166 == 0) {
-            if (work->unk165 == 0) {
+        if (work->isNight == 0) {
+            if (work->gender == 0) {
                 ids = sModelIds_C;
             } else {
                 ids = sModelIds_D;
             }
         } else {
-            if (work->unk165 == 0) {
+            if (work->gender == 0) {
                 ids = sModelIds_B;
             } else {
                 ids = sModelIds_G;
@@ -302,7 +302,7 @@ void ov104_021E5CC8(Ov104Work *work) {
     NARC_Delete(narc);
 }
 
-BOOL ov104_021E5E78(Ov104Model *model, int idx) {
+BOOL Ov104Scene_IsStepAnimDone(Ov104Model *model, int idx) {
     if (idx + 1 >= 3) {
         if (((Ov104AnmObj *)model->anmObj[0])->frame + FX32_ONE == 205 * FX32_ONE) {
             return TRUE;
@@ -315,7 +315,7 @@ BOOL ov104_021E5E78(Ov104Model *model, int idx) {
     return FALSE;
 }
 
-void ov104_021E5EB0(int idx, enum HeapID heapId) {
+void Ov104Scene_StartStepFadeOut(int idx, enum HeapID heapId) {
     if (idx + 1 >= 3) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, heapId);
     } else {

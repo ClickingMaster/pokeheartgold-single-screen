@@ -9,62 +9,62 @@
 #include "unk_02035900.h"
 #include "link_synchronization.h"
 
-typedef struct UnkCommStruct {
+typedef struct CustomSafariLinkWork {
     void (*func)();
     SafariZone *safariZone;
-    u8 unk8[0x5D0];
-} UnkCommStruct; // Size: 0x5D8
+    u8 recvBuffers[0x5D0];
+} CustomSafariLinkWork; // Size: 0x5D8
 
-typedef struct UnkFuncs {
-    void (*unk0)(BOOL, u32, SafariZoneAreaSet *, UnkCommStruct *);
-    u32 (*unk4)();
-    u32 (*unk8)(int, int);
-} UnkFuncs;
+typedef struct CustomSafariLinkCommand {
+    void (*recv)(BOOL, u32, SafariZoneAreaSet *, CustomSafariLinkWork *);
+    u32 (*getSize)();
+    u32 (*getBuffer)(int, int);
+} CustomSafariLinkCommand;
 
-static u32 ov03_02258828();
-static u32 ov03_02258830(int mult, int arg1);
-static void ov03_0225884C(BOOL unkBool, u32 arg1_unused, SafariZoneAreaSet *areaSetSrc, UnkCommStruct *unkCommStruct);
+static u32 CustomSafariLink_GetAreaSetSize();
+static u32 CustomSafariLink_GetRecvBuffer(int mult, int arg1);
+static void CustomSafariLink_RecvAreaSet(BOOL unkBool, u32 arg1_unused, SafariZoneAreaSet *areaSetSrc, CustomSafariLinkWork *unkCommStruct);
 
-static void ov03_02258810(void *ptr, UnkCommStruct *unkCommStruct) {
+static void CustomSafariLink_SetStep(void *ptr, CustomSafariLinkWork *unkCommStruct) {
     unkCommStruct->func = ptr;
 }
 
-static const UnkFuncs ov03_022597FC = {
-    ov03_0225884C,
-    ov03_02258828,
-    ov03_02258830
+static const CustomSafariLinkCommand sCustomSafariLinkCommands = {
+    CustomSafariLink_RecvAreaSet,
+    CustomSafariLink_GetAreaSetSize,
+    CustomSafariLink_GetRecvBuffer
 };
 
-static void ov03_02258814(UnkCommStruct *unkCommStruct) {
-    Comm_RegisterCommandTable(&ov03_022597FC, 1, unkCommStruct);
+static void CustomSafariLink_RegisterCommands(CustomSafariLinkWork *unkCommStruct) {
+    Comm_RegisterCommandTable(&sCustomSafariLinkCommands, 1, unkCommStruct);
 }
 
-static u32 ov03_02258828() {
+static u32 CustomSafariLink_GetAreaSetSize() {
     return 744;
 }
 
-static u32 ov03_02258830(int mult, int arg1) {
+static u32 CustomSafariLink_GetRecvBuffer(int mult, int arg1) {
     if (mult >= 2) {
         GF_AssertFail();
     }
     return arg1 + 8 + (744 * mult);
 }
 
-static void ov03_0225884C(BOOL unkBool, u32 arg1_unused, SafariZoneAreaSet *areaSetSrc, UnkCommStruct *unkCommStruct) {
+static void CustomSafariLink_RecvAreaSet(BOOL unkBool, u32 arg1_unused, SafariZoneAreaSet *areaSetSrc, CustomSafariLinkWork *unkCommStruct) {
     if (unkBool != Comm_GetLocalNetId()) {
         SafariZone_SetAreaSet(unkCommStruct->safariZone, 1, areaSetSrc);
         SafariZone_SetLinkLeaderFromProfile(unkCommStruct->safariZone, CommPlayerInfo_GetProfile(unkBool), HEAP_ID_FIELD2);
     }
 }
 
-static UnkCommStruct *ov03_02258878() {
-    UnkCommStruct *unkCommStruct = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(UnkCommStruct));
-    MI_CpuFill8(unkCommStruct, 0, sizeof(UnkCommStruct));
+static CustomSafariLinkWork *CustomSafariLink_AllocWork() {
+    CustomSafariLinkWork *unkCommStruct = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(CustomSafariLinkWork));
+    MI_CpuFill8(unkCommStruct, 0, sizeof(CustomSafariLinkWork));
     return unkCommStruct;
 }
 
-static BOOL ov03_02258894(TaskManager *taskManager) {
-    UnkCommStruct *unkCommStruct = TaskManager_GetEnvironment(taskManager);
+static BOOL Task_CustomSafariLink(TaskManager *taskManager) {
+    CustomSafariLinkWork *unkCommStruct = TaskManager_GetEnvironment(taskManager);
     if (unkCommStruct->func == NULL) {
         Heap_Free(unkCommStruct);
         return TRUE;
@@ -73,26 +73,26 @@ static BOOL ov03_02258894(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void ov03_022588B0(UnkCommStruct *unkCommStruct) {
+static void CustomSafariLink_WaitDone(CustomSafariLinkWork *unkCommStruct) {
     if (LinkSync_IsSynced(13)) {
         CommPlayerInfo_GetProfile(1 - Comm_GetLocalNetId());
-        ov03_02258810(NULL, unkCommStruct);
+        CustomSafariLink_SetStep(NULL, unkCommStruct);
     }
 }
 
-static void ov03_022588D4(UnkCommStruct *unkCommStruct) {
+static void CustomSafariLink_SendAreaSet(CustomSafariLinkWork *unkCommStruct) {
     if (LinkSync_IsSynced(12) && CommPlayerInfo_GetProfile(1)) {
         sub_020376D4(22, SafariZone_GetAreaSet(unkCommStruct->safariZone, 0));
         LinkSync_StartSync(13);
-        ov03_02258810(&ov03_022588B0, unkCommStruct);
+        CustomSafariLink_SetStep(&CustomSafariLink_WaitDone, unkCommStruct);
     }
 }
 
-void ov03_02258910(FieldSystem *fieldSystem) {
-    UnkCommStruct *unkCommStruct = ov03_02258878();
+void CustomSafariLink_ExchangeAreaSets(FieldSystem *fieldSystem) {
+    CustomSafariLinkWork *unkCommStruct = CustomSafariLink_AllocWork();
     unkCommStruct->safariZone = Save_SafariZone_Get(fieldSystem->saveData);
-    ov03_02258814(unkCommStruct);
+    CustomSafariLink_RegisterCommands(unkCommStruct);
     LinkSync_StartSync(12);
-    ov03_02258810(&ov03_022588D4, unkCommStruct);
-    TaskManager_Call(fieldSystem->taskman, &ov03_02258894, unkCommStruct);
+    CustomSafariLink_SetStep(&CustomSafariLink_SendAreaSet, unkCommStruct);
+    TaskManager_Call(fieldSystem->taskman, &Task_CustomSafariLink, unkCommStruct);
 }

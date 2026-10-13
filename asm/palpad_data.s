@@ -19,14 +19,14 @@
 	.extern _0222EC10
 	.extern PalPadRoster_DeselectTab
 	.extern PalPadRoster_DrawTabsOnScroll
-	.extern ov43_0222DFB0
-	.extern ov43_0222E0E8
-	.extern ov43_0222E220
-	.extern ov43_0222E5B4
-	.extern ov43_0222E78C
-	.extern ov43_0222E904
+	.extern PalPadDetails_PrintUnionRoomPage
+	.extern PalPadDetails_PrintBattleTowerPage
+	.extern PalPadDetails_PrintBattleFactoryPage
+	.extern PalPadDetails_PrintBattleCastlePage
+	.extern PalPadDetails_PrintBattleHallPage
+	.extern PalPadDetails_PrintBattleArcadePage
 	.extern PalPadDetails_PrintWiFiPlazaPage
-	.extern ov43_0222EBD8
+	.extern PalPadDetails_PrintReturnPage
 	.public PalPad_Exit
 	.public PalPad_Init
 	.public PalPad_Main
@@ -653,14 +653,14 @@
 	.public PalPadDetailsSlot_ClearWindows
 	.public PalPadDetailsSlot_DrawPage
 	.public PalPadDetailsSlot_Clear
-	.public ov43_0222DFB0
-	.public ov43_0222E0E8
-	.public ov43_0222E220
-	.public ov43_0222E5B4
-	.public ov43_0222E78C
-	.public ov43_0222E904
+	.public PalPadDetails_PrintUnionRoomPage
+	.public PalPadDetails_PrintBattleTowerPage
+	.public PalPadDetails_PrintBattleFactoryPage
+	.public PalPadDetails_PrintBattleCastlePage
+	.public PalPadDetails_PrintBattleHallPage
+	.public PalPadDetails_PrintBattleArcadePage
 	.public PalPadDetails_PrintWiFiPlazaPage
-	.public ov43_0222EBD8
+	.public PalPadDetails_PrintReturnPage
 	.public PalPadDetailsSlot_ClearBg
 	.public PalPadDetailsSlot_Print
 	.public PalPadDetails_PrintProfileText
@@ -725,14 +725,14 @@
 	.extern _0222EA3C
 	.extern _0222EBD4
 	.extern _0222EC10
-	.extern ov43_0222DFB0
-	.extern ov43_0222E0E8
-	.extern ov43_0222E220
-	.extern ov43_0222E5B4
-	.extern ov43_0222E78C
-	.extern ov43_0222E904
+	.extern PalPadDetails_PrintUnionRoomPage
+	.extern PalPadDetails_PrintBattleTowerPage
+	.extern PalPadDetails_PrintBattleFactoryPage
+	.extern PalPadDetails_PrintBattleCastlePage
+	.extern PalPadDetails_PrintBattleHallPage
+	.extern PalPadDetails_PrintBattleArcadePage
 	.extern PalPadDetails_PrintWiFiPlazaPage
-	.extern ov43_0222EBD8
+	.extern PalPadDetails_PrintReturnPage
 	.public PalPad_VBlankCallback
 	.public PalPadShared_Free
 	.public PalPadShared_SetNextScreen
@@ -927,9 +927,9 @@ sPalPadDetailsPageWindowCounts: ; 0x0222F0D0
 	.data
 
 sPalPadDetailsPagePrinters:
-	.word ov43_0222DFB0
+	.word PalPadDetails_PrintUnionRoomPage
 	.word PalPadDetails_PrintWiFiPlazaPage
-	.word ov43_0222EBD8
+	.word PalPadDetails_PrintReturnPage
 
 sPalPadRosterScrollCallbacks: ; 0x0222F0EC
 	.word PalPadRoster_DeselectTab, 0
@@ -950,14 +950,14 @@ sPalPadDetailsPageWindowSpecs: ; 0x0222F10C
 	.word ov43_0222ED63
 
 sPalPadDetailsFrontierPagePrinters: ; 0x0222F12C
-	.word ov43_0222DFB0
+	.word PalPadDetails_PrintUnionRoomPage
 	.word PalPadDetails_PrintWiFiPlazaPage
-	.word ov43_0222E0E8
-	.word ov43_0222E220
-	.word ov43_0222E5B4
-	.word ov43_0222E78C
-	.word ov43_0222E904
-	.word ov43_0222EBD8
+	.word PalPadDetails_PrintBattleTowerPage
+	.word PalPadDetails_PrintBattleFactoryPage
+	.word PalPadDetails_PrintBattleCastlePage
+	.word PalPadDetails_PrintBattleHallPage
+	.word PalPadDetails_PrintBattleArcadePage
+	.word PalPadDetails_PrintReturnPage
 
 sPalPadArrowSpriteTemplates: ; 0x0222F14C
 	.byte 0x00, 0x00, 0x00, 0x00

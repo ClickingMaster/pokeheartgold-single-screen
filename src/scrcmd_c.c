@@ -5281,20 +5281,20 @@ BOOL ScrCmd_CheckBankBalance(ScriptContext *ctx) {
 BOOL ScrCmd_BufferRulesetName(ScriptContext *ctx) {
     u16 ruleset = ScriptReadHalfword(ctx);
     MessageFormat **p_msgFmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
-    ov03_022566D0(ctx->fieldSystem, *p_msgFmt, ruleset);
+    BattleRegulation_BufferName(ctx->fieldSystem, *p_msgFmt, ruleset);
     return FALSE;
 }
 
 BOOL ScrCmd_799(ScriptContext *ctx) {
     u16 *p_var = ScriptGetVarPointer(ctx);
     MessageFormat **p_msgFmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
-    ov03_022566D0(ctx->fieldSystem, *p_msgFmt, *p_var);
+    BattleRegulation_BufferName(ctx->fieldSystem, *p_msgFmt, *p_var);
     return FALSE;
 }
 
 BOOL ScrCmd_800(ScriptContext *ctx) {
     u16 *p_var = ScriptGetVarPointer(ctx);
-    ov03_02256710(ctx->fieldSystem, *p_var);
+    BattleRegulation_SetActiveRuleset(ctx->fieldSystem, *p_var);
     return FALSE;
 }
 
@@ -5315,7 +5315,7 @@ BOOL ScrCmd_803(ScriptContext *ctx) {
     u16 *r4 = ScriptGetVarPointer(ctx);
     u16 *r6 = ScriptGetVarPointer(ctx);
     MessageFormat **p_msgFmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
-    *r6 = ov03_02256A2C(ctx->fieldSystem, *p_msgFmt, *r4);
+    *r6 = BattleRegulation_CheckParty(ctx->fieldSystem, *p_msgFmt, *r4);
     return FALSE;
 }
 
@@ -5365,7 +5365,7 @@ BOOL ScrCmd_820(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_822(ScriptContext *ctx) {
-    ov03_02258910(ctx->fieldSystem);
+    CustomSafariLink_ExchangeAreaSets(ctx->fieldSystem);
     return TRUE;
 }
 

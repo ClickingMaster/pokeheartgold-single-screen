@@ -935,7 +935,7 @@ BOOL ScrCmd_741(ScriptContext *ctx) {
 
 // Gets called after selecting which type of pokeathlon data to load- might just outright start the loading process
 BOOL ScrCmd_743(ScriptContext *ctx) {
-    ov03_02258CFC(ctx->taskman, (enum PokeathlonData)ScriptGetVar(ctx));
+    PokeathlonRecords_Show(ctx->taskman, (enum PokeathlonData)ScriptGetVar(ctx));
     return TRUE;
 }
 
