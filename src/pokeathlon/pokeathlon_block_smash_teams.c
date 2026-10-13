@@ -595,7 +595,7 @@ void PokeathlonBlockSmashRival_ShowStaminaMark(PokeathlonBlockSmashRival *row, i
 
 void PokeathlonBlockSmashRival_UpdateStatus(PokeathlonBlockSmashRival *row, PokeathlonBlockSmashReport *report) {
     u32 stamina;
-    if (report->unk1A) {
+    if (report->gaugeFull) {
         ManagedSprite_SetAnimNoRestart(row->sprites[3], 16);
         ManagedSprite_SetDrawFlag(row->sprites[3], TRUE);
     } else if (report->gauge >= 50) {
@@ -615,7 +615,7 @@ void PokeathlonBlockSmashRival_UpdateStatus(PokeathlonBlockSmashRival *row, Poke
         PokeathlonCourseMonObject_SetAnim(row->monPics[row->member], 0);
         return;
     }
-    if (report->unk1A) {
+    if (report->gaugeFull) {
         PokeathlonCourseMonObject_SetAnim(row->monPics[row->member], 8);
         return;
     }
@@ -1255,7 +1255,7 @@ void PokeathlonBlockSmashCpuPlayer_WriteReport(PokeathlonBlockSmashCpuPlayer *pl
     report->score = player->score;
     report->stamina = member->stamina;
     report->gauge = player->gauge;
-    report->unk1A = player->gaugeFull;
+    report->gaugeFull = player->gaugeFull;
     report->switchingFrame = result & 2;
     report->member = player->member;
     report->switching = player->mode == BLOCK_SMASH_CPU_SWITCHING;

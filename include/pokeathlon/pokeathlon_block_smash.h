@@ -135,7 +135,7 @@ typedef struct PokeathlonBlockSmashReport {
     u32 stamina : 8; // the active Pokemon's
     u32 gauge : 8;
     u32 member : 2; // the active Pokemon
-    u32 unk1A : 1;
+    u32 gaugeFull : 1;
     u32 switchingFrame : 1; // set by the host from `switching`
     u32 switching : 1;
     u32 unk1D : 3;

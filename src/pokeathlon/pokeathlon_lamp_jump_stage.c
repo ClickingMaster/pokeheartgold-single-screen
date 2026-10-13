@@ -298,14 +298,14 @@ void PokeathlonLampJump_UpdateJumps(PokeathlonCourseData *course, PokeathlonLamp
         PokeathlonCourseObject_GetCollisionCircle(sprite, hit.screenX << FX32_SHIFT, hit.screenY << FX32_SHIFT, &hit.pos.x, &hit.pos.y, &hit.radius);
         hit.pos.z = 0;
         for (lamp = 0; lamp < 29; lamp++) {
-            if (PokeathlonLampJump_IsLampLit(lampJump->unk8C, lamp)) {
-                VecFx32 *lampPos = PokeathlonLampJump_GetLampPos(lampJump->unk8C, lamp);
+            if (PokeathlonLampJump_IsLampLit(lampJump->lamps, lamp)) {
+                VecFx32 *lampPos = PokeathlonLampJump_GetLampPos(lampJump->lamps, lamp);
                 if (PokeathlonLampJump_CheckCollision(&hit.pos, hit.radius << FX32_SHIFT, lampPos, FX32_CONST(8))) {
                     u8 points;
-                    PokeathlonLampJump_PutOutLamp(lampJump->unk8C, lamp);
+                    PokeathlonLampJump_PutOutLamp(lampJump->lamps, lamp);
                     points = PokeathlonLampJump_ScoreLamp(mon);
-                    PokeathlonLampJump_ShowLampPoints(lampJump->unk8C, lamp, points);
-                    lampJump->unk142 = TRUE;
+                    PokeathlonLampJump_ShowLampPoints(lampJump->lamps, lamp, points);
+                    lampJump->hitLamp = TRUE;
                     PlaySEOnPlayer(SEQ_SE_GS_POINT1, *soundPlayer);
                     GF_SndSetTrackPitchByPlayerNo(*soundPlayer, 0xFFFF, ov96_0221C110[points - 1]);
                     PokeathlonCourse_AddMonCounter(course, participant, (u8)i, 3, 1);
@@ -319,11 +319,11 @@ void PokeathlonLampJump_UpdateJumps(PokeathlonCourseData *course, PokeathlonLamp
         i++;
     }
     for (i = 0; i < 3; i++) {
-        if (lampJump->mons[i].unk26) {
+        if (lampJump->mons[i].stunned) {
             lampJump->mons[i].stunTimer--;
             if (lampJump->mons[i].stunTimer == 0) {
                 lampJump->mons[i].stunTimer = 0;
-                lampJump->mons[i].unk26 = FALSE;
+                lampJump->mons[i].stunned = FALSE;
             }
         }
     }
@@ -557,7 +557,7 @@ void PokeathlonLampJump_CreateSprites(PokeathlonLampJump *lampJump, void *scene)
     int j;
     VecFx32 pos;
 
-    PokeathlonLampJump_CreateLampSprites(lampJump->unk8C, scene, 2);
+    PokeathlonLampJump_CreateLampSprites(lampJump->lamps, scene, 2);
     lampJump->unk64 = PokeathlonCourseSpritePool_CreateAndTake(scene, 1, 3, 101, 3);
     PokeathlonCourseSpritePoolSprite_SetAnim(lampJump->unk64, 12);
     PokeathlonCourseSpritePoolSprite_Show(lampJump->unk64, 1, 1);
@@ -580,7 +580,7 @@ void PokeathlonLampJump_CreateSprites(PokeathlonLampJump *lampJump, void *scene)
     }
     for (j = 0; j < 2; j++) {
         SpriteList *spriteList = PokeathlonCourseSpritePool_GetSpriteList(scene);
-        lampJump->timerDigits[j] = ov96_021EA634(lampJump->unk188, spriteList, 1, lampJump->heapId);
+        lampJump->timerDigits[j] = ov96_021EA634(lampJump->spriteResources, spriteList, 1, lampJump->heapId);
         Sprite_SetDrawFlag(lampJump->timerDigits[j], TRUE);
         pos.x = ov96_0221C0B0[j] * FX32_ONE;
         pos.y = FX32_CONST(8);
@@ -599,7 +599,7 @@ void PokeathlonLampJump_PlaceSprites(PokeathlonLampJump *lampJump, u8 self) {
     int i;
     u8 n;
 
-    PokeathlonLampJump_PlaceLamps(lampJump->unk8C);
+    PokeathlonLampJump_PlaceLamps(lampJump->lamps);
     pos = ov96_0221C0C4;
     PokeathlonCourseSpritePoolSprite_SetPosition(lampJump->unk64, &pos);
     ownPos = ov96_0221C0DC;
@@ -790,8 +790,8 @@ BOOL PokeathlonLampJump_CollideMons(PokeathlonCourseData *course, PokeathlonLamp
             if (monB->colliding[i]) {
                 continue;
             }
-            monA->unk26 = TRUE;
-            monB->unk26 = TRUE;
+            monA->stunned = TRUE;
+            monB->stunned = TRUE;
             monA->stunTimer = (30 * monA->stunFrames) / 30;
             monB->stunTimer = (30 * monB->stunFrames) / 30;
             {

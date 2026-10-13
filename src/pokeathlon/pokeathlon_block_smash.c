@@ -932,7 +932,7 @@ void PokeathlonBlockSmash_WriteReport(PokeathlonCourseData *course) {
     report->score = PokeathlonBlockSmashBlocks_GetScore(work->blocks);
     report->stamina = member->stamina;
     report->gauge = PokeathlonBlockSmashMon_GetGauge(work->mon);
-    report->unk1A = PokeathlonBlockSmashMon_IsGaugeFull(work->mon);
+    report->gaugeFull = PokeathlonBlockSmashMon_IsGaugeFull(work->mon);
     report->switching = mode == 3;
     report->member = PokeathlonBlockSmashMon_GetActiveMemberIndex(work->mon);
 }
@@ -957,7 +957,7 @@ void PokeathlonBlockSmash_UpdateLinkData(PokeathlonCourseData *course) {
             out->stamina = report->stamina;
             out->gauge = report->gauge;
             out->member = report->member;
-            out->unk1A = report->unk1A;
+            out->gaugeFull = report->gaugeFull;
             out->switchingFrame = report->switching;
         }
     }

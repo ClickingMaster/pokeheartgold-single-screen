@@ -18,7 +18,7 @@ typedef struct PokeathlonRecordsWork {
     BgConfig *bgConfig;
     Window window;
     PokeathlonSave *pokeathlonSave;
-    Pokeathlon_UnkSubStruct_B00 *pokeathlonStruct;
+    PokeathlonStatistics *pokeathlonStruct;
     MsgData *msgData;
     MessageFormat *messageFormat;
     String *strings[4];
@@ -31,7 +31,7 @@ static void PokeathlonRecords_Free(PokeathlonRecordsWork *data);
 static void PokeathlonRecords_PrintPage(PokeathlonRecordsWork *data, enum PokeathlonData dataType);
 static void PokeathlonRecords_PrintHiddenRecord(PokeathlonRecordsWork *data, int y);
 static void PokeathlonRecords_PrintRecord(PokeathlonRecordsWork *data, int y, int strno);
-static u32 PokeathlonRecords_GetValue(Pokeathlon_UnkSubStruct_B00 *pokeathlonStruct, int strno);
+static u32 PokeathlonRecords_GetValue(PokeathlonStatistics *pokeathlonStruct, int strno);
 
 void PokeathlonRecords_Show(TaskManager *taskManager, enum PokeathlonData dataType) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
@@ -199,56 +199,56 @@ static void PokeathlonRecords_PrintRecord(PokeathlonRecordsWork *data, int y, in
     AddTextPrinterParameterizedWithColor(&data->window, 0, data->strings[1], width - 8, y, TEXT_SPEED_NOTRANSFER, 0x1020F, NULL);
 }
 
-static u32 PokeathlonRecords_GetValue(Pokeathlon_UnkSubStruct_B00 *pokeathlonStruct, int strno) {
+static u32 PokeathlonRecords_GetValue(PokeathlonStatistics *pokeathlonStruct, int strno) {
     if (strno >= 10 && strno <= 19) {
         strno -= 10;
-        return pokeathlonStruct->unk44[strno];
+        return pokeathlonStruct->eventFirstPlaces[strno];
     }
 
     switch (strno) {
     case 0:
-        return pokeathlonStruct->unk4;
+        return pokeathlonStruct->coursesJoined;
     case 1:
-        return pokeathlonStruct->unk8;
+        return pokeathlonStruct->courseFirstPlaces;
     case 2:
-        return pokeathlonStruct->unkC;
+        return pokeathlonStruct->courseLastPlaces;
     case 3:
-        return pokeathlonStruct->unk10;
+        return pokeathlonStruct->bonusesEarned;
     case 4:
         int i;
         int var_r3 = 0;
         for (i = 0; i < 10; i++) {
-            var_r3 += pokeathlonStruct->unk44[i];
+            var_r3 += pokeathlonStruct->eventFirstPlaces[i];
         }
         return var_r3;
     case 5:
-        return pokeathlonStruct->unk6C;
+        return pokeathlonStruct->eventLastPlaces;
     case 6:
-        return pokeathlonStruct->unk38;
+        return pokeathlonStruct->linkCoursesJoined;
     case 7:
-        return pokeathlonStruct->unk3C;
+        return pokeathlonStruct->linkCourseFirstPlaces;
     case 8:
-        return pokeathlonStruct->unk40;
+        return pokeathlonStruct->linkCourseLastPlaces;
     case 9:
-        return pokeathlonStruct->unk0;
+        return pokeathlonStruct->playTime;
     case 20:
-        return pokeathlonStruct->unk14;
+        return pokeathlonStruct->monInstructions;
     case 21:
-        return pokeathlonStruct->unk2C;
+        return pokeathlonStruct->monDashes;
     case 22:
-        return pokeathlonStruct->unk1C;
+        return pokeathlonStruct->monJumps;
     case 23:
-        return pokeathlonStruct->unk24;
+        return pokeathlonStruct->monTackles;
     case 24:
-        return pokeathlonStruct->unk30;
+        return pokeathlonStruct->monSwitches;
     case 25:
-        return pokeathlonStruct->unk34;
+        return pokeathlonStruct->monSelfImpedes;
     case 26:
-        return pokeathlonStruct->unk20;
+        return pokeathlonStruct->monPointsEarned;
     case 27:
-        return pokeathlonStruct->unk18;
+        return pokeathlonStruct->monFailures;
     case 28:
-        return pokeathlonStruct->unk28;
+        return pokeathlonStruct->monFalls;
     default:
         return 0;
     }

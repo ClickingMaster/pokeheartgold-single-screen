@@ -163,7 +163,7 @@ typedef struct PokeathlonCourseMonObject {
     u8 unk1C[4];                 // 0x1C
     s32 x;                       // 0x20: centre
     s32 y;                       // 0x24
-    s32 unk28;                   // 0x28
+    s32 topRow;                   // 0x28
     s32 unk2C;                   // 0x2C
     u32 unk30;                   // 0x30
     u32 animState;               // 0x34
@@ -274,7 +274,7 @@ typedef struct PokeathlonCourseArgsLayout {
     u8 course;          // 0xC: 0..4 solo courses, 5..10 link courses (10 = random events)
     u8 rank;            // 0xD (out)
     u8 shouldFreeHeap;  // 0xE
-    u8 field_F;         // 0xF: harder NPC teams
+    u8 isSupreme;         // 0xF: harder NPC teams
 } PokeathlonCourseArgsLayout;
 
 // A player's result of the event that is running (exchanged with link commands 0x1D / 0x1E).
@@ -288,7 +288,7 @@ typedef void (*PokeathlonCourseFinishFunc)(PokeathlonCourseData *course);
 // A 0x28-byte link packet of the event that is running; the data copy area holds 7 of them.
 typedef struct PokeathlonCoursePacket {
     u8 data[0x24]; // 0x00
-    u8 unk24;      // 0x24
+    u8 isHostPacket;      // 0x24
     u8 unk25[3];   // 0x25
 } PokeathlonCoursePacket;
 
@@ -306,18 +306,18 @@ typedef BOOL (*PokeathlonCourseStepFunc)(PokeathlonCourseData *course, u8 *state
 // The course results (PokeathlonCourseData 0x72C; its first 4 PokeathlonFieldData are the counters).
 typedef struct PokeathlonCourseResults {
     u32 counters[4][3][8]; // 0x000: per participant and Pokemon, capped at 9999
-    u32 unk180;            // 0x180
-    u32 unk184;            // 0x184
+    u32 bonuses;            // 0x180
+    u32 instructions;            // 0x184
     u16 eventPoints[4][4]; // 0x188: [participant][round]
     u16 eventScores[4][4]; // 0x1A8: [participant][round]
     u8 wonRound[4];        // 0x1C8
     u8 lastInRound[4];     // 0x1CC
     u16 wonCourse : 1;     // 0x1D0
-    u16 unkBit1 : 1;
+    u16 lastInCourse : 1;
     u16 rank : 2;
     u16 unkBits4 : 12;
     u16 totalPoints;                    // 0x1D2
-    Pokeathlon_UnkSubStruct_B00 record; // 0x1D4: the player's saved record
+    PokeathlonStatistics record; // 0x1D4: the player's saved record
 } PokeathlonCourseResults;
 
 // Full layout of PokeathlonCourseData (0xD70). pokeathlon.h names only part of it; the course functions view
@@ -333,7 +333,7 @@ typedef struct PokeathlonCourseLayout {
     u8 unk1EC;                                    // 0x1EC
     u8 eventInitState;                                 // 0x1ED
     u8 participantCount;                          // 0x1EE
-    u8 field_1EF;                                 // 0x1EF
+    u8 receivedCount;                                 // 0x1EF
     u32 round;                                    // 0x1F0
     u32 eventDrawEnabled;                                // 0x1F4
     PokeathlonCourseArgsLayout *args;             // 0x1F8
@@ -344,7 +344,7 @@ typedef struct PokeathlonCourseLayout {
     enum HeapID heapId;                           // 0x284
     PokeathlonCourseLink *link;                   // 0x288
     PokeathlonCoursePacket packets[7];            // 0x28C: the data copy area
-    u32 field_3A4[4];                             // 0x3A4
+    u32 eventDataTransfer[4];                             // 0x3A4
     PokeathlonCourseState courseState;            // 0x3B4
     PokeathlonStateInfo stateInfo;                // 0x3C4
     PokeathlonStateInfo eventStateInfo;           // 0x3CC
@@ -370,9 +370,9 @@ typedef struct PokeathlonCourseLayout {
     u8 rounds;                                    // 0x72A
     u8 timeUpSeconds;                             // 0x72B
     PokeathlonCourseResults results;              // 0x72C
-    Pokeathlon_UnkSubStruct_B00 records[4];       // 0x974: every player's saved record
+    PokeathlonStatistics records[4];       // 0x974: every player's saved record
     u32 localCounters[3][8];                      // 0xB44
-    u8 field_BA4[0x180];                          // 0xBA4
+    u8 monCounters[0x180];                          // 0xBA4
     s32 frameCounter;                             // 0xD24
     u16 frameTimer;                               // 0xD28
     u16 recordScore;                              // 0xD2A: the event result compared with the saved record
@@ -385,9 +385,9 @@ typedef struct PokeathlonCourseLayout {
 
 typedef struct PokeathlonCourseUnkTypes {
     u8 unk00[6];
-    u8 unk06;
+    u8 collisionSizeClass;
     u8 unk07;
-    u8 unk08;
+    u8 spriteSizeType;
 } PokeathlonCourseUnkTypes;
 
 // ---------------------------------------------------------------------------------------------------------
@@ -563,7 +563,7 @@ void PokeathlonCourse_CopySoloRanking(PokeathlonCourseData *course, PokeathlonCo
 void PokeathlonCourse_CopyLinkRanking(PokeathlonCourseData *course, PokeathlonCourseLinkEventRecord *record, PokeathlonCourseRankEntry *top);
 BOOL PokeathlonCourse_BeatsRecord(int record, int score, u32 order);
 BOOL PokeathlonCourse_BeatsRecordInOrder(int record, int score, u32 order);
-void PokeathlonCourse_SaveStatistics(PokeathlonCourseData *course, Pokeathlon_UnkSubStruct_B00 *statistics);
+void PokeathlonCourse_SaveStatistics(PokeathlonCourseData *course, PokeathlonStatistics *statistics);
 void PokeathlonCourse_SaveFriendshipStatues(PokeathlonCourseData *course);
 void PokeathlonCourse_SetCourseMedals(PokeathlonCourseData *course);
 void PokeathlonCourse_SetMonMedals(PokeathlonCourseData *course, u32 medals);

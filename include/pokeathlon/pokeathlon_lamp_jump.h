@@ -26,7 +26,7 @@ typedef struct PokeathlonLampJumpMon {
     u16 score;          // 0x20
     u16 unk22;          // 0x22
     u16 combo;          // 0x24: lamps hit in this jump, up to 5
-    u8 unk26;           // 0x26: cannot be touched while set
+    u8 stunned;           // 0x26: cannot be touched while set
     u8 stunTimer;       // 0x27
     u8 unk28;           // 0x28
     u8 colliding[3];    // 0x29: touching each of the other Pokemon
@@ -65,26 +65,26 @@ typedef struct PokeathlonLampJump {
     void *playerSprites[4];        // 0x0068
     void *effectSprites[3];        // 0x0078
     void *timerDigits[2];          // 0x0084
-    void *unk8C;                   // 0x008C
+    void *lamps;                   // 0x008C
     PokeathlonLampJumpMon mons[3]; // 0x0090
-    void *unk138;                  // 0x0138
+    void *cpuPlayers;                  // 0x0138
     int timer;                     // 0x013C: frames left
     u8 selectedMon;                // 0x0140: 3 = none
     u8 holdFrames;                 // 0x0141
-    u8 unk142;                     // 0x0142: sent to the other players every frame
+    u8 hitLamp;                     // 0x0142: sent to the other players every frame
     u8 nextEffect;                 // 0x0143: next of effectPositions / effectPending
     VecFx32 effectPositions[3];    // 0x0144
     u8 effectPending[3];           // 0x0168
     VecFx32 touchStart;            // 0x016C
     u8 unk178[0x10];               // 0x0178
-    void *unk188;                  // 0x0188
+    void *spriteResources;                  // 0x0188
     void *monSpriteManager;        // 0x018C
     Camera *camera;                // 0x0190
     VecFx32 cameraTarget;          // 0x0194
 
     union {
         struct {
-            s32 unk1A0[7][128]; // 0x01A0: the trampoline as rows (pokeathlon_lamp_jump.c)
+            s32 trampolineRows[7][128]; // 0x01A0: the trampoline as rows (pokeathlon_lamp_jump.c)
             s32 monColumns[3];  // 0x0FA0: x / 2 of each Pokemon, in pixels
         };
 
@@ -115,7 +115,7 @@ typedef struct PokeathlonLampJumpSpriteConfig {
 
 typedef struct PokeathlonLampJumpMonSpriteInfo {
     int unk00[5];
-    int unk14[3]; // per Pokemon: PokeathlonCourse_GetSpriteSizeType of the Pokemon
+    int sizeTypes[3]; // per Pokemon: PokeathlonCourse_GetSpriteSizeType of the Pokemon
     int unk20[9];
 } PokeathlonLampJumpMonSpriteInfo;
 

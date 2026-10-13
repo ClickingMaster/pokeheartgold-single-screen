@@ -25,7 +25,7 @@ typedef struct PokeathlonPennantCaptureMoveParams {
     f32 unk04;                        // 0x04
     f32 knockbackScale;               // 0x08: share of the own speed passed on to a Pokemon it knocks down
     s32 knockdownTime;                // 0x0C: base of the frames a knocked-down Pokemon stays down
-    u8 unk10;                         // 0x10
+    u8 maxSpeed;                         // 0x10
     u8 unk11[3];                      // 0x11
 } PokeathlonPennantCaptureMoveParams; // size: 0x14
 
@@ -48,8 +48,8 @@ typedef struct PokeathlonPennantCapturePlayer {
     VecFx32 cpuTarget;                                // 0x88: CPU: where it leads; human: where the touch drag is now
     u8 contacts[4];                                   // 0x94: touching the other participants' Pokemon
     u32 participant;                                  // 0x98
-    u8 unk9C;                                         // 0x9C: set once a deposit finished
-    u8 unk9D;                                         // 0x9D
+    u8 swapPending;                                         // 0x9C: set once a deposit finished
+    u8 swapPhase;                                         // 0x9D
     u8 swapState;                                     // 0x9E: team member swap shown on the top screen
     u8 swapStep;                                      // 0x9F
     u8 swapTimer;                                     // 0xA0
@@ -141,7 +141,7 @@ typedef struct PokeathlonPennantCapture {
     u16 timeLeft;                                         // 0x50C: frames until the event ends
     u8 finished;                                          // 0x50E
     u8 unk50F;                                            // 0x50F
-    u8 unk510;                                            // 0x510: stronger friction while set
+    u8 heldTooLong;                                            // 0x510: stronger friction while set
     u8 bgAnimFrame;                                       // 0x511
     u8 bgAnimTimer;                                       // 0x512
     u8 shownPennantSpots[5];                              // 0x513
@@ -249,7 +249,7 @@ typedef struct PokeathlonPennantCaptureMoveTables {
     int unk00[5];
     int unk04[5];
     int knockdownTime[5];
-    int unk10[5];
+    int maxSpeed[5];
 } PokeathlonPennantCaptureMoveTables;
 
 // An obstacle block grown by a radius: its corners, then its four edges moved outward.

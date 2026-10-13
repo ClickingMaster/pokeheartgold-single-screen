@@ -100,7 +100,7 @@ typedef struct PokeathlonBox_MonInfo {
     u8 gender;        // 0x08
     u8 unk9;          // 0x09
     u16 nickname[11]; // 0x0A
-    u8 unk20[5];
+    u8 medals[5];
     u8 unk25;
     u16 unk26;
     PokeathlonBox_StatChange statChanges[5]; // 0x28, power/skill/speed/jump/stamina
@@ -146,7 +146,7 @@ typedef struct PokeathlonBox_Graphics {
     Window window5;                // 0x048
     Window window6;                // 0x058
     u16 courseId;                  // 0x068
-    u16 unk6A;                     // 0x06A
+    u16 isSupreme;                     // 0x06A
     MsgData *msgData;              // 0x06C
     MessageFormat *msgFormat;      // 0x070
     String *nickname;              // 0x074

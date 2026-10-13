@@ -95,7 +95,7 @@ typedef struct PokeathlonHurdleDash {
     u32 frame;                                   // 0x230
     u32 endTimer;                                // 0x234
     PokeathlonHurdleDashCpuRunner cpuRunners[9]; // 0x238: 3 per participant without a player
-    void *unk3A0;                                // 0x3A0
+    void *spriteResources;                                // 0x3A0
     void *monSpriteManager;                      // 0x3A4
     void *unk3A8;                                // 0x3A8
     Sprite *sprites[6];                          // 0x3AC

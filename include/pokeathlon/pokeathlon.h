@@ -21,7 +21,7 @@ typedef struct PokeathlonStateInfo {
     u8 field_04;      // 0x04 - Field at offset 4 (initialized to 1)
     u8 stateArgsBase; // 0x05 - Base for state function args
     u8 stateIndex;    // 0x06 - State function index
-    u8 field_07;      // 0x07 - Field at offset 7
+    u8 nextStateIndex;      // 0x07 - Field at offset 7
 } PokeathlonStateInfo;
 
 // Participant data structure (0x7C = 124 bytes each)
@@ -47,7 +47,7 @@ typedef struct PokeathlonCourseArgs {
     u8 field_9;        // 0x009
     u8 filler_A[4];    // 0x00A
     u8 shouldFreeHeap; // 0x00E - Flag: if 0, free heap allocations in Exit
-    u8 field_F;        // 0x00F
+    u8 isSupreme;        // 0x00F
     // ... more fields to be discovered
 } PokeathlonCourseArgs;
 
@@ -85,7 +85,7 @@ struct PokeathlonCourseData {
     u8 filler_1E8[0x5];                        // 0x1E8
     u8 eventInitState;                              // 0x1ED
     u8 participantCount;                       // 0x1EE - Number of active participants (1-4)
-    u8 field_1EF;                              // 0x1EF
+    u8 receivedCount;                              // 0x1EF
     u32 currentParticipantIndex;               // 0x1F0
     u32 eventDrawEnabled;                             // 0x1F4
     PokeathlonCourseArgs *args;                // 0x1F8
@@ -100,7 +100,7 @@ struct PokeathlonCourseData {
     u8 dataCopyBuffer1[0x28];                  // 0x2B4 - Destination buffer 1
     u8 dataCopyBuffer2[0x28];                  // 0x2DC - Destination buffer 2
     u8 filler_304[0xA0];                       // 0x304
-    u32 field_3A4[4];                          // 0x3A4
+    u32 eventDataTransfer[4];                          // 0x3A4
     PokeathlonCourseState courseState;         // 0x3B4 - State machine structure (16 bytes: 4 fields x 4 bytes)
     PokeathlonStateInfo stateInfo;             // 0x3C4 - State information (8 bytes)
     u8 filler_3CC[0xC];                        // 0x3CC
@@ -108,8 +108,8 @@ struct PokeathlonCourseData {
     u32 courseId;                             // 0x3E8
     PokeathlonParticipantData participants[4]; // 0x3EC - 4 participant data elements (0x7C each = 0x1F0 bytes)
     PlayerProfile *playerProfiles;             // 0x5DC - Player profiles pointer (heap allocated, 4 profiles)
-    u16 field_5E0[4][2];                       // 0x5E0
-    u16 field_5F0[4][2];                       // 0x5F0
+    u16 eventResults[4][2];                       // 0x5E0
+    u16 receivedResults[4][2];                       // 0x5F0
     u8 filler_600[0x14];                       // 0x600
     void *graphicsSystem;                      // 0x614 - Graphics/UI subsystem pointer
     u8 filler_618[0x112];                      // 0x618
@@ -117,9 +117,9 @@ struct PokeathlonCourseData {
     u8 filler_72B[1];                          // 0x72B
     PokeathlonFieldData fieldData[6];          // 0x72C - Array of PokeathlonFieldData (6 * 0x60 = 0x1E0 bytes)
     u8 filler_96C[8];                          // 0x96C
-    PokeathlonUnkSubStruct_974 field_974[4];   // 0x974 - Array of 4 unknown sub-structures (0x74 bytes each = 0x1D0 bytes)
+    PokeathlonUnkSubStruct_974 records[4];   // 0x974 - Array of 4 unknown sub-structures (0x74 bytes each = 0x1D0 bytes)
     u8 filler_B44[0x60];                       // 0xB44
-    u8 field_BA4[0x180];                       // 0xBA4
+    u8 monCounters[0x180];                       // 0xBA4
     s32 frameCounter;                          // 0xD24 - Increments every 0x708 frames (max 0xEA5F)
     u16 frameTimer;                            // 0xD28 - Frame counter, resets at 0x708
     u16 filler_D2A;                            // 0xD2A - Alignment padding
@@ -184,7 +184,7 @@ void *PokeathlonCourse_GetGraphicsSystem(PokeathlonCourseData *data);
 // Internal overlay 96 functions (stubs for now, in assembly)
 void PokeathlonCourse_DrawEvent(PokeathlonCourseData *data);
 void PokeathlonCourse_VBlankCallback(void *);
-void PokeathlonCourse_AddCapped(s32 frameCount, u32 maxValue, Pokeathlon_UnkSubStruct_B00 *result);
+void PokeathlonCourse_AddCapped(s32 frameCount, u32 maxValue, PokeathlonStatistics *result);
 void *PokeathlonCourseLink_New(int a0, int a1, PokeathlonCourseData *data, int a3, enum HeapID heapId);
 void PokeathlonCourseLink_SendCommand(int a0, void *a1, void *a2, int a3);
 void PokeathlonCourseLink_Free(void *ptr);

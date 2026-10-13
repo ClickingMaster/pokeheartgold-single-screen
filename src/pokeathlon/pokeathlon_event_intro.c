@@ -445,7 +445,7 @@ void PokeathlonEventIntro_LoadGraphics(PokeathlonEventIntro *intro) {
 // Best solo record of the event.
 u16 PokeathlonEventIntro_GetRecord(PokeathlonEventIntro *intro, int event) {
     Pokeathlon_RecordsSolo *records = PokeathlonSave_GetRecordsSolo2(Save_Pokeathlon_Get(PokeathlonCourse_GetSaveData(intro->course)));
-    return records[event].entries[0].unk_0;
+    return records[event].entries[0].score;
 }
 
 #pragma force_active on

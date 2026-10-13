@@ -166,7 +166,7 @@ BOOL PokeathlonBox_Setup(OverlayManager *manager) {
     BoxMonSelector_Init(data->monSelector, data->bgConfig, pcStorage, party, 0, 0, isMode0, 18, &PokeathlonBox_GetLightBoxMon, &PokeathlonBox_GetBoxName, data->selectedMons, &PokeathlonBox_ShowMonInfo, data);
 
     WirelessStatusIcon_CreateOnScreenIfConnected(2);
-    PokeathlonBox_SetupGraphics(data->graphics, data->bgConfig, data->courseId, courseArgs->field_F);
+    PokeathlonBox_SetupGraphics(data->graphics, data->bgConfig, data->courseId, courseArgs->isSupreme);
     Main_SetVBlankIntrCB(&PokeathlonBox_VBlankCallback, data);
     data->state = 0;
 
@@ -364,9 +364,9 @@ void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data) {
             PokeathlonBox_CalcStatChanges(&partyLightMonStats, &partyMonStats, &aprijuiceModifier, &sp70);
             for (u8 i = 0; i < 5; i++) {
                 if (PokeathlonSave_GetUnkDC_AtIndex(Save_Pokeathlon_Get(data->saveData), sp5C[i], sp70.species)) {
-                    sp70.unk20[i] = 1;
+                    sp70.medals[i] = 1;
                 } else {
-                    sp70.unk20[i] = 0;
+                    sp70.medals[i] = 0;
                 }
             }
             PokeathlonBox_DrawMonInfo(data->graphics, &sp70);
@@ -387,9 +387,9 @@ void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data) {
         PokeathlonBox_CalcStatChanges(&boxLightMonStats, &boxMonStats, &emptyAprijuiceModifier, &sp70);
         for (u8 i = 0; i < 5; i++) {
             if (PokeathlonSave_GetUnkDC_AtIndex(Save_Pokeathlon_Get(data->saveData), sp5C[i], sp70.species)) {
-                sp70.unk20[i] = 1;
+                sp70.medals[i] = 1;
             } else {
-                sp70.unk20[i] = 0;
+                sp70.medals[i] = 0;
             }
         }
         PokeathlonBox_DrawMonInfo(data->graphics, &sp70);
@@ -429,7 +429,7 @@ void PokeathlonBox_SetupGraphics(PokeathlonBox_Graphics *graphics, BgConfig *bgC
     graphics->msgFormat = MessageFormat_New(graphics->heapID);
     graphics->nickname = String_New(11, graphics->heapID);
     graphics->courseId = courseId;
-    graphics->unk6A = arg3;
+    graphics->isSupreme = arg3;
     PokeathlonBox_LoadSpriteResources(&graphics->sub);
     PokeathlonBox_CreateSprites(&graphics->sub);
     PokeathlonBox_PrintStaticTexts(graphics);
@@ -540,7 +540,7 @@ void PokeathlonBox_PrintStaticTexts(PokeathlonBox_Graphics *graphics) {
     CopyWindowToVram(&graphics->window1);
     String_Delete(str);
     FillWindowPixelBuffer(&graphics->window2, 0);
-    if (graphics->unk6A != 0) {
+    if (graphics->isSupreme != 0) {
         str = NewString_ReadMsgData(graphics->msgData, 1);
         AddTextPrinterParameterizedWithColor(&graphics->window2, 0, str, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
         String_Delete(str);
@@ -609,7 +609,7 @@ void PokeathlonBox_ShowMonSprites(PokeathlonBox_Graphics *graphics, PokeathlonBo
     PokeathlonBox_ShowStatStars(&graphics->sub, mon);
     subroutine_arg0 = ov97_0221FCFC;
     for (i = 0; i < 5; i++) {
-        if (mon->unk20[subroutine_arg0[i]] != 0) {
+        if (mon->medals[subroutine_arg0[i]] != 0) {
             Sprite_SetDrawFlag(sub->sprites[subroutine_arg0[i]], 1);
         } else {
             Sprite_SetDrawFlag(sub->sprites[subroutine_arg0[i]], 0);

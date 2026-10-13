@@ -9,8 +9,8 @@ void PokeathlonSave_Init(PokeathlonSave *dest) {
 
     for (u8 i = 0; i < 10; i++) {
         for (u8 j = 0; j < 5; j++) {
-            dest->recordsSolo[i].entries[j].unk_0 = 0xFFFF;
-            dest->recordsLink[i].entries[j].unk_0 = 0xFFFF;
+            dest->recordsSolo[i].entries[j].score = 0xFFFF;
+            dest->recordsLink[i].entries[j].score = 0xFFFF;
         }
     }
 }
@@ -36,11 +36,11 @@ Pokeathlon_RecordsLink *PokeathlonSave_GetRecordsLink(PokeathlonSave *pokeathlon
 }
 
 void *PokeathlonSave_GetUnkAEC(PokeathlonSave *pokeathlonSave) {
-    return pokeathlonSave->unk_AEC;
+    return pokeathlonSave->soloEventBestPoints;
 }
 
-Pokeathlon_UnkSubStruct_B00 *PokeathlonSave_GetUnkB00(PokeathlonSave *pokeathlonSave) {
-    return &pokeathlonSave->unk_B00;
+PokeathlonStatistics *PokeathlonSave_GetUnkB00(PokeathlonSave *pokeathlonSave) {
+    return &pokeathlonSave->statistics;
 }
 
 PokeathlonSave *PokeathlonSave_dummy2(PokeathlonSave *pokeathlon) {
@@ -71,8 +71,8 @@ Pokeathlon_RecordsLink *PokeathlonSave_GetRecordsLink2(PokeathlonSave *pokeathlo
     return pokeathlonSave->recordsLink;
 }
 
-Pokeathlon_UnkSubStruct_B00 *PokeathlonSave_GetAgainUnkB00(PokeathlonSave *pokeathlonSave) {
-    return &pokeathlonSave->unk_B00;
+PokeathlonStatistics *PokeathlonSave_GetAgainUnkB00(PokeathlonSave *pokeathlonSave) {
+    return &pokeathlonSave->statistics;
 }
 
 void PokeathlonSave_SetUnkDC_AtIndex(PokeathlonSave *pokeathlonSave, int shift, int index) {

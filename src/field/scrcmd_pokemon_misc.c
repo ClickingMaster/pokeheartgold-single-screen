@@ -760,37 +760,37 @@ BOOL ScrCmd_724(ScriptContext *ctx) {
     u8 unkVar = ScriptGetVar(ctx);
     u16 *unkPtrA = ScriptGetVarPointer(ctx);
 
-    Pokeathlon_UnkSubStruct_B00 *unkPtrB = PokeathlonSave_GetUnkB00(Save_Pokeathlon_Get(ctx->fieldSystem->saveData));
+    PokeathlonStatistics *unkPtrB = PokeathlonSave_GetUnkB00(Save_Pokeathlon_Get(ctx->fieldSystem->saveData));
 
     if (unkVar <= 9) {
-        *unkPtrA = ClampToU16Max(unkPtrB->unk44[unkVar]);
+        *unkPtrA = ClampToU16Max(unkPtrB->eventFirstPlaces[unkVar]);
         return FALSE;
     }
 
     switch (unkVar - 10) {
     case 0:
-        *unkPtrA = ClampToU16Max(unkPtrB->unk8);
+        *unkPtrA = ClampToU16Max(unkPtrB->courseFirstPlaces);
         break;
     case 1:
         *unkPtrA = ClampToU16Max(unkPtrB->unk70);
         break;
     case 2:
-        *unkPtrA = ClampToU16Max(unkPtrB->unk4);
+        *unkPtrA = ClampToU16Max(unkPtrB->coursesJoined);
         break;
     case 3:
-        *unkPtrA = ClampToU16Max(unkPtrB->unk14);
+        *unkPtrA = ClampToU16Max(unkPtrB->monInstructions);
         break;
     case 4:
-        *unkPtrA = ClampToU16Max(unkPtrB->unk1C);
+        *unkPtrA = ClampToU16Max(unkPtrB->monJumps);
         break;
     case 5:
-        *unkPtrA = ClampToU16Max(unkPtrB->unk24);
+        *unkPtrA = ClampToU16Max(unkPtrB->monTackles);
         break;
     case 6:
-        *unkPtrA = ClampToU16Max(unkPtrB->unk2C);
+        *unkPtrA = ClampToU16Max(unkPtrB->monDashes);
         break;
     case 7:
-        *unkPtrA = ClampToU16Max(unkPtrB->unk30);
+        *unkPtrA = ClampToU16Max(unkPtrB->monSwitches);
         break;
     default:
         *unkPtrA = 0;
@@ -807,7 +807,7 @@ BOOL ScrCmd_725(ScriptContext *ctx) {
     u8 unkA = ScriptReadByte(ctx);
     u32 unkB = ScriptGetVar(ctx);
 
-    Pokeathlon_UnkSubStruct_B00 *unkPtr = PokeathlonSave_GetAgainUnkB00(Save_Pokeathlon_Get(ctx->fieldSystem->saveData));
+    PokeathlonStatistics *unkPtr = PokeathlonSave_GetAgainUnkB00(Save_Pokeathlon_Get(ctx->fieldSystem->saveData));
 
     if (unkA == 0) {
         val = unkPtr->unk70 + unkB;

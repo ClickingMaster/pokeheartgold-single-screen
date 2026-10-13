@@ -72,10 +72,10 @@ typedef struct PokeathlonCourseMonEventStats {
     u32 jumped; // 0x04
     u32 points; // 0x08
     u32 hit;    // 0x0C
-    u32 unk10;  // 0x10
+    u32 fellDown;  // 0x10
     u32 dashed; // 0x14
-    u32 unk18;  // 0x18
-    u32 unk1C;  // 0x1C
+    u32 switched;  // 0x18
+    u32 selfImpeded;  // 0x1C
 } PokeathlonCourseMonEventStats;
 
 // Result of the ceremony kept in the field data for the course statistics.
@@ -272,7 +272,7 @@ void PokeathlonCourseCeremony_SaveResult(PokeathlonCourseData *course, Pokeathlo
 void PokeathlonCourseCeremony_BufferNumber(MessageFormat *msgFormat, s32 value, u32 digits, u32 field);
 u32 PokeathlonCourseCeremony_GetCheerLevel(s32 value);
 int PokeathlonCourseCeremony_GetIntroMsgBase(int statistic);
-void PokeathlonCourseCeremony_GetIntroStats(Pokeathlon_UnkSubStruct_B00 *dest, const Pokeathlon_UnkSubStruct_B00 *src);
+void PokeathlonCourseCeremony_GetIntroStats(PokeathlonStatistics *dest, const PokeathlonStatistics *src);
 void PokeathlonCourseCeremony_WeighIntroStats(u8 *weights, const u32 *stats);
 int PokeathlonCourseCeremony_PickIntroStat(const u8 *weights, u8 *level);
 void PokeathlonCourseCeremony_ChooseOwnIntro(PokeathlonCourseCeremonyIntro *intro, PokeathlonCourseData *course);

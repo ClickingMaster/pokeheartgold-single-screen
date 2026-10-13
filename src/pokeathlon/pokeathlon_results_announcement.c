@@ -114,7 +114,7 @@ BOOL PokeathlonResultsAnnouncement_Init(PokeathlonCourseData *course) {
         announcement->bgConfig = BgConfig_Alloc((enum HeapID)137);
         announcement->messageBox = PokeathlonCourseMessageBox_New(announcement->heapId);
         PokeathlonResultsAnnouncement_CreatePlates(&announcement->ranking.plates, (enum HeapID)137, announcement->bgConfig, course);
-        announcement->unk80 = PokeathlonEventBanner_New(PokeathlonCourse_GetField3D8_ForCurrentParticipant(course), announcement->heapId);
+        announcement->banner = PokeathlonEventBanner_New(PokeathlonCourse_GetField3D8_ForCurrentParticipant(course), announcement->heapId);
         PokeathlonResultsAnnouncement_InitSprites(announcement);
         gSystem.screensFlipped = TRUE;
         GfGfx_SwapDisplay();
@@ -139,14 +139,14 @@ BOOL PokeathlonResultsAnnouncement_Init(PokeathlonCourseData *course) {
     case 2:
         PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)announcement->bgConfig); // takes the BgConfig
         PokeathlonResultsAnnouncement_InitBgs(announcement->bgConfig, announcement->heapId);
-        PokeathlonEventBanner_AddWindows(announcement->unk80, announcement->bgConfig);
+        PokeathlonEventBanner_AddWindows(announcement->banner, announcement->bgConfig);
         PokeathlonResultsAnnouncement_LoadBgGfx(announcement);
-        PokeathlonEventBanner_LoadGraphics(announcement->unk80);
+        PokeathlonEventBanner_LoadGraphics(announcement->banner);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
         value = PokeathlonCourse_GetMode(course);
         PokeathlonCourseMessageBox_Init(announcement->messageBox, announcement->bgConfig, 5, value, PokeathlonCourse_GetSaveData(course));
-        PokeathlonEventBanner_PrintTexts(announcement->unk80);
+        PokeathlonEventBanner_PrintTexts(announcement->banner);
         affine.a = FX32_ONE;
         affine.b = 0;
         affine.c = 0;
@@ -213,7 +213,7 @@ BOOL PokeathlonResultsAnnouncement_Exit(PokeathlonCourseData *course) {
     Main_SetHBlankIntrCB(NULL, NULL);
     FontID_Release(4);
     G2_SetBlendBrightness(0x3F, 0);
-    PokeathlonEventBanner_Free(announcement->unk80);
+    PokeathlonEventBanner_Free(announcement->banner);
     RemoveWindow(&announcement->window);
     PokeathlonCourseMessageBox_Free(announcement->messageBox);
     for (i = 0; i < 6; i++) {

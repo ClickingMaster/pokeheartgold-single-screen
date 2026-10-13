@@ -352,14 +352,14 @@ void PokeathlonPennantCapture_HostStep(PokeathlonCourseData *course) {
             work->touches[i].pressed = FALSE;
             work->touches[i].held = FALSE;
         }
-        if (work->players[i].unk9C) {
-            if (work->players[i].unk9D == 1 && input->swapPhase == 1) {
+        if (work->players[i].swapPending) {
+            if (work->players[i].swapPhase == 1 && input->swapPhase == 1) {
                 work->players[i].member = (work->players[i].member + 1) % 3;
-                work->players[i].unk9D = 2;
+                work->players[i].swapPhase = 2;
                 work->players[i].direction = 1;
-            } else if (work->players[i].unk9D == 2 && input->swapPhase == 2) {
-                work->players[i].unk9D = 0;
-                work->players[i].unk9C = 0;
+            } else if (work->players[i].swapPhase == 2 && input->swapPhase == 2) {
+                work->players[i].swapPhase = 0;
+                work->players[i].swapPending = 0;
                 work->players[i].depositing = 0;
                 work->players[i].direction = 1;
             }
@@ -388,7 +388,7 @@ void PokeathlonPennantCapture_HostStep(PokeathlonCourseData *course) {
                 if (work->players[i].holdTime < 0xFF) {
                     work->players[i].holdTime++;
                 } else {
-                    work->unk510 = 1;
+                    work->heldTooLong = 1;
                 }
                 if (work->dragging[i] == FALSE) {
                     continue;
@@ -401,7 +401,7 @@ void PokeathlonPennantCapture_HostStep(PokeathlonCourseData *course) {
                         work->players[i].cpuHasTarget = 1;
                     }
                     work->dragging[i] = FALSE;
-                    work->unk510 = 0;
+                    work->heldTooLong = 0;
                 }
                 released = TRUE;
             }
@@ -477,7 +477,7 @@ void PokeathlonPennantCapture_PackFrame(PokeathlonPennantCapture *work, Pokeathl
         word += 4;
         spot++;
         depositing |= player->depositing << i;
-        contacts |= player->unk9D << j;
+        contacts |= player->swapPhase << j;
         full |= work->pennantsFull[i] << i;
     }
     frame->words[5] = 0;

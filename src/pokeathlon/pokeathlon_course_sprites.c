@@ -694,7 +694,7 @@ void PokeathlonCourseMonObjects_FinishLoad(SysTask *task, void *data) {
         objects->objects[i].gfx = PokeathlonCourseMonGfx_Get(objects->gfxManager, (u8)i);
         PokeathlonCourseMonObject_SetDrawPriority(&objects->objects[i], drawPriority);
         drawPriority++;
-        objects->objects[i].unk28 = PokeathlonCourseMonGfx_GetTopRow(objects->objects[i].gfx);
+        objects->objects[i].topRow = PokeathlonCourseMonGfx_GetTopRow(objects->objects[i].gfx);
     }
     objects->loaded = TRUE;
     SysTask_Destroy(task);

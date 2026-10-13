@@ -322,7 +322,7 @@ void PokeathlonCourseCmd_RecvRecord(int netId, int size, void *data, void *conte
 void PokeathlonCourseCmd_RecvPacket(int netId, int size, void *data, void *context) {
     PokeathlonCourseData *course = context;
     u8 *dataCopy = PokeathlonCourse_GetDataCopyArea(course);
-    if (((PokeathlonCoursePacket *)data)->unk24) {
+    if (((PokeathlonCoursePacket *)data)->isHostPacket) {
         memcpy(dataCopy + 6 * sizeof(PokeathlonCoursePacket), data, size);
     } else {
         memcpy(dataCopy + 2 * sizeof(PokeathlonCoursePacket) + netId * sizeof(PokeathlonCoursePacket), data, size);
@@ -418,7 +418,7 @@ u32 PokeathlonCourseCmd_ProfilesSize(void) {
 }
 
 int PokeathlonCourseCmd_RecordSize(void) {
-    return sizeof(Pokeathlon_UnkSubStruct_B00);
+    return sizeof(PokeathlonStatistics);
 }
 
 // pokeathlon.h declares this size as a pointer, as PokeathlonCourseLink_SendCommand takes it

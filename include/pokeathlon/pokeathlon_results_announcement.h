@@ -113,7 +113,7 @@ typedef struct PokeathlonResultsAnnouncement {
     PokeathlonResultsAnnouncementScoreboard *scoreboard; // 0x14
     void *messageBox;                                    // 0x18: the announcer's text box
     PokeathlonResultsAnnouncementRanking ranking;        // 0x1C
-    void *unk80;                                         // 0x80
+    void *banner;                                         // 0x80
     Window window;                                       // 0x84: "Results Announcement"
     SpriteSystem *spriteSystem;                          // 0x94
     SpriteManager *spriteManager;                        // 0x98

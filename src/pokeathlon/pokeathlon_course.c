@@ -193,7 +193,7 @@ BOOL PokeathlonCourse_Exit(OverlayManager *manager, int *state) {
     PokeathlonCourseData *data;
     PokeathlonCourseArgs *args;
     PokeathlonSave *pokeathlonSave;
-    Pokeathlon_UnkSubStruct_B00 *result;
+    PokeathlonStatistics *result;
     SaveData *saveData;
 
     data = OverlayManager_GetData(manager);
@@ -269,7 +269,7 @@ void PokeathlonCourse_InitStateInfo(const void *funcTable, PokeathlonStateInfo *
     stateInfo->field_04 = 1;
     stateInfo->stateArgsBase = 0;
     stateInfo->stateIndex = 0;
-    stateInfo->field_07 = 0;
+    stateInfo->nextStateIndex = 0;
 }
 
 void PokeathlonCourse_InitPlayerProfiles(PokeathlonCourseData *data) {
@@ -323,7 +323,7 @@ PokeathlonFieldData *PokeathlonCourse_GetFieldData_AtIndex(PokeathlonCourseData 
 }
 
 void *PokeathlonCourse_GetFieldBA4(PokeathlonCourseData *data) {
-    return data->field_BA4;
+    return data->monCounters;
 }
 
 void *PokeathlonCourse_AllocPtr4FromHeap(PokeathlonCourseData *data, u32 size) {
@@ -411,15 +411,15 @@ u32 PokeathlonCourse_GetMode(PokeathlonCourseData *data) {
 }
 
 u8 PokeathlonCourse_GetField1EF(PokeathlonCourseData *data) {
-    return data->field_1EF;
+    return data->receivedCount;
 }
 
 void PokeathlonCourse_IncrementField1EF(PokeathlonCourseData *data) {
-    data->field_1EF++;
+    data->receivedCount++;
 }
 
 void PokeathlonCourse_ResetField1EF(PokeathlonCourseData *data) {
-    data->field_1EF = 0;
+    data->receivedCount = 0;
 }
 
 void *PokeathlonCourse_GetSystem(PokeathlonCourseData *data) {
@@ -435,7 +435,7 @@ PlayerProfile *PokeathlonCourse_GetPlayerProfileFromData(PokeathlonCourseData *d
 }
 
 PokeathlonUnkSubStruct_974 *PokeathlonCourse_GetField974_AtIndex(PokeathlonCourseData *data, int index) {
-    return &data->field_974[index];
+    return &data->records[index];
 }
 
 u8 *PokeathlonCourse_GetDataCopyArea(PokeathlonCourseData *data) {
@@ -443,26 +443,26 @@ u8 *PokeathlonCourse_GetDataCopyArea(PokeathlonCourseData *data) {
 }
 
 void PokeathlonCourse_ResetDataCopyArea(PokeathlonCourseData *data) {
-    // Look like it's filling dataCopySource + dataCopyBuffer1 + dataCopyBuffer2 + filler_304 + field_3A4
+    // Look like it's filling dataCopySource + dataCopyBuffer1 + dataCopyBuffer2 + filler_304 + eventDataTransfer
     MI_CpuFill8(data->dataCopySource, 0, 296);
 }
 
 void PokeathlonCourse_SetField3A4(PokeathlonCourseData *data, u32 a0, u32 a1, u32 a2) {
-    data->field_3A4[0] = a0;
-    data->field_3A4[1] = a1;
-    data->field_3A4[2] = a2;
-    data->field_3A4[3] = 1;
+    data->eventDataTransfer[0] = a0;
+    data->eventDataTransfer[1] = a1;
+    data->eventDataTransfer[2] = a2;
+    data->eventDataTransfer[3] = 1;
 }
 
 void PokeathlonCourse_ResetField3A4(PokeathlonCourseData *data) {
-    data->field_3A4[0] = 0;
-    data->field_3A4[1] = 0;
-    data->field_3A4[2] = 0;
-    data->field_3A4[3] = 0;
+    data->eventDataTransfer[0] = 0;
+    data->eventDataTransfer[1] = 0;
+    data->eventDataTransfer[2] = 0;
+    data->eventDataTransfer[3] = 0;
 }
 
 u32 PokeathlonCourse_GetField3A4(PokeathlonCourseData *data) {
-    return data->field_3A4[1];
+    return data->eventDataTransfer[1];
 }
 
 u32 PokeathlonCourse_GetUnkConstant4() {
@@ -470,24 +470,24 @@ u32 PokeathlonCourse_GetUnkConstant4() {
 }
 
 void PokeathlonCourse_SetField5E0_AtIndex(PokeathlonCourseData *data, int index, u16 value) {
-    data->field_5E0[index][0] = value;
+    data->eventResults[index][0] = value;
 }
 
 u16 PokeathlonCourse_GetField5F0_AtIndex(PokeathlonCourseData *data, int index) {
-    return data->field_5F0[index][0];
+    return data->receivedResults[index][0];
 }
 
 void PokeathlonCourse_SetStateField07(PokeathlonCourseData *data, u8 value) {
     GF_ASSERT(data->courseState.exitFlag != 1);
     data->courseState.exitFlag = 1;
-    data->courseState.argsPtr->field_07 = value;
+    data->courseState.argsPtr->nextStateIndex = value;
 }
 
 void PokeathlonCourse_SetStateField07_IfDifferent(PokeathlonCourseData *data, u8 value, u8 value2) {
-    if (data->courseState.argsPtr->field_07 != value2) {
+    if (data->courseState.argsPtr->nextStateIndex != value2) {
         GF_ASSERT(data->courseState.exitFlag != 1);
         data->courseState.exitFlag = 1;
-        data->courseState.argsPtr->field_07 = value;
+        data->courseState.argsPtr->nextStateIndex = value;
     }
 }
 

@@ -128,8 +128,8 @@ void PokeathlonPennantCapture_UpdatePlayers(PokeathlonCourseData *course) {
                 player->depositSteps--;
                 if (player->depositSteps == 0) {
                     player->depositSteps = 0;
-                    player->unk9C = 1;
-                    player->unk9D = 1;
+                    player->swapPending = 1;
+                    player->swapPhase = 1;
                     PokeathlonCourse_AddMonCounter(course, player->participant, player->member, 7, 1);
                 } else {
                     player->depositDelay = 4;
@@ -235,7 +235,7 @@ void PokeathlonPennantCapture_UpdatePlayers(PokeathlonCourseData *course) {
         if (VEC_Mag(&friction) > 0) {
             float force = 6.0f;
             int amount = (int)(0.1 * force * 4096.0);
-            if (work->unk510) {
+            if (work->heldTooLong) {
                 amount += 0x3000;
             }
             VEC_Normalize(&friction, &friction);
@@ -249,7 +249,7 @@ void PokeathlonPennantCapture_UpdatePlayers(PokeathlonCourseData *course) {
                 player->velocity.y = 0;
             }
         }
-        if (!player->unk9C && player->knockedDown == 1) {
+        if (!player->swapPending && player->knockedDown == 1) {
             player->knockdownTimer--;
             if (player->knockdownTimer == 0) {
                 player->knockedDown = 0;
@@ -645,7 +645,7 @@ void PokeathlonPennantCapture_SetMoveParams(PokeathlonCourseData *course, const 
     u8 *levels = PokeathlonCourse_GetMonStats(course, participant, member);
 
     player->moveParams[member].knockbackScale = (f32)tables->knockbackScale[levels[0]] / 10.0;
-    player->moveParams[member].unk10 = tables->unk10[levels[1]];
+    player->moveParams[member].maxSpeed = tables->maxSpeed[levels[1]];
     player->moveParams[member].unk00 = (f32)tables->unk00[levels[4]] / 10.0;
     player->moveParams[member].unk04 = (f32)tables->unk04[levels[1]] / 10.0;
     player->moveParams[member].knockdownTime = tables->knockdownTime[levels[3]];
@@ -920,7 +920,7 @@ fx32 PokeathlonPennantCapture_CalcCircleEntry(VecFx32 *a, VecFx32 *b, VecFx32 *p
 }
 
 float ov96_022073F0(PokeathlonPennantCapturePlayer *player, int member) {
-    return (float)player->moveParams[member].unk10;
+    return (float)player->moveParams[member].maxSpeed;
 }
 
 void PokeathlonPennantCapture_AddPoint2D(const Point2D *a, const Point2D *b, Point2D *out) {

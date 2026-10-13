@@ -1793,7 +1793,7 @@ void PokeathlonCourseCeremony_ChooseAwards(PokeathlonCourseData *course) {
     for (i = 0, bit = 0; i < 4; i++) {
         for (member = 0; member < 3; member++) {
             u8 mon = member + bit;
-            if (stats[member].failed == 0 && stats[member].unk10 == 0 && stats[member].unk1C == 0) {
+            if (stats[member].failed == 0 && stats[member].fellDown == 0 && stats[member].selfImpeded == 0) {
                 data->noMissMons += 1 << mon;
             }
             if (maxPoints == stats[member].points) {
@@ -1984,34 +1984,34 @@ int PokeathlonCourseCeremony_GetIntroMsgBase(int statistic) {
 }
 
 // The 29 statistics the introduction lines are about.
-void PokeathlonCourseCeremony_GetIntroStats(Pokeathlon_UnkSubStruct_B00 *dest, const Pokeathlon_UnkSubStruct_B00 *src) {
+void PokeathlonCourseCeremony_GetIntroStats(PokeathlonStatistics *dest, const PokeathlonStatistics *src) {
     int i;
     u32 sum = 0;
 
     for (i = 0; i < 10; i++) {
-        sum += src->unk44[i];
+        sum += src->eventFirstPlaces[i];
     }
-    dest->unk0 = src->unk4;
-    dest->unk4 = src->unk8;
-    dest->unk8 = src->unkC;
-    dest->unkC = sum;
-    dest->unk10 = src->unk6C;
-    dest->unk14 = src->unk10;
-    dest->unk18 = src->unk14;
-    dest->unk1C = src->unk18;
-    dest->unk20 = src->unk1C;
-    dest->unk24 = src->unk20;
-    dest->unk28 = src->unk24;
-    dest->unk2C = src->unk28;
-    dest->unk30 = src->unk2C;
-    dest->unk34 = src->unk30;
-    dest->unk38 = src->unk38;
-    dest->unk3C = src->unk3C;
-    dest->unk40 = src->unk40;
+    dest->playTime = src->coursesJoined;
+    dest->coursesJoined = src->courseFirstPlaces;
+    dest->courseFirstPlaces = src->courseLastPlaces;
+    dest->courseLastPlaces = sum;
+    dest->bonusesEarned = src->eventLastPlaces;
+    dest->monInstructions = src->bonusesEarned;
+    dest->monFailures = src->monInstructions;
+    dest->monJumps = src->monFailures;
+    dest->monPointsEarned = src->monJumps;
+    dest->monTackles = src->monPointsEarned;
+    dest->monFalls = src->monTackles;
+    dest->monDashes = src->monFalls;
+    dest->monSwitches = src->monDashes;
+    dest->monSelfImpedes = src->monSwitches;
+    dest->linkCoursesJoined = src->linkCoursesJoined;
+    dest->linkCourseFirstPlaces = src->linkCourseFirstPlaces;
+    dest->linkCourseLastPlaces = src->linkCourseLastPlaces;
     for (i = 0; i < 10; i++) {
-        dest->unk44[i] = src->unk44[i];
+        dest->eventFirstPlaces[i] = src->eventFirstPlaces[i];
     }
-    dest->unk6C = src->unk34;
+    dest->eventLastPlaces = src->monSelfImpedes;
     dest->unk70 = src->unk70;
 }
 
@@ -2061,10 +2061,10 @@ int PokeathlonCourseCeremony_PickIntroStat(const u8 *weights, u8 *level) {
 }
 
 void PokeathlonCourseCeremony_ChooseOwnIntro(PokeathlonCourseCeremonyIntro *intro, PokeathlonCourseData *course) {
-    Pokeathlon_UnkSubStruct_B00 stats = { 0 };
+    PokeathlonStatistics stats = { 0 };
     u8 weights[29] = { 0 };
     u8 level;
-    Pokeathlon_UnkSubStruct_B00 *records;
+    PokeathlonStatistics *records;
     u8 statistic;
 
     records = PokeathlonSave_GetAgainUnkB00(Save_Pokeathlon_Get(PokeathlonCourse_GetSaveData(course)));
@@ -2077,13 +2077,13 @@ void PokeathlonCourseCeremony_ChooseOwnIntro(PokeathlonCourseCeremonyIntro *intr
 }
 
 void PokeathlonCourseCeremony_ChooseLinkIntro(PokeathlonCourseCeremonyIntro *intro, PokeathlonCourseData *course, int team) {
-    Pokeathlon_UnkSubStruct_B00 stats = { 0 };
+    PokeathlonStatistics stats = { 0 };
     u8 weights[29] = { 0 };
     u8 level;
-    Pokeathlon_UnkSubStruct_B00 *records;
+    PokeathlonStatistics *records;
     u8 statistic;
 
-    records = (Pokeathlon_UnkSubStruct_B00 *)PokeathlonCourse_GetField974_AtIndex(course, team);
+    records = (PokeathlonStatistics *)PokeathlonCourse_GetField974_AtIndex(course, team);
     PokeathlonCourseCeremony_GetIntroStats(&stats, records);
     PokeathlonCourseCeremony_WeighIntroStats(weights, (u32 *)&stats);
     statistic = PokeathlonCourseCeremony_PickIntroStat(weights, &level);
