@@ -32,7 +32,7 @@ extern void VCT_SetCodec(int codec);
 extern void VCT_Cleanup(void);
 extern void VCT_GetVADInfo(void *info);
 extern void CommState_GetLinkMode(void);
-extern int sub_02034084(void);
+extern int Comm_IsWifiPeerLinkMode(void);
 extern int ov00_021EE490(void);
 
 #pragma force_active on
@@ -307,7 +307,7 @@ void VoiceChat_Init(int heapId, int codec, int count) {
     gVoiceChat.work->callState = VOICE_CHAT_CALL_IDLE;
     gVoiceChat.work->session = NULL;
     CommState_GetLinkMode();
-    if (!sub_02034084()) {
+    if (!Comm_IsWifiPeerLinkMode()) {
         config.mode = VOICE_CHAT_MODE_PHONE;
     } else {
         config.mode = VOICE_CHAT_MODE_CONFERENCE;

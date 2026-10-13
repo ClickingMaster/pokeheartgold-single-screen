@@ -37,7 +37,7 @@
 .public CommPlayerInfo_DropDisconnected
 .public CommPlayerInfo_GetProfile
 .public CommPlayerInfo_GetExchangeToken
-.public sub_02034870
+.public CommPlayerInfo_GetFriendIndex
 .public CommPlayerInfo_GetGroupName
 .public CommPlayerInfo_GetCountry
 .public CommPlayerInfo_GetRegion

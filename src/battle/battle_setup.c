@@ -376,7 +376,7 @@ void BattleSetup_InitForLinkBattleWithParty(BattleSetup *setup, FieldSystem *fie
     setup->palPad = Save_PalPad_Get(fieldSystem->saveData);
     setup->saveData = fieldSystem->saveData;
 
-    if (sub_0203401C(CommState_GetLinkMode())) {
+    if (Comm_IsUnionRoomLinkMode(CommState_GetLinkMode())) {
         int avatar = PlayerProfile_GetAvatar(profile);
         int gender = PlayerProfile_GetTrainerGender(profile);
         setup->trainer[BATTLER_PLAYER].data.trainerClass = GetUnionRoomAvatarAttrBySprite(gender, avatar, 1);

@@ -24,7 +24,7 @@ extern void FriendRoster_MergeFriend(void *, int, int);
 extern void *Save_FriendRoster_Get(void *);
 extern void FrontierSave_ClearRow(void *, int, int);
 extern void *Save_Frontier_GetStatic(void *);
-extern int sub_02034084(void);
+extern int Comm_IsWifiPeerLinkMode(void);
 extern int sub_02034098(void);
 extern int Comm_CountConnected(void);
 extern void CommState_SetWifiError(int, u32, int);
@@ -286,7 +286,7 @@ int WifiConnection_Update(int success) {
         break;
     case WIFI_CONNECTION_STATE_CONNECTED:
         CommState_GetLinkMode();
-        if (!sub_02034084()) {
+        if (!Comm_IsWifiPeerLinkMode()) {
             WifiConnection_StartVoiceChat(gWifiConnection->heapId);
         }
         {
@@ -511,7 +511,7 @@ void WifiConnection_SendDoneCallback(u32 result, s32 aid) {
 
 void ov00_021E644C(u32 header) {
     CommState_GetLinkMode();
-    if (sub_02034084() == 0) {
+    if (Comm_IsWifiPeerLinkMode() == 0) {
         if (header & 0x100) {
             gWifiConnection->unk_10D0 = 1;
         } else {
@@ -784,7 +784,7 @@ void WifiConnection_StartVoiceChat(int heapId) {
     int codec;
 
     CommState_GetLinkMode();
-    online = sub_02034084();
+    online = Comm_IsWifiPeerLinkMode();
     if (online) {
         count = Comm_CountConnected() - 1;
         if (count < 1) {

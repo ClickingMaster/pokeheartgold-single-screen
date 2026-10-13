@@ -4,7 +4,7 @@ void RecordMixingLink_RegisterCommands(RecordMixingLinkWork *room) {
     Comm_RegisterCommandTable(gRecordMixingLinkCommands, 110, room);
 }
 
-void sub_0208FB78(int sender, int unused, void *data, RecordMixingLinkWork *room) {
+void RecordMixingLink_RecvRecords(int sender, int unused, void *data, RecordMixingLinkWork *room) {
     room->count++;
 }
 
@@ -14,7 +14,7 @@ void sub_0208FB88(int sender, int unused, u8 *data, RecordMixingLinkWork *room) 
     }
 }
 
-void sub_0208FB98(int sender, int unused, void *data, RecordMixingLinkWork *room) {
+void RecordMixingLink_RecvStartMixing(int sender, int unused, void *data, RecordMixingLinkWork *room) {
     room->count = 0;
     room->active = 1;
     RecordMixingLink_SendRecords(room, Comm_GetLocalNetId());
@@ -24,7 +24,7 @@ void sub_0208FB98(int sender, int unused, void *data, RecordMixingLinkWork *room
     PlaySE(0x657);
 }
 
-void sub_0208FBE0(int sender, int unused, void *data, RecordMixingLinkWork *room) {
+void RecordMixingLink_RecvClearMessage(int sender, int unused, void *data, RecordMixingLinkWork *room) {
     RecordMixing_SetStateFromLink(room, 2, 0);
 }
 
@@ -74,7 +74,7 @@ void RecordMixingLink_HandleJoinRequest(int sender, int unused, void *data, Reco
     }
 }
 
-void sub_0208FCDC(int sender, int unused, u8 *data, RecordMixingLinkWork *room) {
+void RecordMixingLink_RecvMemberJoined(int sender, int unused, u8 *data, RecordMixingLinkWork *room) {
     RecordMixing_SetStateFromLinkInMenu(room, 1, *data);
     if (Comm_GetLocalNetId() == 0) {
         room->flag = 0;
@@ -87,13 +87,13 @@ void sub_0208FCFC(int sender, int unused, void *data, RecordMixingLinkWork *room
 void sub_0208FD00(int sender, int unused, void *data, RecordMixingLinkWork *room) {
 }
 
-void sub_0208FD04(int sender, int unused, void *data, RecordMixingLinkWork *room) {
+void RecordMixingLink_RecvCloseYesNo(int sender, int unused, void *data, RecordMixingLinkWork *room) {
     if (Comm_GetLocalNetId() != 0) {
         RecordMixing_SetStateFromLink(room, 13, 0);
     }
 }
 
-void sub_0208FD1C(int sender) {
+void RecordMixingLink_RecvJoinNotice(int sender) {
     if (Comm_GetLocalNetId() == 0) {
         u8 id = sender;
         Comm_SendCommand(110, &id, 1);
@@ -113,15 +113,15 @@ void RecordMixingLink_SendRecords(RecordMixingLinkWork *room, int unused) {
     Comm_SendCommandNoCopy(116, room->send, 0xbc0);
 }
 
-u32 sub_0208FD7C(void) {
+u32 RecordMixingLink_GetSize0(void) {
     return 0;
 }
 
-u32 sub_0208FD80(void) {
+u32 RecordMixingLink_GetSize1(void) {
     return 1;
 }
 
-u32 sub_0208FD84(void) {
+u32 RecordMixingLink_GetJoinRequestSize(void) {
     return 4;
 }
 

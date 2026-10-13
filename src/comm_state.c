@@ -273,7 +273,7 @@ void CommState_RefuseJoinsAndRestart(void) {
     }
 }
 
-void sub_020380F4(void) {
+void CommState_SetUnionAppLinkMode(void) {
     gCommState->linkMode = 18;
 }
 
@@ -994,7 +994,7 @@ void CommState_WifiStartMatch(void) {
         CommState_SetState(CommState_WifiFailed, 0);
         return;
     }
-    u32 temp_r0 = WifiConnection_StartMatchmaking(gCommState->matchFriendIndex, sub_02033FC4(gCommState->linkMode) + 1, 0) + 3;
+    u32 temp_r0 = WifiConnection_StartMatchmaking(gCommState->matchFriendIndex, Comm_GetMaxChildren(gCommState->linkMode) + 1, 0) + 3;
     switch (temp_r0) {
     case 3:
         Comm_ResetWork();
@@ -1297,7 +1297,7 @@ void CommState_WifiClubStart(void) {
     if (CommWireless_IsStartedUp()) {
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_48, 0x35400);
         if (Comm_StartParent(1, 1, 512, 1)) {
-            WifiConnection_Init(gCommState->saveData, 48, 0x2C400, sub_02033FC4(gCommState->linkMode) + 1);
+            WifiConnection_Init(gCommState->saveData, 48, 0x2C400, Comm_GetMaxChildren(gCommState->linkMode) + 1);
             WifiConnection_SetErrorCallback(CommState_ShowErrorAndHalt);
             sub_02035FD8();
             CommState_SetState(CommState_WifiLogin, 3600);
@@ -1443,7 +1443,7 @@ void CommState_GetSelectedOrder(void *arg0) {
 
 int CommState_IsWifi(void) {
     CommState_GetLinkMode();
-    return sub_02034044();
+    return Comm_IsWifiLinkMode();
 }
 
 void CommState_SetErrorScreen(s8 arg0) {
@@ -1523,7 +1523,7 @@ void sub_02039AF8(void) {
     WifiConnection_SetReceiveCallbacks(&Comm_RecvPeerFrameCallback, &Comm_RecvPeerFrameCallback);
 }
 
-void sub_02039B18(void) {
+void CommState_SetClubWifiLinkMode(void) {
     gCommState->linkMode = 35;
     WifiConnection_SetReceiveCallbacks(&Comm_RecvPeerFrameCallback, &Comm_RecvPeerFrameCallback);
 }
@@ -1538,7 +1538,7 @@ void CommState_SetWifiClubLinkMode(void) {
     WifiConnection_SetReceiveCallbacks(&Comm_RecvChildFrameCallback, &Comm_RecvParentFrameCallback);
 }
 
-void sub_02039B7C(void) {
+void CommState_SetSingleBattleWifiLinkMode(void) {
     gCommState->linkMode = 19;
     WifiConnection_SetReceiveCallbacks(&Comm_RecvChildFrameCallback, &Comm_RecvParentFrameCallback);
 }
@@ -1547,7 +1547,7 @@ void CommState_PlazaStart(void) {
     if (CommWireless_IsStartedUp()) {
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_48, 0x60000);
         if (Comm_StartParent(1, 1, 512, 1)) {
-            WifiConnection_Init(gCommState->saveData, 48, 0x58000, sub_02033FC4(gCommState->linkMode) + 1);
+            WifiConnection_Init(gCommState->saveData, 48, 0x58000, Comm_GetMaxChildren(gCommState->linkMode) + 1);
             WifiConnection_SetErrorCallback(CommState_ShowErrorAndHalt);
             sub_02035FD8();
             ov00_021E70B8(0);
@@ -1704,7 +1704,7 @@ void CommState_PlazaTimedOut(void) {
     CommState_PlazaUpdateLobby();
 }
 
-void sub_02039E9C(void) {
+void CommState_SetFrontierWifiLinkMode(void) {
     gCommState->linkMode = 34;
 }
 

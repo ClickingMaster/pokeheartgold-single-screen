@@ -29,7 +29,7 @@ void CommState_SetWifiClubLinkMode(void);
 void CommState_LeaveWifiMatch(void);
 BOOL CommState_GetWifiMatchStatus(void);
 void sub_020378E4(int a0);
-void sub_02039B18(void);
+void CommState_SetClubWifiLinkMode(void);
 void sub_02039AF8(void);
 s32 CommState_StartWifiMatch(s32);
 u8 CommState_WasWifiDisconnected(void);
@@ -38,12 +38,12 @@ void CommState_SendWifiDisconnect(void);
 BOOL CommState_IsWifiJoiningLobby(void);
 void CommState_EndWifiSession(void);
 void Comm_RegisterLinkedFriends(SaveData *saveData, void *a1, enum HeapID heapID);
-void sub_02039B7C(void);
+void CommState_SetSingleBattleWifiLinkMode(void);
 BOOL CommState_IsWifiInLobby(void);
 UnkStruct_ov44_0223197C *CommState_StartWifiClub(SaveData *saveData, u32 a1);
 void CommState_EndWifiMatch(void);
 int Comm_InitDwc(enum HeapID heapID);
-void sub_02039E9C(void);
+void CommState_SetFrontierWifiLinkMode(void);
 void Comm_MarkLocationSeen(SaveWiFiHistory *history, s32 country, s32 region, u8 language);
 
 #endif // POKEHEARTGOLD_COMM_STATE_H

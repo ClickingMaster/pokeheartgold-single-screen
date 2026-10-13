@@ -34,7 +34,7 @@
 .public Wireless_SetEntryLocked
 .public Wireless_IsEntryLocked
 .public Wireless_SetEntryClosed
-.public sub_020340C4
+.public Comm_IsCommClubLinkMode
 .public CommState_ReportsErrors
 .public CommState_GetLinkMode
 .public CommState_SetError

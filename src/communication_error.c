@@ -71,7 +71,7 @@ static void VBlankIntr(void) {
     MI_WaitDma(GX_DEFAULT_DMAID);
 }
 
-static BOOL sub_0203A9FC(u32 *error_code_ptr) {
+static BOOL GetWifiErrorCodeToShow(u32 *error_code_ptr) {
     if (!CommState_HasWifiFailed() || !CommState_Exists()) {
         return FALSE;
     }
@@ -111,14 +111,14 @@ void ShowCommunicationError(enum HeapID heapID, u32 error, u32 errorCode) {
         msgNo = msg_0041_00005;
         break;
     case 5:
-        if (!sub_0203A9FC(&errorCode)) {
+        if (!GetWifiErrorCodeToShow(&errorCode)) {
             msgNo = msg_0041_00006;
         } else {
             msgNo = msg_0041_00008;
         }
         break;
     case 6:
-        if (!sub_0203A9FC(&errorCode)) {
+        if (!GetWifiErrorCodeToShow(&errorCode)) {
             msgNo = msg_0041_00007;
         } else {
             msgNo = msg_0041_00009;

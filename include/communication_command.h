@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-BOOL sub_0203401C(int);
+BOOL Comm_IsUnionRoomLinkMode(int);
 void Comm_RegisterCommandTable(const void *, int, void *arg2);
 u32 CommCmd_GetSize1(void);
 u32 CommCmd_GetSize0(void);

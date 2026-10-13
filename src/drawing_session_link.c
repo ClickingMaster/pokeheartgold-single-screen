@@ -44,7 +44,7 @@ void sub_0208F8E4(int index, void *unused, const u8 *src, DrawingSessionLinkWork
     }
 }
 
-void sub_0208F918(void *a, void *b, void *c, DrawingSessionLinkWork *work) {
+void DrawingSessionLink_ReceivePictureDone(void *a, void *b, void *c, DrawingSessionLinkWork *work) {
     DrawingSession_HandleNetEvent(work, 3, 0);
     MIi_CpuClearFast(0, (u32 *)&work->raw[0x43d0], 0x3840);
     if (Comm_GetLocalNetId() == 0) {
@@ -104,7 +104,7 @@ void DrawingSessionLink_HandleJoinRequest(int id, void *unused, const FourBytes 
 void sub_0208FA50(void) {
 }
 
-void sub_0208FA54(void *a, void *b, const u8 *data, DrawingSessionLinkWork *work) {
+void DrawingSessionLink_ReceiveMemberJoined(void *a, void *b, const u8 *data, DrawingSessionLinkWork *work) {
     DrawingSession_HandleNetEvent(work, 1, data[0]);
     if (Comm_GetLocalNetId() == 0 && U32(work, 0x300) == 1) {
         U32(work, 0x43cc) = 0;
@@ -124,7 +124,7 @@ void sub_0208FA90(void *a, void *b, void *c, DrawingSessionLinkWork *work) {
     }
 }
 
-void sub_0208FAA8(int value, void *b, void *c, DrawingSessionLinkWork *work) {
+void DrawingSessionLink_ReceiveJoinNotice(int value, void *b, void *c, DrawingSessionLinkWork *work) {
     u8 packet;
     if (Comm_GetLocalNetId() != 0) {
         GF_AssertFail();
@@ -172,6 +172,6 @@ int sub_0208FB5C(void) {
     return 4;
 }
 
-int sub_0208FB60(void) {
+int DrawingSessionLink_GetJoinRequestSize(void) {
     return 4;
 }

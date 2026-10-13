@@ -8,7 +8,7 @@
 .public ByteRing_Read
 .public ByteRing_ReadByte
 .public ByteRing_GetReadableSize
-.public sub_02033BE4
+.public ByteRing_GetFreeSize
 .public ByteRing_Commit
 .public PacketPool_AllNodesFree
 .public PacketPool_Enqueue
@@ -17,13 +17,13 @@
 .public PacketPool_Reset
 .public PacketPool_Free
 .public PacketPool_HasCommand
-.public sub_02033FC4
-.public sub_02033FF0
-.public sub_0203401C
-.public sub_02034044
-.public sub_02034084
+.public Comm_GetMaxChildren
+.public Comm_GetMinChildren
+.public Comm_IsUnionRoomLinkMode
+.public Comm_IsWifiLinkMode
+.public Comm_IsWifiPeerLinkMode
 .public sub_02034098
-.public sub_020340C4
+.public Comm_IsCommClubLinkMode
 .public Comm_RegisterCommandTable
 .public Comm_FreeCommandTable
 .public Comm_CallCommandRecv
@@ -75,7 +75,7 @@
 	.public CommCmd_RecvReady
 	.public CommCmd_RecvShutdown
 	.public CommCmd_RecvNotReady
-	.public _020F692C
-	.public _020F6955
+	.public gCommMaxChildren
+	.public gCommMinChildren
 	.public gCommBaseCommands
 	.public gCommCommandTable

@@ -741,7 +741,7 @@ void ov44_0222A1B4(u32 arg0) {
         return;
     }
     if (ov44_02229F44(arg0) != 0) {
-        sub_02039B18();
+        CommState_SetClubWifiLinkMode();
         return;
     }
     if (arg0 == 16) {
@@ -750,11 +750,11 @@ void ov44_0222A1B4(u32 arg0) {
     }
     if ((arg0 - 20) <= 1) {
         sub_020378E4(0);
-        sub_02039E9C();
+        CommState_SetFrontierWifiLinkMode();
         return;
     }
     sub_020378E4(1);
-    sub_02039B7C();
+    CommState_SetSingleBattleWifiLinkMode();
 }
 
 void ov44_0222A1FC(UnkStruct_ov44_022319EC *arg0) {
@@ -2911,7 +2911,7 @@ s32 ov44_0222DA64(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             var_r7 = 0;
         } else {
             ov44_0223197C(arg0, -1, temp_r0);
-            sub_02039B7C();
+            CommState_SetSingleBattleWifiLinkMode();
         }
         ov44_022319BC(arg0, var_r7);
     }

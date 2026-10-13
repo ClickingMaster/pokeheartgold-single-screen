@@ -2689,7 +2689,7 @@ BOOL ScrCmd_260(ScriptContext *ctx) {
 BOOL ScrCmd_261(ScriptContext *ctx) {
     u16 command = ScriptReadHalfword(ctx);
     if (command == 5 || command == 7 || command == 9 || command == 6 || command == 12 || command == 10) {
-        sub_020380F4();
+        CommState_SetUnionAppLinkMode();
     } else if (command == 11) {
         CommState_SetUnionRoomLinkMode();
     }

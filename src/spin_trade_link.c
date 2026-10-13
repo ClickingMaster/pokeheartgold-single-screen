@@ -57,11 +57,11 @@ void SpinTradeLink_ReceiveParty(int sender, int unused, void *data, SpinTradeLin
 void sub_02096DA8(int sender, int unused, void *data, SpinTradeLink *menu);
 void sub_02096DB4(int sender, int unused, void *data, SpinTradeLink *menu);
 void sub_02096DBC(int sender, int unused, void *data, SpinTradeLink *menu);
-void sub_02096DE4(int sender, int unused, void *data, SpinTradeLink *menu);
+void SpinTradeLink_HandleClearMessage(int sender, int unused, void *data, SpinTradeLink *menu);
 void SpinTradeLink_HandleJoinRequest(int sender, int unused, void *data, SpinTradeLink *menu);
-void sub_02096ED0(int sender, int unused, void *data, SpinTradeLink *menu);
-void sub_02096EF0(int sender, int unused, void *data, SpinTradeLink *menu);
-void sub_02096F0C(int sender, int unused, void *data, SpinTradeLink *menu);
+void SpinTradeLink_HandleMemberJoined(int sender, int unused, void *data, SpinTradeLink *menu);
+void SpinTradeLink_HandleCloseYesNo(int sender, int unused, void *data, SpinTradeLink *menu);
+void SpinTradeLink_HandleJoinNotice(int sender, int unused, void *data, SpinTradeLink *menu);
 void SpinTradeLink_HandleStatus(int sender, int unused, void *data, SpinTradeLink *menu);
 void SpinTradeLink_HandleJoin(int sender, int unused, void *data, SpinTradeLink *menu);
 void SpinTradeLink_HandleSlot(int sender, int unused, void *data, SpinTradeLink *menu);
@@ -155,7 +155,7 @@ void sub_02096DBC(int sender, int unused, void *data, SpinTradeLink *menu) {
     }
 }
 
-void sub_02096DE4(int sender, int unused, void *data, SpinTradeLink *menu) {
+void SpinTradeLink_HandleClearMessage(int sender, int unused, void *data, SpinTradeLink *menu) {
     SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 2, 0);
 }
 
@@ -205,20 +205,20 @@ void SpinTradeLink_HandleJoinRequest(int sender, int unused, void *data, SpinTra
     }
 }
 
-void sub_02096ED0(int sender, int unused, void *data, SpinTradeLink *menu) {
+void SpinTradeLink_HandleMemberJoined(int sender, int unused, void *data, SpinTradeLink *menu) {
     SpinTradeGroup_HandleMemberEvent(menu->parent->field38, 1, *(u8 *)data);
     if (Comm_GetLocalNetId() == 0) {
         menu->unk34 = 0;
     }
 }
 
-void sub_02096EF0(int sender, int unused, void *data, SpinTradeLink *menu) {
+void SpinTradeLink_HandleCloseYesNo(int sender, int unused, void *data, SpinTradeLink *menu) {
     if (Comm_GetLocalNetId() != 0) {
         SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 13, 0);
     }
 }
 
-void sub_02096F0C(int sender, int unused, void *data, SpinTradeLink *menu) {
+void SpinTradeLink_HandleJoinNotice(int sender, int unused, void *data, SpinTradeLink *menu) {
     if (Comm_GetLocalNetId() == 0) {
         u8 id = sender;
         SpinTradeLink_SendCommand(menu, 0, &id, 1);

@@ -774,7 +774,7 @@ s32 ov44_02233E80(u32 arg0, u32 arg1) {
         case 1:
         case 2:
         case 3:
-            sub_02039B18();
+            CommState_SetClubWifiLinkMode();
         }
     }
     return var_r5;
@@ -1049,7 +1049,7 @@ void ov44_0223438C(UnkStruct_ov44_02235340 *arg0) {
                 if (var_r4 == 0) {
                     var_r0 = arg0->unk0->unk21;
                 } else {
-                    int temp_r7 = sub_02034870(var_r4);
+                    int temp_r7 = CommPlayerInfo_GetFriendIndex(var_r4);
                     GF_ASSERT(temp_r7 != 32);
                     var_r0 = arg0->unk0[(temp_r7 + 1)].unk21;
                 }
@@ -1122,7 +1122,7 @@ s32 ov44_022344C4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     if (ov44_02233E6C(arg0) == 1) {
         temp_r0 = CommPlayerInfo_FindReceived();
         if ((temp_r0 != 255) && (arg0->unk6 != 0)) {
-            if (sub_02034870(temp_r0) == 32) {
+            if (CommPlayerInfo_GetFriendIndex(temp_r0) == 32) {
                 UnkStruct_ov44_022345FC subroutine_arg0;
                 subroutine_arg0.unk0 = temp_r0;
                 subroutine_arg0.unk2 = 0;
@@ -1818,7 +1818,7 @@ s32 ov44_02235090(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 
 // The leader appears busy.\nPlease apply again.\r
 s32 ov44_02235100(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    arg0->unk26 = sub_02034870(0);
+    arg0->unk26 = CommPlayerInfo_GetFriendIndex(0);
     GF_ASSERT(arg0->unk26 != 32);
     ov44_02233C88(&arg0->unk30, arg1, 0, 0, heapID);
     CommState_LeaveWifiMatch();

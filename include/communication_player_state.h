@@ -17,7 +17,7 @@ void CommPlayerInfo_Accept(int arg0);
 int CommPlayerInfo_FindReceived(void);
 int CommPlayerInfo_CountAccepted(void);
 PlayerProfile *CommPlayerInfo_GetProfile(u32 a0);
-u8 sub_02034870(int arg0);
+u8 CommPlayerInfo_GetFriendIndex(int arg0);
 s32 CommPlayerInfo_RulesetsMatch();
 void CommPlayerInfo_RecordBattleResult(SaveData *saveData, int a1);
 

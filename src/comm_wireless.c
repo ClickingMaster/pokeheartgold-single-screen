@@ -66,7 +66,7 @@ typedef struct CommWirelessWork {
     u8 detectDrops : 1;
     u8 lostWhenAlone : 1;
     u8 renewTgid : 1;
-    u8 unk4 : 1;
+    u8 shutdownRequested : 1;
     u8 entryFlag : 1;
     u8 parentPending : 1; // received holds a parent not stored yet
     u8 unk_D96[2];
@@ -104,8 +104,8 @@ int CommState_GetLinkMode(void);
 int CommState_GetBeaconId(void);
 void CommState_ShowErrorAndHalt(u32);
 BOOL Comm_IsActive(void);
-BOOL sub_0203401C(int value);
-int sub_02033FC4(u16);
+BOOL Comm_IsUnionRoomLinkMode(int value);
+int Comm_GetMaxChildren(u16);
 void Comm_RecvChildFrameCallback(void);
 void Comm_RecvParentFrameCallback(void);
 
@@ -183,8 +183,8 @@ void *CommWireless_GetParentInfo(int slot);
 void *CommWireless_GetProfile(void);
 void *CommWireless_GetParentProfile(int slot);
 void CommWireless_SetMacAddress(void *macAddress, int index);
-BOOL sub_020357FC(void);
-void sub_0203581C(void);
+BOOL CommWireless_IsShutdownRequested(void);
+void CommWireless_RequestShutdown(void);
 void CommWireless_SetMail(void *mail);
 void CommWireless_SetRuleset(void *ruleset);
 void *CommWireless_GetRuleset(void);
@@ -256,7 +256,7 @@ void CommWireless_OnParentFound(void *parentInfo) {
     beacon = data + 0x50;
 
     if (kind != 14) {
-        if (!sub_0203401C(beacon[4]) || !sub_0203401C(kind)) {
+        if (!Comm_IsUnionRoomLinkMode(beacon[4]) || !Comm_IsUnionRoomLinkMode(kind)) {
             if (beacon[0x54] != 0 && beacon[4] == 10) {
                 return;
             }
@@ -366,7 +366,7 @@ void CommWireless_ResetFlags(void) {
     gCommWireless.work->linkLost = 0;
     gCommWireless.work->lostWhenAlone = 0;
     gCommWireless.work->shutdown = 0;
-    gCommWireless.work->unk4 = 0;
+    gCommWireless.work->shutdownRequested = 0;
     gCommWireless.work->stopState = 0;
     gCommWireless.work->portCallbackSet = 0;
 }
@@ -557,7 +557,7 @@ BOOL CommWireless_ConnectToParent(int slot) {
         int kind = CommState_GetLinkMode();
         u32 offset = slot * sizeof(CommParentInfo);
         gCommWireless.work->currentChannel = *(u16 *)((u8 *)gCommWireless.work + offset + offsetof(CommWirelessWork, parents[0].channel));
-        if (sub_0203401C(kind)) {
+        if (Comm_IsUnionRoomLinkMode(kind)) {
             Wireless_ScanAndConnect(1, (u8 *)gCommWireless.work + offsetof(CommWirelessWork, parents[0].macAddress) + offset, 0);
         } else {
             Wireless_StartChild(1, (u8 *)gCommWireless.work + offsetof(CommWirelessWork, parents) + offset);
@@ -697,7 +697,7 @@ void CommWireless_Update(int count, CommWirelessWork *unused) {
             gCommWireless.tgid = WM_GetNextTgid();
         }
         CommWireless_BuildBeacon();
-        maxEntry = sub_02033FC4((u16)CommState_GetLinkMode());
+        maxEntry = Comm_GetMaxChildren((u16)CommState_GetLinkMode());
         beaconPeriod = CommWireless_GetBeaconPeriod((u16)CommState_GetLinkMode());
         Wireless_StartParent(0, gCommWireless.tgid, saved, maxEntry, beaconPeriod, gCommWireless.work->entryFlag);
         gCommWireless.work->currentChannel = saved;
@@ -829,16 +829,16 @@ void CommWireless_SetMacAddress(void *macAddress, int index) {
     }
 }
 
-BOOL sub_020357FC(void) {
+BOOL CommWireless_IsShutdownRequested(void) {
     if (gCommWireless.work != NULL) {
-        return gCommWireless.work->unk4;
+        return gCommWireless.work->shutdownRequested;
     }
     return 0;
 }
 
-void sub_0203581C(void) {
+void CommWireless_RequestShutdown(void) {
     if (gCommWireless.work != NULL) {
-        gCommWireless.work->unk4 = 1;
+        gCommWireless.work->shutdownRequested = 1;
     }
 }
 

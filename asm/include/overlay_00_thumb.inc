@@ -10,7 +10,7 @@
 .public Save_FriendRoster_Get
 .public Save_Frontier_GetStatic
 .public FrontierSave_ClearRow
-.public sub_02034084
+.public Comm_IsWifiPeerLinkMode
 .public sub_02034098
 .public Comm_CountConnected
 .public CommState_SetWifiError

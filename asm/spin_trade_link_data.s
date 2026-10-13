@@ -12,11 +12,11 @@
 	; File boundary
 	.public gSpinTradeLinkPacketHandlers
 gSpinTradeLinkPacketHandlers:
-	.word sub_02096ED0
-	.word sub_02096DE4
+	.word SpinTradeLink_HandleMemberJoined
+	.word SpinTradeLink_HandleClearMessage
 	.word SpinTradeLink_HandleJoinRequest
-	.word sub_02096EF0
-	.word sub_02096F0C
+	.word SpinTradeLink_HandleCloseYesNo
+	.word SpinTradeLink_HandleJoinNotice
 	.word sub_02096DBC
 	.word sub_02096DB4
 	.word sub_02096DA8

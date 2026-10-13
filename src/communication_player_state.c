@@ -241,7 +241,7 @@ void *CommPlayerInfo_GetExchangeToken(int netId) {
     return NULL;
 }
 
-u8 sub_02034870(int a) {
+u8 CommPlayerInfo_GetFriendIndex(int a) {
     return Comm_FindFriendIndexOfPlayer(gCommPlayerInfo->save, a);
 }
 

@@ -36,8 +36,8 @@
 .public Wireless_HasSentBeacons
 .public Wireless_ClearBeaconCount
 .public Wireless_IsEntryLocked
-.public sub_02033FC4
-.public sub_0203401C
+.public Comm_GetMaxChildren
+.public Comm_IsUnionRoomLinkMode
 .public CommPlayerInfo_DropDisconnected
 .public CommWireless_Init
 .public CommWireless_IsInitialized
@@ -71,8 +71,8 @@
 .public CommWireless_GetProfile
 .public CommWireless_GetParentProfile
 .public CommWireless_SetMacAddress
-.public sub_020357FC
-.public sub_0203581C
+.public CommWireless_IsShutdownRequested
+.public CommWireless_RequestShutdown
 .public CommWireless_SetMail
 .public CommWireless_SetRuleset
 .public CommWireless_GetRuleset

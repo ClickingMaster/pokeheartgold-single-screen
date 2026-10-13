@@ -81,8 +81,8 @@ typedef struct CommCommandBytes {
 } CommCommandBytes;
 
 extern CommCommandTable *gCommCommandTable;
-extern const CommCommandBytes _020F692C;
-extern const CommCommandBytes _020F6955;
+extern const CommCommandBytes gCommMaxChildren;
+extern const CommCommandBytes gCommMinChildren;
 extern const CommCommand gCommBaseCommands[COMM_BASE_COMMAND_COUNT];
 
 void Comm_SetLinkError(void);
@@ -97,7 +97,7 @@ int ByteRing_Read(ByteRing *ring, u8 *dst, int count);
 u8 ByteRing_ReadByte(ByteRing *ring);
 int ByteRing_Peek(ByteRing *ring, u8 *dst, int count);
 s32 ByteRing_GetReadableSize(const ByteRing *ring);
-s32 sub_02033BE4(const ByteRing *ring);
+s32 ByteRing_GetFreeSize(const ByteRing *ring);
 s32 ByteRing_GetWritableSize(const ByteRing *ring);
 s32 ByteRing_Wrap(const ByteRing *ring, s32 pos);
 void ByteRing_Commit(ByteRing *ring);
@@ -115,12 +115,12 @@ void PacketPool_Init(PacketPool *pool, int count, ByteRing *ring);
 void PacketPool_Reset(PacketPool *pool);
 void PacketPool_Free(PacketPool *pool);
 BOOL PacketPool_HasCommand(PacketPool *pool, u8 command);
-int sub_02033FC4(u16 command);
-int sub_02033FF0(u16 command);
-BOOL sub_02034044(int v);
-BOOL sub_02034084(int v);
+int Comm_GetMaxChildren(u16 command);
+int Comm_GetMinChildren(u16 command);
+BOOL Comm_IsWifiLinkMode(int v);
+BOOL Comm_IsWifiPeerLinkMode(int v);
 BOOL sub_02034098(int v);
-BOOL sub_020340C4(int v);
+BOOL Comm_IsCommClubLinkMode(int v);
 void Comm_FreeCommandTable(void);
 u32 CommCmd_GetSize2(void);
 void Comm_CallCommandRecv(int netId, int command, int size, void *data);
@@ -190,7 +190,7 @@ s32 ByteRing_GetReadableSize(const ByteRing *ring) {
     return *(volatile const s16 *)&ring->limit - read;
 }
 
-s32 sub_02033BE4(const ByteRing *ring) {
+s32 ByteRing_GetFreeSize(const ByteRing *ring) {
     return ring->capacity - ByteRing_GetReadableSize(ring);
 }
 
@@ -338,7 +338,7 @@ BOOL PacketPool_Enqueue(PacketPool *pool, int command, u8 *data, int size, int a
         packetSize = size;
     }
     if (copyToRing != 0) {
-        if (packetSize + 3 >= sub_02033BE4(pool->ring)) {
+        if (packetSize + 3 >= ByteRing_GetFreeSize(pool->ring)) {
             return FALSE;
         }
         ByteRing_Write(pool->ring, data, packetSize, 0x109);
@@ -445,19 +445,19 @@ BOOL PacketPool_HasCommand(PacketPool *pool, u8 command) {
     return FALSE;
 }
 
-int sub_02033FC4(u16 command) {
-    CommCommandBytes table = _020F692C;
+int Comm_GetMaxChildren(u16 command) {
+    CommCommandBytes table = gCommMaxChildren;
     GF_ASSERT(command < 41);
     return table.values[command];
 }
 
-int sub_02033FF0(u16 command) {
-    CommCommandBytes table = _020F6955;
+int Comm_GetMinChildren(u16 command) {
+    CommCommandBytes table = gCommMinChildren;
     GF_ASSERT(command < 41);
     return table.values[command];
 }
 
-BOOL sub_0203401C(int v) {
+BOOL Comm_IsUnionRoomLinkMode(int v) {
     switch (v) {
     case 7:
     case 9:
@@ -470,7 +470,7 @@ BOOL sub_0203401C(int v) {
     }
 }
 
-BOOL sub_02034044(int v) {
+BOOL Comm_IsWifiLinkMode(int v) {
     switch (v) {
     case 19:
     case 20:
@@ -490,7 +490,7 @@ BOOL sub_02034044(int v) {
     }
 }
 
-BOOL sub_02034084(int v) {
+BOOL Comm_IsWifiPeerLinkMode(int v) {
     if (v == 29 || v == 33 || v == 35) {
         return TRUE;
     }
@@ -511,7 +511,7 @@ BOOL sub_02034098(int v) {
     }
 }
 
-BOOL sub_020340C4(int v) {
+BOOL Comm_IsCommClubLinkMode(int v) {
     switch (v) {
     case 1:
     case 2:

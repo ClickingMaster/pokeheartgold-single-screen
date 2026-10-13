@@ -38,11 +38,11 @@
 	.public sub_02096DA8
 	.public sub_02096DB4
 	.public sub_02096DBC
-	.public sub_02096DE4
+	.public SpinTradeLink_HandleClearMessage
 	.public SpinTradeLink_HandleJoinRequest
-	.public sub_02096ED0
-	.public sub_02096EF0
-	.public sub_02096F0C
+	.public SpinTradeLink_HandleMemberJoined
+	.public SpinTradeLink_HandleCloseYesNo
+	.public SpinTradeLink_HandleJoinNotice
 	.public SpinTradeLink_HandleStatus
 	.public SpinTradeLink_HandleJoin
 	.public SpinTradeLink_HandleSlot

@@ -21,19 +21,19 @@
 .public RecordMixing_SetStateFromLinkInMenu
 .public ov73_021E7488
 
-	.public sub_0208FB78
+	.public RecordMixingLink_RecvRecords
 	.public sub_0208FB88
-	.public sub_0208FB98
-	.public sub_0208FBE0
+	.public RecordMixingLink_RecvStartMixing
+	.public RecordMixingLink_RecvClearMessage
 	.public RecordMixingLink_HandleJoinRequest
-	.public sub_0208FCDC
+	.public RecordMixingLink_RecvMemberJoined
 	.public sub_0208FCFC
 	.public sub_0208FD00
-	.public sub_0208FD04
-	.public sub_0208FD1C
+	.public RecordMixingLink_RecvCloseYesNo
+	.public RecordMixingLink_RecvJoinNotice
 	.public RecordMixingLink_SendRecords
-	.public sub_0208FD7C
-	.public sub_0208FD80
-	.public sub_0208FD84
+	.public RecordMixingLink_GetSize0
+	.public RecordMixingLink_GetSize1
+	.public RecordMixingLink_GetJoinRequestSize
 	.public RecordMixingLink_GetRecvBuffer
 	.public gRecordMixingLinkCommands

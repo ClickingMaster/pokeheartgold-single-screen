@@ -15,19 +15,19 @@
 	.public DrawingSessionLink_ReceivePictureChunk
 	.public sub_0208F8BC
 	.public sub_0208F8E4
-	.public sub_0208F918
+	.public DrawingSessionLink_ReceivePictureDone
 	.public DrawingSessionLink_HandleJoinRequest
 	.public sub_0208FA50
-	.public sub_0208FA54
+	.public DrawingSessionLink_ReceiveMemberJoined
 	.public sub_0208FA88
 	.public sub_0208FA8C
 	.public sub_0208FA90
-	.public sub_0208FAA8
+	.public DrawingSessionLink_ReceiveJoinNotice
 	.public sub_0208FAEC
 	.public DrawingSessionLink_SendPictureChunk
 	.public DrawingSessionLink_GetChunkRecvBuffer
 	.public sub_0208FB5C
-	.public sub_0208FB60
+	.public DrawingSessionLink_GetJoinRequestSize
 	.public gDrawingSessionLinkCommands
 
 	.rodata
@@ -134,12 +134,12 @@ gDrawingSessionLinkCommands:
 	.word sub_0208F8E4, sub_020915A4, 0
 	.word sub_0208FA88, CommCmd_GetSize1, 0
 	.word sub_0208FA8C, CommCmd_GetSize1, 0
-	.word sub_0208FA54, CommCmd_GetSize1, 0
-	.word sub_0208F918, CommCmd_GetSize0, 0
+	.word DrawingSessionLink_ReceiveMemberJoined, CommCmd_GetSize1, 0
+	.word DrawingSessionLink_ReceivePictureDone, CommCmd_GetSize0, 0
 	.word sub_0208FA50, CommCmd_GetSize0, 0
-	.word DrawingSessionLink_HandleJoinRequest, sub_0208FB60, 0
+	.word DrawingSessionLink_HandleJoinRequest, DrawingSessionLink_GetJoinRequestSize, 0
 	.word sub_0208FA90, CommCmd_GetSize0, 0
-	.word sub_0208FAA8, CommCmd_GetSize0, 0
+	.word DrawingSessionLink_ReceiveJoinNotice, CommCmd_GetSize0, 0
 	.word sub_0208FAEC, CommCmd_GetSize0, 0
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0

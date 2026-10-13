@@ -652,7 +652,7 @@ u32 MapObject_CheckCollision(LocalMapObject *object, VecFx32 *position, int x, i
     if (MapObject_IsMoveBlockedByBehavior(object, x, z, direction) == TRUE) {
         result |= 2;
     }
-    if (sub_0203401C(CommState_GetLinkMode())) {
+    if (Comm_IsUnionRoomLinkMode(CommState_GetLinkMode())) {
         if (MapObject_IsTileOccupiedInLink(object, x, y, z) == TRUE) {
             result |= 4;
         }

@@ -182,7 +182,7 @@ void *WMi_GetStatusAddress(void);
 int CommState_GetLinkMode(void);
 int CommState_ReportsErrors(void);
 void CommState_SetError(int);
-BOOL sub_020340C4(int);
+BOOL Comm_IsCommClubLinkMode(int);
 
 void Wireless_SetState(int state);
 void Wireless_SetError(int error);
@@ -1119,7 +1119,7 @@ void Wireless_OnLifeTimeSet(void) {
 // Starts a parent (mode 0, 2 or 4).
 BOOL Wireless_StartParent(int mode, u16 tgid, u16 channel, u16 maxEntry, u16 beaconPeriod, u32 entryFlag) {
     int value;
-    if (sub_020340C4(CommState_GetLinkMode())) {
+    if (Comm_IsCommClubLinkMode(CommState_GetLinkMode())) {
         WM_SetLifeTime(Wireless_OnLifeTimeSet, 0xFFFF, 100, 5, 100);
     }
     gWirelessManager.work->receiveBufferSize = 0x1C0;
@@ -1160,7 +1160,7 @@ BOOL Wireless_StartParent(int mode, u16 tgid, u16 channel, u16 maxEntry, u16 bea
 
 // Connects as a child (mode 1, 3 or 5) to the parent described by parentInfo (0xC0 bytes).
 BOOL Wireless_StartChild(int mode, const void *parentInfo) {
-    if (sub_020340C4(CommState_GetLinkMode())) {
+    if (Comm_IsCommClubLinkMode(CommState_GetLinkMode())) {
         WM_SetLifeTime(Wireless_OnLifeTimeSet, 0xFFFF, 100, 5, 100);
     }
     gWirelessManager.work->receiveBufferSize = 0x200;

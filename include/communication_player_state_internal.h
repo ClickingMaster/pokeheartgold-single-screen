@@ -87,7 +87,7 @@ int CommPlayerInfo_CountAccepted(void);
 BOOL CommPlayerInfo_DropDisconnected(void);
 void *CommPlayerInfo_GetProfile(int netId);
 void *CommPlayerInfo_GetExchangeToken(int netId);
-u8 sub_02034870(int a);
+u8 CommPlayerInfo_GetFriendIndex(int a);
 void *CommPlayerInfo_GetGroupName(int netId);
 u8 CommPlayerInfo_GetCountry(int netId);
 u8 CommPlayerInfo_GetRegion(int netId);
