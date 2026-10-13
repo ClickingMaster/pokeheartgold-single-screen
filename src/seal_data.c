@@ -1,4 +1,4 @@
-#include "unk_02091054.h"
+#include "seal_data.h"
 
 #include "global.h"
 
@@ -95,17 +95,17 @@ static const Unk02091054 _02105F04[81] = {
 };
 
 // Has something to do with seals...
-u8 sub_02091054(u32 idx) {
+u8 Seal_GetGfxCharId(u32 idx) {
     GF_ASSERT(idx < NELEMS(_02105F04));
     return _02105F04[idx].unk0;
 }
 
-u8 sub_0209106C(u8 idx) {
+u8 Seal_GetNameMsgId(u8 idx) {
     GF_ASSERT(idx < NELEMS(_02105F04));
     return _02105F04[idx].unk1;
 }
 
-u8 sub_02091084(u32 idx) {
+u8 Seal_GetBattleAnimResId(u32 idx) {
     GF_ASSERT(idx < NELEMS(_02105F04));
     return _02105F04[idx].unk2;
 }
@@ -119,7 +119,7 @@ BOOL sub_0209109C(u32 idx) {
     return TRUE;
 }
 
-u32 sub_020910B8(u32 idx) {
+u32 Seal_GetDescriptionMsgId(u32 idx) {
     GF_ASSERT(idx < NELEMS(_02105F04));
     return _02105F04[idx].unk3_2;
 }

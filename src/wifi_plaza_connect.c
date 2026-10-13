@@ -102,14 +102,14 @@ extern void CommState_LeaveWifiPlaza(void);
 extern int CommState_HasPlazaLobbyStarted(void);
 extern BOOL CommState_HasPlazaLobbyFailed(void);
 extern void *WiFiPlazaWork_GetMyPlayer(void *lobby);
-extern void ov45_0222B244(void *lobby);
-extern void ov45_0222B270(void *lobby);
+extern void WiFiPlazaWork_NewPlayerInfo(void *lobby);
+extern void WiFiPlazaWork_FreePlayerInfo(void *lobby);
 extern int WiFiPlaza_GetErrorMessageClass(u32 errorCode, u32 errorType);
 extern BOOL WiFiPlaza_IsErrorRecoverable(u32 errorCode, u32 errorType);
-extern void ov45_0222E7CC(void);
-extern u32 ov45_0222E7FC(void);
-extern void ov45_0222ED7C(void);
-extern BOOL ov45_0222EDA8(void);
+extern void WiFiPlazaLobbyClient_GetLastError(void);
+extern u32 WiFiPlazaLobbyClient_ToErrorCode(void);
+extern void WiFiPlazaLobbyClient_StartAddOwnLocation(void);
+extern BOOL WiFiPlazaLobbyClient_IsOwnLocationAdded(void);
 
 extern const u32 sWiFiPlazaConnectBgLayers[WIFI_PLAZA_CONNECT_NUM_BG_LAYERS];
 extern const GraphicsModes sWiFiPlazaConnectGraphicsModes;
@@ -210,7 +210,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
             *state = 9;
         }
         if (CommState_HasPlazaLobbyStarted() == 1) {
-            ov45_0222B244(args->lobby);
+            WiFiPlazaWork_NewPlayerInfo(args->lobby);
             (*state)++;
         }
         break;
@@ -237,11 +237,11 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
             msgId = WiFiPlaza_GetErrorMessageClass(error[0], error[1]);
             errorCode = error[0];
         } else {
-            ov45_0222E7CC();
-            errorCode = ov45_0222E7FC();
+            WiFiPlazaLobbyClient_GetLastError();
+            errorCode = WiFiPlazaLobbyClient_ToErrorCode();
             msgId = msg_0800_00032;
         }
-        ov45_0222B270(args->lobby);
+        WiFiPlazaWork_FreePlayerInfo(args->lobby);
         WiFiPlazaConnect_ClearMessageBox(&work->msgBox);
         WiFiPlazaConnect_ClearMessageBox(&work->statusBox);
         WiFiPlazaConnect_BufferErrorCode(&work->errorBox, errorCode);
@@ -387,13 +387,13 @@ BOOL WiFiPlazaConnect_DisconnectMain(OverlayManager *man, int *state) {
         }
         break;
     case 3:
-        ov45_0222ED7C();
+        WiFiPlazaLobbyClient_StartAddOwnLocation();
         work->timer = 900;
         *state = 4;
         break;
     case 4:
         --work->timer;
-        if (ov45_0222EDA8() || work->timer == 0) {
+        if (WiFiPlazaLobbyClient_IsOwnLocationAdded() || work->timer == 0) {
             *state = 5;
         }
         break;
@@ -405,7 +405,7 @@ BOOL WiFiPlazaConnect_DisconnectMain(OverlayManager *man, int *state) {
         if (!CommState_Exists()) {
             // the status box is not set up on this screen (frame type 0): this does nothing
             WiFiPlazaConnect_StopWaitingIcon(&work->statusBox);
-            ov45_0222B270(args->lobby);
+            WiFiPlazaWork_FreePlayerInfo(args->lobby);
             *state = 7;
         }
         break;

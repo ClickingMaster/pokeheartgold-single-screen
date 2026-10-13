@@ -66,9 +66,9 @@ u8 Roamer_GetLocation(RoamerSaveData *roamerSave, u8 roamerId) {
     return roamerSave->locations[roamerId];
 }
 
-void Roamer_SetLocation(RoamerSaveData *roamerSave, u8 roamerId, u8 a2) {
+void Roamer_SetLocation(RoamerSaveData *roamerSave, u8 roamerId, u8 location) {
     GF_ASSERT(roamerId < ROAMER_MAX);
-    roamerSave->locations[roamerId] = a2;
+    roamerSave->locations[roamerId] = location;
 }
 
 u8 GetRoamerIsActiveByIndex(RoamerSaveData *roamerSave, u8 roamerId) {
@@ -85,8 +85,8 @@ Roamer *Roamers_GetRoamMonStats(RoamerSaveData *roamerSave, u8 roamerId) {
     return &roamerSave->data[roamerId];
 }
 
-int GetRoamerData(Roamer *roamer, int a1) {
-    switch (a1) {
+int GetRoamerData(Roamer *roamer, int attr) {
+    switch (attr) {
     case ROAMER_DATA_MET_LOCATION:
         return roamer->met_location;
     case ROAMER_DATA_IVS:
@@ -109,8 +109,8 @@ int GetRoamerData(Roamer *roamer, int a1) {
     }
 }
 
-void SetRoamerData(Roamer *roamer, int a1, int val) {
-    switch (a1) {
+void SetRoamerData(Roamer *roamer, int attr, int val) {
+    switch (attr) {
     case ROAMER_DATA_MET_LOCATION:
         roamer->met_location = val;
         break;

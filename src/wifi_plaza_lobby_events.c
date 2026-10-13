@@ -5,7 +5,7 @@
 #include "assert.h"
 #include "wifi_plaza_internal.h"
 
-// The callbacks the lobby library calls (ov45_0222E810 hands them over): channel joined, players entering, leaving
+// The callbacks the lobby library calls (WiFiPlazaLobbyClient_InitializeEx hands them over): channel joined, players entering, leaving
 // and updating, messages, the location list, match updates and the results of the library's requests.
 
 // TRUE while the channel has room (ov45_02254C30 per channel).
@@ -189,7 +189,7 @@ void WiFiPlazaLobbyClient_OnMatchInfo(int id, WiFiPlazaLobbyMatchInfo *info) {
                 return;
             }
             _022577C0->unk_69f = 1;
-            ov45_0222F154();
+            WiFiPlazaLobbyClient_StopMatch();
         }
         WiFiPlazaLobbyMatches_Set(_022577C0, info->index, id, info);
     }
@@ -230,7 +230,7 @@ BOOL ov45_02230090(int result) {
 
 #pragma force_active on
 
-void ov45_022300B0(int result, const void *data, u32 size) {
+void WiFiPlazaLobbyClient_OnSpecialVisitorsReceived(int result, const void *data, u32 size) {
     if (result == 0) {
         WiFiPlazaLobbyIdValueList_Set(&_022577C0->unk_6a0, data, size);
     } else {
@@ -238,9 +238,9 @@ void ov45_022300B0(int result, const void *data, u32 size) {
     }
 }
 
-void ov45_022300DC(int result, const void *data) {
+void WiFiPlazaLobbyClient_OnSurveyReceived(int result, const void *data) {
     if (result == 0) {
-        ov45_0223048C(&_022577C0->unk_6a0.unk_04[0].unk_04, data);
+        WiFiPlazaLobbyClient_CopySurveyData(&_022577C0->unk_6a0.unk_04[0].unk_04, data);
     } else {
         _022577C0->unk_132 = 1;
     }
@@ -248,7 +248,7 @@ void ov45_022300DC(int result, const void *data) {
 
 #pragma force_active reset
 
-void ov45_02230108(void) {
+void WiFiPlazaLobbyClient_OnSurveySubmitted(void) {
     GF_ASSERT(_022577C0->unk_980 == 1);
     _022577C0->unk_980 = 2;
 }

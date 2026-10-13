@@ -482,7 +482,7 @@ void CallTask_EasyChat(TaskManager *taskman, int kind, EasyChatResult *a2, u16 *
     case 5:
         args = EasyChat_CreateArgs(2, 0, fieldSystem->saveData, &fieldSystem->menuInputState, HEAP_ID_FIELD3);
         data->easyChat = args;
-        sub_02090D40(args);
+        EasyChatArgs_SetAlwaysConfirm(args);
         MailMessage *mailMessage = Save_Frontier_GetTowerMessage(fieldSystem->saveData, (u8)(kind - 2));
         EasyChatArgs_SetMailMessage(data->easyChat, mailMessage);
         EasyChatArgs_SetCancelled(data->easyChat);
@@ -1304,7 +1304,7 @@ PartyMenuArgs *PartyMenu_LaunchApp_Gracidea(FieldSystem *fieldSystem, enum HeapI
     args->bag = Save_Bag_Get(fieldSystem->saveData);
     args->mailbox = Save_Mailbox_Get(fieldSystem->saveData);
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    args->unk_10 = sub_020270C4(fieldSystem->saveData);
+    args->unk_10 = Save_Block23_Get(fieldSystem->saveData);
     args->fieldMoveCheckData = NULL;
     args->panelLayout = 0;
     args->context = PARTY_MENU_CONTEXT_USE_ITEM;

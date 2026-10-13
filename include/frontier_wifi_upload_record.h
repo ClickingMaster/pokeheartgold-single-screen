@@ -1,5 +1,5 @@
-#ifndef POKEHEARTGOLD_UNK_02069528_H
-#define POKEHEARTGOLD_UNK_02069528_H
+#ifndef POKEHEARTGOLD_FRONTIER_WIFI_UPLOAD_RECORD_H
+#define POKEHEARTGOLD_FRONTIER_WIFI_UPLOAD_RECORD_H
 
 #include "global.h"
 
@@ -25,6 +25,6 @@ typedef struct FrontierWifiUploadRecord {
     u16 unkE2;
 } FrontierWifiUploadRecord;
 
-void sub_02069528(SaveData *saveData, s32 a1, FrontierWifiUploadRecord *record);
+void Frontier_FillWifiUploadRecord(SaveData *saveData, s32 a1, FrontierWifiUploadRecord *record);
 
-#endif // POKEHEARTGOLD_UNK_02069528_H
+#endif // POKEHEARTGOLD_FRONTIER_WIFI_UPLOAD_RECORD_H

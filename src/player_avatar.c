@@ -28,14 +28,14 @@ static void PlayerAvatar_SetGender(PlayerAvatar *avatar, u32 gender);
 static void PlayerAvatar_SetFlagsBits(PlayerAvatar *avatar, PlayerAvatarFlags flags);
 static void PlayerAvatar_ClearFlagsBits(PlayerAvatar *avatar, PlayerAvatarFlags flags);
 static PlayerAvatarFlags PlayerAvatar_GetFlagsBitsMask(PlayerAvatar *avatar, PlayerAvatarFlags flags);
-static void PlayerAvatar_SetLastHorizontalInput(PlayerAvatar *avatar, s32 param1);
-static void PlayerAvatar_SetLastVerticalInput(PlayerAvatar *avatar, s32 param1);
+static void PlayerAvatar_SetLastHorizontalInput(PlayerAvatar *avatar, s32 horizontalInput);
+static void PlayerAvatar_SetLastVerticalInput(PlayerAvatar *avatar, s32 verticalInput);
 static void PlayerAvatar_SetPlayerSaveData(PlayerAvatar *avatar, PlayerSaveData *playerSaveData);
 static void PlayerSaveData_SetState(PlayerSaveData *playerSaveData, s32 state);
 static void PlayerAvatar_SetPlayerSaveDataState(PlayerAvatar *avatar, s32 state);
 
-u32 FrontierStat_GetFriendIndex(u32 param0) {
-    if (param0 < 100) {
+u32 FrontierStat_GetFriendIndex(u32 stat) {
+    if (stat < 100) {
         return 255;
     }
     return WifiConnection_GetTargetFriendIndex();
@@ -57,8 +57,8 @@ u8 sub_0205C298(SaveData *saveData) {
     return 0;
 }
 
-u8 BattleArcade_GetWinStreakStat(u32 param0) {
-    switch (param0) {
+u8 BattleArcade_GetWinStreakStat(u32 mode) {
+    switch (mode) {
     case 0:
         return 95;
     case 1:
@@ -70,8 +70,8 @@ u8 BattleArcade_GetWinStreakStat(u32 param0) {
     }
 }
 
-u8 BattleArcade_GetBestStreakStat(u32 param0) {
-    switch (param0) {
+u8 BattleArcade_GetBestStreakStat(u32 mode) {
+    switch (mode) {
     case 0:
         return 94;
     case 1:
@@ -83,9 +83,9 @@ u8 BattleArcade_GetBestStreakStat(u32 param0) {
     }
 }
 
-u8 BattleTower_GetWinStreakStat(u32 param0) {
+u8 BattleTower_GetWinStreakStat(u32 mode) {
     u8 ret;
-    switch (param0) {
+    switch (mode) {
     case 0:
         ret = 1;
         break;
@@ -112,9 +112,9 @@ u8 BattleTower_GetWinStreakStat(u32 param0) {
     return ret;
 }
 
-u8 BattleTower_GetBestStreakStat(u32 param0) {
+u8 BattleTower_GetBestStreakStat(u32 mode) {
     u8 ret;
-    switch (param0) {
+    switch (mode) {
     case 0:
         ret = 0;
         break;
@@ -369,8 +369,8 @@ s32 PlayerAvatar_GetSpeed(PlayerAvatar *avatar) {
     return avatar->speed;
 }
 
-void PlayerAvatar_SetSpeed(PlayerAvatar *avatar, s32 param1) {
-    avatar->speed = param1;
+void PlayerAvatar_SetSpeed(PlayerAvatar *avatar, s32 speed) {
+    avatar->speed = speed;
 }
 
 void PlayerAvatar_ClearSpeedAndFlag2(PlayerAvatar *avatar) {
@@ -378,25 +378,25 @@ void PlayerAvatar_ClearSpeedAndFlag2(PlayerAvatar *avatar) {
     PlayerAvatar_SetFlag2(avatar, FALSE);
 }
 
-s32 PlayerAvatar_AddSpeedWithCeiling(PlayerAvatar *avatar, s32 param1, s32 param2) {
-    s32 var = avatar->speed + param1;
+s32 PlayerAvatar_AddSpeedWithCeiling(PlayerAvatar *avatar, s32 delta, s32 ceiling) {
+    s32 var = avatar->speed + delta;
     avatar->speed = var;
-    if (var > param2) {
-        avatar->speed = param2;
+    if (var > ceiling) {
+        avatar->speed = ceiling;
     }
     return avatar->speed;
 }
 
-static void PlayerAvatar_SetLastHorizontalInput(PlayerAvatar *avatar, s32 param1) {
-    avatar->lastHorizontalInput = param1;
+static void PlayerAvatar_SetLastHorizontalInput(PlayerAvatar *avatar, s32 horizontalInput) {
+    avatar->lastHorizontalInput = horizontalInput;
 }
 
 s32 PlayerAvatar_GetLastHorizontalInput(PlayerAvatar *avatar) {
     return avatar->lastHorizontalInput;
 }
 
-static void PlayerAvatar_SetLastVerticalInput(PlayerAvatar *avatar, s32 param1) {
-    avatar->lastVerticalInput = param1;
+static void PlayerAvatar_SetLastVerticalInput(PlayerAvatar *avatar, s32 verticalInput) {
+    avatar->lastVerticalInput = verticalInput;
 }
 
 s32 PlayerAvatar_GetLastVerticalInput(PlayerAvatar *avatar) {
@@ -408,8 +408,8 @@ void PlayerAvatar_SetLastInputs(PlayerAvatar *avatar, s32 unk28, s32 unk2C) {
     PlayerAvatar_SetLastVerticalInput(avatar, unk2C);
 }
 
-void PlayerAvatar_SetSurfMountEffect(PlayerAvatar *avatar, u32 param1) {
-    avatar->surfMountEffect = param1;
+void PlayerAvatar_SetSurfMountEffect(PlayerAvatar *avatar, u32 surfMountEffect) {
+    avatar->surfMountEffect = surfMountEffect;
 }
 
 u32 PlayerAvatar_GetSurfMountEffect(PlayerAvatar *avatar) {
@@ -424,8 +424,8 @@ PlayerSaveData *PlayerAvatar_GetPlayerSaveData(PlayerAvatar *avatar) {
     return avatar->playerSaveData;
 }
 
-void PlayerAvatar_SetHeldMovement(PlayerAvatar *avatar, u32 param1) {
-    avatar->heldMovement = param1;
+void PlayerAvatar_SetHeldMovement(PlayerAvatar *avatar, u32 heldMovement) {
+    avatar->heldMovement = heldMovement;
 }
 
 u32 PlayerAvatar_GetHeldMovement(PlayerAvatar *avatar) {

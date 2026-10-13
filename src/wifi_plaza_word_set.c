@@ -6,28 +6,28 @@
 
 // Receive callbacks (see wifi_plaza_receive.c): the sender id marks its lobby slot in WiFiPlazaWork.unk_1e8 or joins a
 // group of WiFiPlazaWork.groups.
-void ov45_0222C83C(int id, void *data, u32 size, WiFiPlazaWork *work) {
+void WiFiPlaza_RecvTapToyPlayed(int id, void *data, u32 size, WiFiPlazaWork *work) {
     int slot = WiFiPlazaLobbyClient_IdToSlot(id);
     if (slot != -1) {
         work->unk_1e8[slot] = 1;
     }
 }
 
-void ov45_0222C858(int id, void *data, u32 size, WiFiPlazaWork *work) {
+void WiFiPlaza_RecvJoinGroup(int id, void *data, u32 size, WiFiPlazaWork *work) {
     int slot = WiFiPlazaLobbyClient_IdToSlot(id), value;
     if (slot != -1) {
         for (value = 0; value < 3; value++) {
-            if (ov45_0222C408(&work->groups, slot, value) != -1) {
+            if (WiFiPlazaGroups_Join(&work->groups, slot, value) != -1) {
                 break;
             }
         }
     }
 }
 
-void ov45_0222C88C(int id, void *data, u32 size, WiFiPlazaWork *work) {
+void WiFiPlaza_RecvGroupAction(int id, void *data, u32 size, WiFiPlazaWork *work) {
     int slot = WiFiPlazaLobbyClient_IdToSlot(id);
     if (slot != -1) {
-        ov45_0222C514(&work->groups, slot);
+        WiFiPlazaGroups_RequestAction(&work->groups, slot);
     }
 }
 

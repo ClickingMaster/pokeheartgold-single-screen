@@ -206,10 +206,10 @@
 .public GetItemIndexMapping
 .public GetItemIconCell
 .public GetItemIconAnim
-.public sub_0207CA9C
-.public sub_0207CAA0
-.public sub_0207CAA4
-.public sub_0207CAA8
+.public PartyMenu_GetHeldItemIconNCGR
+.public PartyMenu_GetHeldItemIconNCLR
+.public PartyMenu_GetHeldItemIconNCER
+.public PartyMenu_GetHeldItemIconNANR
 .public CalculateHpBarColor
 .public UseItemOnPokemon
 .public FrontierLink_RegisterCommands

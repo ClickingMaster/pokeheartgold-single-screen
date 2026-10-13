@@ -43,9 +43,9 @@ u8 *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participan
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
 u32 PokeathlonCourse_GetSpriteSizeType(u8 *performance);
 u32 PokeathlonCourse_GetCollisionSizeClass(u8 *performance);
-void PokeathlonCourse_CreateStartSpritesInPool(PokeathlonCourseData *course, int a1, void *resources, PokeathlonCourseSpritePool *pool, int a4, int a5, void *positions);
+void PokeathlonCourse_CreateStartSpritesInPool(PokeathlonCourseData *course, int baseY, void *resources, PokeathlonCourseSpritePool *pool, int whichScreen, int count, void *positions);
 BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
-Sprite *PokeathlonCourse_AddMarker(PokeathlonCourseData *course, PokeathlonCourseObject *object, void *resources, SpriteList *spriteList, int a4);
+Sprite *PokeathlonCourse_AddMarker(PokeathlonCourseData *course, PokeathlonCourseObject *object, void *resources, SpriteList *spriteList, int priority);
 void PokeathlonCourse_InitMarkers(PokeathlonCourseData *course);
 void PokeathlonCourse_FreeMarkers(PokeathlonCourseData *course);
 void PokeathlonCourse_SetMarkerAnim(PokeathlonCourseData *course, u8 member, int anim);
@@ -63,12 +63,12 @@ void PokeathlonCourseScoreList_Rank(void *scoreList, int mode);
 void PokeathlonCourseScoreList_Init(void *scoreList);
 void PokeathlonCourseScoreList_AddPointsToTotals(void *scoreList);
 void PokeathlonCourseScoreList_SaveEventPoints(void *scoreList, int mode);
-void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, void *scoreList, u32 participant, u32 score, u8 a4, u8 a5, u32 msgId);
-void *PokeathlonCourseSprites_CreateResources(enum HeapID heapId, int flags, int a2);
+void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, void *scoreList, u32 participant, u32 score, u8 idx, u8 digits, u32 msgId);
+void *PokeathlonCourseSprites_CreateResources(enum HeapID heapId, int flags, int charVram);
 void PokeathlonCourseSprites_FreeResources(void *resources);
-void *PokeathlonCourseMonObjects_Create(enum HeapID heapId, int count, int a2, void *resources, SpriteList *spriteList);
+void *PokeathlonCourseMonObjects_Create(enum HeapID heapId, int count, int baseDrawPriority, void *resources, SpriteList *spriteList);
 void PokeathlonCourseMonObjects_Free(void *objects);
-void PokeathlonCourseMonObjects_Load(void *objects, int count, PokeathlonCourseObjectInfo *infos, PokeathlonCourseObjectsTemplate *template, BOOL a4, BOOL a5);
+void PokeathlonCourseMonObjects_Load(void *objects, int count, PokeathlonCourseObjectInfo *infos, PokeathlonCourseObjectsTemplate *template, BOOL priority, BOOL baseIndex);
 BOOL PokeathlonCourseMonObjects_IsLoaded(void *objects);
 void PokeathlonCourseMonObject_SetDrawFlag(void *object, int draw);
 void PokeathlonCourseMonObject_SetShadowDrawFlag(void *object, int draw);
@@ -76,12 +76,12 @@ void PokeathlonCourseMonObject_SetDrawPriority(void *object, int priority);
 void PokeathlonCourseMonObject_SetAffineOverwriteMode(void *object, int mode);
 void PokeathlonCourseMonObject_SetAffineMatrix(void *object, VecFx32 *matrix);
 void PokeathlonCourseMonObject_SetAnimState(void *object, int state);
-void PokeathlonCourseMonObject_Move(void *object, int dx, int dy, int anim, int a4);
-void PokeathlonCourseMonObjects_SetPalette(void *objects, u8 index, int a2, void *palette);
+void PokeathlonCourseMonObject_Move(void *object, int dx, int dy, int anim, int moveShadow);
+void PokeathlonCourseMonObjects_SetPalette(void *objects, u8 index, int vram, void *palette);
 void PokeathlonEvent_CalcPoints(void *scoreList, int mode);
 void PokeathlonCirclePushDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonCirclePushDisplay *display);
 int PokeathlonCourse_GetTouchRadius(); // called with and without an argument
-Sprite **PokeathlonCourse_CreateHudSpritesInPool(PokeathlonCourseData *course, int a1, void *resources, PokeathlonCourseSpritePool *pool);
+Sprite **PokeathlonCourse_CreateHudSpritesInPool(PokeathlonCourseData *course, int baseY, void *resources, PokeathlonCourseSpritePool *pool);
 
 extern const PokeathlonCourseSpritePoolTemplate ov96_0221BC70;
 

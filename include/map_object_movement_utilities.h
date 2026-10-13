@@ -6,7 +6,7 @@
 
 BOOL MapObject_UpdateHeight(LocalMapObject *object);
 u32 GetOppositeDirection(u32 direction);
-BOOL sub_02060E54(LocalMapObject *object, int tile);
+BOOL MapObject_CheckWaterBehavior(LocalMapObject *object, int tile);
 BOOL MapObject_CheckSnowBehavior(LocalMapObject *object, int tile);
 int GetDeltaXByFacingDirection(int direction);
 int GetDeltaYByFacingDirection(int direction);

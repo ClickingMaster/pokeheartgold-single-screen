@@ -63,31 +63,31 @@ static void CommClub_PrintOwnProfile(CommClubManager *commClubManager_unused);
 static void CommClub_ParentListMoveCursor(struct ListMenu *list_unused, s32 index_unused, u8 onInit);
 static void CommClub_ParentListPrintItems(struct ListMenu *list, s32 index_unused, u8 y_unused);
 static void CommClub_CreateParentList();
-static void CommClub_HandleParentList(void *arg0, CommClubManager *commClubManager);
+static void CommClub_HandleParentList(void *task, CommClubManager *commClubManager);
 static void CommClub_RedrawParentList(CommClubManager *commClubManager_unused);
-static void CommClub_WaitConnected(void *arg0, CommClubManager *commClubManager);
-static void CommClub_AskForRegistration(void *arg0, CommClubManager *commClubManager);
-static BOOL CommClub_HandleHostReply(void *arg0, CommClubManager *commClubManager);
-static void CommClub_WaitHostReply(void *arg0, CommClubManager *commClubManager);
-static void CommClub_OpenLeaveGroupChoice(void *arg0, CommClubManager *commClubManager);
-static void CommClub_HandleLeaveGroupChoice(void *arg0, CommClubManager *commClubManager);
+static void CommClub_WaitConnected(void *task, CommClubManager *commClubManager);
+static void CommClub_AskForRegistration(void *task, CommClubManager *commClubManager);
+static BOOL CommClub_HandleHostReply(void *task, CommClubManager *commClubManager);
+static void CommClub_WaitHostReply(void *task, CommClubManager *commClubManager);
+static void CommClub_OpenLeaveGroupChoice(void *task, CommClubManager *commClubManager);
+static void CommClub_HandleLeaveGroupChoice(void *task, CommClubManager *commClubManager);
 static void CommClub_ExitLink();
-static void CommClub_SetState(void *arg0);
-static void CommClub_Task(SysTask *task, void *arg1);
+static void CommClub_SetState(void *taskFunc);
+static void CommClub_Task(SysTask *task, void *data);
 static void CommClub_CreateMemberList(s32 arg0_unused, CommClubManager *commClubManager);
-static void CommClub_HandleMemberList(void *arg0, CommClubManager *commClubManager);
-static void CommClub_WaitDifferentRulesAck(void *arg0, CommClubManager *commClubManager);
-static void CommClub_WaitProblemAckThenReopen(void *arg0, CommClubManager *commClubManager);
+static void CommClub_HandleMemberList(void *task, CommClubManager *commClubManager);
+static void CommClub_WaitDifferentRulesAck(void *task, CommClubManager *commClubManager);
+static void CommClub_WaitProblemAckThenReopen(void *task, CommClubManager *commClubManager);
 static void CommClub_ReopenMemberList(void *arg0_unused, CommClubManager *commClubManager);
 static void CommClub_ConfirmGroup(void *arg0_unused, CommClubManager *commClubManager);
 static void CommClub_OpenConfirmGroupChoice(void *arg0_unused, CommClubManager *commClubManager);
-static void CommClub_HandleConfirmGroupChoice(void *arg0, CommClubManager *commClubManager);
-static void CommClub_GroupCancelled(void *arg0, CommClubManager *commClubManager);
+static void CommClub_HandleConfirmGroupChoice(void *task, CommClubManager *commClubManager);
+static void CommClub_GroupCancelled(void *task, CommClubManager *commClubManager);
 static void CommClub_WaitGroupCancelledAck(SysTask *task, void *commClubManager_unused);
-static void CommClub_AskCancelGroup(void *arg0, CommClubManager *commClubManager);
+static void CommClub_AskCancelGroup(void *task, CommClubManager *commClubManager);
 static void CommClub_OpenCancelGroupChoice(void *arg0_unused, CommClubManager *commClubManager);
-static void CommClub_HandleCancelGroupChoice(void *arg0, CommClubManager *commClubManager);
-static void CommClub_WaitGroupSync(void *arg0, CommClubManager *commClubManager);
+static void CommClub_HandleCancelGroupChoice(void *task, CommClubManager *commClubManager);
+static void CommClub_WaitGroupSync(void *task, CommClubManager *commClubManager);
 static void CommClub_OpenContactChoice(s32 arg0_unused, CommClubManager *commClubManager);
 static void CommClub_CloseMenus(void *task, CommClubManager *commClubManager);
 static void CommClub_HostRepliedOk(CommClubManager *commClubManager);
@@ -105,7 +105,7 @@ static int CommClub_GetMinPlayers();
 static int CommClub_GetMaxPlayers();
 static int ov03_02255B98();
 static void CommClub_PrintAwaitingContact();
-static BOOL ov03_02255C80();
+static BOOL CommClub_HasErrorDummy();
 static void CommClub_OpenYesNoButtons(CommClubManager *commClubManager);
 static BOOL CommClub_InitYesNoButtons(CommClubManager *commClubManager);
 static BOOL CommClub_IsYesNoReady(CommClubManager *commClubManager);
@@ -170,11 +170,11 @@ static const ListMenuTemplate sMemberListTemplate = {
     .data = NULL
 };
 
-static void CommClub_PrintMessage(s32 strno, BOOL arg1) {
+static void CommClub_PrintMessage(s32 strno, BOOL expandPlaceholders) {
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID) == FALSE) {
         RemoveTextPrinter(sCommClubManager->printerID);
     }
-    if (arg1) {
+    if (expandPlaceholders) {
         ReadMsgDataIntoString(sCommClubManager->msgData, strno, sCommClubManager->string[4]);
         StringExpandPlaceholders(sCommClubManager->messageFormat[2], sCommClubManager->string[5], sCommClubManager->string[4]);
     } else {
@@ -396,13 +396,13 @@ static void CommClub_CreateParentList() {
     }
 }
 
-static void CommClub_HandleParentList(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_HandleParentList(void *task, CommClubManager *commClubManager) {
     CommClub_PrintOwnProfile(commClubManager);
     if (FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem) == TRUE) {
         if (Comm_HasLinkError()) {
             sCommClubManager->retCode = 3;
             CommClub_ExitLink();
-            CommClub_CloseMenus(arg0, commClubManager);
+            CommClub_CloseMenus(task, commClubManager);
             return;
         }
         int listInput;
@@ -429,7 +429,7 @@ static void CommClub_HandleParentList(void *arg0, CommClubManager *commClubManag
             PlaySE(SEQ_SE_DP_SELECT);
             sCommClubManager->retCode = 1;
             CommClub_ExitLink();
-            CommClub_CloseMenus(arg0, commClubManager);
+            CommClub_CloseMenus(task, commClubManager);
             break;
         default:
             PlaySE(SEQ_SE_DP_SELECT);
@@ -455,23 +455,23 @@ static void CommClub_RedrawParentList(CommClubManager *commClubManager_unused) {
     }
 }
 
-static void CommClub_WaitConnected(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_WaitConnected(void *task, CommClubManager *commClubManager) {
     if (Comm_HasLinkError()) {
-        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_CloseMenus(task, commClubManager);
         CommClub_PrintMessage(0, FALSE);
         CommClub_ResetToParentList(commClubManager);
         sCommClubManager->buttonCloseRequest = 1;
     } else {
         if (CommPlayerInfo_GetProfile(Comm_GetLocalNetId())) {
             LinkSync_ClearValues();
-            CommClub_AskForRegistration(arg0, commClubManager);
+            CommClub_AskForRegistration(task, commClubManager);
         }
     }
 }
 
-static void CommClub_AskForRegistration(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_AskForRegistration(void *task, CommClubManager *commClubManager) {
     if (Comm_HasLinkError()) {
-        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_CloseMenus(task, commClubManager);
         CommClub_PrintMessage(0, FALSE);
         CommClub_ResetToParentList(commClubManager);
         sCommClubManager->buttonCloseRequest = 1;
@@ -501,18 +501,18 @@ static void CommClub_AskForRegistration(void *arg0, CommClubManager *commClubMan
     CommClub_SetState(&CommClub_WaitHostReply);
 }
 
-static BOOL CommClub_HandleHostReply(void *arg0, CommClubManager *commClubManager) {
+static BOOL CommClub_HandleHostReply(void *task, CommClubManager *commClubManager) {
     if (Comm_HasLinkError()) {
-        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_CloseMenus(task, commClubManager);
         CommClub_PrintMessage(0, FALSE);
         CommClub_ResetToParentList(commClubManager);
     } else if (LinkSync_GetValue(0, 3) == Comm_GetLocalNetId()) {
         LinkSync_ClearValues();
-        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_CloseMenus(task, commClubManager);
         CommClub_ShowRefused(commClubManager);
     } else if (LinkSync_GetValue(0, 5) != -1) {
         LinkSync_ClearValues();
-        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_CloseMenus(task, commClubManager);
         CommClub_ShowRefused(commClubManager);
     } else if (LinkSync_GetValue(0, 4) == Comm_GetLocalNetId()) {
         CommClub_PrintMessage(116, FALSE);
@@ -523,10 +523,10 @@ static BOOL CommClub_HandleHostReply(void *arg0, CommClubManager *commClubManage
         if (DialogBox_IsPrintFinished(sCommClubManager->printerID) == FALSE) {
             RemoveTextPrinter(sCommClubManager->printerID);
         }
-        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_CloseMenus(task, commClubManager);
         CommClub_ChildAccepted(commClubManager);
-    } else if (ov03_02255C80()) {
-        CommClub_CloseMenus(arg0, commClubManager);
+    } else if (CommClub_HasErrorDummy()) {
+        CommClub_CloseMenus(task, commClubManager);
         CommClub_ShowRefused(commClubManager);
     } else {
         return FALSE;
@@ -534,7 +534,7 @@ static BOOL CommClub_HandleHostReply(void *arg0, CommClubManager *commClubManage
     return TRUE;
 }
 
-static void CommClub_WaitHostReply(void *arg0, CommClubManager *unk_ovo3) {
+static void CommClub_WaitHostReply(void *task, CommClubManager *unk_ovo3) {
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
         if (unk_ovo3->buttonsShown == 0) {
             sCommClubManager->buttonMsgIds = &sRemoveFromMembersButton;
@@ -544,7 +544,7 @@ static void CommClub_WaitHostReply(void *arg0, CommClubManager *unk_ovo3) {
             FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->buttonMsgIds);
             unk_ovo3->buttonsShown = 1;
         } else if (FieldSystem_GetBottomScreenAppState(unk_ovo3->fieldSystem) == TRUE) {
-            if (CommClub_HandleHostReply(arg0, unk_ovo3)) {
+            if (CommClub_HandleHostReply(task, unk_ovo3)) {
                 unk_ovo3->buttonCloseRequest = 2;
             } else if (PAD_BUTTON_B & gSystem.newKeys || unk_ovo3->buttonSelection == 0) {
                 PlaySE(SEQ_SE_DP_SELECT);
@@ -556,8 +556,8 @@ static void CommClub_WaitHostReply(void *arg0, CommClubManager *unk_ovo3) {
     }
 }
 
-static void CommClub_OpenLeaveGroupChoice(void *arg0, CommClubManager *commClubManager) {
-    if (CommClub_HandleHostReply(arg0, commClubManager)) {
+static void CommClub_OpenLeaveGroupChoice(void *task, CommClubManager *commClubManager) {
+    if (CommClub_HandleHostReply(task, commClubManager)) {
         commClubManager->buttonCloseRequest = 2;
         return;
     }
@@ -567,7 +567,7 @@ static void CommClub_OpenLeaveGroupChoice(void *arg0, CommClubManager *commClubM
     }
 }
 
-static void CommClub_HandleLeaveGroupChoice(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_HandleLeaveGroupChoice(void *task, CommClubManager *commClubManager) {
     if (commClubManager->buttonsShown == 0) {
         if (CommClub_InitYesNoButtons(commClubManager) == TRUE) {
             commClubManager->buttonsShown = 1;
@@ -576,11 +576,11 @@ static void CommClub_HandleLeaveGroupChoice(void *arg0, CommClubManager *commClu
         }
     }
     if (CommClub_IsYesNoReady(commClubManager)) {
-        if (CommClub_HandleHostReply(arg0, commClubManager)) {
+        if (CommClub_HandleHostReply(task, commClubManager)) {
             CommClub_CloseYesNoButtons(commClubManager);
         } else if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == 6) {
             if (commClubManager->choiceResult == 0) {
-                CommClub_CloseMenus(arg0, commClubManager);
+                CommClub_CloseMenus(task, commClubManager);
                 CommClub_PrintMessage(6, FALSE);
                 CommClub_ResetToParentList(commClubManager);
             } else if (commClubManager->choiceResult == 1) {
@@ -590,17 +590,17 @@ static void CommClub_HandleLeaveGroupChoice(void *arg0, CommClubManager *commClu
     }
 }
 
-static void CommClub_MemberListPrintRow(ListMenu *listMenu_unused, u16 arg1_unused, u8 arg2) {
+static void CommClub_MemberListPrintRow(ListMenu *listMenu_unused, u16 arg1_unused, u8 row) {
     u16 spC = 0;
     if (sCommClubManager->listMenu) {
         ListMenuGetScrollAndRow(sCommClubManager->listMenu, &spC, NULL);
     }
-    spC += arg2;
+    spC += row;
     if (CommPlayerInfo_GetProfile(spC)) {
         BufferPlayersName(sCommClubManager->messageFormat[0], 0, CommPlayerInfo_GetProfile(spC));
         ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_00079, sCommClubManager->string[1]); // {STRVAR_1 3, 0, 0}
         StringExpandPlaceholders(sCommClubManager->messageFormat[0], sCommClubManager->string[0], sCommClubManager->string[1]);
-        s32 temp_r4 = arg2 * 16;
+        s32 temp_r4 = row * 16;
         AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[0], 8, temp_r4, 0, NULL);
         BufferIntegerAsString(sCommClubManager->messageFormat[0], 2, PlayerProfile_GetTrainerID_VisibleHalf(CommPlayerInfo_GetProfile(spC)), 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
         ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_ID_1, sCommClubManager->string[3]); // ID{STRVAR_1 54, 2, 0}
@@ -617,8 +617,8 @@ static void CommClub_ExitLink() {
     CommClubLink_Exit();
 }
 
-static void CommClub_SetState(void *arg0) {
-    sCommClubManager->commClubTask = arg0;
+static void CommClub_SetState(void *taskFunc) {
+    sCommClubManager->commClubTask = taskFunc;
 }
 
 static void CommClub_StartHosting(CommClubManager *commClubManager) {
@@ -719,7 +719,7 @@ static void CommClub_PrintPlayerCount(CommClubManager *commClubManager_unused) {
     AddTextPrinterParameterized(&sCommClubManager->windows[1], 0, sCommClubManager->string[6], 2, 2, 0, NULL);
 }
 
-static void CommClub_PrintContacted(u32 arg0, CommClubManager *commClubManager) {
+static void CommClub_PrintContacted(u32 netId, CommClubManager *commClubManager) {
     u16 sContactedText[NUM_COMM_TYPES] = {
         CommunicationClub_Text_00024_Dummy,
         CommunicationClub_Text_Contacted_SingleBattle, // {STRVAR_1 3, 1, 0} has contacted you. Start a Single Battle?
@@ -764,16 +764,16 @@ static void CommClub_PrintContacted(u32 arg0, CommClubManager *commClubManager) 
         CommunicationClub_Text_Contacted_Pokeathlon      // {STRVAR_1 3, 1, 0} has contacted you. Let {STRVAR_1 3, 1, 0} join your group?
     };
 
-    PlayerProfile *profile = CommPlayerInfo_GetProfile(arg0);
+    PlayerProfile *profile = CommPlayerInfo_GetProfile(netId);
     if (profile) {
         BufferPlayersName(commClubManager->messageFormat[2], 1, profile);
     }
     CommClub_PrintMessage(sContactedText[commClubManager->commType], TRUE);
 }
 
-static void CommClub_Task(SysTask *task, void *arg1) {
+static void CommClub_Task(SysTask *task, void *data) {
     if (sCommClubManager->commClubTask) {
-        sCommClubManager->commClubTask(task, arg1);
+        sCommClubManager->commClubTask(task, data);
     }
 }
 
@@ -805,7 +805,7 @@ static void CommClub_CreateMemberList(s32 arg0_unused, CommClubManager *commClub
     }
 }
 
-static void CommClub_HandleMemberList(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_HandleMemberList(void *task, CommClubManager *commClubManager) {
     if (FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem) != 1) {
         return;
     }
@@ -844,7 +844,7 @@ static void CommClub_HandleMemberList(void *arg0, CommClubManager *commClubManag
     }
     if (Comm_HasLinkError()) {
         CommClub_ExitLink();
-        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_CloseMenus(task, commClubManager);
         sCommClubManager->retCode = 3;
         return;
     }
@@ -922,7 +922,7 @@ static void CommClub_HandleMemberList(void *arg0, CommClubManager *commClubManag
     }
 }
 
-static void CommClub_HandleContactChoice(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_HandleContactChoice(void *task, CommClubManager *commClubManager) {
     CommClub_PrintPlayerCount(commClubManager);
     if (commClubManager->buttonsShown == 0) {
         if (CommClub_InitYesNoButtons(commClubManager) == TRUE) {
@@ -952,7 +952,7 @@ static void CommClub_HandleContactChoice(void *arg0, CommClubManager *commClubMa
             CommClub_PrintMessage(0, FALSE);
             CommClub_SetState(&CommClub_WaitProblemAckThenReopen);
         }
-    } else if (Comm_HasLinkError() || ov03_02255C80()) {
+    } else if (Comm_HasLinkError() || CommClub_HasErrorDummy()) {
         CommClub_CloseYesNoButtons(commClubManager);
         CommPlayerInfo_ClearPlayer(commClubManager->contactNetId);
         CommClub_PrintMessage(0, FALSE);
@@ -971,7 +971,7 @@ static void CommClub_HandleContactChoice(void *arg0, CommClubManager *commClubMa
                     if (CommClub_GetMaxPlayers() > 2) {
                         CommClub_SetState(&CommClub_ConfirmGroup);
                     } else {
-                        CommClub_CloseMenus(arg0, commClubManager);
+                        CommClub_CloseMenus(task, commClubManager);
                         CommClub_HostRepliedOk(commClubManager);
                     }
                 } else {
@@ -999,15 +999,15 @@ static void CommClub_HandleContactChoice(void *arg0, CommClubManager *commClubMa
     }
 }
 
-static void CommClub_WaitDifferentRulesAck(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_WaitDifferentRulesAck(void *task, CommClubManager *commClubManager) {
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID) && ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || System_GetTouchNew() == TRUE)) {
-        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_CloseMenus(task, commClubManager);
         CommClub_ExitLink();
         sCommClubManager->retCode = 4;
     }
 }
 
-static void CommClub_WaitProblemAckThenReopen(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_WaitProblemAckThenReopen(void *task, CommClubManager *commClubManager) {
     CommClub_PrintPlayerCount(commClubManager);
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID) && ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || System_GetTouchNew() == TRUE)) {
         CommClub_PrintAwaitingContact();
@@ -1091,7 +1091,7 @@ static void CommClub_OpenConfirmGroupChoice(void *arg0_unused, CommClubManager *
     }
 }
 
-static void CommClub_HandleConfirmGroupChoice(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_HandleConfirmGroupChoice(void *task, CommClubManager *commClubManager) {
     CommClub_PrintPlayerCount(commClubManager);
     if (commClubManager->buttonsShown == 0) {
         if (CommClub_InitYesNoButtons(commClubManager) == TRUE) {
@@ -1121,7 +1121,7 @@ static void CommClub_HandleConfirmGroupChoice(void *arg0, CommClubManager *commC
                 } else if (commClubManager->choiceResult == 1) {
                     CommState_SetEntry(1);
                     CommClub_ExitLink();
-                    CommClub_CloseMenus(arg0, commClubManager);
+                    CommClub_CloseMenus(task, commClubManager);
                     sCommClubManager->retCode = 1;
                 }
             }
@@ -1129,7 +1129,7 @@ static void CommClub_HandleConfirmGroupChoice(void *arg0, CommClubManager *commC
     }
 }
 
-static void CommClub_GroupCancelled(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_GroupCancelled(void *task, CommClubManager *commClubManager) {
     u16 sGroupCancelledText[NUM_COMM_TYPES] = {
         0,
         0,
@@ -1174,7 +1174,7 @@ static void CommClub_GroupCancelled(void *arg0, CommClubManager *commClubManager
         CommunicationClub_Text_GroupCancelled_Pokeathlon // A Pokéathlon involving this group will be canceled.
     };
 
-    CommClub_CloseMenus(arg0, commClubManager);
+    CommClub_CloseMenus(task, commClubManager);
     if (sCommClubManager->commType == COMM_TYPE_8) {
         CommClub_PrintMessage(sCommClubManager->unk92 + 137, FALSE);
     } else {
@@ -1191,7 +1191,7 @@ static void CommClub_WaitGroupCancelledAck(SysTask *task, void *commClubManager_
     }
 }
 
-static void CommClub_AskCancelGroup(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_AskCancelGroup(void *task, CommClubManager *commClubManager) {
     u16 sCancelGroupText[NUM_COMM_TYPES] = {
         0,
         0,
@@ -1241,7 +1241,7 @@ static void CommClub_AskCancelGroup(void *arg0, CommClubManager *commClubManager
         CommClub_SetState(&CommClub_OpenCancelGroupChoice);
     } else {
         CommClub_ExitLink();
-        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_CloseMenus(task, commClubManager);
         sCommClubManager->retCode = 1;
     }
 }
@@ -1255,7 +1255,7 @@ static void CommClub_OpenCancelGroupChoice(void *arg0_unused, CommClubManager *c
     }
 }
 
-static void CommClub_HandleCancelGroupChoice(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_HandleCancelGroupChoice(void *task, CommClubManager *commClubManager) {
     CommClub_PrintPlayerCount(commClubManager);
     if (commClubManager->buttonsShown == 0) {
         if (CommClub_InitYesNoButtons(commClubManager) == TRUE) {
@@ -1273,7 +1273,7 @@ static void CommClub_HandleCancelGroupChoice(void *arg0, CommClubManager *commCl
         } else if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == 6) {
             if (commClubManager->choiceResult == 0) {
                 CommClub_ExitLink();
-                CommClub_CloseMenus(arg0, commClubManager);
+                CommClub_CloseMenus(task, commClubManager);
                 sCommClubManager->retCode = 1;
             } else if (commClubManager->choiceResult == 1) {
                 CommClub_PrintAwaitingContact();
@@ -1283,14 +1283,14 @@ static void CommClub_HandleCancelGroupChoice(void *arg0, CommClubManager *commCl
     }
 }
 
-static void CommClub_WaitGroupSync(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_WaitGroupSync(void *task, CommClubManager *commClubManager) {
     if (Comm_HasLinkError() || commClubManager->connectedCount != Comm_CountConnected()) {
         CommClub_SetState(&CommClub_GroupCancelled);
     } else {
         CommClub_PrintPlayerCount(commClubManager);
         ListMenu_ProcessInput(commClubManager->listMenu);
         if (LinkSync_IsSynced(10) && LinkSync_Exists()) {
-            CommClub_CloseMenus(arg0, commClubManager);
+            CommClub_CloseMenus(task, commClubManager);
             CommClub_FinishGroup(commClubManager);
         }
     }
@@ -1344,7 +1344,7 @@ static void CommClub_ChildAccepted(CommClubManager *commClubManager) {
 static void CommClub_WaitGroupStart(u32 arg0_unused, CommClubManager *commClubManager) {
     if (Comm_GetLocalNetId() == FALSE && commClubManager->connectedCount != Comm_CountConnected()) {
         CommClub_SetState(&CommClub_ShowProblem);
-    } else if (ov03_02255C80() || Comm_HasLinkError()) {
+    } else if (CommClub_HasErrorDummy() || Comm_HasLinkError()) {
         CommClub_SetState(&CommClub_ShowProblem);
     } else if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
         LinkSync_StartSync(10);
@@ -1355,7 +1355,7 @@ static void CommClub_WaitGroupStart(u32 arg0_unused, CommClubManager *commClubMa
 static void CommClub_WaitGroupSyncAfterReply(void *task, CommClubManager *commClubManager) {
     if (Comm_GetLocalNetId() == 0 && commClubManager->connectedCount != Comm_CountConnected()) {
         CommClub_SetState(&CommClub_ShowProblem);
-    } else if (ov03_02255C80() || Comm_HasLinkError()) {
+    } else if (CommClub_HasErrorDummy() || Comm_HasLinkError()) {
         CommClub_SetState(&CommClub_ShowProblem);
         return;
     } else if (Comm_IsNetIdConnected(0) == 0) {
@@ -1543,7 +1543,7 @@ u32 CommClub_PollHostResult() {
     return retCode;
 }
 
-static BOOL ov03_02255C80() {
+static BOOL CommClub_HasErrorDummy() {
     return FALSE;
 }
 

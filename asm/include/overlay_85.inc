@@ -195,7 +195,7 @@
 .public FieldBGM_Play
 .public UnionRoom_SetBeaconActivity
 .public SpriteToUnionRoomAvatarIdx
-.public sub_0205B4A4
+.public UnionRoom_LoadAvatarPalette
 .public RenderModel_LoadFromNarc
 .public RenderModel_BindTexturesOnVBlank
 .public RenderModel_Free

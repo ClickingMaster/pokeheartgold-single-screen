@@ -226,7 +226,7 @@ BOOL FieldShadowEffect_Init(FieldEffect *effect, FieldShadowEffect *work) {
     work->spriteId = MapObject_GetSpriteID(work->args.mapObject);
     work->objectId = MapObject_GetID(work->args.mapObject);
     if (MapObject_CheckFlag25(work->args.mapObject) == TRUE) {
-        work->mapId = sub_0205F544(work->args.mapObject);
+        work->mapId = MapObject_GetFlag25MapID(work->args.mapObject);
     } else {
         work->mapId = MapObject_GetMapID(work->args.mapObject);
     }
@@ -262,7 +262,7 @@ BOOL FieldShadowEffect_InitFollowMon(FieldEffect *effect, FieldShadowEffect *wor
     work->spriteId = MapObject_GetSpriteID(work->args.mapObject);
     work->objectId = MapObject_GetID(work->args.mapObject);
     if (MapObject_CheckFlag25(work->args.mapObject) == TRUE) {
-        work->mapId = sub_0205F544(work->args.mapObject);
+        work->mapId = MapObject_GetFlag25MapID(work->args.mapObject);
     } else {
         work->mapId = MapObject_GetMapID(work->args.mapObject);
     }

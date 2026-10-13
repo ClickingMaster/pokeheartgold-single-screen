@@ -23,7 +23,7 @@
 #include "sys_task_api.h"
 #include "unk_02009D48.h"
 #include "char_tiles.h"
-#include "unk_02091054.h"
+#include "seal_data.h"
 
 fx32 FX_Sqrt(fx32 x); // not declared by the lib/include fx headers
 
@@ -309,7 +309,7 @@ void BallSealEffect_LoadSealParticlesTask(SysTask *task, void *data) {
             if (seal != NULL) {
                 s32 sealId = SealOnCapsuleGetID(seal);
                 if (sealId != 0 && sealId < 81) {
-                    resource0 = sub_02091084((u8)sealId);
+                    resource0 = Seal_GetBattleAnimResId((u8)sealId);
                     effect->seals[effect->count] = seal;
                     if (effect->particleSystems[effect->count] != NULL) {
                         GF_AssertFail();
@@ -336,7 +336,7 @@ void BallSealEffect_LoadSealParticlesTask(SysTask *task, void *data) {
             if (seal != NULL) {
                 s32 sealId = SealOnCapsuleGetID(seal);
                 if (sealId != 0 && sealId < 81) {
-                    resource1 = sub_02091084((u8)sealId);
+                    resource1 = Seal_GetBattleAnimResId((u8)sealId);
                     effect->seals[effect->count] = seal;
                     if (effect->particleSystems[effect->count] != NULL) {
                         GF_AssertFail();
@@ -363,7 +363,7 @@ void BallSealEffect_LoadSealParticlesTask(SysTask *task, void *data) {
             if (seal != NULL) {
                 s32 sealId = SealOnCapsuleGetID(seal);
                 if (sealId != 0 && sealId < 81) {
-                    resource2 = sub_02091084((u8)sealId);
+                    resource2 = Seal_GetBattleAnimResId((u8)sealId);
                     effect->seals[effect->count] = seal;
                     if (effect->particleSystems[effect->count] != NULL) {
                         GF_AssertFail();
@@ -390,7 +390,7 @@ void BallSealEffect_LoadSealParticlesTask(SysTask *task, void *data) {
             if (seal != NULL) {
                 s32 sealId = SealOnCapsuleGetID(seal);
                 if (sealId != 0 && sealId < 81) {
-                    resource3 = sub_02091084((u8)sealId);
+                    resource3 = Seal_GetBattleAnimResId((u8)sealId);
                     effect->seals[effect->count] = seal;
                     if (effect->particleSystems[effect->count] != NULL) {
                         GF_AssertFail();
@@ -1802,7 +1802,7 @@ BattleAnimEmitter *BattleAnimEmitter_New(enum HeapID heapId, BattleAnimEmitterTe
 
 void BattleAnimEmitter_Start(BattleAnimEmitter *emitter) {
     emitter->active = TRUE;
-    BattleAnimEmitter_CreateEmitters(emitter, (void (*)(SPLEmitter *))UnkBallData_GetEmitterParam);
+    BattleAnimEmitter_CreateEmitters(emitter, (void (*)(SPLEmitter *))BattleAnimEmitter_GetEmitterParam);
     emitter->task = SysTask_CreateOnMainQueue(BattleAnimEmitter_WaitTask, emitter, 1000);
 }
 
@@ -1827,7 +1827,7 @@ void BattleAnimEmitter_CreateEmitters(BattleAnimEmitter *emitter, void (*callbac
     ParticleSystem_SetPerspectiveType(emitter->particleSystem, emitter->template.perspective);
 }
 
-void *UnkBallData_GetEmitterParam(void) {
+void *BattleAnimEmitter_GetEmitterParam(void) {
     return ParticleSystem_GetEmitterParam();
 }
 

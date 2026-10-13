@@ -136,7 +136,7 @@
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
 .public WirelessStatusIcon_SetLevel
-.public sub_02069528
+.public Frontier_FillWifiUploadRecord
 .public LoadDwcOverlay
 .public UnloadDwcOverlay
 .public LoadOVY38

@@ -63,7 +63,7 @@ u32 PlayerProfile_AddMoney(PlayerProfile *profile, u32 amount);
 u32 PlayerProfile_SubMoney(PlayerProfile *profile, u32 amount);
 u8 PlayerProfile_GetVersion(PlayerProfile *profile);
 void PlayerProfile_SetVersion(PlayerProfile *profile, u8 version);
-u32 sub_02029084(void);
+u32 PlayerData_GetDummyGameVersion(void);
 u8 PlayerProfile_GetLanguage(PlayerProfile *profile);
 void PlayerProfile_SetLanguage(PlayerProfile *profile, u8 language);
 void PlayerProfile_SetGameClearFlag(PlayerProfile *profile);

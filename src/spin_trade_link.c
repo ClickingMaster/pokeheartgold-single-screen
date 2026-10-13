@@ -54,9 +54,9 @@ BOOL SpinTradeLink_SendPacket(SpinTradeLink *menu, u32 command, void *data, u32 
 BOOL SpinTradeLink_SendCommand(SpinTradeLink *menu, u32 command, void *data, u32 size);
 void SpinTradeLink_ReceivePacket(int sender, int unused, SpinTradeLinkPacket *packet, SpinTradeLink *menu);
 void SpinTradeLink_ReceiveParty(int sender, int unused, void *data, SpinTradeLink *menu);
-void sub_02096DA8(int sender, int unused, void *data, SpinTradeLink *menu);
-void sub_02096DB4(int sender, int unused, void *data, SpinTradeLink *menu);
-void sub_02096DBC(int sender, int unused, void *data, SpinTradeLink *menu);
+void SpinTradeLink_HandleLeaderMenuState(int sender, int unused, void *data, SpinTradeLink *menu);
+void SpinTradeLink_HandleSyncCount(int sender, int unused, void *data, SpinTradeLink *menu);
+void SpinTradeLink_HandleStartSync(int sender, int unused, void *data, SpinTradeLink *menu);
 void SpinTradeLink_HandleClearMessage(int sender, int unused, void *data, SpinTradeLink *menu);
 void SpinTradeLink_HandleJoinRequest(int sender, int unused, void *data, SpinTradeLink *menu);
 void SpinTradeLink_HandleMemberJoined(int sender, int unused, void *data, SpinTradeLink *menu);
@@ -137,17 +137,17 @@ void SpinTradeLink_ReceiveParty(int sender, int unused, void *data, SpinTradeLin
     memcpy(SpinTradeLink_GetReceivedParty(menu, sender), data, 0x590);
 }
 
-void sub_02096DA8(int sender, int unused, void *data, SpinTradeLink *menu) {
+void SpinTradeLink_HandleLeaderMenuState(int sender, int unused, void *data, SpinTradeLink *menu) {
     if (sender == 0) {
         menu->remoteValue = *(u8 *)data;
     }
 }
 
-void sub_02096DB4(int sender, int unused, void *data, SpinTradeLink *menu) {
+void SpinTradeLink_HandleSyncCount(int sender, int unused, void *data, SpinTradeLink *menu) {
     menu->count++;
 }
 
-void sub_02096DBC(int sender, int unused, void *data, SpinTradeLink *menu) {
+void SpinTradeLink_HandleStartSync(int sender, int unused, void *data, SpinTradeLink *menu) {
     if (Comm_GetLocalNetId() != 0) {
         menu->count = 0;
         menu->state = 1;

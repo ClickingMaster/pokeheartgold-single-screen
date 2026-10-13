@@ -12,23 +12,23 @@
 .public CommState_SetErrorWatch
 .public RecordMixingLink_RegisterCommands
 .public CommCmd_RecvIgnored
-.public sub_02091590
+.public CommCmd_GetSize3008
 .public MATH_CountPopulation
 .public gOverlayTemplate_Battle
 .public gNatureStatMods
 .public RecordMixing_StartFlash
 .public RecordMixing_SetStateFromLink
 .public RecordMixing_SetStateFromLinkInMenu
-.public ov73_021E7488
+.public RecordMixing_GetMemberCount
 
 	.public RecordMixingLink_RecvRecords
-	.public sub_0208FB88
+	.public RecordMixingLink_RecvLeaderMenuState
 	.public RecordMixingLink_RecvStartMixing
 	.public RecordMixingLink_RecvClearMessage
 	.public RecordMixingLink_HandleJoinRequest
 	.public RecordMixingLink_RecvMemberJoined
-	.public sub_0208FCFC
-	.public sub_0208FD00
+	.public RecordMixingLink_RecvUnused108
+	.public RecordMixingLink_RecvUnused109
 	.public RecordMixingLink_RecvCloseYesNo
 	.public RecordMixingLink_RecvJoinNotice
 	.public RecordMixingLink_SendRecords

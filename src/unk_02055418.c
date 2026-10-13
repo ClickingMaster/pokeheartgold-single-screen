@@ -140,16 +140,16 @@ BOOL FieldSystem_HasPenalty(FieldSystem *fieldSystem) {
     return Save_SysInfo_RTC_HasPenalty(sysinfo);
 }
 
-UnkStruct_020556FC *sub_02055680(FieldSystem *fieldSystem, enum HeapID heapID) {
+UnkStruct_020556FC *UnusedFieldModel_New(FieldSystem *fieldSystem, enum HeapID heapID) {
     UnkStruct_020556FC *unkPtr = Heap_Alloc(heapID, sizeof(UnkStruct_020556FC));
     MI_CpuClear8(unkPtr, sizeof(UnkStruct_020556FC));
     unkPtr->heapID = heapID;
-    sub_020556C8(fieldSystem, unkPtr);
+    UnusedFieldModel_Load(fieldSystem, unkPtr);
     return unkPtr;
 }
 
-void sub_020556A8(UnkStruct_020556FC *unkPtr) {
-    sub_020556FC(unkPtr);
+void UnusedFieldModel_Delete(UnkStruct_020556FC *unkPtr) {
+    UnusedFieldModel_Unload(unkPtr);
     Heap_Free(unkPtr);
 }
 
@@ -158,14 +158,14 @@ void FieldSystem_RegrowApricornTrees(FieldSystem *fieldSystem) {
     ApricornTrees_RegrowEmpty(trees);
 }
 
-void sub_020556C8(FieldSystem *fieldSystem, UnkStruct_020556FC *unkPtrB) {
+void UnusedFieldModel_Load(FieldSystem *fieldSystem, UnkStruct_020556FC *unkPtrB) {
     FieldEffectManager *fieldEffectManager = fieldSystem->fieldEffectManager;
     unkPtrB->modelFile = Heap_Alloc(unkPtrB->heapID, FieldEffectManager_GetNarcMemberSize(fieldEffectManager, 31));
     FieldEffectManager_ReadNarcMember(fieldEffectManager, 31, unkPtrB->modelFile);
     GF3dRender_InitObjFromHeader(&unkPtrB->renderObj, &unkPtrB->model, &unkPtrB->modelFile);
 }
 
-void sub_020556FC(UnkStruct_020556FC *unkPtr) {
+void UnusedFieldModel_Unload(UnkStruct_020556FC *unkPtr) {
     FieldEffectManager_HeapFree(unkPtr->modelFile); // function frees modelFile to heap
 }
 

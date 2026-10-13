@@ -422,7 +422,7 @@ static BOOL Task_SafariEncounter(TaskManager *taskManager) {
     case 3:
         Encounter_CopyResultsToSaveData(encounter->setup, fieldSystem);
         if (encounter->setup->winFlag == BATTLE_OUTCOME_MON_CAUGHT) {
-            sub_020270C4(fieldSystem->saveData); // Save_SafariZone_Get?
+            Save_Block23_Get(fieldSystem->saveData); // Save_SafariZone_Get?
             Party_GetMonByIndex(encounter->setup->party[BATTLER_ENEMY], 0);
             FieldSystem_TryTriggerBillPCFullCall(fieldSystem);
             FieldSystem_TryTriggerOakDexProgressCall(fieldSystem);
@@ -749,7 +749,7 @@ void CallTask_LinkBattle(TaskManager *taskManager, void *partySlots, u32 battleT
 }
 
 static u32 Encounter_GetLinkBattleMode(LinkBattleRuleset *ruleset, u32 battleType) {
-    int var = sub_02029264(ruleset);
+    int var = LinkBattleRuleset_GetRegulationIndex(ruleset);
     u32 mode;
 
     if (battleType & BATTLE_TYPE_MULTI) {
@@ -761,7 +761,7 @@ static u32 Encounter_GetLinkBattleMode(LinkBattleRuleset *ruleset, u32 battleTyp
     }
 
     if (var != 255) {
-        mode += 1 + ov03_02256B40(var);
+        mode += 1 + BattleRegulation_GetLinkModeOffset(var);
     }
     return mode;
 }

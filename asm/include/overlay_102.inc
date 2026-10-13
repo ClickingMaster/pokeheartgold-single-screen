@@ -146,9 +146,9 @@
 .public TouchHitboxController_IsTriggered
 .public WirelessStatusIcon_CreateIfConnected
 .public EasyChatArgs_GetType
-.public sub_02090D74
+.public EasyChatArgs_GetPromptMsgNo
 .public EasyChatArgs_GetFrame
-.public sub_02090D88
+.public EasyChatArgs_GetAlwaysConfirm
 .public EasyChatArgs_CopyMessage
 .public EasyChatArgs_MessageEquals
 .public EasyChatArgs_SetResult

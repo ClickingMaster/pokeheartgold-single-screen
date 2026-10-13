@@ -2,12 +2,12 @@
 
 #include "global.h"
 
-#include "unk_020971F8.h"
+#include "wifi_club_comm.h"
 
 static const WifiClubCommCommand sWifiClubCommCommands[] = {
-    { sub_02097238, sub_02097230, NULL },
-    { sub_02097248, sub_0209722C, NULL },
-    { sub_02097258, sub_02097234, NULL },
+    { WifiClubComm_RecvJoinAnswer, WifiClubComm_GetJoinAnswerSize, NULL },
+    { WifiClubComm_RecvStartCommand, WifiClubComm_GetStartCommandSize, NULL },
+    { WifiClubComm_RecvVoiceChatFlags, WifiClubComm_GetVoiceChatFlagsSize, NULL },
 };
 
 const WifiClubCommCommand *WifiClubComm_GetCommandTable(void) {

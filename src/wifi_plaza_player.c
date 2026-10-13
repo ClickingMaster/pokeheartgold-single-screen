@@ -63,7 +63,7 @@ WiFiPlazaPlayer *WiFiPlazaWork_GetMyPlayer(WiFiPlazaWork *work) {
     return &work->profile.player;
 }
 
-void ov45_0222A5E8(WiFiPlazaWork *work, int value) {
+void WiFiPlazaWork_SetActivity(WiFiPlazaWork *work, int value) {
     if (value >= 15) {
         GF_AssertFail();
     }
@@ -117,7 +117,7 @@ void WiFiPlazaWork_AddHistory(WiFiPlazaWork *work, int index, int value) {
     WiFiPlazaWork_SendOwnRecord(work);
 }
 
-void ov45_0222A72C(WiFiPlazaWork *work, u32 value) {
+void WiFiPlazaWork_SetTapToy(WiFiPlazaWork *work, u32 value) {
     if (value >= 27) {
         GF_AssertFail();
     }
@@ -130,7 +130,7 @@ void ov45_0222A72C(WiFiPlazaWork *work, u32 value) {
     WiFiPlazaWork_SendOwnRecord(work);
 }
 
-void ov45_0222A770(WiFiPlazaWork *work, int a, int b) {
+void WiFiPlazaWork_SetFavoriteTypes(WiFiPlazaWork *work, int a, int b) {
     if (a >= 18) {
         GF_AssertFail();
     }
@@ -154,7 +154,7 @@ void ov45_0222A770(WiFiPlazaWork *work, int a, int b) {
     }
 }
 
-void ov45_0222A7DC(WiFiPlazaWork *work, u32 a, u32 b) {
+void WiFiPlazaWork_SetSurveyAnswer(WiFiPlazaWork *work, u32 a, u32 b) {
     if (b >= 3) {
         GF_AssertFail();
     }
@@ -205,7 +205,7 @@ void WiFiPlazaPlayer_CopyToProfile(WiFiPlazaPlayer *player, PlayerProfile *profi
     PlayerProfile_SetGameClearFlag(profile);
 }
 
-int ov45_0222A920(WiFiPlazaPlayer *player) {
+int WiFiPlazaPlayer_GetActivity(WiFiPlazaPlayer *player) {
     u8 v = player->unk_43;
     return v < 14 ? v : 14;
 }
@@ -351,7 +351,7 @@ u8 WiFiPlazaPlayer_GetRegion(WiFiPlazaPlayer *player) {
 
 #pragma force_active reset
 
-u8 ov45_0222AAC8(WiFiPlazaPlayer *player) {
+u8 WiFiPlazaPlayer_GetTapToy(WiFiPlazaPlayer *player) {
     u8 v = player->unk_41;
     if (v == 0xFF) {
         return 0;
@@ -362,13 +362,13 @@ u8 ov45_0222AAC8(WiFiPlazaPlayer *player) {
     return v;
 }
 
-BOOL ov45_0222AADC(WiFiPlazaPlayer *player) {
+BOOL WiFiPlazaPlayer_HasTapToy(WiFiPlazaPlayer *player) {
     return player->unk_41 == 0xFF ? FALSE : TRUE;
 }
 
 #pragma force_active on
 
-u16 ov45_0222AAEC(WiFiPlazaPlayer *player, u32 index) {
+u16 WiFiPlazaPlayer_GetFavoriteType(WiFiPlazaPlayer *player, u32 index) {
     u16 value;
     if (index >= 2) {
         GF_AssertFail();
@@ -380,7 +380,7 @@ u16 ov45_0222AAEC(WiFiPlazaPlayer *player, u32 index) {
     return value;
 }
 
-void ov45_0222AB0C(WiFiPlazaPlayer *player, WiFiPlazaPlayerSurvey *out) {
+void WiFiPlazaPlayer_GetSurvey(WiFiPlazaPlayer *player, WiFiPlazaPlayerSurvey *out) {
     *out = player->survey;
 }
 

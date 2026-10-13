@@ -291,7 +291,7 @@ BOOL CheckFlag96A(SaveVarsFlags *state) {
     return CheckScriptFlag(state, FLAG_UNK_96A);
 }
 
-BOOL sub_020669B4(SaveVarsFlags *state, u32 index) {
+BOOL CheckRocketHQElectrodeDefeated(SaveVarsFlags *state, u32 index) {
     if (index > 2) {
         return FALSE;
     }

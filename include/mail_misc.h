@@ -46,23 +46,23 @@ typedef struct UseMailArgs {
 
 EasyChatArgs *EasyChat_CreateArgs(u8 a0, u8 a1, SaveData *saveData, MenuInputStateMgr *menuInputStateMgr, enum HeapID heapID);
 void EasyChat_FreeArgs(EasyChatArgs *args);
-void EasyChatArgs_SetWord(EasyChatArgs *args, u16 a1);
-void EasyChatArgs_SetWords(EasyChatArgs *args, u16 a1, u16 a2);
+void EasyChatArgs_SetWord(EasyChatArgs *args, u16 word);
+void EasyChatArgs_SetWords(EasyChatArgs *args, u16 word1, u16 word2);
 void EasyChatArgs_SetMailMessage(EasyChatArgs *args, MailMessage *mailMessage);
 void EasyChatArgs_SetCancelled(EasyChatArgs *args);
-void sub_02090D40(EasyChatArgs *args);
+void EasyChatArgs_SetAlwaysConfirm(EasyChatArgs *args);
 BOOL EasyChatArgs_IsCancelled(EasyChatArgs *args);
 BOOL EasyChatArgs_IsChanged(EasyChatArgs *args);
 u16 EasyChatArgs_GetWord(EasyChatArgs *args);
 void EasyChatArgs_GetWords(EasyChatArgs *args, MsgBankMsgNo *mailMessage);
 void EasyChatArgs_GetMailMessage(EasyChatArgs *args, MailMessage *mailMessage);
 u8 EasyChatArgs_GetType(EasyChatArgs *args);
-u8 sub_02090D74(EasyChatArgs *args);
+u8 EasyChatArgs_GetPromptMsgNo(EasyChatArgs *args);
 u32 EasyChatArgs_GetFrame(EasyChatArgs *args);
 Pokedex *EasyChatArgs_GetPokedex(EasyChatArgs *args);
 SaveEasyChat *EasyChatArgs_GetEasyChat(EasyChatArgs *args);
 u8 EasyChatArgs_GetGameCleared(EasyChatArgs *args);
-u8 sub_02090D88(EasyChatArgs *args);
+u8 EasyChatArgs_GetAlwaysConfirm(EasyChatArgs *args);
 void EasyChatArgs_CopyMessage(EasyChatArgs *args, MailMessage *msg1, MailMessage *msg2);
 BOOL EasyChatArgs_MessageEquals(EasyChatArgs *args, MailMessage *msg1, MailMessage *msg2);
 void EasyChatArgs_SetResult(EasyChatArgs *args, MailMessage *msg1, MailMessage *msg2);

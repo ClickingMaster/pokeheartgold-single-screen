@@ -416,7 +416,7 @@ PokeathlonBox_Graphics *PokeathlonBox_InitGraphics(enum HeapID heapID) {
     return ptr;
 }
 
-void PokeathlonBox_SetupGraphics(PokeathlonBox_Graphics *graphics, BgConfig *bgConfig, u8 courseId, u32 arg3) {
+void PokeathlonBox_SetupGraphics(PokeathlonBox_Graphics *graphics, BgConfig *bgConfig, u8 courseId, u32 isSupreme) {
     graphics->bgConfig = bgConfig;
     PokeathlonBox_LoadBgGraphics(bgConfig, graphics->heapID);
     AddWindowParameterized(graphics->bgConfig, &graphics->window1, GF_BG_LYR_SUB_0, 1, 1, 17, 2, 15, 0x01);
@@ -429,7 +429,7 @@ void PokeathlonBox_SetupGraphics(PokeathlonBox_Graphics *graphics, BgConfig *bgC
     graphics->msgFormat = MessageFormat_New(graphics->heapID);
     graphics->nickname = String_New(11, graphics->heapID);
     graphics->courseId = courseId;
-    graphics->isSupreme = arg3;
+    graphics->isSupreme = isSupreme;
     PokeathlonBox_LoadSpriteResources(&graphics->sub);
     PokeathlonBox_CreateSprites(&graphics->sub);
     PokeathlonBox_PrintStaticTexts(graphics);

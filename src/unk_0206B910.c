@@ -24,7 +24,7 @@
 #include "link_synchronization.h"
 #include "field_overworld_transition.h"
 #include "unk_020552A4.h"
-#include "unk_02091054.h"
+#include "seal_data.h"
 
 FS_EXTERN_OVERLAY(OVY_57);
 
@@ -58,12 +58,12 @@ static const OverlayManagerTemplate sOverlayTemplate_BallCapsuleEditor = {
 };
 
 static BOOL Task_BallCapsuleEditor(TaskManager *taskManager);
-static BOOL sub_0206BB90(ScriptContext *ctx);
-static void sub_0206BCA4(UnkStruct_0206BCD4 *a0, u8 syncState);
-static BOOL sub_0206BCB4(UnkStruct_0206BCD4 *a0, u8 syncState);
-static UnkStruct_0206BCD4 *sub_0206BCD4(void);
-static UnkStruct_0206BCD4 *sub_0206BCEC(UnkStruct_0206BCEC *unused);
-static void sub_0206BD00(UnkStruct_0206BCD4 *a0);
+static BOOL ScrNative_WaitLinkSyncWork(ScriptContext *ctx);
+static void LinkSyncWork_StartSync(UnkStruct_0206BCD4 *a0, u8 syncState);
+static BOOL LinkSyncWork_IsSynced(UnkStruct_0206BCD4 *a0, u8 syncState);
+static UnkStruct_0206BCD4 *LinkSyncWork_New(void);
+static UnkStruct_0206BCD4 *LinkSyncWork_CreateWithHeap(UnkStruct_0206BCEC *unused);
+static void LinkSyncWork_Delete(UnkStruct_0206BCD4 *a0);
 
 void CallTask_BallCapsuleEditor(TaskManager *taskManager, SaveData *saveData) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
@@ -141,8 +141,8 @@ static BOOL Task_BallCapsuleEditor(TaskManager *taskManager) {
             Pokemon *mon = r7->editorArgs->mons[partyMenu->partySlot];
             SetMonData(mon, MON_DATA_BALL_CAPSULE_ID, &index);
             SetMonData(mon, MON_DATA_BALL_CAPSULE, SealCase_GetCapsuleI(r6->sealCase, index - 1));
-            sub_0209106C(SealOnCapsuleGetID(CapsuleGetSealI(SealCase_GetCapsuleI(r6->sealCase, index - 1), 0)));
-            sub_020270C4(fieldSystem->saveData);
+            Seal_GetNameMsgId(SealOnCapsuleGetID(CapsuleGetSealI(SealCase_GetCapsuleI(r6->sealCase, index - 1), 0)));
+            Save_Block23_Get(fieldSystem->saveData);
         }
         r7->state = 1;
         break;
@@ -162,20 +162,20 @@ static BOOL Task_BallCapsuleEditor(TaskManager *taskManager) {
 
 BOOL ScrCmd_232(ScriptContext *ctx) {
     UnkStruct_0206BCD4 **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
-    sub_0206BCA4(*unkStruct, ScriptGetVar(ctx));
+    LinkSyncWork_StartSync(*unkStruct, ScriptGetVar(ctx));
     return FALSE;
 }
 
 BOOL ScrCmd_233(ScriptContext *ctx) {
     void *unused = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     ctx->data[0] = ScriptGetVar(ctx);
-    SetupNativeScript(ctx, sub_0206BB90);
+    SetupNativeScript(ctx, ScrNative_WaitLinkSyncWork);
     return TRUE;
 }
 
-static BOOL sub_0206BB90(ScriptContext *ctx) {
+static BOOL ScrNative_WaitLinkSyncWork(ScriptContext *ctx) {
     UnkStruct_0206BCD4 **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
-    return sub_0206BCB4(*unkStruct, ctx->data[0]);
+    return LinkSyncWork_IsSynced(*unkStruct, ctx->data[0]);
 }
 
 BOOL ScrCmd_234(ScriptContext *ctx) {
@@ -189,7 +189,7 @@ BOOL ScrCmd_234(ScriptContext *ctx) {
     unusedStruct.unk01 = arg1;
     unusedStruct.unk02 = arg3;
     unusedStruct.saveData = ctx->fieldSystem->saveData;
-    *unkStruct = sub_0206BCEC(&unusedStruct);
+    *unkStruct = LinkSyncWork_CreateWithHeap(&unusedStruct);
     return FALSE;
 }
 
@@ -197,7 +197,7 @@ BOOL ScrCmd_235(ScriptContext *ctx) {
     UnkStruct_0206BCD4 **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     u16 unused = ScriptGetVar(ctx);
     u32 unused2 = MapHeader_GetMapSec(ctx->fieldSystem->location->mapId);
-    sub_0206BD00(*unkStruct);
+    LinkSyncWork_Delete(*unkStruct);
     return FALSE;
 }
 
@@ -214,31 +214,31 @@ BOOL ScrCmd_237(ScriptContext *ctx) {
     return FALSE;
 }
 
-static void sub_0206BCA4(UnkStruct_0206BCD4 *a0, u8 syncState) {
+static void LinkSyncWork_StartSync(UnkStruct_0206BCD4 *a0, u8 syncState) {
     if (a0->unk04 != 0) {
         LinkSync_StartSync(syncState);
     }
 }
 
-static BOOL sub_0206BCB4(UnkStruct_0206BCD4 *a0, u8 syncState) {
+static BOOL LinkSyncWork_IsSynced(UnkStruct_0206BCD4 *a0, u8 syncState) {
     if (a0->unk04 == 0) {
         return TRUE;
     }
     return LinkSync_IsSynced(syncState) == TRUE;
 }
 
-static UnkStruct_0206BCD4 *sub_0206BCD4(void) {
+static UnkStruct_0206BCD4 *LinkSyncWork_New(void) {
     UnkStruct_0206BCD4 *unkStruct = Heap_Alloc(HEAP_ID_20, sizeof(UnkStruct_0206BCD4));
     MI_CpuFill8(unkStruct, 0, sizeof(UnkStruct_0206BCD4));
     return unkStruct;
 }
 
-static UnkStruct_0206BCD4 *sub_0206BCEC(UnkStruct_0206BCEC *unused) {
+static UnkStruct_0206BCD4 *LinkSyncWork_CreateWithHeap(UnkStruct_0206BCEC *unused) {
     Heap_Create(HEAP_ID_FIELD2, HEAP_ID_20, 0x4000);
-    return sub_0206BCD4();
+    return LinkSyncWork_New();
 }
 
-static void sub_0206BD00(UnkStruct_0206BCD4 *a0) {
+static void LinkSyncWork_Delete(UnkStruct_0206BCD4 *a0) {
     Heap_Free(a0);
     Heap_Destroy(HEAP_ID_20);
 }

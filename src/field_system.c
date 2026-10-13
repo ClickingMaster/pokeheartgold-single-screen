@@ -252,7 +252,7 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
             }
             movementAllowed = 0;
             if (FieldSystem_GetBottomScreenState()) {
-                movementAllowed = ov35_02259DB8();
+                movementAllowed = FieldHookUnused_IsMovementAllowed();
             }
             PlayerAvatar_MoveControl(fieldSystem->playerAvatar, fieldSystem->mapLoadManager, -1, fieldInput.newKeys, fieldInput.heldKeys, movementAllowed);
         }
@@ -275,7 +275,7 @@ void FieldSystem_Control(FieldSystem *fieldSystem) {
                 }
                 u32 flag = 0;
                 if (FieldSystem_GetBottomScreenState()) {
-                    flag = ov35_02259DB8();
+                    flag = FieldHookUnused_IsMovementAllowed();
                 }
                 PlayerAvatar_MoveControl(fieldSystem->playerAvatar, fieldSystem->mapLoadManager, -1, fieldInput.newKeys, fieldInput.heldKeys, flag);
             }

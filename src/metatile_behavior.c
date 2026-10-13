@@ -419,7 +419,7 @@ BOOL MetatileBehavior_IsSnow(u8 tile) {
     return tile == TILE_BEHAVIOR_SNOW;
 }
 
-BOOL sub_0205B8C4(u8 tile) {
+BOOL MetatileBehavior_IsSnowForFootprints(u8 tile) {
     return tile == TILE_BEHAVIOR_SNOW;
 }
 
@@ -491,11 +491,11 @@ BOOL MetatileBehavior_IsWarpPanel(u8 tile) {
     return tile == TILE_BEHAVIOR_WARP_PANEL;
 }
 
-BOOL sub_0205BA24(u8 tile) {
+BOOL MetatileBehavior_IsBridgeStart(u8 tile) {
     return tile == TILE_BEHAVIOR_112;
 }
 
-BOOL sub_0205BA30(u8 tile) {
+BOOL MetatileBehavior_IsBridge(u8 tile) {
     return tile == TILE_BEHAVIOR_113 || tile == TILE_BEHAVIOR_114 || tile == TILE_BEHAVIOR_115;
 }
 
@@ -503,7 +503,7 @@ BOOL sub_0205BA44(u8 tile) {
     return tile == TILE_BEHAVIOR_113 || tile == TILE_BEHAVIOR_114;
 }
 
-BOOL sub_0205BA54(u8 tile) {
+BOOL MetatileBehavior_IsBridgeOverWater(u8 tile) {
     return tile == TILE_BEHAVIOR_115;
 }
 
@@ -539,7 +539,7 @@ BOOL MetatileBehavior_IsMagma(u8 tile) {
     return tile == TILE_BEHAVIOR_MAGMA;
 }
 
-BOOL sub_0205BAD0(u8 tile) {
+BOOL MetatileBehavior_CanPlaceSafariObjectOnLand(u8 tile) {
     return tile == TILE_BEHAVIOR_0 || tile == TILE_BEHAVIOR_SAND || tile == TILE_BEHAVIOR_MUD;
 }
 
@@ -547,7 +547,7 @@ BOOL MetatileBehavior_IsSurfableWater_thunk(u8 tile) {
     return MetatileBehavior_IsSurfableWater(tile);
 }
 
-BOOL sub_0205BAEC(u8 tile) {
+BOOL MetatileBehavior_IsSafariPlacedObject(u8 tile) {
     return tile == TILE_BEHAVIOR_35;
 }
 

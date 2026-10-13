@@ -68,7 +68,7 @@ void TrainerCardSignature_CreateDoneButtonSprite(TrainerCardSignature *signature
 void *TrainerCardSignature_PrintCentered(Window *window, String *string, u32 y, u8 fontId, u32 color);
 void TrainerCardSignature_CreateWindows(TrainerCardSignature *signature, OverlayManager *unused);
 void TrainerCardSignature_RemoveWindows(TrainerCardSignature *signature);
-void ov52_021E8BD8(void);
+void TrainerCardSignature_UpdateCanvasDummy(void);
 void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature);
 void ov52_021E8CBC(Sprite **sprite, int pressed);
 void TrainerCardSignature_SetDoneButtonPressed(Sprite **sprite, int pressed);
@@ -84,9 +84,9 @@ void TrainerCardSignature_BlitClipped(Window *window, const void *src, s32 srcX,
 void TrainerCardSignature_DrawLine(Window *window, const void *src, s32 x1, s32 y1, s32 *lastX, s32 *lastY, s32 sample, s32 hasLast);
 void TrainerCardSignature_SavePenPositions(const TrainerCardSignatureStroke *strokes, TrainerCardSignaturePenPos *penPos);
 void TrainerCardSignature_DrawStrokes(Window *window, TrainerCardSignatureStroke *strokes, TrainerCardSignaturePenPos *penPos, u32 copyToVram);
-void ov52_021E9218(TrainerCardSignature *signature);
+void TrainerCardSignature_DrawDummy(TrainerCardSignature *signature);
 void TrainerCardSignature_AnimateButtonPalette(u16 *angle);
-void ov52_021E925C(Window *windows, int unused1, u32 unused2, TrainerCardSignature *unused3);
+void TrainerCardSignature_PrintPenNamesDummy(Window *windows, int unused1, u32 unused2, TrainerCardSignature *unused3);
 void TrainerCardSignature_TakeNewStroke(TrainerCardSignature *signature);
 void TrainerCardSignature_PrintMessage(TrainerCardSignature *signature, int msgId);
 BOOL TrainerCardSignature_IsPrinterDone(u32 textPrinterId);
@@ -432,7 +432,7 @@ void TrainerCardSignature_CreateWindows(TrainerCardSignature *signature, Overlay
             window++;
         }
     }
-    ov52_021E925C(signature->penNameWindows, 0, MAKE_TEXT_COLOR(14, 13, 15), signature);
+    TrainerCardSignature_PrintPenNamesDummy(signature->penNameWindows, 0, MAKE_TEXT_COLOR(14, 13, 15), signature);
 }
 
 void TrainerCardSignature_RemoveWindows(TrainerCardSignature *signature) {
@@ -447,7 +447,7 @@ void TrainerCardSignature_RemoveWindows(TrainerCardSignature *signature) {
     RemoveWindow(&signature->messageWindow);
 }
 
-void ov52_021E8BD8(void) {
+void TrainerCardSignature_UpdateCanvasDummy(void) {
 }
 
 #pragma force_active on
@@ -504,16 +504,16 @@ void TrainerCardSignature_SetDoneButtonPressed(Sprite **sprite, int pressed) {
 
 int TrainerCardSignature_State_Draw(TrainerCardSignature *signature, int state) {
     TrainerCardSignature_HandleTouch(signature);
-    ov52_021E925C(signature->penNameWindows, 0, MAKE_TEXT_COLOR(14, 12, 15), signature);
+    TrainerCardSignature_PrintPenNamesDummy(signature->penNameWindows, 0, MAKE_TEXT_COLOR(14, 12, 15), signature);
     TrainerCardSignature_TakeNewStroke(signature);
-    ov52_021E9218(signature);
+    TrainerCardSignature_DrawDummy(signature);
     TrainerCardSignature_DrawStrokes(&signature->canvasWindow, signature->strokes, signature->penPos, TRUE);
     return state;
 }
 
 void TrainerCardSignature_UpdateCanvas(TrainerCardSignature *signature) {
-    ov52_021E8BD8();
-    ov52_021E9218(signature);
+    TrainerCardSignature_UpdateCanvasDummy();
+    TrainerCardSignature_DrawDummy(signature);
     TrainerCardSignature_DrawStrokes(&signature->canvasWindow, signature->strokes, signature->penPos, FALSE);
 }
 
@@ -754,7 +754,7 @@ void TrainerCardSignature_DrawStrokes(Window *window, TrainerCardSignatureStroke
     }
 }
 
-void ov52_021E9218(TrainerCardSignature *signature) {
+void TrainerCardSignature_DrawDummy(TrainerCardSignature *signature) {
 #pragma unused(signature)
 }
 
@@ -771,7 +771,7 @@ void TrainerCardSignature_AnimateButtonPalette(u16 *angle) {
     GX_LoadOBJPltt(&color, 0x18, 2);
 }
 
-void ov52_021E925C(Window *windows, int unused1, u32 unused2, TrainerCardSignature *unused3) {
+void TrainerCardSignature_PrintPenNamesDummy(Window *windows, int unused1, u32 unused2, TrainerCardSignature *unused3) {
 #pragma unused(windows, unused1, unused2, unused3)
 }
 

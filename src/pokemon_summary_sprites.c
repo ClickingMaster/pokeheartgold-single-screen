@@ -484,7 +484,7 @@ void PokemonSummary_UpdateMarkingSprites(PokemonSummary *summary) {
 
 #pragma force_active off
 
-void sub_0208BDC8(PokemonSummary *summary) {
+void PokemonSummary_ShowConditionChangeSprites(PokemonSummary *summary) {
     u8 i;
     for (i = 0; i < 5; i++) {
         if ((summary->unk7BE & (1 << i)) != 0) {

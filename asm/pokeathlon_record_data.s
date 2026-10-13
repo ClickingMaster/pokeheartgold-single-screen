@@ -193,7 +193,7 @@
 	.public PokeathlonTrophies_GetCourseRecordTotal
 	.public PokeathlonTrophies_GetTotalPoints
 	.public PokeathlonTrophies_GetCourseScore
-	.public ov99_021E714C
+	.public PokeathlonMedals_GetSpeciesOrderFileIndex
 	.public ov99_021E7150
 	.public PokeathlonMedals_GetSpeciesMedals
 	.public PokeathlonMedals_CountMedalists

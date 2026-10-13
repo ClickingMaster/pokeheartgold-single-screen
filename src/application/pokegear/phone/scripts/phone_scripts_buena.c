@@ -99,7 +99,7 @@ static u8 IsBuenasPasswordOnAir(u8 hour) {
     // Different messages at different times of day
 
     // hour % 3 == 2, so 2, 5, 8, 11 AM/PM
-    if (sub_02095FF8(hour)) {
+    if (Phone_IsBuenasPasswordHour(hour)) {
         return 3;
     }
     if (hour > 3 && hour < 10) {

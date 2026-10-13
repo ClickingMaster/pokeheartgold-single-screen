@@ -16,7 +16,7 @@
 BOOL FriendGroup_IsEmpty(FRIEND_GROUP *group);
 BOOL FriendGroup_Equals(FRIEND_GROUP *a, FRIEND_GROUP *b);
 
-extern const u8 *ov73_021EA664[];
+extern const u8 *sRecordMixingAllowedEntryKinds[];
 
 u32 RecordMixing_GetGroupRecordSize(SAV_FRIEND_GRP *friendGroup) {
     return sizeof(FRIEND_GROUP);
@@ -65,24 +65,24 @@ void RecordMixing_MergeGroups(int count, int localId, FRIEND_GROUP *groups, FRIE
     }
 }
 
-u32 ov73_021E7A74(SaveData *saveData) {
+u32 RecordMixing_Block23List2_GetSize(SaveData *saveData) {
     return 4 * sizeof(RecordMixingEntry);
 }
 
-u32 ov73_021E7A7C(SaveData *saveData) {
+u32 RecordMixing_Block23List0_GetSize(SaveData *saveData) {
     return 4 * sizeof(RecordMixingEntry);
 }
 
-u32 ov73_021E7A84(SaveData *saveData) {
+u32 RecordMixing_Block23List1_GetSize(SaveData *saveData) {
     return 4 * sizeof(RecordMixingEntry);
 }
 
 #pragma force_active on
 
-BOOL ov73_021E7A8C(int idx, int val) {
+BOOL RecordMixing_IsAllowedEntryKind(int idx, int val) {
     int i;
-    for (i = 0; ov73_021EA664[idx][i] != 0xFF; i++) {
-        if (val == ov73_021EA664[idx][i]) {
+    for (i = 0; sRecordMixingAllowedEntryKinds[idx][i] != 0xFF; i++) {
+        if (val == sRecordMixingAllowedEntryKinds[idx][i]) {
             return TRUE;
         }
     }
@@ -93,7 +93,7 @@ BOOL ov73_021E7A8C(int idx, int val) {
 
 #pragma force_active on
 
-void ov73_021E7AC0(SaveData *saveData, RecordMixingEntry *out, RecordMixingEntryData *in, int count, int unused4, int unused5) {
+void RecordMixing_FillBlock23Entries(SaveData *saveData, RecordMixingEntry *out, RecordMixingEntryData *in, int count, int unused4, int unused5) {
     PlayerProfile *profile = Save_PlayerData_GetProfile(saveData);
     int i;
     for (i = 0; i < count; i++, in++, out++) {
@@ -111,74 +111,74 @@ void ov73_021E7AC0(SaveData *saveData, RecordMixingEntry *out, RecordMixingEntry
 
 #pragma force_active reset
 
-void *ov73_021E7B3C(SaveData *saveData, enum HeapID heapID, u32 size) {
+void *RecordMixing_Block23List2_Load(SaveData *saveData, enum HeapID heapID, u32 size) {
     void *out = Heap_AllocAtEnd(heapID, size);
-    UnkStruct_0202E474 *data = sub_020270C4(saveData);
-    if (size != ov73_021E7A74(saveData)) {
+    UnkStruct_0202E474 *data = Save_Block23_Get(saveData);
+    if (size != RecordMixing_Block23List2_GetSize(saveData)) {
         GF_AssertFail();
     }
-    ov73_021E7AC0(saveData, out, (RecordMixingEntryData *)data->unk_18C, 4, 1, 3);
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->unk_18C, 4, 1, 3);
     return out;
 }
 
-void *ov73_021E7B84(SaveData *saveData, enum HeapID heapID, u32 size) {
+void *RecordMixing_Block23List0_Load(SaveData *saveData, enum HeapID heapID, u32 size) {
     void *out = Heap_AllocAtEnd(heapID, size);
-    UnkStruct_0202E474 *data = sub_020270C4(saveData);
-    if (size != ov73_021E7A7C(saveData)) {
+    UnkStruct_0202E474 *data = Save_Block23_Get(saveData);
+    if (size != RecordMixing_Block23List0_GetSize(saveData)) {
         GF_AssertFail();
     }
-    ov73_021E7AC0(saveData, out, (RecordMixingEntryData *)data->unk_00C, 4, 1, 4);
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->unk_00C, 4, 1, 4);
     return out;
 }
 
-void *ov73_021E7BC8(SaveData *saveData, enum HeapID heapID, u32 size) {
+void *RecordMixing_Block23List1_Load(SaveData *saveData, enum HeapID heapID, u32 size) {
     void *out = Heap_AllocAtEnd(heapID, size);
-    UnkStruct_0202E474 *data = sub_020270C4(saveData);
-    if (size != ov73_021E7A84(saveData)) {
+    UnkStruct_0202E474 *data = Save_Block23_Get(saveData);
+    if (size != RecordMixing_Block23List1_GetSize(saveData)) {
         GF_AssertFail();
     }
-    ov73_021E7AC0(saveData, out, (RecordMixingEntryData *)data->unk_0CC, 4, 1, 5);
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->unk_0CC, 4, 1, 5);
     return out;
 }
 
-void *ov73_021E7C0C(SaveData *saveData, enum HeapID heapID, u32 size) {
+void *RecordMixing_Block23List2_Load2(SaveData *saveData, enum HeapID heapID, u32 size) {
     void *out = Heap_AllocAtEnd(heapID, size);
-    UnkStruct_0202E474 *data = sub_020270C4(saveData);
-    if (size != ov73_021E7A74(saveData)) {
+    UnkStruct_0202E474 *data = Save_Block23_Get(saveData);
+    if (size != RecordMixing_Block23List2_GetSize(saveData)) {
         GF_AssertFail();
     }
-    ov73_021E7AC0(saveData, out, (RecordMixingEntryData *)data->unk_18C, 4, 0, 0);
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->unk_18C, 4, 0, 0);
     return out;
 }
 
-void *ov73_021E7C50(SaveData *saveData, enum HeapID heapID, u32 size) {
+void *RecordMixing_Block23List0_Load2(SaveData *saveData, enum HeapID heapID, u32 size) {
     void *out = Heap_AllocAtEnd(heapID, size);
-    UnkStruct_0202E474 *data = sub_020270C4(saveData);
-    if (size != ov73_021E7A7C(saveData)) {
+    UnkStruct_0202E474 *data = Save_Block23_Get(saveData);
+    if (size != RecordMixing_Block23List0_GetSize(saveData)) {
         GF_AssertFail();
     }
-    ov73_021E7AC0(saveData, out, (RecordMixingEntryData *)data->unk_00C, 4, 0, 1);
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->unk_00C, 4, 0, 1);
     return out;
 }
 
-void *ov73_021E7C94(SaveData *saveData, enum HeapID heapID, u32 size) {
+void *RecordMixing_Block23List1_Load2(SaveData *saveData, enum HeapID heapID, u32 size) {
     void *out = Heap_AllocAtEnd(heapID, size);
-    UnkStruct_0202E474 *data = sub_020270C4(saveData);
-    if (size != ov73_021E7A84(saveData)) {
+    UnkStruct_0202E474 *data = Save_Block23_Get(saveData);
+    if (size != RecordMixing_Block23List1_GetSize(saveData)) {
         GF_AssertFail();
     }
-    ov73_021E7AC0(saveData, out, (RecordMixingEntryData *)data->unk_0CC, 4, 0, 2);
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->unk_0CC, 4, 0, 2);
     return out;
 }
 
 #pragma force_active on
 
-int ov73_021E7CD8(RecordMixingEntry *entries, int count, RecordMixingEntry *entry, int idx) {
+int RecordMixing_InsertBlock23Entry(RecordMixingEntry *entries, int count, RecordMixingEntry *entry, int idx) {
     int i;
     if (entry->data.unk_00 == 0) {
         return 0;
     }
-    if (!ov73_021E7A8C(idx, entry->data.unk_00)) {
+    if (!RecordMixing_IsAllowedEntryKind(idx, entry->data.unk_00)) {
         return -1;
     }
     for (i = 0; i < count; i++) {
@@ -199,7 +199,7 @@ int ov73_021E7CD8(RecordMixingEntry *entries, int count, RecordMixingEntry *entr
 #pragma force_active reset
 
 // a for partners whose profile has a version set, b otherwise
-void *ov73_021E7D54(u32 netId, void *a, void *b) {
+void *RecordMixing_SelectReceivedBuffer(u32 netId, void *a, void *b) {
     PlayerProfile *profile = CommPlayerInfo_GetProfile(netId);
     if (!profile) {
         return NULL;
@@ -213,7 +213,7 @@ void *ov73_021E7D54(u32 netId, void *a, void *b) {
 // every member takes 4 entries, from the other members in turn
 #pragma force_active on
 
-void ov73_021E7D74(RecordMixingEntry *entries, int count, int numPlayers, int localId, RecordMixingEntry **received, void *received2, int idx) {
+void RecordMixing_MergeBlock23List(RecordMixingEntry *entries, int count, int numPlayers, int localId, RecordMixingEntry **received, void *received2, int idx) {
     u8 given[16];
     int j;
     int i;
@@ -231,9 +231,9 @@ void ov73_021E7D74(RecordMixingEntry *entries, int count, int numPlayers, int lo
             }
             given[j]++;
             if (j != localId) {
-                list = ov73_021E7D54(j, received, received2);
+                list = RecordMixing_SelectReceivedBuffer(j, received, received2);
                 if (list != NULL) {
-                    ov73_021E7CD8(entries, count, &list[j][k], idx);
+                    RecordMixing_InsertBlock23Entry(entries, count, &list[j][k], idx);
                 }
             }
         }
@@ -243,6 +243,6 @@ void ov73_021E7D74(RecordMixingEntry *entries, int count, int numPlayers, int lo
 
 #pragma force_active reset
 
-void ov73_021E7E24(void *saveBlock23, int numPlayers, int localId, RecordMixingEntry **received, void *received2) {
-    ov73_021E7D74((RecordMixingEntry *)((u8 *)saveBlock23 + 0x90C), 8, numPlayers, localId, received, received2, 0);
+void RecordMixing_MergeBlock23(void *saveBlock23, int numPlayers, int localId, RecordMixingEntry **received, void *received2) {
+    RecordMixing_MergeBlock23List((RecordMixingEntry *)((u8 *)saveBlock23 + 0x90C), 8, numPlayers, localId, received, received2, 0);
 }

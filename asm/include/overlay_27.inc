@@ -157,12 +157,12 @@
 .public GetPhoneBookEntryName
 .public TouchscreenMenu_Create
 .public TouchscreenMenu_Destroy
-.public ov27_0225A2C8
+.public TouchscreenMenu_IsExitDone
 .public TouchscreenMenu_RequestSelectedIconAnim
 .public TouchscreenMenu_RequestRegisteredItemAnim
 .public TouchscreenChoiceMenu_Create
 .public TouchscreenChoiceMenu_Destroy
-.public ov27_0225C418
+.public TouchscreenChoiceMenu_IsExitDone
 .public TouchscreenChoiceMenu_SetCallback
 .public DSProt_DetectFlashcart
 .public DSProt_DetectNotEmulator

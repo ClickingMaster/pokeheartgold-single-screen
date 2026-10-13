@@ -10,13 +10,13 @@
 #include "save_arrays.h"
 #include "save_rankings.h"
 #include "unk_0202E41C.h"
-#include "unk_02069528.h"
+#include "frontier_wifi_upload_record.h"
 
 // record_mixing_records.c
 u32 RecordMixing_GetGroupRecordSize(SAV_FRIEND_GRP *friendGroup);
 FRIEND_GROUP *RecordMixing_GetGroupRecord(SAV_FRIEND_GRP *friendGroup);
 void RecordMixing_MergeGroups(int count, int localId, FRIEND_GROUP *groups, FRIEND_GROUP **received);
-void ov73_021E7E24(void *saveBlock23, int numPlayers, int localId, void **received, void **received2);
+void RecordMixing_MergeBlock23(void *saveBlock23, int numPlayers, int localId, void **received, void **received2);
 
 // No public header declares these.
 u32 FashionEntry_sizeof(void);
@@ -28,7 +28,7 @@ void RecordMixing_FriendGroup_Merge(RecordMixingMergeArgs *args);
 u32 RecordMixing_Fashion_GetSize(SaveData *saveData);
 void *RecordMixing_Fashion_Load(SaveData *saveData, enum HeapID heapID, u32 size);
 void RecordMixing_Fashion_Merge(RecordMixingMergeArgs *args);
-void ov73_021EA2FC(RecordMixingMergeArgs *args);
+void RecordMixing_Block23_Merge(RecordMixingMergeArgs *args);
 SaveRankingsEntry *RecordMixing_Rankings_Load(SaveData *saveData, enum HeapID heapID);
 void RecordMixing_Rankings_Merge(RecordMixingMergeArgs *args);
 void *RecordMixing_BattleRoomTrainer_Load(SaveData *saveData, enum HeapID heapID, u32 size);
@@ -70,9 +70,9 @@ void RecordMixing_Fashion_Merge(RecordMixingMergeArgs *args) {
     Save_FashionData_InsertEntries((u8)args->numPlayers, args->localId, fashionData, (SaveFashionDataSub **)args->records);
 }
 
-void ov73_021EA2FC(RecordMixingMergeArgs *args) {
-    UnkStruct_0202E474 *data = sub_020270C4(args->saveData);
-    ov73_021E7E24(data, args->numPlayers, args->localId, args->records, args->records2);
+void RecordMixing_Block23_Merge(RecordMixingMergeArgs *args) {
+    UnkStruct_0202E474 *data = Save_Block23_Get(args->saveData);
+    RecordMixing_MergeBlock23(data, args->numPlayers, args->localId, args->records, args->records2);
 }
 
 SaveRankingsEntry *RecordMixing_Rankings_Load(SaveData *saveData, enum HeapID heapID) {
@@ -88,7 +88,7 @@ void RecordMixing_Rankings_Merge(RecordMixingMergeArgs *args) {
 void *RecordMixing_BattleRoomTrainer_Load(SaveData *saveData, enum HeapID heapID, u32 size) {
     void *dest = Heap_AllocAtEnd(heapID, size);
     MI_CpuFill8(dest, 0, size);
-    sub_02069528(saveData, 0, dest);
+    Frontier_FillWifiUploadRecord(saveData, 0, dest);
     return dest;
 }
 

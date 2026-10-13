@@ -308,7 +308,7 @@ static BOOL OptionsApp_Free(OptionsApp_Data *data);
 static void OptionsApp_SetupBgConfig(OptionsApp_Data *data);
 static void OptionsApp_FreeBgConfig(OptionsApp_Data *data);
 static void OptionsApp_SetupGraphicsData(OptionsApp_Data *data);
-static void ov54_021E6000(OptionsApp_Data *data);
+static void OptionsApp_FreeGraphicsDummy(OptionsApp_Data *data);
 static void OptionsApp_SetupWindows(OptionsApp_Data *data);
 static void OptionsApp_FreeWindows(OptionsApp_Data *data);
 static void OptionsApp_PrintTextFrameString(OptionsApp_Data *data, String *frameNumText, BOOL instantTextSpeed);
@@ -319,7 +319,7 @@ static void OptionsApp_UpdateMenuEntryCarousel(OptionsApp_Data *data, u32 menuEn
 static void OptionsApp_HandleKeyInput(OptionsApp_Data *data, OptionsApp_MenuEntry *menuEntry);
 static void OptionsApp_HandleInput(OptionsApp_Data *data);
 static void OptionsApp_UpdateSelectionHighlight(OptionsApp_Data *data, u32 menuEntryId);
-static void ov54_021E6A64(OptionsApp_Data *data);
+static void OptionsApp_HideBorderOnConfirmRow(OptionsApp_Data *data);
 static void OptionsApp_SetupSpriteRenderer(OptionsApp_Data *data);
 static void OptionsApp_FreeSpriteRenderer(OptionsApp_Data *data);
 static void OptionsApp_SetupSprites(OptionsApp_Data *data);
@@ -526,7 +526,7 @@ static BOOL OptionsApp_Free(OptionsApp_Data *data) {
         }
 
         DestroyMsgData(data->msgData);
-        ov54_021E6000(data);
+        OptionsApp_FreeGraphicsDummy(data);
         OptionsApp_FreeBgConfig(data);
         OptionsApp_FreeSpriteRenderer(data);
         break;
@@ -660,7 +660,7 @@ static void OptionsApp_SetupGraphicsData(OptionsApp_Data *data) {
     BgSetPosTextAndCommit(data->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_Y, sMenuEntryBorderYCoords[data->currentMenuEntryId]);
 }
 
-static void ov54_021E6000(OptionsApp_Data *data) {
+static void OptionsApp_FreeGraphicsDummy(OptionsApp_Data *data) {
     // empty, maybe would've been used to free graphics data?
 }
 
@@ -910,7 +910,7 @@ static void OptionsApp_HandleInput(OptionsApp_Data *data) {
         case 13: // Confirm button
             data->currentMenuEntryId = sOptionsAppHitboxEntryValues[hitboxIndex][0];
             OptionsApp_SetActiveButtonsXPosition(data);
-            ov54_021E6A64(data);
+            OptionsApp_HideBorderOnConfirmRow(data);
             data->exitChoice = 1;
             PlaySE(SEQ_SE_DP_SAVE);
             data->menuInputState = 1;
@@ -923,7 +923,7 @@ static void OptionsApp_HandleInput(OptionsApp_Data *data) {
         case 14: // Quit button
             data->currentMenuEntryId = sOptionsAppHitboxEntryValues[hitboxIndex][0];
             OptionsApp_SetActiveButtonsXPosition(data);
-            ov54_021E6A64(data);
+            OptionsApp_HideBorderOnConfirmRow(data);
             data->exitChoice = 2;
             PlaySE(SEQ_SE_GS_GEARCANCEL);
             data->menuInputState = 1;
@@ -948,7 +948,7 @@ static void OptionsApp_HandleInput(OptionsApp_Data *data) {
             OptionsApp_UpdateMenuEntry(data, data->currentMenuEntryId);
             OptionsApp_UpdateSelectionHighlight(data, data->currentMenuEntryId);
             OptionsApp_SetActiveButtonsXPosition(data);
-            ov54_021E6A64(data);
+            OptionsApp_HideBorderOnConfirmRow(data);
             data->menuInputState = 1;
             PlaySE(SEQ_SE_DP_SELECT);
             break;
@@ -977,7 +977,7 @@ static void OptionsApp_UpdateSelectionHighlight(OptionsApp_Data *data, u32 menuE
     }
 }
 
-static void ov54_021E6A64(OptionsApp_Data *data) {
+static void OptionsApp_HideBorderOnConfirmRow(OptionsApp_Data *data) {
     if (data->currentMenuEntryId == MENU_ENTRY_6) {
         ToggleBgLayer(GF_BG_LYR_MAIN_0, GF_PLANE_TOGGLE_OFF);
     }

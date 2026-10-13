@@ -137,9 +137,9 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
                     }
                 }
                 if (WiFiPlazaPanelButton_Update(&panel->button, graphics, panel->narc, heapID) == TRUE) {
-                    ov45_0222ADD8(lobby, WiFiPlazaWork_GetOwnSlot(lobby));
-                    ov45_0222AE54(lobby);
-                    ov45_0222AE08(ov45_0222ADA8(lobby, WiFiPlazaWork_GetOwnSlot(lobby)), &started.index, &started.type);
+                    WiFiPlazaWork_RequestGroupAction(lobby, WiFiPlazaWork_GetOwnSlot(lobby));
+                    WiFiPlazaWork_SendGroupAction(lobby);
+                    WiFiPlaza_SplitGroupPlace(WiFiPlazaWork_FindGroupPlace(lobby, WiFiPlazaWork_GetOwnSlot(lobby)), &started.index, &started.type);
                     panel->instrumentPlaying = TRUE;
                     panel->instrumentIndex = started.index;
                     panel->instrumentType = started.type;
@@ -209,12 +209,12 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
             WiFiPlazaInfoPanel_ShowPlayerCard(panel, &room->signWindow, graphics, (WiFiPlazaRoomMsg *)((u8 *)room + offset), isOwn, heapID, player, myPlayer, special, hasMessage, (u16 *)message, TRUE);
             break;
         case 3:
-            token = ov45_0222ADA8(lobby, WiFiPlazaWork_GetOwnSlot(lobby));
+            token = WiFiPlazaWork_FindGroupPlace(lobby, WiFiPlazaWork_GetOwnSlot(lobby));
             if (token == -1) {
                 GF_ASSERT(FALSE);
                 token = 0;
             }
-            ov45_0222AE08(token, &own.index, &own.type);
+            WiFiPlaza_SplitGroupPlace(token, &own.index, &own.type);
             WiFiPlazaInfoPanel_ShowInstrument(panel, graphics, heapID, own.type);
             break;
         }
@@ -480,7 +480,7 @@ void WiFiPlazaPlayerCard_Show(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *sig
         WiFiPlazaPlayerCard_CopyWindow(card, 4);
         WiFiPlazaPlayerCard_LoadMons(card, graphics, narc, heapID, player, myPlayer);
     }
-    WiFiPlazaPlayerCard_LoadIcon(card, graphics, narc, heapID, ov45_0222AAC8(player), showIcon);
+    WiFiPlazaPlayerCard_LoadIcon(card, graphics, narc, heapID, WiFiPlazaPlayer_GetTapToy(player), showIcon);
     if (isOwn == TRUE) {
         if (WiFiPlazaPlayer_GetGender(player) == 1) {
             avatar = 97;
@@ -504,8 +504,8 @@ void WiFiPlazaPlayerCard_LoadTypeIcons(WiFiPlazaInfoPanel *unused0, WiFiPlazaPla
     u32 y = 2;
 
     for (; i < 2; i++) {
-        if ((u16)ov45_0222AAEC(player, i) != 0) {
-            u16 type = ((u32(*)(void))ov45_0222D7C0)(); // called without its argument: the type is still in r0
+        if ((u16)WiFiPlazaPlayer_GetFavoriteType(player, i) != 0) {
+            u16 type = ((u32(*)(void))WiFiPlaza_GetTypeByChoice)(); // called without its argument: the type is still in r0
             NarcId narcId = TypeIcon_GetNarc();
             u32 member = TypeIcon_GetCharFile(type);
             void *buf = GfGfxLoader_LoadFromNarc(narcId, member, TRUE, heapID, TRUE);
@@ -895,7 +895,7 @@ void WiFiPlazaPanelButton_ShowOwnCard(WiFiPlazaPanelButton *button, WiFiPlazaRoo
     String *text;
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 0x37, graphics->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, heapID);
     button->instrumentMode = FALSE;
-    button->graphic = ov45_0222AAC8(player);
+    button->graphic = WiFiPlazaPlayer_GetTapToy(player);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, button->graphic, graphics->bgConfig, GF_BG_LYR_SUB_2, 0x140, 0, FALSE, heapID);
     WiFiPlazaInfoPanel_LoadScreen(graphics, narc, button->graphic + 0x1B, GF_BG_LYR_SUB_2, 0x140, heapID);
     text = WiFiPlazaRoomMsg_GetString(msg, 1, 0x3F);

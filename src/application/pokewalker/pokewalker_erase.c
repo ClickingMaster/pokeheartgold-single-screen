@@ -343,7 +343,7 @@ void PokewalkerApp_ReturnWalkerMonToBox(PokewalkerApp *app) {
     int slot = 0;
     PCStorage *storage = SaveArray_PCStorage_Get(app->saveData);
     BoxPokemon *boxMon = &app->returnedMon;
-    sub_02032688(app->pokewalker, &unk0, &box2);
+    Pokewalker_GetStrollState(app->pokewalker, &unk0, &box2);
     if (Pokewalker_TryGetBoxMon(app->pokewalker, boxMon)) {
         box = box2;
         PCStorage_FindFirstEmptySlot(storage, &box, &slot);

@@ -133,7 +133,7 @@ void PokeathlonBlockSmashRival_SwitchTask(SysTask *task, void *data);
 void PokeathlonBlockSmashRival_StartSwitch(PokeathlonBlockSmashRival *row);
 void PokeathlonBlockSmashRival_Update(PokeathlonBlockSmashRival *row);
 void PokeathlonBlockSmashMon_CreateSprites(ManagedSprite **sprites, SpriteSystem *spriteSystem, SpriteManager *spriteManager);
-void PokeathlonBlockSmashMon_SetMonSprite(PokeathlonBlockSmashMon *mon, int sprite, u8 participant, u8 member, BOOL a4);
+void PokeathlonBlockSmashMon_SetMonSprite(PokeathlonBlockSmashMon *mon, int sprite, u8 participant, u8 member, BOOL mainScreen);
 void PokeathlonBlockSmashMon_SetMode(PokeathlonBlockSmashMon *mon, int mode);
 void PokeathlonBlockSmashMon_UpdateGauge(PokeathlonBlockSmashMon *mon);
 void PokeathlonBlockSmashMon_AddGauge(PokeathlonBlockSmashMon *mon, BOOL hitSpot, u8 broken);

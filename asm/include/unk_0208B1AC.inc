@@ -67,7 +67,7 @@
 .public PokemonSummary_ResetSwapCursorSprite
 .public PokemonSummary_InitSheenSparkles
 .public PokemonSummary_UpdateMarkingSprites
-.public sub_0208BDC8
+.public PokemonSummary_ShowConditionChangeSprites
 .public PokemonSummary_LoadShownMonIcon
 .public PokemonSummary_LoadPartyIcons
 .public PokemonSummary_SetBoxMonIconPos

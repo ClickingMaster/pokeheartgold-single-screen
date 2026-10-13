@@ -209,7 +209,7 @@ BOOL WiFiPlazaSurveyResults_Run(WiFiPlazaSurveyResults *results, WiFiPlazaSurvey
         results->state = 22;
         break;
     case 4:
-        ov45_0222AB0C(WiFiPlazaWork_GetMyPlayer(args->lobby), &record);
+        WiFiPlazaPlayer_GetSurvey(WiFiPlazaWork_GetMyPlayer(args->lobby), &record);
         WiFiPlazaSurveyResults_PrintQuestion(results, &results->current, messages, work, &record, heapID, MAKE_TEXT_COLOR(9, 10, 0), MAKE_TEXT_COLOR(13, 14, 0), WiFiPlazaWork_IsSpecialVisitor(args->lobby, WiFiPlazaWork_GetOwnSlot(args->lobby)));
         WiFiPlazaSurveyResults_StartBars(results, &results->plazaTally, work, 1);
         PlaySE(SEQ_SE_PL_PINPON2);
@@ -460,16 +460,16 @@ void WiFiPlazaSurvey_InitQuestion(WiFiPlazaSurveyQuestion *question, BOOL curren
         base++;
     } while (base < WIFI_PLAZA_SURVEY_NUM_ANSWERS);
     base = current == TRUE ? 0 : 4;
-    question->isSpecial = ov45_0222F544(base + 2);
-    question->questionNo = ov45_0222F544(base + 1);
-    question->surveyId = ov45_0222F544(base);
-    question->hasCustomText = ov45_0222F544(base + 3);
+    question->isSpecial = WiFiPlazaLobbyClient_GetSurveyValue(base + 2);
+    question->questionNo = WiFiPlazaLobbyClient_GetSurveyValue(base + 1);
+    question->surveyId = WiFiPlazaLobbyClient_GetSurveyValue(base);
+    question->hasCustomText = WiFiPlazaLobbyClient_GetSurveyValue(base + 3);
     if (question->hasCustomText == TRUE) {
-        text = ov45_0222F628(base);
+        text = WiFiPlazaLobbyClient_GetSurveyText(base);
         GF_ASSERT(text != NULL);
         CopyU16ArrayToString(question->question, text);
         for (i = 0; i < WIFI_PLAZA_SURVEY_NUM_ANSWERS; i++) {
-            text = ov45_0222F628(base + 1 + i);
+            text = WiFiPlazaLobbyClient_GetSurveyText(base + 1 + i);
             GF_ASSERT(text != NULL);
             CopyU16ArrayToString(question->answers[i], text);
         }
@@ -503,7 +503,7 @@ void WiFiPlazaSurvey_LoadLastWeekTotals(WiFiPlazaSurveyTally *tally) {
     int i;
     tally->total = 0;
     for (i = 0; i < WIFI_PLAZA_SURVEY_NUM_ANSWERS; i++) {
-        tally->counts[i] = ov45_0222F544(i + 8);
+        tally->counts[i] = WiFiPlazaLobbyClient_GetSurveyValue(i + 8);
         tally->total += tally->counts[i];
     }
 }
@@ -522,7 +522,7 @@ void WiFiPlazaSurvey_CountPlazaAnswers(WiFiPlazaSurveyTally *tally, void *lobby)
         if (player != NULL) {
             void *value = WiFiPlazaPlayer_GetRawLanguage(player);
             WiFiPlazaSurveyAnswerRecord record;
-            ov45_0222AB0C(player, &record);
+            WiFiPlazaPlayer_GetSurvey(player, &record);
             if (ov45_0222F6B0(0, value) == 1 && record.answer < WIFI_PLAZA_SURVEY_NUM_ANSWERS) {
                 tally->counts[record.answer]++;
                 tally->total++;

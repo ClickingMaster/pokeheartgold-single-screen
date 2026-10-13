@@ -32,10 +32,10 @@ typedef struct PokeathlonCourseTaskEnv {
 
 static BOOL Task_PokeathlonCourse(TaskManager *taskman);
 
-void CallTask_PokeathlonCourse(FieldSystem *fieldSystem, u8 a1, u8 a2, u8 a3, u16 *a4, u16 *a5, u16 *a6, u16 *a7) {
+void CallTask_PokeathlonCourse(FieldSystem *fieldSystem, u8 mode, u8 a2, u8 a3, u16 *a4, u16 *a5, u16 *a6, u16 *a7) {
     PokeathlonCourseTaskEnv *work = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(PokeathlonCourseTaskEnv));
     work->state = 0;
-    work->mode = a1;
+    work->mode = mode;
     work->unk0E = a2;
     work->unk0C = a3;
     work->unk10 = a4;

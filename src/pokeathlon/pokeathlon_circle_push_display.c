@@ -22,9 +22,9 @@
 
 // Sprite scene of the event and the course helpers (OVY_96, not yet tidied).
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonCirclePushMonView *view);
-void PokeathlonCourseSpritePool_CreateSprite(void *scene, int a1, int a2, int a3, int a4);
-void *PokeathlonCourseSpritePool_Take(void *scene, int a1, int a2);
-void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int a1, int a2);
+void PokeathlonCourseSpritePool_CreateSprite(void *scene, int priority, int whichScreen, int resId, int kind);
+void *PokeathlonCourseSpritePool_Take(void *scene, int resId, int kind);
+void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int shown, int draw);
 Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(void *sprite);
 SpriteResource **PokeathlonCourseSpritePool_GetResourceSlot(void *scene, int id, int type);
 

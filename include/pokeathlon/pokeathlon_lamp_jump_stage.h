@@ -68,7 +68,7 @@ void PokeathlonLampJump_SetMonParams(PokeathlonCourseData *course, PokeathlonLam
 BOOL PokeathlonLampJump_CollideMons(PokeathlonCourseData *course, PokeathlonLampJump *lampJump);
 PokeathlonLampJumpLamps *PokeathlonLampJump_NewLamps(enum HeapID heapId);
 void PokeathlonLampJump_FreeLamps(PokeathlonLampJumpLamps *lamps);
-void PokeathlonLampJump_CreateLampSprites(PokeathlonLampJumpLamps *lamps, void *scene, int a2);
+void PokeathlonLampJump_CreateLampSprites(PokeathlonLampJumpLamps *lamps, void *scene, int priority);
 void PokeathlonLampJump_PlaceLamps(PokeathlonLampJumpLamps *lamps);
 void PokeathlonLampJump_UpdateLamps(PokeathlonLampJumpLamps *lamps);
 void PokeathlonLampJump_PutOutLamp(PokeathlonLampJumpLamps *lamps, u8 index);

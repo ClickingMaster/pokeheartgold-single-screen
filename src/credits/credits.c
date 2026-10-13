@@ -203,7 +203,7 @@ static void StartTogglePageDisplay(PageDisplayWork *pageDisplay, BgConfig *bgCon
 static BOOL PageWindowRendering(PageDisplayWork *pageDisplay);
 static void TogglePageDisplayCB(SysTask *task, void *taskData);
 static void SetPageWindowPosition(int x1, int y1, int x2, int y2);
-static void LoadPage(PageWork *a0);
+static void LoadPage(PageWork *ptr);
 static void LoadCutsceneSpriteResources(CreditsAppWork *work);
 static void LoadCutsceneSpriteGfx(CutsceneWork *cutsceneWork, int spriteId);
 static void InitCutsceneSprites(CreditsAppWork *work);

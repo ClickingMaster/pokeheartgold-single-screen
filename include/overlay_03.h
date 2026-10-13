@@ -97,7 +97,7 @@ void BattleRegulation_BufferName(FieldSystem *fieldSystem, MessageFormat *messag
 void BattleRegulation_SetActiveRuleset(FieldSystem *fieldSystem, u16 a1);
 void BattleRegulation_PrintRulesWindow(FieldSystem *fieldSystem, Window *window, u32 ruleset);
 u16 BattleRegulation_CheckParty(FieldSystem *fieldSystem, MessageFormat *msgFmt, u32 a2);
-u32 ov03_02256B40(int);
+u32 BattleRegulation_GetLinkModeOffset(int);
 
 BOOL Task_Mart(TaskManager *taskManager);
 int MartData_CheckCannotBuy(MartData *data, u32 unkAmount);

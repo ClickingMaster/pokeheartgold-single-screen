@@ -20,10 +20,10 @@
 	.public WirelessTrade_RecvPartyChunk
 	.public WirelessTrade_RecvPartnerSelection
 	.public WirelessTrade_RecvSlot
-	.public sub_0208F724
-	.public sub_0208F728
-	.public sub_0208F72C
-	.public sub_0208F738
+	.public WirelessTrade_RecvUnused3
+	.public WirelessTrade_RecvUnused4
+	.public WirelessTrade_RecvSetState2
+	.public WirelessTrade_RecvUnused8
 	.public WirelessTrade_RecvRemoteState
 	.public WirelessTrade_RecvSpecialRibbons
 	.public WirelessTrade_RecvPalPad

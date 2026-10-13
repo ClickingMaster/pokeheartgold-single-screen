@@ -1274,7 +1274,7 @@ void CommState_WifiLogin(void) {
     gCommState->timer--;
     if (temp_r0 == 27) {
         if (gCommState->linkMode == 33) {
-            if (ov45_0222E804(gCommState->plazaProfileId) == 1) {
+            if (WiFiPlazaLobbyClient_Initialize(gCommState->plazaProfileId) == 1) {
                 gCommState->plazaLobbyStarted = 1;
                 CommState_SetState(CommState_PlazaWaitLobby, gCommState->timer);
             } else {
@@ -1370,7 +1370,7 @@ void CommState_StartPlazaMatch(s32 index) {
 
 void CommState_EndPlazaMatch(void) {
     if (WiFiPlazaLobbyClient_IsMatchHost() == 1) {
-        ov45_0222F154();
+        WiFiPlazaLobbyClient_StopMatch();
     }
     WiFiPlazaLobbyClient_EndMatch();
     CommState_SetState(CommState_PlazaEndMatch, 0);
@@ -1640,7 +1640,7 @@ void CommState_PlazaUpdateMatch(s32 *matchResult) {
 }
 
 void CommState_PlazaLogout(void) {
-    ov45_0222E91C();
+    WiFiPlazaLobbyClient_Shutdown();
     CommState_SetState(CommState_PlazaWaitLogout, 0);
 }
 
@@ -1660,7 +1660,7 @@ void CommState_PlazaLobbyFailed(void) {
 
 void CommState_PlazaMatchConnected(void) {
     CommState_PlazaUpdate();
-    if (ov45_0222F254() == 1) {
+    if (WiFiPlazaLobbyClient_WasMatchCancelled() == 1) {
         WiFiPlazaLobbyClient_EndMatch();
         CommState_SetState(CommState_PlazaEndMatch, 0);
     }
@@ -1668,7 +1668,7 @@ void CommState_PlazaMatchConnected(void) {
 
 void CommState_PlazaMatching(void) {
 
-    if (ov45_0222F254() == 1) {
+    if (WiFiPlazaLobbyClient_WasMatchCancelled() == 1) {
         WiFiPlazaLobbyClient_EndMatch();
         CommState_SetState(CommState_PlazaEndMatch, 0);
         return;

@@ -39,6 +39,6 @@ void CallApplicationAsTask(TaskManager *taskManager, const OverlayManagerTemplat
 FieldSystem *TaskManager_GetFieldSystem(TaskManager *taskManager);
 void *TaskManager_GetEnvironment(TaskManager *taskManager);
 u32 *TaskManager_GetStatePtr(TaskManager *taskManager);
-u32 sub_02050658(TaskManager *taskManager);
+u32 TaskManager_GetBgGoToId(TaskManager *taskManager);
 
 #endif // POKEHEARTGOLD_TASK_H

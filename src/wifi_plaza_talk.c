@@ -42,7 +42,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
     stateManager = WiFiPlazaRoom_GetPlayerStates(room);
     talk = WiFiPlazaPlayerState_GetWork(state);
     partnerStatus = WiFiPlazaWork_GetTalkState(lobby);
-    partnerAnswer = ov45_0222B040(lobby);
+    partnerAnswer = WiFiPlazaWork_GetTalkPartnerMessage(lobby);
     if (WiFiPlazaWork_IsTalkOver(lobby) && talk != NULL && talk->talking) {
         WiFiPlazaPlayerState_SetStep(state, 32);
         WiFiPlazaRoom_HideWaitingIcon(room);
@@ -87,7 +87,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         WiFiPlazaObj_SetDirection(partnerObj, direction);
         WiFiPlazaPlayerState_SetActive(stateManager, partnerIndex, 0);
         PlaySE(SEQ_SE_DP_BUTTON9);
-        ov45_0222A5E8(lobby, 9);
+        WiFiPlazaWork_SetActivity(lobby, 9);
         if (result == TRUE) {
             WiFiPlazaRoom_ShowPlayerCard(room, partnerIndex, 0);
             WiFiPlazaPlayerState_SetStep(state, 1);
@@ -221,8 +221,8 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         break;
     }
     case 13: { // compare Tap Toys
-        myToy = ov45_0222AAC8(me);
-        if (myToy == ov45_0222AAC8(partner)) {
+        myToy = WiFiPlazaPlayer_GetTapToy(me);
+        if (myToy == WiFiPlazaPlayer_GetTapToy(partner)) {
             talk->sameToy = TRUE;
             WiFiPlazaRoom_BufferPlayerName(room, talk->partner, 0);
             WiFiPlazaTalk_BufferInstrument(talk, lobby, room, 1, FALSE);
@@ -255,7 +255,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
             WiFiPlazaWork_AdvanceTalk(lobby, 3);
             WiFiPlazaPlayerState_SetStep(state, 16);
             partnerIndex2 = WiFiPlazaObj_GetParam(talk->partnerObj, 4);
-            WiFiPlaza_SendTapToyTradeNews(lobby, playerIndex, partnerIndex2, ov45_0222AAC8(partner));
+            WiFiPlaza_SendTapToyTradeNews(lobby, playerIndex, partnerIndex2, WiFiPlazaPlayer_GetTapToy(partner));
             done = TRUE;
             break;
         }
@@ -280,7 +280,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         WiFiPlazaTalk_BufferInstrument(talk, lobby, room, 1, FALSE);
         WiFiPlazaRoom_PrintMessage(room, WiFiPlazaTalk_GetMsg(room, talk->partner, 510));
         WiFiPlazaTalk_SetNextStep(talk, 128, 17, state, 37);
-        ov45_0222A72C(lobby, ov45_0222AAC8(partner));
+        WiFiPlazaWork_SetTapToy(lobby, WiFiPlazaPlayer_GetTapToy(partner));
         break;
     case 17:
         PlaySE(SEQ_SE_PL_EFF03_4);
@@ -487,7 +487,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         }
         WiFiPlazaWork_ResetTalk(lobby);
         WiFiPlazaRoom_CloseMessage(room);
-        ov45_0222A5E8(lobby, 1);
+        WiFiPlazaWork_SetActivity(lobby, 1);
         {
             void *objManager2 = WiFiPlazaRoom_GetObjManager(room);
             WiFiPlazaObj_SetHandler(objManager2, WiFiPlazaObj_GetOwnPlayer(objManager2), TRUE);
@@ -516,7 +516,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
     WiFiPlazaTalk *talk = WiFiPlazaPlayerState_GetWork(state);
     u32 partnerStatus = WiFiPlazaWork_GetTalkState(lobby);
-    u32 partnerAnswer = ov45_0222B040(lobby);
+    u32 partnerAnswer = WiFiPlazaWork_GetTalkPartnerMessage(lobby);
     WiFiPlazaPlayer *me;
     WiFiPlazaPlayer *partner;
 
@@ -548,7 +548,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         partnerIndex = WiFiPlazaWork_GetTalkPartner(lobby);
         result = WiFiPlazaTalk_Init(talk, lobby, partnerIndex);
         PlaySE(SEQ_SE_DP_BUTTON9);
-        ov45_0222A5E8(lobby, 9);
+        WiFiPlazaWork_SetActivity(lobby, 9);
         if (result == TRUE) {
             WiFiPlazaRoom_ShowPlayerCard(room, partnerIndex, 0);
             WiFiPlazaWork_SetTalkedWith(lobby, partnerIndex);
@@ -694,7 +694,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         WiFiPlazaRoom_PrintMessage(room, WiFiPlazaTalk_GetMsg(room, talk->partner, 514));
         WiFiPlazaTalk_SetNextStep(talk, 128, 8, state, 30);
         WiFiPlazaWork_AdvanceTalk(lobby, 2);
-        WiFiPlazaRoom_SetPlayerCardIcon(room, ov45_0222AAC8(WiFiPlazaWork_GetMyPlayer(lobby)));
+        WiFiPlazaRoom_SetPlayerCardIcon(room, WiFiPlazaPlayer_GetTapToy(WiFiPlazaWork_GetMyPlayer(lobby)));
         break;
     case 14: // "Oh! You've got a ... just like me."
         WiFiPlazaRoom_BufferPlayerName(room, talk->partner, 0);
@@ -864,7 +864,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         WiFiPlazaRoom_CloseMessage(room);
         WiFiPlazaTalk_Free(talk);
         WiFiPlazaPlayerState_FreeWork(state);
-        ov45_0222A5E8(lobby, 1);
+        WiFiPlazaWork_SetActivity(lobby, 1);
         {
             void *objManager = WiFiPlazaRoom_GetObjManager(room);
             WiFiPlazaObj_SetHandler(objManager, WiFiPlazaObj_GetOwnPlayer(objManager), TRUE);
@@ -1396,15 +1396,15 @@ void WiFiPlazaTalk_BufferInstrument(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, W
     u32 instrument;
 
     if (mine == FALSE) {
-        instrument = ov45_0222AAC8(partner);
+        instrument = WiFiPlazaPlayer_GetTapToy(partner);
     } else {
-        instrument = ov45_0222AAC8(me);
+        instrument = WiFiPlazaPlayer_GetTapToy(me);
     }
     WiFiPlazaRoom_BufferInstrumentName(room, instrument, slot);
 }
 
 void WiFiPlazaTalk_UpdatePartnerWait(WiFiPlazaTalk *talk, WiFiPlazaRoomWork *room) {
-    if (ov45_0222B094(WiFiPlazaRoom_GetLobby(room)) == 450) { // "Umm... Hold on a second..."
+    if (WiFiPlazaWork_GetTalkTimeoutCounter(WiFiPlazaRoom_GetLobby(room)) == 450) { // "Umm... Hold on a second..."
         WiFiPlazaRoom_HideWaitingIcon(room);
         WiFiPlazaRoom_BufferPlayerName(room, talk->partner, 0);
         WiFiPlazaRoom_PrintMessage(room, WiFiPlazaTalk_GetMsg(room, talk->partner, 0x2AC));

@@ -91,21 +91,21 @@ void SafariZone_SetAreaSet(SafariZone *safari_zone, s32 area_set_no, SafariZoneA
     MI_CpuCopy8(area_set_src, &safari_zone->area_sets[area_set_no], sizeof(SafariZoneAreaSet));
 }
 
-void SafariZone_SetLevel(SafariZone *safari_zone, u8 a1) {
-    safari_zone->level = a1;
+void SafariZone_SetLevel(SafariZone *safari_zone, u8 level) {
+    safari_zone->level = level;
 }
 
 u8 SafariZone_GetLevel(SafariZone *safari_zone) {
     return safari_zone->level;
 }
 
-void SafariZone_AddToAllAreaLevels(SafariZone *safariZone, s32 a1) {
+void SafariZone_AddToAllAreaLevels(SafariZone *safariZone, s32 amount) {
     u8 sp8[6];
     u32 area_no;
     int j;
     int i;
 
-    if (a1 <= 0) {
+    if (amount <= 0) {
         return;
     }
 
@@ -113,12 +113,12 @@ void SafariZone_AddToAllAreaLevels(SafariZone *safariZone, s32 a1) {
     MI_CpuClear8(sp8, NELEMS(sp8));
     for (i = 0; i < SAFARI_ZONE_MAX_AREAS_PER_SET; i++) {
         area_no = safariZone->area_sets[0].areas[i].area_no;
-        if (sub_0202FA3C(area_no, sp8, j)) {
+        if (SafariZone_IsAreaInList(area_no, sp8, j)) {
             continue;
         }
 
-        if (safariZone->area_sets[0].areaLevels[area_no] + a1 < 0xFF) {
-            safariZone->area_sets[0].areaLevels[area_no] += a1;
+        if (safariZone->area_sets[0].areaLevels[area_no] + amount < 0xFF) {
+            safariZone->area_sets[0].areaLevels[area_no] += amount;
         } else {
             safariZone->area_sets[0].areaLevels[area_no] = 0xFF;
         }
@@ -131,16 +131,16 @@ u8 SafariZone_GetObjectUnlockLevel(SafariZone *safari_zone) {
     return safari_zone->objectUnlockLevel;
 }
 
-u8 SafariZone_IncObjectUnlockLevel(SafariZone *safari_zone, s32 a1) {
-    SafariZone_SetObjectUnlockLevel(safari_zone, (u8)(safari_zone->objectUnlockLevel + a1));
+u8 SafariZone_IncObjectUnlockLevel(SafariZone *safari_zone, s32 amount) {
+    SafariZone_SetObjectUnlockLevel(safari_zone, (u8)(safari_zone->objectUnlockLevel + amount));
     return safari_zone->objectUnlockLevel;
 }
 
-void SafariZone_SetObjectUnlockLevel(SafariZone *safari_zone, u8 a1) {
-    if (a1 > 4) {
+void SafariZone_SetObjectUnlockLevel(SafariZone *safari_zone, u8 level) {
+    if (level > 4) {
         safari_zone->objectUnlockLevel = 4;
     } else {
-        safari_zone->objectUnlockLevel = a1;
+        safari_zone->objectUnlockLevel = level;
     }
 }
 
@@ -148,11 +148,11 @@ void SafariZone_SetUnlockTime(SafariZone *safari_zone, IGT *igt) {
     safari_zone->unlockTime = (igt->hours * 60) + igt->minutes;
 }
 
-u32 SafariZone_CheckUnlockWaitPassed(SafariZone *safari_zone, IGT *igt, s32 a2) {
+u32 SafariZone_CheckUnlockWaitPassed(SafariZone *safari_zone, IGT *igt, s32 hours) {
     u16 minutes = (igt->hours * 60) + igt->minutes;
     s32 delta = minutes - safari_zone->unlockTime;
 
-    if (delta >= a2 * 60) {
+    if (delta >= hours * 60) {
         return 1;
     }
 
@@ -289,9 +289,9 @@ void SafariZone_ClearLeader(SAFARIZONE_LINKLEADER *link_leader) {
     StringFillEOS(link_leader->name, PLAYER_NAME_LENGTH + 1);
 }
 
-BOOL sub_0202FA3C(u8 a0, u8 *a1, u8 a2) {
-    for (s32 i = 0; i < a2; i++) {
-        if (a0 == a1[i]) {
+BOOL SafariZone_IsAreaInList(u8 value, u8 *array, u8 count) {
+    for (s32 i = 0; i < count; i++) {
+        if (value == array[i]) {
             return TRUE;
         }
     }

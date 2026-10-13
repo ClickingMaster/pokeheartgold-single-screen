@@ -19,9 +19,9 @@ typedef struct WiFiPlazaMoverMarkerPos {
     int x, y, z;
 } WiFiPlazaMoverMarkerPos;
 
-extern int ov45_0222AE34(void *lobby, int slot);
+extern int WiFiPlazaWork_GetGroupMarkerCount(void *lobby, int slot);
 extern void WiFiPlazaModels_GetMoverFrontPos(void *models, int index, int side, WiFiPlazaMoverMarkerPos *position);
-extern void ov45_0222AE24(void *lobby, int slot, int marker);
+extern void WiFiPlazaWork_SetGroupMarkerPassed(void *lobby, int slot, int marker);
 
 void WiFiPlazaEvent_UpdateMoverMarkers(void *parent, int index);
 
@@ -41,13 +41,13 @@ void WiFiPlazaEvent_UpdateMoverMarkers(void *parent, int index) {
     input.base = (s32)((u32)input.index + (u32)twice);
     WiFiPlazaMoverMarkerPos v;
     for (i = 0; i < 3; i++) {
-        j = ov45_0222AE34(w->lobby, (s32)((u32)i + (u32)input.base));
+        j = WiFiPlazaWork_GetGroupMarkerCount(w->lobby, (s32)((u32)i + (u32)input.base));
         WiFiPlazaModels_GetMoverFrontPos(w->models, input.index, i, &v);
         if (j < 3) {
             u8 *p = (u8 *)w + j * 4;
             do {
                 if ((*(s16 *)(p + 0xaa) + 16) * 4096 > v.x) {
-                    ov45_0222AE24(w->lobby, (s32)((u32)i + (u32)input.base), j);
+                    WiFiPlazaWork_SetGroupMarkerPassed(w->lobby, (s32)((u32)i + (u32)input.base), j);
                 }
                 j++;
                 p += 4;

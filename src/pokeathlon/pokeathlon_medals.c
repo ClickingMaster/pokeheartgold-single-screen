@@ -39,7 +39,7 @@ extern const DpadMenuBox ov99_021EA250[];
 extern const u8 ov99_021EA348[7];
 extern const char _021EA5D8[]; // "seq error!"
 
-BOOL ov99_021E714C(void) {
+BOOL PokeathlonMedals_GetSpeciesOrderFileIndex(void) {
     return TRUE;
 }
 
@@ -131,7 +131,7 @@ void PokeathlonMedals_ShowSpeciesMedals(PokeathlonMedals *work, u16 species) {
 
 u16 *PokeathlonMedals_LoadSpeciesOrder(PokeathlonMedals *work, u32 *count) {
     u32 size;
-    u16 *order = GfGfxLoader_LoadFromOpenNarc_GetSizeOut(work->zukanNarc, ov99_021E9F4C[ov99_021E714C()], FALSE, work->heapId, FALSE, &size);
+    u16 *order = GfGfxLoader_LoadFromOpenNarc_GetSizeOut(work->zukanNarc, ov99_021E9F4C[PokeathlonMedals_GetSpeciesOrderFileIndex()], FALSE, work->heapId, FALSE, &size);
 
     *count = size >> 1;
     return order;

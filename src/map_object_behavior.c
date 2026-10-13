@@ -567,7 +567,7 @@ u32 MapObject_GetTrainerNum(LocalMapObject *object) {
     return ScriptNumToTrainerNum((u16)MapObject_GetScriptID(object));
 }
 
-u32 sub_02064518(LocalMapObject *object) {
+u32 MapObjectBehavior_GetTrainerNum(LocalMapObject *object) {
     return MapObject_GetTrainerNum(object);
 }
 

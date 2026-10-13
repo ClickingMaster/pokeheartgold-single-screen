@@ -198,12 +198,12 @@
 	.public PokemonSummary_PrintMoveInfo
 	.public PokemonSummary_ClearMoveInfo
 	.public PokemonSummary_PrintMoveToLearn
-	.public sub_0208DB58
+	.public PokemonSummary_ScheduleMainBg1Transfer
 	.public PokemonSummary_PrintSwappedMoves
 	.public PokemonSummary_PrintCantForgetHMMessage
 	.public PokemonSummary_ShowForgetLabel
 	.public PokemonSummary_ShowSwitchLabel
-	.public sub_0208DDA0
+	.public PokemonSummary_PrintConditionChangeMessage
 	.text
 	.public PokemonSummary_RemovePageWindows
 	.public PokemonSummary_RemoveWindows
@@ -220,12 +220,12 @@
 	.public PokemonSummary_PrintRibbonInfo
 	.public PokemonSummary_ClearMoveInfo
 	.public PokemonSummary_PrintMoveToLearn
-	.public sub_0208DB58
+	.public PokemonSummary_ScheduleMainBg1Transfer
 	.public PokemonSummary_PrintSwappedMoves
 	.public PokemonSummary_PrintCantForgetHMMessage
 	.public PokemonSummary_ShowForgetLabel
 	.public PokemonSummary_ShowSwitchLabel
-	.public sub_0208DDA0
+	.public PokemonSummary_PrintConditionChangeMessage
 	.rodata
 
 	.balign 4, 0

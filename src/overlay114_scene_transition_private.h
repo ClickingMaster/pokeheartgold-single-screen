@@ -76,5 +76,5 @@ void HBlankSystem_Start(void *);
 void BeginNormalPaletteFade(s32, s32, s32, u16, s32, s32, s32);
 BOOL IsPaletteFadeFinished(void);
 void SetMasterBrightnessByColor(s32, u16);
-void ov114_0225F020(void *, Ov114Task *);
-void ov114_0225F280(void *, Ov114Task *);
+void EncounterEffect_FrontierOrLinkSingle(void *, Ov114Task *);
+void EncounterEffect_Double(void *, Ov114Task *);

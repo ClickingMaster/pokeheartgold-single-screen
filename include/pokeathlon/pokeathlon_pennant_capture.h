@@ -343,7 +343,7 @@ void PokeathlonPennantCapture_CalcObstacleBounds(int radius, const PokeathlonPen
 int PokeathlonPennantCapture_CollideWithObstacle(VecFx32 *from, VecFx32 *to, int radius, PokeathlonPennantCaptureBounds *bounds, VecFx32 *out);
 int PokeathlonPennantCapture_CollideWithObstacles(PokeathlonPennantCapture *work, int excluded, int radius, VecFx32 *position, VecFx32 *end, VecFx32 *out);
 fx32 PokeathlonPennantCapture_CalcCircleEntry(VecFx32 *a, VecFx32 *b, VecFx32 *point, fx32 radius);
-float ov96_022073F0(PokeathlonPennantCapturePlayer *player, int member);
+float PokeathlonPennantCapture_GetMaxSpeed(PokeathlonPennantCapturePlayer *player, int member);
 void PokeathlonPennantCapture_AddPoint2D(const Point2D *a, const Point2D *b, Point2D *out);
 int PokeathlonPennantCapture_CollidePlayers(PokeathlonCourseData *course, PokeathlonPennantCapturePlayer *players, VecFx32 *out);
 void PokeathlonPennantCapture_UpdateFieldDrawPriorities(PokeathlonPennantCapture *work);
@@ -361,7 +361,7 @@ BOOL PokeathlonPennantCapture_CirclesOverlap(const VecFx32 *a, const VecFx32 *b,
 int PokeathlonPennantCapture_GetDirection(const VecFx32 *vector);
 BOOL PokeathlonPennantCapture_TryKnockDown(PokeathlonCourseData *course, PokeathlonPennantCapturePlayer *a, PokeathlonPennantCapturePlayer *b);
 BOOL PokeathlonPennantCapture_CanDeposit(PokeathlonPennantCapturePlayer *player);
-u8 ov96_02207BD4(u8 pennants);
+u8 PokeathlonPennantCapture_GetDepositPoints(u8 pennants);
 int PokeathlonPennantCapture_GetDrawPriority(int y);
 void PokeathlonPennantCapture_AnimateBg(PokeathlonPennantCapture *work);
 void PokeathlonPennantCapture_PlaySEIfOnScreen(int x, int y, int seq, BOOL self);

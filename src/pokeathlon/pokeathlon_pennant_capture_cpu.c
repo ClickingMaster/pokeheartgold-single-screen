@@ -15,7 +15,7 @@ u32 LCRandom(void);
 // Course sprite and object helpers (OVY_96, not yet tidied).
 void PokeathlonCourseObject_GetCollisionCenter(void *object, int x, int y, int *outX, int *outY);
 void PokeathlonCourseObject_GroundToCenter(void *object, int x, int y, int *outX, int *outY);
-void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int a1, int show);
+void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int shown, int show);
 void **PokeathlonCourseSpritePool_GetResourceSlot(void *pool, int id, int kind);
 // the CPU's cell checks, next in link order (overlay96_course_scene_helpers.c)
 BOOL PokeathlonPennantCaptureCpu_IsNearCellTarget(PokeathlonPennantCaptureCpuCell *cell, s32 x, s32 y);

@@ -11,7 +11,7 @@ void GF_SndHandleSetTrackPitch(int handleNo, u32 tracks, int pitch);
 void sub_02005B58(u8 value);
 void Sound_SetChatotRecordingDisabled(u8 value);
 BOOL GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value);
-void sub_02005BA8(u16 seqNo);
+void Sound_ApplyFootstepVariation(u16 seqNo);
 int Sound_IsSelectSEMuted(void);
 void SoundSys_SetGBSoundsState(u8 enabled);
 u16 GBSounds_GetGBSeqNoByDSSeqNo(u16 seqNo);
@@ -30,7 +30,7 @@ BOOL GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value) {
     GF_ASSERT(variable <= 15);
     return NNS_SndPlayerReadVariable(GF_GetSoundHandle(GF_GetSndHandleByPlayerNo(GF_GetPlayerNoBySeq(seqNo))), variable, value);
 }
-void sub_02005BA8(u16 seqNo) {
+void Sound_ApplyFootstepVariation(u16 seqNo) {
     u8 *state = GF_SdatGetAttrPtr(55);
     GF_SetVolumeBySeqNo(seqNo, _020F5710[state[0]][1]);
     GF_SndHandleSetTrackPitch(4, 65535, _020F5710[state[0]][0]);

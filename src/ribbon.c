@@ -126,10 +126,10 @@ u32 GetRibbonAttr(u8 ribbon, RibbonAttr attr) {
     return 0;
 }
 
-int GetRibbonDescGmm(const u8 *a0, u8 ribbon) {
+int GetRibbonDescGmm(const u8 *ribbons, u8 ribbon) {
     int ret = sRibbonInfo[ribbon].descGmm;
     if (ret & RIBBON_DESC_SPECIAL_MASK) {
-        ret = msg_0424_00146 + a0[((ret & RIBBON_DESC_ID_MASK) >> RIBBON_DESC_ID_SHIFT)];
+        ret = msg_0424_00146 + ribbons[((ret & RIBBON_DESC_ID_MASK) >> RIBBON_DESC_ID_SHIFT)];
     }
     return ret;
 }

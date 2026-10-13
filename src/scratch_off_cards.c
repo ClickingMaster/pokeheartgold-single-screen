@@ -201,12 +201,12 @@ void ScratchOffCards_FreeBgConfig(BgConfig *bgConfig);
 void ScratchOffCards_VBlank(ScratchOffCardsWork *work);
 void ScratchOffCards_SetVramBanks(void);
 void ScratchOffCards_InitBgs(BgConfig *bgConfig);
-void ov87_021E6DBC(ScratchOffCardsWork *work, GFBgLayer bgId);
-void ov87_021E6E00(ScratchOffCardsWork *work, GFBgLayer bgId);
+void ScratchOffCards_LoadSubBg3Gfx(ScratchOffCardsWork *work, GFBgLayer bgId);
+void ScratchOffCards_LoadSubBg2Gfx(ScratchOffCardsWork *work, GFBgLayer bgId);
 void ScratchOffCards_LoadSubBgPalette(void);
 void ScratchOffCards_LoadMainBgPalette(void);
-void ov87_021E6EB0(ScratchOffCardsWork *work, GFBgLayer bgId);
-void ov87_021E6EF4(ScratchOffCardsWork *work, GFBgLayer bgId);
+void ScratchOffCards_LoadMainBg1Gfx(ScratchOffCardsWork *work, GFBgLayer bgId);
+void ScratchOffCards_LoadMainBg0Gfx(ScratchOffCardsWork *work, GFBgLayer bgId);
 int ScratchOffCards_PrintMessage(ScratchOffCardsWork *work, Window *window, int msgNo, u32 x, u32 y, u32 textSpeed, u8 fg, u8 shadow, u8 bg, u8 fontId);
 int ScratchOffCards_PrintMessageCentered(ScratchOffCardsWork *work, Window *window, int msgNo, u32 x, u32 y, u32 textSpeed, u8 fg, u8 shadow, u8 bg, u8 fontId);
 int ScratchOffCards_PrintStopPrompt(ScratchOffCardsWork *work);
@@ -237,8 +237,8 @@ void ScratchOffCards_AnimateMatch(ScratchOffCardsWork *work);
 int ScratchOffCards_CheckMatch(ScratchOffCardsWork *work);
 u32 ScratchOffCards_StartWildcardMosaic(ScratchOffCardsWork *work);
 int ScratchOffCards_UpdateWildcardMosaic(ScratchOffCardsWork *work, int fadeOut);
-void ov87_021E7990(ScratchOffCardsWork *work);
-void ov87_021E7998(ScratchOffCardsWork *work);
+void ScratchOffCards_AdvanceCard2(ScratchOffCardsWork *work);
+void ScratchOffCards_AdvanceCard(ScratchOffCardsWork *work);
 void ScratchOffCards_HideStartCardMessage(ScratchOffCardsWork *work);
 void ScratchOffCards_LoadScratchLayer(ScratchOffCardsWork *work);
 void ScratchOffCards_AllocScratchPixels(ScratchOffCardsWork *work);
@@ -759,7 +759,7 @@ int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
                 ScratchOffCardsSprite_SetVisible(work->resultSprites[i], FALSE);
             }
             ScratchOffCardsSprite_SetVisible(work->winSprite, FALSE);
-            ov87_021E7998(work);
+            ScratchOffCards_AdvanceCard(work);
             ScratchOffCards_HideStartCardMessage(work);
             return TRUE;
         }
@@ -768,7 +768,7 @@ int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
     case 7:
         if (work->delay == 0) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
-            ov87_021E7998(work);
+            ScratchOffCards_AdvanceCard(work);
             ScratchOffCards_HideStartCardMessage(work);
             work->delay = 30;
             work->subState = 8;
@@ -788,7 +788,7 @@ int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
             ScratchOffCardsSprite_SetAnimActive(work->buttonSprite, FALSE);
             EraseFrameAndWindow1(&work->windows[0], FALSE);
             ClearWindowTilemapAndCopyToVram(&work->windows[0]);
-            ov87_021E7998(work);
+            ScratchOffCards_AdvanceCard(work);
             ScratchOffCards_DestroyYesNoPrompt(work);
             return TRUE;
         }
@@ -806,7 +806,7 @@ int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
             ScratchOffCardsSprite_SetAnimActive(work->buttonSprite, FALSE);
             EraseFrameAndWindow1(&work->windows[0], FALSE);
             ClearWindowTilemapAndCopyToVram(&work->windows[0]);
-            ov87_021E7990(work);
+            ScratchOffCards_AdvanceCard2(work);
             ScratchOffCards_DestroyYesNoPrompt(work);
             return TRUE;
         }
@@ -1077,12 +1077,12 @@ void ScratchOffCards_InitBgGraphics(ScratchOffCardsWork *work) {
     work->paletteData = PaletteData_Init(HEAP_ID_122);
     PaletteData_AllocBuffers(work->paletteData, PLTTBUF_MAIN_OBJ, 0x200, HEAP_ID_122);
     PaletteData_AllocBuffers(work->paletteData, PLTTBUF_MAIN_BG, 0x200, HEAP_ID_122);
-    ov87_021E6DBC(work, GF_BG_LYR_SUB_3);
+    ScratchOffCards_LoadSubBg3Gfx(work, GF_BG_LYR_SUB_3);
     ScratchOffCards_LoadSubBgPalette();
-    ov87_021E6E00(work, GF_BG_LYR_SUB_2);
-    ov87_021E6EB0(work, GF_BG_LYR_MAIN_1);
+    ScratchOffCards_LoadSubBg2Gfx(work, GF_BG_LYR_SUB_2);
+    ScratchOffCards_LoadMainBg1Gfx(work, GF_BG_LYR_MAIN_1);
     ScratchOffCards_LoadMainBgPalette();
-    ov87_021E6EF4(work, GF_BG_LYR_MAIN_0);
+    ScratchOffCards_LoadMainBg0Gfx(work, GF_BG_LYR_MAIN_0);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
 }
@@ -1160,12 +1160,12 @@ void ScratchOffCards_InitBgs(BgConfig *bgConfig) {
 }
 #pragma force_active reset
 
-void ov87_021E6DBC(ScratchOffCardsWork *work, GFBgLayer bgId) {
+void ScratchOffCards_LoadSubBg3Gfx(ScratchOffCardsWork *work, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 0x23, work->bgConfig, bgId, 0, 0, FALSE, HEAP_ID_122);
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 0x25, work->bgConfig, bgId, 0, 0, FALSE, HEAP_ID_122);
 }
 
-void ov87_021E6E00(ScratchOffCardsWork *work, GFBgLayer bgId) {
+void ScratchOffCards_LoadSubBg2Gfx(ScratchOffCardsWork *work, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 0x26, work->bgConfig, bgId, 0, 0, FALSE, HEAP_ID_122);
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 0x28, work->bgConfig, bgId, 0, 0, FALSE, HEAP_ID_122);
 }
@@ -1186,12 +1186,12 @@ void ScratchOffCards_LoadMainBgPalette(void) {
     Heap_Free(file);
 }
 
-void ov87_021E6EB0(ScratchOffCardsWork *work, GFBgLayer bgId) {
+void ScratchOffCards_LoadMainBg1Gfx(ScratchOffCardsWork *work, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 4, work->bgConfig, bgId, 0, 0, FALSE, HEAP_ID_122);
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 6, work->bgConfig, bgId, 0, 0, FALSE, HEAP_ID_122);
 }
 
-void ov87_021E6EF4(ScratchOffCardsWork *work, GFBgLayer bgId) {
+void ScratchOffCards_LoadMainBg0Gfx(ScratchOffCardsWork *work, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 7, work->bgConfig, bgId, 0, 0, FALSE, HEAP_ID_122);
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 9, work->bgConfig, bgId, 0, 0, FALSE, HEAP_ID_122);
 }
@@ -1663,11 +1663,11 @@ int ScratchOffCards_UpdateWildcardMosaic(ScratchOffCardsWork *work, int fadeOut)
     return TRUE;
 }
 
-void ov87_021E7990(ScratchOffCardsWork *work) {
+void ScratchOffCards_AdvanceCard2(ScratchOffCardsWork *work) {
     work->cardNo++;
 }
 
-void ov87_021E7998(ScratchOffCardsWork *work) {
+void ScratchOffCards_AdvanceCard(ScratchOffCardsWork *work) {
     work->cardNo++;
 }
 

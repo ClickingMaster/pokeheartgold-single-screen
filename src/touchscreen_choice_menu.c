@@ -117,7 +117,7 @@ extern TouchscreenChoiceMenuStateFunc sTouchscreenChoiceMenuStateFuncs[];
 
 SysTask *TouchscreenChoiceMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, u16 *result);
 void TouchscreenChoiceMenu_Destroy(BgConfig *bgConfig, SysTask *task);
-BOOL ov27_0225C418(void *unused);
+BOOL TouchscreenChoiceMenu_IsExitDone(void *unused);
 void TouchscreenChoiceMenu_SetCallback(SysTask *task, void (*callback)(void *arg, int selection), void *arg);
 void TouchscreenChoiceMenu_Task(SysTask *task, void *taskData);
 void TouchscreenChoiceMenu_LoadBgGraphics(TouchscreenChoiceMenuData *data);
@@ -214,7 +214,7 @@ void TouchscreenChoiceMenu_Destroy(BgConfig *bgConfig, SysTask *task) {
     Heap_Destroy(HEAP_ID_8);
 }
 
-BOOL ov27_0225C418(void *unused) {
+BOOL TouchscreenChoiceMenu_IsExitDone(void *unused) {
     return TRUE;
 }
 

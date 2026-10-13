@@ -421,12 +421,12 @@ int PokemonSummary_UpdateCondition(PokemonSummary *summary) {
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_14_OFFSET, HEAP_ID_19);
     LoadUserFrameGfx2(summary->bgConfig, GF_BG_LYR_MAIN_1, 0x3E2, 13, Options_GetFrame(summary->args->options), HEAP_ID_19);
     if (summary->unk7BE == 0) {
-        sub_0208DDA0(summary, 0xFE);
+        PokemonSummary_PrintConditionChangeMessage(summary, 0xFE);
         return 18;
     }
     PokemonSummary_InitConditionChart(summary);
     PokemonSummary_InitSheenSparkles(summary);
-    sub_0208BDC8(summary);
+    PokemonSummary_ShowConditionChangeSprites(summary);
     return 17;
 no_input:
     return 16;
@@ -440,7 +440,7 @@ int PokemonSummary_ShowConditionChanges(PokemonSummary *summary) {
         do {
             u32 mask = 1 << i;
             if (changes & mask) {
-                sub_0208DDA0(summary, i);
+                PokemonSummary_PrintConditionChangeMessage(summary, i);
                 summary->unk7BE ^= mask;
                 if (summary->unk7BE == 0) {
                     return 18;

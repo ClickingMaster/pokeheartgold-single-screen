@@ -6,7 +6,7 @@ FS_EXTERN_OVERLAY(OVY_38);
 
 extern BOOL HandleLoadOverlay(u32, u32);
 extern void UnloadOverlayByID(u32);
-extern void ov13_0221BA00(void *);
+extern void RunWifiSetupApp(void *);
 extern void OS_ResetSystem(u32);
 extern void Heap_Create(u32, u32, u32);
 extern void Heap_Destroy(u32);

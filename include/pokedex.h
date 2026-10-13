@@ -64,7 +64,7 @@ u32 Pokedex_GetSeenSpindaPersonality(Pokedex *pokedex, u32 arg);
 int Pokedex_SpeciesGetLastSeenGender(Pokedex *pokedex, u16 species, u32 idx);
 int Pokedex_GetSeenFormByIdx_Unown(Pokedex *pokedex, int idx, u32 caught);
 u32 Pokedex_GetSeenFormNum_Unown(Pokedex *pokedex, BOOL caught);
-int Pokedex_GetSeenFormByIdx_Shellos(Pokedex *pokedex, int a1);
+int Pokedex_GetSeenFormByIdx_Shellos(Pokedex *pokedex, int idx);
 void Pokedex_SetMonSeenFlag(Pokedex *pokedex, Pokemon *mon);
 void Pokedex_SetMonCaughtFlag(Pokedex *pokedex, Pokemon *mon);
 void Pokedex_SetNatDexFlag(Pokedex *pokedex);

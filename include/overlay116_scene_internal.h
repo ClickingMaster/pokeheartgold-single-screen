@@ -80,10 +80,10 @@ extern void BeginNormalPaletteFade(int, int, int, u16, int, int, int);
 extern int IsPaletteFadeFinished(void);
 extern void SetMasterBrightnessByColor(int, u16);
 
-void ov116_0225F020(Ov116FieldSystem *, const Ov116CameraKey *);
-void ov116_0225F054(void *, Ov116Task *);
-void ov116_0225F1BC(void *, Ov116Task *, const Ov116Sequence *);
-void ov116_0225F364(void *, Ov116Task *);
-void ov116_0225F374(void *, Ov116Task *);
+void LegendaryEffect_ApplyCameraKey(Ov116FieldSystem *, const Ov116CameraKey *);
+void EncounterEffect_Legendary(void *, Ov116Task *);
+void LegendaryEffect_RunBirdSequence(void *, Ov116Task *, const Ov116Sequence *);
+void EncounterEffect_HoOh(void *, Ov116Task *);
+void EncounterEffect_Lugia(void *, Ov116Task *);
 
 #endif

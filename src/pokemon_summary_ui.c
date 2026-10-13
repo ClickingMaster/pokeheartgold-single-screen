@@ -409,7 +409,7 @@ BOOL PokemonSummary_SlideOutMoveInfo(PokemonSummary *summary) {
         thunk_Sprite_SetDrawFlag(summary->sprites[18], FALSE);
         thunk_Sprite_SetDrawFlag(summary->sprites[19], FALSE);
         Sprite_SetDrawFlag(summary->sprites[9], FALSE);
-        sub_0208DB58(summary);
+        PokemonSummary_ScheduleMainBg1Transfer(summary);
         PokemonSummary_ClearMoveInfo(summary);
         summary->unk7BE = 1;
         break;

@@ -14,7 +14,7 @@ typedef struct NumberEntryArgs {
     int result;
 } NumberEntryArgs;
 
-SysTask *NumberEntry_Init(BgConfig *bgConfig, void *a1, void *a2, NumberEntryArgs *args);
+SysTask *NumberEntry_Init(BgConfig *bgConfig, void *lastTouchMenuInput, void *fieldSystem, NumberEntryArgs *args);
 void NumberEntry_Exit(BgConfig *bgConfig, SysTask *task);
 BOOL NumberEntry_IsExitDone(void *a0);
 

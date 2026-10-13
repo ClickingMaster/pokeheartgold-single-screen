@@ -32,7 +32,7 @@ extern const int gNumSaveChunkHeaders;
 extern const struct ExtraSaveChunkHeader gExtraSaveChunkHeaders[];
 extern const int gNumExtraSaveChunkHeaders;
 
-UnkStruct_0202E474 *sub_020270C4(SaveData *saveData);
+UnkStruct_0202E474 *Save_Block23_Get(SaveData *saveData);
 PCStorage *SaveArray_PCStorage_Get(SaveData *saveData);
 MysteryGiftSave *Save_MysteryGift_Get(SaveData *saveData);
 struct MigratedPokemon *Save_MigratedPokemon_Get(SaveData *saveData);
@@ -47,6 +47,6 @@ u32 PCStorage_GetNumBoxes(void);
 u32 Save_GetPCBoxModifiedFlags(SaveData *saveData);
 void Save_ResetPCBoxModifiedFlags(SaveData *saveData);
 void Save_SetAllPCBoxesModified(SaveData *saveData);
-void sub_020271A0(SaveData *saveData);
+void Save_PCStorage_ClearBoxPadding(SaveData *saveData);
 
 #endif // POKEHEARTGOLD_SAVE_ARRAYS_H

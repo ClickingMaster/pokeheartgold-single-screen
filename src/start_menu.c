@@ -118,7 +118,7 @@ static void FieldSystem_ResetGearRingManagerIfNotSelectingSaveOrPokegear(FieldSy
 static BOOL Task_StartMenu_HandleInput(TaskManager *taskManager);
 static BOOL StartMenu_HandleKeyInput(TaskManager *taskManager, FieldSystem *fieldSystem, StartMenuTaskData *startMenu);
 static BOOL StartMenu_HandleTouchInput(TaskManager *taskManager, FieldSystem *fieldSystem, StartMenuTaskData *startMenu);
-static void sub_0203C69C(StartMenuTaskData *startMenu, FieldSystem *fieldSystem);
+static void StartMenu_ResumeUnionRoomSearch(StartMenuTaskData *startMenu, FieldSystem *fieldSystem);
 static void StartMenu_CreateCursor(StartMenuTaskData *startMenu, u8 *insertionOrder, u32 numButtons, u8 gender);
 static void StartMenu_DestroyCursor(StartMenuTaskData *startMenu);
 static void Task_StartMenu_WaitFade(TaskManager *taskManager);
@@ -138,7 +138,7 @@ static BOOL Task_StartMenu_HandleReturn_TrainerCard(TaskManager *taskManager);
 static BOOL Task_StartMenu_HandleSelection_Save(TaskManager *taskManager);
 static void Task_StartMenu_WaitSaveAppOpen(TaskManager *taskManager);
 static void Task_StartMenu_WaitSaveAppClose(TaskManager *taskManager);
-static BOOL sub_0203D2CC(TaskManager *taskManager);
+static BOOL StartMenu_SelectUnionChatLog(TaskManager *taskManager);
 static void sub_0203D2EC(TaskManager *taskManager);
 static void sub_0203D304(TaskManager *taskManager);
 static BOOL Task_StartMenu_HandleSelection_Options(TaskManager *taskManager);
@@ -152,8 +152,8 @@ static BOOL Task_StartMenu_HandleSelection_Pokegear(TaskManager *taskManager);
 static BOOL Task_StartMenu_Pokegear(TaskManager *taskManager);
 static BOOL Task_StartMenu_HandleReturn_Pokegear(TaskManager *taskManager);
 static BOOL Task_StartMenu_HandleReturn_Summary(TaskManager *taskManager);
-static void sub_0203D664(TaskManager *taskManager, int itemId);
-static BOOL sub_0203D6C8(TaskManager *taskManager);
+static void StartMenu_HandleBagAction1(TaskManager *taskManager, int itemId);
+static BOOL StartMenu_ReopenBagAtBerries(TaskManager *taskManager);
 static void StartMenu_ReturnToPartyMenuAfterMail(FieldSystem *fieldSystem, StartMenuTaskData *startMenu, u8 context);
 static void Task_StartMenu_Evolution(TaskManager *taskManager);
 static void Task_StartMenu_WaitEvolution(TaskManager *taskManager);
@@ -186,7 +186,7 @@ static const StartMenuActionFunc sStartMenuActions[] = {
     [START_MENU_ACTION_9] = { .ident = msg_0196_00014, .func = Task_StartMenu_HandleSelection_Pokegear             },
     [START_MENU_ACTION_10] = { .ident = msg_0196_00014, .func = Task_StartMenu_HandleSelection_Pokegear             },
     [START_MENU_ACTION_POKEGEAR] = { .ident = msg_0196_00014, .func = Task_StartMenu_HandleSelection_Pokegear             },
-    [START_MENU_ACTION_12] = { .ident = msg_0196_00014, .func = sub_0203D2CC                                        },
+    [START_MENU_ACTION_12] = { .ident = msg_0196_00014, .func = StartMenu_SelectUnionChatLog                                        },
 };
 
 static const u8 _020FA0AC[] = {
@@ -227,7 +227,7 @@ void StartMenu_Init(FieldSystem *fieldSystem) {
         startMenu->inhibitIconFlags = FieldSystem_GetStartMenuButtonInhibitFlags_Normal(fieldSystem);
     }
     startMenu->inUnionRoom = FALSE;
-    if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
+    if (PlayerAvatar_IsBetweenSteps(fieldSystem->playerAvatar) == TRUE) {
         PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
     }
     FieldSystem_CreateTask(fieldSystem, Task_StartMenu, startMenu);
@@ -237,7 +237,7 @@ void StartMenu_InitUnionRoom(FieldSystem *fieldSystem) {
     StartMenuTaskData *startMenu = StartMenu_Create();
     startMenu->inhibitIconFlags = FieldSystem_GetStartMenuButtonInhibitFlags_Union(fieldSystem);
     startMenu->inUnionRoom = TRUE;
-    if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
+    if (PlayerAvatar_IsBetweenSteps(fieldSystem->playerAvatar) == TRUE) {
         PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
     }
     FieldSystem_CreateTask(fieldSystem, Task_StartMenu, startMenu);
@@ -247,7 +247,7 @@ void StartMenu_InitColosseum(FieldSystem *fieldSystem) {
     StartMenuTaskData *startMenu = StartMenu_Create();
     startMenu->inhibitIconFlags = FieldSystem_GetStartMenuButtonInhibitFlags_Colosseum(fieldSystem);
     startMenu->inUnionRoom = FALSE;
-    if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
+    if (PlayerAvatar_IsBetweenSteps(fieldSystem->playerAvatar) == TRUE) {
         PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
     }
     FieldSystem_CreateTask(fieldSystem, Task_StartMenu, startMenu);
@@ -400,7 +400,7 @@ static BOOL Task_StartMenu(TaskManager *taskManager) {
         break;
     case START_MENU_STATE_11:
         if (IsPaletteFadeFinished()) {
-            sub_0203C69C(startMenu, fieldSystem);
+            StartMenu_ResumeUnionRoomSearch(startMenu, fieldSystem);
             Heap_Free(startMenu);
             MapObjectManager_UnpauseAllMovement(fieldSystem->mapObjectManager);
             return TRUE;
@@ -427,7 +427,7 @@ static BOOL Task_StartMenu(TaskManager *taskManager) {
         MapObjectManager_UnpauseAllMovement(fieldSystem->mapObjectManager);
         return TRUE;
     case START_MENU_STATE_CLOSE:
-        sub_0203C69C(startMenu, fieldSystem);
+        StartMenu_ResumeUnionRoomSearch(startMenu, fieldSystem);
         StartMenu_RemoveCursorAndIcons(startMenu, fieldSystem);
         fieldSystem->startMenuState = 2;
         ScheduleBgTilemapBufferTransfer(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
@@ -654,7 +654,7 @@ static BOOL StartMenu_HandleTouchInput(TaskManager *taskManager, FieldSystem *fi
     return TRUE;
 }
 
-static void sub_0203C69C(StartMenuTaskData *startMenu, FieldSystem *fieldSystem) {
+static void StartMenu_ResumeUnionRoomSearch(StartMenuTaskData *startMenu, FieldSystem *fieldSystem) {
     if (CommWireless_Exists() && startMenu->inUnionRoom) {
         UnionRoomObjects_RequestLeaveAll(fieldSystem->unionRoomObjects);
         CommState_ResumeAlternateSearch();
@@ -1039,7 +1039,7 @@ static BOOL Task_StartMenu_HandleReturn(TaskManager *taskManager) {
         break;
     }
     case 1:
-        sub_0203D664(taskManager, BagView_GetItemId(bagView));
+        StartMenu_HandleBagAction1(taskManager, BagView_GetItemId(bagView));
         break;
     case 2: {
         PartyMenuArgs *partyMenuArgs = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PartyMenuArgs));
@@ -1155,7 +1155,7 @@ static void Task_StartMenu_WaitSaveAppClose(TaskManager *taskManager) {
     }
 }
 
-static BOOL sub_0203D2CC(TaskManager *taskManager) {
+static BOOL StartMenu_SelectUnionChatLog(TaskManager *taskManager) {
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
 
@@ -1331,7 +1331,7 @@ static BOOL Task_StartMenu_HandleReturn_Summary(TaskManager *taskManager) {
     return FALSE;
 }
 
-static void sub_0203D664(TaskManager *taskManager, int itemId) {
+static void StartMenu_HandleBagAction1(TaskManager *taskManager, int itemId) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
@@ -1341,10 +1341,10 @@ static void sub_0203D664(TaskManager *taskManager, int itemId) {
     }
     u8 scroll, position;
     BagCursor_Field_PocketGetPosition(fieldSystem->bagCursor, POCKET_BERRIES, &position, &scroll);
-    StartMenu_SetExitTaskFunc(startMenu, sub_0203D6C8);
+    StartMenu_SetExitTaskFunc(startMenu, StartMenu_ReopenBagAtBerries);
 }
 
-static BOOL sub_0203D6C8(TaskManager *taskManager) {
+static BOOL StartMenu_ReopenBagAtBerries(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 

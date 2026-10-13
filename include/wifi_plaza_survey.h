@@ -119,23 +119,23 @@ typedef struct WiFiPlazaSurveyWork {
 
 // The OVY_45 lobby has no public header.
 extern BOOL WiFiPlazaWork_IsClosing(void *lobby);
-extern void ov45_0222A4A8(void *lobby);
+extern void WiFiPlazaWork_SetAppQuitForClosing(void *lobby);
 extern void WiFiPlazaWork_SetLowVolume(void *lobby, int value);
 extern int WiFiPlazaWork_GetOwnSlot(void *lobby);
 extern void *WiFiPlazaWork_GetPlayer(void *lobby, u32 index);
 extern void *WiFiPlazaWork_GetMyPlayer(void *lobby);
-extern void ov45_0222A7DC(void *lobby, u32 surveyId, u32 answer);
+extern void WiFiPlazaWork_SetSurveyAnswer(void *lobby, u32 surveyId, u32 answer);
 extern void WiFiPlazaPlayer_CopyToProfile(void *player, PlayerProfile *profile, enum HeapID heapID);
 extern void *WiFiPlazaPlayer_GetRawLanguage(void *player);
-extern void ov45_0222AB0C(void *player, WiFiPlazaSurveyAnswerRecord *record);
+extern void WiFiPlazaPlayer_GetSurvey(void *player, WiFiPlazaSurveyAnswerRecord *record);
 extern int WiFiPlazaWork_IsSpecialVisitor(void *lobby, int value);
 extern void WiFiPlazaWork_SetSurveyTally(void *lobby, const WiFiPlazaSurveyTally *tally);
 extern BOOL WiFiPlazaWork_GetSurveyTally(void *lobby, WiFiPlazaSurveyTally *tally);
 extern BOOL WiFiPlaza_HasConnectionFailed(void);
-extern void ov45_0222F4D4(int answer);
-extern int ov45_0222F524(void);
-extern u32 ov45_0222F544(int field);
-extern const u16 *ov45_0222F628(int field);
+extern void WiFiPlazaLobbyClient_SubmitSurveyAnswer(int answer);
+extern int WiFiPlazaLobbyClient_GetSurveySubmitState(void);
+extern u32 WiFiPlazaLobbyClient_GetSurveyValue(int field);
+extern const u16 *WiFiPlazaLobbyClient_GetSurveyText(int field);
 extern int ov45_0222F6B0(int which, void *value);
 
 BOOL WiFiPlazaSurvey_Init(OverlayManager *man, int *state);

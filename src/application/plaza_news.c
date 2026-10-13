@@ -131,7 +131,7 @@ typedef struct PlazaNewsWork {
 
 // Lobby (overlay 45) interface.
 int WiFiPlazaWork_IsClosing(void *lobby);
-void ov45_0222A4A8(void *lobby);
+void WiFiPlazaWork_SetAppQuitForClosing(void *lobby);
 void WiFiPlazaWork_SetLowVolume(void *lobby, int value);
 int WiFiPlazaWork_IsSpecialVisitor(void *lobby, int index);
 void WiFiPlazaWork_GetSpecialVisitors(void *lobby, void *out);
@@ -249,7 +249,7 @@ BOOL PlazaNews_Main(OverlayManager *man, u32 *state) {
     case 2:
         if ((gSystem.newKeys & PAD_BUTTON_B) || WiFiPlazaWork_IsClosing(args->lobby) == 1 || WiFiPlaza_HasConnectionFailed() == 1) {
             if (WiFiPlazaWork_IsClosing(args->lobby) == 1) {
-                ov45_0222A4A8(args->lobby);
+                WiFiPlazaWork_SetAppQuitForClosing(args->lobby);
             }
             *state = 3;
         } else {

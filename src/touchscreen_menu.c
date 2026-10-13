@@ -206,7 +206,7 @@ extern const u8 sTouchscreenMenuActionTypeToString[];
 
 SysTask *TouchscreenMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args);
 void TouchscreenMenu_Destroy(BgConfig *bgConfig, SysTask *task);
-BOOL ov27_0225A2C8(void *unused);
+BOOL TouchscreenMenu_IsExitDone(void *unused);
 void TouchscreenMenu_RequestSelectedIconAnim(SysTask *task);
 void TouchscreenMenu_RequestRegisteredItemAnim(SysTask *task, int item);
 void TouchscreenMenu_Task(SysTask *task, void *taskData);
@@ -220,10 +220,10 @@ void TouchscreenMenu_PrintActionLabel(TouchscreenMenuData *data, int actionType)
 void TouchscreenMenu_UpdateActionLabel(TouchscreenMenuData *data);
 void TouchscreenMenu_SetButtonsActive(TouchscreenMenuData *data, BOOL active);
 BOOL ov27_0225A714(TouchscreenMenuData *data);
-void ov27_0225A7B0(TouchscreenMenuData *data);
-void ov27_0225A7DC(TouchscreenMenuData *data);
-void ov27_0225A7FC(TouchscreenMenuData *data);
-void ov27_0225A86C(TouchscreenMenuData *data);
+void TouchscreenMenu_RefreshLabelAndNewIcons(TouchscreenMenuData *data);
+void TouchscreenMenu_HighlightSelectionAndDisable(TouchscreenMenuData *data);
+void TouchscreenMenu_UpdateForStartMenu(TouchscreenMenuData *data);
+void TouchscreenMenu_RestoreAfterStartMenu(TouchscreenMenuData *data);
 BOOL TouchscreenMenu_IsFieldBusy(FieldSystem *fieldSystem);
 void TouchscreenMenu_SetDimmed(TouchscreenMenuData *data, BOOL dimmed);
 void TouchscreenMenu_UpdateRegisteredItemButtons(TouchscreenMenuData *data, BOOL show);
@@ -265,9 +265,9 @@ void TouchscreenMenu_InitIconFlags(TouchscreenMenuData *data);
 int TouchscreenMenu_GetMenuIndex(TouchscreenMenuData *data, int slot);
 int TouchscreenMenu_GetSlotFromMenuIndex(TouchscreenMenuData *data, int menuIndex);
 void TouchscreenMenu_ValidateSelection(TouchscreenMenuData *data);
-void *ov27_0225C238(void);
-void ov27_0225C248(void);
-void ov27_0225C24C(void);
+void *TouchscreenMenu_OnFlashcartDetected(void);
+void TouchscreenMenu_OnEmulatorCheckDummy(void);
+void TouchscreenMenu_OnDummyCheckDummy(void);
 
 SysTask *TouchscreenMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args) {
     SysTask *task;
@@ -320,7 +320,7 @@ SysTask *TouchscreenMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, Fie
     if (!ov27_0225A714(data)) {
         return task;
     }
-    ov27_0225A7FC(data);
+    TouchscreenMenu_UpdateForStartMenu(data);
     SpriteList_RenderAndAnimateSprites(data->spriteList);
     GXS_SetVisibleWnd(GX_WNDMASK_NONE);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
@@ -336,7 +336,7 @@ void TouchscreenMenu_Destroy(BgConfig *bgConfig, SysTask *task) {
     int i;
 
     FS_LoadOverlay(MI_PROCESSOR_ARM9, FS_OVERLAY_ID(ds_protect));
-    if (DSProt_DetectFlashcart(ov27_0225C238)) {
+    if (DSProt_DetectFlashcart(TouchscreenMenu_OnFlashcartDetected)) {
         Heap_AllocAtEnd(HEAP_ID_3, 1000);
     }
     TouchscreenMenu_HidePhoneCaller(&data->phoneRing);
@@ -351,7 +351,7 @@ void TouchscreenMenu_Destroy(BgConfig *bgConfig, SysTask *task) {
     for (i = 0; i < 4; i++) {
         Destroy2DGfxResObjMan(data->resMans[i]);
     }
-    if (!DSProt_DetectNotEmulator(ov27_0225C248)) {
+    if (!DSProt_DetectNotEmulator(TouchscreenMenu_OnEmulatorCheckDummy)) {
         Heap_AllocAtEnd(HEAP_ID_3, 1000);
     }
     SpriteList_Delete(data->spriteList);
@@ -366,13 +366,13 @@ void TouchscreenMenu_Destroy(BgConfig *bgConfig, SysTask *task) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
     Heap_Destroy(HEAP_ID_8);
-    if (!DSProt_DetectNotDummy(ov27_0225C24C)) {
+    if (!DSProt_DetectNotDummy(TouchscreenMenu_OnDummyCheckDummy)) {
         Heap_AllocAtEnd(HEAP_ID_3, 1000);
     }
     FS_UnloadOverlay(MI_PROCESSOR_ARM9, FS_OVERLAY_ID(ds_protect));
 }
 
-BOOL ov27_0225A2C8(void *unused) {
+BOOL TouchscreenMenu_IsExitDone(void *unused) {
     return TRUE;
 }
 
@@ -420,10 +420,10 @@ void TouchscreenMenu_Task(SysTask *task, void *taskData) {
         data->registeredItemAnim = 0;
     }
     if (FieldSystem_TaskIsRunning(data->fieldSystem)) {
-        ov27_0225A7FC(data);
+        TouchscreenMenu_UpdateForStartMenu(data);
     } else {
         if (data->fieldSystem->startMenuState == 2) {
-            ov27_0225A86C(data);
+            TouchscreenMenu_RestoreAfterStartMenu(data);
             data->fieldSystem->startMenuState = 0;
         }
         if (movementAllowed) {
@@ -595,7 +595,7 @@ BOOL ov27_0225A714(TouchscreenMenuData *data) {
 
 #pragma force_active reset
 
-void ov27_0225A7B0(TouchscreenMenuData *data) {
+void TouchscreenMenu_RefreshLabelAndNewIcons(TouchscreenMenuData *data) {
     if (FieldSystem_IsFieldMapRunning(data->fieldSystem) == TRUE) {
         TouchscreenMenu_UpdateActionLabel(data);
     }
@@ -604,7 +604,7 @@ void ov27_0225A7B0(TouchscreenMenuData *data) {
     }
 }
 
-void ov27_0225A7DC(TouchscreenMenuData *data) {
+void TouchscreenMenu_HighlightSelectionAndDisable(TouchscreenMenuData *data) {
     GF_ASSERT(data->selection < TOUCHSCREEN_MENU_NUM_ICONS);
     TouchscreenMenu_HighlightIcon(data, data->selection);
     TouchscreenMenu_SetButtonsActive(data, FALSE);
@@ -612,13 +612,13 @@ void ov27_0225A7DC(TouchscreenMenuData *data) {
 
 #pragma force_active on
 
-void ov27_0225A7FC(TouchscreenMenuData *data) {
+void TouchscreenMenu_UpdateForStartMenu(TouchscreenMenuData *data) {
     switch (data->fieldSystem->startMenuState) {
     case 0:
-        ov27_0225A7B0(data);
+        TouchscreenMenu_RefreshLabelAndNewIcons(data);
         break;
     case 1:
-        ov27_0225A7DC(data);
+        TouchscreenMenu_HighlightSelectionAndDisable(data);
         data->fieldSystem->startMenuState = 2;
         break;
     case 2:
@@ -636,7 +636,7 @@ void ov27_0225A7FC(TouchscreenMenuData *data) {
 
 #pragma force_active reset
 
-void ov27_0225A86C(TouchscreenMenuData *data) {
+void TouchscreenMenu_RestoreAfterStartMenu(TouchscreenMenuData *data) {
     TouchscreenMenu_PrintActionLabel(data, TouchscreenMenu_GetActionType(data));
     TouchscreenMenu_HighlightIcon(data, TOUCHSCREEN_MENU_NO_HIGHLIGHT);
     CopyWindowToVram(&data->actionWindow);
@@ -1528,12 +1528,12 @@ void TouchscreenMenu_ValidateSelection(TouchscreenMenuData *data) {
 
 #pragma force_active reset
 
-void *ov27_0225C238(void) {
+void *TouchscreenMenu_OnFlashcartDetected(void) {
     return Heap_AllocAtEnd(HEAP_ID_3, 1000);
 }
 
-void ov27_0225C248(void) {
+void TouchscreenMenu_OnEmulatorCheckDummy(void) {
 }
 
-void ov27_0225C24C(void) {
+void TouchscreenMenu_OnDummyCheckDummy(void) {
 }

@@ -3,15 +3,15 @@
 #include "filesystem.h"
 
 NarcId Pokefoot_GetNarcId(void);
-int Pokefoot_GetCharFileId(int a0);
+int Pokefoot_GetCharFileId(int species);
 int Pokefoot_GetPlttFileId(void);
 
 NarcId Pokefoot_GetNarcId(void) {
     return NARC_poketool_pokefoot_pokefoot;
 }
 
-int Pokefoot_GetCharFileId(int a0) {
-    return a0 + NARC_pokefoot_pokefoot_00000003_NCGR_lz;
+int Pokefoot_GetCharFileId(int species) {
+    return species + NARC_pokefoot_pokefoot_00000003_NCGR_lz;
 }
 
 int Pokefoot_GetPlttFileId(void) {

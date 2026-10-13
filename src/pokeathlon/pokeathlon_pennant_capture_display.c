@@ -20,13 +20,13 @@
 #include "text.h"
 
 // Course sprite helpers (OVY_96, not yet tidied).
-Sprite *PokeathlonCourseSprites_CreateTimerDigit(void *resources, void *spriteList, int a2, enum HeapID heapId);
-void PokeathlonCourseSpritePool_LoadChar(void *pool, int narc, int file, int id, int a4);
-void PokeathlonCourseSpritePool_LoadPltt(void *pool, int narc, int file, int id, int a4, int a5);
+Sprite *PokeathlonCourseSprites_CreateTimerDigit(void *resources, void *spriteList, int priority, enum HeapID heapId);
+void PokeathlonCourseSpritePool_LoadChar(void *pool, int narc, int file, int id, int vram);
+void PokeathlonCourseSpritePool_LoadPltt(void *pool, int narc, int file, int id, int vram, int count);
 void PokeathlonCourseSpritePool_LoadCell(void *pool, int narc, int file, int id);
 void PokeathlonCourseSpritePool_LoadAnim(void *pool, int narc, int file, int id);
-void *PokeathlonCourseSpritePool_CreateAndTake(void *pool, int a1, int a2, int id, int anim);
-void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int a1, int show);
+void *PokeathlonCourseSpritePool_CreateAndTake(void *pool, int priority, int whichScreen, int id, int anim);
+void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int shown, int show);
 void PokeathlonCourseSpritePoolSprite_SetAnim(void *sprite, int anim);
 void PokeathlonCourseSpritePoolSprite_SetPosition(void *sprite, VecFx32 *position);
 VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(void *sprite);
@@ -34,7 +34,7 @@ Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(void *sprite);
 void *PokeathlonCourseSpritePool_GetSpriteList(void *pool);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *sprite, int priority);
 // monsters.c / pokemon_icon_idx.c, declared here with the argument types the calls were built with
-void *CharTiles_AllocAndLoadMonPicAsObjFromNarc(u16 charNarc, u16 charFile, u32 heapId, u32 personality, int a4, int a5, u16 species);
+void *CharTiles_AllocAndLoadMonPicAsObjFromNarc(u16 charNarc, u16 charFile, u32 heapId, u32 personality, int isAnimated, int whichFacing, u16 species);
 void *AllocAndLoadPltt16FromNarc(u16 plttNarc, u16 plttFile, u32 heapId);
 u32 GetMonIconPlttNaix(void);
 // in the object linked between the two parts of the top screen code (picture sprites)

@@ -2578,7 +2578,7 @@
 	.public WiFiPlazaMap_GetGrid
 	.public WiFiPlazaObj_CreateManager
 	.public WiFiPlazaObj_DeleteManager
-	.public ov49_02258B44
+	.public WiFiPlazaObj_UpdateObjsAndLight
 	.public WiFiPlazaObj_UpdateManager
 	.public WiFiPlazaObj_DrawAvatars
 	.public ov49_02258BE0

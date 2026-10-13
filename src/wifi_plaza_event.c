@@ -653,7 +653,7 @@ WiFiPlazaEventMovers *WiFiPlazaEventMovers_Create(WiFiPlazaRoomWork *room, enum 
     }
     for (i = 0; i < 9; i++) {
         WiFiPlazaModels_SetMoverX(work->models, i, work->baseX);
-        if (ov45_0222AD80(work->lobby, i) == 1) {
+        if (WiFiPlazaWork_GetGroupState(work->lobby, i) == 1) {
             WiFiPlazaEventMovers_UpdateX(work, i);
             WiFiPlazaEvent_UpdateMoverMarkers(work, i);
         }
@@ -668,7 +668,7 @@ void WiFiPlazaEventMovers_Delete(WiFiPlazaEventMovers *work) {
 #pragma force_active on
 
 void WiFiPlazaEventMovers_Update(WiFiPlazaEventMovers *work) {
-    int selected = ov45_0222ADA8(work->lobby, WiFiPlazaWork_GetOwnSlot(work->lobby));
+    int selected = WiFiPlazaWork_FindGroupPlace(work->lobby, WiFiPlazaWork_GetOwnSlot(work->lobby));
     u32 column;
     int present;
     int isOwnIndex;
@@ -677,11 +677,11 @@ void WiFiPlazaEventMovers_Update(WiFiPlazaEventMovers *work) {
     if (selected == -1) {
         present = FALSE;
     } else {
-        ov45_0222AE08(selected, (u32 *)&selected, &column);
+        WiFiPlaza_SplitGroupPlace(selected, (u32 *)&selected, &column);
         present = TRUE;
     }
     for (i = 0; i < 9; i++) {
-        if (ov45_0222AD80(work->lobby, i) == 1) {
+        if (WiFiPlazaWork_GetGroupState(work->lobby, i) == 1) {
             WiFiPlazaModels_SetMoverVisible(work->models, i, 1);
             WiFiPlazaEventMovers_UpdateX(work, i);
             WiFiPlazaEvent_UpdateMoverMarkers(work, i);
@@ -726,8 +726,8 @@ u8 WiFiPlazaEventMovers_GetState(WiFiPlazaEventMovers *work, u32 index, int fiel
 #pragma force_active on
 
 void WiFiPlazaEventMovers_UpdateX(WiFiPlazaEventMovers *work, int index) {
-    int value = ov45_0222AD90(work->lobby, index);
-    int max = ov45_0222ADA0(work->lobby);
+    int value = WiFiPlazaWork_GetGroupCounter(work->lobby, index);
+    int max = WiFiPlazaWork_GetGroupDuration(work->lobby);
     fx32 ratio = FX_Div(work->range, 8192);
     float maxF;
     float valueF;
@@ -758,7 +758,7 @@ void WiFiPlazaEventMovers_StartActions(WiFiPlazaEventMovers *work, u32 index, BO
 
     ov45_0222AD2C(work->lobby);
     for (i = 0; i < 3; i++) {
-        int active = ov45_0222ADE8(work->lobby, index * 3 + i);
+        int active = WiFiPlazaWork_GetGroupActionRequest(work->lobby, index * 3 + i);
         int isOwnColumn = FALSE;
 
         if (isOwnIndex == TRUE && i == ownColumn) {
@@ -779,18 +779,18 @@ void WiFiPlazaEventMovers_StartActions(WiFiPlazaEventMovers *work, u32 index, BO
                             WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, sWiFiPlazaMoverSounds[type][2]);
                         }
                     }
-                    ov45_0222ADF8(work->lobby, index * 3 + i);
+                    WiFiPlazaWork_ClearGroupActionRequest(work->lobby, index * 3 + i);
                 }
                 break;
             case 1:
                 if (WiFiPlazaEventWobble_Start(&work->wobbles[index], index % 3 == 2, work->models, index) == 1) {
-                    ov45_0222ADF8(work->lobby, index * 3 + i);
+                    WiFiPlazaWork_ClearGroupActionRequest(work->lobby, index * 3 + i);
                     WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, 1478);
                 }
                 break;
             case 2:
                 if (WiFiPlazaModels_StartMoverAnim3(work->models, index) == 1) {
-                    ov45_0222ADF8(work->lobby, index * 3 + i);
+                    WiFiPlazaWork_ClearGroupActionRequest(work->lobby, index * 3 + i);
                     if (index % 3 == 2) {
                         WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, sWiFiPlazaMoverSounds[type][5]);
                     } else {

@@ -406,7 +406,7 @@ BOOL ScrCmd_ObjectGoTo(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_BGGoTo(ScriptContext *ctx) {
-    u32 bg = sub_02050658(ctx->taskman);
+    u32 bg = TaskManager_GetBgGoToId(ctx->taskman);
     u8 required_bg = ScriptReadByte(ctx);
 
     u32 offset_in_script = ScriptReadWord(ctx);
@@ -1503,7 +1503,7 @@ BOOL ScrCmd_FacePlayer(ScriptContext *ctx) {
             }
             if (MetatileBehavior_IsTallGrass(metatile) == FALSE
                 && MetatileBehavior_IsVeryTallGrass(metatile) == FALSE
-                && sub_02060E54(*p_lastInteracted, metatile) == FALSE
+                && MapObject_CheckWaterBehavior(*p_lastInteracted, metatile) == FALSE
                 && MetatileBehavior_IsPuddle(metatile) == FALSE
                 && MetatileBehavior_IsShallowWater(metatile) == FALSE
                 && MapObject_CheckSnowBehavior(*p_lastInteracted, metatile) == FALSE
@@ -2147,7 +2147,7 @@ BOOL ScrCmd_629(ScriptContext *ctx) {
 BOOL ScrCmd_630(ScriptContext *ctx) {
     u16 *ret_p = ScriptGetVarPointer(ctx);
     u32 r5 = UnionRoom_GetPartnerGameVersion();
-    u32 r0 = sub_02029084();
+    u32 r0 = PlayerData_GetDummyGameVersion();
     if (r5 == r0) {
         *ret_p = FALSE;
     } else {
@@ -2418,7 +2418,7 @@ BOOL ScrCmd_TrainerMessage(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL sub_02043A98(ScriptContext *ctx);
+BOOL ScrNative_WaitCommClubJoinResult(ScriptContext *ctx);
 
 BOOL ScrCmd_226(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
@@ -2428,11 +2428,11 @@ BOOL ScrCmd_226(ScriptContext *ctx) {
     u16 r6 = ScriptReadHalfword(ctx);
     CommClub_StartJoin(fieldSystem, commType, sp0, sp4);
     ctx->data[0] = r6;
-    SetupNativeScript(ctx, sub_02043A98);
+    SetupNativeScript(ctx, ScrNative_WaitCommClubJoinResult);
     return TRUE;
 }
 
-BOOL sub_02043A98(ScriptContext *ctx) {
+BOOL ScrNative_WaitCommClubJoinResult(ScriptContext *ctx) {
     u16 *p_ret = GetVarPointer(ctx->fieldSystem, ctx->data[0]);
     int result = CommClub_PollJoinResult();
     if (result == 0) {
@@ -2443,7 +2443,7 @@ BOOL sub_02043A98(ScriptContext *ctx) {
     }
 }
 
-BOOL sub_02043B30(ScriptContext *ctx);
+BOOL ScrNative_WaitCommClubHostResult(ScriptContext *ctx);
 
 BOOL ScrCmd_227(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
@@ -2453,11 +2453,11 @@ BOOL ScrCmd_227(ScriptContext *ctx) {
     u16 r6 = ScriptReadHalfword(ctx);
     CommClub_StartHost(fieldSystem, commType, sp0, sp4);
     ctx->data[0] = r6;
-    SetupNativeScript(ctx, sub_02043B30);
+    SetupNativeScript(ctx, ScrNative_WaitCommClubHostResult);
     return TRUE;
 }
 
-BOOL sub_02043B30(ScriptContext *ctx) {
+BOOL ScrNative_WaitCommClubHostResult(ScriptContext *ctx) {
     u16 *p_ret = GetVarPointer(ctx->fieldSystem, ctx->data[0]);
     int result = CommClub_PollHostResult();
     if (result == 0) {
@@ -2770,16 +2770,16 @@ BOOL ScrCmd_274(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL sub_02044318(ScriptContext *ctx);
+BOOL ScrNative_WaitUnionRoomJoinStatus(ScriptContext *ctx);
 
 BOOL ScrCmd_269(ScriptContext *ctx) {
     u16 var_idx = ScriptReadHalfword(ctx);
     ctx->data[0] = var_idx;
-    SetupNativeScript(ctx, sub_02044318);
+    SetupNativeScript(ctx, ScrNative_WaitUnionRoomJoinStatus);
     return TRUE;
 }
 
-BOOL sub_02044318(ScriptContext *ctx) {
+BOOL ScrNative_WaitUnionRoomJoinStatus(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     int result = UnionRoom_GetJoinStatus(fieldSystem->unionRoom);
     u16 *p_ret = GetVarPointer(fieldSystem, ctx->data[0]);
@@ -2817,16 +2817,16 @@ BOOL ScrCmd_271(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL sub_020443D8(ScriptContext *ctx);
+BOOL ScrNative_WaitUnionRoomTalkChoice(ScriptContext *ctx);
 
 BOOL ScrCmd_272(ScriptContext *ctx) {
     u16 var_idx = ScriptReadHalfword(ctx);
     ctx->data[0] = var_idx;
-    SetupNativeScript(ctx, sub_020443D8);
+    SetupNativeScript(ctx, ScrNative_WaitUnionRoomTalkChoice);
     return TRUE;
 }
 
-BOOL sub_020443D8(ScriptContext *ctx) {
+BOOL ScrNative_WaitUnionRoomTalkChoice(ScriptContext *ctx) {
     u16 *p_ret = GetVarPointer(ctx->fieldSystem, ctx->data[0]);
     u32 r0 = UnionRoom_GetTalkChoice(ctx->fieldSystem->unionRoom);
     if (r0 >= 1) {

@@ -4,6 +4,6 @@
 #include "heap.h"
 #include "sound.h"
 
-void ov13_0221BA00(enum HeapID HeapID);
+void RunWifiSetupApp(enum HeapID HeapID);
 
 #endif // POKEHEARTGOLD_OVERLAY_13_THUMB_1_H

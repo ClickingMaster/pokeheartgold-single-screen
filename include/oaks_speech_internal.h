@@ -81,8 +81,8 @@ typedef struct OakSpeechData {
     int lastChosenGender; // if the player changes their mind
 } OakSpeechData;
 
-int OakSpeech_DeadstrippedFunction1(int a0);
-int OakSpeech_DeadstrippedFunction2(int a0);
+int OakSpeech_DeadstrippedFunction1(int index);
+int OakSpeech_DeadstrippedFunction2(int index);
 
 void OakSpeech_InitSpriteEngine(OakSpeechData *data);
 void OakSpeech_CleanupSpriteEngine(OakSpeechData *data);

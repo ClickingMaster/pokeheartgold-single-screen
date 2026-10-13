@@ -8,7 +8,7 @@
 #include "party.h"
 #include "pokemon.h"
 
-static BOOL BattleRegulation_CanPickMonsWithinLevelTotal(u16 *a0, u16 *a1, u16 *a2, int a3, int a4, int a5, int a6);
+static BOOL BattleRegulation_CanPickMonsWithinLevelTotal(u16 *species, u16 *levels, u16 *visited, int numMonsLeft, int curIdx, int totalLevel, int totalNumMons);
 
 PokedexData *PokedexData_CreateAndLoad(enum HeapID heapID) {
     PokedexData *pokedex = PokedexData_Create(heapID);

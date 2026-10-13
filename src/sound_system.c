@@ -71,8 +71,8 @@ void Sound_SetBGMPlayerChannels(int mode);
 void Sound_PlayBGMForFieldScene(u16 seqNo, int mode);
 void Sound_PlayBGMForBattleScene(u16 seqNo, int mode);
 void Sound_PlayBGMForWifiScene(u16 seqNo, int mode);
-void sub_02005280(u16 seqNo, int mode);
-void sub_020052A4(u16 seqNo, int mode);
+void Sound_PlayBGMForContestScene(u16 seqNo, int mode);
+void Sound_PlayBGMForImageScene(u16 seqNo, int mode);
 void Sound_LoadSecondarySceneSoundEffects(int scene);
 void Sound_PlayBGMForScene(int scene, u16 seqNo, int mode);
 void sub_02005464(int seqNo, enum SoundHandleNo handleNo);
@@ -369,10 +369,10 @@ BOOL Sound_SetSceneAndPlayBGM(u8 scene, u16 seqNo, int mode) {
         Sound_PlayBGMForWifiScene(seqNo, mode);
         break;
     case 6:
-        sub_02005280(seqNo, mode);
+        Sound_PlayBGMForContestScene(seqNo, mode);
         break;
     case 7:
-        sub_020052A4(seqNo, mode);
+        Sound_PlayBGMForImageScene(seqNo, mode);
         break;
     case 51:
     case 52:
@@ -535,7 +535,7 @@ void Sound_PlayBGMForWifiScene(u16 seqNo, int mode) {
     PlayBGM(seqNo);
 }
 
-void sub_02005280(u16 seqNo, int mode) {
+void Sound_PlayBGMForContestScene(u16 seqNo, int mode) {
     GF_SdatGetAttrPtr(24);
     Sound_Stop();
     Sound_ResetAndLoadSceneSoundEffects(6);
@@ -543,7 +543,7 @@ void sub_02005280(u16 seqNo, int mode) {
     PlayBGM(seqNo);
 }
 
-void sub_020052A4(u16 seqNo, int mode) {
+void Sound_PlayBGMForImageScene(u16 seqNo, int mode) {
     GF_SdatGetAttrPtr(24);
     Sound_Stop();
     Sound_ResetAndLoadSceneSoundEffects(7);

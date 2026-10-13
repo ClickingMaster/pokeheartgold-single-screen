@@ -69,7 +69,7 @@ BOOL FollowPlayerState_Start(LocalMapObject *object, FollowPlayerMovementState *
 BOOL FollowPlayerState_MirrorStart(LocalMapObject *object, FollowPlayerMovementState *state);
 BOOL FollowPlayerState_Moving(LocalMapObject *object, FollowPlayerMovementState *state);
 BOOL FollowPlayerState_Hop(LocalMapObject *object, FollowPlayerMovementState *state);
-BOOL sub_02065C90(LocalMapObject *object, FollowPlayerMovementState *state);
+BOOL FollowPlayerState_Wait(LocalMapObject *object, FollowPlayerMovementState *state);
 BOOL FollowPlayerMovement_CheckPlayer(LocalMapObject *object, FollowPlayerMovementState *state);
 void FollowPlayerMovement_RecordPlayer(LocalMapObject *object, FollowPlayerMovementState *state);
 BOOL FollowPlayerMovement_HasPlayerMoved(LocalMapObject *object, FollowPlayerMovementState *state);

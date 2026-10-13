@@ -117,7 +117,7 @@
 .public ApricornTreeObject_Resume
 .public ApricornTreeObject_GetBillboard
 .public TryGetSeenByNpcTrainers
-.public sub_02064518
+.public MapObjectBehavior_GetTrainerNum
 .public TrainerApproach_Start
 .public TrainerApproach_IsDone
 .public TrainerApproach_Delete

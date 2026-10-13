@@ -329,30 +329,30 @@ void BattleRecord_FillHeader(SaveData *save, void *header, void *recordData, int
     switch (type) {
     case 1:
     case 8:
-        summary->rules = *sub_020291E8(save, 0);
+        summary->rules = *LinkBattleRuleset_GetRegulation(save, 0);
         break;
     case 2:
     case 9:
-        summary->rules = *sub_020291E8(save, 1);
+        summary->rules = *LinkBattleRuleset_GetRegulation(save, 1);
         break;
     case 3:
     case 10:
-        summary->rules = *sub_020291E8(save, 2);
+        summary->rules = *LinkBattleRuleset_GetRegulation(save, 2);
         break;
     case 4:
     case 11:
-        summary->rules = *sub_020291E8(save, 3);
+        summary->rules = *LinkBattleRuleset_GetRegulation(save, 3);
         break;
     case 5:
     case 12:
-        summary->rules = *sub_020291E8(save, 4);
+        summary->rules = *LinkBattleRuleset_GetRegulation(save, 4);
         break;
     case 6:
     case 13:
-        summary->rules = *sub_020291E8(save, 5);
+        summary->rules = *LinkBattleRuleset_GetRegulation(save, 5);
         break;
     default:
-        summary->rules = *sub_0202925C();
+        summary->rules = *LinkBattleRuleset_GetDefault();
         break;
     }
     summary->arg = arg;

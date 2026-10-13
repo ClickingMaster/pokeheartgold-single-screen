@@ -206,7 +206,7 @@ u32 GearPhoneRingManager_TryRandomCall(GearPhoneRingManager *gearPhone, PhoneBoo
             continue;
         }
         if (candidates[i] == 8) {
-            if (sub_02095FF8(hour)) {
+            if (Phone_IsBuenasPasswordHour(hour)) {
                 continue;
             }
             if (Save_VarsFlags_IsInRocketTakeover(varsFlags)) {

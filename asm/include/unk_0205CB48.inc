@@ -1,6 +1,6 @@
 #include <nitro/fs/overlay.h>
 #pragma once
-.public sub_02005BA8
+.public Sound_ApplyFootstepVariation
 .public PlaySE
 .public PlaySEWithFieldBank
 .public GF_AssertFail
@@ -62,20 +62,20 @@
 .public PlayerAvatar_SetFlag7
 .public PlayerAvatar_CheckFlag7
 .public PlayerAvatar_MoveControl
-.public sub_0205CBE4
+.public PlayerAvatar_CheckReadyToMove
 .public PlayerAvatar_UpdateMovement
 .public PlayerAvatar_ResetMovement
-.public sub_0205CF60
+.public PlayerAvatar_IsBetweenSteps
 .public PlayerAvatar_StopAndFace
 .public PlayerAvatar_CheckCollision
 .public PlayerAvatar_GetInputDirection
-.public sub_0205DE38
+.public PlayerAvatar_IsReadyOrBumpingWall
 .public PlayerAvatar_IsRunning
-.public sub_0205DEC0
-.public sub_0205DF0C
-.public sub_0205DFC8
+.public PlayerAvatar_GetMoveStateForDirection
+.public PlayerAvatar_GetMovementFromInput
+.public PlayerAvatar_IsReadyForMovement
 .public PlayerAvatar_SetMovement
-.public sub_0205DFEC
+.public PlayerAvatar_GetMetatileBehaviorInDirection
 .public PlayerAvatar_GetCoordsInFront
 .public MapObject_SetFlagsBits
 .public MapObject_ClearFlagsBits
@@ -96,9 +96,9 @@
 .public MapObject_IsTileOccupiedInLink
 .public MapObject_IsOutsideMovementRange
 .public MapObject_IsMoveBlockedByBehavior
-.public sub_02060E54
+.public MapObject_CheckWaterBehavior
 .public MapObject_CheckSnowBehavior
-.public sub_02060EEC
+.public MapObject_IsOnBridge
 .public GetDeltaXByFacingDirection
 .public GetDeltaYByFacingDirection
 .public MapObject_SetPreviousCoordsToCurrent
@@ -141,7 +141,7 @@
 	.public PlayerAvatar_MoveOnFoot
 	.public PlayerAvatar_UpdateFootStepKind
 	.public FootStepKindToMoveState
-	.public sub_0205D44C
+	.public PlayerAvatar_AdjustMovementDummy
 	.public PlayerAvatar_GetFootStepKind
 	.public PlayerAvatar_FootStand
 	.public PlayerAvatar_FootStep

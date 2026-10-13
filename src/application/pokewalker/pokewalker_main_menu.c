@@ -65,7 +65,7 @@ int PokewalkerApp_MainMenu_Start(PokewalkerApp *app) {
         PokewalkerApp_AddWindowBank(app, 1);
         return 23;
     }
-    sub_02032688(app->pokewalker, &walkerState.unk0, &walkerState.unk2);
+    Pokewalker_GetStrollState(app->pokewalker, &walkerState.unk0, &walkerState.unk2);
     switch (walkerState.unk0) {
     case 0:
         app->nextMode = 3;
@@ -75,7 +75,7 @@ int PokewalkerApp_MainMenu_Start(PokewalkerApp *app) {
         PokewalkerApp_AddWindowBank(app, 1);
         FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
         BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
-        sub_020326A4(app->pokewalker, 0, 0);
+        Pokewalker_SetStrollState(app->pokewalker, 0, 0);
         return 4;
     case 1:
         app->strollMonSpecies = SPECIES_NONE;
@@ -181,7 +181,7 @@ int PokewalkerApp_MainMenu_HandleTopMenu(PokewalkerApp *app) {
         switch (app->menuSelection) {
         case 0:
             app->nextMode = 2;
-            sub_020326A4(app->pokewalker, 0, 0);
+            Pokewalker_SetStrollState(app->pokewalker, 0, 0);
             PokewalkerApp_RemoveWindowBank(app, 3);
             PokewalkerApp_AddWindowBank(app, 1);
             FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
@@ -195,10 +195,10 @@ int PokewalkerApp_MainMenu_HandleTopMenu(PokewalkerApp *app) {
             PokewalkerApp_AddWindowBank(app, 1);
             FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
             BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
-            sub_020326A4(app->pokewalker, 0, 0);
+            Pokewalker_SetStrollState(app->pokewalker, 0, 0);
             return 4;
         case 2:
-            sub_020326A4(app->pokewalker, 1, 1);
+            Pokewalker_SetStrollState(app->pokewalker, 1, 1);
             app->strollMonSpecies = SPECIES_NONE;
             app->linkAction = 0;
             PokewalkerApp_RemoveWindowBank(app, 3);
@@ -537,7 +537,7 @@ BOOL ov112_021EB950(PokewalkerApp *app, int bank) {
         u16 unk2;
         u16 unk0;
     } walkerState;
-    sub_02032688(app->pokewalker, &walkerState.unk0, &walkerState.unk2);
+    Pokewalker_GetStrollState(app->pokewalker, &walkerState.unk0, &walkerState.unk2);
     if (walkerState.unk0 != 2) {
         return FALSE;
     }

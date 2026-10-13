@@ -12,4 +12,4 @@
 .public UnloadOVY38
 .public OS_ResetSystem
 .public gApp_MainMenu_SelectOption_NintendoWFCSetup
-.public ov13_0221BA00
+.public RunWifiSetupApp

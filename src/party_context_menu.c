@@ -25,12 +25,12 @@ static BOOL TextPrinterCB_PartyMenuWin34Msg(TextPrinterTemplate *template, u16 g
 static void PartyMenu_PrintEvoStoneCompatString(PartyMenu *partyMenu, u8 partySlot, u8 compatibilityParam);
 static void PartyMenu_PrintTMHMCompatString(PartyMenu *partyMenu, u8 partySlot, u8 compatibilityParam);
 static void PartyMenu_PrintSuperContestCompatString(PartyMenu *partyMenu, u8 partySlot, u8 isCompatible);
-static void PartyMenu_PrintEntryStatusString(PartyMenu *partyMenu, u8 partySlot, u8 a2);
+static void PartyMenu_PrintEntryStatusString(PartyMenu *partyMenu, u8 partySlot, u8 entryStatus);
 static void PartyMenu_ShowContextMenu(PartyMenu *partyMenu, int numItems, int state);
 static void PartyMenu_HideContextMenu(PartyMenu *partyMenu, int numItems, int state);
 static u32 getButtonColorDepressed(int selection);
 static u32 getButtonColorRaised(int selection);
-static void PartyMenu_PrintContextMenuItemText(PartyMenu *partyMenu, PartyMenuContextMenu *contextMenu, int numItems, int selection, int state, BOOL a5);
+static void PartyMenu_PrintContextMenuItemText(PartyMenu *partyMenu, PartyMenuContextMenu *contextMenu, int numItems, int selection, int state, BOOL depressed);
 static void PartyMenu_PrintContextMenuItemsText(PartyMenu *partyMenu, PartyMenuContextMenu *contextMenu, int numItems, int selection, int state);
 static void PartyMenu_DrawContextMenuButtonFrame(PartyMenu *partyMenu, int numItems, int selection, int state, int frameType);
 static BOOL hitboxHasSelectionMapping(int state, int numItems, int selection);
@@ -874,14 +874,14 @@ static void PartyMenu_PrintSuperContestCompatString(PartyMenu *partyMenu, u8 par
     ScheduleWindowCopyToVram(window);
 }
 
-static void PartyMenu_PrintEntryStatusString(PartyMenu *partyMenu, u8 partySlot, u8 a2) {
+static void PartyMenu_PrintEntryStatusString(PartyMenu *partyMenu, u8 partySlot, u8 entryStatus) {
     Window *window = &partyMenu->windows[partySlot * PARTY_MENU_WINDOWS_PER_MON + PARTY_MENU_WINDOW_ID_MON1_COMPAT];
     String *string;
 
     FillWindowPixelBuffer(window, 0);
-    if (a2 < 6) {
-        string = NewString_ReadMsgData(partyMenu->msgData, msg_0300_00152 + a2);
-    } else if (a2 == 7) {
+    if (entryStatus < 6) {
+        string = NewString_ReadMsgData(partyMenu->msgData, msg_0300_00152 + entryStatus);
+    } else if (entryStatus == 7) {
         string = NewString_ReadMsgData(partyMenu->msgData, msg_0300_00150);
     } else {
         string = NewString_ReadMsgData(partyMenu->msgData, msg_0300_00151);

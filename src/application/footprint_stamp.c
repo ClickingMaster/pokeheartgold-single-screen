@@ -27,10 +27,10 @@
 #include "vram_transfer_manager.h"
 
 // Declared only in other modules' private headers.
-void *ov45_0222A2C8(void *lobby);
+void *WiFiPlazaWork_GetSaveData(void *lobby);
 void *ov45_0222A2CC(void *lobby);
 void WiFiPlazaWork_SetLowVolume(void *lobby, int value);
-void ov45_0222A4A8(void *lobby);
+void WiFiPlazaWork_SetAppQuitForClosing(void *lobby);
 u32 WiFiPlazaWork_IsClosing(void *lobby);
 BOOL WiFiPlaza_HasConnectionFailed(void);
 void WiFiPlazaLobbyClient_ClearChannelCommands(void);
@@ -69,7 +69,7 @@ BOOL FootprintStamp_Init(OverlayManager *man, int *state) {
     work = OverlayManager_CreateAndGetData(man, sizeof(FootprintStamp), HEAP_ID_125);
     MI_CpuFill8(work, 0, sizeof(FootprintStamp));
     work->args = OverlayManager_GetArgs(man);
-    work->saveData = ov45_0222A2C8(work->args->lobby);
+    work->saveData = WiFiPlazaWork_GetSaveData(work->args->lobby);
     work->unk19E0 = ov45_0222A2CC(work->args->lobby);
     FootprintStamp_InitLinkFilter(work);
     FootprintStamp_LoadParty(work->args->boardType, work->saveData, work->party);
@@ -275,7 +275,7 @@ BOOL FootprintStamp_Main(OverlayManager *man, int *state) {
                 *state = 9;
             } else {
                 PlaySE(SEQ_SE_DP_PINPON);
-                ov45_0222A4A8(work->args->lobby);
+                WiFiPlazaWork_SetAppQuitForClosing(work->args->lobby);
                 *state = 6;
             }
         }

@@ -48,9 +48,9 @@
 	.extern NintendoWfc_PrintDisconnecting
 	.extern NintendoWfc_CloseConnection
 	.extern NintendoWfc_PrintDisconnected
-	.extern ov72_0223A010
+	.extern NintendoWfc_UnusedState_Idle
 	.extern NintendoWfc_StartExit
-	.extern ov72_0223A044
+	.extern NintendoWfc_UnusedState_HandleYesNo
 	.extern NintendoWfc_ShowHttpError
 	.extern NintendoWfc_Disconnect
 	.extern NintendoWfc_WaitMessage
@@ -62,9 +62,9 @@
 	.extern NintendoWfc_NumberInput_Setup
 	.extern NintendoWfc_NumberInput_WaitFadeIn
 	.extern NintendoWfc_NumberInput_Main
-	.extern ov72_0223ABF4
-	.extern ov72_0223ABF8
-	.extern ov72_0223ABFC
+	.extern NintendoWfc_NumberInput_UnusedState4
+	.extern NintendoWfc_NumberInput_UnusedState5
+	.extern NintendoWfc_NumberInput_UnusedState6
 	.extern NintendoWfc_NumberInput_StartFadeOut
 	.extern NintendoWfc_NumberInput_Teardown
 	.extern NintendoWfc_NumberInput_WaitButtonFlash
@@ -72,7 +72,7 @@
 	.extern NintendoWfc_NumberInput_Finish
 	.extern NintendoWfcYesNo_Start
 	.extern NintendoWfcYesNo_HandleInput
-	.extern ov72_0223B084
+	.extern NintendoWfcYesNo_UnusedState2
 	.extern NintendoWfcYesNo_WaitClose
 	.public ov72_0223B4C0
 	.public ov72_0223B4C2
@@ -140,7 +140,7 @@
 	.public NintendoWfc_PrintDisconnecting
 	.public NintendoWfc_PrintDisconnected
 	.public NintendoWfc_StartExit
-	.public ov72_0223A044
+	.public NintendoWfc_UnusedState_HandleYesNo
 	.public NintendoWfc_ShowHttpError
 	.public NintendoWfc_Disconnect
 	.public NintendoWfc_WaitMessage
@@ -231,7 +231,7 @@
 	.public NintendoWfcHttp_Init
 	.public NintendoWfcHttp_GetResult
 	.public NintendoWfc_InitArgs
-	.public ov72_02238160
+	.public NintendoWfc_ExitDummy
 	.public NintendoWfc_InitSpriteTemplate
 	.public NintendoWfc_HandleYesNoPrompt
 	.public NintendoWfc_SetState
@@ -261,20 +261,20 @@
 	.public NintendoWfc_AskCancelChallenge
 	.public NintendoWfc_AskCancelDownload
 	.public NintendoWfc_CloseConnection
-	.public ov72_0223A010
+	.public NintendoWfc_UnusedState_Idle
 	.public NintendoWfc_CreateWirelessIcon
-	.public ov72_0223A41C
+	.public NintendoWfc_NumberInputDummy
 	.public NintendoWfc_HideWaitingIcon
 	.public NintendoWfc_NumberInput_WaitFadeIn
 	.public NintendoWfc_GetCursorAfterDigit
-	.public ov72_0223ABF4
-	.public ov72_0223ABF8
-	.public ov72_0223ABFC
+	.public NintendoWfc_NumberInput_UnusedState4
+	.public NintendoWfc_NumberInput_UnusedState5
+	.public NintendoWfc_NumberInput_UnusedState6
 	.public NintendoWfc_NumberInput_WaitButtonFlash
 	.public NintendoWfc_NumberInput_WaitFadeOut
 	.public NintendoWfc_NumberInput_Finish
 	.public NintendoWfcYesNo_Start
-	.public ov72_0223B084
+	.public NintendoWfcYesNo_UnusedState2
 	.public NintendoWfcYesNo_ShowCursor
 	.include "asm/macros.inc"
 	.include "overlay_72.inc"
@@ -458,13 +458,13 @@ sNintendoWfcStates: ; 0x0223B660
 	.word NintendoWfc_PrintDisconnecting
 	.word NintendoWfc_CloseConnection
 	.word NintendoWfc_PrintDisconnected
-	.word ov72_0223A010
+	.word NintendoWfc_UnusedState_Idle
 	.word NintendoWfc_StartDisconnect
 	.word NintendoWfc_StartExit
 	.word NintendoWfc_WaitMessage
 	.word NintendoWfc_OpenYesNoMenu
 	.word NintendoWfc_WaitMessageAndDelay
-	.word ov72_0223A044
+	.word NintendoWfc_UnusedState_HandleYesNo
 	.word NintendoWfc_AskLogOut
 	.word NintendoWfc_HandleLogOutChoice
 	.word NintendoWfc_ShowHttpError
@@ -477,9 +477,9 @@ sNintendoWfcNumberInputStates: ; 0x0223B744
 	.word NintendoWfc_NumberInput_Setup
 	.word NintendoWfc_NumberInput_WaitFadeIn
 	.word NintendoWfc_NumberInput_Main
-	.word ov72_0223ABF4
-	.word ov72_0223ABF8
-	.word ov72_0223ABFC
+	.word NintendoWfc_NumberInput_UnusedState4
+	.word NintendoWfc_NumberInput_UnusedState5
+	.word NintendoWfc_NumberInput_UnusedState6
 	.word NintendoWfc_NumberInput_StartFadeOut
 	.word NintendoWfc_NumberInput_Teardown
 	.word NintendoWfc_NumberInput_WaitFadeOut
@@ -501,7 +501,7 @@ ov72_0223B7B8: ; 0x0223B7B8
 	.byte 0xA4, 0xBB, 0x5C, 0xA3, 0xA4, 0xBB, 0xB4, 0xFB, 0xFF, 0x00, 0x00, 0x00
 
 sNintendoWfcYesNoStates: ; 0x0223B7FC
-	.word NintendoWfcYesNo_Start, NintendoWfcYesNo_HandleInput, ov72_0223B084, NintendoWfcYesNo_WaitClose
+	.word NintendoWfcYesNo_Start, NintendoWfcYesNo_HandleInput, NintendoWfcYesNo_UnusedState2, NintendoWfcYesNo_WaitClose
 
 	.bss
 

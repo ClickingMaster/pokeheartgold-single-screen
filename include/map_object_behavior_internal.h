@@ -125,7 +125,7 @@ int TrainerSight_GetDistanceWest(LocalMapObject *object, int range, int targetX,
 int TrainerSight_GetDistanceEast(LocalMapObject *object, int range, int targetX, int targetZ, int unused);
 int TrainerSight_IsPathBlocked(LocalMapObject *object, int direction, int distance);
 u32 MapObject_GetTrainerNum(LocalMapObject *object);
-u32 sub_02064518(LocalMapObject *object);
+u32 MapObjectBehavior_GetTrainerNum(LocalMapObject *object);
 LocalMapObject *MapObjectManager_FindTrainerPartner(void *unused, MapObjectManager *manager, LocalMapObject *exclude, u32 trainerNum);
 SysTask *TrainerApproach_Start(FieldSystem *fieldSystem, LocalMapObject *trainer, PlayerAvatar *player, int movement, int remaining, int unk10, int unk14, int unk18);
 BOOL TrainerApproach_IsDone(SysTask *task);

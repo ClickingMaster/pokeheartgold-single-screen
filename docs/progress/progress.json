@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "bd5f6415f19f2f7ef7628f284716319d0694c1a2",
+  "commit": "5acfa764593486282210d1b4b7299d9f57be87cf",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "f24dbad3a56b288306d7bbf67b66e50e1fb04f8a172143c11cac687f807a15d9",
+    "ARM9": "bb0d09c0a7a01bbd942e3880e41b6b42762595f01b62adb3b8d90faafc1a7e1a",
     "ARM7": "b44058d8b791338c04a234352793bd8125685d2c2662d6032830bb6faf239276"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -1924,10 +1924,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_35",
-      "object": "ov35_02259d80.o",
+      "object": "field_hook_unused.o",
       "bytes": 58,
       "status": "c",
-      "source": "src/ov35_02259d80.c"
+      "source": "src/field_hook_unused.c"
     },
     {
       "cpu": "ARM9",
@@ -8264,6 +8264,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "frontier_wifi_upload_record.o",
+      "bytes": 312,
+      "status": "c",
+      "source": "src/frontier_wifi_upload_record.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "fs_send_command.o",
       "bytes": 420,
       "status": "c",
@@ -12117,6 +12125,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "seal_data.o",
+      "bytes": 132,
+      "status": "c",
+      "source": "src/seal_data.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "sin_vcount.o",
       "bytes": 16,
       "status": "c",
@@ -12949,14 +12965,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "unk_02069528.o",
-      "bytes": 312,
-      "status": "c",
-      "source": "src/unk_02069528.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "unk_0206B910.o",
       "bytes": 1016,
       "status": "c",
@@ -12981,14 +12989,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "unk_02091054.o",
-      "bytes": 132,
-      "status": "c",
-      "source": "src/unk_02091054.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "unk_02091564.o",
       "bytes": 68,
       "status": "c",
@@ -13001,14 +13001,6 @@
       "bytes": 44,
       "status": "c",
       "source": "src/unk_02092BB8.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "unk_020971F8.o",
-      "bytes": 108,
-      "status": "c",
-      "source": "src/unk_020971F8.c"
     },
     {
       "cpu": "ARM9",
@@ -13224,6 +13216,14 @@
       "bytes": 1440,
       "status": "c",
       "source": "src/wifi_club.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "wifi_club_comm.o",
+      "bytes": 108,
+      "status": "c",
+      "source": "src/wifi_club_comm.c"
     },
     {
       "cpu": "ARM9",

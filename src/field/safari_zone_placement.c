@@ -126,7 +126,7 @@ BOOL SafariZone_CanPlaceObjectOnLand(u8 behavior, BOOL blocked) {
     if (blocked) {
         return FALSE;
     }
-    return sub_0205BAD0(behavior);
+    return MetatileBehavior_CanPlaceSafariObjectOnLand(behavior);
 }
 
 BOOL SafariZone_CanPlaceObjectOnWater(u8 behavior, BOOL blocked) {

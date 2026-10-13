@@ -12,7 +12,7 @@ typedef struct KimonoGirlEffectWork {
     BOOL scrolling;
 } KimonoGirlEffectWork;
 
-void EncounterEffect_LoadBgGraphicsMirrored(NARC *narc, int member1, int member2, int member3, int arg4, int arg5, BgConfig *bgConfig, int bgId1, int bgId2);
+void EncounterEffect_LoadBgGraphicsMirrored(NARC *narc, int member1, int member2, int member3, int palette, int paletteCount, BgConfig *bgConfig, int bgId1, int bgId2);
 extern void SetBothScreensBrightnessByColor(); // called without its color argument here
 
 // BgTemplates for BG1 and BG3 (512x256, 16 colors; screen base 0x0000 / 0x1000, char base 0x4000 /

@@ -41,7 +41,7 @@ void CallTask_EditBattleGreeting(TaskManager *taskManager, u16 *result) {
     work->result = result;
     MailMsg_Init_WithBank(&work->message, MAILMSG_BANK_0295_GMM);
     SaveMisc_GetBattleGreeting(work->misc, &work->message);
-    sub_02090D40(work->easyChat);
+    EasyChatArgs_SetAlwaysConfirm(work->easyChat);
     work->state = 0;
     TaskManager_Call(taskManager, Task_EditBattleGreeting, work);
 }

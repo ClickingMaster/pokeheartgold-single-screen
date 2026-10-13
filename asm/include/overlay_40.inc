@@ -272,8 +272,8 @@
 .public OrbitCursor_SetPosition
 .public OrbitCursor_SetVisible
 .public OrbitCursor_SetRadius
-.public sub_02087A30
-.public sub_02087A54
+.public OrbitCursor_SetAltAnim
+.public OrbitCursor_SetDefaultAnim
 .public VsRecorderApp_SetResult
 .public VsRecorderApp_HasVisitedBattleFrontier
 .public VsRecorderApp_CountMenuChoices

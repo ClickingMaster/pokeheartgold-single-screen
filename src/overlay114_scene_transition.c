@@ -1,6 +1,6 @@
 #include "overlay114_scene_transition_private.h"
 
-void ov114_0225F020(void *task, Ov114Task *ctx) {
+void EncounterEffect_FrontierOrLinkSingle(void *task, Ov114Task *ctx) {
     Triple scale5;
     Triple scale6;
     Triple tmp5;
@@ -82,7 +82,7 @@ void ov114_0225F020(void *task, Ov114Task *ctx) {
     }
 }
 
-void ov114_0225F280(void *task, Ov114Task *ctx) {
+void EncounterEffect_Double(void *task, Ov114Task *ctx) {
     Triple matrix;
     BOOL done;
     int i;

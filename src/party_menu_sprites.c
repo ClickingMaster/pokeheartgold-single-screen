@@ -617,7 +617,7 @@ void PartyMenu_ShowCursorAtSlot(PartyMenu *partyMenu, u8 partySlot, int selected
     thunk_Sprite_SetPaletteOverride(partyMenu->sprites[PARTY_MENU_SPRITE_ID_CURSOR], selected);
 }
 
-void sub_0207F2A8(PartyMenu *partyMenu, s16 x, s16 y) {
+void PartyMenu_StartUnusedSlotEffectSprite(PartyMenu *partyMenu, s16 x, s16 y) {
     VecFx32 pos;
     pos.x = x * FX32_ONE;
     pos.y = y * FX32_ONE;
@@ -629,7 +629,7 @@ void sub_0207F2A8(PartyMenu *partyMenu, s16 x, s16 y) {
     Sprite_SetAnimCtrlSeq(partyMenu->sprites[PARTY_MENU_SPRITE_ID_28], 0);
 }
 
-void sub_0207F2F8(PartyMenu *partyMenu) {
+void PartyMenu_UpdateUnusedSlotEffectSprite(PartyMenu *partyMenu) {
     if (Sprite_GetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_28]) == TRUE) {
         Sprite_UpdateAnim(partyMenu->sprites[PARTY_MENU_SPRITE_ID_28], FX32_ONE);
         if (Sprite_GetAnimationFrame(partyMenu->sprites[PARTY_MENU_SPRITE_ID_28]) == 2) {

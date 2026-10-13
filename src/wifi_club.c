@@ -179,7 +179,7 @@ BOOL Task_WifiClub(TaskManager *taskManager) {
     case 8:
         Heap_Create(HEAP_ID_3, HEAP_ID_53, 0x40100);
         LoadOVY13();
-        ov13_0221BA00(HEAP_ID_53);
+        RunWifiSetupApp(HEAP_ID_53);
         OS_ResetSystem(0);
         break;
     case 9:

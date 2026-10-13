@@ -43,17 +43,17 @@ void WirelessTrade_RecvSlot(int sender, int unused, u8 *data, TradeContext *cont
     context->work->slots[sender] = *data;
 }
 
-void sub_0208F724(int sender, int unused, void *data, TradeContext *context) {
+void WirelessTrade_RecvUnused3(int sender, int unused, void *data, TradeContext *context) {
 }
 
-void sub_0208F728(int sender, int unused, void *data, TradeContext *context) {
+void WirelessTrade_RecvUnused4(int sender, int unused, void *data, TradeContext *context) {
 }
 
-void sub_0208F72C(int sender, int unused, void *data, TradeContext *context) {
+void WirelessTrade_RecvSetState2(int sender, int unused, void *data, TradeContext *context) {
     context->work->state = 2;
 }
 
-void sub_0208F738(int sender, int unused, void *data, TradeContext *context) {
+void WirelessTrade_RecvUnused8(int sender, int unused, void *data, TradeContext *context) {
 }
 
 void WirelessTrade_RecvRemoteState(int sender, int unused, u8 *data, TradeContext *context) {

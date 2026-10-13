@@ -50,7 +50,7 @@ typedef struct TouchscreenChoiceMenuView {
 // The apps' entry points, declared with the template's signatures.
 void *TouchscreenMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args);
 void TouchscreenMenu_Destroy(BgConfig *bgConfig, void *app);
-BOOL ov27_0225A2C8(BgConfig *bgConfig);
+BOOL TouchscreenMenu_IsExitDone(BgConfig *bgConfig);
 void *TouchSaveApp_Init(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args);
 void TouchSaveApp_Exit(BgConfig *bgConfig, void *app);
 BOOL TouchSaveApp_IsExitDone(BgConfig *bgConfig);
@@ -59,7 +59,7 @@ void TouchMartApp_Exit(BgConfig *bgConfig, void *app);
 BOOL TouchMartApp_IsExitDone(BgConfig *bgConfig);
 void *TouchscreenChoiceMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args);
 void TouchscreenChoiceMenu_Destroy(BgConfig *bgConfig, void *app);
-BOOL ov27_0225C418(BgConfig *bgConfig);
+BOOL TouchscreenChoiceMenu_IsExitDone(BgConfig *bgConfig);
 void *DowsingMchn_Init(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args);
 void DowsingMchn_Exit(BgConfig *bgConfig, void *app);
 BOOL DowsingMchn_IsExitDone(BgConfig *bgConfig);
@@ -78,7 +78,7 @@ void UnionChatLog_Exit(void *data);
 void TouchscreenChoiceMenu_SetCallback(void *app, void *callback, void *arg);
 void TouchscreenMenu_RequestSelectedIconAnim(void *app);
 void TouchscreenMenu_RequestRegisteredItemAnim(void *app, int item);
-void ov35_02259D80(void *, int, int);
+void FieldHookUnused_OnEvent(void *, int, int);
 
 // Also declared by overlay_01.h, with other return types; this file keeps the types it was built with.
 void FieldSystem_SwitchBottomScreenApp(FieldSystem *fieldSystem, int appId, void *args);
@@ -148,10 +148,10 @@ static const u16 sSpriteIdsWithoutTalkAction[] = {
 };
 
 static const BottomScreenAppTemplate sBottomScreenApps[] = {
-    [BOTTOM_SCREEN_APP_TOUCHSCREEN_MENU] = { TouchscreenMenu_Create, TouchscreenMenu_Destroy, ov27_0225A2C8, (u32)-1 },
+    [BOTTOM_SCREEN_APP_TOUCHSCREEN_MENU] = { TouchscreenMenu_Create, TouchscreenMenu_Destroy, TouchscreenMenu_IsExitDone, (u32)-1 },
     [BOTTOM_SCREEN_APP_TOUCH_SAVE] = { TouchSaveApp_Init, TouchSaveApp_Exit, TouchSaveApp_IsExitDone, FS_OVERLAY_ID(touch_save_app) },
     [BOTTOM_SCREEN_APP_TOUCH_MART] = { TouchMartApp_Init, TouchMartApp_Exit, TouchMartApp_IsExitDone, FS_OVERLAY_ID(OVY_31) },
-    [BOTTOM_SCREEN_APP_CHOICE_MENU] = { TouchscreenChoiceMenu_Create, TouchscreenChoiceMenu_Destroy, ov27_0225C418, (u32)-1 },
+    [BOTTOM_SCREEN_APP_CHOICE_MENU] = { TouchscreenChoiceMenu_Create, TouchscreenChoiceMenu_Destroy, TouchscreenChoiceMenu_IsExitDone, (u32)-1 },
     [BOTTOM_SCREEN_APP_DOWSING_MCHN] = { DowsingMchn_Init, DowsingMchn_Exit, DowsingMchn_IsExitDone, FS_OVERLAY_ID(OVY_28) },
     [BOTTOM_SCREEN_APP_NUMBER_ENTRY] = { NumberEntry_Init, NumberEntry_Exit, NumberEntry_IsExitDone, FS_OVERLAY_ID(OVY_29) },
     [BOTTOM_SCREEN_APP_FRIEND_ROSTER] = { FriendRosterApp_Init, FriendRosterApp_Exit, FriendRosterApp_IsExitDone, FS_OVERLAY_ID(OVY_32) },
@@ -162,7 +162,7 @@ static const BottomScreenAppTemplate sBottomScreenApps[] = {
 void FieldSystem_SendBottomScreenEvent(FieldSystem *fieldSystem, int a1, int a2) {
     void *state = (void *)fieldSystem->mapSystems->unk14;
     if (state != NULL) {
-        ov35_02259D80(state, a1, a2);
+        FieldHookUnused_OnEvent(state, a1, a2);
     }
 }
 

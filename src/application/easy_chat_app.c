@@ -1459,7 +1459,7 @@ void EasyChatApp_SubHandler_Start(EasyChatApp *app, u32 *state) {
 void EasyChatApp_SubHandler_ConfirmFinish(EasyChatApp *app, u32 *state) {
     switch (*state) {
     case 0:
-        if (EasyChatApp_HasChanged(app) || sub_02090D88(app->args)) {
+        if (EasyChatApp_HasChanged(app) || EasyChatArgs_GetAlwaysConfirm(app->args)) {
             if (EasyChatApp_IsComplete(app)) {
                 EasyChatYesNo_Set(app->unk_70, 1, 0);
                 EasyChatAppView_StartCommand(app->view, 21);
@@ -1579,7 +1579,7 @@ u32 EasyChatApp_GetType(EasyChatApp *app) {
 }
 
 u8 ov102_021E8F70(EasyChatApp *app) {
-    return sub_02090D74(app->args);
+    return EasyChatArgs_GetPromptMsgNo(app->args);
 }
 
 u8 EasyChatApp_GetListMode(EasyChatApp *app) {

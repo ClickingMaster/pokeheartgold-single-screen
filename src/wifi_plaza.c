@@ -82,7 +82,7 @@ BOOL WiFiPlaza_Exit(OverlayManager *man, int *state) {
 void WiFiPlaza_VBlankTask(SysTask *task, void *data) {
     WiFiPlaza *plaza = data;
     WiFiPlazaApps_VBlank(plaza->apps);
-    ov45_0222A1F8(plaza->work);
+    WiFiPlazaWork_VBlankDummy(plaza->work);
 }
 
 // The original objects of WiFiPlazaWork_New and WiFiPlazaWork_Update were force-active.
@@ -107,10 +107,10 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     }
     WiFiPlazaProfile_InitFromSave(&work->profile, work->save, heapID);
     WiFiPlazaTalkSession_Init(&work->talk);
-    ov45_0222BD30(work->unk_1e8);
+    WiFiPlaza_ClearTapToyPlayedFlags(work->unk_1e8);
     WiFiPlazaLobbyClient_SetLobbyCommands(ov45_02254AC4, 8, work);
     WiFiPlazaEventSchedule_Init(&work->eventSchedule);
-    ov45_0222C388(&work->groups);
+    WiFiPlazaGroups_Init(&work->groups);
     WiFiPlazaGroupWeights_Init(&work->groupWeights);
     WiFiPlazaWordSet_Init(&work->wordSet, heapID);
     WiFiPlazaHistory_Init(&work->history, work->save);
@@ -124,7 +124,7 @@ void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
     WiFiPlazaPlayerSurvey vals;
     int i;
     void *x;
-    ov45_0222AB0C(&work->profile.player, &vals);
+    WiFiPlazaPlayer_GetSurvey(&work->profile.player, &vals);
     x = Save_PlazaSurvey_Get(work->save);
     PlazaSurvey_SetSurveyId(x, vals.surveyId);
     PlazaSurvey_SetAnswer(x, vals.answer);
@@ -150,11 +150,11 @@ void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
     WiFiPlaza_SecondsToTime(&work->currentTime, &time);
     WiFiPlazaWork_CheckClosingTime(work);
     WiFiPlazaTalkSession_UpdateTimeout(&work->talk);
-    ov45_0222BD30(work->unk_1e8);
+    WiFiPlaza_ClearTapToyPlayedFlags(work->unk_1e8);
     WiFiPlaza_ClearEventFlags(work->changeFlags);
     WiFiPlazaEventSchedule_Update(&work->eventSchedule, work->changeFlags, &work->groups, &work->timer);
-    ov45_0222BCB8(&work->unk_3a0);
-    ov45_0222C3B0(&work->groups);
+    WiFiPlazaUnk3A0_UpdateCooldown(&work->unk_3a0);
+    WiFiPlazaGroups_Update(&work->groups);
     WiFiPlazaTimer_Update(&work->timer);
     if (WiFiPlazaHistory_IsCorrupt(&work->history) == 1) {
         work->hasError = 1;

@@ -46,7 +46,7 @@
 	.public VisitorProfilesPanel_PushHistory
 	.public VisitorProfilesPanel_AnimateBgs
 	.public VisitorProfilesPanel_StartReveal
-	.public ov48_0225A428
+	.public VisitorProfilesPanel_HalveRevealTicks
 	.public VisitorProfilesPanel_Reveal
 	.public VisitorProfilesPanel_UpdateRow
 	.public VisitorProfilesPanel_CopyBaseRow

@@ -24,31 +24,31 @@
 #include "text.h"
 #include "sound_playback.h"
 #include "communication_club_link.h"
-#include "unk_02091054.h"
+#include "seal_data.h"
 #include "mart_bag_task.h"
 
-static void ov03_02256BA8(FieldSystem *fieldSystem, u8 index);
+static void RocketHQ_UpdateElectrodePropAnimation(FieldSystem *fieldSystem, u8 index);
 static void MartTask_InitMartMessageData(MartData *data);
 static void MartData_InitMessageData(MartData *data);
 static void MartData_InitCamera(FieldSystem *fieldSystem, MartData *data);
 static void MartData_AddWindows(MartData *data);
 static u8 MartData_WaitForBottomScreenApp(FieldSystem *fieldSystem, MartData *data);
-static void MartData_PrintItemDescription(MartData *data, u32 arg1);
+static void MartData_PrintItemDescription(MartData *data, u32 position);
 static int MartData_HandleItemListInput(MartData *data);
-static u8 MartData_SelectItemListButton(MartData *data, u32 arg1);
+static u8 MartData_SelectItemListButton(MartData *data, u32 button);
 static u8 MartData_PrevPage(MartData *data);
 static u8 MartData_NextPage(MartData *data);
-static void MartData_DrawPageItemIcons(MartData *data, int arg1, u8 arg2);
+static void MartData_DrawPageItemIcons(MartData *data, int pageStart, u8 numItems);
 static u8 MartData_CloseMenu(MartData *data);
 static u8 MartData_BeginPurchase(MartData *data, u16 itemID);
 static u8 MartData_WaitQuantityPrompt(MartData *data);
 static u8 MartData_FinishQuantityInput(MartData *data);
 static u8 MartData_CancelQuantityInput(MartData *data);
 static u8 MartData_HandleQuantityInput(MartData *data);
-static u8 MartData_HandleQuantityButton(MartData *data, u32 arg1);
+static u8 MartData_HandleQuantityButton(MartData *data, u32 button);
 static u8 MartData_CheckInventorySpace(MartData *data);
 static u8 MartData_WaitConfirmPrompt(MartData *data);
-static u8 MartData_HandleConfirmInput(MartData *data, u32 arg1);
+static u8 MartData_HandleConfirmInput(MartData *data, u32 button);
 static u8 MartData_PerformTransaction(MartData *data);
 static u8 MartData_WaitPurchaseMessage(MartData *data);
 static u8 MartData_WaitErrorMessage(MartData *data);
@@ -56,7 +56,7 @@ static u8 MartData_WaitPremierBallMessage(MartData *data);
 static void MartData_RestoreBottomScreenApp(FieldSystem *fieldSystem, MartData *data_unused);
 static u8 MartData_FinishClose(FieldSystem *fieldSystem, MartData *data);
 static void MartData_DeleteSprites(MartData *data);
-static void ov03_02258560(MartData *data, BOOL arg1);
+static void MartData_SetScrollArrowPositions(MartData *data, BOOL arg1);
 static void ov03_022586BC(MartData *data, int flag);
 static u8 MartData_StartButtonPressAnim(MartData *data, u8 arg1, u8 arg2);
 static u8 MartData_AnimateButtonPress(MartData *data);
@@ -68,9 +68,9 @@ static BOOL MartData_Destroy(FieldSystem *fieldSystem_unused, MartData *data);
 static void MartData_UpdateButtonSprites(MartData *data, int arg1);
 static void MartData_SetSelectedItemIcon(MartData *data, u16 itemID);
 static void MartData_LoadItemIcon(MartData *data, int charID, int paletteID, u16 item);
-static int Mart_StepQuantity(s16 currentQuantity, u16 arg1, s16 modifier);
+static int Mart_StepQuantity(s16 currentQuantity, u16 maxQuantity, s16 modifier);
 
-static const u16 ov03_0225945C[4] = {
+static const u16 sRocketHQElectrodePropModels[4] = {
     149,
     152,
     153,
@@ -146,18 +146,18 @@ static const WindowTemplate ov03_02259464 = {
 
 BOOL ScrCmd_710(ScriptContext *ctx) {
     for (int i = 0; i < 3; i++) {
-        ov03_02256BA8(ctx->fieldSystem, i);
+        RocketHQ_UpdateElectrodePropAnimation(ctx->fieldSystem, i);
     }
     return FALSE;
 }
 
-static void ov03_02256BA8(FieldSystem *fieldSystem, u8 index) {
-    u16 modelID = ov03_0225945C[index];
+static void RocketHQ_UpdateElectrodePropAnimation(FieldSystem *fieldSystem, u8 index) {
+    u16 modelID = sRocketHQElectrodePropModels[index];
     Field3dRenderObj *unkC0_SubC = Field3dObjectList_GetRenderObjectByID(fieldSystem->renderObjManager, modelID);
     if (unkC0_SubC == NULL) {
         GF_AssertFail();
     } else {
-        MapPropAnimationManager_AddAnimationToRenderObj(modelID, sub_020669B4(Save_VarsFlags_Get(fieldSystem->saveData), index), 1, &unkC0_SubC->renderObj, fieldSystem->mapPropAnimationManager); 
+        MapPropAnimationManager_AddAnimationToRenderObj(modelID, CheckRocketHQElectrodeDefeated(Save_VarsFlags_Get(fieldSystem->saveData), index), 1, &unkC0_SubC->renderObj, fieldSystem->mapPropAnimationManager); 
     }
 }
 
@@ -524,11 +524,11 @@ static void MartData_SetCursorPosition(MartData *data, int index, int arg2) {
     }
 }
 
-static void MartData_PrintItemDescription(MartData *data, u32 arg1) {
+static void MartData_PrintItemDescription(MartData *data, u32 position) {
     MsgData *msgData;
     String *string;
     u16 itemID = data->itemIds[data->cursorPos + data->pageStart];
-    switch (arg1) {
+    switch (position) {
     case 0:
     case 1:
     case 2:
@@ -546,7 +546,7 @@ static void MartData_PrintItemDescription(MartData *data, u32 arg1) {
                 DestroyMsgData(msgData);
             } else {
                 msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0434_bin, HEAP_ID_FIELD2);
-                string = NewString_ReadMsgData(msgData, sub_020910B8((u8)itemID));
+                string = NewString_ReadMsgData(msgData, Seal_GetDescriptionMsgId((u8)itemID));
                 DestroyMsgData(msgData);
             }
             AddTextPrinterParameterizedWithColor(&data->windows[1], 0, string, 0, 0, 0xFF, 0xF0E00, 0);
@@ -626,16 +626,16 @@ static int MartData_HandleItemListInput(MartData *data) {
     return TASK_MART_3;
 }
 
-static u8 MartData_SelectItemListButton(MartData *data, u32 arg1) {
-    switch (arg1) {
+static u8 MartData_SelectItemListButton(MartData *data, u32 button) {
+    switch (button) {
     case 0:
     case 1:
     case 2:
     case 3:
     case 4:
     case 5:
-        if (arg1 + data->pageStart < data->numItems) {
-            data->cursorPos = arg1;
+        if (button + data->pageStart < data->numItems) {
+            data->cursorPos = button;
             MartData_SetCursorPosition(data, data->cursorPos, 0);
             Sprite_SetAnimCtrlSeq(data->sprites[10], 19);
             PlaySE(SEQ_SE_DP_SELECT);
@@ -656,7 +656,7 @@ static u8 MartData_SelectItemListButton(MartData *data, u32 arg1) {
         }
         break;
     case 8:
-        MartData_SetCursorPosition(data, arg1, 0);
+        MartData_SetCursorPosition(data, button, 0);
         Sprite_SetAnimCtrlSeq(data->sprites[10], 7);
         PlaySE(SEQ_SE_GS_GEARCANCEL);
         MartData_PrintItemDescription(data, 8);
@@ -681,19 +681,19 @@ static u8 MartData_NextPage(MartData *data) {
     return TASK_MART_3;
 }
 
-static void MartData_DrawPageItemIcons(MartData *data, int arg1, u8 arg2) {
+static void MartData_DrawPageItemIcons(MartData *data, int pageStart, u8 numItems) {
     int temp;
     for (int i = 0; i < 6; i++) {
-        if (arg2 - arg1 > 6) {
+        if (numItems - pageStart > 6) {
             temp = 6;
-        } else if (arg2 - arg1 < 0) {
+        } else if (numItems - pageStart < 0) {
             temp = 0;
         } else {
-            temp = arg2 - arg1;
+            temp = numItems - pageStart;
         }
 
         if (i < temp) {
-            MartData_LoadItemIcon(data, i + 3, i + 2, data->itemIds[i + arg1]);
+            MartData_LoadItemIcon(data, i + 3, i + 2, data->itemIds[i + pageStart]);
             Sprite_SetDrawFlag(data->sprites[i + 4], TRUE);
         } else {
             Sprite_SetDrawFlag(data->sprites[i + 4], FALSE);
@@ -797,7 +797,7 @@ static u8 MartData_CancelQuantityInput(MartData *data) {
     EraseFrameAndWindow1(&data->windows[4], TRUE);
     EraseFrameAndWindow1(&data->windows[3], TRUE);
     ClearFrameAndWindow2(&data->windows[5], FALSE);
-    ov03_02258560(data, FALSE);
+    MartData_SetScrollArrowPositions(data, FALSE);
     Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
     Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
     ov03_022586BC(data, 0);
@@ -824,8 +824,8 @@ static u8 MartData_HandleQuantityInput(MartData *data) {
     return TASK_MART_7;
 }
 
-static u8 MartData_HandleQuantityButton(MartData *data, u32 arg1) {
-    switch (arg1) {
+static u8 MartData_HandleQuantityButton(MartData *data, u32 button) {
+    switch (button) {
     case 0:
         if (data->maxQuantity >= 10) {
             data->quantity = Mart_StepQuantity(data->quantity, data->maxQuantity, 10);
@@ -911,14 +911,14 @@ static u8 MartData_WaitConfirmPrompt(MartData *data) {
     return TASK_MART_11;
 }
 
-static u8 MartData_HandleConfirmInput(MartData *data, u32 arg1) {
-    switch (arg1) {
+static u8 MartData_HandleConfirmInput(MartData *data, u32 button) {
+    switch (button) {
     case 0:
         data->touchMartAction = 9;
         return TASK_MART_12;
     case 1:
         ClearFrameAndWindow2(&data->windows[5], FALSE);
-        ov03_02258560(data, FALSE);
+        MartData_SetScrollArrowPositions(data, FALSE);
         Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
         ov03_022586BC(data, 0);
@@ -979,7 +979,7 @@ static u8 MartData_WaitPurchaseMessage(MartData *data) {
             return TASK_MART_15;
         }
         ClearFrameAndWindow2(&data->windows[5], 0);
-        ov03_02258560(data, FALSE);
+        MartData_SetScrollArrowPositions(data, FALSE);
         Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
         ov03_022586BC(data, 0);
@@ -996,7 +996,7 @@ static u8 MartData_WaitErrorMessage(MartData *data) {
     }
     if ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || gSystem.touchNew) {
         ClearFrameAndWindow2(&data->windows[5], FALSE);
-        ov03_02258560(data, FALSE);
+        MartData_SetScrollArrowPositions(data, FALSE);
         Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
         ov03_022586BC(data, 0);
@@ -1013,7 +1013,7 @@ static u8 MartData_WaitPremierBallMessage(MartData *data) {
     }
     if ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || gSystem.touchNew) {
         ClearFrameAndWindow2(&data->windows[5], FALSE);
-        ov03_02258560(data, FALSE);
+        MartData_SetScrollArrowPositions(data, FALSE);
         Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
         ov03_022586BC(data, 0);
@@ -1426,7 +1426,7 @@ static void MartData_UpdateButtonSprites(MartData *data, int arg1) {
     }
 }
 
-static void ov03_02258560(MartData *data, BOOL arg1) {
+static void MartData_SetScrollArrowPositions(MartData *data, BOOL arg1) {
     if (arg1 == FALSE) {
         Sprite_SetPositionXY(data->sprites[0], 177, 8);
         Sprite_SetPositionXY(data->sprites[1], 177, 132);
@@ -1531,18 +1531,18 @@ static u8 MartData_WaitFade(FieldSystem *fieldSystem_unused, MartData *data_unus
     return IsPaletteFadeFinished() == FALSE ? (u8)TASK_MART_26 : (u8)TASK_MART_27;
 }
 
-static int Mart_StepQuantity(s16 currentQuantity, u16 arg1, s16 modifier) {
+static int Mart_StepQuantity(s16 currentQuantity, u16 maxQuantity, s16 modifier) {
     int ret;
     if (modifier > 0) {
-        if (currentQuantity == arg1) {
+        if (currentQuantity == maxQuantity) {
             return 1;
         }
         ret = currentQuantity + modifier;
-        if (ret > arg1) {
-            return arg1;
+        if (ret > maxQuantity) {
+            return maxQuantity;
         }
     } else if (currentQuantity == 1) {
-        return arg1;
+        return maxQuantity;
     } else {
         ret = currentQuantity + modifier;
         if (ret <= 0) {

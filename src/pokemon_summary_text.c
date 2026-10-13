@@ -678,7 +678,7 @@ void PokemonSummary_PrintMoveToLearn(PokemonSummary *summary) {
     }
 }
 
-void sub_0208DB58(PokemonSummary *summary) {
+void PokemonSummary_ScheduleMainBg1Transfer(PokemonSummary *summary) {
     ScheduleBgTilemapBufferTransfer(summary->bgConfig, GF_BG_LYR_MAIN_1);
 }
 
@@ -735,7 +735,7 @@ void PokemonSummary_ShowSwitchLabel(PokemonSummary *summary, int show) {
     }
 }
 
-void sub_0208DDA0(PokemonSummary *summary, int result) {
+void PokemonSummary_PrintConditionChangeMessage(PokemonSummary *summary, int result) {
     int msgNo;
     Window *window;
     switch (result) {

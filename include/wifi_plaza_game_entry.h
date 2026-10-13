@@ -28,7 +28,7 @@ typedef struct WiFiPlazaGameEntryParam {
     s8 result;       // enum WiFiPlazaGameEntryResult
     u8 slot;         // lobby game session
     u8 game;         // activity name / game id reported to the lobby
-    u8 playerStatus; // ov45_0222A5E8 value while registering
+    u8 playerStatus; // WiFiPlazaWork_SetActivity value while registering
 } WiFiPlazaGameEntryParam;
 
 // The game's status panel: session state, free places and the seconds left

@@ -4,7 +4,7 @@
 #include "frontier_data.h"
 #include "pokemon_types_def.h"
 #include "save.h"
-#include "unk_02069528.h"
+#include "frontier_wifi_upload_record.h"
 
 void BattleTowerChallenge_Clear(u32 a0);
 u32 BattleTowerChallenge_GetField(u32 a0, u32 a1, void *a2);

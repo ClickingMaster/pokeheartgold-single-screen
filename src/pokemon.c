@@ -48,15 +48,15 @@ void GetBoxmonSpriteCharAndPlttNarcIds(PokepicTemplate *pokepicTemplate, BoxPoke
 void DP_GetMonSpriteCharAndPlttNarcIdsEx(PokepicTemplate *pokepicTemplate, u16 species, u8 gender, u8 whichFacing, u8 shiny, u8 form, u32 pid);
 void GetMonSpriteCharAndPlttNarcIdsEx(PokepicTemplate *pokepicTemplate, u16 species, u8 gender, u8 whichFacing, u8 shiny, u8 form, u32 pid);
 u8 SanitizeMonForm(u16 species, u8 form);
-u8 GetBoxMonPicHeightEx(BoxPokemon *boxMon, u8 whichFacing, BOOL a2);
+u8 GetBoxMonPicHeightEx(BoxPokemon *boxMon, u8 whichFacing, BOOL usePBR);
 u8 GetMonPicHeightBySpeciesGenderForm_PBR(u16 species, u8 gender, u8 whichFacing, u8 form, u32 pid);
 u8 GetMonPicHeightBySpeciesGenderForm(u16 species, u8 gender, u8 whichFacing, u8 form, u32 pid);
-void GetTrainerPicFileIds(s32 trainer_class, s32 a1, BOOL a2, struct TrainerPicFileIds *a3);
-int TrainerClassToBackpicID(int trainer_class, int a1);
+void GetTrainerPicFileIds(s32 trainer_class, s32 battlerPosition, BOOL isLink, struct TrainerPicFileIds *fileIds);
+int TrainerClassToBackpicID(int trainer_class, int isLink);
 void LoadMonEvolutionTable(u16 species, struct Evolution *evoTable);
 BOOL MonHasMove(Pokemon *mon, u16 move_id);
-void BoxMonSetCatchData(BoxPokemon *boxMon, PlayerProfile *playerProfile, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID);
-void BoxMonSetCatchDataNoHealBall(BoxPokemon *boxMon, PlayerProfile *a1, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID);
+void BoxMonSetCatchData(BoxPokemon *boxMon, PlayerProfile *playerProfile, u32 pokeball, u32 mapsec, u32 encounterType, enum HeapID heapID);
+void BoxMonSetCatchDataNoHealBall(BoxPokemon *boxMon, PlayerProfile *playerProfile, u32 pokeball, u32 mapsec, u32 encounterType, enum HeapID heapID);
 
 #define ENCRY_ARGS_PTY(mon)    (u16 *)&(mon)->party, sizeof((mon)->party), (mon)->box.personality
 #define ENCRY_ARGS_BOX(boxMon) (u16 *)&(boxMon)->dataBlocks, sizeof((boxMon)->dataBlocks), (boxMon)->checksum
@@ -2475,7 +2475,7 @@ u8 GetBoxMonPicHeight_PBR(BoxPokemon *boxMon, u8 whichFacing) {
     return GetBoxMonPicHeightEx(boxMon, whichFacing, TRUE);
 }
 
-u8 GetBoxMonPicHeightEx(BoxPokemon *boxMon, u8 whichFacing, BOOL a2) {
+u8 GetBoxMonPicHeightEx(BoxPokemon *boxMon, u8 whichFacing, BOOL usePBR) {
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES_OR_EGG, NULL);
     u8 gender = GetBoxMonGender(boxMon);
     u32 pid = GetBoxMonData(boxMon, MON_DATA_PERSONALITY, NULL);
@@ -2489,7 +2489,7 @@ u8 GetBoxMonPicHeightEx(BoxPokemon *boxMon, u8 whichFacing, BOOL a2) {
     } else {
         form = GetBoxMonData(boxMon, MON_DATA_FORM, NULL);
     }
-    if (a2 == TRUE) {
+    if (usePBR == TRUE) {
         return GetMonPicHeightBySpeciesGenderForm_PBR(species, gender, whichFacing, form, pid);
     } else {
         return GetMonPicHeightBySpeciesGenderForm(species, gender, whichFacing, form, pid);
@@ -2716,27 +2716,27 @@ struct ManagedSprite *CreateTrainerPicSprite(SpriteSystem *renderer, SpriteManag
     return object;
 }
 
-void GetTrainerPicFileIds(s32 trainer_class, s32 battlerPosition, BOOL isLink, struct TrainerPicFileIds *a3) {
+void GetTrainerPicFileIds(s32 trainer_class, s32 battlerPosition, BOOL isLink, struct TrainerPicFileIds *fileIds) {
     if (battlerPosition == 2) {
-        a3->narcId = NARC_a_0_5_8;
-        a3->ncgr_id = trainer_class * 5 + 0;
-        a3->nclr_id = trainer_class * 5 + 1;
-        a3->ncer_id = trainer_class * 5 + 2;
-        a3->nanr_id = trainer_class * 5 + 3;
-        a3->ncbr_id = trainer_class * 5 + 4;
+        fileIds->narcId = NARC_a_0_5_8;
+        fileIds->ncgr_id = trainer_class * 5 + 0;
+        fileIds->nclr_id = trainer_class * 5 + 1;
+        fileIds->ncer_id = trainer_class * 5 + 2;
+        fileIds->nanr_id = trainer_class * 5 + 3;
+        fileIds->ncbr_id = trainer_class * 5 + 4;
     } else {
-        a3->narcId = NARC_a_0_0_6;
+        fileIds->narcId = NARC_a_0_0_6;
         trainer_class = TrainerClassToBackpicID(trainer_class, isLink);
-        a3->ncgr_id = trainer_class * 5 + 0;
-        a3->nclr_id = trainer_class * 5 + 1;
-        a3->ncer_id = trainer_class * 5 + 2;
-        a3->nanr_id = trainer_class * 5 + 3;
-        a3->ncbr_id = trainer_class * 5 + 4;
+        fileIds->ncgr_id = trainer_class * 5 + 0;
+        fileIds->nclr_id = trainer_class * 5 + 1;
+        fileIds->ncer_id = trainer_class * 5 + 2;
+        fileIds->nanr_id = trainer_class * 5 + 3;
+        fileIds->ncbr_id = trainer_class * 5 + 4;
     }
 }
 
-void GetTrainerPicFileIdsNoLink(s32 trainer_class, s32 battlerSide, struct TrainerPicFileIds *a2) {
-    GetTrainerPicFileIds(trainer_class, battlerSide, FALSE, a2);
+void GetTrainerPicFileIdsNoLink(s32 trainer_class, s32 battlerSide, struct TrainerPicFileIds *fileIds) {
+    GetTrainerPicFileIds(trainer_class, battlerSide, FALSE, fileIds);
 }
 
 u32 Pokemon_sizeof(void) {
@@ -3707,9 +3707,9 @@ void PlayMonCry(Pokemon *mon) {
     PlayCry(GetMonData(mon, MON_DATA_SPECIES, NULL), GetMonData(mon, MON_DATA_FORM, NULL));
 }
 
-void MonSetCatchData(Pokemon *mon, PlayerProfile *a1, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID) {
+void MonSetCatchData(Pokemon *mon, PlayerProfile *playerProfile, u32 pokeball, u32 mapsec, u32 encounterType, enum HeapID heapID) {
     u32 hp;
-    BoxMonSetCatchData(&mon->box, a1, pokeball, a3, encounterType, heapID);
+    BoxMonSetCatchData(&mon->box, playerProfile, pokeball, mapsec, encounterType, heapID);
     if (pokeball == ITEM_HEAL_BALL) {
         hp = GetMonData(mon, MON_DATA_MAX_HP, NULL);
         SetMonData(mon, MON_DATA_HP, &hp);
@@ -3718,19 +3718,19 @@ void MonSetCatchData(Pokemon *mon, PlayerProfile *a1, u32 pokeball, u32 a3, u32 
     }
 }
 
-void BoxMonSetCatchData(BoxPokemon *boxMon, PlayerProfile *playerProfile, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID) {
-    BoxMonSetTrainerMemo(boxMon, playerProfile, 0, a3, heapID);
+void BoxMonSetCatchData(BoxPokemon *boxMon, PlayerProfile *playerProfile, u32 pokeball, u32 mapsec, u32 encounterType, enum HeapID heapID) {
+    BoxMonSetTrainerMemo(boxMon, playerProfile, 0, mapsec, heapID);
     SetBoxMonData(boxMon, MON_DATA_MET_GAME, (void *)&gGameVersion);
     SetBoxMonData(boxMon, MON_DATA_POKEBALL, &pokeball);
     SetBoxMonData(boxMon, MON_DATA_MET_TERRAIN, &encounterType);
 }
 
-void MonSetCatchDataNoHealBall(Pokemon *mon, PlayerProfile *a1, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID) {
-    BoxMonSetCatchDataNoHealBall(&mon->box, a1, pokeball, a3, encounterType, heapID);
+void MonSetCatchDataNoHealBall(Pokemon *mon, PlayerProfile *playerProfile, u32 pokeball, u32 mapsec, u32 encounterType, enum HeapID heapID) {
+    BoxMonSetCatchDataNoHealBall(&mon->box, playerProfile, pokeball, mapsec, encounterType, heapID);
 }
 
-void BoxMonSetCatchDataNoHealBall(BoxPokemon *boxMon, PlayerProfile *a1, u32 pokeball, u32 a3, u32 encounterType, enum HeapID heapID) {
-    BoxMonSetCatchData(boxMon, a1, pokeball, a3, encounterType, heapID);
+void BoxMonSetCatchDataNoHealBall(BoxPokemon *boxMon, PlayerProfile *playerProfile, u32 pokeball, u32 mapsec, u32 encounterType, enum HeapID heapID) {
+    BoxMonSetCatchData(boxMon, playerProfile, pokeball, mapsec, encounterType, heapID);
 }
 
 static const u16 sItemOdds[2][2] = {
@@ -4185,22 +4185,22 @@ void RestoreBoxMonPP(BoxPokemon *boxMon) {
     ReleaseBoxMonLock(boxMon, decry);
 }
 
-void NARC_ReadPokepicAnimScript(NARC *narc, PokepicAnimScript *dest, u16 species, u16 a3) {
+void NARC_ReadPokepicAnimScript(NARC *narc, PokepicAnimScript *dest, u16 species, u16 isFrontpic) {
     struct PokepicSpeciesAnimData sp4;
-    int r5 = (a3 & 1 ? 0 : 1);
+    int r5 = (isFrontpic & 1 ? 0 : 1);
     NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
     MI_CpuCopy8(&sp4.facings[r5].animScripts[0], dest, sizeof(PokepicAnimScript) * 10);
 }
 
-void NARC_StartPokepicAnim(NARC *narc, void *a1, void *a2, u16 a3, int a4, int a5, int a6) {
+void NARC_StartPokepicAnim(NARC *narc, void *manager, void *pic, u16 species, int whichFacing, int reverseX, int index) {
     struct PokepicSpeciesAnimData spA;
     struct PokepicAnimParams sp4;
-    int r4 = (a4 == 2 ? 0 : 1);
-    NARC_ReadFromMember(narc, 0, a3 * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &spA);
+    int r4 = (whichFacing == 2 ? 0 : 1);
+    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &spA);
     sp4.scriptId = spA.facings[r4].animScriptId;
     sp4.delay = spA.facings[r4].animDelay;
-    sp4.reverseX = a5;
-    PokepicAnimManager_StartAnim(a1, a2, &sp4, a6);
+    sp4.reverseX = reverseX;
+    PokepicAnimManager_StartAnim(manager, pic, &sp4, index);
 }
 
 void NARC_ReadPokepicCryDelay(NARC *narc, u8 *ret, u16 species, u16 isFrontpic) {
@@ -4210,34 +4210,34 @@ void NARC_ReadPokepicCryDelay(NARC *narc, u8 *ret, u16 species, u16 isFrontpic) 
     *ret = sp4.facings[r5].cryDelay;
 }
 
-void NARC_ReadPokepicShadowHeight(NARC *narc, s8 *ret, u16 a2, u16 a3) {
+void NARC_ReadPokepicShadowHeight(NARC *narc, s8 *ret, u16 species, u16 isFrontpic) {
     struct PokepicSpeciesAnimData sp4;
-    NARC_ReadFromMember(narc, 0, a2 * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
+    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
     *ret = sp4.shadowHeight;
 }
 
-void NARC_ReadPokepicShadowXOffset(NARC *narc, s8 *ret, u16 a2, u16 a3) {
+void NARC_ReadPokepicShadowXOffset(NARC *narc, s8 *ret, u16 species, u16 isFrontpic) {
     struct PokepicSpeciesAnimData sp4;
-    NARC_ReadFromMember(narc, 0, a2 * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
+    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
     *ret = sp4.shadowXOffset;
 }
 
-void NARC_ReadPokepicShadowSize(NARC *narc, u8 *ret, u16 a2, u16 a3) {
+void NARC_ReadPokepicShadowSize(NARC *narc, u8 *ret, u16 species, u16 isFrontpic) {
     struct PokepicSpeciesAnimData sp4;
-    NARC_ReadFromMember(narc, 0, a2 * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
+    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
     *ret = sp4.shadowSize;
 }
 
-BOOL SetTrMonCapsule(int a0, Pokemon *mon, enum HeapID heapID) {
+BOOL SetTrMonCapsule(int capsuleId, Pokemon *mon, enum HeapID heapID) {
     CAPSULE capsule;
     int data;
     NARC *narc;
-    if (a0 == 0) {
+    if (capsuleId == 0) {
         return FALSE;
     }
     narc = NARC_New(NARC_application_custom_ball_edit_gs_cb_data, heapID);
     data = 1;
-    NARC_ReadFromMember(narc, 0, (a0 - 1) * sizeof(CAPSULE), sizeof(CAPSULE), &capsule);
+    NARC_ReadFromMember(narc, 0, (capsuleId - 1) * sizeof(CAPSULE), sizeof(CAPSULE), &capsule);
     SetMonData(mon, MON_DATA_BALL_CAPSULE_ID, &data);
     SetMonData(mon, MON_DATA_BALL_CAPSULE, &capsule);
     NARC_Delete(narc);
@@ -4419,22 +4419,22 @@ u32 _u32_getDigitN(u32 num, u8 digit) {
     return (num % sp0[digit + 1]) / sp0[digit];
 }
 
-s16 PokeathlonStatScoreToStars(s16 a0) {
-    if (a0 <= -120) {
+s16 PokeathlonStatScoreToStars(s16 score) {
+    if (score <= -120) {
         return -4;
-    } else if (a0 <= -80) {
+    } else if (score <= -80) {
         return -3;
-    } else if (a0 <= -40) {
+    } else if (score <= -40) {
         return -2;
-    } else if (a0 <= -15) {
+    } else if (score <= -15) {
         return -1;
-    } else if (a0 <= 14) {
+    } else if (score <= 14) {
         return 0;
-    } else if (a0 <= 39) {
+    } else if (score <= 39) {
         return 1;
-    } else if (a0 <= 79) {
+    } else if (score <= 79) {
         return 2;
-    } else if (a0 <= 119) {
+    } else if (score <= 119) {
         return 3;
     } else {
         return 4;

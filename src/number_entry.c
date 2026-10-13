@@ -107,7 +107,7 @@ static void NumberEntry_UpdateSpriteAnims(NumberEntryData *data);
 static void NumberEntry_SetPadCursorPos(NumberEntryData *data, u32 pos);
 static void NumberEntry_CreateGridInput(NumberEntryData *data);
 static void NumberEntry_FreeGridInput(NumberEntryData *data);
-static void ov29_0225DC44(void *data, int newTarget, int prevTarget);
+static void NumberEntry_OnGridCursorMoveDummy(void *data, int newTarget, int prevTarget);
 static void NumberEntry_OnGridCursorMove(void *data, int newTarget, int prevTarget);
 static void NumberEntry_UpdateDigitCursor(NumberEntryData *data);
 static void NumberEntry_PositionDigitSprites(NumberEntryData *data);
@@ -172,8 +172,8 @@ static const NumberEntryRodata sRodata = {
      },
     // gridCallbacks (0x0225E13C)
     {
-     ov29_0225DC44,
-     ov29_0225DC44,
+     NumberEntry_OnGridCursorMoveDummy,
+     NumberEntry_OnGridCursorMoveDummy,
      NumberEntry_OnGridCursorMove,
      NumberEntry_OnGridCursorMove,
      },
@@ -321,7 +321,7 @@ static const NumberEntryRodata sRodata = {
     { 0x30, 0x50, 0x70, 0x90, 0xB0, 0xD0, 0, 0 },
 };
 
-SysTask *NumberEntry_Init(BgConfig *bgConfig, void *a1, void *a2, NumberEntryArgs *args) {
+SysTask *NumberEntry_Init(BgConfig *bgConfig, void *lastTouchMenuInput, void *fieldSystem, NumberEntryArgs *args) {
     SysTask *task;
     NumberEntryData *data;
     NARC *narc;
@@ -334,8 +334,8 @@ SysTask *NumberEntry_Init(BgConfig *bgConfig, void *a1, void *a2, NumberEntryArg
     task = CreateSysTaskAndEnvironment(NumberEntry_Task, sizeof(NumberEntryData), 10, HEAP_ID_8);
     data = SysTask_GetData(task);
     data->bgConfig = bgConfig;
-    data->lastTouchMenuInput = a1;
-    data->fieldSystem = a2;
+    data->lastTouchMenuInput = lastTouchMenuInput;
+    data->fieldSystem = fieldSystem;
     data->argsCopy = args;
     data->task = task;
     data->args = args;
@@ -583,7 +583,7 @@ static void NumberEntry_FreeGridInput(NumberEntryData *data) {
     GridInputHandler_Free(data->gridInput);
 }
 
-static void ov29_0225DC44(void *data, int newTarget, int prevTarget) {
+static void NumberEntry_OnGridCursorMoveDummy(void *data, int newTarget, int prevTarget) {
 }
 
 static void NumberEntry_OnGridCursorMove(void *data, int newTarget, int prevTarget) {

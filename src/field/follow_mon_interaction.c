@@ -126,8 +126,8 @@ extern const VecFx32 sFollowMonShrinkScale;
 // Overlay 1 map object model helpers.
 void *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager);
 void FollowMonBillboard_SetShadowAnchored(LocalMapObject *object, BOOL set);
-void FollowMonBillboard_SetHeight(LocalMapObject *object, s8 a1);
-void FollowMonBillboard_AddHeight(LocalMapObject *object, s8 a1);
+void FollowMonBillboard_SetHeight(LocalMapObject *object, s8 height);
+void FollowMonBillboard_AddHeight(LocalMapObject *object, s8 delta);
 
 int FollowMon_SelectInteraction(FieldSystem *fieldSystem);
 void FollowMon_GetSituation(FieldSystem *fieldSystem, FollowMonSituation *situation);

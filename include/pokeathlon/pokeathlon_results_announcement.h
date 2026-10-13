@@ -209,7 +209,7 @@ void PokeathlonResultsAnnouncement_CreateText(PokeathlonResultsAnnouncementPlate
 void PokeathlonResultsAnnouncement_DestroyText(PokeathlonResultsAnnouncementText *text);
 PokeathlonResultsAnnouncementScoreboard *PokeathlonResultsAnnouncement_NewScoreboard(enum HeapID heapId, BgConfig *bgConfig, void *scene);
 void PokeathlonResultsAnnouncement_FreeScoreboard(PokeathlonResultsAnnouncementScoreboard *scoreboard);
-void PokeathlonResultsAnnouncement_LoadScoreboardResources(PokeathlonResultsAnnouncementScoreboard *scoreboard, s32 a1);
+void PokeathlonResultsAnnouncement_LoadScoreboardResources(PokeathlonResultsAnnouncementScoreboard *scoreboard, s32 index);
 void PokeathlonResultsAnnouncement_InitScoreboard(PokeathlonResultsAnnouncementScoreboard *scoreboard, PokeathlonCourseData *course, int y);
 void PokeathlonResultsAnnouncement_SetScore(PokeathlonResultsAnnouncementScoreboard *scoreboard, u32 points, u32 team);
 void PokeathlonResultsAnnouncement_CreateScoreboardText(PokeathlonResultsAnnouncementScoreboard *scoreboard, PokeathlonResultsAnnouncementTextWindow *window, String *string, int x, int dx, int dy, Sprite *parent, PokeathlonResultsAnnouncementText *out);

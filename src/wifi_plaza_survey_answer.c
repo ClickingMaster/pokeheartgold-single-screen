@@ -64,15 +64,15 @@ BOOL WiFiPlazaSurveyAnswer_Run(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMes
         WiFiPlazaSurveyAnswer_UpdateCursor(answer);
         break;
     case 6:
-        ov45_0222A7DC(args->lobby, answer->question.surveyId, answer->cursor);
-        ov45_0222F4D4(answer->cursor);
+        WiFiPlazaWork_SetSurveyAnswer(args->lobby, answer->question.surveyId, answer->cursor);
+        WiFiPlazaLobbyClient_SubmitSurveyAnswer(answer->cursor);
         WiFiPlazaSurvey_PrintMessageInstant(msgBox, WiFiPlazaSurvey_GetMessage(messages, 0, msg_0777_00096));
         WiFiPlazaSurvey_StartWaitingIcon(msgBox);
         PlaySE(SEQ_SE_PL_BREC80);
         answer->state = 7;
         break;
     case 7:
-        if (ov45_0222F524() == 1) {
+        if (WiFiPlazaLobbyClient_GetSurveySubmitState() == 1) {
             break;
         }
         PlaySE(SEQ_SE_DP_BUTTON9);

@@ -29,7 +29,7 @@
 .public memset
 .public gOverlayTemplate_Battle
 .public gNatureStatMods
-.public ov13_0221BA00
+.public RunWifiSetupApp
 .public WifiClub_Init
 .public WifiClub_Main
 .public WifiClub_Exit

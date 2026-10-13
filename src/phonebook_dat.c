@@ -139,6 +139,6 @@ int GetPhoneMessageGmm(int idx) {
     return sPhoneMessageGmm[idx];
 }
 
-BOOL sub_02095FF8(int x) {
+BOOL Phone_IsBuenasPasswordHour(int x) {
     return (x % 3) == 2;
 }

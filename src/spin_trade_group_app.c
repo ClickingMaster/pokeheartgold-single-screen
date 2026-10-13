@@ -199,21 +199,21 @@ void SpinTradeGroup_RemoveWindows(SpinTradeGroupApp *app);
 int SpinTradeGroup_State_ShowPrompt(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_HandleInput(SpinTradeGroupApp *app, int state);
 void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app);
-void ov85_021E943C(SpinTradeGroupApp *app);
-int ov85_021E9440(SpinTradeGroupApp *app, int state);
+void SpinTradeGroup_UpdateDummy(SpinTradeGroupApp *app);
+int SpinTradeGroup_State_WaitTextThenResetMenu(SpinTradeGroupApp *app, int state);
 void SpinTradeGroup_WaitPrinterThen(SpinTradeGroupApp *app, u32 nextSubState);
 int SpinTradeGroup_State_WaitPrinter(SpinTradeGroupApp *app, int state);
-int ov85_021E948C(SpinTradeGroupApp *app, int state);
+int SpinTradeGroup_State_ResetLeaderMenuState(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_ShowCancelYesNo(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_HandleCancelYesNo(SpinTradeGroupApp *app, int state);
-int ov85_021E9614(SpinTradeGroupApp *app, int state);
-int ov85_021E962C(SpinTradeGroupApp *app, int state);
-int ov85_021E96B0(SpinTradeGroupApp *app, int state);
+int SpinTradeGroup_State_ResetLeaveWait(SpinTradeGroupApp *app, int state);
+int SpinTradeGroup_State_SendLeave(SpinTradeGroupApp *app, int state);
+int SpinTradeGroup_State_AbortLeave(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_ShowConfirmYesNo(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_HandleConfirmYesNo(SpinTradeGroupApp *app, int state);
-int ov85_021E97B8(SpinTradeGroupApp *app, int state);
-int ov85_021E97E8(SpinTradeGroupApp *app, int state);
-int ov85_021E9814(SpinTradeGroupApp *app, int state);
+int SpinTradeGroup_State_SendStartSync(SpinTradeGroupApp *app, int state);
+int SpinTradeGroup_State_WaitSyncCount(SpinTradeGroupApp *app, int state);
+int SpinTradeGroup_State_BeforeSave(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_StartSave(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_Save(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_WaitAfterSave(SpinTradeGroupApp *app, int state);
@@ -228,15 +228,15 @@ int SpinTradeGroup_State_WaitExitSync(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_ShowMemberDropped(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_WaitMemberDropped(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_ShowMemberLeft(SpinTradeGroupApp *app, int state);
-int ov85_021E9BA0(SpinTradeGroupApp *app, int state);
-int ov85_021E9BDC(SpinTradeGroupApp *app, int state);
+int SpinTradeGroup_State_StartMemberLeftWait(SpinTradeGroupApp *app, int state);
+int SpinTradeGroup_State_WaitMemberLeft(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_Proceed(SpinTradeGroupApp *app, int state);
 void SpinTradeGroup_HandleLinkEvent(SpinTradeGroupApp *app, int msg, int value);
 void SpinTradeGroup_HandleMemberEvent(SpinTradeGroupApp *app, int event, int netId);
 void SpinTradeGroup_CycleHighlightColor(u16 *p);
 int SpinTradeGroup_CountProfiles(void);
 BOOL SpinTradeGroup_PrintMemberList(Window *window, u32 a1, u32 color, SpinTradeGroupApp *app);
-void ov85_021E9FCC(SpinTradeGroupApp *app);
+void SpinTradeGroup_HandleInputDummy(SpinTradeGroupApp *app);
 int SpinTradeGroup_CountMembers(void);
 u32 SpinTradeGroup_GetMemberMask(void);
 BOOL SpinTradeGroup_UpdateMembers(SpinTradeGroupApp *app);
@@ -250,7 +250,7 @@ void SpinTradeGroup_FreeAvatarGraphics(SpinTradeGroupApp *app);
 int SpinTradeGroup_GetTextSpeed(SpinTradeGroupApp *app);
 void SpinTradeGroup_SetMaxConnections(SpinTradeGroupApp *app, int extraEntries);
 int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int extraEntries);
-void ov85_021EA4EC(void *a0, void *a1);
+void SpinTradeGroup_SaveDummy(void *a0, void *a1);
 
 BOOL SpinTradeGroupApp_Init(OverlayManager *manager, int *state) {
     NARC *narc;
@@ -456,7 +456,7 @@ void SpinTradeGroup_InitData(SpinTradeGroupApp *app, NARC *narc) {
     app->subState = 0;
     ReadMsgDataIntoString(app->msgData, 0x11, app->titleString);
     SpinTradeGroup_LoadAvatarGraphics(app, narc);
-    app->avatarPalette = sub_0205B4A4(HEAP_ID_102);
+    app->avatarPalette = UnionRoom_LoadAvatarPalette(HEAP_ID_102);
     app->blink.active = 0;
     app->blink.timer = 0;
     app->blink.frame = 0;
@@ -604,10 +604,10 @@ int SpinTradeGroup_State_HandleInput(SpinTradeGroupApp *app, int state) {
     SpinTradeGroup_HandleButtons(app);
     if (!Comm_GetLocalNetId()) {
         if (SpinTradeGroup_CountProfiles() != 1) {
-            ov85_021E9FCC(app);
+            SpinTradeGroup_HandleInputDummy(app);
         }
     } else {
-        ov85_021E9FCC(app);
+        SpinTradeGroup_HandleInputDummy(app);
     }
     return state;
 }
@@ -656,13 +656,13 @@ void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
     }
 }
 
-void ov85_021E943C(SpinTradeGroupApp *app) {
+void SpinTradeGroup_UpdateDummy(SpinTradeGroupApp *app) {
 #pragma unused(app)
 }
 
-int ov85_021E9440(SpinTradeGroupApp *app, int state) {
+int SpinTradeGroup_State_WaitTextThenResetMenu(SpinTradeGroupApp *app, int state) {
     SpinTradeGroup_WaitPrinterThen(app, 2);
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
@@ -675,25 +675,25 @@ int SpinTradeGroup_State_WaitPrinter(SpinTradeGroupApp *app, int state) {
     if (SpinTradeGroup_IsPrinterDone(app->printerId)) {
         app->subState = app->nextSubState;
     }
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
-int ov85_021E948C(SpinTradeGroupApp *app, int state) {
+int SpinTradeGroup_State_ResetLeaderMenuState(SpinTradeGroupApp *app, int state) {
     u32 v;
     if (!Comm_GetLocalNetId()) {
         v = 0;
         SpinTradeLink_SendCommand(app->menu, 7, &v, 1);
     }
     app->subState = 3;
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
 int SpinTradeGroup_State_ShowCancelYesNo(SpinTradeGroupApp *app, int state) {
     app->yesNoMenu = Std_CreateYesNoMenu(app->bgConfig, &ov85_021EA8D8, 0x1F, 0xB, HEAP_ID_102);
     app->subState = 5;
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
@@ -707,7 +707,7 @@ int SpinTradeGroup_State_HandleCancelYesNo(SpinTradeGroupApp *app, int state) {
             if (gSystem.newKeys & 0xC3) {
                 PlaySE(0x5F2);
             }
-            ov85_021E943C(app);
+            SpinTradeGroup_UpdateDummy(app);
             return state;
         }
     } else {
@@ -715,12 +715,12 @@ int SpinTradeGroup_State_HandleCancelYesNo(SpinTradeGroupApp *app, int state) {
             if (gSystem.newKeys & 0xC3) {
                 PlaySE(0x5F2);
             }
-            ov85_021E943C(app);
+            SpinTradeGroup_UpdateDummy(app);
             return state;
         }
     }
     if ((u32)SpinTradeGroup_CountMembers() != Comm_CountConnected()) {
-        ov85_021E943C(app);
+        SpinTradeGroup_UpdateDummy(app);
         return state;
     }
     input = Handle2dMenuInput_DeleteOnFinish(app->yesNoMenu, HEAP_ID_102);
@@ -746,21 +746,21 @@ int SpinTradeGroup_State_HandleCancelYesNo(SpinTradeGroupApp *app, int state) {
         }
         app->yesNoMenu = NULL;
     }
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
-int ov85_021E9614(SpinTradeGroupApp *app, int state) {
+int SpinTradeGroup_State_ResetLeaveWait(SpinTradeGroupApp *app, int state) {
     app->leaveWaitFrames = 0;
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
-int ov85_021E962C(SpinTradeGroupApp *app, int state) {
+int SpinTradeGroup_State_SendLeave(SpinTradeGroupApp *app, int state) {
     if (app->menu->assignedCount != Comm_CountConnected() || app->menu->assignedCount != SpinTradeGroup_CountMembers()) {
         app->leaveWaitFrames = 0;
         app->subState = 8;
-        ov85_021E943C(app);
+        SpinTradeGroup_UpdateDummy(app);
         return state;
     }
     app->leaveWaitFrames++;
@@ -773,21 +773,21 @@ int ov85_021E962C(SpinTradeGroupApp *app, int state) {
         app->leaveWaitFrames = 0;
         app->subState = 9;
     }
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
-int ov85_021E96B0(SpinTradeGroupApp *app, int state) {
+int SpinTradeGroup_State_AbortLeave(SpinTradeGroupApp *app, int state) {
     app->leaveRequested = 0;
     SpinTradeGroup_WaitPrinterThen(app, 0);
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
 int SpinTradeGroup_State_ShowConfirmYesNo(SpinTradeGroupApp *app, int state) {
     app->yesNoMenu = Std_CreateYesNoMenu(app->bgConfig, &ov85_021EA8D8, 0x1F, 0xB, HEAP_ID_102);
     app->subState = 0x17;
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
@@ -797,7 +797,7 @@ int SpinTradeGroup_State_HandleConfirmYesNo(SpinTradeGroupApp *app, int state) {
         if (0xC3 & gSystem.newKeys) {
             PlaySE(0x5F2);
         }
-        ov85_021E943C(app);
+        SpinTradeGroup_UpdateDummy(app);
         return state;
     }
     {
@@ -818,11 +818,11 @@ int SpinTradeGroup_State_HandleConfirmYesNo(SpinTradeGroupApp *app, int state) {
             app->yesNoMenu = NULL;
         }
     }
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
-int ov85_021E97B8(SpinTradeGroupApp *app, int state) {
+int SpinTradeGroup_State_SendStartSync(SpinTradeGroupApp *app, int state) {
     if (app->unk_4A53 == 0) {
         if (SpinTradeLink_SendCommand(app->menu, 5, NULL, 0) == 1) {
             app->subState = 0x1F;
@@ -831,7 +831,7 @@ int ov85_021E97B8(SpinTradeGroupApp *app, int state) {
     return state;
 }
 
-int ov85_021E97E8(SpinTradeGroupApp *app, int state) {
+int SpinTradeGroup_State_WaitSyncCount(SpinTradeGroupApp *app, int state) {
     if (!Comm_GetLocalNetId()) {
         Comm_CountConnected();
     }
@@ -841,8 +841,8 @@ int ov85_021E97E8(SpinTradeGroupApp *app, int state) {
     return state;
 }
 
-int ov85_021E9814(SpinTradeGroupApp *app, int state) {
-    ov85_021EA4EC(app->args->input.saveData, app->unk_F80);
+int SpinTradeGroup_State_BeforeSave(SpinTradeGroupApp *app, int state) {
+    SpinTradeGroup_SaveDummy(app->args->input.saveData, app->unk_F80);
     app->subState = 0x1B;
     return state;
 }
@@ -881,7 +881,7 @@ int SpinTradeGroup_State_WaitAfterSave(SpinTradeGroupApp *app, int state) {
 int SpinTradeGroup_State_ShowCanceled(SpinTradeGroupApp *app, int state) {
     SpinTradeGroup_PrintMessage(app, 5, 0);
     SpinTradeGroup_WaitPrinterThen(app, 0xA);
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
@@ -891,14 +891,14 @@ int SpinTradeGroup_State_FadeOutCanceled(SpinTradeGroupApp *app, int state) {
         BeginNormalPaletteFade(0, 0x10, 0x10, 0, 0x10, 1, HEAP_ID_102);
         state = 3;
     }
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
 int SpinTradeGroup_State_ShowDisbandYesNo(SpinTradeGroupApp *app, int state) {
     app->yesNoMenu = Std_CreateYesNoMenu(app->bgConfig, &ov85_021EA8D8, 0x1F, 0xB, HEAP_ID_102);
     app->subState = 0xC;
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
@@ -908,7 +908,7 @@ int SpinTradeGroup_State_HandleDisbandYesNo(SpinTradeGroupApp *app, int state) {
         if (0xC3 & gSystem.newKeys) {
             PlaySE(0x5F2);
         }
-        ov85_021E943C(app);
+        SpinTradeGroup_UpdateDummy(app);
         return state;
     }
     {
@@ -927,7 +927,7 @@ int SpinTradeGroup_State_HandleDisbandYesNo(SpinTradeGroupApp *app, int state) {
             app->yesNoMenu = NULL;
         }
     }
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
@@ -940,7 +940,7 @@ int SpinTradeGroup_State_ShowDisbanded(SpinTradeGroupApp *app, int state) {
     }
     SpinTradeGroup_WaitPrinterThen(app, 14);
     app->timer = 0;
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
@@ -949,14 +949,14 @@ int SpinTradeGroup_State_WaitBeforeExit(SpinTradeGroupApp *app, int state) {
     if (app->timer > 0x2D) {
         app->subState = 0xF;
     }
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
 int SpinTradeGroup_State_StartExitSync(SpinTradeGroupApp *app, int state) {
     LinkSync_StartSync(0xCA);
     app->subState = 0x10;
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
@@ -966,7 +966,7 @@ int SpinTradeGroup_State_WaitExitSync(SpinTradeGroupApp *app, int state) {
         BeginNormalPaletteFade(0, 0x10, 0x10, 0, 0x10, 1, HEAP_ID_102);
         state = 3;
     }
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
@@ -975,7 +975,7 @@ int SpinTradeGroup_State_ShowMemberDropped(SpinTradeGroupApp *app, int state) {
         SpinTradeGroup_PrintMessage(app, 9, 0);
     }
     app->subState = 0x12;
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
@@ -983,7 +983,7 @@ int SpinTradeGroup_State_WaitMemberDropped(SpinTradeGroupApp *app, int state) {
     if (SpinTradeGroup_IsPrinterDone(app->printerId)) {
         app->subState = 0xA;
     }
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
@@ -998,11 +998,11 @@ int SpinTradeGroup_State_ShowMemberLeft(SpinTradeGroupApp *app, int state) {
     }
     app->leaveConnectedCount = Comm_CountConnected();
     app->leaveTimeout = 0x12C;
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
-int ov85_021E9BA0(SpinTradeGroupApp *app, int state) {
+int SpinTradeGroup_State_StartMemberLeftWait(SpinTradeGroupApp *app, int state) {
     if (app->leaveConnectedCount != 0) {
         if (app->leaveConnectedCount != Comm_CountConnected()) {
             app->leaveConnectedCount = 0;
@@ -1010,11 +1010,11 @@ int ov85_021E9BA0(SpinTradeGroupApp *app, int state) {
     }
     app->subState = 0x15;
     app->timer = 0;
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
-int ov85_021E9BDC(SpinTradeGroupApp *app, int state) {
+int SpinTradeGroup_State_WaitMemberLeft(SpinTradeGroupApp *app, int state) {
     if (app->leaveConnectedCount != 0) {
         if (app->leaveConnectedCount != Comm_CountConnected()) {
             app->leaveConnectedCount = 0;
@@ -1031,7 +1031,7 @@ int ov85_021E9BDC(SpinTradeGroupApp *app, int state) {
             SpinTradeGroup_SetMaxConnections(app, 1);
         }
     }
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
@@ -1040,7 +1040,7 @@ int SpinTradeGroup_State_Proceed(SpinTradeGroupApp *app, int state) {
     UnionRoom_SetBeaconActivity(0xC);
     BeginNormalPaletteFade(0, 0x10, 0x10, 0, 0x10, 1, HEAP_ID_102);
     app->result = 1;
-    ov85_021E943C(app);
+    SpinTradeGroup_UpdateDummy(app);
     return 3;
 }
 
@@ -1191,7 +1191,7 @@ BOOL SpinTradeGroup_PrintMemberList(Window *window, u32 a1, u32 color, SpinTrade
     return TRUE;
 }
 
-void ov85_021E9FCC(SpinTradeGroupApp *app) {
+void SpinTradeGroup_HandleInputDummy(SpinTradeGroupApp *app) {
 #pragma unused(app)
 }
 
@@ -1424,7 +1424,7 @@ int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int extraEntries) {
     return 1;
 }
 
-void ov85_021EA4EC(void *a0, void *a1) {
+void SpinTradeGroup_SaveDummy(void *a0, void *a1) {
 #pragma unused(a0)
 #pragma unused(a1)
 }

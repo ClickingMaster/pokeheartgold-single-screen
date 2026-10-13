@@ -39,7 +39,7 @@
 #include "save_wii_message.h"
 #include "comm_wireless.h"
 #include "wireless_status_icon.h"
-#include "unk_02069528.h"
+#include "frontier_wifi_upload_record.h"
 #include "network_overlay_loader.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
@@ -133,21 +133,21 @@ typedef struct NintendoWfcUnusedModeRow {
 } NintendoWfcUnusedModeRow;
 
 // Defined in OVY_0 / OVY_38 (DWC wrappers); not declared in any header.
-int DWC_GetLastError(void *a0);
-int DWC_GetLastErrorEx(int *a0, int *a1);
+int DWC_GetLastError(void *code);
+int DWC_GetLastErrorEx(int *code, int *category);
 void DWC_ClearError(void);
 void DWC_SetMemFunc(void *(*alloc)(void *, u32, int), void (*freeFunc)(void *, void *));
-void DWC_InitInetEx(void *a0, int a1, int a2, int a3);
-void DWC_SetAuthServer(int a0);
+void DWC_InitInetEx(void *connection, int priority, int unused, int sslPriority);
+void DWC_SetAuthServer(int server);
 void DWC_ConnectInetAsync(void);
 int DWC_CheckInet(void);
 void DWC_ProcessInet(void);
 int DWC_GetInetStatus(void);
 void DWC_CleanupInet(void);
 int DWC_GetLinkLevel(void);
-void DWC_GetApInfo(void *a0);
+void DWC_GetApInfo(void *info);
 void DWC_UpdateConnection(void);
-void DWC_GetDateTime(void *a0, void *a1);
+void DWC_GetDateTime(void *date, void *time);
 void DWC_NASLoginAsync(void);
 int DWC_NASLoginProcess(void);
 void DWC_ShutdownFriendsMatch(void);
@@ -159,7 +159,7 @@ BOOL NintendoWfcHttp_IsDone(void);
 s32 NintendoWfcHttp_GetResult(void);
 void NintendoWfcHttp_RequestRoomCount(int rank);
 void NintendoWfcHttp_RequestDownload(int rank, int room, void *buffer);
-void NintendoWfcHttp_RequestUpload(int rank, int room, int a2, FrontierWifiUploadRecord *record);
+void NintendoWfcHttp_RequestUpload(int rank, int room, int winCount, FrontierWifiUploadRecord *record);
 void NintendoWfcHttp_RequestInfo(void);
 void NintendoWfcHttp_RequestSetProfile(WifiServerProfile *profile, u32 *response);
 // The definition takes (u32 profileId, u64 friendKey); this app passes the key as two words.
@@ -172,7 +172,7 @@ void CommWireless_Terminate(void);
 void CommState_InitWfcSession(SaveData *saveData);
 void CommState_FreeWfcSession(void);
 void CommState_ShowRestartErrorAndHalt(void);
-void WirelessStatusIcon_SetLevel(s32 a0);
+void WirelessStatusIcon_SetLevel(s32 level);
 u64 DWC_CreateFriendKey(const void *data);
 u8 FrontierData_GetWifiWinCount(FrontierData *data);
 void BattleRoomDownload_MarkRoom(BattleRoomDownload *data, u32 group, u32 entry, u32 *date);
@@ -182,7 +182,7 @@ void BattleRoomDownload_GetTrainersRoom(BattleRoomDownload *data, u8 *out);
 void BattleRoomDownload_SetLeaders(BattleRoomDownload *data, void *records, u32 a, u32 b);
 // A record mixing state function in record_mixing.c; the copy of the OVY_72 code calls it where OVY_72 calls
 // WifiConnection_ClassifyErrorCode.
-int ov73_021E6A70(int errorCode, int errorType);
+int RecordMixing_State_AbortLeave(int errorCode, int errorType);
 
 extern NintendoWfcUnusedGlobal _021EA940;
 extern const u16 sNintendoWfcUnusedArrowPositions[2][2];
@@ -201,7 +201,7 @@ extern int (*const sNintendoWfcUnusedStates[])(NintendoWfcUnused *wfc);
 void NintendoWfcUnused_VBlankCB(void *arg);
 void NintendoWfcUnused_SetGfxBanks(void);
 void NintendoWfcUnused_InitArgs(NintendoWfcUnused *wfc, OverlayManager *man);
-void ov73_021E8164(NintendoWfcUnused *wfc);
+void NintendoWfcUnused_ExitDummy(NintendoWfcUnused *wfc);
 void NintendoWfcUnused_InitObjTransfer(void);
 void NintendoWfcUnused_InitSpriteResources(NintendoWfcUnused *wfc);
 void NintendoWfcUnused_InitSpriteTemplate(SpriteTemplate *template, NintendoWfcUnused *wfc, SpriteResourcesHeader *header, u32 whichScreen);
@@ -226,7 +226,7 @@ void NintendoWfcUnused_AddWindows(NintendoWfcUnused *wfc);
 void NintendoWfcUnused_RemoveWindows(NintendoWfcUnused *wfc);
 void NintendoWfcUnused_InitStrings(NintendoWfcUnused *wfc);
 void NintendoWfcUnused_FreeStrings(NintendoWfcUnused *wfc);
-int ov73_021E6A70(int errorCode, int errorType);
+int RecordMixing_State_AbortLeave(int errorCode, int errorType);
 int NintendoWfcUnused_AskConnect(NintendoWfcUnused *wfc);
 int NintendoWfcUnused_HandleConnectChoice(NintendoWfcUnused *wfc);
 int NintendoWfcUnused_AskLogOut(NintendoWfcUnused *wfc);
@@ -272,8 +272,8 @@ int NintendoWfcUnused_HandleCancelDownloadChoice(NintendoWfcUnused *wfc);
 int NintendoWfcUnused_PrintDisconnecting(NintendoWfcUnused *wfc);
 int NintendoWfcUnused_CloseConnection(NintendoWfcUnused *wfc);
 int NintendoWfcUnused_PrintDisconnected(NintendoWfcUnused *wfc);
-int ov73_021E9D10(void);
-int ov73_021E9D44(NintendoWfcUnused *wfc);
+int NintendoWfcUnused_UnusedState_Idle(void);
+int NintendoWfcUnused_UnusedState_HandleYesNo(NintendoWfcUnused *wfc);
 int NintendoWfcUnused_StartSave(NintendoWfcUnused *wfc);
 int NintendoWfcUnused_Save(NintendoWfcUnused *wfc);
 int NintendoWfcUnused_StartExit(NintendoWfcUnused *wfc);
@@ -397,7 +397,7 @@ BOOL NintendoWfcUnused_Exit(OverlayManager *man, int *state) {
     DestroyMsgData(wfc->msgDataWfc);
     DestroyMsgData(wfc->msgDataTower);
     MessageFormat_Delete(wfc->msgFormat);
-    ov73_021E8164(wfc);
+    NintendoWfcUnused_ExitDummy(wfc);
     CommWireless_Terminate();
     Heap_Free(wfc->bgConfig);
     OverlayManager_FreeData(man);
@@ -427,7 +427,7 @@ void NintendoWfcUnused_InitArgs(NintendoWfcUnused *wfc, OverlayManager *man) {
     NintendoWfcUnused_SetNextMode(wfc, 0, 0);
 }
 
-void ov73_021E8164(NintendoWfcUnused *wfc) {
+void NintendoWfcUnused_ExitDummy(NintendoWfcUnused *wfc) {
 }
 
 void NintendoWfcUnused_InitObjTransfer(void) {
@@ -1346,7 +1346,7 @@ int NintendoWfcUnused_RequestUpload(NintendoWfcUnused *wfc) {
     int record = FrontierData_GetWifiWinCount(wfc->args->frontierData);
     u8 rankRoom[4];
     BattleRoomDownload_GetTrainersRoom((BattleRoomDownload *)wfc->args->battleRoomDownload, rankRoom);
-    sub_02069528(wfc->args->saveData, 1, &wfc->uploadRecord);
+    Frontier_FillWifiUploadRecord(wfc->args->saveData, 1, &wfc->uploadRecord);
     NintendoWfcHttp_RequestUpload(rankRoom[0], rankRoom[1], record, &wfc->uploadRecord);
     wfc->state = 27;
     wfc->timeoutCounter = 0;
@@ -1669,7 +1669,7 @@ int NintendoWfcUnused_PrintDisconnected(NintendoWfcUnused *wfc) {
     return 3;
 }
 
-int ov73_021E9D10(void) {
+int NintendoWfcUnused_UnusedState_Idle(void) {
     return 3;
 }
 
@@ -1681,7 +1681,7 @@ int NintendoWfcUnused_StartExit(NintendoWfcUnused *wfc) {
     return 4;
 }
 
-int ov73_021E9D44(NintendoWfcUnused *wfc) {
+int NintendoWfcUnused_UnusedState_HandleYesNo(NintendoWfcUnused *wfc) {
     int response = NintendoWfcUnused_HandleYesNoPrompt(wfc->yesNoPrompt);
     if (response) {
         if (response == 2) {
@@ -1789,7 +1789,7 @@ void NintendoWfcUnused_PrintFormattedMessage(NintendoWfcUnused *wfc, MsgData *ms
 }
 
 int NintendoWfcUnused_ShowDwcError(NintendoWfcUnused *wfc) {
-    int msgNo = ov73_021E6A70(-wfc->dwcErrorCode, wfc->dwcErrorType);
+    int msgNo = RecordMixing_State_AbortLeave(-wfc->dwcErrorCode, wfc->dwcErrorType);
     NintendoWfcUnused_ShowErrorMessage(wfc, msgNo, -wfc->dwcErrorCode);
     wfc->state = 56;
     return 3;

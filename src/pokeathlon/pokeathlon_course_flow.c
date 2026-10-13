@@ -1979,15 +1979,15 @@ BOOL PokeathlonCourse_IsInRange(int x, int y, int targetX, int targetY, int rang
 #pragma force_active reset
 
 // Creates the link of the course: the wireless command table (link mode) or a local command queue.
-void *PokeathlonCourseLink_New(int a0, int a1, PokeathlonCourseData *data, int a3, enum HeapID heapId) {
+void *PokeathlonCourseLink_New(int commands, int count, PokeathlonCourseData *data, int isLink, enum HeapID heapId) {
     PokeathlonCourseLink *link = Heap_Alloc(heapId, sizeof(PokeathlonCourseLink));
-    link->isLink = a3;
+    link->isLink = isLink;
     link->checkSize = FALSE;
     link->queue = NULL;
-    if (a3 == 1) {
-        Comm_RegisterCommandTable((const void *)a0, a1, data);
+    if (isLink == 1) {
+        Comm_RegisterCommandTable((const void *)commands, count, data);
     } else {
-        link->queue = PokeathlonCourseCmdQueue_New((const PokeathlonCourseCmd *)a0, a1, data, heapId);
+        link->queue = PokeathlonCourseCmdQueue_New((const PokeathlonCourseCmd *)commands, count, data, heapId);
     }
     return link;
 }
@@ -1996,15 +1996,15 @@ void PokeathlonCourseLink_SetCheckSize(PokeathlonCourseLink *link, u16 checkSize
     link->checkSize = checkSize;
 }
 
-void PokeathlonCourseLink_SendCommand(int a0, void *a1, void *a2, int a3) {
-    PokeathlonCourseLink *link = (PokeathlonCourseLink *)a3;
-    if (link->checkSize != 0 && (s32)a2 > POKEATHLON_COURSE_CMD_INLINE_SIZE) {
+void PokeathlonCourseLink_SendCommand(int command, void *data, void *size, int linkArg) {
+    PokeathlonCourseLink *link = (PokeathlonCourseLink *)linkArg;
+    if (link->checkSize != 0 && (s32)size > POKEATHLON_COURSE_CMD_INLINE_SIZE) {
         GF_AssertFail();
     }
     if (link->isLink == 1) {
-        Comm_SendCommand(a0, a1, (int)a2);
+        Comm_SendCommand(command, data, (int)size);
     } else {
-        PokeathlonCourseCmdQueue_Add(link->queue, a0, a1, (s32)a2);
+        PokeathlonCourseCmdQueue_Add(link->queue, command, data, (s32)size);
     }
 }
 

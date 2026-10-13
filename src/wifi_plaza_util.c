@@ -146,7 +146,7 @@ BOOL WiFiPlaza_IsRegionValid(u32 country, u32 region) {
     return FALSE;
 }
 
-u8 ov45_0222D7C0(u32 index) {
+u8 WiFiPlaza_GetTypeByChoice(u32 index) {
     return ov45_02254BB4[index];
 }
 

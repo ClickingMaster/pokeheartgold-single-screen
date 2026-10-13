@@ -2,7 +2,7 @@
 
 #include "wifi_plaza_internal.h"
 
-void ov45_0222A1F8(WiFiPlazaWork *work) {
+void WiFiPlazaWork_VBlankDummy(WiFiPlazaWork *work) {
 }
 
 u32 WiFiPlazaWork_HasError(WiFiPlazaWork *work) {
@@ -26,7 +26,7 @@ void *WiFiPlazaWork_GetPlaces(WiFiPlazaWork *work) {
     return work->places;
 }
 
-u32 *ov45_0222A22C(WiFiPlazaWork *work) {
+u32 *WiFiPlazaWork_GetCurrentTimePtr(WiFiPlazaWork *work) {
     return &work->currentTime;
 }
 
@@ -61,13 +61,13 @@ BOOL WiFiPlazaWork_TakePlayerUpdated(WiFiPlazaWork *work, int bit) {
     return FALSE;
 }
 
-void *ov45_0222A2C8(void **ptr) {
+void *WiFiPlazaWork_GetSaveData(void **ptr) {
     return *ptr;
 }
 
 int ov45_0222A2CC(WiFiPlazaWork *work) {
     GF_ASSERT(work != NULL);
-    return ov45_0222ECDC(4);
+    return WiFiPlazaLobbyClient_GetScheduleValue(4);
 }
 
 u32 ov45_0222A2E0(WiFiPlazaWork *work) {
@@ -145,12 +145,12 @@ u32 ov45_0222A3EC(WiFiPlazaWork *work) {
     return 11;
 }
 
-void ov45_0222A404(WiFiPlazaWork *work) {
-    ov45_0222BCA0(&work->unk_3a0);
+void WiFiPlazaWork_StartGameEntryCooldown(WiFiPlazaWork *work) {
+    WiFiPlazaUnk3A0_StartCooldown(&work->unk_3a0);
 }
 
-int ov45_0222A414(WiFiPlazaWork *work) {
-    return ov45_0222BCA8(&work->unk_3a0);
+int WiFiPlazaWork_IsGameEntryCoolingDown(WiFiPlazaWork *work) {
+    return WiFiPlazaUnk3A0_IsCoolingDown(&work->unk_3a0);
 }
 
 void *ov45_0222A424(WiFiPlazaWork *work) {
@@ -182,12 +182,12 @@ void WiFiPlazaWork_GetGameMembers(WiFiPlazaWork *work, void *dest) {
     MI_CpuCopy8(work->gameMembers, dest, 4);
 }
 
-void ov45_0222A4A8(WiFiPlazaWork *work) {
-    ov45_0222BD24(&work->unk_3a0);
+void WiFiPlazaWork_SetAppQuitForClosing(WiFiPlazaWork *work) {
+    WiFiPlazaUnk3A0_SetAppQuitForClosing(&work->unk_3a0);
 }
 
-int ov45_0222A4B8(WiFiPlazaWork *work) {
-    return ov45_0222BD2C(&work->unk_3a0);
+int WiFiPlazaWork_DidAppQuitForClosing(WiFiPlazaWork *work) {
+    return WiFiPlazaUnk3A0_DidAppQuitForClosing(&work->unk_3a0);
 }
 
 void ov45_0222A4C8(WiFiPlazaWork *work, u8 value) {

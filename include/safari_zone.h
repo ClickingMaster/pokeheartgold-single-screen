@@ -54,14 +54,14 @@ u8 SafariZone_GetActiveAreaSet(SafariZone *safari_zone);
 SafariZoneAreaSet *SafariZone_GetAreaSet(SafariZone *safari_zone, s32 area_set_no);
 void SafariZone_CopyAreaSet(SafariZone *safari_zone, s32 area_set_no, SafariZoneAreaSet *area_set_dest);
 void SafariZone_SetAreaSet(SafariZone *safari_zone, s32 area_set_no, SafariZoneAreaSet *area_set_src);
-void SafariZone_SetLevel(SafariZone *safari_zone, u8 a1);
+void SafariZone_SetLevel(SafariZone *safari_zone, u8 level);
 u8 SafariZone_GetLevel(SafariZone *safari_zone);
-void SafariZone_AddToAllAreaLevels(SafariZone *safariZone, s32 a1);
+void SafariZone_AddToAllAreaLevels(SafariZone *safariZone, s32 amount);
 u8 SafariZone_GetObjectUnlockLevel(SafariZone *safari_zone);
-u8 SafariZone_IncObjectUnlockLevel(SafariZone *safari_zone, s32 a1);
-void SafariZone_SetObjectUnlockLevel(SafariZone *safari_zone, u8 a1);
+u8 SafariZone_IncObjectUnlockLevel(SafariZone *safari_zone, s32 amount);
+void SafariZone_SetObjectUnlockLevel(SafariZone *safari_zone, u8 level);
 void SafariZone_SetUnlockTime(SafariZone *safari_zone, IGT *igt);
-u32 SafariZone_CheckUnlockWaitPassed(SafariZone *safari_zone, IGT *igt, s32 a2);
+u32 SafariZone_CheckUnlockWaitPassed(SafariZone *safari_zone, IGT *igt, s32 hours);
 void SafariZone_SetLinkLeaderFromProfile(SafariZone *safari_zone, PlayerProfile *profile, enum HeapID heapID);
 void SafariZone_GetLinkLeaderToProfile(SafariZone *safari_zone, PlayerProfile *profile);
 u8 SafariZone_GetLinkLeaderGender(SafariZone *safari_zone);
@@ -75,6 +75,6 @@ void SafariZone_InitAreaSet(SafariZoneAreaSet *area_set);
 void SafariZone_InitArea(SAFARIZONE_AREA *area, u8 area_no);
 void SafariZone_ClearObject(SAFARIZONE_OBJECT *object);
 void SafariZone_ClearLeader(SAFARIZONE_LINKLEADER *link_leader);
-BOOL sub_0202FA3C(u8 a0, u8 *a1, u8 a2);
+BOOL SafariZone_IsAreaInList(u8 value, u8 *array, u8 count);
 
 #endif

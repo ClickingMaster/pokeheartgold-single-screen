@@ -10,7 +10,7 @@
 // bank 3 of the room, msg 766) - greetings in both players' languages, remarks on their local time of day,
 // comparing and sharing Tap Toys, and asking each other questions - and the staff at the general-inquiries
 // counter and the reception (bank 1, msg 777). The two players' handlers stay in step through the lobby
-// (WiFiPlazaWork_AdvanceTalk sends our talk status / answer, WiFiPlazaWork_GetTalkState / ov45_0222B040 read the partner's).
+// (WiFiPlazaWork_AdvanceTalk sends our talk status / answer, WiFiPlazaWork_GetTalkState / WiFiPlazaWork_GetTalkPartnerMessage read the partner's).
 
 // A list menu of the room (items set up through WiFiPlazaRoom_CreateListItems / WiFiPlazaRoom_AddListItem)
 typedef struct WiFiPlazaTalkMenu {

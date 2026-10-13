@@ -331,8 +331,8 @@ void *WiiMessageSettings_CreateRegistrationCodeEntryArgs(WiiMessageSettings *app
 void WiiMessageSettings_FinishRegistrationCodeEntry(WiiMessageSettings *app);
 void *WiiMessageSettings_CreatePasswordEntryArgs(WiiMessageSettings *app);
 void WiiMessageSettings_FinishPasswordEntry(WiiMessageSettings *app);
-void *ov75_02246EAC(WiiMessageSettings *app);
-void ov75_02246EDC(WiiMessageSettings *app);
+void *WiiMessageSettings_CreateWifiClubArgs(WiiMessageSettings *app);
+void WiiMessageSettings_FinishWifiClub(WiiMessageSettings *app);
 BOOL WiiMessageSettingsScreen_Init(OverlayManager *man, int *state);
 BOOL WiiMessageSettingsScreen_Main(OverlayManager *man, int *state);
 BOOL WiiMessageSettingsScreen_Exit(OverlayManager *man, int *state);
@@ -671,7 +671,7 @@ void WiiMessageSettings_FinishPasswordEntry(WiiMessageSettings *app) {
     WiiMessageSettings_SetNextApp(app, WII_MESSAGE_SETTINGS_APP_SCREEN, 0);
 }
 
-void *ov75_02246EAC(WiiMessageSettings *app) {
+void *WiiMessageSettings_CreateWifiClubArgs(WiiMessageSettings *app) {
     WifiClubArgs *args = Heap_Alloc(HEAP_ID_115, sizeof(WifiClubArgs));
     MI_CpuFill8(args, 0, sizeof(WifiClubArgs));
     args->saveData = app->saveData;
@@ -681,7 +681,7 @@ void *ov75_02246EAC(WiiMessageSettings *app) {
     return app->childArgs;
 }
 
-void ov75_02246EDC(WiiMessageSettings *app) {
+void WiiMessageSettings_FinishWifiClub(WiiMessageSettings *app) {
     if (Comm_HasWifiProfile(app->saveData)) {
         SetFlag970(Save_VarsFlags_Get(app->saveData));
     }

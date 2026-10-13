@@ -169,7 +169,7 @@ static LinkBattleRuleset sAlternateRulesets[] = {
                               },
 };
 
-LinkBattleRuleset *sub_020291E8(SaveData *saveData, int index) {
+LinkBattleRuleset *LinkBattleRuleset_GetRegulation(SaveData *saveData, int index) {
     if (index == 5) {
         Save_LinkBattleRuleset *linkBattleRuleset = SaveArray_Get(saveData, SAVE_LINK_BATTLE_RULESET);
         return &linkBattleRuleset->rules[0];
@@ -182,7 +182,7 @@ LinkBattleRuleset *sub_020291E8(SaveData *saveData, int index) {
     }
 }
 
-void sub_0202921C(SaveData *saveData, int index, String *string, enum HeapID heapID) {
+void LinkBattleRuleset_GetRegulationName(SaveData *saveData, int index, String *string, enum HeapID heapID) {
     if (index == 5) {
         LinkBattleRuleset *ruleset = Save_LinkBattleRuleset_GetByIndex(saveData, 0);
         LinkBattleRuleset_CopyNameToString(ruleset, string);
@@ -192,11 +192,11 @@ void sub_0202921C(SaveData *saveData, int index, String *string, enum HeapID hea
         DestroyMsgData(msgData);
     }
 }
-LinkBattleRuleset *sub_0202925C(void) {
+LinkBattleRuleset *LinkBattleRuleset_GetDefault(void) {
     return &sDefaultRuleset;
 }
 
-int sub_02029264(const LinkBattleRuleset *ruleset) {
+int LinkBattleRuleset_GetRegulationIndex(const LinkBattleRuleset *ruleset) {
     if (ruleset == NULL) {
         return 0xFF;
     }

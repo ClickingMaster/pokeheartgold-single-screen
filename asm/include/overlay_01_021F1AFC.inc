@@ -29,8 +29,8 @@
 .public MetatileBehavior_IsRockClimbEastWest
 .public MetatileBehavior_IsWaterfall
 .public MetatileBehavior_IsWhirlpool
-.public sub_0205BA24
-.public sub_0205BA30
+.public MetatileBehavior_IsBridgeStart
+.public MetatileBehavior_IsBridge
 .public PlayerAvatar_GetFacingDirection
 .public PlayerAvatar_GetXCoord
 .public PlayerAvatar_GetZCoord
@@ -47,11 +47,11 @@
 .public PlayerAvatar_GetSpriteByStateAndGender
 .public PlayerAvatar_CheckForcedMovement
 .public PlayerAvatar_SetFlag1
-.public sub_0205CBE4
+.public PlayerAvatar_CheckReadyToMove
 .public PlayerAvatar_CheckCollision
-.public sub_0205DE38
-.public sub_0205DEC0
-.public sub_0205DFEC
+.public PlayerAvatar_IsReadyOrBumpingWall
+.public PlayerAvatar_GetMoveStateForDirection
+.public PlayerAvatar_GetMetatileBehaviorInDirection
 .public MapObject_Delete
 .public MapObject_GetID
 .public MapObject_GetMapID

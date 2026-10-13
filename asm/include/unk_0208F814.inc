@@ -14,9 +14,9 @@
 .public CommState_SetErrorWatch
 .public DrawingSessionLink_RegisterCommands
 .public CommCmd_RecvIgnored
-.public sub_02091598
-.public sub_020915A0
-.public sub_020915A4
+.public CommCmd_GetSize1008
+.public CommCmd_GetSize10
+.public CommCmd_GetSize50
 .public MIi_CpuClearFast
 .public MIi_CpuCopyFast
 .public MATH_CountPopulation

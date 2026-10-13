@@ -35,9 +35,9 @@
 
 	.public SpinTradeLink_ReceivePacket
 	.public SpinTradeLink_ReceiveParty
-	.public sub_02096DA8
-	.public sub_02096DB4
-	.public sub_02096DBC
+	.public SpinTradeLink_HandleLeaderMenuState
+	.public SpinTradeLink_HandleSyncCount
+	.public SpinTradeLink_HandleStartSync
 	.public SpinTradeLink_HandleClearMessage
 	.public SpinTradeLink_HandleJoinRequest
 	.public SpinTradeLink_HandleMemberJoined

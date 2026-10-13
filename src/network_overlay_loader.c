@@ -20,7 +20,7 @@ void RunNintendoWFCSetupAndReset(void *unused, void *args) {
     (void)unused;
     LoadDwcOverlay();
     LoadOVY13();
-    ov13_0221BA00(args);
+    RunWifiSetupApp(args);
     UnloadOVY13();
     UnloadDwcOverlay();
     OS_ResetSystem(0);

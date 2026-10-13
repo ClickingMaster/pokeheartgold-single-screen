@@ -46,7 +46,7 @@
 DECL_CHUNK(Save_FashionData)
 DECL_CHUNK(Save_Frontier)
 DECL_CHUNK_EX(Save_Gts_sizeof, Save_Gts_Init)
-DECL_CHUNK_EX(sub_0202E41C, sub_0202E424)
+DECL_CHUNK_EX(SaveBlock23_sizeof, SaveBlock23_Init)
 DECL_CHUNK_EX(Save_FriendRoster_sizeof, Save_FriendRoster_Init)
 DECL_CHUNK_EX(PokeathlonSave_FriendshipRecords_sizeof, PokeathlonSave_FriendshipRecords_Init)
 DECL_CHUNK_EX(Save_WiiMessage_sizeof, Save_WiiMessage_Init)
@@ -196,8 +196,8 @@ const struct SaveChunkHeader gSaveChunkHeaders[] = {
     {
      SAVE_UNK_23,
      0,
-     (SAVESIZEFN)sub_0202E41C,
-     (SAVEINITFN)sub_0202E424,
+     (SAVESIZEFN)SaveBlock23_sizeof,
+     (SAVEINITFN)SaveBlock23_Init,
      },
     {
      SAVE_RANKINGS,
@@ -310,7 +310,7 @@ const struct SaveChunkHeader gSaveChunkHeaders[] = {
 };
 const int gNumSaveChunkHeaders = NELEMS(gSaveChunkHeaders);
 
-UnkStruct_0202E474 *sub_020270C4(SaveData *saveData) { // Save_SafariZone_Get? conflicts with other one
+UnkStruct_0202E474 *Save_Block23_Get(SaveData *saveData) { // Save_SafariZone_Get? conflicts with other one
     SaveSubstruct_AssertCRC(SAVE_UNK_23);
     return SaveArray_Get(saveData, SAVE_UNK_23);
 }
@@ -421,7 +421,7 @@ void Save_SetAllPCBoxesModified(SaveData *saveData) {
     PCStorage_SetAllBoxesModified(pcStorage);
 }
 
-void sub_020271A0(SaveData *saveData) {
+void Save_PCStorage_ClearBoxPadding(SaveData *saveData) {
     PCStorage *pcStorage = SaveArray_Get(saveData, SAVE_PCSTORAGE);
-    sub_02074128(pcStorage);
+    PCStorage_ClearBoxPadding(pcStorage);
 }

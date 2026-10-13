@@ -55,7 +55,7 @@ void WiFiPlazaObj_DeleteManager(WiFiPlazaObjManager *manager) {
     Heap_Free(manager);
 }
 
-void ov49_02258B44(WiFiPlazaObjManager *manager) {
+void WiFiPlazaObj_UpdateObjsAndLight(WiFiPlazaObjManager *manager) {
     Field2DObjectManager_Update(manager->gridObjs);
     WiFiPlazaObj_UpdateLight(&manager->light, manager->avatars);
 }

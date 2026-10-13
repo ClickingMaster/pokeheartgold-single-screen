@@ -8,7 +8,7 @@
 #include "overlay_13_arm_2.h"
 #include "comm_wireless.h"
 
-void ov13_0221BA00(enum HeapID HeapID) {
+void RunWifiSetupApp(enum HeapID HeapID) {
     for (int playerNo = 0; playerNo < 32; playerNo++) {
         NNS_SndPlayerSetPlayerVolume(playerNo, 127);
         NNS_SndPlayerSetPlayableSeqCount(playerNo, 1);

@@ -5,16 +5,16 @@
 // Wi-Fi Plaza player objects: one billboard sprite (field character model) plus a model under it for every player
 // on the plaza map (overlay 49 drives them). The first functions are the last lobby client helpers.
 
-void ov45_02230394(int result, void *arg) {
+void WiFiPlazaLobbyClient_OnMatchDisconnect(int result, void *arg) {
     WiFiPlazaLobbyClient *client = arg;
     if (client->unk_69e == 1) {
-        ov45_0222F154();
+        WiFiPlazaLobbyClient_StopMatch();
     } else if (result == 0) {
         _022577C0->unk_69f = 1;
     }
 }
 
-u32 ov45_022303BC(WiFiPlazaLobbyClientUnk1B4 *unk, int key) {
+u32 WiFiPlazaLobbySchedule_FindValue(WiFiPlazaLobbyClientUnk1B4 *unk, int key) {
     u32 result = 0;
     int i;
     for (i = 0; i < unk->count; i++) {
@@ -71,7 +71,7 @@ u32 WiFiPlazaLobbyIdValueList_GetValue(WiFiPlazaLobbyClientUnk6A0 *unk, int id) 
     return 0;
 }
 
-void ov45_0223048C(u32 *dest, const void *data) {
+void WiFiPlazaLobbyClient_CopySurveyData(u32 *dest, const void *data) {
     memcpy(dest, data, 0x2D8);
 }
 

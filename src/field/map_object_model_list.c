@@ -181,7 +181,7 @@ BOOL MapObjectModelEffect_Init(FieldEffect *effect, MapObjectModelEffect *work) 
     work->args = *args;
     work->objectId = MapObject_GetID(work->args.mapObject);
     work->renderObj = MapObjectModelList_GetRenderObj(work->args.manager, work->args.spriteId);
-    work->mapId = MapObject_CheckFlag25(work->args.mapObject) == TRUE ? sub_0205F544(work->args.mapObject) : MapObject_GetMapID(work->args.mapObject);
+    work->mapId = MapObject_CheckFlag25(work->args.mapObject) == TRUE ? MapObject_GetFlag25MapID(work->args.mapObject) : MapObject_GetMapID(work->args.mapObject);
     FieldEffect_GetPosition(effect, &work->offset);
     return TRUE;
 }

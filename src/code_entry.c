@@ -149,7 +149,7 @@ extern f32 sCodeEntryGrowScales[];
 extern f32 sCodeEntryShrinkScales[];
 
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapID);
-void WirelessStatusIcon_ShowOnBothScreens(int a0, enum HeapID heapID);
+void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 void WirelessStatusIcon_SetLevel(int level);
 void WirelessStatusIcon_Create(void);
 void WirelessStatusIcon_Destroy(void);

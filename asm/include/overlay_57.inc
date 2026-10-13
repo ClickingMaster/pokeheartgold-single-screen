@@ -203,8 +203,8 @@
 .public GetMonIconPlttNaix
 .public GetMonIconCell64KNaix
 .public GetMonIconAnim64KNaix
-.public sub_02091054
-.public sub_0209106C
+.public Seal_GetGfxCharId
+.public Seal_GetNameMsgId
 .public NNS_G2dSetupSoftwareSpriteCamera
 .public G2x_SetBlendAlpha_
 .public G3X_SetFog

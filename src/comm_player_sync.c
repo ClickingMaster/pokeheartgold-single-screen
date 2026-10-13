@@ -29,9 +29,9 @@ u16 Comm_TakeDirectionKeys(int netId);
 void Comm_SendFixedCommand(int command, void *data);
 void Comm_SetBattleSlot(int netId, int index);
 u8 CommState_GetLinkMode(void);
-u32 sub_0205DF0C(PlayerAvatar *avatar, int keys, int heldKeys, u32 speed, int flag, int collision);
-BOOL sub_0205DFC8(PlayerAvatar *avatar);
-BOOL sub_0205DE38(PlayerAvatar *avatar);
+u32 PlayerAvatar_GetMovementFromInput(PlayerAvatar *avatar, int keys, int heldKeys, u32 speed, int flag, int collision);
+BOOL PlayerAvatar_IsReadyForMovement(PlayerAvatar *avatar);
+BOOL PlayerAvatar_IsReadyOrBumpingWall(PlayerAvatar *avatar);
 void PlayerAvatar_SetMovement(PlayerAvatar *avatar, int movement);
 int GetMovementForDirection(int direction, int movement);
 
@@ -578,10 +578,10 @@ void CommPlayerManager_MoveAvatar(int netId) {
             } else if (!dirKeys && position->facing != direction) {
                 movement = GetMovementForDirection(position->facing, 36);
             } else {
-                movement = sub_0205DF0C(avatar, keys, keys, moveSpeed, 1, 0);
+                movement = PlayerAvatar_GetMovementFromInput(avatar, keys, keys, moveSpeed, 1, 0);
             }
         }
-        if (sub_0205DFC8(avatar) || sub_0205DE38(avatar)) {
+        if (PlayerAvatar_IsReadyForMovement(avatar) || PlayerAvatar_IsReadyOrBumpingWall(avatar)) {
             if (movement != 255) {
                 PlayerAvatar_SetMovement(avatar, movement);
                 if (keys & ~PAD_BUTTON_B) {

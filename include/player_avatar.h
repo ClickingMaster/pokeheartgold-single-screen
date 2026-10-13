@@ -42,13 +42,13 @@ struct PlayerAvatar {
     u32 unk3c;
 }; // size: 0x40
 
-u32 FrontierStat_GetFriendIndex(u32 param0);
+u32 FrontierStat_GetFriendIndex(u32 stat);
 u8 Comm_GetPartnerGameVersion(void);
 u8 sub_0205C298(SaveData *saveData);
-u8 BattleArcade_GetWinStreakStat(u32 param0);
-u8 BattleArcade_GetBestStreakStat(u32 param0);
-u8 BattleTower_GetWinStreakStat(u32 param0);
-u8 BattleTower_GetBestStreakStat(u32 param0);
+u8 BattleArcade_GetWinStreakStat(u32 mode);
+u8 BattleArcade_GetBestStreakStat(u32 mode);
+u8 BattleTower_GetWinStreakStat(u32 mode);
+u8 BattleTower_GetBestStreakStat(u32 mode);
 PlayerAvatar *PlayerAvatar_CreateWithParams(MapObjectManager *manager, u32 x, u32 z, u32 direction, s32 state, u32 gender, u32 param6, PlayerSaveData *playerSaveData);
 PlayerAvatar *PlayerAvatar_CreateWithActiveMapObject(MapObjectManager *manager, PlayerSaveData *playerSaveData, u32 gender);
 void PlayerAvatar_InitMapFeatures(PlayerAvatar *avatar);
@@ -77,13 +77,13 @@ void PlayerAvatar_SetTransitionFlags(PlayerAvatar *avatar, u32 flags);
 u32 PlayerAvatar_GetTransitionFlags(PlayerAvatar *avatar);
 u32 PlayerAvatar_GetGender(PlayerAvatar *avatar);
 s32 PlayerAvatar_GetSpeed(PlayerAvatar *avatar);
-void PlayerAvatar_SetSpeed(PlayerAvatar *avatar, s32 param1);
+void PlayerAvatar_SetSpeed(PlayerAvatar *avatar, s32 speed);
 void PlayerAvatar_ClearSpeedAndFlag2(PlayerAvatar *avatar);
-s32 PlayerAvatar_AddSpeedWithCeiling(PlayerAvatar *avatar, s32 param1, s32 param2);
+s32 PlayerAvatar_AddSpeedWithCeiling(PlayerAvatar *avatar, s32 delta, s32 ceiling);
 s32 PlayerAvatar_GetLastHorizontalInput(PlayerAvatar *avatar);
 s32 PlayerAvatar_GetLastVerticalInput(PlayerAvatar *avatar);
 void PlayerAvatar_SetLastInputs(PlayerAvatar *avatar, s32 unk28, s32 unk2C);
-void PlayerAvatar_SetSurfMountEffect(PlayerAvatar *avatar, u32 param1);
+void PlayerAvatar_SetSurfMountEffect(PlayerAvatar *avatar, u32 surfMountEffect);
 u32 PlayerAvatar_GetSurfMountEffect(PlayerAvatar *avatar);
 PlayerSaveData *PlayerAvatar_GetPlayerSaveData(PlayerAvatar *avatar);
 void PlayerAvatar_SetHeldMovement(PlayerAvatar *avatar, u32 unkA);

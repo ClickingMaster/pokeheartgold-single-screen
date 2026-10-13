@@ -106,7 +106,7 @@ int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app) {
         PokewalkerApp_ReceiveItems(app);
         PokewalkerApp_GiveStarfBerry(app);
         if (app->peerIdentity.hasWalkerMon == 0) {
-            sub_020326A4(app->pokewalker, 1, 0);
+            Pokewalker_SetStrollState(app->pokewalker, 1, 0);
         }
         if (app->strollMon != NULL) {
             PokewalkerApp_LoadMonPicture(app->strollMon, app->monSpriteBuffer, &app->monPicTemplate, 0);
@@ -129,7 +129,7 @@ int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app) {
         PokewalkerApp_LoadMonPicture(app->strollMon, app->monSpriteBuffer, &app->monPicTemplate, 0);
         PokewalkerApp_ShowMonPicture(app);
         app->state = 0;
-        sub_020326A4(app->pokewalker, 1, 0);
+        Pokewalker_SetStrollState(app->pokewalker, 1, 0);
     }
     app->peerIdentity.hasWalkerMon = 0;
     return 2;

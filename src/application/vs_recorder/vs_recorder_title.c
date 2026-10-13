@@ -45,8 +45,8 @@ BOOL VsRecorder_TitleIntro(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_BG, 0xBFFF, 16, (u16)VsRecorder_GetMenuBlendColor(work));
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0x3FFE, 16, (u16)VsRecorder_GetMenuBlendColor(work));
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 0xFFFF, 16, (u16)VsRecorder_GetMenuBlendColor(work));
-        sub_02087A30(work->orbitCursors[1]);
-        sub_02087A30(work->orbitCursors[0]);
+        OrbitCursor_SetAltAnim(work->orbitCursors[1]);
+        OrbitCursor_SetAltAnim(work->orbitCursors[0]);
         work->step++;
         break;
     case 1:
@@ -102,8 +102,8 @@ BOOL VsRecorder_TitleIntro(VsRecorderWork *work) {
         if (System_GetTouchHeld() == TRUE) {
             VsRecorder_HideTouchHere(work);
             OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
-            sub_02087A54(work->orbitCursors[1]);
-            sub_02087A54(work->orbitCursors[0]);
+            OrbitCursor_SetDefaultAnim(work->orbitCursors[1]);
+            OrbitCursor_SetDefaultAnim(work->orbitCursors[0]);
             work->step++;
         }
         break;

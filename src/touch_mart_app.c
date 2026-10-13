@@ -132,7 +132,7 @@ void TouchMartApp_PrintMoney(TouchMartAppData *data);
 void TouchMartApp_PrintPageNumber(TouchMartAppData *data);
 void TouchMartApp_EditListTilemap(BgConfig *bgConfig, int bgId, int itemCount);
 void TouchMartApp_LoadListTilemap(TouchMartAppData *data, int itemCount);
-BOOL ov31_0225E12C(MartData *martData, int index, int itemId);
+BOOL TouchMartApp_IsItemPurchasable(MartData *martData, int index, int itemId);
 void TouchMartApp_PrintSelectedItem(TouchMartAppData *data);
 void TouchMartApp_PrintInBag(TouchMartAppData *data, int unused);
 void TouchMartApp_PrintQuantity(TouchMartAppData *data, int quantity);
@@ -506,7 +506,7 @@ void TouchMartApp_PrintItemList(TouchMartAppData *data) {
             string = NewString_ReadMsgData(data->itemNameMsgData, itemId);
             TouchMartApp_PrintItemName(data, window, string, i);
             String_Delete(string);
-            if (ov31_0225E12C(data->martData, index, itemId)) {
+            if (TouchMartApp_IsItemPurchasable(data->martData, index, itemId)) {
                 int price;
                 martData2 = data->martData;
                 price = MartData_GetItemPrice(martData2, (u16)itemId);
@@ -635,7 +635,7 @@ void TouchMartApp_LoadListTilemap(TouchMartAppData *data, int itemCount) {
     Heap_Free(raw);
 }
 
-BOOL ov31_0225E12C(MartData *martData, int index, int itemId) {
+BOOL TouchMartApp_IsItemPurchasable(MartData *martData, int index, int itemId) {
     if (martData->martType == 3) {
         return PokeathlonSave_IsDailyItemBought(martData->pokeathlonSave, index) == 0;
     }
@@ -658,7 +658,7 @@ void TouchMartApp_PrintSelectedItem(TouchMartAppData *data) {
     String_Delete(string);
     martData = data->martData;
     itemId = martData->itemIds[index];
-    if (ov31_0225E12C(martData, index, itemId)) {
+    if (TouchMartApp_IsItemPurchasable(martData, index, itemId)) {
         int price;
         martData = data->martData;
         itemId = martData->itemIds[index];

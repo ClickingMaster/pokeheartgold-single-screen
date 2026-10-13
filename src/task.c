@@ -127,6 +127,6 @@ u32 *TaskManager_GetStatePtr(TaskManager *taskManager) {
     return &taskManager->state;
 }
 
-u32 sub_02050658(TaskManager *taskManager) {
+u32 TaskManager_GetBgGoToId(TaskManager *taskManager) {
     return taskManager->unk1C->unk0;
 }

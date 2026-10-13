@@ -1384,7 +1384,7 @@ BOOL FrtCmd_183(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_200(FrontierScriptContext *ctx) {
-    sub_020270C4(Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork)->saveData);
+    Save_Block23_Get(Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork)->saveData);
     FrontierScript_ReadVar(ctx);
     return FALSE;
 }

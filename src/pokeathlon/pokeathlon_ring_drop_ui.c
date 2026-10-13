@@ -59,7 +59,7 @@ struct PokeathlonRingDropUi {
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, u32 participant, u32 member, void *info);
 void PokeathlonCourse_LoadMonIcon(void *sprite, void *info, u32 palette, u32 narc, u32 offset, u32 heapId);
 void PokeathlonCourse_LoadMonPic(void *sprite, void *info, u32 mainScreen, u32 palette, u32 heapId);
-Sprite *ov96_021EA374(void *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
+Sprite *PokeathlonCourse_CreateTimerDigitSprite(void *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
 
 // Sprite templates (resources 10001 and 10000) and the windows: name, next name, label.
 extern const ManagedSpriteTemplate ov96_0221D910;
@@ -504,7 +504,7 @@ void PokeathlonRingDropUi_CreateTimerSprites(PokeathlonRingDropUi *ui) {
     for (; i < 2; i++) {
         s32 matrix[3] = { 0, 0, 0 };
         s32 position;
-        cursor->timerDigits[0] = ov96_021EA374(ui->resources, SpriteManager_GetSpriteList(ui->spriteManager), 1, ui->heapId);
+        cursor->timerDigits[0] = PokeathlonCourse_CreateTimerDigitSprite(ui->resources, SpriteManager_GetSpriteList(ui->spriteManager), 1, ui->heapId);
         position = x;
         position <<= FX32_SHIFT;
         matrix[0] = position;

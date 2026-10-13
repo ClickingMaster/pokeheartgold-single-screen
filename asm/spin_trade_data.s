@@ -58,19 +58,19 @@
 	.extern SpinTrade_AddHover
 	.extern SpinTradeGroup_State_ShowPrompt
 	.extern SpinTradeGroup_State_HandleInput
-	.extern ov85_021E9440
+	.extern SpinTradeGroup_State_WaitTextThenResetMenu
 	.extern SpinTradeGroup_State_WaitPrinter
-	.extern ov85_021E948C
+	.extern SpinTradeGroup_State_ResetLeaderMenuState
 	.extern SpinTradeGroup_State_ShowCancelYesNo
 	.extern SpinTradeGroup_State_HandleCancelYesNo
-	.extern ov85_021E9614
-	.extern ov85_021E962C
-	.extern ov85_021E96B0
+	.extern SpinTradeGroup_State_ResetLeaveWait
+	.extern SpinTradeGroup_State_SendLeave
+	.extern SpinTradeGroup_State_AbortLeave
 	.extern SpinTradeGroup_State_ShowConfirmYesNo
 	.extern SpinTradeGroup_State_HandleConfirmYesNo
-	.extern ov85_021E97B8
-	.extern ov85_021E97E8
-	.extern ov85_021E9814
+	.extern SpinTradeGroup_State_SendStartSync
+	.extern SpinTradeGroup_State_WaitSyncCount
+	.extern SpinTradeGroup_State_BeforeSave
 	.extern SpinTradeGroup_State_StartSave
 	.extern SpinTradeGroup_State_Save
 	.extern SpinTradeGroup_State_WaitAfterSave
@@ -85,8 +85,8 @@
 	.extern SpinTradeGroup_State_ShowMemberDropped
 	.extern SpinTradeGroup_State_WaitMemberDropped
 	.extern SpinTradeGroup_State_ShowMemberLeft
-	.extern ov85_021E9BA0
-	.extern ov85_021E9BDC
+	.extern SpinTradeGroup_State_StartMemberLeftWait
+	.extern SpinTradeGroup_State_WaitMemberLeft
 	.extern SpinTradeGroup_State_Proceed
 	.public gSpinTradeHoverOffsets
 	.public SpinTradeApp_Init
@@ -292,21 +292,21 @@
 	.public SpinTradeGroup_State_ShowPrompt
 	.public SpinTradeGroup_State_HandleInput
 	.public SpinTradeGroup_HandleButtons
-	.public ov85_021E943C
-	.public ov85_021E9440
+	.public SpinTradeGroup_UpdateDummy
+	.public SpinTradeGroup_State_WaitTextThenResetMenu
 	.public SpinTradeGroup_WaitPrinterThen
 	.public SpinTradeGroup_State_WaitPrinter
-	.public ov85_021E948C
+	.public SpinTradeGroup_State_ResetLeaderMenuState
 	.public SpinTradeGroup_State_ShowCancelYesNo
 	.public SpinTradeGroup_State_HandleCancelYesNo
-	.public ov85_021E9614
-	.public ov85_021E962C
-	.public ov85_021E96B0
+	.public SpinTradeGroup_State_ResetLeaveWait
+	.public SpinTradeGroup_State_SendLeave
+	.public SpinTradeGroup_State_AbortLeave
 	.public SpinTradeGroup_State_ShowConfirmYesNo
 	.public SpinTradeGroup_State_HandleConfirmYesNo
-	.public ov85_021E97B8
-	.public ov85_021E97E8
-	.public ov85_021E9814
+	.public SpinTradeGroup_State_SendStartSync
+	.public SpinTradeGroup_State_WaitSyncCount
+	.public SpinTradeGroup_State_BeforeSave
 	.public SpinTradeGroup_State_StartSave
 	.public SpinTradeGroup_State_Save
 	.public SpinTradeGroup_State_WaitAfterSave
@@ -321,15 +321,15 @@
 	.public SpinTradeGroup_State_ShowMemberDropped
 	.public SpinTradeGroup_State_WaitMemberDropped
 	.public SpinTradeGroup_State_ShowMemberLeft
-	.public ov85_021E9BA0
-	.public ov85_021E9BDC
+	.public SpinTradeGroup_State_StartMemberLeftWait
+	.public SpinTradeGroup_State_WaitMemberLeft
 	.public SpinTradeGroup_State_Proceed
 	.public SpinTradeGroup_HandleLinkEvent
 	.public SpinTradeGroup_HandleMemberEvent
 	.public SpinTradeGroup_CycleHighlightColor
 	.public SpinTradeGroup_CountProfiles
 	.public SpinTradeGroup_PrintMemberList
-	.public ov85_021E9FCC
+	.public SpinTradeGroup_HandleInputDummy
 	.public SpinTradeGroup_CountMembers
 	.public SpinTradeGroup_GetMemberMask
 	.public SpinTradeGroup_UpdateMembers
@@ -343,7 +343,7 @@
 	.public SpinTradeGroup_GetTextSpeed
 	.public SpinTradeGroup_SetMaxConnections
 	.public SpinTradeGroup_CheckMembers
-	.public ov85_021EA4EC
+	.public SpinTradeGroup_SaveDummy
 	.public ov85_021EA4F0
 	.public ov85_021EA4F4
 	.public gSpinTradeMsgWindowTemplate
@@ -713,14 +713,14 @@ ov85_021EA9B8: ; 0x021EA9B8
 
 gSpinTradeGroupStateFuncs: ; 0x021EA9E0
 	.word SpinTradeGroup_State_ShowPrompt
-	.word ov85_021E9440
-	.word ov85_021E948C
+	.word SpinTradeGroup_State_WaitTextThenResetMenu
+	.word SpinTradeGroup_State_ResetLeaderMenuState
 	.word SpinTradeGroup_State_HandleInput
 	.word SpinTradeGroup_State_ShowCancelYesNo
 	.word SpinTradeGroup_State_HandleCancelYesNo
-	.word ov85_021E9614
-	.word ov85_021E962C
-	.word ov85_021E96B0
+	.word SpinTradeGroup_State_ResetLeaveWait
+	.word SpinTradeGroup_State_SendLeave
+	.word SpinTradeGroup_State_AbortLeave
 	.word SpinTradeGroup_State_ShowCanceled
 	.word SpinTradeGroup_State_FadeOutCanceled
 	.word SpinTradeGroup_State_ShowDisbandYesNo
@@ -732,13 +732,13 @@ gSpinTradeGroupStateFuncs: ; 0x021EA9E0
 	.word SpinTradeGroup_State_ShowMemberDropped
 	.word SpinTradeGroup_State_WaitMemberDropped
 	.word SpinTradeGroup_State_ShowMemberLeft
-	.word ov85_021E9BA0
-	.word ov85_021E9BDC
+	.word SpinTradeGroup_State_StartMemberLeftWait
+	.word SpinTradeGroup_State_WaitMemberLeft
 	.word SpinTradeGroup_State_ShowConfirmYesNo
 	.word SpinTradeGroup_State_HandleConfirmYesNo
-	.word ov85_021E97B8
-	.word ov85_021E97E8
-	.word ov85_021E9814
+	.word SpinTradeGroup_State_SendStartSync
+	.word SpinTradeGroup_State_WaitSyncCount
+	.word SpinTradeGroup_State_BeforeSave
 	.word SpinTradeGroup_State_StartSave
 	.word SpinTradeGroup_State_Save
 	.word SpinTradeGroup_State_WaitAfterSave

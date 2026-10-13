@@ -423,8 +423,8 @@ void PaletteData_SetAutoTransparent(PaletteData *plttData, BOOL autoTransparent)
     plttData->autoTransparent = autoTransparent;
 }
 
-void PaletteData_SetSelectedBufferAll(PaletteData *plttData, BOOL a1) {
-    plttData->selectedFlag = a1 & 1;
+void PaletteData_SetSelectedBufferAll(PaletteData *plttData, BOOL selected) {
+    plttData->selectedFlag = selected & 1;
     plttData->selectedBuffer = PLTTBUF_ALL_F;
 }
 

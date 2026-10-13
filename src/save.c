@@ -28,7 +28,7 @@ static void SaveSlotCheck_InitFromSavedat(struct SaveSlotCheck *check, SaveData 
 static void SaveSlot_BuildFooter(SaveData *saveData, void *data, int idx);
 static int SaveCounterCompare(u32 stat1, u32 stat2);
 static u32 SaveSlotCheckCompare(struct SaveSlotCheck *first, struct SaveSlotCheck *second, u32 *ret1_p, u32 *ret2_p);
-static void Save_RecordWhichLatestGoodSector(SaveData *saveData, struct SaveSlotCheck *a1, struct SaveSlotCheck *a2, int idx);
+static void Save_RecordWhichLatestGoodSector(SaveData *saveData, struct SaveSlotCheck *checks_main, struct SaveSlotCheck *checks_sub, int idx);
 static int Save_GetSaveFilesStatus(SaveData *saveData);
 static void Save_CheckFrontierData(SaveData *saveData, int *err1, int *err2);
 static BOOL FlashLoadSaveDataFromChunk(u32 slot, struct SaveSlotSpec *spec, void *dest);
@@ -48,8 +48,8 @@ static void Save_InitDynamicRegion_Internal(u8 *dynamic_region, struct SaveArray
 static void CreateChunkFooter(SaveData *saveData, void *data, int idx, u32 size);
 static BOOL ValidateChunk(SaveData *saveData, void *data, int idx, u32 size);
 static u32 SaveArray_GetFooterSaveNo(void *data, u32 size);
-static void Save_GetExtraChunkKeys(SaveData *saveData, int a1, u32 *a2, u32 *a3, u8 *a4);
-static void Save_SetExtraChunkKeys(SaveData *saveData, int a1, u32 a2, u32 a3, u8 a4);
+static void Save_GetExtraChunkKeys(SaveData *saveData, int idx, u32 *a2, u32 *a3, u8 *a4);
+static void Save_SetExtraChunkKeys(SaveData *saveData, int idx, u32 a2, u32 a3, u8 a4);
 static BOOL SaveDetectFlash(void);
 static s32 FlashWriteChunk(u32 offset, void *data, u32 size);
 static BOOL FlashLoadChunk(u32 offset, void *data, u32 size);
@@ -1075,12 +1075,12 @@ void *ReadExtraSaveChunkKeyed(SaveData *saveData, enum HeapID heapID, int idx, i
     return ret;
 }
 
-static void Save_GetExtraChunkKeys(SaveData *saveData, int a1, u32 *a2, u32 *a3, u8 *a4) {
-    SaveMisc_GetExtraChunkKeys(Save_Misc_Get(saveData), a1, a2, a3, a4);
+static void Save_GetExtraChunkKeys(SaveData *saveData, int idx, u32 *a2, u32 *a3, u8 *a4) {
+    SaveMisc_GetExtraChunkKeys(Save_Misc_Get(saveData), idx, a2, a3, a4);
 }
 
-static void Save_SetExtraChunkKeys(SaveData *saveData, int a1, u32 a2, u32 a3, u8 a4) {
-    SaveMisc_SetExtraChunkKeys(Save_Misc_Get(saveData), a1, a2, a3, a4);
+static void Save_SetExtraChunkKeys(SaveData *saveData, int idx, u32 a2, u32 a3, u8 a4) {
+    SaveMisc_SetExtraChunkKeys(Save_Misc_Get(saveData), idx, a2, a3, a4);
 }
 
 static BOOL SaveDetectFlash(void) {
@@ -1224,7 +1224,7 @@ static int HandleWriteSaveAsync_PCBoxes(SaveData *saveData, struct AsyncWriteMan
         saveData->pcStorageCRC = GF_CalcCRC16(SaveArray_Get(saveData, SAVE_PCSTORAGE), r7);
         if (saveData->numModifiedBoxes == 0) {
             GF_ASSERT(saveData->pcStorageCRC == saveData->pcStorageLastCRC);
-            sub_020271A0(saveData);
+            Save_PCStorage_ClearBoxPadding(saveData);
             if (saveData->pcStorageCRC != saveData->pcStorageLastCRC) {
                 saveData->numModifiedBoxes = PCStorage_GetNumBoxes();
                 saveData->newBoxModifiedFlags = BOX_ALL_MODIFIED_FLAG;

@@ -9,8 +9,8 @@
 	.extern WiiMessageSettings_FinishRegistrationCodeEntry
 	.extern WiiMessageSettings_CreatePasswordEntryArgs
 	.extern WiiMessageSettings_FinishPasswordEntry
-	.extern ov75_02246EAC
-	.extern ov75_02246EDC
+	.extern WiiMessageSettings_CreateWifiClubArgs
+	.extern WiiMessageSettings_FinishWifiClub
 	.extern WiiMessageSettingsScreen_Init
 	.extern WiiMessageSettingsScreen_Main
 	.extern WiiMessageSettingsScreen_Exit
@@ -120,7 +120,7 @@
 	.public WiiNumber_ToWiiAddress
 	.public WiiNumber_IsZero
 	.public WiiNumber_ParseDigitGroups
-	.public ov75_022498E4
+	.public sWiiMessageSettingsWifiClubTemplate
 	.public sWiiMessageSettingsScreenTemplate
 	.public sWiiMessageSettingsApps
 	.public sWiiMessageSettingsRegisteredMenuWindow
@@ -156,8 +156,8 @@
 	.public WiiMessageSettings_GetWiiNumberEntryState
 	.public WiiMessageSettings_CreateScreenArgs
 	.public WiiMessageSettings_DestroyScreenArgs
-	.public ov75_02246EAC
-	.public ov75_02246EDC
+	.public WiiMessageSettings_CreateWifiClubArgs
+	.public WiiMessageSettings_FinishWifiClub
 	.public WiiMessageSettingsScreen_VBlankCB
 	.public WiiMessageSettingsScreen_FreeBgs
 	.public WiiMessageSettingsScreen_RemoveWindows
@@ -186,7 +186,7 @@
 .text
 	.rodata
 
-ov75_022498E4:
+sWiiMessageSettingsWifiClubTemplate:
 	.word WifiClub_Init, WifiClub_Main, WifiClub_Exit, FS_OVERLAY_ID(OVY_44)
 sWiiMessageSettingsScreenTemplate:
 	.word WiiMessageSettingsScreen_Init, WiiMessageSettingsScreen_Main, WiiMessageSettingsScreen_Exit, 0xFFFFFFFF
@@ -197,7 +197,7 @@ sWiiMessageSettingsApps: ; 0x02249904
 	.word WiiMessageSettings_CreateRegistrationCodeEntryArgs, WiiMessageSettings_FinishRegistrationCodeEntry, gOverlayTemplate_CodeEntry, 0
 	.word WiiMessageSettings_CreatePasswordEntryArgs, WiiMessageSettings_FinishPasswordEntry, gOverlayTemplate_CodeEntry, 0
 	.word WiiMessageSettings_CreatePasswordEntryArgs, WiiMessageSettings_FinishPasswordEntry, gOverlayTemplate_CodeEntry, 0
-	.word ov75_02246EAC, ov75_02246EDC, ov75_022498E4, 1
+	.word WiiMessageSettings_CreateWifiClubArgs, WiiMessageSettings_FinishWifiClub, sWiiMessageSettingsWifiClubTemplate, 1
 
 ov75_App_MainMenu_SelectOption_WiiMessageSettings:
 	.word WiiMessageSettings_Init, WiiMessageSettings_Main, WiiMessageSettings_Exit, 0xFFFFFFFF

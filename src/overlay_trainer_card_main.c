@@ -111,7 +111,7 @@ int TrainerCardMain_HandleInput(TrainerCardMain *cardMain);
 void TrainerCardMain_VBlankCB(TrainerCardMain *cardMain);
 void TrainerCardMain_ResetBgAffine(void);
 void TrainerCardMain_DrawFrontPicture(TrainerCardMain *cardMain);
-void ov51_021E6CCC(TrainerCardMain *cardMain);
+void TrainerCardMain_ClearBackSideRect(TrainerCardMain *cardMain);
 void TrainerCardMain_UnpackSignature(u8 *signature, u8 *pixels);
 void TrainerCardMain_DrawSignature(BgConfig *bgConfig, int bgId, u8 *pixels);
 void TrainerCardMain_UpdatePlayTime(TrainerCardMain *cardMain, int update);
@@ -543,7 +543,7 @@ void TrainerCardMain_LoadSideLayout(TrainerCardMain *cardMain) {
     } else {
         GfGfxLoader_LoadScrnData(NARC_a_0_4_9, 0x30, cardMain->bgConfig, (GFBgLayer)6, 0, 0, FALSE, HEAP_ID_25);
         TrainerCardMain_ClearWindows(cardMain->windows, 0, 6);
-        ov51_021E6CCC(cardMain);
+        TrainerCardMain_ClearBackSideRect(cardMain);
         BgClearTilemapBufferAndCommit(cardMain->bgConfig, 7);
     }
 }
@@ -802,7 +802,7 @@ void TrainerCardMain_DrawFrontPicture(TrainerCardMain *cardMain) {
 
 #pragma force_active reset
 
-void ov51_021E6CCC(TrainerCardMain *cardMain) {
+void TrainerCardMain_ClearBackSideRect(TrainerCardMain *cardMain) {
     FillBgTilemapRect(cardMain->bgConfig, 7, 0, 0x14, 6, 6, 9, 0x10);
 }
 

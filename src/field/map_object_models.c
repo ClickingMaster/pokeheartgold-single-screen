@@ -37,7 +37,7 @@ typedef struct LegendaryBirdObject {
 typedef void (*LegendaryBirdAnimateFunc)(LocalMapObject *object, Sprite *billboard, LegendaryBirdObject *work);
 
 // Map object render (MapObjectRender_Init group, no header yet).
-void MapObjectRender_Init(void *render, MapObjectManager *manager, u32 count, u32 priority, int arg1, int objectsToPreload, const int *objectIDs, int arg4);
+void MapObjectRender_Init(void *render, MapObjectManager *manager, u32 count, u32 priority, int textureCount, int objectsToPreload, const int *objectIDs, int loadsPerFrame);
 void MapObjectRender_Free(void *render);
 void MapObject_CreateBillboard(LocalMapObject *object, void *work);
 void MapObject_DeleteBillboard(LocalMapObject *object, void *work);
@@ -440,7 +440,7 @@ void MapObject_GetDrawPosition(LocalMapObject *object, VecFx32 *dest) {
     MapObject_CopyPositionVector(object, &position);
     MapObject_CopyFacingVector(object, &facing);
     MapObject_CopyDrawOffset(object, &offset2);
-    sub_0205F9B0(object, &offset3);
+    MapObject_CopyTileDrawOffset(object, &offset3);
     dest->x = position.x + facing.x + offset2.x + offset3.x;
     dest->y = position.y + facing.y + offset2.y + offset3.y;
     dest->z = position.z + facing.z + offset2.z + offset3.z;

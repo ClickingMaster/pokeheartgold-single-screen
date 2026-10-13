@@ -164,7 +164,7 @@
 .public FX_SinCosTable_
 .public gSystem
 .public WiFiPlazaWork_IsClosing
-.public ov45_0222A4A8
+.public WiFiPlazaWork_SetAppQuitForClosing
 .public WiFiPlazaWork_SetLowVolume
 .public WiFiPlazaPlaces_GetCountry
 .public WiFiPlazaPlaces_GetRegion

@@ -759,7 +759,7 @@ static MapPreviewGraphicData sMapPreviewGraphicData[] = {
 static BOOL Task_MapPreviewGraphic_ShowImage(TaskManager *man);
 static void MapPreviewGraphic_LoadGfx(MapPreviewGraphicWork *unk);
 static void MapPreviewGraphic_InitWindow(MapPreviewGraphicWork *unk);
-static int sub_0206A694(MapPreviewGraphicWork *unk, FieldSystem *fsys);
+static int MapPreviewGraphic_RunPlayerDropIn(MapPreviewGraphicWork *unk, FieldSystem *fsys);
 
 u8 MapPreviewGraphic_GetIndex(u32 mapId) {
     u8 ret = -1;
@@ -772,7 +772,7 @@ u8 MapPreviewGraphic_GetIndex(u32 mapId) {
     return ret;
 }
 
-void MapPreviewGraphic_BeginShowImage(TaskManager *man, int index, u8 time, int a3) {
+void MapPreviewGraphic_BeginShowImage(TaskManager *man, int index, u8 time, int lowerPlayer) {
     FieldSystem *fsys = TaskManager_GetFieldSystem(man);
     MapPreviewGraphicWork *unk = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(MapPreviewGraphicWork));
 
@@ -804,7 +804,7 @@ void MapPreviewGraphic_BeginShowImage(TaskManager *man, int index, u8 time, int 
     }
 
     unk->heapID = HEAP_ID_FIELD1;
-    unk->lowerPlayer = a3;
+    unk->lowerPlayer = lowerPlayer;
     unk->lowerPlayerState.state = 0;
     unk->lowerPlayerState.frame = 0;
 
@@ -863,7 +863,7 @@ static BOOL Task_MapPreviewGraphic_ShowImage(TaskManager *man) {
             }
             reg_G2_BLDALPHA = (16 - unk->fadeOutTimer) | (unk->fadeOutTimer << 8);
         }
-        if (sub_0206A694(unk, fsys) && unk->fadeOutTimer >= 16) {
+        if (MapPreviewGraphic_RunPlayerDropIn(unk, fsys) && unk->fadeOutTimer >= 16) {
             ToggleBgLayer(2, GF_PLANE_TOGGLE_OFF);
             SetBgControlParam(unk->bgConfig, 2, GF_BG_CNT_SET_COLOR_MODE, unk->bgColorMode);
             SetBgPriority(GF_BG_LYR_MAIN_2, (u8)unk->bg2Priority);
@@ -893,7 +893,7 @@ static void MapPreviewGraphic_InitWindow(MapPreviewGraphicWork *unk) {
     AddWindowParameterized(unk->bgConfig, unk->window, 2, 0, 0, 28, 2, 13, 0x2C0);
 }
 
-static int sub_0206A694(MapPreviewGraphicWork *unk, FieldSystem *fsys) {
+static int MapPreviewGraphic_RunPlayerDropIn(MapPreviewGraphicWork *unk, FieldSystem *fsys) {
     LocalMapObject *player;
 
     if (!unk->lowerPlayer) {

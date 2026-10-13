@@ -2913,10 +2913,10 @@ void BattleCastle_InitSpriteTransfer(void) {
 void BattleCastle_LoadPartyListGfx(BattleCastleSpriteGfx *gfx) {
     NARC *narc = NARC_New(NARC_graphic_plist_gra, HEAP_ID_107);
 
-    gfx->resObj[1][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], narc, sub_0207CA9C(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_107);
-    gfx->resObj[1][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_graphic_plist_gra, sub_0207CAA0(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 1, HEAP_ID_107);
-    gfx->resObj[1][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], narc, sub_0207CAA4(), FALSE, 1, GF_GFX_RES_TYPE_CELL, HEAP_ID_107);
-    gfx->resObj[1][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], narc, sub_0207CAA8(), FALSE, 1, GF_GFX_RES_TYPE_ANIM, HEAP_ID_107);
+    gfx->resObj[1][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], narc, PartyMenu_GetHeldItemIconNCGR(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_107);
+    gfx->resObj[1][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_graphic_plist_gra, PartyMenu_GetHeldItemIconNCLR(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 1, HEAP_ID_107);
+    gfx->resObj[1][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], narc, PartyMenu_GetHeldItemIconNCER(), FALSE, 1, GF_GFX_RES_TYPE_CELL, HEAP_ID_107);
+    gfx->resObj[1][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], narc, PartyMenu_GetHeldItemIconNANR(), FALSE, 1, GF_GFX_RES_TYPE_ANIM, HEAP_ID_107);
     NARC_Delete(narc);
 }
 

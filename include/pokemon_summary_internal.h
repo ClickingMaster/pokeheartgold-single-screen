@@ -143,12 +143,12 @@ void PokemonSummary_PrintMoveSlot(PokemonSummary *summary, int slot);
 void PokemonSummary_PrintMoveInfo(PokemonSummary *summary, u16 move);
 void PokemonSummary_ClearMoveInfo(PokemonSummary *summary);
 void PokemonSummary_PrintMoveToLearn(PokemonSummary *summary);
-void sub_0208DB58(PokemonSummary *summary);
+void PokemonSummary_ScheduleMainBg1Transfer(PokemonSummary *summary);
 void PokemonSummary_PrintSwappedMoves(PokemonSummary *summary);
 void PokemonSummary_PrintCantForgetHMMessage(PokemonSummary *summary);
 void PokemonSummary_ShowForgetLabel(PokemonSummary *summary, int show);
 void PokemonSummary_ShowSwitchLabel(PokemonSummary *summary, int show);
-void sub_0208DDA0(PokemonSummary *summary, int result);
+void PokemonSummary_PrintConditionChangeMessage(PokemonSummary *summary, int result);
 
 // pokemon_summary_states.c
 int PokemonSummary_HandleMoveSelectInput(PokemonSummary *summary);
@@ -272,7 +272,7 @@ void PokemonSummary_ShowSwapCursorSprite(PokemonSummary *summary);
 void PokemonSummary_ResetSwapCursorSprite(PokemonSummary *summary);
 void PokemonSummary_InitSheenSparkles(PokemonSummary *summary);
 void PokemonSummary_UpdateMarkingSprites(PokemonSummary *summary);
-void sub_0208BDC8(PokemonSummary *summary);
+void PokemonSummary_ShowConditionChangeSprites(PokemonSummary *summary);
 void PokemonSummary_LoadMonIcon(PokemonSummary *summary, void *mon, int sprite);
 void PokemonSummary_LoadShownMonIcon(PokemonSummary *summary);
 void PokemonSummary_LoadPartyIcons(PokemonSummary *summary);

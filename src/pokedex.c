@@ -693,12 +693,12 @@ u32 Pokedex_GetSeenFormNum_Unown(Pokedex *pokedex, BOOL caught) {
     return Pokedex_CountRegisteredUnownLetters(pokedex, caught);
 }
 
-int Pokedex_GetSeenFormByIdx_Shellos(Pokedex *pokedex, int a1) {
+int Pokedex_GetSeenFormByIdx_Shellos(Pokedex *pokedex, int idx) {
     ASSERT_POKEDEX(pokedex);
-    if (Pokedex_GetSeenFormNum_2max(pokedex, SPECIES_SHELLOS) <= a1) {
+    if (Pokedex_GetSeenFormNum_2max(pokedex, SPECIES_SHELLOS) <= idx) {
         return -1;
     }
-    return Pokedex_GetSeenFormByIdx_2max(pokedex, SPECIES_SHELLOS, a1);
+    return Pokedex_GetSeenFormByIdx_2max(pokedex, SPECIES_SHELLOS, idx);
 }
 
 static u32 Pokedex_GetSeenFormNum_Shellos(Pokedex *pokedex) {
@@ -706,12 +706,12 @@ static u32 Pokedex_GetSeenFormNum_Shellos(Pokedex *pokedex) {
     return Pokedex_GetSeenFormNum_2max(pokedex, SPECIES_SHELLOS);
 }
 
-static int Pokedex_GetSeenFormByIdx_Gastrodon(Pokedex *pokedex, int a1) {
+static int Pokedex_GetSeenFormByIdx_Gastrodon(Pokedex *pokedex, int idx) {
     ASSERT_POKEDEX(pokedex);
-    if (Pokedex_GetSeenFormNum_2max(pokedex, SPECIES_GASTRODON) <= a1) {
+    if (Pokedex_GetSeenFormNum_2max(pokedex, SPECIES_GASTRODON) <= idx) {
         return -1;
     }
-    return Pokedex_GetSeenFormByIdx_2max(pokedex, SPECIES_GASTRODON, a1);
+    return Pokedex_GetSeenFormByIdx_2max(pokedex, SPECIES_GASTRODON, idx);
 }
 
 static u32 Pokedex_GetSeenFormNum_Gastrodon(Pokedex *pokedex) {
@@ -719,12 +719,12 @@ static u32 Pokedex_GetSeenFormNum_Gastrodon(Pokedex *pokedex) {
     return Pokedex_GetSeenFormNum_2max(pokedex, SPECIES_GASTRODON);
 }
 
-static int Pokedex_GetSeenFormByIdx_Burmy(Pokedex *pokedex, int a1) {
+static int Pokedex_GetSeenFormByIdx_Burmy(Pokedex *pokedex, int idx) {
     ASSERT_POKEDEX(pokedex);
-    if (Pokedex_CountSeenForms_3max(pokedex, SPECIES_BURMY) <= a1) {
+    if (Pokedex_CountSeenForms_3max(pokedex, SPECIES_BURMY) <= idx) {
         return -1;
     }
-    return Pokedex_GetSeenFormByIdx_3max(pokedex, SPECIES_BURMY, a1);
+    return Pokedex_GetSeenFormByIdx_3max(pokedex, SPECIES_BURMY, idx);
 }
 
 static u32 Pokedex_GetSeenFormNum_Burmy(Pokedex *pokedex) {
@@ -732,12 +732,12 @@ static u32 Pokedex_GetSeenFormNum_Burmy(Pokedex *pokedex) {
     return Pokedex_CountSeenForms_3max(pokedex, SPECIES_BURMY);
 }
 
-static int Pokedex_GetSeenFormByIdx_Wormadam(Pokedex *pokedex, int a1) {
+static int Pokedex_GetSeenFormByIdx_Wormadam(Pokedex *pokedex, int idx) {
     ASSERT_POKEDEX(pokedex);
-    if (Pokedex_CountSeenForms_3max(pokedex, SPECIES_WORMADAM) <= a1) {
+    if (Pokedex_CountSeenForms_3max(pokedex, SPECIES_WORMADAM) <= idx) {
         return -1;
     }
-    return Pokedex_GetSeenFormByIdx_3max(pokedex, SPECIES_WORMADAM, a1);
+    return Pokedex_GetSeenFormByIdx_3max(pokedex, SPECIES_WORMADAM, idx);
 }
 
 static u32 Pokedex_GetSeenFormNum_Wormadam(Pokedex *pokedex) {
@@ -745,12 +745,12 @@ static u32 Pokedex_GetSeenFormNum_Wormadam(Pokedex *pokedex) {
     return Pokedex_CountSeenForms_3max(pokedex, SPECIES_WORMADAM);
 }
 
-static int Pokedex_GetSeenFormByIdx_Pichu(Pokedex *pokedex, int a1) {
+static int Pokedex_GetSeenFormByIdx_Pichu(Pokedex *pokedex, int idx) {
     ASSERT_POKEDEX(pokedex);
-    if (Pokedex_CountSeenForms_3max(pokedex, SPECIES_PICHU) <= a1) {
+    if (Pokedex_CountSeenForms_3max(pokedex, SPECIES_PICHU) <= idx) {
         return -1;
     }
-    return Pokedex_GetSeenFormByIdx_3max(pokedex, SPECIES_PICHU, a1);
+    return Pokedex_GetSeenFormByIdx_3max(pokedex, SPECIES_PICHU, idx);
 }
 
 static u32 Pokedex_GetSeenFormNum_Pichu(Pokedex *pokedex) {
@@ -758,9 +758,9 @@ static u32 Pokedex_GetSeenFormNum_Pichu(Pokedex *pokedex) {
     return Pokedex_CountSeenForms_3max(pokedex, SPECIES_PICHU);
 }
 
-static u32 Pokedex_GetSeenFormByIdx_Deoxys(Pokedex *pokedex, u32 a1) {
+static u32 Pokedex_GetSeenFormByIdx_Deoxys(Pokedex *pokedex, u32 idx) {
     ASSERT_POKEDEX(pokedex);
-    return Pokedex_GetSeenDeoxysFormByIndex(pokedex, a1);
+    return Pokedex_GetSeenDeoxysFormByIndex(pokedex, idx);
 }
 
 static u32 Pokedex_GetSeenFormNum_Deoxys(Pokedex *pokedex) {

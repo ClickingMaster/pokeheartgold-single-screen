@@ -90,7 +90,7 @@ static const u16 sRockSmashItems_CliffCave[] = {
 #endif // HEARTGOLD
 
 static BOOL Task_RockSmashItemCheck(TaskManager *taskman);
-static BOOL CheckRockSmashItemDrop(FieldSystem *fieldSystem, RockSmashItemCheckWork *a1);
+static BOOL CheckRockSmashItemDrop(FieldSystem *fieldSystem, RockSmashItemCheckWork *env);
 static BOOL Task_GetRockSmashItem(TaskManager *taskman);
 static int DrawRockSmashIdx(FieldSystem *fieldSystem);
 

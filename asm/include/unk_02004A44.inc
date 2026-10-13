@@ -83,7 +83,7 @@
 .public sub_02005B58
 .public Sound_SetChatotRecordingDisabled
 .public GF_SndReadSeqVariable
-.public sub_02005BA8
+.public Sound_ApplyFootstepVariation
 .public Sound_SetSelectSEMuted
 .public Sound_IsSelectSEMuted
 .public SoundSys_GetGBSoundsState

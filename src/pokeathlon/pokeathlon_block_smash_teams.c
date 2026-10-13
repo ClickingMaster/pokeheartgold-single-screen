@@ -23,12 +23,12 @@ u16 *PokeathlonCourseMonGfx_GetInfo(void *mon);
 void *PokeathlonCourseMonObjects_Get(void *monPics, int index);
 void *PokeathlonCourseMonObject_GetGfx(void *monPic);
 void PokeathlonCourseMonObject_SetDrawFlag(void *monPic, u8 visible);
-void PokeathlonCourseMonObject_SetShadowDrawFlag(void *monPic, int a1);
+void PokeathlonCourseMonObject_SetShadowDrawFlag(void *monPic, int draw);
 void PokeathlonCourseMonObject_SetDrawPriority(void *monPic, int priority);
-void PokeathlonCourseMonObject_SetAnimState(void *monPic, int a1);
+void PokeathlonCourseMonObject_SetAnimState(void *monPic, int animState);
 void PokeathlonCourseMonObject_SetAnim(void *monPic, int anim);
 void PokeathlonCourseObject_SetGroundPosition(void *monPic, int x, int y);
-void PokeathlonCourse_LoadMonPic(ManagedSprite *sprite, void *mon, int a2, int a3, enum HeapID heapId);
+void PokeathlonCourse_LoadMonPic(ManagedSprite *sprite, void *mon, int mainScreen, int palette, enum HeapID heapId);
 
 extern u32 ov96_0221E5A4;
 extern const s32 ov96_0221CE08[3];
@@ -799,14 +799,14 @@ void PokeathlonBlockSmashMon_CreateSprites(ManagedSprite **sprites, SpriteSystem
     }
 }
 
-void PokeathlonBlockSmashMon_SetMonSprite(PokeathlonBlockSmashMon *mon, int sprite, u8 participant, u8 member, BOOL a4) {
+void PokeathlonBlockSmashMon_SetMonSprite(PokeathlonBlockSmashMon *mon, int sprite, u8 participant, u8 member, BOOL mainScreen) {
     u32 info[4];
     enum HeapID heapId;
     ManagedSprite *managedSprite;
     heapId = mon->heapId;
     managedSprite = mon->sprites[sprite];
     PokeathlonCourse_GetMonInfo(mon->course, participant, member, info);
-    PokeathlonCourse_LoadMonPic(managedSprite, info, a4, 0, heapId);
+    PokeathlonCourse_LoadMonPic(managedSprite, info, mainScreen, 0, heapId);
 }
 
 void PokeathlonBlockSmashMon_SetMode(PokeathlonBlockSmashMon *mon, int mode) {

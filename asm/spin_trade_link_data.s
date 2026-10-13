@@ -17,9 +17,9 @@ gSpinTradeLinkPacketHandlers:
 	.word SpinTradeLink_HandleJoinRequest
 	.word SpinTradeLink_HandleCloseYesNo
 	.word SpinTradeLink_HandleJoinNotice
-	.word sub_02096DBC
-	.word sub_02096DB4
-	.word sub_02096DA8
+	.word SpinTradeLink_HandleStartSync
+	.word SpinTradeLink_HandleSyncCount
+	.word SpinTradeLink_HandleLeaderMenuState
 	.word SpinTradeLink_HandleStatus
 	.word SpinTradeLink_HandleJoin
 	.word SpinTradeLink_HandleJump

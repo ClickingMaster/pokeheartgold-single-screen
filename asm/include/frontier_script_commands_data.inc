@@ -109,7 +109,7 @@
 .public String_New
 .public String_Delete
 .public String_Copy
-.public sub_020270C4
+.public Save_Block23_Get
 .public SaveGameNormal
 .public Save_CheckExtraChunksExist
 .public Save_PrepareForAsyncWrite
@@ -157,10 +157,10 @@
 .public GetMonIconAnim32KNaix
 .public Party_GetMonByIndex
 .public SaveArray_Party_Get
-.public sub_0207CA9C
-.public sub_0207CAA0
-.public sub_0207CAA4
-.public sub_0207CAA8
+.public PartyMenu_GetHeldItemIconNCGR
+.public PartyMenu_GetHeldItemIconNCLR
+.public PartyMenu_GetHeldItemIconNCER
+.public PartyMenu_GetHeldItemIconNANR
 .public NamingScreen_CreateArgs
 .public NamingScreen_DeleteArgs
 .public HealParty

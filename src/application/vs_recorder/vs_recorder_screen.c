@@ -410,7 +410,7 @@ void VsRecorder_TouchIndicatorTask(SysTask *task, void *data) {
         SysTask_Destroy(task);
         work->touchIndicator.counter = 0;
         work->touchIndicator.active = FALSE;
-        sub_02087A54(work->touchIndicator.cursor);
+        OrbitCursor_SetDefaultAnim(work->touchIndicator.cursor);
         OrbitCursor_SetRadius(work->touchIndicator.cursor, 0, 0);
         OrbitCursor_SetActive(work->touchIndicator.cursor, FALSE);
         OrbitCursor_SetVisible(work->touchIndicator.cursor, FALSE);
@@ -437,7 +437,7 @@ void VsRecorder_ShowTouchIndicator(VsRecorderWork *work) {
     work->touchIndicator.active = TRUE;
     work->touchIndicator.counter = 0;
     System_GetTouchNewCoords(&x, &y);
-    sub_02087A30(work->touchIndicator.cursor);
+    OrbitCursor_SetAltAnim(work->touchIndicator.cursor);
     OrbitCursor_SetActive(work->touchIndicator.cursor, TRUE);
     OrbitCursor_SetVisible(work->touchIndicator.cursor, TRUE);
     OrbitCursor_SetTarget(work->touchIndicator.cursor, (s16)x, (s16)y);

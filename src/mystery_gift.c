@@ -185,11 +185,11 @@ BOOL SaveMysteryGift_HasAnyCard(const MysteryGiftSave *mg) {
     return FALSE;
 }
 
-BOOL SaveMysteryGift_HasAnyGift(const MysteryGiftSave *mg, int a1) {
+BOOL SaveMysteryGift_HasAnyGift(const MysteryGiftSave *mg, int cardId) {
     int i;
 
     for (i = 0; i < NUM_SAVED_MYSTERY_GIFTS; ++i) {
-        if (MysteryGiftTagIsValid(mg->gifts[i].tag) && a1 == mg->gifts[i].flag) {
+        if (MysteryGiftTagIsValid(mg->gifts[i].tag) && cardId == mg->gifts[i].flag) {
             return TRUE;
         }
     }
@@ -197,11 +197,11 @@ BOOL SaveMysteryGift_HasAnyGift(const MysteryGiftSave *mg, int a1) {
     return FALSE;
 }
 
-void SaveMysteryGift_SetReceivedByCardId(MysteryGiftSave *mg, int a1) {
+void SaveMysteryGift_SetReceivedByCardId(MysteryGiftSave *mg, int cardId) {
     int i;
 
     for (i = 0; i < NUM_SAVED_MYSTERY_GIFTS; ++i) {
-        if (MysteryGiftTagIsValid(mg->gifts[i].tag) && a1 == mg->gifts[i].flag) {
+        if (MysteryGiftTagIsValid(mg->gifts[i].tag) && cardId == mg->gifts[i].flag) {
             SaveMysteryGift_SetReceivedByIdx(mg, i);
             break;
         }

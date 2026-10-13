@@ -14,17 +14,17 @@
 #include "touchscreen.h"
 
 // Course helpers of other OVY_96 parts that have no module header yet.
-void *PokeathlonCourseSpritePool_CreateAndTake(void *pool, int a1, int a2, int tag, int cell);
+void *PokeathlonCourseSpritePool_CreateAndTake(void *pool, int priority, int whichScreen, int tag, int cell);
 void PokeathlonCourseSpritePoolSprite_SetAnim(void *sprite, int anim);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *sprite, int priority);
-void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int a1, int a2);
-void PokeathlonCourseSpritePool_LoadChar(void *pool, int narc, int member, int tag, int a4);
-void PokeathlonCourseSpritePool_LoadPltt(void *pool, int narc, int member, int tag, int a4, int a5);
+void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int shown, int draw);
+void PokeathlonCourseSpritePool_LoadChar(void *pool, int narc, int member, int tag, int vram);
+void PokeathlonCourseSpritePool_LoadPltt(void *pool, int narc, int member, int tag, int vram, int count);
 void PokeathlonCourseSpritePool_LoadCell(void *pool, int narc, int member, int tag);
 void PokeathlonCourseSpritePool_LoadAnim(void *pool, int narc, int member, int tag);
 void PokeathlonCourseObject_GroundToCenter(void *object, int x, int y, int *outX, int *outY);
 BOOL PokeathlonCourseObject_IsInTouchRange(void *object, fx32 x, fx32 y, int touchX, int touchY);
-void PokeathlonCourseObjects_PauseAnims(void *object, int a1);
+void PokeathlonCourseObjects_PauseAnims(void *object, int paused);
 void PokeathlonCourseSpritePool_PauseAnims(void *object);
 u32 PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
 u32 PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
@@ -411,7 +411,7 @@ void PokeathlonPennantCapture_HostStep(PokeathlonCourseData *course) {
 
                 power = work->players[i].moveParams[work->players[i].member].unk00;
                 scaleFactor = work->players[i].moveParams[work->players[i].member].unk04;
-                maxSpeed = ov96_022073F0(&work->players[i], work->players[i].member);
+                maxSpeed = PokeathlonPennantCapture_GetMaxSpeed(&work->players[i], work->players[i].member);
                 scale = power * scaleFactor / 8.0 * 4096.0;
                 VEC_Subtract(&work->players[i].cpuTarget, &work->players[i].cpuFrom, &delta);
                 VEC_MultAdd(scale, &delta, &zero, &delta);

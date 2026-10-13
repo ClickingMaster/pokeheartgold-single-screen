@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · bd5f6415f · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 5acfa7645 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -1533,12 +1533,12 @@ src/battle_greeting_task.c</title></rect>
 <rect x="191.841" y="699.297" width="5.586" height="8.936" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_resolve.o
 312 bytes · C-only source
 lib/libCPS/src/cps_resolve.c</title></rect>
-<rect x="197.428" y="699.297" width="5.586" height="8.936" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2.o
+<rect x="197.428" y="699.297" width="5.586" height="8.936" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / frontier_wifi_upload_record.o
+312 bytes · C-only source
+src/frontier_wifi_upload_record.c</title></rect>
+<rect x="186.112" y="708.234" width="5.695" height="8.766" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2.o
 312 bytes · C-only source
 lib/NitroSDK/src/gx/g2.c</title></rect>
-<rect x="186.112" y="708.234" width="5.695" height="8.766" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_02069528.o
-312 bytes · C-only source
-src/unk_02069528.c</title></rect>
 <rect x="191.807" y="708.234" width="5.622" height="8.766" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / move_relearner.o
 308 bytes · C-only source
 src/move_relearner.c</title></rect>
@@ -1977,9 +1977,9 @@ lib/MSL_C/src/msl_mbstring.c</title></rect>
 <rect x="259.741" y="712.036" width="4.255" height="4.964" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_scanf_string_read.o
 132 bytes · C-only source
 lib/MSL_C/src/msl_scanf_string_read.c</title></rect>
-<rect x="263.995" y="699.474" width="4.673" height="4.520" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_02091054.o
+<rect x="263.995" y="699.474" width="4.673" height="4.520" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / seal_data.o
 132 bytes · C-only source
-src/unk_02091054.c</title></rect>
+src/seal_data.c</title></rect>
 <rect x="263.995" y="703.994" width="4.673" height="4.383" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / MATH_dgt.o
 128 bytes · C-only source
 lib/NitroSDK/src/math/MATH_dgt.c</title></rect>
@@ -2048,9 +2048,9 @@ lib/NitroSDK/src/os/os_exception_init.c</title></rect>
 <rect x="284.814" y="689.973" width="5.583" height="3.095" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_string_strstr.o
 108 bytes · C-only source
 lib/MSL_C/src/msl_string_strstr.c</title></rect>
-<rect x="284.814" y="693.069" width="5.583" height="3.095" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_020971F8.o
+<rect x="284.814" y="693.069" width="5.583" height="3.095" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wifi_club_comm.o
 108 bytes · C-only source
-src/unk_020971F8.c</title></rect>
+src/wifi_club_comm.c</title></rect>
 <rect x="284.814" y="696.164" width="5.583" height="3.038" fill="#6f8fd8" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / fx_mtx44_rot.o
 106 bytes · Original hand-written assembly
 lib/NitroSDK/src/fx/fx_mtx44_rot.c
@@ -5812,9 +5812,9 @@ src/scrcmd_fossils.c</title></rect>
 188 bytes · C-only source
 sub/lib/src/wvr_shelter.c</title></rect>
 <rect x="1167.187" y="708.821" width="4.813" height="6.250" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="1167.187" y="715.072" width="4.813" height="1.928" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_35 / ov35_02259d80.o
+<rect x="1167.187" y="715.072" width="4.813" height="1.928" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_35 / field_hook_unused.o
 58 bytes · C-only source
-src/ov35_02259d80.c</title></rect>
+src/field_hook_unused.c</title></rect>
 <rect x="1167.187" y="715.072" width="4.813" height="1.928" fill="none" stroke="#101722" stroke-width="2"/>
 <text x="28" y="744" font-size="14" fill="#b9c7da">Area = code-section bytes · Hover for files · Mixed objects are excluded from C + C++ source · Hand-written, generated and veneer code is excluded from compiled code</text>
 <text x="28" y="765" font-size="12" fill="#b9c7da">Source-language coverage, not a per-function matching score. Assets and unmapped padding are excluded; code literal pools are included.</text>

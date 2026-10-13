@@ -1,6 +1,6 @@
 #ifndef POKEHEARTGOLD_OVERLAY_35_H
 #define POKEHEARTGOLD_OVERLAY_35_H
 
-int ov35_02259DB8();
+int FieldHookUnused_IsMovementAllowed();
 
 #endif // POKEHEARTGOLD_OVERLAY_35_H

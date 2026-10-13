@@ -3,7 +3,7 @@
 #include "wifi_plaza_internal.h"
 
 // Clears the 20 bytes one at a time.
-void ov45_0222BD30(volatile u8 *a0) {
+void WiFiPlaza_ClearTapToyPlayedFlags(volatile u8 *a0) {
     u32 count = 20;
     do {
         *a0++ = 0;
@@ -318,7 +318,7 @@ void WiFiPlaza_HandleMinigameResultNews(WiFiPlazaWork *work, WiFiPlazaLobbyMessa
     WiFiPlazaNews_AddMinigameResultEvent(work->news, &req);
 }
 
-void ov45_0222C36C(void) {
+void WiFiPlaza_HandleUnusedNews(void) {
 }
 
 void WiFiPlazaWork_AddLobbyEventNotice(WiFiPlazaWork *work, int which) {
@@ -328,11 +328,11 @@ void WiFiPlazaWork_AddLobbyEventNotice(WiFiPlazaWork *work, int which) {
     WiFiPlazaNews_AddLobbyEventNotice(work->news, &notice);
 }
 
-void ov45_0222C388(WiFiPlazaGroups *a0) {
+void WiFiPlazaGroups_Init(WiFiPlazaGroups *a0) {
     memset(a0, 0, sizeof(WiFiPlazaGroups));
     MIi_CpuClear32(0xFFFFFFFF, (u32 *)a0->ids, sizeof(a0->ids));
 }
 
-void ov45_0222C3A8(WiFiPlazaGroups *a0) {
+void WiFiPlazaGroups_Start(WiFiPlazaGroups *a0) {
     a0->active = 1;
 }

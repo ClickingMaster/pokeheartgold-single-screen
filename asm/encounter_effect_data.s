@@ -52,11 +52,11 @@
 	.public EncounterEffect_WildRowsWhite
 	.public EncounterEffect_WildWaveBlack
 	.public EncounterEffect_WildWaveWhite
-	.public ov114_0225F020
-	.public ov114_0225F280
-	.public ov116_0225F054
-	.public ov116_0225F364
-	.public ov116_0225F374
+	.public EncounterEffect_FrontierOrLinkSingle
+	.public EncounterEffect_Double
+	.public EncounterEffect_Legendary
+	.public EncounterEffect_HoOh
+	.public EncounterEffect_Lugia
 
 .text
 	.rodata
@@ -125,11 +125,11 @@ sEncounterEffectFuncs: ; 0x022068C4
 	.word EncounterEffect_EliteFourBruno
 	.word EncounterEffect_EliteFourKaren
 	.word EncounterEffect_Champion
-	.word ov116_0225F054
-	.word ov116_0225F364
-	.word ov116_0225F374
-	.word ov114_0225F020
-	.word ov114_0225F280
+	.word EncounterEffect_Legendary
+	.word EncounterEffect_HoOh
+	.word EncounterEffect_Lugia
+	.word EncounterEffect_FrontierOrLinkSingle
+	.word EncounterEffect_Double
 	.word EncounterEffect_TeamRocket
 	.word EncounterEffect_ExecutivePetrel
 	.word EncounterEffect_ExecutiveProton

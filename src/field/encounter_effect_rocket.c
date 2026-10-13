@@ -52,7 +52,7 @@ void RocketEffect_LoadBgScreen(EncounterEffectTask *effect, u8 bgId, int member)
 String *RocketEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID);
 void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, const RocketExecutiveIntroParams *params);
 
-void EncounterEffect_LoadBgGraphics(NARC *narc, int member1, int member2, int member3, int arg4, int arg5, BgConfig *bgConfig, int bgId);
+void EncounterEffect_LoadBgGraphics(NARC *narc, int member1, int member2, int member3, int palette, int paletteCount, BgConfig *bgConfig, int bgId);
 void EncounterEffect_SetVecFx32(VecFx32 *vec, fx32 x, fx32 y, fx32 z);
 void EncounterEffectHBlankWave_AlternateDirection(EncounterEffectHBlankWave *wave, int unused);
 

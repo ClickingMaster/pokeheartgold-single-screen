@@ -85,7 +85,7 @@ BOOL WiFiPlazaRoom_Init(OverlayManager *manager, int *state) {
     WiFiPlazaYesNoMenu_Init(&room->yesNoMenu, &room->msg, (enum HeapID)0x77);
     WiFiPlazaInfoPanel_Init(&room->infoPanel, room->startParams, &room->graphics, room->profile, (enum HeapID)0x77);
     args = (WiFiPlazaRoomArgs *)WiFiPlazaWork_GetMyPlayer(room->lobby);
-    if (((BOOL(*)(struct WiFiPlazaPlayer *))ov45_0222AADC)((struct WiFiPlazaPlayer *)args) == TRUE) {
+    if (((BOOL(*)(struct WiFiPlazaPlayer *))WiFiPlazaPlayer_HasTapToy)((struct WiFiPlazaPlayer *)args) == TRUE) {
         WiFiPlazaInfoPanel_ShowOwnCard(&room->infoPanel, &room->graphics, &room->msg, (enum HeapID)0x77, (struct WiFiPlazaPlayer *)args);
     }
     room->playerStates = WiFiPlazaPlayerState_CreateManager(room, (enum HeapID)0x77);
@@ -143,7 +143,7 @@ BOOL WiFiPlazaRoom_Main(OverlayManager *manager, int *state) {
         if (CommState_HasWifiFailed() != FALSE) {
             WiFiPlazaErrorWindow_PrintCommError(&room->errorWindow, &room->msg);
         } else if (CommState_HasPlazaLobbyFailed() != 0) {
-            WiFiPlazaErrorWindow_PrintLobbyError(&room->errorWindow, &room->msg, ov45_0222E7CC());
+            WiFiPlazaErrorWindow_PrintLobbyError(&room->errorWindow, &room->msg, WiFiPlazaLobbyClient_GetLastError());
         } else {
             WiFiPlazaErrorWindow_PrintDisconnected(&room->errorWindow, &room->msg, WiFiPlazaWork_HasError(room->lobby));
         }
@@ -492,7 +492,7 @@ void WiFiPlazaRoom_BufferSPGreeting(WiFiPlazaRoomWork *room, u32 field, u32 time
 }
 
 void WiFiPlazaRoom_BufferTypeName(WiFiPlazaRoomWork *room, u32 field, u32 index) {
-    BufferTypeName(room->msg.format, field, ov45_0222D7C0(index));
+    BufferTypeName(room->msg.format, field, WiFiPlaza_GetTypeByChoice(index));
 }
 
 void WiFiPlazaRoom_ShowPlayerCard(WiFiPlazaRoomWork *room, u32 playerIndex, u32 arg) {
@@ -558,10 +558,10 @@ void WiFiPlazaRoom_StartInstrument(WiFiPlazaRoomWork *room, u32 playerIndex) {
     if (playerIndex >= 20) {
         GF_AssertFail();
     }
-    instrument = ov45_0222AAC8(WiFiPlazaWork_GetPlayer(room->lobby, playerIndex));
+    instrument = WiFiPlazaPlayer_GetTapToy(WiFiPlazaWork_GetPlayer(room->lobby, playerIndex));
     WiFiPlazaInstrument_Start(room->instruments, playerIndex, instrument);
     if (playerIndex == WiFiPlazaWork_GetOwnSlot(room->lobby)) {
-        ov45_0222AD70(room->lobby, instrument);
+        WiFiPlazaWork_SendTapToyPlayed(room->lobby, instrument);
     }
 }
 
@@ -705,7 +705,7 @@ void WiFiPlazaRoom_Setup3D(void) {
 
 void WiFiPlazaRoom_Update(WiFiPlazaRoomWork *room) {
     u32 error;
-    ov49_02258B44(room->objManager);
+    WiFiPlazaObj_UpdateObjsAndLight(room->objManager);
     error = room->error;
     if (error == 0 && room->plazaClosing == FALSE) {
         WiFiPlazaPlayerState_Update(room->playerStates);
@@ -1132,7 +1132,7 @@ void WiFiPlazaErrorWindow_PrintCommError(Window *window, WiFiPlazaRoomMsg *msg) 
 }
 
 void WiFiPlazaErrorWindow_PrintLobbyError(Window *window, WiFiPlazaRoomMsg *msg, u32 error) {
-    u32 code = ov45_0222E7FC(error);
+    u32 code = WiFiPlazaLobbyClient_ToErrorCode(error);
     WiFiPlazaRoomMsg_BufferInt(msg, code, 5, 0, 2);
     WiFiPlazaErrorWindow_Print(window, WiFiPlazaRoomMsg_GetString(msg, 2, 0x20));
 }

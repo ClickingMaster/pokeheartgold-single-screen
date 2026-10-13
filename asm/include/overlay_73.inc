@@ -127,7 +127,7 @@
 .public String_New
 .public String_Delete
 .public String16_FormatInteger
-.public sub_020270C4
+.public Save_Block23_Get
 .public Save_PrepareForAsyncWrite
 .public Save_WriteFileAsync
 .public SaveSubstruct_UpdateCRC
@@ -159,8 +159,8 @@
 .public BattleRoomDownload_SetTrainers
 .public BattleRoomDownload_GetTrainersRoom
 .public BattleRoomDownload_SetLeaders
-.public sub_0202E43C
-.public sub_0202E474
+.public SaveBlock23_ClearArraysAndReset
+.public SaveBlock23_Reset
 .public Save_Rankings_Get
 .public Save_Rankings_GetMixingSize
 .public Save_GetPlayerMixingRankingEntry
@@ -191,8 +191,8 @@
 .public UnionRoom_SetBeaconActivity
 .public UnionRoomObjects_ResetSlots
 .public SpriteToUnionRoomAvatarIdx
-.public sub_0205B4A4
-.public sub_02069528
+.public UnionRoom_LoadAvatarPalette
+.public Frontier_FillWifiUploadRecord
 .public RecordMixingLink_RegisterCommands
 .public LoadDwcOverlay
 .public UnloadDwcOverlay
@@ -251,7 +251,7 @@
 .public RecordMixing_StartFlash
 .public RecordMixing_SetStateFromLink
 .public RecordMixing_SetStateFromLinkInMenu
-.public ov73_021E7488
+.public RecordMixing_GetMemberCount
 .public NintendoWfcUnused_Init
 .public NintendoWfcUnused_Main
 .public NintendoWfcUnused_Exit

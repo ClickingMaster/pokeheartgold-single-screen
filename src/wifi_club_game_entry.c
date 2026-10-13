@@ -28,7 +28,7 @@
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
-#include "unk_020971F8.h"
+#include "wifi_club_comm.h"
 #include "vram_transfer_manager.h"
 
 const u8 sWifiClubGameEntryAvatarSpinFrames[4] = { 0x08, 0x00, 0x04, 0x0C };

@@ -95,7 +95,7 @@ int ov45_0222B134(WiFiPlazaWork *work) {
     return 8;
 }
 
-int ov45_0222B1B4(WiFiPlazaWork *work) {
+int WiFiPlazaWork_PickTapToy(WiFiPlazaWork *work) {
     int result = WiFiPlazaGroupWeights_PickGroup(&work->groupWeights);
     int value = WiFiPlazaWork_GetOwnSlot(work);
     if (WiFiPlazaWork_IsSpecialVisitor(work, value) == 1) {
@@ -125,14 +125,14 @@ BOOL WiFiPlazaWork_GetSurveyTally(WiFiPlazaWork *work, WiFiPlazaTallyCache *tall
     return FALSE;
 }
 
-void ov45_0222B244(WiFiPlazaWork *work) {
+void WiFiPlazaWork_NewPlayerInfo(WiFiPlazaWork *work) {
     if (work->timer.playerInfo != NULL) {
         GF_AssertFail();
     }
     work->timer.playerInfo = WiFiPlazaPlayerInfo_New(Save_PlayerData_GetProfile(work->save), work->heapID);
 }
 
-void ov45_0222B270(WiFiPlazaWork *work) {
+void WiFiPlazaWork_FreePlayerInfo(WiFiPlazaWork *work) {
     if (work->timer.playerInfo != NULL) {
         WiFiPlazaPlayerInfo_Free(work->timer.playerInfo);
         work->timer.playerInfo = NULL;
@@ -240,7 +240,7 @@ void WiFiPlaza_OnPlayerLeave(int id, WiFiPlazaWork *work) {
 void WiFiPlaza_OnPlayerUpdate(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *work) {
     int slot = WiFiPlazaLobbyClient_IdToSlot(id);
     work->changeFlags[3] |= 1 << slot;
-    switch (ov45_0222A920(player)) {
+    switch (WiFiPlazaPlayer_GetActivity(player)) {
     case 2:
     case 3:
     case 4:
@@ -251,8 +251,8 @@ void WiFiPlaza_OnPlayerUpdate(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *wo
         WiFiPlazaTalkSession_ResetTalkCount(&work->talk, slot);
         break;
     }
-    if (ov45_0222AADC(player) == TRUE) {
-        WiFiPlazaGroupWeights_ReportPlace(&work->groupWeights, ov45_0222AAC8(player), slot);
+    if (WiFiPlazaPlayer_HasTapToy(player) == TRUE) {
+        WiFiPlazaGroupWeights_ReportPlace(&work->groupWeights, WiFiPlazaPlayer_GetTapToy(player), slot);
     }
 }
 
@@ -319,8 +319,8 @@ void WiFiPlaza_OnLobbyEvent(u32 event, WiFiPlazaWork *work) {
         int b;
         notify = 1;
         which = 1;
-        a = ov45_0222ECDC(6);
-        b = ov45_0222ECDC(7);
+        a = WiFiPlazaLobbyClient_GetScheduleValue(6);
+        b = WiFiPlazaLobbyClient_GetScheduleValue(7);
         WiFiPlazaTimer_Init(&work->timer, a, b);
         work->eventSchedule.fireworksDelay = 300;
     } break;
@@ -542,7 +542,7 @@ void WiFiPlazaEventSchedule_Update(WiFiPlazaEventSchedule *state, u32 *flags, Wi
     if (state->paradeDelay - 1 >= 0) {
         state->paradeDelay--;
     } else if (state->paradeDelay == 0) {
-        ov45_0222C3A8(a2);
+        WiFiPlazaGroups_Start(a2);
         if (state->unk_0c == 0) {
             PlayBGM(SEQ_GS_WIFIPARADE);
         }
@@ -576,15 +576,15 @@ void WiFiPlazaEventSchedule_ApplyVolume(WiFiPlazaEventSchedule *state) {
     }
 }
 
-void ov45_0222BCA0(WiFiPlazaUnk3A0 *a0) {
+void WiFiPlazaUnk3A0_StartCooldown(WiFiPlazaUnk3A0 *a0) {
     a0->timer = 900;
 }
 
-int ov45_0222BCA8(WiFiPlazaUnk3A0 *a0) {
+int WiFiPlazaUnk3A0_IsCoolingDown(WiFiPlazaUnk3A0 *a0) {
     return a0->timer > 0;
 }
 
-void ov45_0222BCB8(WiFiPlazaUnk3A0 *a0) {
+void WiFiPlazaUnk3A0_UpdateCooldown(WiFiPlazaUnk3A0 *a0) {
     if (a0->timer > 0) {
         a0->timer--;
     }
@@ -607,10 +607,10 @@ void WiFiPlazaProfile_CopyToPlayerProfile(PlayerProfile **profile, WiFiPlazaProf
     Heap_Free(player);
 }
 
-void ov45_0222BD24(WiFiPlazaUnk3A0 *a0) {
+void WiFiPlazaUnk3A0_SetAppQuitForClosing(WiFiPlazaUnk3A0 *a0) {
     a0->unk_02 = 1;
 }
 
-u8 ov45_0222BD2C(WiFiPlazaUnk3A0 *a0) {
+u8 WiFiPlazaUnk3A0_DidAppQuitForClosing(WiFiPlazaUnk3A0 *a0) {
     return a0->unk_02;
 }

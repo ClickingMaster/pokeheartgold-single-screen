@@ -104,7 +104,7 @@ void PaletteData_ScheduleFadeTaskEndIfNoSelectedBuffers(PaletteData *data);
 void PaletteData_PushTransparentBuffers(PaletteData *data);
 u16 PaletteData_GetSelectedBuffersBitmask(PaletteData *data);
 void PaletteData_SetAutoTransparent(PaletteData *data, BOOL autoTransparent);
-void PaletteData_SetSelectedBufferAll(PaletteData *plttData, BOOL a1);
+void PaletteData_SetSelectedBufferAll(PaletteData *plttData, BOOL selected);
 void ZeroPalettesByBitmask(u16 selectedBuffer, enum HeapID heapID);
 void PaletteData_FillPaletteInBuffer(PaletteData *plttData, PaletteBufferId bufferID, PaletteSelector which, u16 value, u16 begin, u16 end);
 u16 PaletteData_GetBufferColorAtIndex(PaletteData *plttData, PaletteBufferId bufferID, PaletteSelector which, u16 palIdx);

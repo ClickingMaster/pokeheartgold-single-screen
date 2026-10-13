@@ -21,7 +21,7 @@ int PokeathlonCourse_GetTouchRadius(void);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
 BOOL PokeathlonCourse_IsInRange(int x, int y, int touchX, int touchY, int radius, int *distance);
 void PokeathlonCourseObject_GetCollisionCircle(void *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, int *outRadius);
-void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL a1, BOOL show);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL shown, BOOL show);
 void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonGoalRollSprite *sprite, int anim);
 
 extern const VecFx32 ov96_0221D214;

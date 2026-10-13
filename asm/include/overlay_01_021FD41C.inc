@@ -11,7 +11,7 @@
 .public MapObject_GetMapID
 .public MapObject_GetSpriteID
 .public MapObject_GetFacingDirection
-.public sub_0205F544
+.public MapObject_GetFlag25MapID
 .public MapObject_GetManagerFlagsBitsMask
 .public MapObject_CheckFlag25
 .public MapObject_CopyPositionVector

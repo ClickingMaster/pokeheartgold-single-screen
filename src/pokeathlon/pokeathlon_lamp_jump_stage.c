@@ -37,15 +37,15 @@ void NNS_G3dGlbFlushP(void);
 // Course helpers and the sprite scene (OVY_96, not yet tidied).
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int counter, int value);
-void *ov96_021EA634(void *a0, SpriteList *spriteList, int a2, enum HeapID heapId);
+void *PokeathlonCourse_CreateTimerDigitSpriteAlt(void *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
 void PokeathlonCourseObject_GetCollisionCircle(void *sprite, int x, int y, fx32 *outX, fx32 *outY, int *outRadius);
 void PokeathlonCourseObject_GroundToCenter(void *sprite, int x, int y, int *outX, int *outY);
-void PokeathlonCourseSpritePool_LoadChar(void *scene, NarcId narcId, int a2, int a3, int a4);
-void PokeathlonCourseSpritePool_LoadPltt(void *scene, NarcId narcId, int a2, int a3, int a4, int a5);
-void PokeathlonCourseSpritePool_LoadCell(void *scene, NarcId narcId, int a2, int a3);
-void PokeathlonCourseSpritePool_LoadAnim(void *scene, NarcId narcId, int a2, int a3);
-void *PokeathlonCourseSpritePool_CreateAndTake(void *scene, int a1, int a2, int a3, int a4);
-void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int a1, int a2);
+void PokeathlonCourseSpritePool_LoadChar(void *scene, NarcId narcId, int fileId, int id, int vram);
+void PokeathlonCourseSpritePool_LoadPltt(void *scene, NarcId narcId, int fileId, int id, int vram, int count);
+void PokeathlonCourseSpritePool_LoadCell(void *scene, NarcId narcId, int fileId, int id);
+void PokeathlonCourseSpritePool_LoadAnim(void *scene, NarcId narcId, int fileId, int id);
+void *PokeathlonCourseSpritePool_CreateAndTake(void *scene, int priority, int whichScreen, int resId, int kind);
+void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int shown, int draw);
 void PokeathlonCourseSpritePoolSprite_SetAnim(void *sprite, int anim);
 void PokeathlonCourseSpritePoolSprite_SetPosition(void *sprite, const VecFx32 *pos);
 SpriteList *PokeathlonCourseSpritePool_GetSpriteList(void *scene);
@@ -580,7 +580,7 @@ void PokeathlonLampJump_CreateSprites(PokeathlonLampJump *lampJump, void *scene)
     }
     for (j = 0; j < 2; j++) {
         SpriteList *spriteList = PokeathlonCourseSpritePool_GetSpriteList(scene);
-        lampJump->timerDigits[j] = ov96_021EA634(lampJump->spriteResources, spriteList, 1, lampJump->heapId);
+        lampJump->timerDigits[j] = PokeathlonCourse_CreateTimerDigitSpriteAlt(lampJump->spriteResources, spriteList, 1, lampJump->heapId);
         Sprite_SetDrawFlag(lampJump->timerDigits[j], TRUE);
         pos.x = ov96_0221C0B0[j] * FX32_ONE;
         pos.y = FX32_CONST(8);
@@ -864,15 +864,15 @@ void PokeathlonLampJump_FreeLamps(PokeathlonLampJumpLamps *lamps) {
     Heap_Free(lamps);
 }
 
-void PokeathlonLampJump_CreateLampSprites(PokeathlonLampJumpLamps *lamps, void *scene, int a2) {
+void PokeathlonLampJump_CreateLampSprites(PokeathlonLampJumpLamps *lamps, void *scene, int priority) {
     int i;
     PokeathlonLampJumpLamp *lamp = lamps->lamps;
     for (i = 0; i < 29; i++, lamp++) {
-        lamp->sprite = PokeathlonCourseSpritePool_CreateAndTake(scene, a2, 3, 101, 2);
+        lamp->sprite = PokeathlonCourseSpritePool_CreateAndTake(scene, priority, 3, 101, 2);
         PokeathlonCourseSpritePoolSprite_Show(lamp->sprite, 1, 1);
         PokeathlonCourseSpritePoolSprite_SetAnim(lamp->sprite, 8);
-        lamp->pointsSprite = PokeathlonCourseSpritePool_CreateAndTake(scene, a2, 3, 101, 5);
-        lamp->hitSprite = PokeathlonCourseSpritePool_CreateAndTake(scene, a2, 3, 101, 6);
+        lamp->pointsSprite = PokeathlonCourseSpritePool_CreateAndTake(scene, priority, 3, 101, 5);
+        lamp->hitSprite = PokeathlonCourseSpritePool_CreateAndTake(scene, priority, 3, 101, 6);
         PokeathlonCourseSpritePoolSprite_SetDrawPriority(lamp->sprite, 20);
         PokeathlonCourseSpritePoolSprite_SetDrawPriority(lamp->pointsSprite, 7);
         PokeathlonCourseSpritePoolSprite_SetDrawPriority(lamp->hitSprite, 8);

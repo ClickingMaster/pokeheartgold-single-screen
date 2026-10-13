@@ -107,5 +107,5 @@ void WiFiPlazaLobbyMatchInfo_GetStartTime(const WiFiPlazaLobbyMatchInfo *info, s
     *(WiFiPlazaLobbyEntryTime *)time = info->startTime;
 }
 
-void ov45_02230390(int result, void *arg) {
+void WiFiPlazaLobbyClient_OnMatchClientDummy(int result, void *arg) {
 }

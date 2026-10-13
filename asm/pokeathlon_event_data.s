@@ -402,7 +402,7 @@
 	.public PokeathlonPennantCapture_TickFreezeTimer
 	.public PokeathlonPennantCapture_AddPoint2D
 	.public PokeathlonPennantCapture_ResetPennantSpots
-	.public ov96_02207BD4
+	.public PokeathlonPennantCapture_GetDepositPoints
 	.public PokeathlonPennantCapture_GetDrawPriority
 	.public PokeathlonPennantCaptureCpu_SetPlayer
 	.public PokeathlonPennantCaptureCpu_SetPennants

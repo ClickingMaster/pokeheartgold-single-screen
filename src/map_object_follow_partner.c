@@ -57,7 +57,7 @@ LocalMapObject *MapObject_FindTrainerPartner(LocalMapObject *object) {
     LocalMapObject *other;
     u32 type = MapObject_GetType(object);
     u32 mapId = MapObject_GetMapID(object);
-    u32 trainerNum = sub_02064518(object);
+    u32 trainerNum = MapObjectBehavior_GetTrainerNum(object);
     MapObjectManager *manager = MapObject_GetManager(object);
 
     switch (type) {
@@ -71,7 +71,7 @@ LocalMapObject *MapObject_FindTrainerPartner(LocalMapObject *object) {
     case 8:
         if (MapObjectManager_GetNextObjectWithFlagFromIndex(manager, &other, &index, MAPOBJECTFLAG_ACTIVE) == TRUE) {
             do {
-                if (object != other && mapId == MapObject_GetMapID(other) && trainerNum == sub_02064518(other)) {
+                if (object != other && mapId == MapObject_GetMapID(other) && trainerNum == MapObjectBehavior_GetTrainerNum(other)) {
                     return other;
                 }
             } while (MapObjectManager_GetNextObjectWithFlagFromIndex(manager, &other, &index, MAPOBJECTFLAG_ACTIVE) == TRUE);
@@ -91,11 +91,11 @@ BOOL FollowPartnerMovement_FindPartner(LocalMapObject *object, FollowPartnerMove
     manager = MapObject_GetManager(object);
     index = 0;
     mapId = MapObject_GetMapID(object);
-    trainerNum = sub_02064518(object);
+    trainerNum = MapObjectBehavior_GetTrainerNum(object);
 
     if (MapObjectManager_GetNextObjectWithFlagFromIndex(manager, &other, &index, MAPOBJECTFLAG_ACTIVE) == TRUE) {
         do {
-            if (object != other && mapId == MapObject_GetMapID(other) && trainerNum == sub_02064518(other)) {
+            if (object != other && mapId == MapObject_GetMapID(other) && trainerNum == MapObjectBehavior_GetTrainerNum(other)) {
                 if (state->partnerKnown == FALSE) {
                     FollowPartnerMovement_SetPartner(object, state, other);
                 }

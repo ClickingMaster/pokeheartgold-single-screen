@@ -295,7 +295,7 @@ Static main
     Object src/gymmick_init.o
     Object src/map_landmark_name.o
     Object src/trainer_card_data.o
-    Object src/unk_02069528.o
+    Object src/frontier_wifi_upload_record.o
     Object src/render_model.o
     Object src/render_animation.o
     Object asm/render_animation_data.o
@@ -359,7 +359,7 @@ Static main
     Object asm/record_mixing_link_data.o
     Object src/use_item_on_mon.o
     Object src/mail_misc.o
-    Object src/unk_02091054.o
+    Object src/seal_data.o
     Object src/hatch_egg_task.o
     Object src/pokedex_language.o
     Object src/pokedex_language_order.o
@@ -399,7 +399,7 @@ Static main
     Object asm/spin_trade_link_data.o
     Object src/spin_trade_flow.o
     Object asm/spin_trade_flow_data.o
-    Object src/unk_020971F8.o
+    Object src/wifi_club_comm.o
     Object src/safari_zone_encounters.o
     Object src/safari_decoration_task.o
     Object src/field_effect_launch_1.o
@@ -1419,7 +1419,7 @@ Overlay OVY_34
 Overlay OVY_35
 {
     After npc_trade
-    Object src/ov35_02259d80.o
+    Object src/field_hook_unused.o
 }
 Overlay OVY_36
 {

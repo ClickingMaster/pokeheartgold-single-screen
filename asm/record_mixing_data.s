@@ -19,7 +19,7 @@
 	.public ov73_021EA630
 	.public ov73_021EA640
 	.public ov73_021EA650
-	.public ov73_021EA664
+	.public sRecordMixingAllowedEntryKinds
 	.public sNintendoWfcUnusedArrowPositions
 	.public sNintendoWfcUnusedGraphicsModes
 	.public sNintendoWfcUnusedObjCharTransferTemplate
@@ -35,14 +35,14 @@
 	.public sNintendoWfcUnusedStates
 	.extern RecordMixing_State_PrintGroupPrompt
 	.extern RecordMixing_State_HandleGroupMenu
-	.extern ov73_021E66F4
+	.extern RecordMixing_State_WaitTextThenResetMenu
 	.extern RecordMixing_State_WaitText
-	.extern ov73_021E6778
+	.extern RecordMixing_State_ResetLeaderMenuState
 	.extern RecordMixing_State_ShowCancelYesNo
 	.extern RecordMixing_State_HandleCancelYesNo
 	.extern RecordMixing_State_WaitLeaveReply
 	.extern RecordMixing_State_SendLeave
-	.extern ov73_021E6A70
+	.extern RecordMixing_State_AbortLeave
 	.extern RecordMixing_State_ShowConfirmYesNo
 	.extern RecordMixing_State_HandleConfirmYesNo
 	.extern RecordMixing_State_SendStartMixing
@@ -64,15 +64,15 @@
 	.extern RecordMixing_State_PrintMemberLeft
 	.extern RecordMixing_State_StartMemberLeftWait
 	.extern RecordMixing_State_WaitMemberLeft
-	.extern ov73_021E7A74
-	.extern ov73_021E7A7C
-	.extern ov73_021E7A84
-	.extern ov73_021E7B3C
-	.extern ov73_021E7B84
-	.extern ov73_021E7BC8
-	.extern ov73_021E7C0C
-	.extern ov73_021E7C50
-	.extern ov73_021E7C94
+	.extern RecordMixing_Block23List2_GetSize
+	.extern RecordMixing_Block23List0_GetSize
+	.extern RecordMixing_Block23List1_GetSize
+	.extern RecordMixing_Block23List2_Load
+	.extern RecordMixing_Block23List0_Load
+	.extern RecordMixing_Block23List1_Load
+	.extern RecordMixing_Block23List2_Load2
+	.extern RecordMixing_Block23List0_Load2
+	.extern RecordMixing_Block23List1_Load2
 	.extern NintendoWfcUnused_SessionInit
 	.extern NintendoWfcUnused_SessionMain
 	.extern NintendoWfcUnused_SessionExit
@@ -123,9 +123,9 @@
 	.extern NintendoWfcUnused_PrintDisconnecting
 	.extern NintendoWfcUnused_CloseConnection
 	.extern NintendoWfcUnused_PrintDisconnected
-	.extern ov73_021E9D10
+	.extern NintendoWfcUnused_UnusedState_Idle
 	.extern NintendoWfcUnused_StartExit
-	.extern ov73_021E9D44
+	.extern NintendoWfcUnused_UnusedState_HandleYesNo
 	.extern NintendoWfcUnused_ShowHttpError
 	.extern NintendoWfcUnused_Disconnect
 	.extern NintendoWfcUnused_WaitMessage
@@ -139,7 +139,7 @@
 	.extern RecordMixing_Fashion_GetSize
 	.extern RecordMixing_Fashion_Load
 	.extern RecordMixing_Fashion_Merge
-	.extern ov73_021EA2FC
+	.extern RecordMixing_Block23_Merge
 	.extern RecordMixing_Rankings_Load
 	.extern RecordMixing_Rankings_Merge
 	.extern RecordMixing_BattleRoomTrainer_Load
@@ -219,7 +219,7 @@ ov73_021EA640:
 ov73_021EA650:
 	.byte 0x01, 0x02, 0x03, 0x04, 0x06, 0x07, 0x08, 0x0A, 0x0D, 0x0F, 0x10, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x19, 0x1A, 0xFF
 
-ov73_021EA664: ; 0x021EA664
+sRecordMixingAllowedEntryKinds: ; 0x021EA664
 	.word ov73_021EA630
 	.word ov73_021EA650
 	.word ov73_021EA618
@@ -267,27 +267,27 @@ sNintendoWfcUnusedBgTemplate_Sub0: ; 0x021EA728
 sRecordMixingHandlers: ; 0x021EA744
 	.word RecordMixing_FriendGroup_GetSize, RecordMixing_FriendGroup_Load, RecordMixing_FriendGroup_Merge
 	.word RecordMixing_Fashion_GetSize, RecordMixing_Fashion_Load, RecordMixing_Fashion_Merge
-	.word ov73_021E7A7C, ov73_021E7B84, 0
-	.word ov73_021E7A84, ov73_021E7BC8, 0
-	.word ov73_021E7A74, ov73_021E7B3C, 0
+	.word RecordMixing_Block23List0_GetSize, RecordMixing_Block23List0_Load, 0
+	.word RecordMixing_Block23List1_GetSize, RecordMixing_Block23List1_Load, 0
+	.word RecordMixing_Block23List2_GetSize, RecordMixing_Block23List2_Load, 0
 	.word Save_Rankings_GetMixingSize, RecordMixing_Rankings_Load, RecordMixing_Rankings_Merge
 	.word BattleRoomTrainer_sizeof, RecordMixing_BattleRoomTrainer_Load, RecordMixing_BattleRoomTrainer_Merge
-	.word ov73_021E7A7C, ov73_021E7C50, 0
-	.word ov73_021E7A84, ov73_021E7C94, 0
-	.word ov73_021E7A74, ov73_021E7C0C, ov73_021EA2FC
+	.word RecordMixing_Block23List0_GetSize, RecordMixing_Block23List0_Load2, 0
+	.word RecordMixing_Block23List1_GetSize, RecordMixing_Block23List1_Load2, 0
+	.word RecordMixing_Block23List2_GetSize, RecordMixing_Block23List2_Load2, RecordMixing_Block23_Merge
 
 	.data
 
 sRecordMixingStateFuncs:
 	.word RecordMixing_State_PrintGroupPrompt
-	.word ov73_021E66F4
-	.word ov73_021E6778
+	.word RecordMixing_State_WaitTextThenResetMenu
+	.word RecordMixing_State_ResetLeaderMenuState
 	.word RecordMixing_State_HandleGroupMenu
 	.word RecordMixing_State_ShowCancelYesNo
 	.word RecordMixing_State_HandleCancelYesNo
 	.word RecordMixing_State_WaitLeaveReply
 	.word RecordMixing_State_SendLeave
-	.word ov73_021E6A70
+	.word RecordMixing_State_AbortLeave
 	.word RecordMixing_State_PrintCanceled
 	.word RecordMixing_State_FadeOutAfterDelay
 	.word RecordMixing_State_ShowDisbandYesNo
@@ -365,13 +365,13 @@ sNintendoWfcUnusedStates: ; 0x021EA848
 	.word NintendoWfcUnused_PrintDisconnecting
 	.word NintendoWfcUnused_CloseConnection
 	.word NintendoWfcUnused_PrintDisconnected
-	.word ov73_021E9D10
+	.word NintendoWfcUnused_UnusedState_Idle
 	.word NintendoWfcUnused_StartDisconnect
 	.word NintendoWfcUnused_StartExit
 	.word NintendoWfcUnused_WaitMessage
 	.word NintendoWfcUnused_OpenYesNoPrompt
 	.word NintendoWfcUnused_WaitMessageAndDelay
-	.word ov73_021E9D44
+	.word NintendoWfcUnused_UnusedState_HandleYesNo
 	.word NintendoWfcUnused_AskLogOut
 	.word NintendoWfcUnused_HandleLogOutChoice
 	.word NintendoWfcUnused_ShowHttpError

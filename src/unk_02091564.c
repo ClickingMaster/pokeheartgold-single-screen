@@ -91,9 +91,9 @@ static const FieldCommCommand sFieldCommCommands[] = {
     { CommClubLink_RecvOnSpot, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
-    { sub_0205A408, PlayerProfile_sizeof, NULL         },
+    { UnionRoom_RecvUnusedProfile, PlayerProfile_sizeof, NULL         },
     { UnionRoom_RecvTalkReply, CommCmd_GetSize1,         NULL         },
-    { sub_0205A40C, CommCmd_GetSize1,         NULL         },
+    { UnionRoom_RecvUnused, CommCmd_GetSize1,         NULL         },
     { UnionRoom_RecvBattleChoice, CommCmd_GetSize1,         NULL         },
     { UnionRoom_RecvRestartSearch, CommCmd_GetSize0,         NULL         },
     { UnionRoom_RecvTalkChoice, CommCmd_GetSize1,         NULL         },
@@ -105,36 +105,36 @@ static const FieldCommCommand sFieldCommCommands[] = {
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize0,         NULL         },
-    { CommCmd_RecvIgnored, sub_020915A8,         NULL         },
+    { CommCmd_RecvIgnored, CommCmd_GetSize4,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize0,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize0,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize0,         NULL         },
-    { CommCmd_RecvIgnored, sub_02091590,         NULL         },
+    { CommCmd_RecvIgnored, CommCmd_GetSize3008,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
-    { CommCmd_RecvIgnored, sub_02091598,         NULL         },
-    { CommCmd_RecvIgnored, sub_020915A0,         NULL         },
-    { CommCmd_RecvIgnored, sub_020915A4,         NULL         },
+    { CommCmd_RecvIgnored, CommCmd_GetSize1008,         NULL         },
+    { CommCmd_RecvIgnored, CommCmd_GetSize10,         NULL         },
+    { CommCmd_RecvIgnored, CommCmd_GetSize50,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize0,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize0,         NULL         },
-    { CommCmd_RecvIgnored, sub_020915AC,         NULL         },
+    { CommCmd_RecvIgnored, CommCmd_GetSize4Copy,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize0,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize0,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize0,         NULL         },
-    { CommCmd_RecvIgnored, sub_02091564,         NULL         },
-    { CommCmd_RecvIgnored, sub_02091568,         NULL         },
+    { CommCmd_RecvIgnored, CommCmd_GetSize24,         NULL         },
+    { CommCmd_RecvIgnored, CommCmd_GetSize1424,         NULL         },
     { BattleHall_RecvPartnerSpecies, CommCmd_GetSizeVariable,         NULL         },
     { BattleCastle_RecvPartnerTeam, CommCmd_GetSizeVariable,         NULL         },
     { BattleArcade_RecvPartnerTeam, CommCmd_GetSizeVariable,         NULL         }
 };
 
-u32 sub_02091564() {
+u32 CommCmd_GetSize24() {
     return 0x18;
 }
 
-u32 sub_02091568() {
+u32 CommCmd_GetSize1424() {
     return 0x590;
 }
 
@@ -149,26 +149,26 @@ u32 CommCmd_GetTrainerCardSize() {
     return 0x66C;
 }
 
-u32 sub_02091590() {
+u32 CommCmd_GetSize3008() {
     return 0xBC0;
 }
 
-u32 sub_02091598() {
+u32 CommCmd_GetSize1008() {
     return 0x3F0;
 }
 
-u32 sub_020915A0() {
+u32 CommCmd_GetSize10() {
     return 0xA;
 }
 
-u32 sub_020915A4() {
+u32 CommCmd_GetSize50() {
     return 0x32;
 }
 
-u32 sub_020915A8() {
+u32 CommCmd_GetSize4() {
     return 0x4;
 }
 
-u32 sub_020915AC() {
+u32 CommCmd_GetSize4Copy() {
     return 0x4;
 }

@@ -49,7 +49,7 @@ int PokewalkerApp_StartStroll_Enter(PokewalkerApp *app) {
     int box = app->selectedBox;
     int slot = app->selectedSlot;
     // called with int arguments, not narrowed to the setters' u16 parameters
-    ((void (*)(POKEWALKER *, int, int))sub_020326A4)(app->pokewalker, 2, box);
+    ((void (*)(POKEWALKER *, int, int))Pokewalker_SetStrollState)(app->pokewalker, 2, box);
     ((void (*)(POKEWALKER *, int))Pokewalker_SetCourse)(app->pokewalker, app->courseId);
     Pokewalker_SetBoxMon(app->pokewalker, PCStorage_GetMonByIndexPair(pcStorage, box, slot));
     PCStorage_DeleteBoxMonByIndexPair(pcStorage, box, slot);
@@ -136,7 +136,7 @@ void PokewalkerApp_ReturnStrollMon(PokewalkerApp *app) {
     u16 walkerData[2];
     BOOL received;
 
-    sub_02032688(app->pokewalker, &walkerData[0], &walkerData[1]);
+    Pokewalker_GetStrollState(app->pokewalker, &walkerData[0], &walkerData[1]);
     box = walkerData[1];
     slot = 0;
     if (!app->peerIdentity.hasWalkerMon) {
@@ -287,7 +287,7 @@ void PokewalkerApp_ReceiveMons(PokewalkerApp *app, BOOL useWalkerBox) {
     pcStorage = SaveArray_PCStorage_Get(app->saveData);
     mon = AllocMonZeroed(HEAP_ID_154);
     playerName = PlayerProfile_GetPlayerName_NewString(app->profile, HEAP_ID_154);
-    sub_02032688(app->pokewalker, &unused, &walkerBox);
+    Pokewalker_GetStrollState(app->pokewalker, &unused, &walkerBox);
     if (useWalkerBox) {
         box = walkerBox;
     } else {

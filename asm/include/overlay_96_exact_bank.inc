@@ -180,11 +180,11 @@
 	.public PokeathlonCourseSprites_LoadResources
 	.public PokeathlonCourseSprites_CreateCountdown
 	.public PokeathlonCourseSprites_CreateTimerDigit
-	.public ov96_021EA374
+	.public PokeathlonCourse_CreateTimerDigitSprite
 	.public PokeathlonCourseSprites_CreateLapCounterDigit
 	.public PokeathlonCourseSprites_CreateNewRecord
 	.public PokeathlonCourseSprites_CreateTimeUpCountdown
-	.public ov96_021EA634
+	.public PokeathlonCourse_CreateTimerDigitSpriteAlt
 	.public PokeathlonCourseSprites_CreateStart
 	.public PokeathlonCourseSprites_CreateMarker
 	.public PokeathlonCourseMonObjects_Create
@@ -911,7 +911,7 @@
 	.public PokeathlonPennantCapture_CollideWithObstacle
 	.public PokeathlonPennantCapture_CollideWithObstacles
 	.public PokeathlonPennantCapture_CalcCircleEntry
-	.public ov96_022073F0
+	.public PokeathlonPennantCapture_GetMaxSpeed
 	.public PokeathlonPennantCapture_AddPoint2D
 	.public PokeathlonPennantCapture_CollidePlayers
 	.public PokeathlonPennantCapture_UpdateFieldDrawPriorities
@@ -929,7 +929,7 @@
 	.public PokeathlonPennantCapture_GetDirection
 	.public PokeathlonPennantCapture_TryKnockDown
 	.public PokeathlonPennantCapture_CanDeposit
-	.public ov96_02207BD4
+	.public PokeathlonPennantCapture_GetDepositPoints
 	.public PokeathlonPennantCapture_GetDrawPriority
 	.public PokeathlonPennantCapture_AnimateBg
 	.public PokeathlonPennantCapture_PlaySEIfOnScreen
@@ -1278,13 +1278,13 @@
 	.public PokeathlonGoalRollCpu_ApplyChaserDecision
 	.public PokeathlonGoalRollCpu_ThinkGuard
 	.public PokeathlonGoalRollCpu_ApplyGuardDecision
-	.public ov96_02215184
-	.public ov96_02215460
+	.public PokeathlonGoalRollCpu_ThinkFlex
+	.public PokeathlonGoalRollCpu_ApplyFlexDecision
 	.public PokeathlonGoalRollCpu_MoveToEmptierQuadrant
 	.public PokeathlonGoalRollCpu_Think
 	.public PokeathlonGoalRollCpu_GetQuadrant
-	.public ov96_02215650
-	.public ov96_0221567C
+	.public PokeathlonGoalRollCpu_IsMonInTargetQuadrantOfBall
+	.public PokeathlonGoalRollCpu_IsMonNotOppositeOfBall
 	.public PokeathlonGoalRollCpu_IsNearPoint
 	.public PokeathlonGoalRollCpu_CirclesTouch
 	.public PokeathlonScreenShake_Task

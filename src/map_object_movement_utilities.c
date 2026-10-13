@@ -123,7 +123,7 @@ BOOL MapObject_IsOutsideMovementRange(LocalMapObject *object, int x, int y, int 
 }
 
 BOOL MapObject_IsMoveBlockedByBehavior(LocalMapObject *object, int x, int z, int direction) {
-    if (sub_0205F8D0(object) == FALSE) {
+    if (MapObject_CheckIgnoreMetatileBehaviors(object) == FALSE) {
         FieldSystem *fieldSystem = MapObject_GetFieldSystem(object);
         u8 objectBehavior = MapObject_GetCurrentMetatileBehavior(object);
         u8 behavior = GetMetatileBehavior(fieldSystem, x, z);
@@ -137,8 +137,8 @@ BOOL MapObject_IsMoveBlockedByBehavior(LocalMapObject *object, int x, int z, int
     return FALSE;
 }
 
-BOOL sub_02060E54(LocalMapObject *object, int behavior) {
-    if (sub_0205BA54((u8)behavior)) {
+BOOL MapObject_CheckWaterBehavior(LocalMapObject *object, int behavior) {
+    if (MetatileBehavior_IsBridgeOverWater((u8)behavior)) {
         if (!MapObject_CheckFlag28(object)) {
             return 1;
         }
@@ -167,15 +167,15 @@ BOOL MapObject_CheckSnowBehavior(LocalMapObject *object, int behavior) {
     return 0;
 }
 
-BOOL sub_02060ED4(LocalMapObject *object, int behavior) {
-    if (sub_0205B8C4(behavior)) {
+BOOL MapObject_CheckSnowFootprintBehavior(LocalMapObject *object, int behavior) {
+    if (MetatileBehavior_IsSnowForFootprints(behavior)) {
         return 1;
     }
     return 0;
 }
 
-BOOL sub_02060EEC(LocalMapObject *object, int behavior) {
-    if (MapObject_CheckFlag28(object) == 1 && sub_0205BA30((u8)behavior) == 1) {
+BOOL MapObject_IsOnBridge(LocalMapObject *object, int behavior) {
+    if (MapObject_CheckFlag28(object) == 1 && MetatileBehavior_IsBridge((u8)behavior) == 1) {
         return 1;
     }
     return 0;
@@ -264,7 +264,7 @@ BOOL MapObject_UpdateHeight(LocalMapObject *object) {
 BOOL MapObject_UpdateMetatileBehaviors(LocalMapObject *object) {
     u8 previous = GetMetatileBehavior_None();
     u8 current = previous;
-    if (!sub_0205F8D0(object)) {
+    if (!MapObject_CheckIgnoreMetatileBehaviors(object)) {
         FieldSystem *fieldSystem;
         int x;
         int z;

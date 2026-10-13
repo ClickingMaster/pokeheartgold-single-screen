@@ -150,7 +150,7 @@
 .public PokemonSummary_ResetSwapCursorSprite
 .public PokemonSummary_InitSheenSparkles
 .public PokemonSummary_UpdateMarkingSprites
-.public sub_0208BDC8
+.public PokemonSummary_ShowConditionChangeSprites
 .public PokemonSummary_LoadShownMonIcon
 .public PokemonSummary_LoadPartyIcons
 .public PokemonSummary_SetBoxMonIconPos
@@ -174,12 +174,12 @@
 .public PokemonSummary_PrintMoveInfo
 .public PokemonSummary_ClearMoveInfo
 .public PokemonSummary_PrintMoveToLearn
-.public sub_0208DB58
+.public PokemonSummary_ScheduleMainBg1Transfer
 .public PokemonSummary_PrintSwappedMoves
 .public PokemonSummary_PrintCantForgetHMMessage
 .public PokemonSummary_ShowForgetLabel
 .public PokemonSummary_ShowSwitchLabel
-.public sub_0208DDA0
+.public PokemonSummary_PrintConditionChangeMessage
 .public PokemonSummary_Init3D
 .public PokemonSummary_DrawPokepic
 .public PokemonSummary_FreePokepicAndCamera

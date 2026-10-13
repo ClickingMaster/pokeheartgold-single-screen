@@ -12,7 +12,7 @@
 #include "sound_playback.h"
 
 // player avatar movement helpers, not declared by a header yet
-BOOL sub_0205DFC8(PlayerAvatar *avatar);
+BOOL PlayerAvatar_IsReadyForMovement(PlayerAvatar *avatar);
 void PlayerAvatar_SetMovement(PlayerAvatar *avatar, int movement);
 int GetMovementForDirection(int direction, int movement);
 BOOL PlayerAvatar_CheckCollision(PlayerAvatar *avatar, LocalMapObject *mapObject, int direction);
@@ -73,7 +73,7 @@ BOOL Task_SpinSlide(TaskManager *taskManager) {
         task->state++;
         break;
     case 1:
-        if (sub_0205DFC8(task->avatar) == FALSE) {
+        if (PlayerAvatar_IsReadyForMovement(task->avatar) == FALSE) {
             break;
         }
         PlayerAvatar_SetMovement(task->avatar, GetMovementForDirection(task->direction, 12));

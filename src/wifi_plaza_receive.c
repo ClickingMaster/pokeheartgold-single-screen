@@ -16,7 +16,7 @@ void WiFiPlaza_OnTalkRequest(int id, u16 *data, u32 size, WiFiPlazaWork *work) {
     if (WiFiPlazaProfile_IsChecksumValid(&work->profile, work->save) == FALSE) {
         work->hasError = 1;
     }
-    ready = ov45_0222A920(&work->profile.player);
+    ready = WiFiPlazaPlayer_GetActivity(&work->profile.player);
     busy = WiFiPlazaWork_IsTalking(work);
     if (ready != TRUE || slot == (u32)-1 || data[1] != 1 || busy == TRUE || WiFiPlazaWork_CanTalkWith(work, slot) == FALSE) {
         WiFiPlazaWork_SendTalkAnswer(work, id, FALSE);

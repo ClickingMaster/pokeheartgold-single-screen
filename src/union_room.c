@@ -456,10 +456,10 @@ void UnionRoom_SendTalkResponse(struct UnionRoom *unionRoom, int mode, int value
 }
 
 // Communication command callbacks (comm command table in unk_02091564.c).
-void sub_0205A408(void) {
+void UnionRoom_RecvUnusedProfile(void) {
 }
 
-void sub_0205A40C(void) {
+void UnionRoom_RecvUnused(void) {
 }
 
 void UnionRoom_RecvRestartSearch(int netId, int size, void *data, FieldSystem *fieldSystem) {

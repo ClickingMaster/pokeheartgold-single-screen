@@ -18,14 +18,14 @@ typedef struct FieldCommCommand {
 
 void FieldComm_RegisterCommands(void *arg0);
 u32 CommCmd_GetTrainerCardSize();
-u32 sub_02091590();
-u32 sub_02091598();
-u32 sub_02091564();
-u32 sub_02091568();
+u32 CommCmd_GetSize3008();
+u32 CommCmd_GetSize1008();
+u32 CommCmd_GetSize24();
+u32 CommCmd_GetSize1424();
 void CommCmd_RecvIgnored();
-u32 sub_020915A0();
-u32 sub_020915A4();
-u32 sub_020915A8();
-u32 sub_020915AC();
+u32 CommCmd_GetSize10();
+u32 CommCmd_GetSize50();
+u32 CommCmd_GetSize4();
+u32 CommCmd_GetSize4Copy();
 
 #endif // POKEHEARTGOLD_UNK_02091564_H

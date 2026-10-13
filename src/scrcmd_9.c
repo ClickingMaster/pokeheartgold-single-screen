@@ -35,7 +35,7 @@
 #include "frontier_field_support.h"
 #include "battle_frontier_communication.h"
 
-static BOOL sub_0204A1E8(ScriptContext *ctx);
+static BOOL ScrNative_WaitFrontierPartnerCheck(ScriptContext *ctx);
 static u32 FrontierFieldSystem_0204A2A8(FrontierFieldSystem *frontierFsys, u8 a1);
 
 static const u16 StatTrainerOverworlds[] = { SPRITE_SEVEN1, SPRITE_SEVEN5, SPRITE_SEVEN2, SPRITE_SEVEN3, SPRITE_SEVEN4 };
@@ -263,12 +263,12 @@ BOOL ScrCmd_417(ScriptContext *ctx) {
     } else {
         frontierFsys->resultVar = unk7;
         frontierFsys->unk8D5 = unk6;
-        SetupNativeScript(ctx, sub_0204A1E8);
+        SetupNativeScript(ctx, ScrNative_WaitFrontierPartnerCheck);
     }
     return TRUE;
 }
 
-static BOOL sub_0204A1E8(ScriptContext *ctx) {
+static BOOL ScrNative_WaitFrontierPartnerCheck(ScriptContext *ctx) {
     FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
     u16 *unkPtr = GetVarPointer(ctx->fieldSystem, frontierFsys->resultVar);
     u32 unk = frontierFsys->unk8D5 == 1 ? 1 : 2;

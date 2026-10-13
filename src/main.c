@@ -42,8 +42,8 @@ struct MainOverlayState gMainOverlayState;
 static void HandleCommunicationErrorScreen(void);
 static void DoSoftReset(u32 param);
 static void Main_RunOverlayManager(void);
-static void ShowCommunicationErrorAndReset(u32 a0, int a1);
-static BOOL sub_02001098(int a0);
+static void ShowCommunicationErrorAndReset(u32 resetParam, int errorScreen);
+static BOOL IsLinkModeWithSoftResetCancel(int linkMode);
 
 void NitroMain(void) {
     InitSystemForTheGame();
@@ -212,7 +212,7 @@ static void DoSoftReset(u32 param) {
     }
 }
 
-static void ShowCommunicationErrorAndReset(u32 a0, int a1) {
+static void ShowCommunicationErrorAndReset(u32 resetParam, int errorScreen) {
     int sp4;
     int r7;
     int r4;
@@ -222,10 +222,10 @@ static void ShowCommunicationErrorAndReset(u32 a0, int a1) {
     sp4 = CommState_GetLinkMode();
     r7 = CommState_IsWifi();
     gSystem.touchpadReadAuto = FALSE;
-    if (a1 == 3) {
+    if (errorScreen == 3) {
         r5 = 3;
     } else {
-        if (a0 == 0) {
+        if (resetParam == 0) {
             if (CommState_IsWifi() == TRUE) {
                 r5 = 6;
             } else {
@@ -246,8 +246,8 @@ static void ShowCommunicationErrorAndReset(u32 a0, int a1) {
     while (1) {
         HandleDSLidAction();
         ReadKeypadAndTouchpad();
-        if (a1 == 1 && r5 == 0 && sub_02001098(sp4) && r7 == 0 && (gSystem.newKeys & PAD_BUTTON_B) && r4 >= 10) {
-            a0 = 0;
+        if (errorScreen == 1 && r5 == 0 && IsLinkModeWithSoftResetCancel(sp4) && r7 == 0 && (gSystem.newKeys & PAD_BUTTON_B) && r4 >= 10) {
+            resetParam = 0;
             break;
         }
         if ((gSystem.newKeys & PAD_BUTTON_A) && r4 >= 10) {
@@ -259,11 +259,11 @@ static void ShowCommunicationErrorAndReset(u32 a0, int a1) {
             r4++;
         }
     }
-    DoSoftReset(a0);
+    DoSoftReset(resetParam);
 }
 
-static BOOL sub_02001098(int a0) {
-    switch (a0) {
+static BOOL IsLinkModeWithSoftResetCancel(int linkMode) {
+    switch (linkMode) {
     case 0:
     case 7:
     case 9:

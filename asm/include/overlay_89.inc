@@ -230,10 +230,10 @@
 .public NNS_GfdDefaultFuncFreePlttVram
 .public gSystem
 .public NNS_G3dGlb
-.public ov45_0222A2C8
+.public WiFiPlazaWork_GetSaveData
 .public ov45_0222A2CC
 .public WiFiPlazaWork_IsClosing
-.public ov45_0222A4A8
+.public WiFiPlazaWork_SetAppQuitForClosing
 .public WiFiPlazaWork_SetLowVolume
 .public WiFiPlazaWork_GetPlayer
 .public WiFiPlazaPlayer_CopyToProfile

@@ -27,11 +27,11 @@ void FieldSystem_GetAdventureStartTime(FieldSystem *fieldSystem, RTCDate *date, 
 void FieldSystem_GetGameClearTime(FieldSystem *fieldSystem, RTCDate *date, RTCTime *time);
 void FieldSystem_SetGameClearTime(FieldSystem *fieldSystem);
 BOOL FieldSystem_HasPenalty(FieldSystem *fieldSystem);
-UnkStruct_020556FC *sub_02055680(FieldSystem *fieldSystem, enum HeapID heapID);
-void sub_020556A8(UnkStruct_020556FC *unkPtr);
+UnkStruct_020556FC *UnusedFieldModel_New(FieldSystem *fieldSystem, enum HeapID heapID);
+void UnusedFieldModel_Delete(UnkStruct_020556FC *unkPtr);
 void FieldSystem_RegrowApricornTrees(FieldSystem *fieldSystem);
-void sub_020556C8(FieldSystem *fieldSystem, UnkStruct_020556FC *unkPtrB);
-void sub_020556FC(struct UnkStruct_020556FC *unkPtr);
+void UnusedFieldModel_Load(FieldSystem *fieldSystem, UnkStruct_020556FC *unkPtrB);
+void UnusedFieldModel_Unload(struct UnkStruct_020556FC *unkPtr);
 BOOL FieldSystem_ApricornTreeObject_HasApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObject);
 BOOL FieldSystem_ApricornTree_PickApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObj);
 BOOL FieldSystem_ApricornTree_HasApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObj);

@@ -148,7 +148,7 @@ void BattleAnimEmitter_Start(BattleAnimEmitter *emitter);
 BOOL BattleAnimEmitter_IsActive(BattleAnimEmitter *emitter);
 void BattleAnimEmitter_WaitTask(SysTask *task, void *data);
 void BattleAnimEmitter_CreateEmitters(BattleAnimEmitter *emitter, void (*callback)(SPLEmitter *));
-void *UnkBallData_GetEmitterParam(void);
+void *BattleAnimEmitter_GetEmitterParam(void);
 int BattleAnimEmitter_GetEmitterCount(int resourceId);
 void BattleAnimUtil_LoadMonIntoPicSameFacing(struct BattleAnimBattlerPicParams *params, enum HeapID heapId);
 void BattleAnimUtil_LoadMonIntoPicOppositeFacing(struct BattleAnimBattlerPicParams *params, enum HeapID heapId);

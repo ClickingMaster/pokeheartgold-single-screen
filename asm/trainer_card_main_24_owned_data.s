@@ -29,7 +29,7 @@
 .public TrainerCardMain_VBlankCB
 .public TrainerCardMain_ResetBgAffine
 .public TrainerCardMain_DrawFrontPicture
-.public ov51_021E6CCC
+.public TrainerCardMain_ClearBackSideRect
 .public TrainerCardMain_UnpackSignature
 .public TrainerCardMain_DrawSignature
 .public TrainerCardMain_UpdatePlayTime

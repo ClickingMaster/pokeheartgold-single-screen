@@ -256,7 +256,7 @@ void EmoteBubbleEffect_Update(FieldEffect *effect, EmoteBubbleEffect *work) {
     MapObject_CopyPositionVector(mapObject, &position);
     MapObject_CopyFacingVector(mapObject, &facing);
     MapObject_CopyDrawOffset(mapObject, &drawOffset);
-    sub_0205F9B0(mapObject, &v0);
+    MapObject_CopyTileDrawOffset(mapObject, &v0);
     result.x = v0.x + (drawOffset.x + (position.x + facing.x));
     result.y = v0.y + (position.y + drawOffset.y);
     result.z = v0.z + (drawOffset.z + (position.z + facing.z));

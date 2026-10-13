@@ -83,7 +83,7 @@ struct WiFiPlazaObjManager {
 
 WiFiPlazaObjManager *WiFiPlazaObj_CreateManager(u32 count, u32 mode, WiFiPlazaMap *map, enum HeapID heapID, u32 loadHeapID);
 void WiFiPlazaObj_DeleteManager(WiFiPlazaObjManager *manager);
-void ov49_02258B44(WiFiPlazaObjManager *manager);
+void WiFiPlazaObj_UpdateObjsAndLight(WiFiPlazaObjManager *manager);
 void WiFiPlazaObj_UpdateManager(WiFiPlazaObjManager *manager);
 u32 WiFiPlazaObj_DrawAvatars(WiFiPlazaObjManager *manager);
 u32 ov49_02258BE0(WiFiPlazaObjManager *manager);

@@ -255,7 +255,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
     if (fieldInput->interact) {
         LocalMapObject *mapObject;
         if (FieldSystem_GetInteractableFacingObject(fieldSystem, &mapObject) == TRUE) {
-            if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
+            if (PlayerAvatar_IsBetweenSteps(fieldSystem->playerAvatar) == TRUE) {
                 PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             }
             if (MapObject_GetType(mapObject) != 9) {
@@ -347,7 +347,7 @@ BOOL FieldInput_Process_Colosseum(FieldInput *input, FieldSystem *fieldSystem) {
     if (input->interact) {
         LocalMapObject *facingObject;
         if (FieldSystem_GetInteractableFacingObject(fieldSystem, &facingObject) == TRUE && MapObject_GetMovement(facingObject) != MOVEMENT_FACE_DOWN) {
-            if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
+            if (PlayerAvatar_IsBetweenSteps(fieldSystem->playerAvatar) == TRUE) {
                 PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             }
             StartMapSceneScript(fieldSystem, MapObject_GetScriptID(facingObject), facingObject);
@@ -391,7 +391,7 @@ BOOL FieldInput_Process_UnionRoom(FieldInput *input, FieldSystem *fieldSystem) {
 
     LocalMapObject *mapObject;
     if (input->interact && FieldSystem_GetInteractableFacingObject(fieldSystem, &mapObject) == TRUE) {
-        if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
+        if (PlayerAvatar_IsBetweenSteps(fieldSystem->playerAvatar) == TRUE) {
             PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
         }
         CommState_RefuseJoins(); // CommManager_PauseUnionClient?
@@ -422,7 +422,7 @@ int FieldInput_Process_BattleTower(FieldInput *fieldInput, FieldSystem *fieldSys
     if (fieldInput->interact) {
         LocalMapObject *mapObject;
         if (FieldSystem_GetInteractableFacingObject(fieldSystem, &mapObject) == TRUE) {
-            if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
+            if (PlayerAvatar_IsBetweenSteps(fieldSystem->playerAvatar) == TRUE) {
                 PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             }
 
@@ -621,7 +621,7 @@ static u16 GetInteractedMetatileScript(FieldSystem *fieldSystem, u8 metatileBeha
     }
 
     if (Save_VarsFlags_CheckSafariSysFlag(Save_VarsFlags_Get(fieldSystem->saveData))) {
-        if (SafariZone_GetActiveAreaSet(Save_SafariZone_Get(fieldSystem->saveData)) == 0 && sub_0205BAEC(metatileBehavior)) {
+        if (SafariZone_GetActiveAreaSet(Save_SafariZone_Get(fieldSystem->saveData)) == 0 && MetatileBehavior_IsSafariPlacedObject(metatileBehavior)) {
             return std_safari_remove_object;
         }
     }

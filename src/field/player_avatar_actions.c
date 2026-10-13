@@ -129,10 +129,10 @@ typedef int (*RockClimbStepFunc)(RockClimbWork *work, TaskManager *taskManager);
 typedef int (*WaterfallStepFunc)(WaterfallWork *work);
 
 // Defined in the player avatar movement and field effect modules, which have no header for them.
-int sub_0205CBE4(PlayerAvatar *avatar, int direction);
-BOOL sub_0205DE38(PlayerAvatar *avatar);
-int sub_0205DEC0(PlayerAvatar *avatar, int direction);
-u32 sub_0205DFEC(PlayerAvatar *playerAvatar, int direction);
+int PlayerAvatar_CheckReadyToMove(PlayerAvatar *avatar, int direction);
+BOOL PlayerAvatar_IsReadyOrBumpingWall(PlayerAvatar *avatar);
+int PlayerAvatar_GetMoveStateForDirection(PlayerAvatar *avatar, int direction);
+u32 PlayerAvatar_GetMetatileBehaviorInDirection(PlayerAvatar *playerAvatar, int direction);
 u32 PlayerAvatar_CheckCollision(PlayerAvatar *playerAvatar, LocalMapObject *object, int direction);
 void SurfMountEffect_SetBobbing(u32 effect, int bobbing);
 u32 RockClimbEffect_Create(LocalMapObject *mapObject, int x, int z, int direction, BOOL follow);
@@ -347,7 +347,7 @@ BOOL Field_PlayerAvatar_TryFieldMoveStep(FieldSystem *fieldSystem, PlayerAvatar 
         }
         return FALSE;
     }
-    if (!sub_0205CBE4(playerAvatar, direction)) {
+    if (!PlayerAvatar_CheckReadyToMove(playerAvatar, direction)) {
         return FALSE;
     }
     if (direction == -1) {
@@ -360,7 +360,7 @@ BOOL Field_PlayerAvatar_TryFieldMoveStep(FieldSystem *fieldSystem, PlayerAvatar 
 }
 
 BOOL Field_PlayerAvatar_TryFieldMoveInDirection(FieldSystem *fieldSystem, PlayerAvatar *playerAvatar, int direction, int playerEvents) {
-    int collision = sub_0205DEC0(playerAvatar, direction);
+    int collision = PlayerAvatar_GetMoveStateForDirection(playerAvatar, direction);
     if (playerEvents & PLAYER_EVENT_USED_STRENGTH) {
         if (Field_PlayerAvatar_TryPushBoulder(fieldSystem, playerAvatar, direction, collision) == TRUE) {
             return TRUE;
@@ -415,7 +415,7 @@ BOOL Task_PushBoulder(TaskManager *taskManager) {
         if (!MapObject_AreBitsSetForMovementScriptInit(boulder)) {
             break;
         }
-        if (!MapObject_AreBitsSetForMovementScriptInit(player) && !sub_0205DE38(work->playerAvatar)) {
+        if (!MapObject_AreBitsSetForMovementScriptInit(player) && !PlayerAvatar_IsReadyOrBumpingWall(work->playerAvatar)) {
             break;
         }
         MapObject_SetHeldMovement(boulder, GetMovementForDirection(work->direction, 8));
@@ -501,7 +501,7 @@ void CallFieldTask_Surf(TaskManager *taskManager, int direction, int partySlot) 
 BOOL Field_PlayerCanSurfOnTile(PlayerAvatar *playerAvatar, int currentTile, int facingTile) {
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(playerAvatar);
     if (MetatileBehavior_IsSurfableWater(facingTile) == TRUE) {
-        if (sub_0205BA30(currentTile) == TRUE || sub_0205BA24(currentTile) == TRUE) {
+        if (MetatileBehavior_IsBridge(currentTile) == TRUE || MetatileBehavior_IsBridgeStart(currentTile) == TRUE) {
             if (MapObject_CheckFlag28(mapObject) == TRUE) {
                 return FALSE;
             }
@@ -700,7 +700,7 @@ BOOL Field_PlayerAvatar_TryWaterfallUp(FieldSystem *fieldSystem, PlayerAvatar *p
     if (direction != 1 || collision != 1 || PlayerAvatar_GetState(playerAvatar) != PLAYER_STATE_SURFING) {
         return FALSE;
     }
-    if (!MetatileBehavior_IsWaterfall((u8)sub_0205DFEC(playerAvatar, direction))) {
+    if (!MetatileBehavior_IsWaterfall((u8)PlayerAvatar_GetMetatileBehaviorInDirection(playerAvatar, direction))) {
         return FALSE;
     }
     Field_StartWaterfallTask(fieldSystem, direction);

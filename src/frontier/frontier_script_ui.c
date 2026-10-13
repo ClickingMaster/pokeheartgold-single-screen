@@ -740,10 +740,10 @@ void FrontierMap_DeleteMonIcon(FrontierMap *map, ManagedSprite *sprite, u32 inde
 
 void FrontierMap_LoadItemIconResources(FrontierMap *map) {
     NARC *narc = NARC_New(NARC_graphic_plist_gra, HEAP_ID_101);
-    SpriteSystem_LoadPaletteBufferFromOpenNarc(map->paletteData, PLTTBUF_MAIN_OBJ, map->spriteSystem, map->spriteManager, narc, sub_0207CAA0(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 0x7D1);
-    SpriteSystem_LoadCellResObjFromOpenNarc(map->spriteSystem, map->spriteManager, narc, sub_0207CAA4(), FALSE, 0x7D1);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(map->spriteSystem, map->spriteManager, narc, sub_0207CAA8(), FALSE, 0x7D1);
-    SpriteSystem_LoadCharResObjAtEndWithHardwareMappingType(map->spriteSystem, map->spriteManager, NARC_graphic_plist_gra, sub_0207CA9C(), FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 0x7D9);
+    SpriteSystem_LoadPaletteBufferFromOpenNarc(map->paletteData, PLTTBUF_MAIN_OBJ, map->spriteSystem, map->spriteManager, narc, PartyMenu_GetHeldItemIconNCLR(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 0x7D1);
+    SpriteSystem_LoadCellResObjFromOpenNarc(map->spriteSystem, map->spriteManager, narc, PartyMenu_GetHeldItemIconNCER(), FALSE, 0x7D1);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(map->spriteSystem, map->spriteManager, narc, PartyMenu_GetHeldItemIconNANR(), FALSE, 0x7D1);
+    SpriteSystem_LoadCharResObjAtEndWithHardwareMappingType(map->spriteSystem, map->spriteManager, NARC_graphic_plist_gra, PartyMenu_GetHeldItemIconNCGR(), FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 0x7D9);
     NARC_Delete(narc);
 }
 

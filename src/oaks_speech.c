@@ -142,15 +142,15 @@ static BOOL OakSpeech_PrintAndFadeCenteredFullScreenText(OakSpeechData *data, in
 static void OakSpeech_PrintMultichoiceMenu(OakSpeechData *data, int msg1, int msg2, int msg3, int numChoices);
 static void OakSpeech_FreeWindows(OakSpeechData *data);
 static void OakSpeech_LoadButtonTutorialGfx(OakSpeechData *data);
-static void OakSpeech_SetButtonTutorialScreenLayout(OakSpeechData *data, int a1);
-static void OakSpeech_DrawPicOnBgLayer(OakSpeechData *data, int a1, int a2);
-static void ov53_021E67C4(OakSpeechData *data, int a1);
-static void ov53_021E6824(OakSpeechData *data, int a1);
-static void OakSpeech_InitMultichoiceMenu(OakSpeechMultichoice *dest, int a1);
-static void OakSpeech_InitMultichoiceMenuWithFrameFlash(OakSpeechData *data, int a1);
-static int OakSpeech_MultichoiceMenuHandleInputVertical(OakSpeechData *data, int a1);
-static u16 OakSpeech_AdditiveTransformColor(u16 a0, s8 a1);
-static void OakSpeech_BlinkHighlightedGenderFrame(OakSpeechData *data, int a1);
+static void OakSpeech_SetButtonTutorialScreenLayout(OakSpeechData *data, int layout);
+static void OakSpeech_DrawPicOnBgLayer(OakSpeechData *data, int layer1pic, int layer2pic);
+static void OakSpeech_LoadSubScreenBackground(OakSpeechData *data, int index);
+static void OakSpeech_LoadSubScreenMenuGraphics(OakSpeechData *data, int index);
+static void OakSpeech_InitMultichoiceMenu(OakSpeechMultichoice *dest, int menuId);
+static void OakSpeech_InitMultichoiceMenuWithFrameFlash(OakSpeechData *data, int menuId);
+static int OakSpeech_MultichoiceMenuHandleInputVertical(OakSpeechData *data, int menuId);
+static u16 OakSpeech_AdditiveTransformColor(u16 pltt, s8 delta);
+static void OakSpeech_BlinkHighlightedGenderFrame(OakSpeechData *data, int reset);
 static void OakSpeech_StopHighlightedGenderFrameBlink(OakSpeechData *data);
 static BOOL OakSpeech_GenderSelectHandleInput(OakSpeechData *data);
 static void OakSpeech_InitPlayerPicShrinkAnim(OakSpeechData *data);
@@ -162,7 +162,7 @@ static void OakSpeech_CreateMultichoiceYesNoMenu(OakSpeechData *data);
 static void OakSpeech_ClearBgLayer0TopBottomAndCommit(OakSpeechData *data);
 static void OakSpeech_ShowTutorialTouchMsg(OakSpeechData *data);
 static void OakSpeech_HideTutorialTouchMsg(OakSpeechData *data);
-static void OakSpeech_TouchToAdvanceButtonAction(OakSpeechData *data, int a1);
+static void OakSpeech_TouchToAdvanceButtonAction(OakSpeechData *data, int action);
 static BOOL OakSpeech_IsTouchToAdvanceButtonDepressed(OakSpeechData *data);
 static BOOL OakSpeech_IsTouchToAdvanceButtonActive(OakSpeechData *data);
 static void OakSpeech_HandleTouchToAdvanceButton(OakSpeechData *data);
@@ -298,7 +298,7 @@ static const GraphicsModes sGraphicsModes = {
     GX_BG0_AS_2D,
 };
 
-static const int ov53_021E8558[5] = {
+static const int sSubScreenBackgroundNSCR[5] = {
     NARC_intro_intro_00000044_NSCR,
     NARC_intro_intro_00000043_NSCR,
     NARC_intro_intro_00000043_NSCR,
@@ -315,7 +315,7 @@ static const int sButtonTutorialNSCR[6] = {
     NARC_intro_intro_00000008_NSCR,
 };
 
-static const int ov53_021E8584[3][2] = {
+static const int sSubScreenMenuGraphics[3][2] = {
     {
      NARC_intro_intro_00000047_NSCR,
      NARC_intro_intro_00000037_NCGR,
@@ -652,16 +652,16 @@ BOOL OakSpeech_Exit(OverlayManager *ovyMan, int *pState) {
     return TRUE;
 }
 
-int OakSpeech_DeadstrippedFunction1(int a0) {
+int OakSpeech_DeadstrippedFunction1(int index) {
     int arr[1];
     ARRAY_ASSIGN(arr, ov53_021E84F8);
-    return ov53_021E84F8[a0];
+    return ov53_021E84F8[index];
 }
 
-int OakSpeech_DeadstrippedFunction2(int a0) {
+int OakSpeech_DeadstrippedFunction2(int index) {
     int arr[1];
     ARRAY_ASSIGN(arr, ov53_021E84FC);
-    return ov53_021E84FC[a0];
+    return ov53_021E84FC[index];
 }
 
 static void OakSpeech_VBlankCB(void *cbArg) {
@@ -1178,17 +1178,17 @@ static void OakSpeech_LoadButtonTutorialGfx(OakSpeechData *data) {
 
     OakSpeech_SetButtonTutorialScreenLayout(data, 1);
     OakSpeech_DrawPicOnBgLayer(data, OAK_SPEECH_PIC_NONE, OAK_SPEECH_PIC_NONE); // effectively a nop
-    ov53_021E67C4(data, 0);
+    OakSpeech_LoadSubScreenBackground(data, 0);
     BG_SetMaskColor(GF_BG_LYR_MAIN_0, RGB_BLACK);
     BG_SetMaskColor(GF_BG_LYR_SUB_0, RGB_BLACK);
 }
 
-static void OakSpeech_SetButtonTutorialScreenLayout(OakSpeechData *data, int a1) {
+static void OakSpeech_SetButtonTutorialScreenLayout(OakSpeechData *data, int layout) {
     int sp10[6];
     ARRAY_ASSIGN(sp10, sButtonTutorialNSCR);
 
-    if (a1 < 6) {
-        GfGfxLoader_LoadScrnData(NARC_demo_intro_intro, sp10[a1], data->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, data->heapID);
+    if (layout < 6) {
+        GfGfxLoader_LoadScrnData(NARC_demo_intro_intro, sp10[layout], data->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, data->heapID);
     }
 }
 
@@ -1211,31 +1211,31 @@ static void OakSpeech_DrawPicOnBgLayer(OakSpeechData *data, int layer1pic, int l
     }
 }
 
-static void ov53_021E67C4(OakSpeechData *data, int a1) {
+static void OakSpeech_LoadSubScreenBackground(OakSpeechData *data, int index) {
     int sp10[5];
-    ARRAY_ASSIGN(sp10, ov53_021E8558);
+    ARRAY_ASSIGN(sp10, sSubScreenBackgroundNSCR);
 
-    if (a1 < 5) {
-        GfGfxLoader_LoadScrnData(NARC_demo_intro_intro, sp10[a1], data->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, data->heapID);
-        if (a1 == 1) {
+    if (index < 5) {
+        GfGfxLoader_LoadScrnData(NARC_demo_intro_intro, sp10[index], data->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, data->heapID);
+        if (index == 1) {
             OakSpeech_FillBgLayerWithPalette(data, GF_BG_LYR_SUB_3, 3);
-        } else if (a1 == 2) {
+        } else if (index == 2) {
             OakSpeech_FillBgLayerWithPalette(data, GF_BG_LYR_SUB_3, 2);
         }
     }
 }
 
-static void ov53_021E6824(OakSpeechData *data, int a1) {
+static void OakSpeech_LoadSubScreenMenuGraphics(OakSpeechData *data, int index) {
     int sp10[3][2];
-    ARRAY_ASSIGN(sp10, ov53_021E8584);
+    ARRAY_ASSIGN(sp10, sSubScreenMenuGraphics);
 
-    GfGfxLoader_LoadScrnData(NARC_demo_intro_intro, sp10[a1][0], data->bgConfig, GF_BG_LYR_SUB_2, 0, 0, FALSE, data->heapID);
+    GfGfxLoader_LoadScrnData(NARC_demo_intro_intro, sp10[index][0], data->bgConfig, GF_BG_LYR_SUB_2, 0, 0, FALSE, data->heapID);
     OakSpeech_FillBgLayerWithPalette(data, GF_BG_LYR_SUB_2, 7);
     GfGfxLoader_GXLoadPal(NARC_demo_intro_intro, NARC_intro_intro_00000033_NCLR, GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0xE0, 0x60, data->heapID);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 0x20, 0, data->heapID);
-    GfGfxLoader_LoadCharData(NARC_demo_intro_intro, sp10[a1][1], data->bgConfig, GF_BG_LYR_SUB_2, 0, 0, FALSE, data->heapID);
+    GfGfxLoader_LoadCharData(NARC_demo_intro_intro, sp10[index][1], data->bgConfig, GF_BG_LYR_SUB_2, 0, 0, FALSE, data->heapID);
     ScheduleSetBgPosText(data->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_Y, 0);
-    if (a1 == 1) {
+    if (index == 1) {
         if (data->playerGender == PLAYER_GENDER_MALE) {
             ScheduleSetBgPosText(data->bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SET_X, 0x88);
             ScheduleSetBgPosText(data->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_X, 0x88);
@@ -1535,9 +1535,9 @@ static BOOL OakSpeech_DoMainTask(OakSpeechData *data) {
         data->state = OAK_SPEECH_MAIN_STATE_FADE_IN_TUTORIAL_MENU;
         break;
     case OAK_SPEECH_MAIN_STATE_FADE_IN_TUTORIAL_MENU:
-        ov53_021E6824(data, 0);
+        OakSpeech_LoadSubScreenMenuGraphics(data, 0);
         OakSpeech_SetButtonTutorialScreenLayout(data, 1);
-        ov53_021E67C4(data, 0);
+        OakSpeech_LoadSubScreenBackground(data, 0);
         ToggleBgLayer(GF_BG_LYR_MAIN_3, GF_PLANE_TOGGLE_ON);
         ToggleBgLayer(GF_BG_LYR_MAIN_0, GF_PLANE_TOGGLE_ON);
         ToggleBgLayer(GF_BG_LYR_SUB_0, GF_PLANE_TOGGLE_ON);
@@ -1597,7 +1597,7 @@ static BOOL OakSpeech_DoMainTask(OakSpeechData *data) {
     case OAK_SPEECH_MAIN_STATE_FADE_IN_CONTROL_INFO:
         BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_SUB_0);
         OakSpeech_SetButtonTutorialScreenLayout(data, 1);
-        ov53_021E67C4(data, 1);
+        OakSpeech_LoadSubScreenBackground(data, 1);
         OakSpeech_TouchToAdvanceButtonAction(data, TOUCHTOADVANCE_SHOW);
         ToggleBgLayer(GF_BG_LYR_SUB_0, GF_PLANE_TOGGLE_ON);
         ToggleBgLayer(GF_BG_LYR_SUB_3, GF_PLANE_TOGGLE_ON);
@@ -1717,7 +1717,7 @@ static BOOL OakSpeech_DoMainTask(OakSpeechData *data) {
     // ADVENTURE INFO
     case OAK_SPEECH_MAIN_STATE_FADE_IN_ADVENTURE_INFO:
         OakSpeech_SetButtonTutorialScreenLayout(data, 5);
-        ov53_021E67C4(data, 2);
+        OakSpeech_LoadSubScreenBackground(data, 2);
         OakSpeech_ClearBgLayer0TopBottomAndCommit(data);
         OakSpeech_TouchToAdvanceButtonAction(data, TOUCHTOADVANCE_SHOW);
         ToggleBgLayer(GF_BG_LYR_SUB_0, GF_PLANE_TOGGLE_ON);
@@ -1907,7 +1907,7 @@ static BOOL OakSpeech_DoMainTask(OakSpeechData *data) {
     case OAK_SPEECH_MAIN_STATE_SETUP_GENDER_SELECT_MENU:
         OakSpeech_TouchToAdvanceButtonAction(data, TOUCHTOADVANCE_HIDE);
         ToggleBgLayer(GF_BG_LYR_SUB_0, GF_PLANE_TOGGLE_OFF);
-        ov53_021E67C4(data, 4);
+        OakSpeech_LoadSubScreenBackground(data, 4);
         OakSpeech_SelectedGenderIndicatorSpritesAction(data, GENDER_CURSOR_BOTH);
         BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_SUB_2);
         BeginNormalPaletteFade(FADE_SUB_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, data->heapID);
@@ -1945,7 +1945,7 @@ static BOOL OakSpeech_DoMainTask(OakSpeechData *data) {
         break;
     case OAK_SPEECH_MAIN_STATE_CONFIRM_GENDER_YESNO_INIT_MENU:
         OakSpeech_InitMultichoiceMenu(&data->menuData, 1);
-        ov53_021E6824(data, 1);
+        OakSpeech_LoadSubScreenMenuGraphics(data, 1);
         OakSpeech_PrintMultichoiceMenu(data, msg_0219_00047, msg_0219_00048, 0, 2);
         data->state = OAK_SPEECH_MAIN_STATE_CONFIRM_GENDER_YESNO_HANDLE_INPUT;
         data->menuData.cursorPos = 0;
@@ -1977,7 +1977,7 @@ static BOOL OakSpeech_DoMainTask(OakSpeechData *data) {
             ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_OFF);
             ToggleBgLayer(GF_BG_LYR_SUB_2, GF_PLANE_TOGGLE_OFF);
             OakSpeech_SelectedGenderIndicatorSpritesAction(data, GENDER_CURSOR_NEITHER);
-            ov53_021E67C4(data, 1);
+            OakSpeech_LoadSubScreenBackground(data, 1);
             BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_SUB_0);
             ScheduleSetBgPosText(data->bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SET_X, 0);
             OakSpeech_StopHighlightedGenderFrameBlink(data);
@@ -2070,7 +2070,7 @@ static BOOL OakSpeech_DoMainTask(OakSpeechData *data) {
         if (IsPaletteFadeFinished() == TRUE) {
             ToggleBgLayer(GF_BG_LYR_SUB_2, GF_PLANE_TOGGLE_OFF);
             ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_OFF);
-            ov53_021E67C4(data, 1);
+            OakSpeech_LoadSubScreenBackground(data, 1);
             OakSpeech_SelectedGenderIndicatorSpritesAction(data, GENDER_CURSOR_NEITHER);
             BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_SUB_0);
             ScheduleSetBgPosText(data->bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SET_X, 0);
@@ -2154,8 +2154,8 @@ static BOOL OakSpeech_DoMainTask(OakSpeechData *data) {
 }
 
 static void OakSpeech_CreateMultichoiceYesNoMenu(OakSpeechData *data) {
-    ov53_021E6824(data, 1);
-    ov53_021E67C4(data, 4);
+    OakSpeech_LoadSubScreenMenuGraphics(data, 1);
+    OakSpeech_LoadSubScreenBackground(data, 4);
     OakSpeech_PrintMultichoiceMenu(data, msg_0219_00047, msg_0219_00048, 0, 2);
     FillBgTilemapRect(data->bgConfig, GF_BG_LYR_SUB_3, 1, 16 * (data->playerGender ^ 1), 0, 16, 23, 0);
     BgCommitTilemapBufferToVram(data->bgConfig, GF_BG_LYR_SUB_3);

@@ -184,7 +184,7 @@ void PokeathlonBox_GetLightBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonStat
 void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data);
 void PokeathlonBox_CalcStatChanges(PokeathlonBox_MonStats *stats1, PokeathlonBox_MonStats *stats2, PartyAprijuiceModifier *aprijuiceModifier, PokeathlonBox_MonInfo *mon);
 PokeathlonBox_Graphics *PokeathlonBox_InitGraphics(enum HeapID heapID);
-void PokeathlonBox_SetupGraphics(PokeathlonBox_Graphics *graphics, BgConfig *bgConfig, u8 courseId, u32 arg3);
+void PokeathlonBox_SetupGraphics(PokeathlonBox_Graphics *graphics, BgConfig *bgConfig, u8 courseId, u32 isSupreme);
 void PokeathlonBox_DrawMonInfo(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon);
 void PokeathlonBox_RenderAndAnimateSprites(PokeathlonBox_Graphics *graphics);
 void PokeathlonBox_ReleaseGraphics(PokeathlonBox_Graphics *graphics);

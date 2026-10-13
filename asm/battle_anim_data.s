@@ -484,7 +484,7 @@
 	.public BattleAnimEmitter_IsActive
 	.public BattleAnimEmitter_WaitTask
 	.public BattleAnimEmitter_CreateEmitters
-	.public UnkBallData_GetEmitterParam
+	.public BattleAnimEmitter_GetEmitterParam
 	.public BattleAnimEmitter_GetEmitterCount
 	.public BattleAnimUtil_LoadMonIntoPicSameFacing
 	.public BattleAnimUtil_LoadMonIntoPicOppositeFacing

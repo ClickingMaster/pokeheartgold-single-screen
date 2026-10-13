@@ -12,7 +12,7 @@
 // Course helpers and the sprite pool (OVY_96, not yet tidied).
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
 s32 PokeathlonCourseObject_GetCollisionRadius(void *object);
-void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL a1, BOOL show);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL shown, BOOL show);
 
 // Per goal (indexed by participant - 1 or by 3 - quadrant): three guard points (x, y) in front of it.
 extern const u16 ov96_0221D678[][3][2];
@@ -214,7 +214,7 @@ int PokeathlonGoalRollCpu_ThinkChaser(PokeathlonCourseData *course, u8 participa
             if (PokeathlonGoalRollCpu_CirclesTouch(position, (u32)PokeathlonCourseObject_GetCollisionRadius(mon->object) << 12, &ball->position, radius << 12)) {
                 decisions.values[i] = 1;
             } else if (quadrant == ballQuadrant) {
-                if (ov96_02215650(ball->position.x / 4096, ball->position.y / 4096, mon->position.x / 4096, mon->position.y / 4096, quadrant, participant)) {
+                if (PokeathlonGoalRollCpu_IsMonInTargetQuadrantOfBall(ball->position.x / 4096, ball->position.y / 4096, mon->position.x / 4096, mon->position.y / 4096, quadrant, participant)) {
                     decisions.values[i] = 4;
                 } else {
                     decisions.values[i] = 3;
@@ -315,7 +315,7 @@ int PokeathlonGoalRollCpu_ThinkGuard(PokeathlonCourseData *course, u8 participan
         }
         if (ballQuadrant != 4) {
             if (participant == ballQuadrant) {
-                if (ov96_0221567C(ball->position.x / 4096, ball->position.y / 4096, mon->position.x / 4096, mon->position.y / 4096, quadrant, participant)) {
+                if (PokeathlonGoalRollCpu_IsMonNotOppositeOfBall(ball->position.x / 4096, ball->position.y / 4096, mon->position.x / 4096, mon->position.y / 4096, quadrant, participant)) {
                     decisions[i] = 7;
                 } else {
                     decisions[i] = 6;
@@ -401,7 +401,7 @@ int PokeathlonGoalRollCpu_ApplyGuardDecision(PokeathlonGoalRollMon *mon, Pokeath
 
 #pragma force_active on
 
-int ov96_02215184(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls, PokeathlonGoalRollCpuTeam *teams) {
+int PokeathlonGoalRollCpu_ThinkFlex(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls, PokeathlonGoalRollCpuTeam *teams) {
     u8 i;
     int ballQuadrant;
     int quadrant;
@@ -450,7 +450,7 @@ int ov96_02215184(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
         if (PokeathlonGoalRollCpu_CirclesTouch(&mon->position, PokeathlonCourseObject_GetCollisionRadius(mon->object) << 12, &ball->position, radius << 12)) {
             decisions[i] = 8;
         } else if (quadrant == ballQuadrant) {
-            if (ov96_02215650(ball->position.x / FX32_ONE, ball->position.y / FX32_ONE, mon->position.x / FX32_ONE, mon->position.y / FX32_ONE, quadrant, participant)) {
+            if (PokeathlonGoalRollCpu_IsMonInTargetQuadrantOfBall(ball->position.x / FX32_ONE, ball->position.y / FX32_ONE, mon->position.x / FX32_ONE, mon->position.y / FX32_ONE, quadrant, participant)) {
                 decisions[i] = 13;
             }
         }
@@ -469,7 +469,7 @@ int ov96_02215184(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
         ball = &balls[i];
         if (quadrants[i] != 4) {
             if (participant == quadrants[i]) {
-                if (ov96_02215650(ball->position.x / FX32_ONE, ball->position.y / FX32_ONE, mon->position.x / FX32_ONE, mon->position.y / FX32_ONE, quadrant, participant)) {
+                if (PokeathlonGoalRollCpu_IsMonInTargetQuadrantOfBall(ball->position.x / FX32_ONE, ball->position.y / FX32_ONE, mon->position.x / FX32_ONE, mon->position.y / FX32_ONE, quadrant, participant)) {
                     decisions[i] = 12;
                 } else {
                     decisions[i] = 11;
@@ -490,16 +490,16 @@ int ov96_02215184(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
         distance = VEC_Mag(&delta);
         VEC_Subtract(&mon->position, &balls[1].position, &delta);
         if (distance >= VEC_Mag(&delta)) {
-            result = ov96_02215460(mon, balls, decisions[0], participant, teams);
+            result = PokeathlonGoalRollCpu_ApplyFlexDecision(mon, balls, decisions[0], participant, teams);
         } else {
             balls++;
-            result = ov96_02215460(mon, balls, decision1, participant, teams);
+            result = PokeathlonGoalRollCpu_ApplyFlexDecision(mon, balls, decision1, participant, teams);
         }
     } else if (decision0 >= decision1) {
-        result = ov96_02215460(mon, balls, decision0, participant, teams);
+        result = PokeathlonGoalRollCpu_ApplyFlexDecision(mon, balls, decision0, participant, teams);
     } else {
         balls++;
-        result = ov96_02215460(mon, balls, decision1, participant, teams);
+        result = PokeathlonGoalRollCpu_ApplyFlexDecision(mon, balls, decision1, participant, teams);
     }
     if (mon->mode == GOAL_ROLL_MODE_DASH) {
         PokeathlonCourse_AddMonCounter(course, participant, member, 6, 1);
@@ -512,7 +512,7 @@ int ov96_02215184(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
 // PokeathlonGoalRollCpu_MoveToEmptierQuadrant with the participant passed as int (this call was built against such a declaration).
 typedef int (*PokeathlonGoalRollCpuSpreadFunc)(PokeathlonGoalRollMon *mon, PokeathlonGoalRollCpuTeam *teams, int participant);
 
-int ov96_02215460(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant, PokeathlonGoalRollCpuTeam *teams) {
+int PokeathlonGoalRollCpu_ApplyFlexDecision(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant, PokeathlonGoalRollCpuTeam *teams) {
     if (decision == 10) {
         return ((PokeathlonGoalRollCpuSpreadFunc)PokeathlonGoalRollCpu_MoveToEmptierQuadrant)(mon, teams, participant);
     }
@@ -582,7 +582,7 @@ void PokeathlonGoalRollCpu_Think(PokeathlonCourseData *course, PokeathlonGoalRol
         slot->wait = (u32)PokeathlonGoalRollCpu_ThinkChaser(course, participant, role, slot->mon, cpu->balls);
         break;
     case 2:
-        slot->wait = ov96_02215184(course, participant, role, slot->mon, cpu->balls, cpu->teams);
+        slot->wait = PokeathlonGoalRollCpu_ThinkFlex(course, participant, role, slot->mon, cpu->balls, cpu->teams);
         break;
     default:
         GF_AssertFail();
@@ -610,7 +610,7 @@ int PokeathlonGoalRollCpu_GetQuadrant(int x, int y, int pointX, int pointY) {
     return 4;
 }
 
-BOOL ov96_02215650(int x1, int y1, int x2, int y2, int quadrantInput, int participantInput) {
+BOOL PokeathlonGoalRollCpu_IsMonInTargetQuadrantOfBall(int x1, int y1, int x2, int y2, int quadrantInput, int participantInput) {
     int result = PokeathlonGoalRollCpu_GetQuadrant(x1, y1, x2, y2);
     u8 participant = *(const u8 *)&participantInput;
     u8 quadrant = *(const u8 *)&quadrantInput;
@@ -624,7 +624,7 @@ BOOL ov96_02215650(int x1, int y1, int x2, int y2, int quadrantInput, int partic
     return result == target;
 }
 
-BOOL ov96_0221567C(int x1, int y1, int x2, int y2, int quadrantInput, int participantInput) {
+BOOL PokeathlonGoalRollCpu_IsMonNotOppositeOfBall(int x1, int y1, int x2, int y2, int quadrantInput, int participantInput) {
     int result = PokeathlonGoalRollCpu_GetQuadrant(x1, y1, x2, y2);
     u8 quadrant = *(const u8 *)&quadrantInput;
     u8 participant = *(const u8 *)&participantInput;

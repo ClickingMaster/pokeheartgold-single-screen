@@ -412,7 +412,7 @@ void PokeathlonSnowThrow_CreateSprites(PokeathlonSnowThrow *work, void *pool, u8
     PokeathlonSnowThrowTeamMarkPositions teamMarkPositions;
 
     for (i = 0; i < 2; i++) {
-        work->timerDigits[i] = ov96_021EA374(work->monResources, PokeathlonCourseSpritePool_GetSpriteList(pool), 3, work->heapId);
+        work->timerDigits[i] = PokeathlonCourse_CreateTimerDigitSprite(work->monResources, PokeathlonCourseSpritePool_GetSpriteList(pool), 3, work->heapId);
         Sprite_SetDrawFlag(work->timerDigits[i], TRUE);
         position.x = (i * 16) * FX32_ONE + 24 * FX32_ONE;
         position.y = 8 * FX32_ONE;

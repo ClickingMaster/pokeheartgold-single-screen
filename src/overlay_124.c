@@ -14,21 +14,21 @@
 FS_EXTERN_OVERLAY(ds_protect);
 
 static void ClobberHeapByBadgeCount(FieldSystem *fieldSystem);
-static void ov124_02260D68(void);
-static void ov124_02260D6C(void);
-static void ov124_02260D58(void);
+static void FieldSystem_OnFlashcartDetectedDummy(void);
+static void FieldSystem_OnDummyCheckDummy(void);
+static void FieldSystem_OnEmulatorDetected(void);
 
 void FieldSystem_Init(OverlayManager *man, FieldSystem *fieldSystem) {
     u32 key = 2441 * 4073; // these are both prime
     FS_LoadOverlay(MI_PROCESSOR_ARM9, FS_OVERLAY_ID(ds_protect));
-    key += 769 * (!DSProt_DetectNotFlashcart(ov124_02260D68)); // 769 is prime
+    key += 769 * (!DSProt_DetectNotFlashcart(FieldSystem_OnFlashcartDetectedDummy)); // 769 is prime
     MainOverlayArgs *args = OverlayManager_GetArgs(man);
     fieldSystem->saveData = args->saveData;
     fieldSystem->taskman = NULL;
-    key += 47 * (!DSProt_DetectNotDummy(ov124_02260D6C)); // 47 is prime
+    key += 47 * (!DSProt_DetectNotDummy(FieldSystem_OnDummyCheckDummy)); // 47 is prime
     fieldSystem->location = LocalFieldData_GetCurrentPosition(Save_LocalFieldData_Get(fieldSystem->saveData));
     fieldSystem->mapMatrix = MapMatrix_New();
-    u32 key2 = 929 * DSProt_DetectEmulator(ov124_02260D58); // 929 is prime
+    u32 key2 = 929 * DSProt_DetectEmulator(FieldSystem_OnEmulatorDetected); // 929 is prime
     Field_AllocateMapEvents(fieldSystem, HEAP_ID_FIELD2);
     fieldSystem->bagCursor = BagCursor_New(HEAP_ID_FIELD2);
     FS_UnloadOverlay(MI_PROCESSOR_ARM9, FS_OVERLAY_ID(ds_protect));
@@ -59,11 +59,11 @@ static void ClobberHeapByBadgeCount(FieldSystem *fieldSystem) {
 }
 
 // you can have a little heap clobber, as a treat
-static void ov124_02260D58(void) {
+static void FieldSystem_OnEmulatorDetected(void) {
     Heap_AllocAtEnd(HEAP_ID_3, 1000);
 }
 
-static void ov124_02260D68(void) {
+static void FieldSystem_OnFlashcartDetectedDummy(void) {
 }
-static void ov124_02260D6C(void) {
+static void FieldSystem_OnDummyCheckDummy(void) {
 }

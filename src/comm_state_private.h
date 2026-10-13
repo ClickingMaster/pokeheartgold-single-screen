@@ -121,7 +121,7 @@ int WifiConnection_FinishDisconnect(void);
 int DWC_GetLastErrorEx(s32 *arg0, s32 *arg1);
 void DWC_ClearError(void);
 s32 WifiConnection_UpdateLogin(void);
-int ov45_0222E804(int arg0);
+int WiFiPlazaLobbyClient_Initialize(int arg0);
 void WifiConnection_Init(SaveData *saveData, int arg1, int arg2, int arg3);
 void WifiConnection_SetErrorCallback(void (*func)(u32));
 int WiFiPlazaLobbyClient_IsMatchActive(int arg0);
@@ -322,10 +322,10 @@ void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 netId, s32 slot, enum He
 s32 Comm_FindFriendIndexOfPlayer(SaveData *saveData, s32 netId);
 
 int WiFiPlazaLobbyClient_IsMatchHost(void);
-void ov45_0222F154(void);
+void WiFiPlazaLobbyClient_StopMatch(void);
 void WiFiPlazaLobbyClient_EndMatch(void);
-void ov45_0222E91C(void);
-int ov45_0222F254(void);
+void WiFiPlazaLobbyClient_Shutdown(void);
+int WiFiPlazaLobbyClient_WasMatchCancelled(void);
 
 DWCFriendData *CommPlayerInfo_GetExchangeToken(int arg0);
 u16 *CommPlayerInfo_GetGroupName(int arg0);

@@ -14,7 +14,7 @@
 	.public TouchscreenMenu_PrintActionLabel
 	.public TouchscreenMenu_SetButtonsActive
 	.public ov27_0225A714
-	.public ov27_0225A7FC
+	.public TouchscreenMenu_UpdateForStartMenu
 	.public TouchscreenMenu_IsFieldBusy
 	.public TouchscreenMenu_SetDimmed
 	.public TouchscreenMenu_UpdateRegisteredItemButtons
@@ -108,16 +108,16 @@
 	.public sTouchscreenChoiceMenuListWindowTemplates
 	.public sTouchscreenChoiceMenuStateFuncs
 
-	.public ov27_0225A2C8
+	.public TouchscreenMenu_IsExitDone
 	.public TouchscreenMenu_RequestSelectedIconAnim
 	.public TouchscreenMenu_RequestRegisteredItemAnim
 	.public TouchscreenMenu_SetRunningShoesSprites
 	.public TouchscreenMenu_HandleRunningShoesButton
 	.public TouchscreenMenu_UpdateRunningShoesSprites
 	.public TouchscreenMenu_UpdateActionLabel
-	.public ov27_0225A7B0
-	.public ov27_0225A7DC
-	.public ov27_0225A86C
+	.public TouchscreenMenu_RefreshLabelAndNewIcons
+	.public TouchscreenMenu_HighlightSelectionAndDisable
+	.public TouchscreenMenu_RestoreAfterStartMenu
 	.public TouchscreenMenu_SumBytes
 	.public TouchscreenMenu_GetBallItem
 	.public TouchscreenMenu_SetIconsTranslucent
@@ -131,10 +131,10 @@
 	.public TouchscreenMenu_PrintSafariBalls
 	.public TouchscreenMenu_PrintParkBalls
 	.public TouchscreenMenu_PrintBallInfo
-	.public ov27_0225C238
-	.public ov27_0225C248
-	.public ov27_0225C24C
-	.public ov27_0225C418
+	.public TouchscreenMenu_OnFlashcartDetected
+	.public TouchscreenMenu_OnEmulatorCheckDummy
+	.public TouchscreenMenu_OnDummyCheckDummy
+	.public TouchscreenChoiceMenu_IsExitDone
 	.public TouchscreenChoiceMenu_SetCallback
 	.public TouchscreenChoiceMenu_HideYesNo
 	.public TouchscreenChoiceMenu_HideList

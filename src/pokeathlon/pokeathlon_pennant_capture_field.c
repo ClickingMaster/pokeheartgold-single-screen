@@ -39,7 +39,7 @@ void PokeathlonCourseObject_GetCollisionCircle(void *object, int x, int y, int *
 int PokeathlonCourseObject_GetCollisionRadius(void *object);
 void PokeathlonCourseObject_SetGroundPosition(void *object, int x, int y);
 void PokeathlonCourseObject_GroundToCenter(void *object, int x, int y, int *outX, int *outY);
-void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int a1, int show);
+void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int shown, int show);
 void PokeathlonCourseSpritePoolSprite_SetAnim(void *sprite, int anim);
 void PokeathlonCourseSpritePoolSprite_SetPosition(void *sprite, VecFx32 *position);
 VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(void *sprite);
@@ -106,7 +106,7 @@ void PokeathlonPennantCapture_UpdatePlayers(PokeathlonCourseData *course) {
             continue;
         }
         if (PokeathlonPennantCapture_CanDeposit(player)) {
-            player->pointsToAdd = ov96_02207BD4(player->pennants);
+            player->pointsToAdd = PokeathlonPennantCapture_GetDepositPoints(player->pennants);
             player->pennants = 0;
             player->depositing = 1;
             player->velocity.x = 0;
@@ -919,7 +919,7 @@ fx32 PokeathlonPennantCapture_CalcCircleEntry(VecFx32 *a, VecFx32 *b, VecFx32 *p
     return second;
 }
 
-float ov96_022073F0(PokeathlonPennantCapturePlayer *player, int member) {
+float PokeathlonPennantCapture_GetMaxSpeed(PokeathlonPennantCapturePlayer *player, int member) {
     return (float)player->moveParams[member].maxSpeed;
 }
 
@@ -1259,7 +1259,7 @@ BOOL PokeathlonPennantCapture_CanDeposit(PokeathlonPennantCapturePlayer *player)
 }
 
 // Called as if it returned its argument (it does: r0 is left unchanged).
-u8 ov96_02207BD4(u8 pennants) {
+u8 PokeathlonPennantCapture_GetDepositPoints(u8 pennants) {
 }
 
 int PokeathlonPennantCapture_GetDrawPriority(int y) {

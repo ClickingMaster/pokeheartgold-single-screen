@@ -179,7 +179,7 @@ typedef struct PokeathlonMedals {
     ManagedSprite *sprites[50];
 } PokeathlonMedals; // size: 0x4D0
 
-BOOL ov99_021E714C(void);
+BOOL PokeathlonMedals_GetSpeciesOrderFileIndex(void);
 BOOL ov99_021E7150(PokeathlonMedals *work);
 u8 PokeathlonMedals_GetPageSpeciesCount(PokeathlonMedals *work);
 u8 PokeathlonMedals_GetSpeciesMedals(PokeathlonMedals *work, int species);

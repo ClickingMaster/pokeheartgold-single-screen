@@ -357,7 +357,7 @@ u32 PCBox_sizeof(void) {
     return sizeof(PC_BOX);
 }
 
-void sub_02074128(PCStorage *storage) {
+void PCStorage_ClearBoxPadding(PCStorage *storage) {
     u8 i, j;
 
     for (i = 0; i < NUM_BOXES; i++) {

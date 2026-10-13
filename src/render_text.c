@@ -526,13 +526,13 @@ static u8 TextPrinter_Wait(TextPrinter *printer) {
     return TextPrinter_Continue(printer);
 }
 
-void TextFlags_SetCanABSpeedUpPrint(BOOL param0) {
-    sTextFlags.canABSpeedUpPrint = param0;
+void TextFlags_SetCanABSpeedUpPrint(BOOL enable) {
+    sTextFlags.canABSpeedUpPrint = enable;
 }
 
-void TextFlags_SetAutoScrollParam(int param0) {
-    sTextFlags.autoScroll = param0 & 1;
-    sTextFlags.autoScrollCanSpeedUp = (param0 >> 1) & 1;
+void TextFlags_SetAutoScrollParam(int flags) {
+    sTextFlags.autoScroll = flags & 1;
+    sTextFlags.autoScrollCanSpeedUp = (flags >> 1) & 1;
 }
 
 void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable) {

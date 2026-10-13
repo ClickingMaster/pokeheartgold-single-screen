@@ -44,7 +44,7 @@
 	.public TrainerCardSignature_FreeBgLayers
 	.public TrainerCardSignature_InitObjTransfer
 	.public TrainerCardSignature_RemoveWindows
-	.public ov52_021E8BD8
+	.public TrainerCardSignature_UpdateCanvasDummy
 	.public ov52_021E8CBC
 	.public TrainerCardSignature_SetDoneButtonPressed
 	.public TrainerCardSignature_State_Draw
@@ -53,9 +53,9 @@
 	.public TrainerCardSignature_State_WaitConfirmMessage
 	.public TrainerCardSignature_State_PrintEraseMessage
 	.public TrainerCardSignature_State_WaitEraseMessage
-	.public ov52_021E9218
+	.public TrainerCardSignature_DrawDummy
 	.public TrainerCardSignature_AnimateButtonPalette
-	.public ov52_021E925C
+	.public TrainerCardSignature_PrintPenNamesDummy
 	.public TrainerCardSignature_IsPrinterDone
 	.public TrainerCardSignature_PlayPenSoundOnTurn
 	.public TrainerCardSignature_SetDoneButtonHidden

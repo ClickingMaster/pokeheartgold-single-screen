@@ -17,8 +17,8 @@ void PartyMenu_RefreshMonCapsuleIconSpritePos(PartyMenu *partyMenu, u8 partySlot
 void PartyMenu_DrawMonCapsuleIcon(PartyMenu *partyMenu, u8 partySlot);
 void PartyMenu_UpdateMonIconAnims(PartyMenu *partyMenu);
 void PartyMenu_ShowCursorAtSlot(PartyMenu *partyMenu, u8 partySlot, int selected);
-void sub_0207F2A8(PartyMenu *partyMenu, s16 x, s16 y);
-void sub_0207F2F8(PartyMenu *partyMenu);
+void PartyMenu_StartUnusedSlotEffectSprite(PartyMenu *partyMenu, s16 x, s16 y);
+void PartyMenu_UpdateUnusedSlotEffectSprite(PartyMenu *partyMenu);
 void PartyMenu_SetTopScreenSelectionPanelYDisplacement(PartyMenu *partyMenu, int dy);
 void PartyMenu_SetTopScreenMonIconSprite(PartyMenu *partyMenu, u8 selection);
 

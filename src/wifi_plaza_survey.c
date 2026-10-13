@@ -71,7 +71,7 @@ BOOL WiFiPlazaSurvey_Main(OverlayManager *man, int *state) {
     case 2:
         if (IsPaletteFadeFinished() == TRUE) {
             if (WiFiPlazaWork_IsClosing(args->lobby) == TRUE) {
-                ov45_0222A4A8(args->lobby);
+                WiFiPlazaWork_SetAppQuitForClosing(args->lobby);
                 (*state)++;
                 break;
             }

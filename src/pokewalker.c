@@ -32,26 +32,26 @@ void Pokewalker_IncrementLinkCount(POKEWALKER *pokeWalker) {
     pokeWalker->linkCount++;
 }
 
-void Pokewalker_SetStepsAddWatts(POKEWALKER *pokeWalker, u32 a1, u32 a2) {
-    pokeWalker->steps = a1;
-    pokeWalker->watts += a2;
+void Pokewalker_SetStepsAddWatts(POKEWALKER *pokeWalker, u32 steps, u32 watts) {
+    pokeWalker->steps = steps;
+    pokeWalker->watts += watts;
     if (pokeWalker->watts >= 9999999) {
         pokeWalker->watts = 9999999;
     }
 }
 
-void Pokewalker_GetStepsAndWatts(POKEWALKER *pokeWalker, u32 *a1, u32 *a2) {
-    *a1 = pokeWalker->steps;
-    *a2 = pokeWalker->watts;
+void Pokewalker_GetStepsAndWatts(POKEWALKER *pokeWalker, u32 *steps, u32 *watts) {
+    *steps = pokeWalker->steps;
+    *watts = pokeWalker->watts;
 }
 
-void sub_02032688(POKEWALKER *pokeWalker, u16 *a1, u16 *a2) {
+void Pokewalker_GetStrollState(POKEWALKER *pokeWalker, u16 *a1, u16 *a2) {
     GF_ASSERT(pokeWalker != NULL);
     *a1 = pokeWalker->unk_000;
     *a2 = pokeWalker->unk_002;
 }
 
-void sub_020326A4(POKEWALKER *pokeWalker, u16 a1, u16 a2) {
+void Pokewalker_SetStrollState(POKEWALKER *pokeWalker, u16 a1, u16 a2) {
     GF_ASSERT(pokeWalker != NULL);
     pokeWalker->unk_000 = a1;
     pokeWalker->unk_002 = a2;
@@ -94,8 +94,8 @@ u16 Pokewalker_GetCourse(POKEWALKER *pokeWalker) {
     return pokeWalker->course;
 }
 
-void Pokewalker_SetCourse(POKEWALKER *pokeWalker, u16 a1) {
-    pokeWalker->course = a1;
+void Pokewalker_SetCourse(POKEWALKER *pokeWalker, u16 course) {
+    pokeWalker->course = course;
 }
 
 void *Pokewalker_GetIrClock(POKEWALKER *pokeWalker) {

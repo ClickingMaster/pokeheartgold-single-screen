@@ -48,7 +48,7 @@
 	.public TouchMartApp_RemoveItemWindows
 	.public TouchMartApp_PrintItemName
 	.public TouchMartApp_LoadListTilemap
-	.public ov31_0225E12C
+	.public TouchMartApp_IsItemPurchasable
 	.public TouchMartApp_PrintBuyButton
 	.public TouchMartApp_BufferItemName
 	.public TouchMartApp_BufferItemNamePlural

@@ -1,7 +1,7 @@
 #include "overlay116_scene_internal.h"
 
-const Ov116Sequence ov116_0225F398 = { 0x28, 5, 8, 0x3C, 0x100, -0x226000, 0x800, 5, 13 };
-static const Ov116Sequence sSequenceA = { 0x28, 5, 8, 0x3C, 0x100, -0x294000, 0x800, 5, 13 };
+const Ov116Sequence gLugiaSequence = { 0x28, 5, 8, 0x3C, 0x100, -0x226000, 0x800, 5, 13 };
+static const Ov116Sequence sHoOhSequence = { 0x28, 5, 8, 0x3C, 0x100, -0x294000, 0x800, 5, 13 };
 
 static const Ov116CameraKey sPanKeys[] = {
     { 0x29AEC1, 0xD602, 0,      0x05C1, 4 },
@@ -22,7 +22,7 @@ static const Ov116CameraKey sPanKeys[] = {
     { 0x29AEC1, 0xD602, 0,      0x0241, 1 },
 };
 
-void ov116_0225F020(Ov116FieldSystem *fieldSystem, const Ov116CameraKey *key) {
+void LegendaryEffect_ApplyCameraKey(Ov116FieldSystem *fieldSystem, const Ov116CameraKey *key) {
     Ov116CameraAngle angle;
     Camera_SetPerspectiveAngle(key->perspective, fieldSystem->camera);
     Camera_SetDistance(key->distance, fieldSystem->camera);
@@ -32,7 +32,7 @@ void ov116_0225F020(Ov116FieldSystem *fieldSystem, const Ov116CameraKey *key) {
     Camera_SetAnglePos(&angle, fieldSystem->camera);
 }
 
-void ov116_0225F054(void *arg0, Ov116Task *task) {
+void EncounterEffect_Legendary(void *sysTask, Ov116Task *task) {
     Ov116PanWork *work = task->work;
     switch (task->state) {
     case 0:
@@ -60,7 +60,7 @@ void ov116_0225F054(void *arg0, Ov116Task *task) {
         break;
     case 4:
         if (--work->delay < 0) {
-            ov116_0225F020(task->fieldSystem, &sPanKeys[work->index]);
+            LegendaryEffect_ApplyCameraKey(task->fieldSystem, &sPanKeys[work->index]);
             work->index++;
             if (work->index >= 16) {
                 task->state++;
@@ -86,13 +86,13 @@ void ov116_0225F054(void *arg0, Ov116Task *task) {
         if (task->completionFlag != NULL) {
             *task->completionFlag = 1;
         }
-        EncounterEffect_Finish(task, arg0);
+        EncounterEffect_Finish(task, sysTask);
         SetMasterBrightnessByColor(1, 0x7FFF);
         break;
     }
 }
 
-void ov116_0225F1BC(void *arg0, Ov116Task *task, const Ov116Sequence *seq) {
+void LegendaryEffect_RunBirdSequence(void *sysTask, Ov116Task *task, const Ov116Sequence *seq) {
     Ov116MoveWork *work = task->work;
     int done;
     switch (task->state) {
@@ -162,16 +162,16 @@ void ov116_0225F1BC(void *arg0, Ov116Task *task, const Ov116Sequence *seq) {
         if (task->completionFlag != NULL) {
             *task->completionFlag = 1;
         }
-        EncounterEffect_Finish(task, arg0);
+        EncounterEffect_Finish(task, sysTask);
         SetMasterBrightnessByColor(1, 0x7FFF);
         break;
     }
 }
 
-void ov116_0225F364(void *arg0, Ov116Task *task) {
-    ov116_0225F1BC(arg0, task, &sSequenceA);
+void EncounterEffect_HoOh(void *sysTask, Ov116Task *task) {
+    LegendaryEffect_RunBirdSequence(sysTask, task, &sHoOhSequence);
 }
 
-void ov116_0225F374(void *arg0, Ov116Task *task) {
-    ov116_0225F1BC(arg0, task, &ov116_0225F398);
+void EncounterEffect_Lugia(void *sysTask, Ov116Task *task) {
+    LegendaryEffect_RunBirdSequence(sysTask, task, &gLugiaSequence);
 }

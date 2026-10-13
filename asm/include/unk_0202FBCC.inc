@@ -18,8 +18,8 @@
 .public SaveArray_CalcCRC16
 .public Save_PlayerData_GetOptionsAddr
 .public PlayerProfile_Copy
-.public sub_020291E8
-.public sub_0202925C
+.public LinkBattleRuleset_GetRegulation
+.public LinkBattleRuleset_GetDefault
 .public Pokedex_Copy
 .public Save_Pokedex_Get
 .public Options_Copy

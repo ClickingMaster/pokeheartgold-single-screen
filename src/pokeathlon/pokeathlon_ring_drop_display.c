@@ -46,19 +46,19 @@ void MATH_QSort(void *base, u32 count, u32 width, int (*compare)(const void *, c
 #define PokeathlonRingDrop_GetTeamMemberParams(course, participant, member)         (((PokeathlonRingDropMemberParams * (*)(PokeathlonCourseData *, u8, int)) PokeathlonRingDrop_GetMemberParams)((course), (participant), (member)))
 
 // Course helpers, mon objects and the computer participants (OVY_96).
-void *PokeathlonCourseSprites_CreateResources(int heapId, int a1, int a2);
+void *PokeathlonCourseSprites_CreateResources(int heapId, int flags, int charVram);
 void PokeathlonCourseSprites_FreeResources(void *resources);
 void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, u32 timer);
-void *PokeathlonCourseMonGfx_GetInfo(void *a0);
-void PokeathlonCourseMonGfx_LoadPalette(void *a0, enum HeapID heapId, u16 *palette);
+void *PokeathlonCourseMonGfx_GetInfo(void *mon);
+void PokeathlonCourseMonGfx_LoadPalette(void *info, enum HeapID heapId, u16 *palette);
 void *PokeathlonCourseMonObjects_Get(void *monObjects, u8 index);
 void *PokeathlonCourseMonObject_GetGfx(void *object);
-void PokeathlonCourseMonObject_SetDrawFlag(void *object, int a1);
+void PokeathlonCourseMonObject_SetDrawFlag(void *object, int draw);
 void PokeathlonCourseMonObject_SetDrawPriority(void *object, int priority);
 void PokeathlonCourseMonObject_SetAnimState(void *object, int anim);
 void PokeathlonCourseMonObject_SetAnim(void *object, int anim);
-void PokeathlonCourseMonObjects_SetPalette(void *monObjects, u8 index, int a2, u16 *palette);
-void PokeathlonCourseObject_SetCenterPosition(void *object, int x, int y, int a3);
+void PokeathlonCourseMonObjects_SetPalette(void *monObjects, u8 index, int vram, u16 *palette);
+void PokeathlonCourseObject_SetCenterPosition(void *object, int x, int y, int moveShadow);
 void PokeathlonCourseObject_CenterToGround(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
 void PokeathlonCourseObject_SetScale(void *object, f32 scaleX, f32 scaleY);
 

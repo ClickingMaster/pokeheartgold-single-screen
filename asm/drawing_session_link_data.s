@@ -129,9 +129,9 @@ gDrawingSessionLinkCommands:
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0
-	.word DrawingSessionLink_ReceivePictureChunk, sub_02091598, DrawingSessionLink_GetChunkRecvBuffer
-	.word sub_0208F8BC, sub_020915A0, 0
-	.word sub_0208F8E4, sub_020915A4, 0
+	.word DrawingSessionLink_ReceivePictureChunk, CommCmd_GetSize1008, DrawingSessionLink_GetChunkRecvBuffer
+	.word sub_0208F8BC, CommCmd_GetSize10, 0
+	.word sub_0208F8E4, CommCmd_GetSize50, 0
 	.word sub_0208FA88, CommCmd_GetSize1, 0
 	.word sub_0208FA8C, CommCmd_GetSize1, 0
 	.word DrawingSessionLink_ReceiveMemberJoined, CommCmd_GetSize1, 0

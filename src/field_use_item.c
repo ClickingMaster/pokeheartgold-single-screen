@@ -232,7 +232,7 @@ static void ItemMenuUseFunc_HealingItem(struct ItemMenuUseData *data, const stru
     usedat->bag = Save_Bag_Get(fieldSystem->saveData);
     usedat->mailbox = Save_Mailbox_Get(fieldSystem->saveData);
     usedat->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    usedat->unk_10 = sub_020270C4(fieldSystem->saveData);
+    usedat->unk_10 = Save_Block23_Get(fieldSystem->saveData);
     usedat->fieldMoveCheckData = &env->fieldMoveCheckData;
     usedat->panelLayout = 0;
     usedat->context = PARTY_MENU_CONTEXT_USE_ITEM;
@@ -474,7 +474,7 @@ static enum ItemUseError ItemCheckUseFunc_FishingRod(const struct ItemCheckUseDa
         return ITEMUSEERROR_NOTNOW;
     }
     if (MetatileBehavior_IsSurfableWater(data->facingTile) == TRUE) {
-        if (sub_0205BA30(data->standingTile) == TRUE || sub_0205BA24(data->standingTile) == TRUE) {
+        if (MetatileBehavior_IsBridge(data->standingTile) == TRUE || MetatileBehavior_IsBridgeStart(data->standingTile) == TRUE) {
             if (MapObject_CheckFlag28(PlayerAvatar_GetMapObject(data->playerAvatar)) == TRUE) {
                 return ITEMUSEERROR_OAKSWORDS;
             }
@@ -545,7 +545,7 @@ static void ItemMenuUseFunc_EvoStone(struct ItemMenuUseData *data, const struct 
     usedat->bag = Save_Bag_Get(fieldSystem->saveData);
     usedat->mailbox = Save_Mailbox_Get(fieldSystem->saveData);
     usedat->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    usedat->unk_10 = sub_020270C4(fieldSystem->saveData);
+    usedat->unk_10 = Save_Block23_Get(fieldSystem->saveData);
     usedat->fieldMoveCheckData = &env->fieldMoveCheckData;
     usedat->panelLayout = 0;
     usedat->context = PARTY_MENU_CONTEXT_EVO_STONE;

@@ -102,7 +102,7 @@ static void BattleRegulationMenu_RemoveMsgBox(BattleRegulationMenu *menu, BOOL c
 }
 
 static void BattleRegulationMenu_GetRegulationName(BattleRegulationMenu *menu, int index) {
-    sub_0202921C(menu->fieldSystem->saveData, index, menu->strings[REGULATION_MENU_STRING_REGULATION_NAME], HEAP_ID_FIELD1);
+    LinkBattleRuleset_GetRegulationName(menu->fieldSystem->saveData, index, menu->strings[REGULATION_MENU_STRING_REGULATION_NAME], HEAP_ID_FIELD1);
     BufferString(menu->messageFormat, 0, menu->strings[REGULATION_MENU_STRING_REGULATION_NAME], 0, 1, LANGUAGE_ENGLISH);
 }
 
@@ -176,7 +176,7 @@ static int BattleRegulationMenu_ProcessListMenuInputRegulations(BattleRegulation
         return -1;
     default:
         PlaySE(SEQ_SE_DP_SELECT);
-        menu->fieldSystem->linkBattleRuleset = sub_020291E8(menu->fieldSystem->saveData, input);
+        menu->fieldSystem->linkBattleRuleset = LinkBattleRuleset_GetRegulation(menu->fieldSystem->saveData, input);
         return 1;
     }
 }
@@ -527,16 +527,16 @@ void StartTask_BattleRegulationMenu(TaskManager *taskManager, u16 *result) {
 
 void BattleRegulation_BufferName(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset) {
     String *string = String_New(180, HEAP_ID_FIELD1);
-    sub_0202921C(fieldSystem->saveData, ruleset, string, HEAP_ID_FIELD1);
+    LinkBattleRuleset_GetRegulationName(fieldSystem->saveData, ruleset, string, HEAP_ID_FIELD1);
     BufferString(messageFormat, 0, string, 0, 1, 2);
     String_Delete(string);
 }
 
-void BattleRegulation_SetActiveRuleset(FieldSystem *fieldSystem, u16 arg1) {
-    if (arg1 == 12 || arg1 == 6) {
+void BattleRegulation_SetActiveRuleset(FieldSystem *fieldSystem, u16 rulesetIndex) {
+    if (rulesetIndex == 12 || rulesetIndex == 6) {
         fieldSystem->linkBattleRuleset = NULL;
     } else {
-        fieldSystem->linkBattleRuleset = sub_020291E8(fieldSystem->saveData, arg1);
+        fieldSystem->linkBattleRuleset = LinkBattleRuleset_GetRegulation(fieldSystem->saveData, rulesetIndex);
     }
 }
 
@@ -671,7 +671,7 @@ u16 BattleRegulation_CheckParty(FieldSystem *fieldSystem, MessageFormat *message
     }
 }
 
-u32 ov03_02256B40(int arg0) {
+u32 BattleRegulation_GetLinkModeOffset(int arg0) {
     u32 unkValue = arg0;
     switch (unkValue) {
     case 6:

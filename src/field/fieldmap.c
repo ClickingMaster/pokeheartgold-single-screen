@@ -328,7 +328,7 @@ BOOL FieldMap_Exit(OverlayManager *man, int *state) {
             WeatherManager_Delete(fieldSystem->mapSystems->weatherManager);
             PoisonEffect_Delete(fieldSystem->mapSystems->poisonEffect);
             HBlankSystem_Delete(fieldSystem->mapSystems->hBlankSystem);
-            sub_020556A8(fieldSystem->mapSystems->unk18);
+            UnusedFieldModel_Delete(fieldSystem->mapSystems->unk18);
             Fog_Free(&fieldSystem->fog);
             ModelAttributes_Free(&fieldSystem->modelAttributes);
             Thunk_OamManager_Free();
@@ -710,7 +710,7 @@ static void FieldMap_InitFieldEffectsAndObjects(FieldSystem *fieldSystem) {
 
     FieldEffectManager_InitGfx(fieldSystem->fieldEffectManager, HEAP_ID_FIELD1, 32, 32, 32, 32, 0x500 * (32 / 2), 0x80 * (32 / 2), 0x800 * 32);
 
-    fieldSystem->mapSystems->unk18 = sub_02055680(fieldSystem, HEAP_ID_FIELD1);
+    fieldSystem->mapSystems->unk18 = UnusedFieldModel_New(fieldSystem, HEAP_ID_FIELD1);
     if (fieldSystem->mapLoadType == MAP_LOAD_TYPE_UNION) {
         MapObjectManager_SetEndMovement(fieldSystem->mapObjectManager, FALSE);
     }
@@ -728,7 +728,7 @@ static void FieldMap_InitFieldEffectsAndObjects(FieldSystem *fieldSystem) {
     PlayerAvatar_InitMapFeatures(fieldSystem->playerAvatar);
 
     if (fieldSystem->unkAC != 0) {
-        sub_0205E580(fieldSystem->mapObjectManager);
+        MapObjectManager_ResumePlayerDraw(fieldSystem->mapObjectManager);
     } else {
         MapObjectManager_ResumeAllDraw(fieldSystem->mapObjectManager);
         FollowMon_RecreateForMap(fieldSystem);

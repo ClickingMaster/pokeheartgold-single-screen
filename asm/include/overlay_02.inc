@@ -239,7 +239,7 @@
 .public MetatileBehavior_IsVeryTallGrass
 .public MetatileBehavior_IsSurfableWater
 .public MetatileBehavior_CanGenerateWalkingEncounters
-.public sub_0205BAD0
+.public MetatileBehavior_CanPlaceSafariObjectOnLand
 .public MetatileBehavior_IsSurfableWater_thunk
 .public sub_0205BB04
 .public PlayerAvatar_GetFacingDirection
@@ -342,7 +342,7 @@
 .public AllocAndReadPhoneBook
 .public FreePhoneBook
 .public GetPhoneMessageGmm
-.public sub_02095FF8
+.public Phone_IsBuenasPasswordHour
 .public GetSafariObjectConfig
 .public SafariZoneAreaSet_LoadAreaEncounters
 .public IsSwarmEncounterFromRand

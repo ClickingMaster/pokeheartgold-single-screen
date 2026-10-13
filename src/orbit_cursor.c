@@ -136,7 +136,7 @@ void OrbitCursor_Task(SysTask *task, void *data) {
 
 #pragma force_active reset
 
-void OrbitCursor_ReloadPalette(OrbitCursor *p, int a1) {
+void OrbitCursor_ReloadPalette(OrbitCursor *p, int palette) {
     SpriteSystem *ss = p->spriteSys;
     NARC *narc;
     SpriteManager *sm = p->spriteMan;
@@ -145,11 +145,11 @@ void OrbitCursor_ReloadPalette(OrbitCursor *p, int a1) {
 
     SpriteManager_UnloadPlttObjById(sm, 0x56CF);
     SpriteManager_UnloadPlttObjById(sm, 0x56D0);
-    SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_MAIN_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[a1], FALSE, 1, 1, 0x56CF);
-    SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_SUB_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[a1], FALSE, 1, 2, 0x56D0);
+    SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_MAIN_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[palette], FALSE, 1, 1, 0x56CF);
+    SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_SUB_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[palette], FALSE, 1, 2, 0x56D0);
 }
 
-void OrbitCursor_LoadResources(OrbitCursor *p, int a1) {
+void OrbitCursor_LoadResources(OrbitCursor *p, int palette) {
     int resBase = p->resBase;
     NARC *narc;
     SpriteSystem *ss = p->spriteSys;
@@ -160,14 +160,14 @@ void OrbitCursor_LoadResources(OrbitCursor *p, int a1) {
 
     if (resBase == 1) {
         if (p->unk_1C == 0) {
-            SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_MAIN_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[a1], FALSE, 1, 1, resId);
+            SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_MAIN_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[palette], FALSE, 1, 1, resId);
         } else {
             SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_MAIN_OBJ, ss, sm, narc, 0x60, FALSE, 1, 1, resId);
         }
         SpriteSystem_LoadCharResObjFromOpenNarc(ss, sm, narc, 0x5F, FALSE, 1, resId);
     } else {
         if (p->unk_1C == 0) {
-            SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_SUB_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[a1], FALSE, 1, 2, resId);
+            SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_SUB_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[palette], FALSE, 1, 2, resId);
         } else {
             SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_SUB_OBJ, ss, sm, narc, 0x60, FALSE, 1, 2, resId);
         }
@@ -216,16 +216,16 @@ void OrbitCursor_DeleteSprites(OrbitCursor *p) {
     }
 }
 
-BOOL OrbitCursor_Start(OrbitCursor *p, int a1) {
+BOOL OrbitCursor_Start(OrbitCursor *p, int palette) {
     p->narc = NARC_New((NarcId)0xBF, p->heapId);
-    OrbitCursor_LoadResources(p, a1);
+    OrbitCursor_LoadResources(p, palette);
     OrbitCursor_CreateSprites(p);
     p->task = SysTask_CreateOnVBlankQueue(OrbitCursor_Task, p, 0x1000);
     return TRUE;
 }
 
-BOOL OrbitCursor_SetActive(OrbitCursor *p, int a1) {
-    p->active = a1;
+BOOL OrbitCursor_SetActive(OrbitCursor *p, int active) {
+    p->active = active;
     return TRUE;
 }
 
@@ -302,24 +302,24 @@ BOOL OrbitCursor_SetVisible(OrbitCursor *p, int flag) {
     return TRUE;
 }
 
-void OrbitCursor_SetRadius(OrbitCursor *p, int a1, int a2) {
-    if (a1 != 0 && a2 != 0) {
-        p->radiusX = a1;
-        p->radiusY = a2;
+void OrbitCursor_SetRadius(OrbitCursor *p, int radiusX, int radiusY) {
+    if (radiusX != 0 && radiusY != 0) {
+        p->radiusX = radiusX;
+        p->radiusY = radiusY;
     } else {
         p->radiusX = 15;
         p->radiusY = 15;
     }
 }
 
-void sub_02087A30(OrbitCursor *p) {
+void OrbitCursor_SetAltAnim(OrbitCursor *p) {
     int i;
     for (i = 0; i < p->count; i++) {
         ManagedSprite_SetAnim(p->sprites[i].sprite, 1);
     }
 }
 
-void sub_02087A54(OrbitCursor *p) {
+void OrbitCursor_SetDefaultAnim(OrbitCursor *p) {
     int i;
     for (i = 0; i < p->count; i++) {
         ManagedSprite_SetAnim(p->sprites[i].sprite, 0);

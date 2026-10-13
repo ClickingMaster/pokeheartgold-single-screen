@@ -306,7 +306,7 @@ enum VisitorProfilesMode {
 
 // The Wi-Fi Plaza lobby (OVY_45) has no public header.
 extern u32 WiFiPlazaWork_IsClosing(void *lobby);
-extern void ov45_0222A4A8(void *lobby);
+extern void WiFiPlazaWork_SetAppQuitForClosing(void *lobby);
 extern void WiFiPlazaWork_SetLowVolume(void *lobby, u32 value);
 extern u32 WiFiPlazaPlaces_GetCountry(void *visitors, u8 index);
 extern u32 WiFiPlazaPlaces_GetRegion(void *visitors, u8 index);
@@ -417,7 +417,7 @@ BOOL VisitorProfilesPanel_GetHistory(VisitorProfilesPanel *panel, VisitorProfile
 void VisitorProfilesPanel_AnimateBgs(VisitorProfilesPanel *panel, VisitorProfilesGraphics *gfx);
 void VisitorProfilesPanel_StartReveal(VisitorProfilesPanel *panel, VisitorProfilesMsg *msg);
 BOOL VisitorProfilesPanel_RevealSlow(VisitorProfilesPanel *panel, VisitorProfilesGraphics *gfx);
-void ov48_0225A428(VisitorProfilesPanel *panel, VisitorProfilesMsg *msg, VisitorProfilesGraphics *gfx);
+void VisitorProfilesPanel_HalveRevealTicks(VisitorProfilesPanel *panel, VisitorProfilesMsg *msg, VisitorProfilesGraphics *gfx);
 BOOL VisitorProfilesPanel_RevealFast(VisitorProfilesPanel *panel, VisitorProfilesGraphics *gfx);
 BOOL VisitorProfilesPanel_Reveal(VisitorProfilesPanel *panel, VisitorProfilesGraphics *gfx, int ticksPerRow);
 void VisitorProfilesPanel_ActivateRow(VisitorProfilesPanel *panel, s32 row);
@@ -518,7 +518,7 @@ BOOL VisitorProfiles_Main(OverlayManager *man, int *state) {
         done = VisitorProfiles_Update(work);
         VisitorProfiles_UpdatePanel(work);
         if (WiFiPlazaWork_IsClosing(args->lobby) == 1) {
-            ov45_0222A4A8(args->lobby);
+            WiFiPlazaWork_SetAppQuitForClosing(args->lobby);
             done = 1;
         }
         if (WiFiPlaza_HasConnectionFailed() == 1) {
@@ -1710,7 +1710,7 @@ void VisitorProfilesPanel_Update(VisitorProfilesPanel *panel, VisitorProfilesMsg
         }
         break;
     case 3:
-        ov48_0225A428(panel, msg, gfx);
+        VisitorProfilesPanel_HalveRevealTicks(panel, msg, gfx);
         VisitorProfilesPanel_RevealFast(panel, gfx);
         panel->state = 4;
         break;
@@ -1868,7 +1868,7 @@ BOOL VisitorProfilesPanel_RevealSlow(VisitorProfilesPanel *panel, VisitorProfile
 
 #pragma force_active on
 
-void ov48_0225A428(VisitorProfilesPanel *panel, VisitorProfilesMsg *msg, VisitorProfilesGraphics *gfx) {
+void VisitorProfilesPanel_HalveRevealTicks(VisitorProfilesPanel *panel, VisitorProfilesMsg *msg, VisitorProfilesGraphics *gfx) {
     panel->ticks = (u32)panel->ticks >> 1;
 }
 

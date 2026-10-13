@@ -41,13 +41,13 @@ void EasyChat_FreeArgs(EasyChatArgs *args) {
     Heap_Free(args);
 }
 
-void EasyChatArgs_SetWord(EasyChatArgs *args, u16 a1) {
-    args->words[0] = a1;
+void EasyChatArgs_SetWord(EasyChatArgs *args, u16 word) {
+    args->words[0] = word;
 }
 
-void EasyChatArgs_SetWords(EasyChatArgs *args, u16 a1, u16 a2) {
-    args->words[0] = a1;
-    args->words[1] = a2;
+void EasyChatArgs_SetWords(EasyChatArgs *args, u16 word1, u16 word2) {
+    args->words[0] = word1;
+    args->words[1] = word2;
 }
 
 void EasyChatArgs_SetMailMessage(EasyChatArgs *args, MailMessage *mailMessage) {
@@ -59,7 +59,7 @@ void EasyChatArgs_SetCancelled(EasyChatArgs *args) {
     args->changed = 0;
 }
 
-void sub_02090D40(EasyChatArgs *args) {
+void EasyChatArgs_SetAlwaysConfirm(EasyChatArgs *args) {
     args->unk5 = 1;
 }
 
@@ -88,7 +88,7 @@ u8 EasyChatArgs_GetType(EasyChatArgs *args) {
     return args->type;
 }
 
-u8 sub_02090D74(EasyChatArgs *args) {
+u8 EasyChatArgs_GetPromptMsgNo(EasyChatArgs *args) {
     return args->unk1;
 }
 
@@ -108,7 +108,7 @@ u8 EasyChatArgs_GetGameCleared(EasyChatArgs *args) {
     return args->gameCleared;
 }
 
-u8 sub_02090D88(EasyChatArgs *args) {
+u8 EasyChatArgs_GetAlwaysConfirm(EasyChatArgs *args) {
     return args->unk5;
 }
 
@@ -159,8 +159,8 @@ int EasyChatArgs_GetMenuInputState(EasyChatArgs *args) {
     return MenuInputStateMgr_GetState(args->menuInputPtr);
 }
 
-void EasyChatArgs_SetMenuInputState(EasyChatArgs *args, MenuInputState a1) {
-    MenuInputStateMgr_SetState(args->menuInputPtr, a1);
+void EasyChatArgs_SetMenuInputState(EasyChatArgs *args, MenuInputState state) {
+    MenuInputStateMgr_SetState(args->menuInputPtr, state);
 }
 
 UseMailArgs *UseMailArgs_NewCompose(SaveData *saveData, u16 a1, u8 partyIdx, u8 mailType, enum HeapID heapID) {

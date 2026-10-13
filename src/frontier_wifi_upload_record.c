@@ -1,4 +1,4 @@
-#include "unk_02069528.h"
+#include "frontier_wifi_upload_record.h"
 
 #include "global.h"
 
@@ -8,7 +8,7 @@
 #include "frontier_data_access.h"
 #include "union_room_avatar.h"
 
-void sub_02069528(SaveData *saveData, s32 a1, FrontierWifiUploadRecord *record) {
+void Frontier_FillWifiUploadRecord(SaveData *saveData, s32 a1, FrontierWifiUploadRecord *record) {
     PlayerProfile *playerProfile = Save_PlayerData_GetProfile(saveData);
     SaveWiFiHistory *saveWiFiHistory = Save_WiFiHistory_Get(saveData);
     FrontierData *frontierData = Save_FrontierData_Get(saveData);

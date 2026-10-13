@@ -19,19 +19,19 @@ static void FreeMsgDataRawData(void *data) {
     Heap_Free(data);
 }
 
-inline static void Decrypt1(MAT_ENTRY *arg0, u32 arg1, u32 seed) {
-    seed = seed * 765 * (arg1 + 1) & 0xffff;
+inline static void Decrypt1(MAT_ENTRY *entry, u32 num, u32 seed) {
+    seed = seed * 765 * (num + 1) & 0xffff;
     seed |= seed << 16;
-    arg0->offset ^= seed;
-    arg0->length ^= seed;
+    entry->offset ^= seed;
+    entry->length ^= seed;
 }
 
-inline static void Decrypt2(u16 *arg0, u32 count, u32 arg2) {
-    u16 seed = (u16)((arg2 + 1) * 596947);
+inline static void Decrypt2(u16 *data, u32 count, u32 num) {
+    u16 seed = (u16)((num + 1) * 596947);
 
     while (count-- > 0) {
-        *arg0 ^= seed;
-        arg0++;
+        *data ^= seed;
+        data++;
         seed += 18749;
     }
 }

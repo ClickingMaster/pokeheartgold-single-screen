@@ -40,21 +40,21 @@ typedef struct OrbitCursor {
 } OrbitCursor; // size 0x108
 
 OrbitCursor *OrbitCursor_New(int a0, enum HeapID a1, int a2, int a3, fx32 a4, SpriteSystem *a5, SpriteManager *a6, PaletteData *a7);
-void OrbitCursor_ReloadPalette(OrbitCursor *p, int a1);
-void OrbitCursor_LoadResources(OrbitCursor *p, int a1);
+void OrbitCursor_ReloadPalette(OrbitCursor *p, int palette);
+void OrbitCursor_LoadResources(OrbitCursor *p, int palette);
 void OrbitCursor_CreateSprites(OrbitCursor *p);
 void OrbitCursor_DeleteSprites(OrbitCursor *p);
-BOOL OrbitCursor_Start(OrbitCursor *p, int a1);
-BOOL OrbitCursor_SetActive(OrbitCursor *p, int a1);
+BOOL OrbitCursor_Start(OrbitCursor *p, int palette);
+BOOL OrbitCursor_SetActive(OrbitCursor *p, int active);
 BOOL OrbitCursor_SetTarget(OrbitCursor *p, int x, int y);
 BOOL OrbitCursor_MoveTarget(OrbitCursor *p, int x, int y);
 BOOL OrbitCursor_IsNewTarget(OrbitCursor *p, int x, int y);
 BOOL OrbitCursor_SetPosition(OrbitCursor *p, s16 x, s16 y);
 BOOL OrbitCursor_Delete(OrbitCursor *p);
 BOOL OrbitCursor_SetVisible(OrbitCursor *p, int flag);
-void OrbitCursor_SetRadius(OrbitCursor *p, int a1, int a2);
-void sub_02087A30(OrbitCursor *p);
-void sub_02087A54(OrbitCursor *p);
+void OrbitCursor_SetRadius(OrbitCursor *p, int radiusX, int radiusY);
+void OrbitCursor_SetAltAnim(OrbitCursor *p);
+void OrbitCursor_SetDefaultAnim(OrbitCursor *p);
 extern void OrbitCursor_Task(SysTask *task, void *data);
 
 extern const int gOrbitCursorPaletteMembers[];

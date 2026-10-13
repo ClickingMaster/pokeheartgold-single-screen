@@ -213,7 +213,7 @@ void PlayerProfile_SetVersion(PlayerProfile *profile, u8 version) {
 }
 
 // may have had something to do with the version?
-u32 sub_02029084(void) {
+u32 PlayerData_GetDummyGameVersion(void) {
     return 0;
 }
 

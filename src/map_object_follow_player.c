@@ -68,21 +68,21 @@ const FollowPlayerStateFunc gFollowPlayerStates[4] = {
     FollowPlayerState_Start,
     FollowPlayerState_Moving,
     FollowPlayerState_Hop,
-    sub_02065C90,
+    FollowPlayerState_Wait,
 };
 
 const FollowPlayerStateFunc gMirrorPlayerStates[4] = {
     FollowPlayerState_MirrorStart,
     FollowPlayerState_Moving,
     FollowPlayerState_Hop,
-    sub_02065C90,
+    FollowPlayerState_Wait,
 };
 
 const FollowPlayerStateFunc gFollowMonFollowPlayerStates[4] = {
     FollowPlayerState_FollowMonStart,
     FollowPlayerState_Moving,
     FollowPlayerState_Hop,
-    sub_02065C90,
+    FollowPlayerState_Wait,
 };
 
 const MovementList gRunMovements = { MOVEMENT_RUN_UP, MOVEMENT_RUN_DOWN, MOVEMENT_RUN_LEFT, MOVEMENT_RUN_RIGHT };
@@ -224,7 +224,7 @@ BOOL FollowPlayerState_Hop(LocalMapObject *object, FollowPlayerMovementState *st
     return FALSE;
 }
 
-BOOL sub_02065C90(LocalMapObject *object, FollowPlayerMovementState *state) {
+BOOL FollowPlayerState_Wait(LocalMapObject *object, FollowPlayerMovementState *state) {
     PlayerAvatar *avatar = FieldSystem_GetPlayerAvatar(MapObject_GetFieldSystem(object));
     LocalMapObject *player = PlayerAvatar_GetMapObject(avatar);
     if (MapObject_TestFlagsBits(player, MAPOBJECTFLAG_UNK4) == TRUE && MapObject_TestFlagsBits(player, MAPOBJECTFLAG_UNK5) == TRUE) {

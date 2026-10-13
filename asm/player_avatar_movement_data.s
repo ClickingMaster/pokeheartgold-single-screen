@@ -14,7 +14,7 @@
 
 	.text
 	.public PlayerAvatar_MoveControl
-	.public sub_0205CBE4
+	.public PlayerAvatar_CheckReadyToMove
 	.public PlayerAvatar_IsReadyToMove
 	.rodata
 

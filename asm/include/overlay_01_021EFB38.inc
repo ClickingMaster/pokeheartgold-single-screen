@@ -144,8 +144,8 @@
 .public EncounterEffectHBlankWave_AlternateDirection
 .public HBlankSystem_StartTask
 .public HBlankTask_Delete
-.public ov114_0225F020
-.public ov114_0225F280
+.public EncounterEffect_FrontierOrLinkSingle
+.public EncounterEffect_Double
 .public EncounterEffect_LeaderFalkner
 .public EncounterEffect_LeaderBugsy
 .public EncounterEffect_LeaderWhitney
@@ -168,9 +168,9 @@
 .public EncounterEffect_EliteFourBruno
 .public EncounterEffect_EliteFourKaren
 .public EncounterEffect_Champion
-.public ov116_0225F054
-.public ov116_0225F364
-.public ov116_0225F374
+.public EncounterEffect_Legendary
+.public EncounterEffect_HoOh
+.public EncounterEffect_Lugia
 .public EncounterEffect_TeamRocket
 .public EncounterEffect_ExecutivePetrel
 .public EncounterEffect_ExecutiveProton

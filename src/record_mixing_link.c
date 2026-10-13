@@ -8,7 +8,7 @@ void RecordMixingLink_RecvRecords(int sender, int unused, void *data, RecordMixi
     room->count++;
 }
 
-void sub_0208FB88(int sender, int unused, u8 *data, RecordMixingLinkWork *room) {
+void RecordMixingLink_RecvLeaderMenuState(int sender, int unused, u8 *data, RecordMixingLinkWork *room) {
     if (sender == 0) {
         room->remote = *data;
     }
@@ -40,7 +40,7 @@ void RecordMixingLink_HandleJoinRequest(int sender, int unused, void *data, Reco
         packet.count = room->participantCount;
         switch (src->command) {
         case 0:
-            if (room->participantCount != Comm_CountConnected() || room->participantCount != ov73_021E7488() || room->participantCount != MATH_CountPopulation(Wireless_GetConnectedBitmap())) {
+            if (room->participantCount != Comm_CountConnected() || room->participantCount != RecordMixing_GetMemberCount() || room->participantCount != MATH_CountPopulation(Wireless_GetConnectedBitmap())) {
                 packet.accepted = 0;
             } else {
                 room->participantMask |= 1 << sender;
@@ -81,10 +81,10 @@ void RecordMixingLink_RecvMemberJoined(int sender, int unused, u8 *data, RecordM
     }
 }
 
-void sub_0208FCFC(int sender, int unused, void *data, RecordMixingLinkWork *room) {
+void RecordMixingLink_RecvUnused108(int sender, int unused, void *data, RecordMixingLinkWork *room) {
 }
 
-void sub_0208FD00(int sender, int unused, void *data, RecordMixingLinkWork *room) {
+void RecordMixingLink_RecvUnused109(int sender, int unused, void *data, RecordMixingLinkWork *room) {
 }
 
 void RecordMixingLink_RecvCloseYesNo(int sender, int unused, void *data, RecordMixingLinkWork *room) {
