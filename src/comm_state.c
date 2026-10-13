@@ -1359,20 +1359,20 @@ BOOL CommState_HasPlazaLobbyFailed(void) {
 void CommState_StartPlazaMatch(s32 arg0) {
     GF_ASSERT(gCommState);
     GF_ASSERT(CommState_IsWifiInLobby() == 1);
-    if (!ov45_0222F274(arg0)) {
-        ov45_0222F028(arg0, 4);
+    if (!WiFiPlazaLobbyClient_IsMatchActive(arg0)) {
+        WiFiPlazaLobbyClient_HostMatch(arg0, 4);
         CommState_SetState(CommState_PlazaMatching, 0);
     } else {
-        ov45_0222F350(arg0);
+        WiFiPlazaLobbyClient_JoinMatch(arg0);
         CommState_SetState(CommState_PlazaMatching, 0);
     }
 }
 
 void CommState_EndPlazaMatch(void) {
-    if (ov45_0222F464() == 1) {
+    if (WiFiPlazaLobbyClient_IsMatchHost() == 1) {
         ov45_0222F154();
     }
-    ov45_0222F70C();
+    WiFiPlazaLobbyClient_EndMatch();
     CommState_SetState(CommState_PlazaEndMatch, 0);
 }
 
@@ -1564,7 +1564,7 @@ void CommState_PlazaWaitLobby(void) {
         return;
     }
     Comm_SetWifiConnected(1);
-    if (CommState_PlazaUpdate() && ov45_0222E8F4()) {
+    if (CommState_PlazaUpdate() && WiFiPlazaLobbyClient_IsInLobby()) {
         CommState_SetState(CommState_PlazaLobby, 0);
     }
 }
@@ -1647,7 +1647,7 @@ void CommState_PlazaLogout(void) {
 void CommState_PlazaWaitLogout(void) {
     WifiConnection_Update(0);
     CommState_PlazaUpdateLobby();
-    if (ov45_0222E944()) {
+    if (WiFiPlazaLobbyClient_IsDisconnected()) {
         Sys_ClearSoftResetDisableFlag(1);
         CommPlayerInfo_Free();
         CommState_SetState(CommState_ShutdownWaitStopped, 5);
@@ -1661,7 +1661,7 @@ void CommState_PlazaLobbyFailed(void) {
 void CommState_PlazaMatchConnected(void) {
     CommState_PlazaUpdate();
     if (ov45_0222F254() == 1) {
-        ov45_0222F70C();
+        WiFiPlazaLobbyClient_EndMatch();
         CommState_SetState(CommState_PlazaEndMatch, 0);
     }
 }
@@ -1669,7 +1669,7 @@ void CommState_PlazaMatchConnected(void) {
 void CommState_PlazaMatching(void) {
 
     if (ov45_0222F254() == 1) {
-        ov45_0222F70C();
+        WiFiPlazaLobbyClient_EndMatch();
         CommState_SetState(CommState_PlazaEndMatch, 0);
         return;
     }
@@ -1680,7 +1680,7 @@ void CommState_PlazaMatching(void) {
             CommState_SetState(CommState_PlazaMatchConnected, 0);
             return;
         }
-        ov45_0222F70C();
+        WiFiPlazaLobbyClient_EndMatch();
         CommState_SetState(CommState_PlazaLobby, 0);
     }
 }

@@ -137,9 +137,9 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
                     }
                 }
                 if (WiFiPlazaPanelButton_Update(&panel->button, graphics, panel->narc, heapID) == TRUE) {
-                    ov45_0222ADD8(lobby, ov45_0222A53C(lobby));
+                    ov45_0222ADD8(lobby, WiFiPlazaWork_GetOwnSlot(lobby));
                     ov45_0222AE54(lobby);
-                    ov45_0222AE08(ov45_0222ADA8(lobby, ov45_0222A53C(lobby)), &started.index, &started.type);
+                    ov45_0222AE08(ov45_0222ADA8(lobby, WiFiPlazaWork_GetOwnSlot(lobby)), &started.index, &started.type);
                     panel->instrumentPlaying = TRUE;
                     panel->instrumentIndex = started.index;
                     panel->instrumentType = started.type;
@@ -188,17 +188,17 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
         case 2:
             myPlayer = WiFiPlazaWork_GetMyPlayer(lobby);
             playerIndex = panel->requestPlayer;
-            if (playerIndex == ov45_0222A53C(lobby)) {
+            if (playerIndex == WiFiPlazaWork_GetOwnSlot(lobby)) {
                 player = WiFiPlazaWork_GetMyPlayer(lobby);
                 isOwn = TRUE;
             } else {
                 player = WiFiPlazaWork_GetPlayer(lobby, playerIndex);
                 isOwn = FALSE;
             }
-            special = ov45_0222AB28(lobby, panel->requestPlayer);
+            special = WiFiPlazaWork_IsSpecialVisitor(lobby, panel->requestPlayer);
             if (panel->requestArg == TRUE) {
-                hasMessage = ov45_0222AB48(lobby, panel->requestPlayer);
-                message = (int)ov45_0222AB58(lobby, panel->requestPlayer);
+                hasMessage = WiFiPlazaWork_HasWordSet(lobby, panel->requestPlayer);
+                message = (int)WiFiPlazaWork_GetWordSet(lobby, panel->requestPlayer);
                 if (message == 0) {
                     hasMessage = FALSE;
                 }
@@ -209,7 +209,7 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
             WiFiPlazaInfoPanel_ShowPlayerCard(panel, &room->signWindow, graphics, (WiFiPlazaRoomMsg *)((u8 *)room + offset), isOwn, heapID, player, myPlayer, special, hasMessage, (u16 *)message, TRUE);
             break;
         case 3:
-            token = ov45_0222ADA8(lobby, ov45_0222A53C(lobby));
+            token = ov45_0222ADA8(lobby, WiFiPlazaWork_GetOwnSlot(lobby));
             if (token == -1) {
                 GF_ASSERT(FALSE);
                 token = 0;
@@ -726,7 +726,7 @@ void WiFiPlazaPlayerCard_LoadMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphi
     NARC *narc = NARC_New((NarcId)215, heapID);
     int gender;
     const VecFx32 *pos;
-    int version = ov45_0222A99C(myPlayer);
+    int version = WiFiPlazaPlayer_GetLobbyId(myPlayer);
     const WiFiPlazaCardMonResources *res;
     const u16 *cell, *anim;
     void *use;
@@ -773,8 +773,8 @@ next:
     }
     pos = sWiFiPlazaCardMonPositions;
     for (i = 0; i < 12; i++) {
-        int species = ov45_0222A92C(player, i);
-        int form = ov45_0222A964(player, i);
+        int species = WiFiPlazaPlayer_GetHistoryId(player, i);
+        int form = WiFiPlazaPlayer_GetHistoryValue(player, i);
         if (species == 24) {
             card->monChars[0] = NULL;
             card->monSprites[0] = NULL;

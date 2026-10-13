@@ -60,7 +60,7 @@ BOOL WiFiPlazaSurvey_Main(OverlayManager *man, int *state) {
     switch (*state) {
     case 0:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_129);
-        ov45_0222A520(args->lobby, 1);
+        WiFiPlazaWork_SetLowVolume(args->lobby, 1);
         (*state)++;
         break;
     case 1:
@@ -70,12 +70,12 @@ BOOL WiFiPlazaSurvey_Main(OverlayManager *man, int *state) {
         break;
     case 2:
         if (IsPaletteFadeFinished() == TRUE) {
-            if (ov45_0222A330(args->lobby) == TRUE) {
+            if (WiFiPlazaWork_IsClosing(args->lobby) == TRUE) {
                 ov45_0222A4A8(args->lobby);
                 (*state)++;
                 break;
             }
-            if (ov45_0222D844() == TRUE) {
+            if (WiFiPlaza_HasConnectionFailed() == TRUE) {
                 (*state)++;
                 break;
             }

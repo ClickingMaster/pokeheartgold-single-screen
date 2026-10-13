@@ -77,7 +77,7 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
     case 14:
     case 26:
     case 27:
-        if ((u32)entry->members > ov45_0222F314(param->slot)) {
+        if ((u32)entry->members > WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot)) {
             param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
             WiFiPlazaPlayerState_SetStep(savedState, 23);
         } else if ((s32)entry->members > Comm_CountConnected()) {
@@ -88,7 +88,7 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
             WiFiPlazaPlayerState_SetStep(savedState, 23);
         } else {
         case 8:
-            if (ov45_0222F464() == 1 && ov45_0222F314(param->slot) <= 1) {
+            if (WiFiPlazaLobbyClient_IsMatchHost() == 1 && WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot) <= 1) {
                 param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
                 WiFiPlazaPlayerState_SetStep(savedState, 23);
             } else {
@@ -184,11 +184,11 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
         if (ov45_0222A394(lobby) != 0) {
             param->result = WIFI_PLAZA_GAME_ENTRY_PLAZA_CLOSING;
             WiFiPlazaPlayerState_SetStep(savedState, 28);
-        } else if (ov45_0222F274(param->slot) == TRUE) {
-            if (ov45_0222F2D4(param->slot) == 0 || ov45_0222F294(param->slot) == FALSE) {
+        } else if (WiFiPlazaLobbyClient_IsMatchActive(param->slot) == TRUE) {
+            if (WiFiPlazaLobbyClient_GetMatchFreePlaces(param->slot) == 0 || WiFiPlazaLobbyClient_IsMatchOpen(param->slot) == FALSE) {
                 param->result = WIFI_PLAZA_GAME_ENTRY_SESSION_FULL;
                 WiFiPlazaPlayerState_SetStep(savedState, 28);
-            } else if ((s16)ov45_0222F3E8(param->slot) == 0) {
+            } else if ((s16)WiFiPlazaLobbyClient_GetMatchTimer(param->slot) == 0) {
                 param->result = WIFI_PLAZA_GAME_ENTRY_NOT_READY;
                 WiFiPlazaPlayerState_SetStep(savedState, 28);
             } else {
@@ -196,7 +196,7 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
             }
         } else {
 join:
-            entry->timeLeft = ov45_0222F3E8(param->slot);
+            entry->timeLeft = WiFiPlazaLobbyClient_GetMatchTimer(param->slot);
             entry->timeout = 30 * 30;
             if (entry->timeLeft > 330) {
                 message = WiFiPlazaRoom_GetMsgString(room, 0, 10);
@@ -207,8 +207,8 @@ join:
             WiFiPlazaRoom_PrintMessageInstant(room, message);
             WiFiPlazaRoom_ShowWaitingIcon(room);
             CommState_StartPlazaMatch(param->slot);
-            if (ov45_0222F464() == 1) {
-                ov45_0222AC14(lobby, param->game, 1, savedPlayerIndex, 0, 0, 0, 0);
+            if (WiFiPlazaLobbyClient_IsMatchHost() == 1) {
+                WiFiPlaza_SendActivityNews(lobby, param->game, 1, savedPlayerIndex, 0, 0, 0, 0);
                 entry->reportedMembers = 1;
             }
             WiFiPlazaGameStatus_Open(&entry->status, room, param->game, TRUE, entry->timeLeft);
@@ -218,8 +218,8 @@ join:
         break;
     case 7: // waiting for members
         connection = CommState_GetPlazaMatchStatus();
-        members = ov45_0222F314(param->slot);
-        entry->timeLeft = ov45_0222F3E8(param->slot);
+        members = WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot);
+        entry->timeLeft = WiFiPlazaLobbyClient_GetMatchTimer(param->slot);
         WiFiPlazaGameStatus_SetFrames(&entry->status, entry->timeLeft);
         if (entry->timeLeft <= 330 && entry->startingSoon == FALSE) {
             WiFiPlazaRoom_HideWaitingIcon(room);
@@ -247,7 +247,7 @@ join:
             WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
         } else if (entry->startingSoon == FALSE && (gSystem.newKeys & PAD_BUTTON_B)) {
             PlaySE(SEQ_SE_DP_SELECT);
-            if (ov45_0222F464() == 0) {
+            if (WiFiPlazaLobbyClient_IsMatchHost() == 0) {
                 param->result = WIFI_PLAZA_GAME_ENTRY_DROPPED_OUT;
                 WiFiPlazaRoom_HideWaitingIcon(room);
                 WiFiPlazaPlayerState_SetStep(savedState, 23);
@@ -256,14 +256,14 @@ join:
                 WiFiPlazaRoom_HideWaitingIcon(room);
                 WiFiPlazaPlayerState_SetStep(savedState, 16);
             }
-        } else if (ov45_0222F464() == 1) {
+        } else if (WiFiPlazaLobbyClient_IsMatchHost() == 1) {
             if (entry->reportedMembers != members) {
                 entry->reportedMembers = members;
                 if (members != 4) {
-                    ov45_0222AC14(lobby, param->game, members, savedPlayerIndex, 0, 0, 0, 0);
+                    WiFiPlaza_SendActivityNews(lobby, param->game, members, savedPlayerIndex, 0, 0, 0, 0);
                 }
             }
-            if (entry->timeLeft == 0 && ov45_0222F314(param->slot) <= 1) {
+            if (entry->timeLeft == 0 && WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot) <= 1) {
                 param->result = WIFI_PLAZA_GAME_ENTRY_NO_MEMBERS;
                 WiFiPlazaPlayerState_SetStep(savedState, 23);
             } else {
@@ -271,7 +271,7 @@ join:
             }
         } else {
 checkSession:
-            if (ov45_0222F274(param->slot) == TRUE && ov45_0222F294(param->slot) == FALSE) {
+            if (WiFiPlazaLobbyClient_IsMatchActive(param->slot) == TRUE && WiFiPlazaLobbyClient_IsMatchOpen(param->slot) == FALSE) {
                 param->result = WIFI_PLAZA_GAME_ENTRY_IN_PLAY;
                 WiFiPlazaPlayerState_SetStep(savedState, 23);
             } else if (entry->timeLeft == 0) {
@@ -286,7 +286,7 @@ checkSession:
         WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
         WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
         linkState = CommState_GetPlazaMatchStatus();
-        members2 = ov45_0222F314(param->slot);
+        members2 = WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot);
         linkError2 = CommState_GetWifiMatchStatus();
         switch (linkError2) {
         case 3:
@@ -302,7 +302,7 @@ checkSession:
             param->result = WIFI_PLAZA_GAME_ENTRY_STARTED;
             WiFiPlazaPlayerState_SetStep(savedState, 9);
             entry->members = members2;
-        } else if (ov45_0222F274(param->slot) != TRUE || ov45_0222F294(param->slot) != FALSE) {
+        } else if (WiFiPlazaLobbyClient_IsMatchActive(param->slot) != TRUE || WiFiPlazaLobbyClient_IsMatchOpen(param->slot) != FALSE) {
 
         } else {
             param->result = WIFI_PLAZA_GAME_ENTRY_IN_PLAY;
@@ -315,7 +315,7 @@ checkSession:
         ov45_0222A5E8(WiFiPlazaRoom_GetLobby(room), param->playerStatus);
         CommState_SetPlazaLinkMode();
         CommPlayerInfo_Init(ov45_0222A2C8(WiFiPlazaRoom_GetLobby(room)), 0);
-        CommPlayerInfo_SetProfile(ov45_0222AB1C(lobby));
+        CommPlayerInfo_SetProfile(WiFiPlazaWork_GetOwnPlayerProfile(lobby));
         sub_020378E4(0);
         WiFiPlazaGameEntry_StartSync(entry, savedState, 10, 17);
         break;
@@ -337,15 +337,15 @@ checkSession:
             } while (netId != 0xFF);
         }
         accepted = CommPlayerInfo_CountAccepted();
-        if (accepted >= ov45_0222F314(param->slot)) {
-            if (ov45_0222F464() == 1 && entry->entriesClosed == FALSE) {
-                ov45_0222F1BC();
+        if (accepted >= WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot)) {
+            if (WiFiPlazaLobbyClient_IsMatchHost() == 1 && entry->entriesClosed == FALSE) {
+                WiFiPlazaLobbyClient_CloseMatch();
                 entry->entriesClosed = TRUE;
             }
-            if (ov45_0222F218() == TRUE) {
+            if (WiFiPlazaLobbyClient_IsCurrentMatchClosed() == TRUE) {
                 WiFiPlazaPlayerState_SetStep(savedState, 12);
             }
-        } else if (ov45_0222F218() == TRUE) {
+        } else if (WiFiPlazaLobbyClient_IsCurrentMatchClosed() == TRUE) {
             param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
             WiFiPlazaPlayerState_SetStep(savedState, 23);
         }
@@ -354,13 +354,13 @@ checkSession:
         WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
         WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
         LinkSync_ClearPackets();
-        ov45_0222A43C(lobby);
+        WiFiPlazaWork_ClearGameMembers(lobby);
         WiFiPlazaGameEntry_StartSync(entry, savedState, 13, 14);
         break;
     case 13: // send our lobby id
         WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
         WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
-        entry->lobbyId = ov45_0222A548(lobby);
+        entry->lobbyId = WiFiPlazaWork_GetOwnId(lobby);
         if (LinkSync_SendPacket(Comm_GetLocalNetId(), (s16 *)&entry->lobbyId) != TRUE) {
 
         } else {
@@ -376,19 +376,19 @@ checkSession:
         myNetId = Comm_GetLocalNetId();
         received = 0;
         hostFound = received;
-        hostId = ov45_0222F430();
+        hostId = WiFiPlazaLobbyClient_GetMatchHostId();
         i = received;
         if ((s32)accepted2 > 0) {
 nextMember:
             if (myNetId != i) {
                 packet = LinkSync_GetPacket(i);
                 if (packet != 0) {
-                    if (ov45_0222EC68(*(s32 *)packet) == -1) {
+                    if (WiFiPlazaLobbyClient_IdToSlot(*(s32 *)packet) == -1) {
                         failed = TRUE;
                         param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
                         WiFiPlazaPlayerState_SetStep(savedState, 23);
                     } else {
-                        ov45_0222A450(lobby, *(s32 *)packet, i);
+                        WiFiPlazaWork_SetGameMember(lobby, *(s32 *)packet, i);
                         if (*(s32 *)packet == hostId) {
                             hostFound = TRUE;
                         }
@@ -399,8 +399,8 @@ nextMember:
                     goto next;
                 }
             } else {
-                ov45_0222A480(lobby, i);
-                if (ov45_0222F464() == 1) {
+                WiFiPlazaWork_SetOwnGameMember(lobby, i);
+                if (WiFiPlazaLobbyClient_IsMatchHost() == 1) {
                     hostFound = TRUE;
                 }
                 received += 1;
@@ -422,9 +422,9 @@ next:
         break;
     case 15: // start the game
         CommState_SetErrorWatch(0, 1);
-        if (ov45_0222F464() == 1) {
-            ov45_0222A498(lobby, memberIds);
-            ov45_0222AC14(lobby, param->game, ov45_0222F314(param->slot), memberIds[0], memberIds[1], memberIds[2], memberIds[3], 1);
+        if (WiFiPlazaLobbyClient_IsMatchHost() == 1) {
+            WiFiPlazaWork_GetGameMembers(lobby, memberIds);
+            WiFiPlaza_SendActivityNews(lobby, param->game, WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot), memberIds[0], memberIds[1], memberIds[2], memberIds[3], 1);
         }
         WiFiPlazaRoom_HideWaitingIcon(room);
         WiFiPlazaGameEntry_StartSync(entry, savedState, 28, 18);
@@ -465,7 +465,7 @@ next:
         }
         break;
     case 20: // stays: back to waiting
-        entry->timeLeft = ov45_0222F3E8(param->slot);
+        entry->timeLeft = WiFiPlazaLobbyClient_GetMatchTimer(param->slot);
         WiFiPlazaGameStatus_Open(&entry->status, room, param->game, TRUE, entry->timeLeft);
         WiFiPlazaGameStatus_UpdateInPlay(&entry->status, room, TRUE);
         if (entry->timeLeft > 330) {
@@ -479,7 +479,7 @@ next:
         WiFiPlazaPlayerState_SetStep(savedState, 7);
         break;
     case 21: // the session filled up while the question was open
-        members3 = ov45_0222F314(param->slot);
+        members3 = WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot);
         param->result = WIFI_PLAZA_GAME_ENTRY_STARTED;
         if (members3 == 4) {
             msgId = 16;
@@ -651,7 +651,7 @@ void WiFiPlazaGameEntry_FreeMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *r
 BOOL WiFiPlazaGameEntry_UpdateWaiting(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, WiFiPlazaGameEntryParam *param, WiFiPlazaPlayerState *state, int playerIndex) {
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
     s32 connection = CommState_GetPlazaMatchStatus();
-    u32 members = ov45_0222F314(param->slot);
+    u32 members = WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot);
 
     if (connection == 0) {
         param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
@@ -666,12 +666,12 @@ BOOL WiFiPlazaGameEntry_UpdateWaiting(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWo
     if (entry->reportedMembers != members) {
         entry->reportedMembers = members;
         if (members != 4) {
-            ov45_0222AC14(lobby, param->game, members, playerIndex, 0, 0, 0, 0);
+            WiFiPlaza_SendActivityNews(lobby, param->game, members, playerIndex, 0, 0, 0, 0);
         }
     }
-    entry->timeLeft = ov45_0222F3E8(param->slot);
+    entry->timeLeft = WiFiPlazaLobbyClient_GetMatchTimer(param->slot);
     if (entry->timeLeft == 0) {
-        if (ov45_0222F314(param->slot) <= 1) {
+        if (WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot) <= 1) {
             param->result = WIFI_PLAZA_GAME_ENTRY_NO_MEMBERS;
             WiFiPlazaPlayerState_SetStep(state, 23);
             return TRUE;
@@ -758,20 +758,20 @@ void WiFiPlazaGameStatus_Draw(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *ro
         break;
     }
 
-    sessionActive = ov45_0222F274(slot);
+    sessionActive = WiFiPlazaLobbyClient_IsMatchActive(slot);
     if (status->sessionActive != sessionActive) {
         status->redraw |= WIFI_PLAZA_GAME_STATUS_STATE;
     }
     status->sessionActive = sessionActive;
 
-    value = ov45_0222F294(slot);
+    value = WiFiPlazaLobbyClient_IsMatchOpen(slot);
     if (status->accepting != value) {
         status->redraw |= WIFI_PLAZA_GAME_STATUS_STATE;
     }
     status->accepting = value;
 
     if (sessionActive == TRUE) {
-        value = ov45_0222F2D4(slot);
+        value = WiFiPlazaLobbyClient_GetMatchFreePlaces(slot);
     } else {
         value = 4;
     }

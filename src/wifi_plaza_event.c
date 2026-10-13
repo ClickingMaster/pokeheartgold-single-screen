@@ -187,18 +187,18 @@ WiFiPlazaEvent *WiFiPlazaEvent_Create(enum HeapID heapID, WiFiPlazaRoomWork *roo
     event->lobby = WiFiPlazaRoom_GetLobby(room);
     event->models = WiFiPlazaRoom_GetModels(room);
     event->objManager = WiFiPlazaRoom_GetObjManager(room);
-    colorSet = WiFiPlazaEvent_GetColorSet(ov45_0222A3BC(event->lobby));
-    light1Set = WiFiPlazaEvent_GetLight1Set(ov45_0222A3D4(event->lobby));
+    colorSet = WiFiPlazaEvent_GetColorSet(WiFiPlazaWork_GetColorEvent(event->lobby));
+    light1Set = WiFiPlazaEvent_GetLight1Set(WiFiPlazaWork_GetLight1Event(event->lobby));
     thirdSet = ov49_022689D4(ov45_0222A3EC(event->lobby));
     event->light = WiFiPlazaLight_Create(heapID, colorSet, light1Set, thirdSet);
     event->unk14 = ov49_02268FAC(room, heapID);
     event->unk18 = ov49_02268A0C(event->lobby, event->models, heapID);
     WiFiPlazaObj_SetLightSet(event->objManager, colorSet);
-    mode = ov45_0222A35C(event->lobby);
-    ov45_0222A324(event->lobby);
-    flagB = ov45_0222A374(event->lobby);
-    flagC = ov45_0222A3A0(event->lobby);
-    flagD = ov45_0222A330(event->lobby);
+    mode = WiFiPlazaWork_GetFireworksState(event->lobby);
+    WiFiPlazaWork_IsLobbyOpen(event->lobby);
+    flagB = WiFiPlazaWork_IsParadeStarted(event->lobby);
+    flagC = WiFiPlazaWork_IsLightingStarted(event->lobby);
+    flagD = WiFiPlazaWork_IsClosing(event->lobby);
     ov45_0222A394(event->lobby);
     if (mode == 2) {
         WiFiPlazaModels_EnableKind1To4Lights(event->models);
@@ -226,30 +226,30 @@ void WiFiPlazaEvent_Delete(WiFiPlazaEvent *event) {
 void WiFiPlazaEvent_Update(WiFiPlazaEvent *event) {
     int set;
 
-    if (ov45_0222A288(event->lobby, 1)) {
-        set = WiFiPlazaEvent_GetColorSet(ov45_0222A3BC(event->lobby));
+    if (WiFiPlazaWork_IsEventFlagSet(event->lobby, 1)) {
+        set = WiFiPlazaEvent_GetColorSet(WiFiPlazaWork_GetColorEvent(event->lobby));
         WiFiPlazaLight_FadeToColorSet(event->light, set);
         WiFiPlazaObj_FadeToLightSet(event->objManager, set);
     }
-    if (ov45_0222A288(event->lobby, 2)) {
-        set = WiFiPlazaEvent_GetLight1Set(ov45_0222A3D4(event->lobby));
+    if (WiFiPlazaWork_IsEventFlagSet(event->lobby, 2)) {
+        set = WiFiPlazaEvent_GetLight1Set(WiFiPlazaWork_GetLight1Event(event->lobby));
         WiFiPlazaLight_FadeLight1(event->light, set);
     }
-    if (ov45_0222A288(event->lobby, 3)) {
+    if (WiFiPlazaWork_IsEventFlagSet(event->lobby, 3)) {
         set = ov49_022689D4(ov45_0222A3EC(event->lobby));
         ov49_02268620(event->light, set);
     }
-    if (ov45_0222A3A0(event->lobby) == TRUE && ov45_0222A35C(event->lobby) == 0 && WiFiPlazaModels_GetPairAnimState(event->models) == 0) {
+    if (WiFiPlazaWork_IsLightingStarted(event->lobby) == TRUE && WiFiPlazaWork_GetFireworksState(event->lobby) == 0 && WiFiPlazaModels_GetPairAnimState(event->models) == 0) {
         WiFiPlazaModels_SetPairAnim(event->models, 1);
     }
-    if (ov45_0222A288(event->lobby, 5) && ov45_0222A35C(event->lobby) == 1) {
+    if (WiFiPlazaWork_IsEventFlagSet(event->lobby, 5) && WiFiPlazaWork_GetFireworksState(event->lobby) == 1) {
         WiFiPlazaModels_EnableKind1To4Lights(event->models);
         WiFiPlazaModels_SetPairAnim(event->models, 2);
     }
-    if (ov45_0222A288(event->lobby, 6) && ov45_0222A374(event->lobby) == TRUE) {
+    if (WiFiPlazaWork_IsEventFlagSet(event->lobby, 6) && WiFiPlazaWork_IsParadeStarted(event->lobby) == TRUE) {
         WiFiPlazaModels_StartBaseAnim4(event->models);
     }
-    if (ov45_0222A330(event->lobby) == 1) {
+    if (WiFiPlazaWork_IsClosing(event->lobby) == 1) {
         WiFiPlazaModels_StopBaseAnim4(event->models);
         WiFiPlazaEvent_TurnOffLight2(event);
     }
@@ -322,12 +322,12 @@ UnkStruct_ov49_02268A0C *ov49_02268A0C(WiFiPlazaWork *lobby, WiFiPlazaModels *mo
     } while (--n);
     effect->lobby = lobby;
     effect->models = models;
-    effectId = ov45_0222B1DC(lobby);
-    effect->activeCount = ov45_0222A35C(lobby);
+    effectId = WiFiPlazaWork_GetFireworksPhase(lobby);
+    effect->activeCount = WiFiPlazaWork_GetFireworksState(lobby);
     if (effect->activeCount && effectId) {
         WiFiPlazaModels_SetEffectActive(models, 1);
         WiFiPlazaEvent_StartLoopSE(effect);
-        ov49_02268C74(effect, effectId, ov45_0222B1EC(lobby));
+        ov49_02268C74(effect, effectId, WiFiPlazaWork_GetFireworksCounter(lobby));
     }
     return effect;
 }
@@ -344,9 +344,9 @@ void ov49_02268A7C(UnkStruct_ov49_02268A0C *effect) {
     int arg;
     int count;
 
-    effectId = ov45_0222B1DC(effect->lobby);
-    arg = ov45_0222B1EC(effect->lobby);
-    count = ov45_0222A35C(effect->lobby);
+    effectId = WiFiPlazaWork_GetFireworksPhase(effect->lobby);
+    arg = WiFiPlazaWork_GetFireworksCounter(effect->lobby);
+    count = WiFiPlazaWork_GetFireworksState(effect->lobby);
     if (effect->activeCount != count) {
         effect->activeCount = count;
         if (count == 1) {
@@ -560,12 +560,12 @@ BOOL ov49_02268DCC(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
         WiFiPlazaObj_SetHandler(objManager, special, 0);
         ov49_02259130(special, 0);
         WiFiPlazaObj_SetDirection(special, direction);
-        if (ov45_0222A330(lobby) != 0) {
+        if (WiFiPlazaWork_IsClosing(lobby) != 0) {
             message = WiFiPlazaRoom_GetMsgString(room, 1, 3);
             *nextStep = 4;
             WiFiPlazaRoom_PrintMessage(room, message);
             WiFiPlazaPlayerState_SetStep(state, 5);
-        } else if (ov45_0222A3A0(lobby) == TRUE) {
+        } else if (WiFiPlazaWork_IsLightingStarted(lobby) == TRUE) {
             message = WiFiPlazaRoom_GetMsgString(room, 1, 0x58);
             *nextStep = 4;
             WiFiPlazaRoom_PrintMessage(room, message);
@@ -668,7 +668,7 @@ void ov49_02269090(UnkStruct_ov49_02268FAC *work) {
 #pragma force_active on
 
 void ov49_02269098(UnkStruct_ov49_02268FAC *work) {
-    int selected = ov45_0222ADA8(work->lobby, ov45_0222A53C(work->lobby));
+    int selected = ov45_0222ADA8(work->lobby, WiFiPlazaWork_GetOwnSlot(work->lobby));
     u32 column;
     int present;
     int isOwnIndex;

@@ -53,7 +53,7 @@ u8 CommPlayerInfo_GetRegion(int netId);
 void CommState_EndPlazaMatch(void);
 int Comm_FindFriendSlot(SaveData *saveData, void *friendData, u32 *index);
 void WirelessStatusIcon_ShowOnBothScreens(int a0, enum HeapID heapId);
-void ov45_0222ACB8(void *lobby, u8 game, int count, u32 id0, u32 id1, u32 id2, u32 id3);
+void WiFiPlaza_SendMinigameResultNews(void *lobby, u8 game, int count, u32 id0, u32 id1, u32 id2, u32 id3);
 
 extern const u8 _0225C1E0[];
 extern const u8 ov90_0225C1E4[];
@@ -2439,7 +2439,7 @@ void PlazaGameResults_ReportWinners(PlazaGameResults *results) {
         }
     }
     if (count != 0) {
-        ov45_0222ACB8(results->roster.args->unk30, results->game, count, ids[0], ids[1], ids[2], ids[3]);
+        WiFiPlaza_SendMinigameResultNews(results->roster.args->unk30, results->game, count, ids[0], ids[1], ids[2], ids[3]);
     }
 }
 
@@ -2448,7 +2448,7 @@ void PlazaGameResults_ReportWinners(PlazaGameResults *results) {
 void PlazaGameResults_ReportTeamWin(PlazaGameResults *results) {
     if (results->roster.count != 0 && results->data.total >= 10) {
         PlazaGameArgs *args = results->roster.args;
-        ov45_0222ACB8(args->unk30, results->game, results->roster.count, args->unk04[0], args->unk04[1], args->unk04[2], args->unk04[3]);
+        WiFiPlaza_SendMinigameResultNews(args->unk30, results->game, results->roster.count, args->unk04[0], args->unk04[1], args->unk04[2], args->unk04[3]);
     }
 }
 

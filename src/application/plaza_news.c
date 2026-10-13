@@ -130,26 +130,26 @@ typedef struct PlazaNewsWork {
 } PlazaNewsWork;
 
 // Lobby (overlay 45) interface.
-int ov45_0222A330(void *lobby);
+int WiFiPlazaWork_IsClosing(void *lobby);
 void ov45_0222A4A8(void *lobby);
-void ov45_0222A520(void *lobby, int a1);
-int ov45_0222AB28(void *lobby, int index);
-void ov45_0222AB38(void *lobby, void *out);
-u32 ov45_0222AD4C(void *lobby);
-void ov45_0222D594(const PlazaNewsTime *first, const PlazaNewsTime *second, PlazaNewsTime *out);
-int ov45_0222D844(void);
-void ov45_0222DCE8(void *newsData);
-int ov45_0222DCF4(void *newsData, PlazaNewsTime *out);
-int ov45_0222DCFC(void *newsData, int index);
-int ov45_0222DD08(void *newsData, int index);
-int ov45_0222DD14(void *newsData, int index);
-int ov45_0222DD20(void *newsData, int index);
-int ov45_0222DD2C(void *newsData, int index);
-int ov45_0222DD38(void *newsData);
-BOOL ov45_0222DD44(void *newsData);
-void *ov45_0222DD5C(void *newsData);
-int ov45_0222DD78(void *newsData, void *info, void *item, String *dest, enum HeapID heapID);
-int ov45_0222DDE4(void *newsData, void *item, int index);
+void WiFiPlazaWork_SetLowVolume(void *lobby, int a1);
+int WiFiPlazaWork_IsSpecialVisitor(void *lobby, int index);
+void WiFiPlazaWork_GetSpecialVisitors(void *lobby, void *out);
+u32 WiFiPlazaWork_GetOpenDuration(void *lobby);
+void WiFiPlazaTime_Subtract(const PlazaNewsTime *first, const PlazaNewsTime *second, PlazaNewsTime *out);
+int WiFiPlaza_HasConnectionFailed(void);
+void WiFiPlazaNews_RemoveCurrentEvent(void *newsData);
+int WiFiPlazaNews_GetOpenTime(void *newsData, PlazaNewsTime *out);
+int WiFiPlazaNews_IsSlotOccupied(void *newsData, int index);
+int WiFiPlazaNews_GetSlotGender(void *newsData, int index);
+int WiFiPlazaNews_IsOwnSlot(void *newsData, int index);
+int WiFiPlazaNews_IsOldestSlot(void *newsData, int index);
+int WiFiPlazaNews_IsLastJoinedSlot(void *newsData, int index);
+int WiFiPlazaNews_GetSlotChange(void *newsData);
+BOOL WiFiPlazaNews_HasEvent(void *newsData);
+void *WiFiPlazaNews_GetEventType(void *newsData);
+int WiFiPlazaNews_FormatEvent(void *newsData, void *info, void *item, String *dest, enum HeapID heapID);
+int WiFiPlazaNews_GetEventSlot(void *newsData, void *item, int index);
 
 extern const u8 _02259904[3];     // tilemap top of each headline row, followed by the row durations
 extern const u32 ov88_02259910[]; // duration of the last headline row (240); rows 0-1 come before it
@@ -238,7 +238,7 @@ BOOL PlazaNews_Main(OverlayManager *man, u32 *state) {
     switch (*state) {
     case 0:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_114);
-        ov45_0222A520(args->lobby, 1);
+        WiFiPlazaWork_SetLowVolume(args->lobby, 1);
         (*state)++;
         break;
     case 1:
@@ -247,8 +247,8 @@ BOOL PlazaNews_Main(OverlayManager *man, u32 *state) {
         }
         break;
     case 2:
-        if ((gSystem.newKeys & PAD_BUTTON_B) || ov45_0222A330(args->lobby) == 1 || ov45_0222D844() == 1) {
-            if (ov45_0222A330(args->lobby) == 1) {
+        if ((gSystem.newKeys & PAD_BUTTON_B) || WiFiPlazaWork_IsClosing(args->lobby) == 1 || WiFiPlaza_HasConnectionFailed() == 1) {
+            if (WiFiPlazaWork_IsClosing(args->lobby) == 1) {
                 ov45_0222A4A8(args->lobby);
             }
             *state = 3;
@@ -440,7 +440,7 @@ void PlazaNewsPeople_DrawIcon(PlazaNewsTileset *tileset, PlazaNewsGraphics *grap
 }
 
 void PlazaNewsClock_Init(PlazaNewsClock *clock, PlazaNewsGraphics *graphics, PlazaNewsTileset *tileset, void *newsData, const PlazaNewsTime *a4, void *lobby, enum HeapID heapID) {
-    u32 seconds = ov45_0222AD4C(lobby);
+    u32 seconds = WiFiPlazaWork_GetOpenDuration(lobby);
     clock->time.hms.hour = 0;
     clock->time.hms.minute = seconds / 60 + 1;
     clock->time.hms.second = 0;
@@ -461,7 +461,7 @@ BOOL PlazaNewsClock_UpdateTime(PlazaNewsClock *clock, void *newsData, const Plaz
     PlazaNewsTime remaining;
     PlazaNewsTime diff;
     int changed = FALSE;
-    if (ov45_0222DCF4(newsData, &now) == 0) {
+    if (WiFiPlazaNews_GetOpenTime(newsData, &now) == 0) {
         return changed;
     }
     if (clock->isWaiting == TRUE) {
@@ -469,8 +469,8 @@ BOOL PlazaNewsClock_UpdateTime(PlazaNewsClock *clock, void *newsData, const Plaz
         changed = TRUE;
         clock->needsRedraw = changed;
     }
-    ov45_0222D594(a2, &now, &remaining);
-    ov45_0222D594(&remaining, &clock->time, &diff);
+    WiFiPlazaTime_Subtract(a2, &now, &remaining);
+    WiFiPlazaTime_Subtract(&remaining, &clock->time, &diff);
     if (diff.hms.second >= clock->secondsPerCell || diff.hms.minute != 0 || diff.hms.hour != 0) {
         changed = TRUE;
         clock->needsRedraw = changed;
@@ -561,7 +561,7 @@ void PlazaNewsPeople_Free(PlazaNewsPeople *people) {
 
 BOOL PlazaNewsPeople_UpdateState(PlazaNewsPeople *people, void *newsData) {
     int ret = FALSE;
-    switch (ov45_0222DD38(newsData)) {
+    switch (WiFiPlazaNews_GetSlotChange(newsData)) {
     case 0:
         break;
     case 1:
@@ -626,14 +626,14 @@ void PlazaNewsPeople_DrawGrid(PlazaNewsTileset *tileset, PlazaNewsGraphics *grap
         f.rowU8 = (u8)f.row;
         col = 0;
         do {
-            if (ov45_0222DCFC(newsData, col + base)) {
+            if (WiFiPlazaNews_IsSlotOccupied(newsData, col + base)) {
                 int highlight;
                 int tile;
-                f.altRow = ov45_0222DD08(newsData, col + base);
-                f.usePalette3 = ov45_0222DD14(newsData, col + base);
-                f.altPage = ov45_0222DD20(newsData, col + base);
-                f.unk_10 = ov45_0222DD2C(newsData, col + base);
-                highlight = ov45_0222AB28(lobby, col + base);
+                f.altRow = WiFiPlazaNews_GetSlotGender(newsData, col + base);
+                f.usePalette3 = WiFiPlazaNews_IsOwnSlot(newsData, col + base);
+                f.altPage = WiFiPlazaNews_IsOldestSlot(newsData, col + base);
+                f.unk_10 = WiFiPlazaNews_IsLastJoinedSlot(newsData, col + base);
+                highlight = WiFiPlazaWork_IsSpecialVisitor(lobby, col + base);
                 if (mode == 2 && f.unk_10 == 1) {
                     tile = 0;
                 } else {
@@ -682,9 +682,9 @@ void ov88_02259264(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void 
 void PlazaNewsHeadlines_GetNameColors(u8 *colors, void *newsData, void *item, void *lobby) {
     int i;
     for (i = 0; i < 4; i++) {
-        int person = ov45_0222DDE4(newsData, item, i);
+        int person = WiFiPlazaNews_GetEventSlot(newsData, item, i);
         if (person != 20) {
-            if (ov45_0222AB28(lobby, person) == 1) {
+            if (WiFiPlazaWork_IsSpecialVisitor(lobby, person) == 1) {
                 colors[i] = 9;
             } else {
                 colors[i] = 5;
@@ -760,7 +760,7 @@ BOOL PlazaNewsHeadlines_Update(PlazaNewsHeadlines *headlines, void *newsData, vo
     PlazaNewsTicker *ticker;
     const u32 *duration;
     void *item;
-    ov45_0222AB38(lobby, info);
+    WiFiPlazaWork_GetSpecialVisitors(lobby, info);
     i = 2;
     ticker = &headlines->tickers[2];
     duration = ov88_02259910;
@@ -777,17 +777,17 @@ BOOL PlazaNewsHeadlines_Update(PlazaNewsHeadlines *headlines, void *newsData, vo
         duration--;
     }
     if (headlines->tickers[0].active == FALSE) {
-        if (ov45_0222DD44(newsData) == TRUE) {
+        if (WiFiPlazaNews_HasEvent(newsData) == TRUE) {
             do {
-                item = ov45_0222DD5C(newsData);
-                if (ov45_0222DD78(newsData, info, item, headlines->string, heapID) == 1) {
+                item = WiFiPlazaNews_GetEventType(newsData);
+                if (WiFiPlazaNews_FormatEvent(newsData, info, item, headlines->string, heapID) == 1) {
                     PlazaNewsHeadlines_GetNameColors((u8 *)&nameColors, newsData, item, lobby);
                     PlazaNewsTicker_SetText(&headlines->tickers[0], headlines->string, 336, (u8 *)&nameColors, headlines->palette);
-                    ov45_0222DCE8(newsData);
+                    WiFiPlazaNews_RemoveCurrentEvent(newsData);
                     return TRUE;
                 }
-                ov45_0222DCE8(newsData);
-            } while (ov45_0222DD44(newsData) == TRUE);
+                WiFiPlazaNews_RemoveCurrentEvent(newsData);
+            } while (WiFiPlazaNews_HasEvent(newsData) == TRUE);
         }
     }
     return FALSE;

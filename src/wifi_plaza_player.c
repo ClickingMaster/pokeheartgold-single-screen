@@ -7,35 +7,35 @@
 #include "sound_system.h"
 #include "wifi_plaza_internal.h"
 
-void ov45_0222A4D0(WiFiPlazaWork *work) {
+void WiFiPlazaWork_PlayBGM(WiFiPlazaWork *work) {
     if (work->unk_1fc.flag4 == 1 && work->unk_1fc.unk_0a <= 0) {
         Sound_SetSceneAndPlayBGM(0x15, 0x481, 0);
-        ov45_0222BC84(&work->unk_1fc);
+        WiFiPlazaEventSchedule_ApplyVolume(&work->unk_1fc);
         return;
     }
     Sound_SetSceneAndPlayBGM(0x15, 0x47f, 0);
-    ov45_0222BC84(&work->unk_1fc);
+    WiFiPlazaEventSchedule_ApplyVolume(&work->unk_1fc);
 }
 
-void ov45_0222A520(WiFiPlazaWork *work, int value) {
+void WiFiPlazaWork_SetLowVolume(WiFiPlazaWork *work, int value) {
     if (value == work->unk_1fc.unk_0d) {
         return;
     }
     work->unk_1fc.unk_0d = value;
-    ov45_0222BC84(&work->unk_1fc);
+    WiFiPlazaEventSchedule_ApplyVolume(&work->unk_1fc);
 }
 
-int ov45_0222A53C(void *unused) {
-    return ov45_0222EC68(WiFiPlazaLobbyClient_GetOwnId());
+int WiFiPlazaWork_GetOwnSlot(void *unused) {
+    return WiFiPlazaLobbyClient_IdToSlot(WiFiPlazaLobbyClient_GetOwnId());
 }
 
-void ov45_0222A548(void) {
+void WiFiPlazaWork_GetOwnId(void) {
     WiFiPlazaLobbyClient_GetOwnId();
 }
 
-BOOL ov45_0222A550(void *unused, int index) {
+BOOL WiFiPlazaWork_IsSlotOccupied(void *unused, int index) {
     WiFiPlazaPlayerList list;
-    ov45_0222EC10(&list);
+    WiFiPlazaLobbyClient_GetPlayerList(&list);
     return list.ids[index] != -1;
 }
 
@@ -45,7 +45,7 @@ WiFiPlazaPlayer *WiFiPlazaWork_GetPlayer(WiFiPlazaWork *work, u32 index) {
     if (index >= 20) {
         GF_AssertFail();
     }
-    ov45_0222EC10(&list);
+    WiFiPlazaLobbyClient_GetPlayerList(&list);
     id = list.ids[index];
     if (id == -1) {
         return NULL;
@@ -53,7 +53,7 @@ WiFiPlazaPlayer *WiFiPlazaWork_GetPlayer(WiFiPlazaWork *work, u32 index) {
     if (id == WiFiPlazaLobbyClient_GetOwnId()) {
         return &work->profile.player;
     }
-    return ov45_0222EA2C(id);
+    return WiFiPlazaLobbyClient_GetPlayer(id);
 }
 
 WiFiPlazaPlayer *WiFiPlazaWork_GetMyPlayer(WiFiPlazaWork *work) {
@@ -74,47 +74,47 @@ void ov45_0222A5E8(WiFiPlazaWork *work, int value) {
     if (work->profile.player.unk_43 == value) {
         return;
     }
-    if (value != 9 && ov45_0222AFF8(work) == 1) {
-        if (ov45_0222B00C(work) == 0) {
-            ov45_0222EC90(work->unk_1c0.unk_04);
-            ov45_0222BE28(work, work->unk_1c0.unk_04);
+    if (value != 9 && WiFiPlazaWork_IsTalking(work) == 1) {
+        if (WiFiPlazaWork_WasAskedToTalk(work) == 0) {
+            WiFiPlazaLobbyClient_SlotToId(work->unk_1c0.unk_04);
+            WiFiPlazaWork_SendTalkEnd(work, work->unk_1c0.unk_04);
         }
-        ov45_0222BD5C(&work->unk_1c0);
+        WiFiPlazaTalkSession_Abort(&work->unk_1c0);
     }
     switch (work->profile.player.unk_43) {
     case 2:
-        ov45_0222CB74(&work->history, 0x10, -1);
+        WiFiPlazaHistory_Add(&work->history, 0x10, -1);
         break;
     case 3:
-        ov45_0222CB74(&work->history, 0x11, -1);
+        WiFiPlazaHistory_Add(&work->history, 0x11, -1);
         break;
     case 4:
-        ov45_0222CB74(&work->history, 0x12, -1);
+        WiFiPlazaHistory_Add(&work->history, 0x12, -1);
         break;
     case 5:
-        ov45_0222CB74(&work->history, 0x13, -1);
+        WiFiPlazaHistory_Add(&work->history, 0x13, -1);
         break;
     case 6:
-        ov45_0222CB74(&work->history, 0x14, -1);
+        WiFiPlazaHistory_Add(&work->history, 0x14, -1);
         break;
     case 7:
-        ov45_0222CB74(&work->history, 0x15, -1);
+        WiFiPlazaHistory_Add(&work->history, 0x15, -1);
         break;
     case 8:
-        ov45_0222CB74(&work->history, 0x16, -1);
+        WiFiPlazaHistory_Add(&work->history, 0x16, -1);
         break;
     }
     work->profile.player.unk_43 = value;
     WiFiPlazaProfile_UpdateChecksum(&work->profile, work->save);
-    ov45_0222BA3C(work);
+    WiFiPlazaWork_SendOwnRecord(work);
 }
 
-void ov45_0222A704(WiFiPlazaWork *work, int index, int value) {
+void WiFiPlazaWork_AddHistory(WiFiPlazaWork *work, int index, int value) {
     if (index >= 24) {
         GF_AssertFail();
     }
-    ov45_0222CB74(&work->history, index, value);
-    ov45_0222BA3C(work);
+    WiFiPlazaHistory_Add(&work->history, index, value);
+    WiFiPlazaWork_SendOwnRecord(work);
 }
 
 void ov45_0222A72C(WiFiPlazaWork *work, u32 value) {
@@ -127,7 +127,7 @@ void ov45_0222A72C(WiFiPlazaWork *work, u32 value) {
     }
     work->profile.player.unk_41 = value;
     WiFiPlazaProfile_UpdateChecksum(&work->profile, work->save);
-    ov45_0222BA3C(work);
+    WiFiPlazaWork_SendOwnRecord(work);
 }
 
 void ov45_0222A770(WiFiPlazaWork *work, int a, int b) {
@@ -150,7 +150,7 @@ void ov45_0222A770(WiFiPlazaWork *work, int a, int b) {
             work->profile.player.unk_88[1] = b;
         }
         WiFiPlazaProfile_UpdateChecksum(&work->profile, work->save);
-        ov45_0222BA3C(work);
+        WiFiPlazaWork_SendOwnRecord(work);
     }
 }
 
@@ -168,13 +168,13 @@ void ov45_0222A7DC(WiFiPlazaWork *work, u32 a, u32 b) {
         work->unk_1fc.low = 1;
         ov45_0222B118(work, 6);
         WiFiPlazaProfile_UpdateChecksum(&work->profile, work->save);
-        ov45_0222BA3C(work);
+        WiFiPlazaWork_SendOwnRecord(work);
     }
 }
 
 void WiFiPlazaPlayer_CopyToProfile(WiFiPlazaPlayer *player, PlayerProfile *profile, enum HeapID heapID) {
     BOOL invalid;
-    int ok = ov45_0222B28C(player->name, 8, heapID);
+    int ok = WiFiPlaza_IsNameTerminated(player->name, 8, heapID);
     String *b;
     String *a;
     invalid = FALSE;
@@ -213,7 +213,7 @@ int ov45_0222A920(WiFiPlazaPlayer *player) {
 #pragma force_active on
 #pragma opt_common_subs off
 
-u8 ov45_0222A92C(WiFiPlazaPlayer *player, u32 index) {
+u8 WiFiPlazaPlayer_GetHistoryId(WiFiPlazaPlayer *player, u32 index) {
     int count;
     int i;
 
@@ -233,7 +233,7 @@ u8 ov45_0222A92C(WiFiPlazaPlayer *player, u32 index) {
 #pragma opt_common_subs reset
 #pragma force_active reset
 
-void *ov45_0222A964(WiFiPlazaPlayer *player, u32 index) {
+void *WiFiPlazaPlayer_GetHistoryValue(WiFiPlazaPlayer *player, u32 index) {
     int seen, i;
     if (index >= 12) {
         GF_AssertFail();
@@ -251,7 +251,7 @@ void *ov45_0222A964(WiFiPlazaPlayer *player, u32 index) {
     return (void *)-1;
 }
 
-u32 ov45_0222A99C(WiFiPlazaPlayer *player) {
+u32 WiFiPlazaPlayer_GetLobbyId(WiFiPlazaPlayer *player) {
     return player->unk_00;
 }
 
@@ -259,7 +259,7 @@ u32 WiFiPlazaPlayer_GetTrainerID(WiFiPlazaPlayer *player) {
     return player->trainerId;
 }
 
-int ov45_0222A9A4(WiFiPlazaPlayer *player) {
+int WiFiPlazaPlayer_GetAvatarIndex(WiFiPlazaPlayer *player) {
     u16 v = WiFiPlazaPlayer_GetAvatar(player);
     int i;
     for (i = 0; i < 16; i++) {
@@ -270,7 +270,7 @@ int ov45_0222A9A4(WiFiPlazaPlayer *player) {
     return 24;
 }
 
-void *ov45_0222A9C8(WiFiPlazaPlayer *player) {
+void *WiFiPlazaPlayer_GetLocalTime(WiFiPlazaPlayer *player) {
     return player->unk_1c;
 }
 
@@ -279,7 +279,7 @@ u32 WiFiPlazaPlayer_GetGender(WiFiPlazaPlayer *player) {
     u32 i;
 
     if (player->gender >= 2) {
-        if (ov45_0222CD04(player->unk_3a) != 0xFFFF) {
+        if (WiFiPlaza_IndexToAvatar(player->unk_3a) != 0xFFFF) {
             for (i = 0; i < 16; i++) {
                 if (ov45_02254A84[i].unk_00 == player->unk_3a) {
                     result = ov45_02254A84[i].unk_00;
@@ -315,12 +315,12 @@ BOOL WiFiPlazaPlayer_IsLanguageValid(WiFiPlazaPlayer *player) {
     }
 }
 
-u8 ov45_0222AA54(WiFiPlazaPlayer *player) {
+u8 WiFiPlazaPlayer_GetRawLanguage(WiFiPlazaPlayer *player) {
     return player->language;
 }
 
 u16 WiFiPlazaPlayer_GetAvatar(WiFiPlazaPlayer *player) {
-    u16 avatar = ov45_0222CD04(player->unk_3a);
+    u16 avatar = WiFiPlaza_IndexToAvatar(player->unk_3a);
     if (avatar == 0xFFFF) {
         if (WiFiPlazaPlayer_GetGender(player) == 0) {
             return 3;
@@ -336,14 +336,14 @@ u16 WiFiPlazaPlayer_GetCountry(WiFiPlazaPlayer *player) {
     if (player->country >= 234) {
         return 0;
     }
-    if (ov45_0222D79C(player->country, player->region) == 0) {
+    if (WiFiPlaza_IsRegionValid(player->country, player->region) == 0) {
         return 0;
     }
     return player->country;
 }
 
 u8 WiFiPlazaPlayer_GetRegion(WiFiPlazaPlayer *player) {
-    if (ov45_0222D79C(player->country, player->region) == 0) {
+    if (WiFiPlaza_IsRegionValid(player->country, player->region) == 0) {
         return 0;
     }
     return player->region;

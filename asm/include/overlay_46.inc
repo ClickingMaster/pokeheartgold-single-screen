@@ -91,8 +91,8 @@
 .public WiFiPlazaWork_GetMyPlayer
 .public ov45_0222B244
 .public ov45_0222B270
-.public ov45_0222D7CC
-.public ov45_0222D7FC
+.public WiFiPlaza_GetErrorMessageClass
+.public WiFiPlaza_IsErrorRecoverable
 .public ov45_0222E7CC
 .public ov45_0222E7FC
 .public ov45_0222ED7C

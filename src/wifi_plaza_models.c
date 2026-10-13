@@ -31,7 +31,7 @@ typedef struct WiFiPlazaModelsOffset {
 } WiFiPlazaModelsOffset;
 
 // OVY_45: drops the texture data of a model file once it is in VRAM
-void ov45_0222D740(NNSG3dResFileHeader *file);
+void WiFiPlaza_DisableModelLighting(NNSG3dResFileHeader *file);
 // NitroSystem g3d calls without a public declaration
 void NNS_G3dMdlSetMdlLightEnableFlagAll(NNSG3dResMdl *model, u32 lightFlags);
 void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *model, u32 alpha);
@@ -527,7 +527,7 @@ void WiFiPlazaModelSet_LoadBase(WiFiPlazaBaseResources *res, NARC *narc, WiFiPla
     int i;
     for (i = 0; i < 2; i++) {
         WiFiPlazaModels_LoadModel(&res->models[i], narc, layout->baseModels[i], heapID);
-        ov45_0222D740(res->models[i].file);
+        WiFiPlaza_DisableModelLighting(res->models[i].file);
     }
     for (i = 0; i < WIFI_PLAZA_BASE_ANIM_COUNT; i++) {
         if (layout->baseModels[0] == layout->baseAnims[i]) {
@@ -830,7 +830,7 @@ void WiFiPlazaModelSet_LoadProps(WiFiPlazaPropResources *res, NARC *narc, NNSFnd
     for (; v.i < WIFI_PLAZA_PROP_KIND_COUNT; v.i++) {
         WiFiPlazaModels_LoadModel((ModelResource *)v.model, v.narc, *modelId, heapID);
         if (v.i != 11 && v.i != 12) {
-            ov45_0222D740(*(NNSG3dResFileHeader **)v.model);
+            WiFiPlaza_DisableModelLighting(*(NNSG3dResFileHeader **)v.model);
         }
         animId = v.animIds;
         file = v.files;

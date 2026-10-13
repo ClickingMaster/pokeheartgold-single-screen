@@ -12,7 +12,7 @@ BOOL CommState_HasPlazaLobbyFailed(void);
 #pragma force_active on
 
 // out = left + right (hour, minute, second; the hour wraps at 24).
-void ov45_0222D524(const WiFiPlazaTime *left, const WiFiPlazaTime *right, WiFiPlazaTime *out) {
+void WiFiPlazaTime_Add(const WiFiPlazaTime *left, const WiFiPlazaTime *right, WiFiPlazaTime *out) {
     WiFiPlazaTime a = *left, b = *right;
     a.field.second += b.field.second;
     a.field.minute += a.field.second / 60;
@@ -25,7 +25,7 @@ void ov45_0222D524(const WiFiPlazaTime *left, const WiFiPlazaTime *right, WiFiPl
 }
 
 // out = first - second (hour, minute, second; the hour wraps at 24).
-void ov45_0222D594(const WiFiPlazaTime *first, const WiFiPlazaTime *second, WiFiPlazaTime *out) {
+void WiFiPlazaTime_Subtract(const WiFiPlazaTime *first, const WiFiPlazaTime *second, WiFiPlazaTime *out) {
     WiFiPlazaTime a = *first, b = *second;
     int delta;
     u8 value;
@@ -56,7 +56,7 @@ void ov45_0222D594(const WiFiPlazaTime *first, const WiFiPlazaTime *second, WiFi
 #pragma force_active reset
 
 // Adds a country and region to the list (the first free entry, or the entry of the same place unless value is 1).
-void ov45_0222D638(WiFiPlazaPlace *places, u32 country, u32 region, u32 value) {
+void WiFiPlazaPlaces_Add(WiFiPlazaPlace *places, u32 country, u32 region, u32 value) {
     s32 i;
     BOOL use;
     if (country == 0) {
@@ -85,7 +85,7 @@ void ov45_0222D638(WiFiPlazaPlace *places, u32 country, u32 region, u32 value) {
     }
 }
 
-u16 ov45_0222D6B0(WiFiPlazaPlace *places, u32 index) {
+u16 WiFiPlazaPlaces_GetCountry(WiFiPlazaPlace *places, u32 index) {
     if (index >= 50) {
         GF_AssertFail();
     }
@@ -96,7 +96,7 @@ u16 ov45_0222D6B0(WiFiPlazaPlace *places, u32 index) {
     return places->country;
 }
 
-u8 ov45_0222D6D4(WiFiPlazaPlace *places, u32 index) {
+u8 WiFiPlazaPlaces_GetRegion(WiFiPlazaPlace *places, u32 index) {
     if (index >= 50) {
         GF_AssertFail();
     }
@@ -106,7 +106,7 @@ u8 ov45_0222D6D4(WiFiPlazaPlace *places, u32 index) {
     return places[index].region;
 }
 
-u8 ov45_0222D6FC(WiFiPlazaPlace *places, u32 index) {
+u8 WiFiPlazaPlaces_GetValue(WiFiPlazaPlace *places, u32 index) {
     if (index >= 50) {
         GF_AssertFail();
     }
@@ -117,7 +117,7 @@ u8 ov45_0222D6FC(WiFiPlazaPlace *places, u32 index) {
     return places->value;
 }
 
-u8 ov45_0222D724(WiFiPlazaPlace *places, u32 index) {
+u8 WiFiPlazaPlaces_IsOccupied(WiFiPlazaPlace *places, u32 index) {
     if (index >= 50) {
         GF_AssertFail();
     }
@@ -125,7 +125,7 @@ u8 ov45_0222D724(WiFiPlazaPlace *places, u32 index) {
 }
 
 // Turns off the diffuse, ambient, specular and emission flags of the materials of the first model of file.
-void ov45_0222D740(void *file) {
+void WiFiPlaza_DisableModelLighting(void *file) {
     NNSG3dResMdlSet *set = NNS_G3dGetMdlSet(file);
     NNSG3dResMdl *model = NNS_G3dGetMdlByIdx(set, 0);
     NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_DIFFUSE);
@@ -135,7 +135,7 @@ void ov45_0222D740(void *file) {
 }
 
 // TRUE if region exists in country (region 0 for a country without regions).
-BOOL ov45_0222D79C(u32 country, u32 region) {
+BOOL WiFiPlaza_IsRegionValid(u32 country, u32 region) {
     u32 count = LocationGmmDatRegionCountGetByCountryMsgNo(country);
     if (count == 0 && region == 0) {
         return TRUE;
@@ -152,7 +152,7 @@ u8 ov45_0222D7C0(u32 index) {
 
 // The error message class of a connection error (WifiConnection_ClassifyErrorCode, with the plaza's own errors 25 and
 // 26).
-int ov45_0222D7CC(u32 errorCode, u32 context) {
+int WiFiPlaza_GetErrorMessageClass(u32 errorCode, u32 context) {
     int class = WifiConnection_ClassifyErrorCode(errorCode, context);
     if (class == 11 || errorCode == 25) {
         if (context != 2) {
@@ -170,7 +170,7 @@ int ov45_0222D7CC(u32 errorCode, u32 context) {
 }
 
 // FALSE for the errors that end the connection.
-BOOL ov45_0222D7FC(u32 errorCode, u32 context) {
+BOOL WiFiPlaza_IsErrorRecoverable(u32 errorCode, u32 context) {
     int class = WifiConnection_ClassifyErrorCode(errorCode, context);
     if (errorCode == 25) {
         class = 11;
@@ -193,27 +193,27 @@ BOOL ov45_0222D7FC(u32 errorCode, u32 context) {
     }
 }
 
-BOOL ov45_0222D844(void) {
+BOOL WiFiPlaza_HasConnectionFailed(void) {
     if (CommState_HasWifiFailed() || CommState_HasPlazaLobbyFailed()) {
         return TRUE;
     }
     return FALSE;
 }
 
-WiFiPlazaNews *ov45_0222D860(enum HeapID heapID) {
+WiFiPlazaNews *WiFiPlazaNews_New(enum HeapID heapID) {
     WiFiPlazaNews *news = Heap_Alloc(heapID, sizeof(WiFiPlazaNews));
     memset(news, 0, sizeof(WiFiPlazaNews));
-    ov45_0222DE1C(&news->slots);
-    ov45_0222DF78(&news->events, heapID);
+    WiFiPlazaNewsSlots_Init(&news->slots);
+    WiFiPlazaNewsEventList_Init(&news->events, heapID);
     return news;
 }
 
-void ov45_0222D890(WiFiPlazaNews *news) {
-    ov45_0222DFD0(&news->events);
+void WiFiPlazaNews_Delete(WiFiPlazaNews *news) {
+    WiFiPlazaNewsEventList_Free(&news->events);
     Heap_Free(news);
 }
 
-void ov45_0222D8A4(WiFiPlazaNews *news) {
-    ov45_0222E000(&news->events);
-    ov45_0222DEA4(&news->slots, 0);
+void WiFiPlazaNews_Update(WiFiPlazaNews *news) {
+    WiFiPlazaNewsEventList_Update(&news->events);
+    WiFiPlazaNewsSlots_SetChange(&news->slots, 0);
 }

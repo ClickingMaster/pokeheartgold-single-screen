@@ -7,14 +7,14 @@
 // Receive callbacks (see wifi_plaza_receive.c): the sender id marks its lobby slot in WiFiPlazaWork.unk_1e8 or joins a
 // group of WiFiPlazaWork.unk_20c.
 void ov45_0222C83C(int id, void *data, u32 size, WiFiPlazaWork *work) {
-    int slot = ov45_0222EC68(id);
+    int slot = WiFiPlazaLobbyClient_IdToSlot(id);
     if (slot != -1) {
         work->unk_1e8[slot] = 1;
     }
 }
 
 void ov45_0222C858(int id, void *data, u32 size, WiFiPlazaWork *work) {
-    int slot = ov45_0222EC68(id), value;
+    int slot = WiFiPlazaLobbyClient_IdToSlot(id), value;
     if (slot != -1) {
         for (value = 0; value < 3; value++) {
             if (ov45_0222C408(&work->unk_20c, slot, value) != -1) {
@@ -25,13 +25,13 @@ void ov45_0222C858(int id, void *data, u32 size, WiFiPlazaWork *work) {
 }
 
 void ov45_0222C88C(int id, void *data, u32 size, WiFiPlazaWork *work) {
-    int slot = ov45_0222EC68(id);
+    int slot = WiFiPlazaLobbyClient_IdToSlot(id);
     if (slot != -1) {
         ov45_0222C514(&work->unk_20c, slot);
     }
 }
 
-void ov45_0222C8AC(WiFiPlazaGroupWeights *weights) {
+void WiFiPlazaGroupWeights_Init(WiFiPlazaGroupWeights *weights) {
     int i;
     memset(weights, 0, sizeof(WiFiPlazaGroupWeights));
     for (i = 0; i < 9; i++) {
@@ -40,7 +40,7 @@ void ov45_0222C8AC(WiFiPlazaGroupWeights *weights) {
 }
 
 // The first time the player of a lobby slot reports a place, the weight of that place's group is halved.
-void ov45_0222C8C8(WiFiPlazaGroupWeights *weights, u32 place, u32 slot) {
+void WiFiPlazaGroupWeights_ReportPlace(WiFiPlazaGroupWeights *weights, u32 place, u32 slot) {
     if (slot >= 20) {
         GF_AssertFail();
     }
@@ -54,7 +54,7 @@ void ov45_0222C8C8(WiFiPlazaGroupWeights *weights, u32 place, u32 slot) {
 }
 
 // A random group by weight; returns its first place (group * 3).
-u32 ov45_0222C900(WiFiPlazaGroupWeights *weights) {
+u32 WiFiPlazaGroupWeights_PickGroup(WiFiPlazaGroupWeights *weights) {
     int sum = 0;
     int i = 0;
     u32 target;
@@ -77,7 +77,7 @@ u32 ov45_0222C900(WiFiPlazaGroupWeights *weights) {
     return 0;
 }
 
-void ov45_0222C944(u8 *flags, u32 slot, u8 value) {
+void WiFiPlaza_SetSlotFlag(u8 *flags, u32 slot, u8 value) {
     if (slot >= 20) {
         GF_AssertFail();
     }
@@ -86,7 +86,7 @@ void ov45_0222C944(u8 *flags, u32 slot, u8 value) {
     }
 }
 
-u32 ov45_0222C95C(u8 *flags, u32 slot) {
+u32 WiFiPlaza_GetSlotFlag(u8 *flags, u32 slot) {
     if (slot >= 20) {
         GF_AssertFail();
     }
@@ -106,19 +106,19 @@ void WiFiPlazaWordSet_Free(WiFiPlazaWordSet *wordSet) {
 }
 
 // Sets the flag of a lobby slot; flag 1 also makes its four words from code.
-void ov45_0222C9A0(WiFiPlazaWordSet *wordSet, u32 slot, u8 flag, u32 code) {
+void WiFiPlazaWordSet_Set(WiFiPlazaWordSet *wordSet, u32 slot, u8 flag, u32 code) {
     if (slot >= 20) {
         GF_AssertFail();
     }
     if (slot < 20) {
         wordSet->flags[slot] = flag;
         if (flag == 1) {
-            ov45_0222CA10(wordSet->bank, code, wordSet->words[slot]);
+            WiFiPlaza_MakeWordsFromCode(wordSet->bank, code, wordSet->words[slot]);
         }
     }
 }
 
-u32 ov45_0222C9D0(WiFiPlazaWordSet *wordSet, u32 slot) {
+u32 WiFiPlazaWordSet_HasWords(WiFiPlazaWordSet *wordSet, u32 slot) {
     if (slot >= 20) {
         GF_AssertFail();
     }
@@ -128,7 +128,7 @@ u32 ov45_0222C9D0(WiFiPlazaWordSet *wordSet, u32 slot) {
     return 0;
 }
 
-u16 *ov45_0222C9EC(WiFiPlazaWordSet *wordSet, u32 slot) {
+u16 *WiFiPlazaWordSet_GetWords(WiFiPlazaWordSet *wordSet, u32 slot) {
     if (slot >= 20) {
         GF_AssertFail();
     }
@@ -141,7 +141,7 @@ u16 *ov45_0222C9EC(WiFiPlazaWordSet *wordSet, u32 slot) {
 #pragma force_active on
 
 // Four words of the bank, each picked by the sum of two neighbouring bytes of code.
-void ov45_0222CA10(WallpaperPasswordBank *bank, u32 code, u16 *words) {
+void WiFiPlaza_MakeWordsFromCode(WallpaperPasswordBank *bank, u32 code, u16 *words) {
     union {
         u32 word;
         u8 bytes[4];
@@ -166,27 +166,27 @@ void ov45_0222CA10(WallpaperPasswordBank *bank, u32 code, u16 *words) {
 
 #pragma force_active reset
 
-void ov45_0222CA7C(WiFiPlazaTimer *timer, int start, int end) {
+void WiFiPlazaTimer_Init(WiFiPlazaTimer *timer, int start, int end) {
     timer->active = 0;
     timer->elapsed = 0;
     timer->duration = (end - start) * 30;
 }
 
-void ov45_0222CA8C(WiFiPlazaTimer *timer) {
+void WiFiPlazaTimer_Start(WiFiPlazaTimer *timer) {
     timer->active = 1;
     timer->elapsed = 0;
-    ov45_0222ECB8(&timer->start);
+    WiFiPlazaLobbyClient_GetTime(&timer->start);
 }
 
-// Runs the timer (30 per second of ov45_0222ECB8 time) and steps its phase through _02254A28; phase 5 for 120
+// Runs the timer (30 per second of WiFiPlazaLobbyClient_GetTime time) and steps its phase through _02254A28; phase 5 for 120
 // updates at the end.
-void ov45_0222CAA0(WiFiPlazaTimer *timer) {
+void WiFiPlazaTimer_Update(WiFiPlazaTimer *timer) {
     s64 now;
     s64 delta;
     int accum;
     u32 i;
     if (timer->active != 0) {
-        ov45_0222ECB8(&now);
+        WiFiPlazaLobbyClient_GetTime(&now);
         delta = (now - timer->start) * 30;
         if ((s64)timer->elapsed < delta) {
             timer->elapsed = (s32)delta;
@@ -220,10 +220,10 @@ void ov45_0222CAA0(WiFiPlazaTimer *timer) {
     }
 }
 
-u32 ov45_0222CB3C(WiFiPlazaTimer *timer) {
+u32 WiFiPlazaTimer_GetCounter(WiFiPlazaTimer *timer) {
     return timer->counter;
 }
 
-u32 ov45_0222CB40(WiFiPlazaTimer *timer) {
+u32 WiFiPlazaTimer_GetPhase(WiFiPlazaTimer *timer) {
     return timer->phase;
 }

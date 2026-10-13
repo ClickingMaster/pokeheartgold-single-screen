@@ -24,7 +24,7 @@ void ModelInstance_SetVisible(FootprintStampModelInstance *instance, BOOL visibl
 void ModelInstance_SetPosition(FootprintStampModelInstance *instance, fx32 x, fx32 y, fx32 z);
 void ModelInstance_SetScale(FootprintStampModelInstance *instance, fx32 x, fx32 y, fx32 z);
 u32 WiFiPlazaLobbyClient_GetOwnId(void *unused);
-int ov45_0222EC7C(u32 playerId);
+int WiFiPlazaLobbyClient_IdToChannelSlot(u32 playerId);
 void SetMasterBrightness(PMLCDTarget screen, int brightness);
 
 extern const u16 _0225C9B0[4]; // party bar tiles of an empty slot (the label has no ov89_ prefix)
@@ -36,13 +36,13 @@ extern const ManagedSpriteTemplate ov89_0225CBA4;
 extern const FootprintStampEffectFuncs ov89_0225CDB0[];
 extern BOOL (*const ov89_0225CD10[])(FootprintStampBoard *unused, FootprintStampBoard *board, Camera *camera);
 
-// The lobby's player id list (ov45_0222EC3C).
+// The lobby's player id list (WiFiPlazaLobbyClient_GetChannelPlayerList).
 typedef struct FootprintStampPlayerList {
     u32 unk00;
     u32 *ids; // FOOTPRINT_STAMP_PLAYERS_MAX, -1 = empty
 } FootprintStampPlayerList;
 
-void ov45_0222EC3C(FootprintStampPlayerList *list);
+void WiFiPlazaLobbyClient_GetChannelPlayerList(FootprintStampPlayerList *list);
 
 // Player list rows on the sub screen (tiles).
 typedef struct FootprintStampRow {
@@ -322,7 +322,7 @@ BOOL FootprintStamp_PlaceStamp(FootprintStamp *work, FootprintStampMon *mon, u32
 
     result = FootprintStampBoard_AddStamp(work, &work->board, mon, work->narc, work->footprintNarc, work->unk19E0);
     if (result == TRUE) {
-        index = ov45_0222EC7C(playerId);
+        index = WiFiPlazaLobbyClient_IdToChannelSlot(playerId);
         if (index != -1) {
             if (mon->species != work->playerSpecies[index] || mon->color != work->playerColors[index]) {
                 work->playerSpecies[index] = mon->species;
@@ -362,7 +362,7 @@ int FootprintStamp_UpdatePlayers(FootprintStamp *work) {
 
     joined = 0;
     left = 0;
-    ov45_0222EC3C(&list);
+    WiFiPlazaLobbyClient_GetChannelPlayerList(&list);
     rows = ov89_0225CBD8;
     for (i = 0; i < FOOTPRINT_STAMP_PLAYERS_MAX; i++) {
         if (work->playerIds[i] != list.ids[i]) {

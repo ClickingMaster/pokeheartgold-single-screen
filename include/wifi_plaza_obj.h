@@ -148,25 +148,25 @@ void WiFiPlazaObj_StartLightFade(WiFiPlazaObjLight *light, u32 value);
 BOOL WiFiPlazaObj_UpdateLight(WiFiPlazaObjLight *light, void *avatars);
 
 // OVY_45 avatar manager (no header yet), with the types this overlay calls them with
-void *ov45_02230498(u32 count, u32 arg1, enum HeapID heapID, u32 arg3);
-void ov45_02230638(void *avatars);
-void ov45_02230680(void *avatars);
-u32 ov45_022306B4(void *avatars);
+void *WiFiPlazaPlayerObjects_New(u32 count, u32 arg1, enum HeapID heapID, u32 arg3);
+void WiFiPlazaPlayerObjects_Delete(void *avatars);
+void WiFiPlazaPlayerObjects_Update(void *avatars);
+u32 WiFiPlazaPlayerObjects_Draw(void *avatars);
 u32 ov45_022306F4(void *avatars);
-void ov45_02230700(void *avatars, int value);
-void *ov45_0223070C(void *avatars, UnkStruct_ov42_02228110 *gridObj);
-void ov45_02230884(void *avatar);
-void ov45_0223089C(void *avatar, int enable);
-u32 ov45_022308B0(void *avatar, u32 value);
-u32 ov45_022308B8(void *avatar);
-void ov45_022308C0(void *avatar, void *out);
-void ov45_022308E4(void *avatar, VecFx32 *position);
-void ov45_02230908(void *avatar, VecFx32 *position);
-void ov45_02230920(void *avatar, u32 direction);
-void ov45_0223093C(void *avatar, int kind);
-void ov45_02230968(void *avatar);
-void ov45_02230974(void *avatar, u32 value);
-void ov45_02230978(void *avatar, u32 value);
-u32 ov45_02230994(void *avatar);
+void WiFiPlazaPlayerObjects_SetModelAlpha(void *avatars, int value);
+void *WiFiPlazaPlayerObjects_Add(void *avatars, UnkStruct_ov42_02228110 *gridObj);
+void WiFiPlazaPlayerObject_Delete(void *avatar);
+void WiFiPlazaPlayerObject_SetMode(void *avatar, int enable);
+u32 WiFiPlazaPlayerObject_SetLightFlags(void *avatar, u32 value);
+u32 WiFiPlazaPlayerObject_IsCulled(void *avatar);
+void WiFiPlazaPlayerObject_SetGridPosition(void *avatar, void *out);
+void WiFiPlazaPlayerObject_SetPosition(void *avatar, VecFx32 *position);
+void WiFiPlazaPlayerObject_GetPosition(void *avatar, VecFx32 *position);
+void WiFiPlazaPlayerObject_SetStandingSequence(void *avatar, u32 direction);
+void WiFiPlazaPlayerObject_StartEffect(void *avatar, int kind);
+void WiFiPlazaPlayerObject_StopEffect(void *avatar);
+void WiFiPlazaPlayerObject_SetEffectStep(void *avatar, u32 value);
+void WiFiPlazaPlayerObject_SetVisible(void *avatar, u32 value);
+u32 WiFiPlazaPlayerObject_IsVisible(void *avatar);
 
 #endif // POKEHEARTGOLD_WIFI_PLAZA_OBJ_H

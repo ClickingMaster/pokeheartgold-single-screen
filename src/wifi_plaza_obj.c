@@ -35,7 +35,7 @@ WiFiPlazaObjManager *WiFiPlazaObj_CreateManager(u32 count, u32 unk_0E, WiFiPlaza
 
     memset(manager, 0, sizeof(WiFiPlazaObjManager));
     manager->gridObjs = ov42_02228010(count, heapID);
-    manager->avatars = ov45_02230498(count, unk_0E, heapID, arg4);
+    manager->avatars = WiFiPlazaPlayerObjects_New(count, unk_0E, heapID, arg4);
     manager->commands = ov42_02229A40(0x20, heapID);
     bytes = sizeof(WiFiPlazaObj) * count;
     manager->count = count;
@@ -50,7 +50,7 @@ WiFiPlazaObjManager *WiFiPlazaObj_CreateManager(u32 count, u32 unk_0E, WiFiPlaza
 void WiFiPlazaObj_DeleteManager(WiFiPlazaObjManager *manager) {
     Heap_Free(manager->objs);
     ov42_02229A78(manager->commands);
-    ov45_02230638(manager->avatars);
+    WiFiPlazaPlayerObjects_Delete(manager->avatars);
     ov42_02228050(manager->gridObjs);
     Heap_Free(manager);
 }
@@ -89,11 +89,11 @@ void WiFiPlazaObj_UpdateManager(WiFiPlazaObjManager *manager) {
             }
         } while (ov42_02229AC8(manager->commands, &command) == 1);
     }
-    ov45_02230680(manager->avatars);
+    WiFiPlazaPlayerObjects_Update(manager->avatars);
 }
 
 u32 ov49_02258BD4(WiFiPlazaObjManager *manager) {
-    return ov45_022306B4(manager->avatars);
+    return WiFiPlazaPlayerObjects_Draw(manager->avatars);
 }
 
 u32 ov49_02258BE0(WiFiPlazaObjManager *manager) {
@@ -137,7 +137,7 @@ WiFiPlazaObj *WiFiPlazaObj_CreateOwnPlayerAt(WiFiPlazaObjManager *manager, int i
         template.unkA = 0x61;
     }
     obj->gridObj = ov42_022280B8(manager->gridObjs, &template);
-    obj->avatar = ov45_0223070C(manager->avatars, obj->gridObj);
+    obj->avatar = WiFiPlazaPlayerObjects_Add(manager->avatars, obj->gridObj);
     manager->ownPlayer = obj;
     WiFiPlazaObj_SetHandler(manager, obj, 0);
     return obj;
@@ -174,13 +174,13 @@ WiFiPlazaObj *WiFiPlazaObj_CreatePlayer(WiFiPlazaObjManager *manager, int id, in
     template.unk8 = 1;
     template.unkA = avatar;
     obj->gridObj = ov42_022280B8(manager->gridObjs, &template);
-    obj->avatar = ov45_0223070C(manager->avatars, obj->gridObj);
+    obj->avatar = WiFiPlazaPlayerObjects_Add(manager->avatars, obj->gridObj);
     WiFiPlazaObj_SetHandler(manager, obj, 0);
     return obj;
 }
 
 void WiFiPlazaObj_Delete(WiFiPlazaObj *obj) {
-    ov45_02230884(obj->avatar);
+    WiFiPlazaPlayerObject_Delete(obj->avatar);
     ov42_02228100(obj->gridObj);
     memset(obj, 0, sizeof(WiFiPlazaObj));
 }
@@ -297,7 +297,7 @@ WiFiPlazaObj *WiFiPlazaObj_FindFacing(WiFiPlazaObjManager *manager, WiFiPlazaObj
 #pragma force_active reset
 
 u32 ov49_02258F70(WiFiPlazaObj *obj) {
-    return ov45_022308B8(obj->avatar);
+    return WiFiPlazaPlayerObject_IsCulled(obj->avatar);
 }
 
 WiFiPlazaObj *WiFiPlazaObj_FindAt(WiFiPlazaObjManager *manager, s32 x, s32 y) {
@@ -365,60 +365,60 @@ BOOL WiFiPlazaObj_FindFreeNeighbor(WiFiPlazaObjManager *manager, WiFiPlazaObj *o
 }
 
 void ov49_02259130(WiFiPlazaObj *obj, int enable) {
-    ov45_0223089C(obj->avatar, enable);
+    WiFiPlazaPlayerObject_SetMode(obj->avatar, enable);
 }
 
 void ov49_0225913C(WiFiPlazaObj *obj, void *out) {
-    ov45_022308C0(obj->avatar, out);
+    WiFiPlazaPlayerObject_SetGridPosition(obj->avatar, out);
 }
 
 void WiFiPlazaObj_SetPosition(WiFiPlazaObj *obj, VecFx32 *position) {
-    ov45_022308E4(obj->avatar, position);
+    WiFiPlazaPlayerObject_SetPosition(obj->avatar, position);
 }
 
 void WiFiPlazaObj_GetPosition(WiFiPlazaObj *obj, VecFx32 *position) {
-    ov45_02230908(obj->avatar, position);
+    WiFiPlazaPlayerObject_GetPosition(obj->avatar, position);
 }
 
 void WiFiPlazaObj_SetDirection(WiFiPlazaObj *obj, u32 direction) {
-    ov45_02230920(obj->avatar, direction);
+    WiFiPlazaPlayerObject_SetStandingSequence(obj->avatar, direction);
 }
 
 // The stop call gets `enable` (0) as its second argument register.
 void ov49_0225916C(WiFiPlazaObj *obj, u32 enable) {
     if (enable != 0) {
-        ov45_0223093C(obj->avatar, 1);
+        WiFiPlazaPlayerObject_StartEffect(obj->avatar, 1);
     } else {
-        ov45_02230968(obj->avatar);
+        WiFiPlazaPlayerObject_StopEffect(obj->avatar);
     }
 }
 
 void ov49_02259184(WiFiPlazaObj *obj, u32 enable) {
     if (enable != 0) {
-        ov45_0223093C(obj->avatar, 0);
+        WiFiPlazaPlayerObject_StartEffect(obj->avatar, 0);
     } else {
-        ov45_02230968(obj->avatar);
+        WiFiPlazaPlayerObject_StopEffect(obj->avatar);
     }
 }
 
 void ov49_0225919C(WiFiPlazaObj *obj, u32 enable) {
     if (enable != 0) {
-        ov45_0223093C(obj->avatar, 2);
+        WiFiPlazaPlayerObject_StartEffect(obj->avatar, 2);
     } else {
-        ov45_02230968(obj->avatar);
+        WiFiPlazaPlayerObject_StopEffect(obj->avatar);
     }
 }
 
 void ov49_022591B4(WiFiPlazaObj *obj, u32 value) {
-    ov45_022308B0(obj->avatar, value);
+    WiFiPlazaPlayerObject_SetLightFlags(obj->avatar, value);
 }
 
 void ov49_022591C0(WiFiPlazaObj *obj, u32 value) {
-    ov45_02230978(obj->avatar, value);
+    WiFiPlazaPlayerObject_SetVisible(obj->avatar, value);
 }
 
 u32 ov49_022591CC(WiFiPlazaObj *obj) {
-    return ov45_02230994(obj->avatar);
+    return WiFiPlazaPlayerObject_IsVisible(obj->avatar);
 }
 
 #pragma force_active on
@@ -454,7 +454,7 @@ void WiFiPlazaObj_SpawnMapObjects(WiFiPlazaObjManager *manager) {
             frame.template.unkA = spawn->unk2;
             gridObj = ov42_022280B8(manager->gridObjs, &frame.template);
             obj->gridObj = gridObj;
-            avatar = ov45_0223070C(manager->avatars, gridObj);
+            avatar = WiFiPlazaPlayerObjects_Add(manager->avatars, gridObj);
             obj->avatar = avatar;
             WiFiPlazaObj_SetHandler(manager, obj, 0);
             if (spawn->tag == 97) {
@@ -649,8 +649,8 @@ void WiFiPlazaObj_HandlerRiseOut(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager
 
     switch (obj->step) {
     case 0:
-        ov45_0223089C(obj->avatar, 0);
-        ov45_0223093C(obj->avatar, 0);
+        WiFiPlazaPlayerObject_SetMode(obj->avatar, 0);
+        WiFiPlazaPlayerObject_StartEffect(obj->avatar, 0);
         WiFiPlazaObj_InitTween(&obj->work.lift.tween, 0, 0x1F4000, 0x18);
         obj->work.lift.frame = 0x20;
         obj->step++;
@@ -666,12 +666,12 @@ void WiFiPlazaObj_HandlerRiseOut(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager
     case 2:
         done = WiFiPlazaObj_UpdateTween(&obj->work.lift.tween, obj->work.lift.frame);
         obj->work.lift.frame++;
-        ov45_02230908(obj->avatar, &position);
+        WiFiPlazaPlayerObject_GetPosition(obj->avatar, &position);
         position.y = WiFiPlazaObj_GetTweenValue(&obj->work.lift.tween);
-        ov45_022308E4(obj->avatar, &position);
+        WiFiPlazaPlayerObject_SetPosition(obj->avatar, &position);
         if (done == TRUE) {
             obj->step++;
-            ov45_02230968(obj->avatar);
+            WiFiPlazaPlayerObject_StopEffect(obj->avatar);
             obj->finished = TRUE;
         }
         break;
@@ -687,8 +687,8 @@ void WiFiPlazaObj_HandlerDropIn(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
 
     switch (obj->step) {
     case 0:
-        ov45_0223089C(obj->avatar, 0);
-        ov45_0223093C(obj->avatar, 0);
+        WiFiPlazaPlayerObject_SetMode(obj->avatar, 0);
+        WiFiPlazaPlayerObject_StartEffect(obj->avatar, 0);
         WiFiPlazaObj_InitTween(&obj->work.lift.tween, 0x1F4000, 0, 0x18);
         obj->work.lift.frame = 0;
         obj->step++;
@@ -697,9 +697,9 @@ void WiFiPlazaObj_HandlerDropIn(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
     case 1:
         done = WiFiPlazaObj_UpdateTween(&obj->work.lift.tween, obj->work.lift.frame);
         obj->work.lift.frame++;
-        ov45_02230908(obj->avatar, &position);
+        WiFiPlazaPlayerObject_GetPosition(obj->avatar, &position);
         position.y = WiFiPlazaObj_GetTweenValue(&obj->work.lift.tween);
-        ov45_022308E4(obj->avatar, &position);
+        WiFiPlazaPlayerObject_SetPosition(obj->avatar, &position);
         if (done == TRUE) {
             obj->work.lift.frame = 0x20;
             obj->step++;
@@ -710,8 +710,8 @@ void WiFiPlazaObj_HandlerDropIn(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
         obj->work.lift.frame--;
         if (obj->work.lift.frame == 0) {
             obj->step++;
-            ov45_02230968(obj->avatar);
-            ov45_0223089C(obj->avatar, 1);
+            WiFiPlazaPlayerObject_StopEffect(obj->avatar);
+            WiFiPlazaPlayerObject_SetMode(obj->avatar, 1);
             obj->finished = TRUE;
         }
         break;
@@ -749,11 +749,11 @@ void WiFiPlazaObj_SlideOneCell(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager, 
 
     switch (obj->step) {
     case 0:
-        ov45_0223089C(obj->avatar, 0);
-        ov45_0223093C(obj->avatar, 0);
-        ov45_02230974(obj->avatar, 2);
+        WiFiPlazaPlayerObject_SetMode(obj->avatar, 0);
+        WiFiPlazaPlayerObject_StartEffect(obj->avatar, 0);
+        WiFiPlazaPlayerObject_SetEffectStep(obj->avatar, 2);
         WiFiPlazaObj_InitTween(&obj->work.slide.tween, 0, 0x10000, 4);
-        ov45_02230908(obj->avatar, &startPos);
+        WiFiPlazaPlayerObject_GetPosition(obj->avatar, &startPos);
         switch (direction) {
         case 0:
         case 1:
@@ -769,7 +769,7 @@ void WiFiPlazaObj_SlideOneCell(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager, 
     case 1:
         done = WiFiPlazaObj_UpdateTween(&obj->work.slide.tween, obj->work.slide.frame);
         obj->work.slide.frame = obj->work.slide.frame + 1;
-        ov45_02230908(obj->avatar, &position);
+        WiFiPlazaPlayerObject_GetPosition(obj->avatar, &position);
         switch (direction) {
         case 0:
             position.z = obj->work.slide.start - WiFiPlazaObj_GetTweenValue(&obj->work.slide.tween);
@@ -784,7 +784,7 @@ void WiFiPlazaObj_SlideOneCell(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager, 
             position.x = obj->work.slide.start + WiFiPlazaObj_GetTweenValue(&obj->work.slide.tween);
             break;
         }
-        ov45_022308E4(obj->avatar, &position);
+        WiFiPlazaPlayerObject_SetPosition(obj->avatar, &position);
         if (done == 1) {
             dir = ov42_022282A4(direction);
             obj->work.slide.frame = 4;
@@ -810,8 +810,8 @@ void WiFiPlazaObj_SlideOneCell(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager, 
             next = ov42_02228270(cellCopy, direction);
             nextCopy = next;
             WiFiPlazaObj_SetGridPosAndDir(obj, nextCopy, ov42_022282A4(direction));
-            ov45_02230968(obj->avatar);
-            ov45_0223089C(obj->avatar, 1);
+            WiFiPlazaPlayerObject_StopEffect(obj->avatar);
+            WiFiPlazaPlayerObject_SetMode(obj->avatar, 1);
             obj->finished = 1;
         }
         break;
@@ -828,8 +828,8 @@ void WiFiPlazaObj_HandlerHop(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
 
     switch (obj->step) {
     case 0:
-        ov45_0223089C(obj->avatar, 0);
-        ov45_02230908(obj->avatar, &obj->work.hop.origin);
+        WiFiPlazaPlayerObject_SetMode(obj->avatar, 0);
+        WiFiPlazaPlayerObject_GetPosition(obj->avatar, &obj->work.hop.origin);
         obj->work.hop.frame = 0x1C;
         obj->step++;
         break;
@@ -846,8 +846,8 @@ void WiFiPlazaObj_HandlerHop(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
             position.z += FX_Mul(GF_SinDegNoWrap(degrees), FX32_CONST(-2.0));
             position.y += FX_Mul(GF_SinDegNoWrap(degrees), FX32_CONST(10.0));
         }
-        ov45_022308E4(obj->avatar, &position);
-        ov45_02230920(obj->avatar, 1);
+        WiFiPlazaPlayerObject_SetPosition(obj->avatar, &position);
+        WiFiPlazaPlayerObject_SetStandingSequence(obj->avatar, 1);
         break;
     }
 }
@@ -855,10 +855,10 @@ void WiFiPlazaObj_HandlerHop(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
 void WiFiPlazaObj_HandlerResetHeight(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
     VecFx32 position;
 
-    ov45_0223089C(obj->avatar, 1);
-    ov45_02230908(obj->avatar, &position);
+    WiFiPlazaPlayerObject_SetMode(obj->avatar, 1);
+    WiFiPlazaPlayerObject_GetPosition(obj->avatar, &position);
     position.y = 0;
-    ov45_022308E4(obj->avatar, &position);
+    WiFiPlazaPlayerObject_SetPosition(obj->avatar, &position);
 }
 
 void WiFiPlazaObj_InitLight(WiFiPlazaObjLight *light, void *avatars, u32 value) {
@@ -868,7 +868,7 @@ void WiFiPlazaObj_InitLight(WiFiPlazaObjLight *light, void *avatars, u32 value) 
     light->frame = 0;
     light->duration = 0;
     light->active = 0;
-    ov45_02230700(avatars, value);
+    WiFiPlazaPlayerObjects_SetModelAlpha(avatars, value);
 }
 
 void WiFiPlazaObj_StartLightFade(WiFiPlazaObjLight *light, u32 value) {

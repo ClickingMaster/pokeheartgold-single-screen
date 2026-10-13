@@ -33,9 +33,9 @@ typedef struct WiFiPlazaGameEntryParam {
 
 // The game's status panel: session state, free places and the seconds left
 typedef struct WiFiPlazaGameStatus {
-    u8 sessionActive; // 0x00 ov45_0222F274
+    u8 sessionActive; // 0x00 WiFiPlazaLobbyClient_IsMatchActive
     u8 space;         // 0x01 free places (4 while no session is active)
-    u8 accepting;     // 0x02 ov45_0222F294; 0 while the game is played
+    u8 accepting;     // 0x02 WiFiPlazaLobbyClient_IsMatchOpen; 0 while the game is played
     u8 game;          // 0x03
     s16 seconds;      // 0x04
     u8 showSeconds;   // 0x06
@@ -49,7 +49,7 @@ typedef struct WiFiPlazaGameStatus {
 
 typedef struct WiFiPlazaGameEntry {
     s16 timeLeft;                  // 0x00 frames until the registration closes
-    u16 entriesClosed;             // 0x02 host closed the entries (ov45_0222F1BC)
+    u16 entriesClosed;             // 0x02 host closed the entries (WiFiPlazaLobbyClient_CloseMatch)
     u8 nextStep;                   // 0x04 after the message / the link sync
     s8 syncDelay;                  // 0x05
     u8 syncId;                     // 0x06

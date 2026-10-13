@@ -24,12 +24,12 @@ void ModelInstance_SetScale(FootprintStampModelInstance *instance, fx32 x, fx32 
 void ModelInstance_GetScale(FootprintStampModelInstance *instance, fx32 *x, fx32 *y, fx32 *z);
 void ModelInstance_SetRotation(FootprintStampModelInstance *instance, u16 rotation, int axis);
 u16 ModelInstance_GetRotation(FootprintStampModelInstance *instance, int axis);
-int ov45_0222EC68(u32 playerId);
-int ov45_0222EC7C(u32 playerId);
+int WiFiPlazaLobbyClient_IdToSlot(u32 playerId);
+int WiFiPlazaLobbyClient_IdToChannelSlot(u32 playerId);
 void *WiFiPlazaWork_GetPlayer(void *lobby, int slot);
 void WiFiPlazaPlayer_CopyToProfile(void *record, PlayerProfile *profile, enum HeapID heapId);
-int ov45_0222AB28(void *lobby, int slot);
-BOOL ov45_0222D844(void);
+int WiFiPlazaWork_IsSpecialVisitor(void *lobby, int slot);
+BOOL WiFiPlaza_HasConnectionFailed(void);
 int WiFiPlazaLobbyClient_SetChannelCommands(const void *commands, u32 count, void *data);
 void WiFiPlazaLobbyClient_SendToChannel(int command, void *data, int size);
 // Runtime 64-bit multiply, called by name in FootprintStamp_GetBounds (a plain `*` orders the operands differently).
@@ -1339,7 +1339,7 @@ BOOL FootprintStampCamera_PitchDown(FootprintStampBoard *unused, FootprintStampB
 }
 
 void FootprintStamp_PrintPlayerName(MsgData *msgData, MessageFormat *msgFormat, Window *windows, void *lobby, u32 playerId) {
-    u32 index = ov45_0222EC7C(playerId);
+    u32 index = WiFiPlazaLobbyClient_IdToChannelSlot(playerId);
     int slot;
     void *record;
     PlayerProfile *profile;
@@ -1353,7 +1353,7 @@ void FootprintStamp_PrintPlayerName(MsgData *msgData, MessageFormat *msgFormat, 
     if (index == (u32)-1) {
         return;
     }
-    slot = ov45_0222EC68(playerId);
+    slot = WiFiPlazaLobbyClient_IdToSlot(playerId);
     if (slot == -1) {
         return;
     }
@@ -1375,7 +1375,7 @@ void FootprintStamp_PrintPlayerName(MsgData *msgData, MessageFormat *msgFormat, 
     StringExpandPlaceholders(msgFormat, string, template);
     window = &windows[index];
     FillWindowPixelBuffer(window, 0);
-    color = ov45_0222AB28(lobby, slot) == 1 ? MAKE_TEXT_COLOR(7, 8, 0) : MAKE_TEXT_COLOR(1, 2, 0);
+    color = WiFiPlazaWork_IsSpecialVisitor(lobby, slot) == 1 ? MAKE_TEXT_COLOR(7, 8, 0) : MAKE_TEXT_COLOR(1, 2, 0);
     AddTextPrinterParameterizedWithColor(window, 0, string, 0, 0, TEXT_SPEED_INSTANT, color, NULL);
     CopyWindowToVram(window);
     String_Delete(name);
@@ -1446,7 +1446,7 @@ BOOL FootprintStamp_IsFromOtherPlayer(u32 playerId, const FootprintStampLinkFilt
         return FALSE;
     }
     // called with a second argument the function does not take
-    index = ((int (*)(u32, BOOL))ov45_0222EC7C)(playerId, filter->active);
+    index = ((int (*)(u32, BOOL))WiFiPlazaLobbyClient_IdToChannelSlot)(playerId, filter->active);
     if (index != -1) {
         return TRUE;
     }
@@ -1455,7 +1455,7 @@ BOOL FootprintStamp_IsFromOtherPlayer(u32 playerId, const FootprintStampLinkFilt
 
 BOOL FootprintStamp_SendStamp(FootprintStampMon *mon) {
     // called with an argument the function does not take
-    if (((BOOL(*)(FootprintStampMon *))ov45_0222D844)(mon) == TRUE) {
+    if (((BOOL(*)(FootprintStampMon *))WiFiPlaza_HasConnectionFailed)(mon) == TRUE) {
         return FALSE;
     }
     WiFiPlazaLobbyClient_SendToChannel(2, mon, sizeof(FootprintStampMon));
@@ -1474,7 +1474,7 @@ void FootprintStamp_HandlePlayerLeft(u32 playerId, void *data, u32 unused, Footp
     FootprintStampLinkFilter *filter = FootprintStamp_GetLinkFilter(work);
 
     if (FootprintStamp_IsFromOtherPlayer(playerId, filter)) {
-        FootprintStamp_ClearPlayerName(work, ov45_0222EC7C(playerId));
+        FootprintStamp_ClearPlayerName(work, WiFiPlazaLobbyClient_IdToChannelSlot(playerId));
     }
 }
 

@@ -12,7 +12,7 @@
 extern const u8 sWiFiPlazaInfoCounterMsgs[8];
 extern const ListMenuTemplate sWiFiPlazaTalkMenuTemplate;
 extern const u16 sWiFiPlazaTalkGreetingMsgs[8][8]; // by the speaker's and the listener's language
-// Pairs { message, variant with the partner's name highlighted }, used when ov45_0222AB28 is set for the partner
+// Pairs { message, variant with the partner's name highlighted }, used when WiFiPlazaWork_IsSpecialVisitor is set for the partner
 extern const u16 sWiFiPlazaTalkMsgPairs[];
 extern const u16 sWiFiPlazaTalkMsgPairsHighlighted[];
 
@@ -41,9 +41,9 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
 
     stateManager = WiFiPlazaRoom_GetPlayerStates(room);
     talk = WiFiPlazaPlayerState_GetWork(state);
-    partnerStatus = ov45_0222B034(lobby);
+    partnerStatus = WiFiPlazaWork_GetTalkState(lobby);
     partnerAnswer = ov45_0222B040(lobby);
-    if (ov45_0222B06C(lobby) && talk != NULL && talk->talking) {
+    if (WiFiPlazaWork_IsTalkOver(lobby) && talk != NULL && talk->talking) {
         WiFiPlazaPlayerState_SetStep(state, 32);
         WiFiPlazaRoom_HideWaitingIcon(room);
         talk->talking = FALSE;
@@ -80,7 +80,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         }
         partnerIndex = WiFiPlazaObj_GetParam(partnerObj, 4);
         direction = ov42_022282A4(WiFiPlazaObj_GetParam(ownObj, 6));
-        ov45_0222AE64(lobby);
+        WiFiPlazaWork_ResetTalk(lobby);
         result = WiFiPlazaTalk_Init(talk, lobby, partnerIndex);
         talk->partnerObj = partnerObj;
         ov49_02259130(partnerObj, 0);
@@ -96,7 +96,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         }
         break;
     case 1:
-        if (ov45_0222AE74(lobby, talk->partner) == TRUE) {
+        if (WiFiPlazaWork_StartTalk(lobby, talk->partner) == TRUE) {
             WiFiPlazaPlayerState_SetStep(state, 2);
         } else {
             WiFiPlazaPlayerState_SetStep(state, 34);
@@ -105,7 +105,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
     case 2:
         switch (partnerStatus) {
         case 2:
-            ov45_0222B0E8(lobby, talk->partner);
+            WiFiPlazaWork_SetTalkedWith(lobby, talk->partner);
             WiFiPlazaPlayerState_SetStep(state, 3);
             break;
         case 0:
@@ -129,13 +129,13 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
     case 4:
         WiFiPlazaTalk_PrintGreeting(talk, lobby, room, talk->partnerTimeOfDay, partner, me);
         WiFiPlazaTalk_SetNextStep(talk, 128, 5, state, 37);
-        ov45_0222AED8(lobby, 0);
+        WiFiPlazaWork_AdvanceTalk(lobby, 0);
         break;
     case 5:
         switch (partnerStatus) {
         case 2:
             WiFiPlazaRoom_HideWaitingIcon(room);
-            if (ov45_0222B028(lobby)) {
+            if (WiFiPlazaWork_IsFirstTalk(lobby)) {
                 WiFiPlazaPlayerState_SetStep(state, 6);
             } else {
                 WiFiPlazaPlayerState_SetStep(state, 8);
@@ -200,11 +200,11 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
             break;
         case 1:
             WiFiPlazaPlayerState_SetStep(state, 19);
-            ov45_0222AB94(lobby, playerIndex, WiFiPlazaObj_GetParam(talk->partnerObj, 4));
+            WiFiPlaza_SendChatNews(lobby, playerIndex, WiFiPlazaObj_GetParam(talk->partnerObj, 4));
             done = TRUE;
             break;
         case 2:
-            ov45_0222AF80(lobby);
+            WiFiPlazaWork_CancelTalkRequest(lobby);
             WiFiPlazaPlayerState_SetStep(state, 33);
             done = TRUE;
             break;
@@ -228,7 +228,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
             WiFiPlazaTalk_BufferInstrument(talk, lobby, room, 1, FALSE);
             WiFiPlazaRoom_PrintMessage(room, WiFiPlazaTalk_GetMsg(room, talk->partner, 507));
             WiFiPlazaTalk_SetNextStep(talk, 128, 18, state, 37);
-            ov45_0222AED8(lobby, 4);
+            WiFiPlazaWork_AdvanceTalk(lobby, 4);
         } else {
             talk->sameToy = FALSE;
             WiFiPlazaRoom_BufferPlayerName(room, talk->partner, 0);
@@ -252,10 +252,10 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         case 0: {
             int partnerIndex2;
 
-            ov45_0222AED8(lobby, 3);
+            WiFiPlazaWork_AdvanceTalk(lobby, 3);
             WiFiPlazaPlayerState_SetStep(state, 16);
             partnerIndex2 = WiFiPlazaObj_GetParam(talk->partnerObj, 4);
-            ov45_0222ABD0(lobby, playerIndex, partnerIndex2, ov45_0222AAC8(partner));
+            WiFiPlaza_SendTapToyTradeNews(lobby, playerIndex, partnerIndex2, ov45_0222AAC8(partner));
             done = TRUE;
             break;
         }
@@ -313,7 +313,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         }
         break;
     case 19: // chat: ask a question
-        ov45_0222AED8(lobby, 5);
+        WiFiPlazaWork_AdvanceTalk(lobby, 5);
         WiFiPlazaPlayerState_SetStep(state, 20);
         break;
     case 20: // four questions picked at random out of 30
@@ -455,7 +455,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
             wait = 255;
         }
         WiFiPlazaTalk_SetNextStep(talk, (u8)wait, 38, state, 36);
-        ov45_0222AFC4(lobby);
+        WiFiPlazaWork_EndTalk(lobby);
         break;
     }
     case 33: // "See you again!"
@@ -483,9 +483,9 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         break;
     case 38:
         if (talk->historyPending == TRUE) {
-            ov45_0222A704(lobby, talk->historyAvatar, talk->historyId);
+            WiFiPlazaWork_AddHistory(lobby, talk->historyAvatar, talk->historyId);
         }
-        ov45_0222AE64(lobby);
+        WiFiPlazaWork_ResetTalk(lobby);
         WiFiPlazaRoom_CloseMessage(room);
         ov45_0222A5E8(lobby, 1);
         {
@@ -515,12 +515,12 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
 BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
     WiFiPlazaTalk *talk = WiFiPlazaPlayerState_GetWork(state);
-    u32 partnerStatus = ov45_0222B034(lobby);
+    u32 partnerStatus = WiFiPlazaWork_GetTalkState(lobby);
     u32 partnerAnswer = ov45_0222B040(lobby);
     WiFiPlazaPlayer *me;
     WiFiPlazaPlayer *partner;
 
-    if (ov45_0222B06C(lobby) && talk != NULL && talk->talking == TRUE) {
+    if (WiFiPlazaWork_IsTalkOver(lobby) && talk != NULL && talk->talking == TRUE) {
         WiFiPlazaPlayerState_SetStep(state, 26);
         WiFiPlazaRoom_HideWaitingIcon(room);
         talk->talking = FALSE;
@@ -545,13 +545,13 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         talk->historyPending = 0;
         talk->historyAvatar = 0;
         talk->historyId = 0;
-        partnerIndex = ov45_0222B020(lobby);
+        partnerIndex = WiFiPlazaWork_GetTalkPartner(lobby);
         result = WiFiPlazaTalk_Init(talk, lobby, partnerIndex);
         PlaySE(SEQ_SE_DP_BUTTON9);
         ov45_0222A5E8(lobby, 9);
         if (result == TRUE) {
             WiFiPlazaRoom_ShowPlayerCard(room, partnerIndex, 0);
-            ov45_0222B0E8(lobby, partnerIndex);
+            WiFiPlazaWork_SetTalkedWith(lobby, partnerIndex);
             WiFiPlazaPlayerState_SetStep(state, 1);
         } else {
             WiFiPlazaPlayerState_SetStep(state, 26);
@@ -575,8 +575,8 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         switch (partnerStatus) {
         case 3:
             WiFiPlazaRoom_HideWaitingIcon(room);
-            ov45_0222AED8(lobby, 0);
-            if (ov45_0222B028(lobby)) {
+            WiFiPlazaWork_AdvanceTalk(lobby, 0);
+            if (WiFiPlazaWork_IsFirstTalk(lobby)) {
                 WiFiPlazaPlayerState_SetStep(state, 4);
             } else {
                 WiFiPlazaPlayerState_SetStep(state, 6);
@@ -631,18 +631,18 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
             switch (partnerAnswer) {
             case 3: // gets our Tap Toy
                 WiFiPlazaPlayerState_SetStep(state, 10);
-                ov45_0222B0BC(lobby);
+                WiFiPlazaWork_IncPartnerTalkCount(lobby);
                 talk->answered = TRUE;
                 WiFiPlazaTalk_SetHistory(talk, partner);
                 break;
             case 4: // has the same Tap Toy
                 WiFiPlazaPlayerState_SetStep(state, 14);
-                ov45_0222B0BC(lobby);
+                WiFiPlazaWork_IncPartnerTalkCount(lobby);
                 talk->answered = TRUE;
                 WiFiPlazaTalk_SetHistory(talk, partner);
                 break;
             case 5: // asks a question
-                ov45_0222AED8(lobby, 1);
+                WiFiPlazaWork_AdvanceTalk(lobby, 1);
                 WiFiPlazaPlayerState_SetStep(state, 15);
                 break;
             default:
@@ -693,7 +693,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         WiFiPlazaRoom_BufferPlayerName(room, talk->partner, 0);
         WiFiPlazaRoom_PrintMessage(room, WiFiPlazaTalk_GetMsg(room, talk->partner, 514));
         WiFiPlazaTalk_SetNextStep(talk, 128, 8, state, 30);
-        ov45_0222AED8(lobby, 2);
+        WiFiPlazaWork_AdvanceTalk(lobby, 2);
         WiFiPlazaRoom_SetPlayerCardIcon(room, ov45_0222AAC8(WiFiPlazaWork_GetMyPlayer(lobby)));
         break;
     case 14: // "Oh! You've got a ... just like me."
@@ -701,7 +701,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         WiFiPlazaTalk_BufferInstrument(talk, lobby, room, 1, TRUE);
         WiFiPlazaRoom_PrintMessage(room, WiFiPlazaTalk_GetMsg(room, talk->partner, 507));
         WiFiPlazaTalk_SetNextStep(talk, 128, 27, state, 30);
-        ov45_0222AED8(lobby, 2);
+        WiFiPlazaWork_AdvanceTalk(lobby, 2);
         break;
     case 15: // "Let's chat!"
         WiFiPlazaRoom_BufferPlayerName(room, talk->partner, 0);
@@ -713,7 +713,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         case 3:
             WiFiPlazaPlayerState_SetStep(state, 17);
             WiFiPlazaRoom_HideWaitingIcon(room);
-            ov45_0222B0BC(lobby);
+            WiFiPlazaWork_IncPartnerTalkCount(lobby);
             talk->answered = TRUE;
             break;
         case 2:
@@ -773,13 +773,13 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         case 2:
         case 3:
             talk->myAnswer = choice + talk->question * 4;
-            ov45_0222AED8(lobby, (u16)(talk->myAnswer + 6));
+            WiFiPlazaWork_AdvanceTalk(lobby, (u16)(talk->myAnswer + 6));
             WiFiPlazaPlayerState_SetStep(state, 23);
             done = TRUE;
             break;
         case 4:
             talk->myAnswer = 126;
-            ov45_0222AED8(lobby, talk->myAnswer);
+            WiFiPlazaWork_AdvanceTalk(lobby, talk->myAnswer);
             WiFiPlazaPlayerState_SetStep(state, 28);
             done = TRUE;
             break;
@@ -833,7 +833,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
             duration = 255;
         }
         WiFiPlazaTalk_SetNextStep(talk, (u8)duration, 31, state, 29);
-        ov45_0222AFC4(lobby);
+        WiFiPlazaWork_EndTalk(lobby);
         break;
     }
     case 27: // "See you again!"
@@ -855,12 +855,12 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         break;
     case 31:
         if (talk->historyPending == TRUE) {
-            ov45_0222A704(lobby, talk->historyAvatar, talk->historyId);
+            WiFiPlazaWork_AddHistory(lobby, talk->historyAvatar, talk->historyId);
         }
         if (!talk->answered) {
-            ov45_0222B0D8(lobby, talk->partner);
+            WiFiPlazaWork_IncTalkCount(lobby, talk->partner);
         }
-        ov45_0222AE64(lobby);
+        WiFiPlazaWork_ResetTalk(lobby);
         WiFiPlazaRoom_CloseMessage(room);
         WiFiPlazaTalk_Free(talk);
         WiFiPlazaPlayerState_FreeWork(state);
@@ -900,9 +900,9 @@ BOOL WiFiPlazaTalk_InfoCounter(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *r
     case 0:
         WiFiPlazaPlayerState_AllocWork(state, sizeof(WiFiPlazaInfoCounter));
         PlaySE(SEQ_SE_DP_SELECT);
-        if (ov45_0222A330(lobby) == 1) {
+        if (WiFiPlazaWork_IsClosing(lobby) == 1) {
             WiFiPlazaPlayerState_SetStep(state, 2);
-        } else if (ov45_0222A374(lobby) == TRUE) {
+        } else if (WiFiPlazaWork_IsParadeStarted(lobby) == TRUE) {
             WiFiPlazaPlayerState_SetStep(state, 1);
         } else {
             WiFiPlazaPlayerState_SetStep(state, 3);
@@ -1132,8 +1132,8 @@ BOOL WiFiPlazaTalk_Reception(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *roo
     switch (WiFiPlazaPlayerState_GetStep(state)) {
     case 0:
         PlaySE(SEQ_SE_DP_SELECT);
-        if (ov45_0222A330(lobby) == 0) {
-            if (ov45_0222A374(lobby) == TRUE) { // the Pokemon Parade is on
+        if (WiFiPlazaWork_IsClosing(lobby) == 0) {
+            if (WiFiPlazaWork_IsParadeStarted(lobby) == TRUE) { // the Pokemon Parade is on
                 message = WiFiPlazaRoom_GetMsgString(room, 1, 0x4E);
                 WiFiPlazaRoom_PrintMessage(room, message);
                 WiFiPlazaPlayerState_SetStep(state, 1);
@@ -1211,7 +1211,7 @@ int WiFiPlazaTalk_GetTimeOfDay(WiFiPlazaPlayer *player) {
         u32 copy;
     } localTime;
 
-    localTime.time = ov45_0222A9C8(player);
+    localTime.time = WiFiPlazaPlayer_GetLocalTime(player);
     localTime.copy = localTime.time;
     switch (*(u8 *)&localTime.copy) {
     case 4:
@@ -1251,7 +1251,7 @@ int WiFiPlazaTalk_GetTimeOfDay(WiFiPlazaPlayer *player) {
 String *WiFiPlazaTalk_GetMsg(WiFiPlazaRoomWork *room, u32 playerIndex, u32 msgId) {
     u32 i;
 
-    if (ov45_0222AB28(WiFiPlazaRoom_GetLobby(room), playerIndex) == 1) {
+    if (WiFiPlazaWork_IsSpecialVisitor(WiFiPlazaRoom_GetLobby(room), playerIndex) == 1) {
         for (i = 0; i < 0x163; i++) {
             if (msgId == sWiFiPlazaTalkMsgPairs[i * 2]) {
                 msgId = sWiFiPlazaTalkMsgPairsHighlighted[i * 2];
@@ -1264,8 +1264,8 @@ String *WiFiPlazaTalk_GetMsg(WiFiPlazaRoomWork *room, u32 playerIndex, u32 msgId
 
 String *WiFiPlazaTalk_GetReunionMsg(WiFiPlazaRoomWork *room, u32 speaker, u32 listener) {
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
-    int speakerHighlighted = ov45_0222AB28(lobby, speaker);
-    int listenerHighlighted = ov45_0222AB28(lobby, listener);
+    int speakerHighlighted = WiFiPlazaWork_IsSpecialVisitor(lobby, speaker);
+    int listenerHighlighted = WiFiPlazaWork_IsSpecialVisitor(lobby, listener);
     u32 msgId = 0x29;
 
     if (speakerHighlighted == 1 && listenerHighlighted == 1) {
@@ -1286,7 +1286,7 @@ BOOL WiFiPlazaTalk_Init(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, s32 partner) 
         GF_AssertFail();
     }
     talk->partner = partner;
-    talk->me = ov45_0222A53C(lobby);
+    talk->me = WiFiPlazaWork_GetOwnSlot(lobby);
     talk->talking = TRUE;
     me = WiFiPlazaWork_GetMyPlayer(lobby);
     partnerPlayer = WiFiPlazaWork_GetPlayer(lobby, talk->partner);
@@ -1444,11 +1444,11 @@ void WiFiPlazaTalk_CountMenuTimer(WiFiPlazaTalk *talk) {
 }
 
 void WiFiPlazaTalk_SetHistory(WiFiPlazaTalk *talk, WiFiPlazaPlayer *partner) {
-    u32 avatar = ov45_0222A9A4(partner);
+    u32 avatar = WiFiPlazaPlayer_GetAvatarIndex(partner);
 
     talk->historyPending = TRUE;
     talk->historyAvatar = avatar;
-    talk->historyId = ov45_0222A99C(partner);
+    talk->historyId = WiFiPlazaPlayer_GetLobbyId(partner);
 }
 
 void WiFiPlazaTalkMenu_Init(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room, u32 count, u32 firstMsg, u32 lastItem) {
@@ -1571,14 +1571,14 @@ void WiFiPlazaTalkReply_Start(WiFiPlazaTalkReply *reply, WiFiPlazaWork *lobby, u
     reply->active = TRUE;
     reply->value = value;
     reply->awaited = awaited;
-    reply->startStatus = ov45_0222B034(lobby);
+    reply->startStatus = WiFiPlazaWork_GetTalkState(lobby);
 }
 
 void WiFiPlazaTalkReply_Update(WiFiPlazaTalkReply *reply, WiFiPlazaWork *lobby) {
     if (reply->active != FALSE) {
-        reply->status = ov45_0222B034(lobby);
+        reply->status = WiFiPlazaWork_GetTalkState(lobby);
         if (reply->status == reply->awaited) {
-            ov45_0222AED8(lobby, reply->value);
+            WiFiPlazaWork_AdvanceTalk(lobby, reply->value);
             reply->active = FALSE;
             return;
         }

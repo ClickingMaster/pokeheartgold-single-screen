@@ -124,18 +124,18 @@ s32 WifiConnection_UpdateLogin(void);
 int ov45_0222E804(int arg0);
 void WifiConnection_Init(SaveData *saveData, int arg1, int arg2, int arg3);
 void WifiConnection_SetErrorCallback(void (*func)(u32));
-int ov45_0222F274(int arg0);
-void ov45_0222F028(int arg0, int arg1);
-void ov45_0222F350(int arg0);
+int WiFiPlazaLobbyClient_IsMatchActive(int arg0);
+void WiFiPlazaLobbyClient_HostMatch(int arg0, int arg1);
+void WiFiPlazaLobbyClient_JoinMatch(int arg0);
 void CommWireless_SetDetectDrops(int arg0);
 s32 sub_02034044(void);
 BOOL CommWireless_IsManagerEnded(void);
 BOOL CommWireless_IsInitialized(void);
 int Wireless_HasFatalError(void);
 void sub_020378E4(int arg0);
-int ov45_0222E8F4(void);
+int WiFiPlazaLobbyClient_IsInLobby(void);
 int WiFiPlazaLobbyClient_Update(void);
-int ov45_0222E944(void);
+int WiFiPlazaLobbyClient_IsDisconnected(void);
 int CommPlayerInfo_GetCountry(int arg0);
 int CommPlayerInfo_GetRegion(int arg0);
 void LoadOVY38(void);
@@ -321,9 +321,9 @@ s32 Comm_RegisterLinkedFriends(SaveData *saveData, s32 *arg1, enum HeapID heapID
 void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 arg1, s32 arg2, enum HeapID heapID, u32 arg4);
 s32 Comm_FindFriendIndexOfPlayer(SaveData *saveData, s32 arg1);
 
-int ov45_0222F464(void);
+int WiFiPlazaLobbyClient_IsMatchHost(void);
 void ov45_0222F154(void);
-void ov45_0222F70C(void);
+void WiFiPlazaLobbyClient_EndMatch(void);
 void ov45_0222E91C(void);
 int ov45_0222F254(void);
 

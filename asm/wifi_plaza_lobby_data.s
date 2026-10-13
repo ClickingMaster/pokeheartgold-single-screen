@@ -1,84 +1,84 @@
-	.extern ov45_0222BE9C
-	.extern ov45_0222BF18
-	.extern ov45_0222BF98
-	.extern ov45_0222C0CC
-	.extern ov45_0222C130
-	.extern ov45_0222C1EC
-	.extern ov45_0222C2A8
+	.extern WiFiPlaza_HandleChatNews
+	.extern WiFiPlaza_HandleTapToyTradeNews
+	.extern WiFiPlaza_HandleMinigameEntryNews
+	.extern WiFiPlaza_HandleFootprintStampNews
+	.extern WiFiPlaza_HandleVisitorProfilesNews
+	.extern WiFiPlaza_HandlePlazaNewsNews
+	.extern WiFiPlaza_HandleMinigameResultNews
 	.extern ov45_0222C36C
-	.extern ov45_0222C688
-	.extern ov45_0222C73C
-	.extern ov45_0222C79C
-	.extern ov45_0222C800
-	.extern ov45_0222C828
+	.extern WiFiPlaza_OnTalkRequest
+	.extern WiFiPlaza_OnTalkAnswer
+	.extern WiFiPlaza_OnTalkState
+	.extern WiFiPlaza_OnTalkCancel
+	.extern WiFiPlaza_OnLobbyMessage
 	.extern ov45_0222C83C
 	.extern ov45_0222C858
 	.extern ov45_0222C88C
-	.extern ov45_0222CF00
-	.extern ov45_0222CF24
-	.extern ov45_0222CF40
-	.extern ov45_0222CF68
-	.extern ov45_0222CFF4
-	.extern ov45_0222D01C
-	.extern ov45_0222D028
-	.extern ov45_0222D054
-	.extern ov45_0222D078
-	.extern ov45_0222D0BC
-	.extern ov45_0222D0C8
-	.extern ov45_0222D0D8
-	.extern ov45_0222D0FC
-	.extern ov45_0222D130
-	.extern ov45_0222D13C
-	.extern ov45_0222D14C
-	.extern ov45_0222D164
-	.extern ov45_0222D19C
-	.extern ov45_0222D1B0
-	.extern ov45_0222D1DC
-	.extern ov45_0222D20C
-	.extern ov45_0222D23C
-	.extern ov45_0222D250
-	.extern ov45_0222D27C
-	.extern ov45_0222D2AC
-	.extern ov45_0222D2E4
-	.extern ov45_0222D2F8
-	.extern ov45_0222D324
-	.extern ov45_0222D354
-	.extern ov45_0222D380
-	.extern ov45_0222D38C
+	.extern WiFiPlazaApps_NewMainArgs
+	.extern WiFiPlazaApps_FreeMainArgs
+	.extern WiFiPlazaApps_StartMain
+	.extern WiFiPlazaApps_EndMain
+	.extern WiFiPlazaApps_NewVisitorProfilesArgs
+	.extern WiFiPlazaApps_FreeVisitorProfilesArgs
+	.extern WiFiPlazaApps_StartVisitorProfiles
+	.extern WiFiPlazaApps_EndVisitorProfiles
+	.extern WiFiPlazaApps_NewPlazaNewsArgs
+	.extern WiFiPlazaApps_FreePlazaNewsArgs
+	.extern WiFiPlazaApps_StartPlazaNews
+	.extern WiFiPlazaApps_EndPlazaNews
+	.extern WiFiPlazaApps_NewConnectArgs
+	.extern WiFiPlazaApps_FreeConnectArgs
+	.extern WiFiPlazaApps_StartConnect
+	.extern WiFiPlazaApps_EndConnect
+	.extern WiFiPlazaApps_NewSwalotPlopArgs
+	.extern WiFiPlazaApps_FreeSwalotPlopArgs
+	.extern WiFiPlazaApps_StartSwalotPlop
+	.extern WiFiPlazaApps_EndSwalotPlop
+	.extern WiFiPlazaApps_NewMimeJrTopArgs
+	.extern WiFiPlazaApps_FreeMimeJrTopArgs
+	.extern WiFiPlazaApps_StartMimeJrTop
+	.extern WiFiPlazaApps_EndMimeJrTop
+	.extern WiFiPlazaApps_NewWobbuffetPopArgs
+	.extern WiFiPlazaApps_FreeWobbuffetPopArgs
+	.extern WiFiPlazaApps_StartWobbuffetPop
+	.extern WiFiPlazaApps_EndWobbuffetPop
+	.extern WiFiPlazaApps_NewFootprintStampArgs
+	.extern WiFiPlazaApps_FreeFootprintStampArgs
+	.extern WiFiPlazaApps_EndFootprintStamp
 	.extern ov45_0222D3B0
 	.extern ov45_0222D3C4
-	.extern ov45_0222D3D8
-	.extern ov45_0222D410
-	.extern ov45_0222D41C
-	.extern ov45_0222D428
-	.extern ov45_0222D448
+	.extern WiFiPlazaApps_NewDisconnectArgs
+	.extern WiFiPlazaApps_FreeDisconnectArgs
+	.extern WiFiPlazaApps_StartDisconnect
+	.extern WiFiPlazaApps_StartClosedDisconnect
+	.extern WiFiPlazaApps_EndDisconnect
 	.extern ov45_0222D44C
 	.extern ov45_0222D484
-	.extern ov45_0222D4C0
-	.extern ov45_0222D4CC
-	.extern ov45_0222D4DC
-	.extern ov45_0222D524
-	.extern ov45_0222E14C
-	.extern ov45_0222E1A0
-	.extern ov45_0222E200
-	.extern ov45_0222E33C
-	.extern ov45_0222E39C
-	.extern ov45_0222E414
-	.extern ov45_0222E484
-	.extern ov45_0222E4A8
-	.extern ov45_0222E540
-	.extern ov45_0222E550
-	.extern ov45_0222E560
-	.extern ov45_0222E574
-	.extern ov45_0222E584
-	.extern ov45_0222E598
-	.extern ov45_0222E59C
-	.extern ov45_0222E5A0
-	.extern ov45_02230B64
-	.extern ov45_02230B8C
+	.extern WiFiPlazaApps_FreeSurveyArgs
+	.extern WiFiPlazaApps_StartSurvey
+	.extern WiFiPlazaApps_EndSurvey
+	.extern WiFiPlazaTime_Add
+	.extern WiFiPlazaNewsEvent_FormatChat
+	.extern WiFiPlazaNewsEvent_FormatTapToyTrade
+	.extern WiFiPlazaNewsEvent_FormatMinigameEntry
+	.extern WiFiPlazaNewsEvent_FormatFootprintStamp
+	.extern WiFiPlazaNewsEvent_FormatChecking
+	.extern WiFiPlazaNewsEvent_FormatLobbyEventNotice
+	.extern WiFiPlazaNewsEvent_FormatSpecialVisitor
+	.extern WiFiPlazaNewsEvent_FormatMinigameResult
+	.extern WiFiPlazaNewsEvent_GetChatSlot
+	.extern WiFiPlazaNewsEvent_GetTapToyTradeSlot
+	.extern WiFiPlazaNewsEvent_GetMinigameEntrySlot
+	.extern WiFiPlazaNewsEvent_GetFootprintStampSlot
+	.extern WiFiPlazaNewsEvent_GetCheckingSlot
+	.extern WiFiPlazaNewsEvent_GetLobbyEventNoticeSlot
+	.extern WiFiPlazaNewsEvent_GetSpecialVisitorSlot
+	.extern WiFiPlazaNewsEvent_GetMinigameResultSlot
+	.extern WiFiPlazaPlayerObject_ShowStandingSprite
+	.extern WiFiPlazaPlayerObject_PlayStandingSequence
 	.extern ov45_02230BFC
-	.extern ov45_02230C40
-	.extern ov45_02230CD8
+	.extern WiFiPlazaPlayerObject_PlayWalkingSequence
+	.extern WiFiPlazaPlayerObject_EffectTurnAround
 	.extern ov45_02230D20
 	.extern ov45_02230D5C
 	.public IncrementGameStat119
@@ -94,44 +94,44 @@
 	.public WiFiPlazaWork_Delete
 	.public WiFiPlazaWork_Update
 	.public ov45_0222A208
-	.public ov45_0222A214
-	.public ov45_0222A230
-	.public ov45_0222A25C
-	.public ov45_0222A288
-	.public ov45_0222A2A0
+	.public WiFiPlazaWork_GetPlaces
+	.public WiFiPlazaWork_TakePlayerEntered
+	.public WiFiPlazaWork_TakePlayerLeft
+	.public WiFiPlazaWork_IsEventFlagSet
+	.public WiFiPlazaWork_TakePlayerUpdated
 	.public ov45_0222A2CC
 	.public ov45_0222A2E0
 	.public ov45_0222A2F8
 	.public ov45_0222A310
-	.public ov45_0222A324
-	.public ov45_0222A330
-	.public ov45_0222A33C
-	.public ov45_0222A35C
-	.public ov45_0222A374
+	.public WiFiPlazaWork_IsLobbyOpen
+	.public WiFiPlazaWork_IsClosing
+	.public WiFiPlazaWork_IsClosed
+	.public WiFiPlazaWork_GetFireworksState
+	.public WiFiPlazaWork_IsParadeStarted
 	.public ov45_0222A394
-	.public ov45_0222A3A0
-	.public ov45_0222A3BC
-	.public ov45_0222A3D4
+	.public WiFiPlazaWork_IsLightingStarted
+	.public WiFiPlazaWork_GetColorEvent
+	.public WiFiPlazaWork_GetLight1Event
 	.public ov45_0222A3EC
-	.public ov45_0222A43C
-	.public ov45_0222A450
-	.public ov45_0222A480
-	.public ov45_0222A4D0
-	.public ov45_0222A520
-	.public ov45_0222A53C
-	.public ov45_0222A548
-	.public ov45_0222A550
+	.public WiFiPlazaWork_ClearGameMembers
+	.public WiFiPlazaWork_SetGameMember
+	.public WiFiPlazaWork_SetOwnGameMember
+	.public WiFiPlazaWork_PlayBGM
+	.public WiFiPlazaWork_SetLowVolume
+	.public WiFiPlazaWork_GetOwnSlot
+	.public WiFiPlazaWork_GetOwnId
+	.public WiFiPlazaWork_IsSlotOccupied
 	.public WiFiPlazaWork_GetPlayer
 	.public WiFiPlazaWork_GetMyPlayer
 	.public ov45_0222A5E8
-	.public ov45_0222A704
+	.public WiFiPlazaWork_AddHistory
 	.public ov45_0222A72C
 	.public ov45_0222A770
 	.public ov45_0222A7DC
 	.public WiFiPlazaPlayer_CopyToProfile
-	.public ov45_0222A92C
-	.public ov45_0222A964
-	.public ov45_0222A9A4
+	.public WiFiPlazaPlayer_GetHistoryId
+	.public WiFiPlazaPlayer_GetHistoryValue
+	.public WiFiPlazaPlayer_GetAvatarIndex
 	.public WiFiPlazaPlayer_GetGender
 	.public WiFiPlazaPlayer_GetLanguage
 	.public WiFiPlazaPlayer_IsLanguageValid
@@ -142,20 +142,20 @@
 	.public ov45_0222AADC
 	.public ov45_0222AAEC
 	.public ov45_0222AB0C
-	.public ov45_0222AB28
-	.public ov45_0222AB38
-	.public ov45_0222AB48
-	.public ov45_0222AB58
-	.public ov45_0222AB68
-	.public ov45_0222AB78
-	.public ov45_0222AB94
-	.public ov45_0222ABD0
-	.public ov45_0222AC14
+	.public WiFiPlazaWork_IsSpecialVisitor
+	.public WiFiPlazaWork_GetSpecialVisitors
+	.public WiFiPlazaWork_HasWordSet
+	.public WiFiPlazaWork_GetWordSet
+	.public WiFiPlaza_GetChannelPlayerCount
+	.public WiFiPlaza_ChannelSlotToSlot
+	.public WiFiPlaza_SendChatNews
+	.public WiFiPlaza_SendTapToyTradeNews
+	.public WiFiPlaza_SendActivityNews
 	.public ov45_0222AC58
-	.public ov45_0222ACB8
+	.public WiFiPlaza_SendMinigameResultNews
 	.public ov45_0222AD2C
 	.public ov45_0222AD3C
-	.public ov45_0222AD4C
+	.public WiFiPlazaWork_GetOpenDuration
 	.public ov45_0222AD58
 	.public ov45_0222AD70
 	.public ov45_0222AD80
@@ -171,67 +171,67 @@
 	.public ov45_0222AE34
 	.public ov45_0222AE44
 	.public ov45_0222AE54
-	.public ov45_0222AE64
-	.public ov45_0222AE74
-	.public ov45_0222AED8
-	.public ov45_0222AF80
-	.public ov45_0222AFC4
-	.public ov45_0222AFF8
-	.public ov45_0222B00C
-	.public ov45_0222B048
-	.public ov45_0222B06C
+	.public WiFiPlazaWork_ResetTalk
+	.public WiFiPlazaWork_StartTalk
+	.public WiFiPlazaWork_AdvanceTalk
+	.public WiFiPlazaWork_CancelTalkRequest
+	.public WiFiPlazaWork_EndTalk
+	.public WiFiPlazaWork_IsTalking
+	.public WiFiPlazaWork_WasAskedToTalk
+	.public WiFiPlazaWork_CanTalkWith
+	.public WiFiPlazaWork_IsTalkOver
 	.public ov45_0222B094
-	.public ov45_0222B0BC
-	.public ov45_0222B0D8
-	.public ov45_0222B0E8
+	.public WiFiPlazaWork_IncPartnerTalkCount
+	.public WiFiPlazaWork_IncTalkCount
+	.public WiFiPlazaWork_SetTalkedWith
 	.public ov45_0222B118
 	.public ov45_0222B134
 	.public ov45_0222B1B4
-	.public ov45_0222B1DC
-	.public ov45_0222B1EC
-	.public ov45_0222B1FC
-	.public ov45_0222B21C
+	.public WiFiPlazaWork_GetFireworksPhase
+	.public WiFiPlazaWork_GetFireworksCounter
+	.public WiFiPlazaWork_SetSurveyTally
+	.public WiFiPlazaWork_GetSurveyTally
 	.public ov45_0222B244
 	.public ov45_0222B270
-	.public ov45_0222B28C
+	.public WiFiPlaza_IsNameTerminated
 	.public WiFiPlaza_OnPlayerEnter
 	.public WiFiPlaza_OnPlayerLeave
 	.public WiFiPlaza_OnPlayerUpdate
 	.public WiFiPlaza_OnLobbyEvent
-	.public ov45_0222B75C
-	.public ov45_0222B79C
-	.public ov45_0222B840
+	.public WiFiPlaza_OnOwnRecord
+	.public WiFiPlaza_FillPlaces
+	.public WiFiPlazaWork_CheckClosingTime
 	.public WiFiPlazaProfile_InitFromSave
-	.public ov45_0222BA3C
+	.public WiFiPlazaWork_SendOwnRecord
 	.public WiFiPlazaProfile_UpdateChecksum
 	.public WiFiPlazaProfile_IsChecksumValid
-	.public ov45_0222BB00
-	.public ov45_0222BB60
-	.public ov45_0222BC3C
-	.public ov45_0222BC84
-	.public ov45_0222BCC8
-	.public ov45_0222BCD8
-	.public ov45_0222BCE4
+	.public WiFiPlazaProfile_SetFromLobbyRecord
+	.public WiFiPlazaEventSchedule_Update
+	.public WiFiPlazaEventSchedule_Init
+	.public WiFiPlazaEventSchedule_ApplyVolume
+	.public WiFiPlaza_NewPlayerProfile
+	.public WiFiPlaza_FreePlayerProfile
+	.public WiFiPlazaProfile_CopyToPlayerProfile
 	.public ov45_0222BD30
-	.public ov45_0222BD4C
-	.public ov45_0222BD5C
-	.public ov45_0222BD74
-	.public ov45_0222BD94
-	.public ov45_0222BDB0
-	.public ov45_0222BDCC
-	.public ov45_0222BDE8
-	.public ov45_0222BE08
-	.public ov45_0222BE28
-	.public ov45_0222BE5C
-	.public ov45_0222BE74
-	.public ov45_0222BE9C
-	.public ov45_0222BF18
-	.public ov45_0222BF98
-	.public ov45_0222C0CC
-	.public ov45_0222C130
-	.public ov45_0222C1EC
-	.public ov45_0222C2A8
-	.public ov45_0222C370
+	.public WiFiPlazaTalkSession_Reset
+	.public WiFiPlazaTalkSession_Abort
+	.public WiFiPlazaTalkSession_HasTalkedWith
+	.public WiFiPlazaTalkSession_SetTalkedWith
+	.public WiFiPlazaTalkSession_ClearTalkedWith
+	.public WiFiPlazaTalkSession_IncTalkCount
+	.public WiFiPlazaTalkSession_ResetTalkCount
+	.public WiFiPlazaWork_SendTalkAnswer
+	.public WiFiPlazaWork_SendTalkEnd
+	.public WiFiPlazaTalkSession_UpdateTimeout
+	.public WiFiPlazaTalkSession_IsWithinTimeout
+	.public WiFiPlaza_HandleChatNews
+	.public WiFiPlaza_HandleTapToyTradeNews
+	.public WiFiPlaza_HandleMinigameEntryNews
+	.public WiFiPlaza_HandleFootprintStampNews
+	.public WiFiPlaza_HandleVisitorProfilesNews
+	.public WiFiPlaza_HandlePlazaNewsNews
+	.public WiFiPlaza_HandleMinigameResultNews
+	.public WiFiPlazaWork_AddLobbyEventNotice
 	.public ov45_0222C388
 	.public ov45_0222C3B0
 	.public ov45_0222C408
@@ -246,38 +246,38 @@
 	.public ov45_0222C5E8
 	.public ov45_0222C61C
 	.public ov45_0222C658
-	.public ov45_0222C688
-	.public ov45_0222C73C
-	.public ov45_0222C79C
-	.public ov45_0222C800
-	.public ov45_0222C828
+	.public WiFiPlaza_OnTalkRequest
+	.public WiFiPlaza_OnTalkAnswer
+	.public WiFiPlaza_OnTalkState
+	.public WiFiPlaza_OnTalkCancel
+	.public WiFiPlaza_OnLobbyMessage
 	.public ov45_0222C83C
 	.public ov45_0222C858
 	.public ov45_0222C88C
-	.public ov45_0222C8AC
-	.public ov45_0222C8C8
-	.public ov45_0222C900
-	.public ov45_0222C944
-	.public ov45_0222C95C
+	.public WiFiPlazaGroupWeights_Init
+	.public WiFiPlazaGroupWeights_ReportPlace
+	.public WiFiPlazaGroupWeights_PickGroup
+	.public WiFiPlaza_SetSlotFlag
+	.public WiFiPlaza_GetSlotFlag
 	.public WiFiPlazaWordSet_Init
 	.public WiFiPlazaWordSet_Free
-	.public ov45_0222C9A0
-	.public ov45_0222C9D0
-	.public ov45_0222C9EC
-	.public ov45_0222CA10
-	.public ov45_0222CA7C
-	.public ov45_0222CA8C
-	.public ov45_0222CAA0
-	.public ov45_0222CB44
-	.public ov45_0222CB74
-	.public ov45_0222CBD0
-	.public ov45_0222CC00
-	.public ov45_0222CC50
-	.public ov45_0222CC7C
-	.public ov45_0222CCA4
-	.public ov45_0222CCB8
-	.public ov45_0222CCE4
-	.public ov45_0222CD04
+	.public WiFiPlazaWordSet_Set
+	.public WiFiPlazaWordSet_HasWords
+	.public WiFiPlazaWordSet_GetWords
+	.public WiFiPlaza_MakeWordsFromCode
+	.public WiFiPlazaTimer_Init
+	.public WiFiPlazaTimer_Start
+	.public WiFiPlazaTimer_Update
+	.public WiFiPlazaHistory_Init
+	.public WiFiPlazaHistory_Add
+	.public WiFiPlazaHistory_ReplaceValue
+	.public WiFiPlazaHistory_RemoveOldest
+	.public WiFiPlazaHistory_GetId
+	.public WiFiPlazaHistory_GetValue
+	.public WiFiPlazaHistory_UpdateChecksum
+	.public WiFiPlazaHistory_CheckChecksum
+	.public WiFiPlaza_AvatarToIndex
+	.public WiFiPlaza_IndexToAvatar
 	.public WiFiPlazaApps_New
 	.public WiFiPlazaApps_Delete
 	.public WiFiPlazaApps_StartFirst
@@ -287,156 +287,156 @@
 	.public WiFiPlazaApps_FreeArgs
 	.public WiFiPlazaApps_Start
 	.public WiFiPlazaApps_End
-	.public ov45_0222CE78
-	.public ov45_0222CE94
-	.public ov45_0222CEB0
-	.public ov45_0222CF00
-	.public ov45_0222CF24
-	.public ov45_0222CF40
-	.public ov45_0222CF68
-	.public ov45_0222CFF4
-	.public ov45_0222D01C
-	.public ov45_0222D028
-	.public ov45_0222D054
-	.public ov45_0222D078
-	.public ov45_0222D0BC
-	.public ov45_0222D0C8
-	.public ov45_0222D0D8
-	.public ov45_0222D0FC
-	.public ov45_0222D130
-	.public ov45_0222D13C
-	.public ov45_0222D14C
-	.public ov45_0222D164
-	.public ov45_0222D19C
-	.public ov45_0222D1B0
-	.public ov45_0222D1DC
-	.public ov45_0222D20C
-	.public ov45_0222D23C
-	.public ov45_0222D250
-	.public ov45_0222D27C
-	.public ov45_0222D2AC
-	.public ov45_0222D2E4
-	.public ov45_0222D2F8
-	.public ov45_0222D324
-	.public ov45_0222D354
-	.public ov45_0222D380
-	.public ov45_0222D38C
+	.public WiFiPlazaGameArgs_NewProfiles
+	.public WiFiPlazaGameArgs_FreeProfiles
+	.public WiFiPlazaGameArgs_Setup
+	.public WiFiPlazaApps_NewMainArgs
+	.public WiFiPlazaApps_FreeMainArgs
+	.public WiFiPlazaApps_StartMain
+	.public WiFiPlazaApps_EndMain
+	.public WiFiPlazaApps_NewVisitorProfilesArgs
+	.public WiFiPlazaApps_FreeVisitorProfilesArgs
+	.public WiFiPlazaApps_StartVisitorProfiles
+	.public WiFiPlazaApps_EndVisitorProfiles
+	.public WiFiPlazaApps_NewPlazaNewsArgs
+	.public WiFiPlazaApps_FreePlazaNewsArgs
+	.public WiFiPlazaApps_StartPlazaNews
+	.public WiFiPlazaApps_EndPlazaNews
+	.public WiFiPlazaApps_NewConnectArgs
+	.public WiFiPlazaApps_FreeConnectArgs
+	.public WiFiPlazaApps_StartConnect
+	.public WiFiPlazaApps_EndConnect
+	.public WiFiPlazaApps_NewSwalotPlopArgs
+	.public WiFiPlazaApps_FreeSwalotPlopArgs
+	.public WiFiPlazaApps_StartSwalotPlop
+	.public WiFiPlazaApps_EndSwalotPlop
+	.public WiFiPlazaApps_NewMimeJrTopArgs
+	.public WiFiPlazaApps_FreeMimeJrTopArgs
+	.public WiFiPlazaApps_StartMimeJrTop
+	.public WiFiPlazaApps_EndMimeJrTop
+	.public WiFiPlazaApps_NewWobbuffetPopArgs
+	.public WiFiPlazaApps_FreeWobbuffetPopArgs
+	.public WiFiPlazaApps_StartWobbuffetPop
+	.public WiFiPlazaApps_EndWobbuffetPop
+	.public WiFiPlazaApps_NewFootprintStampArgs
+	.public WiFiPlazaApps_FreeFootprintStampArgs
+	.public WiFiPlazaApps_EndFootprintStamp
 	.public ov45_0222D3B0
 	.public ov45_0222D3C4
-	.public ov45_0222D3D8
-	.public ov45_0222D410
-	.public ov45_0222D41C
-	.public ov45_0222D428
-	.public ov45_0222D434
+	.public WiFiPlazaApps_NewDisconnectArgs
+	.public WiFiPlazaApps_FreeDisconnectArgs
+	.public WiFiPlazaApps_StartDisconnect
+	.public WiFiPlazaApps_StartClosedDisconnect
+	.public WiFiPlazaApps_StartDisconnectOverlay
 	.public ov45_0222D44C
 	.public ov45_0222D484
-	.public ov45_0222D4C0
-	.public ov45_0222D4CC
-	.public ov45_0222D4DC
-	.public ov45_0222D500
-	.public ov45_0222D524
-	.public ov45_0222D594
-	.public ov45_0222D638
-	.public ov45_0222D6B0
-	.public ov45_0222D6D4
-	.public ov45_0222D6FC
-	.public ov45_0222D724
-	.public ov45_0222D740
-	.public ov45_0222D79C
+	.public WiFiPlazaApps_FreeSurveyArgs
+	.public WiFiPlazaApps_StartSurvey
+	.public WiFiPlazaApps_EndSurvey
+	.public WiFiPlaza_SecondsToTime
+	.public WiFiPlazaTime_Add
+	.public WiFiPlazaTime_Subtract
+	.public WiFiPlazaPlaces_Add
+	.public WiFiPlazaPlaces_GetCountry
+	.public WiFiPlazaPlaces_GetRegion
+	.public WiFiPlazaPlaces_GetValue
+	.public WiFiPlazaPlaces_IsOccupied
+	.public WiFiPlaza_DisableModelLighting
+	.public WiFiPlaza_IsRegionValid
 	.public ov45_0222D7C0
-	.public ov45_0222D7CC
-	.public ov45_0222D7FC
-	.public ov45_0222D844
-	.public ov45_0222D860
-	.public ov45_0222D890
-	.public ov45_0222D8A4
-	.public ov45_0222D8C8
-	.public ov45_0222D8D4
-	.public ov45_0222D8F0
-	.public ov45_0222D940
-	.public ov45_0222D990
-	.public ov45_0222D9EC
-	.public ov45_0222DA80
-	.public ov45_0222DAE0
-	.public ov45_0222DB3C
-	.public ov45_0222DB98
-	.public ov45_0222DC08
-	.public ov45_0222DC64
-	.public ov45_0222DD44
-	.public ov45_0222DD5C
-	.public ov45_0222DD78
-	.public ov45_0222DDE4
-	.public ov45_0222DE1C
-	.public ov45_0222DE3C
-	.public ov45_0222DE58
-	.public ov45_0222DE74
-	.public ov45_0222DE8C
-	.public ov45_0222DEA4
-	.public ov45_0222DEB8
-	.public ov45_0222DECC
-	.public ov45_0222DEE0
-	.public ov45_0222DEF4
-	.public ov45_0222DF14
-	.public ov45_0222DF38
-	.public ov45_0222DF58
-	.public ov45_0222DF78
-	.public ov45_0222DFD0
-	.public ov45_0222E000
-	.public ov45_0222E03C
-	.public ov45_0222E04C
-	.public ov45_0222E094
-	.public ov45_0222E0A4
-	.public ov45_0222E0CC
-	.public ov45_0222E0E0
-	.public ov45_0222E14C
-	.public ov45_0222E1A0
-	.public ov45_0222E200
-	.public ov45_0222E33C
-	.public ov45_0222E39C
-	.public ov45_0222E414
-	.public ov45_0222E484
-	.public ov45_0222E4A8
-	.public ov45_0222E540
-	.public ov45_0222E550
-	.public ov45_0222E560
-	.public ov45_0222E574
-	.public ov45_0222E584
-	.public ov45_0222E5A0
-	.public ov45_0222E5B4
+	.public WiFiPlaza_GetErrorMessageClass
+	.public WiFiPlaza_IsErrorRecoverable
+	.public WiFiPlaza_HasConnectionFailed
+	.public WiFiPlazaNews_New
+	.public WiFiPlazaNews_Delete
+	.public WiFiPlazaNews_Update
+	.public WiFiPlazaNews_AddPlayer
+	.public WiFiPlazaNews_RemovePlayer
+	.public WiFiPlazaNews_SetOldestPlayer
+	.public WiFiPlazaNews_AddChatEvent
+	.public WiFiPlazaNews_AddTapToyTradeEvent
+	.public WiFiPlazaNews_AddMinigameEntryEvent
+	.public WiFiPlazaNews_AddFootprintStampEvent
+	.public WiFiPlazaNews_AddVisitorProfilesEvent
+	.public WiFiPlazaNews_AddPlazaNewsEvent
+	.public WiFiPlazaNews_AddLobbyEventNotice
+	.public WiFiPlazaNews_AddSpecialVisitorEvent
+	.public WiFiPlazaNews_AddMinigameResultEvent
+	.public WiFiPlazaNews_HasEvent
+	.public WiFiPlazaNews_GetEventType
+	.public WiFiPlazaNews_FormatEvent
+	.public WiFiPlazaNews_GetEventSlot
+	.public WiFiPlazaNewsSlots_Init
+	.public WiFiPlazaNewsSlots_Set
+	.public WiFiPlazaNewsSlots_AddPlayer
+	.public WiFiPlazaNewsSlots_RemovePlayer
+	.public WiFiPlazaNewsSlots_SetFlags
+	.public WiFiPlazaNewsSlots_SetChange
+	.public WiFiPlazaNewsSlots_SetLastJoined
+	.public WiFiPlazaNewsSlots_IsOccupied
+	.public WiFiPlazaNewsSlots_GetGender
+	.public WiFiPlazaNewsSlots_IsOwn
+	.public WiFiPlazaNewsSlots_IsOldest
+	.public WiFiPlazaNewsSlots_GetFlags
+	.public WiFiPlazaNewsSlots_IsLastJoined
+	.public WiFiPlazaNewsEventList_Init
+	.public WiFiPlazaNewsEventList_Free
+	.public WiFiPlazaNewsEventList_Update
+	.public WiFiPlazaNewsEventList_RemoveFirst
+	.public WiFiPlazaNewsEventList_GetFreeEvent
+	.public WiFiPlazaNewsEvent_InsertAfter
+	.public WiFiPlazaNewsEventList_Insert
+	.public WiFiPlazaNewsEventList_Remove
+	.public WiFiPlazaNewsEvent_Set
+	.public WiFiPlazaNewsEvent_FormatChat
+	.public WiFiPlazaNewsEvent_FormatTapToyTrade
+	.public WiFiPlazaNewsEvent_FormatMinigameEntry
+	.public WiFiPlazaNewsEvent_FormatFootprintStamp
+	.public WiFiPlazaNewsEvent_FormatChecking
+	.public WiFiPlazaNewsEvent_FormatLobbyEventNotice
+	.public WiFiPlazaNewsEvent_FormatSpecialVisitor
+	.public WiFiPlazaNewsEvent_FormatMinigameResult
+	.public WiFiPlazaNewsEvent_GetChatSlot
+	.public WiFiPlazaNewsEvent_GetTapToyTradeSlot
+	.public WiFiPlazaNewsEvent_GetMinigameEntrySlot
+	.public WiFiPlazaNewsEvent_GetFootprintStampSlot
+	.public WiFiPlazaNewsEvent_GetCheckingSlot
+	.public WiFiPlazaNewsEvent_GetMinigameResultSlot
+	.public WiFiPlaza_IsMinigamePlayerCountValid
 	.public WiFiPlazaLobbyClient_Init
 	.public WiFiPlazaLobbyClient_Free
 	.public WiFiPlazaLobbyClient_Update
 	.public ov45_0222E7CC
 	.public ov45_0222E804
 	.public ov45_0222E810
-	.public ov45_0222E8F4
+	.public WiFiPlazaLobbyClient_IsInLobby
 	.public ov45_0222E91C
-	.public ov45_0222E944
-	.public ov45_0222E96C
+	.public WiFiPlazaLobbyClient_IsDisconnected
+	.public WiFiPlazaLobbyClient_GetState
 	.public ov45_0222E9BC
 	.public WiFiPlazaLobbyClient_GetOwnId
-	.public ov45_0222E9F8
-	.public ov45_0222EA2C
-	.public ov45_0222EA4C
+	.public WiFiPlazaLobbyClient_SetOwnPlayer
+	.public WiFiPlazaLobbyClient_GetPlayer
+	.public WiFiPlazaLobbyClient_GetEntryTime
 	.public WiFiPlazaLobbyClient_GetOldestPlayer
 	.public WiFiPlazaLobbyClient_GetOldestOtherPlayer
-	.public ov45_0222EB38
+	.public WiFiPlazaLobbyClient_JoinChannel
 	.public ov45_0222EB74
-	.public ov45_0222EB94
-	.public ov45_0222EBC4
+	.public WiFiPlazaLobbyClient_LeaveChannel
+	.public WiFiPlazaLobbyClient_IsNotInChannel
 	.public ov45_0222EBF0
-	.public ov45_0222EC10
-	.public ov45_0222EC3C
-	.public ov45_0222EC68
-	.public ov45_0222EC7C
-	.public ov45_0222EC90
-	.public ov45_0222ECA4
-	.public ov45_0222ECB8
+	.public WiFiPlazaLobbyClient_GetPlayerList
+	.public WiFiPlazaLobbyClient_GetChannelPlayerList
+	.public WiFiPlazaLobbyClient_IdToSlot
+	.public WiFiPlazaLobbyClient_IdToChannelSlot
+	.public WiFiPlazaLobbyClient_SlotToId
+	.public WiFiPlazaLobbyClient_ChannelSlotToId
+	.public WiFiPlazaLobbyClient_GetTime
 	.public ov45_0222ECDC
 	.public ov45_0222ED7C
 	.public ov45_0222EDA8
-	.public ov45_0222EDC4
-	.public ov45_0222EDF0
+	.public WiFiPlazaLobbyClient_GetLocationCountry
+	.public WiFiPlazaLobbyClient_GetLocationRegion
 	.public WiFiPlazaLobbyClient_SetLobbyCommands
 	.public WiFiPlazaLobbyClient_SetChannelCommands
 	.public WiFiPlazaLobbyClient_ClearLobbyCommands
@@ -444,122 +444,122 @@
 	.public WiFiPlazaLobbyClient_SendToLobby
 	.public WiFiPlazaLobbyClient_SendToPlayer
 	.public WiFiPlazaLobbyClient_SendToChannel
-	.public ov45_0222F028
+	.public WiFiPlazaLobbyClient_HostMatch
 	.public ov45_0222F154
-	.public ov45_0222F1BC
-	.public ov45_0222F218
+	.public WiFiPlazaLobbyClient_CloseMatch
+	.public WiFiPlazaLobbyClient_IsCurrentMatchClosed
 	.public ov45_0222F254
-	.public ov45_0222F274
-	.public ov45_0222F294
-	.public ov45_0222F2D4
-	.public ov45_0222F314
-	.public ov45_0222F350
-	.public ov45_0222F3E8
-	.public ov45_0222F430
-	.public ov45_0222F464
-	.public ov45_0222F484
-	.public ov45_0222F4AC
+	.public WiFiPlazaLobbyClient_IsMatchActive
+	.public WiFiPlazaLobbyClient_IsMatchOpen
+	.public WiFiPlazaLobbyClient_GetMatchFreePlaces
+	.public WiFiPlazaLobbyClient_GetMatchPlayerCount
+	.public WiFiPlazaLobbyClient_JoinMatch
+	.public WiFiPlazaLobbyClient_GetMatchTimer
+	.public WiFiPlazaLobbyClient_GetMatchHostId
+	.public WiFiPlazaLobbyClient_IsMatchHost
+	.public WiFiPlazaLobbyClient_IsSpecialVisitor
+	.public WiFiPlazaLobbyClient_GetSpecialVisitorCode
 	.public ov45_0222F4D4
 	.public ov45_0222F524
 	.public ov45_0222F544
 	.public ov45_0222F628
 	.public ov45_0222F6B0
-	.public ov45_0222F70C
+	.public WiFiPlazaLobbyClient_EndMatch
 	.public WiFiPlazaLobbyClient_CheckResult
-	.public ov45_0222F78C
-	.public ov45_0222F7B4
-	.public ov45_0222F848
-	.public ov45_0222F878
-	.public ov45_0222F88C
-	.public ov45_0222F898
-	.public ov45_0222F8D8
-	.public ov45_0222F8FC
-	.public ov45_0222F928
-	.public ov45_0222F954
-	.public ov45_0222F978
-	.public ov45_0222F9B8
-	.public ov45_0222FA10
-	.public ov45_0222FA40
-	.public ov45_0222FA74
-	.public ov45_0222FAF8
-	.public ov45_0222FB24
-	.public ov45_0222FB5C
-	.public ov45_0222FB84
-	.public ov45_0222FBD8
-	.public ov45_0222FC44
-	.public ov45_0222FCE0
-	.public ov45_0222FD50
-	.public ov45_0222FDD8
-	.public ov45_0222FE84
-	.public ov45_0222FEC4
-	.public ov45_0222FF40
-	.public ov45_0222FF7C
-	.public ov45_02230008
-	.public ov45_02230050
-	.public ov45_02230064
+	.public WiFiPlazaLobbyClient_ClearErrors
+	.public WiFiPlazaLobbyClient_AddOwnLocation
+	.public WiFiPlazaLobbyClient_AllocPlayerData
+	.public WiFiPlazaLobbyClient_FreePlayerData
+	.public WiFiPlazaLobbyClient_SetPlayerData
+	.public WiFiPlazaLobbyClient_CopyPlayerData
+	.public WiFiPlazaLobbyClient_GetPlayerData
+	.public WiFiPlazaLobbyClient_ClearPlayerData
+	.public WiFiPlazaLobbyClient_SetPlayerRecord
+	.public WiFiPlazaLobbyClient_GetPlayerRecord
+	.public WiFiPlazaLobbyClient_ClearPlayerRecord
+	.public WiFiPlazaLobbyClient_AllocIdLists
+	.public WiFiPlazaLobbyClient_FreeIdLists
+	.public WiFiPlazaLobbyClient_ClearIdList
+	.public WiFiPlazaLobbyClient_AddToIdList
+	.public WiFiPlazaLobbyClient_RemoveFromIdList
+	.public WiFiPlazaLobbyClient_FindInIdList
+	.public WiFiPlazaLobbyClient_GetIdListEntry
+	.public WiFiPlazaLobbyClient_RebuildChannelList
+	.public WiFiPlazaLobbyClient_HasChannelRoom
+	.public WiFiPlazaLobbyClient_OnEnterChannel
+	.public WiFiPlazaLobbyClient_OnPlayerEnter
+	.public WiFiPlazaLobbyClient_OnPlayerLeave
+	.public WiFiPlazaLobbyClient_OnMessage
+	.public WiFiPlazaLobbyClient_OnLocationsChanged
+	.public WiFiPlazaLobbyClient_OnPlayerRecordChanged
+	.public WiFiPlazaLobbyClient_OnPlayerUpdate
+	.public WiFiPlazaLobbyClient_OnMatchInfo
+	.public WiFiPlazaLobbyClient_OnMatchClosed
+	.public WiFiPlazaLobbyClient_OnLobbyEvent
+	.public WiFiPlazaLobbyClient_OnOwnRecord
 	.public ov45_02230090
 	.public ov45_022300B0
 	.public ov45_022300DC
 	.public ov45_02230108
 	.public ov45_02230130
-	.public ov45_02230144
-	.public ov45_02230164
-	.public ov45_022301E0
-	.public ov45_0223021C
-	.public ov45_0223023C
-	.public ov45_022302B0
-	.public ov45_022302E4
-	.public ov45_02230378
-	.public ov45_02230384
+	.public WiFiPlazaLobbyClient_InitMatches
+	.public WiFiPlazaLobbyMatches_Set
+	.public WiFiPlazaLobbyMatches_Remove
+	.public WiFiPlazaLobbyMatches_IsActive
+	.public WiFiPlazaLobbyMatches_CalcTimer
+	.public WiFiPlazaLobbyMatches_Get
+	.public WiFiPlazaLobbyMatches_Update
+	.public WiFiPlazaLobbyMatchInfo_SetStartTime
+	.public WiFiPlazaLobbyMatchInfo_GetStartTime
 	.public ov45_02230394
 	.public ov45_022303BC
-	.public ov45_022303E4
-	.public ov45_022303FC
-	.public ov45_0223040C
-	.public ov45_02230434
-	.public ov45_0223045C
+	.public WiFiPlazaLobbyIdValueList_Init
+	.public WiFiPlazaLobbyIdValueList_Free
+	.public WiFiPlazaLobbyIdValueList_Set
+	.public WiFiPlazaLobbyIdValueList_Contains
+	.public WiFiPlazaLobbyIdValueList_GetValue
 	.public ov45_0223048C
-	.public ov45_02230498
-	.public ov45_02230638
-	.public ov45_02230680
-	.public ov45_022306B4
-	.public ov45_02230700
-	.public ov45_0223070C
-	.public ov45_02230884
-	.public ov45_0223089C
-	.public ov45_022308B8
-	.public ov45_022308C0
-	.public ov45_022308E4
-	.public ov45_02230908
-	.public ov45_02230920
-	.public ov45_0223093C
-	.public ov45_02230978
-	.public ov45_02230994
-	.public ov45_0223099C
-	.public ov45_022309D0
-	.public ov45_022309E8
-	.public ov45_02230A44
-	.public ov45_02230A4C
-	.public ov45_02230A5C
-	.public ov45_02230A6C
-	.public ov45_02230AA4
-	.public ov45_02230AB4
-	.public ov45_02230ACC
-	.public ov45_02230B64
-	.public ov45_02230B8C
+	.public WiFiPlazaPlayerObjects_New
+	.public WiFiPlazaPlayerObjects_Delete
+	.public WiFiPlazaPlayerObjects_Update
+	.public WiFiPlazaPlayerObjects_Draw
+	.public WiFiPlazaPlayerObjects_SetModelAlpha
+	.public WiFiPlazaPlayerObjects_Add
+	.public WiFiPlazaPlayerObject_Delete
+	.public WiFiPlazaPlayerObject_SetMode
+	.public WiFiPlazaPlayerObject_IsCulled
+	.public WiFiPlazaPlayerObject_SetGridPosition
+	.public WiFiPlazaPlayerObject_SetPosition
+	.public WiFiPlazaPlayerObject_GetPosition
+	.public WiFiPlazaPlayerObject_SetStandingSequence
+	.public WiFiPlazaPlayerObject_StartEffect
+	.public WiFiPlazaPlayerObject_SetVisible
+	.public WiFiPlazaPlayerObject_IsVisible
+	.public WiFiPlaza_GetSpriteConfig
+	.public WiFiPlaza_CalcSequenceFrame
+	.public WiFiPlazaObjectModel_Load
+	.public WiFiPlazaObjectModel_Free
+	.public WiFiPlazaObjectModel_SetAlpha
+	.public WiFiPlaza_InitModelInstance
+	.public WiFiPlazaPlayerObjects_GetFreeObject
+	.public WiFiPlazaPlayerObject_IsUsed
+	.public WiFiPlazaPlayerObject_Clear
+	.public WiFiPlazaPlayerObject_FollowPlayer
+	.public WiFiPlazaPlayerObject_ShowStandingSprite
+	.public WiFiPlazaPlayerObject_PlayStandingSequence
 	.public ov45_02230BFC
-	.public ov45_02230C40
-	.public ov45_02230CB0
-	.public ov45_02230CD8
+	.public WiFiPlazaPlayerObject_PlayWalkingSequence
+	.public WiFiPlazaPlayerObject_UpdateEffect
+	.public WiFiPlazaPlayerObject_EffectTurnAround
 	.public ov45_02230D20
 	.public ov45_02230D5C
 	.public ov45_02230DC4
-	.public ov45_02230DF4
-	.public ov45_02230E28
-	.public ov45_02230E64
-	.public ov45_02230E78
-	.public ov45_02230F94
-	.public ov45_02231018
+	.public WiFiPlazaPlayerObject_UpdateCulling
+	.public WiFiPlazaPlayerObject_ApplyVisibility
+	.public WiFiPlazaPlayerObject_ApplyLightFlags
+	.public WiFiPlaza_IsSpriteInView
+	.public WiFiPlaza_GetLocalTime
+	.public WiFiPlaza_GetLongitude
 	.public ov45_02254A3C
 	.public ov45_02254A60
 	.public ov45_02254A84
@@ -598,73 +598,73 @@
 	.public ov45_02254F1C
 	.public ov45_02254F28
 	.public ov45_0222A1F8
-	.public ov45_0222A1FC
-	.public ov45_0222A210
+	.public WiFiPlazaWork_HasError
+	.public WiFiPlazaWork_GetNews
 	.public ov45_0222A22C
 	.public ov45_0222A2C8
 	.public ov45_0222A404
 	.public ov45_0222A414
 	.public ov45_0222A424
 	.public ov45_0222A430
-	.public ov45_0222A498
+	.public WiFiPlazaWork_GetGameMembers
 	.public ov45_0222A4A8
 	.public ov45_0222A4B8
 	.public ov45_0222A4C8
 	.public ov45_0222A920
-	.public ov45_0222A99C
+	.public WiFiPlazaPlayer_GetLobbyId
 	.public WiFiPlazaPlayer_GetTrainerID
-	.public ov45_0222A9C8
-	.public ov45_0222AA54
-	.public ov45_0222AB1C
+	.public WiFiPlazaPlayer_GetLocalTime
+	.public WiFiPlazaPlayer_GetRawLanguage
+	.public WiFiPlazaWork_GetOwnPlayerProfile
 	.public ov45_0222ADA0
-	.public ov45_0222B020
-	.public ov45_0222B028
-	.public ov45_0222B034
+	.public WiFiPlazaWork_GetTalkPartner
+	.public WiFiPlazaWork_IsFirstTalk
+	.public WiFiPlazaWork_GetTalkState
 	.public ov45_0222B040
 	.public ov45_0222B0A4
 	.public ov45_0222B0B0
-	.public ov45_0222BB58
+	.public WiFiPlaza_ClearEventFlags
 	.public ov45_0222BCA0
 	.public ov45_0222BCA8
 	.public ov45_0222BCB8
 	.public ov45_0222BD24
 	.public ov45_0222BD2C
-	.public ov45_0222BD40
-	.public ov45_0222BE00
-	.public ov45_0222BE48
-	.public ov45_0222BE54
-	.public ov45_0222BE94
+	.public WiFiPlazaTalkSession_Init
+	.public WiFiPlazaTalkSession_SetMessage
+	.public WiFiPlazaTalkSession_StartTimeout
+	.public WiFiPlazaTalkSession_StopTimeout
+	.public WiFiPlazaTalkSession_GetTimeoutCounter
 	.public ov45_0222C36C
 	.public ov45_0222C3A8
-	.public ov45_0222CB3C
-	.public ov45_0222CB40
-	.public ov45_0222CCDC
+	.public WiFiPlazaTimer_GetCounter
+	.public WiFiPlazaTimer_GetPhase
+	.public WiFiPlazaHistory_IsCorrupt
 	.public WiFiPlazaApps_VBlank
-	.public ov45_0222D448
-	.public ov45_0222D8BC
-	.public ov45_0222DCE8
-	.public ov45_0222DCF4
-	.public ov45_0222DCFC
-	.public ov45_0222DD08
-	.public ov45_0222DD14
-	.public ov45_0222DD20
-	.public ov45_0222DD2C
-	.public ov45_0222DD38
-	.public ov45_0222DF50
-	.public ov45_0222E598
-	.public ov45_0222E59C
+	.public WiFiPlazaApps_EndDisconnect
+	.public WiFiPlazaNews_SetOpenTime
+	.public WiFiPlazaNews_RemoveCurrentEvent
+	.public WiFiPlazaNews_GetOpenTime
+	.public WiFiPlazaNews_IsSlotOccupied
+	.public WiFiPlazaNews_GetSlotGender
+	.public WiFiPlazaNews_IsOwnSlot
+	.public WiFiPlazaNews_IsOldestSlot
+	.public WiFiPlazaNews_IsLastJoinedSlot
+	.public WiFiPlazaNews_GetSlotChange
+	.public WiFiPlazaNewsSlots_GetChange
+	.public WiFiPlazaNewsEvent_GetLobbyEventNoticeSlot
+	.public WiFiPlazaNewsEvent_GetSpecialVisitorSlot
 	.public ov45_0222E7FC
-	.public ov45_0222F7A8
-	.public ov45_0222F7B0
+	.public WiFiPlazaLobbyClient_ChannelFromLib
+	.public WiFiPlazaLobbyClient_ChannelToLib
 	.public ov45_0222FDD4
 	.public ov45_02230390
 	.public ov45_022306F4
-	.public ov45_022308B0
-	.public ov45_02230968
-	.public ov45_02230974
-	.public ov45_022309C4
-	.public ov45_02230A58
-	.public ov45_02230AC0
+	.public WiFiPlazaPlayerObject_SetLightFlags
+	.public WiFiPlazaPlayerObject_StopEffect
+	.public WiFiPlazaPlayerObject_SetEffectStep
+	.public WiFiPlaza_GetSpriteSequence
+	.public WiFiPlazaObjectModel_GetAlpha
+	.public WiFiPlazaPlayerObject_DrawModel
 #include "config.h"
 	.include "asm/macros.inc"
 	.include "overlay_45_thumb.inc"
@@ -683,15 +683,15 @@ ov45_02254A3C: ; 0x02254A3C
 	.byte 0x80, 0x07, 0x00, 0x00, 0x60, 0x09, 0x00, 0x00, 0xC8, 0x0A, 0x00, 0x00, 0x30, 0x0C, 0x00, 0x00
 
 ov45_02254A60: ; 0x02254A60
-	.word ov45_0222BE9C
-	.word ov45_0222BF18
-	.word ov45_0222BF98
-	.word ov45_0222C0CC
-	.word ov45_0222C130
-	.word ov45_0222C1EC
+	.word WiFiPlaza_HandleChatNews
+	.word WiFiPlaza_HandleTapToyTradeNews
+	.word WiFiPlaza_HandleMinigameEntryNews
+	.word WiFiPlaza_HandleFootprintStampNews
+	.word WiFiPlaza_HandleVisitorProfilesNews
+	.word WiFiPlaza_HandlePlazaNewsNews
 	.word ov45_0222C36C
 	.word ov45_0222C36C
-	.word ov45_0222C2A8
+	.word WiFiPlaza_HandleMinigameResultNews
 
 ov45_02254A84: ; 0x02254A84
 	.byte 0x03, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00
@@ -701,15 +701,15 @@ ov45_02254A84: ; 0x02254A84
 	.byte 0x3F, 0x00, 0x01, 0x00
 
 ov45_02254AC4: ; 0x02254AC4
-	.word ov45_0222C688
+	.word WiFiPlaza_OnTalkRequest
 	.byte 0x04, 0x00, 0x00, 0x00
-	.word ov45_0222C73C
+	.word WiFiPlaza_OnTalkAnswer
 	.byte 0x04, 0x00, 0x00, 0x00
-	.word ov45_0222C79C
+	.word WiFiPlaza_OnTalkState
 	.byte 0x04, 0x00, 0x00, 0x00
-	.word ov45_0222C800
+	.word WiFiPlaza_OnTalkCancel
 	.byte 0x04, 0x00, 0x00, 0x00
-	.word ov45_0222C828
+	.word WiFiPlaza_OnLobbyMessage
 	.byte 0x14, 0x00, 0x00, 0x00
 	.word ov45_0222C83C
 	.byte 0x04, 0x00, 0x00, 0x00
@@ -803,26 +803,26 @@ ov45_02254BDC: ; 0x02254BDC
 	.byte 0x03, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 
 ov45_02254BE8: ; 0x02254BE8
-	.word ov45_0222E540
-	.word ov45_0222E550
-	.word ov45_0222E560
-	.word ov45_0222E574
-	.word ov45_0222E584
-	.word ov45_0222E584
-	.word ov45_0222E598
-	.word ov45_0222E59C
-	.word ov45_0222E5A0
+	.word WiFiPlazaNewsEvent_GetChatSlot
+	.word WiFiPlazaNewsEvent_GetTapToyTradeSlot
+	.word WiFiPlazaNewsEvent_GetMinigameEntrySlot
+	.word WiFiPlazaNewsEvent_GetFootprintStampSlot
+	.word WiFiPlazaNewsEvent_GetCheckingSlot
+	.word WiFiPlazaNewsEvent_GetCheckingSlot
+	.word WiFiPlazaNewsEvent_GetLobbyEventNoticeSlot
+	.word WiFiPlazaNewsEvent_GetSpecialVisitorSlot
+	.word WiFiPlazaNewsEvent_GetMinigameResultSlot
 
 ov45_02254C0C: ; 0x02254C0C
-	.word ov45_0222E14C
-	.word ov45_0222E1A0
-	.word ov45_0222E200
-	.word ov45_0222E33C
-	.word ov45_0222E39C
-	.word ov45_0222E39C
-	.word ov45_0222E414
-	.word ov45_0222E484
-	.word ov45_0222E4A8
+	.word WiFiPlazaNewsEvent_FormatChat
+	.word WiFiPlazaNewsEvent_FormatTapToyTrade
+	.word WiFiPlazaNewsEvent_FormatMinigameEntry
+	.word WiFiPlazaNewsEvent_FormatFootprintStamp
+	.word WiFiPlazaNewsEvent_FormatChecking
+	.word WiFiPlazaNewsEvent_FormatChecking
+	.word WiFiPlazaNewsEvent_FormatLobbyEventNotice
+	.word WiFiPlazaNewsEvent_FormatSpecialVisitor
+	.word WiFiPlazaNewsEvent_FormatMinigameResult
 
 ov45_02254C30: ; 0x02254C30
 	.byte 0x08, 0x08, 0x04, 0x04
@@ -858,64 +858,64 @@ ov45_02254C98: ; 0x02254C98
 	.data
 
 _02254E20:
-	.word ov45_0222CF24
-	.word ov45_0222D01C
-	.word ov45_0222D0BC
-	.word ov45_0222D380
-	.word ov45_0222D380
-	.word ov45_0222D130
-	.word ov45_0222D19C
-	.word ov45_0222D23C
-	.word ov45_0222D2E4
-	.word ov45_0222D410
-	.word ov45_0222D410
-	.word ov45_0222D4C0
-	.word ov45_0222D4C0
+	.word WiFiPlazaApps_FreeMainArgs
+	.word WiFiPlazaApps_FreeVisitorProfilesArgs
+	.word WiFiPlazaApps_FreePlazaNewsArgs
+	.word WiFiPlazaApps_FreeFootprintStampArgs
+	.word WiFiPlazaApps_FreeFootprintStampArgs
+	.word WiFiPlazaApps_FreeConnectArgs
+	.word WiFiPlazaApps_FreeSwalotPlopArgs
+	.word WiFiPlazaApps_FreeMimeJrTopArgs
+	.word WiFiPlazaApps_FreeWobbuffetPopArgs
+	.word WiFiPlazaApps_FreeDisconnectArgs
+	.word WiFiPlazaApps_FreeDisconnectArgs
+	.word WiFiPlazaApps_FreeSurveyArgs
+	.word WiFiPlazaApps_FreeSurveyArgs
 
 ov45_02254E54: ; 0x02254E54
-	.word ov45_0222CF40
-	.word ov45_0222D028
-	.word ov45_0222D0C8
+	.word WiFiPlazaApps_StartMain
+	.word WiFiPlazaApps_StartVisitorProfiles
+	.word WiFiPlazaApps_StartPlazaNews
 	.word ov45_0222D3B0
 	.word ov45_0222D3C4
-	.word ov45_0222D13C
-	.word ov45_0222D1B0
-	.word ov45_0222D250
-	.word ov45_0222D2F8
-	.word ov45_0222D41C
-	.word ov45_0222D428
-	.word ov45_0222D4CC
-	.word ov45_0222D4CC
+	.word WiFiPlazaApps_StartConnect
+	.word WiFiPlazaApps_StartSwalotPlop
+	.word WiFiPlazaApps_StartMimeJrTop
+	.word WiFiPlazaApps_StartWobbuffetPop
+	.word WiFiPlazaApps_StartDisconnect
+	.word WiFiPlazaApps_StartClosedDisconnect
+	.word WiFiPlazaApps_StartSurvey
+	.word WiFiPlazaApps_StartSurvey
 
 ov45_02254E88: ; 0x02254E88
-	.word ov45_0222CF00
-	.word ov45_0222CFF4
-	.word ov45_0222D078
-	.word ov45_0222D354
-	.word ov45_0222D354
-	.word ov45_0222D0FC
-	.word ov45_0222D164
-	.word ov45_0222D20C
-	.word ov45_0222D2AC
-	.word ov45_0222D3D8
-	.word ov45_0222D3D8
+	.word WiFiPlazaApps_NewMainArgs
+	.word WiFiPlazaApps_NewVisitorProfilesArgs
+	.word WiFiPlazaApps_NewPlazaNewsArgs
+	.word WiFiPlazaApps_NewFootprintStampArgs
+	.word WiFiPlazaApps_NewFootprintStampArgs
+	.word WiFiPlazaApps_NewConnectArgs
+	.word WiFiPlazaApps_NewSwalotPlopArgs
+	.word WiFiPlazaApps_NewMimeJrTopArgs
+	.word WiFiPlazaApps_NewWobbuffetPopArgs
+	.word WiFiPlazaApps_NewDisconnectArgs
+	.word WiFiPlazaApps_NewDisconnectArgs
 	.word ov45_0222D44C
 	.word ov45_0222D484
 
 ov45_02254EBC: ; 0x02254EBC
-	.word ov45_0222CF68
-	.word ov45_0222D054
-	.word ov45_0222D0D8
-	.word ov45_0222D38C
-	.word ov45_0222D38C
-	.word ov45_0222D14C
-	.word ov45_0222D1DC
-	.word ov45_0222D27C
-	.word ov45_0222D324
-	.word ov45_0222D448
-	.word ov45_0222D448
-	.word ov45_0222D4DC
-	.word ov45_0222D4DC
+	.word WiFiPlazaApps_EndMain
+	.word WiFiPlazaApps_EndVisitorProfiles
+	.word WiFiPlazaApps_EndPlazaNews
+	.word WiFiPlazaApps_EndFootprintStamp
+	.word WiFiPlazaApps_EndFootprintStamp
+	.word WiFiPlazaApps_EndConnect
+	.word WiFiPlazaApps_EndSwalotPlop
+	.word WiFiPlazaApps_EndMimeJrTop
+	.word WiFiPlazaApps_EndWobbuffetPop
+	.word WiFiPlazaApps_EndDisconnect
+	.word WiFiPlazaApps_EndDisconnect
+	.word WiFiPlazaApps_EndSurvey
+	.word WiFiPlazaApps_EndSurvey
 
 ov45_02254EF0: ; 0x02254EF0
 	.word ov45_02254EF4
@@ -934,22 +934,22 @@ ov45_02254F14: ; 0x02254F14
 
 	.balign 4, 0
 ov45_02254F1C: ; 0x02254F1C
-	.word ov45_02230CD8
+	.word WiFiPlazaPlayerObject_EffectTurnAround
 	.word ov45_02230D20
 	.word ov45_02230D5C
 
 ov45_02254F28: ; 0x02254F28
-	.word ov45_02230B64
+	.word WiFiPlazaPlayerObject_ShowStandingSprite
 	.word ov45_02230BFC
-	.word ov45_02230B8C
-	.word ov45_02230C40
-	.word ov45_02230B64
-	.word ov45_02230B8C
-	.word ov45_02230B8C
-	.word ov45_02230B8C
-	.word ov45_02230B8C
-	.word ov45_02230B8C
-	.word ov45_02230B8C
+	.word WiFiPlazaPlayerObject_PlayStandingSequence
+	.word WiFiPlazaPlayerObject_PlayWalkingSequence
+	.word WiFiPlazaPlayerObject_ShowStandingSprite
+	.word WiFiPlazaPlayerObject_PlayStandingSequence
+	.word WiFiPlazaPlayerObject_PlayStandingSequence
+	.word WiFiPlazaPlayerObject_PlayStandingSequence
+	.word WiFiPlazaPlayerObject_PlayStandingSequence
+	.word WiFiPlazaPlayerObject_PlayStandingSequence
+	.word WiFiPlazaPlayerObject_PlayStandingSequence
 	.word 0
 
 	.bss

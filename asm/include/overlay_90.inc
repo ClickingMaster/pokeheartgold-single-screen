@@ -178,7 +178,7 @@
 .public gSystem
 .public WifiConnection_StartVoiceChat
 .public WifiConnection_StopVoiceChat
-.public ov45_0222ACB8
+.public WiFiPlaza_SendMinigameResultNews
 .public PlazaGameRoster_Init
 .public PlazaGameRoster_GetIndexOfNetId
 .public ov90_022588A4

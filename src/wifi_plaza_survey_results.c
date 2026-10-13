@@ -172,9 +172,9 @@ void WiFiPlazaSurveyResults_Setup(WiFiPlazaSurveyResults *results, WiFiPlazaSurv
     WiFiPlazaSurvey_InitQuestion(&results->current, TRUE, heapID);
     WiFiPlazaSurvey_InitQuestion(&results->lastWeek, FALSE, heapID);
     // the lobby caches the tally of this plaza
-    if (!ov45_0222B21C(args->lobby, &results->plazaTally)) {
+    if (!WiFiPlazaWork_GetSurveyTally(args->lobby, &results->plazaTally)) {
         WiFiPlazaSurvey_CountPlazaAnswers(&results->plazaTally, args->lobby);
-        ov45_0222B1FC(args->lobby, &results->plazaTally);
+        WiFiPlazaWork_SetSurveyTally(args->lobby, &results->plazaTally);
     }
     WiFiPlazaSurvey_LoadLastWeekTotals(&results->lastWeekTally);
 }
@@ -210,7 +210,7 @@ BOOL WiFiPlazaSurveyResults_Run(WiFiPlazaSurveyResults *results, WiFiPlazaSurvey
         break;
     case 4:
         ov45_0222AB0C(WiFiPlazaWork_GetMyPlayer(args->lobby), &record);
-        WiFiPlazaSurveyResults_PrintQuestion(results, &results->current, messages, work, &record, heapID, MAKE_TEXT_COLOR(9, 10, 0), MAKE_TEXT_COLOR(13, 14, 0), ov45_0222AB28(args->lobby, ov45_0222A53C(args->lobby)));
+        WiFiPlazaSurveyResults_PrintQuestion(results, &results->current, messages, work, &record, heapID, MAKE_TEXT_COLOR(9, 10, 0), MAKE_TEXT_COLOR(13, 14, 0), WiFiPlazaWork_IsSpecialVisitor(args->lobby, WiFiPlazaWork_GetOwnSlot(args->lobby)));
         WiFiPlazaSurveyResults_StartBars(results, &results->plazaTally, work, 1);
         PlaySE(SEQ_SE_PL_PINPON2);
         results->state = 5;
@@ -291,7 +291,7 @@ BOOL WiFiPlazaSurveyResults_Run(WiFiPlazaSurveyResults *results, WiFiPlazaSurvey
         saveBlock = Save_PlazaSurvey_Get(args->saveData);
         savedRecord.surveyId = PlazaSurvey_GetSurveyId(saveBlock);
         savedRecord.answer = PlazaSurvey_GetAnswer(saveBlock);
-        WiFiPlazaSurveyResults_PrintQuestion(results, &results->lastWeek, messages, work, &savedRecord, heapID, MAKE_TEXT_COLOR(11, 12, 0), MAKE_TEXT_COLOR(15, 14, 0), ov45_0222AB28(args->lobby, ov45_0222A53C(args->lobby)));
+        WiFiPlazaSurveyResults_PrintQuestion(results, &results->lastWeek, messages, work, &savedRecord, heapID, MAKE_TEXT_COLOR(11, 12, 0), MAKE_TEXT_COLOR(15, 14, 0), WiFiPlazaWork_IsSpecialVisitor(args->lobby, WiFiPlazaWork_GetOwnSlot(args->lobby)));
         WiFiPlazaSurveyResults_StartBars(results, &results->lastWeekTally, work, 2);
         PlaySE(SEQ_SE_PL_PINPON2);
         results->state = 18;
@@ -520,7 +520,7 @@ void WiFiPlazaSurvey_CountPlazaAnswers(WiFiPlazaSurveyTally *tally, void *lobby)
     for (i = 0; i < 20; i++) {
         void *player = WiFiPlazaWork_GetPlayer(lobby, i);
         if (player != NULL) {
-            void *value = ov45_0222AA54(player);
+            void *value = WiFiPlazaPlayer_GetRawLanguage(player);
             WiFiPlazaSurveyAnswerRecord record;
             ov45_0222AB0C(player, &record);
             if (ov45_0222F6B0(0, value) == 1 && record.answer < WIFI_PLAZA_SURVEY_NUM_ANSWERS) {

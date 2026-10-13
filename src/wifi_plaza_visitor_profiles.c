@@ -68,7 +68,7 @@ typedef union VisitorProfilesClock {
 
 // Arguments built by the lobby overlay.
 typedef struct VisitorProfilesArgs {
-    void *visitors; // lobby visitor table (OVY_45), read through ov45_0222D6B0 and friends
+    void *visitors; // lobby visitor table (OVY_45), read through WiFiPlazaPlaces_GetCountry and friends
     SaveData *saveData;
     VisitorProfilesClock clock;
     void *lobby;
@@ -305,14 +305,14 @@ enum VisitorProfilesMode {
 };
 
 // The Wi-Fi Plaza lobby (OVY_45) has no public header.
-extern u32 ov45_0222A330(void *lobby);
+extern u32 WiFiPlazaWork_IsClosing(void *lobby);
 extern void ov45_0222A4A8(void *lobby);
-extern void ov45_0222A520(void *lobby, u32 a1);
-extern u32 ov45_0222D6B0(void *visitors, u8 index);
-extern u32 ov45_0222D6D4(void *visitors, u8 index);
-extern u32 ov45_0222D6FC(void *visitors, u8 index);
-extern u32 ov45_0222D724(void *visitors, u8 index);
-extern u32 ov45_0222D844(void);
+extern void WiFiPlazaWork_SetLowVolume(void *lobby, u32 a1);
+extern u32 WiFiPlazaPlaces_GetCountry(void *visitors, u8 index);
+extern u32 WiFiPlazaPlaces_GetRegion(void *visitors, u8 index);
+extern u32 WiFiPlazaPlaces_GetValue(void *visitors, u8 index);
+extern u32 WiFiPlazaPlaces_IsOccupied(void *visitors, u8 index);
+extern u32 WiFiPlaza_HasConnectionFailed(void);
 
 // FX_Sqrt has no declaration in lib/include.
 fx32 FX_Sqrt(fx32 x);
@@ -506,7 +506,7 @@ BOOL VisitorProfiles_Main(OverlayManager *man, int *state) {
     switch (*state) {
     case 0:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_112);
-        ov45_0222A520(args->lobby, 1);
+        WiFiPlazaWork_SetLowVolume(args->lobby, 1);
         (*state)++;
         break;
     case 1:
@@ -517,11 +517,11 @@ BOOL VisitorProfiles_Main(OverlayManager *man, int *state) {
     case 2:
         done = VisitorProfiles_Update(work);
         VisitorProfiles_UpdatePanel(work);
-        if (ov45_0222A330(args->lobby) == 1) {
+        if (WiFiPlazaWork_IsClosing(args->lobby) == 1) {
             ov45_0222A4A8(args->lobby);
             done = 1;
         }
-        if (ov45_0222D844() == 1) {
+        if (WiFiPlaza_HasConnectionFailed() == 1) {
             done = 1;
         }
         if (done == 1) {
@@ -911,8 +911,8 @@ void VisitorProfiles_FocusStartPlace(VisitorProfilesWork *work, VisitorProfilesA
         return;
     }
 
-    country = ov45_0222D6B0(args->visitors, index);
-    region = ov45_0222D6D4(args->visitors, index);
+    country = WiFiPlazaPlaces_GetCountry(args->visitors, index);
+    region = WiFiPlazaPlaces_GetRegion(args->visitors, index);
     if (VisitorProfiles_FocusPlace(work, country, region) != TRUE) {
         GF_AssertFail();
     }
@@ -1344,10 +1344,10 @@ void VisitorProfilesPlaces_Draw(VisitorProfilesPlaces *places, VisitorProfilesGl
 int VisitorProfiles_GetVisitorMarker(void *visitors, int country, int region) {
     int i;
     for (i = 0; i < VISITOR_PROFILES_NUM_VISITORS; i++) {
-        if (ov45_0222D724(visitors, (u8)i)) {
-            int flag = ov45_0222D6FC(visitors, (u8)i);
-            u8 visitorCountry = ov45_0222D6B0(visitors, (u8)i);
-            int visitorRegion = ov45_0222D6D4(visitors, (u8)i);
+        if (WiFiPlazaPlaces_IsOccupied(visitors, (u8)i)) {
+            int flag = WiFiPlazaPlaces_GetValue(visitors, (u8)i);
+            u8 visitorCountry = WiFiPlazaPlaces_GetCountry(visitors, (u8)i);
+            int visitorRegion = WiFiPlazaPlaces_GetRegion(visitors, (u8)i);
             if (visitorCountry == country && visitorRegion == region) {
                 if (flag == 1) {
                     return 1;
@@ -2487,7 +2487,7 @@ String *VisitorProfilesMsg_GetRegionName(VisitorProfilesMsg *msg, u32 country, u
 s32 VisitorProfiles_FindFirstVisitor(void *visitors) {
     s32 i;
     for (i = 0; i < VISITOR_PROFILES_NUM_VISITORS; i++) {
-        if ((u8)ov45_0222D724(visitors, (u8)i) == 1) {
+        if ((u8)WiFiPlazaPlaces_IsOccupied(visitors, (u8)i) == 1) {
             return i;
         }
     }

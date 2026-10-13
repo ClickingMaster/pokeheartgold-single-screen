@@ -49,7 +49,7 @@ BOOL WiFiPlazaObj_UpdateLight(WiFiPlazaObjLight *light, void *avatars) {
     }
     light->value = light->frame * light->delta / light->duration;
     light->value += light->start;
-    ov45_02230700(avatars, light->value);
+    WiFiPlazaPlayerObjects_SetModelAlpha(avatars, light->value);
     return FALSE;
 }
 
@@ -63,8 +63,8 @@ BOOL WiFiPlazaRoom_Init(OverlayManager *manager, int *state) {
     memset(room, 0, sizeof(WiFiPlazaRoomWork));
     room->startParams = args->startParams;
     room->lobby = args->lobby;
-    room->ownPlayerIndex = ov45_0222A53C(room->lobby);
-    if (ov45_0222A53C(room->lobby) == -1) {
+    room->ownPlayerIndex = WiFiPlazaWork_GetOwnSlot(room->lobby);
+    if (WiFiPlazaWork_GetOwnSlot(room->lobby) == -1) {
         GF_AssertFail();
     }
     TextFlags_SetCanABSpeedUpPrint(TRUE);
@@ -117,11 +117,11 @@ BOOL WiFiPlazaRoom_Main(OverlayManager *manager, int *state) {
         break;
     case 2:
         if (room->mode == 1) {
-            if (ov45_0222D844() == TRUE || ov45_0222A1FC(room->lobby) != 0) {
+            if (WiFiPlaza_HasConnectionFailed() == TRUE || WiFiPlazaWork_HasError(room->lobby) != 0) {
                 room->error = 1;
             }
         }
-        if (room->ignorePlazaClosing == FALSE && ov45_0222A33C(room->lobby) == TRUE) {
+        if (room->ignorePlazaClosing == FALSE && WiFiPlazaWork_IsClosed(room->lobby) == TRUE) {
             room->plazaClosing = TRUE;
             WiFiPlazaRoom_SetResult(room, 8);
         }
@@ -145,7 +145,7 @@ BOOL WiFiPlazaRoom_Main(OverlayManager *manager, int *state) {
         } else if (CommState_HasPlazaLobbyFailed() != 0) {
             WiFiPlazaErrorWindow_PrintLobbyError(&room->errorWindow, &room->msg, ov45_0222E7CC());
         } else {
-            WiFiPlazaErrorWindow_PrintDisconnected(&room->errorWindow, &room->msg, ov45_0222A1FC(room->lobby));
+            WiFiPlazaErrorWindow_PrintDisconnected(&room->errorWindow, &room->msg, WiFiPlazaWork_HasError(room->lobby));
         }
         *state = 4;
         break;
@@ -445,7 +445,7 @@ void WiFiPlazaRoom_BufferInt(WiFiPlazaRoomWork *room, int value, int digits, int
 void WiFiPlazaRoom_BufferPlayerName(WiFiPlazaRoomWork *room, u32 playerIndex, u32 field) {
     PlayerProfile *profile = PlayerProfile_New((enum HeapID)0x77);
     struct WiFiPlazaPlayer *player;
-    if (playerIndex == ov45_0222A53C(room->lobby)) {
+    if (playerIndex == WiFiPlazaWork_GetOwnSlot(room->lobby)) {
         player = WiFiPlazaWork_GetMyPlayer(room->lobby);
     } else {
         player = WiFiPlazaWork_GetPlayer(room->lobby, playerIndex);
@@ -560,7 +560,7 @@ void WiFiPlazaRoom_StartInstrument(WiFiPlazaRoomWork *room, u32 playerIndex) {
     }
     instrument = ov45_0222AAC8(WiFiPlazaWork_GetPlayer(room->lobby, playerIndex));
     WiFiPlazaInstrument_Start(room->instruments, playerIndex, instrument);
-    if (playerIndex == ov45_0222A53C(room->lobby)) {
+    if (playerIndex == WiFiPlazaWork_GetOwnSlot(room->lobby)) {
         ov45_0222AD70(room->lobby, instrument);
     }
 }
@@ -741,16 +741,16 @@ void WiFiPlazaRoom_Draw(WiFiPlazaRoomWork *room) {
     WiFiPlazaRoom_DrawSprites(&room->graphics);
 }
 
-// The signs of the three Pokemon match ups (ov45_0222F274: match state, ov45_0222F294: closed for entry)
+// The signs of the three Pokemon match ups (WiFiPlazaLobbyClient_IsMatchActive: match state, WiFiPlazaLobbyClient_IsMatchOpen: closed for entry)
 void WiFiPlazaRoom_UpdateMatchSigns(WiFiPlazaRoomWork *room) {
     int i;
     u32 state;
     u32 recruiting;
     u32 stop = ov45_0222A394(room->lobby);
     for (i = 0; i < 3; i++) {
-        state = ov45_0222F274(i);
+        state = WiFiPlazaLobbyClient_IsMatchActive(i);
         if (state == TRUE) {
-            if (ov45_0222F294(i) == FALSE) {
+            if (WiFiPlazaLobbyClient_IsMatchOpen(i) == FALSE) {
                 recruiting = TRUE;
             } else {
                 recruiting = FALSE;
@@ -758,7 +758,7 @@ void WiFiPlazaRoom_UpdateMatchSigns(WiFiPlazaRoomWork *room) {
         } else {
             recruiting = FALSE;
         }
-        WiFiPlazaModels_UpdateMatchSign(room->models, i, ov45_0222F314(i), state, recruiting, stop);
+        WiFiPlazaModels_UpdateMatchSign(room->models, i, WiFiPlazaLobbyClient_GetMatchPlayerCount(i), state, recruiting, stop);
     }
 }
 
@@ -1126,7 +1126,7 @@ void WiFiPlazaErrorWindow_Print(Window *window, String *string) {
 
 void WiFiPlazaErrorWindow_PrintCommError(Window *window, WiFiPlazaRoomMsg *msg) {
     u32 *error = CommState_GetWifiError();
-    u32 msgId = ov45_0222D7CC(error[0], error[1]);
+    u32 msgId = WiFiPlaza_GetErrorMessageClass(error[0], error[1]);
     WiFiPlazaRoomMsg_BufferInt(msg, error[0], 5, 0, 2);
     WiFiPlazaErrorWindow_Print(window, WiFiPlazaRoomMsg_GetString(msg, 2, msgId));
 }

@@ -6,14 +6,14 @@
 #include "wifi_plaza_internal.h"
 
 // Local time of a player's country / region: `time` shifted by the longitude difference to country 219 region 3.
-WiFiPlazaTime ov45_02230F94(int country, u16 region, u32 time, enum HeapID heapID) {
+WiFiPlazaTime WiFiPlaza_GetLocalTime(int country, u16 region, u32 time, enum HeapID heapID) {
     s32 baseLongitude;
     s32 longitude;
     int hour;
     NARC *narc = NARC_New(NARC_a_0_9_8, heapID);
 
-    ov45_02231018(narc, heapID, 219, 3, &baseLongitude);
-    ov45_02231018(narc, heapID, country, region, &longitude);
+    WiFiPlaza_GetLongitude(narc, heapID, 219, 3, &baseLongitude);
+    WiFiPlaza_GetLongitude(narc, heapID, country, region, &longitude);
     hour = (u16)(baseLongitude - longitude) * 24 / 0xFFFF;
     if (hour < 0) {
         hour += 24;
@@ -24,14 +24,14 @@ WiFiPlazaTime ov45_02230F94(int country, u16 region, u32 time, enum HeapID heapI
     {
         WiFiPlazaTime result = { 0 };
         result.field.hour = hour;
-        ov45_0222D524(&result, (WiFiPlazaTime *)&time, &result);
+        WiFiPlazaTime_Add(&result, (WiFiPlazaTime *)&time, &result);
         NARC_Delete(narc);
         return result;
     }
 }
 
 // Longitude (y angle) of a country (file 18 of the earth place NARC) or, for countries with regions, of a region.
-void ov45_02231018(NARC *narc, enum HeapID heapID, int country, u16 region, s32 *longitude) {
+void WiFiPlaza_GetLongitude(NARC *narc, enum HeapID heapID, int country, u16 region, s32 *longitude) {
     BOOL found = FALSE;
     u32 size;
     u32 regionSize;

@@ -9,16 +9,16 @@
 // and updating, messages, the location list, match updates and the results of the library's requests.
 
 // TRUE while the channel has room (ov45_02254C30 per channel).
-BOOL ov45_0222FBD8(WiFiPlazaLobbyClient *client, int channel) {
+BOOL WiFiPlazaLobbyClient_HasChannelRoom(WiFiPlazaLobbyClient *client, int channel) {
     u32 libChannel;
     int count;
     int i;
 
     GF_ASSERT(channel < 4);
-    libChannel = ov45_0222F7B0(channel);
+    libChannel = WiFiPlazaLobbyClient_ChannelToLib(channel);
     count = 0;
     for (i = 0; i < client->idLists[0].capacity; i++) {
-        int id = ov45_0222FB5C(client, i, 0);
+        int id = WiFiPlazaLobbyClient_GetIdListEntry(client, i, 0);
         if (id != -1 && libChannel == client->records[i].channel) {
             count++;
         }
@@ -27,7 +27,7 @@ BOOL ov45_0222FBD8(WiFiPlazaLobbyClient *client, int channel) {
 }
 
 // Entered the lobby (libChannel 0) or a channel.
-void ov45_0222FC44(int result, u32 libChannel) {
+void WiFiPlazaLobbyClient_OnEnterChannel(int result, u32 libChannel) {
     WiFiPlazaLobbyClient *client;
 
     if (libChannel == 0) {
@@ -37,21 +37,21 @@ void ov45_0222FC44(int result, u32 libChannel) {
         return;
     }
     client = _022577C0;
-    if (client->channel == ov45_0222F7A8(libChannel)) {
+    if (client->channel == WiFiPlazaLobbyClient_ChannelFromLib(libChannel)) {
         if (result == 1) {
             client->unk_12f = 1;
-            ov45_0222FB84(_022577C0, _022577C0->channel);
-            ov45_0222FA74(_022577C0, ov45_02232580(), 1);
+            WiFiPlazaLobbyClient_RebuildChannelList(_022577C0, _022577C0->channel);
+            WiFiPlazaLobbyClient_AddToIdList(_022577C0, ov45_02232580(), 1);
         } else {
             client->unk_12f = 2;
         }
     } else {
         GF_AssertFail();
-        ov45_0222EB94();
+        WiFiPlazaLobbyClient_LeaveChannel();
     }
 }
 
-void ov45_0222FCE0(int id, const WiFiPlazaLobbyPlayerRecord *record, const void *data, u32 size) {
+void WiFiPlazaLobbyClient_OnPlayerEnter(int id, const WiFiPlazaLobbyPlayerRecord *record, const void *data, u32 size) {
     BOOL isOwn;
     WiFiPlazaLobbyClient *client;
     WiFiPlazaPlayer *player;
@@ -62,30 +62,30 @@ void ov45_0222FCE0(int id, const WiFiPlazaLobbyPlayerRecord *record, const void 
     } else {
         isOwn = FALSE;
     }
-    ov45_0222FA74(_022577C0, id, 0);
-    ov45_0222F898(_022577C0, id, data, size);
-    ov45_0222F928(_022577C0, id, record);
+    WiFiPlazaLobbyClient_AddToIdList(_022577C0, id, 0);
+    WiFiPlazaLobbyClient_CopyPlayerData(_022577C0, id, data, size);
+    WiFiPlazaLobbyClient_SetPlayerRecord(_022577C0, id, record);
     client = _022577C0;
-    player = ov45_0222F8D8(client, id);
+    player = WiFiPlazaLobbyClient_GetPlayerData(client, id);
     _022577C0->callbacks.onPlayerEnter(id, player, client->callbackArg, isOwn);
 }
 
-void ov45_0222FD50(int id) {
+void WiFiPlazaLobbyClient_OnPlayerLeave(int id) {
     int i;
 
-    if (ov45_0222FB24(_022577C0, id, 0) == -1) {
+    if (WiFiPlazaLobbyClient_FindInIdList(_022577C0, id, 0) == -1) {
         return;
     }
     for (i = 0; i < 3; i++) {
         if (id == _022577C0->matches[i].hostId) {
-            ov45_02230008(id, &_022577C0->matches[i].info);
+            WiFiPlazaLobbyClient_OnMatchClosed(id, &_022577C0->matches[i].info);
         }
     }
     _022577C0->callbacks.onPlayerLeave(id, _022577C0->callbackArg);
-    ov45_0222F978(_022577C0, id);
-    ov45_0222F8FC(_022577C0, id);
-    ov45_0222FAF8(_022577C0, id, 0);
-    ov45_0222FAF8(_022577C0, id, 1);
+    WiFiPlazaLobbyClient_ClearPlayerRecord(_022577C0, id);
+    WiFiPlazaLobbyClient_ClearPlayerData(_022577C0, id);
+    WiFiPlazaLobbyClient_RemoveFromIdList(_022577C0, id, 0);
+    WiFiPlazaLobbyClient_RemoveFromIdList(_022577C0, id, 1);
 }
 
 void ov45_0222FDD4(void) {
@@ -95,10 +95,10 @@ void ov45_0222FDD4(void) {
 
 // A message of the given type from a player: calls the receive callback of the lobby (libChannel 0 / 5) or channel
 // table.
-void ov45_0222FDD8(int id, u32 libChannel, u32 type, const void *data, u32 size) {
+void WiFiPlazaLobbyClient_OnMessage(int id, u32 libChannel, u32 type, const void *data, u32 size) {
     int table;
 
-    if (ov45_0222FB24(_022577C0, id, 0) == -1) {
+    if (WiFiPlazaLobbyClient_FindInIdList(_022577C0, id, 0) == -1) {
         return;
     }
     switch (libChannel) {
@@ -109,7 +109,7 @@ void ov45_0222FDD8(int id, u32 libChannel, u32 type, const void *data, u32 size)
     case 2:
     case 3:
     case 4:
-        if (_022577C0->channel != ov45_0222F7A8(libChannel)) {
+        if (_022577C0->channel != WiFiPlazaLobbyClient_ChannelFromLib(libChannel)) {
             return;
         }
         table = 1;
@@ -130,7 +130,7 @@ void ov45_0222FDD8(int id, u32 libChannel, u32 type, const void *data, u32 size)
 #pragma force_active reset
 
 // The lobby's location list (key ov45_02254EF0) changed.
-void ov45_0222FE84(int a0, int a1, int a2, int a3, const char *key, const void *data) {
+void WiFiPlazaLobbyClient_OnLocationsChanged(int a0, int a1, int a2, int a3, const char *key, const void *data) {
     if (strcmp(key, ov45_02254EF0) == 0) {
         memcpy(_022577C0->locations, data, sizeof(_022577C0->locations));
         if (_022577C0->unk_130) {
@@ -142,29 +142,29 @@ void ov45_0222FE84(int a0, int a1, int a2, int a3, const char *key, const void *
 #pragma force_active on
 
 // A player's record changed: follows the player into or out of the own channel.
-void ov45_0222FEC4(int id, const WiFiPlazaLobbyPlayerRecord *record) {
-    if (ov45_0222FB24(_022577C0, id, 0) != -1) {
+void WiFiPlazaLobbyClient_OnPlayerRecordChanged(int id, const WiFiPlazaLobbyPlayerRecord *record) {
+    if (WiFiPlazaLobbyClient_FindInIdList(_022577C0, id, 0) != -1) {
         if (_022577C0->channel != 4) {
-            int current, old = ov45_0222F954(_022577C0, id)->channel;
+            int current, old = WiFiPlazaLobbyClient_GetPlayerRecord(_022577C0, id)->channel;
             current = record->channel;
             {
-                int own = ov45_0222F7B0(_022577C0->channel);
+                int own = WiFiPlazaLobbyClient_ChannelToLib(_022577C0->channel);
                 if (old == 5 && current == own) {
-                    ov45_0222FA74(_022577C0, id, 1);
+                    WiFiPlazaLobbyClient_AddToIdList(_022577C0, id, 1);
                 } else if (old == own && current != own) {
-                    ov45_0222FAF8(_022577C0, id, 1);
+                    WiFiPlazaLobbyClient_RemoveFromIdList(_022577C0, id, 1);
                 }
             }
         }
-        ov45_0222F928(_022577C0, id, record);
+        WiFiPlazaLobbyClient_SetPlayerRecord(_022577C0, id, record);
     }
 }
 
 #pragma force_active reset
 
-void ov45_0222FF40(int id, const void *data) {
-    if (ov45_0222FB24(_022577C0, id, 0) != -1) {
-        ov45_0222F88C(_022577C0, id, data);
+void WiFiPlazaLobbyClient_OnPlayerUpdate(int id, const void *data) {
+    if (WiFiPlazaLobbyClient_FindInIdList(_022577C0, id, 0) != -1) {
+        WiFiPlazaLobbyClient_SetPlayerData(_022577C0, id, data);
         _022577C0->callbacks.onPlayerUpdate(id, (WiFiPlazaPlayer *)data, _022577C0->callbackArg);
     }
 }
@@ -176,43 +176,43 @@ static inline BOOL IsSameId(int id, int other) {
 }
 
 // Match info from a player.
-void ov45_0222FF7C(int id, WiFiPlazaLobbyMatchInfo *info) {
+void WiFiPlazaLobbyClient_OnMatchInfo(int id, WiFiPlazaLobbyMatchInfo *info) {
     s64 current;
     s64 received;
-    int slot = ov45_0222FB24(_022577C0, id, 0);
+    int slot = WiFiPlazaLobbyClient_FindInIdList(_022577C0, id, 0);
     if (slot != -1) {
         if (IsSameId(WiFiPlazaLobbyClient_GetOwnId(), id)) {
         } else if (_022577C0->unk_69e && _022577C0->currentMatch == info->index) {
-            ov45_02230384(&_022577C0->matches[_022577C0->currentMatch].info, &current);
-            ov45_02230384(info, &received);
+            WiFiPlazaLobbyMatchInfo_GetStartTime(&_022577C0->matches[_022577C0->currentMatch].info, &current);
+            WiFiPlazaLobbyMatchInfo_GetStartTime(info, &received);
             if (current < received) {
                 return;
             }
             _022577C0->unk_69f = 1;
             ov45_0222F154();
         }
-        ov45_02230164(_022577C0, info->index, id, info);
+        WiFiPlazaLobbyMatches_Set(_022577C0, info->index, id, info);
     }
 }
 
 #pragma force_active reset
 
-void ov45_02230008(int id, const WiFiPlazaLobbyMatchInfo *info) {
+void WiFiPlazaLobbyClient_OnMatchClosed(int id, const WiFiPlazaLobbyMatchInfo *info) {
     int result;
-    if (ov45_0222FB24(_022577C0, id, 0) == -1) {
+    if (WiFiPlazaLobbyClient_FindInIdList(_022577C0, id, 0) == -1) {
         return;
     }
-    result = ov45_022301E0(_022577C0, info->index, id);
+    result = WiFiPlazaLobbyMatches_Remove(_022577C0, info->index, id);
     if (_022577C0->currentMatch == info->index && result == 1) {
         _022577C0->unk_69f = 1;
     }
 }
 
-void ov45_02230050(u32 event) {
+void WiFiPlazaLobbyClient_OnLobbyEvent(u32 event) {
     _022577C0->callbacks.onLobbyEvent(event, _022577C0->callbackArg);
 }
 
-void ov45_02230064(int result, const WiFiPlazaPlayer *data, u32 size) {
+void WiFiPlazaLobbyClient_OnOwnRecord(int result, const WiFiPlazaPlayer *data, u32 size) {
     if (result != 0) {
         _022577C0->unk_133 = 1;
     } else {
@@ -232,7 +232,7 @@ BOOL ov45_02230090(int result) {
 
 void ov45_022300B0(int result, const void *data, u32 size) {
     if (result == 0) {
-        ov45_0223040C(&_022577C0->unk_6a0, data, size);
+        WiFiPlazaLobbyIdValueList_Set(&_022577C0->unk_6a0, data, size);
     } else {
         _022577C0->unk_132 = 1;
     }
@@ -257,7 +257,7 @@ void ov45_02230130(void) {
     _022577C0->unk_131 = 1;
 }
 
-void ov45_02230144(WiFiPlazaLobbyClient *client) {
+void WiFiPlazaLobbyClient_InitMatches(WiFiPlazaLobbyClient *client) {
     memset(client->matches, 0, sizeof(client->matches));
     client->currentMatch = 3;
 }

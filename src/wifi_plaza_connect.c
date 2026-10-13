@@ -104,8 +104,8 @@ extern BOOL CommState_HasPlazaLobbyFailed(void);
 extern void *WiFiPlazaWork_GetMyPlayer(void *lobby);
 extern void ov45_0222B244(void *lobby);
 extern void ov45_0222B270(void *lobby);
-extern int ov45_0222D7CC(u32 errorCode, u32 errorType);
-extern BOOL ov45_0222D7FC(u32 errorCode, u32 errorType);
+extern int WiFiPlaza_GetErrorMessageClass(u32 errorCode, u32 errorType);
+extern BOOL WiFiPlaza_IsErrorRecoverable(u32 errorCode, u32 errorType);
 extern void ov45_0222E7CC(void);
 extern u32 ov45_0222E7FC(void);
 extern void ov45_0222ED7C(void);
@@ -234,7 +234,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
         int msgId;
         if (CommState_HasWifiFailed()) {
             u32 *error = CommState_GetWifiError();
-            msgId = ov45_0222D7CC(error[0], error[1]);
+            msgId = WiFiPlaza_GetErrorMessageClass(error[0], error[1]);
             errorCode = error[0];
         } else {
             ov45_0222E7CC();
@@ -253,7 +253,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
         if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) || System_GetTouchNew() == TRUE) {
             if (CommState_HasWifiFailed()) {
                 u32 *error = CommState_GetWifiError();
-                if (ov45_0222D7FC(error[0], error[1]) == FALSE) {
+                if (WiFiPlaza_IsErrorRecoverable(error[0], error[1]) == FALSE) {
                     *state = 11;
                 } else {
                     *state = 14;

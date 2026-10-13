@@ -2,42 +2,42 @@
 
 #include "wifi_plaza_internal.h"
 
-void *ov45_0222AB1C(WiFiPlazaWork *work) {
+void *WiFiPlazaWork_GetOwnPlayerProfile(WiFiPlazaWork *work) {
     return work->unk_508.profile;
 }
 
-int ov45_0222AB28(WiFiPlazaWork *work, int a1) {
-    return ov45_0222C95C(work->unk_3cc, a1);
+int WiFiPlazaWork_IsSpecialVisitor(WiFiPlazaWork *work, int a1) {
+    return WiFiPlaza_GetSlotFlag(work->unk_3cc, a1);
 }
 
-void ov45_0222AB38(WiFiPlazaWork *work, void *dest) {
+void WiFiPlazaWork_GetSpecialVisitors(WiFiPlazaWork *work, void *dest) {
     MI_CpuCopy8(work->unk_3cc, dest, sizeof(work->unk_3cc));
 }
 
-int ov45_0222AB48(WiFiPlazaWork *work, int a1) {
-    return ov45_0222C9D0(&work->wordSet, a1);
+int WiFiPlazaWork_HasWordSet(WiFiPlazaWork *work, int a1) {
+    return WiFiPlazaWordSet_HasWords(&work->wordSet, a1);
 }
 
-u16 *ov45_0222AB58(WiFiPlazaWork *work, int a1) {
-    return ov45_0222C9EC(&work->wordSet, a1);
+u16 *WiFiPlazaWork_GetWordSet(WiFiPlazaWork *work, int a1) {
+    return WiFiPlazaWordSet_GetWords(&work->wordSet, a1);
 }
 
-u32 ov45_0222AB68(void) {
+u32 WiFiPlaza_GetChannelPlayerCount(void) {
     u32 pair[2];
-    ov45_0222EC3C(pair);
+    WiFiPlazaLobbyClient_GetChannelPlayerList(pair);
     return pair[0];
 }
 
-int ov45_0222AB78(void *unused, int a1) {
-    int index = ov45_0222ECA4(a1);
+int WiFiPlaza_ChannelSlotToSlot(void *unused, int a1) {
+    int index = WiFiPlazaLobbyClient_ChannelSlotToId(a1);
     int result = -1;
     if (index != -1) {
-        result = ov45_0222EC68(index);
+        result = WiFiPlazaLobbyClient_IdToSlot(index);
     }
     return result;
 }
 
-void ov45_0222AB94(void *unused, u32 slot0, u32 slot1) {
+void WiFiPlaza_SendChatNews(void *unused, u32 slot0, u32 slot1) {
     WiFiPlazaLobbyMessage msg;
     u32 *dst = (u32 *)&msg;
     dst[0] = 0;
@@ -46,17 +46,17 @@ void ov45_0222AB94(void *unused, u32 slot0, u32 slot1) {
     dst[3] = 0;
     dst[4] = 0;
     msg.type = 0;
-    msg.ids[0] = ov45_0222EC90(slot0);
-    msg.ids[1] = ov45_0222EC90(slot1);
+    msg.ids[0] = WiFiPlazaLobbyClient_SlotToId(slot0);
+    msg.ids[1] = WiFiPlazaLobbyClient_SlotToId(slot1);
     msg.count = 2;
     WiFiPlazaLobbyClient_SendToLobby(4, &msg, sizeof(msg));
 }
 
-void ov45_0222ABD0(void *unused, u32 slot0, u32 slot1, u8 value) {
+void WiFiPlaza_SendTapToyTradeNews(void *unused, u32 slot0, u32 slot1, u8 value) {
     WiFiPlazaLobbyMessage msg = { 0 };
     msg.type = 1;
-    msg.ids[0] = ov45_0222EC90(slot1);
-    msg.ids[1] = ov45_0222EC90(slot0);
+    msg.ids[0] = WiFiPlazaLobbyClient_SlotToId(slot1);
+    msg.ids[1] = WiFiPlazaLobbyClient_SlotToId(slot0);
     msg.count = 2;
     msg.unk_12 = value;
     WiFiPlazaLobbyClient_SendToLobby(4, &msg, sizeof(msg));
@@ -64,7 +64,7 @@ void ov45_0222ABD0(void *unused, u32 slot0, u32 slot1, u8 value) {
 
 #pragma force_active on
 
-void ov45_0222AC14(void *unused, int selector, int count, int slot0, int slot1, int slot2, int slot3, int flag) {
+void WiFiPlaza_SendActivityNews(void *unused, int selector, int count, int slot0, int slot1, int slot2, int slot3, int flag) {
     WiFiPlazaLobbyMessage msg = { 0 };
     u32 type;
     (void)unused;
@@ -88,10 +88,10 @@ void ov45_0222AC14(void *unused, int selector, int count, int slot0, int slot1, 
         return;
     }
     msg.type = type;
-    msg.ids[0] = ov45_0222EC90(slot0);
-    msg.ids[1] = ov45_0222EC90(slot1);
-    msg.ids[2] = ov45_0222EC90(slot2);
-    msg.ids[3] = ov45_0222EC90(slot3);
+    msg.ids[0] = WiFiPlazaLobbyClient_SlotToId(slot0);
+    msg.ids[1] = WiFiPlazaLobbyClient_SlotToId(slot1);
+    msg.ids[2] = WiFiPlazaLobbyClient_SlotToId(slot2);
+    msg.ids[3] = WiFiPlazaLobbyClient_SlotToId(slot3);
     msg.count = count;
     msg.unk_13_0 = selector;
     msg.unk_13_7 = flag;
@@ -100,7 +100,7 @@ void ov45_0222AC14(void *unused, int selector, int count, int slot0, int slot1, 
 
 #pragma force_active reset
 
-void ov45_0222ACB8(void *unused, int mode, u8 kind, u32 slot0, u32 slot1, u32 slot2, u32 slot3) {
+void WiFiPlaza_SendMinigameResultNews(void *unused, int mode, u8 kind, u32 slot0, u32 slot1, u32 slot2, u32 slot3) {
     WiFiPlazaLobbyMessage msg;
     u32 *dst = (u32 *)&msg;
     dst[0] = 0;
@@ -113,10 +113,10 @@ void ov45_0222ACB8(void *unused, int mode, u8 kind, u32 slot0, u32 slot1, u32 sl
     case 1:
     case 2:
         msg.type = 8;
-        msg.ids[0] = ov45_0222EC90(slot0);
-        msg.ids[1] = ov45_0222EC90(slot1);
-        msg.ids[2] = ov45_0222EC90(slot2);
-        msg.ids[3] = ov45_0222EC90(slot3);
+        msg.ids[0] = WiFiPlazaLobbyClient_SlotToId(slot0);
+        msg.ids[1] = WiFiPlazaLobbyClient_SlotToId(slot1);
+        msg.ids[2] = WiFiPlazaLobbyClient_SlotToId(slot2);
+        msg.ids[3] = WiFiPlazaLobbyClient_SlotToId(slot3);
         msg.count = kind;
         msg.unk_13_0 = mode;
         msg.unk_13_7 = 0;
@@ -141,7 +141,7 @@ int ov45_0222AD3C(WiFiPlazaWork *work) {
     return value;
 }
 
-int ov45_0222AD4C(WiFiPlazaWork *work) {
+int WiFiPlazaWork_GetOpenDuration(WiFiPlazaWork *work) {
     return ov45_0222ECDC(5) + 30;
 }
 
@@ -217,13 +217,13 @@ void ov45_0222AE54(void) {
     WiFiPlazaLobbyClient_SendToLobby(7, &data, 4);
 }
 
-void ov45_0222AE64(WiFiPlazaWork *work) {
-    ov45_0222BD4C(&work->unk_1c0);
+void WiFiPlazaWork_ResetTalk(WiFiPlazaWork *work) {
+    WiFiPlazaTalkSession_Reset(&work->unk_1c0);
 }
 
 #pragma force_active on
 
-int ov45_0222AE74(WiFiPlazaWork *work, int slot) {
+int WiFiPlazaWork_StartTalk(WiFiPlazaWork *work, int slot) {
     if (work->unk_1c0.unk_0a) {
         return 0;
     }
@@ -233,13 +233,13 @@ int ov45_0222AE74(WiFiPlazaWork *work, int slot) {
     work->unk_1c0.unk_04 = slot;
     work->unk_1c0.unk_06 = 1;
     work->unk_1c0.unk_0a = 1;
-    ov45_0222BE00(&work->unk_1c0, 0);
-    WiFiPlazaLobbyClient_SendToPlayer(0, ov45_0222EC90(slot), &work->unk_1c0.unk_20, 4);
-    ov45_0222BE48(&work->unk_1c0);
+    WiFiPlazaTalkSession_SetMessage(&work->unk_1c0, 0);
+    WiFiPlazaLobbyClient_SendToPlayer(0, WiFiPlazaLobbyClient_SlotToId(slot), &work->unk_1c0.unk_20, 4);
+    WiFiPlazaTalkSession_StartTimeout(&work->unk_1c0);
     return 1;
 }
 
-void ov45_0222AED8(WiFiPlazaWork *work, int a1) {
+void WiFiPlazaWork_AdvanceTalk(WiFiPlazaWork *work, int a1) {
     int flag = 0;
     if (work->unk_1c0.unk_0a == 1) {
         if (work->unk_1c0.unk_06 != 2) {
@@ -251,7 +251,7 @@ void ov45_0222AED8(WiFiPlazaWork *work, int a1) {
         }
     }
     if (flag) {
-        ov45_0222BE28(work, ov45_0222EC90(work->unk_1c0.unk_04));
+        WiFiPlazaWork_SendTalkEnd(work, WiFiPlazaLobbyClient_SlotToId(work->unk_1c0.unk_04));
         return;
     }
     switch (work->unk_1c0.unk_0a) {
@@ -262,55 +262,55 @@ void ov45_0222AED8(WiFiPlazaWork *work, int a1) {
         work->unk_1c0.unk_06 = 2;
         break;
     default:
-        ov45_0222BE28(work, ov45_0222EC90(work->unk_1c0.unk_04));
+        WiFiPlazaWork_SendTalkEnd(work, WiFiPlazaLobbyClient_SlotToId(work->unk_1c0.unk_04));
         return;
     }
-    ov45_0222BE00(&work->unk_1c0, a1);
-    WiFiPlazaLobbyClient_SendToPlayer(2, ov45_0222EC90(work->unk_1c0.unk_04), &work->unk_1c0.unk_20, 4);
-    ov45_0222BE48(&work->unk_1c0);
+    WiFiPlazaTalkSession_SetMessage(&work->unk_1c0, a1);
+    WiFiPlazaLobbyClient_SendToPlayer(2, WiFiPlazaLobbyClient_SlotToId(work->unk_1c0.unk_04), &work->unk_1c0.unk_20, 4);
+    WiFiPlazaTalkSession_StartTimeout(&work->unk_1c0);
 }
 
 #pragma force_active reset
 
-void ov45_0222AF80(WiFiPlazaWork *work) {
+void WiFiPlazaWork_CancelTalkRequest(WiFiPlazaWork *work) {
     int id;
 
     if (work->unk_1c0.unk_06 != 0 && work->unk_1c0.unk_0a == 1) {
         work->unk_1c0.unk_22 = 0;
-        id = ov45_0222EC90(work->unk_1c0.unk_04);
+        id = WiFiPlazaLobbyClient_SlotToId(work->unk_1c0.unk_04);
         WiFiPlazaLobbyClient_SendToPlayer(3, id, &work->unk_1c0.unk_20, 4);
-        ov45_0222BD4C(&work->unk_1c0);
+        WiFiPlazaTalkSession_Reset(&work->unk_1c0);
     }
 }
 
-void ov45_0222AFC4(WiFiPlazaWork *work) {
+void WiFiPlazaWork_EndTalk(WiFiPlazaWork *work) {
     int id;
 
     if (work->unk_1c0.unk_06 != 0) {
-        id = ov45_0222EC90(work->unk_1c0.unk_04);
+        id = WiFiPlazaLobbyClient_SlotToId(work->unk_1c0.unk_04);
         work->unk_1c0.unk_06 = 4;
         work->unk_1c0.unk_22 = 4;
         WiFiPlazaLobbyClient_SendToPlayer(2, id, &work->unk_1c0.unk_20, 4);
     }
 }
 
-BOOL ov45_0222AFF8(WiFiPlazaWork *work) {
+BOOL WiFiPlazaWork_IsTalking(WiFiPlazaWork *work) {
     return work->unk_1c0.unk_0a != 0;
 }
 
-BOOL ov45_0222B00C(WiFiPlazaWork *work) {
+BOOL WiFiPlazaWork_WasAskedToTalk(WiFiPlazaWork *work) {
     return work->unk_1c0.unk_0a == 2;
 }
 
-u16 ov45_0222B020(WiFiPlazaWork *work) {
+u16 WiFiPlazaWork_GetTalkPartner(WiFiPlazaWork *work) {
     return work->unk_1c0.unk_04;
 }
 
-u8 ov45_0222B028(WiFiPlazaWork *work) {
+u8 WiFiPlazaWork_IsFirstTalk(WiFiPlazaWork *work) {
     return work->unk_1c0.unk_0b;
 }
 
-u8 ov45_0222B034(WiFiPlazaWork *work) {
+u8 WiFiPlazaWork_GetTalkState(WiFiPlazaWork *work) {
     return work->unk_1c0.unk_06;
 }
 
@@ -318,7 +318,7 @@ u16 ov45_0222B040(WiFiPlazaWork *work) {
     return work->unk_1c0.unk_08;
 }
 
-BOOL ov45_0222B048(WiFiPlazaWork *work, u32 index) {
+BOOL WiFiPlazaWork_CanTalkWith(WiFiPlazaWork *work, u32 index) {
     GF_ASSERT(index < 20);
     if (work->unk_1c0.unk_0c[index] >= 6) {
         return FALSE;
@@ -326,18 +326,18 @@ BOOL ov45_0222B048(WiFiPlazaWork *work, u32 index) {
     return TRUE;
 }
 
-BOOL ov45_0222B06C(WiFiPlazaWork *work) {
+BOOL WiFiPlazaWork_IsTalkOver(WiFiPlazaWork *work) {
     if (work->unk_1c0.unk_06 == 4) {
         return TRUE;
     }
-    if (ov45_0222BE74(&work->unk_1c0) == FALSE) {
+    if (WiFiPlazaTalkSession_IsWithinTimeout(&work->unk_1c0) == FALSE) {
         return TRUE;
     }
     return FALSE;
 }
 
 void ov45_0222B094(WiFiPlazaWork *work) {
-    ov45_0222BE94(&work->unk_1c0);
+    WiFiPlazaTalkSession_GetTimeoutCounter(&work->unk_1c0);
 }
 
 void ov45_0222B0A4(WiFiPlazaWork *work) {

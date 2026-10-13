@@ -10,14 +10,14 @@
 // event takes a free one or replaces one of at least its rank. Each event type has a message (ov45_02254C0C) and a
 // lobby slot getter (ov45_02254BE8).
 
-BOOL ov45_0222DF58(WiFiPlazaNewsSlots *slots, u32 slot) {
+BOOL WiFiPlazaNewsSlots_IsLastJoined(WiFiPlazaNewsSlots *slots, u32 slot) {
     if (slot >= 20) {
         GF_AssertFail();
     }
     return slots->lastSlot == slot;
 }
 
-void ov45_0222DF78(WiFiPlazaNewsEventList *list, enum HeapID heapID) {
+void WiFiPlazaNewsEventList_Init(WiFiPlazaNewsEventList *list, enum HeapID heapID) {
     s32 i, j;
     WiFiPlazaNewsEvent *event;
     memset(list, 0, sizeof(WiFiPlazaNewsEventList));
@@ -30,7 +30,7 @@ void ov45_0222DF78(WiFiPlazaNewsEventList *list, enum HeapID heapID) {
     list->head.prev = &list->head;
 }
 
-void ov45_0222DFD0(WiFiPlazaNewsEventList *list) {
+void WiFiPlazaNewsEventList_Free(WiFiPlazaNewsEventList *list) {
     s32 i, j;
     WiFiPlazaNewsEvent *event;
     for (i = 0, event = list->events; i < 8; i++, event++) {
@@ -42,7 +42,7 @@ void ov45_0222DFD0(WiFiPlazaNewsEventList *list) {
 }
 
 // Counts the timers of the events down; an event goes when its timer runs out.
-void ov45_0222E000(WiFiPlazaNewsEventList *list) {
+void WiFiPlazaNewsEventList_Update(WiFiPlazaNewsEventList *list) {
     WiFiPlazaNewsEvent *event = list->head.next;
     WiFiPlazaNewsEvent *head = &list->head;
     while (event != head) {
@@ -51,19 +51,19 @@ void ov45_0222E000(WiFiPlazaNewsEventList *list) {
         if (event->timer - 1 > 0) {
             event->timer--;
         } else {
-            ov45_0222E0CC(list, event);
+            WiFiPlazaNewsEventList_Remove(list, event);
         }
         event = next;
     }
 }
 
 // Removes the current event.
-void ov45_0222E03C(WiFiPlazaNewsEventList *list) {
-    ov45_0222E0CC(list, list->head.next);
+void WiFiPlazaNewsEventList_RemoveFirst(WiFiPlazaNewsEventList *list) {
+    WiFiPlazaNewsEventList_Remove(list, list->head.next);
 }
 
 // A free event, or one of at least rank (taken out of the list); NULL if there is none.
-WiFiPlazaNewsEvent *ov45_0222E04C(WiFiPlazaNewsEventList *list, u16 rank) {
+WiFiPlazaNewsEvent *WiFiPlazaNewsEventList_GetFreeEvent(WiFiPlazaNewsEventList *list, u16 rank) {
     s32 i;
     WiFiPlazaNewsEvent *event = NULL;
     for (i = 0; i < 8; i++) {
@@ -76,7 +76,7 @@ WiFiPlazaNewsEvent *ov45_0222E04C(WiFiPlazaNewsEventList *list, u16 rank) {
         for (i = 0; i < 8; i++) {
             if (list->events[i].rank >= rank) {
                 event = &list->events[i];
-                ov45_0222E0CC(list, event);
+                WiFiPlazaNewsEventList_Remove(list, event);
                 break;
             }
         }
@@ -84,7 +84,7 @@ WiFiPlazaNewsEvent *ov45_0222E04C(WiFiPlazaNewsEventList *list, u16 rank) {
     return event;
 }
 
-void ov45_0222E094(WiFiPlazaNewsEvent *at, WiFiPlazaNewsEvent *event) {
+void WiFiPlazaNewsEvent_InsertAfter(WiFiPlazaNewsEvent *at, WiFiPlazaNewsEvent *event) {
     event->next = at->next;
     event->prev = at;
     at->next = event;
@@ -92,7 +92,7 @@ void ov45_0222E094(WiFiPlazaNewsEvent *at, WiFiPlazaNewsEvent *event) {
 }
 
 // Inserts the event after the last one of a lower rank.
-void ov45_0222E0A4(WiFiPlazaNewsEventList *list, WiFiPlazaNewsEvent *event) {
+void WiFiPlazaNewsEventList_Insert(WiFiPlazaNewsEventList *list, WiFiPlazaNewsEvent *event) {
     WiFiPlazaNewsEvent *at = list->head.prev;
     WiFiPlazaNewsEvent *head = &list->head;
     if (at != head) {
@@ -104,17 +104,17 @@ void ov45_0222E0A4(WiFiPlazaNewsEventList *list, WiFiPlazaNewsEvent *event) {
             at = at->prev;
         } while (at != head);
     }
-    ov45_0222E094(at, event);
+    WiFiPlazaNewsEvent_InsertAfter(at, event);
 }
 
-void ov45_0222E0CC(WiFiPlazaNewsEventList *list, WiFiPlazaNewsEvent *event) {
+void WiFiPlazaNewsEventList_Remove(WiFiPlazaNewsEventList *list, WiFiPlazaNewsEvent *event) {
     event->prev->next = event->next;
     event->next->prev = event->prev;
     event->prev = NULL;
     event->next = NULL;
 }
 
-void ov45_0222E0E0(WiFiPlazaNewsEvent *event, u32 a, u32 b, u32 c, const PlayerProfile *player0, const PlayerProfile *player1, const PlayerProfile *player2, const PlayerProfile *player3, u16 slot0, u16 slot1, u16 slot2, u16 slot3, u32 timer, u32 rank, u32 type) {
+void WiFiPlazaNewsEvent_Set(WiFiPlazaNewsEvent *event, u32 a, u32 b, u32 c, const PlayerProfile *player0, const PlayerProfile *player1, const PlayerProfile *player2, const PlayerProfile *player3, u16 slot0, u16 slot1, u16 slot2, u16 slot3, u32 timer, u32 rank, u32 type) {
     if (type >= 9) {
         GF_AssertFail();
     }
@@ -143,7 +143,7 @@ void ov45_0222E0E0(WiFiPlazaNewsEvent *event, u32 a, u32 b, u32 c, const PlayerP
 }
 
 // Type 0: two players (WiFiPlazaPairRequest).
-BOOL ov45_0222E14C(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
+BOOL WiFiPlazaNewsEvent_FormatChat(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
     String *string;
     BufferString(format, 0, event->names[0], 0, 1, gGameLanguage);
     BufferString(format, 1, event->names[1], 0, 1, gGameLanguage);
@@ -154,7 +154,7 @@ BOOL ov45_0222E14C(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *fo
 }
 
 // Type 1: two players and an instrument (a).
-BOOL ov45_0222E1A0(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
+BOOL WiFiPlazaNewsEvent_FormatTapToyTrade(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
     String *string;
     BufferString(format, 0, event->names[0], 0, 1, gGameLanguage);
     BufferString(format, 1, event->names[1], 0, 1, gGameLanguage);
@@ -166,7 +166,7 @@ BOOL ov45_0222E1A0(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *fo
 }
 
 // Type 2: an activity (a) with b players; c = 1: all of them are named.
-BOOL ov45_0222E200(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
+BOOL WiFiPlazaNewsEvent_FormatMinigameEntry(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
     String *string;
     u32 msgNo;
     BufferWiFiPlazaActivityName(format, 0, event->a);
@@ -205,7 +205,7 @@ BOOL ov45_0222E200(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *fo
 }
 
 // Type 3: an activity (a), one named player and the others.
-BOOL ov45_0222E33C(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
+BOOL WiFiPlazaNewsEvent_FormatFootprintStamp(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
     String *string;
     BufferWiFiPlazaActivityName(format, 0, event->a);
     BufferString(format, 1, event->names[0], 0, 1, gGameLanguage);
@@ -217,7 +217,7 @@ BOOL ov45_0222E33C(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *fo
 }
 
 // Types 4 and 5: a players (WiFiPlazaGroupRequest).
-BOOL ov45_0222E39C(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
+BOOL WiFiPlazaNewsEvent_FormatChecking(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
     String *string;
     u32 i;
     for (i = 0; i < event->a; i++) {
@@ -235,7 +235,7 @@ BOOL ov45_0222E39C(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *fo
 }
 
 // Type 6: a lobby event (b = WiFiPlazaLobbyNotice.which).
-BOOL ov45_0222E414(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
+BOOL WiFiPlazaNewsEvent_FormatLobbyEventNotice(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
     String *string;
     u32 msgNo;
     switch (event->b) {
@@ -264,7 +264,7 @@ BOOL ov45_0222E414(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *fo
 }
 
 // Type 7: the lobby slot a, if flags[a] is set.
-BOOL ov45_0222E484(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
+BOOL WiFiPlazaNewsEvent_FormatSpecialVisitor(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
     u32 slot = event->a;
     if (slot >= 20) {
         return FALSE;
@@ -277,10 +277,10 @@ BOOL ov45_0222E484(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *fo
 }
 
 // Type 8: an activity (a) with b players.
-BOOL ov45_0222E4A8(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
+BOOL WiFiPlazaNewsEvent_FormatMinigameResult(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out) {
     String *string;
     u32 i;
-    if (!ov45_0222E5B4(event->a, event->b)) {
+    if (!WiFiPlaza_IsMinigamePlayerCountValid(event->a, event->b)) {
         return FALSE;
     }
     BufferWiFiPlazaActivityName(format, 0, event->a);
@@ -297,45 +297,45 @@ BOOL ov45_0222E4A8(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *fo
     return TRUE;
 }
 
-u16 ov45_0222E540(WiFiPlazaNewsEvent *event, u32 index) {
+u16 WiFiPlazaNewsEvent_GetChatSlot(WiFiPlazaNewsEvent *event, u32 index) {
     if (index >= 2) {
         return 20;
     }
     return event->slots[index];
 }
 
-u16 ov45_0222E550(WiFiPlazaNewsEvent *event, u32 index) {
+u16 WiFiPlazaNewsEvent_GetTapToyTradeSlot(WiFiPlazaNewsEvent *event, u32 index) {
     if (index >= 2) {
         return 20;
     }
     return event->slots[index];
 }
 
-u16 ov45_0222E560(WiFiPlazaNewsEvent *event, u32 index) {
+u16 WiFiPlazaNewsEvent_GetMinigameEntrySlot(WiFiPlazaNewsEvent *event, u32 index) {
     if (event->b <= index) {
         return 20;
     }
     return event->slots[index];
 }
 
-u16 ov45_0222E574(WiFiPlazaNewsEvent *event, u32 index) {
+u16 WiFiPlazaNewsEvent_GetFootprintStampSlot(WiFiPlazaNewsEvent *event, u32 index) {
     if (index >= 1) {
         return 20;
     }
     return event->slots[index];
 }
 
-u16 ov45_0222E584(WiFiPlazaNewsEvent *event, u32 index) {
+u16 WiFiPlazaNewsEvent_GetCheckingSlot(WiFiPlazaNewsEvent *event, u32 index) {
     if (event->a <= index) {
         return 20;
     }
     return event->slots[index];
 }
 
-u16 ov45_0222E598(WiFiPlazaNewsEvent *event, u32 index) {
+u16 WiFiPlazaNewsEvent_GetLobbyEventNoticeSlot(WiFiPlazaNewsEvent *event, u32 index) {
     return 20;
 }
 
-u16 ov45_0222E59C(WiFiPlazaNewsEvent *event, u32 index) {
+u16 WiFiPlazaNewsEvent_GetSpecialVisitorSlot(WiFiPlazaNewsEvent *event, u32 index) {
     return 20;
 }

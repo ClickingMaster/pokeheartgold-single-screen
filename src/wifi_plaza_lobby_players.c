@@ -13,7 +13,7 @@
 #pragma force_active on
 
 // Adds the own country and region to the lobby locations (once) and sends the list.
-BOOL ov45_0222F7B4(WiFiPlazaLobbyClient *client) {
+BOOL WiFiPlazaLobbyClient_AddOwnLocation(WiFiPlazaLobbyClient *client) {
     int country = WifiHistory_GetPlayerCountry(client->wifiHistory);
     int region = WiFiHistory_GetPlayerRegion(client->wifiHistory);
     int i;
@@ -40,27 +40,27 @@ BOOL ov45_0222F7B4(WiFiPlazaLobbyClient *client) {
 
 #pragma force_active reset
 
-void ov45_0222F848(WiFiPlazaLobbyClient *client, u32 size, enum HeapID heapID) {
+void WiFiPlazaLobbyClient_AllocPlayerData(WiFiPlazaLobbyClient *client, u32 size, enum HeapID heapID) {
     u32 bytes = size * 20;
     _022577C0->playerData = Heap_Alloc(heapID, bytes);
     memset(_022577C0->playerData, 0, bytes);
     _022577C0->playerDataSize = size;
 }
 
-void ov45_0222F878(WiFiPlazaLobbyClient *client) {
+void WiFiPlazaLobbyClient_FreePlayerData(WiFiPlazaLobbyClient *client) {
     Heap_Free(_022577C0->playerData);
 }
 
-void ov45_0222F88C(WiFiPlazaLobbyClient *client, int id, const void *data) {
-    ov45_0222F898(client, id, data, client->playerDataSize);
+void WiFiPlazaLobbyClient_SetPlayerData(WiFiPlazaLobbyClient *client, int id, const void *data) {
+    WiFiPlazaLobbyClient_CopyPlayerData(client, id, data, client->playerDataSize);
 }
 
-void ov45_0222F898(WiFiPlazaLobbyClient *client, int id, const void *data, u32 size) {
+void WiFiPlazaLobbyClient_CopyPlayerData(WiFiPlazaLobbyClient *client, int id, const void *data, u32 size) {
     int slot;
     u32 stride;
     u32 offset;
     u8 *base;
-    slot = ov45_0222FB24(client, id, 0);
+    slot = WiFiPlazaLobbyClient_FindInIdList(client, id, 0);
     GF_ASSERT(slot != -1);
     stride = client->playerDataSize;
     base = client->playerData;
@@ -73,35 +73,35 @@ void ov45_0222F898(WiFiPlazaLobbyClient *client, int id, const void *data, u32 s
     memcpy(base + offset, data, size);
 }
 
-WiFiPlazaPlayer *ov45_0222F8D8(WiFiPlazaLobbyClient *client, int id) {
-    int slot = ov45_0222FB24(client, id, 0);
+WiFiPlazaPlayer *WiFiPlazaLobbyClient_GetPlayerData(WiFiPlazaLobbyClient *client, int id) {
+    int slot = WiFiPlazaLobbyClient_FindInIdList(client, id, 0);
     GF_ASSERT(slot != -1);
     return (WiFiPlazaPlayer *)(client->playerData + client->playerDataSize * slot);
 }
 
-void ov45_0222F8FC(WiFiPlazaLobbyClient *client, int id) {
-    int slot = ov45_0222FB24(client, id, 0);
+void WiFiPlazaLobbyClient_ClearPlayerData(WiFiPlazaLobbyClient *client, int id) {
+    int slot = WiFiPlazaLobbyClient_FindInIdList(client, id, 0);
     GF_ASSERT(slot != -1);
     memset(client->playerData + client->playerDataSize * slot, 0, client->playerDataSize);
 }
 
-void ov45_0222F928(WiFiPlazaLobbyClient *client, int id, const WiFiPlazaLobbyPlayerRecord *record) {
-    int slot = ov45_0222FB24(client, id, 0);
+void WiFiPlazaLobbyClient_SetPlayerRecord(WiFiPlazaLobbyClient *client, int id, const WiFiPlazaLobbyPlayerRecord *record) {
+    int slot = WiFiPlazaLobbyClient_FindInIdList(client, id, 0);
     WiFiPlazaLobbyPlayerRecord *dest;
     GF_ASSERT(slot != -1);
     dest = &client->records[slot];
     *dest = *record;
 }
 
-WiFiPlazaLobbyPlayerRecord *ov45_0222F954(WiFiPlazaLobbyClient *client, int id) {
-    int slot = ov45_0222FB24(client, id, 0);
+WiFiPlazaLobbyPlayerRecord *WiFiPlazaLobbyClient_GetPlayerRecord(WiFiPlazaLobbyClient *client, int id) {
+    int slot = WiFiPlazaLobbyClient_FindInIdList(client, id, 0);
     GF_ASSERT(slot != -1);
     return &client->records[slot];
 }
 
 // Clears the 12 bytes one at a time.
-void ov45_0222F978(WiFiPlazaLobbyClient *client, int id) {
-    int slot = ov45_0222FB24(client, id, 0);
+void WiFiPlazaLobbyClient_ClearPlayerRecord(WiFiPlazaLobbyClient *client, int id) {
+    int slot = WiFiPlazaLobbyClient_FindInIdList(client, id, 0);
     u8 *bytes;
     GF_ASSERT(slot != -1);
     bytes = (u8 *)&client->records[slot];
@@ -119,7 +119,7 @@ void ov45_0222F978(WiFiPlazaLobbyClient *client, int id) {
     bytes[11] = 0;
 }
 
-void ov45_0222F9B8(WiFiPlazaLobbyClient *client, u32 lobbyCapacity, u32 channelCapacity, enum HeapID heapID) {
+void WiFiPlazaLobbyClient_AllocIdLists(WiFiPlazaLobbyClient *client, u32 lobbyCapacity, u32 channelCapacity, enum HeapID heapID) {
     int i;
     u32 capacity;
     WiFiPlazaLobbyClient *p;
@@ -133,13 +133,13 @@ void ov45_0222F9B8(WiFiPlazaLobbyClient *client, u32 lobbyCapacity, u32 channelC
         p->idLists[0].count = 0;
         p->idLists[0].ids = Heap_Alloc(heapID, capacity * 4);
         p->idLists[0].capacity = capacity;
-        ov45_0222FA40(client, i);
+        WiFiPlazaLobbyClient_ClearIdList(client, i);
         // step to the next id list
         p = (WiFiPlazaLobbyClient *)((u8 *)p + sizeof(WiFiPlazaLobbyIdList));
     }
 }
 
-void ov45_0222FA10(WiFiPlazaLobbyClient *client) {
+void WiFiPlazaLobbyClient_FreeIdLists(WiFiPlazaLobbyClient *client) {
     int i;
     WiFiPlazaLobbyClient *p;
     for (i = 0, p = client; i < 2; i++) {
@@ -151,7 +151,7 @@ void ov45_0222FA10(WiFiPlazaLobbyClient *client) {
     }
 }
 
-void ov45_0222FA40(WiFiPlazaLobbyClient *client, int which) {
+void WiFiPlazaLobbyClient_ClearIdList(WiFiPlazaLobbyClient *client, int which) {
     int i;
     client->idLists[which].count = 0;
     for (i = 0; i < client->idLists[which].capacity; i++) {
@@ -159,10 +159,10 @@ void ov45_0222FA40(WiFiPlazaLobbyClient *client, int which) {
     }
 }
 
-void ov45_0222FA74(WiFiPlazaLobbyClient *client, int id, int which) {
+void WiFiPlazaLobbyClient_AddToIdList(WiFiPlazaLobbyClient *client, int id, int which) {
     int i;
     int freeSlot;
-    if (ov45_0222FB24(client, id, which) == -1) {
+    if (WiFiPlazaLobbyClient_FindInIdList(client, id, which) == -1) {
         GF_ASSERT(client->idLists[which].count < client->idLists[which].capacity);
         if (client->idLists[which].count < client->idLists[which].capacity) {
             for (i = 0; i < client->idLists[which].capacity; i++) {
@@ -177,8 +177,8 @@ void ov45_0222FA74(WiFiPlazaLobbyClient *client, int id, int which) {
     }
 }
 
-void ov45_0222FAF8(WiFiPlazaLobbyClient *client, int id, int which) {
-    int i = ov45_0222FB24(client, id, which);
+void WiFiPlazaLobbyClient_RemoveFromIdList(WiFiPlazaLobbyClient *client, int id, int which) {
+    int i = WiFiPlazaLobbyClient_FindInIdList(client, id, which);
     if (i != -1) {
         client->idLists[which].ids[i] = -1;
         client->idLists[which].count--;
@@ -186,7 +186,7 @@ void ov45_0222FAF8(WiFiPlazaLobbyClient *client, int id, int which) {
 }
 
 // Lobby slot of a player id, -1 if not in the list.
-int ov45_0222FB24(WiFiPlazaLobbyClient *client, int id, int which) {
+int WiFiPlazaLobbyClient_FindInIdList(WiFiPlazaLobbyClient *client, int id, int which) {
     int i;
     for (i = 0; i < client->idLists[which].capacity; i++) {
         if (client->idLists[which].ids[i] == id) {
@@ -196,20 +196,20 @@ int ov45_0222FB24(WiFiPlazaLobbyClient *client, int id, int which) {
     return -1;
 }
 
-int ov45_0222FB5C(WiFiPlazaLobbyClient *client, int slot, int which) {
+int WiFiPlazaLobbyClient_GetIdListEntry(WiFiPlazaLobbyClient *client, int slot, int which) {
     GF_ASSERT(slot < client->idLists[which].capacity);
     return client->idLists[which].ids[slot];
 }
 
 // Rebuilds the channel list from the players' channels.
-void ov45_0222FB84(WiFiPlazaLobbyClient *client, u32 channel) {
+void WiFiPlazaLobbyClient_RebuildChannelList(WiFiPlazaLobbyClient *client, u32 channel) {
     int i;
-    u32 libChannel = ov45_0222F7B0(channel);
-    ov45_0222FA40(client, 1);
+    u32 libChannel = WiFiPlazaLobbyClient_ChannelToLib(channel);
+    WiFiPlazaLobbyClient_ClearIdList(client, 1);
     for (i = 0; i < client->idLists[0].capacity; i++) {
-        int id = ov45_0222FB5C(client, i, 0);
+        int id = WiFiPlazaLobbyClient_GetIdListEntry(client, i, 0);
         if (id != -1 && libChannel == client->records[i].channel) {
-            ov45_0222FA74(client, id, 1);
+            WiFiPlazaLobbyClient_AddToIdList(client, id, 1);
         }
     }
 }

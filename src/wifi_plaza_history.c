@@ -4,7 +4,7 @@
 
 // The last activities of the own player (WiFiPlazaPlayer.slots / slotData), a ring of 13 entries kept with a CRC.
 
-void ov45_0222CB44(WiFiPlazaHistory *history, SaveData *save) {
+void WiFiPlazaHistory_Init(WiFiPlazaHistory *history, SaveData *save) {
     int i;
 
     for (i = 0; i < 13; i++) {
@@ -14,42 +14,42 @@ void ov45_0222CB44(WiFiPlazaHistory *history, SaveData *save) {
     history->oldest = 0;
     history->next = 0;
     history->save = save;
-    ov45_0222CCA4(history);
+    WiFiPlazaHistory_UpdateChecksum(history);
 }
 
 // Adds an entry; the oldest one goes when the ring is full.
-void ov45_0222CB74(WiFiPlazaHistory *history, int id, s32 value) {
-    ov45_0222CCB8(history);
+void WiFiPlazaHistory_Add(WiFiPlazaHistory *history, int id, s32 value) {
+    WiFiPlazaHistory_CheckChecksum(history);
     if ((history->next + 1) % 13 == history->oldest) {
-        ov45_0222CC00(history);
+        WiFiPlazaHistory_RemoveOldest(history);
     }
     history->ids[history->next] = id;
     history->values[history->next] = value;
     history->next = (history->next + 1) % 13;
-    ov45_0222CCA4(history);
+    WiFiPlazaHistory_UpdateChecksum(history);
 }
 
 // Replaces every value oldValue with newValue; TRUE if there was one.
-BOOL ov45_0222CBD0(WiFiPlazaHistory *history, s32 oldValue, s32 newValue) {
+BOOL WiFiPlazaHistory_ReplaceValue(WiFiPlazaHistory *history, s32 oldValue, s32 newValue) {
     int i;
     BOOL found = FALSE;
 
-    ov45_0222CCB8(history);
+    WiFiPlazaHistory_CheckChecksum(history);
     for (i = 0; i < 13; i++) {
         if (history->values[i] == oldValue) {
             history->values[i] = newValue;
             found = TRUE;
         }
     }
-    ov45_0222CCA4(history);
+    WiFiPlazaHistory_UpdateChecksum(history);
     return found;
 }
 
 // Removes the oldest entry and returns its id (24 if there is none).
-u8 ov45_0222CC00(WiFiPlazaHistory *history) {
+u8 WiFiPlazaHistory_RemoveOldest(WiFiPlazaHistory *history) {
     u8 id;
 
-    ov45_0222CCB8(history);
+    WiFiPlazaHistory_CheckChecksum(history);
     if (history->next == history->oldest) {
         return 24;
     }
@@ -57,18 +57,18 @@ u8 ov45_0222CC00(WiFiPlazaHistory *history) {
     history->ids[history->oldest] = 24;
     history->values[history->next] = -1;
     history->oldest = (history->oldest + 1) % 13;
-    ov45_0222CCA4(history);
+    WiFiPlazaHistory_UpdateChecksum(history);
     return id;
 }
 
 // The id of the index-th newest entry.
-u8 ov45_0222CC50(WiFiPlazaHistory *history, u32 index) {
+u8 WiFiPlazaHistory_GetId(WiFiPlazaHistory *history, u32 index) {
     int slot;
 
     if (index >= 12) {
         GF_AssertFail();
     }
-    ov45_0222CCB8(history);
+    WiFiPlazaHistory_CheckChecksum(history);
     slot = history->next - (index + 1);
     if (slot < 0) {
         slot += 13;
@@ -77,13 +77,13 @@ u8 ov45_0222CC50(WiFiPlazaHistory *history, u32 index) {
 }
 
 // The value of the index-th newest entry.
-s32 ov45_0222CC7C(WiFiPlazaHistory *history, u32 index) {
+s32 WiFiPlazaHistory_GetValue(WiFiPlazaHistory *history, u32 index) {
     int slot;
 
     if (index >= 12) {
         GF_AssertFail();
     }
-    ov45_0222CCB8(history);
+    WiFiPlazaHistory_CheckChecksum(history);
     slot = history->next - (index + 1);
     if (slot < 0) {
         slot += 13;
@@ -91,11 +91,11 @@ s32 ov45_0222CC7C(WiFiPlazaHistory *history, u32 index) {
     return history->values[slot];
 }
 
-void ov45_0222CCA4(WiFiPlazaHistory *history) {
+void WiFiPlazaHistory_UpdateChecksum(WiFiPlazaHistory *history) {
     history->crc = SaveArray_CalcCRC16(history->save, history, offsetof(WiFiPlazaHistory, save));
 }
 
-void ov45_0222CCB8(WiFiPlazaHistory *history) {
+void WiFiPlazaHistory_CheckChecksum(WiFiPlazaHistory *history) {
     u16 crc = SaveArray_CalcCRC16(history->save, history, offsetof(WiFiPlazaHistory, save));
 
     if (crc != history->crc) {
@@ -104,6 +104,6 @@ void ov45_0222CCB8(WiFiPlazaHistory *history) {
     }
 }
 
-u16 ov45_0222CCDC(WiFiPlazaHistory *history) {
+u16 WiFiPlazaHistory_IsCorrupt(WiFiPlazaHistory *history) {
     return history->corrupt;
 }

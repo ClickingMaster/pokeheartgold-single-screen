@@ -5,7 +5,7 @@
 
 // Whether a player's billboard sprite is inside the view: box test of its model's bounding box, moved to the sprite
 // position and scaled by the box scale.
-BOOL ov45_02230E78(void *sprite) {
+BOOL WiFiPlaza_IsSpriteInView(void *sprite) {
     VecFx32 position;
     WiFiPlazaBoxTestBounds bounds;
     MtxFx33 rotation;

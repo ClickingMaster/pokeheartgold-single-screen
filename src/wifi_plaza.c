@@ -99,22 +99,22 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     callbacks.onPlayerLeave = WiFiPlaza_OnPlayerLeave;
     callbacks.onPlayerUpdate = WiFiPlaza_OnPlayerUpdate;
     callbacks.onLobbyEvent = WiFiPlaza_OnLobbyEvent;
-    callbacks.onOwnRecord = ov45_0222B75C;
+    callbacks.onOwnRecord = WiFiPlaza_OnOwnRecord;
     WiFiPlazaLobbyClient_Init(heapID, work->save, 0x94, &callbacks, work);
-    work->news = ov45_0222D860(heapID);
+    work->news = WiFiPlazaNews_New(heapID);
     for (i = 0; i < 4; i++) {
         work->profiles[i] = PlayerProfile_New(heapID);
     }
     WiFiPlazaProfile_InitFromSave(&work->profile, work->save, heapID);
-    ov45_0222BD40(&work->unk_1c0);
+    WiFiPlazaTalkSession_Init(&work->unk_1c0);
     ov45_0222BD30(work->unk_1e8);
     WiFiPlazaLobbyClient_SetLobbyCommands(ov45_02254AC4, 8, work);
-    ov45_0222BC3C(&work->unk_1fc);
+    WiFiPlazaEventSchedule_Init(&work->unk_1fc);
     ov45_0222C388(&work->unk_20c);
-    ov45_0222C8AC(&work->groupWeights);
+    WiFiPlazaGroupWeights_Init(&work->groupWeights);
     WiFiPlazaWordSet_Init(&work->wordSet, heapID);
-    ov45_0222CB44(&work->history, work->save);
-    ov45_0222BCC8(&work->unk_508.profile, heapID);
+    WiFiPlazaHistory_Init(&work->history, work->save);
+    WiFiPlaza_NewPlayerProfile(&work->unk_508.profile, heapID);
     return work;
 }
 
@@ -128,10 +128,10 @@ void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
     x = Save_PlazaSurvey_Get(work->save);
     PlazaSurvey_SetSurveyId(x, vals.unk_00);
     PlazaSurvey_SetAnswer(x, vals.unk_04);
-    ov45_0222BCD8(&work->unk_508.profile);
+    WiFiPlaza_FreePlayerProfile(&work->unk_508.profile);
     WiFiPlazaWordSet_Free(&work->wordSet);
     WiFiPlazaLobbyClient_ClearLobbyCommands();
-    ov45_0222D890(work->news);
+    WiFiPlazaNews_Delete(work->news);
     for (i = 0; i < 4; i++) {
         Heap_Free(work->profiles[i]);
     }
@@ -144,19 +144,19 @@ void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
 
 void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
     s64 time;
-    ov45_0222D8A4(work->news);
-    ov45_0222ECB8(&time);
+    WiFiPlazaNews_Update(work->news);
+    WiFiPlazaLobbyClient_GetTime(&time);
     work->unk_d8 = time;
-    ov45_0222D500(&work->unk_d4, &time);
-    ov45_0222B840(work);
-    ov45_0222BE5C(&work->unk_1c0);
+    WiFiPlaza_SecondsToTime(&work->unk_d4, &time);
+    WiFiPlazaWork_CheckClosingTime(work);
+    WiFiPlazaTalkSession_UpdateTimeout(&work->unk_1c0);
     ov45_0222BD30(work->unk_1e8);
-    ov45_0222BB58(work->unk_f8);
-    ov45_0222BB60(&work->unk_1fc, work->unk_f8, &work->unk_20c, &work->timer);
+    WiFiPlaza_ClearEventFlags(work->unk_f8);
+    WiFiPlazaEventSchedule_Update(&work->unk_1fc, work->unk_f8, &work->unk_20c, &work->timer);
     ov45_0222BCB8(&work->unk_3a0);
     ov45_0222C3B0(&work->unk_20c);
-    ov45_0222CAA0(&work->timer);
-    if (ov45_0222CCDC(&work->history) == 1) {
+    WiFiPlazaTimer_Update(&work->timer);
+    if (WiFiPlazaHistory_IsCorrupt(&work->history) == 1) {
         work->unk_52c = 1;
     }
 }

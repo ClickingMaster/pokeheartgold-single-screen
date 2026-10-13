@@ -29,10 +29,10 @@
 // Declared only in other modules' private headers.
 void *ov45_0222A2C8(void *lobby);
 void *ov45_0222A2CC(void *lobby);
-void ov45_0222A520(void *lobby, int a1);
+void WiFiPlazaWork_SetLowVolume(void *lobby, int a1);
 void ov45_0222A4A8(void *lobby);
-u32 ov45_0222A330(void *lobby);
-BOOL ov45_0222D844(void);
+u32 WiFiPlazaWork_IsClosing(void *lobby);
+BOOL WiFiPlaza_HasConnectionFailed(void);
 void WiFiPlazaLobbyClient_ClearChannelCommands(void);
 void HBlankInterruptDisable(void);
 int GetUserFrameGfx2PaletteMember(int frame);
@@ -118,7 +118,7 @@ BOOL FootprintStamp_Init(OverlayManager *man, int *state) {
     work->yesNoPrompt = YesNoPrompt_Create(HEAP_ID_125);
     BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 6, 1, HEAP_ID_125);
     if (work->args->lobby != NULL) {
-        ov45_0222A520(work->args->lobby, 1);
+        WiFiPlazaWork_SetLowVolume(work->args->lobby, 1);
     }
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
@@ -265,13 +265,13 @@ BOOL FootprintStamp_Main(OverlayManager *man, int *state) {
             FootprintStamp_UpdatePlayers(work);
         }
         // the lobby closes the attraction, or this player has to leave
-        if ((ov45_0222D844() == TRUE || ov45_0222A330(work->args->lobby) == TRUE) && *state != 4) {
+        if ((WiFiPlaza_HasConnectionFailed() == TRUE || WiFiPlazaWork_IsClosing(work->args->lobby) == TRUE) && *state != 4) {
             if (work->yesNoActive == TRUE) {
                 YesNoPrompt_Reset(work->yesNoPrompt);
             }
             work->linkFilter.active = FALSE;
             work->phase = 3;
-            if (ov45_0222D844() == TRUE) {
+            if (WiFiPlaza_HasConnectionFailed() == TRUE) {
                 *state = 9;
             } else {
                 PlaySE(SEQ_SE_DP_PINPON);
