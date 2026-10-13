@@ -74,7 +74,7 @@ extern char ov45_022577F8[];
 // Frees a part of the message and clears it.
 #define FREE_PART(part)      \
     if (part) {              \
-        ov00_021EC3D8(part); \
+        DWCi_GsFree(part); \
         part = NULL;         \
     }
 
@@ -101,15 +101,15 @@ BOOL ciSocketConnect(ChatSocket *socket, const char *address, int port) {
     addr.family = 2;
     addr.port = ((u16)port >> 8 & 0xFF) | ((u16)port << 8 & 0xFF00);
     addr.address = ip;
-    socket->handle = ov00_021FF804(2, 1, 0);
+    socket->handle = gsSocketCreate(2, 1, 0);
     if (socket->handle == -1) {
         return FALSE;
     }
-    if (ov00_021FF8A0(socket->handle, &addr, sizeof(addr)) != -1) {
+    if (gsSocketConnect(socket->handle, &addr, sizeof(addr)) != -1) {
         socket->state = 1;
         return TRUE;
     }
-    ov00_021FF818(socket->handle);
+    gsSocketClose(socket->handle);
     return FALSE;
 }
 
@@ -118,30 +118,30 @@ void ciSocketDisconnect(ChatSocket *socket) {
     int i;
     ASSERT_SOCKET(socket, ov45_02257234, 283);
     if (socket->handle != -1) {
-        ov00_021FF82C(socket->handle, 2);
-        ov00_021FF818(socket->handle);
+        gsSocketShutdown(socket->handle, 2);
+        gsSocketClose(socket->handle);
     }
     socket->state = 2;
     ov45_02251C40(&socket->input);
     ov45_02251C40(&socket->output);
-    ov00_021EC3D8(socket->message.text);
-    ov00_021EC3D8(socket->message.prefix);
-    ov00_021EC3D8(socket->message.nick);
-    ov00_021EC3D8(socket->message.user);
-    ov00_021EC3D8(socket->message.host);
-    ov00_021EC3D8(socket->message.command);
-    ov00_021EC3D8(socket->message.middle);
-    ov00_021EC3D8(socket->message.trailing);
+    DWCi_GsFree(socket->message.text);
+    DWCi_GsFree(socket->message.prefix);
+    DWCi_GsFree(socket->message.nick);
+    DWCi_GsFree(socket->message.user);
+    DWCi_GsFree(socket->message.host);
+    DWCi_GsFree(socket->message.command);
+    DWCi_GsFree(socket->message.middle);
+    DWCi_GsFree(socket->message.trailing);
     for (i = 0; i < socket->message.paramCount; i++) {
-        ov00_021EC3D8(socket->message.params[i]);
+        DWCi_GsFree(socket->message.params[i]);
     }
-    ov00_021EC3D8(socket->message.params);
+    DWCi_GsFree(socket->message.params);
 }
 
 // Readiness of the socket handle (each output may be NULL).
 void ciSocketSelect(int handle, BOOL *readable, BOOL *writable, BOOL *except) {
     int r = 0, w = 0, e = 0;
-    ov00_021FF59C(handle, &r, &w, &e);
+    GSISocketSelect(handle, &r, &w, &e);
     if (readable) {
         *readable = r;
     }
@@ -164,7 +164,7 @@ void ciSocketThinkSend(ChatSocket *socket) {
         if (!writable) {
             return;
         }
-        sent = ov00_021FF970(socket->handle, socket->output.data, socket->output.length < 1024 ? socket->output.length : 1024, 0);
+        sent = gsSocketSend(socket->handle, socket->output.data, socket->output.length < 1024 ? socket->output.length : 1024, 0);
         if (sent != 0 && sent != -1) {
             ov45_02251DB4(&socket->output, sent);
         } else {
@@ -190,7 +190,7 @@ void ciSocketThinkRecv(ChatSocket *socket) {
         }
         data = (u8 *)socket->input.data;
         length = socket->input.length;
-        received = ov00_021FF92C(socket->handle, data + length, 4096, 0);
+        received = gsSocketRecv(socket->handle, data + length, 4096, 0);
         if (received <= 0) {
             socket->state = 2;
             return;
@@ -296,7 +296,7 @@ BOOL ciParseUser(char *prefix, ChatMessage *message) {
         }
     }
     if (nickLength) {
-        message->nick = ov00_021EC3A8(nickLength + 1);
+        message->nick = DWCi_GsMalloc(nickLength + 1);
         if (message->nick) {
             memcpy(message->nick, prefix, nickLength);
             message->nick[nickLength] = 0;
@@ -305,7 +305,7 @@ BOOL ciParseUser(char *prefix, ChatMessage *message) {
         message->nick = NULL;
     }
     if (userLength) {
-        message->user = ov00_021EC3A8(userLength + 1);
+        message->user = DWCi_GsMalloc(userLength + 1);
         if (message->user) {
             memcpy(message->user, user, userLength);
             message->user[userLength] = 0;
@@ -314,7 +314,7 @@ BOOL ciParseUser(char *prefix, ChatMessage *message) {
         message->user = NULL;
     }
     if (hostLength) {
-        message->host = ov00_021EC3A8(hostLength + 1);
+        message->host = DWCi_GsMalloc(hostLength + 1);
         if (message->host) {
             memcpy(message->host, host, hostLength);
             message->host[hostLength] = 0;
@@ -330,12 +330,12 @@ BOOL ciAddParam(const char *param, ChatMessage *message) {
     char **params;
     char *copy;
     int i;
-    params = ov00_021EC3BC(message->params, (message->paramCount + 1) * sizeof(char *));
+    params = DWCi_GsRealloc(message->params, (message->paramCount + 1) * sizeof(char *));
     if (!params) {
         return FALSE;
     }
     message->params = params;
-    copy = ov00_021EC3A8(strlen(param) + 1);
+    copy = DWCi_GsMalloc(strlen(param) + 1);
     if (!copy) {
         return FALSE;
     }
@@ -352,7 +352,7 @@ BOOL ciParseParam(const char *params, ChatMessage *message) {
     char *copy;
     ASSERT(params, ov45_02257600, ov45_02257184, 673);
     ASSERT(message, ov45_02257610, ov45_02257184, 674);
-    copy = ov00_021EC3A8(strlen(params) + 1);
+    copy = DWCi_GsMalloc(strlen(params) + 1);
     if (!copy) {
         return FALSE;
     }
@@ -371,17 +371,17 @@ BOOL ciParseParam(const char *params, ChatMessage *message) {
     if (word) {
         do {
             if (!ciAddParam(word, message)) {
-                ov00_021EC3D8(copy);
+                DWCi_GsFree(copy);
                 return FALSE;
             }
             word = strtok(NULL, ov45_02257624);
         } while (word);
     }
     if (trailing && !ciAddParam(trailing, message)) {
-        ov00_021EC3D8(copy);
+        DWCi_GsFree(copy);
         return FALSE;
     }
-    ov00_021EC3D8(copy);
+    DWCi_GsFree(copy);
     return TRUE;
 }
 
@@ -394,7 +394,7 @@ BOOL ciParseMessage(ChatSocket *socket, char *line) {
         return FALSE;
     }
     length = strlen(line);
-    socket->message.text = ov00_021EC3A8(length + 1);
+    socket->message.text = DWCi_GsMalloc(length + 1);
     if (!socket->message.text) {
         return FALSE;
     }
@@ -445,7 +445,7 @@ BOOL ciParseMessage(ChatSocket *socket, char *line) {
     }
     if (prefixLength) {
         start = socket->message.prefix;
-        socket->message.prefix = ov00_021EC3A8(prefixLength + 1);
+        socket->message.prefix = DWCi_GsMalloc(prefixLength + 1);
         if (socket->message.prefix) {
             memcpy(socket->message.prefix, start, prefixLength);
             socket->message.prefix[prefixLength] = 0;
@@ -485,7 +485,7 @@ BOOL ciParseMessage(ChatSocket *socket, char *line) {
     }
     if (trailingLength) {
         start = socket->message.trailing;
-        socket->message.trailing = ov00_021EC3A8(trailingLength + 1);
+        socket->message.trailing = DWCi_GsMalloc(trailingLength + 1);
         if (socket->message.trailing) {
             memcpy(socket->message.trailing, start, trailingLength);
             socket->message.trailing[trailingLength] = 0;
@@ -495,7 +495,7 @@ BOOL ciParseMessage(ChatSocket *socket, char *line) {
     }
     if (commandLength) {
         start = socket->message.command;
-        socket->message.command = ov00_021EC3A8(commandLength + 1);
+        socket->message.command = DWCi_GsMalloc(commandLength + 1);
         if (socket->message.command) {
             memcpy(socket->message.command, start, commandLength);
             socket->message.command[commandLength] = 0;
@@ -505,7 +505,7 @@ BOOL ciParseMessage(ChatSocket *socket, char *line) {
     }
     if (middleLength) {
         start = socket->message.middle;
-        socket->message.middle = ov00_021EC3A8(middleLength + 1);
+        socket->message.middle = DWCi_GsMalloc(middleLength + 1);
         if (socket->message.middle) {
             memcpy(socket->message.middle, start, middleLength);
             socket->message.middle[middleLength] = 0;

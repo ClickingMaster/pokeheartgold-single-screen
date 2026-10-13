@@ -29,8 +29,8 @@ struct Callback {
     void *arg;
 };
 extern struct State *ov45_022577DC;
-extern void ov45_02237B58(struct String *, char *);
-extern void ov45_02237BC8(struct String *);
+extern void LobbyString_InitFromCStr(struct String *, char *);
+extern void LobbyString_Destroy(struct String *);
 extern void ov45_022428D8(struct String *, struct State *, struct String *);
 extern int ov45_022435F8(struct State *, struct String *);
 extern int ov45_02243280(struct State *, struct String *, struct String *);
@@ -51,23 +51,23 @@ void ov45_0223F5C8(int unused, char *name, char *value) {
     if (ov45_022577DC && ov45_022577DC->state == 5) {
         return;
     }
-    ov45_02237B58(&a, value);
+    LobbyString_InitFromCStr(&a, value);
     id = ov45_022435F8(ov45_022577DC, &a);
-    ov45_02237BC8(&a);
+    LobbyString_Destroy(&a);
     if (id == -1) {
         return;
     }
-    ov45_02237B58(&b, name);
+    LobbyString_InitFromCStr(&b, name);
     cb = ov45_02242C3C(ov45_022577DC, &b);
-    ov45_02237BC8(&b);
-    ov45_02237B58(&c, name);
+    LobbyString_Destroy(&b);
+    LobbyString_InitFromCStr(&c, name);
     ov45_022428D8(&d, ov45_022577DC, &c);
     cb->second(getText(&d), id, cb->arg);
-    ov45_02237BC8(&d);
-    ov45_02237BC8(&c);
-    ov45_02237B58(&e, value);
-    ov45_02237B58(&f, name);
+    LobbyString_Destroy(&d);
+    LobbyString_Destroy(&c);
+    LobbyString_InitFromCStr(&e, value);
+    LobbyString_InitFromCStr(&f, name);
     ov45_02243280(ov45_022577DC, &e, &f);
-    ov45_02237BC8(&f);
-    ov45_02237BC8(&e);
+    LobbyString_Destroy(&f);
+    LobbyString_Destroy(&e);
 }

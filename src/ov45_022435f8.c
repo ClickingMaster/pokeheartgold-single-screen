@@ -24,13 +24,13 @@ typedef struct {
 extern int ov45_02242A2C(const String *);
 extern void ov45_022431FC(void **, void *, const void *);
 extern int ov45_022340F8(const void *, const void *);
-extern void ov45_02237B58(String *, const char *);
+extern void LobbyString_InitFromCStr(String *, const char *);
 extern char ov45_022553A8[];
-extern void ov45_02237A24(String *, const void *);
+extern void LobbyString_InitCopy(String *, const void *);
 extern void ov45_022431AC(void *, int *);
 extern void ov45_02243780(Pair *, int, const String *);
 extern void ov45_02243F3C(void *, void *, const Pair *);
-extern void ov45_02237BC8(String *);
+extern void LobbyString_Destroy(String *);
 int ov45_022435F8(Work *, const String *);
 void ov45_0224367C(String *, Work *, int, ...);
 int ov45_022436E0(Work *, const String *, const String *);
@@ -56,8 +56,8 @@ void ov45_0224367C(String *out, Work *w, int id, ...) {
     void *node;
     ov45_022431FC(&node, &w->tree, &id);
     if (node == w->sentinel) {
-        ov45_02237B58(out, ov45_022553A8);
+        LobbyString_InitFromCStr(out, ov45_022553A8);
     } else {
-        ov45_02237A24(out, (u8 *)node + 0x10);
+        LobbyString_InitCopy(out, (u8 *)node + 0x10);
     }
 }

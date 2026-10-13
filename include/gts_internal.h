@@ -214,12 +214,12 @@ struct GtsApp {
     u8 filler_0038[2];                       // 0x0038
     u16 timer;                               // 0x003A, frames until the GTS may be checked again
     int serverResult;                        // 0x003C, of the failed request (screen 7 picks the error message from it)
-    int connectionResult;                    // 0x0040, of a failed Wi-Fi connection (ov00_021EC11C)
+    int connectionResult;                    // 0x0040, of a failed Wi-Fi connection (DWC_GetLastErrorEx)
     int connectionErrorCode;                 // 0x0044
     int connectionErrorType;                 // 0x0048
     void *heapMemory;                        // 0x004C
     NNSFndHeapHandle heap;                   // 0x0050, in heapMemory
-    u8 wifiConnection[0x64];                 // 0x0054, passed to ov00_021EC3F0 when connecting (screen 0)
+    u8 wifiConnection[0x64];                 // 0x0054, passed to DWC_InitInetEx when connecting (screen 0)
     OverlayManager *tradeSequence;           // 0x00B8
     PokemonSummaryArgs summaryArgs;          // 0x00BC, of screen 8
     TRADE_ANIM_WORK tradeAnim;               // 0x00F8, args of the trade sequence (OVY_71)

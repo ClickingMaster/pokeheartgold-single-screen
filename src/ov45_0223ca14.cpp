@@ -6,7 +6,7 @@
 
 struct Tag {};
 
-extern "C" void ov00_021EC2EC(int, void *, u32);
+extern "C" void DWC_Free(int, void *, u32);
 
 struct Buf {
     void **ptr;
@@ -24,7 +24,7 @@ extern "C" void ov45_02238508(Buf *b);
 struct Del {
     void operator()(void *p) const {
         if (p) {
-            ov00_021EC2EC(0, p, 0);
+            DWC_Free(0, p, 0);
         }
     }
 };

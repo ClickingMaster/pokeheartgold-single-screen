@@ -44,9 +44,9 @@ extern Work *ov45_022577DC;
 extern char ov45_022552C0[];
 extern char ov45_022552C8[];
 extern char ov45_022552D8[];
-extern void ov45_02237B58(Text *, char *);
+extern void LobbyString_InitFromCStr(Text *, char *);
 extern int ov45_0223D644(Text *, Text *, int);
-extern void ov45_02237BC8(Text *);
+extern void LobbyString_Destroy(Text *);
 extern void ov45_02237664(Vector *);
 extern void ov45_0223F000(Vector *, Text *, Text *, int);
 extern int ov45_022435F8(Work *, Text *);
@@ -62,11 +62,11 @@ static inline char *TextChars(Text *t) {
 
 static inline int Compare(register char *b, char *a, Text *ta, Text *tb, int n) {
     int result;
-    ov45_02237B58(ta, a);
-    ov45_02237B58(tb, b);
+    LobbyString_InitFromCStr(ta, a);
+    LobbyString_InitFromCStr(tb, b);
     result = ov45_0223D644(ta, tb, n);
-    ov45_02237BC8(tb);
-    ov45_02237BC8(ta);
+    LobbyString_Destroy(tb);
+    LobbyString_Destroy(ta);
     return result;
 }
 
@@ -97,11 +97,11 @@ void ov45_0223EDD8(void *unused, char *name, char *data, int kind, void *arg) {
         if (secondResult != 0) {
             return;
         }
-        ov45_02237B58(&frame.e, data);
-        ov45_02237B58(&frame.f, ov45_022552D8);
+        LobbyString_InitFromCStr(&frame.e, data);
+        LobbyString_InitFromCStr(&frame.f, ov45_022552D8);
         ov45_0223F000(&frame.vector, &frame.e, &frame.f, 0);
-        ov45_02237BC8(&frame.f);
-        ov45_02237BC8(&frame.e);
+        LobbyString_Destroy(&frame.f);
+        LobbyString_Destroy(&frame.e);
         if (frame.vector.count == 0) {
             ov45_02237664(&frame.vector);
             return;
@@ -122,9 +122,9 @@ void ov45_0223EDD8(void *unused, char *name, char *data, int kind, void *arg) {
     if (kind != 3) {
         return;
     }
-    ov45_02237B58(&frame.g, name);
+    LobbyString_InitFromCStr(&frame.g, name);
     id = ov45_022435F8(ov45_022577DC, &frame.g);
-    ov45_02237BC8(&frame.g);
+    LobbyString_Destroy(&frame.g);
     if (id == -1) {
         return;
     }

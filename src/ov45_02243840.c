@@ -21,16 +21,16 @@ typedef struct {
 
 extern u8 ov45_02255358[];
 extern void *ov45_02244170(Tree *, void *, void **, u8 *, u8 *);
-extern int ov45_02237F7C(void *, void *);
+extern int LobbyString_Compare(void *, void *);
 void *ov45_02243970(Tree *, void *, u8, u8, void *);
 extern void ov45_02236E58(Iterator *);
 extern void *ov45_022370D0(void *, void *);
 extern void ov45_02243F1C(void *);
-extern void ov45_02237BC8(void *);
-extern void ov00_021EC2EC(int, void *, int);
+extern void LobbyString_Destroy(void *);
+extern void DWC_Free(int, void *, int);
 
 static inline int isLess(void *a, void *b) {
-    return ov45_02237F7C(a, b) < 0;
+    return LobbyString_Compare(a, b) < 0;
 }
 
 void ov45_02243840(Result *, Tree *, void *);
@@ -67,8 +67,8 @@ static inline void initializeGuard(volatile Guard *g, Node *n, void *anchor) {
 extern const char ov45_022553AC[];
 extern int printf(const char *, ...);
 extern void abort(void);
-extern void *ov45_02242394(int);
-extern void ov45_02237A24(Payload *, Payload *);
+extern void *LobbyMem_Alloc(int);
+extern void LobbyString_InitCopy(Payload *, Payload *);
 extern void ov45_02243BC0(void *, void *);
 extern void ov45_02236EC4(void *, void *);
 
@@ -93,9 +93,9 @@ void ov45_022438F0(Iterator *out, Tree *t, Iterator node) {
     }
     out->current = ov45_022370D0(saved, t->anchor);
     ov45_02243F1C((u8 *)saved + 28);
-    ov45_02237BC8((u8 *)saved + 12);
+    LobbyString_Destroy((u8 *)saved + 12);
     if (saved) {
-        ov00_021EC2EC(0, saved, 0);
+        DWC_Free(0, saved, 0);
     }
     t->count--;
 }

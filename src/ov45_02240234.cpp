@@ -93,8 +93,8 @@ struct Manager {
 extern "C" Manager *ov45_022577DC;
 extern "C" It ov45_0223FD8C(Map *map, Base *const &key);
 extern "C" void ov45_02242510(Map *map, u32 id);
-extern "C" Str *ov45_02237B58(Str *, const char *);
-extern "C" Str *ov45_02237BC8(Str *);
+extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
+extern "C" Str *LobbyString_Destroy(Str *);
 extern "C" void ov45_022428D8(Str *dst, Manager *m, Str *src);
 extern "C" void ov45_0223F8F4(void *self, const char *name, u32 x, u32 id);
 
@@ -140,9 +140,9 @@ extern "C" void ov45_02240234(void *session, int ok, int error, const char *name
     }
     if (ok == 1) {
         Str s;
-        ov45_02237B58(&s, name);
+        LobbyString_InitFromCStr(&s, name);
         int found = ov45_02243808(ov45_022577DC, &s);
-        ov45_02237BC8(&s);
+        LobbyString_Destroy(&s);
         if (found != 0) {
             int limit = chatGetChannelNumUsersA(ov45_022577DC->net, name);
             if (found == -1) {
@@ -160,35 +160,35 @@ extern "C" void ov45_02240234(void *session, int ok, int error, const char *name
         Str a;
         ov45_0223FC5C(&a, ov45_022577DC);
         Str b;
-        ov45_02237B58(&b, name);
+        LobbyString_InitFromCStr(&b, name);
         ov45_02242D30(ov45_022577DC, &a, &b);
-        ov45_02237BC8(&b);
-        ov45_02237BC8(&a);
+        LobbyString_Destroy(&b);
+        LobbyString_Destroy(&a);
         chatEnumUsersA(session, name, (void *)ov45_0224005C, id, 0);
         return;
     }
     {
         Str s;
-        ov45_02237B58(&s, name);
+        LobbyString_InitFromCStr(&s, name);
         Str t;
         ov45_022428D8(&t, ov45_022577DC, &s);
         ov45_022412CC(t.c_str());
-        ov45_02237BC8(&t);
-        ov45_02237BC8(&s);
+        LobbyString_Destroy(&t);
+        LobbyString_Destroy(&s);
     }
     int sid = id;
     Manager *m = ov45_022577DC;
     It it = FindIt(m, sid);
     Handler *h = it.n == &m->map.header ? 0 : it.n->value;
     Str s;
-    ov45_02237B58(&s, name);
+    LobbyString_InitFromCStr(&s, name);
     Str t;
     ov45_022428D8(&t, ov45_022577DC, &s);
     const char *str = t.c_str();
     void (*cb)(BOOL, int, const char *, u32) = h->callback;
     cb(0, error, str, h->getArg());
-    ov45_02237BC8(&t);
-    ov45_02237BC8(&s);
+    LobbyString_Destroy(&t);
+    LobbyString_Destroy(&s);
     ov45_02242510(&ov45_022577DC->map, sid);
 }
 

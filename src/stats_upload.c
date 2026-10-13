@@ -55,7 +55,7 @@ BOOL StatsUpload_CheckResponseHash(const char *response, int length) {
         return FALSE;
     }
     bodyLength = length - 40;
-    buf = ov00_021EC2A8(7, ov45_02253D50(bodyLength) + 41);
+    buf = DWC_Alloc(7, ov45_02253D50(bodyLength) + 41);
     if (buf == NULL) {
         return FALSE;
     }
@@ -68,7 +68,7 @@ BOOL StatsUpload_CheckResponseHash(const char *response, int length) {
         *(SecretKey *)p = *(SecretKey *)ov45_0225765C;
     }
     MATH_CalcSHA1(digest, buf, ov45_02253D50(bodyLength) + 40);
-    ov00_021EC2EC(7, buf, 0);
+    DWC_Free(7, buf, 0);
     for (i = 0; i < 20; i++) {
         hash[i * 2] = hex.chars[digest[i] >> 4];
         hash[i * 2 + 1] = hex.chars[digest[i] & 0xF];
@@ -118,25 +118,25 @@ void StatsUpload_OnRequestCompleted(char *response, int length, int error) {
             } else {
                 StatsUpload_SetFailed();
             }
-            ov00_021EC3D8(response);
+            DWCi_GsFree(response);
             break;
         case STATS_UPLOAD_WAIT_RESPONSE:
             if (strncmp(response, ov45_022576D4, strlen(ov45_022576D4)) == 0) {
-                ov00_021EC3D8(response);
+                DWCi_GsFree(response);
                 StatsUpload_SetFailed();
                 return;
             }
             if (ov45_0225762C.response) {
-                ov00_021EC3D8(ov45_0225762C.response);
+                DWCi_GsFree(ov45_0225762C.response);
                 ov45_0225762C.response = NULL;
             }
             if (!StatsUpload_CheckResponseHash(response, length)) {
-                ov00_021EC3D8(response);
+                DWCi_GsFree(response);
                 StatsUpload_SetFailed();
                 return;
             }
             if (ov45_0225762C.callback && !ov45_0225762C.callback(response, length)) {
-                ov00_021EC3D8(response);
+                DWCi_GsFree(response);
                 StatsUpload_SetFailed();
                 return;
             }
@@ -158,7 +158,7 @@ int StatsUpload_EncodeData(char *out, const u8 *first, int firstLength, const u8
     u32 sum = 0;
     int length = secondLength + firstLength;
     int i;
-    buf = ov00_021EC2A8(7, length + 4);
+    buf = DWC_Alloc(7, length + 4);
     if (!buf) {
         return 2;
     }
@@ -191,7 +191,7 @@ int StatsUpload_EncodeData(char *out, const u8 *first, int firstLength, const u8
     buf[2] = sum >> 8;
     buf[3] = sum;
     B64Encode(buf, out, length + 4, 2);
-    ov00_021EC2EC(7, buf, 0);
+    DWC_Free(7, buf, 0);
     out[ov45_02253D50(length + 4)] = 0;
     return 0;
 }
@@ -232,8 +232,8 @@ void StatsUpload_Start(int server, char *key) {
 }
 
 void StatsUpload_SetFailed(void) {
-    if (!ov00_021EC230()) {
-        ov00_021EC24C(6, -90040);
+    if (!DWCi_IsError()) {
+        DWCi_SetError(6, -90040);
     }
     ov45_0225762C.state = STATS_UPLOAD_FAILED;
 }
@@ -288,11 +288,11 @@ void StatsUpload_Stop(void) {
         return;
     }
     if (ov45_0225762C.url) {
-        ov00_021EC2EC(7, ov45_0225762C.url, 0);
+        DWC_Free(7, ov45_0225762C.url, 0);
         ov45_0225762C.url = NULL;
     }
     if (ov45_0225762C.response) {
-        ov00_021EC3D8(ov45_0225762C.response);
+        DWCi_GsFree(ov45_0225762C.response);
         ov45_0225762C.responseLength = 0;
         ov45_0225762C.response = NULL;
     }
@@ -322,7 +322,7 @@ int StatsUpload_PrepareUpload(char *name, int pid, const void *data, int size, S
         return 3;
     }
     if (ov45_0225762C.url) {
-        ov00_021EC2EC(7, ov45_0225762C.url, 0);
+        DWC_Free(7, ov45_0225762C.url, 0);
         ov45_0225762C.url = NULL;
     }
     dataLength = ov45_02253D50(size + 12);
@@ -333,7 +333,7 @@ int StatsUpload_PrepareUpload(char *name, int pid, const void *data, int size, S
     nameLength = strlen(name);
     serverLength = strlen(ov45_02257628);
     gameNameLength = strlen(ov45_0225763C);
-    ov45_0225762C.url = ov00_021EC2A8(7, dataLength + (dataTagLength + (hashTagLength + (pidLength + (pidTagLength + (nameLength + (serverLength + gameNameLength)))) + 41)));
+    ov45_0225762C.url = DWC_Alloc(7, dataLength + (dataTagLength + (hashTagLength + (pidLength + (pidTagLength + (nameLength + (serverLength + gameNameLength)))) + 41)));
     if (!ov45_0225762C.url) {
         return 2;
     }
@@ -346,7 +346,7 @@ int StatsUpload_PrepareUpload(char *name, int pid, const void *data, int size, S
     header.pid = pid;
     header.size = size;
     if (StatsUpload_EncodeData(ov45_0225762C.data, (const u8 *)&header, 8, data, size) == 2) {
-        ov00_021EC2EC(7, ov45_0225762C.url, 0);
+        DWC_Free(7, ov45_0225762C.url, 0);
         ov45_0225762C.url = NULL;
         return 2;
     }

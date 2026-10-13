@@ -36,7 +36,7 @@ BOOL GlobalTerminalApp_Main(OverlayManager *man, int *state) {
     case 1:
         if (CommWireless_IsStartedUp()) {
             sDwcHeap = data->dwcHeap;
-            ov00_021EC294(GlobalTerminalApp_DwcAlloc, GlobalTerminalApp_DwcFree);
+            DWC_SetMemFunc(GlobalTerminalApp_DwcAlloc, GlobalTerminalApp_DwcFree);
             data->wifiLoaded = 1;
             ++*state;
         }
@@ -84,8 +84,8 @@ BOOL GlobalTerminalApp_Main(OverlayManager *man, int *state) {
     }
 
     if (data->wifiLoaded == 1 && data->disconnect == 1 && data->isConnected == 1) {
-        ov00_021ECB40();
-        WirelessStatusIcon_SetLevel(3 - ov00_021EC9D4());
+        DWC_UpdateConnection();
+        WirelessStatusIcon_SetLevel(3 - DWC_GetLinkLevel());
     }
     return FALSE;
 }

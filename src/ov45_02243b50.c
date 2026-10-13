@@ -19,8 +19,8 @@ typedef struct {
 
 extern void ov45_02236E58(Iterator *);
 extern Node *ov45_022370D0(Node *, void *);
-extern void ov00_021EC2EC(int, void *, int);
-extern Node *ov45_02242394(u32);
+extern void DWC_Free(int, void *, int);
+extern Node *LobbyMem_Alloc(u32);
 
 typedef struct {
     Node *first, *second;
@@ -39,7 +39,7 @@ void ov45_02243B50(Iterator *out, Tree *tree, Iterator node) {
     }
     out->current = ov45_022370D0(old, tree->root);
     if (old) {
-        ov00_021EC2EC(0, old, 0);
+        DWC_Free(0, old, 0);
     }
     tree->count--;
 }

@@ -79,7 +79,7 @@ typedef struct GlobalTerminalSocketToken {
     u8 bytes[301];
 } GlobalTerminalSocketToken;
 
-// filled by ov00_021ECC6C
+// filled by DWC_SVLGetTokenAsync
 typedef struct GlobalTerminalSocketTokenRequest {
     u8 unk_00[0x45];
     GlobalTerminalSocketToken token; // 0x45
@@ -166,12 +166,12 @@ extern u8 ov39_0222AA78[];
 extern u8 sGlobalTerminalSocketCipher[];
 
 // no public header
-void *ov00_021EC2A8(int category, int size);
-void ov00_021EC2EC(int category, void *ptr, int size);
+void *DWC_Alloc(int category, int size);
+void DWC_Free(int category, void *ptr, int size);
 int gsSocketInetAddr(char *address);
-int ov00_021ECC6C(const char *arg, void *request);
-int ov00_021ECCE0(void);
-int ov00_021EC11C(int *errorCode, int *errorType);
+int DWC_SVLGetTokenAsync(const char *arg, void *request);
+int DWC_SVLProcess(void);
+int DWC_GetLastErrorEx(int *errorCode, int *errorType);
 GlobalTerminalSocketHostEntry *SOC_GetHostByName(char *name);
 char *SOC_InetNtoA(GlobalTerminalSocketInAddr address);
 int SOC_Socket(int domain, int type, int protocol);
@@ -473,12 +473,12 @@ int GlobalTerminalSocket_GetError(void) {
 }
 
 void *GlobalTerminalSocket_Alloc(int size) {
-    return ov00_021EC2A8(0, size);
+    return DWC_Alloc(0, size);
 }
 
 void GlobalTerminalSocket_Free(void *ptr) {
     if (ptr) {
-        ov00_021EC2EC(0, ptr, 0);
+        DWC_Free(0, ptr, 0);
     }
 }
 
@@ -736,12 +736,12 @@ int GlobalTerminalSocket_FetchToken(void) {
     if (sGlobalTerminalSocket.hasToken == TRUE) {
         return 1;
     }
-    if (!ov00_021ECC6C((const char *)_0222AA58, &request)) {
+    if (!DWC_SVLGetTokenAsync((const char *)_0222AA58, &request)) {
         sGlobalTerminalSocket.error = GTS_SOCKET_ERROR_TOKEN;
         return 0;
     }
     for (;;) {
-        int status = ov00_021ECCE0();
+        int status = DWC_SVLProcess();
         if (status == 3) {
             GlobalTerminalSocketToken *token = (GlobalTerminalSocketToken *)sGlobalTerminalSocket.login.unk_06;
             *token = request.token;
@@ -749,7 +749,7 @@ int GlobalTerminalSocket_FetchToken(void) {
             return 1;
         }
         if (status == 4) {
-            ov00_021EC11C(&errorCode, &errorType);
+            DWC_GetLastErrorEx(&errorCode, &errorType);
             sGlobalTerminalSocket.error = GTS_SOCKET_ERROR_TOKEN;
             return 0;
         }

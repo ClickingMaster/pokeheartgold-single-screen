@@ -126,7 +126,7 @@ ChatChannel *ciGetChannel(ChatConnection *chat, const char *channel) {
     char key[sizeof(ChatChannel)];
     strncpy(key, channel, 257);
     key[256] = 0;
-    return ov00_021FF0C0(chat->channels, key);
+    return TableLookup(chat->channels, key);
 }
 
 int ciChannelTableHashFn(const void *element, int numBuckets) {
@@ -152,9 +152,9 @@ int ciChannelTableCompareFn(const void *first, const void *second) {
 void ciChannelTableElementFreeFn(void *element) {
     ChatChannel *channel = element;
     ASSERT(channel, ov45_02255938, ov45_022558F0, 0xd2);
-    ov00_021EC3D8(channel->topic);
+    DWCi_GsFree(channel->topic);
     if (channel->users) {
-        ov00_021FEE8C(channel->users);
+        TableFree(channel->users);
     }
 }
 
@@ -187,25 +187,25 @@ void ciUserTableElementFreeFn(void *element) {
 }
 
 BOOL ciInitChannels(ChatConnection *chat) {
-    chat->channels = ov00_021FED4C(sizeof(ChatChannel), 7, 2, ciChannelTableHashFn, ciChannelTableCompareFn, ciChannelTableElementFreeFn);
+    chat->channels = TableNew2(sizeof(ChatChannel), 7, 2, ciChannelTableHashFn, ciChannelTableCompareFn, ciChannelTableElementFreeFn);
     if (!chat->channels) {
         return FALSE;
     }
-    chat->enteringChannels = ov00_021FE5B4(sizeof(ChatChannel), 0, NULL);
+    chat->enteringChannels = ArrayNew(sizeof(ChatChannel), 0, NULL);
     if (chat->enteringChannels) {
         return TRUE;
     }
-    ov00_021FEE8C(chat->channels);
+    TableFree(chat->channels);
     return FALSE;
 }
 
 void ciCleanupChannels(ChatConnection *chat) {
     ASSERT(chat, ov45_022559B8, ov45_02255700, 0x127);
     if (chat->channels) {
-        ov00_021FEE8C(chat->channels);
+        TableFree(chat->channels);
     }
     if (chat->enteringChannels) {
-        ov00_021FE678(chat->enteringChannels);
+        ArrayFree(chat->enteringChannels);
     }
 }
 
@@ -219,7 +219,7 @@ void ciChannelEntering(ChatConnection *chat, const char *channel) {
 
     strncpy((char *)&entry, channel, 257);
     ((char *)&entry)[256] = 0;
-    ov00_021FE754(chat->enteringChannels, &entry);
+    ArrayAppend(chat->enteringChannels, &entry);
 }
 
 int ciEnteringChannelCompareFn(const void *a, const void *b) {
@@ -232,7 +232,7 @@ BOOL ciIsEnteringChannel(ChatConnection *chat, const char *channel) {
     ASSERT(chat, ov45_022559B8, ov45_022557A0, 0x14d);
     n = ArrayLength(chat->enteringChannels);
     for (i = 0; i < n; i++) {
-        name = ov00_021FE6EC(chat->enteringChannels, i);
+        name = ArrayNth(chat->enteringChannels, i);
         ASSERT(name, ov45_022559C8, ov45_022557A0, 0x153);
         if (!strnicmp(name, channel)) {
             return TRUE;
@@ -246,7 +246,7 @@ void ciChannelEntered(ChatConnection *chat, const char *name, const ChatChannelC
     ASSERT(chat, ov45_022559B8, ov45_0225569C, 0x160);
     ASSERT_CHANNEL(name, ov45_0225569C, 0x162);
     ASSERT(callbacks, ov45_02255A18, ov45_0225569C, 0x163);
-    topic = ov00_021EC3A8(2);
+    topic = DWCi_GsMalloc(2);
     if (!topic) {
         return;
     }
@@ -256,7 +256,7 @@ void ciChannelEntered(ChatConnection *chat, const char *name, const ChatChannelC
         channel.callbacks = *callbacks;
         strncpy(channel.name, name, 257);
         channel.name[256] = 0;
-        channel.users = ov00_021FED4C(sizeof(ChatChannelUser), 61, 2, ciUserTableHashFn, ciUserTableCompareFn, ciUserTableElementFreeFn);
+        channel.users = TableNew2(sizeof(ChatChannelUser), 61, 2, ciUserTableHashFn, ciUserTableCompareFn, ciUserTableElementFreeFn);
         if (!channel.users) {
             return;
         }
@@ -265,12 +265,12 @@ void ciChannelEntered(ChatConnection *chat, const char *name, const ChatChannelC
         channel.joined = FALSE;
         channel.key[0] = 0;
         {
-            int index = ov00_021FEA40(chat->enteringChannels, &channel, ciEnteringChannelCompareFn, 0, 0);
+            int index = ArraySearch(chat->enteringChannels, &channel, ciEnteringChannelCompareFn, 0, 0);
             if (index != -1) {
-                ov00_021FE8D8(chat->enteringChannels, index);
+                ArrayRemoveAt(chat->enteringChannels, index);
             }
         }
-        ov00_021FEF74(chat->channels, &channel);
+        TableEnter(chat->channels, &channel);
     }
 }
 
@@ -281,13 +281,13 @@ void ciChannelLeft(ChatConnection *chat, const char *name) {
     strncpy(channel.name, name, 257);
     channel.name[256] = 0;
     {
-        int index = ov00_021FEA40(chat->enteringChannels, &channel, ciEnteringChannelCompareFn, 0, 0);
+        int index = ArraySearch(chat->enteringChannels, &channel, ciEnteringChannelCompareFn, 0, 0);
         if (index != -1) {
-            ov00_021FE8D8(chat->enteringChannels, index);
+            ArrayRemoveAt(chat->enteringChannels, index);
             return;
         }
     }
-    ov00_021FF01C(chat->channels, &channel);
+    TableRemove(chat->channels, &channel);
 }
 
 ChatChannelCallbacks *ciGetChannelCallbacks(ChatConnection *chat, const char *name) {
@@ -311,13 +311,13 @@ void ciChannelListUsersMap(void *element, void *arg) {
     ASSERT(user->nick[0], ov45_02255A58, ov45_0225585C, 450);
     ASSERT(strlen(user->nick) < 128, ov45_02255A70, ov45_0225585C, 450);
     ASSERT(list->count >= 0, ov45_02255A90, ov45_0225585C, 455);
-    p = ov00_021EC3BC(list->users, (list->count + 1) * 4);
+    p = DWCi_GsRealloc(list->users, (list->count + 1) * 4);
     if (!p) {
         __msl_assertion_failed(ov45_02255AA4, ov45_02255918, ov45_0225585C, 473);
         return;
     }
     list->users = p;
-    p = ov00_021EC3BC(list->modes, (list->count + 1) * 4);
+    p = DWCi_GsRealloc(list->modes, (list->count + 1) * 4);
     if (!p) {
         __msl_assertion_failed(ov45_02255AA4, ov45_02255918, ov45_0225585C, 480);
         return;
@@ -342,10 +342,10 @@ void ciChannelListUsers(ChatConnection *chat, const char *name, ChatUserListFunc
     list.count = 0;
     list.users = NULL;
     list.modes = NULL;
-    ov00_021FF160(channel->users, ciChannelListUsersMap, &list);
+    TableMap(channel->users, ciChannelListUsersMap, &list);
     callback(chat, name, list.count, list.users, list.modes, param);
-    ov00_021EC3D8(list.users);
-    ov00_021EC3D8(list.modes);
+    DWCi_GsFree(list.users);
+    DWCi_GsFree(list.modes);
 }
 
 BOOL ciInChannel(ChatConnection *chat, const char *name) {
@@ -392,12 +392,12 @@ void ciSetChannelPassword(ChatConnection *chat, const char *name, const char *to
     if (!channel) {
         return;
     }
-    ov00_021EC3D8(channel->topic);
+    DWCi_GsFree(channel->topic);
     if (!topic) {
         topic = ov45_02255A2C;
     }
     n = strlen(topic);
-    channel->topic = ov00_021EC3A8(n + 1);
+    channel->topic = DWCi_GsMalloc(n + 1);
     if (!channel->topic) {
         return;
     }
@@ -445,7 +445,7 @@ int ciGetChannelNumUsers(ChatConnection *chat, const char *name) {
     if (!channel) {
         return -1;
     }
-    return ov00_021FEF00(channel->users);
+    return TableCount(channel->users);
 }
 
 void ciUserEnteredChannel(ChatConnection *chat, const char *nick, const char *name, int mode, const char *user, const char *address) {
@@ -475,8 +475,8 @@ void ciUserEnteredChannel(ChatConnection *chat, const char *nick, const char *na
             entry.hasUserInfo = FALSE;
         }
         entry.mode = mode;
-        ov00_021FEF74(channel->users, &entry);
-        ASSERT(ov00_021FF0C0(channel->users, &entry) != NULL, ov45_02255B10, ov45_0225582C, 759);
+        TableEnter(channel->users, &entry);
+        ASSERT(TableLookup(channel->users, &entry) != NULL, ov45_02255B10, ov45_0225582C, 759);
     }
 }
 
@@ -493,7 +493,7 @@ void ciUserLeftChannel(ChatConnection *chat, const char *nick, const char *name)
     }
     strncpy(key, nick, 128);
     key[127] = 0;
-    ov00_021FF01C(channel->users, key);
+    TableRemove(channel->users, key);
 }
 
 void ciUserEnumChannelsMap(void *element, void *arg) {
@@ -505,7 +505,7 @@ void ciUserEnumChannelsMap(void *element, void *arg) {
     ASSERT(search->nick, ov45_02255B94, ov45_0225588C, 0x323);
     ASSERT(*search->nick, ov45_02255BA8, ov45_0225588C, 0x324);
     ASSERT(search->callback, ov45_02255BC4, ov45_0225588C, 0x325);
-    if (!ov00_021FF0C0(channel->users, search->nick)) {
+    if (!TableLookup(channel->users, search->nick)) {
         return;
     }
     search->callback(search->chat, search->nick, channel, search->param);
@@ -522,7 +522,7 @@ void ciUserEnumChannels(ChatConnection *chat, const char *nick, ChatUserSearchFu
     search.callback = callback;
     search.param = param;
     search.nick = search.buffer;
-    ov00_021FF160(chat->channels, ciUserEnumChannelsMap, &search);
+    TableMap(chat->channels, ciUserEnumChannelsMap, &search);
 }
 
 void ciUserChangeNickMap(void *element, void *arg) {
@@ -540,15 +540,15 @@ void ciUserChangeNickMap(void *element, void *arg) {
     ASSERT(change->oldNick, ov45_02255C34, ov45_0225578C, 0x35b);
     ASSERT(*change->oldNick, ov45_02255C4C, ov45_0225578C, 0x35b);
     ASSERT(strlen(change->oldNick) < 128, ov45_02255C68, ov45_0225578C, 0x35b);
-    found = ov00_021FF0C0(channel->users, change->oldNick);
+    found = TableLookup(channel->users, change->oldNick);
     if (!found) {
         return;
     }
     memcpy(entry, found, sizeof(entry));
-    ASSERT(ov00_021FF01C(channel->users, found), ov45_02255C8C, ov45_0225578C, 0x367);
+    ASSERT(TableRemove(channel->users, found), ov45_02255C8C, ov45_0225578C, 0x367);
     strncpy((char *)entry, change->newNick, 128);
     entry[127] = 0;
-    ov00_021FEF74(channel->users, entry);
+    TableEnter(channel->users, entry);
     if (ciWasJoinCallbackCalled(change->chat, channel->name) && channel->callbacks.nickChanged) {
         args.channel = channel->name;
         args.oldNick = change->oldNick;
@@ -569,7 +569,7 @@ void ciUserChangedNick(ChatConnection *chat, const char *oldNick, const char *ne
     change.chat = chat;
     change.oldNick = oldNick;
     change.newNick = newNick;
-    ov00_021FF160(chat->channels, ciUserChangeNickMap, &change);
+    TableMap(chat->channels, ciUserChangeNickMap, &change);
 }
 
 void ciUserChangedMode(ChatConnection *chat, const char *nick, const char *name, int mode, BOOL set) {
@@ -591,13 +591,13 @@ void ciUserChangedMode(ChatConnection *chat, const char *nick, const char *name,
     ASSERT(mode >= 0 && mode <= 3, ov45_02255AF4, ov45_022556D8, 927);
     strncpy(frame.channelKey, name, 257);
     frame.channelKey[256] = 0;
-    channel = ov00_021FF0C0(chat->channels, frame.channelKey);
+    channel = TableLookup(chat->channels, frame.channelKey);
     if (!channel) {
         return;
     }
     strncpy(frame.nickKey, nick, 128);
     frame.nickKey[127] = 0;
-    user = ov00_021FF0C0(channel->users, frame.nickKey);
+    user = TableLookup(channel->users, frame.nickKey);
     if (!user) {
         return;
     }
@@ -622,7 +622,7 @@ void ciSetUserBasicInfoMap(void *element, void *arg) {
     ASSERT(channel, ov45_02255938, ov45_02255874, 0x41a);
     ASSERT(info, ov45_02255A30, ov45_02255874, 0x41b);
     ASSERT(channel->users, ov45_02255B7C, ov45_02255874, 0x424);
-    user = ov00_021FF0C0(channel->users, info->nick);
+    user = TableLookup(channel->users, info->nick);
     if (!user) {
         return;
     }
@@ -645,5 +645,5 @@ void ciSetUserBasicInfo(ChatConnection *chat, const char *nick, const char *user
     info.user = user;
     info.address = address;
     info.nick = buffer;
-    ov00_021FF160(chat->channels, ciSetUserBasicInfoMap, &info);
+    TableMap(chat->channels, ciSetUserBasicInfoMap, &info);
 }

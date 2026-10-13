@@ -77,7 +77,7 @@ void WiFiPlazaLobbyMatches_Update(WiFiPlazaLobbyClient *client) {
         match = &_022577C0->matches[_022577C0->currentMatch];
         if (match->info.playerCount != count) {
             match->info.playerCount = count;
-            ov45_02232BB0(match);
+            PPW_LobbyUpdateRecruitInfo(match);
         }
     }
     for (i = 0; i < 3; i++) {

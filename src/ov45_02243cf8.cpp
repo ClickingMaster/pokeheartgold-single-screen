@@ -8,8 +8,8 @@ inline void *operator new(unsigned long, void *p) {
     return p;
 }
 
-extern "C" void ov00_021EC2EC(int, void *, u32);
-extern "C" void *ov45_02242394(u32 size);
+extern "C" void DWC_Free(int, void *, u32);
+extern "C" void *LobbyMem_Alloc(u32 size);
 
 struct Node {
     Node *left, *right;
@@ -40,7 +40,7 @@ struct Node {
 
 struct Alloc {
     Node *allocate() {
-        return (Node *)ov45_02242394(sizeof(Node));
+        return (Node *)LobbyMem_Alloc(sizeof(Node));
     }
 };
 
@@ -71,7 +71,7 @@ struct Holder {
 
 inline void Destroy(Holder *h) {
     if (h->ptr) {
-        ov00_021EC2EC(0, h->ptr, 0);
+        DWC_Free(0, h->ptr, 0);
     }
 }
 

@@ -38,13 +38,13 @@ struct String {
     void destroy();
 };
 
-extern "C" void ov45_02237BC8(String *s);
+extern "C" void LobbyString_Destroy(String *s);
 
 inline void String::destroy() {
-    ov45_02237BC8(this);
+    LobbyString_Destroy(this);
 }
 
-extern "C" void ov45_02237B58(String *s, const char *p);
+extern "C" void LobbyString_InitFromCStr(String *s, const char *p);
 extern "C" void ov45_022429E0(String *s, void *user);
 extern "C" void ov45_02233ABC(String *out, const String *a, const char *b);
 struct Root;
@@ -118,18 +118,18 @@ extern Root *ov45_022577DC;
 extern "C" const u8 _version_NINTENDO_DWC_LOBBY[];
 extern "C" void OSi_ReferSymbol(const void *);
 extern "C" const char ov45_02255308[], ov45_02255310[], ov45_02255318[], ov45_0225531C[];
-extern "C" void *ov45_02242394(u32);
+extern "C" void *LobbyMem_Alloc(u32);
 extern "C" Root *ov45_0224268C(Root *, String *, String *, int, void *, String *, String *, String *, void *);
 extern "C" int ov45_0224246C(void);
 extern "C" void ov45_0223ED00(void), ov45_0223ED1C(void), ov45_0223F1C8(void), ov45_0223EDD8(void), ov45_0223FA3C(void), ov45_0223F9C4(void), ov45_0223F92C(void);
 extern "C" int ov45_02240850(void);
 extern "C" u32 chatConnectSpecialA(const char *, int, const char *, const char *, const char *, const char *, Callbacks *, void (*)(void), void (*)(void), void (*)(void), void *, int);
-extern "C" void ov00_021ECB94(RTCDate *, RTCTime *);
-extern "C" void ov45_022424DC(void), ov45_02242858(Root *), ov00_021EC2EC(int, void *, int);
+extern "C" void DWC_GetDateTime(RTCDate *, RTCTime *);
+extern "C" void ov45_022424DC(void), ov45_02242858(Root *), DWC_Free(int, void *, int);
 
 inline void Free(void *p) {
     if (p) {
-        ov00_021EC2EC(0, p, 0);
+        DWC_Free(0, p, 0);
     }
 }
 
@@ -158,15 +158,15 @@ extern "C" int ov45_02240B10(const char *a, const char *b, int n, u8 *config, vo
         return 4;
     }
     ov45_022429E0(&outer1, user);
-    ov45_02237B58(&outer2, ov45_02255308);
-    ov45_02237B58(&outer3, ov45_02255310);
+    LobbyString_InitFromCStr(&outer2, ov45_02255308);
+    LobbyString_InitFromCStr(&outer3, ov45_02255310);
     {
         int firstReady = 0, secondReady = firstReady;
-        Root *created = (Root *)ov45_02242394(0xac);
+        Root *created = (Root *)LobbyMem_Alloc(0xac);
         if (created) {
-            ov45_02237B58(&name2, b);
+            LobbyString_InitFromCStr(&name2, b);
             firstReady = 1;
-            ov45_02237B58(&name1, a);
+            LobbyString_InitFromCStr(&name1, a);
             secondReady = firstReady;
             created = ov45_0224268C(created, &name1, &name2, n, user, &outer1, &outer2, &outer3, config);
         }
@@ -221,7 +221,7 @@ extern "C" int ov45_02240B10(const char *a, const char *b, int n, u8 *config, vo
     }
     {
         root = ov45_022577DC;
-        ov00_021ECB94(&date, &time);
+        DWC_GetDateTime(&date, &time);
         root->queue.insert(ov45_02232AE8(0, Task(RTC_ConvertDateTimeToSecond(&date, &time), root, ov45_02240850)));
     }
     outer3.destroy();

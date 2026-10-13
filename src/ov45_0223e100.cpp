@@ -13,7 +13,7 @@ struct RTCTime {
     u32 hour, minute, second;
 };
 
-extern "C" void ov00_021ECB94(RTCDate *, RTCTime *);
+extern "C" void DWC_GetDateTime(RTCDate *, RTCTime *);
 extern "C" s64 RTC_ConvertDateTimeToSecond(const RTCDate *, const RTCTime *);
 
 struct Tag {};
@@ -193,7 +193,7 @@ struct Info {
         self->z = 0;
         RTCTime t;
         RTCDate d;
-        ov00_021ECB94(&d, &t);
+        DWC_GetDateTime(&d, &t);
         self->time = RTC_ConvertDateTimeToSecond(&d, &t);
     }
 
@@ -204,7 +204,7 @@ struct Info {
         self->z = 0;
         RTCTime t;
         RTCDate d;
-        ov00_021ECB94(&d, &t);
+        DWC_GetDateTime(&d, &t);
         self->time = RTC_ConvertDateTimeToSecond(&d, &t);
     }
 

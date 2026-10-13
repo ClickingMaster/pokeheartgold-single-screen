@@ -184,7 +184,7 @@
 .public WM_GetLinkLevel
 .public NNS_GfdDefaultFuncAllocTexVram
 .public NNS_GfdDefaultFuncAllocPlttVram
-.public ov00_021EC9D4
+.public DWC_GetLinkLevel
 .public LinkBattleScreen_Start
 .public BattleParticleSystem_DrawAll
 .public BattleAnimSystem_New

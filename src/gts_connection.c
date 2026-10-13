@@ -82,19 +82,19 @@ extern const BgTemplate sGtsConnectionSubBg1Template;
 extern const u32 sGtsPanelCaptionMsgIds[];
 
 // Network library (OVY_0), not declared in a public header.
-int ov00_021EC5B4(void);
-void ov00_021EC3F0(void *connection, int priority, int unused, int sslPriority);
-void ov00_021EC454(int server);
-void ov00_021EC4A4(void);
-void ov00_021EC60C(void);
-int ov00_021EC724(void);
-int ov00_021EC11C(int *errorCode, int *errorType);
-void ov00_021EC210(void);
-void ov00_021EC8D8(void);
-int ov00_021EC0FC(int *errorCode);
-int ov00_021EC9E0(void *apInfo);
-int ov00_021ECD04(void);
-int ov00_021ECDC8(void);
+int DWC_CheckInet(void);
+void DWC_InitInetEx(void *connection, int priority, int unused, int sslPriority);
+void DWC_SetAuthServer(int server);
+void DWC_ConnectInetAsync(void);
+void DWC_ProcessInet(void);
+int DWC_GetInetStatus(void);
+int DWC_GetLastErrorEx(int *errorCode, int *errorType);
+void DWC_ClearError(void);
+void DWC_CleanupInet(void);
+int DWC_GetLastError(int *errorCode);
+int DWC_GetApInfo(void *apInfo);
+int DWC_NASLoginAsync(void);
+int DWC_NASLoginProcess(void);
 void DWC_ShutdownGHTTP(void);
 void DWC_ShutdownFriendsMatch(void);
 u64 DWC_CreateFriendKey(void *userData);
@@ -182,7 +182,7 @@ int GtsConnection_Init(GtsApp *app, int state) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
-    if (ov00_021EC5B4() == 0) {
+    if (DWC_CheckInet() == 0) {
         args = app->args;
         if (args->unk3C != 0) {
             // Connect without asking.
@@ -441,7 +441,7 @@ int GtsConnection_HandleDisconnectMenu(GtsApp *app) {
         goto done;
     }
     if (result == -2) {
-        if (ov00_021EC5B4() == 0) {
+        if (DWC_CheckInet() == 0) {
             app->state = GTS_CONNECTION_STATE_ASK_CONNECT;
             goto done;
         }
@@ -450,8 +450,8 @@ int GtsConnection_HandleDisconnectMenu(GtsApp *app) {
         app->state = GTS_CONNECTION_STATE_FADE_OUT;
         goto done;
     }
-    if (ov00_021EC5B4() != 0) {
-        ov00_021EC8D8();
+    if (DWC_CheckInet() != 0) {
+        DWC_CleanupInet();
     }
     CommState_FreeWfcSession();
     Gts_SetNextScreen(app, 0, 0);
@@ -468,7 +468,7 @@ int GtsConnection_PrintDisconnecting(GtsApp *app) {
 
 int GtsConnection_Disconnect(GtsApp *app) {
     CommState_FreeWfcSession();
-    ov00_021EC8D8();
+    DWC_CleanupInet();
     Gts_SetNextScreen(app, 0, 0);
     app->state = GTS_CONNECTION_STATE_PRINT_DISCONNECTED;
     return 3;
@@ -485,9 +485,9 @@ void GtsConnection_StartConnect(GtsApp *app) {
     CommState_InitWfcSession(app->args->saveData);
     Sys_SetSleepDisableFlag(4);
     Gts_CreateWirelessStatusIcon(app);
-    ov00_021EC3F0(app->wifiConnection, 2, 1, 20);
-    ov00_021EC454(2);
-    ov00_021EC4A4();
+    DWC_InitInetEx(app->wifiConnection, 2, 1, 20);
+    DWC_SetAuthServer(2);
+    DWC_ConnectInetAsync();
     app->state = GTS_CONNECTION_STATE_WAIT_CONNECT;
 }
 
@@ -500,15 +500,15 @@ int GtsConnection_WaitConnect(GtsApp *app) {
         u8 apInfo[60];
     } locals;
 
-    ov00_021EC60C();
-    if (ov00_021EC5B4() != 0) {
-        switch (ov00_021EC724()) {
+    DWC_ProcessInet();
+    if (DWC_CheckInet() != 0) {
+        switch (DWC_GetInetStatus()) {
         case 7:
-            app->connectionResult = ov00_021EC11C(&locals.errorCode, &locals.errorType);
+            app->connectionResult = DWC_GetLastErrorEx(&locals.errorCode, &locals.errorType);
             app->connectionErrorCode = locals.errorCode;
             app->connectionErrorType = locals.errorType;
-            ov00_021EC210();
-            ov00_021EC8D8();
+            DWC_ClearError();
+            DWC_CleanupInet();
             Gts_DeleteWaitingIcon(app);
             app->state = GTS_CONNECTION_STATE_SHOW_CONNECTION_ERROR;
             break;
@@ -520,13 +520,13 @@ int GtsConnection_WaitConnect(GtsApp *app) {
         case 6:
         case 8:
         default:
-            ov00_021EC0FC(&locals.error);
+            DWC_GetLastError(&locals.error);
             Gts_DeleteWaitingIcon(app);
             app->state = GTS_CONNECTION_STATE_PRINT_SERVER_ERROR;
             app->serverResult = -2;
             break;
         case 4:
-            ov00_021EC9E0(locals.apInfo);
+            DWC_GetApInfo(locals.apInfo);
             app->state = GTS_CONNECTION_STATE_START_AUTH;
             break;
         }
@@ -535,7 +535,7 @@ int GtsConnection_WaitConnect(GtsApp *app) {
 }
 
 int GtsConnection_StartAuth(GtsApp *app) {
-    ov00_021ECD04();
+    DWC_NASLoginAsync();
     app->state = GTS_CONNECTION_STATE_WAIT_AUTH;
     return 3;
 }
@@ -545,7 +545,7 @@ int GtsConnection_WaitAuth(GtsApp *app) {
     int errorType;
     int result;
 
-    switch (ov00_021ECDC8()) {
+    switch (DWC_NASLoginProcess()) {
     case 3:
         app->state = GTS_CONNECTION_STATE_INIT_SERVER;
         break;
@@ -553,11 +553,11 @@ int GtsConnection_WaitAuth(GtsApp *app) {
     case 4:
     case 5:
         Gts_DeleteWaitingIcon(app);
-        result = ov00_021EC11C(&errorCode, &errorType);
+        result = DWC_GetLastErrorEx(&errorCode, &errorType);
         app->connectionResult = result;
         app->connectionErrorCode = errorCode;
-        ov00_021EC210();
-        ov00_021EC8D8();
+        DWC_ClearError();
+        DWC_CleanupInet();
         app->state = GTS_CONNECTION_STATE_SHOW_CONNECTION_ERROR;
         switch (errorType) {
         case 1:
@@ -840,7 +840,7 @@ int GtsConnection_DisconnectAfterError(GtsApp *app) {
     case 1:
         if (!TextPrinterCheckActive(app->textPrinterId)) {
             CommState_FreeWfcSession();
-            ov00_021EC8D8();
+            DWC_CleanupInet();
             app->subState++;
         }
         break;

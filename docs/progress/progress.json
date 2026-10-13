@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "8ec8509be50341abc527ff6a86cfa3ba47bd2c2a",
+  "commit": "f20fbc80076136a2a19fbda1dcd98392015e2701",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "c5f208e31eb386e6c9ea3fda0ea51c922d13e3891760e5a1de48464154925668",
+    "ARM9": "0b247cd454f91b2d3542f7d7517228485728823ac73eadaf2c42958717b15b3a",
     "ARM7": "d726d92f810e881692e1b4d2ec232d6ca89b38985dcb26b08751c0037036d92a"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -2596,22 +2596,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "ov45_02231490.o",
-      "bytes": 132,
-      "status": "c",
-      "source": "src/ov45_02231490.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ov45_02231514.o",
-      "bytes": 1828,
-      "status": "cpp",
-      "source": "src/ov45_02231514.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "ov45_02231c38.o",
       "bytes": 64,
       "status": "c",
@@ -2672,14 +2656,6 @@
       "bytes": 96,
       "status": "c",
       "source": "src/ov45_022322a4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ov45_02232304.o",
-      "bytes": 304,
-      "status": "cpp",
-      "source": "src/ov45_02232304.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3920,6 +3896,30 @@
       "bytes": 1392,
       "status": "c",
       "source": "src/ov45_02253968.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "ppw_lobby_get_channel_data.o",
+      "bytes": 304,
+      "status": "cpp",
+      "source": "src/ppw_lobby_get_channel_data.cpp"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "ppw_lobby_process.o",
+      "bytes": 1828,
+      "status": "cpp",
+      "source": "src/ppw_lobby_process.cpp"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "ppw_lobby_shutdown.o",
+      "bytes": 132,
+      "status": "c",
+      "source": "src/ppw_lobby_shutdown.c"
     },
     {
       "cpu": "ARM9",

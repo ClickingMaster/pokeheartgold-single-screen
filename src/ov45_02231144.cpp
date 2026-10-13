@@ -13,10 +13,10 @@ struct Time {
     u32 hour, minute, second;
 };
 
-extern "C" void ov00_021ECB94(Date *, Time *);
+extern "C" void DWC_GetDateTime(Date *, Time *);
 extern "C" s64 RTC_ConvertDateTimeToSecond(const Date *, const Time *);
-extern "C" void *ov45_02242394(u32);
-extern "C" void ov00_021EC2EC(int, void *, int);
+extern "C" void *LobbyMem_Alloc(u32);
+extern "C" void DWC_Free(int, void *, int);
 extern "C" char ov45_02254FA0[], ov45_02254FB0[];
 extern "C" void ov45_02236070();
 extern "C" void ov45_022362B4();
@@ -29,7 +29,7 @@ extern "C" void ov45_02236E38(void *);
 extern "C" void ov45_0223DF4C(void *);
 extern "C" void ov45_022379D4(void *);
 extern "C" void ov45_02236B88(void *);
-extern "C" void ov45_02237BC8(void *);
+extern "C" void LobbyString_Destroy(void *);
 extern "C" void ov45_0223E100(void *, u32, u32, u32);
 extern "C" void ov45_022335A0(void);
 
@@ -67,7 +67,7 @@ struct Str {
     }
 
     void Destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 };
 
@@ -104,7 +104,7 @@ struct Info {
         , z(0) {
         Time time;
         Date date;
-        ov00_021ECB94(&date, &time);
+        DWC_GetDateTime(&date, &time);
         mid = RTC_ConvertDateTimeToSecond(&date, &time);
     }
 };
@@ -215,7 +215,7 @@ extern "C" Work *_022577C4;
 
 inline void Free(void *p) {
     if (p) {
-        ov00_021EC2EC(0, p, 0);
+        DWC_Free(0, p, 0);
     }
 }
 
@@ -251,7 +251,7 @@ extern "C" int ov45_02231144(u32 a0, u32 a1, u32 a2, const Config *cfg, u32 a4, 
         return 4;
     }
     Callbacks cbs(ov45_02236070, ov45_022362B4, 5);
-    _022577C4 = new (ov45_02242394(sizeof(Work))) Work(a2, *cfg, a4, a7);
+    _022577C4 = new (LobbyMem_Alloc(sizeof(Work))) Work(a2, *cfg, a4, a7);
     if (_022577C4 == 0) {
         return 1;
     }

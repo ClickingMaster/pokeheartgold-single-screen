@@ -35,7 +35,7 @@ BOOL WiFiPlazaLobbyClient_AddOwnLocation(WiFiPlazaLobbyClient *client) {
     client->locations[i].country = country;
     client->locations[i].region = region;
     client->locations[i].active = 1;
-    return WiFiPlazaLobbyClient_CheckResult(ov45_022322A4(-1, 0, ov45_02254EF0, client->locations, sizeof(client->locations)));
+    return WiFiPlazaLobbyClient_CheckResult(PPW_LobbySetChannelData(-1, 0, ov45_02254EF0, client->locations, sizeof(client->locations)));
 }
 
 #pragma force_active reset

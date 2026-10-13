@@ -116,18 +116,18 @@ typedef struct GlobalTerminalConnectWork {
 void GF_TouchpadResetSampling(void);
 void GF_TouchpadStartSampling(int a0);
 void GF_TouchpadStopSampling(void);
-void ov00_021EC0FC(void *out);
-int ov00_021EC11C(int *errorCode, u32 *errorType);
-void ov00_021EC210(void);
-void ov00_021EC3F0(void *a0, u32 a1, u32 a2, u32 a3);
-void ov00_021EC4A4(void);
-int ov00_021EC5B4(void);
-void ov00_021EC60C(void);
-int ov00_021EC724(void);
-void ov00_021EC8D8(void);
-void ov00_021EC9E0(void *out);
-void ov00_021ECD04(GlobalTerminalConnectWork *work);
-u32 ov00_021ECDC8(void);
+void DWC_GetLastError(void *out);
+int DWC_GetLastErrorEx(int *errorCode, u32 *errorType);
+void DWC_ClearError(void);
+void DWC_InitInetEx(void *a0, u32 a1, u32 a2, u32 a3);
+void DWC_ConnectInetAsync(void);
+int DWC_CheckInet(void);
+void DWC_ProcessInet(void);
+int DWC_GetInetStatus(void);
+void DWC_CleanupInet(void);
+void DWC_GetApInfo(void *out);
+void DWC_NASLoginAsync(GlobalTerminalConnectWork *work);
+u32 DWC_NASLoginProcess(void);
 void DWC_ShutdownFriendsMatch(void);
 void DWC_ShutdownGHTTP(void);
 void CommState_InitWfcSession(SaveData *saveData);
@@ -656,9 +656,9 @@ BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *work) {
         }
         break;
     case 2:
-        ov00_021EC3F0(work->args->wifiConnection, 2, 1, 20);
-        ov00_021EC454(2);
-        ov00_021EC4A4();
+        DWC_InitInetEx(work->args->wifiConnection, 2, 1, 20);
+        DWC_SetAuthServer(2);
+        DWC_ConnectInetAsync();
         work->state = GTC_STATE_WAIT_CONNECT;
         break;
     }
@@ -668,15 +668,15 @@ BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *work) {
 BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *work) {
     u8 buffer[0x48];
 
-    ov00_021EC60C();
-    if (ov00_021EC5B4() != 0) {
-        switch (ov00_021EC724()) {
+    DWC_ProcessInet();
+    if (DWC_CheckInet() != 0) {
+        switch (DWC_GetInetStatus()) {
         case 7:
-            work->dwcResult = ov00_021EC11C((int *)(buffer + 8), (u32 *)(buffer + 4));
+            work->dwcResult = DWC_GetLastErrorEx((int *)(buffer + 8), (u32 *)(buffer + 4));
             work->errorCode = *(u32 *)(buffer + 8);
             work->errorType = *(u32 *)(buffer + 4);
-            ov00_021EC210();
-            ov00_021EC8D8();
+            DWC_ClearError();
+            DWC_CleanupInet();
             GlobalTerminalConnect_HideWaitingIcon(work);
             work->state = GTC_STATE_SHOW_ERROR;
             break;
@@ -688,13 +688,13 @@ BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *work) {
         case 6:
         case 8:
         default:
-            ov00_021EC0FC(buffer);
+            DWC_GetLastError(buffer);
             GlobalTerminalConnect_HideWaitingIcon(work);
             work->state = GTC_STATE_SHOW_SERVER_ERROR;
             work->serverError = -2;
             break;
         case 4:
-            ov00_021EC9E0(buffer + 12);
+            DWC_GetApInfo(buffer + 12);
             work->state = GTC_STATE_3;
             break;
         }
@@ -703,7 +703,7 @@ BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *work) {
 }
 
 BOOL GlobalTerminalConnect_StateStartAuth(GlobalTerminalConnectWork *work) {
-    ov00_021ECD04(work);
+    DWC_NASLoginAsync(work);
     work->state = GTC_STATE_4;
     return FALSE;
 }
@@ -714,7 +714,7 @@ BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work) {
     int errorCode;
     u32 errorType;
 
-    switch (ov00_021ECDC8()) {
+    switch (DWC_NASLoginProcess()) {
     case 3:
         work->state = GTC_STATE_SAVE_PROFILE_ID;
         break;
@@ -722,11 +722,11 @@ BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work) {
     case 4:
     case 5:
         GlobalTerminalConnect_HideWaitingIcon(work);
-        work->dwcResult = ov00_021EC11C(&errorCode, &errorType);
+        work->dwcResult = DWC_GetLastErrorEx(&errorCode, &errorType);
         work->errorCode = errorCode;
         work->errorType = errorType;
-        ov00_021EC210();
-        ov00_021EC8D8();
+        DWC_ClearError();
+        DWC_CleanupInet();
         work->state = GTC_STATE_SHOW_ERROR;
         switch (errorType) {
         case 1:
@@ -840,7 +840,7 @@ BOOL GlobalTerminalConnect_StateServerErrorDisconnect(GlobalTerminalConnectWork 
     case 1:
         if (GlobalTerminalConnect_IsPrinting(work->printerId) == FALSE) {
             CommState_FreeWfcSession();
-            ov00_021EC8D8();
+            DWC_CleanupInet();
             work->substate++;
         }
         break;
@@ -880,7 +880,7 @@ BOOL GlobalTerminalConnect_StateDisconnect(GlobalTerminalConnectWork *work) {
         work->substate++;
         break;
     case 1:
-        ov00_021EC8D8();
+        DWC_CleanupInet();
         CommState_FreeWfcSession();
         work->substate++;
         break;

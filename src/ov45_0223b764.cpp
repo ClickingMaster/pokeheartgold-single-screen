@@ -3,12 +3,12 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-extern "C" void ov00_021EC2EC(int, void *, u32);
+extern "C" void DWC_Free(int, void *, u32);
 
 struct Alloc {
     void deallocate(char *p) {
         if (p) {
-            ov00_021EC2EC(0, p, 0);
+            DWC_Free(0, p, 0);
         }
     }
 };

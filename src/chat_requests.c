@@ -79,7 +79,7 @@ ChatRequest *ciFindFilter(ChatConnection *chat, int count, const ChatRequestKey 
             if (!((name2 == NULL && request->name2 == NULL) || (name2 != NULL && request->name2 != NULL && strnicmp(name2, request->name2) == 0))) {
                 continue;
             }
-            request->expireTime = ov00_021FF368() + REQUEST_TIMEOUT;
+            request->expireTime = current_time() + REQUEST_TIMEOUT;
             return request;
         }
     }
@@ -104,10 +104,10 @@ ChatRequest *ciFindGetKeyFilter(ChatConnection *chat, const char *channel) {
 
 void ciDestroyFilter(ChatRequest *request) {
     ASSERT(request, ov45_02256644, ov45_02255FC4, 403);
-    ov00_021EC3D8(request->data);
-    ov00_021EC3D8(request->name);
-    ov00_021EC3D8(request->name2);
-    ov00_021EC3D8(request);
+    DWCi_GsFree(request->data);
+    DWCi_GsFree(request->name);
+    DWCi_GsFree(request->name2);
+    DWCi_GsFree(request);
 }
 
 // Unlinks and frees the request.
@@ -153,12 +153,12 @@ void ciFinishFilter(ChatConnection *chat, ChatRequest *request, u32 *results) {
             ciAddCallback_(chat, 14, request->callback2, results, request->param, request->id, NULL, 20);
         }
         for (i = 0; i < data->channels.count; i++) {
-            ov00_021EC3D8(data->channels.names[i]);
-            ov00_021EC3D8(data->channels.topics[i]);
+            DWCi_GsFree(data->channels.names[i]);
+            DWCi_GsFree(data->channels.topics[i]);
         }
-        ov00_021EC3D8(data->channels.names);
-        ov00_021EC3D8(data->channels.topics);
-        ov00_021EC3D8(data->channels.numUsers);
+        DWCi_GsFree(data->channels.names);
+        DWCi_GsFree(data->channels.topics);
+        DWCi_GsFree(data->channels.numUsers);
     } else if (request->type == 1) {
         if (request->callback) {
             ciAddCallback_(chat, 15, request->callback, results, request->param, request->id, NULL, 12);
@@ -174,22 +174,22 @@ void ciFinishFilter(ChatConnection *chat, ChatRequest *request, u32 *results) {
             ciAddCallback_(chat, 19, request->callback, results, request->param, request->id, NULL, 20);
         }
         for (i = 0; i < data->nicks.count; i++) {
-            ov00_021EC3D8(data->nicks.nicks[i]);
+            DWCi_GsFree(data->nicks.nicks[i]);
         }
-        ov00_021EC3D8(data->nicks.nicks);
-        ov00_021EC3D8(data->nicks.modes);
+        DWCi_GsFree(data->nicks.nicks);
+        DWCi_GsFree(data->nicks.modes);
     } else if (request->type == 4) {
         data = request->data;
         if (request->callback) {
             ciAddCallback_(chat, 20, request->callback, results, request->param, request->id, NULL, 28);
         }
         for (i = 0; i < data->whois.channelCount; i++) {
-            ov00_021EC3D8(data->whois.channels[i]);
+            DWCi_GsFree(data->whois.channels[i]);
         }
-        ov00_021EC3D8(data->whois.channels);
-        ov00_021EC3D8(data->whois.realName);
-        ov00_021EC3D8(data->whois.address);
-        ov00_021EC3D8(data->whois.user);
+        DWCi_GsFree(data->whois.channels);
+        DWCi_GsFree(data->whois.realName);
+        DWCi_GsFree(data->whois.address);
+        DWCi_GsFree(data->whois.user);
     } else if (request->type == 10) {
         if (request->callback) {
             ciAddCallback_(chat, 21, request->callback, results, request->param, request->id, NULL, 16);
@@ -207,14 +207,14 @@ void ciFinishFilter(ChatConnection *chat, ChatRequest *request, u32 *results) {
             ciAddCallback_(chat, 23, request->callback, results, request->param, request->id, NULL, 16);
         }
     } else if (request->type == 7) {
-        ov00_021EC3D8(*(void **)request->data);
+        DWCi_GsFree(*(void **)request->data);
     } else if (request->type == 8) {
         data = request->data;
         if (request->callback) {
             ciAddCallback_(chat, 24, request->callback, results, request->param, request->id, NULL, 16);
         }
         for (i = 0; i < data->banList.count; i++) {
-            ov00_021EC3D8(data->banList.bans[i]);
+            DWCi_GsFree(data->banList.bans[i]);
         }
     } else if (request->type == 9) {
         if (request->callback) {
@@ -225,39 +225,39 @@ void ciFinishFilter(ChatConnection *chat, ChatRequest *request, u32 *results) {
         if (request->callback) {
             ciAddCallback_(chat, 29, request->callback, results, request->param, request->id, NULL, 20);
         }
-        ov00_021EC3D8(data->keys.arg.channel);
+        DWCi_GsFree(data->keys.arg.channel);
         for (i = 0; i < data->keys.count; i++) {
-            ov00_021EC3D8(data->keys.keys[i]);
+            DWCi_GsFree(data->keys.keys[i]);
         }
-        ov00_021EC3D8(data->keys.keys);
+        DWCi_GsFree(data->keys.keys);
     } else if (request->type == 13) {
         data = request->data;
         if (request->callback) {
             ciAddCallback_(chat, 30, request->callback, results, request->param, request->id, NULL, 24);
         }
         for (i = 0; i < data->keys.count; i++) {
-            ov00_021EC3D8(data->keys.keys[i]);
+            DWCi_GsFree(data->keys.keys[i]);
         }
-        ov00_021EC3D8(data->keys.keys);
+        DWCi_GsFree(data->keys.keys);
     } else if (request->type == 14) {
         data = request->data;
         if (request->callback) {
             ciAddCallback_(chat, 30, request->callback, results, request->param, request->id, NULL, 24);
         }
         for (i = 0; i < data->keys.count; i++) {
-            ov00_021EC3D8(data->keys.keys[i]);
+            DWCi_GsFree(data->keys.keys[i]);
         }
-        ov00_021EC3D8(data->keys.keys);
+        DWCi_GsFree(data->keys.keys);
     } else if (request->type == 15) {
         data = request->data;
         if (request->callback) {
             ciAddCallback_(chat, 27, request->callback, results, request->param, request->id, NULL, 16);
         }
         for (i = 0; i < data->nicks.count; i++) {
-            ov00_021EC3D8(data->nicks.nicks[i]);
+            DWCi_GsFree(data->nicks.nicks[i]);
         }
-        ov00_021EC3D8(data->nicks.nicks);
-        ov00_021EC3D8(data->nicks.modes);
+        DWCi_GsFree(data->nicks.nicks);
+        DWCi_GsFree(data->nicks.modes);
     } else if (request->type == 16) {
         if (request->callback) {
             ciAddCallback_(chat, 31, request->callback, results, request->param, request->id, NULL, 8);
@@ -432,7 +432,7 @@ void ciFilterThink(ChatConnection *chat) {
     ChatRequest *request, *next;
     u32 now;
     ASSERT_CHAT(chat, ov45_02255EC4, 794);
-    now = ov00_021FF368();
+    now = current_time();
     for (request = chat->requests; request; request = next) {
         next = request->next;
         if (now > request->expireTime) {
@@ -480,19 +480,19 @@ void ciCleanupFilters(ChatConnection *chat) {
 int ciAddFilter(ChatConnection *chat, int type, const char *name, const char *name2, void *callback, void *callback2, void *param, void *data) {
     ChatRequest *request;
     ASSERT_CHAT(chat, ov45_02255E6C, 860);
-    request = ov00_021EC3A8(sizeof(ChatRequest));
+    request = DWCi_GsMalloc(sizeof(ChatRequest));
     if (!request) {
         return 0;
     }
     memset(request, 0, sizeof(ChatRequest));
     request->type = type;
-    request->expireTime = ov00_021FF368() + REQUEST_TIMEOUT;
+    request->expireTime = current_time() + REQUEST_TIMEOUT;
     request->callback = callback;
     request->callback2 = callback2;
     request->param = param;
     request->data = data;
-    request->name = name ? ov00_021FF3D4(name) : NULL;
-    request->name2 = name2 ? ov00_021FF3D4(name2) : NULL;
+    request->name = name ? goastrdup(name) : NULL;
+    request->name2 = name2 ? goastrdup(name2) : NULL;
     request->id = ciGetNextID(chat);
     if (!chat->requests) {
         chat->requests = request;
@@ -504,7 +504,7 @@ int ciAddFilter(ChatConnection *chat, int type, const char *name, const char *na
 }
 
 int ciAddLISTFilter(ChatConnection *chat, void *callbackEach, void *callbackAll, void *param) {
-    void *data = ov00_021EC3A8(sizeof(ChatChannelListData));
+    void *data = DWCi_GsMalloc(sizeof(ChatChannelListData));
     if (!data) {
         return 0;
     }
@@ -517,7 +517,7 @@ int ciAddJOINFilter(ChatConnection *chat, const char *channel, void *callback, v
     int id;
     ASSERT(password, ov45_022566A8, ov45_02255F94, 913);
     ASSERT(strlen(password) < 32, ov45_022566BC, ov45_02255F94, 914);
-    data = ov00_021EC3A8(sizeof(ChatEnterData));
+    data = DWCi_GsMalloc(sizeof(ChatEnterData));
     if (!data) {
         return 0;
     }
@@ -527,13 +527,13 @@ int ciAddJOINFilter(ChatConnection *chat, const char *channel, void *callback, v
     data->password[31] = 0;
     id = ciAddFilter(chat, 1, channel, NULL, callback, NULL, param, data);
     if (!id) {
-        ov00_021EC3D8(data);
+        DWCi_GsFree(data);
     }
     return id;
 }
 
 int ciAddNAMESFilter(ChatConnection *chat, const char *channel, ChatEnumUsersFunc callback, void *param) {
-    void *data = ov00_021EC3A8(sizeof(ChatNickListData));
+    void *data = DWCi_GsMalloc(sizeof(ChatNickListData));
     if (!data) {
         return 0;
     }
@@ -548,7 +548,7 @@ int ciAddCMODEFilter(ChatConnection *chat, const char *channel, void *callback, 
 // Copies the keys, without the empty ones.
 int ciAddGETCKEYFilter(ChatConnection *chat, const char *cookie, int count, const char **keys, BOOL allUsers, BOOL broadcastKeys, void *callback, void *param) {
     int i, j;
-    ChatKeysData *data = ov00_021EC3A8(sizeof(ChatKeysData));
+    ChatKeysData *data = DWCi_GsMalloc(sizeof(ChatKeysData));
     if (!data) {
         return 0;
     }
@@ -559,9 +559,9 @@ int ciAddGETCKEYFilter(ChatConnection *chat, const char *cookie, int count, cons
     if (broadcastKeys) {
         data->count--;
     }
-    data->keys = ov00_021EC3A8(data->count * 4);
+    data->keys = DWCi_GsMalloc(data->count * 4);
     if (!data->keys) {
-        ov00_021EC3D8(data);
+        DWCi_GsFree(data);
         return 0;
     }
     i = 0;
@@ -569,13 +569,13 @@ int ciAddGETCKEYFilter(ChatConnection *chat, const char *cookie, int count, cons
     for (; i < count; i++) {
         const char *key = keys[i];
         if (strcmp(key, ov45_022566DC) != 0) {
-            data->keys[j] = ov00_021FF3D4(key);
+            data->keys[j] = goastrdup(key);
             if (!data->keys[j]) {
                 for (j--; j >= 0; j--) {
-                    ov00_021EC3D8(data->keys[j]);
+                    DWCi_GsFree(data->keys[j]);
                 }
-                ov00_021EC3D8(data->keys);
-                ov00_021EC3D8(data);
+                DWCi_GsFree(data->keys);
+                DWCi_GsFree(data);
                 return 0;
             }
             j++;
@@ -587,7 +587,7 @@ int ciAddGETCKEYFilter(ChatConnection *chat, const char *cookie, int count, cons
 
 int ciAddGETCHANKEYFilter(ChatConnection *chat, const char *cookie, int count, const char **keys, BOOL broadcastKeys, void *callback, void *param) {
     int i, j;
-    ChatKeysData *data = ov00_021EC3A8(12);
+    ChatKeysData *data = DWCi_GsMalloc(12);
     const char *key;
     if (!data) {
         return 0;
@@ -613,9 +613,9 @@ int ciAddGETCHANKEYFilter(ChatConnection *chat, const char *cookie, int count, c
         data->count--;
     }
     if (data->count != 0) {
-        data->keys = ov00_021EC3A8(data->count * 4);
+        data->keys = DWCi_GsMalloc(data->count * 4);
         if (!data->keys) {
-            ov00_021EC3D8(data);
+            DWCi_GsFree(data);
             return 0;
         }
         for (i = 0, j = 0; i < count; i++) {
@@ -623,13 +623,13 @@ int ciAddGETCHANKEYFilter(ChatConnection *chat, const char *cookie, int count, c
             if (strcmp(key, ov45_022566DC) == 0) {
                 continue;
             }
-            data->keys[j] = ov00_021FF3D4(key);
+            data->keys[j] = goastrdup(key);
             if (!data->keys[j]) {
                 for (--j; j >= 0; j--) {
-                    ov00_021EC3D8(data->keys[j]);
+                    DWCi_GsFree(data->keys[j]);
                 }
-                ov00_021EC3D8(data->keys);
-                ov00_021EC3D8(data);
+                DWCi_GsFree(data->keys);
+                DWCi_GsFree(data);
                 return 0;
             }
             j++;
@@ -738,9 +738,9 @@ ChatModeChange *ciParseMode(const char *modes, const char **args, int argCount) 
         }
         if (type != -1) {
             ChatModeChange *change;
-            ChatModeChange *grown = ov00_021EC3BC(changes, (count + 1) * sizeof(ChatModeChange));
+            ChatModeChange *grown = DWCi_GsRealloc(changes, (count + 1) * sizeof(ChatModeChange));
             if (grown == NULL) {
-                ov00_021EC3D8(changes);
+                DWCi_GsFree(changes);
                 return NULL;
             }
             changes = grown;

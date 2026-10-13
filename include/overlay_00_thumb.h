@@ -13,7 +13,7 @@ void WifiConnection_StopVoiceChat(void);
 void WifiConnection_StartVoiceChat(s32 arg0);
 void WifiConnection_SetOwnStatusData(void *arg0, s32 arg1);
 void WifiConnection_SetVoiceChatEnabled(u8 arg0);
-void ov00_021EC454(s32 arg0);
+void DWC_SetAuthServer(s32 arg0);
 void WifiConnection_SetExtraHeapEnabled(s32 arg0, s32 arg1);
 s32 WifiConnection_GetFriendStatus(s32 arg0);
 s32 WifiConnection_GetNewClientIndex(void);

@@ -57,19 +57,19 @@ extern u32 ov45_022577D0;
 extern u32 ov45_022551A4;
 extern unsigned char __lower_mapC[];
 
-void ov00_021EC2EC(int, void *, int);
-void *ov45_02242394(u32);
+void DWC_Free(int, void *, int);
+void *LobbyMem_Alloc(u32);
 void ov45_0223BD0C(void);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
-Str *ov45_02237DB4(Str *, u32, u32, void *);
-void ov45_0223DB08(Str *, u32, u32, const char *);
+Str *LobbyString_Replace(Str *, u32, u32, void *);
+void LobbyString_ReplaceCStr(Str *, u32, u32, const char *);
 
 typedef struct Tag {
     u8 c;
 } Tag;
 
-void ov45_02238104(Str *, u32, u32, const char *, const char *, Tag);
-int ov45_02238024(const u8 *, u32, u32, const void *, u32);
+void LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, Tag);
+int LobbyString_CompareChars(const u8 *, u32, u32, const void *, u32);
 
 static inline BOOL StrIsShort(const Str *s) {
     return !s->l.isLong;
@@ -234,12 +234,12 @@ typedef struct Callbacks {
     void (*onData)(int id, SessionInfo *info, const char *data, u32 size);
 } Callbacks;
 
-Callbacks *ov45_022310B0(void);
+Callbacks *PPWLobby_GetWork(void);
 const char *ov45_02231C78(void *);
 void ov45_0223DCD0(Session *s);
 
 extern VTable ov45_02254FB0;
-void ov00_021ECB94(RTCDate *date, RTCTime *time);
+void DWC_GetDateTime(RTCDate *date, RTCTime *time);
 void ov45_0223E648(InsertResult *out, List *l, Session **key);
 
 typedef struct PtrDeque {
@@ -260,10 +260,10 @@ extern char ov45_022551F4[];
 extern char ov45_022551F8[];
 extern char ov45_022551FC[];
 void ov45_02232B24(Str *out, u32 width, const char *fmt, ...);
-void ov45_02237BC8(Str *s);
-void ov45_0223DA6C(Str *s, void *arg);
-void ov45_0223DAA0(Str *s, const char *arg);
-void ov45_0223DAD4(Str *s, const char *arg);
+void LobbyString_Destroy(Str *s);
+void LobbyString_Append(Str *s, void *arg);
+void LobbyString_AppendCStr(Str *s, const char *arg);
+void LobbyString_AssignCStr(Str *s, const char *arg);
 int ov00_021EFF30(const void *src, u32 len, char *dst, u32 dstLen);
 void MI_CpuFill8(void *dst, u8 val, u32 size);
 
@@ -289,7 +289,7 @@ void ov45_0223EC64(SplitBuf *b);
 int ov45_0223D7B4(int c);
 BOOL ov45_0223D7D4(int type, int mode, u32 value, const void *data, u32 len, Str *out);
 void ov45_0223DA3C(CharVec *s, const char *c);
-int ov45_0223DB54(const u8 *s, u32 a, u32 b, const u8 *o);
+int LobbyString_CompareSubstring(const u8 *s, u32 a, u32 b, const u8 *o);
 
 int ov45_0223D7B4(int c) {
     if (c < 0 || c >= 0x80) {
@@ -310,55 +310,55 @@ BOOL ov45_0223D7D4(int type, int mode, u32 value, const void *data, u32 len, Str
     if (type == 1 && len > 300) {
         return FALSE;
     }
-    ov45_0223DAD4(out, ov45_022551EC);
+    LobbyString_AssignCStr(out, ov45_022551EC);
     ov45_02232B24(&s0, 3, ov45_022551F0, 0);
-    ov45_0223DA6C(out, &s0);
-    ov45_02237BC8(&s0);
-    ov45_0223DAA0(out, ov45_022551E0);
+    LobbyString_Append(out, &s0);
+    LobbyString_Destroy(&s0);
+    LobbyString_AppendCStr(out, ov45_022551E0);
     ov45_02232B24(&s1, 2, ov45_022551F0, 6);
-    ov45_0223DA6C(out, &s1);
-    ov45_02237BC8(&s1);
-    ov45_0223DAA0(out, ov45_022551E0);
+    LobbyString_Append(out, &s1);
+    LobbyString_Destroy(&s1);
+    LobbyString_AppendCStr(out, ov45_022551E0);
     switch (type) {
     case 0:
-        ov45_0223DAA0(out, ov45_022551E8);
+        LobbyString_AppendCStr(out, ov45_022551E8);
         break;
     case 1:
-        ov45_0223DAA0(out, ov45_022551E4);
+        LobbyString_AppendCStr(out, ov45_022551E4);
         break;
     default:
         return FALSE;
     }
-    ov45_0223DAA0(out, ov45_022551E0);
+    LobbyString_AppendCStr(out, ov45_022551E0);
     switch (mode) {
     case 1:
-        ov45_0223DAA0(out, ov45_022551F4);
+        LobbyString_AppendCStr(out, ov45_022551F4);
         break;
     case 0:
-        ov45_0223DAA0(out, ov45_022551E8);
+        LobbyString_AppendCStr(out, ov45_022551E8);
         break;
     default:
         return FALSE;
     }
-    ov45_0223DAA0(out, ov45_022551E0);
+    LobbyString_AppendCStr(out, ov45_022551E0);
     ov45_02232B24(&s2, 8, ov45_022551F0, value);
-    ov45_0223DA6C(out, &s2);
-    ov45_02237BC8(&s2);
-    ov45_0223DAA0(out, ov45_022551E0);
-    ov45_0223DAA0(out, ov45_022551F8);
-    ov45_0223DAA0(out, ov45_022551DC);
+    LobbyString_Append(out, &s2);
+    LobbyString_Destroy(&s2);
+    LobbyString_AppendCStr(out, ov45_022551E0);
+    LobbyString_AppendCStr(out, ov45_022551F8);
+    LobbyString_AppendCStr(out, ov45_022551DC);
     switch (type) {
     case 0:
         ov45_02232B24(&s3, len, ov45_022551FC, data);
-        ov45_0223DA6C(out, &s3);
-        ov45_02237BC8(&s3);
+        LobbyString_Append(out, &s3);
+        LobbyString_Destroy(&s3);
         break;
     case 1:
         MI_CpuFill8(buf, 0, sizeof(buf));
         if (ov00_021EFF30(data, len, buf, sizeof(buf)) == -1) {
             return FALSE;
         }
-        ov45_0223DAA0(out, buf);
+        LobbyString_AppendCStr(out, buf);
         break;
     default:
         return FALSE;
@@ -372,24 +372,24 @@ void ov45_0223DA3C(CharVec *s, const char *c) {
     ov45_0223DB8C(s, 1, c);
 }
 
-void ov45_0223DA6C(Str *s, void *arg) {
-    ov45_02237DB4(s, StrSize(s), 0, arg);
+void LobbyString_Append(Str *s, void *arg) {
+    LobbyString_Replace(s, StrSize(s), 0, arg);
 }
 
-void ov45_0223DAA0(Str *s, const char *arg) {
-    ov45_0223DB08(s, StrSize(s), 0, arg);
+void LobbyString_AppendCStr(Str *s, const char *arg) {
+    LobbyString_ReplaceCStr(s, StrSize(s), 0, arg);
 }
 
-void ov45_0223DAD4(Str *s, const char *arg) {
-    ov45_0223DB08(s, 0, StrSize(s), arg);
+void LobbyString_AssignCStr(Str *s, const char *arg) {
+    LobbyString_ReplaceCStr(s, 0, StrSize(s), arg);
 }
 
-void ov45_0223DB08(Str *s, u32 a, u32 b, const char *str) {
+void LobbyString_ReplaceCStr(Str *s, u32 a, u32 b, const char *str) {
     Tag x;
-    ov45_02238104(s, a, b, str, str + strlen(str), x);
+    LobbyString_ReplaceRange(s, a, b, str, str + strlen(str), x);
 }
 
-int ov45_0223DB54(const u8 *s, u32 a, u32 b, const u8 *input) {
+int LobbyString_CompareSubstring(const u8 *s, u32 a, u32 b, const u8 *input) {
     const Str *o = (const Str *)input;
     u32 n;
     const char *p;
@@ -400,5 +400,5 @@ int ov45_0223DB54(const u8 *s, u32 a, u32 b, const u8 *input) {
         p = o->l.ptr;
         n = o->l.size;
     }
-    return ov45_02238024(s, a, b, p, n);
+    return LobbyString_CompareChars(s, a, b, p, n);
 }

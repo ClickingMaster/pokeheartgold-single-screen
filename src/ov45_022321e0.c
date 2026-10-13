@@ -22,17 +22,17 @@ typedef struct {
 
 extern Work *volatile _022577C4;
 extern void ov45_022320B4(String *, void *);
-extern void ov45_02237BC8(String *);
+extern void LobbyString_Destroy(String *);
 extern int ov45_02240A80(char *);
 
 static inline BOOL active(Work *w) {
     return w->mode == 5 ? FALSE : TRUE;
 }
 
-int ov45_022321E0(void);
+int PPW_LobbyGetSubChannelState(void);
 #pragma opt_propagation off
 
-int ov45_022321E0(void) {
+int PPW_LobbyGetSubChannelState(void) {
     String text;
     Work *w = _022577C4;
     int result;
@@ -53,7 +53,7 @@ int ov45_022321E0(void) {
     }
     ov45_022320B4(&text, &w->mode);
     result = ov45_02240A80(!text.flag ? &text.bytes[1] : *(char **)&text.raw[4]);
-    ov45_02237BC8(&text);
+    LobbyString_Destroy(&text);
     if (result) {
         return 2;
     }

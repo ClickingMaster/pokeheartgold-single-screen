@@ -27,8 +27,8 @@ typedef struct Hooks {
 } Hooks;
 
 extern u8 *ov45_022577DC;
-void ov45_02237B58(String *, const char *);
-void ov45_02237BC8(String *);
+void LobbyString_InitFromCStr(String *, const char *);
+void LobbyString_Destroy(String *);
 int ov45_02243808(void *, String *);
 int chatGetChannelNumUsersA(int, const char *);
 char *ov45_02242A2C(String *);
@@ -54,56 +54,56 @@ void ov45_0223F32C(void *unused, const char *key, const char *value) {
     if (ov45_022577DC && *(int *)(ov45_022577DC + 4) == 5) {
         return;
     }
-    ov45_02237B58(&a, key);
+    LobbyString_InitFromCStr(&a, key);
     exists = ov45_02243808(ov45_022577DC, &a);
-    ov45_02237BC8(&a);
+    LobbyString_Destroy(&a);
     if (exists && chatGetChannelNumUsersA(*(int *)ov45_022577DC, key) > exists) {
         return;
     }
-    ov45_02237B58(&b, value);
+    LobbyString_InitFromCStr(&b, value);
     ov45_0224367C(&result, ov45_022577DC, ov45_02242A2C(&b));
-    ov45_02237BC8(&b);
-    ov45_02237B58(&c, key);
+    LobbyString_Destroy(&b);
+    LobbyString_InitFromCStr(&c, key);
     exists = ov45_02243280(ov45_022577DC, &result, &c);
-    ov45_02237BC8(&c);
+    LobbyString_Destroy(&c);
     if (exists) {
-        ov45_02237B58(&d, key);
+        LobbyString_InitFromCStr(&d, key);
         hooks = ov45_02242C3C(ov45_022577DC, &d);
-        ov45_02237BC8(&d);
-        ov45_02237B58(&e, key);
+        LobbyString_Destroy(&d);
+        LobbyString_InitFromCStr(&e, key);
         ov45_022428D8(&f, ov45_022577DC, &e);
-        ov45_02237B58(&g, value);
+        LobbyString_InitFromCStr(&g, value);
         {
             String *second = &g;
             char *first = getStringData(&f);
             hooks->second(first, ov45_02242A2C(second), hooks->arg);
         }
-        ov45_02237BC8(&g);
-        ov45_02237BC8(&f);
-        ov45_02237BC8(&e);
+        LobbyString_Destroy(&g);
+        LobbyString_Destroy(&f);
+        LobbyString_Destroy(&e);
     }
-    ov45_02237B58(&h, value);
-    ov45_02237B58(&i, key);
+    LobbyString_InitFromCStr(&h, value);
+    LobbyString_InitFromCStr(&i, key);
     index = ov45_02242D30(ov45_022577DC, &h, &i);
-    ov45_02237BC8(&i);
-    ov45_02237BC8(&h);
+    LobbyString_Destroy(&i);
+    LobbyString_Destroy(&h);
     if (index == -1) {
-        ov45_02237BC8(&result);
+        LobbyString_Destroy(&result);
         return;
     }
-    ov45_02237B58(&j, key);
+    LobbyString_InitFromCStr(&j, key);
     exists = ov45_02243794(ov45_022577DC, &j);
-    ov45_02237BC8(&j);
+    LobbyString_Destroy(&j);
     if (exists) {
-        ov45_02237B58(&k, key);
+        LobbyString_InitFromCStr(&k, key);
         hooks = ov45_02242C3C(ov45_022577DC, &k);
-        ov45_02237BC8(&k);
-        ov45_02237B58(&l, key);
+        LobbyString_Destroy(&k);
+        LobbyString_InitFromCStr(&l, key);
         ov45_022428D8(&m, ov45_022577DC, &l);
         hooks->first(getStringData(&m), index, hooks->arg);
-        ov45_02237BC8(&m);
-        ov45_02237BC8(&l);
+        LobbyString_Destroy(&m);
+        LobbyString_Destroy(&l);
     }
-    ov45_02237BC8(&result);
+    LobbyString_Destroy(&result);
     (void)unused;
 }

@@ -19,17 +19,17 @@ typedef struct {
     void *root, *last;
 } Tree;
 
-extern void ov00_021EC2EC(int, void *, int);
-extern void ov00_021EC3D8(void *);
-extern void ov45_02237A24(void *, void *);
-extern void ov45_02237BC8(void *);
+extern void DWC_Free(int, void *, int);
+extern void DWCi_GsFree(void *);
+extern void LobbyString_InitCopy(void *, void *);
+extern void LobbyString_Destroy(void *);
 extern void ov45_02242C74(void **, void *, void *);
 extern void __msl_assertion_failed(char *, char *, char *, int);
-extern void *ov00_021FE5B4(int, int, void (*)(void *));
+extern void *ArrayNew(int, int, void (*)(void *));
 extern char ov45_02255458[];
 extern char ov45_02255468[];
 extern char ov45_02255438[];
-extern int ov45_02237F7C(void *, void *);
+extern int LobbyString_Compare(void *, void *);
 extern void ov45_02243780(void *p, int a, void *b);
 extern int ov45_02243794(void *p, void *key);
 extern int ov45_022437CC(void *p, void *key);
@@ -49,8 +49,8 @@ extern void ov45_0224447C(void *p, void *node);
 extern void ov45_022444C8(void *p);
 extern int ciInitCallbacks(void *p);
 extern int ArrayLength(void *);
-extern void *ov00_021FE6EC(void *, int);
-extern void ov00_021FE678(void *);
+extern void *ArrayNth(void *, int);
+extern void ArrayFree(void *);
 extern void ciFreeCallbackData(void *);
 extern char ov45_022554F0[];
 extern char ov45_0225540C[];
@@ -125,9 +125,9 @@ void ov45_022442D4(void *p, void *node) {
         ov45_022442D4(p, P(node, 4));
     }
     ov45_02243F1C(A(node, 28));
-    ov45_02237BC8(A(node, 12));
+    LobbyString_Destroy(A(node, 12));
     if (node) {
-        ov00_021EC2EC(0, node, 0);
+        DWC_Free(0, node, 0);
     }
 }
 
@@ -173,7 +173,7 @@ void ov45_022443DC(void *p, void *node) {
         ov45_022443DC(p, P(node, 4));
     }
     if (node) {
-        ov00_021EC2EC(0, node, 0);
+        DWC_Free(0, node, 0);
     }
 }
 
@@ -184,9 +184,9 @@ void ov45_02244428(void *p, void *node) {
     if (P(node, 4)) {
         ov45_02244428(p, P(node, 4));
     }
-    ov45_02237BC8(A(node, 16));
+    LobbyString_Destroy(A(node, 16));
     if (node) {
-        ov00_021EC2EC(0, node, 0);
+        DWC_Free(0, node, 0);
     }
 }
 
@@ -198,7 +198,7 @@ void ov45_0224447C(void *p, void *node) {
         ov45_0224447C(p, P(node, 4));
     }
     if (node) {
-        ov00_021EC2EC(0, node, 0);
+        DWC_Free(0, node, 0);
     }
 }
 
@@ -206,5 +206,5 @@ void ov45_022444C8(void *p) {
     if (!p) {
         __msl_assertion_failed(ov45_02255458, ov45_02255468, ov45_02255438, 164);
     }
-    ov00_021EC3D8(P(p, 20));
+    DWCi_GsFree(P(p, 20));
 }

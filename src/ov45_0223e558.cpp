@@ -77,7 +77,7 @@ struct Map {
 };
 
 extern "C" void ov45_0223DCD0(Obj *obj);
-extern "C" Handler *ov45_022310B0(void);
+extern "C" Handler *PPWLobby_GetWork(void);
 extern "C" void *ov45_02231C78(void *p);
 
 inline Triple MakeAddr(Obj *o) {
@@ -118,7 +118,7 @@ extern "C" void ov45_0223E558(Map *m) {
                 Triple b = t;
                 x = o2->unk1C;
                 y = it.n->value->unk2C;
-                Handler *h = ov45_022310B0();
+                Handler *h = PPWLobby_GetWork();
                 h->func(y, &b, ov45_02231C78(o2->unk18), x);
                 it.n->value->unk38 = 1;
                 break;

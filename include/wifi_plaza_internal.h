@@ -339,7 +339,7 @@ typedef struct WiFiPlazaWork {
     WiFiPlazaPlace places[50]; // filled by WiFiPlaza_FillPlaces from the profile
     u32 currentTime;
     s64 lobbyTime;     // WiFiPlazaLobbyClient_GetTime, refreshed every frame
-    s64 lobbyOpenTime; // ov45_022320C4 when the lobby opened (WiFiPlaza_OnLobbyEvent 0)
+    s64 lobbyOpenTime; // PPW_LobbyGetTimeInfo when the lobby opened (WiFiPlaza_OnLobbyEvent 0)
     PlayerProfile *profiles[4];
     u32 changeFlags[4]; // per lobby slot: entered, left, events, updated (WiFiPlazaWork_TakePlayerEntered / A25C / A288 / A2A0)
     WiFiPlazaProfile profile;
@@ -590,7 +590,7 @@ typedef struct WiFiPlazaLobbyClient {
     WiFiPlazaLobbyCommandTable commandTables[2]; // lobby, channel
     s64 time;                                    // lobby time, refreshed every frame
     u8 unk_1a4[0x10];
-    WiFiPlazaLobbyClientUnk1B4 unk_1b4; // received with ov45_02232170 (WiFiPlazaLobbyClient_OnEnterChannel)
+    WiFiPlazaLobbyClientUnk1B4 unk_1b4; // received with PPW_LobbyGetSchedule (WiFiPlazaLobbyClient_OnEnterChannel)
     u32 unk_5b4;                        // its size
     WiFiPlazaLobbyMatch matches[3];
     u16 currentMatch; // 3 = none
@@ -598,7 +598,7 @@ typedef struct WiFiPlazaLobbyClient {
     u8 unk_69f;
     WiFiPlazaLobbyClientUnk6A0 unk_6a0;
     u32 unk_980;
-    int initResult; // ov45_022310C0
+    int initResult; // PPW_LobbyInitializeAsync
 } WiFiPlazaLobbyClient;
 
 // wifi_plaza_work.c
@@ -1158,31 +1158,31 @@ extern void (*const ov45_02254A60[9])(WiFiPlazaWork *work, WiFiPlazaLobbyMessage
 
 // defined in the other overlay 45 files
 // lobby library
-int ov45_02232170(WiFiPlazaLobbyClientUnk1B4 *data, u32 *size);
-int ov45_022322A4(int a0, int a1, const char *key, const void *data, u32 size);
-void ov45_02232304(int a0, int a1, const char *key, int a3);
-int ov45_022310C0(const void *a0, const void *a1, int mode, void (**callbacks)(void), void *userData, int value, u32 playerDataSize);
-int ov45_02231490(void);
-int ov45_02231514(void);
-int ov45_02231C8C(int channel);
-int ov45_02231EC0(void);
-int ov45_022321E0(void);
-int ov45_0223247C(int channel, int type, const void *data, int size);
-int ov45_02232500(int id, int type, const void *data, int size);
-int ov45_02232580(void);
-void ov45_022325B0(WiFiPlazaPlayer *player, u32 size, int a2);
-int ov45_0223285C(WiFiPlazaLobbyMatch *match);
-int ov45_02232BB0(WiFiPlazaLobbyMatch *match);
-int ov45_02232CA4(void);
-int ov45_02232E60(int index);
-void ov45_022331E8(void);
-void ov45_02233204(void);
+int PPW_LobbyGetSchedule(WiFiPlazaLobbyClientUnk1B4 *data, u32 *size);
+int PPW_LobbySetChannelData(int a0, int a1, const char *key, const void *data, u32 size);
+void PPW_LobbyGetChannelDataAsync(int a0, int a1, const char *key, int a3);
+int PPW_LobbyInitializeAsync(const void *a0, const void *a1, int mode, void (**callbacks)(void), void *userData, int value, u32 playerDataSize);
+int PPW_LobbyShutdownAsync(void);
+int PPW_LobbyProcess(void);
+int PPW_LobbyJoinSubChannelAsync(int channel);
+int PPW_LobbyLeaveSubChannel(void);
+int PPW_LobbyGetSubChannelState(void);
+int PPW_LobbySendChannelBinaryMessage(int channel, int type, const void *data, int size);
+int PPW_LobbySendPlayerBinaryMessage(int id, int type, const void *data, int size);
+int PPW_LobbyGetMyUserId(void);
+void PPW_LobbyUpdateMyProfile(WiFiPlazaPlayer *player, u32 size, int a2);
+int PPW_LobbyStartRecruit(WiFiPlazaLobbyMatch *match);
+int PPW_LobbyUpdateRecruitInfo(WiFiPlazaLobbyMatch *match);
+int PPW_LobbyStopRecruit(void);
+int PPW_LobbySubmitQuestionnaire(int index);
+void PPW_LobbyGetLastError(void);
+void PPW_LobbyToErrorCode(void);
 void ov45_02233220(void);
 extern const u8 ov45_02254C30[4]; // room per channel
 extern const char *ov45_02254EF0; // lobby data key of the location list
 extern const u8 ov45_02254F04[];
 extern const u8 ov45_02254F14[];
-void ov45_022320C4(void *a0);
+void PPW_LobbyGetTimeInfo(void *a0);
 
 extern const WiFiPlazaAvatarEntry ov45_02254A84[16];
 extern u8 ov45_02254AC4[];

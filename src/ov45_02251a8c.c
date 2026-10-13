@@ -91,7 +91,7 @@ BOOL ov45_02251BE0(ChatBuffer *buffer) {
     ASSERT(buffer, ov45_02257248, ov45_02257174, 95);
     buffer->length = 0;
     buffer->size = 0x2000;
-    buffer->data = ov00_021EC3A8(0x2001);
+    buffer->data = DWCi_GsMalloc(0x2001);
     if (!buffer->data) {
         return FALSE;
     }
@@ -100,7 +100,7 @@ BOOL ov45_02251BE0(ChatBuffer *buffer) {
 }
 
 void ov45_02251C40(ChatBuffer *buffer) {
-    ov00_021EC3D8(buffer->data);
+    DWCi_GsFree(buffer->data);
 }
 
 // Makes room for length more bytes (the size grows in steps of 0x2000).
@@ -115,7 +115,7 @@ BOOL ov45_02251C50(ChatBuffer *buffer, int length) {
     }
     size = buffer->length + length + 0x2000;
     size -= size % 0x2000;
-    data = ov00_021EC3BC(buffer->data, size + 1);
+    data = DWCi_GsRealloc(buffer->data, size + 1);
     if (!data) {
         return FALSE;
     }

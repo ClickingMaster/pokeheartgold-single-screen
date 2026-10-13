@@ -41,8 +41,8 @@ BOOL GlobalTerminalServer_DownloadVideo(u32 argLow, u32 argHigh, int arg2, void 
 BOOL ov39_0222A4C0(u32 argLow, u32 argHigh, void *response);
 
 // no public header
-void ov00_021EC210(void);
-void ov00_021EC8D8(void);
+void DWC_ClearError(void);
+void DWC_CleanupInet(void);
 void CommState_FreeWfcSession(void);
 u32 BattleRecord_sizeof(void);
 void *sub_0202FC74(void);
@@ -261,8 +261,8 @@ BOOL GlobalTerminalNet_SeqStopClient(GlobalTerminalNet *net) {
 }
 
 BOOL GlobalTerminalNet_SeqDisconnect(GlobalTerminalNet *net) {
-    ov00_021EC210();
-    ov00_021EC8D8();
+    DWC_ClearError();
+    DWC_CleanupInet();
     CommState_FreeWfcSession();
     net->unk_3C8 = 0;
     return TRUE;

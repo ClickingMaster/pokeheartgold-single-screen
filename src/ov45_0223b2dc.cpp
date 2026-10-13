@@ -85,7 +85,7 @@ struct WIt {
 };
 
 extern "C" void ov45_0223BF9C(Ring *r, It pos, WIt first, WIt last, Tag);
-extern "C" void *ov45_02242394(u32 n);
+extern "C" void *LobbyMem_Alloc(u32 n);
 extern "C" void ov45_0223B8D0(char *msg);
 extern char ov45_022551AC[];
 extern u32 ov45_022577C8;
@@ -290,7 +290,7 @@ extern "C" void ov45_0223B2DC(Deque *d, u32 n) {
     }
     if (nb + d->map.size <= d->map.capacity()) {
         for (; nb != 0; --nb) {
-            P p = (P)ov45_02242394(0x400);
+            P p = (P)LobbyMem_Alloc(0x400);
             d->map.back() = p;
             d->map.push_back(0);
         }
@@ -301,7 +301,7 @@ extern "C" void ov45_0223B2DC(Deque *d, u32 n) {
     ov45_0223B8E0(m, Max(d->map.capacity() * 2, nb + d->map.size + 1));
     m->push_back(0);
     for (; nb != 0; --nb) {
-        P p = (P)ov45_02242394(0x400);
+        P p = (P)LobbyMem_Alloc(0x400);
         m->back() = p;
         m->push_back(0);
     }

@@ -42,8 +42,8 @@ extern void ov45_0223325C(int, int, int, int, int, void *, int);
 extern void ov45_02232DDC(void *, void *, void *);
 extern void ov45_02236C40(void *, void *, void *);
 char *ov45_02232B9C(Vec *);
-int ov45_02232BB0(Packet *);
-int ov45_02232CA4(void);
+int PPW_LobbyUpdateRecruitInfo(Packet *);
+int PPW_LobbyStopRecruit(void);
 int ov45_02232D8C(void *, void *);
 
 char *ov45_02232B9C(Vec *p) {
@@ -53,7 +53,7 @@ char *ov45_02232B9C(Vec *p) {
     return p->ptr;
 }
 
-int ov45_02232BB0(Packet *p) {
+int PPW_LobbyUpdateRecruitInfo(Packet *p) {
     Work *w = _022577C4;
     int result;
     if (!w) {
@@ -83,7 +83,7 @@ int ov45_02232BB0(Packet *p) {
     return 0;
 }
 
-int ov45_02232CA4(void) {
+int PPW_LobbyStopRecruit(void) {
     int value;
     Work *w = _022577C4;
     int result;

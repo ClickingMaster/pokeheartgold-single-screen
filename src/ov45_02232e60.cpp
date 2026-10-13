@@ -1,4 +1,4 @@
-// Overlay 45 (DWC lobby) translation unit ov45_02232E60..ov45_022383DF.
+// Overlay 45 (DWC lobby) translation unit PPW_LobbySubmitQuestionnaire..ov45_022383DF.
 // One file because the original TU owned the -ipa-file pooled .data block at _02254F58
 // (4 one-byte objects + 6 string pointers, MWCC pool order = heapsort by size); 35A0/4D68/2E60/4A88/50FC/6BA8/8104
 // address those objects through the shared pool literal. Each former matched fragment keeps its own namespace.
@@ -46,7 +46,7 @@ namespace F00 {
 #pragma force_active on
 extern "C" void OS_GetMacAddress(u8 *);
 struct Str;
-extern "C" Str *ov45_02237B58(Str *, const char *);
+extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
 
 struct Str {
     union {
@@ -65,7 +65,7 @@ struct Str {
     } raw;
 
     Str(const char *c) {
-        ov45_02237B58(this, c);
+        LobbyString_InitFromCStr(this, c);
     }
 
     const char *CStr() const {
@@ -176,7 +176,7 @@ struct Op {
     }
 };
 
-extern "C" void *ov45_02242394(u32);
+extern "C" void *LobbyMem_Alloc(u32);
 extern "C" int ov45_0223AEDC(void *, void *);
 extern "C" void StatsUpload_Start(int, const char *);
 extern "C" int StatsUpload_UploadWithLastHash(const char *, int, const u8 *, u32, int);
@@ -217,9 +217,9 @@ inline const Data *GetData(Work *w) {
 }
 
 #define PNEW(o, a, b, c, d, e, f) new (o) Op(a, b, c, d, e, f)
-extern "C" int ov45_02232E60(int mode);
+extern "C" int PPW_LobbySubmitQuestionnaire(int mode);
 
-extern "C" int ov45_02232E60(int mode) {
+extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
     const char *name;
     const char *host;
     Op *o;
@@ -263,7 +263,7 @@ extern "C" int ov45_02232E60(int mode) {
     name = ov45_02254F64;
     flag = _022577C4->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (ov45_022577D4 == 0) {
-        o = (Op *)ov45_02242394(sizeof(Op));
+        o = (Op *)LobbyMem_Alloc(sizeof(Op));
         PNEW(o, flag, name, host, x, (const u8 *)&p, (const u8 *)&p + sizeof(p));
         ov45_022577D4 = o;
         StatsUpload_Start(o->flag, o->a.CStr());
@@ -357,12 +357,12 @@ extern int DWC_CheckUserData(void *);
 extern int DWC_CheckHasProfile(void *);
 extern u8 *volatile _022577C4;
 extern u8 ov45_02254FA0[];
-extern void *ov45_02237A24(void *, void *);
+extern void *LobbyString_InitCopy(void *, void *);
 extern void *ov45_02232B9C(Vec *);
 extern Node *ov45_02232E30(u8 *, u32 *, Node *, Node *);
 extern void ov45_02232DDC(Node **, u8 *, u32 *);
-extern int ov00_021EC2EC();
-extern int ov00_021ECB94();
+extern int DWC_Free();
+extern int DWC_GetDateTime();
 extern int ov45_02231144();
 extern int ov45_0223325C();
 extern int ov45_02233434();
@@ -372,42 +372,42 @@ extern int ov45_022377AC();
 extern int ov45_02237820();
 extern int ov45_02237890();
 extern int ov45_022379D4();
-extern int ov45_02237B58();
-extern int ov45_02237BC8();
+extern int LobbyString_InitFromCStr();
+extern int LobbyString_Destroy();
 extern int ov45_02238B70();
 extern int ov45_0223DF4C();
 extern int ov45_02240A74(int);
 extern int ov45_02240A80();
 extern int ov45_02240F9C();
-u8 *ov45_022310B0(void);
-int ov45_022310C0(void *a, void *b, void *c, void *d, u8 *user, void *e, void *g);
+u8 *PPWLobby_GetWork(void);
+int PPW_LobbyInitializeAsync(void *a, void *b, void *c, void *d, u8 *user, void *e, void *g);
 u8 *ov45_02231448(u8 *p);
 u8 *ov45_02231460(u8 *p);
 u8 *ov45_02231C38(u8 *p);
 void *ov45_02231EB0(u8 *p, u8 *q);
 void *ov45_022320B4(u8 *p, u8 *q);
-int ov45_022320C4(u64 *out);
-int ov45_02232170(void *p, u32 *size);
-int ov45_022322A4(void *a, void *b, void *c, void *d, void *e);
-int ov45_0223247C(int a, void *b, void *c, void *d);
-int ov45_02232500(int a, void *b, void *c, void *d);
-int ov45_02232580(void);
+int PPW_LobbyGetTimeInfo(u64 *out);
+int PPW_LobbyGetSchedule(void *p, u32 *size);
+int PPW_LobbySetChannelData(void *a, void *b, void *c, void *d, void *e);
+int PPW_LobbySendChannelBinaryMessage(int a, void *b, void *c, void *d);
+int PPW_LobbySendPlayerBinaryMessage(int a, void *b, void *c, void *d);
+int PPW_LobbyGetMyUserId(void);
 void ov45_02232760(Vec *p, char *first, char *last);
 void ov45_02232AE8(Record *p, int type, Body *q);
 void ov45_02232B24(u8 *p, int n, char *fmt, ...);
 int ov45_02232D8C(u8 *p, u32 *key);
 void ov45_02232DDC(Node **out, u8 *p, u32 *key);
 Node *ov45_02232E30(u8 *p, u32 *key, Node *n, Node *best);
-int ov45_022331E8(void);
-int ov45_02233204(int x);
+int PPW_LobbyGetLastError(void);
+int PPW_LobbyToErrorCode(int x);
 int ov45_02233220(int x);
-int ov45_02231490(void);
-int ov45_02232CA4(void);
-int ov45_022321E0(void);
+int PPW_LobbyShutdownAsync(void);
+int PPW_LobbyStopRecruit(void);
+int PPW_LobbyGetSubChannelState(void);
 void ov45_02232434(S *p, u8 *q, int x);
-int ov45_02232BB0(u8 *p);
+int PPW_LobbyUpdateRecruitInfo(u8 *p);
 
-int ov45_022331E8(void) {
+int PPW_LobbyGetLastError(void) {
     u8 *p = _022577C4;
     if (p) {
         return W(p, 4);
@@ -415,7 +415,7 @@ int ov45_022331E8(void) {
     return 0;
 }
 
-int ov45_02233204(int x) {
+int PPW_LobbyToErrorCode(int x) {
     if (x >= 4) {
         return x + 0x297c;
     }
@@ -447,9 +447,9 @@ int ov45_02233220(int x) {
 
 namespace F02 {
 class Str;
-extern "C" Str *ov45_02237BC8(Str *);
-extern "C" Str *ov45_02237A24(Str *, const Str *);
-extern "C" int ov45_02237FD8(const Str *, const char *);
+extern "C" Str *LobbyString_Destroy(Str *);
+extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
+extern "C" int LobbyString_CompareCStr(const Str *, const char *);
 
 class Str {
 public:
@@ -479,11 +479,11 @@ public:
     }
 
     Str(const Str &o) {
-        ov45_02237A24(this, &o);
+        LobbyString_InitCopy(this, &o);
     }
 
     void Destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 
     const char *CStr() const {
@@ -491,7 +491,7 @@ public:
     }
 
     bool operator==(const char *t) const {
-        return ov45_02237FD8(this, t) == 0;
+        return LobbyString_CompareCStr(this, t) == 0;
     }
 };
 
@@ -599,8 +599,8 @@ typedef struct {
 
 extern Global *_022577C4;
 extern char ov45_022550B4[];
-extern int ov45_0223D7D4(void *, void *, void *, void *, void *, String *), ov45_022414C0(int, char *), ov45_022413D4(char *, char *), ov45_02237FD8(String *, char *), ov45_022415CC(char *, int, int, void *);
-extern void ov45_02237BC8(String *), ov45_02232434(String *, void *, int), ov45_022377AC(String *, u32), ov45_022379D4(String *);
+extern int ov45_0223D7D4(void *, void *, void *, void *, void *, String *), ov45_022414C0(int, char *), ov45_022413D4(char *, char *), LobbyString_CompareCStr(String *, char *), ov45_022415CC(char *, int, int, void *);
+extern void LobbyString_Destroy(String *), ov45_02232434(String *, void *, int), ov45_022377AC(String *, u32), ov45_022379D4(String *);
 extern void *ov45_02232B9C(String *);
 extern int ov00_021EFF30(void *, u32, void *, u32);
 
@@ -620,7 +620,7 @@ static inline char *Text(String *s) {
 }
 
 static inline int Empty(String *s) {
-    return ov45_02237FD8(s, ov45_022550B4) == 0;
+    return LobbyString_CompareCStr(s, ov45_022550B4) == 0;
 }
 
 static inline void Status(int result) {
@@ -651,11 +651,11 @@ int ov45_02233434(int id, int key, int mode, void *data, u32 length) {
     char *text;
     ov45_02232434(&name, _022577C4->names, key);
     if (Empty(&name)) {
-        ov45_02237BC8(&name);
+        LobbyString_Destroy(&name);
         return 5;
     }
     if (length > 300) {
-        ov45_02237BC8(&name);
+        LobbyString_Destroy(&name);
         return 3;
     }
     encoded.words[0] = 0;
@@ -671,7 +671,7 @@ int ov45_02233434(int id, int key, int mode, void *data, u32 length) {
     result = ov45_022415CC(text, id, mode, ov45_02232B9C(&encoded));
     Status(result);
     ov45_022379D4(&encoded);
-    ov45_02237BC8(&name);
+    LobbyString_Destroy(&name);
     return result;
 }
 }
@@ -685,7 +685,7 @@ int ov45_02233434(int id, int key, int mode, void *data, u32 length) {
 namespace F04 {
 extern "C" void OS_GetMacAddress(u8 *);
 struct Str;
-extern "C" Str *ov45_02237B58(Str *, const char *);
+extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
 
 struct Str {
     union {
@@ -706,7 +706,7 @@ struct Str {
     } raw;
 
     Str(const char *c) {
-        ov45_02237B58(this, c);
+        LobbyString_InitFromCStr(this, c);
     }
 
     const char *CStr() const {
@@ -845,7 +845,7 @@ struct Work {
 
 extern "C" Work *_022577C4;
 extern "C" Obj *ov45_022577D4;
-extern "C" void *ov45_02242394(u32);
+extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
 extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
 extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
@@ -875,7 +875,7 @@ extern "C" void ov45_022335A0(void) {
     if (ov45_022577D4 != 0) {
         return;
     }
-    o = (Obj *)ov45_02242394(sizeof(Obj));
+    o = (Obj *)LobbyMem_Alloc(sizeof(Obj));
     new (o) Obj(flag, name, host, x, info);
     ov45_022577D4 = o;
     StatsUpload_Start(o->flag, o->name.CStr());
@@ -921,10 +921,10 @@ extern "C" {
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *_022577C4;
 extern char *_02254D04[];
-extern void ov45_022320B4(Str *, void *), ov45_02237BFC(Str *, u32);
-extern int ov45_02237F7C(Str *, Str *), ov45_02240A80(const char *), ov45_0223E4A8(void *), ov45_02233434(u32, u32, const void *, const void *, u32);
+extern void ov45_022320B4(Str *, void *), LobbyString_Reserve(Str *, u32);
+extern int LobbyString_Compare(Str *, Str *), ov45_02240A80(const char *), ov45_0223E4A8(void *), ov45_02233434(u32, u32, const void *, const void *, u32);
 extern void *ov45_02231C78(void *);
-extern u32 ov00_021FF368(void);
+extern u32 current_time(void);
 extern void ov45_02233BC8(Str *, const char *, ...);
 extern void ov45_0223325C(u32, u32, u32, u32, u32, const void *, u32), ov45_02241E24(const char *, void (*)(void), s32), ov45_022417B4(const char *, s32, const char *, void (*)(void), s32);
 extern void ov45_022367E0(void), ov45_0223683C(void), ov45_0223694C(void), ov45_0223AF04(void *, void *);
@@ -952,7 +952,7 @@ void ov45_022353F0(int valid, u8 *data, u32 size);
 void ov45_022354AC(int status);
 
 #pragma warn_uninitializedvar off
-extern Str *ov45_02238104(Str *, u32, u32, const char *, const char *, u8);
+extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
 
 static inline u32 short_length(Str *p) {
     if (p->l.flag) {
@@ -963,11 +963,11 @@ static inline u32 short_length(Str *p) {
 
 void ov45_02233994(Str *out, u32 id, Str *s) {
     Str b, a;
-    ov45_02237B58(&b, _02254D04[id]);
+    LobbyString_InitFromCStr(&b, _02254D04[id]);
     ov45_02233ABC(&a, &b, ov45_022550B8);
     ov45_022339F4(out, &a, s);
-    ov45_02237BC8(&a);
-    ov45_02237BC8(&b);
+    LobbyString_Destroy(&a);
+    LobbyString_Destroy(&b);
 }
 }
 }
@@ -1007,8 +1007,8 @@ namespace DwcStringConcat200 {
 }
 
 using namespace DwcStringConcat200;
-extern "C" void ov45_02237BFC(Str *, u32);
-extern "C" Str *ov45_02238104(Str *, u32, u32, char *, char *, RangeDispatch);
+extern "C" void LobbyString_Reserve(Str *, u32);
+extern "C" Str *LobbyString_ReplaceRange(Str *, u32, u32, char *, char *, RangeDispatch);
 extern "C" Str *ov45_022339F4(Str *, Str *, Str *);
 
 extern "C" Str *ov45_022339F4(Str *out, Str *left, Str *right) {
@@ -1032,9 +1032,9 @@ extern "C" Str *ov45_022339F4(Str *out, Str *left, Str *right) {
         p2 = right->s.data;
         n2 = right->s.size;
     }
-    ov45_02237BFC(out, n1 + n2);
-    out = ov45_02238104(out, 0, 0, p1, p1 + n1, first);
-    return ov45_02238104(out, n1, 0, p2, p2 + n2, second);
+    LobbyString_Reserve(out, n1 + n2);
+    out = LobbyString_ReplaceRange(out, 0, 0, p1, p1 + n1, first);
+    return LobbyString_ReplaceRange(out, n1, 0, p2, p2 + n2, second);
 }
 
 }
@@ -1072,8 +1072,8 @@ namespace DwcStringConcat200 {
 }
 
 using namespace DwcStringConcat200;
-extern "C" void ov45_02237BFC(Str *, u32);
-extern "C" Str *ov45_02238104(Str *, u32, u32, char *, char *, RangeDispatch);
+extern "C" void LobbyString_Reserve(Str *, u32);
+extern "C" Str *LobbyString_ReplaceRange(Str *, u32, u32, char *, char *, RangeDispatch);
 extern "C" unsigned strlen(const char *);
 extern "C" Str *ov45_02233ABC(Str *, Str *, char *);
 
@@ -1092,9 +1092,9 @@ extern "C" Str *ov45_02233ABC(Str *out, Str *left, char *right) {
         p1 = left->s.data;
         n1 = left->s.size;
     }
-    ov45_02237BFC(out, n1 + n2);
-    out = ov45_02238104(out, 0, 0, p1, p1 + n1, first);
-    return ov45_02238104(out, n1, 0, right, right + n2, second);
+    LobbyString_Reserve(out, n1 + n2);
+    out = LobbyString_ReplaceRange(out, 0, 0, p1, p1 + n1, first);
+    return LobbyString_ReplaceRange(out, n1, 0, right, right + n2, second);
 }
 
 }
@@ -1112,10 +1112,10 @@ extern "C" {
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *_022577C4;
 extern char *_02254D04[];
-extern void ov45_022320B4(Str *, void *), ov45_02237BFC(Str *, u32);
-extern int ov45_02237F7C(Str *, Str *), ov45_02240A80(const char *), ov45_0223E4A8(void *), ov45_02233434(u32, u32, const void *, const void *, u32);
+extern void ov45_022320B4(Str *, void *), LobbyString_Reserve(Str *, u32);
+extern int LobbyString_Compare(Str *, Str *), ov45_02240A80(const char *), ov45_0223E4A8(void *), ov45_02233434(u32, u32, const void *, const void *, u32);
 extern void *ov45_02231C78(void *);
-extern u32 ov00_021FF368(void);
+extern u32 current_time(void);
 extern void ov45_02233BC8(Str *, const char *, ...);
 extern void ov45_0223325C(u32, u32, u32, u32, u32, const void *, u32), ov45_02241E24(const char *, void (*)(void), s32), ov45_022417B4(const char *, s32, const char *, void (*)(void), s32);
 extern void ov45_022367E0(void), ov45_0223683C(void), ov45_0223694C(void), ov45_0223AF04(void *, void *);
@@ -1143,7 +1143,7 @@ void ov45_022353F0(int valid, u8 *data, u32 size);
 void ov45_022354AC(int status);
 
 #pragma warn_uninitializedvar off
-extern Str *ov45_02238104(Str *, u32, u32, const char *, const char *, u8);
+extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
 
 static inline u32 short_length(Str *p) {
     if (p->l.flag) {
@@ -1154,7 +1154,7 @@ static inline u32 short_length(Str *p) {
 
 void ov45_02233B74(Str *out) {
     u32 id = I(_022577C4, 0x4c);
-    u32 tick = ov00_021FF368();
+    u32 tick = current_time();
     ov45_02233BC8(out, ov45_022550BC, id, tick % 1000);
 }
 }
@@ -1222,7 +1222,7 @@ extern "C" void ov45_02233BC8(Str *output, const char *format, ...) {
     vector.repr.ptr[count - 1] = 0;
     va_end(args);
     new (output) Str;
-    ov45_02237B58(output, vector.text());
+    LobbyString_InitFromCStr(output, vector.text());
 }
 
 #pragma force_active off
@@ -1235,9 +1235,9 @@ extern "C" void ov45_02233BC8(Str *output, const char *format, ...) {
 namespace F10 {
 #pragma force_active on
 class Str;
-extern "C" Str *ov45_02237BC8(Str *);
-extern "C" Str *ov45_02237A24(Str *, const Str *);
-extern "C" Str *ov45_02237D48(Str *, const Str *);
+extern "C" Str *LobbyString_Destroy(Str *);
+extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
+extern "C" Str *LobbyString_Assign(Str *, const Str *);
 
 class Str {
 public:
@@ -1259,15 +1259,15 @@ public:
     } raw;
 
     Str(const Str &o) {
-        ov45_02237A24(this, &o);
+        LobbyString_InitCopy(this, &o);
     }
 
     void Destroy() const {
-        ov45_02237BC8(const_cast<Str *>(this));
+        LobbyString_Destroy(const_cast<Str *>(this));
     }
 
     Str &operator=(const Str &o) {
-        ov45_02237D48(this, &o);
+        LobbyString_Assign(this, &o);
         return *this;
     }
 
@@ -1388,7 +1388,7 @@ inline void SetSelfK(const Str &n) {
     Work2 *w;
     Info2 *p = &i;
     i.id = 0;
-    ov45_02237A24(&i.name(), &n);
+    LobbyString_InitCopy(&i.name(), &n);
     p->x = 0;
     p->y = 0;
     w = (Work2 *)_022577C4;
@@ -1436,23 +1436,23 @@ extern "C" int ov45_02233CA0(void) {
 
 namespace F11 {
 struct Str;
-extern "C" Str *ov45_02237B58(Str *, char *);
-extern "C" Str *ov45_02237BC8(Str *);
-extern "C" Str *ov45_02237A24(Str *, const Str *);
+extern "C" Str *LobbyString_InitFromCStr(Str *, char *);
+extern "C" Str *LobbyString_Destroy(Str *);
+extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
 
 struct Str {
     u32 words[3];
 
     Str(char *s) {
-        ov45_02237B58(this, s);
+        LobbyString_InitFromCStr(this, s);
     }
 
     Str(const Str &o) {
-        ov45_02237A24(this, &o);
+        LobbyString_InitCopy(this, &o);
     }
 
     void Destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 };
 struct Vec;
@@ -1664,12 +1664,12 @@ public:
     }
 };
 
-extern "C" int ov45_02237F7C(const String *, const String *);
+extern "C" int LobbyString_Compare(const String *, const String *);
 extern "C" int ov45_022340F8(const String &, const String &);
 #pragma force_active on
 
 extern "C" int ov45_022340F8(const String &a, const String &b) {
-    return a.Size() == b.Size() && ov45_02237F7C(&a, &b) == 0;
+    return a.Size() == b.Size() && LobbyString_Compare(&a, &b) == 0;
 }
 
 }
@@ -2069,7 +2069,7 @@ typedef struct {
 } W30615Context;
 
 extern W30615Context *_022577C4;
-extern void ov45_022320B4(W30615String *, void *), ov45_02237BC8(W30615String *);
+extern void ov45_022320B4(W30615String *, void *), LobbyString_Destroy(W30615String *);
 extern int ov45_02240A80(char *), ov45_0223E4A8(void *);
 int ov45_02234688(void);
 
@@ -2091,7 +2091,7 @@ int ov45_02234688(void) {
     W30615Context *c;
     ov45_022320B4(&local, &_022577C4->name);
     empty = ov45_02240A80(!local.heap.large ? local.small.data : local.heap.ptr) == 0;
-    ov45_02237BC8(&local);
+    LobbyString_Destroy(&local);
     if (empty) {
         return 0;
     }
@@ -2149,7 +2149,7 @@ typedef union Str {
 
 extern u8 *_022577C4;
 extern char ov45_022550C4[];
-extern int ov45_02237F7C(Str *, Str *);
+extern int LobbyString_Compare(Str *, Str *);
 extern void *ov45_02231C78(void *);
 extern void ov45_02233434(u32, u32, char *, void *, u32);
 int ov45_022340F8(Str *, Str *);
@@ -2177,7 +2177,7 @@ static inline int flush(u8 *c) {
 
 extern void ov45_022320B4(Str *, void *);
 extern int ov45_02240A80(char *);
-extern void ov45_02237BC8(Str *);
+extern void LobbyString_Destroy(Str *);
 extern int ov45_0223E4A8(void *);
 int ov45_02234688(void);
 
@@ -2205,10 +2205,10 @@ extern "C" {
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *_022577C4;
 extern char *_02254D04[];
-extern void ov45_022320B4(Str *, void *), ov45_02237BFC(Str *, u32);
-extern int ov45_02237F7C(Str *, Str *), ov45_02240A80(const char *), ov45_0223E4A8(void *), ov45_02233434(u32, u32, const void *, const void *, u32);
+extern void ov45_022320B4(Str *, void *), LobbyString_Reserve(Str *, u32);
+extern int LobbyString_Compare(Str *, Str *), ov45_02240A80(const char *), ov45_0223E4A8(void *), ov45_02233434(u32, u32, const void *, const void *, u32);
 extern void *ov45_02231C78(void *);
-extern u32 ov00_021FF368(void);
+extern u32 current_time(void);
 extern void ov45_02233BC8(Str *, const char *, ...);
 extern void ov45_0223325C(u32, u32, u32, u32, u32, const void *, u32), ov45_02241E24(const char *, void (*)(void), s32), ov45_022417B4(const char *, s32, const char *, void (*)(void), s32);
 extern void ov45_022367E0(void), ov45_0223683C(void), ov45_0223694C(void), ov45_0223AF04(void *, void *);
@@ -2236,7 +2236,7 @@ void ov45_022353F0(int valid, u8 *data, u32 size);
 void ov45_022354AC(int status);
 
 #pragma warn_uninitializedvar off
-extern Str *ov45_02238104(Str *, u32, u32, const char *, const char *, u8);
+extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
 
 static inline u32 short_length(Str *p) {
     if (p->l.flag) {
@@ -2268,7 +2268,7 @@ int ov45_02234870(void) {
     Str s;
     ov45_022320B4(&s, (u8 *)_022577C4 + 0xb8);
     ov45_02241E24(!s.l.flag ? s.s.data : s.l.data, ov45_022367E0, 0);
-    ov45_02237BC8(&s);
+    LobbyString_Destroy(&s);
     return 1;
 }
 
@@ -2279,7 +2279,7 @@ int ov45_022348C8(void) {
     }
     ov45_022320B4(&s, (u8 *)_022577C4 + 0xb8);
     ov45_022417B4(!s.l.flag ? s.s.data : s.l.data, -1, ov45_022550E4, ov45_0223683C, 0);
-    ov45_02237BC8(&s);
+    LobbyString_Destroy(&s);
     return 1;
 }
 }
@@ -2297,7 +2297,7 @@ extern "C" {
 #pragma force_active on
 extern u8 *_022577C4;
 extern u8 ov45_022550F4[];
-extern void ov45_0223694C(void), ov45_022320B4(void *, void *), ov45_02237BC8(void *), ov45_022417B4(void *, int, void *, void (*)(void), int);
+extern void ov45_0223694C(void), ov45_022320B4(void *, void *), LobbyString_Destroy(void *), ov45_022417B4(void *, int, void *, void (*)(void), int);
 
 typedef union {
     struct {
@@ -2329,7 +2329,7 @@ int ov45_02234944(void) {
     }
     ov45_022320B4(&s, _022577C4 + 0xb8);
     ov45_022417B4(s.longform.flag == 0 ? s.shortform.data : s.longform.pointer, -1, ov45_022550F4, ov45_0223694C, 0);
-    ov45_02237BC8(&s);
+    LobbyString_Destroy(&s);
     return 1;
 }
 }
@@ -2348,10 +2348,10 @@ extern "C" {
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *_022577C4;
 extern char *_02254D04[];
-extern void ov45_022320B4(Str *, void *), ov45_02237BFC(Str *, u32);
-extern int ov45_02237F7C(Str *, Str *), ov45_02240A80(const char *), ov45_0223E4A8(void *), ov45_02233434(u32, u32, const void *, const void *, u32);
+extern void ov45_022320B4(Str *, void *), LobbyString_Reserve(Str *, u32);
+extern int LobbyString_Compare(Str *, Str *), ov45_02240A80(const char *), ov45_0223E4A8(void *), ov45_02233434(u32, u32, const void *, const void *, u32);
 extern void *ov45_02231C78(void *);
-extern u32 ov00_021FF368(void);
+extern u32 current_time(void);
 extern void ov45_02233BC8(Str *, const char *, ...);
 extern void ov45_0223325C(u32, u32, u32, u32, u32, const void *, u32), ov45_02241E24(const char *, void (*)(void), s32), ov45_022417B4(const char *, s32, const char *, void (*)(void), s32);
 extern void ov45_022367E0(void), ov45_0223683C(void), ov45_0223694C(void), ov45_0223AF04(void *, void *);
@@ -2379,7 +2379,7 @@ void ov45_022353F0(int valid, u8 *data, u32 size);
 void ov45_022354AC(int status);
 
 #pragma warn_uninitializedvar off
-extern Str *ov45_02238104(Str *, u32, u32, const char *, const char *, u8);
+extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
 
 static inline u32 short_length(Str *p) {
     if (p->l.flag) {
@@ -2438,7 +2438,7 @@ int ov45_02234A24(int valid, u8 *data, u32 size, void **output, u32 *length) {
 namespace F21 {
 extern "C" void OS_GetMacAddress(u8 *);
 struct Str;
-extern "C" Str *ov45_02237B58(Str *, const char *);
+extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
 
 struct Str {
     union {
@@ -2459,7 +2459,7 @@ struct Str {
     } raw;
 
     Str(const char *c) {
-        ov45_02237B58(this, c);
+        LobbyString_InitFromCStr(this, c);
     }
 
     const char *CStr() const {
@@ -2581,12 +2581,12 @@ struct Work {
 extern "C" Work *_022577C4;
 extern "C" Obj *ov45_022577D4;
 extern "C" int ov45_02234A24(int, int, int, void **, u32 *);
-extern "C" void *ov45_02242394(u32);
+extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
 extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
 extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
 extern "C" void StatsUpload_Stop(int);
-extern "C" int ov45_022325B0(const void *, u32, int);
+extern "C" int PPW_LobbyUpdateMyProfile(const void *, u32, int);
 extern "C" void ov45_02234A88(int a0, int a1, int a2);
 #pragma force_active on
 
@@ -2610,7 +2610,7 @@ extern "C" void ov45_02234A88(int a0, int a1, int a2) {
         r = 2;
     }
     if (r == 0) {
-        ov45_022325B0(buf, len, 0);
+        PPW_LobbyUpdateMyProfile(buf, len, 0);
     }
     _022577C4->cb(r, buf, len);
     if (r != 0) {
@@ -2632,7 +2632,7 @@ extern "C" void ov45_02234A88(int a0, int a1, int a2) {
     if (ov45_022577D4 != 0) {
         return;
     }
-    o = (Obj *)ov45_02242394(sizeof(Obj));
+    o = (Obj *)LobbyMem_Alloc(sizeof(Obj));
     new (o) Obj(flag, name, host, x, info);
     ov45_022577D4 = o;
     StatsUpload_Start(o->flag, o->name.CStr());
@@ -2674,7 +2674,7 @@ namespace F22 {
 // @var
 extern "C" void OS_GetMacAddress(u8 *);
 struct Str;
-extern "C" Str *ov45_02237B58(Str *, const char *);
+extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
 
 struct Str {
     union {
@@ -2695,7 +2695,7 @@ struct Str {
     } raw;
 
     Str(const char *c) {
-        ov45_02237B58(this, c);
+        LobbyString_InitFromCStr(this, c);
     }
 
     const char *CStr() const {
@@ -2823,8 +2823,8 @@ struct Work {
 extern "C" Work *_022577C4;
 extern "C" Obj *ov45_022577D4;
 extern "C" int ov45_02234A24(int, int, int, void **, u32 *);
-extern "C" int ov45_022325B0(const void *, u32, int);
-extern "C" void *ov45_02242394(u32);
+extern "C" int PPW_LobbyUpdateMyProfile(const void *, u32, int);
+extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
 extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
 extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
@@ -2883,7 +2883,7 @@ extern "C" void ov45_02234D68(int a0, int a1, int a2) {
     if (ov45_022577D4 != 0) {
         return;
     }
-    o = (Obj *)ov45_02242394(sizeof(Obj));
+    o = (Obj *)LobbyMem_Alloc(sizeof(Obj));
     new (o) Obj(flag, name, host, x, i2);
     ov45_022577D4 = o;
     StatsUpload_Start(o->flag, o->name.CStr());
@@ -2923,7 +2923,7 @@ extern "C" void ov45_02234D68(int a0, int a1, int a2) {
 namespace F23 {
 extern "C" void OS_GetMacAddress(u8 *);
 struct Str;
-extern "C" Str *ov45_02237B58(Str *, const char *);
+extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
 
 struct Str {
     union {
@@ -2944,7 +2944,7 @@ struct Str {
     } raw;
 
     Str(const char *c) {
-        ov45_02237B58(this, c);
+        LobbyString_InitFromCStr(this, c);
     }
 
     const char *CStr() const {
@@ -3066,7 +3066,7 @@ struct Work {
 extern "C" Work *_022577C4;
 extern "C" Obj *ov45_022577D4;
 extern "C" int ov45_02234A24(int, int, int, void **, u32 *);
-extern "C" void *ov45_02242394(u32);
+extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
 extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
 extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
@@ -3116,7 +3116,7 @@ extern "C" void ov45_022350FC(int a0, int a1, int a2) {
     if (ov45_022577D4 != 0) {
         return;
     }
-    o = (Obj *)ov45_02242394(sizeof(Obj));
+    o = (Obj *)LobbyMem_Alloc(sizeof(Obj));
     new (o) Obj(flag, name, host, x, info);
     ov45_022577D4 = o;
     StatsUpload_Start(o->flag, o->name.CStr());
@@ -3225,10 +3225,10 @@ extern "C" {
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *_022577C4;
 extern char *_02254D04[];
-extern void ov45_022320B4(Str *, void *), ov45_02237BFC(Str *, u32);
-extern int ov45_02237F7C(Str *, Str *), ov45_02240A80(const char *), ov45_0223E4A8(void *), ov45_02233434(u32, u32, const void *, const void *, u32);
+extern void ov45_022320B4(Str *, void *), LobbyString_Reserve(Str *, u32);
+extern int LobbyString_Compare(Str *, Str *), ov45_02240A80(const char *), ov45_0223E4A8(void *), ov45_02233434(u32, u32, const void *, const void *, u32);
 extern void *ov45_02231C78(void *);
-extern u32 ov00_021FF368(void);
+extern u32 current_time(void);
 extern void ov45_02233BC8(Str *, const char *, ...);
 extern void ov45_0223325C(u32, u32, u32, u32, u32, const void *, u32), ov45_02241E24(const char *, void (*)(void), s32), ov45_022417B4(const char *, s32, const char *, void (*)(void), s32);
 extern void ov45_022367E0(void), ov45_0223683C(void), ov45_0223694C(void), ov45_0223AF04(void *, void *);
@@ -3256,7 +3256,7 @@ void ov45_022353F0(int valid, u8 *data, u32 size);
 void ov45_022354AC(int status);
 
 #pragma warn_uninitializedvar off
-extern Str *ov45_02238104(Str *, u32, u32, const char *, const char *, u8);
+extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
 
 static inline u32 short_length(Str *p) {
     if (p->l.flag) {
@@ -3295,7 +3295,7 @@ typedef struct RTCTime {
 } RTCTime;
 
 extern "C" s64 RTC_ConvertDateTimeToSecond(const RTCDate *date, const RTCTime *time);
-extern "C" void ov00_021ECB94(RTCDate *date, RTCTime *time);
+extern "C" void DWC_GetDateTime(RTCDate *date, RTCTime *time);
 
 struct TrueType {};
 
@@ -3323,8 +3323,8 @@ struct Str {
     }
 };
 
-extern "C" void ov45_02237BC8(Str *s);
-extern "C" void ov45_02237D48(Str *dst, const Str *src);
+extern "C" void LobbyString_Destroy(Str *s);
+extern "C" void LobbyString_Assign(Str *dst, const Str *src);
 
 typedef struct Vec {
     void *ptr;
@@ -3336,7 +3336,7 @@ extern "C" void *ov45_02231C78(Vec *v);
 static inline s64 GetNow(void) {
     RTCDate date;
     RTCTime time;
-    ov00_021ECB94(&date, &time);
+    DWC_GetDateTime(&date, &time);
     return RTC_ConvertDateTimeToSecond(&date, &time);
 }
 
@@ -3488,10 +3488,10 @@ struct Peer {
     void Reset() {
         Str empty;
         kind = 5;
-        ov45_02237D48(&name, &empty);
+        LobbyString_Assign(&name, &empty);
         a = 0;
         b = 0;
-        ov45_02237BC8(&empty);
+        LobbyString_Destroy(&empty);
     }
 };
 
@@ -3604,8 +3604,8 @@ extern "C" void ov45_022354F4(int success, void *unused, void *handle, u32 code)
 namespace F27 {
 extern "C" int memcmp(const void *, const void *, unsigned);
 class Str;
-extern "C" Str *ov45_02237BC8(Str *);
-extern "C" Str *ov45_02237D48(Str *, const Str *);
+extern "C" Str *LobbyString_Destroy(Str *);
+extern "C" Str *LobbyString_Assign(Str *, const Str *);
 
 class Str {
 public:
@@ -3620,11 +3620,11 @@ public:
     }
 
     void Destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 
     Str &operator=(const Str &o) {
-        ov45_02237D48(this, &o);
+        LobbyString_Assign(this, &o);
         return *this;
     }
 };
@@ -3758,14 +3758,14 @@ extern "C" void ov45_02235A94(int result, int unused, int arg, int kind) {
 namespace F28 {
 extern "C" int memcmp(const void *, const void *, unsigned);
 struct Str;
-extern "C" Str *ov45_02237B58(Str *, char *);
-extern "C" Str *ov45_02237BC8(Str *);
+extern "C" Str *LobbyString_InitFromCStr(Str *, char *);
+extern "C" Str *LobbyString_Destroy(Str *);
 
 struct Str {
     u32 words[3];
 
     void Destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 };
 
@@ -3907,7 +3907,7 @@ extern "C" void ov45_02235C40(char *channel, int id) {
     int kind;
     {
         Str name;
-        ov45_02237B58(&name, channel);
+        LobbyString_InitFromCStr(&name, channel);
         kind = Find(_022577C4, name);
         name.Destroy();
     }
@@ -3942,14 +3942,14 @@ extern "C" void ov45_02235C40(char *channel, int id) {
 namespace F29 {
 extern "C" int memcmp(const void *, const void *, unsigned);
 struct Str;
-extern "C" Str *ov45_02237B58(Str *, char *);
-extern "C" Str *ov45_02237BC8(Str *);
+extern "C" Str *LobbyString_InitFromCStr(Str *, char *);
+extern "C" Str *LobbyString_Destroy(Str *);
 
 struct Str {
     u32 words[3];
 
     void Destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 };
 
@@ -4090,7 +4090,7 @@ extern "C" void ov45_02235E4C(char *channel, int id) {
     int kind;
     {
         Str name;
-        ov45_02237B58(&name, channel);
+        LobbyString_InitFromCStr(&name, channel);
         kind = Find(_022577C4, name);
         name.Destroy();
     }
@@ -4174,11 +4174,11 @@ struct Alloc {
 
 extern u32 *_022577C4;
 extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
-extern void ov00_021EC2EC(int, void *, int);
-extern void *ov45_02242394(u32);
-extern struct Str *ov45_02237BC8(struct Str *);
+extern void DWC_Free(int, void *, int);
+extern void *LobbyMem_Alloc(u32);
+extern struct Str *LobbyString_Destroy(struct Str *);
 extern struct Vec *ov45_022379D4(struct Vec *);
-extern struct Str *ov45_02237AA0(struct Str *, struct Str *, u32, u32);
+extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void ov45_02236090(int, int, int, int);
 extern void ov45_02233E10(int, int, int, int, int, int, int);
 extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
@@ -4189,12 +4189,12 @@ extern struct TreeNode *ov45_022370D0(struct TreeNode *, void *);
 extern void ov45_02232D8C(void *, int *), ov45_02241D58(int, char *);
 extern void ov45_0223DD3C(void *, int), ov45_022417B4(int, int, char *, void (*)(), int);
 extern void ov45_022320B4(struct Str *, void *);
-extern struct Str *ov45_02237B58(struct Str *, char *);
+extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int ov45_022340F8(struct Str *, struct Str *);
-extern void ov45_02237BFC(struct Str *, u32);
+extern void LobbyString_Reserve(struct Str *, u32);
 extern u32 ov45_02237890(struct Vec *, u32);
-extern struct Str *ov45_02237DB4(struct Str *, u32, u32, struct Str *);
-extern struct Str *ov45_02238104(struct Str *, u32, u32, char *, char *, struct Alloc);
+extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
+extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -4221,14 +4221,14 @@ struct Vec *ov45_0223775C(struct Vec *a);
 struct Vec *ov45_022379D4(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
 extern void ov45_02238508(void *), ov45_02238558(void *, void *);
 extern struct TreeNode *ov45_02238450(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *ov45_02236CE0(struct Tree *, struct TreeNode *, int, int, u32 *);
-extern void ov45_02237E04(struct Str *, u32, u32, struct Str *, u32, u32);
+extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
 void ov45_022362D0(int a, int b, int c, int d);
@@ -4254,17 +4254,17 @@ struct Vec *ov45_0223775C(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void *ov45_02236AE8(u32 *a);
 void ov45_02236BA8(u32 *result, struct Tree *a, u32 *value);
 void ov45_02236C40(Iterator *result, struct Tree *a, Iterator node);
 void ov45_022377AC(struct Vec *a, u32 n);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
 extern char ov45_02255120[], ov45_02255104[];
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -4296,13 +4296,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
-void ov45_02237BFC(struct Str *a, u32 requested);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
+void LobbyString_Reserve(struct Str *a, u32 requested);
 struct TreeNode *ov45_02236CE0(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 extern int ov45_02233FE4(void *, struct Vec *);
 extern void *ov45_02231C78(struct Vec *);
@@ -4340,13 +4340,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-void ov45_02237BFC(struct Str *a, u32 requested);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+void LobbyString_Reserve(struct Str *a, u32 requested);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void ov45_02236690(char *name, int id, int n, int *list);
 void ov45_0223694C(int ok, int unused1, int unused2, int unused3, void *value);
 
@@ -4387,7 +4387,7 @@ typedef struct {
 } Context;
 
 extern Context *_022577C4;
-extern void ov45_02237B58(String *, void *), ov45_022320B4(String *, String *), ov45_02237BC8(String *), ov45_022379D4(String *), ov45_0223454C(Message *, int, int, void *, u32);
+extern void LobbyString_InitFromCStr(String *, void *), ov45_022320B4(String *, String *), LobbyString_Destroy(String *), ov45_022379D4(String *), ov45_0223454C(Message *, int, int, void *, u32);
 extern int ov45_022340F8(String *, String *), ov45_0223D27C(String *, Message *);
 extern u8 *ov45_0223DEC4(void *, int);
 extern void *ov45_02231C78(String *);
@@ -4419,25 +4419,25 @@ void ov45_02236090(void *key, int index, void *name) {
         Context *c;
         String *kp;
         int match;
-        ov45_02237B58(&k, key);
+        LobbyString_InitFromCStr(&k, key);
         c = _022577C4;
         kp = &k;
         ov45_022320B4(&a, &c->first);
         match = ov45_022340F8(&a, kp);
-        ov45_02237BC8(&a);
+        LobbyString_Destroy(&a);
         if (match) {
             language = c->first.a;
         } else {
             ov45_022320B4(&b, &c->second);
             match = ov45_022340F8(&b, kp);
-            ov45_02237BC8(&b);
+            LobbyString_Destroy(&b);
             if (match) {
                 language = c->second.a;
             } else {
                 language = 5;
             }
         }
-        ov45_02237BC8(&k);
+        LobbyString_Destroy(&k);
     }
     if (key && language == 5) {
         return;
@@ -4452,9 +4452,9 @@ void ov45_02236090(void *key, int index, void *name) {
         m.arg = 0;
         m.spare = 0;
         zeroString(&m.text);
-        ov45_02237B58(&tmp, name);
+        LobbyString_InitFromCStr(&tmp, name);
         match = ov45_0223D27C(&tmp, &m) == 0 ? 1 : zero;
-        ov45_02237BC8(&tmp);
+        LobbyString_Destroy(&tmp);
         if (match) {
             ov45_022379D4(&m.text);
             return;
@@ -4547,11 +4547,11 @@ struct Alloc {
 
 extern u32 *_022577C4;
 extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
-extern void ov00_021EC2EC(int, void *, int);
-extern void *ov45_02242394(u32);
-extern struct Str *ov45_02237BC8(struct Str *);
+extern void DWC_Free(int, void *, int);
+extern void *LobbyMem_Alloc(u32);
+extern struct Str *LobbyString_Destroy(struct Str *);
 extern struct Vec *ov45_022379D4(struct Vec *);
-extern struct Str *ov45_02237AA0(struct Str *, struct Str *, u32, u32);
+extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void ov45_02236090(int, int, int, int);
 extern void ov45_02233E10(int, int, int, int, int, int, int);
 extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
@@ -4562,12 +4562,12 @@ extern struct TreeNode *ov45_022370D0(struct TreeNode *, void *);
 extern void ov45_02232D8C(void *, int *), ov45_02241D58(int, char *);
 extern void ov45_0223DD3C(void *, int), ov45_022417B4(int, int, char *, void (*)(), int);
 extern void ov45_022320B4(struct Str *, void *);
-extern struct Str *ov45_02237B58(struct Str *, char *);
+extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int ov45_022340F8(struct Str *, struct Str *);
-extern void ov45_02237BFC(struct Str *, u32);
+extern void LobbyString_Reserve(struct Str *, u32);
 extern u32 ov45_02237890(struct Vec *, u32);
-extern struct Str *ov45_02237DB4(struct Str *, u32, u32, struct Str *);
-extern struct Str *ov45_02238104(struct Str *, u32, u32, char *, char *, struct Alloc);
+extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
+extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -4594,14 +4594,14 @@ struct Vec *ov45_0223775C(struct Vec *a);
 struct Vec *ov45_022379D4(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
 extern void ov45_02238508(void *), ov45_02238558(void *, void *);
 extern struct TreeNode *ov45_02238450(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *ov45_02236CE0(struct Tree *, struct TreeNode *, int, int, u32 *);
-extern void ov45_02237E04(struct Str *, u32, u32, struct Str *, u32, u32);
+extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
 void ov45_022362D0(int a, int b, int c, int d);
@@ -4627,17 +4627,17 @@ struct Vec *ov45_0223775C(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void *ov45_02236AE8(u32 *a);
 void ov45_02236BA8(u32 *result, struct Tree *a, u32 *value);
 void ov45_02236C40(Iterator *result, struct Tree *a, Iterator node);
 void ov45_022377AC(struct Vec *a, u32 n);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
 extern char ov45_02255120[], ov45_02255104[];
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -4669,13 +4669,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
-void ov45_02237BFC(struct Str *a, u32 requested);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
+void LobbyString_Reserve(struct Str *a, u32 requested);
 struct TreeNode *ov45_02236CE0(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 extern int ov45_02233FE4(void *, struct Vec *);
 extern void *ov45_02231C78(struct Vec *);
@@ -4713,13 +4713,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-void ov45_02237BFC(struct Str *a, u32 requested);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+void LobbyString_Reserve(struct Str *a, u32 requested);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void ov45_02236690(char *name, int id, int n, int *list);
 void ov45_0223694C(int ok, int unused1, int unused2, int unused3, void *value);
 
@@ -4767,7 +4767,7 @@ typedef struct {
 
 extern Work *_022577C4;
 extern char ov45_022550B8[];
-extern void ov45_02237B58(String *, char *), ov45_02237BC8(String *), ov45_02237664(Vec *), ov45_02237D48(String *, String *), ov45_02233B74(String *);
+extern void LobbyString_InitFromCStr(String *, char *), LobbyString_Destroy(String *), ov45_02237664(Vec *), LobbyString_Assign(String *, String *), ov45_02233B74(String *);
 extern void ov45_0223649C(Vec *, String *, String *, int);
 void ov45_0223633C(int, int, char **, int, int *);
 
@@ -4785,11 +4785,11 @@ void ov45_0223633C(int valid, int count, char **names, int unused, int *types) {
         if (types[i] >= 20) {
             continue;
         }
-        ov45_02237B58(&item, names[i]);
-        ov45_02237B58(&delimiter, ov45_022550B8);
+        LobbyString_InitFromCStr(&item, names[i]);
+        LobbyString_InitFromCStr(&delimiter, ov45_022550B8);
         ov45_0223649C(&parts, &item, &delimiter, 0);
-        ov45_02237BC8(&delimiter);
-        ov45_02237BC8(&item);
+        LobbyString_Destroy(&delimiter);
+        LobbyString_Destroy(&item);
         if (parts.size < 2) {
             ov45_02237664(&parts);
             continue;
@@ -4797,18 +4797,18 @@ void ov45_0223633C(int valid, int count, char **names, int unused, int *types) {
         {
             String *s = parts.data + 1;
             char *p = s->allocated == 0 ? (char *)s + 1 : (char *)s->data;
-            ov45_02237B58(&text, p);
+            LobbyString_InitFromCStr(&text, p);
         }
-        ov45_02237D48(&_022577C4->message, &text);
-        ov45_02237BC8(&text);
+        LobbyString_Assign(&_022577C4->message, &text);
+        LobbyString_Destroy(&text);
         _022577C4->failed = 0;
         _022577C4->state = 6;
         ov45_02237664(&parts);
         return;
     }
     ov45_02233B74(&empty);
-    ov45_02237D48(&_022577C4->message, &empty);
-    ov45_02237BC8(&empty);
+    LobbyString_Assign(&_022577C4->message, &empty);
+    LobbyString_Destroy(&empty);
     _022577C4->failed = 1;
     _022577C4->state = 6;
 }
@@ -4822,10 +4822,10 @@ void ov45_0223633C(int valid, int count, char **names, int unused, int *types) {
 
 namespace F34 {
 struct Str;
-extern "C" Str *ov45_02237A24(Str *, const Str *);
-extern "C" void ov45_02237BC8(Str *);
-extern "C" void ov45_02237D48(Str *, const Str *);
-extern "C" int ov45_02237EB0(const Str *, const Str *, int);
+extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
+extern "C" void LobbyString_Destroy(Str *);
+extern "C" void LobbyString_Assign(Str *, const Str *);
+extern "C" int LobbyString_Find(const Str *, const Str *, int);
 extern "C" void ov45_02236680(Str *, const Str *, int, int);
 
 struct Str {
@@ -4850,7 +4850,7 @@ struct Str {
     }
 
     Str(const Str &o) {
-        ov45_02237A24(this, &o);
+        LobbyString_InitCopy(this, &o);
     }
 
     u32 size() const {
@@ -4858,7 +4858,7 @@ struct Str {
     }
 
     void Destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 };
 
@@ -4900,7 +4900,7 @@ extern "C" Vec ov45_0223649C(const Str &s, const Str &delim, int max) {
     int n = 1;
     Str rest(s);
     int pos;
-    while (n != max && (pos = ov45_02237EB0(&rest, &delim, 0)) != -1) {
+    while (n != max && (pos = LobbyString_Find(&rest, &delim, 0)) != -1) {
         if (pos != 0) {
             Str piece;
             ov45_02236680(&piece, &rest, 0, pos);
@@ -4910,7 +4910,7 @@ extern "C" Vec ov45_0223649C(const Str &s, const Str &delim, int max) {
         }
         Str tmp;
         ov45_02236680(&tmp, &rest, pos + delim.size(), -1);
-        ov45_02237D48(&rest, &tmp);
+        LobbyString_Assign(&rest, &tmp);
         tmp.Destroy();
     }
     if (rest.size() != 0) {
@@ -4931,12 +4931,12 @@ namespace F35 {
 extern "C" {
 #pragma force_active on
 #pragma force_active on
-void ov45_02237AA0(void *, void *, int, int);
+void LobbyString_InitSubstring(void *, void *, int, int);
 void ov45_02236680(void *, void *, int, int);
 
 void ov45_02236680(void *a, void *b, int c, int d) {
     void *volatile copy = b;
-    ov45_02237AA0(a, b, c, d);
+    LobbyString_InitSubstring(a, b, c, d);
 }
 }
 }
@@ -4948,23 +4948,23 @@ void ov45_02236680(void *a, void *b, int c, int d) {
 
 namespace F36 {
 struct Str;
-extern "C" Str *ov45_02237B58(Str *, char *);
-extern "C" Str *ov45_02237BC8(Str *);
-extern "C" Str *ov45_02237A24(Str *, const Str *);
+extern "C" Str *LobbyString_InitFromCStr(Str *, char *);
+extern "C" Str *LobbyString_Destroy(Str *);
+extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
 
 struct Str {
     u32 words[3];
 
     Str(char *s) {
-        ov45_02237B58(this, s);
+        LobbyString_InitFromCStr(this, s);
     }
 
     Str(const Str &o) {
-        ov45_02237A24(this, &o);
+        LobbyString_InitCopy(this, &o);
     }
 
     void Destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 };
 
@@ -5107,11 +5107,11 @@ struct Alloc {
 
 extern u32 *_022577C4;
 extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
-extern void ov00_021EC2EC(int, void *, int);
-extern void *ov45_02242394(u32);
-extern struct Str *ov45_02237BC8(struct Str *);
+extern void DWC_Free(int, void *, int);
+extern void *LobbyMem_Alloc(u32);
+extern struct Str *LobbyString_Destroy(struct Str *);
 extern struct Vec *ov45_022379D4(struct Vec *);
-extern struct Str *ov45_02237AA0(struct Str *, struct Str *, u32, u32);
+extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void ov45_02236090(int, int, int, int);
 extern void ov45_02233E10(int, int, int, int, int, int, int);
 extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
@@ -5122,12 +5122,12 @@ extern struct TreeNode *ov45_022370D0(struct TreeNode *, void *);
 extern void ov45_02232D8C(void *, int *), ov45_02241D58(int, char *);
 extern void ov45_0223DD3C(void *, int), ov45_022417B4(int, int, char *, void (*)(), int);
 extern void ov45_022320B4(struct Str *, void *);
-extern struct Str *ov45_02237B58(struct Str *, char *);
+extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int ov45_022340F8(struct Str *, struct Str *);
-extern void ov45_02237BFC(struct Str *, u32);
+extern void LobbyString_Reserve(struct Str *, u32);
 extern u32 ov45_02237890(struct Vec *, u32);
-extern struct Str *ov45_02237DB4(struct Str *, u32, u32, struct Str *);
-extern struct Str *ov45_02238104(struct Str *, u32, u32, char *, char *, struct Alloc);
+extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
+extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -5154,14 +5154,14 @@ struct Vec *ov45_0223775C(struct Vec *a);
 struct Vec *ov45_022379D4(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
 extern void ov45_02238508(void *), ov45_02238558(void *, void *);
 extern struct TreeNode *ov45_02238450(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *ov45_02236CE0(struct Tree *, struct TreeNode *, int, int, u32 *);
-extern void ov45_02237E04(struct Str *, u32, u32, struct Str *, u32, u32);
+extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
 void ov45_022362D0(int a, int b, int c, int d);
@@ -5187,17 +5187,17 @@ struct Vec *ov45_0223775C(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void *ov45_02236AE8(u32 *a);
 void ov45_02236BA8(u32 *result, struct Tree *a, u32 *value);
 void ov45_02236C40(Iterator *result, struct Tree *a, Iterator node);
 void ov45_022377AC(struct Vec *a, u32 n);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
 extern char ov45_02255120[], ov45_02255104[];
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -5229,13 +5229,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
-void ov45_02237BFC(struct Str *a, u32 requested);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
+void LobbyString_Reserve(struct Str *a, u32 requested);
 struct TreeNode *ov45_02236CE0(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 extern int ov45_02233FE4(void *, struct Vec *);
 extern void *ov45_02231C78(struct Vec *);
@@ -5273,13 +5273,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-void ov45_02237BFC(struct Str *a, u32 requested);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+void LobbyString_Reserve(struct Str *a, u32 requested);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void ov45_02236690(char *name, int id, int n, int *list);
 void ov45_0223694C(int ok, int unused1, int unused2, int unused3, void *value);
 
@@ -5355,7 +5355,7 @@ struct Work {
 extern "C" Work *_022577C4;
 extern "C" char ov45_022550E4[];
 extern "C" int ov45_02233FE4(const char *, Vec *);
-extern "C" void ov00_021ECB94(Date *, Time *);
+extern "C" void DWC_GetDateTime(Date *, Time *);
 extern "C" s64 RTC_ConvertDateTimeToSecond(const Date *, const Time *);
 extern "C" void ov45_02233434(int, int, char *, Stamp *, int);
 extern "C" char *ov45_02231C78(Vec *);
@@ -5371,7 +5371,7 @@ extern "C" void ov45_0223683C(int result, int unused1, int unused2, int unused3,
     if (ov45_02233FE4(value, &data) == 0 || data.size != 8) {
         Work *w = _022577C4;
         DateTime now;
-        ov00_021ECB94(&now.date, &now.time);
+        DWC_GetDateTime(&now.date, &now.time);
         w->stamp.v = RTC_ConvertDateTimeToSecond(&now.date, &now.time);
         Stamp s;
         s = w->stamp;
@@ -5422,7 +5422,7 @@ extern Work *_022577C4;
 extern u8 ov45_022550E4[], ov45_022550F4[];
 extern int ov45_02233FE4(void *, Blob *), ov45_02238C74(u32 *, void *, u32);
 extern void *ov45_02231C78(Blob *);
-extern void ov45_022379D4(Blob *), ov45_02233434(int, int, void *, void *, int), ov45_02232D8C(int *, int *), ov45_02238C1C(Blob *, u32 *), ov00_021ECB94(RTCDate *, RTCTime *);
+extern void ov45_022379D4(Blob *), ov45_02233434(int, int, void *, void *, int), ov45_02232D8C(int *, int *), ov45_02238C1C(Blob *, u32 *), DWC_GetDateTime(RTCDate *, RTCTime *);
 
 static inline int appendBlob(Blob *blob) {
     Work *w = _022577C4;
@@ -5508,11 +5508,11 @@ struct Alloc {
 
 extern u32 *_022577C4;
 extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
-extern void ov00_021EC2EC(int, void *, int);
-extern void *ov45_02242394(u32);
-extern struct Str *ov45_02237BC8(struct Str *);
+extern void DWC_Free(int, void *, int);
+extern void *LobbyMem_Alloc(u32);
+extern struct Str *LobbyString_Destroy(struct Str *);
 extern struct Vec *ov45_022379D4(struct Vec *);
-extern struct Str *ov45_02237AA0(struct Str *, struct Str *, u32, u32);
+extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void ov45_02236090(int, int, int, int);
 extern void ov45_02233E10(int, int, int, int, int, int, int);
 extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
@@ -5523,12 +5523,12 @@ extern struct TreeNode *ov45_022370D0(struct TreeNode *, void *);
 extern void ov45_02232D8C(void *, int *), ov45_02241D58(int, char *);
 extern void ov45_0223DD3C(void *, int), ov45_022417B4(int, int, char *, void (*)(), int);
 extern void ov45_022320B4(struct Str *, void *);
-extern struct Str *ov45_02237B58(struct Str *, char *);
+extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int ov45_022340F8(struct Str *, struct Str *);
-extern void ov45_02237BFC(struct Str *, u32);
+extern void LobbyString_Reserve(struct Str *, u32);
 extern u32 ov45_02237890(struct Vec *, u32);
-extern struct Str *ov45_02237DB4(struct Str *, u32, u32, struct Str *);
-extern struct Str *ov45_02238104(struct Str *, u32, u32, char *, char *, struct Alloc);
+extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
+extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -5555,14 +5555,14 @@ struct Vec *ov45_0223775C(struct Vec *a);
 struct Vec *ov45_022379D4(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
 extern void ov45_02238508(void *), ov45_02238558(void *, void *);
 extern struct TreeNode *ov45_02238450(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *ov45_02236CE0(struct Tree *, struct TreeNode *, int, int, u32 *);
-extern void ov45_02237E04(struct Str *, u32, u32, struct Str *, u32, u32);
+extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
 void ov45_022362D0(int a, int b, int c, int d);
@@ -5588,17 +5588,17 @@ struct Vec *ov45_0223775C(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void *ov45_02236AE8(u32 *a);
 void ov45_02236BA8(u32 *result, struct Tree *a, u32 *value);
 void ov45_02236C40(Iterator *result, struct Tree *a, Iterator node);
 void ov45_022377AC(struct Vec *a, u32 n);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
 extern char ov45_02255120[], ov45_02255104[];
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -5630,13 +5630,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
-void ov45_02237BFC(struct Str *a, u32 requested);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
+void LobbyString_Reserve(struct Str *a, u32 requested);
 struct TreeNode *ov45_02236CE0(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 extern int ov45_02233FE4(void *, struct Vec *);
 extern void *ov45_02231C78(struct Vec *);
@@ -5674,13 +5674,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-void ov45_02237BFC(struct Str *a, u32 requested);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+void LobbyString_Reserve(struct Str *a, u32 requested);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void ov45_02236690(char *name, int id, int n, int *list);
 void ov45_0223694C(int ok, int unused1, int unused2, int unused3, void *value);
 
@@ -5689,8 +5689,8 @@ void ov45_02236A44(void) {
 
 void *ov45_02236A48(u8 *a) {
     ov45_022379D4((struct Vec *)(a + 40));
-    ov45_02237BC8((struct Str *)(a + 24));
-    ov45_02237BC8((struct Str *)(a + 12));
+    LobbyString_Destroy((struct Str *)(a + 24));
+    LobbyString_Destroy((struct Str *)(a + 12));
     return a;
 }
 
@@ -5700,7 +5700,7 @@ void *ov45_02236A70(u8 *a) {
     ov45_022379D4((struct Vec *)(a + 40));
     ov45_02236B88((struct Tree *)(a + 4));
     if (a) {
-        ov00_021EC2EC(0, a, 0);
+        DWC_Free(0, a, 0);
     }
     return a;
 }
@@ -5708,7 +5708,7 @@ void *ov45_02236A70(u8 *a) {
 void *ov45_02236AB8(u8 *a) {
     ov45_022379D4((struct Vec *)(a + 24));
     if (a) {
-        ov00_021EC2EC(0, a, 0);
+        DWC_Free(0, a, 0);
     }
     return a;
 }
@@ -5732,7 +5732,7 @@ typedef struct Queue {
     u32 count, capacity;
 } Queue;
 
-extern void ov00_021EC2EC(int, void *, int), ov45_02238508(void *);
+extern void DWC_Free(int, void *, int), ov45_02238508(void *);
 Queue *ov45_02236AE8(Queue *);
 
 Queue *ov45_02236AE8(Queue *p) {
@@ -5753,7 +5753,7 @@ Queue *ov45_02236AE8(Queue *p) {
         limit = base + capacity;
         while (cursor != end) {
             if (*cursor) {
-                ov00_021EC2EC(0, *cursor, 0);
+                DWC_Free(0, *cursor, 0);
             }
             if (++cursor == limit) {
                 cursor = base;
@@ -5819,11 +5819,11 @@ struct Alloc {
 
 extern u32 *_022577C4;
 extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
-extern void ov00_021EC2EC(int, void *, int);
-extern void *ov45_02242394(u32);
-extern struct Str *ov45_02237BC8(struct Str *);
+extern void DWC_Free(int, void *, int);
+extern void *LobbyMem_Alloc(u32);
+extern struct Str *LobbyString_Destroy(struct Str *);
 extern struct Vec *ov45_022379D4(struct Vec *);
-extern struct Str *ov45_02237AA0(struct Str *, struct Str *, u32, u32);
+extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void ov45_02236090(int, int, int, int);
 extern void ov45_02233E10(int, int, int, int, int, int, int);
 extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
@@ -5834,12 +5834,12 @@ extern struct TreeNode *ov45_022370D0(struct TreeNode *, void *);
 extern void ov45_02232D8C(void *, int *), ov45_02241D58(int, char *);
 extern void ov45_0223DD3C(void *, int), ov45_022417B4(int, int, char *, void (*)(), int);
 extern void ov45_022320B4(struct Str *, void *);
-extern struct Str *ov45_02237B58(struct Str *, char *);
+extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int ov45_022340F8(struct Str *, struct Str *);
-extern void ov45_02237BFC(struct Str *, u32);
+extern void LobbyString_Reserve(struct Str *, u32);
 extern u32 ov45_02237890(struct Vec *, u32);
-extern struct Str *ov45_02237DB4(struct Str *, u32, u32, struct Str *);
-extern struct Str *ov45_02238104(struct Str *, u32, u32, char *, char *, struct Alloc);
+extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
+extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -5866,14 +5866,14 @@ struct Vec *ov45_0223775C(struct Vec *a);
 struct Vec *ov45_022379D4(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
 extern void ov45_02238508(void *), ov45_02238558(void *, void *);
 extern struct TreeNode *ov45_02238450(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *ov45_02236CE0(struct Tree *, struct TreeNode *, int, int, u32 *);
-extern void ov45_02237E04(struct Str *, u32, u32, struct Str *, u32, u32);
+extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
 void ov45_022362D0(int a, int b, int c, int d);
@@ -5899,17 +5899,17 @@ struct Vec *ov45_0223775C(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void *ov45_02236AE8(u32 *a);
 void ov45_02236BA8(u32 *result, struct Tree *a, u32 *value);
 void ov45_02236C40(Iterator *result, struct Tree *a, Iterator node);
 void ov45_022377AC(struct Vec *a, u32 n);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
 extern char ov45_02255120[], ov45_02255104[];
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -5941,13 +5941,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
-void ov45_02237BFC(struct Str *a, u32 requested);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
+void LobbyString_Reserve(struct Str *a, u32 requested);
 struct TreeNode *ov45_02236CE0(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 extern int ov45_02233FE4(void *, struct Vec *);
 extern void *ov45_02231C78(struct Vec *);
@@ -5985,13 +5985,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-void ov45_02237BFC(struct Str *a, u32 requested);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+void LobbyString_Reserve(struct Str *a, u32 requested);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void ov45_02236690(char *name, int id, int n, int *list);
 void ov45_0223694C(int ok, int unused1, int unused2, int unused3, void *value);
 
@@ -6096,11 +6096,11 @@ struct Alloc {
 
 extern u32 *_022577C4;
 extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
-extern void ov00_021EC2EC(int, void *, int);
-extern void *ov45_02242394(u32);
-extern struct Str *ov45_02237BC8(struct Str *);
+extern void DWC_Free(int, void *, int);
+extern void *LobbyMem_Alloc(u32);
+extern struct Str *LobbyString_Destroy(struct Str *);
 extern struct Vec *ov45_022379D4(struct Vec *);
-extern struct Str *ov45_02237AA0(struct Str *, struct Str *, u32, u32);
+extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void ov45_02236090(int, int, int, int);
 extern void ov45_02233E10(int, int, int, int, int, int, int);
 extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
@@ -6111,12 +6111,12 @@ extern struct TreeNode *ov45_022370D0(struct TreeNode *, void *);
 extern void ov45_02232D8C(void *, int *), ov45_02241D58(int, char *);
 extern void ov45_0223DD3C(void *, int), ov45_022417B4(int, int, char *, void (*)(), int);
 extern void ov45_022320B4(struct Str *, void *);
-extern struct Str *ov45_02237B58(struct Str *, char *);
+extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int ov45_022340F8(struct Str *, struct Str *);
-extern void ov45_02237BFC(struct Str *, u32);
+extern void LobbyString_Reserve(struct Str *, u32);
 extern u32 ov45_02237890(struct Vec *, u32);
-extern struct Str *ov45_02237DB4(struct Str *, u32, u32, struct Str *);
-extern struct Str *ov45_02238104(struct Str *, u32, u32, char *, char *, struct Alloc);
+extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
+extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -6143,14 +6143,14 @@ struct Vec *ov45_0223775C(struct Vec *a);
 struct Vec *ov45_022379D4(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
 extern void ov45_02238508(void *), ov45_02238558(void *, void *);
 extern struct TreeNode *ov45_02238450(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *ov45_02236CE0(struct Tree *, struct TreeNode *, int, int, u32 *);
-extern void ov45_02237E04(struct Str *, u32, u32, struct Str *, u32, u32);
+extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
 void ov45_022362D0(int a, int b, int c, int d);
@@ -6176,17 +6176,17 @@ struct Vec *ov45_0223775C(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void *ov45_02236AE8(u32 *a);
 void ov45_02236BA8(u32 *result, struct Tree *a, u32 *value);
 void ov45_02236C40(Iterator *result, struct Tree *a, Iterator node);
 void ov45_022377AC(struct Vec *a, u32 n);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
 extern char ov45_02255120[], ov45_02255104[];
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -6218,13 +6218,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
-void ov45_02237BFC(struct Str *a, u32 requested);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
+void LobbyString_Reserve(struct Str *a, u32 requested);
 struct TreeNode *ov45_02236CE0(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 extern int ov45_02233FE4(void *, struct Vec *);
 extern void *ov45_02231C78(struct Vec *);
@@ -6262,13 +6262,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-void ov45_02237BFC(struct Str *a, u32 requested);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+void LobbyString_Reserve(struct Str *a, u32 requested);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void ov45_02236690(char *name, int id, int n, int *list);
 void ov45_0223694C(int ok, int unused1, int unused2, int unused3, void *value);
 
@@ -6280,7 +6280,7 @@ void ov45_02236C40(Iterator *result, struct Tree *a, Iterator node) {
     }
     result->current = ov45_022370D0(old, a->root);
     if (old) {
-        ov00_021EC2EC(0, old, 0);
+        DWC_Free(0, old, 0);
     }
     a->count--;
 }
@@ -6306,8 +6306,8 @@ namespace F45 {
 extern "C" int printf(const char *, ...);
 extern "C" void abort(void);
 extern "C" char ov45_02255104[];
-extern "C" void *ov45_02242394(u32);
-extern "C" void ov00_021EC2EC(int, void *, int);
+extern "C" void *LobbyMem_Alloc(u32);
+extern "C" void DWC_Free(int, void *, int);
 
 class Alloc {};
 
@@ -6365,7 +6365,7 @@ public:
     void Destroy() {
         Node *p = ptr;
         if (p) {
-            ov00_021EC2EC(0, p, 0);
+            DWC_Free(0, p, 0);
         }
     }
 
@@ -6375,7 +6375,7 @@ public:
 };
 
 inline Node *Allocate(Alloc) {
-    return (Node *)ov45_02242394(sizeof(Node));
+    return (Node *)LobbyMem_Alloc(sizeof(Node));
 }
 
 extern "C" void ov45_02236EC4(Node *, Node *);
@@ -6463,11 +6463,11 @@ struct Alloc {
 
 extern u32 *_022577C4;
 extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
-extern void ov00_021EC2EC(int, void *, int);
-extern void *ov45_02242394(u32);
-extern struct Str *ov45_02237BC8(struct Str *);
+extern void DWC_Free(int, void *, int);
+extern void *LobbyMem_Alloc(u32);
+extern struct Str *LobbyString_Destroy(struct Str *);
 extern struct Vec *ov45_022379D4(struct Vec *);
-extern struct Str *ov45_02237AA0(struct Str *, struct Str *, u32, u32);
+extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void ov45_02236090(int, int, int, int);
 extern void ov45_02233E10(int, int, int, int, int, int, int);
 extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
@@ -6478,12 +6478,12 @@ extern struct TreeNode *ov45_022370D0(struct TreeNode *, void *);
 extern void ov45_02232D8C(void *, int *), ov45_02241D58(int, char *);
 extern void ov45_0223DD3C(void *, int), ov45_022417B4(int, int, char *, void (*)(), int);
 extern void ov45_022320B4(struct Str *, void *);
-extern struct Str *ov45_02237B58(struct Str *, char *);
+extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int ov45_022340F8(struct Str *, struct Str *);
-extern void ov45_02237BFC(struct Str *, u32);
+extern void LobbyString_Reserve(struct Str *, u32);
 extern u32 ov45_02237890(struct Vec *, u32);
-extern struct Str *ov45_02237DB4(struct Str *, u32, u32, struct Str *);
-extern struct Str *ov45_02238104(struct Str *, u32, u32, char *, char *, struct Alloc);
+extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
+extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -6510,14 +6510,14 @@ struct Vec *ov45_0223775C(struct Vec *a);
 struct Vec *ov45_022379D4(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
 extern void ov45_02238508(void *), ov45_02238558(void *, void *);
 extern struct TreeNode *ov45_02238450(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *ov45_02236CE0(struct Tree *, struct TreeNode *, int, int, u32 *);
-extern void ov45_02237E04(struct Str *, u32, u32, struct Str *, u32, u32);
+extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
 void ov45_022362D0(int a, int b, int c, int d);
@@ -6543,17 +6543,17 @@ struct Vec *ov45_0223775C(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void *ov45_02236AE8(u32 *a);
 void ov45_02236BA8(u32 *result, struct Tree *a, u32 *value);
 void ov45_02236C40(Iterator *result, struct Tree *a, Iterator node);
 void ov45_022377AC(struct Vec *a, u32 n);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
 extern char ov45_02255120[], ov45_02255104[];
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -6585,13 +6585,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
-void ov45_02237BFC(struct Str *a, u32 requested);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
+void LobbyString_Reserve(struct Str *a, u32 requested);
 struct TreeNode *ov45_02236CE0(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 extern int ov45_02233FE4(void *, struct Vec *);
 extern void *ov45_02231C78(struct Vec *);
@@ -6629,13 +6629,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-void ov45_02237BFC(struct Str *a, u32 requested);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+void LobbyString_Reserve(struct Str *a, u32 requested);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void ov45_02236690(char *name, int id, int n, int *list);
 void ov45_0223694C(int ok, int unused1, int unused2, int unused3, void *value);
 
@@ -6647,7 +6647,7 @@ void ov45_02236DEC(struct Tree *a, struct TreeNode *b) {
         ov45_02236DEC(a, (struct TreeNode *)b->right);
     }
     if (b) {
-        ov00_021EC2EC(0, b, 0);
+        DWC_Free(0, b, 0);
     }
 }
 
@@ -7022,11 +7022,11 @@ struct Alloc {
 
 extern u32 *_022577C4;
 extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
-extern void ov00_021EC2EC(int, void *, int);
-extern void *ov45_02242394(u32);
-extern struct Str *ov45_02237BC8(struct Str *);
+extern void DWC_Free(int, void *, int);
+extern void *LobbyMem_Alloc(u32);
+extern struct Str *LobbyString_Destroy(struct Str *);
 extern struct Vec *ov45_022379D4(struct Vec *);
-extern struct Str *ov45_02237AA0(struct Str *, struct Str *, u32, u32);
+extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void ov45_02236090(int, int, int, int);
 extern void ov45_02233E10(int, int, int, int, int, int, int);
 extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
@@ -7037,12 +7037,12 @@ extern struct TreeNode *ov45_022370D0(struct TreeNode *, void *);
 extern void ov45_02232D8C(void *, int *), ov45_02241D58(int, char *);
 extern void ov45_0223DD3C(void *, int), ov45_022417B4(int, int, char *, void (*)(), int);
 extern void ov45_022320B4(struct Str *, void *);
-extern struct Str *ov45_02237B58(struct Str *, char *);
+extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int ov45_022340F8(struct Str *, struct Str *);
-extern void ov45_02237BFC(struct Str *, u32);
+extern void LobbyString_Reserve(struct Str *, u32);
 extern u32 ov45_02237890(struct Vec *, u32);
-extern struct Str *ov45_02237DB4(struct Str *, u32, u32, struct Str *);
-extern struct Str *ov45_02238104(struct Str *, u32, u32, char *, char *, struct Alloc);
+extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
+extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -7069,14 +7069,14 @@ struct Vec *ov45_0223775C(struct Vec *a);
 struct Vec *ov45_022379D4(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
 extern void ov45_02238508(void *), ov45_02238558(void *, void *);
 extern struct TreeNode *ov45_02238450(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *ov45_02236CE0(struct Tree *, struct TreeNode *, int, int, u32 *);
-extern void ov45_02237E04(struct Str *, u32, u32, struct Str *, u32, u32);
+extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
 void ov45_022362D0(int a, int b, int c, int d);
@@ -7102,17 +7102,17 @@ struct Vec *ov45_0223775C(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void *ov45_02236AE8(u32 *a);
 void ov45_02236BA8(u32 *result, struct Tree *a, u32 *value);
 void ov45_02236C40(Iterator *result, struct Tree *a, Iterator node);
 void ov45_022377AC(struct Vec *a, u32 n);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
 extern char ov45_02255120[], ov45_02255104[];
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -7144,13 +7144,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
-void ov45_02237BFC(struct Str *a, u32 requested);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
+void LobbyString_Reserve(struct Str *a, u32 requested);
 struct TreeNode *ov45_02236CE0(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 extern int ov45_02233FE4(void *, struct Vec *);
 extern void *ov45_02231C78(struct Vec *);
@@ -7188,13 +7188,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-void ov45_02237BFC(struct Str *a, u32 requested);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+void LobbyString_Reserve(struct Str *a, u32 requested);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void ov45_02236690(char *name, int id, int n, int *list);
 void ov45_0223694C(int ok, int unused1, int unused2, int unused3, void *value);
 
@@ -7263,7 +7263,7 @@ typedef struct Tag {
 } Tag;
 
 void ov45_022387E4(u32 *, u32, Tag, u32);
-void ov00_021EC2EC(u32, u32, u32);
+void DWC_Free(u32, u32, u32);
 u32 *ov45_02237664(u32 *);
 
 static inline Tag tag(void) {
@@ -7278,7 +7278,7 @@ u32 *ov45_02237664(u32 *p) {
         Tag t = { 0 };
         ov45_022387E4(p, current, t, 0);
         if (p[0]) {
-            ov00_021EC2EC(0, p[0], 0);
+            DWC_Free(0, p[0], 0);
         }
     }
     return p;
@@ -7339,11 +7339,11 @@ struct Alloc {
 
 extern u32 *_022577C4;
 extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
-extern void ov00_021EC2EC(int, void *, int);
-extern void *ov45_02242394(u32);
-extern struct Str *ov45_02237BC8(struct Str *);
+extern void DWC_Free(int, void *, int);
+extern void *LobbyMem_Alloc(u32);
+extern struct Str *LobbyString_Destroy(struct Str *);
 extern struct Vec *ov45_022379D4(struct Vec *);
-extern struct Str *ov45_02237AA0(struct Str *, struct Str *, u32, u32);
+extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void ov45_02236090(int, int, int, int);
 extern void ov45_02233E10(int, int, int, int, int, int, int);
 extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
@@ -7354,12 +7354,12 @@ extern struct TreeNode *ov45_022370D0(struct TreeNode *, void *);
 extern void ov45_02232D8C(void *, int *), ov45_02241D58(int, char *);
 extern void ov45_0223DD3C(void *, int), ov45_022417B4(int, int, char *, void (*)(), int);
 extern void ov45_022320B4(struct Str *, void *);
-extern struct Str *ov45_02237B58(struct Str *, char *);
+extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int ov45_022340F8(struct Str *, struct Str *);
-extern void ov45_02237BFC(struct Str *, u32);
+extern void LobbyString_Reserve(struct Str *, u32);
 extern u32 ov45_02237890(struct Vec *, u32);
-extern struct Str *ov45_02237DB4(struct Str *, u32, u32, struct Str *);
-extern struct Str *ov45_02238104(struct Str *, u32, u32, char *, char *, struct Alloc);
+extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
+extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -7386,14 +7386,14 @@ struct Vec *ov45_0223775C(struct Vec *a);
 struct Vec *ov45_022379D4(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
 extern void ov45_02238508(void *), ov45_02238558(void *, void *);
 extern struct TreeNode *ov45_02238450(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *ov45_02236CE0(struct Tree *, struct TreeNode *, int, int, u32 *);
-extern void ov45_02237E04(struct Str *, u32, u32, struct Str *, u32, u32);
+extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
 void ov45_022362D0(int a, int b, int c, int d);
@@ -7419,17 +7419,17 @@ struct Vec *ov45_0223775C(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void *ov45_02236AE8(u32 *a);
 void ov45_02236BA8(u32 *result, struct Tree *a, u32 *value);
 void ov45_02236C40(Iterator *result, struct Tree *a, Iterator node);
 void ov45_022377AC(struct Vec *a, u32 n);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
 extern char ov45_02255120[], ov45_02255104[];
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -7461,13 +7461,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
-void ov45_02237BFC(struct Str *a, u32 requested);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
+void LobbyString_Reserve(struct Str *a, u32 requested);
 struct TreeNode *ov45_02236CE0(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 extern int ov45_02233FE4(void *, struct Vec *);
 extern void *ov45_02231C78(struct Vec *);
@@ -7505,13 +7505,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-void ov45_02237BFC(struct Str *a, u32 requested);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+void LobbyString_Reserve(struct Str *a, u32 requested);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void ov45_02236690(char *name, int id, int n, int *list);
 void ov45_0223694C(int ok, int unused1, int unused2, int unused3, void *value);
 
@@ -7521,7 +7521,7 @@ struct Vec *ov45_022376BC(struct Vec *a) {
         struct Alloc alloc = { 0 };
         a->size -= size;
         if (a->ptr) {
-            ov00_021EC2EC(0, a->ptr, 0);
+            DWC_Free(0, a->ptr, 0);
         }
     }
     return a;
@@ -7533,7 +7533,7 @@ struct Vec *ov45_0223770C(struct Vec *a) {
         struct Alloc alloc = { 0 };
         a->size -= size;
         if (a->ptr) {
-            ov00_021EC2EC(0, a->ptr, 0);
+            DWC_Free(0, a->ptr, 0);
         }
     }
     return a;
@@ -7545,7 +7545,7 @@ struct Vec *ov45_0223775C(struct Vec *a) {
         struct Alloc alloc = { 0 };
         a->size -= size;
         if (a->ptr) {
-            ov00_021EC2EC(0, a->ptr, 0);
+            DWC_Free(0, a->ptr, 0);
         }
     }
     return a;
@@ -7641,11 +7641,11 @@ struct Alloc {
 
 extern u32 *_022577C4;
 extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
-extern void ov00_021EC2EC(int, void *, int);
-extern void *ov45_02242394(u32);
-extern struct Str *ov45_02237BC8(struct Str *);
+extern void DWC_Free(int, void *, int);
+extern void *LobbyMem_Alloc(u32);
+extern struct Str *LobbyString_Destroy(struct Str *);
 extern struct Vec *ov45_022379D4(struct Vec *);
-extern struct Str *ov45_02237AA0(struct Str *, struct Str *, u32, u32);
+extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void ov45_02236090(int, int, int, int);
 extern void ov45_02233E10(int, int, int, int, int, int, int);
 extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
@@ -7656,12 +7656,12 @@ extern struct TreeNode *ov45_022370D0(struct TreeNode *, void *);
 extern void ov45_02232D8C(void *, int *), ov45_02241D58(int, char *);
 extern void ov45_0223DD3C(void *, int), ov45_022417B4(int, int, char *, void (*)(), int);
 extern void ov45_022320B4(struct Str *, void *);
-extern struct Str *ov45_02237B58(struct Str *, char *);
+extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int ov45_022340F8(struct Str *, struct Str *);
-extern void ov45_02237BFC(struct Str *, u32);
+extern void LobbyString_Reserve(struct Str *, u32);
 extern u32 ov45_02237890(struct Vec *, u32);
-extern struct Str *ov45_02237DB4(struct Str *, u32, u32, struct Str *);
-extern struct Str *ov45_02238104(struct Str *, u32, u32, char *, char *, struct Alloc);
+extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
+extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -7688,14 +7688,14 @@ struct Vec *ov45_0223775C(struct Vec *a);
 struct Vec *ov45_022379D4(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
 extern void ov45_02238508(void *), ov45_02238558(void *, void *);
 extern struct TreeNode *ov45_02238450(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *ov45_02236CE0(struct Tree *, struct TreeNode *, int, int, u32 *);
-extern void ov45_02237E04(struct Str *, u32, u32, struct Str *, u32, u32);
+extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
 void ov45_022362D0(int a, int b, int c, int d);
@@ -7721,17 +7721,17 @@ struct Vec *ov45_0223775C(struct Vec *a);
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void *ov45_02236AE8(u32 *a);
 void ov45_02236BA8(u32 *result, struct Tree *a, u32 *value);
 void ov45_02236C40(Iterator *result, struct Tree *a, Iterator node);
 void ov45_022377AC(struct Vec *a, u32 n);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
 extern char ov45_02255120[], ov45_02255104[];
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -7763,13 +7763,13 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
-void ov45_02237BFC(struct Str *a, u32 requested);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
+void LobbyString_Reserve(struct Str *a, u32 requested);
 struct TreeNode *ov45_02236CE0(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 extern int ov45_02233FE4(void *, struct Vec *);
 extern void *ov45_02231C78(struct Vec *);
@@ -7807,18 +7807,18 @@ void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(struct Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(struct Vec *a, u32 n);
 struct Vec *ov45_022379D4(struct Vec *a);
-struct Str *ov45_02237A24(struct Str *a, struct Str *b);
-struct Str *ov45_02237AA0(struct Str *a, struct Str *b, u32 offset, u32 length);
-struct Str *ov45_02237B58(struct Str *a, char *b);
-struct Str *ov45_02237BC8(struct Str *a);
-void ov45_02237BFC(struct Str *a, u32 requested);
-struct Str *ov45_02237D48(struct Str *a, struct Str *b);
-struct Str *ov45_02237DB4(struct Str *a, u32 b, u32 c, struct Str *d);
+struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
+struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
+struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
+struct Str *LobbyString_Destroy(struct Str *a);
+void LobbyString_Reserve(struct Str *a, u32 requested);
+struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
+struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void ov45_02236690(char *name, int id, int n, int *list);
 void ov45_0223694C(int ok, int unused1, int unused2, int unused3, void *value);
 
 void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused) {
-    a->ptr = ov45_02242394(b);
+    a->ptr = LobbyMem_Alloc(b);
     a->cap = b;
 }
 }
@@ -7847,7 +7847,7 @@ typedef struct {
     u32 capacity;
 } Buffer;
 
-extern void ov00_021EC2EC(int, void *, int), ov45_02237800(Buffer *, u32, Allocator);
+extern void DWC_Free(int, void *, int), ov45_02237800(Buffer *, u32, Allocator);
 void ov45_02237820(Buffer *, Allocator, u32);
 
 void ov45_02237820(Buffer *b, Allocator incoming, u32 n) {
@@ -7859,7 +7859,7 @@ void ov45_02237820(Buffer *b, Allocator incoming, u32 n) {
     b->size -= size;
     if (b->data) {
         if (b->data) {
-            ov00_021EC2EC(0, b->data, 0);
+            DWC_Free(0, b->data, 0);
         }
         b->data = 0;
         b->capacity = 0;
@@ -7908,11 +7908,11 @@ struct Alloc {
 
 extern u32 *_022577C4;
 extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
-extern void ov00_021EC2EC(int, void *, int);
-extern void *ov45_02242394(u32);
-extern Str *ov45_02237BC8(Str *);
+extern void DWC_Free(int, void *, int);
+extern void *LobbyMem_Alloc(u32);
+extern Str *LobbyString_Destroy(Str *);
 extern Vec *ov45_022379D4(Vec *);
-extern Str *ov45_02237AA0(Str *, Str *, u32, u32);
+extern Str *LobbyString_InitSubstring(Str *, Str *, u32, u32);
 extern void ov45_02236090(int, int, int, int);
 extern void ov45_02233E10(int, int, int, int, int, int, int);
 extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
@@ -7923,12 +7923,12 @@ extern struct TreeNode *ov45_022370D0(struct TreeNode *, void *);
 extern void ov45_02232D8C(void *, int *), ov45_02241D58(int, char *);
 extern void ov45_0223DD3C(void *, int), ov45_022417B4(int, int, char *, void (*)(), int);
 extern void ov45_022320B4(Str *, void *);
-extern Str *ov45_02237B58(Str *, char *);
+extern Str *LobbyString_InitFromCStr(Str *, char *);
 extern int ov45_022340F8(Str *, Str *);
-extern void ov45_02237BFC(Str *, u32);
+extern void LobbyString_Reserve(Str *, u32);
 extern u32 ov45_02237890(Vec *, u32);
-extern Str *ov45_02237DB4(Str *, u32, u32, Str *);
-extern Str *ov45_02238104(Str *, u32, u32, char *, char *, struct Alloc);
+extern Str *LobbyString_Replace(Str *, u32, u32, Str *);
+extern Str *LobbyString_ReplaceRange(Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -7955,14 +7955,14 @@ Vec *ov45_0223775C(Vec *a);
 Vec *ov45_022379D4(Vec *a);
 void ov45_02237800(Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(Vec *a, u32 n);
-Str *ov45_02237BC8(Str *a);
-Str *ov45_02237D48(Str *a, Str *b);
-Str *ov45_02237DB4(Str *a, u32 b, u32 c, Str *d);
+Str *LobbyString_Destroy(Str *a);
+Str *LobbyString_Assign(Str *a, Str *b);
+Str *LobbyString_Replace(Str *a, u32 b, u32 c, Str *d);
 
 extern void ov45_02238508(void *), ov45_02238558(void *, void *);
 extern struct TreeNode *ov45_02238450(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *ov45_02236CE0(struct Tree *, struct TreeNode *, int, int, u32 *);
-extern void ov45_02237E04(Str *, u32, u32, Str *, u32, u32);
+extern void LobbyString_ReplaceSubstring(Str *, u32, u32, Str *, u32, u32);
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
 void ov45_022362D0(int a, int b, int c, int d);
@@ -7988,17 +7988,17 @@ Vec *ov45_0223775C(Vec *a);
 void ov45_02237800(Vec *a, u32 b, struct Alloc unused);
 u32 ov45_02237890(Vec *a, u32 n);
 Vec *ov45_022379D4(Vec *a);
-Str *ov45_02237BC8(Str *a);
-Str *ov45_02237D48(Str *a, Str *b);
-Str *ov45_02237DB4(Str *a, u32 b, u32 c, Str *d);
+Str *LobbyString_Destroy(Str *a);
+Str *LobbyString_Assign(Str *a, Str *b);
+Str *LobbyString_Replace(Str *a, u32 b, u32 c, Str *d);
 void *ov45_02236AE8(u32 *a);
 void ov45_02236BA8(u32 *result, struct Tree *a, u32 *value);
 void ov45_02236C40(Iterator *result, struct Tree *a, Iterator node);
 void ov45_022377AC(Vec *a, u32 n);
 void ov45_02237820(Vec *a, u32 unused, u32 n);
-Str *ov45_02237A24(Str *a, Str *b);
-Str *ov45_02237AA0(Str *a, Str *b, u32 offset, u32 length);
-Str *ov45_02237B58(Str *a, char *b);
+Str *LobbyString_InitCopy(Str *a, Str *b);
+Str *LobbyString_InitSubstring(Str *a, Str *b, u32 offset, u32 length);
+Str *LobbyString_InitFromCStr(Str *a, char *b);
 extern char ov45_02255120[], ov45_02255104[];
 void ov45_02236070(int a, int b, int c);
 void ov45_022362B4(int a);
@@ -8030,13 +8030,13 @@ void ov45_02237800(Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(Vec *a, u32 n);
 Vec *ov45_022379D4(Vec *a);
-Str *ov45_02237A24(Str *a, Str *b);
-Str *ov45_02237AA0(Str *a, Str *b, u32 offset, u32 length);
-Str *ov45_02237B58(Str *a, char *b);
-Str *ov45_02237BC8(Str *a);
-Str *ov45_02237D48(Str *a, Str *b);
-Str *ov45_02237DB4(Str *a, u32 b, u32 c, Str *d);
-void ov45_02237BFC(Str *a, u32 requested);
+Str *LobbyString_InitCopy(Str *a, Str *b);
+Str *LobbyString_InitSubstring(Str *a, Str *b, u32 offset, u32 length);
+Str *LobbyString_InitFromCStr(Str *a, char *b);
+Str *LobbyString_Destroy(Str *a);
+Str *LobbyString_Assign(Str *a, Str *b);
+Str *LobbyString_Replace(Str *a, u32 b, u32 c, Str *d);
+void LobbyString_Reserve(Str *a, u32 requested);
 struct TreeNode *ov45_02236CE0(struct Tree *a, struct TreeNode *parent, int left, int end, u32 *value);
 extern int ov45_02233FE4(void *, Vec *);
 extern void *ov45_02231C78(Vec *);
@@ -8074,13 +8074,13 @@ void ov45_02237800(Vec *a, u32 b, struct Alloc unused);
 void ov45_02237820(Vec *a, u32 unused, u32 n);
 u32 ov45_02237890(Vec *a, u32 n);
 Vec *ov45_022379D4(Vec *a);
-Str *ov45_02237A24(Str *a, Str *b);
-Str *ov45_02237AA0(Str *a, Str *b, u32 offset, u32 length);
-Str *ov45_02237B58(Str *a, char *b);
-Str *ov45_02237BC8(Str *a);
-void ov45_02237BFC(Str *a, u32 requested);
-Str *ov45_02237D48(Str *a, Str *b);
-Str *ov45_02237DB4(Str *a, u32 b, u32 c, Str *d);
+Str *LobbyString_InitCopy(Str *a, Str *b);
+Str *LobbyString_InitSubstring(Str *a, Str *b, u32 offset, u32 length);
+Str *LobbyString_InitFromCStr(Str *a, char *b);
+Str *LobbyString_Destroy(Str *a);
+void LobbyString_Reserve(Str *a, u32 requested);
+Str *LobbyString_Assign(Str *a, Str *b);
+Str *LobbyString_Replace(Str *a, u32 b, u32 c, Str *d);
 void ov45_02236690(char *name, int id, int n, int *list);
 void ov45_0223694C(int ok, int unused1, int unused2, int unused3, void *value);
 
@@ -8133,14 +8133,14 @@ extern "C" void ov45_0223795C(Vec *vector, u32 count, ResizeDispatch) {
 #pragma push
 using DwcStringConcat200::RangeDispatch;
 using namespace DwcFormatted216Native;
-extern "C" void ov00_021EC2EC(int, void *, u32);
-extern "C" Str *ov45_02237A24(Str *, Str *);
+extern "C" void DWC_Free(int, void *, u32);
+extern "C" Str *LobbyString_InitCopy(Str *, Str *);
 
 namespace DwcFormatted216Native {
 struct CharacterAllocator {
     void release(char *storage) {
         if (storage) {
-            ov00_021EC2EC(0, storage, 0);
+            DWC_Free(0, storage, 0);
         }
     }
 };
@@ -8158,7 +8158,7 @@ extern "C" Vec *ov45_022379D4(Vec *vector) {
     return vector;
 }
 
-extern "C" Str *ov45_02237A24(Str *output, Str *input) {
+extern "C" Str *LobbyString_InitCopy(Str *output, Str *input) {
     if (!input->l.flag) {
         *output = *input;
     } else {
@@ -8167,8 +8167,8 @@ extern "C" Str *ov45_02237A24(Str *output, Str *input) {
         for (index = 0; index < 3; index++) {
             output->words[index] = 0;
         }
-        ov45_02237BFC(output, input->l.size);
-        ov45_02238104(output, 0, 0, input->l.data, input->l.data + input->l.size, dispatch);
+        LobbyString_Reserve(output, input->l.size);
+        LobbyString_ReplaceRange(output, 0, 0, input->l.data, input->l.data + input->l.size, dispatch);
     }
     return output;
 }
@@ -8207,23 +8207,23 @@ public:
     }
 };
 
-extern "C" void ov45_02237BFC(String *, u32);
-extern "C" String *ov45_02237E04(String *, u32, u32, String *, u32, u32);
-extern "C" String *ov45_02237AA0(String *, String *, u32, u32);
+extern "C" void LobbyString_Reserve(String *, u32);
+extern "C" String *LobbyString_ReplaceSubstring(String *, u32, u32, String *, u32, u32);
+extern "C" String *LobbyString_InitSubstring(String *, String *, u32, u32);
 
 template <class T>
 inline const T &Min(const T &a, const T &b) {
     return a < b ? a : b;
 }
 
-extern "C" String *ov45_02237AA0(String *self, String *str, u32 pos, u32 n) {
+extern "C" String *LobbyString_InitSubstring(String *self, String *str, u32 pos, u32 n) {
     u32 i;
     for (i = 0; i < 3; i++) {
         self->raw.words[i] = 0;
     }
     u32 size = str->Size();
-    ov45_02237BFC(self, pos <= size ? Min(size - pos, n) : 0);
-    ov45_02237E04(self, 0, 0, str, pos, n);
+    LobbyString_Reserve(self, pos <= size ? Min(size - pos, n) : 0);
+    LobbyString_ReplaceSubstring(self, 0, 0, str, pos, n);
     return self;
 }
 
@@ -8237,23 +8237,23 @@ using DwcStringConcat200::RangeDispatch;
 using std::strlen;
 #pragma force_active on
 
-extern "C" Str *ov45_02237B58(Str *output, char *text) {
+extern "C" Str *LobbyString_InitFromCStr(Str *output, char *text) {
     u32 index, length;
     RangeDispatch dispatch;
     for (index = 0; index < 3; index++) {
         output->words[index] = 0;
     }
     length = strlen(text);
-    ov45_02237BFC(output, length);
-    ov45_02238104(output, 0, 0, text, text + length, dispatch);
+    LobbyString_Reserve(output, length);
+    LobbyString_ReplaceRange(output, 0, 0, text, text + length, dispatch);
     return output;
 }
 
-extern "C" void ov00_021EC2EC(int, void *, u32);
+extern "C" void DWC_Free(int, void *, u32);
 
-extern "C" Str *ov45_02237BC8(Str *output) {
+extern "C" Str *LobbyString_Destroy(Str *output) {
     if (output->l.flag && output->l.data) {
-        ov00_021EC2EC(0, output->l.data, 0);
+        DWC_Free(0, output->l.data, 0);
     }
     return output;
 }
@@ -8277,8 +8277,8 @@ extern "C" {
 extern char ov45_02255120[];
 int printf(const char *, ...);
 void abort(void);
-void *ov45_02242394(u32);
-void ov00_021EC2EC(int, void *, int);
+void *LobbyMem_Alloc(u32);
+void DWC_Free(int, void *, int);
 
 typedef union {
     u32 raw;
@@ -8301,9 +8301,9 @@ typedef struct {
     u8 *ptr;
 } Text;
 
-void ov45_02237BFC(Text *w, u32 size);
+void LobbyString_Reserve(Text *w, u32 size);
 
-void ov45_02237BFC(Text *w, u32 size) {
+void LobbyString_Reserve(Text *w, u32 size) {
     u32 len, capacity;
     u8 *dst, *old;
     int wasHeap, makeHeap;
@@ -8336,9 +8336,9 @@ void ov45_02237BFC(Text *w, u32 size) {
         makeHeap = 0;
     } else {
         if (size > capacity) {
-            dst = (u8 *)ov45_02242394(size);
+            dst = (u8 *)LobbyMem_Alloc(size);
         } else {
-            dst = (u8 *)ov45_02242394(size);
+            dst = (u8 *)LobbyMem_Alloc(size);
             if (!dst) {
                 return;
             }
@@ -8349,7 +8349,7 @@ void ov45_02237BFC(Text *w, u32 size) {
     memmove(dst, old, len);
     dst[len] = 0;
     if (wasHeap && old) {
-        ov00_021EC2EC(0, old, 0);
+        DWC_Free(0, old, 0);
     }
     w->header.h.heap = makeHeap;
     if (!makeHeap) {
@@ -8394,17 +8394,17 @@ struct Str {
     u32 size;
     char *ptr;
 };
-extern struct Str *ov45_02237DB4(struct Str *, u32, u32, struct Str *);
-struct Str *ov45_02237D48(struct Str *, struct Str *);
+extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
+struct Str *LobbyString_Assign(struct Str *, struct Str *);
 #pragma force_active on
 
-struct Str *ov45_02237D48(struct Str *dst, struct Str *src) {
+struct Str *LobbyString_Assign(struct Str *dst, struct Str *src) {
     BOOL isLong = dst->u.bits.large ? TRUE : FALSE;
     if (!isLong && !src->u.bits.large) {
         *(struct StrRaw *)dst = *(struct StrRaw *)src;
         return dst;
     }
-    return ov45_02237DB4(dst, 0, isLong ? dst->size : ((u32)((const u8 *)dst)[0] << 24) >> 25, src);
+    return LobbyString_Replace(dst, 0, isLong ? dst->size : ((u32)((const u8 *)dst)[0] << 24) >> 25, src);
 }
 }
 }
@@ -8442,10 +8442,10 @@ namespace DwcStringConcat200 {
 }
 
 using namespace DwcStringConcat200;
-extern "C" Str *ov45_02238104(Str *, u32, u32, char *, char *, RangeDispatch);
-extern "C" Str *ov45_02237DB4(Str *, u32, u32, Str *);
+extern "C" Str *LobbyString_ReplaceRange(Str *, u32, u32, char *, char *, RangeDispatch);
+extern "C" Str *LobbyString_Replace(Str *, u32, u32, Str *);
 
-extern "C" Str *ov45_02237DB4(Str *out, u32 pos, u32 remove, Str *input) {
+extern "C" Str *LobbyString_Replace(Str *out, u32 pos, u32 remove, Str *input) {
     char *data;
     u32 size;
     RangeDispatch dispatch;
@@ -8456,7 +8456,7 @@ extern "C" Str *ov45_02237DB4(Str *out, u32 pos, u32 remove, Str *input) {
         data = input->s.data;
         size = input->s.size;
     }
-    return ov45_02238104(out, pos, remove, data, data + size, dispatch);
+    return LobbyString_ReplaceRange(out, pos, remove, data, data + size, dispatch);
 }
 
 }
@@ -8492,15 +8492,15 @@ public:
     } raw;
 };
 
-extern "C" String *ov45_02238104(String *, u32, u32, char *, char *, RangeDispatch);
-extern "C" String *ov45_02237E04(String *, u32, u32, String *, u32, u32);
+extern "C" String *LobbyString_ReplaceRange(String *, u32, u32, char *, char *, RangeDispatch);
+extern "C" String *LobbyString_ReplaceSubstring(String *, u32, u32, String *, u32, u32);
 
 template <class T>
 inline const T &Min(const T &a, const T &b) {
     return a < b ? a : b;
 }
 
-extern "C" String *ov45_02237E04(String *self, u32 pos, u32 n1, String *str, u32 pos2, u32 n2) {
+extern "C" String *LobbyString_ReplaceSubstring(String *self, u32 pos, u32 n1, String *str, u32 pos2, u32 n2) {
     char *data;
     u32 size;
     RangeDispatch dispatch;
@@ -8517,7 +8517,7 @@ extern "C" String *ov45_02237E04(String *self, u32 pos, u32 n1, String *str, u32
     }
     data += pos2;
     n2 = Min(size - pos2, n2);
-    return ov45_02238104(self, pos, n1, data, data + n2, dispatch);
+    return LobbyString_ReplaceRange(self, pos, n1, data, data + n2, dispatch);
 }
 
 }
@@ -8537,10 +8537,10 @@ inline StringSearchRange StringSearch::GetRange() const {
 
 inline int StringSearch::Find(const StringSearch &other, u32 pos) const {
     StringSearchRange needle = other.GetRange();
-    return (int)ov45_02237EE4(this, needle.data, pos, needle.size);
+    return (int)LobbyString_FindChars(this, needle.data, pos, needle.size);
 }
 
-extern "C" int ov45_02237EB0(const StringSearch *a, const StringSearch *b, u32 pos) {
+extern "C" int LobbyString_Find(const StringSearch *a, const StringSearch *b, u32 pos) {
     return a->Find(*b, pos);
 }
 
@@ -8552,7 +8552,7 @@ extern "C" {
 #pragma force_active on
 #pragma force_active on
 
-u32 ov45_02237EE4(const StringSearch *s, const s8 *needle, u32 start, u32 count) {
+u32 LobbyString_FindChars(const StringSearch *s, const s8 *needle, u32 start, u32 count) {
     u32 len, left;
     const s8 *data, *end, *at, *p, *q;
     if (s->raw.longForm.flag) {
@@ -8628,9 +8628,9 @@ public:
     int Compare(const char *text) const;
 };
 
-extern "C" int ov45_02238024(const String *, u32, u32, const char *, u32);
-extern "C" int ov45_02237F7C(const String *, const String *);
-extern "C" int ov45_02237FD8(const String *, const char *);
+extern "C" int LobbyString_CompareChars(const String *, u32, u32, const char *, u32);
+extern "C" int LobbyString_Compare(const String *, const String *);
+extern "C" int LobbyString_CompareCStr(const String *, const char *);
 
 inline int String::Compare(const String &other) const {
     const char *d;
@@ -8642,19 +8642,19 @@ inline int String::Compare(const String &other) const {
         d = other.raw.l.data;
         n = other.raw.l.size;
     }
-    return ov45_02238024(this, 0, Size(), d, n);
+    return LobbyString_CompareChars(this, 0, Size(), d, n);
 }
 
 inline int String::Compare(const char *text) const {
     u32 n = strlen(text);
-    return ov45_02238024(this, 0, Size(), text, n);
+    return LobbyString_CompareChars(this, 0, Size(), text, n);
 }
 
-extern "C" int ov45_02237F7C(const String *a, const String *b) {
+extern "C" int LobbyString_Compare(const String *a, const String *b) {
     return a->Compare(*b);
 }
 
-extern "C" int ov45_02237FD8(const String *a, const char *b) {
+extern "C" int LobbyString_CompareCStr(const String *a, const char *b) {
     return a->Compare(b);
 }
 
@@ -8672,13 +8672,13 @@ extern int printf(const char *, ...);
 extern void abort(void);
 #pragma force_active on
 extern const char ov45_02255160[];
-int ov45_02238024(const u8 *, u32, u32, const void *, u32);
+int LobbyString_CompareChars(const u8 *, u32, u32, const void *, u32);
 
 static inline const u32 *Min(const u32 *a, const u32 *b) {
     return *a < *b ? a : b;
 }
 
-int ov45_02238024(const u8 *s, u32 pos, u32 length, const void *other, u32 otherLength) {
+int LobbyString_CompareChars(const u8 *s, u32 pos, u32 length, const void *other, u32 otherLength) {
     const u8 *data;
     u32 size, n, remaining;
     int r;
@@ -8718,14 +8718,14 @@ extern "C" void *memcpy(void *, const void *, unsigned);
 extern "C" void *memmove(void *, const void *, unsigned);
 extern "C" int printf(const char *, ...);
 extern "C" void abort(void);
-extern "C" void *ov45_02242394(u32);
-extern "C" void ov00_021EC2EC(int, void *, int);
+extern "C" void *LobbyMem_Alloc(u32);
+extern "C" void DWC_Free(int, void *, int);
 extern "C" const char ov45_02255144[], ov45_0225517C[];
 
 class Tag {};
 struct Str;
-extern "C" Str *ov45_02237BC8(Str *);
-extern "C" Str *ov45_022384BC(Str *, const char *, const char *, int);
+extern "C" Str *LobbyString_Destroy(Str *);
+extern "C" Str *LobbyString_AssignRange(Str *, const char *, const char *, int);
 
 struct Str {
     union {
@@ -8754,7 +8754,7 @@ struct Str {
     }
 
     void Destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 
     const char *CStr() const {
@@ -8767,11 +8767,11 @@ inline const u32 &Min(const u32 &a, const u32 &b) {
     return b < a ? b : a;
 }
 
-extern "C" Str *ov45_02238104(Str *s, u32 pos, u32 n1, const char *first, const char *last, Tag);
+extern "C" Str *LobbyString_ReplaceRange(Str *s, u32 pos, u32 n1, const char *first, const char *last, Tag);
 
 #pragma opt_common_subs off
 
-extern "C" Str *ov45_02238104(Str *s, u32 pos, u32 n1, const char *first, const char *last, Tag) {
+extern "C" Str *LobbyString_ReplaceRange(Str *s, u32 pos, u32 n1, const char *first, const char *last, Tag) {
     bool isLong = s->raw.l.flag;
     u32 cap;
     char *data;
@@ -8804,7 +8804,7 @@ extern "C" Str *ov45_02238104(Str *s, u32 pos, u32 n1, const char *first, const 
         while (newCap < newSize + 1) {
             newCap = (newCap * 2 + 15) & ~15;
         }
-        char *p = (char *)ov45_02242394(newCap);
+        char *p = (char *)LobbyMem_Alloc(newCap);
         if (pos) {
             memcpy(p, data, pos);
         }
@@ -8816,7 +8816,7 @@ extern "C" Str *ov45_02238104(Str *s, u32 pos, u32 n1, const char *first, const 
         p[newSize] = ov45_02254F5B;
         if (isLong) {
             if (data) {
-                ov00_021EC2EC(0, data, 0);
+                DWC_Free(0, data, 0);
             }
         } else {
             s->raw.l.flag = 1;
@@ -8827,7 +8827,7 @@ extern "C" Str *ov45_02238104(Str *s, u32 pos, u32 n1, const char *first, const 
     } else {
         Str tmp;
         if (tail && data + pos + n2 < last && last <= data + size) {
-            ov45_022384BC(&tmp, first, last, 0);
+            LobbyString_AssignRange(&tmp, first, last, 0);
             first = tmp.CStr();
         }
         if (tail) {

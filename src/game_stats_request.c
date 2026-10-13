@@ -27,8 +27,8 @@ extern char gGameStatsUrlFormat[];
 extern int strncmp(const char *a, const char *b, u32 n);
 extern int sprintf(char *dest, const char *format, ...);
 
-void *ov00_021EC2A8(int category, u32 size);
-void ov00_021EC2EC(int category, void *ptr, u32 size);
+void *DWC_Alloc(int category, u32 size);
+void DWC_Free(int category, void *ptr, u32 size);
 void B64Encode(const void *src, char *dst, int len, int mode);
 BOOL DWC_InitGHTTP(int value);
 
@@ -58,7 +58,7 @@ int GameStats_EncodePayload(u32 key, const u8 *data, int len, char *out, int out
     if (outSize < GameStats_GetBase64Length(total) + 1) {
         return 2;
     }
-    buf = ov00_021EC2A8(10, total);
+    buf = DWC_Alloc(10, total);
     if (buf == NULL) {
         return 1;
     }
@@ -88,7 +88,7 @@ int GameStats_EncodePayload(u32 key, const u8 *data, int len, char *out, int out
     buf[3] = x;
     B64Encode(buf, out, len + 8, 2);
     out[GameStats_GetBase64Length(total)] = 0;
-    ov00_021EC2EC(10, buf, 0);
+    DWC_Free(10, buf, 0);
     return 0;
 }
 
@@ -306,7 +306,7 @@ int GameStats_PrepareRequest(char *url, int pid, void *payload, int payloadSize,
     payloadSize += 8;
     len = strlen(url);
     n = GameStats_GetBase64Length(payloadSize);
-    gGameStatsRequest.url = ov00_021EC2A8(10, len + 69 + n);
+    gGameStatsRequest.url = DWC_Alloc(10, len + 69 + n);
     if (gGameStatsRequest.url == NULL) {
         return 2;
     }

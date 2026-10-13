@@ -11,13 +11,13 @@ struct Vec {
 
 struct Tag {};
 
-extern "C" void ov00_021EC2EC(int, void *, u32);
+extern "C" void DWC_Free(int, void *, u32);
 extern "C" void ov45_0223EA04(Vec *v, u32 n, Tag t);
 
 struct Alloc {
     void release(u32 *p) {
         if (p) {
-            ov00_021EC2EC(0, p, 0);
+            DWC_Free(0, p, 0);
         }
     }
 };

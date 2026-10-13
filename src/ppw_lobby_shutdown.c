@@ -6,9 +6,9 @@
 extern u8 *_022577C4;
 extern void ov45_02236CB0(void *);
 extern int ov45_02240F9C(void);
-int ov45_02231490(void);
+int PPW_LobbyShutdownAsync(void);
 
-int ov45_02231490(void) {
+int PPW_LobbyShutdownAsync(void) {
     int result, error;
     volatile u8 unused;
     u8 *p;

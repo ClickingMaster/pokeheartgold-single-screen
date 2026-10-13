@@ -4,8 +4,8 @@
 #include <nitro/code32.h>
 extern "C" char *strncpy(char *, const char *, unsigned);
 struct Str;
-extern "C" Str *ov45_02237BC8(Str *);
-extern "C" void ov45_02237D48(Str *, const Str *);
+extern "C" Str *LobbyString_Destroy(Str *);
+extern "C" void LobbyString_Assign(Str *, const Str *);
 
 struct Str {
     union {
@@ -35,7 +35,7 @@ struct Str {
     }
 
     Str &operator=(const Str &o) {
-        ov45_02237D48(this, &o);
+        LobbyString_Assign(this, &o);
         return *this;
     }
 };
@@ -118,13 +118,13 @@ struct Work {
 extern "C" Work *_022577C4;
 extern "C" char ov45_02254F88[];
 extern "C" void ov45_02234814();
-extern "C" u32 ov00_021FF368(void);
+extern "C" u32 current_time(void);
 extern "C" Str ov45_02232B24(int, const char *, ...);
-extern "C" void ov00_021ECB94(Date *, Time *);
+extern "C" void DWC_GetDateTime(Date *, Time *);
 extern "C" s64 RTC_ConvertDateTimeToSecond(const Date *, const Time *);
 extern "C" RawEntry ov45_02232AE8(int, const Info &);
 extern "C" Result ov45_02236BA8(Container *, const Entry &);
-extern "C" int ov45_0223285C(User *u);
+extern "C" int PPW_LobbyStartRecruit(User *u);
 
 struct Tag {};
 
@@ -143,7 +143,7 @@ inline Result Insert2(Container *c, const Entry &e) {
 #pragma force_active on
 #pragma opt_common_subs off
 
-extern "C" int ov45_0223285C(User *u) {
+extern "C" int PPW_LobbyStartRecruit(User *u) {
     Work *w = _022577C4;
     if (w == 0) {
         return 4;
@@ -164,23 +164,23 @@ extern "C" int ov45_0223285C(User *u) {
     if (g->busy == 0) {
         g->busy = 1;
         g->user = *u;
-        Str tmp = ov45_02232B24(20, ov45_02254F88, g->code, ov00_021FF368() % 1000);
+        Str tmp = ov45_02232B24(20, ov45_02254F88, g->code, current_time() % 1000);
         value = tmp;
-        ov45_02237BC8(&tmp);
+        LobbyString_Destroy(&tmp);
         strncpy(g->user.name, value.CStr(), 19);
         ok = 1;
     }
     if (!ok) {
-        ov45_02237BC8(&value);
+        LobbyString_Destroy(&value);
         return 4;
     }
     strncpy(u->name, value.CStr(), 19);
     Work *h = _022577C4;
     Date date;
     Time time;
-    ov00_021ECB94(&date, &time);
+    DWC_GetDateTime(&date, &time);
     Insert2(&h->entries, Conv(Tag(), ov45_02232AE8(3, Info(RTC_ConvertDateTimeToSecond(&date, &time), 21, ov45_02234814))));
-    ov45_02237BC8(&value);
+    LobbyString_Destroy(&value);
     return 0;
 }
 

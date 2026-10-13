@@ -10,7 +10,7 @@ typedef struct Tag {
 } Tag;
 
 void ov45_02238ACC(u32 *, u32, Tag, u32);
-void ov00_021EC2EC(u32, u32, u32);
+void DWC_Free(u32, u32, u32);
 u32 *ov45_02238A74(u32 *);
 
 static inline Tag tag(void) {
@@ -25,7 +25,7 @@ u32 *ov45_02238A74(u32 *p) {
         Tag t = { 0 };
         ov45_02238ACC(p, current, t, 0);
         if (p[0]) {
-            ov00_021EC2EC(0, p[0], 0);
+            DWC_Free(0, p[0], 0);
         }
     }
     return p;

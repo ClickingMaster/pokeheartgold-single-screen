@@ -11,7 +11,7 @@ typedef struct {
     u32 start, count, capacity;
 } Container;
 
-void ov00_021EC2EC(int, void *, int);
+void DWC_Free(int, void *, int);
 void ov45_02238508(void *);
 Container *ov45_0223CA14(Container *);
 
@@ -32,7 +32,7 @@ static inline const int *minref(const int *a, const int *b) {
 }
 
 static inline void destroy(u8 *allocator, void *p) {
-    ov00_021EC2EC(0, p, 0);
+    DWC_Free(0, p, 0);
     (void)allocator;
 }
 

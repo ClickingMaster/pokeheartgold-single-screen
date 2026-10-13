@@ -4,9 +4,9 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 struct Str;
-extern "C" void ov45_02237BC8(Str *);
-extern "C" void ov45_02237A24(Str *, const Str *);
-extern "C" void ov45_02237D48(Str *, const Str *);
+extern "C" void LobbyString_Destroy(Str *);
+extern "C" void LobbyString_InitCopy(Str *, const Str *);
+extern "C" void LobbyString_Assign(Str *, const Str *);
 
 struct Str {
     union {
@@ -29,11 +29,11 @@ struct Str {
     }
 
     Str(const Str &o) {
-        ov45_02237A24(this, &o);
+        LobbyString_InitCopy(this, &o);
     }
 
     void Destroy() const {
-        ov45_02237BC8((Str *)this);
+        LobbyString_Destroy((Str *)this);
     }
 };
 struct Work;
@@ -48,7 +48,7 @@ struct Result {
     Result(int m, const Str &s)
         : mode(m) {
         Result *r = (Result *)(void *)this;
-        ov45_02237A24(&text, &s);
+        LobbyString_InitCopy(&text, &s);
         r->a = 0;
         r->b = 0;
     }
@@ -100,7 +100,7 @@ inline int ErrorMap::Map(int r) const {
 inline void SetResult(const Result &r) {
     Work *g = _022577C4;
     g->mode = r.mode;
-    ov45_02237D48(&g->text, &r.text);
+    LobbyString_Assign(&g->text, &r.text);
     g->a = r.a;
     g->b = r.b;
     r.text.Destroy();
@@ -112,10 +112,10 @@ inline Str Build(int mode, const Str &t) {
     return n;
 }
 
-extern "C" int ov45_02231C8C(int mode);
+extern "C" int PPW_LobbyJoinSubChannelAsync(int mode);
 #pragma opt_common_subs off
 
-extern "C" int ov45_02231C8C(int mode) {
+extern "C" int PPW_LobbyJoinSubChannelAsync(int mode) {
     Work *w = _022577C4;
     if (w == 0) {
         return 4;

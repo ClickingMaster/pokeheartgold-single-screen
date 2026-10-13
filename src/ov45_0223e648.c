@@ -56,19 +56,19 @@ extern u32 ov45_022577D0;
 extern u32 ov45_022551A4;
 extern unsigned char __lower_mapC[];
 
-void ov00_021EC2EC(int, void *, int);
-void *ov45_02242394(u32);
+void DWC_Free(int, void *, int);
+void *LobbyMem_Alloc(u32);
 void ov45_0223BD0C(void);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
-Str *ov45_02237DB4(Str *, u32, u32, void *);
-void ov45_0223DB08(Str *, u32, u32, const char *);
+Str *LobbyString_Replace(Str *, u32, u32, void *);
+void LobbyString_ReplaceCStr(Str *, u32, u32, const char *);
 
 typedef struct Tag {
     u8 c;
 } Tag;
 
-void ov45_02238104(Str *, u32, u32, const char *, const char *, Tag);
-int ov45_02238024(const u8 *, u32, u32, const void *, u32);
+void LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, Tag);
+int LobbyString_CompareChars(const u8 *, u32, u32, const void *, u32);
 
 static inline BOOL StrIsShort(Str *s) {
     return !s->l.isLong;
@@ -233,12 +233,12 @@ typedef struct Callbacks {
     void (*onData)(int id, SessionInfo *info, const char *data, u32 size);
 } Callbacks;
 
-Callbacks *ov45_022310B0(void);
+Callbacks *PPWLobby_GetWork(void);
 const char *ov45_02231C78(void *);
 void ov45_0223DCD0(Session *s);
 
 extern VTable ov45_02254FB0;
-void ov00_021ECB94(RTCDate *date, RTCTime *time);
+void DWC_GetDateTime(RTCDate *date, RTCTime *time);
 void ov45_0223E648(InsertResult *out, List *l, Session **key);
 
 typedef struct PtrDeque {
@@ -259,10 +259,10 @@ extern char ov45_022551F4[];
 extern char ov45_022551F8[];
 extern char ov45_022551FC[];
 void ov45_02232B24(Str *out, u32 width, const char *fmt, ...);
-void ov45_02237BC8(Str *s);
-void ov45_0223DA6C(Str *s, void *arg);
-void ov45_0223DAA0(Str *s, const char *arg);
-void ov45_0223DAD4(Str *s, const char *arg);
+void LobbyString_Destroy(Str *s);
+void LobbyString_Append(Str *s, void *arg);
+void LobbyString_AppendCStr(Str *s, const char *arg);
+void LobbyString_AssignCStr(Str *s, const char *arg);
 int ov00_021EFF30(const void *src, u32 len, char *dst, u32 dstLen);
 void MI_CpuFill8(void *dst, u8 val, u32 size);
 
@@ -307,7 +307,7 @@ void ov45_0223E6E8(NodeIter *out, List *l, NodeIter it) {
     }
     out->current = ov45_022370D0(n, l->root);
     if (n != NULL) {
-        ov00_021EC2EC(0, n, 0);
+        DWC_Free(0, n, 0);
     }
     l->count--;
 }
@@ -332,7 +332,7 @@ Node *ov45_0223E758(List *l, Node *parent, u8 left, u8 flag, Session **key) {
     {
         volatile Tag t = { 0 };
     }
-    n = ov45_02242394(sizeof(Node));
+    n = LobbyMem_Alloc(sizeof(Node));
     h.c = &l->root;
     pv = &n->val;
     h.d = n;
@@ -360,7 +360,7 @@ Node *ov45_0223E758(List *l, Node *parent, u8 left, u8 flag, Session **key) {
     }
     tmp = h.d;
     if (tmp != NULL) {
-        ov00_021EC2EC(0, tmp, 0);
+        DWC_Free(0, tmp, 0);
     }
     return n;
 }
@@ -430,7 +430,7 @@ Vec *ov45_0223E9B4(Vec *v) {
         volatile Tag a = { 0 };
         *(volatile u32 *)&v->size -= n;
         if (v->ptr != NULL) {
-            ov00_021EC2EC(0, v->ptr, 0);
+            DWC_Free(0, v->ptr, 0);
         }
     }
     return v;
@@ -440,7 +440,7 @@ void ov45_0223EA04(Vec *v, u32 n, Tag unused) {
     if (n > 0x3FFFFFFF) {
         _ZNSt15__vector_commonILb1EE18throw_length_errorEv();
     }
-    v->ptr = ov45_02242394(n * 4);
+    v->ptr = LobbyMem_Alloc(n * 4);
     v->cap = n;
 }
 

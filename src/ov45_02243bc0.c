@@ -21,11 +21,11 @@ typedef struct {
     void *last;
 } Tree;
 
-extern Node *ov45_02242394(u32);
+extern Node *LobbyMem_Alloc(u32);
 extern void ov45_02243CF8(Tree *, Node *, Node *, int);
 extern void ov45_02244350(void *, Tree *);
 extern void ov45_02244330(Tree *);
-extern void ov00_021EC2EC(int, void *, int);
+extern void DWC_Free(int, void *, int);
 void ov45_02243BC0(u8 *, Work *);
 
 void ov45_02243BC0(u8 *owner, Work *w) {
@@ -46,7 +46,7 @@ void ov45_02243BC0(u8 *owner, Work *w) {
         return;
     }
     f.byte = 0;
-    n = ov45_02242394(16);
+    n = LobbyMem_Alloc(16);
     f.owner = owner + 4;
     f.a = n;
     f.b = n;
@@ -91,7 +91,7 @@ void ov45_02243BC0(u8 *owner, Work *w) {
     {
         Node *cleanup = f.cleanup;
         if (cleanup) {
-            ov00_021EC2EC(0, cleanup, 0);
+            DWC_Free(0, cleanup, 0);
         }
     };
 }

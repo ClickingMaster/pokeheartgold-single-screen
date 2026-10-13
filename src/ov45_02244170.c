@@ -15,7 +15,7 @@ typedef struct {
     void *root;
 } Tree;
 
-extern int ov45_02237F7C(void *, void *);
+extern int LobbyString_Compare(void *, void *);
 void *ov45_02244170(Tree *, void *, Node **, u8 *, u8 *);
 
 void *ov45_02244170(Tree *w, void *key, Node **found, u8 *left, u8 *empty) {
@@ -29,7 +29,7 @@ void *ov45_02244170(Tree *w, void *key, Node **found, u8 *left, u8 *empty) {
     parent = &w->root;
     while (p) {
         parent = p;
-        comparison = (_Bool)(ov45_02237F7C(key, p->data) < 0);
+        comparison = (_Bool)(LobbyString_Compare(key, p->data) < 0);
         if (comparison) {
             p = p->left;
             *left = 1;

@@ -6,8 +6,8 @@
 extern "C" unsigned long strlen(const char *);
 extern "C" void MI_CpuFill8(void *, u8, u32);
 union Str;
-extern "C" Str *ov45_02237B58(Str *, const char *);
-extern "C" Str *ov45_02237BC8(Str *);
+extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
+extern "C" Str *LobbyString_Destroy(Str *);
 
 union Str {
     struct L {
@@ -26,11 +26,11 @@ union Str {
     u32 words[3];
 
     Str(const char *p) {
-        ov45_02237B58(this, p);
+        LobbyString_InitFromCStr(this, p);
     }
 
     void destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 
     const char *c_str() const {
@@ -62,7 +62,7 @@ struct Mgr {
 };
 
 extern "C" Mgr *ov45_022577DC;
-extern "C" void *ov45_02242394(u32);
+extern "C" void *LobbyMem_Alloc(u32);
 
 struct InsertResult {
     void *it;
@@ -130,7 +130,7 @@ inline u32 NextHandlerId() {
 }
 
 inline Handler *NewHandler(u32 a, u32 b) {
-    Handler *p = (Handler *)ov45_02242394(sizeof(Handler));
+    Handler *p = (Handler *)LobbyMem_Alloc(sizeof(Handler));
     if (p) {
         BaseInit(p, b);
         p->id = NextHandlerId();

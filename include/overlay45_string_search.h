@@ -18,8 +18,8 @@ typedef char StringSearchSize12[sizeof(StringSearch)==12?1:-1];
 #ifdef __cplusplus
 extern "C" {
 #endif
-int ov45_02237EB0(const StringSearch *,const StringSearch *,u32);
-u32 ov45_02237EE4(const StringSearch *,const s8 *,u32,u32);
+int LobbyString_Find(const StringSearch *,const StringSearch *,u32);
+u32 LobbyString_FindChars(const StringSearch *,const s8 *,u32,u32);
 #ifdef __cplusplus
 }
 #endif

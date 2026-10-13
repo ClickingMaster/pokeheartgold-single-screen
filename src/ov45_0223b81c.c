@@ -32,10 +32,10 @@ extern char _ZSt7nothrow[];
 extern char ov45_022551C4[];
 void *_ZnamRKSt9nothrow_t(u32, void *);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
-void ov00_021EC2EC(int, void *, int);
-void *ov45_022310B0(void);
+void DWC_Free(int, void *, int);
+void *PPWLobby_GetWork(void);
 int ov45_0223DFC8(void *);
-void ov00_021ECB94(RTCDate *, RTCTime *);
+void DWC_GetDateTime(RTCDate *, RTCTime *);
 void ov45_0223B8D0(const char *);
 void ov45_0223BD0C(void);
 void ov45_0223AA80(void *, int);
@@ -71,7 +71,7 @@ void ov45_0223B81C(void *p, u32 n) {
     while (W(p, 0) >= 256) {
         void *ptr = ((void **)P(p, 8))[W(p, 12)];
         if (ptr) {
-            ov00_021EC2EC(0, ptr, 0);
+            DWC_Free(0, ptr, 0);
         }
         a = 0;
         {

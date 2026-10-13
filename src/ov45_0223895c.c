@@ -45,19 +45,19 @@ typedef struct E {
 } E;
 
 extern void ov45_02237800(Vec *, u32, Small);
-extern int ov45_02238024(const u8 *, u32, u32, const void *, u32);
-extern S *ov45_02238104(S *, u32, u32, char *, char *, Small);
-extern void *ov45_02242394(u32);
+extern int LobbyString_CompareChars(const u8 *, u32, u32, const void *, u32);
+extern S *LobbyString_ReplaceRange(S *, u32, u32, char *, char *, Small);
+extern void *LobbyMem_Alloc(u32);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 extern u8 *ov45_02231C78(S *);
-extern int ov00_021EC2EC();
+extern int DWC_Free();
 extern int ov45_022377AC();
-extern int ov45_02237BC8();
+extern int LobbyString_Destroy();
 #include "overlay45_string_search.h"
-void ov45_02237F7C(S *p, S *q);
-void ov45_02237FD8(S *p, char *q);
+void LobbyString_Compare(S *p, S *q);
+void LobbyString_CompareCStr(S *p, char *q);
 void *ov45_02238450(Node *p, u32 *key, Node **out, u8 *less, u8 *empty);
-void ov45_022384BC(S *p, char *a, char *b);
+void LobbyString_AssignRange(S *p, char *a, char *b);
 void ov45_02238558(void *ctx, Node *p);
 void ov45_022387E4(Vec *p, u32 n, Small tag);
 void ov45_02238ACC(Vec *p, u32 n, Small tag);
@@ -83,7 +83,7 @@ Vec *ov45_0223895C(Vec *p) {
     S *first = p->data + p->extra, *end = first + p->len;
     while (end > first) {
         end--;
-        ov45_02237BC8(end);
+        LobbyString_Destroy(end);
     }
     p->len = 0;
     ov45_02238A74(p);
@@ -97,6 +97,6 @@ Vec *ov45_022389B0(Vec *p) {
 }
 
 void ov45_022389CC(Vec *p, u32 n, Small tag) {
-    p->data = ov45_02242394(n);
+    p->data = LobbyMem_Alloc(n);
     p->cap = n;
 }

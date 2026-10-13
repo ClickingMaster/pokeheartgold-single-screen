@@ -10,9 +10,9 @@ inline void *operator new(unsigned long, void *p) {
 
 struct Tag {};
 struct String;
-extern "C" void ov45_02237A24(String *dst, const String *src);
-extern "C" void ov45_02237BC8(String *s);
-extern "C" void ov45_02237D48(String *dst, const String *src);
+extern "C" void LobbyString_InitCopy(String *dst, const String *src);
+extern "C" void LobbyString_Destroy(String *s);
+extern "C" void LobbyString_Assign(String *dst, const String *src);
 extern "C" String ov45_02236680(const String *s, u32 pos, u32 n);
 extern "C" int ov45_02242254(const String *s, const String &str, int pos);
 
@@ -33,15 +33,15 @@ struct String {
     } raw;
 
     String(const String &o) {
-        ov45_02237A24(this, &o);
+        LobbyString_InitCopy(this, &o);
     }
 
     void destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 
     String &operator=(const String &o) {
-        ov45_02237D48(this, &o);
+        LobbyString_Assign(this, &o);
         return *this;
     }
 

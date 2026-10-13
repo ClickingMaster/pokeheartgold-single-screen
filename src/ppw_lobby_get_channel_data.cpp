@@ -3,9 +3,9 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 class Str;
-extern "C" Str *ov45_02237BC8(Str *);
-extern "C" Str *ov45_02237A24(Str *, const Str *);
-extern "C" int ov45_02237FD8(const Str *, const char *);
+extern "C" Str *LobbyString_Destroy(Str *);
+extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
+extern "C" int LobbyString_CompareCStr(const Str *, const char *);
 
 class Str {
 public:
@@ -27,11 +27,11 @@ public:
     } raw;
 
     Str(const Str &o) {
-        ov45_02237A24(this, &o);
+        LobbyString_InitCopy(this, &o);
     }
 
     void Destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 
     const char *CStr() const {
@@ -39,7 +39,7 @@ public:
     }
 
     bool operator==(const char *t) const {
-        return ov45_02237FD8(this, t) == 0;
+        return LobbyString_CompareCStr(this, t) == 0;
     }
 };
 
@@ -55,7 +55,7 @@ extern "C" char ov45_022550B4[];
 extern "C" Str ov45_02232434(u8 *, int);
 extern "C" int ov45_022417B4(const char *, int, int, void (*)(), int);
 extern "C" void ov45_02236308();
-extern "C" int ov45_02232304(int, int, int, int);
+extern "C" int PPW_LobbyGetChannelDataAsync(int, int, int, int);
 
 inline bool IsState(int s) {
     return _022577C4->state == s;
@@ -82,7 +82,7 @@ inline int ErrorMap::Map(int r) const {
 #pragma force_active on
 #pragma opt_common_subs off
 
-extern "C" int ov45_02232304(int id, int key, int mode, int arg) {
+extern "C" int PPW_LobbyGetChannelDataAsync(int id, int key, int mode, int arg) {
     Work *w = _022577C4;
     if (w == 0) {
         return 4;

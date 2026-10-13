@@ -98,8 +98,8 @@ struct Out {
     CVec payload;
 };
 
-extern "C" Str *ov45_02237B58(Str *, const char *);
-extern "C" void ov45_02237BC8(Str *);
+extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
+extern "C" void LobbyString_Destroy(Str *);
 extern "C" void ov45_0223649C(SVec *, const Str *, const Str *, int);
 extern "C" void ov45_02237664(SVec *);
 extern "C" int ov45_0223D644(Str *, Str *, int);
@@ -121,9 +121,9 @@ extern "C" int ov45_0223D27C(const Str *src, Out *out) {
     Str a2;
     char *end;
     const Str *p;
-    ov45_02237B58(&delim, ov45_022551DC);
+    LobbyString_InitFromCStr(&delim, ov45_022551DC);
     ov45_0223649C(&parts, src, &delim, 2);
-    ov45_02237BC8(&delim);
+    LobbyString_Destroy(&delim);
     if (parts.size != 2) {
         ov45_02237664(&parts);
         return 0;
@@ -139,9 +139,9 @@ extern "C" int ov45_0223D27C(const Str *src, Out *out) {
             return 0;
         }
     }
-    ov45_02237B58(&delim2, ov45_022551E0);
+    LobbyString_InitFromCStr(&delim2, ov45_022551E0);
     ov45_0223649C(&fields, &parts.ptr[0], &delim2, 0);
-    ov45_02237BC8(&delim2);
+    LobbyString_Destroy(&delim2);
     if (fields.size < 6) {
         ov45_02237664(&fields);
         ov45_02237664(&parts);
@@ -151,20 +151,20 @@ extern "C" int ov45_0223D27C(const Str *src, Out *out) {
     out->x4 = strtoul(fields.ptr[1].c_str(), &end, 16);
     {
         const char *k = ov45_022551E4;
-        ov45_02237B58(&a, fields.ptr[2].c_str());
-        ov45_02237B58(&b, k);
+        LobbyString_InitFromCStr(&a, fields.ptr[2].c_str());
+        LobbyString_InitFromCStr(&b, k);
         int r = ov45_0223D644(&a, &b, 1);
-        ov45_02237BC8(&b);
-        ov45_02237BC8(&a);
+        LobbyString_Destroy(&b);
+        LobbyString_Destroy(&a);
         out->decode = r == 0;
     }
     {
         const char *k = ov45_022551E8;
-        ov45_02237B58(&a2, fields.ptr[3].c_str());
-        ov45_02237B58(&b2, k);
+        LobbyString_InitFromCStr(&a2, fields.ptr[3].c_str());
+        LobbyString_InitFromCStr(&b2, k);
         int r = ov45_0223D644(&a2, &b2, 1);
-        ov45_02237BC8(&b2);
-        ov45_02237BC8(&a2);
+        LobbyString_Destroy(&b2);
+        LobbyString_Destroy(&a2);
         if (r == 0) {
             out->flag = 0;
         } else {

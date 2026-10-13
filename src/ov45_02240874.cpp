@@ -13,7 +13,7 @@ struct RTCTime {
 };
 
 extern "C" s64 RTC_ConvertDateTimeToSecond(const RTCDate *date, const RTCTime *time);
-extern "C" void ov00_021ECB94(RTCDate *date, RTCTime *time);
+extern "C" void DWC_GetDateTime(RTCDate *date, RTCTime *time);
 extern "C" void chatThink(void *p);
 
 struct Node {
@@ -156,7 +156,7 @@ extern "C" int ov45_02240874(void) {
     s64 now;
     Node *end;
     It it;
-    ov00_021ECB94(&date, &time);
+    DWC_GetDateTime(&date, &time);
     now = RTC_ConvertDateTimeToSecond(&date, &time);
     it.n = w->tree.header.c;
     end = &w->tree.header;

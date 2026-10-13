@@ -4,9 +4,9 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 struct String;
-extern "C" void ov45_02237B58(String *s, const char *t);
-extern "C" void ov45_02237BC8(String *s);
-extern "C" int ov45_02237FD8(const String *s, const char *t);
+extern "C" void LobbyString_InitFromCStr(String *s, const char *t);
+extern "C" void LobbyString_Destroy(String *s);
+extern "C" int LobbyString_CompareCStr(const String *s, const char *t);
 
 enum Res {
     RES_NO,
@@ -20,15 +20,15 @@ struct String {
     }
 
     String(const char *t) {
-        ov45_02237B58(this, t);
+        LobbyString_InitFromCStr(this, t);
     }
 
     void destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 
     int compare(const char *t) const {
-        return ov45_02237FD8(this, t);
+        return LobbyString_CompareCStr(this, t);
     }
 
     Res ne(const char *t) const {

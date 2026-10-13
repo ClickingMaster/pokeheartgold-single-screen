@@ -178,16 +178,16 @@ extern "C" char ov45_022550B0[];
 
 extern "C" int StatsUpload_Process(void);
 extern "C" void *StatsUpload_GetResponseBody(u32 *len);
-extern "C" void *ov00_021EC2A8(int heap, u32 size);
-extern "C" void ov00_021EC2EC(int heap, void *p, int unk);
-extern "C" void ov00_021EC210(void);
+extern "C" void *DWC_Alloc(int heap, u32 size);
+extern "C" void DWC_Free(int heap, void *p, int unk);
+extern "C" void DWC_ClearError(void);
 extern "C" void StatsUpload_Stop(void);
 extern "C" void StatsUpload_Start(int mode, char *s);
 extern "C" void *ov45_02231C78(Vec *v);
 extern "C" int StatsUpload_UploadWithLastHash(char *a, int b, void *c, u32 d, int e);
 extern "C" int StatsUpload_Upload(char *a, int b, void *c, u32 d, int e);
 extern "C" int ov45_02240874(void);
-extern "C" int ov45_02231490(void);
+extern "C" int PPW_LobbyShutdownAsync(void);
 extern "C" Vec *ov45_0223770C(Vec *);
 extern "C" void *ov45_02236AE8(void *);
 extern "C" Vec *ov45_0223775C(Vec *);
@@ -196,21 +196,21 @@ extern "C" void *ov45_02236E38(Tree *);
 extern "C" void ov45_0223DF4C(void *);
 extern "C" Vec *ov45_022379D4(Vec *);
 extern "C" void *ov45_02236B88(Tree *);
-extern "C" Str *ov45_02237BC8(Str *);
+extern "C" Str *LobbyString_Destroy(Str *);
 extern "C" int ov45_02240A58(void);
-extern "C" int ov00_021ECB94(RTCDate *date, RTCTime *time);
+extern "C" int DWC_GetDateTime(RTCDate *date, RTCTime *time);
 extern "C" void ov45_02236E58(Iterator *it);
 extern "C" void ov45_02236C40(Iterator *result, Tree *t, Iterator node);
 extern "C" void ov45_0223E558(void *);
 extern "C" void ov45_0223AF28(void *);
-extern "C" Str *ov45_02237B58(Str *s, char *text);
+extern "C" Str *LobbyString_InitFromCStr(Str *s, char *text);
 extern "C" void ov45_02233994(Str *out, u32 id, Str *s);
 extern "C" void ov45_0223633C(void);
 extern "C" void ov45_02241A20(char *s, void (*cb)(void), int x);
 extern "C" int ov45_02233CA0(void);
 extern "C" int ov45_02234688(void);
 
-extern "C" int ov45_02231514(void);
+extern "C" int PPW_LobbyProcess(void);
 
 static inline char *Str_CStr(Str *s) {
     return !s->bits.large ? s->s.data : s->l.ptr;
@@ -260,7 +260,7 @@ static inline int Request_Poll(Request *r) {
     switch (StatsUpload_Process()) {
     case 8: {
         void *data = StatsUpload_GetResponseBody(&len);
-        void *buf = ov00_021EC2A8(0, len);
+        void *buf = DWC_Alloc(0, len);
         if (buf != NULL) {
             MI_CpuCopy8(data, buf, len);
         }
@@ -270,12 +270,12 @@ static inline int Request_Poll(Request *r) {
             Request_Finish(r, 0, NULL, 0);
         }
         if (buf != NULL) {
-            ov00_021EC2EC(0, buf, 0);
+            DWC_Free(0, buf, 0);
         }
         return 1;
     }
     case 1:
-        ov00_021EC210();
+        DWC_ClearError();
         if (--r->retries != 0) {
             if (Request_Send(r)) {
                 return 0;
@@ -284,7 +284,7 @@ static inline int Request_Poll(Request *r) {
         Request_Finish(r, 0, NULL, 0);
         return 1;
     case 0:
-        ov00_021EC210();
+        DWC_ClearError();
         Request_Finish(r, 0, NULL, 0);
         return 1;
     }
@@ -319,16 +319,16 @@ static inline void Lobby_Destroy(Lobby *w) {
     ov45_0223DF4C(&w->sub.vt);
     ov45_022379D4(&w->sub.vec);
     ov45_02236B88(&w->sub.tree);
-    ov45_02237BC8(&w->sd4);
-    ov45_02237BC8(&w->sbc);
-    ov45_02237BC8(&w->s58);
+    LobbyString_Destroy(&w->sd4);
+    LobbyString_Destroy(&w->sbc);
+    LobbyString_Destroy(&w->s58);
 }
 
 static inline void Lobby_Delete(Lobby *w) {
     if (w != NULL) {
         Lobby_Destroy(w);
         if (w != NULL) {
-            ov00_021EC2EC(0, w, 0);
+            DWC_Free(0, w, 0);
         }
     }
 }
@@ -368,7 +368,7 @@ static inline void Lobby_UpdateTimers(void) {
     s64 now;
     void *end;
     Iterator it;
-    ov00_021ECB94(&date, &time);
+    DWC_GetDateTime(&date, &time);
     now = RTC_ConvertDateTimeToSecond(&date, &time);
     it.current = w->timers.first;
     end = &w->timers.root;
@@ -396,11 +396,11 @@ static inline int Lobby_IsReady(Lobby *w) {
 static inline void Lobby_Login(void) {
     Str name;
     Str query;
-    ov45_02237B58(&name, ov45_022550B0);
+    LobbyString_InitFromCStr(&name, ov45_022550B0);
     ov45_02233994(&query, 0, &name);
     ov45_02241A20(Str_CStr(&query), ov45_0223633C, 0);
-    ov45_02237BC8(&query);
-    ov45_02237BC8(&name);
+    LobbyString_Destroy(&query);
+    LobbyString_Destroy(&name);
 }
 
 static inline void Lobby_Fail(int r) {
@@ -426,7 +426,7 @@ static inline void Lobby_Fail(int r) {
 static inline int Lobby_Process(void) {
     switch (ov45_02240874()) {
     case 0:
-        ov45_02231490();
+        PPW_LobbyShutdownAsync();
         if (_022577C4 != NULL) {
             Lobby_Delete(_022577C4);
             _022577C4 = NULL;
@@ -492,7 +492,7 @@ static inline int Lobby_Process(void) {
     return _022577C4->state;
 }
 
-int ov45_02231514(void) {
+int PPW_LobbyProcess(void) {
     int polled = Request_Update();
     if (polled) {
         if (_022577C4 == NULL) {

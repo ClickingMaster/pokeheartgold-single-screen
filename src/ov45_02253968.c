@@ -38,7 +38,7 @@ extern const char ov45_02257538[];
 // Frees a part of the message and clears it.
 #define FREE_PART(part)      \
     if (part) {              \
-        ov00_021EC3D8(part); \
+        DWCi_GsFree(part); \
         part = NULL;         \
     }
 

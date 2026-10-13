@@ -20,9 +20,9 @@ typedef struct {
 } Tree;
 
 extern const char ov45_022553AC[];
-extern Node *ov45_02242394(u32);
+extern Node *LobbyMem_Alloc(u32);
 extern void ov45_02236EC4(Node *, void *);
-extern void ov00_021EC2EC(int, void *, int);
+extern void DWC_Free(int, void *, int);
 Node *ov45_02243E44(Tree *, Node *, int, int, const u32 *);
 
 Node *ov45_02243E44(Tree *t, Node *parent, int left, int last, const u32 *value) {
@@ -41,7 +41,7 @@ Node *ov45_02243E44(Tree *t, Node *parent, int left, int last, const u32 *value)
         abort();
     }
     f.byte = 0;
-    n = ov45_02242394(16);
+    n = LobbyMem_Alloc(16);
     f.owner = &t->alloc;
     address = (u32)n + 12;
     f.cleanup = n;
@@ -70,7 +70,7 @@ Node *ov45_02243E44(Tree *t, Node *parent, int left, int last, const u32 *value)
     {
         Node *cleanup = f.cleanup;
         if (cleanup) {
-            ov00_021EC2EC(0, cleanup, 0);
+            DWC_Free(0, cleanup, 0);
         }
     };
     return n;

@@ -4,8 +4,8 @@
 #include <nitro/code32.h>
 extern "C" int memcmp(const void *, const void *, unsigned);
 class Str;
-extern "C" Str *ov45_02237BC8(Str *);
-extern "C" Str *ov45_02237D48(Str *, const Str *);
+extern "C" Str *LobbyString_Destroy(Str *);
+extern "C" Str *LobbyString_Assign(Str *, const Str *);
 
 class Str {
 public:
@@ -30,11 +30,11 @@ public:
     }
 
     void Destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 
     Str &operator=(const Str &o) {
-        ov45_02237D48(this, &o);
+        LobbyString_Assign(this, &o);
         return *this;
     }
 
@@ -134,7 +134,7 @@ inline int ErrorMap::Map(int r) const {
 extern "C" Work *_022577C4;
 extern "C" Str ov45_022320B4(Peer *);
 extern "C" int ov45_022412CC(const char *);
-extern "C" int ov45_02231EC0(void);
+extern "C" int PPW_LobbyLeaveSubChannel(void);
 
 inline Work *GetWork() {
     return _022577C4;
@@ -160,7 +160,7 @@ inline void Refresh(Work *w, Info &info) {
 #pragma force_active on
 #pragma opt_common_subs off
 
-extern "C" int ov45_02231EC0(void) {
+extern "C" int PPW_LobbyLeaveSubChannel(void) {
     Info info;
     Work *w = GetWork();
     if (w == 0) {

@@ -302,7 +302,7 @@ void CommState_Main(void) {
         gCommState->stateFunc();
     }
     if (CommState_IsWifi()) {
-        WirelessStatusIcon_SetLevel(3 - ov00_021EC9D4());
+        WirelessStatusIcon_SetLevel(3 - DWC_GetLinkLevel());
     } else if (CommWireless_Exists()) {
         WirelessStatusIcon_SetLevel(3 - WM_GetLinkLevel());
     }
@@ -1259,11 +1259,11 @@ BOOL CommState_CheckDwcError(void) {
     s32 sp4;
     s32 sp0;
     if (gCommState->linkMode == 24 || gCommState->linkMode == 36) {
-        if (ov00_021EC11C(&sp4, &sp0)) {
-            ov00_021EC210();
+        if (DWC_GetLastErrorEx(&sp4, &sp0)) {
+            DWC_ClearError();
             return TRUE;
         }
-    } else if ((gCommState->linkMode == 25) && ov00_021EC11C(&sp4, &sp0) && (sp0 == 7)) {
+    } else if ((gCommState->linkMode == 25) && DWC_GetLastErrorEx(&sp4, &sp0) && (sp0 == 7)) {
         return TRUE;
     }
     return FALSE;

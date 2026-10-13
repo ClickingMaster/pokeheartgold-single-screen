@@ -8,8 +8,8 @@
 .public strncat
 .public strncmp
 .public _u32_div_f
-.public ov00_021EC2A8
-.public ov00_021EC2EC
+.public DWC_Alloc
+.public DWC_Free
 .public DWC_InitGHTTP
 .public DWC_ShutdownGHTTP
 .public DWC_ProcessGHTTP

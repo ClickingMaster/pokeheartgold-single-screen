@@ -5,7 +5,7 @@
 BOOL DWC_ProcessGHTTP(void);
 int DWC_GetGHTTPData(char *url, void (*callback)(const char *, int, int), void *arg);
 void DWC_ShutdownGHTTP(void);
-void ov00_021EC2EC(int category, void *ptr, u32 size);
+void DWC_Free(int category, void *ptr, u32 size);
 
 GameStatsRequest gGameStatsRequest = { GAME_STATS_STATE_IDLE };
 u32 gGameStatsRandState;
@@ -48,7 +48,7 @@ int GameStats_Update(void) {
 
 void GameStats_Shutdown(void) {
     if (gGameStatsRequest.url != NULL) {
-        ov00_021EC2EC(10, gGameStatsRequest.url, 0);
+        DWC_Free(10, gGameStatsRequest.url, 0);
         gGameStatsRequest.url = NULL;
     }
     DWC_ShutdownGHTTP();

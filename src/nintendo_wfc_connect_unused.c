@@ -73,7 +73,7 @@ typedef struct NintendoWfcUnused {
     int nextState;                              // 0x0020
     void *heapMem;                              // 0x0024
     NNSFndHeapHandle expHeap;                   // 0x0028
-    u8 connection[0x64];                          // 0x002C, passed to ov00_021EC3F0
+    u8 connection[0x64];                          // 0x002C, passed to DWC_InitInetEx
     u32 ownRank;                                // 0x0090
     u32 rank;                                   // 0x0094
     int roomCount;                              // 0x0098
@@ -133,23 +133,23 @@ typedef struct NintendoWfcUnusedModeRow {
 } NintendoWfcUnusedModeRow;
 
 // Defined in OVY_0 / OVY_38 (DWC wrappers); not declared in any header.
-int ov00_021EC0FC(void *a0);
-int ov00_021EC11C(int *a0, int *a1);
-void ov00_021EC210(void);
-void ov00_021EC294(void *(*alloc)(void *, u32, int), void (*freeFunc)(void *, void *));
-void ov00_021EC3F0(void *a0, int a1, int a2, int a3);
-void ov00_021EC454(int a0);
-void ov00_021EC4A4(void);
-int ov00_021EC5B4(void);
-void ov00_021EC60C(void);
-int ov00_021EC724(void);
-void ov00_021EC8D8(void);
-int ov00_021EC9D4(void);
-void ov00_021EC9E0(void *a0);
-void ov00_021ECB40(void);
-void ov00_021ECB94(void *a0, void *a1);
-void ov00_021ECD04(void);
-int ov00_021ECDC8(void);
+int DWC_GetLastError(void *a0);
+int DWC_GetLastErrorEx(int *a0, int *a1);
+void DWC_ClearError(void);
+void DWC_SetMemFunc(void *(*alloc)(void *, u32, int), void (*freeFunc)(void *, void *));
+void DWC_InitInetEx(void *a0, int a1, int a2, int a3);
+void DWC_SetAuthServer(int a0);
+void DWC_ConnectInetAsync(void);
+int DWC_CheckInet(void);
+void DWC_ProcessInet(void);
+int DWC_GetInetStatus(void);
+void DWC_CleanupInet(void);
+int DWC_GetLinkLevel(void);
+void DWC_GetApInfo(void *a0);
+void DWC_UpdateConnection(void);
+void DWC_GetDateTime(void *a0, void *a1);
+void DWC_NASLoginAsync(void);
+int DWC_NASLoginProcess(void);
 void DWC_ShutdownFriendsMatch(void);
 void DWC_ShutdownGHTTP(void);
 
@@ -348,14 +348,14 @@ BOOL NintendoWfcUnused_Init(OverlayManager *man, int *state) {
 
 BOOL NintendoWfcUnused_Main(OverlayManager *man, int *state) {
     NintendoWfcUnused *wfc = OverlayManager_GetData(man);
-    ov00_021ECB40();
+    DWC_UpdateConnection();
     NintendoWfcHttp_Update();
-    ov00_021ECB40();
+    DWC_UpdateConnection();
     switch (*state) {
     case 0:
         if (CommWireless_IsStartedUp()) {
             _021EA940.heap = wfc->expHeap;
-            ov00_021EC294(NintendoWfcUnused_Alloc, NintendoWfcUnused_Free);
+            DWC_SetMemFunc(NintendoWfcUnused_Alloc, NintendoWfcUnused_Free);
             *state = 1;
         }
         break;
@@ -541,7 +541,7 @@ void NintendoWfcUnused_Free(void *unused, void *ptr) {
 }
 
 int NintendoWfcUnused_GetWifiIconLevel(NintendoWfcUnused *wfc) {
-    return 3 - ov00_021EC9D4();
+    return 3 - DWC_GetLinkLevel();
 }
 
 void NintendoWfcUnused_SetNextMode(NintendoWfcUnused *wfc, int mode, int a2) {
@@ -593,7 +593,7 @@ int NintendoWfcUnused_SessionInit(NintendoWfcUnused *wfc) {
     wfc->rank = wfc->ownRank;
     wfc->room = 1;
     wfc->waitingIcon = NULL;
-    if (ov00_021EC5B4() == 0) {
+    if (DWC_CheckInet() == 0) {
         if (wfc->args->unk24 != 0) {
             NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataWfc, 1, 1, 0xF0F);
             NintendoWfcUnused_SetState(wfc, 47, 2);
@@ -838,13 +838,13 @@ int NintendoWfcUnused_HandleLogOutChoice(NintendoWfcUnused *wfc) {
     int response = NintendoWfcUnused_HandleYesNoPrompt(wfc->yesNoPrompt);
     if (response != 0) {
         if (response == 2) {
-            if (ov00_021EC5B4() == 0) {
+            if (DWC_CheckInet() == 0) {
                 wfc->state = 0;
             } else {
                 wfc->state = 41;
             }
         } else {
-            if (ov00_021EC5B4() == 0) {
+            if (DWC_CheckInet() == 0) {
                 NintendoWfcUnused_SetNextMode(wfc, 0, 0);
                 wfc->state = 46;
             } else {
@@ -857,9 +857,9 @@ int NintendoWfcUnused_HandleLogOutChoice(NintendoWfcUnused *wfc) {
 }
 
 void NintendoWfcUnused_StartConnect(NintendoWfcUnused *wfc) {
-    ov00_021EC3F0(wfc->connection, 2, 1, 20);
-    ov00_021EC454(2);
-    ov00_021EC4A4();
+    DWC_InitInetEx(wfc->connection, 2, 1, 20);
+    DWC_SetAuthServer(2);
+    DWC_ConnectInetAsync();
     wfc->state = 3;
 }
 
@@ -869,14 +869,14 @@ int NintendoWfcUnused_WaitConnect(NintendoWfcUnused *wfc) {
     int errorCode, ignored;
     u8 info[60];
 
-    ov00_021EC60C();
-    if (ov00_021EC5B4()) {
-        switch (ov00_021EC724()) {
+    DWC_ProcessInet();
+    if (DWC_CheckInet()) {
+        switch (DWC_GetInetStatus()) {
         case 7:
-            wfc->dwcError = ov00_021EC0FC(&errorCode);
+            wfc->dwcError = DWC_GetLastError(&errorCode);
             wfc->dwcErrorCode = errorCode;
-            ov00_021EC210();
-            ov00_021EC8D8();
+            DWC_ClearError();
+            DWC_CleanupInet();
             NintendoWfcUnused_HideWaitingIcon(wfc);
             wfc->state = 55;
             break;
@@ -888,13 +888,13 @@ int NintendoWfcUnused_WaitConnect(NintendoWfcUnused *wfc) {
         case 6:
         case 8:
         default:
-            ov00_021EC0FC(&ignored);
+            DWC_GetLastError(&ignored);
             NintendoWfcUnused_HideWaitingIcon(wfc);
             wfc->state = 53;
             wfc->httpResult = -2;
             break;
         case 4:
-            ov00_021EC9E0(info);
+            DWC_GetApInfo(info);
             wfc->state = 4;
             break;
         }
@@ -905,7 +905,7 @@ int NintendoWfcUnused_WaitConnect(NintendoWfcUnused *wfc) {
 #pragma force_active reset
 
 int NintendoWfcUnused_StartAuth(NintendoWfcUnused *wfc) {
-    ov00_021ECD04();
+    DWC_NASLoginAsync();
     wfc->state = 5;
     return 3;
 }
@@ -914,7 +914,7 @@ int NintendoWfcUnused_StartAuth(NintendoWfcUnused *wfc) {
 
 int NintendoWfcUnused_WaitAuth(NintendoWfcUnused *wfc) {
     int errorCode, errorKind;
-    switch (ov00_021ECDC8()) {
+    switch (DWC_NASLoginProcess()) {
     case 3:
         wfc->state = 6;
         break;
@@ -922,10 +922,10 @@ int NintendoWfcUnused_WaitAuth(NintendoWfcUnused *wfc) {
     case 4:
     case 5:
         NintendoWfcUnused_HideWaitingIcon(wfc);
-        wfc->dwcError = ov00_021EC11C(&errorCode, &errorKind);
+        wfc->dwcError = DWC_GetLastErrorEx(&errorCode, &errorKind);
         wfc->dwcErrorCode = errorCode;
-        ov00_021EC210();
-        ov00_021EC8D8();
+        DWC_ClearError();
+        DWC_CleanupInet();
         wfc->state = 55;
         switch (errorKind) {
         case 1:
@@ -1225,7 +1225,7 @@ int NintendoWfcUnused_HandleChallengeRoomInput(NintendoWfcUnused *wfc) {
         NintendoWfcUnused_PrintNumber(&wfc->roomWindow, wfc->roomString, wfc->room, 3);
         PlaySE(SEQ_SE_DP_SELECT);
     } else if (gSystem.newKeys & PAD_BUTTON_A) {
-        ov00_021ECB94(date, time);
+        DWC_GetDateTime(date, time);
         // BattleRoomDownload_IsRoomMarked takes u32 group/entry; the original call truncated them to u8
         if (BattleRoomDownload_IsRoomMarked((BattleRoomDownload *)wfc->args->unk4, (u8)wfc->rank, (u8)wfc->room, date)) {
             wfc->state = 20;
@@ -1280,7 +1280,7 @@ int NintendoWfcUnused_WaitTrainersDownload(NintendoWfcUnused *wfc) {
             // BattleRoomDownload_SetTrainers / BattleRoomDownload_MarkRoom take u32; the original calls truncated rank and room to u8
             BattleRoomDownload_SetTrainers((BattleRoomDownload *)wfc->args->unk4, wfc->downloadBuffer, (u8)wfc->ownRank, (u8)wfc->room);
             NintendoWfcUnused_SetState(wfc, 39, 19);
-            ov00_021ECB94(date, time);
+            DWC_GetDateTime(date, time);
             BattleRoomDownload_MarkRoom((BattleRoomDownload *)wfc->args->unk4, (u8)wfc->rank, (u8)wfc->room, date);
             break;
         case -1:
@@ -1656,7 +1656,7 @@ int NintendoWfcUnused_PrintDisconnecting(NintendoWfcUnused *wfc) {
 }
 
 int NintendoWfcUnused_CloseConnection(NintendoWfcUnused *wfc) {
-    ov00_021EC8D8();
+    DWC_CleanupInet();
     NintendoWfcUnused_SetNextMode(wfc, 0, 0);
     wfc->state = 43;
     return 3;
@@ -1730,7 +1730,7 @@ int NintendoWfcUnused_Disconnect(NintendoWfcUnused *wfc) {
     case 1:
         if (!TextPrinterCheckActive((u8)wfc->textPrinterId)) {
             CommState_FreeWfcSession();
-            ov00_021EC8D8();
+            DWC_CleanupInet();
             wfc->subState++;
         }
         break;

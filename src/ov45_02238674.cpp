@@ -8,13 +8,13 @@ inline void *operator new(std::size_t, void *p) {
     return p;
 }
 struct Str;
-extern "C" Str *ov45_02237A24(Str *, const Str *);
+extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
 
 struct Str {
     u32 words[3];
 
     Str(const Str &o) {
-        ov45_02237A24(this, &o);
+        LobbyString_InitCopy(this, &o);
     }
 };
 

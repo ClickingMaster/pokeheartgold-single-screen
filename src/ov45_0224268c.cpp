@@ -4,10 +4,10 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 struct String;
-extern "C" void ov45_02237A24(String *dst, const String *src);
-extern "C" void ov45_02237B58(String *dst, const char *src);
-extern "C" void ov45_02237D48(String *dst, const String *src);
-extern "C" void ov45_02237BC8(String *s);
+extern "C" void LobbyString_InitCopy(String *dst, const String *src);
+extern "C" void LobbyString_InitFromCStr(String *dst, const char *src);
+extern "C" void LobbyString_Assign(String *dst, const String *src);
+extern "C" void LobbyString_Destroy(String *s);
 
 struct String {
     u32 w[3];
@@ -19,19 +19,19 @@ struct String {
     }
 
     String(const char *s) {
-        ov45_02237B58(this, s);
+        LobbyString_InitFromCStr(this, s);
     }
 
     String(const String &s) {
-        ov45_02237A24(this, &s);
+        LobbyString_InitCopy(this, &s);
     }
 
     void destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 
     String &operator=(const String &s) {
-        ov45_02237D48(this, &s);
+        LobbyString_Assign(this, &s);
         return *this;
     }
 };
@@ -87,11 +87,11 @@ extern "C" Obj *ov45_0224268C(Obj *obj, const String &a1, const String &a2, int 
     obj->unk0 = 0;
     obj->unk4 = 0;
     obj->unk8 = v8;
-    ov45_02237A24(&obj->strC, &aC);
-    ov45_02237A24(&obj->str18, &a18);
-    ov45_02237A24(&obj->str24, &a24);
-    ov45_02237A24(&obj->str30, &a1);
-    ov45_02237A24(&obj->str3C, &a2);
+    LobbyString_InitCopy(&obj->strC, &aC);
+    LobbyString_InitCopy(&obj->str18, &a18);
+    LobbyString_InitCopy(&obj->str24, &a24);
+    LobbyString_InitCopy(&obj->str30, &a1);
+    LobbyString_InitCopy(&obj->str3C, &a2);
     u32 *w = obj->str48.w;
     u32 i = 0;
     do {
@@ -124,7 +124,7 @@ extern "C" Obj *ov45_0224268C(Obj *obj, const String &a1, const String &a2, int 
     String sC = ov45_022339F4(s24, s18);
     String r = ov45_02233ABC(sC, ov45_02255398);
     const String *pr = &r;
-    ov45_02237D48(&obj->str48, pr);
+    LobbyString_Assign(&obj->str48, pr);
     r.destroy();
     sC.destroy();
     s18.destroy();

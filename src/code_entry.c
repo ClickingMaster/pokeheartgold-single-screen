@@ -153,7 +153,7 @@ void WirelessStatusIcon_ShowOnBothScreens(int a0, enum HeapID heapID);
 void WirelessStatusIcon_SetLevel(int level);
 void WirelessStatusIcon_Create(void);
 void WirelessStatusIcon_Destroy(void);
-int ov00_021EC9D4(void);
+int DWC_GetLinkLevel(void);
 u32 GetUserFrameGfx2PaletteMember(u32 frame); // render_window.c
 
 CodeEntryArgs *CodeEntryArgs_Alloc(enum HeapID heapID, u32 length, const int *groupLengths, Options *options, int promptMsg, u32 showWirelessIcon);
@@ -243,7 +243,7 @@ BOOL CodeEntry_Main(OverlayManager *manager, int *state) {
     BOOL done = CodeEntry_RunState(app);
 
     if (app->args.showWirelessIcon) {
-        WirelessStatusIcon_SetLevel(3 - ov00_021EC9D4());
+        WirelessStatusIcon_SetLevel(3 - DWC_GetLinkLevel());
     }
     if (done) {
         return TRUE;

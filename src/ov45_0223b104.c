@@ -32,10 +32,10 @@ extern char _ZSt7nothrow[];
 extern char ov45_022551C4[];
 void *_ZnamRKSt9nothrow_t(u32, void *);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
-void ov00_021EC2EC(int, void *, int);
-void *ov45_022310B0(void);
+void DWC_Free(int, void *, int);
+void *PPWLobby_GetWork(void);
 int ov45_0223DFC8(void *);
-void ov00_021ECB94(RTCDate *, RTCTime *);
+void DWC_GetDateTime(RTCDate *, RTCTime *);
 void ov45_0223B8D0(const char *);
 void ov45_0223BD0C(void);
 void ov45_0223AA80(void *, int);
@@ -65,7 +65,7 @@ int ov45_0223B104(void *p) {
     RTCTime t;
     RTCDate d;
     s64 now;
-    if (W(p, 0) == 5 || W(ov45_022310B0(), 0) != 8) {
+    if (W(p, 0) == 5 || W(PPWLobby_GetWork(), 0) != 8) {
         return 0;
     }
     if (*(s64 *)((u8 *)p + 16) != 0) {
@@ -74,10 +74,10 @@ int ov45_0223B104(void *p) {
     if (W(p, 24)) {
         return 1;
     }
-    if (ov45_0223DFC8((u8 *)ov45_022310B0() + 0xe8)) {
+    if (ov45_0223DFC8((u8 *)PPWLobby_GetWork() + 0xe8)) {
         return 1;
     }
-    ov00_021ECB94(&d, &t);
+    DWC_GetDateTime(&d, &t);
     now = RTC_ConvertDateTimeToSecond(&d, &t);
     return *(s64 *)((u8 *)p + 8) + (s64)(u64)W(p, 28) < now;
 }
@@ -85,12 +85,12 @@ int ov45_0223B104(void *p) {
 int ov45_0223B1C8(void *p) {
     RTCTime t;
     RTCDate d;
-    if (W(p, 0) != 5 && W(ov45_022310B0(), 0) == 8) {
-        ov00_021ECB94(&d, &t);
+    if (W(p, 0) != 5 && W(PPWLobby_GetWork(), 0) == 8) {
+        DWC_GetDateTime(&d, &t);
         *(s64 *)((u8 *)p + 16) = RTC_ConvertDateTimeToSecond(&d, &t);
         W(p, 0) = 5;
         W(p, 24) = 0;
-        ((void (*)(int))P(ov45_022310B0(), 0x30))(0);
+        ((void (*)(int))P(PPWLobby_GetWork(), 0x30))(0);
         return 1;
     }
     W(p, 24) = 1;

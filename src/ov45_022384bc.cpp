@@ -34,13 +34,13 @@ public:
     String *Assign(char *first, char *last);
 };
 
-extern "C" String *ov45_02238104(String *, u32, u32, char *, char *, RangeDispatch);
-extern "C" String *ov45_022384BC(String *, char *, char *);
+extern "C" String *LobbyString_ReplaceRange(String *, u32, u32, char *, char *, RangeDispatch);
+extern "C" String *LobbyString_AssignRange(String *, char *, char *);
 
 inline String *String::Assign(char *first, char *last) {
-    return ov45_02238104(this, 0, Size(), first, last, RangeDispatch());
+    return LobbyString_ReplaceRange(this, 0, Size(), first, last, RangeDispatch());
 }
 
-extern "C" String *ov45_022384BC(String *s, char *first, char *last) {
+extern "C" String *LobbyString_AssignRange(String *s, char *first, char *last) {
     return s->Assign(first, last);
 }

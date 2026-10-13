@@ -68,258 +68,258 @@ void ciFreeCallbackData(ChatCallback *callback) {
     switch (callback->type) {
     case 0: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
+        DWCi_GsFree((void *)p[0]);
         break;
     }
     case 1: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
+        DWCi_GsFree((void *)p[0]);
         break;
     }
     case 2: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
-        ov00_021EC3D8((void *)p[1]);
+        DWCi_GsFree((void *)p[0]);
+        DWCi_GsFree((void *)p[1]);
         break;
     }
     case 3: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
-        ov00_021EC3D8((void *)p[1]);
+        DWCi_GsFree((void *)p[0]);
+        DWCi_GsFree((void *)p[1]);
         break;
     }
     case 4: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
-        ov00_021EC3D8((void *)p[1]);
-        ov00_021EC3D8((void *)p[2]);
+        DWCi_GsFree((void *)p[0]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[2]);
         break;
     }
     case 5: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
-        ov00_021EC3D8((void *)p[1]);
-        ov00_021EC3D8((void *)p[2]);
+        DWCi_GsFree((void *)p[0]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[2]);
         break;
     }
     case 6: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
-        ov00_021EC3D8((void *)p[1]);
+        DWCi_GsFree((void *)p[0]);
+        DWCi_GsFree((void *)p[1]);
         break;
     }
     case 7: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
-        ov00_021EC3D8((void *)p[1]);
-        ov00_021EC3D8((void *)p[3]);
-        ov00_021EC3D8((void *)p[4]);
+        DWCi_GsFree((void *)p[0]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[3]);
+        DWCi_GsFree((void *)p[4]);
         break;
     }
     case 8: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
-        ov00_021EC3D8((void *)p[1]);
-        ov00_021EC3D8((void *)p[2]);
+        DWCi_GsFree((void *)p[0]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[2]);
         break;
     }
     case 9: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
-        ov00_021EC3D8((void *)p[1]);
+        DWCi_GsFree((void *)p[0]);
+        DWCi_GsFree((void *)p[1]);
         break;
     }
     case 10: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
-        ov00_021EC3D8((void *)p[1]);
+        DWCi_GsFree((void *)p[0]);
+        DWCi_GsFree((void *)p[1]);
         break;
     }
     case 11: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
-        ov00_021EC3D8((void *)p[1]);
+        DWCi_GsFree((void *)p[0]);
+        DWCi_GsFree((void *)p[1]);
         break;
     }
     case 12: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
+        DWCi_GsFree((void *)p[0]);
         break;
     }
     case 13: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[2]);
-        ov00_021EC3D8((void *)p[3]);
+        DWCi_GsFree((void *)p[2]);
+        DWCi_GsFree((void *)p[3]);
         break;
     }
     case 14: {
         int i;
         u32 *p = callback->param;
         for (i = 0; i < (int)p[1]; i++) {
-            ov00_021EC3D8(((void **)p[2])[i]);
-            ov00_021EC3D8(((void **)p[3])[i]);
+            DWCi_GsFree(((void **)p[2])[i]);
+            DWCi_GsFree(((void **)p[3])[i]);
         }
-        ov00_021EC3D8((void *)p[2]);
-        ov00_021EC3D8((void *)p[3]);
-        ov00_021EC3D8((void *)p[4]);
+        DWCi_GsFree((void *)p[2]);
+        DWCi_GsFree((void *)p[3]);
+        DWCi_GsFree((void *)p[4]);
         break;
     }
     case 15: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[2]);
+        DWCi_GsFree((void *)p[2]);
         break;
     }
     case 16: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[1]);
-        ov00_021EC3D8((void *)p[2]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[2]);
         break;
     }
     case 17: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[1]);
-        ov00_021EC3D8((void *)p[2]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[2]);
         break;
     }
     case 18: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[1]);
-        ov00_021EC3D8((void *)p[3]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[3]);
         break;
     }
     case 19: {
         int i;
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[1]);
+        DWCi_GsFree((void *)p[1]);
         for (i = 0; i < (int)p[2]; i++) {
-            ov00_021EC3D8(((void **)p[3])[i]);
+            DWCi_GsFree(((void **)p[3])[i]);
         }
-        ov00_021EC3D8((void *)p[3]);
-        ov00_021EC3D8((void *)p[4]);
+        DWCi_GsFree((void *)p[3]);
+        DWCi_GsFree((void *)p[4]);
         break;
     }
     case 20: {
         int i;
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[1]);
-        ov00_021EC3D8((void *)p[2]);
-        ov00_021EC3D8((void *)p[3]);
-        ov00_021EC3D8((void *)p[4]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[2]);
+        DWCi_GsFree((void *)p[3]);
+        DWCi_GsFree((void *)p[4]);
         for (i = 0; i < (int)p[5]; i++) {
-            ov00_021EC3D8(((void **)p[6])[i]);
+            DWCi_GsFree(((void **)p[6])[i]);
         }
-        ov00_021EC3D8((void *)p[6]);
+        DWCi_GsFree((void *)p[6]);
         break;
     }
     case 21: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[1]);
-        ov00_021EC3D8((void *)p[2]);
-        ov00_021EC3D8((void *)p[3]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[2]);
+        DWCi_GsFree((void *)p[3]);
         break;
     }
     case 22: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[1]);
-        ov00_021EC3D8((void *)p[2]);
-        ov00_021EC3D8((void *)p[3]);
-        ov00_021EC3D8((void *)p[4]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[2]);
+        DWCi_GsFree((void *)p[3]);
+        DWCi_GsFree((void *)p[4]);
         break;
     }
     case 23: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[1]);
-        ov00_021EC3D8((void *)p[2]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[2]);
         break;
     }
     case 24: {
         int i;
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[1]);
+        DWCi_GsFree((void *)p[1]);
         for (i = 0; i < (int)p[2]; i++) {
-            ov00_021EC3D8(((void **)p[3])[i]);
+            DWCi_GsFree(((void **)p[3])[i]);
         }
-        ov00_021EC3D8((void *)p[3]);
+        DWCi_GsFree((void *)p[3]);
         break;
     }
     case 25: {
         int i;
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[1]);
+        DWCi_GsFree((void *)p[1]);
         for (i = 0; i < (int)p[2]; i++) {
-            ov00_021EC3D8(((void **)p[3])[i]);
+            DWCi_GsFree(((void **)p[3])[i]);
         }
-        ov00_021EC3D8((void *)p[3]);
+        DWCi_GsFree((void *)p[3]);
         break;
     }
     case 26: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[1]);
-        ov00_021EC3D8((void *)p[2]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[2]);
         break;
     }
     case 27: {
         int i;
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
+        DWCi_GsFree((void *)p[0]);
         for (i = 0; i < (int)p[1]; i++) {
-            ov00_021EC3D8(((void **)p[2])[i]);
+            DWCi_GsFree(((void **)p[2])[i]);
         }
-        ov00_021EC3D8((void *)p[2]);
-        ov00_021EC3D8((void *)p[3]);
+        DWCi_GsFree((void *)p[2]);
+        DWCi_GsFree((void *)p[3]);
         break;
     }
     case 28: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[0]);
-        ov00_021EC3D8((void *)p[1]);
-        ov00_021EC3D8((void *)p[2]);
-        ov00_021EC3D8((void *)p[3]);
+        DWCi_GsFree((void *)p[0]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[2]);
+        DWCi_GsFree((void *)p[3]);
         break;
     }
     case 29: {
         int i;
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[1]);
+        DWCi_GsFree((void *)p[1]);
         for (i = 0; i < (int)p[2]; i++) {
-            ov00_021EC3D8(((void **)p[3])[i]);
+            DWCi_GsFree(((void **)p[3])[i]);
             if (p[4]) {
-                ov00_021EC3D8(((void **)p[4])[i]);
+                DWCi_GsFree(((void **)p[4])[i]);
             }
         }
-        ov00_021EC3D8((void *)p[3]);
-        ov00_021EC3D8((void *)p[4]);
+        DWCi_GsFree((void *)p[3]);
+        DWCi_GsFree((void *)p[4]);
         break;
     }
     case 30: {
         int i;
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[1]);
-        ov00_021EC3D8((void *)p[2]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[2]);
         for (i = 0; i < (int)p[3]; i++) {
-            ov00_021EC3D8(((void **)p[4])[i]);
+            DWCi_GsFree(((void **)p[4])[i]);
             if (p[5]) {
-                ov00_021EC3D8(((void **)p[5])[i]);
+                DWCi_GsFree(((void **)p[5])[i]);
             }
         }
-        ov00_021EC3D8((void *)p[4]);
-        ov00_021EC3D8((void *)p[5]);
+        DWCi_GsFree((void *)p[4]);
+        DWCi_GsFree((void *)p[5]);
         break;
     }
     case 31: {
         u32 *p = callback->param;
-        ov00_021EC3D8((void *)p[1]);
+        DWCi_GsFree((void *)p[1]);
         break;
     }
     default:
         __msl_assertion_failed(ov45_022554EC, ov45_02255468, ov45_022553F8, 485);
         break;
     }
-    ov00_021EC3D8(callback->param);
+    DWCi_GsFree(callback->param);
 }
 
 ChatResult ciInitCallbacks(ChatConnection *chat) {
-    chat->callbacks = ov00_021FE5B4(sizeof(ChatCallback), 0x80, ov45_022444C8);
+    chat->callbacks = ArrayNew(sizeof(ChatCallback), 0x80, ov45_022444C8);
     return chat->callbacks == NULL ? CHAT_FAILURE : CHAT_SUCCESS;
 }
 
@@ -332,11 +332,11 @@ void ciCleanupCallbacks(ChatConnection *chat) {
     }
     n = ArrayLength(chat->callbacks);
     for (i = 0; i < n; i++) {
-        callback = ov00_021FE6EC(chat->callbacks, i);
+        callback = ArrayNth(chat->callbacks, i);
         ASSERT_CALLBACK(callback, ov45_0225540C, 525);
         ciFreeCallbackData(callback);
     }
-    ov00_021FE678(chat->callbacks);
+    ArrayFree(chat->callbacks);
 }
 
 #define ASSERT(test, string, line) \
@@ -344,14 +344,14 @@ void ciCleanupCallbacks(ChatConnection *chat) {
     __msl_assertion_failed(string, ov45_02255468, ov45_022553C8, line)
 #define FAIL()                       \
     {                                \
-        ov00_021EC3D8(dst);          \
-        ov00_021EC3D8(item.channel); \
+        DWCi_GsFree(dst);          \
+        DWCi_GsFree(item.channel); \
         return FALSE;                \
     }
 // Copies the string argument i into the stored parameters.
 #define COPY_STRING(i)                               \
     if (src[i]) {                                    \
-        dst[i] = (u32)ov00_021FF3D4((char *)src[i]); \
+        dst[i] = (u32)goastrdup((char *)src[i]); \
         if (!dst[i]) {                               \
             FAIL();                                  \
         }                                            \
@@ -378,7 +378,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
     }
     item.type = type;
     item.callback = func;
-    item.param = ov00_021EC3A8(size);
+    item.param = DWCi_GsMalloc(size);
     if (!item.param) {
         return FALSE;
     }
@@ -389,9 +389,9 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         item.channel = NULL;
     } else {
         int length = strlen(channel);
-        item.channel = ov00_021EC3A8(length + 1);
+        item.channel = DWCi_GsMalloc(length + 1);
         if (!item.channel) {
-            ov00_021EC3D8(item.param);
+            DWCi_GsFree(item.param);
             return FALSE;
         }
         memcpy(item.channel, channel, length + 1);
@@ -464,7 +464,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         u32 *dst = item.param;
         COPY_STRING(0);
         if (src[1]) {
-            dst[1] = (u32)ov00_021EC3A8(32);
+            dst[1] = (u32)DWCi_GsMalloc(32);
             if (!dst[1]) {
                 FAIL();
             }
@@ -496,7 +496,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         if (!src[2]) {
             dst[2] = 0;
         } else {
-            dst[2] = (u32)ov00_021EC3A8(src[1] * 4);
+            dst[2] = (u32)DWCi_GsMalloc(src[1] * 4);
             if (!dst[2]) {
                 FAIL();
             }
@@ -504,12 +504,12 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 if (!((u32 *)src[2])[i]) {
                     ((u32 *)dst[2])[i] = 0;
                 } else {
-                    ((u32 *)dst[2])[i] = (u32)ov00_021FF3D4((char *)((u32 *)src[2])[i]);
+                    ((u32 *)dst[2])[i] = (u32)goastrdup((char *)((u32 *)src[2])[i]);
                     if (!((u32 *)dst[2])[i]) {
                         for (i--; i >= 0; i--) {
-                            ov00_021EC3D8((void *)((u32 *)dst[2])[i]);
+                            DWCi_GsFree((void *)((u32 *)dst[2])[i]);
                         }
-                        ov00_021EC3D8((void *)dst[2]);
+                        DWCi_GsFree((void *)dst[2]);
                         FAIL();
                     }
                 }
@@ -519,7 +519,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         if (!src[3]) {
             dst[3] = 0;
         } else {
-            dst[3] = (u32)ov00_021EC3A8(src[1] * 4);
+            dst[3] = (u32)DWCi_GsMalloc(src[1] * 4);
             if (!dst[3]) {
                 FAIL();
             }
@@ -527,12 +527,12 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 if (!((u32 *)src[3])[i]) {
                     ((u32 *)dst[3])[i] = 0;
                 } else {
-                    ((u32 *)dst[3])[i] = (u32)ov00_021FF3D4((char *)((u32 *)src[3])[i]);
+                    ((u32 *)dst[3])[i] = (u32)goastrdup((char *)((u32 *)src[3])[i]);
                     if (!((u32 *)dst[3])[i]) {
                         for (i--; i >= 0; i--) {
-                            ov00_021EC3D8((void *)((u32 *)dst[3])[i]);
+                            DWCi_GsFree((void *)((u32 *)dst[3])[i]);
                         }
-                        ov00_021EC3D8((void *)dst[3]);
+                        DWCi_GsFree((void *)dst[3]);
                         FAIL();
                     }
                 }
@@ -543,10 +543,10 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
             int bytes;
             ASSERT(src[4], ov45_022555B0, 0x2d5);
             bytes = src[1] * 4;
-            dst[4] = (u32)ov00_021EC3A8(bytes);
+            dst[4] = (u32)DWCi_GsMalloc(bytes);
             if (!dst[4]) {
-                ov00_021EC3D8(dst);
-                ov00_021EC3D8(item.channel);
+                DWCi_GsFree(dst);
+                DWCi_GsFree(item.channel);
                 return FALSE;
             }
             memcpy((void *)dst[4], (void *)src[4], bytes);
@@ -568,7 +568,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         u32 *dst = item.param;
         COPY_STRING(1);
         if (src[2]) {
-            dst[2] = (u32)ov00_021EC3A8(32);
+            dst[2] = (u32)DWCi_GsMalloc(32);
             if (!dst[2]) {
                 FAIL();
             }
@@ -590,7 +590,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
             dst[3] = 0;
         } else {
             int i;
-            dst[3] = (u32)ov00_021EC3A8(src[2] * 4);
+            dst[3] = (u32)DWCi_GsMalloc(src[2] * 4);
             if (!dst[3]) {
                 FAIL();
             }
@@ -598,12 +598,12 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 if (!((u32 *)src[3])[i]) {
                     ((u32 *)dst[3])[i] = 0;
                 } else {
-                    ((u32 *)dst[3])[i] = (u32)ov00_021FF3D4((char *)((u32 *)src[3])[i]);
+                    ((u32 *)dst[3])[i] = (u32)goastrdup((char *)((u32 *)src[3])[i]);
                     if (!((u32 *)dst[3])[i]) {
                         for (i--; i >= 0; i--) {
-                            ov00_021EC3D8((void *)((u32 *)dst[3])[i]);
+                            DWCi_GsFree((void *)((u32 *)dst[3])[i]);
                         }
-                        ov00_021EC3D8((void *)dst[3]);
+                        DWCi_GsFree((void *)dst[3]);
                         FAIL();
                     }
                 }
@@ -614,7 +614,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
             int bytes;
             ASSERT(src[4], ov45_022555E8, 0x302);
             bytes = src[2] * 4;
-            dst[4] = (u32)ov00_021EC3A8(bytes);
+            dst[4] = (u32)DWCi_GsMalloc(bytes);
             if (!dst[4]) {
                 FAIL();
             }
@@ -633,7 +633,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
             dst[6] = 0;
         } else {
             int i;
-            dst[6] = (u32)ov00_021EC3A8(src[5] * 4);
+            dst[6] = (u32)DWCi_GsMalloc(src[5] * 4);
             if (!dst[6]) {
                 FAIL();
             }
@@ -641,12 +641,12 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 if (!((u32 *)src[6])[i]) {
                     ((u32 *)dst[6])[i] = 0;
                 } else {
-                    ((u32 *)dst[6])[i] = (u32)ov00_021FF3D4((char *)((u32 *)src[6])[i]);
+                    ((u32 *)dst[6])[i] = (u32)goastrdup((char *)((u32 *)src[6])[i]);
                     if (!((u32 *)dst[6])[i]) {
                         for (i--; i >= 0; i--) {
-                            ov00_021EC3D8((void *)((u32 *)dst[6])[i]);
+                            DWCi_GsFree((void *)((u32 *)dst[6])[i]);
                         }
-                        ov00_021EC3D8((void *)dst[6]);
+                        DWCi_GsFree((void *)dst[6]);
                         FAIL();
                     }
                 }
@@ -683,7 +683,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
             dst[3] = 0;
         } else {
             int i;
-            dst[3] = (u32)ov00_021EC3A8(src[2] * 4);
+            dst[3] = (u32)DWCi_GsMalloc(src[2] * 4);
             if (!dst[3]) {
                 FAIL();
             }
@@ -691,12 +691,12 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 if (!((u32 *)src[3])[i]) {
                     ((u32 *)dst[3])[i] = 0;
                 } else {
-                    ((u32 *)dst[3])[i] = (u32)ov00_021FF3D4((char *)((u32 *)src[3])[i]);
+                    ((u32 *)dst[3])[i] = (u32)goastrdup((char *)((u32 *)src[3])[i]);
                     if (!((u32 *)dst[3])[i]) {
                         for (i--; i >= 0; i--) {
-                            ov00_021EC3D8((void *)((u32 *)dst[3])[i]);
+                            DWCi_GsFree((void *)((u32 *)dst[3])[i]);
                         }
-                        ov00_021EC3D8((void *)dst[3]);
+                        DWCi_GsFree((void *)dst[3]);
                         FAIL();
                     }
                 }
@@ -712,7 +712,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
             dst[3] = 0;
         } else {
             int i;
-            dst[3] = (u32)ov00_021EC3A8(src[2] * 4);
+            dst[3] = (u32)DWCi_GsMalloc(src[2] * 4);
             if (!dst[3]) {
                 FAIL();
             }
@@ -720,12 +720,12 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 if (!((u32 *)src[3])[i]) {
                     ((u32 *)dst[3])[i] = 0;
                 } else {
-                    ((u32 *)dst[3])[i] = (u32)ov00_021FF3D4((char *)((u32 *)src[3])[i]);
+                    ((u32 *)dst[3])[i] = (u32)goastrdup((char *)((u32 *)src[3])[i]);
                     if (!((u32 *)dst[3])[i]) {
                         for (i--; i >= 0; i--) {
-                            ov00_021EC3D8((void *)((u32 *)dst[3])[i]);
+                            DWCi_GsFree((void *)((u32 *)dst[3])[i]);
                         }
-                        ov00_021EC3D8((void *)dst[3]);
+                        DWCi_GsFree((void *)dst[3]);
                         FAIL();
                     }
                 }
@@ -747,7 +747,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
             dst[2] = 0;
         } else {
             int i;
-            dst[2] = (u32)ov00_021EC3A8(src[1] * 4);
+            dst[2] = (u32)DWCi_GsMalloc(src[1] * 4);
             if (!dst[2]) {
                 FAIL();
             }
@@ -755,12 +755,12 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 if (!((u32 *)src[2])[i]) {
                     ((u32 *)dst[2])[i] = 0;
                 } else {
-                    ((u32 *)dst[2])[i] = (u32)ov00_021FF3D4((char *)((u32 *)src[2])[i]);
+                    ((u32 *)dst[2])[i] = (u32)goastrdup((char *)((u32 *)src[2])[i]);
                     if (!((u32 *)dst[2])[i]) {
                         for (i--; i >= 0; i--) {
-                            ov00_021EC3D8((void *)((u32 *)dst[2])[i]);
+                            DWCi_GsFree((void *)((u32 *)dst[2])[i]);
                         }
-                        ov00_021EC3D8((void *)dst[2]);
+                        DWCi_GsFree((void *)dst[2]);
                         FAIL();
                     }
                 }
@@ -771,7 +771,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
             int bytes;
             ASSERT(src[3], ov45_022555E8, 0x351);
             bytes = src[1] * 4;
-            dst[3] = (u32)ov00_021EC3A8(bytes);
+            dst[3] = (u32)DWCi_GsMalloc(bytes);
             if (!dst[3]) {
                 FAIL();
             }
@@ -795,7 +795,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
             dst[3] = 0;
         } else {
             int i;
-            dst[3] = (u32)ov00_021EC3A8(src[2] * 4);
+            dst[3] = (u32)DWCi_GsMalloc(src[2] * 4);
             if (!dst[3]) {
                 FAIL();
             }
@@ -803,12 +803,12 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 if (!((u32 *)src[3])[i]) {
                     ((u32 *)dst[3])[i] = 0;
                 } else {
-                    ((u32 *)dst[3])[i] = (u32)ov00_021FF3D4((char *)((u32 *)src[3])[i]);
+                    ((u32 *)dst[3])[i] = (u32)goastrdup((char *)((u32 *)src[3])[i]);
                     if (!((u32 *)dst[3])[i]) {
                         for (i--; i >= 0; i--) {
-                            ov00_021EC3D8((void *)((u32 *)dst[3])[i]);
+                            DWCi_GsFree((void *)((u32 *)dst[3])[i]);
                         }
-                        ov00_021EC3D8((void *)dst[3]);
+                        DWCi_GsFree((void *)dst[3]);
                         FAIL();
                     }
                 }
@@ -819,7 +819,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
             dst[4] = 0;
         } else {
             int i;
-            dst[4] = (u32)ov00_021EC3A8(src[2] * 4);
+            dst[4] = (u32)DWCi_GsMalloc(src[2] * 4);
             if (!dst[4]) {
                 FAIL();
             }
@@ -827,12 +827,12 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 if (!((u32 *)src[4])[i]) {
                     ((u32 *)dst[4])[i] = 0;
                 } else {
-                    ((u32 *)dst[4])[i] = (u32)ov00_021FF3D4((char *)((u32 *)src[4])[i]);
+                    ((u32 *)dst[4])[i] = (u32)goastrdup((char *)((u32 *)src[4])[i]);
                     if (!((u32 *)dst[4])[i]) {
                         for (i--; i >= 0; i--) {
-                            ov00_021EC3D8((void *)((u32 *)dst[4])[i]);
+                            DWCi_GsFree((void *)((u32 *)dst[4])[i]);
                         }
-                        ov00_021EC3D8((void *)dst[4]);
+                        DWCi_GsFree((void *)dst[4]);
                         FAIL();
                     }
                 }
@@ -849,7 +849,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
             dst[4] = 0;
         } else {
             int i;
-            dst[4] = (u32)ov00_021EC3A8(src[3] * 4);
+            dst[4] = (u32)DWCi_GsMalloc(src[3] * 4);
             if (!dst[4]) {
                 FAIL();
             }
@@ -857,12 +857,12 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 if (!((u32 *)src[4])[i]) {
                     ((u32 *)dst[4])[i] = 0;
                 } else {
-                    ((u32 *)dst[4])[i] = (u32)ov00_021FF3D4((char *)((u32 *)src[4])[i]);
+                    ((u32 *)dst[4])[i] = (u32)goastrdup((char *)((u32 *)src[4])[i]);
                     if (!((u32 *)dst[4])[i]) {
                         for (i--; i >= 0; i--) {
-                            ov00_021EC3D8((void *)((u32 *)dst[4])[i]);
+                            DWCi_GsFree((void *)((u32 *)dst[4])[i]);
                         }
-                        ov00_021EC3D8((void *)dst[4]);
+                        DWCi_GsFree((void *)dst[4]);
                         FAIL();
                     }
                 }
@@ -873,7 +873,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
             dst[5] = 0;
         } else {
             int i;
-            dst[5] = (u32)ov00_021EC3A8(src[3] * 4);
+            dst[5] = (u32)DWCi_GsMalloc(src[3] * 4);
             if (!dst[5]) {
                 FAIL();
             }
@@ -881,12 +881,12 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 if (!((u32 *)src[5])[i]) {
                     ((u32 *)dst[5])[i] = 0;
                 } else {
-                    ((u32 *)dst[5])[i] = (u32)ov00_021FF3D4((char *)((u32 *)src[5])[i]);
+                    ((u32 *)dst[5])[i] = (u32)goastrdup((char *)((u32 *)src[5])[i]);
                     if (!((u32 *)dst[5])[i]) {
                         for (i--; i >= 0; i--) {
-                            ov00_021EC3D8((void *)((u32 *)dst[5])[i]);
+                            DWCi_GsFree((void *)((u32 *)dst[5])[i]);
                         }
-                        ov00_021EC3D8((void *)dst[5]);
+                        DWCi_GsFree((void *)dst[5]);
                         FAIL();
                     }
                 }
@@ -903,7 +903,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         __msl_assertion_failed(ov45_022554EC, ov45_02255468, ov45_022553C8, 0x380);
         break;
     }
-    ov00_021FE754(chat->callbacks, &item);
+    ArrayAppend(chat->callbacks, &item);
     return TRUE;
 }
 
@@ -1124,14 +1124,14 @@ void ciCallCallbacks(ChatConnection *chat, int id) {
     ASSERT_CHAT(chat, ov45_022553E8, 0x5fc);
     i = 0;
     while (i < ArrayLength(chat->callbacks)) {
-        callback = ov00_021FE6EC(chat->callbacks, i);
+        callback = ArrayNth(chat->callbacks, i);
         ASSERT_CALLBACK(callback, ov45_022553E8, 0x605);
         if (callback->channel && !ciInChannel(chat, callback->channel)) {
             ciFreeCallbackData(callback);
-            ov00_021FE968(chat->callbacks, i);
+            ArrayDeleteAt(chat->callbacks, i);
         } else if ((!callback->channel || ciWasJoinCallbackCalled(chat, callback->channel)) && (!id || callback->id == id)) {
             copy = *callback;
-            ov00_021FE968(chat->callbacks, i);
+            ArrayDeleteAt(chat->callbacks, i);
             ciCallCallback(chat, &copy);
             if (id) {
                 return;
@@ -1148,7 +1148,7 @@ int ciGetCallbackIndexByID(ChatConnection *chat, int id) {
     ASSERT_CHAT(chat, ov45_02255420, 0x63b);
     count = ArrayLength(chat->callbacks);
     for (i = 0; i < count; i++) {
-        callback = ov00_021FE6EC(chat->callbacks, i);
+        callback = ArrayNth(chat->callbacks, i);
         ASSERT_CALLBACK(callback, ov45_02255420, 0x648);
         if (callback->id == id) {
             return i;

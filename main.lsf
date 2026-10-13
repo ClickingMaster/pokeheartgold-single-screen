@@ -1560,8 +1560,8 @@ Overlay OVY_45
     Object src/ov45_022310c0.o
     Object src/ov45_02231144.o
     Object src/ov45_02231448.o
-    Object src/ov45_02231490.o
-    Object src/ov45_02231514.o
+    Object src/ppw_lobby_shutdown.o
+    Object src/ppw_lobby_process.o
     Object src/ov45_02231c38.o
     Object src/ov45_02231c78.o
     Object src/ov45_02231c8c.o
@@ -1570,7 +1570,7 @@ Overlay OVY_45
     Object src/ov45_022320b4.o
     Object src/ov45_022321e0.o
     Object src/ov45_022322a4.o
-    Object src/ov45_02232304.o
+    Object src/ppw_lobby_get_channel_data.o
     Object src/ov45_02232434.o
     Object src/ov45_0223259c.o
     Object src/ov45_022325b0.o

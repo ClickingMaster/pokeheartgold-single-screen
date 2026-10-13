@@ -27,22 +27,22 @@ extern char ov45_022552E4[];
 extern char ov45_022552EC[];
 extern char ov45_022552F0[];
 extern char ov45_022552FC[];
-void ov45_02237B58(Str *, char *);
-void ov45_02237BC8(Str *);
-void ov45_02237A24(void *, void *);
+void LobbyString_InitFromCStr(Str *, char *);
+void LobbyString_Destroy(Str *);
+void LobbyString_InitCopy(void *, void *);
 void ov45_022376BC(void *);
 void ov45_02232D8C(void *, int *, int);
 void ov45_02242858(void *);
-void ov00_021EC2EC(int, void *, int);
+void DWC_Free(int, void *, int);
 void ov45_022436E0(void *, Str *, Str *);
 void ov45_0224335C(void *, Str *);
-void ov45_0223DAD4(Str *, char *);
+void LobbyString_AssignCStr(Str *, char *);
 void *ov45_02242C3C(void *, Str *);
 void ov45_022428D8(Str *, void *, Str *);
 void ov45_022428C8(Str *, void *, Str *);
 int chatInChannelA(void *, char *);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
-void *ov45_02242394(unsigned);
+void *LobbyMem_Alloc(unsigned);
 void *ov45_0223EA34(void *, unsigned, char *);
 void ov45_022421E4(void *, unsigned, void *);
 char *strncpy(char *, const char *, size_t);
@@ -85,14 +85,14 @@ void ov45_0223F83C(void *a, char *s, void *b) {
     if (ov45_022577DC && W(ov45_022577DC, 4) == 5) {
         return;
     }
-    ov45_02237B58(&x, s);
+    LobbyString_InitFromCStr(&x, s);
     p = ov45_02242C3C(ov45_022577DC, &x);
-    ov45_02237BC8(&x);
-    ov45_02237B58(&y, s);
+    LobbyString_Destroy(&x);
+    LobbyString_InitFromCStr(&y, s);
     ov45_022428D8(&z, ov45_022577DC, &y);
     ((void (*)(char *, void *, void *))P(p, 16))(!z.b.flag ? z.s.inlinebuf : z.b.data, b, P(p, 20));
-    ov45_02237BC8(&z);
-    ov45_02237BC8(&y);
+    LobbyString_Destroy(&z);
+    LobbyString_Destroy(&y);
 }
 
 void ov45_0223F8F4(void) {
@@ -134,9 +134,9 @@ void ov45_0223F9C4(void *a, void *b, char *out) {
     }
     ov45_0223FA2C(&t, ov45_022577DC);
     strncpy(out, !t.b.flag ? t.s.inlinebuf : t.b.data, 127);
-    ov45_02237BC8(&t);
+    LobbyString_Destroy(&t);
 }
 
 void ov45_0223FA2C(void *out, void *p) {
-    ov45_02237A24(out, (u8 *)p + 24);
+    LobbyString_InitCopy(out, (u8 *)p + 24);
 }

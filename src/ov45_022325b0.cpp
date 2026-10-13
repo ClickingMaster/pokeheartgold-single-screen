@@ -133,9 +133,9 @@ struct Work {
 };
 
 extern "C" Work *_022577C4;
-extern "C" int ov45_022325B0(const u8 *data, u32 len, int flag);
+extern "C" int PPW_LobbyUpdateMyProfile(const u8 *data, u32 len, int flag);
 
-extern "C" int ov45_022325B0(const u8 *data, u32 len, int flag) {
+extern "C" int PPW_LobbyUpdateMyProfile(const u8 *data, u32 len, int flag) {
     Work *w = _022577C4;
     if (w == 0) {
         return 4;

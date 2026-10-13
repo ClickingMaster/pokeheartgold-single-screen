@@ -24,12 +24,12 @@ struct Node {
 };
 
 extern void ov45_02236E58(Iterator *);
-extern void ov45_02237BC8(void *);
-extern void ov00_021EC2EC(int, void *, int);
+extern void LobbyString_Destroy(void *);
+extern void DWC_Free(int, void *, int);
 extern Node *ov45_022370D0(Node *, void *);
 void ov45_02243FD4(Iterator *, List *, Iterator);
-extern void *ov45_02242394(int);
-extern void ov45_02237A24(void *, void *);
+extern void *LobbyMem_Alloc(int);
+extern void LobbyString_InitCopy(void *, void *);
 extern void ov45_02236EC4(Node *, void *);
 extern char ov45_022553AC[];
 Node *ov45_0224404C(List *, Node *, int, int, u32 *);
@@ -41,9 +41,9 @@ void ov45_02243FD4(Iterator *out, List *list, Iterator node) {
         list->current = node.current;
     }
     out->current = ov45_022370D0(old, list->head);
-    ov45_02237BC8(old->str);
+    LobbyString_Destroy(old->str);
     if (old) {
-        ov00_021EC2EC(0, old, 0);
+        DWC_Free(0, old, 0);
     }
     list->count--;
 }
@@ -69,7 +69,7 @@ Node *ov45_0224404C(List *list, Node *link, int before, int current, u32 *value)
         abort();
     }
     guard.flag = 0;
-    n = ov45_02242394(28);
+    n = LobbyMem_Alloc(28);
     guard.a = n;
     guard.b = n;
     guard.head = &list->head;
@@ -77,7 +77,7 @@ Node *ov45_0224404C(List *list, Node *link, int before, int current, u32 *value)
     dest = (void *)((u8 *)n + 12);
     if (dest) {
         dest->data = *value;
-        ov45_02237A24(dest->str, value + 1);
+        LobbyString_InitCopy(dest->str, value + 1);
     }
     n = guard.owned;
     n->prev = 0;
@@ -99,7 +99,7 @@ Node *ov45_0224404C(List *list, Node *link, int before, int current, u32 *value)
     }
     owned = guard.owned;
     if (owned) {
-        ov00_021EC2EC(0, owned, 0);
+        DWC_Free(0, owned, 0);
     }
     return n;
 }

@@ -19,17 +19,17 @@ typedef struct {
     void *root, *last;
 } Tree;
 
-extern void ov00_021EC2EC(int, void *, int);
-extern void ov00_021EC3D8(void *);
-extern void ov45_02237A24(void *, void *);
-extern void ov45_02237BC8(void *);
+extern void DWC_Free(int, void *, int);
+extern void DWCi_GsFree(void *);
+extern void LobbyString_InitCopy(void *, void *);
+extern void LobbyString_Destroy(void *);
 extern void ov45_02242C74(void **, void *, void *);
 extern void __msl_assertion_failed(char *, char *, char *, int);
-extern void *ov00_021FE5B4(int, int, void (*)(void *));
+extern void *ArrayNew(int, int, void (*)(void *));
 extern char ov45_02255458[];
 extern char ov45_02255468[];
 extern char ov45_02255438[];
-extern int ov45_02237F7C(void *, void *);
+extern int LobbyString_Compare(void *, void *);
 extern void ov45_02243780(void *p, int a, void *b);
 extern int ov45_02243794(void *p, void *key);
 extern int ov45_022437CC(void *p, void *key);
@@ -49,8 +49,8 @@ extern void ov45_0224447C(void *p, void *node);
 extern void ov45_022444C8(void *p);
 extern int ciInitCallbacks(void *p);
 extern int ArrayLength(void *);
-extern void *ov00_021FE6EC(void *, int);
-extern void ov00_021FE678(void *);
+extern void *ArrayNth(void *, int);
+extern void ArrayFree(void *);
 extern void ciFreeCallbackData(void *);
 extern char ov45_022554F0[];
 extern char ov45_0225540C[];
@@ -75,7 +75,7 @@ extern void ov45_02243F3C(InsertResult *, Tree *, int *);
 
 void ov45_02243780(void *p, int a, void *b) {
     W(p, 0) = a;
-    ov45_02237A24(A(p, 4), b);
+    LobbyString_InitCopy(A(p, 4), b);
 }
 
 int ov45_02243794(void *p, void *key) {

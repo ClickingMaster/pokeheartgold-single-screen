@@ -100,7 +100,7 @@ extern int ov70_0224590C[];
 // Not declared in a public header.
 u32 GtsSave_GetDepositDate(void *gtsSave);
 u32 GtsSave_GetTradeDate(void *gtsSave);
-void ov00_021ECB94(RTCDate *date, RTCTime *time);
+void DWC_GetDateTime(RTCDate *date, RTCTime *time);
 void CommState_ShowRestartErrorAndHalt(void);
 
 int GtsSearch_Init(GtsApp *app, int state);
@@ -504,7 +504,7 @@ BOOL GtsSearch_IsDateRecent(GtsApp *app, int which) {
     saved.month = (packed >> 16) & 0xFF;
     saved.day = (packed >> 8) & 0xFF;
     saved.week = (RTCWeek)(packed & 0xFF);
-    ov00_021ECB94(&current, &time);
+    DWC_GetDateTime(&current, &time);
     days = RTC_ConvertDateToDay(&current) - RTC_ConvertDateToDay(&saved);
     return days >= 0 && days < 3;
 }

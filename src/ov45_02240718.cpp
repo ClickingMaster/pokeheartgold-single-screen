@@ -93,8 +93,8 @@ struct Manager {
 extern "C" Manager *ov45_022577DC;
 extern "C" It ov45_0223FD8C(Map *map, Base *const &key);
 extern "C" void ov45_02242510(Map *map, u32 id);
-extern "C" Str *ov45_02237B58(Str *, const char *);
-extern "C" Str *ov45_02237BC8(Str *);
+extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
+extern "C" Str *LobbyString_Destroy(Str *);
 extern "C" void ov45_022428D8(Str *dst, Manager *m, Str *src);
 extern "C" void ov45_0223F8F4(void *self, const char *name, u32 x, u32 id);
 
@@ -140,14 +140,14 @@ extern "C" void ov45_02240718(void *self, int result, const char *name, u32 x, u
     It it = FindIt(m, sid);
     Handler *h = it.n == &m->map.header ? 0 : it.n->value;
     Str s;
-    ov45_02237B58(&s, name);
+    LobbyString_InitFromCStr(&s, name);
     Str t;
     ov45_022428D8(&t, ov45_022577DC, &s);
     const char *str = t.c_str();
     void (*cb)(BOOL, const char *, u32, u32) = h->callback;
     cb(result == 1, str, x, h->getArg());
-    ov45_02237BC8(&t);
-    ov45_02237BC8(&s);
+    LobbyString_Destroy(&t);
+    LobbyString_Destroy(&s);
     ov45_02242510(&ov45_022577DC->map, sid);
 }
 

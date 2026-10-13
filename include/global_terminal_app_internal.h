@@ -37,9 +37,9 @@ void WirelessStatusIcon_SetLevel(int a0);
 const OverlayManagerTemplate *VsRecorderApp_GetTemplate(u8 a0);
 BOOL CommWireless_IsStartedUp(void);
 void CommWireless_Terminate(void);
-void ov00_021EC294(void *(*alloc)(int, u32, int), void (*free)(int, void *, u32));
-int ov00_021EC9D4(void);
-void ov00_021ECB40(void);
+void DWC_SetMemFunc(void *(*alloc)(int, u32, int), void (*free)(int, void *, u32));
+int DWC_GetLinkLevel(void);
+void DWC_UpdateConnection(void);
 
 extern const OverlayManagerTemplate sOverlayTemplate_GlobalTerminalConnect;
 

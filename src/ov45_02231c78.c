@@ -53,19 +53,19 @@ extern void ov45_02236A44(void);
 extern void ov45_02235A94(void);
 extern void ov45_02231EB0(String *);
 extern void ov45_02233994(String *, int, String *);
-extern void ov45_02237BC8(String *);
-extern void ov45_02237A24(String *, String *);
-extern void ov45_02237D48(String *, String *);
+extern void LobbyString_Destroy(String *);
+extern void LobbyString_InitCopy(String *, String *);
+extern void LobbyString_Assign(String *, String *);
 extern int ov45_02241048(char *, int, void *, void *, void (*)(void), int);
 
 static inline void initResult(Result *r, int mode, String *s) {
     r->mode = mode;
-    ov45_02237A24(&r->text, s);
+    LobbyString_InitCopy(&r->text, s);
     r->a = 0;
     r->b = 0;
 }
 
-int ov45_02231C8C(int);
+int PPW_LobbyJoinSubChannelAsync(int);
 
 int ov45_02231C78(int *p) {
     if (p[1] == 0) {

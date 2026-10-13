@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 8ec8509be · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · f20fbc800 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -2803,9 +2803,9 @@ src/wifi_plaza_player_objects.c</title></rect>
 <rect x="341.208" y="612.694" width="26.290" height="12.672" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / wifi_plaza_apps.o
 2,082 bytes · C-only source
 src/wifi_plaza_apps.c</title></rect>
-<rect x="308.240" y="625.366" width="26.857" height="10.891" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02231514.o
+<rect x="308.240" y="625.366" width="26.857" height="10.891" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ppw_lobby_process.o
 1,828 bytes · C++-only source
-src/ov45_02231514.cpp</title></rect>
+src/ppw_lobby_process.cpp</title></rect>
 <rect x="308.240" y="636.257" width="13.518" height="19.696" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / wifi_plaza_news.o
 1,664 bytes · C-only source
 src/wifi_plaza_news.c</title></rect>
@@ -3073,12 +3073,12 @@ src/ov45_02240718.cpp</title></rect>
 <rect x="407.458" y="663.625" width="6.507" height="7.672" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02243bc0.o
 312 bytes · C-only source
 src/ov45_02243bc0.c</title></rect>
-<rect x="413.965" y="655.953" width="9.468" height="5.137" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02232304.o
-304 bytes · C++-only source
-src/ov45_02232304.cpp</title></rect>
-<rect x="413.965" y="661.090" width="9.468" height="5.137" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02243840.o
+<rect x="413.965" y="655.953" width="9.468" height="5.137" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02243840.o
 304 bytes · C-only source
 src/ov45_02243840.c</title></rect>
+<rect x="413.965" y="661.090" width="9.468" height="5.137" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ppw_lobby_get_channel_data.o
+304 bytes · C++-only source
+src/ppw_lobby_get_channel_data.cpp</title></rect>
 <rect x="413.965" y="666.228" width="9.468" height="5.070" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_022320b4.o
 300 bytes · C-only source
 src/ov45_022320b4.c</title></rect>
@@ -3226,12 +3226,12 @@ src/ov45_02244170.c</title></rect>
 <rect x="414.758" y="686.532" width="2.892" height="7.303" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_022310c0.o
 132 bytes · C-only source
 src/ov45_022310c0.c</title></rect>
-<rect x="417.650" y="686.532" width="5.784" height="3.652" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02231490.o
-132 bytes · C-only source
-src/ov45_02231490.c</title></rect>
-<rect x="417.650" y="690.184" width="5.784" height="3.652" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02232ddc.o
+<rect x="417.650" y="686.532" width="5.784" height="3.652" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02232ddc.o
 132 bytes · C-only source
 src/ov45_02232ddc.c</title></rect>
+<rect x="417.650" y="690.184" width="5.784" height="3.652" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ppw_lobby_shutdown.o
+132 bytes · C-only source
+src/ppw_lobby_shutdown.c</title></rect>
 <rect x="408.623" y="693.836" width="7.689" height="2.664" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02239abc.o
 128 bytes · C-only source
 src/ov45_02239abc.c</title></rect>

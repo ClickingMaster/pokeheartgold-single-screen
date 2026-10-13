@@ -16,7 +16,7 @@
 #include "sound_system.h"
 #include "wifi_plaza_internal.h"
 
-// What ov45_022320C4 reports: the lobby time first.
+// What PPW_LobbyGetTimeInfo reports: the lobby time first.
 typedef struct WiFiPlazaLobbyTime {
     s64 time;
     u8 unk_08[16];
@@ -263,7 +263,7 @@ void WiFiPlaza_OnLobbyEvent(u32 event, WiFiPlazaWork *work) {
     WiFiPlazaLobbyTime now;
     int notify = 0;
     int which;
-    ov45_022320C4(&now);
+    PPW_LobbyGetTimeInfo(&now);
     WiFiPlaza_SecondsToTime(&work->currentTime, &now.time);
     work->lobbyTime = now.time;
     switch (event) {

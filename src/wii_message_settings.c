@@ -125,7 +125,7 @@ typedef struct WiiMessageSettings {
     Options *options;           // 0x008
     void *expHeapMemory;        // 0x00C
     NNSFndHeapHandle expHeap;   // 0x010
-    u8 unk_14[0x64];            // 0x014, passed to ov00_021EC3F0 when connecting
+    u8 unk_14[0x64];            // 0x014, passed to DWC_InitInetEx when connecting
     u16 registrationCodePrefix; // 0x078
     u8 screenStartState;        // 0x07A
     u8 unk_7B;                  // 0x07B
@@ -259,22 +259,22 @@ void WirelessStatusIcon_SetLevel(int a0);
 void CommState_InitWiiMessageWfcSession(SaveData *saveData);
 void CommState_FreeWiiMessageWfcSession(void);
 void CommState_ShowRestartErrorAndHalt(void);
-void ov00_021EC294(void *(*alloc)(int, u32, int), void (*free)(int, void *));
-int ov00_021EC9D4(void);
-void ov00_021ECB40(void);
-void ov00_021EC8D8(void);
-int ov00_021EC5B4(void);
-void ov00_021EC3F0(void *a0, int a1, int a2, int a3);
-void ov00_021EC454(int a0);
-void ov00_021EC4A4(void);
-void ov00_021EC60C(void);
-int ov00_021EC724(void);
-int ov00_021EC11C(int *errorCode, u32 *errorType);
-void ov00_021EC210(void);
-void ov00_021EC0FC(int *a0);
-void ov00_021EC9E0(void *a0);
-void ov00_021ECD04(void);
-int ov00_021ECDC8(void);
+void DWC_SetMemFunc(void *(*alloc)(int, u32, int), void (*free)(int, void *));
+int DWC_GetLinkLevel(void);
+void DWC_UpdateConnection(void);
+void DWC_CleanupInet(void);
+int DWC_CheckInet(void);
+void DWC_InitInetEx(void *a0, int a1, int a2, int a3);
+void DWC_SetAuthServer(int a0);
+void DWC_ConnectInetAsync(void);
+void DWC_ProcessInet(void);
+int DWC_GetInetStatus(void);
+int DWC_GetLastErrorEx(int *errorCode, u32 *errorType);
+void DWC_ClearError(void);
+void DWC_GetLastError(int *a0);
+void DWC_GetApInfo(void *a0);
+void DWC_NASLoginAsync(void);
+int DWC_NASLoginProcess(void);
 void DWC_ShutdownGHTTP(void);
 void DWC_ShutdownFriendsMatch(void);
 s32 WifiConnection_ClassifyErrorCode(s32 errorCode, u32 errorType);
@@ -422,9 +422,9 @@ BOOL WiiMessageSettings_Main(OverlayManager *man, int *state) {
     void *args;
 
     if (app->networkLoaded == TRUE) {
-        ov00_021ECB40();
+        DWC_UpdateConnection();
         GtsServer_Update();
-        WirelessStatusIcon_SetLevel(3 - ov00_021EC9D4());
+        WirelessStatusIcon_SetLevel(3 - DWC_GetLinkLevel());
     }
 
     switch (*state) {
@@ -435,7 +435,7 @@ BOOL WiiMessageSettings_Main(OverlayManager *man, int *state) {
     case 1:
         if (CommWireless_IsStartedUp()) {
             _02249BE0 = app->expHeap;
-            ov00_021EC294(WiiMessageSettings_Alloc, WiiMessageSettings_Free);
+            DWC_SetMemFunc(WiiMessageSettings_Alloc, WiiMessageSettings_Free);
             app->networkLoaded = TRUE;
             *state = 2;
         }
@@ -728,7 +728,7 @@ BOOL WiiMessageSettingsScreen_Init(OverlayManager *man, int *state) {
 
     switch (WiiMessageSettings_GetScreenStartState(screen->app)) {
     case WMS_STATE_START_CONNECT:
-        if (ov00_021EC5B4() == 0 && Comm_HasWifiProfile(screen->app->saveData) == TRUE) {
+        if (DWC_CheckInet() == 0 && Comm_HasWifiProfile(screen->app->saveData) == TRUE) {
             screen->state = WMS_STATE_START_CONNECT;
             CommState_InitWiiMessageWfcSession(screen->app->saveData);
             WirelessStatusIcon_Create();
@@ -1564,7 +1564,7 @@ BOOL WiiMessageSettingsScreen_PrintDisconnecting(WiiMessageSettingsScreen *scree
 
 BOOL WiiMessageSettingsScreen_Disconnect(WiiMessageSettingsScreen *screen) {
     CommState_FreeWiiMessageWfcSession();
-    ov00_021EC8D8();
+    DWC_CleanupInet();
     WirelessStatusIcon_Destroy();
     Sys_ClearSleepDisableFlag(4);
     if (screen->app->serverSessionStarted == TRUE) {
@@ -1599,9 +1599,9 @@ BOOL WiiMessageSettingsScreen_StartConnect(WiiMessageSettingsScreen *screen) {
         break;
     case 2:
         Sys_SetSleepDisableFlag(4);
-        ov00_021EC3F0(screen->app->unk_14, 2, 1, 20);
-        ov00_021EC454(2);
-        ov00_021EC4A4();
+        DWC_InitInetEx(screen->app->unk_14, 2, 1, 20);
+        DWC_SetAuthServer(2);
+        DWC_ConnectInetAsync();
         screen->state = WMS_STATE_WAIT_CONNECT;
         break;
     }
@@ -1617,15 +1617,15 @@ BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen) {
         u8 info[60];
     } locals;
 
-    ov00_021EC60C();
-    if (ov00_021EC5B4()) {
-        switch (ov00_021EC724()) {
+    DWC_ProcessInet();
+    if (DWC_CheckInet()) {
+        switch (DWC_GetInetStatus()) {
         case 7:
-            screen->connectionResult = ov00_021EC11C(&locals.errorCode, &locals.errorType);
+            screen->connectionResult = DWC_GetLastErrorEx(&locals.errorCode, &locals.errorType);
             screen->connectionErrorCode = locals.errorCode;
             screen->connectionErrorType = locals.errorType;
-            ov00_021EC210();
-            ov00_021EC8D8();
+            DWC_ClearError();
+            DWC_CleanupInet();
             WirelessStatusIcon_Destroy();
             CommState_FreeWiiMessageWfcSession();
             Sys_ClearSleepDisableFlag(4);
@@ -1644,13 +1644,13 @@ BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen) {
         case 6:
         case 8:
         default:
-            ov00_021EC0FC(&locals.error);
+            DWC_GetLastError(&locals.error);
             WiiMessageSettingsScreen_HideWaitingIcon(screen);
             screen->state = WMS_STATE_SHOW_REGISTRATION_ERROR;
             screen->registrationError = -2;
             break;
         case 4:
-            ov00_021EC9E0(locals.info);
+            DWC_GetApInfo(locals.info);
             screen->state = WMS_STATE_14;
             break;
         }
@@ -1661,7 +1661,7 @@ BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen) {
 #pragma force_active reset
 
 BOOL WiiMessageSettingsScreen_StartAuth(WiiMessageSettingsScreen *screen) {
-    ov00_021ECD04();
+    DWC_NASLoginAsync();
     screen->state = WMS_STATE_15;
     return FALSE;
 }
@@ -1672,7 +1672,7 @@ BOOL WiiMessageSettingsScreen_WaitAuth(WiiMessageSettingsScreen *screen) {
     int errorCode;
     u32 errorType;
 
-    switch (ov00_021ECDC8()) {
+    switch (DWC_NASLoginProcess()) {
     case 3:
         screen->state = WMS_STATE_START_SERVER_SESSION;
         break;
@@ -1680,10 +1680,10 @@ BOOL WiiMessageSettingsScreen_WaitAuth(WiiMessageSettingsScreen *screen) {
     case 4:
     case 5:
         WiiMessageSettingsScreen_HideWaitingIcon(screen);
-        screen->connectionResult = ov00_021EC11C(&errorCode, &errorType);
+        screen->connectionResult = DWC_GetLastErrorEx(&errorCode, &errorType);
         screen->connectionErrorCode = errorCode;
-        ov00_021EC210();
-        ov00_021EC8D8();
+        DWC_ClearError();
+        DWC_CleanupInet();
         WirelessStatusIcon_Destroy();
         CommState_FreeWiiMessageWfcSession();
         Sys_ClearSleepDisableFlag(4);
@@ -2101,7 +2101,7 @@ BOOL WiiMessageSettingsScreen_DisconnectAndWait(WiiMessageSettingsScreen *screen
         screen->subState++;
         break;
     case 1:
-        ov00_021EC8D8();
+        DWC_CleanupInet();
         WirelessStatusIcon_Destroy();
         CommState_FreeWiiMessageWfcSession();
         Sys_ClearSleepDisableFlag(4);
@@ -2246,7 +2246,7 @@ BOOL WiiMessageSettingsScreen_DisconnectAndQuit(WiiMessageSettingsScreen *screen
     case 1:
         if (!WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId)) {
             CommState_FreeWiiMessageWfcSession();
-            ov00_021EC8D8();
+            DWC_CleanupInet();
             WirelessStatusIcon_Destroy();
             Sys_ClearSleepDisableFlag(4);
             if (screen->app->serverSessionStarted == TRUE) {

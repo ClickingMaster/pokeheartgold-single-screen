@@ -122,7 +122,7 @@ extern void ParticleSystem_FreeAll(void);
 extern void sub_02037930(int mode);
 extern void sub_020399FC(int a0, BgConfig *bgConfig);
 extern void WirelessStatusIcon_SetLevel(int linkLevel);
-extern int ov00_021EC9D4(void);
+extern int DWC_GetLinkLevel(void);
 extern BOOL CommWireless_Exists(void);
 extern int WM_GetLinkLevel(void);
 
@@ -1603,7 +1603,7 @@ void ov12_0223A664(BattleSystem *battleSystem, BattleSetup *setup) {
 void Battle_CreateWirelessStatusIcon(void) {
     WirelessStatusIcon_Create();
     if (CommState_IsWifi()) {
-        WirelessStatusIcon_SetLevel(3 - ov00_021EC9D4());
+        WirelessStatusIcon_SetLevel(3 - DWC_GetLinkLevel());
     } else if (CommWireless_Exists()) {
         WirelessStatusIcon_SetLevel(3 - WM_GetLinkLevel());
     }

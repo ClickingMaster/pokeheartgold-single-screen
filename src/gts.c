@@ -69,10 +69,10 @@ extern const GtsScreen sGtsScreens[];
 
 // Network library (OVY_0) and loaders without a header declaring them.
 int WCM_GetPhase(void);
-void ov00_021EC210(void);
-void ov00_021ECB40(void);
-void ov00_021EC294(void *(*alloc)(void *, u32, int), void (*free)(void *, void *));
-int ov00_021EC9D4(void);
+void DWC_ClearError(void);
+void DWC_UpdateConnection(void);
+void DWC_SetMemFunc(void *(*alloc)(void *, u32, int), void (*free)(void *, void *));
+int DWC_GetLinkLevel(void);
 BOOL LoadOVY38(void);
 void UnloadOVY38(void);
 void CommWireless_Terminate(void);
@@ -364,7 +364,7 @@ int GtsServer_GetErrorResult(int error) {
         if (WCM_GetPhase() != 9) {
             result = -14;
         }
-        ov00_021EC210();
+        DWC_ClearError();
     }
     return result;
 }
@@ -421,13 +421,13 @@ BOOL Gts_Init(OverlayManager *man, int *state) {
 BOOL Gts_Main(OverlayManager *man, int *state) {
     GtsApp *app = OverlayManager_GetData(man);
 
-    ov00_021ECB40();
+    DWC_UpdateConnection();
     GtsServer_Update();
     switch (*state) {
     case 0:
         if (CommWireless_IsStartedUp()) {
             gGtsGlobals.heap = app->heap;
-            ov00_021EC294(Gts_Alloc, Gts_Free);
+            DWC_SetMemFunc(Gts_Alloc, Gts_Free);
             *state = 1;
         }
         break;
@@ -757,7 +757,7 @@ void Gts_Free(void *unused, void *ptr) {
 #pragma force_active reset
 
 int Gts_GetWifiIconLevel(void) {
-    return 3 - ov00_021EC9D4();
+    return 3 - DWC_GetLinkLevel();
 }
 
 void Gts_SetNextScreen(GtsApp *app, int screen, int arg) {

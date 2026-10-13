@@ -8,7 +8,7 @@
   },
   {
     "section": ".text",
-    "owner": {"name": "ov45_02237BC8", "size": 52, "type": "FUNC"},
+    "owner": {"name": "LobbyString_Destroy", "size": 52, "type": "FUNC"},
     "aliases": [
       {"name": "_ZN6StringD1Ev", "offset": 0}
     ]

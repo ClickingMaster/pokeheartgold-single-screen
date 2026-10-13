@@ -10,7 +10,7 @@ typedef struct {
     volatile u32 size;
 } Work;
 
-void ov00_021EC2EC(int, void *, u32);
+void DWC_Free(int, void *, u32);
 Work *ov45_022389EC(Work *);
 
 static inline void init(u8 *p) {
@@ -27,7 +27,7 @@ Work *ov45_022389EC(Work *w) {
 
         w->size -= old;
         if (w->data) {
-            ov00_021EC2EC(0, w->data, 0);
+            DWC_Free(0, w->data, 0);
         }
     }
     return w;

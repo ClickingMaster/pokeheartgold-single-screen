@@ -40,16 +40,16 @@ extern int DWC_IsBuddyFriendData(void *);
 extern u16 NNS_FndSetGroupIDForExpHeap(NNSFndHeapHandle heap, u16 groupID);
 extern int NNS_FndGetGroupIDForMBlockExpHeap(void *);
 
-extern int ov00_021EC11C(int *, u32 *);
-extern void ov00_021EC210(void);
-extern void ov00_021EC294(void *(*alloc)(int, u32, int), void (*free)(int, void *, u32));
-extern void ov00_021EC3F0(void *, int, int, int);
-extern void ov00_021EC454(int);
-extern void ov00_021EC4A4(void);
-extern int ov00_021EC5B4(void);
-extern void ov00_021EC60C(void);
-extern int ov00_021EC724(void);
-extern void ov00_021EC8D8(void);
+extern int DWC_GetLastErrorEx(int *, u32 *);
+extern void DWC_ClearError(void);
+extern void DWC_SetMemFunc(void *(*alloc)(int, u32, int), void (*free)(int, void *, u32));
+extern void DWC_InitInetEx(void *, int, int, int);
+extern void DWC_SetAuthServer(int);
+extern void DWC_ConnectInetAsync(void);
+extern int DWC_CheckInet(void);
+extern void DWC_ProcessInet(void);
+extern int DWC_GetInetStatus(void);
+extern void DWC_CleanupInet(void);
 extern void DWC_InitFriendsMatch(void *, void *, int, char *, char *, int, int, void *, int);
 extern void DWC_ShutdownFriendsMatch(void);
 extern void DWC_ProcessFriendsMatch(void);
@@ -72,13 +72,13 @@ extern void DWC_CancelMatching(void);
 extern void DWC_StopSCMatchingAsync(void (*)(void), int);
 extern int DWC_AddMatchKeyString(int, const char *, const char *);
 extern int DWC_SetMatchingOption(int, const void *, u32);
-extern int ov00_021F9580(u8);
-extern u32 ov00_021F9750(u32, void *, u32);
-extern void ov00_021F9850(u8, void *, int);
-extern int ov00_021F9988(u8, int);
-extern void ov00_021F989C(void (*)(u32, s32));
-extern void ov00_021F98BC(void (*)(u16, const u8 *, int));
-extern void ov00_021F98DC(void (*)(void));
+extern int DWC_IsSendableReliable(u8);
+extern u32 DWC_SendReliableBitmap(u32, void *, u32);
+extern void DWC_SetRecvBuffer(u8, void *, int);
+extern int DWC_SetRecvTimeoutTime(u8, int);
+extern void DWC_SetUserSendCallback(void (*)(u32, s32));
+extern void DWC_SetUserRecvCallback(void (*)(u16, const u8 *, int));
+extern void DWC_SetUserRecvTimeoutCallback(void (*)(void));
 
 #pragma force_active on
 
@@ -152,7 +152,7 @@ void WifiConnection_Destroy(void) {
         Heap_FreeExplicit((enum HeapID)gWifiConnection->heapId, gWifiConnection->rawAlloc);
         gWifiConnection = NULL;
     }
-    ov00_021EC210();
+    DWC_ClearError();
 }
 
 #pragma force_active on
@@ -163,21 +163,21 @@ int WifiConnection_UpdateLogin(void) {
 
     switch ((u32)gWifiConnection->state) {
     case WIFI_CONNECTION_STATE_INIT:
-        ov00_021EC294(WifiConnection_Alloc, WifiConnection_Free);
-        ov00_021EC3F0(gWifiConnection->libConfig, 2, 1, 20);
-        ov00_021EC454(2);
-        ov00_021EC4A4();
+        DWC_SetMemFunc(WifiConnection_Alloc, WifiConnection_Free);
+        DWC_InitInetEx(gWifiConnection->libConfig, 2, 1, 20);
+        DWC_SetAuthServer(2);
+        DWC_ConnectInetAsync();
         gWifiConnection->state = WIFI_CONNECTION_STATE_WAIT_LINK;
         gWifiConnection->voiceChatActive = 0;
     case WIFI_CONNECTION_STATE_WAIT_LINK:
-        if (ov00_021EC5B4()) {
-            if (ov00_021EC724() == 4) {
+        if (DWC_CheckInet()) {
+            if (DWC_GetInetStatus() == 4) {
                 gWifiConnection->state = WIFI_CONNECTION_STATE_LOGIN;
             } else {
                 gWifiConnection->state = WIFI_CONNECTION_STATE_ERROR;
             }
         } else {
-            ov00_021EC60C();
+            DWC_ProcessInet();
             break;
         }
     case WIFI_CONNECTION_STATE_LOGIN:
@@ -244,10 +244,10 @@ int WifiConnection_StartAnybodyMatchmaking(const char *name, int maxPlayers, int
     gWifiConnection->maxPlayers = maxPlayers;
     DWC_ConnectToAnybodyAsync((u8)maxPlayers, gWifiConnection->matchFilter, WifiConnection_AnybodyMatchedCallback, 0, WifiConnection_EvalPlayerCallback, 0);
     gWifiConnection->matchType = 0;
-    ov00_021F989C(WifiConnection_SendDoneCallback);
-    ov00_021F98BC(WifiConnection_ReceiveCallback);
+    DWC_SetUserSendCallback(WifiConnection_SendDoneCallback);
+    DWC_SetUserRecvCallback(WifiConnection_ReceiveCallback);
     DWC_SetConnectionClosedCallback(WifiConnection_ConnectionClosedCallback, 0);
-    ov00_021F98DC(WifiConnection_TimeoutCallback);
+    DWC_SetUserRecvTimeoutCallback(WifiConnection_TimeoutCallback);
     gWifiConnection->sendBusy = 0;
     gWifiConnection->disconnectWhenAlone = 1;
     return 1;
@@ -341,7 +341,7 @@ int WifiConnection_SendToHost(void *data, int size) {
     gWifiConnection->sendBuffer[2] = gWifiConnection->sendSequence;
     MI_CpuCopy8(data, gWifiConnection->sendBuffer + 4, size);
     gWifiConnection->sendBusy = 1;
-    ov00_021F9750(1, gWifiConnection, size + 4);
+    DWC_SendReliableBitmap(1, gWifiConnection, size + 4);
     return 1;
 }
 
@@ -360,7 +360,7 @@ int WifiConnection_SendFromHost(void *data, int size) {
     gWifiConnection->sendBuffer[2] = gWifiConnection->sendSequence;
     MI_CpuCopy8(data, gWifiConnection->sendBuffer + 4, size);
     gWifiConnection->sendBusy = 1;
-    if (ov00_021F9750(DWC_GetAIDBitmap(), gWifiConnection, size + 4) == 0) {
+    if (DWC_SendReliableBitmap(DWC_GetAIDBitmap(), gWifiConnection, size + 4) == 0) {
         gWifiConnection->sendBusy = 0;
         return 0;
     }
@@ -384,7 +384,7 @@ int WifiConnection_SendToAll(void *data, int size) {
     MI_CpuCopy8(data, gWifiConnection->sendBuffer + 4, size);
     gWifiConnection->sendBusy = 1;
     aidMask = DWC_GetAIDBitmap();
-    if (ov00_021F9750(aidMask, gWifiConnection, size + 4) != aidMask) {
+    if (DWC_SendReliableBitmap(aidMask, gWifiConnection, size + 4) != aidMask) {
         gWifiConnection->sendBusy = 0;
         return 0;
     }
@@ -450,18 +450,18 @@ void WifiConnection_ResetKeepAliveTimers(void) {
 void WifiConnection_SetRecvTimeouts(void) {
     int i;
     for (i = 0; i < 4; i++) {
-        ov00_021F9988((u8)i, 0);
+        DWC_SetRecvTimeoutTime((u8)i, 0);
     }
     if (DWC_GetMyAID() == 0) {
         for (i = 0; i < gWifiConnection->maxPlayers; i++) {
             if (i != DWC_GetMyAID() && (DWC_GetAIDBitmap() & (1 << i))) {
-                if (!ov00_021F9988((u8)i, 10000)) {
+                if (!DWC_SetRecvTimeoutTime((u8)i, 10000)) {
                     GF_AssertFail();
                 }
             }
         }
     } else {
-        if (!ov00_021F9988(0, 10000)) {
+        if (!DWC_SetRecvTimeoutTime(0, 10000)) {
             GF_AssertFail();
         }
     }
@@ -612,7 +612,7 @@ int WifiConnection_CheckError(void) {
     int status;
     int result = 0;
 
-    status = ov00_021EC11C(&error, &type);
+    status = DWC_GetLastErrorEx(&error, &type);
     if (status) {
         result = error;
         if (error == 0 || type == 1) {
@@ -620,10 +620,10 @@ int WifiConnection_CheckError(void) {
         }
         switch (type) {
         case 1:
-            ov00_021EC210();
+            DWC_ClearError();
             break;
         case 2:
-            ov00_021EC210();
+            DWC_ClearError();
             break;
         case 3:
         case 4:
@@ -647,11 +647,11 @@ int WifiConnection_CheckError(void) {
                 case 1:
                 case 2:
                     if (CommState_GetLinkMode() != 33) {
-                        ov00_021EC8D8();
+                        DWC_CleanupInet();
                     }
                     break;
                 }
-                ov00_021EC210();
+                DWC_ClearError();
             }
             if (gWifiConnection) {
                 gWifiConnection->state = WIFI_CONNECTION_STATE_FATAL_ERROR;
@@ -686,7 +686,7 @@ int WifiConnection_CanSendToAll(void) {
         do {
             if (i != DWC_GetMyAID() && DWC_IsValidAID((u8)i) != 0) {
                 found = 1;
-                if (ov00_021F9580((u8)i) == 0) {
+                if (DWC_IsSendableReliable((u8)i) == 0) {
                     return 0;
                 }
             }
@@ -702,7 +702,7 @@ int WifiConnection_SendKeepAlive(int aid) {
         if ((mask & 0xFFFE) != 0) {
             gWifiConnection->sendBusy = 1;
             *(u32 *)gWifiConnection->sendBuffer = 2 | ((u32)gWifiConnection->ownVoiceFlag << 8);
-            ov00_021F9750(DWC_GetAIDBitmap(), gWifiConnection, 4);
+            DWC_SendReliableBitmap(DWC_GetAIDBitmap(), gWifiConnection, 4);
             gWifiConnection->keepAliveTimers[aid] = 0;
             return 1;
         }
@@ -975,7 +975,7 @@ void WifiConnection_SetErrorCallback(void (*callback)(int)) {
 
 void WifiConnection_Shutdown(void) {
     DWC_ShutdownFriendsMatch();
-    ov00_021EC8D8();
+    DWC_CleanupInet();
     WifiConnection_StopVoiceChat();
     WifiConnection_Destroy();
 }
@@ -1048,10 +1048,10 @@ int WifiConnection_StartMatchmaking(int friendIndex, int maxPlayers, BOOL altern
     }
     gWifiConnection->retryCount = 0;
     gWifiConnection->state = WIFI_CONNECTION_STATE_MATCHING;
-    ov00_021F989C(WifiConnection_SendDoneCallback);
-    ov00_021F98BC(WifiConnection_ReceiveCallback);
+    DWC_SetUserSendCallback(WifiConnection_SendDoneCallback);
+    DWC_SetUserRecvCallback(WifiConnection_ReceiveCallback);
     DWC_SetConnectionClosedCallback(WifiConnection_ConnectionClosedCallback, 0);
-    ov00_021F98DC(WifiConnection_TimeoutCallback);
+    DWC_SetUserRecvTimeoutCallback(WifiConnection_TimeoutCallback);
     gWifiConnection->sendBusy = 0;
     return 0;
 }
@@ -1254,7 +1254,7 @@ void WifiConnection_AllocRecvBuffer(int aid) {
             gWifiConnection->recvBuffers[aid] = WifiConnection_Alloc(0, 0x1000, 32);
             gWifiConnection->recvBufferFromGameHeap[aid] = 0;
         }
-        ov00_021F9850((u8)aid, (void *)(((u32)gWifiConnection->recvBuffers[aid] + 31) & ~31), 0x1000);
+        DWC_SetRecvBuffer((u8)aid, (void *)(((u32)gWifiConnection->recvBuffers[aid] + 31) & ~31), 0x1000);
     }
 }
 

@@ -686,12 +686,12 @@ void ciModeHandler(ChatConnection *chat, ChatMessage *message) {
         change++;
     }
     if (ciGetChannelMode(chat, channel, &mode) == 0) {
-        ov00_021EC3D8(changes);
+        DWCi_GsFree(changes);
         return;
     }
     ciApplyChangesToMode(&mode, changes);
     ciSetChannelMode(chat, channel, &mode);
-    ov00_021EC3D8(changes);
+    DWCi_GsFree(changes);
 }
 
 // ERROR: the server closes the connection.
@@ -769,13 +769,13 @@ void ciNameReplyHandler(ChatConnection *chat, ChatMessage *message) {
         }
         if (request->type != 1) {
             if (list->count == list->capacity) {
-                char **newNicks = ov00_021EC3BC(list->nicks, (list->capacity + NICK_LIST_GROWTH) * sizeof(char *));
+                char **newNicks = DWCi_GsRealloc(list->nicks, (list->capacity + NICK_LIST_GROWTH) * sizeof(char *));
                 if (!newNicks) {
                     __msl_assertion_failed(ov45_02256690, ov45_022565D0, ov45_02256088, 2413);
                     return;
                 }
                 list->nicks = newNicks;
-                int *newModes = ov00_021EC3BC(list->modes, (list->capacity + NICK_LIST_GROWTH) * sizeof(int));
+                int *newModes = DWCi_GsRealloc(list->modes, (list->capacity + NICK_LIST_GROWTH) * sizeof(int));
                 if (!newModes) {
                     __msl_assertion_failed(ov45_02256690, ov45_022565D0, ov45_02256088, 2420);
                     return;
@@ -784,7 +784,7 @@ void ciNameReplyHandler(ChatConnection *chat, ChatMessage *message) {
                 list->capacity += NICK_LIST_GROWTH;
             }
             u32 length = strlen(nick);
-            char *copy = ov00_021EC3A8(length + 1);
+            char *copy = DWCi_GsMalloc(length + 1);
             if (!copy) {
                 __msl_assertion_failed(ov45_02256690, ov45_022565D0, ov45_02256088, 2433);
                 return;
@@ -1086,7 +1086,7 @@ char *ciParseValue(const char *text, int *length) {
     while (text[n + 1] && text[n + 1] != '\\') {
         n++;
     }
-    field = ov00_021EC3A8(n + 1);
+    field = DWCi_GsMalloc(n + 1);
     if (!field) {
         return NULL;
     }
@@ -1125,7 +1125,7 @@ void ciRplGetKeyHandler(ChatConnection *chat, ChatMessage *message) {
         }
         data = request->data;
         count = data->count;
-        values = ov00_021EC3A8(count * 4);
+        values = DWCi_GsMalloc(count * 4);
         if (!values) {
             return;
         }
@@ -1135,7 +1135,7 @@ void ciRplGetKeyHandler(ChatConnection *chat, ChatMessage *message) {
                 values[i] = value;
                 cursor += length;
             } else {
-                values[i] = ov00_021FF3D4(ov45_02256708);
+                values[i] = goastrdup(ov45_02256708);
             }
         }
         results[0] = TRUE;
@@ -1149,9 +1149,9 @@ void ciRplGetKeyHandler(ChatConnection *chat, ChatMessage *message) {
             ciAddCallback_(chat, 29, request->callback, results, request->param, request->id, NULL, sizeof(results));
         }
         for (i = 0; i < count; i++) {
-            ov00_021EC3D8(values[i]);
+            DWCi_GsFree(values[i]);
         }
-        ov00_021EC3D8(values);
+        DWCi_GsFree(values);
     }
 }
 
@@ -1259,7 +1259,7 @@ void ciRplGetCKeyHandler(ChatConnection *chat, ChatMessage *message) {
     }
     data = request->data;
     count = data->count;
-    values = ov00_021EC3A8(count * 4);
+    values = DWCi_GsMalloc(count * 4);
     if (values == NULL) {
         return;
     }
@@ -1277,25 +1277,25 @@ void ciRplGetCKeyHandler(ChatConnection *chat, ChatMessage *message) {
             if (keyValue != NULL) {
                 size = (count + 1) * 4;
                 cursor += length;
-                newKeys = ov00_021EC3BC(data->keys, size);
+                newKeys = DWCi_GsRealloc(data->keys, size);
                 if (newKeys != NULL) {
                     data->keys = newKeys;
-                    newValues = ov00_021EC3BC(values, size);
+                    newValues = DWCi_GsRealloc(values, size);
                     if (newValues != NULL) {
                         values = newValues;
                         data->keys[count] = name;
                         values[count] = keyValue;
                         count++;
                     } else {
-                        ov00_021EC3D8(name);
-                        ov00_021EC3D8(keyValue);
+                        DWCi_GsFree(name);
+                        DWCi_GsFree(keyValue);
                     }
                 } else {
-                    ov00_021EC3D8(name);
-                    ov00_021EC3D8(keyValue);
+                    DWCi_GsFree(name);
+                    DWCi_GsFree(keyValue);
                 }
             } else {
-                ov00_021EC3D8(name);
+                DWCi_GsFree(name);
                 break;
             }
         }
@@ -1313,9 +1313,9 @@ void ciRplGetCKeyHandler(ChatConnection *chat, ChatMessage *message) {
         ciAddCallback_(chat, 30, request->callback, results, request->param, request->id, NULL, sizeof(results));
     }
     for (i = 0; i < count; i++) {
-        ov00_021EC3D8(values[i]);
+        DWCi_GsFree(values[i]);
     }
-    ov00_021EC3D8(values);
+    DWCi_GsFree(values);
 }
 
 // 703: end of the keys of the users of a channel (request type 13).
@@ -1416,7 +1416,7 @@ void ciRplGetChanKeyHandler(ChatConnection *chat, ChatMessage *message) {
         char **values;
         char *name, *value;
         if (count) {
-            values = ov00_021EC3A8(count * 4);
+            values = DWCi_GsMalloc(count * 4);
             if (!values) {
                 return;
             }
@@ -1436,25 +1436,25 @@ void ciRplGetChanKeyHandler(ChatConnection *chat, ChatMessage *message) {
                     if (value) {
                         size = (count + 1) * 4;
                         cursor += length;
-                        newKeys = ov00_021EC3BC(data->keys, size);
+                        newKeys = DWCi_GsRealloc(data->keys, size);
                         if (newKeys) {
                             data->keys = newKeys;
-                            newValues = ov00_021EC3BC(values, size);
+                            newValues = DWCi_GsRealloc(values, size);
                             if (newValues) {
                                 values = newValues;
                                 data->keys[count] = name;
                                 values[count] = value;
                                 count++;
                             } else {
-                                ov00_021EC3D8(name);
-                                ov00_021EC3D8(value);
+                                DWCi_GsFree(name);
+                                DWCi_GsFree(value);
                             }
                         } else {
-                            ov00_021EC3D8(name);
-                            ov00_021EC3D8(value);
+                            DWCi_GsFree(name);
+                            DWCi_GsFree(value);
                         }
                     } else {
-                        ov00_021EC3D8(name);
+                        DWCi_GsFree(name);
                         break;
                     }
                     name = ciParseValue(cursor, &length);
@@ -1475,30 +1475,30 @@ void ciRplGetChanKeyHandler(ChatConnection *chat, ChatMessage *message) {
                 cursor += length;
                 value = ciParseValue(cursor, &length);
                 if (!value) {
-                    ov00_021EC3D8(name);
+                    DWCi_GsFree(name);
                     break;
                 }
                 size = (count + 1) * 4;
                 cursor += length;
-                newKeys = ov00_021EC3BC(keys, size);
-                newValues = ov00_021EC3BC(values, size);
+                newKeys = DWCi_GsRealloc(keys, size);
+                newValues = DWCi_GsRealloc(values, size);
                 if (!newKeys || !newValues) {
                     // (the arrays are still used after this cleanup)
-                    ov00_021EC3D8(name);
-                    ov00_021EC3D8(value);
+                    DWCi_GsFree(name);
+                    DWCi_GsFree(value);
                     while (count--) {
-                        ov00_021EC3D8(keys[count]);
-                        ov00_021EC3D8(values[count]);
+                        DWCi_GsFree(keys[count]);
+                        DWCi_GsFree(values[count]);
                     }
                     if (newKeys) {
-                        ov00_021EC3D8(newKeys);
+                        DWCi_GsFree(newKeys);
                     } else {
-                        ov00_021EC3D8(keys);
+                        DWCi_GsFree(keys);
                     }
                     if (newValues) {
-                        ov00_021EC3D8(newValues);
+                        DWCi_GsFree(newValues);
                     } else {
-                        ov00_021EC3D8(values);
+                        DWCi_GsFree(values);
                     }
                 }
                 newKeys[count] = name;
@@ -1518,9 +1518,9 @@ void ciRplGetChanKeyHandler(ChatConnection *chat, ChatMessage *message) {
         results[5] = (u32)values;
         ciFinishFilter(chat, request, results);
         for (i = 0; i < count; i++) {
-            ov00_021EC3D8(values[i]);
+            DWCi_GsFree(values[i]);
         }
-        ov00_021EC3D8(values);
+        DWCi_GsFree(values);
     }
 }
 
@@ -1583,16 +1583,16 @@ void ciRplListHandler(ChatConnection *chat, ChatMessage *message) {
         data = request->data;
         ASSERT(data, ov45_022568DC, ov45_02255FFC, 3605);
         length = strlen(message->params[1]);
-        name = ov00_021EC3A8(length + 1);
+        name = DWCi_GsMalloc(length + 1);
         if (name == NULL) {
             return;
         }
         memcpy(name, message->params[1], length + 1);
         numUsers = atol(message->params[2]);
         length = strlen(message->params[3]);
-        topic = ov00_021EC3A8(length + 1);
+        topic = DWCi_GsMalloc(length + 1);
         if (topic == NULL) {
-            ov00_021EC3D8(name);
+            DWCi_GsFree(name);
             return;
         }
         memcpy(topic, message->params[3], length + 1);
@@ -1603,26 +1603,26 @@ void ciRplListHandler(ChatConnection *chat, ChatMessage *message) {
         args.numUsers = numUsers;
         args.success = TRUE;
         ciAddCallback_(chat, 13, request->callback, (u32 *)&args, request->param, request->id, NULL, sizeof(args));
-        array = ov00_021EC3BC(data->names, (data->count + 1) * 4);
+        array = DWCi_GsRealloc(data->names, (data->count + 1) * 4);
         if (array == NULL) {
-            ov00_021EC3D8(name);
-            ov00_021EC3D8(topic);
+            DWCi_GsFree(name);
+            DWCi_GsFree(topic);
             return;
         }
         data->names = array;
         data->names[index] = name;
-        array = ov00_021EC3BC(data->numUsers, (data->count + 1) * 4);
+        array = DWCi_GsRealloc(data->numUsers, (data->count + 1) * 4);
         if (array == NULL) {
-            ov00_021EC3D8(name);
-            ov00_021EC3D8(topic);
+            DWCi_GsFree(name);
+            DWCi_GsFree(topic);
             return;
         }
         data->numUsers = array;
         data->numUsers[index] = numUsers;
-        array = ov00_021EC3BC(data->topics, (data->count + 1) * 4);
+        array = DWCi_GsRealloc(data->topics, (data->count + 1) * 4);
         if (array == NULL) {
-            ov00_021EC3D8(name);
-            ov00_021EC3D8(topic);
+            DWCi_GsFree(name);
+            DWCi_GsFree(topic);
             return;
         }
         data->topics = array;
@@ -1701,7 +1701,7 @@ void ciRplChannelModeIsHandler(ChatConnection *chat, ChatMessage *message) {
         result.mode = &mode;
         ciFinishFilter(chat, request, (u32 *)&result);
     }
-    ov00_021EC3D8(changes);
+    DWCi_GsFree(changes);
 }
 
 // 311: the user, address and real name of a user (WHOIS reply, request type 4), or the address for a ban by nick
@@ -1731,15 +1731,15 @@ void ciRplWhoisUserHandler(ChatConnection *chat, ChatMessage *message) {
         ChatWhoisData *data = request->data;
         realName = message->params[5];
         address = message->params[3];
-        data->user = ov00_021FF3D4(message->params[2]);
+        data->user = goastrdup(message->params[2]);
         if (!data->user) {
             return;
         }
-        data->realName = ov00_021FF3D4(realName);
+        data->realName = goastrdup(realName);
         if (!data->realName) {
             return;
         }
-        data->address = ov00_021FF3D4(address);
+        data->address = goastrdup(address);
         if (!data->address) {
             return;
         }
@@ -1785,13 +1785,13 @@ void ciRplWhoisChannelsHandler(ChatConnection *chat, ChatMessage *message) {
         if (*token == '@' || *token == '+') {
             token++;
         }
-        name = ov00_021FF3D4(token);
+        name = goastrdup(token);
         if (!name) {
             return;
         }
-        array = ov00_021EC3BC(data->channels, (data->channelCount + 1) * 4);
+        array = DWCi_GsRealloc(data->channels, (data->channelCount + 1) * 4);
         if (!array) {
-            ov00_021EC3D8(name);
+            DWCi_GsFree(name);
             return;
         }
         data->channels = array;
@@ -1854,13 +1854,13 @@ void ciRplBanListHandler(ChatConnection *chat, ChatMessage *message) {
     data = request->data;
     ASSERT(data, ov45_022568DC, ov45_022560EC, 4015);
     ASSERT(data->count >= 0, ov45_0225697C, ov45_022560EC, 4016);
-    copy = ov00_021EC3BC(data->bans, (data->count + 1) * 4);
+    copy = DWCi_GsRealloc(data->bans, (data->count + 1) * 4);
     if (copy == NULL) {
         return;
     }
     data->bans = (char **)copy;
     length = strlen(ban);
-    copy = ov00_021EC3A8(length + 1);
+    copy = DWCi_GsMalloc(length + 1);
     if (copy == NULL) {
         return;
     }
@@ -2142,14 +2142,14 @@ void ciErrRegisterNickFailedHandler(ChatConnection *chat, ChatMessage *message) 
     if (!chat->connecting) {
         return;
     }
-    suggestions = ov00_021EC3A8(count * 4);
+    suggestions = DWCi_GsMalloc(count * 4);
     if (!suggestions) {
         return;
     }
     token = strtok(text, ov45_02256998);
     i = 0;
     while (i < count && token) {
-        suggestions[i] = ov00_021FF3D4(token);
+        suggestions[i] = goastrdup(token);
         if (!suggestions[i]) {
             break;
         }
@@ -2158,7 +2158,7 @@ void ciErrRegisterNickFailedHandler(ChatConnection *chat, ChatMessage *message) 
     }
     ov45_02251B0C(chat, 5, chat->registeredNick, i, (int)suggestions);
     for (j = 0; j < i; j++) {
-        ov00_021EC3D8(suggestions[j]);
+        DWCi_GsFree(suggestions[j]);
     }
-    ov00_021EC3D8(suggestions);
+    DWCi_GsFree(suggestions);
 }

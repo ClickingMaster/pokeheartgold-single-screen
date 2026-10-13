@@ -24,7 +24,7 @@ typedef struct IntStrPair {
     Str val;
 } IntStrPair;
 
-extern void ov45_02237A24(void *dst, void *src);
+extern void LobbyString_InitCopy(void *dst, void *src);
 
 static inline void StrInit(Str *s) {
     u32 i;
@@ -36,7 +36,7 @@ static inline void StrInit(Str *s) {
 
 static inline void PairInit(IntStrPair *p, int *k, Str *v) {
     p->key = *k;
-    ov45_02237A24(&p->val, v);
+    LobbyString_InitCopy(&p->val, v);
 }
 
 static inline BOOL StrIsShort(Str *s) {
@@ -51,9 +51,9 @@ static inline const char *StrData(Str *s) {
     return StrIsShort(s) ? s->s.buf : s->l.ptr;
 }
 
-extern void ov45_02237A24(void *dst, void *src);
-extern void ov00_021EC2EC(int a, void *p, int b);
-extern void *ov00_021EC2A8(int a, u32 size);
+extern void LobbyString_InitCopy(void *dst, void *src);
+extern void DWC_Free(int a, void *p, int b);
+extern void *DWC_Alloc(int a, u32 size);
 extern void ov45_02236680(void *a, void *b, u32 len, int d);
 extern void ov45_02236CB0(void *p);
 extern void ov45_02236E38(void *p);
@@ -62,7 +62,7 @@ extern void ov45_022425A0(struct Tree *p);
 extern void ov45_02244150(void *p);
 extern void ov45_02243A98(void *p);
 extern void ov45_02244130(void *p);
-extern void ov45_02237BC8(void *p);
+extern void LobbyString_Destroy(void *p);
 
 typedef struct Obj {
     void *vt;
@@ -96,7 +96,7 @@ typedef struct InsertResult {
     u8 inserted;
 } InsertResult;
 
-extern int ov45_02237F7C(Str *a, Str *b);
+extern int LobbyString_Compare(Str *a, Str *b);
 extern void ov45_02243FD4(Iter *out, Tree *t, Iter it);
 extern u8 ov45_02255228[];
 Node *ov45_0224210C(Tree *t, Node *parent, u8 a, u8 b, Obj **val);
@@ -107,7 +107,7 @@ void ov45_022431FC(Iter *out, Tree *t, int *key);
 void ov45_02242C74(Iter *out, Tree *t, Str *key);
 
 static inline BOOL StrLess(Str *a, Str *b) {
-    return ov45_02237F7C(a, b) < 0;
+    return LobbyString_Compare(a, b) < 0;
 }
 
 typedef struct ObjKey {
@@ -170,17 +170,17 @@ typedef struct Empty2 {
 extern Node *ov45_022370D0(Node *n, void *root);
 extern void ov45_0223FD8C(Iter *out, Tree *t, void *key);
 extern void *ov45_02255238;
-extern u32 ov00_021FF368(void);
+extern u32 current_time(void);
 extern void ov45_02232B24(char *buf, u32 size, const char *fmt, ...);
 extern char ov45_0225539C[];
 extern char ov45_022553A4[];
-extern void ov45_02237B58(Str *s, const char *cstr);
+extern void LobbyString_InitFromCStr(Str *s, const char *cstr);
 extern void ov45_0223F000(Vec *out, Str *s, Str *sep, int n);
 extern void ov45_02237664(Vec *v);
 extern long atol(const char *s);
 extern void ov45_02243BC0(TreeHdr *dst, TreeHdr *src);
 extern void ov45_02243AB8(InsertResult *out, Tree *t, int *key);
-extern void ov45_02237D48(Str *dst, Str *src);
+extern void LobbyString_Assign(Str *dst, Str *src);
 extern Node *ov45_0224404C(Tree *t, Node *parent, u8 a, u8 b, IntStrPair *val);
 extern BOOL ov45_0224330C(Tree *t, int *id);
 int ov45_02242A2C(Str *s);
@@ -255,7 +255,7 @@ typedef struct CbObj {
 
 extern int ov45_022577E0;
 extern void chatDisconnect(void *p);
-extern void *ov45_02242394(u32 size);
+extern void *LobbyMem_Alloc(u32 size);
 extern void ov45_0224206C(InsertResult *out, Tree *t, Obj **val);
 
 static inline void CbObjBaseInit(CbObj *o, void *x8) {
@@ -281,7 +281,7 @@ static inline void CbObjDerivedInit(CbObj *o, void *vt, int xc, void *x8, int id
 }
 
 static inline CbObj *CbObjCreate(void *vt, int xc, void *x8) {
-    CbObj *o = ov45_02242394(sizeof(CbObj));
+    CbObj *o = LobbyMem_Alloc(sizeof(CbObj));
     if (o != NULL) {
         CbObjBaseInit(o, x8);
         o->vt = vt;
@@ -291,7 +291,7 @@ static inline CbObj *CbObjCreate(void *vt, int xc, void *x8) {
     return o;
 }
 
-extern int ov45_02237FD8(Str *a, const char *b);
+extern int LobbyString_CompareCStr(Str *a, const char *b);
 extern void chatLeaveChannelA(void *h, const char *name, int x);
 extern void ov45_0224335C(Ctx *c, Str *s);
 extern void chatSendChannelMessageA(void *h, const char *name, const char *msg, int x);
@@ -325,11 +325,11 @@ void ov45_022424DC(void);
 
 static inline void OpDelete(void *p) {
     if (p != NULL) {
-        ov00_021EC2EC(0, p, 0);
+        DWC_Free(0, p, 0);
     }
 }
 
-extern void ov45_0223DAD4(Str *s, const char *cstr);
+extern void LobbyString_AssignCStr(Str *s, const char *cstr);
 extern void chatSetChannelKeysA(void *h, const char *name, const char *who, int x, const char **key, const char **val);
 
 extern void ov45_02243840(InsertResult *out, Tree *t, NamedEntry *e);
@@ -364,7 +364,7 @@ static inline void EntryCopy(Entry *d, Entry *s) {
 }
 
 static inline void NamedEntryCopy(NamedEntry *d, NamedEntry *s) {
-    ov45_02237A24(&d->name, &s->name);
+    LobbyString_InitCopy(&d->name, &s->name);
     EntryCopy(&d->e, &s->e);
 }
 
@@ -430,7 +430,7 @@ static inline void IterTemp(Node *n) {
 }
 
 static inline BOOL StrEqC(Str *a, const char *b) {
-    return ov45_02237FD8(a, b) == 0;
+    return LobbyString_CompareCStr(a, b) == 0;
 }
 
 extern Ctx *ov45_022577DC;
@@ -524,14 +524,14 @@ Node *ov45_02242320(Tree *t, Obj **key, Node **pos, u8 *a, u8 *b) {
     return parent;
 }
 
-void *ov45_02242394(u32 size) {
+void *LobbyMem_Alloc(u32 size) {
     void *p;
     if (size == 0) {
         size = 1;
     }
     for (;;) {
         VoidFunc f;
-        p = ov00_021EC2A8(0, size);
+        p = DWC_Alloc(0, size);
         if (p != NULL) {
             return p;
         }
@@ -553,7 +553,7 @@ void ov45_022423E0(void) {
 void ov45_0224240C(void) {
     u8 *obj;
     if (ov45_022577E8.buf != NULL) {
-        ov00_021EC2EC(0, ov45_022577E8.buf, 0);
+        DWC_Free(0, ov45_022577E8.buf, 0);
         ov45_022577E8.buf = NULL;
     }
     obj = ov45_022577E8.obj;
@@ -566,10 +566,10 @@ BOOL ov45_0224246C(u8 *obj) {
     void *buf;
     ov45_022577E8.obj = obj;
     if (ov45_022577E8.buf != NULL) {
-        ov00_021EC2EC(0, ov45_022577E8.buf, 0);
+        DWC_Free(0, ov45_022577E8.buf, 0);
         ov45_022577E8.buf = NULL;
     }
-    buf = ov00_021EC2A8(0, 0x400);
+    buf = DWC_Alloc(0, 0x400);
     ov45_022577E8.buf = buf;
     if (buf == NULL) {
         return FALSE;
@@ -580,7 +580,7 @@ BOOL ov45_0224246C(u8 *obj) {
 
 void ov45_022424DC(void) {
     if (ov45_022577E8.buf != NULL) {
-        ov00_021EC2EC(0, ov45_022577E8.buf, 0);
+        DWC_Free(0, ov45_022577E8.buf, 0);
         ov45_022577E8.buf = NULL;
     }
 }
@@ -631,7 +631,7 @@ void ov45_0224261C(Iter *out, Tree *t, Iter pos) {
     }
     out->current = ov45_022370D0(n, t->head.left);
     if (n != NULL) {
-        ov00_021EC2EC(0, n, 0);
+        DWC_Free(0, n, 0);
     }
     t->count--;
 }

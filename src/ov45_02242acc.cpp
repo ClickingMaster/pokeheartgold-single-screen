@@ -5,8 +5,8 @@
 #include <nitro/code32.h>
 struct String;
 struct TreeHdr;
-extern "C" void ov45_02237A24(String *dst, const String *src);
-extern "C" void ov45_02237BC8(String *s);
+extern "C" void LobbyString_InitCopy(String *dst, const String *src);
+extern "C" void LobbyString_Destroy(String *s);
 extern "C" void ov45_02243BC0(TreeHdr *dst, const TreeHdr *src);
 extern "C" void ov45_02243F1C(TreeHdr *t);
 
@@ -20,14 +20,14 @@ struct String {
     u32 w[3];
 
     String(const String &s) {
-        ov45_02237A24(this, &s);
+        LobbyString_InitCopy(this, &s);
     }
 
     String(const String &s, int) {
         String *const d = this;
         Alloc al = Alloc();
         (void)al;
-        ov45_02237A24(d, &s);
+        LobbyString_InitCopy(d, &s);
     }
 };
 
@@ -109,11 +109,11 @@ extern "C" int ov45_02242ACC(Obj *o, const String *name, const Blob24 *b, u32 x)
     NamedEntry cp(ne);
     u8 ins = ov45_02243840(&o->tree, &cp).inserted;
     ov45_02243F1C(&cp.e.t);
-    ov45_02237BC8(&cp.name);
+    LobbyString_Destroy(&cp.name);
     ov45_02243F1C(&ne.e.t);
-    ov45_02237BC8(&ne.name);
+    LobbyString_Destroy(&ne.name);
     ov45_02243F1C(&e.t);
-    ov45_02237BC8(&a);
+    LobbyString_Destroy(&a);
     return ins;
 }
 

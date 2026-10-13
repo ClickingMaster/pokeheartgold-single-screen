@@ -22,10 +22,10 @@ typedef struct {
 } Owner;
 
 extern int ov45_0223B104(W *);
-extern Owner *ov45_022310B0(void);
+extern Owner *PPWLobby_GetWork(void);
 extern void ov45_022320B4(void *, void *);
 extern void ov45_02241D58(char *, void *);
-extern void ov45_02237BC8(void *);
+extern void LobbyString_Destroy(void *);
 extern u8 ov45_02254D9C[];
 extern void ov45_0223325C(int, int, int, int, int, void *, int);
 
@@ -35,7 +35,7 @@ typedef struct {
 
 extern void ov45_0223B1C8(W *);
 extern void ov45_0223B81C(u32 *, int, Byte);
-extern void ov00_021ECB94(RTCDate *, RTCTime *);
+extern void DWC_GetDateTime(RTCDate *, RTCTime *);
 
 typedef union {
     struct {
@@ -66,9 +66,9 @@ void ov45_0223AF28(W *w) {
         if (!ov45_0223B104(w)) {
             return;
         }
-        ov45_022320B4(&text, ov45_022310B0()->text);
+        ov45_022320B4(&text, PPWLobby_GetWork()->text);
         ov45_02241D58(text.s.flag == 0 ? (char *)&text.bytes[1] : text.s.ptr, ov45_02254D9C);
-        ov45_02237BC8(&text);
+        LobbyString_Destroy(&text);
         zero = 0;
         ov45_0223325C(-1, 0, 1, 0, 0, &zero, 4);
         ov45_0223B1C8(w);
@@ -78,14 +78,14 @@ void ov45_0223AF28(W *w) {
             return;
         }
         entry = w->chunks[(w->base + (w->index >> 7)) % w->mod] + (w->index & 127) * 2;
-        ov00_021ECB94(&date, &time);
+        DWC_GetDateTime(&date, &time);
         now = RTC_ConvertDateTimeToSecond(&date, &time);
         if ((s32)entry[0] > now - w->start) {
             return;
         }
         do {
             Byte byte;
-            ov45_022310B0()->cb(entry[1]);
+            PPWLobby_GetWork()->cb(entry[1]);
             memset(&byte, 0, sizeof byte);
             ov45_0223B81C(&w->index, 1, byte);
             if (!w->count) {

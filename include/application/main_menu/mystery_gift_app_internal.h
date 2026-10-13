@@ -53,7 +53,7 @@ struct MysteryGiftAppData {
     int resultDelay;                                   // 0x15DC
     int wfcState;                                      // 0x15E0, Nintendo WFC download (MysteryGiftWfc_Run)
     u8 unk_15E4[4];                                    // 0x15E4
-    u8 wfcConfig[0x68];                                // 0x15E8, Wi-Fi library setup (ov00_021EC3F0)
+    u8 wfcConfig[0x68];                                // 0x15E8, Wi-Fi library setup (DWC_InitInetEx)
     int wfcNextState;                                  // 0x1650, after the request or cleanup it waits for
     int wfcFileCount;                                  // 0x1654, gift files on the server (1 expected)
     u8 wfcRecvBuffer[0x1000];                          // 0x1658, receivedHeader + receivedCard (receive mode 4)

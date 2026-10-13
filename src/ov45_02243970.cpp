@@ -8,19 +8,19 @@ inline void *operator new(unsigned long, void *p) {
     return p;
 }
 
-extern "C" void ov00_021EC2EC(int, void *, u32);
-extern "C" void *ov45_02242394(u32 size);
+extern "C" void DWC_Free(int, void *, u32);
+extern "C" void *LobbyMem_Alloc(u32 size);
 extern "C" int printf(const char *, ...);
 extern "C" void abort(void);
 extern "C" char ov45_022553AC[];
 struct String;
-extern "C" String *ov45_02237A24(String *dst, const String *src);
+extern "C" String *LobbyString_InitCopy(String *dst, const String *src);
 
 struct String {
     u32 w[3];
 
     String(const String &o) {
-        ov45_02237A24(this, &o);
+        LobbyString_InitCopy(this, &o);
     }
 };
 struct Set;
@@ -58,7 +58,7 @@ struct Node {
 
 struct Alloc {
     Node *allocate() {
-        return (Node *)ov45_02242394(sizeof(Node));
+        return (Node *)LobbyMem_Alloc(sizeof(Node));
     }
 };
 
@@ -89,7 +89,7 @@ struct Holder {
     void Destroy() {
         Node *q = ptr;
         if (q) {
-            ov00_021EC2EC(0, q, 0);
+            DWC_Free(0, q, 0);
         }
     }
 

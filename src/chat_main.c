@@ -151,7 +151,7 @@ static inline void ConnectFailed(ChatConnection *chat) {
 #define WAIT_FOR_REQUEST(chat, id) \
     do {                           \
         ciThink(chat, id);   \
-        ov00_021FF3C0(10);         \
+        msleep(10);         \
     } while (ciCheckForID(chat, id))
 
 // Calls the handler of the message's command; returns whether the command is known.
@@ -269,7 +269,7 @@ void ciSendLogin(ChatConnection *chat) {
         ciSocketSendf(&chat->socket, ov45_02256BEC, chat->authTicket, chat->partnerKey);
         return;
     }
-    ov00_021FF31C(chat->password, strlen(chat->password), hash);
+    MD5Digest(chat->password, strlen(chat->password), hash);
     if (chat->loginType == 1) {
         ciSocketSendf(&chat->socket, ov45_02256C00, chat->accountSpace, chat->registeredNick, hash);
         return;
@@ -323,8 +323,8 @@ ChatConnection *chatConnectDoit(int loginType, const char *serverAddress, int se
         REQUIRE_STRING(gameName, ov45_02256D84, 401);
         REQUIRE_STRING(gameKey, ov45_02256D9C, 404);
     }
-    ov00_021FF3CC();
-    chat = ov00_021EC3A8(sizeof(ChatConnection));
+    SocketStartUp();
+    chat = DWCi_GsMalloc(sizeof(ChatConnection));
     if (!chat) {
         return NULL;
     }
@@ -375,29 +375,29 @@ ChatConnection *chatConnectDoit(int loginType, const char *serverAddress, int se
     chat->connecting = TRUE;
     chat->unk_824 = 0;
     if (!ciInitChannels(chat)) {
-        ov00_021EC3D8(chat);
-        ov00_021FF3D0();
+        DWCi_GsFree(chat);
+        SocketShutDown();
         return NULL;
     }
     if (!ciInitCallbacks(chat)) {
         ciCleanupChannels(chat);
-        ov00_021EC3D8(chat);
-        ov00_021FF3D0();
+        DWCi_GsFree(chat);
+        SocketShutDown();
         return NULL;
     }
     if (!ov45_02251EF0(&chat->socket, socketName)) {
         ciCleanupCallbacks(chat);
         ciCleanupChannels(chat);
-        ov00_021EC3D8(chat);
-        ov00_021FF3D0();
+        DWCi_GsFree(chat);
+        SocketShutDown();
         return NULL;
     }
     if (!ciSocketConnect(&chat->socket, serverAddress, serverPort)) {
         ciSocketDisconnect(&chat->socket);
         ciCleanupCallbacks(chat);
         ciCleanupChannels(chat);
-        ov00_021EC3D8(chat);
-        ov00_021FF3D0();
+        DWCi_GsFree(chat);
+        SocketShutDown();
         return NULL;
     }
     chat->nickErrorCallback = nickErrorCallback;
@@ -416,7 +416,7 @@ ChatConnection *chatConnectDoit(int loginType, const char *serverAddress, int se
     if (blocking) {
         do {
             ciThink(chat, 0);
-            ov00_021FF3C0(10);
+            msleep(10);
         } while (chat->connecting);
         if (!chat->connected) {
             chatDisconnect(chat);
@@ -484,8 +484,8 @@ void chatDisconnect(ChatConnection *chat) {
     ciCleanupChannels(chat);
     ciCleanupCallbacks(chat);
     ciSocketDisconnect(&chat->socket);
-    ov00_021EC3D8(chat);
-    ov00_021FF3D0();
+    DWCi_GsFree(chat);
+    SocketShutDown();
 }
 
 void chatThink(ChatConnection *chat) {
@@ -903,7 +903,7 @@ void chatGetChannelKeysA(ChatConnection *chat, const char *channel, const char *
     if (blocking) {
         do {
             ciThink(chat, id);
-            ov00_021FF3C0(10);
+            msleep(10);
         } while (ciCheckForID(chat, id) != 0);
     }
 }

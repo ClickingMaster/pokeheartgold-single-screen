@@ -4,11 +4,11 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 union Str;
-extern "C" Str *ov45_02237B58(Str *, const char *);
-extern "C" Str *ov45_02237BC8(Str *);
-extern "C" void ov45_0223DAD4(Str *s, const char *p);
-extern "C" void ov45_02237D48(Str *dst, const Str *src);
-extern "C" int ov45_02237FD8(const Str *s, const char *p);
+extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
+extern "C" Str *LobbyString_Destroy(Str *);
+extern "C" void LobbyString_AssignCStr(Str *s, const char *p);
+extern "C" void LobbyString_Assign(Str *dst, const Str *src);
+extern "C" int LobbyString_CompareCStr(const Str *s, const char *p);
 
 union Str {
     struct L {
@@ -27,11 +27,11 @@ union Str {
     u32 words[3];
 
     Str(const char *p) {
-        ov45_02237B58(this, p);
+        LobbyString_InitFromCStr(this, p);
     }
 
     void destroy() {
-        ov45_02237BC8(this);
+        LobbyString_Destroy(this);
     }
 
     const char *c_str() const {
@@ -39,15 +39,15 @@ union Str {
     }
 
     void assign(const char *p) {
-        ov45_0223DAD4(this, p);
+        LobbyString_AssignCStr(this, p);
     }
 
     void assign(const Str &o) {
-        ov45_02237D48(this, &o);
+        LobbyString_Assign(this, &o);
     }
 
     bool equals(const char *p) const {
-        return ov45_02237FD8(this, p) == 0;
+        return LobbyString_CompareCStr(this, p) == 0;
     }
 };
 struct Handler;
@@ -75,7 +75,7 @@ struct Mgr {
 };
 
 extern "C" Mgr *ov45_022577DC;
-extern "C" void *ov45_02242394(u32);
+extern "C" void *LobbyMem_Alloc(u32);
 
 struct Tag {};
 
@@ -115,7 +115,7 @@ inline u32 NextHandlerId() {
 }
 
 inline Handler *NewHandler(u32 a, u32 b) {
-    Handler *p = (Handler *)ov45_02242394(sizeof(Handler));
+    Handler *p = (Handler *)LobbyMem_Alloc(sizeof(Handler));
     if (p) {
         BaseInit(p, b);
         p->id = NextHandlerId();

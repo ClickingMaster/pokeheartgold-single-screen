@@ -27,22 +27,22 @@ extern char ov45_022552E4[];
 extern char ov45_022552EC[];
 extern char ov45_022552F0[];
 extern char ov45_022552FC[];
-void ov45_02237B58(Str *, char *);
-void ov45_02237BC8(Str *);
-void ov45_02237A24(void *, void *);
+void LobbyString_InitFromCStr(Str *, char *);
+void LobbyString_Destroy(Str *);
+void LobbyString_InitCopy(void *, void *);
 void ov45_022376BC(void *);
 void ov45_02232D8C(void *, int *, int);
 void ov45_02242858(void *);
-void ov00_021EC2EC(int, void *, int);
+void DWC_Free(int, void *, int);
 void ov45_022436E0(void *, Str *, Str *);
 void ov45_0224335C(void *, Str *);
-void ov45_0223DAD4(Str *, char *);
+void LobbyString_AssignCStr(Str *, char *);
 void *ov45_02242C3C(void *, Str *);
 void ov45_022428D8(Str *, void *, Str *);
 void ov45_022428C8(Str *, void *, Str *);
 int chatInChannelA(void *, char *);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
-void *ov45_02242394(unsigned);
+void *LobbyMem_Alloc(unsigned);
 void *ov45_0223EA34(void *, unsigned, char *);
 void ov45_022421E4(void *, unsigned, void *);
 char *strncpy(char *, const char *, size_t);
@@ -80,5 +80,5 @@ void ov45_0223F1E4(void *a, char *s, char *name, void *arg, int mode);
 void ov45_02240620(void *a, char *s, char *name, void *arg, void *extra);
 
 void ov45_0223FC5C(void *out, void *p) {
-    ov45_02237A24(out, (u8 *)p + 12);
+    LobbyString_InitCopy(out, (u8 *)p + 12);
 }

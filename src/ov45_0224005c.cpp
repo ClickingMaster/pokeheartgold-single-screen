@@ -25,8 +25,8 @@ union String {
     }
 };
 
-extern "C" void ov45_02237B58(String *s, const char *t);
-extern "C" void ov45_02237BC8(String *s);
+extern "C" void LobbyString_InitFromCStr(String *s, const char *t);
+extern "C" void LobbyString_Destroy(String *s);
 struct Handler;
 
 struct HandlerVtbl {
@@ -176,16 +176,16 @@ extern "C" void ov45_0224005C(void *self, int result, const char *name, int coun
     }
     if (result == 1) {
         String s;
-        ov45_02237B58(&s, name);
+        LobbyString_InitFromCStr(&s, name);
         Vec tmp = ov45_02242EF4(ov45_022577DC, count, names, s);
         tmp.destroy();
-        ov45_02237BC8(&s);
+        LobbyString_Destroy(&s);
     }
     {
         String u;
-        ov45_02237B58(&u, name);
+        LobbyString_InitFromCStr(&u, name);
         ov45_022437CC(ov45_022577DC, &u);
-        ov45_02237BC8(&u);
+        LobbyString_Destroy(&u);
     }
     int sid = id;
     Manager *m = ov45_022577DC;
@@ -198,25 +198,25 @@ extern "C" void ov45_0224005C(void *self, int result, const char *name, int coun
         h = nd->value;
     }
     String t;
-    ov45_02237B58(&t, name);
+    LobbyString_InitFromCStr(&t, name);
     String k;
     ov45_022428D8(&k, ov45_022577DC, &t);
     void (*cb)(BOOL, u32, const char *, u32) = h->callback;
     const char *str = k.c_str();
     cb(result == 1, 0, str, h->getArg());
-    ov45_02237BC8(&k);
-    ov45_02237BC8(&t);
+    LobbyString_Destroy(&k);
+    LobbyString_Destroy(&t);
     ov45_02242510(&ov45_022577DC->map, sid);
     if (result != 0) {
         return;
     }
     String a;
-    ov45_02237B58(&a, name);
+    LobbyString_InitFromCStr(&a, name);
     String b;
     ov45_022428D8(&b, ov45_022577DC, &a);
     ov45_022412CC(b.c_str());
-    ov45_02237BC8(&b);
-    ov45_02237BC8(&a);
+    LobbyString_Destroy(&b);
+    LobbyString_Destroy(&a);
 }
 
 #pragma pop

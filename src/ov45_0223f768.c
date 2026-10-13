@@ -20,8 +20,8 @@ typedef struct {
     u32 w[3];
 } String;
 
-void ov45_0223DAD4(String *str, const char *s);
-void ov45_02237BC8(String *str);
+void LobbyString_AssignCStr(String *str, const char *s);
+void LobbyString_Destroy(String *str);
 void ov45_0223F768(int a, int b, int c, int mode);
 
 void ov45_0223F768(int a, int b, int c, int mode) {
@@ -38,20 +38,20 @@ void ov45_0223F768(int a, int b, int c, int mode) {
     }
     switch (mode) {
     case 0:
-        ov45_0223DAD4(&str, ov45_022552DC);
+        LobbyString_AssignCStr(&str, ov45_022552DC);
         break;
     case 1:
-        ov45_0223DAD4(&str, ov45_022552E4);
+        LobbyString_AssignCStr(&str, ov45_022552E4);
         break;
     case 2:
-        ov45_0223DAD4(&str, ov45_022552EC);
+        LobbyString_AssignCStr(&str, ov45_022552EC);
         break;
     case 3:
-        ov45_0223DAD4(&str, ov45_022552F0);
+        LobbyString_AssignCStr(&str, ov45_022552F0);
         break;
     default:
-        ov45_0223DAD4(&str, ov45_022552FC);
+        LobbyString_AssignCStr(&str, ov45_022552FC);
         break;
     }
-    ov45_02237BC8(&str);
+    LobbyString_Destroy(&str);
 }

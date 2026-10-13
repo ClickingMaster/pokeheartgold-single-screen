@@ -11,7 +11,7 @@ typedef struct {
     volatile u32 size;
 } Container;
 
-extern void ov00_021EC2EC(int, void *, int);
+extern void DWC_Free(int, void *, int);
 Container *ov45_02238508(Container *);
 
 Container *ov45_02238508(Container *s) {
@@ -25,7 +25,7 @@ Container *ov45_02238508(Container *s) {
         s->size = s->size - start;
         (void)local;
         if (s->allocator) {
-            ov00_021EC2EC(0, s->allocator, 0);
+            DWC_Free(0, s->allocator, 0);
         }
     }
     return s;

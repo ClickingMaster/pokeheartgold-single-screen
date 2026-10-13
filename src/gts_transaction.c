@@ -102,7 +102,7 @@ u16 GtsSave_GetStoredMonBox(void *gtsSave);
 // Not declared in a public header.
 void WirelessStatusIcon_SetLevel(s32 level);
 void CommState_ShowRestartErrorAndHalt(void);
-void ov00_021ECB94(RTCDate *date, RTCTime *time);
+void DWC_GetDateTime(RTCDate *date, RTCTime *time);
 
 int GtsTransaction_Init(GtsApp *app, int state);
 int GtsTransaction_Main(GtsApp *app, int state);
@@ -1138,7 +1138,7 @@ void GtsTransaction_SaveTradeDate(void *gtsSave, int exchange) {
     RTCTime time;
     u32 packed;
 
-    ov00_021ECB94(&date, &time);
+    DWC_GetDateTime(&date, &time);
     packed = (date.year << 24) | ((date.month << 24) >> 8) | ((date.day << 24) >> 16) | date.week;
     if (exchange == TRUE) {
         GtsSave_SetTradeDate(gtsSave, packed);

@@ -44,30 +44,30 @@ typedef struct MysteryGiftWfcStatus {
     BOOL errorShown;
 } MysteryGiftWfcStatus;
 
-int ov00_021EC11C(s32 *errorCode, s32 *errorType);
-int ov00_021EC724(void);
-void ov00_021EC9E0(void *data);
-int ov00_021ED308(void (*callback)(void));
-void ov00_021EC210(void);
-void ov00_021EC294(void *(*alloc)(void *, u32), void (*free)(void *, void *));
-void ov00_021EC3F0(void *config, int a1, int a2, int a3);
-void ov00_021EC454(int a0);
-void ov00_021EC4A4(void);
-int ov00_021EC5B4(void);
-void ov00_021EC60C(void);
-void ov00_021EC8D8(void);
-int ov00_021EC938(void);
-int ov00_021ECB40(void);
-int ov00_021ECD04(void);
-int ov00_021ECDC8(void);
-void ov00_021ECEC0(void);
-int ov00_021ED1F0(void (*callback)(int, int), const char *gameCode, const char *secretKey);
-int ov00_021ED354(const char *attribute1, const char *attribute2, const char *attribute3);
-int ov00_021ED388(int *count);
-int ov00_021ED3AC(void *fileList, int start, int count);
-int ov00_021ED3F4(void *fileInfo, void *buffer, int size);
-int ov00_021ED428(void);
-int ov00_021ED444(u32 *received, u32 *total);
+int DWC_GetLastErrorEx(s32 *errorCode, s32 *errorType);
+int DWC_GetInetStatus(void);
+void DWC_GetApInfo(void *data);
+int DWC_NdCleanupAsync(void (*callback)(void));
+void DWC_ClearError(void);
+void DWC_SetMemFunc(void *(*alloc)(void *, u32), void (*free)(void *, void *));
+void DWC_InitInetEx(void *config, int a1, int a2, int a3);
+void DWC_SetAuthServer(int a0);
+void DWC_ConnectInetAsync(void);
+int DWC_CheckInet(void);
+void DWC_ProcessInet(void);
+void DWC_CleanupInet(void);
+int DWC_CleanupInetAsync(void);
+int DWC_UpdateConnection(void);
+int DWC_NASLoginAsync(void);
+int DWC_NASLoginProcess(void);
+void DWC_NASLoginAbort(void);
+int DWC_NdInitAsync(void (*callback)(int, int), const char *gameCode, const char *secretKey);
+int DWC_NdSetAttr(const char *attribute1, const char *attribute2, const char *attribute3);
+int DWC_NdGetFileListNumAsync(int *count);
+int DWC_NdGetFileListAsync(void *fileList, int start, int count);
+int DWC_NdGetFileAsync(void *fileInfo, void *buffer, int size);
+int DWC_NdCancelAsync(void);
+int DWC_NdGetProgress(u32 *received, u32 *total);
 void Comm_InitDwc(int a0);
 void CommState_InitMysteryGiftWfcSession(SaveData *saveData);
 void CommState_FreeMysteryGiftWfcSession(void);
@@ -117,7 +117,7 @@ void MysteryGiftWfc_Free(void *unused, void *ptr) {
 // Shows the error of the Wi-Fi library (MysteryGiftApp_ShowWfcError)
 int MysteryGiftWfc_HandleError(MysteryGiftAppData *data) {
     s32 error[2];
-    ov00_021EC11C(&error[0], &error[1]);
+    DWC_GetLastErrorEx(&error[0], &error[1]);
     data->wfcErrorMsgId = WifiConnection_ClassifyErrorCode(-error[0], error[1]);
     data->wfcErrorCode = -error[0];
     data->wfcErrorType = error[1];
@@ -130,9 +130,9 @@ int MysteryGiftWfc_HandleError(MysteryGiftAppData *data) {
 
 BOOL ov74_02236A2C(MysteryGiftAppData *data) {
     u8 buffer[60];
-    switch (ov00_021EC724()) {
+    switch (DWC_GetInetStatus()) {
     case 4:
-        ov00_021EC9E0(buffer);
+        DWC_GetApInfo(buffer);
         return TRUE;
     case 7:
         break;
@@ -156,7 +156,7 @@ void MysteryGiftWfc_StartCleanup(MysteryGiftAppData *data, int result, int *stat
     sMysteryGiftWfcStatus.result = result;
     data->wfcNextState = nextState;
     *state = WFC_STATE_WAIT_CLEANUP;
-    if (!ov00_021ED308(MysteryGiftWfc_OnCleanupDone)) {
+    if (!DWC_NdCleanupAsync(MysteryGiftWfc_OnCleanupDone)) {
         *state = failState;
     }
 }
@@ -200,22 +200,22 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
         break;
     case WFC_STATE_WAIT_OVERLAYS:
         if (CommWireless_IsStartedUp()) {
-            ov00_021EC294(MysteryGiftWfc_Alloc, MysteryGiftWfc_Free);
+            DWC_SetMemFunc(MysteryGiftWfc_Alloc, MysteryGiftWfc_Free);
             CommState_InitMysteryGiftWfcSession(data->saveData);
             *state = WFC_STATE_INIT;
         }
         break;
     case WFC_STATE_INIT:
-        ov00_021EC3F0(data->wfcConfig, 2, 1, 20);
-        ov00_021EC454(2);
-        ov00_021EC4A4();
+        DWC_InitInetEx(data->wfcConfig, 2, 1, 20);
+        DWC_SetAuthServer(2);
+        DWC_ConnectInetAsync();
         WirelessStatusIcon_Create();
         *state = WFC_STATE_CONNECT;
         data->wfcCancel = FALSE;
         break;
     case WFC_STATE_CONNECT:
-        ov00_021EC60C();
-        if (ov00_021EC5B4()) {
+        DWC_ProcessInet();
+        if (DWC_CheckInet()) {
             if (ov74_02236A2C(data) == TRUE) {
                 if (data->wfcCancel == TRUE) {
                     sMysteryGiftWfcStatus.result = MYSTERY_GIFT_WFC_RESULT_CANCELLED;
@@ -232,31 +232,31 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
         }
         break;
     case WFC_STATE_LOGIN:
-        if (!ov00_021ECD04()) {
+        if (!DWC_NASLoginAsync()) {
             *state = MysteryGiftWfc_HandleError(data);
         } else {
             *state = WFC_STATE_WAIT_LOGIN;
         }
         break;
     case WFC_STATE_WAIT_LOGIN: {
-        int result = ov00_021ECDC8();
+        int result = DWC_NASLoginProcess();
         if (result == 3) {
             *state = WFC_STATE_INIT_DOWNLOAD;
-            data->wfcCallback = ov00_021ECB40;
+            data->wfcCallback = DWC_UpdateConnection;
         } else if (result == 4) {
             *state = MysteryGiftWfc_HandleError(data);
-            ov00_021EC8D8();
+            DWC_CleanupInet();
         } else if (result == 5) {
             sMysteryGiftWfcStatus.result = MYSTERY_GIFT_WFC_RESULT_CANCELLED;
             *state = WFC_STATE_DISCONNECT;
         }
         if (gSystem.newKeys & PAD_BUTTON_B) {
-            ov00_021ECEC0();
+            DWC_NASLoginAbort();
         }
         break;
     }
     case WFC_STATE_INIT_DOWNLOAD:
-        if (!ov00_021ED1F0(MysteryGiftWfc_OnRequestDone, ov74_0223D038, ov74_0223D040)) { // "IPGE", the secret key
+        if (!DWC_NdInitAsync(MysteryGiftWfc_OnRequestDone, ov74_0223D038, ov74_0223D040)) { // "IPGE", the secret key
             *state = MysteryGiftWfc_HandleError(data);
         } else {
             MysteryGiftWfc_WaitForRequest(data, state, WFC_STATE_SET_ATTRIBUTES);
@@ -266,7 +266,7 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
         if (data->wfcCancel == TRUE) {
             MysteryGiftWfc_StartCleanup(data, MYSTERY_GIFT_WFC_RESULT_CANCELLED, state, WFC_STATE_CLEANUP, WFC_STATE_CLEANUP);
         } else {
-            if (!ov00_021ED354(ov74_0223D054, ov74_0223D054, ov74_0223D054)) { // ""
+            if (!DWC_NdSetAttr(ov74_0223D054, ov74_0223D054, ov74_0223D054)) { // ""
                 *state = MysteryGiftWfc_HandleError(data);
             } else {
                 *state = WFC_STATE_GET_FILE_COUNT;
@@ -274,7 +274,7 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
         }
         break;
     case WFC_STATE_GET_FILE_COUNT:
-        if (!ov00_021ED388(&data->wfcFileCount)) {
+        if (!DWC_NdGetFileListNumAsync(&data->wfcFileCount)) {
             *state = MysteryGiftWfc_HandleError(data);
         } else {
             MysteryGiftWfc_WaitForRequest(data, state, WFC_STATE_GET_FILE_LIST);
@@ -284,7 +284,7 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
         if (data->wfcFileCount != 1) {
             MysteryGiftWfc_StartCleanup(data, MYSTERY_GIFT_WFC_RESULT_NO_GIFT, state, WFC_STATE_DISCONNECT, WFC_STATE_DISCONNECT);
         } else {
-            if (!ov00_021ED3AC(sMysteryGiftWfcFileList, 0, 10)) {
+            if (!DWC_NdGetFileListAsync(sMysteryGiftWfcFileList, 0, 10)) {
                 *state = MysteryGiftWfc_HandleError(data);
             } else {
                 MysteryGiftWfc_WaitForRequest(data, state, WFC_STATE_GET_FILE);
@@ -292,7 +292,7 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
         }
         break;
     case WFC_STATE_GET_FILE:
-        if (!ov00_021ED3F4(sMysteryGiftWfcFileList, data->wfcRecvBuffer, sizeof(data->wfcRecvBuffer))) {
+        if (!DWC_NdGetFileAsync(sMysteryGiftWfcFileList, data->wfcRecvBuffer, sizeof(data->wfcRecvBuffer))) {
             *state = MysteryGiftWfc_HandleError(data);
         } else {
             *state = WFC_STATE_DOWNLOADING;
@@ -303,7 +303,7 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
         if (!sMysteryGiftWfcStatus.requestDone) {
             if (gSystem.newKeys & PAD_BUTTON_B) {
                 MysteryGiftWfc_StartCleanup(data, MYSTERY_GIFT_WFC_RESULT_CANCELLED, state, WFC_STATE_CLEANUP, WFC_STATE_CLEANUP);
-            } else if (ov00_021ED444(&data->wfcBytesReceived, &data->wfcBytesTotal) == 1) {
+            } else if (DWC_NdGetProgress(&data->wfcBytesReceived, &data->wfcBytesTotal) == 1) {
                 u32 progress = 100 * data->wfcBytesReceived / data->wfcBytesTotal;
                 if (data->wfcProgress != progress) {
                     data->wfcProgress = progress;
@@ -320,7 +320,7 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
         }
         break;
     case WFC_STATE_CLEANUP:
-        if (!ov00_021ED428()) {
+        if (!DWC_NdCancelAsync()) {
             *state = WFC_STATE_DISCONNECT;
         } else {
             data->wfcCallback = NULL;
@@ -329,7 +329,7 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
         }
         break;
     case WFC_STATE_DISCONNECT:
-        if (ov00_021EC938() == 1) {
+        if (DWC_CleanupInetAsync() == 1) {
             data->wfcCallback = NULL;
             MysteryGiftWfc_Shutdown();
             return sMysteryGiftWfcStatus.result;
@@ -346,13 +346,13 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
         }
         break;
     case WFC_STATE_ERROR_SHOWN:
-        ov00_021EC8D8();
+        DWC_CleanupInet();
         *state = WFC_STATE_WAIT_BUTTON;
         break;
     case WFC_STATE_WAIT_BUTTON:
         if (gSystem.newKeys & PAD_BUTTON_A) {
             data->wfcCallback = NULL;
-            ov00_021EC210();
+            DWC_ClearError();
             MysteryGiftWfc_Shutdown();
             return MYSTERY_GIFT_WFC_RESULT_ERROR;
         }

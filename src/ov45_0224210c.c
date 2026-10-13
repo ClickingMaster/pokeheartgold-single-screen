@@ -26,9 +26,9 @@ typedef struct {
 extern int printf(const char *, ...);
 extern void abort(void);
 extern const char ov45_0225533C[];
-extern void *ov45_02242394(u32);
+extern void *LobbyMem_Alloc(u32);
 extern void ov45_02236EC4(Node *, void *);
-extern void ov00_021EC2EC(int, void *, int);
+extern void DWC_Free(int, void *, int);
 Node *ov45_0224210C(Container *, void *, int, int, const u32 *);
 
 Node *ov45_0224210C(Container *c, void *owner, int first, int last, const u32 *value) {
@@ -41,7 +41,7 @@ Node *ov45_0224210C(Container *c, void *owner, int first, int last, const u32 *v
         abort();
     }
     guard.active = 0;
-    node = ov45_02242394(16);
+    node = LobbyMem_Alloc(16);
     guard.owner = &c->head;
     dest = (u32 *)((u8 *)node + 12);
     guard.pending = node;
@@ -69,7 +69,7 @@ Node *ov45_0224210C(Container *c, void *owner, int first, int last, const u32 *v
     }
     pending = guard.pending;
     if (pending) {
-        ov00_021EC2EC(0, pending, 0);
+        DWC_Free(0, pending, 0);
     }
     return node;
 }
