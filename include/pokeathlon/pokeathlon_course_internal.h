@@ -331,11 +331,11 @@ typedef struct PokeathlonCourseLayout {
     void *heapAllocPtr4;                          // 0x1E4
     u8 eventIds[4];                               // 0x1E8: event of each round, as sent to the other players
     u8 unk1EC;                                    // 0x1EC
-    u8 field_1ED;                                 // 0x1ED
+    u8 eventInitState;                                 // 0x1ED
     u8 participantCount;                          // 0x1EE
     u8 field_1EF;                                 // 0x1EF
     u32 round;                                    // 0x1F0
-    u32 field_1F4;                                // 0x1F4
+    u32 eventDrawEnabled;                                // 0x1F4
     PokeathlonCourseArgsLayout *args;             // 0x1F8
     u32 unk1FC;                                   // 0x1FC
     PokeathlonCourseParticipant localParticipant; // 0x200
@@ -350,7 +350,7 @@ typedef struct PokeathlonCourseLayout {
     PokeathlonStateInfo eventStateInfo;           // 0x3CC
     u32 unk3D4;                                   // 0x3D4
     u32 roundEvents[4];                           // 0x3D8
-    u32 field_3E8;                                // 0x3E8
+    u32 courseId;                                // 0x3E8
     PokeathlonCourseParticipant participants[4];  // 0x3EC
     PlayerProfile *playerProfiles;                // 0x5DC
     PokeathlonCourseEventResult eventResults[4];  // 0x5E0: the player's own, then (host) everybody's

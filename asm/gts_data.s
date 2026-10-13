@@ -1270,7 +1270,7 @@
 	.public _0223FE0A
 	.public _0223FE12
 	.public _0223FE1A
-	.public _0223FE20
+	.public gBattleHallAppSummaryPages
 	.public _0223FE36
 	.public _0223FE3C
 	.public _0223FE5C

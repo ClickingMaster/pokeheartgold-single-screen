@@ -221,7 +221,7 @@
 	.public FrontierScriptNative_WaitLinkSync
 	.public FrtCmd_054
 	.public FrtCmd_055
-	.public ov80_0222D244
+	.public FrontierScriptNative_WaitCommEnd
 	.public FrtCmd_056
 	.public FrtCmd_057
 	.public FrtCmd_058
@@ -310,10 +310,10 @@
 	.public FrontierMap_UnloadMonIconResources
 	.public FrontierMap_CreateMonIcon
 	.public FrontierMap_DeleteMonIcon
-	.public ov80_0222F33C
-	.public ov80_0222F3CC
-	.public ov80_0222F3FC
-	.public ov80_0222F440
+	.public FrontierMap_LoadItemIconResources
+	.public FrontierMap_UnloadItemIconResources
+	.public FrontierMap_CreateItemIcon
+	.public FrontierMap_DeleteItemIcon
 	.public FrontierScript_PrintMessageEntry
 	.public FrontierScript_PrintMessageEntryFromBank
 	.public FrontierScriptNative_WaitMessageEntry
@@ -327,8 +327,8 @@
 	.public ov80_0223B9EC
 	.public gFrontierCommandTable
 	.public ov80_0223BD44
-	.public ov80_0223BD4C
-	.public ov80_0223BD80
+	.public gFrontierMapItemIconTemplate
+	.public gFrontierMapMonIconTemplate
 	.public gOverlayTemplate_BattleFactoryRentalApp
 	.public gOverlayTemplate_BattleFactoryTradeApp
 	.public gBattleFactoryBattlePoints
@@ -343,14 +343,14 @@
 	.public ov80_0223BE60
 	.public ov80_0223BE6C
 	.public gOverlayTemplate_BattleArcadeGameBoard
-	.public ov80_0223BE88
-	.public ov80_0223BE90
-	.public ov80_0223BE98
-	.public ov80_0223BE9E
+	.public gBattleArcadeFaintedMonPoints
+	.public gBattleArcadeStatusedMonPoints
+	.public gBattleArcadeRoundCursorSpeeds
+	.public gBattleArcadeRankBattlePoints
 	.public ov80_0223BE9F
 	.public ov80_0223BEA8
-	.public ov80_0223BEB8
-	.public ov80_0223BEC8
+	.public gBattleArcadePlayerMonIconPositions
+	.public gBattleArcadeOpponentMonIconPositions
 	.public ov80_0223BED8
 	.public ov80_0223BEEC
 	.public ov80_0223BF02
@@ -488,7 +488,7 @@
 	.public ov80_0222EC84
 	.public FrontierListMenu_Cancel
 	.public FrontierMap_DeleteMonIcon
-	.public ov80_0222F440
+	.public FrontierMap_DeleteItemIcon
 	.public FrontierScript_PrintMessageEntry
 	.public FrontierScriptNative_WaitMessageEntry
 .public ov80_0223BE6C
@@ -730,13 +730,13 @@ gFrontierCommandTable: ; 0x0223BA04
 ov80_0223BD44: ; 0x0223BD44
 	.byte 0x01, 0x02, 0x04, 0x08, 0x0F, 0x10, 0x20, 0x00
 
-ov80_0223BD4C: ; 0x0223BD4C
+gFrontierMapItemIconTemplate: ; 0x0223BD4C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x63, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0xD9, 0x07, 0x00, 0x00, 0xD1, 0x07, 0x00, 0x00, 0xD1, 0x07, 0x00, 0x00, 0xD1, 0x07, 0x00, 0x00
 	.byte 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov80_0223BD80: ; 0x0223BD80
+gFrontierMapMonIconTemplate: ; 0x0223BD80
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0xD0, 0x07, 0x00, 0x00, 0xD0, 0x07, 0x00, 0x00, 0xD0, 0x07, 0x00, 0x00
 	.byte 0xD0, 0x07, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x00, 0x00, 0x00
@@ -803,19 +803,19 @@ ov80_0223BE6C: ; 0x0223BE6C
 gOverlayTemplate_BattleArcadeGameBoard: ; 0x0223BE78
 	.word BattleArcadeGameBoard_InitOverlay
 	.word BattleArcadeGameBoard_Main
-	.word ov84_0223DFF0
+	.word BattleArcadeGameBoard_Exit
 	.word FS_OVERLAY_ID(OVY_84)
 
-ov80_0223BE88: ; 0x0223BE88
+gBattleArcadeFaintedMonPoints: ; 0x0223BE88
 	.byte 0x06, 0x04, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov80_0223BE90: ; 0x0223BE90
+gBattleArcadeStatusedMonPoints: ; 0x0223BE90
 	.byte 0x08, 0x06, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov80_0223BE98: ; 0x0223BE98
+gBattleArcadeRoundCursorSpeeds: ; 0x0223BE98
 	.byte 0x07, 0x05, 0x04, 0x04, 0x00, 0x03
 
-ov80_0223BE9E: ; 0x0223BE9E
+gBattleArcadeRankBattlePoints: ; 0x0223BE9E
 	.byte 0x03
 
 ov80_0223BE9F: ; 0x0223BE9F
@@ -826,11 +826,11 @@ ov80_0223BEA8:
 	.byte 0x95, 0x00, 0x96, 0x00, 0x97, 0x00, 0x98, 0x00
 	.byte 0x99, 0x00, 0x9C, 0x00, 0x9E, 0x00, 0x9D, 0x00
 
-ov80_0223BEB8: ; 0x0223BEB8
+gBattleArcadePlayerMonIconPositions: ; 0x0223BEB8
 	.byte 0x21, 0x00, 0x14, 0x00, 0x27, 0x00, 0x2B, 0x00
 	.byte 0x2B, 0x00, 0x42, 0x00, 0x2E, 0x00, 0x59, 0x00
 
-ov80_0223BEC8: ; 0x0223BEC8
+gBattleArcadeOpponentMonIconPositions: ; 0x0223BEC8
 	.byte 0xDE, 0x00, 0x14, 0x00, 0xD8, 0x00, 0x2B, 0x00
 	.byte 0xD5, 0x00, 0x42, 0x00, 0xD2, 0x00, 0x59, 0x00
 

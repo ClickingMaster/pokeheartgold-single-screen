@@ -57,7 +57,7 @@ void FrontierData_ReadMember(void *dest, s32 fileId, int narcId);
 void *FrontierTrainer_Load(BattleFactoryTrainerRecord *record, u16 trainerId, enum HeapID heapID, int narcId);
 void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, BattleFactoryTrainerRecord *record, int count, int battler, enum HeapID heapID);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-void ov80_0222A3BC(SaveData *saveData, Party *party, Pokemon *mon);
+void Frontier_AddRentalMonToParty(SaveData *saveData, Party *party, Pokemon *mon);
 
 int BattleFactory_GetRandomTrainerId(int type, u32 round, int battleNo) {
     u16 min;
@@ -347,7 +347,7 @@ void BattleFactory_SetPartyToRentals(BattleFactoryData *data) {
     mon = AllocMonZeroed(HEAP_ID_FIELD2);
     for (i = 0, frontierMon = data->rentals.mons; i < FACTORY_RENTAL_COUNT; i++, frontierMon++) {
         FrontierMon_ToPokemon(frontierMon, mon, BattleFactory_GetMonLevel(data));
-        ov80_0222A3BC(data->saveData, data->playerParty, mon);
+        Frontier_AddRentalMonToParty(data->saveData, data->playerParty, mon);
     }
     Heap_Free(mon);
 }
@@ -367,7 +367,7 @@ void BattleFactory_AddPartnerMonsToParty(BattleFactoryData *data) {
     mon = AllocMonZeroed(HEAP_ID_FIELD2);
     for (i = 0; i < 2; i++) {
         FrontierMon_ToPokemon(&partnerMons[i], mon, BattleFactory_GetMonLevel(data));
-        ov80_0222A3BC(data->saveData, data->playerParty, mon);
+        Frontier_AddRentalMonToParty(data->saveData, data->playerParty, mon);
         data->partySetIds[2 + i] = data->partnerRentals.setIds[i];
     }
     Heap_Free(mon);

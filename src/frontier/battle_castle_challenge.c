@@ -36,7 +36,7 @@ void CastleChallenge_SetField(void *challenge, int field, u8 index, int a3, void
 void CastleChallenge_SetSaved(void *challenge, int saved);
 void CastleChallenge_Clear(void *challenge);
 void FrontierSave_AddStat(FrontierSave *frontierSave, int stat, int substat, u32 amount);
-void ov80_0222A840(SaveData *saveData);
+void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 u32 FrontierTrainer_GetClassSprite(u8 trainerClass);
 void *FrontierTrainer_Load(void *dst, u16 trainerId, u32 heapId, u32 size);
 void FrontierTrainer_GenerateMons(int a0, u16 trainerId, u16 partnerTrainerId, u16 *setIds, void *mons, u8 *ivs, void **personalities, u8 a7);
@@ -52,9 +52,9 @@ void BattleCastle_GetRoundTrainerIds(u32 type, u32 round, u16 *trainerIds, int c
 void BattleCastle_AddMonToParty(void *data, void *party, void *mon);
 void BattleCastle_SetOpponentParty(void *data);
 u16 BattleCastle_GetRound(void *data);
-BOOL ov80_0222B5C8(BattleCastleData *data);
+BOOL BattleCastleLink_SendRecord(BattleCastleData *data);
 BOOL BattleCastleLink_SendTrainerIds(BattleCastleData *data);
-BOOL ov80_0222B6C8(BattleCastleData *data);
+BOOL BattleCastleLink_SendChoice(BattleCastleData *data);
 BOOL BattleCastleLink_SendOpponentMons(BattleCastleData *data);
 BOOL ov80_0222B8D8(BattleCastleData *data, u16 value);
 BOOL ov80_0222B920(BattleCastleData *data, u16 value);
@@ -174,7 +174,7 @@ BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 typ
         }
     }
     if (BattleCastle_IsMultiType(sBattleCastleData->type) == TRUE) {
-        ov80_0222A840(sBattleCastleData->saveData);
+        Frontier_RecordLinkPlayerLocations(sBattleCastleData->saveData);
     }
     return sBattleCastleData;
 }
@@ -416,7 +416,7 @@ u32 BattleCastleData_GetTrainerSprite(BattleCastleData *data, u32 index) {
     return FrontierTrainer_GetClassSprite((u8) * (u16 *)(trainer + 4));
 }
 
-void ov80_02232E9C(BattleCastleData *data) {
+void BattleCastleData_ResetRanks(BattleCastleData *data) {
     int i;
     for (i = 0; i < 3; i++) {
         FrontierSave *frontierSave = Save_Frontier_GetStatic(data->saveData);
@@ -436,7 +436,7 @@ void BattleCastleData_EndRound(BattleCastleData *data) {
     BattleCastleData_Save(data, 0);
 }
 
-void ov80_02232F00(BattleCastleData *data) {
+void BattleCastleData_SetPartyBeforeBattle(BattleCastleData *data) {
     BattleCastle_SetOpponentParty(data);
 }
 
@@ -599,13 +599,13 @@ void BattleCastle_AddPoints(SaveData *saveData, u32 type, s32 amount) {
 BOOL BattleCastleData_SendLinkMessage(BattleCastleData *data, u32 kind, u16 value) {
     switch (kind) {
     case 0:
-        ov80_0222B5C8(data);
+        BattleCastleLink_SendRecord(data);
         break;
     case 1:
         BattleCastleLink_SendTrainerIds(data);
         break;
     case 2:
-        ov80_0222B6C8(data);
+        BattleCastleLink_SendChoice(data);
         break;
     case 3:
         BattleCastleLink_SendOpponentMons(data);

@@ -23,13 +23,13 @@ typedef struct ArcadeContext {
     u8 cursorSpeed;
     u8 bpGain;
     u8 unk1E;
-    u8 unk1F; // set when the event affected no Pokemon
-    u16 unk20;
+    u8 eventNoEffect; // set when the event affected no Pokemon
+    u16 eventRandom;
     u16 unk22;
     u32 unk24;
     BOOL battleWon;
     u8 partySlots[3]; // party indices of the entered Pokemon
-    u8 unk2F;
+    u8 hasStreak;
     ManagedSprite *playerMonSprites[4];
     ManagedSprite *opponentMonSprites[4];
     ManagedSprite *playerItemIcons[4];
@@ -50,7 +50,7 @@ typedef struct ArcadeContext {
     FrontierMon opponentMons[4]; // 0x330
     u8 filler_410[2];
     u16 heldItems[3]; // held items of the entered Pokemon, restored afterwards
-    u16 unk418[6];
+    u16 gameBoardResults[6];
     u16 linkBuffer[20];      // 0x424, outgoing link message
     u8 filler_44C[0x28];
     u8 linkMonBuffer[0x200]; // 0x474, outgoing Pokemon
@@ -61,7 +61,7 @@ typedef struct ArcadeContext {
     u8 unkA75;
     u16 partnerRound; // the link partner's round
     u16 multiWinStreak;
-    u8 unkA7A;
+    u8 mirrorParticles;
     u8 unkA7B;
     u8 linkMessageCount;
 } ArcadeContext;
@@ -71,25 +71,25 @@ void BattleArcadeData_Free(ArcadeContext *ctx);
 u32 BattleArcade_GetWonBattlePoints(ArcadeContext *ctx, Party *playerParty, Party *opponentParty, int rank);
 void BattleArcade_CopyMonHeldItem(Party *srcParty, Party *dstParty, int srcSlot, int dstSlot);
 int BattleCastle_IsMultiType(u8 a0);
-void ov80_02234550(ArcadeContext *ctx, GAME_BOARD_ARGS *args);
+void BattleArcade_StoreGameBoardResult(ArcadeContext *ctx, GAME_BOARD_ARGS *args);
 void BattleArcade_SetPartyBeforeBattle(ArcadeContext *ctx);
 void BattleArcade_SetPartyAfterBattle(ArcadeContext *ctx);
 void BattleArcadeData_SaveRecord(ArcadeContext *ctx, u32 mode);
 u32 BattleArcade_IncBattleNo(ArcadeContext *ctx);
 u32 BattleArcade_GetTrainerSprite(ArcadeContext *ctx, u8 partner);
 void ov80_022347B8(ArcadeContext *ctx);
-void ov80_022347C4(ArcadeContext *ctx);
+void BattleArcade_CompleteRound(ArcadeContext *ctx);
 u32 BattleArcade_GetBattleNo(ArcadeContext *ctx);
 void BattleArcade_CreateMonSprites(ArcadeContext *ctx, FrontierMap *map, u32 opponent);
 void BattleArcade_DeleteMonSprites(ArcadeContext *ctx, FrontierMap *map, u32 opponent);
 void BattleArcade_CreateItemIcons(ArcadeContext *ctx, FrontierMap *map, u32 opponent);
 void BattleArcade_DeleteItemIcons(ArcadeContext *ctx, FrontierMap *map, u32 opponent);
-void ov80_02234968(ArcadeContext *ctx, FrontierMap *map);
-void ov80_02234A38(ArcadeContext *ctx, FrontierMap *map);
+void BattleArcade_LoadEventBg(ArcadeContext *ctx, FrontierMap *map);
+void BattleArcade_LoadMultiBgScreen(ArcadeContext *ctx, FrontierMap *map);
 u32 BattleArcade_GetTrainerIndex(ArcadeContext *ctx, u32 partner);
 void BattleArcade_SetPlayerMonSpriteVisible(ArcadeContext *ctx, FrontierMap *map, u32 visible, u32 slot);
 void BattleArcade_SetOpponentMonSpriteVisible(ArcadeContext *ctx, FrontierMap *map, u32 visible, u32 slot);
-void ov80_02234DC4(u32 color, u32 mode);
+void BattleArcade_LoadBlendedBgExtPalette(u32 color, u32 mode);
 u32 ov80_02235324(ArcadeContext *ctx);
 u16 BattleArcade_SendBuffer(ArcadeContext *ctx, u32 cmd, u32 value);
 void BattleArcade_ApplyEvent(ArcadeContext *ctx, u8 event);

@@ -18,10 +18,10 @@
 #include "unk_02096910.h"
 
 static void GameBoardArgs_Set(GAME_BOARD_ARGS *args, ArcadeContext *data);
-static void ov80_02233A1C(void *data);
-static void ov80_02233F1C(FrontierScriptContext *ctx, ArcadeContext *arcadeCtx, u32 a2);
-static void ov80_02233F40(SPLEmitter *emitter);
-static BOOL ov80_02234028(FrontierScriptContext *ctx);
+static void BattleArcade_OnGameBoardExit(void *data);
+static void BattleArcade_CreateParticleEmitter(FrontierScriptContext *ctx, ArcadeContext *arcadeCtx, u32 a2);
+static void BattleArcade_ParticleEmitterCallback(SPLEmitter *emitter);
+static BOOL FrontierScriptNative_WaitArcadeLink(FrontierScriptContext *ctx);
 
 BOOL FrtCmd_ArcadeAlloc(FrontierScriptContext *ctx) {
     u32 spC = FrontierScript_ReadVar(ctx);
@@ -58,7 +58,7 @@ BOOL FrtCmd_LaunchGameBoard(FrontierScriptContext *ctx) {
     MI_CpuFill8(boardArgs, 0, sizeof(GAME_BOARD_ARGS));
     boardArgs->saveData = args->saveData;
     GameBoardArgs_Set(boardArgs, data);
-    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &gOverlayTemplate_BattleArcadeGameBoard, boardArgs, 0, ov80_02233A1C);
+    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &gOverlayTemplate_BattleArcadeGameBoard, boardArgs, 0, BattleArcade_OnGameBoardExit);
 
     return TRUE;
 }
@@ -142,10 +142,10 @@ BOOL FrtCmd_ArcadeStartBattle(FrontierScriptContext *ctx) {
 
 static void GameBoardArgs_Set(GAME_BOARD_ARGS *args, ArcadeContext *data) {
     args->type = data->type;
-    args->unk1E = BattleArcade_GetRound(data);
+    args->round = BattleArcade_GetRound(data);
 
-    args->unk14 = &data->unk20;
-    args->unk10 = &data->eventId;
+    args->eventRandom = &data->eventRandom;
+    args->eventId = &data->eventId;
     args->bpGain = data->bpGain;
 
     args->winStreak = data->winStreak;
@@ -160,7 +160,7 @@ static void GameBoardArgs_Set(GAME_BOARD_ARGS *args, ArcadeContext *data) {
     args->weather = &data->weather;
     args->randomFlag = data->randomFlag;
     data->randomFlag = 0;
-    data->unk1F = 0;
+    data->eventNoEffect = 0;
 
     int partyCnt = Party_GetCount(data->playerParty);
 
@@ -175,9 +175,9 @@ static void GameBoardArgs_Set(GAME_BOARD_ARGS *args, ArcadeContext *data) {
     }
 }
 
-static void ov80_02233A1C(void *data) {
+static void BattleArcade_OnGameBoardExit(void *data) {
     GAME_BOARD_ARGS *args = data;
-    ov80_02234550(args->work, args);
+    BattleArcade_StoreGameBoardResult(args->work, args);
     Heap_Free(args);
 }
 
@@ -212,7 +212,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         arcadeCtx->type = var0;
         break;
     case 3:
-        *out = arcadeCtx->unk418[var0];
+        *out = arcadeCtx->gameBoardResults[var0];
         break;
     case 4:
         *out = arcadeCtx->winStreak;
@@ -265,7 +265,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         ov80_022347B8(arcadeCtx);
         break;
     case 22:
-        ov80_022347C4(arcadeCtx);
+        BattleArcade_CompleteRound(arcadeCtx);
         break;
     case 23:
         *out = BattleArcade_GetBattleNo(arcadeCtx);
@@ -336,10 +336,10 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         BattleArcade_DeleteMonSprites(arcadeCtx, frontierMap, var0);
         break;
     case 33:
-        ov80_0222F33C(frontierMap);
+        FrontierMap_LoadItemIconResources(frontierMap);
         break;
     case 34:
-        ov80_0222F3CC(frontierMap);
+        FrontierMap_UnloadItemIconResources(frontierMap);
         break;
     case 35:
         BattleArcade_CreateItemIcons(arcadeCtx, frontierMap, var0);
@@ -348,11 +348,11 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         BattleArcade_DeleteItemIcons(arcadeCtx, frontierMap, var0);
         break;
     case 11:
-        ov80_02234968(arcadeCtx, frontierMap);
+        BattleArcade_LoadEventBg(arcadeCtx, frontierMap);
         break;
     case 37:
         if (BattleArcade_MultiplayerCheck(arcadeCtx->type) == TRUE) {
-            ov80_02234A38(arcadeCtx, frontierMap);
+            BattleArcade_LoadMultiBgScreen(arcadeCtx, frontierMap);
         }
         break;
     case 38:
@@ -368,8 +368,8 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         }
         break;
     case 39:
-        arcadeCtx->unkA7A = var1;
-        ov80_02233F1C(ctx, arcadeCtx, var0);
+        arcadeCtx->mirrorParticles = var1;
+        BattleArcade_CreateParticleEmitter(ctx, arcadeCtx, var0);
         break;
     case 40:
         FrontierTrainer_LoadRecord(&arcadeCtx->trainers[0], arcadeCtx->trainerIds[arcadeCtx->battleNo], 0xb, 0xcc);
@@ -382,7 +382,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         BattleArcade_SetOpponentMonSpriteVisible(arcadeCtx, frontierMap, var0, var1);
         break;
     case 43:
-        ov80_02234DC4(var0, var1);
+        BattleArcade_LoadBlendedBgExtPalette(var0, var1);
         break;
     case 44:
         if (var0 == 0) {
@@ -400,7 +400,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         break;
     case 47:
-        *out = arcadeCtx->unk1F;
+        *out = arcadeCtx->eventNoEffect;
         break;
     case 48:
         *out = 0;
@@ -431,18 +431,18 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-static void ov80_02233F1C(FrontierScriptContext *ctx, ArcadeContext *arcadeCtx, u32 a2) {
+static void BattleArcade_CreateParticleEmitter(FrontierScriptContext *ctx, ArcadeContext *arcadeCtx, u32 a2) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(ctx->frontierSystem);
-    ParticleSystem_CreateEmitterWithParam(FrontierParticles_GetSystem(map->particleManager, 0), a2, ov80_02233F40, arcadeCtx);
+    ParticleSystem_CreateEmitterWithParam(FrontierParticles_GetSystem(map->particleManager, 0), a2, BattleArcade_ParticleEmitterCallback, arcadeCtx);
 }
 
 extern const VecFx32 ov80_0223BE6C; //{-1, 0, 0}
-static void ov80_02233F40(SPLEmitter *emitter) {
+static void BattleArcade_ParticleEmitterCallback(SPLEmitter *emitter) {
     VecFx16 axis;
     ArcadeContext *ctx = ParticleSystem_GetEmitterParam();
     const VecFx32 pos = ov80_0223BE6C;
 
-    if (ctx->unkA7A == 1) {
+    if (ctx->mirrorParticles == 1) {
         ParticleEmitter_GetAxis(emitter, &axis);
         axis.x *= -1;
         SPL_SetEmitterAxis(emitter, &axis);
@@ -472,11 +472,11 @@ BOOL FrtCmd_ArcadeSendBuffer(FrontierScriptContext *ctx) {
 
 BOOL FrtCmd_ArcadeReceiveBuffer(FrontierScriptContext *ctx) {
     ctx->data[0] = FrontierScriptContext_ReadHalfWord(ctx);
-    FrontierScriptContext_Pause(ctx, ov80_02234028);
+    FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitArcadeLink);
     return TRUE;
 }
 
-static BOOL ov80_02234028(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitArcadeLink(FrontierScriptContext *ctx) {
     FrontierScript_GetVar(ctx, ctx->data[0]);
     ArcadeContext *arcadeCtx = Frontier_GetData(ctx->frontierSystem->frontierWork);
 

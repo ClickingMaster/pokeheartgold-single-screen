@@ -40,7 +40,7 @@ extern const WindowTemplate ov80_0223B9D0;
 void *Frontier_GetMap(void *frontierWork);
 void Frontier_RequestExit(void *frontierWork);
 void Frontier_ChangeMode(void *frontierWork, u16 mode, u16 taskId);
-u16 ov80_0222A7EC(PlayerProfile *profile);
+u16 Frontier_GetPlayerSpriteId(PlayerProfile *profile);
 
 u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
 u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
@@ -517,14 +517,14 @@ BOOL FrtCmd_034(FrontierScriptContext *ctx) {
         gfx.unk_02 = FrontierScriptContext_ReadByte(ctx);
         if (gfx.id == FRONTIER_ID_PLAYER) {
             FrontierLaunchArgs *args = Frontier_GetLaunchArgs(system->frontierWork);
-            gfx.id = ov80_0222A7EC(Save_PlayerData_GetProfile(args->saveData));
+            gfx.id = Frontier_GetPlayerSpriteId(Save_PlayerData_GetProfile(args->saveData));
             FrontierMap_AddObjectGfx(map, &gfx);
         } else if (gfx.id == FRONTIER_ID_LINK_MONS) {
             if (sub_02037474() == TRUE) {
                 int count = Comm_CountConnected();
                 int i;
                 for (i = 0; i < count; i++) {
-                    gfx.id = ov80_0222A7EC(CommPlayerInfo_GetProfile(i));
+                    gfx.id = Frontier_GetPlayerSpriteId(CommPlayerInfo_GetProfile(i));
                     FrontierMap_AddObjectGfx(map, &gfx);
                 }
             }
@@ -569,10 +569,10 @@ BOOL FrtCmd_036(FrontierScriptContext *ctx) {
         if (template.unk_00 == FRONTIER_ID_PLAYER) {
             FrontierLaunchArgs *args = Frontier_GetLaunchArgs(system->frontierWork);
             PlayerProfile *profile = Save_PlayerData_GetProfile(args->saveData);
-            template.unk_00 = ov80_0222A7EC(profile);
+            template.unk_00 = Frontier_GetPlayerSpriteId(profile);
             index = FRONTIER_MAP_OBJECT_MAX - 1;
         } else if (template.unk_00 == FRONTIER_ID_LINK_MONS) {
-            template.unk_00 = ov80_0222A7EC(CommPlayerInfo_GetProfile(FrontierScriptContext_ReadByte(ctx)));
+            template.unk_00 = Frontier_GetPlayerSpriteId(CommPlayerInfo_GetProfile(FrontierScriptContext_ReadByte(ctx)));
         }
         FrontierMap_CreateObject(map, &template, index);
     }

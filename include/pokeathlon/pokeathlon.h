@@ -83,11 +83,11 @@ struct PokeathlonCourseData {
     u32 state;                                 // 0x1E0
     void *heapAllocPtr4;                       // 0x1E4 - Heap allocated pointer
     u8 filler_1E8[0x5];                        // 0x1E8
-    u8 field_1ED;                              // 0x1ED
+    u8 eventInitState;                              // 0x1ED
     u8 participantCount;                       // 0x1EE - Number of active participants (1-4)
     u8 field_1EF;                              // 0x1EF
     u32 currentParticipantIndex;               // 0x1F0
-    u32 field_1F4;                             // 0x1F4
+    u32 eventDrawEnabled;                             // 0x1F4
     PokeathlonCourseArgs *args;                // 0x1F8
     u8 filler_1FC[0x74];                       // 0x1FC
     void *field_270;                           // 0x270
@@ -104,8 +104,8 @@ struct PokeathlonCourseData {
     PokeathlonCourseState courseState;         // 0x3B4 - State machine structure (16 bytes: 4 fields x 4 bytes)
     PokeathlonStateInfo stateInfo;             // 0x3C4 - State information (8 bytes)
     u8 filler_3CC[0xC];                        // 0x3CC
-    u32 field_3D8[4];                          // 0x3D8 - Array of 4 u32s (16 bytes)
-    u32 field_3E8;                             // 0x3E8
+    u32 roundEvents[4];                          // 0x3D8 - Array of 4 u32s (16 bytes)
+    u32 courseId;                             // 0x3E8
     PokeathlonParticipantData participants[4]; // 0x3EC - 4 participant data elements (0x7C each = 0x1F0 bytes)
     PlayerProfile *playerProfiles;             // 0x5DC - Player profiles pointer (heap allocated, 4 profiles)
     u16 field_5E0[4][2];                       // 0x5E0

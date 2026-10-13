@@ -144,7 +144,7 @@ BOOL FrtCmd_053(FrontierScriptContext *ctx);
 BOOL FrontierScriptNative_WaitLinkSync(FrontierScriptContext *ctx);
 BOOL FrtCmd_054(FrontierScriptContext *ctx);
 BOOL FrtCmd_055(FrontierScriptContext *ctx);
-BOOL ov80_0222D244(void);
+BOOL FrontierScriptNative_WaitCommEnd(void);
 BOOL FrtCmd_056(FrontierScriptContext *ctx);
 BOOL FrtCmd_057(FrontierScriptContext *ctx);
 BOOL FrtCmd_058(FrontierScriptContext *ctx);
@@ -720,11 +720,11 @@ BOOL FrtCmd_054(FrontierScriptContext *ctx) {
 
 BOOL FrtCmd_055(FrontierScriptContext *ctx) {
     sub_02058284();
-    FrontierScriptContext_Pause(ctx, (FrontierShouldResumeScriptFunc)ov80_0222D244);
+    FrontierScriptContext_Pause(ctx, (FrontierShouldResumeScriptFunc)FrontierScriptNative_WaitCommEnd);
     return TRUE;
 }
 
-BOOL ov80_0222D244(void) {
+BOOL FrontierScriptNative_WaitCommEnd(void) {
     if (CommState_Exists() != TRUE && CommWireless_Exists() != TRUE) {
         return TRUE;
     }

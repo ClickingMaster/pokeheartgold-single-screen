@@ -94,8 +94,8 @@ void *FrontierTrainer_Load(FrontierTrainerRecord *record, int trainerId, enum He
 u32 FrontierMon_Generate(FrontierMon *mon, u32 setId, u32 otId, u32 pid, u8 iv, u8 itemIndex, BOOL useItemTable, enum HeapID heapID, NarcId narcId);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
 u16 FrontierTrainer_GetClassSprite(u16 value);
-void ov80_0222A334(SaveData *saveData, Pokemon *mon);
-void ov80_0222A3BC(SaveData *saveData, Party *party, Pokemon *mon);
+void Frontier_SetRentalMonOt(SaveData *saveData, Pokemon *mon);
+void Frontier_AddRentalMonToParty(SaveData *saveData, Party *party, Pokemon *mon);
 void Frontier_SetSpriteAnim(Sprite *sprite, int anim);
 void Frontier_SetSpritePosition(Sprite *sprite, int x, int y, BOOL bounce);
 int Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
@@ -107,8 +107,8 @@ int FrontierTrainer_GetMonIv(u32 trainerIndex);
 BOOL FrontierTrainer_PickMonSets(FrontierTrainer *trainer, const u16 *excludedSpecies, const u16 *excludedItems, int numExcluded, int count, u16 *setIds, enum HeapID heapID);
 void FrontierTrainer_GenerateMons(u8 count, int trainerIndex, int partnerIndex, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *otIds, u8 hasPartner);
 void Frontier_BufferPartnerName(MessageFormat *msgFmt, int field);
-int ov80_0222A7EC(PlayerProfile *profile);
-void ov80_0222A840(SaveData *saveData);
+int Frontier_GetPlayerSpriteId(PlayerProfile *profile);
+void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 
 void *FrontierData_AllocMember(s32 fileId, enum HeapID heapID, NarcId narcId) {
     return AllocAndReadWholeNarcMemberByIdPair(narcId, fileId, heapID);
@@ -285,7 +285,7 @@ u16 FrontierTrainer_GetClassSprite(u16 value) {
     return 3;
 }
 
-void ov80_0222A334(SaveData *saveData, Pokemon *mon) {
+void Frontier_SetRentalMonOt(SaveData *saveData, Pokemon *mon) {
     PlayerProfile *profile = Save_PlayerData_GetProfile(saveData);
     u32 otId = GetMonData(mon, MON_DATA_OT_ID, NULL);
     MsgData *msgData;
@@ -303,8 +303,8 @@ void ov80_0222A334(SaveData *saveData, Pokemon *mon) {
     DestroyMsgData(msgData);
 }
 
-void ov80_0222A3BC(SaveData *saveData, Party *party, Pokemon *mon) {
-    ov80_0222A334(saveData, mon);
+void Frontier_AddRentalMonToParty(SaveData *saveData, Party *party, Pokemon *mon) {
+    Frontier_SetRentalMonOt(saveData, mon);
     Party_AddMon(party, mon);
 }
 
@@ -522,7 +522,7 @@ void Frontier_BufferPartnerName(MessageFormat *msgFmt, int field) {
     BufferPlayersName(msgFmt, field, CommPlayerInfo_GetProfile(netId));
 }
 
-int ov80_0222A7EC(PlayerProfile *profile) {
+int Frontier_GetPlayerSpriteId(PlayerProfile *profile) {
     int gender = PlayerProfile_GetTrainerGender(profile);
     switch (PlayerProfile_GetVersion(profile)) {
     default:
@@ -536,6 +536,6 @@ int ov80_0222A7EC(PlayerProfile *profile) {
     }
 }
 
-void ov80_0222A840(SaveData *saveData) {
+void Frontier_RecordLinkPlayerLocations(SaveData *saveData) {
     Comm_RecordPlayerLocations(Save_WiFiHistory_Get(saveData));
 }

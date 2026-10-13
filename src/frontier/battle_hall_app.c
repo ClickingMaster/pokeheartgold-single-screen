@@ -137,17 +137,17 @@ typedef struct BattleHallApp {
     u8 unk_27E[6];                   // 0x27E
 } BattleHallApp;
 
-extern const u8 _0223FE20[];
-extern const GraphicsModes ov82_0223FE28;
-extern const BgTemplate ov82_0223FE38;
-extern const BgTemplate ov82_0223FE54;
-extern const BgTemplate ov82_0223FE70;
-extern const BgTemplate ov82_0223FE8C;
-extern const BgTemplate ov82_0223FEA8;
-extern const GraphicsBanks ov82_0223FEC4;
-extern const u8 ov82_0223FEEC[4];
-extern const ObjCharTransferTemplate ov82_0223FEF0;
-extern const WindowTemplate ov82_0223FF00[4];
+extern const u8 gBattleHallAppSummaryPages[];
+extern const GraphicsModes gBattleHallAppGraphicsModes;
+extern const BgTemplate gBattleHallAppSubBg0Template;
+extern const BgTemplate gBattleHallAppBg0Template;
+extern const BgTemplate gBattleHallAppBg1Template;
+extern const BgTemplate gBattleHallAppBg3Template;
+extern const BgTemplate gBattleHallAppSubBg1Template;
+extern const GraphicsBanks gBattleHallAppGraphicsBanks;
+extern const u8 gBattleHallAppResObjCounts[4];
+extern const ObjCharTransferTemplate gBattleHallAppCharTransferTemplate;
+extern const WindowTemplate gBattleHallAppWindowTemplates[4];
 
 // Frontier overlay (80) helpers
 u8 BattleHall_GetCellType(u8 index);
@@ -869,37 +869,37 @@ void BattleHallApp_VBlankCallback(BattleHallApp *app) {
 }
 
 void BattleHallApp_SetGraphicsBanks(void) {
-    GraphicsBanks banks = ov82_0223FEC4;
+    GraphicsBanks banks = gBattleHallAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 void BattleHallApp_InitBgLayers(BgConfig *bgConfig) {
-    GraphicsModes modes = ov82_0223FE28;
+    GraphicsModes modes = gBattleHallAppGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     {
-        BgTemplate bg = ov82_0223FE54;
+        BgTemplate bg = gBattleHallAppBg0Template;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bg, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 0x20, 0, HEAP_ID_105);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
     }
     {
-        BgTemplate bg = ov82_0223FE70;
+        BgTemplate bg = gBattleHallAppBg1Template;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &bg, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, HEAP_ID_105);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     }
     {
-        BgTemplate bg = ov82_0223FE8C;
+        BgTemplate bg = gBattleHallAppBg3Template;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
     }
     {
-        BgTemplate bg = ov82_0223FEA8;
+        BgTemplate bg = gBattleHallAppSubBg1Template;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
     }
     {
-        BgTemplate bg = ov82_0223FE38;
+        BgTemplate bg = gBattleHallAppSubBg0Template;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     }
@@ -1066,7 +1066,7 @@ void BattleHallApp_CreateSummaryArgs(BattleHallApp *app) {
     app->summaryArgs->unk2C = sub_02088288(app->saveData);
     app->summaryArgs->ribbons = Save_SpecialRibbons_Get(app->saveData);
     app->summaryArgs->isFlag982Set = 0;
-    PokemonSummary_SetPages(app->summaryArgs, _0223FE20);
+    PokemonSummary_SetPages(app->summaryArgs, gBattleHallAppSummaryPages);
     PokemonSummaryArgs_SetPlayer(app->summaryArgs, Save_PlayerData_GetProfile(app->saveData));
 }
 
@@ -1451,7 +1451,7 @@ void BattleHallSpriteGfx_Init(BattleHallSpriteGfx *gfx, Pokemon *mon) {
     OamManager_Create(0, 128, 0, 32, 0, 128, 0, 32, HEAP_ID_105);
     gfx->spriteList = G2dRenderer_Init(2, &gfx->renderer, HEAP_ID_105);
     for (i = 0; i < 4; i++) {
-        gfx->resMan[i] = Create2DGfxResObjMan(ov82_0223FEEC[i], (GfGfxResType)i, HEAP_ID_105);
+        gfx->resMan[i] = Create2DGfxResObjMan(gBattleHallAppResObjCounts[i], (GfGfxResType)i, HEAP_ID_105);
     }
     gfx->resObj[0][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], NARC_a_1_8_4, 0xC, TRUE, 0, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_105);
     gfx->resObj[0][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_a_1_8_4, 0x36, FALSE, 0, NNS_G2D_VRAM_TYPE_2DMAIN, 1, HEAP_ID_105);
@@ -1520,7 +1520,7 @@ void BattleHallSpriteGfx_Free(BattleHallSpriteGfx *gfx) {
 }
 
 void BattleHallSpriteGfx_InitTransfers(void) {
-    ObjCharTransferTemplate template = ov82_0223FEF0;
+    ObjCharTransferTemplate template = gBattleHallAppCharTransferTemplate;
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_32K);
     ObjPlttTransfer_Init(4, HEAP_ID_105);
     ObjCharTransfer_ClearBuffers();
@@ -1575,7 +1575,7 @@ void BattleHallApp_AddWindows(BgConfig *bgConfig, Window *windows) {
     u8 i;
 
     for (i = 0; i < 4; i++) {
-        AddWindow(bgConfig, &windows[i], &ov82_0223FF00[i]);
+        AddWindow(bgConfig, &windows[i], &gBattleHallAppWindowTemplates[i]);
         FillWindowPixelBuffer(&windows[i], 0);
     }
 }

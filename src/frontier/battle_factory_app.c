@@ -188,7 +188,7 @@ typedef struct BattleFactoryApp {
     u32 cursorPos;                        // 0x468
     YesNoPrompt *yesNoPrompt;             // 0x46C
     u8 unk_470[4];                        // 0x470
-    BgCellManager *unk_474;          // 0x474
+    BgCellManager *bgCellManager;          // 0x474
     int paletteBlinkState;                // 0x478
     u32 numPokepics;                      // 0x47C
     u32 monIconIndex;                     // 0x480
@@ -302,7 +302,7 @@ void ov81_02240698(BattleFactoryApp *app, GFBgLayer bgId);
 void ov81_022406E0(BattleFactoryApp *app, GFBgLayer bgId);
 void ov81_02240728(BattleFactoryApp *app, GFBgLayer bgId);
 void BattleFactoryApp_LoadBgPalette(void);
-void ov81_022407A8(BattleFactoryApp *app, GFBgLayer bgId);
+void BattleFactoryApp_LoadSubScreenBg(BattleFactoryApp *app, GFBgLayer bgId);
 u8 BattleFactoryApp_PrintMessage(BattleFactoryApp *app, Window *window, u32 msgId, u32 x, u32 y, u32 textSpeed, u8 fg, u8 shadow, u8 bg, u8 fontId);
 u8 BattleFactoryApp_ShowMessage(BattleFactoryApp *app, u32 msgId);
 void BattleFactoryApp_BufferNumber(BattleFactoryApp *app, u32 field, s32 value);
@@ -386,8 +386,8 @@ BOOL BattleFactoryApp_UpdateButtonFlash(BattleFactoryApp *app);
 void BattleFactoryApp_SetBallsTranslucent(BattleFactoryApp *app, int enable);
 BOOL BattleFactory_IsLinkMode(int frontierType);
 BOOL BattleFactoryApp_IsLinkMode(BattleFactoryApp *app);
-void ov81_0224271C(BattleFactoryApp *app);
-void ov81_0224275C(BattleFactoryApp *app);
+void BattleFactoryApp_InitBgCellManager(BattleFactoryApp *app);
+void BattleFactoryApp_FreeBgCellManager(BattleFactoryApp *app);
 void BattleFactorySpriteGfx_Init(BattleFactorySpriteGfx *gfx);
 Sprite *BattleFactorySpriteGfx_CreateSprite(BattleFactorySpriteGfx *gfx, int resourceId, int animSeq, int drawPriority, int priority, u8 screen);
 void BattleFactorySpriteGfx_Free(BattleFactorySpriteGfx *gfx);
@@ -834,7 +834,7 @@ void BattleFactoryApp_SetupRentalScreen(BattleFactoryApp *app) {
     app->monIcons[1] = BattleFactorySprite_CreateSub(&app->spriteGfx, 5, 0, 0, 0, 80, 12);
     BattleFactoryApp_ShowMonIcon(app, app->party, app->cursorPos, 6);
     BattleFactoryApp_PrintRentalNames(app, app->cursorPos, 6);
-    BgCellManager_DrawCellAt(app->unk_474, 0, 7, 0);
+    BgCellManager_DrawCellAt(app->bgCellManager, 0, 7, 0);
     BattleFactoryApp_PrintPlayerName(app, &app->windows[0], 0, 0, 0);
     for (i = 0; i < app->numPicked; i++) {
         BattleFactoryBall_Select(app->balls[app->picked[i]]);
@@ -905,7 +905,7 @@ void BattleFactoryApp_SetupSwapOutScreen(BattleFactoryApp *app) {
     app->monIcons[1] = BattleFactorySprite_CreateSub(&app->spriteGfx, 5, 0, 0, 0, 80, 12);
     BattleFactoryApp_ShowMonIcon(app, app->party, app->cursorPos, 4);
     BattleFactoryApp_PrintPartyNames(app, app->party);
-    BgCellManager_DrawCellAt(app->unk_474, 0, 7, 0);
+    BgCellManager_DrawCellAt(app->bgCellManager, 0, 7, 0);
     BattleFactoryApp_PrintPlayerName(app, &app->windows[0], 0, 0, 0);
     BattleFactoryApp_DrawMessageFrame(&app->windows[7], Options_GetFrame(app->options));
     app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00009);
@@ -943,7 +943,7 @@ void BattleFactoryApp_SetupSwapInScreen(BattleFactoryApp *app) {
     app->monIcons[1] = BattleFactorySprite_CreateSub(&app->spriteGfx, 5, 0, 0, 0, 80, 12);
     BattleFactoryApp_ShowMonIcon(app, app->otherParty, 0, 4);
     BattleFactoryApp_PrintSwapNames(app, 0);
-    BgCellManager_DrawCellAt(app->unk_474, 0, 7, 0);
+    BgCellManager_DrawCellAt(app->bgCellManager, 0, 7, 0);
     BattleFactoryApp_PrintPlayerName(app, &app->windows[0], 0, 0, 0);
     app->cursorPos = 0;
     BattleFactoryApp_CloseSwapInMenu(app);
@@ -1274,7 +1274,7 @@ BOOL BattleFactoryApp_SelectSwapOut(BattleFactoryApp *app) {
             app->cursorPos = input;
             BattleFactoryApp_ShowMonIcon(app, app->party, app->cursorPos, 4);
             BattleFactoryApp_UpdateSwapOutPicCursor(app);
-            BgCellManager_DrawCellAt(app->unk_474, 0, 7, 0);
+            BgCellManager_DrawCellAt(app->bgCellManager, 0, 7, 0);
             BattleFactoryApp_OpenSwapOutMenu(app);
             BattleFactorySprite_SetPalette(app->cursor, 1);
             break;
@@ -1298,7 +1298,7 @@ BOOL BattleFactoryApp_SelectSwapOut(BattleFactoryApp *app) {
             BattleFactorySprite_SetVisible(app->monIcons[0], FALSE);
             BattleFactorySprite_SetVisible(app->monIcons[1], FALSE);
             ClearWindowTilemapAndScheduleTransfer(&app->windows[8]);
-            BgCellManager_EraseCell(app->unk_474, 0);
+            BgCellManager_EraseCell(app->bgCellManager, 0);
             BattleFactoryApp_UpdateSwapOutPicCursor(app);
             BattleFactoryApp_FlashNarrowButton(app, 23, 15, 6);
             app->subState = 2;
@@ -1311,11 +1311,11 @@ BOOL BattleFactoryApp_SelectSwapOut(BattleFactoryApp *app) {
                     BattleFactorySprite_SetVisible(app->monIcons[0], FALSE);
                     BattleFactorySprite_SetVisible(app->monIcons[1], FALSE);
                     ClearWindowTilemapAndScheduleTransfer(&app->windows[8]);
-                    BgCellManager_EraseCell(app->unk_474, 0);
+                    BgCellManager_EraseCell(app->bgCellManager, 0);
                 } else {
                     BattleFactoryApp_ShowMonIcon(app, app->party, next, 3);
                     ScheduleWindowCopyToVram(&app->windows[8]);
-                    BgCellManager_DrawCellAt(app->unk_474, 0, 7, 0);
+                    BgCellManager_DrawCellAt(app->bgCellManager, 0, 7, 0);
                 }
                 BattleFactoryApp_UpdateSwapOutPicCursor(app);
             }
@@ -1453,7 +1453,7 @@ BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app) {
             PlaySE(SEQ_SE_DP_SELECT);
             app->cursorPos = input;
             BattleFactoryApp_ShowMonIcon(app, app->otherParty, app->cursorPos, 4);
-            BgCellManager_DrawCellAt(app->unk_474, 0, 7, 0);
+            BgCellManager_DrawCellAt(app->bgCellManager, 0, 7, 0);
             BattleFactoryApp_UpdateSwapInPicCursor(app);
             BattleFactoryApp_PrintSwapInName(app, app->cursorPos);
             BattleFactoryApp_OpenSwapInMenu(app);
@@ -1466,7 +1466,7 @@ BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app) {
             Pokepic_SetAttr(app->pokepics[app->picked[0]], POKEPIC_VANISHED, TRUE);
             ClearWindowTilemapAndScheduleTransfer(&app->windows[8]);
             ClearWindowTilemapAndScheduleTransfer(&app->windows[app->picked[0] + 2]);
-            BgCellManager_EraseCell(app->unk_474, 0);
+            BgCellManager_EraseCell(app->bgCellManager, 0);
             BattleFactoryApp_FlashNarrowButton(app, 2, 15, 5);
             app->subState = 4;
             break;
@@ -1477,7 +1477,7 @@ BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app) {
             Pokepic_SetAttr(app->pokepics[app->picked[0]], POKEPIC_VANISHED, TRUE);
             ClearWindowTilemapAndScheduleTransfer(&app->windows[8]);
             ClearWindowTilemapAndScheduleTransfer(&app->windows[app->picked[0] + 2]);
-            BgCellManager_EraseCell(app->unk_474, 0);
+            BgCellManager_EraseCell(app->bgCellManager, 0);
             BattleFactoryApp_FlashNarrowButton(app, 23, 15, 6);
             app->subState = 4;
             break;
@@ -1500,7 +1500,7 @@ BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app) {
                 Pokepic_SetAttr(app->pokepics[app->picked[0]], POKEPIC_VANISHED, TRUE);
                 ClearWindowTilemapAndScheduleTransfer(&app->windows[8]);
                 ClearWindowTilemapAndScheduleTransfer(&app->windows[app->picked[0] + 2]);
-                BgCellManager_EraseCell(app->unk_474, 0);
+                BgCellManager_EraseCell(app->bgCellManager, 0);
             } else {
                 switch (input) {
                 case 6:
@@ -1509,7 +1509,7 @@ BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app) {
                 default:
                     BattleFactoryApp_ShowMonIcon(app, app->otherParty, input, 4);
                     ScheduleWindowCopyToVram(&app->windows[8]);
-                    BgCellManager_DrawCellAt(app->unk_474, 0, 7, 0);
+                    BgCellManager_DrawCellAt(app->bgCellManager, 0, 7, 0);
                     BattleFactoryApp_UpdateSwapInPicCursor(app);
                     BattleFactoryApp_PrintSwapInName(app, input);
                     break;
@@ -1661,7 +1661,7 @@ BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app) {
         ClearWindowTilemapAndCopyToVram(&app->windows[3]);
         ClearWindowTilemapAndCopyToVram(&app->windows[4]);
         ClearWindowTilemapAndCopyToVram(&app->windows[8]);
-        BgCellManager_EraseCell(app->unk_474, 0);
+        BgCellManager_EraseCell(app->bgCellManager, 0);
         ClearFrameAndWindow2(&app->windows[7], TRUE);
         ClearWindowTilemapAndScheduleTransfer(&app->windows[7]);
         BattleFactoryApp_RemoveWindows(app->windows);
@@ -1948,7 +1948,7 @@ void BattleFactoryApp_InitBgGraphics(BattleFactoryApp *app) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
-    ov81_022407A8(app, GF_BG_LYR_SUB_3);
+    BattleFactoryApp_LoadSubScreenBg(app, GF_BG_LYR_SUB_3);
 }
 
 void BattleFactoryApp_InitSprites(BattleFactoryApp *app) {
@@ -2086,7 +2086,7 @@ void BattleFactoryApp_LoadBgPalette(void) {
     Heap_Free(file);
 }
 
-void ov81_022407A8(BattleFactoryApp *app, GFBgLayer bgId) {
+void BattleFactoryApp_LoadSubScreenBg(BattleFactoryApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 4, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 7, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
     GfGfxLoader_GXLoadPalFromOpenNarc(app->narc, 0x95, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0x160, HEAP_ID_100);
@@ -2208,7 +2208,7 @@ void BattleFactoryApp_PrintPartnerMonName(BattleFactoryApp *app, Window *window,
 #pragma force_active reset
 
 void BattleFactoryApp_FreeGraphics(BattleFactoryApp *app) {
-    ov81_0224275C(app);
+    BattleFactoryApp_FreeBgCellManager(app);
     {
         int i;
         for (i = 0; i < app->numBalls; i++) {
@@ -2311,7 +2311,7 @@ void BattleFactoryApp_InitGraphics(BattleFactoryApp *app) {
     }
     BattleFactoryApp_LoadSubPalette(app);
     BattleFactoryApp_LoadButtonGraphics(app->bgConfig, app->narc);
-    ov81_0224271C(app);
+    BattleFactoryApp_InitBgCellManager(app);
     GfGfx_BothDispOn();
     Main_SetVBlankIntrCB((GFIntrCB)BattleFactoryApp_VBlankCallback, app);
 }
@@ -3241,15 +3241,15 @@ BOOL BattleFactoryApp_IsLinkMode(BattleFactoryApp *app) {
 }
 
 #pragma force_active on
-void ov81_0224271C(BattleFactoryApp *app) {
-    app->unk_474 = BgCellManager_New(app->bgConfig, 2, 1, HEAP_ID_100);
-    BgCellManager_InitCell(app->unk_474, 0, 4, 18, 4);
-    BgCellManager_LoadCellTilemapFromOpenNarc(app->unk_474, 0, app->narc, 144, 1);
+void BattleFactoryApp_InitBgCellManager(BattleFactoryApp *app) {
+    app->bgCellManager = BgCellManager_New(app->bgConfig, 2, 1, HEAP_ID_100);
+    BgCellManager_InitCell(app->bgCellManager, 0, 4, 18, 4);
+    BgCellManager_LoadCellTilemapFromOpenNarc(app->bgCellManager, 0, app->narc, 144, 1);
 }
 #pragma force_active reset
 
-void ov81_0224275C(BattleFactoryApp *app) {
-    BgCellManager_Delete(app->unk_474);
+void BattleFactoryApp_FreeBgCellManager(BattleFactoryApp *app) {
+    BgCellManager_Delete(app->bgCellManager);
 }
 
 void BattleFactorySpriteGfx_Init(BattleFactorySpriteGfx *gfx) {

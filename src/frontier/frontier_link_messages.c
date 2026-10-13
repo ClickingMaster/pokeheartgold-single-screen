@@ -99,12 +99,12 @@ void BattleHallLink_ReceiveSetIds(int netId, int size, const u16 *data, BattleHa
     }
 }
 
-BOOL ov80_0222B024(BattleHallData *work, u16 value) {
+BOOL BattleHallLink_SendValue(BattleHallData *work, u16 value) {
     work->linkBuffer[0] = value;
     return Comm_SendCommand(0x25, work->linkBuffer, 0x2C) == TRUE;
 }
 
-void ov80_0222B048(int netId, int size, const u16 *data, BattleHallData *work) {
+void BattleHallLink_ReceiveValue(int netId, int size, const u16 *data, BattleHallData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         work->partnerValue = *data;
@@ -132,7 +132,7 @@ void *BattleHallLink_GetRecvMonBuffer(int netId, BattleHallData *work, int size)
 
 // Battle Factory
 
-BOOL ov80_0222B108(BattleFactoryData *work) {
+BOOL BattleFactoryLink_SendRecord(BattleFactoryData *work) {
     u16 *buffer = work->linkBuffer;
     Save_PlayerData_GetProfile(work->saveData);
     buffer[1] = work->tradeCount;
@@ -141,7 +141,7 @@ BOOL ov80_0222B108(BattleFactoryData *work) {
     return Comm_SendCommand(0x16, buffer, 0x3C) == TRUE;
 }
 
-void ov80_0222B140(int netId, int size, const u16 *data, BattleFactoryData *work) {
+void BattleFactoryLink_ReceiveRecord(int netId, int size, const u16 *data, BattleFactoryData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         work->partnerTradeCount = data[1];
@@ -404,7 +404,7 @@ void BattleFactoryLink_ReceivePartyMons(int netId, int size, u16 *data, BattleFa
 
 // Battle Castle
 
-BOOL ov80_0222B5C8(BattleCastleData *work) {
+BOOL BattleCastleLink_SendRecord(BattleCastleData *work) {
     FrontierSave *frontierSave;
     u32 stat;
     u32 substat;
@@ -418,7 +418,7 @@ BOOL ov80_0222B5C8(BattleCastleData *work) {
     return Comm_SendCommand(0x2A, work->linkBuffer, 0x28) == TRUE;
 }
 
-void ov80_0222B628(int netId, int size, const u16 *data, BattleCastleData *work) {
+void BattleCastleLink_ReceiveRecord(int netId, int size, const u16 *data, BattleCastleData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         work->partnerWinStreak = data[1];
@@ -450,7 +450,7 @@ void BattleCastleLink_ReceiveTrainerIds(int netId, int size, const u16 *data, Ba
     }
 }
 
-BOOL ov80_0222B6C8(BattleCastleData *work) {
+BOOL BattleCastleLink_SendChoice(BattleCastleData *work) {
     work->linkBuffer[0] = work->choice;
     if (Comm_GetLocalNetId() == 0) {
         if (work->decidedChoice == 0) {
@@ -465,7 +465,7 @@ BOOL ov80_0222B6C8(BattleCastleData *work) {
     return Comm_SendCommand(0x2C, work->linkBuffer, 0x28) == TRUE;
 }
 
-void ov80_0222B740(int netId, int size, void *data, BattleCastleData *work) {
+void BattleCastleLink_ReceiveChoice(int netId, int size, void *data, BattleCastleData *work) {
     const u16 *msg = data;
 
     work->linkMessageCount++;

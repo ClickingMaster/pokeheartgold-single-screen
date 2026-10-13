@@ -55,7 +55,7 @@ int BattleHall_GetSpeciesRecordsType(int type);
 u32 FrontierStat_GetFriendIndex(u32 stat);
 void *FrontierTrainer_Load(BattleHallTrainerRecord *record, u32 trainerId, enum HeapID heapID, u32 narcId);
 void FrontierTrainer_GetClassSprite(u8 trainerClass);
-void ov80_0222A840(void *saveData);
+void Frontier_RecordLinkPlayerLocations(void *saveData);
 // Defined in battle_hall_setup.c with other types (returning u8 and int); declared as these callers use them.
 int BattleHall_GetLevelRank(BattleHallData *data);
 u8 BattleHall_GetPartySize(u8 type);
@@ -156,7 +156,7 @@ BattleHallData *BattleHallData_Alloc(SaveData *saveData, BOOL resume, u8 type, u
         }
     }
     if (BattleHall_IsMultiType(sBattleHallData->type) == TRUE) {
-        ov80_0222A840(sBattleHallData->saveData);
+        Frontier_RecordLinkPlayerLocations(sBattleHallData->saveData);
     }
     return sBattleHallData;
 }
@@ -354,7 +354,7 @@ void BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value) {
         BattleHallLink_SendSetIds(data);
         break;
     case 3:
-        ov80_0222B024(data, (u8)value);
+        BattleHallLink_SendValue(data, (u8)value);
         break;
     case 4:
         break;

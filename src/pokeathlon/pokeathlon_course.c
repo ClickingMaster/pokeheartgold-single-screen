@@ -345,32 +345,32 @@ enum HeapID PokeathlonCourse_GetHeapID(PokeathlonCourseData *data) {
 }
 
 u8 PokeathlonCourse_GetField1ED(PokeathlonCourseData *data) {
-    return data->field_1ED;
+    return data->eventInitState;
 }
 
 void PokeathlonCourse_SetField1ED(PokeathlonCourseData *data, int param) {
-    data->field_1ED = param;
+    data->eventInitState = param;
 }
 
 void PokeathlonCourse_IncrementField1ED(PokeathlonCourseData *data) {
-    data->field_1ED++;
+    data->eventInitState++;
 }
 
 void PokeathlonCourse_SetField1F4(PokeathlonCourseData *data, int param) {
-    data->field_1F4 = param;
+    data->eventDrawEnabled = param;
 }
 
 void ov96_021E5E04(PokeathlonCourseData *data, u8 *param) {
     for (int i = 0; i < data->maxParticipants; i++) {
-        data->field_3D8[i] = param[i];
+        data->roundEvents[i] = param[i];
     }
 
-    data->field_3E8 = ov96_021E5E7C(data);
-    data->field_27C = data->field_3E8;
+    data->courseId = ov96_021E5E7C(data);
+    data->field_27C = data->courseId;
 }
 
 u32 PokeathlonCourse_GetField3D8_ForCurrentParticipant(PokeathlonCourseData *data) {
-    return data->field_3D8[data->currentParticipantIndex];
+    return data->roundEvents[data->currentParticipantIndex];
 }
 
 u32 PokeathlonCourse_GetField3D8_AtIndex(PokeathlonCourseData *data, u8 index) {
@@ -378,13 +378,13 @@ u32 PokeathlonCourse_GetField3D8_AtIndex(PokeathlonCourseData *data, u8 index) {
         GF_ASSERT(FALSE);
         return 0;
     }
-    return data->field_3D8[index];
+    return data->roundEvents[index];
 }
 
 u32 ov96_021E5E7C(PokeathlonCourseData *data) {
     u8 i, j, numParticipants;
     BOOL flag = (PokeathlonCourse_GetMode(data) == 1);
-    u32 *fieldPtr = data->field_3D8;
+    u32 *fieldPtr = data->roundEvents;
     numParticipants = flag ? 4 : 3;
 
     for (i = 0; i < 10; i++) {

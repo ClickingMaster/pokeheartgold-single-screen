@@ -1314,7 +1314,7 @@
 	.public BattleCastlePartyApp_LoadPartyBg
 	.public BattleCastlePartyApp_LoadBgPalette
 	.public BattleCastlePartyApp_LoadStatsSummaryBg
-	.public ov83_0223FAF0
+	.public BattleCastlePartyApp_ReloadBgPalette
 	.public BattleCastlePartyApp_LoadMovesSummaryBg
 	.public BattleCastlePartyApp_LoadItemGridBg
 	.public BattleCastlePartyApp_LoadSubScreenBg
@@ -1519,7 +1519,7 @@
 	.public BattleCastle_LoadItemIconPalette
 	.public BattleCastle_InitSpriteTransfer
 	.public BattleCastle_LoadPartyListGfx
-	.public ov83_022473BC
+	.public BattleCastle_LoadMonPicGfx
 	.public BattleCastleSprite_New
 	.public BattleCastleSprite_NewSubScreen
 	.public BattleCastleSprite_Delete
@@ -1528,8 +1528,8 @@
 	.public BattleCastleSprite_SetPositionSubScreen
 	.public BattleCastleSprite_SetAnim
 	.public BattleCastleSprite_SetMonIconPalette
-	.public ov83_02247600
-	.public ov83_0224760C
+	.public BattleCastleSprite_ChangeAnim
+	.public BattleCastleSprite_SetBounce
 	.public BattleCastleSprite_IsAnimated
 	.public ov83_02247630
 	.public BattleCastleSprite_LoadMonPic
@@ -1553,19 +1553,19 @@
 	.public BattleCastle_PrintString
 	.public BattleCastle_PrintMsg
 	.public BattleCastle_FreeGrid
-	.public ov83_02247A20
+	.public BattleCastle_GridCallbackNoOp
 	.public BattleCastlePartyApp_CreatePartyGrid
 	.public BattleCastleOpponentApp_CreatePartyGrid
 	.public BattleCastle_HandlePartyGridInput
 	.public ov83_02247B04
-	.public ov83_02247B1C
-	.public ov83_02247B34
-	.public ov83_02247B4C
-	.public ov83_02247B64
+	.public BattleCastlePartyApp_OnPartyGridKeyMove
+	.public BattleCastlePartyApp_OnPartyGridTouch
+	.public BattleCastleOpponentApp_OnPartyGridKeyMove
+	.public BattleCastleOpponentApp_OnPartyGridTouch
 	.public BattleCastlePartyApp_CreateItemGrid
 	.public BattleCastle_HandleItemGridInput
-	.public ov83_02247C58
-	.public ov83_02247C88
+	.public BattleCastlePartyApp_OnItemGridKeyMove
+	.public BattleCastlePartyApp_OnItemGridTouch
 	.public BattleCastle_CreateListMenuSpawner
 	.public BattleCastle_DestroyListMenuSpawner
 	.public BattleCastle_CreateListMenu
@@ -1619,9 +1619,9 @@
 	.public ov83_022481AC
 	.public ov83_022482C4
 	.public ov83_022484F4
-	.public ov83_02248500
-	.public ov83_02248510
-	.public ov83_02248520
+	.public gBattleCastlePartyAppPartyGridCallbacks
+	.public gBattleCastleOpponentAppPartyGridCallbacks
+	.public gBattleCastleItemGridCallbacks
 	.public ov83_02248530
 	.public ov83_02248544
 	.public ov83_02248558
@@ -1698,8 +1698,8 @@
 	.public BattleCastleSprite_SetDrawFlag
 	.public BattleCastleSprite_SetAnim
 	.public BattleCastleSprite_SetMonIconPalette
-	.public ov83_02247600
-	.public ov83_0224760C
+	.public BattleCastleSprite_ChangeAnim
+	.public BattleCastleSprite_SetBounce
 	.public BattleCastleSprite_IsAnimated
 	.public BattleCastle_SetSpritesTranslucent
 	.public BattleCastle_GetMonIndex
@@ -1712,12 +1712,12 @@
 	.public BattleCastlePrompt_Hide
 	.public BattleCastle_GetMenuTiles
 	.public BattleCastle_FreeGrid
-	.public ov83_02247A20
+	.public BattleCastle_GridCallbackNoOp
 	.public ov83_02247B04
-	.public ov83_02247B1C
-	.public ov83_02247B34
-	.public ov83_02247B4C
-	.public ov83_02247B64
+	.public BattleCastlePartyApp_OnPartyGridKeyMove
+	.public BattleCastlePartyApp_OnPartyGridTouch
+	.public BattleCastleOpponentApp_OnPartyGridKeyMove
+	.public BattleCastleOpponentApp_OnPartyGridTouch
 	.public BattleCastle_CreateListMenuSpawner
 	.public BattleCastle_DestroyListMenuSpawner
 	.public BattleCastle_DestroyListMenu
@@ -1992,23 +1992,23 @@ ov83_022482C4:
 ov83_022484F4: ; 0x022484F4
 	.byte 0xA0, 0xBF, 0x00, 0x27, 0xA0, 0xBF, 0x28, 0x4F, 0xFF, 0x00, 0x00, 0x00
 
-ov83_02248500: ; 0x02248500
-	.word ov83_02247A20
-	.word ov83_02247A20
-	.word ov83_02247B1C
-	.word ov83_02247B34
+gBattleCastlePartyAppPartyGridCallbacks: ; 0x02248500
+	.word BattleCastle_GridCallbackNoOp
+	.word BattleCastle_GridCallbackNoOp
+	.word BattleCastlePartyApp_OnPartyGridKeyMove
+	.word BattleCastlePartyApp_OnPartyGridTouch
 
-ov83_02248510: ; 0x02248510
-	.word ov83_02247A20
-	.word ov83_02247A20
-	.word ov83_02247B4C
-	.word ov83_02247B64
+gBattleCastleOpponentAppPartyGridCallbacks: ; 0x02248510
+	.word BattleCastle_GridCallbackNoOp
+	.word BattleCastle_GridCallbackNoOp
+	.word BattleCastleOpponentApp_OnPartyGridKeyMove
+	.word BattleCastleOpponentApp_OnPartyGridTouch
 
-ov83_02248520: ; 0x02248520
-	.word ov83_02247A20
-	.word ov83_02247A20
-	.word ov83_02247C58
-	.word ov83_02247C88
+gBattleCastleItemGridCallbacks: ; 0x02248520
+	.word BattleCastle_GridCallbackNoOp
+	.word BattleCastle_GridCallbackNoOp
+	.word BattleCastlePartyApp_OnItemGridKeyMove
+	.word BattleCastlePartyApp_OnItemGridTouch
 
 ov83_02248530: ; 0x02248530
 	.byte 0x98, 0xAF, 0xC8, 0xF7, 0x20, 0x4F, 0x20, 0x5F, 0x20, 0x4F, 0x60, 0x9F, 0x20, 0x4F, 0xA0, 0xDF

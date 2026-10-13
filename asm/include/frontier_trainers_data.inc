@@ -47,7 +47,7 @@
 .public FrontierTrainer_Load
 .public FrontierMon_ToPokemon
 .public FrontierTrainer_GetClassSprite
-.public ov80_0222A3BC
+.public Frontier_AddRentalMonToParty
 .public Frontier_SetSpriteAnim
 .public Frontier_SetSpritePosition
 .public Frontier_GetHpGaugeFrame
@@ -57,5 +57,5 @@
 .public FrontierMon_GenerateList
 .public FrontierTrainer_GenerateMons
 .public Frontier_BufferPartnerName
-.public ov80_0222A7EC
-.public ov80_0222A840
+.public Frontier_GetPlayerSpriteId
+.public Frontier_RecordLinkPlayerLocations

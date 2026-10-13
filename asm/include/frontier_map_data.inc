@@ -143,7 +143,7 @@
 .public ov42_02229A40
 .public ov42_02229A78
 .public ov42_02229AC8
-.public ov80_0222A7EC
+.public Frontier_GetPlayerSpriteId
 .public FrontierMap_GetParam
 .public FrontierMap_InitEffect
 .public FrontierMap_ExitEffect

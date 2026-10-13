@@ -251,5 +251,5 @@
 .public SpinTradeGroupApp_Init
 .public SpinTradeGroupApp_Main
 .public SpinTradeGroupApp_Exit
-.public ov85_021E9C84
-.public ov85_021E9D9C
+.public SpinTradeGroup_HandleLinkEvent
+.public SpinTradeGroup_HandleMemberEvent

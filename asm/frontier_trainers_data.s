@@ -93,8 +93,8 @@
 	.public FrontierMon_Generate
 	.public FrontierMon_ToPokemon
 	.public FrontierTrainer_GetClassSprite
-	.public ov80_0222A334
-	.public ov80_0222A3BC
+	.public Frontier_SetRentalMonOt
+	.public Frontier_AddRentalMonToParty
 	.public Frontier_SetSpriteAnim
 	.public Frontier_SetSpritePosition
 	.public Frontier_GetHpGaugeFrame
@@ -106,8 +106,8 @@
 	.public FrontierTrainer_PickMonSets
 	.public FrontierTrainer_GenerateMons
 	.public Frontier_BufferPartnerName
-	.public ov80_0222A7EC
-	.public ov80_0222A840
+	.public Frontier_GetPlayerSpriteId
+	.public Frontier_RecordLinkPlayerLocations
 	.public gFrontierTrainerClassSprites
 	.public gFrontierTrainerClassSpriteValues
 	.include "frontier_trainers_data.inc"
@@ -117,8 +117,8 @@
 	.public FrontierData_AllocMember
 	.public FrontierData_ReadMember
 	.public FrontierTrainer_Load
-	.public ov80_0222A334
-	.public ov80_0222A3BC
+	.public Frontier_SetRentalMonOt
+	.public Frontier_AddRentalMonToParty
 	.public Frontier_SetSpriteAnim
 	.public Frontier_SetSpritePosition
 	.public Frontier_GetHpGaugeFrame
@@ -126,8 +126,8 @@
 	.public FrontierTrainer_SetBattleTrainer
 	.public FrontierTrainer_GetMonIv
 	.public Frontier_BufferPartnerName
-	.public ov80_0222A7EC
-	.public ov80_0222A840
+	.public Frontier_GetPlayerSpriteId
+	.public Frontier_RecordLinkPlayerLocations
     .rodata
 
 _0223B620: ; 0x0223B620

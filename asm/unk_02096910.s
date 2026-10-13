@@ -11,7 +11,7 @@
 	.rodata
 	.public _02108594
 _02108594:
-	.word ov80_0222B140, CommCmd_GetSizeVariable, 0
+	.word BattleFactoryLink_ReceiveRecord, CommCmd_GetSizeVariable, 0
 	.word BattleFactoryLink_ReceiveTrainerIds, CommCmd_GetSizeVariable, 0
 	.word BattleFactoryLink_ReceiveRentalMons, CommCmd_GetSizeVariable, 0
 	.word BattleFactoryLink_ReceiveOpponentMons, CommCmd_GetSizeVariable, 0
@@ -26,14 +26,14 @@ _02108594:
 	.word ov80_0222AF3C, CommCmd_GetSizeVariable, 0
 	.word BattleHallLink_ReceiveTrainerIds, CommCmd_GetSizeVariable, 0
 	.word BattleHallLink_ReceiveSetIds, CommCmd_GetSizeVariable, 0
-	.word ov80_0222B048, CommCmd_GetSizeVariable, 0
+	.word BattleHallLink_ReceiveValue, CommCmd_GetSizeVariable, 0
 	.word BattleHallLink_ReceivePartnerMon, CommCmd_GetSizeVariable, BattleHallLink_GetRecvMonBuffer
 	.word BattleHall_ReceivePing, CommCmd_GetSizeVariable, 0
 	.word BattleHall_ReceiveChoice, CommCmd_GetSizeVariable, 0
 	.word BattleHall_ReceiveAnswer, CommCmd_GetSizeVariable, 0
-	.word ov80_0222B628, CommCmd_GetSizeVariable, 0
+	.word BattleCastleLink_ReceiveRecord, CommCmd_GetSizeVariable, 0
 	.word BattleCastleLink_ReceiveTrainerIds, CommCmd_GetSizeVariable, 0
-	.word ov80_0222B740, CommCmd_GetSizeVariable, 0
+	.word BattleCastleLink_ReceiveChoice, CommCmd_GetSizeVariable, 0
 	.word BattleCastleLink_ReceiveOpponentMons, CommCmd_GetSizeVariable, 0
 	.word ov80_0222B8F8, CommCmd_GetSizeVariable, 0
 	.word ov80_0222B940, CommCmd_GetSizeVariable, 0
@@ -60,6 +60,6 @@ _02108594:
 	.word ov80_0222BC6C, CommCmd_GetSizeVariable, 0
 	.word ov80_0222BCB8, CommCmd_GetSizeVariable, 0
 	.word BattleArcadeLink_ReceivePartyMons, CommCmd_GetSizeVariable, BattleArcadeLink_GetRecvMonBuffer
-	.word ov84_0223ED34, CommCmd_GetSizeVariable, 0
-	.word ov84_0223EDA8, CommCmd_GetSizeVariable, 0
-	.word ov84_0223EE08, CommCmd_GetSizeVariable, 0
+	.word BattleArcadeGameBoard_ReceiveBoardLayout, CommCmd_GetSizeVariable, 0
+	.word BattleArcadeGameBoard_ReceiveStopPos, CommCmd_GetSizeVariable, 0
+	.word BattleArcadeGameBoard_ReceiveCursorPos, CommCmd_GetSizeVariable, 0

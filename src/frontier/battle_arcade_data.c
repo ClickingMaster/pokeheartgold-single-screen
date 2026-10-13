@@ -46,12 +46,12 @@ typedef void (*ArcadeEventFunc)(ArcadeContext *ctx, Party *party, int count);
 typedef void (*BlendPaletteWideFunc)(const void *src, void *dst, int size, int cur, int target);
 
 extern ArcadeContext *gBattleArcadeData;
-extern const u8 ov80_0223BE88[];
-extern const u8 ov80_0223BE90[];
-extern const u8 ov80_0223BE98[];
-extern const u8 ov80_0223BE9E[];
-extern const ArcadeSpritePos ov80_0223BEB8[];
-extern const ArcadeSpritePos ov80_0223BEC8[];
+extern const u8 gBattleArcadeFaintedMonPoints[];
+extern const u8 gBattleArcadeStatusedMonPoints[];
+extern const u8 gBattleArcadeRoundCursorSpeeds[];
+extern const u8 gBattleArcadeRankBattlePoints[];
+extern const ArcadeSpritePos gBattleArcadePlayerMonIconPositions[];
+extern const ArcadeSpritePos gBattleArcadeOpponentMonIconPositions[];
 // Per event {character, screen, palette} file ids; the three labels point at the first entry's members.
 typedef u16 ArcadeEventBgFiles[3];
 extern const ArcadeEventBgFiles ov80_0223BF5A[];
@@ -59,8 +59,8 @@ extern const ArcadeEventBgFiles ov80_0223BF5C[];
 extern const ArcadeEventBgFiles ov80_0223BF5E[];
 extern const u8 ov80_0223C01C[];
 extern const u8 ov80_0223C028[];
-extern const u16 *const ov80_0223DCA0[];
-extern const ArcadeEventFunc ov80_0223DCB8[];
+extern const u16 *const gBattleArcadeEventItemLists[];
+extern const ArcadeEventFunc gBattleArcadeEventFuncs[];
 
 // The script command (frontier/frontier_cmd_arcade.h) declares the slots as u32; it passes them unnarrowed.
 u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u16 slot1, u16 slot2, u16 *resultVar);
@@ -69,7 +69,7 @@ u32 ArcadeChallenge_GetField(void *record, int kind, u8 index, int a3, void *dst
 void ArcadeChallenge_Clear(void *record);
 void ArcadeChallenge_SetSaved(void *record, int a1);
 void ArcadeChallenge_SetField(void *record, int kind, u8 index, int a3, void *src);
-void ov80_0222A840(SaveData *saveData);
+void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 void BattleArcade_GetRoundTrainerIds(u32 type, u32 rank, u16 *trainerIds, u32 count);
 void FrontierTrainer_GenerateMons(u32 count, u16 trainerId, u16 partnerTrainerId, u16 *monIds, void *a4, u8 *a5, u32 *a6, u8 multiplayer);
 int BattleArcade_GetMonLevel(ArcadeContext *ctx);
@@ -79,8 +79,8 @@ void *FrontierTrainer_Load(void *trainer, u16 trainerId, u32 heapId, u32 a3);
 void FrontierTrainer_GetClassSprite(u8 a0);
 ManagedSprite *FrontierMap_CreateMonIcon(FrontierMap *map, Pokemon *mon, int index, int x, int y);
 void FrontierMap_DeleteMonIcon(FrontierMap *map, ManagedSprite *sprite, int index);
-ManagedSprite *ov80_0222F3FC(FrontierMap *map, int x, int y);
-void ov80_0222F440(FrontierMap *map, ManagedSprite *sprite);
+ManagedSprite *FrontierMap_CreateItemIcon(FrontierMap *map, int x, int y);
+void FrontierMap_DeleteItemIcon(FrontierMap *map, ManagedSprite *sprite);
 void BattleArcadeLink_SendWinStreak(ArcadeContext *ctx);
 void BattleArcadeLink_SendTrainerIds(ArcadeContext *ctx);
 void BattleArcadeLink_SendOpponentMons(ArcadeContext *ctx);
@@ -91,26 +91,26 @@ void BattleArcadeLink_SendPartyMons(ArcadeContext *ctx);
 void BattleArcadeData_InitNew(ArcadeContext *ctx);
 void BattleArcadeData_InitResume(ArcadeContext *ctx);
 void BattleArcadeData_RestoreHeldItems(ArcadeContext *ctx);
-u16 ov80_02234574(const GAME_BOARD_ARGS *args, u32 index);
-int ov80_02234894(ArcadeContext *ctx, Party *party, Party *partnerParty, u8 count);
+u16 BattleArcade_GetGameBoardResult(const GAME_BOARD_ARGS *args, u32 index);
+int BattleArcade_GetPartyConditionPoints(ArcadeContext *ctx, Party *party, Party *partnerParty, u8 count);
 void BattleArcade_Event_LowerHp(ArcadeContext *ctx, Party *party, int count);
 void BattleArcade_Event_Poison(ArcadeContext *ctx, Party *party, int count);
 void BattleArcade_Event_Paralyze(ArcadeContext *ctx, Party *party, int count);
 void BattleArcade_Event_Burn(ArcadeContext *ctx, Party *party, int count);
 void BattleArcade_Event_Sleep(ArcadeContext *ctx, Party *party, int count);
 void BattleArcade_Event_Freeze(ArcadeContext *ctx, Party *party, int count);
-void ov80_022351AC(ArcadeContext *ctx, Party *party, int count);
-void ov80_02235208(ArcadeContext *ctx, Party *party, int count);
+void BattleArcade_Event_GiveBerry(ArcadeContext *ctx, Party *party, int count);
+void BattleArcade_Event_GiveItem(ArcadeContext *ctx, Party *party, int count);
 void BattleArcade_Event_LevelUp(ArcadeContext *ctx, Party *party, int count);
 void ov80_022352BC(ArcadeContext *ctx);
-void ov80_022352C8(ArcadeContext *ctx);
-void ov80_022352D0(ArcadeContext *ctx);
+void BattleArcade_Event_Rain(ArcadeContext *ctx);
+void BattleArcade_Event_Sandstorm(ArcadeContext *ctx);
 void ov80_022352D8(ArcadeContext *ctx);
 void ov80_022352E0(ArcadeContext *ctx);
 void ov80_022352E8(ArcadeContext *ctx);
-void ov80_022352F4(ArcadeContext *ctx);
-void ov80_02235300(ArcadeContext *ctx);
-void ov80_0223530C(ArcadeContext *ctx);
+void BattleArcade_Event_SpeedUp(ArcadeContext *ctx);
+void BattleArcade_Event_SpeedDown(ArcadeContext *ctx);
+void BattleArcade_Event_Random(ArcadeContext *ctx);
 void ov80_02235314(ArcadeContext *ctx);
 void ov80_02235318(ArcadeContext *ctx);
 void ov80_0223531C(ArcadeContext *ctx);
@@ -228,7 +228,7 @@ u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u1
     }
 
     if (BattleArcade_MultiplayerCheck(gBattleArcadeData->type) == TRUE) {
-        ov80_0222A840(gBattleArcadeData->saveData);
+        Frontier_RecordLinkPlayerLocations(gBattleArcadeData->saveData);
     }
     return (u32)gBattleArcadeData;
 }
@@ -259,8 +259,8 @@ void BattleArcadeData_InitNew(ArcadeContext *ctx) {
 
     rank = BattleArcade_GetRound(ctx);
     for (i = 0; i < 3; i++) {
-        if (rank >= ov80_0223BE98[i * 2]) {
-            ctx->cursorSpeed = ov80_0223BE98[i * 2 + 1];
+        if (rank >= gBattleArcadeRoundCursorSpeeds[i * 2]) {
+            ctx->cursorSpeed = gBattleArcadeRoundCursorSpeeds[i * 2 + 1];
             return;
         }
     }
@@ -317,15 +317,15 @@ void BattleArcadeData_Free(ArcadeContext *ctx) {
     }
 }
 
-void ov80_02234550(ArcadeContext *ctx, GAME_BOARD_ARGS *args) {
+void BattleArcade_StoreGameBoardResult(ArcadeContext *ctx, GAME_BOARD_ARGS *args) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
-        ctx->unk418[i] = ov80_02234574(args, (u8)i);
+        ctx->gameBoardResults[i] = BattleArcade_GetGameBoardResult(args, (u8)i);
     }
 }
 
-u16 ov80_02234574(const GAME_BOARD_ARGS *args, u32 index) {
+u16 BattleArcade_GetGameBoardResult(const GAME_BOARD_ARGS *args, u32 index) {
     if (index >= 6) {
         GF_AssertFail();
         return 0;
@@ -372,12 +372,12 @@ void BattleArcadeData_SaveRecord(ArcadeContext *ctx, u32 mode) {
         index = BattleArcade_GetBestStreakStat(ctx->type);
         key = FrontierStat_GetFriendIndex(BattleArcade_GetBestStreakStat(ctx->type));
         FrontierSave_RaiseStat(frontier, index, key, ctx->winStreak);
-        value.byte = ctx->unk2F;
+        value.byte = ctx->hasStreak;
         ArcadeFlags_SetField(typeRecord, 8, ctx->type, 0, &value.byte);
         if (ctx->type == 3) {
             frontier = Save_Frontier_GetStatic(ctx->saveData);
             key = FrontierStat_GetFriendIndex(110);
-            FrontierSave_SetStat(frontier, 110, key, ctx->unk2F);
+            FrontierSave_SetStat(frontier, 110, key, ctx->hasStreak);
         }
     }
 
@@ -429,8 +429,8 @@ void ov80_022347B8(ArcadeContext *ctx) {
     BattleArcadeData_SaveRecord(ctx, 1);
 }
 
-void ov80_022347C4(ArcadeContext *ctx) {
-    ctx->unk2F = 1;
+void BattleArcade_CompleteRound(ArcadeContext *ctx) {
+    ctx->hasStreak = 1;
     if (ctx->round < 8) {
         ctx->round++;
     }
@@ -459,10 +459,10 @@ u32 BattleArcade_GetWonBattlePoints(ArcadeContext *ctx, Party *playerParty, Part
     u8 count = BattleArcade_GetMonCount(ctx->type, 0);
     s32 i;
 
-    points += ov80_02234894(ctx, playerParty, opponentParty, count);
+    points += BattleArcade_GetPartyConditionPoints(ctx, playerParty, opponentParty, count);
     for (i = 0; i < 5; i++) {
-        if (rank < ov80_0223BE9E[i * 2]) {
-            points += ov80_0223BE9E[i * 2 + 1];
+        if (rank < gBattleArcadeRankBattlePoints[i * 2]) {
+            points += gBattleArcadeRankBattlePoints[i * 2 + 1];
             break;
         }
     }
@@ -470,7 +470,7 @@ u32 BattleArcade_GetWonBattlePoints(ArcadeContext *ctx, Party *playerParty, Part
 }
 
 #pragma force_active on
-int ov80_02234894(ArcadeContext *ctx, Party *party, Party *partnerParty, u8 count) {
+int BattleArcade_GetPartyConditionPoints(ArcadeContext *ctx, Party *party, Party *partnerParty, u8 count) {
     u8 fainted, statused;
     int result;
     int i;
@@ -503,13 +503,13 @@ int ov80_02234894(ArcadeContext *ctx, Party *party, Party *partnerParty, u8 coun
             }
         }
     }
-    result += ov80_0223BE90[statused];
-    result += ov80_0223BE88[fainted];
+    result += gBattleArcadeStatusedMonPoints[statused];
+    result += gBattleArcadeFaintedMonPoints[fainted];
     return result;
 }
 #pragma force_active reset
 
-void ov80_02234968(ArcadeContext *ctx, FrontierMap *map) {
+void BattleArcade_LoadEventBg(ArcadeContext *ctx, FrontierMap *map) {
     if (ctx->eventId != 0x20) {
         NNSG2dPaletteData *plttData;
         NARC *narc = NARC_New(NARC_a_1_8_3, HEAP_ID_101);
@@ -531,7 +531,7 @@ void ov80_02234968(ArcadeContext *ctx, FrontierMap *map) {
     }
 }
 
-void ov80_02234A38(ArcadeContext *ctx, FrontierMap *map) {
+void BattleArcade_LoadMultiBgScreen(ArcadeContext *ctx, FrontierMap *map) {
     NARC *narc = NARC_New(NARC_a_1_8_3, HEAP_ID_101);
     BgConfig *bgConfig = map->bgConfig;
 
@@ -548,12 +548,12 @@ void BattleArcade_CreateMonSprites(ArcadeContext *ctx, FrontierMap *map, u32 opp
 
     if (opponent == FALSE) {
         for (i = 0; i < count; i++) {
-            ctx->playerMonSprites[i] = FrontierMap_CreateMonIcon(map, Party_GetMonByIndex(ctx->playerParty, i), i, ov80_0223BEB8[i].x, ov80_0223BEB8[i].y);
+            ctx->playerMonSprites[i] = FrontierMap_CreateMonIcon(map, Party_GetMonByIndex(ctx->playerParty, i), i, gBattleArcadePlayerMonIconPositions[i].x, gBattleArcadePlayerMonIconPositions[i].y);
             Sprite_SetAnimActiveFlag(ctx->playerMonSprites[i]->sprite, FALSE);
         }
     } else {
         for (i = 0; i < opponentCount; i++) {
-            ctx->opponentMonSprites[i] = FrontierMap_CreateMonIcon(map, Party_GetMonByIndex(ctx->opponentParty, i), count + i, ov80_0223BEC8[i].x, ov80_0223BEC8[i].y);
+            ctx->opponentMonSprites[i] = FrontierMap_CreateMonIcon(map, Party_GetMonByIndex(ctx->opponentParty, i), count + i, gBattleArcadeOpponentMonIconPositions[i].x, gBattleArcadeOpponentMonIconPositions[i].y);
             Sprite_SetAnimActiveFlag(ctx->opponentMonSprites[i]->sprite, FALSE);
         }
     }
@@ -605,14 +605,14 @@ void BattleArcade_CreateItemIcons(ArcadeContext *ctx, FrontierMap *map, u32 oppo
 
     if (opponent == FALSE) {
         for (i = 0; i < count; i++) {
-            ctx->playerItemIcons[i] = ov80_0222F3FC(map, ov80_0223BEB8[i].x + 8, ov80_0223BEB8[i].y + 4);
+            ctx->playerItemIcons[i] = FrontierMap_CreateItemIcon(map, gBattleArcadePlayerMonIconPositions[i].x + 8, gBattleArcadePlayerMonIconPositions[i].y + 4);
             if (GetMonData(Party_GetMonByIndex(ctx->playerParty, i), MON_DATA_HELD_ITEM, NULL) == 0) {
                 Sprite_SetDrawFlag(ctx->playerItemIcons[i]->sprite, FALSE);
             }
         }
     } else {
         for (i = 0; i < opponentCount; i++) {
-            ctx->opponentItemIcons[i] = ov80_0222F3FC(map, ov80_0223BEC8[i].x + 8, ov80_0223BEC8[i].y + 4);
+            ctx->opponentItemIcons[i] = FrontierMap_CreateItemIcon(map, gBattleArcadeOpponentMonIconPositions[i].x + 8, gBattleArcadeOpponentMonIconPositions[i].y + 4);
             if (GetMonData(Party_GetMonByIndex(ctx->opponentParty, i), MON_DATA_HELD_ITEM, NULL) == 0) {
                 Sprite_SetDrawFlag(ctx->opponentItemIcons[i]->sprite, FALSE);
             }
@@ -628,11 +628,11 @@ void BattleArcade_DeleteItemIcons(ArcadeContext *ctx, FrontierMap *map, u32 oppo
 
     if (opponent == FALSE) {
         for (i = 0; i < count; i++) {
-            ov80_0222F440(map, ctx->playerItemIcons[i]);
+            FrontierMap_DeleteItemIcon(map, ctx->playerItemIcons[i]);
         }
     } else {
         for (i = 0; i < opponentCount; i++) {
-            ov80_0222F440(map, ctx->opponentItemIcons[i]);
+            FrontierMap_DeleteItemIcon(map, ctx->opponentItemIcons[i]);
         }
     }
 }
@@ -672,7 +672,7 @@ void BattleArcade_SetItemIconVisible(ArcadeContext *ctx, FrontierMap *map, u32 o
 }
 
 #pragma force_active on
-void ov80_02234DC4(u32 color, u32 mode) {
+void BattleArcade_LoadBlendedBgExtPalette(u32 color, u32 mode) {
     int size;
     int fileId;
     void *buffer;
@@ -737,7 +737,7 @@ void BattleArcade_ApplyEvent(ArcadeContext *ctx, u8 event) {
         party = ctx->playerParty;
         count = BattleArcade_GetMonCount(ctx->type, 1);
     }
-    ov80_0223DCB8[event](ctx, party, count);
+    gBattleArcadeEventFuncs[event](ctx, party, count);
 }
 
 void BattleArcade_Event_LowerHp(ArcadeContext *ctx, Party *party, int count) {
@@ -782,7 +782,7 @@ void BattleArcade_Event_Poison(ArcadeContext *ctx, Party *party, int count) {
         }
     }
     if (frame.immuneCount >= frame.count) {
-        frame.ctx->unk1F = TRUE;
+        frame.ctx->eventNoEffect = TRUE;
     }
 }
 
@@ -810,7 +810,7 @@ void BattleArcade_Event_Paralyze(ArcadeContext *ctx, Party *party, int count) {
         }
     }
     if (immuneCount >= frame.count) {
-        ctx->unk1F = TRUE;
+        ctx->eventNoEffect = TRUE;
     }
 }
 
@@ -838,15 +838,15 @@ void BattleArcade_Event_Burn(ArcadeContext *ctx, Party *party, int count) {
         }
     }
     if (immuneCount >= frame.count) {
-        ctx->unk1F = TRUE;
+        ctx->eventNoEffect = TRUE;
     }
 }
 #pragma force_active reset
 
-// Starts with the Pokemon picked by unk20 and puts the first one that can fall asleep to sleep.
+// Starts with the Pokemon picked by eventRandom and puts the first one that can fall asleep to sleep.
 void BattleArcade_Event_Sleep(ArcadeContext *ctx, Party *party, int count) {
     s32 skipped = 0;
-    u8 slot = ctx->unk20 % count;
+    u8 slot = ctx->eventRandom % count;
     s32 i;
 
     for (i = 0; i < count; i++) {
@@ -865,13 +865,13 @@ void BattleArcade_Event_Sleep(ArcadeContext *ctx, Party *party, int count) {
         }
     }
     if (skipped >= count) {
-        ctx->unk1F = TRUE;
+        ctx->eventNoEffect = TRUE;
     }
 }
 
 void BattleArcade_Event_Freeze(ArcadeContext *ctx, Party *party, int count) {
     s32 skipped = 0;
-    u8 slot = ctx->unk20 % count;
+    u8 slot = ctx->eventRandom % count;
     s32 i;
 
     for (i = 0; i < count; i++) {
@@ -892,11 +892,11 @@ void BattleArcade_Event_Freeze(ArcadeContext *ctx, Party *party, int count) {
         }
     }
     if (skipped >= count) {
-        ctx->unk1F = TRUE;
+        ctx->eventNoEffect = TRUE;
     }
 }
 
-void ov80_022351AC(ArcadeContext *ctx, Party *party, int count) {
+void BattleArcade_Event_GiveBerry(ArcadeContext *ctx, Party *party, int count) {
     u32 rank = BattleArcade_GetRound(ctx);
     const u16 *items;
     s32 itemCount;
@@ -904,22 +904,22 @@ void ov80_022351AC(ArcadeContext *ctx, Party *party, int count) {
     s32 i;
 
     if (rank < 3) {
-        items = ov80_0223DCA0[0];
+        items = gBattleArcadeEventItemLists[0];
         itemCount = 8;
     } else if (rank < 6) {
-        items = ov80_0223DCA0[1];
+        items = gBattleArcadeEventItemLists[1];
         itemCount = 20;
     } else {
-        items = ov80_0223DCA0[2];
+        items = gBattleArcadeEventItemLists[2];
         itemCount = 10;
     }
-    item = items[ctx->unk20 % itemCount];
+    item = items[ctx->eventRandom % itemCount];
     for (i = 0; i < count; i++) {
         SetMonData(Party_GetMonByIndex(party, i), MON_DATA_HELD_ITEM, &item);
     }
 }
 
-void ov80_02235208(ArcadeContext *ctx, Party *party, int count) {
+void BattleArcade_Event_GiveItem(ArcadeContext *ctx, Party *party, int count) {
     u32 rank = BattleArcade_GetRound(ctx);
     const u16 *items;
     s32 itemCount;
@@ -927,16 +927,16 @@ void ov80_02235208(ArcadeContext *ctx, Party *party, int count) {
     s32 i;
 
     if (rank < 3) {
-        items = ov80_0223DCA0[3];
+        items = gBattleArcadeEventItemLists[3];
         itemCount = 11;
     } else if (rank < 6) {
-        items = ov80_0223DCA0[4];
+        items = gBattleArcadeEventItemLists[4];
         itemCount = 13;
     } else {
-        items = ov80_0223DCA0[5];
+        items = gBattleArcadeEventItemLists[5];
         itemCount = 11;
     }
-    item = items[ctx->unk20 % itemCount];
+    item = items[ctx->eventRandom % itemCount];
     for (i = 0; i < count; i++) {
         SetMonData(Party_GetMonByIndex(party, i), MON_DATA_HELD_ITEM, &item);
     }
@@ -963,11 +963,11 @@ void ov80_022352BC(ArcadeContext *ctx) {
     ctx->weather = 1001;
 }
 
-void ov80_022352C8(ArcadeContext *ctx) {
+void BattleArcade_Event_Rain(ArcadeContext *ctx) {
     ctx->weather = 1;
 }
 
-void ov80_022352D0(ArcadeContext *ctx) {
+void BattleArcade_Event_Sandstorm(ArcadeContext *ctx) {
     ctx->weather = 7;
 }
 
@@ -983,19 +983,19 @@ void ov80_022352E8(ArcadeContext *ctx) {
     ctx->weather = 1002;
 }
 
-void ov80_022352F4(ArcadeContext *ctx) {
+void BattleArcade_Event_SpeedUp(ArcadeContext *ctx) {
     if (ctx->cursorSpeed < 7) {
         ctx->cursorSpeed++;
     }
 }
 
-void ov80_02235300(ArcadeContext *ctx) {
+void BattleArcade_Event_SpeedDown(ArcadeContext *ctx) {
     if (ctx->cursorSpeed != 0) {
         ctx->cursorSpeed--;
     }
 }
 
-void ov80_0223530C(ArcadeContext *ctx) {
+void BattleArcade_Event_Random(ArcadeContext *ctx) {
     ctx->randomFlag = 1;
 }
 

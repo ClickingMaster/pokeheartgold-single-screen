@@ -27,7 +27,7 @@ u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
 u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
 
 u8 LinkSync_GetPlayerState(int netId);
-void ov80_0222A840(SaveData *saveData);
+void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 BOOL sub_02096998(FrontierFieldSystem *frontierFsys);
 // Defined returning void in frontier_link_lobby.c, which leaves the new lobby in r0.
 FrontierLinkLobby *FrontierLinkLobby_New(SaveData *saveData);
@@ -284,7 +284,7 @@ BOOL FrtCmd_LinkLobbyStartTower(FrontierScriptContext *ctx) {
     frontierFsys = FrontierFieldSystem_New(args->saveData, FALSE, TOWER_MODE_6);
     Frontier_SetData(ctx->frontierSystem->frontierWork, (u32)frontierFsys);
     if (frontierFsys->towerMode == TOWER_MODE_6) {
-        ov80_0222A840(args->saveData);
+        Frontier_RecordLinkPlayerLocations(args->saveData);
     }
     for (i = 0; i < frontierFsys->numMons; i++) {
         frontierFsys->partyMonIndexes[i] = backup.partySlots[i];

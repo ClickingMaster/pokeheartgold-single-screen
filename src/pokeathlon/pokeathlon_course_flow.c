@@ -419,7 +419,7 @@ int PokeathlonCourse_GetPerformanceFileId(int species, int form) {
 
 void ov96_021E67AC(PokeathlonCourseData *data) {
     PokeathlonCourseLayout *layout = (PokeathlonCourseLayout *)data;
-    if (layout->field_1F4 != 0) {
+    if (layout->eventDrawEnabled != 0) {
         layout->event->unk04(data, 0);
     }
 }
@@ -469,7 +469,7 @@ u32 ov96_021E6870(PokeathlonCourseData *course, u8 *state) {
     switch (*state) {
     case 0:
         layout->event = &ov96_0221A8BC;
-        layout->field_1ED = 0;
+        layout->eventInitState = 0;
         PokeathlonCourse_InitStateInfo(ov96_0221DA68, &layout->eventStateInfo);
         (*state)++;
         break;
@@ -556,7 +556,7 @@ u32 ov96_021E6A54(PokeathlonCourseData *course) {
     layout->counterEnabled = TRUE;
     PokeathlonCourse_ResetDataCopyArea(course);
     layout->event = &ov96_0221A808;
-    layout->field_1ED = 0;
+    layout->eventInitState = 0;
     PokeathlonCourse_InitStateInfo(ov96_0221DA50, &layout->eventStateInfo);
     PokeathlonCourse_SetStateField07(course, 8);
     return 0;
@@ -625,7 +625,7 @@ u32 ov96_021E6BC0(PokeathlonCourseData *course) {
 u32 ov96_021E6BEC(PokeathlonCourseData *course) {
     PokeathlonCourseLayout *layout = (PokeathlonCourseLayout *)course;
     layout->event = &ov96_0221A8E4;
-    layout->field_1ED = 0;
+    layout->eventInitState = 0;
     PokeathlonCourse_InitStateInfo(ov96_0221DA6C, &layout->eventStateInfo);
     PokeathlonCourse_SetStateField07(course, 12);
     return 0;
@@ -684,7 +684,7 @@ u32 PokeathlonCourse_State_StartRound(PokeathlonCourseData *course) {
     layout->finishCallback = NULL;
     PokeathlonCourse_ResetDataCopyArea(course);
     layout->event = ov96_0221DA28[event];
-    layout->field_1ED = 0;
+    layout->eventInitState = 0;
     PokeathlonCourse_InitStateInfo(_0221DA00[event], &layout->eventStateInfo);
     PokeathlonCourse_SetStateField07(course, 16);
     return 0;
@@ -869,7 +869,7 @@ u32 PokeathlonCourse_State_NextRound(PokeathlonCourseData *course) {
 u32 ov96_021E711C(PokeathlonCourseData *course) {
     PokeathlonCourseLayout *layout = (PokeathlonCourseLayout *)course;
     layout->event = &ov96_0221A86C;
-    layout->field_1ED = 0;
+    layout->eventInitState = 0;
     PokeathlonCourse_InitStateInfo(ov96_0221DC24, &layout->eventStateInfo);
     PokeathlonCourse_SetStateField07(course, 26);
     return 0;
@@ -932,7 +932,7 @@ u32 ov96_021E7294(PokeathlonCourseData *course) {
     PokeathlonCourseLayout *layout = (PokeathlonCourseLayout *)course;
     PokeathlonCourse_ResetDataCopyArea(course);
     layout->event = &ov96_0221A844;
-    layout->field_1ED = 0;
+    layout->eventInitState = 0;
     PokeathlonCourse_InitStateInfo(ov96_0221DA5C, &layout->eventStateInfo);
     PokeathlonCourse_SetStateField07(course, 32);
     return 0;

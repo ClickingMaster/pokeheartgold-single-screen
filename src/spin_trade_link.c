@@ -35,8 +35,8 @@ typedef struct SpinTradeJoinRequest {
 u32 MATH_CountPopulation(u32 value);
 void CommState_SetMaxEntries(int count);
 void UnionRoomObjects_ResetSlots(void *ptr);
-void ov85_021E9C84(void *ptr, int event, int value);
-void ov85_021E9D9C(void *ptr, int event, int value);
+void SpinTradeGroup_HandleLinkEvent(void *ptr, int event, int value);
+void SpinTradeGroup_HandleMemberEvent(void *ptr, int event, int value);
 void SpinTrade_ReceiveMemberSlot(void *ptr, void *data);
 void SpinTrade_ReceivePlayerCount(void *ptr, u32 data);
 void SpinTrade_ReceiveJump(void *ptr, u8 data);
@@ -151,12 +151,12 @@ void sub_02096DBC(int sender, int unused, void *data, SpinTradeLink *menu) {
     if (Comm_GetLocalNetId() != 0) {
         menu->count = 0;
         menu->state = 1;
-        ov85_021E9C84(menu->parent->field38, 31, (u8)sender);
+        SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 31, (u8)sender);
     }
 }
 
 void sub_02096DE4(int sender, int unused, void *data, SpinTradeLink *menu) {
-    ov85_021E9C84(menu->parent->field38, 2, 0);
+    SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 2, 0);
 }
 
 void SpinTradeLink_HandleJoinRequest(int sender, int unused, void *data, SpinTradeLink *menu) {
@@ -192,21 +192,21 @@ void SpinTradeLink_HandleJoinRequest(int sender, int unused, void *data, SpinTra
             return;
         }
         if (src->accepted == 0) {
-            ov85_021E9C84(menu->parent->field38, 8, id);
+            SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 8, id);
             return;
         }
         menu->unk38 = src->count;
-        ov85_021E9C84(menu->parent->field38, 7, src->sender);
+        SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 7, src->sender);
         return;
     }
     case 1:
-        ov85_021E9C84(menu->parent->field38, 19, src->sender);
+        SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 19, src->sender);
         break;
     }
 }
 
 void sub_02096ED0(int sender, int unused, void *data, SpinTradeLink *menu) {
-    ov85_021E9D9C(menu->parent->field38, 1, *(u8 *)data);
+    SpinTradeGroup_HandleMemberEvent(menu->parent->field38, 1, *(u8 *)data);
     if (Comm_GetLocalNetId() == 0) {
         menu->unk34 = 0;
     }
@@ -214,7 +214,7 @@ void sub_02096ED0(int sender, int unused, void *data, SpinTradeLink *menu) {
 
 void sub_02096EF0(int sender, int unused, void *data, SpinTradeLink *menu) {
     if (Comm_GetLocalNetId() != 0) {
-        ov85_021E9C84(menu->parent->field38, 13, 0);
+        SpinTradeGroup_HandleLinkEvent(menu->parent->field38, 13, 0);
     }
 }
 

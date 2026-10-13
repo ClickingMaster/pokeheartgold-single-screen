@@ -15,8 +15,8 @@ u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
 u32 FrontierScript_ReadVar(FrontierScriptContext *ctx);
 void FrontierMap_LoadMonIconResources(FrontierMap *map);
 void FrontierMap_UnloadMonIconResources(FrontierMap *map);
-void ov80_0222F33C(FrontierMap *map);
-void ov80_0222F3CC(FrontierMap *map);
+void FrontierMap_LoadItemIconResources(FrontierMap *map);
+void FrontierMap_UnloadItemIconResources(FrontierMap *map);
 void FrontierScript_GetVar(FrontierScriptContext *ctx, u16 a1);
 void FrontierScript_PrintMessageEntry(FrontierScriptContext *ctx, u16 *a1);
 

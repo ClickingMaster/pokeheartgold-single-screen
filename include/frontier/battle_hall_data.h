@@ -64,7 +64,7 @@ typedef struct BattleHallData {
     u8 linkRecvMon[2][HALL_LINK_MON_BUFFER_SIZE];        // 0x984
     u16 partnerLevel;                                    // 0xD84
     u8 filler_D86[2];                                    // 0xD86
-    u8 partnerValue;                                     // 0xD88, received by ov80_0222B048
+    u8 partnerValue;                                     // 0xD88, received by BattleHallLink_ReceiveValue
     u8 filler_D89[3];                                    // 0xD89
     Pokemon *partnerMon;                                 // 0xD8C
     u8 linkMessageCount;                                 // 0xD90

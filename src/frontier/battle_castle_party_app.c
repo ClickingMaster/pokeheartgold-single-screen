@@ -270,7 +270,7 @@ void BattleCastle_SpendPoints(FrontierSave *frontierSave, int frontierType, int 
 BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state);
 int BattleCastlePartyApp_Main(OverlayManager *manager, int *state);
 BOOL BattleCastlePartyApp_Exit(OverlayManager *manager);
-void ov83_0223FAF0(void);
+void BattleCastlePartyApp_ReloadBgPalette(void);
 void BattleCastlePartyApp_ReceiveRanks(int netId, void *unused, void *data, BattleCastlePartyApp *app);
 void BattleCastlePartyApp_ReceiveAction(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
 void BattleCastlePartyApp_ReceiveCursor(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
@@ -1372,7 +1372,7 @@ void BattleCastlePartyApp_InitBgGraphics(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_LoadPartyBg(app, GF_BG_LYR_MAIN_3);
     BattleCastlePartyApp_LoadBgPalette();
     BattleCastlePartyApp_LoadStatsSummaryBg(app, GF_BG_LYR_MAIN_2);
-    ov83_0223FAF0();
+    BattleCastlePartyApp_ReloadBgPalette();
     BattleCastle_RequestBgToggle(GF_BG_LYR_MAIN_2, 0, &app->bgToggleRequests);
     BattleCastlePartyApp_LoadSubScreenBg(app, GF_BG_LYR_SUB_0);
 }
@@ -1490,7 +1490,7 @@ void BattleCastlePartyApp_LoadStatsSummaryBg(BattleCastlePartyApp *app, GFBgLaye
 }
 
 // Reloads the first 4 palettes of the same file as BattleCastlePartyApp_LoadBgPalette
-void ov83_0223FAF0(void) {
+void BattleCastlePartyApp_ReloadBgPalette(void) {
     NNSG2dPaletteData *plttData;
     void *file = GfGfxLoader_GetPlttData(NARC_a_1_8_3, 0x9C, &plttData, HEAP_ID_107);
 
@@ -2240,7 +2240,7 @@ int BattleCastlePartyApp_PlayActionEffect(BattleCastlePartyApp *app, u32 selecte
                 BattleCastlePartyApp_PrintMonSummary(app, FALSE);
             }
             BattleCastleSprite_SetAnim(app->hpBars[slot], hpBarSeq);
-            ov83_02247600(app->monIcons[slot], (u8)iconPalette);
+            BattleCastleSprite_ChangeAnim(app->monIcons[slot], (u8)iconPalette);
             app->flags.bits.effectActive = FALSE;
             return TRUE;
         }
@@ -2728,11 +2728,11 @@ void BattleCastlePartyApp_UpdateMonIcons(BattleCastlePartyApp *app) {
         u32 hpState = Frontier_GetHpGaugeFrame(hp, maxHp);
 
         if (app->monIcons[i] != NULL) {
-            ov83_02247600(app->monIcons[i], hpState);
+            BattleCastleSprite_ChangeAnim(app->monIcons[i], hpState);
             if (i != BattleCastle_GetMonIndex(app->numMons, app->cursorPos) || app->cursorPos >= app->unk_015) {
-                ov83_0224760C(app->monIcons[i], 0);
+                BattleCastleSprite_SetBounce(app->monIcons[i], 0);
             } else {
-                ov83_0224760C(app->monIcons[i], 1);
+                BattleCastleSprite_SetBounce(app->monIcons[i], 1);
             }
         }
     }

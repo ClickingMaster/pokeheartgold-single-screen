@@ -306,9 +306,9 @@ extern const struct {
     u32 count;
 } ov83_0224819C[2];                             // window sets
 extern const TouchscreenHitbox ov83_022484F4[]; // rental item grid page arrows
-extern const GridCallbacks ov83_02248500;       // party app party grid
-extern const GridCallbacks ov83_02248510;       // opponent app party grid
-extern const GridCallbacks ov83_02248520;       // rental item grid
+extern const GridCallbacks gBattleCastlePartyAppPartyGridCallbacks;       // party app party grid
+extern const GridCallbacks gBattleCastleOpponentAppPartyGridCallbacks;       // opponent app party grid
+extern const GridCallbacks gBattleCastleItemGridCallbacks;       // rental item grid
 extern const TouchscreenHitbox ov83_02248530[]; // party grid, 3 mons
 extern const int ov83_02248544[];               // party grid position -> slot
 extern const TouchscreenHitbox ov83_02248558[]; // party grid, 4 mons
@@ -433,15 +433,15 @@ void BattleCastleOpponentApp_PrintSummaryMenuHelp(BattleCastleOpponentApp *app);
 Sprite *BattleCastle_CreateSprite(BattleCastleSpriteGfx *gfx, int charId, int plttId, int cellId, int animSeq, int drawPriority, int priority, u8 screen);
 void BattleCastle_InitSpriteTransfer(void);
 void BattleCastle_LoadPartyListGfx(BattleCastleSpriteGfx *gfx);
-void ov83_022473BC(BattleCastleSpriteGfx *gfx);
-void ov83_02247A20(void);
+void BattleCastle_LoadMonPicGfx(BattleCastleSpriteGfx *gfx);
+void BattleCastle_GridCallbackNoOp(void);
 GridInputHandler *BattleCastleOpponentApp_CreatePartyGrid(BattleCastleOpponentApp *app, int initialPos, int numMons);
-void ov83_02247B1C(BattleCastlePartyApp *app, int newTarget, int prevTarget);
-void ov83_02247B34(BattleCastlePartyApp *app, int newTarget, int prevTarget);
-void ov83_02247B4C(BattleCastleOpponentApp *app, int newTarget, int prevTarget);
-void ov83_02247B64(BattleCastleOpponentApp *app, int newTarget, int prevTarget);
-void ov83_02247C58(BattleCastlePartyApp *app, int newTarget);
-void ov83_02247C88(BattleCastlePartyApp *app, int newTarget);
+void BattleCastlePartyApp_OnPartyGridKeyMove(BattleCastlePartyApp *app, int newTarget, int prevTarget);
+void BattleCastlePartyApp_OnPartyGridTouch(BattleCastlePartyApp *app, int newTarget, int prevTarget);
+void BattleCastleOpponentApp_OnPartyGridKeyMove(BattleCastleOpponentApp *app, int newTarget, int prevTarget);
+void BattleCastleOpponentApp_OnPartyGridTouch(BattleCastleOpponentApp *app, int newTarget, int prevTarget);
+void BattleCastlePartyApp_OnItemGridKeyMove(BattleCastlePartyApp *app, int newTarget);
+void BattleCastlePartyApp_OnItemGridTouch(BattleCastlePartyApp *app, int newTarget);
 
 // Party app functions the shared helpers call
 void BattleCastlePartyApp_SetCursorPos(BattleCastlePartyApp *app, u32 cursorPos, u32 prevCursorPos);
@@ -2235,11 +2235,11 @@ void BattleCastleOpponentApp_UpdateMonIcons(BattleCastleOpponentApp *app) {
         u32 hpState = Frontier_GetHpGaugeFrame(hp, maxHp);
 
         if (app->monIcons[i] != NULL) {
-            ov83_02247600(app->monIcons[i], hpState);
+            BattleCastleSprite_ChangeAnim(app->monIcons[i], hpState);
             if (i != BattleCastle_GetMonIndex(app->numMons, app->cursorPos) || app->cursorPos >= app->unk_015) {
-                ov83_0224760C(app->monIcons[i], 0);
+                BattleCastleSprite_SetBounce(app->monIcons[i], 0);
             } else {
-                ov83_0224760C(app->monIcons[i], 1);
+                BattleCastleSprite_SetBounce(app->monIcons[i], 1);
             }
         }
     }
@@ -2781,7 +2781,7 @@ void BattleCastle_InitSpriteGfx(BattleCastleSpriteGfx *gfx, Party *party, u8 isL
     for (i = 0; i < 4; i++) {
         gfx->resMan[i] = Create2DGfxResObjMan(ov83_02248178[i], (GfGfxResType)i, HEAP_ID_107);
     }
-    ov83_022473BC(gfx);
+    BattleCastle_LoadMonPicGfx(gfx);
     gfx->resObj[0][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], NARC_a_1_8_4, 15, TRUE, 0, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_107);
     gfx->resObj[0][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_a_1_8_4, 55, FALSE, 0, NNS_G2D_VRAM_TYPE_2DMAIN, 4, HEAP_ID_107);
     gfx->resObj[0][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], NARC_a_1_8_4, 17, TRUE, 0, GF_GFX_RES_TYPE_CELL, HEAP_ID_107);
@@ -2920,7 +2920,7 @@ void BattleCastle_LoadPartyListGfx(BattleCastleSpriteGfx *gfx) {
     NARC_Delete(narc);
 }
 
-void ov83_022473BC(BattleCastleSpriteGfx *gfx) {
+void BattleCastle_LoadMonPicGfx(BattleCastleSpriteGfx *gfx) {
     NARC *narc = NARC_New(NARC_a_0_0_8, HEAP_ID_107);
 
     gfx->resObj[2][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], narc, 0x4C, FALSE, 2, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_107);
@@ -3000,11 +3000,11 @@ void BattleCastleSprite_SetMonIconPalette(BattleCastleSprite *sprite, Pokemon *m
     Sprite_SetPalOffsetRespectVramOffset(sprite->sprite, palette);
 }
 
-void ov83_02247600(BattleCastleSprite *sprite, int value) {
+void BattleCastleSprite_ChangeAnim(BattleCastleSprite *sprite, int value) {
     Frontier_SetSpriteAnim(sprite->sprite, value);
 }
 
-void ov83_0224760C(BattleCastleSprite *sprite, int value) {
+void BattleCastleSprite_SetBounce(BattleCastleSprite *sprite, int value) {
     Frontier_SetSpritePosition(sprite->sprite, sprite->x, sprite->y, value);
 }
 
@@ -3227,21 +3227,21 @@ void BattleCastle_FreeGrid(GridInputHandler *grid) {
 }
 
 // Grid callback that does nothing
-void ov83_02247A20(void) {
+void BattleCastle_GridCallbackNoOp(void) {
 }
 
 GridInputHandler *BattleCastlePartyApp_CreatePartyGrid(BattleCastlePartyApp *app, int initialPos, int numMons) {
     if (numMons == 3) {
-        return GridInputHandler_Create(ov83_02248530, ov83_022485A8, &ov83_02248500, app, TRUE, initialPos, HEAP_ID_107);
+        return GridInputHandler_Create(ov83_02248530, ov83_022485A8, &gBattleCastlePartyAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
     }
-    return GridInputHandler_Create(ov83_02248558, ov83_022485E8, &ov83_02248500, app, TRUE, initialPos, HEAP_ID_107);
+    return GridInputHandler_Create(ov83_02248558, ov83_022485E8, &gBattleCastlePartyAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
 }
 
 GridInputHandler *BattleCastleOpponentApp_CreatePartyGrid(BattleCastleOpponentApp *app, int initialPos, int numMons) {
     if (numMons == 3) {
-        return GridInputHandler_Create(ov83_02248530, ov83_022485A8, &ov83_02248510, app, TRUE, initialPos, HEAP_ID_107);
+        return GridInputHandler_Create(ov83_02248530, ov83_022485A8, &gBattleCastleOpponentAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
     }
-    return GridInputHandler_Create(ov83_02248558, ov83_022485E8, &ov83_02248510, app, TRUE, initialPos, HEAP_ID_107);
+    return GridInputHandler_Create(ov83_02248558, ov83_022485E8, &gBattleCastleOpponentAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
 }
 
 // Party grid input: the selected slot (CASTLE_*_GRID_EXIT for EXIT) or a GRID_MENU_* code
@@ -3263,24 +3263,24 @@ void ov83_02247B04(GridInputHandler *grid) {
     GridInputHandler_SetNextLastUnk0FInputs(grid, 0, input, input);
 }
 
-void ov83_02247B1C(BattleCastlePartyApp *app, int newTarget, int prevTarget) {
+void BattleCastlePartyApp_OnPartyGridKeyMove(BattleCastlePartyApp *app, int newTarget, int prevTarget) {
     BattleCastlePartyApp_SetCursorPos(app, ov83_02248544[newTarget], ov83_02248544[prevTarget]);
 }
 
-void ov83_02247B34(BattleCastlePartyApp *app, int newTarget, int prevTarget) {
+void BattleCastlePartyApp_OnPartyGridTouch(BattleCastlePartyApp *app, int newTarget, int prevTarget) {
     BattleCastlePartyApp_SetCursorPos(app, ov83_02248544[newTarget], ov83_02248544[prevTarget]);
 }
 
-void ov83_02247B4C(BattleCastleOpponentApp *app, int newTarget, int prevTarget) {
+void BattleCastleOpponentApp_OnPartyGridKeyMove(BattleCastleOpponentApp *app, int newTarget, int prevTarget) {
     BattleCastleOpponentApp_SetCursorPos(app, ov83_02248544[newTarget], ov83_02248544[prevTarget]);
 }
 
-void ov83_02247B64(BattleCastleOpponentApp *app, int newTarget, int prevTarget) {
+void BattleCastleOpponentApp_OnPartyGridTouch(BattleCastleOpponentApp *app, int newTarget, int prevTarget) {
     BattleCastleOpponentApp_SetCursorPos(app, ov83_02248544[newTarget], ov83_02248544[prevTarget]);
 }
 
 GridInputHandler *BattleCastlePartyApp_CreateItemGrid(BattleCastlePartyApp *app) {
-    GridInputHandler *grid = GridInputHandler_Create(ov83_022485C8, ov83_02248610, &ov83_02248520, app, TRUE, 0, HEAP_ID_107);
+    GridInputHandler *grid = GridInputHandler_Create(ov83_022485C8, ov83_02248610, &gBattleCastleItemGridCallbacks, app, TRUE, 0, HEAP_ID_107);
 
     BattleCastlePartyApp_SetItemCursor(app, 64, 52, 3);
     BattleCastlePartyApp_ShowItemDescription(app, 0);
@@ -3324,12 +3324,12 @@ int BattleCastle_HandleItemGridInput(GridInputHandler *grid) {
     return -1;
 }
 
-void ov83_02247C58(BattleCastlePartyApp *app, int newTarget) {
+void BattleCastlePartyApp_OnItemGridKeyMove(BattleCastlePartyApp *app, int newTarget) {
     BattleCastlePartyApp_SetItemCursor(app, ov83_02248610[newTarget].left, ov83_02248611[newTarget * sizeof(DpadMenuBox)], ov83_02248570[newTarget]);
     BattleCastlePartyApp_ShowItemDescription(app, newTarget);
 }
 
-void ov83_02247C88(BattleCastlePartyApp *app, int newTarget) {
+void BattleCastlePartyApp_OnItemGridTouch(BattleCastlePartyApp *app, int newTarget) {
     BattleCastlePartyApp_SetItemCursor(app, ov83_02248610[newTarget].left, ov83_02248611[newTarget * sizeof(DpadMenuBox)], ov83_02248570[newTarget]);
     BattleCastlePartyApp_ShowItemDescription(app, newTarget);
 }

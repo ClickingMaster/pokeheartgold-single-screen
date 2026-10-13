@@ -164,7 +164,7 @@ void BattleCastle_OnAppExit(void *args) {
 }
 
 BOOL FrtCmd_158(FrontierScriptContext *ctx) {
-    ov80_02232F00(Frontier_GetData(ctx->frontierSystem->frontierWork));
+    BattleCastleData_SetPartyBeforeBattle(Frontier_GetData(ctx->frontierSystem->frontierWork));
     return FALSE;
 }
 
@@ -236,7 +236,7 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         *result = BattleCastleData_GetTrainerSprite(data, arg);
         break;
     case 21:
-        ov80_02232E9C(data);
+        BattleCastleData_ResetRanks(data);
         break;
     case 22:
         BattleCastleData_EndRound(data);

@@ -30,8 +30,8 @@
 .public SpinTrade_ReceivePlayerCount
 .public SpinTrade_ReceiveTradeSlot
 .public SpinTrade_ReceiveResult
-.public ov85_021E9C84
-.public ov85_021E9D9C
+.public SpinTradeGroup_HandleLinkEvent
+.public SpinTradeGroup_HandleMemberEvent
 
 	.public SpinTradeLink_ReceivePacket
 	.public SpinTradeLink_ReceiveParty

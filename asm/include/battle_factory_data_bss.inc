@@ -38,10 +38,10 @@
 .public FrontierTrainer_Load
 .public FrontierMon_ToPokemon
 .public FrontierTrainer_GetClassSprite
-.public ov80_0222A3BC
+.public Frontier_AddRentalMonToParty
 .public FrontierMon_GenerateList
-.public ov80_0222A840
-.public ov80_0222B108
+.public Frontier_RecordLinkPlayerLocations
+.public BattleFactoryLink_SendRecord
 .public BattleFactoryLink_SendTrainerIds
 .public BattleFactoryLink_SendRentalMons
 .public BattleFactoryLink_SendOpponentMons

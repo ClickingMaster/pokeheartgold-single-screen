@@ -33,13 +33,13 @@ u32 FrontierFieldSystem_AwardTowerBattlePoints(void *data);
 void *Save_GameStats_Get(void *saveData);
 void GameStats_Add(void *stats, u32 stat, u32 value);
 u32 FrontierFieldSystem_GetFrontierBattleNumber(void *data);
-u32 ov80_022358C4(void *data);
+u32 BattleTower_IncBattleNumber(void *data);
 u32 FrontierFieldSystem_0204AC7C(void *data);
 u32 ov80_022358E8(void *data);
 u32 FrontierFieldSystem_GetBattleTowerMode(void *data);
-void ov80_022357B4(void *data, void *saveData);
+void BattleTower_GenerateOpponents(void *data, void *saveData);
 u32 BattleTower_GetTrainerSprite(void *data, u32 value);
-void ov80_022358B0(void *data, u32 value);
+void BattleTower_SetPalmerDefeated(void *data, u32 value);
 void FrontierFieldSystem_0204AD04(void *data, void *saveData);
 void FrontierFieldSystem_0204AE20(void *data, void *saveData);
 void FrontierFieldSystem_0204AF2C(void *data);
@@ -53,7 +53,7 @@ BOOL FrtCmd_136(void *ctx);
 BOOL FrtCmd_137(void *ctx);
 BOOL FrtCmd_138(void *ctx);
 u32 ov80_0223558C(void *data, u32 mode);
-BOOL ov80_0223573C(void *ctx);
-BOOL ov80_02235774(void *ctx, void *data, void *fieldSystem, u32 mode, u16 value);
+BOOL FrontierScriptNative_WaitPartnerPacket(void *ctx);
+BOOL FrontierScript_ReadPartnerPacket(void *ctx, void *data, void *fieldSystem, u32 mode, u16 value);
 
 #endif

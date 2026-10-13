@@ -46,8 +46,8 @@ typedef u32 (*FrontierObjectGetPosFunc)(UnkStruct_ov42_02228110 *object);
 #define FRONTIER_MON_ICON_ID_BASE   2000
 
 extern const u8 ov80_0223BD44[];
-extern const ManagedSpriteTemplate ov80_0223BD4C;
-extern const ManagedSpriteTemplate ov80_0223BD80;
+extern const ManagedSpriteTemplate gFrontierMapItemIconTemplate;
+extern const ManagedSpriteTemplate gFrontierMapMonIconTemplate;
 extern const u16 _0223DC20[];
 extern const u16 ov80_0223DC22[];
 
@@ -722,7 +722,7 @@ ManagedSprite *FrontierMap_CreateMonIcon(FrontierMap *map, Pokemon *mon, s32 ind
 
     GF_ASSERT(index < 8);
     SpriteSystem_LoadCharResObjAtEndWithHardwareMappingType(map->spriteSystem, map->spriteManager, NARC_poketool_icongra_poke_icon, Pokemon_GetIconNaix(mon), FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, index + FRONTIER_MON_ICON_ID_BASE);
-    template = ov80_0223BD80;
+    template = gFrontierMapMonIconTemplate;
     template.resIdList[GF_GFX_RES_TYPE_CHAR] += index;
     template.x = x;
     template.y = y;
@@ -738,7 +738,7 @@ void FrontierMap_DeleteMonIcon(FrontierMap *map, ManagedSprite *sprite, u32 inde
     Sprite_DeleteAndFreeResources(sprite);
 }
 
-void ov80_0222F33C(FrontierMap *map) {
+void FrontierMap_LoadItemIconResources(FrontierMap *map) {
     NARC *narc = NARC_New(NARC_graphic_plist_gra, HEAP_ID_101);
     SpriteSystem_LoadPaletteBufferFromOpenNarc(map->paletteData, PLTTBUF_MAIN_OBJ, map->spriteSystem, map->spriteManager, narc, sub_0207CAA0(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 0x7D1);
     SpriteSystem_LoadCellResObjFromOpenNarc(map->spriteSystem, map->spriteManager, narc, sub_0207CAA4(), FALSE, 0x7D1);
@@ -747,15 +747,15 @@ void ov80_0222F33C(FrontierMap *map) {
     NARC_Delete(narc);
 }
 
-void ov80_0222F3CC(FrontierMap *map) {
+void FrontierMap_UnloadItemIconResources(FrontierMap *map) {
     SpriteManager_UnloadCharObjById(map->spriteManager, 0x7D9);
     SpriteManager_UnloadCellObjById(map->spriteManager, 0x7D1);
     SpriteManager_UnloadAnimObjById(map->spriteManager, 0x7D1);
     SpriteManager_UnloadPlttObjById(map->spriteManager, 0x7D1);
 }
 
-ManagedSprite *ov80_0222F3FC(FrontierMap *map, s16 x, s16 y) {
-    ManagedSpriteTemplate template = ov80_0223BD4C;
+ManagedSprite *FrontierMap_CreateItemIcon(FrontierMap *map, s16 x, s16 y) {
+    ManagedSpriteTemplate template = gFrontierMapItemIconTemplate;
     ManagedSprite *sprite;
 
     template.x = x;
@@ -766,7 +766,7 @@ ManagedSprite *ov80_0222F3FC(FrontierMap *map, s16 x, s16 y) {
     return sprite;
 }
 
-void ov80_0222F440(FrontierMap *map, ManagedSprite *sprite) {
+void FrontierMap_DeleteItemIcon(FrontierMap *map, ManagedSprite *sprite) {
     Sprite_DeleteAndFreeResources(sprite);
 }
 

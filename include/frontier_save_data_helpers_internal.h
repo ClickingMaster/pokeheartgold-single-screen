@@ -21,10 +21,10 @@ u32 BattleTower_NextRandom(u32 value);
 void BattleTower_GenerateTrainerMons(void *data, void *array, u32 value, u32 count, void *values1, void *values2, u32 zero, u32 word);
 void BattleTower_GetRoomTrainer(void *saveData, void *array, u32 index);
 
-void ov80_022357B4(void *data, void *saveData);
+void BattleTower_GenerateOpponents(void *data, void *saveData);
 u32 BattleTower_GetTrainerSprite(void *data, u32 index);
-void ov80_022358B0(void *data, u32 value);
-u32 ov80_022358C4(void *data);
+void BattleTower_SetPalmerDefeated(void *data, u32 value);
+u32 BattleTower_IncBattleNumber(void *data);
 u32 ov80_022358E8(void *data);
 
 #endif

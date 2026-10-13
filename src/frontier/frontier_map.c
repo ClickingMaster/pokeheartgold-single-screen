@@ -44,7 +44,7 @@ void Frontier_ResetMapSpriteState(void *frontier);
 u32 FrontierMap_GetParam(u32 mapId, u32 field);
 void FrontierMap_InitEffect(void *map, void *effect, u32 mapId);
 void FrontierMap_ExitEffect(void *map, void *effect, u32 mapId);
-int ov80_0222A7EC(void *profile);
+int Frontier_GetPlayerSpriteId(void *profile);
 u32 FrontierParticles_New(enum HeapID heapID);
 void FrontierParticles_Free(u32 resourceManager);
 void FrontierParticles_Update(void);
@@ -433,7 +433,7 @@ void FrontierMap_InitMapObjects(FrontierMap *map, u32 mapId, void *profile) {
     map->objectManager = ov42_02228010(32, HEAP_ID_101);
     map->unk18 = ov42_02227EE0(16, 16, HEAP_ID_101);
     ov42_02229394(&map->camera);
-    map->objectGfx = ov42_02228F24(SpriteManager_GetSpriteList(map->spriteManager), map->paletteData, 32, ov80_0222A7EC(profile), 0, 1, HEAP_ID_101);
+    map->objectGfx = ov42_02228F24(SpriteManager_GetSpriteList(map->spriteManager), map->paletteData, 32, Frontier_GetPlayerSpriteId(profile), 0, 1, HEAP_ID_101);
     layerTemplate = ov80_0223D554;
     layerTemplate.narcId = FrontierMap_GetParam(mapId, MAP_PARAM_NARC);
     layerTemplate.fileId = FrontierMap_GetParam(mapId, MAP_PARAM_BG3_SCREEN);

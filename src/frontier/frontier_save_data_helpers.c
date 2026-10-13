@@ -1,6 +1,6 @@
 #include "frontier_save_data_helpers_internal.h"
 
-void ov80_022357B4(void *data, void *saveData) {
+void BattleTower_GenerateOpponents(void *data, void *saveData) {
     u8 *p = data;
     s32 index;
     u16 *source;
@@ -50,11 +50,11 @@ u32 BattleTower_GetTrainerSprite(void *data, u32 index) {
     return FrontierTrainer_GetClassSprite((u8) * (u16 *)(p + index * 0x110 + 0x7C));
 }
 
-void ov80_022358B0(void *data, u32 value) {
+void BattleTower_SetPalmerDefeated(void *data, u32 value) {
     ((Overlay80Bits *)data)->value = (u8)value;
 }
 
-u32 ov80_022358C4(void *data) {
+u32 BattleTower_IncBattleNumber(void *data) {
     u8 *p = data;
     p[0xD]++;
     if (p[0xF] != 6) {

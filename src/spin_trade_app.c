@@ -47,7 +47,7 @@
 #include "render_animation.h"
 #include "vram_transfer_manager.h"
 
-// Main loop states (index into ov85_021EA800)
+// Main loop states (index into gSpinTradeStateFuncs)
 #define SPIN_TRADE_STATE_START               0
 #define SPIN_TRADE_STATE_WAIT_FADE_IN        1
 #define SPIN_TRADE_STATE_WAIT_MEMBERS        2
@@ -399,31 +399,31 @@ typedef struct SpinTradeBonusAreas {
 } SpinTradeBonusAreas;
 
 extern const s32 ov85_021EA4F0[];
-extern const WindowTemplate ov85_021EA4FC;
-extern int (*const ov85_021EA51C[])(SpinTradeEggDropTask *task);
-extern const SpinTradeCountdownSounds ov85_021EA528;
-extern const GraphicsModes ov85_021EA538;
-extern const int ov85_021EA558[];
-extern const OamCharTransferParam ov85_021EA56C;
-extern const int ov85_021EA580[];
-extern const SpriteResourceCountsListUnion ov85_021EA594;
-extern const WindowTemplate *const ov85_021EA5AC[];
-extern const int ov85_021EA5C4[];
-extern const s32 ov85_021EA5DC[];
-extern const BgTemplate ov85_021EA60C;
-extern const BgTemplate ov85_021EA628;
-extern const BgTemplate ov85_021EA644;
-extern const BgTemplate ov85_021EA660;
-extern const BgTemplate ov85_021EA67C;
-extern const OamManagerParam ov85_021EA6B8;
-extern const GraphicsBanks ov85_021EA700;
+extern const WindowTemplate gSpinTradeMsgWindowTemplate;
+extern int (*const gSpinTradeEggDropStateFuncs[])(SpinTradeEggDropTask *task);
+extern const SpinTradeCountdownSounds gSpinTradeCountdownSounds;
+extern const GraphicsModes gSpinTradeGraphicsModes;
+extern const int gSpinTradeMarkerModelIds[];
+extern const OamCharTransferParam gSpinTradeOamCharTransferParam;
+extern const int gSpinTradeMarkerAnimIds[];
+extern const SpriteResourceCountsListUnion gSpinTradeResObjCounts;
+extern const WindowTemplate *const gSpinTradeNameWindowTemplates[];
+extern const int gSpinTradeMachineModelIds[];
+extern const s32 gSpinTradeMachineAngleOffsets[];
+extern const BgTemplate gSpinTradeBg1Template;
+extern const BgTemplate gSpinTradeBg2Template;
+extern const BgTemplate gSpinTradeBg3Template;
+extern const BgTemplate gSpinTradeSubBg2Template;
+extern const BgTemplate gSpinTradeSubBg3Template;
+extern const OamManagerParam gSpinTradeOamManagerParam;
+extern const GraphicsBanks gSpinTradeGraphicsBanks;
 extern u32 ov85_021EA728[][2];
 extern u32 ov85_021EA72C[][2];
-extern const SpinTradeBonusAreas ov85_021EA758[];
-extern const u16 ov85_021EA788[][5];
-extern const u16 ov85_021EA7C4[][5];
-extern int (*const ov85_021EA800[])(SpinTradeApp *app);
-extern const int _021EAA80[];
+extern const SpinTradeBonusAreas gSpinTradeBonusAreas[];
+extern const u16 gSpinTradeSlotAngles[][5];
+extern const u16 gSpinTradeDropTargetAngles[][5];
+extern int (*const gSpinTradeStateFuncs[])(SpinTradeApp *app);
+extern const int gSpinTradeHoverOffsets[];
 
 // Not declared by the owners' headers
 void Sys_SetSoftResetDisableFlag(int a0);
@@ -672,7 +672,7 @@ BOOL SpinTradeApp_Init(OverlayManager *man, int *state) {
             slot++;
         }
     }
-    machine->baseAngle = ov85_021EA788[args->unk0[2]][slot] << FX32_SHIFT;
+    machine->baseAngle = gSpinTradeSlotAngles[args->unk0[2]][slot] << FX32_SHIFT;
     app->bgm = GF_GetCurrentPlayingBGM();
     SpinTrade_StartBounceTask(app);
     SpinTrade_StartSpinTask(app);
@@ -712,7 +712,7 @@ BOOL SpinTradeApp_Main(OverlayManager *man, int *state) {
 
     SpinTrade_UpdateTouch(app);
     do {
-        ret = ov85_021EA800[app->state](app);
+        ret = gSpinTradeStateFuncs[app->state](app);
     } while (ret == 1);
     if (ret == 2) {
         return TRUE;
@@ -907,7 +907,7 @@ BOOL SpinTrade_State_SetupDrop(SpinTradeApp *app) {
     drop->index = app->mySlot;
     playerCount = app->playerCount;
     drop->total = playerCount;
-    drop->slotAngle = ov85_021EA788[playerCount][app->mySlot];
+    drop->slotAngle = gSpinTradeSlotAngles[playerCount][app->mySlot];
     for (netId = 0; netId < 8; netId++) {
         if (SpinTrade_IsMemberPresent(app, netId)) {
             app->profiles[netId] = CommPlayerInfo_GetProfile(netId);
@@ -930,7 +930,7 @@ BOOL SpinTrade_State_DropEggs(SpinTradeApp *app) {
     }
     app->timer = 15;
     drop = SpinTrade_GetScratch(app);
-    SpinTrade_StartEggDrop(app, app->members[drop->index].netId, drop->index, drop->count, ov85_021EA7C4[drop->total][drop->index], drop->slotAngle, &app->objects.eggs[drop->index]);
+    SpinTrade_StartEggDrop(app, app->members[drop->index].netId, drop->index, drop->count, gSpinTradeDropTargetAngles[drop->total][drop->index], drop->slotAngle, &app->objects.eggs[drop->index]);
     drop->index++;
     drop->index %= drop->total;
     if (++drop->count == drop->total) {
@@ -1148,7 +1148,7 @@ BOOL SpinTrade_State_AlignToSlot(SpinTradeApp *app) {
 
     step = FX32_CONST(4);
     angle = app->landedEgg->angle;
-    target = ov85_021EA7C4[count][slot] << FX32_SHIFT;
+    target = gSpinTradeDropTargetAngles[count][slot] << FX32_SHIFT;
     distance = target - angle;
     if (distance < 0) {
         distance = target + SPIN_TRADE_ANGLE_FULL - angle;
@@ -1505,7 +1505,7 @@ void SpinTrade_Draw(SpinTradeApp *app) {
 }
 
 void SpinTrade_SetGraphicsBanks(SpinTradeApp *app) {
-    GraphicsBanks banks = ov85_021EA700;
+    GraphicsBanks banks = gSpinTradeGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -1569,32 +1569,32 @@ void SpinTrade_InitBgLayers(SpinTradeApp *app) {
     app->bgConfig = BgConfig_Alloc(HEAP_ID_102);
     reg_GX_POWCNT |= 0x8000; // main engine on the bottom screen
     {
-        GraphicsModes modes = ov85_021EA538;
+        GraphicsModes modes = gSpinTradeGraphicsModes;
         SetBothScreensModesAndDisable(&modes);
     }
     {
-        BgTemplate template = ov85_021EA60C;
+        BgTemplate template = gSpinTradeBg1Template;
         InitBgFromTemplate(app->bgConfig, GF_BG_LYR_MAIN_1, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_1);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, HEAP_ID_102);
     {
-        BgTemplate template = ov85_021EA628;
+        BgTemplate template = gSpinTradeBg2Template;
         InitBgFromTemplate(app->bgConfig, GF_BG_LYR_MAIN_2, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_2);
     {
-        BgTemplate template = ov85_021EA644;
+        BgTemplate template = gSpinTradeBg3Template;
         InitBgFromTemplate(app->bgConfig, GF_BG_LYR_MAIN_3, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_3);
     {
-        BgTemplate template = ov85_021EA660;
+        BgTemplate template = gSpinTradeSubBg2Template;
         InitBgFromTemplate(app->bgConfig, GF_BG_LYR_SUB_2, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_SUB_2);
     {
-        BgTemplate template = ov85_021EA67C;
+        BgTemplate template = gSpinTradeSubBg3Template;
         InitBgFromTemplate(app->bgConfig, GF_BG_LYR_SUB_3, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_SUB_3);
@@ -1706,13 +1706,13 @@ void SpinTrade_SetSubBgFadeLevel(SpinTradeApp *app, u32 level) {
 }
 
 void SpinTrade_InitSpriteSystem(SpinTradeApp *app) {
-    OamManagerParam oamParam = ov85_021EA6B8;
-    OamCharTransferParam transferParam = ov85_021EA56C;
+    OamManagerParam oamParam = gSpinTradeOamManagerParam;
+    OamCharTransferParam transferParam = gSpinTradeOamCharTransferParam;
     SpriteResourceCountsListUnion counts;
 
     app->spriteSystem = SpriteSystem_Alloc(HEAP_ID_102);
     SpriteSystem_Init(app->spriteSystem, &oamParam, &transferParam, 0x20);
-    counts = ov85_021EA594;
+    counts = gSpinTradeResObjCounts;
     app->spriteManager = SpriteManager_New(app->spriteSystem);
     if (!SpriteSystem_InitSprites(app->spriteSystem, app->spriteManager, 0xFF)) {
         GF_AssertFail();
@@ -1764,7 +1764,7 @@ void SpinTrade_InitText(SpinTradeApp *app) {
     PaletteData_LoadNarc(app->paletteData, NARC_graphic_font, 8, HEAP_ID_102, PLTTBUF_MAIN_BG, 0x20, 15 * 16);
     text->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0206_bin, HEAP_ID_102);
     text->msgFormat = MessageFormat_New(HEAP_ID_102);
-    AddWindow(app->bgConfig, &text->msgWindow, &ov85_021EA4FC);
+    AddWindow(app->bgConfig, &text->msgWindow, &gSpinTradeMsgWindowTemplate);
     text->string = String_New(256, HEAP_ID_102);
     for (i = 0; i < SPIN_TRADE_MAX_PLAYERS; i++) {
         app->names[i] = String_New(PLAYER_NAME_LENGTH + 1, HEAP_ID_102);
@@ -1846,7 +1846,7 @@ void SpinTrade_ClearMessage(SpinTradeApp *app) {
 void SpinTrade_AddNameWindows(SpinTradeApp *app, int count) {
     int i;
     SpinTradeText *text = &app->text;
-    const WindowTemplate *templates = ov85_021EA5AC[count];
+    const WindowTemplate *templates = gSpinTradeNameWindowTemplates[count];
 
     text->nameWindowCount = count;
     for (i = 0; i < count; i++) {
@@ -1963,11 +1963,11 @@ void SpinTrade_InitMachine(SpinTradeApp *app) {
     SpinTradeMachine *machine = &app->machine;
     int playerCount = app->args->unk0[2];
 
-    RenderModel_LoadFromNarc(&machine->model, 0, app->narc, ov85_021EA5C4[playerCount], HEAP_ID_102, FALSE);
+    RenderModel_LoadFromNarc(&machine->model, 0, app->narc, gSpinTradeMachineModelIds[playerCount], HEAP_ID_102, FALSE);
     RenderModel_BindTexturesOnVBlank(&machine->model);
     RenderObj_InitFromModel(&machine->renderObj, &machine->model);
     machine->angle = 0;
-    machine->angleOffset = ov85_021EA5DC[playerCount];
+    machine->angleOffset = gSpinTradeMachineAngleOffsets[playerCount];
     machine->scale.x = FX32_ONE;
     machine->scale.y = FX32_ONE;
     machine->scale.z = FX32_ONE;
@@ -2031,8 +2031,8 @@ void SpinTrade_LoadObjectModels(SpinTradeApp *app) {
     RenderModel_LoadFromNarc(&objects->shadowModel, 0, app->narc, 5, HEAP_ID_102, FALSE);
     RenderModel_BindTexturesOnVBlank(&objects->shadowModel);
     model = objects->markerModels;
-    modelIds = ov85_021EA558;
-    animIds = ov85_021EA580;
+    modelIds = gSpinTradeMarkerModelIds;
+    animIds = gSpinTradeMarkerAnimIds;
     i = 0;
     anim = objects->markerAnims;
     animModel = model;
@@ -2164,7 +2164,7 @@ SpinTradeEgg *SpinTrade_FindEggNearestSlot(SpinTradeApp *app) {
     count = app->playerCount;
     objects = &app->objects;
     i = 0;
-    target = ov85_021EA7C4[count][app->mySlot] << FX32_SHIFT;
+    target = gSpinTradeDropTargetAngles[count][app->mySlot] << FX32_SHIFT;
     do {
         order[i] = i;
         distances[i] = 0xFFFF;
@@ -2262,7 +2262,7 @@ void SpinTrade_EggDropTask(SysTask *sysTask, void *data) {
     int ret;
 
     do {
-        ret = ov85_021EA51C[task->state](task);
+        ret = gSpinTradeEggDropStateFuncs[task->state](task);
     } while (ret == 1);
     if (ret == 2) {
         task->egg->dropped = TRUE;
@@ -2666,7 +2666,7 @@ void SpinTrade_CountdownTask(SysTask *task, void *data) {
     switch (countdown->state) {
     case 0:
         if (countdown->soundIndex < 4) {
-            SpinTradeCountdownSounds sounds = ov85_021EA528;
+            SpinTradeCountdownSounds sounds = gSpinTradeCountdownSounds;
             countdown->timer--;
             if (countdown->timer <= 0) {
                 countdown->timer = 30;
@@ -2791,7 +2791,7 @@ void SpinTradeHover_Update(SpinTradeApp *app, SpinTradeHover *hover) {
     case 0:
         break;
     case 1:
-        hover->egg->offset.y = _021EAA80[hover->index] << FX32_SHIFT;
+        hover->egg->offset.y = gSpinTradeHoverOffsets[hover->index] << FX32_SHIFT;
         hover->index++;
         if (hover->index >= 16) {
             hover->index = 0;
@@ -3080,7 +3080,7 @@ BOOL SpinTrade_IsInBonusArea(SpinTradeApp *app, fx32 angle, int playerCount) {
     SpinTrade_AddAngle(&position, FX32_CONST(5));
     b = position / FX32_ONE;
     {
-        const SpinTradeBonusAreas *areas = &ov85_021EA758[playerCount];
+        const SpinTradeBonusAreas *areas = &gSpinTradeBonusAreas[playerCount];
         count = areas->count;
         range = areas->ranges;
     }

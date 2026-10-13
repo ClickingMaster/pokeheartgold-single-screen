@@ -668,7 +668,7 @@
 	.public ov81_022406E0
 	.public ov81_02240728
 	.public BattleFactoryApp_LoadBgPalette
-	.public ov81_022407A8
+	.public BattleFactoryApp_LoadSubScreenBg
 	.public BattleFactoryApp_PrintMessage
 	.public BattleFactoryApp_ShowMessage
 	.public BattleFactoryApp_BufferNumber
@@ -740,7 +740,7 @@
 	.public BattleFactoryApp_FlashNarrowButton
 	.public BattleFactoryApp_UpdateButtonFlash
 	.public BattleFactoryApp_SetBallsTranslucent
-	.public ov81_0224271C
+	.public BattleFactoryApp_InitBgCellManager
 	.public BattleFactorySpriteGfx_Init
 	.public BattleFactorySpriteGfx_CreateSprite
 	.public BattleFactorySpriteGfx_Free
@@ -854,7 +854,7 @@
 	.public ov81_022406E0
 	.public ov81_02240728
 	.public BattleFactoryApp_LoadBgPalette
-	.public ov81_022407A8
+	.public BattleFactoryApp_LoadSubScreenBg
 	.public BattleFactoryApp_PrintMessage
 	.public BattleFactoryApp_ShowMessage
 	.public BattleFactoryApp_BufferNumber
@@ -938,8 +938,8 @@
 	.public BattleFactoryApp_SetBallsTranslucent
 	.public BattleFactory_IsLinkMode
 	.public BattleFactoryApp_IsLinkMode
-	.public ov81_0224271C
-	.public ov81_0224275C
+	.public BattleFactoryApp_InitBgCellManager
+	.public BattleFactoryApp_FreeBgCellManager
 	.public BattleFactorySpriteGfx_Init
 	.public BattleFactorySpriteGfx_CreateSprite
 	.public BattleFactorySpriteGfx_Free
@@ -1021,7 +1021,7 @@
 	.public BattleFactoryApp_DestroyYesNo
 	.public BattleFactory_IsLinkMode
 	.public BattleFactoryApp_IsLinkMode
-	.public ov81_0224275C
+	.public BattleFactoryApp_FreeBgCellManager
 	.public BattleFactory_SetPokepicHFlip
 	.public BattleFactorySprite_Delete
 	.public BattleFactorySprite_SetVisible

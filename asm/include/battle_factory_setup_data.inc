@@ -22,7 +22,7 @@
 .public FrontierData_ReadMember
 .public FrontierTrainer_Load
 .public FrontierMon_ToPokemon
-.public ov80_0222A3BC
+.public Frontier_AddRentalMonToParty
 .public FrontierTrainer_SetBattleTrainer
 .public FrontierMon_GenerateList
 .public BattleFactory_GetRoundTrainerIds
