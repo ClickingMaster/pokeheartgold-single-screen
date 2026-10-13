@@ -119,7 +119,7 @@ int WifiSetupApp_Run(void *heap, s32 language, s32 flags) {
         gWifiSetupApp.stateFunc();
         WifiSetupTask_RunQueue(0);
         WifiSetupInput_UpdateLcdPower();
-        ov13_022422E0();
+        WifiSetupLed_SetWirelessPattern();
         OS_WaitVBlankIntr();
     } while (gWifiSetupApp.exit == FALSE);
     WifiSetupApp_Shutdown();
@@ -244,7 +244,7 @@ void WifiSetupApp_InitDisplay(void) {
 void WifiSetupApp_Shutdown(void) {
     GX_DispOff();
     GXS_DispOff();
-    ov13_0224230C();
+    WifiSetupLed_SetOn();
     WifiSetupInput_Free();
     WifiSetup_RestoreVBlankIntr();
     WifiSetupSound_Free();

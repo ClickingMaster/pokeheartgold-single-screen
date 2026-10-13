@@ -18,7 +18,7 @@ BOOL PokedexApp_RunSearch(PokedexAppData *pokedexApp, u8 natDexFlag, u32 order, 
     u32 count1;
     u32 count2;
 
-    MI_CpuClear32(&pokedexApp->searchResults, sizeof(PokedexAppData_UnkSub0878));
+    MI_CpuClear32(&pokedexApp->searchResults, sizeof(PokedexSearchResults));
     buf1 = Heap_AllocAtEnd(HEAP_ID_POKEDEX_APP, NATIONAL_DEX_COUNT * sizeof(u16));
     GF_ASSERT(buf1 != NULL);
     memset(buf1, 0, NATIONAL_DEX_COUNT * sizeof(u16));
@@ -130,7 +130,7 @@ void PokedexApp_FilterSeen(u16 *dst, u32 *count, const Pokedex *pokedex, const u
     } while (i < length);
 }
 
-void PokedexApp_StoreSearchResults(PokedexAppData_UnkSub0878 *result, const Pokedex *pokedex, const u16 *src, u32 count) {
+void PokedexApp_StoreSearchResults(PokedexSearchResults *result, const Pokedex *pokedex, const u16 *src, u32 count) {
     u32 i;
 
     result->count = count;
@@ -432,7 +432,7 @@ u16 PokedexApp_GetCursorSpecies(PokedexAppData *pokedexApp) {
 }
 
 // Returns species if it is among the results, else the first result.
-u32 PokedexApp_FindSpeciesInResults(PokedexAppData_UnkSub0878 *results, u16 species) {
+u32 PokedexApp_FindSpeciesInResults(PokedexSearchResults *results, u16 species) {
     u32 i;
     u16 first = 0;
     u16 count = results->count;
@@ -460,7 +460,7 @@ void PokedexApp_BuildListEntries(PokedexAppData *pokedexApp, int mode) {
             PokedexAppData *shifted;
             dexNo--;
             // addressed through the app pointer shifted by dexNo entries (listEntries[dexNo] changes the code)
-            shifted = (PokedexAppData *)((u8 *)pokedexApp + dexNo * sizeof(PokedexAppData_UnkSub1030));
+            shifted = (PokedexAppData *)((u8 *)pokedexApp + dexNo * sizeof(PokedexListEntry));
             shifted->listEntries[0].species = pokedexApp->searchResults.entries[i][0];
             shifted->listEntries[0].caughtState = pokedexApp->searchResults.entries[i][1];
         }

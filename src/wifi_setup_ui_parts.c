@@ -416,7 +416,7 @@ void WifiSetupBackground_LoadSlotHeader(void) {
     WifiSetupBackground_LoadHeader(WifiSetupConnections_GetEdit()[244] + 5);
 }
 
-void ov13_02227E58(void) {
+void WifiSetupBackground_LoadSlotListHeader(void) {
     WifiSetupBackground_LoadHeader(WifiSetupConnections_GetEdit()[244] + 2);
 }
 

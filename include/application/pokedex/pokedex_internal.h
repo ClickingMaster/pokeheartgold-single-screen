@@ -112,7 +112,7 @@ enum {
 
 typedef struct PokedexAppData PokedexAppData;
 
-typedef struct PokedexAppData_UnkSub0868_State04 {
+typedef struct PokedexFlashButtonState {
     u8 x;
     u8 y;
     u8 width;
@@ -122,7 +122,7 @@ typedef struct PokedexAppData_UnkSub0868_State04 {
     u8 timer;
     u8 normalPalette : 4;
     u8 flashPalette : 4;
-} PokedexAppData_UnkSub0868_State04;
+} PokedexFlashButtonState;
 
 typedef struct PokedexAppData_UnkSub0868_State06 {
     u32 touchX;
@@ -141,13 +141,13 @@ typedef struct PokedexAppData_UnkSub0868_State10 {
     u8 state;
 } PokedexAppData_UnkSub0868_State10;
 
-typedef struct PokedexAppData_UnkSub0868_State13 {
+typedef struct PokedexListScrollState {
     u16 *numberTilemap;
     u8 state;
     u8 scrollStep;
     u8 scrollbarStep;
     u8 wrapCursor;
-} PokedexAppData_UnkSub0868_State13;
+} PokedexListScrollState;
 
 typedef struct PokedexAppData_UnkSub0868_State16 {
     u16 unk_0;
@@ -168,12 +168,12 @@ typedef struct PokedexAppData_UnkSub0868_State26 {
     u8 unk_3;
 } PokedexAppData_UnkSub0868_State26;
 
-typedef struct PokedexAppData_UnkSub0868_State38 {
+typedef struct PokedexSliderState {
     u32 prevValue;
     u32 holdFrames;
     u16 arrowSprite;
     s16 direction;
-} PokedexAppData_UnkSub0868_State38;
+} PokedexSliderState;
 
 typedef struct PokedexAppData_UnkSub0868_State69 {
     u16 state;
@@ -181,7 +181,7 @@ typedef struct PokedexAppData_UnkSub0868_State69 {
 } PokedexAppData_UnkSub0868_State69;
 
 // Weight check: the scale animation (sWeightCheckAnimFuncs[animIndex], one per weight-difference class)
-typedef struct PokedexAppData_UnkSub0868_State77_Sub4 {
+typedef struct PokedexWeightCheckAnim {
     PokedexAppData *pokedexApp; // 0x00
     s32 dropOffset;             // 0x04 figures dropping onto the pans, fx32
     u16 animIndex;              // 0x08
@@ -194,74 +194,74 @@ typedef struct PokedexAppData_UnkSub0868_State77_Sub4 {
     s16 dropAccel;              // 0x1A
     u16 dropSprite;             // 0x1C the thrown figure (2 trainer, 4 Pokemon)
     u16 dropTargetSprite;       // 0x1E its pan (8, 9)
-} PokedexAppData_UnkSub0868_State77_Sub4;
+} PokedexWeightCheckAnim;
 
-typedef struct PokedexAppData_UnkSub0868_State77 {
+typedef struct PokedexWeightCheckState {
     int state;
-    PokedexAppData_UnkSub0868_State77_Sub4 *anim;
-} PokedexAppData_UnkSub0868_State77;
+    PokedexWeightCheckAnim *anim;
+} PokedexWeightCheckState;
 
-typedef union PokedexAppData_UnkSub0868 {
-    PokedexAppData_UnkSub0868_State04 state_04;
+typedef union PokedexSeqState {
+    PokedexFlashButtonState state_04;
     PokedexAppData_UnkSub0868_State06 state_06;
     PokedexAppData_UnkSub0868_State09 state_09;
     PokedexAppData_UnkSub0868_State10 state_10;
-    PokedexAppData_UnkSub0868_State13 state_13;
+    PokedexListScrollState state_13;
     PokedexAppData_UnkSub0868_State16 state_16;
     PokedexAppData_UnkSub0868_State17 state_17;
     PokedexAppData_UnkSub0868_State26 state_26;
-    PokedexAppData_UnkSub0868_State38 state_38;
+    PokedexSliderState state_38;
     PokedexAppData_UnkSub0868_State69 state_69;
-    PokedexAppData_UnkSub0868_State77 state_77;
+    PokedexWeightCheckState state_77;
     u8 padding[16];
-} PokedexAppData_UnkSub0868;
+} PokedexSeqState;
 
-typedef struct PokedexAppData_UnkSub0878 {
+typedef struct PokedexSearchResults {
     u16 entries[NATIONAL_DEX_COUNT][2];
     u16 count;
     u16 caughtCount;
-} PokedexAppData_UnkSub0878;
+} PokedexSearchResults;
 
-typedef struct PokedexAppData_UnkSub1030 {
+typedef struct PokedexListEntry {
     u16 species;     // 0x0
     u16 caughtState; // 0x2
-} PokedexAppData_UnkSub1030;
+} PokedexListEntry;
 
-typedef struct PokedexAppData_UnkSub18CC {
+typedef struct PokedexSizeCheckData {
     s16 *player_ypos;  // 0x0
     s16 *player_scale; // 0x4
     s16 *mon_ypos;     // 0x8
     s16 *mon_scale;    // 0xC
-} PokedexAppData_UnkSub18CC;
+} PokedexSizeCheckData;
 
-typedef struct PokedexAppData_UnkSub18DC_0 {
+typedef struct PokedexMapList {
     s32 *maps;
     s32 nMaps;
-} PokedexAppData_UnkSub18DC_0;
+} PokedexMapList;
 
-typedef struct PokedexAppData_UnkSub18DC {
-    PokedexAppData_UnkSub18DC_0 overworldByTime; // 0x00
-    PokedexAppData_UnkSub18DC_0 overworldOther;  // 0x08
-    PokedexAppData_UnkSub18DC_0 dungeonByTime;   // 0x10
-    PokedexAppData_UnkSub18DC_0 dungeonOther;    // 0x18
-    PokedexAppData_UnkSub18DC_0 areas;           // 0x20
-    u32 *areaSources;                            // 0x28
-} PokedexAppData_UnkSub18DC;
+typedef struct PokedexAreaList {
+    PokedexMapList overworldByTime; // 0x00
+    PokedexMapList overworldOther;  // 0x08
+    PokedexMapList dungeonByTime;   // 0x10
+    PokedexMapList dungeonOther;    // 0x18
+    PokedexMapList areas;           // 0x20
+    u32 *areaSources;               // 0x28
+} PokedexAreaList;
 
-typedef struct PokedexAppData_UnkSub1908 {
+typedef struct PokedexDungeonArea {
     u8 x;      // 0x00
     u8 y;      // 0x01
     u8 unk_02; // 0x02
     u8 unk_03; // 0x03
-} PokedexAppData_UnkSub1908;
+} PokedexDungeonArea;
 
-typedef struct PokedexAppData_UnkSub190C {
+typedef struct PokedexOverworldArea {
     u8 x;          // 0x00
     u8 y;          // 0x01
     u8 width;      // 0x02
     u8 height;     // 0x03
     u8 unk_04[32]; // 0x04
-} PokedexAppData_UnkSub190C;
+} PokedexOverworldArea;
 
 typedef struct PokedexBgRect {
     u8 x;
@@ -270,10 +270,10 @@ typedef struct PokedexBgRect {
     u8 height;
 } PokedexBgRect;
 
-typedef struct PokedexAppData_UnkSub1850 {
+typedef struct PokedexSliderValue {
     u16 height;
     u16 weight;
-} PokedexAppData_UnkSub1850;
+} PokedexSliderValue;
 
 struct PokedexAppData {
     PokedexArgs *args;                              // 0x0000
@@ -292,12 +292,12 @@ struct PokedexAppData {
     int nextSeq;                                    // 0x085C
     int fadeNextSeq;                                // 0x0860
     u32 keyInput;                                   // 0x0864
-    PokedexAppData_UnkSub0868 seqState;             // 0x0868
-    PokedexAppData_UnkSub0878 searchResults;        // 0x0878
-    PokedexAppData_UnkSub1030 listEntries[518];     // 0x1030
+    PokedexSeqState seqState;                       // 0x0868
+    PokedexSearchResults searchResults;             // 0x0878
+    PokedexListEntry listEntries[518];              // 0x1030
     void *heights;                                  // 0x1848
     void *weights;                                  // 0x184C
-    PokedexAppData_UnkSub1850 *sliderValues;        // 0x1850
+    PokedexSliderValue *sliderValues;               // 0x1850
     u8 *speciesAreaMasks;                           // 0x1854
     u8 dexMode;                                     // 0x1858
     u8 listPage;                                    // 0x1859 list / search result page
@@ -331,10 +331,10 @@ struct PokedexAppData {
     u8 areaBlinkAlpha : 6;                          // 0x18CB
     u8 areaBlinkPhase : 1;                          // 0x18CB
     u8 areaBlinkFadingOut : 1;                      // 0x18CB
-    PokedexAppData_UnkSub18CC sizeCheckData;        // 0x18CC
-    PokedexAppData_UnkSub18DC areaList;             // 0x18DC
-    PokedexAppData_UnkSub1908 *dungeonAreaTable;    // 0x1908
-    PokedexAppData_UnkSub190C *overworldAreaTable;  // 0x190C
+    PokedexSizeCheckData sizeCheckData;             // 0x18CC
+    PokedexAreaList areaList;                       // 0x18DC
+    PokedexDungeonArea *dungeonAreaTable;           // 0x1908
+    PokedexOverworldArea *overworldAreaTable;       // 0x190C
 }; // size: 0x1910
 
 void PokedexApp_VBlankCallback(void *cb_arg);
@@ -645,31 +645,31 @@ void PokedexApp_RotatePoint(u16 angle, s16 *x, s16 *y);
 void PokedexApp_SetPanSpritePos(PokedexAppData *pokedexApp, int index, u16 angle, s16 x, s16 y);
 void PokedexApp_PlaceFigureOnPan(PokedexAppData *pokedexApp, int index, int from);
 void PokedexApp_UpdateScalePans(PokedexAppData *pokedexApp, u32 angle);
-void PokedexApp_InitWeightCheckAnim(PokedexAppData *pokedexApp, PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_DropFiguresOntoPans(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_RunWeightCheckAnim(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-void PokedexApp_SetBeamRotation(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s32 speed, s32 accel);
-void PokedexApp_SetBeamSwing(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s32 speed, s32 accel, s32 endSpeed);
-BOOL PokedexApp_WeightAnim_Even(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Tip1(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Tip2(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Tip3(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Tip4(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Tip5(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Tip6(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Tip7(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-void PokedexApp_StartFigureThrow(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s16 speed, s16 accel);
-void PokedexApp_MoveThrownFigure(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_UpdateThrownFigure(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_TipToStop(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Throw1(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Throw2(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Throw3(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Throw4(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Throw5(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Throw6(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Throw7(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
-BOOL PokedexApp_WeightAnim_Throw8(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
+void PokedexApp_InitWeightCheckAnim(PokedexAppData *pokedexApp, PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_DropFiguresOntoPans(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_RunWeightCheckAnim(PokedexWeightCheckAnim *anim);
+void PokedexApp_SetBeamRotation(PokedexWeightCheckAnim *anim, s32 speed, s32 accel);
+void PokedexApp_SetBeamSwing(PokedexWeightCheckAnim *anim, s32 speed, s32 accel, s32 endSpeed);
+BOOL PokedexApp_WeightAnim_Even(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Tip1(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Tip2(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Tip3(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Tip4(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Tip5(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Tip6(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Tip7(PokedexWeightCheckAnim *anim);
+void PokedexApp_StartFigureThrow(PokedexWeightCheckAnim *anim, s16 speed, s16 accel);
+void PokedexApp_MoveThrownFigure(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_UpdateThrownFigure(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_TipToStop(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Throw1(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Throw2(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Throw3(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Throw4(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Throw5(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Throw6(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Throw7(PokedexWeightCheckAnim *anim);
+BOOL PokedexApp_WeightAnim_Throw8(PokedexWeightCheckAnim *anim);
 void PokedexApp_SetupFormsSprites(PokedexAppData *pokedexApp);
 void PokedexApp_FreeFormsSprites(PokedexAppData *pokedexApp);
 void PokedexApp_CreateFormsSprites(PokedexAppData *pokedexApp);
@@ -761,7 +761,7 @@ u32 PokedexApp_HandleEntryMenuInput(PokedexAppData *pokedexApp, u32 *touched);
 BOOL PokedexApp_RunSearch(PokedexAppData *pokedexApp, u8 natDexFlag, u32 order, u32 letter, u32 type1, u32 type2, u32 heightMin, u32 heightMax, u32 weightMin, u32 weightMax, u32 areaMask, u32 bodyType);
 void *PokedexApp_LoadSortData(u32 index, u32 *count);
 void PokedexApp_FilterSeen(u16 *dst, u32 *count, const Pokedex *pokedex, const u16 *src, u32 length);
-void PokedexApp_StoreSearchResults(PokedexAppData_UnkSub0878 *result, const Pokedex *pokedex, const u16 *src, u32 count);
+void PokedexApp_StoreSearchResults(PokedexSearchResults *result, const Pokedex *pokedex, const u16 *src, u32 count);
 void PokedexApp_ApplySortOrder(u32 order, u16 *dst, u32 *dstCount, const u16 *src, u32 srcCount, const Pokedex *pokedex);
 void PokedexApp_FilterByLetter(u32 letter, u16 *dst, u32 *dstCount, const u16 *src, u32 srcCount, const Pokedex *pokedex);
 void PokedexApp_FilterByType(u32 type, u16 *dst, u32 *dstCount, const u16 *src, u32 srcCount, const Pokedex *pokedex);
@@ -772,7 +772,7 @@ void PokedexApp_FilterByWeight(PokedexAppData *pokedexApp, u16 min, u16 max, u16
 void PokedexApp_IntersectSpeciesLists(u16 *dst, u32 *count, const u16 *lookup, u32 lookupCount, const u16 *src, u32 srcCount, BOOL seenOnly, const Pokedex *pokedex);
 u32 PokedexApp_GetListCursorIndex(PokedexAppData *pokedexApp);
 u16 PokedexApp_GetCursorSpecies(PokedexAppData *pokedexApp);
-u32 PokedexApp_FindSpeciesInResults(PokedexAppData_UnkSub0878 *results, u16 species);
+u32 PokedexApp_FindSpeciesInResults(PokedexSearchResults *results, u16 species);
 void PokedexApp_BuildListEntries(PokedexAppData *pokedexApp, int mode);
 u32 PokedexApp_GetListLength(PokedexAppData *pokedexApp, int mode);
 u32 PokedexApp_GetLastListPage(PokedexAppData *pokedexApp, int mode);

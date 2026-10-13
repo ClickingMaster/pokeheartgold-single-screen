@@ -103,7 +103,7 @@ void VsRecorder_InitResources(VsRecorderWork *work) {
     VsRecorder_InitSpriteSystem(work);
     GF_TouchpadResetSampling();
     GF_TouchpadStartSampling(4);
-    work->unk_0044 = 1;
+    work->cursorHidden = 1;
     VsRecorder_InitMenuHitboxes(work);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     Main_SetVBlankIntrCB(VsRecorder_VBlankCB, work);
@@ -302,7 +302,7 @@ BOOL VsRecorder_Main(VsRecorderWork *work, int *screen) {
         if (done == FALSE) {
             break;
         }
-        if (work->unk_0044 == 1) {
+        if (work->cursorHidden == 1) {
             VsRecorder_SetSubState(work, 0);
         } else {
             VsRecorder_SetSubState(work, 1);

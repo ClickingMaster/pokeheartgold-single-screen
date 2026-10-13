@@ -116,10 +116,10 @@ typedef struct MapFlypointParam {
     u8 unk170DestY : 4;
 } MapFlypointParam;
 
-typedef struct PokegearMapAppData_Sub044 {
+typedef struct PokegearMapTextObj {
     TextOBJ *textOBJ;
-    ObjCharSpaceReservation unk_4;
-} PokegearMapAppData_Sub044;
+    ObjCharSpaceReservation charSpace;
+} PokegearMapTextObj;
 
 typedef struct PokegearMapCursorState {
     fx32 x;
@@ -130,8 +130,8 @@ typedef struct PokegearMapCursorState {
     int affineY;
     fx32 dxStep;
     fx32 dyStep;
-    fx32 unk_20;
-    fx32 unk_24;
+    fx32 fxX;
+    fx32 fxY;
     u16 top;
     u16 bottom;
     u16 left;
@@ -190,9 +190,9 @@ typedef struct PokegearMapAppData {
     int markingsPanelScrollActive;                // 0x030
     int markingsPanelScrollStep;                  // 0x034
     MAPDATA *mapData;                             // 0x038
-    FontSystem *unk_03C;                  // 0x03C
-    TextOBJLayout *unk_040;                  // 0x040
-    PokegearMapAppData_Sub044 unk_044[4];         // 0x044
+    FontSystem *fontSystem;               // 0x03C
+    TextOBJLayout *textObjLayout;            // 0x040
+    PokegearMapTextObj textObjs[4];               // 0x044
     PokegearObjectsManager *objManager;           // 0x084
     MsgData *msgData;                             // 0x088
     MessageFormat *msgFormat;                     // 0x08C
@@ -238,9 +238,9 @@ typedef struct PokegearMapAppData {
     u8 mapUnlockLevel : 2;                        // 0x138
     u8 requestAffineUpdate : 1;                   // 0x138
     u8 draggingMarking : 1;                       // 0x139
-    u8 unk_139_1 : 1;                             // 0x139
-    u8 unk_139_2 : 1;                             // 0x139
-    u8 unk_139_3 : 1;                             // 0x139
+    u8 zoomMoving : 1;                            // 0x139
+    u8 cursorMoving : 1;                          // 0x139
+    u8 touchDragging : 1;                         // 0x139
     u8 draggingIcon : 4;                          // 0x139
     u8 cursorSpeed;                               // 0x13A
     u8 moveCursorDirection;                       // 0x13B
@@ -252,22 +252,22 @@ typedef struct PokegearMapAppData {
     u8 isMapSSAqua : 1;                           // 0x13D
     s16 draggingWordX;                            // 0x13E
     s16 draggingWordY;                            // 0x140
-    s16 unk_142;                                  // 0x142
-    s16 unk_144;                                  // 0x144
-    s16 unk_146;                                  // 0x146
-    s16 unk_148;                                  // 0x148
+    s16 dragAnchorX;                              // 0x142
+    s16 dragAnchorY;                              // 0x144
+    s16 touchStartX;                              // 0x146
+    s16 touchStartY;                              // 0x148
     s16 pixelTop;                                 // 0x14A
     s16 pixelBottom;                              // 0x14C
     s16 pixelLeft;                                // 0x14E
     s16 pixelRight;                               // 0x150
     u16 lastSelectedMapID;                        // 0x152
-    void *unk_154[6];                             // 0x154
-    NNSG2dScreenData *unk_16C;                    // 0x16C
-    NNSG2dScreenData *unk_170;                    // 0x170
-    NNSG2dScreenData *unk_174;                    // 0x174
-    NNSG2dScreenData *unk_178;                    // 0x178
-    NNSG2dScreenData *unk_17C;                    // 0x17C
-    NNSG2dScreenData *unk_180;                    // 0x180
+    void *screenFiles[6];                         // 0x154
+    NNSG2dScreenData *subBg2Screen;               // 0x16C
+    NNSG2dScreenData *mapScreen;                  // 0x170
+    NNSG2dScreenData *subBg3Screen;               // 0x174
+    NNSG2dScreenData *mainBg1Screen;              // 0x178
+    NNSG2dScreenData *mainBg2Screen;              // 0x17C
+    NNSG2dScreenData *mainBg3Screen;              // 0x180
     Window windows[9];                            // 0x184
     const PokegearMapLocationSpec *locationSpecs; // 0x214
     MapMarkingsHeapNode mapMarkingsHeap[100];     // 0x218

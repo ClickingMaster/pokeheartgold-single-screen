@@ -40,7 +40,7 @@ extern const TouchscreenHitbox sVsRecorderSearchOverwriteHitboxes[2];
 extern const TouchscreenHitbox sVsRecorderSearchDetailHitboxes[4];
 
 // flag byte of the video found by number (VsRecorderVideoList.flags of a listed video)
-#define NUMBER_SEARCH_VIDEO_FLAG(work) ((work)->net.unk_0004[0x1D4C])
+#define NUMBER_SEARCH_VIDEO_FLAG(work) ((work)->net.videoBuffer[0x1D4C])
 
 // VsRecorderVideoSearch substates of the video search (sVsRecorderVideoSearchSubStates)
 #define SEARCH_SHOW_CONDITIONS   2
@@ -136,9 +136,9 @@ BOOL VsRecorder_VideoSearchDownloadVideo(VsRecorderWork *work) {
             StopSE(SEQ_SE_PL_BREC80, 0);
             work->step = 0xFF;
             search->downloaded = TRUE;
-            work->unk_0878 = (u32)&work->net.videoList.flags[work->listWindow.cursor];
+            work->videoFlagPtr = (u32)&work->net.videoList.flags[work->listWindow.cursor];
             search->foundVideo = work->net.downloadedVideo;
-            MI_CpuCopy8(search->foundVideo, work->net.unk_0004, 0x1D4C);
+            MI_CpuCopy8(search->foundVideo, work->net.videoBuffer, 0x1D4C);
         }
         OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 0, 0);
@@ -475,9 +475,9 @@ BOOL VsRecorder_NumberSearchDownloadVideo(VsRecorderWork *work) {
             work->step = 0xFF;
             search->downloaded = TRUE;
             PlaySE(SEQ_SE_PL_BREC12);
-            work->unk_0878 = (u32)&NUMBER_SEARCH_VIDEO_FLAG(work);
+            work->videoFlagPtr = (u32)&NUMBER_SEARCH_VIDEO_FLAG(work);
             search->foundVideo = work->net.downloadedVideo;
-            MI_CpuCopy8(search->foundVideo, work->net.unk_0004, 0x1D4C);
+            MI_CpuCopy8(search->foundVideo, work->net.videoBuffer, 0x1D4C);
         }
         OrbitCursor_SetVisible(work->orbitCursors[1], FALSE);
         OrbitCursor_SetRadius(work->orbitCursors[1], 0, 0);
@@ -991,7 +991,7 @@ BOOL VsRecorder_NumberSearchResume(VsRecorderWork *work) {
         if (VsRecorder_IsFlipScreensDone(work)) {
             VsRecorder_InitBgBlend(&search->eva, &search->evb, 0);
             search->videoFlag = NUMBER_SEARCH_VIDEO_FLAG(work);
-            search->foundVideo = work->net.unk_0004;
+            search->foundVideo = work->net.videoBuffer;
             work->net.downloadedVideo = search->foundVideo;
             VsRecorder_ImportBattleRecord(work);
             VsRecorder_LoadFoundVideoDetails(work);

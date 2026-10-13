@@ -295,24 +295,24 @@ static void PokegearMap_LoadGraphics(PokegearMapAppData *mapApp, u8 frame) {
     BgConfig_LoadAssetFromOpenNarc(mapApp->pokegear->bgConfig, mapApp->heapID, narc, NARC_application_pokegear_map_pgmap_gra, NARC_pgmap_gra_pgmap_gra_00000010_NCGR, GF_BG_LYR_MAIN_2, GF_BG_GFX_TYPE_CHAR, 0, 0);
     BgConfig_LoadAssetFromOpenNarc(mapApp->pokegear->bgConfig, mapApp->heapID, narc, NARC_application_pokegear_map_pgmap_gra, frame + NARC_pgmap_gra_pgmap_gra_00000050_NCGR, GF_BG_LYR_SUB_2, GF_BG_GFX_TYPE_CHAR, 0, 0);
     BgConfig_LoadAssetFromOpenNarc(mapApp->pokegear->bgConfig, mapApp->heapID, narc, NARC_application_pokegear_map_pgmap_gra, NARC_pgmap_gra_pgmap_gra_00000012_NCGR, GF_BG_LYR_SUB_3, GF_BG_GFX_TYPE_CHAR, 0, 0);
-    mapApp->unk_154[0] = GfGfxLoader_GetScrnDataFromOpenNarc(narc, frame + NARC_pgmap_gra_pgmap_gra_00000056_NSCR, FALSE, &mapApp->unk_16C, mapApp->heapID);
-    mapApp->unk_154[1] = GfGfxLoader_GetScrnDataFromOpenNarc(narc, NARC_pgmap_gra_pgmap_gra_00000011_NSCR, FALSE, &mapApp->unk_170, mapApp->heapID);
-    mapApp->unk_154[2] = GfGfxLoader_GetScrnDataFromOpenNarc(narc, NARC_pgmap_gra_pgmap_gra_00000013_NSCR, FALSE, &mapApp->unk_174, mapApp->heapID);
-    mapApp->unk_154[3] = GfGfxLoader_GetScrnDataFromOpenNarc(narc, frame + NARC_pgmap_gra_pgmap_gra_00000032_NSCR, FALSE, &mapApp->unk_178, mapApp->heapID);
-    mapApp->unk_154[4] = GfGfxLoader_GetScrnDataFromOpenNarc(narc, frame + NARC_pgmap_gra_pgmap_gra_00000038_NSCR, FALSE, &mapApp->unk_17C, mapApp->heapID);
-    mapApp->unk_154[5] = GfGfxLoader_GetScrnDataFromOpenNarc(narc, frame + NARC_pgmap_gra_pgmap_gra_00000044_NSCR, FALSE, &mapApp->unk_180, mapApp->heapID);
+    mapApp->screenFiles[0] = GfGfxLoader_GetScrnDataFromOpenNarc(narc, frame + NARC_pgmap_gra_pgmap_gra_00000056_NSCR, FALSE, &mapApp->subBg2Screen, mapApp->heapID);
+    mapApp->screenFiles[1] = GfGfxLoader_GetScrnDataFromOpenNarc(narc, NARC_pgmap_gra_pgmap_gra_00000011_NSCR, FALSE, &mapApp->mapScreen, mapApp->heapID);
+    mapApp->screenFiles[2] = GfGfxLoader_GetScrnDataFromOpenNarc(narc, NARC_pgmap_gra_pgmap_gra_00000013_NSCR, FALSE, &mapApp->subBg3Screen, mapApp->heapID);
+    mapApp->screenFiles[3] = GfGfxLoader_GetScrnDataFromOpenNarc(narc, frame + NARC_pgmap_gra_pgmap_gra_00000032_NSCR, FALSE, &mapApp->mainBg1Screen, mapApp->heapID);
+    mapApp->screenFiles[4] = GfGfxLoader_GetScrnDataFromOpenNarc(narc, frame + NARC_pgmap_gra_pgmap_gra_00000038_NSCR, FALSE, &mapApp->mainBg2Screen, mapApp->heapID);
+    mapApp->screenFiles[5] = GfGfxLoader_GetScrnDataFromOpenNarc(narc, frame + NARC_pgmap_gra_pgmap_gra_00000044_NSCR, FALSE, &mapApp->mainBg3Screen, mapApp->heapID);
     NARC_Delete(narc);
     ScheduleBgTilemapBufferTransfer(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_1);
     ScheduleBgTilemapBufferTransfer(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
 static void PokegearMap_UnloadGraphics(PokegearMapAppData *mapApp) {
-    Heap_Free(mapApp->unk_154[5]);
-    Heap_Free(mapApp->unk_154[4]);
-    Heap_Free(mapApp->unk_154[3]);
-    Heap_Free(mapApp->unk_154[2]);
-    Heap_Free(mapApp->unk_154[1]);
-    Heap_Free(mapApp->unk_154[0]);
+    Heap_Free(mapApp->screenFiles[5]);
+    Heap_Free(mapApp->screenFiles[4]);
+    Heap_Free(mapApp->screenFiles[3]);
+    Heap_Free(mapApp->screenFiles[2]);
+    Heap_Free(mapApp->screenFiles[1]);
+    Heap_Free(mapApp->screenFiles[0]);
 }
 
 static void PokegearMap_InitWindows(PokegearMapAppData *mapApp) {
@@ -722,12 +722,12 @@ static void PokegearMap_CreateObjectsManager(PokegearMapAppData *mapApp) {
     PokegearApp_CreateSpriteManager(mapApp->pokegear, GEAR_APP_MAP);
     mapApp->objManager = PokegearObjectsManager_Create(PGMAP_SPRITE_MAX, mapApp->heapID);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(mapApp->pokegear->spriteSystem), 0, FX32_CONST(240));
-    mapApp->unk_03C = FontSystem_NewInit(4, mapApp->heapID);
+    mapApp->fontSystem = FontSystem_NewInit(4, mapApp->heapID);
 }
 
 static void PokegearMap_DestroyObjectsManager(PokegearMapAppData *mapApp) {
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(mapApp->pokegear->spriteSystem), 0, FX32_CONST(192));
-    FontSystem_Delete(mapApp->unk_03C);
+    FontSystem_Delete(mapApp->fontSystem);
     PokegearObjectsManager_Release(mapApp->objManager);
     PokegearApp_DestroySpriteManager(mapApp->pokegear);
 }
@@ -876,11 +876,11 @@ static void PokegearMap_CreateMarkingsECWordTextOBJs(PokegearMapAppData *mapApp)
     u32 size;
     int i;
 
-    mapApp->unk_040 = TextOBJLayout_New(&mapApp->windows[8], mapApp->heapID);
-    size = TextOBJLayout_GetCharSize(mapApp->unk_040, NNS_G2D_VRAM_TYPE_2DMAIN);
+    mapApp->textObjLayout = TextOBJLayout_New(&mapApp->windows[8], mapApp->heapID);
+    size = TextOBJLayout_GetCharSize(mapApp->textObjLayout, NNS_G2D_VRAM_TYPE_2DMAIN);
     AddTextPrinterParameterizedWithColor(&mapApp->windows[8], 0, mapApp->regionNameStrings[1], 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
 
-    template.fontSystem = mapApp->unk_03C;
+    template.fontSystem = mapApp->fontSystem;
     template.window = &mapApp->windows[8];
     template.spriteList = SpriteManager_GetSpriteList(mapApp->pokegear->spriteManager);
     template.plttResourceProxy = SpriteManager_FindPlttResourceProxy(mapApp->pokegear->spriteManager, 0);
@@ -892,12 +892,12 @@ static void PokegearMap_CreateMarkingsECWordTextOBJs(PokegearMapAppData *mapApp)
     template.heapID = mapApp->heapID;
 
     for (i = 0; i < 4; ++i) {
-        ObjCharTransfer_ReserveCharSpace(size, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &mapApp->unk_044[i].unk_4);
-        template.offset = mapApp->unk_044[i].unk_4.offset;
+        ObjCharTransfer_ReserveCharSpace(size, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &mapApp->textObjs[i].charSpace);
+        template.offset = mapApp->textObjs[i].charSpace.offset;
         template.sprite = mapApp->objManager->objects[PGMAP_SPRITE_MARKINGS_MENU_SLOT_WORD_0 + i].sprite;
-        mapApp->unk_044[i].textOBJ = TextOBJ_Create(&template, mapApp->unk_040);
-        TextOBJ_SetSpritesDrawFlag(mapApp->unk_044[i].textOBJ, FALSE);
-        TextOBJ_SetPaletteNum(mapApp->unk_044[i].textOBJ, 7);
+        mapApp->textObjs[i].textOBJ = TextOBJ_Create(&template, mapApp->textObjLayout);
+        TextOBJ_SetSpritesDrawFlag(mapApp->textObjs[i].textOBJ, FALSE);
+        TextOBJ_SetPaletteNum(mapApp->textObjs[i].textOBJ, 7);
     }
 }
 
@@ -905,11 +905,11 @@ static void PokegearMap_DestroyMarkingsECWordTextOBJs(PokegearMapAppData *mapApp
     int i;
 
     for (i = 0; i < 4; ++i) {
-        TextOBJ_Destroy(mapApp->unk_044[i].textOBJ);
-        ObjCharTransfer_FreeCharSpace(&mapApp->unk_044[i].unk_4);
-        mapApp->unk_044[i].textOBJ = NULL;
+        TextOBJ_Destroy(mapApp->textObjs[i].textOBJ);
+        ObjCharTransfer_FreeCharSpace(&mapApp->textObjs[i].charSpace);
+        mapApp->textObjs[i].textOBJ = NULL;
     }
-    TextOBJLayout_Delete(mapApp->unk_040);
+    TextOBJLayout_Delete(mapApp->textObjLayout);
 }
 
 static void PokegearMap_CreateAuxSprites_MarkingsMode(PokegearMapAppData *mapApp) {
@@ -1072,11 +1072,11 @@ static void PokegearMap_SetBgParam_MapMode(PokegearMapAppData *mapApp) {
     mapApp->pokegear->deselectAppCB = PokegearMap_DeselectApp;
     ov101_021E990C(mapApp);
     PokegearMap_OnVBlank_UpdateCursorAffine(mapApp, &mapApp->cursorSpriteState);
-    CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 32, 20, mapApp->unk_178->rawData, 0, 0, mapApp->unk_178->screenWidth / 8, mapApp->unk_178->screenHeight / 8);
+    CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 32, 20, mapApp->mainBg1Screen->rawData, 0, 0, mapApp->mainBg1Screen->screenWidth / 8, mapApp->mainBg1Screen->screenHeight / 8);
 
     PokegearMap_DrawMapTilemap(mapApp);
     PokegearMap_SetButtonState(mapApp, 1, mapApp->zoomed);
-    CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_SUB_2, 0, 7, 32, 17, mapApp->unk_16C->rawData, 0, 7, mapApp->unk_16C->screenWidth / 8, mapApp->unk_16C->screenHeight / 8);
+    CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_SUB_2, 0, 7, 32, 17, mapApp->subBg2Screen->rawData, 0, 7, mapApp->subBg2Screen->screenWidth / 8, mapApp->subBg2Screen->screenHeight / 8);
 
     PokegearMap_SelectLocationAtCoord(mapApp, &mapApp->selectedLoc, mapApp->playerX, mapApp->playerY);
     PokegearMap_UpdateLocationPanel(mapApp, FALSE);
@@ -1124,8 +1124,8 @@ static void PokegearMap_SetBgParam_MarkingsMode(PokegearMapAppData *mapApp) {
         BgClearTilemapBufferAndCommit(mapApp->pokegear->bgConfig, i + GF_BG_LYR_MAIN_1);
     }
 
-    CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 32, 14, mapApp->unk_17C->rawData, 0, 0, mapApp->unk_17C->screenWidth / 8, mapApp->unk_17C->screenHeight / 8);
-    CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, 32, 24, mapApp->unk_180->rawData, 0, 0, mapApp->unk_180->screenWidth / 8, mapApp->unk_180->screenHeight / 8);
+    CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 32, 14, mapApp->mainBg2Screen->rawData, 0, 0, mapApp->mainBg2Screen->screenWidth / 8, mapApp->mainBg2Screen->screenHeight / 8);
+    CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, 32, 24, mapApp->mainBg3Screen->rawData, 0, 0, mapApp->mainBg3Screen->screenWidth / 8, mapApp->mainBg3Screen->screenHeight / 8);
     ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_ON);
     ScheduleBgTilemapBufferTransfer(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_1);
     ScheduleBgTilemapBufferTransfer(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_2);

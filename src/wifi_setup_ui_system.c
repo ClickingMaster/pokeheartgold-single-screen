@@ -1514,7 +1514,7 @@ void WifiSetup_ClearVram(void) {
     MIi_CpuClearFast(0, (void *)0x05000400, 0x400);
 }
 
-void ov13_022422E0(void) {
+void WifiSetupLed_SetWirelessPattern(void) {
     u32 pattern;
     if (PM_GetLEDPattern(&pattern) != 0) {
         return;
@@ -1525,7 +1525,7 @@ void ov13_022422E0(void) {
     PMi_SendLEDPatternCommand(0xF);
 }
 
-void ov13_0224230C(void) {
+void WifiSetupLed_SetOn(void) {
     PMi_SendLEDPatternCommand(1);
 }
 

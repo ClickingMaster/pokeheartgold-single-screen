@@ -179,7 +179,7 @@ void WifiSetupErrorScreen_WaitButtonBar(void) {
 
 void WifiSetupErrorScreen_Main(void) {
     WifiSetupErrorScreen_HandleKeys();
-    ov13_02232CA4();
+    WifiSetupErrorScreen_Update();
     WifiSetupErrorScreen_HandleButton();
 }
 
@@ -190,7 +190,7 @@ void WifiSetupErrorScreen_HandleKeys(void) {
     WifiSetupButtonBar_SelectIfNone(0);
 }
 
-void ov13_02232CA4(void) {
+void WifiSetupErrorScreen_Update(void) {
 }
 
 void WifiSetupErrorScreen_HandleButton(void) {

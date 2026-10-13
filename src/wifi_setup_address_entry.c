@@ -102,7 +102,7 @@ void WifiSetupAddressEntry_WaitKeypad(void) {
 
 void WifiSetupAddressEntry_Main(void) {
     WifiSetupAddressEntry_HandleInput();
-    ov13_022321FC();
+    WifiSetupAddressEntry_Update();
 }
 
 void WifiSetupAddressEntry_HandleInput(void) {
@@ -212,7 +212,7 @@ int WifiSetupAddressEntry_IsFieldAtLeast(int limit) {
     return atol((char *)buf) >= limit;
 }
 
-void ov13_022321FC(void) {
+void WifiSetupAddressEntry_Update(void) {
 }
 
 void WifiSetupAddressEntry_StartClose(void) {

@@ -76,7 +76,7 @@ void WifiSetupBackground_Init(void);
 void WifiSetupBackground_Free(void);
 void WifiSetupBackground_LoadHeader(int n);
 void WifiSetupBackground_LoadSlotHeader(void);
-void ov13_02227E58(void);
+void WifiSetupBackground_LoadSlotListHeader(void);
 void WifiSetupBackground_TransferTask(void *task);
 void WifiSetupSignalIcon_Create(int type);
 void WifiSetupSignalIcon_Destroy(void);

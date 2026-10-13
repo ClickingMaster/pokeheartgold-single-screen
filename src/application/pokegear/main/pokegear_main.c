@@ -87,7 +87,7 @@ BOOL Pokegear_Init(OverlayManager *man, int *state) {
         }
         break;
     }
-    pokegearApp->unk_038 = 0;
+    pokegearApp->returnFromEasyChat = 0;
     pokegearApp->mapSessionState.word = EC_WORD_NULL;
     pokegearApp->cursorInAppSwitchZone = 1;
     Sound_SetSceneAndPlayBGM(0x37, 0, 0);
@@ -269,7 +269,7 @@ static PokegearAppMainState Pokegear_MainStep_RunDebug(PokegearAppData *pokegear
     }
 
     EasyChat_FreeArgs(pokegearApp->easyChatArgs);
-    pokegearApp->unk_038 = 1;
+    pokegearApp->returnFromEasyChat = 1;
     pokegearApp->app = GEAR_APP_CANCEL;
     return POKEGEAR_APP_MAIN_STATE_SETUP;
 }

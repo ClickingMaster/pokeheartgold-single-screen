@@ -233,7 +233,7 @@ typedef struct VsRecorderVideoList {
 // server data of the work (0x8B4)
 typedef struct VsRecorderNetData {
     u8 *downloadedVideo; // profile 0x80 + header 0x64 + battle
-    u8 unk_0004[0x1D54 - 4];
+    u8 videoBuffer[0x1D54 - 4];
     VsRecorderVideoList videoList;
 } VsRecorderNetData; // size 0x38A8
 
@@ -292,7 +292,7 @@ typedef struct VsRecorderFrontierRecord {
     ManagedSprite *digits[5]; // Battle Points: 4 digits and "BP"
     int battlePoints;
     u8 unk_94[4];
-    ManagedSprite *unk_98;
+    ManagedSprite *buttonSprite;
     u8 unk_9C[0x1C];
     VsRecorderTextSprite exitButton;
     int eva; // top screen blend
@@ -456,7 +456,7 @@ struct VsRecorderWork {
     PaletteData *plttData;                   // 0x0028
     TouchHitboxController *hitboxController; // 0x002C, menu choices
     TouchscreenHitbox menuHitboxes[5];       // 0x0030
-    u32 unk_0044;                            // 0x0044, 1: the title goes on to the menu's substate 0
+    u32 cursorHidden;                        // 0x0044, 1: the title goes on to the menu's substate 0
     MsgData *msgData;                        // 0x0048, msg_0013
     MsgData *recordMsgData;                  // 0x004C, msg_0026 (frontier record)
     FontSystem *fontSystem;                  // 0x0050
@@ -487,8 +487,8 @@ struct VsRecorderWork {
     const VsRecorderMenuEntry *menu;         // 0x0818, current choices
     const VsRecorderMenuEntry *menuStack[5]; // 0x081C
     SaveData *saveData;                      // 0x0830
-    u16 unk_0834;                            // 0x0834
-    u16 unk_0836;                            // 0x0836
+    u16 recordWriteStep;                     // 0x0834
+    u16 recordWriteState;                    // 0x0836
     u32 hasResumeScreen;                     // 0x0838
     u32 resumeScreen;                        // 0x083C
     u32 unk_0840[8];                         // 0x0840
@@ -498,7 +498,7 @@ struct VsRecorderWork {
     u32 selection;                           // 0x086C
     u32 boxUploaded;                         // 0x0870, a box was sent (only one per visit)
     u32 battleResult;                        // 0x0874
-    u32 unk_0878;                            // 0x0878
+    u32 videoFlagPtr;                        // 0x0878
     void *savedVideos[4];                    // 0x087C
     FrontierCard *videoOwners[4];            // 0x088C
     u32 menuNoticeShown;                     // 0x089C, notice raised by the menu touch

@@ -252,9 +252,9 @@ BOOL VsRecorder_VideoListDownloadVideo(VsRecorderWork *work) {
             StopSE(SEQ_SE_PL_BREC80, 0);
             work->step = 0xFF;
             listWork->downloaded = TRUE;
-            work->unk_0878 = (u32)&work->net.videoList.flags[work->listWindow.cursor];
+            work->videoFlagPtr = (u32)&work->net.videoList.flags[work->listWindow.cursor];
             listWork->downloadedVideo = work->net.downloadedVideo;
-            MI_CpuCopy8(listWork->downloadedVideo, work->net.unk_0004, 0x1D4C);
+            MI_CpuCopy8(listWork->downloadedVideo, work->net.videoBuffer, 0x1D4C);
         }
         OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 0, 0);

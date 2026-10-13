@@ -35,9 +35,9 @@ static void PokedexApp_LoadAreaGraphics(PokedexAppData *pokedexApp);
 static void PokedexApp_LoadSizeCheckGraphics(PokedexAppData *pokedexApp);
 static void PokedexApp_LoadEntryMenuGraphics(PokedexAppData *pokedexApp);
 static u8 PokedexApp_GetSeenGenderForm(PokedexAppData *pokedexApp, u8 idx);
-static void PokedexApp_LoadEncounterMaps(PokedexAppData_UnkSub18DC_0 *a0, u16 species, int a2);
-static void PokedexApp_AddOverworldAreas(PokedexAppData *pokedexApp, PokedexAppData_UnkSub18DC_0 *a1, int a2, int a3);
-static void PokedexApp_AddDungeonAreas(PokedexAppData *pokedexApp, PokedexAppData_UnkSub18DC_0 *a1, int a2, int a3, int a4);
+static void PokedexApp_LoadEncounterMaps(PokedexMapList *a0, u16 species, int a2);
+static void PokedexApp_AddOverworldAreas(PokedexAppData *pokedexApp, PokedexMapList *a1, int a2, int a3);
+static void PokedexApp_AddDungeonAreas(PokedexAppData *pokedexApp, PokedexMapList *a1, int a2, int a3, int a4);
 static u32 PokedexApp_GetAlphabeticalMapIndex(u32 a0);
 static void PokedexApp_SortAreaList(PokedexAppData *pokedexApp);
 static u32 PokedexApp_GetRoute2AreaIndex(void);
@@ -1807,7 +1807,7 @@ static u8 PokedexApp_GetSeenGenderForm(PokedexAppData *pokedexApp, u8 idx) {
 
 void PokedexApp_LoadSizeData(PokedexAppData *pokedexApp) {
     NARC *narc; // forward decl fixes regswap
-    PokedexAppData_UnkSub18CC *r5 = &pokedexApp->sizeCheckData;
+    PokedexSizeCheckData *r5 = &pokedexApp->sizeCheckData;
     narc = NARC_New(GetPokedexDataNarcID(), HEAP_ID_POKEDEX_APP);
     if (PlayerProfile_GetTrainerGender(pokedexApp->args->playerProfile) == TRAINER_MALE) {
         r5->player_ypos = GfGfxLoader_LoadFromOpenNarc(narc, NARC_zukan_data_mon_stats_player_ypos_m, FALSE, HEAP_ID_POKEDEX_APP, FALSE);
@@ -1826,7 +1826,7 @@ void PokedexApp_LoadSizeData(PokedexAppData *pokedexApp) {
 }
 
 void PokedexApp_FreeSizeData(PokedexAppData *pokedexApp) {
-    PokedexAppData_UnkSub18CC *r5 = &pokedexApp->sizeCheckData;
+    PokedexSizeCheckData *r5 = &pokedexApp->sizeCheckData;
 
     Heap_Free(pokedexApp->heights);
     Heap_Free(pokedexApp->weights);
@@ -1873,7 +1873,7 @@ void PokedexApp_FreeAreaList(PokedexAppData *pokedexApp) {
     Heap_Free(pokedexApp->areaList.areaSources);
 }
 
-static void PokedexApp_LoadEncounterMaps(PokedexAppData_UnkSub18DC_0 *a0, u16 species, int a2) {
+static void PokedexApp_LoadEncounterMaps(PokedexMapList *a0, u16 species, int a2) {
     int base;
     u32 size;
 
@@ -1908,7 +1908,7 @@ static void PokedexApp_LoadEncounterMaps(PokedexAppData_UnkSub18DC_0 *a0, u16 sp
     a0->nMaps = size / sizeof(u32);
 }
 
-static void PokedexApp_AddOverworldAreas(PokedexAppData *pokedexApp, PokedexAppData_UnkSub18DC_0 *a1, int a2, int a3) {
+static void PokedexApp_AddOverworldAreas(PokedexAppData *pokedexApp, PokedexMapList *a1, int a2, int a3) {
     u16 i;
     u16 j;
 
@@ -1956,7 +1956,7 @@ static void PokedexApp_AddOverworldAreas(PokedexAppData *pokedexApp, PokedexAppD
     }
 }
 
-static void PokedexApp_AddDungeonAreas(PokedexAppData *pokedexApp, PokedexAppData_UnkSub18DC_0 *a1, int a2, int a3, int a4) {
+static void PokedexApp_AddDungeonAreas(PokedexAppData *pokedexApp, PokedexMapList *a1, int a2, int a3, int a4) {
     u16 i;
     u16 j;
 

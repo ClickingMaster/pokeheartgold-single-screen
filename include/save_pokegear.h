@@ -29,7 +29,7 @@ typedef struct PhoneCallPersistentState {
     PhoneRematch rematches[NUM_PHONE_CONTACTS];
     u16 momGiftQueue[5][2];
     u32 bankBalance; // 140
-    u16 unk_144;
+    u16 momNormalGiftsGiven;
     u8 kenjiWaitDays : 7;
     u8 kenjiActive : 1;
     u8 numSafariAreas;
@@ -40,9 +40,9 @@ typedef struct PhoneCallPersistentState {
 
 typedef struct SavePokegear {
     u8 lastUsedApp;
-    u8 unk_1;
-    u8 unk_2;
-    u8 unk_3;
+    u8 mapZoomed;
+    u8 radioCursorX;
+    u8 radioCursorY;
     u32 unlockedSkins : 9;
     u32 unk_4_9 : 9;
     u32 skin : 7;
@@ -53,7 +53,7 @@ typedef struct SavePokegear {
     // 2: the rest of Kanto
     u32 mapUnlockLevel : 2;
     u32 unk_4_29 : 3;
-    MapMarkingsSaveArray unk_8;
+    MapMarkingsSaveArray mapMarkings;
     PhoneCallPersistentState callPersistentState;   // 4B8
     PhoneContact phoneContacts[NUM_PHONE_CONTACTS]; // 60C
 } SavePokegear;                                     // size=0x658

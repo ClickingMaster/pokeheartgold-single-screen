@@ -187,7 +187,7 @@ BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId) {
         if (OverlayManager_Run(work->manager)) {
             work->recorder->battleResult = work->setup->unk1C4;
             if (work->recorder->mode != 0 && work->recorder->battleResult == 0) {
-                *(u8 *)work->recorder->unk_0878 = 1;
+                *(u8 *)work->recorder->videoFlagPtr = 1;
             }
             Heap_Free(work->setup->bagCursor);
             BattleSetup_Delete(work->setup);

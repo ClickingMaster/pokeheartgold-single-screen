@@ -175,7 +175,7 @@ static void PokegearMap_InitInternal(PokegearMapAppData *mapApp) {
             }
             MapMarkingsHeapNode_SetWord(mapMarkingsHeapNode, mapApp->sessionState.index, mapApp->sessionState.word);
         }
-        mapApp->pokegear->unk_038 = 0;
+        mapApp->pokegear->returnFromEasyChat = 0;
         mapApp->pokegear->app = GEAR_APP_MAP;
     }
     mapApp->unk_138_4 = FALSE;

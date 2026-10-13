@@ -31,9 +31,9 @@ static void SavePokegear_Init_Internal(SavePokegear *pokegear) {
     MI_CpuClear8(pokegear, sizeof(SavePokegear));
     pokegear->lastUsedApp = 3;
     pokegear->skin = 0;
-    pokegear->unk_1 = 0;
-    pokegear->unk_3 = 128;
-    pokegear->unk_2 = pokegear->unk_3;
+    pokegear->mapZoomed = 0;
+    pokegear->radioCursorY = 128;
+    pokegear->radioCursorX = pokegear->radioCursorY;
     pokegear->registeredCards = 0;
     pokegear->mapUnlockLevel = 0;
     SavePokegear_PhonebookInit(pokegear);
@@ -45,7 +45,7 @@ void SaveData_Pokegear_Init(SavePokegear *pokegear) {
 }
 
 MapMarkingsSaveArray *SavePokegear_GetMapMarkingsArray(SavePokegear *pokegear) {
-    return &pokegear->unk_8;
+    return &pokegear->mapMarkings;
 }
 
 u8 SavePokegear_GetLastUsedApp(SavePokegear *pokegear) {
@@ -97,21 +97,21 @@ u16 Pokegear_GetUnlockedSkins(SavePokegear *pokegear) {
 }
 
 BOOL Pokegear_GetMapZoomed(SavePokegear *pokegear) {
-    return pokegear->unk_1;
+    return pokegear->mapZoomed;
 }
 
 void Pokegear_SetMapZoomed(SavePokegear *pokegear, u8 a1) {
-    pokegear->unk_1 = a1;
+    pokegear->mapZoomed = a1;
 }
 
 void Pokegear_SetRadioCursorCoords(SavePokegear *pokegear, u8 x, u8 y) {
-    pokegear->unk_2 = x;
-    pokegear->unk_3 = y;
+    pokegear->radioCursorX = x;
+    pokegear->radioCursorY = y;
 }
 
 void Pokegear_GetRadioCursorCoords(SavePokegear *pokegear, s16 *px, s16 *py) {
-    *px = pokegear->unk_2;
-    *py = pokegear->unk_3;
+    *px = pokegear->radioCursorX;
+    *py = pokegear->radioCursorY;
 }
 
 u8 SavePokegear_FindEmptyPhonebookSlot(SavePokegear *pokegear) {
@@ -299,12 +299,12 @@ u32 PhoneCallPersistentState_MomSavings_BalanceAction(PhoneCallPersistentState *
 
 void PhoneCallPersistentState_MomGift_SetNormalGiftGiven(PhoneCallPersistentState *callPersistentState, u8 idx) {
     if (idx < 9) {
-        callPersistentState->unk_144 |= (1 << idx);
+        callPersistentState->momNormalGiftsGiven |= (1 << idx);
     }
 }
 
 BOOL PhoneCallPersistentState_MomGift_IsNormalGiftGiven(PhoneCallPersistentState *callPersistentState, u8 idx) {
-    return (callPersistentState->unk_144 >> idx) & 1;
+    return (callPersistentState->momNormalGiftsGiven >> idx) & 1;
 }
 
 void PhoneCallPersistentState_MomGiftQueue_Put(PhoneCallPersistentState *callPersistentState, u16 itemID, u16 quantity) {

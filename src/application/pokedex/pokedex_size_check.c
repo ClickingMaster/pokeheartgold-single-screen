@@ -22,7 +22,7 @@ typedef struct PokedexWeightRange {
 
 extern const ManagedSpriteTemplate ov18_021FA7B0[];
 extern PokedexWeightRange sWeightCheckDiffRanges[];
-extern BOOL (*const sWeightCheckAnimFuncs[])(PokedexAppData_UnkSub0868_State77_Sub4 *anim);
+extern BOOL (*const sWeightCheckAnimFuncs[])(PokedexWeightCheckAnim *anim);
 
 #pragma force_active on
 
@@ -124,7 +124,7 @@ void PokedexApp_SetSizeCheckMonIcons(PokedexAppData *pokedexApp) {
 void PokedexApp_DrawSizeCheckMonPic(PokedexAppData *pokedexApp) {
     u8 form;
     u8 gender;
-    PokedexAppData_UnkSub18CC *measures;
+    PokedexSizeCheckData *measures;
     u16 species;
 
     PokedexApp_GetSeenFormAndGender(pokedexApp, 0, &form, &gender);
@@ -135,7 +135,7 @@ void PokedexApp_DrawSizeCheckMonPic(PokedexAppData *pokedexApp) {
 }
 
 void PokedexApp_ScaleSizeCheckTrainer(PokedexAppData *pokedexApp) {
-    PokedexAppData_UnkSub18CC *measures = &pokedexApp->sizeCheckData;
+    PokedexSizeCheckData *measures = &pokedexApp->sizeCheckData;
     float scale = (float)FX_Div(1 << 20, measures->player_scale[pokedexApp->curSpecies] << 12) / 4096.0f;
     s16 x;
     s16 y;
@@ -199,7 +199,7 @@ void PokedexApp_UpdateScalePans(PokedexAppData *pokedexApp, u32 angle) {
 #pragma force_active on
 
 // Picks the animation from the weight difference between the Pokemon and the player (40.0 or 41.0 kg).
-void PokedexApp_InitWeightCheckAnim(PokedexAppData *pokedexApp, PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+void PokedexApp_InitWeightCheckAnim(PokedexAppData *pokedexApp, PokedexWeightCheckAnim *anim) {
     u32 heavier, weight, lighter, diff;
     u8 monLighter;
     u32 i;
@@ -232,7 +232,7 @@ void PokedexApp_InitWeightCheckAnim(PokedexAppData *pokedexApp, PokedexAppData_U
 }
 
 // Lowers the trainer and the Pokemon icon onto the pans; FALSE once they rest at y 88.
-BOOL PokedexApp_DropFiguresOntoPans(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_DropFiguresOntoPans(PokedexWeightCheckAnim *anim) {
     PokedexSpritePos trainer, mon;
 
     PokedexApp_GetSpritePos(anim->pokedexApp, 2, &trainer.x, &trainer.y, 1);
@@ -252,12 +252,12 @@ BOOL PokedexApp_DropFiguresOntoPans(PokedexAppData_UnkSub0868_State77_Sub4 *anim
 
 #pragma force_active reset
 
-BOOL PokedexApp_RunWeightCheckAnim(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_RunWeightCheckAnim(PokedexWeightCheckAnim *anim) {
     return sWeightCheckAnimFuncs[anim->animIndex](anim);
 }
 
 // Rotation speed and acceleration, signed by which side is heavier.
-void PokedexApp_SetBeamRotation(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s32 speed, s32 accel) {
+void PokedexApp_SetBeamRotation(PokedexWeightCheckAnim *anim, s32 speed, s32 accel) {
     if (anim->monLighter == FALSE) {
         anim->rotationSpeed = -speed;
         anim->rotationAccel = accel;
@@ -268,7 +268,7 @@ void PokedexApp_SetBeamRotation(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s3
 }
 
 // Rotation speed, acceleration and the speed at which the swing stops, signed by which side is heavier.
-void PokedexApp_SetBeamSwing(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s32 speed, s32 accel, s32 endSpeed) {
+void PokedexApp_SetBeamSwing(PokedexWeightCheckAnim *anim, s32 speed, s32 accel, s32 endSpeed) {
     if (anim->monLighter == FALSE) {
         anim->rotationSpeed = -speed;
         anim->rotationAccel = -accel;
@@ -281,13 +281,13 @@ void PokedexApp_SetBeamSwing(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s32 s
 }
 
 // Same weight: no swing.
-BOOL PokedexApp_WeightAnim_Even(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Even(PokedexWeightCheckAnim *anim) {
     PlaySE(SEQ_SE_GS_ZUKAN01);
     return FALSE;
 }
 
 // Small differences: the beam swings and settles level again.
-BOOL PokedexApp_WeightAnim_Tip1(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Tip1(PokedexWeightCheckAnim *anim) {
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
@@ -305,7 +305,7 @@ BOOL PokedexApp_WeightAnim_Tip1(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL PokedexApp_WeightAnim_Tip2(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Tip2(PokedexWeightCheckAnim *anim) {
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
@@ -323,7 +323,7 @@ BOOL PokedexApp_WeightAnim_Tip2(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL PokedexApp_WeightAnim_Tip3(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Tip3(PokedexWeightCheckAnim *anim) {
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
@@ -341,7 +341,7 @@ BOOL PokedexApp_WeightAnim_Tip3(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL PokedexApp_WeightAnim_Tip4(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Tip4(PokedexWeightCheckAnim *anim) {
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
@@ -359,7 +359,7 @@ BOOL PokedexApp_WeightAnim_Tip4(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL PokedexApp_WeightAnim_Tip5(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Tip5(PokedexWeightCheckAnim *anim) {
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
@@ -377,7 +377,7 @@ BOOL PokedexApp_WeightAnim_Tip5(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL PokedexApp_WeightAnim_Tip6(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Tip6(PokedexWeightCheckAnim *anim) {
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
@@ -395,7 +395,7 @@ BOOL PokedexApp_WeightAnim_Tip6(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
     return TRUE;
 }
 
-BOOL PokedexApp_WeightAnim_Tip7(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Tip7(PokedexWeightCheckAnim *anim) {
     switch (anim->step) {
     case 0:
         PlaySE(SEQ_SE_GS_ZUKAN01);
@@ -415,7 +415,7 @@ BOOL PokedexApp_WeightAnim_Tip7(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
 
 // Starts dropping the lighter side's figure (sprite 2 trainer / 4 Pokemon) towards its pan, with its
 // lower-screen copy (3 / 5) shown 192 pixels further down.
-void PokedexApp_StartFigureThrow(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s16 speed, s16 accel) {
+void PokedexApp_StartFigureThrow(PokedexWeightCheckAnim *anim, s16 speed, s16 accel) {
     PokedexSpritePos trainer;
     PokedexSpritePos mon;
 
@@ -436,7 +436,7 @@ void PokedexApp_StartFigureThrow(PokedexAppData_UnkSub0868_State77_Sub4 *anim, s
     }
 }
 
-void PokedexApp_MoveThrownFigure(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+void PokedexApp_MoveThrownFigure(PokedexWeightCheckAnim *anim) {
     PokedexSpritePos pos;
 
     PokedexApp_GetSpritePos(anim->pokedexApp, anim->dropSprite, &pos.x, &pos.y, 1);
@@ -449,7 +449,7 @@ void PokedexApp_MoveThrownFigure(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
 }
 
 // FALSE once the dropping figure is back on its pan.
-BOOL PokedexApp_UpdateThrownFigure(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_UpdateThrownFigure(PokedexWeightCheckAnim *anim) {
     PokedexSpritePos figure;
     PokedexSpritePos pan;
 
@@ -465,7 +465,7 @@ BOOL PokedexApp_UpdateThrownFigure(PokedexAppData_UnkSub0868_State77_Sub4 *anim)
 
 // Larger differences: the beam tips to its stop (0xF600 / 0xA00); from here on the lighter figure is
 // thrown up and falls back.
-BOOL PokedexApp_WeightAnim_TipToStop(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_TipToStop(PokedexWeightCheckAnim *anim) {
     u32 rotation;
 
     switch (anim->step) {
@@ -497,7 +497,7 @@ BOOL PokedexApp_WeightAnim_TipToStop(PokedexAppData_UnkSub0868_State77_Sub4 *ani
     return TRUE;
 }
 
-BOOL PokedexApp_WeightAnim_Throw1(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw1(PokedexWeightCheckAnim *anim) {
     u32 rotation;
 
     switch (anim->step) {
@@ -537,7 +537,7 @@ BOOL PokedexApp_WeightAnim_Throw1(PokedexAppData_UnkSub0868_State77_Sub4 *anim) 
     return TRUE;
 }
 
-BOOL PokedexApp_WeightAnim_Throw2(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw2(PokedexWeightCheckAnim *anim) {
     u32 rotation;
 
     switch (anim->step) {
@@ -577,7 +577,7 @@ BOOL PokedexApp_WeightAnim_Throw2(PokedexAppData_UnkSub0868_State77_Sub4 *anim) 
     return TRUE;
 }
 
-BOOL PokedexApp_WeightAnim_Throw3(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw3(PokedexWeightCheckAnim *anim) {
     u32 rotation;
 
     switch (anim->step) {
@@ -617,7 +617,7 @@ BOOL PokedexApp_WeightAnim_Throw3(PokedexAppData_UnkSub0868_State77_Sub4 *anim) 
     return TRUE;
 }
 
-BOOL PokedexApp_WeightAnim_Throw4(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw4(PokedexWeightCheckAnim *anim) {
     u32 rotation;
 
     switch (anim->step) {
@@ -657,7 +657,7 @@ BOOL PokedexApp_WeightAnim_Throw4(PokedexAppData_UnkSub0868_State77_Sub4 *anim) 
     return TRUE;
 }
 
-BOOL PokedexApp_WeightAnim_Throw5(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw5(PokedexWeightCheckAnim *anim) {
     u32 rotation;
 
     switch (anim->step) {
@@ -697,7 +697,7 @@ BOOL PokedexApp_WeightAnim_Throw5(PokedexAppData_UnkSub0868_State77_Sub4 *anim) 
     return TRUE;
 }
 
-BOOL PokedexApp_WeightAnim_Throw6(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw6(PokedexWeightCheckAnim *anim) {
     u32 rotation;
 
     switch (anim->step) {
@@ -737,7 +737,7 @@ BOOL PokedexApp_WeightAnim_Throw6(PokedexAppData_UnkSub0868_State77_Sub4 *anim) 
     return TRUE;
 }
 
-BOOL PokedexApp_WeightAnim_Throw7(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw7(PokedexWeightCheckAnim *anim) {
     u32 rotation;
 
     switch (anim->step) {
@@ -778,7 +778,7 @@ BOOL PokedexApp_WeightAnim_Throw7(PokedexAppData_UnkSub0868_State77_Sub4 *anim) 
 }
 
 // The heaviest class throws the figure off the top of the screen.
-BOOL PokedexApp_WeightAnim_Throw8(PokedexAppData_UnkSub0868_State77_Sub4 *anim) {
+BOOL PokedexApp_WeightAnim_Throw8(PokedexWeightCheckAnim *anim) {
     u32 rotation;
     PokedexSpritePos pos;
 

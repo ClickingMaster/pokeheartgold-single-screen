@@ -354,8 +354,8 @@ int VsRecorder_GetCenteredTextX(Window *window, String *str) {
 #pragma force_active reset
 
 void VsRecorder_ResetRecordSave(VsRecorderWork *work) {
-    work->unk_0834 = 0;
-    work->unk_0836 = 0;
+    work->recordWriteStep = 0;
+    work->recordWriteState = 0;
 }
 
 BOOL VsRecorder_ClearSavedVideoKeys(VsRecorderWork *work) {
@@ -380,7 +380,7 @@ void VsRecorder_ResetBgPriorities(void) {
 }
 
 void VsRecorder_PlaceOrbitCursor(VsRecorderWork *work, OrbitCursor *cursor, s16 x, s16 y) {
-    if (work->unk_0044 == 0) {
+    if (work->cursorHidden == 0) {
         OrbitCursor_SetVisible(cursor, TRUE);
     }
     OrbitCursor_SetActive(cursor, TRUE);

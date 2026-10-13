@@ -221,8 +221,8 @@ int WifiSetup_StrNLen(const u8 *str, int max);
 void WifiSetup_SaveVramBanks(void);
 void WifiSetup_RestoreVramBanks(void);
 void WifiSetup_ClearVram(void);
-void ov13_022422E0(void);
-void ov13_0224230C(void);
+void WifiSetupLed_SetWirelessPattern(void);
+void WifiSetupLed_SetOn(void);
 
 void WifiSetupTask_InitScheduler(void);
 void WifiSetupTask_FreeScheduler(void);

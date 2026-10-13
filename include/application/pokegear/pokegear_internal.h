@@ -100,12 +100,12 @@ typedef struct PokegearManagedObject {
     Coord2S16 pos;          // 0x04
     s16 destX;              // 0x08
     s16 destY;              // 0x0A
-    u16 unk_0C;             // 0x0C
-    u16 unk_0E;             // 0x0E
-    fx32 unk_10;            // 0x10
-    fx32 unk_14;            // 0x14
-    fx32 unk_18;            // 0x18
-    fx32 unk_1C;            // 0x1C
+    u16 matrixX;             // 0x0C
+    u16 matrixY;             // 0x0E
+    fx32 fxX;            // 0x10
+    fx32 fxY;            // 0x14
+    fx32 fxStepX;            // 0x18
+    fx32 fxStepY;            // 0x1C
     Sprite *sprite;         // 0x20
     u8 filler_24[0x4];      // 0x24
 } PokegearManagedObject;
@@ -152,7 +152,7 @@ struct PokegearAppData {
     SaveVarsFlags *saveVarsFlags;                // 0x02C
     Options *options;                            // 0x030
     PlayerProfile *profile;                      // 0x034
-    u8 unk_038;                                  // 0x038
+    u8 returnFromEasyChat;                                  // 0x038
     u8 filler_039[3];                            // 0x039
     PokegearMapSessionState mapSessionState;     // 0x03C
     void (*vblankCB)(PokegearAppData *, void *); // 0x058
@@ -170,8 +170,8 @@ struct PokegearAppData {
     SpriteManager *spriteManager;                // 0x090
     PokegearUIManager *uiManager;                // 0x094
     ManagedSprite *uiSprites[11];                // 0x098
-    u16 *unk_0C4;                                // 0x0C4
-    NNSG2dScreenData *unk_0C8;                   // 0x0C8
+    u16 *appButtonsScreenFile;                                // 0x0C4
+    NNSG2dScreenData *appButtonsScreen;                   // 0x0C8
 }; // size: 0xCC
 
 typedef struct PhoneCallScriptDef {
@@ -247,8 +247,8 @@ static inline void PokegearManagedObject_SetCoord(PokegearManagedObject *obj, s1
 }
 
 static inline void PokegearManagedObject_SetCoord2(PokegearManagedObject *obj, s16 x, s16 y) {
-    obj->unk_0C = x;
-    obj->unk_0E = y;
+    obj->matrixX = x;
+    obj->matrixY = y;
 }
 
 static inline void PokegearManagedObject_AddCoord(PokegearManagedObject *obj, s16 x, s16 y) {
@@ -261,8 +261,8 @@ static inline void PokegearManagedObject_SetUnk01(PokegearManagedObject *obj, BO
 }
 
 static inline void PokegearManagedObject_SetFixCoords(PokegearManagedObject *obj, s16 x, s16 y) {
-    obj->unk_10 = FX32_CONST(x);
-    obj->unk_14 = FX32_CONST(y);
+    obj->fxX = FX32_CONST(x);
+    obj->fxY = FX32_CONST(y);
 }
 
 static inline void PokegearManagedObject_SetPriority(PokegearManagedObject *obj, int priority) {

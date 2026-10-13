@@ -85,7 +85,7 @@ int VsRecorder_CheckSchemeArrowTouch(void) {
 
 BOOL VsRecorder_MenuInvalid(VsRecorderWork *work) {
     GF_ASSERT(FALSE);
-    work->unk_0044 = 1;
+    work->cursorHidden = 1;
     VsRecorder_SetSubState(work, 0);
     return VsRecorder_MenuMain(work);
 }
@@ -136,7 +136,7 @@ BOOL VsRecorder_MenuExit(VsRecorderWork *work) {
 
 BOOL VsRecorder_MenuSlideIn(VsRecorderWork *work) {
     if (VsRecorder_SlideInChoiceRows(work)) {
-        if (work->unk_0044 == 1) {
+        if (work->cursorHidden == 1) {
             OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
             VsRecorder_SetSubState(work, 0);
         } else {
@@ -147,7 +147,7 @@ BOOL VsRecorder_MenuSlideIn(VsRecorderWork *work) {
 }
 
 BOOL VsRecorder_MenuShow(VsRecorderWork *work) {
-    if (work->unk_0044 == 1) {
+    if (work->cursorHidden == 1) {
         OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
         VsRecorder_SetSubState(work, 0);
     } else {

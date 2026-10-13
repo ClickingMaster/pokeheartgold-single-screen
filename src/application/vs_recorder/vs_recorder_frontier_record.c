@@ -69,10 +69,10 @@ void VsRecorder_CreateFrontierButtons(VsRecorderWork *work) {
     ManagedSprite_SetPositionXY(record->exitButton.sprite, 128, 232);
     TextOBJ_SetPosition(record->exitButton.text, 36, -8);
     TextOBJ_SetSpritesDrawFlag(record->exitButton.text, TRUE);
-    record->unk_98 = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
-    ManagedSprite_SetPositionXY(record->unk_98, 220, 224);
-    ManagedSprite_SetAnim(record->unk_98, 2);
-    ManagedSprite_SetDrawFlag(record->unk_98, FALSE);
+    record->buttonSprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
+    ManagedSprite_SetPositionXY(record->buttonSprite, 220, 224);
+    ManagedSprite_SetAnim(record->buttonSprite, 2);
+    ManagedSprite_SetDrawFlag(record->buttonSprite, FALSE);
     VsRecorder_PlaceFrontierExitButton(work, TRUE);
 }
 
@@ -80,7 +80,7 @@ void VsRecorder_FreeFrontierButtons(VsRecorderWork *work) {
     VsRecorderFrontierRecord *record = work->screenWork;
     VsRecorder_FreeTextSprite(&record->exitButton);
     Sprite_DeleteAndFreeResources(record->exitButton.sprite);
-    Sprite_DeleteAndFreeResources(record->unk_98);
+    Sprite_DeleteAndFreeResources(record->buttonSprite);
     VsRecorder_FreeButtonGfx(work);
 }
 

@@ -61,7 +61,7 @@ extern u32 ov13_0224F554[]; // &gWifiSetupSettings.work
 extern int WifiSetupMessage_Show();
 extern int WifiSetupMessage_Hide();
 extern void WifiSetupBanner_Show(int);
-extern void ov13_02227E58(void);
+extern void WifiSetupBackground_LoadSlotListHeader(void);
 extern void WifiSetup_LoadGraphics(const void *path, void *load);
 extern void *WifiSetup_LocalizePath(const void *path);
 extern void WifiSetupCursor_Hide(void);
@@ -119,7 +119,7 @@ void WifiSetupSettings_Init(void) {
         WifiSetupMessage_Show(69, -1, 0);
     }
     WifiSetupBanner_Show(1);
-    ov13_02227E58();
+    WifiSetupBackground_LoadSlotListHeader();
     WifiSetupScrollBar_Create(2, 85, 241, 65, (gWifiSetupSettings.scroll * 55) / WIFI_SETUP_SETTINGS_MAX_SCROLL);
     gWifiSetupSettings.work->canvas = WifiSetupText_InitBgCanvas(0, 1);
     for (i = 0; i < 7; i++) { // rows and the two switches
