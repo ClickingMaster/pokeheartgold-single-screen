@@ -181,8 +181,8 @@ BOOL IsSpriteIdWithoutTalkAction(int spriteId);
 BOOL IsScriptIdWithoutTalkAction(int scriptId);
 
 // Defined in link_lobby_2.c / link_lobby_4.c and communication_player_movement.c; no header declares them.
-BOOL sub_02058258(void);
-BOOL sub_02058AA0(void);
+BOOL CommClubLink_CardExchangeFinished(void);
+BOOL CommClubLink_IsStartingBattle(void);
 BOOL CommPlayerManager_IsInitialized(void);
 
 extern const u32 sTouchscreenMenuTextColors[];
@@ -644,7 +644,7 @@ void ov27_0225A86C(TouchscreenMenuData *data) {
 }
 
 BOOL TouchscreenMenu_IsFieldBusy(FieldSystem *fieldSystem) {
-    if (!IsPaletteFadeFinished() || !fieldSystem->runningFieldMap || fieldSystem->unkD2_0 != 0 || !FieldSystem_IsPlayerMovementAllowed(fieldSystem) || TouchscreenMenu_IsTextboxOpen(fieldSystem) || MapSceneScriptCheck(fieldSystem) || sub_02058AA0()) {
+    if (!IsPaletteFadeFinished() || !fieldSystem->runningFieldMap || fieldSystem->unkD2_0 != 0 || !FieldSystem_IsPlayerMovementAllowed(fieldSystem) || TouchscreenMenu_IsTextboxOpen(fieldSystem) || MapSceneScriptCheck(fieldSystem) || CommClubLink_IsStartingBattle()) {
         return TRUE;
     }
     return FALSE;
@@ -1090,7 +1090,7 @@ BOOL TouchscreenMenu_HandleTouchInput(TouchscreenMenuData *data) {
     }
     if (data->layout == TOUCHSCREEN_MENU_LAYOUT_5) {
         u32 netId = Comm_GetLocalNetId();
-        if (!sub_02058740() || !sub_02058258() || !CommPlayerManager_IsInitialized() || !CommPlayerManager_IsLocalPlayerConnected() || CommPlayerManager_GetMoveTimer(netId) || Comm_IsSendingMoveKeys()) {
+        if (!CommClubLink_IsWalkingInRoom() || !CommClubLink_CardExchangeFinished() || !CommPlayerManager_IsInitialized() || !CommPlayerManager_IsLocalPlayerConnected() || CommPlayerManager_GetMoveTimer(netId) || Comm_IsSendingMoveKeys()) {
             return TRUE;
         }
     }

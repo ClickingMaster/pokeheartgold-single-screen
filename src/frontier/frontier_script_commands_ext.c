@@ -719,7 +719,7 @@ BOOL FrtCmd_054(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_055(FrontierScriptContext *ctx) {
-    sub_02058284();
+    CommClubLink_Exit();
     FrontierScriptContext_Pause(ctx, (FrontierShouldResumeScriptFunc)FrontierScriptNative_WaitCommEnd);
     return TRUE;
 }

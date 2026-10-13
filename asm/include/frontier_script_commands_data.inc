@@ -146,7 +146,7 @@
 .public CommState_Exists
 .public Save_VarsFlags_Get
 .public Save_VarsFlags_GetVarAddr
-.public sub_02058284
+.public CommClubLink_Exit
 .public sub_0205C298
 .public GetMonData
 .public GetPokemonSpriteCharAndPlttNarcIds

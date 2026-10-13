@@ -2426,7 +2426,7 @@ BOOL ScrCmd_226(ScriptContext *ctx) {
     u16 sp0 = ScriptGetVar(ctx);
     u16 sp4 = ScriptGetVar(ctx);
     u16 r6 = ScriptReadHalfword(ctx);
-    ov03_02255BB0(fieldSystem, commType, sp0, sp4);
+    CommClub_StartJoin(fieldSystem, commType, sp0, sp4);
     ctx->data[0] = r6;
     SetupNativeScript(ctx, sub_02043A98);
     return TRUE;
@@ -2434,7 +2434,7 @@ BOOL ScrCmd_226(ScriptContext *ctx) {
 
 BOOL sub_02043A98(ScriptContext *ctx) {
     u16 *p_ret = GetVarPointer(ctx->fieldSystem, ctx->data[0]);
-    int result = ov03_02255BFC();
+    int result = CommClub_PollJoinResult();
     if (result == 0) {
         return FALSE;
     } else {
@@ -2451,7 +2451,7 @@ BOOL ScrCmd_227(ScriptContext *ctx) {
     u16 sp0 = ScriptGetVar(ctx);
     u16 sp4 = ScriptGetVar(ctx);
     u16 r6 = ScriptReadHalfword(ctx);
-    ov03_02255C18(fieldSystem, commType, sp0, sp4);
+    CommClub_StartHost(fieldSystem, commType, sp0, sp4);
     ctx->data[0] = r6;
     SetupNativeScript(ctx, sub_02043B30);
     return TRUE;
@@ -2459,7 +2459,7 @@ BOOL ScrCmd_227(ScriptContext *ctx) {
 
 BOOL sub_02043B30(ScriptContext *ctx) {
     u16 *p_ret = GetVarPointer(ctx->fieldSystem, ctx->data[0]);
-    int result = ov03_02255C64();
+    int result = CommClub_PollHostResult();
     if (result == 0) {
         return FALSE;
     } else {
@@ -2938,7 +2938,7 @@ BOOL ScrCmd_HealParty(ScriptContext *ctx) {
 BOOL NativeScript_WaitCommShutdown(ScriptContext *ctx);
 
 BOOL ScrCmd_283(ScriptContext *ctx) {
-    sub_02058284();
+    CommClubLink_Exit();
     SetupNativeScript(ctx, NativeScript_WaitCommShutdown);
     return TRUE;
 }
@@ -2952,7 +2952,7 @@ BOOL NativeScript_WaitCommShutdown(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_587(ScriptContext *ctx) {
-    sub_020582A8();
+    CommClubLink_ExitSynced();
     SetupNativeScript(ctx, NativeScript_WaitCommShutdown);
     return TRUE;
 }

@@ -88,7 +88,7 @@ static const UnkStruct_02091564 sFieldCommCommands[] = {
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
     { sub_02057D50, CommCmd_GetSize1,         NULL         },
-    { sub_02058720, CommCmd_GetSize1,         NULL         },
+    { CommClubLink_RecvOnSpot, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
     { sub_0205A408, PlayerProfile_sizeof, NULL         },

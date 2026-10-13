@@ -85,12 +85,12 @@ typedef struct MartData {
     u32 unk2A0;
 } MartData;
 
-void ov03_02255BB0(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3);
-void ov03_02255BEC();
-u32 ov03_02255BFC();
-void ov03_02255C18(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3);
-void ov03_02255C54();
-u32 ov03_02255C64();
+void CommClub_StartJoin(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3);
+void CommClub_OnChildStarted();
+u32 CommClub_PollJoinResult();
+void CommClub_StartHost(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3);
+void CommClub_OnParentConnected();
+u32 CommClub_PollHostResult();
 
 void StartTask_BattleRegulationMenu(TaskManager *taskManager, u16 *result);
 void BattleRegulation_BufferName(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset);

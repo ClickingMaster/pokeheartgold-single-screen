@@ -35,7 +35,7 @@ struct CommClubManager {
     UnkFuncPtr_CommClub unk70;
     MsgData *msgData;
     PlayerProfile *playerProfile[2];
-    u8 unk80[8];
+    u8 playerListed[8];
     u32 retCode;
     u16 unk8C;
     u16 connectionIndex;
@@ -44,92 +44,92 @@ struct CommClubManager {
     u8 unk92;
     u8 unk93;
     u8 printerID;
-    u8 unk95;
+    u8 contactNetId;
     u8 messageDelay;
-    u8 unk97;
-    u8 unk98;
+    u8 infoWindowOpen;
+    u8 listNeedsRedraw;
     u8 unk99;
     u16 unk9A;
-    const u32 *unk9C;
-    u8 unkA0;
-    u8 unkA1;
-    u16 unkA2;
-    u32 unkA4;
+    const u32 *buttonMsgIds;
+    u8 buttonCount;
+    u8 buttonCloseRequest;
+    u16 buttonSelection;
+    u32 choiceResult;
     u32 unkA8;
 };
 
-static void ov03_02254150(ListMenu *list, u16 cursorPos_unused, u8 itemsAbove);
-static void ov03_022543AC(CommClubManager *commClubManager_unused);
-static void ov03_02254100(struct ListMenu *list_unused, s32 index_unused, u8 onInit);
-static void ov03_02254120(struct ListMenu *list, s32 index_unused, u8 y_unused);
-static void ov03_02254420();
-static void ov03_02254500(void *arg0, CommClubManager *commClubManager);
-static void ov03_02254600(CommClubManager *commClubManager_unused);
-static void ov03_02254660(void *arg0, CommClubManager *commClubManager);
-static void ov03_022546B0(void *arg0, CommClubManager *commClubManager);
-static BOOL ov03_022547D8(void *arg0, CommClubManager *commClubManager);
-static void ov03_022548E0(void *arg0, CommClubManager *commClubManager);
-static void ov03_0225499C(void *arg0, CommClubManager *commClubManager);
-static void ov03_022549D8(void *arg0, CommClubManager *commClubManager);
-static void ov03_02254B44();
-static void ov03_02254B4C(void *arg0);
-static void ov03_02254D64(SysTask *task, void *arg1);
-static void ov03_02254D78(s32 arg0_unused, CommClubManager *commClubManager);
-static void ov03_02254E70(void *arg0, CommClubManager *commClubManager);
-static void ov03_02255280(void *arg0, CommClubManager *commClubManager);
-static void ov03_022552C8(void *arg0, CommClubManager *commClubManager);
-static void ov03_0225530C(void *arg0_unused, CommClubManager *commClubManager);
-static void ov03_02255388(void *arg0_unused, CommClubManager *commClubManager);
-static void ov03_022553C8(void *arg0_unused, CommClubManager *commClubManager);
-static void ov03_02255404(void *arg0, CommClubManager *commClubManager);
-static void ov03_022554E0(void *arg0, CommClubManager *commClubManager);
-static void ov03_0225554C(SysTask *task, void *commClubManager_unused);
-static void ov03_0225558C(void *arg0, CommClubManager *commClubManager);
-static void ov03_022555F4(void *arg0_unused, CommClubManager *commClubManager);
-static void ov03_0225562C(void *arg0, CommClubManager *commClubManager);
-static void ov03_022556BC(void *arg0, CommClubManager *commClubManager);
-static void ov03_02255714(s32 arg0_unused, CommClubManager *commClubManager);
-static void ov03_0225574C(void *task, CommClubManager *commClubManager);
-static void ov03_022557CC(CommClubManager *commClubManager);
-static void ov03_02255804(CommClubManager *commClubManager);
-static void ov03_02255860(u32 arg0_unused, CommClubManager *commClubManager);
-static void ov03_022558C4(void *task, CommClubManager *commClubManager);
-static void ov03_02255A00();
-static void ov03_02255A2C(SysTask *task);
-static void ov03_02255A70(CommClubManager *commClubManager);
-static void ov03_02255AB0(SysTask *task, void *commClubManager);
-static void ov03_02255ADC(void *commClubManager);
-static void ov03_02255B04(SysTask *task, void *commClubManager);
-static void ov03_02255B44(CommClubManager *commClubManager_unused);
-static int ov03_02255B70();
-static int ov03_02255B84();
+static void CommClub_ParentListPrintRow(ListMenu *list, u16 cursorPos_unused, u8 itemsAbove);
+static void CommClub_PrintOwnProfile(CommClubManager *commClubManager_unused);
+static void CommClub_ParentListMoveCursor(struct ListMenu *list_unused, s32 index_unused, u8 onInit);
+static void CommClub_ParentListPrintItems(struct ListMenu *list, s32 index_unused, u8 y_unused);
+static void CommClub_CreateParentList();
+static void CommClub_HandleParentList(void *arg0, CommClubManager *commClubManager);
+static void CommClub_RedrawParentList(CommClubManager *commClubManager_unused);
+static void CommClub_WaitConnected(void *arg0, CommClubManager *commClubManager);
+static void CommClub_AskForRegistration(void *arg0, CommClubManager *commClubManager);
+static BOOL CommClub_HandleHostReply(void *arg0, CommClubManager *commClubManager);
+static void CommClub_WaitHostReply(void *arg0, CommClubManager *commClubManager);
+static void CommClub_OpenLeaveGroupChoice(void *arg0, CommClubManager *commClubManager);
+static void CommClub_HandleLeaveGroupChoice(void *arg0, CommClubManager *commClubManager);
+static void CommClub_ExitLink();
+static void CommClub_SetState(void *arg0);
+static void CommClub_Task(SysTask *task, void *arg1);
+static void CommClub_CreateMemberList(s32 arg0_unused, CommClubManager *commClubManager);
+static void CommClub_HandleMemberList(void *arg0, CommClubManager *commClubManager);
+static void CommClub_WaitDifferentRulesAck(void *arg0, CommClubManager *commClubManager);
+static void CommClub_WaitProblemAckThenReopen(void *arg0, CommClubManager *commClubManager);
+static void CommClub_ReopenMemberList(void *arg0_unused, CommClubManager *commClubManager);
+static void CommClub_ConfirmGroup(void *arg0_unused, CommClubManager *commClubManager);
+static void CommClub_OpenConfirmGroupChoice(void *arg0_unused, CommClubManager *commClubManager);
+static void CommClub_HandleConfirmGroupChoice(void *arg0, CommClubManager *commClubManager);
+static void CommClub_GroupCancelled(void *arg0, CommClubManager *commClubManager);
+static void CommClub_WaitGroupCancelledAck(SysTask *task, void *commClubManager_unused);
+static void CommClub_AskCancelGroup(void *arg0, CommClubManager *commClubManager);
+static void CommClub_OpenCancelGroupChoice(void *arg0_unused, CommClubManager *commClubManager);
+static void CommClub_HandleCancelGroupChoice(void *arg0, CommClubManager *commClubManager);
+static void CommClub_WaitGroupSync(void *arg0, CommClubManager *commClubManager);
+static void CommClub_OpenContactChoice(s32 arg0_unused, CommClubManager *commClubManager);
+static void CommClub_CloseMenus(void *task, CommClubManager *commClubManager);
+static void CommClub_HostRepliedOk(CommClubManager *commClubManager);
+static void CommClub_ChildAccepted(CommClubManager *commClubManager);
+static void CommClub_WaitGroupStart(u32 arg0_unused, CommClubManager *commClubManager);
+static void CommClub_WaitGroupSyncAfterReply(void *task, CommClubManager *commClubManager);
+static void CommClub_ShowProblem();
+static void CommClub_WaitProblemAck(SysTask *task);
+static void CommClub_ShowRefused(CommClubManager *commClubManager);
+static void CommClub_WaitRefusedThenParentList(SysTask *task, void *commClubManager);
+static void CommClub_ResetToParentList(void *commClubManager);
+static void CommClub_WaitAckThenParentList(SysTask *task, void *commClubManager);
+static void CommClub_FinishGroup(CommClubManager *commClubManager_unused);
+static int CommClub_GetMinPlayers();
+static int CommClub_GetMaxPlayers();
 static int ov03_02255B98();
-static void ov03_02254BEC();
+static void CommClub_PrintAwaitingContact();
 static BOOL ov03_02255C80();
-static void ov03_02255C84(CommClubManager *commClubManager);
-static BOOL ov03_02255CA0(CommClubManager *commClubManager);
-static BOOL ov03_02255CD0(CommClubManager *commClubManager);
-static void ov03_02255CE4(CommClubManager *commClubManager);
+static void CommClub_OpenYesNoButtons(CommClubManager *commClubManager);
+static BOOL CommClub_InitYesNoButtons(CommClubManager *commClubManager);
+static BOOL CommClub_IsYesNoReady(CommClubManager *commClubManager);
+static void CommClub_CloseYesNoButtons(CommClubManager *commClubManager);
 
 static CommClubManager *sCommClubManager = NULL;
 
-static const u32 ov03_0225912C = 335;
-static const u32 ov03_02259130 = 334;
+static const u32 sRemoveFromMembersButton = 335;
+static const u32 sQuitButton = 334;
 
-static const u32 ov03_0225913C[2] = {
+static const u32 sStartQuitButtons[2] = {
     336,
     334
 };
 
-static const u32 ov03_02259134[2] = {
+static const u32 sJoinQuitButtons[2] = {
     333,
     334
 };
 
-static const ListMenuTemplate ov03_02259164 = {
+static const ListMenuTemplate sParentListTemplate = {
     .items = NULL,
-    .moveCursorFunc = ov03_02254100,
-    .itemPrintFunc = ov03_02254120,
+    .moveCursorFunc = CommClub_ParentListMoveCursor,
+    .itemPrintFunc = CommClub_ParentListPrintItems,
     .window = NULL,
     .totalItems = 16,
     .maxShowed = 5,
@@ -148,7 +148,7 @@ static const ListMenuTemplate ov03_02259164 = {
     .data = NULL
 };
 
-static const ListMenuTemplate ov03_02259144 = {
+static const ListMenuTemplate sMemberListTemplate = {
     .items = NULL,
     .moveCursorFunc = NULL,
     .itemPrintFunc = NULL,
@@ -170,7 +170,7 @@ static const ListMenuTemplate ov03_02259144 = {
     .data = NULL
 };
 
-static void ov03_02253E20(s32 strno, BOOL arg1) {
+static void CommClub_PrintMessage(s32 strno, BOOL arg1) {
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID) == FALSE) {
         RemoveTextPrinter(sCommClubManager->printerID);
     }
@@ -187,7 +187,7 @@ static void ov03_02253E20(s32 strno, BOOL arg1) {
     sCommClubManager->printerID = DialogBox_PrintMessage(&sCommClubManager->windows[2], sCommClubManager->string[5], Save_PlayerData_GetOptionsAddr(sCommClubManager->fieldSystem->saveData), TRUE);
 }
 
-static void ov03_02253ED0(ListMenuTemplate listMenuTemplate, u8 x, u8 y, u8 width, u8 height, u16 baseTile) {
+static void CommClub_CreateListMenu(ListMenuTemplate listMenuTemplate, u8 x, u8 y, u8 width, u8 height, u16 baseTile) {
     if (WindowIsInUse(&sCommClubManager->windows[0]) == FALSE) {
         AddWindowParameterized(sCommClubManager->fieldSystem->bgConfig, &sCommClubManager->windows[0], 3, x, y, width, height, 13, baseTile);
     }
@@ -199,7 +199,7 @@ static void ov03_02253ED0(ListMenuTemplate listMenuTemplate, u8 x, u8 y, u8 widt
     CopyWindowToVram(&sCommClubManager->windows[0]);
 }
 
-static void ov03_02253F74(FieldSystem *fieldSystem) {
+static void CommClub_NewManager(FieldSystem *fieldSystem) {
     if (sCommClubManager) {
         GF_AssertFail();
     }
@@ -208,7 +208,7 @@ static void ov03_02253F74(FieldSystem *fieldSystem) {
     MI_CpuFill8(commClubManager, 0, sizeof(CommClubManager));
     sCommClubManager->retCode = 0;
     sCommClubManager->fieldSystem = fieldSystem;
-    sCommClubManager->unk97 = 0;
+    sCommClubManager->infoWindowOpen = 0;
     sCommClubManager->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0182_bin, HEAP_ID_FIELD1);
     sCommClubManager->playerProfile[0] = Save_PlayerData_GetProfile(FieldSystem_GetSaveData(sCommClubManager->fieldSystem));
     sCommClubManager->playerProfile[1] = PlayerProfile_New(HEAP_ID_FIELD1);
@@ -218,17 +218,17 @@ static void ov03_02253F74(FieldSystem *fieldSystem) {
     sCommClubManager->messageFormat[0] = MessageFormat_New(HEAP_ID_FIELD1);
     sCommClubManager->messageFormat[1] = MessageFormat_New(HEAP_ID_FIELD1);
     sCommClubManager->messageFormat[2] = MessageFormat_New(HEAP_ID_FIELD1);
-    sCommClubManager->unk98 = 0;
+    sCommClubManager->listNeedsRedraw = 0;
     int i;
     for (i = 0; i < 8; i++) {
-        sCommClubManager->unk80[i] = 0;
+        sCommClubManager->playerListed[i] = 0;
     }
     for (i = 0; i < 8; i++) {
         sCommClubManager->string[i] = String_New(140, HEAP_ID_FIELD1);
     }
 }
 
-static void Unk03_Delete() {
+static void CommClub_DeleteManager() {
     for (int i = 0; i < 8; i++) {
         String_Delete(sCommClubManager->string[i]);
     };
@@ -258,24 +258,24 @@ static void Unk03_Delete() {
     sCommClubManager = NULL;
 }
 
-static void ov03_022540E8(CommClubManager *commClubManager) {
-    sub_02058124(commClubManager->fieldSystem, commClubManager->commType, ov03_02255B98());
+static void CommClub_StartChild(CommClubManager *commClubManager) {
+    CommClubLink_StartChild(commClubManager->fieldSystem, commClubManager->commType, ov03_02255B98());
 }
 
-static void ov03_02254100(struct ListMenu *list_unused, s32 index_unused, u8 onInit) {
-    sCommClubManager->unk98 = 1;
+static void CommClub_ParentListMoveCursor(struct ListMenu *list_unused, s32 index_unused, u8 onInit) {
+    sCommClubManager->listNeedsRedraw = 1;
     if (onInit == FALSE) {
         PlaySE(SEQ_SE_DP_SELECT);
     }
 }
 
-static void ov03_02254120(struct ListMenu *list, s32 index_unused, u8 y_unused) {
+static void CommClub_ParentListPrintItems(struct ListMenu *list, s32 index_unused, u8 y_unused) {
     for (u32 i = 0; i < ListMenuGetTemplateField(list, LISTMENUATTR_MAXSHOWED); i++) {
-        ov03_02254150(list, 0, i);
+        CommClub_ParentListPrintRow(list, 0, i);
     };
 }
 
-static void ov03_02254150(ListMenu *list, u16 cursorPos_unused, u8 itemsAbove) {
+static void CommClub_ParentListPrintRow(ListMenu *list, u16 cursorPos_unused, u8 itemsAbove) {
     s32 res = CommWireless_CountParents();
     u16 cursorPos = 0;
     if (sCommClubManager->listMenu) {
@@ -302,16 +302,16 @@ static void ov03_02254150(ListMenu *list, u16 cursorPos_unused, u8 itemsAbove) {
     }
 }
 
-static void ov03_022542C8(CommClubManager *commClubManager) {
+static void CommClub_ShowParentList(CommClubManager *commClubManager) {
     if (WindowIsInUse(&sCommClubManager->windows[1]) == FALSE) {
         AddWindowParameterized(sCommClubManager->fieldSystem->bgConfig, &sCommClubManager->windows[1], 3, 23, 2, 8, 4, 13, 201);
     }
     DrawFrameAndWindow1(&sCommClubManager->windows[1], TRUE, 985, HEAP_ID_FIELD2);
     FillWindowPixelBuffer(&sCommClubManager->windows[1], 15);
     CopyWindowToVram(&sCommClubManager->windows[1]);
-    commClubManager->unk97 = 1;
-    SysTask_CreateOnMainQueue(ov03_02254D64, commClubManager, 0);
-    ov03_022543AC(sCommClubManager);
+    commClubManager->infoWindowOpen = 1;
+    SysTask_CreateOnMainQueue(CommClub_Task, commClubManager, 0);
+    CommClub_PrintOwnProfile(sCommClubManager);
 
     u16 sChooseText[NUM_COMM_TYPES] = {
         CommunicationClub_Text_00048_Dummy,
@@ -358,16 +358,16 @@ static void ov03_022542C8(CommClubManager *commClubManager) {
     };
 
     if (sCommClubManager->commType == COMM_TYPE_8) {
-        ov03_02253E20(sCommClubManager->unk92 + 122, FALSE);
+        CommClub_PrintMessage(sCommClubManager->unk92 + 122, FALSE);
     } else if (sCommClubManager->commType == COMM_TYPE_POKEATHLON) {
-        ov03_02253E20(sCommClubManager->unk92 + CommunicationClub_Text_ChooseLeader_JumpCourse, FALSE);
+        CommClub_PrintMessage(sCommClubManager->unk92 + CommunicationClub_Text_ChooseLeader_JumpCourse, FALSE);
     } else {
-        ov03_02253E20(sChooseText[sCommClubManager->commType], FALSE);
+        CommClub_PrintMessage(sChooseText[sCommClubManager->commType], FALSE);
     }
-    ov03_02254B4C(&ov03_02254420);
+    CommClub_SetState(&CommClub_CreateParentList);
 }
 
-static void ov03_022543AC(CommClubManager *commClubManager_unused) {
+static void CommClub_PrintOwnProfile(CommClubManager *commClubManager_unused) {
     BufferPlayersName(sCommClubManager->messageFormat[1], 0, sCommClubManager->playerProfile[0]);
     BufferIntegerAsString(sCommClubManager->messageFormat[1], 1, PlayerProfile_GetTrainerID(sCommClubManager->playerProfile[0]) % 0x10000, 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
     ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_ID_2, sCommClubManager->string[6]); // {STRVAR_1 3, 0, 0}\nID{STRVAR_1 54, 1, 0}
@@ -375,7 +375,7 @@ static void ov03_022543AC(CommClubManager *commClubManager_unused) {
     AddTextPrinterParameterized(&sCommClubManager->windows[1], 0, sCommClubManager->string[7], 2, 2, 0, NULL);
 }
 
-static void ov03_02254420() {
+static void CommClub_CreateParentList() {
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
         sCommClubManager->items = ListMenuItems_New(16, HEAP_ID_FIELD1);
         for (int i = 0; i < 16; i++) {
@@ -385,35 +385,35 @@ static void ov03_02254420() {
             ListMenuItems_AddItem(sCommClubManager->items, sCommClubManager->string[0], 0);
         };
 
-        ov03_02253ED0(ov03_02259164, 1, 2, 20, 10, 1);
+        CommClub_CreateListMenu(sParentListTemplate, 1, 2, 20, 10, 1);
 
-        sCommClubManager->unk9C = ov03_02259134;
-        sCommClubManager->unkA0 = 2;
-        sCommClubManager->unkA2 = 0xFFFF;
-        sCommClubManager->unkA1 = 0;
-        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->unk9C);
-        ov03_02254B4C(&ov03_02254500);
+        sCommClubManager->buttonMsgIds = sJoinQuitButtons;
+        sCommClubManager->buttonCount = 2;
+        sCommClubManager->buttonSelection = 0xFFFF;
+        sCommClubManager->buttonCloseRequest = 0;
+        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->buttonMsgIds);
+        CommClub_SetState(&CommClub_HandleParentList);
     }
 }
 
-static void ov03_02254500(void *arg0, CommClubManager *commClubManager) {
-    ov03_022543AC(commClubManager);
+static void CommClub_HandleParentList(void *arg0, CommClubManager *commClubManager) {
+    CommClub_PrintOwnProfile(commClubManager);
     if (FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem) == TRUE) {
         if (Comm_HasLinkError()) {
             sCommClubManager->retCode = 3;
-            ov03_02254B44();
-            ov03_0225574C(arg0, commClubManager);
+            CommClub_ExitLink();
+            CommClub_CloseMenus(arg0, commClubManager);
             return;
         }
         int listInput;
         if (CommWireless_IsParentListChanged() == 0) {
             listInput = ListMenu_ProcessInput(sCommClubManager->listMenu);
             if (listInput == -1) {
-                if (commClubManager->unkA2 == 0) {
+                if (commClubManager->buttonSelection == 0) {
                     u16 currentItem;
                     ListMenuGetCurrentItemArrayId(sCommClubManager->listMenu, &currentItem);
                     listInput = currentItem;
-                } else if (commClubManager->unkA2 == 1) {
+                } else if (commClubManager->buttonSelection == 1) {
                     listInput = -2;
                 }
             }
@@ -422,65 +422,65 @@ static void ov03_02254500(void *arg0, CommClubManager *commClubManager) {
         }
         switch (listInput) {
         case -1:
-            ov03_02254600(commClubManager);
+            CommClub_RedrawParentList(commClubManager);
             break;
 
         case -2:
             PlaySE(SEQ_SE_DP_SELECT);
             sCommClubManager->retCode = 1;
-            ov03_02254B44();
-            ov03_0225574C(arg0, commClubManager);
+            CommClub_ExitLink();
+            CommClub_CloseMenus(arg0, commClubManager);
             break;
         default:
             PlaySE(SEQ_SE_DP_SELECT);
             ListMenuGetCurrentItemArrayId(commClubManager->listMenu, &commClubManager->connectionIndex);
             if (CommWireless_CountParents() > commClubManager->connectionIndex) {
-                ov03_02254600(commClubManager);
+                CommClub_RedrawParentList(commClubManager);
                 commClubManager->connectionIndex = CommWireless_GetParentSlot(commClubManager->connectionIndex);
-                sub_02058164(commClubManager->connectionIndex);
+                CommClubLink_ConnectToParent(commClubManager->connectionIndex);
                 LinkSync_ClearValues();
-                ov03_02254B4C(&ov03_02254660);
+                CommClub_SetState(&CommClub_WaitConnected);
             }
         }
     }
 }
 
-static void ov03_02254600(CommClubManager *commClubManager_unused) {
-    if (CommWireless_IsParentListChanged() || sCommClubManager->unk98) {
-        sCommClubManager->unk98 = 0;
+static void CommClub_RedrawParentList(CommClubManager *commClubManager_unused) {
+    if (CommWireless_IsParentListChanged() || sCommClubManager->listNeedsRedraw) {
+        sCommClubManager->listNeedsRedraw = 0;
         CommWireless_ClearParentListChanged();
         FillWindowPixelRect(&sCommClubManager->windows[0], 15, 8, 0, 12, 80);
-        ov03_02254120(sCommClubManager->listMenu, LISTMENUATTR_MOVECURSORFUNC, 0);
+        CommClub_ParentListPrintItems(sCommClubManager->listMenu, LISTMENUATTR_MOVECURSORFUNC, 0);
         CopyWindowToVram(&sCommClubManager->windows[0]);
     }
 }
 
-static void ov03_02254660(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_WaitConnected(void *arg0, CommClubManager *commClubManager) {
     if (Comm_HasLinkError()) {
-        ov03_0225574C(arg0, commClubManager);
-        ov03_02253E20(0, FALSE);
-        ov03_02255ADC(commClubManager);
-        sCommClubManager->unkA1 = 1;
+        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_PrintMessage(0, FALSE);
+        CommClub_ResetToParentList(commClubManager);
+        sCommClubManager->buttonCloseRequest = 1;
     } else {
         if (CommPlayerInfo_GetProfile(Comm_GetLocalNetId())) {
             LinkSync_ClearValues();
-            ov03_022546B0(arg0, commClubManager);
+            CommClub_AskForRegistration(arg0, commClubManager);
         }
     }
 }
 
-static void ov03_022546B0(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_AskForRegistration(void *arg0, CommClubManager *commClubManager) {
     if (Comm_HasLinkError()) {
-        ov03_0225574C(arg0, commClubManager);
-        ov03_02253E20(0, FALSE);
-        ov03_02255ADC(commClubManager);
-        sCommClubManager->unkA1 = 1;
+        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_PrintMessage(0, FALSE);
+        CommClub_ResetToParentList(commClubManager);
+        sCommClubManager->buttonCloseRequest = 1;
         return;
     }
     CommWireless_CopyParentProfile(commClubManager->connectionIndex, sCommClubManager->playerProfile[1]);
     BufferPlayersName(commClubManager->messageFormat[2], 1, sCommClubManager->playerProfile[1]);
-    if (ov03_02255B70() <= 2) {
-        ov03_02253E20(1, TRUE);
+    if (CommClub_GetMinPlayers() <= 2) {
+        CommClub_PrintMessage(1, TRUE);
     } else {
         if (DialogBox_IsPrintFinished(sCommClubManager->printerID) == FALSE) {
             RemoveTextPrinter(sCommClubManager->printerID);
@@ -497,100 +497,100 @@ static void ov03_022546B0(void *arg0, CommClubManager *commClubManager) {
         sCommClubManager->printerID = AddTextPrinterParameterized(&sCommClubManager->windows[2], 1, sCommClubManager->string[5], 0, 0, 1, NULL);
     }
     sCommClubManager->unkA8 = 0;
-    sCommClubManager->unkA1 = 1;
-    ov03_02254B4C(&ov03_022548E0);
+    sCommClubManager->buttonCloseRequest = 1;
+    CommClub_SetState(&CommClub_WaitHostReply);
 }
 
-static BOOL ov03_022547D8(void *arg0, CommClubManager *commClubManager) {
+static BOOL CommClub_HandleHostReply(void *arg0, CommClubManager *commClubManager) {
     if (Comm_HasLinkError()) {
-        ov03_0225574C(arg0, commClubManager);
-        ov03_02253E20(0, FALSE);
-        ov03_02255ADC(commClubManager);
+        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_PrintMessage(0, FALSE);
+        CommClub_ResetToParentList(commClubManager);
     } else if (LinkSync_GetValue(0, 3) == Comm_GetLocalNetId()) {
         LinkSync_ClearValues();
-        ov03_0225574C(arg0, commClubManager);
-        ov03_02255A70(commClubManager);
+        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_ShowRefused(commClubManager);
     } else if (LinkSync_GetValue(0, 5) != -1) {
         LinkSync_ClearValues();
-        ov03_0225574C(arg0, commClubManager);
-        ov03_02255A70(commClubManager);
+        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_ShowRefused(commClubManager);
     } else if (LinkSync_GetValue(0, 4) == Comm_GetLocalNetId()) {
-        ov03_02253E20(116, FALSE);
-        ov03_02254B4C(&ov03_02255280);
+        CommClub_PrintMessage(116, FALSE);
+        CommClub_SetState(&CommClub_WaitDifferentRulesAck);
     } else if (LinkSync_GetValue(0, 2) == Comm_GetLocalNetId()) {
         LinkSync_ClearValues();
         commClubManager->connectedCount = CommPlayerInfo_CountAccepted();
         if (DialogBox_IsPrintFinished(sCommClubManager->printerID) == FALSE) {
             RemoveTextPrinter(sCommClubManager->printerID);
         }
-        ov03_0225574C(arg0, commClubManager);
-        ov03_02255804(commClubManager);
+        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_ChildAccepted(commClubManager);
     } else if (ov03_02255C80()) {
-        ov03_0225574C(arg0, commClubManager);
-        ov03_02255A70(commClubManager);
+        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_ShowRefused(commClubManager);
     } else {
         return FALSE;
     }
     return TRUE;
 }
 
-static void ov03_022548E0(void *arg0, CommClubManager *unk_ovo3) {
+static void CommClub_WaitHostReply(void *arg0, CommClubManager *unk_ovo3) {
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
         if (unk_ovo3->unkA8 == 0) {
-            sCommClubManager->unk9C = &ov03_0225912C;
-            sCommClubManager->unkA0 = 1;
-            sCommClubManager->unkA2 = 0xFFFF;
-            sCommClubManager->unkA1 = 0;
-            FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->unk9C);
+            sCommClubManager->buttonMsgIds = &sRemoveFromMembersButton;
+            sCommClubManager->buttonCount = 1;
+            sCommClubManager->buttonSelection = 0xFFFF;
+            sCommClubManager->buttonCloseRequest = 0;
+            FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->buttonMsgIds);
             unk_ovo3->unkA8 = 1;
         } else if (FieldSystem_GetBottomScreenAppState(unk_ovo3->fieldSystem) == TRUE) {
-            if (ov03_022547D8(arg0, unk_ovo3)) {
-                unk_ovo3->unkA1 = 2;
-            } else if (PAD_BUTTON_B & gSystem.newKeys || unk_ovo3->unkA2 == 0) {
+            if (CommClub_HandleHostReply(arg0, unk_ovo3)) {
+                unk_ovo3->buttonCloseRequest = 2;
+            } else if (PAD_BUTTON_B & gSystem.newKeys || unk_ovo3->buttonSelection == 0) {
                 PlaySE(SEQ_SE_DP_SELECT);
                 unk_ovo3->unkA8 = 0;
-                ov03_02253E20(3, FALSE);
-                ov03_02254B4C(&ov03_0225499C);
+                CommClub_PrintMessage(3, FALSE);
+                CommClub_SetState(&CommClub_OpenLeaveGroupChoice);
             }
         }
     }
 }
 
-static void ov03_0225499C(void *arg0, CommClubManager *commClubManager) {
-    if (ov03_022547D8(arg0, commClubManager)) {
-        commClubManager->unkA1 = 2;
+static void CommClub_OpenLeaveGroupChoice(void *arg0, CommClubManager *commClubManager) {
+    if (CommClub_HandleHostReply(arg0, commClubManager)) {
+        commClubManager->buttonCloseRequest = 2;
         return;
     }
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
-        ov03_02255C84(commClubManager);
-        ov03_02254B4C(&ov03_022549D8);
+        CommClub_OpenYesNoButtons(commClubManager);
+        CommClub_SetState(&CommClub_HandleLeaveGroupChoice);
     }
 }
 
-static void ov03_022549D8(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_HandleLeaveGroupChoice(void *arg0, CommClubManager *commClubManager) {
     if (commClubManager->unkA8 == 0) {
-        if (ov03_02255CA0(commClubManager) == TRUE) {
+        if (CommClub_InitYesNoButtons(commClubManager) == TRUE) {
             commClubManager->unkA8 = 1;
         } else {
             return;
         }
     }
-    if (ov03_02255CD0(commClubManager)) {
-        if (ov03_022547D8(arg0, commClubManager)) {
-            ov03_02255CE4(commClubManager);
+    if (CommClub_IsYesNoReady(commClubManager)) {
+        if (CommClub_HandleHostReply(arg0, commClubManager)) {
+            CommClub_CloseYesNoButtons(commClubManager);
         } else if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == 6) {
-            if (commClubManager->unkA4 == 0) {
-                ov03_0225574C(arg0, commClubManager);
-                ov03_02253E20(6, FALSE);
-                ov03_02255ADC(commClubManager);
-            } else if (commClubManager->unkA4 == 1) {
-                ov03_02254B4C(&ov03_022546B0);
+            if (commClubManager->choiceResult == 0) {
+                CommClub_CloseMenus(arg0, commClubManager);
+                CommClub_PrintMessage(6, FALSE);
+                CommClub_ResetToParentList(commClubManager);
+            } else if (commClubManager->choiceResult == 1) {
+                CommClub_SetState(&CommClub_AskForRegistration);
             }
         }
     }
 }
 
-static void ov03_02254A54(ListMenu *listMenu_unused, u16 arg1_unused, u8 arg2) {
+static void CommClub_MemberListPrintRow(ListMenu *listMenu_unused, u16 arg1_unused, u8 arg2) {
     u16 spC = 0;
     if (sCommClubManager->listMenu) {
         ListMenuGetScrollAndRow(sCommClubManager->listMenu, &spC, NULL);
@@ -609,33 +609,33 @@ static void ov03_02254A54(ListMenu *listMenu_unused, u16 arg1_unused, u8 arg2) {
     }
 }
 
-static void ov03_02254B2C(CommClubManager *commClubManager) {
-    sub_020580E4(commClubManager->fieldSystem, commClubManager->commType, ov03_02255B98());
+static void CommClub_StartParent(CommClubManager *commClubManager) {
+    CommClubLink_StartParent(commClubManager->fieldSystem, commClubManager->commType, ov03_02255B98());
 }
 
-static void ov03_02254B44() {
-    sub_02058284();
+static void CommClub_ExitLink() {
+    CommClubLink_Exit();
 }
 
-static void ov03_02254B4C(void *arg0) {
+static void CommClub_SetState(void *arg0) {
     sCommClubManager->commClubTask = arg0;
 }
 
-static void ov03_02254B58(CommClubManager *commClubManager) {
-    SysTask_CreateOnMainQueue(&ov03_02254D64, commClubManager, 0);
-    ov03_02254BEC();
+static void CommClub_StartHosting(CommClubManager *commClubManager) {
+    SysTask_CreateOnMainQueue(&CommClub_Task, commClubManager, 0);
+    CommClub_PrintAwaitingContact();
     if (WindowIsInUse(&sCommClubManager->windows[1]) == FALSE) {
         AddWindowParameterized(sCommClubManager->fieldSystem->bgConfig, &sCommClubManager->windows[1], 3, 22, 2, 9, 4, 13, 205);
     }
     DrawFrameAndWindow1(&sCommClubManager->windows[1], TRUE, 985, 11);
     FillWindowPixelBuffer(&sCommClubManager->windows[1], 15);
     CopyWindowToVram(&sCommClubManager->windows[1]);
-    commClubManager->unk97 = 1;
+    commClubManager->infoWindowOpen = 1;
     CommPlayerInfo_Accept(0);
-    ov03_02254B4C(&ov03_02254D78);
+    CommClub_SetState(&CommClub_CreateMemberList);
 }
 
-static void ov03_02254BEC() {
+static void CommClub_PrintAwaitingContact() {
     u16 sAwaitingContactText[NUM_COMM_TYPES] = {
         CommunicationClub_Text_00007_Dummy,
         CommunicationClub_Text_AwaitingContact_SingleBattle, // Single Battle! Awaiting contact from your friend.
@@ -686,30 +686,30 @@ static void ov03_02254BEC() {
 
     if (sCommClubManager->commType == COMM_TYPE_8) {
         if (CommPlayerInfo_CountAccepted() > 1) {
-            ov03_02253E20(sCommClubManager->unk92 + 127, FALSE);
+            CommClub_PrintMessage(sCommClubManager->unk92 + 127, FALSE);
         } else {
-            ov03_02253E20(sCommClubManager->unk92 + 117, FALSE);
+            CommClub_PrintMessage(sCommClubManager->unk92 + 117, FALSE);
         }
     } else if (sCommClubManager->commType == COMM_TYPE_POKEATHLON) {
         if (CommPlayerInfo_CountAccepted() > 1) {
-            ov03_02253E20(sCommClubManager->unk92 + 154, FALSE);
+            CommClub_PrintMessage(sCommClubManager->unk92 + 154, FALSE);
         } else {
-            ov03_02253E20(sCommClubManager->unk92 + 142, FALSE);
+            CommClub_PrintMessage(sCommClubManager->unk92 + 142, FALSE);
         }
     } else {
-        ov03_02253E20(sAwaitingContactText[sCommClubManager->commType], FALSE);
+        CommClub_PrintMessage(sAwaitingContactText[sCommClubManager->commType], FALSE);
     }
 }
 
-static void ov03_02254C9C(CommClubManager *commClubManager_unused) {
+static void CommClub_PrintPlayerCount(CommClubManager *commClubManager_unused) {
     s32 num;
     s32 strno;
 
-    if (CommPlayerInfo_CountAccepted() >= ov03_02255B70()) {
+    if (CommPlayerInfo_CountAccepted() >= CommClub_GetMinPlayers()) {
         num = CommPlayerInfo_CountAccepted();
         strno = CommunicationClub_Text_NumPlayers; // {STRVAR_1 50, 0, 0} Players
     } else {
-        num = ov03_02255B70() - CommPlayerInfo_CountAccepted();
+        num = CommClub_GetMinPlayers() - CommPlayerInfo_CountAccepted();
         strno = CommunicationClub_Text_NumNeeded; // {STRVAR_1 50, 0, 0} more needed.
     }
     BufferIntegerAsString(sCommClubManager->messageFormat[1], 0, num, 2, PRINTING_MODE_5_UNUSED, TRUE);
@@ -719,7 +719,7 @@ static void ov03_02254C9C(CommClubManager *commClubManager_unused) {
     AddTextPrinterParameterized(&sCommClubManager->windows[1], 0, sCommClubManager->string[6], 2, 2, 0, NULL);
 }
 
-static void ov03_02254D24(u32 arg0, CommClubManager *commClubManager) {
+static void CommClub_PrintContacted(u32 arg0, CommClubManager *commClubManager) {
     u16 sContactedText[NUM_COMM_TYPES] = {
         CommunicationClub_Text_00024_Dummy,
         CommunicationClub_Text_Contacted_SingleBattle, // {STRVAR_1 3, 1, 0} has contacted you. Start a Single Battle?
@@ -768,95 +768,95 @@ static void ov03_02254D24(u32 arg0, CommClubManager *commClubManager) {
     if (profile) {
         BufferPlayersName(commClubManager->messageFormat[2], 1, profile);
     }
-    ov03_02253E20(sContactedText[commClubManager->commType], TRUE);
+    CommClub_PrintMessage(sContactedText[commClubManager->commType], TRUE);
 }
 
-static void ov03_02254D64(SysTask *task, void *arg1) {
+static void CommClub_Task(SysTask *task, void *arg1) {
     if (sCommClubManager->commClubTask) {
         sCommClubManager->commClubTask(task, arg1);
     }
 }
 
-static void ov03_02254D78(s32 arg0_unused, CommClubManager *commClubManager) {
-    ov03_02254C9C(commClubManager);
+static void CommClub_CreateMemberList(s32 arg0_unused, CommClubManager *commClubManager) {
+    CommClub_PrintPlayerCount(commClubManager);
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
         sCommClubManager->items = ListMenuItems_New(5, HEAP_ID_FIELD1);
         int i;
         for (i = 0; i < 5; i++) {
             ListMenuItems_AppendFromMsgData(sCommClubManager->items, sCommClubManager->msgData, 82, 0);
         }
-        sCommClubManager->unk98 = 1;
+        sCommClubManager->listNeedsRedraw = 1;
         for (i = 0; i < 8; i++) {
-            sCommClubManager->unk80[i] = 0;
+            sCommClubManager->playerListed[i] = 0;
         }
 
-        ov03_02253ED0(ov03_02259144, 1, 2, 17, 12, 1);
-        ov03_02254B4C(&ov03_02254E70);
-        if (ov03_02255B84() > 2) {
-            sCommClubManager->unk9C = ov03_0225913C;
-            sCommClubManager->unkA0 = 2;
+        CommClub_CreateListMenu(sMemberListTemplate, 1, 2, 17, 12, 1);
+        CommClub_SetState(&CommClub_HandleMemberList);
+        if (CommClub_GetMaxPlayers() > 2) {
+            sCommClubManager->buttonMsgIds = sStartQuitButtons;
+            sCommClubManager->buttonCount = 2;
         } else {
-            sCommClubManager->unk9C = &ov03_02259130;
-            sCommClubManager->unkA0 = 1;
+            sCommClubManager->buttonMsgIds = &sQuitButton;
+            sCommClubManager->buttonCount = 1;
         }
-        sCommClubManager->unkA2 = 0xFFFF;
-        sCommClubManager->unkA1 = 0;
-        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->unk9C);
+        sCommClubManager->buttonSelection = 0xFFFF;
+        sCommClubManager->buttonCloseRequest = 0;
+        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->buttonMsgIds);
     }
 }
 
-static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_HandleMemberList(void *arg0, CommClubManager *commClubManager) {
     if (FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem) != 1) {
         return;
     }
 
-    ov03_02254C9C(commClubManager);
+    CommClub_PrintPlayerCount(commClubManager);
 
     for (int i = 0; i < 8; i++) {
         if (CommPlayerInfo_IsReceived(i) && i != 0) {
-            sCommClubManager->unk80[i] = 1;
-            sCommClubManager->unk98 = 1;
-        } else if (CommPlayerInfo_GetProfile(i) && sCommClubManager->unk80[i] == 0) {
-            sCommClubManager->unk80[i] = 1;
-            sCommClubManager->unk98 = 1;
-        } else if (CommPlayerInfo_GetProfile(i) == 0 && sCommClubManager->unk80[i] != 0) {
-            sCommClubManager->unk80[i] = 0;
-            sCommClubManager->unk98 = 1;
+            sCommClubManager->playerListed[i] = 1;
+            sCommClubManager->listNeedsRedraw = 1;
+        } else if (CommPlayerInfo_GetProfile(i) && sCommClubManager->playerListed[i] == 0) {
+            sCommClubManager->playerListed[i] = 1;
+            sCommClubManager->listNeedsRedraw = 1;
+        } else if (CommPlayerInfo_GetProfile(i) == 0 && sCommClubManager->playerListed[i] != 0) {
+            sCommClubManager->playerListed[i] = 0;
+            sCommClubManager->listNeedsRedraw = 1;
         }
     };
 
-    if (sCommClubManager->unk98) {
-        sCommClubManager->unk98 = 0;
+    if (sCommClubManager->listNeedsRedraw) {
+        sCommClubManager->listNeedsRedraw = 0;
         RedrawListMenu(sCommClubManager->listMenu);
         for (u32 i = 0; i < ListMenuGetTemplateField(sCommClubManager->listMenu, LISTMENUATTR_MAXSHOWED); i++) {
-            ov03_02254A54(sCommClubManager->listMenu, 0, i);
+            CommClub_MemberListPrintRow(sCommClubManager->listMenu, 0, i);
         };
     }
 
     s32 listState = ListMenu_ProcessInput(commClubManager->listMenu);
     if (CommPlayerInfo_FindReceived() != 0xFF) {
-        commClubManager->unk95 = CommPlayerInfo_FindReceived();
+        commClubManager->contactNetId = CommPlayerInfo_FindReceived();
         PlaySE(SEQ_SE_DP_PC_LOGIN);
-        commClubManager->unkA1 = 1;
-        ov03_02254D24(commClubManager->unk95, commClubManager);
-        ov03_02254B4C(&ov03_02255714);
+        commClubManager->buttonCloseRequest = 1;
+        CommClub_PrintContacted(commClubManager->contactNetId, commClubManager);
+        CommClub_SetState(&CommClub_OpenContactChoice);
         return;
     }
     if (Comm_HasLinkError()) {
-        ov03_02254B44();
-        ov03_0225574C(arg0, commClubManager);
+        CommClub_ExitLink();
+        CommClub_CloseMenus(arg0, commClubManager);
         sCommClubManager->retCode = 3;
         return;
     }
 
     if (listState == LIST_NOTHING_CHOSEN) {
-        if (ov03_02255B84() > 2) {
-            if (sCommClubManager->unkA2 == 0) {
+        if (CommClub_GetMaxPlayers() > 2) {
+            if (sCommClubManager->buttonSelection == 0) {
                 listState = LIST_NO_MULTIPLE_SCROLL;
-            } else if (sCommClubManager->unkA2 == 1) {
+            } else if (sCommClubManager->buttonSelection == 1) {
                 listState = LIST_CANCEL;
             }
-        } else if (sCommClubManager->unkA2 == 0) {
+        } else if (sCommClubManager->buttonSelection == 0) {
             listState = LIST_CANCEL;
         }
     }
@@ -864,10 +864,10 @@ static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
     switch (listState) {
     case LIST_CANCEL:
         PlaySE(SEQ_SE_DP_SELECT);
-        ov03_02254B4C(&ov03_0225558C);
+        CommClub_SetState(&CommClub_AskCancelGroup);
         break;
     default:
-        if (ov03_02255B70() <= CommPlayerInfo_CountAccepted()) {
+        if (CommClub_GetMinPlayers() <= CommPlayerInfo_CountAccepted()) {
             u16 sConfirmGroupText[NUM_COMM_TYPES] = {
                 0,
                 0,
@@ -913,8 +913,8 @@ static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
             };
             PlaySE(SEQ_SE_DP_SELECT);
             commClubManager->connectedCount = CommPlayerInfo_CountAccepted();
-            ov03_02253E20(sConfirmGroupText[commClubManager->commType], FALSE);
-            ov03_02254B4C(&ov03_022553C8);
+            CommClub_PrintMessage(sConfirmGroupText[commClubManager->commType], FALSE);
+            CommClub_SetState(&CommClub_OpenConfirmGroupChoice);
         }
         break;
     case LIST_NOTHING_CHOSEN:
@@ -922,117 +922,117 @@ static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
     }
 }
 
-static void ov03_02255078(void *arg0, CommClubManager *commClubManager) {
-    ov03_02254C9C(commClubManager);
+static void CommClub_HandleContactChoice(void *arg0, CommClubManager *commClubManager) {
+    CommClub_PrintPlayerCount(commClubManager);
     if (commClubManager->unkA8 == 0) {
-        if (ov03_02255CA0(commClubManager) == TRUE) {
+        if (CommClub_InitYesNoButtons(commClubManager) == TRUE) {
             commClubManager->unkA8 = 1;
         } else {
             return;
         }
     }
 
-    if (ov03_02255CD0(commClubManager) == FALSE) {
+    if (CommClub_IsYesNoReady(commClubManager) == FALSE) {
         return;
     }
     int i;
-    if (Comm_IsNetIdConnected(commClubManager->unk95) == FALSE) {
-        ov03_02255CE4(commClubManager);
+    if (Comm_IsNetIdConnected(commClubManager->contactNetId) == FALSE) {
+        CommClub_CloseYesNoButtons(commClubManager);
         if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_POKEATHLON) {
-            for (i = 1; i < ov03_02255B84(); i++) {
+            for (i = 1; i < CommClub_GetMaxPlayers(); i++) {
                 if (Comm_IsNetIdConnected(i)) {
                     CommPlayerInfo_ClearPlayer(i);
                     LinkSync_SendValue(5, i);
                 }
             }
-            ov03_02253E20(0, FALSE);
-            ov03_02254B4C(&ov03_022552C8);
+            CommClub_PrintMessage(0, FALSE);
+            CommClub_SetState(&CommClub_WaitProblemAckThenReopen);
         } else {
-            CommPlayerInfo_ClearPlayer(commClubManager->unk95);
-            ov03_02253E20(0, FALSE);
-            ov03_02254B4C(&ov03_022552C8);
+            CommPlayerInfo_ClearPlayer(commClubManager->contactNetId);
+            CommClub_PrintMessage(0, FALSE);
+            CommClub_SetState(&CommClub_WaitProblemAckThenReopen);
         }
     } else if (Comm_HasLinkError() || ov03_02255C80()) {
-        ov03_02255CE4(commClubManager);
-        CommPlayerInfo_ClearPlayer(commClubManager->unk95);
-        ov03_02253E20(0, FALSE);
-        ov03_02254B4C(&ov03_022552C8);
+        CommClub_CloseYesNoButtons(commClubManager);
+        CommPlayerInfo_ClearPlayer(commClubManager->contactNetId);
+        CommClub_PrintMessage(0, FALSE);
+        CommClub_SetState(&CommClub_WaitProblemAckThenReopen);
     } else if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == 6) {
-        if (commClubManager->unkA4 == 0) {
+        if (commClubManager->choiceResult == 0) {
             if ((commClubManager->commType == COMM_TYPE_SINGLE_BATTLE || commClubManager->commType == COMM_TYPE_DOUBLE_BATTLE || commClubManager->commType == COMM_TYPE_FLAT_BATTLE_1 || commClubManager->commType == COMM_TYPE_FLAT_BATTLE_2) && CommPlayerInfo_RulesetsMatch() == 0) {
-                ov03_02253E20(116, FALSE);
-                ov03_02254B4C(&ov03_02255280);
-                LinkSync_SendValue(4, commClubManager->unk95);
+                CommClub_PrintMessage(116, FALSE);
+                CommClub_SetState(&CommClub_WaitDifferentRulesAck);
+                LinkSync_SendValue(4, commClubManager->contactNetId);
             } else {
-                CommPlayerInfo_Accept(commClubManager->unk95);
-                LinkSync_SendValue(2, commClubManager->unk95);
-                if (ov03_02255B84() == CommPlayerInfo_CountAccepted()) {
+                CommPlayerInfo_Accept(commClubManager->contactNetId);
+                LinkSync_SendValue(2, commClubManager->contactNetId);
+                if (CommClub_GetMaxPlayers() == CommPlayerInfo_CountAccepted()) {
                     commClubManager->connectedCount = CommPlayerInfo_CountAccepted();
-                    if (ov03_02255B84() > 2) {
-                        ov03_02254B4C(&ov03_02255388);
+                    if (CommClub_GetMaxPlayers() > 2) {
+                        CommClub_SetState(&CommClub_ConfirmGroup);
                     } else {
-                        ov03_0225574C(arg0, commClubManager);
-                        ov03_022557CC(commClubManager);
+                        CommClub_CloseMenus(arg0, commClubManager);
+                        CommClub_HostRepliedOk(commClubManager);
                     }
                 } else {
-                    ov03_02254BEC();
-                    ov03_02254B4C(&ov03_0225530C);
+                    CommClub_PrintAwaitingContact();
+                    CommClub_SetState(&CommClub_ReopenMemberList);
                 }
             }
-        } else if (commClubManager->unkA4 == 1) {
+        } else if (commClubManager->choiceResult == 1) {
             if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_POKEATHLON) {
-                for (i = 1; i < ov03_02255B84(); i++) {
+                for (i = 1; i < CommClub_GetMaxPlayers(); i++) {
                     if (Comm_IsNetIdConnected(i)) {
                         CommPlayerInfo_ClearPlayer(i);
                         LinkSync_SendValue(5, i);
                     }
                 }
-                ov03_02254BEC();
-                ov03_02254B4C(&ov03_0225530C);
+                CommClub_PrintAwaitingContact();
+                CommClub_SetState(&CommClub_ReopenMemberList);
             } else {
-                CommPlayerInfo_ClearPlayer(commClubManager->unk95);
-                LinkSync_SendValue(3, commClubManager->unk95);
-                ov03_02254BEC();
-                ov03_02254B4C(&ov03_0225530C);
+                CommPlayerInfo_ClearPlayer(commClubManager->contactNetId);
+                LinkSync_SendValue(3, commClubManager->contactNetId);
+                CommClub_PrintAwaitingContact();
+                CommClub_SetState(&CommClub_ReopenMemberList);
             }
         }
     }
 }
 
-static void ov03_02255280(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_WaitDifferentRulesAck(void *arg0, CommClubManager *commClubManager) {
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID) && ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || System_GetTouchNew() == TRUE)) {
-        ov03_0225574C(arg0, commClubManager);
-        ov03_02254B44();
+        CommClub_CloseMenus(arg0, commClubManager);
+        CommClub_ExitLink();
         sCommClubManager->retCode = 4;
     }
 }
 
-static void ov03_022552C8(void *arg0, CommClubManager *commClubManager) {
-    ov03_02254C9C(commClubManager);
+static void CommClub_WaitProblemAckThenReopen(void *arg0, CommClubManager *commClubManager) {
+    CommClub_PrintPlayerCount(commClubManager);
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID) && ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || System_GetTouchNew() == TRUE)) {
-        ov03_02254BEC();
-        ov03_02254B4C(&ov03_0225530C);
+        CommClub_PrintAwaitingContact();
+        CommClub_SetState(&CommClub_ReopenMemberList);
     }
 }
 
-static void ov03_0225530C(void *arg0_unused, CommClubManager *commClubManager) {
-    ov03_02254C9C(commClubManager);
+static void CommClub_ReopenMemberList(void *arg0_unused, CommClubManager *commClubManager) {
+    CommClub_PrintPlayerCount(commClubManager);
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
-        ov03_02254B4C(&ov03_02254E70);
-        if (ov03_02255B84() > 2) {
-            sCommClubManager->unk9C = ov03_0225913C;
-            sCommClubManager->unkA0 = 2;
+        CommClub_SetState(&CommClub_HandleMemberList);
+        if (CommClub_GetMaxPlayers() > 2) {
+            sCommClubManager->buttonMsgIds = sStartQuitButtons;
+            sCommClubManager->buttonCount = 2;
         } else {
-            sCommClubManager->unk9C = &ov03_02259130;
-            sCommClubManager->unkA0 = 1;
+            sCommClubManager->buttonMsgIds = &sQuitButton;
+            sCommClubManager->buttonCount = 1;
         }
-        sCommClubManager->unkA2 = 0xFFFF;
-        sCommClubManager->unkA1 = 0;
-        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->unk9C);
+        sCommClubManager->buttonSelection = 0xFFFF;
+        sCommClubManager->buttonCloseRequest = 0;
+        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->buttonMsgIds);
     }
 }
 
-static void ov03_02255388(void *arg0_unused, CommClubManager *commClubManager) {
+static void CommClub_ConfirmGroup(void *arg0_unused, CommClubManager *commClubManager) {
     u16 sConfirmGroupText[NUM_COMM_TYPES] = {
         0,
         0,
@@ -1076,52 +1076,52 @@ static void ov03_02255388(void *arg0_unused, CommClubManager *commClubManager) {
         0,
         CommunicationClub_Text_ConfirmGroup_Pokeathlon // Pokéathlon! Is this group OK?
     };
-    ov03_02254C9C(commClubManager);
-    ov03_02253E20(sConfirmGroupText[commClubManager->commType], FALSE);
-    ov03_02254B4C(&ov03_022553C8);
+    CommClub_PrintPlayerCount(commClubManager);
+    CommClub_PrintMessage(sConfirmGroupText[commClubManager->commType], FALSE);
+    CommClub_SetState(&CommClub_OpenConfirmGroupChoice);
 }
 
-static void ov03_022553C8(void *arg0_unused, CommClubManager *commClubManager) {
-    ov03_02254C9C(commClubManager);
+static void CommClub_OpenConfirmGroupChoice(void *arg0_unused, CommClubManager *commClubManager) {
+    CommClub_PrintPlayerCount(commClubManager);
     CommState_SetEntry(0);
     ListMenu_ProcessInput(commClubManager->listMenu);
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
-        ov03_02255C84(commClubManager);
-        ov03_02254B4C(&ov03_02255404);
+        CommClub_OpenYesNoButtons(commClubManager);
+        CommClub_SetState(&CommClub_HandleConfirmGroupChoice);
     }
 }
 
-static void ov03_02255404(void *arg0, CommClubManager *commClubManager) {
-    ov03_02254C9C(commClubManager);
+static void CommClub_HandleConfirmGroupChoice(void *arg0, CommClubManager *commClubManager) {
+    CommClub_PrintPlayerCount(commClubManager);
     if (commClubManager->unkA8 == 0) {
-        if (ov03_02255CA0(commClubManager) == TRUE) {
+        if (CommClub_InitYesNoButtons(commClubManager) == TRUE) {
             commClubManager->unkA8 = 1;
         } else {
             return;
         }
     }
 
-    if (ov03_02255CD0(commClubManager)) {
+    if (CommClub_IsYesNoReady(commClubManager)) {
         if (Comm_HasLinkError() || commClubManager->connectedCount != Comm_CountConnected()) {
-            ov03_02255CE4(commClubManager);
-            ov03_02254B4C(&ov03_022554E0);
+            CommClub_CloseYesNoButtons(commClubManager);
+            CommClub_SetState(&CommClub_GroupCancelled);
         } else {
             if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == 6) {
-                if (commClubManager->unkA4 == 0) {
+                if (commClubManager->choiceResult == 0) {
                     if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_POKEATHLON) {
                         for (int i = 1; i < Comm_CountConnected(); i++) {
                             if (Comm_IsNetIdConnected(i) == 0) {
-                                ov03_02254B4C(&ov03_022554E0);
+                                CommClub_SetState(&CommClub_GroupCancelled);
                                 return;
                             }
                         }
                     }
                     LinkSync_StartSync(10);
-                    ov03_02254B4C(&ov03_022556BC);
-                } else if (commClubManager->unkA4 == 1) {
+                    CommClub_SetState(&CommClub_WaitGroupSync);
+                } else if (commClubManager->choiceResult == 1) {
                     CommState_SetEntry(1);
-                    ov03_02254B44();
-                    ov03_0225574C(arg0, commClubManager);
+                    CommClub_ExitLink();
+                    CommClub_CloseMenus(arg0, commClubManager);
                     sCommClubManager->retCode = 1;
                 }
             }
@@ -1129,7 +1129,7 @@ static void ov03_02255404(void *arg0, CommClubManager *commClubManager) {
     }
 }
 
-static void ov03_022554E0(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_GroupCancelled(void *arg0, CommClubManager *commClubManager) {
     u16 sGroupCancelledText[NUM_COMM_TYPES] = {
         0,
         0,
@@ -1174,24 +1174,24 @@ static void ov03_022554E0(void *arg0, CommClubManager *commClubManager) {
         CommunicationClub_Text_GroupCancelled_Pokeathlon // A Pokéathlon involving this group will be canceled.
     };
 
-    ov03_0225574C(arg0, commClubManager);
+    CommClub_CloseMenus(arg0, commClubManager);
     if (sCommClubManager->commType == COMM_TYPE_8) {
-        ov03_02253E20(sCommClubManager->unk92 + 137, FALSE);
+        CommClub_PrintMessage(sCommClubManager->unk92 + 137, FALSE);
     } else {
-        ov03_02253E20(sGroupCancelledText[commClubManager->commType], FALSE);
+        CommClub_PrintMessage(sGroupCancelledText[commClubManager->commType], FALSE);
     }
-    sub_02058284();
-    SysTask_CreateOnMainQueue(&ov03_0225554C, commClubManager, 0);
+    CommClubLink_Exit();
+    SysTask_CreateOnMainQueue(&CommClub_WaitGroupCancelledAck, commClubManager, 0);
 }
 
-static void ov03_0225554C(SysTask *task, void *commClubManager_unused) {
+static void CommClub_WaitGroupCancelledAck(SysTask *task, void *commClubManager_unused) {
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID) && ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || System_GetTouchNew() == TRUE)) {
         sCommClubManager->retCode = 1;
         SysTask_Destroy(task);
     }
 }
 
-static void ov03_0225558C(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_AskCancelGroup(void *arg0, CommClubManager *commClubManager) {
     u16 sCancelGroupText[NUM_COMM_TYPES] = {
         0,
         0,
@@ -1235,77 +1235,77 @@ static void ov03_0225558C(void *arg0, CommClubManager *commClubManager) {
         0,
         CommunicationClub_Text_CancelGroup_Pokeathlon // Cancel holding a Pokéathlon with this group?
     };
-    ov03_02254C9C(commClubManager);
+    CommClub_PrintPlayerCount(commClubManager);
     if (CommPlayerInfo_CountAccepted() > 1) {
-        ov03_02253E20(sCancelGroupText[commClubManager->commType], FALSE);
-        ov03_02254B4C(&ov03_022555F4);
+        CommClub_PrintMessage(sCancelGroupText[commClubManager->commType], FALSE);
+        CommClub_SetState(&CommClub_OpenCancelGroupChoice);
     } else {
-        ov03_02254B44();
-        ov03_0225574C(arg0, commClubManager);
+        CommClub_ExitLink();
+        CommClub_CloseMenus(arg0, commClubManager);
         sCommClubManager->retCode = 1;
     }
 }
 
-static void ov03_022555F4(void *arg0_unused, CommClubManager *commClubManager) {
-    ov03_02254C9C(commClubManager);
+static void CommClub_OpenCancelGroupChoice(void *arg0_unused, CommClubManager *commClubManager) {
+    CommClub_PrintPlayerCount(commClubManager);
     ListMenu_ProcessInput(commClubManager->listMenu);
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
-        ov03_02255C84(commClubManager);
-        ov03_02254B4C(&ov03_0225562C);
+        CommClub_OpenYesNoButtons(commClubManager);
+        CommClub_SetState(&CommClub_HandleCancelGroupChoice);
     }
 }
 
-static void ov03_0225562C(void *arg0, CommClubManager *commClubManager) {
-    ov03_02254C9C(commClubManager);
+static void CommClub_HandleCancelGroupChoice(void *arg0, CommClubManager *commClubManager) {
+    CommClub_PrintPlayerCount(commClubManager);
     if (commClubManager->unkA8 == 0) {
-        if (ov03_02255CA0(commClubManager) == TRUE) {
+        if (CommClub_InitYesNoButtons(commClubManager) == TRUE) {
             commClubManager->unkA8 = 1;
         } else {
             return;
         }
     }
 
-    if (ov03_02255CD0(commClubManager)) {
+    if (CommClub_IsYesNoReady(commClubManager)) {
         if (Comm_HasLinkError()) {
-            ov03_02255CE4(commClubManager);
-            ov03_02254BEC();
-            ov03_02254B4C(&ov03_0225530C);
+            CommClub_CloseYesNoButtons(commClubManager);
+            CommClub_PrintAwaitingContact();
+            CommClub_SetState(&CommClub_ReopenMemberList);
         } else if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == 6) {
-            if (commClubManager->unkA4 == 0) {
-                ov03_02254B44();
-                ov03_0225574C(arg0, commClubManager);
+            if (commClubManager->choiceResult == 0) {
+                CommClub_ExitLink();
+                CommClub_CloseMenus(arg0, commClubManager);
                 sCommClubManager->retCode = 1;
-            } else if (commClubManager->unkA4 == 1) {
-                ov03_02254BEC();
-                ov03_02254B4C(&ov03_0225530C);
+            } else if (commClubManager->choiceResult == 1) {
+                CommClub_PrintAwaitingContact();
+                CommClub_SetState(&CommClub_ReopenMemberList);
             }
         }
     }
 }
 
-static void ov03_022556BC(void *arg0, CommClubManager *commClubManager) {
+static void CommClub_WaitGroupSync(void *arg0, CommClubManager *commClubManager) {
     if (Comm_HasLinkError() || commClubManager->connectedCount != Comm_CountConnected()) {
-        ov03_02254B4C(&ov03_022554E0);
+        CommClub_SetState(&CommClub_GroupCancelled);
     } else {
-        ov03_02254C9C(commClubManager);
+        CommClub_PrintPlayerCount(commClubManager);
         ListMenu_ProcessInput(commClubManager->listMenu);
         if (LinkSync_IsSynced(10) && LinkSync_Exists()) {
-            ov03_0225574C(arg0, commClubManager);
-            ov03_02255B44(commClubManager);
+            CommClub_CloseMenus(arg0, commClubManager);
+            CommClub_FinishGroup(commClubManager);
         }
     }
 }
 
-static void ov03_02255714(s32 arg0_unused, CommClubManager *commClubManager) {
-    ov03_02254C9C(commClubManager);
+static void CommClub_OpenContactChoice(s32 arg0_unused, CommClubManager *commClubManager) {
+    CommClub_PrintPlayerCount(commClubManager);
     ListMenu_ProcessInput(commClubManager->listMenu);
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
-        ov03_02255C84(commClubManager);
-        ov03_02254B4C(&ov03_02255078);
+        CommClub_OpenYesNoButtons(commClubManager);
+        CommClub_SetState(&CommClub_HandleContactChoice);
     }
 }
 
-static void ov03_0225574C(void *task, CommClubManager *commClubManager) {
+static void CommClub_CloseMenus(void *task, CommClubManager *commClubManager) {
     FillWindowPixelBuffer(&sCommClubManager->windows[2], 15);
     EraseFrameAndWindow1(&commClubManager->windows[0], FALSE);
     ListMenuItems_Delete(commClubManager->items);
@@ -1313,63 +1313,63 @@ static void ov03_0225574C(void *task, CommClubManager *commClubManager) {
     commClubManager->listMenu = NULL;
     ClearWindowTilemapAndCopyToVram(&commClubManager->windows[0]);
     RemoveWindow(&commClubManager->windows[0]);
-    if (commClubManager->unk97) {
+    if (commClubManager->infoWindowOpen) {
         EraseFrameAndWindow1(&sCommClubManager->windows[1], 0);
         ClearWindowTilemapAndCopyToVram(&sCommClubManager->windows[1]);
         RemoveWindow(&sCommClubManager->windows[1]);
-        commClubManager->unk97 = 0;
+        commClubManager->infoWindowOpen = 0;
     }
     if (task) {
         SysTask_Destroy(task);
     }
 }
 
-static void ov03_022557CC(CommClubManager *commClubManager) {
+static void CommClub_HostRepliedOk(CommClubManager *commClubManager) {
     BufferPlayersName(commClubManager->messageFormat[2], 1, CommPlayerInfo_GetProfile(1));
-    ov03_02253E20(69, TRUE);
-    SysTask_CreateOnMainQueue(&ov03_02254D64, commClubManager, 0);
-    ov03_02254B4C(&ov03_02255860);
+    CommClub_PrintMessage(69, TRUE);
+    SysTask_CreateOnMainQueue(&CommClub_Task, commClubManager, 0);
+    CommClub_SetState(&CommClub_WaitGroupStart);
 }
 
-static void ov03_02255804(CommClubManager *commClubManager) {
+static void CommClub_ChildAccepted(CommClubManager *commClubManager) {
     CommWireless_CopyParentProfile(commClubManager->connectionIndex, sCommClubManager->playerProfile[1]);
     BufferPlayersName(commClubManager->messageFormat[2], 1, sCommClubManager->playerProfile[1]);
-    ov03_02253E20(4, TRUE);
+    CommClub_PrintMessage(4, TRUE);
     commClubManager->connectedCount = Comm_CountConnected();
-    SysTask_CreateOnMainQueue(&ov03_02254D64, commClubManager, 0);
-    ov03_02254B4C(&ov03_02255860);
+    SysTask_CreateOnMainQueue(&CommClub_Task, commClubManager, 0);
+    CommClub_SetState(&CommClub_WaitGroupStart);
     sCommClubManager->messageDelay = 90;
 }
 
-static void ov03_02255860(u32 arg0_unused, CommClubManager *commClubManager) {
+static void CommClub_WaitGroupStart(u32 arg0_unused, CommClubManager *commClubManager) {
     if (Comm_GetLocalNetId() == FALSE && commClubManager->connectedCount != Comm_CountConnected()) {
-        ov03_02254B4C(&ov03_02255A00);
+        CommClub_SetState(&CommClub_ShowProblem);
     } else if (ov03_02255C80() || Comm_HasLinkError()) {
-        ov03_02254B4C(&ov03_02255A00);
+        CommClub_SetState(&CommClub_ShowProblem);
     } else if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
         LinkSync_StartSync(10);
-        ov03_02254B4C(&ov03_022558C4);
+        CommClub_SetState(&CommClub_WaitGroupSyncAfterReply);
     }
 }
 
-static void ov03_022558C4(void *task, CommClubManager *commClubManager) {
+static void CommClub_WaitGroupSyncAfterReply(void *task, CommClubManager *commClubManager) {
     if (Comm_GetLocalNetId() == 0 && commClubManager->connectedCount != Comm_CountConnected()) {
-        ov03_02254B4C(&ov03_02255A00);
+        CommClub_SetState(&CommClub_ShowProblem);
     } else if (ov03_02255C80() || Comm_HasLinkError()) {
-        ov03_02254B4C(&ov03_02255A00);
+        CommClub_SetState(&CommClub_ShowProblem);
         return;
     } else if (Comm_IsNetIdConnected(0) == 0) {
-        ov03_02254B4C(&ov03_02255A00);
+        CommClub_SetState(&CommClub_ShowProblem);
         return;
     } else if (LinkSync_GetValue(0, 5) != -1) {
-        ov03_02254B4C(&ov03_02255A00);
+        CommClub_SetState(&CommClub_ShowProblem);
         return;
     } else if (LinkSync_IsSynced(10) && LinkSync_Exists()) {
         if (DialogBox_IsPrintFinished(sCommClubManager->printerID) == FALSE) {
             RemoveTextPrinter(sCommClubManager->printerID);
         }
         commClubManager->connectedCount = Comm_CountConnected();
-        ov03_02255B44(commClubManager);
+        CommClub_FinishGroup(commClubManager);
         SysTask_Destroy(task);
         return;
     }
@@ -1421,63 +1421,63 @@ static void ov03_022558C4(void *task, CommClubManager *commClubManager) {
                 CommunicationClub_Text_GroupWaiting_Pokeathlon // Pokéathlon! Waiting for the rest of the group.
             };
             if (sCommClubManager->commType == COMM_TYPE_8) {
-                ov03_02253E20(sCommClubManager->unk92 + 132, FALSE);
+                CommClub_PrintMessage(sCommClubManager->unk92 + 132, FALSE);
             } else if (sCommClubManager->commType == COMM_TYPE_POKEATHLON) {
-                ov03_02253E20(sCommClubManager->unk92 + 160, FALSE);
+                CommClub_PrintMessage(sCommClubManager->unk92 + 160, FALSE);
             } else {
-                ov03_02253E20(sGroupWaitingText[commClubManager->commType], FALSE);
+                CommClub_PrintMessage(sGroupWaitingText[commClubManager->commType], FALSE);
             }
         }
     }
 }
 
-static void ov03_02255A00() {
+static void CommClub_ShowProblem() {
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
-        ov03_02253E20(0, FALSE);
-        ov03_02254B4C(&ov03_02255A2C);
+        CommClub_PrintMessage(0, FALSE);
+        CommClub_SetState(&CommClub_WaitProblemAck);
     }
 }
 
-static void ov03_02255A2C(SysTask *task) {
+static void CommClub_WaitProblemAck(SysTask *task) {
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID) && ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || System_GetTouchNew() == TRUE)) {
         SysTask_Destroy(task);
-        ov03_02254B44();
+        CommClub_ExitLink();
         sCommClubManager->retCode = 1;
     }
 }
 
-static void ov03_02255A70(CommClubManager *commClubManager) {
+static void CommClub_ShowRefused(CommClubManager *commClubManager) {
     CommWireless_CopyParentProfile(commClubManager->connectionIndex, sCommClubManager->playerProfile[1]);
     BufferPlayersName(commClubManager->messageFormat[2], 1, sCommClubManager->playerProfile[1]);
-    ov03_02253E20(5, TRUE);
-    sub_02058180();
-    SysTask_CreateOnMainQueue(&ov03_02255AB0, commClubManager, 0);
+    CommClub_PrintMessage(5, TRUE);
+    CommClubLink_RestartScan();
+    SysTask_CreateOnMainQueue(&CommClub_WaitRefusedThenParentList, commClubManager, 0);
 }
 
-static void ov03_02255AB0(SysTask *task, void *commClubManager) {
+static void CommClub_WaitRefusedThenParentList(SysTask *task, void *commClubManager) {
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
-        sub_02058180();
-        ov03_022542C8(commClubManager);
+        CommClubLink_RestartScan();
+        CommClub_ShowParentList(commClubManager);
         SysTask_Destroy(task);
     }
 }
 
-static void ov03_02255ADC(void *commClubManager) {
-    sub_02058180();
+static void CommClub_ResetToParentList(void *commClubManager) {
+    CommClubLink_RestartScan();
     for (int i = 0; i < 8; i++) {
         CommPlayerInfo_ClearPlayer(i);
     }
-    SysTask_CreateOnMainQueue(&ov03_02255B04, commClubManager, 0);
+    SysTask_CreateOnMainQueue(&CommClub_WaitAckThenParentList, commClubManager, 0);
 }
 
-static void ov03_02255B04(SysTask *task, void *commClubManager) {
+static void CommClub_WaitAckThenParentList(SysTask *task, void *commClubManager) {
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID) && ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || System_GetTouchNew() == TRUE)) {
-        ov03_022542C8(commClubManager);
+        CommClub_ShowParentList(commClubManager);
         SysTask_Destroy(task);
     }
 }
 
-static void ov03_02255B44(CommClubManager *commClubManager_unused) {
+static void CommClub_FinishGroup(CommClubManager *commClubManager_unused) {
     CommState_SetEntry(0);
     sCommClubManager->retCode = 2;
     CommState_SetErrorWatch(1, 1);
@@ -1485,11 +1485,11 @@ static void ov03_02255B44(CommClubManager *commClubManager_unused) {
     CommWireless_SetLostWhenAlone(1);
 }
 
-static int ov03_02255B70() {
+static int CommClub_GetMinPlayers() {
     return Comm_GetMinPlayers(sCommClubManager->commType);
 }
 
-static int ov03_02255B84() {
+static int CommClub_GetMaxPlayers() {
     return Comm_GetMaxPlayers(sCommClubManager->commType);
 }
 
@@ -1497,48 +1497,48 @@ static int ov03_02255B98() {
     return sCommClubManager->unk92 + (sCommClubManager->unk93 * 16);
 }
 
-void ov03_02255BB0(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3) {
-    ov03_02253F74(fieldSystem);
+void CommClub_StartJoin(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3) {
+    CommClub_NewManager(fieldSystem);
     sCommClubManager->commType = commType;
     if (commType == COMM_TYPE_MIX_BATTLE || commType == COMM_TYPE_MULTI_BATTLE_1) {
         fieldSystem->linkBattleRuleset = NULL;
     }
     sCommClubManager->unk92 = arg2;
     sCommClubManager->unk93 = arg3;
-    ov03_022540E8(sCommClubManager);
+    CommClub_StartChild(sCommClubManager);
 }
 
-void ov03_02255BEC() {
-    ov03_022542C8(sCommClubManager);
+void CommClub_OnChildStarted() {
+    CommClub_ShowParentList(sCommClubManager);
 }
 
-u32 ov03_02255BFC() {
+u32 CommClub_PollJoinResult() {
     u32 retCode = sCommClubManager->retCode; // Needs to be reserved as the pointer will be null after the next line.
     if (retCode) {
-        Unk03_Delete();
+        CommClub_DeleteManager();
     }
     return retCode;
 }
 
-void ov03_02255C18(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3) {
-    ov03_02253F74(fieldSystem);
+void CommClub_StartHost(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3) {
+    CommClub_NewManager(fieldSystem);
     sCommClubManager->commType = commType;
     if (commType == COMM_TYPE_MIX_BATTLE || commType == COMM_TYPE_MULTI_BATTLE_1) {
         fieldSystem->linkBattleRuleset = NULL;
     }
     sCommClubManager->unk92 = arg2;
     sCommClubManager->unk93 = arg3;
-    ov03_02254B2C(sCommClubManager);
+    CommClub_StartParent(sCommClubManager);
 }
 
-void ov03_02255C54() {
-    ov03_02254B58(sCommClubManager);
+void CommClub_OnParentConnected() {
+    CommClub_StartHosting(sCommClubManager);
 }
 
-u32 ov03_02255C64() {
+u32 CommClub_PollHostResult() {
     u32 retCode = sCommClubManager->retCode;
     if (retCode) {
-        Unk03_Delete();
+        CommClub_DeleteManager();
     }
     return retCode;
 }
@@ -1547,26 +1547,26 @@ static BOOL ov03_02255C80() {
     return FALSE;
 }
 
-static void ov03_02255C84(CommClubManager *commClubManager) {
+static void CommClub_OpenYesNoButtons(CommClubManager *commClubManager) {
     FieldSystem_SwitchBottomScreenApp(commClubManager->fieldSystem, 3, NULL);
     commClubManager->unkA8 = 0;
-    commClubManager->unkA4 = 0;
+    commClubManager->choiceResult = 0;
 }
 
-static BOOL ov03_02255CA0(CommClubManager *commClubManager) {
+static BOOL CommClub_InitYesNoButtons(CommClubManager *commClubManager) {
     int unkInt = FieldSystem_GetBottomScreenAppId(commClubManager->fieldSystem);
     BOOL unkBool = FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem);
     if (unkInt == 3 && unkBool == TRUE) {
-        FieldSystem_SetTouchscreenChoiceMenuState(commClubManager->fieldSystem, 3, 3, &commClubManager->unkA4);
+        FieldSystem_SetTouchscreenChoiceMenuState(commClubManager->fieldSystem, 3, 3, &commClubManager->choiceResult);
         return TRUE;
     }
     return FALSE;
 }
 
-static BOOL ov03_02255CD0(CommClubManager *commClubManager) {
+static BOOL CommClub_IsYesNoReady(CommClubManager *commClubManager) {
     return FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) >= 4;
 }
 
-static void ov03_02255CE4(CommClubManager *commClubManager) {
-    FieldSystem_SetTouchscreenChoiceMenuState(commClubManager->fieldSystem, 3, 11, &commClubManager->unkA4);
+static void CommClub_CloseYesNoButtons(CommClubManager *commClubManager) {
+    FieldSystem_SetTouchscreenChoiceMenuState(commClubManager->fieldSystem, 3, 11, &commClubManager->choiceResult);
 }

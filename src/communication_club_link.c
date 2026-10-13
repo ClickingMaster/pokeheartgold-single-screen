@@ -25,7 +25,7 @@ void CommClubLink_Init(FieldSystem *fieldSystem) {
         gCommClubLink->fieldSystem = fieldSystem;
         gCommClubLink->party = NULL;
         sub_02058034();
-        CommRandom_Init(gCommClubLink->pad18);
+        CommRandom_Init(gCommClubLink->random);
     }
 }
 
@@ -46,29 +46,29 @@ void CommClubLink_Free(void) {
     }
 }
 
-void sub_020580E4(FieldSystem *fieldSystem, s32 arg1, s32 arg2) {
+void CommClubLink_StartParent(FieldSystem *fieldSystem, s32 arg1, s32 arg2) {
     if (Comm_IsActive() == 0) {
         CommState_StartParentSession(FieldSystem_GetSaveData(fieldSystem), arg1, arg2, fieldSystem->linkBattleRuleset, 0);
         CommClubLink_Init(fieldSystem);
-        CommClubLink_SetState(sub_02058304, 0);
+        CommClubLink_SetState(CommClubLink_WaitParentConnected, 0);
     }
 }
 
-void sub_02058124(FieldSystem *fieldSystem, u8 arg1, u32 arg2) {
+void CommClubLink_StartChild(FieldSystem *fieldSystem, u8 arg1, u32 arg2) {
     if (Comm_IsActive() == 0) {
         CommState_StartChildSession(FieldSystem_GetSaveData(fieldSystem), arg1, arg2, fieldSystem->linkBattleRuleset, 0);
         CommClubLink_Init(fieldSystem);
-        CommClubLink_SetState(sub_0205832C, 0);
+        CommClubLink_SetState(CommClubLink_WaitChildStarted, 0);
     }
 }
 
-void sub_02058164(u16 mode) {
+void CommClubLink_ConnectToParent(u16 mode) {
     gCommClubLink->mode = mode;
-    CommClubLink_SetState(sub_0205834C, 0);
+    CommClubLink_SetState(CommClubLink_ConnectToSlot, 0);
 }
 
-void sub_02058180(void) {
-    CommClubLink_SetState(sub_020588A0, 0);
+void CommClubLink_RestartScan(void) {
+    CommClubLink_SetState(CommClubLink_DoRestartScan, 0);
 }
 
 CommClubLink *gCommClubLink;
@@ -101,27 +101,27 @@ void CommClubLink_StartCardExchange(FieldSystem *fieldSystem) {
     }
 }
 
-BOOL sub_02058258(void) {
+BOOL CommClubLink_CardExchangeFinished(void) {
     if (gCommClubLink->state == CommClubLink_SendCard) {
         return FALSE;
     }
-    if (gCommClubLink->state != sub_02058930) {
+    if (gCommClubLink->state != CommClubLink_WaitCards) {
         return TRUE;
     }
     return FALSE;
 }
 
-void sub_02058284(void) {
+void CommClubLink_Exit(void) {
     if (gCommClubLink) {
         CommState_SetErrorWatch(0, 0);
-        CommClubLink_SetState(sub_02058A60, 5);
+        CommClubLink_SetState(CommClubLink_DeletePlayers, 5);
     }
 }
 
-void sub_020582A8(void) {
+void CommClubLink_ExitSynced(void) {
     if (gCommClubLink) {
         LinkSync_StartSync(91);
-        CommClubLink_SetState(sub_02058A38, 5);
+        CommClubLink_SetState(CommClubLink_WaitExitSync, 5);
     }
 }
 
@@ -140,10 +140,10 @@ void CommClubLink_SetState(CommClubLinkState state, u16 timer) {
     gCommClubLink->timer = timer;
 }
 
-void sub_02058304(void) {
+void CommClubLink_WaitParentConnected(void) {
     Comm_GetLocalNetId();
     if (((BOOL(*)(void))Comm_IsNetIdConnected)()) {
-        ov03_02255C54();
+        CommClub_OnParentConnected();
         CommPlayerInfo_SendLocal();
         CommClubLink_SetState(sub_02058328, 0);
     }
@@ -152,9 +152,9 @@ void sub_02058304(void) {
 void sub_02058328(void) {
 }
 
-void sub_0205832C(void) {
+void CommClubLink_WaitChildStarted(void) {
     if (CommWireless_IsStartedUp()) {
-        ov03_02255BEC();
+        CommClub_OnChildStarted();
         CommClubLink_SetState(sub_02058348, 0);
     }
 }
@@ -162,12 +162,12 @@ void sub_0205832C(void) {
 void sub_02058348(void) {
 }
 
-void sub_0205834C(void) {
+void CommClubLink_ConnectToSlot(void) {
     CommState_ConnectToSlot(gCommClubLink->mode);
-    CommClubLink_SetState(sub_0205836C, 0);
+    CommClubLink_SetState(CommClubLink_WaitLinked, 0);
 }
 
-void sub_0205836C(void) {
+void CommClubLink_WaitLinked(void) {
     if (CommState_IsLinked()) {
         CommPlayerInfo_SendLocal();
         CommClubLink_SetState(sub_02058388, 0);
@@ -177,14 +177,14 @@ void sub_0205836C(void) {
 void sub_02058388(void) {
 }
 
-void sub_0205838C(void) {
+void CommClubLink_HostInitRoom(void) {
     if (LinkSync_IsSynced(98)) {
         void *data = Heap_Alloc((enum HeapID)15, CommPlayerManager_sizeof());
         CommPlayerManager_Init(data, gCommClubLink->fieldSystem, 0);
         CommPlayerManager_ResumeFieldOnce();
         Comm_DisableKeySync();
         LinkSync_StartSync(92);
-        CommClubLink_SetState(sub_020583EC, 0);
+        CommClubLink_SetState(CommClubLink_HostShowRoom, 0);
         return;
     }
     if (gCommClubLink->timer) {
@@ -195,7 +195,7 @@ void sub_0205838C(void) {
     LinkSync_StartSync(98);
 }
 
-void sub_020583EC(void) {
+void CommClubLink_HostShowRoom(void) {
     if (Comm_GetLocalNetId() == 0) {
         CommPlayerInfo_HostRedistribute();
     }
@@ -205,22 +205,22 @@ void sub_020583EC(void) {
         ResetVisibleHardwareWindows((PMLCDTarget)1);
         CommPlayerManager_ResyncLocalPlayer();
         CommPlayerManager_SendLocalPosition(0);
-        CommClubLink_SetState(sub_02058478, 1);
+        CommClubLink_SetState(CommClubLink_HostPlacePlayers, 1);
     }
 }
 
-void sub_02058444(void) {
+void CommClubLink_WaitPlayersPlaced(void) {
     if (gCommClubLink->timer) {
         gCommClubLink->timer--;
         return;
     }
     if (LinkSync_IsSynced(30)) {
         Comm_EnableKeySync();
-        CommClubLink_SetState(sub_02058608, 0);
+        CommClubLink_SetState(CommClubLink_WaitLeaveSpot, 0);
     }
 }
 
-void sub_02058478(void) {
+void CommClubLink_HostPlacePlayers(void) {
     if (gCommClubLink->timer) {
         gCommClubLink->timer--;
         return;
@@ -233,16 +233,16 @@ void sub_02058478(void) {
     } else {
         LinkSync_StartSync(30);
     }
-    CommClubLink_SetState(sub_02058444, 20);
+    CommClubLink_SetState(CommClubLink_WaitPlayersPlaced, 20);
 }
 
-void sub_020584BC(void) {
+void CommClubLink_ChildInitRoom(void) {
     if (LinkSync_IsSynced(98)) {
         void *data = Heap_Alloc((enum HeapID)15, CommPlayerManager_sizeof());
         CommPlayerManager_Init(data, gCommClubLink->fieldSystem, 0);
         CommPlayerManager_ResumeFieldOnce();
         LinkSync_StartSync(92);
-        CommClubLink_SetState(sub_02058518, 0);
+        CommClubLink_SetState(CommClubLink_ChildShowRoom, 0);
         return;
     }
     if (gCommClubLink->timer) {
@@ -253,7 +253,7 @@ void sub_020584BC(void) {
     LinkSync_StartSync(98);
 }
 
-void sub_02058518(void) {
+void CommClubLink_ChildShowRoom(void) {
     if (Comm_GetLocalNetId() == 0) {
         CommPlayerInfo_HostRedistribute();
     }
@@ -266,7 +266,7 @@ void sub_02058518(void) {
         BeginNormalPaletteFade((enum FadeMode)0, (enum FadeType)1, (enum FadeType)1, 0, 6, 1, (enum HeapID)4);
         ResetVisibleHardwareWindows((PMLCDTarget)0);
         ResetVisibleHardwareWindows((PMLCDTarget)1);
-        CommClubLink_SetState(sub_020586EC, 0);
+        CommClubLink_SetState(CommClubLink_WaitOnSpot, 0);
     }
 }
 
@@ -288,73 +288,73 @@ void sub_0205857C(void) {
     sub_020399FC(4, gCommClubLink->fieldSystem->bgConfig);
 }
 
-void sub_02058608(void) {
+void CommClubLink_WaitLeaveSpot(void) {
     if (CommPlayerManager_AssignBattleSlots() == 0) {
         u8 flag;
         gCommClubLink->ready = 0;
         flag = 1;
         Comm_SendFixedCommand(94, &flag);
-        CommClubLink_SetState(sub_020586EC, 0);
+        CommClubLink_SetState(CommClubLink_WaitOnSpot, 0);
     }
     sub_0205857C();
 }
 
-void sub_02058640(int start, Party *party) {
+void CommClubLink_OnEntryResult(int start, Party *party) {
     if (party) {
         gCommClubLink->party = SaveArray_Party_Alloc((enum HeapID)11);
         Party_Copy(party, gCommClubLink->party);
     }
     if (start) {
-        CommClubLink_SetState(sub_02058870, 3);
+        CommClubLink_SetState(CommClubLink_LeaveRoomForBattle, 3);
         return;
     }
     {
         u8 flag = 3;
         Comm_SendFixedCommand(94, &flag);
-        CommClubLink_SetState(sub_02058608, 0);
+        CommClubLink_SetState(CommClubLink_WaitLeaveSpot, 0);
     }
 }
 
 void sub_02058690(void) {
-    CommClubLink_SetState(sub_02058608, 0);
+    CommClubLink_SetState(CommClubLink_WaitLeaveSpot, 0);
 }
 
-void sub_020586A0(void) {
+void CommClubLink_StartEntry(void) {
     if (Comm_IsSendingMoveKeys() == 0 && CommPlayerManager_GetMoveTimer(Comm_GetLocalNetId()) == 0) {
         if (gCommClubLink->timer) {
             gCommClubLink->timer--;
             return;
         }
         CommPlayerManager_PauseField();
-        Colosseum_StartEntry(gCommClubLink->fieldSystem, sub_02058640);
+        Colosseum_StartEntry(gCommClubLink->fieldSystem, CommClubLink_OnEntryResult);
         CommClubLink_SetState(sub_02058690, 0);
     }
 }
 
-void sub_020586EC(void) {
+void CommClubLink_WaitOnSpot(void) {
     if (gCommClubLink->ready) {
         u8 flag;
-        CommClubLink_SetState(sub_020586A0, 5);
+        CommClubLink_SetState(CommClubLink_StartEntry, 5);
         flag = 0;
         Comm_SendFixedCommand(94, &flag);
     }
     sub_0205857C();
 }
 
-void sub_02058720(int sender, int unused, u8 *data) {
+void CommClubLink_RecvOnSpot(int sender, int unused, u8 *data) {
     if (*data == Comm_GetLocalNetId()) {
         gCommClubLink->ready = 1;
     }
 }
 
-BOOL sub_02058740(void) {
-    if (gCommClubLink && (gCommClubLink->state == sub_020586EC || gCommClubLink->state == sub_02058608)) {
+BOOL CommClubLink_IsWalkingInRoom(void) {
+    if (gCommClubLink && (gCommClubLink->state == CommClubLink_WaitOnSpot || gCommClubLink->state == CommClubLink_WaitLeaveSpot)) {
         return TRUE;
     }
     return FALSE;
 }
 
-void sub_0205876C(void) {
+void CommClubLink_StartBattle(void) {
     int battleType;
     u8 data[8];
     if (gCommClubLink->timer) {
@@ -383,7 +383,7 @@ void sub_0205876C(void) {
     CommClubLink_Free();
 }
 
-void sub_020587E8(void) {
+void CommClubLink_WaitBattleTransferMode(void) {
     if (sub_02036010()) {
         if (gCommClubLink->timer) {
             gCommClubLink->timer--;
@@ -392,44 +392,44 @@ void sub_020587E8(void) {
             LinkSync_StartSync(4);
         }
         if (LinkSync_IsSynced(4)) {
-            CommClubLink_SetState(sub_0205876C, 0);
+            CommClubLink_SetState(CommClubLink_StartBattle, 0);
         }
     }
 }
 
-void sub_0205882C(void) {
+void CommClubLink_RequestBattleTransferMode(void) {
     if (gCommClubLink->timer) {
         gCommClubLink->timer--;
         return;
     }
     sub_02035FD8();
-    CommClubLink_SetState(sub_020587E8, 120);
+    CommClubLink_SetState(CommClubLink_WaitBattleTransferMode, 120);
 }
 
-void sub_02058854(void) {
+void CommClubLink_WaitBattleSync(void) {
     if (LinkSync_IsSynced(3)) {
-        CommClubLink_SetState(sub_0205882C, 2);
+        CommClubLink_SetState(CommClubLink_RequestBattleTransferMode, 2);
     }
 }
 
-void sub_02058870(void) {
+void CommClubLink_LeaveRoomForBattle(void) {
     if (gCommClubLink->timer) {
         gCommClubLink->timer--;
         return;
     }
     CommPlayerManager_Delete(0);
     LinkSync_StartSync(3);
-    CommClubLink_SetState(sub_02058854, 0);
+    CommClubLink_SetState(CommClubLink_WaitBattleSync, 0);
 }
 
-void sub_020588A0(void) {
+void CommClubLink_DoRestartScan(void) {
     CommState_RestartScan();
-    CommClubLink_SetState(sub_020588B4, 2);
+    CommClubLink_SetState(CommClubLink_WaitScanIdle, 2);
 }
 
-void sub_020588B4(void) {
+void CommClubLink_WaitScanIdle(void) {
     if (CommWireless_IsIdle()) {
-        CommClubLink_SetState(sub_0205836C, 10);
+        CommClubLink_SetState(CommClubLink_WaitLinked, 10);
     }
 }
 
@@ -446,11 +446,11 @@ void CommClubLink_SendCard(void) {
     int id = Comm_GetLocalNetId();
     if (LinkSync_IsSynced(95)) {
         Comm_SendCommandNoCopy(88, gCommClubLink->cards[id], 0x66c);
-        CommClubLink_SetState(sub_02058930, 0);
+        CommClubLink_SetState(CommClubLink_WaitCards, 0);
     }
 }
 
-void sub_02058930(void) {
+void CommClubLink_WaitCards(void) {
     int i;
     for (i = 0; i < Comm_CountConnected(); i++) {
         if (gCommClubLink->received[i] == 0) {
@@ -458,10 +458,10 @@ void sub_02058930(void) {
         }
     }
     LinkSync_StartSync(97);
-    CommClubLink_SetState(sub_020589D8, 0);
+    CommClubLink_SetState(CommClubLink_WaitCardsSync, 0);
 }
 
-void sub_0205896C(void) {
+void CommClubLink_WaitRoomTransferMode(void) {
     if (sub_02036010() == 0) {
         if (gCommClubLink->timer) {
             gCommClubLink->timer--;
@@ -470,53 +470,53 @@ void sub_0205896C(void) {
             LinkSync_StartSync(5);
         }
         if (LinkSync_IsSynced(5)) {
-            CommClubLink_SetState(sub_020589F4, 0);
+            CommClubLink_SetState(CommClubLink_EnterRoom, 0);
         }
     }
 }
 
-void sub_020589B0(void) {
+void CommClubLink_RequestRoomTransferMode(void) {
     if (gCommClubLink->timer) {
         gCommClubLink->timer--;
         return;
     }
     sub_02035FE4();
-    CommClubLink_SetState(sub_0205896C, 120);
+    CommClubLink_SetState(CommClubLink_WaitRoomTransferMode, 120);
 }
 
-void sub_020589D8(void) {
+void CommClubLink_WaitCardsSync(void) {
     if (LinkSync_IsSynced(97)) {
-        CommClubLink_SetState(sub_020589B0, 2);
+        CommClubLink_SetState(CommClubLink_RequestRoomTransferMode, 2);
     }
 }
 
-void sub_020589F4(void) {
+void CommClubLink_EnterRoom(void) {
     if (gCommClubLink->timer) {
         gCommClubLink->timer--;
         return;
     }
     LinkSync_StartSync(98);
     if (gCommClubLink->host) {
-        CommClubLink_SetState(sub_0205838C, 30);
+        CommClubLink_SetState(CommClubLink_HostInitRoom, 30);
         return;
     }
-    CommClubLink_SetState(sub_020584BC, 30);
+    CommClubLink_SetState(CommClubLink_ChildInitRoom, 30);
 }
 
-void sub_02058A38(void) {
+void CommClubLink_WaitExitSync(void) {
     if (LinkSync_IsSynced(91)) {
         CommState_SetErrorWatch(0, 0);
         CommPlayerManager_Delete(1);
-        CommClubLink_SetState(sub_02058A78, 5);
+        CommClubLink_SetState(CommClubLink_Shutdown, 5);
     }
 }
 
-void sub_02058A60(void) {
+void CommClubLink_DeletePlayers(void) {
     CommPlayerManager_Delete(1);
-    CommClubLink_SetState(sub_02058A78, 5);
+    CommClubLink_SetState(CommClubLink_Shutdown, 5);
 }
 
-void sub_02058A78(void) {
+void CommClubLink_Shutdown(void) {
     if (gCommClubLink->timer) {
         gCommClubLink->timer--;
         return;
@@ -525,11 +525,11 @@ void sub_02058A78(void) {
     CommClubLink_SetState(CommClubLink_Free, 0);
 }
 
-BOOL sub_02058AA0(void) {
+BOOL CommClubLink_IsStartingBattle(void) {
     if (gCommClubLink == NULL) {
         return FALSE;
     }
-    if (gCommClubLink->state == sub_02058870 || gCommClubLink->state == sub_02058854 || gCommClubLink->state == sub_0205882C || gCommClubLink->state == sub_020587E8 || gCommClubLink->state == sub_0205876C) {
+    if (gCommClubLink->state == CommClubLink_LeaveRoomForBattle || gCommClubLink->state == CommClubLink_WaitBattleSync || gCommClubLink->state == CommClubLink_RequestBattleTransferMode || gCommClubLink->state == CommClubLink_WaitBattleTransferMode || gCommClubLink->state == CommClubLink_StartBattle) {
         return TRUE;
     }
     return FALSE;

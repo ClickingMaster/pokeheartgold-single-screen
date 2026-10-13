@@ -104,9 +104,9 @@
 .public CommPlayerManager_IsInitialized
 .public CommPlayerManager_IsLocalPlayerConnected
 .public CommPlayerManager_GetMoveTimer
-.public sub_02058258
-.public sub_02058740
-.public sub_02058AA0
+.public CommClubLink_CardExchangeFinished
+.public CommClubLink_IsWalkingInRoom
+.public CommClubLink_IsStartingBattle
 .public PlayerAvatar_GetPlayerMoveState
 .public PlayerAvatar_GetMapObject
 .public PlayerAvatar_GetState
