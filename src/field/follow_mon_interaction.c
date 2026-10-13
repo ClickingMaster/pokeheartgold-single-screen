@@ -909,10 +909,10 @@ void FollowMonMovement_ApplyOffset(const FollowMonMovementStep *move, LocalMapOb
     if (move->dx != 0) {
         pos.x += move->dx << FX32_SHIFT;
     }
-    if (move->unk3 != 0) {
+    if (move->dy != 0) {
         species = FollowMon_GetSpecies(object);
         if (species != SPECIES_DIGLETT && species != SPECIES_DUGTRIO) {
-            FollowMonBillboard_AddHeight(object, move->unk3);
+            FollowMonBillboard_AddHeight(object, move->dy);
         }
     }
     if (move->dz != 0) {

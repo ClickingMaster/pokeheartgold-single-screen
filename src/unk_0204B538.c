@@ -193,22 +193,22 @@ BOOL sub_0204B690(FieldSystem *fieldSystem, u16 *a1) {
 }
 
 void FrontierFieldSystem_PackLinkAllyData(FrontierFieldSystem *frontierFsys, SaveData *saveData) {
-    frontierFsys->unk83e[0] = PlayerProfile_GetTrainerGender(Save_PlayerData_GetProfile(saveData));
+    frontierFsys->linkSendBuffer[0] = PlayerProfile_GetTrainerGender(Save_PlayerData_GetProfile(saveData));
     Party *party = SaveArray_Party_Get(saveData);
     for (s32 i = 0; i < 2; i++) {
         Pokemon *mon = Party_GetMonByIndex(party, frontierFsys->partyMonIndexes[i]);
-        frontierFsys->unk83e[1 + i] = GetMonData(mon, MON_DATA_SPECIES, NULL);
+        frontierFsys->linkSendBuffer[1 + i] = GetMonData(mon, MON_DATA_SPECIES, NULL);
     }
-    frontierFsys->unk83e[3] = FrontierData_TowerRoundAction(frontierFsys->frontierData, 3, 0);
+    frontierFsys->linkSendBuffer[3] = FrontierData_TowerRoundAction(frontierFsys->frontierData, 3, 0);
 }
 
 void FrontierFieldSystem_PackRoundTrainers(FrontierFieldSystem *frontierFsys) {
-    MI_CpuCopy8(frontierFsys->trainersInCurrentRound, frontierFsys->unk83e, sizeof(frontierFsys->trainersInCurrentRound));
+    MI_CpuCopy8(frontierFsys->trainersInCurrentRound, frontierFsys->linkSendBuffer, sizeof(frontierFsys->trainersInCurrentRound));
 }
 
 void FrontierFieldSystem_0204B720(FrontierFieldSystem *frontierFsys, u32 a1) {
     frontierFsys->unk10_3 = a1;
-    frontierFsys->unk83e[0] = a1;
+    frontierFsys->linkSendBuffer[0] = a1;
 }
 
 u16 FrontierFieldSystem_GetRandomFrontierTrainerID(FrontierFieldSystem *frontierFsys, u8 difficultyBracket, u8 winsThisRound, u32 towerMode) {

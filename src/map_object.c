@@ -947,7 +947,7 @@ u32 MapObjectManager_GetPriority(MapObjectManager *manager) {
 // type of unk18 is unknown, it's a u32 in MapObjectManager, but unsure what it's supposed to be
 // leaving return as a void * to reflect this
 void *MapObjectManager_GetRender(MapObjectManager *manager) {
-    return &manager->unk18;
+    return &manager->render;
 }
 
 static void MapObjectManager_SetObjects(MapObjectManager *manager, LocalMapObject *objects) {

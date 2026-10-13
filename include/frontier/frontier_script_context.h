@@ -13,7 +13,7 @@ typedef BOOL (*FrontierShouldResumeScriptFunc)(FrontierScriptContext *);
 struct FrontierScriptContext {
     FrontierSystem *frontierSystem;
     u8 padding[4];
-    u16 unk_08[8];
+    u16 taskVars[8];
     u8 stackPointer;
     u8 state;
     const u8 *scriptPtr;
@@ -24,7 +24,7 @@ struct FrontierScriptContext {
     MsgData *msgLoader;
     u8 *scripts;
     FrontierShouldResumeScriptFunc shouldResume;
-    u8 unk_8C;
+    u8 comparisonResult;
 };
 
 #define FrontierScriptContext_ReadByte(ctx) (*(ctx->scriptPtr++))

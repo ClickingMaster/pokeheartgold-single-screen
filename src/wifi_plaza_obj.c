@@ -34,9 +34,9 @@ WiFiPlazaObjManager *WiFiPlazaObj_CreateManager(u32 count, u32 unk_0E, WiFiPlaza
     u32 bytes;
 
     memset(manager, 0, sizeof(WiFiPlazaObjManager));
-    manager->gridObjs = ov42_02228010(count, heapID);
+    manager->gridObjs = Field2DObjectManager_New(count, heapID);
     manager->avatars = WiFiPlazaPlayerObjects_New(count, unk_0E, heapID, arg4);
-    manager->commands = ov42_02229A40(0x20, heapID);
+    manager->commands = Field2DCommandQueue_New(0x20, heapID);
     bytes = sizeof(WiFiPlazaObj) * count;
     manager->count = count;
     manager->objs = Heap_Alloc(heapID, bytes);
@@ -49,14 +49,14 @@ WiFiPlazaObjManager *WiFiPlazaObj_CreateManager(u32 count, u32 unk_0E, WiFiPlaza
 
 void WiFiPlazaObj_DeleteManager(WiFiPlazaObjManager *manager) {
     Heap_Free(manager->objs);
-    ov42_02229A78(manager->commands);
+    Field2DCommandQueue_Free(manager->commands);
     WiFiPlazaPlayerObjects_Delete(manager->avatars);
-    ov42_02228050(manager->gridObjs);
+    Field2DObjectManager_Free(manager->gridObjs);
     Heap_Free(manager);
 }
 
 void ov49_02258B44(WiFiPlazaObjManager *manager) {
-    ov42_0222807C(manager->gridObjs);
+    Field2DObjectManager_Update(manager->gridObjs);
     WiFiPlazaObj_UpdateLight(&manager->light, manager->avatars);
 }
 
@@ -64,9 +64,9 @@ void ov49_02258B44(WiFiPlazaObjManager *manager) {
 void WiFiPlazaObj_UpdateManager(WiFiPlazaObjManager *manager) {
     int i;
     int offset;
-    UnkStruct_ov42_02227F68 *grid;
-    UnkStruct_ov42_02228CDC command;
-    UnkStruct_ov42_02228EB0 move;
+    Field2DMap *grid;
+    Field2DCommand command;
+    Field2DMove move;
 
     i = 0;
     if (i < manager->count) {
@@ -82,12 +82,12 @@ void WiFiPlazaObj_UpdateManager(WiFiPlazaObjManager *manager) {
         } while (i < manager->count);
     }
     grid = WiFiPlazaMap_GetGrid(manager->map);
-    if (ov42_02229AC8(manager->commands, &command) == 1) {
+    if (Field2DCommandQueue_Pop(manager->commands, &command) == 1) {
         do {
-            if (ov42_02228C80(grid, manager->gridObjs, &command, &move) == 1) {
-                ov42_02228068(manager->gridObjs, &move);
+            if (Field2DObjectManager_TryCommand(grid, manager->gridObjs, &command, &move) == 1) {
+                Field2DObjectManager_StartMove(manager->gridObjs, &move);
             }
-        } while (ov42_02229AC8(manager->commands, &command) == 1);
+        } while (Field2DCommandQueue_Pop(manager->commands, &command) == 1);
     }
     WiFiPlazaPlayerObjects_Update(manager->avatars);
 }
@@ -108,8 +108,8 @@ void WiFiPlazaObj_FadeToLightSet(WiFiPlazaObjManager *manager, int set) {
     WiFiPlazaObj_StartLightFade(&manager->light, ov49_02269660[set]);
 }
 
-void WiFiPlazaObj_PushCommand(WiFiPlazaObjManager *manager, UnkStruct_ov42_02228CDC *command) {
-    ov42_02229A8C(manager->commands, command);
+void WiFiPlazaObj_PushCommand(WiFiPlazaObjManager *manager, Field2DCommand *command) {
+    Field2DCommandQueue_Push(manager->commands, command);
 }
 
 // Creates the own player on the start cell (map tag 3).
@@ -123,7 +123,7 @@ WiFiPlazaObj *WiFiPlazaObj_CreateOwnPlayer(WiFiPlazaObjManager *manager, int id)
 }
 
 WiFiPlazaObj *WiFiPlazaObj_CreateOwnPlayerAt(WiFiPlazaObjManager *manager, int id, int x, int y) {
-    UnkStruct_ov42_02122667 template;
+    Field2DObjectTemplate template;
     WiFiPlazaObj *obj = WiFiPlazaObj_AllocObj(manager);
 
     template.unk0 = x << 4;
@@ -136,7 +136,7 @@ WiFiPlazaObj *WiFiPlazaObj_CreateOwnPlayerAt(WiFiPlazaObjManager *manager, int i
     } else {
         template.unkA = 0x61;
     }
-    obj->gridObj = ov42_022280B8(manager->gridObjs, &template);
+    obj->gridObj = Field2DObjectManager_AddObject(manager->gridObjs, &template);
     obj->avatar = WiFiPlazaPlayerObjects_Add(manager->avatars, obj->gridObj);
     manager->ownPlayer = obj;
     WiFiPlazaObj_SetHandler(manager, obj, 0);
@@ -145,7 +145,7 @@ WiFiPlazaObj *WiFiPlazaObj_CreateOwnPlayerAt(WiFiPlazaObjManager *manager, int i
 
 // Creates another player on the first free cell with map tag id + 4.
 WiFiPlazaObj *WiFiPlazaObj_CreatePlayer(WiFiPlazaObjManager *manager, int id, int avatar) {
-    UnkStruct_ov42_02122667 template;
+    Field2DObjectTemplate template;
     u16 cell[2];
     WiFiPlazaObj *obj;
     WiFiPlazaObj *ownPlayer;
@@ -173,7 +173,7 @@ WiFiPlazaObj *WiFiPlazaObj_CreatePlayer(WiFiPlazaObjManager *manager, int id, in
     template.unk6 = 0;
     template.unk8 = 1;
     template.unkA = avatar;
-    obj->gridObj = ov42_022280B8(manager->gridObjs, &template);
+    obj->gridObj = Field2DObjectManager_AddObject(manager->gridObjs, &template);
     obj->avatar = WiFiPlazaPlayerObjects_Add(manager->avatars, obj->gridObj);
     WiFiPlazaObj_SetHandler(manager, obj, 0);
     return obj;
@@ -181,19 +181,19 @@ WiFiPlazaObj *WiFiPlazaObj_CreatePlayer(WiFiPlazaObjManager *manager, int id, in
 
 void WiFiPlazaObj_Delete(WiFiPlazaObj *obj) {
     WiFiPlazaPlayerObject_Delete(obj->avatar);
-    ov42_02228100(obj->gridObj);
+    Field2DObject_Delete(obj->gridObj);
     memset(obj, 0, sizeof(WiFiPlazaObj));
 }
 
 WiFiPlazaObj *WiFiPlazaObj_FindById(WiFiPlazaObjManager *manager, int id) {
     int i;
-    UnkStruct_ov42_02228110 *gridObj;
+    Field2DObject *gridObj;
     int objId;
 
     for (i = 0; i < manager->count; i++) {
-        gridObj = *(UnkStruct_ov42_02228110 **)((u8 *)manager->objs + i * (int)sizeof(WiFiPlazaObj));
+        gridObj = *(Field2DObject **)((u8 *)manager->objs + i * (int)sizeof(WiFiPlazaObj));
         if (gridObj != NULL) {
-            objId = ov42_02228188(gridObj, 4);
+            objId = Field2DObject_GetParam(gridObj, 4);
             if (objId == id) {
                 return (WiFiPlazaObj *)((u8 *)manager->objs + (int)sizeof(WiFiPlazaObj) * i);
             }
@@ -210,25 +210,25 @@ WiFiPlazaObj *WiFiPlazaObj_GetSpecial(WiFiPlazaObjManager *manager) {
     return manager->special;
 }
 
-void WiFiPlazaObj_SetGridPos(WiFiPlazaObj *obj, UnkStruct_ov44_02232914 pos) {
+void WiFiPlazaObj_SetGridPos(WiFiPlazaObj *obj, Field2DPoint pos) {
     if (obj->gridObj == NULL) {
         GF_AssertFail();
     }
-    ov42_0222839C(obj->gridObj, pos);
-    ov42_022283AC(obj->gridObj, pos);
-    ov42_022281F8(obj->gridObj, 5, 0);
+    Field2DObject_SetPos(obj->gridObj, pos);
+    Field2DObject_SetPrevPos(obj->gridObj, pos);
+    Field2DObject_SetParam(obj->gridObj, 5, 0);
 }
 
-void WiFiPlazaObj_SetGridPosAndDir(WiFiPlazaObj *obj, UnkStruct_ov44_02232914 pos, s32 direction) {
+void WiFiPlazaObj_SetGridPosAndDir(WiFiPlazaObj *obj, Field2DPoint pos, s32 direction) {
     WiFiPlazaObj_SetGridPos(obj, pos);
-    ov42_022281F8(obj->gridObj, 6, direction);
+    Field2DObject_SetParam(obj->gridObj, 6, direction);
 }
 
 #pragma force_active on
 
-UnkStruct_ov44_02232914 WiFiPlazaObj_GetGridPos(WiFiPlazaObj *obj) {
+Field2DPoint WiFiPlazaObj_GetGridPos(WiFiPlazaObj *obj) {
     GF_ASSERT(obj->gridObj != NULL);
-    return ov42_022282F4(obj->gridObj);
+    return Field2DObject_GetDrawPos(obj->gridObj);
 }
 
 #pragma force_active reset
@@ -237,24 +237,24 @@ s32 WiFiPlazaObj_GetParam(WiFiPlazaObj *obj, s32 param) {
     if (obj->gridObj == NULL) {
         GF_AssertFail();
     }
-    return ov42_02228188(obj->gridObj, param);
+    return Field2DObject_GetParam(obj->gridObj, param);
 }
 
 void WiFiPlazaObj_QueueCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, s32 command, s32 direction) {
-    if (ov42_02228188(obj->gridObj, 5) != 0) {
+    if (Field2DObject_GetParam(obj->gridObj, 5) != 0) {
         GF_AssertFail();
     }
-    WiFiPlazaObj_QueueMove(manager, command, direction, ov42_02228188(obj->gridObj, 4));
+    WiFiPlazaObj_QueueMove(manager, command, direction, Field2DObject_GetParam(obj->gridObj, 4));
 }
 
 void WiFiPlazaObj_RunCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, u16 value, u8 kind) {
-    UnkStruct_ov42_02228EB0 data;
+    Field2DMove data;
 
-    data.unk0 = ov42_022282DC(obj->gridObj);
+    data.unk0 = Field2DObject_GetPos(obj->gridObj);
     data.unk4 = value;
     data.unk6 = kind;
-    data.unk7 = ov42_02228188(obj->gridObj, 4);
-    ov42_02228068(manager->gridObjs, &data);
+    data.unk7 = Field2DObject_GetParam(obj->gridObj, 4);
+    Field2DObjectManager_StartMove(manager->gridObjs, &data);
 }
 
 // Runs the old handler's exit function and installs handler `handler` with a cleared work area.
@@ -284,13 +284,13 @@ u8 WiFiPlazaObj_GetHandler(WiFiPlazaObj *obj) {
 
 // Returns the object on the cell obj is facing.
 WiFiPlazaObj *WiFiPlazaObj_FindFacing(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj) {
-    s32 direction = ov42_02228188(obj->gridObj, 6);
-    UnkStruct_ov42_02228110 *facing = ov42_022283BC(obj->gridObj, manager->gridObjs, direction);
+    s32 direction = Field2DObject_GetParam(obj->gridObj, 6);
+    Field2DObject *facing = Field2DObject_FindObjectInDirection(obj->gridObj, manager->gridObjs, direction);
 
     if (facing == NULL) {
         return NULL;
     } else {
-        return WiFiPlazaObj_FindById(manager, ov42_02228188(facing, 4));
+        return WiFiPlazaObj_FindById(manager, Field2DObject_GetParam(facing, 4));
     }
 }
 
@@ -302,14 +302,14 @@ u32 WiFiPlazaObj_IsCulled(WiFiPlazaObj *obj) {
 
 WiFiPlazaObj *WiFiPlazaObj_FindAt(WiFiPlazaObjManager *manager, s32 x, s32 y) {
     volatile WiFiPlazaObjManager *volatileManager = manager; // entries and count are reloaded in the loop
-    UnkStruct_ov44_02232914 pos;
-    UnkStruct_ov42_02228110 *gridObj;
+    Field2DPoint pos;
+    Field2DObject *gridObj;
     u8 *entry;
     int i;
 
     pos.unk0 = x << 4;
     pos.unk2 = y << 4;
-    gridObj = ov42_022284A4(manager->gridObjs, pos);
+    gridObj = Field2DObjectManager_FindObjectAt(manager->gridObjs, pos);
     if (gridObj == NULL) {
         return NULL;
     }
@@ -317,7 +317,7 @@ WiFiPlazaObj *WiFiPlazaObj_FindAt(WiFiPlazaObjManager *manager, s32 x, s32 y) {
     if (i < volatileManager->count) {
         entry = (u8 *)volatileManager->objs;
         do {
-            if (*(UnkStruct_ov42_02228110 **)entry == gridObj) {
+            if (*(Field2DObject **)entry == gridObj) {
                 return (WiFiPlazaObj *)((u8 *)volatileManager->objs + i * sizeof(WiFiPlazaObj));
             }
             i++;
@@ -330,8 +330,8 @@ WiFiPlazaObj *WiFiPlazaObj_FindAt(WiFiPlazaObjManager *manager, s32 x, s32 y) {
 
 // TRUE if obj stands on or is moving to cell (x, y).
 BOOL WiFiPlazaObj_IsOnCell(WiFiPlazaObj *obj, s32 x, s32 y) {
-    UnkStruct_ov44_02232914 current = ov42_022282DC(obj->gridObj);
-    UnkStruct_ov44_02232914 previous = ov42_022282E8(obj->gridObj);
+    Field2DPoint current = Field2DObject_GetPos(obj->gridObj);
+    Field2DPoint previous = Field2DObject_GetPrevPos(obj->gridObj);
 
     if (current.unk0 == (x << 4) && current.unk2 == (y << 4)) {
         return TRUE;
@@ -342,19 +342,19 @@ BOOL WiFiPlazaObj_IsOnCell(WiFiPlazaObj *obj, s32 x, s32 y) {
     return FALSE;
 }
 
-BOOL WiFiPlazaObj_FindFreeNeighbor(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, s32 *direction, UnkStruct_ov44_02232914 *position) {
-    UnkStruct_ov44_02232914 current = ov42_022282DC(obj->gridObj);
+BOOL WiFiPlazaObj_FindFreeNeighbor(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, s32 *direction, Field2DPoint *position) {
+    Field2DPoint current = Field2DObject_GetPos(obj->gridObj);
     int i;
 
     for (i = 0; i < 4; i++) {
-        UnkStruct_ov44_02232914 next = ov42_02228270(current, ov49_02269654[i]);
+        Field2DPoint next = Field2D_StepInDirection(current, ov49_02269654[i]);
         int y = next.unk2 / 16;
         int x = next.unk0 / 16;
 
         if (WiFiPlazaMap_GetCollision(manager->map, x, y) != 1) {
             int attr = WiFiPlazaMap_GetTileAttr(manager->map, x, y);
 
-            if ((attr == 0 || attr == 0x2A) && ov42_022284A4(manager->gridObjs, next) == NULL) {
+            if ((attr == 0 || attr == 0x2A) && Field2DObjectManager_FindObjectAt(manager->gridObjs, next) == NULL) {
                 *direction = ov49_02269654[i];
                 *position = next;
                 return TRUE;
@@ -435,11 +435,11 @@ void WiFiPlazaObj_SpawnMapObjects(WiFiPlazaObjManager *manager) {
             u16 x;
         } cell;
 
-        UnkStruct_ov42_02122667 template;
+        Field2DObjectTemplate template;
     } frame;
 
     WiFiPlazaObj *obj;
-    UnkStruct_ov42_02228110 *gridObj;
+    Field2DObject *gridObj;
     void *avatar;
 
     for (i = 0; i < 4; i++, spawn++) {
@@ -452,7 +452,7 @@ void WiFiPlazaObj_SpawnMapObjects(WiFiPlazaObjManager *manager) {
             frame.template.unk6 = 0;
             frame.template.unk8 = spawn->unk1;
             frame.template.unkA = spawn->unk2;
-            gridObj = ov42_022280B8(manager->gridObjs, &frame.template);
+            gridObj = Field2DObjectManager_AddObject(manager->gridObjs, &frame.template);
             obj->gridObj = gridObj;
             avatar = WiFiPlazaPlayerObjects_Add(manager->avatars, gridObj);
             obj->avatar = avatar;
@@ -468,7 +468,7 @@ void WiFiPlazaObj_SpawnMapObjects(WiFiPlazaObjManager *manager) {
 #pragma force_active reset
 
 void WiFiPlazaObj_QueueMove(WiFiPlazaObjManager *manager, int command, int direction, int id) {
-    UnkStruct_ov42_02228CDC data;
+    Field2DCommand data;
 
     data.unk0 = command;
     data.unk2 = direction;
@@ -481,10 +481,10 @@ u8 WiFiPlazaObj_RandomPick(const u8 *values, u32 count) {
 }
 
 BOOL WiFiPlazaObj_IsTagInDirection(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, s32 direction, int tag) {
-    UnkStruct_ov44_02232914 position = ov42_022282DC(obj->gridObj);
+    Field2DPoint position = Field2DObject_GetPos(obj->gridObj);
     u32 result;
 
-    position = ov42_02228270(position, direction);
+    position = Field2D_StepInDirection(position, direction);
     result = WiFiPlazaMap_GetTileTag(manager->map, position.unk0 / 16, position.unk2 / 16);
     if (result == tag) {
         return TRUE;
@@ -548,9 +548,9 @@ void WiFiPlazaObj_HandlerIdle(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
 
 // D-pad: walk (run while B is held) when already facing that way, otherwise turn.
 void WiFiPlazaObj_HandlerPlayerInput(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
-    int facing = ov42_02228188(obj->gridObj, 6);
-    int id = ov42_02228188(obj->gridObj, 4);
-    int moving = ov42_02228188(obj->gridObj, 5);
+    int facing = Field2DObject_GetParam(obj->gridObj, 6);
+    int id = Field2DObject_GetParam(obj->gridObj, 4);
+    int moving = Field2DObject_GetParam(obj->gridObj, 5);
     int command;
     u32 input;
 
@@ -612,8 +612,8 @@ void WiFiPlazaObj_HandlerWander(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
         }
         break;
     case 2:
-        id = ov42_02228188(obj->gridObj, 4);
-        facing = ov42_02228188(obj->gridObj, 6);
+        id = Field2DObject_GetParam(obj->gridObj, 4);
+        facing = Field2DObject_GetParam(obj->gridObj, 6);
         obj->work.wander.direction = WiFiPlazaObj_RandomPick(ov49_0226965C, 4);
         if (WiFiPlazaObj_IsTagInDirection(manager, obj, obj->work.wander.direction, id + 4) == TRUE) {
             if (facing == obj->work.wander.direction) {
@@ -629,13 +629,13 @@ void WiFiPlazaObj_HandlerWander(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
         }
         break;
     case 3:
-        if (ov42_02228188(obj->gridObj, 5) == 0) {
+        if (Field2DObject_GetParam(obj->gridObj, 5) == 0) {
             WiFiPlazaObj_QueueCommand(manager, obj, 2, obj->work.wander.direction);
             obj->step++;
         }
         break;
     case 4:
-        if (ov42_02228188(obj->gridObj, 5) == 0) {
+        if (Field2DObject_GetParam(obj->gridObj, 5) == 0) {
             obj->step = 0;
         }
         break;
@@ -740,10 +740,10 @@ void WiFiPlazaObj_HandlerSlideDown(WiFiPlazaObj *obj, WiFiPlazaObjManager *manag
 void WiFiPlazaObj_SlideOneCell(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager, u32 direction) {
     VecFx32 startPos;
     VecFx32 position;
-    UnkStruct_ov44_02232914 cellCopy;
-    UnkStruct_ov44_02232914 nextCopy;
-    UnkStruct_ov44_02232914 cell;
-    UnkStruct_ov44_02232914 next;
+    Field2DPoint cellCopy;
+    Field2DPoint nextCopy;
+    Field2DPoint cell;
+    Field2DPoint next;
     u32 done;
     u8 dir;
 
@@ -786,7 +786,7 @@ void WiFiPlazaObj_SlideOneCell(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager, 
         }
         WiFiPlazaPlayerObject_SetPosition(obj->avatar, &position);
         if (done == 1) {
-            dir = ov42_022282A4(direction);
+            dir = Field2D_GetOppositeDirection(direction);
             obj->work.slide.frame = 4;
             switch (dir) {
             case 3:
@@ -805,11 +805,11 @@ void WiFiPlazaObj_SlideOneCell(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager, 
         obj->work.slide.frame--;
         if (obj->work.slide.frame == 0) {
             obj->step++;
-            cell = ov42_022282DC(obj->gridObj);
+            cell = Field2DObject_GetPos(obj->gridObj);
             cellCopy = cell;
-            next = ov42_02228270(cellCopy, direction);
+            next = Field2D_StepInDirection(cellCopy, direction);
             nextCopy = next;
-            WiFiPlazaObj_SetGridPosAndDir(obj, nextCopy, ov42_022282A4(direction));
+            WiFiPlazaObj_SetGridPosAndDir(obj, nextCopy, Field2D_GetOppositeDirection(direction));
             WiFiPlazaPlayerObject_StopEffect(obj->avatar);
             WiFiPlazaPlayerObject_SetMode(obj->avatar, 1);
             obj->finished = 1;

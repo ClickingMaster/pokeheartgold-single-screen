@@ -366,41 +366,41 @@ static PlayerAvatarFlags PlayerAvatar_GetFlagsBitsMask(PlayerAvatar *avatar, Pla
 }
 
 s32 PlayerAvatar_GetUnk24(PlayerAvatar *avatar) {
-    return avatar->unk24;
+    return avatar->speed;
 }
 
 void PlayerAvatar_SetUnk24(PlayerAvatar *avatar, s32 param1) {
-    avatar->unk24 = param1;
+    avatar->speed = param1;
 }
 
 void PlayerAvatar_ClearUnk24ClearFlag2(PlayerAvatar *avatar) {
-    avatar->unk24 = 0;
+    avatar->speed = 0;
     PlayerAvatar_SetFlag2(avatar, FALSE);
 }
 
 s32 PlayerAvatar_Unk24AddWithCeiling(PlayerAvatar *avatar, s32 param1, s32 param2) {
-    s32 var = avatar->unk24 + param1;
-    avatar->unk24 = var;
+    s32 var = avatar->speed + param1;
+    avatar->speed = var;
     if (var > param2) {
-        avatar->unk24 = param2;
+        avatar->speed = param2;
     }
-    return avatar->unk24;
+    return avatar->speed;
 }
 
 static void PlayerAvatar_SetUnk28(PlayerAvatar *avatar, s32 param1) {
-    avatar->unk28 = param1;
+    avatar->lastHorizontalInput = param1;
 }
 
 s32 PlayerAvatar_GetUnk28(PlayerAvatar *avatar) {
-    return avatar->unk28;
+    return avatar->lastHorizontalInput;
 }
 
 static void PlayerAvatar_SetUnk2C(PlayerAvatar *avatar, s32 param1) {
-    avatar->unk2C = param1;
+    avatar->lastVerticalInput = param1;
 }
 
 s32 PlayerAvatar_GetUnk2C(PlayerAvatar *avatar) {
-    return avatar->unk2C;
+    return avatar->lastVerticalInput;
 }
 
 void PlayerAvatar_SetUnk28Unk2C(PlayerAvatar *avatar, s32 unk28, s32 unk2C) {
@@ -409,11 +409,11 @@ void PlayerAvatar_SetUnk28Unk2C(PlayerAvatar *avatar, s32 unk28, s32 unk2C) {
 }
 
 void PlayerAvatar_SetUnk34(PlayerAvatar *avatar, u32 param1) {
-    avatar->unk34 = param1;
+    avatar->surfMountEffect = param1;
 }
 
 u32 PlayerAvatar_GetUnk34(PlayerAvatar *avatar) {
-    return avatar->unk34;
+    return avatar->surfMountEffect;
 }
 
 static void PlayerAvatar_SetPlayerSaveData(PlayerAvatar *avatar, PlayerSaveData *playerSaveData) {
@@ -425,23 +425,23 @@ PlayerSaveData *PlayerAvatar_GetPlayerSaveData(PlayerAvatar *avatar) {
 }
 
 void PlayerAvatar_SetUnk8(PlayerAvatar *avatar, u32 param1) {
-    avatar->unk8 = param1;
+    avatar->heldMovement = param1;
 }
 
 u32 PlayerAvatar_GetUnk8(PlayerAvatar *avatar) {
-    return avatar->unk8;
+    return avatar->heldMovement;
 }
 
 BOOL PlayerAvatar_GetUnkC(PlayerAvatar *avatar) {
-    return avatar->unkC;
+    return avatar->footstepToggle;
 }
 
 void PlayerAvatar_ToggleUnkC(PlayerAvatar *avatar) {
-    avatar->unkC = (avatar->unkC + 1) & TRUE;
+    avatar->footstepToggle = (avatar->footstepToggle + 1) & TRUE;
 }
 
 void PlayerAvatar_ResetUnkC(PlayerAvatar *avatar) {
-    avatar->unkC = FALSE;
+    avatar->footstepToggle = FALSE;
 }
 
 void PlayerSaveData_Init(PlayerSaveData *playerSaveData) {

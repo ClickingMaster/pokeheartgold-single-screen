@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "01a7951fe081044656d55c5f2295de40ca3e792f",
+  "commit": "9be2545b4033ec271ce4ff32dcf1d272fcb919e7",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "f10443814e69f4960a244a3bf2e62c8097def323db218225c4a089a3b46c11ca",
+    "ARM9": "645adbf42e62e4b0a972d0af973988a96cf8df3e93c3fe63315f4f57da9e100b",
     "ARM7": "d726d92f810e881692e1b4d2ec232d6ca89b38985dcb26b08751c0037036d92a"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -2396,34 +2396,34 @@
     {
       "cpu": "ARM9",
       "module": "OVY_42",
-      "object": "overlay_42_02227D30.o",
+      "object": "field2d_char_sprite.o",
       "bytes": 3288,
       "status": "c",
-      "source": "src/overlay_42_02227D30.c"
+      "source": "src/field2d_char_sprite.c"
     },
     {
       "cpu": "ARM9",
       "module": "OVY_42",
-      "object": "overlay_42_02227EE0.o",
+      "object": "field2d_char_sprite_anim.o",
       "bytes": 600,
       "status": "c",
-      "source": "src/overlay_42_02227EE0.c"
+      "source": "src/field2d_char_sprite_anim.c"
     },
     {
       "cpu": "ARM9",
       "module": "OVY_42",
-      "object": "overlay_42_02227F68.o",
+      "object": "field2d_object.o",
       "bytes": 3350,
       "status": "c",
-      "source": "src/overlay_42_02227F68.c"
+      "source": "src/field2d_object.c"
     },
     {
       "cpu": "ARM9",
       "module": "OVY_42",
-      "object": "overlay_42_02233EDC.o",
+      "object": "field2d_view.o",
       "bytes": 3568,
       "status": "c",
-      "source": "src/overlay_42_02233EDC.c"
+      "source": "src/field2d_view.c"
     },
     {
       "cpu": "ARM9",

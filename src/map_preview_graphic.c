@@ -29,12 +29,12 @@ typedef struct MapPreviewGraphicData {
     int unused3C; // this looks like it was originally used as a dungeon index const
 } MapPreviewGraphicData;
 
-typedef struct UnkStateMachineSubstruct_0206A388 {
+typedef struct MapPreviewLowerPlayerState {
     u16 state;
-    u16 unk2;
-} UnkStateMachineSubstruct_0206A388;
+    u16 frame;
+} MapPreviewLowerPlayerState;
 
-typedef struct UnkStruct_0206A388 {
+typedef struct MapPreviewGraphicWork {
     int state;
     int displayTimer;
     enum HeapID heapID;
@@ -43,15 +43,15 @@ typedef struct UnkStruct_0206A388 {
     u16 bgColorMode;
     u16 index;
     u16 fadeOutTimer;
-    u16 unk1A;
+    u16 fadeOutDelay;
     u32 bg2Priority;
     u32 bg0Priority;
     u32 bg1Priority;
     u32 bg3Priority;
     int timeIndex;
-    int unk30;
-    UnkStateMachineSubstruct_0206A388 unk34;
-} UnkStruct_0206A388;
+    int lowerPlayer;
+    MapPreviewLowerPlayerState lowerPlayerState;
+} MapPreviewGraphicWork;
 
 static MapPreviewGraphicData sMapPreviewGraphicData[] = {
     // Dark Cave, North Side
@@ -757,9 +757,9 @@ static MapPreviewGraphicData sMapPreviewGraphicData[] = {
 };
 
 static BOOL Task_MapPreviewGraphic_ShowImage(TaskManager *man);
-static void MapPreviewGraphic_LoadGfx(UnkStruct_0206A388 *unk);
-static void MapPreviewGraphic_InitWindow(UnkStruct_0206A388 *unk);
-static int sub_0206A694(UnkStruct_0206A388 *unk, FieldSystem *fsys);
+static void MapPreviewGraphic_LoadGfx(MapPreviewGraphicWork *unk);
+static void MapPreviewGraphic_InitWindow(MapPreviewGraphicWork *unk);
+static int sub_0206A694(MapPreviewGraphicWork *unk, FieldSystem *fsys);
 
 u8 MapPreviewGraphic_GetIndex(u32 mapId) {
     u8 ret = -1;
@@ -774,13 +774,13 @@ u8 MapPreviewGraphic_GetIndex(u32 mapId) {
 
 void MapPreviewGraphic_BeginShowImage(TaskManager *man, int index, u8 time, int a3) {
     FieldSystem *fsys = TaskManager_GetFieldSystem(man);
-    UnkStruct_0206A388 *unk = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(UnkStruct_0206A388));
+    MapPreviewGraphicWork *unk = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(MapPreviewGraphicWork));
 
     unk->state = 0;
     unk->displayTimer = 0;
     unk->bgConfig = FieldSystem_GetBgConfigPtr(fsys);
     unk->fadeOutTimer = 0;
-    unk->unk1A = 0;
+    unk->fadeOutDelay = 0;
     unk->index = index;
 
     switch (time) {
@@ -804,9 +804,9 @@ void MapPreviewGraphic_BeginShowImage(TaskManager *man, int index, u8 time, int 
     }
 
     unk->heapID = HEAP_ID_FIELD1;
-    unk->unk30 = a3;
-    unk->unk34.state = 0;
-    unk->unk34.unk2 = 0;
+    unk->lowerPlayer = a3;
+    unk->lowerPlayerState.state = 0;
+    unk->lowerPlayerState.frame = 0;
 
     TaskManager_Call(man, Task_MapPreviewGraphic_ShowImage, unk);
 }
@@ -820,7 +820,7 @@ typedef enum PreviewGraphicState {
 
 static BOOL Task_MapPreviewGraphic_ShowImage(TaskManager *man) {
     FieldSystem *fsys = TaskManager_GetFieldSystem(man);
-    UnkStruct_0206A388 *unk = TaskManager_GetEnvironment(man);
+    MapPreviewGraphicWork *unk = TaskManager_GetEnvironment(man);
 
     switch (unk->state) {
     case PG_STATE_INIT:
@@ -857,8 +857,8 @@ static BOOL Task_MapPreviewGraphic_ShowImage(TaskManager *man) {
         break;
     case PG_STATE_FADE_OUT:
         if (unk->fadeOutTimer < 16) {
-            if (++unk->unk1A >= 2) {
-                unk->unk1A = 0;
+            if (++unk->fadeOutDelay >= 2) {
+                unk->fadeOutDelay = 0;
                 unk->fadeOutTimer++;
             }
             reg_G2_BLDALPHA = (16 - unk->fadeOutTimer) | (unk->fadeOutTimer << 8);
@@ -882,27 +882,27 @@ static BOOL Task_MapPreviewGraphic_ShowImage(TaskManager *man) {
     return FALSE;
 }
 
-static void MapPreviewGraphic_LoadGfx(UnkStruct_0206A388 *unk) {
+static void MapPreviewGraphic_LoadGfx(MapPreviewGraphicWork *unk) {
     GfGfxLoader_GXLoadPal(NARC_a_1_5_0, sMapPreviewGraphicData[unk->index].files[unk->timeIndex].palNo, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x160, unk->heapID);
     GfGfxLoader_LoadCharData(NARC_a_1_5_0, sMapPreviewGraphicData[unk->index].files[unk->timeIndex].charNo, unk->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 1, unk->heapID);
     GfGfxLoader_LoadScrnData(NARC_a_1_5_0, sMapPreviewGraphicData[unk->index].files[unk->timeIndex].scrnNo, unk->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 1, unk->heapID);
 }
 
-static void MapPreviewGraphic_InitWindow(UnkStruct_0206A388 *unk) {
+static void MapPreviewGraphic_InitWindow(MapPreviewGraphicWork *unk) {
     unk->window = AllocWindows(unk->heapID, 1);
     AddWindowParameterized(unk->bgConfig, unk->window, 2, 0, 0, 28, 2, 13, 0x2C0);
 }
 
-static int sub_0206A694(UnkStruct_0206A388 *unk, FieldSystem *fsys) {
+static int sub_0206A694(MapPreviewGraphicWork *unk, FieldSystem *fsys) {
     LocalMapObject *player;
 
-    if (!unk->unk30) {
+    if (!unk->lowerPlayer) {
         return TRUE;
     }
 
-    UnkStateMachineSubstruct_0206A388 *unkSub = &unk->unk34; // required to match
+    MapPreviewLowerPlayerState *unkSub = &unk->lowerPlayerState; // required to match
 
-    switch (unk->unk34.state) {
+    switch (unk->lowerPlayerState.state) {
     case 0:
         PlayerAvatar_ToggleAutomaticHeightUpdatingImmediate(fsys->playerAvatar, FALSE);
         unkSub->state++;
@@ -910,11 +910,11 @@ static int sub_0206A694(UnkStruct_0206A388 *unk, FieldSystem *fsys) {
     case 1:
         VecFx32 pos;
         player = PlayerAvatar_GetMapObject(fsys->playerAvatar);
-        unkSub->unk2++;
+        unkSub->frame++;
         MapObject_CopyPositionVector(player, &pos);
         pos.y -= 2 * FX32_ONE;
         MapObject_SetPositionVector(player, &pos);
-        if (unkSub->unk2 >= 16) {
+        if (unkSub->frame >= 16) {
             PlayerAvatar_ToggleAutomaticHeightUpdatingImmediate(fsys->playerAvatar, TRUE);
             unkSub->state++;
         }

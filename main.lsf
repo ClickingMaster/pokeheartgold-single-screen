@@ -1506,10 +1506,10 @@ Overlay OVY_41
 Overlay OVY_42
 {
     After OVY_38
-    Object src/overlay_42_02227D30.o
-    Object src/overlay_42_02227EE0.o
-    Object src/overlay_42_02227F68.o
-    Object src/overlay_42_02233EDC.o
+    Object src/field2d_char_sprite.o
+    Object src/field2d_char_sprite_anim.o
+    Object src/field2d_object.o
+    Object src/field2d_view.o
 }
 Overlay OVY_43
 {

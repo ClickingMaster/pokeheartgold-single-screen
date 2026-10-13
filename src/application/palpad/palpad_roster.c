@@ -110,10 +110,10 @@ void PalPadRosterPage_Free(PalPadRosterPage *page, PalPadGfx *gfx);
 void PalPadRosterPage_DrawFrame(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens);
 void PalPadRoster_SetCursor(PalPadRosterPage *page, PalPadGfx *gfx, int cursor);
 void PalPadRosterPage_HighlightSlot(PalPadRosterPage *page, PalPadGfx *gfx, int cursor, int highlight);
-void PalPadRosterPage_Draw(PalPadRosterPage *page, PalPadShared *shared, PalPadGfx *gfx, UnkStruct_ov42_02227060 *trainerIcons, PalPadScreens *screens, PalPadFriendList *friends, int pageNo, enum HeapID heapId);
+void PalPadRosterPage_Draw(PalPadRosterPage *page, PalPadShared *shared, PalPadGfx *gfx, CharSpriteManager *trainerIcons, PalPadScreens *screens, PalPadFriendList *friends, int pageNo, enum HeapID heapId);
 void PalPadRosterPage_Clear(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens);
 void PalPadRosterPage_DeleteIcons(PalPadRosterPage *page, PalPadGfx *gfx);
-void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, UnkStruct_ov42_02227060 *trainerIcons, PalPadGfx *gfx, PalPadScreens *screens, int slot, FriendRoster *wifiList, int friendSlot, enum HeapID heapId);
+void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, CharSpriteManager *trainerIcons, PalPadGfx *gfx, PalPadScreens *screens, int slot, FriendRoster *wifiList, int friendSlot, enum HeapID heapId);
 void PalPadRosterPage_DrawEmptySlot(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens, int slot);
 
 static inline int Abs16(s16 value) {
@@ -316,8 +316,8 @@ void PalPadRoster_Setup(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *g
     for (i = 0; i < 3; i++) {
         PalPadRosterPage_Init(&roster->pages[i], gfx, &sPalPadPanelLayouts[i], sPalPadRosterPageBaseTiles[i], heapId);
     }
-    roster->trainerIcons = ov42_02227060(gfx->spriteList, NULL, 16, heapId);
-    ov42_02227228(roster->trainerIcons, 1, 2, heapId);
+    roster->trainerIcons = CharSpriteManager_New(gfx->spriteList, NULL, 16, heapId);
+    CharSpriteManager_LoadAvatarChars(roster->trainerIcons, 1, 2, heapId);
     PalPad_AddWindow(gfx->bgConfig, &roster->returnWindow, GF_BG_LYR_MAIN_1, 21, 21, 9, 2, 11, 0x14F, 0);
     string = NewString_ReadMsgData(gfx->msgData, 7);
     AddTextPrinterParameterizedWithColor(&roster->returnWindow, 4, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 15, 0), NULL);
@@ -351,8 +351,8 @@ void PalPadRoster_Teardown(PalPadRoster *roster, PalPadShared *shared, PalPadGfx
         ListMenuItems_Delete(roster->menuItems[i]);
     }
     RemoveWindow(&roster->returnWindow);
-    ov42_02227274(roster->trainerIcons);
-    ov42_02227114(roster->trainerIcons);
+    CharSpriteManager_UnloadAvatarChars(roster->trainerIcons);
+    CharSpriteManager_Free(roster->trainerIcons);
     for (i = 0, page = roster->pages; i < 3; i++, page++) {
         PalPadRosterPage_Free(page, gfx);
     }
@@ -933,7 +933,7 @@ void PalPadRosterPage_HighlightSlot(PalPadRosterPage *page, PalPadGfx *gfx, int 
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-void PalPadRosterPage_Draw(PalPadRosterPage *page, PalPadShared *shared, PalPadGfx *gfx, UnkStruct_ov42_02227060 *trainerIcons, PalPadScreens *screens, PalPadFriendList *friends, int pageNo, enum HeapID heapId) {
+void PalPadRosterPage_Draw(PalPadRosterPage *page, PalPadShared *shared, PalPadGfx *gfx, CharSpriteManager *trainerIcons, PalPadScreens *screens, PalPadFriendList *friends, int pageNo, enum HeapID heapId) {
     int first, i;
     FriendRoster *wifiList;
 
@@ -968,7 +968,7 @@ void PalPadRosterPage_DeleteIcons(PalPadRosterPage *page, PalPadGfx *gfx) {
 
     for (i = 0; i < PALPAD_ROSTER_PAGE_SLOT; i++) {
         if (page->icons[i]) {
-            ov42_0222740C(page->icons[i]);
+            CharSprite_Delete(page->icons[i]);
             page->icons[i] = NULL;
         }
     }
@@ -976,7 +976,7 @@ void PalPadRosterPage_DeleteIcons(PalPadRosterPage *page, PalPadGfx *gfx) {
 
 #pragma force_active on
 
-void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, UnkStruct_ov42_02227060 *trainerIcons, PalPadGfx *gfx, PalPadScreens *screens, int slot, FriendRoster *wifiList, int friendSlot, enum HeapID heapId) {
+void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, CharSpriteManager *trainerIcons, PalPadGfx *gfx, PalPadScreens *screens, int slot, FriendRoster *wifiList, int friendSlot, enum HeapID heapId) {
     int avatar, gender;
     s16 position[4];
     String *string;
@@ -991,7 +991,7 @@ void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, UnkStruct_ov42_02227060
         position[1] = (page->layout.y + sPalPadRosterSlotY[slot].y) * 8 + 262;
         position[2] = 8;
         position[3] = 1;
-        *(UnkStruct_ov42_02227114 **)(owner + offsetof(PalPadRosterPage, icons) + slot * sizeof(UnkStruct_ov42_02227114 *)) = ov42_022272BC(trainerIcons, position, avatar, heapId);
+        *(CharSprite **)(owner + offsetof(PalPadRosterPage, icons) + slot * sizeof(CharSprite *)) = CharSpriteManager_CreateSprite(trainerIcons, position, avatar, heapId);
     }
     string = String_New(0x80, heapId);
     CopyU16ArrayToString(string, sub_0202C254(wifiList, friendSlot));

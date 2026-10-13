@@ -101,7 +101,7 @@ static void FieldInput_Clear(FieldInput *fieldInput) {
     fieldInput->mapTransition = 0;
     fieldInput->movement = 0;
     fieldInput->unk0_8 = 0;
-    fieldInput->unk0_9 = 0;
+    fieldInput->switchBottomScreen = 0;
     fieldInput->unk0_A = 0;
     fieldInput->unk0_B = 0;
     fieldInput->unk0_C = 0;
@@ -146,12 +146,12 @@ void FieldInput_Update(FieldInput *fieldInput, FieldSystem *fieldSystem, u16 new
                 fieldSystem->lastTouchMenuInput = 0;
             }
         } else if (fieldSystem->lastTouchMenuInput == 11) {
-            fieldInput->unk0_9 = TRUE;
+            fieldInput->switchBottomScreen = TRUE;
             fieldSystem->lastTouchMenuInput = 0;
         } else if (newKeys & PAD_BUTTON_X || fieldSystem->lastTouchMenuInput) {
             if (FieldSystem_GetBottomScreenAppId(fieldSystem) == 4) {
                 MenuInputStateMgr_SetState(&fieldSystem->menuInputState, MENU_INPUT_STATE_BUTTONS);
-                fieldInput->unk0_9 = TRUE;
+                fieldInput->switchBottomScreen = TRUE;
                 fieldInput->menu = TRUE;
             } else if (shouldDrawBagIcon) {
                 fieldInput->menu = TRUE;
@@ -311,7 +311,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
         return 1;
     }
 
-    if (fieldInput->unk0_9) {
+    if (fieldInput->switchBottomScreen) {
         FieldSystem_SwitchBottomScreenApp(fieldSystem, 0, 0);
         return 2;
     }
@@ -1053,7 +1053,7 @@ static int GetLocalSoundplateID(const SoundplateStruct *soundplateStruct, int gl
     int localZ = globalZ % 32;
 
     // Gets the highest-numbered local ID. Likely important because plates are overlaid.
-    for (i = 0; i < soundplateStruct->unk2 / 8; i++) {
+    for (i = 0; i < soundplateStruct->dataSize / 8; i++) {
         if (soundplateStruct->soundplates[i].x <= localX && localX <= soundplateStruct->soundplates[i].xBounds
             && soundplateStruct->soundplates[i].z <= localZ && localZ <= soundplateStruct->soundplates[i].zBounds) {
             ret = i;

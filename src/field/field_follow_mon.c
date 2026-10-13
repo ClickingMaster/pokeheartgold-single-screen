@@ -155,7 +155,7 @@ BOOL ScrCmd_808(ScriptContext *ctx) {
 
 // On leaving a map: FollowMon_RecreateForMap re-creates or drops the following Pokemon on the next one.
 void FollowMon_MarkForRecreate(FieldSystem *fieldSystem) {
-    fieldSystem->followMon.unk15 = TRUE;
+    fieldSystem->followMon.recreatePending = TRUE;
 }
 
 // The next faster movement in direction after movement (8-11, then steps 12-15, runs 16-19, 20-23).
@@ -435,19 +435,19 @@ void SepiaBillboardTransfer_FreeWhenDone(SysTask *task, void *data) {
 
 // The player's step (movement from x, z) for the following Pokemon to repeat.
 void FollowMon_QueuePlayerStep(int movement, int x, int z, FollowMon *followMon) {
-    followMon->unk4 = movement;
-    followMon->unk8 = x;
-    followMon->unkC = z;
-    if (followMon->unk1C == 3) {
-        followMon->unk1C = 2;
-    } else if (followMon->unk1C == 0) {
-        followMon->unk1C = 1;
+    followMon->queuedMovement = movement;
+    followMon->queuedX = x;
+    followMon->queuedZ = z;
+    if (followMon->queuedStepState == 3) {
+        followMon->queuedStepState = 2;
+    } else if (followMon->queuedStepState == 0) {
+        followMon->queuedStepState = 1;
     }
 }
 
 // On entering a map: re-creates the following Pokemon next to the player, or removes it where it may not follow.
 void FollowMon_RecreateForMap(FieldSystem *fieldSystem) {
-    if (fieldSystem->followMon.unk15) {
+    if (fieldSystem->followMon.recreatePending) {
         if (fieldSystem->followMon.active == FALSE) {
             int x = PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
             int z = PlayerAvatar_GetZCoord(fieldSystem->playerAvatar);
@@ -468,7 +468,7 @@ void FollowMon_RecreateForMap(FieldSystem *fieldSystem) {
             }
         }
     }
-    fieldSystem->followMon.unk15 = FALSE;
+    fieldSystem->followMon.recreatePending = FALSE;
 }
 
 void FollowMon_SetHeight(FieldSystem *fieldSystem, fx32 y) {

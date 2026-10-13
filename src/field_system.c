@@ -47,7 +47,7 @@ static FieldSystem *sFieldSysPtr;
 
 typedef struct UnkFieldSystemInit {
     int unk0;
-    int unk4;
+    int commError;
 } FieldSystemInitWork;
 
 static BOOL FieldSystem_Main(FieldSystem *fieldSystem);
@@ -56,13 +56,13 @@ BOOL Field_Continue_AppInit(OverlayManager *man, int *unused) {
     FieldSystemInitWork *args = OverlayManager_GetArgs(man);
     sFieldSysPtr = FieldSystem_New(man);
 
-    if (args->unk4) {
+    if (args->commError) {
         CallFieldTask_ContinueGame_CommError(sFieldSysPtr);
     } else {
         CallFieldTask_ContinueGame_Normal(sFieldSysPtr);
     }
 
-    args->unk4 = 0;
+    args->commError = 0;
 
     return TRUE;
 }

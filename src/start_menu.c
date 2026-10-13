@@ -347,13 +347,13 @@ static BOOL Task_StartMenu(TaskManager *taskManager) {
         ItemCheckUseData_Init(fieldSystem, &startMenu->itemCheckUseData);
         FieldMove_InitCheckData(fieldSystem, &startMenu->fieldMoveCheckData);
         Task_StartMenu_DrawCursor(taskManager);
-        fieldSystem->unkD2_0 = 1;
+        fieldSystem->startMenuState = 1;
         startMenu->state = START_MENU_STATE_HANDLE_INPUT;
         break;
     case START_MENU_STATE_2:
         if (FieldSystem_GetBottomScreenAppState(fieldSystem) == 6) {
             Task_StartMenu_DrawCursor(taskManager);
-            fieldSystem->unkD2_0 = 1;
+            fieldSystem->startMenuState = 1;
         } else if (FieldSystem_GetBottomScreenAppState(fieldSystem) == 1) {
             ItemCheckUseData_Init(fieldSystem, &startMenu->itemCheckUseData);
             FieldMove_InitCheckData(fieldSystem, &startMenu->fieldMoveCheckData);
@@ -387,7 +387,7 @@ static BOOL Task_StartMenu(TaskManager *taskManager) {
         if (FieldSystem_IsOverworldRestored(fieldSystem)) {
             MapObjectManager_PauseAllMovement(fieldSystem->mapObjectManager);
             Task_StartMenu_DrawCursor(taskManager);
-            fieldSystem->unkD2_0 = 1;
+            fieldSystem->startMenuState = 1;
             FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_IN);
             startMenu->state = START_MENU_STATE_RETURN_WAIT_FADE;
         }
@@ -429,7 +429,7 @@ static BOOL Task_StartMenu(TaskManager *taskManager) {
     case START_MENU_STATE_CLOSE:
         sub_0203C69C(startMenu, fieldSystem);
         StartMenu_RemoveCursorAndIcons(startMenu, fieldSystem);
-        fieldSystem->unkD2_0 = 2;
+        fieldSystem->startMenuState = 2;
         ScheduleBgTilemapBufferTransfer(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
         Heap_Free(startMenu);
         MapObjectManager_UnpauseAllMovement(fieldSystem->mapObjectManager);
@@ -710,7 +710,7 @@ static void Task_StartMenu_WaitFade(TaskManager *taskManager) {
         StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
         StartMenu_RemoveCursorAndIcons(startMenu, fieldSystem);
-        fieldSystem->unkD2_0 = 0;
+        fieldSystem->startMenuState = 0;
         startMenu->exitTaskFunc(taskManager);
         startMenu->state = START_MENU_STATE_WAIT_APP;
     }
@@ -1254,7 +1254,7 @@ static BOOL Task_StartMenu_HandleSelection_Retire(TaskManager *taskManager) {
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
     StartMenu_RemoveCursorAndIcons(startMenu, fieldSystem);
-    fieldSystem->unkD2_0 = 0;
+    fieldSystem->startMenuState = 0;
     if (Save_VarsFlags_CheckSafariSysFlag(Save_VarsFlags_Get(fieldSystem->saveData)) == TRUE) {
         StartScriptFromMenu(taskManager, std_safari_exit, NULL);
     } else if (Save_VarsFlags_CheckBugContestFlag(Save_VarsFlags_Get(fieldSystem->saveData)) == TRUE) {

@@ -122,7 +122,7 @@ typedef struct PalPadPanelLayout {
 typedef struct PalPadRosterPage {
     PalPadPanelLayout layout;                                // 0x00
     Window window;                                           // 0x08
-    UnkStruct_ov42_02227114 *icons[PALPAD_ROSTER_PAGE_SLOT]; // 0x18
+    CharSprite *icons[PALPAD_ROSTER_PAGE_SLOT]; // 0x18
 } PalPadRosterPage;
 
 typedef struct PalPadRoster {
@@ -133,7 +133,7 @@ typedef struct PalPadRoster {
     PalPadRosterPage pages[3];             // 0x08
     s16 scrollStep;                        // 0xB0
     u16 scrollDir;                         // 0xB2
-    UnkStruct_ov42_02227060 *trainerIcons; // 0xB4
+    CharSpriteManager *trainerIcons; // 0xB4
     Window returnWindow;                   // 0xB8
     Window msgWindow;                      // 0xC8
     String *msgText;                       // 0xD8

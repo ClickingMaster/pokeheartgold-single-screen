@@ -200,7 +200,7 @@ SysTask *TouchSaveApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSyste
     data->state = TOUCHSAVEAPP_STATE_DISPLAY_SAVE_INFORMATION;
 
     TouchSaveApp_SetupGraphics(data);
-    TouchSaveApp_SetupText(data, data->fieldSystem->unkD2_0);
+    TouchSaveApp_SetupText(data, data->fieldSystem->startMenuState);
 
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
@@ -254,15 +254,15 @@ BOOL TouchSaveApp_IsExitDone(void *a0) {
 
 static void TouchSaveApp_Task(SysTask *task, TouchSaveAppData *data) {
     if (!FieldSystem_TaskIsRunning(data->fieldSystem)) {
-        if (data->fieldSystem->unkD2_0 == 2) {
-            data->fieldSystem->unkD2_0 = 3;
+        if (data->fieldSystem->startMenuState == 2) {
+            data->fieldSystem->startMenuState = 3;
             Field_SaveStatsPrinter_RemoveTouchSave(data->saveStatsPrinter);
         }
 
         G2S_BlendNone();
     } else {
-        if (data->fieldSystem->unkD2_0 == 2 && sTouchSaveAppStateFuncs[data->state](data) == TRUE) {
-            data->fieldSystem->unkD2_0 = 3;
+        if (data->fieldSystem->startMenuState == 2 && sTouchSaveAppStateFuncs[data->state](data) == TRUE) {
+            data->fieldSystem->startMenuState = 3;
             FieldSystem_SwitchBottomScreenApp(data->fieldSystem, 0, 0);
         }
     }

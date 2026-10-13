@@ -389,7 +389,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
             PaletteData_BlendPalette(frontierMap->paletteData, PLTTBUF_MAIN_OBJ, 0, 0x100, var0, RGB_BLACK);
         } else {
             FrontierMapObject *object = FrontierMap_FindObject(ctx->frontierSystem->frontierWork, var1);
-            u32 palNo = ov42_02229248(object->objectSprite);
+            u32 palNo = Field2DObjectSprite_GetPaletteOffset(object->objectSprite);
             PaletteData_BlendPalette(frontierMap->paletteData, PLTTBUF_MAIN_OBJ, palNo * 0x10, 0x10, var0, RGB_BLACK);
         }
         break;

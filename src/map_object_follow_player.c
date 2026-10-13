@@ -116,10 +116,10 @@ void FollowPlayerMovement_Reset(LocalMapObject *object) {
     MapObject_SetMovementCommand(object, MOVEMENT_NONE);
     MapObject_SetMovementStep(object, 0);
     state->state = 0;
-    fieldSystem->followMon.unk4 = 0;
-    fieldSystem->followMon.unk1C = 0;
-    fieldSystem->followMon.unk8 = 0;
-    fieldSystem->followMon.unkC = 0;
+    fieldSystem->followMon.queuedMovement = 0;
+    fieldSystem->followMon.queuedStepState = 0;
+    fieldSystem->followMon.queuedX = 0;
+    fieldSystem->followMon.queuedZ = 0;
     MapObject_SetPositionFromXYZAndDirection(object, MapObject_GetXCoord(object), MapObject_GetYCoord(object), MapObject_GetZCoord(object), MapObject_GetFacingDirection(object));
 }
 
@@ -138,14 +138,14 @@ BOOL FollowPlayerState_FollowMonStart(LocalMapObject *object, FollowPlayerMoveme
     MapObject_ClearSingleMovement(object);
     MapObject_ClearEndMovement(object);
 
-    if (fieldSystem->followMon.unk1C == 1) {
-        fieldSystem->followMon.unk1C = 2;
+    if (fieldSystem->followMon.queuedStepState == 1) {
+        fieldSystem->followMon.queuedStepState = 2;
         return FALSE;
     }
-    if (fieldSystem->followMon.unk1C == 2) {
+    if (fieldSystem->followMon.queuedStepState == 2) {
         FollowPlayerMovement_UpdatePlayerCoords(object, state);
-        if (fieldSystem->followMon.unk8 == MapObject_GetXCoord(object) && fieldSystem->followMon.unkC == MapObject_GetZCoord(object)) {
-            fieldSystem->followMon.unk1C = 0;
+        if (fieldSystem->followMon.queuedX == MapObject_GetXCoord(object) && fieldSystem->followMon.queuedZ == MapObject_GetZCoord(object)) {
+            fieldSystem->followMon.queuedStepState = 0;
             state->state = 3;
             if (FollowMon_IsHiddenUntilStep(object) && !state->noBallEffect) {
                 FollowMon_SpawnStepEffects(object);
@@ -160,11 +160,11 @@ BOOL FollowPlayerState_FollowMonStart(LocalMapObject *object, FollowPlayerMoveme
                 FollowMon_SpawnStepEffects(object);
             }
             MapObject_SetSingleMovement(object);
-            fieldSystem->followMon.unk1C = 3;
+            fieldSystem->followMon.queuedStepState = 3;
             return TRUE;
         }
-    } else if (fieldSystem->followMon.unk1C == 3) {
-        fieldSystem->followMon.unk1C = 0;
+    } else if (fieldSystem->followMon.queuedStepState == 3) {
+        fieldSystem->followMon.queuedStepState = 0;
     }
     return FALSE;
 }
@@ -277,7 +277,7 @@ void FollowPlayerMovement_UpdatePlayerCoords(LocalMapObject *object, FollowPlaye
 int FollowMon_GetMovement(LocalMapObject *object) {
     FieldSystem *fieldSystem = MapObject_GetFieldSystem(object);
     FieldSystem_GetPlayerAvatar(fieldSystem);
-    switch (fieldSystem->followMon.unk4) {
+    switch (fieldSystem->followMon.queuedMovement) {
     case 0x58:
         return MOVEMENT_RUN_UP;
     case 0x59:
@@ -287,7 +287,7 @@ int FollowMon_GetMovement(LocalMapObject *object) {
     case 0x5b:
         return MOVEMENT_RUN_RIGHT;
     default:
-        return fieldSystem->followMon.unk4;
+        return fieldSystem->followMon.queuedMovement;
     }
 }
 

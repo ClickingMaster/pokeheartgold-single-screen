@@ -928,7 +928,7 @@ BOOL WiFiPlazaPlayerState_OwnWalk(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork
         int frontY, frontX, direction, frontTile, selected;
         WiFiPlazaObjManager *objManager;
         WiFiPlazaObj *other;
-        UnkStruct_ov44_02232914 pos, frontPos;
+        Field2DPoint pos, frontPos;
         WiFiPlazaRoom_SetPanelButtonDisabled(room, 0);
         manager = WiFiPlazaRoom_GetPlayerStates(room);
         lobby = WiFiPlazaRoom_GetLobby(room);
@@ -949,7 +949,7 @@ BOOL WiFiPlazaPlayerState_OwnWalk(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork
         moveState = WiFiPlazaObj_GetParam(ownPlayer, 5);
         direction = WiFiPlazaObj_GetParam(ownPlayer, 6);
         pos = WiFiPlazaObj_GetGridPos(ownPlayer);
-        frontPos = ov42_02228270(pos, direction);
+        frontPos = Field2D_StepInDirection(pos, direction);
         tile = WiFiPlazaMap_GetTileAttr(map, (u16)(pos.unk0 / 16), (u16)(pos.unk2 / 16));
         frontY = frontPos.unk2 / 16;
         frontX = frontPos.unk0 / 16;
@@ -1250,7 +1250,7 @@ BOOL WiFiPlazaPlayerState_OwnEnterAttraction(WiFiPlazaPlayerState *state, WiFiPl
         int result = WiFiPlazaPlayerState_GetAttractionResult(tile), lobbyState = WiFiPlazaPlayerState_GetAttractionLobbyState(tile);
         int count, direction;
         WiFiPlazaRoomEntry *entry;
-        UnkStruct_ov44_02232914 pos;
+        Field2DPoint pos;
         WiFiPlazaRoom_SetFinished(room, 1);
         WiFiPlazaRoom_SetResult(room, (u8)result);
         ov45_0222A5E8(WiFiPlazaRoom_GetLobby(room), lobbyState);
@@ -1270,7 +1270,7 @@ BOOL WiFiPlazaPlayerState_OwnEnterAttraction(WiFiPlazaPlayerState *state, WiFiPl
             break;
         }
         ov45_0222B118(lobby, count);
-        direction = ov42_022282A4(WiFiPlazaObj_GetParam(obj, 6));
+        direction = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(obj, 6));
         entry = WiFiPlazaRoom_GetStartParams(room);
         pos = WiFiPlazaObj_GetGridPos(obj);
         entry->entryMode = 1;
@@ -1311,7 +1311,7 @@ BOOL WiFiPlazaPlayerState_OwnEnterAttraction(WiFiPlazaPlayerState *state, WiFiPl
         }
         break;
     case 5: {
-        u8 direction = ((int (*)(s32))ov42_022282A4)((u8)WiFiPlazaObj_GetParam(obj, 6));
+        u8 direction = ((int (*)(s32))Field2D_GetOppositeDirection)((u8)WiFiPlazaObj_GetParam(obj, 6));
         WiFiPlazaObj_RunCommand(objManager, obj, 2, direction);
         WiFiPlazaPlayerState_NextStep(state);
         break;
@@ -1391,8 +1391,8 @@ BOOL WiFiPlazaPlayerState_OwnEnterMinigame(WiFiPlazaPlayerState *state, WiFiPlaz
         break;
     case 2: {
         WiFiPlazaRoomEntry *entry;
-        UnkStruct_ov44_02232914 position;
-        UnkStruct_ov44_02232914 current;
+        Field2DPoint position;
+        Field2DPoint current;
         u32 packed;
         u32 direction;
         switch (WiFiPlazaRoom_GetActionTile(room)) {
@@ -1413,7 +1413,7 @@ BOOL WiFiPlazaPlayerState_OwnEnterMinigame(WiFiPlazaPlayerState *state, WiFiPlaz
         WiFiPlazaRoom_SetResult(room, (u8)value);
         IncrementGameStat119(lobby);
         ov45_0222B118(lobby, choice);
-        direction = ov42_022282A4(WiFiPlazaObj_GetParam(ownPlayer, 6));
+        direction = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownPlayer, 6));
         entry = WiFiPlazaRoom_GetStartParams(room);
         packed = ((u32(*)(WiFiPlazaObj *))WiFiPlazaObj_GetGridPos)(ownPlayer);
         current.unk0 = packed;
@@ -1429,7 +1429,7 @@ BOOL WiFiPlazaPlayerState_OwnEnterMinigame(WiFiPlazaPlayerState *state, WiFiPlaz
         return TRUE;
     }
     case 3:
-        WiFiPlazaObj_RunCommand(objManager, ownPlayer, 2, ov42_022282A4(WiFiPlazaObj_GetParam(ownPlayer, 6)));
+        WiFiPlazaObj_RunCommand(objManager, ownPlayer, 2, Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownPlayer, 6)));
         WiFiPlazaPlayerState_NextStep(state);
         break;
     case 4:
@@ -1499,8 +1499,8 @@ BOOL WiFiPlazaPlayerState_OwnUseSurveyMonitor(WiFiPlazaPlayerState *state, WiFiP
     WiFiPlazaRoomEntry *entry;
     int value;
     u32 packed;
-    UnkStruct_ov44_02232914 position;
-    UnkStruct_ov44_02232914 current;
+    Field2DPoint position;
+    Field2DPoint current;
 
     WiFiPlazaRoom_GetPlayerStates(room);
     objManager = WiFiPlazaRoom_GetObjManager(room);
@@ -1537,7 +1537,7 @@ enter:
         WiFiPlazaRoom_SetFinished(room, 1);
         WiFiPlazaRoom_SetResult(room, (u8)value);
         WiFiPlazaWork_AddHistory(lobby, 23, -1);
-        value = ov42_022282A4(WiFiPlazaObj_GetParam(ownPlayer, 6));
+        value = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownPlayer, 6));
         entry = WiFiPlazaRoom_GetStartParams(room);
         packed = ((u32(*)(WiFiPlazaObj *))WiFiPlazaObj_GetGridPos)(ownPlayer);
         current.unk0 = packed;
@@ -1551,7 +1551,7 @@ enter:
         WiFiPlazaPlayerState_FreeWork(state);
         return TRUE;
     case 2:
-        WiFiPlazaObj_RunCommand(objManager, ownPlayer, 2, ov42_022282A4(WiFiPlazaObj_GetParam(ownPlayer, 6)));
+        WiFiPlazaObj_RunCommand(objManager, ownPlayer, 2, Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownPlayer, 6)));
         WiFiPlazaPlayerState_NextStep(state);
         break;
     case 3:
@@ -1903,7 +1903,7 @@ BOOL WiFiPlazaPlayerRide_IsMoverHere(WiFiPlazaPlayerRide *ride, void *models) {
 BOOL WiFiPlazaPlayerRide_JumpOn(WiFiPlazaPlayerRide *ride, void *models, WiFiPlazaCamera *camera) {
     VecFx32 start, end, pos;
     u32 mover, side;
-    UnkStruct_ov44_02232914 cell, packedCell;
+    Field2DPoint cell, packedCell;
     int done, difference, frame;
     u32 packed;
     ride->timer++;
@@ -2200,7 +2200,7 @@ BOOL WiFiPlazaPlayerState_OtherRideMover(WiFiPlazaPlayerState *state, WiFiPlazaR
             work->startY = vecD.y;
             work->frame = 0;
             {
-                UnkStruct_ov44_02232914 cell = { 0 };
+                Field2DPoint cell = { 0 };
                 WiFiPlazaObj_SetGridPos(work->obj, cell);
             }
             PlaySE(SEQ_SE_DP_TELE2);
@@ -2259,9 +2259,9 @@ BOOL WiFiPlazaPlayerState_OtherDoActivity(WiFiPlazaPlayerState *state, WiFiPlaza
     WiFiPlazaObjManager *objManager;
     WiFiPlazaWork *lobby;
     BOOL leave;
-    UnkStruct_ov44_02232914 current;
-    UnkStruct_ov44_02232914 cell;
-    UnkStruct_ov44_02232914 packedCell;
+    Field2DPoint current;
+    Field2DPoint cell;
+    Field2DPoint packedCell;
     WiFiPlazaPlacement *placement;
     void *obj;
     WiFiPlazaObj *ownPlayer;
@@ -2316,7 +2316,7 @@ BOOL WiFiPlazaPlayerState_OtherDoActivity(WiFiPlazaPlayerState *state, WiFiPlaza
         leave = FALSE;
         if (placement->besideOwnPlayer == TRUE && ov45_0222B0B0(lobby) == 0 && ov45_0222A920(WiFiPlazaWork_GetMyPlayer(lobby)) == 9) {
             ov45_0222B0A4(lobby);
-            WiFiPlazaObj_RunCommand(objManager, ownPlayer, 0, ov42_022282A4(WiFiPlazaObj_GetParam(obj, 6)));
+            WiFiPlazaObj_RunCommand(objManager, ownPlayer, 0, Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(obj, 6)));
         }
         obj = WiFiPlazaWork_GetPlayer(lobby, index);
         if (obj == NULL) {
@@ -2362,8 +2362,8 @@ BOOL WiFiPlazaPlayerState_OtherDoActivity(WiFiPlazaPlayerState *state, WiFiPlaza
 BOOL WiFiPlazaPlayerState_PlaceOtherForActivity(WiFiPlazaPlacement *placement, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room, WiFiPlazaObj *obj, u8 kind, u32 justAppeared) {
     s32 direction;
     u16 cell[2];
-    UnkStruct_ov44_02232914 position;
-    UnkStruct_ov44_02232914 current;
+    Field2DPoint position;
+    Field2DPoint current;
     WiFiPlazaObj *ownPlayer;
     WiFiPlazaObjManager *objManager;
     WiFiPlazaMap *map;
@@ -2429,10 +2429,10 @@ BOOL WiFiPlazaPlayerState_PlaceOtherForActivity(WiFiPlazaPlacement *placement, W
         if (id != WiFiPlazaWork_GetTalkPartner(lobby)) {
             return besideOwnPlayer;
         }
-        if (WiFiPlazaObj_FindFreeNeighbor(objManager, ownPlayer, &direction, (UnkStruct_ov44_02232914 *)cell) != TRUE) {
+        if (WiFiPlazaObj_FindFreeNeighbor(objManager, ownPlayer, &direction, (Field2DPoint *)cell) != TRUE) {
             GF_AssertFail();
         }
-        direction = ov42_022282A4(direction);
+        direction = Field2D_GetOppositeDirection(direction);
         besideOwnPlayer = TRUE;
         goto found;
     case 0:
@@ -2451,7 +2451,7 @@ found:
     current.unk0 = packed;
     current.unk2 = packed >> 16;
     position = current;
-    WiFiPlazaObj_SetGridPosAndDir(obj, *(UnkStruct_ov44_02232914 *)cell, direction);
+    WiFiPlazaObj_SetGridPosAndDir(obj, *(Field2DPoint *)cell, direction);
     placement->x = position.unk0 / 16;
     placement->y = position.unk2 / 16;
     placement->kind = kind;

@@ -72,9 +72,9 @@ void StartMapSceneScript(FieldSystem *fieldSystem, u16 script, LocalMapObject *l
 void FieldSystem_SetEngagedTrainer(FieldSystem *fieldSystem, LocalMapObject *obj, int a2, int a3, int a4, int trainerId, int encounterType, int idx) {
     ScriptEnvironment *env = TaskManager_GetEnvironment(fieldSystem->taskman);
     EngagedTrainer *r0 = &env->engagedTrainers[idx];
-    r0->unk0 = a2;
-    r0->unk4 = a3;
-    r0->unk8 = a4;
+    r0->sightDistance = a2;
+    r0->sightDirection = a3;
+    r0->scriptId = a4;
     r0->trainerId = trainerId;
     r0->encounterType = encounterType;
     r0->overworldEvent = obj;
@@ -222,9 +222,9 @@ void LoadScriptsAndMessagesForCurrentMap(FieldSystem *fieldSystem, ScriptContext
 void *FieldSysGetAttrAddrInternal(ScriptEnvironment *environment, enum ScriptEnvField field) {
     switch (field) {
     case SCRIPTENV_MENU_WINDOW:
-        return &environment->unk_10;
+        return &environment->menu;
     case SCRIPTENV_WINDOW:
-        return &environment->unk_14;
+        return &environment->window;
     case SCRIPTENV_LIST_MENU_2D:
         return &environment->listMenu2D;
     case SCRIPTENV_TEXT_PRINTER_NUMBER:
@@ -232,9 +232,9 @@ void *FieldSysGetAttrAddrInternal(ScriptEnvironment *environment, enum ScriptEnv
     case SCRIPTENV_ACTIVE_MOVEMENT_COUNTER:
         return &environment->activeMovementCounter;
     case SCRIPTENV_FIELD_07:
-        return &environment->unk_7;
+        return &environment->stdScriptWaitFlags;
     case SCRIPTENV_FIELD_08:
-        return &environment->unk_8;
+        return &environment->msgWindowOpen;
     case SCRIPTENV_ACTIVE_SCRIPT_CONTEXT_COUNT:
         return &environment->activeScriptContextCount;
     case SCRIPTENV_ACTIVE_SCRIPT_NUMBER:
@@ -266,15 +266,15 @@ void *FieldSysGetAttrAddrInternal(ScriptEnvironment *environment, enum ScriptEnv
     case SCRIPTENV_FIELD_B4:
         return &environment->unk_B4;
     case SCRIPTENV_FIELD_B8:
-        return &environment->unk_B8;
+        return &environment->savingPoseTask;
     case SCRIPTENV_BATTLE_WIN_FLAG:
         return &environment->battleWinFlag;
     case SCRIPTENV_ENGAGED_TRAINER_0_FIELD_00:
-        return &environment->engagedTrainers[0].unk0;
+        return &environment->engagedTrainers[0].sightDistance;
     case SCRIPTENV_ENGAGED_TRAINER_0_FIELD_04:
-        return &environment->engagedTrainers[0].unk4;
+        return &environment->engagedTrainers[0].sightDirection;
     case SCRIPTENV_ENGAGED_TRAINER_0_FIELD_08:
-        return &environment->engagedTrainers[0].unk8;
+        return &environment->engagedTrainers[0].scriptId;
     case SCRIPTENV_ENGAGED_TRAINER_0_ID:
         return &environment->engagedTrainers[0].trainerId;
     case SCRIPTENV_ENGAGED_TRAINER_0_ENCOUNTER_TYPE:
@@ -282,13 +282,13 @@ void *FieldSysGetAttrAddrInternal(ScriptEnvironment *environment, enum ScriptEnv
     case SCRIPTENV_ENGAGED_TRAINER_0_EVENT:
         return &environment->engagedTrainers[0].overworldEvent;
     case SCRIPTENV_ENGAGED_TRAINER_0_FIELD_18:
-        return &environment->engagedTrainers[0].unk18;
+        return &environment->engagedTrainers[0].approachTask;
     case SCRIPTENV_ENGAGED_TRAINER_1_FIELD_00:
-        return &environment->engagedTrainers[1].unk0;
+        return &environment->engagedTrainers[1].sightDistance;
     case SCRIPTENV_ENGAGED_TRAINER_1_FIELD_04:
-        return &environment->engagedTrainers[1].unk4;
+        return &environment->engagedTrainers[1].sightDirection;
     case SCRIPTENV_ENGAGED_TRAINER_1_FIELD_08:
-        return &environment->engagedTrainers[1].unk8;
+        return &environment->engagedTrainers[1].scriptId;
     case SCRIPTENV_ENGAGED_TRAINER_1_ID:
         return &environment->engagedTrainers[1].trainerId;
     case SCRIPTENV_ENGAGED_TRAINER_1_ENCOUNTER_TYPE:
@@ -296,7 +296,7 @@ void *FieldSysGetAttrAddrInternal(ScriptEnvironment *environment, enum ScriptEnv
     case SCRIPTENV_ENGAGED_TRAINER_1_EVENT:
         return &environment->engagedTrainers[1].overworldEvent;
     case SCRIPTENV_ENGAGED_TRAINER_1_FIELD_18:
-        return &environment->engagedTrainers[1].unk18;
+        return &environment->engagedTrainers[1].approachTask;
     case SCRIPTENV_POINTS_BOX:
         return &environment->pointsBox;
     case SCRIPTENV_MONEY_BOX:

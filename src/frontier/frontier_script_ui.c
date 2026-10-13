@@ -40,7 +40,7 @@
 #include "char_tiles.h"
 
 typedef void (*FrontierPrintMailMessageFunc)(FrontierSystem *system, int speed, u16 bank, u16 number, u16 field0, s16 field1, u8 canABSpeedUp);
-typedef u32 (*FrontierObjectGetPosFunc)(UnkStruct_ov42_02228110 *object);
+typedef u32 (*FrontierObjectGetPosFunc)(Field2DObject *object);
 
 #define FRONTIER_MON_SPRITE_ID_BASE 50000
 #define FRONTIER_MON_ICON_ID_BASE   2000
@@ -556,7 +556,7 @@ void FrontierListMenu_Cancel(FrontierMenu *menu) {
 }
 
 // Runs a movement script on a map object: (opcode, count) pairs ending with 0xFD13; opcodes 0x20-0x26 wait,
-// 0x27/0x28 turn the object's sprite flag on/off, the others are steps (ov42_022299C0) repeated count times.
+// 0x27/0x28 turn the object's sprite flag on/off, the others are steps (Field2DMoveQueue_Push) repeated count times.
 void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
     FrontierMovementStep step;
     u16 opcode = data->script[0];
@@ -569,7 +569,7 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
             return;
         }
     case 1:
-        if (ov42_02228188(data->object->object, 5) != 0) {
+        if (Field2DObject_GetParam(data->object->object, 5) != 0) {
             return;
         }
         if (opcode >= 0x20 && opcode <= 0x26) {
@@ -584,10 +584,10 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
         if (opcode >= 0x27 && opcode < 0x29) {
             switch (opcode) {
             case 0x27:
-                ov42_02229200(data->object->objectSprite, 1);
+                Field2DObjectSprite_SetVisible(data->object->objectSprite, 1);
                 break;
             case 0x28:
-                ov42_02229200(data->object->objectSprite, 0);
+                Field2DObjectSprite_SetVisible(data->object->objectSprite, 0);
                 break;
             default:
                 GF_AssertFail();
@@ -597,7 +597,7 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
             return;
         }
         FrontierScript_GetMovementStep(&step, data->object->object, data->id, opcode);
-        ov42_022299C0(data->unk_10, (UnkStruct_ov44_02232031 *)&step);
+        Field2DMoveQueue_Push(data->unk_10, (Field2DMoveQueueEntry *)&step);
         data->repeat++;
         if (data->repeat >= count) {
             data->repeat = 0;
@@ -606,7 +606,7 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
         data->state = 0;
         return;
     case 2:
-        if (ov42_02228188(data->object->object, 5) == 0) {
+        if (Field2DObject_GetParam(data->object->object, 5) == 0) {
             (*data->runningCount)--;
             data->object->unk_38 = NULL;
             Heap_Free(data);
@@ -617,13 +617,13 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
 }
 
 // The object position comes from overlay 42 as a packed word; the halfwords go through a volatile copy.
-void FrontierScript_GetMovementStep(FrontierMovementStep *step, UnkStruct_ov42_02228110 *object, u16 id, s32 opcode) {
+void FrontierScript_GetMovementStep(FrontierMovementStep *step, Field2DObject *object, u16 id, s32 opcode) {
     step->id = id;
     step->direction = ov80_0223DC22[opcode * 2];
     step->sequence = _0223DC20[opcode * 2];
     if (step->sequence == 2 || step->sequence == 3 || step->sequence == 6) {
         volatile u16 position[2];
-        u32 raw = ((FrontierObjectGetPosFunc)ov42_022282E8)(object);
+        u32 raw = ((FrontierObjectGetPosFunc)Field2DObject_GetPrevPos)(object);
         position[0] = raw;
         position[1] = raw >> 16;
         step->x = position[0];
@@ -631,7 +631,7 @@ void FrontierScript_GetMovementStep(FrontierMovementStep *step, UnkStruct_ov42_0
         return;
     } else {
         volatile u16 position[2];
-        u32 raw = ((FrontierObjectGetPosFunc)ov42_022282DC)(object);
+        u32 raw = ((FrontierObjectGetPosFunc)Field2DObject_GetPos)(object);
         position[0] = raw;
         position[1] = raw >> 16;
         step->x = position[0];

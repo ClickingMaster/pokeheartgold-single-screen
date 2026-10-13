@@ -79,7 +79,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
             break;
         }
         partnerIndex = WiFiPlazaObj_GetParam(partnerObj, 4);
-        direction = ov42_022282A4(WiFiPlazaObj_GetParam(ownObj, 6));
+        direction = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownObj, 6));
         WiFiPlazaWork_ResetTalk(lobby);
         result = WiFiPlazaTalk_Init(talk, lobby, partnerIndex);
         talk->partnerObj = partnerObj;

@@ -1158,7 +1158,7 @@ static void BerryPotsApp_SetupWindows(BerryPotsAppData *data) {
         FillWindowPixelBuffer(&data->windows[i], 0x0);
     }
 
-    data->unk12C = YesNoPrompt_Create(data->heapID);
+    data->yesNoPrompt = YesNoPrompt_Create(data->heapID);
 }
 
 static void BerryPotsApp_FreeWindows(BerryPotsAppData *data) {
@@ -1167,7 +1167,7 @@ static void BerryPotsApp_FreeWindows(BerryPotsAppData *data) {
         RemoveWindow(&data->windows[i]);
     }
 
-    YesNoPrompt_Destroy(data->unk12C);
+    YesNoPrompt_Destroy(data->yesNoPrompt);
 }
 
 static void BerryPotsApp_SetupListMenuItems(BerryPotsAppData *data) {

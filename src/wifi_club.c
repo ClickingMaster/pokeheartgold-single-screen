@@ -288,20 +288,20 @@ void CallTask_WifiClubWithResult(TaskManager *taskManager, u16 *result) {
 
 void WifiClub_LaunchGameEntry(WifiClubTask *task, FieldSystem *fieldSystem, enum HeapID heapID, int game) {
     WifiClubGameEntryArgs *args = Heap_Alloc(heapID, sizeof(WifiClubGameEntryArgs));
-    args->unk0 = game;
-    args->unk1 = 2;
-    args->unk2 = gWifiClubGameMaxPlayers[game];
-    args->unk3 = 0;
-    args->unk4 = 0;
-    args->unk8 = fieldSystem->saveData;
+    args->game = game;
+    args->minPlayers = 2;
+    args->maxPlayers = gWifiClubGameMaxPlayers[game];
+    args->result = 0;
+    args->voiceChat = 0;
+    args->saveData = fieldSystem->saveData;
     task->launchedArgs = args;
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_WifiClubGameEntry, args);
 }
 
 u32 WifiClub_FinishGameEntry(WifiClubTask *task) {
     WifiClubGameEntryArgs *args = task->launchedArgs;
-    if (args->unk3 == 1) {
-        switch ((enum WifiClubGame)args->unk0) {
+    if (args->result == 1) {
+        switch ((enum WifiClubGame)args->game) {
         case WIFI_CLUB_GAME_SWALOT_PLOP:
             task->state = 16;
             break;
@@ -316,7 +316,7 @@ u32 WifiClub_FinishGameEntry(WifiClubTask *task) {
     } else {
         task->state = 1;
     }
-    task->selection = args->unk4;
+    task->selection = args->voiceChat;
     Heap_Free(task->launchedArgs);
     return task->state;
 }

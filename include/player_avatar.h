@@ -26,18 +26,18 @@ typedef struct PlayerSaveData {
 struct PlayerAvatar {
     PlayerAvatarFlags flags;
     u32 transitionFlags;
-    u32 unk8;
-    BOOL unkC;
+    u32 heldMovement;
+    BOOL footstepToggle;
     u32 moveState;
     u32 playerMoveState;
     s32 state;
     u32 gender;
     u32 unk20;
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
+    s32 speed;
+    s32 lastHorizontalInput;
+    s32 lastVerticalInput;
     LocalMapObject *mapObject;
-    u32 unk34;
+    u32 surfMountEffect;
     PlayerSaveData *playerSaveData;
     u32 unk3c;
 }; // size: 0x40

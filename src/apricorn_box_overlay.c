@@ -169,22 +169,22 @@ void ApricornBox_InitFromArgs(ApricornBoxApp *app) {
     }
     switch (app->args->unk0) {
     case 0:
-        app->unk_18 = 0;
+        app->mode = 0;
         break;
     case 1:
-        app->unk_18 = 1;
+        app->mode = 1;
         break;
     case 2:
-        app->unk_18 = 2;
+        app->mode = 2;
         break;
     case 3:
         app->unk_19 = 1;
-        app->unk_18 = 0;
-        app->unk_14 = app->args->unkC;
+        app->mode = 0;
+        app->juiceIndex = app->args->unkC;
         return;
     }
     app->unk_19 = 0;
-    app->unk_14 = 8;
+    app->juiceIndex = 8;
 }
 
 void ApricornBox_Cleanup(ApricornBoxApp *app) {
@@ -199,7 +199,7 @@ int ApricornBox_State_RunBoxScreen(ApricornBoxApp *app) {
     if (!ApricornBox_RunChildApp(&app->child)) {
         return 2;
     }
-    if (app->unk_18 == 3) {
+    if (app->mode == 3) {
         app->partySlot = 0;
         return 3;
     }
@@ -252,7 +252,7 @@ int ApricornBox_State_RunAprijuiceScreen(ApricornBoxApp *app) {
     if (!ApricornBox_RunChildApp(&app->child)) {
         return 6;
     }
-    if (app->unk_18 == 3) {
+    if (app->mode == 3) {
         return 3;
     }
     if (app->args->unk0 == 3) {

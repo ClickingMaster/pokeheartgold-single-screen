@@ -300,7 +300,7 @@ BOOL FrtCmd_LinkLobbyStartTower(FrontierScriptContext *ctx) {
     }
     HealParty(SaveArray_Party_Get(args->saveData));
     FrontierLink_RegisterCommands(frontierFsys);
-    frontierFsys->unk8D4 = 0;
+    frontierFsys->linkReceiveCount = 0;
     return FALSE;
 }
 
@@ -317,10 +317,10 @@ BOOL FrtCmd_TowerLinkWaitReceive(FrontierScriptContext *ctx) {
 
 BOOL FrontierScriptNative_WaitTowerLinkReceive(FrontierScriptContext *ctx) {
     FrontierFieldSystem *frontierFsys = Frontier_GetData(ctx->frontierSystem->frontierWork);
-    if (frontierFsys->unk8D4 < 2) {
+    if (frontierFsys->linkReceiveCount < 2) {
         return FALSE;
     }
-    frontierFsys->unk8D4 = 0;
+    frontierFsys->linkReceiveCount = 0;
     return TRUE;
 }
 

@@ -27,7 +27,7 @@ typedef struct {
     u16 *itemFound; // TODO: bool16
     u16 *item;
     ROCK_SMASH rockSmash;
-    u32 unk14;
+    u32 emoteMark;
 } RockSmashItemCheckWork;
 
 static const u16 sRockSmashItems_Default[] = {
@@ -189,12 +189,12 @@ static BOOL Task_GetRockSmashItem(TaskManager *taskman) {
         } else {
             obj = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
         }
-        env->unk14 = EmoteMark_Spawn(obj, 0, 1);
+        env->emoteMark = EmoteMark_Spawn(obj, 0, 1);
         ++(*state_p);
         break;
     case 1:
-        if (EmoteMark_IsDone(env->unk14)) {
-            FieldEffect_Destroy(env->unk14);
+        if (EmoteMark_IsDone(env->emoteMark)) {
+            FieldEffect_Destroy(env->emoteMark);
             ++(*state_p);
         }
         break;

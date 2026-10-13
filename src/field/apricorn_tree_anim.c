@@ -33,7 +33,7 @@ typedef struct {
     s16 expelTimer;
     s8 wiggleTimer;
     u8 treeWiggles;
-    u16 *unk24;
+    u16 *result;
 } AnimApricornTreeWork;
 
 typedef struct {
@@ -69,7 +69,7 @@ void FieldSystem_AnimApricornTree(FieldSystem *fieldSystem, LocalMapObject *tree
     MI_CpuFill8(env, 0, sizeof(AnimApricornTreeWork));
     env->state = 0;
     env->tree = tree;
-    env->unk24 = a2;
+    env->result = a2;
 
     TaskManager_Call(fieldSystem->taskman, Task_AnimApricornTree, env);
 }
@@ -87,7 +87,7 @@ static BOOL Task_AnimApricornTree(TaskManager *taskman) {
     switch (env->state) {
     case 0:
         if (!FieldSystem_ApricornTreeObject_HasApricorn(fieldSystem, env->tree)) {
-            *env->unk24 = 0;
+            *env->result = 0;
             env->state = 10;
             break;
         }
@@ -115,11 +115,11 @@ static BOOL Task_AnimApricornTree(TaskManager *taskman) {
         MapObject_PauseMovement(env->tree);
         if (FieldSystem_ApricornTreeObject_HasApricorn(fieldSystem, env->tree)) {
             FieldSystem_ApricornTree_PickApricorn(fieldSystem, env->tree);
-            *env->unk24 = 1;
+            *env->result = 1;
             env->state = 3;
             break;
         }
-        *env->unk24 = 0;
+        *env->result = 0;
         env->state = 10;
         break;
     case 3:

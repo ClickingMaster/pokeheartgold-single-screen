@@ -8,157 +8,157 @@
 #include "sprite.h"
 #include "unk_02009D48.h"
 
-typedef struct UnkStruct_ov44_02232914 {
+typedef struct Field2DPoint {
     s16 unk0;
     s16 unk2;
-} UnkStruct_ov44_02232914;
+} Field2DPoint;
 
-typedef struct UnkStruct_ov42_02228CDC {
+typedef struct Field2DCommand {
     u16 unk0;
     u8 unk2;
     u8 unk3;
-} UnkStruct_ov42_02228CDC;
+} Field2DCommand;
 
-typedef struct UnkStruct_ov42_02228EB0 {
-    UnkStruct_ov44_02232914 unk0;
+typedef struct Field2DMove {
+    Field2DPoint unk0;
     u16 unk4;
     u8 unk6;
     u8 unk7;
-} UnkStruct_ov42_02228EB0;
+} Field2DMove;
 
-typedef struct UnkStruct_ov42_02229A40 {
-    UnkStruct_ov42_02228CDC *unk0;
-    u32 unk4;
-    u16 unk8;
-    u16 unkA;
-} UnkStruct_ov42_02229A40;
+typedef struct Field2DCommandQueue {
+    Field2DCommand *entries;
+    u32 capacity;
+    u16 head;
+    u16 tail;
+} Field2DCommandQueue;
 
-typedef struct UnkStruct_ov42_022293B8 {
+typedef struct Field2DBgLayer {
     G2dRenderer *g2dRenderer;
     BgConfig *bgConfig;
-    void *unk8;
+    void *screenFile;
     NNSG2dScreenData *nnsg2dScreenData;
-    u32 unk10;
-    u32 unk14;
-    u16 unk18;
-    u16 unk1A;
-} UnkStruct_ov42_022293B8;
+    u32 screen;
+    u32 bgLayer;
+    u16 tileX;
+    u16 tileY;
+} Field2DBgLayer;
 
-typedef struct UnkStruct_ov44_02232031 {
+typedef struct Field2DMoveQueueEntry {
     u16 unk0;
     u16 unk2;
     u16 unk4;
     u16 unk6;
-} UnkStruct_ov44_02232031;
+} Field2DMoveQueueEntry;
 
-typedef struct UnkStruct_ov42_022299C0 {
-    UnkStruct_ov44_02232031 *unk0;
-    u32 unk4;
-    u16 unk8;
-    u16 unkA;
-} UnkStruct_ov42_022299C0;
+typedef struct Field2DMoveQueue {
+    Field2DMoveQueueEntry *entries;
+    u32 capacity;
+    u16 head;
+    u16 tail;
+} Field2DMoveQueue;
 
-typedef struct UnkStruct_ov42_02228110 {
-    u32 unk0;
-    UnkStruct_ov44_02232914 unk4;
-    UnkStruct_ov44_02232914 unk8;
-    u16 unkC;
-    u16 unkE;
-    u16 unk10;
-    u16 unk12;
-    u8 unk14;
-    u8 unk15;
-    u16 unk16;
-} UnkStruct_ov42_02228110;
+typedef struct Field2DObject {
+    u32 active;
+    Field2DPoint pos;
+    Field2DPoint prevPos;
+    u16 id;
+    u16 spriteId;
+    u16 actionFrame;
+    u16 actionDuration;
+    u8 direction;
+    u8 action;
+    u16 stateFrames;
+} Field2DObject;
 
-typedef struct UnkStruct_ov42_022280A8 {
-    UnkStruct_ov42_02228110 *unk0;
-    u32 unk4;
-} UnkStruct_ov42_022280A8;
+typedef struct Field2DObjectManager {
+    Field2DObject *objects;
+    u32 capacity;
+} Field2DObjectManager;
 
-typedef struct UnkStruct_ov42_02227F68 {
-    u16 unk0;
-    u16 unk2;
-    u32 *unk4;
-} UnkStruct_ov42_02227F68;
+typedef struct Field2DMap {
+    u16 width;
+    u16 height;
+    u32 *cells;
+} Field2DMap;
 
-typedef struct UnkStruct_ov42_02122667 {
+typedef struct Field2DObjectTemplate {
     s16 unk0;
     s16 unk2;
     u16 unk4;
     u16 unk6;
     u16 unk8;
     u16 unkA;
-} UnkStruct_ov42_02122667;
+} Field2DObjectTemplate;
 
-typedef struct UnkStruct_ov42_02227114 {
-    u32 *unk0;
-    Sprite *unk4;
-    Sprite *unk8;
-    u32 unkC;
-    u32 unk10;
-    s16 unk14;
+typedef struct CharSprite {
+    u32 *resource;
+    Sprite *sprite;
+    Sprite *shadow;
+    u32 animKind;
+    u32 direction;
+    s16 animFrames;
     u8 unk16[2];
-} UnkStruct_ov42_02227114;
+} CharSprite;
 
-typedef struct UnkStruct_ov42_0222903C {
-    UnkStruct_ov42_02228110 *unk0;
-    UnkStruct_ov42_02227114 *unk4;
-    u16 unk8;
-    u16 unkA;
-    s16 unkC;
-    u16 unkE;
-    u16 unk10;
-    u8 unk12;
-    u8 unk13;
-} UnkStruct_ov42_0222903C;
+typedef struct Field2DObjectSprite {
+    Field2DObject *object;
+    CharSprite *charSprite;
+    u16 action;
+    u16 direction;
+    s16 id;
+    u16 savedAnimFrame;
+    u16 savedAnimKind;
+    u8 priorityMode;
+    u8 autoUpdate;
+} Field2DObjectSprite;
 
-typedef struct UnkStruct_ov42_022272BC {
-    u32 unk0;
-    SpriteResource *unk4;
-    SpriteResource *unk8;
-    u32 unkC;
-    u32 unk10;
-    SpriteResourcesHeader unk14;
-} UnkStruct_ov42_022272BC;
+typedef struct CharSpriteResource {
+    u32 sharedPalette;
+    SpriteResource *charResource;
+    SpriteResource *plttResource;
+    u32 vramType;
+    u32 animSet;
+    SpriteResourcesHeader header;
+} CharSpriteResource;
 
-typedef struct UnkStruct_ov42_02227C18 {
-    SpriteResource *unk0;
-    SpriteResource *unk4;
+typedef struct CharSpriteCellAnim {
+    SpriteResource *cell;
+    SpriteResource *anim;
     u8 unk8[8];
-} UnkStruct_ov42_02227C18;
+} CharSpriteCellAnim;
 
-typedef struct UnkStruct_ov42_02227060 {
-    SpriteList *unk0;
-    PaletteData *unk4;
-    UnkStruct_ov42_02227114 *unk8;
-    u32 unkC;
-    UnkStruct_ov42_022272BC unk10[0x99];
-    SpriteResource *unk2188[4];
+typedef struct CharSpriteManager {
+    SpriteList *spriteList;
+    PaletteData *paletteData;
+    CharSprite *sprites;
+    u32 maxSprites;
+    CharSpriteResource chars[0x99];
+    SpriteResource *cellAnims[4];
     u8 unk2198[0x20];
-    UnkStruct_ov42_02227C18 unk21B8[0x10];
-    SpriteResource *unk22B8[4];
-    SpriteResourcesHeader unk22C8;
-    u32 unk22EC;
-    GF_2DGfxResMan *unk22F0[4];
-    SpriteResource *unk2300;
-    NARC *unk2304;
-    NARC *unk2308;
-} UnkStruct_ov42_02227060;
+    CharSpriteCellAnim avatarCellAnims[0x10];
+    SpriteResource *shadowResources[4];
+    SpriteResourcesHeader shadowHeader;
+    u32 shadowDrawPriority;
+    GF_2DGfxResMan *resManagers[4];
+    SpriteResource *avatarPalette;
+    NARC *charNarc;
+    NARC *avatarNarc;
+} CharSpriteManager;
 
-typedef struct UnkStruct_ov42_02228EDC {
-    UnkStruct_ov42_02227060 *unk0;
-    UnkStruct_ov42_0222903C *unk4;
-    u16 unk8;
-    u8 unkA;
-    u8 unkB;
-} UnkStruct_ov42_02228EDC;
+typedef struct Field2DObjectSpriteManager {
+    CharSpriteManager *charSprites;
+    Field2DObjectSprite *sprites;
+    u16 maxSprites;
+    u8 bgPriority;
+    u8 vramType;
+} Field2DObjectSpriteManager;
 
-typedef struct UnkStruct_ov42_02227FA4 {
-    u32 unk0;
-} UnkStruct_ov42_02227FA4;
+typedef struct Field2DMapCell {
+    u32 value;
+} Field2DMapCell;
 
-typedef struct UnkTemplate_ov42_022293B8 {
+typedef struct Field2DBgLayerTemplate {
     u8 unk_0;
     u8 unk_1;
     u8 colorMode;
@@ -170,199 +170,199 @@ typedef struct UnkTemplate_ov42_022293B8 {
     u8 narcId;
     u8 fileId;
     u8 compressed;
-} UnkTemplate_ov42_022293B8;
+} Field2DBgLayerTemplate;
 
-typedef s32 (*func_type_02229E74)(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_02227F68 *arg1, UnkStruct_ov42_022280A8 *arg2, UnkStruct_ov42_02228CDC *arg3, UnkStruct_ov42_02228EB0 *arg4);
-typedef void (*func_type_022285A4)(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg2, u32 arg3);
-typedef s32 (*func_type_02228574)(UnkStruct_ov42_02228110 *arg0);
-typedef void (*func_type_02229B48)(UnkStruct_ov42_02227114 *arg0);
-typedef void (*func_type_02227504)(UnkStruct_ov42_02227114 *arg0, s32 arg1);
+typedef s32 (*Field2DCommandCheckFunc)(Field2DObject *arg0, Field2DMap *arg1, Field2DObjectManager *arg2, Field2DCommand *arg3, Field2DMove *arg4);
+typedef void (*Field2DObjectStartFunc)(Field2DObject *arg0, Field2DPoint arg2, u32 arg3);
+typedef s32 (*Field2DObjectUpdateFunc)(Field2DObject *arg0);
+typedef void (*CharSpriteAnimUpdateFunc)(CharSprite *arg0);
+typedef void (*CharSpriteAnimStartFunc)(CharSprite *arg0, s32 arg1);
 
-UnkStruct_ov42_02227060 *ov42_02227060(SpriteList *arg0, PaletteData *arg1, s32 arg2, enum HeapID heapID);
-void ov42_02227114(UnkStruct_ov42_02227060 *arg0);
-void ov42_02227194(UnkStruct_ov42_02227060 *arg0, s32 arg1, u8 arg2, s32 arg3, enum HeapID heapID);
-void ov42_022271D0(UnkStruct_ov42_02227060 *arg0, s32 arg1);
-s32 ov42_022271E4(UnkStruct_ov42_02227060 *arg0, s32 arg1);
-void ov42_022271F8(UnkStruct_ov42_02227060 *arg0);
-void ov42_02227228(UnkStruct_ov42_02227060 *arg0, u8 arg1, s32 arg2, enum HeapID heapID);
-void ov42_02227274(UnkStruct_ov42_02227060 *arg0);
-void ov42_0222729C(UnkStruct_ov42_02227060 *arg0, u8 arg1, s32 arg2, enum HeapID heapID);
-void ov42_022272B4(UnkStruct_ov42_02227060 *arg0);
-UnkStruct_ov42_02227114 *ov42_022272BC(UnkStruct_ov42_02227060 *arg0, s16 *arg1, s32 arg2, enum HeapID heapID);
-void ov42_0222740C(UnkStruct_ov42_02227114 *arg0);
-Sprite *ov42_02227430(UnkStruct_ov42_02227114 *arg0);
-void ov42_02227434(UnkStruct_ov42_02227114 *arg0, s16 arg1, s16 arg2);
-void ov42_02227474(UnkStruct_ov42_02227114 *arg0, u16 arg1);
-u16 ov42_02227480(UnkStruct_ov42_02227114 *arg0);
-void ov42_02227490(UnkStruct_ov42_02227114 *arg0, u16 arg1);
-BOOL ov42_022274AC(UnkStruct_ov42_02227114 *arg0);
-s32 ov42_022274B8(UnkStruct_ov42_02227114 *arg0);
-u32 ov42_022274C0(UnkStruct_ov42_02227114 *arg0);
-void ov42_022274C4(UnkStruct_ov42_02227114 *arg0, u16 arg1);
-u16 ov42_022274D0(UnkStruct_ov42_02227114 *arg0);
-void ov42_022274DC(UnkStruct_ov42_02227114 *arg0, s16 arg1, s16 arg2);
-void ov42_02227504(UnkStruct_ov42_02227114 *arg0, s32 arg1, s32 arg2);
-void ov42_02227538(UnkStruct_ov42_02227114 *arg0);
-void ov42_02227570(UnkStruct_ov42_02227060 *arg0, s32 arg1, enum HeapID heapID);
-void ov42_02227604(UnkStruct_ov42_02227060 *arg0, s32 arg1);
-u16 ov42_02227654(s32 arg0);
-s32 ov42_02227680(u32 arg0, s32 arg1);
-s32 ov42_022276AC(s32 arg0, s32 arg1, s32 arg2);
-void ov42_022276DC(UnkStruct_ov42_02227060 *arg0, s32 arg1, u8 arg2, s32 arg3, enum HeapID heapID, s32 arg5);
-void ov42_02227720(UnkStruct_ov42_02227060 *arg0, s32 arg1, s32 arg2, s32 arg3, enum HeapID heapID);
-void ov42_02227874(UnkStruct_ov42_02227060 *arg0, s32 arg1, s32 arg2, s32 arg3, enum HeapID heapID);
-void ov42_02227948(UnkStruct_ov42_02227060 *arg0, s32 arg1);
-void ov42_0222797C(UnkStruct_ov42_02227060 *arg0, s32 arg1);
-void ov42_022279C0(UnkStruct_ov42_02227060 *arg0, s32 arg1);
-BOOL ov42_022279E8(UnkStruct_ov42_02227060 *arg0, s32 arg1);
-void ov42_022279FC(UnkStruct_ov42_02227060 *arg0, s32 arg1, enum HeapID heapID);
-void ov42_02227B04(UnkStruct_ov42_02227060 *arg0);
-BOOL ov42_02227B5C(SpriteResource **spriteResources);
-void ov42_02227B6C(UnkStruct_ov42_02227060 *arg0, s32 arg1, enum HeapID heapID);
-void ov42_02227BE0(UnkStruct_ov42_02227060 *arg0);
-void ov42_02227C18(UnkStruct_ov42_02227060 *arg0, enum HeapID heapID);
-void ov42_02227CA8(UnkStruct_ov42_02227060 *arg0);
-UnkStruct_ov42_02227114 *ov42_02227CF8(UnkStruct_ov42_02227060 *arg0);
-void ov42_02227D30(UnkStruct_ov42_02227114 *arg0);
+CharSpriteManager *CharSpriteManager_New(SpriteList *arg0, PaletteData *arg1, s32 arg2, enum HeapID heapID);
+void CharSpriteManager_Free(CharSpriteManager *arg0);
+void CharSpriteManager_LoadChar(CharSpriteManager *arg0, s32 arg1, u8 arg2, s32 arg3, enum HeapID heapID);
+void CharSpriteManager_UnloadChar(CharSpriteManager *arg0, s32 arg1);
+s32 CharSpriteManager_IsCharLoaded(CharSpriteManager *arg0, s32 arg1);
+void CharSpriteManager_UnloadAllChars(CharSpriteManager *arg0);
+void CharSpriteManager_LoadAvatarChars(CharSpriteManager *arg0, u8 arg1, s32 arg2, enum HeapID heapID);
+void CharSpriteManager_UnloadAvatarChars(CharSpriteManager *arg0);
+void CharSpriteManager_LoadShadow(CharSpriteManager *arg0, u8 arg1, s32 arg2, enum HeapID heapID);
+void CharSpriteManager_UnloadShadow(CharSpriteManager *arg0);
+CharSprite *CharSpriteManager_CreateSprite(CharSpriteManager *arg0, s16 *arg1, s32 arg2, enum HeapID heapID);
+void CharSprite_Delete(CharSprite *arg0);
+Sprite *CharSprite_GetSprite(CharSprite *arg0);
+void CharSprite_SetPosition(CharSprite *arg0, s16 arg1, s16 arg2);
+void CharSprite_SetDrawPriority(CharSprite *arg0, u16 arg1);
+u16 CharSprite_GetDrawPriority(CharSprite *arg0);
+void CharSprite_SetVisible(CharSprite *arg0, u16 arg1);
+BOOL CharSprite_IsVisible(CharSprite *arg0);
+s32 CharSprite_GetAnimSet(CharSprite *arg0);
+u32 CharSprite_GetAnimKind(CharSprite *arg0);
+void CharSprite_SetAnimFrame(CharSprite *arg0, u16 arg1);
+u16 CharSprite_GetAnimFrame(CharSprite *arg0);
+void CharSprite_SetShadowPosition(CharSprite *arg0, s16 arg1, s16 arg2);
+void CharSprite_StartAnim(CharSprite *arg0, s32 arg1, s32 arg2);
+void CharSprite_UpdateAnim(CharSprite *arg0);
+void CharSpriteManager_LoadCellAnims(CharSpriteManager *arg0, s32 arg1, enum HeapID heapID);
+void CharSpriteManager_UnloadCellAnims(CharSpriteManager *arg0, s32 arg1);
+u16 CharSprite_GetCharIndex(s32 arg0);
+s32 CharSprite_IsAnimSetAllowed(u32 arg0, s32 arg1);
+s32 CharSprite_GetCellAnimResId(s32 arg0, s32 arg1, s32 arg2);
+void CharSpriteManager_LoadCharResources(CharSpriteManager *arg0, s32 arg1, u8 arg2, s32 arg3, enum HeapID heapID, s32 arg5);
+void CharSpriteManager_LoadCharWithPalette(CharSpriteManager *arg0, s32 arg1, s32 arg2, s32 arg3, enum HeapID heapID);
+void CharSpriteManager_LoadSharedPaletteChar(CharSpriteManager *arg0, s32 arg1, s32 arg2, s32 arg3, enum HeapID heapID);
+void CharSpriteManager_UnloadCharResources(CharSpriteManager *arg0, s32 arg1);
+void CharSpriteManager_UnloadCharWithPalette(CharSpriteManager *arg0, s32 arg1);
+void CharSpriteManager_UnloadSharedPaletteChar(CharSpriteManager *arg0, s32 arg1);
+BOOL CharSpriteManager_IsCharIndexLoaded(CharSpriteManager *arg0, s32 arg1);
+void CharSpriteManager_LoadShadowResources(CharSpriteManager *arg0, s32 arg1, enum HeapID heapID);
+void CharSpriteManager_UnloadShadowResources(CharSpriteManager *arg0);
+BOOL CharSprite_HasShadowResources(SpriteResource **spriteResources);
+void CharSpriteManager_LoadAvatarPalette(CharSpriteManager *arg0, s32 arg1, enum HeapID heapID);
+void CharSpriteManager_UnloadAvatarPalette(CharSpriteManager *arg0);
+void CharSpriteManager_LoadAvatarCellAnims(CharSpriteManager *arg0, enum HeapID heapID);
+void CharSpriteManager_UnloadAvatarCellAnims(CharSpriteManager *arg0);
+CharSprite *CharSpriteManager_GetFreeSprite(CharSpriteManager *arg0);
+void CharSprite_StepAnim(CharSprite *arg0);
 
-void ov42_02227D48(UnkStruct_ov42_02227114 *arg0, s32 arg1);
-void ov42_02227D54(UnkStruct_ov42_02227114 *arg0, s32 arg1);
-void ov42_02227D64(UnkStruct_ov42_02227114 *arg0, s32 arg1);
-void ov42_02227D74(UnkStruct_ov42_02227114 *arg0, s32 arg1);
-void ov42_02227D88(UnkStruct_ov42_02227114 *arg0, s32 arg1);
-void ov42_02227D98(UnkStruct_ov42_02227114 *arg0, s32 arg1);
-void ov42_02227DA8(UnkStruct_ov42_02227114 *arg0, s32 arg1);
-void ov42_02227DB8(UnkStruct_ov42_02227114 *arg0, s32 arg1);
-void ov42_02227DC8(UnkStruct_ov42_02227114 *arg0, s32 arg1);
-void ov42_02227DD8(UnkStruct_ov42_02227114 *arg0);
-void ov42_02227DE8(UnkStruct_ov42_02227114 *arg0);
-void ov42_02227DF8(UnkStruct_ov42_02227114 *arg0);
-void ov42_02227E18(UnkStruct_ov42_02227114 *arg0);
-void ov42_02227E28(UnkStruct_ov42_02227114 *arg0);
-void ov42_02227E38(UnkStruct_ov42_02227114 *arg0);
-void ov42_02227E48(UnkStruct_ov42_02227114 *arg0);
-void ov42_02227E58(UnkStruct_ov42_02227114 *arg0);
-s32 ov42_02227E68(UnkStruct_ov42_02227114 *arg0);
-void ov42_02227E78(UnkStruct_ov42_02227060 *arg0, SpriteResource *arg1, s32 arg2);
-void *ov42_02227EE0(u16 arg0, u16 arg1, enum HeapID heapID);
-void ov42_02227F28(UnkStruct_ov42_02227F68 *arg0);
-u16 ov42_02227F40(UnkStruct_ov42_02227F68 *arg0);
-u16 ov42_02227F44(UnkStruct_ov42_02227F68 *arg0);
-void ov42_02227F48(UnkStruct_ov42_02227F68 *arg0, const void *arg1);
+void CharSprite_StartAnimStand(CharSprite *arg0, s32 arg1);
+void CharSprite_StartAnimLoop(CharSprite *arg0, s32 arg1);
+void CharSprite_StartAnimWalk(CharSprite *arg0, s32 arg1);
+void CharSprite_StartAnimTurn(CharSprite *arg0, s32 arg1);
+void CharSprite_StartAnimRun(CharSprite *arg0, s32 arg1);
+void CharSprite_StartAnimBump(CharSprite *arg0, s32 arg1);
+void CharSprite_StartAnimWalkSlow(CharSprite *arg0, s32 arg1);
+void CharSprite_StartAnimWalkVeryFast(CharSprite *arg0, s32 arg1);
+void CharSprite_StartAnimWalkFast(CharSprite *arg0, s32 arg1);
+void CharSprite_UpdateAnimLoop(CharSprite *arg0);
+void CharSprite_UpdateAnimWalk(CharSprite *arg0);
+void CharSprite_UpdateAnimTurn(CharSprite *arg0);
+void CharSprite_UpdateAnimRun(CharSprite *arg0);
+void CharSprite_UpdateAnimBump(CharSprite *arg0);
+void CharSprite_UpdateAnimWalkSlow(CharSprite *arg0);
+void CharSprite_UpdateAnimWalkVeryFast(CharSprite *arg0);
+void CharSprite_UpdateAnimWalkFast(CharSprite *arg0);
+s32 CharSprite_IsFree(CharSprite *arg0);
+void CharSpriteManager_LoadPaletteToBuffer(CharSpriteManager *arg0, SpriteResource *arg1, s32 arg2);
+void *Field2DMap_New(u16 arg0, u16 arg1, enum HeapID heapID);
+void Field2DMap_Free(Field2DMap *arg0);
+u16 Field2DMap_GetWidth(Field2DMap *arg0);
+u16 Field2DMap_GetHeight(Field2DMap *arg0);
+void Field2DMap_Load(Field2DMap *arg0, const void *arg1);
 
-UnkStruct_ov42_02227FA4 ov42_02227F68(UnkStruct_ov42_02227F68 *arg0, u32 arg1, u32 arg2);
-s32 ov42_02227FA4(UnkStruct_ov42_02227F68 *arg0, u16 arg1, u16 arg2);
-u32 ov42_02227FDC(UnkStruct_ov42_02227F68 *arg0, u16 arg1, u16 arg2);
-UnkStruct_ov42_022280A8 *ov42_02228010(u32 a0, enum HeapID heapID);
-void ov42_02228050(UnkStruct_ov42_022280A8 *arg0);
-void ov42_02228068(UnkStruct_ov42_022280A8 *arg0, UnkStruct_ov42_02228EB0 *arg1);
-void ov42_0222807C(UnkStruct_ov42_022280A8 *arg0);
-u32 ov42_022280A8(UnkStruct_ov42_022280A8 *arg0);
-UnkStruct_ov42_02228110 *ov42_022280B8(UnkStruct_ov42_022280A8 *arg0, UnkStruct_ov42_02122667 *arg1);
-void ov42_02228100(void *arg0);
-UnkStruct_ov42_02228110 *ov42_02228110(UnkStruct_ov42_022280A8 *arg0, u8 arg1);
-UnkStruct_ov42_02228110 *ov42_02228148(UnkStruct_ov42_022280A8 *arg0, u16 arg1);
-UnkStruct_ov42_02228110 *ov42_02228178(UnkStruct_ov42_022280A8 *arg0, u8 arg1);
-UnkStruct_ov42_02228110 *ov42_02228180(UnkStruct_ov42_022280A8 *arg0, u16 arg1);
-s32 ov42_02228188(UnkStruct_ov42_02228110 *arg0, s32 arg1);
-void ov42_022281F8(UnkStruct_ov42_02228110 *arg0, u32 arg1, s32 arg2);
-UnkStruct_ov44_02232914 ov42_02228270(UnkStruct_ov44_02232914 arg0, s32 arg1);
-u8 ov42_022282A4(s32 arg0);
-UnkStruct_ov42_02228110 *ov42_022282B0(UnkStruct_ov42_022280A8 *arg0);
-UnkStruct_ov44_02232914 ov42_022282DC(UnkStruct_ov42_02228110 *arg0);
-UnkStruct_ov44_02232914 ov42_022282E8(UnkStruct_ov42_02228110 *arg0);
-UnkStruct_ov44_02232914 ov42_022282F4(UnkStruct_ov42_02228110 *arg0);
-void ov42_0222839C(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg1);
-void ov42_022283AC(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg1);
-UnkStruct_ov42_02228110 *ov42_022283BC(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_022280A8 *arg1, s32 arg2);
-UnkStruct_ov42_02228110 *ov42_022284A4(UnkStruct_ov42_022280A8 *arg0, UnkStruct_ov44_02232914 arg1);
-void ov42_02228548(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_02228EB0 *arg1);
-void ov42_02228574(UnkStruct_ov42_02228110 *arg0);
-void ov42_022285A4(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
-void ov42_022285FC(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
-void ov42_02228668(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
-void ov42_02228700(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
-void ov42_02228798(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
-void ov42_022287F0(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
-void ov42_0222885C(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
-void ov42_022288F4(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
-void ov42_0222898C(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
-void ov42_022289F8(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
-void ov42_02228A64(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
-void ov42_02228AD0(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
-s32 ov42_02228B3C(UnkStruct_ov42_02228110 *arg0);
-s32 ov42_02228B40(UnkStruct_ov42_02228110 *arg0);
-s32 ov42_02228B48(UnkStruct_ov42_02228110 *arg0);
-s32 ov42_02228B88(UnkStruct_ov42_02228110 *arg0);
-s32 ov42_02228BC8(UnkStruct_ov42_02228110 *arg0);
-s32 ov42_02228BCC(UnkStruct_ov42_02228110 *arg0);
-s32 ov42_02228BD4(UnkStruct_ov42_02228110 *arg0);
-UnkStruct_ov44_02232914 ov42_02228BDC(UnkStruct_ov44_02232914 arg0, s32 arg1);
-s32 ov42_02228C0C(UnkStruct_ov42_02228110 *arg0);
-void ov42_02228C40(UnkStruct_ov42_02228110 *arg0);
-s32 ov42_02228C80(UnkStruct_ov42_02227F68 *arg0, UnkStruct_ov42_022280A8 *arg1, UnkStruct_ov42_02228CDC *arg2, UnkStruct_ov42_02228EB0 *arg3);
+Field2DMapCell Field2DMap_GetCell(Field2DMap *arg0, u32 arg1, u32 arg2);
+s32 Field2DMap_IsBlocked(Field2DMap *arg0, u16 arg1, u16 arg2);
+u32 Field2DMap_GetTag(Field2DMap *arg0, u16 arg1, u16 arg2);
+Field2DObjectManager *Field2DObjectManager_New(u32 a0, enum HeapID heapID);
+void Field2DObjectManager_Free(Field2DObjectManager *arg0);
+void Field2DObjectManager_StartMove(Field2DObjectManager *arg0, Field2DMove *arg1);
+void Field2DObjectManager_Update(Field2DObjectManager *arg0);
+u32 Field2DObjectManager_GetCapacity(Field2DObjectManager *arg0);
+Field2DObject *Field2DObjectManager_AddObject(Field2DObjectManager *arg0, Field2DObjectTemplate *arg1);
+void Field2DObject_Delete(void *arg0);
+Field2DObject *Field2DObjectManager_FindById(Field2DObjectManager *arg0, u8 arg1);
+Field2DObject *Field2DObjectManager_GetSlot(Field2DObjectManager *arg0, u16 arg1);
+Field2DObject *Field2DObjectManager_GetById(Field2DObjectManager *arg0, u8 arg1);
+Field2DObject *Field2DObjectManager_GetByIndex(Field2DObjectManager *arg0, u16 arg1);
+s32 Field2DObject_GetParam(Field2DObject *arg0, s32 arg1);
+void Field2DObject_SetParam(Field2DObject *arg0, u32 arg1, s32 arg2);
+Field2DPoint Field2D_StepInDirection(Field2DPoint arg0, s32 arg1);
+u8 Field2D_GetOppositeDirection(s32 arg0);
+Field2DObject *Field2DObjectManager_GetFreeSlot(Field2DObjectManager *arg0);
+Field2DPoint Field2DObject_GetPos(Field2DObject *arg0);
+Field2DPoint Field2DObject_GetPrevPos(Field2DObject *arg0);
+Field2DPoint Field2DObject_GetDrawPos(Field2DObject *arg0);
+void Field2DObject_SetPos(Field2DObject *arg0, Field2DPoint arg1);
+void Field2DObject_SetPrevPos(Field2DObject *arg0, Field2DPoint arg1);
+Field2DObject *Field2DObject_FindObjectInDirection(Field2DObject *arg0, Field2DObjectManager *arg1, s32 arg2);
+Field2DObject *Field2DObjectManager_FindObjectAt(Field2DObjectManager *arg0, Field2DPoint arg1);
+void Field2DObject_StartMove(Field2DObject *arg0, Field2DMove *arg1);
+void Field2DObject_Update(Field2DObject *arg0);
+void Field2DObject_StartStand(Field2DObject *arg0, Field2DPoint arg1, u32 arg2);
+void Field2DObject_StartTurn(Field2DObject *arg0, Field2DPoint arg1, u32 arg2);
+void Field2DObject_StartWalk(Field2DObject *arg0, Field2DPoint arg1, u32 arg2);
+void Field2DObject_StartRun(Field2DObject *arg0, Field2DPoint arg1, u32 arg2);
+void Field2DObject_StartPause(Field2DObject *arg0, Field2DPoint arg1, u32 arg2);
+void Field2DObject_StartBump(Field2DObject *arg0, Field2DPoint arg1, u32 arg2);
+void Field2DObject_StartWalkSlow(Field2DObject *arg0, Field2DPoint arg1, u32 arg2);
+void Field2DObject_StartWalkFast(Field2DObject *arg0, Field2DPoint arg1, u32 arg2);
+void Field2DObject_StartWalkInPlaceVeryFast(Field2DObject *arg0, Field2DPoint arg1, u32 arg2);
+void Field2DObject_StartWalkInPlaceFast(Field2DObject *arg0, Field2DPoint arg1, u32 arg2);
+void Field2DObject_StartWalkInPlace(Field2DObject *arg0, Field2DPoint arg1, u32 arg2);
+void Field2DObject_StartWalkInPlaceSlow(Field2DObject *arg0, Field2DPoint arg1, u32 arg2);
+s32 Field2DObject_UpdateStand(Field2DObject *arg0);
+s32 Field2DObject_UpdateTurn(Field2DObject *arg0);
+s32 Field2DObject_UpdateWalk(Field2DObject *arg0);
+s32 Field2DObject_UpdateRun(Field2DObject *arg0);
+s32 Field2DObject_UpdatePause(Field2DObject *arg0);
+s32 Field2DObject_UpdateBump(Field2DObject *arg0);
+s32 Field2DObject_UpdateWalkInPlace(Field2DObject *arg0);
+Field2DPoint Field2D_GetStepTarget(Field2DPoint arg0, s32 arg1);
+s32 Field2DObject_AdvanceActionFrame(Field2DObject *arg0);
+void Field2DObject_EndAction(Field2DObject *arg0);
+s32 Field2DObjectManager_TryCommand(Field2DMap *arg0, Field2DObjectManager *arg1, Field2DCommand *arg2, Field2DMove *arg3);
 
-s32 ov42_02228CDC(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_02227F68 *arg1, UnkStruct_ov42_022280A8 *arg2, UnkStruct_ov42_02228CDC *arg3, UnkStruct_ov42_02228EB0 *arg4);
-s32 ov42_02228D08(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_02227F68 *arg1, UnkStruct_ov42_022280A8 *arg2, UnkStruct_ov42_02228CDC *arg3, UnkStruct_ov42_02228EB0 *arg4);
-s32 ov42_02228D44(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_02227F68 *arg1, UnkStruct_ov42_022280A8 *arg2, UnkStruct_ov42_02228CDC *arg3, UnkStruct_ov42_02228EB0 *arg4);
-s32 ov42_02228DB8(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_02227F68 *arg1, UnkStruct_ov42_022280A8 *arg2, UnkStruct_ov42_02228CDC *arg3, UnkStruct_ov42_02228EB0 *arg4);
-s32 ov42_02228DC8(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_02227F68 *arg1, UnkStruct_ov42_022280A8 *arg2, UnkStruct_ov42_02228CDC *arg3, UnkStruct_ov42_02228EB0 *arg4);
-s32 ov42_02228DF0(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_02227F68 *arg1, UnkStruct_ov42_022280A8 *arg2, UnkStruct_ov42_02228CDC *arg3, UnkStruct_ov42_02228EB0 *arg4);
-s32 ov42_02228DFC(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_02227F68 *arg1, UnkStruct_ov42_022280A8 *arg2, UnkStruct_ov42_02228CDC *arg3, UnkStruct_ov42_02228EB0 *arg4);
-s32 ov42_02228E0C(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_02227F68 *arg1, UnkStruct_ov42_022280A8 *arg2, UnkStruct_ov42_02228CDC *arg3, UnkStruct_ov42_02228EB0 *arg4);
-s32 ov42_02228E34(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_02227F68 *arg1, u8 arg2);
-BOOL ov42_02228E9C(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_022280A8 *arg1, u8 arg2);
-void ov42_02228EB0(UnkStruct_ov42_02228EB0 *arg0, UnkStruct_ov42_02228110 *arg1, u16 arg2, u8 arg3, s32 arg4);
-UnkStruct_ov42_02228EDC *ov42_02228EDC(SpriteList *arg0, PaletteData *arg1, u16 arg2, s8 arg3, enum HeapID heapID);
-UnkStruct_ov42_02228EDC *ov42_02228F24(SpriteList *arg0, PaletteData *arg1, u16 arg2, s32 arg3, s32 arg4, s32 arg5, enum HeapID heapID);
-void ov42_02228F94(UnkStruct_ov42_02228EDC *arg0);
-void ov42_02228FE0(UnkStruct_ov42_02228EDC *arg0, s32 arg1, s32 arg2, enum HeapID heapID);
-void ov42_02229004(UnkStruct_ov42_02228EDC *arg0, s32 arg1);
-s32 ov42_02229010(UnkStruct_ov42_02228EDC *arg0, s32 arg1);
-void ov42_0222901C(UnkStruct_ov42_02228EDC *arg0);
-void ov42_02229028(UnkStruct_ov42_02228EDC *arg0, s32 arg1, enum HeapID heapID);
-UnkStruct_ov42_0222903C *ov42_0222903C(UnkStruct_ov42_02228EDC *arg0, UnkStruct_ov42_02228110 *arg1, u32 arg2, enum HeapID heapID);
-void ov42_022290C4(UnkStruct_ov42_0222903C *arg0);
-void ov42_022290DC(UnkStruct_ov42_02228EDC *arg0);
-void ov42_0222910C(UnkStruct_ov42_0222903C *arg0);
-void ov42_0222919C(UnkStruct_ov42_0222903C *arg0, s8 arg1);
-void ov42_022291A0(UnkStruct_ov42_0222903C *arg0);
-void ov42_022291AC(UnkStruct_ov42_0222903C *arg0);
-void ov42_022291B8(UnkStruct_ov42_0222903C *arg0);
-void ov42_022291D8(UnkStruct_ov42_0222903C *arg0, UnkStruct_ov44_02232914 arg1);
-s32 ov42_022291F4(UnkStruct_ov42_0222903C *arg0);
-void ov42_02229200(UnkStruct_ov42_0222903C *arg0, u16 arg1);
-u16 ov42_0222920C(UnkStruct_ov42_0222903C *arg0);
-void ov42_02229218(UnkStruct_ov42_0222903C *arg0, s32 arg1);
-u32 ov42_0222922C(s16 arg0, u8 arg1);
-u8 ov42_02229248(UnkStruct_ov42_0222903C *arg0);
-void ov42_02229258(UnkStruct_ov42_0222903C *arg0, UnkStruct_ov44_02232914 arg1);
-s32 ov42_02229274(UnkStruct_ov42_0222903C *arg0);
-UnkStruct_ov42_0222903C *ov42_02229284(UnkStruct_ov42_02228EDC *arg0);
-u8 ov42_022292BC(UnkStruct_ov42_02227114 *arg0, s32 arg1);
-void ov42_022292D8(UnkStruct_ov42_0222903C *arg0, s16 *arg1, s16 *arg2);
-void ov42_02229308(UnkStruct_ov42_0222903C *arg0, u8 arg1, s32 arg2);
-void ov42_02229358(UnkStruct_ov44_02232914 *arg0, UnkStruct_ov42_02228110 *arg1);
-void ov42_02229394(UnkStruct_ov44_02232914 *arg0);
-void ov42_022293A0(UnkStruct_ov44_02232914 *arg0, s16 arg1, s16 arg2);
-s16 ov42_022293A8(UnkStruct_ov44_02232914 *arg0);
-s16 ov42_022293B0(UnkStruct_ov44_02232914 *arg0);
-UnkStruct_ov42_022293B8 *ov42_022293B8(G2dRenderer *g2dRenderer, BgConfig *bgConfig, const UnkTemplate_ov42_022293B8 *arg2, enum HeapID heapID);
-void ov42_0222940C(UnkStruct_ov42_022293B8 *arg0);
-void ov42_02229420(UnkStruct_ov42_022293B8 *arg0, UnkStruct_ov44_02232914 *arg1);
-void ov42_02229514(BgConfig *bgConfig, s32 arg1, const UnkTemplate_ov42_022293B8 *arg2);
-void ov42_02229570(UnkStruct_ov42_022293B8 *arg0, s16 arg1, s16 arg2);
-void ov42_02229600(BgConfig *bgConfig, s32 arg1, NNSG2dScreenData *nnsg2dScreenData, s16 arg3, s16 arg4);
-void ov42_022296F0(BgConfig *bgConfig, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, void *arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA);
-u8 ov42_02229880(u8 arg0, u8 arg1);
-void *ov42_022298B4(void *arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, UnkStruct_ov44_02232914 *arg6);
-UnkStruct_ov42_02229A40 *ov42_02229974(s32 arg0, enum HeapID heapID);
-void ov42_022299AC(u32 *arg0);
-void ov42_022299C0(UnkStruct_ov42_022299C0 *arg0, UnkStruct_ov44_02232031 *arg1);
-s32 ov42_02229A08(UnkStruct_ov42_022299C0 *arg0, UnkStruct_ov44_02232031 *arg1);
-UnkStruct_ov42_02229A40 *ov42_02229A40(s32 arg0, enum HeapID heapID);
-void ov42_02229A78(UnkStruct_ov42_02229A40 *arg0);
-void ov42_02229A8C(UnkStruct_ov42_02229A40 *arg0, UnkStruct_ov42_02228CDC *arg1);
-u32 ov42_02229AC8(UnkStruct_ov42_02229A40 *arg0, UnkStruct_ov42_02228CDC *arg1);
+s32 Field2DCommand_CheckStand(Field2DObject *arg0, Field2DMap *arg1, Field2DObjectManager *arg2, Field2DCommand *arg3, Field2DMove *arg4);
+s32 Field2DCommand_CheckTurn(Field2DObject *arg0, Field2DMap *arg1, Field2DObjectManager *arg2, Field2DCommand *arg3, Field2DMove *arg4);
+s32 Field2DCommand_CheckWalk(Field2DObject *arg0, Field2DMap *arg1, Field2DObjectManager *arg2, Field2DCommand *arg3, Field2DMove *arg4);
+s32 Field2DCommand_CheckRun(Field2DObject *arg0, Field2DMap *arg1, Field2DObjectManager *arg2, Field2DCommand *arg3, Field2DMove *arg4);
+s32 Field2DCommand_CheckPause(Field2DObject *arg0, Field2DMap *arg1, Field2DObjectManager *arg2, Field2DCommand *arg3, Field2DMove *arg4);
+s32 Field2DCommand_CheckBump(Field2DObject *arg0, Field2DMap *arg1, Field2DObjectManager *arg2, Field2DCommand *arg3, Field2DMove *arg4);
+s32 Field2DCommand_CheckWalkSlow(Field2DObject *arg0, Field2DMap *arg1, Field2DObjectManager *arg2, Field2DCommand *arg3, Field2DMove *arg4);
+s32 Field2DCommand_CheckWalkInPlace(Field2DObject *arg0, Field2DMap *arg1, Field2DObjectManager *arg2, Field2DCommand *arg3, Field2DMove *arg4);
+s32 Field2DObject_IsMapBlockedInDirection(Field2DObject *arg0, Field2DMap *arg1, u8 arg2);
+BOOL Field2DObject_IsObjectInDirection(Field2DObject *arg0, Field2DObjectManager *arg1, u8 arg2);
+void Field2DMove_Init(Field2DMove *arg0, Field2DObject *arg1, u16 arg2, u8 arg3, s32 arg4);
+Field2DObjectSpriteManager *Field2DObjectSpriteManager_New(SpriteList *arg0, PaletteData *arg1, u16 arg2, s8 arg3, enum HeapID heapID);
+Field2DObjectSpriteManager *Field2DObjectSpriteManager_NewWithShadow(SpriteList *arg0, PaletteData *arg1, u16 arg2, s32 arg3, s32 arg4, s32 arg5, enum HeapID heapID);
+void Field2DObjectSpriteManager_Free(Field2DObjectSpriteManager *arg0);
+void Field2DObjectSpriteManager_LoadChar(Field2DObjectSpriteManager *arg0, s32 arg1, s32 arg2, enum HeapID heapID);
+void Field2DObjectSpriteManager_UnloadChar(Field2DObjectSpriteManager *arg0, s32 arg1);
+s32 Field2DObjectSpriteManager_IsCharLoaded(Field2DObjectSpriteManager *arg0, s32 arg1);
+void Field2DObjectSpriteManager_UnloadAllChars(Field2DObjectSpriteManager *arg0);
+void Field2DObjectSpriteManager_LoadAvatarChars(Field2DObjectSpriteManager *arg0, s32 arg1, enum HeapID heapID);
+Field2DObjectSprite *Field2DObjectSpriteManager_CreateSprite(Field2DObjectSpriteManager *arg0, Field2DObject *arg1, u32 arg2, enum HeapID heapID);
+void Field2DObjectSprite_Delete(Field2DObjectSprite *arg0);
+void Field2DObjectSpriteManager_Update(Field2DObjectSpriteManager *arg0);
+void Field2DObjectSprite_Update(Field2DObjectSprite *arg0);
+void Field2DObjectSprite_SetAutoUpdate(Field2DObjectSprite *arg0, s8 arg1);
+void Field2DObjectSprite_StartLoopAnim(Field2DObjectSprite *arg0);
+void Field2DObjectSprite_UpdateAnim(Field2DObjectSprite *arg0);
+void Field2DObjectSprite_SyncAnim(Field2DObjectSprite *arg0);
+void Field2DObjectSprite_SetPosition(Field2DObjectSprite *arg0, Field2DPoint arg1);
+s32 Field2DObjectSprite_IsVisible(Field2DObjectSprite *arg0);
+void Field2DObjectSprite_SetVisible(Field2DObjectSprite *arg0, u16 arg1);
+u16 Field2DObjectSprite_GetDrawPriority(Field2DObjectSprite *arg0);
+void Field2DObjectSprite_FaceDirection(Field2DObjectSprite *arg0, s32 arg1);
+u32 Field2DObjectSprite_CalcDrawPriority(s16 arg0, u8 arg1);
+u8 Field2DObjectSprite_GetPaletteOffset(Field2DObjectSprite *arg0);
+void Field2DObjectSprite_SetShadowPosition(Field2DObjectSprite *arg0, Field2DPoint arg1);
+s32 Field2DObjectSprite_IsFree(Field2DObjectSprite *arg0);
+Field2DObjectSprite *Field2DObjectSpriteManager_GetFreeSprite(Field2DObjectSpriteManager *arg0);
+u8 Field2DObjectSprite_GetAnimKindForAction(CharSprite *arg0, s32 arg1);
+void Field2DObjectSprite_GetDrawPos(Field2DObjectSprite *arg0, s16 *arg1, s16 *arg2);
+void Field2DObjectSprite_StartAnim(Field2DObjectSprite *arg0, u8 arg1, s32 arg2);
+void Field2DCamera_CenterOnObject(Field2DPoint *arg0, Field2DObject *arg1);
+void Field2DCamera_Init(Field2DPoint *arg0);
+void Field2DCamera_Set(Field2DPoint *arg0, s16 arg1, s16 arg2);
+s16 Field2DCamera_GetY(Field2DPoint *arg0);
+s16 Field2DCamera_GetX(Field2DPoint *arg0);
+Field2DBgLayer *Field2DBgLayer_New(G2dRenderer *g2dRenderer, BgConfig *bgConfig, const Field2DBgLayerTemplate *arg2, enum HeapID heapID);
+void Field2DBgLayer_Free(Field2DBgLayer *arg0);
+void Field2DBgLayer_SetCamera(Field2DBgLayer *arg0, Field2DPoint *arg1);
+void Field2DBgLayer_InitBg(BgConfig *bgConfig, s32 arg1, const Field2DBgLayerTemplate *arg2);
+void Field2DBgLayer_Scroll(Field2DBgLayer *arg0, s16 arg1, s16 arg2);
+void Field2DBgLayer_CopyVisibleTiles(BgConfig *bgConfig, s32 arg1, NNSG2dScreenData *nnsg2dScreenData, s16 arg3, s16 arg4);
+void Field2DBgLayer_CopyTilemapRect(BgConfig *bgConfig, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, void *arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA);
+u8 Field2DBgLayer_GetScreenBlockLayout(u8 arg0, u8 arg1);
+void *Field2DBgLayer_GetScreenBlock(void *arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, Field2DPoint *arg6);
+Field2DCommandQueue *Field2DMoveQueue_New(s32 arg0, enum HeapID heapID);
+void Field2DMoveQueue_Free(u32 *arg0);
+void Field2DMoveQueue_Push(Field2DMoveQueue *arg0, Field2DMoveQueueEntry *arg1);
+s32 Field2DMoveQueue_Pop(Field2DMoveQueue *arg0, Field2DMoveQueueEntry *arg1);
+Field2DCommandQueue *Field2DCommandQueue_New(s32 arg0, enum HeapID heapID);
+void Field2DCommandQueue_Free(Field2DCommandQueue *arg0);
+void Field2DCommandQueue_Push(Field2DCommandQueue *arg0, Field2DCommand *arg1);
+u32 Field2DCommandQueue_Pop(Field2DCommandQueue *arg0, Field2DCommand *arg1);
 
 #endif // POKEHEARTGOLD_OVY_42_H

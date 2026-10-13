@@ -16,9 +16,9 @@ struct HiddenObjectCover {
 };
 
 typedef struct {
-    int unk0;
+    int coverIndex;
     FieldEffectManager *manager;
-    HiddenObjectCover *unk8;
+    HiddenObjectCover *cover;
     LocalMapObject *mapObject;
     NNSG3dRenderObj *renderObj;
 } HiddenObjectCoverEffectArgs;
@@ -89,11 +89,11 @@ void HiddenObjectCover_Spawn(LocalMapObject *mapObject, int a1) {
     SetPositionToTileCenter(x, z, &temp);
     FieldSystem_SnapToTerrainHeight(fieldSystem, &temp);
 
-    temp2.unk0 = a1;
+    temp2.coverIndex = a1;
     temp2.manager = manager;
 
     HiddenObjectCover *val1 = FieldEffectManager_GetRendererData(manager, 0xe);
-    temp2.unk8 = val1;
+    temp2.cover = val1;
     temp2.mapObject = mapObject;
     temp2.renderObj = HiddenObjectCover_GetRenderObj(val1, a1);
 

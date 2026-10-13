@@ -79,14 +79,14 @@ SaveApricornBox *Save_ApricornBox_Get(SaveData *saveData) {
 
 void InitApricornBox(SaveApricornBox *apricornBox) {
     MI_CpuFill8(apricornBox, 0, sizeof(SaveApricornBox));
-    ClearApricornJuice(apricornBox->unk_0C);
+    ClearApricornJuice(apricornBox->juice);
     ApricornBox_ClearJuiceRecords(apricornBox);
 }
 
 void ApricornBox_ClearJuiceRecords(SaveApricornBox *apricornBox) {
     int i;
     for (i = 0; i < 3; i++) {
-        ClearApricornJuiceRecord(apricornBox->unk_20[i]);
+        ClearApricornJuiceRecord(apricornBox->juiceRecords[i]);
     }
 }
 
@@ -156,11 +156,11 @@ int ApricornBox_GetKurtBall(SaveApricornBox *apricornBox) {
 }
 
 void ApricornBox_SetMixState(SaveApricornBox *apricornBox, u32 value) {
-    apricornBox->unk_1C = (apricornBox->unk_1C & 0x3FFFFFFF) | (value << 30);
+    apricornBox->mixWord = (apricornBox->mixWord & 0x3FFFFFFF) | (value << 30);
 }
 
 u32 ApricornBox_GetMixState(SaveApricornBox *apricornBox) {
-    return apricornBox->unk_1C >> 30;
+    return apricornBox->mixWord >> 30;
 }
 
 int ApricornBox_CountQueuedApricorns(SaveApricornBox *box) {
@@ -169,7 +169,7 @@ int ApricornBox_CountQueuedApricorns(SaveApricornBox *box) {
     u16 value;
 
     count = 0;
-    value = box->unk_0A;
+    value = box->queuedApricorns;
     for (i = 0; i < 5; i++) {
         if (value & 7) {
             count++;
@@ -180,7 +180,7 @@ int ApricornBox_CountQueuedApricorns(SaveApricornBox *box) {
 }
 
 BOOL ApricornBox_QueueApricorn(SaveApricornBox *box, int apricorn, u32 value) {
-    u16 slots = box->unk_0A;
+    u16 slots = box->queuedApricorns;
     u16 encoded;
     int i;
     if (apricorn >= 7) {
@@ -193,11 +193,11 @@ BOOL ApricornBox_QueueApricorn(SaveApricornBox *box, int apricorn, u32 value) {
             continue;
         }
         encoded = ((apricorn + 1) & 7) << (i * 3);
-        box->unk_0A |= encoded;
-        box->unk_0A |= 2 << 14;
-        box->unk_14 = value;
-        if (box->unk_09 == 0) {
-            box->unk_18 = value;
+        box->queuedApricorns |= encoded;
+        box->queuedApricorns |= 2 << 14;
+        box->mixStartSteps = value;
+        if (box->juiceServings == 0) {
+            box->juiceAgingSteps = value;
         }
         *(u32 *)((u8 *)box + 0x1C) &= 0xC0000000;
         ApricornBox_TakeApricorn(box, apricorn, 1);
@@ -224,19 +224,19 @@ int ApricornBox_GetMixProgressLevel(SaveApricornBox *box) {
 void sub_02031CCC(SaveApricornBox *box, int amount) {
     int increment = amount * 10;
     int value;
-    if (box->unk_09 != 0) {
-        value = box->unk_0C[2];
+    if (box->juiceServings != 0) {
+        value = box->juice[2];
         value += increment;
         if (value > 255) {
-            box->unk_0C[2] = 255;
+            box->juice[2] = 255;
         } else {
-            box->unk_0C[2] = value;
+            box->juice[2] = value;
         }
     }
 }
 
 u8 ApricornBox_GetJuiceServings(SaveApricornBox *box) {
-    return box->unk_09;
+    return box->juiceServings;
 }
 
 BOOL ApricornBox_GetJuice(SaveApricornBox *box, int index, UnkStruct_02031CEC *out) {
@@ -421,31 +421,31 @@ int sub_02032004(void *data) {
 }
 
 int ApricornBox_UseJuiceServing(SaveApricornBox *box) {
-    if (box->unk_09 == 0) {
+    if (box->juiceServings == 0) {
         return 0;
     }
-    box->unk_09--;
-    if (box->unk_09 == 0) {
-        ClearApricornJuice(box->unk_0C);
-        box->unk_18 = 0;
-        box->unk_14 = 0;
+    box->juiceServings--;
+    if (box->juiceServings == 0) {
+        ClearApricornJuice(box->juice);
+        box->juiceAgingSteps = 0;
+        box->mixStartSteps = 0;
         box->mixProgress = 0;
     }
-    return box->unk_09;
+    return box->juiceServings;
 }
 
 void ApricornBox_UpdateSteps(SaveApricornBox *box, u32 steps) {
     u32 difference;
-    if ((((u32)box->unk_0A << 16) >> 31) != 0 || box->unk_09 != 0) {
-        difference = steps - box->unk_18;
+    if ((((u32)box->queuedApricorns << 16) >> 31) != 0 || box->juiceServings != 0) {
+        difference = steps - box->juiceAgingSteps;
         if (difference >= 100) {
             sub_02032340(box, difference / 100);
-            box->unk_18 = steps - difference % 100;
+            box->juiceAgingSteps = steps - difference % 100;
         }
-        if ((((u32)box->unk_0A << 16) >> 31) != 0) {
-            box->mixProgress = steps - box->unk_14;
+        if ((((u32)box->queuedApricorns << 16) >> 31) != 0) {
+            box->mixProgress = steps - box->mixStartSteps;
             if (box->mixProgress >= 100) {
-                if (box->unk_09 != 0) {
+                if (box->juiceServings != 0) {
                     ApricornBox_SetMixState(box, 3);
                 } else {
                     ApricornBox_SetMixState(box, 2);
@@ -503,7 +503,7 @@ void ApricornBox_StoreJuiceRecords(SaveApricornBox *box, ApricornRecord *records
     u32 destIndex;
 
     do {
-        if (!ApricornJuice_IsValid((UnkStruct_02031CEC *)&box->unk_20[initialIndex][0x18])) {
+        if (!ApricornJuice_IsValid((UnkStruct_02031CEC *)&box->juiceRecords[initialIndex][0x18])) {
             break;
         }
         numRecords++;
@@ -524,7 +524,7 @@ void ApricornBox_StoreJuiceRecords(SaveApricornBox *box, ApricornRecord *records
         foundIndex = 0;
         found = FALSE;
         {
-            ApricornRecord *boxRecord = (ApricornRecord *)box->unk_20;
+            ApricornRecord *boxRecord = (ApricornRecord *)box->juiceRecords;
             j = found;
             do {
                 if (ApricornRecord_IsSameTrainer(records, boxRecord)) {
@@ -590,11 +590,11 @@ String *ApricornBox_GetJuiceFlavorName(SaveApricornBox *box, u16 type, u32 heapI
 }
 
 void sub_02032340(SaveApricornBox *box, u8 amount) {
-    int value = box->unk_0C[2] + amount;
+    int value = box->juice[2] + amount;
     if (value > 255) {
-        box->unk_0C[2] = 255;
+        box->juice[2] = 255;
     } else {
-        box->unk_0C[2] = value;
+        box->juice[2] = value;
     }
 }
 

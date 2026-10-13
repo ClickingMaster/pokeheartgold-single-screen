@@ -31,7 +31,7 @@
 #define FRONTIER_ID_PLAYER    0xEEEE
 #define FRONTIER_ID_LINK_MONS 0xEEEF
 
-typedef UnkStruct_ov42_02228110 *(*FrontierMapGetObjectFunc)(UnkStruct_ov42_022280A8 *objectManager, u16 id);
+typedef Field2DObject *(*FrontierMapGetObjectFunc)(Field2DObjectManager *objectManager, u16 id);
 
 // Result of the comparison commands (0: less, 1: equal, 2: greater) x the condition byte of a jump/call.
 extern const u8 ov80_0223B9D8[][3];
@@ -124,7 +124,7 @@ u16 *FrontierScript_GetVarPtr(FrontierScriptContext *ctx, u32 index) {
         return NULL;
     }
     if (index < FRONTIER_VAR_SYSTEM_START) {
-        return &ctx->unk_08[index - FRONTIER_VAR_TASK_START];
+        return &ctx->taskVars[index - FRONTIER_VAR_TASK_START];
     }
     if (index < FRONTIER_VAR_DATA_START) {
         return FrontierSystem_GetVarPtr(ctx->frontierSystem, index - FRONTIER_VAR_SYSTEM_START);
@@ -241,14 +241,14 @@ u8 FrontierScript_Compare(u16 a, u16 b) {
 
 BOOL FrtCmd_032(FrontierScriptContext *ctx) {
     u16 value = FrontierScript_ReadVar(ctx);
-    ctx->unk_8C = FrontierScript_Compare(value, FrontierScriptContext_ReadHalfWord(ctx));
+    ctx->comparisonResult = FrontierScript_Compare(value, FrontierScriptContext_ReadHalfWord(ctx));
     return FALSE;
 }
 
 BOOL FrtCmd_033(FrontierScriptContext *ctx) {
     u16 *a = FrontierScript_ReadVarPtr(ctx);
     u16 *b = FrontierScript_ReadVarPtr(ctx);
-    ctx->unk_8C = FrontierScript_Compare(*a, *b);
+    ctx->comparisonResult = FrontierScript_Compare(*a, *b);
     return FALSE;
 }
 
@@ -265,7 +265,7 @@ BOOL FrtCmd_010(FrontierScriptContext *ctx) {
 BOOL FrtCmd_011(FrontierScriptContext *ctx) {
     u8 condition = FrontierScriptContext_ReadByte(ctx);
     u32 offset = FrontierScriptContext_ReadWord(ctx);
-    if (ov80_0223B9D8[condition][ctx->unk_8C] == TRUE) {
+    if (ov80_0223B9D8[condition][ctx->comparisonResult] == TRUE) {
         FrontierScript_Jump(ctx, ctx->scriptPtr + offset);
     }
     return FALSE;
@@ -286,7 +286,7 @@ BOOL FrtCmd_013(FrontierScriptContext *ctx) {
 BOOL FrtCmd_014(FrontierScriptContext *ctx) {
     int condition = FrontierScriptContext_ReadByte(ctx);
     int offset = FrontierScriptContext_ReadWord(ctx);
-    if (ov80_0223B9D8[condition][ctx->unk_8C] == TRUE) {
+    if (ov80_0223B9D8[condition][ctx->comparisonResult] == TRUE) {
         FrontierScriptContext_Call(ctx, ctx->scriptPtr + offset);
     }
     return FALSE;
@@ -584,7 +584,7 @@ BOOL FrtCmd_036(FrontierScriptContext *ctx) {
 BOOL FrtCmd_037(FrontierScriptContext *ctx) {
     FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     // the id goes to overlay 42 as the full halfword (the original call does not narrow it to the u8 parameter)
-    UnkStruct_ov42_02228110 *object = ((FrontierMapGetObjectFunc)ov42_02228110)(map->objectManager, FrontierScript_ReadVar(ctx));
+    Field2DObject *object = ((FrontierMapGetObjectFunc)Field2DObjectManager_FindById)(map->objectManager, FrontierScript_ReadVar(ctx));
     FrontierMap_DeleteObject(map, object);
     return FALSE;
 }
@@ -593,12 +593,12 @@ BOOL FrtCmd_038(FrontierScriptContext *ctx) {
     FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     u16 id = FrontierScript_ReadVar(ctx);
     u8 state = FrontierScriptContext_ReadByte(ctx);
-    UnkStruct_ov42_0222903C *objectSprite = NULL;
+    Field2DObjectSprite *objectSprite = NULL;
     FrontierMap_GetObjectById(map, id, NULL, &objectSprite);
     if (objectSprite == NULL) {
         GF_AssertFail();
     }
-    ov42_02229200(objectSprite, state);
+    Field2DObjectSprite_SetVisible(objectSprite, state);
     return FALSE;
 }
 

@@ -4351,7 +4351,7 @@ BOOL ScrCmd_682(ScriptContext *ctx) {
 BOOL ScrCmd_691(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    if (GF_RTC_DateTimeToSec() - fieldSystem->unkB4 >= 120) {
+    if (GF_RTC_DateTimeToSec() - fieldSystem->plazaLoginTime >= 120) {
         *p_ret = TRUE;
     } else {
         *p_ret = FALSE;

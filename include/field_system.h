@@ -40,17 +40,17 @@
 
 typedef struct FollowMon {
     LocalMapObject *mapObject;
-    u32 unk4;
-    u32 unk8;
-    u32 unkC;
+    u32 queuedMovement;
+    u32 queuedX;
+    u32 queuedZ;
     u32 species;
     u8 gender;
-    u8 unk15;
+    u8 recreatePending;
     u8 active;
     u8 shiny;
     u16 form;
     u16 dummy;
-    u32 unk1C;
+    u32 queuedStepState;
 } FollowMon;
 
 struct GearPhoneRingManager {
@@ -63,12 +63,12 @@ struct GearPhoneRingManager {
     u8 callerId;
     u8 isScriptedCall;
     u8 callScriptID;
-    u8 unk_arr5[2];
+    u8 callerParams[2];
     u8 callTriggerID;
-    s32 unk_var8;
-    s32 unk_varC;
+    s32 elapsedMinutes;
+    s32 callIntervalMinutes;
     u16 maxActiveDuration;
-    u16 unk_var12;
+    u16 randomCallChance;
     s64 activeTimer;                       // Seconds? see GearPhoneRingManager_HandleTimeAdvance
     PhoneBookEntry entry;                  // 0x1c
     SavePokegear *pokegearData;            // 0x30
@@ -167,7 +167,7 @@ typedef struct FollowMonMovementStep {
     u8 facing; // direction + 1; 0xFF ends the script
     u8 duration;
     s8 dx;
-    s8 unk3;
+    s8 dy;
     s8 dz;
     u8 playSound;
     u8 unk6;
@@ -250,14 +250,14 @@ struct FieldSystem {
     UnkStruct_02092BB8 *unkA8;
     u32 unkAC;
     void *unkB0;
-    s64 unkB4;
+    s64 plazaLoginTime;
     int fieldMapUpdateFlags;     // FieldMap_UpdateFrame steps: bit 0 texture free, 1 map load tick, 2 3D render, 3 MapPropAnimationPoolList_Update
     Field3dRenderObjManager *renderObjManager;
     int environmentSoundState;   // Used to keep track of the active weather/soundplate sound and their associated loading status.
     MapPropAnimationPoolList *mapPropAnimationPools;
     void *areaMapAnimation;
     u16 lastTouchMenuInput;
-    u8 unkD2_0 : 6;
+    u8 startMenuState : 6;
     u8 textbox_open : 1;
     u8 unkD2_7 : 1;
     u8 startMenuCursorPos;
@@ -270,7 +270,7 @@ struct FieldSystem {
     FollowMonMood *followMonMood;
     MenuInputStateMgr menuInputState; // Tracks whether the last menu input was touch or keypad
     u8 startMenuInputState;
-    u8 unk_111[3];
+    u8 safariDecorationCursorPos[3];
     GearPhoneRingManager *phoneRingManager;
     BugContest *bugContest;
     fx32 unk11C;
@@ -287,7 +287,7 @@ typedef struct FieldInput {
     u16 mapTransition : 1;
     u16 movement : 1;
     u16 unk0_8 : 1;
-    u16 unk0_9 : 1;
+    u16 switchBottomScreen : 1;
     u16 unk0_A : 1;
     u16 unk0_B : 1;
     u16 unk0_C : 1;

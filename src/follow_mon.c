@@ -1581,7 +1581,7 @@ void FollowMon_ChangeMon(MapObjectManager *mapObjectManager, u32 mapno) {
             followPokeObj = MapObjectManager_GetFirstActiveObjectByID(fieldSystem->mapObjectManager, obj_partner_poke);
 
             if (followPokeObj == NULL) {
-                fieldSystem->followMon.unk15 = 1;
+                fieldSystem->followMon.recreatePending = 1;
             } else {
                 form = GetMonData(mon, MON_DATA_FORM, NULL);
                 gender = GetMonGender(mon);
@@ -1629,7 +1629,7 @@ void FollowMon_ChangeMon(MapObjectManager *mapObjectManager, u32 mapno) {
 
                 fieldSystem->followMon.mapObject = followPokeObj;
                 fieldSystem->followMon.active = TRUE;
-                fieldSystem->followMon.unk15 = 1;
+                fieldSystem->followMon.recreatePending = 1;
             }
         }
     }
@@ -1840,11 +1840,11 @@ void FollowMon_Hide(FieldSystem *fieldSystem) {
 static void FollowMon_Clear(FollowMon *followMon) {
     followMon->active = FALSE;
     followMon->mapObject = NULL;
-    followMon->unk4 = 0;
-    followMon->unk1C = 0;
-    followMon->unk8 = 0;
-    followMon->unkC = 0;
-    followMon->unk15 = 0;
+    followMon->queuedMovement = 0;
+    followMon->queuedStepState = 0;
+    followMon->queuedX = 0;
+    followMon->queuedZ = 0;
+    followMon->recreatePending = 0;
 }
 
 static void FollowMon_SetObjectShiny(LocalMapObject *mapObject, BOOL enable) {

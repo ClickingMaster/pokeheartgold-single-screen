@@ -304,7 +304,7 @@ SysTask *TouchscreenMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, Fie
     TouchscreenMenu_ValidateSelection(data);
     TouchscreenMenu_LoadSpriteResources(data);
     TouchscreenMenu_CreateSprites(data);
-    TouchscreenMenu_LoadStrings(data, data->fieldSystem->unkD2_0);
+    TouchscreenMenu_LoadStrings(data, data->fieldSystem->startMenuState);
     AddTextPrinterParameterizedWithColor(&data->actionWindow, 4, data->actionStrings[1], 0, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(15, 1, 0), NULL);
     AddTextPrinterParameterizedWithColor(&data->menuWindow, 0, data->menuString, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 1, 0), NULL);
     TouchscreenMenu_PrintIconLabels(data);
@@ -422,9 +422,9 @@ void TouchscreenMenu_Task(SysTask *task, void *taskData) {
     if (FieldSystem_TaskIsRunning(data->fieldSystem)) {
         ov27_0225A7FC(data);
     } else {
-        if (data->fieldSystem->unkD2_0 == 2) {
+        if (data->fieldSystem->startMenuState == 2) {
             ov27_0225A86C(data);
-            data->fieldSystem->unkD2_0 = 0;
+            data->fieldSystem->startMenuState = 0;
         }
         if (movementAllowed) {
             TouchscreenMenu_UpdateActionLabel(data);
@@ -470,7 +470,7 @@ void TouchscreenMenu_UpdateRunningShoesSprites(TouchscreenMenuData *data) {
 BOOL TouchscreenMenu_UpdateRunningShoesVisibility(TouchscreenMenuData *data) {
     BOOL show = TouchscreenMenu_HasRunningShoes(data);
 
-    if (PlayerAvatar_GetState(data->fieldSystem->playerAvatar) == PLAYER_STATE_CYCLING || data->fieldSystem->unkD2_0 != 0) {
+    if (PlayerAvatar_GetState(data->fieldSystem->playerAvatar) == PLAYER_STATE_CYCLING || data->fieldSystem->startMenuState != 0) {
         show = FALSE;
     }
     if (show) {
@@ -573,21 +573,21 @@ BOOL ov27_0225A714(TouchscreenMenuData *data) {
     GF_ASSERT(data->lastTouchMenuInput != NULL);
     fieldSystem = data->fieldSystem;
     lastTouchMenuInput = data->lastTouchMenuInput;
-    state = fieldSystem->unkD2_0;
+    state = fieldSystem->startMenuState;
     if (state == 4) {
         if (MenuInputStateMgr_GetState(&fieldSystem->menuInputState) == MENU_INPUT_STATE_BUTTONS) {
             TouchscreenMenu_SetDimmed(data, TRUE);
         } else {
-            fieldSystem->unkD2_0 = 0;
+            fieldSystem->startMenuState = 0;
         }
     } else if (state == 3) {
         if (MenuInputStateMgr_GetState(&fieldSystem->menuInputState) == MENU_INPUT_STATE_TOUCH) {
             *lastTouchMenuInput = 1;
-            fieldSystem->unkD2_0 = 0;
+            fieldSystem->startMenuState = 0;
             fieldSystem->unkD2_7 = TRUE;
         } else {
             TouchscreenMenu_HighlightIcon(data, data->selection);
-            fieldSystem->unkD2_0 = 1;
+            fieldSystem->startMenuState = 1;
         }
     }
     return TRUE;
@@ -613,13 +613,13 @@ void ov27_0225A7DC(TouchscreenMenuData *data) {
 #pragma force_active on
 
 void ov27_0225A7FC(TouchscreenMenuData *data) {
-    switch (data->fieldSystem->unkD2_0) {
+    switch (data->fieldSystem->startMenuState) {
     case 0:
         ov27_0225A7B0(data);
         break;
     case 1:
         ov27_0225A7DC(data);
-        data->fieldSystem->unkD2_0 = 2;
+        data->fieldSystem->startMenuState = 2;
         break;
     case 2:
         if (data->fieldSystem->runningFieldMap && IsPaletteFadeFinished() && TouchscreenMenu_HandleTouchInput(data)) {
@@ -644,7 +644,7 @@ void ov27_0225A86C(TouchscreenMenuData *data) {
 }
 
 BOOL TouchscreenMenu_IsFieldBusy(FieldSystem *fieldSystem) {
-    if (!IsPaletteFadeFinished() || !fieldSystem->runningFieldMap || fieldSystem->unkD2_0 != 0 || !FieldSystem_IsPlayerMovementAllowed(fieldSystem) || TouchscreenMenu_IsTextboxOpen(fieldSystem) || MapSceneScriptCheck(fieldSystem) || CommClubLink_IsStartingBattle()) {
+    if (!IsPaletteFadeFinished() || !fieldSystem->runningFieldMap || fieldSystem->startMenuState != 0 || !FieldSystem_IsPlayerMovementAllowed(fieldSystem) || TouchscreenMenu_IsTextboxOpen(fieldSystem) || MapSceneScriptCheck(fieldSystem) || CommClubLink_IsStartingBattle()) {
         return TRUE;
     }
     return FALSE;
@@ -653,7 +653,7 @@ BOOL TouchscreenMenu_IsFieldBusy(FieldSystem *fieldSystem) {
 // While the field is busy the buttons are drawn translucent over a dimmed bottom screen.
 void TouchscreenMenu_SetDimmed(TouchscreenMenuData *data, BOOL dimmed) {
     if (dimmed) {
-        if (data->layout == TOUCHSCREEN_MENU_LAYOUT_5 && data->fieldSystem->unkD2_0 == 0) {
+        if (data->layout == TOUCHSCREEN_MENU_LAYOUT_5 && data->fieldSystem->startMenuState == 0) {
             TouchscreenMenu_HighlightIcon(data, TOUCHSCREEN_MENU_NO_HIGHLIGHT);
         }
         Sprite_SetOamMode(data->sprites[TOUCHSCREEN_MENU_SPRITE_SHOES], GX_OAM_MODE_XLU);
@@ -662,7 +662,7 @@ void TouchscreenMenu_SetDimmed(TouchscreenMenuData *data, BOOL dimmed) {
         Sprite_SetOamMode(data->sprites[TOUCHSCREEN_MENU_SPRITE_ITEM_1_BUTTON], GX_OAM_MODE_XLU);
         Sprite_SetOamMode(data->sprites[TOUCHSCREEN_MENU_SPRITE_ITEM_2], GX_OAM_MODE_XLU);
         Sprite_SetOamMode(data->sprites[TOUCHSCREEN_MENU_SPRITE_ITEM_2_BUTTON], GX_OAM_MODE_XLU);
-        if (data->fieldSystem->unkD2_0 != 0) {
+        if (data->fieldSystem->startMenuState != 0) {
             TouchscreenMenu_SetIconsTranslucent(data->sprites, data->selection);
         } else {
             TouchscreenMenu_SetIconsTranslucent(data->sprites, TOUCHSCREEN_MENU_NO_HIGHLIGHT);

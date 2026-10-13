@@ -504,12 +504,12 @@ typedef struct WiFiPlazaPlayerObject {
     u8 effect : 7;       // index into ov45_02254F1C
     u8 timer;
     u8 step;
-    UnkStruct_ov42_02228110 *player; // NULL = free slot
+    Field2DObject *player; // NULL = free slot
     void *sprite;                    // billboard object
     ModelInstance model;
-    u8 action;        // ov42_02228188 field 5
+    u8 action;        // Field2DObject_GetParam field 5
     u8 savedSequence; // sequence and frame when an action of ov45_02230DC4 ended
-    u16 actionFrame;  // ov42_02228188 field 8
+    u16 actionFrame;  // Field2DObject_GetParam field 8
     u32 savedFrame;
     u32 lightFlags;
 } WiFiPlazaPlayerObject;
@@ -532,7 +532,7 @@ typedef struct WiFiPlazaPlayerObjects {
 } WiFiPlazaPlayerObjects;
 
 typedef struct WiFiPlazaSpriteConfig {
-    u16 spriteId; // ov42_02228188 field 7
+    u16 spriteId; // Field2DObject_GetParam field 7
     u16 fileId : 15;
     u16 ownTexture : 1; // texture loaded per object instead of once into VRAM
 } WiFiPlazaSpriteConfig;
@@ -1094,12 +1094,12 @@ void WiFiPlazaPlayerObjects_Update(WiFiPlazaPlayerObjects *objects);
 void WiFiPlazaPlayerObjects_Draw(WiFiPlazaPlayerObjects *objects);
 void ov45_022306F4(WiFiPlazaPlayerObjects *objects);
 void WiFiPlazaPlayerObjects_SetModelAlpha(WiFiPlazaPlayerObjects *objects, int alpha);
-WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_Add(WiFiPlazaPlayerObjects *objects, UnkStruct_ov42_02228110 *player);
+WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_Add(WiFiPlazaPlayerObjects *objects, Field2DObject *player);
 void WiFiPlazaPlayerObject_Delete(WiFiPlazaPlayerObject *object);
 void WiFiPlazaPlayerObject_SetMode(WiFiPlazaPlayerObject *object, u32 mode);
 void WiFiPlazaPlayerObject_SetLightFlags(WiFiPlazaPlayerObject *object, u32 lightFlags);
 u32 WiFiPlazaPlayerObject_IsCulled(WiFiPlazaPlayerObject *object);
-void WiFiPlazaPlayerObject_SetGridPosition(WiFiPlazaPlayerObject *object, const UnkStruct_ov44_02232914 *gridPos);
+void WiFiPlazaPlayerObject_SetGridPosition(WiFiPlazaPlayerObject *object, const Field2DPoint *gridPos);
 void WiFiPlazaPlayerObject_SetPosition(WiFiPlazaPlayerObject *object, const VecFx32 *position);
 void WiFiPlazaPlayerObject_GetPosition(WiFiPlazaPlayerObject *object, VecFx32 *position);
 void WiFiPlazaPlayerObject_SetStandingSequence(WiFiPlazaPlayerObject *object, u32 sequence);

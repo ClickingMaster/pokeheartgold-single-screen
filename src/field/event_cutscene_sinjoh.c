@@ -23,10 +23,10 @@ typedef struct SinjohCutsceneData {
     Field3dModel model174;
     Field3DModelAnimation animation184[2];
     Field3dObject object1AC;
-    u8 unk224;
-    u8 unk225;
+    u8 animateUnown;
+    u8 animateObject;
     u8 drawObjectFlag;
-    u8 unk227;
+    u8 timer;
 } SinjohCutsceneData;
 
 typedef struct SinjohGetEggCutsceneData {
@@ -35,9 +35,9 @@ typedef struct SinjohGetEggCutsceneData {
     Field3dModel eggModel;
     Field3DModelAnimation animations[4];
     Field3dObject object;
-    u8 unkEC;
-    u8 unkED;
-    u8 unkEE;
+    u8 animate;
+    u8 animationDone;
+    u8 drawObject;
     u8 whichLegend;
 } SinjohGetEggCutsceneData;
 
@@ -84,21 +84,21 @@ static BOOL Task_SinjohCutscene(TaskManager *taskMan) {
         break;
     case SJC_STATE_2:
         if (IsPaletteFadeFinished()) {
-            data->unk224 = 1;
-            data->unk227 = 0;
+            data->animateUnown = 1;
+            data->timer = 0;
             Field3dObject_SetActiveFlag(&data->object1AC, 1);
             (*state)++;
         }
         break;
     case SJC_STATE_3:
-        if (++data->unk227 >= 100) {
-            data->unk225 = 1;
-            data->unk227 = 0;
+        if (++data->timer >= 100) {
+            data->animateObject = 1;
+            data->timer = 0;
             (*state)++;
         }
         break;
     case SJC_STATE_4:
-        if (++data->unk227 >= 150) {
+        if (++data->timer >= 150) {
             BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 2, 1, HEAP_ID_FIELD1);
             (*state)++;
         }
@@ -111,11 +111,11 @@ static BOOL Task_SinjohCutscene(TaskManager *taskMan) {
         }
         break;
     }
-    if (data->unk224) {
+    if (data->animateUnown) {
         sField3DModelAnimation_Array_FrameAdvanceAndCheck(&data->unownAnimations[0][0], 2);
         sField3DModelAnimation_Array_FrameAdvanceAndCheck(&data->unownAnimations[1][0], 2);
     }
-    if (data->unk225) {
+    if (data->animateObject) {
         sField3DModelAnimation_Array_FrameAdvanceAndCheck(&data->animation184[0], 2);
     }
     if (data->drawObjectFlag) {
@@ -267,13 +267,13 @@ static BOOL Task_SinjohGetEggCutscene(TaskManager *taskMan) {
         break;
     case SGEC_STATE_START_WAIT:
         if (IsPaletteFadeFinished()) {
-            data->unkEC = 1;
-            data->unkED = 0;
+            data->animate = 1;
+            data->animationDone = 0;
             (*state)++;
         }
         break;
     case SGEC_STATE_WAIT:
-        if (data->unkED) {
+        if (data->animationDone) {
             (*state)++;
         }
         break;
@@ -283,11 +283,11 @@ static BOOL Task_SinjohGetEggCutscene(TaskManager *taskMan) {
         return TRUE;
     }
 
-    if (data->unkEC) {
-        data->unkED = sField3DModelAnimation_Array_FrameAdvanceAndCheck(&data->animations[0], 4);
+    if (data->animate) {
+        data->animationDone = sField3DModelAnimation_Array_FrameAdvanceAndCheck(&data->animations[0], 4);
     }
 
-    if (data->unkEE) {
+    if (data->drawObject) {
         Field3dObject_Draw(&data->object);
     }
     return FALSE;
@@ -328,7 +328,7 @@ static void SinjohGetEggCutscene_LoadResources(SinjohGetEggCutsceneData *data) {
 
     Field3dObject_SetPosEx(&data->object, arceusPos.x, arceusPos.y, arceusPos.z);
 
-    data->unkEE = 1;
+    data->drawObject = 1;
 }
 
 static void SinjohGetEggCutscene_FreeResources(SinjohGetEggCutsceneData *data) {

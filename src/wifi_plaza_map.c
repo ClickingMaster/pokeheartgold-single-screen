@@ -81,15 +81,15 @@ WiFiPlazaMap *WiFiPlazaMap_Create(enum HeapID heapID) {
     void *file;
 
     map = Heap_Alloc(heapID, sizeof(*map));
-    map->grid = ov42_02227EE0(0x23, 0x2A, heapID);
+    map->grid = Field2DMap_New(0x23, 0x2A, heapID);
     file = GfGfxLoader_LoadFromNarc((NarcId)0xCA, 0, FALSE, heapID, TRUE);
-    ov42_02227F48(map->grid, file);
+    Field2DMap_Load(map->grid, file);
     Heap_Free(file);
     return map;
 }
 
 void WiFiPlazaMap_Delete(WiFiPlazaMap *map) {
-    ov42_02227F28(map->grid);
+    Field2DMap_Free(map->grid);
     Heap_Free(map);
 }
 
@@ -98,19 +98,19 @@ u32 WiFiPlazaMap_GetWidth(void) {
 }
 
 s32 WiFiPlazaMap_GetCollision(WiFiPlazaMap *map, u16 x, u16 y) {
-    return ov42_02227FA4(map->grid, x, y);
+    return Field2DMap_IsBlocked(map->grid, x, y);
 }
 
 #pragma force_active on
 
 u32 WiFiPlazaMap_GetTileTag(WiFiPlazaMap *map, u16 x, u16 y) {
-    return ov42_02227FDC(map->grid, x, y) >> 15;
+    return Field2DMap_GetTag(map->grid, x, y) >> 15;
 }
 
 #pragma force_active reset
 
 u32 WiFiPlazaMap_GetTileAttr(WiFiPlazaMap *map, u16 x, u16 y) {
-    return ov42_02227FDC(map->grid, x, y) & 0x7FFF;
+    return Field2DMap_GetTag(map->grid, x, y) & 0x7FFF;
 }
 
 // Finds the cell holding the ordinal-th occurrence of tag, scanning row by row.
@@ -182,6 +182,6 @@ BOOL WiFiPlazaMap_IsPropTile(u8 attr) {
     return FALSE;
 }
 
-UnkStruct_ov42_02227F68 *WiFiPlazaMap_GetGrid(WiFiPlazaMap *map) {
+Field2DMap *WiFiPlazaMap_GetGrid(WiFiPlazaMap *map) {
     return map->grid;
 }

@@ -95,7 +95,7 @@ typedef struct BerryPotsAppData {
     String *statusStrings[17];
     u8 unkF4[8];
     Window windows[3];
-    void *unk12C;
+    void *yesNoPrompt;
     SpriteSystem *spriteRenderer;
     SpriteManager *spriteGfxHandler1;
     SpriteManager *spriteGfxHandler2;

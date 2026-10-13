@@ -11,7 +11,7 @@
 #include "safari_zone_encounters.h"
 
 typedef struct MapPropArcData {
-    int unk_00;
+    int buildModel;
     VecFx32 translation;
     VecFx32 rotation;
     VecFx32 scale;
@@ -112,7 +112,7 @@ void MapPropManager_LoadFromNARC(NARC *narc, u32 size, MapPropManager *mapPropMa
     for (int i = 0; i < MAP_PROP_MAX; ++i) {
         MapProp *mapProp = &mapPropManager->mapProps[i];
         if (i < num) {
-            mapProp->buildModel = narcData[i].unk_00;
+            mapProp->buildModel = narcData[i].buildModel;
             mapProp->active = TRUE;
             mapProp->overrideRotation = FALSE;
             mapProp->translation = narcData[i].translation;

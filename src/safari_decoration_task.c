@@ -25,7 +25,7 @@ static BOOL Task_SafariDecoration(TaskManager *taskManager) {
         break;
     case 1:
         if (FieldSystem_ApplicationIsRunning(fieldSystem) == FALSE) {
-            *env->unknown_4 = env->safariDecorationArgs->unk1C;
+            *env->unknown_4 = env->safariDecorationArgs->placedObject;
             Heap_Free(env->safariDecorationArgs);
             env->state++;
         }

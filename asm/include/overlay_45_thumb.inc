@@ -170,9 +170,9 @@
 .public ov00_021E5CEC
 .public WifiConnection_ClassifyErrorCode
 .public ov00_021E7144
-.public ov42_02228188
-.public ov42_022282DC
-.public ov42_022282F4
+.public Field2DObject_GetParam
+.public Field2DObject_GetPos
+.public Field2DObject_GetDrawPos
 .public WiFiPlaza_Init
 .public WiFiPlaza_Main
 .public WiFiPlaza_Exit

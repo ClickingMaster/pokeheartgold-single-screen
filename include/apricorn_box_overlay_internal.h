@@ -30,10 +30,10 @@ typedef struct ApricornBoxApp {
     /* 0x08 */ OverlayManager *child;
     /* 0x0C */ u32 unk_0C;
     /* 0x10 */ PartyMenuArgs *partyMenuArgs;
-    /* 0x14 */ u32 unk_14;
-    /* 0x18 */ u8 unk_18;
+    /* 0x14 */ u32 juiceIndex;
+    /* 0x18 */ u8 mode;
     /* 0x19 */ u8 unk_19;
-    /* 0x1A */ u8 unk_1A[2];
+    /* 0x1A */ u8 lastRows[2];
     /* 0x1C */ u8 partySlot;
 } ApricornBoxApp;
 

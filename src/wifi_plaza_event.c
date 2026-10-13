@@ -556,7 +556,7 @@ BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
 
         nextStep = WiFiPlazaPlayerState_AllocWork(state, 4);
         PlaySE(0x5DC);
-        direction = ov42_022282A4(WiFiPlazaObj_GetParam(player, 6));
+        direction = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(player, 6));
         WiFiPlazaObj_SetHandler(objManager, special, 0);
         WiFiPlazaObj_SetAvatarMode(special, 0);
         WiFiPlazaObj_SetDirection(special, direction);

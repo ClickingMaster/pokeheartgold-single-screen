@@ -1162,7 +1162,7 @@ BOOL WiFiPlazaInstrument_UpdateBalloonRise(WiFiPlazaInstrumentManager *manager, 
     if (effect->obj == WiFiPlazaObj_GetOwnPlayer(manager->objManager)) {
         u32 keys = gSystem.newKeys;
         u32 direction = 4;
-        UnkStruct_ov44_02232914 position;
+        Field2DPoint position;
         u32 packed;
 
         if (keys & PAD_KEY_UP) {

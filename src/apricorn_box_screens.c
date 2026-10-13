@@ -61,9 +61,9 @@ typedef struct ApricornBoxScreen {
     ApricornBoxApp *app;                 // 0x004
     u8 filler_08[8];                     // 0x008
     SaveApricornBox *apricornBox;        // 0x010
-    u8 unk_14;                           // 0x014, ApricornBox_GetJuiceServings
-    u8 unk_15;                           // 0x015, ApricornJuice_GetFlavorTotal(juiceRecord)
-    u8 unk_16;                           // 0x016, juiceRecord byte 2
+    u8 juiceServings;                           // 0x014, ApricornBox_GetJuiceServings
+    u8 flavorTotal;                           // 0x015, ApricornJuice_GetFlavorTotal(juiceRecord)
+    u8 juiceMildness;                           // 0x016, juiceRecord byte 2
     u8 unk_17;                           // 0x017, sub_02031FE8(juiceRecord)
     u8 numBlending;                      // 0x018, apricorns in the blender (ApricornBox_CountQueuedApricorns, at most 5)
     u8 mixStage;                         // 0x019, ApricornBox_GetMixProgressLevel
@@ -75,7 +75,7 @@ typedef struct ApricornBoxScreen {
     u16 subState;                        // 0x03C
     u16 animState;                       // 0x03E
     MenuInputState menuInputState;       // 0x040
-    u8 mode;                             // 0x044, ApricornBoxApp.unk_18
+    u8 mode;                             // 0x044, ApricornBoxApp.mode
     u8 textFrameDelay;                   // 0x045
     u8 frame;                            // 0x046
     u8 textPrinterId;                    // 0x047
@@ -362,17 +362,17 @@ void ApricornBoxScreen_InitFromArgs(ApricornBoxScreen *screen) {
     options = Save_PlayerData_GetOptionsAddr(screen->app->args->saveData);
     screen->textFrameDelay = Options_GetTextFrameDelay(options);
     screen->frame = Options_GetFrame(options);
-    screen->mode = screen->app->unk_18;
+    screen->mode = screen->app->mode;
     screen->steps = screen->app->args->steps;
     screen->apricornBox = Save_ApricornBox_Get(screen->app->args->saveData);
     ApricornBoxScreen_LoadBoxState(screen);
     if (screen->mode == 3) {
         screen->cursorArea = 2;
         screen->cursorRow = 0;
-        screen->lastRowLeft = screen->app->unk_1A[0];
-        screen->lastRowRight = screen->app->unk_1A[1];
+        screen->lastRowLeft = screen->app->lastRows[0];
+        screen->lastRowRight = screen->app->lastRows[1];
         screen->mode = 1;
-        screen->app->unk_18 = 1;
+        screen->app->mode = 1;
     }
 }
 
@@ -755,10 +755,10 @@ int ApricornBoxScreen_JuiceMenuState(ApricornBoxScreen *screen) {
             ApricornBoxScreen_SetApricornsFocus(screen, 1);
             return 15;
         }
-        screen->app->unk_18 = 3;
+        screen->app->mode = 3;
         screen->app->partySlot = 0;
-        screen->app->unk_1A[0] = screen->lastRowLeft;
-        screen->app->unk_1A[1] = screen->lastRowRight;
+        screen->app->lastRows[0] = screen->lastRowLeft;
+        screen->app->lastRows[1] = screen->lastRowRight;
         return 1;
     }
     return 11;
@@ -864,11 +864,11 @@ void ApricornBoxScreen_DrawScreen(ApricornBoxScreen *screen) {
 void ApricornBoxScreen_LoadBoxState(ApricornBoxScreen *screen) {
     int i;
     screen->numBlending = ApricornBox_CountQueuedApricorns(screen->apricornBox);
-    screen->unk_14 = ApricornBox_GetJuiceServings(screen->apricornBox);
+    screen->juiceServings = ApricornBox_GetJuiceServings(screen->apricornBox);
     ApricornBox_GetJuice(screen->apricornBox, 8, (UnkStruct_02031CEC *)screen->juiceRecord);
-    screen->unk_16 = screen->juiceRecord[2];
+    screen->juiceMildness = screen->juiceRecord[2];
     screen->unk_17 = sub_02031FE8(screen->juiceRecord);
-    screen->unk_15 = ApricornJuice_GetFlavorTotal((UnkStruct_02031CEC *)screen->juiceRecord);
+    screen->flavorTotal = ApricornJuice_GetFlavorTotal((UnkStruct_02031CEC *)screen->juiceRecord);
     ApricornJuice_RankFlavors(screen->juiceRecord, &screen->juice);
     screen->mixStage = ApricornBox_GetMixProgressLevel(screen->apricornBox);
     for (i = 0; i < 7; i++) {
@@ -1040,7 +1040,7 @@ void ApricornBoxScreen_PrintDescription(ApricornBoxScreen *screen) {
             return;
         }
         ApricornBoxScreen_ReadMessage(screen, selection + 13);
-    } else if (screen->unk_14 != 0) {
+    } else if (screen->juiceServings != 0) {
         ApricornBoxScreen_ReadMessage(screen, 21);
     } else {
         ApricornBoxScreen_ReadMessage(screen, 20);
@@ -1571,7 +1571,7 @@ void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
             Sprite_SetDrawFlag(((ApricornBoxScreen *)target)->sprites[0], TRUE);
             Sprite_SetAnimActiveFlag(((ApricornBoxScreen *)target)->sprites[0], TRUE);
         }
-        Sprite_SetAnimCtrlSeq(screen->sprites[9], screen->unk_14 + 16);
+        Sprite_SetAnimCtrlSeq(screen->sprites[9], screen->juiceServings + 16);
         Sprite_SetPaletteOverride(screen->sprites[9], screen->unk_17 + 5);
         break;
     }
@@ -1664,8 +1664,8 @@ void ApricornBoxScreen_ReadMessage(ApricornBoxScreen *screen, int msgNo) {
         int juice = sub_02032004(screen->juiceRecord);
         ReadMsgDataIntoString(screen->msgData, juice + 19, screen->string);
         BufferString(screen->msgFormat, 0, screen->string, 2, 0, 2);
-        BufferIntegerAsString(screen->msgFormat, 1, screen->unk_15, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-        BufferIntegerAsString(screen->msgFormat, 2, screen->unk_16, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
+        BufferIntegerAsString(screen->msgFormat, 1, screen->flavorTotal, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
+        BufferIntegerAsString(screen->msgFormat, 2, screen->juiceMildness, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
         BufferIntegerAsString(screen->msgFormat, 3, 5 - screen->numBlending, 1, PRINTING_MODE_LEFT_ALIGN, TRUE);
         break;
     }
@@ -1876,17 +1876,17 @@ int ApricornBoxScreen_BlenderSelect(ApricornBoxScreen *screen, u32 input) {
         PlaySE(SEQ_SE_DP_SELECT);
         ApricornBoxScreen_UpdateCursor(screen);
         screen->selectedApricorn = input;
-        if (screen->unk_14 == 0 && screen->numBlending == 0) {
+        if (screen->juiceServings == 0 && screen->numBlending == 0) {
             ApricornBoxScreen_PrintMessage(screen, 25, TEXT_SPEED_NOTRANSFER);
             ApricornBoxScreen_SetApricornsFocus(screen, 1);
             return 15;
         }
-        if (screen->unk_14 == 0 && screen->numBlending != 0) {
+        if (screen->juiceServings == 0 && screen->numBlending != 0) {
             ApricornBoxScreen_PrintMessage(screen, 27, TEXT_SPEED_NOTRANSFER);
             ApricornBoxScreen_SetApricornsFocus(screen, 1);
             return 15;
         }
-        if (screen->unk_14 != 0 && screen->numBlending != 0) {
+        if (screen->juiceServings != 0 && screen->numBlending != 0) {
             ApricornBoxScreen_PrintMessage(screen, 28, TEXT_SPEED_NOTRANSFER);
             ApricornBoxScreen_SetApricornsFocus(screen, 1);
             return 15;
@@ -2247,7 +2247,7 @@ typedef struct AprijuiceMon {
     u8 level;                                      // 0x06
     u8 gender;                                     // 0x07
     u8 slot;                                       // 0x08
-    u8 unk_09;                                     // 0x09
+    u8 hFlip;                                     // 0x09
     u8 filler_0A[2];                               // 0x0A
     String *name;                                  // 0x0C
     PartyExtraSub aprijuice;                       // 0x10
@@ -2488,7 +2488,7 @@ void AprijuiceScreen_InitFromArgs(AprijuiceScreen *screen) {
     screen->textFrameDelay = Options_GetTextFrameDelay(options);
     screen->frame = Options_GetFrame(options);
     screen->apricornBox = Save_ApricornBox_Get(screen->saveData);
-    ApricornBox_GetJuice(screen->apricornBox, screen->app->unk_14, &screen->juiceRecord);
+    ApricornBox_GetJuice(screen->apricornBox, screen->app->juiceIndex, &screen->juiceRecord);
     ApricornJuice_RankFlavors(&screen->juiceRecord, &screen->juice);
     AprijuiceScreen_LoadParty(screen);
     i = 0;
@@ -2512,7 +2512,7 @@ void AprijuiceScreen_WriteResult(AprijuiceScreen *screen) {
     MenuInputStateMgr_SetState(screen->app->args->menuInputStatePtr, screen->menuInputState);
     entry = &screen->mons[screen->selectedMon];
     screen->app->partySlot = entry->slot;
-    screen->app->unk_18 = screen->juiceUsed != 0 ? 1 : 3;
+    screen->app->mode = screen->juiceUsed != 0 ? 1 : 3;
     if (screen->app->args->unk8 != NULL) {
         *screen->app->args->unk8 = screen->juiceUsed;
     }
@@ -3189,7 +3189,7 @@ void AprijuiceMon_Init(AprijuiceMon *entry, Party *party, Pokemon *mon, u8 slot,
     entry->species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     entry->gender = GetMonData(mon, MON_DATA_GENDER, NULL);
     entry->level = GetMonData(mon, MON_DATA_LEVEL, NULL);
-    entry->unk_09 = GetMonBaseStat_HandleAlternateForm(entry->species, GetMonData(mon, MON_DATA_FORM, NULL), BASE_FLIP) ^ 1;
+    entry->hFlip = GetMonBaseStat_HandleAlternateForm(entry->species, GetMonData(mon, MON_DATA_FORM, NULL), BASE_FLIP) ^ 1;
     entry->name = String_New(12, heapId);
     GetMonData(mon, MON_DATA_NICKNAME_STRING, entry->name);
     CalcMonPokeathlonPerformance(entry->mon, &entry->performance);
@@ -3204,7 +3204,7 @@ void AprijuiceScreen_UseJuice(AprijuiceScreen *screen) {
     int i;
     AprijuiceMon *entry = &screen->mons[screen->selectedMon];
     ApricornBox_FeedAprijuice(&screen->juiceRecord, screen->party, entry->slot);
-    if (screen->app->unk_14 == 8) {
+    if (screen->app->juiceIndex == 8) {
         ApricornBox_UseJuiceServing(screen->apricornBox);
     }
     Party_GetMonAprijuiceModifiers(screen->party, &entry->aprijuice, entry->slot);

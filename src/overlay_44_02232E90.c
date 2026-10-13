@@ -3,7 +3,7 @@
 #include "overlay_42.h"
 #include "overlay_44.h"
 
-const UnkStruct_ov44_02232914 ov44_02235630[4] = {
+const Field2DPoint ov44_02235630[4] = {
     { 0x0010, 0x000B },
     { 0x0010, 0x000B },
     { 0x0016, 0x000B },
@@ -20,7 +20,7 @@ const u32 ov44_02235F88[308] = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 
 const u32 *ov44_0223688C[4] = { ov44_02235640, ov44_02235900, ov44_02235BC0, ov44_02235F88 };
 
-UnkStruct_ov44_02232914 ov44_02232E90(s32 arg0) {
+Field2DPoint ov44_02232E90(s32 arg0) {
     return ov44_02235630[arg0];
 }
 

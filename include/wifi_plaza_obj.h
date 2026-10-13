@@ -24,7 +24,7 @@ typedef struct WiFiPlazaObjTween {
 } WiFiPlazaObjTween;
 
 struct WiFiPlazaObj {
-    UnkStruct_ov42_02228110 *gridObj; // 0x00
+    Field2DObject *gridObj; // 0x00
     void *avatar;                     // 0x04
     u16 step;                         // 0x08
     u8 finished;                      // 0x0A
@@ -69,12 +69,12 @@ typedef struct WiFiPlazaObjLight {
 } WiFiPlazaObjLight;
 
 struct WiFiPlazaObjManager {
-    UnkStruct_ov42_022280A8 *gridObjs; // 0x00
+    Field2DObjectManager *gridObjs; // 0x00
     void *avatars;                     // 0x04 OVY_45 avatar manager
     WiFiPlazaObj *objs;                // 0x08
     u16 count;                         // 0x0C
     u16 unk_0E;                        // 0x0E nonzero: own player avatar 0x61
-    UnkStruct_ov42_02229A40 *commands; // 0x10 queued move commands
+    Field2DCommandQueue *commands; // 0x10 queued move commands
     WiFiPlazaMap *map;                 // 0x14
     WiFiPlazaObjLight light;           // 0x18
     WiFiPlazaObj *ownPlayer;           // 0x20
@@ -89,7 +89,7 @@ u32 WiFiPlazaObj_DrawAvatars(WiFiPlazaObjManager *manager);
 u32 ov49_02258BE0(WiFiPlazaObjManager *manager);
 void WiFiPlazaObj_SetLightSet(WiFiPlazaObjManager *manager, int set);
 void WiFiPlazaObj_FadeToLightSet(WiFiPlazaObjManager *manager, int set);
-void WiFiPlazaObj_PushCommand(WiFiPlazaObjManager *manager, UnkStruct_ov42_02228CDC *command);
+void WiFiPlazaObj_PushCommand(WiFiPlazaObjManager *manager, Field2DCommand *command);
 WiFiPlazaObj *WiFiPlazaObj_CreateOwnPlayer(WiFiPlazaObjManager *manager, int id);
 WiFiPlazaObj *WiFiPlazaObj_CreateOwnPlayerAt(WiFiPlazaObjManager *manager, int id, int x, int y);
 WiFiPlazaObj *WiFiPlazaObj_CreatePlayer(WiFiPlazaObjManager *manager, int id, int avatar);
@@ -97,9 +97,9 @@ void WiFiPlazaObj_Delete(WiFiPlazaObj *obj);
 WiFiPlazaObj *WiFiPlazaObj_FindById(WiFiPlazaObjManager *manager, int id);
 WiFiPlazaObj *WiFiPlazaObj_GetOwnPlayer(WiFiPlazaObjManager *manager);
 WiFiPlazaObj *WiFiPlazaObj_GetSpecial(WiFiPlazaObjManager *manager);
-void WiFiPlazaObj_SetGridPos(WiFiPlazaObj *obj, UnkStruct_ov44_02232914 pos);
-void WiFiPlazaObj_SetGridPosAndDir(WiFiPlazaObj *obj, UnkStruct_ov44_02232914 pos, s32 direction);
-UnkStruct_ov44_02232914 WiFiPlazaObj_GetGridPos(WiFiPlazaObj *obj);
+void WiFiPlazaObj_SetGridPos(WiFiPlazaObj *obj, Field2DPoint pos);
+void WiFiPlazaObj_SetGridPosAndDir(WiFiPlazaObj *obj, Field2DPoint pos, s32 direction);
+Field2DPoint WiFiPlazaObj_GetGridPos(WiFiPlazaObj *obj);
 s32 WiFiPlazaObj_GetParam(WiFiPlazaObj *obj, s32 param);
 void WiFiPlazaObj_QueueCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, s32 command, s32 direction);
 void WiFiPlazaObj_RunCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, u16 value, u8 kind);
@@ -110,7 +110,7 @@ WiFiPlazaObj *WiFiPlazaObj_FindFacing(WiFiPlazaObjManager *manager, WiFiPlazaObj
 u32 WiFiPlazaObj_IsCulled(WiFiPlazaObj *obj);
 WiFiPlazaObj *WiFiPlazaObj_FindAt(WiFiPlazaObjManager *manager, s32 x, s32 y);
 BOOL WiFiPlazaObj_IsOnCell(WiFiPlazaObj *obj, s32 x, s32 y);
-BOOL WiFiPlazaObj_FindFreeNeighbor(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, s32 *direction, UnkStruct_ov44_02232914 *position);
+BOOL WiFiPlazaObj_FindFreeNeighbor(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, s32 *direction, Field2DPoint *position);
 void WiFiPlazaObj_SetAvatarMode(WiFiPlazaObj *obj, int enable);
 void WiFiPlazaObj_SetPositionFromGrid(WiFiPlazaObj *obj, void *out);
 void WiFiPlazaObj_SetPosition(WiFiPlazaObj *obj, VecFx32 *position);
@@ -154,7 +154,7 @@ void WiFiPlazaPlayerObjects_Update(void *avatars);
 u32 WiFiPlazaPlayerObjects_Draw(void *avatars);
 u32 ov45_022306F4(void *avatars);
 void WiFiPlazaPlayerObjects_SetModelAlpha(void *avatars, int value);
-void *WiFiPlazaPlayerObjects_Add(void *avatars, UnkStruct_ov42_02228110 *gridObj);
+void *WiFiPlazaPlayerObjects_Add(void *avatars, Field2DObject *gridObj);
 void WiFiPlazaPlayerObject_Delete(void *avatar);
 void WiFiPlazaPlayerObject_SetMode(void *avatar, int enable);
 u32 WiFiPlazaPlayerObject_SetLightFlags(void *avatar, u32 value);

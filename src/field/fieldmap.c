@@ -160,7 +160,7 @@ BOOL FieldMap_Init(OverlayManager *man, int *state) {
 
         offset += DSProt_DetectFlashcart(&FieldMapInit_DSProtFlashcartCallback) * 0x3A1;
 
-        Heap_Create(HEAP_ID_3, HEAP_ID_FIELD1, fieldSystem->mapLoadMode->unk_4);
+        Heap_Create(HEAP_ID_3, HEAP_ID_FIELD1, fieldSystem->mapLoadMode->fieldHeapSize);
         GF_ASSERT(fieldSystem->mapSystems == NULL);
 
         FS_UnloadOverlay(MI_PROCESSOR_ARM9, FS_OVERLAY_ID(ds_protect));

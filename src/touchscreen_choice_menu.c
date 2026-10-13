@@ -181,7 +181,7 @@ SysTask *TouchscreenChoiceMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInpu
     data->yesWindow.pixelBuffer = NULL;
     data->noWindow.pixelBuffer = NULL;
     FontID_Alloc(4, HEAP_ID_8);
-    TouchscreenChoiceMenu_LoadMessages(data, data->fieldSystem->unkD2_0);
+    TouchscreenChoiceMenu_LoadMessages(data, data->fieldSystem->startMenuState);
     TouchscreenChoiceMenu_LoadBgGraphics(data);
     TouchscreenChoiceMenu_LoadSpriteResources(data);
     TouchscreenChoiceMenu_CreateCursor(data, 0);
@@ -229,12 +229,12 @@ void TouchscreenChoiceMenu_Task(SysTask *task, void *taskData) {
     TouchscreenChoiceMenuData *data = taskData;
 
     if (!FieldSystem_TaskIsRunning(data->fieldSystem)) {
-        if (data->fieldSystem->unkD2_0 == 2) {
-            data->fieldSystem->unkD2_0 = 3;
+        if (data->fieldSystem->startMenuState == 2) {
+            data->fieldSystem->startMenuState = 3;
         }
         G2S_BlendNone();
     } else if (sTouchscreenChoiceMenuStateFuncs[data->state](data) == TRUE) {
-        data->fieldSystem->unkD2_0 = 0;
+        data->fieldSystem->startMenuState = 0;
         FieldSystem_SwitchBottomScreenApp(data->fieldSystem, 0, NULL); // back to the start menu (app 0)
     }
     SpriteList_RenderAndAnimateSprites(data->spriteList);

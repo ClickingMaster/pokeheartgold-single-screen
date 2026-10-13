@@ -234,10 +234,10 @@ FrontierFieldSystem *FrontierFieldSystem_New(SaveData *saveData, BOOL resumeFrom
     FrontierFieldSystem *frontierFsys = Heap_Alloc(HEAP_ID_FIELD2, sizeof(FrontierFieldSystem));
     MI_CpuClear8(frontierFsys, sizeof(FrontierFieldSystem));
     frontierFsys->heapID = HEAP_ID_FIELD2;
-    frontierFsys->unk70 = Save_BattleTowerChallenge_Get(saveData);
+    frontierFsys->challenge = Save_BattleTowerChallenge_Get(saveData);
     frontierFsys->frontierData = Save_FrontierData_Get(saveData);
     frontierFsys->initMagicNumber = 0x12345678;
-    BattleTowerChallenge_SetSaved(frontierFsys->unk70, 0);
+    BattleTowerChallenge_SetSaved(frontierFsys->challenge, 0);
     if (!resumeFromPrevious) {
         frontierFsys->towerMode = towerMode;
         frontierFsys->numMons = NumMonsForTowerMode(frontierFsys->towerMode);
@@ -249,24 +249,24 @@ FrontierFieldSystem *FrontierFieldSystem_New(SaveData *saveData, BOOL resumeFrom
         for (u16 i = 0; i < 14; i++) {
             frontierFsys->trainersInCurrentRound[i] = 0xffff;
         }
-        BattleTowerChallenge_Clear(frontierFsys->unk70);
+        BattleTowerChallenge_Clear(frontierFsys->challenge);
         u8 data = frontierFsys->towerMode;
-        BattleTowerChallenge_SetField(frontierFsys->unk70, 0, &data);
+        BattleTowerChallenge_SetField(frontierFsys->challenge, 0, &data);
     } else {
-        frontierFsys->towerMode = BattleTowerChallenge_GetField(frontierFsys->unk70, 0, 0);
-        frontierFsys->currentBattleNumber = BattleTowerChallenge_GetField(frontierFsys->unk70, 1, 0);
+        frontierFsys->towerMode = BattleTowerChallenge_GetField(frontierFsys->challenge, 0, 0);
+        frontierFsys->currentBattleNumber = BattleTowerChallenge_GetField(frontierFsys->challenge, 1, 0);
         frontierFsys->curWinStreak = frontierFsys->currentBattleNumber - 1;
         frontierFsys->numMons = NumMonsForTowerMode(frontierFsys->towerMode);
-        BattleTowerChallenge_GetField(frontierFsys->unk70, 5, frontierFsys->partyMonIndexes);
-        BattleTowerChallenge_GetField(frontierFsys->unk70, 8, frontierFsys->trainersInCurrentRound);
-        frontierFsys->unk08 = BattleTowerChallenge_GetField(frontierFsys->unk70, 10, 0);
+        BattleTowerChallenge_GetField(frontierFsys->challenge, 5, frontierFsys->partyMonIndexes);
+        BattleTowerChallenge_GetField(frontierFsys->challenge, 8, frontierFsys->trainersInCurrentRound);
+        frontierFsys->randomState = BattleTowerChallenge_GetField(frontierFsys->challenge, 10, 0);
         if (frontierFsys->towerMode == TOWER_MODE_MULTI) {
-            frontierFsys->multiBattleAllyID = BattleTowerChallenge_GetField(frontierFsys->unk70, 9, 0);
-            BattleTowerChallenge_GetField(frontierFsys->unk70, 6, &frontierFsys->multiBattleAllyData[frontierFsys->multiBattleAllyID]);
+            frontierFsys->multiBattleAllyID = BattleTowerChallenge_GetField(frontierFsys->challenge, 9, 0);
+            BattleTowerChallenge_GetField(frontierFsys->challenge, 6, &frontierFsys->multiBattleAllyData[frontierFsys->multiBattleAllyID]);
             FrontierFieldSystem_GenerateAllyFrontierMons(frontierFsys,
                 &frontierFsys->frontierStatTrainers[frontierFsys->multiBattleAllyID],
                 300 + frontierFsys->multiBattleAllyID,
-                BattleTowerChallenge_GetField(frontierFsys->unk70, 7, 0),
+                BattleTowerChallenge_GetField(frontierFsys->challenge, 7, 0),
                 &frontierFsys->multiBattleAllyData[frontierFsys->multiBattleAllyID],
                 frontierFsys->heapID);
         }
@@ -418,12 +418,12 @@ static void sub_0204ACA0(FrontierFieldSystem *frontierFsys, SaveData *saveData, 
         break;
     case TOWER_MODE_WIFI:
         FrontierFieldSystem_SetFrontierMons(frontierFsys, saveData, TRUE);
-        BattleTowerChallenge_AddWifiScoreCounters(frontierFsys->unk70, frontierFsys->unk28, frontierFsys->unk24, frontierFsys->unk26);
+        BattleTowerChallenge_AddWifiScoreCounters(frontierFsys->challenge, frontierFsys->unk28, frontierFsys->unk24, frontierFsys->unk26);
         u8 data = frontierFsys->towerMode;
-        BattleTowerChallenge_SetField(frontierFsys->unk70, 0, &data);
+        BattleTowerChallenge_SetField(frontierFsys->challenge, 0, &data);
         data = frontierFsys->currentBattleNumber;
-        BattleTowerChallenge_SetField(frontierFsys->unk70, 1, &data);
-        FrontierData_CalcWifiScore(frontierFsys->frontierData, frontierFsys->unk70);
+        BattleTowerChallenge_SetField(frontierFsys->challenge, 1, &data);
+        FrontierData_CalcWifiScore(frontierFsys->frontierData, frontierFsys->challenge);
     }
 }
 
@@ -492,19 +492,19 @@ void FrontierFieldSystem_0204AE20(FrontierFieldSystem *frontierFsys, SaveData *s
 
 void FrontierFieldSystem_0204AF2C(FrontierFieldSystem *frontierFsys) {
     u8 data = frontierFsys->towerMode;
-    BattleTowerChallenge_SetField(frontierFsys->unk70, 0, &data);
+    BattleTowerChallenge_SetField(frontierFsys->challenge, 0, &data);
     data = frontierFsys->currentBattleNumber;
-    BattleTowerChallenge_SetField(frontierFsys->unk70, 1, &data);
-    BattleTowerChallenge_SetField(frontierFsys->unk70, 5, frontierFsys->partyMonIndexes);
-    BattleTowerChallenge_AddWifiScoreCounters(frontierFsys->unk70, frontierFsys->unk28, frontierFsys->unk24, frontierFsys->unk26);
-    BattleTowerChallenge_SetField(frontierFsys->unk70, 8, frontierFsys->trainersInCurrentRound);
-    BattleTowerChallenge_SetField(frontierFsys->unk70, 10, &frontierFsys->unk08);
-    BattleTowerChallenge_SetSaved(frontierFsys->unk70, 1);
+    BattleTowerChallenge_SetField(frontierFsys->challenge, 1, &data);
+    BattleTowerChallenge_SetField(frontierFsys->challenge, 5, frontierFsys->partyMonIndexes);
+    BattleTowerChallenge_AddWifiScoreCounters(frontierFsys->challenge, frontierFsys->unk28, frontierFsys->unk24, frontierFsys->unk26);
+    BattleTowerChallenge_SetField(frontierFsys->challenge, 8, frontierFsys->trainersInCurrentRound);
+    BattleTowerChallenge_SetField(frontierFsys->challenge, 10, &frontierFsys->randomState);
+    BattleTowerChallenge_SetSaved(frontierFsys->challenge, 1);
     if (frontierFsys->towerMode == TOWER_MODE_MULTI) {
         data = frontierFsys->multiBattleAllyID;
-        BattleTowerChallenge_SetField(frontierFsys->unk70, 9, &data);
-        BattleTowerChallenge_SetField(frontierFsys->unk70, 6, &frontierFsys->multiBattleAllyData[frontierFsys->multiBattleAllyID]);
-        BattleTowerChallenge_SetField(frontierFsys->unk70, 7, &frontierFsys->unk838[frontierFsys->multiBattleAllyID]);
+        BattleTowerChallenge_SetField(frontierFsys->challenge, 9, &data);
+        BattleTowerChallenge_SetField(frontierFsys->challenge, 6, &frontierFsys->multiBattleAllyData[frontierFsys->multiBattleAllyID]);
+        BattleTowerChallenge_SetField(frontierFsys->challenge, 7, &frontierFsys->unk838[frontierFsys->multiBattleAllyID]);
     }
 }
 
@@ -515,7 +515,7 @@ void FrontierFieldSystem_0204AFE0(FrontierFieldSystem *frontierFsys) {
 }
 
 u32 FrontierFieldSystem_0204B044(FrontierFieldSystem *frontierFsys, u32 a1) {
-    GetFrontierTrainerOverworld(frontierFsys->unk78[a1].trainerClass);
+    GetFrontierTrainerOverworld(frontierFsys->opponents[a1].trainerClass);
 }
 
 u32 FrontierFieldSystem_GetBattleTowerMode(FrontierFieldSystem *frontierFsys) {
@@ -579,12 +579,12 @@ u32 FrontierFieldSystem_0204B120(FrontierFieldSystem *frontierFsys, SaveData *sa
         FrontierData_FlagAction(frontierData, 4, 2);
         s32 unk0 = FrontierData_WifiRankAction(frontierData, 0); // Wifi Battle Rank?
         if (unk0 == 10) {
-            frontierFsys->unk10_4 = TRUE;
+            frontierFsys->ribbonEarned = TRUE;
             return 0;
         }
         FrontierData_WifiRankAction(frontierData, 3);
         if (unk0 + 1 >= 5) {
-            frontierFsys->unk10_4 = TRUE;
+            frontierFsys->ribbonEarned = TRUE;
         }
         return 1;
     case 2: {
@@ -626,7 +626,7 @@ BOOL FrontierFieldSystem_TryGiveOtherTowerRibbons(FrontierFieldSystem *frontierF
     if (frontierFsys->towerMode == TOWER_MODE_6) {
         return FALSE;
     }
-    if (!frontierFsys->unk10_4) {
+    if (!frontierFsys->ribbonEarned) {
         return FALSE;
     }
     u32 ribbon;
@@ -655,11 +655,11 @@ u16 FrontierFieldSystem_0204B258(FrontierFieldSystem *frontierFsys, SaveData *sa
         unk = FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, 0);
     }
     if (unk == 0) {
-        frontierFsys->unk08 = BattleTower_AdvanceSeed(saveData);
+        frontierFsys->randomState = BattleTower_AdvanceSeed(saveData);
     } else {
-        frontierFsys->unk08 = BattleTower_RestoreRandom(saveData);
+        frontierFsys->randomState = BattleTower_RestoreRandom(saveData);
     }
-    return frontierFsys->unk08 / 0xffff; // unk08 is a u32, so this should return between 0-3.
+    return frontierFsys->randomState / 0xffff; // unk08 is a u32, so this should return between 0-3.
 }
 
 static BOOL TryGiveTowerRibbons(SaveData *saveData, u32 ribbon, FrontierFieldSystem *a2) {
@@ -687,7 +687,7 @@ static u32 FrontierFieldSystem_0204B318(FrontierFieldSystem *frontierFsys) {
     if ((u16)(frontierFsys->currentBattleInSession + frontierFsys->curWinStreak) < 50) {
         return FALSE;
     }
-    frontierFsys->unk10_4 = TRUE;
+    frontierFsys->ribbonEarned = TRUE;
     return TRUE;
 }
 
@@ -752,6 +752,6 @@ u16 FrontierFieldSystem_NextRandom(FrontierFieldSystem *frontierFsys) {
     if (frontierFsys->towerMode == TOWER_MODE_6) {
         return LCRandom();
     }
-    frontierFsys->unk08 = BattleTower_NextRandom(frontierFsys->unk08);
-    return frontierFsys->unk08 / 0xffff; // unk08 is a u32, so this should return between 0-3.
+    frontierFsys->randomState = BattleTower_NextRandom(frontierFsys->randomState);
+    return frontierFsys->randomState / 0xffff; // unk08 is a u32, so this should return between 0-3.
 }

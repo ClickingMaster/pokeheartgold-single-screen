@@ -60,7 +60,7 @@ typedef struct FrontierMultiBattleAllyData {
 typedef struct FrontierFieldSystem {
     u32 initMagicNumber;
     enum HeapID heapID;
-    u32 unk08;
+    u32 randomState;
     u8 currentBattleNumber; // Total battles won on current streak.
     u8 curWinStreak;
     u8 numMons;
@@ -68,7 +68,7 @@ typedef struct FrontierFieldSystem {
     u8 unk10_0 : 1;
     u8 palmerDefeated : 2;
     u8 unk10_3 : 1;
-    u8 unk10_4 : 1;
+    u8 ribbonEarned : 1;
     u8 multiBattleAllyID : 3;
     u8 trainerGender;
     u8 linkAllyGender;
@@ -87,21 +87,21 @@ typedef struct FrontierFieldSystem {
     u16 partyMonItems[4];
     u16 trainersInCurrentRound[14];
     u8 filler5a[0x13];
-    u32 unk70; // Seems to be some sort of frontier save data.
+    u32 challenge; // Seems to be some sort of frontier save data.
     FrontierData *frontierData;
-    FrontierTrainer unk78[2];
+    FrontierTrainer opponents[2];
     FrontierTrainer frontierStatTrainers[5];
     FrontierMultiBattleAllyData multiBattleAllyData[5];
     u8 unk838[5]; // Related to multi battle allies' replaced items.
     u8 filler83d;
-    u16 unk83e[0x23]; // Related to unk10_3 somehow. Also player gender? Also species??? these seem to be some sort of struct?
+    u16 linkSendBuffer[0x23]; // Related to unk10_3 somehow. Also player gender? Also species??? these seem to be some sort of struct?
     u16 unk884[0x23]; // Seemingly never set. Probably relates to tag partner somehow.
     u8 filler8CA[0xa];
-    u8 unk8D4;
+    u8 linkReceiveCount;
     u8 unk8D5;
     u8 filler8D6[2];
     u16 unk8D8;
-    u16 unk8DA;
+    u16 resultVar;
 } FrontierFieldSystem;
 
 #endif // POKEHEARTGOLD_SCRCMD_9_H

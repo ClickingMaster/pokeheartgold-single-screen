@@ -7,27 +7,27 @@
 #include "unk_02009D48.h"
 
 typedef struct WifiClubGameEntryAvatar {
-    UnkStruct_ov42_02228110 *unk0;
-    UnkStruct_ov42_0222903C *unk4;
-    u16 unk8;
-    s16 unkA;
+    Field2DObject *object;
+    Field2DObjectSprite *drawer;
+    u16 state;
+    s16 timer;
 } WifiClubGameEntryAvatar;
 
 typedef struct WifiClubGameEntryArgs {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
-    u8 unk4;
+    u8 game;
+    u8 minPlayers;
+    u8 maxPlayers;
+    u8 result;
+    u8 voiceChat;
     u8 unk5;
     u8 unk6;
     u8 unk7;
-    SaveData *unk8;
+    SaveData *saveData;
 } WifiClubGameEntryArgs;
 
 typedef struct WifiClubGameEntryJoinAnswer {
-    s16 unk0;
-    s32 unk2;
+    s16 netId;
+    s32 answer;
 } WifiClubGameEntryJoinAnswer;
 
 typedef struct WifiClubGameEntryScreen {
@@ -37,14 +37,14 @@ typedef struct WifiClubGameEntryScreen {
     String *string1;
     String *string2;
     u8 printerId;
-    u8 unk15;
+    u8 messageDelay;
     u16 textFrameDelay;
     SpriteList *spriteList; // 0x18
     G2dRenderer g2dRenderer;
     GF_2DGfxResMan *gf2DGfxResManList[4];
-    UnkStruct_ov42_022280A8 *unk154;
-    UnkStruct_ov42_02228EDC *unk158;
-    WifiClubGameEntryAvatar unk15C[4];
+    Field2DObjectManager *objects;
+    Field2DObjectSpriteManager *drawers;
+    WifiClubGameEntryAvatar avatars[4];
     Window windowList[5]; // 0x18C - 0x1DC
     struct ListMenu2D *listMenu2D;
     void *scrnDataRaw;
@@ -52,34 +52,34 @@ typedef struct WifiClubGameEntryScreen {
     WaitingIcon *waitingIcon; // 0x218;
     void *plttDataRaw;
     NNSG2dPaletteData *plttData;
-    s16 unk1F4;
-    s16 unk1F6;
+    s16 paletteTimer;
+    s16 paletteFrame;
 } WifiClubGameEntryScreen;
 
 typedef struct WifiClubGameEntry {
-    UnkStruct_ov44_02231958 *unk0;
-    u8 unk4;
-    u8 unk5;
-    u8 unk6;
-    u8 unk7;
-    s32 unk8;
-    s32 unkC;
-    u8 unk10;
-    u8 unk11;
-    u8 unk12;
-    u8 unk13;
-    u8 unk14[4];
-    u8 unk18[4];
-    u8 unk1C[4];
-    u8 unk20[4];
-    u8 unk24;
-    u8 unk25;
-    u8 unk26;
-    u8 unk27;
-    u8 unk28[4];
-    u8 unk2C;
-    u8 unk2D;
-    WifiClubGameEntryScreen unk30;
+    UnkStruct_ov44_02231958 *clubStatus;
+    u8 isLeader;
+    u8 state;
+    u8 applicantNetId;
+    u8 result;
+    s32 timer;
+    s32 timeoutTimer;
+    u8 timeoutRunning;
+    u8 voiceChatOn;
+    u8 membersChanged;
+    u8 joinAnswer;
+    u8 disconnected[4];
+    u8 disconnectedNetIds[4];
+    u8 shownVoiceChatFlags[4];
+    u8 voiceChatFlags[4];
+    u8 memberListDirty;
+    u8 lastAcceptedNetId;
+    u8 leaderFriendIndex;
+    u8 watchConnection;
+    u8 acceptedByLeader[4];
+    u8 startSyncStarted;
+    u8 refusedMsg;
+    WifiClubGameEntryScreen screen;
 } WifiClubGameEntry;
 
 typedef void (*WifiClubGameEntryAvatarFunc)(WifiClubGameEntry *arg0, WifiClubGameEntryAvatar *arg1);
@@ -221,7 +221,7 @@ s32 WifiClubGameEntry_Member_WaitReconnected(WifiClubGameEntry *arg0, WifiClubGa
 s32 WifiClubGameEntry_Member_RebuildScreen(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID);
 s32 WifiClubGameEntry_Member_WaitFadeIn(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID);
 s32 WifiClubGameEntry_Member_Cancel(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID);
-UnkStruct_ov44_02232914 ov44_02232E90(s32 arg0);
+Field2DPoint ov44_02232E90(s32 arg0);
 const u32 *ov44_02232E9C(u32 arg0);
 
 #endif // POKEHEARTGOLD_OVY_44_H

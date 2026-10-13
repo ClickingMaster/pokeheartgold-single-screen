@@ -84,11 +84,11 @@ void StripeWipe_Start(EncounterEffectTask *effect, StripeWipe *wipe, u32 stripeH
     if (wipe->hBlankTask != NULL) {
         GF_AssertFail();
     }
-    effect->unk_18 = FALSE;
+    effect->wipeDone = FALSE;
     wipe->hBlankSystem = effect->fieldSystem->mapSystems->hBlankSystem;
     wipe->stripeHeight = stripeHeight;
     wipe->state = 0;
-    wipe->done = &effect->unk_18;
+    wipe->done = &effect->wipeDone;
     EncounterEffectQuadInterp_Init(&wipe->offset, start, end, velocity, duration);
     if (start >= 0) {
         reg_G2_WIN0H = 0xFF - start;
@@ -203,11 +203,11 @@ void SplitWipe_Start(EncounterEffectTask *effect, SplitWipe *wipe, s32 duration,
     if (wipe->hBlankTask != NULL) {
         GF_AssertFail();
     }
-    effect->unk_18 = FALSE;
+    effect->wipeDone = FALSE;
     wipe->hBlankSystem = effect->fieldSystem->mapSystems->hBlankSystem;
     wipe->middleLine = 96;
     wipe->state = 0;
-    wipe->done = &effect->unk_18;
+    wipe->done = &effect->wipeDone;
     EncounterEffectQuadInterp_Init(&wipe->x, 0, FX32_CONST(255), velocityX, duration);
     EncounterEffectQuadInterp_Init(&wipe->y, 0, FX32_CONST(96), velocityY, duration);
     reg_G2_WIN0H = 0xFF;

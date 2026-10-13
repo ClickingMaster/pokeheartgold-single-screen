@@ -274,7 +274,7 @@ void sub_0205857C(void) {
     int i;
 
     for (i = 0; i < Comm_CountConnected(); i++) {
-        if (i != Comm_GetLocalNetId() && LinkSync_GetPlayerState(i) == 0x5e && gCommClubLink->fieldSystem->taskman == NULL && gCommClubLink->fieldSystem->unkD2_0 == 0) {
+        if (i != Comm_GetLocalNetId() && LinkSync_GetPlayerState(i) == 0x5e && gCommClubLink->fieldSystem->taskman == NULL && gCommClubLink->fieldSystem->startMenuState == 0) {
             int j;
             for (j = 0; j < 4; j++) {
                 if (gCommClubLink->cards[j] != NULL) {

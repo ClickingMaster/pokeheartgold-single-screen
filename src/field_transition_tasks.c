@@ -26,7 +26,7 @@
 typedef struct WiFiPlazaTaskEnv {
     u16 state;
     u16 parameter;
-    void *fieldArg; // &fieldSystem->unkB4, passed to the app as its args
+    void *fieldArg; // &fieldSystem->plazaLoginTime, passed to the app as its args
     SaveData *saveData;
     u32 value;
 } WiFiPlazaTaskEnv;
@@ -368,7 +368,7 @@ BOOL Task_WiFiPlaza(TaskManager *taskMan) {
     case 0:
         env->saveData = fieldSystem->saveData;
         env->value = env->parameter;
-        env->fieldArg = &fieldSystem->unkB4;
+        env->fieldArg = &fieldSystem->plazaLoginTime;
         CallApplicationAsTask(taskMan, &sOverlayTemplate_WiFiPlaza, &env->fieldArg);
         env->state++;
         break;

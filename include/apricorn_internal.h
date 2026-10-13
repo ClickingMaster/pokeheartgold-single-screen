@@ -13,19 +13,19 @@ struct SaveApricornBox {
     u8 apricorns[7];
     u8 kurtQuantity;
     u8 kurtApricorn;
-    u8 unk_09;
-    u16 unk_0A;
-    u8 unk_0C[8];
-    u32 unk_14;
-    u32 unk_18;
+    u8 juiceServings;
+    u16 queuedApricorns;
+    u8 juice[8];
+    u32 mixStartSteps;
+    u32 juiceAgingSteps;
     union {
-        u32 unk_1C;
+        u32 mixWord;
         struct {
             u32 mixProgress : 30;
             u32 mixState : 2;
         };
     };
-    u8 unk_20[3][0x20];
+    u8 juiceRecords[3][0x20];
 };
 
 typedef struct ApricornRecord {

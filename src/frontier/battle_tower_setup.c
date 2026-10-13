@@ -304,7 +304,7 @@ BattleSetup *BattleTower_NewBattleSetup(FrontierFieldSystem *tower, FrontierLaun
     }
     Heap_Free(mon);
     BattleSetup_SetAllySideBattlersToPlayer(setup);
-    BattleTower_AddTrainerToBattle(setup, &tower->unk78[0], tower->numMons, BATTLER_ENEMY, tower->heapID);
+    BattleTower_AddTrainerToBattle(setup, &tower->opponents[0], tower->numMons, BATTLER_ENEMY, tower->heapID);
     for (i = 0; i < BATTLER_MAX; i++) {
         setup->trainer[i].data.aiFlags = 7;
     }
@@ -314,7 +314,7 @@ BattleSetup *BattleTower_NewBattleSetup(FrontierFieldSystem *tower, FrontierLaun
         // fallthrough
     case TOWER_MODE_LINK:
     case TOWER_MODE_6:
-        BattleTower_AddTrainerToBattle(setup, &tower->unk78[1], tower->numMons, BATTLER_ENEMY2, tower->heapID);
+        BattleTower_AddTrainerToBattle(setup, &tower->opponents[1], tower->numMons, BATTLER_ENEMY2, tower->heapID);
         break;
     }
     return setup;
@@ -362,7 +362,7 @@ u32 BattleTower_GetBattleType(u32 towerMode) {
 
 void ov80_02236ABC(FrontierFieldSystem *tower, u16 value) {
     tower->unk10_3 = value;
-    tower->unk83e[0] = value;
+    tower->linkSendBuffer[0] = value;
 }
 
 BOOL ov80_02236AD8(FrontierFieldSystem *tower, const u16 *remote) {

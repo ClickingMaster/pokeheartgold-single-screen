@@ -136,7 +136,7 @@ void EncounterEffect_Start(s32 effect, FieldSystem *fieldSystem, BOOL *done) {
     if (taskDone) {
         *taskDone = FALSE;
     }
-    effectTask->unk_18 = FALSE;
+    effectTask->wipeDone = FALSE;
 }
 
 void EncounterEffect_Finish(EncounterEffectTask *effect, SysTask *task) {
@@ -207,7 +207,7 @@ void Task_EncounterEffectFlash(SysTask *task, void *data) {
 }
 
 BOOL ov01_021EFE30(EncounterEffectTask *effect) {
-    return effect->unk_18;
+    return effect->wipeDone;
 }
 
 void EncounterEffectInterp_Init(EncounterEffectInterp *interp, s32 start, s32 end, s32 duration) {

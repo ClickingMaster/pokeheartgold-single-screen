@@ -343,7 +343,7 @@ int UnionChatLog_AddLogIndex(int index, int offset) {
 }
 
 void UnionChatLog_DrawRow(UnionChatLogData *data, int row, MessageSlot *slot) {
-    data->rows[row].gender = slot->unk10;
+    data->rows[row].gender = slot->gender;
     CopyToBgTilemapRect(data->bgConfig, GF_BG_LYR_SUB_3, 0, 7 * row + 2, 32, 7, data->screenData->rawData, 0, data->rows[row].gender * 24, 32, 48);
     FillWindowPixelBuffer(&data->rows[row].name, 0);
     FillWindowPixelBuffer(&data->rows[row].message, 0);
@@ -463,14 +463,14 @@ int UnionChatLog_HandleTouchButtons(UnionChatLogData *data) {
                         UnionChatLogPeer *peer = CommWireless_GetParentInfo(i);
                         if (peer) {
                             register UnionChatLogPeerChat *chat = &peer->chat;
-                            if (data->unionRoom->slots[i].state == 2 && chat->trainerId == data->log->slots[index].unkC) {
+                            if (data->unionRoom->slots[i].state == 2 && chat->trainerId == data->log->slots[index].trainerId) {
                                 PlaySE(SEQ_SE_DP_BUTTON3);
                                 data->unionRoom->slots[i].trigger = 1;
                                 break;
                             }
                         }
                     }
-                    if (PlayerProfile_GetTrainerID(CommWireless_GetProfile()) == data->log->slots[index].unkC) {
+                    if (PlayerProfile_GetTrainerID(CommWireless_GetProfile()) == data->log->slots[index].trainerId) {
                         PlaySE(SEQ_SE_DP_BUTTON3);
                         data->unionRoom->slots[50].trigger = 1;
                     }
@@ -656,8 +656,8 @@ void UnionChatLog_AddEntry(UnionChatLogData *data, u32 trainerId, MailMessage *m
     }
     CopyU16ArrayToString(log->slots[*index].string0, PlayerProfile_GetNamePtr(profile));
     log->slots[*index].message = *mail;
-    log->slots[*index].unkC = trainerId;
-    log->slots[*index].unk10 = PlayerProfile_GetTrainerGender(profile);
+    log->slots[*index].trainerId = trainerId;
+    log->slots[*index].gender = PlayerProfile_GetTrainerGender(profile);
     log->slots[*index].string1 = MailMsg_GetExpandedString(mail, HEAP_ID_87);
     log->slots[*index].string2 = UnionChatLog_GetFriendOfText(palPad, trainerId, data->msgFormat, data->msgData, data->profile);
     (*index)++;
@@ -676,7 +676,7 @@ BOOL UnionChatLog_IsNewMessage(UnionChatLogData *data, MailMessage *mail, u32 tr
     }
     for (i = 0; i < data->log->count; i++) {
         MessageSlot *slot = &data->log->slots[i];
-        if (trainerId == slot->unkC && MailMsg_Compare(mail, &slot->message)) {
+        if (trainerId == slot->trainerId && MailMsg_Compare(mail, &slot->message)) {
             break;
         }
     }
@@ -684,7 +684,7 @@ BOOL UnionChatLog_IsNewMessage(UnionChatLogData *data, MailMessage *mail, u32 tr
         return FALSE;
     }
     // The result of this comparison is not used.
-    if (trainerId != data->log->slots[i].unkC) {
+    if (trainerId != data->log->slots[i].trainerId) {
         MailMsg_Compare(mail, &data->log->slots[i].message);
     }
     return TRUE;

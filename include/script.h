@@ -34,13 +34,13 @@ typedef struct ScriptContext ScriptContext;
 #define Unk80_10_C_MAGIC (222271)
 
 typedef struct EngagedTrainer {
-    int unk0;
-    int unk4;
-    int unk8;
+    int sightDistance;
+    int sightDirection;
+    int scriptId;
     int trainerId;
     int encounterType; // 0: single trainer; 1: double-battle trainer; 2: two trainers
     LocalMapObject *overworldEvent;
-    int unk18;
+    int approachTask;
 } EngagedTrainer;
 
 typedef struct ScriptEnvironment {
@@ -48,13 +48,13 @@ typedef struct ScriptEnvironment {
     u8 state;
     u8 textPrinterNum;
     u8 activeMovementCounter;
-    u8 unk_7;
-    u8 unk_8;
+    u8 stdScriptWaitFlags;
+    u8 msgWindowOpen;
     u8 activeScriptContextCount;
     u16 activeScriptNumber;
     u32 battleWinFlag;
-    u32 unk_10;
-    Window unk_14;
+    u32 menu;
+    Window window;
     struct ListMenu2D *listMenu2D;
     int facingDirection;
     LocalMapObject *lastInteracted;
@@ -71,7 +71,7 @@ typedef struct ScriptEnvironment {
     void *runningAppData;
     void *miscDataPtr;
     void *unk_B4;
-    void *unk_B8; // PlayerMovementState
+    void *savingPoseTask; // PlayerMovementState
     Window *pointsBox;
     u8 padding[0xC]; // FIXME: ugly hack
     Window *moneyBox;
@@ -147,7 +147,7 @@ struct MapLoadMode {
     u32 loadExtOverlay : 4;
     u32 separateTerrainAttributesBlockCount : 8;
     union {
-        u32 unk_4;
+        u32 fieldHeapSize;
         struct {
             u8 unk4;
             u8 unk5;

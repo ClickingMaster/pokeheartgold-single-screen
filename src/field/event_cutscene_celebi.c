@@ -25,7 +25,7 @@ typedef struct CelebiTimeTravelCutsceneTaskData {
     Field3DModelAnimation animations[3];
     Field3dObject object3d;
     s32 swirlRotation;
-    u16 unkE4;
+    u16 swirlStartAngle;
     u16 swirlFrame;
     u16 swirlDuration;
     u16 perspective;
@@ -158,7 +158,7 @@ static void CelebiCutscene_InitSwirlData(CelebiTimeTravelCutsceneTaskData *data,
     data->isSwirlFinished = FALSE;
     data->swirlFrame = 0;
     data->swirlRotation = a1->rotation;
-    data->unkE4 = data->unk0;
+    data->swirlStartAngle = data->unk0;
     data->perspective = Camera_GetPerspectiveAngle(data->fieldSystem->camera);
     data->swirlTargetPerspective = a1->perspective;
     data->swirlDuration = a1->duration;
@@ -179,7 +179,7 @@ static BOOL CelebiCutscene_SwirlEffect(CelebiTimeTravelCutsceneTaskData *data) {
     angle *= e6;
     angle /= e8;
     angle += data->perspective;
-    u16 index = ((data->swirlRotation * e6) / e8) + data->unkE4;
+    u16 index = ((data->swirlRotation * e6) / e8) + data->swirlStartAngle;
     MTX_RotZ33(&rotMatrix, FX_SinIdx(index), FX_CosIdx(index));
     MTX_MultVec33(&vec2, &rotMatrix, &vec);
     Camera_SetLookAtCamUp(&vec, camera);

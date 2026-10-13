@@ -88,7 +88,7 @@ typedef struct RockClimbWork {
     LocalMapObject *mapObject;  // 0x14
     u32 effect;                 // 0x18
     FieldMoveAnim anim;         // 0x1C
-    Field3dObjectTask *unk2C;   // 0x2C
+    Field3dObjectTask *debris;   // 0x2C
 } RockClimbWork;                // size: 0x30
 
 // Waterfall (up and down) and Whirlpool.
@@ -838,7 +838,7 @@ int RockClimb_CreateEffect(RockClimbWork *work, TaskManager *taskManager) {
     if (FollowMon_IsActive(work->fieldSystem)) {
         MapObject_UnpauseMovement(FollowMon_GetMapObject(work->fieldSystem));
     }
-    work->unk2C = RockClimbDebris_Create(work->fieldSystem);
+    work->debris = RockClimbDebris_Create(work->fieldSystem);
     PlaySE(SEQ_SE_DP_UG_023);
     work->state++;
     return 0;
@@ -884,8 +884,8 @@ int RockClimb_CheckNextTile(RockClimbWork *work, TaskManager *taskManager) {
     work->timer = 0;
     work->state++;
     RockClimbEffect_SetFollow(work->effect, FALSE);
-    RockClimbDebris_Delete(work->unk2C);
-    work->unk2C = NULL;
+    RockClimbDebris_Delete(work->debris);
+    work->debris = NULL;
     return 0;
 }
 #pragma force_active reset

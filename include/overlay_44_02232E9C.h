@@ -17,15 +17,15 @@
 #include "yes_no_prompt.h"
 
 typedef struct WifiClubRoomLights {
-    void *unk0;
-    NNSG2dPaletteData *unk4;
-    u8 unk8;
-    u8 unk9;
-    s16 unkA;
-    u8 unkC;
-    u8 unkD;
-    s16 unkE;
-    u8 unk10;
+    void *plttDataRaw;
+    NNSG2dPaletteData *plttData;
+    u8 blinkMask;
+    u8 blinkPhase;
+    s16 blinkTimer;
+    u8 activeLight;
+    u8 step;
+    s16 stepTimer;
+    u8 triggered;
 } WifiClubRoomLights;
 
 typedef struct UnkStruct_ov44_0222DD64 {
@@ -43,16 +43,16 @@ typedef void (*func_type_02236680)(UnkStruct_ov44_022319EC *, enum HeapID);
 typedef s32 (*func_type_0222A60C)(UnkStruct_ov44_022319EC *, s32);
 
 struct WifiClubRoomPerson {
-    UnkStruct_ov42_02228110 *unk0;
-    UnkStruct_ov42_0222903C *unk4;
-    s16 unk8;
-    u8 unkA;
-    u8 unkB;
-    u16 unkC;
-    u16 unkE;
-    WifiClubRoomPersonUpdateFunc unk10;
-    void *unk14;
-    WifiClubRoomPersonAnimFunc unk18;
+    Field2DObject *object;
+    Field2DObjectSprite *drawer;
+    s16 timer;
+    u8 talkPartnerId;
+    u8 activityMode;
+    u16 mode;
+    u16 savedMode;
+    WifiClubRoomPersonUpdateFunc update;
+    void *savedUpdate;
+    WifiClubRoomPersonAnimFunc animate;
 };
 
 typedef struct UnkStruct_ov44_02232C4C {
@@ -62,33 +62,33 @@ typedef struct UnkStruct_ov44_02232C4C {
 } UnkStruct_ov44_02232C4C;
 
 typedef struct WifiClubRoomGfx {
-    SpriteList *unk0;
-    G2dRenderer unk4;
-    GF_2DGfxResMan *unk12C[4];
-    SpriteResource *unk13C[4];
-    SpriteResourcesHeader unk14C;
-    Sprite *unk170;
-    Sprite *unk174;
+    SpriteList *spriteList;
+    G2dRenderer g2dRenderer;
+    GF_2DGfxResMan *resManagers[4];
+    SpriteResource *resources[4];
+    SpriteResourcesHeader resourcesHeader;
+    Sprite *exitArrowSprite;
+    Sprite *friendMarkerSprite;
 } WifiClubRoomGfx;
 
 struct WifiClubRoom {
-    s32 unk0;
-    enum HeapID unk4;
+    s32 initialized;
+    enum HeapID heapID;
     u8 unk8;
     u8 unk9;
     s16 unkA;
-    u32 unkC;
-    BgConfig *unk10;
-    WifiClubRoomGfx unk14;
-    WifiClubRoomPerson unk18C[48];
-    WifiClubRoomPerson *unk6CC;
-    WifiClubRoomLights unk6D0;
-    UnkStruct_ov42_02227F68 *unk6E4;
-    UnkStruct_ov42_022280A8 *unk6E8;
-    UnkStruct_ov42_02228EDC *unk6EC;
-    UnkStruct_ov44_02232914 unk6F0;
-    UnkStruct_ov42_022293B8 *unk6F4;
-    UnkStruct_ov42_02229A40 *unk6F8;
+    u32 inputLocked;
+    BgConfig *bgConfig;
+    WifiClubRoomGfx gfx;
+    WifiClubRoomPerson persons[48];
+    WifiClubRoomPerson *player;
+    WifiClubRoomLights lights;
+    Field2DMap *map;
+    Field2DObjectManager *objects;
+    Field2DObjectSpriteManager *drawers;
+    Field2DPoint cameraPos;
+    Field2DBgLayer *mapBg;
+    Field2DCommandQueue *commandQueue;
 };
 
 typedef struct UnkStruct_ov44_02231800 {
@@ -494,7 +494,7 @@ void WifiClubRoomGfx_CreateMarkerSprites(WifiClubRoomGfx *arg0, enum HeapID heap
 void WifiClubRoomGfx_DeleteMarkerSprites(WifiClubRoomGfx *arg0);
 void WifiClubRoom_ShowExitArrow(WifiClubRoom *arg0);
 void WifiClubRoom_HideExitArrow(WifiClubRoom *arg0);
-void WifiClubRoom_ShowFriendMarkerAt(WifiClubRoom *arg0, UnkStruct_ov44_02232914 arg1, s32 arg2);
+void WifiClubRoom_ShowFriendMarkerAt(WifiClubRoom *arg0, Field2DPoint arg1, s32 arg2);
 void WifiClubRoom_HideFriendMarkerSprite(WifiClubRoom *arg0);
 s32 WifiClubRoom_IsPlayerAtEntrance(WifiClubRoom *arg0);
 void WifiClubRoom_FindFriendSpawnPos(WifiClubRoom *arg0, s16 *arg1, u32 arg2);
@@ -530,7 +530,7 @@ void WifiClubRoomLights_EndSequence(WifiClubRoomLights *arg0);
 void WifiClubRoomLights_Trigger(WifiClubRoomLights *arg0);
 void WifiClubRoomLights_Start(WifiClubRoomLights *arg0, u8 arg1);
 void WifiClubRoomLights_Continue(WifiClubRoomLights *arg0);
-UnkStruct_ov44_02232914 ov44_02232E90(s32 arg0);
+Field2DPoint ov44_02232E90(s32 arg0);
 const u32 *ov44_02232E9C(u32 arg0);
 
 #endif // POKEHEARTGOLD_OVY_44_02232E9C_H

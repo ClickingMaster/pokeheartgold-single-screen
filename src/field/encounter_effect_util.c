@@ -342,10 +342,10 @@ SysTask *ZigzagWipe_Start(EncounterEffectTask *effect, ZigzagWipe *wipe, s32 dur
     if (wipe->task) {
         GF_AssertFail();
     }
-    effect->unk_18 = FALSE;
+    effect->wipeDone = FALSE;
     wipe->hBlankSystem = effect->fieldSystem->mapSystems->hBlankSystem;
     wipe->state = 0;
-    wipe->done = &effect->unk_18;
+    wipe->done = &effect->wipeDone;
     EncounterEffectInterp_Init(&wipe->edge, 255, 0, duration);
     for (i = 0; i < 192; i++) {
         u32 step = i % period;

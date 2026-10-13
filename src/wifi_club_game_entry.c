@@ -110,7 +110,7 @@ const GraphicsBanks sWifiClubGameEntryGraphicsBanks = {
     GX_VRAM_BG_128_A, GX_VRAM_BGEXTPLTT_NONE, GX_VRAM_SUB_BG_128_C, GX_VRAM_SUB_BGEXTPLTT_NONE, GX_VRAM_OBJ_128_B, GX_VRAM_OBJEXTPLTT_NONE, GX_VRAM_SUB_OBJ_16_I, GX_VRAM_SUB_OBJEXTPLTT_NONE, GX_VRAM_TEX_NONE, GX_VRAM_TEXPLTT_NONE
 };
 
-const UnkStruct_ov42_02122667 sWifiClubGameEntryAvatarTemplates[4] = {
+const Field2DObjectTemplate sWifiClubGameEntryAvatarTemplates[4] = {
     { 208, 48, 0, 0, 1, 0 },
     { 232, 72, 1, 0, 2, 0 },
     { 208, 96, 2, 0, 0, 0 },
@@ -200,20 +200,20 @@ void WifiClubGameEntry_Init(OverlayManager *overlayMananger) {
     Heap_Create(HEAP_ID_3, HEAP_ID_104, 0xA000);
     WifiClubGameEntry *temp_r0 = OverlayManager_CreateAndGetData(overlayMananger, sizeof(WifiClubGameEntry), HEAP_ID_103);
     MI_CpuFill8(temp_r0, 0, sizeof(WifiClubGameEntry));
-    MI_CpuFill8(temp_r0->unk1C, 1, 4);
-    MI_CpuFill8(temp_r0->unk20, 1, 4);
+    MI_CpuFill8(temp_r0->shownVoiceChatFlags, 1, 4);
+    MI_CpuFill8(temp_r0->voiceChatFlags, 1, 4);
     GF_CreateVramTransferManager(16, HEAP_ID_103);
     UnkStruct_ov44_0223197C *temp_r0_2 = CommState_GetWifiClubData();
-    temp_r0->unk0 = &temp_r0_2->unk0;
+    temp_r0->clubStatus = &temp_r0_2->unk0;
     temp_r0_2->unk0.unk21 = temp_r0_2->unk0.unk22;
-    temp_r0->unk4 = WifiClubGameEntry_IsLocalLeader(temp_r0);
-    temp_r0->unk6 = 255;
+    temp_r0->isLeader = WifiClubGameEntry_IsLocalLeader(temp_r0);
+    temp_r0->applicantNetId = 255;
     WifiClubComm_RegisterCommands(temp_r0);
     WifiClubGameEntry_SetDisconnectCallback(temp_r0);
     WifiClubGameEntry_InitScreen(temp_r0, temp_r5, HEAP_ID_103);
     Main_SetVBlankIntrCB((void *)&WifiClubGameEntry_VBlankCB, temp_r0);
     WirelessStatusIcon_Create();
-    temp_r0->unk27 = 1;
+    temp_r0->watchConnection = 1;
 }
 
 s32 WifiClubGameEntry_Main(OverlayManager *overlayManager, u32 *arg1) {
@@ -234,18 +234,18 @@ s32 WifiClubGameEntry_Main(OverlayManager *overlayManager, u32 *arg1) {
         }
         break;
     case 2:
-        if (temp_r4->unk27 != 0) {
+        if (temp_r4->watchConnection != 0) {
             WifiClubGameEntry_CheckConnectionLost(temp_r4, temp_r7, HEAP_ID_103);
         }
-        if (temp_r4->unk4 != 0) {
+        if (temp_r4->isLeader != 0) {
             if (CommPlayerInfo_Exists() == 1) {
                 WifiClubGameEntry_SendVoiceChatFlags(temp_r4);
                 CommPlayerInfo_HostRedistribute();
                 WifiClubGameEntry_RefuseLateApplicants(temp_r4);
             }
-            var_r6 = sWifiClubGameEntryLeaderStates[temp_r4->unk5](temp_r4, temp_r7, HEAP_ID_103);
+            var_r6 = sWifiClubGameEntryLeaderStates[temp_r4->state](temp_r4, temp_r7, HEAP_ID_103);
         } else {
-            var_r6 = sWifiClubGameEntryMemberStates[temp_r4->unk5](temp_r4, temp_r7, HEAP_ID_103);
+            var_r6 = sWifiClubGameEntryMemberStates[temp_r4->state](temp_r4, temp_r7, HEAP_ID_103);
             if (CommPlayerInfo_Exists() == 1) {
                 WifiClubGameEntry_AcceptAnnouncedMembers(temp_r4, HEAP_ID_103);
             }
@@ -255,8 +255,8 @@ s32 WifiClubGameEntry_Main(OverlayManager *overlayManager, u32 *arg1) {
         }
         WifiClubGameEntry_UpdateAvatars(temp_r4);
         if (var_r6 == 1) {
-            temp_r7->unk3 = temp_r4->unk7;
-            temp_r7->unk4 = temp_r4->unk11;
+            temp_r7->result = temp_r4->result;
+            temp_r7->voiceChat = temp_r4->voiceChatOn;
             arg1[0]++;
         }
         break;
@@ -269,8 +269,8 @@ s32 WifiClubGameEntry_Main(OverlayManager *overlayManager, u32 *arg1) {
             return 1;
         }
     }
-    WifiClubGameEntry_AnimateBgPalette(&temp_r4->unk30);
-    SpriteList_RenderAndAnimateSprites(temp_r4->unk30.spriteList);
+    WifiClubGameEntry_AnimateBgPalette(&temp_r4->screen);
+    SpriteList_RenderAndAnimateSprites(temp_r4->screen.spriteList);
     return 0;
 }
 
@@ -293,19 +293,19 @@ s32 WifiClubGameEntry_Exit(OverlayManager *arg0) {
 }
 
 void WifiClubGameEntry_OnJoinAnswer(WifiClubGameEntry *arg0, String *arg1) {
-    if (arg0->unk4 == 0) {
+    if (arg0->isLeader == 0) {
 
         if (arg1->maxsize == Comm_GetLocalNetId()) {
             switch (arg1->magic) {
             case 1:
-                arg0->unk13 = 1;
+                arg0->joinAnswer = 1;
                 return;
             case 0:
-                arg0->unk13 = 2;
+                arg0->joinAnswer = 2;
                 return;
 
             case 2:
-                arg0->unk13 = 3;
+                arg0->joinAnswer = 3;
                 return;
             }
         } else {
@@ -313,7 +313,7 @@ void WifiClubGameEntry_OnJoinAnswer(WifiClubGameEntry *arg0, String *arg1) {
             case 0:
                 break;
             case 1:
-                arg0->unk28[arg1->maxsize] = 1;
+                arg0->acceptedByLeader[arg1->maxsize] = 1;
                 return;
             case 2:
                 break;
@@ -328,20 +328,20 @@ void WifiClubGameEntry_OnJoinAnswer(WifiClubGameEntry *arg0, String *arg1) {
 }
 
 void WifiClubGameEntry_OnStartCommand(WifiClubGameEntry *arg0) {
-    if (arg0->unk2C == 0) {
-        arg0->unk2C = 1;
+    if (arg0->startSyncStarted == 0) {
+        arg0->startSyncStarted = 1;
         LinkSync_StartSync(13);
     }
 }
 
 void WifiClubGameEntry_OnVoiceChatFlags(WifiClubGameEntry *arg0, String *arg1) {
-    if (arg0->unk4 != 1) {
-        memcpy(arg0->unk20, arg1, 4);
+    if (arg0->isLeader != 1) {
+        memcpy(arg0->voiceChatFlags, arg1, 4);
     }
 }
 
 void WifiClubGameEntry_VBlankCB(WifiClubGameEntry *arg0) {
-    DoScheduledBgGpuUpdates(arg0->unk30.bgConfig);
+    DoScheduledBgGpuUpdates(arg0->screen.bgConfig);
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
 }
@@ -355,19 +355,19 @@ s32 WifiClubGameEntry_IsLocalLeader(WifiClubGameEntry *arg0) {
 
 void WifiClubGameEntry_InitScreen(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     WifiClubGameEntry_SetGfxBanks();
-    InitBgAndScrnData(&arg0->unk30, heapID);
-    InitWindowList(&arg0->unk30, arg1, heapID);
-    InitStringAndMsgData(&arg0->unk30, arg1, heapID);
-    WifiClubGameEntry_PrintTitle(&arg0->unk30, arg1, heapID);
+    InitBgAndScrnData(&arg0->screen, heapID);
+    InitWindowList(&arg0->screen, arg1, heapID);
+    InitStringAndMsgData(&arg0->screen, arg1, heapID);
+    WifiClubGameEntry_PrintTitle(&arg0->screen, arg1, heapID);
     WifiClubGameEntry_DrawMemberList(arg0, arg1, heapID);
-    InitSpritesAnd2DGfxResObjs(&arg0->unk30, heapID);
+    InitSpritesAnd2DGfxResObjs(&arg0->screen, heapID);
 }
 
 void WifiClubGameEntry_FreeScreen(WifiClubGameEntry *arg0, enum HeapID heapID) {
-    FreeSpritesAnd2DGfxResObjs(&arg0->unk30);
-    FreeStringAndMsgData(&arg0->unk30);
-    FreeWindowList(&arg0->unk30, heapID);
-    FreeBgAndScreenData(&arg0->unk30);
+    FreeSpritesAnd2DGfxResObjs(&arg0->screen);
+    FreeStringAndMsgData(&arg0->screen);
+    FreeWindowList(&arg0->screen, heapID);
+    FreeBgAndScreenData(&arg0->screen);
 }
 
 void WifiClubGameEntry_SetGfxBanks(void) {
@@ -411,8 +411,8 @@ void InitBgAndScrnData(WifiClubGameEntryScreen *arg0, enum HeapID heapID) {
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 46, arg0->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, heapID);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 47, arg0->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, heapID);
     WifiClubGameEntry_LoadBgPaletteFrame(arg0, 0);
-    arg0->unk1F4 = 3;
-    arg0->unk1F6 = 1;
+    arg0->paletteTimer = 3;
+    arg0->paletteFrame = 1;
     NARC_Delete(narc);
 }
 
@@ -428,7 +428,7 @@ void FreeBgAndScreenData(WifiClubGameEntryScreen *arg0) {
 void InitWindowList(WifiClubGameEntryScreen *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_1_OFFSET, heapID);
 
-    Options *options = Save_PlayerData_GetOptionsAddr(arg1->unk8);
+    Options *options = Save_PlayerData_GetOptionsAddr(arg1->saveData);
     LoadUserFrameGfx2(arg0->bgConfig, GF_BG_LYR_MAIN_1, 1, 2, Options_GetFrame(options), heapID);
     LoadUserFrameGfx1(arg0->bgConfig, GF_BG_LYR_MAIN_1, 31, 3, 0, heapID);
     LoadUserFrameGfx1(arg0->bgConfig, GF_BG_LYR_MAIN_2, 48, 4, 0, heapID);
@@ -471,7 +471,7 @@ void InitStringAndMsgData(WifiClubGameEntryScreen *arg0, WifiClubGameEntryArgs *
     arg0->string2 = String_New(256, heapID);
     arg0->printerId = 255;
 
-    Options *options = Save_PlayerData_GetOptionsAddr(arg1->unk8);
+    Options *options = Save_PlayerData_GetOptionsAddr(arg1->saveData);
     arg0->textFrameDelay = Options_GetTextFrameDelay(options);
 }
 
@@ -483,7 +483,7 @@ void FreeStringAndMsgData(WifiClubGameEntryScreen *arg0) {
 }
 
 void WifiClubGameEntry_PrintTitle(WifiClubGameEntryScreen *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    switch (arg1->unk0) {
+    switch (arg1->game) {
     case 0:
         break;
     case 1:
@@ -498,7 +498,7 @@ void WifiClubGameEntry_PrintTitle(WifiClubGameEntryScreen *arg0, WifiClubGameEnt
     }
 
     // Seeking Poffin cooks! OR // Seeking {STRVAR_3 0, 0, 0} players!
-    ReadMsgDataIntoString(arg0->msgData, sWifiClubGameEntryTitleMsgIds[arg1->unk0], arg0->string2);
+    ReadMsgDataIntoString(arg0->msgData, sWifiClubGameEntryTitleMsgIds[arg1->game], arg0->string2);
     StringExpandPlaceholders(arg0->msgFmt, arg0->string1, arg0->string2);
     AddTextPrinterParameterizedWithColor(&arg0->windowList[1], 0, arg0->string1, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 15), 0);
     ScheduleWindowCopyToVram(&arg0->windowList[1]);
@@ -528,13 +528,13 @@ void InitSpritesAnd2DGfxResObjs(WifiClubGameEntryScreen *arg0, enum HeapID heapI
         arg0->gf2DGfxResManList[i] = Create2DGfxResObjMan(4, (GfGfxResType)i, heapID);
     }
 
-    arg0->unk154 = ov42_02228010(4, heapID);
-    arg0->unk158 = ov42_02228EDC(arg0->spriteList, 0, 4, 1, heapID);
+    arg0->objects = Field2DObjectManager_New(4, heapID);
+    arg0->drawers = Field2DObjectSpriteManager_New(arg0->spriteList, 0, 4, 1, heapID);
 }
 
 void FreeSpritesAnd2DGfxResObjs(WifiClubGameEntryScreen *arg0) {
-    ov42_02228F94(arg0->unk158);
-    ov42_02228050(arg0->unk154);
+    Field2DObjectSpriteManager_Free(arg0->drawers);
+    Field2DObjectManager_Free(arg0->objects);
     SpriteList_Delete(arg0->spriteList);
 
     for (s32 i = 0; i < 4; i++) {
@@ -562,21 +562,21 @@ void Wifi_LoadAndPrintTextToWindow(WifiClubGameEntryScreen *arg0, WifiClubGameEn
     arg0->printerId = AddTextPrinterParameterizedWithColor(&arg0->windowList[0], 1, arg0->string1, 0, 0, arg0->textFrameDelay, MAKE_TEXT_COLOR(1, 2, 15), 0);
     ScheduleWindowCopyToVram(&arg0->windowList[0]);
     String_Delete(string);
-    Options *options = Save_PlayerData_GetOptionsAddr(arg1->unk8);
+    Options *options = Save_PlayerData_GetOptionsAddr(arg1->saveData);
     LoadUserFrameGfx2(arg0->bgConfig, GF_BG_LYR_MAIN_1, 1, 2, Options_GetFrame(options), heapID);
-    arg0->unk15 = arg3;
+    arg0->messageDelay = arg3;
 }
 
 s32 WifiClubGameEntry_IsMessageFinished(WifiClubGameEntryScreen *arg0) {
     if (arg0->printerId == 255) {
-        if (arg0->unk15 != 0) {
-            arg0->unk15--;
+        if (arg0->messageDelay != 0) {
+            arg0->messageDelay--;
             return 0;
         }
     } else if ((TextPrinterCheckActive(arg0->printerId) == 0) && (arg0->printerId != 255)) {
         arg0->printerId = 255;
     }
-    if ((arg0->printerId == 255) && (arg0->unk15 == 0)) {
+    if ((arg0->printerId == 255) && (arg0->messageDelay == 0)) {
         return 1;
     }
     return 0;
@@ -591,7 +591,7 @@ void WifiClubGameEntry_ClearMessage(WifiClubGameEntryScreen *arg0) {
     }
     FillWindowPixelBuffer(&arg0->windowList[0], 15);
     ScheduleWindowCopyToVram(&arg0->windowList[0]);
-    arg0->unk15 = 0;
+    arg0->messageDelay = 0;
 }
 
 // {STRVAR_1 3, 0, 0}\nID {STRVAR_1 54, 1, 0}
@@ -621,7 +621,7 @@ void WifiClubGameEntry_DrawMemberList(WifiClubGameEntry *arg0, WifiClubGameEntry
     WifiClubGameEntryScreen *temp_r6;
 
     if (CommPlayerInfo_Exists() != 0) {
-        temp_r6 = &arg0->unk30;
+        temp_r6 = &arg0->screen;
         for (s32 i = 0; i < 4; i++) {
             if ((i == 0) && (CommPlayerInfo_IsReceivedOrAccepted(i) == 1)) {
                 WifiClubGameEntry_DrawMember(arg0, temp_r6, arg1, i, heapID);
@@ -655,12 +655,12 @@ void WifiClubGameEntry_DrawMember(WifiClubGameEntry *arg0, WifiClubGameEntryScre
     ScheduleWindowCopyToVram(&arg1->windowList[3]);
     s32 var_r2;
     if (arg3 == Comm_GetLocalNetId()) {
-        if (arg0->unk0->unk21 != 0) {
+        if (arg0->clubStatus->unk21 != 0) {
             var_r2 = 2;
         } else {
             var_r2 = 1;
         }
-    } else if (arg0->unk20[arg3] != 0) {
+    } else if (arg0->voiceChatFlags[arg3] != 0) {
         var_r2 = 2;
     } else {
         var_r2 = 1;
@@ -693,13 +693,13 @@ void WifiClubGameEntry_BufferTrainerId(WifiClubGameEntryScreen *arg0, WifiClubGa
 }
 
 void WifiClubGameEntry_AnimateBgPalette(WifiClubGameEntryScreen *arg0) {
-    if (arg0->unk1F4 <= 0) {
-        WifiClubGameEntry_LoadBgPaletteFrame(arg0, arg0->unk1F6);
-        arg0->unk1F4 = 3;
-        arg0->unk1F6 = (arg0->unk1F6 + 1) % 18;
+    if (arg0->paletteTimer <= 0) {
+        WifiClubGameEntry_LoadBgPaletteFrame(arg0, arg0->paletteFrame);
+        arg0->paletteTimer = 3;
+        arg0->paletteFrame = (arg0->paletteFrame + 1) % 18;
         return;
     }
-    arg0->unk1F4--;
+    arg0->paletteTimer--;
 }
 
 void WifiClubGameEntry_LoadBgPaletteFrame(WifiClubGameEntryScreen *arg0, s32 arg1) {
@@ -707,16 +707,16 @@ void WifiClubGameEntry_LoadBgPaletteFrame(WifiClubGameEntryScreen *arg0, s32 arg
 }
 
 u8 WifiClubGameEntry_ToggleVoiceChat(WifiClubGameEntry *arg0, enum HeapID heapID) {
-    arg0->unk0->unk22 = 1 - arg0->unk0->unk22;
-    arg0->unk0->unk21 = arg0->unk0->unk22;
-    ov00_021E70B8(arg0->unk0->unk21);
-    ov00_021E6D60(arg0->unk0, 36);
-    if (arg0->unk0->unk21 == 1) {
+    arg0->clubStatus->unk22 = 1 - arg0->clubStatus->unk22;
+    arg0->clubStatus->unk21 = arg0->clubStatus->unk22;
+    ov00_021E70B8(arg0->clubStatus->unk21);
+    ov00_021E6D60(arg0->clubStatus, 36);
+    if (arg0->clubStatus->unk21 == 1) {
         WifiClubGameEntry_EnableVoiceChat(arg0);
     } else {
         WifiClubGameEntry_DisableVoiceChat(arg0);
     }
-    return arg0->unk0->unk22;
+    return arg0->clubStatus->unk22;
 }
 
 void WifiClubGameEntry_CheckConnectionLost(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
@@ -724,14 +724,14 @@ void WifiClubGameEntry_CheckConnectionLost(WifiClubGameEntry *arg0, WifiClubGame
     s32 temp_r6;
     s32 var_r5;
 
-    if (arg0->unk4 != 0) {
-        if ((u8)(arg0->unk5 + 229) <= 2) {
+    if (arg0->isLeader != 0) {
+        if ((u8)(arg0->state + 229) <= 2) {
             return;
         }
         if ((CommState_GetWifiMatchStatus() <= 2) && (WifiClubGameEntry_CountMembers(arg0) <= 1) && (WifiClubGameEntry_IsAnyoneConnected(arg0) == 0)) {
             return;
         }
-    } else if ((arg0->unk5 == 15) || (arg0->unk5 == 16) || (arg0->unk5 == 17) || ((u8)(arg0->unk5 + 250) <= 1)) {
+    } else if ((arg0->state == 15) || (arg0->state == 16) || (arg0->state == 17) || ((u8)(arg0->state + 250) <= 1)) {
         return;
     }
 
@@ -743,17 +743,17 @@ void WifiClubGameEntry_CheckConnectionLost(WifiClubGameEntry *arg0, WifiClubGame
         var_r5 = 0;
     }
     if ((CommState_GetWifiMatchStatus() >= 3) || (CommState_HasWifiFailed() != 0) || (CommState_WasWifiDisconnected() != 0) || (Comm_IsNetIdConnected(0) == 0) || (WifiClubGameEntry_IsAnyoneConnected(arg0) == 0) || (var_r5 == 1) || (temp_r6 == 1) || (temp_r7 == 1)) {
-        if (arg0->unk4 != 0) {
-            arg0->unk5 = 27;
+        if (arg0->isLeader != 0) {
+            arg0->state = 27;
             return;
         }
-        arg0->unk5 = 15;
+        arg0->state = 15;
     }
 }
 
 void WifiClubGameEntry_CheckMatchFailed(WifiClubGameEntry *arg0) {
     if ((CommState_GetWifiMatchStatus() > 3) || (CommState_WasWifiDisconnected() != 0) || (CommState_HasWifiFailed() != 0)) {
-        arg0->unk5 = 15;
+        arg0->state = 15;
     }
 }
 
@@ -781,41 +781,41 @@ s32 WifiClubGameEntry_StartMatch(u32 arg0, u32 arg1) {
 }
 
 void WifiClubGameEntry_SetPlayingStatus(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1) {
-    switch (arg1->unk0) {
+    switch (arg1->game) {
     case 0:
-        arg0->unk0->unk1B = 18;
+        arg0->clubStatus->unk1B = 18;
         break;
     case 1:
-        arg0->unk0->unk1B = 22;
+        arg0->clubStatus->unk1B = 22;
         break;
     case 2:
-        arg0->unk0->unk1B = 24;
+        arg0->clubStatus->unk1B = 24;
         break;
     case 3:
-        arg0->unk0->unk1B = 26;
+        arg0->clubStatus->unk1B = 26;
         break;
     }
-    ov00_021E6D60(arg0->unk0, 36);
+    ov00_021E6D60(arg0->clubStatus, 36);
 }
 
 s32 WifiClubGameEntry_StartVoiceChat(WifiClubGameEntry *arg0) {
-    if (arg0->unk11 == 1) {
+    if (arg0->voiceChatOn == 1) {
         return 0;
     }
     if (WifiClubGameEntry_IsAnyoneConnected(arg0) == 1) {
         WifiConnection_StartVoiceChat(104);
-        arg0->unk11 = 1;
+        arg0->voiceChatOn = 1;
         return 1;
     }
     return 0;
 }
 
 s32 WifiClubGameEntry_StopVoiceChat(WifiClubGameEntry *arg0) {
-    if (arg0->unk11 == 0) {
+    if (arg0->voiceChatOn == 0) {
         return 0;
     }
     WifiConnection_StopVoiceChat();
-    arg0->unk11 = 0;
+    arg0->voiceChatOn = 0;
     return 1;
 }
 
@@ -850,10 +850,10 @@ s32 WifiClubGameEntry_AcceptEarlierMembers(WifiClubGameEntry *arg0, enum HeapID 
 
 void WifiClubGameEntry_RefusePendingApplicants(WifiClubGameEntry *arg0) {
     WifiClubGameEntryJoinAnswer var_r5;
-    var_r5.unk2 = 0;
+    var_r5.answer = 0;
     for (s32 i = 1; i < 4; i++) {
         if (CommPlayerInfo_IsReceived(i) == 1) {
-            var_r5.unk0 = i;
+            var_r5.netId = i;
             GF_ASSERT(Comm_SendCommand(22, &var_r5, 8) == TRUE);
             CommPlayerInfo_ClearPlayer(i);
         }
@@ -862,10 +862,10 @@ void WifiClubGameEntry_RefusePendingApplicants(WifiClubGameEntry *arg0) {
 
 void WifiClubGameEntry_ReleaseAllMembers(WifiClubGameEntry *arg0) {
     WifiClubGameEntryJoinAnswer var_r5;
-    var_r5.unk2 = 0;
+    var_r5.answer = 0;
     for (s32 i = 1; i < 4; i++) {
         if (CommPlayerInfo_IsReceivedOrAccepted(i) == 1) {
-            var_r5.unk0 = i;
+            var_r5.netId = i;
             GF_ASSERT(Comm_SendCommand(22, &var_r5, 8) == TRUE);
             CommPlayerInfo_ClearPlayer(i);
         }
@@ -883,34 +883,34 @@ void WifiClubGameEntry_ClearDisconnectCallback(WifiClubGameEntry *arg0) {
 s32 WifiClubGameEntry_CheckMemberDisconnected(WifiClubGameEntry *arg0) {
     s32 var_r7 = 0;
     for (s32 i = 0; i < 4; i++) {
-        if (arg0->unk14[i] == 1) {
-            if (CommPlayerInfo_IsAccepted(arg0->unk18[i]) == 1) {
+        if (arg0->disconnected[i] == 1) {
+            if (CommPlayerInfo_IsAccepted(arg0->disconnectedNetIds[i]) == 1) {
                 var_r7 = 1;
             }
-            arg0->unk14[i] = 0;
-            arg0->unk18[i] = 0;
+            arg0->disconnected[i] = 0;
+            arg0->disconnectedNetIds[i] = 0;
         }
     }
     return var_r7;
 }
 
 void WifiClubGameEntry_OnDisconnect(u8 arg0, WifiClubGameEntry *arg1, s32 arg2) {
-    arg1->unk14[arg0] = 1;
-    arg1->unk18[arg0] = arg0;
+    arg1->disconnected[arg0] = 1;
+    arg1->disconnectedNetIds[arg0] = arg0;
 }
 
 s32 WifiClubGameEntry_CheckMemberListChanged(WifiClubGameEntry *arg0) {
     s32 i;
     s32 ret = 0;
     for (i = 0; i < 4; i++) {
-        if (arg0->unk1C[i] != arg0->unk20[i]) {
+        if (arg0->shownVoiceChatFlags[i] != arg0->voiceChatFlags[i]) {
             ret = 1;
         }
-        arg0->unk1C[i] = arg0->unk20[i];
+        arg0->shownVoiceChatFlags[i] = arg0->voiceChatFlags[i];
     }
 
-    if (arg0->unk24 != 0) {
-        arg0->unk24 = 0;
+    if (arg0->memberListDirty != 0) {
+        arg0->memberListDirty = 0;
         ret = 1;
     }
 
@@ -918,68 +918,68 @@ s32 WifiClubGameEntry_CheckMemberListChanged(WifiClubGameEntry *arg0) {
 }
 
 void WifiClubGameEntry_RequestMemberListRedraw(WifiClubGameEntry *arg0) {
-    arg0->unk24 = 1;
+    arg0->memberListDirty = 1;
 }
 
 void WifiClubGameEntry_AcceptMember(WifiClubGameEntry *arg0, s32 arg1, enum HeapID heapID) {
     if (CommPlayerInfo_IsAccepted(arg1) == 0) {
         CommPlayerInfo_Accept(arg1);
-        arg0->unk25 = arg1;
+        arg0->lastAcceptedNetId = arg1;
         WifiClubGameEntry_AddMemberAvatar(arg0, arg1, heapID);
         WifiClubGameEntry_RequestMemberListRedraw(arg0);
     }
 }
 
 void WifiClubGameEntry_AddMemberAvatar(WifiClubGameEntry *arg0, s32 arg1, enum HeapID heapID) {
-    UnkStruct_ov42_02122667 sp4;
+    Field2DObjectTemplate sp4;
 
-    if (arg0->unk30.unk15C[arg1].unk0 == 0) {
+    if (arg0->screen.avatars[arg1].object == 0) {
         sp4 = sWifiClubGameEntryAvatarTemplates[arg1];
 
         if (arg1 != Comm_GetLocalNetId()) {
             PlayerProfile *playerProfile = CommPlayerInfo_GetProfile(arg1);
             GF_ASSERT(playerProfile);
             sp4.unkA = PlayerProfile_GetAvatar(playerProfile);
-        } else if (arg0->unk0->unk1C[2] == 0) {
+        } else if (arg0->clubStatus->unk1C[2] == 0) {
             sp4.unkA = 0;
         } else {
             sp4.unkA = 97;
         }
-        arg0->unk30.unk15C[arg1].unk0 = ov42_022280B8(arg0->unk30.unk154, &sp4);
-        if (ov42_02229010(arg0->unk30.unk158, sp4.unkA) == 0) {
-            ov42_02228FE0(arg0->unk30.unk158, sp4.unkA, 2, heapID);
+        arg0->screen.avatars[arg1].object = Field2DObjectManager_AddObject(arg0->screen.objects, &sp4);
+        if (Field2DObjectSpriteManager_IsCharLoaded(arg0->screen.drawers, sp4.unkA) == 0) {
+            Field2DObjectSpriteManager_LoadChar(arg0->screen.drawers, sp4.unkA, 2, heapID);
         }
 
-        arg0->unk30.unk15C[arg1].unk4 = ov42_0222903C(arg0->unk30.unk158, arg0->unk30.unk15C[arg1].unk0, 0, heapID);
-        ov42_02229200(arg0->unk30.unk15C[arg1].unk4, 0);
-        arg0->unk30.unk15C[arg1].unk8++;
+        arg0->screen.avatars[arg1].drawer = Field2DObjectSpriteManager_CreateSprite(arg0->screen.drawers, arg0->screen.avatars[arg1].object, 0, heapID);
+        Field2DObjectSprite_SetVisible(arg0->screen.avatars[arg1].drawer, 0);
+        arg0->screen.avatars[arg1].state++;
     }
 }
 
 void WifiClubGameEntry_UpdateAvatars(WifiClubGameEntry *arg0) {
     for (s32 i = 0; i < 4; i++) {
-        WifiClubGameEntryAvatarFunc ov44_func = sWifiClubGameEntryAvatarFuncs[arg0->unk30.unk15C[i].unk8];
-        ov44_func(arg0, &arg0->unk30.unk15C[i]);
+        WifiClubGameEntryAvatarFunc ov44_func = sWifiClubGameEntryAvatarFuncs[arg0->screen.avatars[i].state];
+        ov44_func(arg0, &arg0->screen.avatars[i]);
     }
-    ov42_0222807C(arg0->unk30.unk154);
-    ov42_022290DC(arg0->unk30.unk158);
+    Field2DObjectManager_Update(arg0->screen.objects);
+    Field2DObjectSpriteManager_Update(arg0->screen.drawers);
 }
 
 void WifiClubGameEntry_DeleteAvatars(WifiClubGameEntry *arg0) {
-    ov42_0222901C(arg0->unk30.unk158);
-    memset(&arg0->unk30.unk15C, 0, 48);
+    Field2DObjectSpriteManager_UnloadAllChars(arg0->screen.drawers);
+    memset(&arg0->screen.avatars, 0, 48);
 }
 
 void WifiClubGameEntry_SendLeaderBusy(WifiClubGameEntry *arg0, s32 arg1) {
     WifiClubGameEntryJoinAnswer sp;
-    sp.unk0 = arg1;
-    sp.unk2 = 2;
+    sp.netId = arg1;
+    sp.answer = 2;
     GF_ASSERT(Comm_SendCommand(22, &sp, 8) == 1);
 }
 
 void WifiClubGameEntry_RefuseLateApplicants(WifiClubGameEntry *arg0) {
     for (s32 i = 0; i < 4; i++) {
-        if (((arg0->unk25 + 1) < i) && (CommPlayerInfo_IsReceived(i) == 1)) {
+        if (((arg0->lastAcceptedNetId + 1) < i) && (CommPlayerInfo_IsReceived(i) == 1)) {
             WifiClubGameEntry_SendLeaderBusy(arg0, i);
             CommPlayerInfo_ClearPlayer(i);
         }
@@ -988,25 +988,25 @@ void WifiClubGameEntry_RefuseLateApplicants(WifiClubGameEntry *arg0) {
 
 void WifiClubGameEntry_AcceptAnnouncedMembers(WifiClubGameEntry *arg0, enum HeapID heapID) {
     for (s32 i = 0; i < 4; i++) {
-        if ((arg0->unk28[i] == 1) && (CommPlayerInfo_IsReceivedOrAccepted(i) == 1)) {
+        if ((arg0->acceptedByLeader[i] == 1) && (CommPlayerInfo_IsReceivedOrAccepted(i) == 1)) {
             WifiClubGameEntry_AcceptMember(arg0, i, heapID);
-            arg0->unk28[i] = 0;
-            arg0->unk12 = 1;
+            arg0->acceptedByLeader[i] = 0;
+            arg0->membersChanged = 1;
         }
     }
 }
 
 void WifiClubGameEntry_ShowWaitingIcon(WifiClubGameEntry *arg0) {
-    GF_ASSERT(!arg0->unk30.waitingIcon);
-    arg0->unk30.waitingIcon = WaitingIcon_New(&arg0->unk30.windowList[0], 1);
+    GF_ASSERT(!arg0->screen.waitingIcon);
+    arg0->screen.waitingIcon = WaitingIcon_New(&arg0->screen.windowList[0], 1);
 }
 
 void WifiClubGameEntry_HideWaitingIcon(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (arg0->unk30.waitingIcon != 0) {
-        WaitingIcon_Delete(arg0->unk30.waitingIcon);
-        arg0->unk30.waitingIcon = 0;
-        Options *options = Save_PlayerData_GetOptionsAddr(arg1->unk8);
-        LoadUserFrameGfx2(arg0->unk30.bgConfig, GF_BG_LYR_MAIN_1, 1, 2, Options_GetFrame(options), heapID);
+    if (arg0->screen.waitingIcon != 0) {
+        WaitingIcon_Delete(arg0->screen.waitingIcon);
+        arg0->screen.waitingIcon = 0;
+        Options *options = Save_PlayerData_GetOptionsAddr(arg1->saveData);
+        LoadUserFrameGfx2(arg0->screen.bgConfig, GF_BG_LYR_MAIN_1, 1, 2, Options_GetFrame(options), heapID);
     }
 }
 
@@ -1014,21 +1014,21 @@ void WifiClubGameEntry_AvatarNone(WifiClubGameEntry *arg0, WifiClubGameEntryAvat
 }
 
 void WifiClubGameEntry_AvatarStartSpin(WifiClubGameEntry *arg0, WifiClubGameEntryAvatar *arg1) {
-    ov42_0222919C(arg1->unk4, 0);
-    ov42_022291A0(arg1->unk4);
-    ov42_02229200(arg1->unk4, 1);
-    arg1->unk8 = 2;
-    s32 idx = ov42_02228188(arg1->unk0, 6);
-    arg1->unkA = sWifiClubGameEntryAvatarSpinFrames[idx] + 16;
+    Field2DObjectSprite_SetAutoUpdate(arg1->drawer, 0);
+    Field2DObjectSprite_StartLoopAnim(arg1->drawer);
+    Field2DObjectSprite_SetVisible(arg1->drawer, 1);
+    arg1->state = 2;
+    s32 idx = Field2DObject_GetParam(arg1->object, 6);
+    arg1->timer = sWifiClubGameEntryAvatarSpinFrames[idx] + 16;
 }
 
 void WifiClubGameEntry_AvatarUpdateSpin(WifiClubGameEntry *arg0, WifiClubGameEntryAvatar *arg1) {
-    ov42_022291AC(arg1->unk4);
-    arg1->unkA = (arg1->unkA - 1);
-    if (arg1->unkA <= 0) {
-        ov42_022291B8(arg1->unk4);
-        ov42_0222919C(arg1->unk4, 1);
-        arg1->unk8 = 3;
+    Field2DObjectSprite_UpdateAnim(arg1->drawer);
+    arg1->timer = (arg1->timer - 1);
+    if (arg1->timer <= 0) {
+        Field2DObjectSprite_SyncAnim(arg1->drawer);
+        Field2DObjectSprite_SetAutoUpdate(arg1->drawer, 1);
+        arg1->state = 3;
     }
 }
 
@@ -1047,22 +1047,22 @@ void WifiClubGameEntry_SendVoiceChatFlags(WifiClubGameEntry *arg0) {
         if (sp_count > 0) {
             do {
                 if (var_r4 == 0) {
-                    var_r0 = arg0->unk0->unk21;
+                    var_r0 = arg0->clubStatus->unk21;
                 } else {
                     int temp_r7 = CommPlayerInfo_GetFriendIndex(var_r4);
                     GF_ASSERT(temp_r7 != 32);
-                    var_r0 = arg0->unk0[(temp_r7 + 1)].unk21;
+                    var_r0 = arg0->clubStatus[(temp_r7 + 1)].unk21;
                 }
-                if (var_r0 != arg0->unk20[var_r4]) {
+                if (var_r0 != arg0->voiceChatFlags[var_r4]) {
                     sp0 = 1;
                 }
-                arg0->unk20[var_r4] = var_r0;
+                arg0->voiceChatFlags[var_r4] = var_r0;
                 var_r4 += 1;
             } while (var_r4 < sp_count);
         }
         if (sp0 == 1) {
             u8 sp4[4];
-            memcpy(&sp4, arg0->unk20, 4);
+            memcpy(&sp4, arg0->voiceChatFlags, 4);
             Comm_SendCommand(24, &sp4, 4);
         }
     }
@@ -1076,80 +1076,80 @@ int WifiClubGameEntry_IsStartSynced(WifiClubGameEntry *arg0) {
 }
 
 void WifiClubGameEntry_StartTimeout(WifiClubGameEntry *arg0) {
-    arg0->unk10 = 1;
-    arg0->unkC = 1800;
+    arg0->timeoutRunning = 1;
+    arg0->timeoutTimer = 1800;
 }
 
 void WifiClubGameEntry_StopTimeout(WifiClubGameEntry *arg0) {
-    arg0->unk10 = 0;
+    arg0->timeoutRunning = 0;
 }
 
 s32 WifiClubGameEntry_HasTimedOut(WifiClubGameEntry *arg0) {
-    if (arg0->unk10 == 0) {
+    if (arg0->timeoutRunning == 0) {
         return 0;
     }
-    if (arg0->unkC > 0) {
-        arg0->unkC--;
+    if (arg0->timeoutTimer > 0) {
+        arg0->timeoutTimer--;
         return 0;
     }
     return 1;
 }
 
 s32 WifiClubGameEntry_Leader_Start(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (arg0->unk0->unk21 == 1) {
+    if (arg0->clubStatus->unk21 == 1) {
         WifiClubGameEntry_EnableVoiceChat(arg0);
     }
     ov00_021E7220(0);
     CommState_SetErrorWatch(0, 1);
     WifiClubGameEntry_AddMemberAvatar(arg0, Comm_GetLocalNetId(), heapID);
-    arg0->unk5 = 1;
+    arg0->state = 1;
     return 0;
 }
 
 // When the group is ready:\nA Button: Proceed   B Button: Cancel
 s32 Wifi_PromptReadyMessage(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00107, heapID);
-    arg0->unk5 = 2;
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00107, heapID);
+    arg0->state = 2;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_HandleInput(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
     if (WifiClubGameEntry_IsAnyoneConnected(arg0) == 1) {
         temp_r0 = CommPlayerInfo_FindReceived();
-        if ((temp_r0 != 255) && (arg0->unk6 != 0)) {
+        if ((temp_r0 != 255) && (arg0->applicantNetId != 0)) {
             if (CommPlayerInfo_GetFriendIndex(temp_r0) == 32) {
                 WifiClubGameEntryJoinAnswer subroutine_arg0;
-                subroutine_arg0.unk0 = temp_r0;
-                subroutine_arg0.unk2 = 0;
+                subroutine_arg0.netId = temp_r0;
+                subroutine_arg0.answer = 0;
                 CommPlayerInfo_ClearPlayer(temp_r0);
                 GF_ASSERT(Comm_SendCommand(22, &subroutine_arg0, 8) == TRUE);
             } else {
-                arg0->unk6 = temp_r0;
+                arg0->applicantNetId = temp_r0;
             }
         }
     }
     if (gSystem.newKeys & PAD_BUTTON_A) {
         PlaySE(SEQ_SE_DP_DECIDE);
         if (WifiClubGameEntry_IsAnyoneConnected(arg0) == 0) {
-            arg0->unk5 = 6;
-        } else if (arg1->unk1 <= WifiClubGameEntry_CountMembers(arg0)) {
-            arg0->unk5 = 8;
+            arg0->state = 6;
+        } else if (arg1->minPlayers <= WifiClubGameEntry_CountMembers(arg0)) {
+            arg0->state = 8;
         } else {
-            arg0->unk5 = 6;
+            arg0->state = 6;
         }
     } else if (gSystem.newKeys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_DP_DECIDE);
-        arg0->unk5 = 22;
-    } else if (arg0->unk6 != 255) {
+        arg0->state = 22;
+    } else if (arg0->applicantNetId != 255) {
         PlaySE(SEQ_SE_DP_DECIDE);
-        arg0->unk5 = 3;
+        arg0->state = 3;
     } else if (gSystem.newKeys & PAD_BUTTON_X) {
-        arg0->unk5 = 30;
+        arg0->state = 30;
         PlaySE(SEQ_SE_DP_DECIDE);
     }
     return 0;
@@ -1157,109 +1157,109 @@ s32 WifiClubGameEntry_Leader_HandleInput(WifiClubGameEntry *arg0, WifiClubGameEn
 
 // Someone wishes to join.\nAccept this Trainer as a member?
 s32 Wifi_PromptUserJoinRequest(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    WifiClubGameEntry_ShowApplicantInfo(&arg0->unk30, arg1, arg0->unk6, heapID);
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00108, heapID);
-    arg0->unk5 = 4;
+    WifiClubGameEntry_ShowApplicantInfo(&arg0->screen, arg1, arg0->applicantNetId, heapID);
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00108, heapID);
+    arg0->state = 4;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_ShowAcceptYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
-    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
-    arg0->unk5 = 5;
+    arg0->screen.listMenu2D = Std_CreateYesNoMenu(arg0->screen.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
+    arg0->state = 5;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_HandleAcceptYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
-    temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk30.listMenu2D, heapID);
+    temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->screen.listMenu2D, heapID);
     if (temp_r0 != -1) {
         WifiClubGameEntryJoinAnswer subroutine_arg0;
-        subroutine_arg0.unk0 = (s16)arg0->unk6;
+        subroutine_arg0.netId = (s16)arg0->applicantNetId;
         if (temp_r0 == 0) {
-            subroutine_arg0.unk2 = 1;
-            WifiClubGameEntry_AcceptMember(arg0, arg0->unk6, heapID);
-            if (arg0->unk0->unk21 == 1) {
+            subroutine_arg0.answer = 1;
+            WifiClubGameEntry_AcceptMember(arg0, arg0->applicantNetId, heapID);
+            if (arg0->clubStatus->unk21 == 1) {
                 WifiClubGameEntry_StopVoiceChat(arg0);
                 WifiClubGameEntry_EnableVoiceChat(arg0);
             }
-            if (arg1->unk2 <= WifiClubGameEntry_CountMembers(arg0)) {
-                arg0->unk5 = 8;
+            if (arg1->maxPlayers <= WifiClubGameEntry_CountMembers(arg0)) {
+                arg0->state = 8;
             } else {
-                arg0->unk5 = 1;
+                arg0->state = 1;
             }
         } else {
-            subroutine_arg0.unk2 = 0;
-            CommPlayerInfo_ClearPlayer(arg0->unk6);
-            arg0->unk5 = 1;
+            subroutine_arg0.answer = 0;
+            CommPlayerInfo_ClearPlayer(arg0->applicantNetId);
+            arg0->state = 1;
         }
         GF_ASSERT(Comm_SendCommand(22, &subroutine_arg0, 8) == TRUE);
-        arg0->unk6 = 255;
-        WifiClubGameEntry_HideApplicantInfo(&arg0->unk30);
-        arg0->unk30.listMenu2D = NULL;
+        arg0->applicantNetId = 255;
+        WifiClubGameEntry_HideApplicantInfo(&arg0->screen);
+        arg0->screen.listMenu2D = NULL;
     }
     return 0;
 }
 
 // There aren’t enough members.\r
 s32 Wifi_PromptInsufficientMembers(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00119, heapID);
-    arg0->unk5 = 7;
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00119, heapID);
+    arg0->state = 7;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_WaitNotEnoughMembers(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
-    arg0->unk5 = 19;
+    arg0->state = 19;
     return 0;
 }
 
 // Are these members OK?
 s32 Wifi_PromptConfirmMembers(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00111, heapID);
-    arg0->unk5 = 9;
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00111, heapID);
+    arg0->state = 9;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_ShowConfirmYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
-    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
-    arg0->unk5 = 10;
+    arg0->screen.listMenu2D = Std_CreateYesNoMenu(arg0->screen.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
+    arg0->state = 10;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_HandleConfirmYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
-    temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk30.listMenu2D, heapID);
+    temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->screen.listMenu2D, heapID);
     if (temp_r0 != -1) {
         if (temp_r0 == 0) {
-            arg0->unk5 = 11;
-        } else if (arg1->unk2 <= WifiClubGameEntry_CountMembers(arg0)) {
-            arg0->unk5 = 19;
+            arg0->state = 11;
+        } else if (arg1->maxPlayers <= WifiClubGameEntry_CountMembers(arg0)) {
+            arg0->state = 19;
         } else {
-            arg0->unk5 = 1;
+            arg0->state = 1;
         }
-        arg0->unk30.listMenu2D = NULL;
+        arg0->screen.listMenu2D = NULL;
     }
     return 0;
 }
 
 // Communicating. Please stand by...
 s32 WifiClubGameEntry_Leader_StartCommunicating(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    arg0->unk8 = 30;
+    arg0->timer = 30;
     WifiClubGameEntry_RefusePendingApplicants(arg0);
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00102, heapID);
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00102, heapID);
     WifiClubGameEntry_ShowWaitingIcon(arg0);
     WifiClubGameEntry_StartTimeout(arg0);
-    arg0->unk5 = 12;
+    arg0->state = 12;
     ov00_021E7130();
     return 0;
 }
@@ -1273,17 +1273,17 @@ s32 WifiClubGameEntry_Leader_WaitMembersConnected(WifiClubGameEntry *arg0, WifiC
         return 0;
     }
     ov00_021E7220(1);
-    arg0->unk5 = 13;
+    arg0->state = 13;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_SendStartCommand(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (arg0->unk8 == 0) {
+    if (arg0->timer == 0) {
         if (Comm_SendCommand(23, NULL, 0) != 0) {
-            arg0->unk5 = 14;
+            arg0->state = 14;
         }
     } else {
-        arg0->unk8--;
+        arg0->timer--;
     }
     return 0;
 }
@@ -1293,16 +1293,16 @@ s32 WifiClubGameEntry_Leader_WaitStartSync(WifiClubGameEntry *arg0, WifiClubGame
         WifiClubGameEntry_SetPlayingStatus(arg0, arg1);
         LinkSync_ClearPackets();
         LinkSync_StartSync(14);
-        arg0->unk5 = 15;
+        arg0->state = 15;
     }
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_SendStatus(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (LinkSync_IsSynced(14) != 0) {
-        s16 subroutine_arg0 = (s16)arg0->unk0->unk1B;
+        s16 subroutine_arg0 = (s16)arg0->clubStatus->unk1B;
         if (LinkSync_SendPacket(Comm_GetLocalNetId(), &subroutine_arg0) == 1) {
-            arg0->unk5 = 16;
+            arg0->state = 16;
         }
     }
     return 0;
@@ -1318,10 +1318,10 @@ s32 WifiClubGameEntry_Leader_CheckStatuses(WifiClubGameEntry *arg0, WifiClubGame
         if (sp0 != i) {
             u16 *temp_r0 = LinkSync_GetPacket(i);
             if (temp_r0 != NULL) {
-                if (temp_r0[0] == arg0->unk0->unk1B) {
+                if (temp_r0[0] == arg0->clubStatus->unk1B) {
                     var_r5++;
                 } else {
-                    arg0->unk5 = 27;
+                    arg0->state = 27;
                 }
             }
         } else {
@@ -1329,7 +1329,7 @@ s32 WifiClubGameEntry_Leader_CheckStatuses(WifiClubGameEntry *arg0, WifiClubGame
         }
     }
     if (var_r5 == temp_r7) {
-        arg0->unk5 = 17;
+        arg0->state = 17;
     }
     return 0;
 }
@@ -1337,13 +1337,13 @@ s32 WifiClubGameEntry_Leader_CheckStatuses(WifiClubGameEntry *arg0, WifiClubGame
 s32 WifiClubGameEntry_Leader_StartFinalSync(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     CommState_SetErrorWatch(1, 1);
     LinkSync_StartSync(18);
-    arg0->unk5 = 18;
+    arg0->state = 18;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_WaitFinalSync(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (LinkSync_IsSynced(18) != 0) {
-        arg0->unk7 = 1;
+        arg0->result = 1;
         WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
         return 1;
     }
@@ -1352,98 +1352,98 @@ s32 WifiClubGameEntry_Leader_WaitFinalSync(WifiClubGameEntry *arg0, WifiClubGame
 
 // Stop looking for members?
 s32 Wifi_PromptStopFindingMembers(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00120, heapID);
-    arg0->unk5 = 20;
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00120, heapID);
+    arg0->state = 20;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_ShowStopSeekingYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
-    arg0->unk30.listMenu2D = CreateYesNoMenu(arg0->unk30.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48U, 4, 1, heapID);
-    arg0->unk5 = 21;
+    arg0->screen.listMenu2D = CreateYesNoMenu(arg0->screen.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48U, 4, 1, heapID);
+    arg0->state = 21;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_HandleStopSeekingYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
-    temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk30.listMenu2D, heapID);
+    temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->screen.listMenu2D, heapID);
     if (temp_r0 != -1) {
         if (temp_r0 == 0) {
-            arg0->unk5 = 22;
+            arg0->state = 22;
         } else if (WifiClubGameEntry_IsAnyoneConnected(arg0) != 0) {
-            if (arg1->unk2 <= WifiClubGameEntry_CountMembers(arg0)) {
-                arg0->unk5 = 8;
+            if (arg1->maxPlayers <= WifiClubGameEntry_CountMembers(arg0)) {
+                arg0->state = 8;
             } else {
-                arg0->unk5 = 1;
+                arg0->state = 1;
             }
         } else {
-            arg0->unk5 = 1;
+            arg0->state = 1;
         }
-        arg0->unk30.listMenu2D = NULL;
+        arg0->screen.listMenu2D = NULL;
     }
     return 0;
 }
 
 // If the leader drops out, the group will\nbe disbanded. Is that OK?
 s32 Wifi_PromptDropAsLeader(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00121, heapID);
-    arg0->unk5 = 23;
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00121, heapID);
+    arg0->state = 23;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_ShowDisbandYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
-    arg0->unk30.listMenu2D = CreateYesNoMenu(arg0->unk30.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, 1, heapID);
-    arg0->unk5 = 24;
+    arg0->screen.listMenu2D = CreateYesNoMenu(arg0->screen.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, 1, heapID);
+    arg0->state = 24;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_HandleDisbandYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
-    temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk30.listMenu2D, heapID);
+    temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->screen.listMenu2D, heapID);
     if (temp_r0 != -1) {
         if (temp_r0 == 0) {
-            arg0->unk5 = 25;
+            arg0->state = 25;
         } else if (WifiClubGameEntry_IsAnyoneConnected(arg0) != 0) {
-            if (arg1->unk2 <= WifiClubGameEntry_CountMembers(arg0)) {
-                arg0->unk5 = 8;
+            if (arg1->maxPlayers <= WifiClubGameEntry_CountMembers(arg0)) {
+                arg0->state = 8;
             } else {
-                arg0->unk5 = 1;
+                arg0->state = 1;
             }
         } else {
-            arg0->unk5 = 1;
+            arg0->state = 1;
         }
-        arg0->unk30.listMenu2D = NULL;
+        arg0->screen.listMenu2D = NULL;
     }
     return 0;
 }
 
 // The member invitations will be canceled.
 s32 Wifi_PromptCancelInvites(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00122, heapID);
-    arg0->unk8 = 30;
-    arg0->unk5 = 26;
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00122, heapID);
+    arg0->timer = 30;
+    arg0->state = 26;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_Cancel(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
-    temp_r0 = arg0->unk8 - 1;
-    arg0->unk8 = temp_r0;
+    temp_r0 = arg0->timer - 1;
+    arg0->timer = temp_r0;
     if (temp_r0 > 0) {
         return 0;
     }
-    arg0->unk7 = 0;
+    arg0->result = 0;
     CommState_LeaveWifiMatch();
     WifiClubGameEntry_ReleaseAllMembers(arg0);
     CommState_SetWifiClubLinkMode();
@@ -1452,20 +1452,20 @@ s32 WifiClubGameEntry_Leader_Cancel(WifiClubGameEntry *arg0, WifiClubGameEntryAr
 }
 
 s32 WifiClubGameEntry_Leader_OnMemberDropped(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (arg0->unk30.listMenu2D != NULL) {
-        Clear2dMenuWindowAndDelete(arg0->unk30.listMenu2D, heapID);
-        arg0->unk30.listMenu2D = NULL;
+    if (arg0->screen.listMenu2D != NULL) {
+        Clear2dMenuWindowAndDelete(arg0->screen.listMenu2D, heapID);
+        arg0->screen.listMenu2D = NULL;
     }
-    WifiClubGameEntry_HideApplicantInfo(&arg0->unk30);
+    WifiClubGameEntry_HideApplicantInfo(&arg0->screen);
     WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
-    arg0->unk5 = 28;
+    arg0->state = 28;
     return 0;
 }
 
 // A member had to drop out.\nPlease register from the start again.\r
 s32 Wifi_PromptMemberDropped(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00118, heapID);
-    arg0->unk5 = 29;
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00118, heapID);
+    arg0->state = 29;
     WifiClubGameEntry_ReleaseAllMembers(arg0);
     WifiClubGameEntry_SetPlayingStatus(arg0, arg1);
     if ((u32)(CommState_GetWifiMatchStatus() - 4) <= 1U) {
@@ -1478,13 +1478,13 @@ s32 WifiClubGameEntry_Leader_EndAfterMemberDropped(WifiClubGameEntry *arg0, Wifi
     if ((u32)(CommState_GetWifiMatchStatus() - 4) <= 1) {
         ov00_021EDB1C();
     }
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
     CommState_LeaveWifiMatch();
     CommState_SetWifiClubLinkMode();
     WifiClubGameEntry_ReleaseAllMembers(arg0);
-    arg0->unk7 = 0;
+    arg0->result = 0;
     CommState_SetErrorWatch(0, 1);
     return 1;
 }
@@ -1492,38 +1492,38 @@ s32 WifiClubGameEntry_Leader_EndAfterMemberDropped(WifiClubGameEntry *arg0, Wifi
 s32 Wifi_PromptToggleVoiceChat(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 strno;
 
-    if (arg0->unk0->unk21 == 1) {
+    if (arg0->clubStatus->unk21 == 1) {
         // Is it OK to turn off the Voice Chat?
         strno = msg_0778_00125;
     } else {
         // Is it OK to turn on the Voice Chat?
         strno = msg_0778_00124;
     }
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, strno, heapID);
-    arg0->unk5 = 31;
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, strno, heapID);
+    arg0->state = 31;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_ShowVoiceChatYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
-    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
-    arg0->unk5 = 32;
+    arg0->screen.listMenu2D = Std_CreateYesNoMenu(arg0->screen.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
+    arg0->state = 32;
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_HandleVoiceChatYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
-    temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk30.listMenu2D, heapID);
+    temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->screen.listMenu2D, heapID);
     if (temp_r0 != -1) {
         if (temp_r0 == 0) {
             WifiClubGameEntry_ToggleVoiceChat(arg0, heapID);
             WifiClubGameEntry_RequestMemberListRedraw(arg0);
         }
-        arg0->unk5 = 1;
-        arg0->unk30.listMenu2D = NULL;
+        arg0->state = 1;
+        arg0->screen.listMenu2D = NULL;
     }
     return 0;
 }
@@ -1532,7 +1532,7 @@ s32 WifiClubGameEntry_Member_Start(WifiClubGameEntry *arg0, WifiClubGameEntryArg
     CommPlayerInfo_SendLocal();
     CommState_SetErrorWatch(0, 1);
     WifiClubGameEntry_StartTimeout(arg0);
-    arg0->unk5 = 1;
+    arg0->state = 1;
     return 0;
 }
 
@@ -1540,10 +1540,10 @@ s32 WifiClubGameEntry_Member_WaitLeaderInfo(WifiClubGameEntry *arg0, WifiClubGam
     WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
     if (Comm_IsNetIdConnected(0) == 0) {
         WifiClubGameEntry_StopTimeout(arg0);
-        arg0->unk5 = 15;
+        arg0->state = 15;
     } else if (CommPlayerInfo_IsAccepted(0) != 0) {
         WifiClubGameEntry_StopTimeout(arg0);
-        arg0->unk5 = 2;
+        arg0->state = 2;
     }
     return 0;
 }
@@ -1551,10 +1551,10 @@ s32 WifiClubGameEntry_Member_WaitLeaderInfo(WifiClubGameEntry *arg0, WifiClubGam
 // Awaiting {STRVAR_1 3, 0, 0}’s response...
 s32 Wifi_PromptAwaitingResponse(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
-    WifiClubGameEntry_BufferPlayerName(&arg0->unk30, arg1, 0, 0, heapID);
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00114, heapID);
+    WifiClubGameEntry_BufferPlayerName(&arg0->screen, arg1, 0, 0, heapID);
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00114, heapID);
     WifiClubGameEntry_ShowWaitingIcon(arg0);
-    arg0->unk5 = 3;
+    arg0->state = 3;
     return 0;
 }
 
@@ -1562,23 +1562,23 @@ s32 WifiClubGameEntry_Member_WaitJoinAnswer(WifiClubGameEntry *arg0, WifiClubGam
     u8 temp_r0;
 
     WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
-    if (arg0->unk13 != 0) {
+    if (arg0->joinAnswer != 0) {
         WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
-        temp_r0 = arg0->unk13;
+        temp_r0 = arg0->joinAnswer;
         switch (temp_r0) {
         case 1:
-            arg0->unk5 = 4;
+            arg0->state = 4;
             break;
         case 2:
-            arg0->unk5 = 6;
-            arg0->unk2D = 116;
+            arg0->state = 6;
+            arg0->refusedMsg = 116;
             break;
         case 3:
-            arg0->unk5 = 6;
-            arg0->unk2D = 132;
+            arg0->state = 6;
+            arg0->refusedMsg = 132;
             break;
         }
     }
@@ -1587,37 +1587,37 @@ s32 WifiClubGameEntry_Member_WaitJoinAnswer(WifiClubGameEntry *arg0, WifiClubGam
 
 // {STRVAR_1 3, 0, 0} approved your\nmember-registration request.
 s32 WifiClubGameEntry_Member_PrintApproved(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    WifiClubGameEntry_BufferPlayerName(&arg0->unk30, arg1, 0, 0, heapID);
+    WifiClubGameEntry_BufferPlayerName(&arg0->screen, arg1, 0, 0, heapID);
 
-    Wifi_LoadAndPrintTextToWindow(&arg0->unk30, arg1, msg_0778_00115, 30, heapID);
-    arg0->unk5 = 5;
+    Wifi_LoadAndPrintTextToWindow(&arg0->screen, arg1, msg_0778_00115, 30, heapID);
+    arg0->state = 5;
     WifiClubGameEntry_AcceptMember(arg0, Comm_GetLocalNetId(), HEAP_ID_103);
     return 0;
 }
 
 s32 WifiClubGameEntry_Member_WaitApproved(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
-    arg0->unk5 = 8;
+    arg0->state = 8;
     return 0;
 }
 
 s32 WifiClubGameEntry_Member_PrintRefused(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    WifiClubGameEntry_BufferPlayerName(&arg0->unk30, arg1, 0, 0, heapID);
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, arg0->unk2D, heapID);
-    arg0->unk5 = 7;
+    WifiClubGameEntry_BufferPlayerName(&arg0->screen, arg1, 0, 0, heapID);
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, arg0->refusedMsg, heapID);
+    arg0->state = 7;
     CommState_LeaveWifiMatch();
     CommState_SetWifiClubLinkMode();
     return 0;
 }
 
 s32 WifiClubGameEntry_Member_EndRefused(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
-    arg0->unk7 = 0;
+    arg0->result = 0;
     CommState_SetErrorWatch(0, 1);
     return 1;
 }
@@ -1625,10 +1625,10 @@ s32 WifiClubGameEntry_Member_EndRefused(WifiClubGameEntry *arg0, WifiClubGameEnt
 // Awaiting other members.
 s32 Wifi_PromptAwaitingMembers(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00123, heapID);
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00123, heapID);
     WifiClubGameEntry_ShowWaitingIcon(arg0);
-    arg0->unk5 = 9;
-    if (arg0->unk0->unk21 == 1) {
+    arg0->state = 9;
+    if (arg0->clubStatus->unk21 == 1) {
         WifiClubGameEntry_EnableVoiceChat(arg0);
     }
     return 0;
@@ -1636,19 +1636,19 @@ s32 Wifi_PromptAwaitingMembers(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *a
 
 s32 WifiClubGameEntry_Member_WaitAwaitingMessage(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
-    arg0->unk5 = 10;
+    arg0->state = 10;
     return 0;
 }
 
 // Communicating. Please stand by...
 s32 WifiClubGameEntry_Member_WaitStart(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
-    if (arg0->unk12 != 0) {
-        arg0->unk12 = 0U;
-        if (arg0->unk0->unk21 == 1) {
+    if (arg0->membersChanged != 0) {
+        arg0->membersChanged = 0U;
+        if (arg0->clubStatus->unk21 == 1) {
             WifiClubGameEntry_StopVoiceChat(arg0);
             WifiClubGameEntry_EnableVoiceChat(arg0);
         }
@@ -1658,14 +1658,14 @@ s32 WifiClubGameEntry_Member_WaitStart(WifiClubGameEntry *arg0, WifiClubGameEntr
         LinkSync_ClearPackets();
         LinkSync_StartSync(14);
         WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
-        Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00102, heapID);
+        Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00102, heapID);
         WifiClubGameEntry_StartTimeout(arg0);
-        arg0->unk8 = 300;
+        arg0->timer = 300;
         WifiClubGameEntry_ShowWaitingIcon(arg0);
-        arg0->unk5 = 11;
+        arg0->state = 11;
     } else if (gSystem.newKeys & PAD_BUTTON_X) {
         WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
-        arg0->unk5 = 18;
+        arg0->state = 18;
     }
     return 0;
 }
@@ -1674,17 +1674,17 @@ s32 WifiClubGameEntry_Member_SendStatus(WifiClubGameEntry *arg0, WifiClubGameEnt
     s32 temp_r0;
 
     if (LinkSync_IsSynced(14) != 0) {
-        s16 subroutine_arg0 = (s16)arg0->unk0->unk1B;
+        s16 subroutine_arg0 = (s16)arg0->clubStatus->unk1B;
         if (WifiClubGameEntry_CountMembers(arg0) != Comm_CountConnected()) {
-            temp_r0 = arg0->unk8 - 1;
-            arg0->unk8 = temp_r0;
+            temp_r0 = arg0->timer - 1;
+            arg0->timer = temp_r0;
             if (temp_r0 <= 0) {
-                arg0->unk5 = 15;
+                arg0->state = 15;
             }
             return 0;
         }
         if (LinkSync_SendPacket(Comm_GetLocalNetId(), &subroutine_arg0) == 1) {
-            arg0->unk5 = 12;
+            arg0->state = 12;
         }
     }
     return 0;
@@ -1700,10 +1700,10 @@ s32 WifiClubGameEntry_Member_CheckStatuses(WifiClubGameEntry *arg0, WifiClubGame
         if (sp0 != i) {
             u16 *temp_r0 = LinkSync_GetPacket(i);
             if (temp_r0 != NULL) {
-                if (temp_r0[0] == arg0->unk0->unk1B) {
+                if (temp_r0[0] == arg0->clubStatus->unk1B) {
                     var_r5++;
                 } else {
-                    arg0->unk5 = 0xF;
+                    arg0->state = 0xF;
                 }
             }
         } else {
@@ -1712,7 +1712,7 @@ s32 WifiClubGameEntry_Member_CheckStatuses(WifiClubGameEntry *arg0, WifiClubGame
     }
 
     if (var_r5 == temp_r7) {
-        arg0->unk5 = 0xD;
+        arg0->state = 0xD;
     }
     return 0;
 }
@@ -1720,44 +1720,44 @@ s32 WifiClubGameEntry_Member_CheckStatuses(WifiClubGameEntry *arg0, WifiClubGame
 s32 WifiClubGameEntry_Member_StartFinalSync(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     CommState_SetErrorWatch(1, 1);
     LinkSync_StartSync(18);
-    arg0->unk5 = 14;
+    arg0->state = 14;
     return 0;
 }
 
 s32 WifiClubGameEntry_Member_WaitFinalSync(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (LinkSync_IsSynced(18) != 0) {
         WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
-        arg0->unk7 = 1;
+        arg0->result = 1;
         return 1;
     }
     return 0;
 }
 
 s32 WifiClubGameEntry_Member_OnDropped(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (arg0->unk30.listMenu2D != NULL) {
-        Clear2dMenuWindowAndDelete(arg0->unk30.listMenu2D, heapID);
-        arg0->unk30.listMenu2D = NULL;
+    if (arg0->screen.listMenu2D != NULL) {
+        Clear2dMenuWindowAndDelete(arg0->screen.listMenu2D, heapID);
+        arg0->screen.listMenu2D = NULL;
     }
-    WifiClubGameEntry_HideApplicantInfo(&arg0->unk30);
+    WifiClubGameEntry_HideApplicantInfo(&arg0->screen);
     WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
-    arg0->unk5 = 16;
+    arg0->state = 16;
     return 0;
 }
 
 // A member had to drop out.\nPlease register from the start again.\r
 s32 Wifi_PromptMemberDrop(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00118, heapID);
-    arg0->unk5 = 17;
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00118, heapID);
+    arg0->state = 17;
     return 0;
 }
 
 s32 WifiClubGameEntry_Member_EndAfterDropped(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
     CommState_LeaveWifiMatch();
     CommState_SetWifiClubLinkMode();
-    arg0->unk7 = 0;
+    arg0->result = 0;
     CommState_SetErrorWatch(0, 1);
     return 1;
 }
@@ -1766,30 +1766,30 @@ s32 Wifi_PromptToggleVoiceChat_(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *
     s32 strno;
 
     WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
-    if (arg0->unk0->unk21 == 1) {
+    if (arg0->clubStatus->unk21 == 1) {
         // Is it OK to turn off the Voice Chat?
         strno = msg_0778_00125;
     } else {
         // Is it OK to turn on the Voice Chat?
         strno = msg_0778_00124;
     }
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, strno, heapID);
-    arg0->unk5 = 19;
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, strno, heapID);
+    arg0->state = 19;
     return 0;
 }
 
 s32 WifiClubGameEntry_Member_ShowVoiceChatYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
     if (WifiClubGameEntry_IsStartSynced(arg0) == 1) {
-        arg0->unk5 = 10;
-        WifiClubGameEntry_ClearMessage(&arg0->unk30);
+        arg0->state = 10;
+        WifiClubGameEntry_ClearMessage(&arg0->screen);
         return 0;
     }
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
-    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
-    arg0->unk5 = 20;
+    arg0->screen.listMenu2D = Std_CreateYesNoMenu(arg0->screen.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
+    arg0->state = 20;
     return 0;
 }
 
@@ -1798,42 +1798,42 @@ s32 WifiClubGameEntry_Member_HandleVoiceChatYesNo(WifiClubGameEntry *arg0, WifiC
 
     WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
     if (WifiClubGameEntry_IsStartSynced(arg0) == 1) {
-        arg0->unk5 = 10;
-        WifiClubGameEntry_ClearMessage(&arg0->unk30);
-        Clear2dMenuWindowAndDelete(arg0->unk30.listMenu2D, heapID);
-        arg0->unk30.listMenu2D = 0;
+        arg0->state = 10;
+        WifiClubGameEntry_ClearMessage(&arg0->screen);
+        Clear2dMenuWindowAndDelete(arg0->screen.listMenu2D, heapID);
+        arg0->screen.listMenu2D = 0;
         return 0;
     }
-    temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk30.listMenu2D, heapID);
+    temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->screen.listMenu2D, heapID);
     if (temp_r0 != -1) {
         if (temp_r0 == 0) {
             WifiClubGameEntry_ToggleVoiceChat(arg0, heapID);
             WifiClubGameEntry_RequestMemberListRedraw(arg0);
         }
-        arg0->unk5 = 8;
-        arg0->unk30.listMenu2D = 0;
+        arg0->state = 8;
+        arg0->screen.listMenu2D = 0;
     }
     return 0;
 }
 
 // The leader appears busy.\nPlease apply again.\r
 s32 WifiClubGameEntry_Member_PrintLeaderBusy(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    arg0->unk26 = CommPlayerInfo_GetFriendIndex(0);
-    GF_ASSERT(arg0->unk26 != 32);
-    WifiClubGameEntry_BufferPlayerName(&arg0->unk30, arg1, 0, 0, heapID);
+    arg0->leaderFriendIndex = CommPlayerInfo_GetFriendIndex(0);
+    GF_ASSERT(arg0->leaderFriendIndex != 32);
+    WifiClubGameEntry_BufferPlayerName(&arg0->screen, arg1, 0, 0, heapID);
     CommState_LeaveWifiMatch();
-    arg0->unk27 = 0;
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00132, heapID);
-    arg0->unk5 = 22;
+    arg0->watchConnection = 0;
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00132, heapID);
+    arg0->state = 22;
     return 0;
 }
 
 s32 WifiClubGameEntry_Member_ShowApplyAgainYesNo(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
-    arg0->unk30.listMenu2D = Std_CreateYesNoMenu(arg0->unk30.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
-    arg0->unk5 = 23;
+    arg0->screen.listMenu2D = Std_CreateYesNoMenu(arg0->screen.bgConfig, &sWifiClubGameEntryYesNoWindowTemplate, 48, 4, heapID);
+    arg0->state = 23;
     return 0;
 }
 
@@ -1841,38 +1841,38 @@ s32 WifiClubGameEntry_Member_HandleApplyAgainYesNo(WifiClubGameEntry *arg0, Wifi
     s32 temp_r0;
     s8 var_r0;
 
-    temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk30.listMenu2D, heapID);
+    temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->screen.listMenu2D, heapID);
     if (temp_r0 != -1) {
         if (temp_r0 == 0) {
             var_r0 = 24;
         } else {
             var_r0 = 29;
         }
-        arg0->unk5 = var_r0;
-        arg0->unk30.listMenu2D = 0;
+        arg0->state = var_r0;
+        arg0->screen.listMenu2D = 0;
     }
     return 0;
 }
 
 // Communicating with {STRVAR_1 3, 0, 0}...
 s32 WifiClubGameEntry_Member_PrintContacting(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00017, heapID);
+    Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00017, heapID);
     WifiClubGameEntry_ShowWaitingIcon(arg0);
-    arg0->unk8 = 90;
-    arg0->unk5 = 25;
+    arg0->timer = 90;
+    arg0->state = 25;
     return 0;
 }
 
 s32 WifiClubGameEntry_Member_ApplyAgain(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (arg0->unk8 > 0) {
-        arg0->unk8 = arg0->unk8 - 1;
+    if (arg0->timer > 0) {
+        arg0->timer = arg0->timer - 1;
         return 0;
     }
-    if (WifiClubGameEntry_IsMessageFinished(&arg0->unk30) == 0) {
+    if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;
     }
-    if (WifiClubGameEntry_StartMatch(arg0->unk26, arg1->unk0) != 0) {
-        arg0->unk5 = 26;
+    if (WifiClubGameEntry_StartMatch(arg0->leaderFriendIndex, arg1->game) != 0) {
+        arg0->state = 26;
     }
     return 0;
 }
@@ -1883,7 +1883,7 @@ s32 WifiClubGameEntry_Member_WaitReconnected(WifiClubGameEntry *arg0, WifiClubGa
         sub_020378E4(0);
         WifiClubGameEntry_HideWaitingIcon(arg0, arg1, heapID);
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, heapID);
-        arg0->unk5 = 27;
+        arg0->state = 27;
     }
     return 0;
 }
@@ -1892,45 +1892,45 @@ s32 WifiClubGameEntry_Member_RebuildScreen(WifiClubGameEntry *arg0, WifiClubGame
     u8 *temp_r0;
 
     if (IsPaletteFadeFinished()) {
-        CommPlayerInfo_Init(arg1->unk8, 0);
-        arg0->unk27 = 1;
+        CommPlayerInfo_Init(arg1->saveData, 0);
+        arg0->watchConnection = 1;
         WifiClubGameEntry_DeleteAvatars(arg0);
         WifiClubGameEntry_FreeScreen(arg0, heapID);
         arg0 = arg0;
-        memset(&arg0->unk30, 0, 504);
+        memset(&arg0->screen, 0, 504);
         WifiClubGameEntry_SetDisconnectCallback(arg0);
         WifiClubGameEntry_InitScreen(arg0, arg1, heapID);
         WirelessStatusIcon_Create();
-        arg0->unk12 = 0;
-        arg0->unk13 = 0;
-        temp_r0 = arg0->unk14;
-        arg0->unk14[0] = 0;
+        arg0->membersChanged = 0;
+        arg0->joinAnswer = 0;
+        temp_r0 = arg0->disconnected;
+        arg0->disconnected[0] = 0;
         temp_r0[1] = 0;
         temp_r0[2] = 0;
         temp_r0[3] = 0;
-        temp_r0 = arg0->unk18;
-        arg0->unk18[0] = 0;
+        temp_r0 = arg0->disconnectedNetIds;
+        arg0->disconnectedNetIds[0] = 0;
         temp_r0[1] = 0;
         temp_r0[2] = 0;
         temp_r0[3] = 0;
-        MI_CpuFill8(&arg0->unk1C, 1, 4);
-        MI_CpuFill8(&arg0->unk20, 1, 4);
-        temp_r0 = arg0->unk28;
-        arg0->unk24 = 0;
-        arg0->unk26 = 0;
-        arg0->unk28[0] = 0;
+        MI_CpuFill8(&arg0->shownVoiceChatFlags, 1, 4);
+        MI_CpuFill8(&arg0->voiceChatFlags, 1, 4);
+        temp_r0 = arg0->acceptedByLeader;
+        arg0->memberListDirty = 0;
+        arg0->leaderFriendIndex = 0;
+        arg0->acceptedByLeader[0] = 0;
         temp_r0[1] = 0;
         temp_r0[2] = 0;
         temp_r0[3] = 0;
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, heapID);
-        arg0->unk5 = 28;
+        arg0->state = 28;
     }
     return 0;
 }
 
 s32 WifiClubGameEntry_Member_WaitFadeIn(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (IsPaletteFadeFinished() != 0) {
-        arg0->unk5 = 0;
+        arg0->state = 0;
     }
     return 0;
 }
@@ -1938,7 +1938,7 @@ s32 WifiClubGameEntry_Member_WaitFadeIn(WifiClubGameEntry *arg0, WifiClubGameEnt
 s32 WifiClubGameEntry_Member_Cancel(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     CommState_LeaveWifiMatch();
     CommState_SetWifiClubLinkMode();
-    arg0->unk7 = 0;
+    arg0->result = 0;
     CommState_SetErrorWatch(0, 1);
     return 1;
 }

@@ -57,10 +57,10 @@ typedef struct SpeciesListMenu {
     String *stringArr_1C[120];
     MsgData *msgdata;
     MessageFormat *msgfmt;
-    u8 unk_204;
+    u8 delay;
     u8 unk_205;
-    u8 unk_206;
-    u8 unk_207;
+    u8 initCursorPos;
+    u8 flags;
     u8 x;
     u8 y;
     u8 unk_20A;
@@ -76,8 +76,8 @@ typedef struct SpeciesListMenu {
     struct ListMenu *listMenu_23C;
     u32 unk_240;
     ListMenuItem items[120];
-    u16 unk_604[120];
-    u16 unk_6F4;
+    u16 msgIds[120];
+    u16 lastRow;
 } SpeciesListMenu;
 
 static BOOL NativeScript_WaitSpeciesListMenu(ScriptContext *ctx);
@@ -198,7 +198,7 @@ static void SpeciesListMenu_SetMsgData(SpeciesListMenu *unkPtr, MsgData *msgdata
 static void SpeciesListMenu_Init(FieldSystem *fieldSystem, SpeciesListMenu *unkPtr, u8 x, u8 y, u8 a4, u8 a5, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove) {
     int i;
     unkPtr->msgdata = msgdata;
-    unkPtr->unk_207 = unkPtr->unk_207 & ~0x2;
+    unkPtr->flags = unkPtr->flags & ~0x2;
     unkPtr->msgfmt = msgfmt;
     unkPtr->fieldSystem = fieldSystem;
     unkPtr->input = input;
@@ -206,19 +206,19 @@ static void SpeciesListMenu_Init(FieldSystem *fieldSystem, SpeciesListMenu *unkP
     *unkPtr->input = 0;
     unkPtr->cursorPos = cursorPos;
     unkPtr->itemsAbove = itemsAbove;
-    unkPtr->unk_207 = unkPtr->unk_207 & ~1 | a5 & 1;
-    unkPtr->unk_206 = a4;
+    unkPtr->flags = unkPtr->flags & ~1 | a5 & 1;
+    unkPtr->initCursorPos = a4;
     unkPtr->x = x;
     unkPtr->y = y;
     unkPtr->totalItems = 0;
     unkPtr->window_18 = window;
-    unkPtr->unk_204 = 3;
-    unkPtr->unk_6F4 = a4;
+    unkPtr->delay = 3;
+    unkPtr->lastRow = a4;
 
     for (i = 0; i < 0x78; i++) {
         unkPtr->items[i].text = NULL;
         unkPtr->items[i].value = 0;
-        unkPtr->unk_604[i] = 0xff;
+        unkPtr->msgIds[i] = 0xff;
     }
 
     for (i = 0; i < 0x78; i++) {
@@ -267,7 +267,7 @@ static void SpeciesListMenu_AddItemInternal(SpeciesListMenu *unkPtr, int strNo, 
     } else {
         unkPtr->items[unkPtr->totalItems].value = a3;
     }
-    unkPtr->unk_604[unkPtr->totalItems] = a2;
+    unkPtr->msgIds[unkPtr->totalItems] = a2;
     unkPtr->totalItems++;
 }
 
@@ -315,20 +315,20 @@ static void SpeciesListMenu_Task(SysTask *sysTask, void *work) {
     u16 prev;
     int input;
     SpeciesListMenu *unkPtr = work;
-    if (unkPtr->unk_204) {
-        unkPtr->unk_204--;
+    if (unkPtr->delay) {
+        unkPtr->delay--;
         return;
     }
     if (IsPaletteFadeFinished()) {
         input = ListMenu_ProcessInput(unkPtr->listMenu_23C);
-        prev = unkPtr->unk_6F4;
-        ListMenuGetCurrentItemArrayId(unkPtr->listMenu_23C, &unkPtr->unk_6F4);
-        if (prev != unkPtr->unk_6F4) {
+        prev = unkPtr->lastRow;
+        ListMenuGetCurrentItemArrayId(unkPtr->listMenu_23C, &unkPtr->lastRow);
+        if (prev != unkPtr->lastRow) {
             PlaySE(SEQ_SE_DP_SELECT);
         }
         switch (input) {
         case -2:
-            if (((u32)(unkPtr->unk_207 << 0x1f) >> 0x1f) == 1) {
+            if (((u32)(unkPtr->flags << 0x1f) >> 0x1f) == 1) {
                 PlaySE(SEQ_SE_DP_SELECT);
                 *unkPtr->input = -2;
                 SpeciesListMenu_Close(unkPtr);
@@ -355,7 +355,7 @@ static void SpeciesListMenu_Close(SpeciesListMenu *unkPtr) {
         String_Delete(unkPtr->stringArr_1C[i]);
     }
 
-    if (((u32)(unkPtr->unk_207 << 0x1e) >> 0x1f) == 1) {
+    if (((u32)(unkPtr->flags << 0x1e) >> 0x1f) == 1) {
         DestroyMsgData(unkPtr->msgdata);
     }
 

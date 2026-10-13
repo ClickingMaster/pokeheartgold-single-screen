@@ -186,11 +186,11 @@ void WiFiPlazaPlayerObjects_SetModelAlpha(WiFiPlazaPlayerObjects *objects, int a
     WiFiPlazaObjectModel_SetAlpha(&objects->model, alpha);
 }
 
-WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_Add(WiFiPlazaPlayerObjects *objects, UnkStruct_ov42_02228110 *player) {
+WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_Add(WiFiPlazaPlayerObjects *objects, Field2DObject *player) {
     WiFiPlazaBillboardResource resource;
     WiFiPlazaBillboardCreateParams create;
     WiFiPlazaBillboardSequence sequence;
-    UnkStruct_ov44_02232914 gridPos;
+    Field2DPoint gridPos;
     const WiFiPlazaSpriteConfig *config;
     GF_3DGfxRawResObj *texture;
     void *modelFile;
@@ -202,7 +202,7 @@ WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_Add(WiFiPlazaPlayerObjects *object
     object->player = player;
     VecFx32 position = { 0, 0, 0 };
     VecFx32 scale = ov45_02254C3C;
-    config = WiFiPlaza_GetSpriteConfig(ov42_02228188(player, 7));
+    config = WiFiPlaza_GetSpriteConfig(Field2DObject_GetParam(player, 7));
     modelFile = GF2dGfxRawResObj_GetData(GF2dGfxRawResMan_GetObjById(objects->models, 0x7F));
     texture = GF3dGfxRawResMan_GetObjById(objects->textures, config->fileId);
     tex = GF3dGfxRawResObj_GetTex(texture);
@@ -219,7 +219,7 @@ WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_Add(WiFiPlazaPlayerObjects *object
         tex4x4Key = GF3dGfxRawResObj_GetTex4x4Key(texture);
         BillboardResource_InitWithKeys(&resource, modelFile, tex, &ov45_02254C98, &sequence, texKey, tex4x4Key, GF3dGfxRawResObj_GetPlttKey(texture));
     }
-    gridPos = ov42_022282DC(player);
+    gridPos = Field2DObject_GetPos(player);
     WiFiPlazaMap_PosToVecFx32(&gridPos.unk0, &position.x);
     position.z += FX32_ONE * 16;
     create.billboards = objects->billboards;
@@ -254,7 +254,7 @@ u32 WiFiPlazaPlayerObject_IsCulled(WiFiPlazaPlayerObject *object) {
     return object->culled;
 }
 
-void WiFiPlazaPlayerObject_SetGridPosition(WiFiPlazaPlayerObject *object, const UnkStruct_ov44_02232914 *gridPos) {
+void WiFiPlazaPlayerObject_SetGridPosition(WiFiPlazaPlayerObject *object, const Field2DPoint *gridPos) {
     VecFx32 position;
     WiFiPlazaMap_PosToVecFx32(&gridPos->unk0, &position.x);
     position.z += FX32_ONE * 16;
@@ -381,10 +381,10 @@ void WiFiPlazaPlayerObject_DrawModel(WiFiPlazaPlayerObject *object) {
 void WiFiPlazaPlayerObject_FollowPlayer(WiFiPlazaPlayerObject *object) {
     int action;
     u32 actionFrame;
-    UnkStruct_ov44_02232914 gridPos;
+    Field2DPoint gridPos;
     if (object->mode) {
-        action = ov42_02228188(object->player, 5);
-        actionFrame = ov42_02228188(object->player, 8);
+        action = Field2DObject_GetParam(object->player, 5);
+        actionFrame = Field2DObject_GetParam(object->player, 8);
         if (object->actionFrame > actionFrame || object->action != action) {
             if (ov45_02230DC4(object->action) == TRUE) {
                 object->savedSequence = BillboardObject_GetSequence(object->sprite);
@@ -397,7 +397,7 @@ void WiFiPlazaPlayerObject_FollowPlayer(WiFiPlazaPlayerObject *object) {
             object->actionFrame = actionFrame;
             func(object);
         }
-        gridPos = ov42_022282F4(object->player);
+        gridPos = Field2DObject_GetDrawPos(object->player);
         WiFiPlazaPlayerObject_SetGridPosition(object, &gridPos);
     }
 }
@@ -405,17 +405,17 @@ void WiFiPlazaPlayerObject_FollowPlayer(WiFiPlazaPlayerObject *object) {
 #pragma force_active reset
 
 void WiFiPlazaPlayerObject_ShowStandingSprite(WiFiPlazaPlayerObject *object) {
-    u32 index = ov42_02228188(object->player, 6);
+    u32 index = Field2DObject_GetParam(object->player, 6);
     u32 sequence = WiFiPlaza_GetSpriteSequence(1, index);
     BillboardObject_SetSequence(object->sprite, sequence);
     BillboardObject_SetSequenceFrame(object->sprite, 0);
 }
 
 void WiFiPlazaPlayerObject_PlayStandingSequence(WiFiPlazaPlayerObject *object) {
-    u32 index = ov42_02228188(object->player, 6);
+    u32 index = Field2DObject_GetParam(object->player, 6);
     u32 sequence = WiFiPlaza_GetSpriteSequence(1, index);
-    u16 duration = ov42_02228188(object->player, 9);
-    u16 frame = ov42_02228188(object->player, 8);
+    u16 duration = Field2DObject_GetParam(object->player, 9);
+    u16 frame = Field2DObject_GetParam(object->player, 8);
     s32 offset = WiFiPlaza_CalcSequenceFrame(duration, frame, 8);
     BillboardObject_SetSequence(object->sprite, sequence);
     if (object->savedSequence == sequence) {
@@ -428,20 +428,20 @@ void WiFiPlazaPlayerObject_PlayStandingSequence(WiFiPlazaPlayerObject *object) {
 }
 
 void ov45_02230BFC(WiFiPlazaPlayerObject *object) {
-    u16 frame = ov42_02228188(object->player, 8);
+    u16 frame = Field2DObject_GetParam(object->player, 8);
     if (frame < 4) {
         BillboardObject_SetSequenceFrame(object->sprite, FX32_ONE * 4);
         return;
     }
-    BillboardObject_SetSequence(object->sprite, WiFiPlaza_GetSpriteSequence(1, ov42_02228188(object->player, 6)));
+    BillboardObject_SetSequence(object->sprite, WiFiPlaza_GetSpriteSequence(1, Field2DObject_GetParam(object->player, 6)));
     BillboardObject_SetSequenceFrame(object->sprite, 0);
 }
 
 void WiFiPlazaPlayerObject_PlayWalkingSequence(WiFiPlazaPlayerObject *object) {
-    u32 index = ov42_02228188(object->player, 6);
+    u32 index = Field2DObject_GetParam(object->player, 6);
     u32 sequence = WiFiPlaza_GetSpriteSequence(0, index);
-    u16 duration = ov42_02228188(object->player, 9);
-    u16 frame = ov42_02228188(object->player, 8);
+    u16 duration = Field2DObject_GetParam(object->player, 9);
+    u16 frame = Field2DObject_GetParam(object->player, 8);
     s32 offset = WiFiPlaza_CalcSequenceFrame(duration, frame, 4);
     BillboardObject_SetSequence(object->sprite, sequence);
     if (object->savedSequence == sequence) {
@@ -478,8 +478,8 @@ void WiFiPlazaPlayerObject_EffectTurnAround(WiFiPlazaPlayerObject *object) {
 
 void ov45_02230D20(WiFiPlazaPlayerObject *object) {
     if (object->timer == 0) {
-        ov42_02228188(object->player, 6);
-        BillboardObject_SetSequence(object->sprite, WiFiPlaza_GetSpriteSequence(1, ov42_02228188(object->player, 6)));
+        Field2DObject_GetParam(object->player, 6);
+        BillboardObject_SetSequence(object->sprite, WiFiPlaza_GetSpriteSequence(1, Field2DObject_GetParam(object->player, 6)));
         BillboardObject_SetSequenceFrame(object->sprite, FX32_ONE * 4);
         object->timer++;
     }
@@ -487,10 +487,10 @@ void ov45_02230D20(WiFiPlazaPlayerObject *object) {
 
 void ov45_02230D5C(WiFiPlazaPlayerObject *object) {
     if (object->timer == 0) {
-        BillboardObject_SetSequence(object->sprite, WiFiPlaza_GetSpriteSequence(1, ov42_02228188(object->player, 6)));
+        BillboardObject_SetSequence(object->sprite, WiFiPlaza_GetSpriteSequence(1, Field2DObject_GetParam(object->player, 6)));
         BillboardObject_SetSequenceFrame(object->sprite, FX32_ONE * 4);
     } else if (object->timer == 4) {
-        BillboardObject_SetSequence(object->sprite, WiFiPlaza_GetSpriteSequence(1, ov42_02228188(object->player, 6)));
+        BillboardObject_SetSequence(object->sprite, WiFiPlaza_GetSpriteSequence(1, Field2DObject_GetParam(object->player, 6)));
         BillboardObject_SetSequenceFrame(object->sprite, FX32_ONE * 12);
     }
     object->timer = (object->timer + 1) % 8;

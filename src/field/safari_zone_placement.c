@@ -151,37 +151,37 @@ SafariDecorationArgs *SafariDecoration_CreateArgs(FieldSystem *fieldSystem, enum
 
     MI_CpuFill8(args, 0, sizeof(SafariDecorationArgs));
     args->saveData = FieldSystem_GetSaveData(fieldSystem);
-    args->unk04 = (BOOL *)&fieldSystem->menuInputState;
-    args->unk20 = fieldSystem->unk_111;
+    args->menuInputStateMgr = (BOOL *)&fieldSystem->menuInputState;
+    args->cursorPos = fieldSystem->safariDecorationCursorPos;
     onWater = (u8)(PlayerAvatar_GetState(fieldSystem->playerAvatar) == PLAYER_STATE_SURFING ? TRUE : FALSE);
-    args->unk18 = onWater;
+    args->isSurfing = onWater;
     direction = (u8)PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
     x = (s16)PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
     z = (s16)PlayerAvatar_GetZCoord(fieldSystem->playerAvatar);
     PlayerAvatar_CopyPositionVector(fieldSystem->playerAvatar, &pos);
-    args->unk19 = (u8)SafariZone_GetAreaIndexAt(x, z);
+    args->area = (u8)SafariZone_GetAreaIndexAt(x, z);
     pos.y = Terrain_GetHeight_Bdhc(fieldSystem, pos.y, pos.x, pos.z, &kind);
     if (kind != 1) {
         return args;
     }
-    args->unk1A = (u8)(pos.y >> FX32_SHIFT);
+    args->height = (u8)(pos.y >> FX32_SHIFT);
     args->deltaX = (u8)(x + GetDeltaXByFacingDirection(direction));
     args->deltaY = (u8)(z + GetDeltaYByFacingDirection(direction));
-    args->unk08 = TRUE;
+    args->spot1x1Valid = TRUE;
     if (SafariZone_FindSpotFor1x2Object(fieldSystem, x, z, direction, pos.y, &spotX, &spotZ, onWater)) {
-        args->unk0D = (u8)spotX;
-        args->unk0F = (u8)spotZ;
-        args->unk0C = TRUE;
+        args->spot1x2X = (u8)spotX;
+        args->spot1x2Z = (u8)spotZ;
+        args->spot1x2Valid = TRUE;
     }
     if (SafariZone_FindSpotFor2x1Object(fieldSystem, x, z, direction, pos.y, &spotX, &spotZ, onWater)) {
-        args->unk11 = (u8)spotX;
-        args->unk13 = (u8)spotZ;
-        args->unk10 = TRUE;
+        args->spot2x1X = (u8)spotX;
+        args->spot2x1Z = (u8)spotZ;
+        args->spot2x1Valid = TRUE;
     }
     if (SafariZone_FindSpotFor2x2Object(fieldSystem, x, z, direction, pos.y, &spotX, &spotZ, onWater)) {
-        args->unk15 = (u8)spotX;
-        args->unk17 = (u8)spotZ;
-        args->unk14 = TRUE;
+        args->spot2x2X = (u8)spotX;
+        args->spot2x2Z = (u8)spotZ;
+        args->spot2x2Valid = TRUE;
     }
     return args;
 }

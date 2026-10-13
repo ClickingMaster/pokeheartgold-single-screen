@@ -101,9 +101,9 @@ GearPhoneRingManager *GearPhoneRingManager_New(enum HeapID heapID, FieldSystem *
     GearPhoneRingManager *ptr = Heap_Alloc(heapID, sizeof(GearPhoneRingManager));
     MI_CpuClear8(ptr, sizeof(GearPhoneRingManager));
     gearRingingManagerReset(ptr);
-    ptr->unk_varC = 10;
+    ptr->callIntervalMinutes = 10;
     ptr->maxActiveDuration = 30;
-    ptr->unk_var12 = 50;
+    ptr->randomCallChance = 50;
     ptr->saveData = sys->saveData;
     ptr->pokegearData = SaveData_Pokegear_Get(ptr->saveData);
     ptr->savingsData = SaveData_GetPhoneCallPersistentState(ptr->saveData);
@@ -136,8 +136,8 @@ PhoneBookEntry *GearPhoneRingManager_GetCallerPhoneBookEntry(GearPhoneRingManage
 void GearPhoneRingManager_SetCallTrigger(GearPhoneRingManager *ptr, u8 a1, BOOL a2) {
     PhoneCallPersistentState_SetCallTriggerFlag(ptr->savingsData, a1);
     if (a2) {
-        if (ptr->unk_var8 < ptr->unk_varC - 1) {
-            ptr->unk_var8 = ptr->unk_varC - 1;
+        if (ptr->elapsedMinutes < ptr->callIntervalMinutes - 1) {
+            ptr->elapsedMinutes = ptr->callIntervalMinutes - 1;
         }
     }
 }
@@ -149,7 +149,7 @@ void GearPhoneRingManager_AddMinutes(GearPhoneRingManager *ptr, s32 a1, BOOL a2)
             return;
         }
     }
-    ptr->unk_var8 += a1;
+    ptr->elapsedMinutes += a1;
     GearPhoneRingManager_CheckSafariCalls(ptr);
 }
 
@@ -218,7 +218,7 @@ void GearPhoneRingManager_HandleTimeAdvance(GearPhoneRingManager *ptr, s64 secon
 
 static void gearRingingManagerReset(GearPhoneRingManager *ptr) {
     GearPhone_ToggleRinging(ptr, FALSE);
-    ptr->unk_var8 = 0;
+    ptr->elapsedMinutes = 0;
     ptr->activeTimer = 0;
     ptr->active = FALSE;
     ptr->unk_var0_1 = FALSE;
@@ -228,7 +228,7 @@ static void gearRingingManagerReset(GearPhoneRingManager *ptr) {
     ptr->callScriptID = 0;
     ptr->callTriggerID = 0;
     ptr->entry.id = PHONE_CONTACT_NONE;
-    ptr->unk_var12 = 50;
+    ptr->randomCallChance = 50;
 }
 
 static void GearPhoneRingManager_Reset(GearPhoneRingManager *ptr) {

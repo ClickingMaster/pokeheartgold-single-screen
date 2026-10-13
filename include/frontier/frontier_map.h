@@ -36,8 +36,8 @@ typedef struct FrontierMapObjectMovement {
 } FrontierMapObjectMovement;
 
 typedef struct FrontierMapObject {
-    UnkStruct_ov42_02228110 *object;
-    UnkStruct_ov42_0222903C *objectSprite;
+    Field2DObject *object;
+    Field2DObjectSprite *objectSprite;
     FrontierMapObjectTemplate template;
     FrontierMapObjectMovement movement;
     u8 unk_36[2];
@@ -105,14 +105,14 @@ typedef struct FrontierMap {
     void *frontier; // 0x08, the frontier application's work
     GF3DVramMan *vramMan;
     u32 particleManager; // 0x10, from FrontierParticles_New (frontier/frontier_particles.h)
-    UnkStruct_ov42_022280A8 *objectManager;
-    UnkStruct_ov42_02227F68 *unk18;
-    UnkStruct_ov44_02232914 camera;
-    UnkStruct_ov42_02228EDC *objectGfx;
-    UnkStruct_ov42_022293B8 *bg3Layer;
-    UnkStruct_ov42_022293B8 *bg2Layer;
-    UnkStruct_ov42_02229A40 *unk2C;
-    UnkStruct_ov42_022299C0 *unk30;
+    Field2DObjectManager *objectManager;
+    Field2DMap *unk18;
+    Field2DPoint camera;
+    Field2DObjectSpriteManager *objectGfx;
+    Field2DBgLayer *bg3Layer;
+    Field2DBgLayer *bg2Layer;
+    Field2DCommandQueue *unk2C;
+    Field2DMoveQueue *unk30;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     FrontierMapSpriteSet spriteSet;
@@ -153,9 +153,9 @@ void FrontierMap_InitSpriteSystem(FrontierMap *map);
 void FrontierMap_FreeSpriteSystem(FrontierMap *map);
 void FrontierMap_AddObjectGfx(FrontierMap *map, const FrontierMapObjectGfx *gfx);
 void FrontierMap_RemoveObjectGfx(FrontierMap *map, u16 id);
-UnkStruct_ov42_02228110 *FrontierMap_CreateObject(FrontierMap *map, const FrontierMapObjectTemplate *template, int index);
-void FrontierMap_DeleteObject(FrontierMap *map, UnkStruct_ov42_02228110 *object);
-void FrontierMap_GetObjectById(FrontierMap *map, u16 id, UnkStruct_ov42_02228110 **object, UnkStruct_ov42_0222903C **objectSprite);
+Field2DObject *FrontierMap_CreateObject(FrontierMap *map, const FrontierMapObjectTemplate *template, int index);
+void FrontierMap_DeleteObject(FrontierMap *map, Field2DObject *object);
+void FrontierMap_GetObjectById(FrontierMap *map, u16 id, Field2DObject **object, Field2DObjectSprite **objectSprite);
 void FrontierMap_AddLoadedResource(FrontierMap *map, u16 resourceId);
 void FrontierMap_RemoveLoadedResource(FrontierMap *map, u16 resourceId);
 void FrontierMap_DeleteSprite(FrontierMap *map, u32 index);
@@ -165,7 +165,7 @@ void FrontierMap_SaveSprites(FrontierMap *map);
 void FrontierMap_RestoreSprites(FrontierMap *map);
 void FrontierMap_GetCameraPos(FrontierMap *map, u16 *x, u16 *y);
 void FrontierMapObject_GetTemplate(FrontierMapObject *object, u16 *dest);
-void FrontierMap_SetObject(void *frontier, u32 index, UnkStruct_ov42_02228110 *object, UnkStruct_ov42_0222903C *objectSprite, const FrontierMapObjectTemplate *template);
+void FrontierMap_SetObject(void *frontier, u32 index, Field2DObject *object, Field2DObjectSprite *objectSprite, const FrontierMapObjectTemplate *template);
 FrontierMapObject *FrontierMap_FindObject(void *frontier, u32 id);
 
 typedef struct FrontierMapTileBlink FrontierMapTileBlink;

@@ -37,7 +37,7 @@ struct MapObjectManager { // declared field_system.h
     u32 priority;
     u8 unk10[4];
     NARC *mapModelNarc;
-    u32 unk18;
+    u32 render;
     u8 unk1C[0x108];
     LocalMapObject *objects;
     FieldSystem *fieldSystem;

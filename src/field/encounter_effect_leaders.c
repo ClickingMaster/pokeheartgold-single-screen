@@ -555,11 +555,11 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
         break;
     case 2:
         EncounterEffect_StartFlash(1, 16, 16, &effect->fadeDone, 1);
-        effect->unk_08 = 0;
+        effect->timer = 0;
         effect->state++;
         break;
     case 3:
-        if (++effect->unk_08 == 8) {
+        if (++effect->timer == 8) {
             EncounterEffect_RequestParticleSetup();
         }
         if (effect->fadeDone) {

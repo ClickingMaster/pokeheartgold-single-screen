@@ -20,7 +20,7 @@ typedef struct MessageBox {
     String *buffer;
     MessageFormat *messageFormat;
     Window *window;
-    u8 *unk10;
+    u8 *windowOpenPtr;
     u8 *textPrinterNumPtr;
 } MessageBox;
 
@@ -103,7 +103,7 @@ BOOL ScrCmd_443(ScriptContext *ctx) {
     if (frontierFsys == NULL) {
         return FALSE;
     }
-    MailMessage *intro = &frontierFsys->unk78[index].introMessage;
+    MailMessage *intro = &frontierFsys->opponents[index].introMessage;
     if (intro->msg_bank == 0xFFFF) {
         MsgData *messageData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 723, HEAP_ID_FIELD3);
         ovFieldMain_ShowMessage(ctx, messageData, intro->msg_no, TRUE, NULL);
@@ -261,7 +261,7 @@ static void ovFieldMain_GetMsgBoxParameters(FieldSystem *fieldSystem, MessageBox
     messageBox->buffer = *(String **)FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_STRING_BUFFER_1);
     messageBox->messageFormat = *(MessageFormat **)FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     messageBox->window = (Window *)FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_WINDOW);
-    messageBox->unk10 = (u8 *)FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_FIELD_08);
+    messageBox->windowOpenPtr = (u8 *)FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_FIELD_08);
     messageBox->textPrinterNumPtr = (u8 *)FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_TEXT_PRINTER_NUMBER);
 }
 
@@ -270,15 +270,15 @@ static void ovFieldMain_GetMsgBoxParametersEx(FieldSystem *fieldSystem, MessageF
     messageBox->buffer = *(String **)FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_STRING_BUFFER_1);
     messageBox->messageFormat = messageFormat;
     messageBox->window = (Window *)FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_WINDOW);
-    messageBox->unk10 = (u8 *)FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_FIELD_08);
+    messageBox->windowOpenPtr = (u8 *)FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_FIELD_08);
     messageBox->textPrinterNumPtr = (u8 *)FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_TEXT_PRINTER_NUMBER);
 }
 
 static void ovFieldMain_CreateMessageBox(FieldSystem *fieldSystem, MessageBox *messageBox) {
-    if (*(messageBox->unk10) == 0) {
+    if (*(messageBox->windowOpenPtr) == 0) {
         DialogBox_AddWindowToLayer3(fieldSystem->bgConfig, messageBox->window, GF_BG_LYR_MAIN_3);
         DialogBox_LoadFrame(messageBox->window, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData));
-        *(messageBox->unk10) = 1;
+        *(messageBox->windowOpenPtr) = 1;
         fieldSystem->textbox_open = TRUE;
     }
     FillWindowPixelBuffer(messageBox->window, 15);

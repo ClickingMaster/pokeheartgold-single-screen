@@ -37,9 +37,9 @@ enum BattleRegulationValidationResult {
     BATTLE_REGULATION_VALIDATION_RESULT_INVALID_POKEMON,
 };
 
-typedef struct UnkMiniStruct {
+typedef struct MartButtonPressAnim {
     u8 unk0[4];
-} UnkMiniStruct;
+} MartButtonPressAnim;
 
 typedef struct MartData {
     BgConfig *bgConfig;
@@ -65,7 +65,7 @@ typedef struct MartData {
     u8 numItems;
     u8 pageStart;
     u8 state;
-    u8 unk273;
+    u8 sellOnly;
     String *string;
     u8 bgPriority[4];
     u32 engineAPlanes;
@@ -81,7 +81,7 @@ typedef struct MartData {
     int cursorPos;
     u32 touchButton;
     u32 touchMartAction;
-    UnkMiniStruct unk29C;
+    MartButtonPressAnim buttonPressAnim;
     u32 unk2A0;
 } MartData;
 

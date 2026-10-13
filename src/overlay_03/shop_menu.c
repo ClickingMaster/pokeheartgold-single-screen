@@ -244,7 +244,7 @@ void Mart_Init(TaskManager *taskManager, FieldSystem *fieldSystem, const u16 *it
     martData->touchMartAction = 0;
     martData->pokeathlonSave = Save_Pokeathlon_Get(fieldSystem->saveData);
     martData->priceOverrides = priceOverrides;
-    martData->unk273 = buy_sell;
+    martData->sellOnly = buy_sell;
     if (martData->martType == MART_TYPE_NORMAL || martData->martType == MART_TYPE_3 || martData->martType == MART_TYPE_4) {
         martData->inventory = Save_Bag_Get(fieldSystem->saveData);
     } else {
@@ -293,7 +293,7 @@ BOOL Task_Mart(TaskManager *taskManager) {
     switch (data->state) {
     case TASK_MART_START:
         MartTask_InitMartMessageData(data);
-        if (data->unk273 == 0) {
+        if (data->sellOnly == 0) {
             data->state = TASK_MART_1;
         } else {
             data->state = 22;
@@ -1465,7 +1465,7 @@ static void ov03_022586BC(MartData *data, int flag) {
 }
 
 static u8 MartData_StartButtonPressAnim(MartData *data, u8 arg1, u8 arg2) {
-    UnkMiniStruct *mini = &data->unk29C;
+    MartButtonPressAnim *mini = &data->buttonPressAnim;
     mini->unk0[0] = arg1;
     mini->unk0[1] = 0;
     mini->unk0[2] = 0;
@@ -1474,16 +1474,16 @@ static u8 MartData_StartButtonPressAnim(MartData *data, u8 arg1, u8 arg2) {
 }
 
 static u8 MartData_AnimateButtonPress(MartData *data) {
-    UnkMiniStruct *mini = &data->unk29C;
+    MartButtonPressAnim *mini = &data->buttonPressAnim;
     switch (mini->unk0[1]) {
     case 0:
-        thunk_Sprite_SetPaletteOverride(data->sprites[data->unk29C.unk0[0]], 7);
+        thunk_Sprite_SetPaletteOverride(data->sprites[data->buttonPressAnim.unk0[0]], 7);
         mini->unk0[1]++;
         break;
     case 1:
         mini->unk0[2]++;
         if (mini->unk0[2] == 4) {
-            thunk_Sprite_SetPaletteOverride(data->sprites[data->unk29C.unk0[0]], 6);
+            thunk_Sprite_SetPaletteOverride(data->sprites[data->buttonPressAnim.unk0[0]], 6);
             mini->unk0[2] = 0;
             mini->unk0[1]++;
         }

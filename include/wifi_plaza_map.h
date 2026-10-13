@@ -11,7 +11,7 @@
 // The Wi-Fi Plaza room's 35 x 42 cell grid (OVY_42 grid, cells from NARC a/2/0/0 member 0).
 // Each cell holds a collision bit (bit 0) and a 15-bit tile attribute plus a tag above it.
 typedef struct WiFiPlazaMap {
-    UnkStruct_ov42_02227F68 *grid;
+    Field2DMap *grid;
 } WiFiPlazaMap;
 
 void WiFiPlazaMap_PosToVecFx32(const s16 *pos, s32 *vec);
@@ -29,6 +29,6 @@ BOOL WiFiPlazaMap_IsStandActionTile(u8 attr);
 BOOL WiFiPlazaMap_IsWalkUpActionTile(u8 attr);
 BOOL WiFiPlazaMap_IsCheckActionTile(u8 attr);
 BOOL WiFiPlazaMap_IsPropTile(u8 attr);
-UnkStruct_ov42_02227F68 *WiFiPlazaMap_GetGrid(WiFiPlazaMap *map);
+Field2DMap *WiFiPlazaMap_GetGrid(WiFiPlazaMap *map);
 
 #endif // POKEHEARTGOLD_WIFI_PLAZA_MAP_H

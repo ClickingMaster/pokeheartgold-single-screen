@@ -31,7 +31,7 @@ struct AreaLightManager {
     AreaLightEntry *entries;          // 0x04
     u32 activeIndex;                  // 0x08
     ModelAttributes *modelAttributes; // 0x0C
-    u32 unk10;                        // 0x10
+    u32 applyChanges;                        // 0x10
 };
 
 extern const char *const gAreaLightFilePaths[AREA_LIGHT_FILE_COUNT];
@@ -60,7 +60,7 @@ AreaLightManager *AreaLightManager_New(ModelAttributes *areaModelAttributes, con
             entry++;
         } while (i < areaLightManager->count);
     }
-    areaLightManager->unk10 = 1;
+    areaLightManager->applyChanges = 1;
     AreaLightManager_ApplyActiveEntry(areaLightManager);
     return areaLightManager;
 }
@@ -93,7 +93,7 @@ void AreaLightManager_UpdateActiveTemplate(AreaLightManager *areaLightManager) {
         if (areaLightManager->activeIndex >= areaLightManager->count) {
             areaLightManager->activeIndex = 0;
         }
-        if (areaLightManager->unk10 != 0) {
+        if (areaLightManager->applyChanges != 0) {
             AreaLightManager_ApplyActiveEntry(areaLightManager);
         }
     }

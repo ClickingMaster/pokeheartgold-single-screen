@@ -51,8 +51,8 @@ typedef struct {
     String *string0;
     String *string1;
     String *string2;
-    u32 unkC;
-    u32 unk10;
+    u32 trainerId;
+    u32 gender;
     MailMessage message;
 } MessageSlot;
 

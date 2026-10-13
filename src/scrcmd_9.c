@@ -240,14 +240,14 @@ BOOL ScrCmd_416(ScriptContext *ctx) {
         break;
     }
     if (sub_0205C298(ctx->fieldSystem->saveData) == 1) {
-        if (LinkSync_SendPacket(Comm_GetLocalNetId(), frontierFsys->unk83e) == 1) {
+        if (LinkSync_SendPacket(Comm_GetLocalNetId(), frontierFsys->linkSendBuffer) == 1) {
             *unkPtr = TRUE;
         } else {
             return TRUE;
         }
     } else {
         FrontierLink_RegisterCommands((void *)frontierFsys);
-        if (Comm_SendCommand(unk0, frontierFsys->unk83e, sizeof(frontierFsys->unk83e)) == 1) {
+        if (Comm_SendCommand(unk0, frontierFsys->linkSendBuffer, sizeof(frontierFsys->linkSendBuffer)) == 1) {
             *unkPtr = TRUE;
         }
     }
@@ -261,7 +261,7 @@ BOOL ScrCmd_417(ScriptContext *ctx) {
     if (sub_0205C298(ctx->fieldSystem->saveData) == 1) {
         TaskManager_CallFrontierLinkPartnerCheck(ctx->fieldSystem->taskman, unk6, unk7);
     } else {
-        frontierFsys->unk8DA = unk7;
+        frontierFsys->resultVar = unk7;
         frontierFsys->unk8D5 = unk6;
         SetupNativeScript(ctx, sub_0204A1E8);
     }
@@ -270,10 +270,10 @@ BOOL ScrCmd_417(ScriptContext *ctx) {
 
 static BOOL sub_0204A1E8(ScriptContext *ctx) {
     FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
-    u16 *unkPtr = GetVarPointer(ctx->fieldSystem, frontierFsys->unk8DA);
+    u16 *unkPtr = GetVarPointer(ctx->fieldSystem, frontierFsys->resultVar);
     u32 unk = frontierFsys->unk8D5 == 1 ? 1 : 2;
-    if (frontierFsys->unk8D4 == unk) {
-        frontierFsys->unk8D4 = 0;
+    if (frontierFsys->linkReceiveCount == unk) {
+        frontierFsys->linkReceiveCount = 0;
         *unkPtr = frontierFsys->unk8D8;
         return TRUE;
     } else {

@@ -76,13 +76,13 @@ void GearPhoneRingManager_SetCallerParams(GearPhoneRingManager *gearPhone, u8 ca
     // a5 related to message id? when passed from script
     if (callerId >= NUM_PHONE_CONTACTS) {
         gearPhone->callerId = 0xFF;
-        gearPhone->unk_arr5[0] = 0xFF;
-        gearPhone->unk_arr5[1] = 0;
+        gearPhone->callerParams[0] = 0xFF;
+        gearPhone->callerParams[1] = 0;
         GF_ASSERT(FALSE);
     } else {
         gearPhone->callerId = callerId;
-        gearPhone->unk_arr5[0] = a2;
-        gearPhone->unk_arr5[1] = a3;
+        gearPhone->callerParams[0] = a2;
+        gearPhone->callerParams[1] = a3;
     }
 
     gearPhone->isScriptedCall = isScriptedCall;
@@ -96,8 +96,8 @@ u8 GearPhoneRingManager_GetCallerParams(GearPhoneRingManager *gearPhone, Unk_Pok
         a1->unk_0 = 0xFF;
         return 0xFF;
     }
-    a1->unk_0 = gearPhone->unk_arr5[0];
-    a1->unk_1 = gearPhone->unk_arr5[1];
+    a1->unk_0 = gearPhone->callerParams[0];
+    a1->unk_1 = gearPhone->callerParams[1];
     a1->isScriptedCall = gearPhone->isScriptedCall;
     a1->callScriptID = gearPhone->callScriptID;
     a1->callTriggerID = gearPhone->callTriggerID;
@@ -111,7 +111,7 @@ BOOL GearPhoneRingManager_TryStartCall(GearPhoneRingManager *gearPhone) {
         return FALSE;
     }
 
-    if (gearPhone->active || gearPhone->unk_var8 < gearPhone->unk_varC) {
+    if (gearPhone->active || gearPhone->elapsedMinutes < gearPhone->callIntervalMinutes) {
         return FALSE;
     }
 
@@ -129,9 +129,9 @@ BOOL GearPhoneRingManager_TryStartCall(GearPhoneRingManager *gearPhone) {
     }
     u32 rand = MTRandom() % 100;
 
-    if (rand > gearPhone->unk_var12) {
+    if (rand > gearPhone->randomCallChance) {
         FreePhoneBook(phoneBook);
-        gearPhone->unk_var8 = 0;
+        gearPhone->elapsedMinutes = 0;
         return FALSE;
     }
 
@@ -139,7 +139,7 @@ BOOL GearPhoneRingManager_TryStartCall(GearPhoneRingManager *gearPhone) {
     FreePhoneBook(phoneBook);
 
     if (var == 0) {
-        gearPhone->unk_var8 = 0;
+        gearPhone->elapsedMinutes = 0;
     }
     return FALSE;
 }

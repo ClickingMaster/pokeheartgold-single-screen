@@ -19,11 +19,11 @@
 typedef struct EncounterEffectTask {
     u32 state;
     BOOL fadeDone; // set by EncounterEffect_StartFlash when its brightness fade ends
-    u32 unk_08;    // frame counter in some effects
+    u32 timer;    // frame counter in some effects
     void *work;    // effect-specific, freed by EncounterEffect_Finish
     FieldSystem *fieldSystem;
     BOOL *done;  // set to TRUE by the effect when the screen is ready for the battle
-    BOOL unk_18; // read by ov01_021EFE30
+    BOOL wipeDone; // read by ov01_021EFE30
     u32 unk_1C;
     NARC *narc; // deleted by EncounterEffect_Finish
 } EncounterEffectTask;
