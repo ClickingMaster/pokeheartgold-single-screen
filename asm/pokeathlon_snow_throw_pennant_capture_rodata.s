@@ -44,11 +44,11 @@
 	.extern PokeathlonCourse_SetStateField07_IfDifferent
 	.extern PokeathlonCourse_SetStateTransitionType
 	.extern PokeathlonCourse_SetVBlankIntrCB
-	.extern ov96_021E5E04
-	.extern ov96_021E5E7C
-	.extern ov96_021E5F24
-	.extern ov96_021E6F18
-	.extern ov96_021E75B8
+	.extern PokeathlonCourse_SetEvents
+	.extern PokeathlonCourse_FindCourseId
+	.extern PokeathlonCourse_GetNetId
+	.extern PokeathlonCourse_State_ResetDataCopyArea
+	.extern PokeathlonCourse_State_WaitForCommand
 	.extern PokeathlonCourseCmd_EventsSize
 	.extern PokeathlonCourseCmd_ParticipantSize
 	.extern PokeathlonCourseCmd_AllParticipantsSize
@@ -61,7 +61,7 @@
 	.extern PokeathlonCourseCmd_GetEventDataBuffer
 	.extern PokeathlonCourseCmd_GetRecordBuffer
 	.extern PokeathlonCourseCmd_GetResultsBuffer
-	.extern ov96_021E9A54
+	.extern PokeathlonCourseCmd_GetMonCountersBuffer
 	.extern PokeathlonCourseCmd_GetJuiceRecordBuffer
 	.extern PokeathlonCourseOpening_Init
 	.extern PokeathlonCourseOpening_Main

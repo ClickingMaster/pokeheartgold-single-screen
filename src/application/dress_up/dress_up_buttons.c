@@ -69,7 +69,7 @@ void DressUpButton_SetCallback(DressUpButton *button, DressUpButtonCallback call
     button->callback = callback;
 }
 
-void ov41_0224A254(void *button, void *arg) {
+void DressUpButton_DefaultCallback(void *button, void *arg) {
 }
 
 void DressUpButton_SetAnimSelected(DressUpButton *button) {
@@ -210,7 +210,7 @@ void DressUpButtonPanel_Update(DressUpButtonPanel *panel) {
 
 #pragma force_active reset
 
-void ov41_0224A580(DressUpButtonPanel *panel) {
+void DressUpButtonPanel_ResetButtons(DressUpButtonPanel *panel) {
     DressUpButton_SetAnimByTouchState(&panel->done.button, 3);
     DressUpButton_SetTextByState(&panel->done, 3);
     DressUp_UpdateCategoryTabs(panel, 2, 3);

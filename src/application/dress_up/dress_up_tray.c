@@ -228,7 +228,7 @@ void DressUpTray_LinkObjectToPage(DressUpTray *tray, int mode, int page, DressUp
 
 #pragma force_active reset
 
-void ov41_022486F0(DressUpNode *node) {
+void DressUpTray_RemoveNode(DressUpNode *node) {
     DressUpList_Remove(node);
 }
 
@@ -359,7 +359,7 @@ void DressUpTray_LoadTabBg(DressUpTray *tray, int tab) {
 #pragma force_active on
 
 // loads the tab BG and slides it in; flags: 1 from the side, 2 from below
-void ov41_022488D8(DressUpTray *tray, int tab, u32 flags, int frames, BOOL *done) {
+void DressUpTray_SlideInTabBg(DressUpTray *tray, int tab, u32 flags, int frames, BOOL *done) {
     DressUpBgScreenTemplate template;
     int dx, dy;
     template.bgConfig = tray->bgConfig;
@@ -574,7 +574,7 @@ void DressUpTray_PageSwapTask(SysTask *task, DressUpPageSwap *swap) {
         DressUpTray_MovePageObjects(swap->tray, swap->toGroup, swap->toPage, 0, -132);
         DressUpTray_SetPageVisible(swap->tray, swap->toGroup, swap->toPage, TRUE);
         swap->tabSlideDone = FALSE;
-        ov41_022488D8(swap->tray, (swap->tray->tabBgIndex + 1) % 2, 2, 5, &swap->tabSlideDone);
+        DressUpTray_SlideInTabBg(swap->tray, (swap->tray->tabBgIndex + 1) % 2, 2, 5, &swap->tabSlideDone);
         swap->counter = ov41_02248E10(swap->fromLeft, 1);
         swap->state++;
         break;

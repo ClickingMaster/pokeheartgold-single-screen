@@ -209,7 +209,7 @@ BOOL VsRecorder_DeleteMain(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)deleteWork->fade, (u16)work->blendColor);
         break;
     case 6:
-        if (ov40_022306F0(work)) {
+        if (VsRecorder_ClearSavedVideoKeys(work)) {
             VsRecorder_FreeSavedVideos(work);
             VsRecorder_LoadSavedVideos(work);
             VsRecorder_PrintDeleteMessage(work, 285, 0);

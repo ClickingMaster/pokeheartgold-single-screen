@@ -93,7 +93,7 @@ PokeathlonRingDropUi *PokeathlonRingDropUi_New(SpriteSystem *spriteSystem, Sprit
     ui->iconNarc = NARC_New((NarcId)20, ui->heapId);
     ui->digitsBuffer = GfGfxLoader_GetScrnData((NarcId)242, 7, TRUE, &ui->digits, ui->heapId);
     ui->iconPalette = SpriteSystem_LoadPlttResObj(spriteSystem, spriteManager, (NarcId)20, GetMonIconPlttNaix(), FALSE, 3, 2, 10004);
-    member = PokeathlonCourse_GetParticipantUnk04(course, ov96_021E5F24(course));
+    member = PokeathlonCourse_GetParticipantUnk04(course, PokeathlonCourse_GetNetId(course));
     i = 0;
     do {
         ui->memberNames[i] = String_New(11, ui->heapId);
@@ -183,7 +183,7 @@ void PokeathlonRingDropUi_SetRanks(PokeathlonRingDropUi *ui, u16 participant, u1
             rank = i + 1;
         }
     }
-    if (participant == ov96_021E5F24(ui->course) && score != ui->score) {
+    if (participant == PokeathlonCourse_GetNetId(ui->course) && score != ui->score) {
         ((void (*)(PokeathlonRingDropUi *, u8))PokeathlonRingDropUi_DrawScore)(ui, score);
         ui->score = score;
     }
@@ -232,7 +232,7 @@ u16 PokeathlonRingDropUi_GetScore(PokeathlonRingDropUi *ui) {
 #pragma force_active on
 
 BOOL PokeathlonRingDropUi_RunSwitch(PokeathlonRingDropUi *ui, u8 participant, u8 member) {
-    u8 own = ov96_021E5F24(ui->course);
+    u8 own = PokeathlonCourse_GetNetId(ui->course);
     u8 next = (member + 1) % RING_DROP_TEAM_SIZE;
 
     switch (ui->switchStep) {

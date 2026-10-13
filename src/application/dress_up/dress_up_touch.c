@@ -54,9 +54,9 @@ void DressUpTouch_Reset(DressUpTouch *touch) {
         *bytes++ = 0;
         n--;
     }
-    touch->onTouch = ov41_02248E80;
-    touch->onRelease = ov41_02248E80;
-    touch->onHeld = ov41_02248E80;
+    touch->onTouch = DressUpTouch_DefaultHandler;
+    touch->onRelease = DressUpTouch_DefaultHandler;
+    touch->onHeld = DressUpTouch_DefaultHandler;
 }
 
 void DressUpTouch_Update(DressUpTouch *touch) {
@@ -72,7 +72,7 @@ void DressUpTouch_Update(DressUpTouch *touch) {
     touch->wasHeld = gSystem.touchHeld;
 }
 
-void ov41_02248E80(DressUpTouch *touch) {
+void DressUpTouch_DefaultHandler(DressUpTouch *touch) {
     return;
 }
 
@@ -159,7 +159,7 @@ void DressUpDrag_OnTouchIdle(DressUpTouch *touch) {
                 DressUpCanvas_RemoveAccessory(drag->canvas, node);
                 priority = 0;
             } else {
-                ov41_02248030(node);
+                DressUpCanvas_RemoveNode(node);
                 priority = DressUpMon_GetPriority(node->object);
                 DressUpObj_GetPos(node, &drag->monX, &drag->monY);
             }
@@ -170,7 +170,7 @@ void DressUpDrag_OnTouchIdle(DressUpTouch *touch) {
     } else if (DressUpTray_IsTouchHeldIn(drag->tray)) {
         node = DressUpTray_FindObjectAt(drag->tray, &x, &y, drag->gfx->hitMaps);
         if (node) {
-            ov41_022486F0(node);
+            DressUpTray_RemoveNode(node);
             DressUpTray_RefreshPriorities(drag->tray);
             DressUpDrag_BeginDrag(drag, node, FALSE, x, y, 0);
             DressUp_EnableDragWindow();
@@ -185,7 +185,7 @@ void DressUpDrag_OnTouchIdle(DressUpTouch *touch) {
             break;
         case 1:
             touch->onRelease = DressUpDrag_OnReleaseBackdrop;
-            touch->onHeld = ov41_022490AC;
+            touch->onHeld = DressUpDrag_OnHeldBackdrop;
             DressUpDrag_ApplyBackdrop(touch);
             se = SEQ_SE_DP_SYARAAN;
             break;
@@ -201,7 +201,7 @@ void DressUpDrag_OnTouchIdle(DressUpTouch *touch) {
 
 #pragma force_active reset
 
-void ov41_022490AC(DressUpTouch *touch) {
+void DressUpDrag_OnHeldBackdrop(DressUpTouch *touch) {
     return;
 }
 
@@ -283,7 +283,7 @@ void DressUpDrag_OnHeldAccessory(DressUpTouch *touch) {
 void DressUpDrag_OnReleaseMon(DressUpTouch *touch) {
     DressUpDrag *drag = touch->drag;
     if (drag->selected != NULL) {
-        ov41_02248020(drag->canvas, drag->selected);
+        DressUpCanvas_AddToMonList(drag->canvas, drag->selected);
         DressUpCanvas_RefreshPriorities(drag->canvas);
         DressUp_DisableDragWindow();
         drag->dragging = FALSE;

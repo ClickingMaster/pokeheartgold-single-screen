@@ -105,10 +105,10 @@ BOOL VsRecorder_MenuExit(VsRecorderWork *work) {
     case 1:
         if (work->counter != 16) {
             work->counter += 2;
-            PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 0xFFFE, (u8)work->counter, (u16)ov40_0222DAF0(work));
-            PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_BG, 0xFFFF, (u8)work->counter, (u16)ov40_0222DAF0(work));
-            PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0x3FFE, (u8)work->counter, (u16)ov40_0222DAF0(work));
-            PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 0xFFFF, (u8)work->counter, (u16)ov40_0222DAF0(work));
+            PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 0xFFFE, (u8)work->counter, (u16)VsRecorder_GetMenuBlendColor(work));
+            PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_BG, 0xFFFF, (u8)work->counter, (u16)VsRecorder_GetMenuBlendColor(work));
+            PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0x3FFE, (u8)work->counter, (u16)VsRecorder_GetMenuBlendColor(work));
+            PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 0xFFFF, (u8)work->counter, (u16)VsRecorder_GetMenuBlendColor(work));
         } else {
             work->counter = 16;
             work->step++;

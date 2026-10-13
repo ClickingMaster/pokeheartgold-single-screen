@@ -174,7 +174,7 @@ void PokeathlonGoalRollCpu_Update(PokeathlonCourseData *course, PokeathlonGoalRo
 
 #pragma force_active on
 
-int ov96_02214C3C(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls) {
+int PokeathlonGoalRollCpu_ThinkChaser(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls) {
     VecFx32 *position;
     int radius, quadrant;
 
@@ -227,10 +227,10 @@ int ov96_02214C3C(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
         }
     }
     if (decisions.values[0] >= decisions.values[1]) {
-        result = ov96_02214DBC(mon, balls, decisions.values[0], quadrant);
+        result = PokeathlonGoalRollCpu_ApplyChaserDecision(mon, balls, decisions.values[0], quadrant);
     } else {
         balls++;
-        result = ov96_02214DBC(mon, balls, decisions.values[1], quadrant);
+        result = PokeathlonGoalRollCpu_ApplyChaserDecision(mon, balls, decisions.values[1], quadrant);
     }
     if (mon->mode == GOAL_ROLL_MODE_DASH) {
         PokeathlonCourse_AddMonCounter(course, participant, member, 6, 1);
@@ -240,7 +240,7 @@ int ov96_02214C3C(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
 
 #pragma force_active reset
 
-int ov96_02214DBC(PokeathlonGoalRollMon *mon, const PokeathlonGoalRollBall *ball, u8 decision, int quadrant) {
+int PokeathlonGoalRollCpu_ApplyChaserDecision(PokeathlonGoalRollMon *mon, const PokeathlonGoalRollBall *ball, u8 decision, int quadrant) {
     u8 random = (s32)LCRandom() % 100;
 
     switch (decision) {
@@ -293,7 +293,7 @@ int ov96_02214DBC(PokeathlonGoalRollMon *mon, const PokeathlonGoalRollBall *ball
 
 #pragma force_active on
 
-int ov96_02214EB4(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls) {
+int PokeathlonGoalRollCpu_ThinkGuard(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls) {
     int quadrant, result;
     u32 ballQuadrant;
     u8 i, decisions[2];
@@ -334,17 +334,17 @@ int ov96_02214EB4(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
         distance = VEC_Mag(&delta);
         VEC_Subtract(&mon->position, &balls[1].position, &delta);
         if (distance >= VEC_Mag(&delta)) {
-            result = ov96_02215058(mon, balls, decisions[0], participant);
+            result = PokeathlonGoalRollCpu_ApplyGuardDecision(mon, balls, decisions[0], participant);
         } else {
             balls++;
-            result = ov96_02215058(mon, balls, ballQuadrant, participant);
+            result = PokeathlonGoalRollCpu_ApplyGuardDecision(mon, balls, ballQuadrant, participant);
         }
     } else {
         if (decisions[0] >= ballQuadrant) {
-            result = ov96_02215058(mon, balls, decisions[0], participant);
+            result = PokeathlonGoalRollCpu_ApplyGuardDecision(mon, balls, decisions[0], participant);
         } else {
             balls++;
-            result = ov96_02215058(mon, balls, ballQuadrant, participant);
+            result = PokeathlonGoalRollCpu_ApplyGuardDecision(mon, balls, ballQuadrant, participant);
         }
     }
     if (mon->mode == GOAL_ROLL_MODE_DASH) {
@@ -355,7 +355,7 @@ int ov96_02214EB4(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
 
 #pragma force_active reset
 
-int ov96_02215058(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant) {
+int PokeathlonGoalRollCpu_ApplyGuardDecision(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant) {
     volatile u16 point[2];
 
     switch (decision) {
@@ -456,14 +456,14 @@ int ov96_02215184(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
         }
     }
     if (decisions[0] == 13) {
-        return ov96_02214DBC(mon, balls, decisions[0], quadrant);
+        return PokeathlonGoalRollCpu_ApplyChaserDecision(mon, balls, decisions[0], quadrant);
     }
     if (decisions[1] == 13) {
         balls++;
-        return ov96_02214DBC(mon, balls, decisions[1], quadrant);
+        return PokeathlonGoalRollCpu_ApplyChaserDecision(mon, balls, decisions[1], quadrant);
     }
     if (teams[participant].order[0].mon->power >= 50) {
-        return ov96_02215478(mon, teams, participant);
+        return PokeathlonGoalRollCpu_MoveToEmptierQuadrant(mon, teams, participant);
     }
     for (i = 0; i < 2; i++) {
         ball = &balls[i];
@@ -509,20 +509,20 @@ int ov96_02215184(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
 
 #pragma force_active reset
 
-// ov96_02215478 with the participant passed as int (this call was built against such a declaration).
+// PokeathlonGoalRollCpu_MoveToEmptierQuadrant with the participant passed as int (this call was built against such a declaration).
 typedef int (*PokeathlonGoalRollCpuSpreadFunc)(PokeathlonGoalRollMon *mon, PokeathlonGoalRollCpuTeam *teams, int participant);
 
 int ov96_02215460(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant, PokeathlonGoalRollCpuTeam *teams) {
     if (decision == 10) {
-        return ((PokeathlonGoalRollCpuSpreadFunc)ov96_02215478)(mon, teams, participant);
+        return ((PokeathlonGoalRollCpuSpreadFunc)PokeathlonGoalRollCpu_MoveToEmptierQuadrant)(mon, teams, participant);
     }
-    return ov96_02215058(mon, ball, decision, participant);
+    return PokeathlonGoalRollCpu_ApplyGuardDecision(mon, ball, decision, participant);
 }
 
 #pragma force_active on
 
 // Sends the Pokemon to a random spot in a quadrant with fewer Pokemon than the one before it.
-int ov96_02215478(PokeathlonGoalRollMon *mon, PokeathlonGoalRollCpuTeam *teams, u8 excluded) {
+int PokeathlonGoalRollCpu_MoveToEmptierQuadrant(PokeathlonGoalRollMon *mon, PokeathlonGoalRollCpuTeam *teams, u8 excluded) {
     u8 counts[4] = { 0, 0, 0, 0 };
     u8 i, j;
     int chosen, x, y;
@@ -576,10 +576,10 @@ void PokeathlonGoalRollCpu_Think(PokeathlonCourseData *course, PokeathlonGoalRol
     u8 role = cpu->orderSlot;
     switch (role) {
     case 0:
-        slot->wait = (u32)ov96_02214EB4(course, participant, role, slot->mon, cpu->balls);
+        slot->wait = (u32)PokeathlonGoalRollCpu_ThinkGuard(course, participant, role, slot->mon, cpu->balls);
         break;
     case 1:
-        slot->wait = (u32)ov96_02214C3C(course, participant, role, slot->mon, cpu->balls);
+        slot->wait = (u32)PokeathlonGoalRollCpu_ThinkChaser(course, participant, role, slot->mon, cpu->balls);
         break;
     case 2:
         slot->wait = ov96_02215184(course, participant, role, slot->mon, cpu->balls, cpu->teams);

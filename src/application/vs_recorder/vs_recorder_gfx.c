@@ -369,7 +369,7 @@ u32 VsRecorder_GetBlendColor(VsRecorderWork *work) {
     return table.values[work->colorScheme];
 }
 
-u32 ov40_0222DAF0(VsRecorderWork *work) {
+u32 VsRecorder_GetMenuBlendColor(VsRecorderWork *work) {
     VsRecorderSchemeTable table = *(const VsRecorderSchemeTable *)ov40_02244E94;
     if (work->mode != 0) {
         return 0x7E05;
@@ -428,7 +428,7 @@ void VsRecorder_ClearPaletteBlend(VsRecorderWork *work) {
 
 #pragma force_active on
 
-u16 *ov40_0222DD68(enum HeapID heapID, int unused, int *count) {
+u16 *VsRecorder_LoadSpeciesList(enum HeapID heapID, int unused, int *count) {
     u32 size;
     u16 *data = GfGfxLoader_LoadFromNarc_GetSizeOut(NARC_application_zukanlist_zkn_data_zukan_data, 13, FALSE, heapID, FALSE, &size);
     *count = size >> 1;

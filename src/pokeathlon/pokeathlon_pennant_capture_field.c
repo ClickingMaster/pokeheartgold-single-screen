@@ -25,7 +25,7 @@ BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
 
 // Course helpers and the rest of the event (OVY_96, not yet tidied).
-u8 *ov96_021E8A20(void *block);
+u8 *PokeathlonCourse_ToBytes(void *block);
 u8 *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, u16 member);
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, u8 member);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int kind, int amount);
@@ -299,8 +299,8 @@ void PokeathlonPennantCapture_ApplyFrame(PokeathlonCourseData *course, int viewe
     u8 pennants;
     u16 score;
 
-    self = ov96_021E5F24(course);
-    frame = (PokeathlonPennantCaptureFrame *)ov96_021E8A20(link->frame);
+    self = PokeathlonCourse_GetNetId(course);
+    frame = (PokeathlonPennantCaptureFrame *)PokeathlonCourse_ToBytes(link->frame);
     work = PokeathlonCourse_GetHeapAllocPtr4(course);
     baseX = frame->words[viewer] & 0x1FF;
     baseY = (frame->words[viewer] >> 9) & 0x1FF;
@@ -361,10 +361,10 @@ void PokeathlonPennantCapture_ApplyFrame(PokeathlonCourseData *course, int viewe
         object = player->monObjects[member];
         if (PokeathlonCourse_GetParticipantCount(course) <= i) {
             remote = TRUE;
-            block = ov96_021E8A20(link->others[i]);
+            block = PokeathlonCourse_ToBytes(link->others[i]);
         } else {
             remote = FALSE;
-            block = ov96_021E8A20(link->own);
+            block = PokeathlonCourse_ToBytes(link->own);
         }
         if (viewer == i) {
             UpdateMonSwapAsU16(work->display, player, frame, i, member, block, isHost, TRUE, FALSE);
@@ -1288,9 +1288,9 @@ void PokeathlonPennantCapture_PlaySEIfOnScreen(int x, int y, int seq, BOOL self)
 #pragma force_active on
 
 void PokeathlonPennantCapture_UpdateOwnScore(PokeathlonCourseData *course) {
-    PokeathlonPennantCaptureFrame *frame = (PokeathlonPennantCaptureFrame *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 240);
+    PokeathlonPennantCaptureFrame *frame = (PokeathlonPennantCaptureFrame *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 240);
     PokeathlonPennantCapture *work = PokeathlonCourse_GetHeapAllocPtr4(course);
-    u8 self = (u8)ov96_021E5F24(course);
+    u8 self = (u8)PokeathlonCourse_GetNetId(course);
     u16 score = (u16)((frame->words[self] >> 18) & 1023);
     u8 bonus = (u8)((frame->spots[self] >> 11) & 31);
     score = (u16)(score + bonus);

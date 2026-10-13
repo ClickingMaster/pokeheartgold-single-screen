@@ -331,7 +331,7 @@ void DressUp_InitCanvas(DressUpWork *work, Pokemon *mon, int limit, BOOL altMonP
     if (altMonPic == FALSE) {
         DressUpCanvas_CreateMonPic(&work->canvas, mon, &pokepicTemplate, HEAP_ID_14);
     } else {
-        ov41_02247FFC(&work->canvas, mon, &pokepicTemplate, HEAP_ID_14);
+        DressUpCanvas_CreateMonPicEx(&work->canvas, mon, &pokepicTemplate, HEAP_ID_14);
     }
     DressUp_LoadMonHitMap(&work->gfx, &pokepicTemplate);
     DressUpCanvas_RefreshPriorities(&work->canvas);
@@ -396,7 +396,7 @@ void DressUp_RestoreEditBgLayout(DressUpWork *work) {
     G2_SetBG3Priority(3);
     BgSetPosTextAndCommit(work->gfx.bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, -16);
     DressUpTray_LoadTabBg(&work->tray, 0);
-    ov41_022488D8(&work->tray, 0, 2, 0, NULL);
+    DressUpTray_SlideInTabBg(&work->tray, 0, 2, 0, NULL);
 }
 
 #pragma force_active reset
@@ -445,8 +445,8 @@ void DressUp_UpdateButtons(DressUpWork *work) {
     DressUpButtonPanel_Update(&work->buttonPanel);
 }
 
-void ov41_02247588(DressUpWork *work) {
-    ov41_0224A580(&work->buttonPanel);
+void DressUp_ResetButtons(DressUpWork *work) {
+    DressUpButtonPanel_ResetButtons(&work->buttonPanel);
 }
 
 void DressUp_OnDoneButton(void *button, void *arg) {
@@ -596,7 +596,7 @@ void DressUp_ReturnTransitionTask(SysTask *task, DressUpTransition *env) {
     case 2:
         DressUp_HidePrompt(env->work);
         DressUp_RestoreEditBgLayout(env->work);
-        ov41_02247588(env->work);
+        DressUp_ResetButtons(env->work);
         DressUp_LoadFrameBg(env->work, 0);
         ScheduleSetBgPosText(env->work->gfx.bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_Y, -40);
         env->state++;
@@ -717,7 +717,7 @@ void DressUp_ShowDressedUpPrompt(DressUpWork *work) {
 
 void DressUp_HidePrompt(DressUpWork *work) {
     YesNoPrompt_Reset(work->yesNoPrompt);
-    ov41_02247D3C(work);
+    DressUp_RemovePromptMsgWindow(work);
     BgClearTilemapBufferAndCommit(work->gfx.bgConfig, GF_BG_LYR_MAIN_3);
 }
 
@@ -779,11 +779,11 @@ void DressUp_CreatePromptMsgWindow(DressUpWork *work, int msgId) {
     DressUp_CreateMsgWindow(work, msgId, 2, 1, 27, 2);
 }
 
-void ov41_02247D34(DressUpWork *work, int msgId) {
+void DressUp_PrintPromptMsgWindow(DressUpWork *work, int msgId) {
     DressUp_PrintMsgWindow(work, msgId);
 }
 
-void ov41_02247D3C(DressUpWork *work) {
+void DressUp_RemovePromptMsgWindow(DressUpWork *work) {
     DressUp_RemoveMsgWindow(work);
 }
 

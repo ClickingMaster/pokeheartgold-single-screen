@@ -128,7 +128,7 @@ void VsRecorder_FreeListArrows(VsRecorderListWindow *list, VsRecorderWork *work)
     Sprite_DeleteAndFreeResources(list->arrows[1]);
 }
 
-ManagedSprite *ov40_0222F950(void *unused, VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram, int anim) {
+ManagedSprite *VsRecorder_NewScrollSprite(void *unused, VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram, int anim) {
     ManagedSpriteTemplate template;
     ManagedSprite *sprite;
 
@@ -170,8 +170,8 @@ void VsRecorder_CreateTouchScrollSprites(VsRecorderTouchScroll *scroll, VsRecord
 #pragma force_active on
 
 void VsRecorder_CreateTouchScrollSpritesWithAnim(VsRecorderTouchScroll *scroll, VsRecorderWork *work, int anim) {
-    scroll->sprites[0] = ov40_0222F950(scroll, work, NNS_G2D_VRAM_TYPE_2DSUB, anim);
-    scroll->sprites[1] = ov40_0222F950(scroll, work, NNS_G2D_VRAM_TYPE_2DSUB, anim);
+    scroll->sprites[0] = VsRecorder_NewScrollSprite(scroll, work, NNS_G2D_VRAM_TYPE_2DSUB, anim);
+    scroll->sprites[1] = VsRecorder_NewScrollSprite(scroll, work, NNS_G2D_VRAM_TYPE_2DSUB, anim);
     ManagedSprite_SetPositionXY(scroll->sprites[0], 24, 136);
     ManagedSprite_SetPositionXY(scroll->sprites[1], 232, 136);
 }

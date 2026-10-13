@@ -314,18 +314,18 @@ void PokeathlonRingDropDisplay_UpdateSwitch(PokeathlonRingDropMonPacket *packet,
     position[1] = packet->y;
     if (PokeathlonCourse_GetParticipantCount(course) <= participant) {
         cpu = TRUE;
-        input = (PokeathlonRingDropInput *)ov96_021E8A20(data + RING_DROP_DATA_INPUTS + participant * RING_DROP_DATA_SLOT_SIZE);
+        input = (PokeathlonRingDropInput *)PokeathlonCourse_ToBytes(data + RING_DROP_DATA_INPUTS + participant * RING_DROP_DATA_SLOT_SIZE);
     } else {
         cpu = FALSE;
-        input = (PokeathlonRingDropInput *)ov96_021E8A20(data);
+        input = (PokeathlonRingDropInput *)PokeathlonCourse_ToBytes(data);
     }
-    host = ov96_021E5F24(course) == 0 ? TRUE : FALSE;
+    host = PokeathlonCourse_GetNetId(course) == 0 ? TRUE : FALSE;
     if (host && cpu) {
         hostCpu = TRUE;
     } else {
         hostCpu = FALSE;
     }
-    own = participant == ov96_021E5F24(course) ? TRUE : FALSE;
+    own = participant == PokeathlonCourse_GetNetId(course) ? TRUE : FALSE;
     report = hostCpu | own;
     if (packet->switchState != mon->switchState) {
         mon->switchStep = 0;
@@ -406,7 +406,7 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
     mon = display->mons;
     for (; participant < RING_DROP_PARTICIPANTS; participant++, packet++, mon++, index += RING_DROP_TEAM_SIZE) {
         BOOL cpu = PokeathlonCourse_GetParticipantCount(course) <= participant;
-        BOOL host = ov96_021E5F24(course) == 0;
+        BOOL host = PokeathlonCourse_GetNetId(course) == 0;
         hostCpu = FALSE;
         if (host && cpu) {
             hostCpu = TRUE;
@@ -419,7 +419,7 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
         monObject = PokeathlonCourseMonObjects_Get(ringDrop->monObjects, objectIndex);
         mon->monObject = monObject;
         GF_ASSERT(monObject != NULL);
-        if (participant == ov96_021E5F24(course)) {
+        if (participant == PokeathlonCourse_GetNetId(course)) {
             member = packet->member;
             {
                 u32 marks = framePacket->marks.raw >> 8;
@@ -437,13 +437,13 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
                 other--;
             }
             if (packet->hit == 1) {
-                if (other == ov96_021E5F24(course)) {
+                if (other == PokeathlonCourse_GetNetId(course)) {
                     PokeathlonScreenShake_Start(&ringDrop->shake, 4, 10);
                 }
                 showHit = TRUE;
                 PlaySE(SEQ_SE_GS_TACKLEHIT);
             } else if (packet->hit == 2) {
-                if (other == ov96_021E5F24(course)) {
+                if (other == PokeathlonCourse_GetNetId(course)) {
                     PokeathlonScreenShake_Start(&ringDrop->shake, 10, 15);
                 }
                 showHit = TRUE;
@@ -489,7 +489,7 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
             PokeathlonCourseMonObjects_SetPalette(ringDrop->monObjects, objectIndex, 1, mon->palettes[team][0]);
         }
         if (packet->state == 5 && mon->state != 5) {
-            if (participant == ov96_021E5F24(course)) {
+            if (participant == PokeathlonCourse_GetNetId(course)) {
                 PlaySE_SetPitch(SEQ_SE_GS_TACKLEHATUDOU, 256);
             } else {
                 PlaySE_SetVolume(SEQ_SE_GS_TACKLEHATUDOU2, 64);
@@ -542,14 +542,14 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
                 mon->jumpScale = FX32_ONE;
                 PlaySE(SEQ_SE_GS_PUSH02);
                 PokeathlonRingDropUi_SetMemberSwitching(display->ui, (u8)participant, team, 1);
-                if (participant == ov96_021E5F24(course) || hostCpu) {
+                if (participant == PokeathlonCourse_GetNetId(course) || hostCpu) {
                     mon->recordJump = TRUE;
                 }
             } else if (!airborne && mon->airborne == TRUE) {
                 ManagedSprite_SetPositionXYWithSubscreenOffset(mon->dustSprite, packet->x, packet->y, FX32_CONST(480));
                 ManagedSprite_SetDrawFlag(mon->dustSprite, TRUE);
                 ManagedSprite_ResetSpriteAnimCtrlState(mon->dustSprite);
-                PokeathlonRingDrop_PlaySE(SEQ_SE_GS_BOWA2, participant == ov96_021E5F24(course));
+                PokeathlonRingDrop_PlaySE(SEQ_SE_GS_BOWA2, participant == PokeathlonCourse_GetNetId(course));
                 PokeathlonRingDropUi_SetMemberSwitching(display->ui, (u8)participant, team, 0);
                 PokeathlonCourseMonObject_SetDrawFlag(monObject, 1);
                 mon->jumping = FALSE;
@@ -600,7 +600,7 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
                 u32 frames;
                 if (!mon->squashFrames) {
                     if (!params->jumpType) {
-                        if (participant == ov96_021E5F24(course)) {
+                        if (participant == PokeathlonCourse_GetNetId(course)) {
                             PlaySE(SEQ_SE_DP_BOX03);
                         }
                     } else {
@@ -701,14 +701,14 @@ void PokeathlonRingDropDisplay_Update(PokeathlonRingDropDisplay *display, Pokeat
     u32 anim;
     int i;
 
-    packet = (PokeathlonRingDropFramePacket *)(void *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + RING_DROP_DATA_FRAME_IN);
+    packet = (PokeathlonRingDropFramePacket *)(void *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + RING_DROP_DATA_FRAME_IN);
     ringDrop = PokeathlonCourse_GetHeapAllocPtr4(course);
     PokeathlonRingDropDisplay_ApplyFramePacket(display, packet, course);
     PokeathlonCourse_UpdateTimeUpCountdown(course, packet->timer);
     if (packet->timer == 450) {
         PlaySE(SEQ_SE_DP_TRAIN04);
     }
-    status = packet->mons[ov96_021E5F24(course)].status;
+    status = packet->mons[PokeathlonCourse_GetNetId(course)].status;
     switch (status) {
     case 0:
         anim = 2;

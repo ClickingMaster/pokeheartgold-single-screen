@@ -304,9 +304,9 @@ void PokeathlonCourseRecord_ShowCoursePanel(PokeathlonCourseRecord *work, u32 co
 }
 
 void PokeathlonCourseRecord_PrintStaticText(PokeathlonCourseRecord *work) {
-    ov98_0221EC08(work->textContext, 0, msg_0314_00002, 1, 0);
-    ov98_0221EBEC(work->textContext, 2, msg_0314_00000, TRUE, 0, 4);
-    ov98_0221EBD8(work->textContext, 11, msg_0314_00007, FALSE);
+    PokeathlonUtil_PrintMessageAtXY(work->textContext, 0, msg_0314_00002, 1, 0);
+    PokeathlonUtil_PrintAlignedMessageAtY(work->textContext, 2, msg_0314_00000, TRUE, 0, 4);
+    PokeathlonUtil_PrintAlignedMessage(work->textContext, 11, msg_0314_00007, FALSE);
 }
 
 void PokeathlonCourseRecord_PrintPage(PokeathlonCourseRecord *work, u32 course) {
@@ -327,13 +327,13 @@ void PokeathlonCourseRecord_PrintEventScores(PokeathlonCourseRecord *work, int c
         if (PokeathlonCourseRecord_HasRecord(work->args, course)) {
             PokeathlonUtil_PrintMessageWithNumber(work->textContext, windows[1], msg_0314_00008, PokeathlonCourseRecord_GetScore(work->args, course, (u16)i), 3, 0);
         } else {
-            ov98_0221EBD8(work->textContext, windows[1], msg_0314_00009, FALSE);
+            PokeathlonUtil_PrintAlignedMessage(work->textContext, windows[1], msg_0314_00009, FALSE);
         }
     }
     if (PokeathlonCourseRecord_HasRecord(work->args, course)) {
         PokeathlonUtil_PrintMessageWithNumber(work->textContext, 12, msg_0314_00008, PokeathlonCourseRecord_GetScore(work->args, course, 3), 3, 0);
     } else {
-        ov98_0221EBD8(work->textContext, 12, msg_0314_00009, FALSE);
+        PokeathlonUtil_PrintAlignedMessage(work->textContext, 12, msg_0314_00009, FALSE);
     }
 }
 
@@ -358,15 +358,15 @@ void PokeathlonCourseRecord_PrintCourseName(PokeathlonCourseRecord *work, int co
     int medal;
 
     BufferPokeathlonMedalName(msgFormat, 0, (u8)course);
-    ov98_0221EC08(work->textContext, 1, msg_0314_00004, 1, 0);
+    PokeathlonUtil_PrintMessageAtXY(work->textContext, 1, msg_0314_00004, 1, 0);
     BufferPokeathlonCourseName(msgFormat, 0, course & 0xFF);
-    ov98_0221EBD8(work->textContext, 3, msg_0314_00003, TRUE);
+    PokeathlonUtil_PrintAlignedMessage(work->textContext, 3, msg_0314_00003, TRUE);
     if (ov99_021E5B70(work->args)) {
-        medal = ov98_0221EF64(PokeathlonCourseRecord_GetTotalScore(work->args, course));
+        medal = PokeathlonUtil_GetCourseMedal(PokeathlonCourseRecord_GetTotalScore(work->args, course));
         if (medal == 0) {
-            ov98_0221EBD8(work->textContext, 4, msg_0314_00005, TRUE);
+            PokeathlonUtil_PrintAlignedMessage(work->textContext, 4, msg_0314_00005, TRUE);
         } else if (medal == 1) {
-            ov98_0221EBD8(work->textContext, 4, msg_0314_00006, TRUE);
+            PokeathlonUtil_PrintAlignedMessage(work->textContext, 4, msg_0314_00006, TRUE);
         } else {
             FillWindowPixelBuffer(&textContext->windows[4], 0);
             ScheduleWindowCopyToVram(&textContext->windows[4]);
@@ -380,7 +380,7 @@ void PokeathlonCourseRecord_PrintTotalLabel(PokeathlonCourseRecord *work) {
     PokeathlonTextContext *textContext = work->textContext;
 
     if (PokeathlonCourseRecord_HasRecord(work->args, work->selection.page)) {
-        ov98_0221EBD8(work->textContext, 13, msg_0314_00001, FALSE);
+        PokeathlonUtil_PrintAlignedMessage(work->textContext, 13, msg_0314_00001, FALSE);
     } else {
         FillWindowPixelBuffer(&textContext->windows[13], 0);
         ScheduleWindowCopyToVram(&textContext->windows[13]);
@@ -429,7 +429,7 @@ void PokeathlonCourseRecord_LoadMonPicResources(PokeathlonCourseRecord *work) {
     SpriteManager *spriteManager = PokeathlonUtil_GetSpriteManager(work->spriteContext);
 
     for (i = 0; i < 3; i++) {
-        ov98_0221E784(spriteSystem, spriteManager, ov99_021E9650[i], NNS_G2D_VRAM_TYPE_2DMAIN);
+        PokeathlonUtil_LoadMonPicSpriteResources(spriteSystem, spriteManager, ov99_021E9650[i], NNS_G2D_VRAM_TYPE_2DMAIN);
     }
 }
 
@@ -450,7 +450,7 @@ void PokeathlonCourseRecord_CreateSprites(PokeathlonCourseRecord *work) {
         if (!PokeathlonCourseRecord_HasRecord(work->args, course)) {
             ManagedSprite_SetDrawFlag(work->sprites[1 + course], FALSE);
         }
-        medal = ov98_0221EF64(PokeathlonCourseRecord_GetTotalScore(work->args, course));
+        medal = PokeathlonUtil_GetCourseMedal(PokeathlonCourseRecord_GetTotalScore(work->args, course));
         if (medal == 2) {
             if (course % 2 == 0) {
                 ManagedSprite_SetAnim(work->sprites[6 + course], 5);

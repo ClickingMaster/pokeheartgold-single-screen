@@ -73,11 +73,11 @@
 	.extern PokeathlonCourse_SetStateField07_IfDifferent
 	.extern PokeathlonCourse_SetStateTransitionType
 	.extern PokeathlonCourse_SetVBlankIntrCB
-	.extern ov96_021E5E04
-	.extern ov96_021E5E7C
-	.extern ov96_021E5F24
-	.extern ov96_021E6F18
-	.extern ov96_021E75B8
+	.extern PokeathlonCourse_SetEvents
+	.extern PokeathlonCourse_FindCourseId
+	.extern PokeathlonCourse_GetNetId
+	.extern PokeathlonCourse_State_ResetDataCopyArea
+	.extern PokeathlonCourse_State_WaitForCommand
 	.extern PokeathlonCourseCmd_EventsSize
 	.extern PokeathlonCourseCmd_ParticipantSize
 	.extern PokeathlonCourseCmd_AllParticipantsSize
@@ -90,7 +90,7 @@
 	.extern PokeathlonCourseCmd_GetEventDataBuffer
 	.extern PokeathlonCourseCmd_GetRecordBuffer
 	.extern PokeathlonCourseCmd_GetResultsBuffer
-	.extern ov96_021E9A54
+	.extern PokeathlonCourseCmd_GetMonCountersBuffer
 	.extern PokeathlonCourseCmd_GetJuiceRecordBuffer
 	.extern PokeathlonCourseOpening_Init
 	.extern PokeathlonCourseOpening_Main
@@ -118,12 +118,12 @@
 	.extern ov96_0221DC90
 	.extern ov96_0221E5A0
 	.extern ov96_0221E5A4
-	.public _0221DA00
-	.public ov96_0221DA28
-	.public ov96_0221DA50
-	.public ov96_0221DA5C
-	.public ov96_0221DA68
-	.public ov96_0221DA6C
+	.public gPokeathlonCourseEventSteps
+	.public gPokeathlonCourseEvents
+	.public gPokeathlonCourseOpeningSteps
+	.public gPokeathlonCourseClosingSteps
+	.public gPokeathlonCourseWaitSteps
+	.public gPokeathlonEventIntroSteps
 	.public ov96_0221DA80
 	.public ov96_0221DB50
 	.public ov96_0221DB5C
@@ -132,7 +132,7 @@
 	.public ov96_0221DBC8
 	.public ov96_0221DC04
 	.data
-_0221DA00:
+gPokeathlonCourseEventSteps:
 	.word ov96_0221DC30
 	.word ov96_0221DC50
 	.word ov96_0221DB50
@@ -144,7 +144,7 @@ _0221DA00:
 	.word ov96_0221DC48
 	.word ov96_0221DC88
 
-ov96_0221DA28: ; 0x0221DA28
+gPokeathlonCourseEvents: ; 0x0221DA28
 	.word ov96_0221A90C
 	.word ov96_0221A8D0
 	.word ov96_0221A7F4
@@ -156,20 +156,20 @@ ov96_0221DA28: ; 0x0221DA28
 	.word ov96_0221A858
 	.word ov96_0221A81C
 
-ov96_0221DA50: ; 0x0221DA50
+gPokeathlonCourseOpeningSteps: ; 0x0221DA50
 	.word PokeathlonCourseOpening_FadeIn
 	.word PokeathlonCourseOpening_Introduce
 	.word PokeathlonCourseOpening_FadeOut
 
-ov96_0221DA5C: ; 0x0221DA5C
+gPokeathlonCourseClosingSteps: ; 0x0221DA5C
 	.word PokeathlonCourseClosing_FadeIn
 	.word PokeathlonCourseClosing_Awards
 	.word PokeathlonCourseClosing_FadeOut
 
-ov96_0221DA68: ; 0x0221DA68
+gPokeathlonCourseWaitSteps: ; 0x0221DA68
 	.word PokeathlonCourseWait_FadeOut
 
-ov96_0221DA6C: ; 0x0221DA6C
+gPokeathlonEventIntroSteps: ; 0x0221DA6C
 	.word PokeathlonEventIntro_Appear
 	.word PokeathlonEventIntro_DetailsPage
 	.word PokeathlonEventIntro_RulesPage

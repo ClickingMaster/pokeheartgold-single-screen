@@ -22,7 +22,7 @@ extern BOOL GF_heap_c_dummy_return_true(enum HeapID heapId);
 
 // Data tables in assembly
 extern const OverlayManagerTemplate subOverlayTemplate;
-extern const u8 ov96_0221A934[40];
+extern const u8 gPokeathlonCourseEventIds[40];
 extern const void *sPokeathlonStateInfoFuncTable;
 
 BOOL PokeathlonCourse_Init(OverlayManager *manager, int *state) {
@@ -151,7 +151,7 @@ BOOL PokeathlonCourse_Main(OverlayManager *manager, int *state) {
 
     case POKEATHLON_STATE_EXIT_SEQUENCE:
         if (!LinkSync_IsSynced(courseState->transitionType)) {
-            if (ov96_021E5F24(data)) {
+            if (PokeathlonCourse_GetNetId(data)) {
                 break;
             }
 
@@ -166,8 +166,8 @@ BOOL PokeathlonCourse_Main(OverlayManager *manager, int *state) {
                 dest1 = data->dataCopyBuffer1; // Destination buffer 1
                 PokeathlonCourseLink_SendCommand(0x1B, dest1, src, (int)data->system);
 
-                dest1 = ov96_021E8A20(data->dataCopyBuffer2); // Destination buffer 2
-                dest2 = ov96_021E8A20(data->dataCopySource);  // Source buffer
+                dest1 = PokeathlonCourse_ToBytes(data->dataCopyBuffer2); // Destination buffer 2
+                dest2 = PokeathlonCourse_ToBytes(data->dataCopySource);  // Source buffer
 
                 // Copy 0x28 bytes from source to dest
                 for (copyCount = 0x28; copyCount != 0; copyCount--) {
@@ -185,7 +185,7 @@ BOOL PokeathlonCourse_Main(OverlayManager *manager, int *state) {
         break;
     }
 
-    ov96_021E67AC(data);
+    PokeathlonCourse_DrawEvent(data);
     return FALSE;
 }
 
@@ -360,12 +360,12 @@ void PokeathlonCourse_SetField1F4(PokeathlonCourseData *data, int param) {
     data->eventDrawEnabled = param;
 }
 
-void ov96_021E5E04(PokeathlonCourseData *data, u8 *param) {
+void PokeathlonCourse_SetEvents(PokeathlonCourseData *data, u8 *param) {
     for (int i = 0; i < data->maxParticipants; i++) {
         data->roundEvents[i] = param[i];
     }
 
-    data->courseId = ov96_021E5E7C(data);
+    data->courseId = PokeathlonCourse_FindCourseId(data);
     data->field_27C = data->courseId;
 }
 
@@ -381,7 +381,7 @@ u32 PokeathlonCourse_GetField3D8_AtIndex(PokeathlonCourseData *data, u8 index) {
     return data->roundEvents[index];
 }
 
-u32 ov96_021E5E7C(PokeathlonCourseData *data) {
+u32 PokeathlonCourse_FindCourseId(PokeathlonCourseData *data) {
     u8 i, j, numParticipants;
     BOOL flag = (PokeathlonCourse_GetMode(data) == 1);
     u32 *fieldPtr = data->roundEvents;
@@ -390,7 +390,7 @@ u32 ov96_021E5E7C(PokeathlonCourseData *data) {
     for (i = 0; i < 10; i++) {
         BOOL match = TRUE;
         for (j = 0; j < numParticipants; j++) {
-            if (fieldPtr[j] != ov96_0221A934[i * 4 + j]) {
+            if (fieldPtr[j] != gPokeathlonCourseEventIds[i * 4 + j]) {
                 match = FALSE;
                 break;
             }
@@ -426,7 +426,7 @@ void *PokeathlonCourse_GetSystem(PokeathlonCourseData *data) {
     return data->system;
 }
 
-BOOL ov96_021E5F24(PokeathlonCourseData *data) {
+BOOL PokeathlonCourse_GetNetId(PokeathlonCourseData *data) {
     return PokeathlonCourseLink_GetNetId(data->system);
 }
 

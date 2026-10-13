@@ -33,7 +33,7 @@ static inline void *GetTexDictData(NNSG3dResTex *tex, u32 index) {
 
 BOOL PokeathlonCourseCeremony_IsOpeningFinished(PokeathlonCourseData *course) {
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyOpeningData *data = (PokeathlonCourseCeremonyOpeningData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyOpeningData *data = (PokeathlonCourseCeremonyOpeningData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     if (course == NULL) {
         GF_AssertFail();
     }
@@ -48,7 +48,7 @@ BOOL PokeathlonCourseCeremony_IsOpeningFinished(PokeathlonCourseData *course) {
 
 BOOL PokeathlonCourseCeremony_IsClosingFinished(PokeathlonCourseData *course) {
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     if (course == NULL) {
         GF_AssertFail();
     }

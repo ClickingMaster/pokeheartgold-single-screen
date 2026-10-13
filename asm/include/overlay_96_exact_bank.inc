@@ -1,14 +1,14 @@
 	.public PokeathlonCourse_LoadPerformanceData
 	.public PokeathlonCourse_GetPerformance
 	.public PokeathlonCourse_GetMonStats
-	.public ov96_021E6104
-	.public ov96_021E6108
-	.public ov96_021E6138
+	.public PokeathlonCourse_GetTouchRadius
+	.public PokeathlonCourse_GetSpriteSizeType
+	.public PokeathlonCourse_GetCollisionSizeClass
 	.public PokeathlonCourse_GetMonInfo
 	.public PokeathlonCourse_CreateHudSprites
-	.public ov96_021E6290
+	.public PokeathlonCourse_CreateHudSpritesInPool
 	.public PokeathlonCourse_CreateStartSprites
-	.public ov96_021E634C
+	.public PokeathlonCourse_CreateStartSpritesInPool
 	.public PokeathlonCourse_RunStartCountdown
 	.public PokeathlonCourse_UpdateTimeUpCountdown
 	.public PokeathlonCourse_InitMarkers
@@ -21,46 +21,46 @@
 	.public PokeathlonCourse_SetHudPlanes
 	.public PokeathlonCourse_RunFinish
 	.public PokeathlonCourse_GetPerformanceFileId
-	.public ov96_021E67AC
+	.public PokeathlonCourse_DrawEvent
 	.public PokeathlonCourse_State_SendEvents
 	.public PokeathlonCourse_State_RunEventOverlay
-	.public ov96_021E6870
+	.public PokeathlonCourse_State_RunWait
 	.public PokeathlonCourse_State_SendParticipant
 	.public PokeathlonCourse_State_SendParticipants
 	.public PokeathlonCourse_State_SendProfiles
 	.public PokeathlonCourse_State_SendRecord
-	.public ov96_021E6A54
-	.public ov96_021E6A94
-	.public ov96_021E6AE8
-	.public ov96_021E6BC0
-	.public ov96_021E6BEC
-	.public ov96_021E6C20
-	.public ov96_021E6C40
-	.public ov96_021E6CB8
+	.public PokeathlonCourse_State_StartOpening
+	.public PokeathlonCourse_State_WaitOpeningStart
+	.public PokeathlonCourse_State_RunOpening
+	.public PokeathlonCourse_State_EndOpening
+	.public PokeathlonCourse_State_StartEventIntro
+	.public PokeathlonCourse_State_WaitEventIntroStart
+	.public PokeathlonCourse_State_RunEventIntro
+	.public PokeathlonCourse_State_EndEventIntro
 	.public PokeathlonCourse_State_StartRound
 	.public PokeathlonCourse_State_WaitRoundStart
-	.public ov96_021E6DE8
+	.public PokeathlonCourse_State_SendEventData
 	.public PokeathlonCourse_State_RunEvent
-	.public ov96_021E6F18
-	.public ov96_021E6F2C
-	.public ov96_021E6FFC
+	.public PokeathlonCourse_State_ResetDataCopyArea
+	.public PokeathlonCourse_State_SendEventResult
+	.public PokeathlonCourse_State_SendEventResults
 	.public PokeathlonCourse_State_EndRound
-	.public ov96_021E7080
+	.public PokeathlonCourse_State_ExitEvent
 	.public PokeathlonCourse_State_NextRound
-	.public ov96_021E711C
-	.public ov96_021E7150
-	.public ov96_021E7190
-	.public ov96_021E7268
-	.public ov96_021E7294
-	.public ov96_021E72CC
-	.public ov96_021E7320
+	.public PokeathlonCourse_State_StartResultsAnnouncement
+	.public PokeathlonCourse_State_WaitResultsAnnouncementStart
+	.public PokeathlonCourse_State_RunResultsAnnouncement
+	.public PokeathlonCourse_State_EndResultsAnnouncement
+	.public PokeathlonCourse_State_StartClosing
+	.public PokeathlonCourse_State_WaitClosingStart
+	.public PokeathlonCourse_State_RunClosing
 	.public PokeathlonCourse_State_CreateJuiceRecords
 	.public PokeathlonCourse_State_SendMonCounters
 	.public PokeathlonCourse_State_SendResults
 	.public PokeathlonCourse_State_SendJuiceRecord
 	.public PokeathlonCourse_State_StoreJuiceRecords
 	.public PokeathlonCourse_State_Exit
-	.public ov96_021E75B8
+	.public PokeathlonCourse_State_WaitForCommand
 	.public PokeathlonCourse_VBlankCallback
 	.public PokeathlonCourse_SendEventResults
 	.public PokeathlonCourse_StoreRoundResults
@@ -89,8 +89,8 @@
 	.public PokeathlonCourse_SetFinishCallback
 	.public PokeathlonCourse_AddToCounter
 	.public PokeathlonCourse_IsNewRecord
-	.public ov96_021E8424
-	.public ov96_021E8448
+	.public PokeathlonCourse_GetNpcTeamSpriteId
+	.public PokeathlonCourse_GetNpcTeamMsgId
 	.public PokeathlonCourse_SetupNpcParticipants
 	.public PokeathlonCourse_ChooseNpcTeams
 	.public PokeathlonCourse_GetJuiceRecord
@@ -106,7 +106,7 @@
 	.public PokeathlonCourseCmdQueue_Free
 	.public PokeathlonCourseCmdQueue_Add
 	.public PokeathlonCourseCmdQueue_AddLarge
-	.public ov96_021E8A20
+	.public PokeathlonCourse_ToBytes
 	.public PokeathlonCourseCmd_GetTable
 	.public PokeathlonCourseCmd_GetCount
 	.public PokeathlonCourseMonGfx_AllocManager
@@ -171,7 +171,7 @@
 	.public PokeathlonCourseCmd_GetEventDataBuffer
 	.public PokeathlonCourseCmd_GetRecordBuffer
 	.public PokeathlonCourseCmd_GetResultsBuffer
-	.public ov96_021E9A54
+	.public PokeathlonCourseCmd_GetMonCountersBuffer
 	.public PokeathlonCourseCmd_GetJuiceRecordBuffer
 	.public PokeathlonCourseSprites_CreateResources
 	.public PokeathlonCourseSprites_FreeResources
@@ -179,9 +179,9 @@
 	.public PokeathlonCourseSprites_GetResMan
 	.public PokeathlonCourseSprites_LoadResources
 	.public PokeathlonCourseSprites_CreateCountdown
-	.public ov96_021EA2C4
+	.public PokeathlonCourseSprites_CreateTimerDigit
 	.public ov96_021EA374
-	.public ov96_021EA424
+	.public PokeathlonCourseSprites_CreateLapCounterDigit
 	.public PokeathlonCourseSprites_CreateNewRecord
 	.public PokeathlonCourseSprites_CreateTimeUpCountdown
 	.public ov96_021EA634
@@ -544,7 +544,7 @@
 	.public PokeathlonCirclePushDisplay_OffsetScreenTiles
 	.public PokeathlonLampJump_Init
 	.public PokeathlonLampJump_Draw
-	.public ov96_021F54D4
+	.public PokeathlonLampJump_ShowResults
 	.public PokeathlonLampJump_Exit
 	.public PokeathlonLampJump_SetGfxBanks
 	.public PokeathlonLampJump_Play
@@ -973,7 +973,7 @@
 	.public PokeathlonBlockSmash_Finish
 	.public PokeathlonBlockSmash_Init
 	.public PokeathlonBlockSmash_Draw
-	.public ov96_02209748
+	.public PokeathlonBlockSmash_ShowResults
 	.public PokeathlonBlockSmash_Exit
 	.public PokeathlonBlockSmash_SetVramBanks
 	.public PokeathlonBlockSmash_InitSpriteSystem
@@ -1122,7 +1122,7 @@
 	.public PokeathlonDiscCatch_Finish
 	.public PokeathlonDiscCatch_Init
 	.public PokeathlonDiscCatch_Draw
-	.public ov96_0220E60C
+	.public PokeathlonDiscCatch_ShowResults
 	.public PokeathlonDiscCatch_Exit
 	.public PokeathlonDiscCatch_GetDiscX
 	.public PokeathlonDiscCatch_IsMonInPlay
@@ -1201,7 +1201,7 @@
 	.public PokeathlonDiscCatch_CirclesOverlap
 	.public PokeathlonGoalRoll_Init
 	.public PokeathlonGoalRoll_Draw
-	.public ov96_02211660
+	.public PokeathlonGoalRoll_ShowResults
 	.public PokeathlonGoalRoll_Exit
 	.public PokeathlonGoalRoll_SetGfxBanks
 	.public PokeathlonGoalRoll_State_Play
@@ -1233,7 +1233,7 @@
 	.public PokeathlonGoalRoll_InitWindows
 	.public PokeathlonGoalRoll_PrintTotalPoints
 	.public PokeathlonGoalRoll_CollideWithWalls
-	.public ov96_02213D00
+	.public PokeathlonGoalRoll_SegmentsIntersect
 	.public PokeathlonGoalRoll_IntersectWall
 	.public PokeathlonGoalRoll_PickBallSpawn
 	.public PokeathlonGoalRoll_EncodeBallY
@@ -1274,13 +1274,13 @@
 	.public PokeathlonGoalRollCpu_SetBalls
 	.public PokeathlonGoalRollCpu_Free
 	.public PokeathlonGoalRollCpu_Update
-	.public ov96_02214C3C
-	.public ov96_02214DBC
-	.public ov96_02214EB4
-	.public ov96_02215058
+	.public PokeathlonGoalRollCpu_ThinkChaser
+	.public PokeathlonGoalRollCpu_ApplyChaserDecision
+	.public PokeathlonGoalRollCpu_ThinkGuard
+	.public PokeathlonGoalRollCpu_ApplyGuardDecision
 	.public ov96_02215184
 	.public ov96_02215460
-	.public ov96_02215478
+	.public PokeathlonGoalRollCpu_MoveToEmptierQuadrant
 	.public PokeathlonGoalRollCpu_Think
 	.public PokeathlonGoalRollCpu_GetQuadrant
 	.public ov96_02215650
@@ -1301,7 +1301,7 @@
 	.public PokeathlonRingDrop_State_Finish
 	.public PokeathlonRingDrop_Init
 	.public PokeathlonRingDrop_Draw
-	.public ov96_02215CE8
+	.public PokeathlonRingDrop_ShowResults
 	.public PokeathlonRingDrop_Exit
 	.public PokeathlonRingDrop_GetMonState
 	.public PokeathlonRingDrop_GetMonPosition
@@ -1436,26 +1436,26 @@
 	.public _0221A7D8
 	.public subOverlayTemplate
 	.public ov96_0221A7F4
-	.public ov96_0221A808
+	.public gPokeathlonCourseEvent_Opening
 	.public ov96_0221A81C
 	.public ov96_0221A830
-	.public ov96_0221A844
+	.public gPokeathlonCourseEvent_Closing
 	.public ov96_0221A858
-	.public ov96_0221A86C
+	.public gPokeathlonCourseEvent_ResultsAnnouncement
 	.public ov96_0221A880
 	.public ov96_0221A894
 	.public ov96_0221A8A8
-	.public ov96_0221A8BC
+	.public gPokeathlonCourseEvent_Wait
 	.public ov96_0221A8D0
-	.public ov96_0221A8E4
+	.public gPokeathlonCourseEvent_EventIntro
 	.public ov96_0221A8F8
 	.public ov96_0221A90C
 	.public ov96_0221A920
-	.public ov96_0221A934
+	.public gPokeathlonCourseEventIds
 	.public ov96_0221A95C
 	.public sPokeathlonStateInfoFuncTable
-	.public ov96_0221AA20
-	.public ov96_0221AAE8
+	.public gPokeathlonNpcTeamSpriteIds
+	.public gPokeathlonPerformanceFileIds
 	.public ov96_0221AEC4
 	.public ov96_0221AF54
 	.public ov96_0221AF64
@@ -1773,12 +1773,12 @@
 	.public ov96_0221D99C
 	.public ov96_0221D9A0
 	.public ov96_0221D9C8
-	.public _0221DA00
-	.public ov96_0221DA28
-	.public ov96_0221DA50
-	.public ov96_0221DA5C
-	.public ov96_0221DA68
-	.public ov96_0221DA6C
+	.public gPokeathlonCourseEventSteps
+	.public gPokeathlonCourseEvents
+	.public gPokeathlonCourseOpeningSteps
+	.public gPokeathlonCourseClosingSteps
+	.public gPokeathlonCourseWaitSteps
+	.public gPokeathlonEventIntroSteps
 	.public ov96_0221DA80
 	.public ov96_0221DB50
 	.public ov96_0221DB5C
@@ -1789,7 +1789,7 @@
 	.public sTrampolineBlue
 	.public ov96_0221DC18
 	.public ov96_0221DC1C
-	.public ov96_0221DC24
+	.public gPokeathlonResultsAnnouncementSteps
 	.public ov96_0221DC28
 	.public ov96_0221DC2C
 	.public ov96_0221DC30
@@ -1819,17 +1819,17 @@
 	.extern PokeathlonCourse_SetField1ED
 	.extern PokeathlonCourse_IncrementField1ED
 	.extern PokeathlonCourse_SetField1F4
-	.extern ov96_021E5E04
+	.extern PokeathlonCourse_SetEvents
 	.extern PokeathlonCourse_GetField3D8_ForCurrentParticipant
 	.extern PokeathlonCourse_GetField3D8_AtIndex
-	.extern ov96_021E5E7C
+	.extern PokeathlonCourse_FindCourseId
 	.extern PokeathlonCourse_GetCurrentParticipantIndex
 	.extern PokeathlonCourse_GetMode
 	.extern PokeathlonCourse_GetField1EF
 	.extern PokeathlonCourse_IncrementField1EF
 	.extern PokeathlonCourse_ResetField1EF
 	.extern PokeathlonCourse_GetSystem
-	.extern ov96_021E5F24
+	.extern PokeathlonCourse_GetNetId
 	.extern PokeathlonCourse_GetPlayerProfileFromData
 	.extern PokeathlonCourse_GetField974_AtIndex
 	.extern PokeathlonCourse_GetDataCopyArea

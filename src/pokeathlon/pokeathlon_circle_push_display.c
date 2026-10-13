@@ -134,7 +134,7 @@ void PokeathlonCirclePushDisplay_PrintPlayerNames(PokeathlonCirclePushDisplay *d
         FillWindowPixelBuffer(&display->windows[i], 0);
     }
 
-    self = (u8)ov96_021E5F24(display->course);
+    self = (u8)PokeathlonCourse_GetNetId(display->course);
     name = PlayerProfile_GetPlayerName_NewString(PokeathlonCourse_GetPlayerProfileFromData(display->course, self), display->heapId);
     AddTextPrinterParameterizedWithColor(&display->windows[0], 0, name, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(name);
@@ -299,7 +299,7 @@ void PokeathlonCirclePushDisplay_Update(PokeathlonCirclePushDisplay *display, BO
 }
 
 void PokeathlonCirclePushDisplay_SetScore(PokeathlonCirclePushDisplay *display, u32 score, u32 participant) {
-    u32 self = ov96_021E5F24(display->course);
+    u32 self = PokeathlonCourse_GetNetId(display->course);
 
     if (participant == self && display->anim.score != score) {
         GF_ASSERT(display->anim.score < score);

@@ -41,9 +41,9 @@
 	.public PokeathlonCourseRecord_SetMonSpritesVisible
 	.public PokeathlonCourseRecord_UpdatePageSprites
 	.public PokeathlonCourseRecord_HandleInput
-	.public ov99_021E677C
-	.public ov99_021E6840
-	.public ov99_021E6888
+	.public PokeathlonTrophies_Init
+	.public PokeathlonTrophies_Exit
+	.public PokeathlonTrophies_Main
 	.public PokeathlonTrophies_VBlankCallback
 	.public PokeathlonTrophies_InitBgs
 	.public PokeathlonTrophies_LoadBgGraphics
@@ -93,8 +93,8 @@
 	.public PokeathlonMedals_CreateIconSprites
 	.public PokeathlonMedals_PrintStaticText
 	.public PokeathlonEventRecord_GetEventTotal
-	.public ov99_021E84EC
-	.public ov99_021E8518
+	.public PokeathlonEventRecord_RecordReachesThreshold
+	.public PokeathlonEventRecord_SoloRecordReachesThreshold
 	.public PokeathlonEventRecord_IsRankEmpty
 	.public PokeathlonEventRecord_VBlankCallback
 	.public PokeathlonEventRecord_InitBgs

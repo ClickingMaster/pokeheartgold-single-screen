@@ -20,7 +20,7 @@
 #include "text.h"
 
 // Course sprite helpers (OVY_96, not yet tidied).
-Sprite *ov96_021EA2C4(void *resources, void *spriteList, int a2, enum HeapID heapId);
+Sprite *PokeathlonCourseSprites_CreateTimerDigit(void *resources, void *spriteList, int a2, enum HeapID heapId);
 void PokeathlonCourseSpritePool_LoadChar(void *pool, int narc, int file, int id, int a4);
 void PokeathlonCourseSpritePool_LoadPltt(void *pool, int narc, int file, int id, int a4, int a5);
 void PokeathlonCourseSpritePool_LoadCell(void *pool, int narc, int file, int id);
@@ -66,7 +66,7 @@ PokeathlonPennantCaptureDisplay *PokeathlonPennantCaptureDisplay_New(enum HeapID
     for (i = 0; i < 3; i++) {
         display->names[i] = String_New(11, heapId);
     }
-    participant = PokeathlonCourse_GetParticipantUnk04(course, ov96_021E5F24(course));
+    participant = PokeathlonCourse_GetParticipantUnk04(course, PokeathlonCourse_GetNetId(course));
     for (int j = 0; j < 3; j++) {
         CopyU16ArrayToString(display->names[j], (u16 *)(participant + 0x12));
         participant += 0x28;
@@ -179,7 +179,7 @@ void PokeathlonPennantCaptureDisplay_CreateSprites(PokeathlonPennantCaptureDispl
     PokeathlonCourseSpritePoolSprite_SetPosition(display->goalSprite, &initialPosition);
     PokeathlonPennantCaptureDisplay_CreatePicSprites(pool, display);
     for (i = 0; i < 2; i++) {
-        display->timerDigits[i] = ov96_021EA2C4(resources, PokeathlonCourseSpritePool_GetSpriteList(pool), 3, display->heapId);
+        display->timerDigits[i] = PokeathlonCourseSprites_CreateTimerDigit(resources, PokeathlonCourseSpritePool_GetSpriteList(pool), 3, display->heapId);
         Sprite_SetDrawFlag(display->timerDigits[i], TRUE);
         digitPosition.x = ov96_0221CBC4[i] << FX32_SHIFT;
         digitPosition.y = 0x2C4000;

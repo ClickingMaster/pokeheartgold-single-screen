@@ -147,7 +147,7 @@ void PokeathlonRingDrop_CreateMonObjects(PokeathlonRingDrop *ringDrop, Pokeathlo
             int member = i % 3;
             int participant = i / 3;
             PokeathlonCourse_GetMonInfo(course, participant, member, &infos[i]);
-            template.sizeTypes[i] = ov96_021E6108((void *)PokeathlonCourse_GetPerformance(course, participant, member));
+            template.sizeTypes[i] = PokeathlonCourse_GetSpriteSizeType((void *)PokeathlonCourse_GetPerformance(course, participant, member));
         }
         template.priority = 3;
         template.vram = 1;
@@ -187,7 +187,7 @@ void PokeathlonRingDrop_InitMons(PokeathlonRingDrop *ringDrop, PokeathlonCourseD
         teamMember = &ringDrop->players[participant].mon.members[member];
         object = PokeathlonRingDrop_GetMonObject(ringDrop->monObjects, i);
         PokeathlonRingDrop_SetMonObjectDrawn(object, member == 0);
-        size = ov96_021E6138(((void *(*)(PokeathlonCourseData *, u8, u8))PokeathlonCourse_GetPerformance)(course, participant, member));
+        size = PokeathlonCourse_GetCollisionSizeClass(((void *(*)(PokeathlonCourseData *, u8, u8))PokeathlonCourse_GetPerformance)(course, participant, member));
         PokeathlonCourseObject_SetCollision(object, collisions[size - 1].offsetY, collisions[size - 1].radius);
         object = PokeathlonRingDrop_GetMonObject(ringDrop->monObjects, i);
         PokeathlonCourseMonObject_GetGfx(object);
@@ -195,14 +195,14 @@ void PokeathlonRingDrop_InitMons(PokeathlonRingDrop *ringDrop, PokeathlonCourseD
         PokeathlonRingDrop_SetMonAffineCenter(object, TRUE);
         x = ov96_0221D6E4[participant][0];
         y = ov96_0221D6E4[participant][1];
-        if (participant == ov96_021E5F24(course)) {
+        if (participant == PokeathlonCourse_GetNetId(course)) {
             t.own.x = x;
             t.own.y = y;
         }
         PokeathlonCourseMonObject_SetAnimState(object, 2);
         PokeathlonCourseMonObject_SetDrawPriority(object, 7);
         PokeathlonCourseObject_SetGroundPosition(object, x, y);
-        PokeathlonCourseObject_SetTouchRadius(object, ov96_021E6104());
+        PokeathlonCourseObject_SetTouchRadius(object, PokeathlonCourse_GetTouchRadius());
         PokeathlonCourseObject_GroundToCenter(object, x, y, &t.centerX, &t.centerY);
         teamMember->index = i;
         teamMember->object = object;
@@ -404,10 +404,10 @@ static inline float PokeathlonRingDrop_ToFx32Rounded(s16 x) {
 }
 
 static inline float PokeathlonRingDrop_TouchRadius(void) {
-    if (ov96_021E6104() > 0) {
-        return 0.5f + (float)(ov96_021E6104() << FX32_SHIFT);
+    if (PokeathlonCourse_GetTouchRadius() > 0) {
+        return 0.5f + (float)(PokeathlonCourse_GetTouchRadius() << FX32_SHIFT);
     }
-    return (float)(ov96_021E6104() << FX32_SHIFT) - 0.5f;
+    return (float)(PokeathlonCourse_GetTouchRadius() << FX32_SHIFT) - 0.5f;
 }
 
 static inline int PokeathlonRingDrop_Abs(int x) {
@@ -484,7 +484,7 @@ void PokeathlonRingDrop_BuildFramePacket(u8 (*contacts)[RING_DROP_PARTICIPANTS],
     PokeathlonRingDropFrameMarks *marks;
 
     bumped = 0;
-    packets = (void *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + RING_DROP_DATA_FRAME_OUT);
+    packets = (void *)PokeathlonCourse_ToBytes((u8 *)PokeathlonCourse_GetDataCopyArea(course) + RING_DROP_DATA_FRAME_OUT);
     for (i = 0, mon = (PokeathlonRingDropMon *)((u8 *)contacts + RING_DROP_CONTACTS_TO(players[0].mon)), packet = packets; i < RING_DROP_PARTICIPANTS; i++, mon = (PokeathlonRingDropMon *)((u8 *)mon + sizeof(PokeathlonRingDropPlayer)), packet++) {
         s32 x = (mon->position.x << 4) >> 16;
         s32 y = (mon->position.y << 4) >> 16;

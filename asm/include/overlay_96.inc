@@ -419,9 +419,9 @@
 .public ov97_0221E69C
 .public PokeathlonUtil_CreateTextContext
 .public PokeathlonUtil_FreeTextContext
-.public ov98_0221EBD8
-.public ov98_0221EBEC
-.public ov98_0221EC08
+.public PokeathlonUtil_PrintAlignedMessage
+.public PokeathlonUtil_PrintAlignedMessageAtY
+.public PokeathlonUtil_PrintMessageAtXY
 .public PokeathlonUtil_PrintMessageWithNumber
 .public PokeathlonUtil_PrintMessage
 .public PokeathlonUtil_BufferNumber

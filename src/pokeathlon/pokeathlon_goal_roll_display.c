@@ -17,9 +17,9 @@
 void MATH_QSort(void *base, u32 count, u32 width, int (*compare)(const void *, const void *), void *context);
 
 // Course helpers and the sprite pool (OVY_96, not yet tidied).
-u8 *ov96_021E8A20(void *ptr);
+u8 *PokeathlonCourse_ToBytes(void *ptr);
 void PokeathlonCourse_SetRecordScore(PokeathlonCourseData *course, u32 score);
-Sprite *ov96_021EA2C4(PokeathlonGoalRollResources *resources, SpriteList *spriteList, int a2, enum HeapID heapId);
+Sprite *PokeathlonCourseSprites_CreateTimerDigit(PokeathlonGoalRollResources *resources, SpriteList *spriteList, int a2, enum HeapID heapId);
 void PokeathlonCourseMonObject_SetDrawPriority(void *object, u32 priority);
 PokeathlonGoalRollSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonGoalRollSpritePool *pool, int a1, int a2, int a3, u8 a4);
 void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL a1, BOOL show);
@@ -296,7 +296,7 @@ void PokeathlonGoalRoll_SortOtherMonsOrder(PokeathlonGoalRoll *goalRoll, Pokeath
 // Course callback at the end of the match: the own team's total.
 void PokeathlonGoalRoll_OnTimeUp(PokeathlonCourseData *course) {
     void *area = PokeathlonCourse_GetDataCopyArea(course);
-    ov96_021E8A20((u8 *)area + 0xF0);
+    PokeathlonCourse_ToBytes((u8 *)area + 0xF0);
     PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetHeapAllocPtr4(course);
     u32 score = PokeathlonGoalRollDisplay_GetScore(goalRoll->display);
     PokeathlonCourse_SetRecordScore(course, score);
@@ -344,7 +344,7 @@ void PokeathlonGoalRollDisplay_CreateSprites(PokeathlonGoalRollSpritePool *pool,
     sprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 0, 2, 102, 9);
     PokeathlonCourseSpritePoolSprite_Show(sprite, TRUE, TRUE);
     PokeathlonCourseSpritePoolSprite_SetPosition(sprite, &numberPosition);
-    PokeathlonCourseSpritePoolSprite_SetAnim(sprite, ov96_021E5F24(display->course) + 1);
+    PokeathlonCourseSpritePoolSprite_SetAnim(sprite, PokeathlonCourse_GetNetId(display->course) + 1);
 
     sprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 0, 2, 102, 10);
     PokeathlonCourseSpritePoolSprite_Show(sprite, TRUE, TRUE);
@@ -354,7 +354,7 @@ void PokeathlonGoalRollDisplay_CreateSprites(PokeathlonGoalRollSpritePool *pool,
 
     for (i = 0; i < 2; i++) {
         VecFx32 position;
-        display->timerDigits[i] = ov96_021EA2C4(resources, PokeathlonCourseSpritePool_GetSpriteList(pool), 0, display->heapId);
+        display->timerDigits[i] = PokeathlonCourseSprites_CreateTimerDigit(resources, PokeathlonCourseSpritePool_GetSpriteList(pool), 0, display->heapId);
         Sprite_SetDrawFlag(display->timerDigits[i], TRUE);
         position.x = ov96_0221D648[i] << 12;
         position.y = 10 << 18;
@@ -368,7 +368,7 @@ void PokeathlonGoalRollDisplay_PrintName(PokeathlonGoalRollDisplay *display) {
     String *name;
     u8 own;
     FillWindowPixelBuffer(&display->nameWindow, 0);
-    own = ov96_021E5F24(display->course);
+    own = PokeathlonCourse_GetNetId(display->course);
     name = PlayerProfile_GetPlayerName_NewString(PokeathlonCourse_GetPlayerProfileFromData(display->course, own), display->heapId);
     AddTextPrinterParameterizedWithColor(&display->nameWindow, 0, name, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(name);
@@ -392,7 +392,7 @@ void PokeathlonGoalRollDisplay_InitWindows(PokeathlonGoalRollDisplay *display) {
 }
 
 void PokeathlonGoalRollDisplay_SetScore(PokeathlonGoalRollDisplay *display, u32 score, u32 participant) {
-    if (participant == ov96_021E5F24(display->course) && display->ownScore != score) {
+    if (participant == PokeathlonCourse_GetNetId(display->course) && display->ownScore != score) {
         display->ownScore = score;
     }
 }

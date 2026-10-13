@@ -24,7 +24,7 @@ u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *stri
 u32 MATH_CountPopulation(u32 value);
 
 extern const u32 _0221F194[2];
-extern const TileRect ov98_0221F19C;
+extern const TileRect sPokeathlonMonPicRect;
 
 void *PokeathlonUtil_GetSpriteSystem(PokeathlonSpriteContext *ctx) {
     GF_ASSERT(ctx != NULL);
@@ -109,7 +109,7 @@ void PokeathlonUtil_CreateSpriteRow(PokeathlonSpriteContext *ctx, ManagedSprite 
     }
 }
 
-void ov98_0221E784(SpriteSystem *system, SpriteManager *manager, const int *resourceIds, int vram) {
+void PokeathlonUtil_LoadMonPicSpriteResources(SpriteSystem *system, SpriteManager *manager, const int *resourceIds, int vram) {
     SpriteSystem_LoadCharResObj(system, manager, NARC_a_0_0_8, 76, FALSE, vram, resourceIds[0]);
     SpriteSystem_LoadPlttResObj(system, manager, NARC_a_0_0_8, 75, FALSE, 1, vram, resourceIds[1]);
     SpriteSystem_LoadCellResObj(system, manager, NARC_a_0_0_8, 77, FALSE, resourceIds[2]);
@@ -127,7 +127,7 @@ void PokeathlonUtil_LoadMonPicSprite(ManagedSprite *sprite, const PokeathlonMonI
     }
 
     GetMonSpriteCharAndPlttNarcIdsEx(&pokepic, mon->species, mon->gender, MON_PIC_FACING_FRONT, mon->shiny, mon->form, mon->personality);
-    rect = ov98_0221F19C;
+    rect = sPokeathlonMonPicRect;
     charBuf = Heap_AllocAtEnd(heapId, MON_PIC_BUFFER_SIZE);
     CharTiles_LoadMonRectAsObjFromNarc((NarcId)pokepic.narcID, pokepic.charDataID, heapId, &rect, charBuf, mon->personality, FALSE, MON_PIC_FACING_FRONT, mon->species);
     PokeathlonUtil_LoadSpriteChars(sprite, charBuf, MON_PIC_BUFFER_SIZE);
@@ -277,15 +277,15 @@ void PokeathlonUtil_FreeTextContext(PokeathlonTextContext *ctx, int count) {
     Heap_Free(ctx);
 }
 
-void ov98_0221EBD8(PokeathlonTextContext *ctx, u32 window, u32 message, BOOL center) {
-    ov98_0221EBEC(ctx, window, message, center, 0, 0);
+void PokeathlonUtil_PrintAlignedMessage(PokeathlonTextContext *ctx, u32 window, u32 message, BOOL center) {
+    PokeathlonUtil_PrintAlignedMessageAtY(ctx, window, message, center, 0, 0);
 }
 
-void ov98_0221EBEC(PokeathlonTextContext *ctx, u32 window, u32 message, BOOL center, u8 y, u32 font) {
+void PokeathlonUtil_PrintAlignedMessageAtY(PokeathlonTextContext *ctx, u32 window, u32 message, BOOL center, u8 y, u32 font) {
     PokeathlonUtil_PrintMessageEx(ctx, window, message, center, 0, y, font, 0);
 }
 
-void ov98_0221EC08(PokeathlonTextContext *ctx, u32 window, u32 message, u8 x, u8 y) {
+void PokeathlonUtil_PrintMessageAtXY(PokeathlonTextContext *ctx, u32 window, u32 message, u8 x, u8 y) {
     PokeathlonUtil_PrintMessageEx(ctx, window, message, FALSE, x, y, 0, 0);
 }
 
@@ -388,7 +388,7 @@ void PokeathlonUtil_ClearWindow(PokeathlonTextContext *ctx, u32 index) {
 }
 
 BOOL PokeathlonUtil_CheckExitInput(void) {
-    TouchscreenHitbox hitbox = ov98_0221F1E0;
+    TouchscreenHitbox hitbox = sPokeathlonExitHitbox;
     BOOL result = FALSE;
     if (TouchscreenHitbox_TouchNewIsIn(&hitbox) || (gSystem.newKeys & PAD_BUTTON_B)) {
         result = TRUE;
@@ -396,7 +396,7 @@ BOOL PokeathlonUtil_CheckExitInput(void) {
     return result;
 }
 
-u32 ov98_0221EF64(u32 value) {
+u32 PokeathlonUtil_GetCourseMedal(u32 value) {
     if (value >= 450) {
         return 2;
     }
@@ -406,10 +406,10 @@ u32 ov98_0221EF64(u32 value) {
     return 0;
 }
 
-u8 ov98_0221EF80(s32 value) {
+u8 PokeathlonUtil_GetMedalistTrophyCount(s32 value) {
     u8 i = 0;
     do {
-        if (ov98_0221F220[i] <= value) {
+        if (sPokeathlonMedalistTrophyThresholds[i] <= value) {
             break;
         }
         i++;
@@ -417,12 +417,12 @@ u8 ov98_0221EF80(s32 value) {
     return 10 - i;
 }
 
-u16 ov98_0221EFA4(u32 row, u32 column) {
-    return ov98_0221F1F8[row][column];
+u16 PokeathlonUtil_GetEventThreshold(u32 row, u32 column) {
+    return sPokeathlonEventThresholds[row][column];
 }
 
-BOOL ov98_0221EFB4(u32 direction, u32 column, u16 value) {
-    u16 limit = ov98_0221EFA4(direction, column);
+BOOL PokeathlonUtil_BeatsEventThreshold(u32 direction, u32 column, u16 value) {
+    u16 limit = PokeathlonUtil_GetEventThreshold(direction, column);
     if (value == 0xFFFF) {
         return FALSE;
     }
@@ -432,8 +432,8 @@ BOOL ov98_0221EFB4(u32 direction, u32 column, u16 value) {
     return value > limit;
 }
 
-BOOL ov98_0221EFE8(u32 direction, u32 column, u16 value) {
-    u16 limit = ov98_0221EFA4(direction, column);
+BOOL PokeathlonUtil_ReachesEventThreshold(u32 direction, u32 column, u16 value) {
+    u16 limit = PokeathlonUtil_GetEventThreshold(direction, column);
     if (value == 0xFFFF) {
         return FALSE;
     }
@@ -443,7 +443,7 @@ BOOL ov98_0221EFE8(u32 direction, u32 column, u16 value) {
     return value >= limit;
 }
 
-u16 ov98_0221F01C(const void *records, u32 index) {
+u16 PokeathlonUtil_GetRecordScore(const void *records, u32 index) {
     return *(const u16 *)((const u8 *)records + index * 8);
 }
 
@@ -459,12 +459,12 @@ u32 PokeathlonUtil_CountSpeciesWithAllMedals(const u8 *data) {
     return count;
 }
 
-u8 ov98_0221F058(const u16 (*records)[22]) {
+u8 PokeathlonUtil_CountEventTrophies(const u16 (*records)[22]) {
     u8 i;
     u8 count = 0;
     for (i = 0; i < 10; i++) {
-        u16 value = ov98_0221F01C(&records[i], 0);
-        if (ov98_0221EFE8(i, 1, value)) {
+        u16 value = PokeathlonUtil_GetRecordScore(&records[i], 0);
+        if (PokeathlonUtil_ReachesEventThreshold(i, 1, value)) {
             count++;
         }
     }
@@ -496,9 +496,9 @@ void PokeathlonUtil_DisableDisplay(void) {
 u32 PokeathlonUtil_GetDecimalDigit(u32 value, u32 digit) {
     u32 remainder;
     GF_ASSERT(digit != 0 && digit < 5);
-    remainder = value % ov98_0221F1E4[digit];
+    remainder = value % sPokeathlonPowersOfTen[digit];
     digit--;
-    return remainder / ov98_0221F1E4[digit];
+    return remainder / sPokeathlonPowersOfTen[digit];
 }
 
 u8 PokeathlonUtil_CountDecimalDigits(s32 value) {
@@ -517,6 +517,6 @@ u8 PokeathlonUtil_CountDecimalDigits(s32 value) {
 }
 
 void PokeathlonUtil_SetGfxBanks(void) {
-    GraphicsBanks banks = ov98_0221F248;
+    GraphicsBanks banks = sPokeathlonUtilGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }

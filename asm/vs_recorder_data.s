@@ -3370,11 +3370,11 @@
 	.public VsRecorder_ResetFade
 	.public VsRecorder_NewMessageFormat
 	.public VsRecorder_GetBlendColor
-	.public ov40_0222DAF0
+	.public VsRecorder_GetMenuBlendColor
 	.public VsRecorder_GetSchemeFileId
 	.public VsRecorder_ReloadSchemePalettes
 	.public VsRecorder_ClearPaletteBlend
-	.public ov40_0222DD68
+	.public VsRecorder_LoadSpeciesList
 	.public VsRecorder_SetBoxUploaded
 	.public VsRecorder_IsBoxUploaded
 	.public VsRecorder_ShowNotice
@@ -3414,7 +3414,7 @@
 	.public VsRecorder_UpdateListArrows
 	.public VsRecorder_UpdateListArrowsCursor
 	.public VsRecorder_FreeListArrows
-	.public ov40_0222F950
+	.public VsRecorder_NewScrollSprite
 	.public VsRecorder_DeleteTouchScrollSprites
 	.public VsRecorder_CreateTouchScrollSprites
 	.public VsRecorder_CreateTouchScrollSpritesWithAnim
@@ -3453,7 +3453,7 @@
 	.public VsRecorder_SetVideoPartyIconsDrawFlag
 	.public VsRecorder_GetCenteredTextX
 	.public VsRecorder_ResetRecordSave
-	.public ov40_022306F0
+	.public VsRecorder_ClearSavedVideoKeys
 	.public VsRecorder_ResetBgPriorities
 	.public VsRecorder_PlaceOrbitCursor
 	.public VsRecorder_CountDigits

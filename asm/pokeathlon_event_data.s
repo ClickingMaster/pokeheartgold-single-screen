@@ -123,11 +123,11 @@
 	.extern PokeathlonCourse_SetStateField07_IfDifferent
 	.extern PokeathlonCourse_SetStateTransitionType
 	.extern PokeathlonCourse_SetVBlankIntrCB
-	.extern ov96_021E5E04
-	.extern ov96_021E5E7C
-	.extern ov96_021E5F24
-	.extern ov96_021E6F18
-	.extern ov96_021E75B8
+	.extern PokeathlonCourse_SetEvents
+	.extern PokeathlonCourse_FindCourseId
+	.extern PokeathlonCourse_GetNetId
+	.extern PokeathlonCourse_State_ResetDataCopyArea
+	.extern PokeathlonCourse_State_WaitForCommand
 	.extern PokeathlonCourseCmd_EventsSize
 	.extern PokeathlonCourseCmd_ParticipantSize
 	.extern PokeathlonCourseCmd_AllParticipantsSize
@@ -140,7 +140,7 @@
 	.extern PokeathlonCourseCmd_GetEventDataBuffer
 	.extern PokeathlonCourseCmd_GetRecordBuffer
 	.extern PokeathlonCourseCmd_GetResultsBuffer
-	.extern ov96_021E9A54
+	.extern PokeathlonCourseCmd_GetMonCountersBuffer
 	.extern PokeathlonCourseCmd_GetJuiceRecordBuffer
 	.extern PokeathlonCourseOpening_Init
 	.extern PokeathlonCourseOpening_Main
@@ -169,19 +169,19 @@
 	.extern ov96_0221E5A0
 	.extern ov96_0221E5A4
 	.public ov96_0221D99C
-	.public ov96_0221A8BC
+	.public gPokeathlonCourseEvent_Wait
 	.public ov96_0221AF64
 	.public ov96_0221AFA0
 	.public ov96_0221AFBC
 	.public ov96_0221AFD8
 	.public ov96_0221AFF4
-	.public ov96_0221DA68
+	.public gPokeathlonCourseWaitSteps
 	.public ov96_0221CDC8
 	.public ov96_0221CDCA
 	.public ov96_0221CF2C
 	.public ov96_0221CF40
 	.public ov96_0221CF74
-	.public ov96_0221DA28
+	.public gPokeathlonCourseEvents
 	.public ov96_0221C3E0
 	.public ov96_0221C5CC
 	.public ov96_0221C5D8
@@ -233,17 +233,17 @@
 	.extern PokeathlonCourse_SetField1ED
 	.extern PokeathlonCourse_IncrementField1ED
 	.extern PokeathlonCourse_SetField1F4
-	.extern ov96_021E5E04
+	.extern PokeathlonCourse_SetEvents
 	.extern PokeathlonCourse_GetField3D8_ForCurrentParticipant
 	.extern PokeathlonCourse_GetField3D8_AtIndex
-	.extern ov96_021E5E7C
+	.extern PokeathlonCourse_FindCourseId
 	.extern PokeathlonCourse_GetCurrentParticipantIndex
 	.extern PokeathlonCourse_GetMode
 	.extern PokeathlonCourse_GetField1EF
 	.extern PokeathlonCourse_IncrementField1EF
 	.extern PokeathlonCourse_ResetField1EF
 	.extern PokeathlonCourse_GetSystem
-	.extern ov96_021E5F24
+	.extern PokeathlonCourse_GetNetId
 	.extern PokeathlonCourse_GetPlayerProfileFromData
 	.extern PokeathlonCourse_GetField974_AtIndex
 	.extern PokeathlonCourse_GetDataCopyArea
@@ -260,16 +260,16 @@
 	.extern PokeathlonCourse_SetVBlankIntrCB
 	.extern PokeathlonCourse_GetGraphicsSystem
 	.public PokeathlonCourse_GetPerformance
-	.public ov96_021E6104
+	.public PokeathlonCourse_GetTouchRadius
 	.public PokeathlonCourse_SetHudPlanes
 	.public PokeathlonCourse_GetPerformanceFileId
-	.public ov96_021E6F18
-	.public ov96_021E75B8
+	.public PokeathlonCourse_State_ResetDataCopyArea
+	.public PokeathlonCourse_State_WaitForCommand
 	.public PokeathlonCourse_AddCapped
 	.public PokeathlonCourse_SetRecordScore
 	.public PokeathlonCourseLink_SetCheckSize
 	.public PokeathlonCourseLink_GetNetId
-	.public ov96_021E8A20
+	.public PokeathlonCourse_ToBytes
 	.public PokeathlonCourseCmd_GetTable
 	.public PokeathlonCourseCmd_GetCount
 	.public PokeathlonCourseMonGfx_AllocManager
@@ -294,7 +294,7 @@
 	.public PokeathlonCourseCmd_GetEventDataBuffer
 	.public PokeathlonCourseCmd_GetRecordBuffer
 	.public PokeathlonCourseCmd_GetResultsBuffer
-	.public ov96_021E9A54
+	.public PokeathlonCourseCmd_GetMonCountersBuffer
 	.public PokeathlonCourseCmd_GetJuiceRecordBuffer
 	.public PokeathlonCourseSprites_HasGroup
 	.public PokeathlonCourseSprites_GetResMan
@@ -1059,7 +1059,7 @@ ov96_0221DC1C:
 	.word PokeathlonLampJump_Play
 	.word PokeathlonLampJump_CalcScores
 
-ov96_0221DC24: ; 0x0221DC24
+gPokeathlonResultsAnnouncementSteps: ; 0x0221DC24
 	.word PokeathlonResultsAnnouncement_Run
 
 ov96_0221DC28: ; 0x0221DC28

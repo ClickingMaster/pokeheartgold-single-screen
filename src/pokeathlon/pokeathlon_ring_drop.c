@@ -171,7 +171,7 @@ BOOL PokeathlonRingDrop_State_Finish(PokeathlonCourseData *course, u8 *state) {
 
     if (*state == 0) {
         if (IsPaletteFadeFinished()) {
-            if (!ov96_021E5F24(course)) {
+            if (!PokeathlonCourse_GetNetId(course)) {
                 int i;
                 PokeathlonRingDropMonFlags *flags;
                 // one cursor over the players' flags words
@@ -226,7 +226,7 @@ BOOL PokeathlonRingDrop_Init(PokeathlonCourseData *course) {
         }
         break;
     case 3: {
-        u8 participant = ov96_021E5F24(course);
+        u8 participant = PokeathlonCourse_GetNetId(course);
         ringDrop->cpu = PokeathlonRingDropCpu_New(course, ringDrop->heapId);
         ringDrop->ui = PokeathlonRingDropUi_New(ringDrop->spriteSystem, ringDrop->spriteManager, ringDrop->resources, ringDrop->bgConfig, ringDrop->msgData, ringDrop->msgFormat, participant, ringDrop->heapId, course);
         PokeathlonCourse_IncrementField1ED(course);
@@ -239,8 +239,8 @@ BOOL PokeathlonRingDrop_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)ringDrop->bgConfig);
         PokeathlonScreenShake_Init(&ringDrop->shake, ringDrop->bgConfig, ringDrop->spriteSystem);
         PokeathlonCourse_SetField1F4(course, 1);
-        if (ov96_021E5F24(course) == 0) {
-            PokeathlonRingDropFramePacket *packet = (PokeathlonRingDropFramePacket *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + RING_DROP_DATA_FRAME_OUT);
+        if (PokeathlonCourse_GetNetId(course) == 0) {
+            PokeathlonRingDropFramePacket *packet = (PokeathlonRingDropFramePacket *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + RING_DROP_DATA_FRAME_OUT);
             packet->timer = ringDrop->timer;
             PokeathlonRingDrop_BuildFramePacket(ringDrop->contacts, course);
         }
@@ -263,7 +263,7 @@ BOOL PokeathlonRingDrop_Draw(PokeathlonCourseData *course) {
     return TRUE;
 }
 
-BOOL ov96_02215CE8(PokeathlonCourseData *course) {
+BOOL PokeathlonRingDrop_ShowResults(PokeathlonCourseData *course) {
     void *gfx = PokeathlonCourse_GetGraphicsSystem(course);
     int i;
 
@@ -413,8 +413,8 @@ void PokeathlonRingDrop_Update(PokeathlonCourseData *course) {
 
     ringDrop = PokeathlonCourse_GetHeapAllocPtr4(course);
     data = PokeathlonCourse_GetDataCopyArea(course);
-    packet = (PokeathlonRingDropFramePacket *)ov96_021E8A20(data + RING_DROP_DATA_FRAME_OUT);
-    if (ov96_021E5F24(course) == 0) {
+    packet = (PokeathlonRingDropFramePacket *)PokeathlonCourse_ToBytes(data + RING_DROP_DATA_FRAME_OUT);
+    if (PokeathlonCourse_GetNetId(course) == 0) {
         if (packet->finished) {
             PokeathlonRingDrop_BuildFramePacket(ringDrop->contacts, course);
             return;
@@ -423,12 +423,12 @@ void PokeathlonRingDrop_Update(PokeathlonCourseData *course) {
             ringDrop->timer--;
             packet->timer = ringDrop->timer;
         }
-        *(PokeathlonRingDropInput *)ov96_021E8A20(data + RING_DROP_DATA_INPUTS) = *(PokeathlonRingDropInput *)ov96_021E8A20(data);
+        *(PokeathlonRingDropInput *)PokeathlonCourse_ToBytes(data + RING_DROP_DATA_INPUTS) = *(PokeathlonRingDropInput *)PokeathlonCourse_ToBytes(data);
         i = 0;
         data += RING_DROP_DATA_INPUTS;
         player = ringDrop->players;
         for (; i < RING_DROP_PARTICIPANTS; player++, data += RING_DROP_DATA_SLOT_SIZE, i++) {
-            PokeathlonRingDropInput *input = (PokeathlonRingDropInput *)ov96_021E8A20(data);
+            PokeathlonRingDropInput *input = (PokeathlonRingDropInput *)PokeathlonCourse_ToBytes(data);
             PokeathlonRingDropTouch *touch = &player->touch;
             PokeathlonRingDropMon *mon = &player->mon;
             if (input->touching) {
@@ -479,7 +479,7 @@ void PokeathlonRingDrop_Update(PokeathlonCourseData *course) {
 void PokeathlonRingDrop_OnFinish(PokeathlonCourseData *course) {
     u8 score;
 
-    ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + RING_DROP_DATA_FRAME_IN);
+    PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + RING_DROP_DATA_FRAME_IN);
     score = PokeathlonRingDropUi_GetScore(((PokeathlonRingDrop *)PokeathlonCourse_GetHeapAllocPtr4(course))->ui);
     PokeathlonCourse_SetRecordScore(course, score);
     PokeathlonRingDrop_PrintScore(course, score);
@@ -492,8 +492,8 @@ void PokeathlonRingDrop_OnFinish(PokeathlonCourseData *course) {
 BOOL PokeathlonRingDrop_ReadInput(PokeathlonCourseData *course) {
     PokeathlonRingDrop *ringDrop = PokeathlonCourse_GetHeapAllocPtr4(course);
     u8 *data = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonRingDropInput *input = (PokeathlonRingDropInput *)ov96_021E8A20(data);
-    PokeathlonRingDropFramePacket *packet = (PokeathlonRingDropFramePacket *)ov96_021E8A20(data + RING_DROP_DATA_FRAME_IN);
+    PokeathlonRingDropInput *input = (PokeathlonRingDropInput *)PokeathlonCourse_ToBytes(data);
+    PokeathlonRingDropFramePacket *packet = (PokeathlonRingDropFramePacket *)PokeathlonCourse_ToBytes(data + RING_DROP_DATA_FRAME_IN);
 
     if (packet->finished == TRUE) {
         PokeathlonRingDropDisplay_StopAnimations(&ringDrop->display);
@@ -503,7 +503,7 @@ BOOL PokeathlonRingDrop_ReadInput(PokeathlonCourseData *course) {
         return TRUE;
     }
     if (System_GetTouchNew()) {
-        PokeathlonCourse_AddMonCounter(course, ov96_021E5F24(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, PokeathlonCourse_GetNetId(course), 3, 0, 1);
     }
     if (System_GetTouchHeld()) {
         input->x = gSystem.touchX;

@@ -270,7 +270,7 @@ BOOL PokeathlonRingDrop_State_Play(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonRingDrop_State_Finish(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonRingDrop_Init(PokeathlonCourseData *course);
 BOOL PokeathlonRingDrop_Draw(PokeathlonCourseData *course);
-BOOL ov96_02215CE8(PokeathlonCourseData *course);
+BOOL PokeathlonRingDrop_ShowResults(PokeathlonCourseData *course);
 BOOL PokeathlonRingDrop_Exit(PokeathlonCourseData *course);
 s32 PokeathlonRingDrop_GetMonState(PokeathlonCourseData *course, int participant);
 VecFx32 *PokeathlonRingDrop_GetMonPosition(PokeathlonCourseData *course, int participant);

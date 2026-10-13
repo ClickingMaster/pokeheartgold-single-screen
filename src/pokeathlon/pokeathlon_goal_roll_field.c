@@ -17,7 +17,7 @@
 
 // Course helpers, sprite scene and object helpers (OVY_96, not yet tidied).
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
-int ov96_021E6104(void);
+int PokeathlonCourse_GetTouchRadius(void);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
 BOOL PokeathlonCourse_IsInRange(int x, int y, int touchX, int touchY, int radius, int *distance);
 void PokeathlonCourseObject_GetCollisionCircle(void *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, int *outRadius);
@@ -674,7 +674,7 @@ int PokeathlonGoalRoll_GetTouchedMon(PokeathlonGoalRoll *goalRoll, u8 participan
     u8 count;
     u8 best;
 
-    reach = ov96_021E6104();
+    reach = PokeathlonCourse_GetTouchRadius();
     count = 0;
     nearest = reach << 12;
     for (i = 0; i < 3; i++) {
@@ -923,7 +923,7 @@ edges:
             if (crossesCorner && out->y >= hit.y) {
                 return result;
             }
-            if (checkCorners && ov96_02213D00(&cornerA, &cornerB, &previousPoint, &hit)) {
+            if (checkCorners && PokeathlonGoalRoll_SegmentsIntersect(&cornerA, &cornerB, &previousPoint, &hit)) {
                 *out = *previous;
                 return 3;
             }
@@ -946,7 +946,7 @@ edges:
                 if (crossesCorner && out->x >= hit.x) {
                     return result;
                 }
-                if (checkCorners && ov96_02213D00(&cornerA, &cornerB, &previousPoint, &hit)) {
+                if (checkCorners && PokeathlonGoalRoll_SegmentsIntersect(&cornerA, &cornerB, &previousPoint, &hit)) {
                     *out = *previous;
                     return 1;
                 }
@@ -969,7 +969,7 @@ edges:
                 if (crossesCorner && out->x <= hit.x) {
                     return result;
                 }
-                if (checkCorners && ov96_02213D00(&cornerA, &cornerB, &previousPoint, &hit)) {
+                if (checkCorners && PokeathlonGoalRoll_SegmentsIntersect(&cornerA, &cornerB, &previousPoint, &hit)) {
                     *out = *previous;
                     return 2;
                 }
@@ -993,7 +993,7 @@ edges:
             if (crossesCorner && out->y <= hit.y) {
                 return result;
             }
-            if (checkCorners && ov96_02213D00(&cornerA, &cornerB, &previousPoint, &hit)) {
+            if (checkCorners && PokeathlonGoalRoll_SegmentsIntersect(&cornerA, &cornerB, &previousPoint, &hit)) {
                 *out = *previous;
                 return 4;
             }
@@ -1016,7 +1016,7 @@ edges:
                 if (crossesCorner && out->x >= hit.x) {
                     return result;
                 }
-                if (checkCorners && ov96_02213D00(&cornerA, &cornerB, &previousPoint, &hit)) {
+                if (checkCorners && PokeathlonGoalRoll_SegmentsIntersect(&cornerA, &cornerB, &previousPoint, &hit)) {
                     *out = *previous;
                     return 1;
                 }
@@ -1039,7 +1039,7 @@ edges:
                 if (crossesCorner && out->x <= hit.x) {
                     return result;
                 }
-                if (checkCorners && ov96_02213D00(&cornerA, &cornerB, &previousPoint, &hit)) {
+                if (checkCorners && PokeathlonGoalRoll_SegmentsIntersect(&cornerA, &cornerB, &previousPoint, &hit)) {
                     *out = *previous;
                     return 2;
                 }
@@ -1053,7 +1053,7 @@ edges:
 
 #pragma force_active reset
 
-BOOL ov96_02213D00(Point2D *a, Point2D *b, Point2D *c, const VecFx32 *point) {
+BOOL PokeathlonGoalRoll_SegmentsIntersect(Point2D *a, Point2D *b, Point2D *c, const VecFx32 *point) {
     Point2D d;
     Point2D out;
     d.x = point->x / FX32_ONE;

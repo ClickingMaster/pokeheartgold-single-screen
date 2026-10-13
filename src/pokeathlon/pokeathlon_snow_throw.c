@@ -173,21 +173,21 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
         PokeathlonCourseSpritePool_TransferResources(work->spritePool);
         work->monResources = PokeathlonCourseSprites_CreateResources(work->heapId, 1255, 1);
         work->monObjectList = PokeathlonCourseMonObjects_Create(work->heapId, 9, 32, work->monResources, PokeathlonCourseSpritePool_GetSpriteList(work->spritePool));
-        Sprite_SetDrawPriority(*ov96_021E6290(course, 0, work->monResources, work->spritePool), 1);
-        own = ov96_021E5F24(course);
+        Sprite_SetDrawPriority(*PokeathlonCourse_CreateHudSpritesInPool(course, 0, work->monResources, work->spritePool), 1);
+        own = PokeathlonCourse_GetNetId(course);
         PokeathlonSnowThrow_CreateSprites(work, work->spritePool, own);
         PokeathlonCourse_IncrementField1ED(course);
         break;
     }
     case 3:
         // the other teams' Pokemon first, the own three last
-        own = (u8)ov96_021E5F24(course);
+        own = (u8)PokeathlonCourse_GetNetId(course);
         for (i = 0; i < SNOW_THROW_MONS; i++) {
             count = PokeathlonSnowThrow_OtherMon(own, i);
             member = count % SNOW_THROW_MEMBERS;
             participant = count / SNOW_THROW_MEMBERS;
             PokeathlonCourse_GetMonInfo(course, participant, member, &infos[i]);
-            template.sizeTypes[i] = ov96_021E6108((PokeathlonCourseUnkTypes *)PokeathlonCourse_GetPerformance(course, participant, member));
+            template.sizeTypes[i] = PokeathlonCourse_GetSpriteSizeType((PokeathlonCourseUnkTypes *)PokeathlonCourse_GetPerformance(course, participant, member));
         }
         PokeathlonSnowThrowDisplay_CreateSprites(work->display, work->spritePool, &infos[9]);
         for (i = 0; i < SNOW_THROW_MEMBERS; i++) {
@@ -215,7 +215,7 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
 
             PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)work->bgConfig); // takes the BgConfig
             PokeathlonCourse_SetField1F4(course, 1);
-            own = ov96_021E5F24(course);
+            own = PokeathlonCourse_GetNetId(course);
             for (k = 0; k < SNOW_THROW_MONS - SNOW_THROW_MEMBERS; k++) {
                 work->monObjects[k] = PokeathlonCourseMonObjects_Get(work->monObjectList, (u8)k);
                 object = work->monObjects[k];
@@ -246,16 +246,16 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
                 for (j = 0; j < SNOW_THROW_MEMBERS; j++) {
                     teamMon = &work->mons[j + first];
                     PokeathlonSnowThrow_InitMon(course, stats, team, j, teamMon);
-                    if (ov96_021E5F24(course) == 0) {
+                    if (PokeathlonCourse_GetNetId(course) == 0) {
                         PokeathlonSnowThrowCpu_SetMon(work->cpu, j + first, teamMon, &work->balls[j + first]);
                     }
                 }
             }
-            if (ov96_021E5F24(course) == 0) {
-                PokeathlonSnowThrow_PackPacket(work, (PokeathlonSnowThrowPacket *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + offsetof(PokeathlonSnowThrowLink, packetToSend)));
+            if (PokeathlonCourse_GetNetId(course) == 0) {
+                PokeathlonSnowThrow_PackPacket(work, (PokeathlonSnowThrowPacket *)PokeathlonCourse_ToBytes((u8 *)PokeathlonCourse_GetDataCopyArea(course) + offsetof(PokeathlonSnowThrowLink, packetToSend)));
             }
             PokeathlonSnowThrowDisplay_SetMonShadows(work->display, work->spritePool, work->monResources);
-            PokeathlonSnowThrow_LoadBgGraphics(work, ov96_021E5F24(course));
+            PokeathlonSnowThrow_LoadBgGraphics(work, PokeathlonCourse_GetNetId(course));
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
             WirelessStatusIcon_CreateOnScreenIfConnected(1);
@@ -511,10 +511,10 @@ BOOL PokeathlonSnowThrow_SaveScores(PokeathlonCourseData *course, u8 *state) {
         }
         return FALSE;
     }
-    if (ov96_021E5F24(course)) {
+    if (PokeathlonCourse_GetNetId(course)) {
         return TRUE;
     }
-    packet = (PokeathlonSnowThrowPacket *)ov96_021E8A20(&link->packetToSend);
+    packet = (PokeathlonSnowThrowPacket *)PokeathlonCourse_ToBytes(&link->packetToSend);
     for (i = 0; i < SNOW_THROW_TEAMS; i++) {
         PokeathlonCourse_SetField5E0_AtIndex(course, (u8)i, packet->teams[i] & 0x3FF);
     }
@@ -541,22 +541,22 @@ void PokeathlonSnowThrow_UpdateHost(PokeathlonCourseData *course) {
 
     block = (PokeathlonSnowThrowTouchBlock *)PokeathlonCourse_GetDataCopyArea(course);
     work = PokeathlonCourse_GetHeapAllocPtr4(course);
-    if (ov96_021E5F24(course) != 0) {
+    if (PokeathlonCourse_GetNetId(course) != 0) {
         return;
     }
     if (work->finished) {
         block++;
-        PokeathlonSnowThrow_PackPacket(work, (PokeathlonSnowThrowPacket *)ov96_021E8A20(block));
+        PokeathlonSnowThrow_PackPacket(work, (PokeathlonSnowThrowPacket *)PokeathlonCourse_ToBytes(block));
         return;
     }
     // the host's own stylus goes into its slot of everyone's
-    *(PokeathlonSnowThrowTouch *)ov96_021E8A20(&block[2]) = *(PokeathlonSnowThrowTouch *)ov96_021E8A20(block);
+    *(PokeathlonSnowThrowTouch *)PokeathlonCourse_ToBytes(&block[2]) = *(PokeathlonSnowThrowTouch *)PokeathlonCourse_ToBytes(block);
     if (work->timer != 0) {
         work->timer--;
     }
-    ov96_021E8A20(&block[1]);
+    PokeathlonCourse_ToBytes(&block[1]);
     for (i = 0; i < SNOW_THROW_TEAMS; i++) {
-        touch = (PokeathlonSnowThrowTouch *)ov96_021E8A20(&(block + 2)[i]);
+        touch = (PokeathlonSnowThrowTouch *)PokeathlonCourse_ToBytes(&(block + 2)[i]);
         if (touch->held) {
             if (work->presses[i].pressed && work->presses[i].held) {
                 work->presses[i].pressed = FALSE;
@@ -672,7 +672,7 @@ void PokeathlonSnowThrow_UpdateHost(PokeathlonCourseData *course) {
         work->finished = FALSE;
     }
     block++;
-    PokeathlonSnowThrow_PackPacket(work, (PokeathlonSnowThrowPacket *)ov96_021E8A20(block));
+    PokeathlonSnowThrow_PackPacket(work, (PokeathlonSnowThrowPacket *)PokeathlonCourse_ToBytes(block));
 }
 
 #pragma force_active reset
@@ -744,10 +744,10 @@ BOOL PokeathlonSnowThrow_Update(PokeathlonCourseData *course) {
 
     work = PokeathlonCourse_GetHeapAllocPtr4(course);
     link = (PokeathlonSnowThrowLink *)PokeathlonCourse_GetDataCopyArea(course);
-    touch = (PokeathlonSnowThrowTouch *)ov96_021E8A20(link);
+    touch = (PokeathlonSnowThrowTouch *)PokeathlonCourse_ToBytes(link);
     touch->held = FALSE;
     {
-        PokeathlonSnowThrowPacket *packet = (PokeathlonSnowThrowPacket *)ov96_021E8A20(&link->packet);
+        PokeathlonSnowThrowPacket *packet = (PokeathlonSnowThrowPacket *)PokeathlonCourse_ToBytes(&link->packet);
         u8 finished = (packet->flags >> 24) & 1;
         if (finished) {
             PokeathlonCourseSpritePool_PauseAnims(work->spritePool, TRUE);
@@ -757,7 +757,7 @@ BOOL PokeathlonSnowThrow_Update(PokeathlonCourseData *course) {
         }
     }
     if (System_GetTouchNew()) {
-        PokeathlonCourse_AddMonCounter(course, (u8)ov96_021E5F24(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, (u8)PokeathlonCourse_GetNetId(course), 3, 0, 1);
     }
     if (System_GetTouchHeld()) {
         touch->x = gSystem.touchX;
@@ -814,8 +814,8 @@ void PokeathlonSnowThrow_DrawPacket(PokeathlonCourseData *course) {
     f32 factor;
 
     work = PokeathlonCourse_GetHeapAllocPtr4(course);
-    packet = (PokeathlonSnowThrowPacket *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + offsetof(PokeathlonSnowThrowLink, packet));
-    own = ov96_021E5F24(course);
+    packet = (PokeathlonSnowThrowPacket *)PokeathlonCourse_ToBytes((u8 *)PokeathlonCourse_GetDataCopyArea(course) + offsetof(PokeathlonSnowThrowLink, packet));
+    own = PokeathlonCourse_GetNetId(course);
     seconds = (packet->flags >> 25) & 0x7F;
     PokeathlonSnowThrow_SetTimerDigits(work, seconds == 0 ? 0 : (u8)(seconds - 1));
     PokeathlonSnowThrowDisplay_SetScore(work->display, packet->teams[own] & 0x3FF);

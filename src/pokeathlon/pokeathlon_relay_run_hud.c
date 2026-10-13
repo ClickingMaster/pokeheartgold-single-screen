@@ -177,9 +177,9 @@ void PokeathlonRelayRun_UpdateSwapSign(PokeathlonRelayRun *relayRun, u8 teamId, 
 
 // Finish callback: the player's record (laps << 10 | x) and the result window.
 void PokeathlonRelayRun_SaveResult(PokeathlonCourseData *course) {
-    PokeathlonRelayRunPacket *packet = (PokeathlonRelayRunPacket *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + offsetof(PokeathlonRelayRunLink, packet));
+    PokeathlonRelayRunPacket *packet = (PokeathlonRelayRunPacket *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + offsetof(PokeathlonRelayRunLink, packet));
     PokeathlonRelayRun *relayRun = PokeathlonCourse_GetHeapAllocPtr4(course);
-    u8 own = (u8)ov96_021E5F24(course);
+    u8 own = (u8)PokeathlonCourse_GetNetId(course);
     u8 laps = (u8)(packet->laps[own] & 0x7F);
     u16 x = packet->x[own];
     if (laps > RELAY_RUN_MAX_LAPS) {
@@ -203,7 +203,7 @@ PokeathlonRelayRunHud *PokeathlonRelayRunHud_New(enum HeapID heapId, BgConfig *b
     for (i = 0; i < RELAY_RUN_MEMBERS; i++) {
         hud->names[i] = String_New(11, heapId);
     }
-    mon = PokeathlonCourse_GetParticipantUnk04(course, ov96_021E5F24(course));
+    mon = PokeathlonCourse_GetParticipantUnk04(course, PokeathlonCourse_GetNetId(course));
     {
         int member;
         for (member = 0; member < RELAY_RUN_MEMBERS; member++) {
@@ -299,7 +299,7 @@ void PokeathlonRelayRunHud_CreateSprites(PokeathlonRelayRunHud *hud, void *sprit
     PokeathlonCourseSpritePoolSprite_SetPosition(plate, &platePosition);
     PokeathlonRelayRunHud_CreatePicFrames(spritePool, hud);
     for (j = 0; j < 6; j++) {
-        hud->timerSprites[j] = ov96_021EA2C4(monResources, PokeathlonCourseSpritePool_GetSpriteList(spritePool), 3, hud->heapId);
+        hud->timerSprites[j] = PokeathlonCourseSprites_CreateTimerDigit(monResources, PokeathlonCourseSpritePool_GetSpriteList(spritePool), 3, hud->heapId);
         Sprite_SetDrawFlag(hud->timerSprites[j], TRUE);
         timerPosition.x = ov96_0221C718[j] << FX32_SHIFT;
         timerPosition.y = FX32_CONST(568);

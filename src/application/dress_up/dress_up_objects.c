@@ -659,7 +659,7 @@ void DressUpButton_Init(DressUpButton *button, const DressUpButtonTemplate *temp
         button->callback = template->callback;
         return;
     }
-    button->callback = ov41_0224A254;
+    button->callback = DressUpButton_DefaultCallback;
 }
 
 void DressUpButton_InitWithText(DressUpTextButton *button, const DressUpTextButtonTemplate *template) {

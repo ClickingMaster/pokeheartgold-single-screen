@@ -13,8 +13,8 @@
 #include "string_util.h"
 #include "unk_02009D48.h"
 
-// The "Results Announcement" screen the course shows after an event (event template ov96_0221A86C,
-// states ov96_0221DC24): the announcer comments on the event (msg 309 #246..), the teams' plates slide in
+// The "Results Announcement" screen the course shows after an event (event template gPokeathlonCourseEvent_ResultsAnnouncement,
+// states gPokeathlonResultsAnnouncementSteps): the announcer comments on the event (msg 309 #246..), the teams' plates slide in
 // from last to first place, the winner is congratulated and the course points are counted up on the
 // scoreboard (sprite digits) on the other screen.
 

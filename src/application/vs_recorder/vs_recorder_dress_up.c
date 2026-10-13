@@ -1219,7 +1219,7 @@ BOOL VsRecorder_DressUpCategoryHasSeen(VsRecorderWork *work, int category) {
     int end = ov40_02245CD4[category + 1];
     int start = ov40_02245CD4[category];
     int count, i;
-    u16 *list = ov40_0222DD68(HEAP_ID_109, found, &count);
+    u16 *list = VsRecorder_LoadSpeciesList(HEAP_ID_109, found, &count);
     Pokedex *pokedex = Save_Pokedex_Get(work->saveData);
     for (i = start; i < end; i++) {
         if (!Pokedex_CheckMonSeenFlag(pokedex, list[i])) {
@@ -1245,8 +1245,8 @@ void VsRecorder_BuildDressUpSpeciesList(VsRecorderWork *work, int category) {
     int start = ov40_02245CD4[category];
     int i;
 
-    dressUp->speciesList = ov40_0222DD68(HEAP_ID_109, 0, &dressUp->listSize);
-    tmp = ov40_0222DD68(HEAP_ID_109, 0, &dressUp->listSize);
+    dressUp->speciesList = VsRecorder_LoadSpeciesList(HEAP_ID_109, 0, &dressUp->listSize);
+    tmp = VsRecorder_LoadSpeciesList(HEAP_ID_109, 0, &dressUp->listSize);
     pokedex = Save_Pokedex_Get(work->saveData);
     dressUp->speciesCount = 0;
     for (i = start; i < end; i++) {

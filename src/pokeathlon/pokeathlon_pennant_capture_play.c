@@ -171,7 +171,7 @@ BOOL PokeathlonPennantCapture_State_Setup(PokeathlonCourseData *course, u8 *stat
 
     switch (*state) {
     case 0:
-        ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
+        PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
         ReadWholeNarcMemberByIdPair(&layout, (NarcId)0xE3, work->layoutFileId);
         spot = layout.pennantSpots[0];
         fieldItem = layout.fieldItems[0];
@@ -204,7 +204,7 @@ BOOL PokeathlonPennantCapture_State_Setup(PokeathlonCourseData *course, u8 *stat
             work->pennants.spots[i].x = spot[0] * 8;
             work->pennants.spots[i].y = spot[1] * 8;
         }
-        if (!ov96_021E5F24(course)) {
+        if (!PokeathlonCourse_GetNetId(course)) {
             PokeathlonPennantCapture_RefillPennants(work);
             PokeathlonPennantCaptureCpu_SetObstacles(work->cpu, layout.obstacles[0]);
             PokeathlonPennantCaptureCpu_SetObstacles(work->cpu, layout.fieldItems[0]);
@@ -273,11 +273,11 @@ BOOL PokeathlonPennantCapture_State_End(PokeathlonCourseData *course, u8 *state)
         }
         return FALSE;
     }
-    if (ov96_021E5F24(course)) {
+    if (PokeathlonCourse_GetNetId(course)) {
         return TRUE;
     }
     link += 0x28;
-    frame = (u32 *)ov96_021E8A20(link);
+    frame = (u32 *)PokeathlonCourse_ToBytes(link);
     for (i = 0; i < 4; i++) {
         u16 score = (frame[i] >> 18) & 0x3FF;
         u16 pennants = (((u16 *)frame)[i + 12] >> 11) & 31;
@@ -325,22 +325,22 @@ void PokeathlonPennantCapture_HostStep(PokeathlonCourseData *course) {
     link = (PokeathlonPennantCaptureLinkEntry *)PokeathlonCourse_GetDataCopyArea(course);
     work = PokeathlonCourse_GetHeapAllocPtr4(course);
     self = work;
-    if (ov96_021E5F24(course) != 0) {
+    if (PokeathlonCourse_GetNetId(course) != 0) {
         return;
     }
     if (work->finished) {
         link++;
-        PokeathlonPennantCapture_PackFrame(work, (PokeathlonPennantCaptureFrame *)ov96_021E8A20(link));
+        PokeathlonPennantCapture_PackFrame(work, (PokeathlonPennantCaptureFrame *)PokeathlonCourse_ToBytes(link));
         return;
     }
-    *(PokeathlonPennantCaptureInput *)ov96_021E8A20(&link[2]) = *(PokeathlonPennantCaptureInput *)ov96_021E8A20(link);
+    *(PokeathlonPennantCaptureInput *)PokeathlonCourse_ToBytes(&link[2]) = *(PokeathlonPennantCaptureInput *)PokeathlonCourse_ToBytes(link);
     if (work->timeLeft != 0) {
         work->timeLeft--;
     }
     PokeathlonPennantCaptureCpu_Update(work->cpu);
     work->flicked = 0;
     for (i = 0; i < 4; i++) {
-        input = (PokeathlonPennantCaptureInput *)ov96_021E8A20(&(link + 2)[i]);
+        input = (PokeathlonPennantCaptureInput *)PokeathlonCourse_ToBytes(&(link + 2)[i]);
         if (input->touching) {
             if (work->touches[i].pressed && work->touches[i].held) {
                 work->touches[i].pressed = FALSE;
@@ -448,7 +448,7 @@ void PokeathlonPennantCapture_HostStep(PokeathlonCourseData *course) {
         work->finished = 0;
     }
     link++;
-    PokeathlonPennantCapture_PackFrame(work, (PokeathlonPennantCaptureFrame *)ov96_021E8A20(link));
+    PokeathlonPennantCapture_PackFrame(work, (PokeathlonPennantCaptureFrame *)PokeathlonCourse_ToBytes(link));
 }
 
 // Frame layout: words[0-3] one per participant: x (9 bits), y (9), score (10), pennants (4);
@@ -506,9 +506,9 @@ BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course) {
 
     work = PokeathlonCourse_GetHeapAllocPtr4(course);
     link = PokeathlonCourse_GetDataCopyArea(course);
-    input = (PokeathlonPennantCaptureInput *)ov96_021E8A20(link);
+    input = (PokeathlonPennantCaptureInput *)PokeathlonCourse_ToBytes(link);
     input->touching = FALSE;
-    frame = (PokeathlonPennantCaptureFrame *)ov96_021E8A20(link + 0xF0);
+    frame = (PokeathlonPennantCaptureFrame *)PokeathlonCourse_ToBytes(link + 0xF0);
     {
         u8 finished = 1;
         finished &= frame->words[4] >> 31;
@@ -520,7 +520,7 @@ BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course) {
         }
     }
     if (System_GetTouchNew()) {
-        PokeathlonCourse_AddMonCounter(course, (u8)ov96_021E5F24(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, (u8)PokeathlonCourse_GetNetId(course), 3, 0, 1);
     }
     if (System_GetTouchHeld()) {
         input->x = gSystem.touchX;
@@ -535,8 +535,8 @@ BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course) {
 void PokeathlonPennantCapture_ShowFrame(PokeathlonCourseData *course) {
     PokeathlonPennantCapture *work = PokeathlonCourse_GetHeapAllocPtr4(course);
     u8 *link = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonPennantCaptureFrame *frame = (PokeathlonPennantCaptureFrame *)ov96_021E8A20(link + 0xF0);
-    u8 viewer = ov96_021E5F24(course);
+    PokeathlonPennantCaptureFrame *frame = (PokeathlonPennantCaptureFrame *)PokeathlonCourse_ToBytes(link + 0xF0);
+    u8 viewer = PokeathlonCourse_GetNetId(course);
     u32 packed = frame->words[viewer];
     u32 x = packed & 0x1FF;
     u32 y = (packed >> 9) & 0x1FF;

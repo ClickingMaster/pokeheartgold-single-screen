@@ -23,7 +23,7 @@ void DressUp_ShowSavePrompt(DressUpWork *work) {
     template.ignoreTouchFlag = work->menuInputState;
     YesNoPrompt_Reset(work->yesNoPrompt);
     YesNoPrompt_InitFromTemplate(work->yesNoPrompt, &template);
-    ov41_02247D34(work, msg_0215_00002);
+    DressUp_PrintPromptMsgWindow(work, msg_0215_00002);
     G2_SetBG0Priority(2);
     G2_SetBG1Priority(1);
     G2_SetBG2Priority(3);
@@ -157,15 +157,15 @@ void DressUpCanvas_CreateMonPic(DressUpCanvas *canvas, Pokemon *mon, PokepicTemp
     DressUpMon_Create(&canvas->monPic, canvas->pokepicManager, mon, template, heapID);
 }
 
-void ov41_02247FFC(DressUpCanvas *canvas, Pokemon *mon, PokepicTemplate *template, enum HeapID heapID) {
+void DressUpCanvas_CreateMonPicEx(DressUpCanvas *canvas, Pokemon *mon, PokepicTemplate *template, enum HeapID heapID) {
     DressUpMon_CreateEx(&canvas->monPic, canvas->pokepicManager, mon, template, heapID, 1);
 }
 
-void ov41_02248020(DressUpCanvas *canvas, DressUpNode *node) {
+void DressUpCanvas_AddToMonList(DressUpCanvas *canvas, DressUpNode *node) {
     DressUpList_InsertAfter(node, canvas->monList.prev);
 }
 
-void ov41_02248030(DressUpNode *node) {
+void DressUpCanvas_RemoveNode(DressUpNode *node) {
     DressUpList_Remove(node);
 }
 
@@ -241,11 +241,11 @@ void DressUpCanvas_SetOrigin(DressUpCanvas *canvas, int x, int y, int newX, int 
 }
 
 void DressUpCanvas_RefreshPriorities(DressUpCanvas *canvas) {
-    ov41_02248164(canvas, -1);
+    DressUpCanvas_SetPriorities(canvas, -1);
 }
 
 // priorities count down from `priority`: the mon's list first, then (8 lower) the loose accessories
-void ov41_02248164(DressUpCanvas *canvas, int priority) {
+void DressUpCanvas_SetPriorities(DressUpCanvas *canvas, int priority) {
     DressUpNode *node = canvas->monList.next;
     DressUpNode *end = &canvas->monList;
     while (node != end) {

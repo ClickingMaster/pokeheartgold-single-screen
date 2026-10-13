@@ -114,7 +114,7 @@ u32 PokeathlonMedals_GetSpindaPersonality(PokeathlonMedals *work) {
 }
 
 u8 PokeathlonMedals_CountTrustTrophies(PokeathlonMedals *work) {
-    return ov98_0221EF80(PokeathlonMedals_CountMedalists(work));
+    return PokeathlonUtil_GetMedalistTrophyCount(PokeathlonMedals_CountMedalists(work));
 }
 
 void PokeathlonMedals_ShowSpeciesMedals(PokeathlonMedals *work, u16 species) {
@@ -295,7 +295,7 @@ void PokeathlonMedals_PrintSpeciesName(PokeathlonMedals *work, u16 species) {
 
     if (species != SPECIES_NONE) {
         BufferSpeciesName(msgFormat, 0, species);
-        ov98_0221EBD8(work->textContext, 5, msg_0314_00124, FALSE);
+        PokeathlonUtil_PrintAlignedMessage(work->textContext, 5, msg_0314_00124, FALSE);
     } else {
         PokeathlonUtil_ClearAndCopyWindow(work->textContext, 5);
     }
@@ -618,7 +618,7 @@ void PokeathlonMedals_LoadMonPicResources(PokeathlonMedals *work) {
     SpriteSystem *spriteSystem = PokeathlonUtil_GetSpriteSystem(work->spriteContext);
     SpriteManager *spriteManager = PokeathlonUtil_GetSpriteManager(work->spriteContext);
 
-    ov98_0221E784(spriteSystem, spriteManager, ov99_021E9F70, NNS_G2D_VRAM_TYPE_2DSUB);
+    PokeathlonUtil_LoadMonPicSpriteResources(spriteSystem, spriteManager, ov99_021E9F70, NNS_G2D_VRAM_TYPE_2DSUB);
 }
 
 void PokeathlonMedals_LoadSpriteResources(PokeathlonMedals *work) {
@@ -714,16 +714,16 @@ void PokeathlonMedals_PrintStaticText(PokeathlonMedals *work) {
     int i;
 
     PokeathlonUtil_PrintMessageCentered(work->textContext, 11, msg_0314_00126, 3);
-    ov98_0221EC08(work->textContext, 0, msg_0314_00127, 1, 0);
-    ov98_0221EBEC(work->textContext, 4, msg_0314_00000, TRUE, 0, 4);
+    PokeathlonUtil_PrintMessageAtXY(work->textContext, 0, msg_0314_00127, 1, 0);
+    PokeathlonUtil_PrintAlignedMessageAtY(work->textContext, 4, msg_0314_00000, TRUE, 0, 4);
     for (i = 0; i < 5; i++) {
         BufferPokeathlonMedalName(msgFormat, 0, (u8)i);
-        ov98_0221EBD8(work->textContext, i + 6, msg_0314_00004, FALSE);
+        PokeathlonUtil_PrintAlignedMessage(work->textContext, i + 6, msg_0314_00004, FALSE);
     }
     BufferIntegerAsString(msgFormat, 0, PokeathlonMedals_CountMedalists(work), 3, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-    ov98_0221EC08(work->textContext, 1, msg_0314_00128, 1, 0);
+    PokeathlonUtil_PrintMessageAtXY(work->textContext, 1, msg_0314_00128, 1, 0);
     if (ov99_021E7150(work)) {
         int trustTrophies = PokeathlonMedals_CountTrustTrophies(work);
-        ov98_0221EC08(work->textContext, 2, trustTrophies + msg_0314_00113, 1, 0);
+        PokeathlonUtil_PrintMessageAtXY(work->textContext, 2, trustTrophies + msg_0314_00113, 1, 0);
     }
 }

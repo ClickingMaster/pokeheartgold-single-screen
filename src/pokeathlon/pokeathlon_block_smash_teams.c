@@ -15,7 +15,7 @@
 #include "sys_task_api.h"
 
 // Course helpers (OVY_96, not yet tidied).
-u8 *ov96_021E8A20(void *block);
+u8 *PokeathlonCourse_ToBytes(void *block);
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, u32 participant, u32 member);
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, u8 participant, u8 member, void *out);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int kind, int amount);
@@ -78,7 +78,7 @@ typedef struct PokeathlonBlockSmashAnimElement {
 #pragma force_active on
 
 PokeathlonBlockSmashMon *PokeathlonBlockSmashMon_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course) {
-    u8 participant = ov96_021E5F24(course);
+    u8 participant = PokeathlonCourse_GetNetId(course);
     PokeathlonBlockSmashMon *mon = Heap_Alloc(heapId, sizeof(PokeathlonBlockSmashMon));
     s16 x, y, monX, monY;
     MI_CpuFill8(mon, 0, sizeof(PokeathlonBlockSmashMon));
@@ -195,7 +195,7 @@ void PokeathlonBlockSmashMon_OnHit(PokeathlonBlockSmashMon *mon, BOOL hitSpot, u
         PokeathlonBlockSmashMon_AddGauge(mon, hitSpot, broken);
     }
     ManagedSprite_SetAnim(mon->sprites[0], 2);
-    PokeathlonCourse_AddMonCounter(mon->course, ov96_021E5F24(mon->course), mon->member, 4, 1);
+    PokeathlonCourse_AddMonCounter(mon->course, PokeathlonCourse_GetNetId(mon->course), mon->member, 4, 1);
     PokeathlonBlockSmashMon_SetMode(mon, BLOCK_SMASH_MON_HIT);
 }
 
@@ -281,7 +281,7 @@ PokeathlonBlockSmashRivals *PokeathlonBlockSmashRivals_New(enum HeapID heapId, S
     s32 i;
     s32 k;
     u32 *out;
-    self = (u8)ov96_021E5F24(course);
+    self = (u8)PokeathlonCourse_GetNetId(course);
     ReadWholeNarcMemberByIdPair(&table, NARC_a_1_7_0, 5);
     rivals = Heap_Alloc(heapId, sizeof(PokeathlonBlockSmashRivals));
     MI_CpuFill8(rivals, 0, sizeof(PokeathlonBlockSmashRivals));
@@ -404,7 +404,7 @@ void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon) {
             if (member < 0) {
                 member = 2;
             }
-            PokeathlonBlockSmashMon_SetMonSprite(mon, 6, (u8)ov96_021E5F24(mon->course), (u8)member, FALSE);
+            PokeathlonBlockSmashMon_SetMonSprite(mon, 6, (u8)PokeathlonCourse_GetNetId(mon->course), (u8)member, FALSE);
             p2.x = 40;
             p2.y = -40;
             PokeathlonBlockSmashMon_SetWaitingPosition(mon, 6, 40, -40);
@@ -483,7 +483,7 @@ void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon) {
     case 5:
         if (++mon->switchFrames >= 2) {
             ManagedSprite_SetDrawFlag(mon->sprites[4], FALSE);
-            PokeathlonBlockSmashMon_SetMonSprite(mon, 0, (u8)ov96_021E5F24(mon->course), (u8)mon->member, TRUE);
+            PokeathlonBlockSmashMon_SetMonSprite(mon, 0, (u8)PokeathlonCourse_GetNetId(mon->course), (u8)mon->member, TRUE);
             mon->switchFrames = 0;
             mon->switchState++;
         }
@@ -554,14 +554,14 @@ void PokeathlonBlockSmashRival_Init(PokeathlonBlockSmashRival *row, SpriteSystem
     row->participant = who;
     row->course = course;
     row->column = who;
-    if (row->participant > ov96_021E5F24(course)) {
+    if (row->participant > PokeathlonCourse_GetNetId(course)) {
         row->column = row->column - 1;
     }
     for (i = 0; i < 3; i++) {
         row->monPics[i] = PokeathlonCourseMonObjects_Get(monPics, (u8)(i + row->column * 3));
         row->maxStamina[i] = maxStamina[i];
     }
-    ((PokeathlonBlockSmashReport *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0x50 + who * 0x28))->stamina = maxStamina[0];
+    ((PokeathlonBlockSmashReport *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0x50 + who * 0x28))->stamina = maxStamina[0];
     x = row->column * 64 + 72;
     row->sprites[0] = NewMainSpriteAtS16(spriteSystem, spriteManager, x, 56, 12, 29);
     row->sprites[1] = NewMainSpriteAtS16(spriteSystem, spriteManager, x, 56, 5, 28);
@@ -751,7 +751,7 @@ void PokeathlonBlockSmashRival_StartSwitch(PokeathlonBlockSmashRival *row) {
 void PokeathlonBlockSmashRival_Update(PokeathlonBlockSmashRival *row) {
     PokeathlonBlockSmashReport *reports;
     u32 participant;
-    reports = (PokeathlonBlockSmashReport *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(row->course) + 0xF0);
+    reports = (PokeathlonBlockSmashReport *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(row->course) + 0xF0);
     participant = row->participant;
     if (row->member == reports[participant].member) {
         PokeathlonBlockSmashRival_UpdateStatus(row, &reports[participant]);
@@ -813,12 +813,12 @@ void PokeathlonBlockSmashMon_SetMode(PokeathlonBlockSmashMon *mon, int mode) {
     s32 gauge;
     switch (mode) {
     case BLOCK_SMASH_MON_EXHAUSTED:
-        PokeathlonCourse_AddMonCounter(mon->course, (u8)ov96_021E5F24(mon->course), (u8)mon->member, 1, 1);
+        PokeathlonCourse_AddMonCounter(mon->course, (u8)PokeathlonCourse_GetNetId(mon->course), (u8)mon->member, 1, 1);
         mon->members[mon->member].stamina = 0;
         mon->frames = 0;
         break;
     case BLOCK_SMASH_MON_SWITCHING:
-        PokeathlonCourse_AddMonCounter(mon->course, (u8)ov96_021E5F24(mon->course), (u8)mon->member, 7, 1);
+        PokeathlonCourse_AddMonCounter(mon->course, (u8)PokeathlonCourse_GetNetId(mon->course), (u8)mon->member, 7, 1);
         mon->switchFrames = 0;
         gauge = mon->gauge - 10;
         if (gauge > 100) {
@@ -1250,7 +1250,7 @@ void PokeathlonBlockSmashCpuPlayer_Hit(PokeathlonBlockSmashCpuPlayer *player, in
 
 // The CPU participant's report in its link data block (written by the host).
 void PokeathlonBlockSmashCpuPlayer_WriteReport(PokeathlonBlockSmashCpuPlayer *player, u32 result, PokeathlonCourseData *course) {
-    PokeathlonBlockSmashReport *report = (PokeathlonBlockSmashReport *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0x50 + player->participant * 0x28);
+    PokeathlonBlockSmashReport *report = (PokeathlonBlockSmashReport *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0x50 + player->participant * 0x28);
     PokeathlonBlockSmashMember *member = &player->members[player->member];
     report->score = player->score;
     report->stamina = member->stamina;

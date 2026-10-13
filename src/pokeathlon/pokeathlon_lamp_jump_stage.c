@@ -283,7 +283,7 @@ void PokeathlonLampJump_UpdateJumps(PokeathlonCourseData *course, PokeathlonLamp
         VecFx32 pos;
     } hit;
 
-    participant = (u8)ov96_021E5F24(course);
+    participant = (u8)PokeathlonCourse_GetNetId(course);
     for (i = 0; i < 3; i++) {
         PokeathlonLampJump_UpdateJump(course, lampJump, (u8)i);
     }
@@ -342,7 +342,7 @@ void PokeathlonLampJump_UpdateJump(PokeathlonCourseData *course, PokeathlonLampJ
     if (!jump->jumping) {
         return;
     }
-    participant = ov96_021E5F24(course);
+    participant = PokeathlonCourse_GetNetId(course);
     column = lampJump->monColumns[mon];
     switch (mon) {
     case 0:
@@ -675,7 +675,7 @@ void PokeathlonLampJump_PrintPlayerNames(PokeathlonCourseData *course, Pokeathlo
     for (i = 0; i < 5; i++) {
         FillWindowPixelBuffer(&lampJump->windows[i], 0);
     }
-    self = ov96_021E5F24(course);
+    self = PokeathlonCourse_GetNetId(course);
     name = PlayerProfile_GetPlayerName_NewString(PokeathlonCourse_GetPlayerProfileFromData(course, self), lampJump->heapId);
     AddTextPrinterParameterizedWithColor(&lampJump->windows[0], 0, name, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(name);
@@ -745,7 +745,7 @@ void PokeathlonLampJump_SlowDownSideways(PokeathlonLampJumpMon *mon) {
 
 // Bounce, stun time and flick scale from the Pokemon's Skill, Stamina and Jump.
 void PokeathlonLampJump_SetMonParams(PokeathlonCourseData *course, PokeathlonLampJumpMonParams *params, u8 member, PokeathlonLampJumpMon *mon) {
-    u8 self = ov96_021E5F24(course);
+    u8 self = PokeathlonCourse_GetNetId(course);
     u8 *stats = PokeathlonCourse_GetMonStats(course, self, member);
     mon->bounce = params->acceleration[stats[2]];
     mon->stunFrames = params->velocity[stats[3]];
@@ -773,7 +773,7 @@ BOOL PokeathlonLampJump_CollideMons(PokeathlonCourseData *course, PokeathlonLamp
             if (i == j) {
                 continue;
             }
-            participant = ov96_021E5F24(course);
+            participant = PokeathlonCourse_GetNetId(course);
             spriteA = monA->sprite;
             spriteB = monB->sprite;
             PokeathlonCourseObject_GroundToCenter(spriteA, monA->x / FX32_ONE, (FX32_CONST(288) - (jumpA->height << 6)) / FX32_ONE, &x, &y);
@@ -1008,7 +1008,7 @@ int PokeathlonLampJump_UpdateCpuPlayers(PokeathlonCourseData *course, Pokeathlon
     }
     cpu->tick++;
     for (participant = cpu->first; participant < 4; participant++) {
-        *(u32 *)ov96_021E8A20(cpu->dataCopy + 0x50 + participant * 0x28) = FALSE;
+        *(u32 *)PokeathlonCourse_ToBytes(cpu->dataCopy + 0x50 + participant * 0x28) = FALSE;
     }
     if (cpu->tick >= cpu->interval) {
         cpu->active = TRUE;
@@ -1038,7 +1038,7 @@ void PokeathlonLampJump_UpdateCpuPlayer(PokeathlonCourseData *course, Pokeathlon
     int value;
     u8 roll;
     u8 i;
-    u32 *lampHit = (u32 *)ov96_021E8A20(cpu->dataCopy + 0x50 + participant * 0x28);
+    u32 *lampHit = (u32 *)PokeathlonCourse_ToBytes(cpu->dataCopy + 0x50 + participant * 0x28);
 
     if (cpu->skill[participant] == 0) {
         value = 0;

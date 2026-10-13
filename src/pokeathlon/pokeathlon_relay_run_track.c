@@ -60,7 +60,7 @@ void PokeathlonRelayRun_DrawTeams(PokeathlonCourseData *course, int own, Pokeath
     u8 bench1;
     s32 flags;
 
-    packet = (PokeathlonRelayRunPacket *)ov96_021E8A20(&link->packet);
+    packet = (PokeathlonRelayRunPacket *)PokeathlonCourse_ToBytes(&link->packet);
     relayRun = PokeathlonCourse_GetHeapAllocPtr4(course);
     x = packet->x[own];
     {
@@ -111,10 +111,10 @@ void PokeathlonRelayRun_DrawTeams(PokeathlonCourseData *course, int own, Pokeath
         position.z = 0;
         if (PokeathlonCourse_GetParticipantCount(course) <= i) {
             isCpu = TRUE;
-            touch = (PokeathlonRelayRunTouch *)ov96_021E8A20(&link->touches[i]);
+            touch = (PokeathlonRelayRunTouch *)PokeathlonCourse_ToBytes(&link->touches[i]);
         } else {
             isCpu = FALSE;
-            touch = (PokeathlonRelayRunTouch *)ov96_021E8A20(link);
+            touch = (PokeathlonRelayRunTouch *)PokeathlonCourse_ToBytes(link);
         }
         if (own == i) {
             PokeathlonRelayRunTeam_DrawSwap(relayRun->hud, team, &position, packet, i, (u8)member, touch, isHost, TRUE, FALSE);
@@ -130,7 +130,7 @@ void PokeathlonRelayRun_DrawTeams(PokeathlonCourseData *course, int own, Pokeath
         for (int j = 0; j < RELAY_RUN_MEMBERS; j++) {
             PokeathlonCourseObject_SetGroundPosition(team->monObjects[j], screenX, packet->y[i]);
         }
-        PokeathlonRelayRunTeam_SetDrawPriority(team, packet->y[i], i == ov96_021E5F24(course));
+        PokeathlonRelayRunTeam_SetDrawPriority(team, packet->y[i], i == PokeathlonCourse_GetNetId(course));
         PokeathlonRelayRun_PlaceAboveMon(PokeathlonCourse_GetPerformance(course, i, member), &position, team->conditionSprite);
         above = position;
         above.y -= FX32_CONST(24);

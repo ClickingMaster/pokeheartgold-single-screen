@@ -560,7 +560,7 @@ void PokeathlonDiscCatch_PlayCatchSound(u32 state) {
 
 // Shows the discs of the frame packet.
 void PokeathlonDiscCatch_UpdateDiscSprites(PokeathlonDiscCatchSprites *sprites, PokeathlonDiscCatchDiscPacket *discs, PokeathlonCourseData *course) {
-    u8 myId = ov96_021E5F24(course);
+    u8 myId = PokeathlonCourse_GetNetId(course);
     PokeathlonDiscCatch *work = PokeathlonCourse_GetHeapAllocPtr4(course);
     PokeathlonDiscCatchDiscSprites *disc;
     int i;
@@ -710,7 +710,7 @@ void PokeathlonDiscCatch_UpdateMonSprites(PokeathlonDiscCatchSprites *sprites, P
                 int participant;
                 participant = i / 3;
                 stats = PokeathlonDiscCatch_GetStats(course, (u8)participant, (u8)(i % 3));
-                if (participant == (int)ov96_021E5F24(course) && mon->jumping == 0 && mon->squashed == 0) {
+                if (participant == (int)PokeathlonCourse_GetNetId(course) && mon->jumping == 0 && mon->squashed == 0) {
                     if (stats->jump == 0) {
                         PlaySE(SEQ_SE_DP_BOX03);
                     } else {
@@ -784,7 +784,7 @@ u32 PokeathlonDiscCatch_Intro(PokeathlonCourseData *course, u8 *state) {
 // The time is up: stops the sprites and reports the own score.
 void PokeathlonDiscCatch_EndGame(PokeathlonCourseData *course) {
     u8 score;
-    ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
+    PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
     score = (u8)PokeathlonDiscCatchScoreboard_GetOwnScore(((PokeathlonDiscCatch *)PokeathlonCourse_GetHeapAllocPtr4(course))->scoreboard);
     PokeathlonCourse_SetRecordScore(course, score);
     PokeathlonDiscCatch_PrintScore(course, score);
@@ -804,7 +804,7 @@ u32 PokeathlonDiscCatch_Play(PokeathlonCourseData *course, u8 *state) {
     case 1: {
         PokeathlonDiscCatchFrame *frame;
         PokeathlonDiscCatch_UpdateHost(course);
-        frame = (PokeathlonDiscCatchFrame *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
+        frame = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
         PokeathlonDiscCatchScoreboard_SetOwnScore(work->scoreboard, (u8)frame->scoreParticipant, (u16)frame->score);
         if (PokeathlonCourse_RunFinish(course)) {
             if (PokeathlonDiscCatchShake_IsDone(&work->shake)) {
@@ -826,7 +826,7 @@ u32 PokeathlonDiscCatch_Finish(PokeathlonCourseData *course, u8 *state) {
     PokeathlonDiscCatch *work = PokeathlonCourse_GetHeapAllocPtr4(course);
     if (*state == 0) {
         if (IsPaletteFadeFinished()) {
-            u32 isGuest = ov96_021E5F24(course);
+            u32 isGuest = PokeathlonCourse_GetNetId(course);
             work = PokeathlonCourse_GetHeapAllocPtr4(course);
             if (isGuest == 0) {
                 int i;
@@ -885,7 +885,7 @@ u32 PokeathlonDiscCatch_Init(PokeathlonCourseData *course) {
         }
         break;
     case 3: {
-        u8 participant = (u8)ov96_021E5F24(course);
+        u8 participant = (u8)PokeathlonCourse_GetNetId(course);
         work->scoreboard = PokeathlonDiscCatchScoreboard_New(work->spriteSystem, work->spriteManager, work->bgConfig, work->msgData, work->messageFormat, participant, work->heapId, course);
         PokeathlonDiscCatchSprites_Init(&work->sprites, work->spriteSystem, work->spriteManager, work->scoreboard);
         work->cpu = PokeathlonDiscCatchCpu_New(course, work->heapId);
@@ -894,8 +894,8 @@ u32 PokeathlonDiscCatch_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)work->bgConfig); // the callback gets the BgConfig
         PokeathlonCourse_SetField1F4(course, 1);
         PokeathlonDiscCatch_InitMons(work);
-        if (ov96_021E5F24(course) == 0) {
-            PokeathlonDiscCatchFrame *frame = (PokeathlonDiscCatchFrame *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
+        if (PokeathlonCourse_GetNetId(course) == 0) {
+            PokeathlonDiscCatchFrame *frame = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
             frame->seconds = (work->timer + 30) / 30;
             PokeathlonDiscCatch_WriteFramePacket(&work->field, course);
         }
@@ -920,7 +920,7 @@ u32 PokeathlonDiscCatch_Draw(PokeathlonCourseData *course) {
 }
 
 // Event template entry 2.
-u32 ov96_0220E60C(PokeathlonCourseData *course) {
+u32 PokeathlonDiscCatch_ShowResults(PokeathlonCourseData *course) {
     void *graphics = PokeathlonCourse_GetGraphicsSystem(course);
     int i;
     PokeathlonCourseScoreList_Init(graphics);
@@ -1322,11 +1322,11 @@ void PokeathlonDiscCatch_UpdateHost(PokeathlonCourseData *course) {
     u8 *input;
     PokeathlonDiscCatchTeam *team;
 
-    if (ov96_021E5F24(course)) {
+    if (PokeathlonCourse_GetNetId(course)) {
         return;
     }
     seconds = 0;
-    frame = (PokeathlonDiscCatchFrame *)ov96_021E8A20(area + 0x28);
+    frame = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(area + 0x28);
     if (frame->finished) {
         PokeathlonDiscCatch_WriteFramePacket(&work->field, course);
         return;
@@ -1337,15 +1337,15 @@ void PokeathlonDiscCatch_UpdateHost(PokeathlonCourseData *course) {
         frame->seconds = seconds;
     }
     {
-        PokeathlonDiscCatchFrame *dest = (PokeathlonDiscCatchFrame *)ov96_021E8A20(area + 0x50);
-        PokeathlonDiscCatchFrame *src = (PokeathlonDiscCatchFrame *)ov96_021E8A20(area);
+        PokeathlonDiscCatchFrame *dest = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(area + 0x50);
+        PokeathlonDiscCatchFrame *src = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(area);
         *dest = *src;
     }
     i = 0;
     input = area + 0x50;
     team = work->field.teams;
     for (; i < DISC_CATCH_PARTICIPANTS; i++) {
-        PokeathlonDiscCatchFrame *touch = (PokeathlonDiscCatchFrame *)ov96_021E8A20(input);
+        PokeathlonDiscCatchFrame *touch = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(input);
         if (touch->touching) {
             if (team->touchNew && team->touching) {
                 team->touchNew = FALSE;

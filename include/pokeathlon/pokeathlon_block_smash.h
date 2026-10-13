@@ -161,7 +161,7 @@ BOOL PokeathlonBlockSmash_Play(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonBlockSmash_Finish(PokeathlonCourseData *course);
 BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course);
 BOOL PokeathlonBlockSmash_Draw(PokeathlonCourseData *course);
-BOOL ov96_02209748(PokeathlonCourseData *course);
+BOOL PokeathlonBlockSmash_ShowResults(PokeathlonCourseData *course);
 BOOL PokeathlonBlockSmash_Exit(PokeathlonCourseData *course);
 void PokeathlonBlockSmash_SetVramBanks(void);
 void PokeathlonBlockSmash_InitSpriteSystem(PokeathlonBlockSmash *work);

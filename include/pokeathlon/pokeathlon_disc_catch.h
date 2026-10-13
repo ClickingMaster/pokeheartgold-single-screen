@@ -254,7 +254,7 @@ u32 PokeathlonDiscCatch_Play(PokeathlonCourseData *course, u8 *state);
 u32 PokeathlonDiscCatch_Finish(PokeathlonCourseData *course, u8 *state);
 u32 PokeathlonDiscCatch_Init(PokeathlonCourseData *course);
 u32 PokeathlonDiscCatch_Draw(PokeathlonCourseData *course);
-u32 ov96_0220E60C(PokeathlonCourseData *course);
+u32 PokeathlonDiscCatch_ShowResults(PokeathlonCourseData *course);
 u32 PokeathlonDiscCatch_Exit(PokeathlonCourseData *course);
 s16 PokeathlonDiscCatch_GetDiscX(int progress, int path);
 BOOL PokeathlonDiscCatch_IsMonInPlay(PokeathlonDiscCatch *work, u32 participant, u32 member);

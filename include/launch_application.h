@@ -170,7 +170,7 @@ void GlobalTerminal_LaunchApp(FieldSystem *fieldSystem, u16 a1, u16 a2);
 PokegearArgs *PokegearPhone_LaunchApp(FieldSystem *fieldSystem);
 PokeathlonMedalsArgs *PokeathlonMedals_LaunchApp(FieldSystem *fieldSystem);
 PokeathlonEventRecordArgs *PokeathlonEventRecord_LaunchApp(FieldSystem *fieldSystem);
-UnkStruct_0203EFA0 *PokeathlonUnk_LaunchApp(FieldSystem *fieldSystem);
+PokeathlonTrophiesArgs *PokeathlonUnk_LaunchApp(FieldSystem *fieldSystem);
 PokeathlonCourseRecordArgs *PokeathlonCourseRecord_LaunchApp(FieldSystem *fieldSystem);
 AlphPuzzleArgs *AlphPuzzle_LaunchApp(FieldSystem *fieldSystem, u8 puzzle);
 void RegisterHallOfFame_LaunchApp(FieldSystem *fieldSystem, RegisterHallOfFameArgs *args);

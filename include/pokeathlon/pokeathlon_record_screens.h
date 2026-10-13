@@ -91,7 +91,7 @@ void PokeathlonCourseRecord_SetMonSpritesVisible(PokeathlonCourseRecord *work, B
 void PokeathlonCourseRecord_UpdatePageSprites(PokeathlonCourseRecord *work, int course);
 BOOL PokeathlonCourseRecord_HandleInput(PokeathlonCourseRecord *work);
 
-// Trophies app (ov99_021E677C / ov99_021E6888 / ov99_021E6840)
+// Trophies app (PokeathlonTrophies_Init / PokeathlonTrophies_Main / PokeathlonTrophies_Exit)
 
 typedef struct PokeathlonTrophiesSummary {
     PlayerProfile *profile;
@@ -131,7 +131,7 @@ void PokeathlonTrophies_PrintNextFriendshipTrophy(PokeathlonTrophies *work, u32 
 void PokeathlonTrophies_DrawScreen(PokeathlonTrophies *work);
 u16 PokeathlonTrophies_CalcEventRecordTotal(PokeathlonSave *pokeathlon);
 u16 PokeathlonTrophies_CountMedals(const u8 *medals);
-void PokeathlonTrophies_CreateSummary(PokeathlonTrophies *work, UnkStruct_0203EFA0 *args);
+void PokeathlonTrophies_CreateSummary(PokeathlonTrophies *work, PokeathlonTrophiesArgs *args);
 void PokeathlonTrophies_FreeSummary(PokeathlonTrophiesSummary *summary);
 u8 PokeathlonTrophies_GetPotentialTrophyCount(PokeathlonTrophiesSummary *summary);
 u8 PokeathlonTrophies_GetMedalistCount(PokeathlonTrophiesSummary *summary);
@@ -276,8 +276,8 @@ typedef struct PokeathlonEventRecord {
 } PokeathlonEventRecord; // size: 0xE4
 
 u16 PokeathlonEventRecord_GetEventTotal(PokeathlonEventRecordData *data, u32 event);
-BOOL ov99_021E84EC(PokeathlonEventRecord *work, int event);
-BOOL ov99_021E8518(PokeathlonEventRecord *work, s8 event, u32 column);
+BOOL PokeathlonEventRecord_RecordReachesThreshold(PokeathlonEventRecord *work, int event);
+BOOL PokeathlonEventRecord_SoloRecordReachesThreshold(PokeathlonEventRecord *work, s8 event, u32 column);
 BOOL PokeathlonEventRecord_IsRankEmpty(PokeathlonEventRecord *work, u8 rank);
 void PokeathlonEventRecord_VBlankCallback(PokeathlonEventRecord *work);
 void PokeathlonEventRecord_InitBgs(PokeathlonEventRecord *work);

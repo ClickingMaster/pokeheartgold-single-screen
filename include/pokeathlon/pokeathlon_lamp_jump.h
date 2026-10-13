@@ -115,7 +115,7 @@ typedef struct PokeathlonLampJumpSpriteConfig {
 
 typedef struct PokeathlonLampJumpMonSpriteInfo {
     int unk00[5];
-    int unk14[3]; // per Pokemon: ov96_021E6108 of the Pokemon
+    int unk14[3]; // per Pokemon: PokeathlonCourse_GetSpriteSizeType of the Pokemon
     int unk20[9];
 } PokeathlonLampJumpMonSpriteInfo;
 
@@ -145,7 +145,7 @@ typedef union PokeathlonLampJumpSyncBlock {
 
 BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course);
 BOOL PokeathlonLampJump_Draw(PokeathlonCourseData *course);
-BOOL ov96_021F54D4(PokeathlonCourseData *course);
+BOOL PokeathlonLampJump_ShowResults(PokeathlonCourseData *course);
 BOOL PokeathlonLampJump_Exit(PokeathlonCourseData *course);
 void PokeathlonLampJump_SetGfxBanks(void);
 BOOL PokeathlonLampJump_Play(PokeathlonCourseData *course, u8 *state);

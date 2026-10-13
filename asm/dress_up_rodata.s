@@ -70,8 +70,8 @@
 	.public DressUpGfx_RenderSprites
 	.public DressUp_LoadAccessoryChars
 	.public DressUp_LoadBackdropCharsAndPalettes
-	.public ov41_02246C90
-	.public ov41_02246CB0
+	.public DressUpGfx_LoadMonPicAttrs
+	.public DressUpGfx_FreeMonPicAttrs
 	.public DressUpGfx_CreatePokepicManager
 	.public DressUpGfx_DestroyPokepicManager
 	.public DressUpGfx_AllocRawResTables
@@ -93,7 +93,7 @@
 	.public DressUp_InitButtons
 	.public DressUp_FreeButtons
 	.public DressUp_UpdateButtons
-	.public ov41_02247588
+	.public DressUp_ResetButtons
 	.public DressUp_OnDoneButton
 	.public DressUp_OnNextPageButton
 	.public DressUp_OnPrevPageButton
@@ -114,8 +114,8 @@
 	.public DressUp_PrintMsgWindow
 	.public DressUp_RemoveMsgWindow
 	.public DressUp_CreatePromptMsgWindow
-	.public ov41_02247D34
-	.public ov41_02247D3C
+	.public DressUp_PrintPromptMsgWindow
+	.public DressUp_RemovePromptMsgWindow
 	.public DressUp_UpdateCountMeter
 	.public DressUp_ShowSavePrompt
 	.public DressUp_HandleSavePrompt
@@ -124,9 +124,9 @@
 	.public DressUpCanvas_Destroy
 	.public AccessoryPortrait_CreateCanvasMonPic
 	.public DressUpCanvas_CreateMonPic
-	.public ov41_02247FFC
-	.public ov41_02248020
-	.public ov41_02248030
+	.public DressUpCanvas_CreateMonPicEx
+	.public DressUpCanvas_AddToMonList
+	.public DressUpCanvas_RemoveNode
 	.public DressUpCanvas_FreeMonPic
 	.public AccessoryPortrait_PlaceCanvasAccessory
 	.public DressUpCanvas_TryAddAccessory
@@ -136,7 +136,7 @@
 	.public DressUpCanvas_MoveMonGroup
 	.public DressUpCanvas_SetOrigin
 	.public DressUpCanvas_RefreshPriorities
-	.public ov41_02248164
+	.public DressUpCanvas_SetPriorities
 	.public DressUpCanvas_IsTouchHeldIn
 	.public DressUpCanvas_IsPointIn
 	.public DressUpCanvas_FindObjectAt
@@ -152,7 +152,7 @@
 	.public DressUpTray_GetItemSpawnPos
 	.public DressUpTray_AddItem
 	.public DressUpTray_LinkObjectToPage
-	.public ov41_022486F0
+	.public DressUpTray_RemoveNode
 	.public DressUpTray_ClearObjects
 	.public DressUpTray_RefreshPriorities
 	.public DressUpTray_AnimateToPage
@@ -162,7 +162,7 @@
 	.public DressUpTray_IsPointIn
 	.public DressUpTray_FindObjectAt
 	.public DressUpTray_LoadTabBg
-	.public ov41_022488D8
+	.public DressUpTray_SlideInTabBg
 	.public DressUpTray_FreeTabBg
 	.public DressUpTray_GetGroup
 	.public DressUpTray_GetGroupPage
@@ -189,7 +189,7 @@
 	.public ov41_02248E10
 	.public DressUpTouch_Reset
 	.public DressUpTouch_Update
-	.public ov41_02248E80
+	.public DressUpTouch_DefaultHandler
 	.public DressUp_LoadFashionCaseTable
 	.public DressUp_GetAccessoryCount
 	.public DressUp_GetBackdropByOrder
@@ -197,7 +197,7 @@
 	.public DressUpDrag_Init
 	.public DressUpDrag_Destroy
 	.public DressUpDrag_OnTouchIdle
-	.public ov41_022490AC
+	.public DressUpDrag_OnHeldBackdrop
 	.public DressUpDrag_OnReleaseBackdrop
 	.public DressUpDrag_OnReleaseAccessory
 	.public DressUpDrag_OnHeldAccessory
@@ -265,7 +265,7 @@
 	.public DressUpButton_TryCallback
 	.public DressUp_UpdateCategoryTabs
 	.public DressUpButton_SetCallback
-	.public ov41_0224A254
+	.public DressUpButton_DefaultCallback
 	.public DressUpButton_SetAnimSelected
 	.public DressUpButton_SetAnimNormal
 	.public DressUpButton_SetAnimPressed
@@ -274,7 +274,7 @@
 	.public DressUpButtonPanel_HandleKeys
 	.public DressUpButtonPanel_UpdateInputMode
 	.public DressUpButtonPanel_Update
-	.public ov41_0224A580
+	.public DressUpButtonPanel_ResetButtons
 	.public DressUpButtonPanel_MoveBy
 	.public DressUpButtonPanel_SetCallback
 	.public DressUpButtonPanel_OnTouch
@@ -391,8 +391,8 @@
 	.public DressUpGfx_DrawGraphicsManager
 	.public DressUp_DestroyCharRawResMan
 	.public DressUpGfx_RenderSprites
-	.public ov41_02246C90
-	.public ov41_02246CB0
+	.public DressUpGfx_LoadMonPicAttrs
+	.public DressUpGfx_FreeMonPicAttrs
 	.public DressUp_DrawFrame
 	.public DressUp_FreeGraphics
 	.public DressUp_FreeCanvas
@@ -400,7 +400,7 @@
 	.public DressUp_VBlankCB
 	.public DressUp_FreeFrameBg
 	.public DressUp_UpdateButtons
-	.public ov41_02247588
+	.public DressUp_ResetButtons
 	.public DressUp_OnDoneButton
 	.public DressUp_OnNextPageButton
 	.public DressUp_OnPrevPageButton
@@ -408,13 +408,13 @@
 	.public DressUp_HidePrompt
 	.public DressUp_RemoveMsgWindow
 	.public DressUp_CreatePromptMsgWindow
-	.public ov41_02247D34
-	.public ov41_02247D3C
+	.public DressUp_PrintPromptMsgWindow
+	.public DressUp_RemovePromptMsgWindow
 	.public DressUp_UpdateCountMeter
 	.public DressUpCanvas_Destroy
 	.public DressUpCanvas_CreateMonPic
-	.public ov41_02248020
-	.public ov41_02248030
+	.public DressUpCanvas_AddToMonList
+	.public DressUpCanvas_RemoveNode
 	.public DressUpCanvas_FreeMonPic
 	.public DressUpCanvas_TryAddAccessory
 	.public DressUpCanvas_RemoveAccessory
@@ -425,7 +425,7 @@
 	.public DressUpCanvas_IsTouchHeldIn
 	.public DressUpCanvas_FreeBackdrop
 	.public DressUpCanvas_GetCount
-	.public ov41_022486F0
+	.public DressUpTray_RemoveNode
 	.public DressUpTray_IsTouchHeldIn
 	.public DressUpTray_FreeTabBg
 	.public DressUpTray_GetGroup
@@ -436,11 +436,11 @@
 	.public DressUpTray_CountPageObjects
 	.public DressUp_StartSlideAnim
 	.public DressUp_TickSlideAnims
-	.public ov41_02248E80
+	.public DressUpTouch_DefaultHandler
 	.public DressUp_GetAccessoryCount
 	.public DressUp_GetBackdropByOrder
 	.public DressUpDrag_Destroy
-	.public ov41_022490AC
+	.public DressUpDrag_OnHeldBackdrop
 	.public DressUpDrag_GetSelectedVisibleRect
 	.public DressUpMon_Create
 	.public DressUpMon_SetPriority
@@ -463,7 +463,7 @@
 	.public DressUpButton_Delete
 	.public DressUpButton_DeleteWithText
 	.public DressUpButton_SetCallback
-	.public ov41_0224A254
+	.public DressUpButton_DefaultCallback
 	.public DressUpButton_SetAnimSelected
 	.public DressUpButton_SetAnimNormal
 	.public DressUpButton_SetAnimPressed

@@ -27,9 +27,9 @@ extern const int ov99_021E9DBC[];
 extern const int ov99_021E9DD4[];
 extern const int ov99_021E9E04[10];
 
-BOOL ov99_021E677C(OverlayManager *man, int *state) {
+BOOL PokeathlonTrophies_Init(OverlayManager *man, int *state) {
     PokeathlonTrophies *work;
-    UnkStruct_0203EFA0 *args;
+    PokeathlonTrophiesArgs *args;
     SpriteResourceCountsListUnion counts;
 
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_98), OVY_LOAD_ASYNC);
@@ -54,7 +54,7 @@ BOOL ov99_021E677C(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-BOOL ov99_021E6840(OverlayManager *man, int *state) {
+BOOL PokeathlonTrophies_Exit(OverlayManager *man, int *state) {
     PokeathlonTrophies *work = OverlayManager_GetData(man);
 
     PokeathlonTrophies_FreeSummary(work->summary);
@@ -68,7 +68,7 @@ BOOL ov99_021E6840(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-BOOL ov99_021E6888(OverlayManager *man, int *state) {
+BOOL PokeathlonTrophies_Main(OverlayManager *man, int *state) {
     PokeathlonTrophies *work = OverlayManager_GetData(man);
 
     switch (*state) {
@@ -202,12 +202,12 @@ void PokeathlonTrophies_CreateNumberSprites(PokeathlonTrophies *work, s32 value,
 
 void PokeathlonTrophies_PrintTitle(PokeathlonTrophies *work, u32 trophyCount) {
     GF_ASSERT(trophyCount <= 40);
-    ov98_0221EBD8(work->textContext, 6, trophyCount / 2 + msg_0314_00033, FALSE);
+    PokeathlonUtil_PrintAlignedMessage(work->textContext, 6, trophyCount / 2 + msg_0314_00033, FALSE);
 }
 
 void PokeathlonTrophies_PrintNextFriendshipTrophy(PokeathlonTrophies *work, u32 friendshipTrophies) {
     GF_ASSERT(friendshipTrophies <= 10);
-    ov98_0221EBD8(work->textContext, 9, friendshipTrophies + msg_0314_00017, FALSE);
+    PokeathlonUtil_PrintAlignedMessage(work->textContext, 9, friendshipTrophies + msg_0314_00017, FALSE);
 }
 
 void PokeathlonTrophies_DrawScreen(PokeathlonTrophies *work) {
@@ -229,24 +229,24 @@ void PokeathlonTrophies_DrawScreen(PokeathlonTrophies *work) {
     totalPoints = PokeathlonTrophies_GetTotalPoints(work->summary);
     gender = PokeathlonTrophies_GetGender(work->summary);
     collectiveTrophies = PokeathlonTrophies_CountCollectiveTrophies(work);
-    trustTrophies = ov98_0221EF80(PokeathlonTrophies_GetMedalistCount(work->summary));
+    trustTrophies = PokeathlonUtil_GetMedalistTrophyCount(PokeathlonTrophies_GetMedalistCount(work->summary));
     potentialTrophies = PokeathlonTrophies_GetPotentialTrophyCount(work->summary);
     friendshipTrophies = PokeathlonTrophies_CountFriendshipTrophies(totalPoints);
     trophyCount = collectiveTrophies + trustTrophies + potentialTrophies + friendshipTrophies;
 
     msgFormat = PokeathlonUtil_GetMessageFormat(work->textContext);
     BufferPlayersName(msgFormat, 0, PokeathlonTrophies_GetProfile(work->summary));
-    ov98_0221EC08(work->textContext, 0, msg_0314_00011, 1, 0);
-    ov98_0221EBD8(work->textContext, 1, msg_0314_00012, FALSE);
-    ov98_0221EBD8(work->textContext, 2, msg_0314_00013, FALSE);
-    ov98_0221EBD8(work->textContext, 3, msg_0314_00014, FALSE);
-    ov98_0221EBD8(work->textContext, 4, msg_0314_00015, FALSE);
-    ov98_0221EC08(work->textContext, 5, msg_0314_00032, 2, 0);
-    ov98_0221EBEC(work->textContext, 7, msg_0314_00000, TRUE, 0, 4);
+    PokeathlonUtil_PrintMessageAtXY(work->textContext, 0, msg_0314_00011, 1, 0);
+    PokeathlonUtil_PrintAlignedMessage(work->textContext, 1, msg_0314_00012, FALSE);
+    PokeathlonUtil_PrintAlignedMessage(work->textContext, 2, msg_0314_00013, FALSE);
+    PokeathlonUtil_PrintAlignedMessage(work->textContext, 3, msg_0314_00014, FALSE);
+    PokeathlonUtil_PrintAlignedMessage(work->textContext, 4, msg_0314_00015, FALSE);
+    PokeathlonUtil_PrintMessageAtXY(work->textContext, 5, msg_0314_00032, 2, 0);
+    PokeathlonUtil_PrintAlignedMessageAtY(work->textContext, 7, msg_0314_00000, TRUE, 0, 4);
     PokeathlonTrophies_PrintTitle(work, trophyCount);
-    ov98_0221EBD8(work->textContext, 8, msg_0314_00016, FALSE);
-    ov98_0221EBD8(work->textContext, 13, msg_0314_00031, FALSE);
-    ov98_0221EBD8(work->textContext, 14, msg_0314_00001, FALSE);
+    PokeathlonUtil_PrintAlignedMessage(work->textContext, 8, msg_0314_00016, FALSE);
+    PokeathlonUtil_PrintAlignedMessage(work->textContext, 13, msg_0314_00031, FALSE);
+    PokeathlonUtil_PrintAlignedMessage(work->textContext, 14, msg_0314_00001, FALSE);
     PokeathlonUtil_PrintMessageWithNumber(work->textContext, 10, msg_0314_00028, courseRecordTotal, 4, 0);
     PokeathlonUtil_PrintMessageWithNumber(work->textContext, 11, msg_0314_00029, eventRecordTotal, 4, 0);
     PokeathlonUtil_PrintMessageWithNumber(work->textContext, 12, msg_0314_00030, medalTotal, 4, 0);
@@ -289,7 +289,7 @@ u16 PokeathlonTrophies_CountMedals(const u8 *medals) {
     return count;
 }
 
-void PokeathlonTrophies_CreateSummary(PokeathlonTrophies *work, UnkStruct_0203EFA0 *args) {
+void PokeathlonTrophies_CreateSummary(PokeathlonTrophies *work, PokeathlonTrophiesArgs *args) {
     PokeathlonTrophiesSummary *summary;
     PokeathlonSave *pokeathlon;
     PlayerProfile *profile;
@@ -314,7 +314,7 @@ void PokeathlonTrophies_CreateSummary(PokeathlonTrophies *work, UnkStruct_0203EF
     summary->eventRecordTotal = PokeathlonTrophies_CalcEventRecordTotal(pokeathlon);
     summary->medalTotal = PokeathlonTrophies_CountMedals(medals);
     summary->medalistCount = PokeathlonUtil_CountSpeciesWithAllMedals(medals);
-    summary->potentialTrophies = ov98_0221F058((const u16(*)[22])recordsSolo);
+    summary->potentialTrophies = PokeathlonUtil_CountEventTrophies((const u16(*)[22])recordsSolo);
     summary->totalPoints = summary->courseRecordTotal + summary->eventRecordTotal + summary->medalTotal;
     summary->gender = PlayerProfile_GetTrainerGender(profile);
     work->summary = summary;
@@ -387,7 +387,7 @@ u8 PokeathlonTrophies_CountCollectiveTrophies(PokeathlonTrophies *work) {
     u8 count = 0;
 
     for (i = 0; i < 5; i++) {
-        count += ov98_0221EF64(PokeathlonTrophies_GetCourseScore(work->summary, (u8)i));
+        count += PokeathlonUtil_GetCourseMedal(PokeathlonTrophies_GetCourseScore(work->summary, (u8)i));
     }
     return count;
 }

@@ -65,7 +65,7 @@ void PokeathlonDiscCatchScoreboard_Pause(PokeathlonDiscCatchScoreboard *scoreboa
 // Takes the own score from a frame packet (7 bits: counts the wraps); returns how much it went up.
 u8 PokeathlonDiscCatchScoreboard_SetOwnScore(PokeathlonDiscCatchScoreboard *scoreboard, u32 participant, u16 score) {
     u16 delta;
-    if (participant == ov96_021E5F24(scoreboard->course)) {
+    if (participant == PokeathlonCourse_GetNetId(scoreboard->course)) {
         if (score != scoreboard->shownScore) {
             if (scoreboard->shownScore > score) {
                 scoreboard->wraps++;
@@ -95,7 +95,7 @@ BOOL PokeathlonDiscCatchScoreboard_OnScore(PokeathlonDiscCatchScoreboard *scoreb
     GF_ASSERT(participant < DISC_CATCH_PARTICIPANTS);
     u32 badge = participant + DISC_CATCH_SCOREBOARD_BADGES;
     ManagedSprite_SetAnim(scoreboard->sprites[badge], participant + 4);
-    if (participant == ov96_021E5F24(scoreboard->course) && score != scoreboard->shownScore) {
+    if (participant == PokeathlonCourse_GetNetId(scoreboard->course) && score != scoreboard->shownScore) {
         delta = PokeathlonDiscCatchScoreboard_SetOwnScore(scoreboard, participant, score);
         if (delta == 1) {
         } else if (delta == 2) {

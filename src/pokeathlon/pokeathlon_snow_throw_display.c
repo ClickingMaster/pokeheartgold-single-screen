@@ -96,7 +96,7 @@ void PokeathlonSnowThrow_PrintNames(PokeathlonSnowThrow *work, PokeathlonCourseD
     String *name;
     u8 own;
 
-    own = (u8)ov96_021E5F24(course);
+    own = (u8)PokeathlonCourse_GetNetId(course);
     i = 0;
     participant = own + 1;
     window = work->nameWindows;
@@ -123,9 +123,9 @@ void PokeathlonSnowThrow_ShowOwnScore(PokeathlonCourseData *course) {
     PokeathlonSnowThrow *work;
     u16 score;
 
-    teams = ((PokeathlonSnowThrowPacket *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + offsetof(PokeathlonSnowThrowLink, packet)))->teams;
+    teams = ((PokeathlonSnowThrowPacket *)PokeathlonCourse_ToBytes((u8 *)PokeathlonCourse_GetDataCopyArea(course) + offsetof(PokeathlonSnowThrowLink, packet)))->teams;
     work = PokeathlonCourse_GetHeapAllocPtr4(course);
-    score = (u16)(teams[(u8)ov96_021E5F24(course)] & 0x3FF);
+    score = (u16)(teams[(u8)PokeathlonCourse_GetNetId(course)] & 0x3FF);
     if (score > 999) {
         score = 999;
     }
@@ -308,7 +308,7 @@ void PokeathlonSnowThrowDisplay_SetMonShadows(PokeathlonSnowThrowDisplay *displa
         VecFx32 *position = PokeathlonCourseSpritePoolSprite_GetPosition(display->picSprites[i]);
         positions[i].x = position->x / FX32_ONE;
         positions[i].y = position->y / FX32_ONE;
-        ov96_021E634C(display->course, 0, monResources, pool, NNS_G2D_VRAM_TYPE_2DSUB, 3, positions);
+        PokeathlonCourse_CreateStartSpritesInPool(display->course, 0, monResources, pool, NNS_G2D_VRAM_TYPE_2DSUB, 3, positions);
     }
 }
 
@@ -418,7 +418,7 @@ void PokeathlonSnowThrowDisplay_InitWindow(PokeathlonSnowThrowDisplay *display) 
 }
 
 void PokeathlonSnowThrowDisplay_PrintName(PokeathlonSnowThrowDisplay *display) {
-    u8 own = (u8)ov96_021E5F24(display->course);
+    u8 own = (u8)PokeathlonCourse_GetNetId(display->course);
     PlayerProfile *profile = PokeathlonCourse_GetPlayerProfileFromData(display->course, own);
     String *name = PlayerProfile_GetPlayerName_NewString(profile, display->heapId);
 

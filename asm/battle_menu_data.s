@@ -330,7 +330,7 @@
 	.public _0221D978
 	.public _0221D9B4
 	.public _0221D9CA
-	.public _0221DA00
+	.public gPokeathlonCourseEventSteps
 	.public _0221DA1C
 	.public _0221DA6C
 	.public _0221DAB4

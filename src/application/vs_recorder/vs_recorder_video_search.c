@@ -992,7 +992,7 @@ BOOL VsRecorder_SearchCategoryHasSeen(VsRecorderWork *work, int category) {
     next = category + 1;
     end = sVsRecorderSearchSpeciesGroupStarts[next];
     start = sVsRecorderSearchSpeciesGroupStarts[category];
-    list = ov40_0222DD68(HEAP_ID_109, found, &count);
+    list = VsRecorder_LoadSpeciesList(HEAP_ID_109, found, &count);
     pokedex = Save_Pokedex_Get(work->saveData);
     for (i = start; i < end; i++) {
         if (!Pokedex_CheckMonSeenFlag(pokedex, list[i])) {
@@ -1022,8 +1022,8 @@ void VsRecorder_BuildSearchSpeciesList(VsRecorderWork *work, int category) {
     next = category + 1;
     end = sVsRecorderSearchSpeciesGroupStarts[next];
     start = sVsRecorderSearchSpeciesGroupStarts[category];
-    search->speciesList = ov40_0222DD68(HEAP_ID_109, 0, &search->listSize);
-    tmp = ov40_0222DD68(HEAP_ID_109, 0, &search->listSize);
+    search->speciesList = VsRecorder_LoadSpeciesList(HEAP_ID_109, 0, &search->listSize);
+    tmp = VsRecorder_LoadSpeciesList(HEAP_ID_109, 0, &search->listSize);
     pokedex = Save_Pokedex_Get(work->saveData);
     search->speciesCount = 0;
     for (i = start; i < end; i++) {

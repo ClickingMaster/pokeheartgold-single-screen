@@ -294,8 +294,8 @@ typedef struct PokeathlonCoursePacket {
 
 // Callbacks of the event that is running (PokeathlonCourseData.state points to the event's table).
 typedef struct PokeathlonCourseEvent {
-    void *unk00;
-    void (*unk04)(PokeathlonCourseData *course, u32 param);
+    void *init;
+    void (*draw)(PokeathlonCourseData *course, u32 param);
     void (*onResults)(PokeathlonCourseData *course, u32 param);
     void (*exit)(PokeathlonCourseData *course, u32 param);
     BOOL unk10;
@@ -450,30 +450,30 @@ typedef struct PokeathlonCourseLinkEventRecord {
 typedef struct PokeathlonCourseNpcTeam {
     u16 species[3];
     u8 nameId; // msg 310
-    u8 unk07;
+    u8 msgId;
 } PokeathlonCourseNpcTeam;
 
 // ---------------------------------------------------------------------------------------------------------
 // Defined elsewhere in OVY_96 (other event / course modules, data in asm)
 
-extern const PokeathlonCourseEvent ov96_0221A808;
-extern const PokeathlonCourseEvent ov96_0221A844;
-extern const PokeathlonCourseEvent ov96_0221A86C;
-extern const PokeathlonCourseEvent ov96_0221A8BC;
-extern const PokeathlonCourseEvent ov96_0221A8E4;
-extern const PokeathlonCourseEvent *const ov96_0221DA28[]; // events by event id
-extern const PokeathlonCourseStepFunc *const _0221DA00[];  // their state functions
-extern const PokeathlonCourseStepFunc ov96_0221DA50[];
-extern const PokeathlonCourseStepFunc ov96_0221DA5C[];
-extern const PokeathlonCourseStepFunc ov96_0221DA68[];
-extern const PokeathlonCourseStepFunc ov96_0221DA6C[];
-extern const PokeathlonCourseStepFunc ov96_0221DC24[];
+extern const PokeathlonCourseEvent gPokeathlonCourseEvent_Opening;
+extern const PokeathlonCourseEvent gPokeathlonCourseEvent_Closing;
+extern const PokeathlonCourseEvent gPokeathlonCourseEvent_ResultsAnnouncement;
+extern const PokeathlonCourseEvent gPokeathlonCourseEvent_Wait;
+extern const PokeathlonCourseEvent gPokeathlonCourseEvent_EventIntro;
+extern const PokeathlonCourseEvent *const gPokeathlonCourseEvents[]; // events by event id
+extern const PokeathlonCourseStepFunc *const gPokeathlonCourseEventSteps[];  // their state functions
+extern const PokeathlonCourseStepFunc gPokeathlonCourseOpeningSteps[];
+extern const PokeathlonCourseStepFunc gPokeathlonCourseClosingSteps[];
+extern const PokeathlonCourseStepFunc gPokeathlonCourseWaitSteps[];
+extern const PokeathlonCourseStepFunc gPokeathlonEventIntroSteps[];
+extern const PokeathlonCourseStepFunc gPokeathlonResultsAnnouncementSteps[];
 extern const u8 _0221A7D8[];        // score order of each event (0: higher is better, 1: lower)
 extern const u16 ov96_0221A894[];   // target score of each event
-extern const u8 ov96_0221A934[][4]; // events of the courses 0..9
+extern const u8 gPokeathlonCourseEventIds[][4]; // events of the courses 0..9
 extern const u8 ov96_0221A95C[][4]; // the 10 event sets of course 10
-extern const u16 ov96_0221AA20[];   // per NPC team
-extern const u16 ov96_0221AAE8[];   // performance file of each species' first form
+extern const u16 gPokeathlonNpcTeamSpriteIds[];   // per NPC team
+extern const u16 gPokeathlonPerformanceFileIds[];   // performance file of each species' first form
 extern const PokeathlonCourseCmd ov96_0221AEC4[];
 
 SpriteList *PokeathlonCourseSpritePool_GetSpriteList(void *eventGfx);
@@ -492,14 +492,14 @@ BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 void PokeathlonCourse_LoadPerformanceData(PokeathlonCourseData *course);
 PokeathlonCoursePerformance *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int mon);
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int mon);
-int ov96_021E6104(void);
-int ov96_021E6108(const PokeathlonCourseUnkTypes *types);
-int ov96_021E6138(const PokeathlonCourseUnkTypes *types);
+int PokeathlonCourse_GetTouchRadius(void);
+int PokeathlonCourse_GetSpriteSizeType(const PokeathlonCourseUnkTypes *types);
+int PokeathlonCourse_GetCollisionSizeClass(const PokeathlonCourseUnkTypes *types);
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int which, PokeathlonCourseMonInfo *info);
 Sprite **PokeathlonCourse_CreateHudSprites(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList);
-Sprite **ov96_021E6290(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, void *eventGfx);
+Sprite **PokeathlonCourse_CreateHudSpritesInPool(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, void *eventGfx);
 void PokeathlonCourse_CreateStartSprites(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, NNS_G2D_VRAM_TYPE whichScreen, u8 count, PokeathlonCoursePoint *positions);
-void ov96_021E634C(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, void *eventGfx, NNS_G2D_VRAM_TYPE whichScreen, u8 count, PokeathlonCoursePoint *positions);
+void PokeathlonCourse_CreateStartSpritesInPool(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, void *eventGfx, NNS_G2D_VRAM_TYPE whichScreen, u8 count, PokeathlonCoursePoint *positions);
 BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
 void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, int framesLeft);
 void PokeathlonCourse_InitMarkers(PokeathlonCourseData *course);
@@ -514,43 +514,43 @@ BOOL PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
 int PokeathlonCourse_GetPerformanceFileId(int species, int form);
 u32 PokeathlonCourse_State_SendEvents(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_RunEventOverlay(PokeathlonCourseData *course);
-u32 ov96_021E6870(PokeathlonCourseData *course, u8 *state);
+u32 PokeathlonCourse_State_RunWait(PokeathlonCourseData *course, u8 *state);
 u32 PokeathlonCourse_State_SendParticipant(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_SendParticipants(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_SendProfiles(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_SendRecord(PokeathlonCourseData *course);
-u32 ov96_021E6A54(PokeathlonCourseData *course);
-u32 ov96_021E6A94(PokeathlonCourseData *course);
-u32 ov96_021E6AE8(PokeathlonCourseData *course);
-u32 ov96_021E6BC0(PokeathlonCourseData *course);
-u32 ov96_021E6BEC(PokeathlonCourseData *course);
-u32 ov96_021E6C20(PokeathlonCourseData *course);
-u32 ov96_021E6C40(PokeathlonCourseData *course);
-u32 ov96_021E6CB8(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_StartOpening(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_WaitOpeningStart(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_RunOpening(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_EndOpening(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_StartEventIntro(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_WaitEventIntroStart(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_RunEventIntro(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_EndEventIntro(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_StartRound(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_WaitRoundStart(PokeathlonCourseData *course);
-u32 ov96_021E6DE8(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_SendEventData(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_RunEvent(PokeathlonCourseData *course);
-u32 ov96_021E6F18(PokeathlonCourseData *course);
-u32 ov96_021E6F2C(PokeathlonCourseData *course);
-u32 ov96_021E6FFC(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_ResetDataCopyArea(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_SendEventResult(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_SendEventResults(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_EndRound(PokeathlonCourseData *course);
-u32 ov96_021E7080(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_ExitEvent(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_NextRound(PokeathlonCourseData *course);
-u32 ov96_021E711C(PokeathlonCourseData *course);
-u32 ov96_021E7150(PokeathlonCourseData *course);
-u32 ov96_021E7190(PokeathlonCourseData *course);
-u32 ov96_021E7268(PokeathlonCourseData *course);
-u32 ov96_021E7294(PokeathlonCourseData *course);
-u32 ov96_021E72CC(PokeathlonCourseData *course);
-u32 ov96_021E7320(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_StartResultsAnnouncement(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_WaitResultsAnnouncementStart(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_RunResultsAnnouncement(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_EndResultsAnnouncement(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_StartClosing(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_WaitClosingStart(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_RunClosing(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_CreateJuiceRecords(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_SendMonCounters(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_SendResults(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_SendJuiceRecord(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_StoreJuiceRecords(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_Exit(PokeathlonCourseData *course);
-int ov96_021E75B8(void);
+int PokeathlonCourse_State_WaitForCommand(void);
 BOOL PokeathlonCourse_SendEventResults(PokeathlonCourseData *course);
 void PokeathlonCourse_StoreRoundResults(PokeathlonCourseData *course, int round);
 void PokeathlonCourse_SaveResults(PokeathlonCourseData *course);
@@ -577,8 +577,8 @@ void PokeathlonCourse_SetRecordScore(PokeathlonCourseData *course, u16 score);
 void PokeathlonCourse_SetFinishCallback(PokeathlonCourseData *course, PokeathlonCourseFinishFunc callback);
 void PokeathlonCourse_AddToCounter(u32 counter, u32 amount, u32 *counters);
 BOOL PokeathlonCourse_IsNewRecord(PokeathlonCourseData *course);
-u16 ov96_021E8424(u32 npcTeam);
-u8 ov96_021E8448(PokeathlonCourseData *course, u32 npcTeam);
+u16 PokeathlonCourse_GetNpcTeamSpriteId(u32 npcTeam);
+u8 PokeathlonCourse_GetNpcTeamMsgId(PokeathlonCourseData *course, u32 npcTeam);
 void PokeathlonCourse_SetupNpcParticipants(PokeathlonCourseData *course, int count);
 void PokeathlonCourse_ChooseNpcTeams(u32 count, u8 courseId, u32 hard, u8 *npcTeams);
 void *PokeathlonCourse_GetJuiceRecord(PokeathlonCourseData *course, u32 index);
@@ -653,7 +653,7 @@ u32 PokeathlonCourseCmd_JuiceRecordSize(void);
 void *PokeathlonCourseCmd_GetEventDataBuffer(int netId, void *context);
 void *PokeathlonCourseCmd_GetRecordBuffer(int netId, void *context);
 void *PokeathlonCourseCmd_GetResultsBuffer(int netId, void *context);
-void *ov96_021E9A54(int netId, void *context, int size);
+void *PokeathlonCourseCmd_GetMonCountersBuffer(int netId, void *context, int size);
 void *PokeathlonCourseCmd_GetJuiceRecordBuffer(int netId, void *context);
 
 // Sprite resources and course Pokemon objects (pokeathlon_course_sprites.c)
@@ -663,9 +663,9 @@ u8 PokeathlonCourseSprites_HasGroup(PokeathlonCourseSpriteResources *resources, 
 GF_2DGfxResMan *PokeathlonCourseSprites_GetResMan(PokeathlonCourseSpriteResources *resources, int type);
 void PokeathlonCourseSprites_LoadResources(PokeathlonCourseSpriteResources *resources);
 Sprite *PokeathlonCourseSprites_CreateCountdown(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, NNS_G2D_VRAM_TYPE whichScreen, enum HeapID heapId);
-Sprite *ov96_021EA2C4(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
+Sprite *PokeathlonCourseSprites_CreateTimerDigit(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
 Sprite *ov96_021EA374(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
-Sprite *ov96_021EA424(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
+Sprite *PokeathlonCourseSprites_CreateLapCounterDigit(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
 Sprite *PokeathlonCourseSprites_CreateNewRecord(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
 Sprite *PokeathlonCourseSprites_CreateTimeUpCountdown(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
 Sprite *ov96_021EA634(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);

@@ -29,11 +29,11 @@ FS_EXTERN_OVERLAY(OVY_98);
 // Course code (OVY_96, not yet tidied).
 PokeathlonParticipantData *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
-u32 ov96_021E6108(PokeathlonParticipantData *performance);
+u32 PokeathlonCourse_GetSpriteSizeType(PokeathlonParticipantData *performance);
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonCourseObjectInfo *info);
 u32 PokeathlonCourse_GetPerformanceFileId(u16 species, u16 form);
-u32 ov96_021E8424(u8 npcTeam);
-u32 ov96_021E8448(PokeathlonCourseData *course, u8 npcTeam);
+u32 PokeathlonCourse_GetNpcTeamSpriteId(u8 npcTeam);
+u32 PokeathlonCourse_GetNpcTeamMsgId(PokeathlonCourseData *course, u8 npcTeam);
 void *PokeathlonCourseMonGfx_GetInfo(void *gfx);
 u32 PokeathlonCourseScoreList_GetEventPoints(void *scoreList, int event, int team);
 void *PokeathlonCourseSprites_CreateResources(enum HeapID heapId, int flags, int a2);
@@ -107,7 +107,7 @@ BOOL PokeathlonCourseOpening_FadeIn(PokeathlonCourseData *course, u8 *state) {
 
     switch (*state) {
     case 0:
-        if (!ov96_021E5F24(course)) {
+        if (!PokeathlonCourse_GetNetId(course)) {
             PokeathlonCourseCeremony_ChooseIntros(course);
         }
         BeginNormalPaletteFade(FADE_SUB_ONLY, FADE_TYPE_DOWNWARD_IN, FADE_TYPE_DOWNWARD_IN, 0, 6, 1, ceremony->heapId);
@@ -281,7 +281,7 @@ BOOL PokeathlonCourseClosing_FadeIn(PokeathlonCourseData *course, u8 *state) {
 
     switch (*state) {
     case 0:
-        if (!ov96_021E5F24(course)) {
+        if (!PokeathlonCourse_GetNetId(course)) {
             PokeathlonCourseCeremony_ChooseAwards(course);
         }
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_DOWNWARD_IN, FADE_TYPE_DOWNWARD_IN, 0, 6, 1, ceremony->heapId);
@@ -517,7 +517,7 @@ BOOL PokeathlonCourseClosing_Awards(PokeathlonCourseData *course) {
             goto noRecord;
         }
         winner = ceremony->ranks[0].team;
-        own = ov96_021E5F24(course);
+        own = PokeathlonCourse_GetNetId(course);
         if (winner != (u32)own) {
             goto noRecord;
         }
@@ -931,7 +931,7 @@ void PokeathlonCourseCeremony_LoadTrainerSprites(PokeathlonCourseData *course) {
             PokeathlonCourse_LoadTeamTrainerPic(sprites, course, (u8)i, 0);
         } else {
             u8 npcTeam = *(u32 *)PokeathlonCourse_GetParticipantData(course, i);
-            int fileId = PokeathlonCourse_GetNpcTrainerPicFileId(ov96_021E8424(npcTeam));
+            int fileId = PokeathlonCourse_GetNpcTrainerPicFileId(PokeathlonCourse_GetNpcTeamSpriteId(npcTeam));
             PokeathlonCourse_LoadTrainerPic(cursor->trainerSprites[0], fileId, 0, ceremony->heapId);
         }
         cursor = (PokeathlonCourseCeremony *)((u8 *)cursor + sizeof(ManagedSprite *));
@@ -957,7 +957,7 @@ void PokeathlonCourseCeremony_SetTrainerPose(ManagedSprite **sprites, Pokeathlon
     }
     if (isNpc) {
         u8 npcTeam = *(u32 *)PokeathlonCourse_GetParticipantData(course, team);
-        int fileId = PokeathlonCourse_GetNpcTrainerPicFileId(ov96_021E8424(npcTeam));
+        int fileId = PokeathlonCourse_GetNpcTrainerPicFileId(PokeathlonCourse_GetNpcTeamSpriteId(npcTeam));
         PokeathlonCourse_LoadTrainerPic(sprites[team], fileId, (u8)frame, heapId);
     } else {
         PokeathlonCourse_LoadTeamTrainerPic(sprites, course, (u8)team, frame);
@@ -1312,7 +1312,7 @@ BOOL PokeathlonCourseCeremony_Init(PokeathlonCourseData *course) {
         ceremony = PokeathlonCourse_AllocPtr4FromHeap(course, sizeof(PokeathlonCourseCeremony));
         MI_CpuFill8(ceremony, 0, sizeof(PokeathlonCourseCeremony));
         ceremony->heapId = HEAP_ID_135;
-        ceremony->course = ov96_021E5E7C(course);
+        ceremony->course = PokeathlonCourse_FindCourseId(course);
         ceremony->bgConfig = BgConfig_Alloc(ceremony->heapId);
         ceremony->messageBox = PokeathlonCourseMessageBox_New(ceremony->heapId);
         PokeathlonCourseCeremony_InitSpriteSystem(ceremony);
@@ -1328,7 +1328,7 @@ BOOL PokeathlonCourseCeremony_Init(PokeathlonCourseData *course) {
             int member = i % 3;
             int team = i / 3;
             PokeathlonCourse_GetMonInfo(course, team, member, &infos[i]);
-            template.sizeTypes[i] = ov96_021E6108(PokeathlonCourse_GetPerformance(course, team, member));
+            template.sizeTypes[i] = PokeathlonCourse_GetSpriteSizeType(PokeathlonCourse_GetPerformance(course, team, member));
         }
         template.loadAtOnce = FALSE;
         template.priority = 3;
@@ -1444,7 +1444,7 @@ void PokeathlonCourseCeremony_BufferTeamMon(PokeathlonCourseData *course, int te
 
 u32 PokeathlonCourseCeremony_HasNoMissBonus(PokeathlonCourseData *course) {
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     if (!course) {
         GF_AssertFail();
     }
@@ -1460,7 +1460,7 @@ u32 PokeathlonCourseCeremony_HasNoMissBonus(PokeathlonCourseData *course) {
 u32 PokeathlonCourseCeremony_IsNoMissMon(PokeathlonCourseData *course, int team, int member) {
     int index = member + team * 3;
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     if (!course) {
         GF_AssertFail();
     }
@@ -1479,7 +1479,7 @@ u32 PokeathlonCourseCeremony_IsNoMissMon(PokeathlonCourseData *course, int team,
 u32 PokeathlonCourseCeremony_IsPointsLeader(PokeathlonCourseData *course, int team, int member) {
     int index = member + team * 3;
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     if (!course) {
         GF_AssertFail();
     }
@@ -1498,7 +1498,7 @@ u32 PokeathlonCourseCeremony_IsPointsLeader(PokeathlonCourseData *course, int te
 u32 PokeathlonCourseCeremony_IsEffortPrizeMon(PokeathlonCourseData *course, int team, int member) {
     int index = member + team * 3;
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     if (!course) {
         GF_AssertFail();
     }
@@ -1519,7 +1519,7 @@ int PokeathlonCourseConfetti_GetRandomDelay(void) {
 
 u8 PokeathlonCourseCeremony_GetChallengeBonus(PokeathlonCourseData *course, u8 team) {
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     if (course == NULL) {
         GF_AssertFail();
     }
@@ -1553,7 +1553,7 @@ int PokeathlonCourseCeremony_GetEffortPrizePoints(PokeathlonCourseCeremony *cere
 
 u32 PokeathlonCourseCeremony_CountNoMissMons(PokeathlonCourseData *course) {
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     if (course == NULL) {
         GF_AssertFail();
     }
@@ -1568,7 +1568,7 @@ u32 PokeathlonCourseCeremony_CountNoMissMons(PokeathlonCourseData *course) {
 
 u32 PokeathlonCourseCeremony_CountPointsLeaders(PokeathlonCourseData *course) {
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     if (course == NULL) {
         GF_AssertFail();
     }
@@ -1583,7 +1583,7 @@ u32 PokeathlonCourseCeremony_CountPointsLeaders(PokeathlonCourseData *course) {
 
 u32 PokeathlonCourseCeremony_CountEffortPrizes(PokeathlonCourseData *course) {
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     if (course == NULL) {
         GF_AssertFail();
     }
@@ -1598,7 +1598,7 @@ u32 PokeathlonCourseCeremony_CountEffortPrizes(PokeathlonCourseData *course) {
 
 void PokeathlonCourseCeremony_GetDrawingLots(PokeathlonCourseData *course, u8 *drawingLots) {
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     s32 i;
     if (course == NULL) {
         GF_AssertFail();
@@ -1616,7 +1616,7 @@ void PokeathlonCourseCeremony_GetDrawingLots(PokeathlonCourseData *course, u8 *d
 
 u32 PokeathlonCourseCeremony_GetIntroMsgId(PokeathlonCourseData *course, u32 team) {
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyOpeningData *data = (PokeathlonCourseCeremonyOpeningData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyOpeningData *data = (PokeathlonCourseCeremonyOpeningData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     if (course == NULL) {
         GF_AssertFail();
     }
@@ -1631,7 +1631,7 @@ u32 PokeathlonCourseCeremony_GetIntroMsgId(PokeathlonCourseData *course, u32 tea
 
 u32 PokeathlonCourseCeremony_GetIntroValue(PokeathlonCourseData *course, u32 team) {
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyOpeningData *data = (PokeathlonCourseCeremonyOpeningData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyOpeningData *data = (PokeathlonCourseCeremonyOpeningData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     if (course == NULL) {
         GF_AssertFail();
     }
@@ -1646,7 +1646,7 @@ u32 PokeathlonCourseCeremony_GetIntroValue(PokeathlonCourseData *course, u32 tea
 
 u32 PokeathlonCourseCeremony_GetIntroCheer(PokeathlonCourseData *course, u32 team) {
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyOpeningData *data = (PokeathlonCourseCeremonyOpeningData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyOpeningData *data = (PokeathlonCourseCeremonyOpeningData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     if (course == NULL) {
         GF_AssertFail();
     }
@@ -1662,11 +1662,11 @@ u32 PokeathlonCourseCeremony_GetIntroCheer(PokeathlonCourseData *course, u32 tea
 // Host: the introduction line of every team (from the player's records, the other players'
 // records or the NPC team's line).
 void PokeathlonCourseCeremony_ChooseIntros(PokeathlonCourseData *course) {
-    PokeathlonCourseCeremonyIntro *intro = (PokeathlonCourseCeremonyIntro *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
+    PokeathlonCourseCeremonyIntro *intro = (PokeathlonCourseCeremonyIntro *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
     s32 i;
     if (PokeathlonCourse_GetMode(course) == 0) {
         for (i = 0; i < 4; i++, intro++) {
-            if (i == ov96_021E5F24(course)) {
+            if (i == PokeathlonCourse_GetNetId(course)) {
                 PokeathlonCourseCeremony_ChooseOwnIntro(intro, course);
             } else {
                 PokeathlonCourseCeremony_ChooseNpcIntro(intro, course, (u8)i);
@@ -1765,7 +1765,7 @@ void PokeathlonCourseCeremony_ChooseAwards(PokeathlonCourseData *course) {
     int index;
 
     stats = (PokeathlonCourseMonEventStats *)PokeathlonCourse_GetFieldData(course);
-    data = (PokeathlonCourseCeremonyClosingData *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
+    data = (PokeathlonCourseCeremonyClosingData *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
     data->noMissMons = 0;
     data->effortPrizeMons = 0;
     data->pointsLeaderMons = 0;
@@ -1844,7 +1844,7 @@ u32 PokeathlonCourseCeremony_GetCourseMedal(u32 course, u32 which) {
 
 u8 PokeathlonCourseCeremony_GetEffortPrizeKind(PokeathlonCourseData *course) {
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)ov96_021E8A20(copyArea + 0xF0);
+    PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
     if (course == NULL) {
         GF_AssertFail();
     }
@@ -1932,7 +1932,7 @@ void PokeathlonCourseCeremony_SaveResult(PokeathlonCourseData *course, Pokeathlo
     int i;
     int fewest;
     int place;
-    own = ov96_021E5F24(course);
+    own = PokeathlonCourse_GetNetId(course);
     ceremony = PokeathlonCourse_GetHeapAllocPtr4(course);
     result = (PokeathlonCourseCeremonyResult *)PokeathlonCourse_GetFieldData(course);
     if (ceremony->ranks[0].team == own) {
@@ -2117,7 +2117,7 @@ void PokeathlonCourseCeremony_ChooseNpcIntro(PokeathlonCourseCeremonyIntro *intr
     } else if (cheer < 0) {
         cheer = 0;
     }
-    intro->msgId = ov96_021E8448(course, (u8) * (u32 *)locals.participant);
+    intro->msgId = PokeathlonCourse_GetNpcTeamMsgId(course, (u8) * (u32 *)locals.participant);
     intro->value = 0;
     intro->cheer = cheer;
 }
@@ -2176,9 +2176,9 @@ static inline BOOL SyncMessages(PokeathlonCourseData *course, BOOL closing) {
 
     ceremony = PokeathlonCourse_GetHeapAllocPtr4(course);
     copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    sent = ov96_021E8A20(copyArea + 0x28);
-    received = ov96_021E8A20(copyArea + 0xF0);
-    netId = (u8)ov96_021E5F24(course);
+    sent = PokeathlonCourse_ToBytes(copyArea + 0x28);
+    received = PokeathlonCourse_ToBytes(copyArea + 0xF0);
+    netId = (u8)PokeathlonCourse_GetNetId(course);
     messageCount = ceremony->messageCount;
     waiting = 0;
 
@@ -2190,8 +2190,8 @@ static inline BOOL SyncMessages(PokeathlonCourseData *course, BOOL closing) {
             ((PokeathlonCourseCeremonyOpeningData *)sent)->messageCount = messageCount;
         }
         {
-            u8 *dest = ov96_021E8A20(copyArea + 0x50);
-            u8 *src = ov96_021E8A20(copyArea);
+            u8 *dest = PokeathlonCourse_ToBytes(copyArea + 0x50);
+            u8 *src = PokeathlonCourse_ToBytes(copyArea);
             u32 count = 0x24;
 
             do {
@@ -2199,7 +2199,7 @@ static inline BOOL SyncMessages(PokeathlonCourseData *course, BOOL closing) {
             } while (--count != 0);
         }
         for (i = 0; i < PokeathlonCourse_GetParticipantCount(course); i++) {
-            sync = (PokeathlonCourseCeremonySync *)ov96_021E8A20(copyArea + 0x50 + i * 0x28);
+            sync = (PokeathlonCourseCeremonySync *)PokeathlonCourse_ToBytes(copyArea + 0x50 + i * 0x28);
             if (sync->messageCount < messageCount || sync->printing == 1) {
                 waiting = 1;
             }
@@ -2219,7 +2219,7 @@ static inline BOOL SyncMessages(PokeathlonCourseData *course, BOOL closing) {
             ((PokeathlonCourseCeremonyOpeningData *)sent)->waiting = waiting;
         }
     }
-    sync = (PokeathlonCourseCeremonySync *)ov96_021E8A20(copyArea);
+    sync = (PokeathlonCourseCeremonySync *)PokeathlonCourse_ToBytes(copyArea);
     sync->messageCount = messageCount;
     sync->printing = PokeathlonCourseMessageBox_IsBusy(ceremony->messageBox);
     sync->finished = ceremony->finished;

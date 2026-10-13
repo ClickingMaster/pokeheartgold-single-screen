@@ -358,7 +358,7 @@ void VsRecorder_ResetRecordSave(VsRecorderWork *work) {
     work->unk_0836 = 0;
 }
 
-BOOL ov40_022306F0(VsRecorderWork *work) {
+BOOL VsRecorder_ClearSavedVideoKeys(VsRecorderWork *work) {
     u32 a;
     u32 b;
     u8 c;

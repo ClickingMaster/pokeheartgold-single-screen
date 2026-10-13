@@ -26,9 +26,9 @@ typedef struct PokeathlonDiscCatchMonInfo {
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonDiscCatchMonInfo *info);
-int ov96_021E6108(void *performance);
-int ov96_021E6138(void *performance);
-u32 ov96_021E6104(void);
+int PokeathlonCourse_GetSpriteSizeType(void *performance);
+int PokeathlonCourse_GetCollisionSizeClass(void *performance);
+u32 PokeathlonCourse_GetTouchRadius(void);
 void PokeathlonCourse_StopMarkerAnims(PokeathlonCourseData *course);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, int member, int counter, int amount);
 Sprite *PokeathlonCourse_AddMarker(PokeathlonCourseData *course, void *monPic, void *resources, SpriteList *spriteList, int a4);
@@ -60,8 +60,8 @@ extern const WindowTemplate ov96_0221CEEC;
 BOOL PokeathlonDiscCatch_UpdateFrame(PokeathlonCourseData *course) {
     PokeathlonDiscCatch *work = PokeathlonCourse_GetHeapAllocPtr4(course);
     u8 *area = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonDiscCatchFrame *received = (PokeathlonDiscCatchFrame *)ov96_021E8A20(area + 0xF0);
-    PokeathlonDiscCatchFrame *own = (PokeathlonDiscCatchFrame *)ov96_021E8A20(area);
+    PokeathlonDiscCatchFrame *received = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(area + 0xF0);
+    PokeathlonDiscCatchFrame *own = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(area);
     if (received->finished == TRUE) {
         PokeathlonDiscCatch_StopAnims(work);
         PokeathlonCourse_StopMarkerAnims(course);
@@ -69,7 +69,7 @@ BOOL PokeathlonDiscCatch_UpdateFrame(PokeathlonCourseData *course) {
         return TRUE;
     }
     if (System_GetTouchNew()) {
-        PokeathlonCourse_AddMonCounter(course, (u8)ov96_021E5F24(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, (u8)PokeathlonCourse_GetNetId(course), 3, 0, 1);
     }
     if (System_GetTouchHeld()) {
         own->touchX = gSystem.touchX;
@@ -168,7 +168,7 @@ void PokeathlonDiscCatch_CreateMonPics(PokeathlonDiscCatch *work) {
             int member = i % DISC_CATCH_TEAM_SIZE;
             int participant = i / DISC_CATCH_TEAM_SIZE;
             PokeathlonCourse_GetMonInfo(course, participant, member, &infos[i]);
-            params[i + 5] = ov96_021E6108(PokeathlonCourse_GetPerformance(course, participant, member));
+            params[i + 5] = PokeathlonCourse_GetSpriteSizeType(PokeathlonCourse_GetPerformance(course, participant, member));
         }
         params[1] = 1;
         params[3] = 1;
@@ -178,7 +178,7 @@ void PokeathlonDiscCatch_CreateMonPics(PokeathlonDiscCatch *work) {
 }
 
 static inline int GetSizeClass(PokeathlonCourseData *course, int index) {
-    return ov96_021E6138(PokeathlonCourse_GetPerformance(course, index / DISC_CATCH_TEAM_SIZE, index % DISC_CATCH_TEAM_SIZE));
+    return PokeathlonCourse_GetCollisionSizeClass(PokeathlonCourse_GetPerformance(course, index / DISC_CATCH_TEAM_SIZE, index % DISC_CATCH_TEAM_SIZE));
 }
 
 // Puts the Pokemon on their start places (the host also writes them into the first frame packet).
@@ -224,7 +224,7 @@ void PokeathlonDiscCatch_InitMons(PokeathlonDiscCatch *work) {
         groundY = ov96_0221CFBC[participant][member][1];
         PokeathlonCourseMonObject_SetAnimState(pic);
         PokeathlonCourseObject_SetGroundPosition(pic, groundX, groundY);
-        PokeathlonCourseObject_SetTouchRadius(pic, ov96_021E6104());
+        PokeathlonCourseObject_SetTouchRadius(pic, PokeathlonCourse_GetTouchRadius());
         PokeathlonCourseObject_GroundToCenter(pic, groundX, groundY, &x, &y);
         mon->course = course;
         mon->index = i;
@@ -239,7 +239,7 @@ void PokeathlonDiscCatch_InitMons(PokeathlonDiscCatch *work) {
         mon->position.y = y * FX32_ONE;
         mon->target.x = x * FX32_ONE;
         mon->target.y = y * FX32_ONE;
-        if (participant == ov96_021E5F24(course)) {
+        if (participant == PokeathlonCourse_GetNetId(course)) {
             ownPositions[member][0] = groundX;
             ownPositions[member][1] = groundY;
             Sprite_SetDrawPriority(PokeathlonCourse_AddMarker(course, pic, work->monPicResources, SpriteManager_GetSpriteList(work->spriteManager), 1), 4);
@@ -247,8 +247,8 @@ void PokeathlonDiscCatch_InitMons(PokeathlonDiscCatch *work) {
         } else {
             PokeathlonCourseMonObject_SetDrawPriority(pic, 7);
         }
-        if (ov96_021E5F24(course) == 0) {
-            frame = (PokeathlonDiscCatchFrame *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
+        if (PokeathlonCourse_GetNetId(course) == 0) {
+            frame = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
             frame->monX[i] = x;
             frame->monY[i] = y;
         }
@@ -307,7 +307,7 @@ void PokeathlonDiscCatch_UpdateCollisions(PokeathlonCourseData *course) {
 // Pokemon; then the Pokemon move and bounce off each other.
 void PokeathlonDiscCatch_UpdateField(PokeathlonDiscCatchTeam *teams, PokeathlonCourseData *course) {
     int participant;
-    ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
+    PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
     for (participant = 0; participant < DISC_CATCH_PARTICIPANTS; participant++, teams++) {
         PokeathlonDiscCatchMon *mon;
         int i;
@@ -357,7 +357,7 @@ void PokeathlonDiscCatch_WriteFramePacket(PokeathlonDiscCatchField *field, Pokea
     int x, y;
     PokeathlonDiscCatchFrame *frame;
     int i, shift;
-    frame = (PokeathlonDiscCatchFrame *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
+    frame = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
     frame->scoreParticipant++;
     frame->score = field->teams[frame->scoreParticipant].result.score & 0x7F;
     frame->jumped = 0;
@@ -627,7 +627,7 @@ void PokeathlonDiscCatchDiscs_LaunchNext(PokeathlonDiscCatchDiscs *discs, u32 se
 
 void PokeathlonDiscCatchDiscs_Update(PokeathlonDiscCatchDiscs *discs, u8 *area, u32 seconds) {
     int i;
-    PokeathlonDiscCatchDiscPacket *packets = (PokeathlonDiscCatchDiscPacket *)ov96_021E8A20(area + 0x28);
+    PokeathlonDiscCatchDiscPacket *packets = (PokeathlonDiscCatchDiscPacket *)PokeathlonCourse_ToBytes(area + 0x28);
     if (discs->delay == 0) {
         PokeathlonDiscCatchDiscs_LaunchNext(discs, seconds);
     } else {
@@ -667,7 +667,7 @@ void PokeathlonDiscCatchSprites_Init(PokeathlonDiscCatchSprites *sprites, Sprite
 #pragma force_active on
 
 void PokeathlonDiscCatchSprites_Update(PokeathlonDiscCatchSprites *sprites, PokeathlonCourseData *course) {
-    PokeathlonDiscCatchFrame *frame = (PokeathlonDiscCatchFrame *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
+    PokeathlonDiscCatchFrame *frame = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
     PokeathlonDiscCatch *work = PokeathlonCourse_GetHeapAllocPtr4(course);
     PokeathlonDiscCatch_UpdateDiscSprites(sprites, (PokeathlonDiscCatchDiscPacket *)frame, course);
     PokeathlonDiscCatch_UpdateMonSprites(sprites, frame, course);

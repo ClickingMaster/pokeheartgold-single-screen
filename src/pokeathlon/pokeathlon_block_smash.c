@@ -30,10 +30,10 @@
 #include "wireless_status_icon.h"
 
 // Course helpers (OVY_96, not yet tidied).
-u8 *ov96_021E8A20(void *block);
+u8 *PokeathlonCourse_ToBytes(void *block);
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, void *out);
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
-u32 ov96_021E6108(void *mon);
+u32 PokeathlonCourse_GetSpriteSizeType(void *mon);
 void PokeathlonCourse_CreateStartSprites(PokeathlonCourseData *course, int a1, void *resources, void *spriteList, int a4, int a5, const void *position);
 BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
 void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, int timer);
@@ -203,7 +203,7 @@ BOOL PokeathlonBlockSmash_UpdateGame(PokeathlonCourseData *course) {
     u32 strongHit;
     int hitSpot;
     int broken;
-    if (((PokeathlonBlockSmashFrame *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0xF0))->finished == 1) {
+    if (((PokeathlonBlockSmashFrame *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0))->finished == 1) {
         PokeathlonBlockSmash_PrintScore(course, PokeathlonBlockSmashBlocks_GetScore(work->blocks));
         PokeathlonBlockSmash_StopHudAnims(work);
         PokeathlonBlockSmashMon_SetAnimate(work->mon, 0);
@@ -213,13 +213,13 @@ BOOL PokeathlonBlockSmash_UpdateGame(PokeathlonCourseData *course) {
         return TRUE;
     }
     if (System_GetTouchNew()) {
-        PokeathlonCourse_AddMonCounter(course, (u8)ov96_021E5F24(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, (u8)PokeathlonCourse_GetNetId(course), 3, 0, 1);
     }
     PokeathlonBlockSmash_UpdateTimer(work);
     PokeathlonBlockSmashBlocks_Update(work->blocks);
     state = PokeathlonBlockSmashBlocks_GetState(work->blocks);
     PokeathlonBlockSmashMon_Update(work->mon, state == 1);
-    if (ov96_021E5F24(course) == 0) {
+    if (PokeathlonCourse_GetNetId(course) == 0) {
         PokeathlonBlockSmashCpu_Update(work->cpu);
     }
     PokeathlonBlockSmashRivals_Update(work->rivals);
@@ -246,8 +246,8 @@ BOOL PokeathlonBlockSmash_UpdateGame(PokeathlonCourseData *course) {
         work->timer--;
     }
     PokeathlonCourse_UpdateTimeUpCountdown(course, work->timer);
-    if (work->timer == 0 && ov96_021E5F24(course) == 0) {
-        PokeathlonBlockSmashFrame *frame = (PokeathlonBlockSmashFrame *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
+    if (work->timer == 0 && PokeathlonCourse_GetNetId(course) == 0) {
+        PokeathlonBlockSmashFrame *frame = (PokeathlonBlockSmashFrame *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
         frame->finished = TRUE;
     }
     return FALSE;
@@ -284,7 +284,7 @@ BOOL PokeathlonBlockSmash_Finish(PokeathlonCourseData *course) {
     u32 offset;
     u16 score;
     if (IsPaletteFadeFinished()) {
-        participant = ov96_021E5F24(course);
+        participant = PokeathlonCourse_GetNetId(course);
         score = PokeathlonBlockSmashBlocks_GetScore(work->blocks);
         PokeathlonCourse_SetField5E0_AtIndex(course, (u8)participant, score);
         if (participant == 0) {
@@ -293,7 +293,7 @@ BOOL PokeathlonBlockSmash_Finish(PokeathlonCourseData *course) {
                 offset = count * 0x28;
                 do {
                     u8 *block = PokeathlonCourse_GetDataCopyArea(course) + 0x50 + offset;
-                    PokeathlonCourse_SetField5E0_AtIndex(course, (u8)count, ((PokeathlonBlockSmashReport *)ov96_021E8A20(block))->score);
+                    PokeathlonCourse_SetField5E0_AtIndex(course, (u8)count, ((PokeathlonBlockSmashReport *)PokeathlonCourse_ToBytes(block))->score);
                     count++;
                     offset += 0x28;
                 } while (count < 4);
@@ -367,11 +367,11 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
         int n = 0;
         PokeathlonBlockSmashMonPicParams params = { 0 };
         for (i = 0; i < 4; i++) {
-            if (i != ov96_021E5F24(course)) {
+            if (i != PokeathlonCourse_GetNetId(course)) {
                 for (j = 0; j < 3; j++) {
                     GF_ASSERT(n < 9);
                     PokeathlonCourse_GetMonInfo(course, i, j, &mons[n]);
-                    params.ids[n] = ov96_021E6108(PokeathlonCourse_GetPerformance(course, i, j));
+                    params.ids[n] = PokeathlonCourse_GetSpriteSizeType(PokeathlonCourse_GetPerformance(course, i, j));
                     n++;
                 }
             }
@@ -400,7 +400,7 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
         work->mon = PokeathlonBlockSmashMon_New(work->heapId, work->spriteSystem, work->spriteManager, course);
         work->rivals = PokeathlonBlockSmashRivals_New(work->heapId, work->spriteSystem, work->spriteManager, course, work->monPics);
         PokeathlonCourseObjects_PauseAnims(work->monPics, 1);
-        if (ov96_021E5F24(course) == 0) {
+        if (PokeathlonCourse_GetNetId(course) == 0) {
             work->cpu = PokeathlonBlockSmashCpu_New(course, work->heapId);
         }
         PokeathlonBlockSmash_PrintInitialText(work);
@@ -410,14 +410,14 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_SetField1F4(course, 1);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
-        if (ov96_021E5F24(course) == 0) {
+        if (PokeathlonCourse_GetNetId(course) == 0) {
             PokeathlonBlockSmashCpu_WriteReports(work->cpu);
         }
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_WHITE, 6, 1, work->heapId);
         PokeathlonCourse_IncrementField1ED(course);
         break;
     case 6:
-        if (ov96_021E5F24(course) == 0) {
+        if (PokeathlonCourse_GetNetId(course) == 0) {
             PokeathlonBlockSmash_WriteReport(course);
         }
         PokeathlonBlockSmash_UpdateLinkData(course);
@@ -447,7 +447,7 @@ BOOL PokeathlonBlockSmash_Draw(PokeathlonCourseData *course) {
 #pragma force_active on
 
 // Event template entry 2.
-BOOL ov96_02209748(PokeathlonCourseData *course) {
+BOOL PokeathlonBlockSmash_ShowResults(PokeathlonCourseData *course) {
     void *graphics = PokeathlonCourse_GetGraphicsSystem(course);
     int i;
     PokeathlonCourseScoreList_Init(graphics);
@@ -466,7 +466,7 @@ BOOL ov96_02209748(PokeathlonCourseData *course) {
 BOOL PokeathlonBlockSmash_Exit(PokeathlonCourseData *course) {
     PokeathlonBlockSmash *work = PokeathlonCourse_GetHeapAllocPtr4(course);
     PokeathlonBlockSmash_DeleteTeamRows(work);
-    if (!ov96_021E5F24(course)) {
+    if (!PokeathlonCourse_GetNetId(course)) {
         PokeathlonBlockSmashCpu_Delete(work->cpu);
     }
     PokeathlonBlockSmashBlocks_Delete(work->blocks);
@@ -688,7 +688,7 @@ void PokeathlonBlockSmash_InitText(PokeathlonCourseData *course) {
         FillWindowPixelBuffer(&work->windows[i], 0);
         ClearWindowTilemap(&work->windows[i]);
     }
-    mons = (PokeathlonBlockSmashTeamMon *)PokeathlonCourse_GetParticipantUnk04(course, ov96_021E5F24(course));
+    mons = (PokeathlonBlockSmashTeamMon *)PokeathlonCourse_GetParticipantUnk04(course, PokeathlonCourse_GetNetId(course));
     for (i = 0; i < 3; i++) {
         work->names[i] = String_New(11, work->heapId);
         CopyU16ArrayToString(work->names[i], mons[i].nickname);
@@ -799,7 +799,7 @@ void PokeathlonBlockSmash_UpdateTeamRows(PokeathlonCourseData *course) {
     PokeathlonBlockSmashReport *report;
     GF_ASSERT(course != NULL);
     row = PokeathlonCourse_GetHeapAllocPtr4(course);
-    report = (PokeathlonBlockSmashReport *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
+    report = (PokeathlonBlockSmashReport *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
     participant = 0;
     row = ((PokeathlonBlockSmash *)row)->icons.rows;
     do {
@@ -926,7 +926,7 @@ void PokeathlonBlockSmash_HandleSwipe(PokeathlonBlockSmash *work, BOOL anywhere)
 // Fills in the own report of the link data.
 void PokeathlonBlockSmash_WriteReport(PokeathlonCourseData *course) {
     PokeathlonBlockSmash *work = PokeathlonCourse_GetHeapAllocPtr4(course);
-    PokeathlonBlockSmashReport *report = (PokeathlonBlockSmashReport *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course));
+    PokeathlonBlockSmashReport *report = (PokeathlonBlockSmashReport *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course));
     PokeathlonBlockSmashMember *member = PokeathlonBlockSmashMon_GetActiveMember(work->mon);
     u32 mode = PokeathlonBlockSmashMon_GetMode(work->mon);
     report->score = PokeathlonBlockSmashBlocks_GetScore(work->blocks);
@@ -939,7 +939,7 @@ void PokeathlonBlockSmash_WriteReport(PokeathlonCourseData *course) {
 
 // The host builds the frame from all reports; every participant then writes its own report.
 void PokeathlonBlockSmash_UpdateLinkData(PokeathlonCourseData *course) {
-    BOOL participant = ov96_021E5F24(course);
+    BOOL participant = PokeathlonCourse_GetNetId(course);
     PokeathlonBlockSmash *work = PokeathlonCourse_GetHeapAllocPtr4(course);
     u8 *data = PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonBlockSmashReport *out;
@@ -948,11 +948,11 @@ void PokeathlonBlockSmash_UpdateLinkData(PokeathlonCourseData *course) {
     GF_ASSERT(work->mon != NULL);
     GF_ASSERT(work->blocks != NULL);
     if (participant == 0) {
-        out = (PokeathlonBlockSmashReport *)ov96_021E8A20(data + 0x28);
-        *(PokeathlonBlockSmashLinkBlock *)ov96_021E8A20(data + 0x50) = *(PokeathlonBlockSmashLinkBlock *)ov96_021E8A20(data);
+        out = (PokeathlonBlockSmashReport *)PokeathlonCourse_ToBytes(data + 0x28);
+        *(PokeathlonBlockSmashLinkBlock *)PokeathlonCourse_ToBytes(data + 0x50) = *(PokeathlonBlockSmashLinkBlock *)PokeathlonCourse_ToBytes(data);
         data += 0x50;
         for (i = 0; i < 4; i++, data += 0x28, out++) {
-            PokeathlonBlockSmashReport *report = (PokeathlonBlockSmashReport *)ov96_021E8A20(data);
+            PokeathlonBlockSmashReport *report = (PokeathlonBlockSmashReport *)PokeathlonCourse_ToBytes(data);
             out->score = report->score;
             out->stamina = report->stamina;
             out->gauge = report->gauge;
@@ -1208,7 +1208,7 @@ u16 PokeathlonBlockSmashBlocks_Hit(PokeathlonBlockSmashBlocks *blocks, int membe
             power = -block->health;
             broken++;
             PokeathlonBlockSmashFragments_Spawn(blocks->fragments, 4, position.x, position.y);
-            PokeathlonCourse_AddMonCounter(blocks->course, (u8)ov96_021E5F24(blocks->course), member, 3, 1);
+            PokeathlonCourse_AddMonCounter(blocks->course, (u8)PokeathlonCourse_GetNetId(blocks->course), member, 3, 1);
         }
     }
     if (broken) {

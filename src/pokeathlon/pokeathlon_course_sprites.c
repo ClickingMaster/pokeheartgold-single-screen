@@ -282,7 +282,7 @@ Sprite *PokeathlonCourseSprites_CreateCountdown(PokeathlonCourseSpriteResources 
     return sprite;
 }
 
-Sprite *ov96_021EA2C4(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId) {
+Sprite *PokeathlonCourseSprites_CreateTimerDigit(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId) {
     SpriteResourcesHeader header;
     SpriteTemplate template;
     Sprite *sprite;
@@ -354,7 +354,7 @@ Sprite *ov96_021EA374(PokeathlonCourseSpriteResources *resources, SpriteList *sp
     return sprite;
 }
 
-Sprite *ov96_021EA424(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId) {
+Sprite *PokeathlonCourseSprites_CreateLapCounterDigit(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId) {
     SpriteResourcesHeader header;
     SpriteTemplate template;
     Sprite *sprite;

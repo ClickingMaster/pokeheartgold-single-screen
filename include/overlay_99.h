@@ -27,10 +27,10 @@ typedef struct PokeathlonCourseRecordArgs {
     BOOL unk4;
 } PokeathlonCourseRecordArgs;
 
-typedef struct UnkStruct_0203EFA0 {
+typedef struct PokeathlonTrophiesArgs {
     PokeathlonSave *pokeathlon;
     PlayerProfile *profile;
-} UnkStruct_0203EFA0;
+} PokeathlonTrophiesArgs;
 
 BOOL PokeathlonMedals_Init(OverlayManager *man, int *state);
 BOOL PokeathlonMedals_Main(OverlayManager *man, int *state);
@@ -44,8 +44,8 @@ BOOL PokeathlonCourseRecord_Init(OverlayManager *man, int *state);
 BOOL PokeathlonCourseRecord_Main(OverlayManager *man, int *state);
 BOOL PokeathlonCourseRecord_Exit(OverlayManager *man, int *state);
 
-BOOL ov99_021E677C(OverlayManager *man, int *state);
-BOOL ov99_021E6888(OverlayManager *man, int *state);
-BOOL ov99_021E6840(OverlayManager *man, int *state);
+BOOL PokeathlonTrophies_Init(OverlayManager *man, int *state);
+BOOL PokeathlonTrophies_Main(OverlayManager *man, int *state);
+BOOL PokeathlonTrophies_Exit(OverlayManager *man, int *state);
 
 #endif // POKEHEARTGOLD_OVY_99_H

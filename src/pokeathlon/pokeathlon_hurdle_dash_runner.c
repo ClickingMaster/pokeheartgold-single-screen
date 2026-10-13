@@ -14,9 +14,9 @@ void *PokeathlonCourseMonObject_GetGfx(void *object);
 PokeathlonHurdleDashMonView *PokeathlonCourseMonGfx_GetInfo(void *gfx);
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int mon);
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, u8 mon);
-int ov96_021E6138(void *performance);
+int PokeathlonCourse_GetCollisionSizeClass(void *performance);
 void PokeathlonCourseObject_SetCollision(void *object, u32 offsetY, u32 radius);
-int ov96_021E6104(void);
+int PokeathlonCourse_GetTouchRadius(void);
 void PokeathlonCourseObject_SetTouchRadius(void *object, u32 radius);
 void PokeathlonCourseObject_SetGroundPosition(void *object, int x, int y);
 void PokeathlonCourseMonObject_SetAnimState(void *object, u32 animState);
@@ -89,13 +89,13 @@ void PokeathlonHurdleDashRunner_Init(PokeathlonCourseData *course, const Pokeath
     gfx = PokeathlonCourseMonObject_GetGfx(monObject);
     runner->mon.monObject = monObject;
     info = PokeathlonCourseMonGfx_GetInfo(gfx);
-    stats = PokeathlonCourse_GetMonStats(course, ov96_021E5F24(course), lane);
+    stats = PokeathlonCourse_GetMonStats(course, PokeathlonCourse_GetNetId(course), lane);
     runner->mon.riseFrames = table->rows[0][stats[2]];
     runner->mon.hangFrames = table->rows[1][stats[2]];
     runner->mon.jumpStat = stats[2];
-    performance = ov96_021E6138(PokeathlonCourse_GetPerformance(course, ov96_021E5F24(course), lane)) - 1;
+    performance = PokeathlonCourse_GetCollisionSizeClass(PokeathlonCourse_GetPerformance(course, PokeathlonCourse_GetNetId(course), lane)) - 1;
     PokeathlonCourseObject_SetCollision(monObject, params->values[performance][0], params->values[performance][1]);
-    PokeathlonCourseObject_SetTouchRadius(monObject, ov96_021E6104());
+    PokeathlonCourseObject_SetTouchRadius(monObject, PokeathlonCourse_GetTouchRadius());
     runner->mon.topSpeed = table->rows[3][stats[1]] / 10.0f;
     runner->mon.acceleration = table->rows[2][stats[4]] / 100.0f;
     if (info->isLarge) {

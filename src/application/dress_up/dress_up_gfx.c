@@ -244,14 +244,14 @@ void DressUp_InitGfxCore(DressUpGfx *gfx) {
     DressUpGfx_CreateGraphicsManager(gfx, &template);
     DressUpGfx_CreatePokepicManager(gfx, HEAP_ID_14, 0x2800, 0x20);
     DressUp_CreateCharRawResMan(gfx);
-    ov41_02246C90(gfx, HEAP_ID_13);
+    DressUpGfx_LoadMonPicAttrs(gfx, HEAP_ID_13);
     DressUpGfx_InitSpriteSystem(gfx);
     gfx->bgConfig = BgConfig_Alloc(HEAP_ID_14);
     DressUpGfx_InitBgs(gfx);
 }
 
 void DressUp_FreeGfxCore(DressUpGfx *gfx) {
-    ov41_02246CB0(gfx);
+    DressUpGfx_FreeMonPicAttrs(gfx);
     DressUpGfx_DestroyGraphicsManager(gfx);
     DressUpGfx_FreeBgs(gfx);
     Heap_Free(gfx->bgConfig);
@@ -420,7 +420,7 @@ void AccessoryPortrait_InitGfxCore(DressUpGfx *gfx, GraphicsManagerTemplate *tem
     DressUpGfx_CreateGraphicsManager(gfx, template);
     DressUpGfx_CreatePokepicManager(gfx, heapID, 0x2800, 0x20);
     PokepicManager_SetNeedG3IdentityFlag(gfx->pokepicManager, TRUE);
-    ov41_02246C90(gfx, heapID);
+    DressUpGfx_LoadMonPicAttrs(gfx, heapID);
 }
 
 void AccessoryPortrait_InitBg(DressUpGfx *gfx, BgConfig *bgConfig, enum HeapID heapID) {
@@ -435,7 +435,7 @@ void AccessoryPortrait_InitBg(DressUpGfx *gfx, BgConfig *bgConfig, enum HeapID h
 }
 
 void AccessoryPortrait_FreeGfxCore(DressUpGfx *gfx) {
-    ov41_02246CB0(gfx);
+    DressUpGfx_FreeMonPicAttrs(gfx);
     DressUpGfx_DestroyGraphicsManager(gfx);
     DressUpGfx_DestroyPokepicManager(gfx);
     Heap_Free(gfx->images);
@@ -752,11 +752,11 @@ void DressUp_LoadBackdropCharsAndPalettes(DressUpGfx *gfx, DressUpGfxResources *
 
 #pragma force_active reset
 
-void ov41_02246C90(DressUpGfx *gfx, enum HeapID heapID) {
+void DressUpGfx_LoadMonPicAttrs(DressUpGfx *gfx, enum HeapID heapID) {
     gfx->monPicAttrs = GfGfxLoader_LoadFromOpenNarc(gfx->narc, 0xEB, FALSE, heapID, FALSE);
 }
 
-void ov41_02246CB0(DressUpGfx *gfx) {
+void DressUpGfx_FreeMonPicAttrs(DressUpGfx *gfx) {
     Heap_Free(gfx->monPicAttrs);
     gfx->monPicAttrs = NULL;
 }

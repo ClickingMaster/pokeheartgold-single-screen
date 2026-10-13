@@ -44,11 +44,11 @@
 	.extern PokeathlonCourse_SetStateField07_IfDifferent
 	.extern PokeathlonCourse_SetStateTransitionType
 	.extern PokeathlonCourse_SetVBlankIntrCB
-	.extern ov96_021E5E04
-	.extern ov96_021E5E7C
-	.extern ov96_021E5F24
-	.extern ov96_021E6F18
-	.extern ov96_021E75B8
+	.extern PokeathlonCourse_SetEvents
+	.extern PokeathlonCourse_FindCourseId
+	.extern PokeathlonCourse_GetNetId
+	.extern PokeathlonCourse_State_ResetDataCopyArea
+	.extern PokeathlonCourse_State_WaitForCommand
 	.extern PokeathlonCourseCmd_EventsSize
 	.extern PokeathlonCourseCmd_ParticipantSize
 	.extern PokeathlonCourseCmd_AllParticipantsSize
@@ -61,7 +61,7 @@
 	.extern PokeathlonCourseCmd_GetEventDataBuffer
 	.extern PokeathlonCourseCmd_GetRecordBuffer
 	.extern PokeathlonCourseCmd_GetResultsBuffer
-	.extern ov96_021E9A54
+	.extern PokeathlonCourseCmd_GetMonCountersBuffer
 	.extern PokeathlonCourseCmd_GetJuiceRecordBuffer
 	.extern PokeathlonCourseOpening_Init
 	.extern PokeathlonCourseOpening_Main
@@ -92,26 +92,26 @@
 	.public _0221A7D8
 	.public subOverlayTemplate
 	.public ov96_0221A7F4
-	.public ov96_0221A808
+	.public gPokeathlonCourseEvent_Opening
 	.public ov96_0221A81C
 	.public ov96_0221A830
-	.public ov96_0221A844
+	.public gPokeathlonCourseEvent_Closing
 	.public ov96_0221A858
-	.public ov96_0221A86C
+	.public gPokeathlonCourseEvent_ResultsAnnouncement
 	.public ov96_0221A880
 	.public ov96_0221A894
 	.public ov96_0221A8A8
-	.public ov96_0221A8BC
+	.public gPokeathlonCourseEvent_Wait
 	.public ov96_0221A8D0
-	.public ov96_0221A8E4
+	.public gPokeathlonCourseEvent_EventIntro
 	.public ov96_0221A8F8
 	.public ov96_0221A90C
 	.public ov96_0221A920
-	.public ov96_0221A934
+	.public gPokeathlonCourseEventIds
 	.public ov96_0221A95C
 	.public sPokeathlonStateInfoFuncTable
-	.public ov96_0221AA20
-	.public ov96_0221AAE8
+	.public gPokeathlonNpcTeamSpriteIds
+	.public gPokeathlonPerformanceFileIds
 	.public ov96_0221AEC4
 	.public ov96_0221AF54
 	.public ov96_0221AF64
@@ -205,7 +205,7 @@ ov96_0221A7F4:
 	.word PokeathlonCirclePush_Exit
 	.word 0
 
-ov96_0221A808: ; 0x0221A808
+gPokeathlonCourseEvent_Opening: ; 0x0221A808
 	.word PokeathlonCourseOpening_Init
 	.word PokeathlonCourseOpening_Main
 	.word 0
@@ -215,18 +215,18 @@ ov96_0221A808: ; 0x0221A808
 ov96_0221A81C:
 	.word PokeathlonGoalRoll_Init
 	.word PokeathlonGoalRoll_Draw
-	.word ov96_02211660
+	.word PokeathlonGoalRoll_ShowResults
 	.word PokeathlonGoalRoll_Exit
 	.word 0
 
 ov96_0221A830:
 	.word PokeathlonBlockSmash_Init
 	.word PokeathlonBlockSmash_Draw
-	.word ov96_02209748
+	.word PokeathlonBlockSmash_ShowResults
 	.word PokeathlonBlockSmash_Exit
 	.word 1
 
-ov96_0221A844: ; 0x0221A844
+gPokeathlonCourseEvent_Closing: ; 0x0221A844
 	.word PokeathlonCourseClosing_Init
 	.word PokeathlonCourseClosing_Main
 	.word 0
@@ -240,7 +240,7 @@ ov96_0221A858:
 	.word PokeathlonSnowThrow_Exit
 	.word 0
 
-ov96_0221A86C: ; 0x0221A86C
+gPokeathlonCourseEvent_ResultsAnnouncement: ; 0x0221A86C
 	.word PokeathlonResultsAnnouncement_Init
 	.word PokeathlonResultsAnnouncement_Draw
 	.word 0
@@ -250,7 +250,7 @@ ov96_0221A86C: ; 0x0221A86C
 ov96_0221A880:
 	.word PokeathlonRingDrop_Init
 	.word PokeathlonRingDrop_Draw
-	.word ov96_02215CE8
+	.word PokeathlonRingDrop_ShowResults
 	.word PokeathlonRingDrop_Exit
 	.word 0
 
@@ -261,11 +261,11 @@ ov96_0221A894: ; 0x0221A894
 ov96_0221A8A8:
 	.word PokeathlonDiscCatch_Init
 	.word PokeathlonDiscCatch_Draw
-	.word ov96_0220E60C
+	.word PokeathlonDiscCatch_ShowResults
 	.word PokeathlonDiscCatch_Exit
 	.word 0
 
-ov96_0221A8BC: ; 0x0221A8BC
+gPokeathlonCourseEvent_Wait: ; 0x0221A8BC
 	.word PokeathlonCourseWait_Init
 	.word PokeathlonCourseWait_Main
 	.word 0
@@ -279,7 +279,7 @@ ov96_0221A8D0:
 	.word PokeathlonPennantCapture_Exit
 	.word 0
 
-ov96_0221A8E4: ; 0x0221A8E4
+gPokeathlonCourseEvent_EventIntro: ; 0x0221A8E4
 	.word PokeathlonEventIntro_Init
 	.word PokeathlonEventIntro_Main
 	.word 0
@@ -303,12 +303,12 @@ ov96_0221A90C:
 ov96_0221A920:
 	.word PokeathlonLampJump_Init
 	.word PokeathlonLampJump_Draw
-	.word ov96_021F54D4
+	.word PokeathlonLampJump_ShowResults
 	.word PokeathlonLampJump_Exit
 	.word 1
 
-	.global ov96_0221A934
-ov96_0221A934: ; 0x0221A934
+	.global gPokeathlonCourseEventIds
+gPokeathlonCourseEventIds: ; 0x0221A934
 	.byte 0x00, 0x01, 0x06, 0x0A, 0x03, 0x02, 0x09, 0x0A, 0x08, 0x09, 0x01, 0x0A
 	.byte 0x07, 0x06, 0x03, 0x0A, 0x05, 0x04, 0x00, 0x0A, 0x00, 0x05, 0x04, 0x06, 0x05, 0x04, 0x01, 0x08
 	.byte 0x09, 0x08, 0x01, 0x03, 0x03, 0x02, 0x09, 0x07, 0x06, 0x07, 0x00, 0x02
@@ -323,45 +323,45 @@ ov96_0221A95C: ; 0x0221A95C
 sPokeathlonStateInfoFuncTable: ; 0x0221A984
 	.word PokeathlonCourse_State_SendEvents
 	.word PokeathlonCourse_State_RunEventOverlay
-	.word ov96_021E6870
+	.word PokeathlonCourse_State_RunWait
 	.word PokeathlonCourse_State_SendParticipant
 	.word PokeathlonCourse_State_SendParticipants
 	.word PokeathlonCourse_State_SendProfiles
 	.word PokeathlonCourse_State_SendRecord
-	.word ov96_021E6A54
-	.word ov96_021E6A94
-	.word ov96_021E6AE8
-	.word ov96_021E6BC0
-	.word ov96_021E6BEC
-	.word ov96_021E6C20
-	.word ov96_021E6C40
-	.word ov96_021E6CB8
+	.word PokeathlonCourse_State_StartOpening
+	.word PokeathlonCourse_State_WaitOpeningStart
+	.word PokeathlonCourse_State_RunOpening
+	.word PokeathlonCourse_State_EndOpening
+	.word PokeathlonCourse_State_StartEventIntro
+	.word PokeathlonCourse_State_WaitEventIntroStart
+	.word PokeathlonCourse_State_RunEventIntro
+	.word PokeathlonCourse_State_EndEventIntro
 	.word PokeathlonCourse_State_StartRound
 	.word PokeathlonCourse_State_WaitRoundStart
-	.word ov96_021E6DE8
+	.word PokeathlonCourse_State_SendEventData
 	.word PokeathlonCourse_State_RunEvent
-	.word ov96_021E6F18
-	.word ov96_021E6F2C
-	.word ov96_021E6FFC
+	.word PokeathlonCourse_State_ResetDataCopyArea
+	.word PokeathlonCourse_State_SendEventResult
+	.word PokeathlonCourse_State_SendEventResults
 	.word PokeathlonCourse_State_EndRound
-	.word ov96_021E7080
+	.word PokeathlonCourse_State_ExitEvent
 	.word PokeathlonCourse_State_NextRound
-	.word ov96_021E711C
-	.word ov96_021E7150
-	.word ov96_021E7190
-	.word ov96_021E7268
+	.word PokeathlonCourse_State_StartResultsAnnouncement
+	.word PokeathlonCourse_State_WaitResultsAnnouncementStart
+	.word PokeathlonCourse_State_RunResultsAnnouncement
+	.word PokeathlonCourse_State_EndResultsAnnouncement
 	.word PokeathlonCourse_State_SendMonCounters
 	.word PokeathlonCourse_State_SendResults
-	.word ov96_021E7294
-	.word ov96_021E72CC
-	.word ov96_021E7320
+	.word PokeathlonCourse_State_StartClosing
+	.word PokeathlonCourse_State_WaitClosingStart
+	.word PokeathlonCourse_State_RunClosing
 	.word PokeathlonCourse_State_CreateJuiceRecords
 	.word PokeathlonCourse_State_SendJuiceRecord
 	.word PokeathlonCourse_State_StoreJuiceRecords
 	.word PokeathlonCourse_State_Exit
-	.word ov96_021E75B8
+	.word PokeathlonCourse_State_WaitForCommand
 
-ov96_0221AA20: ; 0x0221AA20
+gPokeathlonNpcTeamSpriteIds: ; 0x0221AA20
 	.byte 0x40, 0x01, 0x3F, 0x01, 0x42, 0x01, 0x43, 0x01, 0x3D, 0x01, 0x45, 0x01, 0x47, 0x01, 0x58, 0x01
 	.byte 0x55, 0x01, 0x4C, 0x01, 0x41, 0x01, 0x46, 0x01, 0x3E, 0x01, 0x4A, 0x01, 0x43, 0x01, 0x5A, 0x01
 	.byte 0x47, 0x01, 0x4D, 0x01, 0x58, 0x01, 0x79, 0x01, 0x49, 0x01, 0x40, 0x01, 0x5C, 0x01, 0x5A, 0x01
@@ -376,7 +376,7 @@ ov96_0221AA20: ; 0x0221AA20
 	.byte 0x4C, 0x01, 0x4D, 0x01, 0x80, 0x01, 0x81, 0x00, 0x45, 0x01, 0x58, 0x01, 0x3E, 0x01, 0x65, 0x01
 	.byte 0x41, 0x01, 0x79, 0x01, 0x59, 0x01, 0x58, 0x01
 
-ov96_0221AAE8: ; 0x0221AAE8
+gPokeathlonPerformanceFileIds: ; 0x0221AAE8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x02, 0x00
 	.byte 0x03, 0x00, 0x04, 0x00, 0x05, 0x00, 0x06, 0x00, 0x07, 0x00, 0x08, 0x00, 0x09, 0x00, 0x0A, 0x00
 	.byte 0x0B, 0x00, 0x0C, 0x00, 0x0D, 0x00, 0x0E, 0x00, 0x0F, 0x00, 0x10, 0x00, 0x11, 0x00, 0x12, 0x00
@@ -471,7 +471,7 @@ ov96_0221AEC4: ; 0x0221AEC4
 	.word 0
 	.word PokeathlonCourseCmd_RecvMonCounters
 	.word PokeathlonCourseCmd_MonCountersSize
-	.word ov96_021E9A54
+	.word PokeathlonCourseCmd_GetMonCountersBuffer
 	.word PokeathlonCourseCmd_RecvResults
 	.word PokeathlonCourseCmd_ResultsSize
 	.word PokeathlonCourseCmd_GetResultsBuffer

@@ -5,29 +5,29 @@
 	.text
 	.public _0221FC98
 	.public ov97_0221E5D4
-	.public ov97_0221E700
+	.public PokeathlonBox_Setup
 	.public ov97_0221E898
 	.public ov97_0221E91C
 	.public ov97_0221E98C
 	.public ov97_0221EA88
 	.public ov97_0221EB38
-	.public ov97_0221EC14
-	.public ov97_0221EDE4
+	.public PokeathlonBox_ShowMonInfo
+	.public PokeathlonBox_CalcStatChanges
 	.public ov97_0221EEA4
-	.public ov97_0221EFD0
+	.public PokeathlonBox_DrawMonInfo
 	.public ov97_0221F020
-	.public ov97_0221F0E0
-	.public ov97_0221F14C
+	.public PokeathlonBox_DeleteSprites
+	.public PokeathlonBox_LoadBgGraphics
 	.public ov97_0221F1D8
-	.public ov97_0221F294
-	.public ov97_0221F428
-	.public ov97_0221F56C
-	.public ov97_0221F5F8
-	.public ov97_0221F74C
-	.public ov97_0221F7DC
-	.public ov97_0221F9E0
-	.public ov97_0221FAEC
-	.public ov97_0221FBDC
+	.public PokeathlonBox_PrintStaticTexts
+	.public PokeathlonBox_PrintMonTexts
+	.public PokeathlonBox_ShowMonSprites
+	.public PokeathlonBox_ShowStatStars
+	.public PokeathlonBox_HideMonSprites
+	.public PokeathlonBox_LoadSpriteResources
+	.public PokeathlonBox_CreateSprites
+	.public PokeathlonBox_CreateSprite
+	.public PokeathlonBox_LoadMonPic
 	.public ov97_0221FCA8
 	.public ov97_0221FCB8
 	.public ov97_0221FCCC
@@ -39,19 +39,19 @@
 	.public ov97_0221FD58
 	.public ov97_0221E5C0
 	.public ov97_0221E69C
-	.public ov97_0221E6DC
+	.public PokeathlonBox_RunSetup
 	.public ov97_0221E7F4
 	.public ov97_0221E814
 	.public ov97_0221E834
-	.public ov97_0221E864
-	.public ov97_0221E88C
+	.public PokeathlonBox_CreateOamManager
+	.public PokeathlonBox_VBlankCallback
 	.public ov97_0221E97C
 	.public ov97_0221EBD8
 	.public ov97_0221EE84
 	.public ov97_0221F010
-	.public ov97_0221FB80
-	.public ov97_0221FBA0
-	.public ov97_0221FC54
+	.public PokeathlonBox_InitSpriteTemplate
+	.public PokeathlonBox_GetMonPicVramOffsets
+	.public PokeathlonBox_TransferMonPic
 	.rodata
 
 _0221FC98:

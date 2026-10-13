@@ -149,7 +149,7 @@ static BOOL sub_0203EE54(SaveData *saveData);
 static void PokeathlonCourseRecord_LaunchApp_Impl(FieldSystem *fieldSystem, PokeathlonCourseRecordArgs *args);
 static void PokeathlonMedals_LaunchApp_Impl(FieldSystem *fieldSystem, PokeathlonMedalsArgs *args);
 static void PokeathlonEventRecord_LaunchApp_Impl(FieldSystem *fieldSystem, PokeathlonEventRecordArgs *args);
-static void PokeathlonUnk_LaunchApp_Impl(FieldSystem *fieldSystem, UnkStruct_0203EFA0 *args);
+static void PokeathlonUnk_LaunchApp_Impl(FieldSystem *fieldSystem, PokeathlonTrophiesArgs *args);
 static void UseMail_LaunchApp_Impl(FieldSystem *fieldSystem, UseMailArgs *args);
 static DressUpArgs *DressUp_CreateArgs(enum HeapID heapID, SaveData *saveData, int slot, int *a3, int a4);
 static BOOL Task_DressUp(TaskManager *taskman);
@@ -734,13 +734,13 @@ PokeathlonEventRecordArgs *PokeathlonEventRecord_LaunchApp(FieldSystem *fieldSys
     return args;
 }
 
-static void PokeathlonUnk_LaunchApp_Impl(FieldSystem *fieldSystem, UnkStruct_0203EFA0 *args) {
-    static const OverlayManagerTemplate sOverlayTemplate_PokeathlonUnkApp = { ov99_021E677C, ov99_021E6888, ov99_021E6840, FS_OVERLAY_ID(OVY_99) };
+static void PokeathlonUnk_LaunchApp_Impl(FieldSystem *fieldSystem, PokeathlonTrophiesArgs *args) {
+    static const OverlayManagerTemplate sOverlayTemplate_PokeathlonUnkApp = { PokeathlonTrophies_Init, PokeathlonTrophies_Main, PokeathlonTrophies_Exit, FS_OVERLAY_ID(OVY_99) };
     FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_PokeathlonUnkApp, args);
 }
 
-UnkStruct_0203EFA0 *PokeathlonUnk_LaunchApp(FieldSystem *fieldSystem) {
-    UnkStruct_0203EFA0 *args = Heap_AllocAtEnd(HEAP_ID_3, sizeof(UnkStruct_0203EFA0));
+PokeathlonTrophiesArgs *PokeathlonUnk_LaunchApp(FieldSystem *fieldSystem) {
+    PokeathlonTrophiesArgs *args = Heap_AllocAtEnd(HEAP_ID_3, sizeof(PokeathlonTrophiesArgs));
     SaveData *saveData = FieldSystem_GetSaveData(fieldSystem);
     PlayerProfile *profile = Save_PlayerData_GetProfile(saveData);
     args->pokeathlon = Save_Pokeathlon_Get(saveData);
