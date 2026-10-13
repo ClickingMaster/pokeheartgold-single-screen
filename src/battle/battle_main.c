@@ -163,7 +163,7 @@ void Battle_BattleInit(OverlayManager *manager) {
     archive7 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
     archive8 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
     gender = BattleSystem_GetTrainerGender(battleSystem, BattleSystem_GetNetworkId(battleSystem));
-    battleSystem->battleInput = BattleInput_NewInit(archive7, archive8, battleSystem, gender, battleSystem->unk1C0);
+    battleSystem->battleInput = BattleInput_NewInit(archive7, archive8, battleSystem, gender, battleSystem->keyPressedSave);
     NARC_Delete(archive7);
     NARC_Delete(archive8);
 
@@ -305,7 +305,7 @@ void Battle_BattleExit(OverlayManager *man) {
     Heap_Free(battleSystem->pokedex);
     setup->storagePC = battleSystem->storage;
     setup->bagCursor = battleSystem->bagCursor;
-    setup->unk1B8 = battleSystem->unk1C0;
+    setup->keyPressedSave = battleSystem->keyPressedSave;
     setup->unk_128 = battleSystem->unk98;
     setup->unk_134 = (struct UnkStruct_02067A60 *)battleSystem->unk9C;
     setup->safariBalls = battleSystem->safariBallCnt;
@@ -334,10 +334,10 @@ void Battle_BattleExit(OverlayManager *man) {
     BattleAnimSystem_Delete(battleSystem->animSystem);
     BattleContext_Delete(battleSystem->ctx);
     for (i = 0; i < battleSystem->maxBattlers; i++) {
-        OpponentData_Free(battleSystem, battleSystem->opponentData[i], battleSystem->unk23FD);
+        OpponentData_Free(battleSystem, battleSystem->opponentData[i], battleSystem->graphicsMode);
     }
     PokepicManager_Delete(battleSystem->pokepicManager);
-    if (battleSystem->unk23FD != 2) {
+    if (battleSystem->graphicsMode != 2) {
         BattleSystem_FreeGraphics(battleSystem);
     }
     TextFlags_SetCanABSpeedUpPrint(FALSE);
@@ -496,7 +496,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
     battleSystem->options = setup->options;
     battleSystem->palPad = (u32 *)setup->palPad;
     battleSystem->bagCursor = setup->bagCursor;
-    battleSystem->unk1C0 = setup->unk1B8;
+    battleSystem->keyPressedSave = setup->keyPressedSave;
     battleSystem->unk98 = setup->unk_128;
     battleSystem->evolutionLocation = setup->evolutionLocation;
     battleSystem->unk9C = (u32 *)setup->unk_134;
@@ -882,13 +882,13 @@ void Battle_VBlankCallback(void *data) {
         reg_G2_BLDCNT = 0;
         reg_G2S_DB_BLDCNT = 0;
     }
-    if (battleSystem->unk240F_1) {
-        battleSystem->unk240F_1 = 0;
+    if (battleSystem->battleBanksRequested) {
+        battleSystem->battleBanksRequested = 0;
         banks = ov12_0226C0D0;
         GfGfx_SetBanks(&banks);
     }
-    if (battleSystem->unk240E_F) {
-        battleSystem->unk240E_F = 0;
+    if (battleSystem->subMenuBanksRequested) {
+        battleSystem->subMenuBanksRequested = 0;
         banks2 = ov12_0226C0F8;
         GfGfx_SetBanks(&banks2);
     }
@@ -915,8 +915,8 @@ void Task_DrawBattleGraphics(SysTask *task, void *data) {
     BattleSystem *battleSystem = data;
 
     sub_020399FC(5, battleSystem->bgConfig);
-    if (battleSystem->unk23FD == 0 || battleSystem->unk23FD == 3) {
-        if (battleSystem->unk23FD == 0) {
+    if (battleSystem->graphicsMode == 0 || battleSystem->graphicsMode == 3) {
+        if (battleSystem->graphicsMode == 0) {
             BattleParticleSystem_DrawAll();
         }
         PokepicManager_DrawAll(battleSystem->pokepicManager);

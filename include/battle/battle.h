@@ -565,7 +565,7 @@ struct BattleSystem {
     Options *options;
     u32 *palPad;
     void *waitingIcon;
-    u8 *unk1C0;
+    u8 *keyPressedSave;
     u32 *linkScreenArgs;
     void *pokepicAnimManager; // related to animations
     u32 *cellTransferState;
@@ -587,11 +587,11 @@ struct BattleSystem {
     u8 *linkSendState;
     u8 *linkRecvState;
     u8 isServer;
-    u8 unk23FD;
+    u8 graphicsMode;
     u8 battleFinished;
     u8 resetBlendRequested : 1;
-    u8 unk240F_1 : 1;
-    u8 unk240E_F : 1;
+    u8 battleBanksRequested : 1;
+    u8 subMenuBanksRequested : 1;
     u8 criticalHpMusic : 2;
     u8 criticalHpMusicDelay : 3;
     Terrain terrain;

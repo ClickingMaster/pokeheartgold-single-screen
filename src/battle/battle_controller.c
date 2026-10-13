@@ -179,7 +179,7 @@ typedef struct BattleControllerPacketShowMonList {
     u8 reservedMon;
     u8 selectedMonIndex[BATTLER_MAX];
     u8 partyOrder[BATTLER_MAX][PARTY_SIZE];
-    u32 unk_24;
+    u32 trapped;
     u8 switchInFlag;
     u8 filler_29[3];
 } BattleControllerPacketShowMonList;
@@ -391,11 +391,11 @@ typedef struct BattleControllerPacketCommandComplete {
     u16 unk_02;
 } BattleControllerPacketCommandComplete;
 
-typedef struct BattleControllerPacket67 {
+typedef struct BattleControllerPacketScreenFade {
     u8 command;
-    u8 unk_01;
+    u8 mode;
     u16 unk_02;
-} BattleControllerPacket67;
+} BattleControllerPacketScreenFade;
 
 void BattleController_InitBallGaugePacket(BattleSystem *battleSystem, BattleContext *ctx, BattleControllerPacketBallGauge *packet, int command, int battlerId);
 
@@ -1037,7 +1037,7 @@ void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext 
     packet.command = 18;
     packet.battlerId = battlerId;
     packet.mode = a3;
-    packet.unk_24 = a4;
+    packet.trapped = a4;
     packet.reservedMon = a5;
     packet.switchInFlag = ctx->switchInFlag;
     for (i = 0; i < BATTLER_MAX; i++) {
@@ -1735,10 +1735,10 @@ void BattleController_InitMoveAnimData(BattleSystem *battleSystem, BattleContext
 #pragma force_active reset
 
 void ov12_022645C8(BattleSystem *battleSystem, BattleContext *ctx, u8 a2) {
-    BattleControllerPacket67 packet;
+    BattleControllerPacketScreenFade packet;
     MI_CpuFill8(&packet, 0, sizeof(packet));
     packet.command = 67;
-    packet.unk_01 = a2;
+    packet.mode = a2;
     BattleController_EmitPacket(battleSystem, 1, 0, &packet, sizeof(packet));
 }
 

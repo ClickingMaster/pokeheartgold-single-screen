@@ -64,7 +64,7 @@ BattleSetup *BattleSetup_New(enum HeapID heapID, u32 battleTypeFlags) {
     setup->options = Options_New(heapID);
     setup->unk_134 = sub_02067A60(heapID);
     setup->bagCursor = NULL;
-    setup->unk1B8 = NULL;
+    setup->keyPressedSave = NULL;
     setup->safariBalls = 0;
     setup->wifiHistory = NULL;
     setup->gameStats = NULL;
@@ -133,7 +133,7 @@ BattleSetup *BattleSetup_New_Tutorial(enum HeapID heapID, FieldSystem *fieldSyst
     setup->followMonSlot[BATTLER_PLAYER] = 0;
     setup->storagePC = SaveArray_PCStorage_Get(fieldSystem->saveData);
     setup->bagCursor = fieldSystem->bagCursor;
-    setup->unk1B8 = NULL;
+    setup->keyPressedSave = NULL;
     setup->gameStats = Save_GameStats_Get(fieldSystem->saveData);
     setup->mapNumber = fieldSystem->location->mapId;
     BattleSetup_SetAllySideBattlersToPlayer(setup);
@@ -246,7 +246,7 @@ void BattleSetup_InitFromSaveData(BattleSetup *setup, FieldSystem *fieldSystem, 
     }
     setup->weatherType = LocalFieldData_GetWeatherType(local);
     setup->bagCursor = bagCursor;
-    setup->unk1B8 = arg5;
+    setup->keyPressedSave = arg5;
     setup->wifiHistory = Save_WiFiHistory_Get(saveData);
     setup->gameStats = Save_GameStats_Get(saveData);
     setup->palPad = Save_PalPad_Get(saveData);
@@ -298,7 +298,7 @@ void BattleSetup_InitForFixedLevelFacility(BattleSetup *setup, FieldSystem *fiel
     setup->storagePC = SaveArray_PCStorage_Get(fieldSystem->saveData);
     setup->timeOfDay = Field_GetTimeOfDay(fieldSystem);
     setup->bagCursor = fieldSystem->bagCursor;
-    setup->unk1B8 = fieldSystem->unkB0;
+    setup->keyPressedSave = fieldSystem->unkB0;
     setup->wifiHistory = Save_WiFiHistory_Get(fieldSystem->saveData);
     setup->gameStats = Save_GameStats_Get(fieldSystem->saveData);
     setup->palPad = Save_PalPad_Get(fieldSystem->saveData);
@@ -369,7 +369,7 @@ void BattleSetup_InitForLinkBattleWithParty(BattleSetup *setup, FieldSystem *fie
     setup->storagePC = SaveArray_PCStorage_Get(fieldSystem->saveData);
     setup->timeOfDay = Field_GetTimeOfDay(fieldSystem);
     setup->bagCursor = fieldSystem->bagCursor;
-    setup->unk1B8 = fieldSystem->unkB0;
+    setup->keyPressedSave = fieldSystem->unkB0;
     setup->wifiHistory = Save_WiFiHistory_Get(fieldSystem->saveData);
     setup->gameStats = Save_GameStats_Get(fieldSystem->saveData);
     setup->mapNumber = fieldSystem->location->mapId;

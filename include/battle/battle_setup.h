@@ -67,7 +67,7 @@ struct BattleSetup {                     // declared in trainer_data.h
     u8 linkBattleMode;
     u8 unk1B3;
     int totalTurns;
-    void *unk1B8;
+    void *keyPressedSave;
     u8 chatotVoiceParam[BATTLER_MAX];
     SaveData *saveData; // 1c0
     int unk1C4;

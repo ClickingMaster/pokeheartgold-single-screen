@@ -121,7 +121,7 @@ typedef struct BattleInputFeedback {
             const s16 *screenOffsets;
             const TouchscreenHitbox *touchscreenHitbox;
             int ret;
-            u8 unk10;
+            u8 bufferIndex;
             u8 textObjId;
             u8 pokemonIconIndex;
             u8 frameType;
@@ -168,7 +168,7 @@ typedef struct BattleInputTutorial {
 // At somepoint here my counting was off so some of the listed offsets may be wrong. Due to it being a big and poorly put together struct, it's difficult to find out where that is
 struct BattleInput {
     BattleSystem *battleSystem;
-    u8 *unk4; // when non-null, allows for keyPressed to be set to unk4[0]; heldKeys?
+    u8 *keyPressedSave; // when non-null, keyPressed is loaded from it and saved back to it (kept across battles)
     SysTask *ballTask;
     SysTask *feedbackTask;
     SysTask *unk10;

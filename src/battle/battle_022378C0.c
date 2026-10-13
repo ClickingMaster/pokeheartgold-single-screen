@@ -171,7 +171,7 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
 void BattleSystem_FreeInputForSubMenu(BattleSystem *battleSystem) {
     BattleInput_Free(battleSystem->battleInput);
     BgConfig_CleanupBattleMenuBackgrounds(battleSystem->bgConfig);
-    battleSystem->unk240E_F = 1;
+    battleSystem->subMenuBanksRequested = 1;
     FontID_Release(4);
     ov12_0223BBF0(battleSystem, 3);
 
@@ -213,11 +213,11 @@ void BattleSystem_RestoreInputAfterSubMenu(BattleSystem *battleSystem) {
     NARC *unkNarcA = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
     NARC *unkNarcB = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
 
-    battleSystem->battleInput = BattleInput_NewInit(unkNarcA, unkNarcB, battleSystem, BattleSystem_GetTrainerGender(battleSystem, BattleSystem_GetNetworkId(battleSystem)), battleSystem->unk1C0);
+    battleSystem->battleInput = BattleInput_NewInit(unkNarcA, unkNarcB, battleSystem, BattleSystem_GetTrainerGender(battleSystem, BattleSystem_GetNetworkId(battleSystem)), battleSystem->keyPressedSave);
 
     FontID_Alloc(4, HEAP_ID_BATTLE);
 
-    battleSystem->unk240F_1 = 1;
+    battleSystem->battleBanksRequested = 1;
 
     BgConfig_InitBattleMenuBackgrounds(battleSystem->bgConfig);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -301,7 +301,7 @@ void BattleSystem_ReinitMainBgLayers(BattleSystem *battleSystem) {
 
     Main_SetVBlankIntrCB(Battle_VBlankCallback, battleSystem);
 
-    battleSystem->unk240F_1 = 1;
+    battleSystem->battleBanksRequested = 1;
 
     AddWindowParameterized(battleSystem->bgConfig, battleSystem->window, GF_BG_LYR_MAIN_1, 2, 19, 27, 4, 11, 31);
     FillWindowPixelBuffer(battleSystem->window, 0xFF);

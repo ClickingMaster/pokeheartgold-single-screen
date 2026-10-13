@@ -263,7 +263,7 @@ void LobbyString_Destroy(Str *s);
 void LobbyString_Append(Str *s, void *arg);
 void LobbyString_AppendCStr(Str *s, const char *arg);
 void LobbyString_AssignCStr(Str *s, const char *arg);
-int ov00_021EFF30(const void *src, u32 len, char *dst, u32 dstLen);
+int DWC_Base64Encode(const void *src, u32 len, char *dst, u32 dstLen);
 void MI_CpuFill8(void *dst, u8 val, u32 size);
 
 void ov45_0223D15C(DequeBuf *d, u32 n, Tag unused);

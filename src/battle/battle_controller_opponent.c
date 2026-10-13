@@ -270,7 +270,7 @@ typedef struct BattleControllerPacketShowMonList {
     u8 reservedMon;
     u8 selectedMonIndex[BATTLER_MAX];
     u8 partyOrder[BATTLER_MAX][PARTY_SIZE];
-    u32 unk_20;
+    u32 trapped;
     u8 switchInFlag;
     u8 filler_25[3];
 } BattleControllerPacketShowMonList;
@@ -471,11 +471,11 @@ typedef struct BattleControllerPacketBattleResults {
     u8 record[28];
 } BattleControllerPacketBattleResults;
 
-typedef struct BattleControllerPacket67 {
+typedef struct BattleControllerPacketScreenFade {
     u8 command;
-    u8 unk_01;
+    u8 mode;
     u16 unk_02;
-} BattleControllerPacket67;
+} BattleControllerPacketScreenFade;
 
 // Arguments of the battle party menu (BATTLE_PARTY_MENU_START), also used to pick the move to forget.
 typedef struct BattlePartyMenuArgs {
@@ -762,7 +762,7 @@ typedef struct OpponentShowMonListWork {
     u8 state;
     u8 mode;
     u8 selectedMonIndex[BATTLER_MAX];
-    u32 unk_10;
+    u32 trapped;
     u16 item;
     u8 reservedMon;
     u8 key;
@@ -1046,7 +1046,7 @@ void OpponentData_ForfeitMessage(BattleSystem *battleSystem, OpponentData *oppon
 void OpponentData_SwapToSubstituteSprite(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData);
 void OpponentData_PlayMoveSE(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketMoveSE *packet);
 void OpponentData_PlaySong(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPlaySong *packet);
-void OpponentData_ScreenFade(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacket67 *packet);
+void OpponentData_ScreenFade(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketScreenFade *packet);
 void Task_PokemonEncounter(SysTask *task, void *data);
 void Task_GiratinaEncounter(SysTask *task, void *data);
 void Task_PokemonSlideIn(SysTask *task, void *data);
@@ -2538,7 +2538,7 @@ void OpponentData_ShowMonList(BattleSystem *battleSystem, OpponentData *opponent
     work->command = packet->command;
     work->battlerId = packet->battlerId;
     work->mode = packet->mode;
-    work->unk_10 = packet->unk_20;
+    work->trapped = packet->trapped;
     work->reservedMon = packet->reservedMon;
     work->item = 0;
     work->switchInFlag = packet->switchInFlag;
@@ -3079,13 +3079,13 @@ void OpponentData_PlaySong(BattleSystem *battleSystem, OpponentData *opponentDat
     BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, packet->command);
 }
 
-void OpponentData_ScreenFade(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacket67 *packet) {
+void OpponentData_ScreenFade(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketScreenFade *packet) {
     OpponentScreenFadeWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentScreenFadeWork));
     MI_CpuFill8(work, 0, sizeof(OpponentScreenFadeWork));
     work->state = 0;
     work->battleSystem = battleSystem;
     work->command = packet->command;
-    work->mode = packet->unk_01;
+    work->mode = packet->mode;
     work->counter = 0;
     work->battlerId = opponentData->battlerId;
     SysTask_CreateOnMainQueue(Task_OpponentScreenFade, work, 0);
@@ -5523,7 +5523,7 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
         work->partyMenu->battleSystem = work->battleSystem;
         work->partyMenu->heapID = HEAP_ID_BATTLE;
         work->partyMenu->done = FALSE;
-        work->partyMenu->move = work->unk_10;
+        work->partyMenu->move = work->trapped;
         work->partyMenu->reservedMon = work->reservedMon;
         work->partyMenu->mode = work->mode;
         work->partyMenu->item = work->item;

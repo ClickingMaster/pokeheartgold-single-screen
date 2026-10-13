@@ -1008,7 +1008,7 @@ void MonPicData_SetHeight(MonPicData *ptr, int index, int a2) {
 }
 
 void ov12_0223BBF0(BattleSystem *battleSystem, u8 a1) {
-    battleSystem->unk23FD = a1;
+    battleSystem->graphicsMode = a1;
 }
 
 void BattleSystem_SetLinkSendStatePtr(BattleSystem *battleSystem, u8 *a1) {

@@ -602,7 +602,7 @@ extern char ov45_022550B4[];
 extern int ov45_0223D7D4(void *, void *, void *, void *, void *, String *), ov45_022414C0(int, char *), ov45_022413D4(char *, char *), LobbyString_CompareCStr(String *, char *), ov45_022415CC(char *, int, int, void *);
 extern void LobbyString_Destroy(String *), ov45_02232434(String *, void *, int), ov45_022377AC(String *, u32), ov45_022379D4(String *);
 extern void *ov45_02232B9C(String *);
-extern int ov00_021EFF30(void *, u32, void *, u32);
+extern int DWC_Base64Encode(void *, u32, void *, u32);
 
 static inline void Zero(u32 *p) {
     u32 i, zero = 0;
@@ -664,7 +664,7 @@ int ov45_02233434(int id, int key, int mode, void *data, u32 length) {
     ov45_022377AC(&encoded, (length + 2) / 3 * 4 + 1);
     {
         void *out = ov45_02232B9C(&encoded);
-        int end = ov00_021EFF30(data, length, out, encoded.words[1]);
+        int end = DWC_Base64Encode(data, length, out, encoded.words[1]);
         ((char *)encoded.words[0])[end] = 0;
     }
     text = Text(&name);
@@ -1596,7 +1596,7 @@ struct Vec {
 
 extern "C" void ov45_0223795C(Vec *, u32, ResizeDispatch);
 extern "C" char *ov45_02231C78(Vec *);
-extern "C" int ov00_021EFF3C(const char *, u32, char *, u32);
+extern "C" int DWC_Base64Decode(const char *, u32, char *, u32);
 extern "C" int ov45_02233FE4(const char *, Vec *);
 
 inline void Shrink(Vec *v, u32 count, ResizeDispatch) {
@@ -1613,7 +1613,7 @@ inline void Resize(Vec *v, u32 count) {
 }
 
 inline int Decoder::Decode(const char *src, u32 len, Vec *dst) const {
-    return ov00_021EFF3C(src, len, ov45_02231C78(dst), dst->size);
+    return DWC_Base64Decode(src, len, ov45_02231C78(dst), dst->size);
 }
 
 #pragma force_active on
