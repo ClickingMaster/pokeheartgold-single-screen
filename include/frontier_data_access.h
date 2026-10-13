@@ -9,13 +9,13 @@
 void BattleTowerChallenge_Clear(u32 a0);
 u32 BattleTowerChallenge_GetField(u32 a0, u32 a1, void *a2);
 void BattleTowerChallenge_SetField(u32 a0, u32 a1, void *a2);
-void sub_0202D3B0(u32 a0, u8 a1, u32 a2, u32 a3);
+void BattleTowerChallenge_AddWifiScoreCounters(u32 a0, u8 a1, u32 a2, u32 a3);
 u32 BattleTowerChallenge_GetSaved(u32 record);
 void BattleTowerChallenge_SetSaved(u32 a0, u32 a1);
-u32 sub_0202D450(FrontierData *frontierData, u32 a1);
+u32 FrontierData_WifiStreakAction(FrontierData *frontierData, u32 a1);
 u32 FrontierData_WifiRankAction(FrontierData *frontierData, u32 a1);
-void sub_0202D4B8(FrontierData *frontierData, u32 a1, void *a2);
-void sub_0202D4DC(FrontierData *frontierData, s32 a1, UnkStruct_02069528 *a2);
+void FrontierData_SetWifiTeam(FrontierData *frontierData, u32 a1, void *a2);
+void FrontierData_GetWifiTeam(FrontierData *frontierData, s32 a1, UnkStruct_02069528 *a2);
 u16 FrontierData_CalcWifiScore(FrontierData *frontierData, u32 a1);
 u16 FrontierData_GetWifiScore(FrontierData *frontierData);
 u32 FrontierData_TowerRoundAction(void *a0, u32 a1, u32 a2);

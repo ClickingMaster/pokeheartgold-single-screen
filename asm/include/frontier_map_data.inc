@@ -90,7 +90,7 @@
 .public Options_GetFrame
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
-.public sub_02055198
+.public FieldBGM_Play
 .public Frontier_GetLaunchArgs
 .public Frontier_GetMapObjectGfx
 .public Frontier_GetMapObjects

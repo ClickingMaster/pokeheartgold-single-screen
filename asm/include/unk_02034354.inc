@@ -10,7 +10,7 @@
 .public PlayerProfile_IsNameEmpty
 .public LinkBattleRuleset_Copy
 .public FriendRoster_GetUserData
-.public sub_0202C4F0
+.public FriendRoster_AddWinsLossesTrades
 .public Save_FriendRoster_Get
 .public Save_FriendGroup_GetName
 .public Save_FriendGroup_Get

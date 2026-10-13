@@ -22,7 +22,7 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "unk_0203170C.h"
+#include "save_wii_message.h"
 #include "wireless_status_icon.h"
 #include "wifi_connection.h"
 #include "yes_no_prompt.h"
@@ -659,7 +659,7 @@ int GtsConnection_WaitInfo(GtsApp *app) {
 }
 
 int GtsConnection_SendSetProfile(GtsApp *app) {
-    sub_0203189C(app->args->saveData, &app->profile);
+    Save_WiiMessage_GetServerProfile(app->args->saveData, &app->profile);
     GtsServer_RequestSetProfile(&app->profile, app->profileResponse);
     app->state = GTS_CONNECTION_STATE_WAIT_SET_PROFILE;
     app->requestFrames = 0;

@@ -17,7 +17,7 @@ void sub_02058034(void) {
 
 void CommClubLink_Init(FieldSystem *fieldSystem) {
     if (gCommClubLink == NULL) {
-        sub_02091574(fieldSystem);
+        FieldComm_RegisterCommands(fieldSystem);
         gCommClubLink = Heap_Alloc((enum HeapID)15, sizeof(CommClubLink));
         MI_CpuFill8(gCommClubLink, 0, sizeof(CommClubLink));
         gCommClubLink->timer = 50;

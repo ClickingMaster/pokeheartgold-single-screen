@@ -327,7 +327,7 @@ void VsRecorder_CreateProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork 
     SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconCell64KNaix(), FALSE, 100000);
     SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconAnim64KNaix(), FALSE, 100000);
     species = FrontierCard_GetSpecies(profile->card);
-    form = sub_020315F0(profile->card);
+    form = FrontierCard_GetSanitizedForm(profile->card);
     isEgg = FrontierCard_IsEgg(profile->card);
     if (species) {
         SpriteSystem_LoadCharResObjAtEndWithHardwareMappingType(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconNaixEx(species, isEgg, form), FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 100000);

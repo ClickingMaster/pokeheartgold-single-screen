@@ -115,7 +115,7 @@
 .public GetMovementDirection
 .public FieldSystem_IsSaveGymmickTypeEqualTo
 .public FollowMon_IsActive
-.public sub_0206D494
+.public FieldSystem_TryPushIceBlock
 .public Field_PlayerAvatar_ApplyTransitionFlags
 .public Field_PlayerAvatar_TryEnterPoketchPose
 .public Field_PlayerAvatar_TryLeavePoketchPose

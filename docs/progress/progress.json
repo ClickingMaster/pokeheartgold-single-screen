@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "5823fd3dc73ec60c131d94d84b2e45998bdb1923",
+  "commit": "bdd6ad523038d3f98847746d7deb27ee081827b2",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "b3c5c0b5e4da171bc25f474c829f3c0719850a8b674e6f076b2a6ddd24f2eea6",
+    "ARM9": "f509a855cf1a28fb1a821cfe7241d85ae41b3ca20c6e1e621164a620ec3415cc",
     "ARM7": "d726d92f810e881692e1b4d2ec232d6ca89b38985dcb26b08751c0037036d92a"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -11869,6 +11869,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "save_wii_message.o",
+      "bytes": 432,
+      "status": "c",
+      "source": "src/save_wii_message.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "scanline_effect.o",
       "bytes": 910,
       "status": "c",
@@ -12905,14 +12913,6 @@
       "bytes": 840,
       "status": "c",
       "source": "src/unk_02009D48.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "unk_0203170C.o",
-      "bytes": 432,
-      "status": "c",
-      "source": "src/unk_0203170C.c"
     },
     {
       "cpu": "ARM9",

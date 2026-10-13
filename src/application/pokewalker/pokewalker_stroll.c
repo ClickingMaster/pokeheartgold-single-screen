@@ -50,7 +50,7 @@ int PokewalkerApp_StartStroll_Enter(PokewalkerApp *app) {
     int slot = app->selectedSlot;
     // called with int arguments, not narrowed to the setters' u16 parameters
     ((void (*)(POKEWALKER *, int, int))sub_020326A4)(app->pokewalker, 2, box);
-    ((void (*)(POKEWALKER *, int))sub_02032720)(app->pokewalker, app->courseId);
+    ((void (*)(POKEWALKER *, int))Pokewalker_SetCourse)(app->pokewalker, app->courseId);
     Pokewalker_SetBoxMon(app->pokewalker, PCStorage_GetMonByIndexPair(pcStorage, box, slot));
     PCStorage_DeleteBoxMonByIndexPair(pcStorage, box, slot);
     PokewalkerApp_ReceiveGifts(app);
@@ -96,7 +96,7 @@ int PokewalkerApp_StartStroll_EndSave(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_StartStroll_CheckFirstStroll(PokewalkerApp *app) {
-    if (sub_0203263C(app->pokewalker) == 1) {
+    if (Pokewalker_GetLinkCount(app->pokewalker) == 1) {
         return 5;
     }
     app->nextMode = 10;
@@ -198,8 +198,8 @@ BOOL PokewalkerApp_AddStrollExp(BoxPokemon *boxMon, Pokemon *mon, int exp) {
 // The Pokewalker gives a Starf Berry once (flag in the Pokewalker save data).
 void PokewalkerApp_GiveStarfBerry(PokewalkerApp *app) {
     app->receivedStarfBerry = 0;
-    if (app->irStatus.giveStarfBerry && sub_02032764(app->pokewalker) == 0) {
-        sub_0203276C(app->pokewalker);
+    if (app->irStatus.giveStarfBerry && Pokewalker_HasReceivedStarfBerry(app->pokewalker) == 0) {
+        Pokewalker_SetReceivedStarfBerry(app->pokewalker);
         Bag_AddItem(app->bag, ITEM_STARF_BERRY, 1, HEAP_ID_154);
         app->receivedStarfBerry = 1;
     }

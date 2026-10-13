@@ -28,13 +28,13 @@
 
 FS_EXTERN_OVERLAY(OVY_57);
 
-typedef struct UnkStruct_0206B910 {
+typedef struct BallCapsuleEditorTaskData {
     u8 filler00[4];
-    BallCapsuleEditorArgs *unk04;
+    BallCapsuleEditorArgs *editorArgs;
     PartyMenuArgs *partyMenu;
     SaveData *saveData;
     u32 state;
-} UnkStruct_0206B910;
+} BallCapsuleEditorTaskData;
 
 typedef struct UnkStruct_0206BCEC {
     u8 unk00;
@@ -50,14 +50,14 @@ typedef struct UnkStruct_0206BCD4 {
     u8 filler05[15];
 } UnkStruct_0206BCD4;
 
-static const OverlayManagerTemplate _020FF480 = {
+static const OverlayManagerTemplate sOverlayTemplate_BallCapsuleEditor = {
     .init = BallCapsuleEditor_Init,
     .exec = BallCapsuleEditor_Main,
     .exit = BallCapsuleEditor_Exit,
     .ovy_id = FS_OVERLAY_ID(OVY_57),
 };
 
-static BOOL sub_0206B984(TaskManager *taskManager);
+static BOOL Task_BallCapsuleEditor(TaskManager *taskManager);
 static BOOL sub_0206BB90(ScriptContext *ctx);
 static void sub_0206BCA4(UnkStruct_0206BCD4 *a0, u8 a1);
 static BOOL sub_0206BCB4(UnkStruct_0206BCD4 *a0, u8 a1);
@@ -65,24 +65,24 @@ static UnkStruct_0206BCD4 *sub_0206BCD4(void);
 static UnkStruct_0206BCD4 *sub_0206BCEC(UnkStruct_0206BCEC *unused);
 static void sub_0206BD00(UnkStruct_0206BCD4 *a0);
 
-void sub_0206B910(TaskManager *taskManager, SaveData *saveData) {
+void CallTask_BallCapsuleEditor(TaskManager *taskManager, SaveData *saveData) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    UnkStruct_0206B910 *r4 = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(UnkStruct_0206B910));
-    memset(r4, 0, sizeof(UnkStruct_0206B910));
+    BallCapsuleEditorTaskData *r4 = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(BallCapsuleEditorTaskData));
+    memset(r4, 0, sizeof(BallCapsuleEditorTaskData));
     r4->saveData = saveData;
-    r4->unk04 = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BallCapsuleEditorArgs));
-    memset(r4->unk04, 0, sizeof(BallCapsuleEditorArgs));
-    r4->unk04->options = Save_PlayerData_GetOptionsAddr(saveData);
-    r4->unk04->saveData = saveData;
-    r4->unk04->menuInputStatePtr = &fieldSystem->menuInputState;
+    r4->editorArgs = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BallCapsuleEditorArgs));
+    memset(r4->editorArgs, 0, sizeof(BallCapsuleEditorArgs));
+    r4->editorArgs->options = Save_PlayerData_GetOptionsAddr(saveData);
+    r4->editorArgs->saveData = saveData;
+    r4->editorArgs->menuInputStatePtr = &fieldSystem->menuInputState;
     r4->partyMenu = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PartyMenuArgs));
     memset(r4->partyMenu, 0, sizeof(PartyMenuArgs));
-    TaskManager_Call(taskManager, sub_0206B984, r4);
+    TaskManager_Call(taskManager, Task_BallCapsuleEditor, r4);
 }
 
-static BOOL sub_0206B984(TaskManager *taskManager) {
-    UnkStruct_0206B910 *r7 = TaskManager_GetEnvironment(taskManager);
-    BallCapsuleEditorArgs *r6 = r7->unk04;
+static BOOL Task_BallCapsuleEditor(TaskManager *taskManager) {
+    BallCapsuleEditorTaskData *r7 = TaskManager_GetEnvironment(taskManager);
+    BallCapsuleEditorArgs *r6 = r7->editorArgs;
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     switch (r7->state) {
     case 0:
@@ -105,11 +105,11 @@ static BOOL sub_0206B984(TaskManager *taskManager) {
         r7->state = 1;
         break;
     case 1:
-        CallApplicationAsTask(taskManager, &_020FF480, r6);
+        CallApplicationAsTask(taskManager, &sOverlayTemplate_BallCapsuleEditor, r6);
         r7->state = 2;
         break;
     case 2:
-        switch (r7->unk04->setCapsuleOnMon) {
+        switch (r7->editorArgs->setCapsuleOnMon) {
         default:
             GF_ASSERT(FALSE);
         case 0:
@@ -136,9 +136,9 @@ static BOOL sub_0206B984(TaskManager *taskManager) {
         break;
     case 4: {
         PartyMenuArgs *partyMenu = r7->partyMenu;
-        u32 index = r7->unk04->capsuleIndex + 1;
+        u32 index = r7->editorArgs->capsuleIndex + 1;
         if (partyMenu->partySlot != 7) {
-            Pokemon *mon = r7->unk04->mons[partyMenu->partySlot];
+            Pokemon *mon = r7->editorArgs->mons[partyMenu->partySlot];
             SetMonData(mon, MON_DATA_BALL_CAPSULE_ID, &index);
             SetMonData(mon, MON_DATA_BALL_CAPSULE, SealCase_GetCapsuleI(r6->sealCase, index - 1));
             sub_0209106C(SealOnCapsuleGetID(CapsuleGetSealI(SealCase_GetCapsuleI(r6->sealCase, index - 1), 0)));
@@ -153,7 +153,7 @@ static BOOL sub_0206B984(TaskManager *taskManager) {
         break;
     case 6:
         Heap_Free(r7->partyMenu);
-        Heap_Free(r7->unk04);
+        Heap_Free(r7->editorArgs);
         Heap_Free(r7);
         return TRUE;
     }

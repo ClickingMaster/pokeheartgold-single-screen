@@ -1463,7 +1463,7 @@ BOOL ScrCmd_BugContestAction(ScriptContext *ctx) {
     } else {
         BugContest_Delete(fieldSystem->bugContest);
         fieldSystem->bugContest = NULL;
-        sub_02093070(fieldSystem);
+        FieldSystem_TryTriggerBillPCFullCall(fieldSystem);
     }
     return FALSE;
 }

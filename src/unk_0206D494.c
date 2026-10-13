@@ -36,39 +36,39 @@
 #include "map_object_movement_utilities.h"
 #include "map_object_movement_commands.h"
 
-typedef struct UnkStruct_0206D494 {
-    LocalMapObject *unk00;
-    LocalMapObject *unk04;
+typedef struct IceBlockPushWork {
+    LocalMapObject *block;
+    LocalMapObject *hitBlock;
     u8 unk08;
-    u8 unk09;
-} UnkStruct_0206D494;
+    u8 slideState;
+} IceBlockPushWork;
 
-typedef struct UnkStruct_0206DB94 {
+typedef struct BugContestSwapMonWork {
     u8 filler00[4];
     Pokemon *newlyCaughtMon;
     BugContestSwapMonArgs *unk08;
-} UnkStruct_0206DB94;
+} BugContestSwapMonWork;
 
-static BOOL sub_0206D4E4(TaskManager *taskManager);
-static LocalMapObject *sub_0206D590(LocalMapObject *object);
-static LocalMapObject *sub_0206D614(MapObjectManager *a0, u32 x, u32 a2, u32 y);
-static u32 sub_0206D688(UnkStruct_0206D494 *a0);
-static u32 sub_0206D7B8(LocalMapObject *object, u32 x, u32 height, u32 y);
-static u32 sub_0206D81C(u32 direction);
-static void sub_0206D850(PlayerAvatar *playerAvatar);
+static BOOL Task_PushIceBlock(TaskManager *taskManager);
+static LocalMapObject *IceBlock_GetFacingBlock(LocalMapObject *object);
+static LocalMapObject *IceBlock_FindObjectAt(MapObjectManager *a0, u32 x, u32 a2, u32 y);
+static u32 IceBlock_UpdateSlide(IceBlockPushWork *a0);
+static u32 IceBlock_GetBlockedFlags(LocalMapObject *object, u32 x, u32 height, u32 y);
+static u32 GetStepMovementForDirection(u32 direction);
+static void IceBlock_EndPlayerForcedMovement(PlayerAvatar *playerAvatar);
 static BOOL MonIsInGameTradePokeInternal(Pokemon *mon, NPCTrade *trade, NpcTradeNum tradeNum);
 static BOOL Task_BugContest_PromptSwapPokemon(TaskManager *taskManager);
 
-BOOL sub_0206D494(FieldSystem *fieldSystem) {
+BOOL FieldSystem_TryPushIceBlock(FieldSystem *fieldSystem) {
     LocalMapObject *unk1 = MapObjectManager_GetFirstActiveObjectWithMovement1(fieldSystem->mapObjectManager);
-    LocalMapObject *unk2 = sub_0206D590(unk1);
+    LocalMapObject *unk2 = IceBlock_GetFacingBlock(unk1);
     if (unk2) {
-        UnkStruct_0206D494 *unkStruct = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(UnkStruct_0206D494));
-        unkStruct->unk00 = unk2;
-        unkStruct->unk04 = NULL;
+        IceBlockPushWork *unkStruct = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(IceBlockPushWork));
+        unkStruct->block = unk2;
+        unkStruct->hitBlock = NULL;
         unkStruct->unk08 = MapObject_GetFacingDirection(unk1);
-        unkStruct->unk09 = 0;
-        FieldSystem_CreateTask(fieldSystem, sub_0206D4E4, unkStruct);
+        unkStruct->slideState = 0;
+        FieldSystem_CreateTask(fieldSystem, Task_PushIceBlock, unkStruct);
         PlaySE(SEQ_SE_GS_HYOUKAI_HIT);
         return TRUE;
     } else {
@@ -76,9 +76,9 @@ BOOL sub_0206D494(FieldSystem *fieldSystem) {
     }
 }
 
-static BOOL sub_0206D4E4(TaskManager *taskManager) {
+static BOOL Task_PushIceBlock(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    UnkStruct_0206D494 *unkStruct = TaskManager_GetEnvironment(taskManager);
+    IceBlockPushWork *unkStruct = TaskManager_GetEnvironment(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
     switch (*state) {
     case 0:
@@ -88,29 +88,29 @@ static BOOL sub_0206D4E4(TaskManager *taskManager) {
         }
         break;
     case 1:
-        if (sub_0206D688(unkStruct)) {
+        if (IceBlock_UpdateSlide(unkStruct)) {
             StopSE(SEQ_SE_GS_HYOUKAI_SUBERU, 0);
             (*state)++;
         }
         break;
     case 2:
-        if (MapObject_IsMovementPaused(unkStruct->unk00)) {
-            if (unkStruct->unk04 == NULL) {
+        if (MapObject_IsMovementPaused(unkStruct->block)) {
+            if (unkStruct->hitBlock == NULL) {
                 (*state)++;
-            } else if (MapObject_IsMovementPaused(unkStruct->unk04)) {
+            } else if (MapObject_IsMovementPaused(unkStruct->hitBlock)) {
                 (*state)++;
             }
         }
         break;
     case 3:
-        sub_0206D850(fieldSystem->playerAvatar);
+        IceBlock_EndPlayerForcedMovement(fieldSystem->playerAvatar);
         Heap_Free(unkStruct);
         return TRUE;
     }
     return FALSE;
 }
 
-static LocalMapObject *sub_0206D590(LocalMapObject *object) {
+static LocalMapObject *IceBlock_GetFacingBlock(LocalMapObject *object) {
     MapObjectManager *manager = MapObject_GetManager(object);
     u32 direction = MapObject_GetFacingDirection(object);
     u32 x = MapObject_GetXCoord(object);
@@ -118,7 +118,7 @@ static LocalMapObject *sub_0206D590(LocalMapObject *object) {
     u32 y = MapObject_GetYCoord(object);
     u32 z = MapObject_GetZCoord(object);
     u32 dy = GetDeltaYByFacingDirection(direction);
-    LocalMapObject *obj = sub_0206D614(manager, x + dx, y, z + dy);
+    LocalMapObject *obj = IceBlock_FindObjectAt(manager, x + dx, y, z + dy);
     if (obj) {
         if (MapObject_GetSpriteID(obj) != SPRITE_ICE) {
             return NULL;
@@ -133,7 +133,7 @@ static LocalMapObject *sub_0206D590(LocalMapObject *object) {
     return NULL;
 }
 
-static LocalMapObject *sub_0206D614(MapObjectManager *manager, u32 x, u32 a2, u32 y) {
+static LocalMapObject *IceBlock_FindObjectAt(MapObjectManager *manager, u32 x, u32 a2, u32 y) {
     LocalMapObject *object = MapObjectManager_GetObjects(manager);
     u32 count = MapObjectManager_GetObjectCount(manager);
     do {
@@ -156,60 +156,60 @@ static LocalMapObject *sub_0206D614(MapObjectManager *manager, u32 x, u32 a2, u3
     return NULL;
 }
 
-static u32 sub_0206D688(UnkStruct_0206D494 *a0) {
-    switch (a0->unk09) {
+static u32 IceBlock_UpdateSlide(IceBlockPushWork *a0) {
+    switch (a0->slideState) {
     case 0:
-        if (MapObject_IsMovementPaused(a0->unk00)) {
-            u32 x = MapObject_GetXCoord(a0->unk00);
+        if (MapObject_IsMovementPaused(a0->block)) {
+            u32 x = MapObject_GetXCoord(a0->block);
             u32 dx = GetDeltaXByFacingDirection(a0->unk08);
-            u32 y = MapObject_GetYCoord(a0->unk00);
-            u32 z = MapObject_GetZCoord(a0->unk00);
+            u32 y = MapObject_GetYCoord(a0->block);
+            u32 z = MapObject_GetZCoord(a0->block);
             u32 dy = GetDeltaYByFacingDirection(a0->unk08);
-            u32 flags = sub_0206D7B8(a0->unk00, x + dx, y, z + dy);
+            u32 flags = IceBlock_GetBlockedFlags(a0->block, x + dx, y, z + dy);
             if (flags & 2) {
-                MapObjectManager *manager = MapObject_GetManager(a0->unk00);
-                LocalMapObject *object = sub_0206D614(manager, x + dx, y, z + dy);
+                MapObjectManager *manager = MapObject_GetManager(a0->block);
+                LocalMapObject *object = IceBlock_FindObjectAt(manager, x + dx, y, z + dy);
                 if (!object) {
                     GF_ASSERT(FALSE);
                     return TRUE;
                 }
                 if (MapObject_GetSpriteID(object) == SPRITE_ICE) {
-                    a0->unk04 = object;
-                    MapObject_SetHeldMovement(a0->unk00, MOVEMENT_UNK_72);
-                    a0->unk09 = 2;
+                    a0->hitBlock = object;
+                    MapObject_SetHeldMovement(a0->block, MOVEMENT_UNK_72);
+                    a0->slideState = 2;
                 } else {
-                    a0->unk04 = NULL;
-                    MapObject_SetHeldMovement(a0->unk00, MOVEMENT_UNK_72);
-                    a0->unk09 = 2;
+                    a0->hitBlock = NULL;
+                    MapObject_SetHeldMovement(a0->block, MOVEMENT_UNK_72);
+                    a0->slideState = 2;
                 }
             } else {
                 if (flags & 1 || flags & 4) {
                     return TRUE;
                 }
-                MapObject_SetHeldMovement(a0->unk00, MOVEMENT_UNK_71);
-                a0->unk09 = 1;
+                MapObject_SetHeldMovement(a0->block, MOVEMENT_UNK_71);
+                a0->slideState = 1;
             }
         }
         break;
     case 1:
-        if (MapObject_IsMovementPaused(a0->unk00)) {
-            u32 movement = sub_0206D81C(a0->unk08);
+        if (MapObject_IsMovementPaused(a0->block)) {
+            u32 movement = GetStepMovementForDirection(a0->unk08);
             if (movement != MOVEMENT_NONE) {
-                MapObject_SetHeldMovement(a0->unk00, movement);
+                MapObject_SetHeldMovement(a0->block, movement);
             } else {
                 GF_ASSERT(FALSE);
                 return TRUE;
             }
-            a0->unk09 = 0;
+            a0->slideState = 0;
         }
         break;
     case 2:
-        if (MapObject_IsMovementPaused(a0->unk00)) {
+        if (MapObject_IsMovementPaused(a0->block)) {
             PlaySE(SEQ_SE_GS_HYOUKAI_KETUGOU);
-            if (a0->unk04) {
-                MapObject_SetHeldMovement(a0->unk04, MOVEMENT_FACE_UP);
+            if (a0->hitBlock) {
+                MapObject_SetHeldMovement(a0->hitBlock, MOVEMENT_FACE_UP);
             }
-            MapObject_SetHeldMovement(a0->unk00, MOVEMENT_FACE_UP);
+            MapObject_SetHeldMovement(a0->block, MOVEMENT_FACE_UP);
             return TRUE;
         }
         break;
@@ -217,7 +217,7 @@ static u32 sub_0206D688(UnkStruct_0206D494 *a0) {
     return FALSE;
 }
 
-static u32 sub_0206D7B8(LocalMapObject *object, u32 x, u32 height, u32 y) {
+static u32 IceBlock_GetBlockedFlags(LocalMapObject *object, u32 x, u32 height, u32 y) {
     u32 unk;
     VecFx32 position;
     MapObject_CopyPositionVector(object, &position);
@@ -234,7 +234,7 @@ static u32 sub_0206D7B8(LocalMapObject *object, u32 x, u32 height, u32 y) {
     return flags;
 }
 
-static u32 sub_0206D81C(u32 direction) {
+static u32 GetStepMovementForDirection(u32 direction) {
     u32 movement = MOVEMENT_NONE;
     switch (direction) {
     case DIR_NORTH:
@@ -255,7 +255,7 @@ static u32 sub_0206D81C(u32 direction) {
     return movement;
 }
 
-static void sub_0206D850(PlayerAvatar *playerAvatar) {
+static void IceBlock_EndPlayerForcedMovement(PlayerAvatar *playerAvatar) {
     if (PlayerAvatar_CheckForcedMovement(playerAvatar) == TRUE) {
         MapObject_ClearFlagsBits(PlayerAvatar_GetMapObject(playerAvatar), (MapObjectFlagBits)(MAPOBJECTFLAG_UNK7 | MAPOBJECTFLAG_UNK8));
         if (PlayerAvatar_CheckFlag7(playerAvatar) == 0) {
@@ -401,15 +401,15 @@ void BugContest_WarpToJudging(TaskManager *taskManager, FieldSystem *fieldSystem
 }
 
 void BugContest_PromptSwapPokemon(TaskManager *taskManager, Pokemon *mon) {
-    UnkStruct_0206DB94 *unkStruct = Heap_AllocAtEnd(HEAP_ID_3, sizeof(UnkStruct_0206DB94));
-    MI_CpuFill8(unkStruct, 0, sizeof(UnkStruct_0206DB94));
+    BugContestSwapMonWork *unkStruct = Heap_AllocAtEnd(HEAP_ID_3, sizeof(BugContestSwapMonWork));
+    MI_CpuFill8(unkStruct, 0, sizeof(BugContestSwapMonWork));
     unkStruct->newlyCaughtMon = mon;
     TaskManager_Call(taskManager, Task_BugContest_PromptSwapPokemon, unkStruct);
 }
 
 static BOOL Task_BugContest_PromptSwapPokemon(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    UnkStruct_0206DB94 *unkStruct = TaskManager_GetEnvironment(taskManager);
+    BugContestSwapMonWork *unkStruct = TaskManager_GetEnvironment(taskManager);
     BugContest *contest = FieldSystem_BugContest_Get(fieldSystem);
     u32 *state = TaskManager_GetStatePtr(taskManager);
     switch (*state) {

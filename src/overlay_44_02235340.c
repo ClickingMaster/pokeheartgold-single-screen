@@ -208,7 +208,7 @@ void ov44_02232EA8(OverlayManager *overlayMananger) {
     temp_r0_2->unk0.unk21 = temp_r0_2->unk0.unk22;
     temp_r0->unk4 = ov44_022331B0(temp_r0);
     temp_r0->unk6 = 255;
-    sub_020971F8(temp_r0);
+    WifiClubComm_RegisterCommands(temp_r0);
     ov44_02234028(temp_r0);
     ov44_022331C4(temp_r0, temp_r5, HEAP_ID_103);
     Main_SetVBlankIntrCB((void *)&ov44_0223319C, temp_r0);

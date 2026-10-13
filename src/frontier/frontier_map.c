@@ -128,7 +128,7 @@ void *FrontierMap_Init(void *frontier) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     Sound_SetFieldBGM(FrontierMap_GetParam(mapId, MAP_PARAM_BGM));
-    sub_02055198(NULL, FrontierMap_GetParam(mapId, MAP_PARAM_BGM));
+    FieldBGM_Play(NULL, FrontierMap_GetParam(mapId, MAP_PARAM_BGM));
     TextFlags_SetAutoScrollParam(1);
     TextFlags_SetCanABSpeedUpPrint(FALSE);
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);

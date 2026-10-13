@@ -598,13 +598,13 @@ int PokewalkerApp_StrollReport_ShowResults(PokewalkerApp *app) {
     u32 currentSteps;
     u32 startSteps;
 
-    BufferPokewalkerCourseName(app->msgFormat, 2, (u8)sub_02032718(app->pokewalker));
+    BufferPokewalkerCourseName(app->msgFormat, 2, (u8)Pokewalker_GetCourse(app->pokewalker));
     currentSteps = app->peerIdentity.unk_64;
     startSteps = app->walkerSteps;
     if (currentSteps > startSteps) {
         strollSteps = currentSteps - startSteps;
     }
-    sub_02032674(app->pokewalker, &totalSteps, &totalWatts);
+    Pokewalker_GetStepsAndWatts(app->pokewalker, &totalSteps, &totalWatts);
     BufferIntegerAsString(app->msgFormat, 5, strollSteps, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BufferIntegerAsString(app->msgFormat, 3, app->irStatus.unk_0A, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BufferIntegerAsString(app->msgFormat, 6, totalSteps, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
@@ -634,7 +634,7 @@ int PokewalkerApp_StrollReport_WaitResultsFade(PokewalkerApp *app) {
 int PokewalkerApp_StrollReport_PrintMonArrived(PokewalkerApp *app) {
     String *nickname;
 
-    BufferPokewalkerCourseName(app->msgFormat, 1, (u8)sub_02032718(app->pokewalker));
+    BufferPokewalkerCourseName(app->msgFormat, 1, (u8)Pokewalker_GetCourse(app->pokewalker));
     nickname = String_New(POKEMON_NAME_LENGTH + 2, HEAP_ID_154);
     CopyU16ArrayToStringN(nickname, app->walkerMonNickname, POKEMON_NAME_LENGTH + 1);
     BufferString(app->msgFormat, 1, nickname, app->walkerMon.gender, 1, app->peerIdentity.unk_04);
@@ -928,13 +928,13 @@ int PokewalkerApp_StrollReport_ShowGifts(PokewalkerApp *app) {
     FillBgTilemapRect(app->bgConfig, 1, 0, 0, 0, 32, 24, 16);
     PokewalkerApp_LoadTilemap(app, 2, 15);
     PokewalkerApp_PrintStringDefaultColor(app, 1, app->giftsReceivedText, 0);
-    BufferPokewalkerCourseName(app->msgFormat, 2, (u8)sub_02032718(app->pokewalker));
+    BufferPokewalkerCourseName(app->msgFormat, 2, (u8)Pokewalker_GetCourse(app->pokewalker));
     currentSteps = app->peerIdentity.unk_64;
     startSteps = app->walkerSteps;
     if (currentSteps > startSteps) {
         strollSteps = currentSteps - startSteps;
     }
-    sub_02032674(app->pokewalker, &totalSteps, &totalWatts);
+    Pokewalker_GetStepsAndWatts(app->pokewalker, &totalSteps, &totalWatts);
     BufferIntegerAsString(app->msgFormat, 5, strollSteps, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BufferIntegerAsString(app->msgFormat, 3, app->irStatus.unk_0A, 5, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BufferIntegerAsString(app->msgFormat, 6, totalSteps, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
@@ -1012,13 +1012,13 @@ int PokewalkerApp_StrollReport_ShowRecords(PokewalkerApp *app) {
     FillBgTilemapRect(app->bgConfig, 1, 0, 0, 0, 32, 24, 16);
     PokewalkerApp_LoadTilemap(app, 2, 15);
     PokewalkerApp_PrintStringDefaultColor(app, 1, app->walkerRecordsText, 0);
-    BufferPokewalkerCourseName(app->msgFormat, 2, (u8)sub_02032718(app->pokewalker));
+    BufferPokewalkerCourseName(app->msgFormat, 2, (u8)Pokewalker_GetCourse(app->pokewalker));
     currentSteps = app->peerIdentity.unk_64;
     startSteps = app->walkerSteps;
     if (currentSteps > startSteps) {
         strollSteps = currentSteps - startSteps;
     }
-    sub_02032674(app->pokewalker, &totalSteps, &totalWatts);
+    Pokewalker_GetStepsAndWatts(app->pokewalker, &totalSteps, &totalWatts);
     BufferIntegerAsString(app->msgFormat, 5, strollSteps, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BufferIntegerAsString(app->msgFormat, 3, app->irStatus.unk_0A, 5, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BufferIntegerAsString(app->msgFormat, 6, totalSteps, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);

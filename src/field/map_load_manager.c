@@ -455,7 +455,7 @@ void MapLoadManager_LoadSafariZoneProps(MapLoadManager *mapLoadManager, LoadedMa
         MapPropManager_LoadFromNARC(mapLoadManager->narc, header->propsSize, map->propManager, (int)mapLoadManager->mapPropAnimationManager);
     } else {
         SafariZone *safariZone = Save_SafariZone_Get(mapLoadManager->saveData);
-        int linkLeader = sub_0202F620(safariZone);
+        int linkLeader = SafariZone_GetActiveAreaSet(safariZone);
         areaSet = (u8 *)SafariZone_GetAreaSet(safariZone, linkLeader);
         int gender;
         if (linkLeader == 0) {

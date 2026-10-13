@@ -16,13 +16,13 @@ typedef struct UnkStruct_02091564 {
     UnkFuncPtr_02091564 func3;
 } UnkStruct_02091564;
 
-void sub_02091574(void *arg0);
-u32 sub_02091588();
+void FieldComm_RegisterCommands(void *arg0);
+u32 CommCmd_GetTrainerCardSize();
 u32 sub_02091590();
 u32 sub_02091598();
 u32 sub_02091564();
 u32 sub_02091568();
-void sub_02091570();
+void CommCmd_RecvIgnored();
 u32 sub_020915A0();
 u32 sub_020915A4();
 u32 sub_020915A8();

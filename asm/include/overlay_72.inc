@@ -125,7 +125,7 @@
 .public BattleRoomDownload_SetTrainers
 .public BattleRoomDownload_GetTrainersRoom
 .public BattleRoomDownload_SetLeaders
-.public sub_0203189C
+.public Save_WiiMessage_GetServerProfile
 .public CommWireless_StartUp
 .public CommWireless_IsStartedUp
 .public CommWireless_Terminate

@@ -184,7 +184,7 @@
 .public SavePokegear_AllocAndCopyPhonebook
 .public PhoneCallPersistentState_CheckCallTriggerFlag
 .public Save_SafariZone_Get
-.public sub_0202F620
+.public SafariZone_GetActiveAreaSet
 .public SafariZone_GetAreaSet
 .public SafariZone_GetObjectUnlockLevel
 .public MapMatrix_GetWidth

@@ -17,8 +17,8 @@
 .public BattleTowerChallenge_SetField
 .public FrontierData_TowerRoundAction
 .public FrontierData_FlagAction
-.public sub_0202D638
-.public sub_0202D63C
+.public FrontierData_SetTowerSeed
+.public FrontierData_GetTowerSeed
 .public Save_BattleTowerChallenge_Get
 .public Save_FrontierData_Get
 .public Save_SpecialRibbons_Get
@@ -30,8 +30,8 @@
 .public FieldSystem_LaunchApplication
 .public NintendoWifiConnection_LaunchApp
 .public GetVarPointer
-.public sub_0204B610
-.public sub_0204B66C
+.public FrontierFieldSystem_ReceiveLinkAllyData
+.public FrontierFieldSystem_ReceiveRoundTrainers
 .public sub_0204B690
 .public TaskManager_Call
 .public FieldSystem_ApplicationIsRunning

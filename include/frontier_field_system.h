@@ -14,7 +14,7 @@ u32 sub_0204A6F8(SaveData *saveData, u32 a1);
 void sub_0204A730(SaveData *saveData, u8 a1);
 u16 sub_0204A750(SaveData *saveData);
 u32 sub_0204A764(SaveData *saveData);
-u16 sub_0204A800(SaveData *saveData);
+u16 Save_BattleRoomDownload_HasTrainers(SaveData *saveData);
 void FrontierFieldSystem_0204A810(FrontierFieldSystem **frontierFsys);
 FrontierFieldSystem *FrontierFieldSystem_New(SaveData *saveData, BOOL resumeFromPrevious, u32 a2);
 void FrontierFieldSystem_Free(FrontierFieldSystem *frontierFsys);
@@ -38,6 +38,6 @@ BOOL FrontierFieldSystem_TryGivePalmerRibbons(FrontierFieldSystem *frontierFsys,
 BOOL FrontierFieldSystem_TryGiveOtherTowerRibbons(FrontierFieldSystem *frontierFsys, SaveData *saveData);
 u16 FrontierFieldSystem_0204B258(FrontierFieldSystem *frontierFsys, SaveData *saveData);
 u8 GetFrontierTrainerIVs(u32 frontierTrainerIndex);
-u16 FrontierFieldSystem_0204B510(FrontierFieldSystem *frontierFsys);
+u16 FrontierFieldSystem_NextRandom(FrontierFieldSystem *frontierFsys);
 
 #endif // POKEHEARTGOLD_FRONTIER_FIELD_SYSTEM_H

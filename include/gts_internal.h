@@ -18,7 +18,7 @@
 #include "trade_anim.h"
 #include "unk_02009D48.h"
 #include "sprite_resource.h"
-#include "unk_0203170C.h"
+#include "save_wii_message.h"
 #include "evolution_scene.h"
 #include "unk_02088288.h"
 #include "yes_no_prompt.h"
@@ -317,7 +317,7 @@ struct GtsApp {
     s16 avatarPositions[8][2];               // 0x120C, {x, y} of avatarSprites
     u8 filler_122C[8];                       // 0x122C
     GtsUnk1234 unk_1234;                     // 0x1234
-    Unk020317F4 profile;                     // 0x1260, sent by GtsServer_RequestSetProfile (screen 0)
+    WifiServerProfile profile;                     // 0x1260, sent by GtsServer_RequestSetProfile (screen 0)
     u32 profileResponse[2];                  // 0x12C4, its answer
     u32 searchCountry;                       // 0x12CC, of SEEK POKEMON, 0 for any
     GtsPaletteAnim paletteAnim;              // 0x12D0, of screen 0

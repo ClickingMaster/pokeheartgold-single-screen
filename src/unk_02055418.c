@@ -34,11 +34,11 @@ void FieldSystem_StartBugContestTimer(FieldSystem *fieldSystem) {
         return;
     }
     GF_RTC_CopyDateTime(&date, &time);
-    sub_02055450(fieldSystem, sysinfo, &date);
-    sub_02055478(fieldSystem, sysinfo, &date, &time);
+    FieldSystem_CheckDayChange(fieldSystem, sysinfo, &date);
+    FieldSystem_CheckTimeAdvance(fieldSystem, sysinfo, &date, &time);
 }
 
-void sub_02055450(FieldSystem *fieldSystem, SysInfo_RTC *sysinfo, RTCDate *date) {
+void FieldSystem_CheckDayChange(FieldSystem *fieldSystem, SysInfo_RTC *sysinfo, RTCDate *date) {
     u32 day = RTC_ConvertDateToDay(date);
     if (day < (u32)(sysinfo->days_since_nitro_epoch)) {
         sysinfo->days_since_nitro_epoch = day;
@@ -47,11 +47,11 @@ void sub_02055450(FieldSystem *fieldSystem, SysInfo_RTC *sysinfo, RTCDate *date)
     if (day <= sysinfo->days_since_nitro_epoch) {
         return;
     }
-    sub_02055508(fieldSystem, day - sysinfo->days_since_nitro_epoch);
+    FieldSystem_HandleDaysPassed(fieldSystem, day - sysinfo->days_since_nitro_epoch);
     sysinfo->days_since_nitro_epoch = day;
 }
 
-void sub_02055478(FieldSystem *fieldSystem, SysInfo_RTC *sysinfo, RTCDate *date, RTCTime *time) {
+void FieldSystem_CheckTimeAdvance(FieldSystem *fieldSystem, SysInfo_RTC *sysinfo, RTCDate *date, RTCTime *time) {
     s64 seconds = RTC_ConvertDateTimeToSecond(date, time);
     s64 sys_seconds = RTC_ConvertDateTimeToSecond(&sysinfo->date, &sysinfo->time);
     if (seconds < sys_seconds) {
@@ -68,12 +68,12 @@ void sub_02055478(FieldSystem *fieldSystem, SysInfo_RTC *sysinfo, RTCDate *date,
         return;
     }
     Save_SysInfo_RTC_DecrementPenalty(sysinfo, minutes);
-    sub_020555B4(fieldSystem, minutes, time);
+    FieldSystem_HandleMinutesPassed(fieldSystem, minutes, time);
     sysinfo->date = *date;
     sysinfo->time = *time;
 }
 
-void sub_02055508(FieldSystem *fieldSystem, int days) {
+void FieldSystem_HandleDaysPassed(FieldSystem *fieldSystem, int days) {
     BOOL hasPenalty = FieldSystem_HasPenalty(fieldSystem);
     ClearDailyFlags(fieldSystem);
     Save_DullBadges(fieldSystem->saveData, days); // reset badge shininess..?
@@ -84,7 +84,7 @@ void sub_02055508(FieldSystem *fieldSystem, int days) {
     Save_VarsFlags_RandomizeVar4041(fieldSystem->saveData);
     BattleTower_InitSeed(fieldSystem->saveData);
     WiFiHistory_UpgradeAllLocationsState(Save_WiFiHistory_Get(fieldSystem->saveData));
-    sub_020556B8(fieldSystem);
+    FieldSystem_RegrowApricornTrees(fieldSystem);
     PhoneCallPersistentState_BlackBeltKenji_UpdateWaitDays(SaveData_GetPhoneCallPersistentState(fieldSystem->saveData), days);
     if (!hasPenalty) {
         sub_02031CCC(Save_ApricornBox_Get(fieldSystem->saveData), days);
@@ -94,8 +94,8 @@ void sub_02055508(FieldSystem *fieldSystem, int days) {
     Save_VarsFlags_UpdateBuenasPasswordSet(Save_VarsFlags_Get(fieldSystem->saveData));
 }
 
-void sub_020555B4(FieldSystem *fieldSystem, u32 unkA, RTCTime *time) {
-    sub_02092E34(FieldSystem_GetGearPhoneRingManager(fieldSystem), unkA, 0);
+void FieldSystem_HandleMinutesPassed(FieldSystem *fieldSystem, u32 unkA, RTCTime *time) {
+    GearPhoneRingManager_AddMinutes(FieldSystem_GetGearPhoneRingManager(fieldSystem), unkA, 0);
     FieldSystem_IncrementBugContestTimer(fieldSystem, unkA);
     Party_TryResetShaymin(SaveArray_Party_Get(fieldSystem->saveData), unkA, time);
 }
@@ -120,7 +120,7 @@ u32 Field_GetHour(FieldSystem *fieldSystem) {
     return Save_SysInfo_RTC_Get(fieldSystem->saveData)->time.hour;
 }
 
-void sub_02055624(FieldSystem *fieldSystem, RTCDate *date, RTCTime *time) {
+void FieldSystem_GetAdventureStartTime(FieldSystem *fieldSystem, RTCDate *date, RTCTime *time) {
     SysInfo_RTC *sysinfo = Save_SysInfo_RTC_Get(fieldSystem->saveData);
     RTC_ConvertSecondToDateTime(date, time, sysinfo->seconds_since_nitro_epoch);
 }
@@ -153,9 +153,9 @@ void sub_020556A8(UnkStruct_020556FC *unkPtr) {
     Heap_Free(unkPtr);
 }
 
-void sub_020556B8(FieldSystem *fieldSystem) {
+void FieldSystem_RegrowApricornTrees(FieldSystem *fieldSystem) {
     APRICORN_TREE *trees = Save_FieldApricornTrees_Get(fieldSystem->saveData);
-    sub_0202AE74(trees);
+    ApricornTrees_RegrowEmpty(trees);
 }
 
 void sub_020556C8(FieldSystem *fieldSystem, UnkStruct_020556FC *unkPtrB) {
@@ -169,7 +169,7 @@ void sub_020556FC(UnkStruct_020556FC *unkPtr) {
     FieldEffectManager_HeapFree(unkPtr->unk5c); // function frees unk5c to heap
 }
 
-BOOL sub_02055708(FieldSystem *fieldSystem, LocalMapObject *mapObject) {
+BOOL FieldSystem_ApricornTreeObject_HasApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObject) {
     if (mapObject == NULL) {
         return FALSE;
     }
@@ -177,21 +177,21 @@ BOOL sub_02055708(FieldSystem *fieldSystem, LocalMapObject *mapObject) {
     if (id != SPRITE_BONGURI_R && id != SPRITE_BONGURI_Y && id != SPRITE_BONGURI_B && id != SPRITE_BONGURI_G && id != SPRITE_BONGURI_P && id != SPRITE_BONGURI_W && id != SPRITE_BONGURI_BK) {
         return FALSE;
     }
-    if (sub_02055780(fieldSystem, mapObject) != TRUE) {
+    if (FieldSystem_ApricornTree_HasApricorn(fieldSystem, mapObject) != TRUE) {
         return FALSE;
     }
     return TRUE;
 }
 
-BOOL sub_02055760(FieldSystem *fieldSystem, LocalMapObject *mapObj) {
-    sub_0202AE68(Save_FieldApricornTrees_Get(fieldSystem->saveData), MapObject_GetParam(mapObj, 0));
+BOOL FieldSystem_ApricornTree_PickApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObj) {
+    ApricornTrees_PickApricorn(Save_FieldApricornTrees_Get(fieldSystem->saveData), MapObject_GetParam(mapObj, 0));
     return TRUE;
 }
 
-BOOL sub_02055780(FieldSystem *fieldSystem, LocalMapObject *mapObj) {
+BOOL FieldSystem_ApricornTree_HasApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObj) {
     APRICORN_TREE *trees = Save_FieldApricornTrees_Get(fieldSystem->saveData);
     int idx = MapObject_GetParam(mapObj, 0);
-    return sub_0202AE38(trees, idx);
+    return ApricornTrees_HasApricorn(trees, idx);
 }
 
 u32 FieldSystem_ApricornTree_TryGetApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObject) {

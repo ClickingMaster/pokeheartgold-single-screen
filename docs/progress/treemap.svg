@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 5823fd3dc · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · bdd6ad523 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -1353,12 +1353,12 @@ lib/NitroSDK/src/fx/fx_trig_internal.c</title></rect>
 <rect x="297.010" y="633.462" width="11.230" height="6.212" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_anm_btp.o
 436 bytes · C-only source
 lib/NitroSystem/src/g3d_anm_btp.c</title></rect>
-<rect x="297.010" y="639.674" width="11.230" height="6.155" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / snd_next_inst_data.o
+<rect x="297.010" y="639.674" width="11.230" height="6.155" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / save_wii_message.o
+432 bytes · C-only source
+src/save_wii_message.c</title></rect>
+<rect x="168.469" y="645.830" width="7.911" height="8.738" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / snd_next_inst_data.o
 432 bytes · C-only source
 lib/NitroSDK/src/snd/snd_next_inst_data.c</title></rect>
-<rect x="168.469" y="645.830" width="7.911" height="8.738" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_0203170C.o
-432 bytes · C-only source
-src/unk_0203170C.c</title></rect>
 <rect x="176.379" y="645.830" width="7.874" height="8.738" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sound_gb.o
 430 bytes · C-only source
 src/sound_gb.c</title></rect>

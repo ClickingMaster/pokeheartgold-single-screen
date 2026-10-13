@@ -8,40 +8,40 @@
 .public sMapExitRoutines
 .public _020FC76C;
 
-.public sub_02056530
-.public sub_020565FC
+.public FieldTransition_EnterWithDirectionalFade
+.public FieldTransition_EnterWithFade
 .public FieldTransition_EnterThroughSideDoor
 .public FieldTransition_EnterFromWarpStairs
 .public FieldTransition_EnterWithDoorExit
-.public sub_02056004
-.public sub_02056040
-.public sub_020560C4
-.public sub_0205613C
-.public sub_02056424
-.public sub_02056268
-.public sub_02056220
-.public sub_020562B0
+.public FieldTransition_ExitWithFade
+.public FieldTransition_ExitThroughDoor
+.public FieldTransition_ExitThroughSideDoor
+.public FieldTransition_ExitOnWarpStairs
+.public FieldTransition_ExitSinking
+.public FieldTransition_ExitStairsFadeToWhite
+.public FieldTransition_ExitStairsFadeOut
+.public FieldTransition_ExitRising
 
 sMapEnterRoutines:
-	.word sub_02056530
-	.word sub_020565FC
+	.word FieldTransition_EnterWithDirectionalFade
+	.word FieldTransition_EnterWithFade
 	.word FieldTransition_EnterThroughSideDoor
 	.word FieldTransition_EnterFromWarpStairs
-	.word sub_020565FC
+	.word FieldTransition_EnterWithFade
 	.word FieldTransition_EnterWithDoorExit
-	.word sub_020565FC
+	.word FieldTransition_EnterWithFade
 	.word FieldTransition_EnterRising
 	.word FieldTransition_EnterSinking
 sMapExitRoutines:
-	.word sub_02056004
-	.word sub_02056040
-	.word sub_020560C4
-	.word sub_0205613C
-	.word sub_02056220
-	.word sub_02056268
-	.word sub_02056004
-	.word sub_020562B0
-	.word sub_02056424
+	.word FieldTransition_ExitWithFade
+	.word FieldTransition_ExitThroughDoor
+	.word FieldTransition_ExitThroughSideDoor
+	.word FieldTransition_ExitOnWarpStairs
+	.word FieldTransition_ExitStairsFadeOut
+	.word FieldTransition_ExitStairsFadeToWhite
+	.word FieldTransition_ExitWithFade
+	.word FieldTransition_ExitRising
+	.word FieldTransition_ExitSinking
 _020FC76C:
 	.word 0
 	.word 0

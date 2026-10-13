@@ -66,8 +66,8 @@ typedef struct Unk67484Outer {
 extern const u8 gFrontierSummaryPages[];
 
 extern FrontierData *Save_FrontierData_Get(SaveData *saveData);
-extern void sub_0202D638(FrontierData *frontierData, u32 value);
-extern u32 sub_0202D63C(FrontierData *frontierData);
+extern void FrontierData_SetTowerSeed(FrontierData *frontierData, u32 value);
+extern u32 FrontierData_GetTowerSeed(FrontierData *frontierData);
 extern BOOL Comm_HasWifiProfile(SaveData *saveData);
 
 u32 FrontierPartySelect_LaunchPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId);
@@ -267,10 +267,10 @@ BOOL Task_FrontierLinkPartnerCheck(TaskManager *taskManager) {
     output = GetVarPointer(fieldSystem, env->outputVar);
     switch (env->kind) {
     case 0:
-        *output = sub_0204B610(fieldSystem, linkData);
+        *output = FrontierFieldSystem_ReceiveLinkAllyData(fieldSystem, linkData);
         break;
     case 1:
-        *output = sub_0204B66C(fieldSystem, linkData);
+        *output = FrontierFieldSystem_ReceiveRoundTrainers(fieldSystem, linkData);
         break;
     case 2:
         *output = sub_0204B690(fieldSystem, linkData);
@@ -396,15 +396,15 @@ u32 BattleTower_NextSeed(u32 value) {
 
 u32 BattleTower_InitSeed(SaveData *saveData) {
     u32 value = BattleTower_NextSeed(Save_FriendGroup_GetCurrentSeed(Save_FriendGroup_Get(saveData)));
-    sub_0202D638(Save_FrontierData_Get(saveData), value);
+    FrontierData_SetTowerSeed(Save_FrontierData_Get(saveData), value);
     return value;
 }
 
 u32 BattleTower_AdvanceSeed(SaveData *saveData) {
     FrontierData *frontierData = Save_FrontierData_Get(saveData);
-    u32 value = BattleTower_NextSeed(sub_0202D63C(frontierData));
+    u32 value = BattleTower_NextSeed(FrontierData_GetTowerSeed(frontierData));
     u32 next;
-    sub_0202D638(frontierData, value);
+    FrontierData_SetTowerSeed(frontierData, value);
     next = BattleTower_NextRandom(value);
     BattleTowerChallenge_SetField(Save_BattleTowerChallenge_Get(saveData), 10, &next);
     return next;
@@ -413,7 +413,7 @@ u32 BattleTower_AdvanceSeed(SaveData *saveData) {
 u32 BattleTower_RestoreRandom(SaveData *saveData) {
     FrontierData *frontierData = Save_FrontierData_Get(saveData);
     u32 unk = Save_BattleTowerChallenge_Get(saveData);
-    u32 value = BattleTower_NextRandom(sub_0202D63C(frontierData));
+    u32 value = BattleTower_NextRandom(FrontierData_GetTowerSeed(frontierData));
     s32 i;
     s32 count;
     count = FrontierData_TowerRoundAction(frontierData, (u16)BattleTowerChallenge_GetField(unk, 0, 0), 0) * 24;

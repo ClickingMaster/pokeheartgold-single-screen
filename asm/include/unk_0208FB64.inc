@@ -11,7 +11,7 @@
 .public CommState_SetMaxEntries
 .public CommState_SetErrorWatch
 .public RecordMixingLink_RegisterCommands
-.public sub_02091570
+.public CommCmd_RecvIgnored
 .public sub_02091590
 .public MATH_CountPopulation
 .public gOverlayTemplate_Battle

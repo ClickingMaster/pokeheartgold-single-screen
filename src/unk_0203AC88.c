@@ -4,16 +4,16 @@
 
 #include "unk_020971F8.h"
 
-static const UnkStruct_0203AC88 sUnkTable_0203AC88[] = {
+static const UnkStruct_0203AC88 sWifiClubCommCommands[] = {
     { sub_02097238, sub_02097230, NULL },
     { sub_02097248, sub_0209722C, NULL },
     { sub_02097258, sub_02097234, NULL },
 };
 
-const UnkStruct_0203AC88 *sub_0203AC88(void) {
-    return sUnkTable_0203AC88;
+const UnkStruct_0203AC88 *WifiClubComm_GetCommandTable(void) {
+    return sWifiClubCommCommands;
 }
 
-int sub_0203AC90(void) {
-    return NELEMS(sUnkTable_0203AC88);
+int WifiClubComm_GetCommandCount(void) {
+    return NELEMS(sWifiClubCommCommands);
 }

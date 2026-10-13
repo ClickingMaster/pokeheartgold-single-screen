@@ -221,7 +221,7 @@ u32 sub_0204A764(SaveData *saveData) {
     return towerMode;
 }
 
-u16 sub_0204A800(SaveData *saveData) {
+u16 Save_BattleRoomDownload_HasTrainers(SaveData *saveData) {
     return BattleRoomDownload_HasTrainers(Save_BattleRoomDownload_Get(saveData));
 }
 
@@ -418,7 +418,7 @@ static void sub_0204ACA0(FrontierFieldSystem *frontierFsys, SaveData *saveData, 
         break;
     case TOWER_MODE_WIFI:
         FrontierFieldSystem_SetFrontierMons(frontierFsys, saveData, TRUE);
-        sub_0202D3B0(frontierFsys->unk70, frontierFsys->unk28, frontierFsys->unk24, frontierFsys->unk26);
+        BattleTowerChallenge_AddWifiScoreCounters(frontierFsys->unk70, frontierFsys->unk28, frontierFsys->unk24, frontierFsys->unk26);
         u8 data = frontierFsys->towerMode;
         BattleTowerChallenge_SetField(frontierFsys->unk70, 0, &data);
         data = frontierFsys->currentBattleNumber;
@@ -496,7 +496,7 @@ void FrontierFieldSystem_0204AF2C(FrontierFieldSystem *frontierFsys) {
     data = frontierFsys->currentBattleNumber;
     BattleTowerChallenge_SetField(frontierFsys->unk70, 1, &data);
     BattleTowerChallenge_SetField(frontierFsys->unk70, 5, frontierFsys->partyMonIndexes);
-    sub_0202D3B0(frontierFsys->unk70, frontierFsys->unk28, frontierFsys->unk24, frontierFsys->unk26);
+    BattleTowerChallenge_AddWifiScoreCounters(frontierFsys->unk70, frontierFsys->unk28, frontierFsys->unk24, frontierFsys->unk26);
     BattleTowerChallenge_SetField(frontierFsys->unk70, 8, frontierFsys->trainersInCurrentRound);
     BattleTowerChallenge_SetField(frontierFsys->unk70, 10, &frontierFsys->unk08);
     BattleTowerChallenge_SetSaved(frontierFsys->unk70, 1);
@@ -510,7 +510,7 @@ void FrontierFieldSystem_0204AF2C(FrontierFieldSystem *frontierFsys) {
 
 void FrontierFieldSystem_0204AFE0(FrontierFieldSystem *frontierFsys) {
     for (s32 i = 0; i < 5; i++) {
-        frontierFsys->unk838[i] = FrontierFieldSystem_0204BA04(frontierFsys, &frontierFsys->frontierStatTrainers[i], 300 + i, frontierFsys->numMons, frontierFsys->partyMonSpecies, frontierFsys->partyMonItems, &frontierFsys->multiBattleAllyData[i], frontierFsys->heapID);
+        frontierFsys->unk838[i] = FrontierFieldSystem_GenerateFrontierTrainer(frontierFsys, &frontierFsys->frontierStatTrainers[i], 300 + i, frontierFsys->numMons, frontierFsys->partyMonSpecies, frontierFsys->partyMonItems, &frontierFsys->multiBattleAllyData[i], frontierFsys->heapID);
     }
 }
 
@@ -588,7 +588,7 @@ u32 FrontierFieldSystem_0204B120(FrontierFieldSystem *frontierFsys, SaveData *sa
         }
         return 1;
     case 2: {
-        u32 unk4 = sub_0202D450(frontierData, 3);
+        u32 unk4 = FrontierData_WifiStreakAction(frontierData, 3);
         s32 unk0 = FrontierData_WifiRankAction(frontierData, 0);
         if (unk0 == 1) {
             return 0;
@@ -596,7 +596,7 @@ u32 FrontierFieldSystem_0204B120(FrontierFieldSystem *frontierFsys, SaveData *sa
         u32 index = unk0 - 1;
         if (unk4 >= _020FBF8C[index]) {
             FrontierData_WifiRankAction(frontierData, 4);
-            sub_0202D450(frontierData, 2);
+            FrontierData_WifiStreakAction(frontierData, 2);
             FrontierData_FlagAction(frontierData, 4, 2);
             return 1;
         }
@@ -718,7 +718,7 @@ static void FrontierFieldSystem_SetFrontierMons(FrontierFieldSystem *frontierFsy
     for (s32 i = 0; i < 3; i++) {
         SetFrontierMon(&frontierMons[i], Party_GetMonByIndex(party, frontierFsys->partyMonIndexes[i]));
     }
-    sub_0202D4B8(frontierFsys->frontierData, isWifiRoom, frontierMons); // FrontierData_SetFrontierMons?
+    FrontierData_SetWifiTeam(frontierFsys->frontierData, isWifiRoom, frontierMons); // FrontierData_SetFrontierMons?
     MI_CpuClear8(frontierMons, 3 * sizeof(FrontierMon));
     Heap_Free(frontierMons);
 }
@@ -748,7 +748,7 @@ u8 GetFrontierTrainerIVs(u32 frontierTrainerIndex) {
     return 31;
 }
 
-u16 FrontierFieldSystem_0204B510(FrontierFieldSystem *frontierFsys) {
+u16 FrontierFieldSystem_NextRandom(FrontierFieldSystem *frontierFsys) {
     if (frontierFsys->towerMode == TOWER_MODE_6) {
         return LCRandom();
     }

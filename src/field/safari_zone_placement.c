@@ -81,7 +81,7 @@ BOOL FieldSystem_CanPlaceSafariObject(FieldSystem *fieldSystem) {
     if (Save_VarsFlags_CheckSafariSysFlag(varsFlags) == FALSE) {
         return FALSE;
     }
-    if (sub_0202F620(safariZone) != 0) {
+    if (SafariZone_GetActiveAreaSet(safariZone) != 0) {
         return FALSE;
     }
     if (SafariZone_GetObjectUnlockLevel(safariZone) == 0) {

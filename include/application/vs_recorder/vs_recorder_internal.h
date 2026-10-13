@@ -35,7 +35,7 @@ typedef struct FrontierCard FrontierCard;
 String *FrontierCard_NewNameString(const u16 *name, enum HeapID heapID); // the name is the card's first field
 u32 FrontierCard_GetGender(FrontierCard *card);
 u32 FrontierCard_GetSpecies(FrontierCard *card);
-u32 sub_020315F0(FrontierCard *card);
+u32 FrontierCard_GetSanitizedForm(FrontierCard *card);
 u32 FrontierCard_IsEgg(FrontierCard *card);
 u32 FrontierCard_GetCountry(FrontierCard *card);
 u32 FrontierCard_GetRegion(FrontierCard *card);

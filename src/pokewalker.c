@@ -18,31 +18,31 @@ void Pokewalker_Init(POKEWALKER *pokeWalker) {
     Pokewalker_UnlockCourse(pokeWalker, WALKER_COURSE_NOISY_FOREST);
 }
 
-void sub_02032624(POKEWALKER *pokeWalker) {
+void Pokewalker_Reset(POKEWALKER *pokeWalker) {
     u32 bak = pokeWalker->unlockedCourses;
     Pokewalker_Init(pokeWalker);
     pokeWalker->unlockedCourses = bak;
 }
 
-u16 sub_0203263C(const POKEWALKER *pokeWalker) {
-    return pokeWalker->unk_124;
+u16 Pokewalker_GetLinkCount(const POKEWALKER *pokeWalker) {
+    return pokeWalker->linkCount;
 }
 
-void sub_02032644(POKEWALKER *pokeWalker) {
-    pokeWalker->unk_124++;
+void Pokewalker_IncrementLinkCount(POKEWALKER *pokeWalker) {
+    pokeWalker->linkCount++;
 }
 
-void sub_02032650(POKEWALKER *pokeWalker, u32 a1, u32 a2) {
-    pokeWalker->unk_128 = a1;
-    pokeWalker->unk_12C += a2;
-    if (pokeWalker->unk_12C >= 9999999) {
-        pokeWalker->unk_12C = 9999999;
+void Pokewalker_SetStepsAddWatts(POKEWALKER *pokeWalker, u32 a1, u32 a2) {
+    pokeWalker->steps = a1;
+    pokeWalker->watts += a2;
+    if (pokeWalker->watts >= 9999999) {
+        pokeWalker->watts = 9999999;
     }
 }
 
-void sub_02032674(POKEWALKER *pokeWalker, u32 *a1, u32 *a2) {
-    *a1 = pokeWalker->unk_128;
-    *a2 = pokeWalker->unk_12C;
+void Pokewalker_GetStepsAndWatts(POKEWALKER *pokeWalker, u32 *a1, u32 *a2) {
+    *a1 = pokeWalker->steps;
+    *a2 = pokeWalker->watts;
 }
 
 void sub_02032688(POKEWALKER *pokeWalker, u16 *a1, u16 *a2) {
@@ -90,16 +90,16 @@ static BOOL pokewalkerHasBoxmon(POKEWALKER *pokeWalker) {
     return TRUE;
 }
 
-u16 sub_02032718(POKEWALKER *pokeWalker) {
-    return pokeWalker->unk_0F8;
+u16 Pokewalker_GetCourse(POKEWALKER *pokeWalker) {
+    return pokeWalker->course;
 }
 
-void sub_02032720(POKEWALKER *pokeWalker, u16 a1) {
-    pokeWalker->unk_0F8 = a1;
+void Pokewalker_SetCourse(POKEWALKER *pokeWalker, u16 a1) {
+    pokeWalker->course = a1;
 }
 
-void *sub_02032728(POKEWALKER *pokeWalker) {
-    return &pokeWalker->unk_0FC;
+void *Pokewalker_GetIrClock(POKEWALKER *pokeWalker) {
+    return &pokeWalker->irClock;
 }
 
 BOOL Pokewalker_CourseIsUnlocked(POKEWALKER *pokeWalker, int courseNo) {
@@ -114,10 +114,10 @@ void Pokewalker_UnlockCourse(POKEWALKER *pokeWalker, int courseNo) {
     pokeWalker->unlockedCourses |= (1 << courseNo);
 }
 
-u16 sub_02032764(POKEWALKER *pokeWalker) {
-    return pokeWalker->unk_0FA;
+u16 Pokewalker_HasReceivedStarfBerry(POKEWALKER *pokeWalker) {
+    return pokeWalker->receivedStarfBerry;
 }
 
-void sub_0203276C(POKEWALKER *pokeWalker) {
-    pokeWalker->unk_0FA = TRUE;
+void Pokewalker_SetReceivedStarfBerry(POKEWALKER *pokeWalker) {
+    pokeWalker->receivedStarfBerry = TRUE;
 }

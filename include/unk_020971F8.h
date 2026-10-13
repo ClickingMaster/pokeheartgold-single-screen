@@ -5,8 +5,8 @@
 
 #include "overlay_44.h"
 
-void sub_020971F8(void *);
-void sub_02097214(void);
+void WifiClubComm_RegisterCommands(void *);
+void WifiClubComm_RegisterCommandsNoContext(void);
 s32 sub_0209722C(void);
 s32 sub_02097230(void);
 s32 sub_02097234(void);

@@ -33,7 +33,7 @@ struct FrontierData {
     u16 battlePoints;
     u8 wifiStreak;
     u8 wifiRank; // 1..10
-    u32 unk4;
+    u32 towerSeed;
 
     union {
         u16 flags;
@@ -84,8 +84,8 @@ void FrontierData_Reset(void *data);
 void TowerMessages_Init(void *data);
 void BattleRoomDownload_Init(void *data);
 u8 FrontierData_GetWifiWinCount(FrontierData *data);
-void sub_0202D638(FrontierData *data, u32 value);
-u32 sub_0202D63C(FrontierData *data);
+void FrontierData_SetTowerSeed(FrontierData *data, u32 value);
+u32 FrontierData_GetTowerSeed(FrontierData *data);
 void BattleRoomDownload_MarkRoom(BattleRoomDownload *download, u32 rank, u32 room, u32 *date);
 void BattleRoomDownload_ClearRoomMarks(BattleRoomDownload *download);
 BOOL BattleRoomDownload_IsDateNewer(u32 *date, u32 *stored);
@@ -193,7 +193,7 @@ void BattleTowerChallenge_SetField(u32 challenge, u32 field, void *value) {
 }
 
 // Adds to the three Wi-Fi score counters, each capped below its type's maximum.
-void sub_0202D3B0(u32 challenge, u8 a, u32 b, u32 c) {
+void BattleTowerChallenge_AddWifiScoreCounters(u32 challenge, u8 a, u32 b, u32 c) {
     BattleTowerChallenge *ch = (BattleTowerChallenge *)challenge;
     int x = ch->unk3 + a;
     int y;
@@ -255,7 +255,7 @@ u32 FrontierData_BattlePointAction(FrontierData *data, u32 param, u32 action) {
 }
 
 // action: 2 reset, 3 count (starts at 1 when the streak flag is not set); returns the count.
-u32 sub_0202D450(FrontierData *data, u32 action) {
+u32 FrontierData_WifiStreakAction(FrontierData *data, u32 action) {
     switch (action) {
     case 2:
         data->wifiStreak = 0;
@@ -293,7 +293,7 @@ u32 FrontierData_WifiRankAction(FrontierData *data, u32 action) {
     return data->wifiRank;
 }
 
-void sub_0202D4B8(FrontierData *data, u32 index, void *src) {
+void FrontierData_SetWifiTeam(FrontierData *data, u32 index, void *src) {
     if (index == 0) {
         MI_CpuCopy8(src, data->wifiTeams[1], 0xA8);
     } else {
@@ -301,7 +301,7 @@ void sub_0202D4B8(FrontierData *data, u32 index, void *src) {
     }
 }
 
-void sub_0202D4DC(FrontierData *data, s32 index, UnkStruct_02069528 *dst) {
+void FrontierData_GetWifiTeam(FrontierData *data, s32 index, UnkStruct_02069528 *dst) {
     if (index == 0) {
         MI_CpuCopy8(data->wifiTeams[1], dst, 0xA8);
     } else {
@@ -398,12 +398,12 @@ u32 FrontierData_FlagAction(FrontierData *data, u16 flag, u32 action) {
     return 0;
 }
 
-void sub_0202D638(FrontierData *data, u32 value) {
-    data->unk4 = value;
+void FrontierData_SetTowerSeed(FrontierData *data, u32 value) {
+    data->towerSeed = value;
 }
 
-u32 sub_0202D63C(FrontierData *data) {
-    return data->unk4;
+u32 FrontierData_GetTowerSeed(FrontierData *data) {
+    return data->towerSeed;
 }
 
 void Save_Frontier_SetTowerMessage(SaveData *save, int index, MailMessage *message) {

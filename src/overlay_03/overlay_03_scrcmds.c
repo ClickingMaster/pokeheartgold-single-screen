@@ -142,6 +142,6 @@ BOOL ScrCmd_CheckSafariZoneChallengeCompleted(ScriptContext *ctx) {
 // Likely used for Safari Zone time-gated upgrades.
 BOOL ScrCmd_UpdateSafariZoneIGT(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    sub_0202F784(Save_SafariZone_Get(fieldSystem->saveData), Save_PlayerData_GetIGTAddr(fieldSystem->saveData));
+    SafariZone_SetUnlockTime(Save_SafariZone_Get(fieldSystem->saveData), Save_PlayerData_GetIGTAddr(fieldSystem->saveData));
     return FALSE;
 }

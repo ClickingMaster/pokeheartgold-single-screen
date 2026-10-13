@@ -196,7 +196,7 @@ BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId) {
             Sound_SetScene(0);
             bgm = FieldBGM_GetEffective(work->fieldSystem, work->fieldSystem->location->mapId);
             Sound_SetFieldBGM(FieldBGM_GetForMapHeader(work->fieldSystem, work->fieldSystem->location->mapId));
-            sub_02055198(NULL, bgm);
+            FieldBGM_Play(NULL, bgm);
             work->state = 0;
             if (work->recorder->mode != 0) {
                 LoadOVY38();

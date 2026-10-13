@@ -3,12 +3,12 @@
 #include "communication_command.h"
 #include "unk_0203AC88.h"
 
-void sub_020971F8(void *arg0) {
-    Comm_RegisterCommandTable(sub_0203AC88(), sub_0203AC90(), arg0);
+void WifiClubComm_RegisterCommands(void *arg0) {
+    Comm_RegisterCommandTable(WifiClubComm_GetCommandTable(), WifiClubComm_GetCommandCount(), arg0);
 }
 
-void sub_02097214(void) {
-    Comm_RegisterCommandTable(sub_0203AC88(), sub_0203AC90(), NULL);
+void WifiClubComm_RegisterCommandsNoContext(void) {
+    Comm_RegisterCommandTable(WifiClubComm_GetCommandTable(), WifiClubComm_GetCommandCount(), NULL);
 }
 
 s32 sub_0209722C(void) {

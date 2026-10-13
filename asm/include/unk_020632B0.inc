@@ -18,7 +18,7 @@
 .public ScriptNumToTrainerNum
 .public TrainerNumIsDouble
 .public TrainerFlagCheck
-.public sub_02055780
+.public FieldSystem_ApricornTree_HasApricorn
 .public FieldSystem_ApricornTree_TryGetApricorn
 .public PlayerAvatar_GetFacingDirection
 .public PlayerAvatar_GetXCoord

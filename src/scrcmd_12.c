@@ -71,7 +71,7 @@ BOOL ScrCmd_510(ScriptContext *ctx) {
 
     Heap_Free(mon);
     MigratedPokemon_InitPokemonOnly(unkStruct);
-    sub_02093070(ctx->fieldSystem);
+    FieldSystem_TryTriggerBillPCFullCall(ctx->fieldSystem);
     return FALSE;
 }
 

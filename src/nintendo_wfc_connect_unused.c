@@ -36,7 +36,7 @@
 #include "text.h"
 #include "unk_02009D48.h"
 #include "sprite_resource.h"
-#include "unk_0203170C.h"
+#include "save_wii_message.h"
 #include "comm_wireless.h"
 #include "wireless_status_icon.h"
 #include "unk_02069528.h"
@@ -111,7 +111,7 @@ typedef struct NintendoWfcUnused {
     int dwcErrorType;                           // 0x0F18
     int httpResult;                             // 0x0F1C
     int messageTimer;                           // 0x0F20
-    Unk020317F4 profile;                        // 0x0F24
+    WifiServerProfile profile;                        // 0x0F24
     u32 profileResponse[2];                     // 0x0F88
     s16 subState;                               // 0x0F90
     s16 subTimer;                               // 0x0F92
@@ -161,7 +161,7 @@ void NintendoWfcHttp_RequestRoomCount(int rank);
 void NintendoWfcHttp_RequestDownload(int rank, int room, void *buffer);
 void NintendoWfcHttp_RequestUpload(int rank, int room, int a2, UnkStruct_02069528 *record);
 void NintendoWfcHttp_RequestInfo(void);
-void NintendoWfcHttp_RequestSetProfile(Unk020317F4 *profile, u32 *response);
+void NintendoWfcHttp_RequestSetProfile(WifiServerProfile *profile, u32 *response);
 // The definition takes (u32 profileId, u64 friendKey); this app passes the key as two words.
 void NintendoWfcHttp_Init(u32 profileId, u32 friendKeyLo, u32 friendKeyHi);
 
@@ -1037,7 +1037,7 @@ int NintendoWfcUnused_WaitInfo(NintendoWfcUnused *wfc) {
 #pragma force_active reset
 
 int NintendoWfcUnused_RequestSetProfile(NintendoWfcUnused *wfc) {
-    sub_0203189C(wfc->args->saveData, &wfc->profile);
+    Save_WiiMessage_GetServerProfile(wfc->args->saveData, &wfc->profile);
     NintendoWfcHttp_RequestSetProfile(&wfc->profile, wfc->profileResponse);
     wfc->state = 10;
     wfc->timeoutCounter = 0;

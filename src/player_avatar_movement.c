@@ -429,7 +429,7 @@ BOOL ForcedMovement_Ice(PlayerAvatar *avatar, int value) {
         FieldSystem *fieldSystem = MapObject_GetFieldSystem(mapObject);
         PlayerAvatar_SetFlag1(avatar, TRUE);
         PlayerAvatar_SetMoveState(avatar, AVATAR_MOVE_STATE_NONE);
-        if (sub_0206D494(fieldSystem) == FALSE) {
+        if (FieldSystem_TryPushIceBlock(fieldSystem) == FALSE) {
             PlayerAvatar_EndForcedMovement(avatar);
             return FALSE;
         }

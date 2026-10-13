@@ -46,22 +46,22 @@ void SafariZone_ResetAreaSetToDefaultSet(SafariZoneAreaSet *area_set, u32 defaul
     MI_CpuClear8(area_set->areaLevels, sizeof(area_set->areaLevels));
 }
 
-void sub_0202F5F8(SafariZone *safari_zone, s32 areaSetNo) {
+void SafariZone_SetActiveAreaSet(SafariZone *safari_zone, s32 areaSetNo) {
     if (areaSetNo >= SAFARI_ZONE_MAX_AREA_SETS) {
         GF_ASSERT(FALSE);
         areaSetNo = 0;
     }
 
-    safari_zone->unk5F9_6 = areaSetNo;
+    safari_zone->activeAreaSet = areaSetNo;
 }
 
-u8 sub_0202F620(SafariZone *safari_zone) {
-    return safari_zone->unk5F9_6;
+u8 SafariZone_GetActiveAreaSet(SafariZone *safari_zone) {
+    return safari_zone->activeAreaSet;
 }
 
 SafariZoneAreaSet *SafariZone_GetAreaSet(SafariZone *safari_zone, s32 area_set_no) {
     if (area_set_no == 3) {
-        area_set_no = safari_zone->unk5F9_6;
+        area_set_no = safari_zone->activeAreaSet;
     }
 
     if (area_set_no >= SAFARI_ZONE_MAX_AREA_SETS) {
@@ -144,13 +144,13 @@ void SafariZone_SetObjectUnlockLevel(SafariZone *safari_zone, u8 a1) {
     }
 }
 
-void sub_0202F784(SafariZone *safari_zone, IGT *igt) {
-    safari_zone->unk5FA = (igt->hours * 60) + igt->minutes;
+void SafariZone_SetUnlockTime(SafariZone *safari_zone, IGT *igt) {
+    safari_zone->unlockTime = (igt->hours * 60) + igt->minutes;
 }
 
-u32 sub_0202F798(SafariZone *safari_zone, IGT *igt, s32 a2) {
+u32 SafariZone_CheckUnlockWaitPassed(SafariZone *safari_zone, IGT *igt, s32 a2) {
     u16 minutes = (igt->hours * 60) + igt->minutes;
-    s32 delta = minutes - safari_zone->unk5FA;
+    s32 delta = minutes - safari_zone->unlockTime;
 
     if (delta >= a2 * 60) {
         return 1;

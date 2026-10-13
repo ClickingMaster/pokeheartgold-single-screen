@@ -5,7 +5,7 @@
 
 BOOL MetatileBehavior_IsTallGrass(u8 tile);
 BOOL MetatileBehavior_IsVeryTallGrass(u8 tile);
-BOOL sub_0205B700(u8 tile);
+BOOL MetatileBehavior_IsCounter(u8 tile);
 BOOL MetatileBehavior_IsDoor(u8 tile);
 BOOL MetatileBehavior_IsWarpEntranceEast(u8 tile);
 BOOL MetatileBehavior_IsWarpEntranceWest(u8 tile);
@@ -46,10 +46,10 @@ BOOL sub_0205B8C4(u8 tile);
 BOOL MetatileBehavior_IsCaveFloor(u8 tile);
 BOOL MetatileBehavior_IsWaterfall(u8 tile);
 BOOL MetatileBehavior_IsWhirlpool(u8 tile);
-BOOL sub_0205B8F4(u8 tile);
-BOOL sub_0205B918(u8 tile);
-BOOL sub_0205B93C(u8 tile);
-BOOL sub_0205B960(u8 tile);
+BOOL MetatileBehavior_IsBlockedNorth(u8 tile);
+BOOL MetatileBehavior_IsBlockedSouth(u8 tile);
+BOOL MetatileBehavior_IsBlockedWest(u8 tile);
+BOOL MetatileBehavior_IsBlockedEast(u8 tile);
 BOOL MetatileBehavior_IsPuddle(u8 tile);
 BOOL MetatileBehavior_CanGenerateWalkingEncounters(u8 tile);
 BOOL MetatileBehavior_IsTV(u8 tile);

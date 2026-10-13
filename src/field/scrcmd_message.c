@@ -122,7 +122,7 @@ BOOL ScrCmd_444(ScriptContext *ctx) {
     u16 r2 = ScriptReadHalfword(ctx);
     u8 r3 = ScriptReadByte(ctx);
     u8 numLegendaryPokemonSeen = 0;
-    MessageFormat *messageFormat = sub_0204B538(fieldSystem->saveData, numEligiblePokemon, r2, r3, &numLegendaryPokemonSeen);
+    MessageFormat *messageFormat = Frontier_NewBannedSpeciesMessageFormat(fieldSystem->saveData, numEligiblePokemon, r2, r3, &numLegendaryPokemonSeen);
     ovFieldMain_ShowMessageWithFormat(ctx, messageFormat, baseMessageNum + numLegendaryPokemonSeen, TRUE);
     MessageFormat_Delete(messageFormat);
     SetupNativeScript(ctx, ScrNative_WaitTextPrinter);

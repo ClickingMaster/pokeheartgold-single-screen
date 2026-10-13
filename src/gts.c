@@ -280,7 +280,7 @@ void GtsServer_RequestInfo(void) {
     }
 }
 
-// profile: 0x64 bytes (Unk020317F4), the console's MAC address is filled in at 0x1C.
+// profile: 0x64 bytes (WifiServerProfile), the console's MAC address is filled in at 0x1C.
 void GtsServer_RequestSetProfile(void *profile, void *response) {
     OS_GetMacAddress((u8 *)profile + 0x1C);
     memcpy(gGtsServerRequest, profile, 0x64);

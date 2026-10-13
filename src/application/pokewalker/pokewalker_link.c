@@ -616,7 +616,7 @@ int PokewalkerApp_Link_UpdateUpload(PokewalkerApp *app) {
         break;
     case 15: // done
         ManagedSprite_SetDrawFlag(app->sprites[2], FALSE);
-        sub_02032644(app->pokewalker);
+        Pokewalker_IncrementLinkCount(app->pokewalker);
         PokewalkerApp_HideSprite(app, 8);
         PokewalkerApp_InitMotion(app, LINK_MOTION(app), 0);
         return 35;

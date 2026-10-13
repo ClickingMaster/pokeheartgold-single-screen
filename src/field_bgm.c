@@ -225,9 +225,9 @@ void FieldBGM_PlayForMapHeader(FieldSystem *fieldSystem, u32 mapID, BOOL a2) {
     fieldSystem->environmentSoundState = ENVIRONMENT_SOUND_NONE_UNK3;
 
     if (a2 == TRUE) {
-        sub_02055198(fieldSystem, seqNo);
+        FieldBGM_Play(fieldSystem, seqNo);
     } else {
-        sub_02055198(NULL, seqNo);
+        FieldBGM_Play(NULL, seqNo);
     }
 
     sub_02005CF4(FALSE);
@@ -238,13 +238,13 @@ BOOL FieldBGM_PlayEffectiveForMapHeader(FieldSystem *fieldSystem, u32 mapId) {
     Sound_SetFieldBGM(FieldBGM_GetForMapHeader(fieldSystem, mapId));
 
     sub_02005CF4(TRUE);
-    u32 res = sub_02055198(NULL, seqNo);
+    u32 res = FieldBGM_Play(NULL, seqNo);
     sub_02005CF4(FALSE);
 
     return res;
 }
 
-BOOL sub_02055198(FieldSystem *fieldSystem, u16 seqNo) {
+BOOL FieldBGM_Play(FieldSystem *fieldSystem, u16 seqNo) {
     BOOL res = Sound_PlayFieldBGM(seqNo);
     if (res == TRUE && fieldSystem != NULL) {
         FieldSystem_ProcessSoundplate(fieldSystem, FALSE);

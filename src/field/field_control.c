@@ -565,7 +565,7 @@ static BOOL FieldSystem_CheckMapTransition(FieldSystem *fieldSystem, FieldInput 
     } else if (MetatileBehavior_IsWarpEntranceEast(metatileBehavior) || MetatileBehavior_IsWarpEast(metatileBehavior)
         || MetatileBehavior_IsWarpEntranceWest(metatileBehavior) || MetatileBehavior_IsWarpWest(metatileBehavior)
         || MetatileBehavior_IsWarpEntranceSouth(metatileBehavior) || MetatileBehavior_IsWarpSouth(metatileBehavior)) {
-        sub_02055CD8(fieldSystem, nextMap.mapId, nextMap.warpId, 0, 0, fieldInput->transitionDir);
+        NewFieldTransitionEnvironmentByMapType(fieldSystem, nextMap.mapId, nextMap.warpId, 0, 0, fieldInput->transitionDir);
         return TRUE;
     } else {
         return FALSE;
@@ -621,7 +621,7 @@ static u16 GetInteractedMetatileScript(FieldSystem *fieldSystem, u8 metatileBeha
     }
 
     if (Save_VarsFlags_CheckSafariSysFlag(Save_VarsFlags_Get(fieldSystem->saveData))) {
-        if (sub_0202F620(Save_SafariZone_Get(fieldSystem->saveData)) == 0 && sub_0205BAEC(metatileBehavior)) {
+        if (SafariZone_GetActiveAreaSet(Save_SafariZone_Get(fieldSystem->saveData)) == 0 && sub_0205BAEC(metatileBehavior)) {
             return std_safari_remove_object;
         }
     }
@@ -731,7 +731,7 @@ static BOOL FieldSystem_CheckTransition(FieldSystem *fieldSystem, int x, int z, 
     }
 
     if (MetatileBehavior_IsWarpEntranceNorth(metatileBehavior) || MetatileBehavior_IsWarpNorth(metatileBehavior)) {
-        sub_02055CD8(fieldSystem, location.mapId, location.warpId, 0, 0, 0);
+        NewFieldTransitionEnvironmentByMapType(fieldSystem, location.mapId, location.warpId, 0, 0, 0);
         return TRUE;
     }
 
@@ -828,7 +828,7 @@ static BOOL FieldSystem_UpdateBikeShop(FieldSystem *fieldSystem) {
     if (Save_VarsFlags_CheckFlagInArray(Save_VarsFlags_Get(fieldSystem->saveData), FLAG_SYS_GOT_BIKE_SHOP_CALL) == FALSE
         && PhoneCallPersistentState_CheckCallTriggerFlag(phoneCallPersistentState, CALL_TRIGGER_BIKE_SHOP_STEPS) == FALSE
         && GameStats_GetCapped(Save_GameStats_Get(fieldSystem->saveData), GAME_STAT_STEPS_BIKED) >= 1024) {
-        sub_02092E14(FieldSystem_GetGearPhoneRingManager(fieldSystem), 2, 1);
+        GearPhoneRingManager_SetCallTrigger(FieldSystem_GetGearPhoneRingManager(fieldSystem), 2, 1);
         return FALSE;
     }
     return FALSE;

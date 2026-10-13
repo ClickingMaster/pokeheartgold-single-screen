@@ -60,7 +60,7 @@ int PokewalkerApp_MainMenu_Start(PokewalkerApp *app) {
         PokewalkerApp_AddWindowBank(app, 1);
         return 20;
     }
-    if (PCStorage_CountMonsInAllBoxes(storage) == 0 && sub_0203263C(app->pokewalker) == 0) {
+    if (PCStorage_CountMonsInAllBoxes(storage) == 0 && Pokewalker_GetLinkCount(app->pokewalker) == 0) {
         PokewalkerApp_RemoveWindowBank(app, 3);
         PokewalkerApp_AddWindowBank(app, 1);
         return 23;
@@ -103,7 +103,7 @@ void PokewalkerApp_ShowWalkerRecords(PokewalkerApp *app, BOOL onStroll) {
     int wattsNeeded;
     Pokemon *mon;
     BoxPokemon *boxMon;
-    sub_02032674(app->pokewalker, &steps, &watts);
+    Pokewalker_GetStepsAndWatts(app->pokewalker, &steps, &watts);
     BufferIntegerAsString(app->msgFormat, 7, watts, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BufferIntegerAsString(app->msgFormat, 6, steps, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
     wattsNeeded = PokewalkerApp_GetWattsToNextCourse(app, watts);

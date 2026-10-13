@@ -46,20 +46,20 @@ void PokewalkerApp_AddPeerTrainerHouseSets(PokewalkerApp *app) {
 
 void PokewalkerApp_UpdateSavedSteps(PokewalkerApp *app) {
     u32 steps;
-    sub_02032674(app->pokewalker, &app->walkerSteps, &app->unk_1D75C);
+    Pokewalker_GetStepsAndWatts(app->pokewalker, &app->walkerSteps, &app->unk_1D75C);
     steps = app->peerIdentity.unk_64;
     if (steps < app->walkerSteps) {
-        sub_02032650(app->pokewalker, app->walkerSteps, app->irStatus.unk_0A);
+        Pokewalker_SetStepsAddWatts(app->pokewalker, app->walkerSteps, app->irStatus.unk_0A);
     } else {
-        sub_02032650(app->pokewalker, steps, app->irStatus.unk_0A);
+        Pokewalker_SetStepsAddWatts(app->pokewalker, steps, app->irStatus.unk_0A);
     }
 }
 
 #pragma force_active reset
 
 void PokewalkerApp_AddSavedTotal(PokewalkerApp *app) {
-    sub_02032674(app->pokewalker, &app->walkerSteps, &app->unk_1D75C);
-    sub_02032650(app->pokewalker, app->walkerSteps, app->irStatus.unk_0A);
+    Pokewalker_GetStepsAndWatts(app->pokewalker, &app->walkerSteps, &app->unk_1D75C);
+    Pokewalker_SetStepsAddWatts(app->pokewalker, app->walkerSteps, app->irStatus.unk_0A);
 }
 
 BOOL PokewalkerApp_IsWalkerMonValid(PokewalkerApp *app) {
@@ -327,9 +327,9 @@ int PokewalkerApp_Link_UpdateSendStroll(PokewalkerApp *app) {
         break;
     case 15: // done
         ManagedSprite_SetDrawFlag(app->sprites[2], FALSE);
-        sub_02032674(app->pokewalker, &app->walkerSteps, &app->unk_1D75C);
+        Pokewalker_GetStepsAndWatts(app->pokewalker, &app->walkerSteps, &app->unk_1D75C);
         PokewalkerApp_UpdateSavedSteps(app);
-        sub_02032644(app->pokewalker);
+        Pokewalker_IncrementLinkCount(app->pokewalker);
         PokewalkerApp_HideSprite(app, 8);
         PokewalkerApp_InitMotion(app, LINK_MOTION(app), 0);
         return 35;

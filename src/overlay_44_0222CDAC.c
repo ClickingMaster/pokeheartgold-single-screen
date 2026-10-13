@@ -35,7 +35,7 @@
 #include "touchpad.h"
 #include "friend_roster.h"
 #include "frontier_save_access.h"
-#include "unk_0203170C.h"
+#include "save_wii_message.h"
 #include "communication_player_state.h"
 #include "comm_wireless.h"
 #include "unk_02035900.h"
@@ -1513,7 +1513,7 @@ s32 ov44_0222B528(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         RemoveWindow(&arg0->unk300);
         Save_FriendRoster_Init(arg0->unk0);
         void *saveArray = SaveArray_Get(arg0->saveData, 31);
-        sub_02031710(saveArray);
+        Save_WiiMessage_Init(saveArray);
         FrontierSave_ClearRows(Save_Frontier_GetStatic(arg0->saveData));
         arg0->unk348 = 14;
         arg0->unk4 = CommState_StartWifiClub(arg0->saveData, 1188);
@@ -4999,7 +4999,7 @@ s32 ov44_0223197C(UnkStruct_ov44_022319EC *arg0, s32 arg1, s32 arg2) {
     } else {
         WifiConnection_SetExtraHeapEnabled(0, 128);
     }
-    sub_02097214();
+    WifiClubComm_RegisterCommandsNoContext();
     return CommState_StartWifiMatch(arg1);
 }
 

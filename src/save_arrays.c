@@ -49,7 +49,7 @@ DECL_CHUNK_EX(Save_Gts_sizeof, Save_Gts_Init)
 DECL_CHUNK_EX(sub_0202E41C, sub_0202E424)
 DECL_CHUNK_EX(Save_FriendRoster_sizeof, Save_FriendRoster_Init)
 DECL_CHUNK_EX(PokeathlonSave_FriendshipRecords_sizeof, PokeathlonSave_FriendshipRecords_Init)
-DECL_CHUNK_EX(sub_0203170C, sub_02031710)
+DECL_CHUNK_EX(Save_WiiMessage_sizeof, Save_WiiMessage_Init)
 DECL_CHUNK_EX(Save_PlazaSurvey_sizeof, Save_PlazaSurvey_Init)
 DECL_CHUNK(PokeathlonSave)
 DECL_CHUNK(Save_ApricornBox)
@@ -244,8 +244,8 @@ const struct SaveChunkHeader gSaveChunkHeaders[] = {
     {
      SAVE_UNK_31,
      0,
-     (SAVESIZEFN)sub_0203170C,
-     (SAVEINITFN)sub_02031710,
+     (SAVESIZEFN)Save_WiiMessage_sizeof,
+     (SAVEINITFN)Save_WiiMessage_Init,
      },
     {
      SAVE_PLAZA_SURVEY,

@@ -32,7 +32,7 @@
 
 typedef void (*FieldSystemFunc)(FieldSystem *);
 
-BOOL sub_02055DBC(TaskManager *man);
+BOOL Task_FieldTransition(TaskManager *man);
 BOOL RoutineFieldFade(TaskManager *man);
 
 extern TaskFunc sMapEnterRoutines[9];
@@ -83,10 +83,10 @@ void NewFieldTransitionEnvironment(FieldSystem *fieldSystem, int mapID, int warp
     fenv->location.y = y;
     fenv->location.direction = dir;
     fenv->transitionNo = transNo;
-    FieldSystem_CreateTask(fieldSystem, sub_02055DBC, fenv);
+    FieldSystem_CreateTask(fieldSystem, Task_FieldTransition, fenv);
 }
 
-void sub_02055CD8(FieldSystem *fieldSystem, int mapID, int warpID, int x, int y, int dir) {
+void NewFieldTransitionEnvironmentByMapType(FieldSystem *fieldSystem, int mapID, int warpID, int x, int y, int dir) {
     FieldTransitionEnvironment *fenv = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FieldTransitionEnvironment));
     fenv->state = 0;
     fenv->transitionState = 0;
@@ -132,11 +132,11 @@ void sub_02055CD8(FieldSystem *fieldSystem, int mapID, int warpID, int x, int y,
         }
     }
     fenv->transitionNo = var;
-    FieldSystem_CreateTask(fieldSystem, sub_02055DBC, fenv);
+    FieldSystem_CreateTask(fieldSystem, Task_FieldTransition, fenv);
 }
 
 // this function handles transition routines between maps
-BOOL sub_02055DBC(TaskManager *man) {
+BOOL Task_FieldTransition(TaskManager *man) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(man);
     FieldTransitionEnvironment *env = TaskManager_GetEnvironment(man);
     switch (env->state) {
@@ -233,7 +233,7 @@ BOOL sub_02055DBC(TaskManager *man) {
     return FALSE;
 }
 
-BOOL sub_02056004(TaskManager *man) {
+BOOL FieldTransition_ExitWithFade(TaskManager *man) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(man);
     FieldTransitionEnvironment *fenv = TaskManager_GetEnvironment(man);
     switch (fenv->transitionState) {
@@ -248,7 +248,7 @@ BOOL sub_02056004(TaskManager *man) {
     return FALSE;
 }
 
-BOOL sub_02056040(TaskManager *man) {
+BOOL FieldTransition_ExitThroughDoor(TaskManager *man) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(man);
     FieldTransitionEnvironment *fenv = TaskManager_GetEnvironment(man);
     switch (fenv->transitionState) {
@@ -273,7 +273,7 @@ BOOL sub_02056040(TaskManager *man) {
     return FALSE;
 }
 
-BOOL sub_020560C4(TaskManager *man) {
+BOOL FieldTransition_ExitThroughSideDoor(TaskManager *man) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(man);
     FieldTransitionEnvironment *fenv = TaskManager_GetEnvironment(man);
     switch (fenv->transitionState) {
@@ -296,7 +296,7 @@ BOOL sub_020560C4(TaskManager *man) {
     return FALSE;
 }
 
-BOOL sub_0205613C(TaskManager *man) {
+BOOL FieldTransition_ExitOnWarpStairs(TaskManager *man) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(man);
     FieldTransitionEnvironment *fenv = TaskManager_GetEnvironment(man);
     LocalMapObject *obj;
@@ -345,7 +345,7 @@ BOOL sub_0205613C(TaskManager *man) {
     return FALSE;
 }
 
-BOOL sub_02056220(TaskManager *man) {
+BOOL FieldTransition_ExitStairsFadeOut(TaskManager *man) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(man);
     FieldTransitionEnvironment *fenv = TaskManager_GetEnvironment(man);
     PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
@@ -360,7 +360,7 @@ BOOL sub_02056220(TaskManager *man) {
     return FALSE;
 }
 
-BOOL sub_02056268(TaskManager *man) {
+BOOL FieldTransition_ExitStairsFadeToWhite(TaskManager *man) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(man);
     FieldTransitionEnvironment *fenv = TaskManager_GetEnvironment(man);
     PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
@@ -375,7 +375,7 @@ BOOL sub_02056268(TaskManager *man) {
     return FALSE;
 }
 
-BOOL sub_020562B0(TaskManager *man) {
+BOOL FieldTransition_ExitRising(TaskManager *man) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(man);
     FieldTransitionEnvironment *fenv = TaskManager_GetEnvironment(man);
     LocalMapObject *obj;
@@ -453,7 +453,7 @@ BOOL sub_020562B0(TaskManager *man) {
     return FALSE;
 }
 
-BOOL sub_02056424(TaskManager *man) {
+BOOL FieldTransition_ExitSinking(TaskManager *man) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(man);
     FieldTransitionEnvironment *fenv = TaskManager_GetEnvironment(man);
     LocalMapObject *obj;
@@ -506,7 +506,7 @@ BOOL sub_02056424(TaskManager *man) {
     return FALSE;
 }
 
-BOOL sub_02056530(TaskManager *man) {
+BOOL FieldTransition_EnterWithDirectionalFade(TaskManager *man) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(man);
     FieldTransitionEnvironment *fenv = TaskManager_GetEnvironment(man);
     LocalMapObject *obj;
@@ -541,7 +541,7 @@ BOOL sub_02056530(TaskManager *man) {
     return FALSE;
 }
 
-BOOL sub_020565FC(TaskManager *man) {
+BOOL FieldTransition_EnterWithFade(TaskManager *man) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(man);
     FieldTransitionEnvironment *fenv = TaskManager_GetEnvironment(man);
     switch (fenv->transitionState) {
@@ -550,7 +550,7 @@ BOOL sub_020565FC(TaskManager *man) {
         if (MetatileBehavior_IsDoor(GetMetatileBehavior(fieldSystem, PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar)))) {
             MapObject_SetVisible(mapObj, TRUE);
             fenv->transitionState = 1;
-            TaskManager_Jump(man, sub_02056530, fenv);
+            TaskManager_Jump(man, FieldTransition_EnterWithDirectionalFade, fenv);
             break;
         } else {
             TaskManager_Call(man, Task_ArriveWithFade, DoorTransition_NewTaskWork());

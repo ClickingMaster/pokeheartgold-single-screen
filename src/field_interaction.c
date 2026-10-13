@@ -61,7 +61,7 @@ void FieldSystem_GetFacingObject(FieldSystem *fieldSystem, LocalMapObject **ret_
     int x;
     int z;
     u32 dir = _GetCoordsOfFacingTile(fieldSystem, &x, &z);
-    if (sub_0205B700(GetMetatileBehavior(fieldSystem, x, z)) == TRUE) {
+    if (MetatileBehavior_IsCounter(GetMetatileBehavior(fieldSystem, x, z)) == TRUE) {
         switch (dir) {
         case 0:
             z--;

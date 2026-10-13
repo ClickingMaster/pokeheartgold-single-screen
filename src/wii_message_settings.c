@@ -43,7 +43,7 @@
 #include "oam_manager.h"
 #include "touchpad.h"
 #include "friend_roster.h"
-#include "unk_0203170C.h"
+#include "save_wii_message.h"
 #include "comm_wireless.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
@@ -136,7 +136,7 @@ typedef struct WiiMessageSettings {
     u32 unk_8C;                 // 0x08C, set together with nextApp, never read
     u32 unk_90;                 // 0x090
     void *childArgs;            // 0x094
-    Unk020317F4 request;        // 0x098
+    WifiServerProfile request;        // 0x098
     int responseStatus;         // 0x0FC, written by GtsServer_RequestSetProfile
     int responseResult;         // 0x100
     u32 password;               // 0x104
@@ -284,7 +284,7 @@ void GtsServer_Init(u32 profileId, u32 friendKeyLo, u32 friendKeyHi);
 void GtsServer_Exit(void);
 BOOL GtsServer_IsRequestDone(void);
 int GtsServer_GetResult(void);
-void GtsServer_RequestSetProfile(Unk020317F4 *request, int *response);
+void GtsServer_RequestSetProfile(WifiServerProfile *request, int *response);
 
 extern NNSFndHeapHandle _02249BE0;
 extern const WiiMessageSettingsAppEntry sWiiMessageSettingsApps[];
@@ -544,32 +544,32 @@ void WiiMessageSettings_Free(int unused, void *ptr) {
 void WiiMessageSettings_SaveWiiAddress(WiiMessageSettings *app) {
     char *address = Heap_Alloc(HEAP_ID_115, 100);
     WiiNumber_ToWiiAddress(app->wiiNumber, address, HEAP_ID_115);
-    sub_0203175C(app->saveData, address);
+    Save_WiiMessage_SetWiiAddress(app->saveData, address);
     Heap_Free(address);
 }
 
 #pragma force_active reset
 
 void WiiMessageSettings_SaveRegistrationCode(WiiMessageSettings *app) {
-    sub_02031780(app->saveData, 1, app->registrationCodePrefix);
-    sub_02031780(app->saveData, 2, app->registrationCode);
+    Save_WiiMessage_SetParam(app->saveData, 1, app->registrationCodePrefix);
+    Save_WiiMessage_SetParam(app->saveData, 2, app->registrationCode);
 }
 
 void WiiMessageSettings_SavePassword(WiiMessageSettings *app) {
-    sub_02031780(app->saveData, 3, app->password);
+    Save_WiiMessage_SetParam(app->saveData, 3, app->password);
 }
 
 void WiiMessageSettings_InitRequest(WiiMessageSettings *app) {
-    s32 prefix = sub_0203186C(app->saveData, &app->request);
+    s32 prefix = Save_WiiMessage_InitRegistrationProfile(app->saveData, &app->request);
     WiiMessageSettings_SetRegistrationCodePrefix(app, prefix);
 }
 
 void WiiMessageSettings_SetRequestWiiAddress(WiiMessageSettings *app) {
-    WiiNumber_ToWiiAddress(app->wiiNumber, app->request.unk24, HEAP_ID_115);
+    WiiNumber_ToWiiAddress(app->wiiNumber, app->request.wiiAddress, HEAP_ID_115);
 }
 
 void WiiMessageSettings_SetRequestRegistrationCode(WiiMessageSettings *app) {
-    app->request.unk62 = app->registrationCode;
+    app->request.registrationCode = app->registrationCode;
 }
 
 void WiiMessageSettings_SetRegistrationCodePrefix(WiiMessageSettings *app, int prefix) {
@@ -1079,7 +1079,7 @@ BOOL WiiMessageSettingsScreen_MainMenu(WiiMessageSettingsScreen *screen) {
 
     switch (screen->subState) {
     case 0:
-        if (sub_02031744(screen->app->saveData) == TRUE) {
+        if (Save_WiiMessage_IsRegistered(screen->app->saveData) == TRUE) {
             rect = &sWiiMessageSettingsRegisteredMenuWindow;
             entries = sWiiMessageSettingsRegisteredMenuItems;
             count = 4;
@@ -1168,12 +1168,12 @@ BOOL WiiMessageSettingsScreen_SetMessageReception(WiiMessageSettingsScreen *scre
         if (input == YESNORESPONSE_YES) {
             YesNoPrompt_Destroy(screen->yesNoPrompt);
             WiiMessageSettingsScreen_PrintMessage(screen, screen->msgData, msg_0188_00026, 1, 0xF0F);
-            sub_02031780(screen->app->saveData, 0, TRUE);
+            Save_WiiMessage_SetParam(screen->app->saveData, 0, TRUE);
             screen->subState++;
         } else if (input == YESNORESPONSE_NO) {
             YesNoPrompt_Destroy(screen->yesNoPrompt);
             WiiMessageSettingsScreen_PrintMessage(screen, screen->msgData, msg_0188_00027, 1, 0xF0F);
-            sub_02031780(screen->app->saveData, 0, FALSE);
+            Save_WiiMessage_SetParam(screen->app->saveData, 0, FALSE);
             screen->subState++;
         }
         break;
@@ -1204,7 +1204,7 @@ BOOL WiiMessageSettingsScreen_DeleteSettings(WiiMessageSettingsScreen *screen) {
         if (input == YESNORESPONSE_YES) {
             YesNoPrompt_Destroy(screen->yesNoPrompt);
             WiiMessageSettingsScreen_PrintMessage(screen, screen->msgData, msg_0188_00029, 1, 0xF0F);
-            sub_02031734(screen->app->saveData);
+            Save_WiiMessage_Reset(screen->app->saveData);
             screen->subState++;
         } else if (input == YESNORESPONSE_NO) {
             YesNoPrompt_Destroy(screen->yesNoPrompt);
@@ -2356,10 +2356,10 @@ BOOL WiiMessageSettingsScreen_CheckPassword(WiiMessageSettingsScreen *screen) {
     case 0: {
         int msgId;
         int password = WiiMessageSettings_GetPassword(app);
-        if (password == sub_020317BC(app->saveData, 3)) {
+        if (password == Save_WiiMessage_GetParam(app->saveData, 3)) {
             u32 groups[4];
             u32 i;
-            WiiNumber_ParseDigitGroups(sub_02031774(app->saveData)->unk0, groups, HEAP_ID_115);
+            WiiNumber_ParseDigitGroups(Save_WiiMessage_Get(app->saveData)->wiiAddress, groups, HEAP_ID_115);
             for (i = 0; i < 4; i++) {
                 BufferIntegerAsString(screen->msgFormat, i, groups[i], 4, PRINTING_MODE_LEADING_ZEROS, TRUE);
             }

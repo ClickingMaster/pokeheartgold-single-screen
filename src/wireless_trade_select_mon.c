@@ -439,7 +439,7 @@ BOOL WirelessTradeSelectMon_Init(OverlayManager *man, int *state) {
     sub_020399FC(HEAP_ID_26, work->bgConfig);
     WirelessStatusIcon_Create();
     IsNighttime();
-    sub_02055198(NULL, SEQ_GS_POKESEN);
+    FieldBGM_Play(NULL, SEQ_GS_POKESEN);
     sub_02005448(SEQ_GS_POKESEN);
     NARC_Delete(narc);
     return TRUE;

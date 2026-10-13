@@ -779,7 +779,7 @@ BOOL HandleDaycareStep(Daycare *dayCare, Party *party, FieldSystem *fieldSystem)
             u8 compat = Save_Daycare_CalcCompatibilityInternal(dayCare);
             if (compat > (LCRandom() * 100 / 0xFFFFu)) {
                 GenerateEggPID(dayCare);
-                sub_0209316C(fieldSystem);
+                FieldSystem_TryTriggerDaycareEggCall(fieldSystem);
             }
         }
     }

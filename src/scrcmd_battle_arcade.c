@@ -134,7 +134,7 @@ static void BattleArcade_StartTeamCheck(TaskManager *taskManager, u16 firstMon, 
     unk->playerTeam[0] = firstMon;
     unk->playerTeam[1] = secondMon;
     unk->result = result;
-    sub_02091574(unk);
+    FieldComm_RegisterCommands(unk);
     TaskManager_Call(taskManager, Task_BattleArcadeTeamCheck, unk);
 }
 

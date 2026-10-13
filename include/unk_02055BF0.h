@@ -31,17 +31,17 @@ typedef struct FieldTransitionEnvironment {
 
 void NewFieldFadeEnvironment(TaskManager *man, enum FadeMode fadeMode, enum FadeType typeTop, enum FadeType typeBottom, u16 colour, int duration, int framesPer, enum HeapID heapID);
 void NewFieldTransitionEnvironment(FieldSystem *fieldSystem, int mapID, int warpID, int x, int z, int dir, u32 transNo);
-void sub_02055CD8(FieldSystem *fieldSystem, int mapID, int warpID, int x, int z, int dir);
+void NewFieldTransitionEnvironmentByMapType(FieldSystem *fieldSystem, int mapID, int warpID, int x, int z, int dir);
 
-BOOL sub_02056004(TaskManager *man);
-BOOL sub_02056040(TaskManager *man);
-BOOL sub_020560C4(TaskManager *man);
-BOOL sub_0205613C(TaskManager *man);
-BOOL sub_02056220(TaskManager *man);
-BOOL sub_02056268(TaskManager *man);
-BOOL sub_020562B0(TaskManager *man);
-BOOL sub_02056424(TaskManager *man);
-BOOL sub_02056530(TaskManager *man);
-BOOL sub_020565FC(TaskManager *man);
+BOOL FieldTransition_ExitWithFade(TaskManager *man);
+BOOL FieldTransition_ExitThroughDoor(TaskManager *man);
+BOOL FieldTransition_ExitThroughSideDoor(TaskManager *man);
+BOOL FieldTransition_ExitOnWarpStairs(TaskManager *man);
+BOOL FieldTransition_ExitStairsFadeOut(TaskManager *man);
+BOOL FieldTransition_ExitStairsFadeToWhite(TaskManager *man);
+BOOL FieldTransition_ExitRising(TaskManager *man);
+BOOL FieldTransition_ExitSinking(TaskManager *man);
+BOOL FieldTransition_EnterWithDirectionalFade(TaskManager *man);
+BOOL FieldTransition_EnterWithFade(TaskManager *man);
 
 #endif // POKEHEARTGOLD_UNK_02055BF0_H

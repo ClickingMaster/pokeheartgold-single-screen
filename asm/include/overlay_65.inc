@@ -183,7 +183,7 @@
 .public Comm_StoreFriendFromPlayer
 .public WirelessStatusIcon_Create
 .public Save_VarsFlags_Get
-.public sub_02055198
+.public FieldBGM_Play
 .public Save_VarsFlags_GetVar404C
 .public Save_VarsFlags_SetVar404C
 .public AllocMonZeroed

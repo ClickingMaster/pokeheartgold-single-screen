@@ -204,7 +204,7 @@ BOOL ScrCmd_664(ScriptContext *ctx) {
 
 BOOL ScrCmd_665(ScriptContext *ctx) {
     u16 var0 = ScriptGetVar(ctx);
-    sub_02055198(ctx->fieldSystem, var0);
+    FieldBGM_Play(ctx->fieldSystem, var0);
     return TRUE;
 }
 

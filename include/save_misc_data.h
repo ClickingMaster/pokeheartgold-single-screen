@@ -8,7 +8,7 @@
 #include "save.h"
 
 typedef struct APRICORN_TREE {
-    u8 unk_0;
+    u8 hasApricorn;
     u8 unk_1;
     u16 unk_2;
 } APRICORN_TREE;

@@ -31,10 +31,10 @@ void sub_02069528(SaveData *saveData, s32 a1, UnkStruct_02069528 *a2) {
     if (a1 == 0) {
         a2->unkE2 = FrontierData_FlagAction(frontierData, 7, 0);
         if (a2->unkE2 != 0) {
-            sub_0202D4DC(frontierData, a1, a2);
+            FrontierData_GetWifiTeam(frontierData, a1, a2);
         }
     } else {
         a2->unkE2 = FrontierData_GetWifiScore(frontierData);
-        sub_0202D4DC(frontierData, a1, a2);
+        FrontierData_GetWifiTeam(frontierData, a1, a2);
     }
 }

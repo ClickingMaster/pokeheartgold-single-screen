@@ -192,7 +192,7 @@
 .public Comm_SyncedSave
 .public WirelessStatusIcon_LoadPaletteFile
 .public WirelessStatusIcon_Create
-.public sub_02055198
+.public FieldBGM_Play
 .public UnionRoom_SetBeaconActivity
 .public SpriteToUnionRoomAvatarIdx
 .public sub_0205B4A4

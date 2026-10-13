@@ -53,7 +53,7 @@ struct UnkStruct_02059E1C *UnionRoom_Start(FieldSystem *fieldSystem) {
     if (unionRoom == NULL) {
         unionRoom = fieldSystem->unionRoom;
     }
-    sub_02091574(fieldSystem);
+    FieldComm_RegisterCommands(fieldSystem);
     CommState_SetMaxEntries(2);
     UnionRoom_SetState(unionRoom, sub_02059E88, 40);
     return unionRoom;
@@ -123,7 +123,7 @@ void sub_02059EBC(struct UnkStruct_02059E1C *unionRoom) {
 
 void sub_02059F30(struct UnkStruct_02059E1C *unionRoom) {
     if (CommState_IsAlternateSearchReady() == TRUE) {
-        sub_02091574(unionRoom->fieldSystem);
+        FieldComm_RegisterCommands(unionRoom->fieldSystem);
         UnionRoom_SetState(unionRoom, sub_02059EBC, 2);
     }
 }

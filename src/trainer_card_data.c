@@ -62,7 +62,7 @@ void TrainerCardData_Build(u8 unk_04_0, u8 liveIgt, u8 unk_02, u8 caseVariant, F
     TrainerCardData_SetHeader(unk_04_0, GAME_VERSION, FieldSystem_GetTrainerCardStars(fieldSystem), unk_02, PlayerProfile_GetLanguage(profile), card);
     TrainerCardData_SetProfile(PlayerProfile_GetTrainerID_VisibleHalf(profile), PlayerProfile_GetTrainerGender(profile), PlayerProfile_GetNamePtr(profile), PlayerProfile_GetMoney(profile), Pokedex_CountDexOwned(Save_Pokedex_Get(fieldSystem->saveData)), Pokedex_IsEnabled(Save_Pokedex_Get(fieldSystem->saveData)), GameStats_GetScore(stats), card);
     igt = Save_PlayerData_GetIGTAddr(save);
-    sub_02055624(fieldSystem, &startDate, &clearTime);
+    FieldSystem_GetAdventureStartTime(fieldSystem, &startDate, &clearTime);
     FieldSystem_GetGameClearTime(fieldSystem, &clearDate, &clearTime);
     TrainerCardData_SetTimes(CheckGameClearFlag(Save_VarsFlags_Get(fieldSystem->saveData)), igt, &startDate, &clearDate, &clearTime, liveIgt, card);
     saveCard = Save_TrainerCard_Get(fieldSystem->saveData);

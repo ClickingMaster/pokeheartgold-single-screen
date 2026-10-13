@@ -86,7 +86,7 @@ static BOOL Task_AnimApricornTree(TaskManager *taskman) {
 
     switch (env->state) {
     case 0:
-        if (!sub_02055708(fieldSystem, env->tree)) {
+        if (!FieldSystem_ApricornTreeObject_HasApricorn(fieldSystem, env->tree)) {
             *env->unk24 = 0;
             env->state = 10;
             break;
@@ -113,8 +113,8 @@ static BOOL Task_AnimApricornTree(TaskManager *taskman) {
         }
         MapObject_SetAnimation(env->tree, 0);
         MapObject_PauseMovement(env->tree);
-        if (sub_02055708(fieldSystem, env->tree)) {
-            sub_02055760(fieldSystem, env->tree);
+        if (FieldSystem_ApricornTreeObject_HasApricorn(fieldSystem, env->tree)) {
+            FieldSystem_ApricornTree_PickApricorn(fieldSystem, env->tree);
             *env->unk24 = 1;
             env->state = 3;
             break;

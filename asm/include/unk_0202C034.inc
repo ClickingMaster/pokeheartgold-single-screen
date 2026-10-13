@@ -20,7 +20,7 @@
 .public FriendRoster_RemoveFriend
 .public FriendRoster_Compact
 .public FriendRoster_UpdateDate
-.public sub_0202C4F0
+.public FriendRoster_AddWinsLossesTrades
 .public sub_0202C554
 .public sub_0202C584
 .public sub_0202C5B4

@@ -46,7 +46,7 @@ void PlayerProfile_Init(void *profile);
 BOOL PlayerProfile_IsNameEmpty(void *profile);
 void LinkBattleRuleset_Copy(void *src, void *dst);
 void *FriendRoster_GetUserData(void *a);
-void sub_0202C4F0(void *a, int b, int c, int d, int e);
+void FriendRoster_AddWinsLossesTrades(void *a, int b, int c, int d, int e);
 void *Save_FriendRoster_Get(void *save);
 void *Save_FriendGroup_GetName(void *a, int b, int c);
 void *Save_FriendGroup_Get(void *save);

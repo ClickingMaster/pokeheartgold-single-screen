@@ -48,14 +48,14 @@ GearPhoneRingManager *FieldSystem_GetGearPhoneRingManager(FieldSystem *sys);
 void GearPhoneRingManager_StartRinging(GearPhoneRingManager *ptr);
 BOOL GearPhoneRingManager_IsRinging(GearPhoneRingManager *ptr);
 PhoneBookEntry *GearPhoneRingManager_GetCallerPhoneBookEntry(GearPhoneRingManager *ptr);
-void sub_02092E14(GearPhoneRingManager *ptr, u8 a1, BOOL a2);
-void sub_02092E34(GearPhoneRingManager *ptr, s32 a1, BOOL a2);
+void GearPhoneRingManager_SetCallTrigger(GearPhoneRingManager *ptr, u8 a1, BOOL a2);
+void GearPhoneRingManager_AddMinutes(GearPhoneRingManager *ptr, s32 a1, BOOL a2);
 void GearPhoneRingManager_HandleTimeAdvance(GearPhoneRingManager *ptr, s64 seconds);
 void GearPhoneRingManager_ResetIfActive(GearPhoneRingManager *ptr);
 void GearPhone_ToggleRinging(GearPhoneRingManager *ptr, BOOL a1);
-BOOL sub_02093070(FieldSystem *sys);
-BOOL sub_020930C4(FieldSystem *sys);
-BOOL sub_02093134(FieldSystem *sys, Pokemon *mon);
-BOOL sub_0209316C(FieldSystem *sys);
+BOOL FieldSystem_TryTriggerBillPCFullCall(FieldSystem *sys);
+BOOL FieldSystem_TryTriggerOakDexProgressCall(FieldSystem *sys);
+BOOL FieldSystem_TryTriggerElmEggHatchedCall(FieldSystem *sys, Pokemon *mon);
+BOOL FieldSystem_TryTriggerDaycareEggCall(FieldSystem *sys);
 
 #endif // POKEHEARTGOLD_GEAR_PHONE_RING_MANAGER_H

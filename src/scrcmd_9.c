@@ -107,7 +107,7 @@ BOOL ScrCmd_412(ScriptContext *ctx) {
         *result = sub_0204A764(ctx->fieldSystem->saveData);
         break;
     case 15:
-        *result = sub_0204A800(ctx->fieldSystem->saveData);
+        *result = Save_BattleRoomDownload_HasTrainers(ctx->fieldSystem->saveData);
         break;
     case 16:
         TaskManager_CallFrontierWifiConnection(ctx->taskman, arg, resultVarId, *result);
@@ -228,11 +228,11 @@ BOOL ScrCmd_416(ScriptContext *ctx) {
     switch (unk7) {
     case 0:
         unk0 = 62;
-        FrontierFieldSystem_0204B6AC(ctx->fieldSystem->frontierFsys, ctx->fieldSystem->saveData);
+        FrontierFieldSystem_PackLinkAllyData(ctx->fieldSystem->frontierFsys, ctx->fieldSystem->saveData);
         break;
     case 1:
         unk0 = 63;
-        FrontierFieldSystem_0204B708(ctx->fieldSystem->frontierFsys);
+        FrontierFieldSystem_PackRoundTrainers(ctx->fieldSystem->frontierFsys);
         break;
     case 2:
         unk0 = 64;

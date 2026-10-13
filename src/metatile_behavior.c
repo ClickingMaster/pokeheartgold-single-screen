@@ -271,7 +271,7 @@ BOOL MetatileBehavior_IsVeryTallGrass(u8 tile) {
     return tile == TILE_BEHAVIOR_VERY_TALL_GRASS;
 }
 
-BOOL sub_0205B700(u8 tile) {
+BOOL MetatileBehavior_IsCounter(u8 tile) {
     return tile == TILE_BEHAVIOR_128;
 }
 
@@ -435,19 +435,19 @@ BOOL MetatileBehavior_IsWhirlpool(u8 tile) {
     return tile == TILE_BEHAVIOR_WHIRLPOOL;
 }
 
-BOOL sub_0205B8F4(u8 tile) {
+BOOL MetatileBehavior_IsBlockedNorth(u8 tile) {
     return tile == TILE_BEHAVIOR_50 || tile == TILE_BEHAVIOR_52 || tile == TILE_BEHAVIOR_53 || tile == TILE_BEHAVIOR_LADDER_NORTH || tile == TILE_BEHAVIOR_73;
 }
 
-BOOL sub_0205B918(u8 tile) {
+BOOL MetatileBehavior_IsBlockedSouth(u8 tile) {
     return tile == TILE_BEHAVIOR_51 || tile == TILE_BEHAVIOR_54 || tile == TILE_BEHAVIOR_55 || tile == TILE_BEHAVIOR_LADDER_SOUTH || tile == TILE_BEHAVIOR_73;
 }
 
-BOOL sub_0205B93C(u8 tile) {
+BOOL MetatileBehavior_IsBlockedWest(u8 tile) {
     return tile == TILE_BEHAVIOR_49 || tile == TILE_BEHAVIOR_53 || tile == TILE_BEHAVIOR_55 || tile == TILE_BEHAVIOR_74;
 }
 
-BOOL sub_0205B960(u8 tile) {
+BOOL MetatileBehavior_IsBlockedEast(u8 tile) {
     return tile == TILE_BEHAVIOR_48 || tile == TILE_BEHAVIOR_52 || tile == TILE_BEHAVIOR_54 || tile == TILE_BEHAVIOR_74;
 }
 

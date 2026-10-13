@@ -165,7 +165,7 @@
 .public Save_Rankings_GetMixingSize
 .public Save_GetPlayerMixingRankingEntry
 .public Save_UpdateRankingsFromMixing
-.public sub_0203189C
+.public Save_WiiMessage_GetServerProfile
 .public Wireless_GetConnectedBitmap
 .public CommPlayerInfo_GetProfile
 .public CommWireless_StartUp

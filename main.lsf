@@ -164,7 +164,7 @@ Static main
     Object src/frontier_save.o
     Object src/frontier_card.o
     Object asm/frontier_save_data.o
-    Object src/unk_0203170C.o
+    Object src/save_wii_message.o
     Object src/save_plaza_survey.o
     Object src/pokeathlon/pokeathlon_save.o
     Object asm/apricorn_box_data.o

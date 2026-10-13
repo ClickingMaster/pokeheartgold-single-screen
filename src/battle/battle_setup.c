@@ -410,7 +410,7 @@ static void FieldSystem_DepositBattleMoneyToMomsSavings(FieldSystem *fieldSystem
             balanceResult = savingsBalance;
         }
         if (MomGift_TryEnqueueGiftOnBalanceChange(savings, balanceResult, savingsBalance)) {
-            sub_02092E14(FieldSystem_GetGearPhoneRingManager(fieldSystem), 12, TRUE);
+            GearPhoneRingManager_SetCallTrigger(FieldSystem_GetGearPhoneRingManager(fieldSystem), 12, TRUE);
         }
     }
 }

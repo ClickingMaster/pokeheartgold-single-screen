@@ -255,7 +255,7 @@ static void BattleHall_StartSpeciesCheck(TaskManager *taskManager, u16 playerSpe
     memset(r4, 0, sizeof(BattleHallSpeciesCheck));
     r4->playerTeam = playerSpecies;
     r4->result = resultPtr;
-    sub_02091574((FieldSystem *)r4);
+    FieldComm_RegisterCommands((FieldSystem *)r4);
     TaskManager_Call(taskManager, Task_BattleHallSpeciesCheck, r4);
 }
 

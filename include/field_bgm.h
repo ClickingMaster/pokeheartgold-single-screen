@@ -19,6 +19,6 @@ u16 FieldBGM_GetEyesMeetForTrainer(u16 a0, int regionNo);
 void FieldBGM_TryFadeIn(FieldSystem *fieldSystem, u32 mapId);
 void FieldBGM_PlayForMapHeader(FieldSystem *fieldSystem, u32 mapId, BOOL a2);
 BOOL FieldBGM_PlayEffectiveForMapHeader(FieldSystem *fieldSystem, u32 mapId);
-BOOL sub_02055198(FieldSystem *fieldSystem, u16 seqNo);
+BOOL FieldBGM_Play(FieldSystem *fieldSystem, u16 seqNo);
 
 #endif // POKEHEARTGOLD_FIELD_BGM_H

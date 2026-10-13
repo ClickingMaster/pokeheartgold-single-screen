@@ -1772,7 +1772,7 @@ static BOOL ScrNative_WaitPCBox(ScriptContext *ctx) {
     if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
         return FALSE;
     }
-    sub_02093070(fieldSystem);
+    FieldSystem_TryTriggerBillPCFullCall(fieldSystem);
     Heap_Free(*p_work);
     *p_work = NULL;
     return TRUE;
@@ -1966,7 +1966,7 @@ BOOL ScrCmd_450(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_156(ScriptContext *ctx) {
-    sub_0206B910(ctx->taskman, ctx->fieldSystem->saveData);
+    CallTask_BallCapsuleEditor(ctx->taskman, ctx->fieldSystem->saveData);
     return TRUE;
 }
 
@@ -2717,7 +2717,7 @@ BOOL ScrCmd_264(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_265(ScriptContext *ctx) {
-    sub_02091574(ctx->fieldSystem);
+    FieldComm_RegisterCommands(ctx->fieldSystem);
     return FALSE;
 }
 
@@ -3404,13 +3404,13 @@ BOOL ScrCmd_SafariZoneAction(ScriptContext *ctx) {
     switch (action) {
     case 0:
         Save_VarsFlags_SetSafariSysFlag(varsFlags);
-        sub_0202F5F8(safariZone, areaSet);
+        SafariZone_SetActiveAreaSet(safariZone, areaSet);
         *p_nSafariBall = 30;
         *p_nSafariSteps = 0;
         break;
     case 1:
         Save_VarsFlags_ClearSafariSysFlag(varsFlags);
-        sub_0202F5F8(safariZone, 1);
+        SafariZone_SetActiveAreaSet(safariZone, 1);
         r1 = SafariZone_GetLevel(safariZone);
         if (r1 != 0) {
             SaveData_SafariZone_CheckAreasWithUpdatedEncounters(ctx->fieldSystem->saveData, r1);
@@ -4734,7 +4734,7 @@ BOOL ScrCmd_GetPhoneContactGiftItem(ScriptContext *ctx) {
 
 BOOL ScrCmd_148(ScriptContext *ctx) {
     u8 r4 = ScriptReadByte(ctx);
-    sub_02092E14(FieldSystem_GetGearPhoneRingManager(ctx->fieldSystem), r4, ScriptReadByte(ctx));
+    GearPhoneRingManager_SetCallTrigger(FieldSystem_GetGearPhoneRingManager(ctx->fieldSystem), r4, ScriptReadByte(ctx));
     return FALSE;
 }
 

@@ -97,7 +97,7 @@ u32 BattleTower_PickTrainerMonSets(FrontierFieldSystem *tower, BattleTowerTraine
     if (n != 0) {
         cursor = setIds;
         do {
-            setId = sets->setIds[(u8)(FrontierFieldSystem_0204B510(tower) % sets->numSets)];
+            setId = sets->setIds[(u8)(FrontierFieldSystem_NextRandom(tower) % sets->numSets)];
             FrontierData_ReadMember(&candidate, setId, BattleTower_GetMonSetNarc(tower->towerMode));
             for (j = 0; j < i; j++) {
                 FrontierData_ReadMember(&other, setIds[j], BattleTower_GetMonSetNarc(tower->towerMode));
@@ -146,7 +146,7 @@ u32 BattleTower_PickTrainerMonSets(FrontierFieldSystem *tower, BattleTowerTraine
         } while (i != n);
     }
     iv = GetFrontierTrainerIVs(trainerId);
-    otId = FrontierFieldSystem_0204B510(tower) | (FrontierFieldSystem_0204B510(tower) << 16);
+    otId = FrontierFieldSystem_NextRandom(tower) | (FrontierFieldSystem_NextRandom(tower) << 16);
     if (failedItemAttempts >= 50) {
         replaceItem = TRUE;
     }
@@ -231,8 +231,8 @@ u32 BattleTower_GenerateFrontierMon(FrontierFieldSystem *tower, FrontierMon *mon
     newPid = pid;
     if (newPid == 0) {
         do {
-            u16 lo = FrontierFieldSystem_0204B510(tower);
-            u16 hi = FrontierFieldSystem_0204B510(tower);
+            u16 lo = FrontierFieldSystem_NextRandom(tower);
+            u16 hi = FrontierFieldSystem_NextRandom(tower);
             newPid = lo | (hi << 16);
         } while (set.nature != GetNatureFromPersonality(newPid) || CalcShininessByOtIdAndPersonality(otId, newPid) == TRUE);
         mon->pid = newPid;

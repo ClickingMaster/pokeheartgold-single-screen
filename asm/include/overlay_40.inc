@@ -229,7 +229,7 @@
 .public FrontierCard_NewNameString
 .public FrontierCard_GetGender
 .public FrontierCard_GetSpecies
-.public sub_020315F0
+.public FrontierCard_GetSanitizedForm
 .public FrontierCard_IsEgg
 .public FrontierCard_GetCountry
 .public FrontierCard_GetRegion

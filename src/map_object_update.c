@@ -112,8 +112,8 @@ void MapObject_UpdateEffectsAtStepEnd(LocalMapObject *object) {
     MapObject_ClearFlagsBits(object, (MapObjectFlagBits)(MAPOBJECTFLAG_END_MOVEMENT | MAPOBJECTFLAG_UNK17));
 }
 
-const TileTestFunc gMetatileBlocksExitTests[4] = { sub_0205B8F4, sub_0205B918, sub_0205B93C, sub_0205B960 };
-const TileTestFunc gMetatileBlocksEntryTests[4] = { sub_0205B918, sub_0205B8F4, sub_0205B960, sub_0205B93C };
+const TileTestFunc gMetatileBlocksExitTests[4] = { MetatileBehavior_IsBlockedNorth, MetatileBehavior_IsBlockedSouth, MetatileBehavior_IsBlockedWest, MetatileBehavior_IsBlockedEast };
+const TileTestFunc gMetatileBlocksEntryTests[4] = { MetatileBehavior_IsBlockedSouth, MetatileBehavior_IsBlockedNorth, MetatileBehavior_IsBlockedEast, MetatileBehavior_IsBlockedWest };
 const s32 gDirectionDeltaX[4] = { 0, 0, -1, 1 };
 const s32 gDirectionDeltaY[4] = { -1, 1, 0, 0 };
 const s32 gOppositeDirections[4] = { 1, 0, 3, 2 };

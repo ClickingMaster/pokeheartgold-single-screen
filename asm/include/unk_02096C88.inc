@@ -14,7 +14,7 @@
 .public CommState_SetMaxEntries
 .public UnionRoom_SetBeaconActivity
 .public UnionRoomObjects_ResetSlots
-.public sub_02091570
+.public CommCmd_RecvIgnored
 .public SpinTradeLink_New
 .public SpinTradeLink_Free
 .public SpinTradeLink_RegisterCommands

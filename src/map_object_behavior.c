@@ -257,7 +257,7 @@ void ApricornTreeObject_Init(LocalMapObject *object) {
 void ApricornTreeObject_Update(LocalMapObject *object) {
     MapObjectSpriteState *spriteState = (MapObjectSpriteState *)MapObject_GetMovementData(object);
     ApricornTreeState *state = (ApricornTreeState *)MapObject_GetDrawData(object);
-    int apricorn = sub_02055780(MapObject_GetFieldSystem(object), object);
+    int apricorn = FieldSystem_ApricornTree_HasApricorn(MapObject_GetFieldSystem(object), object);
     if (MapObject_IsBillboardPending(object) == TRUE) {
         return;
     }

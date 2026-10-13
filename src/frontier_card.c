@@ -41,7 +41,7 @@ void FrontierCard_InitFromSave(FrontierCard *card, SaveData *saveData);
 String *FrontierCard_NewNameString(const u16 *name, enum HeapID heapId);
 u32 FrontierCard_GetGender(FrontierCard *card);
 u32 FrontierCard_GetSpecies(FrontierCard *card);
-u32 sub_020315F0(FrontierCard *card);
+u32 FrontierCard_GetSanitizedForm(FrontierCard *card);
 u32 FrontierCard_IsEgg(FrontierCard *card);
 u32 FrontierCard_GetCountry(FrontierCard *card);
 u32 FrontierCard_GetRegion(FrontierCard *card);
@@ -113,7 +113,7 @@ u32 FrontierCard_GetSpecies(FrontierCard *card) {
     return card->species;
 }
 
-u32 sub_020315F0(FrontierCard *card) {
+u32 FrontierCard_GetSanitizedForm(FrontierCard *card) {
     if (card->species >= 495) {
         return 0;
     }

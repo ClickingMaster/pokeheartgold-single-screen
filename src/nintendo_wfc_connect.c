@@ -35,7 +35,7 @@
 #include "unk_02009D48.h"
 #include "sprite_resource.h"
 #include "frontier_data_access.h"
-#include "unk_0203170C.h"
+#include "save_wii_message.h"
 #include "comm_wireless.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
@@ -156,7 +156,7 @@ typedef struct NintendoWfcConnect {
     int dwcErrorType;                           // 0x0F58
     int httpResult;                             // 0x0F5C
     int messageTimer;                           // 0x0F60
-    Unk020317F4 profile;                        // 0x0F64
+    WifiServerProfile profile;                        // 0x0F64
     u32 profileResponse[2];                     // 0x0FC8
     s16 subState;                               // 0x0FD0
     s16 subTimer;                               // 0x0FD2
@@ -365,7 +365,7 @@ void NintendoWfcHttp_RequestRoomCount(int rank);
 void NintendoWfcHttp_RequestDownload(int rank, int room, void *buffer);
 void NintendoWfcHttp_RequestUpload(int rank, int room, int a2, UnkStruct_02069528 *record);
 void NintendoWfcHttp_RequestInfo(void);
-void NintendoWfcHttp_RequestSetProfile(Unk020317F4 *profile, u32 *response);
+void NintendoWfcHttp_RequestSetProfile(WifiServerProfile *profile, u32 *response);
 BOOL NintendoWfc_Init(OverlayManager *man, int *state);
 BOOL NintendoWfc_Main(OverlayManager *man, int *state);
 BOOL NintendoWfc_Exit(OverlayManager *man, int *state);
@@ -697,12 +697,12 @@ void NintendoWfcHttp_RequestInfo(void) {
     }
 }
 
-void NintendoWfcHttp_RequestSetProfile(Unk020317F4 *profile, u32 *response) {
-    OS_GetMacAddress(profile->unk1c);
-    memcpy(ov72_0223B834, profile, sizeof(Unk020317F4));
+void NintendoWfcHttp_RequestSetProfile(WifiServerProfile *profile, u32 *response) {
+    OS_GetMacAddress(profile->macAddress);
+    memcpy(ov72_0223B834, profile, sizeof(WifiServerProfile));
     ov72_0223B920.buffer = (u8 *)response;
     GameStats_Start();
-    if (NintendoWfcHttp_StartRequest(sNintendoWfcSetProfileUrl, ov72_0223B834, sizeof(Unk020317F4), ov72_0223B920.buffer, 8)) {
+    if (NintendoWfcHttp_StartRequest(sNintendoWfcSetProfileUrl, ov72_0223B834, sizeof(WifiServerProfile), ov72_0223B920.buffer, 8)) {
         sNintendoWfcHttp.state = 10;
     } else {
         sNintendoWfcHttp.state = 12;
@@ -1619,7 +1619,7 @@ int NintendoWfc_WaitInfo(NintendoWfcConnect *wfc) {
 }
 
 int NintendoWfc_RequestSetProfile(NintendoWfcConnect *wfc) {
-    sub_0203189C(wfc->args->saveData, &wfc->profile);
+    Save_WiiMessage_GetServerProfile(wfc->args->saveData, &wfc->profile);
     NintendoWfcHttp_RequestSetProfile(&wfc->profile, wfc->profileResponse);
     wfc->state = 10;
     wfc->timeoutCounter = 0;

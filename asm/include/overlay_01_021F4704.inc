@@ -19,7 +19,7 @@
 .public Save_PlayerData_GetProfile
 .public PlayerProfile_GetTrainerGender
 .public Save_SafariZone_Get
-.public sub_0202F620
+.public SafariZone_GetActiveAreaSet
 .public SafariZone_GetAreaSet
 .public SafariZone_GetLinkLeaderGender
 .public CommState_SetError

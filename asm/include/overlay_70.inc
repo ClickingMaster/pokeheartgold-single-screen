@@ -206,7 +206,7 @@
 .public GtsSave_SetTradeDate
 .public GtsSave_GetStoredMonBox
 .public UpdatePokedexWithReceivedSpecies
-.public sub_0203189C
+.public Save_WiiMessage_GetServerProfile
 .public Save_Pokewalker_Get
 .public Pokewalker_UnlockCourse
 .public CommWireless_StartUp

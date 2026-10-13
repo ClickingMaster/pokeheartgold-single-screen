@@ -102,7 +102,7 @@ void PokewalkerApp_UnlockNextCourse(PokewalkerApp *app) {
     u32 steps, watts;
     u32 count;
     u32 i;
-    sub_02032674(app->pokewalker, &steps, &watts);
+    Pokewalker_GetStepsAndWatts(app->pokewalker, &steps, &watts);
     if (Pokedex_GetNatDexFlag(Save_Pokedex_Get(app->saveData))) {
         count = 20;
     } else {

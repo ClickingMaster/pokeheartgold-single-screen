@@ -1439,7 +1439,7 @@ BOOL SpinTrade_State_FadeOut(SpinTradeApp *app) {
     BeginNormalPaletteFade(2, 0, 0, RGB_BLACK, 8, 1, HEAP_ID_102);
     bgm = app->bgm;
     if (bgm != GF_GetCurrentPlayingBGM()) {
-        sub_02055198(NULL, bgm);
+        FieldBGM_Play(NULL, bgm);
     }
     app->state = SPIN_TRADE_STATE_WAIT_FADE_OUT;
     return FALSE;

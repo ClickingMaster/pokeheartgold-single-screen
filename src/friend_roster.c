@@ -47,7 +47,7 @@ void FriendRoster_RemoveFriend(FriendRoster *data, int index);
 void FriendRoster_MoveFriend(FriendRoster *data, int dest, int src);
 void FriendRoster_Compact(FriendRoster *data);
 void FriendRoster_UpdateDate(FriendRoster *data, s32 index);
-void sub_0202C4F0(FriendRoster *data, s32 index, s32 a, s32 b, s32 c);
+void FriendRoster_AddWinsLossesTrades(FriendRoster *data, s32 index, s32 a, s32 b, s32 c);
 void sub_0202C554(FriendRoster *data, s32 index, s32 value);
 void sub_0202C584(FriendRoster *data, s32 index, s32 value);
 void sub_0202C5B4(FriendRoster *data, s32 index, s32 value);
@@ -261,7 +261,7 @@ void FriendRoster_UpdateDate(FriendRoster *data, s32 index) {
     }
 }
 
-void sub_0202C4F0(FriendRoster *data, s32 index, s32 a, s32 b, s32 c) {
+void FriendRoster_AddWinsLossesTrades(FriendRoster *data, s32 index, s32 a, s32 b, s32 c) {
     if (index >= 0 && index < 32) {
         data->roster.entries[index].value24 += a;
         if (data->roster.entries[index].value24 > 9999) {

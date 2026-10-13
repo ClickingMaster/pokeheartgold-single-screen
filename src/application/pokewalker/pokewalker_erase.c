@@ -311,7 +311,7 @@ int PokewalkerApp_EraseRecords_UpdateLink(PokewalkerApp *app) {
     case 15:
         ManagedSprite_SetDrawFlag(app->sprites[2], FALSE);
         PokewalkerApp_ReturnWalkerMonToBox(app);
-        sub_02032624(app->pokewalker);
+        Pokewalker_Reset(app->pokewalker);
         app->walkerSteps = 0;
         app->unk_1D75C = 0;
         PokewalkerIr_Stop();

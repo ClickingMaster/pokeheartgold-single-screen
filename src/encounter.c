@@ -135,8 +135,8 @@ static BOOL Task_StartEncounter(TaskManager *taskManager) { // todo: better name
     case 3:
         sub_02050724(encounter->setup, fieldSystem);
         if (encounter->setup->battleType == BATTLE_TYPE_NONE || encounter->setup->battleType == BATTLE_TYPE_ROAMER || encounter->setup->battleType == (BATTLE_TYPE_DOUBLES | BATTLE_TYPE_MULTI | BATTLE_TYPE_AI)) {
-            sub_02093070(fieldSystem);
-            sub_020930C4(fieldSystem);
+            FieldSystem_TryTriggerBillPCFullCall(fieldSystem);
+            FieldSystem_TryTriggerOakDexProgressCall(fieldSystem);
         }
 
         fieldSystem->encounterInhibitSteps = 0;
@@ -367,8 +367,8 @@ static BOOL Task_WildEncounter(TaskManager *taskManager) {
         break;
     case 3:
         sub_02050724(encounter->setup, fieldSystem);
-        sub_02093070(fieldSystem);
-        sub_020930C4(fieldSystem);
+        FieldSystem_TryTriggerBillPCFullCall(fieldSystem);
+        FieldSystem_TryTriggerOakDexProgressCall(fieldSystem);
 
         if (IsBattleResultWin(encounter->setup->winFlag) == FALSE) {
             WildEncounter_Delete(encounter);
@@ -424,8 +424,8 @@ static BOOL Task_SafariEncounter(TaskManager *taskManager) {
         if (encounter->setup->winFlag == BATTLE_OUTCOME_MON_CAUGHT) {
             sub_020270C4(fieldSystem->saveData); // Save_SafariZone_Get?
             Party_GetMonByIndex(encounter->setup->party[BATTLER_ENEMY], 0);
-            sub_02093070(fieldSystem);
-            sub_020930C4(fieldSystem);
+            FieldSystem_TryTriggerBillPCFullCall(fieldSystem);
+            FieldSystem_TryTriggerOakDexProgressCall(fieldSystem);
         }
 
         Encounter_AddBattleScore(fieldSystem, encounter->setup);
@@ -508,8 +508,8 @@ static BOOL Task_BugContestEncounter(TaskManager *taskManager) {
 
         if (encounter->setup->winFlag == BATTLE_OUTCOME_MON_CAUGHT) {
             BugContest_PromptSwapPokemon(taskManager, encounter->setup->bugContestMon);
-            sub_02093070(fieldSystem);
-            sub_020930C4(fieldSystem);
+            FieldSystem_TryTriggerBillPCFullCall(fieldSystem);
+            FieldSystem_TryTriggerOakDexProgressCall(fieldSystem);
         }
         (*state)++;
         break;

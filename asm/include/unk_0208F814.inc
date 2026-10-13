@@ -13,7 +13,7 @@
 .public CommState_SetMaxEntries
 .public CommState_SetErrorWatch
 .public DrawingSessionLink_RegisterCommands
-.public sub_02091570
+.public CommCmd_RecvIgnored
 .public sub_02091598
 .public sub_020915A0
 .public sub_020915A4

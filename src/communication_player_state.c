@@ -342,7 +342,7 @@ void CommPlayerInfo_SaveRecords(void *save) {
                 if (val < 0) {
                     GF_AssertFail();
                 }
-                sub_0202C4F0(r, val, gCommPlayerInfo->scores[i].wins, gCommPlayerInfo->scores[i].losses, gCommPlayerInfo->scores[i].trades);
+                FriendRoster_AddWinsLossesTrades(r, val, gCommPlayerInfo->scores[i].wins, gCommPlayerInfo->scores[i].losses, gCommPlayerInfo->scores[i].trades);
             }
         }
     }

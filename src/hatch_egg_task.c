@@ -55,7 +55,7 @@ static BOOL Task_HatchEggInParty(TaskManager *taskManager) {
         SetMonData(pokemon, MON_DATA_IS_EGG, &isEgg);
         MonSetTrainerMemo(pokemon, profile, 6, mapsec, HEAP_ID_FIELD2);
         SetMonData(pokemon, MON_DATA_SPECIES_NAME, NULL);
-        sub_02093134(fieldSystem, pokemon);
+        FieldSystem_TryTriggerElmEggHatchedCall(fieldSystem, pokemon);
         UpdatePokedexWithReceivedSpecies(FieldSystem_GetSaveData(fieldSystem), data->unkC.mon);
 
         if (data->wantToNameNewMon == TRUE) {
