@@ -95,7 +95,7 @@ static BOOL VoltorbFlip_TutorialScreenTransition(VoltorbFlipTaskEngine *workflow
 static BOOL VoltorbFlipTaskEngine_Memo_SetUp(VoltorbFlipTaskEngine *workflow, VoltorbFlipAppData *work);
 static BOOL VoltorbFlip_AddCoinsToPayout(VoltorbFlipAppData *work);
 static BOOL VoltorbFlip_AwardPayoutToPlayer(VoltorbFlipAppData *work);
-static void ov122_021E6B38(VoltorbFlipAppData *work);
+static void VoltorbFlip_InitDigitTiles(VoltorbFlipAppData *work);
 static void VoltorbFlip_PrintCoins(VoltorbFlipAppData *work, CoinDisplay type, int amount);
 static void VoltorbFlip_RenderCardMemo(VoltorbFlipAppData *work, int cardId, int memoFlag);
 static void VoltorbFlip_PrintBoardVoltorbs(VoltorbFlipAppData *work);
@@ -132,8 +132,8 @@ static BOOL VoltorbFlip_IsPrinterFinished(VoltorbFlipAppData *work);
 static void VoltorbFlip_FormatGameLevel(VoltorbFlipAppData *work, int idx);
 static void VoltorbFlip_DimLayersExceptBG3(u8 *isDimmed);
 static void VoltorbFlip_UndimLayersExceptBG3(u8 *isDimmed);
-static void ov122_021E78DC(u8 *a0);
-static void ov122_021E7904(u8 *a0);
+static void VoltorbFlip_DimBG0(u8 *a0);
+static void VoltorbFlip_UndimBG0(u8 *a0);
 static void VoltorbFlip_InitBgs(VoltorbFlipAppData *work);
 static void VoltorbFlip_UnloadBgs(VoltorbFlipAppData *work);
 static void VoltorbFlip_LoadBgGfx(VoltorbFlipAppData *work);
@@ -145,13 +145,13 @@ static ManagedSprite *VoltorbFlip_CreateSprite_Sub(SpriteSystem *spriteSystem, S
 static void VoltorbFlip_CreateSprites(VoltorbFlipAppData *work);
 static void VoltorbFlip_DeleteSprites(VoltorbFlipAppData *work);
 static void VoltorbFlip_Sprite_SetAnimCtrlTime(Sprite *sprite, fx32 animCtrlTime);
-static BOOL ov122_021E7F70(VoltorbFlipAppData *work);
+static BOOL VoltorbFlip_AreCursorAnimsFinished(VoltorbFlipAppData *work);
 static CardType VoltorbFlip_GetSelectedCardType(VoltorbFlipAppData *work);
 static int MemoFlagToIdx(int memoFlag);
 static void VoltorbFlip_VBlankIntr(void *data);
 static void SetGXBanks(void);
 static void VF_RenderingOff(void);
-static void ov122_021E8094(OverlayManager *man);
+static void VoltorbFlip_CreateOverlayData(OverlayManager *man);
 static void FreeOverlayData(OverlayManager *man);
 
 const u8 sMainMenuMsgNos[] = {
@@ -173,7 +173,7 @@ const u8 sGameInfoMsgNos[] = {
     msg_0039_00024
 };
 
-const u8 ov122_021E9270[] = {
+const u8 sVoltorbFlipBgLayers[] = {
     GF_BG_LYR_MAIN_0,
     GF_BG_LYR_MAIN_1,
     GF_BG_LYR_MAIN_2,
@@ -205,7 +205,7 @@ const TouchscreenListMenuTemplate sListMenuTemplate = {
 };
 
 // clang-format off
-const u16 ov122_021E92A0[] = {
+const u16 sVoltorbFlipDigitBaseTiles[] = {
     0x00A0, 0x00A1,
     0x00C0, 0x00C1,
     0x00E0, 0x00E1,
@@ -858,7 +858,7 @@ BOOL VoltorbFlipTaskEngine_BoardInteraction_Main(VoltorbFlipTaskEngine *workflow
 }
 
 BOOL VoltorbFlipTaskEngine_BoardInteraction_TidyUp(VoltorbFlipTaskEngine *workflow, VoltorbFlipAppData *work) {
-    if (ov122_021E7F70(work)) {
+    if (VoltorbFlip_AreCursorAnimsFinished(work)) {
         return TRUE;
     }
     return FALSE;
@@ -1165,7 +1165,7 @@ BOOL VoltorbFlipTaskEngine_MemoTouch_Run(VoltorbFlipTaskEngine *workflow, Voltor
 BOOL VoltorbFlipTaskEngine_MemoButtons_SetUp(VoltorbFlipTaskEngine *workflow, VoltorbFlipAppData *work) {
     int state = VoltorbFlipTaskEngine_CurrentTaskState(workflow);
     if (state == 0) {
-        ov122_021E78DC(&work->screenIsDimmed);
+        VoltorbFlip_DimBG0(&work->screenIsDimmed);
         VoltorbFlipInputHandler_SetMemoFocused(work->inputHandler, TRUE);
     }
     return VoltorbFlipTaskEngine_Memo_SetUp(workflow, work);
@@ -1225,11 +1225,11 @@ BOOL VoltorbFlipTaskEngine_Memo_TidyUp(VoltorbFlipTaskEngine *workflow, VoltorbF
         VoltorbFlipTaskEngine_IncrementTaskState(workflow);
         // fallthrough
     case 1:
-        if (ov122_021E7F70(work)) {
+        if (VoltorbFlip_AreCursorAnimsFinished(work)) {
             if (VoltorbFlipTaskEngine_CurrentWorkflow(workflow) == WORKFLOW_MEMO_BUTTONS) {
                 VoltorbFlipInputHandler_SetMemoCursor0(work->inputHandler);
                 VoltorbFlipInputHandler_SetMemoFocused(work->inputHandler, FALSE);
-                ov122_021E7904(&work->screenIsDimmed);
+                VoltorbFlip_UndimBG0(&work->screenIsDimmed);
             }
             VoltorbFlipTaskEngine_IncrementTaskState(workflow);
         }
@@ -1387,13 +1387,13 @@ static BOOL VoltorbFlip_AwardPayoutToPlayer(VoltorbFlipAppData *work) {
     return FALSE;
 }
 
-static void ov122_021E6B38(VoltorbFlipAppData *work) {
+static void VoltorbFlip_InitDigitTiles(VoltorbFlipAppData *work) {
     int i;
     int j;
 
     for (i = 0; i < 10; i++) {
         for (j = 0; j < 8; j++) {
-            work->unk188[i][j] = ov122_021E92A0[j] + i * 2;
+            work->digitTiles[i][j] = sVoltorbFlipDigitBaseTiles[j] + i * 2;
         }
     }
 }
@@ -1417,7 +1417,7 @@ static void VoltorbFlip_PrintCoins(VoltorbFlipAppData *work, CoinDisplay type, i
             y = 14;
         }
 
-        LoadRectToBgTilemapRect(work->bgConfig, GF_BG_LYR_SUB_0, &work->unk188[buf[i]][0], x, y, 2, 4);
+        LoadRectToBgTilemapRect(work->bgConfig, GF_BG_LYR_SUB_0, &work->digitTiles[buf[i]][0], x, y, 2, 4);
         x += 2;
     }
 
@@ -1918,7 +1918,7 @@ static void VoltorbFlip_PrintTextWindow(VoltorbFlipAppData *work, int msgNo, BOO
         DrawFrameAndWindow2(window, TRUE, 1, 13);
     }
 
-    work->printerId = AddTextPrinterParameterized(window, 1, str, 0, 0, work->unk22A, NULL);
+    work->printerId = AddTextPrinterParameterized(window, 1, str, 0, 0, work->textFrameDelay, NULL);
     GF_ASSERT(work->printerId != 0xff);
 
     ScheduleWindowCopyToVram(window);
@@ -1956,7 +1956,7 @@ static void VoltorbFlip_UndimLayersExceptBG3(u8 *isDimmed) {
     *isDimmed = FALSE;
 }
 
-static void ov122_021E78DC(u8 *a0) {
+static void VoltorbFlip_DimBG0(u8 *a0) {
     if (!*a0) {
         InitScreenBrightnessData(SCREEN_MASK_MAIN);
         StartBrightnessTransition(1, -6, 0, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BD | GX_BLEND_PLANEMASK_BG0), SCREEN_MASK_MAIN);
@@ -1964,7 +1964,7 @@ static void ov122_021E78DC(u8 *a0) {
     }
 }
 
-static void ov122_021E7904(u8 *a0) {
+static void VoltorbFlip_UndimBG0(u8 *a0) {
     InitScreenBrightnessData(SCREEN_MASK_MAIN);
     StartBrightnessTransition(1, 0, -6, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BD | GX_BLEND_PLANEMASK_BG0), SCREEN_MASK_MAIN);
     *a0 = FALSE;
@@ -2070,16 +2070,16 @@ static void VoltorbFlip_InitBgs(VoltorbFlipAppData *work) {
     };
 
     for (int i = 0; i < 6; i++) {
-        InitBgFromTemplate(work->bgConfig, ov122_021E9270[i], &bgTemplates[i], 0);
-        BgClearTilemapBufferAndCommit(work->bgConfig, ov122_021E9270[i]);
-        BG_FillCharDataRange(work->bgConfig, (GFBgLayer)ov122_021E9270[i], 0, 1, 0);
-        ToggleBgLayer(ov122_021E9270[i], GF_PLANE_TOGGLE_ON);
+        InitBgFromTemplate(work->bgConfig, sVoltorbFlipBgLayers[i], &bgTemplates[i], 0);
+        BgClearTilemapBufferAndCommit(work->bgConfig, sVoltorbFlipBgLayers[i]);
+        BG_FillCharDataRange(work->bgConfig, (GFBgLayer)sVoltorbFlipBgLayers[i], 0, 1, 0);
+        ToggleBgLayer(sVoltorbFlipBgLayers[i], GF_PLANE_TOGGLE_ON);
     }
 }
 
 static void VoltorbFlip_UnloadBgs(VoltorbFlipAppData *work) {
     for (int i = 0; i < 6; i++) {
-        FreeBgTilemapBuffer(work->bgConfig, ov122_021E9270[i]);
+        FreeBgTilemapBuffer(work->bgConfig, sVoltorbFlipBgLayers[i]);
     }
 
     FontID_Release(4);
@@ -2095,7 +2095,7 @@ static void VoltorbFlip_LoadBgGfx(VoltorbFlipAppData *work) {
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_12_OFFSET, work->heapID);
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_12_OFFSET, work->heapID);
     GfGfxLoader_GXLoadPal(NARC_graphic_font, 9, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_13_OFFSET, 32, work->heapID);
-    LoadUserFrameGfx2(work->bgConfig, GF_BG_LYR_MAIN_3, 1, 13, work->unk229, work->heapID);
+    LoadUserFrameGfx2(work->bgConfig, GF_BG_LYR_MAIN_3, 1, 13, work->frame, work->heapID);
     GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, NARC_voltorb_flip_voltorb_flip_00000002_NCGR_lz, work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, work->heapID);
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, NARC_voltorb_flip_voltorb_flip_00000004_NSCR_lz, work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, work->heapID);
     GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, NARC_voltorb_flip_voltorb_flip_00000002_NCGR_lz, work->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, work->heapID);
@@ -2218,7 +2218,7 @@ static void VoltorbFlip_Sprite_SetAnimCtrlTime(Sprite *sprite, fx32 animCtrlTime
     ptr->animCtrl.currentTime = animCtrlTime;
 }
 
-static BOOL ov122_021E7F70(VoltorbFlipAppData *work) {
+static BOOL VoltorbFlip_AreCursorAnimsFinished(VoltorbFlipAppData *work) {
     return !ManagedSprite_IsAnimated(work->sprites[VF_SPRITE_03]) && !ManagedSprite_IsAnimated(work->sprites[VF_SPRITE_02]) && !ManagedSprite_IsAnimated(work->sprites[VF_SPRITE_MEMO_CURSOR]);
 }
 
@@ -2269,7 +2269,7 @@ static void VF_RenderingOff(void) {
     GXS_SetVisiblePlane(0);
 }
 
-static void ov122_021E8094(OverlayManager *man) {
+static void VoltorbFlip_CreateOverlayData(OverlayManager *man) {
     VoltorbFlipArgs *args = OverlayManager_GetArgs(man);
     GF_ASSERT(args != NULL);
 
@@ -2289,8 +2289,8 @@ static void ov122_021E8094(OverlayManager *man) {
     work->menuInputStatePtr = args->menuInputStatePtr;
     work->profile = args->profile;
     work->menuInputState = MenuInputStateMgr_GetState(work->menuInputStatePtr);
-    work->unk229 = Options_GetFrame(work->options);
-    work->unk22A = Options_GetTextFrameDelay(work->options);
+    work->frame = Options_GetFrame(work->options);
+    work->textFrameDelay = Options_GetTextFrameDelay(work->options);
 
     work->narc = NARC_New(NARC_application_voltorb_flip, work->heapID);
     work->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0039_bin, work->heapID);
@@ -2301,7 +2301,7 @@ static void ov122_021E8094(OverlayManager *man) {
     VoltorbFlip_LoadBgGfx(work);
     VoltorbFlip_AddWindows(work);
     VoltorbFlip_CreateListMenuSpawnerAndItems(work);
-    ov122_021E6B38(work);
+    VoltorbFlip_InitDigitTiles(work);
 
     u16 coins = (u32)Coins_GetValue(work->coins);
     VoltorbFlip_PrintCoins(work, COIN_DISPLAY_TOTAL, coins);
@@ -2350,7 +2350,7 @@ static void FreeOverlayData(OverlayManager *man) {
 BOOL VoltorbFlip_Init(OverlayManager *man, int *state) {
     switch (*state) {
     case 0:
-        ov122_021E8094(man);
+        VoltorbFlip_CreateOverlayData(man);
         *state += 1;
         break;
     case 1: {

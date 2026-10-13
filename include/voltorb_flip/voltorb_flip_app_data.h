@@ -48,10 +48,10 @@ typedef struct VoltorbFlipAppData {
     ManagedSprite *sprites[13];
     MsgData *msgData;
     MessageFormat *msgFmt;
-    u16 unk188[10][8];
+    u16 digitTiles[10][8];
     u8 menuInputState;
-    u8 unk229;
-    u8 unk22A;
+    u8 frame;
+    u8 textFrameDelay;
     u8 printerId;
     u16 payoutDisplay;
     BOOL hasPlayedOneLeve;

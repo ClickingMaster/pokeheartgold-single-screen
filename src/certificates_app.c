@@ -36,15 +36,15 @@ typedef struct CertificatesApp_Data {
     Window window2;
     MsgData *msgData;
     MessageFormat *msgFmt;
-    s16 unk40;
+    s16 scrollY;
     u16 waitFrames;
     SpriteSystem *spriteRenderer;
     SpriteManager *spriteGfxHandler;
-    ManagedSprite *unk4C[3];
-    u32 unk58;
+    ManagedSprite *sprites[3];
+    u32 monSpriteSize;
 } CertificatesApp_Data; // size: 0x5c
 
-static const WindowTemplate ov78_021E67D8 = {
+static const WindowTemplate sCertificatesWindowTemplate = {
     .bgId = 0,
     .left = 0,
     .top = 0,
@@ -54,7 +54,7 @@ static const WindowTemplate ov78_021E67D8 = {
     .baseTile = 0x0001,
 };
 
-static const GraphicsModes ov78_021E67E0 = {
+static const GraphicsModes sCertificatesGraphicsModes = {
     .dispMode = GX_DISPMODE_GRAPHICS,
     .bgMode = GX_BGMODE_0,
     .subMode = GX_BGMODE_0,
@@ -78,7 +78,7 @@ static const SpriteResourceCountsListUnion sSpriteResourceCounts = {
     .numManm = 0,
 };
 
-static const BgTemplate ov78_021E681C = {
+static const BgTemplate sCertificatesBgTemplate = {
     .x = 0,
     .y = 0,
     .bufferSize = 0,
@@ -104,7 +104,7 @@ static const OamManagerParam sOamManagerParam = {
     .numAffineSub = 32,
 };
 
-static const GraphicsBanks ov78_021E6858 = {
+static const GraphicsBanks sCertificatesGraphicsBanks = {
     .bg = GX_VRAM_BG_128_B,
     .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
     .subbg = GX_VRAM_SUB_BG_128_C,
@@ -117,7 +117,7 @@ static const GraphicsBanks ov78_021E6858 = {
     .texpltt = GX_VRAM_TEXPLTT_NONE,
 };
 
-static const ManagedSpriteTemplate ov78_021E68B4 = {
+static const ManagedSpriteTemplate sCertificatesMonSpriteTemplate = {
     .x = 0,
     .y = 0,
     .z = 0,
@@ -143,7 +143,7 @@ static const ManagedSpriteTemplate ov78_021E6880 = {
     .vramTransfer = 0,
 };
 
-static const ManagedSpriteTemplate ov78_021E68E8 = {
+static const ManagedSpriteTemplate sCertificatesPlayerSpriteTemplate = {
     .x = 0,
     .y = 0,
     .z = 0,
@@ -156,7 +156,7 @@ static const ManagedSpriteTemplate ov78_021E68E8 = {
     .vramTransfer = 0,
 };
 
-static s16 ov78_021E6920[3][2] = {
+static s16 sCertificatesSpritePositions[3][2] = {
     { 128, 16  },
     { 116, 180 },
     { 140, 180 },
@@ -167,22 +167,22 @@ static void CertificatesApp_SetupBgConfig(CertificatesApp_Data *data);
 static void CertificatesApp_FreeBgConfig(CertificatesApp_Data *data);
 static void CertificatesApp_SetupWindowsAndText(CertificatesApp_Data *data);
 static void CertificatesApp_FreeWindowsAndText(CertificatesApp_Data *data);
-static void ov78_021E5E44(CertificatesApp_Data *data);
-static void ov78_021E5E54(CertificatesApp_Data *data);
-static void ov78_021E5EA4(CertificatesApp_Data *data);
-static void ov78_021E6068(CertificatesApp_Data *data);
+static void CertificatesApp_ResetScroll(CertificatesApp_Data *data);
+static void CertificatesApp_ApplyScroll(CertificatesApp_Data *data);
+static void CertificatesApp_LoadBgGraphics(CertificatesApp_Data *data);
+static void CertificatesApp_PrintText(CertificatesApp_Data *data);
 static ManagedSprite *ov78_021E61C4(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y, u8 animation, u8 spritePriority);
-static ManagedSprite *ov78_021E6214(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y);
-static ManagedSprite *ov78_021E6250(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y);
+static ManagedSprite *CertificatesApp_CreateMonSprite(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y);
+static ManagedSprite *CertificatesApp_CreatePlayerSprite(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y);
 static void CertificatesApp_SetupSpriteRenderer(CertificatesApp_Data *data);
 static void CertificatesApp_FreeSpriteRenderer(CertificatesApp_Data *data);
-static void ov78_021E636C(CertificatesApp_Data *data);
-static void ov78_021E652C(CertificatesApp_Data *data);
-static void ov78_021E656C(Sprite *sprite, void *unkBuffer, u32 unkBufferSize, u32 srcOffset);
-static void ov78_021E65BC(Sprite *sprite, s32 narcMemberNum, u8 a2, enum HeapID heapID);
-static void ov78_021E6664(Sprite *sprite, PlayerProfile *profile, enum HeapID heapID);
-static u32 ov78_021E6688(int species, int form, int gender);
-static void ov78_021E66D4(Sprite *sprite, Pokemon *pokemon, enum HeapID heapID, u32 a3);
+static void CertificatesApp_CreateSprites(CertificatesApp_Data *data);
+static void CertificatesApp_UpdateSpritePositions(CertificatesApp_Data *data);
+static void CertificatesApp_LoadSpriteChars(Sprite *sprite, void *unkBuffer, u32 unkBufferSize, u32 srcOffset);
+static void CertificatesApp_LoadMmodelSprite(Sprite *sprite, s32 narcMemberNum, u8 a2, enum HeapID heapID);
+static void CertificatesApp_LoadPlayerSprite(Sprite *sprite, PlayerProfile *profile, enum HeapID heapID);
+static u32 CertificatesApp_GetMonMmodelId(int species, int form, int gender);
+static void CertificatesApp_LoadMonSprite(Sprite *sprite, Pokemon *pokemon, enum HeapID heapID, u32 a3);
 
 BOOL Certificates_Init(OverlayManager *manager, int *state) {
     Heap_Create(HEAP_ID_3, HEAP_ID_CERTIFICATES, 0x20000);
@@ -224,7 +224,7 @@ BOOL Certificates_Init(OverlayManager *manager, int *state) {
 
     if (data->certificateId == CERTIFICATE_SHINY_LEAVES) {
         CertificatesApp_SetupSpriteRenderer(data);
-        ov78_021E636C(data);
+        CertificatesApp_CreateSprites(data);
     }
 
     GfGfx_BothDispOn();
@@ -238,9 +238,9 @@ BOOL Certificates_Main(OverlayManager *manager, int *state) {
 
     switch (*state) {
     case CERTIFICATES_EXECSTATE_SETUP:
-        ov78_021E5E44(data);
-        ov78_021E5EA4(data);
-        ov78_021E6068(data);
+        CertificatesApp_ResetScroll(data);
+        CertificatesApp_LoadBgGraphics(data);
+        CertificatesApp_PrintText(data);
 
         ToggleBgLayer(GF_BG_LYR_MAIN_0, GF_PLANE_TOGGLE_ON);
         ToggleBgLayer(GF_BG_LYR_MAIN_1, GF_PLANE_TOGGLE_ON);
@@ -269,12 +269,12 @@ BOOL Certificates_Main(OverlayManager *manager, int *state) {
         }
         break;
     case CERTIFICATES_EXECSTATE_MOVE_TO_BOTTOM_SCREEN:
-        if (data->unk40 > -192) {
-            data->unk40 -= 4;
-            ov78_021E5E54(data);
+        if (data->scrollY > -192) {
+            data->scrollY -= 4;
+            CertificatesApp_ApplyScroll(data);
         } else {
-            data->unk40 = -192;
-            ov78_021E5E54(data);
+            data->scrollY = -192;
+            CertificatesApp_ApplyScroll(data);
             *state = CERTIFICATES_EXECSTATE_WAIT_FOR_INPUT;
         }
         break;
@@ -331,15 +331,15 @@ static void CertificatesApp_OnVBlank(CertificatesApp_Data *data) {
 }
 
 static void CertificatesApp_SetupBgConfig(CertificatesApp_Data *data) {
-    GraphicsBanks banks = ov78_021E6858;
+    GraphicsBanks banks = sCertificatesGraphicsBanks;
     GfGfx_SetBanks(&banks);
 
     data->bgConfig = BgConfig_Alloc(data->heapID);
 
-    GraphicsModes modes = ov78_021E67E0;
+    GraphicsModes modes = sCertificatesGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
 
-    BgTemplate template = ov78_021E681C;
+    BgTemplate template = sCertificatesBgTemplate;
 
     template.screenBase = GX_BG_SCRBASE_0x0000;
     template.charBase = GX_BG_CHARBASE_0x10000;
@@ -414,7 +414,7 @@ static void CertificatesApp_FreeBgConfig(CertificatesApp_Data *data) {
 }
 
 static void CertificatesApp_SetupWindowsAndText(CertificatesApp_Data *data) {
-    WindowTemplate template = ov78_021E67D8;
+    WindowTemplate template = sCertificatesWindowTemplate;
 
     ResetAllTextPrinters();
 
@@ -438,23 +438,23 @@ static void CertificatesApp_FreeWindowsAndText(CertificatesApp_Data *data) {
     DestroyMsgData(data->msgData);
 }
 
-void ov78_021E5E44(CertificatesApp_Data *data) {
-    data->unk40 = 0;
-    ov78_021E5E54(data);
+void CertificatesApp_ResetScroll(CertificatesApp_Data *data) {
+    data->scrollY = 0;
+    CertificatesApp_ApplyScroll(data);
 }
 
-static void ov78_021E5E54(CertificatesApp_Data *data) {
-    ScheduleSetBgPosText(data->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_Y, data->unk40);
-    ScheduleSetBgPosText(data->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_Y, data->unk40 + GX_LCD_SIZE_Y);
-    ScheduleSetBgPosText(data->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_Y, data->unk40);
-    ScheduleSetBgPosText(data->bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SET_Y, data->unk40 + GX_LCD_SIZE_Y);
+static void CertificatesApp_ApplyScroll(CertificatesApp_Data *data) {
+    ScheduleSetBgPosText(data->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_Y, data->scrollY);
+    ScheduleSetBgPosText(data->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_Y, data->scrollY + GX_LCD_SIZE_Y);
+    ScheduleSetBgPosText(data->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_Y, data->scrollY);
+    ScheduleSetBgPosText(data->bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SET_Y, data->scrollY + GX_LCD_SIZE_Y);
 
     if (data->certificateId == CERTIFICATE_SHINY_LEAVES) {
-        ov78_021E652C(data);
+        CertificatesApp_UpdateSpritePositions(data);
     }
 }
 
-static void ov78_021E5EA4(CertificatesApp_Data *data) {
+static void CertificatesApp_LoadBgGraphics(CertificatesApp_Data *data) {
     u32 nscrFileNum;
     u32 ncgrFileNum;
     u32 nclrFileNum;
@@ -509,7 +509,7 @@ static void ov78_021E5EA4(CertificatesApp_Data *data) {
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_2_OFFSET, data->heapID);
 }
 
-static void ov78_021E6068(CertificatesApp_Data *data) {
+static void CertificatesApp_PrintText(CertificatesApp_Data *data) {
     String *string = String_New(512, data->heapID);
 
     u32 x1, x2, y1, y2;
@@ -575,16 +575,16 @@ static ManagedSprite *ov78_021E61C4(SpriteSystem *renderer, SpriteManager *gfxHa
     return unk;
 }
 
-static ManagedSprite *ov78_021E6214(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y) {
-    ManagedSpriteTemplate template = ov78_021E68B4;
+static ManagedSprite *CertificatesApp_CreateMonSprite(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y) {
+    ManagedSpriteTemplate template = sCertificatesMonSpriteTemplate;
     template.x = x;
     template.y = y;
 
     return SpriteSystem_NewSpriteWithYOffset(renderer, gfxHandler, &template, FX32_CONST(GX_LCD_SIZE_Y));
 }
 
-static ManagedSprite *ov78_021E6250(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y) {
-    ManagedSpriteTemplate template = ov78_021E68E8;
+static ManagedSprite *CertificatesApp_CreatePlayerSprite(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y) {
+    ManagedSpriteTemplate template = sCertificatesPlayerSpriteTemplate;
     template.x = x;
     template.y = y;
 
@@ -608,23 +608,23 @@ static void CertificatesApp_SetupSpriteRenderer(CertificatesApp_Data *data) {
 
     u8 tp_param_data[4];
     ReadWholeNarcMemberByIdPair(tp_param_data, NARC_fielddata_tsurepoke_tp_param, SpeciesToOverworldModelIndexOffset(GetMonData(data->frontPokemon, MON_DATA_SPECIES, NULL)));
-    data->unk58 = tp_param_data[1];
+    data->monSpriteSize = tp_param_data[1];
 }
 
 static void CertificatesApp_FreeSpriteRenderer(CertificatesApp_Data *data) {
     SpriteSystem *renderer = data->spriteRenderer;
     SpriteManager *gfxHandler = data->spriteGfxHandler;
 
-    for (int i = 0; i < (int)NELEMS(data->unk4C); i++) {
-        GF_ASSERT(data->unk4C[i] != NULL);
-        Sprite_DeleteAndFreeResources(data->unk4C[i]);
+    for (int i = 0; i < (int)NELEMS(data->sprites); i++) {
+        GF_ASSERT(data->sprites[i] != NULL);
+        Sprite_DeleteAndFreeResources(data->sprites[i]);
     }
 
     SpriteSystem_FreeResourcesAndManager(renderer, gfxHandler);
     SpriteSystem_Free(renderer);
 }
 
-static void ov78_021E636C(CertificatesApp_Data *data) {
+static void CertificatesApp_CreateSprites(CertificatesApp_Data *data) {
     SpriteSystem *renderer = data->spriteRenderer;
     SpriteManager *gfxHandler = data->spriteGfxHandler;
 
@@ -648,33 +648,33 @@ static void ov78_021E636C(CertificatesApp_Data *data) {
         SpriteSystem_LoadAnimResObjFromOpenNarc(renderer, gfxHandler, narc, 21, FALSE, 1);
 
         SpriteSystem_LoadPlttResObjFromOpenNarc(renderer, gfxHandler, narc, 18, FALSE, 1, NNS_G2D_VRAM_TYPE_2DBOTH, 2);
-        SpriteSystem_LoadCharResObjFromOpenNarc(renderer, gfxHandler, narc, 19 + (data->unk58 * 3), FALSE, NNS_G2D_VRAM_TYPE_2DBOTH, 2);
-        SpriteSystem_LoadCellResObjFromOpenNarc(renderer, gfxHandler, narc, 20 + (data->unk58 * 3), FALSE, 2);
-        SpriteSystem_LoadAnimResObjFromOpenNarc(renderer, gfxHandler, narc, 21 + (data->unk58 * 3), FALSE, 2);
+        SpriteSystem_LoadCharResObjFromOpenNarc(renderer, gfxHandler, narc, 19 + (data->monSpriteSize * 3), FALSE, NNS_G2D_VRAM_TYPE_2DBOTH, 2);
+        SpriteSystem_LoadCellResObjFromOpenNarc(renderer, gfxHandler, narc, 20 + (data->monSpriteSize * 3), FALSE, 2);
+        SpriteSystem_LoadAnimResObjFromOpenNarc(renderer, gfxHandler, narc, 21 + (data->monSpriteSize * 3), FALSE, 2);
 
         NARC_Delete(narc);
     }
 
-    data->unk4C[0] = ov78_021E61C4(data->spriteRenderer, data->spriteGfxHandler, ov78_021E6920[0][0], ov78_021E6920[1][1], 7, 0);
-    data->unk4C[1] = ov78_021E6250(data->spriteRenderer, data->spriteGfxHandler, ov78_021E6920[1][0], ov78_021E6920[1][1]);
-    data->unk4C[2] = ov78_021E6214(data->spriteRenderer, data->spriteGfxHandler, ov78_021E6920[2][0], ov78_021E6920[2][1]);
+    data->sprites[0] = ov78_021E61C4(data->spriteRenderer, data->spriteGfxHandler, sCertificatesSpritePositions[0][0], sCertificatesSpritePositions[1][1], 7, 0);
+    data->sprites[1] = CertificatesApp_CreatePlayerSprite(data->spriteRenderer, data->spriteGfxHandler, sCertificatesSpritePositions[1][0], sCertificatesSpritePositions[1][1]);
+    data->sprites[2] = CertificatesApp_CreateMonSprite(data->spriteRenderer, data->spriteGfxHandler, sCertificatesSpritePositions[2][0], sCertificatesSpritePositions[2][1]);
 
-    ManagedSprite_SetDrawFlag(data->unk4C[0], FALSE);
-    ov78_021E6664(data->unk4C[1]->sprite, data->profile, data->heapID);
-    ov78_021E66D4(data->unk4C[2]->sprite, data->frontPokemon, data->heapID, data->unk58);
+    ManagedSprite_SetDrawFlag(data->sprites[0], FALSE);
+    CertificatesApp_LoadPlayerSprite(data->sprites[1]->sprite, data->profile, data->heapID);
+    CertificatesApp_LoadMonSprite(data->sprites[2]->sprite, data->frontPokemon, data->heapID, data->monSpriteSize);
 
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-static void ov78_021E652C(CertificatesApp_Data *data) {
-    for (int i = 0; i < (int)NELEMS(data->unk4C); i++) {
-        GF_ASSERT(data->unk4C[i] != NULL);
-        ManagedSprite_SetPositionXYWithSubscreenOffset(data->unk4C[i], ov78_021E6920[i][0], ov78_021E6920[i][1] - data->unk40, FX32_CONST(GX_LCD_SIZE_Y));
+static void CertificatesApp_UpdateSpritePositions(CertificatesApp_Data *data) {
+    for (int i = 0; i < (int)NELEMS(data->sprites); i++) {
+        GF_ASSERT(data->sprites[i] != NULL);
+        ManagedSprite_SetPositionXYWithSubscreenOffset(data->sprites[i], sCertificatesSpritePositions[i][0], sCertificatesSpritePositions[i][1] - data->scrollY, FX32_CONST(GX_LCD_SIZE_Y));
     }
 }
 
-static void ov78_021E656C(Sprite *sprite, void *unkBuffer, u32 unkBufferSize, u32 srcOffset) {
+static void CertificatesApp_LoadSpriteChars(Sprite *sprite, void *unkBuffer, u32 unkBufferSize, u32 srcOffset) {
     GF_ASSERT(Sprite_GetVramType(sprite) == NNS_G2D_VRAM_TYPE_2DBOTH);
 
     DC_FlushRange(unkBuffer, unkBufferSize);
@@ -684,7 +684,7 @@ static void ov78_021E656C(Sprite *sprite, void *unkBuffer, u32 unkBufferSize, u3
     GXS_LoadOBJ(unkBuffer, (u32)((void *)NNS_G2dGetImageLocation(proxy, NNS_G2D_VRAM_TYPE_2DSUB) + srcOffset), unkBufferSize);
 }
 
-void ov78_021E65BC(Sprite *sprite, s32 narcMemberNum, u8 a2, enum HeapID heapID) {
+void CertificatesApp_LoadMmodelSprite(Sprite *sprite, s32 narcMemberNum, u8 a2, enum HeapID heapID) {
     thunk_Sprite_SetDrawFlag(sprite, FALSE);
 
     NARC *narc = NARC_New(NARC_data_mmodel_mmodel, heapID);
@@ -694,7 +694,7 @@ void ov78_021E65BC(Sprite *sprite, s32 narcMemberNum, u8 a2, enum HeapID heapID)
     const void *address = NNS_G3dGetTexData(tex);
     void *buffer = Heap_AllocAtEnd(heapID, 0x200);
     CharTiles_CopyRectFromBuffer(address + (a2 * 0x200), 4, 0, 0, 4, 4, buffer);
-    ov78_021E656C(sprite, buffer, 0x200, 0);
+    CertificatesApp_LoadSpriteChars(sprite, buffer, 0x200, 0);
     Heap_Free(buffer);
 
     Sprite_GetVramType(sprite);
@@ -710,12 +710,12 @@ void ov78_021E65BC(Sprite *sprite, s32 narcMemberNum, u8 a2, enum HeapID heapID)
     thunk_Sprite_SetDrawFlag(sprite, TRUE);
 }
 
-static void ov78_021E6664(Sprite *sprite, PlayerProfile *profile, enum HeapID heapID) {
+static void CertificatesApp_LoadPlayerSprite(Sprite *sprite, PlayerProfile *profile, enum HeapID heapID) {
     u32 narcMemberNum = (PlayerProfile_GetTrainerGender(profile) == PLAYER_GENDER_MALE) ? MMODEL_HERO : MMODEL_HEROINE;
-    ov78_021E65BC(sprite, narcMemberNum, 21, heapID);
+    CertificatesApp_LoadMmodelSprite(sprite, narcMemberNum, 21, heapID);
 }
 
-static u32 ov78_021E6688(int species, int form, int gender) {
+static u32 CertificatesApp_GetMonMmodelId(int species, int form, int gender) {
     u32 ret;
     if (species <= SPECIES_NONE || species > MAX_SPECIES) {
         ret = 1;
@@ -735,7 +735,7 @@ static u32 ov78_021E6688(int species, int form, int gender) {
     return ret;
 }
 
-static void ov78_021E66D4(Sprite *sprite, Pokemon *pokemon, enum HeapID heapID, u32 a3) {
+static void CertificatesApp_LoadMonSprite(Sprite *sprite, Pokemon *pokemon, enum HeapID heapID, u32 a3) {
     u32 species = GetMonData(pokemon, MON_DATA_SPECIES, NULL);
     u32 form = GetMonData(pokemon, MON_DATA_FORM, NULL);
     u32 gender = GetMonGender(pokemon);
@@ -756,13 +756,13 @@ static void ov78_021E66D4(Sprite *sprite, Pokemon *pokemon, enum HeapID heapID, 
         form = 0;
     }
 
-    u32 member = ov78_021E6688(species, (u16)form, gender);
+    u32 member = CertificatesApp_GetMonMmodelId(species, (u16)form, gender);
     NNSG3dResFileHeader *header = NARC_AllocAndReadWholeMember(narc, member, heapID);
     NNSG3dResTex *tex = NNS_G3dGetTex(header);
     void *address = (void *)tex + tex->texInfo.ofsTex;
     void *buffer = Heap_AllocAtEnd(heapID, bufferSize);
     CharTiles_CopyRectFromBuffer(address + (bufferSize * 2), unk, 0, 0, unk, unk, buffer);
-    ov78_021E656C(sprite, buffer, bufferSize, 0);
+    CertificatesApp_LoadSpriteChars(sprite, buffer, bufferSize, 0);
     Heap_Free(buffer);
     Sprite_GetVramType(sprite);
     void *pointer = (void *)tex + tex->plttInfo.ofsPlttData;

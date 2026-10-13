@@ -100,7 +100,7 @@ typedef struct {
 } SceneWork;
 
 typedef struct {
-    int unk0;
+    int step;
     BOOL rendering;
     BOOL hidden;
     SysTask *sysTask;
@@ -167,10 +167,10 @@ typedef struct {
     SceneWork sceneWork;
     PageWork pageWork;
     CutsceneWork cutsceneWork;
-    void *unk468[6];
-    void *unk480[6];
-    NNSG2dScreenData *unk498[NUM_SCENES];
-    NNSG2dScreenData *unk4B0[NUM_SCENES];
+    void *bg2ScrnFiles[6];
+    void *bg3ScrnFiles[6];
+    NNSG2dScreenData *bg2ScrnData[NUM_SCENES];
+    NNSG2dScreenData *bg3ScrnData[NUM_SCENES];
 } CreditsAppWork;
 
 extern const UnkOv021E60F6 ov76_021E6E88[4];
@@ -185,8 +185,8 @@ static void FreeBG(CreditsAppWork *work);
 static void LoadBgGraphics(CreditsAppWork *work);
 static void CreateOamAndObjResMgrs(CreditsAppWork *work);
 static void FreeOamAndObjResMgrs(CreditsAppWork *work);
-static void ov76_021E6170(CreditsAppWork *work);
-static void ov76_021E62B4(CreditsAppWork *work);
+static void LoadCreditsSpriteResources(CreditsAppWork *work);
+static void FreeCreditsSpriteTransferTasks(CreditsAppWork *work);
 static void InitSprites(CreditsAppWork *work);
 static void InitDancingSpriteResources(int idx, CreditsAppWork *work, int sprtResPriority, NNS_G2D_VRAM_TYPE whichScreen, SpriteTemplate *tmpl, SpriteResourcesHeader *header);
 static void SetPageSysTasks(CreditsAppWork *work);
@@ -196,13 +196,13 @@ static void HandleSceneTransition(CreditsAppWork *work);
 static void HandleSceneFlip(CreditsAppWork *work);
 static void HandleCutscenes(CreditsAppWork *work);
 static void ActivateSprite(Sprite *sprite);
-static void ov76_021E68C8(CreditsAppWork *work);
+static void RequestScreenFlip(CreditsAppWork *work);
 static void FlipScreensCB(SysTask *task, void *taskData);
 static void DisplayWindow(CreditsAppWork *work);
-static void ov76_021E6944(PageDisplayWork *pageDisplay, BgConfig *bgConfig, BOOL hidden);
+static void StartTogglePageDisplay(PageDisplayWork *pageDisplay, BgConfig *bgConfig, BOOL hidden);
 static BOOL PageWindowRendering(PageDisplayWork *pageDisplay);
 static void TogglePageDisplayCB(SysTask *task, void *taskData);
-static void ov76_021E6A34(int a0, int a1, int a2, int a3);
+static void SetPageWindowPosition(int a0, int a1, int a2, int a3);
 static void LoadPage(PageWork *a0);
 static void LoadCutsceneSpriteResources(CreditsAppWork *work);
 static void LoadCutsceneSpriteGfx(CutsceneWork *a0, int a1);
@@ -230,7 +230,7 @@ BOOL Credits_Init(OverlayManager *man, int *state) {
             gSystem.screensFlipped = TRUE;
             GfGfx_SwapDisplay();
             CreateOamAndObjResMgrs(work);
-            ov76_021E6170(work);
+            LoadCreditsSpriteResources(work);
             LoadCutsceneSpriteResources(work);
             G2dRenderer_SetSubSurfaceCoords(&work->g2dRender, 0, 0);
             G2dRenderer_SetMainSurfaceCoords(&work->g2dRender, 0, 256 * FX32_ONE);
@@ -282,8 +282,8 @@ BOOL Credits_Exit(OverlayManager *man, int *state) {
         String_Delete(ptr->string);
         FreeBG(work);
         for (u8 i = 0; i < 6; i++) {
-            Heap_Free(work->unk468[i]);
-            Heap_Free(work->unk480[i]);
+            Heap_Free(work->bg2ScrnFiles[i]);
+            Heap_Free(work->bg3ScrnFiles[i]);
         }
         FreePageSysTasks(work);
         *state += 1;
@@ -291,7 +291,7 @@ BOOL Credits_Exit(OverlayManager *man, int *state) {
     }
     case 2:
         NARC_Delete(work->cutsceneWork.narc);
-        ov76_021E62B4(work);
+        FreeCreditsSpriteTransferTasks(work);
         FreeOamAndObjResMgrs(work);
         *state += 1;
         break;
@@ -410,20 +410,20 @@ static void InitBgLayers(CreditsAppWork *work) {
     work->bgConfig = BgConfig_Alloc(HEAP_ID_CREDITS);
     G2_BlendNone();
     G2S_BlendNone();
-    modeSet = ov76_021E6EB0;
+    modeSet = sCreditsGraphicsModes;
     SetBothScreensModesAndDisable(&modeSet);
 
-    tmpl2 = ov76_021E6F18;
+    tmpl2 = sCreditsBgTemplate_Main2;
     InitBgFromTemplate(work->bgConfig, 2, &tmpl2, 0);
-    tmpl3 = ov76_021E6F34;
+    tmpl3 = sCreditsBgTemplate_Main3;
     InitBgFromTemplate(work->bgConfig, 3, &tmpl3, 0);
-    tmpl1 = ov76_021E6F50;
+    tmpl1 = sCreditsBgTemplate_Main1;
     InitBgFromTemplate(work->bgConfig, 1, &tmpl1, 0);
-    tmpl5 = ov76_021E6F6C;
+    tmpl5 = sCreditsBgTemplate_Sub1;
     InitBgFromTemplate(work->bgConfig, 5, &tmpl5, 0);
-    tmpl6 = ov76_021E6F88;
+    tmpl6 = sCreditsBgTemplate_Sub2;
     InitBgFromTemplate(work->bgConfig, 6, &tmpl6, 0);
-    tmpl7 = ov76_021E6FA4;
+    tmpl7 = sCreditsBgTemplate_Sub3;
     InitBgFromTemplate(work->bgConfig, 7, &tmpl7, 0);
 
     LoadBgGraphics(work);
@@ -440,8 +440,8 @@ static void FreeBG(CreditsAppWork *work) {
 }
 
 static void LoadBgGraphics(CreditsAppWork *work) {
-    ScrnFileIds temp1 = ov76_021E6EE8;
-    ScrnFileIds temp2 = ov76_021E6F00;
+    ScrnFileIds temp1 = sCreditsBg2ScrnFileIds;
+    ScrnFileIds temp2 = sCreditsBg3ScrnFileIds;
     BgConfig *bgConfig = work->bgConfig;
 
     GfGfxLoader_LoadCharData(NARC_a_2_6_3, 5, bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_CREDITS);
@@ -449,14 +449,14 @@ static void LoadBgGraphics(CreditsAppWork *work) {
     GfGfxLoader_GXLoadPal(NARC_a_2_6_3, 4, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0xe0, HEAP_ID_CREDITS);
     GfGfxLoader_GXLoadPal(NARC_a_2_6_3, 4, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0xe0, HEAP_ID_CREDITS);
     for (u8 i = 0; i < 6; i++) {
-        work->unk468[i] = GfGfxLoader_GetScrnData(NARC_a_2_6_3, temp1.ids[i], 1, &work->unk498[i], HEAP_ID_CREDITS);
-        work->unk480[i] = GfGfxLoader_GetScrnData(NARC_a_2_6_3, temp2.ids[i], 1, &work->unk4B0[i], HEAP_ID_CREDITS);
+        work->bg2ScrnFiles[i] = GfGfxLoader_GetScrnData(NARC_a_2_6_3, temp1.ids[i], 1, &work->bg2ScrnData[i], HEAP_ID_CREDITS);
+        work->bg3ScrnFiles[i] = GfGfxLoader_GetScrnData(NARC_a_2_6_3, temp2.ids[i], 1, &work->bg3ScrnData[i], HEAP_ID_CREDITS);
     }
 
-    BG_LoadScreenTilemapData(bgConfig, 2, work->unk498[0]->rawData, work->unk498[0]->szByte);
-    BG_LoadScreenTilemapData(bgConfig, 3, work->unk4B0[0]->rawData, work->unk4B0[0]->szByte);
-    BG_LoadScreenTilemapData(bgConfig, 6, work->unk498[0]->rawData, work->unk498[0]->szByte);
-    BG_LoadScreenTilemapData(bgConfig, 7, work->unk4B0[0]->rawData, work->unk4B0[0]->szByte);
+    BG_LoadScreenTilemapData(bgConfig, 2, work->bg2ScrnData[0]->rawData, work->bg2ScrnData[0]->szByte);
+    BG_LoadScreenTilemapData(bgConfig, 3, work->bg3ScrnData[0]->rawData, work->bg3ScrnData[0]->szByte);
+    BG_LoadScreenTilemapData(bgConfig, 6, work->bg2ScrnData[0]->rawData, work->bg2ScrnData[0]->szByte);
+    BG_LoadScreenTilemapData(bgConfig, 7, work->bg3ScrnData[0]->rawData, work->bg3ScrnData[0]->szByte);
     ScheduleBgTilemapBufferTransfer(bgConfig, 2);
     ScheduleBgTilemapBufferTransfer(bgConfig, 3);
     ScheduleBgTilemapBufferTransfer(bgConfig, 6);
@@ -497,7 +497,7 @@ static void FreeOamAndObjResMgrs(CreditsAppWork *work) {
     ObjPlttTransfer_Destroy();
 }
 
-static void ov76_021E6170(CreditsAppWork *work) {
+static void LoadCreditsSpriteResources(CreditsAppWork *work) {
     work->gf2dGfxResObj[GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(work->gf2dGfxResMan[GF_GFX_RES_TYPE_CHAR], NARC_a_2_6_3, 1, TRUE, 1, NNS_G2D_VRAM_TYPE_2DBOTH, HEAP_ID_CREDITS);
     work->gf2dGfxResObj[GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(work->gf2dGfxResMan[GF_GFX_RES_TYPE_PLTT], NARC_a_2_6_3, 0, FALSE, 1, NNS_G2D_VRAM_TYPE_2DBOTH, 7, HEAP_ID_CREDITS);
     work->gf2dGfxResObj[GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromNarc(work->gf2dGfxResMan[GF_GFX_RES_TYPE_CELL], NARC_a_2_6_3, 2, TRUE, 1, GF_GFX_RES_TYPE_CELL, HEAP_ID_CREDITS);
@@ -525,7 +525,7 @@ static void ov76_021E6170(CreditsAppWork *work) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-static void ov76_021E62B4(CreditsAppWork *work) {
+static void FreeCreditsSpriteTransferTasks(CreditsAppWork *work) {
     SpriteTransfer_DeleteCharTransferTask(work->gf2dGfxResObj[GF_GFX_RES_TYPE_CHAR]);
     SpriteTransfer_DeletePlttTransferTask(work->gf2dGfxResObj[GF_GFX_RES_TYPE_PLTT]);
 
@@ -677,14 +677,14 @@ static void HandlePageDisplay(CreditsAppWork *work) {
         switch (ptr->pageState.state) {
         case PAGE_STATE_DISPLAY:
             if (++ptr->pageState.timer >= sPageTimings[ptr->pageState.page].duration) {
-                ov76_021E6944(ptr18, work->bgConfig, TRUE);
+                StartTogglePageDisplay(ptr18, work->bgConfig, TRUE);
                 ptr->pageState.state = PAGE_STATE_END_DISPLAY;
                 return;
             }
             break;
         case PAGE_STATE_NO_DISPLAY:
             if (newPageFrame) {
-                ov76_021E6944(ptr18, work->bgConfig, FALSE);
+                StartTogglePageDisplay(ptr18, work->bgConfig, FALSE);
                 ptr->pageState.state = PAGE_STATE_LOAD_DISPLAY;
                 return;
             }
@@ -741,16 +741,16 @@ static void HandleSceneTransition(CreditsAppWork *work) {
                 Sprite_SetAnimCtrlSeq(ptr->pokemon[i], sPokemonSpriteSeqNos[idx]);
             }
 
-            BG_LoadScreenTilemapData(work->bgConfig, 7, work->unk4B0[idx]->rawData, work->unk4B0[idx]->szByte);
+            BG_LoadScreenTilemapData(work->bgConfig, 7, work->bg3ScrnData[idx]->rawData, work->bg3ScrnData[idx]->szByte);
             ScheduleBgTilemapBufferTransfer(work->bgConfig, 7);
 
-            BG_LoadScreenTilemapData(work->bgConfig, 6, work->unk498[idx]->rawData, work->unk498[idx]->szByte);
+            BG_LoadScreenTilemapData(work->bgConfig, 6, work->bg2ScrnData[idx]->rawData, work->bg2ScrnData[idx]->szByte);
             ScheduleBgTilemapBufferTransfer(work->bgConfig, 6);
 
-            BG_LoadScreenTilemapData(work->bgConfig, 3, work->unk4B0[idx]->rawData, work->unk4B0[idx]->szByte);
+            BG_LoadScreenTilemapData(work->bgConfig, 3, work->bg3ScrnData[idx]->rawData, work->bg3ScrnData[idx]->szByte);
             ScheduleBgTilemapBufferTransfer(work->bgConfig, 3);
 
-            BG_LoadScreenTilemapData(work->bgConfig, 2, work->unk498[idx]->rawData, work->unk498[idx]->szByte);
+            BG_LoadScreenTilemapData(work->bgConfig, 2, work->bg2ScrnData[idx]->rawData, work->bg2ScrnData[idx]->szByte);
             ScheduleBgTilemapBufferTransfer(work->bgConfig, 2);
 
             ptr->transition.timer = 0;
@@ -778,7 +778,7 @@ static void HandleSceneFlip(CreditsAppWork *work) {
             transitionFrame = TRUE;
         }
         if (transitionFrame) {
-            ov76_021E68C8(work);
+            RequestScreenFlip(work);
         }
     }
 }
@@ -812,7 +812,7 @@ static void ActivateSprite(Sprite *sprite) {
 }
 
 // Marks the scene transition for the SysTask callback.
-static void ov76_021E68C8(CreditsAppWork *work) {
+static void RequestScreenFlip(CreditsAppWork *work) {
     ScreenFlipWork *ptr = &work->pageWork.scrFlipWork;
     ptr->transitionFrame = TRUE;
     ptr->count++;
@@ -832,19 +832,19 @@ static void FlipScreensCB(SysTask *task, void *taskData) {
 }
 
 static void DisplayWindow(CreditsAppWork *work) {
-    AddWindow(work->bgConfig, &work->pageWork.window, &ov76_021E6E98);
+    AddWindow(work->bgConfig, &work->pageWork.window, &sCreditsWindowTemplate);
     BG_FillCharDataRange(work->bgConfig, GF_BG_LYR_SUB_1, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, HEAP_ID_CREDITS);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
 }
 
-static void ov76_021E6944(PageDisplayWork *pageDisplay, BgConfig *bgConfig, BOOL hidden) {
+static void StartTogglePageDisplay(PageDisplayWork *pageDisplay, BgConfig *bgConfig, BOOL hidden) {
     GF_ASSERT(pageDisplay->rendering == FALSE);
     GXS_SetVisibleWnd(3);
     G2S_SetWnd0InsidePlane(30, TRUE);
     G2S_SetWnd1InsidePlane(30, TRUE);
     G2S_SetWndOutsidePlane(28, TRUE);
-    pageDisplay->unk0 = 0;
+    pageDisplay->step = 0;
     pageDisplay->rendering = TRUE;
     pageDisplay->hidden = hidden;
     pageDisplay->bgConfig = bgConfig;
@@ -866,17 +866,17 @@ static void TogglePageDisplayCB(SysTask *task, void *taskData) {
         return;
     }
 
-    pageDisplay->unk0++;
+    pageDisplay->step++;
     if (pageDisplay->hidden == FALSE) {
         temp2 = 0xff;
-        temp = (1 - pageDisplay->unk0) * temp2;
+        temp = (1 - pageDisplay->step) * temp2;
     } else {
         temp = 0;
-        temp2 = (1 - pageDisplay->unk0) * 0xff;
+        temp2 = (1 - pageDisplay->step) * 0xff;
     }
 
-    xPos = pageDisplay->unk0 * 0xff;
-    if (pageDisplay->unk0 >= 1) {
+    xPos = pageDisplay->step * 0xff;
+    if (pageDisplay->step >= 1) {
         pageDisplay->rendering = FALSE;
         if (pageDisplay->hidden == FALSE) {
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
@@ -884,11 +884,11 @@ static void TogglePageDisplayCB(SysTask *task, void *taskData) {
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
         }
     }
-    ov76_021E6A34(temp, 0, temp2, 0xc0);
+    SetPageWindowPosition(temp, 0, temp2, 0xc0);
     BgSetPosTextAndCommit(pageDisplay->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, xPos);
 }
 
-static void ov76_021E6A34(int a0, int a1, int a2, int a3) {
+static void SetPageWindowPosition(int a0, int a1, int a2, int a3) {
     if (a0 == 0 && a2 == 0xff) {
         G2S_SetWnd1Position(0, a1, 1, a3);
         G2S_SetWnd0Position(1, a1, 0, a3);

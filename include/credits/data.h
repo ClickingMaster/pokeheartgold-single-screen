@@ -48,7 +48,7 @@ typedef struct {
     CutsceneSpriteParam spriteParam[SPRITES_PER_CUTSCENE];
 } Cutscene;
 
-static const WindowTemplate ov76_021E6E98 = {
+static const WindowTemplate sCreditsWindowTemplate = {
     .bgId = 0x05,
     .left = 0x03,
     .top = 0x00,
@@ -60,7 +60,7 @@ static const WindowTemplate ov76_021E6E98 = {
 
 static const ObjCharTransferTemplate sObjCharTransferTemplate = { 0x28, 0, 0, HEAP_ID_CREDITS };
 
-static const GraphicsModes ov76_021E6EB0 = {
+static const GraphicsModes sCreditsGraphicsModes = {
     .dispMode = GX_DISPMODE_GRAPHICS,
     .bgMode = GX_BGMODE_0,
     .subMode = GX_BGMODE_0,
@@ -71,15 +71,15 @@ static const int sSceneTransitionTimings[5] = { 890, 1780, 2615, 3030, 4295 };
 
 static const int sScreenFlipTimings[5] = { 890, 1780, 2615, 3030, 4295 };
 
-static const ScrnFileIds ov76_021E6F00 = {
+static const ScrnFileIds sCreditsBg3ScrnFileIds = {
     { 0x08, 0x12, 0x0A, 0x10, 0x0E, 0x0C },
 };
 
-static const ScrnFileIds ov76_021E6EE8 = {
+static const ScrnFileIds sCreditsBg2ScrnFileIds = {
     { 0x07, 0x11, 0x09, 0x0F, 0x0D, 0x0B },
 };
 
-static const BgTemplate ov76_021E6F50 = {
+static const BgTemplate sCreditsBgTemplate_Main1 = {
     .x = 0,
     .y = 0,
     .bufferSize = 0x0800,
@@ -95,7 +95,7 @@ static const BgTemplate ov76_021E6F50 = {
     .mosaic = FALSE,
 };
 
-static const BgTemplate ov76_021E6F6C = {
+static const BgTemplate sCreditsBgTemplate_Sub1 = {
     .x = 0,
     .y = 0,
     .bufferSize = 0x0800,
@@ -111,7 +111,7 @@ static const BgTemplate ov76_021E6F6C = {
     .mosaic = FALSE,
 };
 
-static const BgTemplate ov76_021E6F88 = {
+static const BgTemplate sCreditsBgTemplate_Sub2 = {
     .x = 0,
     .y = 0,
     .bufferSize = 0x0800,
@@ -127,7 +127,7 @@ static const BgTemplate ov76_021E6F88 = {
     .mosaic = FALSE,
 };
 
-static const BgTemplate ov76_021E6FA4 = {
+static const BgTemplate sCreditsBgTemplate_Sub3 = {
     .x = 0,
     .y = 0,
     .bufferSize = 0x0800,
@@ -143,7 +143,7 @@ static const BgTemplate ov76_021E6FA4 = {
     .mosaic = FALSE,
 };
 
-static const BgTemplate ov76_021E6F18 = {
+static const BgTemplate sCreditsBgTemplate_Main2 = {
     .x = 0,
     .y = 0,
     .bufferSize = 0x0800,
@@ -159,7 +159,7 @@ static const BgTemplate ov76_021E6F18 = {
     .mosaic = FALSE,
 };
 
-static const BgTemplate ov76_021E6F34 = {
+static const BgTemplate sCreditsBgTemplate_Main3 = {
     .x = 0,
     .y = 0,
     .bufferSize = 0x0800,
